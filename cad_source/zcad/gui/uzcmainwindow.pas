@@ -22,7 +22,7 @@ unit uzcmainwindow;
 interface
 uses
   {LCL}
-       AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr,
+       AnchorDockPanel,AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr,
        ActnList,LCLType,LCLProc,uzctranslations,toolwin,LMessages,LCLIntf,
        Forms, stdctrls, ExtCtrls, ComCtrls,Controls,Classes,SysUtils,LazUTF8,
        menus,graphics,dialogs,XMLPropStorage,Buttons,Themes,
@@ -69,8 +69,18 @@ type
   TCommandHistory=Array [0..9] of TmyAction;
 
 
-  TZCADMainWindow = class(TFreedForm)
-    ToolBarU:TToolBar;
+  { TZCADMainWindow }
+
+  TZCADMainWindow = class(TForm)
+    AnchorDockPanel1:TAnchorDockPanel;
+    CoolBarR: TCoolBar;
+    CoolBarD: TCoolBar;
+    CoolBarL: TCoolBar;
+    CoolBarU: TCoolBar;
+    ToolBarR: TToolBar;
+    ToolBarD: TToolBar;
+    ToolBarU: TToolBar;
+
     MainPanel:TForm;
     FToolBar:TToolButtonForm;
     PageControl:TmyPageControl;
@@ -136,7 +146,7 @@ type
     FileHistory:TFileHistory;
     OpenedDrawings:TOpenedDrawings;
     CommandsHistory:TCommandHistory;
-    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction); override;
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     destructor Destroy;override;
     procedure CreateAnchorDockingInterface;
     procedure AdjustHeight(const AWindow: TCustomForm; const AAdjustHeight: Boolean;const ANewHeight: Integer);
@@ -210,6 +220,7 @@ var
   function IsRealyQuit:GDBBoolean;
 
 implementation
+{$R *.lfm}
 constructor TmyAnchorDockSplitter.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
@@ -1088,9 +1099,10 @@ begin
   DockMaster.SplitterClass:=TmyAnchorDockSplitter;
   DockMaster.ManagerClass:=TAnchorDockManager;
   DockMaster.OnCreateControl:=DockMasterCreateControl;
-  DockMaster.MakeDockSite(Self, [akBottom], admrpChild
-    {admrpNone}, true{false});
-  if DockManager is TAnchorDockManager then
+  //DockMaster.MakeDockSite(Self, [akBottom], admrpChild
+  //  {admrpNone}, true{false});
+  DockMaster.MakeDockPanel(AnchorDockPanel1,admrpChild);
+  if AnchorDockPanel1.DockManager is TAnchorDockManager then
   begin
        DockMaster.OnShowOptions:={@}ShowAnchorDockOptions;
   end;
@@ -1103,18 +1115,40 @@ begin
        DockMaster.ShowControl('PageControl', true);
   end;
 
-   ToolBarU:=TToolBar.Create(self);
+   (*ToolBarU:=TToolBar.Create(self);
    ToolBarU.Align:=alTop{alClient};
    ToolBarU.SetBounds(500,0,1000,26);
    ToolBarU.AutoSize:=true;
    ToolBarU.ButtonHeight:=sysvar.INTF.INTF_DefaultControlHeight^;
    ToolBarU.ShowCaptions:=true;
    ToolBarU.Parent:=self;
-   ToolBarU.EdgeBorders:=[{ebTop, ebBottom, ebLeft, ebRight}];
-   self.CreateToolbarFromDesk(ToolBarU, 'STANDART', self.findtoolbatdesk('STAND'
-     +'ART'));
+   ToolBarU.EdgeBorders:=[{ebTop, ebBottom, ebLeft, ebRight}];*)
+
+   CreateToolbarFromDesk(ToolBarR, 'RIGHT', self.findtoolbatdesk('RIGHT'));
+
+   CreateToolbarFromDesk(ToolBarU, 'STANDART', self.findtoolbatdesk('STANDART'));
+   CreateHTPB(ToolBarD);
+   CreateToolbarFromDesk(ToolBarD, 'STATUS', self.findtoolbatdesk('STATUS'));
    //ToolBarU.AdjustSize;
    action:=tmyaction(StandartActions.ActionByName('ACN_SHOW_STANDART'));
+   if assigned(action) then
+                           begin
+                                action.Enabled:=false;
+                                action.Checked:=true;
+                                action.pfoundcommand:=nil;
+                                action.command:='';
+                                action.options:='';
+                           end;
+   action:=tmyaction(StandartActions.ActionByName('ACN_SHOW_STATUS'));
+   if assigned(action) then
+                           begin
+                                action.Enabled:=false;
+                                action.Checked:=true;
+                                action.pfoundcommand:=nil;
+                                action.command:='';
+                                action.options:='';
+                           end;
+   action:=tmyaction(StandartActions.ActionByName('ACN_SHOW_RIGHT'));
    if assigned(action) then
                            begin
                                 action.Enabled:=false;

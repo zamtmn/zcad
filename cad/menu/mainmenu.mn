@@ -1,8 +1,24 @@
-Panel test;
+Panel Right;
   {
-    action ACN_QUIT
+    action ACN_LOADQS
+    action ACN_SAVEQS
+    action ACN_PROJECTTREE
     Separator
-    action ACN_LOAD
+    action ACN_BEDIT
+    action ACN_POLYED
+    action ACN_COPY
+    action ACN_MOVE
+    action ACN_ROTATE
+    action ACN_SCALE
+    action ACN_MIRROR
+    Separator
+    action ACN_LINE
+    action ACN_3DPOLY
+    action ACN_CIRCLE
+    action ACN_RECTANGLE
+    action ACN_BInsert
+    action ACN_TEXT
+    action ACN_SupeLine
   }
 Panel OIButtons;
   {

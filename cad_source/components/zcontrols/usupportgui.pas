@@ -133,7 +133,7 @@ end;
 procedure ComboBoxDrawItem(Control:TWinControl;ARect:TRect;State:TOwnerDrawState);
 begin
      //if not ({odSelected}{odComboBoxEdit}odDisabled in state) then
-     if (state<>[])and(state<>[odHotLight])and(state<>[odPainted]) then
+     if (state<>[])and(state<>[odHotLight])and(state<>[odBackgroundPainted]) then
      {ifdef windows}
      TComboBox(Control).canvas.FillRect(ARect);
      {endif}

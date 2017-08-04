@@ -1,0 +1,123 @@
+object ZCADMainWindow: TZCADMainWindow
+  Left = 649
+  Height = 470
+  Top = 205
+  Width = 632
+  ClientHeight = 470
+  ClientWidth = 632
+  object AnchorDockPanel1: TAnchorDockPanel
+    Left = 0
+    Height = 417
+    Top = 29
+    Width = 632
+    Align = alClient
+    Caption = 'AnchorDockPanel1'
+    ClientHeight = 417
+    ClientWidth = 632
+    TabOrder = 0
+    object CoolBarL: TCoolBar
+      Left = 1
+      Height = 411
+      Top = 1
+      Width = 4
+      Align = alLeft
+      AutoSize = True
+      Bands = <>
+      DockSite = True
+      Vertical = True
+    end
+    object CoolBarR: TCoolBar
+      Left = 602
+      Height = 411
+      Top = 1
+      Width = 29
+      Align = alRight
+      AutoSize = True
+      Bands = <      
+        item
+          Control = ToolBarR
+          Width = 100
+        end>
+      DockSite = True
+      Vertical = True
+      object ToolBarR: TToolBar
+        AnchorSideLeft.Control = CoolBarR
+        AnchorSideTop.Control = CoolBarR
+        Left = 14
+        Height = 71
+        Top = 24
+        Width = 0
+        Align = alNone
+        AutoSize = True
+        BorderSpacing.Left = 12
+        BorderSpacing.Top = 22
+        Caption = 'ToolBarR'
+        DragKind = dkDock
+        DragMode = dmAutomatic
+        EdgeBorders = []
+        ShowCaptions = True
+        TabOrder = 0
+        Transparent = True
+        Wrapable = False
+      end
+    end
+    object CoolBarD: TCoolBar
+      Left = 1
+      Height = 4
+      Top = 412
+      Width = 630
+      Align = alBottom
+      AutoSize = True
+      Bands = <>
+      DockSite = True
+    end
+  end
+  object CoolBarU: TCoolBar
+    Left = 0
+    Height = 29
+    Top = 0
+    Width = 632
+    AutoSize = True
+    Bands = <    
+      item
+        Control = ToolBarU
+        Width = 100
+      end>
+    DockSite = True
+    object ToolBarU: TToolBar
+      AnchorSideLeft.Control = CoolBarU
+      AnchorSideTop.Control = CoolBarU
+      Left = 24
+      Height = 0
+      Top = 14
+      Width = 71
+      Align = alNone
+      AutoSize = True
+      BorderSpacing.Left = 22
+      BorderSpacing.Top = 12
+      Caption = 'ToolBar1'
+      DragKind = dkDock
+      DragMode = dmAutomatic
+      EdgeBorders = []
+      ShowCaptions = True
+      TabOrder = 0
+      Transparent = True
+      Wrapable = False
+    end
+  end
+  object ToolBarD: TToolBar
+    AnchorSideTop.Control = CoolBarD
+    Left = 0
+    Height = 24
+    Top = 446
+    Width = 632
+    Align = alBottom
+    Caption = 'ToolBarD'
+    DragKind = dkDock
+    EdgeBorders = []
+    ShowCaptions = True
+    TabOrder = 2
+    Transparent = True
+    Wrapable = False
+  end
+end

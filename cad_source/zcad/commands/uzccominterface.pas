@@ -63,7 +63,7 @@ uses
   uPSR_stdctrls,
   uPSR_forms,
   uPSUtils}
- uzcmainwindow,
+ uzcmainwindow,uztoolbarsutils,
  uzegeometry;
 
 
@@ -462,6 +462,7 @@ begin
     try
       DockMaster.SaveLayoutToConfig(Config);
       DockMaster.SaveSettingsToConfig(Config);
+      SaveToolBarsToConfig(ZCADMainWindow,Config);
     finally
       Config.Free;
     end;

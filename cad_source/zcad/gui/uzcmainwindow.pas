@@ -1124,6 +1124,9 @@ begin
    ToolBarU.Parent:=self;
    ToolBarU.EdgeBorders:=[{ebTop, ebBottom, ebLeft, ebRight}];*)
 
+   DragManager.DragImmediate:=false;
+   DragManager.DragThreshold:=32;
+
    CreateToolbarFromDesk(ToolBarR, 'RIGHT', self.findtoolbatdesk('RIGHT'));
 
    CreateToolbarFromDesk(ToolBarU, 'STANDART', self.findtoolbatdesk('STANDART'));

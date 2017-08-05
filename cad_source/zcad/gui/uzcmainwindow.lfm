@@ -5,72 +5,16 @@ object ZCADMainWindow: TZCADMainWindow
   Width = 632
   ClientHeight = 470
   ClientWidth = 632
+  DesignTimePPI = 113
+  LCLVersion = '1.9.0.0'
   object AnchorDockPanel1: TAnchorDockPanel
-    Left = 0
-    Height = 417
+    Left = 4
+    Height = 413
     Top = 29
-    Width = 632
+    Width = 599
     Align = alClient
     Caption = 'AnchorDockPanel1'
-    ClientHeight = 417
-    ClientWidth = 632
     TabOrder = 0
-    object CoolBarL: TCoolBar
-      Left = 1
-      Height = 411
-      Top = 1
-      Width = 4
-      Align = alLeft
-      AutoSize = True
-      Bands = <>
-      DockSite = True
-      Vertical = True
-    end
-    object CoolBarR: TCoolBar
-      Left = 602
-      Height = 411
-      Top = 1
-      Width = 29
-      Align = alRight
-      AutoSize = True
-      Bands = <      
-        item
-          Control = ToolBarR
-          Width = 100
-        end>
-      DockSite = True
-      Vertical = True
-      object ToolBarR: TToolBar
-        AnchorSideLeft.Control = CoolBarR
-        AnchorSideTop.Control = CoolBarR
-        Left = 14
-        Height = 71
-        Top = 24
-        Width = 0
-        Align = alNone
-        AutoSize = True
-        BorderSpacing.Left = 12
-        BorderSpacing.Top = 22
-        Caption = 'ToolBarR'
-        DragKind = dkDock
-        DragMode = dmAutomatic
-        EdgeBorders = []
-        ShowCaptions = True
-        TabOrder = 0
-        Transparent = True
-        Wrapable = False
-      end
-    end
-    object CoolBarD: TCoolBar
-      Left = 1
-      Height = 4
-      Top = 412
-      Width = 630
-      Align = alBottom
-      AutoSize = True
-      Bands = <>
-      DockSite = True
-    end
   end
   object CoolBarU: TCoolBar
     Left = 0
@@ -84,16 +28,17 @@ object ZCADMainWindow: TZCADMainWindow
         Width = 100
       end>
     DockSite = True
+    GrabWidth = 5
     object ToolBarU: TToolBar
       AnchorSideLeft.Control = CoolBarU
       AnchorSideTop.Control = CoolBarU
-      Left = 24
+      Left = 19
       Height = 0
       Top = 14
-      Width = 71
+      Width = 76
       Align = alNone
       AutoSize = True
-      BorderSpacing.Left = 22
+      BorderSpacing.Left = 17
       BorderSpacing.Top = 12
       Caption = 'ToolBar1'
       DragKind = dkDock
@@ -119,5 +64,64 @@ object ZCADMainWindow: TZCADMainWindow
     TabOrder = 2
     Transparent = True
     Wrapable = False
+  end
+  object CoolBarL: TCoolBar
+    Left = 0
+    Height = 413
+    Top = 29
+    Width = 4
+    Align = alLeft
+    AutoSize = True
+    Bands = <>
+    DockSite = True
+    GrabWidth = 5
+    Vertical = True
+  end
+  object CoolBarR: TCoolBar
+    Left = 603
+    Height = 413
+    Top = 29
+    Width = 29
+    Align = alRight
+    AutoSize = True
+    Bands = <    
+      item
+        Control = ToolBarR
+        Width = 100
+      end>
+    DockSite = True
+    GrabWidth = 5
+    Vertical = True
+    object ToolBarR: TToolBar
+      AnchorSideLeft.Control = CoolBarR
+      AnchorSideTop.Control = CoolBarR
+      Left = 14
+      Height = 76
+      Top = 19
+      Width = 0
+      Align = alNone
+      AutoSize = True
+      BorderSpacing.Left = 12
+      BorderSpacing.Top = 17
+      Caption = 'ToolBarR'
+      DragKind = dkDock
+      DragMode = dmAutomatic
+      EdgeBorders = []
+      ShowCaptions = True
+      TabOrder = 0
+      Transparent = True
+      Wrapable = False
+    end
+  end
+  object CoolBarD: TCoolBar
+    Left = 0
+    Height = 4
+    Top = 442
+    Width = 632
+    Align = alBottom
+    AutoSize = True
+    Bands = <>
+    DockSite = True
+    GrabWidth = 5
   end
 end

@@ -44,7 +44,7 @@ uses
   {ZCAD COMMANDS}
        uzccommandsabstract,uzccommandsimpl,uzccommandsmanager,
   {GUI}
-       uzctextenteditor,{uzcoidecorations,}uzcfcommandline,uzctreenode,uzcflineweights,uzcctrllayercombobox,uzcctrlcontextmenu,
+       uztoolbarsutils,uzctextenteditor,{uzcoidecorations,}uzcfcommandline,uzctreenode,uzcflineweights,uzcctrllayercombobox,uzcctrlcontextmenu,
        uzcfcolors,uzcimagesmanager,uzcgui2textstyles,usupportgui,uzcgui2dimstyles,
   {}
        zcchangeundocommand,uzgldrawcontext,uzglviewareaabstract,uzcguimanager,uzcinterfacedata,
@@ -175,6 +175,7 @@ type
     procedure processfilehistory(filename:string);
     procedure processcommandhistory(Command:string);
     function CreateZCADControl(aName: string;DoDisableAlign:boolean=false):TControl;
+    function CreateZCADToolBar(aName: string):TToolBar;
     procedure DockMasterCreateControl(Sender: TObject; aName: string; var
     AControl: TControl; DoDisableAutoSizing: boolean);
 
@@ -914,6 +915,7 @@ begin
       // this will close unneeded forms and call OnCreateControl for all needed
       DockMaster.LoadLayoutFromConfig(XMLConfig,false);
       DockMaster.LoadSettingsFromConfig(XMLConfig);
+      RestoreToolBarsFromConfig(ZCADMainWindow,XMLConfig,ZCADMainWindow.CreateZCADToolBar);
     finally
       XMLConfig.Free;
     end;
@@ -1095,6 +1097,54 @@ procedure TZCADMainWindow.CreateAnchorDockingInterface;
 var
   action: tmyaction;
 begin
+
+  (*ToolBarU:=TToolBar.Create(self);
+  ToolBarU.Align:=alTop{alClient};
+  ToolBarU.SetBounds(500,0,1000,26);
+  ToolBarU.AutoSize:=true;
+  ToolBarU.ButtonHeight:=sysvar.INTF.INTF_DefaultControlHeight^;
+  ToolBarU.ShowCaptions:=true;
+  ToolBarU.Parent:=self;
+  ToolBarU.EdgeBorders:=[{ebTop, ebBottom, ebLeft, ebRight}];*)
+
+  DragManager.DragImmediate:=false;
+  DragManager.DragThreshold:=32;
+
+  CreateToolbarFromDesk(ToolBarR, 'RIGHT', self.findtoolbatdesk('RIGHT'));
+
+  CreateToolbarFromDesk(ToolBarU, 'STANDART', self.findtoolbatdesk('STANDART'));
+  CreateHTPB(ToolBarD);
+  CreateToolbarFromDesk(ToolBarD, 'STATUS', self.findtoolbatdesk('STATUS'));
+  //ToolBarU.AdjustSize;
+  action:=tmyaction(StandartActions.ActionByName('ACN_SHOW_STANDART'));
+  if assigned(action) then
+                          begin
+                               action.Enabled:=false;
+                               action.Checked:=true;
+                               action.pfoundcommand:=nil;
+                               action.command:='';
+                               action.options:='';
+                          end;
+  action:=tmyaction(StandartActions.ActionByName('ACN_SHOW_STATUS'));
+  if assigned(action) then
+                          begin
+                               action.Enabled:=false;
+                               action.Checked:=true;
+                               action.pfoundcommand:=nil;
+                               action.command:='';
+                               action.options:='';
+                          end;
+  action:=tmyaction(StandartActions.ActionByName('ACN_SHOW_RIGHT'));
+  if assigned(action) then
+                          begin
+                               action.Enabled:=false;
+                               action.Checked:=true;
+                               action.pfoundcommand:=nil;
+                               action.command:='';
+                               action.options:='';
+                          end;
+
+
   self.SetBounds(0, 0, 800, 44);
   DockMaster.SplitterClass:=TmyAnchorDockSplitter;
   DockMaster.ManagerClass:=TAnchorDockManager;
@@ -1108,58 +1158,18 @@ begin
   end;
    if not sysparam.noloadlayout then
                                     LoadLayout_com(EmptyCommandOperands);
+
+   if assigned(updatesbytton) then
+     updatesbytton.Clear;
+   if assigned(updatescontrols) then
+     updatescontrols.Clear;
+
   if sysparam.noloadlayout then
   begin
        DockMaster.ShowControl('CommandLine', true);
        DockMaster.ShowControl('ObjectInspector', true);
        DockMaster.ShowControl('PageControl', true);
   end;
-
-   (*ToolBarU:=TToolBar.Create(self);
-   ToolBarU.Align:=alTop{alClient};
-   ToolBarU.SetBounds(500,0,1000,26);
-   ToolBarU.AutoSize:=true;
-   ToolBarU.ButtonHeight:=sysvar.INTF.INTF_DefaultControlHeight^;
-   ToolBarU.ShowCaptions:=true;
-   ToolBarU.Parent:=self;
-   ToolBarU.EdgeBorders:=[{ebTop, ebBottom, ebLeft, ebRight}];*)
-
-   DragManager.DragImmediate:=false;
-   DragManager.DragThreshold:=32;
-
-   CreateToolbarFromDesk(ToolBarR, 'RIGHT', self.findtoolbatdesk('RIGHT'));
-
-   CreateToolbarFromDesk(ToolBarU, 'STANDART', self.findtoolbatdesk('STANDART'));
-   CreateHTPB(ToolBarD);
-   CreateToolbarFromDesk(ToolBarD, 'STATUS', self.findtoolbatdesk('STATUS'));
-   //ToolBarU.AdjustSize;
-   action:=tmyaction(StandartActions.ActionByName('ACN_SHOW_STANDART'));
-   if assigned(action) then
-                           begin
-                                action.Enabled:=false;
-                                action.Checked:=true;
-                                action.pfoundcommand:=nil;
-                                action.command:='';
-                                action.options:='';
-                           end;
-   action:=tmyaction(StandartActions.ActionByName('ACN_SHOW_STATUS'));
-   if assigned(action) then
-                           begin
-                                action.Enabled:=false;
-                                action.Checked:=true;
-                                action.pfoundcommand:=nil;
-                                action.command:='';
-                                action.options:='';
-                           end;
-   action:=tmyaction(StandartActions.ActionByName('ACN_SHOW_RIGHT'));
-   if assigned(action) then
-                           begin
-                                action.Enabled:=false;
-                                action.Checked:=true;
-                                action.pfoundcommand:=nil;
-                                action.command:='';
-                                action.options:='';
-                           end;
 end;
 
 
@@ -1373,6 +1383,51 @@ FToolBar.Caption:='';
 end;
 
 end;
+
+function TZCADMainWindow.CreateZCADToolBar(aName: string):TToolBar;
+var
+  TB:TToolBar;
+  tbdesk:string;
+  ta:TmyAction;
+  PFID:PTFormInfoData;
+begin
+  ta:=tmyaction(self.StandartActions.ActionByName('ACN_Show_'+aname));
+  if ta<>nil then
+                 ta.Checked:=true;
+begin
+tbdesk:=self.findtoolbatdesk(aName);
+if tbdesk=''then
+          ShowError(format(rsToolBarNotFound,[aName]));
+
+TB:=TToolBar.Create(self);
+TB.ButtonHeight:=sysvar.INTF.INTF_DefaultControlHeight^;
+TB.Align:=alclient;
+TB.Top:=0;
+TB.Left:=0;
+TB.AutoSize:=true;
+TB.Wrapable:=false;
+TB.Transparent:=true;
+TB.DragKind:=dkDock;
+TB.DragMode:=dmAutomatic;
+if aName<>'Status' then
+TB.EdgeBorders:=[];
+TB.ShowCaptions:=true;
+
+if aName='Status' then
+begin
+CreateHTPB(tb);
+end;
+CreateToolbarFromDesk(tb,aName,tbdesk);
+
+result:=TB;
+
+result.Name:=aname;
+end;
+
+end;
+
+
+
 procedure ZCADMainPanelSetupProc(Form:TControl);
 begin
   Tform(Form).BorderWidth:=0;
@@ -3252,7 +3307,7 @@ begin
                          ZCADMainWindow.OpenedDrawings[i].command:='';
              end;
            ZCADMainWindow.Caption:=('ZCad v'+sysvar.SYS.SYS_Version^);
-           if assigned(LayerBox)then
+           {if assigned(LayerBox)then
            LayerBox.enabled:=false;
            if assigned(LineWBox)then
            LineWBox.enabled:=false;
@@ -3263,7 +3318,7 @@ begin
            if assigned(DimStyleBox) then
            DimStyleBox.enabled:=false;
            if assigned(LTypeBox) then
-           LTypeBox.enabled:=false;
+           LTypeBox.enabled:=false;}
            if assigned(ZCADMainWindow.HScrollBar) then
            begin
            ZCADMainWindow.HScrollBar.enabled:=false;

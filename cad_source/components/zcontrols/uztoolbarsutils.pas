@@ -128,6 +128,9 @@ begin
     Result := TWinControl(FloatingClass.NewInstance);
     Result.DisableAutoSizing{$IFDEF DebugDisableAutoSizing}('TControl.CreateFloatingDockSite'){$ENDIF};
     Result.Create(tb);
+    if result is TCustomDockForm then
+      (result as TCustomDockForm).BorderStyle:=bsSizeToolWin;
+    result.TabStop:=false;
     // resize with minimal resizes
     NewClientWidth:=Bounds.Right-Bounds.Left;
     NewClientHeight:=Bounds.Bottom-Bounds.Top;
@@ -181,7 +184,7 @@ begin
                  FloatHost := CreateFloatingDockSite(tb,r);
                  if FloatHost <> nil then
                  begin
-                   tb.Parent:=FloatHost;
+                   tb.dock(FloatHost,FloatHost.ClientRect);
                    FloatHost.Caption := FloatHost.GetDockCaption(tb);
                    FloatHost.Show;
                  end;

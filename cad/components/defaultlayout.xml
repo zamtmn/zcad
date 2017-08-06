@@ -3,28 +3,28 @@
   <MainConfig>
     <Nodes ChildCount="1">
       <Item1 Name="AnchorDockPanel1" Type="CustomSite" ChildCount="1">
-        <Bounds Top="26" Left="29" Width="683" Height="521"/>
+        <Bounds Top="12" Left="60" Width="719" Height="508"/>
         <Anchors Align="Client"/>
         <Item1 Name="AnchorDockSite4" Type="Layout" ChildCount="5">
-          <Bounds Top="1" Left="5" Width="673" Height="433"/>
+          <Bounds Top="1" Left="1" Width="675" Height="396"/>
           <Anchors Align="Client"/>
           <Item1 Name="CommandLine" Type="Control">
-            <Bounds Top="343" Left="154" Width="519" Height="90"/>
+            <Bounds Top="303" Left="200" Width="475" Height="93"/>
             <Anchors Top="AnchorDockSplitter1" Left="AnchorDockSplitter2"/>
           </Item1>
           <Item2 Name="AnchorDockSplitter1" Type="SplitterHorizontal">
-            <Bounds Top="339" Left="154" Width="519" Height="4"/>
+            <Bounds Top="299" Left="200" Width="475" Height="4"/>
             <Anchors Left="AnchorDockSplitter2"/>
           </Item2>
           <Item3 Name="PageControl" Type="Control">
-            <Bounds Left="154" Width="519" Height="339"/>
+            <Bounds Left="200" Width="475" Height="299"/>
             <Anchors Left="AnchorDockSplitter2" Bottom="AnchorDockSplitter1"/>
           </Item3>
           <Item4 Name="AnchorDockSplitter2" Type="SplitterVertical">
-            <Bounds Left="150" Width="4" Height="433"/>
+            <Bounds Left="196" Width="4" Height="396"/>
           </Item4>
           <Item5 Name="ObjectInspector" Type="Control">
-            <Bounds Width="150" Height="433"/>
+            <Bounds Width="196" Height="396"/>
             <Anchors Right="AnchorDockSplitter2"/>
           </Item5>
         </Item1>
@@ -32,4 +32,14 @@
     </Nodes>
   </MainConfig>
   <Settings HeaderStyle="Lines"/>
+  <ToolBarsConfig ItemCount="4">
+    <Item0 Name="CoolBarU" Type="CoolBar" ItemCount="1">
+      <Item0 Name="Standart" Type="ToolBar"/>
+    </Item0>
+    <Item1 Name="CoolBarL" Type="CoolBar" ItemCount="0"/>
+    <Item2 Name="CoolBarR" Type="CoolBar" ItemCount="1">
+      <Item0 Name="Right" Type="ToolBar"/>
+    </Item2>
+    <Item3 Name="CoolBarD" Type="CoolBar" ItemCount="0"/>
+  </ToolBarsConfig>
 </CONFIG>

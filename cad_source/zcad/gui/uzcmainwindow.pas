@@ -22,7 +22,7 @@ unit uzcmainwindow;
 interface
 uses
   {LCL}
-       AnchorDockPanel,AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr,
+       Laz2_DOM,AnchorDockPanel,AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr,
        ActnList,LCLType,LCLProc,uzctranslations,toolwin,LMessages,LCLIntf,
        Forms, stdctrls, ExtCtrls, ComCtrls,Controls,Classes,SysUtils,LazUTF8,
        menus,graphics,dialogs,XMLPropStorage,Buttons,Themes,
@@ -175,7 +175,8 @@ type
     procedure processfilehistory(filename:string);
     procedure processcommandhistory(Command:string);
     function CreateZCADControl(aName: string;DoDisableAlign:boolean=false):TControl;
-    function CreateZCADToolBar(aName: string):TToolBar;
+    function CreateZCADToolBar(aName,atype: string):TToolBar;
+    procedure TBSeparatorCreateFunc (aNode: TDomNode; TB:TToolBar);
     procedure DockMasterCreateControl(Sender: TObject; aName: string; var
     AControl: TControl; DoDisableAutoSizing: boolean);
 
@@ -915,7 +916,7 @@ begin
       // this will close unneeded forms and call OnCreateControl for all needed
       DockMaster.LoadLayoutFromConfig(XMLConfig,false);
       DockMaster.LoadSettingsFromConfig(XMLConfig);
-      RestoreToolBarsFromConfig(ZCADMainWindow,XMLConfig,ZCADMainWindow.CreateZCADToolBar);
+      RestoreToolBarsFromConfig(ZCADMainWindow,XMLConfig);
     finally
       XMLConfig.Free;
     end;
@@ -1384,7 +1385,7 @@ end;
 
 end;
 
-function TZCADMainWindow.CreateZCADToolBar(aName: string):TToolBar;
+function TZCADMainWindow.CreateZCADToolBar(aName,atype: string):TToolBar;
 var
   TB:TToolBar;
   tbdesk:string;
@@ -1490,6 +1491,15 @@ begin
   ZCADMainWindow.PageControl.OnMouseDown:=ZCADMainWindow.PageControlMouseDown;
   ZCADMainWindow.PageControl.ShowTabs:=SysVar.INTF.INTF_ShowDwgTabs^;
 end;
+procedure TZCADMainWindow.TBSeparatorCreateFunc(aNode: TDomNode; TB:TToolBar);
+begin
+ with TToolButton.Create(TB) do
+ begin
+   Style:=tbsDivider;
+   Parent:=TB;
+   AutoSize:=False;
+ end;
+end;
 procedure TZCADMainWindow._onCreate(Sender: TObject);
 begin
   {
@@ -1526,6 +1536,9 @@ begin
   toolbars.Sorted:=true;
   CreateInterfaceLists;
   loadpanels(ProgramPath+'menu/mainmenu.mn');
+  RegisterTBItemCreateFunc('Separator',TBSeparatorCreateFunc);
+  RegisterTBCreateFunc('ToolBar',CreateZCADToolBar);
+  LoadToolBarsContent(ProgramPath+'menu/toolbarscontent.xml');
 
   if sysparam.standartinterface then
                                     CreateStandartInterface
@@ -1880,7 +1893,7 @@ begin
     line := f.readstring(' ',#$D#$A);
     if (line <> '') and (line[1] <> ';') then
     begin
-      if uppercase(line) = 'PANEL' then
+      if uppercase(line) = 'TOOLBAR' then
       begin
            line := f.readstring('; ','');
            paneldesk:=line+':';

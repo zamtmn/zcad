@@ -6,15 +6,61 @@ interface
 
 uses
   Classes, SysUtils, ComCtrls, Controls, Graphics, Menus, Forms,
-  LazConfigStorage;
+  LazConfigStorage,Laz2_XMLCfg,Laz2_DOM,
+  Generics.Collections;
 
 type
-  TTBCreateFunc=function (aName: string):TToolBar of object;
+  TTBCreateFunc=function (aName,aType: string):TToolBar of object;
+  TTBItemCreateFunc=procedure (aNode: TDomNode; TB:TToolBar) of object;
+
+  TTBCreateFuncRegister=specialize TDictionary <string,TTBCreateFunc>;
+  TTBItemCreateFuncRegister=specialize TDictionary <string,TTBItemCreateFunc>;
 
 procedure SaveToolBarsToConfig(MainForm:TForm; Config: TConfigStorage);
-procedure RestoreToolBarsFromConfig(MainForm:TForm; Config: TConfigStorage;TBCreateFunc:TTBCreateFunc);
+procedure RestoreToolBarsFromConfig(MainForm:TForm; Config: TConfigStorage);
+procedure LoadToolBarsContent(filename:string);
+procedure RegisterTBCreateFunc(TBType:string;TBCreateFunc:TTBCreateFunc);
+procedure RegisterTBItemCreateFunc(aNodeName:string;TBItemCreateFunc:TTBItemCreateFunc);
 
 implementation
+
+var
+  TBConfig:TXMLConfig=nil;
+  TBCreateFuncRegister:TTBCreateFuncRegister=nil;
+  TBItemCreateFuncRegister:TTBItemCreateFuncRegister=nil;
+
+procedure RegisterTBCreateFunc(TBType:string;TBCreateFunc:TTBCreateFunc);
+begin
+  if not assigned(TBCreateFuncRegister) then
+    TBCreateFuncRegister:=TTBCreateFuncRegister.create;
+  TBCreateFuncRegister.add(uppercase(TBType),TBCreateFunc);
+end;
+
+function DoTBCreateFunc(aName,aType:string):TToolBar;
+var
+  tbcf:TTBCreateFunc;
+begin
+  result:=nil;
+  if assigned(TBCreateFuncRegister) then
+    if TBCreateFuncRegister.TryGetValue(uppercase(aType),tbcf)then
+      result:=tbcf(aName,aType);
+end;
+
+procedure RegisterTBItemCreateFunc(aNodeName:string;TBItemCreateFunc:TTBItemCreateFunc);
+begin
+  if not assigned(TBItemCreateFuncRegister) then
+    TBItemCreateFuncRegister:=TTBItemCreateFuncRegister.create;
+  TBItemCreateFuncRegister.add(uppercase(aNodeName),TBItemCreateFunc);
+end;
+
+procedure DoTBItemCreateFunc(aNodeName:string; aNode: TDomNode; TB:TToolBar);
+var
+  tbicf:TTBItemCreateFunc;
+begin
+  if assigned(TBItemCreateFuncRegister) then
+    if TBItemCreateFuncRegister.TryGetValue(uppercase(aNodeName),tbicf)then
+      tbicf(aNode,TB);
+end;
 
 function IsFloatToolbar(tb:TToolBar;out tf:TCustomDockForm):boolean;
 begin
@@ -145,7 +191,7 @@ begin
   end;
 end;
 
-procedure RestoreToolBarsFromConfig(MainForm:TForm; Config: TConfigStorage;TBCreateFunc:TTBCreateFunc);
+procedure RestoreToolBarsFromConfig(MainForm:TForm; Config: TConfigStorage);
 var
   i,j,ItemCount:integer;
   itemName,itemType:string;
@@ -172,14 +218,16 @@ begin
                    Config.AppendBasePath('Item'+IntToStr(j)+'/');
                    itemType:=Config.GetValue('Type','');
                    itemName:=Config.GetValue('Name','');
-                   tb:=TBCreateFunc(itemName);
+                   tb:=DoTBCreateFunc(itemName,itemType);
+                   //tb:=TBCreateFunc(itemName,itemType);
                    cb.InsertControl(tb,j);
                    Config.UndoAppendBasePath;
                  end;
                end;
 'FloatToolBar':begin
                  Config.GetValue('BoundsRect',r,Rect(0,0,0,0));
-                 tb:=TBCreateFunc(itemName);
+                 tb:=DoTBCreateFunc(itemName,'ToolBar');
+                 //tb:=TBCreateFunc(itemName,'ToolBar');
 
                  FloatHost := CreateFloatingDockSite(tb,r);
                  if FloatHost <> nil then
@@ -195,5 +243,27 @@ begin
   Config.UndoAppendBasePath;
 end;
 
-end.
+function FindBarsContent(toolbarname:string):TDomNode;
+//var
+//  node,subnode,namenode:TDomNode;
+//  s:string;
+begin
+  if not assigned(TBConfig) then
+    exit(nil);
+  result:=nil;
+  result:=TBConfig.FindNode('ToolBarsContent/'+toolbarname,false);
+  //s:=result.NodeName;
+end;
 
+procedure LoadToolBarsContent(filename:string);
+begin
+  if not assigned(TBConfig) then
+    TBConfig:=TXMLConfig.Create(nil);
+  TBConfig.Filename:=filename;
+  //FindBarsContent('Right');
+end;
+
+finalization
+  if assigned(TBConfig) then
+    TBConfig.Free;
+end.

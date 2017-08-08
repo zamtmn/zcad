@@ -1,4 +1,4 @@
-Panel Right;
+ToolBar Right;
   {
     action ACN_LOADQS
     action ACN_SAVEQS
@@ -20,7 +20,7 @@ Panel Right;
     action ACN_TEXT
     action ACN_SupeLine
   }
-Panel OIButtons;
+ToolBar OIButtons;
   {
     action ACN_SNAPRUNTIME
     Separator
@@ -32,7 +32,7 @@ Panel OIButtons;
     variable DSGN_SelNew,one.bmp,New selection set,
     variable DSGN_SelSameName,#SN,Auto select devices with same name,
   }
-Panel Status;
+ToolBar Status;
   {
     Separator
     variable DWG_SnapGrid,snaptogrid.bmp,Snap,F9
@@ -45,7 +45,7 @@ Panel Status;
     variable DWG_HelpGeometryDraw,#AG,Auxiliary graphics (connectivity, direction, etc.)
     variable DISP_SystmGeometryDraw,#SG,System graphics (size, communication, etc. for debugging)
   }
-Panel ObjectSnap;
+ToolBar ObjectSnap;
   {
     action ACN_OS_INSERT
     action ACN_OS_END
@@ -62,7 +62,7 @@ Panel ObjectSnap;
     action ACN_OS_APARENTINTERSECTION
     action ACN_OS_PARALEL
   }
-Panel Standart;
+ToolBar Standart;
   {
     action ACN_NEW
     action ACN_LOAD
@@ -103,7 +103,7 @@ Panel Standart;
     action ACN_PROCESSKZ
     action ACN_REMAUTOCABLES
   }
-Panel View;
+ToolBar View;
   {
     action ACN_ZOOMIN
     action ACN_ZOOMOUT
@@ -131,13 +131,13 @@ Panel View;
     action ACN_VIEWRU
     action ACN_VIEWRD
   }
-Panel Quick;
+ToolBar Quick;
   {
     action ACN_LOADQS
     action ACN_SAVEQS
     action ACN_PROJECTTREE
   }
-Panel Modify;
+ToolBar Modify;
   {
     action ACN_BEDIT
     action ACN_POLYED
@@ -147,7 +147,7 @@ Panel Modify;
     action ACN_SCALE
     action ACN_MIRROR
   }
-Panel Draw;
+ToolBar Draw;
   {
     action ACN_LINE
     action ACN_3DPOLY
@@ -157,7 +157,7 @@ Panel Draw;
     action ACN_TEXT
     action ACN_SupeLine
   }
-Panel Misc;
+ToolBar Misc;
   {
     action ACN_CABLE
     action ACN_WIRE

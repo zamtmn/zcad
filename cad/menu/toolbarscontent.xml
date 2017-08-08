@@ -22,5 +22,45 @@
       <Action Name="ACN_TEXT"/>
       <Action Name="ACN_SupeLine"/>
     </Right>
+    <Standart Type="ToolBar">
+      <Action Name="ACN_NEW"/>
+      <Action Name="ACN_LOAD"/>
+      <Action Name="ACN_QSAVE"/>
+      <Separator/>
+      <Action Name="ACN_PRINT"/>
+      <Separator/>
+      <Action Name="ACN_LAYER"/>
+      <LayerComboBox Width="200" Hint="Layer selection"/>
+      <Separator/>
+      <Action Name="ACN_COLORS"/>
+      <ColorComboBox Width="100" Hint="Color selection"/>
+      <Separator/>
+      <Action Name="ACN_LTYPES"/>
+      <LTypeComboBox Width="250" Hint="Line type selection"/>
+      <Separator/>
+      <LineWComboBox Width="100" Hint="Line weight selection"/>
+      <Separator/>
+      <Action Name="ACN_TSTYLES"/>
+      <TStyleComboBox Width="100" Hint="Text style selection"/>
+      <Separator/>
+      <Action Name="ACN_DSTYLES"/>
+      <DimStyleComboBox Width="100" Hint="Dim style selection"/>
+      <Separator/>
+      <Action Name="ACN_UNDO"/>
+      <Action Name="ACN_REDO"/>
+      <Separator/>
+      <Action Name="ACN_REGEN"/>
+      <Action Name="ACN_REGENZENTS"/>
+      <Separator/>
+      <Action Name="ACN_MATCHPROP"/>
+      <Button Command="OPS_Sensor_Mark" img='#++' Hint="Numbering sensors on the plan"/>
+      <Action Name="ACN_DEVNUMBERING"/>
+      <Action Name="ACN_KIPCDBUILD"/>
+      <Separator/>
+      <Action Name="ACN_REBUILDTREE"/>
+      <Separator/>
+      <Action Name="ACN_PROCESSKZ"/>
+      <Action Name="ACN_REMAUTOCABLES"/>
+    </Standart>
   </ToolBarsContent>
 </CONFIG>

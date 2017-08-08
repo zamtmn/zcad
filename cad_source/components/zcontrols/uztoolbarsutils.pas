@@ -191,6 +191,46 @@ begin
   end;
 end;
 
+function FindBarsContent(toolbarname:string):TDomNode;
+//var
+//  node,subnode,namenode:TDomNode;
+//  s:string;
+begin
+  if not assigned(TBConfig) then
+    exit(nil);
+  result:=nil;
+  result:=TBConfig.FindNode('ToolBarsContent/'+toolbarname,false);
+  //s:=result.NodeName;
+end;
+
+procedure LoadToolBarsContent(filename:string);
+begin
+  if not assigned(TBConfig) then
+    TBConfig:=TXMLConfig.Create(nil);
+  TBConfig.Filename:=filename;
+  //FindBarsContent('Right');
+end;
+
+function CreateToolbar(aName:string):TToolBar;
+var
+  TBNode,TBSubNode,TBNodeType:TDomNode;
+  TBType:string;
+begin
+  TBNode:=FindBarsContent(aName);
+  TBNodeType:=TBNode.Attributes.GetNamedItem('Type');
+  if assigned(TBNodeType) then
+                              TBType:=TBNodeType.NodeValue
+                          else
+                              TBType:='';
+  result:=DoTBCreateFunc(aName,TBType);
+  TBSubNode:=TBNode.FirstChild;
+  while assigned(TBSubNode)do
+  begin
+     DoTBItemCreateFunc(TBSubNode.NodeName,TBSubNode,result);
+     TBSubNode:=TBSubNode.NextSibling;
+  end;
+end;
+
 procedure RestoreToolBarsFromConfig(MainForm:TForm; Config: TConfigStorage);
 var
   i,j,ItemCount:integer;
@@ -218,7 +258,7 @@ begin
                    Config.AppendBasePath('Item'+IntToStr(j)+'/');
                    itemType:=Config.GetValue('Type','');
                    itemName:=Config.GetValue('Name','');
-                   tb:=DoTBCreateFunc(itemName,itemType);
+                   tb:=CreateToolbar(itemName);
                    //tb:=TBCreateFunc(itemName,itemType);
                    cb.InsertControl(tb,j);
                    Config.UndoAppendBasePath;
@@ -226,7 +266,7 @@ begin
                end;
 'FloatToolBar':begin
                  Config.GetValue('BoundsRect',r,Rect(0,0,0,0));
-                 tb:=DoTBCreateFunc(itemName,'ToolBar');
+                 tb:=CreateToolbar(itemName);
                  //tb:=TBCreateFunc(itemName,'ToolBar');
 
                  FloatHost := CreateFloatingDockSite(tb,r);
@@ -241,26 +281,6 @@ begin
     Config.UndoAppendBasePath;
   end;
   Config.UndoAppendBasePath;
-end;
-
-function FindBarsContent(toolbarname:string):TDomNode;
-//var
-//  node,subnode,namenode:TDomNode;
-//  s:string;
-begin
-  if not assigned(TBConfig) then
-    exit(nil);
-  result:=nil;
-  result:=TBConfig.FindNode('ToolBarsContent/'+toolbarname,false);
-  //s:=result.NodeName;
-end;
-
-procedure LoadToolBarsContent(filename:string);
-begin
-  if not assigned(TBConfig) then
-    TBConfig:=TXMLConfig.Create(nil);
-  TBConfig.Filename:=filename;
-  //FindBarsContent('Right');
 end;
 
 finalization

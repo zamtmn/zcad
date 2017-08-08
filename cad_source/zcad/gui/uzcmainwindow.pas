@@ -177,6 +177,7 @@ type
     function CreateZCADControl(aName: string;DoDisableAlign:boolean=false):TControl;
     function CreateZCADToolBar(aName,atype: string):TToolBar;
     procedure TBSeparatorCreateFunc (aNode: TDomNode; TB:TToolBar);
+    procedure TBActionCreateFunc(aNode: TDomNode; TB:TToolBar);
     procedure DockMasterCreateControl(Sender: TObject; aName: string; var
     AControl: TControl; DoDisableAutoSizing: boolean);
 
@@ -1413,12 +1414,14 @@ TB.DragMode:=dmAutomatic;
 if aName<>'Status' then
 TB.EdgeBorders:=[];
 TB.ShowCaptions:=true;
+if not assigned(TB.Images) then
+                               TB.Images:=standartactions.Images;
 
 if aName='Status' then
 begin
 CreateHTPB(tb);
 end;
-CreateToolbarFromDesk(tb,aName,tbdesk);
+{--------------------}//CreateToolbarFromDesk(tb,aName,tbdesk);
 
 result:=TB;
 
@@ -1500,6 +1503,29 @@ begin
    AutoSize:=False;
  end;
 end;
+procedure TZCADMainWindow.TBActionCreateFunc(aNode: TDomNode; TB:TToolBar);
+var
+  _action:TZAction;
+  aNodeName:TDomNode;
+  aNodeNameValue:string;
+begin
+  aNodeName:=aNode.Attributes.GetNamedItem('Name');
+  if assigned(aNodeName) then
+                              aNodeNameValue:=aNodeName.NodeValue
+                          else
+                              aNodeNameValue:='';
+  _action:=TZAction(StandartActions.ActionByName(aNodeNameValue));
+  with TToolButton.Create(tb) do
+  begin
+    Action:=_action;
+    ShowCaption:=false;
+    ShowHint:=true;
+    Caption:=_action.imgstr;
+    Parent:=tb;
+    Visible:=true;
+  end;
+end;
+
 procedure TZCADMainWindow._onCreate(Sender: TObject);
 begin
   {
@@ -1537,6 +1563,7 @@ begin
   CreateInterfaceLists;
   loadpanels(ProgramPath+'menu/mainmenu.mn');
   RegisterTBItemCreateFunc('Separator',TBSeparatorCreateFunc);
+  RegisterTBItemCreateFunc('Action',TBActionCreateFunc);
   RegisterTBCreateFunc('ToolBar',CreateZCADToolBar);
   LoadToolBarsContent(ProgramPath+'menu/toolbarscontent.xml');
 

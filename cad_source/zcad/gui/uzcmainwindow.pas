@@ -178,6 +178,14 @@ type
     function CreateZCADToolBar(aName,atype: string):TToolBar;
     procedure TBSeparatorCreateFunc (aNode: TDomNode; TB:TToolBar);
     procedure TBActionCreateFunc(aNode: TDomNode; TB:TToolBar);
+    procedure TBButtonCreateFunc(aNode: TDomNode; TB:TToolBar);
+    procedure TBLayerComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
+    procedure TBColorComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
+    procedure TBLTypeComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
+    procedure TBLineWComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
+    procedure TBTStyleComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
+    procedure TBDimStyleComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
+    procedure TBVariableCreateFunc(aNode: TDomNode; TB:TToolBar);
     procedure DockMasterCreateControl(Sender: TObject; aName: string; var
     AControl: TControl; DoDisableAutoSizing: boolean);
 
@@ -1503,18 +1511,39 @@ begin
    AutoSize:=False;
  end;
 end;
+
+function getAttrValue(const aNode:TDomNode;const AttrName,DefValue:string):string;overload;
+var
+  aNodeAttr:TDomNode;
+begin
+  aNodeAttr:=aNode.Attributes.GetNamedItem(AttrName);
+  if assigned(aNodeAttr) then
+                              result:=aNodeAttr.NodeValue
+                          else
+                              result:=DefValue;
+end;
+
+function getAttrValue(const aNode:TDomNode;const AttrName:string;const DefValue:integer):integer;overload;
+var
+  aNodeAttr:TDomNode;
+  value:string;
+begin
+  value:='';
+  aNodeAttr:=aNode.Attributes.GetNamedItem(AttrName);
+  if assigned(aNodeAttr) then
+                              value:=aNodeAttr.NodeValue;
+  if not TryStrToInt(value,result) then
+    result:=DefValue;
+end;
+
+
 procedure TZCADMainWindow.TBActionCreateFunc(aNode: TDomNode; TB:TToolBar);
 var
   _action:TZAction;
-  aNodeName:TDomNode;
-  aNodeNameValue:string;
+  ActionName:string;
 begin
-  aNodeName:=aNode.Attributes.GetNamedItem('Name');
-  if assigned(aNodeName) then
-                              aNodeNameValue:=aNodeName.NodeValue
-                          else
-                              aNodeNameValue:='';
-  _action:=TZAction(StandartActions.ActionByName(aNodeNameValue));
+  ActionName:=getAttrValue(aNode,'Name','');
+  _action:=TZAction(StandartActions.ActionByName(ActionName));
   with TToolButton.Create(tb) do
   begin
     Action:=_action;
@@ -1525,6 +1554,150 @@ begin
     Visible:=true;
   end;
 end;
+
+procedure TZCADMainWindow.TBButtonCreateFunc(aNode: TDomNode; TB:TToolBar);
+var
+  _action:TZAction;
+  command,img,_hint:string;
+  CreatedButton:TmyCommandToolButton;
+begin
+  command:=getAttrValue(aNode,'Command','');
+  img:=getAttrValue(aNode,'Img','');
+  _hint:=getAttrValue(aNode,'Hint','');
+
+  CreatedButton:=TmyCommandToolButton.Create(tb);
+  CreatedButton.FCommand:=command;
+   if _hint<>'' then
+   begin
+     _hint:=InterfaceTranslate('hint_panel~'+command,hint);
+     CreatedButton.hint:=_hint;
+     CreatedButton.ShowHint:=true;
+   end;
+  SetImage(tb,CreatedButton,img,true,'button_command~'+command);
+  CreatedButton.Parent:=tb;
+end;
+
+procedure TZCADMainWindow.TBLayerComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
+var
+  _hint:string;
+  _Width:integer;
+begin
+  _hint:=getAttrValue(aNode,'Hint','');
+  _Width:=getAttrValue(aNode,'Width',100);
+
+  LayerBox:=TZCADLayerComboBox.Create(tb);
+  LayerBox.ImageList:=ImagesManager.IconList;
+
+  LayerBox.Index_Lock:=ImagesManager.GetImageIndex('lock');
+  LayerBox.Index_UnLock:=ImagesManager.GetImageIndex('unlock');
+  LayerBox.Index_Freze:=ImagesManager.GetImageIndex('freze');;
+  LayerBox.Index_UnFreze:=ImagesManager.GetImageIndex('unfreze');
+  LayerBox.Index_ON:=ImagesManager.GetImageIndex('on');
+  LayerBox.Index_OFF:=ImagesManager.GetImageIndex('off');
+
+  LayerBox.fGetLayerProp:=self.GetLayerProp;
+  LayerBox.fGetLayersArray:=self.GetLayersArray;
+  LayerBox.fClickOnLayerProp:=self.ClickOnLayerProp;
+
+  LayerBox.Width:=_Width;
+
+  if _hint<>''then
+  begin
+       _hint:=InterfaceTranslate('hint_panel~LAYERCOMBOBOX',_hint);
+       LayerBox.hint:=(_hint);
+       LayerBox.ShowHint:=true;
+  end;
+  LayerBox.AutoSize:=false;
+  LayerBox.Parent:=tb;
+  LayerBox.Height:=10;
+  updatescontrols.Add(LayerBox);
+end;
+procedure TZCADMainWindow.TBColorComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
+var
+  _hint:string;
+  _Width:integer;
+begin
+  _hint:=getAttrValue(aNode,'Hint','');
+  _Width:=getAttrValue(aNode,'Width',100);
+  ColorBox:=CreateCBox('ColorComboBox',tb,TSupportColorCombo.ColorBoxDrawItem,ChangeCColor,DropDownColor,DropUpColor,FillColorCombo,_Width,_hint);
+end;
+procedure TZCADMainWindow.TBLTypeComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
+var
+  _hint:string;
+  _Width:integer;
+begin
+  _hint:=getAttrValue(aNode,'Hint','');
+  _Width:=getAttrValue(aNode,'Width',100);
+  LTypeBox:=CreateCBox('LTypeComboBox',tb,TSupportLineTypeCombo.LTypeBoxDrawItem,ChangeLType,DropDownLType,DropUpLType,FillLTCombo,_Width,_hint);
+end;
+procedure TZCADMainWindow.TBLineWComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
+var
+  _hint:string;
+  _Width:integer;
+begin
+  _hint:=getAttrValue(aNode,'Hint','');
+  _Width:=getAttrValue(aNode,'Width',100);
+  LineWBox:=CreateCBox('LineWComboBox',tb,TSupportLineWidthCombo.LineWBoxDrawIVarsItem,ChangeCLineW,DropDownColor,DropUpColor,FillLWCombo,_Width,_hint);
+end;
+procedure TZCADMainWindow.TBTStyleComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
+var
+  _hint:string;
+  _Width:integer;
+begin
+  _hint:=getAttrValue(aNode,'Hint','');
+  _Width:=getAttrValue(aNode,'Width',100);
+  TStyleBox:=CreateCBox('TStyleComboBox',tb,TSupportTStyleCombo.DrawItemTStyle,TSupportTStyleCombo.ChangeLType,TSupportTStyleCombo.DropDownTStyle,TSupportTStyleCombo.CloseUpTStyle,TSupportTStyleCombo.FillLTStyle,_Width,_hint);
+end;
+procedure TZCADMainWindow.TBDimStyleComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
+var
+  _hint:string;
+  _Width:integer;
+begin
+  _hint:=getAttrValue(aNode,'Hint','');
+  _Width:=getAttrValue(aNode,'Width',100);
+  DimStyleBox:=CreateCBox('DimStyleComboBox',tb,TSupportDimStyleCombo.DrawItemTStyle,TSupportDimStyleCombo.ChangeLType,TSupportDimStyleCombo.DropDownTStyle,TSupportDimStyleCombo.CloseUpTStyle,TSupportDimStyleCombo.FillLTStyle,_Width,_hint);
+end;
+
+procedure TZCADMainWindow.TBVariableCreateFunc(aNode: TDomNode; TB:TToolBar);
+var
+  _varname,_img,_hint,_shortcut:string;
+  _mask:integer;
+  b:TmyVariableToolButton;
+  shortcut:TShortCut;
+  baction:TmyButtonAction;
+begin
+  _varname:=getAttrValue(aNode,'VarName','');
+  _img:=getAttrValue(aNode,'Img','');
+  _hint:=getAttrValue(aNode,'Hint','');
+  _shortcut:=getAttrValue(aNode,'ShortCut','');
+  _mask:=getAttrValue(aNode,'Mask',0);
+
+  b:=TmyVariableToolButton.Create(tb);
+  b.Style:=tbsCheck;
+  TmyVariableToolButton(b).AssignToVar(_varname,_mask);
+  if _hint<>''then
+  begin
+    _hint:=InterfaceTranslate('hint_panel~'+_varname,_hint);
+    b.hint:=(_hint);
+    b.ShowHint:=true;
+  end;
+  SetImage(tb,b,_img,false,'button_variable~'+_varname);
+  //AddToBar(tb,b);
+  b.Parent:=tb;
+  updatesbytton.Add(b);
+  if _shortcut<>'' then
+  begin
+    shortcut:=TextToShortCut(_shortcut);
+    if shortcut>0 then
+    begin
+      baction:=TmyButtonAction.Create(StandartActions);
+      baction.button:=b;
+      baction.ShortCut:=shortcut;
+      StandartActions.AddMyAction(baction);
+    end;
+  end;
+end;
+
 
 procedure TZCADMainWindow._onCreate(Sender: TObject);
 begin
@@ -1564,6 +1737,15 @@ begin
   loadpanels(ProgramPath+'menu/mainmenu.mn');
   RegisterTBItemCreateFunc('Separator',TBSeparatorCreateFunc);
   RegisterTBItemCreateFunc('Action',TBActionCreateFunc);
+  RegisterTBItemCreateFunc('Button',TBButtonCreateFunc);
+  RegisterTBItemCreateFunc('LayerComboBox',TBLayerComboBoxCreateFunc);
+  RegisterTBItemCreateFunc('ColorComboBox',TBColorComboBoxCreateFunc);
+  RegisterTBItemCreateFunc('LTypeComboBox',TBLTypeComboBoxCreateFunc);
+  RegisterTBItemCreateFunc('LineWComboBox',TBLineWComboBoxCreateFunc);
+  RegisterTBItemCreateFunc('TStyleComboBox',TBTStyleComboBoxCreateFunc);
+  RegisterTBItemCreateFunc('DimStyleComboBox',TBDimStyleComboBoxCreateFunc);
+  RegisterTBItemCreateFunc('Variable',TBVariableCreateFunc);
+
   RegisterTBCreateFunc('ToolBar',CreateZCADToolBar);
   LoadToolBarsContent(ProgramPath+'menu/toolbarscontent.xml');
 

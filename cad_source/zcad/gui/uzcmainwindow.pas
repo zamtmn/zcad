@@ -186,6 +186,7 @@ type
     procedure TBTStyleComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
     procedure TBDimStyleComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
     procedure TBVariableCreateFunc(aNode: TDomNode; TB:TToolBar);
+    procedure TTBRegisterInAPPFunc(aTBNode: TDomNode;aName,aType: string;Data:Pointer);
     procedure DockMasterCreateControl(Sender: TObject; aName: string; var
     AControl: TControl; DoDisableAutoSizing: boolean);
 
@@ -1512,31 +1513,6 @@ begin
  end;
 end;
 
-function getAttrValue(const aNode:TDomNode;const AttrName,DefValue:string):string;overload;
-var
-  aNodeAttr:TDomNode;
-begin
-  aNodeAttr:=aNode.Attributes.GetNamedItem(AttrName);
-  if assigned(aNodeAttr) then
-                              result:=aNodeAttr.NodeValue
-                          else
-                              result:=DefValue;
-end;
-
-function getAttrValue(const aNode:TDomNode;const AttrName:string;const DefValue:integer):integer;overload;
-var
-  aNodeAttr:TDomNode;
-  value:string;
-begin
-  value:='';
-  aNodeAttr:=aNode.Attributes.GetNamedItem(AttrName);
-  if assigned(aNodeAttr) then
-                              value:=aNodeAttr.NodeValue;
-  if not TryStrToInt(value,result) then
-    result:=DefValue;
-end;
-
-
 procedure TZCADMainWindow.TBActionCreateFunc(aNode: TDomNode; TB:TToolBar);
 var
   _action:TZAction;
@@ -1575,6 +1551,29 @@ begin
    end;
   SetImage(tb,CreatedButton,img,true,'button_command~'+command);
   CreatedButton.Parent:=tb;
+end;
+procedure TZCADMainWindow.TTBRegisterInAPPFunc(aTBNode: TDomNode;aName,aType: string;Data:Pointer);
+var
+    //pmenuitem:TmyMenuItem;
+    pm1:TMenuItem;
+    //submenu:TMenuItem;
+    //line2:GDBString;
+    //i:integer;
+    //pstr:PGDBString;
+    action:tmyaction;
+    //debs:string;
+begin
+  action:=TmyAction.Create(self);
+  action.Name:='ACN_SHOWTOOLBAR_'+uppercase(aName);
+  action.Caption:=aName;
+  action.command:='ShowToolBar';
+  action.options:=aName;
+  action.DisableIfNoHandler:=false;
+  self.StandartActions.AddMyAction(action);
+  action.pfoundcommand:=commandmanager.FindCommand('ShowToolBar');
+  pm1:=TMenuItem.Create(TMenuItem(Data));
+  pm1.Action:=action;
+  TMenuItem(Data).Add(pm1);
 end;
 
 procedure TZCADMainWindow.TBLayerComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
@@ -1734,7 +1733,7 @@ begin
   toolbars:=tstringlist.Create;
   toolbars.Sorted:=true;
   CreateInterfaceLists;
-  loadpanels(ProgramPath+'menu/mainmenu.mn');
+
   RegisterTBItemCreateFunc('Separator',TBSeparatorCreateFunc);
   RegisterTBItemCreateFunc('Action',TBActionCreateFunc);
   RegisterTBItemCreateFunc('Button',TBButtonCreateFunc);
@@ -1748,6 +1747,8 @@ begin
 
   RegisterTBCreateFunc('ToolBar',CreateZCADToolBar);
   LoadToolBarsContent(ProgramPath+'menu/toolbarscontent.xml');
+
+  loadpanels(ProgramPath+'menu/mainmenu.mn');
 
   if sysparam.standartinterface then
                                     CreateStandartInterface
@@ -2340,24 +2341,7 @@ begin
                                                       end
                 else if uppercase(line)='TOOLBARS' then
                                                       begin
-                                                           for i:=0 to toolbars.Count-1 do
-                                                           begin
-                                                                debs:=toolbars.Strings[i];
-                                                                debs:=copy(debs,1,pos(':',debs)-1);
-
-                                                                action:=TmyAction.Create(self);
-                                                                action.Name:='ACN_SHOW_'+uppercase(debs);
-                                                                action.Caption:=debs;
-                                                                action.command:='Show';
-                                                                action.options:=debs;
-                                                                action.DisableIfNoHandler:=false;
-                                                                self.StandartActions.AddMyAction(action);
-                                                                action.pfoundcommand:=commandmanager.FindCommand('SHOW');
-                                                                pm1:=TMenuItem.Create(pm);
-                                                                pm1.Action:=action;
-                                                                pm.Add(pm1);
-
-                                                           end;
+                                                           EnumerateToolBars(TTBRegisterInAPPFunc,pm);
                                                            line := f.readstring(#$A' ',#$D);
                                                            line:=readspace(line);
                                                       end

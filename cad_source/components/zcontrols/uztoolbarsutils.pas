@@ -12,15 +12,20 @@ uses
 type
   TTBCreateFunc=function (aName,aType: string):TToolBar of object;
   TTBItemCreateFunc=procedure (aNode: TDomNode; TB:TToolBar) of object;
+  TTBRegisterInAPPFunc=procedure (aTBNode: TDomNode;aName,aType: string; Data:Pointer) of object;
 
   TTBCreateFuncRegister=specialize TDictionary <string,TTBCreateFunc>;
   TTBItemCreateFuncRegister=specialize TDictionary <string,TTBItemCreateFunc>;
 
 procedure SaveToolBarsToConfig(MainForm:TForm; Config: TConfigStorage);
 procedure RestoreToolBarsFromConfig(MainForm:TForm; Config: TConfigStorage);
+Procedure ShowFloatToolbar(TBName:String;r:trect);
 procedure LoadToolBarsContent(filename:string);
+procedure EnumerateToolBars(rf:TTBRegisterInAPPFunc;Data:Pointer);
 procedure RegisterTBCreateFunc(TBType:string;TBCreateFunc:TTBCreateFunc);
 procedure RegisterTBItemCreateFunc(aNodeName:string;TBItemCreateFunc:TTBItemCreateFunc);
+function getAttrValue(const aNode:TDomNode;const AttrName,DefValue:string):string;overload;
+function getAttrValue(const aNode:TDomNode;const AttrName:string;const DefValue:integer):integer;overload;
 
 implementation
 
@@ -28,6 +33,30 @@ var
   TBConfig:TXMLConfig=nil;
   TBCreateFuncRegister:TTBCreateFuncRegister=nil;
   TBItemCreateFuncRegister:TTBItemCreateFuncRegister=nil;
+
+function getAttrValue(const aNode:TDomNode;const AttrName,DefValue:string):string;overload;
+var
+  aNodeAttr:TDomNode;
+begin
+  aNodeAttr:=aNode.Attributes.GetNamedItem(AttrName);
+  if assigned(aNodeAttr) then
+                              result:=aNodeAttr.NodeValue
+                          else
+                              result:=DefValue;
+end;
+
+function getAttrValue(const aNode:TDomNode;const AttrName:string;const DefValue:integer):integer;overload;
+var
+  aNodeAttr:TDomNode;
+  value:string;
+begin
+  value:='';
+  aNodeAttr:=aNode.Attributes.GetNamedItem(AttrName);
+  if assigned(aNodeAttr) then
+                              value:=aNodeAttr.NodeValue;
+  if not TryStrToInt(value,result) then
+    result:=DefValue;
+end;
 
 procedure RegisterTBCreateFunc(TBType:string;TBCreateFunc:TTBCreateFunc);
 begin
@@ -96,6 +125,9 @@ begin
         Config.AppendBasePath('Item'+inttostr(j));
         Config.SetDeleteValue('Type','ToolBar','');
         Config.SetDeleteValue('Name',cb.Bands[j].Control.Name,'');
+        Config.SetDeleteValue('Break',cb.Bands[j].Break,true);
+        //if not cb.Bands[j].Break then
+        Config.SetDeleteValue('Width',cb.Bands[j].Width,100);
         Config.UndoAppendBasePath;
       end;
       Config.UndoAppendBasePath;
@@ -208,26 +240,53 @@ begin
   if not assigned(TBConfig) then
     TBConfig:=TXMLConfig.Create(nil);
   TBConfig.Filename:=filename;
-  //FindBarsContent('Right');
+end;
+
+procedure EnumerateToolBars(rf:TTBRegisterInAPPFunc;Data:Pointer);
+var
+  TBNode,TBSubNode,TBNodeType:TDomNode;
+begin
+  if assigned(rf) then
+  begin
+    TBNode:=TBConfig.FindNode('ToolBarsContent',false);
+    if assigned(TBNode) then
+      TBSubNode:=TBNode.FirstChild;
+    if assigned(TBSubNode) then
+      while assigned(TBSubNode)do
+      begin
+         rf(TBSubNode,TBSubNode.NodeName,getAttrValue(TBSubNode,'Type',''),data);
+         TBSubNode:=TBSubNode.NextSibling;
+      end;
+  end;
 end;
 
 function CreateToolbar(aName:string):TToolBar;
 var
-  TBNode,TBSubNode,TBNodeType:TDomNode;
+  TBNode,TBSubNode:TDomNode;
   TBType:string;
 begin
   TBNode:=FindBarsContent(aName);
-  TBNodeType:=TBNode.Attributes.GetNamedItem('Type');
-  if assigned(TBNodeType) then
-                              TBType:=TBNodeType.NodeValue
-                          else
-                              TBType:='';
+  TBType:=getAttrValue(TBNode,'Type','');
   result:=DoTBCreateFunc(aName,TBType);
   TBSubNode:=TBNode.FirstChild;
   while assigned(TBSubNode)do
   begin
      DoTBItemCreateFunc(TBSubNode.NodeName,TBSubNode,result);
      TBSubNode:=TBSubNode.NextSibling;
+  end;
+end;
+Procedure ShowFloatToolbar(TBName:String;r:trect);
+var
+  tb:TToolBar;
+  FloatHost: TWinControl;
+begin
+  tb:=CreateToolbar(TBName);
+  FloatHost := CreateFloatingDockSite(tb,r);
+  if FloatHost <> nil then
+  begin
+    tb.dock(FloatHost,FloatHost.ClientRect);
+    FloatHost.Caption := FloatHost.GetDockCaption(tb);
+    FloatHost.Show;
   end;
 end;
 
@@ -261,21 +320,15 @@ begin
                    tb:=CreateToolbar(itemName);
                    //tb:=TBCreateFunc(itemName,itemType);
                    cb.InsertControl(tb,j);
+                   cb.Bands[j].Break:=Config.GetValue('Break',True);
+                   //if not cb.Bands[j].Break then
+                   cb.Bands[j].Width:=Config.GetValue('Width',100);
                    Config.UndoAppendBasePath;
                  end;
                end;
 'FloatToolBar':begin
-                 Config.GetValue('BoundsRect',r,Rect(0,0,0,0));
-                 tb:=CreateToolbar(itemName);
-                 //tb:=TBCreateFunc(itemName,'ToolBar');
-
-                 FloatHost := CreateFloatingDockSite(tb,r);
-                 if FloatHost <> nil then
-                 begin
-                   tb.dock(FloatHost,FloatHost.ClientRect);
-                   FloatHost.Caption := FloatHost.GetDockCaption(tb);
-                   FloatHost.Show;
-                 end;
+                 Config.GetValue('BoundsRect',r,Rect(0,0,300,50));
+                 ShowFloatToolbar(itemName,r);
                end;
     end;
     Config.UndoAppendBasePath;

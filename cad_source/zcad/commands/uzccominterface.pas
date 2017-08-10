@@ -522,6 +522,18 @@ begin
                       ShowError('Show command must have one operand!');
   result:=cmd_ok;
 end;
+function ShowToolBar_com(operands:TCommandOperands):TCommandResult;
+var
+   ctrl:TControl;
+begin
+  if Operands<>'' then
+                      begin
+                        ShowFloatToolbar(operands,rect(0,0,300,50));
+                      end
+                  else
+                      ShowError('Show command must have one operand!');
+  result:=cmd_ok;
+end;
 function quit_com(operands:TCommandOperands):TCommandResult;
 begin
      //Application.QueueAsyncCall(MainFormN.asynccloseapp, 0);
@@ -829,6 +841,7 @@ begin
   CreateCommandFastObjectPlugin(@Colors_cmd,'Colors',CADWG,0);
   CreateCommandFastObjectPlugin(@SaveLayout_com,'SaveLayout',0,0);
   CreateCommandFastObjectPlugin(@Show_com,'Show',0,0);
+  CreateCommandFastObjectPlugin(@ShowToolBar_com,'ShowToolBar',0,0);
   CreateCommandFastObjectPlugin(@About_com,'About',0,0);
   CreateCommandFastObjectPlugin(@Help_com,'Help',0,0);
   CreateCommandFastObjectPlugin(@ClearFileHistory_com,'ClearFileHistory',0,0);

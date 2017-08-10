@@ -3,28 +3,28 @@
   <MainConfig>
     <Nodes ChildCount="1">
       <Item1 Name="AnchorDockPanel1" Type="CustomSite" ChildCount="1">
-        <Bounds Top="12" Left="60" Width="719" Height="508"/>
+        <Bounds Top="12" Left="60" Width="1189" Height="970"/>
         <Anchors Align="Client"/>
         <Item1 Name="AnchorDockSite4" Type="Layout" ChildCount="5">
-          <Bounds Top="1" Left="1" Width="675" Height="396"/>
+          <Bounds Top="1" Left="1" Width="1073" Height="812"/>
           <Anchors Align="Client"/>
           <Item1 Name="CommandLine" Type="Control">
-            <Bounds Top="303" Left="200" Width="475" Height="93"/>
+            <Bounds Top="532" Left="229" Width="844" Height="280"/>
             <Anchors Top="AnchorDockSplitter1" Left="AnchorDockSplitter2"/>
           </Item1>
           <Item2 Name="AnchorDockSplitter1" Type="SplitterHorizontal">
-            <Bounds Top="299" Left="200" Width="475" Height="4"/>
+            <Bounds Top="528" Left="229" Width="844" Height="4"/>
             <Anchors Left="AnchorDockSplitter2"/>
           </Item2>
           <Item3 Name="PageControl" Type="Control">
-            <Bounds Left="200" Width="475" Height="299"/>
+            <Bounds Left="229" Width="844" Height="528"/>
             <Anchors Left="AnchorDockSplitter2" Bottom="AnchorDockSplitter1"/>
           </Item3>
           <Item4 Name="AnchorDockSplitter2" Type="SplitterVertical">
-            <Bounds Left="196" Width="4" Height="396"/>
+            <Bounds Left="225" Width="4" Height="812"/>
           </Item4>
           <Item5 Name="ObjectInspector" Type="Control">
-            <Bounds Width="196" Height="396"/>
+            <Bounds Width="225" Height="812"/>
             <Anchors Right="AnchorDockSplitter2"/>
           </Item5>
         </Item1>
@@ -32,14 +32,20 @@
     </Nodes>
   </MainConfig>
   <Settings HeaderStyle="Lines"/>
-  <ToolBarsConfig ItemCount="4">
-    <Item0 Name="CoolBarU" Type="CoolBar" ItemCount="1">
+  <ToolBarsConfig ItemCount="5">
+    <Item0 Name="CoolBarU" Type="CoolBar" ItemCount="2">
       <Item0 Name="Standart" Type="ToolBar"/>
+      <Item1 Name="OIButtons" Type="ToolBar"/>
     </Item0>
     <Item1 Name="CoolBarL" Type="CoolBar" ItemCount="0"/>
-    <Item2 Name="CoolBarR" Type="CoolBar" ItemCount="1">
-      <Item0 Name="Right" Type="ToolBar"/>
+    <Item2 Name="CoolBarR" Type="CoolBar" ItemCount="3">
+      <Item0 Name="Modify" Type="ToolBar" Width="324"/>
+      <Item1 Name="Quick" Type="ToolBar" Break="False" Width="324"/>
+      <Item2 Name="Draw" Type="ToolBar" Width="324"/>
     </Item2>
-    <Item3 Name="CoolBarD" Type="CoolBar" ItemCount="0"/>
+    <Item3 Name="CoolBarD" Type="CoolBar" ItemCount="1">
+      <Item0 Name="Misc" Type="ToolBar" Width="324"/>
+    </Item3>
+    <Item4 Name="Right" Type="FloatToolBar" BoundsRectTop="536" BoundsRectLeft="1080" BoundsRectRight="1108" BoundsRectBottom="1049"/>
   </ToolBarsConfig>
 </CONFIG>

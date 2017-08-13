@@ -1346,34 +1346,25 @@ begin
   ta:=tmyaction(self.StandartActions.ActionByName(ToolBarNameToActionName(aname)));
   if ta<>nil then
                  ta.Checked:=true;
-begin
-TB:=TToolBar.Create(self);
-TB.ButtonHeight:=sysvar.INTF.INTF_DefaultControlHeight^;
-TB.Align:=alclient;
-TB.Top:=0;
-TB.Left:=0;
-TB.AutoSize:=true;
-TB.Wrapable:=false;
-TB.Transparent:=true;
-TB.DragKind:=dkDock;
-TB.DragMode:=dmAutomatic;
-if aName<>'Status' then
-TB.EdgeBorders:=[];
-TB.ShowCaptions:=true;
-if not assigned(TB.Images) then
-                               TB.Images:=standartactions.Images;
-
-if aName='Status' then
-begin
-CreateHTPB(tb);
-end;
-{--------------------}//CreateToolbarFromDesk(tb,aName,tbdesk);
-
-result:=TB;
-
-result.Name:=aname;
-end;
-
+  begin
+    TB:=TToolBar.Create(self);
+    TB.ButtonHeight:=sysvar.INTF.INTF_DefaultControlHeight^;
+    TB.Align:=alclient;
+    TB.Top:=0;
+    TB.Left:=0;
+    TB.AutoSize:=true;
+    TB.Wrapable:=false;
+    TB.Transparent:=true;
+    TB.DragKind:=dkDock;
+    TB.DragMode:=dmAutomatic;
+    if aName<>'Status' then
+    TB.EdgeBorders:=[];
+    TB.ShowCaptions:=true;
+    if not assigned(TB.Images) then
+                                   TB.Images:=standartactions.Images;
+    result:=TB;
+    result.Name:=aname;
+  end;
 end;
 
 
@@ -1785,220 +1776,6 @@ begin
   AddToBar(owner,result);
   updatescontrols.Add(result);
 end;
-(*
-procedure TZCADMainWindow.CreateToolbarFromDesk(tb:TToolBar;tbname,tbdesk:string);
-var
-    f:GDBOpenArrayOfByte;
-    line,ts,ts2,bc,masks:GDBString;
-    mask:DWord;
-    b:TToolButton;
-    i:longint;
-    w,code:GDBInteger;
-    action:TZAction;
-    baction:TmyButtonAction;
-    shortcut:TShortCut;
-
-  procedure ReadComboSubParam(out a,b:string;out c:integer);
-  begin
-    a := f.readstring(',','');
-    b := f.readstring(';','');
-    val(a,c,code);
-    if code<>0 then
-                  c:=0;
-  end;
-
-begin
-     if not assigned(tb.Images) then
-                                    tb.Images:=standartactions.Images;
-     if tbdesk<>'' then
-      begin
-           f.init({$IFDEF DEBUGBUILD}'{BF3C3480-8736-4378-AA0E-D96EFFE4FC7A}',{$ENDIF}length(tbdesk));
-           f.AddData(@tbdesk[1],length(tbdesk));
-
-           repeat
-           line := f.readstring(';','');
-           begin
-                if (line <> '') and (line[1] <> ';') then
-                begin
-                     if uppercase(line)='ACTION' then
-                     begin
-                          line := f.readstring(';','');
-                          action:=TZAction(self.StandartActions.ActionByName(line));
-                          b:={TmyCommand}TToolButton.Create(tb);
-                          b.Action:=action;
-                          b.ShowCaption:=false;
-                          b.ShowHint:=true;
-                          b.Caption:=action.imgstr;
-                          AddToBar(tb,b);
-                          b.Visible:=true;
-                     end;
-                     if uppercase(line)='BUTTON' then
-                     begin
-                          bc := f.readstring(',','');
-                          line := f.readstring(';','');
-                          ts:='???';
-                          i:=pos(',',line);
-                          if i>0 then
-                                     begin
-                                          ts:=system.copy(line,i+1,length(line)-i);
-                                          line:=system.copy(line,1,i-1);
-                                     end;
-                          b:=TmyCommandToolButton.Create(tb);
-                          TmyCommandToolButton(b).FCommand:=bc;
-                          //b.AutoSize:=true;
-                          if ts<>''then
-                          begin
-                               ts:=InterfaceTranslate('hint_panel~'+bc,ts);
-                          b.hint:=(ts);
-                          b.ShowHint:=true;
-                          end;
-                          SetImage(tb,b,line,true,'button_command~'+bc);
-                          AddToBar(tb,b);
-                     end;
-                     if uppercase(line)='VARIABLE' then
-                     begin
-                          bc := f.readstring(',','');
-                          masks:='';
-                          i:=pos('|', bc);
-                          if i>0 then
-                                     begin
-                                          masks:=system.copy(bc,i+1,length(bc)-i);
-                                          bc:=system.copy(bc,1,i-1);
-                                     end;
-                          if masks<>''then
-                                         begin
-                                              val(masks,mask,code);
-                                              if code<>0 then
-                                                             mask:=0;
-                                         end
-                                     else
-                                         mask:=0;
-                          line := f.readstring(';','');
-                          ts:='???';
-                          i:=pos(',',line);
-                          if i>0 then
-                                     begin
-                                          ts:=system.copy(line,i+1,length(line)-i);
-                                          line:=system.copy(line,1,i-1);
-                                     end;
-                          i:=PosWithBracket(',',ts);
-                          if i>0 then
-                                     begin
-                                          ts2:=system.copy(ts,i+1,length(ts)-i);
-                                          ts:=system.copy(ts,1,i-1);
-                                     end;
-                          b:=TmyVariableToolButton.Create(tb);
-                          b.Style:=tbsCheck;
-                          TmyVariableToolButton(b).AssignToVar(bc,mask);
-                          if ts<>''then
-                          begin
-                               ts:=InterfaceTranslate('hint_panel~'+bc,ts);
-                          b.hint:=(ts);
-                          b.ShowHint:=true;
-                          end;
-                          SetImage(tb,b,line,false,'button_variable~'+bc);
-                          AddToBar(tb,b);
-                          updatesbytton.Add(b);
-                          if ts2<>'' then
-                          begin
-                               shortcut:=TextToShortCut(ts2);
-                               if shortcut>0 then
-                               begin
-                               baction:=TmyButtonAction.Create(StandartActions);
-                               baction.button:=b;
-                               baction.ShortCut:=shortcut;
-                               StandartActions.AddMyAction(baction);
-                               end;
-                               ts2:='';
-                          end;
-                     end;
-                     if uppercase(line)='LAYERCOMBOBOX' then
-                     begin
-                          ReadComboSubParam(bc,ts,w);
-                          LayerBox:=TZCADLayerComboBox.Create(tb);
-                          LayerBox.ImageList:=ImagesManager.IconList;
-
-                          LayerBox.Index_Lock:=ImagesManager.GetImageIndex('lock');
-                          LayerBox.Index_UnLock:=ImagesManager.GetImageIndex('unlock');
-                          LayerBox.Index_Freze:=ImagesManager.GetImageIndex('freze');;
-                          LayerBox.Index_UnFreze:=ImagesManager.GetImageIndex('unfreze');
-                          LayerBox.Index_ON:=ImagesManager.GetImageIndex('on');
-                          LayerBox.Index_OFF:=ImagesManager.GetImageIndex('off');
-
-                          LayerBox.fGetLayerProp:=self.GetLayerProp;
-                          LayerBox.fGetLayersArray:=self.GetLayersArray;
-                          LayerBox.fClickOnLayerProp:=self.ClickOnLayerProp;
-                          if code=0 then
-                                        LayerBox.Width:=w;
-                          if ts<>''then
-                          begin
-                               ts:=InterfaceTranslate('hint_panel~LAYERCOMBOBOX',ts);
-                               LayerBox.hint:=(ts);
-                               LayerBox.ShowHint:=true;
-                          end;
-                          LayerBox.AutoSize:=false;
-                          AddToBar(tb,LayerBox);
-                          LayerBox.Height:=10;
-                          updatescontrols.Add(LayerBox);
-                     end;
-                     if uppercase(line)='LINEWCOMBOBOX' then
-                     begin
-                          ReadComboSubParam(bc,ts,w);
-                          LineWBox:=CreateCBox(line,tb,TSupportLineWidthCombo.LineWBoxDrawIVarsItem,ChangeCLineW,DropDownColor,DropUpColor,FillLWCombo,w,ts);
-                     end;
-                     if uppercase(line)='COLORCOMBOBOX' then
-                     begin
-                          ReadComboSubParam(bc,ts,w);
-                          ColorBox:=CreateCBox(line,tb,TSupportColorCombo.ColorBoxDrawItem,ChangeCColor,DropDownColor,DropUpColor,FillColorCombo,w,ts);
-                     end;
-                     if uppercase(line)='LTYPECOMBOBOX' then
-                     begin
-                          ReadComboSubParam(bc,ts,w);
-                          LTypeBox:=CreateCBox(line,tb,TSupportLineTypeCombo.LTypeBoxDrawItem,ChangeLType,DropDownLType,DropUpLType,FillLTCombo,w,ts);
-                     end;
-                     if uppercase(line)='TSTYLECOMBOBOX' then
-                     begin
-                          ReadComboSubParam(bc,ts,w);
-                          TStyleBox:=CreateCBox(line,tb,TSupportTStyleCombo.DrawItemTStyle,TSupportTStyleCombo.ChangeLType,TSupportTStyleCombo.DropDownTStyle,TSupportTStyleCombo.CloseUpTStyle,TSupportTStyleCombo.FillLTStyle,w,ts);
-                     end;
-                     if uppercase(line)='DIMSTYLECOMBOBOX' then
-                     begin
-                          ReadComboSubParam(bc,ts,w);
-                          DimStyleBox:=CreateCBox(line,tb,TSupportDimStyleCombo.DrawItemTStyle,TSupportDimStyleCombo.ChangeLType,TSupportDimStyleCombo.DropDownTStyle,TSupportDimStyleCombo.CloseUpTStyle,TSupportDimStyleCombo.FillLTStyle,w,ts);
-                     end;
-                     if uppercase(line)='SEPARATOR' then
-                                         begin
-                                         TToolButton(b):={Tmy}TToolButton.Create(tb);
-                                         b.Style:=
-                                         tbsDivider;
-                                          AddToBar(tb,b);
-                                          TToolButton(b).AutoSize:=false;
-                                         end;
-                end;
-           end;
-
-           until not(f.ReadPos<f.count);
-           if (tbname='Status')and(not sysparam.standartinterface) then
-                       begin
-                            if assigned(LayoutBox) then
-                                                      ShowError(format(rsReCreating,['LAYOUTBOX']));
-                            CreateLayoutbox(tb);
-                            if ts<>''then
-                            begin
-                                 //ts:=InterfaceTranslate('hint_panel~LAYOUTBOX',ts);
-                                 //LineWBox.hint:=(ts);
-                                 //LineWBox.ShowHint:=true;
-                            end;
-                            AddToBar(tb,LayoutBox);
-                            LayoutBox.AutoSize:=false;
-                            LayoutBox.Width:=200;
-                            LayoutBox.Align:=alRight;
-
-                       end;
-           f.done;
-
-      end;
-end;*)
 procedure addfiletoLayoutbox(filename:GDBString);
 var
     s:string;

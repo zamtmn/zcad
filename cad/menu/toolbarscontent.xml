@@ -1,27 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ToolBarsContent>
-    <Right Type="ToolBar">
-      <Action Name="ACN_LOADQS"/>
-      <Action Name="ACN_SAVEQS"/>
-      <Action Name="ACN_PROJECTTREE"/>
-      <Separator/>
-      <Action Name="ACN_BEDIT"/>
-      <Action Name="ACN_POLYED"/>
-      <Action Name="ACN_COPY"/>
-      <Action Name="ACN_MOVE"/>
-      <Action Name="ACN_ROTATE"/>
-      <Action Name="ACN_SCALE"/>
-      <Action Name="ACN_MIRROR"/>
-      <Separator/>
-      <Action Name="ACN_LINE"/>
-      <Action Name="ACN_3DPOLY"/>
-      <Action Name="ACN_CIRCLE"/>
-      <Action Name="ACN_RECTANGLE"/>
-      <Action Name="ACN_BInsert"/>
-      <Action Name="ACN_TEXT"/>
-      <Action Name="ACN_SupeLine"/>
-    </Right>
     <Standart Type="ToolBar">
       <Action Name="ACN_NEW"/>
       <Action Name="ACN_LOAD"/>

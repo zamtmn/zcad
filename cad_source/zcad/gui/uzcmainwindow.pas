@@ -77,12 +77,11 @@ type
     CoolBarD: TCoolBar;
     CoolBarL: TCoolBar;
     CoolBarU: TCoolBar;
-    ToolBarR: TToolBar;
     ToolBarD: TToolBar;
-    ToolBarU: TToolBar;
 
+    public
     MainPanel:TForm;
-    FToolBar:TToolButtonForm;
+    //FToolBar:TToolButtonForm;
     PageControl:TmyPageControl;
     DHPanel:TPanel;
     HScrollBar,VScrollBar:TScrollBar;
@@ -91,7 +90,7 @@ type
     toolbars:tstringlist;
     updatesbytton,updatescontrols:tlist;
     procedure ZcadException(Sender: TObject; E: Exception);
-    function findtoolbatdesk(tbn:string):string;
+    //function findtoolbatdesk(tbn:string):string;
     //procedure CreateToolbarFromDesk(tb:TToolBar;tbname,tbdesk:string);
     function CreateCBox(CBName:GDBString;owner:TToolBar;DrawItem:TDrawItemEvent;Change,DropDown,CloseUp:TNotifyEvent;Filler:TComboFiller;w:integer;ts:GDBString):TComboBox;
     procedure CreateHTPB(tb:TToolBar);
@@ -133,7 +132,6 @@ type
 
     //onXxxxx handlers
     procedure _onCreate(Sender: TObject);
-    procedure _onResize(Sender: TObject);
 
     //Long process support - draw progressbar. See uzelongprocesssupport unit
     procedure StartLongProcess(LPHandle:TLPSHandle;Total:TLPSCounter;processname:TLPName);
@@ -149,7 +147,6 @@ type
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     destructor Destroy;override;
     procedure CreateAnchorDockingInterface;
-    procedure AdjustHeight(const AWindow: TCustomForm; const AAdjustHeight: Boolean;const ANewHeight: Integer);
 
     procedure CreateStandartInterface;
     procedure CreateInterfaceLists;
@@ -175,8 +172,6 @@ type
     procedure processfilehistory(filename:string);
     procedure processcommandhistory(Command:string);
     function CreateZCADControl(aName: string;DoDisableAlign:boolean=false):TControl;
-    function CreateZCADToolBar(aName,atype: string):TToolBar;
-    procedure TBSeparatorCreateFunc (aNode: TDomNode; TB:TToolBar);
     procedure TBActionCreateFunc(aNode: TDomNode; TB:TToolBar);
     procedure TBButtonCreateFunc(aNode: TDomNode; TB:TToolBar);
     procedure TBLayerComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
@@ -189,10 +184,6 @@ type
     procedure TTBRegisterInAPPFunc(aTBNode: TDomNode;aName,aType: string;Data:Pointer);
     procedure DockMasterCreateControl(Sender: TObject; aName: string; var
     AControl: TControl; DoDisableAutoSizing: boolean);
-
-    procedure GetPreferredSize(var PreferredWidth, PreferredHeight: integer;
-                                   Raw: boolean = false;
-                                   WithThemeSpace: boolean = true); override;
 
     function IsShortcut(var Message: TLMKey): boolean; override;
     function GetLayerProp(PLayer:Pointer;out lp:TLayerPropRecord):boolean;
@@ -556,22 +547,6 @@ begin
                        end;
 
 end;
-
-function TZCADMainWindow.findtoolbatdesk(tbn:string):string;
-var i:integer;
-    debs:string;
-begin
-     tbn:=uppercase(tbn)+':';
-     for i:=0 to toolbars.Count-1 do
-     begin
-          debs:=uppercase(toolbars.Strings[i]);
-          if pos(tbn,debs)=1 then
-          begin
-               result:=copy(toolbars.Strings[i],length(tbn)+1,length(toolbars.Strings[i])-length(tbn));
-               exit;
-          end;
-     end;
-end;
 function FindIndex(taa:PTDummyMyActionsArray;l,h:integer;ca:string):integer;
 var
     i:integer;
@@ -789,14 +764,6 @@ begin
     Dlg.Free;
   end;
 end;
-procedure TZCADMainWindow.GetPreferredSize(var PreferredWidth, PreferredHeight: integer;
-                               Raw: boolean = false;
-                               WithThemeSpace: boolean = true);
-begin
-     inherited GetPreferredSize(PreferredWidth, PreferredHeight,Raw,WithThemeSpace);
-     {PreferredWidth:=0;
-     PreferredHeight:=0;}
-end;
 function _CloseDWGPage(ClosedDWG:PTZCADDrawing;lincedcontrol:TObject):Integer;
 var
    viewcontrol:TCADControl;
@@ -910,6 +877,7 @@ begin
     exit;
   end;
   aControl:=CreateZCADControl(aName,true);
+  if assigned(aControl)then
   if not DoDisableAutoSizing then
                                Acontrol.EnableAutoSizing;
 end;
@@ -926,7 +894,7 @@ begin
       // this will close unneeded forms and call OnCreateControl for all needed
       DockMaster.LoadLayoutFromConfig(XMLConfig,false);
       DockMaster.LoadSettingsFromConfig(XMLConfig);
-      RestoreToolBarsFromConfig(ZCADMainWindow,XMLConfig);
+      ToolBarsManager.RestoreToolBarsFromConfig(ZCADMainWindow,XMLConfig);
     finally
       XMLConfig.Free;
     end;
@@ -1080,33 +1048,6 @@ begin
        cb.items.AddObject(s, TObject(lwarray[i]));
   end;
 end;
-procedure TZCADMainWindow.AdjustHeight(const AWindow: TCustomForm; const AAdjustHeight: Boolean;const ANewHeight: Integer);
-var
-  Site: TAnchorDockHostSite;
-  I: Integer;
-  SiteNewHeight: Integer;
-begin
-  Site := nil;
-  for I := 0 to AWindow.ControlCount-1 do
-  if AWindow.Controls[I] is TAnchorDockHostSite then
-  begin
-    Site := TAnchorDockHostSite(AWindow.Controls[I]);
-    system.Break;
-  end;
-
-  if not Assigned(Site) then
-    Exit;
-
-  Site.BoundSplitter.Enabled:=not AAdjustHeight;
-  Site.BoundSplitter.Visible:=not AAdjustHeight;
-  SiteNewHeight := Site.Parent.ClientHeight - ANewHeight - Site.BoundSplitter.Height;
-  if AAdjustHeight and (Site.Height <> SiteNewHeight) then
-    Site.Height := SiteNewHeight;
-end;
-function ToolBarNameToActionName(tbname:string):string;
-begin
-  result:='ACN_SHOWTOOLBAR_'+uppercase(tbname);
-end;
 procedure TZCADMainWindow.CreateAnchorDockingInterface;
 var
   action: tmyaction;
@@ -1117,7 +1058,7 @@ begin
 
   {Наполняем статусную строку}
   CreateHTPB(ToolBarD);//поле отображения координат progressbar
-  AddContentToToolbar(ToolBarD,'Status');//переносим туда то что есть на тулбаре 'Status'
+  ToolBarsManager.AddContentToToolbar(ToolBarD,'Status');//переносим туда то что есть на тулбаре 'Status'
 
   {Запрещаем влючать-выключать тулбар 'Status', он показывается всегда}
   action:=tmyaction(StandartActions.ActionByName(ToolBarNameToActionName('Status')));
@@ -1332,41 +1273,12 @@ begin
   end
   else
   begin
-    tbdesk:=self.findtoolbatdesk(aName);
-    if tbdesk=''then
+    //tbdesk:=self.findtoolbatdesk(aName);
+    //if tbdesk=''then
       ShowError(format(rsFormNotFound,[aName]));
+    result:=nil;
   end;
 end;
-function TZCADMainWindow.CreateZCADToolBar(aName,atype: string):TToolBar;
-var
-  TB:TToolBar;
-  ta:TmyAction;
-  PFID:PTFormInfoData;
-begin
-  ta:=tmyaction(self.StandartActions.ActionByName(ToolBarNameToActionName(aname)));
-  if ta<>nil then
-                 ta.Checked:=true;
-  begin
-    TB:=TToolBar.Create(self);
-    TB.ButtonHeight:=sysvar.INTF.INTF_DefaultControlHeight^;
-    TB.Align:=alclient;
-    TB.Top:=0;
-    TB.Left:=0;
-    TB.AutoSize:=true;
-    TB.Wrapable:=false;
-    TB.Transparent:=true;
-    TB.DragKind:=dkDock;
-    TB.DragMode:=dmAutomatic;
-    if aName<>'Status' then
-    TB.EdgeBorders:=[];
-    TB.ShowCaptions:=true;
-    if not assigned(TB.Images) then
-                                   TB.Images:=standartactions.Images;
-    result:=TB;
-    result.Name:=aname;
-  end;
-end;
-
 
 
 procedure ZCADMainPanelSetupProc(Form:TControl);
@@ -1431,16 +1343,6 @@ begin
   ZCADMainWindow.PageControl.OnMouseDown:=ZCADMainWindow.PageControlMouseDown;
   ZCADMainWindow.PageControl.ShowTabs:=SysVar.INTF.INTF_ShowDwgTabs^;
 end;
-procedure TZCADMainWindow.TBSeparatorCreateFunc(aNode: TDomNode; TB:TToolBar);
-begin
- with TToolButton.Create(TB) do
- begin
-   Style:=tbsDivider;
-   Parent:=TB;
-   AutoSize:=False;
- end;
-end;
-
 procedure TZCADMainWindow.TBActionCreateFunc(aNode: TDomNode; TB:TToolBar);
 var
   _action:TZAction;
@@ -1662,19 +1564,20 @@ begin
   toolbars.Sorted:=true;
   CreateInterfaceLists;
 
-  RegisterTBItemCreateFunc('Separator',TBSeparatorCreateFunc);
-  RegisterTBItemCreateFunc('Action',TBActionCreateFunc);
-  RegisterTBItemCreateFunc('Button',TBButtonCreateFunc);
-  RegisterTBItemCreateFunc('LayerComboBox',TBLayerComboBoxCreateFunc);
-  RegisterTBItemCreateFunc('ColorComboBox',TBColorComboBoxCreateFunc);
-  RegisterTBItemCreateFunc('LTypeComboBox',TBLTypeComboBoxCreateFunc);
-  RegisterTBItemCreateFunc('LineWComboBox',TBLineWComboBoxCreateFunc);
-  RegisterTBItemCreateFunc('TStyleComboBox',TBTStyleComboBoxCreateFunc);
-  RegisterTBItemCreateFunc('DimStyleComboBox',TBDimStyleComboBoxCreateFunc);
-  RegisterTBItemCreateFunc('Variable',TBVariableCreateFunc);
+  ToolBarsManager:=TToolBarsManager.create(self,StandartActions,sysvar.INTF.INTF_DefaultControlHeight^);
+  ToolBarsManager.RegisterTBItemCreateFunc('Separator',ToolBarsManager.CreateDefaultSeparator);
+  ToolBarsManager.RegisterTBItemCreateFunc('Action',TBActionCreateFunc);
+  ToolBarsManager.RegisterTBItemCreateFunc('Button',TBButtonCreateFunc);
+  ToolBarsManager.RegisterTBItemCreateFunc('LayerComboBox',TBLayerComboBoxCreateFunc);
+  ToolBarsManager.RegisterTBItemCreateFunc('ColorComboBox',TBColorComboBoxCreateFunc);
+  ToolBarsManager.RegisterTBItemCreateFunc('LTypeComboBox',TBLTypeComboBoxCreateFunc);
+  ToolBarsManager.RegisterTBItemCreateFunc('LineWComboBox',TBLineWComboBoxCreateFunc);
+  ToolBarsManager.RegisterTBItemCreateFunc('TStyleComboBox',TBTStyleComboBoxCreateFunc);
+  ToolBarsManager.RegisterTBItemCreateFunc('DimStyleComboBox',TBDimStyleComboBoxCreateFunc);
+  ToolBarsManager.RegisterTBItemCreateFunc('Variable',TBVariableCreateFunc);
 
-  RegisterTBCreateFunc('ToolBar',CreateZCADToolBar);
-  LoadToolBarsContent(ProgramPath+'menu/toolbarscontent.xml');
+  ToolBarsManager.RegisterTBCreateFunc('ToolBar',ToolBarsManager.CreateDefaultToolBar);
+  ToolBarsManager.LoadToolBarsContent(ProgramPath+'menu/toolbarscontent.xml');
 
   loadpanels(ProgramPath+'menu/mainmenu.mn');
 
@@ -1682,16 +1585,6 @@ begin
                                     CreateStandartInterface
                                 else
                                     CreateAnchorDockingInterface;
-
-  OnResize:=_onResize;
-end;
-procedure TZCADMainWindow._onResize(Sender: TObject);
-//var PreferredWidth, PreferredHeight: integer;
-begin
-     if assigned(ToolBarU) then
-                               AdjustHeight(self,true,ToolBarU.Height)
-                           else
-                               AdjustHeight(self,true,0)
 end;
 
 procedure TZCADMainWindow.AfterConstruction;
@@ -2055,7 +1948,7 @@ begin
                                                       end
                 else if uppercase(line)='TOOLBARS' then
                                                       begin
-                                                           EnumerateToolBars(TTBRegisterInAPPFunc,pm);
+                                                           ToolBarsManager.EnumerateToolBars(TTBRegisterInAPPFunc,pm);
                                                            line := f.readstring(#$A' ',#$D);
                                                            line:=readspace(line);
                                                       end

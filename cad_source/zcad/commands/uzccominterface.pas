@@ -462,7 +462,7 @@ begin
     try
       DockMaster.SaveLayoutToConfig(Config);
       DockMaster.SaveSettingsToConfig(Config);
-      SaveToolBarsToConfig(ZCADMainWindow,Config);
+      ToolBarsManager.SaveToolBarsToConfig(ZCADMainWindow,Config);
     finally
       Config.Free;
     end;
@@ -528,7 +528,7 @@ var
 begin
   if Operands<>'' then
                       begin
-                        ShowFloatToolbar(operands,rect(0,0,300,50));
+                        ToolBarsManager.ShowFloatToolbar(operands,rect(0,0,300,50));
                       end
                   else
                       ShowError('Show command must have one operand!');

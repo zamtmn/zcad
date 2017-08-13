@@ -26,6 +26,8 @@ procedure RegisterTBCreateFunc(TBType:string;TBCreateFunc:TTBCreateFunc);
 procedure RegisterTBItemCreateFunc(aNodeName:string;TBItemCreateFunc:TTBItemCreateFunc);
 function getAttrValue(const aNode:TDomNode;const AttrName,DefValue:string):string;overload;
 function getAttrValue(const aNode:TDomNode;const AttrName:string;const DefValue:integer):integer;overload;
+function CreateToolbar(aName:string):TToolBar;
+function AddContentToToolbar(tb:TToolBar;aName:string):TToolBar;
 
 implementation
 
@@ -135,6 +137,7 @@ begin
     if MainForm.Components[i] is TToolBar then
     begin
       tb:=MainForm.Components[i] as TToolBar;
+      if tb.IsVisible then
       if IsFloatToolbar(tb,tf) then
       begin
         Config.AppendBasePath('Item'+inttostr(ItemCount));
@@ -260,6 +263,19 @@ begin
   end;
 end;
 
+procedure CreateToolbarContent(tb:TToolBar;TBNode:TDomNode);
+var
+  TBSubNode:TDomNode;
+  TBType:string;
+begin
+  TBSubNode:=TBNode.FirstChild;
+  while assigned(TBSubNode)do
+  begin
+     DoTBItemCreateFunc(TBSubNode.NodeName,TBSubNode,tb);
+     TBSubNode:=TBSubNode.NextSibling;
+  end;
+end;
+
 function CreateToolbar(aName:string):TToolBar;
 var
   TBNode,TBSubNode:TDomNode;
@@ -268,13 +284,19 @@ begin
   TBNode:=FindBarsContent(aName);
   TBType:=getAttrValue(TBNode,'Type','');
   result:=DoTBCreateFunc(aName,TBType);
-  TBSubNode:=TBNode.FirstChild;
-  while assigned(TBSubNode)do
-  begin
-     DoTBItemCreateFunc(TBSubNode.NodeName,TBSubNode,result);
-     TBSubNode:=TBSubNode.NextSibling;
-  end;
+  CreateToolbarContent(result,TBNode);
 end;
+
+function AddContentToToolbar(tb:TToolBar;aName:string):TToolBar;
+var
+  TBNode,TBSubNode:TDomNode;
+  TBType:string;
+begin
+  TBNode:=FindBarsContent(aName);
+  TBType:=getAttrValue(TBNode,'Type','');
+  CreateToolbarContent(tb,TBNode);
+end;
+
 Procedure ShowFloatToolbar(TBName:String;r:trect);
 var
   tb:TToolBar;

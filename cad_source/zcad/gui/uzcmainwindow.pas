@@ -1103,77 +1103,49 @@ begin
   if AAdjustHeight and (Site.Height <> SiteNewHeight) then
     Site.Height := SiteNewHeight;
 end;
-
+function ToolBarNameToActionName(tbname:string):string;
+begin
+  result:='ACN_SHOWTOOLBAR_'+uppercase(tbname);
+end;
 procedure TZCADMainWindow.CreateAnchorDockingInterface;
 var
   action: tmyaction;
 begin
-
-  (*ToolBarU:=TToolBar.Create(self);
-  ToolBarU.Align:=alTop{alClient};
-  ToolBarU.SetBounds(500,0,1000,26);
-  ToolBarU.AutoSize:=true;
-  ToolBarU.ButtonHeight:=sysvar.INTF.INTF_DefaultControlHeight^;
-  ToolBarU.ShowCaptions:=true;
-  ToolBarU.Parent:=self;
-  ToolBarU.EdgeBorders:=[{ebTop, ebBottom, ebLeft, ebRight}];*)
-
+  {Настройка DragManager чтоб срабатывал попозже}
   DragManager.DragImmediate:=false;
   DragManager.DragThreshold:=32;
 
-  CreateToolbarFromDesk(ToolBarR, 'RIGHT', self.findtoolbatdesk('RIGHT'));
+  {Наполняем статусную строку}
+  CreateHTPB(ToolBarD);//поле отображения координат progressbar
+  AddContentToToolbar(ToolBarD,'Status');//переносим туда то что есть на тулбаре 'Status'
 
-  CreateToolbarFromDesk(ToolBarU, 'STANDART', self.findtoolbatdesk('STANDART'));
-  CreateHTPB(ToolBarD);
-  CreateToolbarFromDesk(ToolBarD, 'STATUS', self.findtoolbatdesk('STATUS'));
-  //ToolBarU.AdjustSize;
-  action:=tmyaction(StandartActions.ActionByName('ACN_SHOW_STANDART'));
+  {Запрещаем влючать-выключать тулбар 'Status', он показывается всегда}
+  action:=tmyaction(StandartActions.ActionByName(ToolBarNameToActionName('Status')));
   if assigned(action) then
-                          begin
-                               action.Enabled:=false;
-                               action.Checked:=true;
-                               action.pfoundcommand:=nil;
-                               action.command:='';
-                               action.options:='';
-                          end;
-  action:=tmyaction(StandartActions.ActionByName('ACN_SHOW_STATUS'));
-  if assigned(action) then
-                          begin
-                               action.Enabled:=false;
-                               action.Checked:=true;
-                               action.pfoundcommand:=nil;
-                               action.command:='';
-                               action.options:='';
-                          end;
-  action:=tmyaction(StandartActions.ActionByName('ACN_SHOW_RIGHT'));
-  if assigned(action) then
-                          begin
-                               action.Enabled:=false;
-                               action.Checked:=true;
-                               action.pfoundcommand:=nil;
-                               action.command:='';
-                               action.options:='';
-                          end;
+    begin
+      action.Enabled:=false;
+      action.Checked:=true;
+      action.pfoundcommand:=nil;
+      action.command:='';
+      action.options:='';
+    end;
 
 
-  self.SetBounds(0, 0, 800, 44);
+  {Наcтраиваем докинг}
   DockMaster.SplitterClass:=TmyAnchorDockSplitter;
   DockMaster.ManagerClass:=TAnchorDockManager;
   DockMaster.OnCreateControl:=DockMasterCreateControl;
-  //DockMaster.MakeDockSite(Self, [akBottom], admrpChild
-  //  {admrpNone}, true{false});
+  {Делаем AnchorDockPanel1 докабельной}
   DockMaster.MakeDockPanel(AnchorDockPanel1,admrpChild);
-  if AnchorDockPanel1.DockManager is TAnchorDockManager then
-  begin
-       DockMaster.OnShowOptions:={@}ShowAnchorDockOptions;
-  end;
-   if not sysparam.noloadlayout then
-                                    LoadLayout_com(EmptyCommandOperands);
+  DockMaster.OnShowOptions:=ShowAnchorDockOptions;
+  {Грузим раскладку окон}
+  if not sysparam.noloadlayout then
+    LoadLayout_com(EmptyCommandOperands);
 
-   if assigned(updatesbytton) then
-     updatesbytton.Clear;
-   if assigned(updatescontrols) then
-     updatescontrols.Clear;
+  {if assigned(updatesbytton) then
+    updatesbytton.Clear;
+  if assigned(updatescontrols) then
+    updatescontrols.Clear;}
 
   if sysparam.noloadlayout then
   begin
@@ -1394,22 +1366,16 @@ FToolBar.Caption:='';
 end;
 
 end;
-
 function TZCADMainWindow.CreateZCADToolBar(aName,atype: string):TToolBar;
 var
   TB:TToolBar;
-  tbdesk:string;
   ta:TmyAction;
   PFID:PTFormInfoData;
 begin
-  ta:=tmyaction(self.StandartActions.ActionByName('ACN_Show_'+aname));
+  ta:=tmyaction(self.StandartActions.ActionByName(ToolBarNameToActionName(aname)));
   if ta<>nil then
                  ta.Checked:=true;
 begin
-tbdesk:=self.findtoolbatdesk(aName);
-if tbdesk=''then
-          ShowError(format(rsToolBarNotFound,[aName]));
-
 TB:=TToolBar.Create(self);
 TB.ButtonHeight:=sysvar.INTF.INTF_DefaultControlHeight^;
 TB.Align:=alclient;
@@ -1564,7 +1530,7 @@ var
     //debs:string;
 begin
   action:=TmyAction.Create(self);
-  action.Name:='ACN_SHOWTOOLBAR_'+uppercase(aName);
+  action.Name:=ToolBarNameToActionName(aName);
   action.Caption:=aName;
   action.command:='ShowToolBar';
   action.options:=aName;

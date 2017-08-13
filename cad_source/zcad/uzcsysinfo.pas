@@ -30,7 +30,7 @@ type
                      ScreenX,ScreenY:GDBInteger;
                      DefaultHeight:GDBInteger;
                      Ver:TmyFileVersionInfo;
-                     NoSplash,NoLoadLayout,UpdatePO,StandartInterface,otherinstancerun:GDBBoolean;
+                     NoSplash,NoLoadLayout,UpdatePO,otherinstancerun:GDBBoolean;
                      PreloadedFile:GDBString;
               end;
 var
@@ -128,8 +128,6 @@ begin
                                                           uzclog.VerboseLog:=true
        else if (paramUC='NOLOADLAYOUT')or(paramUC='NLL')then
                                                                SysParam.NoLoadLayout:=true
-       else if (paramUC='STANDARTINTERFACE')or(paramUC='SI')then
-                                                               SysParam.StandartInterface:=true
        else if (paramUC='UPDATEPO')then
                                                                SysParam.UpdatePO:=true
        else if (paramUC='LM_TRACE')then
@@ -207,8 +205,6 @@ begin
      //programlog.LogOutStr(format('SysParam.NoLoadLayout=%s',[BoolToStr(SysParam.NoLoadLayout,true)]),lp_OldPos,LM_Necessarily);
      debugln('{N}SysParam.UpdatePO=%s',[BoolToStr(SysParam.UpdatePO,true)]);
      //programlog.LogOutStr(format('SysParam.UpdatePO=%s',[BoolToStr(SysParam.UpdatePO,true)]),lp_OldPos,LM_Necessarily);
-     debugln('{N}SysParam.StandartInterface=%s',[BoolToStr(SysParam.StandartInterface,true)]);
-     //programlog.LogOutStr(format('SysParam.StandartInterface=%s',[BoolToStr(SysParam.StandartInterface,true)]),lp_OldPos,LM_Necessarily);
      debugln('{N}SysParam.PreloadedFile="%s"',[SysParam.PreloadedFile]);
      //programlog.LogOutStr(format('SysParam.PreloadedFile="%s"',[SysParam.PreloadedFile]),lp_OldPos,LM_Necessarily);
 

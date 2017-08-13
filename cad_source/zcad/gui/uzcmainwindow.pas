@@ -148,7 +148,6 @@ type
     destructor Destroy;override;
     procedure CreateAnchorDockingInterface;
 
-    procedure CreateStandartInterface;
     procedure CreateInterfaceLists;
     procedure FillColorCombo(cb:TCustomComboBox);
     procedure FillLTCombo(cb:TCustomComboBox);
@@ -1105,50 +1104,6 @@ begin
   end;
 end;
 
-
-procedure TZCADMainWindow.CreateStandartInterface;
-var
-  TempForm:TForm;
-begin
-  self.SetBounds(0,0,sysparam.screenx-100,sysparam.screeny-100);
-
-  TempForm:=TForm(CreateZCADControl('Standart'));
-  TempForm.BorderStyle:=bsnone;
-  TempForm.Parent:=self;
-  TempForm.Align:=alTop;
-  TempForm.Show;
-
-  TempForm:=TForm(CreateZCADControl('PageControl'));
-  TempForm.BorderStyle:=bsnone;
-  TempForm.Parent:=self;
-  TempForm.Align:=alClient;
-  TempForm.Show;
-
-  TempForm:=TForm(CreateZCADControl('ObjectInspector'));
-  TempForm.BorderStyle:=bsnone;
-  TempForm.Parent:=self;
-  TempForm.Align:=alLeft;
-  TempForm.Show;
-
-  TempForm:=TForm(CreateZCADControl('CommandLine'));
-  TempForm.BorderStyle:=bsnone;
-  TempForm.Parent:=self;
-  TempForm.Align:=alBottom;
-  TempForm.Show;
-
-  TempForm:=TForm(CreateZCADControl('Draw'));
-  TempForm.BorderStyle:=bsnone;
-  TempForm.Parent:=self;
-  TempForm.Align:=alRight;
-  TempForm.Show;
-
-  TempForm:=TForm(CreateZCADControl('Status'));
-  TempForm.BorderStyle:=bsnone;
-  TempForm.Parent:={self}CLine;
-  TempForm.Align:=alBottom;
-  TempForm.Show;
-end;
-
 procedure myDumpAddr(Addr: Pointer;var f:system.text);
 //var
   //func,source:shortstring;
@@ -1581,10 +1536,7 @@ begin
 
   loadpanels(ProgramPath+'menu/mainmenu.mn');
 
-  if sysparam.standartinterface then
-                                    CreateStandartInterface
-                                else
-                                    CreateAnchorDockingInterface;
+  CreateAnchorDockingInterface;
 end;
 
 procedure TZCADMainWindow.AfterConstruction;

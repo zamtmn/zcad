@@ -5,7 +5,7 @@ unit uztoolbarsutils;
 interface
 
 uses
-  Classes, SysUtils, ComCtrls, Controls, Graphics, Menus, Forms,
+  Classes, SysUtils, ComCtrls, Controls, Graphics, Menus, Forms,ActnList,
   LazConfigStorage,Laz2_XMLCfg,Laz2_DOM,
   Generics.Collections;
 
@@ -17,17 +17,34 @@ type
   TTBCreateFuncRegister=specialize TDictionary <string,TTBCreateFunc>;
   TTBItemCreateFuncRegister=specialize TDictionary <string,TTBItemCreateFunc>;
 
-procedure SaveToolBarsToConfig(MainForm:TForm; Config: TConfigStorage);
-procedure RestoreToolBarsFromConfig(MainForm:TForm; Config: TConfigStorage);
-Procedure ShowFloatToolbar(TBName:String;r:trect);
-procedure LoadToolBarsContent(filename:string);
-procedure EnumerateToolBars(rf:TTBRegisterInAPPFunc;Data:Pointer);
-procedure RegisterTBCreateFunc(TBType:string;TBCreateFunc:TTBCreateFunc);
-procedure RegisterTBItemCreateFunc(aNodeName:string;TBItemCreateFunc:TTBItemCreateFunc);
-function getAttrValue(const aNode:TDomNode;const AttrName,DefValue:string):string;overload;
-function getAttrValue(const aNode:TDomNode;const AttrName:string;const DefValue:integer):integer;overload;
-function CreateToolbar(aName:string):TToolBar;
-function AddContentToToolbar(tb:TToolBar;aName:string):TToolBar;
+  TToolBarsManager=class
+    factionlist:TActionList;
+    fdefbuttonheight:integer;
+    fmainform:TForm;
+    constructor Create(mainform:TForm;actlist:TActionList;defbuttonheight:integer);
+    destructor Destroy;override;
+
+    procedure SaveToolBarsToConfig(MainForm:TForm; Config: TConfigStorage);
+    procedure RestoreToolBarsFromConfig(MainForm:TForm; Config: TConfigStorage);
+    Procedure ShowFloatToolbar(TBName:String;r:trect);
+    procedure LoadToolBarsContent(filename:string);
+    procedure EnumerateToolBars(rf:TTBRegisterInAPPFunc;Data:Pointer);
+    procedure RegisterTBCreateFunc(TBType:string;TBCreateFunc:TTBCreateFunc);
+    procedure RegisterTBItemCreateFunc(aNodeName:string;TBItemCreateFunc:TTBItemCreateFunc);
+    function CreateToolbar(aName:string):TToolBar;
+    function AddContentToToolbar(tb:TToolBar;aName:string):TToolBar;
+
+    function CreateDefaultToolBar(aName,atype: string):TToolBar;
+    procedure CreateDefaultSeparator(aNode: TDomNode; TB:TToolBar);
+    procedure CreateDefaultAction(aNode: TDomNode; TB:TToolBar);
+  end;
+
+  function getAttrValue(const aNode:TDomNode;const AttrName,DefValue:string):string;overload;
+  function getAttrValue(const aNode:TDomNode;const AttrName:string;const DefValue:integer):integer;overload;
+  function ToolBarNameToActionName(tbname:string):string;
+
+var
+  ToolBarsManager:TToolBarsManager;
 
 implementation
 
@@ -36,6 +53,76 @@ var
   TBCreateFuncRegister:TTBCreateFuncRegister=nil;
   TBItemCreateFuncRegister:TTBItemCreateFuncRegister=nil;
 
+function ToolBarNameToActionName(tbname:string):string;
+begin
+  result:='ACN_SHOWTOOLBAR_'+uppercase(tbname);
+end;
+
+
+function TToolBarsManager.CreateDefaultToolBar(aName,atype: string):TToolBar;
+var
+  ta:TAction;
+begin
+  if assigned(factionlist)then
+  begin
+    ta:=taction(factionlist.ActionByName(ToolBarNameToActionName(aname)));
+    if ta<>nil then
+                   ta.Checked:=true;
+  end;
+  result:=TToolBar.Create(fmainform);
+  if fdefbuttonheight>0 then
+    result.ButtonHeight:=fdefbuttonheight;
+  result.Align:=alclient;
+  result.Top:=0;
+  result.Left:=0;
+  result.AutoSize:=true;
+  result.Wrapable:=false;
+  result.Transparent:=true;
+  result.DragKind:=dkDock;
+  result.DragMode:=dmAutomatic;
+  result.ShowCaptions:=true;
+  result.Name:=aname;
+  result.EdgeBorders:=[];
+  if assigned(factionlist)then
+  if not assigned(result.Images) then
+                                 result.Images:=factionlist.Images;
+end;
+procedure TToolBarsManager.CreateDefaultSeparator(aNode: TDomNode; TB:TToolBar);
+begin
+ with TToolButton.Create(TB) do
+ begin
+   Style:=tbsDivider;
+   Parent:=TB;
+   AutoSize:={False}True;
+ end;
+end;
+procedure TToolBarsManager.CreateDefaultAction(aNode: TDomNode; TB:TToolBar);
+var
+  _action:TContainedAction;
+  ActionName:string;
+begin
+  ActionName:=getAttrValue(aNode,'Name','');
+  _action:=factionlist.ActionByName(ActionName);
+  with TToolButton.Create(tb) do
+  begin
+    Action:=_action;
+    ShowCaption:=false;
+    ShowHint:=true;
+    //Caption:=_action.imgstr;
+    Parent:=tb;
+    Visible:=true;
+  end;
+end;
+
+constructor TToolBarsManager.Create(mainform:TForm;actlist:TActionList;defbuttonheight:integer);
+begin
+  fmainform:=mainform;
+  factionlist:=actlist;
+  fdefbuttonheight:=defbuttonheight;
+end;
+destructor TToolBarsManager.Destroy;
+begin
+end;
 function getAttrValue(const aNode:TDomNode;const AttrName,DefValue:string):string;overload;
 var
   aNodeAttr:TDomNode;
@@ -60,7 +147,7 @@ begin
     result:=DefValue;
 end;
 
-procedure RegisterTBCreateFunc(TBType:string;TBCreateFunc:TTBCreateFunc);
+procedure TToolBarsManager.RegisterTBCreateFunc(TBType:string;TBCreateFunc:TTBCreateFunc);
 begin
   if not assigned(TBCreateFuncRegister) then
     TBCreateFuncRegister:=TTBCreateFuncRegister.create;
@@ -77,7 +164,7 @@ begin
       result:=tbcf(aName,aType);
 end;
 
-procedure RegisterTBItemCreateFunc(aNodeName:string;TBItemCreateFunc:TTBItemCreateFunc);
+procedure TToolBarsManager.RegisterTBItemCreateFunc(aNodeName:string;TBItemCreateFunc:TTBItemCreateFunc);
 begin
   if not assigned(TBItemCreateFuncRegister) then
     TBItemCreateFuncRegister:=TTBItemCreateFuncRegister.create;
@@ -102,7 +189,7 @@ begin
     result:=false;
 end;
 
-procedure SaveToolBarsToConfig(MainForm:TForm; Config: TConfigStorage);
+procedure TToolBarsManager.SaveToolBarsToConfig(MainForm:TForm; Config: TConfigStorage);
 var
   i,j,ItemCount:integer;
   cb:TCoolBar;
@@ -238,14 +325,14 @@ begin
   //s:=result.NodeName;
 end;
 
-procedure LoadToolBarsContent(filename:string);
+procedure TToolBarsManager.LoadToolBarsContent(filename:string);
 begin
   if not assigned(TBConfig) then
     TBConfig:=TXMLConfig.Create(nil);
   TBConfig.Filename:=filename;
 end;
 
-procedure EnumerateToolBars(rf:TTBRegisterInAPPFunc;Data:Pointer);
+procedure TToolBarsManager.EnumerateToolBars(rf:TTBRegisterInAPPFunc;Data:Pointer);
 var
   TBNode,TBSubNode,TBNodeType:TDomNode;
 begin
@@ -276,7 +363,7 @@ begin
   end;
 end;
 
-function CreateToolbar(aName:string):TToolBar;
+function TToolBarsManager.CreateToolbar(aName:string):TToolBar;
 var
   TBNode,TBSubNode:TDomNode;
   TBType:string;
@@ -287,7 +374,7 @@ begin
   CreateToolbarContent(result,TBNode);
 end;
 
-function AddContentToToolbar(tb:TToolBar;aName:string):TToolBar;
+function TToolBarsManager.AddContentToToolbar(tb:TToolBar;aName:string):TToolBar;
 var
   TBNode,TBSubNode:TDomNode;
   TBType:string;
@@ -297,7 +384,7 @@ begin
   CreateToolbarContent(tb,TBNode);
 end;
 
-Procedure ShowFloatToolbar(TBName:String;r:trect);
+Procedure TToolBarsManager.ShowFloatToolbar(TBName:String;r:trect);
 var
   tb:TToolBar;
   FloatHost: TWinControl;
@@ -312,7 +399,7 @@ begin
   end;
 end;
 
-procedure RestoreToolBarsFromConfig(MainForm:TForm; Config: TConfigStorage);
+procedure TToolBarsManager.RestoreToolBarsFromConfig(MainForm:TForm; Config: TConfigStorage);
 var
   i,j,ItemCount:integer;
   itemName,itemType:string;
@@ -358,7 +445,13 @@ begin
   Config.UndoAppendBasePath;
 end;
 
+{initialization
+if not assigned(ToolBarsManager) then
+  ToolBarsManager.Create;}
+
 finalization
+  if assigned(ToolBarsManager) then
+    ToolBarsManager.Free;
   if assigned(TBConfig) then
     TBConfig.Free;
 end.

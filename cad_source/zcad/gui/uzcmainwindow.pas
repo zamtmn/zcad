@@ -92,7 +92,7 @@ type
     updatesbytton,updatescontrols:tlist;
     procedure ZcadException(Sender: TObject; E: Exception);
     function findtoolbatdesk(tbn:string):string;
-    procedure CreateToolbarFromDesk(tb:TToolBar;tbname,tbdesk:string);
+    //procedure CreateToolbarFromDesk(tb:TToolBar;tbname,tbdesk:string);
     function CreateCBox(CBName:GDBString;owner:TToolBar;DrawItem:TDrawItemEvent;Change,DropDown,CloseUp:TNotifyEvent;Filler:TComboFiller;w:integer;ts:GDBString):TComboBox;
     procedure CreateHTPB(tb:TToolBar);
 
@@ -1130,6 +1130,15 @@ begin
       action.options:='';
     end;
 
+  {Создаем на ToolBarD переключатель рабочих пространств}
+  if assigned(LayoutBox) then
+    ShowError(format(rsReCreating,['LAYOUTBOX']));
+  CreateLayoutbox(ToolBarD);
+  LayoutBox.Parent:=ToolBarD;
+  LayoutBox.AutoSize:=false;
+  LayoutBox.Width:=200;
+  LayoutBox.Align:=alRight;
+
 
   {Наcтраиваем докинг}
   DockMaster.SplitterClass:=TmyAnchorDockSplitter;
@@ -1321,50 +1330,12 @@ begin
        if @PFID.SetupProc<>nil then
                                   PFID.SetupProc(result);
   end
-else
-begin
-tbdesk:=self.findtoolbatdesk(aName);
-if tbdesk=''then
-          ShowError(format(rsToolBarNotFound,[aName]));
-FToolBar:=TToolButtonForm(TToolButtonForm.NewInstance);
-if DoDisableAlign then
-FToolBar.DisableAlign;
-FToolBar.CreateNew(Application);
-FToolBar.Caption:='';
-FToolBar.SetBounds(100,64,1000,26);
-
-TB:=TToolBar.Create(application);
-TB.ButtonHeight:=sysvar.INTF.INTF_DefaultControlHeight^;
-TB.Align:=alclient;
-TB.Top:=0;
-TB.Left:=0;
-TB.AutoSize:=true;
-if aName<>'Status' then
-TB.EdgeBorders:=[];
-TB.ShowCaptions:=true;
-TB.Parent:=ftoolbar;
-
-if aName='ToolBarR' then
-begin
-//ToolBarR:=tb;
-end;
-if aName='ToolBarU' then
-begin
-//ToolBarU:=tb;
-end;
-if aName='Status' then
-begin
-//ToolBarD:=tb;
-CreateHTPB(tb);
-end;
-CreateToolbarFromDesk(tb,aName,tbdesk);
-
-result:=FToolBar;
-
-result.Name:=aname;
-FToolBar.Caption:='';
-end;
-
+  else
+  begin
+    tbdesk:=self.findtoolbatdesk(aName);
+    if tbdesk=''then
+      ShowError(format(rsFormNotFound,[aName]));
+  end;
 end;
 function TZCADMainWindow.CreateZCADToolBar(aName,atype: string):TToolBar;
 var
@@ -1814,7 +1785,7 @@ begin
   AddToBar(owner,result);
   updatescontrols.Add(result);
 end;
-
+(*
 procedure TZCADMainWindow.CreateToolbarFromDesk(tb:TToolBar;tbname,tbdesk:string);
 var
     f:GDBOpenArrayOfByte;
@@ -2027,7 +1998,7 @@ begin
            f.done;
 
       end;
-end;
+end;*)
 procedure addfiletoLayoutbox(filename:GDBString);
 var
     s:string;

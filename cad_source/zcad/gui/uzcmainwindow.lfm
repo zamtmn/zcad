@@ -57,6 +57,7 @@ object ZCADMainWindow: TZCADMainWindow
     Top = 446
     Width = 632
     Align = alBottom
+    AutoSize = True
     Caption = 'ToolBarD'
     DragKind = dkDock
     EdgeBorders = []

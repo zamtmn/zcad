@@ -179,6 +179,7 @@ resourcestring
   rsReCreating='Re-creating %s!';
   rsLayoutLoad='Error loading layout from file';
   rsToolBarNotFound='Toolbar "%s" is not found! Create a blank window';
+  rsFormNotFound='Form "%s" is not found!';
   rsDifferent='Different';
   rsByLayer='ByLayer';
   rsByBlock='ByBlock';

@@ -63,7 +63,7 @@ uses
   uPSR_stdctrls,
   uPSR_forms,
   uPSUtils}
- uzcmainwindow,uztoolbarsutils,
+ uzcmainwindow,uztoolbarsmanager,
  uzegeometry;
 
 

@@ -263,7 +263,7 @@ begin
     if MainForm.Components[i] is TCoolBar then
     begin
       cb:=MainForm.Components[i] as TCoolBar;
-      for j:=0 to cb.Bands.Count-1 do
+      for j:=cb.Bands.Count-1 downto 0 do
       begin
         cb.Bands[j].Control.Free;
       end;
@@ -292,7 +292,7 @@ begin
   result:=nil;
 end;
 
-function CreateFloatingDockSite(tb:TToolBar; const Bounds: TRect): TWinControl;
+function CreateFloatingDockSite(tb:TToolBar; const Bounds: TRect): TWinControl;//copy  from LCL
 var
   FloatingClass: TWinControlClass;
   NewWidth: Integer;
@@ -310,17 +310,11 @@ begin
     if result is TCustomDockForm then
       (result as TCustomDockForm).BorderStyle:=bsSizeToolWin;
     result.TabStop:=false;
-    tform(result).borderstyle:=bsnone;
-    // resize with minimal resizes
     NewClientWidth:=Bounds.Right-Bounds.Left;
     NewClientHeight:=Bounds.Bottom-Bounds.Top;
     NewWidth:=Result.Width-Result.ClientWidth+NewClientWidth;
     NewHeight:=Result.Height-Result.ClientHeight+NewClientHeight;
     Result.SetBounds(Bounds.Left,Bounds.Top,NewWidth,NewHeight);
-    //Result.SetClientSize(Point(NewClientWidth,NewClientHeight));
-    {$IFDEF DebugDisableAutoSizing}
-    debugln('TControl.CreateFloatingDockSite A ',DbgSName(Self),' ',DbgSName(Result),' ',dbgs(Result.BoundsRect));
-    {$ENDIF}
     Result.EnableAutoSizing{$IFDEF DebugDisableAutoSizing}('TControl.CreateFloatingDockSite'){$ENDIF};
   end;
 end;

@@ -1,0 +1,91 @@
+object Form1: TForm1
+  Left = 144
+  Height = 265
+  Top = 153
+  Width = 388
+  Caption = 'Form1'
+  ClientHeight = 265
+  ClientWidth = 388
+  Menu = MainMenu1
+  OnCreate = onCreateHandler
+  LCLVersion = '1.9.0.0'
+  object CoolBar1: TCoolBar
+    Left = 0
+    Height = 4
+    Top = 0
+    Width = 388
+    AutoSize = True
+    Bands = <>
+    DockSite = True
+  end
+  object CoolBar2: TCoolBar
+    Left = 0
+    Height = 229
+    Top = 4
+    Width = 4
+    Align = alLeft
+    AutoSize = True
+    Bands = <>
+    Constraints.MinHeight = 2
+    Constraints.MinWidth = 2
+    DockSite = True
+    Vertical = True
+  end
+  object CoolBar3: TCoolBar
+    Left = 0
+    Height = 4
+    Top = 233
+    Width = 388
+    Align = alBottom
+    AutoSize = True
+    Bands = <>
+    DockSite = True
+    DragKind = dkDock
+  end
+  object CoolBar4: TCoolBar
+    Left = 384
+    Height = 229
+    Top = 4
+    Width = 4
+    Align = alRight
+    AutoSize = True
+    Bands = <>
+    DockSite = True
+    DragKind = dkDock
+    Vertical = True
+  end
+  object StatusBar1: TStatusBar
+    Left = 0
+    Height = 28
+    Top = 237
+    Width = 388
+    Panels = <>
+  end
+  object MainMenu1: TMainMenu
+    Left = 40
+    Top = 72
+  end
+  object ActionList1: TActionList
+    Left = 104
+    Top = 72
+    object FileExit: TFileExit
+      Category = 'File'
+      Caption = 'E&xit'
+      Hint = 'Exit'
+    end
+    object LoadLayout: TAction
+      Caption = 'LoadLayout'
+      OnExecute = AsyncLoadTBLayout
+    end
+    object SaveLayout: TAction
+      Caption = 'SaveLayout'
+      OnExecute = SaveTBLayout
+    end
+    object FileOpen: TFileOpen
+      Category = 'File'
+      Caption = '&Open ...'
+      Hint = 'Open'
+      ShortCut = 16463
+    end
+  end
+end

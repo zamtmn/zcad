@@ -133,6 +133,7 @@ begin
     with TToolButton.Create(tb) do
     begin
       Caption:='Empty';
+      Hint:='Empty button from "YourOwnTBitem" node fake handler';
       ShowCaption:=true;
       ShowHint:=true;
       Parent:=tb;

@@ -75,10 +75,12 @@ object Form1: TForm1
     end
     object LoadLayout: TAction
       Caption = 'LoadLayout'
+      Hint = 'Restore layout from "toolbarslayout.xml"'
       OnExecute = AsyncLoadTBLayout
     end
     object SaveLayout: TAction
       Caption = 'SaveLayout'
+      Hint = 'Save current layout to "toolbarslayout.xml"'
       OnExecute = SaveTBLayout
     end
     object FileOpen: TFileOpen

@@ -19,6 +19,14 @@ type
     CoolBar2: TCoolBar;
     CoolBar3: TCoolBar;
     CoolBar4: TCoolBar;
+    MainMenu2: TMainMenu;
+    MenuItem1: TMenuItem;
+    MenuItem2: TMenuItem;
+    MenuItem3: TMenuItem;
+    MenuItem4: TMenuItem;
+    MenuItem5: TMenuItem;
+    MenuItem6: TMenuItem;
+    MenuItem7: TMenuItem;
     StatusBar1: TStatusBar;
     FileExit: TFileExit;
     FileOpen: TFileOpen;
@@ -28,10 +36,12 @@ type
     procedure onCreateHandler(Sender: TObject);
     procedure SaveTBLayout(Sender: TObject);
     procedure AsyncLoadTBLayout(Sender: TObject);
+    procedure ShowToolbar(Sender: TObject);
   private
     procedure CreateYourOwnTBitem(aNode: TDomNode; TB:TToolBar);
     procedure DoLoadTBLayout(Data: PtrInt);
     procedure LoadTBLayout(Sender: TObject);
+    procedure AddToolBarToMenu(aTBNode: TDomNode;aName,aType: string; Data:Pointer);
   public
 
   end;
@@ -68,6 +78,8 @@ begin
 
   //Load toolbars content from toolbarscontent.xml
   ToolBarsManager.LoadToolBarsContent('toolbarscontent.xml');
+
+  ToolBarsManager.EnumerateToolBars(@AddToolBarToMenu,pointer(MenuItem6));
 
   //Load toolbars layout
   LoadTBLayout(nil);
@@ -139,6 +151,30 @@ begin
       Parent:=tb;
       Visible:=true;
     end;
+end;
+procedure TForm1.ShowToolbar(Sender: TObject);
+begin
+    if sender is TAction then
+    begin
+      ToolBarsManager.ShowFloatToolbar((Sender as TAction).Caption,rect(0,0,300,50));
+    end;
+end;
+
+procedure TForm1.AddToolBarToMenu(aTBNode: TDomNode;aName,aType: string; Data:Pointer);
+var
+  pm1:TMenuItem;
+  aaction:taction;
+begin
+  aaction:=TAction.Create(self);
+  aaction.Name:=ToolBarNameToActionName(aName);
+  aaction.Caption:=aName;
+  aaction.OnExecute:=@ShowToolbar;
+  aaction.DisableIfNoHandler:=false;
+  aaction.ActionList:=ActionList1;
+
+    pm1:=TMenuItem.Create(TMenuItem(Data));
+    pm1.Action:=aaction;
+    TMenuItem(Data).Add(pm1);
 end;
 
 end.

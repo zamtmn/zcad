@@ -173,58 +173,61 @@
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="17">
+    <RequiredPackages Count="18">
       <Item1>
-        <PackageName Value="ag_graph"/>
+        <PackageName Value="ztoolbars"/>
       </Item1>
       <Item2>
-        <PackageName Value="ag_vectors"/>
+        <PackageName Value="ag_graph"/>
       </Item2>
       <Item3>
-        <PackageName Value="virtualtreeview_package"/>
+        <PackageName Value="ag_vectors"/>
       </Item3>
       <Item4>
-        <PackageName Value="zmath"/>
+        <PackageName Value="virtualtreeview_package"/>
       </Item4>
       <Item5>
-        <PackageName Value="zobjectinspector"/>
+        <PackageName Value="zmath"/>
       </Item5>
       <Item6>
-        <PackageName Value="zundostack"/>
+        <PackageName Value="zobjectinspector"/>
       </Item6>
       <Item7>
-        <PackageName Value="zscript"/>
+        <PackageName Value="zundostack"/>
       </Item7>
       <Item8>
-        <PackageName Value="zscriptbase"/>
+        <PackageName Value="zscript"/>
       </Item8>
       <Item9>
-        <PackageName Value="zcontainers"/>
+        <PackageName Value="zscriptbase"/>
       </Item9>
       <Item10>
-        <PackageName Value="zebase"/>
+        <PackageName Value="zcontainers"/>
       </Item10>
       <Item11>
-        <PackageName Value="zcontrols"/>
+        <PackageName Value="zebase"/>
       </Item11>
       <Item12>
-        <PackageName Value="FCL"/>
+        <PackageName Value="zcontrols"/>
       </Item12>
       <Item13>
-        <PackageName Value="fpvectorialpkg"/>
+        <PackageName Value="FCL"/>
       </Item13>
       <Item14>
-        <PackageName Value="Printer4Lazarus"/>
+        <PackageName Value="fpvectorialpkg"/>
       </Item14>
       <Item15>
-        <PackageName Value="AnchorDocking"/>
+        <PackageName Value="Printer4Lazarus"/>
       </Item15>
       <Item16>
-        <PackageName Value="LazOpenGLContext"/>
+        <PackageName Value="AnchorDocking"/>
       </Item16>
       <Item17>
-        <PackageName Value="LCL"/>
+        <PackageName Value="LazOpenGLContext"/>
       </Item17>
+      <Item18>
+        <PackageName Value="LCL"/>
+      </Item18>
     </RequiredPackages>
     <Units Count="185">
       <Unit0>

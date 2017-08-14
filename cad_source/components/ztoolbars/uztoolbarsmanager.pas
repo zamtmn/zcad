@@ -1,4 +1,4 @@
-unit uztoolbarsutils;
+unit uztoolbarsmanager;
 
 {$mode objfpc}{$H+}
 
@@ -18,9 +18,16 @@ type
   TTBItemCreateFuncRegister=specialize TDictionary <string,TTBItemCreateFunc>;
 
   TToolBarsManager=class
+    private
     factionlist:TActionList;
     fdefbuttonheight:integer;
     fmainform:TForm;
+
+    TBConfig:TXMLConfig;
+    TBCreateFuncRegister:TTBCreateFuncRegister;
+    TBItemCreateFuncRegister:TTBItemCreateFuncRegister;
+
+    public
     constructor Create(mainform:TForm;actlist:TActionList;defbuttonheight:integer);
     destructor Destroy;override;
 
@@ -28,11 +35,15 @@ type
     procedure RestoreToolBarsFromConfig(MainForm:TForm; Config: TConfigStorage);
     Procedure ShowFloatToolbar(TBName:String;r:trect);
     procedure LoadToolBarsContent(filename:string);
+    function FindBarsContent(toolbarname:string):TDomNode;
     procedure EnumerateToolBars(rf:TTBRegisterInAPPFunc;Data:Pointer);
+    procedure CreateToolbarContent(tb:TToolBar;TBNode:TDomNode);
     procedure RegisterTBCreateFunc(TBType:string;TBCreateFunc:TTBCreateFunc);
     procedure RegisterTBItemCreateFunc(aNodeName:string;TBItemCreateFunc:TTBItemCreateFunc);
     function CreateToolbar(aName:string):TToolBar;
     function AddContentToToolbar(tb:TToolBar;aName:string):TToolBar;
+    function DoTBCreateFunc(aName,aType:string):TToolBar;
+    procedure DoTBItemCreateFunc(aNodeName:string; aNode: TDomNode; TB:TToolBar);
 
     function CreateDefaultToolBar(aName,atype: string):TToolBar;
     procedure CreateDefaultSeparator(aNode: TDomNode; TB:TToolBar);
@@ -47,12 +58,6 @@ var
   ToolBarsManager:TToolBarsManager;
 
 implementation
-
-var
-  TBConfig:TXMLConfig=nil;
-  TBCreateFuncRegister:TTBCreateFuncRegister=nil;
-  TBItemCreateFuncRegister:TTBItemCreateFuncRegister=nil;
-
 function ToolBarNameToActionName(tbname:string):string;
 begin
   result:='ACN_SHOWTOOLBAR_'+uppercase(tbname);
@@ -119,9 +124,15 @@ begin
   fmainform:=mainform;
   factionlist:=actlist;
   fdefbuttonheight:=defbuttonheight;
+
+  TBConfig:=nil;
+  TBCreateFuncRegister:=nil;
+  TBItemCreateFuncRegister:=nil;
 end;
 destructor TToolBarsManager.Destroy;
 begin
+    if assigned(TBConfig) then
+    TBConfig.Free;
 end;
 function getAttrValue(const aNode:TDomNode;const AttrName,DefValue:string):string;overload;
 var
@@ -154,7 +165,7 @@ begin
   TBCreateFuncRegister.add(uppercase(TBType),TBCreateFunc);
 end;
 
-function DoTBCreateFunc(aName,aType:string):TToolBar;
+function TToolBarsManager.DoTBCreateFunc(aName,aType:string):TToolBar;
 var
   tbcf:TTBCreateFunc;
 begin
@@ -171,7 +182,7 @@ begin
   TBItemCreateFuncRegister.add(uppercase(aNodeName),TBItemCreateFunc);
 end;
 
-procedure DoTBItemCreateFunc(aNodeName:string; aNode: TDomNode; TB:TToolBar);
+procedure TToolBarsManager.DoTBItemCreateFunc(aNodeName:string; aNode: TDomNode; TB:TToolBar);
 var
   tbicf:TTBItemCreateFunc;
 begin
@@ -299,6 +310,7 @@ begin
     if result is TCustomDockForm then
       (result as TCustomDockForm).BorderStyle:=bsSizeToolWin;
     result.TabStop:=false;
+    tform(result).borderstyle:=bsnone;
     // resize with minimal resizes
     NewClientWidth:=Bounds.Right-Bounds.Left;
     NewClientHeight:=Bounds.Bottom-Bounds.Top;
@@ -313,16 +325,12 @@ begin
   end;
 end;
 
-function FindBarsContent(toolbarname:string):TDomNode;
-//var
-//  node,subnode,namenode:TDomNode;
-//  s:string;
+function TToolBarsManager.FindBarsContent(toolbarname:string):TDomNode;
 begin
   if not assigned(TBConfig) then
     exit(nil);
   result:=nil;
   result:=TBConfig.FindNode('ToolBarsContent/'+toolbarname,false);
-  //s:=result.NodeName;
 end;
 
 procedure TToolBarsManager.LoadToolBarsContent(filename:string);
@@ -350,7 +358,7 @@ begin
   end;
 end;
 
-procedure CreateToolbarContent(tb:TToolBar;TBNode:TDomNode);
+procedure TToolBarsManager.CreateToolbarContent(tb:TToolBar;TBNode:TDomNode);
 var
   TBSubNode:TDomNode;
   TBType:string;
@@ -452,6 +460,4 @@ if not assigned(ToolBarsManager) then
 finalization
   if assigned(ToolBarsManager) then
     ToolBarsManager.Free;
-  if assigned(TBConfig) then
-    TBConfig.Free;
 end.

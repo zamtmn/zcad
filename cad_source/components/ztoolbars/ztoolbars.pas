@@ -2,21 +2,20 @@
   This source is only used to compile and install the package.
  }
 
-unit zcontrols;
+unit ztoolbars;
 
 {$warn 5023 off : no warning about unused units}
 interface
 
 uses
-  ZListView, LazarusPackageIntf;
+  uztoolbarsmanager, LazarusPackageIntf;
 
 implementation
 
 procedure Register;
 begin
-  RegisterUnit('ZListView', @ZListView.Register);
 end;
 
 initialization
-  RegisterPackage('zcontrols', @Register);
+  RegisterPackage('ztoolbars', @Register);
 end.

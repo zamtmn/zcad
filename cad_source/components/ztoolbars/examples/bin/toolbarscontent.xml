@@ -11,5 +11,17 @@
       <Action Name="LoadLayout"/>
       <Action Name="SaveLayout"/>
     </LayooutManager>
+    <Test1 Type="ToolBar">
+      <Action Name="LoadLayout"/>
+      <Action Name="SaveLayout"/>
+    </Test1>
+    <Test2 Type="ToolBar">
+      <Action Name="LoadLayout"/>
+      <Action Name="SaveLayout"/>
+    </Test2>
+    <Test3 Type="ToolBar">
+      <Action Name="LoadLayout"/>
+      <Action Name="SaveLayout"/>
+    </Test3>
   </ToolBarsContent>
 </CONFIG>

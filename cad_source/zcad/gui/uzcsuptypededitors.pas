@@ -111,7 +111,7 @@ begin
      end;
      if PEditor.geteditor is TComboBox then
                                            begin
-                                           SetComboSize(TComboBox(PEditor.geteditor),r.Bottom-r.Top-5);
+                                           SetComboSize(TComboBox(PEditor.geteditor),r.Bottom-r.Top-5,TComboBox(PEditor.geteditor).ReadOnly);
                                            TComboBox(PEditor.geteditor).DropDownCount:=30;
                                            end;
      PEditor.geteditor.BoundsRect:=r;

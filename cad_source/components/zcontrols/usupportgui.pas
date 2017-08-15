@@ -29,7 +29,7 @@ type
 procedure SetcomboItemsCount(cb:tcombobox;ItemsCount:integer);
 procedure ComboBoxDrawItem(Control:TWinControl;ARect:TRect;State:TOwnerDrawState);
 function ListViewDrawSubItem(State: TCustomDrawState;canvas:tcanvas;Item: TListItem;SubItem: Integer): TRect;
-procedure SetComboSize(cb:tcombobox;ItemH:Integer);
+procedure SetComboSize(cb:tcombobox;ItemH:Integer;readonly:boolean);
 function IsZEditableShortCut(var Message: TLMKey):boolean;
 function IsZShortcut(var Message: TLMKey;const ActiveControl:TWinControl; const CMDEdit:TEdit; const OldFunction:TIsShortcutFunc): boolean;
 implementation
@@ -96,11 +96,14 @@ begin
                                           result:=false;
            end;
 end;
-procedure SetComboSize(cb:tcombobox;ItemH:Integer);
+procedure SetComboSize(cb:tcombobox;ItemH:Integer;readonly:boolean);
 begin
      cb.AutoSize:=false;
      {$IFDEF LCLWIN32}
-     cb.Style:={csOwnerDrawFixed}csOwnerDrawEditableFixed;
+     if readonly then
+       cb.Style:=csOwnerDrawFixed
+     else
+       cb.Style:=csOwnerDrawEditableFixed;
      cb.ItemHeight:=ItemH;
      {$ENDIF}
 end;

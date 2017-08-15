@@ -105,7 +105,7 @@ begin
      cbedit:=TComboBox.Create(propeditor);
      cbedit.Text:=ptdesc^.GetValueAsString(pinstance);
      cbedit.OnChange:=propeditor.EditingProcess;
-     SetComboSize(cbedit,{sysvar.INTF.INTF_DefaultControlHeight^}preferedHeight-6);
+     SetComboSize(cbedit,{sysvar.INTF.INTF_DefaultControlHeight^}preferedHeight-6,true);
      {$IFNDEF DELPHI}
      cbedit.ReadOnly:=true;
      {$ENDIF}
@@ -160,7 +160,7 @@ begin
      cbedit:=TComboBox.Create(propeditor);
      cbedit.Text:=ptdesc^.GetValueAsString(pinstance);
      cbedit.OnChange:=propeditor.EditingProcess;
-     SetComboSize(cbedit,{sysvar.INTF.INTF_DefaultControlHeight^}preferedHeight-6);
+     SetComboSize(cbedit,{sysvar.INTF.INTF_DefaultControlHeight^}preferedHeight-6,true);
      {$IFNDEF DELPHI}
      cbedit.ReadOnly:=true;
      {$ENDIF}

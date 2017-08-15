@@ -1595,7 +1595,7 @@ function TZCADMainWindow.CreateCBox(CBName:GDBString;owner:TToolBar;DrawItem:TDr
 begin
   result:=TComboBox.Create(owner);
   result.Style:=csOwnerDrawFixed;
-  SetComboSize(result,sysvar.INTF.INTF_DefaultControlHeight^-6);
+  SetComboSize(result,sysvar.INTF.INTF_DefaultControlHeight^-6,true);
   result.Clear;
   result.readonly:=true;
   result.DropDownCount:=50;
@@ -1612,7 +1612,7 @@ begin
   result.OnChange:=Change;
   result.OnDropDown:=DropDown;
   result.OnCloseUp:=CloseUp;
-  result.OnMouseLeave:=setnormalfocus;
+  //result.OnMouseLeave:=setnormalfocus;
 
   if assigned(Filler)then
                          Filler(result);

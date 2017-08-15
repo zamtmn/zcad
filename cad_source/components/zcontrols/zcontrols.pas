@@ -8,7 +8,7 @@ unit zcontrols;
 interface
 
 uses
-  ZListView, LazarusPackageIntf;
+  ZListView, usupportgui, LazarusPackageIntf;
 
 implementation
 

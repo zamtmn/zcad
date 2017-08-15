@@ -12,12 +12,20 @@
         <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
     </CompilerOptions>
-    <Files Count="1">
+    <Files Count="3">
       <Item1>
         <Filename Value="zlistview.pas"/>
         <HasRegisterProc Value="True"/>
         <UnitName Value="ZListView"/>
       </Item1>
+      <Item2>
+        <Filename Value="usupportgui.pas"/>
+        <UnitName Value="usupportgui"/>
+      </Item2>
+      <Item3>
+        <Filename Value="zcontrols.pas"/>
+        <UnitName Value="zcontrols"/>
+      </Item3>
     </Files>
     <RequiredPkgs Count="3">
       <Item1>

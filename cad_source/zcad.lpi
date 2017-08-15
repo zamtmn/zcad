@@ -343,7 +343,7 @@
       <Unit20>
         <Filename Value="zcad/gui/forms/uzcfdimstyles.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="DSWindow"/>
+        <ComponentName Value="DimStylesForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit20>

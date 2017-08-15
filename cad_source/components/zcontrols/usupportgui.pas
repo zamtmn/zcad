@@ -100,7 +100,7 @@ procedure SetComboSize(cb:tcombobox;ItemH:Integer);
 begin
      cb.AutoSize:=false;
      {$IFDEF LCLWIN32}
-     cb.Style:=csOwnerDrawFixed;
+     cb.Style:={csOwnerDrawFixed}csOwnerDrawEditableFixed;
      cb.ItemHeight:=ItemH;
      {$ENDIF}
 end;

@@ -2389,12 +2389,14 @@ end;
 procedure TZCADMainWindow.ShowAllCursors;
 begin
      if drawings.GetCurrentDWG<>nil then
+     if drawings.GetCurrentDWG.wa<>nil then
      drawings.GetCurrentDWG.wa.showmousecursor;
 end;
 
 procedure TZCADMainWindow.RestoreCursors;
 begin
      if drawings.GetCurrentDWG<>nil then
+     if drawings.GetCurrentDWG.wa<>nil then
      drawings.GetCurrentDWG.wa.hidemousecursor;
 end;
 

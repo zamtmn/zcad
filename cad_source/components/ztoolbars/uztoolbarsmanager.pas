@@ -143,6 +143,10 @@ destructor TToolBarsManager.Destroy;
 begin
     if assigned(TBConfig) then
     TBConfig.Free;
+    if assigned(TBCreateFuncRegister) then
+    TBCreateFuncRegister.Free;
+    if assigned(TBItemCreateFuncRegister) then
+    TBItemCreateFuncRegister.Free;
 end;
 function getAttrValue(const aNode:TDomNode;const AttrName,DefValue:string):string;overload;
 var

@@ -1,14 +1,14 @@
-object DSWindow: TDSWindow
+object DimStylesForm: TDimStylesForm
   Left = 552
-  Height = 240
+  Height = 234
   Top = 143
-  Width = 320
+  Width = 286
   Caption = 'DSWindow'
-  ClientHeight = 240
-  ClientWidth = 320
+  ClientHeight = 234
+  ClientWidth = 286
+  DesignTimePPI = 113
   Position = poMainFormCenter
-  LCLVersion = '1.7'
-  Visible = False
+  LCLVersion = '1.9.0.0'
   object Label1: TLabel
     Left = 136
     Height = 19

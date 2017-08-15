@@ -79,6 +79,7 @@ begin
   //Load toolbars content from toolbarscontent.xml
   ToolBarsManager.LoadToolBarsContent('toolbarscontent.xml');
 
+  //Enumerate all toolbars and add them to view\tooldars menu
   ToolBarsManager.EnumerateToolBars(@AddToolBarToMenu,pointer(MenuItem6));
 
   //Load toolbars layout
@@ -152,14 +153,8 @@ begin
       Visible:=true;
     end;
 end;
-procedure TForm1.ShowToolbar(Sender: TObject);
-begin
-    if sender is TAction then
-    begin
-      ToolBarsManager.ShowFloatToolbar((Sender as TAction).Caption,rect(0,0,300,50));
-    end;
-end;
 
+//Add to menu callback procedure for enumerate toolbars
 procedure TForm1.AddToolBarToMenu(aTBNode: TDomNode;aName,aType: string; Data:Pointer);
 var
   pm1:TMenuItem;
@@ -172,9 +167,18 @@ begin
   aaction.DisableIfNoHandler:=false;
   aaction.ActionList:=ActionList1;
 
-    pm1:=TMenuItem.Create(TMenuItem(Data));
-    pm1.Action:=aaction;
-    TMenuItem(Data).Add(pm1);
+  pm1:=TMenuItem.Create(TMenuItem(Data));
+  pm1.Action:=aaction;
+  TMenuItem(Data).Add(pm1);
+end;
+
+//Show toolbar OnExecute handler
+procedure TForm1.ShowToolbar(Sender: TObject);
+begin
+    if sender is TAction then
+    begin
+      ToolBarsManager.ShowFloatToolbar((Sender as TAction).Caption,rect(0,0,300,50));
+    end;
 end;
 
 end.

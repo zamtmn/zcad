@@ -333,7 +333,7 @@ begin
 end;
 function TZCADDrawingsManager.GetCurrentOGLWParam:POGLWndtype;
 begin
-     if currentdwg<>nil then
+     if (currentdwg<>nil)and(currentdwg^.wa<>nil) then
                             begin
                                  if currentdwg^.wa.getviewcontrol<>nil then
                                                                     result:=@currentdwg^.wa.param

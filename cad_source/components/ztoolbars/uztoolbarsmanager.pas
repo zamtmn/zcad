@@ -17,6 +17,11 @@ type
   TTBCreateFuncRegister=specialize TDictionary <string,TTBCreateFunc>;
   TTBItemCreateFuncRegister=specialize TDictionary <string,TTBItemCreateFunc>;
 
+  TToolBarsManagerDockForm=class(TCustomDockForm)
+  protected
+    procedure DoClose(var CloseAction: TCloseAction); override;
+  end;
+
   TToolBarsManager=class
     private
     factionlist:TActionList;
@@ -33,7 +38,8 @@ type
 
     procedure SaveToolBarsToConfig(MainForm:TForm; Config: TConfigStorage);
     procedure RestoreToolBarsFromConfig(MainForm:TForm; Config: TConfigStorage);
-    Procedure ShowFloatToolbar(TBName:String;r:trect);
+    procedure ShowFloatToolbar(TBName:String;r:trect);
+    function FindToolBar(TBName:String;out tb:TToolBar):boolean;
     procedure LoadToolBarsContent(filename:string);
     function FindBarsContent(toolbarname:string):TDomNode;
     procedure EnumerateToolBars(rf:TTBRegisterInAPPFunc;Data:Pointer);
@@ -48,6 +54,8 @@ type
     function CreateDefaultToolBar(aName,atype: string):TToolBar;
     procedure CreateDefaultSeparator(aNode: TDomNode; TB:TToolBar);
     procedure CreateDefaultAction(aNode: TDomNode; TB:TToolBar);
+    procedure FloatDockSiteClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure SetActionChecked(aName:string;newChecked:boolean);
   end;
 
   function getAttrValue(const aNode:TDomNode;const AttrName,DefValue:string):string;overload;
@@ -58,6 +66,13 @@ var
   ToolBarsManager:TToolBarsManager;
 
 implementation
+
+procedure TToolBarsManagerDockForm.DoClose(var CloseAction: TCloseAction);
+begin
+  ToolBarsManager.FloatDockSiteClose(self,CloseAction);
+  inherited DoClose(CloseAction);
+end;
+
 function ToolBarNameToActionName(tbname:string):string;
 begin
   result:='ACN_SHOWTOOLBAR_'+uppercase(tbname);
@@ -68,12 +83,7 @@ function TToolBarsManager.CreateDefaultToolBar(aName,atype: string):TToolBar;
 var
   ta:TAction;
 begin
-  if assigned(factionlist)then
-  begin
-    ta:=taction(factionlist.ActionByName(ToolBarNameToActionName(aname)));
-    if ta<>nil then
-                   ta.Checked:=true;
-  end;
+  SetActionChecked(ToolBarNameToActionName(aname),true);
   result:=TToolBar.Create(fmainform);
   if fdefbuttonheight>0 then
     result.ButtonHeight:=fdefbuttonheight;
@@ -307,8 +317,8 @@ begin
     Result := TWinControl(FloatingClass.NewInstance);
     Result.DisableAutoSizing{$IFDEF DebugDisableAutoSizing}('TControl.CreateFloatingDockSite'){$ENDIF};
     Result.Create(tb);
-    if result is TCustomDockForm then
-      (result as TCustomDockForm).BorderStyle:=bsSizeToolWin;
+    {if result is TCustomDockForm then
+      (result as TCustomDockForm).OnClose:=@ToolBarsManager.FloatDockSiteClose;}
     result.TabStop:=false;
     NewClientWidth:=Bounds.Right-Bounds.Left;
     NewClientHeight:=Bounds.Bottom-Bounds.Top;
@@ -318,7 +328,24 @@ begin
     Result.EnableAutoSizing{$IFDEF DebugDisableAutoSizing}('TControl.CreateFloatingDockSite'){$ENDIF};
   end;
 end;
+procedure TToolBarsManager.SetActionChecked(aName:string;newChecked:boolean);
+var
+  ta:TAction;
+begin
+  if assigned(factionlist)then
+  begin
+    ta:=taction(factionlist.ActionByName(aName));
+    if ta<>nil then
+                   ta.Checked:=newChecked;
+  end;
+end;
 
+procedure TToolBarsManager.FloatDockSiteClose(Sender: TObject; var CloseAction: TCloseAction);
+var
+  ta:TAction;
+begin
+  SetActionChecked(ToolBarNameToActionName((Sender as TCustomDockForm).caption),false);
+end;
 function TToolBarsManager.FindBarsContent(toolbarname:string):TDomNode;
 begin
   if not assigned(TBConfig) then
@@ -373,6 +400,7 @@ begin
   TBNode:=FindBarsContent(aName);
   TBType:=getAttrValue(TBNode,'Type','');
   result:=DoTBCreateFunc(aName,TBType);
+  result.FloatingDockSiteClass:=TToolBarsManagerDockForm;
   CreateToolbarContent(result,TBNode);
 end;
 
@@ -385,12 +413,57 @@ begin
   TBType:=getAttrValue(TBNode,'Type','');
   CreateToolbarContent(tb,TBNode);
 end;
-
+function TToolBarsManager.FindToolBar(TBName:String;out tb:TToolBar):boolean;
+var
+  i,j:integer;
+  cb:TCoolBar;
+  tf:TCustomDockForm;
+begin
+  TBName:=uppercase(TBName);
+  for i:=fmainform.ComponentCount-1 downto 0 do
+  if fmainform.Components[i] is TControl then
+  begin
+    if fmainform.Components[i] is TCoolBar then
+    begin
+      cb:=fmainform.Components[i] as TCoolBar;
+      for j:=cb.Bands.Count-1 downto 0 do
+      begin
+        if cb.Bands[j].Control is TToolBar then
+        if uppercase(cb.Bands[j].Control.name)=TBName then
+        begin
+          result:=true;
+          tb:=ttoolbar(cb.Bands[j].Control);
+          exit;
+        end;
+      end;
+    end;
+    if fmainform.Components[i] is TToolBar then
+    begin
+      tb:=fmainform.Components[i] as TToolBar;
+      if IsFloatToolbar(tb,tf) then
+      if uppercase(tb.name)=TBName then
+      begin
+        result:=true;
+        exit;
+      end;
+    end;
+  end;
+  result:=false;
+  tb:=nil;
+end;
 Procedure TToolBarsManager.ShowFloatToolbar(TBName:String;r:trect);
 var
   tb:TToolBar;
   FloatHost: TWinControl;
 begin
+  if FindToolBar(TBName,tb) then
+  begin
+    FloatHost:=GetParentForm(tb);
+    FloatHost.Show;
+    tb.Show;
+    SetActionChecked(ToolBarNameToActionName(tb.name),true);
+    exit;
+  end;
   tb:=CreateToolbar(TBName);
   FloatHost := CreateFloatingDockSite(tb,r);
   if FloatHost <> nil then

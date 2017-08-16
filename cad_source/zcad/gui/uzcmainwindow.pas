@@ -2226,6 +2226,7 @@ procedure TZCADMainWindow.DropDownLType(Sender:Tobject);
 var
    i:integer;
 begin
+     if drawings.GetCurrentDWG=nil then exit;
      SetcomboItemsCount(tcombobox(Sender),drawings.GetCurrentDWG.LTypeStyleTable.Count+1);
      for i:=0 to drawings.GetCurrentDWG.LTypeStyleTable.Count-1 do
      begin

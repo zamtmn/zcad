@@ -43,6 +43,7 @@ var
   pts:PGDBTextStyle;
   ir:itrec;
 begin
+  if drawings.GetCurrentDWG=nil then exit;
   //Correct items count
   ptt:=@drawings.GetCurrentDWG.TextStyleTable;
   SetcomboItemsCount(tcombobox(Sender),ptt.GetRealCount);

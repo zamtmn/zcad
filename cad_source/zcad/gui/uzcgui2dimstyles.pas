@@ -42,6 +42,7 @@ var
   PDimStyleArray:PGDBDimStyleArray;
   PDimStyle:PGDBDimStyle;
 begin
+  if drawings.GetCurrentDWG=nil then exit;
   //Correct items count
   PDimStyleArray:=@drawings.GetCurrentDWG.DimStyleTable;
   SetcomboItemsCount(tcombobox(Sender),PDimStyleArray.Count);

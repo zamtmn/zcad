@@ -90,7 +90,8 @@ begin
   result.Align:=alclient;
   result.Top:=0;
   result.Left:=0;
-  result.AutoSize:=true;
+  //result.AutoSize:=true;
+  result.Align:=alClient;
   result.Wrapable:=false;
   result.Transparent:=true;
   result.DragKind:=dkDock;

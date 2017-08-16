@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ToolBarsContent>
-    <Standart Type="ToolBar">
+    <Standard Type="ToolBar">
       <Action Name="ACN_NEW"/>
       <Action Name="ACN_LOAD"/>
       <Action Name="ACN_QSAVE"/>
@@ -40,7 +40,7 @@
       <Separator/>
       <Action Name="ACN_PROCESSKZ"/>
       <Action Name="ACN_REMAUTOCABLES"/>
-    </Standart>
+    </Standard>
     <OIButtons Type="ToolBar">
       <Action Name="ACN_SNAPRUNTIME"/>
       <Separator/>

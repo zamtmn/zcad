@@ -22,6 +22,7 @@ object ZCADMainWindow: TZCADMainWindow
     Top = 0
     Width = 632
     AutoSize = True
+    BandMaximize = bmDblClick
     Bands = <>
     DockSite = True
     GrabWidth = 5
@@ -49,6 +50,7 @@ object ZCADMainWindow: TZCADMainWindow
     Width = 4
     Align = alLeft
     AutoSize = True
+    BandMaximize = bmDblClick
     Bands = <>
     DockSite = True
     GrabWidth = 5
@@ -61,6 +63,7 @@ object ZCADMainWindow: TZCADMainWindow
     Width = 4
     Align = alRight
     AutoSize = True
+    BandMaximize = bmDblClick
     Bands = <>
     DockSite = True
     GrabWidth = 5
@@ -73,6 +76,7 @@ object ZCADMainWindow: TZCADMainWindow
     Width = 632
     Align = alBottom
     AutoSize = True
+    BandMaximize = bmDblClick
     Bands = <>
     DockSite = True
     GrabWidth = 5

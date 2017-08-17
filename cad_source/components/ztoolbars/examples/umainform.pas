@@ -106,7 +106,7 @@ begin
   end;
 end;
 
-//the load toolbar procedure
+//load toolbar procedure
 procedure TForm1.DoLoadTBLayout(Data: PtrInt);
 var
   XMLConfig: TXMLConfigStorage;

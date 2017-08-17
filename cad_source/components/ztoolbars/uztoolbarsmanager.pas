@@ -503,18 +503,22 @@ begin
                  cb:=FindCoolBar(MainForm,itemName);
                  ItemCount:=Config.GetValue('ItemCount',0);
                  if cb<>nil then
-                 for j:=0 to ItemCount-1 do
                  begin
-                   Config.AppendBasePath('Item'+IntToStr(j)+'/');
-                   itemType:=Config.GetValue('Type','');
-                   itemName:=Config.GetValue('Name','');
-                   tb:=CreateToolbar(itemName);
-                   //tb:=TBCreateFunc(itemName,itemType);
-                   cb.InsertControl(tb,j);
-                   cb.Bands[j].Break:=Config.GetValue('Break',True);
-                   //if not cb.Bands[j].Break then
-                   cb.Bands[j].Width:=Config.GetValue('Width',100);
-                   Config.UndoAppendBasePath;
+                   cb.BeginUpdate;
+                   for j:=0 to ItemCount-1 do
+                   begin
+                     Config.AppendBasePath('Item'+IntToStr(j)+'/');
+                     itemType:=Config.GetValue('Type','');
+                     itemName:=Config.GetValue('Name','');
+                     tb:=CreateToolbar(itemName);
+                     //tb:=TBCreateFunc(itemName,itemType);
+                     cb.InsertControl(tb,j);
+                     cb.Bands[j].Break:=Config.GetValue('Break',True);
+                     //if not cb.Bands[j].Break then
+                     cb.Bands[j].Width:=Config.GetValue('Width',100);
+                     Config.UndoAppendBasePath;
+                   end;
+                   cb.EndUpdate;
                  end;
                end;
 'FloatToolBar':begin

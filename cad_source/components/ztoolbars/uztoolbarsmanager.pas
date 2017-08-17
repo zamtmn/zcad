@@ -56,6 +56,8 @@ type
     procedure CreateDefaultAction(aNode: TDomNode; TB:TToolBar);
     procedure FloatDockSiteClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure SetActionChecked(aName:string;newChecked:boolean);
+    procedure DefaultShowToolbar(Sender: TObject);
+    procedure DefaultAddToolBarToMenu(aTBNode: TDomNode;aName,aType: string; Data:Pointer);
   end;
 
   function getAttrValue(const aNode:TDomNode;const AttrName,DefValue:string):string;overload;
@@ -524,6 +526,32 @@ begin
   end;
   Config.UndoAppendBasePath;
 end;
+
+//Show toolbar OnExecute handler
+procedure TToolBarsManager.DefaultShowToolbar(Sender: TObject);
+begin
+    if sender is TAction then
+      ToolBarsManager.ShowFloatToolbar((Sender as TAction).Caption,rect(0,0,300,50));
+end;
+
+//Add to menu callback procedure for enumerate toolbars
+procedure TToolBarsManager.DefaultAddToolBarToMenu(aTBNode: TDomNode;aName,aType: string; Data:Pointer);
+var
+  pm1:TMenuItem;
+  aaction:taction;
+begin
+  aaction:=TAction.Create(fmainform);
+  aaction.Name:=ToolBarNameToActionName(aName);
+  aaction.Caption:=aName;
+  aaction.OnExecute:=@DefaultShowToolbar;
+  aaction.DisableIfNoHandler:=false;
+  aaction.ActionList:=factionlist;
+
+  pm1:=TMenuItem.Create(TMenuItem(Data));
+  pm1.Action:=aaction;
+  TMenuItem(Data).Add(pm1);
+end;
+
 
 {initialization
 if not assigned(ToolBarsManager) then

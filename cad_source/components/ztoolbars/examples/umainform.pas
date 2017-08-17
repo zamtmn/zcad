@@ -36,12 +36,10 @@ type
     procedure onCreateHandler(Sender: TObject);
     procedure SaveTBLayout(Sender: TObject);
     procedure AsyncLoadTBLayout(Sender: TObject);
-    procedure ShowToolbar(Sender: TObject);
   private
     procedure CreateYourOwnTBitem(aNode: TDomNode; TB:TToolBar);
     procedure DoLoadTBLayout(Data: PtrInt);
     procedure LoadTBLayout(Sender: TObject);
-    procedure AddToolBarToMenu(aTBNode: TDomNode;aName,aType: string; Data:Pointer);
   public
 
   end;
@@ -80,7 +78,7 @@ begin
   ToolBarsManager.LoadToolBarsContent('toolbarscontent.xml');
 
   //Enumerate all toolbars and add them to view\tooldars menu
-  ToolBarsManager.EnumerateToolBars(@AddToolBarToMenu,pointer(MenuItem6));
+  ToolBarsManager.EnumerateToolBars(@ToolBarsManager.DefaultAddToolBarToMenu,pointer(MenuItem6));
 
   //Load toolbars layout
   LoadTBLayout(nil);
@@ -151,33 +149,6 @@ begin
       ShowHint:=true;
       Parent:=tb;
       Visible:=true;
-    end;
-end;
-
-//Add to menu callback procedure for enumerate toolbars
-procedure TForm1.AddToolBarToMenu(aTBNode: TDomNode;aName,aType: string; Data:Pointer);
-var
-  pm1:TMenuItem;
-  aaction:taction;
-begin
-  aaction:=TAction.Create(self);
-  aaction.Name:=ToolBarNameToActionName(aName);
-  aaction.Caption:=aName;
-  aaction.OnExecute:=@ShowToolbar;
-  aaction.DisableIfNoHandler:=false;
-  aaction.ActionList:=ActionList1;
-
-  pm1:=TMenuItem.Create(TMenuItem(Data));
-  pm1.Action:=aaction;
-  TMenuItem(Data).Add(pm1);
-end;
-
-//Show toolbar OnExecute handler
-procedure TForm1.ShowToolbar(Sender: TObject);
-begin
-    if sender is TAction then
-    begin
-      ToolBarsManager.ShowFloatToolbar((Sender as TAction).Caption,rect(0,0,300,50));
     end;
 end;
 

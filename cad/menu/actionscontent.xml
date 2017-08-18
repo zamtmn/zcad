@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ActionsContent>
+    <Group Category="File">
+      <ZAction Name="ACN_LOAD" Command="Load" Img="load.bmp" Caption="Open ..." Hint="Open drawing" ShortCut="CTRL+O"/>
+      <ZAction Name="ACN_LOADQS" Command="Load(QS)" Img="#QL" Caption="Open (Autosave)" Hint="Open last autosave"/>
+      <ZAction Name="ACN_IMPORT" Command="Import" Img="#Import" Caption="Import ..." Hint="Import drawing"/>
+      <ZAction Name="ACN_NEW" Command="NewDWG" Img="new.bmp" Caption="New drawing" ShortCut="CTRL+N"/>
+      <ZAction Name="ACN_QSAVE" Command="QSave" Img="save.bmp" Caption="Save" Hint="Save drawing" ShortCut="CTRL+S"/>
+      <ZAction Name="ACN_SAVEAS" Command="SaveAs" Img="saveas.bmp" Caption="Save as ..." Hint="Save drawing as" ShortCut="CTRL+SHIFT+S"/>
+      <ZAction Name="ACN_SAVEQS" Command="QSave(QS)" Img="#QS" Caption="Save (Autosave)" Hint="Autosave"/>
+      <ZAction Name="ACN_PRINT" Command="Print" Img="print.bmp" Caption="Print" Hint="Print" ShortCut="CTRL+P"/>
+      <ZAction Name="ACN_CLOSE" Command="CloseDWG" Img="close.bmp" Caption="Close drawing" ShortCut="CTRL+F4"/>
+      <ZAction Name="ACN_QUIT" Command="Quit" Img="exit.bmp" Caption="Quit" ShortCut="CTRL+Q"/>
+    </Group>
+  </ActionsContent>
+</CONFIG>

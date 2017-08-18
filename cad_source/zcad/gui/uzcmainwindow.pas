@@ -181,6 +181,7 @@ type
     procedure TBDimStyleComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
     procedure TBVariableCreateFunc(aNode: TDomNode; TB:TToolBar);
     procedure TTBRegisterInAPPFunc(aTBNode: TDomNode;aName,aType: string;Data:Pointer);
+    procedure ZActionsReader(aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList);
     procedure DockMasterCreateControl(Sender: TObject; aName: string; var
     AControl: TControl; DoDisableAutoSizing: boolean);
 
@@ -983,11 +984,7 @@ procedure TZCADMainWindow.LoadActions;
 var
    i:integer;
 begin
-  StandartActions:=TmyActionList.Create(self);
-  if not assigned(StandartActions.Images) then
-                             StandartActions.Images:=TImageList.Create(StandartActions);
-  StandartActions.brocenicon:=StandartActions.LoadImage(ProgramPath+
-  'menu/BMP/noimage.bmp');
+  ToolBarsManager.LoadActions(ProgramPath+'menu/actionscontent.xml');
   StandartActions.LoadFromACNFile(ProgramPath+'menu/actions.acn');
   StandartActions.LoadFromACNFile(ProgramPath+'menu/electrotech.acn');
   StandartActions.OnUpdate:=ActionUpdate;
@@ -1339,14 +1336,8 @@ begin
 end;
 procedure TZCADMainWindow.TTBRegisterInAPPFunc(aTBNode: TDomNode;aName,aType: string;Data:Pointer);
 var
-    //pmenuitem:TmyMenuItem;
     pm1:TMenuItem;
-    //submenu:TMenuItem;
-    //line2:GDBString;
-    //i:integer;
-    //pstr:PGDBString;
     action:tmyaction;
-    //debs:string;
 begin
   action:=TmyAction.Create(self);
   action.Name:=ToolBarNameToActionName(aName);
@@ -1359,6 +1350,32 @@ begin
   pm1:=TMenuItem.Create(TMenuItem(Data));
   pm1.Action:=action;
   TMenuItem(Data).Add(pm1);
+end;
+
+procedure TZCADMainWindow.ZActionsReader(aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList);
+var
+  action:tmyaction;
+  actioncommand,actionshortcut:string;
+begin
+  action:=TmyAction.Create(self);
+  action.Name:=uppercase(getAttrValue(aNode,'Name',''));
+  action.Caption:=getAttrValue(aNode,'Caption','');
+  action.Caption:=InterfaceTranslate(action.Name+'~caption',action.Caption);
+  action.Hint:=getAttrValue(aNode,'Hint','');
+  if action.Hint<>'' then
+                         action.Hint:=InterfaceTranslate(action.Name+'~hint',action.Hint)
+                     else
+                         action.Hint:=action.Caption;
+  actionshortcut:=getAttrValue(aNode,'ShortCut','');
+  if actionshortcut<>'' then
+                          action.ShortCut:=TextToShortCut(actionshortcut);
+  actioncommand:=getAttrValue(aNode,'Command','');
+  ParseCommand(actioncommand,action.command,action.options);
+  action.Category:=getAttrValue(aNode,'Category',CategoryOverrider);
+  action.DisableIfNoHandler:=false;
+  action.ActionList:=actlist;
+  TmyActionList(actlist).SetImage(getAttrValue(aNode,'Img',''),action.Name+'~textimage',TZAction(action));
+  action.pfoundcommand:=commandmanager.FindCommand(uppercase(action.command));
 end;
 
 procedure TZCADMainWindow.TBLayerComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
@@ -1512,12 +1529,16 @@ begin
   SystemTimer.OnTimer:=self.generaltick;
 
   InitSystemCalls;
+
   ImagesManager.ScanDir(ProgramPath+'images/');
   ImagesManager.LoadAliasesDir(ProgramPath+'images/navigator.ima');
-  LoadActions;
-  toolbars:=tstringlist.Create;
-  toolbars.Sorted:=true;
-  CreateInterfaceLists;
+
+  StandartActions:=TmyActionList.Create(self);
+  if not assigned(StandartActions.Images) then
+                             StandartActions.Images:=TImageList.Create(StandartActions);
+  StandartActions.brocenicon:=StandartActions.LoadImage(ProgramPath+
+  'menu/BMP/noimage.bmp');
+
 
   ToolBarsManager:=TToolBarsManager.create(self,StandartActions,sysvar.INTF.INTF_DefaultControlHeight^);
   ToolBarsManager.RegisterTBItemCreateFunc('Separator',ToolBarsManager.CreateDefaultSeparator);
@@ -1531,8 +1552,16 @@ begin
   ToolBarsManager.RegisterTBItemCreateFunc('DimStyleComboBox',TBDimStyleComboBoxCreateFunc);
   ToolBarsManager.RegisterTBItemCreateFunc('Variable',TBVariableCreateFunc);
 
+  ToolBarsManager.RegisterActionCreateFuncRegister('Group',ToolBarsManager.DefaultActionsGroupReader);
+  ToolBarsManager.RegisterActionCreateFuncRegister('ZAction',ZActionsReader);
+
   ToolBarsManager.RegisterTBCreateFunc('ToolBar',ToolBarsManager.CreateDefaultToolBar);
   ToolBarsManager.LoadToolBarsContent(ProgramPath+'menu/toolbarscontent.xml');
+
+  LoadActions;
+  toolbars:=tstringlist.Create;
+  toolbars.Sorted:=true;
+  CreateInterfaceLists;
 
   loadpanels(ProgramPath+'menu/mainmenu.mn');
 

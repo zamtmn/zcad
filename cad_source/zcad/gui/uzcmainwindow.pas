@@ -182,6 +182,7 @@ type
     procedure TBVariableCreateFunc(aNode: TDomNode; TB:TToolBar);
     procedure TTBRegisterInAPPFunc(aTBNode: TDomNode;aName,aType: string;Data:Pointer);
     procedure ZActionsReader(aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList);
+    procedure ZAction2VariableReader(aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList);
     procedure DockMasterCreateControl(Sender: TObject; aName: string; var
     AControl: TControl; DoDisableAutoSizing: boolean);
 
@@ -985,8 +986,7 @@ var
    i:integer;
 begin
   ToolBarsManager.LoadActions(ProgramPath+'menu/actionscontent.xml');
-  StandartActions.LoadFromACNFile(ProgramPath+'menu/actions.acn');
-  StandartActions.LoadFromACNFile(ProgramPath+'menu/electrotech.acn');
+  ToolBarsManager.LoadActions(ProgramPath+'menu/elactionscontent.xml');
   StandartActions.OnUpdate:=ActionUpdate;
 
   for i:=low(FileHistory) to high(FileHistory) do
@@ -1307,7 +1307,8 @@ begin
     Action:=_action;
     ShowCaption:=false;
     ShowHint:=true;
-    Caption:=_action.imgstr;
+    if assigned(_action) then
+      Caption:=_action.imgstr;
     Parent:=tb;
     Visible:=true;
   end;
@@ -1377,7 +1378,35 @@ begin
   TmyActionList(actlist).SetImage(getAttrValue(aNode,'Img',''),action.Name+'~textimage',TZAction(action));
   action.pfoundcommand:=commandmanager.FindCommand(uppercase(action.command));
 end;
+procedure TZCADMainWindow.ZAction2VariableReader(aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList);
+var
+  va:TmyVariableAction;
+  actionvariable,actionshortcut:string;
+  mask:DWord;
+begin
+  va:=TmyVariableAction.create(self);
+  va.Name:=uppercase(getAttrValue(aNode,'Name',''));
+  va.Caption:=getAttrValue(aNode,'Caption','');
+  va.Caption:=InterfaceTranslate(va.Name+'~caption',va.Caption);
+  va.Hint:=getAttrValue(aNode,'Hint','');
+  if va.Hint<>'' then
+                     va.Hint:=InterfaceTranslate(va.Name+'~hint',va.Hint)
+                 else
+                     va.Hint:=va.Caption;
+  actionshortcut:=getAttrValue(aNode,'ShortCut','');
+  if actionshortcut<>'' then
+                            va.ShortCut:=TextToShortCut(actionshortcut);
+  actionvariable:=getAttrValue(aNode,'Variable','');
+  mask:=getAttrValue(aNode,'Mask',0);
 
+  va.AssignToVar(actionvariable,mask);
+
+  TmyActionList(actlist).SetImage(getAttrValue(aNode,'Img',''),va.Name+'~textimage',TZAction(va));
+
+  va.AutoCheck:=true;
+  va.Enabled:=true;
+  va.ActionList:=actlist;
+end;
 procedure TZCADMainWindow.TBLayerComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
 var
   _hint:string;
@@ -1554,6 +1583,7 @@ begin
 
   ToolBarsManager.RegisterActionCreateFuncRegister('Group',ToolBarsManager.DefaultActionsGroupReader);
   ToolBarsManager.RegisterActionCreateFuncRegister('ZAction',ZActionsReader);
+  ToolBarsManager.RegisterActionCreateFuncRegister('ZAction2Variable',ZAction2VariableReader);
 
   ToolBarsManager.RegisterTBCreateFunc('ToolBar',ToolBarsManager.CreateDefaultToolBar);
   ToolBarsManager.LoadToolBarsContent(ProgramPath+'menu/toolbarscontent.xml');

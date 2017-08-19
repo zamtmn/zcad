@@ -55,7 +55,7 @@
     </OIButtons>
     <ObjectSnap Type="ToolBar">
       <Action Name="ACN_OS_INSERT"/>
-      <Action Name="ACN_SAVEQS"/>"/>
+      <Action Name="ACN_OS_END"/>"/>
       <Action Name="ACN_OS_MIDDLE"/>
       <Action Name="ACN_OS_THIRD"/>
       <Action Name="ACN_OS_QUARTER"/>

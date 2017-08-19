@@ -1059,6 +1059,7 @@ begin
   DragManager.DragThreshold:=32;
 
   {Наполняем статусную строку}
+  ToolBarD.ButtonHeight:=sysvar.INTF.INTF_DefaultControlHeight^;
   CreateHTPB(ToolBarD);//поле отображения координат progressbar
   ToolBarsManager.AddContentToToolbar(ToolBarD,'Status');//переносим туда то что есть на тулбаре 'Status'
 

@@ -52,7 +52,6 @@ type
               end;
 
     TmyActionList=class(TActionList)
-                       procedure LoadFromACNFile(fname:string);
                        procedure SetImage(img,identifer:string;var action:TZAction);
                        function LoadImage(imgfile:GDBString):Integer;
                        procedure AddMyAction(Action:TZAction);
@@ -399,105 +398,6 @@ begin
                               end;
      end;
 end;
-procedure TmyActionList.LoadFromACNFile(fname:string);
-var
-    f:GDBOpenArrayOfByte;
-    line,ucline:GDBString;
-    actionname,actioncommand,actionpic,actioncaption,actionhint,actionshortcut:string;
-
-    {ts,ts2,bc,}masks:GDBString;
-    i:longint;
-    code:GDBInteger;
-    mask:DWord;
-    va:TmyVariableAction;
-
-    action:TmyAction;
-
-begin
-  f.InitFromFile(fname);
-  while f.notEOF do
-  begin
-    line := f.readstring(' ',#$D#$A);
-    if (line <> '') and (line[1] <> ';') then
-    begin
-      ucline:=uppercase(line);
-      if ucline = 'ACTION' then
-           begin
-               actionname:=UPPERCASE(f.readstring(',',''));
-            actioncommand:=f.readstring(',','');
-                actionpic:=f.readstring(',','');
-            actioncaption:=f.readstring(',','');
-            actioncaption:=InterfaceTranslate(actionname+'~caption',actioncaption);
-               actionhint:=f.readstring(',','');
-               if actionhint<>'' then
-                                     actionhint:=InterfaceTranslate(actionname+'~hint',actionhint)
-                                 else
-                                     actionhint:=actioncaption;
-               actionshortcut:=f.readstring(#$A,#$D);
-              { if actionname='ACN_SAVEQS' then
-                                         actionname:=actionname;}
-
-               action:=TmyAction.Create(self);
-               //if actionname='ACN_SHOWOBJINSP'
-               //                               then ACN_ShowObjInsp:=action;
-               if actionshortcut<>'' then
-                                         action.ShortCut:=TextToShortCut(actionshortcut);
-               action.Name:=uppercase(actionname);
-               action.Caption:=actioncaption;
-               ParseCommand(actioncommand,action.command,action.options);
-               //action.command:=actioncommand;
-               action.Hint:=actionhint;
-               action.DisableIfNoHandler:=false;
-               SetImage(actionpic,actionname+'~textimage',TZAction(action));
-               self.AddAction(action);
-               action.pfoundcommand:=commandmanager.FindCommand(uppercase(action.command));
-           end
- else if ucline = 'ACTION2VARIABLE' then
-           begin
-                actionname:=UPPERCASE(f.readstring(',',''));
-                actioncommand := f.readstring(',','');
-                masks:='';
-                i:=pos('|', actioncommand);
-                if i>0 then
-                           begin
-                                masks:=system.copy(actioncommand,i+1,length(actioncommand)-i);
-                                actioncommand:=system.copy(actioncommand,1,i-1);
-                           end;
-                if masks<>''then
-                               begin
-                                    val(masks,mask,code);
-                                    if code<>0 then
-                                                   mask:=0;
-                               end
-                           else
-                               mask:=0;
-                actionpic:=f.readstring(',','');
-                actioncaption := f.readstring(',','');
-                actioncaption:=InterfaceTranslate(actionname+'~caption',actioncaption);
-                actionhint:=f.readstring(',','');
-                if actionhint<>'' then
-                                     actionhint:=InterfaceTranslate(actionname+'~hint',actionhint)
-                                 else
-                                     actionhint:=actioncaption;
-                actionshortcut:=f.readstring(#$A,#$D);
-                                va:=TmyVariableAction.create(self);
-                va.Name:=actionname;
-                va.Caption:=actioncaption;
-                va.AssignToVar(actioncommand,mask);
-                va.hint:=(actionhint);
-                SetImage(actionpic,actionname+'~textimage',TZAction(va));
-                if actionshortcut<>'' then
-                                         action.ShortCut:=TextToShortCut(actionshortcut);
-                va.AutoCheck:=true;
-                va.Enabled:=true;
-                self.AddAction(va);
-
-           end;
-    end;
-  end;
-  f.done;
-end;
-
 function FindControlByType(_parent:TWinControl;_class:TClass):TControl;
 var
     i:integer;

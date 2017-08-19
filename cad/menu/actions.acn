@@ -1,102 +1,17 @@
 action ACN_CANCEL,Cancel,#C,Cancel,Cancel,
 
-action ACN_UNDO,Undo,undo.bmp,Undo,,CTRL+Z
-action ACN_REDO,Redo,redo.bmp,Redo,,CTRL+SHIFT+Z
-action ACN_CUTCLIP,CutClip,cutclip.bmp,Cut to clipboard,Cut to clipboard,CTRL+X
-action ACN_COPYCLIP,CopyClip,copyclip.bmp,Copy to clipboard,Copy to clipboard,CTRL+C
-action ACN_COPYCLIPBASE,CopyBase,copyclipbase.bmp,Copy to clipboard with base point,Copy to clipboard with base point,CTRL+SHIFT+C
-action ACN_FAKECOPYCLIPBASE,CopyBase,#CB,,,CTRL+INS
-action ACN_PASTE,PasteClip,pasteclip.bmp,Paste,Paste from clipboard,CTRL+V
-action ACN_FAKEPASTE,PasteClip,#Paste,,,SHIFT+INS
-action ACN_ERASE,Erase,erase.bmp,Erase,,DEL
-action ACN_SELECTALL,SelectAll,#SA,Select all,,CTRL+A
-action ACN_INVERSESELECTED,InverseSelected,#SI,Inverse selected,,
-action ACN_DESELECTALL,DeSelectAll,#DSA,DeSelect all,,CTRL+SHIFT+A
-action ACN_SELSIM,SelSim,#SSim,Select similar,,
-action ACN_El_FIND,EL_Find,find.bmp,Find device,,CTRL+F
-
-action ACN_PROJECTTREE,ProjectTree,treeview.bmp,Project tree,,CTRL+T
-action ACN_REGEN,Regen,regen.bmp,Regen all,,CTRL+R
-action ACN_PERSPECTIVE,ChangeProjType,perspective.bmp,Perspective,Perspective on/off,
-action ACN_SHOW_OBJECTINSPECTOR,Show(ObjectInspector),#OI,Object inspector,,
-action ACN_SHOW_PAGECONTROL,Show(PageControl),#DW,Drawings window,,
-action ACN_SHOW_COMMANDLINE,Show(CommandLine),#CL,Command line and history,,
-action ACN_SHOW_NAVIGATOR,Show(Navigator),#NV,Navigstor,,
-action ACN_SAVELAYOUT,SaveLayout,#SLay,Save window layout as default,,
-action ACN_DOCKOPT,DockingOptions,#DO,Docking options,,
-action ACN_TEXTWINDOW,TextWindow,#TW,View text window,,F2
-action ACN_ZOOMALL,Zoom(ALL),zoomall.bmp,Zoom All,,HOME
-action ACN_ZOOMWINDOW,ZoomWindow,zoomwindow.bmp,Zoom window,,
-action ACN_ZOOMSEL,Zoom(SEL),#zsel,Zoom selected,,END
-action ACN_ZOOMIN,Zoom(IN),zoomin.bmp,Zoom in,,PGUP
-action ACN_ZOOMOUT,Zoom(OUT),zoomout.bmp,Zoom out,,PGDN
-action ACN_PANLEFT,Pan(LEFT),panleft.bmp,Pan left,,LEFT
-action ACN_PANRIGHT,Pan(RIGHT),panright.bmp,Pan right,,RIGHT
-action ACN_PANUP,Pan(UP),panup.bmp,Pan up,,UP
-action ACN_PANDOWN,Pan(DOWN),pandown.bmp,Pan down,,DOWN
-action ACN_VIEWTOP,View(TOP),top.bmp,View top,,
-action ACN_VIEWDOWN,View(BOTTOM),bottom.bmp,View bottom,,
-action ACN_VIEWLEFT,View(LEFT),left.bmp,View left,,
-action ACN_VIEWRIGHT,View(RIGHT),right.bmp,View right,,
-action ACN_VIEWSEISO,View(SEISO),isose.bmp,View SE isometric,,
-action ACN_VIEWNEISO,View(NEISO),isone.bmp,View NE isometric,,
-action ACN_VIEWSWISO,View(SWISO),isosw.bmp,View SW isometric,,
-action ACN_VIEWNWISO,View(NWISO),isonw.bmp,View NW isometric,,
-action ACN_VIEWRL,View(RL),#RL,Rotate camera left,,CTRL+LEFT
-action ACN_VIEWRR,View(RR),#RR,Rotate camera right,,CTRL+RIGHT
-action ACN_VIEWRU,View(RU),#RU,Rotate camera up,,CTRL+UP
-action ACN_VIEWRD,View(RD),#RD,Rotate camera down,,CTRL+DOWN
-
-
-
-
 action ACN_SNAPRUNTIME,SnapProperties,magnet.bmp,Run time snap editor,,ALT+S
 
-action ACN_UNITS,Units,#0.0,Units format ...,Units format,
-action ACN_LAYER,Layer,layer.bmp,Layers ...,Layers properties manager,
-action ACN_COLORS,Colors,colors.bmp,Colors ...,Select current color,
-action ACN_TSTYLES,TextStyles,textstyles.bmp,Text styles ...,Text styles properties manager,
-action ACN_DSTYLES,DimStyles,dimstyles.bmp,Dimension styles ...,Dimension styles properties manager,
-action ACN_LTYPES,LineTypes,linestyles.bmp,Line types ...,Line types properties manager,
 action ACN_MATCHPROP,MatchProp,matchprop.bmp,Match properties,Match properties,
-
-action ACN_COPY,Copy,copy.bmp,Copy,Copy primitives,
-action ACN_MOVE,Move,move.bmp,Move,Move primitives,
-action ACN_ROTATE,Rotate,rotate.bmp,Rotate,Rotate primitives,
-action ACN_SCALE,Scale,scale.bmp,Scale,Scale primitives,
-action ACN_MIRROR,Mirror,mirror.bmp,Mirror,Reflect primitives,
-
-action ACN_BEDIT,BEdit,bedit.bmp,Block editor,,
-action ACN_BREPLACE,BlockReplace,#BR,Block replace,,
-action ACN_BSCALE,BlockScale,#BS,Block scale,,
-action ACN_BROTATE,BlockRotate,#BR,Block rotate,,
-action ACN_ADDTOOWNER,AddToOwner,addtoowner.bmp,Add to owner,,
-action ACN_COPYFROMOWNER,CopyFromOwner,#COF,Copy from owner,,
-action ACN_DEVNUMBERING,NumDevices,#D++,Numbering Devices,,
-action ACN_POLYED,PolyED,polyed.bmp,Edit polyline,,
-action ACN_OBJVARMAN,ObjVarMan,varman.bmp,Object variables manager,,
-action ACN_MULTIOBJVARMAN,MultiObjVarMan,mvarman.bmp,Multi object variables manager,,
 
 action ACN_slagcabCom,slagcab,#D(),Start command panels for autocabeling SL,,
 action ACN_agslr,AGSLROOM,#ASL,Start command ASL,,
 action ACN_SupeLine,DrawSuperLine,superline.bmp,SuperLine,,
 
-action ACN_LINE,Line,line.bmp,Draw line,,
-action ACN_3DPOLY,3DPoly,pline.bmp,Draw 3Dpolyline,,
-action ACN_RECTANGLE,Rectangle,rectangle.bmp,Draw rectangle,,
-action ACN_CIRCLE,Circle,circle.bmp,Center; radius,,
-action ACN_CIRCLECD,Circle(cd),circlecd.bmp,Center; diameter,,
-action ACN_CIRCLE2P,Circle(2p),circle2p.bmp,2 points,,
-action ACN_CIRCLE3P,Circle(3p),circle3p.bmp,3 points,,
-action ACN_BInsert,Insert,insert.bmp,Insert block,,
-action ACN_TEXT,Text,text.bmp,Draw text,,
-action ACN_ARC,Arc,arc.bmp,Draw arc,,
-
 action ACN_DIMALIGNED,DimAligned,dimaligned.bmp,Draw aligned dimension,,
 action ACN_DIMLINEAR,DimLinear,dimlinear.bmp,Draw linear dimension,,
 action ACN_DIMRADIAL,DimRadius,dimradial.bmp,Draw radial dimension,,
 action ACN_DIMDIAMETRIC,DimDiameter,dimdiametric.bmp,Draw diametric dimension,,
-
 action ACN_OPTIONS,Options,options.bmp,Options,,
 action ACN_SAVEOPTIONS,SaveOptions,,Save options,,
 

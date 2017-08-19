@@ -1,3 +1,5 @@
+action ACN_DEVNUMBERING,NumDevices,#D++,Numbering Devices,,
+
 action ACN_CABLE,El_Cable,el_cable.bmp,Draw cable,Draw cable,
 action ACN_WIRE,El_Wire,El_Wire.bmp,Draw net\trace,Draw net\trace,
 action ACN_LEADER,El_Leader,el_leader.bmp,Mark cables,Mark cables,

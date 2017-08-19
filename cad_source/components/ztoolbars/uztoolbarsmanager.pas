@@ -408,6 +408,7 @@ begin
       end;
   end;
 
+  ActionsConfig.Free;
 end;
 procedure TToolBarsManager.EnumerateToolBars(rf:TTBRegisterInAPPFunc;Data:Pointer);
 var

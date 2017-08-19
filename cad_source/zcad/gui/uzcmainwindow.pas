@@ -893,6 +893,12 @@ begin
     try
       // restore the layout
       // this will close unneeded forms and call OnCreateControl for all needed
+
+      if assigned(ZCADMainWindow.updatesbytton) then
+        ZCADMainWindow.updatesbytton.Clear;
+      if assigned(ZCADMainWindow.updatescontrols) then
+        ZCADMainWindow.updatescontrols.Clear;
+
       DockMaster.LoadLayoutFromConfig(XMLConfig,false);
       DockMaster.LoadSettingsFromConfig(XMLConfig);
       ToolBarsManager.RestoreToolBarsFromConfig(ZCADMainWindow,XMLConfig);
@@ -1087,11 +1093,6 @@ begin
   {Грузим раскладку окон}
   if not sysparam.noloadlayout then
     LoadLayout_com(EmptyCommandOperands);
-
-  {if assigned(updatesbytton) then
-    updatesbytton.Clear;
-  if assigned(updatescontrols) then
-    updatescontrols.Clear;}
 
   if sysparam.noloadlayout then
   begin

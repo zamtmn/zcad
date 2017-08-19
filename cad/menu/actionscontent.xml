@@ -98,5 +98,63 @@
       <ZAction Name="ACN_TEXT" Command="Text" Img="text.bmp" Caption="Draw text"/>
       <ZAction Name="ACN_ARC" Command="Arc" Img="arc.bmp" Caption="Draw arc"/>
     </Group>
+    <Group Category="Dimension">
+      <ZAction Name="ACN_DIMALIGNED" Command="DimAligned" Img="dimaligned.bmp" Caption="Draw aligned dimension"/>
+      <ZAction Name="ACN_DIMLINEAR" Command="DimLinear" Img="dimlinear.bmp" Caption="Draw linear dimension"/>
+      <ZAction Name="ACN_DIMRADIAL" Command="DimRadius" Img="dimradial.bmp" Caption="Draw radial dimension"/>
+      <ZAction Name="ACN_DIMDIAMETRIC" Command="DimDiameter" Img="dimdiametric.bmp" Caption="Draw diametric dimension"/>
+    </Group>
+    <Group Category="Misc">
+      <ZAction Name="ACN_CANCEL" Command="Cancel" Img="#C" Caption="Cancel"/>
+      <ZAction Name="ACN_SNAPRUNTIME" Command="SnapProperties" Img="magnet.bmp" Caption="Run time snap editor" ShortCut="ALT+S"/>
+      <ZAction Name="ACN_MATCHPROP" Command="MatchProp" Img="matchprop.bmp" Caption="Match properties"/>
+      <ZAction Name="ACN_WNEXT" Command="NextDrawing" Img="#N" Caption="Next window" ShortCut="CTRL+TAB"/>
+      <ZAction Name="ACN_WPREV" Command="PrevDrawing" Img="#P" Caption="Previous window" ShortCut="SHIFT+CTRL+TAB"/>
+      <ZAction Name="ACN_ABOUT" Command="About" Img="about.bmp" Caption="About"/>
+      <ZAction Name="ACN_HELP" Command="Help" Img="help.bmp" Caption="Help" ShortCut="F1"/>
+      <ZAction Name="ACN_DBASEADD" Command="DBaseAdd" Img="#DBAdd" Caption="Add to drawing database"/>
+      <ZAction Name="ACN_DBASELINK" Command="DBaseLink" Img="#DBLink" Caption="Link to selected entities"/>
+      <ZAction Name="ACN_DBASERENAME" Command="DBaseRename" Img="#DBRename" Caption="Rename"/>
+      <ZAction Name="ACN_INSERTTODRAWING" Command="Insert2" Img="#ITD" Caption="Insert to drawing"/>
+      <ZAction Name="ACN_COPYVARNAMETOCLIP" Command="ObjInspCopyToClip(VAR)" Img="#CVN" Caption="Copy var name"/>
+      <ZAction Name="ACN_COPYLINKTOVARTOCLIP" Command="ObjInspCopyToClip(LVAR)" Img="#CLV" Caption="Copy link to var"/>
+      <ZAction Name="ACN_COPYVALUETOCLIP" Command="ObjInspCopyToClip(VALUE)" Img="#CVL" Caption="Copy value"/>
+      <ZAction Name="ACN_DIST" Command="Dist" Img="dist.bmp" Caption="Distance"/>
+      <ZAction Name="ACN_REBUILDTREE" Command="RebuildTree" Img="#rtree" Caption="Rebuild current drawing spatial index"/>
+      <ZAction Name="ACN_TREESTAT" Command="TreeStat" Img="#ti" Caption="Spatial index info" Hint="Current drawing spatial index info"/>
+      <ZAction Name="ACN_OPTIONS" Command="Options" Img="options.bmp" Caption="Options"/>
+      <ZAction Name="ACN_SAVEOPTIONS" Command="SaveOptions" Img="#so" Caption="Save options"/>
+    </Group>
+    <Group Category="SL">
+      <ZAction Name="ACN_slagcabCom" Command="slagcab" Img="#D()" Caption="Start command panels for autocabeling SL"/>
+      <ZAction Name="ACN_agslr" Command="AGSLROOM" Img="#ASL" Caption="Start command ASL"/>
+      <ZAction Name="ACN_SupeLine" Command="DrawSuperLine" Img="superline.bmp" Caption="SuperLine"/>
+    </Group>
+    <Group Category="Variables">
+      <ZAction2Variable Name="ACN_OS_INSERT" Variable="DWG_OSMode" Mask="1" Img="snaptoinsert.bmp" Caption="Snap to insert point"/>
+      <ZAction2Variable Name="ACN_OS_END" Variable="DWG_OSMode" Mask="2" Img="snaptoend.bmp" Caption="Snap to end point"/>
+      <ZAction2Variable Name="ACN_OS_MIDDLE" Variable="DWG_OSMode" Mask="4" Img="snaptomid.bmp" Caption="Snap to middle point"/>
+      <ZAction2Variable Name="ACN_OS_THIRD" Variable="DWG_OSMode" Mask="8" Img="#1/3" Caption="Snap to 1/3 point"/>
+      <ZAction2Variable Name="ACN_OS_QUARTER" Variable="DWG_OSMode" Mask="16" Img="#1/4" Caption="Snap to 1/4 point"/>
+      <ZAction2Variable Name="ACN_OS_CENTER" Variable="DWG_OSMode" Mask="32" Img="snaptocenter.bmp" Caption="Snap to center point"/>
+      <ZAction2Variable Name="ACN_OS_QUADRANT" Variable="DWG_OSMode" Mask="64" Img="snaptoquadrant.bmp" Caption="Snap to quadrant"/>
+      <ZAction2Variable Name="ACN_OS_POINT" Variable="DWG_OSMode" Mask="128" Img="#P" Caption="Snap to point"/>
+      <ZAction2Variable Name="ACN_OS_INTERSECTION" Variable="DWG_OSMode" Mask="256" Img="snaptointersection.bmp" Caption="Snap to intersection"/>
+      <ZAction2Variable Name="ACN_OS_PERPENDICULAR" Variable="DWG_OSMode" Mask="512" Img="snaptoperpendicular.bmp" Caption="Snap to perpendicular"/>
+      <ZAction2Variable Name="ACN_OS_TANGENT" Variable="DWG_OSMode" Mask="1024" Img="snaptotangent.bmp" Caption="Snap to tangent"/>
+      <ZAction2Variable Name="ACN_OS_NEAREST" Variable="DWG_OSMode" Mask="2048" Img="snaptonearest.bmp" Caption="Snap to nearest point"/>
+      <ZAction2Variable Name="ACN_OS_APARENTINTERSECTION" Variable="DWG_OSMode" Mask="4096" Img="snaptoapparentintersection.bmp" Caption="Snap to apparent intersection"/>
+      <ZAction2Variable Name="ACN_OS_PARALEL" Variable="DWG_OSMode" Mask="8192" Img="snaptoparalel.bmp" Caption="Snap to paralel"/>
+      <ZAction2Variable Name="ACN_SHOWHIDDENFIELDINOBJINSP" Variable="ShowHiddenFieldInObjInsp" Img="#shf" Caption="Show hidden field in object inspector"/>
+      <ZAction2Variable Name="ACN_SHOWHEADERSINOBJINSP" Variable="INTF_ObjInsp_ShowHeaders" Img="#sh" Caption="Show headers in object inspector"/>
+      <ZAction2Variable Name="ACN_OLDSTYLEINOBJINSP" Variable="INTF_ObjInsp_OldStyleDraw" Img="#os" Caption="Old style"/>
+      <ZAction2Variable Name="ACN_WHITEBACKGROUNFDINOBJINSP" Variable="INTF_ObjInsp_WhiteBackground" Img="#wb" Caption="White background in object inspector"/>
+      <ZAction2Variable Name="ACN_SHOWSPLITERINOBJINSP" Variable="INTF_ObjInsp_ShowSeparator" Img="#ss" Caption="Show spliter in object inspector"/>
+      <ZAction2Variable Name="ACN_SHOWFASTEDITORSINOBJINSP" Variable="INTF_ObjInsp_ShowFastEditors" Img="#sfe" Caption="Show fast editors in object inspector"/>
+      <ZAction2Variable Name="ACN_SHOWONLYHOTFASTEDITORSINOBJINSP" Variable="INTF_ObjInsp_ShowOnlyHotFastEditors" Img="#sohfe" Caption="Show only hot fast editors in object inspector"/>
+      <ZAction2Variable Name="ACN_OVERRIDEROWHEIGHTINOBJINSP" Variable="INTF_ObjInsp_RowHeight_OverriderEnable" Img="#orh" Caption="Override row height in object inspector"/>
+      <ZAction2Variable Name="ACN_ALWAYSUSEMULTISELECTWWRAPPER" Variable="INTF_ObjInsp_AlwaysUseMultiSelectWrapper" Img="#aumsw" Caption="Always use multi select wrapper in object inspector"/>
+      <ZAction2Variable Name="ACN_SHOWEMPTYSECTIONS" Variable="INTF_ObjInsp_ShowEmptySections" Img="#ses" Caption="Show empty sections in object inspector"/>
+    </Group>
   </ActionsContent>
 </CONFIG>

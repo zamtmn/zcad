@@ -394,19 +394,17 @@ begin
   ActionsConfig:=TXMLConfig.Create(nil);
   ActionsConfig.Filename:=filename;
 
-  begin
-    TBNode:=ActionsConfig.FindNode('ActionsContent',false);
-    if assigned(TBNode) then
-      TBSubNode:=TBNode.FirstChild;
-    if assigned(TBSubNode) then
-      while assigned(TBSubNode)do
-      begin
-        if assigned(ActionCreateFuncRegister) then
-          if ActionCreateFuncRegister.TryGetValue(uppercase(TBSubNode.NodeName),acf)then
-            acf(TBSubNode.NodeName,TBSubNode,'',factionlist);
-        TBSubNode:=TBSubNode.NextSibling;
-      end;
-  end;
+  TBNode:=ActionsConfig.FindNode('ActionsContent',false);
+  if assigned(TBNode) then
+    TBSubNode:=TBNode.FirstChild;
+  if assigned(TBSubNode) then
+    while assigned(TBSubNode)do
+    begin
+      if assigned(ActionCreateFuncRegister) then
+        if ActionCreateFuncRegister.TryGetValue(uppercase(TBSubNode.NodeName),acf)then
+          acf(TBSubNode.NodeName,TBSubNode,'',factionlist);
+      TBSubNode:=TBSubNode.NextSibling;
+    end;
 
   ActionsConfig.Free;
 end;

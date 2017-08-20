@@ -9,11 +9,11 @@ object ZCADMainWindow: TZCADMainWindow
   LCLVersion = '1.9.0.0'
   object AnchorDockPanel1: TAnchorDockPanel
     Left = 4
-    Height = 438
+    Height = 440
     Top = 4
     Width = 624
     Align = alClient
-    Caption = 'AnchorDockPanel1'
+    BevelOuter = bvNone
     TabOrder = 0
   end
   object CoolBarU: TCoolBar
@@ -25,6 +25,7 @@ object ZCADMainWindow: TZCADMainWindow
     BandMaximize = bmDblClick
     Bands = <>
     DockSite = True
+    EdgeBorders = []
     GrabWidth = 5
   end
   object ToolBarD: TToolBar
@@ -45,7 +46,7 @@ object ZCADMainWindow: TZCADMainWindow
   end
   object CoolBarL: TCoolBar
     Left = 0
-    Height = 438
+    Height = 440
     Top = 4
     Width = 4
     Align = alLeft
@@ -53,12 +54,13 @@ object ZCADMainWindow: TZCADMainWindow
     BandMaximize = bmDblClick
     Bands = <>
     DockSite = True
+    EdgeBorders = []
     GrabWidth = 5
     Vertical = True
   end
   object CoolBarR: TCoolBar
     Left = 628
-    Height = 438
+    Height = 440
     Top = 4
     Width = 4
     Align = alRight
@@ -66,19 +68,21 @@ object ZCADMainWindow: TZCADMainWindow
     BandMaximize = bmDblClick
     Bands = <>
     DockSite = True
+    EdgeBorders = []
     GrabWidth = 5
     Vertical = True
   end
   object CoolBarD: TCoolBar
     Left = 0
-    Height = 4
-    Top = 442
+    Height = 2
+    Top = 444
     Width = 632
     Align = alBottom
     AutoSize = True
     BandMaximize = bmDblClick
     Bands = <>
     DockSite = True
+    EdgeBorders = [ebBottom]
     GrabWidth = 5
   end
 end

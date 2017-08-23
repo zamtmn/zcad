@@ -547,6 +547,7 @@ end;
 procedure EnableCmdLine;
 begin
   if assigned(uzcfcommandline.cmdedit) then
+  if uzcfcommandline.cmdedit.IsVisible then
                                   begin
                                        uzcfcommandline.cmdedit.Enabled:=true;
                                        uzcfcommandline.cmdedit.SetFocus;

@@ -128,8 +128,9 @@ end;
 procedure _onAfterFreeEditor(sender:tobject);
 begin
   if assigned(uzcfcommandline.cmdedit) then
-       if uzcfcommandline.cmdedit.IsVisible then
-                                       uzcfcommandline.cmdedit.SetFocus;
+    //if uzcfcommandline.cmdedit.IsVisible then
+      if uzcfcommandline.cmdedit.CanFocus then
+        uzcfcommandline.cmdedit.SetFocus;
 end;
 function IsCurrObjInUndoContext(_GDBobj:boolean;_pcurrobj:pointer):boolean;
 begin

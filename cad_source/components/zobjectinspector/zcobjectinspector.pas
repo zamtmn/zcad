@@ -69,6 +69,10 @@ type
 
   TObjInspCustom=TScrollBox;
 
+  TNameColumnWidthCorrector=record
+   LastClientWidth,LastNameColumnWidth:integer;
+  end;
+
   TGDBobjinsp=class(TObjInspCustom)
     public
     GDBobj:boolean;
@@ -86,7 +90,9 @@ type
     pcurcontext,pdefaultcontext:pointer;
     PEditor:TPropEditor;
     PDA:TPropertyDeskriptorArray;
-    namecol:integer;
+    NameColumnWidth:integer;
+    NameColumnWidthCorrector:TNameColumnWidthCorrector;
+
     contentheigth:integer;
     OLDPP:PPropertyDeskriptor;
     OnMousePP:PPropertyDeskriptor;
@@ -165,6 +171,7 @@ function  GetCurrentObj:Pointer;
 procedure ClrarIfItIs(const f:TzeUnitsFormat;addr:pointer);
 procedure SetNameColWidth(w:integer);
 function GetNameColWidth:integer;
+function GetOIWidth:integer;
 function GetPeditor:TComponent;
 procedure FreEditor;
 procedure StoreAndFreeEditor;
@@ -338,7 +345,8 @@ procedure SetNameColWidth(w:integer);
 begin
        if assigned(GDBobjinsp)then
                                   begin
-                                       GDBobjinsp.namecol:=w;
+                                       GDBobjinsp.NameColumnWidth:=w;
+                                       GDBobjinsp.NameColumnWidthCorrector.LastNameColumnWidth:=w;
                                   end;
 end;
 function GetPeditor:TComponent;
@@ -370,7 +378,16 @@ function GetNameColWidth:integer;
 begin
        if assigned(GDBobjinsp)then
                                   begin
-                                       result:=GDBobjinsp.namecol;
+                                       result:=GDBobjinsp.NameColumnWidth;
+                                  end
+                               else
+                                   result:=0;
+end;
+function GetOIWidth:integer;
+begin
+       if assigned(GDBobjinsp)then
+                                  begin
+                                       result:=GDBobjinsp.ClientWidth;
                                   end
                                else
                                    result:=0;
@@ -444,7 +461,9 @@ begin
   EDContext.ppropcurrentedit:=nil;
 
   MResplit:=false;
-  namecol:=clientwidth div 2;
+  NameColumnWidth:=clientwidth div 2;
+  NameColumnWidthCorrector.LastNameColumnWidth:=NameColumnWidth;
+  NameColumnWidthCorrector.LastClientWidth:=clientwidth;
 end;
 
 procedure TGDBobjinsp.SetCurrentObjDefault;
@@ -825,9 +844,9 @@ begin
         r.Left:=arect.Left+{2+}(subtab+GetSizeTreeIcon(not ppd^.Collapsed^,false).cx)*sub;
         r.Top:=y;
         if NeedShowSeparator then
-                                 r.Right:=namecol-spliterhalfwidth
+                                 r.Right:=NameColumnWidth-spliterhalfwidth
                              else
-                                 r.Right:=namecol;
+                                 r.Right:=NameColumnWidth;
         r.Bottom:=y+rowh+1;
          if miny<=r.Bottom then
                                                  visible:=true
@@ -1052,7 +1071,7 @@ hrect.Bottom:=hrect.Top+HeadersHeight-1{+1};
 if IsHeadersEnabled then
 begin
     hrect.Left:=hrect.Left+2;
-    hrect.Right:=namecol;
+    hrect.Right:=NameColumnWidth;
 
     DefaultDetails := ThemeServices.GetElementDetails(thHeaderItemNormal);
     ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, hrect, nil);
@@ -1067,8 +1086,8 @@ begin
 end;
 if NeedShowSeparator then
 begin
-     hrect.Left:=namecol-2;
-     hrect.right:=namecol+{$IFNDEF WINDOWS}2{$ENDIF}{$IFDEF WINDOWS}1{$ENDIF};
+     hrect.Left:=NameColumnWidth-2;
+     hrect.right:=NameColumnWidth+{$IFNDEF WINDOWS}2{$ENDIF}{$IFDEF WINDOWS}1{$ENDIF};
      hrect.Top:= hrect.Bottom;
      hrect.Bottom:=contentheigth+HeadersHeight;
      if hrect.Bottom>ARect.Bottom then
@@ -1284,7 +1303,7 @@ begin
   {$ENDIF}
   if peditor<>nil then
   begin
-     //peditor.geteditor.SetBounds(namecol+1,EDContext.ppropcurrentedit.rect.Top+DeltaY,clientwidth-namecol-2,EDContext.ppropcurrentedit.rect.Bottom-EDContext.ppropcurrentedit.rect.Top+1);
+     //peditor.geteditor.SetBounds(NameColumnWidth+1,EDContext.ppropcurrentedit.rect.Top+DeltaY,clientwidth-NameColumnWidth-2,EDContext.ppropcurrentedit.rect.Bottom-EDContext.ppropcurrentedit.rect.Top+1);
      //peditor.geteditor.Invalidate;
      if (EDContext.ppropcurrentedit.rect.Top<HeadersHeight+VertScrollBar.ScrollPos-1)
      or (EDContext.ppropcurrentedit.rect.Top>clientheight+VertScrollBar.ScrollPos-1)then
@@ -1346,7 +1365,7 @@ begin
          canresplit:=true;
 
   if canresplit then
-  if (abs(x-namecol)<spliterhalfwidth) then
+  if (abs(x-NameColumnWidth)<spliterhalfwidth) then
                                            result:=true;
 end;
 procedure TGDBobjinsp.MouseLeave;
@@ -1378,15 +1397,27 @@ begin
     needredraw:=false;
     if mresplit then
                   begin
-                       if namecol<subtab then
+                       if NameColumnWidth<subtab then
                                              begin
-                                                  if x>namecol then namecol:=x;
+                                                  if x>NameColumnWidth then begin
+                                                    NameColumnWidth:=x;
+                                                    NameColumnWidthCorrector.LastNameColumnWidth:=NameColumnWidth;
+                                                    NameColumnWidthCorrector.LastClientWidth:=clientwidth;
+                                                  end
                                              end
-                  else if namecol>clientwidth-subtab then
+                  else if NameColumnWidth>clientwidth-subtab then
                                                          begin
-                                                              if x<namecol then namecol:=x;
+                                                              if x<NameColumnWidth then begin
+                                                                NameColumnWidth:=x;
+                                                                NameColumnWidthCorrector.LastNameColumnWidth:=NameColumnWidth;
+                                                                NameColumnWidthCorrector.LastClientWidth:=clientwidth;
+                                                              end;
                                                          end
-                  else namecol:=x;
+                  else begin
+                         NameColumnWidth:=x;
+                         NameColumnWidthCorrector.LastNameColumnWidth:=NameColumnWidth;
+                         NameColumnWidthCorrector.LastClientWidth:=clientwidth;
+                       end;
                        repaint;
                        updateeditorBounds;
                        exit;
@@ -1932,34 +1963,31 @@ begin
   EDContext.ppropcurrentedit:=nil;
 
   MResplit:=false;
-  namecol:=50;
+  NameColumnWidth:=50;
+  NameColumnWidthCorrector.LastNameColumnWidth:=NameColumnWidth;
+  NameColumnWidthCorrector.LastClientWidth:=clientwidth;
 end;
 procedure TGDBobjinsp.updateeditorBounds;
 begin
   if peditor<>nil then
-  peditor.geteditor.SetBounds(namecol+1,EDContext.ppropcurrentedit.rect.Top,clientwidth-namecol-2,EDContext.ppropcurrentedit.rect.Bottom-EDContext.ppropcurrentedit.rect.Top+1);
+  peditor.geteditor.SetBounds(NameColumnWidth+1,EDContext.ppropcurrentedit.rect.Top,clientwidth-NameColumnWidth-2,EDContext.ppropcurrentedit.rect.Bottom-EDContext.ppropcurrentedit.rect.Top+1);
 end;
 procedure TGDBobjinsp._onresize(sender:tobject);
 //var x,xn:integer;
 {$IFDEF LCLGTK2}var Widget: PGtkWidget;{$ENDIF}
 begin
-     if namecol>clientwidth-subtab then
-                                       namecol:=clientwidth-subtab;
-     if namecol<subtab then
-                           namecol:=clientwidth div 2;
+     if NameColumnWidthCorrector.LastClientWidth>0 then
+       NameColumnWidth:=round(NameColumnWidthCorrector.LastNameColumnWidth*(clientwidth/NameColumnWidthCorrector.LastClientWidth));
+     if NameColumnWidth>clientwidth-subtab then
+                                       NameColumnWidth:=clientwidth-subtab;
+     if NameColumnWidth<subtab then
+                           NameColumnWidth:=clientwidth div 2;
   {$IFDEF LCLGTK2}
   //Widget:=PGtkWidget(PtrUInt(Handle));
   //gtk_widget_add_events (Widget,GDK_POINTER_MOTION_HINT_MASK);
   {$ENDIF}
   createscrollbars;
   updateeditorBounds;
-  {x:=width;
-  xn:=namecol;
-  inherited;
-  namecol:=self.clientwidth div 2;
-  if namecol<50 then namecol:=50;
-  if namecol>155 then
-    namecol:=155;}
 end;
 procedure Register;
 begin

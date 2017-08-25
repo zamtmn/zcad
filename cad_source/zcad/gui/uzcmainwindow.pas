@@ -682,6 +682,9 @@ begin
           if assigned(pint)then
                                pint^:=Cline.Height;
           pint:=SavedUnit.FindValue('VIEW_ObjInspV');
+          if assigned(pint)then
+                               if assigned(GetOIWidthProc)then
+                               pint^:=GetOIWidthProc;
           pint:=SavedUnit.FindValue('VIEW_ObjInspSubV');
           if assigned(pint)then
                                if assigned(GetNameColWidthProc)then

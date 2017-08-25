@@ -93,6 +93,7 @@ var
    SetCurrentObjDefaultProc:TSimpleProcedure;
    GetCurrentObjProc:TFunction__Pointer;
    GetNameColWidthProc:TFunction__Integer;
+   GetOIWidthProc:TFunction__Integer;
    GetPeditorProc:TFunction__TComponent;
    FreEditorProc:TSimpleProcedure;
    StoreAndFreeEditorProc:TSimpleProcedure;

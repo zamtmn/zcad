@@ -37,6 +37,9 @@ begin
   pint:=SavedUnit.FindValue('VIEW_ObjInspSubV');
   if assigned(pint)then
                        SetNameColWidth(pint^);
+  pint:=SavedUnit.FindValue('VIEW_ObjInspV');
+  if assigned(pint)then
+                       GDBobjinsp.NameColumnWidthCorrector.LastClientWidth:=pint^;
   GDBobjinsp.Align:=alClient;
   GDBobjinsp.BorderStyle:=bsNone;
   GDBobjinsp.Parent:=tform(Form);
@@ -128,7 +131,7 @@ end;
 procedure _onAfterFreeEditor(sender:tobject);
 begin
   if assigned(uzcfcommandline.cmdedit) then
-    //if uzcfcommandline.cmdedit.IsVisible then
+    if uzcfcommandline.cmdedit.IsVisible then
       if uzcfcommandline.cmdedit.CanFocus then
         uzcfcommandline.cmdedit.SetFocus;
 end;
@@ -185,6 +188,7 @@ ReBuildProc:=ReBuild;
 SetCurrentObjDefaultProc:=SetCurrentObjDefault;
 GetCurrentObjProc:=GetCurrentObj;
 GetNameColWidthProc:=GetNameColWidth;
+GetOIWidthProc:=GetOIWidth;
 GetPeditorProc:=GetPeditor;
 FreEditorProc:=FreEditor;
 StoreAndFreeEditorProc:=StoreAndFreeEditor;

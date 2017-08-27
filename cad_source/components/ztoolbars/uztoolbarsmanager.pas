@@ -57,6 +57,7 @@ type
     function DoTBCreateFunc(aName,aType:string):TToolBar;
     procedure DoTBItemCreateFunc(aNodeName:string; aNode: TDomNode; TB:TToolBar);
 
+    procedure SetupDefaultToolBar(aName,atype: string; tb:TToolBar);
     function CreateDefaultToolBar(aName,atype: string):TToolBar;
     procedure CreateDefaultSeparator(aNode: TDomNode; TB:TToolBar);
     procedure CreateDefaultAction(aNode: TDomNode; TB:TToolBar);
@@ -88,30 +89,36 @@ begin
   result:='ACN_SHOWTOOLBAR_'+uppercase(tbname);
 end;
 
+procedure TToolBarsManager.SetupDefaultToolBar(aName,atype: string; tb:TToolBar);
+var
+  ta:TAction;
+begin
+  SetActionChecked(ToolBarNameToActionName(aname),true);
+  if fdefbuttonheight>0 then
+    tb.ButtonHeight:=fdefbuttonheight;
+  tb.Align:=alclient;
+  tb.Top:=0;
+  tb.Left:=0;
+  //tb.AutoSize:=true;
+  tb.Align:=alClient;
+  tb.Wrapable:=false;
+  tb.Transparent:=true;
+  tb.DragKind:=dkDock;
+  tb.DragMode:=dmAutomatic;
+  tb.ShowCaptions:=true;
+  tb.Name:=aname;
+  tb.EdgeBorders:=[];
+  if assigned(factionlist)then
+  if not assigned(tb.Images) then
+                                 tb.Images:=factionlist.Images;
+end;
 
 function TToolBarsManager.CreateDefaultToolBar(aName,atype: string):TToolBar;
 var
   ta:TAction;
 begin
-  SetActionChecked(ToolBarNameToActionName(aname),true);
   result:=TToolBar.Create(fmainform);
-  if fdefbuttonheight>0 then
-    result.ButtonHeight:=fdefbuttonheight;
-  result.Align:=alclient;
-  result.Top:=0;
-  result.Left:=0;
-  //result.AutoSize:=true;
-  result.Align:=alClient;
-  result.Wrapable:=false;
-  result.Transparent:=true;
-  result.DragKind:=dkDock;
-  result.DragMode:=dmAutomatic;
-  result.ShowCaptions:=true;
-  result.Name:=aname;
-  result.EdgeBorders:=[];
-  if assigned(factionlist)then
-  if not assigned(result.Images) then
-                                 result.Images:=factionlist.Images;
+  SetupDefaultToolBar(aName,atype,result);
 end;
 procedure TToolBarsManager.CreateDefaultSeparator(aNode: TDomNode; TB:TToolBar);
 begin

@@ -51,6 +51,10 @@ uses
        uzcenitiesvariablesextender,uzglviewareageneral;
   {}
 type
+  TMyToolbar=class(TToolBar)
+    public
+    destructor Destroy; override;
+  end;
   TComboFiller=procedure(cb:TCustomComboBox) of object;
   TFiletoMenuIteratorData=record
                                 localpm:TMenuItem;
@@ -180,6 +184,7 @@ type
     procedure TBTStyleComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
     procedure TBDimStyleComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
     procedure TBVariableCreateFunc(aNode: TDomNode; TB:TToolBar);
+    function TBCreateZCADToolBar(aName,atype: string):TToolBar;
     procedure TTBRegisterInAPPFunc(aTBNode: TDomNode;aName,aType: string;Data:Pointer);
     procedure ZActionsReader(aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList);
     procedure ZAction2VariableReader(aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList);
@@ -225,6 +230,21 @@ var
 
 implementation
 {$R *.lfm}
+
+destructor TmyToolBar.Destroy;
+var
+  I: Integer;
+begin
+  for I := 0 to ButtonCount - 1 do
+    begin
+      if assigned(ZCADMainWindow.updatescontrols)  then
+        ZCADMainWindow.updatescontrols.Remove(Buttons[I]);
+      if assigned(ZCADMainWindow.updatesbytton)  then
+        ZCADMainWindow.updatesbytton.Remove(Buttons[I]);
+    end;
+  inherited Destroy;
+end;
+
 constructor TmyAnchorDockSplitter.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
@@ -897,10 +917,10 @@ begin
       // restore the layout
       // this will close unneeded forms and call OnCreateControl for all needed
 
-      if assigned(ZCADMainWindow.updatesbytton) then
+      {if assigned(ZCADMainWindow.updatesbytton) then
         ZCADMainWindow.updatesbytton.Clear;
       if assigned(ZCADMainWindow.updatescontrols) then
-        ZCADMainWindow.updatescontrols.Clear;
+        ZCADMainWindow.updatescontrols.Clear;}
 
       DockMaster.LoadLayoutFromConfig(XMLConfig,false);
       DockMaster.LoadSettingsFromConfig(XMLConfig);
@@ -1493,6 +1513,12 @@ begin
   DimStyleBox:=CreateCBox('DimStyleComboBox',tb,TSupportDimStyleCombo.DrawItemTStyle,TSupportDimStyleCombo.ChangeLType,TSupportDimStyleCombo.DropDownTStyle,TSupportDimStyleCombo.CloseUpTStyle,TSupportDimStyleCombo.FillLTStyle,_Width,_hint);
 end;
 
+function TZCADMainWindow.TBCreateZCADToolBar(aName,atype: string):TToolBar;
+begin
+  result:=TmyToolBar.Create(self);
+  ToolBarsManager.SetupDefaultToolBar(aName,atype, result);
+end;
+
 procedure TZCADMainWindow.TBVariableCreateFunc(aNode: TDomNode; TB:TToolBar);
 var
   _varname,_img,_hint,_shortcut:string;
@@ -1590,7 +1616,7 @@ begin
   ToolBarsManager.RegisterActionCreateFuncRegister('ZAction',ZActionsReader);
   ToolBarsManager.RegisterActionCreateFuncRegister('ZAction2Variable',ZAction2VariableReader);
 
-  ToolBarsManager.RegisterTBCreateFunc('ToolBar',ToolBarsManager.CreateDefaultToolBar);
+  ToolBarsManager.RegisterTBCreateFunc('ToolBar',TBCreateZCADToolBar);
   ToolBarsManager.LoadToolBarsContent(ProgramPath+'menu/toolbarscontent.xml');
 
   LoadActions;

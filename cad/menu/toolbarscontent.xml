@@ -51,7 +51,6 @@
       <Separator/>
       <Variable VarName="DSGN_SelNew" Img="one.bmp" Hint="New selection set"/>
       <Variable VarName="DSGN_SelSameName" Img="#SN" Hint="Auto select devices with same name"/>
-      <Action Name="ACN_MULTIOBJVARMAN"/>
     </OIButtons>
     <ObjectSnap Type="ToolBar">
       <Action Name="ACN_OS_INSERT"/>

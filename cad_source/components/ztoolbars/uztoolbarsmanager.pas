@@ -55,7 +55,7 @@ type
     procedure CreateToolbarContent(tb:TToolBar;TBNode:TDomNode);
     procedure RegisterTBCreateFunc(TBType:string;TBCreateFunc:TTBCreateFunc);
     procedure RegisterTBItemCreateFunc(aNodeName:string;TBItemCreateFunc:TTBItemCreateFunc);
-    procedure RegisterActionCreateFuncRegister(aNodeName:string;ActionCreateFunc:TActionCreateFunc);
+    procedure RegisterActionCreateFunc(aNodeName:string;ActionCreateFunc:TActionCreateFunc);
     procedure RegisterMenuCreateFunc(aNodeName:string;MenuCreateFunc:TMenuCreateFunc);
     function CreateToolbar(aName:string):TToolBar;
     function AddContentToToolbar(tb:TToolBar;aName:string):TToolBar;
@@ -222,7 +222,7 @@ begin
   TBItemCreateFuncRegister.add(uppercase(aNodeName),TBItemCreateFunc);
 end;
 
-procedure TToolBarsManager.RegisterActionCreateFuncRegister(aNodeName:string;ActionCreateFunc:TActionCreateFunc);
+procedure TToolBarsManager.RegisterActionCreateFunc(aNodeName:string;ActionCreateFunc:TActionCreateFunc);
 begin
   if not assigned(ActionCreateFuncRegister) then
     ActionCreateFuncRegister:=TActionCreateFuncRegister.create;

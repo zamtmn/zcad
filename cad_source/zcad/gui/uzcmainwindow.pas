@@ -188,6 +188,9 @@ type
     procedure TTBRegisterInAPPFunc(aTBNode: TDomNode;aName,aType: string;Data:Pointer);
     procedure ZActionsReader(aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList);
     procedure ZAction2VariableReader(aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList);
+    procedure ZMainMenuItemReader(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+    procedure ZMainMenuFileHistory(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+    procedure ZMainMenuCommand(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     procedure DockMasterCreateControl(Sender: TObject; aName: string; var
     AControl: TControl; DoDisableAutoSizing: boolean);
 
@@ -1624,9 +1627,91 @@ begin
   toolbars.Sorted:=true;
   CreateInterfaceLists;
 
+  ToolBarsManager.RegisterMenuCreateFunc('MainMenuItem',ZMainMenuItemReader);
+  ToolBarsManager.RegisterMenuCreateFunc('Action',ToolBarsManager.CreateDefaultMenuAction);
+  ToolBarsManager.RegisterMenuCreateFunc('Separator',ToolBarsManager.CreateDefaultMenuSeparator);
+  ToolBarsManager.RegisterMenuCreateFunc('FileHistory',ZMainMenuFileHistory);
+  ToolBarsManager.RegisterMenuCreateFunc('Command',ZMainMenuCommand());
+
+  ToolBarsManager.LoadMenus(ProgramPath+'menu/menuscontent.xml');
   loadpanels(ProgramPath+'menu/mainmenu.mn');
 
   CreateAnchorDockingInterface;
+end;
+
+procedure TZCADMainWindow.ZMainMenuItemReader(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+ var
+  CreatedMenuItem:TMenuItem;
+  line:string;
+  TBSubNode:TDomNode;
+  mcf:TMenuCreateFunc;
+begin
+    CreatedMenuItem:=TMenuItem.Create(application);
+    line:=getAttrValue(aNode,'Name','');
+    if RootMenuItem=nil then
+      CreatedMenuItem.Name:=MenuNameModifier+line;
+    line:=InterfaceTranslate('menu~'+line,line);
+    CreatedMenuItem.Caption:=line;
+    if assigned(aNode) then
+      TBSubNode:=aNode.FirstChild;
+    if assigned(TBSubNode) then
+      while assigned(TBSubNode)do
+      begin
+        ToolBarsManager.TryRunMenuCreateFunc(TBSubNode.NodeName,TBSubNode,actlist,CreatedMenuItem);
+        TBSubNode:=TBSubNode.NextSibling;
+      end;
+    if assigned(RootMenuItem) then
+    begin
+      if RootMenuItem is TMenuItem then
+        RootMenuItem.Add(CreatedMenuItem)
+      else
+        TPopUpMenu(RootMenuItem).Items.Add(CreatedMenuItem);
+    end;
+end;
+
+procedure TZCADMainWindow.ZMainMenuFileHistory(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+var
+ i:integer;
+ pstr:pstring;
+ line:string;
+ CreatedMenuItem:TMenuItem;
+begin
+  for i:=low(FileHistory) to high(FileHistory) do
+  begin
+       pstr:=SavedUnit.FindValue('PATH_File'+inttostr(i));
+       if assigned(pstr)then
+                            line:=pstr^
+                        else
+                            line:='';
+       if line<>''then
+                              begin
+                              FileHistory[i].SetCommand(line,'Load',line);
+                              FileHistory[i].visible:=true;
+                              end
+                        else
+                            begin
+                            FileHistory[i].SetCommand(line,'',line);
+                            FileHistory[i].visible:=false
+                            end;
+       CreatedMenuItem:=TMenuItem.Create(RootMenuItem);
+       CreatedMenuItem.Action:=FileHistory[i];
+       RootMenuItem.Add(CreatedMenuItem);
+  end;
+end;
+
+procedure TZCADMainWindow.ZMainMenuCommand(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+var
+  CreatedMenuItem:TmyMenuItem;
+  actioncommand,actionshortcut:string;
+  captionstr,comstr:string;
+begin
+  captionstr:=getAttrValue(aNode,'Caption','');
+  comstr:=getAttrValue(aNode,'Command','');
+  CreatedMenuItem:=TmyMenuItem.Create(RootMenuItem,InterfaceTranslate('menucommand~'+comstr,captionstr),comstr);
+  if RootMenuItem is TMenuItem then
+    RootMenuItem.Add(CreatedMenuItem)
+  else
+    TPopUpMenu(RootMenuItem).Items.Add(CreatedMenuItem);
 end;
 
 procedure TZCADMainWindow.AfterConstruction;
@@ -1935,33 +2020,6 @@ begin
                                                            line:=readspace(line);
                                                            localpm.localpm:=nil;
                                                            localpm.ImageIndex:=-1;
-                                                      end
-                else if uppercase(line)='FILEHISTORY' then
-                                                      begin
-
-                                                           for i:=low(FileHistory) to high(FileHistory) do
-                                                           begin
-                                                                pstr:=SavedUnit.FindValue('PATH_File'+inttostr(i));
-                                                                if assigned(pstr)then
-                                                                                     line:=pstr^
-                                                                                 else
-                                                                                     line:='';
-                                                                if line<>''then
-                                                                                       begin
-                                                                                       FileHistory[i].SetCommand(line,'Load',line);
-                                                                                       FileHistory[i].visible:=true;
-                                                                                       end
-                                                                                 else
-                                                                                     begin
-                                                                                     FileHistory[i].SetCommand(line,'',line);
-                                                                                     FileHistory[i].visible:=false
-                                                                                     end;
-                                                                pm1:=TMenuItem.Create(pm);
-                                                                pm1.Action:=FileHistory[i];
-                                                                pm.Add(pm1);
-                                                           end;
-                                                           line := f.readstring(#$A' ',#$D);
-                                                           line:=readspace(line);
                                                       end
                 else if uppercase(line)='DRAWINGS' then
                                                       begin

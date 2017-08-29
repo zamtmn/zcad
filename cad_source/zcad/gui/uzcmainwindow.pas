@@ -1612,9 +1612,9 @@ begin
   ToolBarsManager.RegisterTBItemCreateFunc('DimStyleComboBox',TBDimStyleComboBoxCreateFunc);
   ToolBarsManager.RegisterTBItemCreateFunc('Variable',TBVariableCreateFunc);
 
-  ToolBarsManager.RegisterActionCreateFuncRegister('Group',ToolBarsManager.DefaultActionsGroupReader);
-  ToolBarsManager.RegisterActionCreateFuncRegister('ZAction',ZActionsReader);
-  ToolBarsManager.RegisterActionCreateFuncRegister('ZAction2Variable',ZAction2VariableReader);
+  ToolBarsManager.RegisterActionCreateFunc('Group',ToolBarsManager.DefaultActionsGroupReader);
+  ToolBarsManager.RegisterActionCreateFunc('ZAction',ZActionsReader);
+  ToolBarsManager.RegisterActionCreateFunc('ZAction2Variable',ZAction2VariableReader);
 
   ToolBarsManager.RegisterTBCreateFunc('ToolBar',TBCreateZCADToolBar);
   ToolBarsManager.LoadToolBarsContent(ProgramPath+'menu/toolbarscontent.xml');

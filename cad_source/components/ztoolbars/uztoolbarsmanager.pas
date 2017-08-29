@@ -11,6 +11,7 @@ uses
 
 type
   TActionCreateFunc=procedure (aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList) of object;
+  TMenuCreateFunc=procedure (aName: string;aNode: TDomNode;actlist:TActionList) of object;
 
   TTBCreateFunc=function (aName,aType: string):TToolBar of object;
   TTBItemCreateFunc=procedure (aNode: TDomNode; TB:TToolBar) of object;
@@ -19,6 +20,7 @@ type
   TTBCreateFuncRegister=specialize TDictionary <string,TTBCreateFunc>;
   TTBItemCreateFuncRegister=specialize TDictionary <string,TTBItemCreateFunc>;
   TActionCreateFuncRegister=specialize TDictionary <string,TActionCreateFunc>;
+  TMenuCreateFuncRegister=specialize TDictionary <string,TMenuCreateFunc>;
 
   TToolBarsManagerDockForm=class(TCustomDockForm)
   protected
@@ -35,6 +37,7 @@ type
     TBCreateFuncRegister:TTBCreateFuncRegister;
     TBItemCreateFuncRegister:TTBItemCreateFuncRegister;
     ActionCreateFuncRegister:TActionCreateFuncRegister;
+    MenuCreateFuncRegister:TMenuCreateFuncRegister;
 
     public
     constructor Create(mainform:TForm;actlist:TActionList;defbuttonheight:integer);
@@ -46,12 +49,14 @@ type
     function FindToolBar(TBName:String;out tb:TToolBar):boolean;
     procedure LoadToolBarsContent(filename:string);
     procedure LoadActions(filename:string);
+    procedure LoadMenus(filename:string);
     function FindBarsContent(toolbarname:string):TDomNode;
     procedure EnumerateToolBars(rf:TTBRegisterInAPPFunc;Data:Pointer);
     procedure CreateToolbarContent(tb:TToolBar;TBNode:TDomNode);
     procedure RegisterTBCreateFunc(TBType:string;TBCreateFunc:TTBCreateFunc);
     procedure RegisterTBItemCreateFunc(aNodeName:string;TBItemCreateFunc:TTBItemCreateFunc);
     procedure RegisterActionCreateFuncRegister(aNodeName:string;ActionCreateFunc:TActionCreateFunc);
+    procedure RegisterMenuCreateFunc(aNodeName:string;MenuCreateFunc:TMenuCreateFunc);
     function CreateToolbar(aName:string):TToolBar;
     function AddContentToToolbar(tb:TToolBar;aName:string):TToolBar;
     function DoTBCreateFunc(aName,aType:string):TToolBar;
@@ -222,6 +227,13 @@ begin
   if not assigned(ActionCreateFuncRegister) then
     ActionCreateFuncRegister:=TActionCreateFuncRegister.create;
   ActionCreateFuncRegister.add(uppercase(aNodeName),ActionCreateFunc);
+end;
+
+procedure TToolBarsManager.RegisterMenuCreateFunc(aNodeName:string;MenuCreateFunc:TMenuCreateFunc);
+begin
+  if not assigned(MenuCreateFuncRegister) then
+    MenuCreateFuncRegister:=TMenuCreateFuncRegister.create;
+  MenuCreateFuncRegister.add(uppercase(aNodeName),MenuCreateFunc);
 end;
 
 procedure TToolBarsManager.DoTBItemCreateFunc(aNodeName:string; aNode: TDomNode; TB:TToolBar);
@@ -415,6 +427,32 @@ begin
 
   ActionsConfig.Free;
 end;
+
+procedure TToolBarsManager.LoadMenus(filename:string);
+var
+  ActionsConfig:TXMLConfig;
+  TBNode,TBSubNode:TDomNode;
+  mcf:TMenuCreateFunc;
+begin
+  ActionsConfig:=TXMLConfig.Create(nil);
+  ActionsConfig.Filename:=filename;
+
+  TBNode:=ActionsConfig.FindNode('MenusContent',false);
+  if assigned(TBNode) then
+    TBSubNode:=TBNode.FirstChild;
+  if assigned(TBSubNode) then
+    while assigned(TBSubNode)do
+    begin
+      if assigned(MenuCreateFuncRegister) then
+        if MenuCreateFuncRegister.TryGetValue(uppercase(TBSubNode.NodeName),mcf)then
+          mcf(TBSubNode.NodeName,TBSubNode,factionlist);
+      TBSubNode:=TBSubNode.NextSibling;
+    end;
+
+  ActionsConfig.Free;
+end;
+
+
 procedure TToolBarsManager.EnumerateToolBars(rf:TTBRegisterInAPPFunc;Data:Pointer);
 var
   TBNode,TBSubNode,TBNodeType:TDomNode;

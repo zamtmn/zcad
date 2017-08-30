@@ -246,7 +246,9 @@ var
 begin
 if assigned(ToolBarsManager.MenuCreateFuncRegister) then
   if MenuCreateFuncRegister.TryGetValue(uppercase(aName),mcf)then
-    mcf(aName,aNode,actlist,RootMenuItem);
+    mcf(aName,aNode,actlist,RootMenuItem)
+  else
+    Application.MessageBox(@aName[1],'Error');
 end;
 
 procedure TToolBarsManager.DoTBItemCreateFunc(aNodeName:string; aNode: TDomNode; TB:TToolBar);
@@ -689,9 +691,7 @@ begin
     if assigned(TBSubNode) then
       while assigned(TBSubNode)do
       begin
-        if assigned(MenuCreateFuncRegister) then
-          if MenuCreateFuncRegister.TryGetValue(uppercase(TBSubNode.NodeName),mcf)then
-            mcf(TBSubNode.NodeName,TBSubNode,factionlist,CreatedMenuItem);
+        TryRunMenuCreateFunc(TBSubNode.NodeName,TBSubNode,factionlist,CreatedMenuItem);
         TBSubNode:=TBSubNode.NextSibling;
       end;
 end;

@@ -191,6 +191,10 @@ type
     procedure ZMainMenuItemReader(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     procedure ZMainMenuFileHistory(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     procedure ZMainMenuCommand(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+    procedure ZMainMenuToolBars(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+    procedure ZMainMenuDrawings(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+    procedure ZMainMenuSampleFiles(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+    procedure ZMainMenuDebugFiles(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     procedure DockMasterCreateControl(Sender: TObject; aName: string; var
     AControl: TControl; DoDisableAutoSizing: boolean);
 
@@ -1631,7 +1635,11 @@ begin
   ToolBarsManager.RegisterMenuCreateFunc('Action',ToolBarsManager.CreateDefaultMenuAction);
   ToolBarsManager.RegisterMenuCreateFunc('Separator',ToolBarsManager.CreateDefaultMenuSeparator);
   ToolBarsManager.RegisterMenuCreateFunc('FileHistory',ZMainMenuFileHistory);
-  ToolBarsManager.RegisterMenuCreateFunc('Command',ZMainMenuCommand());
+  ToolBarsManager.RegisterMenuCreateFunc('Command',ZMainMenuCommand);
+  ToolBarsManager.RegisterMenuCreateFunc('Toolbars',ZMainMenuToolBars);
+  ToolBarsManager.RegisterMenuCreateFunc('Drawings',ZMainMenuDrawings);
+  ToolBarsManager.RegisterMenuCreateFunc('SampleFiles',ZMainMenuSampleFiles);
+  ToolBarsManager.RegisterMenuCreateFunc('DebugFiles',ZMainMenuDebugFiles);
 
   ToolBarsManager.LoadMenus(ProgramPath+'menu/menuscontent.xml');
   loadpanels(ProgramPath+'menu/mainmenu.mn');
@@ -1712,6 +1720,57 @@ begin
     RootMenuItem.Add(CreatedMenuItem)
   else
     TPopUpMenu(RootMenuItem).Items.Add(CreatedMenuItem);
+end;
+
+procedure TZCADMainWindow.ZMainMenuToolBars(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+begin
+  ToolBarsManager.EnumerateToolBars(TTBRegisterInAPPFunc,RootMenuItem);
+end;
+
+procedure TZCADMainWindow.ZMainMenuDrawings(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+var
+  i:integer;
+  CreatedMenuItem:TMenuItem;
+begin
+  for i:=low(OpenedDrawings) to high(OpenedDrawings) do
+  begin
+    CreatedMenuItem:=TMenuItem.Create(RootMenuItem);
+    CreatedMenuItem.Action:=OpenedDrawings[i];
+    RootMenuItem.Add(CreatedMenuItem);
+  end;
+end;
+
+procedure bugfileiterator(filename:GDBString);
+var
+    myitem:TmyMenuItem;
+begin
+  myitem:=TmyMenuItem.Create(localpm.localpm,'**'+extractfilename(filename),'Load('+filename+')');
+  localpm.localpm.SubMenuImages:=ImagesManager.IconList;
+  myitem.ImageIndex:=localpm.ImageIndex;
+  localpm.localpm.Add(myitem);
+end;
+
+procedure TZCADMainWindow.ZMainMenuSampleFiles(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+var
+  i:integer;
+begin
+  localpm.localpm:=RootMenuItem;
+  localpm.ImageIndex:=ImagesManager.GetImageIndex('Dxf');
+  FromDirIterator(expandpath('*/sample'),'*.dxf','',@bugfileiterator,nil);
+  FromDirIterator(expandpath('*/sample'),'*.dwg','',@bugfileiterator,nil);
+  localpm.localpm:=nil;
+  localpm.ImageIndex:=-1;
+end;
+
+procedure TZCADMainWindow.ZMainMenuDebugFiles(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+var
+  i:integer;
+begin
+  localpm.localpm:=RootMenuItem;
+  localpm.ImageIndex:=ImagesManager.GetImageIndex('Dxf');
+  FromDirIterator(expandpath('*../errors/'),'*.dxf','',@bugfileiterator,nil);
+  localpm.localpm:=nil;
+  localpm.ImageIndex:=-1;
 end;
 
 procedure TZCADMainWindow.AfterConstruction;
@@ -1944,15 +2003,6 @@ begin
                               else
                                   ShowError(format(rsMenuNotFounf,[ts]));
            until line='';
-end;
-procedure bugfileiterator(filename:GDBString);
-var
-    myitem:TmyMenuItem;
-begin
-  myitem:=TmyMenuItem.Create(localpm.localpm,'**'+extractfilename(filename),'Load('+filename+')');
-  localpm.localpm.SubMenuImages:=ImagesManager.IconList;
-  myitem.ImageIndex:=localpm.ImageIndex;
-  localpm.localpm.Add(myitem);
 end;
 procedure TZCADMainWindow.loadsubmenu(var f:GDBOpenArrayOfByte;var pm:TMenuItem;var line:GDBString);
 var

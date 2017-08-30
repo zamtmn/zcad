@@ -109,29 +109,32 @@ begin
           typemanager:=SysUnit^.TypeName2PTD(vartype);
           PEditor:=typemanager^.CreateEditor(TheOwner,r,@variable,nil,true,'',preferedHeight).Editor;
      end;
-     if PEditor.geteditor is TComboBox then
-                                           begin
-                                           SetComboSize(TComboBox(PEditor.geteditor),r.Bottom-r.Top-5,TComboBox(PEditor.geteditor).ReadOnly);
-                                           TComboBox(PEditor.geteditor).DropDownCount:=30;
-                                           end;
-     PEditor.geteditor.BoundsRect:=r;
-     PEditor.geteditor.Parent:=TheOwner;
-     PEditor.geteditor.SetFocus;
-     if needdropdown then
-      TComboBox(PEditor.geteditor).DroppedDown:=true;
-     PEditor.OwnerNotify:=Notify;
-     EditedControl:=AEditedControl;
-     ClearEDContext;
-     if assigned(UndoPrefixProcedure) then
-                                          UndoPrefixProcedure;
-     if useinternalundo then
-      begin
-     undocontext.UndoStack:=GetUndoStack;
-     if undocontext.UndoStack<>nil then
-      begin
-       undocontext.UndoCommand:=undocontext.UndoStack.PushCreateTTypedChangeCommand(@variable,typemanager);
-      end;
-      end;
+     if assigned(peditor) then
+     begin
+       if PEditor.geteditor is TComboBox then
+                                             begin
+                                             SetComboSize(TComboBox(PEditor.geteditor),r.Bottom-r.Top-5,TComboBox(PEditor.geteditor).ReadOnly);
+                                             TComboBox(PEditor.geteditor).DropDownCount:=30;
+                                             end;
+       PEditor.geteditor.BoundsRect:=r;
+       PEditor.geteditor.Parent:=TheOwner;
+       PEditor.geteditor.SetFocus;
+       if needdropdown then
+        TComboBox(PEditor.geteditor).DroppedDown:=true;
+       PEditor.OwnerNotify:=Notify;
+       EditedControl:=AEditedControl;
+       ClearEDContext;
+       if assigned(UndoPrefixProcedure) then
+                                            UndoPrefixProcedure;
+       if useinternalundo then
+        begin
+       undocontext.UndoStack:=GetUndoStack;
+       if undocontext.UndoStack<>nil then
+        begin
+         undocontext.UndoCommand:=undocontext.UndoStack.PushCreateTTypedChangeCommand(@variable,typemanager);
+        end;
+        end;
+     end;
 end;
 
 end.

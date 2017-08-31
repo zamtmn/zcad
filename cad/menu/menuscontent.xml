@@ -315,5 +315,125 @@
         <Command Caption="Add to the drawing database" Command="DBaseAdd"/>
         <Command Caption="linked to entity" Command="DBaseLink"/>
     </MainMenuItem>
+    <PopUpMenu Name="PROGRAMDBCXMENU">
+      <Action Name="ACN_DBASEADD"/>
+    </PopUpMenu>
+    <PopUpMenu Name="PROJECTDBCXMENU">
+      <Action Name="ACN_DBASELINK"/>
+      <Action Name="ACN_DBASERENAME"/>
+    </PopUpMenu>
+    <PopUpMenu Name="PROGRAMBLOCKSCXMENU">
+      <Action Name="ACN_INSERTTODRAWING"/>
+    </PopUpMenu>
+    <PopUpMenu Name="OBJINSPVARCXMENU">
+      <Action Name="ACN_COPYVARNAMETOCLIP"/>
+      <Action Name="ACN_COPYLINKTOVARTOCLIP"/>
+      <Action Name="ACN_COPYVALUETOCLIP"/>
+      <Separator/>
+      <Action Name="ACN_SHOWHIDDENFIELDINOBJINSP"/>
+      <Action Name="ACN_SHOWHEADERSINOBJINSP"/>
+      <Action Name="ACN_OLDSTYLEINOBJINSP"/>
+      <Action Name="ACN_WHITEBACKGROUNFDINOBJINSP"/>
+      <Action Name="ACN_SHOWSPLITERINOBJINSP"/>
+      <Action Name="ACN_SHOWFASTEDITORSINOBJINSP"/>
+      <Action Name="ACN_SHOWONLYHOTFASTEDITORSINOBJINSP"/>
+      <Action Name="ACN_OVERRIDEROWHEIGHTINOBJINSP"/>
+    </PopUpMenu>
+    <PopUpMenu Name="OBJINSPCXMENU">
+      <Action Name="ACN_COPYVALUETOCLIP"/>
+      <Separator/>
+      <Action Name="ACN_SHOWHIDDENFIELDINOBJINSP"/>
+      <Action Name="ACN_SHOWHEADERSINOBJINSP"/>
+      <Action Name="ACN_OLDSTYLEINOBJINSP"/>
+      <Action Name="ACN_WHITEBACKGROUNFDINOBJINSP"/>
+      <Action Name="ACN_SHOWSPLITERINOBJINSP"/>
+      <Action Name="ACN_SHOWFASTEDITORSINOBJINSP"/>
+      <Action Name="ACN_SHOWONLYHOTFASTEDITORSINOBJINSP"/>
+      <Action Name="ACN_OVERRIDEROWHEIGHTINOBJINSP"/>
+    </PopUpMenu>
+    <PopUpMenu Name="OBJINSPHEADERCXMENU">
+      <Action Name="ACN_SHOWHIDDENFIELDINOBJINSP"/>
+      <Action Name="ACN_SHOWHEADERSINOBJINSP"/>
+      <Action Name="ACN_OLDSTYLEINOBJINSP"/>
+      <Action Name="ACN_WHITEBACKGROUNFDINOBJINSP"/>
+      <Action Name="ACN_SHOWSPLITERINOBJINSP"/>
+      <Action Name="ACN_SHOWFASTEDITORSINOBJINSP"/>
+      <Action Name="ACN_SHOWONLYHOTFASTEDITORSINOBJINSP"/>
+      <Action Name="ACN_OVERRIDEROWHEIGHTINOBJINSP"/>
+      <Action Name="ACN_ALWAYSUSEMULTISELECTWWRAPPER"/>
+      <Action Name="ACN_SHOWEMPTYSECTIONS"/>
+    </PopUpMenu>
+    <PopUpMenu Name="SELECTEDENTSCXMENU">
+      <Action Name="ACN_COPY"/>
+      <Action Name="ACN_MOVE"/>
+      <Action Name="ACN_ROTATE"/>
+      <Action Name="ACN_SCALE"/>
+      <Action Name="ACN_MIRROR"/>
+      <Separator/>
+      <Action Name="ACN_COPYCLIP"/>
+      <Action Name="ACN_COPYCLIPBASE"/>
+      <Separator/>
+      <Action Name="ACN_ERASE"/>
+      <Separator/>
+      <Action Name="ACN_DESELECTALL"/>
+      <Action Name="ACN_INVERSESELECTED"/>
+      <Action Name="ACN_SELSIM"/>
+      <MainMenuItem Name="Last commands">
+        <LastCommands/>
+      </MainMenuItem>
+      <MainMenuItem Name="Object snap">
+        <Action Name="ACN_OS_INSERT"/>
+        <Action Name="ACN_OS_END"/>
+        <Action Name="ACN_OS_MIDDLE"/>
+        <Action Name="ACN_OS_THIRD"/>
+        <Action Name="ACN_OS_QUARTER"/>
+        <Action Name="ACN_OS_CENTER"/>
+        <Action Name="ACN_OS_QUADRANT"/>
+        <Action Name="ACN_OS_POINT"/>
+        <Action Name="ACN_OS_INTERSECTION"/>
+        <Action Name="ACN_OS_PERPENDICULAR"/>
+        <Action Name="ACN_OS_TANGENT"/>
+        <Action Name="ACN_OS_NEAREST"/>
+        <Action Name="ACN_OS_APARENTINTERSECTION"/>
+        <Action Name="ACN_OS_PARALEL"/>
+      </MainMenuItem>
+      <Action Name="ACN_CANCEL"/>
+    </PopUpMenu>
+    <PopUpMenu Name="NONSELECTEDENTSCXMENU">
+      <Action Name="ACN_PASTE"/>
+      <Separator/>
+      <Action Name="ACN_SELECTALL"/>
+      <Separator/>
+      <MainMenuItem Name="Last commands">
+        <LastCommands/>
+      </MainMenuItem>
+      <MainMenuItem Name="Object snap">
+        <Action Name="ACN_OS_INSERT"/>
+        <Action Name="ACN_OS_END"/>
+        <Action Name="ACN_OS_MIDDLE"/>
+        <Action Name="ACN_OS_THIRD"/>
+        <Action Name="ACN_OS_QUARTER"/>
+        <Action Name="ACN_OS_CENTER"/>
+        <Action Name="ACN_OS_QUADRANT"/>
+        <Action Name="ACN_OS_POINT"/>
+        <Action Name="ACN_OS_INTERSECTION"/>
+        <Action Name="ACN_OS_PERPENDICULAR"/>
+        <Action Name="ACN_OS_TANGENT"/>
+        <Action Name="ACN_OS_NEAREST"/>
+        <Action Name="ACN_OS_APARENTINTERSECTION"/>
+        <Action Name="ACN_OS_PARALEL"/>
+      </MainMenuItem>
+      <Action Name="ACN_CANCEL"/>
+    </PopUpMenu>
+    <MainMenuItem Name="LASTCOMMANDSCXMENU">
+      <LastCommands/>
+    </MainMenuItem>
+    <MainMenuItem Name="FASTMENU">
+      <Action Name="ACN_PASTE"/>
+      <Separator/>
+      <Action Name="ACN_SELECTALL"/>
+      <Separator/>
+      <Action Name="ACN_VIEWTOP"/>
+    </MainMenuItem>
   </MenusContent>
 </CONFIG>

@@ -523,6 +523,7 @@ begin
      AddEditorToType(SysUnit.TypeName2PTD('LongWord'),TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType(SysUnit.TypeName2PTD('QWord'),TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType(SysUnit.TypeName2PTD('Double'),TBaseTypesEditors.BaseCreateEditor);
+     AddEditorToType(SysUnit.TypeName2PTD('GDBDouble'),TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType(SysUnit.TypeName2PTD('GDBNonDimensionDouble'),TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType(SysUnit.TypeName2PTD('GDBAngleDouble'),TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType(SysUnit.TypeName2PTD('GDBAngleDegDouble'),TBaseTypesEditors.BaseCreateEditor);

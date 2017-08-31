@@ -103,13 +103,13 @@ type
     procedure AfterConstruction; override;
     procedure setnormalfocus(Sender: TObject);
 
-    procedure loadpanels(pf:GDBString);
+    //procedure loadpanels(pf:GDBString);
     procedure CreateLayoutbox(tb:TToolBar);
-    procedure loadmenu(var f:GDBOpenArrayOfByte;var line:GDBString);
-    procedure loadpopupmenu(var f:GDBOpenArrayOfByte;var line:GDBString);
-    procedure createmenu(var f:GDBOpenArrayOfByte;var line:GDBString);
-    procedure setmainmenu(var f:GDBOpenArrayOfByte;var line:GDBString);
-    procedure loadsubmenu(var f:GDBOpenArrayOfByte;var pm:TMenuItem;var line:GDBString);
+    //procedure loadmenu(var f:GDBOpenArrayOfByte;var line:GDBString);
+    //procedure loadpopupmenu(var f:GDBOpenArrayOfByte;var line:GDBString);
+    //procedure createmenu(var f:GDBOpenArrayOfByte;var line:GDBString);
+    //procedure setmainmenu(var f:GDBOpenArrayOfByte;var line:GDBString);
+    //procedure loadsubmenu(var f:GDBOpenArrayOfByte;var pm:TMenuItem;var line:GDBString);
 
     procedure ChangedDWGTabCtrl(Sender: TObject);
     procedure UpdateControls;
@@ -189,12 +189,16 @@ type
     procedure ZActionsReader(aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList);
     procedure ZAction2VariableReader(aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList);
     procedure ZMainMenuItemReader(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+    procedure ZPopUpMenuReader(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     procedure ZMainMenuFileHistory(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+    procedure ZMainMenuCommandsHistory(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     procedure ZMainMenuCommand(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     procedure ZMainMenuToolBars(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     procedure ZMainMenuDrawings(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     procedure ZMainMenuSampleFiles(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     procedure ZMainMenuDebugFiles(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+    procedure ZMainCreateMenu(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+    procedure ZMainSetMenu(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     procedure DockMasterCreateControl(Sender: TObject; aName: string; var
     AControl: TControl; DoDisableAutoSizing: boolean);
 
@@ -1632,17 +1636,20 @@ begin
   CreateInterfaceLists;
 
   ToolBarsManager.RegisterMenuCreateFunc('MainMenuItem',ZMainMenuItemReader);
+  ToolBarsManager.RegisterMenuCreateFunc('PopUpMenu',ZPopUpMenuReader);
   ToolBarsManager.RegisterMenuCreateFunc('Action',ToolBarsManager.CreateDefaultMenuAction);
   ToolBarsManager.RegisterMenuCreateFunc('Separator',ToolBarsManager.CreateDefaultMenuSeparator);
   ToolBarsManager.RegisterMenuCreateFunc('FileHistory',ZMainMenuFileHistory);
+  ToolBarsManager.RegisterMenuCreateFunc('LastCommands',ZMainMenuCommandsHistory);
   ToolBarsManager.RegisterMenuCreateFunc('Command',ZMainMenuCommand);
   ToolBarsManager.RegisterMenuCreateFunc('Toolbars',ZMainMenuToolBars);
   ToolBarsManager.RegisterMenuCreateFunc('Drawings',ZMainMenuDrawings);
   ToolBarsManager.RegisterMenuCreateFunc('SampleFiles',ZMainMenuSampleFiles);
   ToolBarsManager.RegisterMenuCreateFunc('DebugFiles',ZMainMenuDebugFiles);
+  ToolBarsManager.RegisterMenuCreateFunc('CreateMenu',ZMainCreateMenu);
+  ToolBarsManager.RegisterMenuCreateFunc('SetMainMenu',ZMainSetMenu);
 
   ToolBarsManager.LoadMenus(ProgramPath+'menu/menuscontent.xml');
-  loadpanels(ProgramPath+'menu/mainmenu.mn');
 
   CreateAnchorDockingInterface;
 end;
@@ -1677,6 +1684,30 @@ begin
     end;
 end;
 
+
+procedure TZCADMainWindow.ZPopUpMenuReader(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+ var
+  CreatedMenuItem:TPopupMenu;
+  line:string;
+  TBSubNode:TDomNode;
+  mcf:TMenuCreateFunc;
+begin
+    CreatedMenuItem:=TmyPopupMenu.Create(application);
+    line:=getAttrValue(aNode,'Name','');
+    CreatedMenuItem.Name:=MenuNameModifier+line;
+    CreatedMenuItem.Images := actlist.Images;
+
+    if assigned(aNode) then
+      TBSubNode:=aNode.FirstChild;
+    if assigned(TBSubNode) then
+      while assigned(TBSubNode)do
+      begin
+        ToolBarsManager.TryRunMenuCreateFunc(TBSubNode.NodeName,TBSubNode,actlist,tmenuitem(CreatedMenuItem));
+        TBSubNode:=TBSubNode.NextSibling;
+      end;
+    cxmenumgr.RegisterLCLMenu(CreatedMenuItem);
+end;
+
 procedure TZCADMainWindow.ZMainMenuFileHistory(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
 var
  i:integer;
@@ -1704,6 +1735,24 @@ begin
        CreatedMenuItem:=TMenuItem.Create(RootMenuItem);
        CreatedMenuItem.Action:=FileHistory[i];
        RootMenuItem.Add(CreatedMenuItem);
+  end;
+end;
+
+procedure TZCADMainWindow.ZMainMenuCommandsHistory(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+var
+ i:integer;
+ pstr:pstring;
+ line:string;
+ CreatedMenuItem:TMenuItem;
+begin
+  for i:=low(CommandsHistory) to high(CommandsHistory) do
+  begin
+       CreatedMenuItem:=TMenuItem.Create(RootMenuItem);
+       CreatedMenuItem.Action:=CommandsHistory[i];
+       if RootMenuItem is TMenuItem then
+                              RootMenuItem.Add(CreatedMenuItem)
+                          else
+                              TMyPopUpMenu(RootMenuItem).Items.Add(CreatedMenuItem);
   end;
 end;
 
@@ -1771,6 +1820,42 @@ begin
   FromDirIterator(expandpath('*../errors/'),'*.dxf','',@bugfileiterator,nil);
   localpm.localpm:=nil;
   localpm.ImageIndex:=-1;
+end;
+
+procedure TZCADMainWindow.ZMainCreateMenu(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+var
+  ppopupmenu:TMenuItem;
+  ts:GDBString;
+  menuname:string;
+  createdmenu:TMenu;
+  TBSubNode:TDomNode;
+begin
+
+  createdmenu:=TMainMenu.Create(self);
+  createdmenu.Images:=actlist.Images;
+  createdmenu.Name:=MenuNameModifier+uppercase(getAttrValue(aNode,'Name',''));
+
+  if assigned(aNode) then
+    TBSubNode:=aNode.FirstChild;
+  if assigned(TBSubNode) then
+    while assigned(TBSubNode)do
+    begin
+      ppopupmenu:=tmenuitem(application.FindComponent(MenuNameModifier+uppercase(TBSubNode.NodeName)));
+
+      if ppopupmenu<>nil then
+                                begin
+                                     createdmenu.items.Add(ppopupmenu);
+                                end
+                            else
+                                ShowError(format(rsMenuNotFounf,[ts]));
+
+      TBSubNode:=TBSubNode.NextSibling;
+    end;
+end;
+
+procedure TZCADMainWindow.ZMainSetMenu(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+begin
+  self.Menu:=TMainMenu(self.FindComponent(MenuNameModifier+uppercase(getAttrValue(aNode,'Name',''))));
 end;
 
 procedure TZCADMainWindow.AfterConstruction;
@@ -1884,255 +1969,6 @@ begin
   LoadLayoutFromFile(s);
 end;
 
-procedure TZCADMainWindow.loadpanels(pf:GDBString);
-var
-    f:GDBOpenArrayOfByte;
-    line:GDBString;
-    paneldesk:string;
-begin
-  f.InitFromFile(pf);
-  while f.notEOF do
-  begin
-    line := f.readstring(' ',#$D#$A);
-    if (line <> '') and (line[1] <> ';') then
-    begin
-      if uppercase(line) = 'TOOLBAR' then
-      begin
-           line := f.readstring('; ','');
-           paneldesk:=line+':';
-           while line<>'{' do
-                             line := f.readstring(#$A,#$D);
-           line := f.readstring(#$A' ',#$D);
-           while line<>'}' do
-           begin
-                if (line <> '') and (line[1] <> ';') then
-                begin
-                     paneldesk:=paneldesk+line+';';
-                     if uppercase(line)<>'SEPARATOR' then
-                     begin
-                     line := f.readstring(#$A,#$D);
-                     paneldesk:=paneldesk+line+';';
-                     end;
-                end;
-                line := f.readstring(#$A' ',#$D);
-           end;
-           toolbars.Add(paneldesk);
-           uzclog.programlog.LogOutStr(paneldesk,0,LM_Info);
-      end
-      else if uppercase(line) =createmenutoken  then
-      begin
-           //MainMenu:=menu;
-           createmenu(f,{MainMenu,}line);
-      end
-      else if uppercase(line) =setmainmenutoken  then
-      begin
-           //MainMenu:=menu;
-           setmainmenu(f,{MainMenu,}line);
-      end
-      else if uppercase(line) = menutoken then
-      begin
-           //MainMenu:=menu;
-           loadmenu(f,{MainMenu,}line);
-      end
-      else if uppercase(line) = popupmenutoken then
-      begin
-           //MainMenu:=menu;
-           loadpopupmenu(f,{MainMenu,}line);
-      end
-    end;
-  end;
-  f.done;
-end;
-procedure TZCADMainWindow.loadmenu(var f:GDBOpenArrayOfByte;{var pm:TMenu;}var line:GDBString);
-var
-    ppopupmenu:TMenuItem;
-begin
-           line := f.readstring(';','');
-           line:=(line);
-
-
-           ppopupmenu:=TMenuItem.Create({pm}application);
-           ppopupmenu.Name:=MenuNameModifier+uppercase(line);
-           line:=InterfaceTranslate('menu~'+line,line);
-           ppopupmenu.Caption:=line;
-           loadsubmenu(f,ppopupmenu,line);
-
-end;
-procedure TZCADMainWindow.loadpopupmenu(var f:GDBOpenArrayOfByte;{var pm:TMenu;}var line:GDBString);
-var
-    ppopupmenu:TPopupMenu;
-begin
-           line := f.readstring(';','');
-           line:=(line);
-           ppopupmenu:=TmyPopupMenu.Create({pm}application);
-           ppopupmenu.Name:=MenuNameModifier+uppercase(line);
-           ppopupmenu.Images := StandartActions.Images;
-           line:=InterfaceTranslate('menu~'+line,line);
-           loadsubmenu(f,TMenuItem(ppopupmenu),line);
-           cxmenumgr.RegisterLCLMenu(ppopupmenu)
-end;
-procedure TZCADMainWindow.setmainmenu(var f:GDBOpenArrayOfByte;var line:GDBString);
-var
-    pmenu:TMainMenu;
-begin
-     line := f.readstring(';','');
-     pmenu:=TMainMenu(self.FindComponent(MenuNameModifier+uppercase(line)));
-     self.Menu:=pmenu;
-end;
-
-procedure TZCADMainWindow.createmenu(var f:GDBOpenArrayOfByte;var line:GDBString);
-var
-    ppopupmenu:TMenuItem;
-    ts:GDBString;
-    menuname:string;
-    createdmenu:TMenu;
-begin
-
-           createdmenu:=TMainMenu.Create(self);
-           createdmenu.Images:=self.StandartActions.Images;
-           line := f.readstring(';','');
-           GetPartOfPath(menuname,line,' ');
-           createdmenu.Name:=MenuNameModifier+uppercase(menuname);
-           repeat
-           GetPartOfPath(ts,line,',');
-           ppopupmenu:=tmenuitem(application.FindComponent(MenuNameModifier+uppercase(ts)));
-           if ppopupmenu<>nil then
-                                  begin
-                                       createdmenu.items.Add(ppopupmenu);
-                                  end
-                              else
-                                  ShowError(format(rsMenuNotFounf,[ts]));
-           until line='';
-end;
-procedure TZCADMainWindow.loadsubmenu(var f:GDBOpenArrayOfByte;var pm:TMenuItem;var line:GDBString);
-var
-    pmenuitem:TmyMenuItem;
-    pm1:TMenuItem;
-    submenu:TMenuItem;
-    line2:GDBString;
-    i:integer;
-    pstr:PGDBString;
-    action:tmyaction;
-    debs:string;
-begin
-           while line<>'{' do
-                             begin
-                             line := f.readstring(#$A,#$D);
-                             line:=readspace(line);
-                             end;
-           line := f.readstring(#$A' ',#$D);
-           while line<>'}' do
-           begin
-                if (line <> '') and (line[1] <> ';') then
-                begin
-                     if uppercase(line)='ACTION' then
-                     begin
-                          line := f.readstring(#$A,#$D);
-                          action:=tmyaction(self.StandartActions.ActionByName(line));
-                          pm1:=TMenuItem.Create(pm);
-                          pm1.Action:=action;
-                          if pm is TMenuItem then
-                                                 pm.Add(pm1)
-                                             else
-                                                 TMyPopUpMenu(pm).Items.Add(pm1);
-                          line := f.readstring(#$A' ',#$D);
-                          line:=readspace(line);
-                     end
-                else if uppercase(line)='COMMAND' then
-                                                      begin
-                                                           line2 := f.readstring(',','');
-                                                           line := f.readstring(',','');
-                                                           line2:=InterfaceTranslate('menucommand~'+line,line2);
-                                                           pmenuitem:=TmyMenuItem.Create(pm,line2,line);
-                                                           pm.Add(pmenuitem);
-                                                           line := f.readstring(',','');
-                                                           line := f.readstring(#$A' ',#$D);
-                                                           line := f.readstring(#$A' ',#$D);
-                                                           line:=readspace(line);
-                                                      end
-                else if uppercase(line)='BUGFILES' then
-                                                      begin
-                                                           localpm.localpm:=pm;
-                                                           localpm.ImageIndex:=ImagesManager.GetImageIndex('Bug');;
-                                                           FromDirIterator(expandpath('*../errors/'),'*.dxf','',@bugfileiterator,nil);
-                                                           line := f.readstring(#$A' ',#$D);
-                                                           line:=readspace(line);
-                                                           localpm.localpm:=nil;
-                                                           localpm.ImageIndex:=-1;
-                                                      end
-                else if uppercase(line)='SAMPLEFILES' then
-                                                      begin
-                                                           localpm.localpm:=pm;
-                                                           localpm.ImageIndex:=ImagesManager.GetImageIndex('Dxf');
-                                                           FromDirIterator(expandpath('*/sample'),'*.dxf','',@bugfileiterator,nil);
-                                                           FromDirIterator(expandpath('*/sample'),'*.dwg','',@bugfileiterator,nil);
-                                                           line := f.readstring(#$A' ',#$D);
-                                                           line:=readspace(line);
-                                                           localpm.localpm:=nil;
-                                                           localpm.ImageIndex:=-1;
-                                                      end
-                else if uppercase(line)='DRAWINGS' then
-                                                      begin
-                                                           for i:=low(OpenedDrawings) to high(OpenedDrawings) do
-                                                           begin
-                                                                pm1:=TMenuItem.Create(pm);
-                                                                pm1.Action:=OpenedDrawings[i];
-                                                                pm.Add(pm1);
-                                                           end;
-                                                           line := f.readstring(#$A' ',#$D);
-                                                           line:=readspace(line);
-                                                      end
-                else if uppercase(line)='LASTCOMMANDS' then
-                                                      begin
-                                                           for i:=low(CommandsHistory) to high(CommandsHistory) do
-                                                           begin
-                                                                pm1:=TMenuItem.Create(pm);
-                                                                pm1.Action:=CommandsHistory[i];
-                                                                if pm is TMenuItem then
-                                                                                       pm.Add(pm1)
-                                                                                   else
-                                                                                       TMyPopUpMenu(pm).Items.Add(pm1);
-                                                           end;
-                                                           line := f.readstring(#$A' ',#$D);
-                                                           line:=readspace(line);
-                                                      end
-                else if uppercase(line)='TOOLBARS' then
-                                                      begin
-                                                           ToolBarsManager.EnumerateToolBars(TTBRegisterInAPPFunc,pm);
-                                                           line := f.readstring(#$A' ',#$D);
-                                                           line:=readspace(line);
-                                                      end
-                else     if uppercase(line)='SEPARATOR' then
-                                                      begin
-                                                           if pm is TMenuItem then
-                                                                                  pm.AddSeparator
-                                                                              else
-                                                                                  begin
-                                                                                       pm1:=TMenuItem.Create(pm);
-                                                                                       pm1.Caption:='-';
-                                                                                       TMyPopUpMenu(pm).Items.Add(pm1);
-                                                                                  end;
-                                                           line := f.readstring(#$A' ',#$D);
-                                                           line:=readspace(line);
-                                                      end
-                else if uppercase(line) = submenutoken then
-                                                      begin
-
-                                                           line := f.readstring(';','');
-                                                           submenu:=TMenuItem.Create(pm);
-                                                           line:=InterfaceTranslate('submenu~'+line,line);
-                                                           submenu.Caption:=(line);
-                                                           if pm is TMenuItem then
-                                                                                  pm.Add(submenu)
-                                                                              else
-                                                                                  TMyPopUpMenu(pm).Items.Add(submenu);
-                                                           loadsubmenu(f,submenu,line);
-                                                           line := f.readstring(#$A' ',#$D);
-                                                           line:=readspace(line);
-                                                      end
-                end;
-           end;
-end;
 procedure TZCADMainWindow.UpdateControls;
 var
     i:integer;

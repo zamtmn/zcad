@@ -243,12 +243,15 @@ end;
 procedure TToolBarsManager.TryRunMenuCreateFunc(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
 var
   mcf:TMenuCreateFunc;
+  msg:string;
 begin
 if assigned(ToolBarsManager.MenuCreateFuncRegister) then
   if MenuCreateFuncRegister.TryGetValue(uppercase(aName),mcf)then
     mcf(aName,aNode,actlist,RootMenuItem)
-  else
-    Application.MessageBox(@aName[1],'Error');
+  else begin
+    msg:=format('"%s" not found in MenuCreateFuncRegister',[aName]);
+    Application.MessageBox(@msg[1],'Error');
+  end;
 end;
 
 procedure TToolBarsManager.DoTBItemCreateFunc(aNodeName:string; aNode: TDomNode; TB:TToolBar);
@@ -447,7 +450,6 @@ procedure TToolBarsManager.LoadMenus(filename:string);
 var
   ActionsConfig:TXMLConfig;
   TBNode,TBSubNode:TDomNode;
-  mcf:TMenuCreateFunc;
 begin
   ActionsConfig:=TXMLConfig.Create(nil);
   ActionsConfig.Filename:=filename;
@@ -458,9 +460,7 @@ begin
   if assigned(TBSubNode) then
     while assigned(TBSubNode)do
     begin
-      if assigned(MenuCreateFuncRegister) then
-        if MenuCreateFuncRegister.TryGetValue(uppercase(TBSubNode.NodeName),mcf)then
-          mcf(TBSubNode.NodeName,TBSubNode,factionlist,nil);
+      TryRunMenuCreateFunc(TBSubNode.NodeName,TBSubNode,factionlist,nil);
       TBSubNode:=TBSubNode.NextSibling;
     end;
 

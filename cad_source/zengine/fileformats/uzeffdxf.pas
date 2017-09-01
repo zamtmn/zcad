@@ -692,7 +692,7 @@ begin
                              ptp^.Text:=txtstr;
                              //ptp^.Style:=;
                              ptp^.param.PStyle:=pointer(stylehandle);
-                             psp^.param.PstyleIsHandle:=true;
+                             ptp^.param.PstyleIsHandle:=true;
                              pltypeprop^.dasharray.PushBackData(dashinfo);
                         end;
                end;

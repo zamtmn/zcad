@@ -20,7 +20,7 @@ unit uzcreggeneralwiewarea;
 {$INCLUDE def.inc}
 interface
 uses uzglbackendmanager,uzglgeometry,uzeentitiestree,uzcsysvars,uzglviewareageneral,
-     uzeentabstracttext,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors;
+     uzeentabstracttext,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,LazLogger;
 implementation
 
 initialization
@@ -110,5 +110,6 @@ sysvar.DSGN.DSGN_SelNew:=@sysvarDSGNSelNew;
 sysvar.RD.RD_LastCalcVisible:=@sysvarRDLastCalcVisible;
 sysvar.RD.RD_Light:=@sysvarRDLight;
 finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.
 

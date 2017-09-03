@@ -19,7 +19,7 @@
 unit uzcregfontmanager;
 {$INCLUDE def.inc}
 interface
-uses uzcsysvars,uzefontmanager,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors;
+uses uzcsysvars,uzefontmanager,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,LazLogger;
 implementation
 
 initialization
@@ -28,5 +28,6 @@ units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),Inte
 sysvar.PATH.Fonts_Path:=@sysvarPATHFontsPath;
 sysvar.PATH.Alternate_Font:=@sysvarAlternateFont;
 finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.
 

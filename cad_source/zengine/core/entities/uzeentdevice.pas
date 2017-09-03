@@ -25,7 +25,7 @@ uses uzestyleslayers,uzepalette,uzeobjectextender,uabstractunit,uzeentityfactory
      UGDBOpenArrayOfByte,gzctnrvectorpobjects,uunitmanager,uzbmemman,uzegeometry,
      uzeconsts,uzeentity,uzeentsubordinated,varmandef,uzbtypesbase,
      uzbgeomtypes,uzeentblockinsert,uzbtypes,UGDBVisibleOpenArray,UGDBObjBlockdefArray,
-     gzctnrvectortypes,uzeblockdef,uzeffdxfsupport,UGDBSelectedObjArray,uzeentitiestree;
+     gzctnrvectortypes,uzeblockdef,uzeffdxfsupport,UGDBSelectedObjArray,uzeentitiestree,LazLogger;
 
 type
 {REGISTEROBJECTTYPE GDBObjDevice}
@@ -727,5 +727,6 @@ initialization
   RegisterEntityUpgradeInfo(GDBBlockInsertID,1,@UpgradeBlockInsert2Device);
   GDBObjDeviceDXFFeatures:=TDXFEntIODataManager.Create;
 finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   GDBObjDeviceDXFFeatures.Destroy;
 end.

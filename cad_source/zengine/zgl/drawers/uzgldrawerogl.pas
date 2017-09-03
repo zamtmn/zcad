@@ -604,6 +604,7 @@ end;
 initialization
   OGLDrawer:=TZGLOpenGLDrawer.create;
 finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   OGLDrawer.Destroy;
 end.
 

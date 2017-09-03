@@ -24,7 +24,7 @@ uses uzbpaths,UUnitManager,uzcsysvars,uzcstrconsts,{$IFNDEF DELPHI}uzctranslatio
      UBaseTypeDescriptor,uzcshared,uzbtypes,UGDBOpenArrayOfByte, strmy, varmandef,uzcsysinfo,
      TypeDescriptors,
      URecordDescriptor,
-     uzclog,uzbmemman;
+     uzclog,uzbmemman,LazLogger;
 implementation
 {$IFNDEF WINDOWS}
 var
@@ -247,5 +247,6 @@ initialization;
   programlog.logoutstr('end; {urtl.initialization}',lp_DecPos,LM_Debug);
 
 finalization;
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization')
   //units.FreeAndDone;
 end.

@@ -33,7 +33,8 @@ uses
     {$ENDIF}
     {$IFNDEF DELPHI}LCLIntf,LCLType,{$ENDIF}
     Classes,Controls,
-    gzctnrvectortypes,uzbgeomtypes,uzegeometry,uzgldrawergeneral,uzgldrawerabstract,Graphics,uzbtypes;
+    gzctnrvectortypes,uzbgeomtypes,uzegeometry,uzgldrawergeneral,uzgldrawerabstract,
+    Graphics,uzbtypes,LazLogger;
 const
   NeedScreenInvalidrect=true;
 type
@@ -617,8 +618,9 @@ initialization
   LLGDIPrimitivesCreator:=TLLGDIPrimitivesCreator.Create;
   {$IFDEF WINDOWS}(*GDIPlusDrawer:=TZGLGDIPlusDrawer.create;*){$ENDIF}
 finalization
-   GDIDrawer.Destroy;
-   LLGDIPrimitivesCreator.Destroy;
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  GDIDrawer.Destroy;
+  LLGDIPrimitivesCreator.Destroy;
   {$IFDEF WINDOWS}(*GDIPlusDrawer.Destroy;*){$ENDIF}
 end.
 

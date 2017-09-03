@@ -22,7 +22,7 @@ unit uzeblockdefsfactory;
 
 interface
 uses uzbpaths,sysutils,uzeblockdef,usimplegenerics,uzedrawingdef,gzctnrstl,
-     uzbmemman,uzbtypesbase,uzbtypes,uzeentity;
+     uzbmemman,uzbtypesbase,uzbtypes,uzeentity,LazLogger;
 type
 TBlockDefCreateFunc=function(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:GDBString):PGDBObjBlockdef;
 PTBlockDefCreateData=^TBlockDefCreateData;
@@ -85,6 +85,7 @@ end;
 
 initialization
 finalization
-if assigned(BlockDefName2BlockDefCreateData) then
-                                                  BlockDefName2BlockDefCreateData.destroy;
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  if assigned(BlockDefName2BlockDefCreateData) then
+    BlockDefName2BlockDefCreateData.destroy;
 end.

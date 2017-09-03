@@ -31,7 +31,7 @@ uses
   Varman,
   uzcoimultipropertiesutil,
   uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,uzeenttext,uzeentmtext,uzeentpolyline,uzcentelleader,uzeentdimension,uzeentellipse,
-  uzegeometry,uzcoimultiproperties;
+  uzegeometry,uzcoimultiproperties,LazLogger;
 implementation
 procedure GDBDoubleDeltaEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var
@@ -569,6 +569,7 @@ end;
 initialization
   startup;
 finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   finalize;
 end.
 

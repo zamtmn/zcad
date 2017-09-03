@@ -20,7 +20,7 @@ unit uzcregzscript;
 {$INCLUDE def.inc}
 interface
 uses uzcsysvars,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,varman,
-     UBaseTypeDescriptor,uzbtypesbase,uzedimensionaltypes,uzemathutils;
+     UBaseTypeDescriptor,uzbtypesbase,uzedimensionaltypes,uzemathutils,LazLogger;
 type
   GDBNonDimensionDoubleDescriptor=object(GDBDoubleDescriptor)
                             function GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):GDBString;virtual;
@@ -61,8 +61,9 @@ begin
   BaseTypesEndIndex:=ptsu^.InterfaceTypes.exttype.Count;
 end;
 initialization
-OnCreateSystemUnit:=_OnCreateSystemUnit;
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'ShowHiddenFieldInObjInsp','GDBBoolean',@debugShowHiddenFieldInObjInsp);
+  OnCreateSystemUnit:=_OnCreateSystemUnit;
+  units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'ShowHiddenFieldInObjInsp','GDBBoolean',@debugShowHiddenFieldInObjInsp);
 finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.
 

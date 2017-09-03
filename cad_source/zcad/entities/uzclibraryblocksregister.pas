@@ -23,7 +23,7 @@ unit uzclibraryblocksregister;
 interface
 uses uzccommandsimpl,uzbstrproc,UGDBOpenArrayOfByte,uzccommandsabstract,uzbpaths,
      uzestyleslayers,UGDBObjBlockdefArray,uzeblockdefsfactory,uzeblockdef,uzedrawingdef,
-     uzbmemman,uzcsysvars,uzbtypesbase,uzbtypes,uzeentity,uzcdrawings,uzccombase,uzclog;
+     uzbmemman,uzcsysvars,uzbtypesbase,uzbtypes,uzeentity,uzcdrawings,uzccombase,uzclog,LazLogger;
 implementation
 function LoadLibraryBlock(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:GDBString):PGDBObjBlockdef;
 var
@@ -65,4 +65,5 @@ end;
 initialization
   CreateCommandFastObjectPlugin(@ReadBlockLibrary_com,'ReadBlockLibrary',0,0);
 finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

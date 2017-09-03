@@ -20,7 +20,7 @@ unit uzglbackendmanager;
 {$INCLUDE def.inc}
 
 interface
-uses uzbtypesbase,uzbtypes,uzctnrvectorgdbstring,uzglviewareaabstract,uzctnrvectorgdbpointer;
+uses uzbtypesbase,uzbtypes,uzctnrvectorgdbstring,uzglviewareaabstract,uzctnrvectorgdbpointer,LazLogger;
 const test:GDBSTRING='asdasd';
 type
     TVA=class of TAbstractViewArea;
@@ -45,6 +45,7 @@ initialization
   BackendsNames.Selected:=0;
   Backends.init({$IFDEF DEBUGBUILD}'{143AA836-9372-462F-B107-229B50E7A37C}',{$ENDIF}10);
 finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   BackendsNames.Enums.done;
   Backends.done;
 end.

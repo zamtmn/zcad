@@ -36,6 +36,7 @@ type
 var
   SysParam: tsysparam;
   SysDefaultFormatSettings:TFormatSettings;
+  disabledefaultmodule:boolean;
 
 Procedure GetSysInfo;
 implementation
@@ -104,6 +105,7 @@ var
    param,paramUC:GDBString;
 const
   LogEnableModulePrefix='LEM_';
+  LogDisableModulePrefix='LDM_';
 begin
      //programlog.LogOutStr('ProcessParamStr',lp_IncPos,LM_Necessarily);
      debugln('{N+}ProcessParamStr');
@@ -148,6 +150,16 @@ begin
                                                       length(LogEnableModulePrefix)+1,
                                                       length(paramUC)-length(LogEnableModulePrefix)+1);
                                          programlog.enablemodule(paramUC);
+                                       end
+       else if pos(LogDisableModulePrefix,paramUC)=1 then
+                                       begin
+                                         paramUC:=copy(paramUC,
+                                                      length(LogEnableModulePrefix)+1,
+                                                      length(paramUC)-length(LogEnableModulePrefix)+1);
+                                         if paramUC<>'DEFAULT'then
+                                           programlog.disablemodule(paramUC)
+                                         else
+                                           disabledefaultmodule:=true;
                                        end;
        end;
      debugln('{N-}end;{ProcessParamStr}');
@@ -210,7 +222,9 @@ begin
 
      debugln('{N-}end;{GetSysInfo}');
      //programlog.LogOutStr('end;{GetSysInfo}',lp_DecPos,LM_Necessarily);
+     if disabledefaultmodule then programlog.disablemodule('DEFAULT');
 end;
 initialization
 GetSysInfo;
+disabledefaultmodule:=false;
 end.

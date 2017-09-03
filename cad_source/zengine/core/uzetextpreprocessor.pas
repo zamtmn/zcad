@@ -19,7 +19,7 @@ unit uzetextpreprocessor;
 {$INCLUDE def.inc}
 
 interface
-uses sysutils,uzbtypesbase,usimplegenerics,gzctnrstl;
+uses sysutils,uzbtypesbase,usimplegenerics,gzctnrstl,LazLogger;
 type
 TStrProcessFunc=procedure(var str:gdbstring;startpos:integer;pobj:pointer);
 TPrefix2ProcessFunc=GKey2DataMap<GDBString,TStrProcessFunc{$IFNDEF DELPHI},LessGDBString{$ENDIF}>;
@@ -98,5 +98,6 @@ end;
 initialization
   Prefix2ProcessFunc:=TPrefix2ProcessFunc.Create;
 finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   Prefix2ProcessFunc.Destroy;
 end.

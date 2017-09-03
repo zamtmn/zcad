@@ -109,11 +109,12 @@ begin
 end;
 
 initialization
-cxmenumgr:=tcxmenumgr.Create;
-cxmenumgr.menupopupcount:=0;
-cxmenumgr.notprocessedclosecount:=0;
+  cxmenumgr:=tcxmenumgr.Create;
+  cxmenumgr.menupopupcount:=0;
+  cxmenumgr.notprocessedclosecount:=0;
 finalization
-freeandnil(cxmenumgr);
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  freeandnil(cxmenumgr);
 end.
 
 

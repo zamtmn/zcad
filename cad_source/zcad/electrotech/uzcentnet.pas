@@ -13,7 +13,7 @@ uses uzcinterface,uzeobjectextender,uzeentityfactory,Varman,uzgldrawcontext,uzes
      uzbtypesbase,uzeentity,UGDBOpenArrayOfPV,uzeentconnected,uzeconsts,
      varmandef,uzegeometry,uzbtypes,UGDBGraf,uzbmemman,uzeentsubordinated,uunitmanager,
      gzctnrvectortypes,uzbgeomtypes,uzcshared,sysutils,gzctnrvectorpobjects,
-     uzcenitiesvariablesextender,uzeentline,uzeffdxfsupport,math,uzclog;
+     uzcenitiesvariablesextender,uzeentline,uzeffdxfsupport,math,uzclog,LazLogger;
 const
      UNNAMEDNET='NET';
 type
@@ -601,5 +601,6 @@ initialization
   RegisterEntityUpgradeInfo(GDBLineID,UD_LineToNet,@UpgradeLine2Net);
   GDBObjNetDXFFeatures:=TDXFEntIODataManager.Create;
 finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   GDBObjNetDXFFeatures.Destroy;
 end.

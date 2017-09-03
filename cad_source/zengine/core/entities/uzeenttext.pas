@@ -24,7 +24,7 @@ uses
     uzglgeometry,uzgldrawcontext,uzeobjectextender,uzetextpreprocessor,uzeentityfactory,
     uzedrawingdef,uzecamera,uzbstrproc,sysutils,uzefont,uzestyleslayers,uzbtypesbase,
     uzeentabstracttext,uzeentity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,uzbtypes,
-    uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzbmemman,uzeentsubordinated,
+    uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzbmemman,uzeentsubordinated,LazLogger,
     uzbgeomtypes,uzestylestexts;
 type
 {REGISTEROBJECTTYPE GDBObjText}
@@ -759,5 +759,6 @@ initialization
   RegisterDXFEntity(GDBTextID,'TEXT','Text',@AllocText,@AllocAndInitText);
   GDBObjTextDXFFeatures:=TDXFEntIODataManager.Create;
 finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   GDBObjTextDXFFeatures.Destroy;
 end.

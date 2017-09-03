@@ -34,7 +34,7 @@ uses
   uzcshared,uzeentsubordinated,uzcentcable,varman,uzcdialogsfiles,uunitmanager,
   gzctnrvectorpobjects,uzcbillofmaterial,uzccablemanager,uzeentdevice,uzeenttable,
   uzbpaths,uzctnrvectorgdbstring,math,Masks,uzclog,uzccombase,uzbstrproc,
-  uzeentmtext,uzeblockdef,UGDBPoint3DArray,uzcdevicebaseabstract,uzelongprocesssupport;
+  uzeentmtext,uzeblockdef,UGDBPoint3DArray,uzcdevicebaseabstract,uzelongprocesssupport,LazLogger;
 type
 {Export+}
   TFindType=(
@@ -3297,6 +3297,7 @@ end;
 initialization
   startup;
 finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   finalize;
 end.
 

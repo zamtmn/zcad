@@ -18,7 +18,7 @@ uses
   uzccomdraw,UGDBVisibleOpenArray,uzeentline,uzbpaths,uzcshared,uzeentblockinsert,
   uzbgeomtypes,varman,uzccablemanager,uzeentdevice,uzeentmtext,math,
   uzcenitiesvariablesextender,uzeroot,uzglviewareadata,uzcentcable,UUnitManager,
-  gzctnrvectortypes,uzccomelectrical,URecordDescriptor,TypeDescriptors;
+  gzctnrvectortypes,uzccomelectrical,URecordDescriptor,TypeDescriptors,LazLogger;
 
 type
   TPlaceParam=record
@@ -1379,5 +1379,6 @@ end;
 initialization
   startup;
 finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   finalize;
 end.

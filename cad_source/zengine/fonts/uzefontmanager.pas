@@ -303,6 +303,7 @@ initialization
   FontExt2LoadProc:=TFontExt2LoadProcMap.Create;
   sysvarPATHFontsPath:=ExtractFileDir(ParamStr(0));
 finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   FontManager.Done;
   FontExt2LoadProc.Destroy;
 end.

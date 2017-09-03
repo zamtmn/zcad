@@ -21,7 +21,7 @@ unit uzcfsplash;
 interface
 uses
  uzbpaths,uzclog,uniqueinstanceraw,uzcstrconsts,uzbstrproc,Forms, stdctrls, Controls, Graphics,
- ExtCtrls,uzbtypesbase,uzcsysinfo,{fileutil}LazUTF8,sysutils;
+ ExtCtrls,uzbtypesbase,uzcsysinfo,{fileutil}LazUTF8,sysutils,LazLogger;
 const
   zcaduniqueinstanceid='zcad unique instance';
 type
@@ -110,5 +110,6 @@ initialization
   createsplash(true);
   SplashTextOut:=SplashTextOutProc;
 finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   removesplash;
 end.

@@ -1664,8 +1664,9 @@ begin
 end;
 finalization;
 begin
-     VarCategory.Done;
-     CategoryCollapsed.done;
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  VarCategory.Done;
+  CategoryCollapsed.done;
 end;
 end.
 

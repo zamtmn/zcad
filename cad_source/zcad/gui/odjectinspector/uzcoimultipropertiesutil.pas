@@ -29,7 +29,8 @@ uses
   uzbtypesbase,
   Varman,UGDBPoint3DArray,
   uzedimensionaltypes,
-  gzctnrvectortypes,uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,uzeenttext,uzeentmtext,uzeentpolyline,uzegeometry,uzcoimultiproperties;
+  gzctnrvectortypes,uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,
+  uzeenttext,uzeentmtext,uzeentpolyline,uzegeometry,uzcoimultiproperties,LazLogger;
 function GetOneVarData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
 function GetVertex3DControlData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
 procedure FreeOneVarData(piteratedata:GDBPointer;mp:TMultiProperty);
@@ -251,5 +252,6 @@ end;
 
 initialization
 finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.
 

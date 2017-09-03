@@ -206,6 +206,4 @@ begin
      until pobj=nil;
      result:=nil;
 end;
-initialization
-finalization
 end.

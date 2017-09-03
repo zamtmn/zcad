@@ -47,7 +47,7 @@ uses
   uzcshared,uzeentsubordinated,uzeentblockinsert,uzeentpolyline,uzclog,gzctnrvectordata,
   math,uzeenttable,uzctnrvectorgdbstring,//uzcprinterspecfunc,
   uzeentcurve,uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray
-  ,uzelongprocesssupport;
+  ,uzelongprocesssupport,LazLogger;
 const
      modelspacename:GDBSTring='**Модель**';
 type
@@ -4147,7 +4147,8 @@ begin
   freeandnil(paged);
 end;
 initialization
-     startup;
+  startup;
 finalization
-     finalize;
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  finalize;
 end.

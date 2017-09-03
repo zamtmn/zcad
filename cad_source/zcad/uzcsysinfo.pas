@@ -144,6 +144,8 @@ begin
                                        programlog.SetLogMode(LM_Error)
        else if (paramUC='LM_FATAL')then
                                        programlog.SetLogMode(LM_Fatal)
+       else if (paramUC='LEAM')then
+                                   programlog.enableallmodules
        else if pos(LogEnableModulePrefix,paramUC)=1 then
                                        begin
                                          paramUC:=copy(paramUC,

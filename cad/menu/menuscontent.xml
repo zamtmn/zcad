@@ -425,16 +425,16 @@
       </MainMenuItem>
       <Action Name="ACN_CANCEL"/>
     </PopUpMenu>
-    <MainMenuItem Name="LASTCOMMANDSCXMENU">
+    <PopUpMenu Name="LASTCOMMANDSCXMENU">
       <LastCommands/>
-    </MainMenuItem>
-    <MainMenuItem Name="FASTMENU">
+    </PopUpMenu>
+    <PopUpMenu Name="FASTMENU">
       <Action Name="ACN_PASTE"/>
       <Separator/>
       <Action Name="ACN_SELECTALL"/>
       <Separator/>
       <Action Name="ACN_VIEWTOP"/>
-    </MainMenuItem>
+    </PopUpMenu>
     <CreateMenu Name="MainMenu">
       <File/>
       <Edit/>

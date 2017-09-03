@@ -20,7 +20,9 @@ unit uzctranslations;
 {$INCLUDE def.inc}
 
 interface
-uses uzbpaths,LCLVersion,uzbstrproc{$IFNDEF DELPHI},LazUTF8,gettext,translations,fileutil,LResources{$ENDIF},uzcsysinfo,sysutils,uzclog,forms,Classes, typinfo;
+uses uzbpaths,LCLVersion,uzbstrproc{$IFNDEF DELPHI},LazUTF8,gettext,translations,
+     fileutil,LResources{$ENDIF},uzcsysinfo,sysutils,uzclog,forms,Classes, typinfo,
+     LazLogger;
 
 type
     TmyPOFile = class(TPOFile)
@@ -259,10 +261,11 @@ procedure initialize;
     end;
 
 initialization
-TranslateLogModuleId:=programlog.registermodule('TRANSLATOR');
-initialize;
+  TranslateLogModuleId:=programlog.registermodule('TRANSLATOR');
+  initialize;
 finalization
-if assigned(actualypo) then freeandnil(actualypo);
-if assigned(po) then freeandnil(po);
-if assigned(LRSTranslator) then freeandnil(LRSTranslator);
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  if assigned(actualypo) then freeandnil(actualypo);
+  if assigned(po) then freeandnil(po);
+  if assigned(LRSTranslator) then freeandnil(LRSTranslator);
 end.

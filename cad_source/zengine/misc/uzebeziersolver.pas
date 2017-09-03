@@ -19,8 +19,9 @@
 unit uzebeziersolver;
 {$INCLUDE def.inc}
 interface
-uses uzgprimitivescreator,uzgprimitives,uzglvectorobject,uzegluinterface,gvector,uzbmemman,
-     gzctnrvectortypes,uzbgeomtypes,UGDBOpenArrayOfByte,uzbtypesbase,sysutils,uzbtypes,uzegeometry,gzctnrstl;
+uses uzgprimitivescreator,uzgprimitives,uzglvectorobject,uzegluinterface,gvector,
+     uzbmemman,gzctnrvectortypes,uzbgeomtypes,UGDBOpenArrayOfByte,uzbtypesbase,
+     sysutils,uzbtypes,uzegeometry,gzctnrstl,LazLogger;
 type
 TPointAttr=(TPA_OnCurve,TPA_NotOnCurve);
 TSolverMode=(TSM_WaitStartCountur,TSM_WaitStartPoint,TSM_WaitPoint);
@@ -261,5 +262,6 @@ end;
 initialization
   BS:=TBezierSolver2D.create;
 finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   bs.Destroy;
 end.

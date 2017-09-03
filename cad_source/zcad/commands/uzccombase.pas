@@ -1957,5 +1957,6 @@ initialization
   OSModeEditor.trace.Angle:=TTA45;
   startup;
 finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   finalize;
 end.

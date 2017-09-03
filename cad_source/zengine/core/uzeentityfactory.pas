@@ -22,7 +22,7 @@ unit uzeentityfactory;
 
 interface
 uses uzeentsubordinated,usimplegenerics,uzedrawingdef,uzeconsts,gzctnrstl,
-     uzbmemman,uzbtypesbase,uzbtypes,{uzeentgenericsubentry,}uzeentity;
+     uzbmemman,uzbtypesbase,uzbtypes,{uzeentgenericsubentry,}uzeentity,LazLogger;
 type
 TAllocEntFunc=function:GDBPointer;
 TAllocAndInitEntFunc=function (owner:PGDBObjGenericWithSubordinated): PGDBObjEntity;
@@ -192,6 +192,7 @@ initialization
     NeedInit:=false;
   end;
 finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   DXFName2EntInfoData.Destroy;
   ObjID2EntInfoData.Destroy;
   EntUpgradeKey2EntUpgradeData.Destroy;

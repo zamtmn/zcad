@@ -35,7 +35,7 @@ uses
   uzbmemman,
   uzeconsts,
   uzbgeomtypes,uzcshared,uzclog,
-  UBaseTypeDescriptor,Varman,TypeDescriptors;
+  UBaseTypeDescriptor,Varman,TypeDescriptors,LazLogger;
 implementation
 var
    c1,c2:integer;
@@ -150,7 +150,8 @@ procedure Finalize;
 begin
 end;
 initialization
-     startup;
+  startup;
 finalization
-     finalize;
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  finalize;
 end.

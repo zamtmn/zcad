@@ -20,7 +20,7 @@ unit uzcreginterface;
 {$INCLUDE def.inc}
 interface
 uses uzcsysvars,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,
-     Varman,uzcoidecorations,uzegluinterface;
+     Varman,uzcoidecorations,uzegluinterface,LazLogger;
 implementation
 
 initialization
@@ -34,5 +34,6 @@ initialization
   sysvar.RD.RD_GLUExtensions^:=GLUExtensions;
 
 finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.
 

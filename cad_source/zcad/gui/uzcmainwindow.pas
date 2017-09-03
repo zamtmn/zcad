@@ -3161,7 +3161,6 @@ begin
   CreateCommandFastObjectPlugin(@DockingOptions_com,'DockingOptions',0,0);
 end
 finalization
-begin
-end;
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.
 

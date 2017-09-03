@@ -853,6 +853,7 @@ end;
 initialization;
      units.init;
 finalization;
+     debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
      if DBUnit<>nil then
      begin
           PVardeskInDBUnit:=DBUnit.InterfaceVariables.vardescarray.beginiterate(IrInDBUnit);

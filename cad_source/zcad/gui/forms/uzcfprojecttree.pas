@@ -26,7 +26,7 @@ uses
  Classes,FileUtil,Forms,stdctrls,Controls,ComCtrls,
  uzcdevicebaseabstract,uzclog,SysUtils,uzbtypes,uzcdrawings,varman,languade,
  varmandef,uzcshared,uzcsysinfo,uzbmemman,uzbtypesbase,uzccommandsimpl,uzccommandsabstract,
- gzctnrvectortypes,uzeblockdef,UBaseTypeDescriptor,uzcinterface,UUnitManager;
+ gzctnrvectortypes,uzeblockdef,UBaseTypeDescriptor,uzcinterface,UUnitManager,LazLogger;
 const
   uncat='UNCAT';
   uncat_='UNCAT_';
@@ -382,10 +382,11 @@ begin
 end;
 finalization
 begin
-     {FreeAndNil(ProgramDBContextMenuN);
-     FreeAndNil(ProjectDBContextMenuN);
-     FreeAndNil(ProgramDEVContextMenuN);}
-     BlockCategory.Done;
-     EqCategory.Done;
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  {FreeAndNil(ProgramDBContextMenuN);
+  FreeAndNil(ProjectDBContextMenuN);
+  FreeAndNil(ProgramDEVContextMenuN);}
+  BlockCategory.Done;
+  EqCategory.Done;
 end;
 end.

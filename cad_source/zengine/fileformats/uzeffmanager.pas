@@ -20,7 +20,7 @@ unit uzeffmanager;
 {$INCLUDE def.inc}
 
 interface
-uses uzbtypesbase,uzbtypes,usimplegenerics,uzeentgenericsubentry,uzedrawingsimple,sysutils,gzctnrstl;
+uses uzbtypesbase,uzbtypes,usimplegenerics,uzeentgenericsubentry,uzedrawingsimple,sysutils,gzctnrstl,LazLogger;
 
 type
 TFileLoadProcedure=procedure(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
@@ -121,6 +121,7 @@ end;
 initialization
   Ext2LoadProcMap:=TExt2LoadProcMap.create;
 finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   Ext2LoadProcMap.Destroy;
 end.
 

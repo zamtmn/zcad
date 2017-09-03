@@ -23,7 +23,7 @@ uses uzepalette,uzeobjectextender,uzgldrawerabstract,uzgldrawcontext,uzedrawingd
      uzecamera,uzeentitiesprop,uzestyleslinetypes,uzbtypesbase,
      uzbgeomtypes,UGDBControlPointArray,uzeentsubordinated,uzbtypes,uzeconsts,
      uzglviewareadata,uzegeometry,uzeffdxfsupport,sysutils,uzbmemman,UGDBOpenArrayOfByte,
-     uzestyleslayers,gzctnrvectorpobjects,uzeenrepresentation;
+     uzestyleslayers,gzctnrvectorpobjects,uzeenrepresentation,LazLogger;
 type
 //Owner:{-}PGDBObjEntity{/GDBPointer/};(*'Владелец'*)
 taddotrac=procedure (var posr:os_record;const axis:GDBVertex) of object;
@@ -1225,5 +1225,6 @@ end;
 initialization
   GDBObjEntityDXFFeatures:=TDXFEntIODataManager.Create;
 finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   GDBObjEntityDXFFeatures.Destroy;
 end.

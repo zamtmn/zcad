@@ -19,15 +19,16 @@
 unit uzcregpaths;
 {$INCLUDE def.inc}
 interface
-uses uzcsysvars,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors;
+uses uzcsysvars,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,LazLogger;
 implementation
 
 initialization
-//units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'PATH_Program_Run','GDBString',@ProgramPath);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'PATH_Support_Path','GDBString',@SupportPath);
-sysvar.PATH.Program_Run:=@ProgramPath;
-sysvar.PATH.Support_Path:=@SupportPath;
-sysvar.PATH.Temp_files:=@TempPath;
+  //units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'PATH_Program_Run','GDBString',@ProgramPath);
+  units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'PATH_Support_Path','GDBString',@SupportPath);
+  sysvar.PATH.Program_Run:=@ProgramPath;
+  sysvar.PATH.Support_Path:=@SupportPath;
+  sysvar.PATH.Temp_files:=@TempPath;
 finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.
 

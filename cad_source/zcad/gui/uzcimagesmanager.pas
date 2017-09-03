@@ -24,7 +24,8 @@ interface
 uses
   uzbpaths,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   Buttons, ExtCtrls, LazUTF8,
-  uzbtypes,uzcsysvars,uzcsysinfo,uzbtypesbase,gzctnrstl,usimplegenerics,UGDBOpenArrayOfByte,uzbstrproc;
+  uzbtypes,uzcsysvars,uzcsysinfo,uzbtypesbase,gzctnrstl,usimplegenerics,UGDBOpenArrayOfByte,
+  uzbstrproc,LazLogger;
 type
   TImageData=record
     Index:Integer;
@@ -178,6 +179,7 @@ initialization
   {$i defaultimages.inc}
   ImagesManager:=TImagesManager.Create;
 finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   ImagesManager.Destroy;
 end.
 

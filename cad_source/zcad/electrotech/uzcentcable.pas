@@ -12,7 +12,7 @@ uses uzeobjectextender,varman,uzgldrawcontext,uzeentgenericsubentry,uzedrawingde
      uzcsysvars,UGDBOpenArrayOfByte,uzestyleslayers,UUnitManager,uzeentcurve,uzegeometry,
      math,gzctnrvectordata,uzbtypesbase,uzeentity,varmandef,uzbtypes,
      uzbgeomtypes,uzeconsts,uzeffdxfsupport,sysutils,uzbmemman,uzeentsubordinated,uzeentdevice,
-     gzctnrvectortypes,uzcenitiesvariablesextender,uzeentityfactory,uzclog;
+     gzctnrvectortypes,uzcenitiesvariablesextender,uzeentityfactory,uzclog,LazLogger;
 type
 {Повторное описание типа в Cableы}
   PTCableType=^TCableType;
@@ -556,5 +556,6 @@ initialization
   RegisterEntityUpgradeInfo(GDBPolylineID,1,@Upgrade3DPolyline2Cable);
   GDBObjCableDXFFeatures:=TDXFEntIODataManager.Create;
 finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   GDBObjCableDXFFeatures.Destroy
 end.

@@ -21,7 +21,7 @@ unit uzelongprocesssupport;
 
 
 interface
-uses sysutils,gzctnrstl;
+uses sysutils,gzctnrstl,LazLogger;
 type
 TLPSHandle=integer;
 TLPSCounter=integer;
@@ -178,5 +178,6 @@ end;
 initialization
   LPS:=TZELongProcessSupport.Create;
 finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   LPS.destroy;
 end.

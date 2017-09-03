@@ -859,5 +859,6 @@ end;
 initialization
   startup;
 finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   finalize;
 end.

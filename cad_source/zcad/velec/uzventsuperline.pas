@@ -120,6 +120,7 @@ initialization
   RegisterEntity(GDBSuperLineID,'SuperLine',@AllocSuperLine,@AllocAndInitSuperLine,@SetSuperLineGeomProps,@AllocAndCreateSuperLine);
   RegisterEntityUpgradeInfo(GDBLineID,UD_LineToSuperLine,@UpgradeLine2SuperLine);
 finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   GDBObjSuperLineDXFFeatures.destroy;
 end.
 {
@@ -128,5 +129,6 @@ initialization
   RegisterEntityUpgradeInfo(GDBBlockInsertID,1,@UpgradeBlockInsert2Device);
   GDBObjDeviceDXFFeatures:=TDXFEntIODataManager.Create;
 finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   GDBObjDeviceDXFFeatures.Destroy;
 }

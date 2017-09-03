@@ -19,7 +19,7 @@
 unit uzehelpobj;
 {$INCLUDE def.inc}
 interface
-uses uzbgeomtypes,UGDBPolyPoint2DArray,uzbtypes;
+uses uzbgeomtypes,UGDBPolyPoint2DArray,uzbtypes,LazLogger;
 const
    CircleLODCount=100;
 var
@@ -60,5 +60,6 @@ end;
 initialization
   createcircle;
 finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   freecircle;
 end.

@@ -94,8 +94,5 @@ begin
     //setWorldTransform
   {$ENDIF}
 end;
-
-initialization
-finalization
 end.
 

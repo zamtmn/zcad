@@ -46,6 +46,4 @@ begin
      inherited;
      //SHXdata.done;
 end;
-initialization
-finalization
 end.

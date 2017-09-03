@@ -20,7 +20,7 @@ unit uzeblockdef;
 interface
 uses gzctnrvectortypes,uzeentity,uzeentityfactory,uzgldrawcontext,uzeobjectextender,uzedrawingdef,
      uzeentsubordinated,uzeffdxfsupport,UGDBOpenArrayOfByte,uzbtypesbase,sysutils,uzbtypes,
-     uzbgeomtypes,uzbmemman,uzegeometry,uzestyleslayers,uzeconsts,uzeentgenericsubentry;
+     uzbgeomtypes,uzbmemman,uzegeometry,uzestyleslayers,uzeconsts,uzeentgenericsubentry,LazLogger;
 type
 {REGISTEROBJECTTYPE GDBObjBlockdef}
 {Export+}
@@ -175,5 +175,6 @@ initialization
   GDBObjBlockDefDXFFeatures:=TDXFEntIODataManager.Create;
   {RegisterDXFEntity}RegisterEntity(GDBBlockDefID,'BlockDef',@AllocBlockDef,@AllocAndInitBlockDef,@SetLineGeomProps,@AllocAndCreateBlockDef);
 finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   GDBObjBlockDefDXFFeatures.Destroy;
 end.

@@ -21,7 +21,7 @@ unit uzgldrawergeneral;
 interface
 uses uzbgeomtypes,uzgvertex3sarray,uzgprimitivescreatorabstract,uzgprimitivescreator,
      uzgldrawerabstract,uzepalette,types,Classes,Graphics,
-     uzbtypesbase,uzbtypes,uzecamera,uzegeometry,UGDBPoint3DArray;
+     uzbtypesbase,uzbtypes,uzecamera,uzegeometry,UGDBPoint3DArray,LazLogger;
 type
 TPaintState=(TPSBufferNotSaved,TPSBufferSaved);
 TZGLGeneralDrawer=class(TZGLAbstractDrawer)
@@ -280,6 +280,7 @@ end;
 initialization
   DrawerLLPCreator:=TLLPrimitivesCreator.create;
 finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   DrawerLLPCreator.Destroy;
 end.
 

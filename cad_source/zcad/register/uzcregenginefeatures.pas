@@ -19,7 +19,7 @@
 unit uzcregenginefeatures;
 {$INCLUDE def.inc}
 interface
-uses uzeutils,uzeentity,uzedrawingsimple,uzbtypes,uzeconsts,uzeenttext,uzeentdimension;
+uses uzeutils,uzeentity,uzedrawingsimple,uzbtypes,uzeconsts,uzeenttext,uzeentdimension,LazLogger;
 implementation
 procedure zeSetTextStylePropFromDrawingProp(const PEnt: PGDBObjEntity; var Drawing:TSimpleDrawing);
 var
@@ -43,7 +43,8 @@ begin
      end;
 end;
 initialization;
-    zeRegisterEntPropSetter(zeSetTextStylePropFromDrawingProp);
-    zeRegisterEntPropSetter(zeSetDimStylePropFromDrawingProp);
+  zeRegisterEntPropSetter(zeSetTextStylePropFromDrawingProp);
+  zeRegisterEntPropSetter(zeSetDimStylePropFromDrawingProp);
 finalization;
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

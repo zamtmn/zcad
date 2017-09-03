@@ -80,6 +80,7 @@ tlog={$IFNDEF DELPHI}packed{$ENDIF} object
            constructor init(fn:AnsiString;LogMode:TLogMode);
            function registermodule(modulename:AnsiString):TLogModuleDeskIndex;
            function enablemodule(modulename:AnsiString):TLogModuleDeskIndex;
+           function disablemodule(modulename:AnsiString):TLogModuleDeskIndex;
            procedure SetLogMode(LogMode:TLogMode);
            destructor done;
            procedure AddStrToLatest(str:AnsiString);
@@ -381,7 +382,10 @@ function tlog.enablemodule(modulename:AnsiString):TLogModuleDeskIndex;
 begin
   ModulesDeskArray.mutable[registermodule(modulename)]^.enabled:=true;
 end;
-
+function tlog.disablemodule(modulename:AnsiString):TLogModuleDeskIndex;
+begin
+  ModulesDeskArray.mutable[registermodule(modulename)]^.enabled:=false;
+end;
 constructor tlog.init(fn:AnsiString;LogMode:TLogMode);
 var
    CurrentTime:TMyTimeStamp;
@@ -499,6 +503,7 @@ begin
     programlog.init({$IFNDEF DELPHI}SysToUTF8{$ENDIF}(ExtractFilePath(paramstr(0)))+filelog,LM_Error);
 end;
 finalization
+    debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
     programlog.done;
 end.
 

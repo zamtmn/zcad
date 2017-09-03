@@ -22,7 +22,7 @@ interface
 uses uzcfnavigator,uzcfcommandline,uzbpaths,TypeDescriptors,uzctranslations,uzcshared,Forms,
      uzbtypes,varmandef,
      uzeentity,zcobjectinspector,uzcguimanager,
-     Types,Controls,uzcdrawings,Varman,UUnitManager,uzcsysvars,uzcsysinfo;
+     Types,Controls,uzcdrawings,Varman,UUnitManager,uzcsysvars,uzcsysinfo,LazLogger;
 implementation
 procedure ZCADFormSetupProc(Form:TControl);
 {var
@@ -41,5 +41,6 @@ end;
 initialization
   ZCADGUIManager.RegisterZCADFormInfo('Navigator','Navigator',TNavigator,rect(0,100,200,600),ZCADFormSetupProc,nil,@Navigator,true);
 finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.
 

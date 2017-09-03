@@ -21,7 +21,7 @@ unit uzclog;
 {$mode objfpc}{$H+}
 interface
 uses UGDBOpenArrayOfByte,gzctnrvectordata,gzctnrstl,LazLoggerBase,
-     LazLogger,strutils,sysutils{$IFNDEF DELPHI},LazUTF8{$ENDIF};
+     math,LazLogger,strutils,sysutils{$IFNDEF DELPHI},LazUTF8{$ENDIF};
 const {$IFDEF DELPHI}filelog='log/zcad_delphi.log';{$ENDIF}
       {$IFDEF FPC}
                   {$IFDEF LINUX}filelog='log/zcad_linux.log';{$ENDIF}
@@ -81,6 +81,7 @@ tlog={$IFNDEF DELPHI}packed{$ENDIF} object
            function registermodule(modulename:AnsiString):TLogModuleDeskIndex;
            function enablemodule(modulename:AnsiString):TLogModuleDeskIndex;
            function disablemodule(modulename:AnsiString):TLogModuleDeskIndex;
+           procedure enableallmodules;
            procedure SetLogMode(LogMode:TLogMode);
            destructor done;
            procedure AddStrToLatest(str:AnsiString);
@@ -385,6 +386,14 @@ end;
 function tlog.disablemodule(modulename:AnsiString):TLogModuleDeskIndex;
 begin
   ModulesDeskArray.mutable[registermodule(modulename)]^.enabled:=false;
+end;
+procedure tlog.enableallmodules;
+var
+   i:integer;
+begin
+  for i:=0 to ModulesDeskArray.Size-1 do
+    ModulesDeskArray.mutable[i]^.enabled:=true;
+  NewModuleDesk.enabled:=true;
 end;
 constructor tlog.init(fn:AnsiString;LogMode:TLogMode);
 var

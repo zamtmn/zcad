@@ -166,6 +166,7 @@ begin
   TBCreateFuncRegister:=nil;
   TBItemCreateFuncRegister:=nil;
   ActionCreateFuncRegister:=nil;
+  MenuCreateFuncRegister:=nil;
 end;
 destructor TToolBarsManager.Destroy;
 begin
@@ -177,6 +178,8 @@ begin
       TBItemCreateFuncRegister.Free;
     if assigned(ActionCreateFuncRegister) then
       ActionCreateFuncRegister.Free;
+    if assigned(MenuCreateFuncRegister) then
+      MenuCreateFuncRegister.Free;
 end;
 function getAttrValue(const aNode:TDomNode;const AttrName,DefValue:string):string;overload;
 var

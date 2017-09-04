@@ -1685,6 +1685,7 @@ var
 begin
   Drawer.delmyscrbuf;
   PolarAxis.done;
+  param.done;
   freeandnil(drawer);
   freeandnil(OTTimer);
   freeandnil(OHTimer);

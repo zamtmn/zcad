@@ -448,9 +448,10 @@ begin
   //si.PSymbolInfo.LLPrimitiveCount:=pttf^.FontData.LLprimitives.Count-si.PSymbolInfo.LLPrimitiveStartIndex;
 
 
-  bs.ClearConturs;
+  //bs.ClearConturs;
   //EndSymContour;
   end;
+  bs.ClearConturs;
 end;
 procedure TTFFont.SetupSymbolLineParams(const matr:DMatrix4D; var SymsParam:TSymbolSParam);
 begin

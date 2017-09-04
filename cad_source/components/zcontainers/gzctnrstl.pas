@@ -101,8 +101,12 @@ begin
      VArray:=TArrayOfVec.create;
 end;
 destructor TMyVectorArray<T>.destroy;
+var
+  i:integer;
 begin
-     VArray.destroy;
+  for i:=0 to{$IFNDEF DELPHI}VArray.size{$ENDIF}{$IFDEF DELPHI}VArray.Count{$ENDIF}-1 do
+    VArray[i].destroy;
+  VArray.destroy;
 end;
 function TMyVectorArray<T>.AddArray:SizeInt;
 begin

@@ -1908,6 +1908,7 @@ begin
   EDContext.UndoStack:=undostack;
   if (pcurrobj<>addr)or(currobjgdbtype<>exttype) then
   begin
+    OnMousePP:=nil;
     {Objinsp.}currpd:=nil;
     if peditor<>nil then
     begin

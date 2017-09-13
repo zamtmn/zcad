@@ -245,13 +245,15 @@ implementation
 destructor TmyToolBar.Destroy;
 var
   I: Integer;
+  c:tcontrol;
 begin
-  for I := 0 to ButtonCount - 1 do
+  for I := 0 to controlCount - 1 do
     begin
+      c:=controls[I];
       if assigned(ZCADMainWindow.updatescontrols)  then
-        ZCADMainWindow.updatescontrols.Remove(Buttons[I]);
+        ZCADMainWindow.updatescontrols.Remove(c);
       if assigned(ZCADMainWindow.updatesbytton)  then
-        ZCADMainWindow.updatesbytton.Remove(Buttons[I]);
+        ZCADMainWindow.updatesbytton.Remove(c);
     end;
   inherited Destroy;
 end;
@@ -763,7 +765,6 @@ procedure TZCADMainWindow.asynccloseapp(Data: PtrInt);
 begin
       CloseApp;
 end;
-
 procedure TZCADMainWindow.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
      CloseAction:=caNone;
@@ -1981,7 +1982,7 @@ begin
      if assigned(updatescontrols) then
      for i:=0 to updatescontrols.Count-1 do
      begin
-          TComboBox(updatescontrols[i]).Invalidate;
+          TControl(updatescontrols[i]).Invalidate;
      end;
 end;
 

@@ -126,7 +126,7 @@ type
   TmyPageControl=class(TPageControl)
                  procedure ChangePage(NewPage:Integer);virtual;
                  protected
-                 //procedure DoChange;override;
+                 procedure DoChange;override;
                  end;
   TMySpeedButton = class(TCustomSpeedButton)
   protected
@@ -455,12 +455,13 @@ begin
 end;*)
 procedure TmyPageControl.ChangePage(NewPage:Integer);
 begin
+  if assigned(UpdateVisibleProc) then UpdateVisibleProc;
 end;
-{procedure TmyPageControl.DoChange;
+procedure TmyPageControl.DoChange;
 begin
      inherited;
      ChangePage(ActivePageIndex);
-end;}
+end;
 {procedure TmyToolButton.CalculatePreferredSize(
                  var PreferredWidth, PreferredHeight: integer;
                  WithThemeSpace: Boolean);

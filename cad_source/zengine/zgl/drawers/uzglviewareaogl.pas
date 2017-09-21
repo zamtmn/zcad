@@ -26,7 +26,7 @@ uses
      (*{$IFDEF LCLQT}
      qt4,
      {$ENDIF}*)
-     LCLProc,uzgldrawergdi,uzglviewareaabstract,uzgldrawerogl,sysutils,uzbmemman,
+     LCLProc,uzglviewareaabstract,uzgldrawerogl,sysutils,uzbmemman,
      uzgloglstatemanager,uzbtypesbase,uzbtypes,
      uzglviewareadata,uzgldrawcontext,uzegeometry,LCLType,
      ExtCtrls,classes,Controls,Graphics,uzglviewareageneral,math,uzglbackendmanager,

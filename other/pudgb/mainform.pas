@@ -302,6 +302,10 @@ end;
 procedure TForm1._GenerateFullGraph(Sender: TObject);
 begin
    //write full graph to memo
+   if not assigned(ScanResult) then begin
+     _Scan(nil);
+     _Check(nil);
+   end;
    WriteGraph(Options.ProjectOptions,ScanResult,DummyWriteToLog);
 end;
 procedure TForm1._Scan(Sender: TObject);
@@ -323,7 +327,11 @@ begin
 end;
 procedure TForm1._Check(Sender: TObject);
 begin
-   {$IFDEF CHECKLOOPS}CheckGraph(Options.ProjectOptions,ScanResult,DummyWriteToLog);{$ENDIF}//check  result graph (for loops), and write loops to memo
+   {$IFDEF CHECKLOOPS}
+   if not assigned(ScanResult) then
+     _Scan(nil);
+   CheckGraph(Options.ProjectOptions,ScanResult,DummyWriteToLog);
+   {$ENDIF}
 end;
 procedure TForm1._OpenWebGraphviz(Sender: TObject);
 begin

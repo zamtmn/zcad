@@ -23,9 +23,14 @@ type
     Timer:Boolean;
     Notfounded:Boolean;
   end;
+  TBehavior=packed record
+    AutoSelectPages:Boolean;
+    AutoClearPages:Boolean;
+  end;
   PTProgramOptions=^TProgramOptions;
   TProgramOptions=packed record
     ProgPaths:TProgPaths;
+    Behavior:TBehavior;
     Visualizer:TVisualizer;
     Logger:TLogger;
   end;

@@ -161,7 +161,7 @@ begin
 
   if assigned(LogWriter) then
   begin
-    LogWriter('DiGraph Classes {',[LD_FullGraph]);
+    LogWriter('DiGraph Classes {',[LD_FullGraph,LD_Clear]);
     if assigned(ScanResult) then
     begin
       for i:=0 to ScanResult.UnitInfoArray.Size-1 do

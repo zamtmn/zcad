@@ -96,6 +96,8 @@ begin
                              PasModule.Release;
   if assigned(PasTreeContainer) then
                                     PasTreeContainer.Free;
+  UnitName:='';
+  UnitPath:='';
   {if assigned(InterfaceUses) then
                                  InterfaceUses.Free;
   if assigned(ImplementationUses) then
@@ -153,6 +155,7 @@ begin
   begin
     UnitInfoArray.Mutable[i]^.ImplementationUses.Destroy;
     UnitInfoArray.Mutable[i]^.InterfaceUses.Destroy;
+
   end;
   UnitInfoArray.destroy;
   if assigned(G) then

@@ -140,6 +140,8 @@ begin
    //setup default ProgramOptions
    Options.ProgramOptions.ProgPaths._PathToDot:='E:\Program Files (x86)\Graphviz2.38\bin\dot.exe';
    Options.ProgramOptions.ProgPaths._Temp:=GetTempDir;
+   Options.ProgramOptions.Behavior.AutoClearPages:=true;
+   Options.ProgramOptions.Behavior.AutoSelectPages:=true;
    Options.ProgramOptions.Visualizer.VisBackend:=VB_GDI;
    Options.ProgramOptions.Logger.ScanerMessages:=false;
    Options.ProgramOptions.Logger.ParserMessages:=false;
@@ -150,6 +152,9 @@ begin
    //register TProjectOptions in zscript unit
    RunTimeUnit^.RegisterType(TypeInfo(TProjectOptions));
    //Set params names
+   RunTimeUnit^.SetTypeDesk(TypeInfo(TProgPaths),['PathToDot','Temp']);
+   RunTimeUnit^.SetTypeDesk(TypeInfo(TBehavior),['AutoSelectPages:','AutoClearPages']);
+
    RunTimeUnit^.SetTypeDesk(TypeInfo(TProjectOptions),['Paths','Parser options','Graph bulding','Log']);
    RunTimeUnit^.SetTypeDesk(TypeInfo(TPasPaths),['File','Paths']);
    RunTimeUnit^.SetTypeDesk(TypeInfo(TParser),['Compiler options','Target OS','Target CPU']);
@@ -306,6 +311,8 @@ begin
      _Scan(nil);
      _Check(nil);
    end;
+   if Options.ProgramOptions.Behavior.AutoSelectPages then
+     Memo4.Show;
    WriteGraph(Options.ProjectOptions,ScanResult,DummyWriteToLog);
 end;
 procedure TForm1._Scan(Sender: TObject);
@@ -330,6 +337,8 @@ begin
    {$IFDEF CHECKLOOPS}
    if not assigned(ScanResult) then
      _Scan(nil);
+   if Options.ProgramOptions.Behavior.AutoSelectPages then
+     Memo3.Show;
    CheckGraph(Options.ProjectOptions,ScanResult,DummyWriteToLog);
    {$ENDIF}
 end;
@@ -342,7 +351,7 @@ var
   NeedClear:boolean;
 begin
    //remap log messages to memo`s
-   if LD_Clear in LogOpt then
+   if (LD_Clear in LogOpt)and(Options.ProgramOptions.Behavior.AutoClearPages) then
     NeedClear:=true
    else
     NeedClear:=false;

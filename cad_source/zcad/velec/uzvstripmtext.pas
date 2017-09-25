@@ -23,93 +23,18 @@ unit uzvstripmtext;
 interface
 uses
 
-   sysutils, math,
+  sysutils,
 
-  URecordDescriptor,TypeDescriptors,
-
-  Forms, //uzcfblockinsert,
-   uzcfarrayinsert,
-
-  uzeentblockinsert,      //unit describes blockinsert entity
-                       //модуль описывающий примитив вставка блока
-  uzeentline,             //unit describes line entity
-                       //модуль описывающий примитив линия
-
-
-  uzeentlwpolyline,             //unit describes line entity
-                       //модуль описывающий примитив двухмерная ПОЛИлиния
-
-  uzeentpolyline,             //unit describes line entity
-                       //модуль описывающий примитив трехмерная ПОЛИлиния
-  uzeenttext,             //unit describes line entity
-                       //модуль описывающий примитив текст
   uzeentmtext,
-
-  uzeentdimaligned, //unit describes aligned dimensional entity
-                       //модуль описывающий выровненный размерный примитив
-  uzeentdimrotated,
-
-  uzeentdimdiametric,
-
-  uzeentdimradial,
-  uzeentarc,
-  uzeentcircle,
-  uzeentity,
-  uzbgeomtypes,
-
-
-  gvector,garrayutils, // Подключение Generics и модуля для работы с ним
-
-  uzcentcable,
-  uzeentdevice,
-  UGDBOpenArrayOfPV,
-
-  uzegeometry,
-  uzeentitiesmanager,
-
-  uzcshared,
-  uzeentityfactory,    //unit describing a "factory" to create primitives
-                      //модуль описывающий "фабрику" для создания примитивов
-  uzcsysvars,        //system global variables
-                      //системные переменные
-  uzgldrawcontext,
-  uzcinterface,
-  uzbtypesbase,uzbtypes, //base types
-                      //описания базовых типов
+  uzbtypes,
   uzeconsts, //base constants
-                      //описания базовых констант
-  uzccommandsmanager,
+             //описания базовых констант
   uzccommandsabstract,
   uzccommandsimpl, //Commands manager and related objects
-                      //менеджер команд и объекты связанные с ним
-  uzcdrawing,
-  uzedrawingsimple,
+                   //менеджер команд и объекты связанные с ним
   uzcdrawings,     //Drawings manager, all open drawings are processed him
-                      //"Менеджер" чертежей
-  uzcutils,         //different functions simplify the creation entities, while there are very few
-                      //разные функции упрощающие создание примитивов, пока их там очень мало
-  varmandef,
-  Varman,
-  {UGDBOpenArrayOfUCommands,}zcchangeundocommand,
-
-  uzclog,                //log system
-                      //<**система логирования
-  uzcvariablesutils, // для работы с ртти
-
-   gzctnrvectortypes,                  //itrec
-
-  //для работы графа
-  ExtType,
-  Pointerv,
-  Graphs,
-
-   uzcenitiesvariablesextender,
-   UUnitManager,
-   uzbpaths,
-   uzctranslations,
-
-  uzvcom,
   uzccombase,
+  gzctnrvectortypes,
   RegExpr;
 
 
@@ -213,7 +138,7 @@ begin
     until pobj=nil;
 
     Regen_com(EmptyCommandOperands);   //выполнитть регенирацию всего листа
-
+    result:=cmd_ok;
 end;
 
 initialization

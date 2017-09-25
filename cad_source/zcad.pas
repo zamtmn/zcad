@@ -111,9 +111,14 @@ uses
   uzccombase,
   uzccomdb,
   uzccomdraw,
-  //uzvcom,
-  //uzvnum,
-  //uzccomexample2,
+
+  //**for velec func**//
+  uzvslagcab, //автопрокладка кабелей по именным суперлиниям
+  uzvagslcom, //создания именных суперлиний в комнате между извещателями
+  uzvstripmtext, //очистка мтекста, сделано плохо, в будущем надо переделывать мтекст и механизм.
+  //**//
+
+  uzccomexample2,
   //uzventsuperline,
   uzccomexample,
   uzccomobjectinspector,

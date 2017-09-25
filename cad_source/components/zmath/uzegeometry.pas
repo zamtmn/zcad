@@ -170,10 +170,12 @@ function distance2ray(q:GDBvertex;const p1,p2:GDBvertex):DistAndt;
 function CreateTranslationMatrix(const V:GDBvertex): DMatrix4D;inline;
 function CreateScaleMatrix(const V:GDBvertex): DMatrix4D;inline;
 function CreateReflectionMatrix(plane:DVector4D): DMatrix4D;
+//**Создать 3D вершину
 function CreateVertex(const x,y,z:GDBDouble):GDBVertex;inline;
 function CreateVertexFromArray(var counter:integer;const args:array of const):GDBVertex;
 function  CreateDoubleFromArray(var counter:integer;const args:array of const):GDBDouble;
 function  CreateGDBStringFromArray(var counter:integer;const args:array of const):GDBString;
+//**Создать 2D вершину
 function CreateVertex2D(const x,y:GDBDouble):GDBVertex2D;inline;
 function IsPointInBB(const point:GDBvertex; var fistbb:TBoundingBox):GDBBoolean;inline;
 function CreateBBFrom2Point(const p1,p2:GDBvertex):TBoundingBox;

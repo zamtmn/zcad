@@ -107,16 +107,16 @@ var
  stPoint:gdbvertex;
 begin
   if commandmanager.get3dpoint('Specify insert point:',stPoint) then
-       historyoutstr('координата введена')
+       ZCMsgCallBackInterface.Do_HistoryOut('координата введена')
      else
-       historyoutstr('координаты НЕТ');
+       ZCMsgCallBackInterface.Do_HistoryOut('координаты НЕТ');
 
    if uzvagsl.getContourRoom(contourRoom) then                  // получить контур помещения
       if uzvagsl.isRectangelRoom(contourRoom) then begin        //это прямоугольная комната?
-         historyoutstr('проверки пройдены');
+         ZCMsgCallBackInterface.Do_HistoryOut('проверки пройдены');
          // if mainElementAutoEmbedSL(contourRoom,contourRoomEmbedSL) then  begin
          //  listDeviceinRoom:=uzvagsl.getListDeviceinRoom(contourRoom);  //получен список извещателей внутри помещения
-         //  historyoutstr('Количество выделяных извещателей = ' + inttostr(listDeviceinRoom.Size));
+         //  ZCMsgCallBackInterface.Do_HistoryOut('Количество выделяных извещателей = ' + inttostr(listDeviceinRoom.Size));
          //end;
          //uzvagsl.autoNumberDevice(uzvagslComParams);
    end;

@@ -411,7 +411,7 @@ begin
                                               //s:=valuetoGDBString(v.pvalue,v.ptd);
                                               s:=v.data.ptd^.GetValueAsString(v.data.Instance);
                                               v.data.Instance:=v.data.Instance;
-                                              historyoutstr(Format(rsExprOutText,[expr,s]));
+                                              ZCMsgCallBackInterface.Do_HistoryOut(Format(rsExprOutText,[expr,s]));
                                          end
       else if commandmanager.FindCommand(uppercase({cmd}command))<>nil then
           begin
@@ -437,7 +437,7 @@ begin
            until (cmd='')or(not parsed);
            if parsed then
            begin
-           historyoutstr(Format(rsExprOutText,[CmdEdit.text,superexpr]));
+           ZCMsgCallBackInterface.Do_HistoryOut(Format(rsExprOutText,[CmdEdit.text,superexpr]));
            if IsParsed('_realnumber'#0'_softspace'#0'=,_realnumber'#0'_softspace'#0'=,_realnumber'#0,superexpr,parseresult)then
            begin
                  if drawings.GetCurrentDWG<>nil then
@@ -576,8 +576,8 @@ begin
   historychanged:=false;
   ZCADGUIManager.RegisterZCADFormInfo('CommandLine',rsCommandLineWndName,TCLine,rect(200,100,600,100),nil,nil,@CLine);
 
-  uzcinterface.HistoryOutStr:=HistoryOutStr;
-  uzcinterface.HistoryOut:=HistoryOut;
+  ZCMsgCallBackInterface.RegisterHandler_HistoryOut(HistoryOutStr());
+  //uzcinterface.HistoryOutStr:=HistoryOutStr;
 
   uzcinterface.DisableCmdLine:=DisableCmdLine;
   uzcinterface.EnableCmdLine:=EnableCmdLine;

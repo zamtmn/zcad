@@ -102,7 +102,7 @@ begin
   //
   for i:=0 to graphCable.listEdge.Size-1 do
     begin
-       uzvcom.testTempDrawLine(graphCable.listEdge[i].VPoint1,graphCable.listEdge[i].VPoint2);
+       //uzvcom.testTempDrawLine(graphCable.listEdge[i].VPoint1,graphCable.listEdge[i].VPoint2);
     end;
   zcPlaceUndoEndMarkerIfNeed(UndoMarcerIsPlazed);
   zcRedrawCurrentDrawing;

@@ -53,6 +53,7 @@ TLogMode=(
           );
 //SplashWnd
 TSplashTextOutProc=procedure (s:string;pm:boolean);
+THistoryTextOutMethod=procedure (s:string) of object;
 THistoryTextOutProc=procedure (s:string);
 PTMyTimeStamp=^TMyTimeStamp;
 TMyTimeStamp=record
@@ -108,7 +109,8 @@ procedure LogOut(s:AnsiString);
 var programlog:tlog;
    VerboseLog:boolean;
    SplashTextOut:TSplashTextOutProc;
-   HistoryTextOut,MessageBoxTextOut:THistoryTextOutProc;
+   HistoryTextOut:THistoryTextOutMethod;
+   MessageBoxTextOut:THistoryTextOutProc;
 implementation
 var
     PerfomaneBuf:GDBOpenArrayOfByte;

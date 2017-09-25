@@ -873,7 +873,7 @@ begin
         if player<>nil then
                            psuperline.vp.Layer:=player
                        else
-                           if assigned(HistoryOutStr) then HistoryOutStr(format('Layer "%s" not found',[layername]));
+                           ZCMsgCallBackInterface.Do_HistoryOut(format('Layer "%s" not found',[layername]));
       end;
     end;
     //zcPlaceUndoStartMarkerIfNeed(UndoMarcerIsPlazed,'DrawSuperLine');
@@ -922,7 +922,7 @@ begin
         if player<>nil then
                            psuperline.vp.Layer:=player
                        else
-                           if assigned(HistoryOutStr) then HistoryOutStr(format('Layer "%s" not found',[layername]));
+                           ZCMsgCallBackInterface.Do_HistoryOut(format('Layer "%s" not found',[layername]));
       end;
     end;
     zcPlaceUndoStartMarkerIfNeed(UndoMarcerIsPlazed,'DrawSuperLine');

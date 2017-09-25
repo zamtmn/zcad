@@ -20,11 +20,6 @@ unit uzcinterface;
 interface
 uses uzedimensionaltypes,uzelongprocesssupport,zeundostack,varmandef,forms,classes,uzbtypes;
 const
-     menutoken='MAINMENUITEM';
-     popupmenutoken='POPUPMENU';
-     submenutoken='MENUITEM';
-     createmenutoken='CREATEMENU';
-     setmainmenutoken='SETMAINMENU';
      MenuNameModifier='MENU_';
 
 type

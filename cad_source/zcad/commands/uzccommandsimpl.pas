@@ -436,7 +436,7 @@ begin
 end;
 procedure CommandRTEdObject.Prompt(msg:GDBString);
 begin
-     HistoryOutStr(self.CommandName+':'+msg);
+     ZCMsgCallBackInterface.Do_HistoryOut(self.CommandName+':'+msg);
 end;
 procedure CommandRTEdObject.Error(msg:GDBString);
 begin

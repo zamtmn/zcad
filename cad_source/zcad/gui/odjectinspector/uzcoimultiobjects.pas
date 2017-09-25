@@ -615,7 +615,7 @@ begin
       end;
       pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
     until pv=nil;
-    HistoryOutStr(sysutils.Format(rscmNEntitiesDeselected,[count]));
+    ZCMsgCallBackInterface.Do_HistoryOut(sysutils.Format(rscmNEntitiesDeselected,[count]));
     if count>0 then
                    //ZCADMainWindow.waSetObjInsp(drawings.GetCurrentDWG.wa);
                    waSetObjInspProc(drawings.GetCurrentDWG.wa);

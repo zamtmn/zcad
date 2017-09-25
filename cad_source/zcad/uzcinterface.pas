@@ -18,11 +18,24 @@
 unit uzcinterface;
 {$INCLUDE def.inc}
 interface
-uses uzedimensionaltypes,uzelongprocesssupport,zeundostack,varmandef,forms,classes,uzbtypes;
+uses uzedimensionaltypes,gzctnrstl,zeundostack,varmandef,forms,classes,uzbtypes;
 const
      MenuNameModifier='MENU_';
 
 type
+    TProcedure_String_=procedure(s:String);
+    TProcedure_String_HandlersVector=TMyVector<TProcedure_String_>;
+
+
+    TZCMsgCallBackInterface=class
+      public
+        procedure RegisterHandler_HistoryOut(Handler:TProcedure_String_);
+        procedure Do_HistoryOut(s:String);
+      private
+        HistoryOutHandlers:TProcedure_String_HandlersVector;
+
+    end;
+
     TStartLongProcessProc=Procedure(a:integer;s:string) of object;
     TProcessLongProcessProc=Procedure(a:integer) of object;
     TEndLongProcessProc=Procedure of object;
@@ -45,7 +58,7 @@ type
     TFunction__TComponent=Function:TComponent;
 
     TMethod_String_=procedure (s:String) of object;
-    TProcedure_String_=procedure (s:String);
+    //TProcedure_String_=procedure (s:String);
     TProcedure_PAnsiChar_=procedure (s:PAnsiChar);
 
     //SimpleProcOfObject=procedure of object;
@@ -118,8 +131,8 @@ var
     SetCommandLineMode:TSetCommandLineMode;
 
    //uzcshared
-   HistoryOutStr:TProcedure_String_;
-   HistoryOut:TProcedure_PAnsiChar_;
+   //HistoryOutStr:TProcedure_String_;
+
    CursorOn:TSimpleMethod=nil;
    CursorOff:TSimpleMethod=nil;
    ShowError:TProcedure_String_;
@@ -132,7 +145,24 @@ var
 function DoShowModal(MForm:TForm): Integer;
 function MessageBox(Text, Caption: PChar; Flags: Longint): Integer;
 function GetUndoStack:pointer;
+var
+   ZCMsgCallBackInterface:TZCMsgCallBackInterface;
 implementation
+procedure TZCMsgCallBackInterface.RegisterHandler_HistoryOut(Handler:TProcedure_String_);
+begin
+   if not assigned(HistoryOutHandlers) then
+     HistoryOutHandlers:=TProcedure_String_HandlersVector.Create;
+   HistoryOutHandlers.PushBack(Handler);
+end;
+procedure TZCMsgCallBackInterface.Do_HistoryOut(s:String);
+var
+   i:integer;
+begin
+   if assigned(HistoryOutHandlers) then begin
+     for i:=0 to HistoryOutHandlers.Size-1 do
+       HistoryOutHandlers[i](s);
+   end;
+end;
 function GetUndoStack:pointer;
 begin
      if assigned(_GetUndoStack) then
@@ -158,4 +188,8 @@ begin
                                          RestoreAllCursorsProc;
 end;
 
+initialization
+  ZCMsgCallBackInterface:=TZCMsgCallBackInterface.create;
+finalization
+  ZCMsgCallBackInterface.free;
 end.

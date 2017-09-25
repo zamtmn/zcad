@@ -53,7 +53,7 @@ begin
                                 CursorOff;
 end;
 begin
-uzclog.HistoryTextOut:=HistoryOutStr;
+uzclog.HistoryTextOut:=ZCMsgCallBackInterface.Do_HistoryOut();
 uzclog.MessageBoxTextOut:=@ShowError;
 uzcinterface.ShowError:=@ShowError;
 end.

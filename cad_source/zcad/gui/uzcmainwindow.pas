@@ -732,7 +732,7 @@ begin
           mem.done;
           end;
 
-          HistoryOutStr('   Вот и всё бля...............');
+          ZCMsgCallBackInterface.Do_HistoryOut('   Вот и всё бля...............');
 
 
      end
@@ -2464,9 +2464,9 @@ begin
     time:=(now-LPTime)*10e4;
     str(time:3:2,ts);
     if pname='' then
-                     HistoryOutStr(format(rscompiledtimemsg,[ts]))
+                     ZCMsgCallBackInterface.Do_HistoryOut(format(rscompiledtimemsg,[ts]))
                  else
-                     HistoryOutStr(format(rsprocesstimemsg,[pname,ts]));
+                     ZCMsgCallBackInterface.Do_HistoryOut(format(rsprocesstimemsg,[pname,ts]));
     pname:='';
 end;
 procedure TZCADMainWindow.ReloadLayer(plt:PTGenericNamedObjectsArray);
@@ -2871,7 +2871,7 @@ var
 begin
   RelSelectedObjects:=SelectRelatedObjects(Sender.PDWG,@Sender.param,Sender.param.SelDesc.LastSelectedObject);
   if RelSelectedObjects>0 then
-                              HistoryOutStr(format(rsAdditionalSelected,[RelSelectedObjects]));
+                              ZCMsgCallBackInterface.Do_HistoryOut(format(rsAdditionalSelected,[RelSelectedObjects]));
   if (commandmanager.pcommandrunning=nil)or(commandmanager.pcommandrunning^.IData.GetPointMode<>TGPWaitEnt) then
   begin
   if PGDBObjEntity(Sender.param.SelDesc.OnMouseObject)^.select(Sender.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.selector) then

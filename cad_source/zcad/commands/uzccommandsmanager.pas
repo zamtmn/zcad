@@ -226,7 +226,7 @@ begin
                                                                                                      //устанавливаем режим указания точек мышью
                                                                       MGetControlpoint or MGetSelectionFrame or MGetSelectObject);//reset selection entities  mode
                                                                                                               //сбрасываем режим выбора примитивов мышью
-  HistoryOutStr(prompt);
+  ZCMsgCallBackInterface.Do_HistoryOut(prompt);
   pcommandrunning^.IData.GetPointMode:=TGPWait;
   pcommandrunning^.IData.PInteractiveData:=PInteractiveData;
   pcommandrunning^.IData.PInteractiveProc:=InteractiveProc;
@@ -260,7 +260,7 @@ var
 begin
   savemode:=PTSimpleDrawing(pcommandrunning.pdwg)^.DefMouseEditorMode(MGetSelectObject,
                                                                       MGet3DPoint or MGet3DPointWoOP or MGetSelectionFrame or MGetControlpoint);
-  HistoryOutStr(prompt);
+  ZCMsgCallBackInterface.Do_HistoryOut(prompt);
   pcommandrunning^.IData.GetPointMode:=TGPWaitEnt;
   pcommandrunning^.IData.PInteractiveData:=nil;
   pcommandrunning^.IData.PInteractiveProc:=nil;
@@ -382,7 +382,7 @@ var
    s:gdbstring;
 begin
      s:=(ExpandPath(fn));
-     historyoutstr(sysutils.format(rsRunScript,[s]));
+     ZCMsgCallBackInterface.Do_HistoryOut(sysutils.format(rsRunScript,[s]));
      busy:=true;
 
      DisableCmdLine;
@@ -581,7 +581,7 @@ begin
                         programlog.LogOutFormatStr('GDBCommandManager.ExecuteCommandSilent(%s)',[pfoundcommand^.CommandName],lp_OldPos,LM_Info)
                     else
                         begin
-                        historyoutstr(rsRunCommand+':'+pfoundcommand^.CommandName);
+                        ZCMsgCallBackInterface.Do_HistoryOut(rsRunCommand+':'+pfoundcommand^.CommandName);
                         lastcommand := command;
                         if not (busy) then
                         if assigned(OnCommandRun) then
@@ -597,11 +597,11 @@ begin
           end
      else
          begin
-              HistoryOutStr(rsCommandNRInC);
+              ZCMsgCallBackInterface.Do_HistoryOut(rsCommandNRInC);
          end;
     end;
   end
-  else HistoryOutStr(rsUnknownCommand+':"'+command+'"');
+  else ZCMsgCallBackInterface.Do_HistoryOut(rsUnknownCommand+':"'+command+'"');
   end;
   command:='';
   operands:='';
@@ -626,12 +626,12 @@ var
 begin
      if self.varstack.vardescarray.Count<>0 then
      begin
-     HistoryOutStr(rscmInStackData);
+     ZCMsgCallBackInterface.Do_HistoryOut(rscmInStackData);
      pvd:=self.varstack.vardescarray.beginiterate(ir);
      if pvd<>nil then
      repeat
            value:=pvd.data.PTD.GetValueAsString(pvd.data.Instance);
-           HistoryOutStr(pvd.data.PTD.TypeName+':'+value);
+           ZCMsgCallBackInterface.Do_HistoryOut(pvd.data.PTD.TypeName+':'+value);
 
      pvd:=self.varstack.vardescarray.iterate(ir);
      until pvd=nil;

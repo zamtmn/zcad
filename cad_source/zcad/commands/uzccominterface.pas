@@ -706,7 +706,7 @@ function Options_com(operands:TCommandOperands):TCommandResult;
 begin
   if assigned(SetGDBObjInspProc)then
                                     SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar,drawings.GetCurrentDWG);
-  historyoutstr(rscmOptions2OI);
+  ZCMsgCallBackInterface.Do_HistoryOut(rscmOptions2OI);
   result:=cmd_ok;
 end;
 function SaveOptions_com(operands:TCommandOperands):TCommandResult;
@@ -733,7 +733,7 @@ begin
          p:=commandmanager.iterate(ir);
    until p=nil;
    clist.sort;
-   HistoryOutStr(clist.GetTextWithEOL);
+   ZCMsgCallBackInterface.Do_HistoryOut(clist.GetTextWithEOL);
    clist.done;
    result:=cmd_ok;
 end;

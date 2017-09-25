@@ -60,7 +60,7 @@ begin
            inc(GDBInteger(pvd.data.Instance^));
      end
         else
-            HistoryOutStr(rscmCommandOnlyCTXMenu);
+            ZCMsgCallBackInterface.Do_HistoryOut(rscmCommandOnlyCTXMenu);
      result:=cmd_ok;
 end;
 function DBaseRename_com(operands:TCommandOperands):TCommandResult;
@@ -100,7 +100,7 @@ begin
                       if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
                       if parseerror and (s1='') then
                                         begin
-                                             HistoryOutStr(format(rsRenamedTo,['Entry',pdbv.name,s]));
+                                             ZCMsgCallBackInterface.Do_HistoryOut(format(rsRenamedTo,['Entry',pdbv.name,s]));
                                              pdbv.name:=s;
                                              renamed:=true;
                                         end
@@ -112,7 +112,7 @@ begin
            end;
      end
         else
-            HistoryOutStr(rscmCommandOnlyCTXMenu);
+            ZCMsgCallBackInterface.Do_HistoryOut(rscmCommandOnlyCTXMenu);
      result:=cmd_ok;
 end;
 procedure DBLinkProcess(pEntity:PGDBObjEntity;const drawing:TDrawingDef);
@@ -183,11 +183,11 @@ begin
                                           end;
                  pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
                  until pv=nil;
-                 HistoryOutSTR(format(rscmNEntitiesProcessed,[inttostr(c)]));
+                 ZCMsgCallBackInterface.Do_HistoryOut(format(rscmNEntitiesProcessed,[inttostr(c)]));
            end;
      end
         else
-            HistoryOutStr(rscmCommandOnlyCTXMenu);
+            ZCMsgCallBackInterface.Do_HistoryOut(rscmCommandOnlyCTXMenu);
 {     if TempPGDBEqNode<>nil then
      begin
              c:=0;

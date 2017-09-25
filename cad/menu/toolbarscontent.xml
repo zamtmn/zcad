@@ -131,6 +131,8 @@
       <Action Name="ACN_SENSORMARK"/>
       <Action Name="ACN_slagcabCom"/>
       <Action Name="ACN_agslr"/>"/>
+      <Action Name="ACN_smtextall"/>"/>
+      <Action Name="ACN_smtextarea"/>"/>
       <Action Name="ACN_ORTODEVPLACE"/>
       <Action Name="ACN_ADDTOOWNER"/>
       <Button Command="InsertTestTable" Img='spec.bmp' Hint="*DEBUG*Вставить таблицу"/>

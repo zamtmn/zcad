@@ -153,7 +153,7 @@ implementation
        result.x:=(ptdev.x * scale.x) + insertDev.x;
        HistoryOutStr('result-х = ' + FloatToStr(result.x));
        result.y:=(ptdev.y * scale.y) + insertDev.y;
-       result.x:=(ptdev.z * scale.z) + insertDev.z;
+       result.z:=(ptdev.z * scale.z) + insertDev.z;
   end;
 
   //** Получение области поиска около вершины, левая-нижняя-ближняя точка и правая-верхняя-дальняя точка

@@ -118,7 +118,7 @@ uses
   uzvstripmtext, //очистка мтекста, сделано плохо, в будущем надо переделывать мтекст и механизм.
   //**//
 
-  uzccomexample2,
+  //uzccomexample2,
   //uzventsuperline,
   uzccomexample,
   uzccomobjectinspector,

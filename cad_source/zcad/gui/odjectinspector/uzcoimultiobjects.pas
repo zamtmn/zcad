@@ -205,9 +205,9 @@ begin
                                                                                            entname:=rsNotRegistred;
                                if PMultiPropertyDataForObjects.SetValueErrorRange
                                then
-                                ShowError(sysutils.format(rsInvalidInputForPropery,[mp.MPUserName,entname,msg]))
+                                ZCMsgCallBackInterface.Do_ShowError(sysutils.format(rsInvalidInputForPropery,[mp.MPUserName,entname,msg]))
                                else
-                                LogError(sysutils.format(rsInvalidInputForPropery,[mp.MPUserName,entname,msg]));
+                                ZCMsgCallBackInterface.Do_LogError(sysutils.format(rsInvalidInputForPropery,[mp.MPUserName,entname,msg]));
                              end;
      end
 

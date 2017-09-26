@@ -1761,7 +1761,7 @@ begin
      inherited;
      if drawings.GetCurrentDWG^.TextStyleTable.GetRealCount<1 then
      begin
-          ShowError(rscmInDwgTxtStyleNotDeffined);
+          ZCMsgCallBackInterface.Do_ShowError(rscmInDwgTxtStyleNotDeffined);
           commandmanager.executecommandend;
      end;
 end;
@@ -3569,7 +3569,7 @@ begin
                                     begin
                                          if (PEProp.nearestvertex=0)or(PEProp.nearestvertex=p3dpl^.VertexArrayInOCS.Count-1) then
                                          begin
-                                              ShowError(rscmNotCutHere);
+                                              ZCMsgCallBackInterface.Do_ShowError(rscmNotCutHere);
                                               exit;
                                          end;
                                          p3dpl2 := pointer(p3dpl^.Clone(p3dpl^.bp.ListPos.Owner));

@@ -847,7 +847,7 @@ begin
                                      FreEditorProc;
        if assigned(ReturnToDefaultProc)then
                                            ReturnToDefaultProc(drawings.GetUnitsFormat);
-       StatusLineTextOut('Закрыто');
+       ZCMsgCallBackInterface.Do_StatusLineTextOut('Закрыто');
        if assigned(UpdateVisibleProc) then UpdateVisibleProc;
   end;
 end;
@@ -977,7 +977,7 @@ begin
     end;
   except
     on E: Exception do begin
-                            ShowError(rsLayoutLoad+' '+Filename+':'#13+E.Message);
+                            ZCMsgCallBackInterface.Do_ShowError(rsLayoutLoad+' '+Filename+':'#13+E.Message);
       //MessageDlg('Error',
       //  'Error loading layout from file '+Filename+':'#13+E.Message,mtError,
       //  [mbCancel],0);
@@ -1111,7 +1111,7 @@ begin
 
   {Создаем на ToolBarD переключатель рабочих пространств}
   if assigned(LayoutBox) then
-    ShowError(format(rsReCreating,['LAYOUTBOX']));
+    ZCMsgCallBackInterface.Do_ShowError(format(rsReCreating,['LAYOUTBOX']));
   CreateLayoutbox(ToolBarD);
   LayoutBox.Parent:=ToolBarD;
   LayoutBox.AutoSize:=false;
@@ -1264,7 +1264,7 @@ begin
   begin
     //tbdesk:=self.findtoolbatdesk(aName);
     //if tbdesk=''then
-      ShowError(format(rsFormNotFound,[aName]));
+      ZCMsgCallBackInterface.Do_ShowError(format(rsFormNotFound,[aName]));
     result:=nil;
   end;
 end;
@@ -1848,7 +1848,7 @@ begin
                                      createdmenu.items.Add(ppopupmenu);
                                 end
                             else
-                                ShowError(format(rsMenuNotFounf,[ts]));
+                                ZCMsgCallBackInterface.Do_ShowError(format(rsMenuNotFounf,[ts]));
 
       TBSubNode:=TBSubNode.NextSibling;
     end;
@@ -2606,7 +2606,7 @@ begin
 
             Application.ActivateHint(Sender.getviewcontrol.ClientToScreen(classes.Point(Sender.param.md.mouse.x,Sender.param.md.mouse.y)));
        end;
-       StatusLineTextOut(htext);
+       ZCMsgCallBackInterface.Do_StatusLineTextOut(htext);
 end;
 
 function TZCADMainWindow.wamd(Sender:TAbstractViewArea;Button:TMouseButton;Shift:TShiftState;X,Y:Integer;onmouseobject:GDBPointer;var NeedRedraw:Boolean):boolean;

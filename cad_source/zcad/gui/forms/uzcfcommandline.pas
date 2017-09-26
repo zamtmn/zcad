@@ -475,7 +475,7 @@ begin
            end
            end
               else
-                  ShowError('Unable to parse line "'+subexpr+'"');
+                  ZCMsgCallBackInterface.Do_ShowError('Unable to parse line "'+subexpr+'"');
       end;
     end;
     CmdEdit.text:='';
@@ -582,6 +582,8 @@ begin
   uzcinterface.DisableCmdLine:=DisableCmdLine;
   uzcinterface.EnableCmdLine:=EnableCmdLine;
 
-  uzcinterface.StatusLineTextOut:=StatusLineTextOut;
-  uzcinterface.LogError:=LogError;
+  ZCMsgCallBackInterface.RegisterHandler_StatusLineTextOut(StatusLineTextOut);
+  //uzcinterface.StatusLineTextOut:=StatusLineTextOut;
+  ZCMsgCallBackInterface.RegisterHandler_LogError(LogError);
+  //uzcinterface.LogError:=LogError;
 end.

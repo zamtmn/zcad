@@ -92,7 +92,7 @@ begin
 
                       if pu^.FindVariable(s)<>nil then
                                                  begin
-                                                      ShowError(format(rsEntryAlreadyExist,[s]));
+                                                      ZCMsgCallBackInterface.Do_ShowError(format(rsEntryAlreadyExist,[s]));
                                                  end
                       else
                       begin
@@ -105,7 +105,7 @@ begin
                                              renamed:=true;
                                         end
                                            else
-                                               ShowError(format(rsInvalidIdentificator,[s]));
+                                               ZCMsgCallBackInterface.Do_ShowError(format(rsInvalidIdentificator,[s]));
                       end;
                  end;
                  until renamed or (SingleLineTextEditorForm.ModalResult<>mrok);

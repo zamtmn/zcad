@@ -6,6 +6,7 @@ object Form1: TForm1
   Caption = 'Form1'
   ClientHeight = 636
   ClientWidth = 737
+  DesignTimePPI = 113
   Menu = MainMenu1
   OnClose = _onClose
   OnCreate = _onCreate

@@ -251,7 +251,7 @@ begin
      if fileExists(utf8tosys(tn)) then
                            {merge_com(@tn[1])}Load_merge(tn,TLOLoad)
                        else
-                           ShowError(format(rsTemplateNotFound,[tn]));
+                           ZCMsgCallBackInterface.Do_ShowError(format(rsTemplateNotFound,[tn]));
                            //ShowError('Не найден файл шаблона "'+tn+'"');
      end;
      wpowner.Drawer.delmyscrbuf;//буфер чистить, потому что он может оказаться невалидным в случае отрисовки во время
@@ -301,7 +301,7 @@ begin
        import(s,drawings.GetCurrentDWG^);
   end
             else
-     ShowError('LOAD:'+format(rsUnableToOpenFile,[s+'('+Operands+')']));
+     ZCMsgCallBackInterface.Do_ShowError('LOAD:'+format(rsUnableToOpenFile,[s+'('+Operands+')']));
      //ShowError('GDBCommandsBase.LOAD: Не могу открыть файл: '+s+'('+Operands+')');
 end;
 function Load_com(operands:TCommandOperands):TCommandResult;
@@ -358,10 +358,10 @@ begin
      end
                else
                begin
-                    ShowError('LOAD:'+format(rsUnableToOpenFile,[s+'('+Operands+')']));
+                    ZCMsgCallBackInterface.Do_ShowError('LOAD:'+format(rsUnableToOpenFile,[s+'('+Operands+')']));
                     result:=cmd_error;
                end;
-        //ShowError('GDBCommandsBase.LOAD: Не могу открыть файл: '+s+'('+Operands+')');
+        //ZCMsgCallBackInterface.Do_ShowError('GDBCommandsBase.LOAD: Не могу открыть файл: '+s+'('+Operands+')');
 end;
 function units_cmd(operands:TCommandOperands):TCommandResult;
 var
@@ -515,11 +515,11 @@ begin
                                                 If IsValidIdent(Operands) then
                                                                               DockMaster.ShowControl(Operands,true)
                                                                           else
-                                                                              ShowError('Show: invalid identificator!');
+                                                                              ZCMsgCallBackInterface.Do_ShowError('Show: invalid identificator!');
                                            end;
                       end
                   else
-                      ShowError('Show command must have one operand!');
+                      ZCMsgCallBackInterface.Do_ShowError('Show command must have one operand!');
   result:=cmd_ok;
 end;
 function ShowToolBar_com(operands:TCommandOperands):TCommandResult;
@@ -531,7 +531,7 @@ begin
                         ToolBarsManager.ShowFloatToolbar(operands,rect(0,0,300,50));
                       end
                   else
-                      ShowError('Show command must have one operand!');
+                      ZCMsgCallBackInterface.Do_ShowError('Show command must have one operand!');
   result:=cmd_ok;
 end;
 function quit_com(operands:TCommandOperands):TCommandResult;
@@ -615,14 +615,14 @@ else if Operands='CURRENT' then
                                      end
                                  else
                                      begin
-                                          ShowError('ugdbdescriptor.poglwnd^.SelDesc.LastSelectedObject=NIL, try SetObjInsp(SELECTED)...');
+                                          ZCMsgCallBackInterface.Do_ShowError('ugdbdescriptor.poglwnd^.SelDesc.LastSelectedObject=NIL, try SetObjInsp(SELECTED)...');
                                      end;
                                  SysVar.DWG.DWG_SelectedObjToInsp^:=false;
                             end
 else if Operands='SELECTED' then
                             begin
                                      begin
-                                          //ShowError('ugdbdescriptor.poglwnd^.SelDesc.LastSelectedObject=NIL, try find selected in DRAWING...');
+                                          //ZCMsgCallBackInterface.Do_ShowError('ugdbdescriptor.poglwnd^.SelDesc.LastSelectedObject=NIL, try find selected in DRAWING...');
                                           pp:=drawings.GetCurrentROOT.objarray.beginiterate(ir);
                                           if pp<>nil then
                                          begin

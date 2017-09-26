@@ -44,7 +44,7 @@ procedure ShowError(errstr:String); export;
 var
    ts:GDBString;
 begin
-     LogError(errstr);
+     ZCMsgCallBackInterface.Do_LogError(errstr);
      ts:=(errstr);
      if  assigned(CursorOn) then
                                 CursorOn;
@@ -55,5 +55,6 @@ end;
 begin
 uzclog.HistoryTextOut:=ZCMsgCallBackInterface.Do_HistoryOut();
 uzclog.MessageBoxTextOut:=@ShowError;
-uzcinterface.ShowError:=@ShowError;
+ZCMsgCallBackInterface.RegisterHandler_ShowError(ShowError);
+//uzcinterface.ShowError:=@ShowError;
 end.

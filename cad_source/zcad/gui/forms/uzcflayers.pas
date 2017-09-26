@@ -561,7 +561,7 @@ begin
      layername:=pdwg^.LayerTable.GetFreeName(Tria_Utf8ToAnsi(rsNewLayerNameFormat),1);
      if layername='' then
      begin
-       ShowError(rsUnableSelectFreeLayerName);
+       ZCMsgCallBackInterface.Do_ShowError(rsUnableSelectFreeLayerName);
        exit;
      end;
      if pdwg^.LayerTable.AddItem(layername,pcreatedlayer)=IsCreated then
@@ -639,7 +639,7 @@ begin
                                      countlayer(player,e,b);
                                      if (e+b)>0 then
                                                   begin
-                                                       ShowError(rsUnableDelUsedLayer);
+                                                       ZCMsgCallBackInterface.Do_ShowError(rsUnableDelUsedLayer);
                                                        exit;
                                                   end;
 
@@ -648,7 +648,7 @@ begin
                                      LayerDescLabel.Caption:='';
                                      end
                                  else
-                                     ShowError(rsLayerMustBeSelected);
+                                     ZCMsgCallBackInterface.Do_ShowError(rsLayerMustBeSelected);
 end;
 
 procedure TLayersForm.AplyClose(Sender: TObject);

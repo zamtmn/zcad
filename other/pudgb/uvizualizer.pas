@@ -283,7 +283,9 @@ begin
             while j<=seperarray.Count-1 do
             begin
               if seperarray.getDataMutable(j)^<>SVGPM_Space then
-                m:=seperarray.getDataMutable(j)^
+                begin
+                m:=seperarray.getDataMutable(j)^;
+                end
               else
                 inc(j);
               mm:=seperarray.getDataMutable(j)^;

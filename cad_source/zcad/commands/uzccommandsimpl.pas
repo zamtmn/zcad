@@ -440,7 +440,7 @@ begin
 end;
 procedure CommandRTEdObject.Error(msg:GDBString);
 begin
-     ShowError(self.CommandName+':'+msg);
+     ZCMsgCallBackInterface.Do_ShowError(self.CommandName+':'+msg);
 end;
 procedure CommandRTEdObject.SetCommandParam(PTypedTata:pointer;TypeName:string);
 begin

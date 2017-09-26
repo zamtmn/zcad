@@ -259,7 +259,7 @@ begin
 
      end
         else
-        ShowError('MERGE:'+format(rsUnableToOpenFile,[s]));
+        ZCMsgCallBackInterface.Do_ShowError('MERGE:'+format(rsUnableToOpenFile,[s]));
 end;
 function Merge_com(operands:TCommandOperands):TCommandResult;
 begin
@@ -372,7 +372,7 @@ begin
                                      if assigned(updatevisibleproc) then updatevisibleproc;
                                 end
      else begin
-          ShowError(Format(rsunknownFileExt, [fileext]));
+          ZCMsgCallBackInterface.Do_ShowError(Format(rsunknownFileExt, [fileext]));
           end;
      end;
      result:=cmd_ok;
@@ -427,8 +427,8 @@ begin
                                                    if assigned(ReturnToDefaultProc) then ReturnToDefaultProc(drawings.GetUnitsFormat);
                                               end;
   case PTZCADDrawing(drawings.GetCurrentDWG).UndoStack.undo(msg,prevundo,overlay) of
-    URRNoCommandsToUndoInOverlayMode:ShowError(rscmNoCTUSE);
-    URRNoCommandsToUndo:ShowError(rscmNoCTU);
+    URRNoCommandsToUndoInOverlayMode:ZCMsgCallBackInterface.Do_ShowError(rscmNoCTUSE);
+    URRNoCommandsToUndo:ZCMsgCallBackInterface.Do_ShowError(rscmNoCTU);
   end;
   if msg<>'' then ZCMsgCallBackInterface.Do_HistoryOut(msg);
   zcRedrawCurrentDrawing;
@@ -440,7 +440,7 @@ var
 begin
   drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.deselector);
   case PTZCADDrawing(drawings.GetCurrentDWG).UndoStack.redo(msg) of
-    URRNoCommandsToUndo:ShowError(rscmNoCTR);
+    URRNoCommandsToUndo:ZCMsgCallBackInterface.Do_ShowError(rscmNoCTR);
   end;
   if msg<>'' then ZCMsgCallBackInterface.Do_HistoryOut(msg);
   zcRedrawCurrentDrawing;
@@ -1562,7 +1562,7 @@ begin
                uzcsysinfo.sysparam.updatepo:=false
           end;
      end
-        else showerror('Command line swith "UpdatePO" must be set. (or not the first time running this command)');
+        else ZCMsgCallBackInterface.Do_ShowError('Command line swith "UpdatePO" must be set. (or not the first time running this command)');
      result:=cmd_ok;
 end;
 function Zoom_com(operands:TCommandOperands):TCommandResult;
@@ -1793,7 +1793,7 @@ var
   Script:GDBString;
 begin
                    Script:='GDBString;';
-                   ShowError(Script);
+                   ZCMsgCallBackInterface.Do_ShowError(Script);
 end;
 function TestScript_com(operands:TCommandOperands):TCommandResult;
 (*var

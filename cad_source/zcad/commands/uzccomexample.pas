@@ -404,7 +404,7 @@ begin
                               FinalCreateDDim;
                           end;
                      else begin
-                              ShowError('Please select Arc or Circle');
+                              ZCMsgCallBackInterface.Do_ShowError('Please select Arc or Circle');
                           end;
               end;
          end;
@@ -465,7 +465,7 @@ begin
                               FinalCreateRDim;
                           end;
                      else begin
-                              ShowError('Please select Arc or Circle');
+                              ZCMsgCallBackInterface.Do_ShowError('Please select Arc or Circle');
                           end;
               end;
          end;

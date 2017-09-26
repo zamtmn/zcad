@@ -440,7 +440,7 @@ begin
   stylename:=pdwg^.TextStyleTable.GetFreeName(Tria_Utf8ToAnsi(rsNewTextStyleNameFormat),1);
   if stylename='' then
   begin
-    ShowError(rsUnableSelectFreeTextStylerName);
+    ZCMsgCallBackInterface.Do_ShowError(rsUnableSelectFreeTextStylerName);
     exit;
   end;
 
@@ -492,12 +492,12 @@ begin
                                      countstyle(pstyle,inEntities,inBlockTable,indimstyles);
                                      if ListView1.Selected.Data=pdwg^.GetCurrentTextStyle then
                                      begin
-                                       ShowError(rsCurrentStyleCannotBeDeleted);
+                                       ZCMsgCallBackInterface.Do_ShowError(rsCurrentStyleCannotBeDeleted);
                                        exit;
                                      end;
                                      if (inEntities+inBlockTable+indimstyles)>0 then
                                                   begin
-                                                       ShowError(rsUnableDelUsedStyle);
+                                                       ZCMsgCallBackInterface.Do_ShowError(rsUnableDelUsedStyle);
                                                        exit;
                                                   end;
 
@@ -506,7 +506,7 @@ begin
                                      DescLabel.Caption:='';
                                      end
                                  else
-                                     ShowError(rsStyleMustBeSelected);
+                                     ZCMsgCallBackInterface.Do_ShowError(rsStyleMustBeSelected);
 end;
 
 procedure TTextStylesForm.AplyClose(Sender: TObject);

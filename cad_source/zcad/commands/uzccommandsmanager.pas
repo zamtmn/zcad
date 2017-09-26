@@ -611,7 +611,7 @@ begin
      if not busy then
                      execute(comm,false,pdrawing,POGLWndParam)
                  else
-                     ShowError(rsCommandNRInC);
+                     ZCMsgCallBackInterface.Do_ShowError(rsCommandNRInC);
 end;
 procedure GDBcommandmanager.executecommandsilent{(const comm:pansichar): GDBInteger};
 begin

@@ -6,7 +6,7 @@ object VizualiserForm: TVizualiserForm
   Caption = 'Graph vizualizer'
   ClientHeight = 849
   ClientWidth = 1012
-  ClientWidth = 1106
+  DesignTimePPI = 113
   KeyPreview = True
   OnCreate = _FormCreate
   OnDestroy = _DestroyApp

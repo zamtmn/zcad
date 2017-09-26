@@ -3117,14 +3117,14 @@ begin
                           //drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.Clear;
                           end
                           else
-                              ShowError('В строке '+inttostr(row)+' обнаружено несколько не связанных трасс "'+FDoc.Cells[3,row]);
+                              ZCMsgCallBackInterface.Do_ShowError('В строке '+inttostr(row)+' обнаружено несколько не связанных трасс "'+FDoc.Cells[3,row]);
 
 
 
                           //ShowError('В строке '+inttostr(row)+' обнаружена множественная трасса "'+FDoc.Cells[3,row]+'". Пока недопилено((');
                           end
                           else
-                              ShowError('В строке '+inttostr(row)+' обнаружена трасса "'+FDoc.Cells[3,row]+'" отсутствующая в чертеже((');
+                              ZCMsgCallBackInterface.Do_ShowError('В строке '+inttostr(row)+' обнаружена трасса "'+FDoc.Cells[3,row]+'" отсутствующая в чертеже((');
                      end;
 
 
@@ -3158,7 +3158,7 @@ begin
        lps.EndLongProcess(lph)
   end
             else
-     ShowError('GDBCommandsElectrical.El_ExternalKZ: Не могу открыть файл: '+s+'('+Operands+')');
+     ZCMsgCallBackInterface.Do_ShowError('GDBCommandsElectrical.El_ExternalKZ: Не могу открыть файл: '+s+'('+Operands+')');
 end;
 function _AutoGenCableRemove_com(operands:TCommandOperands):TCommandResult;
 var //i,len: GDBInteger;

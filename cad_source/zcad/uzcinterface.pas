@@ -30,9 +30,21 @@ type
     TZCMsgCallBackInterface=class
       public
         procedure RegisterHandler_HistoryOut(Handler:TProcedure_String_);
+        procedure RegisterHandler_ShowError(Handler:TProcedure_String_);
+        procedure RegisterHandler_LogError(Handler:TProcedure_String_);
+        procedure RegisterHandler_StatusLineTextOut(Handler:TProcedure_String_);
         procedure Do_HistoryOut(s:String);
+        procedure Do_ShowError(s:String);
+        procedure Do_LogError(s:String);
+        procedure Do_StatusLineTextOut(s:String);
+      private
+        procedure RegisterTProcedure_String_HandlersVector(var PSHV:TProcedure_String_HandlersVector;Handler:TProcedure_String_);
+        procedure Do_TProcedure_String_HandlersVector(var PSHV:TProcedure_String_HandlersVector;s:String);
       private
         HistoryOutHandlers:TProcedure_String_HandlersVector;
+        ShowErrorHandlers:TProcedure_String_HandlersVector;
+        LogErrorHandlers:TProcedure_String_HandlersVector;
+        StatusLineTextOutHandlers:TProcedure_String_HandlersVector;
 
     end;
 
@@ -135,11 +147,9 @@ var
 
    CursorOn:TSimpleMethod=nil;
    CursorOff:TSimpleMethod=nil;
-   ShowError:TProcedure_String_;
+
    DisableCmdLine:TSimpleProcedure;
    EnableCmdLine:TSimpleProcedure;
-   StatusLineTextOut:TProcedure_String_;
-   LogError:TProcedure_String_;
 
 
 function DoShowModal(MForm:TForm): Integer;
@@ -148,20 +158,52 @@ function GetUndoStack:pointer;
 var
    ZCMsgCallBackInterface:TZCMsgCallBackInterface;
 implementation
-procedure TZCMsgCallBackInterface.RegisterHandler_HistoryOut(Handler:TProcedure_String_);
+procedure TZCMsgCallBackInterface.RegisterTProcedure_String_HandlersVector(var PSHV:TProcedure_String_HandlersVector;Handler:TProcedure_String_);
 begin
-   if not assigned(HistoryOutHandlers) then
-     HistoryOutHandlers:=TProcedure_String_HandlersVector.Create;
-   HistoryOutHandlers.PushBack(Handler);
+   if not assigned(PSHV) then
+     PSHV:=TProcedure_String_HandlersVector.Create;
+   PSHV.PushBack(Handler);
 end;
-procedure TZCMsgCallBackInterface.Do_HistoryOut(s:String);
+procedure TZCMsgCallBackInterface.Do_TProcedure_String_HandlersVector(var PSHV:TProcedure_String_HandlersVector;s:String);
 var
    i:integer;
 begin
-   if assigned(HistoryOutHandlers) then begin
-     for i:=0 to HistoryOutHandlers.Size-1 do
-       HistoryOutHandlers[i](s);
+   if assigned(PSHV) then begin
+     for i:=0 to PSHV.Size-1 do
+       PSHV[i](s);
    end;
+end;
+procedure TZCMsgCallBackInterface.RegisterHandler_HistoryOut(Handler:TProcedure_String_);
+begin
+   RegisterTProcedure_String_HandlersVector(HistoryOutHandlers,Handler);
+end;
+procedure TZCMsgCallBackInterface.RegisterHandler_ShowError(Handler:TProcedure_String_);
+begin
+   RegisterTProcedure_String_HandlersVector(ShowErrorHandlers,Handler);
+end;
+procedure TZCMsgCallBackInterface.RegisterHandler_LogError(Handler:TProcedure_String_);
+begin
+   RegisterTProcedure_String_HandlersVector(LogErrorHandlers,Handler);
+end;
+procedure TZCMsgCallBackInterface.RegisterHandler_StatusLineTextOut(Handler:TProcedure_String_);
+begin
+   RegisterTProcedure_String_HandlersVector(StatusLineTextOutHandlers,Handler);
+end;
+procedure TZCMsgCallBackInterface.Do_HistoryOut(s:String);
+begin
+   Do_TProcedure_String_HandlersVector(HistoryOutHandlers,s);
+end;
+procedure TZCMsgCallBackInterface.Do_ShowError(s:String);
+begin
+   Do_TProcedure_String_HandlersVector(ShowErrorHandlers,s);
+end;
+procedure TZCMsgCallBackInterface.Do_LogError(s:String);
+begin
+   Do_TProcedure_String_HandlersVector(LogErrorHandlers,s);
+end;
+procedure TZCMsgCallBackInterface.Do_StatusLineTextOut(s:String);
+begin
+   Do_TProcedure_String_HandlersVector(StatusLineTextOutHandlers,s);
 end;
 function GetUndoStack:pointer;
 begin

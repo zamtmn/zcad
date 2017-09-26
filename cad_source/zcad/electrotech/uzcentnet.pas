@@ -405,7 +405,7 @@ begin
                                       system.break;
                                       end
                                          else
-                                         ZCMsgCallBackInterface.Do_ShowError('Нельзя обьеденить');
+                                         ZCMsgCallBackInterface.TextMessage('Нельзя обьеденить',ShowError);
                                  end;
 
                            ptestline:=currentnet^.objarray.iterate(ir3);

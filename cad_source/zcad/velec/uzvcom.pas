@@ -376,7 +376,7 @@ begin
          l2begin.z := 0;
 
          if  compareVertex(l1begin,l2begin,10) then
-            ZCMsgCallBackInterface.Do_HistoryOut('rrrrrrrrrrrrrrrrrrrrrrrrrr');
+            ZCMsgCallBackInterface.TextMessage('rrrrrrrrrrrrrrrrrrrrrrrrrr',HistoryOut);
 
          l2end.x := 350;
          l2end.y := 60;
@@ -389,7 +389,7 @@ begin
 
                                      RecurseSearhCable(pc) //осуществляем поиск ветвей
                                  else
-                                     ZCMsgCallBackInterface.Do_HistoryOut('Fuck! You must select Cable'); //не кабель - посылаем
+                                     ZCMsgCallBackInterface.TextMessage('Fuck! You must select Cable',HistoryOut); //не кабель - посылаем
     end;
     result:=cmd_ok;
 end;
@@ -643,9 +643,9 @@ begin
     if  IsDoubleNotEqual(areaRect,sumAreaTriangle,sqreps*1000000) = false then
       result:=true;
 
-    //ZCMsgCallBackInterface.Do_HistoryOut('прямоугл = ' + floattostr(areaRect));
-    //ZCMsgCallBackInterface.Do_HistoryOut('треугол = ' + floattostr(sumAreaTriangle));
-    //ZCMsgCallBackInterface.Do_HistoryOut('погрешность = ' + floattostr(sqreps*100000));
+    //ZCMsgCallBackInterface.TextMessage('прямоугл = ' + floattostr(areaRect));
+    //ZCMsgCallBackInterface.TextMessage('треугол = ' + floattostr(sumAreaTriangle));
+    //ZCMsgCallBackInterface.TextMessage('погрешность = ' + floattostr(sqreps*100000));
 end;
 
 
@@ -740,9 +740,9 @@ begin
 //    if  IsDoubleNotEqual(areaRect,sumAreaTriangle,sqreps*1000000) = false then
 //      result:=true;
 //
-//    //ZCMsgCallBackInterface.Do_HistoryOut('прямоугл = ' + floattostr(areaRect));
-//    //ZCMsgCallBackInterface.Do_HistoryOut('треугол = ' + floattostr(sumAreaTriangle));
-//    //ZCMsgCallBackInterface.Do_HistoryOut('погрешность = ' + floattostr(sqreps*100000));
+//    //ZCMsgCallBackInterface.TextMessage('прямоугл = ' + floattostr(areaRect));
+//    //ZCMsgCallBackInterface.TextMessage('треугол = ' + floattostr(sumAreaTriangle));
+//    //ZCMsgCallBackInterface.TextMessage('погрешность = ' + floattostr(sqreps*100000));
 end;
 
 
@@ -993,13 +993,13 @@ begin
 
     for i:=0 to listCable.Size-1 do
       begin
-        //ZCMsgCallBackInterface.Do_HistoryOut(inttostr(i+1)+'-я кабельная линия');
+        //ZCMsgCallBackInterface.TextMessage(inttostr(i+1)+'-я кабельная линия');
         NearObjects.init(100) ;
         for j:=0 to 1 do
         begin
           listDev:=TGDBDevice.create;
 
-          //ZCMsgCallBackInterface.Do_HistoryOut(inttostr(j+1)+'-й конец кабельной линии');
+          //ZCMsgCallBackInterface.TextMessage(inttostr(j+1)+'-й конец кабельной линии');
           inAddEdge:=true; //есть ли кабель в узле. если есть и кабель и девайс, то девайс не запишеться
           colDevice:=0;    //сброс счетчика
           if j = 0 then
@@ -1009,7 +1009,7 @@ begin
           areaVertex:=getAreaVertex(vertexLine,accuracy);
           //testTempDrawLine(areaVertex.LBN,areaVertex.RTF); // показать область
 
-          //ZCMsgCallBackInterface.Do_HistoryOut('x='+ floattostr(areaVertex.LBN.x)+'---y='+floattostr(areaVertex.LBN.y)); // координата данной точки
+          //ZCMsgCallBackInterface.TextMessage('x='+ floattostr(areaVertex.LBN.x)+'---y='+floattostr(areaVertex.LBN.y)); // координата данной точки
 
           if drawings.GetCurrentROOT^.FindObjectsInVolume(areaVertex,NearObjects)then //ищем примитивы оболочка которых пересекается с volume
             begin
@@ -1034,7 +1034,7 @@ begin
                   inc(colDevice);
                   listDev.PushBack(pObjDevice);
 
-                  //ZCMsgCallBackInterface.Do_HistoryOut('coldev=' + inttostr(colDevice));
+                  //ZCMsgCallBackInterface.TextMessage('coldev=' + inttostr(colDevice));
                   //uzvtestdraw.testDrawCircle(pObjDevice^.P_insert_in_WCS,2,4);
                  end;
                pobj:=NearObjects.iterate(ir);//получаем следующий примитив из списка
@@ -1145,7 +1145,7 @@ begin
 
    result.isinterceptCol:=0;
     if (linePt1.x=linePt2.x) and (linePt1.y=linePt2.y) then
-      ZCMsgCallBackInterface.Do_HistoryOut('Введите две разные точки')
+      ZCMsgCallBackInterface.TextMessage('Введите две разные точки',HistoryOut)
     else
       if (linePt1.x=linePt2.x) then
         k:=(linePt1.y-linePt2.y)/(linePt1.x)
@@ -1153,13 +1153,13 @@ begin
         k:=(linePt1.y-linePt2.y)/(linePt1.x - linePt2.x);
 
     b:=linePt1.y - k*linePt1.x;
-    ZCMsgCallBackInterface.Do_HistoryOut('gfgfgfg');
+    ZCMsgCallBackInterface.TextMessage('gfgfgfg',HistoryOut);
     //находим дискрименант квадратного уравнения
    d:=(power((2*k*b-2*circlePt.x-2*circlePt.y*k),2)-(4+4*k*k)*(b*b-r*r+circlePt.x*circlePt.x+circlePt.y*circlePt.y-2*circlePt.y*b));
-   ZCMsgCallBackInterface.Do_HistoryOut(floattostr(d))  ;
+   ZCMsgCallBackInterface.TextMessage(floattostr(d),HistoryOut)  ;
   //если он меньше 0, уравнение не имеет решения
      if (d<-0.0001) then
-          ZCMsgCallBackInterface.Do_HistoryOut('Прямая и окружность не пересекаются')
+          ZCMsgCallBackInterface.TextMessage('Прямая и окружность не пересекаются',HistoryOut)
      else
          begin
   //иначе находим корни квадратного уравнения
@@ -1168,24 +1168,24 @@ begin
         result.point2.x:=((-(2*k*b-2*circlePt.x-2*circlePt.y*k)+sqrt(d))/(2+2*k*k));
         result.point1.y:=k*result.point1.x+b;
         result.point2.y:=k*result.point2.x+b;
- // ZCMsgCallBackInterface.Do_HistoryOut('Прямая и окружность пересекаются в точках: x1=' + floattostr(result.point1.x) + 'y1='+  floattostr(result.point1.y) + 'x2='+  floattostr(result.point2.x)+ 'y2='+  floattostr(result.point2.y));
+ // ZCMsgCallBackInterface.TextMessage('Прямая и окружность пересекаются в точках: x1=' + floattostr(result.point1.x) + 'y1='+  floattostr(result.point1.y) + 'x2='+  floattostr(result.point2.x)+ 'y2='+  floattostr(result.point2.y));
   if AtOtres(linePt1.x,linePt1.y,linePt2.x,linePt2.y,result.point1.x,result.point1.y) then
   begin
     result.isinterceptCol:=result.isinterceptCol+1;
-    ZCMsgCallBackInterface.Do_HistoryOut('Прямая и окружность имеют точку касания: x=' + floattostr(result.point1.x) + 'y='+  floattostr(result.point1.y));
+    ZCMsgCallBackInterface.TextMessage('Прямая и окружность имеют точку касания: x=' + floattostr(result.point1.x) + 'y='+  floattostr(result.point1.y),HistoryOut);
   end;
   if AtOtres(linePt1.x,linePt1.y,linePt2.x,linePt2.y,result.point2.x,result.point2.y) then
      if result.isinterceptCol = 1 then
      begin
         result.isinterceptCol:=result.isinterceptCol+1;
-        ZCMsgCallBackInterface.Do_HistoryOut('Прямая и окружность пересекаются в точках: x1=' + floattostr(result.point1.x) + 'y1='+  floattostr(result.point1.y) + 'x2='+  floattostr(result.point2.x)+ 'y2='+  floattostr(result.point2.y));
+        ZCMsgCallBackInterface.TextMessage('Прямая и окружность пересекаются в точках: x1=' + floattostr(result.point1.x) + 'y1='+  floattostr(result.point1.y) + 'x2='+  floattostr(result.point2.x)+ 'y2='+  floattostr(result.point2.y),HistoryOut);
      end
      else
         begin
           result.isinterceptCol:=result.isinterceptCol+1;
           result.point1.x :=result.point2.x;
           result.point1.y :=result.point2.y;
-          ZCMsgCallBackInterface.Do_HistoryOut('Прямая и окружность имеют точку касания: x=' + floattostr(result.point1.x) + 'y='+  floattostr(result.point1.y));
+          ZCMsgCallBackInterface.TextMessage('Прямая и окружность имеют точку касания: x=' + floattostr(result.point1.x) + 'y='+  floattostr(result.point1.y),HistoryOut);
         end;
 
      end;
@@ -1210,7 +1210,7 @@ begin
     for i:=0 to graph.listVertex.Size-1 do
     begin
      nameDevice:=graph.listVertex[i].deviceEnt^.Name;
-     //ZCMsgCallBackInterface.Do_HistoryOut('breakname= ' + nameDevice);
+     //ZCMsgCallBackInterface.TextMessage('breakname= ' + nameDevice);
 
      if (nameDevice='EL_CABLE_UP') or (nameDevice='EL_CABLE_DOWN') or (nameDevice='EL_CABLE_FROMDOWN') or (nameDevice='EL_CABLE_FROMUP') or (nameDevice='EL_CABLE_BREAK') then
      begin
@@ -1415,14 +1415,14 @@ begin
              //        end;
              //  end;
              //*** ***//
-             //ZCMsgCallBackInterface.Do_HistoryOut('name= ' + pobj^.GetObjTypeName);
+             //ZCMsgCallBackInterface.TextMessage('name= ' + pobj^.GetObjTypeName);
              pConnect.x:=0;
              pConnect.y:=0;
              pConnect.z:=0;
           if pobj^.GetObjType=GDBDeviceID then
                begin
                  //if getPointConnector(pobj,pConnect) then
-                   //ZCMsgCallBackInterface.Do_HistoryOut('pobeda= ');
+                   //ZCMsgCallBackInterface.TextMessage('pobeda= ');
                   //pObjDevice:= PGDBObjDevice(pobj); // передача объекта в девайсы
                   //currentSubObj:=pObjDevice^.VarObjArray.beginiterate(ir_inDevice); //иследование содержимого девайса
                   //if (currentSubObj<>nil) then
@@ -1446,7 +1446,7 @@ begin
                              //testTempDrawCircle(infoDevice.centerPoint,2.5);
 
                            end;
-                          // ZCMsgCallBackInterface.Do_HistoryOut('x= ' + FloatToStr(devpoint.x) + ' y=' + FloatToStr(devpoint.y));
+                          // ZCMsgCallBackInterface.TextMessage('x= ' + FloatToStr(devpoint.x) + ' y=' + FloatToStr(devpoint.y));
                          end;
                      //currentSubObj:=pObjDevice^.VarObjArray.iterate(ir_inDevice);
                     //until currentSubObj=nil;
@@ -1457,9 +1457,9 @@ begin
       pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir); //переход к следующем примитиву в списке выбраных примитивов
     until pobj=nil;
 
-  ZCMsgCallBackInterface.Do_HistoryOut('Кол-во ввыбранных элементов = ' + IntToStr(counter));
-  ZCMsgCallBackInterface.Do_HistoryOut('Список кусков кабельных линий состоит из = ' + IntToStr(counter1));
-  ZCMsgCallBackInterface.Do_HistoryOut('Список устройств состоит из = ' + IntToStr(counter2));
+  ZCMsgCallBackInterface.TextMessage('Кол-во ввыбранных элементов = ' + IntToStr(counter),HistoryOut);
+  ZCMsgCallBackInterface.TextMessage('Список кусков кабельных линий состоит из = ' + IntToStr(counter1),HistoryOut);
+  ZCMsgCallBackInterface.TextMessage('Список устройств состоит из = ' + IntToStr(counter2),HistoryOut);
 
 
   //******* поиск и обработка стояков (переходов между этажами) и разрывов
@@ -1614,9 +1614,9 @@ begin
           if listHaveThisEdge(result.listEdge,tempListEdge[j]) = false then
             result.listEdge.PushBack(tempListEdge[j]);
 
-   //   ZCMsgCallBackInterface.Do_HistoryOut('до = ' + IntToStr(tempListEdge.size));
+   //   ZCMsgCallBackInterface.TextMessage('до = ' + IntToStr(tempListEdge.size));
       tempListEdge.Clear;
-   //   ZCMsgCallBackInterface.Do_HistoryOut('после = ' + IntToStr(tempListEdge.size));
+   //   ZCMsgCallBackInterface.TextMessage('после = ' + IntToStr(tempListEdge.size));
   end;
 *}
 //*******старый метод************//
@@ -1669,7 +1669,7 @@ begin
          if ourGraph.listVertex[i].deviceEnt<>nil then
          begin
              pvd:=FindVariableInEnt(ourGraph.listVertex[i].deviceEnt,'DB_link');
-             ZCMsgCallBackInterface.Do_HistoryOut(pgdbstring(pvd^.data.Instance)^);
+             ZCMsgCallBackInterface.TextMessage(pgdbstring(pvd^.data.Instance)^);
          end;
          testTempDrawCircle(ourGraph.listVertex[i].centerPoint,Epsilon);
       end;
@@ -1686,10 +1686,10 @@ begin
          testTempDrawLine(ourGraph.listEdge[i].VPoint1,ourGraph.listEdge[i].VPoint2);
       end;
 
-      ZCMsgCallBackInterface.Do_HistoryOut('В полученном графе вершин = ' + IntToStr(ourGraph.listVertex.Size));
-      ZCMsgCallBackInterface.Do_HistoryOut('В полученном графе ребер = ' + IntToStr(ourGraph.listEdge.Size));
+      ZCMsgCallBackInterface.TextMessage('В полученном графе вершин = ' + IntToStr(ourGraph.listVertex.Size));
+      ZCMsgCallBackInterface.TextMessage('В полученном графе ребер = ' + IntToStr(ourGraph.listEdge.Size));
     {
-    ZCMsgCallBackInterface.Do_HistoryOut('*** Min Weight Path ***');
+    ZCMsgCallBackInterface.TextMessage('*** Min Weight Path ***');
   //  writeln('*** Min Weight Path ***');
     G:=TGraph.Create;
     G.Features:=[Weighted];
@@ -1712,18 +1712,18 @@ begin
       T:=G.FindMinWeightPath(G[0], G[6], EdgePath);
 
       if T <> 11 then begin
-           ZCMsgCallBackInterface.Do_HistoryOut('*** Error! ***');
+           ZCMsgCallBackInterface.TextMessage('*** Error! ***');
        // write('Error!');
        // readln;
         Exit;
       end;
-      ZCMsgCallBackInterface.Do_HistoryOut('Minimal Length: ');
+      ZCMsgCallBackInterface.TextMessage('Minimal Length: ');
       //writeln('Minimal Length: ', T :4:2);
       G.EdgePathToVertexPath(G[0], EdgePath, VertexPath);
-      ZCMsgCallBackInterface.Do_HistoryOut('Vertices: ');
+      ZCMsgCallBackInterface.TextMessage('Vertices: ');
       //write('Vertices: ');
       for I:=0 to VertexPath.Count - 1 do
-        ZCMsgCallBackInterface.Do_HistoryOut(IntToStr(TVertex(VertexPath[I]).Index) + ' ');
+        ZCMsgCallBackInterface.TextMessage(IntToStr(TVertex(VertexPath[I]).Index) + ' ');
       //writeln;
     finally
       G.Free;
@@ -1740,7 +1740,7 @@ begin
     I: Integer;
     T: Float;
   begin
-    ZCMsgCallBackInterface.Do_HistoryOut('*** Min Weight Path ***');
+    ZCMsgCallBackInterface.TextMessage('*** Min Weight Path ***');
   //  writeln('*** Min Weight Path ***');
     G:=TGraph.Create;
     G.Features:=[Weighted];
@@ -1763,18 +1763,18 @@ begin
       T:=G.FindMinWeightPath(G[0], G[6], EdgePath);
 
       if T <> 11 then begin
-           ZCMsgCallBackInterface.Do_HistoryOut('*** Error! ***');
+           ZCMsgCallBackInterface.TextMessage('*** Error! ***');
        // write('Error!');
        // readln;
         Exit;
       end;
-      ZCMsgCallBackInterface.Do_HistoryOut('Minimal Length: ');
+      ZCMsgCallBackInterface.TextMessage('Minimal Length: ');
       //writeln('Minimal Length: ', T :4:2);
       G.EdgePathToVertexPath(G[0], EdgePath, VertexPath);
-      ZCMsgCallBackInterface.Do_HistoryOut('Vertices: ');
+      ZCMsgCallBackInterface.TextMessage('Vertices: ');
       //write('Vertices: ');
       for I:=0 to VertexPath.Count - 1 do
-        ZCMsgCallBackInterface.Do_HistoryOut(IntToStr(TVertex(VertexPath[I]).Index) + ' ');
+        ZCMsgCallBackInterface.TextMessage(IntToStr(TVertex(VertexPath[I]).Index) + ' ');
       //writeln;
     finally
       G.Free;
@@ -1801,7 +1801,7 @@ function Testcablemanager_com(operands:TCommandOperands):TCommandResult;
     pcabledesk:=cman.beginiterate(ir);
     if pcabledesk<>nil then BEGIN
        repeat
-         ZCMsgCallBackInterface.Do_HistoryOut('  Найдена групповая линия "'+pcabledesk^.Name+'"');
+         ZCMsgCallBackInterface.TextMessage('  Найдена групповая линия "'+pcabledesk^.Name+'"',HistoryOut);
 
          pobj:= pcabledesk^.Segments.beginiterate(ir2);
          if pobj<>nil then
@@ -1809,12 +1809,12 @@ function Testcablemanager_com(operands:TCommandOperands):TCommandResult;
            pnp:=pobj^.NodePropArray.beginiterate(ir3);
            if pnp<>nil then
             repeat
-             ZCMsgCallBackInterface.Do_HistoryOut('1');
+             ZCMsgCallBackInterface.TextMessage('1',HistoryOut);
              testTempDrawLine(pnp^.PrevP,pnp^.NextP);
-             ZCMsgCallBackInterface.Do_HistoryOut('  имя устройства подключенного - '+pnp^.DevLink^.GetObjTypeName);
+             ZCMsgCallBackInterface.TextMessage('  имя устройства подключенного - '+pnp^.DevLink^.GetObjTypeName,HistoryOut);
              pnp:=pobj^.NodePropArray.iterate(ir3);
             until pnp=nil;
-           //ZCMsgCallBackInterface.Do_HistoryOut('  Найдена групповая линия "'+pcabledesk^.Name+'"');
+           //ZCMsgCallBackInterface.TextMessage('  Найдена групповая линия "'+pcabledesk^.Name+'"');
            //pcabledesk:=cman.iterate(ir);
            pobj:=pcabledesk^.Segments.iterate(ir2);
          until pobj=nil;
@@ -1824,10 +1824,10 @@ function Testcablemanager_com(operands:TCommandOperands):TCommandResult;
 
 
 
-        //ZCMsgCallBackInterface.Do_HistoryOut(' гуд ' + pcabledesk.);
+        //ZCMsgCallBackInterface.TextMessage(' гуд ' + pcabledesk.);
     // CableManager.build;
     // CableManager.GetObjName;
-       //ZCMsgCallBackInterface.Do_HistoryOut(' гуд ' + CableManager.GetObjName);
+       //ZCMsgCallBackInterface.TextMessage(' гуд ' + CableManager.GetObjName);
   end;
 
 initialization

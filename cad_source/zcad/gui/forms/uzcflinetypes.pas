@@ -185,7 +185,7 @@ begin
                                                      pltp:=nil;
      if (pltp=nil) then
                      begin
-                          ZCMsgCallBackInterface.Do_ShowError('Please select non system layer!!!');
+                          ZCMsgCallBackInterface.TextMessage('Please select non system layer!!!',ShowError);
                           exit;
                      end;
      CurrentLine:=1;
@@ -240,7 +240,7 @@ begin
 
      if (pdwg^.GetLTypeTable.AddItem(LTName,pltp)<>IsCreated) then
                         begin
-                             ZCMsgCallBackInterface.Do_ShowError('Line type name already exist!!!');
+                             ZCMsgCallBackInterface.TextMessage('Line type name already exist!!!',ShowError);
                              exit;
                         end;
 

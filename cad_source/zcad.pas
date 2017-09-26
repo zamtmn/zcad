@@ -177,7 +177,7 @@ begin
   ZCADMainWindow.show;
   {if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
                                                   sysvar.SYS.SYS_IsHistoryLineCreated^:=true;}
-  ZCMsgCallBackInterface.Do_HistoryOut(format(rsZCADStarted,[sysvar.SYS.SYS_Version^]));
+  ZCMsgCallBackInterface.TextMessage(format(rsZCADStarted,[sysvar.SYS.SYS_Version^]),HistoryOut);
   gdbplugins.loadplugins(ProgramPath+'PLUGINS\');
 
   SplashForm.TXTOut('Выполнение *components\autorun.cmd',false);commandmanager.executefile('*components/autorun.cmd',drawings.GetCurrentDWG,nil);

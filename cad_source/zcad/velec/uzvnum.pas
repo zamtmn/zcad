@@ -403,7 +403,7 @@ end;
 //           end;
 //
 //        end;
-//     // ZCMsgCallBackInterface.Do_HistoryOut(IntToStr(result));
+//     // ZCMsgCallBackInterface.TextMessage(IntToStr(result));
 //end;
 //
 
@@ -1334,13 +1334,13 @@ function getGroupDeviceInGraph(ourGraph:TGraphBuilder;Epsilon:double):TListHeadD
                     end
                     else begin
                       listHeadDevice.Mutable[i]^.listGroup.Mutable[j]^.listDevice.Mutable[k]^.listNumVertexMinWeight:=nil;
-                      ZCMsgCallBackInterface.Do_HistoryOut(' Нет пути от устройства к головному устройству = ' + listHeadDevice[i].listGroup[j].listDevice[k].tDevice);
+                      ZCMsgCallBackInterface.TextMessage(' Нет пути от устройства к головному устройству = ' + listHeadDevice[i].listGroup[j].listDevice[k].tDevice,HistoryOut);
                       uzvtestdraw.testTempDrawPLCross(ourGraph.listVertex[listHeadDevice[i].listGroup[j].listDevice[k].num].centerPoint,12*epsilon,4);
                     end;
                     //Анализ результата
-                    //ZCMsgCallBackInterface.Do_HistoryOut(' Путь подключения = ' + listHeadDevice[i].listGroup[j].listDevice[k].tDevice);
+                    //ZCMsgCallBackInterface.TextMessage(' Путь подключения = ' + listHeadDevice[i].listGroup[j].listDevice[k].tDevice);
                     //for m:=0 to listHeadDevice[i].listGroup[j].listDevice[k].listNumVertexMinWeight.Size - 1 do  begin
-                    //   ZCMsgCallBackInterface.Do_HistoryOut(' вершина = ' + IntToStr(listHeadDevice[i].listGroup[j].listDevice[k].listNumVertexMinWeight[m].num));
+                    //   ZCMsgCallBackInterface.TextMessage(' вершина = ' + IntToStr(listHeadDevice[i].listGroup[j].listDevice[k].listNumVertexMinWeight[m].num));
                     //end;
                   EdgePath.Free;
                   VertexPath.Free;
@@ -1361,7 +1361,7 @@ function getGroupDeviceInGraph(ourGraph:TGraphBuilder;Epsilon:double):TListHeadD
                //     uzvcom.testTempDrawText(pCenter,IntToStr(listHeadDevice[i].listGroup[j].listVertexWayGroup[k].numBefore));
                //end;
 
-           //   ZCMsgCallBackInterface.Do_HistoryOut('длина списка графа после создания' + IntToStr(listHeadDevice[i].listGroup[j].listVertexWayGroup.Size));
+           //   ZCMsgCallBackInterface.TextMessage('длина списка графа после создания' + IntToStr(listHeadDevice[i].listGroup[j].listVertexWayGroup.Size));
             end;
       end;
 
@@ -1395,7 +1395,7 @@ function getGroupDeviceInGraph(ourGraph:TGraphBuilder;Epsilon:double):TListHeadD
                  //for k:=0 to listHeadDevice[i].listGroup[j].listVertexWayOnlyVertex.size-1 do
                  //  begin
                  //
-                 //      ZCMsgCallBackInterface.Do_HistoryOut('точка' + IntToStr(listHeadDevice[i].listGroup[j].listVertexWayOnlyVertex[k]));
+                 //      ZCMsgCallBackInterface.TextMessage('точка' + IntToStr(listHeadDevice[i].listGroup[j].listVertexWayOnlyVertex[k]));
                  //  end;
             end;
       end;
@@ -1409,10 +1409,10 @@ function getGroupDeviceInGraph(ourGraph:TGraphBuilder;Epsilon:double):TListHeadD
       counterColor:=0;
       for i:=0 to listHeadDevice.Size-1 do
       begin
-         ZCMsgCallBackInterface.Do_HistoryOut(listHeadDevice[i].name + ' = '+ IntToStr(listHeadDevice[i].num));
+         ZCMsgCallBackInterface.TextMessage(listHeadDevice[i].name + ' = '+ IntToStr(listHeadDevice[i].num));
          for j:=0 to listHeadDevice[i].listGroup.Size -1 do
             begin
-              ZCMsgCallBackInterface.Do_HistoryOut(' Group = ' + listHeadDevice[i].listGroup[j].name);
+              ZCMsgCallBackInterface.TextMessage(' Group = ' + listHeadDevice[i].listGroup[j].name);
               for k:=0 to listHeadDevice[i].listGroup[j].listDevice.Size -1 do
                 begin
                   if counterColor=7 then
@@ -1421,12 +1421,12 @@ function getGroupDeviceInGraph(ourGraph:TGraphBuilder;Epsilon:double):TListHeadD
                       inc(counterColor);
                   EdgePath:=TClassList.Create;
                   VertexPath:=TClassList.Create;
-                  ZCMsgCallBackInterface.Do_HistoryOut(' device = ' + IntToStr(listHeadDevice[i].listGroup[j].listDevice[k].num) + '_type' + listHeadDevice[i].listGroup[j].listDevice[k].tDevice);
+                  ZCMsgCallBackInterface.TextMessage(' device = ' + IntToStr(listHeadDevice[i].listGroup[j].listDevice[k].num) + '_type' + listHeadDevice[i].listGroup[j].listDevice[k].tDevice);
                   T:=G.FindMinWeightPath(G[listHeadDevice[i].num], G[listHeadDevice[i].listGroup[j].listDevice[k].num], EdgePath);
-                  ZCMsgCallBackInterface.Do_HistoryOut('Minimal Length: '+ FloatToStr(T));
+                  ZCMsgCallBackInterface.TextMessage('Minimal Length: '+ FloatToStr(T));
                   G.EdgePathToVertexPath(G[listHeadDevice[i].num], EdgePath, VertexPath);
 
-                  //  ZCMsgCallBackInterface.Do_HistoryOut('Vertices: ');
+                  //  ZCMsgCallBackInterface.TextMessage('Vertices: ');
                   GListVert.PushBack(ourGraph.listVertex[listHeadDevice[i].num].centerPoint);
                   for m:=0 to VertexPath.Count - 1 do  begin
                       GListVert.PushBack(ourGraph.listVertex[TVertex(VertexPath[m]).Index].centerPoint);
@@ -1440,7 +1440,7 @@ function getGroupDeviceInGraph(ourGraph:TGraphBuilder;Epsilon:double):TListHeadD
                 end;
             end;
       end;
-      ZCMsgCallBackInterface.Do_HistoryOut('dfsdfsdfsdfsdfsdfsdsdf: ');
+      ZCMsgCallBackInterface.TextMessage('dfsdfsdfsdfsdfsdfsdsdf: ');
          *}
 
 
@@ -1448,24 +1448,24 @@ function getGroupDeviceInGraph(ourGraph:TGraphBuilder;Epsilon:double):TListHeadD
       T:=G.FindMinWeightPath(G[0], G[6], EdgePath);
 
       {if T <> 11 then begin
-           ZCMsgCallBackInterface.Do_HistoryOut('*** Error! ***');
+           ZCMsgCallBackInterface.TextMessage('*** Error! ***');
        // write('Error!');
        // readln;
         Exit;
       end;  }
-      ZCMsgCallBackInterface.Do_HistoryOut('Minimal Length: '+ FloatToStr(T));
+      ZCMsgCallBackInterface.TextMessage('Minimal Length: '+ FloatToStr(T));
       //writeln('Minimal Length: ', T :4:2);
       G.EdgePathToVertexPath(G[0], EdgePath, VertexPath);
-      ZCMsgCallBackInterface.Do_HistoryOut('Vertices: ');
+      ZCMsgCallBackInterface.TextMessage('Vertices: ');
       //write('Vertices: ');
       for I:=0 to VertexPath.Count - 1 do
-        ZCMsgCallBackInterface.Do_HistoryOut(IntToStr(TVertex(VertexPath[I]).Index) + ' ');
+        ZCMsgCallBackInterface.TextMessage(IntToStr(TVertex(VertexPath[I]).Index) + ' ');
       //writeln;   }
       //G.Destroy;
       //EdgePath.Free;
       //VertexPath.Free;
 //
-//       ZCMsgCallBackInterface.Do_HistoryOut('dfsdfsdfsdfsdfsdfsdsdf: ');
+//       ZCMsgCallBackInterface.TextMessage('dfsdfsdfsdfsdfsdfsdsdf: ');
 //
 //    for i:=0 to ourGraph.listVertex.Size-1 do
 //      begin
@@ -1477,14 +1477,14 @@ function getGroupDeviceInGraph(ourGraph:TGraphBuilder;Epsilon:double):TListHeadD
 //         uzvcom.testTempDrawLine(ourGraph.listEdge[i].VPoint1,ourGraph.listEdge[i].VPoint2);
 //      end;
 //
-//      ZCMsgCallBackInterface.Do_HistoryOut('В полученном грhfjhfjhfафе вершин = ' + IntToStr(ourGraph.listVertex.Size));
-//      ZCMsgCallBackInterface.Do_HistoryOut('В полученном графе ребер = ' + IntToStr(ourGraph.listEdge.Size));
+//      ZCMsgCallBackInterface.TextMessage('В полученном грhfjhfjhfафе вершин = ' + IntToStr(ourGraph.listVertex.Size));
+//      ZCMsgCallBackInterface.TextMessage('В полученном графе ребер = ' + IntToStr(ourGraph.listEdge.Size));
 
 
 
 
       {*
-    ZCMsgCallBackInterface.Do_HistoryOut('*** Min Weight Path ***');
+    ZCMsgCallBackInterface.TextMessage('*** Min Weight Path ***');
   //  writeln('*** Min Weight Path ***');
     G:=TGraph.Create;
     G.Features:=[Weighted];
@@ -1506,18 +1506,18 @@ function getGroupDeviceInGraph(ourGraph:TGraphBuilder;Epsilon:double):TListHeadD
       T:=G.FindMinWeightPath(G[0], G[6], EdgePath);
 
       if T <> 11 then begin
-           ZCMsgCallBackInterface.Do_HistoryOut('*** Error! ***');
+           ZCMsgCallBackInterface.TextMessage('*** Error! ***');
        // write('Error!');
        // readln;
         Exit;
       end;
-      ZCMsgCallBackInterface.Do_HistoryOut('Minimal Length: ');
+      ZCMsgCallBackInterface.TextMessage('Minimal Length: ');
       //writeln('Minimal Length: ', T :4:2);
       G.EdgePathToVertexPath(G[0], EdgePath, VertexPath);
-      ZCMsgCallBackInterface.Do_HistoryOut('Vertices: ');
+      ZCMsgCallBackInterface.TextMessage('Vertices: ');
       //write('Vertices: ');
       for I:=0 to VertexPath.Count - 1 do
-        ZCMsgCallBackInterface.Do_HistoryOut(IntToStr(TVertex(VertexPath[I]).Index) + ' ');
+        ZCMsgCallBackInterface.TextMessage(IntToStr(TVertex(VertexPath[I]).Index) + ' ');
       //writeln;
       G.Free;
       EdgePath.Free;
@@ -1532,7 +1532,7 @@ function getGroupDeviceInGraph(ourGraph:TGraphBuilder;Epsilon:double):TListHeadD
     I: Integer;
     T: Float;
   begin
-    ZCMsgCallBackInterface.Do_HistoryOut('*** Min Weight Path ***');
+    ZCMsgCallBackInterface.TextMessage('*** Min Weight Path ***',HistoryOut);
   //  writeln('*** Min Weight Path ***');
     G:=TGraph.Create;
     G.Features:=[Weighted];
@@ -1555,18 +1555,18 @@ function getGroupDeviceInGraph(ourGraph:TGraphBuilder;Epsilon:double):TListHeadD
       T:=G.FindMinWeightPath(G[0], G[6], EdgePath);
 
       if T <> 11 then begin
-           ZCMsgCallBackInterface.Do_HistoryOut('*** Error! ***');
+           ZCMsgCallBackInterface.TextMessage('*** Error! ***',HistoryOut);
        // write('Error!');
        // readln;
         Exit;
       end;
-      ZCMsgCallBackInterface.Do_HistoryOut('Minimal Length: ');
+      ZCMsgCallBackInterface.TextMessage('Minimal Length: ',HistoryOut);
       //writeln('Minimal Length: ', T :4:2);
       G.EdgePathToVertexPath(G[0], EdgePath, VertexPath);
-      ZCMsgCallBackInterface.Do_HistoryOut('Vertices: ');
+      ZCMsgCallBackInterface.TextMessage('Vertices: ',HistoryOut);
       //write('Vertices: ');
       for I:=0 to VertexPath.Count - 1 do
-        ZCMsgCallBackInterface.Do_HistoryOut(IntToStr(TVertex(VertexPath[I]).Index) + ' ');
+        ZCMsgCallBackInterface.TextMessage(IntToStr(TVertex(VertexPath[I]).Index) + ' ',HistoryOut);
       //writeln;
     finally
       G.Free;

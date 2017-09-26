@@ -18,7 +18,7 @@
 unit uzcinterface;
 {$INCLUDE def.inc}
 interface
-uses uzedimensionaltypes,gzctnrstl,zeundostack,varmandef,forms,classes,uzbtypes;
+uses uzcstrconsts,uzedimensionaltypes,gzctnrstl,zeundostack,varmandef,forms,classes,uzbtypes,LCLType;
 const
      MenuNameModifier='MENU_';
 
@@ -26,23 +26,37 @@ type
     TProcedure_String_=procedure(s:String);
     TProcedure_String_HandlersVector=TMyVector<TProcedure_String_>;
 
+    TTextMessageWriteOptions=(TMWOToConsole,            //вывод сообщения в консоль
+                              TMWOToLog,                //вывод в log
+                              TMWOToQuicklyReplaceable, //вывод в статусную строку
+                              TMWOToModal,              //messagebox
+                              TMWOWarning,              //оформить как варнинг
+                              TMWOError);               //оформить как ошибку
+const
+    HistoryOut=[TMWOToConsole,TMWOToLog];
+    ShowError=[TMWOToConsole,TMWOToLog,TMWOToModal,TMWOError];
+    SilentShowError=[TMWOToConsole,TMWOToLog,TMWOError];
+    Quickly=[TMWOToQuicklyReplaceable];
+type
+    TTextMessageWriteOptionsSet=set of TTextMessageWriteOptions;
+
 
     TZCMsgCallBackInterface=class
       public
         procedure RegisterHandler_HistoryOut(Handler:TProcedure_String_);
-        procedure RegisterHandler_ShowError(Handler:TProcedure_String_);
         procedure RegisterHandler_LogError(Handler:TProcedure_String_);
         procedure RegisterHandler_StatusLineTextOut(Handler:TProcedure_String_);
+
         procedure Do_HistoryOut(s:String);
-        procedure Do_ShowError(s:String);
         procedure Do_LogError(s:String);
         procedure Do_StatusLineTextOut(s:String);
+
+        procedure TextMessage(msg:String;opt:TTextMessageWriteOptionsSet);
       private
         procedure RegisterTProcedure_String_HandlersVector(var PSHV:TProcedure_String_HandlersVector;Handler:TProcedure_String_);
         procedure Do_TProcedure_String_HandlersVector(var PSHV:TProcedure_String_HandlersVector;s:String);
       private
         HistoryOutHandlers:TProcedure_String_HandlersVector;
-        ShowErrorHandlers:TProcedure_String_HandlersVector;
         LogErrorHandlers:TProcedure_String_HandlersVector;
         StatusLineTextOutHandlers:TProcedure_String_HandlersVector;
 
@@ -153,11 +167,61 @@ var
 
 
 function DoShowModal(MForm:TForm): Integer;
-function MessageBox(Text, Caption: PChar; Flags: Longint): Integer;
+procedure MessageBox(Text: string);
+procedure ErrMessageBox(Text: string);
 function GetUndoStack:pointer;
 var
    ZCMsgCallBackInterface:TZCMsgCallBackInterface;
 implementation
+procedure TZCMsgCallBackInterface.TextMessage(msg:String;opt:TTextMessageWriteOptionsSet);
+var
+   Text,Caption: string;
+   ps:PChar;
+   Flags: Longint;
+begin
+     if TMWOToModal in opt then begin
+       if TMWOWarning in opt then begin
+         Caption:=rsWarningCaption;
+         msg:=rsWarningPrefix+msg;
+         Flags:=MB_OK or MB_ICONWARNING;
+       end
+  else if TMWOError in opt then begin
+         Caption:=rsErrorCaption;
+         msg:=rsErrorPrefix+msg;
+         Flags:=MB_ICONERROR;
+       end
+  else begin
+          Caption:=rsMessageCaption;
+          Flags:=MB_OK;
+       end;
+
+       if msg<>'' then ps:=@msg[1]
+                  else ps:=nil;
+
+       if assigned(ShowAllCursorsProc) then
+                                           ShowAllCursorsProc;
+
+       application.MessageBox(ps,@Caption[1],Flags);
+
+       if assigned(RestoreAllCursorsProc) then
+                                           RestoreAllCursorsProc;
+     end else begin
+       if TMWOWarning in opt then begin
+         msg:=rsWarningPrefix+msg;
+       end
+  else if TMWOError in opt then begin
+         msg:=rsErrorPrefix+msg;
+       end
+     end;
+
+     if TMWOToConsole in opt then
+       Do_HistoryOut(msg)
+else if TMWOToLog in opt then
+       Do_LogError(msg)
+else if TMWOToQuicklyReplaceable in opt then
+       Do_StatusLineTextOut(msg)
+end;
+
 procedure TZCMsgCallBackInterface.RegisterTProcedure_String_HandlersVector(var PSHV:TProcedure_String_HandlersVector;Handler:TProcedure_String_);
 begin
    if not assigned(PSHV) then
@@ -177,10 +241,6 @@ procedure TZCMsgCallBackInterface.RegisterHandler_HistoryOut(Handler:TProcedure_
 begin
    RegisterTProcedure_String_HandlersVector(HistoryOutHandlers,Handler);
 end;
-procedure TZCMsgCallBackInterface.RegisterHandler_ShowError(Handler:TProcedure_String_);
-begin
-   RegisterTProcedure_String_HandlersVector(ShowErrorHandlers,Handler);
-end;
 procedure TZCMsgCallBackInterface.RegisterHandler_LogError(Handler:TProcedure_String_);
 begin
    RegisterTProcedure_String_HandlersVector(LogErrorHandlers,Handler);
@@ -192,10 +252,6 @@ end;
 procedure TZCMsgCallBackInterface.Do_HistoryOut(s:String);
 begin
    Do_TProcedure_String_HandlersVector(HistoryOutHandlers,s);
-end;
-procedure TZCMsgCallBackInterface.Do_ShowError(s:String);
-begin
-   Do_TProcedure_String_HandlersVector(ShowErrorHandlers,s);
 end;
 procedure TZCMsgCallBackInterface.Do_LogError(s:String);
 begin
@@ -221,14 +277,24 @@ begin
      if assigned(RestoreAllCursorsProc) then
                                          RestoreAllCursorsProc;
 end;
-function MessageBox(Text, Caption: PChar; Flags: Longint): Integer;
+procedure MessageBox(Text: string);
 begin
      if assigned(ShowAllCursorsProc) then
                                          ShowAllCursorsProc;
-     result:=application.MessageBox(Text, Caption,Flags);
+     application.MessageBox(@Text[1], @rsWarningCaption[1],MB_OK or MB_ICONWARNING);
      if assigned(RestoreAllCursorsProc) then
                                          RestoreAllCursorsProc;
 end;
+
+procedure errMessageBox(Text: string);
+begin
+     if assigned(ShowAllCursorsProc) then
+                                         ShowAllCursorsProc;
+     application.MessageBox(@Text[1], 'Error',mb_iconhand);
+     if assigned(RestoreAllCursorsProc) then
+                                         RestoreAllCursorsProc;
+end;
+
 
 initialization
   ZCMsgCallBackInterface:=TZCMsgCallBackInterface.create;

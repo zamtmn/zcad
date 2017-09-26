@@ -411,7 +411,7 @@ begin
                                               //s:=valuetoGDBString(v.pvalue,v.ptd);
                                               s:=v.data.ptd^.GetValueAsString(v.data.Instance);
                                               v.data.Instance:=v.data.Instance;
-                                              ZCMsgCallBackInterface.Do_HistoryOut(Format(rsExprOutText,[expr,s]));
+                                              ZCMsgCallBackInterface.TextMessage(Format(rsExprOutText,[expr,s]),HistoryOut);
                                          end
       else if commandmanager.FindCommand(uppercase({cmd}command))<>nil then
           begin
@@ -437,7 +437,7 @@ begin
            until (cmd='')or(not parsed);
            if parsed then
            begin
-           ZCMsgCallBackInterface.Do_HistoryOut(Format(rsExprOutText,[CmdEdit.text,superexpr]));
+           ZCMsgCallBackInterface.TextMessage(Format(rsExprOutText,[CmdEdit.text,superexpr]),HistoryOut);
            if IsParsed('_realnumber'#0'_softspace'#0'=,_realnumber'#0'_softspace'#0'=,_realnumber'#0,superexpr,parseresult)then
            begin
                  if drawings.GetCurrentDWG<>nil then
@@ -475,7 +475,7 @@ begin
            end
            end
               else
-                  ZCMsgCallBackInterface.Do_ShowError('Unable to parse line "'+subexpr+'"');
+                  ZCMsgCallBackInterface.TextMessage('Unable to parse line "'+subexpr+'"',ShowError);
       end;
     end;
     CmdEdit.text:='';
@@ -525,7 +525,7 @@ begin
           //a:=CLine.HistoryLine.Lines[CLine.HistoryLine.Lines.Count];
      //SendMessageA(cline.HistoryLine.Handle, WM_vSCROLL, SB_PAGEDOWN	, 0);
      end;
-     programlog.logoutstr('HISTORY: '+s,0,LM_Info);
+     //programlog.logoutstr('HISTORY: '+s,0,LM_Info);
 end;
 procedure HistoryOutStr(s:String);
 begin
@@ -564,11 +564,11 @@ begin
 end;
 procedure LogError(errstr:String); export;
 begin
-     errstr:=rserrorprefix+errstr;
+     {errstr:=rserrorprefix+errstr;
      if assigned(HistoryLine) then
      begin
      HistoryOutStr(errstr);
-     end;
+     end;}
      programlog.logoutstr(errstr,0,LM_Error);
 end;
 begin
@@ -576,7 +576,7 @@ begin
   historychanged:=false;
   ZCADGUIManager.RegisterZCADFormInfo('CommandLine',rsCommandLineWndName,TCLine,rect(200,100,600,100),nil,nil,@CLine);
 
-  ZCMsgCallBackInterface.RegisterHandler_HistoryOut(HistoryOutStr());
+  ZCMsgCallBackInterface.RegisterHandler_HistoryOut(HistoryOutStr);
   //uzcinterface.HistoryOutStr:=HistoryOutStr;
 
   uzcinterface.DisableCmdLine:=DisableCmdLine;
@@ -585,5 +585,5 @@ begin
   ZCMsgCallBackInterface.RegisterHandler_StatusLineTextOut(StatusLineTextOut);
   //uzcinterface.StatusLineTextOut:=StatusLineTextOut;
   ZCMsgCallBackInterface.RegisterHandler_LogError(LogError);
-  //uzcinterface.LogError:=LogError;
+  //uzcinterface.SilentShowError:=LogError;
 end.

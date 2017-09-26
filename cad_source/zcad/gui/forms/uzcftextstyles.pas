@@ -347,7 +347,7 @@ begin
                                        end;
                                      end
                                  else
-                                     MessageBox(@rsStyleMustBeSelected[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
+                                     MessageBox(rsStyleMustBeSelected);
 end;
 procedure TTextStylesForm.FormShow(Sender: TObject);
 begin
@@ -440,7 +440,7 @@ begin
   stylename:=pdwg^.TextStyleTable.GetFreeName(Tria_Utf8ToAnsi(rsNewTextStyleNameFormat),1);
   if stylename='' then
   begin
-    ZCMsgCallBackInterface.Do_ShowError(rsUnableSelectFreeTextStylerName);
+    ZCMsgCallBackInterface.TextMessage(rsUnableSelectFreeTextStylerName,ShowError);
     exit;
   end;
 
@@ -492,12 +492,12 @@ begin
                                      countstyle(pstyle,inEntities,inBlockTable,indimstyles);
                                      if ListView1.Selected.Data=pdwg^.GetCurrentTextStyle then
                                      begin
-                                       ZCMsgCallBackInterface.Do_ShowError(rsCurrentStyleCannotBeDeleted);
+                                       ZCMsgCallBackInterface.TextMessage(rsCurrentStyleCannotBeDeleted,ShowError);
                                        exit;
                                      end;
                                      if (inEntities+inBlockTable+indimstyles)>0 then
                                                   begin
-                                                       ZCMsgCallBackInterface.Do_ShowError(rsUnableDelUsedStyle);
+                                                       ZCMsgCallBackInterface.TextMessage(rsUnableDelUsedStyle,ShowError);
                                                        exit;
                                                   end;
 
@@ -506,7 +506,7 @@ begin
                                      DescLabel.Caption:='';
                                      end
                                  else
-                                     ZCMsgCallBackInterface.Do_ShowError(rsStyleMustBeSelected);
+                                     ZCMsgCallBackInterface.TextMessage(rsStyleMustBeSelected,ShowError);
 end;
 
 procedure TTextStylesForm.AplyClose(Sender: TObject);

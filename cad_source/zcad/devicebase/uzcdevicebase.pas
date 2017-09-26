@@ -214,7 +214,7 @@ begin
                           end;
                      end
                  else
-                     ZCMsgCallBackInterface.Do_ShowError('');
+                     ZCMsgCallBackInterface.TextMessage('',ShowError);
 end;
 procedure DeviceManager.loadfromdir(path: GDBString);
 //var sr: TSearchRec;

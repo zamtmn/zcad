@@ -447,7 +447,7 @@ implementation
          for i:=0 to contour2dRoom^.Vertex2D_in_OCS_Array.GetRealCount-1 do begin
           pt2d:=contour2dRoom^.Vertex2D_in_OCS_Array.getdata(i);
 
-          //ZCMsgCallBackInterface.Do_HistoryOut('i='+inttostr(i));
+          //ZCMsgCallBackInterface.TextMessage('i='+inttostr(i));
           //historyoutstr('GetRealCount='+inttostr(contour2dRoom^.Vertex2D_in_OCS_Array.GetRealCount-1));
 
           ptb2d:=contour2dRoom^.Vertex2D_in_OCS_Array.getdata(i-1);
@@ -514,10 +514,10 @@ implementation
             result:=true;
          end
          else
-            ZCMsgCallBackInterface.Do_HistoryOut('The point is not perpendicular to the room');
+            ZCMsgCallBackInterface.TextMessage('The point is not perpendicular to the room',HistoryOut);
       end
       else
-          ZCMsgCallBackInterface.Do_HistoryOut('Starting point automatic placement lines super not available');
+          ZCMsgCallBackInterface.TextMessage('Starting point automatic placement lines super not available',HistoryOut);
     end;
 
     //**Поиск прямоугольного контура помещения
@@ -545,7 +545,7 @@ implementation
         until pobj=nil;
 
         if not result then
-           ZCMsgCallBackInterface.Do_HistoryOut('Прямоугольный контур помещения не найден');
+           ZCMsgCallBackInterface.TextMessage('Прямоугольный контур помещения не найден',HistoryOut);
     end;
     //**проверка является ли комната прямоугольной
     function isRectangelRoom(contourRoom:PGDBObjPolyLine):boolean;
@@ -568,7 +568,7 @@ implementation
                 result:=true
             end;
          if not result then
-           ZCMsgCallBackInterface.Do_HistoryOut('комната не прямоугольная');
+           ZCMsgCallBackInterface.TextMessage('комната не прямоугольная',HistoryOut);
     end;
     //** Получение области выделения вокруг комнаты, левая-нижняя-ближняя точка и правая-верхняя-дальняя точка
     function getAreaSelectRoom(contourRoom:PGDBObjPolyLine):TBoundingBox;
@@ -724,7 +724,7 @@ implementation
        tempVertex.z:=0;
        xline:=uzegeometry.Vertexlength(p1,tempVertex);
        anglewall:=arccos(xline/xyline);
-       //ZCMsgCallBackInterface.Do_HistoryOut('anglewall='+floattostr(anglewall));
+       //ZCMsgCallBackInterface.TextMessage('anglewall='+floattostr(anglewall));
        if not pzona13 then
          anglewall:=3.1416-anglewall;
 
@@ -735,11 +735,11 @@ implementation
        tempVertex.z:=0;
        xline:=uzegeometry.Vertexlength(pr1,tempVertex);
        angleper:=arccos(xline/xyline);
-       //ZCMsgCallBackInterface.Do_HistoryOut('angleper='+floattostr(angleper));
+       //ZCMsgCallBackInterface.TextMessage('angleper='+floattostr(angleper));
        if not przona13 then
          angleper:=3.1416-angleper;
 
-      //ZCMsgCallBackInterface.Do_HistoryOut('angleper='+floattostr(angleper)+'--- anglewall='+floattostr(anglewall));
+      //ZCMsgCallBackInterface.TextMessage('angleper='+floattostr(angleper)+'--- anglewall='+floattostr(anglewall));
       anglecenter:=3.1416;
       zonaAngleMin2:=-1;
       zonaAngleMax2:=-1;
@@ -766,7 +766,7 @@ implementation
         if ((anglewall<=zonaAngleMax) and (anglewall>=zonaAngleMin)) then
            result:=true;
 
-      //ZCMsgCallBackInterface.Do_HistoryOut('angleper='+floattostr(angleper)+'--- anglewall='+floattostr(anglewall));
+      //ZCMsgCallBackInterface.TextMessage('angleper='+floattostr(angleper)+'--- anglewall='+floattostr(anglewall));
 
     end;
 
@@ -819,7 +819,7 @@ implementation
            begin
              if not thisLinePlaceDev(mpd[i-1],mpd[i]) then
                begin
-                    //ZCMsgCallBackInterface.Do_HistoryOut('device######'+inttostr(count));
+                    //ZCMsgCallBackInterface.TextMessage('device######'+inttostr(count));
 
                   infoVertexDevice.coord:=mpd[i-1].coord;
                   infoVertexDevice.pdev:=mpd[i-1].pdev;
@@ -870,7 +870,7 @@ implementation
           infoColumnDev:=TInfoColumnDev.Create;
           columns:=horList.Size;
           lines:=vertList.Size;
-          //ZCMsgCallBackInterface.Do_HistoryOut('column######'+inttostr(columns)+'---lines######'+inttostr(lines));
+          //ZCMsgCallBackInterface.TextMessage('column######'+inttostr(columns)+'---lines######'+inttostr(lines));
           for i:=0 to columns+1 do begin
             for j:=0 to lines+1 do begin
                 infoVertexDevice.coord:=uzegeometry.CreateVertex(-1,-1,-1);
@@ -915,7 +915,7 @@ implementation
          infoVertexDevice:TVertexDevice;
          tempforinfo:string;
     begin
-         //ZCMsgCallBackInterface.Do_HistoryOut('Заработалоssssss');
+         //ZCMsgCallBackInterface.TextMessage('Заработалоssssss');
 
          mpd:=devcoordarray.Create;  //**создания списока устройств и координат
          dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
@@ -930,7 +930,7 @@ implementation
          if (perpendListVertex.front.x <= perpendListVertex[1].x) and (perpendListVertex.front.y <= perpendListVertex[1].y) then
             angle:=arccos(anglePerpendCos)+3*1.5707963267949;
 
-         //ZCMsgCallBackInterface.Do_HistoryOut('angle######'+floattostr(angle));
+         //ZCMsgCallBackInterface.TextMessage('angle######'+floattostr(angle));
 
           //** Получение горизонтального расположение нумерации
                for i:=0 to listDeviceinRoom.Size-1 do
@@ -984,14 +984,14 @@ implementation
          result:=getMatrixListDevice(hor2DListDevice,vert2DListDevice);
 
          tempforinfo:='*';
-         //ZCMsgCallBackInterface.Do_HistoryOut('cs######'+inttostr(result.Size-1));
-         //ZCMsgCallBackInterface.Do_HistoryOut('ls######'+inttostr(result[0].listLineDev.Size-1));
+         //ZCMsgCallBackInterface.TextMessage('cs######'+inttostr(result.Size-1));
+         //ZCMsgCallBackInterface.TextMessage('ls######'+inttostr(result[0].listLineDev.Size-1));
          for i:=0 to result.Size-1 do  begin
            for j:=0 to result[i].listLineDev.Size-1 do
            begin
                 tempforinfo:=tempforinfo + inttostr(result[i].listLineDev[j].num)+'*';
            end;
-           ZCMsgCallBackInterface.Do_HistoryOut('##'+tempforinfo);
+           ZCMsgCallBackInterface.TextMessage('##'+tempforinfo,HistoryOut);
            tempforinfo:='*';
          end;
 
@@ -1020,7 +1020,7 @@ implementation
 //       infoVertexDevice:TVertexDevice;
 //       //strNameDev:string;
 //  begin
-//       ZCMsgCallBackInterface.Do_HistoryOut('Заработало');
+//       ZCMsgCallBackInterface.TextMessage('Заработало');
 //
 //       mpd:=devcoordarray.Create;  //**создания списока устройств и координат
 //       psd:=drawings.GetCurrentDWG^.SelObjArray.beginiterate(ir);  //перебор выбраных объектов
@@ -1047,7 +1047,7 @@ implementation
 //       //** если ничего не выделено и не обработано то остановка функции
 //       if count=0 then
 //                      begin
-//                           ZCMsgCallBackInterface.Do_HistoryOut('In selection not found devices');
+//                           ZCMsgCallBackInterface.TextMessage('In selection not found devices');
 //                           mpd.Destroy;
 //                           Commandmanager.executecommandend;
 //                           exit;
@@ -1070,7 +1070,7 @@ implementation
 //         begin
 //           if not thisLinePlaceDev(mpd[i-1],mpd[i]) then
 //             begin
-//                  //ZCMsgCallBackInterface.Do_HistoryOut('device######'+inttostr(count));
+//                  //ZCMsgCallBackInterface.TextMessage('device######'+inttostr(count));
 //                inc(count);
 //                infoVertexDevice.coord:=mpd[i-1].coord;
 //                infoVertexDevice.pdev:=mpd[i-1].pdev;
@@ -1132,7 +1132,7 @@ implementation
 //                   else
 //                       begin
 //                            process:=true;
-//                            ZCMsgCallBackInterface.Do_HistoryOut('In device not found BaseName variable. Processed');
+//                            ZCMsgCallBackInterface.TextMessage('In device not found BaseName variable. Processed');
 //                       end;
 //              end
 //                 else
@@ -1144,19 +1144,19 @@ implementation
 //                if pvd<>nil then
 //                begin
 //                     pvd^.data.PTD^.SetValueFromString(pvd^.data.Instance,inttostr(index));
-//                     ZCMsgCallBackInterface.Do_HistoryOut('device'+inttostr(index)+'==='+inttostr(i)+'##'+inttostr(j));
+//                     ZCMsgCallBackInterface.TextMessage('device'+inttostr(index)+'==='+inttostr(i)+'##'+inttostr(j));
 //                     //inc(index,NumberingParams.Increment);
 //                     inc(index);
 //                     inc(count);
 //                     pdev^.FormatEntity(drawings.GetCurrentDWG^,dc);
 //                end
 //                   else
-//                   ZCMsgCallBackInterface.Do_HistoryOut('In device not found numbering variable');
+//                   ZCMsgCallBackInterface.TextMessage('In device not found numbering variable');
 //              end
 //              else
-//                  ZCMsgCallBackInterface.Do_HistoryOut('Device with basename "'+pvd^.data.PTD^.GetUserValueAsString(pvd^.data.Instance)+'" filtred out');
+//                  ZCMsgCallBackInterface.TextMessage('Device with basename "'+pvd^.data.PTD^.GetUserValueAsString(pvd^.data.Instance)+'" filtred out');
 //         end;
-//       ZCMsgCallBackInterface.Do_HistoryOut(sysutils.format(rscmNEntitiesProcessed,[inttostr(count)]));
+//       ZCMsgCallBackInterface.TextMessage(sysutils.format(rscmNEntitiesProcessed,[inttostr(count)]));
 //       //if NumberingParams.SaveStart then
 //       //                                 NumberingParams.StartNumber:=index;
 //       mpd.Destroy;
@@ -1343,7 +1343,7 @@ begin
          //есть ли в данной позиции устройство
          if listColumnDev[i].listLineDev[j].num >= 0 then
          begin
-           //ZCMsgCallBackInterface.Do_HistoryOut('-num+'+ inttostr(listColumnDev[i].listLineDev[j].num)+'-');
+           //ZCMsgCallBackInterface.TextMessage('-num+'+ inttostr(listColumnDev[i].listLineDev[j].num)+'-');
            //uzvtestdraw.testTempDrawText(listColumnDev[i].listLineDev[j].coord,inttostr(listColumnDev[i].listLineDev[j].num));
            //если предыдущая ячейка в столбце так же устройство
            if listColumnDev[i-1].listLineDev[j].num >= 0 then
@@ -1351,8 +1351,8 @@ begin
 
                infoEdge.VIndex1:=listColumnDev[i-1].listLineDev[j].num;
                infoEdge.VIndex2:=listColumnDev[i].listLineDev[j].num;
-               //ZCMsgCallBackInterface.Do_HistoryOut('-v1+'+ inttostr(infoEdge.VIndex1)+'-');
-               //ZCMsgCallBackInterface.Do_HistoryOut('-v2+'+ inttostr(infoEdge.VIndex2)+'-');
+               //ZCMsgCallBackInterface.TextMessage('-v1+'+ inttostr(infoEdge.VIndex1)+'-');
+               //ZCMsgCallBackInterface.TextMessage('-v2+'+ inttostr(infoEdge.VIndex2)+'-');
                infoEdge.VPoint1:=graphASL.listVertex[infoEdge.VIndex1].pt;
                infoEdge.VPoint2:=graphASL.listVertex[infoEdge.VIndex2].pt;
                infoEdge.edgeLength:=uzegeometry.Vertexlength(infoEdge.VPoint1,infoEdge.VPoint2);
@@ -1378,8 +1378,8 @@ begin
                    begin
                      infoEdge.VIndex1:=listColumnDev[k].listLineDev[j].num;
                      infoEdge.VIndex2:=listColumnDev[i].listLineDev[j].num;
-                     //ZCMsgCallBackInterface.Do_HistoryOut('-v1+'+ inttostr(infoEdge.VIndex1)+'-');
-                     //ZCMsgCallBackInterface.Do_HistoryOut('-v2+'+ inttostr(infoEdge.VIndex2)+'-');
+                     //ZCMsgCallBackInterface.TextMessage('-v1+'+ inttostr(infoEdge.VIndex1)+'-');
+                     //ZCMsgCallBackInterface.TextMessage('-v2+'+ inttostr(infoEdge.VIndex2)+'-');
                      infoEdge.VPoint1:=graphASL.listVertex[infoEdge.VIndex1].pt;
                      infoEdge.VPoint2:=graphASL.listVertex[infoEdge.VIndex2].pt;
                      infoEdge.edgeLength:=uzegeometry.Vertexlength(infoEdge.VPoint1,infoEdge.VPoint2);
@@ -1529,7 +1529,7 @@ begin
       tempNum:=-1;
       for i:=0 to tempListDevice.Size-1 do
       begin
-         //ZCMsgCallBackInterface.Do_HistoryOut('номер' + IntToStr(tempListDevice[i].num)) ;
+         //ZCMsgCallBackInterface.TextMessage('номер' + IntToStr(tempListDevice[i].num)) ;
          for j:=0 to analisListVert.Size-1 do
             begin
               //**работа с библиотекой Аграф
@@ -1547,17 +1547,17 @@ begin
                   tempListVertex.PushBack(TVertex(VertexPath[k]).Index);
                 end
                 else
-                  ZCMsgCallBackInterface.Do_HistoryOut('АВАРИЯ');
+                  ZCMsgCallBackInterface.TextMessage('АВАРИЯ',HistoryOut);
                 //**смотрем его длину
                 tempLength:=0;
                 for k:=1 to tempListVertex.size - 1 do  begin
                   tempLength:=tempLength+uzegeometry.Vertexlength(graphASL.listVertex[tempListVertex[k-1]].pt,graphASL.listVertex[tempListVertex[k]].pt);
                 end;
 
-                //ZCMsgCallBackInterface.Do_HistoryOut('Длина' + FloatToStr(tempLength));
+                //ZCMsgCallBackInterface.TextMessage('Длина' + FloatToStr(tempLength));
 
                 //** проверяем был ли вообще создано начально значение длины и сравниваем длины, соответствено присваиваем промежуточные значения
-                //ZCMsgCallBackInterface.Do_HistoryOut('длина1 before=' + IntToStr(beforeListVert.size));
+                //ZCMsgCallBackInterface.TextMessage('длина1 before=' + IntToStr(beforeListVert.size));
                 if tempLength <>0 then
                 if beforeListVert.Size > 0 then begin
                     if beforeLength > tempLength then begin
@@ -1575,14 +1575,14 @@ begin
                 end;
               EdgePath.Free;
               VertexPath.Free;
-              //ZCMsgCallBackInterface.Do_HistoryOut('длина2 before=' + IntToStr(beforeListVert.size));
+              //ZCMsgCallBackInterface.TextMessage('длина2 before=' + IntToStr(beforeListVert.size));
               tempListVertex.Clear;
-              //ZCMsgCallBackInterface.Do_HistoryOut('длина3 before=' + IntToStr(beforeListVert.size));
+              //ZCMsgCallBackInterface.TextMessage('длина3 before=' + IntToStr(beforeListVert.size));
             end;
       end;
 
       //**добавляем вершины прокладки
-      //ZCMsgCallBackInterface.Do_HistoryOut('длина= before' + IntToStr(beforeListVert.size));
+      //ZCMsgCallBackInterface.TextMessage('длина= before' + IntToStr(beforeListVert.size));
        isFirst:=true;
        for i:=0 to beforeListVert.size - 1 do
        begin
@@ -1607,17 +1607,17 @@ begin
        end;
        beforeListVert.Clear;
 
-       //ZCMsgCallBackInterface.Do_HistoryOut('кол-во = ' + IntToStr(tempListDevice.size)+'tempNum='+ IntToStr(tempNum));
+       //ZCMsgCallBackInterface.TextMessage('кол-во = ' + IntToStr(tempListDevice.size)+'tempNum='+ IntToStr(tempNum));
        //**удаляем из списка то извещатель который мы соеденили с началом поиска
        tempListDevice.Erase(tempNum);
 
       inc(count);
-      //ZCMsgCallBackInterface.Do_HistoryOut('счетчик' + IntToStr(count)+'listDeviceinRoom='+ IntToStr(listDeviceinRoom.Size));
+      //ZCMsgCallBackInterface.TextMessage('счетчик' + IntToStr(count)+'listDeviceinRoom='+ IntToStr(listDeviceinRoom.Size));
 
       UNTIL count>listDeviceinRoom.Size;
 
       //for i:=0 to analisListVert.size - 1 do  begin
-      //  ZCMsgCallBackInterface.Do_HistoryOut('счетчик analisis' + IntToStr(i));
+      //  ZCMsgCallBackInterface.TextMessage('счетчик analisis' + IntToStr(i));
       //    uzvtestdraw.testTempDrawText(graphASL.listVertex[analisListVert[i]].pt,'i='+ inttostr(i));
       // end;
 end;
@@ -1674,11 +1674,11 @@ begin
                     if currentSubObj^.GetObjType=GDBLineID then begin   //если тип линия, это когда усекающая контур состоит из линий
                      pcdev:= PGDBObjLine(currentSubObj);
 
-                     ZCMsgCallBackInterface.Do_HistoryOut('lBegin-х = ' + FloatToStr(pcdev^.CoordInOCS.lBegin.x));
-                     ZCMsgCallBackInterface.Do_HistoryOut('lgetcenter-х = ' + FloatToStr(pObjDevice^.GetCenterPoint.x));
-                     ZCMsgCallBackInterface.Do_HistoryOut('lscale-х = ' + FloatToStr(pObjDevice^.scale.x));
+                     ZCMsgCallBackInterface.TextMessage('lBegin-х = ' + FloatToStr(pcdev^.CoordInOCS.lBegin.x),HistoryOut);
+                     ZCMsgCallBackInterface.TextMessage('lgetcenter-х = ' + FloatToStr(pObjDevice^.GetCenterPoint.x),HistoryOut);
+                     ZCMsgCallBackInterface.TextMessage('lscale-х = ' + FloatToStr(pObjDevice^.scale.x),HistoryOut);
                      tempvert:=uzvsgeom.getRealPointDevice(pcdev^.CoordInOCS.lBegin,pObjDevice^.GetCenterPoint,pObjDevice^.scale);
-                     ZCMsgCallBackInterface.Do_HistoryOut('lrealBegintemp-х = ' + FloatToStr(tempvert.x));
+                     ZCMsgCallBackInterface.TextMessage('lrealBegintemp-х = ' + FloatToStr(tempvert.x),HistoryOut);
 
                      if uzegeometry.intercept3d(pt,stpt,uzvsgeom.getRealPointDevice(pcdev^.CoordInOCS.lBegin,pObjDevice^.GetCenterPoint,pObjDevice^.scale),uzvsgeom.getRealPointDevice(pcdev^.CoordInOCS.lEnd,pObjDevice^.GetCenterPoint,pObjDevice^.scale)).isintercept then
                         begin
@@ -1694,7 +1694,7 @@ begin
        until pobj=nil;
       end;
 
-    ZCMsgCallBackInterface.Do_HistoryOut('dlina listvert = ' + intToStr(listVertex.size));
+    ZCMsgCallBackInterface.TextMessage('dlina listvert = ' + intToStr(listVertex.size),HistoryOut);
 
     //if listVertex.size>0 then
     //   result:=listVertex[0];
@@ -1719,7 +1719,7 @@ begin
    for i:=0 to listSL.size-1 do
    begin
       //scaleDev:=listDeviceinRoom[i].pdev^.scale;
-      //ZCMsgCallBackInterface.Do_HistoryOut('scale' + FloatToStr(scaleDev.x));
+      //ZCMsgCallBackInterface.TextMessage('scale' + FloatToStr(scaleDev.x));
 
       listSL.Mutable[i]^.p1:=getVertexSL(listSL[i].p1,listSL[i].p2,listDeviceinRoom,accuracy);
       listSL.Mutable[i]^.p2:=getVertexSL(listSL[i].p2,listSL[i].p1,listDeviceinRoom,accuracy);
@@ -1816,12 +1816,12 @@ begin
    begin
       contour2DRoom:=getContour2DRoom(contourRoom);
      // if uzvagsl.isRectangelRoom(contourRoom) then        //это прямоугольная комната?
-         //ZCMsgCallBackInterface.Do_HistoryOut('проверки пройдены');
+         //ZCMsgCallBackInterface.TextMessage('проверки пройдены');
 
           if mainElementAutoEmbedSL(contour2DRoom,contourRoomEmbedSL,perpendListVertex,anglePerpendCos,autogenSuperLine.indent) then  begin
            listDeviceinRoom:=uzvagsl.getListDeviceinRoom(contourRoom);  //получен список извещателей внутри помещения
 
-           ZCMsgCallBackInterface.Do_HistoryOut('Количество выделяных извещателей = ' + inttostr(listDeviceinRoom.Size));
+           ZCMsgCallBackInterface.TextMessage('Количество выделяных извещателей = ' + inttostr(listDeviceinRoom.Size),HistoryOut);
            listWallOrient:=getWallInfoOrient(contourRoomEmbedSL,perpendListVertex);
 
            //получаем двухмерный список устройств правильной сортировки
@@ -1846,7 +1846,7 @@ begin
            //**обрезаем суперлинии по линиям обрезки, у устройства
            cropSLonBorder(listSL,listDeviceinRoom,autogenSuperLine.accuracy);
 
-           ZCMsgCallBackInterface.Do_HistoryOut('Количество вершин графа= ' + inttostr(graphASL.listVertex.size));
+           ZCMsgCallBackInterface.TextMessage('Количество вершин графа= ' + inttostr(graphASL.listVertex.size),HistoryOut);
            for i:=0 to listSL.size-1 do
            uzccomexample.createSuperLine(listSL[i].p1,listSL[i].p2,autogenSuperLine.nameSL,autogenSuperLine.ProcessLayer,autogenSuperLine.LayerNamePrefix);
               //uzvtestdraw.testTempDrawLineColor(listSL[i].p1,listSL[i].p2,5);

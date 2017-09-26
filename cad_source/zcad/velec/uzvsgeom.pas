@@ -151,7 +151,7 @@ implementation
   function getRealPointDevice(ptdev,insertDev,scale:GDBVertex):GDBVertex;
   begin
        result.x:=(ptdev.x * scale.x) + insertDev.x;
-       ZCMsgCallBackInterface.Do_HistoryOut('result-х = ' + FloatToStr(result.x));
+       ZCMsgCallBackInterface.TextMessage('result-х = ' + FloatToStr(result.x),HistoryOut);
        result.y:=(ptdev.y * scale.y) + insertDev.y;
        result.z:=(ptdev.z * scale.z) + insertDev.z;
   end;
@@ -461,7 +461,7 @@ end;
 //        test:='УРА';
 //        r:=autoGenSLBetweenDevices(test);
 //
-//        ZCMsgCallBackInterface.Do_HistoryOut(' работает ' + test);
+//        ZCMsgCallBackInterface.TextMessage(' работает ' + test);
 // end;
 //
 //initialization

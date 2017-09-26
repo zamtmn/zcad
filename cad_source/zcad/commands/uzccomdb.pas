@@ -60,7 +60,7 @@ begin
            inc(GDBInteger(pvd.data.Instance^));
      end
         else
-            ZCMsgCallBackInterface.Do_HistoryOut(rscmCommandOnlyCTXMenu);
+            ZCMsgCallBackInterface.TextMessage(rscmCommandOnlyCTXMenu,HistoryOut);
      result:=cmd_ok;
 end;
 function DBaseRename_com(operands:TCommandOperands):TCommandResult;
@@ -92,7 +92,7 @@ begin
 
                       if pu^.FindVariable(s)<>nil then
                                                  begin
-                                                      ZCMsgCallBackInterface.Do_ShowError(format(rsEntryAlreadyExist,[s]));
+                                                      ZCMsgCallBackInterface.TextMessage(format(rsEntryAlreadyExist,[s]),ShowError);
                                                  end
                       else
                       begin
@@ -100,19 +100,19 @@ begin
                       if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
                       if parseerror and (s1='') then
                                         begin
-                                             ZCMsgCallBackInterface.Do_HistoryOut(format(rsRenamedTo,['Entry',pdbv.name,s]));
+                                             ZCMsgCallBackInterface.TextMessage(format(rsRenamedTo,['Entry',pdbv.name,s]),HistoryOut);
                                              pdbv.name:=s;
                                              renamed:=true;
                                         end
                                            else
-                                               ZCMsgCallBackInterface.Do_ShowError(format(rsInvalidIdentificator,[s]));
+                                               ZCMsgCallBackInterface.TextMessage(format(rsInvalidIdentificator,[s]),ShowError);
                       end;
                  end;
                  until renamed or (SingleLineTextEditorForm.ModalResult<>mrok);
            end;
      end
         else
-            ZCMsgCallBackInterface.Do_HistoryOut(rscmCommandOnlyCTXMenu);
+            ZCMsgCallBackInterface.TextMessage(rscmCommandOnlyCTXMenu,HistoryOut);
      result:=cmd_ok;
 end;
 procedure DBLinkProcess(pEntity:PGDBObjEntity;const drawing:TDrawingDef);
@@ -183,11 +183,11 @@ begin
                                           end;
                  pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
                  until pv=nil;
-                 ZCMsgCallBackInterface.Do_HistoryOut(format(rscmNEntitiesProcessed,[inttostr(c)]));
+                 ZCMsgCallBackInterface.TextMessage(format(rscmNEntitiesProcessed,[inttostr(c)]),HistoryOut);
            end;
      end
         else
-            ZCMsgCallBackInterface.Do_HistoryOut(rscmCommandOnlyCTXMenu);
+            ZCMsgCallBackInterface.TextMessage(rscmCommandOnlyCTXMenu,HistoryOut);
 {     if TempPGDBEqNode<>nil then
      begin
              c:=0;

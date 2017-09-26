@@ -732,7 +732,7 @@ begin
           mem.done;
           end;
 
-          ZCMsgCallBackInterface.Do_HistoryOut('   Вот и всё бля...............');
+          ZCMsgCallBackInterface.TextMessage('   Вот и всё бля...............',HistoryOut);
 
 
      end
@@ -847,7 +847,7 @@ begin
                                      FreEditorProc;
        if assigned(ReturnToDefaultProc)then
                                            ReturnToDefaultProc(drawings.GetUnitsFormat);
-       ZCMsgCallBackInterface.Do_StatusLineTextOut('Закрыто');
+       ZCMsgCallBackInterface.TextMessage('Закрыто',Quickly);
        if assigned(UpdateVisibleProc) then UpdateVisibleProc;
   end;
 end;
@@ -977,7 +977,7 @@ begin
     end;
   except
     on E: Exception do begin
-                            ZCMsgCallBackInterface.Do_ShowError(rsLayoutLoad+' '+Filename+':'#13+E.Message);
+                            ZCMsgCallBackInterface.TextMessage(rsLayoutLoad+' '+Filename+':'#13+E.Message,ShowError);
       //MessageDlg('Error',
       //  'Error loading layout from file '+Filename+':'#13+E.Message,mtError,
       //  [mbCancel],0);
@@ -1111,7 +1111,7 @@ begin
 
   {Создаем на ToolBarD переключатель рабочих пространств}
   if assigned(LayoutBox) then
-    ZCMsgCallBackInterface.Do_ShowError(format(rsReCreating,['LAYOUTBOX']));
+    ZCMsgCallBackInterface.TextMessage(format(rsReCreating,['LAYOUTBOX']),ShowError);
   CreateLayoutbox(ToolBarD);
   LayoutBox.Parent:=ToolBarD;
   LayoutBox.AutoSize:=false;
@@ -1264,7 +1264,7 @@ begin
   begin
     //tbdesk:=self.findtoolbatdesk(aName);
     //if tbdesk=''then
-      ZCMsgCallBackInterface.Do_ShowError(format(rsFormNotFound,[aName]));
+      ZCMsgCallBackInterface.TextMessage(format(rsFormNotFound,[aName]),ShowError);
     result:=nil;
   end;
 end;
@@ -1848,7 +1848,7 @@ begin
                                      createdmenu.items.Add(ppopupmenu);
                                 end
                             else
-                                ZCMsgCallBackInterface.Do_ShowError(format(rsMenuNotFounf,[ts]));
+                                ZCMsgCallBackInterface.TextMessage(format(rsMenuNotFounf,[ts]),ShowError);
 
       TBSubNode:=TBSubNode.NextSibling;
     end;
@@ -2464,9 +2464,9 @@ begin
     time:=(now-LPTime)*10e4;
     str(time:3:2,ts);
     if pname='' then
-                     ZCMsgCallBackInterface.Do_HistoryOut(format(rscompiledtimemsg,[ts]))
+                     ZCMsgCallBackInterface.TextMessage(format(rscompiledtimemsg,[ts]),HistoryOut)
                  else
-                     ZCMsgCallBackInterface.Do_HistoryOut(format(rsprocesstimemsg,[pname,ts]));
+                     ZCMsgCallBackInterface.TextMessage(format(rsprocesstimemsg,[pname,ts]),HistoryOut);
     pname:='';
 end;
 procedure TZCADMainWindow.ReloadLayer(plt:PTGenericNamedObjectsArray);
@@ -2606,7 +2606,7 @@ begin
 
             Application.ActivateHint(Sender.getviewcontrol.ClientToScreen(classes.Point(Sender.param.md.mouse.x,Sender.param.md.mouse.y)));
        end;
-       ZCMsgCallBackInterface.Do_StatusLineTextOut(htext);
+       ZCMsgCallBackInterface.TextMessage(htext,Quickly);
 end;
 
 function TZCADMainWindow.wamd(Sender:TAbstractViewArea;Button:TMouseButton;Shift:TShiftState;X,Y:Integer;onmouseobject:GDBPointer;var NeedRedraw:Boolean):boolean;
@@ -2871,7 +2871,7 @@ var
 begin
   RelSelectedObjects:=SelectRelatedObjects(Sender.PDWG,@Sender.param,Sender.param.SelDesc.LastSelectedObject);
   if RelSelectedObjects>0 then
-                              ZCMsgCallBackInterface.Do_HistoryOut(format(rsAdditionalSelected,[RelSelectedObjects]));
+                              ZCMsgCallBackInterface.TextMessage(format(rsAdditionalSelected,[RelSelectedObjects]),HistoryOut);
   if (commandmanager.pcommandrunning=nil)or(commandmanager.pcommandrunning^.IData.GetPointMode<>TGPWaitEnt) then
   begin
   if PGDBObjEntity(Sender.param.SelDesc.OnMouseObject)^.select(Sender.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.selector) then

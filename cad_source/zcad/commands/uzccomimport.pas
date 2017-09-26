@@ -106,7 +106,7 @@ begin
   except
         on Exception do
         begin
-             ZCMsgCallBackInterface.Do_ShowError('Unsupported vector graphics format?');
+             ZCMsgCallBackInterface.TextMessage('Unsupported vector graphics format?',ShowError);
         end
   end;
   //finally

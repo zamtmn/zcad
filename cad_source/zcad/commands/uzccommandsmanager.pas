@@ -226,7 +226,7 @@ begin
                                                                                                      //устанавливаем режим указания точек мышью
                                                                       MGetControlpoint or MGetSelectionFrame or MGetSelectObject);//reset selection entities  mode
                                                                                                               //сбрасываем режим выбора примитивов мышью
-  ZCMsgCallBackInterface.Do_HistoryOut(prompt);
+  ZCMsgCallBackInterface.TextMessage(prompt,HistoryOut);
   pcommandrunning^.IData.GetPointMode:=TGPWait;
   pcommandrunning^.IData.PInteractiveData:=PInteractiveData;
   pcommandrunning^.IData.PInteractiveProc:=InteractiveProc;
@@ -260,7 +260,7 @@ var
 begin
   savemode:=PTSimpleDrawing(pcommandrunning.pdwg)^.DefMouseEditorMode(MGetSelectObject,
                                                                       MGet3DPoint or MGet3DPointWoOP or MGetSelectionFrame or MGetControlpoint);
-  ZCMsgCallBackInterface.Do_HistoryOut(prompt);
+  ZCMsgCallBackInterface.TextMessage(prompt,HistoryOut);
   pcommandrunning^.IData.GetPointMode:=TGPWaitEnt;
   pcommandrunning^.IData.PInteractiveData:=nil;
   pcommandrunning^.IData.PInteractiveProc:=nil;
@@ -382,7 +382,7 @@ var
    s:gdbstring;
 begin
      s:=(ExpandPath(fn));
-     ZCMsgCallBackInterface.Do_HistoryOut(sysutils.format(rsRunScript,[s]));
+     ZCMsgCallBackInterface.TextMessage(sysutils.format(rsRunScript,[s]),HistoryOut);
      busy:=true;
 
      DisableCmdLine;
@@ -581,7 +581,7 @@ begin
                         programlog.LogOutFormatStr('GDBCommandManager.ExecuteCommandSilent(%s)',[pfoundcommand^.CommandName],lp_OldPos,LM_Info)
                     else
                         begin
-                        ZCMsgCallBackInterface.Do_HistoryOut(rsRunCommand+':'+pfoundcommand^.CommandName);
+                        ZCMsgCallBackInterface.TextMessage(rsRunCommand+':'+pfoundcommand^.CommandName,HistoryOut);
                         lastcommand := command;
                         if not (busy) then
                         if assigned(OnCommandRun) then
@@ -597,11 +597,11 @@ begin
           end
      else
          begin
-              ZCMsgCallBackInterface.Do_HistoryOut(rsCommandNRInC);
+              ZCMsgCallBackInterface.TextMessage(rsCommandNRInC,HistoryOut);
          end;
     end;
   end
-  else ZCMsgCallBackInterface.Do_HistoryOut(rsUnknownCommand+':"'+command+'"');
+  else ZCMsgCallBackInterface.TextMessage(rsUnknownCommand+':"'+command+'"',HistoryOut);
   end;
   command:='';
   operands:='';
@@ -611,7 +611,7 @@ begin
      if not busy then
                      execute(comm,false,pdrawing,POGLWndParam)
                  else
-                     ZCMsgCallBackInterface.Do_ShowError(rsCommandNRInC);
+                     ZCMsgCallBackInterface.TextMessage(rsCommandNRInC,ShowError);
 end;
 procedure GDBcommandmanager.executecommandsilent{(const comm:pansichar): GDBInteger};
 begin
@@ -626,12 +626,12 @@ var
 begin
      if self.varstack.vardescarray.Count<>0 then
      begin
-     ZCMsgCallBackInterface.Do_HistoryOut(rscmInStackData);
+     ZCMsgCallBackInterface.TextMessage(rscmInStackData,HistoryOut);
      pvd:=self.varstack.vardescarray.beginiterate(ir);
      if pvd<>nil then
      repeat
            value:=pvd.data.PTD.GetValueAsString(pvd.data.Instance);
-           ZCMsgCallBackInterface.Do_HistoryOut(pvd.data.PTD.TypeName+':'+value);
+           ZCMsgCallBackInterface.TextMessage(pvd.data.PTD.TypeName+':'+value,HistoryOut);
 
      pvd:=self.varstack.vardescarray.iterate(ir);
      until pvd=nil;

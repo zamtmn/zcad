@@ -259,7 +259,7 @@ begin
 
      end
         else
-        ZCMsgCallBackInterface.Do_ShowError('MERGE:'+format(rsUnableToOpenFile,[s]));
+        ZCMsgCallBackInterface.TextMessage('MERGE:'+format(rsUnableToOpenFile,[s]),ShowError);
 end;
 function Merge_com(operands:TCommandOperands):TCommandResult;
 begin
@@ -334,7 +334,7 @@ begin
                           begin
                                s1:=ExpandPath(sysvar.SAVE.SAVE_Auto_FileName^);
                                s:=rsAutoSave+': '''+s1+'''';
-                               ZCMsgCallBackInterface.Do_HistoryOut(s);
+                               ZCMsgCallBackInterface.TextMessage(s,HistoryOut);
                                itautoseve:=true;
                           end
                       else
@@ -372,7 +372,7 @@ begin
                                      if assigned(updatevisibleproc) then updatevisibleproc;
                                 end
      else begin
-          ZCMsgCallBackInterface.Do_ShowError(Format(rsunknownFileExt, [fileext]));
+          ZCMsgCallBackInterface.TextMessage(Format(rsunknownFileExt, [fileext]),ShowError);
           end;
      end;
      result:=cmd_ok;
@@ -427,10 +427,10 @@ begin
                                                    if assigned(ReturnToDefaultProc) then ReturnToDefaultProc(drawings.GetUnitsFormat);
                                               end;
   case PTZCADDrawing(drawings.GetCurrentDWG).UndoStack.undo(msg,prevundo,overlay) of
-    URRNoCommandsToUndoInOverlayMode:ZCMsgCallBackInterface.Do_ShowError(rscmNoCTUSE);
-    URRNoCommandsToUndo:ZCMsgCallBackInterface.Do_ShowError(rscmNoCTU);
+    URRNoCommandsToUndoInOverlayMode:ZCMsgCallBackInterface.TextMessage(rscmNoCTUSE,ShowError);
+    URRNoCommandsToUndo:ZCMsgCallBackInterface.TextMessage(rscmNoCTU,ShowError);
   end;
-  if msg<>'' then ZCMsgCallBackInterface.Do_HistoryOut(msg);
+  if msg<>'' then ZCMsgCallBackInterface.TextMessage(msg,HistoryOut);
   zcRedrawCurrentDrawing;
   result:=cmd_ok;
 end;
@@ -440,9 +440,9 @@ var
 begin
   drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.deselector);
   case PTZCADDrawing(drawings.GetCurrentDWG).UndoStack.redo(msg) of
-    URRNoCommandsToUndo:ZCMsgCallBackInterface.Do_ShowError(rscmNoCTR);
+    URRNoCommandsToUndo:ZCMsgCallBackInterface.TextMessage(rscmNoCTR,ShowError);
   end;
-  if msg<>'' then ZCMsgCallBackInterface.Do_HistoryOut(msg);
+  if msg<>'' then ZCMsgCallBackInterface.TextMessage(msg,HistoryOut);
   zcRedrawCurrentDrawing;
   result:=cmd_ok;
 end;
@@ -464,7 +464,7 @@ end;
 procedure FrameEdit_com_CommandStart(Operands:pansichar);
 begin
   drawings.GetCurrentDWG.wa.SetMouseMode((MGet3DPointWOOP) or (MMoveCamera) {or (MRotateCamera)});
-  ZCMsgCallBackInterface.Do_HistoryOut(rscmFirstPoint);
+  ZCMsgCallBackInterface.TextMessage(rscmFirstPoint,HistoryOut);
 end;
 function ShowWindow_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 begin
@@ -494,7 +494,7 @@ begin
   if (button and MZW_LBUTTON)<>0 then
   begin
     drawings.GetCurrentDWG.wa.param.seldesc.MouseFrameON := true;
-    ZCMsgCallBackInterface.Do_HistoryOut(rscmSecondPoint);
+    ZCMsgCallBackInterface.TextMessage(rscmSecondPoint,HistoryOut);
     drawings.GetCurrentDWG.wa.param.seldesc.Frame1 := mc;
     drawings.GetCurrentDWG.wa.param.seldesc.Frame2 := mc;
     drawings.GetCurrentDWG.wa.param.seldesc.Frame13d := wc;
@@ -900,7 +900,7 @@ begin
            end;
       end
   else
-      ZCMsgCallBackInterface.Do_HistoryOut(rscmSelEntBeforeComm);
+      ZCMsgCallBackInterface.TextMessage(rscmSelEntBeforeComm,HistoryOut);
   result:=cmd_ok;
 end;
 function BlockDefVarMan_com(operands:TCommandOperands):TCommandResult;
@@ -933,7 +933,7 @@ else if length(Operands)>0 then
            end;
       end
   else
-      ZCMsgCallBackInterface.Do_HistoryOut(rscmSelOrSpecEntity);
+      ZCMsgCallBackInterface.TextMessage(rscmSelOrSpecEntity,HistoryOut);
   result:=cmd_ok;
 end;
 function UnitsMan_com(operands:TCommandOperands):TCommandResult;
@@ -950,10 +950,10 @@ begin
                                                       EditUnit(PUnit^);
                                                     end
                                                  else
-                                                    ZCMsgCallBackInterface.Do_HistoryOut('unit not found!');
+                                                    ZCMsgCallBackInterface.TextMessage('unit not found!',HistoryOut);
                                end
                           else
-                              ZCMsgCallBackInterface.Do_HistoryOut('Specify unit name!');
+                              ZCMsgCallBackInterface.TextMessage('Specify unit name!',HistoryOut);
   result:=cmd_ok;
 end;
 function MultiObjVarMan_com(operands:TCommandOperands):TCommandResult;
@@ -1006,7 +1006,7 @@ begin
 
            //InfoFormVar.Free;
            mem.done;
-           ZCMsgCallBackInterface.Do_HistoryOut(format(rscmNEntitiesProcessed,[inttostr(counter)]));
+           ZCMsgCallBackInterface.TextMessage(format(rscmNEntitiesProcessed,[inttostr(counter)]),HistoryOut);
       end;
     result:=cmd_ok;
 end;
@@ -1229,21 +1229,21 @@ begin
   else
     rootnode:=@PGDBObjEntity(drawings.GetCurrentDWG.wa.param.seldesc.LastSelectedObject)^.Representation.Geometry;
   GetTreeStat(rootnode,depth,tr);
-  ZCMsgCallBackInterface.Do_HistoryOut('Total entities in drawing: '+inttostr(drawings.GetCurrentROOT.ObjArray.count));
-  ZCMsgCallBackInterface.Do_HistoryOut('Max tree depth: '+inttostr(SysVar.RD.RD_SpatialNodesDepth^));
-  ZCMsgCallBackInterface.Do_HistoryOut('Max in node entities: '+inttostr(GetInNodeCount(SysVar.RD.RD_SpatialNodeCount^)));
-  ZCMsgCallBackInterface.Do_HistoryOut('Current drawing spatial index Info:');
-  ZCMsgCallBackInterface.Do_HistoryOut('Total entities: '+inttostr(tr.EntCount));
-  ZCMsgCallBackInterface.Do_HistoryOut('Memory usage (bytes): '+inttostr(tr.MemCount));
-  ZCMsgCallBackInterface.Do_HistoryOut('Total nodes: '+inttostr(tr.NodesCount));
-  ZCMsgCallBackInterface.Do_HistoryOut('Total overflow nodes: '+inttostr(tr.OverflowCount));
-  ZCMsgCallBackInterface.Do_HistoryOut('Fact tree depth: '+inttostr(tr.MaxDepth));
-  ZCMsgCallBackInterface.Do_HistoryOut('By levels:');
+  ZCMsgCallBackInterface.TextMessage('Total entities in drawing: '+inttostr(drawings.GetCurrentROOT.ObjArray.count),HistoryOut);
+  ZCMsgCallBackInterface.TextMessage('Max tree depth: '+inttostr(SysVar.RD.RD_SpatialNodesDepth^),HistoryOut);
+  ZCMsgCallBackInterface.TextMessage('Max in node entities: '+inttostr(GetInNodeCount(SysVar.RD.RD_SpatialNodeCount^)),HistoryOut);
+  ZCMsgCallBackInterface.TextMessage('Current drawing spatial index Info:',HistoryOut);
+  ZCMsgCallBackInterface.TextMessage('Total entities: '+inttostr(tr.EntCount),HistoryOut);
+  ZCMsgCallBackInterface.TextMessage('Memory usage (bytes): '+inttostr(tr.MemCount),HistoryOut);
+  ZCMsgCallBackInterface.TextMessage('Total nodes: '+inttostr(tr.NodesCount),HistoryOut);
+  ZCMsgCallBackInterface.TextMessage('Total overflow nodes: '+inttostr(tr.OverflowCount),HistoryOut);
+  ZCMsgCallBackInterface.TextMessage('Fact tree depth: '+inttostr(tr.MaxDepth),HistoryOut);
+  ZCMsgCallBackInterface.TextMessage('By levels:',HistoryOut);
   ap:=0;
   for i:=0 to tr.MaxDepth do
   begin
-       ZCMsgCallBackInterface.Do_HistoryOut('level '+inttostr(i));
-       ZCMsgCallBackInterface.Do_HistoryOut('  Entities: '+inttostr(tr.PLevelStat^[i].EntCount));
+       ZCMsgCallBackInterface.TextMessage('level '+inttostr(i),HistoryOut);
+       ZCMsgCallBackInterface.TextMessage('  Entities: '+inttostr(tr.PLevelStat^[i].EntCount),HistoryOut);
        if tr.EntCount<>0 then
                              cp:=tr.PLevelStat^[i].EntCount/tr.EntCount*100
                          else
@@ -1251,14 +1251,14 @@ begin
        ap:=ap+cp;
        str(cp:2:2,percent);
        str(ap:2:2,apercent);
-       ZCMsgCallBackInterface.Do_HistoryOut('  Entities(%)[summary]: '+percent+'['+apercent+']');
-       ZCMsgCallBackInterface.Do_HistoryOut('  Nodes: '+inttostr(tr.PLevelStat^[i].NodesCount));
-       ZCMsgCallBackInterface.Do_HistoryOut('  Overflow nodes: '+inttostr(tr.PLevelStat^[i].OverflowCount));
+       ZCMsgCallBackInterface.TextMessage('  Entities(%)[summary]: '+percent+'['+apercent+']',HistoryOut);
+       ZCMsgCallBackInterface.TextMessage('  Nodes: '+inttostr(tr.PLevelStat^[i].NodesCount),HistoryOut);
+       ZCMsgCallBackInterface.TextMessage('  Overflow nodes: '+inttostr(tr.PLevelStat^[i].OverflowCount),HistoryOut);
   end;
   iter:=tr.pc.min;
   if assigned(iter)then
   repeat
-    ZCMsgCallBackInterface.Do_HistoryOut('  Nodes with population '+inttostr(iter.Data.Key)+': '+inttostr(iter.Data.Value));
+    ZCMsgCallBackInterface.TextMessage('  Nodes with population '+inttostr(iter.Data.Key)+': '+inttostr(iter.Data.Value),HistoryOut);
   until not iter.next;
   if assigned(iter)then iter.destroy;
   KillTreeStatisticRec(tr);
@@ -1271,12 +1271,12 @@ begin
   begin
   drawings.GetCurrentDWG.wa.SetMouseMode((MGet3DPointWOOP) or (MMoveCamera) or (MRotateCamera) or (MGet3DPoint));
   //drawings.GetCurrentDWG.OGLwindow1.param.seldesc.MouseFrameON := true;
-  ZCMsgCallBackInterface.Do_HistoryOut('тыкаем и проверяем внутри\снаружи 2D полилинии:');
+  ZCMsgCallBackInterface.TextMessage('тыкаем и проверяем внутри\снаружи 2D полилинии:',HistoryOut);
   exit;
   end;
   //else
   begin
-       ZCMsgCallBackInterface.Do_HistoryOut('перед запуском нужно выбрать 2D полилинию');
+       ZCMsgCallBackInterface.TextMessage('перед запуском нужно выбрать 2D полилинию',HistoryOut);
        commandmanager.executecommandend;
   end;
 end;
@@ -1287,9 +1287,9 @@ begin
   if (button and MZW_LBUTTON)<>0 then
   begin
        if pgdbobjlwpolyline(drawings.GetCurrentDWG.GetLastSelected).isPointInside(wc) then
-       ZCMsgCallBackInterface.Do_HistoryOut('Внутри!')
+       ZCMsgCallBackInterface.TextMessage('Внутри!',HistoryOut)
        else
-       ZCMsgCallBackInterface.Do_HistoryOut('Снаружи!')
+       ZCMsgCallBackInterface.TextMessage('Снаружи!',HistoryOut)
   end;
 end;
 function isrect(const p1,p2,p3,p4:GDBVertex2D):boolean;
@@ -1522,7 +1522,7 @@ begin
   end;
   //else
   begin
-       ZCMsgCallBackInterface.Do_HistoryOut('перед запуском нужно выбрать 2D полилинию');
+       ZCMsgCallBackInterface.TextMessage('перед запуском нужно выбрать 2D полилинию',HistoryOut);
        commandmanager.executecommandend;
   end;
 end;
@@ -1562,7 +1562,7 @@ begin
                uzcsysinfo.sysparam.updatepo:=false
           end;
      end
-        else ZCMsgCallBackInterface.Do_ShowError('Command line swith "UpdatePO" must be set. (or not the first time running this command)');
+        else ZCMsgCallBackInterface.TextMessage('Command line swith "UpdatePO" must be set. (or not the first time running this command)',ShowError);
      result:=cmd_ok;
 end;
 function Zoom_com(operands:TCommandOperands):TCommandResult;
@@ -1793,7 +1793,7 @@ var
   Script:GDBString;
 begin
                    Script:='GDBString;';
-                   ZCMsgCallBackInterface.Do_ShowError(Script);
+                   ZCMsgCallBackInterface.TextMessage(Script,ShowError);
 end;
 function TestScript_com(operands:TCommandOperands):TCommandResult;
 (*var
@@ -1868,7 +1868,7 @@ begin
    if assigned(GetCurrentObjProc)then
    begin
    if GetCurrentObjProc=nil then
-                             ZCMsgCallBackInterface.Do_HistoryOut(rscmCommandOnlyCTXMenu)
+                             ZCMsgCallBackInterface.TextMessage(rscmCommandOnlyCTXMenu,HistoryOut)
                          else
                              begin
                                   if uppercase(Operands)='VAR' then

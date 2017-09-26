@@ -27,6 +27,7 @@ resourcestring
   rsInvalidInputForPropery='Property "%s" for entity "%s": %s';
   rsDivByZero='Divide by zero';
   rsErrorPrefix='ERROR: ';
+  rsWarningPrefix='WARNING: ';
 
   rsInvalidIdentificator='"%s" not valid identificator';
   rsEntryAlreadyExist='Entry "%s" already exist';
@@ -157,6 +158,8 @@ resourcestring
   rsAutoSave='Autosave';
   rsQuitCaption='Quit';
   rsWarningCaption='Warning!';
+  rsErrorCaption='Error!';
+  rsMessageCaption='Message:';
   rsAboutWndCaption = 'About ZCAD';
   rsProjectTree = 'Project Tree';
   rsProgramDB = 'Program DB';

@@ -23,11 +23,28 @@ const
      MenuNameModifier='MENU_';
 
 type
+  TZMessageID=type integer;
+var
+  ZMsgID_GUIEnable:TZMessageID=-1;
+  ZMsgID_GUIDisable:TZMessageID=-1;
+  ZMsgID_GUIEnableCMDLine:TZMessageID=-1;
+  ZMsgID_GUIDisableCMDLine:TZMessageID=-1;
+
+  ZMsgID_GUICMDLineReadyMode:TZMessageID=-1;
+  ZMsgID_GUICMDLineRunMode:TZMessageID=-1;
+
+type
     TProcedure_String_=procedure(s:String);
     TProcedure_String_HandlersVector=TMyVector<TProcedure_String_>;
 
-    TMethod_TForm_=Procedure (ShowedForm:TForm) of object;
+    TMethod_TForm_=procedure (ShowedForm:TForm) of object;
     TMethod_TForm_HandlersVector=TMyVector<TMethod_TForm_>;
+
+    TProcedure_TZMessageID=procedure(GUIMode:TZMessageID);
+    TProcedure_TZMessageID_HandlersVector=TMyVector<TProcedure_TZMessageID>;
+
+    TSimpleProcedure=Procedure;
+    TSimpleProcedure_HandlersVector=TMyVector<TSimpleProcedure>;
 
     TTextMessageWriteOptions=(TMWOToConsole,            //вывод сообщения в консоль
                               TMWOToLog,                //вывод в log
@@ -47,6 +64,8 @@ const
 type
     TZCMsgCallBackInterface=class
       public
+        constructor Create;
+        function GetUniqueZMessageID:TZMessageID;
         procedure RegisterHandler_HistoryOut(Handler:TProcedure_String_);
         procedure RegisterHandler_LogError(Handler:TProcedure_String_);
         procedure RegisterHandler_StatusLineTextOut(Handler:TProcedure_String_);
@@ -54,12 +73,16 @@ type
         procedure RegisterHandler_BeforeShowModal(Handler:TMethod_TForm_);
         procedure RegisterHandler_AfterShowModal(Handler:TMethod_TForm_);
 
+        procedure RegisterHandler_GUIMode(Handler:TProcedure_TZMessageID);
+
         procedure Do_HistoryOut(s:String);
         procedure Do_LogError(s:String);
         procedure Do_StatusLineTextOut(s:String);
 
         procedure Do_BeforeShowModal(ShowedForm:TForm);
         procedure Do_AfterShowModal(ShowedForm:TForm);
+
+        procedure Do_GUIMode(GUIMode:TZMessageID);
 
         procedure TextMessage(msg:String;opt:TTextMessageWriteOptionsSet);
         function TextQuestion(Caption,Question:String;Flags: Longint):integer;
@@ -71,20 +94,25 @@ type
         procedure RegisterTMethod_TForm_HandlersVector(var MFHV:TMethod_TForm_HandlersVector;Handler:TMethod_TForm_);
         procedure Do_TMethod_TForm_HandlersVector(var MFHV:TMethod_TForm_HandlersVector;ShowedForm:TForm);
 
+        procedure RegisterTProcedure_TGUIMode_HandlersVector(var PGUIMHV:TProcedure_TZMessageID_HandlersVector;Handler:TProcedure_TZMessageID);
+        procedure Do_TProcedure_TZMessageID_HandlersVector(var PGUIMHV:TProcedure_TZMessageID_HandlersVector;GUIMode:TZMessageID);
+
       private
+        ZMessageIDSeed:TZMessageID;
         HistoryOutHandlers:TProcedure_String_HandlersVector;
         LogErrorHandlers:TProcedure_String_HandlersVector;
         StatusLineTextOutHandlers:TProcedure_String_HandlersVector;
 
         BeforeShowModalHandlers:TMethod_TForm_HandlersVector;
         AfterShowModalHandlers:TMethod_TForm_HandlersVector;
+
+        GUIModeHandlers:TProcedure_TZMessageID_HandlersVector;
     end;
 
     TStartLongProcessProc=Procedure(a:integer;s:string) of object;
     TProcessLongProcessProc=Procedure(a:integer) of object;
     TEndLongProcessProc=Procedure of object;
     //Abstract
-    TSimpleProcedure=Procedure;
     TOIReturnToDefaultProcedure=Procedure(const f:TzeUnitsFormat);
     TSimpleMethod=Procedure of object;
     TSimpleLCLMethod=Procedure (sender:TObject) of object;
@@ -119,8 +147,6 @@ type
     //UGDBDescriptor
     TSetCurrentDrawing=function(PDWG:Pointer):Pointer;//нужно завязать на UGDBDrawingdef
 
-    //cmdline
-    TSetCommandLineMode=procedure(m:TCLineMode) of object;
 var
    //Objinsp
    {**Позволяет в инспектор вывести то что тебе нужно
@@ -151,12 +177,7 @@ var
    StoreAndFreeEditorProc:TSimpleProcedure;
 
    //mainwindow
-   //ShowAllCursorsProc,RestoreAllCursorsProc:TMethod_TForm_;
-   //StartLongProcessProc:TStartLongProcessProc;
-   //ProcessLongProcessProc:TProcessLongProcessProc;
-   //EndLongProcessProc:TEndLongProcessProc;
    UpdateVisibleProc:TSimpleProcedure;
-   //MessageBoxProc:TMessageBox;
    ProcessFilehistoryProc:TMethod_String_;
    AddOneObjectProc:TSimpleMethod;
    SetVisuaProplProc:TSimpleMethod;
@@ -172,16 +193,22 @@ var
    waSetObjInspProc:TSimpleLCLMethod;
 
    //cmdline
-   SetCommandLineMode:TSetCommandLineMode;
-
-   DisableCmdLine:TSimpleProcedure;
-   EnableCmdLine:TSimpleProcedure;
+   //SetCommandLineMode:TSetCommandLineMode;
 
 
 function GetUndoStack:pointer;
 var
    ZCMsgCallBackInterface:TZCMsgCallBackInterface;
 implementation
+constructor TZCMsgCallBackInterface.Create;
+begin
+  ZMessageIDSeed:=0;
+end;
+function TZCMsgCallBackInterface.GetUniqueZMessageID:TZMessageID;
+begin
+  inc(ZMessageIDSeed);
+  result:=ZMessageIDSeed;
+end;
 function TZCMsgCallBackInterface.TextQuestion(Caption,Question:String;Flags: Longint):integer;
 var
    pc:PChar;
@@ -273,6 +300,22 @@ begin
        MFHV[i](ShowedForm);
    end;
 end;
+procedure TZCMsgCallBackInterface.RegisterTProcedure_TGUIMode_HandlersVector(var PGUIMHV:TProcedure_TZMessageID_HandlersVector;Handler:TProcedure_TZMessageID);
+begin
+   if not assigned(PGUIMHV) then
+     PGUIMHV:=TProcedure_TZMessageID_HandlersVector.Create;
+   PGUIMHV.PushBack(Handler);
+end;
+procedure TZCMsgCallBackInterface.Do_TProcedure_TZMessageID_HandlersVector(var PGUIMHV:TProcedure_TZMessageID_HandlersVector;GUIMode:{TGUIMode}TZMessageID);
+var
+   i:integer;
+begin
+   if assigned(PGUIMHV) then begin
+     for i:=0 to PGUIMHV.Size-1 do
+       PGUIMHV[i](GUIMode);
+   end;
+end;
+
 procedure TZCMsgCallBackInterface.RegisterHandler_HistoryOut(Handler:TProcedure_String_);
 begin
    RegisterTProcedure_String_HandlersVector(HistoryOutHandlers,Handler);
@@ -293,6 +336,11 @@ procedure TZCMsgCallBackInterface.RegisterHandler_AfterShowModal(Handler:TMethod
 begin
    RegisterTMethod_TForm_HandlersVector(AfterShowModalHandlers,Handler);
 end;
+procedure TZCMsgCallBackInterface.RegisterHandler_GUIMode(Handler:TProcedure_TZMessageID);
+begin
+   RegisterTProcedure_TGUIMode_HandlersVector(GUIModeHandlers,Handler);
+end;
+
 procedure TZCMsgCallBackInterface.Do_HistoryOut(s:String);
 begin
    Do_TProcedure_String_HandlersVector(HistoryOutHandlers,s);
@@ -313,6 +361,11 @@ procedure TZCMsgCallBackInterface.Do_AfterShowModal(ShowedForm:TForm);
 begin
    Do_TMethod_TForm_HandlersVector(AfterShowModalHandlers,ShowedForm);
 end;
+procedure TZCMsgCallBackInterface.Do_GUIMode(GUIMode:TZMessageID);
+begin
+   Do_TProcedure_TZMessageID_HandlersVector(GUIModeHandlers,GUIMode);
+end;
+
 function TZCMsgCallBackInterface.DoShowModal(MForm:TForm): Integer;
 begin
      Do_BeforeShowModal(MForm);
@@ -331,6 +384,13 @@ end;
 
 initialization
   ZCMsgCallBackInterface:=TZCMsgCallBackInterface.create;
+  ZMsgID_GUIEnable:=ZCMsgCallBackInterface.GetUniqueZMessageID;
+  ZMsgID_GUIDisable:=ZCMsgCallBackInterface.GetUniqueZMessageID;
+  ZMsgID_GUIEnableCMDLine:=ZCMsgCallBackInterface.GetUniqueZMessageID;
+  ZMsgID_GUIDisableCMDLine:=ZCMsgCallBackInterface.GetUniqueZMessageID;
+
+  ZMsgID_GUICMDLineReadyMode:=ZCMsgCallBackInterface.GetUniqueZMessageID;
+  ZMsgID_GUICMDLineRunMode:=ZCMsgCallBackInterface.GetUniqueZMessageID;
 finalization
   ZCMsgCallBackInterface.free;
 end.

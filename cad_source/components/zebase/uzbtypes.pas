@@ -181,7 +181,6 @@ GDBArrayVertex=packed array[0..0] of GDBvertex;
                    BGroup:TBlockGroup;(*'Block group'*)
              end;
   TENTID=GDBString;
-TCLineMode=(CLCOMMANDREDY,CLCOMMANDRUN);
 PGDBsymdolinfo=^GDBsymdolinfo;
 GDBsymdolinfo=packed record
     LLPrimitiveStartIndex: GDBInteger;

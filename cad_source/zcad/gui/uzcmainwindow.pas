@@ -732,7 +732,7 @@ begin
           mem.done;
           end;
 
-          ZCMsgCallBackInterface.TextMessage('   Вот и всё бля...............',HistoryOut);
+          ZCMsgCallBackInterface.TextMessage('   Вот и всё бля...............',TMWOHistoryOut);
 
 
      end
@@ -847,7 +847,7 @@ begin
                                      FreEditorProc;
        if assigned(ReturnToDefaultProc)then
                                            ReturnToDefaultProc(drawings.GetUnitsFormat);
-       ZCMsgCallBackInterface.TextMessage('Закрыто',Quickly);
+       ZCMsgCallBackInterface.TextMessage('Закрыто',TMWOQuickly);
        if assigned(UpdateVisibleProc) then UpdateVisibleProc;
   end;
 end;
@@ -977,7 +977,7 @@ begin
     end;
   except
     on E: Exception do begin
-                            ZCMsgCallBackInterface.TextMessage(rsLayoutLoad+' '+Filename+':'#13+E.Message,ShowError);
+                            ZCMsgCallBackInterface.TextMessage(rsLayoutLoad+' '+Filename+':'#13+E.Message,TMWOShowError);
       //MessageDlg('Error',
       //  'Error loading layout from file '+Filename+':'#13+E.Message,mtError,
       //  [mbCancel],0);
@@ -1111,7 +1111,7 @@ begin
 
   {Создаем на ToolBarD переключатель рабочих пространств}
   if assigned(LayoutBox) then
-    ZCMsgCallBackInterface.TextMessage(format(rsReCreating,['LAYOUTBOX']),ShowError);
+    ZCMsgCallBackInterface.TextMessage(format(rsReCreating,['LAYOUTBOX']),TMWOShowError);
   CreateLayoutbox(ToolBarD);
   LayoutBox.Parent:=ToolBarD;
   LayoutBox.AutoSize:=false;
@@ -1264,7 +1264,7 @@ begin
   begin
     //tbdesk:=self.findtoolbatdesk(aName);
     //if tbdesk=''then
-      ZCMsgCallBackInterface.TextMessage(format(rsFormNotFound,[aName]),ShowError);
+      ZCMsgCallBackInterface.TextMessage(format(rsFormNotFound,[aName]),TMWOShowError);
     result:=nil;
   end;
 end;
@@ -1848,7 +1848,7 @@ begin
                                      createdmenu.items.Add(ppopupmenu);
                                 end
                             else
-                                ZCMsgCallBackInterface.TextMessage(format(rsMenuNotFounf,[ts]),ShowError);
+                                ZCMsgCallBackInterface.TextMessage(format(rsMenuNotFounf,[ts]),TMWOShowError);
 
       TBSubNode:=TBSubNode.NextSibling;
     end;
@@ -2464,9 +2464,9 @@ begin
     time:=(now-LPTime)*10e4;
     str(time:3:2,ts);
     if pname='' then
-                     ZCMsgCallBackInterface.TextMessage(format(rscompiledtimemsg,[ts]),HistoryOut)
+                     ZCMsgCallBackInterface.TextMessage(format(rscompiledtimemsg,[ts]),TMWOHistoryOut)
                  else
-                     ZCMsgCallBackInterface.TextMessage(format(rsprocesstimemsg,[pname,ts]),HistoryOut);
+                     ZCMsgCallBackInterface.TextMessage(format(rsprocesstimemsg,[pname,ts]),TMWOHistoryOut);
     pname:='';
 end;
 procedure TZCADMainWindow.ReloadLayer(plt:PTGenericNamedObjectsArray);
@@ -2606,7 +2606,7 @@ begin
 
             Application.ActivateHint(Sender.getviewcontrol.ClientToScreen(classes.Point(Sender.param.md.mouse.x,Sender.param.md.mouse.y)));
        end;
-       ZCMsgCallBackInterface.TextMessage(htext,Quickly);
+       ZCMsgCallBackInterface.TextMessage(htext,TMWOQuickly);
 end;
 
 function TZCADMainWindow.wamd(Sender:TAbstractViewArea;Button:TMouseButton;Shift:TShiftState;X,Y:Integer;onmouseobject:GDBPointer;var NeedRedraw:Boolean):boolean;
@@ -2871,7 +2871,7 @@ var
 begin
   RelSelectedObjects:=SelectRelatedObjects(Sender.PDWG,@Sender.param,Sender.param.SelDesc.LastSelectedObject);
   if RelSelectedObjects>0 then
-                              ZCMsgCallBackInterface.TextMessage(format(rsAdditionalSelected,[RelSelectedObjects]),HistoryOut);
+                              ZCMsgCallBackInterface.TextMessage(format(rsAdditionalSelected,[RelSelectedObjects]),TMWOHistoryOut);
   if (commandmanager.pcommandrunning=nil)or(commandmanager.pcommandrunning^.IData.GetPointMode<>TGPWaitEnt) then
   begin
   if PGDBObjEntity(Sender.param.SelDesc.OnMouseObject)^.select(Sender.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.selector) then

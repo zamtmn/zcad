@@ -945,7 +945,7 @@ begin
   end
   else
   begin
-    ZCMsgCallBackInterface.TextMessage(rscmSelEntBeforeComm,HistoryOut);
+    ZCMsgCallBackInterface.TextMessage(rscmSelEntBeforeComm,TMWOHistoryOut);
     Commandmanager.executecommandend;
   end;
 end;
@@ -1045,7 +1045,7 @@ begin
   axisdevname:=uppercase(ExportDevWithAxisParams.AxisDeviceName);
   ALLayer:=drawings.GetCurrentDWG^.LayerTable.getAddres('EL_AXIS');
   Vertex0:=drawings.GetCurrentROOT^.vp.BoundingBox.LBN;
-  ZCMsgCallBackInterface.TextMessage('Searh axis.....',HistoryOut);
+  ZCMsgCallBackInterface.TextMessage('Searh axis.....',TMWOHistoryOut);
   pdev:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
   if pdev<>nil then
   repeat
@@ -1090,12 +1090,12 @@ begin
                   end;
                   if isVertical then
                                     begin
-                                      ZCMsgCallBackInterface.TextMessage(sysutils.format('  Found vertical axis "%s"',[pgdbstring(pvd^.data.Instance)^]),HistoryOut);
+                                      ZCMsgCallBackInterface.TextMessage(sysutils.format('  Found vertical axis "%s"',[pgdbstring(pvd^.data.Instance)^]),TMWOHistoryOut);
                                       vaxis.PushBack(axisdesc);
                                     end
                                 else
                                     begin
-                                      ZCMsgCallBackInterface.TextMessage(sysutils.format('  Found horisontal axis "%s"',[pgdbstring(pvd^.data.Instance)^]),HistoryOut);
+                                      ZCMsgCallBackInterface.TextMessage(sysutils.format('  Found horisontal axis "%s"',[pgdbstring(pvd^.data.Instance)^]),TMWOHistoryOut);
                                       haxis.PushBack(axisdesc);
                                     end
 
@@ -1105,17 +1105,17 @@ begin
   until pdev=nil;
   if haxis.size>0 then
   begin
-    ZCMsgCallBackInterface.TextMessage('Sorting horisontal axis...',HistoryOut);
+    ZCMsgCallBackInterface.TextMessage('Sorting horisontal axis...',TMWOHistoryOut);
     taxisdescdsort.Sort(haxis,haxis.size);
     for i:=0 to haxis.size-1 do
-    ZCMsgCallBackInterface.TextMessage(sysutils.format('  Horisontal axis "%s", d0=%f',[haxis[i].Name,haxis[i].d0]),HistoryOut);
+    ZCMsgCallBackInterface.TextMessage(sysutils.format('  Horisontal axis "%s", d0=%f',[haxis[i].Name,haxis[i].d0]),TMWOHistoryOut);
   end;
   if vaxis.size>0 then
   begin
-    ZCMsgCallBackInterface.TextMessage('Sorting vertical axis...',HistoryOut);
+    ZCMsgCallBackInterface.TextMessage('Sorting vertical axis...',TMWOHistoryOut);
     taxisdescdsort.Sort(vaxis,vaxis.size);
     for i:=0 to vaxis.size-1 do
-    ZCMsgCallBackInterface.TextMessage(sysutils.format('  Vertical axis "%s", d0=%f',[vaxis[i].Name,vaxis[i].d0]),HistoryOut);
+    ZCMsgCallBackInterface.TextMessage(sysutils.format('  Vertical axis "%s", d0=%f',[vaxis[i].Name,vaxis[i].d0]),TMWOHistoryOut);
   end;
   psd:=drawings.GetCurrentDWG^.SelObjArray.beginiterate(ir);
   if psd<>nil then
@@ -1137,11 +1137,11 @@ begin
                   GetNearestAxis(vaxis,pdev^.P_insert_in_WCS,vi,vi2);
                   vname:=GetAxisName(vaxis,vi,vi2);
                   if (hname<>'')and(vname<>'')then
-                                          ZCMsgCallBackInterface.TextMessage(sysutils.format('%s;%s/%s',[pgdbstring(pvd^.data.Instance)^,vname,hname]),HistoryOut)
+                                          ZCMsgCallBackInterface.TextMessage(sysutils.format('%s;%s/%s',[pgdbstring(pvd^.data.Instance)^,vname,hname]),TMWOHistoryOut)
              else if (hname<>'')then
-                                ZCMsgCallBackInterface.TextMessage(sysutils.format('%s;%s',[pgdbstring(pvd^.data.Instance)^,hname]),HistoryOut)
+                                ZCMsgCallBackInterface.TextMessage(sysutils.format('%s;%s',[pgdbstring(pvd^.data.Instance)^,hname]),TMWOHistoryOut)
              else if (vname<>'')then
-                                ZCMsgCallBackInterface.TextMessage(sysutils.format('%s;%s',[pgdbstring(pvd^.data.Instance)^,vname]),HistoryOut);
+                                ZCMsgCallBackInterface.TextMessage(sysutils.format('%s;%s',[pgdbstring(pvd^.data.Instance)^,vname]),TMWOHistoryOut);
 
              end;
 
@@ -1160,7 +1160,7 @@ begin
   end
   else
   begin
-    ZCMsgCallBackInterface.TextMessage(rscmSelEntBeforeComm,HistoryOut);
+    ZCMsgCallBackInterface.TextMessage(rscmSelEntBeforeComm,TMWOHistoryOut);
     Commandmanager.executecommandend;
   end;
 end;
@@ -1252,7 +1252,7 @@ begin
      until psd=nil;
      if count=0 then
                     begin
-                         ZCMsgCallBackInterface.TextMessage('In selection not found devices',HistoryOut);
+                         ZCMsgCallBackInterface.TextMessage('In selection not found devices',TMWOHistoryOut);
                          mpd.Destroy;
                          Commandmanager.executecommandend;
                          exit;
@@ -1282,7 +1282,7 @@ begin
                else
                    begin
                         process:=true;
-                        ZCMsgCallBackInterface.TextMessage('In device not found BaseName variable. Processed',HistoryOut);
+                        ZCMsgCallBackInterface.TextMessage('In device not found BaseName variable. Processed',TMWOHistoryOut);
                    end;
             end
                else
@@ -1299,12 +1299,12 @@ begin
                  pdev^.FormatEntity(drawings.GetCurrentDWG^,dc);
             end
                else
-               ZCMsgCallBackInterface.TextMessage('In device not found numbering variable',HistoryOut);
+               ZCMsgCallBackInterface.TextMessage('In device not found numbering variable',TMWOHistoryOut);
             end
             else
-                ZCMsgCallBackInterface.TextMessage('Device with basename "'+pvd^.data.PTD^.GetUserValueAsString(pvd^.data.Instance)+'" filtred out',HistoryOut);
+                ZCMsgCallBackInterface.TextMessage('Device with basename "'+pvd^.data.PTD^.GetUserValueAsString(pvd^.data.Instance)+'" filtred out',TMWOHistoryOut);
        end;
-     ZCMsgCallBackInterface.TextMessage(sysutils.format(rscmNEntitiesProcessed,[inttostr(count)]),HistoryOut);
+     ZCMsgCallBackInterface.TextMessage(sysutils.format(rscmNEntitiesProcessed,[inttostr(count)]),TMWOHistoryOut);
      if NumberingParams.SaveStart then
                                       NumberingParams.StartNumber:=index;
      mpd.Destroy;
@@ -1338,7 +1338,7 @@ begin
   end
   else
   begin
-    ZCMsgCallBackInterface.TextMessage(rscmSelDevBeforeComm,HistoryOut);
+    ZCMsgCallBackInterface.TextMessage(rscmSelDevBeforeComm,TMWOHistoryOut);
     Commandmanager.executecommandend;
   end;
 end;
@@ -1394,7 +1394,7 @@ begin
   end
   else
   begin
-    ZCMsgCallBackInterface.TextMessage(rscmSelEntBeforeComm,HistoryOut);
+    ZCMsgCallBackInterface.TextMessage(rscmSelEntBeforeComm,TMWOHistoryOut);
     Commandmanager.executecommandend;
   end;
 end;
@@ -1593,7 +1593,7 @@ begin
 end;
 procedure Print_com.SelectPrinter(pdata:GDBPlatformint);
 begin
-  ZCMsgCallBackInterface.TextMessage(rsNotYetImplemented,HistoryOut);
+  ZCMsgCallBackInterface.TextMessage(rsNotYetImplemented,TMWOHistoryOut);
        if assigned(ShowAllCursorsProc) then
                                          ShowAllCursorsProc;
   if PSD.Execute then;
@@ -1609,7 +1609,7 @@ end;
 procedure Print_com.SelectPaper(pdata:GDBPlatformint);
 
 begin
-  ZCMsgCallBackInterface.TextMessage(rsNotYetImplemented,HistoryOut);
+  ZCMsgCallBackInterface.TextMessage(rsNotYetImplemented,TMWOHistoryOut);
   if assigned(ShowAllCursorsProc) then
                                       ShowAllCursorsProc;
   if Paged.Execute then;
@@ -1714,7 +1714,7 @@ begin
     on E:Exception do
     begin
       Printer.Abort;
-      ErrMessageBox(pChar(e.message));
+      ZCMsgCallBackInterface.TextMessage(e.message,TMWOShowError);
     end;
   end;
   ForeGround:=oldForeGround;
@@ -1761,7 +1761,7 @@ begin
      inherited;
      if drawings.GetCurrentDWG^.TextStyleTable.GetRealCount<1 then
      begin
-          ZCMsgCallBackInterface.TextMessage(rscmInDwgTxtStyleNotDeffined,ShowError);
+          ZCMsgCallBackInterface.TextMessage(rscmInDwgTxtStyleNotDeffined,TMWOShowError);
           commandmanager.executecommandend;
      end;
 end;
@@ -1947,7 +1947,7 @@ begin
            //s:=memsubstr.ReadAnsiString;
            memsubstr.free;
                          if fileexists(utf8tosys(s)) then
-              //if messagebox(mainform.handle,'В данной версии возможна двойная загрузка файлов, ПРИВОДЯЩАЯ К ДУБЛИРОВАНИЮ ОБЪЕКТОВ НА ЧЕРТЕЖЕ Осуществить вставку?','QLOAD',MB_YESNO)=IDYES then
+              //if TMWOMessageBox(mainform.handle,'В данной версии возможна двойная загрузка файлов, ПРИВОДЯЩАЯ К ДУБЛИРОВАНИЮ ОБЪЕКТОВ НА ЧЕРТЕЖЕ Осуществить вставку?','QLOAD',MB_YESNO)=IDYES then
               begin
                     addfromdxf(s,@drawings.GetCurrentDWG^.ConstructObjRoot,{tloload}TLOMerge,drawings.GetCurrentDWG^);
                     {ReloadLayer;
@@ -1958,10 +1958,10 @@ begin
                     redrawoglwnd;}
               end;
            drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
-           ZCMsgCallBackInterface.TextMessage(rscmNewBasePoint,HistoryOut);
+           ZCMsgCallBackInterface.TextMessage(rscmNewBasePoint,TMWOHistoryOut);
      end
        else
-         ZCMsgCallBackInterface.TextMessage(rsClipboardIsEmpty,HistoryOut);
+         ZCMsgCallBackInterface.TextMessage(rsClipboardIsEmpty,TMWOHistoryOut);
 (*    res:=OpenClipboard(mainformn.handle);
     if res then
     begin
@@ -1974,7 +1974,7 @@ begin
               s:=pbuf;
               GlobalUnlock(hData);
               if fileexists(s) then
-              //if messagebox(mainform.handle,'В данной версии возможна двойная загрузка файлов, ПРИВОДЯЩАЯ К ДУБЛИРОВАНИЮ ОБЪЕКТОВ НА ЧЕРТЕЖЕ Осуществить вставку?','QLOAD',MB_YESNO)=IDYES then
+              //if TMWOMessageBox(mainform.handle,'В данной версии возможна двойная загрузка файлов, ПРИВОДЯЩАЯ К ДУБЛИРОВАНИЮ ОБЪЕКТОВ НА ЧЕРТЕЖЕ Осуществить вставку?','QLOAD',MB_YESNO)=IDYES then
               begin
                     addfromdxf(s,@drawings.GetCurrentDWG^.ConstructObjRoot);
                     {ReloadLayer;
@@ -2014,11 +2014,11 @@ begin
   if counter>0 then
   begin
   drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
-  ZCMsgCallBackInterface.TextMessage(rscmBasePoint,HistoryOut);
+  ZCMsgCallBackInterface.TextMessage(rscmBasePoint,TMWOHistoryOut);
   end
   else
   begin
-    ZCMsgCallBackInterface.TextMessage(rscmSelEntBeforeComm,HistoryOut);
+    ZCMsgCallBackInterface.TextMessage(rscmSelEntBeforeComm,TMWOHistoryOut);
     Commandmanager.executecommandend;
   end;
 end;
@@ -2112,18 +2112,18 @@ begin
                  else
                      if length(operands)<>0 then
                                          begin
-                                               ZCMsgCallBackInterface.TextMessage('Insert:'+sysutils.format(rscmNoBlockDefInDWG,[operands]),HistoryOut);
+                                               ZCMsgCallBackInterface.TextMessage('Insert:'+sysutils.format(rscmNoBlockDefInDWG,[operands]),TMWOHistoryOut);
                                                commandmanager.executecommandend;
                                                exit;
                                          end;
           if assigned(SetGDBObjInspProc)then
                                             SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD('TBlockInsert'),@BIProp,drawings.GetCurrentDWG);
           drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
-          ZCMsgCallBackInterface.TextMessage(rscmInsertPoint,HistoryOut);
+          ZCMsgCallBackInterface.TextMessage(rscmInsertPoint,TMWOHistoryOut);
      end
         else
             begin
-                 ZCMsgCallBackInterface.TextMessage('Insert:'+rscmInDwgBlockDefNotDeffined,HistoryOut);
+                 ZCMsgCallBackInterface.TextMessage('Insert:'+rscmInDwgBlockDefNotDeffined,TMWOHistoryOut);
                  commandmanager.executecommandend;
             end;
   result:=cmd_ok;
@@ -2536,7 +2536,7 @@ end;
 function Circle_com_CommandStart(operands:TCommandOperands):TCommandResult;
 begin
   drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
-  ZCMsgCallBackInterface.TextMessage(rscmCenterPointCircle,HistoryOut);
+  ZCMsgCallBackInterface.TextMessage(rscmCenterPointCircle,TMWOHistoryOut);
   result:=cmd_ok;
 end;
 
@@ -2551,7 +2551,7 @@ begin
   if (button and MZW_LBUTTON)<>0 then
   begin
     dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-    ZCMsgCallBackInterface.TextMessage(rscmPointOnCircle,HistoryOut);
+    ZCMsgCallBackInterface.TextMessage(rscmPointOnCircle,TMWOHistoryOut);
 
     pc := PGDBObjCircle(ENTF_CreateCircle(@drawings.GetCurrentDWG^.ConstructObjRoot,@drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray,[wc.x,wc.y,wc.z,0]));
     zcSetEntPropFromCurrentDrawingProp(pc);
@@ -2600,7 +2600,7 @@ function Line_com_CommandStart(operands:TCommandOperands):TCommandResult;
 begin
   pold:=nil;
   drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
-  ZCMsgCallBackInterface.TextMessage(rscmFirstPoint,HistoryOut);
+  ZCMsgCallBackInterface.TextMessage(rscmFirstPoint,TMWOHistoryOut);
   result:=cmd_ok;
 end;
 
@@ -2615,7 +2615,7 @@ begin
   result:=0;
   if (button and MZW_LBUTTON)<>0 then
   begin
-    //historyout('Вторая точка:');
+    //TMWOHistoryOut('Вторая точка:');
     dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
     PCreatedGDBLine := PGDBObjLine(ENTF_CreateLine(@drawings.GetCurrentDWG^.ConstructObjRoot,@drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray,[wc.x,wc.y,wc.z,wc.x,wc.y,wc.z]));
     zcSetEntPropFromCurrentDrawingProp(PCreatedGDBLine);
@@ -2646,7 +2646,7 @@ begin
        begin
             PGDBObjEntity(osp^.PGDBObject)^.formatentity(drawings.GetCurrentDWG^,dc);
             //PGDBObjEntity(osp^.PGDBObject)^.ObjToGDBString('Found: ','');
-            ZCMsgCallBackInterface.TextMessage(PGDBObjline(osp^.PGDBObject)^.ObjToGDBString('Found: ',''),HistoryOut);
+            ZCMsgCallBackInterface.TextMessage(PGDBObjline(osp^.PGDBObject)^.ObjToGDBString('Found: ',''),TMWOHistoryOut);
             po:=PGDBObjEntity(osp^.PGDBObject)^.getowner;
             pold:=osp^.PGDBObject;
        end
@@ -2714,8 +2714,8 @@ end;}
 procedure Move_com.showprompt(mklick:integer);
 begin
      case mklick of
-     0:ZCMsgCallBackInterface.TextMessage(rscmBasePoint,HistoryOut);
-     1:ZCMsgCallBackInterface.TextMessage(rscmNewBasePoint,HistoryOut);
+     0:ZCMsgCallBackInterface.TextMessage(rscmBasePoint,TMWOHistoryOut);
+     1:ZCMsgCallBackInterface.TextMessage(rscmNewBasePoint,TMWOHistoryOut);
      end;
 end;
 
@@ -2768,7 +2768,7 @@ begin
   end
   else
   begin
-    ZCMsgCallBackInterface.TextMessage(rscmSelEntBeforeComm,HistoryOut);
+    ZCMsgCallBackInterface.TextMessage(rscmSelEntBeforeComm,TMWOHistoryOut);
     Commandmanager.executecommandend;
   end;
 end;
@@ -2958,7 +2958,7 @@ procedure rotate_com.showprompt(mklick:integer);
 begin
      case mklick of
      0:inherited;
-     1:ZCMsgCallBackInterface.TextMessage(rscmPickOrEnterAngle,HistoryOut);
+     1:ZCMsgCallBackInterface.TextMessage(rscmPickOrEnterAngle,TMWOHistoryOut);
      end;
 end;
 procedure rotate_com.rot(a:GDBDouble; button: GDBByte);
@@ -3059,7 +3059,7 @@ procedure scale_com.showprompt(mklick:integer);
 begin
      case mklick of
      0:inherited;
-     1:ZCMsgCallBackInterface.TextMessage(rscmPickOrEnterScale,HistoryOut);
+     1:ZCMsgCallBackInterface.TextMessage(rscmPickOrEnterScale,TMWOHistoryOut);
      end;
 end;
 procedure scale_com.scale(a:GDBDouble; button: GDBByte);
@@ -3160,7 +3160,7 @@ function _3DPoly_com_CommandStart(operands:TCommandOperands):TCommandResult; //<
 begin
   p3dpl:=nil;
   drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
-  ZCMsgCallBackInterface.TextMessage(rscmFirstPoint,HistoryOut);
+  ZCMsgCallBackInterface.TextMessage(rscmFirstPoint,TMWOHistoryOut);
   drawings.GetCurrentDWG^.wa.param.processObjConstruct:=true;
   result:=cmd_ok;
 end;
@@ -3303,7 +3303,7 @@ begin
    until pobj=nil;
    if p3dpl=nil then
                    begin
-                        ZCMsgCallBackInterface.TextMessage(rscmPolyNotSel,HistoryOut);
+                        ZCMsgCallBackInterface.TextMessage(rscmPolyNotSel,TMWOHistoryOut);
                         commandmanager.executecommandend;
                    end
                else
@@ -3312,7 +3312,7 @@ begin
                         SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD('TPolyEdit'),@PEProp,drawings.GetCurrentDWG);
                         drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
                         drawings.GetCurrentDWG^.SelObjArray.Free;
-                        //historyout('Поехали:');
+                        //TMWOHistoryOut('Поехали:');
                    end;
   result:=cmd_ok;
 end;
@@ -3503,7 +3503,7 @@ begin
                                                   zcRedrawCurrentDrawing;
                                              end
                                              else
-                                                 ZCMsgCallBackInterface.TextMessage(rscm2VNotRemove,HistoryOut);
+                                                 ZCMsgCallBackInterface.TextMessage(rscm2VNotRemove,TMWOHistoryOut);
                                         end;
        if (PEProp.Action=TSPE_Insert)and(PEProp.nearestline<>-1)and(PEProp.dir<>0) then
                                         begin
@@ -3569,7 +3569,7 @@ begin
                                     begin
                                          if (PEProp.nearestvertex=0)or(PEProp.nearestvertex=p3dpl^.VertexArrayInOCS.Count-1) then
                                          begin
-                                              ZCMsgCallBackInterface.TextMessage(rscmNotCutHere,ShowError);
+                                              ZCMsgCallBackInterface.TextMessage(rscmNotCutHere,TMWOShowError);
                                               exit;
                                          end;
                                          p3dpl2 := pointer(p3dpl^.Clone(p3dpl^.bp.ListPos.Owner));
@@ -3629,7 +3629,7 @@ begin
      end;
      end
         else
-            ZCMsgCallBackInterface.TextMessage(rscmCommandOnlyCTXMenu,HistoryOut);
+            ZCMsgCallBackInterface.TextMessage(rscmCommandOnlyCTXMenu,TMWOHistoryOut);
 end;
 procedure ITT_com.Command(Operands:TCommandOperands);
 var //pv:pGDBObjEntity;
@@ -3726,7 +3726,7 @@ else if (sd.PFirstSelectedEnt^.GetObjType=GDBDeviceID) then
                  else
                      if length(operands)<>0 then
                                          begin
-                                               ZCMsgCallBackInterface.TextMessage('BEdit:'+format(rscmNoBlockDefInDWG,[operands]),HistoryOut);
+                                               ZCMsgCallBackInterface.TextMessage('BEdit:'+format(rscmNoBlockDefInDWG,[operands]),TMWOHistoryOut);
                                                commandmanager.executecommandend;
                                                exit;
                                          end;
@@ -3739,11 +3739,11 @@ else if (sd.PFirstSelectedEnt^.GetObjType=GDBDeviceID) then
           if tn<>'' then
                         bedit_format(nil);
           //poglwnd^.md.mode := (MGet3DPoint) or (MMoveCamera) or (MRotateCamera);
-          //historyout('Точка вставки:');
+          //TMWOHistoryOut('Точка вставки:');
      end
         else
             begin
-                 ZCMsgCallBackInterface.TextMessage('BEdit:'+rscmInDwgBlockDefNotDeffined,HistoryOut);
+                 ZCMsgCallBackInterface.TextMessage('BEdit:'+rscmInDwgBlockDefNotDeffined,TMWOHistoryOut);
                  commandmanager.executecommandend;
             end;
 
@@ -3768,7 +3768,7 @@ begin
      xcoord:=0;
      if pb<>nil then
      repeat
-           ZCMsgCallBackInterface.TextMessage(pb^.name,HistoryOut);
+           ZCMsgCallBackInterface.TextMessage(pb^.name,TMWOHistoryOut);
 
 
     BLINSERT := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID{,drawings.GetCurrentROOT}));
@@ -3811,7 +3811,7 @@ begin
      pb:=drawings.GetCurrentDWG^.BlockDefArray.beginiterate(ir);
      if pb<>nil then
      repeat
-           ZCMsgCallBackInterface.TextMessage(format('Found block "%s", contains %d entities',[Tria_AnsiToUtf8(pb^.name),pb^.ObjArray.Count]),HistoryOut);
+           ZCMsgCallBackInterface.TextMessage(format('Found block "%s", contains %d entities',[Tria_AnsiToUtf8(pb^.name),pb^.ObjArray.Count]),TMWOHistoryOut);
 
 
            pb:=drawings.GetCurrentDWG^.BlockDefArray.iterate(ir);
@@ -4006,8 +4006,8 @@ begin
      lph:=lps.StartLongProcess(10,'Cutting lines',nil);
       PlaceLines(LinesMap,lm,lc);
      lps.EndLongProcess(lph);
-     ZCMsgCallBackInterface.TextMessage('Lines modified: '+inttostr(lm),HistoryOut);
-     ZCMsgCallBackInterface.TextMessage('Lines created: '+inttostr(lc),HistoryOut);
+     ZCMsgCallBackInterface.TextMessage('Lines modified: '+inttostr(lm),TMWOHistoryOut);
+     ZCMsgCallBackInterface.TextMessage('Lines created: '+inttostr(lc),TMWOHistoryOut);
 
 
 
@@ -4015,9 +4015,9 @@ begin
      parray.done;
      LinesMap.Free;
      lps.EndLongProcess(lph);
-     ZCMsgCallBackInterface.TextMessage('Line-AABB tests count: '+inttostr(lineAABBtests),HistoryOut);
-     ZCMsgCallBackInterface.TextMessage('Line-Line tests count: '+inttostr(linelinetests),HistoryOut);
-     ZCMsgCallBackInterface.TextMessage('Intersections count: '+inttostr(intersectcount),HistoryOut);
+     ZCMsgCallBackInterface.TextMessage('Line-AABB tests count: '+inttostr(lineAABBtests),TMWOHistoryOut);
+     ZCMsgCallBackInterface.TextMessage('Line-Line tests count: '+inttostr(linelinetests),TMWOHistoryOut);
+     ZCMsgCallBackInterface.TextMessage('Intersections count: '+inttostr(intersectcount),TMWOHistoryOut);
      result:=cmd_ok;
 end;
 

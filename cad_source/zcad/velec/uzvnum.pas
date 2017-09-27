@@ -1334,7 +1334,7 @@ function getGroupDeviceInGraph(ourGraph:TGraphBuilder;Epsilon:double):TListHeadD
                     end
                     else begin
                       listHeadDevice.Mutable[i]^.listGroup.Mutable[j]^.listDevice.Mutable[k]^.listNumVertexMinWeight:=nil;
-                      ZCMsgCallBackInterface.TextMessage(' Нет пути от устройства к головному устройству = ' + listHeadDevice[i].listGroup[j].listDevice[k].tDevice,HistoryOut);
+                      ZCMsgCallBackInterface.TextMessage(' Нет пути от устройства к головному устройству = ' + listHeadDevice[i].listGroup[j].listDevice[k].tDevice,TMWOHistoryOut);
                       uzvtestdraw.testTempDrawPLCross(ourGraph.listVertex[listHeadDevice[i].listGroup[j].listDevice[k].num].centerPoint,12*epsilon,4);
                     end;
                     //Анализ результата
@@ -1532,7 +1532,7 @@ function getGroupDeviceInGraph(ourGraph:TGraphBuilder;Epsilon:double):TListHeadD
     I: Integer;
     T: Float;
   begin
-    ZCMsgCallBackInterface.TextMessage('*** Min Weight Path ***',HistoryOut);
+    ZCMsgCallBackInterface.TextMessage('*** Min Weight Path ***',TMWOHistoryOut);
   //  writeln('*** Min Weight Path ***');
     G:=TGraph.Create;
     G.Features:=[Weighted];
@@ -1555,18 +1555,18 @@ function getGroupDeviceInGraph(ourGraph:TGraphBuilder;Epsilon:double):TListHeadD
       T:=G.FindMinWeightPath(G[0], G[6], EdgePath);
 
       if T <> 11 then begin
-           ZCMsgCallBackInterface.TextMessage('*** Error! ***',HistoryOut);
+           ZCMsgCallBackInterface.TextMessage('*** Error! ***',TMWOHistoryOut);
        // write('Error!');
        // readln;
         Exit;
       end;
-      ZCMsgCallBackInterface.TextMessage('Minimal Length: ',HistoryOut);
+      ZCMsgCallBackInterface.TextMessage('Minimal Length: ',TMWOHistoryOut);
       //writeln('Minimal Length: ', T :4:2);
       G.EdgePathToVertexPath(G[0], EdgePath, VertexPath);
-      ZCMsgCallBackInterface.TextMessage('Vertices: ',HistoryOut);
+      ZCMsgCallBackInterface.TextMessage('Vertices: ',TMWOHistoryOut);
       //write('Vertices: ');
       for I:=0 to VertexPath.Count - 1 do
-        ZCMsgCallBackInterface.TextMessage(IntToStr(TVertex(VertexPath[I]).Index) + ' ',HistoryOut);
+        ZCMsgCallBackInterface.TextMessage(IntToStr(TVertex(VertexPath[I]).Index) + ' ',TMWOHistoryOut);
       //writeln;
     finally
       G.Free;

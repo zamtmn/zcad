@@ -151,7 +151,7 @@ implementation
   function getRealPointDevice(ptdev,insertDev,scale:GDBVertex):GDBVertex;
   begin
        result.x:=(ptdev.x * scale.x) + insertDev.x;
-       ZCMsgCallBackInterface.TextMessage('result-х = ' + FloatToStr(result.x),HistoryOut);
+       ZCMsgCallBackInterface.TextMessage('result-х = ' + FloatToStr(result.x),TMWOHistoryOut);
        result.y:=(ptdev.y * scale.y) + insertDev.y;
        result.z:=(ptdev.z * scale.z) + insertDev.z;
   end;

@@ -214,7 +214,7 @@ begin
                           end;
                      end
                  else
-                     ZCMsgCallBackInterface.TextMessage('',ShowError);
+                     ZCMsgCallBackInterface.TextMessage('',TMWOShowError);
 end;
 procedure DeviceManager.loadfromdir(path: GDBString);
 //var sr: TSearchRec;

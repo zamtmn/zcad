@@ -472,7 +472,7 @@ begin
      //ListView1.CurrentItem.ImageIndex:=-1;
      //ListView1.CurrentItem:=ListItem;
      if not PGDBLayerProp(ListItem.Data)^._on then
-                                                   MessageBox(rsCurrentLayerOff);
+                                                   ZCMsgCallBackInterface.TextMessage(rsCurrentLayerOff,TMWOMessageBox);
      //invalidate;
      end;
 end;
@@ -488,7 +488,7 @@ begin
                                      end;
                                      end
                                  else
-                                     MessageBox(rsLayerMustBeSelected);
+                                     ZCMsgCallBackInterface.TextMessage(rsLayerMustBeSelected,TMWOMessageBox);
 end;
 procedure TLayersForm.RefreshListItems(Sender: TObject);
 var
@@ -561,7 +561,7 @@ begin
      layername:=pdwg^.LayerTable.GetFreeName(Tria_Utf8ToAnsi(rsNewLayerNameFormat),1);
      if layername='' then
      begin
-       ZCMsgCallBackInterface.TextMessage(rsUnableSelectFreeLayerName,ShowError);
+       ZCMsgCallBackInterface.TextMessage(rsUnableSelectFreeLayerName,TMWOShowError);
        exit;
      end;
      if pdwg^.LayerTable.AddItem(layername,pcreatedlayer)=IsCreated then
@@ -631,7 +631,7 @@ var
    e,b:GDBInteger;
    //domethod,undomethod:tmethod;
 begin
-  //ShowError(rsNotYetImplemented);
+  //TMWOShowError(rsNotYetImplemented);
   //pdwg:=drawings.GetCurrentDWG;
   if assigned(ListView1.Selected)then
                                      begin
@@ -639,7 +639,7 @@ begin
                                      countlayer(player,e,b);
                                      if (e+b)>0 then
                                                   begin
-                                                       ZCMsgCallBackInterface.TextMessage(rsUnableDelUsedLayer,ShowError);
+                                                       ZCMsgCallBackInterface.TextMessage(rsUnableDelUsedLayer,TMWOShowError);
                                                        exit;
                                                   end;
 
@@ -648,7 +648,7 @@ begin
                                      LayerDescLabel.Caption:='';
                                      end
                                  else
-                                     ZCMsgCallBackInterface.TextMessage(rsLayerMustBeSelected,ShowError);
+                                     ZCMsgCallBackInterface.TextMessage(rsLayerMustBeSelected,TMWOShowError);
 end;
 
 procedure TLayersForm.AplyClose(Sender: TObject);

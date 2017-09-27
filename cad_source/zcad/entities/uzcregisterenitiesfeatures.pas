@@ -472,7 +472,7 @@ begin
                          end
                      else
                          begin
-                                ZCMsgCallBackInterface.TextMessage(sysutils.format(rsfardeffilenotfounf,[pEntity^.Name]),HistoryOut);
+                                ZCMsgCallBackInterface.TextMessage(sysutils.format(rsfardeffilenotfounf,[pEntity^.Name]),TMWOHistoryOut);
                          end;
      end;
 end;

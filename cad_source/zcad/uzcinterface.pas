@@ -32,15 +32,16 @@ type
                               TMWOToModal,              //messagebox
                               TMWOWarning,              //оформить как варнинг
                               TMWOError);               //оформить как ошибку
-const
-    HistoryOut=[TMWOToConsole,TMWOToLog];
-    ShowError=[TMWOToConsole,TMWOToLog,TMWOToModal,TMWOError];
-    SilentShowError=[TMWOToConsole,TMWOToLog,TMWOError];
-    Quickly=[TMWOToQuicklyReplaceable];
-type
+
     TTextMessageWriteOptionsSet=set of TTextMessageWriteOptions;
 
-
+const
+    TMWOHistoryOut=[TMWOToConsole,TMWOToLog];
+    TMWOShowError=[TMWOToConsole,TMWOToLog,TMWOToModal,TMWOError];
+    TMWOSilentShowError=[TMWOToConsole,TMWOToLog,TMWOError];
+    TMWOMessageBox=[TMWOToConsole,TMWOToLog,TMWOToModal];
+    TMWOQuickly=[TMWOToQuicklyReplaceable];
+type
     TZCMsgCallBackInterface=class
       public
         procedure RegisterHandler_HistoryOut(Handler:TProcedure_String_);
@@ -167,8 +168,6 @@ var
 
 
 function DoShowModal(MForm:TForm): Integer;
-procedure MessageBox(Text: string);
-procedure ErrMessageBox(Text: string);
 function GetUndoStack:pointer;
 var
    ZCMsgCallBackInterface:TZCMsgCallBackInterface;
@@ -277,25 +276,6 @@ begin
      if assigned(RestoreAllCursorsProc) then
                                          RestoreAllCursorsProc;
 end;
-procedure MessageBox(Text: string);
-begin
-     if assigned(ShowAllCursorsProc) then
-                                         ShowAllCursorsProc;
-     application.MessageBox(@Text[1], @rsWarningCaption[1],MB_OK or MB_ICONWARNING);
-     if assigned(RestoreAllCursorsProc) then
-                                         RestoreAllCursorsProc;
-end;
-
-procedure errMessageBox(Text: string);
-begin
-     if assigned(ShowAllCursorsProc) then
-                                         ShowAllCursorsProc;
-     application.MessageBox(@Text[1], 'Error',mb_iconhand);
-     if assigned(RestoreAllCursorsProc) then
-                                         RestoreAllCursorsProc;
-end;
-
-
 initialization
   ZCMsgCallBackInterface:=TZCMsgCallBackInterface.create;
 finalization

@@ -376,7 +376,7 @@ begin
          l2begin.z := 0;
 
          if  compareVertex(l1begin,l2begin,10) then
-            ZCMsgCallBackInterface.TextMessage('rrrrrrrrrrrrrrrrrrrrrrrrrr',HistoryOut);
+            ZCMsgCallBackInterface.TextMessage('rrrrrrrrrrrrrrrrrrrrrrrrrr',TMWOHistoryOut);
 
          l2end.x := 350;
          l2end.y := 60;
@@ -389,7 +389,7 @@ begin
 
                                      RecurseSearhCable(pc) //осуществляем поиск ветвей
                                  else
-                                     ZCMsgCallBackInterface.TextMessage('Fuck! You must select Cable',HistoryOut); //не кабель - посылаем
+                                     ZCMsgCallBackInterface.TextMessage('Fuck! You must select Cable',TMWOHistoryOut); //не кабель - посылаем
     end;
     result:=cmd_ok;
 end;
@@ -1145,7 +1145,7 @@ begin
 
    result.isinterceptCol:=0;
     if (linePt1.x=linePt2.x) and (linePt1.y=linePt2.y) then
-      ZCMsgCallBackInterface.TextMessage('Введите две разные точки',HistoryOut)
+      ZCMsgCallBackInterface.TextMessage('Введите две разные точки',TMWOHistoryOut)
     else
       if (linePt1.x=linePt2.x) then
         k:=(linePt1.y-linePt2.y)/(linePt1.x)
@@ -1153,13 +1153,13 @@ begin
         k:=(linePt1.y-linePt2.y)/(linePt1.x - linePt2.x);
 
     b:=linePt1.y - k*linePt1.x;
-    ZCMsgCallBackInterface.TextMessage('gfgfgfg',HistoryOut);
+    ZCMsgCallBackInterface.TextMessage('gfgfgfg',TMWOHistoryOut);
     //находим дискрименант квадратного уравнения
    d:=(power((2*k*b-2*circlePt.x-2*circlePt.y*k),2)-(4+4*k*k)*(b*b-r*r+circlePt.x*circlePt.x+circlePt.y*circlePt.y-2*circlePt.y*b));
-   ZCMsgCallBackInterface.TextMessage(floattostr(d),HistoryOut)  ;
+   ZCMsgCallBackInterface.TextMessage(floattostr(d),TMWOHistoryOut)  ;
   //если он меньше 0, уравнение не имеет решения
      if (d<-0.0001) then
-          ZCMsgCallBackInterface.TextMessage('Прямая и окружность не пересекаются',HistoryOut)
+          ZCMsgCallBackInterface.TextMessage('Прямая и окружность не пересекаются',TMWOHistoryOut)
      else
          begin
   //иначе находим корни квадратного уравнения
@@ -1172,20 +1172,20 @@ begin
   if AtOtres(linePt1.x,linePt1.y,linePt2.x,linePt2.y,result.point1.x,result.point1.y) then
   begin
     result.isinterceptCol:=result.isinterceptCol+1;
-    ZCMsgCallBackInterface.TextMessage('Прямая и окружность имеют точку касания: x=' + floattostr(result.point1.x) + 'y='+  floattostr(result.point1.y),HistoryOut);
+    ZCMsgCallBackInterface.TextMessage('Прямая и окружность имеют точку касания: x=' + floattostr(result.point1.x) + 'y='+  floattostr(result.point1.y),TMWOHistoryOut);
   end;
   if AtOtres(linePt1.x,linePt1.y,linePt2.x,linePt2.y,result.point2.x,result.point2.y) then
      if result.isinterceptCol = 1 then
      begin
         result.isinterceptCol:=result.isinterceptCol+1;
-        ZCMsgCallBackInterface.TextMessage('Прямая и окружность пересекаются в точках: x1=' + floattostr(result.point1.x) + 'y1='+  floattostr(result.point1.y) + 'x2='+  floattostr(result.point2.x)+ 'y2='+  floattostr(result.point2.y),HistoryOut);
+        ZCMsgCallBackInterface.TextMessage('Прямая и окружность пересекаются в точках: x1=' + floattostr(result.point1.x) + 'y1='+  floattostr(result.point1.y) + 'x2='+  floattostr(result.point2.x)+ 'y2='+  floattostr(result.point2.y),TMWOHistoryOut);
      end
      else
         begin
           result.isinterceptCol:=result.isinterceptCol+1;
           result.point1.x :=result.point2.x;
           result.point1.y :=result.point2.y;
-          ZCMsgCallBackInterface.TextMessage('Прямая и окружность имеют точку касания: x=' + floattostr(result.point1.x) + 'y='+  floattostr(result.point1.y),HistoryOut);
+          ZCMsgCallBackInterface.TextMessage('Прямая и окружность имеют точку касания: x=' + floattostr(result.point1.x) + 'y='+  floattostr(result.point1.y),TMWOHistoryOut);
         end;
 
      end;
@@ -1457,9 +1457,9 @@ begin
       pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir); //переход к следующем примитиву в списке выбраных примитивов
     until pobj=nil;
 
-  ZCMsgCallBackInterface.TextMessage('Кол-во ввыбранных элементов = ' + IntToStr(counter),HistoryOut);
-  ZCMsgCallBackInterface.TextMessage('Список кусков кабельных линий состоит из = ' + IntToStr(counter1),HistoryOut);
-  ZCMsgCallBackInterface.TextMessage('Список устройств состоит из = ' + IntToStr(counter2),HistoryOut);
+  ZCMsgCallBackInterface.TextMessage('Кол-во ввыбранных элементов = ' + IntToStr(counter),TMWOHistoryOut);
+  ZCMsgCallBackInterface.TextMessage('Список кусков кабельных линий состоит из = ' + IntToStr(counter1),TMWOHistoryOut);
+  ZCMsgCallBackInterface.TextMessage('Список устройств состоит из = ' + IntToStr(counter2),TMWOHistoryOut);
 
 
   //******* поиск и обработка стояков (переходов между этажами) и разрывов
@@ -1801,7 +1801,7 @@ function Testcablemanager_com(operands:TCommandOperands):TCommandResult;
     pcabledesk:=cman.beginiterate(ir);
     if pcabledesk<>nil then BEGIN
        repeat
-         ZCMsgCallBackInterface.TextMessage('  Найдена групповая линия "'+pcabledesk^.Name+'"',HistoryOut);
+         ZCMsgCallBackInterface.TextMessage('  Найдена групповая линия "'+pcabledesk^.Name+'"',TMWOHistoryOut);
 
          pobj:= pcabledesk^.Segments.beginiterate(ir2);
          if pobj<>nil then
@@ -1809,9 +1809,9 @@ function Testcablemanager_com(operands:TCommandOperands):TCommandResult;
            pnp:=pobj^.NodePropArray.beginiterate(ir3);
            if pnp<>nil then
             repeat
-             ZCMsgCallBackInterface.TextMessage('1',HistoryOut);
+             ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
              testTempDrawLine(pnp^.PrevP,pnp^.NextP);
-             ZCMsgCallBackInterface.TextMessage('  имя устройства подключенного - '+pnp^.DevLink^.GetObjTypeName,HistoryOut);
+             ZCMsgCallBackInterface.TextMessage('  имя устройства подключенного - '+pnp^.DevLink^.GetObjTypeName,TMWOHistoryOut);
              pnp:=pobj^.NodePropArray.iterate(ir3);
             until pnp=nil;
            //ZCMsgCallBackInterface.TextMessage('  Найдена групповая линия "'+pcabledesk^.Name+'"');

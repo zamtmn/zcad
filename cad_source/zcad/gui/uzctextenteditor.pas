@@ -49,7 +49,7 @@ begin
      InfoForm.memo.text:=astring;
      if assigned(SysVar.INTF.INTF_DefaultEditorFontHeight) then
         InfoForm.memo.Font.Height:=SysVar.INTF.INTF_DefaultEditorFontHeight^;
-     modalresult:=DOShowModal(InfoForm);
+     modalresult:=ZCMsgCallBackInterface.DOShowModal(InfoForm);
      if modalresult=MrOk then
                          begin
                               PGDBObjText(pobj)^.Template:=ConvertToDxfString(InfoForm.memo.text);
@@ -67,7 +67,7 @@ begin
      if assigned(SysVar.INTF.INTF_DefaultEditorFontHeight) then
         SingleLineTextEditorForm.EditField.Font.Height:=SysVar.INTF.INTF_DefaultEditorFontHeight^;
 
-     modalresult:=DOShowModal(SingleLineTextEditorForm);
+     modalresult:=ZCMsgCallBackInterface.DOShowModal(SingleLineTextEditorForm);
 
      if modalresult=MrOk then
                          begin

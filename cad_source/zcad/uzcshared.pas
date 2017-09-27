@@ -32,11 +32,9 @@ begin
      s:='FATALERROR: '+errstr;
      programlog.logoutstr(s,0,LM_Fatal);
      s:=(s);
-     if  assigned(CursorOn) then
-                                CursorOn;
+     ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
      Application.MessageBox(@s[1],'',MB_OK);
-     if  assigned(CursorOff) then
-                                CursorOff;
+     ZCMsgCallBackInterface.Do_AfterShowModal(nil);
 
      halt(0);
 end;
@@ -46,11 +44,9 @@ var
 begin
      ZCMsgCallBackInterface.TextMessage(errstr,TMWOSilentShowError);
      ts:=(errstr);
-     if  assigned(CursorOn) then
-                                CursorOn;
+     ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
      Application.MessageBox(@ts[1],'',MB_ICONERROR);
-     if  assigned(CursorOff) then
-                                CursorOff;
+     ZCMsgCallBackInterface.Do_AfterShowModal(nil);
 end;
 begin
 uzclog.HistoryTextOut:=ZCMsgCallBackInterface.Do_HistoryOut();

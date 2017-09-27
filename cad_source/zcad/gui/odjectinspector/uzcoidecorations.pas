@@ -218,15 +218,13 @@ begin
      if not assigned(ColorSelectForm)then
      Application.CreateForm(TColorSelectForm, ColorSelectForm);
      SetHeightControl(ColorSelectForm,sysvar.INTF.INTF_DefaultControlHeight^);
-     if assigned(ShowAllCursorsProc) then
-                                         ShowAllCursorsProc;
+     ZCMsgCallBackInterface.Do_BeforeShowModal(ColorSelectForm);
      mr:=ColorSelectForm.run(PTGDBPaletteColor(PInstance)^,true){showmodal};
      if mr=mrOk then
                     begin
                     PTGDBPaletteColor(PInstance)^:=ColorSelectForm.ColorInfex;
                     end;
-     if assigned(RestoreAllCursorsProc) then
-                                            RestoreAllCursorsProc;
+     ZCMsgCallBackInterface.Do_AfterShowModal(ColorSelectForm);
      freeandnil(ColorSelectForm);
 end;
 procedure drawLWProp(canvas:TCanvas;ARect:TRect;PInstance:GDBPointer);
@@ -261,7 +259,7 @@ procedure runOSwnd(PInstance:GDBPointer);
 begin
   SnapEditorForm:=TSnapEditorForm.Create(nil);
   SetHeightControl(SnapEditorForm,sysvar.INTF.INTF_DefaultControlHeight^);
-  DOShowModal(SnapEditorForm);
+  ZCMsgCallBackInterface.DOShowModal(SnapEditorForm);
   Freeandnil(SnapEditorForm);
 end;
 function ColorDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorGDBString;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
@@ -335,7 +333,7 @@ begin
         InfoForm.memo.Font.Height:=SysVar.INTF.INTF_DefaultEditorFontHeight^;
 
      InfoForm.memo.text:=pgdbstring(PInstance)^;
-     modalresult:=DOShowModal(InfoForm);
+     modalresult:=ZCMsgCallBackInterface.DOShowModal(InfoForm);
      if modalresult=MrOk then
                          begin
                               pgdbstring(PInstance)^:=InfoForm.memo.text;
@@ -357,7 +355,7 @@ begin
         InfoForm.memo.Font.Height:=SysVar.INTF.INTF_DefaultEditorFontHeight^;
 
      InfoForm.memo.text:=ConvertFromDxfString(pgdbstring(PInstance)^);
-     modalresult:=DOShowModal(InfoForm);
+     modalresult:=ZCMsgCallBackInterface.DOShowModal(InfoForm);
      if modalresult=MrOk then
                          begin
                               pgdbstring(PInstance)^:=ConvertToDxfString(InfoForm.memo.text);

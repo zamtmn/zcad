@@ -276,10 +276,10 @@ var
 begin
   if length(operands)=0 then
                      begin
-                          if assigned(Showallcursorsproc) then Showallcursorsproc;
+                          ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
                           //mainformn.ShowAllCursors;
                           isload:=OpenFileDialog(s,1,'svg',ImportFileFilter,'','Import...');
-                          if assigned(RestoreAllCursorsproc) then RestoreAllCursorsproc;
+                          ZCMsgCallBackInterface.Do_AfterShowModal(nil);
                           //mainformn.RestoreCursors;
                           //s:=utf8tosys(s);
                           if not isload then
@@ -314,9 +314,9 @@ var
 begin
      if length(operands)=0 then
                         begin
-                             if assigned(Showallcursorsproc) then Showallcursorsproc;
+                             ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
                              isload:=OpenFileDialog(s,Ext2LoadProcMap.GetDefaultFileFilterIndex,{'dxf'}Ext2LoadProcMap.GetDefaultFileExt,{ProjectFileFilter}Ext2LoadProcMap.GetCurrentFileFilter,'',rsOpenFile);
-                             if assigned(RestoreAllCursorsproc) then RestoreAllCursorsproc;
+                             ZCMsgCallBackInterface.Do_AfterShowModal(nil);
                              //s:=utf8tosys(s);
                              if not isload then
                                                begin
@@ -376,8 +376,7 @@ begin
 
    _UnitsFormat:=drawings.GetUnitsFormat;
 
-   if assigned(ShowAllCursorsProc) then
-                                       ShowAllCursorsProc;
+   ZCMsgCallBackInterface.Do_BeforeShowModal(UnitsForm);
    result:=UnitsForm.runmodal(_UnitsFormat,sysvar.DWG.DWG_InsUnits^);
    if result=mrok then
                       begin
@@ -385,8 +384,7 @@ begin
                         if assigned(ReturnToDefaultProc)then
                                                             ReturnToDefaultProc(drawings.GetUnitsFormat);
                       end;
-   if assigned(RestoreAllCursorsProc) then
-                                       RestoreAllCursorsProc;
+   ZCMsgCallBackInterface.Do_AfterShowModal(UnitsForm);
    StoreBoundsToSavedUnit('UnitsWND',UnitsForm.BoundsRect);
    Freeandnil(UnitsForm);
    result:=cmd_ok;
@@ -395,7 +393,7 @@ function layer_cmd(operands:TCommandOperands):TCommandResult;
 begin
   LayersForm:=TLayersForm.Create(nil);
   SetHeightControl(LayersForm,sysvar.INTF.INTF_DefaultControlHeight^);
-  DOShowModal(LayersForm);
+  ZCMsgCallBackInterface.DOShowModal(LayersForm);
   Freeandnil(LayersForm);
   result:=cmd_ok;
 end;
@@ -403,7 +401,7 @@ function TextStyles_cmd(operands:TCommandOperands):TCommandResult;
 begin
   TextStylesForm:=TTextStylesForm.Create(nil);
   SetHeightControl(TextStylesForm,sysvar.INTF.INTF_DefaultControlHeight^);
-  DOShowModal(TextStylesForm);
+  ZCMsgCallBackInterface.DOShowModal(TextStylesForm);
   Freeandnil(TextStylesForm);
   result:=cmd_ok;
 end;
@@ -411,7 +409,7 @@ function DimStyles_cmd(operands:TCommandOperands):TCommandResult;
 begin
   DimStylesForm:=TDimStylesForm.Create(nil);
   SetHeightControl(DimStylesForm,sysvar.INTF.INTF_DefaultControlHeight^);
-  DOShowModal(DimStylesForm);
+  ZCMsgCallBackInterface.DOShowModal(DimStylesForm);
   Freeandnil(DimStylesForm);
   result:=cmd_ok;
 end;
@@ -419,7 +417,7 @@ end;
 begin
   LineTypesForm:=TLineTypesForm.Create(nil);
   SetHeightControl(LineTypesForm,sysvar.INTF.INTF_DefaultControlHeight^);
-  DOShowModal(LineTypesForm);
+  ZCMsgCallBackInterface.DOShowModal(LineTypesForm);
   Freeandnil(LineTypesForm);
   result:=cmd_ok;
 end;
@@ -430,15 +428,13 @@ begin
      if not assigned(ColorSelectForm)then
      Application.CreateForm(TColorSelectForm, ColorSelectForm);
      SetHeightControl(ColorSelectForm,sysvar.INTF.INTF_DefaultControlHeight^);
-     if assigned(ShowAllCursorsProc) then
-                                         ShowAllCursorsProc;
+     ZCMsgCallBackInterface.Do_BeforeShowModal(ColorSelectForm);
      mr:=ColorSelectForm.run(SysVar.dwg.DWG_CColor^,true){showmodal};
      if mr=mrOk then
                     begin
                     SysVar.dwg.DWG_CColor^:=ColorSelectForm.ColorInfex;
                     end;
-     if assigned(RestoreAllCursorsProc) then
-                                            RestoreAllCursorsProc;
+     ZCMsgCallBackInterface.Do_AfterShowModal(ColorSelectForm);
      freeandnil(ColorSelectForm);
      result:=cmd_ok;
 end;
@@ -544,14 +540,14 @@ function About_com(operands:TCommandOperands):TCommandResult;
 begin
   if not assigned(AboutForm) then
                                   AboutForm:=TAboutForm.mycreate(Application,@AboutForm);
-  DOShowModal(AboutForm);
+  ZCMsgCallBackInterface.DOShowModal(AboutForm);
   result:=cmd_ok;
 end;
 function Help_com(operands:TCommandOperands):TCommandResult;
 begin
   if not assigned(HelpForm) then
                                   HelpForm:=THelpForm.mycreate(Application,@HelpForm);
-  DOShowModal(HelpForm);
+  ZCMsgCallBackInterface.DOShowModal(HelpForm);
   result:=cmd_ok;
 end;
 function ClearFileHistory_com(operands:TCommandOperands):TCommandResult;
@@ -770,7 +766,7 @@ begin
      end;
      memsubstr.Free;
 
-     DOShowModal(InfoForm);
+     ZCMsgCallBackInterface.DOShowModal(InfoForm);
      InfoForm.Free;
 
      result:=cmd_ok;
@@ -811,7 +807,7 @@ begin
      until pmemcounter=nil;
 
 
-     DOShowModal(InfoForm);
+     ZCMsgCallBackInterface.DOShowModal(InfoForm);
      InfoForm.Free;
      memcount.Done;
     result:=cmd_ok;

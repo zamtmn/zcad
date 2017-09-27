@@ -247,11 +247,9 @@ var
 begin
   if not assigned(ColorSelectForm)then
     Application.CreateForm(TColorSelectForm, ColorSelectForm);
-  if assigned(ShowAllCursorsProc) then
-    ShowAllCursorsProc;
+  ZCMsgCallBackInterface.Do_BeforeShowModal(ColorSelectForm);
   mr:=ColorSelectForm.run(PGDBLayerProp(Item.Data)^.color,false);
-  if assigned(RestoreAllCursorsProc) then
-    RestoreAllCursorsProc;
+  ZCMsgCallBackInterface.Do_AfterShowModal(ColorSelectForm);
   if mr=mrOk then
     begin
       if PGDBLayerProp(Item.Data)^.color<>ColorSelectForm.ColorInfex then
@@ -316,11 +314,9 @@ begin
   if not assigned(SelectorForm)then
   Application.CreateForm(TSelectorForm, SelectorForm);
   FillSelector(SelectorForm);
-  if assigned(ShowAllCursorsProc) then
-                                      ShowAllCursorsProc;
+  ZCMsgCallBackInterface.Do_BeforeShowModal(SelectorForm);
   mr:=SelectorForm.run;
-  if assigned(RestoreAllCursorsProc) then
-                                      RestoreAllCursorsProc;
+  ZCMsgCallBackInterface.Do_AfterShowModal(SelectorForm);
   if mr=mrOk then
                  begin
                       PGDBLayerProp(Item.Data)^.LT:=SelectorForm.data;
@@ -358,11 +354,9 @@ var
 begin
   if not assigned(LineWeightSelectForm)then
   Application.CreateForm(TLineWeightSelectForm, LineWeightSelectForm);
-  if assigned(ShowAllCursorsProc) then
-                                      ShowAllCursorsProc;
+  ZCMsgCallBackInterface.Do_BeforeShowModal(LineWeightSelectForm);
   mr:=LineWeightSelectForm.run(PGDBLayerProp(Item.Data)^.lineweight,false);
-  if assigned(RestoreAllCursorsProc) then
-                                      RestoreAllCursorsProc;
+  ZCMsgCallBackInterface.Do_AfterShowModal(LineWeightSelectForm);
   if mr=mrOk then
                  begin
                       PGDBLayerProp(Item.Data)^.lineweight:=LineWeightSelectForm.SelectedLW;

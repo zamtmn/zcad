@@ -1594,12 +1594,9 @@ end;
 procedure Print_com.SelectPrinter(pdata:GDBPlatformint);
 begin
   ZCMsgCallBackInterface.TextMessage(rsNotYetImplemented,TMWOHistoryOut);
-       if assigned(ShowAllCursorsProc) then
-                                         ShowAllCursorsProc;
+  ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
   if PSD.Execute then;
-  if assigned(RestoreAllCursorsProc) then
-                                      RestoreAllCursorsProc;
-       //UpdatePrinterInfo;
+  ZCMsgCallBackInterface.Do_AfterShowModal(nil);
 end;
 procedure Print_com.SetWindow(pdata:GDBPlatformint);
 begin
@@ -1610,11 +1607,9 @@ procedure Print_com.SelectPaper(pdata:GDBPlatformint);
 
 begin
   ZCMsgCallBackInterface.TextMessage(rsNotYetImplemented,TMWOHistoryOut);
-  if assigned(ShowAllCursorsProc) then
-                                      ShowAllCursorsProc;
+  ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
   if Paged.Execute then;
-       if assigned(RestoreAllCursorsProc) then
-                                         RestoreAllCursorsProc;
+  ZCMsgCallBackInterface.Do_AfterShowModal(nil);
 end;
 function Inch(AValue: Double; VertRes:boolean=true): Integer;
 begin

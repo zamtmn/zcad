@@ -217,11 +217,8 @@ begin
      if drawings.currentdwg<>PTSimpleDrawing(BlockBaseDWG) then
      if drawings.GetCurrentROOT.ObjArray.Count>0 then
                                                      begin
-                                                          if assigned(messageboxproc)then
-                                                          begin
-                                                          if messageboxproc('Чертеж уже содержит данные. Осуществить подгрузку?','QLOAD',MB_YESNO)=IDNO then
+                                                          if ZCMsgCallBackInterface.TextQuestion('Чертеж уже содержит данные. Осуществить подгрузку?','QLOAD',MB_YESNO)=IDNO then
                                                           exit;
-                                                          end;
                                                      end;
      s:=operands;
      loadproc:=Ext2LoadProcMap.GetLoadProc(extractfileext(s));
@@ -357,7 +354,7 @@ var
    s: GDBString;
    fileext:GDBString;
 begin
-     if assigned(ShowAllCursorsProc) then ShowAllCursorsProc;
+     ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
      s:=drawings.GetCurrentDWG.GetFileName;
      if SaveFileDialog(s,'dxf',ProjectFileFilter,'',rsSaveFile) then
      begin
@@ -376,7 +373,7 @@ begin
           end;
      end;
      result:=cmd_ok;
-     if assigned(RestoreAllCursorsProc) then RestoreAllCursorsProc;
+     ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
 end;
 function Cam_reset_com(operands:TCommandOperands):TCommandResult;
 begin
@@ -861,7 +858,7 @@ begin
      createInfoFormVar;
 
      InfoFormVar.memo.text:=u8s;
-     modalresult:=DOShowModal(InfoFormVar);
+     modalresult:=ZCMsgCallBackInterface.DOShowModal(InfoFormVar);
      if modalresult=MrOk then
                          begin
                                u8s:=InfoFormVar.memo.text;
@@ -976,7 +973,7 @@ begin
            counter:=0;
 
            InfoFormVar.memo.text:='';
-           modalresult:=DOShowModal(InfoFormVar);
+           modalresult:=ZCMsgCallBackInterface.DOShowModal(InfoFormVar);
            if modalresult=MrOk then
                                begin
                                      u8s:=InfoFormVar.memo.text;
@@ -1554,8 +1551,7 @@ begin
                s:='Cleaned items: '+inttostr(cleaned)
            +#13#10'Added items: '+inttostr(_UpdatePO)
            +#13#10'File zcad.po must be rewriten. Confirm?';
-               if assigned(messageboxProc) then
-               if messageboxProc(@s[1],'UpdatePO',MB_YESNO)=IDNO then
+               if ZCMsgCallBackInterface.TextQuestion(s,'UpdatePO',MB_YESNO)=IDNO then
                                                                          exit;
                po.SaveToFile(expandpath(PODirectory + 'zcad.po.backup'));
                actualypo.SaveToFile(expandpath(PODirectory + 'zcad.po'));

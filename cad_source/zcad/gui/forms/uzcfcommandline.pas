@@ -411,7 +411,7 @@ begin
                                               //s:=valuetoGDBString(v.pvalue,v.ptd);
                                               s:=v.data.ptd^.GetValueAsString(v.data.Instance);
                                               v.data.Instance:=v.data.Instance;
-                                              ZCMsgCallBackInterface.TextMessage(Format(rsExprOutText,[expr,s]),HistoryOut);
+                                              ZCMsgCallBackInterface.TextMessage(Format(rsExprOutText,[expr,s]),TMWOHistoryOut);
                                          end
       else if commandmanager.FindCommand(uppercase({cmd}command))<>nil then
           begin
@@ -437,7 +437,7 @@ begin
            until (cmd='')or(not parsed);
            if parsed then
            begin
-           ZCMsgCallBackInterface.TextMessage(Format(rsExprOutText,[CmdEdit.text,superexpr]),HistoryOut);
+           ZCMsgCallBackInterface.TextMessage(Format(rsExprOutText,[CmdEdit.text,superexpr]),TMWOHistoryOut);
            if IsParsed('_realnumber'#0'_softspace'#0'=,_realnumber'#0'_softspace'#0'=,_realnumber'#0,superexpr,parseresult)then
            begin
                  if drawings.GetCurrentDWG<>nil then
@@ -475,7 +475,7 @@ begin
            end
            end
               else
-                  ZCMsgCallBackInterface.TextMessage('Unable to parse line "'+subexpr+'"',ShowError);
+                  ZCMsgCallBackInterface.TextMessage('Unable to parse line "'+subexpr+'"',TMWOShowError);
       end;
     end;
     CmdEdit.text:='';
@@ -585,5 +585,5 @@ begin
   ZCMsgCallBackInterface.RegisterHandler_StatusLineTextOut(StatusLineTextOut);
   //uzcinterface.StatusLineTextOut:=StatusLineTextOut;
   ZCMsgCallBackInterface.RegisterHandler_LogError(LogError);
-  //uzcinterface.SilentShowError:=LogError;
+  //uzcinterface.TMWOSilentShowError:=LogError;
 end.

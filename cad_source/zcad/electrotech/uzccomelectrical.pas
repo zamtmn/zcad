@@ -617,7 +617,7 @@ commandmanager.DMShow;
   end;
 
   if counter=0 then
-                   historyout('Выбери объект(ы) источник энергии!')
+                   TMWOHistoryOut('Выбери объект(ы) источник энергии!')
                else
                    EM_SEP_build_graphix(cman,root^.SubNode);
   cman.done;
@@ -670,7 +670,7 @@ begin
 
      if dna.Size=0 then
      begin
-          ZCMsgCallBackInterface.TextMessage(rscmSelDevsBeforeComm,HistoryOut);
+          ZCMsgCallBackInterface.TextMessage(rscmSelDevsBeforeComm,TMWOHistoryOut);
      end
      else
      begin
@@ -820,7 +820,7 @@ begin
               pvd:=pentvarext^.entityunit.FindVariable('DB_link');
               //if pvd<>nil then
               //                material:=pgdbstring(pvd.data.Instance)^;
-              ZCMsgCallBackInterface.TextMessage('Найден объект источник энергии "'+name+'"',HistoryOut);
+              ZCMsgCallBackInterface.TextMessage('Найден объект источник энергии "'+name+'"',TMWOHistoryOut);
 
               p:=nil;pust:=nil;i:=nil;iust:=nil;cosf:=nil;
               sumpcos:=0;
@@ -851,7 +851,7 @@ begin
                      {$ifndef GenericsContainerNotFinished}psfirstline:=pointer(pt^.tbl.CreateObject);{$endif}
                      psfirstline.init(16);
 
-                   ZCMsgCallBackInterface.TextMessage('Текущие значения Pрасч='+floattostr(p^)+'; Iрасч='+floattostr(i^)+'; Pуст='+floattostr(pust^)+'; Iуст='+floattostr(iust^)+' будут пересчитаны',HistoryOut);
+                   ZCMsgCallBackInterface.TextMessage('Текущие значения Pрасч='+floattostr(p^)+'; Iрасч='+floattostr(i^)+'; Pуст='+floattostr(pust^)+'; Iуст='+floattostr(iust^)+' будут пересчитаны',TMWOHistoryOut);
                    p^:=0;
                    pust^:=0;
                    i^:=0;
@@ -864,7 +864,7 @@ begin
                          potrname:='';
                          if pcabledesk^.StartDevice.bp.ListPos.Owner=pointer(pobj) then
                          begin
-                              ZCMsgCallBackInterface.TextMessage('  Найдена групповая линия "'+pcabledesk^.Name+'"',HistoryOut);
+                              ZCMsgCallBackInterface.TextMessage('  Найдена групповая линия "'+pcabledesk^.Name+'"',TMWOHistoryOut);
 
                               potrpust:=0;
                               potriust:=0;
@@ -932,7 +932,7 @@ begin
 
                                                                       p^:=p^+potrp;
                                                                       i^:=i^+potri;
-                                                                      ZCMsgCallBackInterface.TextMessage('    Найден объект потребитель энергии "'+potrname+'"; Pрасч='+floattostr(potrp)+'; Iрасч='+floattostr(potri),HistoryOut);
+                                                                      ZCMsgCallBackInterface.TextMessage('    Найден объект потребитель энергии "'+potrname+'"; Pрасч='+floattostr(potrp)+'; Iрасч='+floattostr(potri),TMWOHistoryOut);
 
 
 
@@ -1034,7 +1034,7 @@ begin
 
                                                                       p^:=p^+potrp;
                                                                       i^:=i^+potri;
-                                                                      ZCMsgCallBackInterface.TextMessage('    Найден объект распределитель энергии "'+potrname+'"; Pрасч='+floattostr(potrp)+'; Iрасч='+floattostr(potri),HistoryOut);
+                                                                      ZCMsgCallBackInterface.TextMessage('    Найден объект распределитель энергии "'+potrname+'"; Pрасч='+floattostr(potrp)+'; Iрасч='+floattostr(potri),TMWOHistoryOut);
                                                                  end;
                                               end;
                                          end;
@@ -1145,7 +1145,7 @@ begin
   until pobj=nil;
   end;
   if counter=0 then
-                   ZCMsgCallBackInterface.TextMessage('Выбери объект(ы) источник энергии!',HistoryOut);
+                   ZCMsgCallBackInterface.TextMessage('Выбери объект(ы) источник энергии!',TMWOHistoryOut);
   cman.done;
   CodePage:=TCP;
 end;
@@ -1188,7 +1188,7 @@ begin
        then
        begin
             PGDBObjEntity(osp^.PGDBObject)^.format;
-            historyout(GDBPointer(PGDBObjline(osp^.PGDBObject)^.ObjToGDBString('Found: ','')));
+            TMWOHistoryOut(GDBPointer(PGDBObjline(osp^.PGDBObject)^.ObjToGDBString('Found: ','')));
             po:=PGDBObjEntity(osp^.PGDBObject)^.getowner;
             //FirstOwner:=GDBPointer(po);
        end
@@ -1239,7 +1239,7 @@ begin
        then
        begin
             PGDBObjEntity(osp^.PGDBObject)^.formatentity(drawings.GetCurrentDWG^,dc);
-            ZCMsgCallBackInterface.TextMessage(PGDBObjline(osp^.PGDBObject)^.ObjToGDBString('Found: ',''),HistoryOut);
+            ZCMsgCallBackInterface.TextMessage(PGDBObjline(osp^.PGDBObject)^.ObjToGDBString('Found: ',''),TMWOHistoryOut);
             //po:=PGDBObjEntity(osp^.PGDBObject)^.getowner;
             //SecondOwner:=GDBPointer(po);
        end
@@ -1420,7 +1420,7 @@ begin
 
 
 
-  ZCMsgCallBackInterface.TextMessage('Первая точка:',HistoryOut);
+  ZCMsgCallBackInterface.TextMessage('Первая точка:',TMWOHistoryOut);
   result:=cmd_ok;
 end;
 Procedure _Cable_com_CommandEnd(_self:pointer);
@@ -1918,7 +1918,7 @@ begin
                                  psl.addutoa(s);
 
          //ZCMsgCallBackInterface.TextMessage(cablename+' '+CableMaterial+' '+CableLength);
-         ZCMsgCallBackInterface.TextMessage('Кабель "'+pv^.Name+'", сегментов '+inttostr(pv^.Segments.Count)+', материал "'+CableMaterial+'", начало: '+puredevstart+' конец: '+devend,HistoryOut);
+         ZCMsgCallBackInterface.TextMessage('Кабель "'+pv^.Name+'", сегментов '+inttostr(pv^.Segments.Count)+', материал "'+CableMaterial+'", начало: '+puredevstart+' конец: '+devend,TMWOHistoryOut);
 
 
     end;
@@ -2253,14 +2253,14 @@ begin
   ps:=VarContents.beginiterate(ir);
   if (ps<>nil) then
   repeat
-       ZCMsgCallBackInterface.TextMessage(ps^,HistoryOut);
+       ZCMsgCallBackInterface.TextMessage(ps^,TMWOHistoryOut);
        ps:=VarContents.iterate(ir);
   until ps=nil;
 
   VarContents.Done;
   end
   else
-      ZCMsgCallBackInterface.TextMessage('Имя переменной должно быть задано в параметре команды',HistoryOut);
+      ZCMsgCallBackInterface.TextMessage('Имя переменной должно быть задано в параметре команды',TMWOHistoryOut);
   zcRedrawCurrentDrawing;
   result:=cmd_ok;
 end;
@@ -2280,7 +2280,7 @@ begin
     begin
          PGDBObjCable(pv)^.VertexArrayInOCS.invert;
          pv^.Formatentity(drawings.GetCurrentDWG^,dc);
-         ZCMsgCallBackInterface.TextMessage('Направление изменено',HistoryOut);
+         ZCMsgCallBackInterface.TextMessage('Направление изменено',TMWOHistoryOut);
     end;
   pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
   until pv=nil;
@@ -2308,7 +2308,7 @@ begin
     else if pc2=nil then
                         pc2:=pointer(pv)
     else begin
-              ZCMsgCallBackInterface.TextMessage('Выбрано больше 2х кабелей!',HistoryOut);
+              ZCMsgCallBackInterface.TextMessage('Выбрано больше 2х кабелей!',TMWOHistoryOut);
               exit;
          end;
     end;
@@ -2316,7 +2316,7 @@ begin
   until pv=nil;
   if pc2=nil then
                  begin
-                      ZCMsgCallBackInterface.TextMessage('Выбери 2 кабеля!',HistoryOut);
+                      ZCMsgCallBackInterface.TextMessage('Выбери 2 кабеля!',TMWOHistoryOut);
                       exit;
                  end;
   pv11:=pc1.VertexArrayInWCS.getDataMutable(0);
@@ -2353,7 +2353,7 @@ else if uzegeometry.Vertexlength(pv12^,pv22^)<eps then
                                                    end
 else
                                                    begin
-                                                        ZCMsgCallBackInterface.TextMessage('Кабели не соединены!',HistoryOut);
+                                                        ZCMsgCallBackInterface.TextMessage('Кабели не соединены!',TMWOHistoryOut);
                                                         exit;
                                                    end;
 
@@ -2493,7 +2493,7 @@ begin
   //drawings.GetCurrentDWG.ConstructObjRoot.calcvisible;
   end;
   zcRedrawCurrentDrawing;
-  ZCMsgCallBackInterface.TextMessage('Найдено '+inttostr(count)+' объектов',HistoryOut);
+  ZCMsgCallBackInterface.TextMessage('Найдено '+inttostr(count)+' объектов',TMWOHistoryOut);
 end;
 function _Cable_mark_com(operands:TCommandOperands):TCommandResult;
 var //i: GDBInteger;
@@ -2546,7 +2546,7 @@ begin
                        pv^.Formatentity(drawings.GetCurrentDWG^,dc);
                    end
                       else
-                          ZCMsgCallBackInterface.TextMessage('Кабель "'+pstring(pvn^.data.Instance)^+'" на плане не найден',HistoryOut);
+                          ZCMsgCallBackInterface.TextMessage('Кабель "'+pstring(pvn^.data.Instance)^+'" на плане не найден',TMWOHistoryOut);
               end;
          end;
     end;
@@ -2578,7 +2578,7 @@ begin
        begin
             PGDBObjEntity(osp^.PGDBObject)^.formatentity(drawings.GetCurrentDWG^,dc);
             //PGDBObjEntity(osp^.PGDBObject)^.ObjToGDBString('Found: ','');
-            ZCMsgCallBackInterface.TextMessage(PGDBObjline(osp^.PGDBObject)^.ObjToGDBString('Found: ',''),HistoryOut);
+            ZCMsgCallBackInterface.TextMessage(PGDBObjline(osp^.PGDBObject)^.ObjToGDBString('Found: ',''),TMWOHistoryOut);
             //po:=PGDBObjEntity(osp^.PGDBObject)^.getowner;
             pold:=osp^.PGDBObject;
        end
@@ -2624,7 +2624,7 @@ begin
   drawings.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
   sysvarDWGOSMode:=sysvarDWGOSMode or osm_nearest;
   zcShowCommandParams(SysUnit.TypeName2PTD('TELLeaderComParam'),@ELLeaderComParam);
-  ZCMsgCallBackInterface.TextMessage('Первая точка:',HistoryOut);
+  ZCMsgCallBackInterface.TextMessage('Первая точка:',TMWOHistoryOut);
   result:=cmd_ok;
 end;
 function _Cable_com_Manager(operands:TCommandOperands):TCommandResult;
@@ -2662,7 +2662,7 @@ begin
                               begin
                                    name:=system.copy(name,1,len-1)+'0'+system.copy(name,len,1);
                                    pgdbstring(pvd.data.Instance)^:=name;
-                                   ZCMsgCallBackInterface.TextMessage('Переименован кабель '+name,HistoryOut);
+                                   ZCMsgCallBackInterface.TextMessage('Переименован кабель '+name,TMWOHistoryOut);
                               end
                                  {else
                                      ZCMsgCallBackInterface.TextMessage(name);;}
@@ -2783,20 +2783,20 @@ begin
   PGDBObjEntity(startdev):=drawings.FindEntityByVar(GDBDeviceID,'NMO_Name',startdevname);
   PGDBObjEntity(enddev):=drawings.FindEntityByVar(GDBDeviceID,'NMO_Name',enddevname);
   if startdev=nil then
-                      ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+' не найдено стартовое устройство '+startdevname,HistoryOut)
+                      ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+' не найдено стартовое устройство '+startdevname,TMWOHistoryOut)
                   else
                       begin
                       startdev:=findconnector(startdev);
                       if startdev=nil then
-                                          ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+' не найден коннектор стартового устройства '+startdevname,HistoryOut);
+                                          ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+' не найден коннектор стартового устройства '+startdevname,TMWOHistoryOut);
                       end;
   if enddev=nil then
-                      ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+' не найдено конечное устройство '+enddevname,HistoryOut)
+                      ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+' не найдено конечное устройство '+enddevname,TMWOHistoryOut)
                   else
                       begin
                       enddev:=findconnector(enddev);
                       if enddev=nil then
-                                          ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+' не найден коннектор конечного устройства '+enddevname,HistoryOut);
+                                          ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+' не найден коннектор конечного устройства '+enddevname,TMWOHistoryOut);
 
                       end;
 end;
@@ -2901,7 +2901,7 @@ begin
                   PGDBaseObject(net):=netarray.getDataMutable(0);
                  //PGDBObjEntity(net):=drawings.FindEntityByVar(GDBNetID,'NMO_Name',FDoc.Cells[3,row]);
                  if net=nil then
-                                     ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+' не найдена трасса '+FDoc.Cells[3,row],HistoryOut);
+                                     ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+' не найдена трасса '+FDoc.Cells[3,row],TMWOHistoryOut);
                  if (net<>nil) then
                  begin
                  //startdev:=findconnector(startdev);
@@ -3117,23 +3117,23 @@ begin
                           //drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.Clear;
                           end
                           else
-                              ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+' обнаружено несколько не связанных трасс "'+FDoc.Cells[3,row],ShowError);
+                              ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+' обнаружено несколько не связанных трасс "'+FDoc.Cells[3,row],TMWOShowError);
 
 
 
-                          //ShowError('В строке '+inttostr(row)+' обнаружена множественная трасса "'+FDoc.Cells[3,row]+'". Пока недопилено((');
+                          //TMWOShowError('В строке '+inttostr(row)+' обнаружена множественная трасса "'+FDoc.Cells[3,row]+'". Пока недопилено((');
                           end
                           else
-                              ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+' обнаружена трасса "'+FDoc.Cells[3,row]+'" отсутствующая в чертеже((',ShowError);
+                              ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+' обнаружена трасса "'+FDoc.Cells[3,row]+'" отсутствующая в чертеже((',TMWOShowError);
                      end;
 
 
             end
             else
                 begin
-                ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+'мало параметров',HistoryOut);
+                ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+'мало параметров',TMWOHistoryOut);
                 for col:=0 to FDoc.ColCount[row] do
-                ZCMsgCallBackInterface.TextMessage(FDoc.Cells[col,row],HistoryOut);
+                ZCMsgCallBackInterface.TextMessage(FDoc.Cells[col,row],TMWOHistoryOut);
                 end;
        lps.ProgressLongProcess(lph,row);
        end;
@@ -3158,7 +3158,7 @@ begin
        lps.EndLongProcess(lph)
   end
             else
-     ZCMsgCallBackInterface.TextMessage('GDBCommandsElectrical.El_ExternalKZ: Не могу открыть файл: '+s+'('+Operands+')',ShowError);
+     ZCMsgCallBackInterface.TextMessage('GDBCommandsElectrical.El_ExternalKZ: Не могу открыть файл: '+s+'('+Operands+')',TMWOShowError);
 end;
 function _AutoGenCableRemove_com(operands:TCommandOperands):TCommandResult;
 var //i,len: GDBInteger;
@@ -3197,12 +3197,12 @@ end;
 
 function _test_com(operands:TCommandOperands):TCommandResult;
 begin
-     ZCMsgCallBackInterface.TextMessage('Тест производительности. запасаемя терпением',HistoryOut);
+     ZCMsgCallBackInterface.TextMessage('Тест производительности. запасаемя терпением',TMWOHistoryOut);
      {$IFDEF PERFOMANCELOG}programlog.LogOutStrFast('тест производительности - getonmouseobject*10000',lp_IncPos);{$ENDIF}
      //for i:=0 to 10000 do
      //       drawings.GetCurrentDWG.wa.getonmouseobject(@drawings.GetCurrentROOT.ObjArray);
      {$IFDEF PERFOMANCELOG}programlog.LogOutStrFast('тест производительности',lp_DecPos);{$ENDIF}
-     ZCMsgCallBackInterface.TextMessage('Конец теста. выходим, смотрим результаты в конце лога.',HistoryOut);
+     ZCMsgCallBackInterface.TextMessage('Конец теста. выходим, смотрим результаты в конце лога.',TMWOHistoryOut);
      //quit_com('');
      result:=cmd_ok;
 end;

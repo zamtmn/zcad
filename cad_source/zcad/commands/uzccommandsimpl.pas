@@ -436,11 +436,11 @@ begin
 end;
 procedure CommandRTEdObject.Prompt(msg:GDBString);
 begin
-     ZCMsgCallBackInterface.TextMessage(self.CommandName+':'+msg,HistoryOut);
+     ZCMsgCallBackInterface.TextMessage(self.CommandName+':'+msg,TMWOHistoryOut);
 end;
 procedure CommandRTEdObject.Error(msg:GDBString);
 begin
-     ZCMsgCallBackInterface.TextMessage(self.CommandName+':'+msg,ShowError);
+     ZCMsgCallBackInterface.TextMessage(self.CommandName+':'+msg,TMWOShowError);
 end;
 procedure CommandRTEdObject.SetCommandParam(PTypedTata:pointer;TypeName:string);
 begin

@@ -44,7 +44,7 @@ procedure ShowError(errstr:String); export;
 var
    ts:GDBString;
 begin
-     ZCMsgCallBackInterface.TextMessage(errstr,SilentShowError);
+     ZCMsgCallBackInterface.TextMessage(errstr,TMWOSilentShowError);
      ts:=(errstr);
      if  assigned(CursorOn) then
                                 CursorOn;

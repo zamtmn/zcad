@@ -288,9 +288,9 @@ implementation
           3:
             result:=oldListColumn;
           else
-            ZCMsgCallBackInterface.TextMessage('ЧТО ТО НЕ ТАК С ОРИЕНТАЦИЕЙ',HistoryOut);
+            ZCMsgCallBackInterface.TextMessage('ЧТО ТО НЕ ТАК С ОРИЕНТАЦИЕЙ',TMWOHistoryOut);
           end;
-          ZCMsgCallBackInterface.TextMessage(' ориентируется ',HistoryOut);
+          ZCMsgCallBackInterface.TextMessage(' ориентируется ',TMWOHistoryOut);
        end;
 
 
@@ -503,7 +503,7 @@ var
             //**в список ориетированые относительно стартовой точки
              newListDev:=listDeviceColumnOrient(listColumnDev,orient);
 
-              ZCMsgCallBackInterface.TextMessage(' АУ1' + test,HistoryOut);
+              ZCMsgCallBackInterface.TextMessage(' АУ1' + test,TMWOHistoryOut);
              counter:=0;
              for i:=0 to newListDev.size-1 do  begin
                for j:=0 to newListDev[i].listLineDev.size-1 do begin
@@ -645,7 +645,7 @@ var
             end;
           zcPlaceUndoEndMarkerIfNeed(UndoMarcerIsPlazed);
 
-        ZCMsgCallBackInterface.TextMessage(' работает ' + test,HistoryOut);
+        ZCMsgCallBackInterface.TextMessage(' работает ' + test,TMWOHistoryOut);
  end;
 
 function TestModul_com(operands:TCommandOperands):TCommandResult;
@@ -656,7 +656,7 @@ var
         test:='УРА';
         r:=autoGenSLBetweenDevices(test);
 
-        ZCMsgCallBackInterface.TextMessage(' работает ' + test,HistoryOut);
+        ZCMsgCallBackInterface.TextMessage(' работает ' + test,TMWOHistoryOut);
  end;
 
 

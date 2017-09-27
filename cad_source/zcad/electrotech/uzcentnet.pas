@@ -189,7 +189,7 @@ procedure GDBObjNet.SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfBy
 begin
      inherited;
      //s:=inttohex(GetHandle,10);
-     //historyout(@s[1]);
+     //TMWOHistoryOut(@s[1]);
      dxfGDBStringout(outhandle,1000,'_HANDLE='+inttohex(GetHandle,10));
      dxfGDBStringout(outhandle,1000,'_UPGRADE='+inttostr(UD_LineToNet));
 end;
@@ -405,7 +405,7 @@ begin
                                       system.break;
                                       end
                                          else
-                                         ZCMsgCallBackInterface.TextMessage('Нельзя обьеденить',ShowError);
+                                         ZCMsgCallBackInterface.TextMessage('Нельзя обьеденить',TMWOShowError);
                                  end;
 
                            ptestline:=currentnet^.objarray.iterate(ir3);

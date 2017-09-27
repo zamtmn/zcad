@@ -514,10 +514,10 @@ implementation
             result:=true;
          end
          else
-            ZCMsgCallBackInterface.TextMessage('The point is not perpendicular to the room',HistoryOut);
+            ZCMsgCallBackInterface.TextMessage('The point is not perpendicular to the room',TMWOHistoryOut);
       end
       else
-          ZCMsgCallBackInterface.TextMessage('Starting point automatic placement lines super not available',HistoryOut);
+          ZCMsgCallBackInterface.TextMessage('Starting point automatic placement lines super not available',TMWOHistoryOut);
     end;
 
     //**Поиск прямоугольного контура помещения
@@ -545,7 +545,7 @@ implementation
         until pobj=nil;
 
         if not result then
-           ZCMsgCallBackInterface.TextMessage('Прямоугольный контур помещения не найден',HistoryOut);
+           ZCMsgCallBackInterface.TextMessage('Прямоугольный контур помещения не найден',TMWOHistoryOut);
     end;
     //**проверка является ли комната прямоугольной
     function isRectangelRoom(contourRoom:PGDBObjPolyLine):boolean;
@@ -568,7 +568,7 @@ implementation
                 result:=true
             end;
          if not result then
-           ZCMsgCallBackInterface.TextMessage('комната не прямоугольная',HistoryOut);
+           ZCMsgCallBackInterface.TextMessage('комната не прямоугольная',TMWOHistoryOut);
     end;
     //** Получение области выделения вокруг комнаты, левая-нижняя-ближняя точка и правая-верхняя-дальняя точка
     function getAreaSelectRoom(contourRoom:PGDBObjPolyLine):TBoundingBox;
@@ -991,7 +991,7 @@ implementation
            begin
                 tempforinfo:=tempforinfo + inttostr(result[i].listLineDev[j].num)+'*';
            end;
-           ZCMsgCallBackInterface.TextMessage('##'+tempforinfo,HistoryOut);
+           ZCMsgCallBackInterface.TextMessage('##'+tempforinfo,TMWOHistoryOut);
            tempforinfo:='*';
          end;
 
@@ -1547,7 +1547,7 @@ begin
                   tempListVertex.PushBack(TVertex(VertexPath[k]).Index);
                 end
                 else
-                  ZCMsgCallBackInterface.TextMessage('АВАРИЯ',HistoryOut);
+                  ZCMsgCallBackInterface.TextMessage('АВАРИЯ',TMWOHistoryOut);
                 //**смотрем его длину
                 tempLength:=0;
                 for k:=1 to tempListVertex.size - 1 do  begin
@@ -1674,11 +1674,11 @@ begin
                     if currentSubObj^.GetObjType=GDBLineID then begin   //если тип линия, это когда усекающая контур состоит из линий
                      pcdev:= PGDBObjLine(currentSubObj);
 
-                     ZCMsgCallBackInterface.TextMessage('lBegin-х = ' + FloatToStr(pcdev^.CoordInOCS.lBegin.x),HistoryOut);
-                     ZCMsgCallBackInterface.TextMessage('lgetcenter-х = ' + FloatToStr(pObjDevice^.GetCenterPoint.x),HistoryOut);
-                     ZCMsgCallBackInterface.TextMessage('lscale-х = ' + FloatToStr(pObjDevice^.scale.x),HistoryOut);
+                     ZCMsgCallBackInterface.TextMessage('lBegin-х = ' + FloatToStr(pcdev^.CoordInOCS.lBegin.x),TMWOHistoryOut);
+                     ZCMsgCallBackInterface.TextMessage('lgetcenter-х = ' + FloatToStr(pObjDevice^.GetCenterPoint.x),TMWOHistoryOut);
+                     ZCMsgCallBackInterface.TextMessage('lscale-х = ' + FloatToStr(pObjDevice^.scale.x),TMWOHistoryOut);
                      tempvert:=uzvsgeom.getRealPointDevice(pcdev^.CoordInOCS.lBegin,pObjDevice^.GetCenterPoint,pObjDevice^.scale);
-                     ZCMsgCallBackInterface.TextMessage('lrealBegintemp-х = ' + FloatToStr(tempvert.x),HistoryOut);
+                     ZCMsgCallBackInterface.TextMessage('lrealBegintemp-х = ' + FloatToStr(tempvert.x),TMWOHistoryOut);
 
                      if uzegeometry.intercept3d(pt,stpt,uzvsgeom.getRealPointDevice(pcdev^.CoordInOCS.lBegin,pObjDevice^.GetCenterPoint,pObjDevice^.scale),uzvsgeom.getRealPointDevice(pcdev^.CoordInOCS.lEnd,pObjDevice^.GetCenterPoint,pObjDevice^.scale)).isintercept then
                         begin
@@ -1694,7 +1694,7 @@ begin
        until pobj=nil;
       end;
 
-    ZCMsgCallBackInterface.TextMessage('dlina listvert = ' + intToStr(listVertex.size),HistoryOut);
+    ZCMsgCallBackInterface.TextMessage('dlina listvert = ' + intToStr(listVertex.size),TMWOHistoryOut);
 
     //if listVertex.size>0 then
     //   result:=listVertex[0];
@@ -1821,7 +1821,7 @@ begin
           if mainElementAutoEmbedSL(contour2DRoom,contourRoomEmbedSL,perpendListVertex,anglePerpendCos,autogenSuperLine.indent) then  begin
            listDeviceinRoom:=uzvagsl.getListDeviceinRoom(contourRoom);  //получен список извещателей внутри помещения
 
-           ZCMsgCallBackInterface.TextMessage('Количество выделяных извещателей = ' + inttostr(listDeviceinRoom.Size),HistoryOut);
+           ZCMsgCallBackInterface.TextMessage('Количество выделяных извещателей = ' + inttostr(listDeviceinRoom.Size),TMWOHistoryOut);
            listWallOrient:=getWallInfoOrient(contourRoomEmbedSL,perpendListVertex);
 
            //получаем двухмерный список устройств правильной сортировки
@@ -1846,7 +1846,7 @@ begin
            //**обрезаем суперлинии по линиям обрезки, у устройства
            cropSLonBorder(listSL,listDeviceinRoom,autogenSuperLine.accuracy);
 
-           ZCMsgCallBackInterface.TextMessage('Количество вершин графа= ' + inttostr(graphASL.listVertex.size),HistoryOut);
+           ZCMsgCallBackInterface.TextMessage('Количество вершин графа= ' + inttostr(graphASL.listVertex.size),TMWOHistoryOut);
            for i:=0 to listSL.size-1 do
            uzccomexample.createSuperLine(listSL[i].p1,listSL[i].p2,autogenSuperLine.nameSL,autogenSuperLine.ProcessLayer,autogenSuperLine.LayerNamePrefix);
               //uzvtestdraw.testTempDrawLineColor(listSL[i].p1,listSL[i].p2,5);

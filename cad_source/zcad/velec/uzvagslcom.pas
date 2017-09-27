@@ -107,13 +107,13 @@ var
  stPoint:gdbvertex;
 begin
   if commandmanager.get3dpoint('Specify insert point:',stPoint) then
-       ZCMsgCallBackInterface.TextMessage('координата введена',HistoryOut)
+       ZCMsgCallBackInterface.TextMessage('координата введена',TMWOHistoryOut)
      else
-       ZCMsgCallBackInterface.TextMessage('координаты НЕТ',HistoryOut);
+       ZCMsgCallBackInterface.TextMessage('координаты НЕТ',TMWOHistoryOut);
 
    if uzvagsl.getContourRoom(contourRoom) then                  // получить контур помещения
       if uzvagsl.isRectangelRoom(contourRoom) then begin        //это прямоугольная комната?
-         ZCMsgCallBackInterface.TextMessage('проверки пройдены',HistoryOut);
+         ZCMsgCallBackInterface.TextMessage('проверки пройдены',TMWOHistoryOut);
          // if mainElementAutoEmbedSL(contourRoom,contourRoomEmbedSL) then  begin
          //  listDeviceinRoom:=uzvagsl.getListDeviceinRoom(contourRoom);  //получен список извещателей внутри помещения
          //  ZCMsgCallBackInterface.TextMessage('Количество выделяных извещателей = ' + inttostr(listDeviceinRoom.Size));

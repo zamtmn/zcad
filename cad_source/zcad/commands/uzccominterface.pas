@@ -251,8 +251,8 @@ begin
      if fileExists(utf8tosys(tn)) then
                            {merge_com(@tn[1])}Load_merge(tn,TLOLoad)
                        else
-                           ZCMsgCallBackInterface.TextMessage(format(rsTemplateNotFound,[tn]),ShowError);
-                           //ShowError('Не найден файл шаблона "'+tn+'"');
+                           ZCMsgCallBackInterface.TextMessage(format(rsTemplateNotFound,[tn]),TMWOShowError);
+                           //TMWOShowError('Не найден файл шаблона "'+tn+'"');
      end;
      wpowner.Drawer.delmyscrbuf;//буфер чистить, потому что он может оказаться невалидным в случае отрисовки во время
                                 //создания или загрузки
@@ -301,8 +301,8 @@ begin
        import(s,drawings.GetCurrentDWG^);
   end
             else
-     ZCMsgCallBackInterface.TextMessage('LOAD:'+format(rsUnableToOpenFile,[s+'('+Operands+')']),ShowError);
-     //ShowError('GDBCommandsBase.LOAD: Не могу открыть файл: '+s+'('+Operands+')');
+     ZCMsgCallBackInterface.TextMessage('LOAD:'+format(rsUnableToOpenFile,[s+'('+Operands+')']),TMWOShowError);
+     //TMWOShowError('GDBCommandsBase.LOAD: Не могу открыть файл: '+s+'('+Operands+')');
 end;
 function Load_com(operands:TCommandOperands):TCommandResult;
 var
@@ -358,7 +358,7 @@ begin
      end
                else
                begin
-                    ZCMsgCallBackInterface.TextMessage('LOAD:'+format(rsUnableToOpenFile,[s+'('+Operands+')']),ShowError);
+                    ZCMsgCallBackInterface.TextMessage('LOAD:'+format(rsUnableToOpenFile,[s+'('+Operands+')']),TMWOShowError);
                     result:=cmd_error;
                end;
         //ZCMsgCallBackInterface.TextMessage('GDBCommandsBase.LOAD: Не могу открыть файл: '+s+'('+Operands+')');
@@ -515,11 +515,11 @@ begin
                                                 If IsValidIdent(Operands) then
                                                                               DockMaster.ShowControl(Operands,true)
                                                                           else
-                                                                              ZCMsgCallBackInterface.TextMessage('Show: invalid identificator!',ShowError);
+                                                                              ZCMsgCallBackInterface.TextMessage('Show: invalid identificator!',TMWOShowError);
                                            end;
                       end
                   else
-                      ZCMsgCallBackInterface.TextMessage('Show command must have one operand!',ShowError);
+                      ZCMsgCallBackInterface.TextMessage('Show command must have one operand!',TMWOShowError);
   result:=cmd_ok;
 end;
 function ShowToolBar_com(operands:TCommandOperands):TCommandResult;
@@ -531,7 +531,7 @@ begin
                         ToolBarsManager.ShowFloatToolbar(operands,rect(0,0,300,50));
                       end
                   else
-                      ZCMsgCallBackInterface.TextMessage('Show command must have one operand!',ShowError);
+                      ZCMsgCallBackInterface.TextMessage('Show command must have one operand!',TMWOShowError);
   result:=cmd_ok;
 end;
 function quit_com(operands:TCommandOperands):TCommandResult;
@@ -615,7 +615,7 @@ else if Operands='CURRENT' then
                                      end
                                  else
                                      begin
-                                          ZCMsgCallBackInterface.TextMessage('ugdbdescriptor.poglwnd^.SelDesc.LastSelectedObject=NIL, try SetObjInsp(SELECTED)...',ShowError);
+                                          ZCMsgCallBackInterface.TextMessage('ugdbdescriptor.poglwnd^.SelDesc.LastSelectedObject=NIL, try SetObjInsp(SELECTED)...',TMWOShowError);
                                      end;
                                  SysVar.DWG.DWG_SelectedObjToInsp^:=false;
                             end
@@ -706,7 +706,7 @@ function Options_com(operands:TCommandOperands):TCommandResult;
 begin
   if assigned(SetGDBObjInspProc)then
                                     SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar,drawings.GetCurrentDWG);
-  ZCMsgCallBackInterface.TextMessage(rscmOptions2OI,HistoryOut);
+  ZCMsgCallBackInterface.TextMessage(rscmOptions2OI,TMWOHistoryOut);
   result:=cmd_ok;
 end;
 function SaveOptions_com(operands:TCommandOperands):TCommandResult;
@@ -733,7 +733,7 @@ begin
          p:=commandmanager.iterate(ir);
    until p=nil;
    clist.sort;
-   ZCMsgCallBackInterface.TextMessage(clist.GetTextWithEOL,HistoryOut);
+   ZCMsgCallBackInterface.TextMessage(clist.GetTextWithEOL,TMWOHistoryOut);
    clist.done;
    result:=cmd_ok;
 end;

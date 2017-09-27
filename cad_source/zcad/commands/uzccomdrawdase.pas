@@ -45,9 +45,9 @@ function Line_com_CommandStart(operands:TCommandOperands):TCommandResult;
 begin
   drawings.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
   if operands='' then
-                     ZCMsgCallBackInterface.TextMessage(rscmPoint,HistoryOut)
+                     ZCMsgCallBackInterface.TextMessage(rscmPoint,TMWOHistoryOut)
                  else
-                     ZCMsgCallBackInterface.TextMessage(operands,HistoryOut);
+                     ZCMsgCallBackInterface.TextMessage(operands,TMWOHistoryOut);
   result:=cmd_ok;
 end;
 function Line_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
@@ -132,7 +132,7 @@ begin
                    begin
                         len:=uzegeometry.Vertexlength(point,oldpoint);
                         distlen:=distlen+len;
-                        ZCMsgCallBackInterface.TextMessage('Длина отрезка: '+floattostr(len)+' Суммарная длина: '+floattostr(distlen),HistoryOut)
+                        ZCMsgCallBackInterface.TextMessage('Длина отрезка: '+floattostr(len)+' Суммарная длина: '+floattostr(distlen),TMWOHistoryOut)
                    end;
      c2:=cs;
      oldpoint:=point;

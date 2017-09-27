@@ -404,7 +404,7 @@ begin
                               FinalCreateDDim;
                           end;
                      else begin
-                              ZCMsgCallBackInterface.TextMessage('Please select Arc or Circle',ShowError);
+                              ZCMsgCallBackInterface.TextMessage('Please select Arc or Circle',TMWOShowError);
                           end;
               end;
          end;
@@ -465,7 +465,7 @@ begin
                               FinalCreateRDim;
                           end;
                      else begin
-                              ZCMsgCallBackInterface.TextMessage('Please select Arc or Circle',ShowError);
+                              ZCMsgCallBackInterface.TextMessage('Please select Arc or Circle',TMWOShowError);
                           end;
               end;
          end;
@@ -873,7 +873,7 @@ begin
         if player<>nil then
                            psuperline.vp.Layer:=player
                        else
-                           ZCMsgCallBackInterface.TextMessage(format('Layer "%s" not found',[layername]),HistoryOut);
+                           ZCMsgCallBackInterface.TextMessage(format('Layer "%s" not found',[layername]),TMWOHistoryOut);
       end;
     end;
     //zcPlaceUndoStartMarkerIfNeed(UndoMarcerIsPlazed,'DrawSuperLine');
@@ -922,7 +922,7 @@ begin
         if player<>nil then
                            psuperline.vp.Layer:=player
                        else
-                           ZCMsgCallBackInterface.TextMessage(format('Layer "%s" not found',[layername]),HistoryOut);
+                           ZCMsgCallBackInterface.TextMessage(format('Layer "%s" not found',[layername]),TMWOHistoryOut);
       end;
     end;
     zcPlaceUndoStartMarkerIfNeed(UndoMarcerIsPlazed,'DrawSuperLine');

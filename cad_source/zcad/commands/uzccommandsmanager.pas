@@ -385,7 +385,8 @@ begin
      ZCMsgCallBackInterface.TextMessage(sysutils.format(rsRunScript,[s]),TMWOHistoryOut);
      busy:=true;
 
-     DisableCmdLine;
+     //DisableCmdLine;
+     ZCMsgCallBackInterface.Do_GUIMode(ZMsgID_GUIDisableCMDLine);
 
      oldlastcomm:=lastcommand;
      sa.init(200);
@@ -407,7 +408,8 @@ begin
   sa.Done;
   lastcommand:=oldlastcomm;
 
-     EnableCmdLine;
+     //EnableCmdLine;
+     ZCMsgCallBackInterface.Do_GUIMode(ZMsgID_GUIEnableCMDLine);
      busy:=false;
 end;
 procedure GDBcommandmanager.sendpoint2command;
@@ -590,10 +592,9 @@ begin
 
           run(pfoundcommand,operands,pdrawing);
           if pcommandrunning<>nil then
-                                      //if assigned(CLine) then
-                                      //CLine.SetMode(CLCOMMANDRUN);
-                                      if assigned(SetCommandLineMode) then
-                                      SetCommandLineMode(CLCOMMANDRUN);
+                                      ZCMsgCallBackInterface.Do_GUIMode(ZMsgID_GUICMDLineRunMode);
+                                      {if assigned(SetCommandLineMode) then
+                                      SetCommandLineMode(CLCOMMANDRUN);}
           end
      else
          begin
@@ -655,8 +656,9 @@ begin
   if pcommandrunning=nil then
   //if assigned(cline) then
   //                 CLine.SetMode(CLCOMMANDREDY);
-  if assigned(SetCommandLineMode) then
-                   SetCommandLineMode(CLCOMMANDREDY);
+  ZCMsgCallBackInterface.Do_GUIMode(ZMsgID_GUICMDLineReadyMode);
+  {if assigned(SetCommandLineMode) then
+                   SetCommandLineMode(CLCOMMANDREDY);}
   if self.CommandsStack.Count>0 then
                                     begin
                                          pcommandrunning:=ppointer(CommandsStack.getDataMutable(CommandsStack.Count-1))^;
@@ -693,8 +695,9 @@ begin
   if temp<>nil then
                    temp^.CommandEnd;
   if pcommandrunning=nil then
-                             if assigned(SetCommandLineMode) then
-                             SetCommandLineMode(CLCOMMANDREDY);
+                             ZCMsgCallBackInterface.Do_GUIMode(ZMsgID_GUICMDLineReadyMode);
+                             {if assigned(SetCommandLineMode) then
+                             SetCommandLineMode(CLCOMMANDREDY);}
   CommandsStack.Clear;
   ContextCommandParams:=nil;
 end;

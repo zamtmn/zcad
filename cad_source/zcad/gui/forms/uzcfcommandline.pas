@@ -31,6 +31,7 @@ const
      commandsuffix='>';
      commandprefix=' ';
 type
+  TCLineMode=(CLCOMMANDREDY,CLCOMMANDRUN);
   TCWindow = class(TForm)
     public
     procedure AfterConstruction; override;
@@ -140,6 +141,18 @@ begin
      end;
      mode:=m;
 end;
+procedure HandleCommandLineMode(GUIMode:TZMessageID);
+begin
+     if GUIMode=ZMsgID_GUICMDLineReadyMode then begin
+       if assigned(CLine) then
+         CLine.SetMode(CLCOMMANDREDY)
+     end
+else if GUIMode=ZMsgID_GUICMDLineRunMode then begin
+     if assigned(CLine) then
+       CLine.SetMode(CLCOMMANDRUN)
+     end;
+end;
+
 procedure TCLine.ButtonPressed(Sender: TObject);
 var
   menu:TmyPopupMenu;
@@ -261,7 +274,8 @@ begin
                          DMenu.Top:=pint^;}
     CWindow:=TCWindow.CreateNew(application);
     //CWindow.Show;
-    SetCommandLineMode:=self.SetMode;
+    ZCMsgCallBackInterface.RegisterHandler_GUIMode(HandleCommandLineMode);
+   // SetCommandLineMode:=self.SetMode;
 end;
 destructor TCLine.Destroy;
 begin
@@ -556,6 +570,12 @@ begin
                             HintText.Enabled:=true;
 end;
 
+procedure HandleCmdLine(GUIMode:TZMessageID);
+begin
+     if GUIMode in [ZMsgID_GUIDisable,ZMsgID_GUIDisableCMDLine] then DisableCmdLine
+else if GUIMode in [ZMsgID_GUIEnable,ZMsgID_GUIEnableCMDLine] then EnableCmdLine;
+end;
+
 procedure StatusLineTextOut(s:String);
 begin
      if assigned(HintText) then
@@ -579,8 +599,7 @@ begin
   ZCMsgCallBackInterface.RegisterHandler_HistoryOut(HistoryOutStr);
   //uzcinterface.HistoryOutStr:=HistoryOutStr;
 
-  uzcinterface.DisableCmdLine:=DisableCmdLine;
-  uzcinterface.EnableCmdLine:=EnableCmdLine;
+  ZCMsgCallBackInterface.RegisterHandler_GUIMode(HandleCmdLine);
 
   ZCMsgCallBackInterface.RegisterHandler_StatusLineTextOut(StatusLineTextOut);
   //uzcinterface.StatusLineTextOut:=StatusLineTextOut;

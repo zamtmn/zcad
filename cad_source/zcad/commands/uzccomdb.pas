@@ -85,7 +85,7 @@ begin
                  SingleLineTextEditorForm.EditField.Caption:=copy(pdbv.name,4,length(pdbv.name)-3);
                  renamed:=false;
                  repeat
-                 if DoShowModal(SingleLineTextEditorForm)=mrok then
+                 if ZCMsgCallBackInterface.DoShowModal(SingleLineTextEditorForm)=mrok then
                  begin
                       s:='_EQ'+SingleLineTextEditorForm.EditField.Caption;
                       s1:=s;

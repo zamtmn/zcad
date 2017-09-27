@@ -26,6 +26,9 @@ type
     TProcedure_String_=procedure(s:String);
     TProcedure_String_HandlersVector=TMyVector<TProcedure_String_>;
 
+    TMethod_TForm_=Procedure (ShowedForm:TForm) of object;
+    TMethod_TForm_HandlersVector=TMyVector<TMethod_TForm_>;
+
     TTextMessageWriteOptions=(TMWOToConsole,            //вывод сообщения в консоль
                               TMWOToLog,                //вывод в log
                               TMWOToQuicklyReplaceable, //вывод в статусную строку
@@ -48,19 +51,33 @@ type
         procedure RegisterHandler_LogError(Handler:TProcedure_String_);
         procedure RegisterHandler_StatusLineTextOut(Handler:TProcedure_String_);
 
+        procedure RegisterHandler_BeforeShowModal(Handler:TMethod_TForm_);
+        procedure RegisterHandler_AfterShowModal(Handler:TMethod_TForm_);
+
         procedure Do_HistoryOut(s:String);
         procedure Do_LogError(s:String);
         procedure Do_StatusLineTextOut(s:String);
 
+        procedure Do_BeforeShowModal(ShowedForm:TForm);
+        procedure Do_AfterShowModal(ShowedForm:TForm);
+
         procedure TextMessage(msg:String;opt:TTextMessageWriteOptionsSet);
+        function TextQuestion(Caption,Question:String;Flags: Longint):integer;
+        function DoShowModal(MForm:TForm):Integer;
       private
         procedure RegisterTProcedure_String_HandlersVector(var PSHV:TProcedure_String_HandlersVector;Handler:TProcedure_String_);
         procedure Do_TProcedure_String_HandlersVector(var PSHV:TProcedure_String_HandlersVector;s:String);
+
+        procedure RegisterTMethod_TForm_HandlersVector(var MFHV:TMethod_TForm_HandlersVector;Handler:TMethod_TForm_);
+        procedure Do_TMethod_TForm_HandlersVector(var MFHV:TMethod_TForm_HandlersVector;ShowedForm:TForm);
+
       private
         HistoryOutHandlers:TProcedure_String_HandlersVector;
         LogErrorHandlers:TProcedure_String_HandlersVector;
         StatusLineTextOutHandlers:TProcedure_String_HandlersVector;
 
+        BeforeShowModalHandlers:TMethod_TForm_HandlersVector;
+        AfterShowModalHandlers:TMethod_TForm_HandlersVector;
     end;
 
     TStartLongProcessProc=Procedure(a:integer;s:string) of object;
@@ -97,7 +114,7 @@ type
     TStoreAndSetGDBObjInsp=procedure(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:Pointer);
 
     //mainwindow
-    TMessageBox=function(Text, Caption: PChar; Flags: Longint): Integer of object;
+    //TMessageBox=function(Text, Caption: PChar; Flags: Longint): Integer of object;
 
     //UGDBDescriptor
     TSetCurrentDrawing=function(PDWG:Pointer):Pointer;//нужно завязать на UGDBDrawingdef
@@ -134,12 +151,12 @@ var
    StoreAndFreeEditorProc:TSimpleProcedure;
 
    //mainwindow
-   ShowAllCursorsProc,RestoreAllCursorsProc:TSimpleMethod;
+   //ShowAllCursorsProc,RestoreAllCursorsProc:TMethod_TForm_;
    //StartLongProcessProc:TStartLongProcessProc;
    //ProcessLongProcessProc:TProcessLongProcessProc;
    //EndLongProcessProc:TEndLongProcessProc;
    UpdateVisibleProc:TSimpleProcedure;
-   MessageBoxProc:TMessageBox;
+   //MessageBoxProc:TMessageBox;
    ProcessFilehistoryProc:TMethod_String_;
    AddOneObjectProc:TSimpleMethod;
    SetVisuaProplProc:TSimpleMethod;
@@ -155,26 +172,33 @@ var
    waSetObjInspProc:TSimpleLCLMethod;
 
    //cmdline
-    SetCommandLineMode:TSetCommandLineMode;
-
-   //uzcshared
-   //HistoryOutStr:TProcedure_String_;
-
-   CursorOn:TSimpleMethod=nil;
-   CursorOff:TSimpleMethod=nil;
+   SetCommandLineMode:TSetCommandLineMode;
 
    DisableCmdLine:TSimpleProcedure;
    EnableCmdLine:TSimpleProcedure;
 
 
-function DoShowModal(MForm:TForm): Integer;
 function GetUndoStack:pointer;
 var
    ZCMsgCallBackInterface:TZCMsgCallBackInterface;
 implementation
+function TZCMsgCallBackInterface.TextQuestion(Caption,Question:String;Flags: Longint):integer;
+var
+   pc:PChar;
+   ps:PChar;
+begin
+  if Question<>'' then ps:=@Question[1]
+                  else ps:=nil;
+  if Caption<>'' then pc:=@Caption[1]
+                 else pc:=nil;
+  Do_BeforeShowModal(nil);
+  result:=application.MessageBox(ps,pc,Flags);
+  Do_AfterShowModal(nil);
+end;
+
 procedure TZCMsgCallBackInterface.TextMessage(msg:String;opt:TTextMessageWriteOptionsSet);
 var
-   Text,Caption: string;
+   Caption: string;
    ps:PChar;
    Flags: Longint;
 begin
@@ -197,13 +221,11 @@ begin
        if msg<>'' then ps:=@msg[1]
                   else ps:=nil;
 
-       if assigned(ShowAllCursorsProc) then
-                                           ShowAllCursorsProc;
+       Do_BeforeShowModal(nil);
 
        application.MessageBox(ps,@Caption[1],Flags);
 
-       if assigned(RestoreAllCursorsProc) then
-                                           RestoreAllCursorsProc;
+       Do_AfterShowModal(nil);
      end else begin
        if TMWOWarning in opt then begin
          msg:=rsWarningPrefix+msg;
@@ -236,6 +258,21 @@ begin
        PSHV[i](s);
    end;
 end;
+procedure TZCMsgCallBackInterface.RegisterTMethod_TForm_HandlersVector(var MFHV:TMethod_TForm_HandlersVector;Handler:TMethod_TForm_);
+begin
+   if not assigned(MFHV) then
+     MFHV:=TMethod_TForm_HandlersVector.Create;
+   MFHV.PushBack(Handler);
+end;
+procedure TZCMsgCallBackInterface.Do_TMethod_TForm_HandlersVector(var MFHV:TMethod_TForm_HandlersVector;ShowedForm:TForm);
+var
+   i:integer;
+begin
+   if assigned(MFHV) then begin
+     for i:=0 to MFHV.Size-1 do
+       MFHV[i](ShowedForm);
+   end;
+end;
 procedure TZCMsgCallBackInterface.RegisterHandler_HistoryOut(Handler:TProcedure_String_);
 begin
    RegisterTProcedure_String_HandlersVector(HistoryOutHandlers,Handler);
@@ -247,6 +284,14 @@ end;
 procedure TZCMsgCallBackInterface.RegisterHandler_StatusLineTextOut(Handler:TProcedure_String_);
 begin
    RegisterTProcedure_String_HandlersVector(StatusLineTextOutHandlers,Handler);
+end;
+procedure TZCMsgCallBackInterface.RegisterHandler_BeforeShowModal(Handler:TMethod_TForm_);
+begin
+   RegisterTMethod_TForm_HandlersVector(BeforeShowModalHandlers,Handler);
+end;
+procedure TZCMsgCallBackInterface.RegisterHandler_AfterShowModal(Handler:TMethod_TForm_);
+begin
+   RegisterTMethod_TForm_HandlersVector(AfterShowModalHandlers,Handler);
 end;
 procedure TZCMsgCallBackInterface.Do_HistoryOut(s:String);
 begin
@@ -260,6 +305,21 @@ procedure TZCMsgCallBackInterface.Do_StatusLineTextOut(s:String);
 begin
    Do_TProcedure_String_HandlersVector(StatusLineTextOutHandlers,s);
 end;
+procedure TZCMsgCallBackInterface.Do_BeforeShowModal(ShowedForm:TForm);
+begin
+   Do_TMethod_TForm_HandlersVector(BeforeShowModalHandlers,ShowedForm);
+end;
+procedure TZCMsgCallBackInterface.Do_AfterShowModal(ShowedForm:TForm);
+begin
+   Do_TMethod_TForm_HandlersVector(AfterShowModalHandlers,ShowedForm);
+end;
+function TZCMsgCallBackInterface.DoShowModal(MForm:TForm): Integer;
+begin
+     Do_BeforeShowModal(MForm);
+     result:=MForm.ShowModal;
+     Do_BeforeShowModal(MForm);
+end;
+
 function GetUndoStack:pointer;
 begin
      if assigned(_GetUndoStack) then
@@ -268,14 +328,7 @@ begin
                                     result:=nil;
 end;
 
-function DoShowModal(MForm:TForm): Integer;
-begin
-     if assigned(ShowAllCursorsProc) then
-                                         ShowAllCursorsProc;
-     result:=MForm.ShowModal;
-     if assigned(RestoreAllCursorsProc) then
-                                         RestoreAllCursorsProc;
-end;
+
 initialization
   ZCMsgCallBackInterface:=TZCMsgCallBackInterface.create;
 finalization

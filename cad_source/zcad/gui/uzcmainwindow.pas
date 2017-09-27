@@ -119,8 +119,8 @@ type
     procedure SetImage(ppanel:TToolBar;b:TToolButton;img:string;autosize:boolean;identifer:string);
 
     function MessageBox(Text, Caption: PChar; Flags: Longint): Integer;
-    procedure ShowAllCursors;
-    procedure RestoreCursors;
+    procedure ShowAllCursors(ShowedForm:TForm);
+    procedure RestoreCursors(ShowedForm:TForm);
     procedure CloseDWGPageInterf(Sender: TObject);
     function CloseDWGPage(Sender: TObject):integer;
 
@@ -795,7 +795,7 @@ begin
     BtnPanel.OKButton.OnClick:=OptsFrame.OkClick;
     BtnPanel.Parent:=Dlg;
     Dlg.EnableAutoSizing;
-    Result:=DOShowModal(Dlg);
+    Result:=ZCMsgCallBackInterface.DOShowModal(Dlg);
   finally
     Dlg.Free;
   end;
@@ -998,22 +998,22 @@ end;
 procedure TZCADMainWindow.InitSystemCalls;
 var tm:tmethod;
 begin
-  ShowAllCursorsProc:=self.ShowAllCursors;
-  RestoreAllCursorsProc:=self.RestoreCursors;
+  //ShowAllCursorsProc:=self.ShowAllCursors;
+  //RestoreAllCursorsProc:=self.RestoreCursors;
   //StartLongProcessProc:=self.StartLongProcess;
   lps.AddOnLPStartHandler(StartLongProcess);
   //ProcessLongProcessproc:=self.ProcessLongProcess;
   lps.AddOnLPProgressHandler(ProcessLongProcess);
   //EndLongProcessProc:=EndLongProcess;
   lps.AddOnLPEndHandler(EndLongProcess);
-  messageboxproc:=self.MessageBox;
+  //messageboxproc:=self.MessageBox;
   AddOneObjectProc:=self.addoneobject;
   SetVisuaProplProc:=self.setvisualprop;
   UpdateVisibleProc:=UpdateVisible;
   updatevisibleproc:=UpdateVisible;
   ProcessFilehistoryProc:=self.processfilehistory;
-  CursorOn:=ShowAllCursors;
-  CursorOff:=RestoreCursors;
+  ZCMsgCallBackInterface.RegisterHandler_BeforeShowModal(ShowAllCursors);
+  ZCMsgCallBackInterface.RegisterHandler_AfterShowModal(RestoreCursors);
   commandmanager.OnCommandRun:=processcommandhistory;
   AppCloseProc:=asynccloseapp;
   uzcinterface.SetNormalFocus:=self.setnormalfocus;
@@ -2318,7 +2318,7 @@ begin
                            begin
                                if not assigned(ColorSelectForm)then
                                Application.CreateForm(TColorSelectForm, ColorSelectForm);
-                               ShowAllCursors;
+                               ShowAllCursors(ColorSelectForm);
                                mr:=ColorSelectForm.run(SysVar.dwg.DWG_CColor^,true){showmodal};
                                if mr=mrOk then
                                               begin
@@ -2334,7 +2334,7 @@ begin
                                                    tcombobox(Sender).ItemIndex:=OldColor;
                                                    ColorIndex:=-1;
                                               end;
-                               RestoreCursors;
+                               RestoreCursors(ColorSelectForm);
                                freeandnil(ColorSelectForm);
                            end;
      if colorindex<0 then
@@ -2418,9 +2418,9 @@ begin
 end;
 function TZCADMainWindow.MessageBox(Text, Caption: PChar; Flags: Longint): Integer;
 begin
-     ShowAllCursors;
+     ShowAllCursors(nil);
      result:=application.MessageBox(Text, Caption,Flags);
-     RestoreCursors;
+     RestoreCursors(nil);
 end;
 procedure TZCADMainWindow.ShowAllCursors;
 begin

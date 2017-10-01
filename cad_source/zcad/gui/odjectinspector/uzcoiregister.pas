@@ -19,12 +19,18 @@
 unit uzcoiregister;
 {$INCLUDE def.inc}
 interface
-uses uzcfcommandline,uzcutils,uzbpaths,TypeDescriptors,uzctranslations,uzcshared,Forms,uzcinterface,uzeroot,
+uses Clipbrd,sysutils,uzccommandsabstract,uzcfcommandline,uzcutils,uzbpaths,TypeDescriptors,uzctranslations,uzcshared,Forms,uzcinterface,uzeroot,
      uzbtypes,uzedrawingdef,uzgldrawcontext,uzctnrvectorgdbstring,varmandef,uzedrawingsimple,
      uzeentity,uzcenitiesvariablesextender,zcobjectinspector,uzcguimanager,uzcstrconsts,
-     gzctnrvectortypes,Types,Controls,uzcdrawings,Varman,UUnitManager,uzcsysvars,uzbtypesbase,uzcsysinfo,LazLogger;
+     gzctnrvectortypes,Types,Controls,uzcdrawings,Varman,UUnitManager,uzcsysvars,
+     uzcoimultiobjects,uzccommandsimpl,uzbtypesbase,uzcsysinfo,LazLogger;
+type
+  tdummyclass=class
+    procedure UpdateObjInsp(sender:TObject;GUIMode:TZMessageID);
+  end;
 var
   INTFObjInspRowHeight:TGDBIntegerOverrider;
+  dummyclass:tdummyclass;
 implementation
 procedure ZCADFormSetupProc(Form:TControl);
 var
@@ -153,6 +159,46 @@ begin
      result:=tform(TForm.NewInstance);
      GDBobjinsp._IsCurrObjInUndoContext:=IsCurrObjInUndoContext;
 end;
+
+function ObjInspCopyToClip_com(operands:TCommandOperands):TCommandResult;
+begin
+   if assigned(GetCurrentObjProc)then
+   begin
+   if GetCurrentObjProc=nil then
+                             ZCMsgCallBackInterface.TextMessage(rscmCommandOnlyCTXMenu,TMWOHistoryOut)
+                         else
+                             begin
+                                  if uppercase(Operands)='VAR' then
+                                                                   clipbrd.clipboard.AsText:={Objinsp.}currpd.ValKey
+                             else if uppercase(Operands)='LVAR' then
+                                                                   clipbrd.clipboard.AsText:='@@['+{Objinsp.}currpd.ValKey+']'
+                             else if uppercase(Operands)='VALUE' then
+                                                                   clipbrd.clipboard.AsText:={Objinsp.}currpd.Value;
+                                  {Objinsp.}currpd:=nil;
+                             end;
+   end;
+   result:=cmd_ok;
+end;
+procedure ReBuild;
+begin
+       if assigned(GetCurrentObjProc)then
+         if GetCurrentObjProc=@MSEditor then  MSEditor.CreateUnit(drawings.GetUnitsFormat);
+       if assigned(GDBobjinsp)then
+                                  begin
+                                       GDBobjinsp.ReBuild;
+                                  end;
+end;
+procedure tdummyclass.UpdateObjInsp(sender:TObject;GUIMode:TZMessageID);
+begin
+   if (GUIMode=ZMsgID_GUIActionRedraw)
+   or (GUIMode=ZMsgID_GUITimerTick) then
+     if assigned(GDBobjinsp)then
+                                begin
+                                     GDBobjinsp.updateinsp;
+                                end;
+end;
+
+
 initialization
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'INTF_ObjInsp_WhiteBackground','GDBBoolean',@INTFObjInspWhiteBackground);
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'INTF_ObjInsp_ShowHeaders','GDBBoolean',@INTFObjInspShowHeaders);
@@ -181,9 +227,11 @@ onAfterFreeEditor:=_onAfterFreeEditor;
 
 currpd:=nil;
 SetGDBObjInspProc:=TSetGDBObjInsp(SetGDBObjInsp);
-StoreAndSetGDBObjInspProc:=TStoreAndSetGDBObjInsp(StoreAndSetGDBObjInsp);
+//StoreAndSetGDBObjInspProc:=TSetGDBObjInsp(StoreAndSetGDBObjInsp);
 ReStoreGDBObjInspProc:=ReStoreGDBObjInsp;
-UpdateObjInspProc:=UpdateObjInsp;
+dummyclass:=tdummyclass.create;
+ZCMsgCallBackInterface.RegisterHandler_GUIAction(dummyclass.UpdateObjInsp);
+//UpdateObjInspProc:=dummyclass.UpdateObjInsp;
 ReturnToDefaultProc:=ReturnToDefault;
 ClrarIfItIsProc:=ClrarIfItIs;
 ReBuildProc:=ReBuild;
@@ -194,8 +242,10 @@ GetOIWidthProc:=GetOIWidth;
 GetPeditorProc:=GetPeditor;
 FreEditorProc:=FreEditor;
 StoreAndFreeEditorProc:=StoreAndFreeEditor;
+CreateCommandFastObjectPlugin(@ObjInspCopyToClip_com,'ObjInspCopyToClip',0,0).overlay:=true;
 
 finalization
+  dummyclass.free;
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.
 

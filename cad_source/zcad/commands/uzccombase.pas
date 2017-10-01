@@ -1000,8 +1000,6 @@ begin
                                            end;
                                            pobj:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
                                      until pobj=nil;
-                                     if assigned(GetCurrentObjProc)then
-                                                                       if GetCurrentObjProc=@MSEditor then  MSEditor.CreateUnit(drawings.GetUnitsFormat);
                                      if assigned(rebuildProc)then
                                                                  rebuildproc;
                                end;
@@ -1541,8 +1539,8 @@ begin
 end;
 function SnapProp_com(operands:TCommandOperands):TCommandResult;
 begin
-     if assigned(StoreAndSetGDBObjInspProc)then
-      StoreAndSetGDBObjInspProc(nil,drawings.GetUnitsFormat,dbunit.TypeName2PTD('TOSModeEditor'),@OSModeEditor,drawings.GetCurrentDWG);
+     if assigned(SetGDBObjInspProc)then
+      SetGDBObjInspProc(nil,drawings.GetUnitsFormat,dbunit.TypeName2PTD('TOSModeEditor'),@OSModeEditor,drawings.GetCurrentDWG,true);
       result:=cmd_ok;
 end;
 function UpdatePO_com(operands:TCommandOperands):TCommandResult;
@@ -1865,25 +1863,6 @@ var f: TForm; i: Longint; begin f := TForm.CreateNew(f{, 0}); f.Show; while f.Vi
      Exec.RunScript; // Run the script.
      Exec.Free; // Free the executer. *)
 end;
-function ObjInspCopyToClip_com(operands:TCommandOperands):TCommandResult;
-begin
-   if assigned(GetCurrentObjProc)then
-   begin
-   if GetCurrentObjProc=nil then
-                             ZCMsgCallBackInterface.TextMessage(rscmCommandOnlyCTXMenu,TMWOHistoryOut)
-                         else
-                             begin
-                                  if uppercase(Operands)='VAR' then
-                                                                   clipbrd.clipboard.AsText:={Objinsp.}currpd.ValKey
-                             else if uppercase(Operands)='LVAR' then
-                                                                   clipbrd.clipboard.AsText:='@@['+{Objinsp.}currpd.ValKey+']'
-                             else if uppercase(Operands)='VALUE' then
-                                                                   clipbrd.clipboard.AsText:={Objinsp.}currpd.Value;
-                                  {Objinsp.}currpd:=nil;
-                             end;
-   end;
-   result:=cmd_ok;
-end;
 function Cancel_com(operands:TCommandOperands):TCommandResult;
 begin
    result:=cmd_ok;
@@ -1894,7 +1873,6 @@ procedure startup;
 begin
   Randomize;
   CopyClipFile:='Empty';
-  CreateCommandFastObjectPlugin(@ObjInspCopyToClip_com,'ObjInspCopyToClip',0,0).overlay:=true;
   ms2objinsp:=CreateCommandFastObjectPlugin(@MultiSelect2ObjIbsp_com,'MultiSelect2ObjIbsp',CADWG,0);
   ms2objinsp.CEndActionAttr:=0;
   CreateCommandFastObjectPlugin(@SelectOnMouseObjects_com,'SelectOnMouseObjects',CADWG,0);

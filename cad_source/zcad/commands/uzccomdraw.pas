@@ -1785,8 +1785,7 @@ begin
       i:=GetStyleNames(TextInsertParams.Style.Enums,s);
       if i<0 then
                  TextInsertParams.Style.Selected:=0;
-      if assigned(UpdateObjInspProc)then
-      UpdateObjInspProc;
+      ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
       BuildPrimitives;
      drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
      format;

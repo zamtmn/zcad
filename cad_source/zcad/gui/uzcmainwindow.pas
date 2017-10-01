@@ -2236,8 +2236,9 @@ begin
      date:=sysutils.date;
      if rt<>SysVar.SYS.SYS_RunTime^ then
                                         begin
-                                             if assigned(UpdateObjInspProc)then
-                                                                               UpdateObjInspProc;
+                                         ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUITimerTick);
+                                         {if assigned(UpdateObjInspProc)then
+                                                                               UpdateObjInspProc;}
                                         end;
      rt:=SysVar.SYS.SYS_RunTime^;
      if historychanged then
@@ -2523,8 +2524,9 @@ procedure TZCADMainWindow.MainMouseUp;
 begin
      if assigned(GetCurrentObjProc) then
      if GetCurrentObjProc=@sysvar then
-     If assigned(UpdateObjInspProc)then
-                                      UpdateObjInspProc;
+     {If assigned(UpdateObjInspProc)then
+                                      UpdateObjInspProc;}
+     ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRedraw);
      ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionSetNormalFocus);
 end;
 procedure TZCADMainWindow.ShowCXMenu;
@@ -2777,8 +2779,7 @@ begin
         commandmanager.sendmousecoordwop(sender,key);
       end;
     end;
-    If assigned(UpdateObjInspProc)then
-    UpdateObjInspProc;
+    ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRedraw);
 
   result:=false;
 end;

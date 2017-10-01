@@ -163,9 +163,7 @@ type
 procedure SetGDBObjInsp(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:pointer);
 procedure StoreAndSetGDBObjInsp(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:pointer);
 function ReStoreGDBObjInsp:boolean;
-procedure UpdateObjInsp;
 procedure ReturnToDefault(const f:TzeUnitsFormat);
-procedure rebuild;
 procedure SetCurrentObjDefault;
 function  GetCurrentObj:Pointer;
 procedure ClrarIfItIs(const f:TzeUnitsFormat;addr:pointer);
@@ -326,13 +324,6 @@ begin
                                      GDBobjinsp.setptr(UndoStack,f,exttype,addr,context);
                                 end;
 end;
-procedure UpdateObjInsp;
-begin
-     if assigned(GDBobjinsp)then
-                                begin
-                                     GDBobjinsp.updateinsp;
-                                end;
-end;
 procedure ClrarIfItIs(const f:TzeUnitsFormat;addr:pointer);
 begin
        if assigned(GDBobjinsp)then
@@ -417,14 +408,6 @@ begin
                               else
                                   result:=nil;
 end;
-procedure ReBuild;
-begin
-       if assigned(GDBobjinsp)then
-                                  begin
-                                       GDBobjinsp.ReBuild;
-                                  end;
-end;
-
 procedure TGDBobjinsp.EraseBackground(DC: HDC);
 begin
      inherited;

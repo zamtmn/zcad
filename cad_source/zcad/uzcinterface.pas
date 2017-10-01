@@ -40,6 +40,7 @@ var
   ZMsgID_GUIActionRedraw:TZMessageID=-1;
 
   ZMsgID_GUIResetOGLWNDProc:TZMessageID=-1;//надо убрать это чудо
+  ZMsgID_GUITimerTick:TZMessageID=-1;
 
 type
     TProcedure_String_=procedure(s:String);
@@ -145,8 +146,7 @@ type
     TProcedure_PAnsiChar_=procedure (s:PAnsiChar);
 
     //ObjInsp
-    TSetGDBObjInsp=procedure(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:Pointer);
-    TStoreAndSetGDBObjInsp=procedure(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:Pointer);
+    TSetGDBObjInsp=procedure(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:Pointer;popoldpos:boolean=false);
 
     //UGDBDescriptor
     TSetCurrentDrawing=function(PDWG:Pointer):Pointer;//нужно завязать на UGDBDrawingdef
@@ -164,22 +164,24 @@ var
     @sampleParam - адресс на созданную запись, которая помещается в инспектор
     gdb.GetCurrentDWG  - так надо всегда!
     }
-   SetGDBObjInspProc:TSetGDBObjInsp;
-
-   StoreAndSetGDBObjInspProc:TStoreAndSetGDBObjInsp;
    ReStoreGDBObjInspProc:TFunction__Boolean;
    ReturnToDefaultProc:TOIReturnToDefaultProcedure;
    ClrarIfItIsProc:TOIClearIfItIs_Pointer_;
    GetCurrentObjProc:TFunction__Pointer;
    GetNameColWidthProc:TFunction__Integer;
    GetOIWidthProc:TFunction__Integer;
+
    GetPeditorProc:TFunction__TComponent;
 
-   UpdateObjInspProc:TSimpleProcedure;
-   ReBuildProc:TSimpleProcedure;
-   SetCurrentObjDefaultProc:TSimpleProcedure;
-   FreEditorProc:TSimpleProcedure;
-   StoreAndFreeEditorProc:TSimpleProcedure;
+
+   SetGDBObjInspProc:TSetGDBObjInsp;
+   //StoreAndSetGDBObjInspProc:TSetGDBObjInsp;
+
+   //UpdateObjInspProc        :TSimpleLCLMethod_TZMessageID;
+   ReBuildProc              :TSimpleProcedure;
+   SetCurrentObjDefaultProc :TSimpleProcedure;
+   FreEditorProc            :TSimpleProcedure;
+   StoreAndFreeEditorProc   :TSimpleProcedure;
 
    //mainwindow
    ProcessFilehistoryProc:TMethod_String_;
@@ -413,6 +415,7 @@ initialization
   ZMsgID_GUIActionRedrawContent:=ZCMsgCallBackInterface.GetUniqueZMessageID;
   ZMsgID_GUIActionRedraw:=ZCMsgCallBackInterface.GetUniqueZMessageID;
   ZMsgID_GUIResetOGLWNDProc:=ZCMsgCallBackInterface.GetUniqueZMessageID;
+  ZMsgID_GUITimerTick:=ZCMsgCallBackInterface.GetUniqueZMessageID;
 finalization
   ZCMsgCallBackInterface.free;
 end.

@@ -166,7 +166,8 @@ begin
                                      pp^.select(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.Selector);
                                      drawings.CurrentDWG.wa.param.SelDesc.LastSelectedObject:=pp;
                                      end;
-     if assigned(updatevisibleproc) then updatevisibleproc;
+     ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
+     //if assigned(updatevisibleproc) then updatevisibleproc(ZMsgID_GUIActionRedraw);
      drawings.CurrentDWG.wa.SetObjInsp;
      result:=cmd_ok;
      //SetObjInsp;
@@ -244,7 +245,8 @@ begin
      drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree.maketreefrom(drawings.GetCurrentDWG^.pObjRoot.ObjArray,drawings.GetCurrentDWG^.pObjRoot.vp.BoundingBox,nil);
      //drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree:=createtree(drawings.GetCurrentDWG^.pObjRoot.ObjArray,drawings.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
      drawings.GetCurrentROOT.FormatEntity(drawings.GetCurrentDWG^,dc);
-     if assigned(updatevisibleproc) then updatevisibleproc;
+     ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
+     //if assigned(updatevisibleproc) then updatevisibleproc(ZMsgID_GUIActionRedraw);
      if drawings.currentdwg<>PTSimpleDrawing(BlockBaseDWG) then
                                          begin
                                          drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree.maketreefrom(drawings.GetCurrentDWG^.pObjRoot.ObjArray,drawings.GetCurrentDWG^.pObjRoot.vp.BoundingBox,nil);
@@ -264,7 +266,8 @@ begin
 end;
 function DeSelectAll_com(operands:TCommandOperands):TCommandResult;
 begin
-     if assigned(updatevisibleproc) then updatevisibleproc;
+     ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
+     //if assigned(updatevisibleproc) then updatevisibleproc(ZMsgID_GUIActionRedraw);
      result:=cmd_ok;
 end;
 
@@ -298,7 +301,8 @@ begin
   pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
   until pv=nil;
 
-  if assigned(updatevisibleproc) then updatevisibleproc;
+  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
+  //if assigned(updatevisibleproc) then updatevisibleproc(ZMsgID_GUIActionRedraw);
   result:=cmd_ok;
 end;
 function MergeBlocks_com(operands:TCommandOperands):TCommandResult;
@@ -366,7 +370,8 @@ begin
                                      SaveDXFDPAS(s);
                                      drawings.GetCurrentDWG.SetFileName(s);
                                      drawings.GetCurrentDWG.ChangeStampt(false);
-                                     if assigned(updatevisibleproc) then updatevisibleproc;
+                                     ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
+                                     //if assigned(updatevisibleproc) then updatevisibleproc(ZMsgID_GUIActionRedraw);
                                 end
      else begin
           ZCMsgCallBackInterface.TextMessage(Format(rsunknownFileExt, [fileext]),TMWOShowError);
@@ -636,7 +641,8 @@ begin
       commandmanager.executecommandend;
       //OGLwindow1.SetObjInsp;
       //redrawoglwnd;
-      if assigned(updatevisibleProc) then updatevisibleProc;
+      ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
+      //if assigned(updatevisibleProc) then updatevisibleProc(ZMsgID_GUIActionRedraw);
     end;
   end
   else

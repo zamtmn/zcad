@@ -33,8 +33,11 @@ var
   ZMsgID_GUICMDLineReadyMode:TZMessageID=-1;
   ZMsgID_GUICMDLineRunMode:TZMessageID=-1;
 
-  ZMsgID_GUIActinSelectionChanged:TZMessageID=-1;
-  ZMsgID_GUIActinSetNormalFocus:TZMessageID=-1;
+  ZMsgID_GUIActionSelectionChanged:TZMessageID=-1;
+  ZMsgID_GUIActionSetNormalFocus:TZMessageID=-1;
+
+  ZMsgID_GUIActionRedrawContent:TZMessageID=-1;
+  ZMsgID_GUIActionRedraw:TZMessageID=-1;
 
 type
     TProcedure_String_=procedure(s:String);
@@ -46,8 +49,9 @@ type
     TProcedure_TZMessageID=procedure(GUIMode:TZMessageID);
     TProcedure_TZMessageID_HandlersVector=TMyVector<TProcedure_TZMessageID>;
 
+    TSimpleProcedure_TZMessageID=Procedure(GUIAction:TZMessageID);
     TSimpleProcedure=Procedure;
-    TSimpleProcedure_HandlersVector=TMyVector<TSimpleProcedure>;
+    TSimpleProcedure_TZMessageID_HandlersVector=TMyVector<TSimpleProcedure_TZMessageID>;
 
     TSimpleLCLMethod_TZMessageID=Procedure (sender:TObject;GUIAction:TZMessageID) of object;
     TSimpleLCLMethod_HandlersVector=TMyVector<TSimpleLCLMethod_TZMessageID>;
@@ -128,38 +132,22 @@ type
     //Abstract
     TOIReturnToDefaultProcedure=Procedure(const f:TzeUnitsFormat);
     TSimpleMethod=Procedure of object;
-    TProcedure_Pointer_=Procedure(p:pointer);
     TOIClearIfItIs_Pointer_=Procedure(const f:TzeUnitsFormat;p:pointer);
-    TProcedure_Integer_=Procedure(a:integer);
-    TMethod_Integer_=Procedure(a:integer) of object;
     TMethod_PtrInt_=procedure (Data: PtrInt) of object;
-    TMethod_IntegerString_=Procedure(a:integer;s:string) of object;
     TMethod__Pointer=function:Pointer of object;
     TFunction__Integer=Function:integer;
     TFunction__Boolean=Function:boolean;
     TFunction__Pointer=Function:Pointer;
-    TFunction__TForm=Function:TForm;
     TFunction__TComponent=Function:TComponent;
-
     TMethod_String_=procedure (s:String) of object;
-    //TProcedure_String_=procedure (s:String);
     TProcedure_PAnsiChar_=procedure (s:PAnsiChar);
-
-    //SimpleProcOfObject=procedure of object;
-
-
 
     //ObjInsp
     TSetGDBObjInsp=procedure(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:Pointer);
     TStoreAndSetGDBObjInsp=procedure(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:Pointer);
 
-    //mainwindow
-    //TMessageBox=function(Text, Caption: PChar; Flags: Longint): Integer of object;
-
     //UGDBDescriptor
     TSetCurrentDrawing=function(PDWG:Pointer):Pointer;//нужно завязать на UGDBDrawingdef
-
-    //TSimpleLCLMethod=Procedure (sender:TObject) of object;
 
 var
    //Objinsp
@@ -191,21 +179,17 @@ var
    StoreAndFreeEditorProc:TSimpleProcedure;
 
    //mainwindow
-   UpdateVisibleProc:TSimpleProcedure;
+   //UpdateVisibleProc:TSimpleProcedure_TZMessageID;
    ProcessFilehistoryProc:TMethod_String_;
    AddOneObjectProc:TSimpleMethod;
    SetVisuaProplProc:TSimpleMethod;
    AppCloseProc:TMethod_PtrInt_;
-   //SetNormalFocus:TSimpleLCLMethod;
 
    //UGDBDescriptor
-   RedrawOGLWNDProc:TSimpleProcedure;
+   //RedrawOGLWNDProc:TSimpleProcedure_TZMessageID;
    ResetOGLWNDProc:TSimpleProcedure;
    SetCurrentDWGProc:TSetCurrentDrawing;
    _GetUndoStack:TMethod__Pointer;
-
-   //waSetObjInspProc:TSimpleLCLMethod;
-
 
 function GetUndoStack:pointer;
 var
@@ -424,8 +408,10 @@ initialization
   ZMsgID_GUICMDLineReadyMode:=ZCMsgCallBackInterface.GetUniqueZMessageID;
   ZMsgID_GUICMDLineRunMode:=ZCMsgCallBackInterface.GetUniqueZMessageID;
 
-  ZMsgID_GUIActinSelectionChanged:=ZCMsgCallBackInterface.GetUniqueZMessageID;
-  ZMsgID_GUIActinSetNormalFocus:=ZCMsgCallBackInterface.GetUniqueZMessageID;
+  ZMsgID_GUIActionSelectionChanged:=ZCMsgCallBackInterface.GetUniqueZMessageID;
+  ZMsgID_GUIActionSetNormalFocus:=ZCMsgCallBackInterface.GetUniqueZMessageID;
+  ZMsgID_GUIActionRedrawContent:=ZCMsgCallBackInterface.GetUniqueZMessageID;
+  ZMsgID_GUIActionRedraw:=ZCMsgCallBackInterface.GetUniqueZMessageID;
 finalization
   ZCMsgCallBackInterface.free;
 end.

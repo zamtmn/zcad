@@ -263,7 +263,8 @@ begin
                                                                end;
      end;
      zcRedrawCurrentDrawing;
-     if assigned(UpdateVisibleProc) then UpdateVisibleProc;
+     ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRedraw);
+     //if assigned(UpdateVisibleProc) then UpdateVisibleProc(ZMsgID_GUIActionRedraw);
 end;
 
 procedure TmyVariableAction.AssignToVar(varname:string;mask:DWord);
@@ -328,7 +329,7 @@ begin
      {if assigned(pfoundcommand)then
 
                                else}
-                                   ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActinSetNormalFocus);
+                                   ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionSetNormalFocus);
                                    {if assigned(uzcinterface.SetNormalFocus)then
                                                                                 uzcinterface.SetNormalFocus(nil);}
                                    commandmanager.executecommand(s,drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
@@ -456,7 +457,8 @@ begin
 end;*)
 procedure TmyPageControl.ChangePage(NewPage:Integer);
 begin
-  if assigned(UpdateVisibleProc) then UpdateVisibleProc;
+  ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRedraw);
+  //if assigned(UpdateVisibleProc) then UpdateVisibleProc(ZMsgID_GUIActionRedraw);
 end;
 procedure TmyPageControl.DoChange;
 begin
@@ -608,7 +610,8 @@ begin
                                                                end;
      end;
      zcRedrawCurrentDrawing;
-     if assigned(UpdateVisibleProc) then UpdateVisibleProc;
+     ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRedraw);
+     //if assigned(UpdateVisibleProc) then UpdateVisibleProc(ZMsgID_GUIActionRedraw);
 end;
 procedure TmyCommandToolButton.click;
 begin

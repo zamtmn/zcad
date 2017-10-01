@@ -3677,7 +3677,8 @@ begin
                                       drawings.GetCurrentDWG^.pObjRoot:=drawings.GetCurrentDWG^.BlockDefArray.getblockdef(Tria_Utf8ToAnsi(nname))
                                   else
                                       drawings.GetCurrentDWG^.pObjRoot:=@drawings.GetCurrentDWG^.mainObjRoot;
-          if assigned(UpdateVisibleProc) then UpdateVisibleProc;
+          ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
+          //if assigned(UpdateVisibleProc) then UpdateVisibleProc(ZMsgID_GUIActionRedraw);
           zcRedrawCurrentDrawing;
      end;
 end;

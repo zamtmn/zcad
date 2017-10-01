@@ -3405,7 +3405,7 @@ begin
 end;
 procedure TGeneralViewArea.SetObjInsp;
 begin
-  ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActinSelectionChanged);
+  ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionSelectionChanged);
   {  if assigned(OnSetObjInsp)then
                                   OnSetObjInsp(self);}
 end;

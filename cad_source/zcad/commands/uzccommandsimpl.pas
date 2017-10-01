@@ -251,7 +251,8 @@ begin
   //poglwnd^.md.mode := savemousemode;
   OSModeEditor.GetState;
   zcRedrawCurrentDrawing;
-  if assigned(UpdateVisibleProc) then UpdateVisibleProc;
+  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
+  //if assigned(UpdateVisibleProc) then UpdateVisibleProc(ZMsgID_GUIActionRedraw);
     end;
 end;
 procedure CommandRTEdObject.CommandEnd;

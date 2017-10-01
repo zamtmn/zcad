@@ -241,7 +241,8 @@ begin
 
      ZCADMainWindow.PageControl.ActivePage:=myts;
      //programlog.logoutstr('MainFormN.PageControl.ActivePage:=myts;',0);
-     if assigned(UpdateVisibleProc) then UpdateVisibleProc;
+     ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
+     //if assigned(UpdateVisibleProc) then UpdateVisibleProc(ZMsgID_GUIActionRedraw);
      //programlog.logoutstr('sharedgdb.updatevisible;',0);
      operands:=operands;
      //programlog.logoutstr('operands:=operands;???????????????',0);
@@ -256,7 +257,7 @@ begin
      end;
      wpowner.Drawer.delmyscrbuf;//буфер чистить, потому что он может оказаться невалидным в случае отрисовки во время
                                 //создания или загрузки
-     redrawoglwnd;
+     ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedrawContent);
      result:=cmd_ok;
      //programlog.logoutstr('result:=cmd_ok;',0);
      //application.ProcessMessages;
@@ -350,7 +351,7 @@ begin
           load_merge(s,tloload);
           drawings.GetCurrentDWG.wa.Drawer.delmyscrbuf;//буфер чистить, потому что он может оказаться невалидным в случае отрисовки во время
                                                   //создания или загрузки
-          redrawoglwnd;
+          ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedrawContent);
           //programlog.logoutstr('load_merge(@s[1],tloload);',0);
           if assigned(ProcessFilehistoryProc) then
            ProcessFilehistoryProc(s);

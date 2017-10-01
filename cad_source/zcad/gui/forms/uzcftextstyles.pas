@@ -549,8 +549,9 @@ procedure TTextStylesForm.Aply(Sender: TObject);
 begin
      if changedstamp then
      begin
-           if assigned(UpdateVisibleProc) then UpdateVisibleProc;
-           zcRedrawCurrentDrawing;
+       ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRedraw);
+       //if assigned(UpdateVisibleProc) then UpdateVisibleProc(ZMsgID_GUIActionRedraw);
+       zcRedrawCurrentDrawing;
      end;
 end;
 

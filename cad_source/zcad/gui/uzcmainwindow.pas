@@ -2511,8 +2511,6 @@ begin
 end;
 function TZCADMainWindow.MainMouseDown(Sender:TAbstractViewArea):GDBBoolean;
 begin
-     {if assigned(uzcinterface.SetNormalFocus)then
-                                                 uzcinterface.SetNormalFocus(nil);}
      ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionSetNormalFocus);
      if @SetCurrentDWGProc<>nil then
                                      SetCurrentDWGProc(Sender.PDWG);
@@ -2527,8 +2525,6 @@ begin
      if GetCurrentObjProc=@sysvar then
      If assigned(UpdateObjInspProc)then
                                       UpdateObjInspProc;
-     {if assigned(uzcinterface.SetNormalFocus)then
-                                                  uzcinterface.SetNormalFocus(nil);}
      ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionSetNormalFocus);
 end;
 procedure TZCADMainWindow.ShowCXMenu;
@@ -2768,31 +2764,18 @@ begin
 
 
   if (ssLeft in shift) then
-    //---------------------------------------------------------if commandmanager.pcommandrunning = nil then
     begin
       if (sender.param.md.mode and MGetControlpoint) <> 0 then
                                                        FreeClick:=not ProcessControlpoint;
 
-        {else} if FreeClick and((sender.param.md.mode and MGetSelectObject) <> 0) then
+        if FreeClick and((sender.param.md.mode and MGetSelectObject) <> 0) then
         FreeClick:=not ProcessEntSelect;
-        //needredraw:=true;
     end;
-    //---------------------------------------------------------else
     begin
       if FreeClick and((sender.param.md.mode and (MGet3DPoint or MGet3DPointWoOP)) <> 0) then
       begin
-        //if commandmanager.pcommandrunning <> nil then
-        //                                             FreeClick:=false;
         commandmanager.sendmousecoordwop(sender,key);
-        //GDBFreeMem(drawings.PObjPropArray^.propertyarray[0].pobject);
       end;
-       {if FreeClick and(((wa.param.md.mode and MGetSelectionFrame) <> 0) and ((key and MZW_LBUTTON)<>0)) then
-          begin
-            commandmanager.ExecuteCommandSilent('SelectFrame',wa.pdwg,@wa.param);
-            sendmousecoord(MZW_LBUTTON);
-            FreeClick:=false;
-          end;}
-      //needredraw:=true;
     end;
     If assigned(UpdateObjInspProc)then
     UpdateObjInspProc;

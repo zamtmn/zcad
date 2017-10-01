@@ -168,15 +168,16 @@ var
 
    StoreAndSetGDBObjInspProc:TStoreAndSetGDBObjInsp;
    ReStoreGDBObjInspProc:TFunction__Boolean;
-   UpdateObjInspProc:TSimpleProcedure;
    ReturnToDefaultProc:TOIReturnToDefaultProcedure;
    ClrarIfItIsProc:TOIClearIfItIs_Pointer_;
-   ReBuildProc:TSimpleProcedure;
-   SetCurrentObjDefaultProc:TSimpleProcedure;
    GetCurrentObjProc:TFunction__Pointer;
    GetNameColWidthProc:TFunction__Integer;
    GetOIWidthProc:TFunction__Integer;
    GetPeditorProc:TFunction__TComponent;
+
+   UpdateObjInspProc:TSimpleProcedure;
+   ReBuildProc:TSimpleProcedure;
+   SetCurrentObjDefaultProc:TSimpleProcedure;
    FreEditorProc:TSimpleProcedure;
    StoreAndFreeEditorProc:TSimpleProcedure;
 

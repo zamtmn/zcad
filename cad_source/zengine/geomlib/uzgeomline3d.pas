@@ -21,7 +21,7 @@ unit uzgeomline3d;
 interface
 uses
      sysutils,uzbtypes,uzbtypesbase,uzbmemman,uzegeometry,
-     uzgeomentity,uzgeomentity3d,uzbgeomtypes;
+     {uzgeomentity,}uzgeomentity3d,uzbgeomtypes;
 type
 {Export+}
 TGeomLine3D={$IFNDEF DELPHI}packed{$ENDIF} object(TGeomEntity3D)

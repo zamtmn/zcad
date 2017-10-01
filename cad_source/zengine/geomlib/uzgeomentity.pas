@@ -19,8 +19,8 @@
 unit uzgeomentity;
 {$INCLUDE def.inc}
 interface
-uses uzgprimitivessarray,math,uzglgeomdata,uzgldrawcontext,uzgvertex3sarray,uzgldrawerabstract,
-     uzbtypesbase,sysutils,uzbtypes,uzbmemman,
+uses //uzgprimitivessarray,//math,//uzglgeomdata,//uzgldrawcontext,//uzgvertex3sarray,//uzgldrawerabstract,
+     {uzbtypesbase,}sysutils,uzbtypes,uzbmemman,
      uzbgeomtypes,uzegeometry;
 type
 {Export+}

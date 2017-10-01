@@ -38,18 +38,6 @@ type
                            public
                            WorkArea:TCADControl;
                            InsidePaintMessage:integer;
-                           {param: OGLWndtype;
-                           PDWG:PTAbstractDrawing;
-                           PolarAxis:GDBPoint3dArray;
-                           OTTimer:TTimer;
-                           OHTimer:TTimer;
-                           tocommandmcliccount:GDBInteger;
-                           currentmousemovesnaptogrid:GDBBoolean;
-
-                           onCameraChanged:TCameraChangedNotify;
-                           ShowCXMenu:procedure of object;
-                           MainMouseMove:procedure of object;
-                           MainMouseDown:function:boolean of object;}
 
                            function getviewcontrol:TCADControl;override;
 
@@ -59,7 +47,6 @@ type
                            procedure ClearOntrackpoint;override;
                            procedure SetMouseMode(smode:GDBByte);override;
                            procedure SetObjInsp;override;
-                           //procedure sendcoordtocommandTraceOn(coord:GDBVertex;key: GDBByte;pos:pos_record);override;
                            procedure reprojectaxis;override;
                            procedure Project0Axis;override;
                            procedure create0axis;override;
@@ -72,7 +59,6 @@ type
                            procedure myKeyPress(var Key: Word; Shift: TShiftState);override;
                            function ProjectPoint(pntx,pnty,pntz:gdbdouble;var wcsLBN,wcsRTF,dcsLBN,dcsRTF: GDBVertex):gdbvertex;override;
                            procedure mouseunproject(X, Y: integer);override;
-                           //Procedure Paint;override;
                            procedure addaxistootrack(var posr:os_record;const axis:GDBVertex);virtual;
                            procedure projectaxis;override;
                            procedure CalcOptimalMatrix;override;
@@ -219,10 +205,8 @@ begin
     pdwg.SetCurrentDWG;
     param.firstdraw:=true;
     GDBActivateGLContext;
-    //paint;
     getviewcontrol.invalidate;
     if assigned(OnActivateProc) then OnActivateProc;
-    //if assigned(updatevisibleproc) then updatevisibleproc;
 end;
 procedure drawfrustustum(frustum:ClipArray;var DC:TDrawContext);
 var
@@ -237,16 +221,7 @@ begin
   tv2:=PointOf3PlaneIntersect(frustum[1],frustum[3],Tempplane);
   tv3:=PointOf3PlaneIntersect(frustum[1],frustum[2],Tempplane);
   tv4:=PointOf3PlaneIntersect(frustum[0],frustum[2],Tempplane);
-  {oglsm.myglbegin(GL_LINES);
-                 oglsm.myglVertex3dv(@tv1);
-                 oglsm.myglVertex3dv(@tv2);
-                 oglsm.myglVertex3dv(@tv2);
-                 oglsm.myglVertex3dv(@tv3);
-                 oglsm.myglVertex3dv(@tv3);
-                 oglsm.myglVertex3dv(@tv4);
-                 oglsm.myglVertex3dv(@tv4);
-                 oglsm.myglVertex3dv(@tv1);
-  oglsm.myglend;}
+
   dc.drawer.DrawLine3DInModelSpace(tv1,tv2,dc.DrawingContext.matrixs);
   dc.drawer.DrawLine3DInModelSpace(tv2,tv3,dc.DrawingContext.matrixs);
   dc.drawer.DrawLine3DInModelSpace(tv3,tv4,dc.DrawingContext.matrixs);
@@ -279,14 +254,9 @@ begin
                                         end;
                                       end;
   dc.drawer.SetColor(foreground);
-  {oglsm.myglEnable(GL_COLOR_LOGIC_OP);
-  oglsm.myglLogicOp(GL_OR);}
-  dc.drawer.SetDrawMode({TDM_OR}TDM_Normal);
+  dc.drawer.SetDrawMode(TDM_Normal);
   if param.ShowDebugFrustum then
                           drawfrustustum(param.debugfrustum,dc);
-  {if param.ShowDebugBoundingBbox then
-                              DrawAABB(param.DebugBoundingBbox);}
-
   Tempplane:=param.mousefrustumLCS[5];
   tempplane[3]:=(tempplane[3]-param.mousefrustumLCS[4][3])/2;
   {курсор фрустума выделения}
@@ -1650,22 +1620,8 @@ end;
 
   pdwg.GetSelObjArray.calcvisible(pdwg.Getpcamera^.frustum,pdwg.Getpcamera.POSCOUNT,pdwg.Getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
   Set3dmouse;
-
-  //Update objectinspector with mousemove
-  //if assigned(GetCurrentObjProc) then
-  //if GetCurrentObjProc=@sysvar then
-  //If assigned(UpdateObjInspProc)then
-  //                                 UpdateObjInspProc;
-
-
-  //param.firstdraw:=true;
-  //isOpenGLError;
   CorrectMouseAfterOS;
   draworinvalidate;
-  //inc(sysvar.debug.int1);
-  //debugvar(Variables,1);
-
-  //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.Pre_MouseMove----{end}',lp_decPos);{$ENDIF}
 end;
 procedure TGeneralViewArea.asynczoomsel(Data: PtrInt);
 begin
@@ -1812,29 +1768,17 @@ begin
 end;
 
 procedure TGeneralViewArea.WaMouseUp(Sender:TObject;Button: TMouseButton; Shift:TShiftState;X, Y: Integer);
-//procedure TOGLWnd.Pre_MouseUp;
 begin
   inherited;
   if button = mbMiddle then
   begin
-    {if assigned(sysvar.RD.RD_RemoveSystemCursorFromWorkArea)
-    then}
-        RemoveCursorIfNeed(WorkArea,sysvarRDRemoveSystemCursorFromWorkArea);
-    {else
-        RemoveCursorIfNeed(WorkArea,true);}
+    RemoveCursorIfNeed(WorkArea,sysvarRDRemoveSystemCursorFromWorkArea);
     param.scrollmode:=false;
     param.firstdraw:=true;
     WorkArea.invalidate;
-    //paint;
   end;
   if assigned(MainMouseUp) then
                                MainMouseUp;
-  {if assigned(GetCurrentObjProc) then
-  if GetCurrentObjProc=@sysvar then
-  If assigned(UpdateObjInspProc)then
-                                   UpdateObjInspProc;
-  if assigned(zcadinterface.SetNormalFocus)then
-                                               zcadinterface.SetNormalFocus(nil);}
 end;
 function TGeneralViewArea.CreateRC(_maxdetail:GDBBoolean=false):TDrawContext;
 begin

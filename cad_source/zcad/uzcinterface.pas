@@ -39,6 +39,8 @@ var
   ZMsgID_GUIActionRedrawContent:TZMessageID=-1;
   ZMsgID_GUIActionRedraw:TZMessageID=-1;
 
+  ZMsgID_GUIResetOGLWNDProc:TZMessageID=-1;//надо убрать это чудо
+
 type
     TProcedure_String_=procedure(s:String);
     TProcedure_String_HandlersVector=TMyVector<TProcedure_String_>;
@@ -179,15 +181,12 @@ var
    StoreAndFreeEditorProc:TSimpleProcedure;
 
    //mainwindow
-   //UpdateVisibleProc:TSimpleProcedure_TZMessageID;
    ProcessFilehistoryProc:TMethod_String_;
    AddOneObjectProc:TSimpleMethod;
    SetVisuaProplProc:TSimpleMethod;
    AppCloseProc:TMethod_PtrInt_;
 
    //UGDBDescriptor
-   //RedrawOGLWNDProc:TSimpleProcedure_TZMessageID;
-   ResetOGLWNDProc:TSimpleProcedure;
    SetCurrentDWGProc:TSetCurrentDrawing;
    _GetUndoStack:TMethod__Pointer;
 
@@ -412,6 +411,7 @@ initialization
   ZMsgID_GUIActionSetNormalFocus:=ZCMsgCallBackInterface.GetUniqueZMessageID;
   ZMsgID_GUIActionRedrawContent:=ZCMsgCallBackInterface.GetUniqueZMessageID;
   ZMsgID_GUIActionRedraw:=ZCMsgCallBackInterface.GetUniqueZMessageID;
+  ZMsgID_GUIResetOGLWNDProc:=ZCMsgCallBackInterface.GetUniqueZMessageID;
 finalization
   ZCMsgCallBackInterface.free;
 end.

@@ -90,7 +90,8 @@ begin
                                         end;
 
                 end;
-  if assigned(resetoglwndproc) then resetoglwndproc;
+  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIResetOGLWNDProc);
+  //if assigned(resetoglwndproc) then resetoglwndproc;
   zcRedrawCurrentDrawing;
   ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
   //if assigned(UpdateVisibleProc) then UpdateVisibleProc(ZMsgID_GUIActionRedraw);

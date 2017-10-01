@@ -75,6 +75,7 @@ TZCADDrawingsManager={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorPGDBaseOb
                     function GetUnitsFormat:TzeUnitsFormat;
                     procedure SetUnitsFormat(f:TzeUnitsFormat);
                     procedure redrawoglwnd(Sender:TObject;GUIAction:TZMessageID);
+                    procedure resetoglwnd(Sender:TObject;GUIAction:TZMessageID);
               end;
 {EXPORT-}
 var drawings: TZCADDrawingsManager;
@@ -244,10 +245,12 @@ begin
   end;
 end;}
 
-procedure resetoglwnd;
+procedure TZCADDrawingsManager.resetoglwnd;
 var
    pdwg:PTSimpleDrawing;
 begin
+  if GUIAction<>ZMsgID_GUIResetOGLWNDProc then
+    exit;
   pdwg:=drawings.GetCurrentDWG;
   if pdwg<>nil then
   begin
@@ -963,7 +966,8 @@ var
    filename='GEWIND.SHX';}
 begin
   //RedrawOGLWNDProc:=RedrawOGLWND;
-  ResetOGLWNDProc:=ResetOGLWND;
+  //ResetOGLWNDProc:=ResetOGLWND;
+
 
   LTypeManager.init({$IFDEF DEBUGBUILD}'{9D0E081C-796F-4EB1-98A9-8B6EA9BD8640}',{$ENDIF}100);
 
@@ -989,6 +993,7 @@ begin
   //pbasefont:=FontManager.{FindFonf}getAddres('amgdt.shx');
   //pbasefont:=FontManager.getAddres('gothice.shx');
   drawings.init;
+  ZCMsgCallBackInterface.RegisterHandler_GUIAction(drawings.ResetOGLWND);
   SetCurrentDWGProc:=SetCurrentDWG;
   BlockBaseDWG:=drawings.CreateDWG('','');
   _GetUndoStack:=drawings.GetUndoStack;

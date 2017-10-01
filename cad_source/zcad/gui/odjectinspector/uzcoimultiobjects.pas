@@ -619,7 +619,7 @@ begin
     if count>0 then
                    //ZCADMainWindow.waSetObjInsp(drawings.GetCurrentDWG.wa);
                    //waSetObjInspProc(drawings.GetCurrentDWG.wa);
-                   ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,ZMsgID_GUIActinSelectionChanged);
+                   ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,ZMsgID_GUIActionSelectionChanged);
 
     {pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
     if pv<>nil then

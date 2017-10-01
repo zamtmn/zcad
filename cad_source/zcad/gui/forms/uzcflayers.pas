@@ -654,8 +654,9 @@ procedure TLayersForm.Aply(Sender: TObject) ;
 begin
      if changedstamp then
      begin
-           if assigned(UpdateVisibleProc) then UpdateVisibleProc;
-           zcRedrawCurrentDrawing;
+       ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
+       //if assigned(UpdateVisibleProc) then UpdateVisibleProc(ZMsgID_GUIActionRedraw);
+       zcRedrawCurrentDrawing;
      end;
 end;
 

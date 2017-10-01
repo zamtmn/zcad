@@ -74,6 +74,7 @@ TZCADDrawingsManager={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorPGDBaseOb
                     function FindDrawingByName(DWGName:GDBString):PTSimpleDrawing;
                     function GetUnitsFormat:TzeUnitsFormat;
                     procedure SetUnitsFormat(f:TzeUnitsFormat);
+                    procedure redrawoglwnd(Sender:TObject;GUIAction:TZMessageID);
               end;
 {EXPORT-}
 var drawings: TZCADDrawingsManager;
@@ -88,12 +89,34 @@ procedure finalize;
 procedure SetObjCreateManipulator(out domethod,undomethod:tmethod);
 procedure clearotrack;
 procedure clearcp;
-procedure redrawoglwnd;
+//procedure redrawoglwnd(GUIAction:TZMessageID);
 function dwgSaveDXFDPAS(s:gdbstring;dwg:PTSimpleDrawing):GDBInteger;
 function dwgQSave_com(dwg:PTSimpleDrawing):GDBInteger;
 //procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
 implementation
  uses uzcenitiesvariablesextender,uzeenttext,uzeentdevice,uzeentblockinsert,uzeffdxf,uzcshared,uzccommandsmanager;
+procedure TZCADDrawingsManager.redrawoglwnd(Sender:TObject;GUIAction:TZMessageID);
+var
+   pdwg:PTSimpleDrawing;
+   DC:TDrawContext;
+begin
+  if GUIAction=ZMsgID_GUIActionRedrawContent then
+  begin
+    pdwg:=drawings.GetCurrentDWG;
+    if pdwg<>nil then begin
+      DC:=pdwg^.CreateDrawingRC;
+      drawings.GetCurrentRoot.FormatAfterEdit(pdwg^,dc);
+      pdwg.wa.param.firstdraw := TRUE;
+      pdwg.wa.CalcOptimalMatrix;
+      pdwg.pcamera^.totalobj:=0;
+      pdwg.pcamera^.infrustum:=0;
+      drawings.GetCurrentROOT.CalcVisibleByTree(drawings.GetCurrentDWG.pcamera^.frustum,drawings.GetCurrentDWG.pcamera.POSCOUNT,drawings.GetCurrentDWG.pcamera.VISCOUNT,drawings.GetCurrentROOT.ObjArray.ObjTree,pdwg.pcamera^.totalobj,pdwg.pcamera^.infrustum,pdwg^.myGluProject2,pdwg.pcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
+      pdwg.ConstructObjRoot.calcvisible(drawings.GetCurrentDWG.pcamera^.frustum,drawings.GetCurrentDWG.pcamera.POSCOUNT,drawings.GetCurrentDWG.pcamera.VISCOUNT,pdwg.pcamera^.totalobj,pdwg.pcamera^.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
+      pdwg.wa.calcgrid;
+      pdwg.wa.draworinvalidate;
+    end;
+  end;
+end;
 function TZCADDrawingsManager.GetDefaultDrawingName:GDBString;
 var
     OldName:GDBString;
@@ -201,29 +224,25 @@ begin
                          drawings.SetCurrentDWG(pdwg);
 end;
 
-procedure redrawoglwnd;
+{procedure redrawoglwnd(GUIAction:TZMessageID);
 var
    pdwg:PTSimpleDrawing;
    DC:TDrawContext;
 begin
-  //isOpenGLError;
   pdwg:=drawings.GetCurrentDWG;
-  if pdwg<>nil then
-  begin
-       DC:=pdwg^.CreateDrawingRC;
-       drawings.GetCurrentRoot.FormatAfterEdit(pdwg^,dc);
-  pdwg.wa.param.firstdraw := TRUE;
-  pdwg.wa.CalcOptimalMatrix;
-  pdwg.pcamera^.totalobj:=0;
-  pdwg.pcamera^.infrustum:=0;
-  drawings.GetCurrentROOT.CalcVisibleByTree(drawings.GetCurrentDWG.pcamera^.frustum,drawings.GetCurrentDWG.pcamera.POSCOUNT,drawings.GetCurrentDWG.pcamera.VISCOUNT,drawings.GetCurrentROOT.ObjArray.ObjTree,pdwg.pcamera^.totalobj,pdwg.pcamera^.infrustum,pdwg^.myGluProject2,pdwg.pcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
-  //drawings.GetCurrentROOT.calcvisible(drawings.GetCurrentDWG.pcamera^.frustum,drawings.GetCurrentDWG.pcamera.POSCOUNT,drawings.GetCurrentDWG.pcamera.VISCOUNT);
-  pdwg.ConstructObjRoot.calcvisible(drawings.GetCurrentDWG.pcamera^.frustum,drawings.GetCurrentDWG.pcamera.POSCOUNT,drawings.GetCurrentDWG.pcamera.VISCOUNT,pdwg.pcamera^.totalobj,pdwg.pcamera^.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
-  pdwg.wa.calcgrid;
-  pdwg.wa.draworinvalidate;
+  if pdwg<>nil then begin
+    DC:=pdwg^.CreateDrawingRC;
+    drawings.GetCurrentRoot.FormatAfterEdit(pdwg^,dc);
+    pdwg.wa.param.firstdraw := TRUE;
+    pdwg.wa.CalcOptimalMatrix;
+    pdwg.pcamera^.totalobj:=0;
+    pdwg.pcamera^.infrustum:=0;
+    drawings.GetCurrentROOT.CalcVisibleByTree(drawings.GetCurrentDWG.pcamera^.frustum,drawings.GetCurrentDWG.pcamera.POSCOUNT,drawings.GetCurrentDWG.pcamera.VISCOUNT,drawings.GetCurrentROOT.ObjArray.ObjTree,pdwg.pcamera^.totalobj,pdwg.pcamera^.infrustum,pdwg^.myGluProject2,pdwg.pcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
+    pdwg.ConstructObjRoot.calcvisible(drawings.GetCurrentDWG.pcamera^.frustum,drawings.GetCurrentDWG.pcamera.POSCOUNT,drawings.GetCurrentDWG.pcamera.VISCOUNT,pdwg.pcamera^.totalobj,pdwg.pcamera^.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
+    pdwg.wa.calcgrid;
+    pdwg.wa.draworinvalidate;
   end;
-  //drawings.GetCurrentDWG.OGLwindow1.repaint;
-end;
+end;}
 
 procedure resetoglwnd;
 var
@@ -527,6 +546,7 @@ begin
        //addfromdxf(sysvar.path.Program_Run^+'sample\test_dxf\shema_Poly_Line_Text_Circle_Arc.dxf',@CurrentDWG.ObjRoot);
   end;
   MainBlockCreateProc:=AddBlockFromDBIfNeed;
+  ZCMsgCallBackInterface.RegisterHandler_GUIAction(redrawoglwnd);
 end;
 constructor TZCADDrawingsManager.initnul;
 //var tp:GDBTextStyleProp;
@@ -942,7 +962,7 @@ var
    resname='GEWIND';
    filename='GEWIND.SHX';}
 begin
-  RedrawOGLWNDProc:=RedrawOGLWND;
+  //RedrawOGLWNDProc:=RedrawOGLWND;
   ResetOGLWNDProc:=ResetOGLWND;
 
   LTypeManager.init({$IFDEF DEBUGBUILD}'{9D0E081C-796F-4EB1-98A9-8B6EA9BD8640}',{$ENDIF}100);

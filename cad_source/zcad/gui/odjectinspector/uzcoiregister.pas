@@ -92,7 +92,8 @@ begin
                 end;
   if assigned(resetoglwndproc) then resetoglwndproc;
   zcRedrawCurrentDrawing;
-  if assigned(UpdateVisibleProc) then UpdateVisibleProc;
+  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
+  //if assigned(UpdateVisibleProc) then UpdateVisibleProc(ZMsgID_GUIActionRedraw);
 end;
 
 procedure _onGetOtherValues(var vsa:TZctnrVectorGDBString;const valkey:string;const pcurcontext:pointer;const pcurrobj:pointer;const GDBobj:boolean);

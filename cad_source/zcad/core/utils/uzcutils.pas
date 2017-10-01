@@ -197,8 +197,7 @@ begin
 end;
 procedure zcRedrawCurrentDrawing();
 begin
-  if assigned(redrawoglwndproc) then
-                                    redrawoglwndproc;
+  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedrawContent);
 end;
 function GDBInsertBlock(own:PGDBObjGenericSubEntry;//владелец
                         BlockName:GDBString;       //имя блока

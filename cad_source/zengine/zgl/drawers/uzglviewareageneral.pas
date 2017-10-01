@@ -20,7 +20,7 @@ unit uzglviewareageneral;
 {$INCLUDE def.inc}
 interface
 uses
-     gzctnrvectortypes,uzbgeomtypes,LCLProc,uzbmemman,uzemathutils,uzepalette,
+     uzcinterface,gzctnrvectortypes,uzbgeomtypes,LCLProc,uzbmemman,uzemathutils,uzepalette,
      uzegeometry,uzbtypesbase,uzbtypes,UGDBSelectedObjArray,
      uzglviewareadata,uzgldrawcontext,uzeentity,uzedrawingabstract,UGDBPoint3DArray,uzeentitiestree,
      uzeconsts,uzestrconsts,UGDBTracePropArray,math,sysutils,uzedrawingdef,uzbstrproc,
@@ -3405,8 +3405,9 @@ begin
 end;
 procedure TGeneralViewArea.SetObjInsp;
 begin
-     if assigned(OnSetObjInsp)then
-                                  OnSetObjInsp(self);
+  ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActinSelectionChanged);
+  {  if assigned(OnSetObjInsp)then
+                                  OnSetObjInsp(self);}
 end;
 
 begin

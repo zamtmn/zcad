@@ -20,7 +20,7 @@ unit uzglviewareaabstract;
 {$INCLUDE def.inc}
 interface
 uses
-     UGDBOpenArrayOfPV,uzgldrawerabstract,uzeentgenericsubentry,uzbtypesbase,uzbtypes,
+     uzcinterface,UGDBOpenArrayOfPV,uzgldrawerabstract,uzeentgenericsubentry,uzbtypesbase,uzbtypes,
      uzglviewareadata,uzgldrawcontext,UGDBPoint3DArray,uzeentitiestree,uzegeometry,uzedrawingabstract,
      uzbgeomtypes,sysutils,
      ExtCtrls,Controls,Classes,{$IFDEF DELPHI}Types,Messages,Graphics,{$ENDIF}{$IFNDEF DELPHI}LCLType,{$ENDIF}Forms,uzeentity;
@@ -56,7 +56,7 @@ type
     TOnWaKeyPress=procedure (Sender:TAbstractViewArea;var Key: Word; Shift: TShiftState) of object;
     TOnGetEntsDesc=function (ents:PGDBObjOpenArrayOfPV):GDBString of object;
     TOnWaShowCursor=procedure (Sender:TAbstractViewArea;var DC:TDrawContext) of object;
-    TWAGeneralMethod=procedure (Sender:TAbstractViewArea) of object;
+    TWAGeneralMethod={procedure (Sender:TAbstractViewArea) of object;}procedure (Sender:{TAbstractViewArea}tobject;GUIAction:TZMessageID);
     TAbstractViewArea=class(tcomponent)
                            public
                            Drawer:TZGLAbstractDrawer;

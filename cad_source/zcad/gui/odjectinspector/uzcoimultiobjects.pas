@@ -618,7 +618,8 @@ begin
     ZCMsgCallBackInterface.TextMessage(sysutils.Format(rscmNEntitiesDeselected,[count]),TMWOHistoryOut);
     if count>0 then
                    //ZCADMainWindow.waSetObjInsp(drawings.GetCurrentDWG.wa);
-                   waSetObjInspProc(drawings.GetCurrentDWG.wa);
+                   //waSetObjInspProc(drawings.GetCurrentDWG.wa);
+                   ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,ZMsgID_GUIActinSelectionChanged);
 
     {pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
     if pv<>nil then

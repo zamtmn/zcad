@@ -328,8 +328,9 @@ begin
      {if assigned(pfoundcommand)then
 
                                else}
-                                   if assigned(uzcinterface.SetNormalFocus)then
-                                                                                uzcinterface.SetNormalFocus(nil);
+                                   ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActinSetNormalFocus);
+                                   {if assigned(uzcinterface.SetNormalFocus)then
+                                                                                uzcinterface.SetNormalFocus(nil);}
                                    commandmanager.executecommand(s,drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
      result:=true;
 end;

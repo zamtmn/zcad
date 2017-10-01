@@ -215,7 +215,7 @@ begin
      wpowner.MainMouseMove:=ZCADMainWindow.MainMouseMove;
      wpowner.MainMouseDown:=ZCADMainWindow.MainMouseDown;
      wpowner.MainMouseUp:=ZCADMainWindow.MainMouseUp;
-     wpowner.OnSetObjInsp:=ZCADMainWindow.waSetObjInsp;
+     //wpowner.OnSetObjInsp:=ZCADMainWindow.waSetObjInsp;
      wpowner.OnWaShowCursor:=ZCADMainWindow.WaShowCursor;
      oglwnd:=wpowner.getviewcontrol;// TOGLWnd.Create(myts);
 

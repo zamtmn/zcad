@@ -572,8 +572,8 @@ end;
 
 procedure HandleCmdLine(GUIMode:TZMessageID);
 begin
-     if GUIMode in [ZMsgID_GUIDisable,ZMsgID_GUIDisableCMDLine] then DisableCmdLine
-else if GUIMode in [ZMsgID_GUIEnable,ZMsgID_GUIEnableCMDLine] then EnableCmdLine;
+     if GUIMode in [ZMsgID_GUIDisable{,ZMsgID_GUIDisableCMDLine}] then DisableCmdLine
+else if GUIMode in [ZMsgID_GUIEnable{,ZMsgID_GUIEnableCMDLine}] then EnableCmdLine;
 end;
 
 procedure StatusLineTextOut(s:String);

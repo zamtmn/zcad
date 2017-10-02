@@ -27,8 +27,8 @@ type
 var
   ZMsgID_GUIEnable:TZMessageID=-1;
   ZMsgID_GUIDisable:TZMessageID=-1;
-  ZMsgID_GUIEnableCMDLine:TZMessageID=-1;
-  ZMsgID_GUIDisableCMDLine:TZMessageID=-1;
+  //ZMsgID_GUIEnableCMDLine:TZMessageID=-1;
+  //ZMsgID_GUIDisableCMDLine:TZMessageID=-1;
 
   ZMsgID_GUICMDLineReadyMode:TZMessageID=-1;
   ZMsgID_GUICMDLineRunMode:TZMessageID=-1;
@@ -431,8 +431,8 @@ initialization
   ZCMsgCallBackInterface:=TZCMsgCallBackInterface.create;
   ZMsgID_GUIEnable:=ZCMsgCallBackInterface.GetUniqueZMessageID;
   ZMsgID_GUIDisable:=ZCMsgCallBackInterface.GetUniqueZMessageID;
-  ZMsgID_GUIEnableCMDLine:=ZCMsgCallBackInterface.GetUniqueZMessageID;
-  ZMsgID_GUIDisableCMDLine:=ZCMsgCallBackInterface.GetUniqueZMessageID;
+  //ZMsgID_GUIEnableCMDLine:=ZCMsgCallBackInterface.GetUniqueZMessageID;
+  //ZMsgID_GUIDisableCMDLine:=ZCMsgCallBackInterface.GetUniqueZMessageID;
 
   ZMsgID_GUICMDLineReadyMode:=ZCMsgCallBackInterface.GetUniqueZMessageID;
   ZMsgID_GUICMDLineRunMode:=ZCMsgCallBackInterface.GetUniqueZMessageID;

@@ -386,7 +386,7 @@ begin
      busy:=true;
 
      //DisableCmdLine;
-     ZCMsgCallBackInterface.Do_GUIMode(ZMsgID_GUIDisableCMDLine);
+     ZCMsgCallBackInterface.Do_GUIMode({ZMsgID_GUIDisableCMDLine}ZMsgID_GUIDisable);
 
      oldlastcomm:=lastcommand;
      sa.init(200);
@@ -409,7 +409,7 @@ begin
   lastcommand:=oldlastcomm;
 
      //EnableCmdLine;
-     ZCMsgCallBackInterface.Do_GUIMode(ZMsgID_GUIEnableCMDLine);
+     ZCMsgCallBackInterface.Do_GUIMode({ZMsgID_GUIEnableCMDLine}ZMsgID_GUIEnable);
      busy:=false;
 end;
 procedure GDBcommandmanager.sendpoint2command;

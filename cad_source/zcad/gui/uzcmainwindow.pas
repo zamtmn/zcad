@@ -2126,6 +2126,7 @@ begin
      if comtext='' then
      begin
      if assigned(drawings.GetCurrentDWG) then
+     if assigned(drawings.GetCurrentDWG.wa) then
      if assigned(drawings.GetCurrentDWG.wa.getviewcontrol)then
                     drawings.GetCurrentDWG.wa.myKeyPress(tempkey,shift);
      end

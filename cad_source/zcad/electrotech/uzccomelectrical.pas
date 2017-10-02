@@ -1327,7 +1327,7 @@ begin
 
     drawings.GetCurrentDWG.OnMouseObj.Clear;
     if assigned(ClrarIfItIsProc)then
-    ClrarIfItIsProc(drawings.GetUnitsFormat,SecondOwner);
+    ClrarIfItIsProc(SecondOwner);
 
     zcRedrawCurrentDrawing;
     if mode= 2 then commandmanager.executecommandend
@@ -1431,7 +1431,7 @@ begin
   if p3dpl^.VertexArrayInOCS.Count<2 then
                                          begin
                                               if assigned(ReturnToDefaultProc)then
-                                                                                  ReturnToDefaultProc(drawings.GetUnitsFormat);
+                                                                                  ReturnToDefaultProc;
                                               p3dpl^.YouDeleted(drawings.GetCurrentDWG^);
                                               PTZCADDrawing(drawings.GetCurrentDWG).UndoStack.KillLastCommand;
                                          end;
@@ -2365,7 +2365,7 @@ else
   drawings.GetCurrentDWG.wa.param.seldesc.OnMouseObject:=nil;
   drawings.GetCurrentDWG.wa.param.seldesc.LastSelectedObject:=nil;
      if assigned(ReturnToDefaultProc)then
-                                         ReturnToDefaultProc(drawings.GetUnitsFormat);
+                                         ReturnToDefaultProc;
   clearcp;
 
   //redrawoglwnd;
@@ -3190,7 +3190,7 @@ begin
   drawings.GetCurrentDWG.wa.param.lastonmouseobject:=nil;
   drawings.GetCurrentDWG.SelObjArray.Clear;
   if assigned(ReturnToDefaultProc)then
-  ReturnToDefaultProc(drawings.GetUnitsFormat);
+  ReturnToDefaultProc;
   clearcp;
   result:=cmd_ok;
 end;
@@ -3235,7 +3235,7 @@ begin
   drawings.GetCurrentDWG.wa.param.lastonmouseobject:=nil;
   {objinsp.GDBobjinsp.}
   if assigned(ReturnToDefaultProc)then
-                                      ReturnToDefaultProc(drawings.GetUnitsFormat);
+                                      ReturnToDefaultProc;
   clearcp;
   //redrawoglwnd;
   result:=cmd_ok;

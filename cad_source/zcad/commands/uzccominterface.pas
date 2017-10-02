@@ -383,7 +383,7 @@ begin
                       begin
                         drawings.SetUnitsFormat(_UnitsFormat);
                         if assigned(ReturnToDefaultProc)then
-                                                            ReturnToDefaultProc(drawings.GetUnitsFormat);
+                                                            ReturnToDefaultProc;
                       end;
    ZCMsgCallBackInterface.Do_AfterShowModal(UnitsForm);
    StoreBoundsToSavedUnit('UnitsWND',UnitsForm.BoundsRect);
@@ -591,13 +591,11 @@ var
 begin
      if Operands='VARS' then
                             begin
-                                 If assigned(SetGDBObjInspProc)then
-                                 SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar,drawings.GetCurrentDWG);
+                              ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar,drawings.GetCurrentDWG);
                             end
 else if Operands='CAMERA' then
                             begin
-                                 If assigned(SetGDBObjInspProc)then
-                                 SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('GDBObjCamera'),drawings.GetCurrentDWG.pcamera,drawings.GetCurrentDWG);
+                              ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('GDBObjCamera'),drawings.GetCurrentDWG.pcamera,drawings.GetCurrentDWG);
                             end
 else if Operands='CURRENT' then
                             begin
@@ -607,8 +605,7 @@ else if Operands='CURRENT' then
                                      begin
                                           obj:=pGDBObjEntity(drawings.GetCurrentDWG.GetLastSelected)^.GetObjTypeName;
                                           objt:=SysUnit.TypeName2PTD(obj);
-                                          If assigned(SetGDBObjInspProc)then
-                                          SetGDBObjInspProc(drawings.GetUndoStack,drawings.GetUnitsFormat,objt,drawings.GetCurrentDWG.GetLastSelected,drawings.GetCurrentDWG);
+                                          ZCMsgCallBackInterface.Do_PrepareObject(drawings.GetUndoStack,drawings.GetUnitsFormat,objt,drawings.GetCurrentDWG.GetLastSelected,drawings.GetCurrentDWG);
                                      end
                                  else
                                      begin
@@ -628,8 +625,7 @@ else if Operands='SELECTED' then
                                                               begin
                                                                    obj:=pp^.GetObjTypeName;
                                                                    objt:=SysUnit.TypeName2PTD(obj);
-                                                                   If assigned(SetGDBObjInspProc)then
-                                                                   SetGDBObjInspProc(drawings.GetUndoStack,drawings.GetUnitsFormat,objt,pp,drawings.GetCurrentDWG);
+                                                                   ZCMsgCallBackInterface.Do_PrepareObject(drawings.GetUndoStack,drawings.GetUnitsFormat,objt,pp,drawings.GetCurrentDWG);
                                                                    exit;
                                                               end;
                                               pp:=drawings.GetCurrentROOT.objarray.iterate(ir);
@@ -640,69 +636,56 @@ else if Operands='SELECTED' then
                             end
 else if Operands='OGLWND_DEBUG' then
                             begin
-                                 If assigned(SetGDBObjInspProc)then
-                                 SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('OGLWndtype'),@drawings.GetCurrentDWG.wa.param,drawings.GetCurrentDWG);
+                                 ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('OGLWndtype'),@drawings.GetCurrentDWG.wa.param,drawings.GetCurrentDWG);
                             end
 else if Operands='GDBDescriptor' then
                             begin
-                                 If assigned(SetGDBObjInspProc)then
-                                 SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('GDBDescriptor'),@drawings,drawings.GetCurrentDWG);
+                                 ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('GDBDescriptor'),@drawings,drawings.GetCurrentDWG);
                             end
 else if Operands='RELE_DEBUG' then
                             begin
-                                 If assigned(SetGDBObjInspProc)then
-                                 SetGDBObjInspProc(nil,drawings.GetUnitsFormat,dbunit.TypeName2PTD('vardesk'),dbunit.FindVariable('SEVCABLEkvvg'),drawings.GetCurrentDWG);
+                                 ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,dbunit.TypeName2PTD('vardesk'),dbunit.FindVariable('SEVCABLEkvvg'),drawings.GetCurrentDWG);
                             end
 else if Operands='LAYERS' then
                             begin
-                                 SetGDBObjInspProc(nil,drawings.GetUnitsFormat,dbunit.TypeName2PTD('GDBLayerArray'),@drawings.GetCurrentDWG.LayerTable,drawings.GetCurrentDWG);
+                                 ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,dbunit.TypeName2PTD('GDBLayerArray'),@drawings.GetCurrentDWG.LayerTable,drawings.GetCurrentDWG);
                             end
 else if Operands='TSTYLES' then
                             begin
-                                 If assigned(SetGDBObjInspProc)then
-                                 SetGDBObjInspProc(nil,drawings.GetUnitsFormat,dbunit.TypeName2PTD('GDBTextStyleArray'),@drawings.GetCurrentDWG.TextStyleTable,drawings.GetCurrentDWG);
+                                 ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,dbunit.TypeName2PTD('GDBTextStyleArray'),@drawings.GetCurrentDWG.TextStyleTable,drawings.GetCurrentDWG);
                             end
 else if Operands='FONTS' then
                             begin
-                                 If assigned(SetGDBObjInspProc)then
-                                 SetGDBObjInspProc(nil,drawings.GetUnitsFormat,dbunit.TypeName2PTD('GDBFontManager'),@FontManager,drawings.GetCurrentDWG);
+                                 ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,dbunit.TypeName2PTD('GDBFontManager'),@FontManager,drawings.GetCurrentDWG);
                             end
 else if Operands='OSMODE' then
                             begin
                                  OSModeEditor.GetState;
-                                 If assigned(SetGDBObjInspProc)then
-                                 SetGDBObjInspProc(nil,drawings.GetUnitsFormat,dbunit.TypeName2PTD('TOSModeEditor'),@OSModeEditor,drawings.GetCurrentDWG);
+                                 ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,dbunit.TypeName2PTD('TOSModeEditor'),@OSModeEditor,drawings.GetCurrentDWG);
                             end
 else if Operands='NUMERATORS' then
                             begin
-                                 If assigned(SetGDBObjInspProc)then
-                                 SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('GDBNumerator'),@drawings.GetCurrentDWG.Numerator,drawings.GetCurrentDWG);
+                                 ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('GDBNumerator'),@drawings.GetCurrentDWG.Numerator,drawings.GetCurrentDWG);
                             end
 else if Operands='LINETYPESTYLES' then
                             begin
-                                 If assigned(SetGDBObjInspProc)then
-                                 SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('GDBLtypeArray'),@drawings.GetCurrentDWG.LTypeStyleTable,drawings.GetCurrentDWG);
+                                 ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('GDBLtypeArray'),@drawings.GetCurrentDWG.LTypeStyleTable,drawings.GetCurrentDWG);
                             end
 else if Operands='TABLESTYLES' then
                             begin
-                                 If assigned(SetGDBObjInspProc)then
-                                 SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('GDBTableStyleArray'),@drawings.GetCurrentDWG.TableStyleTable,drawings.GetCurrentDWG);
+                                 ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('GDBTableStyleArray'),@drawings.GetCurrentDWG.TableStyleTable,drawings.GetCurrentDWG);
                             end
 else if Operands='DIMSTYLES' then
                             begin
-                                 If assigned(SetGDBObjInspProc)then
-                                 SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('GDBDimStyleArray'),@drawings.GetCurrentDWG.DimStyleTable,drawings.GetCurrentDWG);
-                            end
-                            ;
-     If assigned(SetCurrentObjDefaultProc)then
-                                              SetCurrentObjDefaultProc;
+                                 ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('GDBDimStyleArray'),@drawings.GetCurrentDWG.DimStyleTable,drawings.GetCurrentDWG);
+                            end;
+     ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUISetDefaultObject);
      result:=cmd_ok;
 end;
 
 function Options_com(operands:TCommandOperands):TCommandResult;
 begin
-  if assigned(SetGDBObjInspProc)then
-                                    SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar,drawings.GetCurrentDWG);
+  ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar,drawings.GetCurrentDWG);
   ZCMsgCallBackInterface.TextMessage(rscmOptions2OI,TMWOHistoryOut);
   result:=cmd_ok;
 end;

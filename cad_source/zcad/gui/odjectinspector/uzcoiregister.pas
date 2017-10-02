@@ -27,16 +27,27 @@ uses Clipbrd,sysutils,uzccommandsabstract,uzcfcommandline,uzcutils,uzbpaths,Type
 type
   tdummyclass=class
     procedure UpdateObjInsp(sender:TObject;GUIMode:TZMessageID);
+    procedure ReBuild(sender:TObject;GUIMode:TZMessageID);
+    procedure SetCurrentObjDefault(sender:TObject;GUIMode:TZMessageID);
+    procedure FreEditor(sender:TObject;GUIMode:TZMessageID);
+    procedure StoreAndFreeEditor(sender:TObject;GUIMode:TZMessageID);
   end;
 var
   INTFObjInspRowHeight:TGDBIntegerOverrider;
   dummyclass:tdummyclass;
 implementation
+procedure SetCurrentObjDefault;
+begin
+       if assigned(GDBobjinsp)then
+                                  begin
+                                       GDBobjinsp.SetCurrentObjDefault;
+                                  end;
+end;
 procedure ZCADFormSetupProc(Form:TControl);
 var
   pint:PGDBInteger;
 begin
-  SetGDBObjInsp(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar,nil);
+  StoreAndSetGDBObjInsp(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar,nil);
   SetCurrentObjDefault;
   //pint:=SavedUnit.FindValue('VIEW_ObjInspV');
   SetNameColWidth(Form.Width div 2);
@@ -179,8 +190,9 @@ begin
    end;
    result:=cmd_ok;
 end;
-procedure ReBuild;
+procedure tdummyclass.ReBuild(sender:TObject;GUIMode:TZMessageID);
 begin
+       if (GUIMode=ZMsgID_GUIRePrepareObject)then
        if assigned(GetCurrentObjProc)then
          if GetCurrentObjProc=@MSEditor then  MSEditor.CreateUnit(drawings.GetUnitsFormat);
        if assigned(GDBobjinsp)then
@@ -197,7 +209,27 @@ begin
                                      GDBobjinsp.updateinsp;
                                 end;
 end;
-
+procedure tdummyclass.SetCurrentObjDefault;
+begin
+  if (GUIMode=ZMsgID_GUISetDefaultObject) then
+    uzcoiregister.SetCurrentObjDefault
+end;
+procedure tdummyclass.FreEditor;
+begin
+       if (GUIMode=ZMsgID_GUIFreEditorProc) then
+       if assigned(GDBobjinsp)then
+                                  begin
+                                       GDBobjinsp.freeeditor;
+                                  end
+end;
+procedure tdummyclass.StoreAndFreeEditor;
+begin
+       if (GUIMode=ZMsgID_GUIStoreAndFreeEditorProc) then
+       if assigned(GDBobjinsp)then
+                                  begin
+                                       GDBobjinsp.StoreAndFreeEditor;
+                                  end
+end;
 
 initialization
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'INTF_ObjInsp_WhiteBackground','GDBBoolean',@INTFObjInspWhiteBackground);
@@ -226,7 +258,8 @@ onNotify:=_onNotify;
 onAfterFreeEditor:=_onAfterFreeEditor;
 
 currpd:=nil;
-SetGDBObjInspProc:=TSetGDBObjInsp(SetGDBObjInsp);
+ZCMsgCallBackInterface.RegisterHandler_PrepareObject(StoreAndSetGDBObjInsp());
+//PrepareObject:={TSetGDBObjInsp}(StoreAndSetGDBObjInsp);
 //StoreAndSetGDBObjInspProc:=TSetGDBObjInsp(StoreAndSetGDBObjInsp);
 ReStoreGDBObjInspProc:=ReStoreGDBObjInsp;
 dummyclass:=tdummyclass.create;
@@ -234,14 +267,18 @@ ZCMsgCallBackInterface.RegisterHandler_GUIAction(dummyclass.UpdateObjInsp);
 //UpdateObjInspProc:=dummyclass.UpdateObjInsp;
 ReturnToDefaultProc:=ReturnToDefault;
 ClrarIfItIsProc:=ClrarIfItIs;
-ReBuildProc:=ReBuild;
-SetCurrentObjDefaultProc:=SetCurrentObjDefault;
+ZCMsgCallBackInterface.RegisterHandler_GUIAction(dummyclass.ReBuild);
+//ReBuildProc:=ReBuild;
+ZCMsgCallBackInterface.RegisterHandler_GUIAction(dummyclass.SetCurrentObjDefault);
+//SetCurrentObjDefaultProc:=SetCurrentObjDefault;
 GetCurrentObjProc:=GetCurrentObj;
 GetNameColWidthProc:=GetNameColWidth;
 GetOIWidthProc:=GetOIWidth;
 GetPeditorProc:=GetPeditor;
-FreEditorProc:=FreEditor;
-StoreAndFreeEditorProc:=StoreAndFreeEditor;
+ZCMsgCallBackInterface.RegisterHandler_GUIAction(dummyclass.FreEditor);
+//FreEditorProc:=FreEditor;
+ZCMsgCallBackInterface.RegisterHandler_GUIAction(dummyclass.StoreAndFreeEditor);
+//StoreAndFreeEditorProc:=StoreAndFreeEditor;
 CreateCommandFastObjectPlugin(@ObjInspCopyToClip_com,'ObjInspCopyToClip',0,0).overlay:=true;
 
 finalization

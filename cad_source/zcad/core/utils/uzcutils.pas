@@ -185,15 +185,14 @@ begin
 end;
 procedure zcShowCommandParams(const PDataTypeDesk:PUserTypeDescriptor;const PInstance:Pointer);
 begin
-  if assigned(SetGDBObjInspProc)then
-      SetGDBObjInspProc(nil,drawings.GetUnitsFormat,
+  ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,
                         PDataTypeDesk,PInstance,
                         drawings.GetCurrentDWG);
 end;
 procedure zcHideCommandParams();
 begin
   if assigned(ReturnToDefaultProc)then
-      ReturnToDefaultProc(drawings.GetUnitsFormat);
+      ReturnToDefaultProc;
 end;
 procedure zcRedrawCurrentDrawing();
 begin

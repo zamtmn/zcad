@@ -98,8 +98,7 @@ begin
                                  MSEditor.VariablesUnit.SaveToMem(membuf);
                                  membuf.SaveToFile(expandpath('*log\lms.pas'));
                                  {$ENDIF}
-                                 if assigned(SetGDBObjInspProc)then
-                                                               SetGDBObjInspProc(drawings.GetUndoStack,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('TMSEditor'),@MSEditor,drawings.GetCurrentDWG);
+                                 ZCMsgCallBackInterface.Do_PrepareObject(drawings.GetUndoStack,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('TMSEditor'),@MSEditor,drawings.GetCurrentDWG);
                                 end
                             {else
                                 commandmanager.executecommandend};
@@ -426,7 +425,7 @@ begin
                                               begin
                                                    prevundo:=0;
                                                    overlay:=false;
-                                                   if assigned(ReturnToDefaultProc) then ReturnToDefaultProc(drawings.GetUnitsFormat);
+                                                   if assigned(ReturnToDefaultProc) then ReturnToDefaultProc;
                                               end;
   case PTZCADDrawing(drawings.GetCurrentDWG).UndoStack.undo(msg,prevundo,overlay) of
     URRNoCommandsToUndoInOverlayMode:ZCMsgCallBackInterface.TextMessage(rscmNoCTUSE,TMWOShowError);
@@ -898,8 +897,7 @@ begin
            if pentvarext<>nil then
            begin
             if EditUnit(pentvarext^.entityunit) then
-                                                    if assigned(rebuildproc)then
-                                                                             rebuildproc;
+              ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIRePrepareObject);
            end;
       end
   else
@@ -931,8 +929,7 @@ else if length(Operands)>0 then
            if pentvarext<>nil then
            begin
             if EditUnit(pentvarext^.entityunit) then
-                                                    if assigned(rebuildproc)then
-                                                                             rebuildproc;
+              ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIRePrepareObject);
            end;
       end
   else
@@ -1000,8 +997,7 @@ begin
                                            end;
                                            pobj:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
                                      until pobj=nil;
-                                     if assigned(rebuildProc)then
-                                                                 rebuildproc;
+                                     ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIRePrepareObject);
                                end;
 
 
@@ -1043,7 +1039,7 @@ begin
   drawings.GetCurrentDWG.wa.param.lastonmouseobject:=nil;
   {objinsp.GDBobjinsp.}
   if assigned(ReturnToDefaultProc)then
-                                      ReturnToDefaultProc(drawings.GetUnitsFormat);
+                                      ReturnToDefaultProc;
   clearcp;
   //redrawoglwnd;
   result:=cmd_ok;
@@ -1197,7 +1193,7 @@ begin
   drawings.GetCurrentDWG.wa.param.seldesc.OnMouseObject:=nil;
   drawings.GetCurrentDWG.wa.param.seldesc.LastSelectedObject:=nil;
     if assigned(ReturnToDefaultProc)then
-                                      ReturnToDefaultProc(drawings.GetUnitsFormat);
+                                      ReturnToDefaultProc;
   clearcp;
   zcRedrawCurrentDrawing;
   result:=cmd_ok;
@@ -1539,9 +1535,8 @@ begin
 end;
 function SnapProp_com(operands:TCommandOperands):TCommandResult;
 begin
-     if assigned(SetGDBObjInspProc)then
-      SetGDBObjInspProc(nil,drawings.GetUnitsFormat,dbunit.TypeName2PTD('TOSModeEditor'),@OSModeEditor,drawings.GetCurrentDWG,true);
-      result:=cmd_ok;
+  ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,dbunit.TypeName2PTD('TOSModeEditor'),@OSModeEditor,drawings.GetCurrentDWG,true);
+  result:=cmd_ok;
 end;
 function UpdatePO_com(operands:TCommandOperands):TCommandResult;
 var

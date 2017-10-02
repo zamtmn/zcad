@@ -2110,8 +2110,7 @@ begin
                                                commandmanager.executecommandend;
                                                exit;
                                          end;
-          if assigned(SetGDBObjInspProc)then
-                                            SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD('TBlockInsert'),@BIProp,drawings.GetCurrentDWG);
+          ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD('TBlockInsert'),@BIProp,drawings.GetCurrentDWG);
           drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
           ZCMsgCallBackInterface.TextMessage(rscmInsertPoint,TMWOHistoryOut);
      end
@@ -2281,7 +2280,7 @@ begin
   drawings.GetCurrentDWG^.wa.param.seldesc.LastSelectedObject:=nil;
   drawings.GetCurrentDWG^.wa.param.lastonmouseobject:=nil;
   if assigned(ReturnToDefaultProc)then
-                                      ReturnToDefaultProc(drawings.GetUnitsFormat);
+                                      ReturnToDefaultProc;
   clearcp;
   zcRedrawCurrentDrawing;
   result:=cmd_ok;
@@ -3169,7 +3168,7 @@ begin
   if p3dpl^.VertexArrayInOCS.Count<2 then
                                          begin
                                                if assigned(ReturnToDefaultProc)then
-                                                                                   ReturnToDefaultProc(drawings.GetUnitsFormat);
+                                                                                   ReturnToDefaultProc;
                                               //p3dpl^.YouDeleted;
                                               cc:=pCommandRTEdObject(_self)^.UndoTop;
                                               PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.ClearFrom(cc);
@@ -3211,8 +3210,8 @@ begin
     //drawings.GetCurrentROOT^.ObjArray.ObjTree.{AddObjectToNodeTree(p3dpl)}CorrectNodeBoundingBox(p3dpl);   vbnvbn
     //drawings.GetCurrentROOT^.AddObjectToObjArray(addr(p3dpl));
 
-    //if assigned(SetGDBObjInspProc)then
-    //SetGDBObjInspProc(drawings.GetUndoStack,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD('GDBObjPolyline'),p3dpl,drawings.GetCurrentDWG);
+    //if assigned(PrepareObject)then
+    //PrepareObject(drawings.GetUndoStack,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD('GDBObjPolyline'),p3dpl,drawings.GetCurrentDWG);
     end;
 
   end
@@ -3302,8 +3301,7 @@ begin
                    end
                else
                    begin
-                        if assigned(SetGDBObjInspProc)then
-                        SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD('TPolyEdit'),@PEProp,drawings.GetCurrentDWG);
+                        ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD('TPolyEdit'),@PEProp,drawings.GetCurrentDWG);
                         drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
                         drawings.GetCurrentDWG^.SelObjArray.Free;
                         //TMWOHistoryOut('Поехали:');
@@ -3725,8 +3723,7 @@ else if (sd.PFirstSelectedEnt^.GetObjType=GDBDeviceID) then
                                                commandmanager.executecommandend;
                                                exit;
                                          end;
-          if assigned(SetGDBObjInspProc)then
-          SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD('CommandRTEdObject'),pbeditcom,drawings.GetCurrentDWG);
+          ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD('CommandRTEdObject'),pbeditcom,drawings.GetCurrentDWG);
           drawings.GetCurrentDWG^.SelObjArray.Free;
           drawings.GetCurrentROOT^.ObjArray.DeSelect(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,@drawings.GetCurrentDWG^.deselector);
           result:=cmd_ok;
@@ -3745,8 +3742,7 @@ else if (sd.PFirstSelectedEnt^.GetObjType=GDBDeviceID) then
 
 
   exit;
-  if assigned(SetGDBObjInspProc)then
-  SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD('CommandRTEdObject'),pbeditcom,drawings.GetCurrentDWG);
+  ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD('CommandRTEdObject'),pbeditcom,drawings.GetCurrentDWG);
   drawings.GetCurrentDWG^.SelObjArray.Free;
   drawings.GetCurrentROOT^.ObjArray.DeSelect(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,@drawings.GetCurrentDWG^.deselector);
   result:=cmd_ok;

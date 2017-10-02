@@ -73,8 +73,7 @@ begin
 end;
 procedure TmyProcToolButton.Click;
 begin
-     if assigned(StoreAndFreeEditorProc)then
-                                            StoreAndFreeEditorProc;
+     ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIStoreAndFreeEditorProc);
      {$IFNDEF DELPHI}
      if assigned(FProc) then
                             FProc(PPata);

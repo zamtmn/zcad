@@ -42,6 +42,10 @@ var
   ZMsgID_GUIResetOGLWNDProc:TZMessageID=-1;//надо убрать это чудо
   ZMsgID_GUITimerTick:TZMessageID=-1;
 
+  ZMsgID_GUIRePrepareObject:TZMessageID=-1;
+  ZMsgID_GUISetDefaultObject:TZMessageID=-1;
+  ZMsgID_GUIFreEditorProc:TZMessageID=-1;
+  ZMsgID_GUIStoreAndFreeEditorProc:TZMessageID=-1;
 type
     TProcedure_String_=procedure(s:String);
     TProcedure_String_HandlersVector=TMyVector<TProcedure_String_>;
@@ -58,6 +62,11 @@ type
 
     TSimpleLCLMethod_TZMessageID=Procedure (sender:TObject;GUIAction:TZMessageID) of object;
     TSimpleLCLMethod_HandlersVector=TMyVector<TSimpleLCLMethod_TZMessageID>;
+
+    //ObjInsp
+    TSetGDBObjInsp=procedure(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:Pointer;popoldpos:boolean=false);
+    TSetGDBObjInsp_HandlersVector=TMyVector<TSetGDBObjInsp>;
+
 
     TTextMessageWriteOptions=(TMWOToConsole,            //вывод сообщения в консоль
                               TMWOToLog,                //вывод в log
@@ -89,6 +98,8 @@ type
         procedure RegisterHandler_GUIMode(Handler:TProcedure_TZMessageID);
         procedure RegisterHandler_GUIAction(Handler:TSimpleLCLMethod_TZMessageID);
 
+        procedure RegisterHandler_PrepareObject(Handler:TSetGDBObjInsp);
+
         procedure Do_HistoryOut(s:String);
         procedure Do_LogError(s:String);
         procedure Do_StatusLineTextOut(s:String);
@@ -98,6 +109,9 @@ type
 
         procedure Do_GUIMode(GUIMode:TZMessageID);
         procedure Do_GUIaction(Sender:TObject;GUIaction:TZMessageID);
+
+        procedure Do_PrepareObject(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:Pointer;popoldpos:boolean=false);
+
 
         procedure TextMessage(msg:String;opt:TTextMessageWriteOptionsSet);
         function TextQuestion(Caption,Question:String;Flags: Longint):integer;
@@ -115,6 +129,8 @@ type
         procedure RegisterTProcedure_TSimpleLCLMethod_HandlersVector(var SMHV:TSimpleLCLMethod_HandlersVector;Handler:TSimpleLCLMethod_TZMessageID);
         procedure Do_TSimpleLCLMethod_HandlersVector(var SMHV:TSimpleLCLMethod_HandlersVector;Sender:TObject;GUIAction:TZMessageID);
 
+        procedure RegisterSetGDBObjInsp_HandlersVector(var SOIHV:TSetGDBObjInsp_HandlersVector;Handler:TSetGDBObjInsp);
+        procedure Do_SetGDBObjInsp_HandlersVector(var SOIHV:TSetGDBObjInsp_HandlersVector;const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:Pointer;popoldpos:boolean=false);
 
       private
         ZMessageIDSeed:TZMessageID;
@@ -127,15 +143,16 @@ type
 
         GUIModeHandlers:TProcedure_TZMessageID_HandlersVector;
         GUIActionsHandlers:TSimpleLCLMethod_HandlersVector;
+
+        SetGDBObjInsp_HandlersVector:TSetGDBObjInsp_HandlersVector;
     end;
 
     TStartLongProcessProc=Procedure(a:integer;s:string) of object;
     TProcessLongProcessProc=Procedure(a:integer) of object;
     TEndLongProcessProc=Procedure of object;
     //Abstract
-    TOIReturnToDefaultProcedure=Procedure(const f:TzeUnitsFormat);
     TSimpleMethod=Procedure of object;
-    TOIClearIfItIs_Pointer_=Procedure(const f:TzeUnitsFormat;p:pointer);
+    TOIClearIfItIs_Pointer_=Procedure(p:pointer);
     TMethod_PtrInt_=procedure (Data: PtrInt) of object;
     TMethod__Pointer=function:Pointer of object;
     TFunction__Integer=Function:integer;
@@ -144,9 +161,6 @@ type
     TFunction__TComponent=Function:TComponent;
     TMethod_String_=procedure (s:String) of object;
     TProcedure_PAnsiChar_=procedure (s:PAnsiChar);
-
-    //ObjInsp
-    TSetGDBObjInsp=procedure(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:Pointer;popoldpos:boolean=false);
 
     //UGDBDescriptor
     TSetCurrentDrawing=function(PDWG:Pointer):Pointer;//нужно завязать на UGDBDrawingdef
@@ -165,23 +179,13 @@ var
     gdb.GetCurrentDWG  - так надо всегда!
     }
    ReStoreGDBObjInspProc:TFunction__Boolean;
-   ReturnToDefaultProc:TOIReturnToDefaultProcedure;
+   ReturnToDefaultProc:TSimpleProcedure;
    ClrarIfItIsProc:TOIClearIfItIs_Pointer_;
    GetCurrentObjProc:TFunction__Pointer;
    GetNameColWidthProc:TFunction__Integer;
    GetOIWidthProc:TFunction__Integer;
 
    GetPeditorProc:TFunction__TComponent;
-
-
-   SetGDBObjInspProc:TSetGDBObjInsp;
-   //StoreAndSetGDBObjInspProc:TSetGDBObjInsp;
-
-   //UpdateObjInspProc        :TSimpleLCLMethod_TZMessageID;
-   ReBuildProc              :TSimpleProcedure;
-   SetCurrentObjDefaultProc :TSimpleProcedure;
-   FreEditorProc            :TSimpleProcedure;
-   StoreAndFreeEditorProc   :TSimpleProcedure;
 
    //mainwindow
    ProcessFilehistoryProc:TMethod_String_;
@@ -328,6 +332,21 @@ begin
        SMHV[i](sender,GUIAction);
    end;
 end;
+procedure TZCMsgCallBackInterface.RegisterSetGDBObjInsp_HandlersVector(var SOIHV:TSetGDBObjInsp_HandlersVector;Handler:TSetGDBObjInsp);
+begin
+   if not assigned(SOIHV) then
+     SOIHV:=TSetGDBObjInsp_HandlersVector.Create;
+   SOIHV.PushBack(Handler);
+end;
+procedure TZCMsgCallBackInterface.Do_SetGDBObjInsp_HandlersVector(var SOIHV:TSetGDBObjInsp_HandlersVector;const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:Pointer;popoldpos:boolean=false);
+var
+   i:integer;
+begin
+   if assigned(SOIHV) then begin
+     for i:=0 to SOIHV.Size-1 do
+       SOIHV[i](UndoStack,f,exttype,addr,context,popoldpos);
+   end;
+end;
 procedure TZCMsgCallBackInterface.RegisterHandler_HistoryOut(Handler:TProcedure_String_);
 begin
    RegisterTProcedure_String_HandlersVector(HistoryOutHandlers,Handler);
@@ -356,6 +375,10 @@ procedure TZCMsgCallBackInterface.RegisterHandler_GUIAction(Handler:TSimpleLCLMe
 begin
    RegisterTProcedure_TSimpleLCLMethod_HandlersVector(GUIActionsHandlers,Handler);
 end;
+procedure TZCMsgCallBackInterface.RegisterHandler_PrepareObject(Handler:TSetGDBObjInsp);
+begin
+   RegisterSetGDBObjInsp_HandlersVector(SetGDBObjInsp_HandlersVector,Handler);
+end;
 procedure TZCMsgCallBackInterface.Do_HistoryOut(s:String);
 begin
    Do_TProcedure_String_HandlersVector(HistoryOutHandlers,s);
@@ -383,6 +406,10 @@ end;
 procedure TZCMsgCallBackInterface.Do_GUIaction(Sender:TObject;GUIaction:TZMessageID);
 begin
    Do_TSimpleLCLMethod_HandlersVector(GUIActionsHandlers,Sender,GUIaction);
+end;
+procedure TZCMsgCallBackInterface.Do_PrepareObject(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:Pointer;popoldpos:boolean=false);
+begin
+   Do_SetGDBObjInsp_HandlersVector(SetGDBObjInsp_HandlersVector,UndoStack,f,exttype,addr,context,popoldpos);
 end;
 function TZCMsgCallBackInterface.DoShowModal(MForm:TForm): Integer;
 begin
@@ -416,6 +443,10 @@ initialization
   ZMsgID_GUIActionRedraw:=ZCMsgCallBackInterface.GetUniqueZMessageID;
   ZMsgID_GUIResetOGLWNDProc:=ZCMsgCallBackInterface.GetUniqueZMessageID;
   ZMsgID_GUITimerTick:=ZCMsgCallBackInterface.GetUniqueZMessageID;
+  ZMsgID_GUIRePrepareObject:=ZCMsgCallBackInterface.GetUniqueZMessageID;
+  ZMsgID_GUISetDefaultObject:=ZCMsgCallBackInterface.GetUniqueZMessageID;
+  ZMsgID_GUIFreEditorProc:=ZCMsgCallBackInterface.GetUniqueZMessageID;
+  ZMsgID_GUIStoreAndFreeEditorProc:=ZCMsgCallBackInterface.GetUniqueZMessageID;
 finalization
   ZCMsgCallBackInterface.free;
 end.

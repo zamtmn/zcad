@@ -756,10 +756,9 @@ begin
                                                                                              exit;
                end;
           end;
-          if assigned(FreEditorProc)then
-                                        FreEditorProc;
+          ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIFreEditorProc);
           if assigned(ReturnToDefaultProc)then
-                                           ReturnToDefaultProc(drawings.GetUnitsFormat);
+                                           ReturnToDefaultProc;
           application.terminate;
      end;
 end;
@@ -845,10 +844,9 @@ begin
        end
        else
            drawings.freedwgvars;
-       if assigned(FreEditorProc)then
-                                     FreEditorProc;
+       ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIFreEditorProc);
        if assigned(ReturnToDefaultProc)then
-                                           ReturnToDefaultProc(drawings.GetUnitsFormat);
+                                           ReturnToDefaultProc;
        ZCMsgCallBackInterface.TextMessage('Закрыто',TMWOQuickly);
        ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
        //if assigned(UpdateVisibleProc) then UpdateVisibleProc(ZMsgID_GUIActionRedraw);
@@ -2003,7 +2001,7 @@ begin
                           OGL.GDBActivate;
      OGL.param.firstdraw:=true;
      OGL.draworinvalidate;
-     ReturnToDefaultProc(drawings.GetUnitsFormat);
+     ReturnToDefaultProc;
 end;
 
 destructor TZCADMainWindow.Destroy;
@@ -2101,8 +2099,7 @@ begin
       begin
            if key=VK_ESCAPE then
                                 begin
-                                     if assigned(FreEditorProc) then
-                                                                    FreEditorProc;
+                                     ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIFreEditorProc);
                                      key:=0;
                                      exit;
                                 end;
@@ -2936,7 +2933,7 @@ var
     objcount:integer;
     sender_wa:TAbstractViewArea;
 begin
-  if sender is (TAbstractViewArea) then
+  if (sender is (TAbstractViewArea))and(ZMsgID_GUIActionSelectionChanged=GUIAction) then
     sender_wa:=sender as TAbstractViewArea
   else
     exit;
@@ -2950,7 +2947,7 @@ begin
                                                     commandmanager.ExecuteCommandSilent('MultiSelect2ObjIbsp',sender_wa.pdwg,@sender_wa.param)
                                                 else
                                                     If assigned(ReturnToDefaultProc)then
-                                                                                        ReturnToDefaultProc(drawings.GetUnitsFormat);
+                                                                                        ReturnToDefaultProc;
     end
   else
   begin
@@ -2961,14 +2958,13 @@ begin
        ptype:=SysUnit.TypeName2PTD(tn);
        if ptype<>nil then
        begin
-            If assigned(SetGDBObjInspProc)then
-            SetGDBObjInspProc(drawings.GetUndoStack,drawings.GetUnitsFormat,ptype,sender_wa.param.SelDesc.LastSelectedObject,sender_wa.pdwg);
+         ZCMsgCallBackInterface.Do_PrepareObject(drawings.GetUndoStack,drawings.GetUnitsFormat,ptype,sender_wa.param.SelDesc.LastSelectedObject,sender_wa.pdwg);
        end;
   end
   else
   begin
     If assigned(ReturnToDefaultProc)then
-    ReturnToDefaultProc(drawings.GetUnitsFormat);
+    ReturnToDefaultProc;
   end;
   end
 end;

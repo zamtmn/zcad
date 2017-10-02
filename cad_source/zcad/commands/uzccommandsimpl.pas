@@ -411,8 +411,7 @@ begin
   if (commanddata.Instance<>nil)
   and(commanddata.PTD<>nil) then
                                 begin
-                                     if assigned(SetGDBObjInspProc)then
-                                                                       SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('CommandRTEdObject'),@self,drawings.GetCurrentDWG);
+                                  ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('CommandRTEdObject'),@self,drawings.GetCurrentDWG);
                                 end; 
 
 end;

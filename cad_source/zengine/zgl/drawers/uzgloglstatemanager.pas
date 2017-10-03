@@ -114,6 +114,7 @@ const ls = $AAAA;
       GL_MAP1_VERTEX_4={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_MAP1_VERTEX_4;
       GL_MAP1_VERTEX_3={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_MAP1_VERTEX_3;
       GL_TRUE={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_TRUE;
+      GL_FALSE={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_FALSE;
 
       maxmybufer=200;
 type

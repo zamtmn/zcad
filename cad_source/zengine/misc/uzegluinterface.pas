@@ -70,6 +70,7 @@ type
                            function ErrorString(error:GLenum):glu.PGLubyte;
                            function mygluGetString(name: GLenum): PAnsiChar;
                            procedure mygluPickMatrix(x:GLdouble; y:GLdouble; delX:GLdouble; delY:GLdouble; viewport:PGLint);
+                           procedure mygluLoadSamplingMatrices(renderer:GLUnurbsObj;const model,perspective:PGLfloat;view:PGLint);
     end;
 
 var
@@ -83,6 +84,10 @@ end;
 procedure TGLUInterface.mygluPickMatrix(x:GLdouble; y:GLdouble; delX:GLdouble; delY:GLdouble; viewport:PGLint);
 begin
      gluPickMatrix(x,y,delX,delY,{$IFNDEF DELPHI}PTViewPortArray(viewport)^{$ELSE}(viewport){$ENDIF});
+end;
+procedure TGLUInterface.mygluLoadSamplingMatrices(renderer:GLUnurbsObj;const model,perspective:PGLfloat;view:PGLint);
+begin
+     gluLoadSamplingMatrices(renderer,model,perspective,view);
 end;
 function TGLUInterface.NewNurbsRenderer:GLUnurbsObj;
 begin

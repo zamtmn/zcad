@@ -85,6 +85,8 @@ type Intercept3DProp=record
                     t,d:GDBDouble;
               end;
      TCSDir=(TCSDLeft,TCSDRight);
+function ToDVector4F(const m:DVector4D):DVector4F;
+function ToDMatrix4F(const m:DMatrix4D):DMatrix4F;
 function ToVertex2DI(const V:GDBVertex):GDBVertex2DI;
 function CrossVertex(const Vector1, Vector2: GDBVertex): GDBVertex;inline;
 function VertexD2S(const Vector1:GDBVertex): GDBVertex3S;inline;
@@ -243,6 +245,20 @@ var WorldMatrix{,CurrentCS}:DMatrix4D;
 type
     TLineClipArray=array[0..5]of gdbdouble;
 implementation
+function ToDVector4F(const m:DVector4D):DVector4F;
+begin
+  result[0]:=m[0];
+  result[1]:=m[1];
+  result[2]:=m[2];
+  result[3]:=m[3];
+end;
+function ToDMatrix4F(const m:DMatrix4D):DMatrix4F;
+begin
+  result[0]:=ToDVector4F(m[0]);
+  result[1]:=ToDVector4F(m[1]);
+  result[2]:=ToDVector4F(m[2]);
+  result[3]:=ToDVector4F(m[3]);
+end;
 function ToVertex2DI(const V:GDBVertex):GDBVertex2DI;
 begin
   result.x:=round(V.x);

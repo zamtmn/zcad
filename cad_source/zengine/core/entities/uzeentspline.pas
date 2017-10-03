@@ -156,6 +156,7 @@ var //i,j: GDBInteger;
     tfv{,base}:GDBvertex4D;
     tfvs:GDBvertex4S;
     m:DMatrix4D;
+    fm,fp:DMatrix4F;
 begin
 
      FormatWithoutSnapArray;
@@ -218,7 +219,12 @@ begin
   GLUIntrf.NurbsProperty(nurbsobj,GLU_NURBS_MODE_EXT,GLU_NURBS_TESSELLATOR_EXT);
   GLUIntrf.NurbsProperty(nurbsobj,GLU_SAMPLING_TOLERANCE,10);
   GLUIntrf.NurbsProperty(nurbsobj,GLU_DISPLAY_MODE,{GLU_FILL}GLU_POINT);
-  GLUIntrf.NurbsProperty(nurbsobj,GLU_AUTO_LOAD_MATRIX, GL_TRUE);
+  GLUIntrf.NurbsProperty(nurbsobj,GLU_AUTO_LOAD_MATRIX, {GL_TRUE}GL_FALSE);
+  fm:=ToDMatrix4F(DC.DrawingContext.matrixs.pmodelMatrix^);
+  fp:=ToDMatrix4F(DC.DrawingContext.matrixs.pprojMatrix^);
+  GLUIntrf.mygluLoadSamplingMatrices(nurbsobj,@fm,
+                                              @fp,
+                                              @DC.DrawingContext.matrixs.pviewport^);
   GLUIntrf.NurbsCallback(nurbsobj,GLU_NURBS_BEGIN_EXT,@NurbsBeginCallBack);
   GLUIntrf.NurbsCallback(nurbsobj,GLU_NURBS_END_EXT,@NurbsEndCallBack);
   GLUIntrf.NurbsCallback(nurbsobj,GLU_NURBS_VERTEX_EXT,@NurbsVertexCallBack);

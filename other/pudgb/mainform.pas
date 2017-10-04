@@ -160,7 +160,11 @@ begin
    RunTimeUnit^.SetTypeDesk(TypeInfo(TParser),['Compiler options','Target OS','Target CPU']);
    RunTimeUnit^.SetTypeDesk(TypeInfo(TGraphBulding),['Circular graph','Full graph','Interface uses edge type',
                                                      'Implementation uses edge type',{'Calc edges weight',}
-                                                     'Path clusters']);
+                                                     'Path clusters',
+                                                     'Collapse clusters mask',
+                                                     'Expand clusters mask',
+                                                     'Label clusters edges']);
+
    RunTimeUnit^.SetTypeDesk(TypeInfo(TCircularG),['Calc edges weight']);
    RunTimeUnit^.SetTypeDesk(TypeInfo(TFullG),['Include not founded units','Include interface uses',
                                               'Include implementation uses','Only looped edges',

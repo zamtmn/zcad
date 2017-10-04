@@ -38,6 +38,9 @@ type
     InterfaceUsesEdgeType:TEdgeType;
     ImplementationUsesEdgeType:TEdgeType;
     PathClusters:Boolean;
+    CollapseClusters:string;
+    ExpandClusters:string;
+    LabelClustersEdges:Boolean;
   end;
   PTProjectOptions=^TProjectOptions;
   TProjectOptions=packed record

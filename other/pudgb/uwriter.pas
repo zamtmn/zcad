@@ -14,12 +14,13 @@ type
   TDecoratedUnitNameModeSet=set of TDecoratedUnitNameMode;
 
 
-  TClusterInfo=specialize TVector<string>;
   TNodeIndexes=specialize TVector<integer>;
   TClusters=specialize TDictionary<string,TClusterInfo>;
+  TLinkCounter=class (specialize TDictionary<string,Integer>)
+    procedure addlink(ln:string);
+  end;
+  TLinkCounterPair=specialize TPair<string,Integer>;
   TClusterInfoPair=specialize TPair<string,TClusterInfo>;
-
-  TIncludeToGraph=(ITG_Include,ITG_Exclude);
 
 procedure WriteGraph(Options:TProjectOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
 procedure ProcessNode(_SourceUnitIndex,_DestUnitIndex:TNodeIndexes;Options:TProjectOptions;ScanResult:TScanResult;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter;const LogOpt:TLogOpt;ForceInclude:boolean=false);
@@ -27,10 +28,23 @@ function IncludeToGraph(_SourceUnitIndex,_DestUnitIndex:TNodeIndexes;const Optio
 function getDecoratedUnnitname(const UI:TUnitInfo;DecoratedUnitNameMode:TDecoratedUnitNameModeSet=[TDUNM_AddUsesCount]):string;
 
 implementation
-function getDecoratedUnnitname(const UI:TUnitInfo;DecoratedUnitNameMode:TDecoratedUnitNameModeSet=[TDUNM_AddUsesCount]):string;
+
+function PathToSubGraphName(s:string):string;
+begin
+  result:=StringReplace(s,'.','_',[rfReplaceAll]);
+  result:=StringReplace(s,':','_',[rfReplaceAll]);
+  result:=StringReplace(result,'/','_',[rfReplaceAll]);
+  result:=StringReplace(result,'\','_',[rfReplaceAll]);
+end;
+
+function getDecoratedUnnitName(const UI:TUnitInfo;DecoratedUnitNameMode:TDecoratedUnitNameModeSet=[TDUNM_AddUsesCount]):string;
 begin
   //result:=UI.UnitName;
   result:=format('%s_%d_%d',[UI.UnitName,UI.InterfaceUses.Size,UI.ImplementationUses.Size]);
+end;
+function getDecoratedClusterName(const path:string;ucount:integer):string;
+begin
+  result:=format('%s_%d',[PathToSubGraphName(path),ucount]);
   result:=StringReplace(result,'.','_',[rfReplaceAll]);
 end;
 
@@ -49,6 +63,21 @@ begin
         exit;
       end;
   result:=ITG_Include;
+end;
+
+function CheckCollapseOptions(const Options:TProjectOptions;const ClusterName:string):TCollapseCluster;
+begin
+  result:=CC_Expand;
+  if Options.GraphBulding.CollapseClusters<>'' then
+    if MatchesMaskList(ClusterName,Options.GraphBulding.CollapseClusters) then
+      begin
+        result:=CC_Collapse;
+      end;
+  if Options.GraphBulding.ExpandClusters<>'' then
+    if MatchesMaskList(ClusterName,Options.GraphBulding.ExpandClusters) then
+      begin
+        result:=CC_Expand;
+      end;
 end;
 
 function IncludeToGraph(_SourceUnitIndex,_DestUnitIndex:TNodeIndexes;const Options:TProjectOptions;const ScanResult:TScanResult;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter):boolean;
@@ -126,16 +155,25 @@ begin
   WriteNode(Node,index,LogWriter,LogOpt);
 end;
 
-function PathToSubGraphName(s:string):string;
+procedure TLinkCounter.addlink(ln:string);
+var
+  counter:integer;
 begin
-  result:=StringReplace(s,'.','_',[rfReplaceAll]);
-  result:=StringReplace(result,'/','_',[rfReplaceAll]);
-  result:=StringReplace(result,'\','_',[rfReplaceAll]);
+  if trygetvalue(ln,counter) then
+    begin
+     AddOrSetValue(ln,counter+1);
+    end
+  else
+    begin
+     AddOrSetValue(ln,1);
+    end;
 end;
 
 procedure WriteGraph(Options:TProjectOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
 var
-  i,j,paths:integer;
+  cc:TCollapseCluster;
+  nstart,nend,link:string;
+  i,j:integer;
   s:string;
   te:TEdge;
   v1,v2:TVertex;
@@ -144,6 +182,8 @@ var
   ClusterInfo:TClusterInfo;
   ClusterInfoPair:TClusterInfoPair;
   SourceUnitIndexs,DestUnitIndexs:TNodeIndexes;
+  LC:TLinkCounter;
+  LCP:TLinkCounterPair;
 begin
   SourceUnitIndexs:=nil;
   DestUnitIndexs:=nil;
@@ -178,9 +218,65 @@ begin
     if assigned(ScanResult) then
     begin
       for i:=0 to ScanResult.UnitInfoArray.Size-1 do
+      begin
        ScanResult.UnitInfoArray.mutable[i]^.NodeState:=NSNotCheced;
-    paths:=-1;
+       CheckNode(SourceUnitIndexs,DestUnitIndexs,Options,ScanResult,ScanResult.UnitInfoArray.Mutable[i]^,i,LogWriter,[LD_FullGraph]);
+      end;
+
+      if Options.GraphBulding.PathClusters then
+      begin
+       Clusters:=TClusters.create;
+       for i:=0 to ScanResult.UnitInfoArray.Size-1 do
+       if ScanResult.UnitInfoArray[i].NodeState<>NSFiltredOut then
+       if ScanResult.UnitInfoArray[i].UnitPath<>'' then
+       begin
+         //s:=getDecoratedUnnitname(ScanResult.UnitInfoArray[i].UnitName);
+         if Clusters.trygetvalue(ScanResult.UnitInfoArray[i].UnitPath,ClusterInfo) then
+           begin
+            ClusterInfo.PushBack(getDecoratedUnnitname(ScanResult.UnitInfoArray[i]));
+            ScanResult.UnitInfoArray.Mutable[i]^.Cluster:=ClusterInfo;
+           end
+         else
+           begin
+            s:=ScanResult.UnitInfoArray[i].UnitPath;
+            ClusterInfo:=TClusterInfo.Create;
+            ScanResult.UnitInfoArray.Mutable[i]^.Cluster:=ClusterInfo;
+            ClusterInfo.collapsed:=CheckCollapseOptions(options,PathToSubGraphName(ScanResult.UnitInfoArray[i].UnitPath));
+            ClusterInfo.PushBack(getDecoratedUnnitname(ScanResult.UnitInfoArray[i]));
+            Clusters.add(ScanResult.UnitInfoArray[i].UnitPath,ClusterInfo);
+           end;
+       end;
+       j:=1;
+       for ClusterInfoPair in Clusters do
+       begin
+         LogWriter(format('  subgraph cluster_%d {',[j]),[LD_FullGraph]);
+         inc(j);
+         LogWriter('   style=filled;',[LD_FullGraph]);
+         LogWriter('   color=lightgrey;',[LD_FullGraph]);
+         LogWriter(format('   label = "%s";',[PathToSubGraphName(ClusterInfoPair.key)]),[LD_FullGraph]);
+         if ClusterInfoPair.Value.collapsed=CC_Expand then
+           for i:=0 to ClusterInfoPair.Value.Size-1 do
+           begin
+             if i<>ClusterInfoPair.Value.Size-1 then
+               LogWriter(format('   %S;',[ClusterInfoPair.Value[i]]),[LD_FullGraph])
+             else
+               LogWriter(format('   %S;',[ClusterInfoPair.Value[i]]),[LD_FullGraph]);
+           end
+         else
+           LogWriter(format('   %S;',[getDecoratedClusterName(ClusterInfoPair.Key,ClusterInfoPair.Value.Size)]),[LD_FullGraph]);
+         LogWriter('  }',[LD_FullGraph]);
+       end;
+       //Clusters.Free;
+       //ClusterInfo.Free
+      end;
+
     if Options.GraphBulding.FullG.IncludeInterfaceUses then
+    begin
+    LC:=TLinkCounter.create;
+    if Options.GraphBulding.InterfaceUsesEdgeType=ETDotted then
+                                                               LogWriter(' edge [style=dotted]',[LD_FullGraph])
+                                                           else
+                                                               LogWriter(' edge [style=solid]',[LD_FullGraph]);
     for i:=0 to ScanResult.UnitInfoArray.Size-1 do
     begin
      if ScanResult.UnitInfoArray[i].InterfaceUses.Size>0 then
@@ -192,36 +288,49 @@ begin
          ProcessNode(SourceUnitIndexs,DestUnitIndexs,Options,ScanResult,ScanResult.UnitInfoArray.Mutable[ScanResult.UnitInfoArray[i].InterfaceUses[j]]^,ScanResult.UnitInfoArray[i].InterfaceUses[j],LogWriter,[LD_FullGraph]);
          if ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].InterfaceUses[j]].NodeState<>NSFiltredOut then
          begin
-         {if Options.GraphBulding.FullG.CalcEdgesWeight then
-         if (SourceUnitIndex<>-1)and(DestUnitIndex<>-1)then
-         begin
-           v1:=ScanResult.G.Vertices[i];
-           v2:=ScanResult.G.Vertices[ScanResult.UnitInfoArray[i].InterfaceUses[j]];
-           te:=ScanResult.G.GetArc(v1,v2);
-           te.Hide;
-           if EdgePaths=nil then
-             EdgePaths:=TMultiList.Create(TClassList);
-           v1:=ScanResult.G.Vertices[SourceUnitIndex];
-           v2:=ScanResult.G.Vertices[DestUnitIndex];
-           paths:=ScanResult.G.FindMinPathsDirected(v2,v1,0,EdgePaths);
-           EdgePaths.Clear;
-           te.Restore;
-         end;}
-         if Options.GraphBulding.InterfaceUsesEdgeType=ETDotted then
-                                                                    LogWriter(' edge [style=dotted]',[LD_FullGraph])
-                                                                else
-                                                                    LogWriter(' edge [style=solid]',[LD_FullGraph]);
-         if paths<0 then
-           LogWriter(format(' %s -> %s',
-           [getDecoratedUnnitname(ScanResult.UnitInfoArray[i]),getDecoratedUnnitname(ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].InterfaceUses[j]])]),[LD_FullGraph])
+         if ScanResult.UnitInfoArray[i].cluster<>nil then
+           cc:=ScanResult.UnitInfoArray[i].cluster.collapsed
          else
-           LogWriter(format({' %s -> %s [label=%d]'}' %s -> %s',[getDecoratedUnnitname(ScanResult.UnitInfoArray[i]),getDecoratedUnnitname(ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].InterfaceUses[j]]){,paths}]),[LD_FullGraph]);
+           cc:=CC_Expand;
+
+         if cc=CC_Expand then
+           nstart:=getDecoratedUnnitname(ScanResult.UnitInfoArray[i])
+         else
+           nstart:=getDecoratedClusterName(ScanResult.UnitInfoArray[i].UnitPath,ScanResult.UnitInfoArray[i].cluster.size);
+
+         if ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].InterfaceUses[j]].cluster<>nil then
+           cc:=ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].InterfaceUses[j]].cluster.collapsed
+         else
+           cc:=CC_Expand;
+
+         if cc=CC_Expand then
+           nend:=getDecoratedUnnitname(ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].InterfaceUses[j]])
+         else
+           nend:=getDecoratedClusterName(ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].InterfaceUses[j]].UnitPath,ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].InterfaceUses[j]].cluster.size);
+         link:=format(' %s -> %s',[nstart,nend]);
+         LC.addlink(link);
+         //LogWriter(format(' %s -> %s',[nstart,nend]),[LD_FullGraph])
          end;
        end;
      end;
     end;
+    for LCP in LC do
+       begin
+         if (LCP.Value>1)and(Options.GraphBulding.LabelClustersEdges) then
+           LogWriter(format('%s  [label=%d]',[LCP.Key,LCP.Value]),[LD_FullGraph])
+         else
+           LogWriter(LCP.Key,[LD_FullGraph]);
+       end;
+    LC.free;
+    end;
 
     if Options.GraphBulding.FullG.IncludeImplementationUses then
+    begin
+    LC:=TLinkCounter.create;
+    if Options.GraphBulding.ImplementationUsesEdgeType=ETDotted then
+                                                                    LogWriter(' edge [style=dotted]',[LD_FullGraph])
+                                                                else
+                                                                    LogWriter(' edge [style=solid]',[LD_FullGraph]);
     for i:=0 to ScanResult.UnitInfoArray.Size-1 do
     begin
      if ScanResult.UnitInfoArray[i].NodeState<>NSFiltredOut then
@@ -232,74 +341,52 @@ begin
          ProcessNode(SourceUnitIndexs,DestUnitIndexs,Options,ScanResult,ScanResult.UnitInfoArray.Mutable[ScanResult.UnitInfoArray[i].ImplementationUses[j]]^,ScanResult.UnitInfoArray[i].ImplementationUses[j],LogWriter,[LD_FullGraph]);
          if ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].ImplementationUses[j]].NodeState<>NSFiltredOut then
          begin
-         {if Options.GraphBulding.FullG.CalcEdgesWeight then
-         if (SourceUnitIndex<>-1)and(DestUnitIndex<>-1)then
-         begin
-         v1:=ScanResult.G.Vertices[i];
-         v2:=ScanResult.G.Vertices[ScanResult.UnitInfoArray[i].ImplementationUses[j]];
-         te:=ScanResult.G.GetArc(v1,v2);
-         te.Hide;
-         if EdgePaths=nil then
-           EdgePaths:=TMultiList.Create(TClassList);
-         v1:=ScanResult.G.Vertices[SourceUnitIndex];
-         v2:=ScanResult.G.Vertices[DestUnitIndex];
-         paths:=ScanResult.G.FindMinPathsDirected(v2,v1,0,EdgePaths);
-         EdgePaths.Clear;
-         te.Restore;
-         end;}
-         if Options.GraphBulding.ImplementationUsesEdgeType=ETDotted then
-                                                                         LogWriter(' edge [style=dotted]',[LD_FullGraph])
-                                                                     else
-                                                                         LogWriter(' edge [style=solid]',[LD_FullGraph]);
-         if paths<0 then
-           LogWriter(format(' %s -> %s',[getDecoratedUnnitname(ScanResult.UnitInfoArray[i]),getDecoratedUnnitname(ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].ImplementationUses[j]])]),[LD_FullGraph])
+         if ScanResult.UnitInfoArray[i].cluster<>nil then
+           cc:=ScanResult.UnitInfoArray[i].cluster.collapsed
          else
-           LogWriter(format({' %s -> %s [label=%d]'}' %s -> %s',[getDecoratedUnnitname(ScanResult.UnitInfoArray[i]),getDecoratedUnnitname(ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].ImplementationUses[j]]){,paths}]),[LD_FullGraph]);
+           cc:=CC_Expand;
+
+         if cc=CC_Expand then
+           nstart:=getDecoratedUnnitname(ScanResult.UnitInfoArray[i])
+         else
+           nstart:=getDecoratedClusterName(ScanResult.UnitInfoArray[i].UnitPath,ScanResult.UnitInfoArray[i].cluster.size);
+
+         if ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].ImplementationUses[j]].cluster<>nil then
+           cc:=ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].ImplementationUses[j]].cluster.collapsed
+         else
+           cc:=CC_Expand;
+
+         if cc=CC_Expand then
+           nend:=getDecoratedUnnitname(ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].ImplementationUses[j]])
+         else
+           nend:=getDecoratedClusterName(ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].ImplementationUses[j]].UnitPath,ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].ImplementationUses[j]].cluster.size);
+         {nstart:=getDecoratedUnnitname(ScanResult.UnitInfoArray[i]);
+         nend:=getDecoratedUnnitname(ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].ImplementationUses[j]]);}
+         link:=format(' %s -> %s',[nstart,nend]);
+         LC.addlink(link);
+         //LogWriter(format(' %s -> %s',[nstart,nend]),[LD_FullGraph])
          end;
        end;
      end;
     end;
+    for LCP in LC do
+       begin
+         if (LCP.Value>1)and(Options.GraphBulding.LabelClustersEdges) then
+           LogWriter(format('%s  [label=%d]',[LCP.Key,LCP.Value]),[LD_FullGraph])
+         else
+           LogWriter(LCP.Key,[LD_FullGraph]);
+       end;
+    LC.free;
     end;
+
     if Options.GraphBulding.PathClusters then
     begin
-     Clusters:=TClusters.create;
-     for i:=0 to ScanResult.UnitInfoArray.Size-1 do
-     if ScanResult.UnitInfoArray[i].NodeState<>NSFiltredOut then
-     if ScanResult.UnitInfoArray[i].UnitPath<>'' then
-     begin
-       //s:=getDecoratedUnnitname(ScanResult.UnitInfoArray[i].UnitName);
-       if Clusters.trygetvalue(ScanResult.UnitInfoArray[i].UnitPath,ClusterInfo) then
-         begin
-          ClusterInfo.PushBack(getDecoratedUnnitname(ScanResult.UnitInfoArray[i]));
-         end
-       else
-         begin
-          s:=ScanResult.UnitInfoArray[i].UnitPath;
-          ClusterInfo:=TClusterInfo.Create;
-          ClusterInfo.PushBack(getDecoratedUnnitname(ScanResult.UnitInfoArray[i]));
-          Clusters.add(ScanResult.UnitInfoArray[i].UnitPath,ClusterInfo);
-         end;
-     end;
-     j:=1;
-     for ClusterInfoPair in Clusters do
-     begin
-       LogWriter(format('  subgraph cluster_%d {',[j]),[LD_FullGraph]);
-       inc(j);
-       LogWriter('   style=filled;',[LD_FullGraph]);
-       LogWriter('   color=lightgrey;',[LD_FullGraph]);
-       LogWriter(format('   label = "%s";',[PathToSubGraphName(ClusterInfoPair.key)]),[LD_FullGraph]);
-       for i:=0 to ClusterInfoPair.Value.Size-1 do
-       begin
-         if i<>ClusterInfoPair.Value.Size-1 then
-           LogWriter(format('   %S;',[ClusterInfoPair.Value[i]]),[LD_FullGraph])
-         else
-           LogWriter(format('   %S;',[ClusterInfoPair.Value[i]]),[LD_FullGraph]);
-       end;
-       LogWriter('  }',[LD_FullGraph]);
-     end;
      Clusters.Free;
      ClusterInfo.Free
     end;
+
+    end;
+
     LogWriter('}',[LD_FullGraph]);
     if assigned(SourceUnitIndexs)then
       SourceUnitIndexs.Free;

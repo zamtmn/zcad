@@ -22,6 +22,11 @@ type
                        function GetValue(key:TUnitName;out value:TUnitIndex):boolean;inline;
                      end;
   {$ENDIF}
+  TIncludeToGraph=(ITG_Include,ITG_Exclude);
+  TCollapseCluster=(CC_Collapse,CC_Expand);
+  TClusterInfo=class (specialize TVector<string>)
+    collapsed:TCollapseCluster;
+  end;
   TUnitFlag=(UFLoop);
   TUnitFlags=set of TUnitFlag;
   TNodeState=(NSNotCheced,NSCheced,NSChecedNotWrited,NSFiltredOut);
@@ -34,6 +39,7 @@ type
     UnitType:TUnitType;                         //тип юнита
     UnitFlags:TUnitFlags;
     InterfaceUses,ImplementationUses:TUsesArray;//массив индексов юнитов которые есть в усес этого юнита
+    Cluster:TClusterInfo;                       //"Кластер" папка в которой лежит юнит
 
     PasModule:TPasModule;
     PasTreeContainer:TPasTreeContainer;
@@ -85,6 +91,7 @@ begin
   UnitFlags:=[];
   PasModule:=nil;
   PasTreeContainer:=nil;
+  Cluster:=nil;
 end;
 destructor TUnitInfo.done;
 begin

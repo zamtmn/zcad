@@ -1210,6 +1210,42 @@ begin
      gdbfreemem(pointer(tr.PLevelStat));
      tr.pc.destroy;
 end;
+function PNodeToNodeName(node:PTEntTreeNode):string;
+begin
+  result:=format(' _%s',[inttohex(ptruint(node),8)])
+end;
+
+procedure WriteNode(node:PTEntTreeNode;nodedepth:integer);
+begin
+  ZCMsgCallBackInterface.TextMessage(format(' %s [label="None with %d ents"]',[PNodeToNodeName(node),node.nul.count]),TMWOHistoryOut);
+  ZCMsgCallBackInterface.TextMessage(format('rank=same; level_%d;',[nodedepth]),TMWOHistoryOut);
+  //{ rank = same; "past"
+  if assigned(node.pplusnode)then
+  begin
+    ZCMsgCallBackInterface.TextMessage(format(' %s->%s [label="+"]',[PNodeToNodeName(node),PNodeToNodeName(PTEntTreeNode(node.pplusnode))]),TMWOHistoryOut);
+    WriteNode(PTEntTreeNode(node.pplusnode),nodedepth+1);
+  end;
+  if assigned(node.pminusnode)then
+  begin
+    ZCMsgCallBackInterface.TextMessage(format(' %s->%s [label="-"]',[PNodeToNodeName(node),PNodeToNodeName(PTEntTreeNode(node.pminusnode))]),TMWOHistoryOut);
+    WriteNode(PTEntTreeNode(node.pminusnode),nodedepth+1);
+  end;
+end;
+
+procedure WriteDot(node:PTEntTreeNode; var tr:TTreeStatistik);
+var
+  i:integer;
+begin
+  ZCMsgCallBackInterface.TextMessage('DiGraph Classes {',TMWOHistoryOut);
+  for i:=0 to tr.MaxDepth do
+   if i<>tr.MaxDepth then
+     ZCMsgCallBackInterface.TextMessage('level_'+inttostr(i)+'->',TMWOHistoryOut)
+   else
+     ZCMsgCallBackInterface.TextMessage('level_'+inttostr(i),TMWOHistoryOut);
+  WriteNode(node,0);
+  ZCMsgCallBackInterface.TextMessage('}',TMWOHistoryOut);
+end;
+
 function TreeStat_com(operands:TCommandOperands):TCommandResult;
 var i: GDBInteger;
     percent,apercent:string;
@@ -1258,6 +1294,7 @@ begin
     ZCMsgCallBackInterface.TextMessage('  Nodes with population '+inttostr(iter.Data.Key)+': '+inttostr(iter.Data.Value),TMWOHistoryOut);
   until not iter.next;
   if assigned(iter)then iter.destroy;
+  WriteDot(rootnode,tr);
   KillTreeStatisticRec(tr);
   result:=cmd_ok;
 end;

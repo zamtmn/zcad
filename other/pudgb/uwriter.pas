@@ -97,22 +97,35 @@ begin
     result:=true;
 end;
 
-procedure ProcessNode(_SourceUnitIndex,_DestUnitIndex:TNodeIndexes;Options:TProjectOptions;ScanResult:TScanResult;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter;const LogOpt:TLogOpt;ForceInclude:boolean=false);
+procedure CheckNode(_SourceUnitIndex,_DestUnitIndex:TNodeIndexes;Options:TProjectOptions;ScanResult:TScanResult;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter;const LogOpt:TLogOpt;ForceInclude:boolean=false);
 begin
   if node.NodeState=NSNotCheced then
   begin
     if ForceInclude or IncludeToGraph(_SourceUnitIndex,_DestUnitIndex,Options,ScanResult,Node,index,LogWriter)then
-    begin
-        if Node.UnitType=UTProgram then
-          LogWriter(format(' %s [shape=box]',[getDecoratedUnnitname(Node)]),LogOpt);
-        if (Node.UnitPath='')and(index<>0) then
-          LogWriter(format(' %s [style=dashed]',[getDecoratedUnnitname(Node)]),LogOpt);
-        node.NodeState:=NSCheced;
-    end
+        node.NodeState:=NSChecedNotWrited
     else
         node.NodeState:=NSFiltredOut;
   end;
 end;
+
+procedure WriteNode(var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter;const LogOpt:TLogOpt);
+begin
+  if node.NodeState=NSChecedNotWrited then
+  begin
+    if Node.UnitType=UTProgram then
+      LogWriter(format(' %s [shape=box]',[getDecoratedUnnitname(Node)]),LogOpt);
+    if (Node.UnitPath='')and(index<>0) then
+      LogWriter(format(' %s [style=dashed]',[getDecoratedUnnitname(Node)]),LogOpt);
+    node.NodeState:=NSCheced
+  end;
+end;
+
+procedure ProcessNode(_SourceUnitIndex,_DestUnitIndex:TNodeIndexes;Options:TProjectOptions;ScanResult:TScanResult;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter;const LogOpt:TLogOpt;ForceInclude:boolean=false);
+begin
+  CheckNode(_SourceUnitIndex,_DestUnitIndex,Options,ScanResult,Node,index,LogWriter,LogOpt,ForceInclude);
+  WriteNode(Node,index,LogWriter,LogOpt);
+end;
+
 function PathToSubGraphName(s:string):string;
 begin
   result:=StringReplace(s,'.','_',[rfReplaceAll]);

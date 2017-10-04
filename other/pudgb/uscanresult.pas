@@ -24,7 +24,7 @@ type
   {$ENDIF}
   TUnitFlag=(UFLoop);
   TUnitFlags=set of TUnitFlag;
-  TNodeState=(NSNotCheced,NSCheced,NSFiltredOut);
+  TNodeState=(NSNotCheced,NSCheced,NSChecedNotWrited,NSFiltredOut);
   TUnitType=(UTProgram,UTUnit);
   TUsesArray=specialize TVector<TUnitIndex>;//вектор индексов
   TUnitInfo=object //информация о юните, пока тут почти пусто

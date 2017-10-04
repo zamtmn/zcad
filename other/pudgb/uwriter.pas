@@ -288,7 +288,7 @@ begin
          ProcessNode(SourceUnitIndexs,DestUnitIndexs,Options,ScanResult,ScanResult.UnitInfoArray.Mutable[ScanResult.UnitInfoArray[i].InterfaceUses[j]]^,ScanResult.UnitInfoArray[i].InterfaceUses[j],LogWriter,[LD_FullGraph]);
          if ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].InterfaceUses[j]].NodeState<>NSFiltredOut then
          begin
-         if ScanResult.UnitInfoArray[i].cluster<>nil then
+         if (ScanResult.UnitInfoArray[i].cluster<>nil)and(Options.GraphBulding.PathClusters) then
            cc:=ScanResult.UnitInfoArray[i].cluster.collapsed
          else
            cc:=CC_Expand;
@@ -298,7 +298,7 @@ begin
          else
            nstart:=getDecoratedClusterName(ScanResult.UnitInfoArray[i].UnitPath,ScanResult.UnitInfoArray[i].cluster.size);
 
-         if ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].InterfaceUses[j]].cluster<>nil then
+         if (ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].InterfaceUses[j]].cluster<>nil)and(Options.GraphBulding.PathClusters) then
            cc:=ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].InterfaceUses[j]].cluster.collapsed
          else
            cc:=CC_Expand;
@@ -341,7 +341,7 @@ begin
          ProcessNode(SourceUnitIndexs,DestUnitIndexs,Options,ScanResult,ScanResult.UnitInfoArray.Mutable[ScanResult.UnitInfoArray[i].ImplementationUses[j]]^,ScanResult.UnitInfoArray[i].ImplementationUses[j],LogWriter,[LD_FullGraph]);
          if ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].ImplementationUses[j]].NodeState<>NSFiltredOut then
          begin
-         if ScanResult.UnitInfoArray[i].cluster<>nil then
+         if (ScanResult.UnitInfoArray[i].cluster<>nil)and(Options.GraphBulding.PathClusters) then
            cc:=ScanResult.UnitInfoArray[i].cluster.collapsed
          else
            cc:=CC_Expand;
@@ -351,7 +351,7 @@ begin
          else
            nstart:=getDecoratedClusterName(ScanResult.UnitInfoArray[i].UnitPath,ScanResult.UnitInfoArray[i].cluster.size);
 
-         if ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].ImplementationUses[j]].cluster<>nil then
+         if (ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].ImplementationUses[j]].cluster<>nil)and(Options.GraphBulding.PathClusters) then
            cc:=ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].ImplementationUses[j]].cluster.collapsed
          else
            cc:=CC_Expand;

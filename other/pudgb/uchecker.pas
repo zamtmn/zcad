@@ -158,7 +158,7 @@ begin
     end;
 
 
-    if ts<>'' then LogWriter(format('Implimentation uses can be move to interface in %s ',[ts]),[LD_Report]);
+    if ts<>'' then LogWriter(format('Implementation uses can be moved to interface in %s ',[ts]),[LD_Report]);
   finally
     //G.Free;
     //M.Free;

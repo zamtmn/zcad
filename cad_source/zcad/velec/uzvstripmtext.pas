@@ -109,34 +109,41 @@ var
 begin
 
   UCoperands:=uppercase(operands);
-
+   if UCoperands='ALL' then
+   begin
    pobj:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir); //выбрать первый элемент чертежа
      if pobj<>nil then
      repeat                                                   //перебор всех элементов чертежа
            if pobj^.GetObjType=GDBMTextID then                //работа только с кабелями
            begin
-                 if UCoperands='ALL' then
-                 begin
-                      pmtext:=PGDBObjMText(pobj);
-                      newText:=clearText(pmtext^.Template);
+            pmtext:=PGDBObjMText(pobj);
+            newText:=clearText(pmtext^.Template);
 
-                      pmtext^.Template:=newText;
-                      pmtext^.Content:=newText;
-                 end
-                 else
-                 if pobj^.selected then
-                   begin
-                      pobj^.DeSelect(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,@drawings.CurrentDWG^.deselector);
-                      pmtext:=PGDBObjMText(pobj);
-                      newText:=clearText(pmtext^.Template);
+            pmtext^.Template:=newText;
+            pmtext^.Content:=newText;
+           end;
+    pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir); //переход к следующем примитиву в списке выбраных примитивов
+    until pobj=nil;
+   end
+   else
+   begin
+     pobj:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir); //выбрать первый элемент чертежа
+     if pobj<>nil then
+     repeat                                                   //перебор всех элементов чертежа
+       if pobj^.GetObjType=GDBMTextID then                //работа только с кабелями
+         if pobj^.selected then
+           begin
+              //pobj^.DeSelect(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,@drawings.CurrentDWG^.deselector);
+              pmtext:=PGDBObjMText(pobj);
+              newText:=clearText(pmtext^.Template);
 
-                      pmtext^.Template:=newText;
-                      pmtext^.Content:=newText;
-                   end;
-               end;
+              pmtext^.Template:=newText;
+              pmtext^.Content:=newText;
+           end;
     pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir); //переход к следующем примитиву в списке выбраных примитивов
     until pobj=nil;
 
+    end;
     Regen_com(EmptyCommandOperands);   //выполнитть регенирацию всего листа
     result:=cmd_ok;
 end;

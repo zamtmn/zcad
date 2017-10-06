@@ -1,20 +1,243 @@
 object DimStylesForm: TDimStylesForm
-  Left = 552
-  Height = 234
-  Top = 143
-  Width = 286
-  Caption = 'DSWindow'
-  ClientHeight = 234
-  ClientWidth = 286
-  DesignTimePPI = 113
+  Left = 326
+  Height = 590
+  Top = 506
+  Width = 800
+  ActiveControl = ButtonApplyClose
+  Caption = 'Dimantion styles'
+  ClientHeight = 590
+  ClientWidth = 800
+  Constraints.MinHeight = 500
+  Constraints.MinWidth = 800
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnShow = FormShow
   Position = poMainFormCenter
   LCLVersion = '1.9.0.0'
-  object Label1: TLabel
-    Left = 136
+  object Bevel1: TBevel
+    AnchorSideLeft.Control = ToolBar1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = FontTypeFilterDesc
+    AnchorSideBottom.Control = FontTypeFilterComboBox
+    AnchorSideBottom.Side = asrBottom
+    Left = 125
+    Height = 21
+    Top = 1
+    Width = 512
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BorderSpacing.Left = 2
+    BorderSpacing.Top = 1
+    BorderSpacing.Right = 2
+  end
+  object DescLabel: TLabel
+    AnchorSideLeft.Control = Bevel1
+    AnchorSideTop.Control = Bevel1
+    AnchorSideRight.Control = Bevel1
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Bevel1
+    AnchorSideBottom.Side = asrBottom
+    Left = 126
     Height = 19
-    Top = 16
-    Width = 214
-    Caption = 'Dim styles wnd not Implemed yet(('
+    Top = 2
+    Width = 510
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BorderSpacing.Around = 1
+    Layout = tlCenter
     ParentColor = False
+  end
+  object ButtonApplyClose: TBitBtn
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
+    Left = 645
+    Height = 30
+    Top = 559
+    Width = 154
+    Anchors = [akRight, akBottom]
+    BorderSpacing.Right = 1
+    BorderSpacing.Bottom = 1
+    Caption = 'Apply and close'
+    OnClick = AplyClose
+    TabOrder = 0
+  end
+  object ListView1: TZListView
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Bevel1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = ButtonApplyClose
+    Left = 1
+    Height = 533
+    Top = 24
+    Width = 798
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BorderSpacing.Left = 1
+    BorderSpacing.Top = 2
+    BorderSpacing.Right = 1
+    BorderSpacing.Bottom = 2
+    Columns = <    
+      item
+        Caption = 'Status'
+      end    
+      item
+        Caption = 'Name'
+        Width = 378
+      end    
+      item
+        Caption = 'LinearScale'
+        Width = 150
+      end    
+      item
+        Caption = 'TextStyleName'
+        Width = 150
+      end    
+      item
+        Caption = 'TextHeight'
+        Width = 70
+      end>
+    HideSelection = False
+    ReadOnly = True
+    RowSelect = True
+    ScrollBars = ssAutoBoth
+    SortColumn = 1
+    SortType = stText
+    TabOrder = 1
+    ViewStyle = vsReport
+    OnResize = onrsz
+    OnSelectItem = ListView1SelectItem
+    onMakeCurrent = MaceItemCurrent
+  end
+  object FontTypeFilterComboBox: TComboBox
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 727
+    Height = 21
+    Top = 1
+    Width = 72
+    Anchors = [akTop, akRight]
+    AutoSelect = False
+    BorderSpacing.Top = 1
+    BorderSpacing.Right = 1
+    ItemHeight = 13
+    ItemIndex = 0
+    Items.Strings = (
+      'All'
+      'TTF'
+      'SHX'
+    )
+    OnChange = FontsTypesChange
+    Style = csDropDownList
+    TabOrder = 2
+    Text = 'All'
+  end
+  object FontTypeFilterDesc: TLabel
+    AnchorSideTop.Control = FontTypeFilterComboBox
+    AnchorSideRight.Control = FontTypeFilterComboBox
+    AnchorSideBottom.Control = FontTypeFilterComboBox
+    AnchorSideBottom.Side = asrBottom
+    Left = 639
+    Height = 21
+    Top = 1
+    Width = 86
+    Anchors = [akTop, akRight, akBottom]
+    BorderSpacing.Right = 2
+    Caption = 'Fonts types filter:'
+    Layout = tlCenter
+    ParentColor = False
+  end
+  object ToolBar1: TToolBar
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    Left = 2
+    Height = 22
+    Top = 1
+    Width = 121
+    Align = alNone
+    AutoSize = True
+    BorderSpacing.Left = 2
+    BorderSpacing.Top = 1
+    Caption = 'ToolBar1'
+    EdgeBorders = []
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 3
+    object ToolButton_Add: TToolButton
+      Left = 1
+      Top = 0
+      Action = AddStyle
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object ToolButton_Delete: TToolButton
+      Left = 24
+      Top = 0
+      Action = DelStyle
+    end
+    object ToolButton_MkCurrent: TToolButton
+      Left = 47
+      Top = 0
+      Action = MkCurrentStyle
+    end
+    object Separator1: TToolButton
+      Left = 70
+      Height = 22
+      Top = 0
+      Caption = 'Separator1'
+      Style = tbsDivider
+    end
+    object ToolButton_Purge: TToolButton
+      Left = 75
+      Top = 0
+      Action = PurgeStyles
+    end
+    object ToolButton_Refresh: TToolButton
+      Left = 98
+      Top = 0
+      Action = RefreshStyles
+    end
+  end
+  object ActionList1: TActionList
+    left = 632
+    top = 312
+    object AddStyle: TAction
+      Caption = 'AddStyle'
+      DisableIfNoHandler = False
+      Hint = 'Add text style'
+      ImageIndex = 1
+      OnExecute = DimStyleAdd
+      ShortCut = 45
+    end
+    object DelStyle: TAction
+      Caption = 'DelStyle'
+      DisableIfNoHandler = False
+      Hint = 'Delete text style'
+      OnExecute = DeleteItem
+      ShortCut = 46
+    end
+    object MkCurrentStyle: TAction
+      Caption = 'MkCurrentStyle'
+      DisableIfNoHandler = False
+      Hint = 'Make selected style curretn'
+      OnExecute = MkCurrent
+      ShortCut = 32
+    end
+    object PurgeStyles: TAction
+      Caption = 'PurgeStyles'
+      DisableIfNoHandler = False
+      Hint = 'Purge not used styles'
+      OnExecute = PurgeTStyles
+      ShortCut = 8238
+    end
+    object RefreshStyles: TAction
+      Caption = 'RefreshStyles'
+      DisableIfNoHandler = False
+      Hint = 'Refresh styles list'
+      OnExecute = RefreshListitems
+      ShortCut = 115
+    end
   end
 end

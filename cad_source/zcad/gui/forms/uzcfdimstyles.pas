@@ -489,12 +489,12 @@ begin
   domethod:=tmethod(@pdwg^.DimStyleTable.RemoveData);
   undomethod:=tmethod(@pdwg^.DimStyleTable.PushBackData);
   CreateUndoStartMarkerNeeded;
-  /////////   не получилось запустить
-  //with PushCreateTGObjectChangeCommand2(PTZCADDrawing(pdwg)^.UndoStack,pstyle,tmethod(domethod),tmethod(undomethod))^ do
-  //begin
-  //     AfterAction:=false;
-  //     comit;
-  //end;
+  ///////   не получилось запустить
+  with PushCreateTGObjectChangeCommand2(PTZCADDrawing(pdwg)^.UndoStack,pstyle,tmethod(domethod),tmethod(undomethod))^ do
+  begin
+       AfterAction:=false;
+       comit;
+  end;
   ListView1.Items.Delete(ListView1.Items.IndexOf(ProcessedItem));
 end;
 
@@ -572,8 +572,9 @@ procedure TDimStylesForm.Aply(Sender: TObject);
 begin
      if changedstamp then
      begin
-           //if assigned(UpdateVisibleProc) then UpdateVisibleProc;
-           //zcRedrawCurrentDrawing;
+       ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRedraw);//это новая замена следующей закоментированой строки
+       //if assigned(UpdateVisibleProc) then UpdateVisibleProc;
+       zcRedrawCurrentDrawing;
      end;
 end;
 

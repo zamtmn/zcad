@@ -64,6 +64,7 @@ resourcestring
 
   rsNewLayerNameFormat='Layer%-3.3d';
   rsNewTextStyleNameFormat='Style%-3.3d';
+  rsNewDimStyleNameFormat='Style%-3.3d';
 
   rsNameWithCounter='%s (%d)';
   rsNameAll='All';
@@ -129,8 +130,11 @@ resourcestring
   rsLayerDefpaontsCanNotBePrinted='Layer DEFPOINTS can not be printed';
   rsLayerUsedIn='Layer "%s" used in: %d-model, %d-blockdef table';
   rsTextStyleUsedIn='Text style "%s" used in: %d-model, %d-blockdef table, %d-dimstyle table';
+  rsDimStyleUsedIn='Dimension style "%s" used in: %d-model, %d-blockdef table, %d-dimstyle table';
   rsCountTStylesPurged='%d Text styles purged';
+  rsCountDimStylesPurged='%d Dimension styles purged';
   rsCountTStylesFound='%d Text styles found';
+  rsCountDimStylesFound='%d Dimension styles found';
   rsLineTypeUsedIn='Line type "%s" used in: %d-model, %d-blockdef table';
   rsLineTypeDesk=';;Pattern length %f'#13#10'%s';
   rsSysLineTypeWarning='This is system line type!';
@@ -144,6 +148,7 @@ resourcestring
   rsStyleMustBeSelected='Style must be selected';
   rsUnableDelUsedStyle='Unable to delete, Style is used';
   rsCurrentStyleCannotBeDeleted='Current style cannot be deleted';
+  rsCurrentDimStyleCannotBeDeleted='Current dimension style cannot be deleted';
 
   rsSaveEmptyDWG='Drawing is empty. Sure?';
   rsZCADStarted='ZCAD v%s started';
@@ -151,6 +156,7 @@ resourcestring
   rsTypeNotDefinedInModule='Type "%S" not defined in unit "%S"';
   rsUnableSelectFreeLayerName='Unable select free layer name';
   rsUnableSelectFreeTextStylerName='Unable select free text style name';
+  rsUnableSelectFreeDimStylerName='Unable select free dimension style name';
 
   {window names}
   rsOpenFile='Open file...';

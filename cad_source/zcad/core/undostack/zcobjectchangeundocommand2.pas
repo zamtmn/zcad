@@ -20,7 +20,7 @@ unit zcobjectchangeundocommand2;
 {$INCLUDE def.inc}
 interface
 uses uzbmemman,zeundostack,zebaseundocommands,uzbtypes,uzeentity,
-     uzestyleslayers,uzestylestexts,uzgldrawcontext,uzcdrawings;
+     uzestyleslayers,uzestylestexts,uzestylesdim,uzgldrawcontext,uzcdrawings;
 
 type
 
@@ -49,6 +49,10 @@ generic TGObjectChangeCommand2<_T> =object(TCustomChangeCommand)
 {$DEFINE PTCommand := PTGDBTextStyleChangeCommand}
 {$DEFINE TData     := PGDBTextStyle}
   {$I TGObjectChangeCommand2IMPL.inc}
+{$DEFINE TCommand  := TGDBDimStyleArrayChangeCommand}
+{$DEFINE PTCommand := PTGDBDimStyleChangeCommand}
+{$DEFINE TData     := PGDBDimStyle}
+  {$I TGObjectChangeCommand2IMPL.inc}
 {$UNDEF INTERFACE}
 
 {$DEFINE CLASSDECLARATION}
@@ -63,6 +67,10 @@ generic TGObjectChangeCommand2<_T> =object(TCustomChangeCommand)
 {$DEFINE TCommand  := TGDBTextStyleArrayChangeCommand}
 {$DEFINE PTCommand := PTGDBTextStyleChangeCommand}
 {$DEFINE TData     := PGDBTextStyle}
+  {$I TGObjectChangeCommand2IMPL.inc}
+{$DEFINE TCommand  := TGDBDimStyleArrayChangeCommand}
+{$DEFINE PTCommand := PTGDBDimStyleChangeCommand}
+{$DEFINE TData     := PGDBDimStyle}
   {$I TGObjectChangeCommand2IMPL.inc}
 {$UNDEF CLASSDECLARATION}
 implementation
@@ -126,6 +134,10 @@ end;
 {$DEFINE TCommand  := TGDBTextStyleArrayChangeCommand}
 {$DEFINE PTCommand := PTGDBTextStyleChangeCommand}
 {$DEFINE TData     := PGDBTextStyle}
+  {$I TGObjectChangeCommand2IMPL.inc}
+{$DEFINE TCommand  := TGDBDimStyleArrayChangeCommand}
+{$DEFINE PTCommand := PTGDBDimStyleChangeCommand}
+{$DEFINE TData     := PGDBDimStyle}
   {$I TGObjectChangeCommand2IMPL.inc}
 {$UNDEF IMPLEMENTATION}
 {$MACRO OFF}

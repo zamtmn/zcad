@@ -469,12 +469,12 @@ begin
   domethod:=tmethod(@pdwg^.DimStyleTable.PushBackData);
   undomethod:=tmethod(@pdwg^.DimStyleTable.RemoveData);
   CreateUndoStartMarkerNeeded;
-  /////////   не получилось запустить
-  //with PushCreateTGObjectChangeCommand2(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pcreatedstyle,tmethod(domethod),tmethod(undomethod))^ do
-  //begin
-  //     AfterAction:=false;
-  //     //comit;
-  //end;
+  ///////   не получилось запустить
+  with PushCreateTGObjectChangeCommand2(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pcreatedstyle,tmethod(domethod),tmethod(undomethod))^ do
+  begin
+       AfterAction:=false;
+       //comit;
+  end;
 
   ListView1.AddCreatedItem(pcreatedstyle,drawings.GetCurrentDWG^.GetCurrentDimStyle);
 end;

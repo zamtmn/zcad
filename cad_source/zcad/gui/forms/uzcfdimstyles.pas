@@ -467,7 +467,7 @@ begin
   pcreatedstyle^.Name:=stylename;
 
   domethod:=tmethod(@pdwg^.DimStyleTable.PushBackData);
-  undomethod:=tmethod(@pdwg^.DimStyleTable.RemoveData);
+  undomethod:=tmethod(@pdwg^.DimStyleTable.RemoveDataFromArray);
   CreateUndoStartMarkerNeeded;
   ///////   не получилось запустить
   with PushCreateTGObjectChangeCommand2(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pcreatedstyle,tmethod(domethod),tmethod(undomethod))^ do
@@ -486,7 +486,7 @@ var
 begin
   pdwg:=drawings.GetCurrentDWG;
   pstyle:=(ProcessedItem.Data);
-  domethod:=tmethod(@pdwg^.DimStyleTable.RemoveData);
+  domethod:=tmethod(@pdwg^.DimStyleTable.RemoveDataFromArray);
   undomethod:=tmethod(@pdwg^.DimStyleTable.PushBackData);
   CreateUndoStartMarkerNeeded;
   ///////   не получилось запустить

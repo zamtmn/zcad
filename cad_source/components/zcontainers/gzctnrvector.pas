@@ -86,8 +86,10 @@ GZVector{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
 
 
         {old}
-        {**Удалить элемент по индексу}
+        {**Удалить элемент по индексу, без уменьшениием размера массива, элемент затирается значением default(T)}
         function DeleteElement(index:Integer):Pointer;
+        {**Удалить элемент по индексу, с уменьшениием размера массива}
+        function EraseElement(index:Integer):Pointer;
         {**Перевод указателя в индекс}
         function P2I(pel:Pointer):Integer;
         {**Удалить элемент по указателю}
@@ -477,6 +479,18 @@ begin
      result:=parray;
 end;
 function GZVector<T>.DeleteElement;
+begin
+  if (index>=0)and(index<count)then
+  begin
+    dec(count);
+    if PTypeInfo(TypeInfo(T))^.kind in TypesNeedToInicialize
+      then parray^[index]:=default(t);
+    if index<>count then
+    Move(parray^[index+1],parray^[index],(count-index)*SizeOfData);
+  end;
+  result:=parray;
+end;
+function GZVector<T>.EraseElement;
 begin
   if (index>=0)and(index<count)then
   begin

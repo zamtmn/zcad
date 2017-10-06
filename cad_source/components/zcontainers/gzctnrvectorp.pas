@@ -28,6 +28,7 @@ GZVectorP{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                                        function iterate (var ir:itrec):Pointer;virtual;
                                        function beginiterate(out ir:itrec):Pointer;virtual;
                                        procedure RemoveData(const data:T);virtual;
+                                       procedure RemoveDataFromArray(const data:T);virtual;
                                        function DeleteElement(index:Integer):Pointer;
                                        function GetRealCount:Integer;
 
@@ -127,6 +128,22 @@ begin
              if p=data then
                            begin
                                 pointer(ir.itp^):=nil;
+                                exit;
+                           end;
+             p:=iterate(ir);
+       until p=nil;
+end;
+procedure GZVectorP<T>.RemoveDataFromArray(const data:T);
+var p:Pointer;
+    ir:itrec;
+begin
+       p:=beginiterate(ir);
+       if p<>nil then
+       repeat
+             if p=data then
+                           begin
+                                //pointer(ir.itp^):=nil;
+                                EraseElement(ir.itc);
                                 exit;
                            end;
              p:=iterate(ir);

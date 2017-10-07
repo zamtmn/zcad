@@ -153,16 +153,18 @@ begin
      _T(addr^):=OldData;
      if assigned(PEntity)then
                              PEntity^.YouChanged(drawings.GetCurrentDWG^);
-     if assigned(SetVisuaProplProc)then
-                                       SetVisuaProplProc;
+     ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);
+     //if assigned(SetVisuaProplProc)then
+     //                                  SetVisuaProplProc;
 end;
 procedure TGChangeCommand.Comit;
 begin
      _T(addr^):=NewData;
      if assigned(PEntity)then
                              PEntity^.YouChanged(drawings.GetCurrentDWG^);
-     if assigned(SetVisuaProplProc)then
-                                       SetVisuaProplProc;
+     ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);
+     //if assigned(SetVisuaProplProc)then
+     //                                  SetVisuaProplProc;
 
 end;
 procedure TGChangeCommand.ComitFromObj;

@@ -207,7 +207,7 @@ type
     function GetLayersArray(out la:TLayerArray):boolean;
     function ClickOnLayerProp(PLayer:Pointer;NumProp:integer;out newlp:TLayerPropRecord):boolean;
 
-    procedure setvisualprop;
+    procedure setvisualprop(sender:TObject;GUIAction:TZMessageID);
     procedure addoneobject;
 
     procedure _scroll(Sender: TObject; ScrollCode: TScrollCode;
@@ -319,7 +319,7 @@ begin
      until msgstring='';
 end;
 
-procedure TZCADMainWindow.setvisualprop;
+procedure TZCADMainWindow.setvisualprop(sender:TObject;GUIAction:TZMessageID);
 const IntEmpty=-1000;
       IntDifferent=-10001;
       PEmpty=pointer(0);
@@ -333,7 +333,8 @@ var lw:GDBInteger;
     pv:PSelectedObjDesc;
     ir:itrec;
 begin
-
+  if GUIAction<>ZMsgID_GUIActionRebuild then
+    exit;
   if drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0
   then
       begin
@@ -502,7 +503,8 @@ begin
                                           end;
                                           if not PGDBLayerProp(PLayer)^._on then
                                                                             MessageBox(@rsCurrentLayerOff[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
-                                          setvisualprop;
+                                          //setvisualprop;
+                                          ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);
                                 end
                                 else
                                 begin
@@ -510,7 +512,8 @@ begin
                                        SysVar.dwg.DWG_CLayer^:=Player;
                                        commandmanager.ExecuteCommand('SelObjChangeLayerToCurrent',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
                                        SysVar.dwg.DWG_CLayer^:=tcl;
-                                       setvisualprop;
+                                       //setvisualprop;
+                                       ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRebuild);
                                 end;
                            result:=true;
                            end;
@@ -1012,7 +1015,8 @@ begin
   lps.AddOnLPEndHandler(EndLongProcess);
   //messageboxproc:=self.MessageBox;
   AddOneObjectProc:=self.addoneobject;
-  SetVisuaProplProc:=self.setvisualprop;
+  ZCMsgCallBackInterface.RegisterHandler_GUIAction(self.setvisualprop);
+  //SetVisuaProplProc:=self.setvisualprop;
   ZCMsgCallBackInterface.RegisterHandler_GUIAction(self.UpdateVisible);
   //UpdateVisibleProc:=UpdateVisible;
   ProcessFilehistoryProc:=self.processfilehistory;
@@ -2311,7 +2315,8 @@ begin
           SysVar.dwg.DWG_CLType^:=CLTSave;
      end;
      end;
-     setvisualprop;
+     //setvisualprop;
+     ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRebuild);
      //setnormalfocus(nil);
      ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionSetNormalFocus);
 end;
@@ -2360,7 +2365,8 @@ begin
           commandmanager.ExecuteCommand('SelObjChangeColorToCurrent',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
           SysVar.dwg.DWG_CColor^:=CColorSave;
      end;
-     setvisualprop;
+     //setvisualprop;
+     ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRebuild);
      //setnormalfocus(nil);
      ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionSetNormalFocus);
 end;
@@ -2384,7 +2390,8 @@ begin
                 SysVar.dwg.DWG_CLinew^:=tcl;
            end;
   end;
-  setvisualprop;
+  //setvisualprop;
+  ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRebuild);
   //setnormalfocus(nil);
   ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionSetNormalFocus);
 end;
@@ -2839,7 +2846,8 @@ begin
          Sender.PDWG.GetSelObjArray.Free;
          Sender.CalcOptimalMatrix;
          Sender.paint;
-         if assigned(SetVisuaProplProc) then SetVisuaProplProc;
+         //if assigned(SetVisuaProplProc) then SetVisuaProplProc;
+         ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRebuild);
          Sender.setobjinsp;
          end
        else
@@ -3016,7 +3024,8 @@ begin
    k:=0;
   if (pdwg<>nil)and(pdwg<>PTSimpleDrawing(BlockBaseDWG)) then
   begin
-  ZCADMainWindow.setvisualprop;
+  //ZCADMainWindow.setvisualprop;
+  ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRebuild);
   ZCADMainWindow.Caption:='ZCad v'+sysvar.SYS.SYS_Version^+' - ['+drawings.GetCurrentDWG.GetFileName+']';
 
   if assigned(LayerBox) then

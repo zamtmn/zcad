@@ -38,6 +38,7 @@ var
 
   ZMsgID_GUIActionRedrawContent:TZMessageID=-1;
   ZMsgID_GUIActionRedraw:TZMessageID=-1;
+  ZMsgID_GUIActionRebuild:TZMessageID=-1;
 
   ZMsgID_GUIResetOGLWNDProc:TZMessageID=-1;//надо убрать это чудо
   ZMsgID_GUITimerTick:TZMessageID=-1;
@@ -190,7 +191,6 @@ var
    //mainwindow
    ProcessFilehistoryProc:TMethod_String_;
    AddOneObjectProc:TSimpleMethod;
-   SetVisuaProplProc:TSimpleMethod;
    AppCloseProc:TMethod_PtrInt_;
 
    //UGDBDescriptor
@@ -441,6 +441,7 @@ initialization
   ZMsgID_GUIActionSetNormalFocus:=ZCMsgCallBackInterface.GetUniqueZMessageID;
   ZMsgID_GUIActionRedrawContent:=ZCMsgCallBackInterface.GetUniqueZMessageID;
   ZMsgID_GUIActionRedraw:=ZCMsgCallBackInterface.GetUniqueZMessageID;
+  ZMsgID_GUIActionRebuild:=ZCMsgCallBackInterface.GetUniqueZMessageID;
   ZMsgID_GUIResetOGLWNDProc:=ZCMsgCallBackInterface.GetUniqueZMessageID;
   ZMsgID_GUITimerTick:=ZCMsgCallBackInterface.GetUniqueZMessageID;
   ZMsgID_GUIRePrepareObject:=ZCMsgCallBackInterface.GetUniqueZMessageID;

@@ -193,12 +193,14 @@ end;
 procedure tdummyclass.ReBuild(sender:TObject;GUIMode:TZMessageID);
 begin
        if (GUIMode=ZMsgID_GUIRePrepareObject)then
+       begin
        if assigned(GetCurrentObjProc)then
          if GetCurrentObjProc=@MSEditor then  MSEditor.CreateUnit(drawings.GetUnitsFormat);
        if assigned(GDBobjinsp)then
                                   begin
                                        GDBobjinsp.ReBuild;
                                   end;
+       end;
 end;
 procedure tdummyclass.UpdateObjInsp(sender:TObject;GUIMode:TZMessageID);
 begin

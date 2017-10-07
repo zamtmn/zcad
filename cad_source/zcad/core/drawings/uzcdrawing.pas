@@ -299,8 +299,9 @@ begin
                                         drawings.GetCurrentDWG^.GetCurrentROOT^.FormatAfterEdit(drawings.GetCurrentDWG^,dc);
                                    end;
                           end;
-  if assigned(SetVisuaProplProc)then
-                                    SetVisuaProplProc;
+  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);
+  //if assigned(SetVisuaProplProc)then
+  //                                  SetVisuaProplProc;
 end;
 procedure TZCADDrawing.onUndoRedo;
 var

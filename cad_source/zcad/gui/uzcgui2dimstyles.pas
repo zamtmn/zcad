@@ -114,8 +114,8 @@ begin
           commandmanager.ExecuteCommand('SelObjChangeDimStyleToCurrent',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
           SysVar.dwg.DWG_CDimStyle^:=CLTSave;
      end;
-     if assigned(SetVisuaProplProc) then SetVisuaProplProc;
-     //setnormalfocus(nil);
+     ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);
+     //if assigned(SetVisuaProplProc) then SetVisuaProplProc;
 end;
 
 

@@ -7,7 +7,9 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
   StdCtrls, ActnList, VirtualTrees, gvector,
-  gzctnrvectortypes,uzbgeomtypes ,uzegeometry, uzccommandsmanager,uzcinterface,uzeconsts,uzeentity,uzcimagesmanager,uzcdrawings,uzbtypesbase,uzcenitiesvariablesextender,varmandef;
+  uzbtypes,gzctnrvectortypes,uzbgeomtypes ,uzegeometry, uzccommandsmanager,
+  uzcinterface,uzeconsts,uzeentity,uzcimagesmanager,uzcdrawings,uzbtypesbase,
+  uzcenitiesvariablesextender,varmandef;
 
 type
 
@@ -52,6 +54,7 @@ type
     ActionList1:TActionList;
     Refresh:TAction;
     procedure RefreshTree(Sender: TObject);
+    procedure AutoRefreshTree(sender:TObject;GUIAction:TZMessageID);
     procedure TVDblClick(Sender: TObject);
     procedure TVOnMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure VTCompareNodes(Sender: TBaseVirtualTree; Node1,
@@ -324,6 +327,8 @@ begin
    NavTree.NodeDataSize:=sizeof(TNodeData);
    NavTree.OnFreeNode:=FreeNode;
    NavTree.OnFocusChanged:=VTFocuschanged;
+
+   ZCMsgCallBackInterface.RegisterHandler_GUIAction(AutoRefreshTree);
 end;
 procedure TNavigator.RefreshTree(Sender: TObject);
 var
@@ -353,6 +358,11 @@ begin
    end;
    NavTree.EndUpdate;
    //NavTree.UpdateRanges;
+end;
+procedure TNavigator.AutoRefreshTree(sender:TObject;GUIAction:TZMessageID);
+begin
+  if GUIAction=ZMsgID_GUIActionRebuild then
+    RefreshTree(sender);
 end;
 
 procedure TNavigator.TVDblClick(Sender: TObject);

@@ -28,6 +28,7 @@ const
      GDBBaseObjectID = 30000;
      ObjN_NotRecognized='NotRecognized';
 type
+TZMessageID=type integer;
 TProcCounter=procedure(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
 {REGISTEROBJECTTYPE GDBBaseCamera}
 {EXPORT+}

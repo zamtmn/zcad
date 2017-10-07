@@ -22,8 +22,6 @@ uses uzcstrconsts,uzedimensionaltypes,gzctnrstl,zeundostack,varmandef,forms,clas
 const
      MenuNameModifier='MENU_';
 
-type
-  TZMessageID=type integer;
 var
   ZMsgID_GUIEnable:TZMessageID=-1;
   ZMsgID_GUIDisable:TZMessageID=-1;
@@ -45,6 +43,7 @@ var
 
   ZMsgID_GUIRePrepareObject:TZMessageID=-1;
   ZMsgID_GUISetDefaultObject:TZMessageID=-1;
+  ZMsgID_GUIReturnToDefaultObject:TZMessageID=-1;
   ZMsgID_GUIFreEditorProc:TZMessageID=-1;
   ZMsgID_GUIStoreAndFreeEditorProc:TZMessageID=-1;
 type
@@ -180,7 +179,7 @@ var
     gdb.GetCurrentDWG  - так надо всегда!
     }
    ReStoreGDBObjInspProc:TFunction__Boolean;
-   ReturnToDefaultProc:TSimpleProcedure;
+   //ReturnToDefaultProc:TSimpleProcedure;
    ClrarIfItIsProc:TOIClearIfItIs_Pointer_;
    GetCurrentObjProc:TFunction__Pointer;
    GetNameColWidthProc:TFunction__Integer;
@@ -190,7 +189,6 @@ var
 
    //mainwindow
    ProcessFilehistoryProc:TMethod_String_;
-   AddOneObjectProc:TSimpleMethod;
    AppCloseProc:TMethod_PtrInt_;
 
    //UGDBDescriptor
@@ -446,6 +444,7 @@ initialization
   ZMsgID_GUITimerTick:=ZCMsgCallBackInterface.GetUniqueZMessageID;
   ZMsgID_GUIRePrepareObject:=ZCMsgCallBackInterface.GetUniqueZMessageID;
   ZMsgID_GUISetDefaultObject:=ZCMsgCallBackInterface.GetUniqueZMessageID;
+  ZMsgID_GUIReturnToDefaultObject:=ZCMsgCallBackInterface.GetUniqueZMessageID;
   ZMsgID_GUIFreEditorProc:=ZCMsgCallBackInterface.GetUniqueZMessageID;
   ZMsgID_GUIStoreAndFreeEditorProc:=ZCMsgCallBackInterface.GetUniqueZMessageID;
 finalization

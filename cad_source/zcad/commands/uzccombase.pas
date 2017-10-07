@@ -425,7 +425,7 @@ begin
                                               begin
                                                    prevundo:=0;
                                                    overlay:=false;
-                                                   if assigned(ReturnToDefaultProc) then ReturnToDefaultProc;
+                                                   ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
                                               end;
   case PTZCADDrawing(drawings.GetCurrentDWG).UndoStack.undo(msg,prevundo,overlay) of
     URRNoCommandsToUndoInOverlayMode:ZCMsgCallBackInterface.TextMessage(rscmNoCTUSE,TMWOShowError);
@@ -1038,8 +1038,7 @@ begin
   drawings.GetCurrentDWG.wa.param.seldesc.LastSelectedObject:=nil;
   drawings.GetCurrentDWG.wa.param.lastonmouseobject:=nil;
   {objinsp.GDBobjinsp.}
-  if assigned(ReturnToDefaultProc)then
-                                      ReturnToDefaultProc;
+  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
   clearcp;
   //redrawoglwnd;
   result:=cmd_ok;
@@ -1192,8 +1191,7 @@ begin
   drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;
   drawings.GetCurrentDWG.wa.param.seldesc.OnMouseObject:=nil;
   drawings.GetCurrentDWG.wa.param.seldesc.LastSelectedObject:=nil;
-    if assigned(ReturnToDefaultProc)then
-                                      ReturnToDefaultProc;
+  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
   clearcp;
   zcRedrawCurrentDrawing;
   result:=cmd_ok;

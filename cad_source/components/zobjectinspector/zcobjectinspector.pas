@@ -165,7 +165,6 @@ type
 //procedure SetGDBObjInsp(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:pointer:);
 procedure StoreAndSetGDBObjInsp(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:pointer;popoldpos:boolean=false);
 function ReStoreGDBObjInsp:boolean;
-procedure ReturnToDefault;
 function  GetCurrentObj:Pointer;
 procedure ClrarIfItIs(addr:pointer);
 procedure SetNameColWidth(w:integer);
@@ -367,15 +366,6 @@ begin
                                   end
                                else
                                    result:=0;
-end;
-procedure ReturnToDefault;
-begin
-       if assigned(GDBobjinsp)then
-                                  begin
-                                       GDBobjinsp.PStoredObj:=nil;
-                                       GDBobjinsp.StoredObjGDBType:=nil;
-                                       GDBobjinsp.ReturnToDefault;
-                                  end;
 end;
 function  GetCurrentObj:Pointer;
 begin

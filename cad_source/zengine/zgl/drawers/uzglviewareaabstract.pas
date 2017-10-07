@@ -56,7 +56,6 @@ type
     TOnWaKeyPress=procedure (Sender:TAbstractViewArea;var Key: Word; Shift: TShiftState) of object;
     TOnGetEntsDesc=function (ents:PGDBObjOpenArrayOfPV):GDBString of object;
     TOnWaShowCursor=procedure (Sender:TAbstractViewArea;var DC:TDrawContext) of object;
-    TWAGeneralMethod={procedure (Sender:TAbstractViewArea) of object;}procedure (Sender:{TAbstractViewArea}tobject;GUIAction:TZMessageID);
     TAbstractViewArea=class(tcomponent)
                            public
                            Drawer:TZGLAbstractDrawer;
@@ -77,7 +76,6 @@ type
                            OnWaMouseMove:TOnWaMouseMove;
                            OnWaKeyPress:TOnWaKeyPress;
                            OnGetEntsDesc:TOnGetEntsDesc;
-                           OnSetObjInsp:TWAGeneralMethod;
                            OnWaShowCursor:TOnWaShowCursor;
 
                            procedure GDBActivate;virtual;abstract;
@@ -91,7 +89,6 @@ type
                            procedure DrawOrInvalidate;virtual;abstract;
                            procedure Clear0Ontrackpoint;virtual;abstract;
                            procedure SetMouseMode(smode:GDBByte);virtual;abstract;
-                           procedure SetObjInsp;virtual;abstract;
                            //procedure sendcoordtocommandTraceOn(coord:GDBVertex;key: GDBByte;pos:pos_record);virtual;abstract;
                            procedure reprojectaxis;virtual;abstract;
                            procedure Project0Axis;virtual;abstract;

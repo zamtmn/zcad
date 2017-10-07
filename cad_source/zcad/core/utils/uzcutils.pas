@@ -191,8 +191,9 @@ begin
 end;
 procedure zcHideCommandParams();
 begin
-  if assigned(ReturnToDefaultProc)then
-      ReturnToDefaultProc;
+  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
+  {if assigned(ReturnToDefaultProc)then
+      ReturnToDefaultProc;}
 end;
 procedure zcRedrawCurrentDrawing();
 begin

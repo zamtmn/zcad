@@ -31,6 +31,7 @@ type
     procedure SetCurrentObjDefault(sender:TObject;GUIMode:TZMessageID);
     procedure FreEditor(sender:TObject;GUIMode:TZMessageID);
     procedure StoreAndFreeEditor(sender:TObject;GUIMode:TZMessageID);
+    procedure ReturnToDefault(sender:TObject;GUIMode:TZMessageID);
   end;
 var
   INTFObjInspRowHeight:TGDBIntegerOverrider;
@@ -232,6 +233,17 @@ begin
                                        GDBobjinsp.StoreAndFreeEditor;
                                   end
 end;
+procedure tdummyclass.ReturnToDefault;
+begin
+  if (GUIMode=ZMsgID_GUIReturnToDefaultObject) then
+       if assigned(GDBobjinsp)then
+                                  begin
+                                       GDBobjinsp.PStoredObj:=nil;
+                                       GDBobjinsp.StoredObjGDBType:=nil;
+                                       GDBobjinsp.ReturnToDefault;
+                                  end;
+end;
+
 
 initialization
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'INTF_ObjInsp_WhiteBackground','GDBBoolean',@INTFObjInspWhiteBackground);
@@ -267,7 +279,8 @@ ReStoreGDBObjInspProc:=ReStoreGDBObjInsp;
 dummyclass:=tdummyclass.create;
 ZCMsgCallBackInterface.RegisterHandler_GUIAction(dummyclass.UpdateObjInsp);
 //UpdateObjInspProc:=dummyclass.UpdateObjInsp;
-ReturnToDefaultProc:=ReturnToDefault;
+ZCMsgCallBackInterface.RegisterHandler_GUIAction(dummyclass.ReturnToDefault());
+//ReturnToDefaultProc:=ReturnToDefault;
 ClrarIfItIsProc:=ClrarIfItIs;
 ZCMsgCallBackInterface.RegisterHandler_GUIAction(dummyclass.ReBuild);
 //ReBuildProc:=ReBuild;

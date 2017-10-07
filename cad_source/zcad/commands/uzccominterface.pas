@@ -382,8 +382,7 @@ begin
    if result=mrok then
                       begin
                         drawings.SetUnitsFormat(_UnitsFormat);
-                        if assigned(ReturnToDefaultProc)then
-                                                            ReturnToDefaultProc;
+                        ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
                       end;
    ZCMsgCallBackInterface.Do_AfterShowModal(UnitsForm);
    StoreBoundsToSavedUnit('UnitsWND',UnitsForm.BoundsRect);

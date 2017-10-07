@@ -1430,8 +1430,7 @@ begin
   PTZCADDrawing(drawings.GetCurrentDWG).UndoStack.PushEndMarker;
   if p3dpl^.VertexArrayInOCS.Count<2 then
                                          begin
-                                              if assigned(ReturnToDefaultProc)then
-                                                                                  ReturnToDefaultProc;
+                                              ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
                                               p3dpl^.YouDeleted(drawings.GetCurrentDWG^);
                                               PTZCADDrawing(drawings.GetCurrentDWG).UndoStack.KillLastCommand;
                                          end;
@@ -2364,8 +2363,7 @@ else
   drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;
   drawings.GetCurrentDWG.wa.param.seldesc.OnMouseObject:=nil;
   drawings.GetCurrentDWG.wa.param.seldesc.LastSelectedObject:=nil;
-     if assigned(ReturnToDefaultProc)then
-                                         ReturnToDefaultProc;
+  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
   clearcp;
 
   //redrawoglwnd;
@@ -3189,8 +3187,7 @@ begin
   drawings.GetCurrentDWG.wa.param.seldesc.LastSelectedObject:=nil;
   drawings.GetCurrentDWG.wa.param.lastonmouseobject:=nil;
   drawings.GetCurrentDWG.SelObjArray.Clear;
-  if assigned(ReturnToDefaultProc)then
-  ReturnToDefaultProc;
+  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
   clearcp;
   result:=cmd_ok;
 end;
@@ -3233,9 +3230,7 @@ begin
   drawings.GetCurrentDWG.wa.param.seldesc.OnMouseObject:=nil;
   drawings.GetCurrentDWG.wa.param.seldesc.LastSelectedObject:=nil;
   drawings.GetCurrentDWG.wa.param.lastonmouseobject:=nil;
-  {objinsp.GDBobjinsp.}
-  if assigned(ReturnToDefaultProc)then
-                                      ReturnToDefaultProc;
+  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
   clearcp;
   //redrawoglwnd;
   result:=cmd_ok;

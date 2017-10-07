@@ -208,7 +208,6 @@ type
     function ClickOnLayerProp(PLayer:Pointer;NumProp:integer;out newlp:TLayerPropRecord):boolean;
 
     procedure setvisualprop(sender:TObject;GUIAction:TZMessageID);
-    procedure addoneobject;
 
     procedure _scroll(Sender: TObject; ScrollCode: TScrollCode;
            var ScrollPos: Integer);
@@ -435,38 +434,6 @@ begin
                                end;
       end;
       UpdateControls;
-end;
-procedure TZCADMainWindow.addoneobject;
-var lw:GDBInteger;
-begin
-  exit;
-  lw:=PGDBObjEntity(drawings.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject)^.vp.LineWeight;
-  if drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=1
-  then
-      begin
-           if assigned(LinewBox)then
-           begin
-           if lw<0 then
-                       begin
-                            LinewBox.ItemIndex:=(lw+3)
-                       end
-                   else LinewBox.ItemIndex:=((lw div 10)+3);
-           end;
-           ivars.CColor:=PGDBObjEntity(drawings.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject)^.vp.color;
-           ivars.CLType:=PGDBObjEntity(drawings.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject)^.vp.LineType;
-      end
-  else
-      begin
-           if lw<0 then lw:=lw+3
-                   else lw:=(lw div 10)+3;
-           if assigned(LinewBox)then
-           if LinewBox.ItemIndex<>lw then LinewBox.ItemIndex:=(LinewBox.Items.Count-1);
-
-           if ivars.CColor<>PGDBObjEntity(drawings.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject)^.vp.color then
-              ivars.CColor:=ClDifferent;
-           if ivars.CLType<>PGDBObjEntity(drawings.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject)^.vp.LineType then
-              ivars.CLType:=nil;
-      end;
 end;
 
 function TZCADMainWindow.ClickOnLayerProp(PLayer:Pointer;NumProp:integer;out newlp:TLayerPropRecord):boolean;
@@ -760,8 +727,7 @@ begin
                end;
           end;
           ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIFreEditorProc);
-          if assigned(ReturnToDefaultProc)then
-                                           ReturnToDefaultProc;
+          ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
           application.terminate;
      end;
 end;
@@ -848,8 +814,7 @@ begin
        else
            drawings.freedwgvars;
        ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIFreEditorProc);
-       if assigned(ReturnToDefaultProc)then
-                                           ReturnToDefaultProc;
+       ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
        ZCMsgCallBackInterface.TextMessage('Закрыто',TMWOQuickly);
        ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
        //if assigned(UpdateVisibleProc) then UpdateVisibleProc(ZMsgID_GUIActionRedraw);
@@ -1014,7 +979,6 @@ begin
   //EndLongProcessProc:=EndLongProcess;
   lps.AddOnLPEndHandler(EndLongProcess);
   //messageboxproc:=self.MessageBox;
-  AddOneObjectProc:=self.addoneobject;
   ZCMsgCallBackInterface.RegisterHandler_GUIAction(self.setvisualprop);
   //SetVisuaProplProc:=self.setvisualprop;
   ZCMsgCallBackInterface.RegisterHandler_GUIAction(self.UpdateVisible);
@@ -2005,7 +1969,7 @@ begin
                           OGL.GDBActivate;
      OGL.param.firstdraw:=true;
      OGL.draworinvalidate;
-     ReturnToDefaultProc;
+     ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
 end;
 
 destructor TZCADMainWindow.Destroy;
@@ -2881,7 +2845,6 @@ begin
   begin
   if PGDBObjEntity(Sender.param.SelDesc.OnMouseObject)^.select(Sender.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.selector) then
     begin
-          if assigned(addoneobjectproc) then addoneobjectproc;
           Sender.SetObjInsp;
           ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
           //if assigned(updatevisibleproc) then updatevisibleproc(ZMsgID_GUIActionRedraw);
@@ -2955,8 +2918,7 @@ begin
        if drawings.GetCurrentDWG.SelObjArray.Count>0 then
                                                     commandmanager.ExecuteCommandSilent('MultiSelect2ObjIbsp',sender_wa.pdwg,@sender_wa.param)
                                                 else
-                                                    If assigned(ReturnToDefaultProc)then
-                                                                                        ReturnToDefaultProc;
+                                                  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
     end
   else
   begin
@@ -2972,8 +2934,7 @@ begin
   end
   else
   begin
-    If assigned(ReturnToDefaultProc)then
-    ReturnToDefaultProc;
+    ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
   end;
   end
 end;

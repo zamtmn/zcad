@@ -9,7 +9,7 @@ uses
   StdCtrls, ActnList, VirtualTrees, gvector,
   uzbtypes,gzctnrvectortypes,uzbgeomtypes ,uzegeometry, uzccommandsmanager,
   uzcinterface,uzeconsts,uzeentity,uzcimagesmanager,uzcdrawings,uzbtypesbase,
-  uzcenitiesvariablesextender,varmandef;
+  uzcenitiesvariablesextender,varmandef,uzbstrproc;
 
 type
 
@@ -399,7 +399,8 @@ end;
 procedure TNavigator.VTCompareNodes(Sender: TBaseVirtualTree; Node1,
   Node2: PVirtualNode; Column: TColumnIndex; var Result: Integer);
 begin
-  Result := WideCompareStr(NavTree.Text[Node1, Column], NavTree.Text[Node2, Column]);
+  Result := //WideCompareStr(NavTree.Text[Node1, Column], NavTree.Text[Node2, Column]);
+            AnsiNaturalCompare(NavTree.Text[Node1, Column], NavTree.Text[Node2, Column],False);
 end;
 
 procedure TNavigator.VTHeaderClick(Sender: TVTHeader; HitInfo: TVTHeaderHitInfo

@@ -335,7 +335,7 @@ begin
   if GUIAction<>ZMsgID_GUIActionRebuild then
     exit;
   if drawings.GetCurrentDWG=nil then
-      exit;
+    exit;
   if drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0
   then
       begin

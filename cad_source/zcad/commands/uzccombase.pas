@@ -1215,26 +1215,32 @@ begin
   result:=format(' _%s',[inttohex(ptruint(node),8)])
 end;
 
-procedure WriteNode(node:PTEntTreeNode;nodedepth:integer);
+procedure WriteNode(node:PTEntTreeNode;infrustum:TActulity;nodedepth:integer);
+var
+   nodename:string;
 begin
-  ZCMsgCallBackInterface.TextMessage(format(' %s [label="None with %d ents"]',[PNodeToNodeName(node),node.nul.count]),TMWOHistoryOut);
+  nodename:=PNodeToNodeName(node);
+  ZCMsgCallBackInterface.TextMessage(format(' %s [label="None with %d ents"]',[nodename,node.nul.count]),TMWOHistoryOut);
+  if node^.NodeData.infrustum=infrustum then
+    ZCMsgCallBackInterface.TextMessage(format(' %s [fillcolor=red, style=filled]',[nodename,node.nul.count]),TMWOHistoryOut);
   ZCMsgCallBackInterface.TextMessage(format('rank=same; level_%d;',[nodedepth]),TMWOHistoryOut);
   //{ rank = same; "past"
   if assigned(node.pplusnode)then
   begin
-    ZCMsgCallBackInterface.TextMessage(format(' %s->%s [label="+"]',[PNodeToNodeName(node),PNodeToNodeName(PTEntTreeNode(node.pplusnode))]),TMWOHistoryOut);
-    WriteNode(PTEntTreeNode(node.pplusnode),nodedepth+1);
+    ZCMsgCallBackInterface.TextMessage(format(' %s->%s [label="+"]',[nodename,PNodeToNodeName(PTEntTreeNode(node.pplusnode))]),TMWOHistoryOut);
+    WriteNode(PTEntTreeNode(node.pplusnode),infrustum,nodedepth+1);
   end;
   if assigned(node.pminusnode)then
   begin
-    ZCMsgCallBackInterface.TextMessage(format(' %s->%s [label="-"]',[PNodeToNodeName(node),PNodeToNodeName(PTEntTreeNode(node.pminusnode))]),TMWOHistoryOut);
-    WriteNode(PTEntTreeNode(node.pminusnode),nodedepth+1);
+    ZCMsgCallBackInterface.TextMessage(format(' %s->%s [label="-"]',[nodename,PNodeToNodeName(PTEntTreeNode(node.pminusnode))]),TMWOHistoryOut);
+    WriteNode(PTEntTreeNode(node.pminusnode),infrustum,nodedepth+1);
   end;
 end;
 
 procedure WriteDot(node:PTEntTreeNode; var tr:TTreeStatistik);
 var
   i:integer;
+  DC:TDrawContext;
 begin
   ZCMsgCallBackInterface.TextMessage('DiGraph Classes {',TMWOHistoryOut);
   for i:=0 to tr.MaxDepth do
@@ -1242,7 +1248,8 @@ begin
      ZCMsgCallBackInterface.TextMessage('level_'+inttostr(i)+'->',TMWOHistoryOut)
    else
      ZCMsgCallBackInterface.TextMessage('level_'+inttostr(i),TMWOHistoryOut);
-  WriteNode(node,0);
+  dc:=drawings.GetCurrentDWG.CreateDrawingRC;
+  WriteNode(node,dc.DrawingContext.InfrustumActualy,0);
   ZCMsgCallBackInterface.TextMessage('}',TMWOHistoryOut);
 end;
 

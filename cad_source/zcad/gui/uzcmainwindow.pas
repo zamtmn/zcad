@@ -334,6 +334,8 @@ var lw:GDBInteger;
 begin
   if GUIAction<>ZMsgID_GUIActionRebuild then
     exit;
+  if drawings.GetCurrentDWG=nil then
+      exit;
   if drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0
   then
       begin
@@ -816,6 +818,7 @@ begin
        ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIFreEditorProc);
        ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
        ZCMsgCallBackInterface.TextMessage('Закрыто',TMWOQuickly);
+       ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);
        ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
        //if assigned(UpdateVisibleProc) then UpdateVisibleProc(ZMsgID_GUIActionRedraw);
   end;

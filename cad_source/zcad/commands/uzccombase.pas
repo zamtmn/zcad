@@ -167,7 +167,8 @@ begin
                                      end;
      ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
      //if assigned(updatevisibleproc) then updatevisibleproc(ZMsgID_GUIActionRedraw);
-     drawings.CurrentDWG.wa.SetObjInsp;
+     ZCMsgCallBackInterface.Do_GUIaction(drawings.CurrentDWG.wa,ZMsgID_GUIActionSelectionChanged);
+     //drawings.CurrentDWG.wa.SetObjInsp;
      result:=cmd_ok;
      //SetObjInsp;
      //commandmanager.executecommandsilent('MultiSelect2ObjIbsp');

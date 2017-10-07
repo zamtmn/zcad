@@ -281,7 +281,7 @@ begin
   sysvarDWGOSMode := saveosmode;
 
   if uzccommandsmanager.commandmanager.CommandsStack.Count=0 then
-                                                           drawings.GetCurrentDWG.wa.setobjinsp;
+    ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,ZMsgID_GUIActionSelectionChanged);
   //-------------------------------drawings.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
   OSModeEditor.GetState;
   zcRedrawCurrentDrawing;

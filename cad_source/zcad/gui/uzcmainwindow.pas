@@ -2677,7 +2677,8 @@ begin
                   PGDBObjEntity(sender.param.SelDesc.OnMouseObject)^.DeSelect(sender.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.DeSelector);
                   sender.param.SelDesc.LastSelectedObject := nil;
                   //addoneobject;
-                  sender.SetObjInsp;
+                  ZCMsgCallBackInterface.Do_GUIaction(sender,ZMsgID_GUIActionSelectionChanged);
+                  //sender.SetObjInsp;
                   ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
                   //if assigned(updatevisibleproc) then updatevisibleproc(ZMsgID_GUIActionRedraw);
              end;
@@ -2812,7 +2813,8 @@ begin
          Sender.paint;
          //if assigned(SetVisuaProplProc) then SetVisuaProplProc;
          ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRebuild);
-         Sender.setobjinsp;
+         ZCMsgCallBackInterface.Do_GUIaction(Sender,ZMsgID_GUIActionSelectionChanged);
+         //Sender.setobjinsp;
          end
        else
          begin
@@ -2845,7 +2847,7 @@ begin
   begin
   if PGDBObjEntity(Sender.param.SelDesc.OnMouseObject)^.select(Sender.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.selector) then
     begin
-          Sender.SetObjInsp;
+          ZCMsgCallBackInterface.Do_GUIaction(sender,ZMsgID_GUIActionSelectionChanged);
           ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
           //if assigned(updatevisibleproc) then updatevisibleproc(ZMsgID_GUIActionRedraw);
     end;

@@ -46,7 +46,6 @@ type
                            procedure Clear0Ontrackpoint;override;
                            procedure ClearOntrackpoint;override;
                            procedure SetMouseMode(smode:GDBByte);override;
-                           procedure SetObjInsp;override;
                            procedure reprojectaxis;override;
                            procedure Project0Axis;override;
                            procedure create0axis;override;
@@ -3346,12 +3345,6 @@ begin
      param.md.WPPointUR.x:=pv;
      param.md.WPPointUR.y:=ph;
      end;
-end;
-procedure TGeneralViewArea.SetObjInsp;
-begin
-  ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionSelectionChanged);
-  {  if assigned(OnSetObjInsp)then
-                                  OnSetObjInsp(self);}
 end;
 
 begin

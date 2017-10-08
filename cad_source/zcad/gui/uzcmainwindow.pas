@@ -2065,24 +2065,17 @@ var
    tempkey:word;
    comtext:string;
 begin
-     if assigned(GetPeditorProc) then
-     if GetPeditorProc<>nil then
-      begin
-           if key=VK_ESCAPE then
-                                begin
-                                     ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIFreEditorProc);
-                                     key:=0;
-                                     exit;
-                                end;
-      end;
+     ZCMsgCallBackInterface.Do_KeyDown(Sender,Key,Shift);
+     if key=0 then exit;
+
      if ((ActiveControl<>cmdedit)and(ActiveControl<>HistoryLine)and(ActiveControl<>LayerBox)and(ActiveControl<>LineWBox))then
      begin
      if (ActiveControl is tedit)or (ActiveControl is tmemo)or (ActiveControl is TComboBox)then
                                                                                               exit;
      if assigned(GetPeditorProc) then
      if (GetPeditorProc)<>nil then
-     if (ActiveControl=TPropEditor(GetPeditorProc).geteditor) then
-                                                            exit;
+     {if (ActiveControl=TPropEditor(GetPeditorProc).geteditor) then
+                                                            exit;}
      end;
      if ((ActiveControl=LayerBox)or(ActiveControl=LineWBox))then
                                                                  begin

@@ -160,6 +160,8 @@ type
     procedure DoAllAutoSize; override;
 
     procedure FormHide(Sender: TObject);
+
+    procedure myKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   end;
 
 //procedure SetGDBObjInsp(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:pointer:);
@@ -202,6 +204,19 @@ var
   onNotify:TOnNotify=nil;
   onAfterFreeEditor:TMyNotifyEvent=nil;
 implementation
+procedure TGDBobjinsp.myKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  if Peditor<>nil then
+    begin
+      if key=VK_ESCAPE then
+        begin
+          freeeditor;
+          key:=0;
+          exit;
+        end;
+    end;
+end;
+
 function PlusMinusDetail(Collapsed,hot:boolean):TThemedTreeview;
 begin
      {$IFDEF WINDOWS}

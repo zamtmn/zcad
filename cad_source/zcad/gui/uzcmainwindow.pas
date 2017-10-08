@@ -158,7 +158,7 @@ type
     procedure FillLWCombo(cb:TCustomComboBox);
     procedure InitSystemCalls;
     procedure LoadActions;
-    procedure myKeyPress(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure myKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure ChangeCLineW(Sender:Tobject);
     procedure ChangeCColor(Sender:Tobject);
     procedure ChangeLType(Sender:Tobject);
@@ -1569,7 +1569,7 @@ begin
 
   //DecorateSysTypes;
   self.onclose:=self.FormClose;
-  self.onkeydown:=self.mykeypress;
+  self.OnKeyDown:=self.myKeyDown;
   self.KeyPreview:=true;
   application.OnIdle:=self.idle;
   SystemTimer:=TTimer.Create(self);
@@ -2060,7 +2060,7 @@ begin
    result:=IsZShortcut(Message,Screen.ActiveControl,cmdedit,OldFunction);
 end;
 
-procedure TZCADMainWindow.myKeyPress(Sender: TObject; var Key: Word; Shift: TShiftState);
+procedure TZCADMainWindow.myKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 var
    tempkey:word;
    comtext:string;

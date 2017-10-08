@@ -18,7 +18,7 @@
 unit uzcinterface;
 {$INCLUDE def.inc}
 interface
-uses uzcstrconsts,uzedimensionaltypes,gzctnrstl,zeundostack,varmandef,forms,classes,uzbtypes,LCLType;
+uses controls,uzcstrconsts,uzedimensionaltypes,gzctnrstl,zeundostack,varmandef,forms,classes,uzbtypes,LCLType;
 const
      MenuNameModifier='MENU_';
 
@@ -67,6 +67,8 @@ type
     TSetGDBObjInsp=procedure(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:Pointer;popoldpos:boolean=false);
     TSetGDBObjInsp_HandlersVector=TMyVector<TSetGDBObjInsp>;
 
+    TKeyEvent_HandlersVector=TMyVector<TKeyEvent>;
+
 
     TTextMessageWriteOptions=(TMWOToConsole,            //вывод сообщения в консоль
                               TMWOToLog,                //вывод в log
@@ -100,6 +102,8 @@ type
 
         procedure RegisterHandler_PrepareObject(Handler:TSetGDBObjInsp);
 
+        procedure RegisterHandler_KeyDown(Handler:TKeyEvent);
+
         procedure Do_HistoryOut(s:String);
         procedure Do_LogError(s:String);
         procedure Do_StatusLineTextOut(s:String);
@@ -111,6 +115,8 @@ type
         procedure Do_GUIaction(Sender:TObject;GUIaction:TZMessageID);
 
         procedure Do_PrepareObject(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:Pointer;popoldpos:boolean=false);
+
+        procedure Do_KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 
 
         procedure TextMessage(msg:String;opt:TTextMessageWriteOptionsSet);
@@ -132,6 +138,10 @@ type
         procedure RegisterSetGDBObjInsp_HandlersVector(var SOIHV:TSetGDBObjInsp_HandlersVector;Handler:TSetGDBObjInsp);
         procedure Do_SetGDBObjInsp_HandlersVector(var SOIHV:TSetGDBObjInsp_HandlersVector;const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:Pointer;popoldpos:boolean=false);
 
+        procedure RegisterTKeyEvent_HandlersVector(var KEHV:TKeyEvent_HandlersVector;Handler:TKeyEvent);
+        procedure Do_TKeyEvent_HandlersVector(var KEHV:TKeyEvent_HandlersVector;Sender: TObject; var Key: Word; Shift: TShiftState);
+
+
       private
         ZMessageIDSeed:TZMessageID;
         HistoryOutHandlers:TProcedure_String_HandlersVector;
@@ -145,6 +155,10 @@ type
         GUIActionsHandlers:TSimpleLCLMethod_HandlersVector;
 
         SetGDBObjInsp_HandlersVector:TSetGDBObjInsp_HandlersVector;
+
+        onKeyDown:TKeyEvent_HandlersVector;
+
+
     end;
 
     TStartLongProcessProc=Procedure(a:integer;s:string) of object;
@@ -345,6 +359,24 @@ begin
        SOIHV[i](UndoStack,f,exttype,addr,context,popoldpos);
    end;
 end;
+procedure TZCMsgCallBackInterface.RegisterTKeyEvent_HandlersVector(var KEHV:TKeyEvent_HandlersVector;Handler:TKeyEvent);
+begin
+   if not assigned(KEHV) then
+     KEHV:=TKeyEvent_HandlersVector.Create;
+   KEHV.PushBack(Handler);
+end;
+procedure TZCMsgCallBackInterface.Do_TKeyEvent_HandlersVector(var KEHV:TKeyEvent_HandlersVector;Sender: TObject; var Key: Word; Shift: TShiftState);
+var
+   i:integer;
+begin
+   if assigned(KEHV) then begin
+     for i:=0 to KEHV.Size-1 do
+       begin
+         KEHV[i](Sender,Key,Shift);
+         if key=0 then exit;
+       end;
+   end;
+end;
 procedure TZCMsgCallBackInterface.RegisterHandler_HistoryOut(Handler:TProcedure_String_);
 begin
    RegisterTProcedure_String_HandlersVector(HistoryOutHandlers,Handler);
@@ -376,6 +408,10 @@ end;
 procedure TZCMsgCallBackInterface.RegisterHandler_PrepareObject(Handler:TSetGDBObjInsp);
 begin
    RegisterSetGDBObjInsp_HandlersVector(SetGDBObjInsp_HandlersVector,Handler);
+end;
+procedure TZCMsgCallBackInterface.RegisterHandler_KeyDown(Handler:TKeyEvent);
+begin
+   RegisterTKeyEvent_HandlersVector(onKeyDown,Handler);
 end;
 procedure TZCMsgCallBackInterface.Do_HistoryOut(s:String);
 begin
@@ -409,6 +445,11 @@ procedure TZCMsgCallBackInterface.Do_PrepareObject(const UndoStack:PTZctnrVector
 begin
    Do_SetGDBObjInsp_HandlersVector(SetGDBObjInsp_HandlersVector,UndoStack,f,exttype,addr,context,popoldpos);
 end;
+procedure TZCMsgCallBackInterface.Do_KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+   Do_TKeyEvent_HandlersVector(onKeyDown,Sender,Key,Shift);
+end;
+
 function TZCMsgCallBackInterface.DoShowModal(MForm:TForm): Integer;
 begin
      Do_BeforeShowModal(MForm);

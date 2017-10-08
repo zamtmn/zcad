@@ -61,6 +61,7 @@ begin
   GDBobjinsp.Align:=alClient;
   GDBobjinsp.BorderStyle:=bsNone;
   GDBobjinsp.Parent:=tform(Form);
+  ZCMsgCallBackInterface.RegisterHandler_KeyDown(GDBobjinsp.myKeyDown);
 end;
 procedure _onNotify(const pcurcontext:pointer);
 begin

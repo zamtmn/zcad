@@ -35,7 +35,7 @@ uses
     and actions }
   { подключеные модули, список будет меняться в зависимости от требуемых
     примитивов и действий с ними }
-
+  uzbgeomtypes,
   sysutils, math, uzccomexample,uzccominteractivemanipulators,
 
   URecordDescriptor,TypeDescriptors,
@@ -584,7 +584,8 @@ begin
           //     zcEndUndoCommand;
           //
       end;
-      ReturnToDefaultProc(drawings.GetUnitsFormat);
+      ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
+      //ReturnToDefaultProc(drawings.GetUnitsFormat);
     end;
     result:=cmd_ok;
 end;

@@ -175,9 +175,7 @@ end;
 
 function ObjInspCopyToClip_com(operands:TCommandOperands):TCommandResult;
 begin
-   if assigned(GetCurrentObjProc)then
-   begin
-   if GetCurrentObjProc=nil then
+   if GetCurrentObj=nil then
                              ZCMsgCallBackInterface.TextMessage(rscmCommandOnlyCTXMenu,TMWOHistoryOut)
                          else
                              begin
@@ -189,15 +187,13 @@ begin
                                                                    clipbrd.clipboard.AsText:={Objinsp.}currpd.Value;
                                   {Objinsp.}currpd:=nil;
                              end;
-   end;
    result:=cmd_ok;
 end;
 procedure tdummyclass.ReBuild(sender:TObject;GUIMode:TZMessageID);
 begin
        if (GUIMode=ZMsgID_GUIRePrepareObject)then
        begin
-       if assigned(GetCurrentObjProc)then
-         if GetCurrentObjProc=@MSEditor then  MSEditor.CreateUnit(drawings.GetUnitsFormat);
+         if GetCurrentObj=@MSEditor then  MSEditor.CreateUnit(drawings.GetUnitsFormat);
        if assigned(GDBobjinsp)then
                                   begin
                                        GDBobjinsp.ReBuild;
@@ -276,21 +272,21 @@ currpd:=nil;
 ZCMsgCallBackInterface.RegisterHandler_PrepareObject(StoreAndSetGDBObjInsp());
 //PrepareObject:={TSetGDBObjInsp}(StoreAndSetGDBObjInsp);
 //StoreAndSetGDBObjInspProc:=TSetGDBObjInsp(StoreAndSetGDBObjInsp);
-ReStoreGDBObjInspProc:=ReStoreGDBObjInsp;
+//ReStoreGDBObjInspProc:=ReStoreGDBObjInsp;
 dummyclass:=tdummyclass.create;
 ZCMsgCallBackInterface.RegisterHandler_GUIAction(dummyclass.UpdateObjInsp);
 //UpdateObjInspProc:=dummyclass.UpdateObjInsp;
 ZCMsgCallBackInterface.RegisterHandler_GUIAction(dummyclass.ReturnToDefault());
 //ReturnToDefaultProc:=ReturnToDefault;
-ClrarIfItIsProc:=ClrarIfItIs;
+//ClrarIfItIsProc:=ClrarIfItIs;
 ZCMsgCallBackInterface.RegisterHandler_GUIAction(dummyclass.ReBuild);
 //ReBuildProc:=ReBuild;
 ZCMsgCallBackInterface.RegisterHandler_GUIAction(dummyclass.SetCurrentObjDefault);
 //SetCurrentObjDefaultProc:=SetCurrentObjDefault;
-GetCurrentObjProc:=GetCurrentObj;
+//GetCurrentObjProc:=GetCurrentObj;
 GetNameColWidthProc:=GetNameColWidth;
 GetOIWidthProc:=GetOIWidth;
-GetPeditorProc:=GetPeditor;
+//GetPeditorProc:=GetPeditor;
 ZCMsgCallBackInterface.RegisterHandler_GUIAction(dummyclass.FreEditor);
 //FreEditorProc:=FreEditor;
 ZCMsgCallBackInterface.RegisterHandler_GUIAction(dummyclass.StoreAndFreeEditor);

@@ -2072,9 +2072,9 @@ begin
      begin
      if (ActiveControl is tedit)or (ActiveControl is tmemo)or (ActiveControl is TComboBox)then
                                                                                               exit;
-     if assigned(GetPeditorProc) then
+     {if assigned(GetPeditorProc) then
      if (GetPeditorProc)<>nil then
-     {if (ActiveControl=TPropEditor(GetPeditorProc).geteditor) then
+     if (ActiveControl=TPropEditor(GetPeditorProc).geteditor) then
                                                             exit;}
      end;
      if ((ActiveControl=LayerBox)or(ActiveControl=LineWBox))then
@@ -2478,8 +2478,8 @@ end;
 function TZCADMainWindow.MainMouseDown(Sender:TAbstractViewArea):GDBBoolean;
 begin
      ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionSetNormalFocus);
-     if @SetCurrentDWGProc<>nil then
-                                     SetCurrentDWGProc(Sender.PDWG);
+     //if @SetCurrentDWGProc<>nil then
+     SetCurrentDWG{Proc}(Sender.PDWG);
      if (cxmenumgr.ismenupopup)or(ActivePopupMenu<>nil) then
                                                             result:=true
                                                         else
@@ -2487,8 +2487,8 @@ begin
 end;
 procedure TZCADMainWindow.MainMouseUp;
 begin
-     if assigned(GetCurrentObjProc) then
-     if GetCurrentObjProc=@sysvar then
+     //if assigned(GetCurrentObjProc) then
+     //if GetCurrentObjProc=@sysvar then
      {If assigned(UpdateObjInspProc)then
                                       UpdateObjInspProc;}
      ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRedraw);
@@ -2792,10 +2792,10 @@ procedure TZCADMainWindow.wakp(Sender:TAbstractViewArea;var Key: Word; Shift: TS
 begin
      if Key=VK_ESCAPE then
      begin
-       if assigned(ReStoreGDBObjInspProc)then
-       begin
-       if not ReStoreGDBObjInspProc then
-       begin
+       //if assigned(ReStoreGDBObjInspProc)then
+       //begin
+       //if not ReStoreGDBObjInspProc then
+       //begin
        Sender.ClearOntrackpoint;
        if commandmanager.pcommandrunning=nil then
          begin
@@ -2817,8 +2817,8 @@ begin
               commandmanager.pcommandrunning.CommandCancel;
               commandmanager.executecommandend;
          end;
-       end;
-       end;
+       //end;
+       //end;
        Key:=0;
      end
      else if (Key = VK_RETURN)or(Key = VK_SPACE) then

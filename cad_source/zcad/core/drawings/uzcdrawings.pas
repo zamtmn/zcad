@@ -93,6 +93,7 @@ procedure clearcp;
 //procedure redrawoglwnd(GUIAction:TZMessageID);
 function dwgSaveDXFDPAS(s:gdbstring;dwg:PTSimpleDrawing):GDBInteger;
 function dwgQSave_com(dwg:PTSimpleDrawing):GDBInteger;
+function SetCurrentDWG(PDWG:pointer):pointer;
 //procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
 implementation
  uses uzcenitiesvariablesextender,uzeenttext,uzeentdevice,uzeentblockinsert,uzeffdxf,uzcshared,uzccommandsmanager;
@@ -994,7 +995,7 @@ begin
   //pbasefont:=FontManager.getAddres('gothice.shx');
   drawings.init;
   ZCMsgCallBackInterface.RegisterHandler_GUIAction(drawings.ResetOGLWND);
-  SetCurrentDWGProc:=SetCurrentDWG;
+  //SetCurrentDWGProc:=SetCurrentDWG;
   BlockBaseDWG:=drawings.CreateDWG('','');
   _GetUndoStack:=drawings.GetUndoStack;
   ClipboardDWG:=drawings.CreateDWG(preloadedfile1,preloadedfile2);

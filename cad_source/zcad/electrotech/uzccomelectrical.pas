@@ -1326,8 +1326,8 @@ begin
     drawings.GetCurrentDWG.wa.param.lastonmouseobject:=nil;
 
     drawings.GetCurrentDWG.OnMouseObj.Clear;
-    if assigned(ClrarIfItIsProc)then
-    ClrarIfItIsProc(SecondOwner);
+    {if assigned( ClrarIfItIsProc)then
+    ClrarIfItIsProc(SecondOwner);}
 
     zcRedrawCurrentDrawing;
     if mode= 2 then commandmanager.executecommandend

@@ -166,18 +166,18 @@ type
     TEndLongProcessProc=Procedure of object;
     //Abstract
     TSimpleMethod=Procedure of object;
-    TOIClearIfItIs_Pointer_=Procedure(p:pointer);
+    //TOIClearIfItIs_Pointer_=Procedure(p:pointer);
     TMethod_PtrInt_=procedure (Data: PtrInt) of object;
     TMethod__Pointer=function:Pointer of object;
     TFunction__Integer=Function:integer;
-    TFunction__Boolean=Function:boolean;
-    TFunction__Pointer=Function:Pointer;
-    TFunction__TComponent=Function:TComponent;
+    //TFunction__Boolean=Function:boolean;
+    //TFunction__Pointer=Function:Pointer;
+    //TFunction__TComponent=Function:TComponent;
     TMethod_String_=procedure (s:String) of object;
     TProcedure_PAnsiChar_=procedure (s:PAnsiChar);
 
     //UGDBDescriptor
-    TSetCurrentDrawing=function(PDWG:Pointer):Pointer;//нужно завязать на UGDBDrawingdef
+    //TSetCurrentDrawing=function(PDWG:Pointer):Pointer;//нужно завязать на UGDBDrawingdef
 
 var
    //Objinsp
@@ -192,21 +192,21 @@ var
     @sampleParam - адресс на созданную запись, которая помещается в инспектор
     gdb.GetCurrentDWG  - так надо всегда!
     }
-   ReStoreGDBObjInspProc:TFunction__Boolean;
+   //ReStoreGDBObjInspProc:TFunction__Boolean;
    //ReturnToDefaultProc:TSimpleProcedure;
-   ClrarIfItIsProc:TOIClearIfItIs_Pointer_;
-   GetCurrentObjProc:TFunction__Pointer;
+   //ClrarIfItIsProc:TOIClearIfItIs_Pointer_;
+   //GetCurrentObjProc:TFunction__Pointer;
    GetNameColWidthProc:TFunction__Integer;
    GetOIWidthProc:TFunction__Integer;
 
-   GetPeditorProc:TFunction__TComponent;
+   //GetPeditorProc:TFunction__TComponent;
 
    //mainwindow
    ProcessFilehistoryProc:TMethod_String_;
    AppCloseProc:TMethod_PtrInt_;
 
    //UGDBDescriptor
-   SetCurrentDWGProc:TSetCurrentDrawing;
+   //SetCurrentDWGProc:TSetCurrentDrawing;
    _GetUndoStack:TMethod__Pointer;
 
 function GetUndoStack:pointer;

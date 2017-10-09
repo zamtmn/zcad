@@ -12,7 +12,8 @@ uses
   uzeblockdef,          //описания блоков
   uzbtypes,          //базовые типы
   uzbgeomtypes,uzbtypesbase,          //базовые типы
-  uzbstrproc               //билеберда для работы со стрингами
+  uzbstrproc,               //билеберда для работы со стрингами
+  gzctnrvectortypes
   ;
 
 type

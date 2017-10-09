@@ -166,9 +166,9 @@ type
 
 //procedure SetGDBObjInsp(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:pointer:);
 procedure StoreAndSetGDBObjInsp(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:pointer;popoldpos:boolean=false);
-function ReStoreGDBObjInsp:boolean;
+//function ReStoreGDBObjInsp:boolean;
 function  GetCurrentObj:Pointer;
-procedure ClrarIfItIs(addr:pointer);
+//procedure ClrarIfItIs(addr:pointer);
 procedure SetNameColWidth(w:integer);
 function GetNameColWidth:integer;
 function GetOIWidth:integer;
@@ -215,6 +215,17 @@ begin
           exit;
         end;
     end;
+  if PStoredObj<>nil then
+    if key=VK_ESCAPE then
+      begin
+        setptr(GDBobjinsp.StoredUndoStack,GDBobjinsp.StoredUnitsFormat,GDBobjinsp.StoredObjGDBType,GDBobjinsp.PStoredObj,GDBobjinsp.pStoredContext);
+        PStoredObj:=nil;
+        StoredObjGDBType:=nil;
+        pStoredContext:=nil;
+        StoredUndoStack:=nil;
+        key:=0;
+        exit;
+      end;
 end;
 
 function PlusMinusDetail(Collapsed,hot:boolean):TThemedTreeview;
@@ -293,7 +304,7 @@ begin
                        aheight:=aheight;
   inherited SetBounds(ALeft, ATop, AWidth, AHeight);
 end;
-function ReStoreGDBObjInsp:boolean;
+{function ReStoreGDBObjInsp:boolean;
 begin
      result:=false;
      if assigned(GDBobjinsp)then
@@ -306,14 +317,10 @@ begin
                                          GDBobjinsp.StoredObjGDBType:=nil;
                                          GDBobjinsp.pStoredContext:=nil;
                                          GDBobjinsp.StoredUndoStack:=nil;
-
-                                         {GDBobjinsp.CurrPObj:=GDBobjinsp.PStoredObj;
-                                         GDBobjinsp.CurrObjGDBType:=GDBobjinsp.StoredObjGDBType;
-                                         GDBobjinsp.SetGDBObjInsp(exttype:PUserTypeDescriptor; addr:pointer);}
                                          result:=true;
                                     end;
      end;
-end;
+end;}
 procedure StoreAndSetGDBObjInsp(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:pointer;popoldpos:boolean=false);
 begin
      if assigned(GDBobjinsp)then
@@ -338,14 +345,14 @@ begin
                                      GDBobjinsp.setptr(UndoStack,f,exttype,addr,context);
                                 end;
 end;}
-procedure ClrarIfItIs(addr:pointer);
+{procedure ClrarIfItIs(addr:pointer);
 begin
        if assigned(GDBobjinsp)then
                                   begin
                                        if GDBobjinsp.CurrPObj=addr then
                                        GDBobjinsp.ReturnToDefault;
                                   end;
-end;
+end;}
 procedure SetNameColWidth(w:integer);
 begin
        if assigned(GDBobjinsp)then

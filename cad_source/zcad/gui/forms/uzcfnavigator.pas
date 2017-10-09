@@ -46,6 +46,7 @@ type
   end;
 
   TNavigator = class(TForm)
+    CoolBar1: TCoolBar;
     MainToolBar: TToolBar;
     NavTree: TVirtualStringTree;
     ToolButton1: TToolButton;

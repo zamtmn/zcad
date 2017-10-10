@@ -24,6 +24,7 @@ type
   TNodesStatesVector=tvector<TNodeData>;
   TNodesStates=class
       OpenedNodes:TNodesStatesVector;
+      SelectedNode:TNodeData;
       constructor Create;
       destructor Destroy;override;
   end;
@@ -92,6 +93,9 @@ implementation
 constructor TNodesStates.Create;
 begin
   OpenedNodes:=TNodesStatesVector.create;
+  SelectedNode.id:='';
+  SelectedNode.name:='';
+  SelectedNode.pent:=nil;
 end;
 destructor TNodesStates.Destroy;
 begin
@@ -102,11 +106,16 @@ var
   child:PVirtualNode;
   pnd:PTNodeData;
 begin
-  if vsExpanded in Node.states then
+  //if vsExpanded in Node.states then
   begin
     pnd:=Tree.GetNodeData(Node);
     if pnd<>nil then
-      NodesStates.OpenedNodes.PushBack(pnd^);
+    begin
+      if vsExpanded in Node.states then
+        NodesStates.OpenedNodes.PushBack(pnd^);
+      if Tree.Selected[Node]then
+        NodesStates.SelectedNode:=pnd^;
+    end;
   end;
   child:=Node^.FirstChild;
   while child<>nil do
@@ -149,7 +158,11 @@ begin
   if pnd<>nil then
   begin
     if findin(pnd,StartInNodestates,NodesStates) then
-    Tree.Expanded[Node]:=true;
+      Tree.Expanded[Node]:=true;
+    if (pnd.pent=NodesStates.SelectedNode.pent)
+    and(pnd.name=NodesStates.SelectedNode.name)
+    and(pnd.id=NodesStates.SelectedNode.id) then
+      Tree.AddToSelection(Node);
       //Node^.Expand(True);
       //Node.states:=Node.states+[vsExpanded];
   end;

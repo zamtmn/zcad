@@ -44,6 +44,7 @@ TArrowStyle=(TSClosedFilled,TSClosedBlank,TSClosed,TSDot,TSArchitecturalTick,TSO
 TDimTextMove=(DTMMoveDimLine,DTMCreateLeader,DTMnothung);
 PTDimStyleDXFLoadingData=^TDimStyleDXFLoadingData;
 TDimStyleDXFLoadingData=packed record
+                              TextStyleName:string;
                               DIMBLK1handle,DIMBLK2handle,DIMLDRBLKhandle:TDWGHandle;
                         end;
 TGDBDimLinesProp=packed record
@@ -104,6 +105,7 @@ GDBDimStyle = {$IFNDEF DELPHI}packed{$ENDIF}object(GDBNamedObject)
                       procedure CreateLDIfNeed;
                       procedure ReleaseLDIfNeed;
                       procedure ResolveDXFHandles(const Handle2BlockName:TMapBlockHandle_BlockNames);
+                      procedure ResolveTextstyles(const tst:TGenericNamedObjectsArray);
                       destructor Done;virtual;
              end;
 PGDBDimStyleArray=^GDBDimStyleArray;
@@ -111,6 +113,7 @@ GDBDimStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray{-}<P
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;
                     procedure ResolveDXFHandles(const Handle2BlockName:TMapBlockHandle_BlockNames);
+                    procedure ResolveTextstyles(const tst:TGenericNamedObjectsArray);
                     procedure ResolveLineTypes(const lta:GDBLtypeArray);
               end;
 {EXPORT-}
@@ -146,7 +149,12 @@ begin
      ReleaseLDIfNeed;
      inherited;
 end;
-
+procedure GDBDimStyle.ResolveTextstyles(const tst:TGenericNamedObjectsArray);
+begin
+     if PDXFLoadingData<>nil then
+       if PDXFLoadingData.TextStyleName<>'' then
+         Text.DIMTXSTY:=tst.getAddres(PDXFLoadingData.TextStyleName)
+end;
 procedure GDBDimStyle.ResolveDXFHandles(const Handle2BlockName:TMapBlockHandle_BlockNames);
 {NEEDFIXFORDELPHI}
 {$IFNDEF DELPHI}
@@ -196,6 +204,7 @@ begin
      if PDXFLoadingData=nil then
      begin
           GDBGetMem({$IFDEF DEBUGBUILD}'{29732718-D406-4A69-A37E-3F9A28E849EF}',{$ENDIF}pointer(PDXFLoadingData),SizeOf(PDXFLoadingData^));
+          pointer(PDXFLoadingData^.TextStyleName):=nil;
           PDXFLoadingData^.DIMBLK1handle:=0;
           PDXFLoadingData^.DIMBLK2handle:=0;
           PDXFLoadingData^.DIMLDRBLKhandle:=0;
@@ -205,6 +214,7 @@ procedure GDBDimStyle.ReleaseLDIfNeed;
 begin
      if PDXFLoadingData<>nil then
      begin
+          PDXFLoadingData^.TextStyleName:='';
           GDBFreeMem(pointer(PDXFLoadingData));
      end;
 end;
@@ -231,6 +241,8 @@ begin
 end;
 
 procedure GDBDimStyle.SetValueFromDxf(var mode:TDimStyleReadMode; group:GDBInteger;value:GDBString;var h2p:TMapHandleToPointer);
+var
+   temp:QWord;
 begin
   if group=1001 then
                     mode:=TDSRM_ACAD;
@@ -373,12 +385,21 @@ begin
                 end;
                 340:
                 begin
-                     Text.DIMTXSTY:=h2p.MyGetValue(StrToQWord('$'+value));
+                     if TryStrToQWord('$'+value,temp) then
+                       Text.DIMTXSTY:=h2p.MyGetValue(temp)
+                     else
+                       begin
+                         CreateLDIfNeed;
+                         PDXFLoadingData.TextStyleName:=value;
+                       end;
                 end;
                 341:
                 begin
-                     CreateLDIfNeed;
-                     PDXFLoadingData.DIMLDRBLKhandle:=StrToQWord('$'+value);
+                     if TryStrToQWord('$'+value,temp) then
+                       begin
+                        CreateLDIfNeed;
+                        PDXFLoadingData.DIMLDRBLKhandle:=temp;
+                       end;
                 end;
                 342:
                 begin
@@ -450,6 +471,19 @@ begin
      text.DIMTXSTY:=nil;
      text.DIMCLRT:=DIMCLRTDefaultValue;
      Placing.DIMTMOVE:=DTMMoveDimLine;
+end;
+procedure GDBDimStyleArray.ResolveTextstyles(const tst:TGenericNamedObjectsArray);
+var
+  p:PGDBDimStyle;
+  ir:itrec;
+begin
+  p:=beginiterate(ir);
+  if p<>nil then
+  repeat
+    p^.ResolveTextstyles(tst);
+
+    p:=iterate(ir);
+  until p=nil;
 end;
 procedure GDBDimStyleArray.ResolveDXFHandles(const Handle2BlockName:TMapBlockHandle_BlockNames);
 var

@@ -380,6 +380,7 @@ var code{,ch}: GDBInteger;
   cmd,subexpr,superexpr:string;
   parsed:gdbboolean;
   command,operands:GDBString;
+  relativemarker:boolean;
 begin
     //ch:=ord(key);
     if ord(key)=13 then
@@ -422,10 +423,13 @@ begin
       else if CmdEdit.text[1] = '$' then begin
                                               expr:=copy(CmdEdit.text, 2, length(CmdEdit.text) - 1);
                                               v:=evaluate(expr,SysUnit);
-                                              //s:=valuetoGDBString(v.pvalue,v.ptd);
-                                              s:=v.data.ptd^.GetValueAsString(v.data.Instance);
-                                              v.data.Instance:=v.data.Instance;
-                                              ZCMsgCallBackInterface.TextMessage(Format(rsExprOutText,[expr,s]),TMWOHistoryOut);
+                                              if v.data.ptd<>nil  then
+                                              begin
+                                                s:=v.data.ptd^.GetValueAsString(v.data.Instance);
+                                                v.data.ptd^.MagicFreeInstance(v.data.Instance);
+                                                v.data.Instance:=v.data.Instance;
+                                                ZCMsgCallBackInterface.TextMessage(Format(rsExprOutText,[expr,s]),TMWOHistoryOut);
+                                              end;
                                          end
       else if commandmanager.FindCommand(uppercase({cmd}command))<>nil then
           begin
@@ -434,7 +438,16 @@ begin
                commandmanager.executecommand(Cmd,drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
           end
       else begin
-           cmd:=CmdEdit.text;
+           cmd:=readspace(CmdEdit.text);
+           if length(cmd)>0 then
+           begin
+           if cmd[1]='@' then
+           begin
+             relativemarker:=true;
+             cmd:=copy(cmd,2,length(cmd)-1);
+           end
+           else
+             relativemarker:=false;
            superexpr:='';
            repeat
            subexpr:=GetPredStr(cmd,',');
@@ -456,18 +469,27 @@ begin
            begin
                  if drawings.GetCurrentDWG<>nil then
                  if drawings.GetCurrentDWG.wa.getviewcontrol<>nil then
-                 commandmanager.sendcoordtocommandTraceOn(drawings.GetCurrentDWG.wa,uzegeometry.CreateVertex(strtodouble(parseresult^.getData(0)),
-                                                                                              strtodouble(parseresult^.getData(1)),
-                                                                                              strtodouble(parseresult^.getData(2))),MZW_LBUTTON,nil);
+                 begin
+                 temp:=CreateVertex(strtodouble(parseresult^.getData(0)),strtodouble(parseresult^.getData(1)),strtodouble(parseresult^.getData(2)));
+                 if relativemarker then
+                 if drawings.GetCurrentDWG.wa.tocommandmcliccount>0 then
+                   temp:=VertexAdd(temp,drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[0].worldcoord);
+                 commandmanager.sendcoordtocommandTraceOn(drawings.GetCurrentDWG.wa,temp,MZW_LBUTTON,nil);
+                 end;
                  if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
            end
            else if IsParsed('_realnumber'#0'_softspace'#0'=,_realnumber'#0,superexpr,parseresult)then
            begin
                  if drawings.GetCurrentDWG<>nil then
                  if drawings.GetCurrentDWG.wa.getviewcontrol<>nil then
-                 commandmanager.sendcoordtocommandTraceOn(drawings.GetCurrentDWG.wa,uzegeometry.CreateVertex(strtodouble(parseresult^.getData(0)),
-                                                                                              strtodouble(parseresult^.getData(1)),
-                                                                                              0),MZW_LBUTTON,nil);
+                 begin
+                 len:=drawings.GetCurrentDWG.wa.param.ontrackarray.total;
+                 temp:=CreateVertex(strtodouble(parseresult^.getData(0)),strtodouble(parseresult^.getData(1)),0);
+                 if relativemarker then
+                 if drawings.GetCurrentDWG.wa.tocommandmcliccount>0 then
+                   temp:=VertexAdd(temp,drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[0].worldcoord);
+                 commandmanager.sendcoordtocommandTraceOn(drawings.GetCurrentDWG.wa,temp,MZW_LBUTTON,nil);
+                 end;
                  if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
            end
            else if IsParsed('_realnumber'#0'_softspace'#0,superexpr,parseresult)then
@@ -490,6 +512,7 @@ begin
            end
               else
                   ZCMsgCallBackInterface.TextMessage('Unable to parse line "'+subexpr+'"',TMWOShowError);
+          end;
       end;
     end;
     CmdEdit.text:='';

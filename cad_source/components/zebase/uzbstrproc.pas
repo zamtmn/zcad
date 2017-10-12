@@ -20,7 +20,8 @@ unit uzbstrproc;
 {$INCLUDE def.inc}
 interface
 uses {$IFNDEF DELPHI}{fileutil,}{$ENDIF}uzbtypesbase,sysutils,strutils{$IFNDEF DELPHI},{LCLProc}LazUTF8,lazutf16{$ENDIF};
-function GetPredStr(var s: GDBString; substr: GDBString): GDBString;
+function GetPredStr(var s: GDBString; substr: GDBString): GDBString;overload;
+function GetPredStr(var s: GDBString; substrs: array of const; out nearestsubstr:string): GDBString;overload;
 function readspace(expr: GDBString): GDBString;
 
 //function sys2interf(s:GDBString):GDBString;
@@ -354,7 +355,7 @@ begin
   if expr='' then exit;
 
   i := 1;
-  while not (expr[i] in ['{','}','a'..'z', 'A'..'Z', '0'..'9', '$', '(', ')', '+', '-', '*', '/', ':', '=','_', '''']) do
+  while not (expr[i] in ['@','{','}','a'..'z', 'A'..'Z', '0'..'9', '$', '(', ')', '+', '-', '*', '/', ':', '=','_', '''']) do
   begin
     if i = length(expr) then
       system.break;
@@ -385,6 +386,58 @@ begin
                   s:='';
              end;
 end;
+function GetPredStr(var s: GDBString; substrs: array of const; out nearestsubstr:string): GDBString;
+var i,current: GDBInteger;
+    substr:GDBString;
+    itstring:boolean;
+    nearest: GDBInteger;
+procedure storecurrent;
+begin
+  nearest:=current;
+  nearestsubstr:=substr;
+end;
+begin
+  nearest:=Low(substrs)-1;
+  nearestsubstr:='';
+  for i:=Low(substrs) to High(substrs) do
+  begin
+    itstring:=true;
+    case substrs[i].VType of
+                   vtChar:substr:=substrs[i].VChar;
+                 vtString:substr:=substrs[i].VString^;
+             vtAnsiString:substr:=PAnsiString(substrs[i].VAnsiString)^;
+          vtUnicodeString:substr:=PUnicodeString(substrs[i].VUnicodeString)^;
+          else itstring:=False;
+    end;
+    if itstring then
+    begin
+      current:=pos(substr,s);
+      if current>0 then
+      begin
+        if nearest=Low(substrs)-1 then begin
+          storecurrent;
+        end else begin
+          if current<nearest then
+            storecurrent;
+        end;
+      end;
+    end;
+  end;
+  if nearest<>Low(substrs)-1 then //begin
+  //if nearest<>0 then
+             begin
+                  result:=copy(s,1,nearest-1);
+                  nearest:=nearest+length(nearestsubstr);
+                  s:=copy(s,nearest,length(s)-nearest+1);
+             end
+          else
+             begin
+                  result:=s;
+                  s:='';
+             end;
+  //end;
+end;
+
 function Ansi2CP(astr:GDBAnsiString):GDBString;
 begin
      case CodePage of

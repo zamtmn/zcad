@@ -229,7 +229,7 @@
         <PackageName Value="LCL"/>
       </Item18>
     </RequiredPackages>
-    <Units Count="185">
+    <Units Count="187">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -1015,6 +1015,17 @@
         <Filename Value="components/zobjectinspector/zcobjectinspectorui.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit184>
+      <Unit185>
+        <Filename Value="zcad/gui/forms/uzcfnavigatorentities.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="TNavigatorEntities"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit185>
+      <Unit186>
+        <Filename Value="zcad/register/uzcregnavigatorentities.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit186>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

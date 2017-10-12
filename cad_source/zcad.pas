@@ -52,6 +52,7 @@ uses
   uzcregpaths,
   uzcregenginefeatures,
   uzcreginterface,
+  uzcregnavigatorentities,
   uzcregnavigatordevices,
   //
   //next line load system.pas

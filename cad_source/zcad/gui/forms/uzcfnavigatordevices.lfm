@@ -1,9 +1,9 @@
-object Navigator: TNavigator
-  Left = 64
+object NavigatorDevices: TNavigatorDevices
+  Left = 334
   Height = 885
-  Top = 169
+  Top = 99
   Width = 484
-  Caption = 'Navigator'
+  Caption = 'Devices'
   ClientHeight = 885
   ClientWidth = 484
   DesignTimePPI = 113

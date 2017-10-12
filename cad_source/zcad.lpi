@@ -1007,7 +1007,7 @@
       <Unit183>
         <Filename Value="zcad/gui/forms/uzcfnavigatordevices.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="Navigator"/>
+        <ComponentName Value="NavigatorDevices"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit183>

@@ -13,7 +13,7 @@ uses
 
 type
 
-  { TNavigator }
+  { TNavigatorDevices }
   TNodeMode=(TNMGroup,TNMAutoGroup,TNMData);
   PTNodeData=^TNodeData;
   TNodeData=record
@@ -46,7 +46,7 @@ type
     //function FindGroupNodeById(RootNode:PVirtualNode;id:string):PVirtualNode;
   end;
 
-  TNavigator = class(TForm)
+  TNavigatorDevices = class(TForm)
     CoolBar1: TCoolBar;
     MainToolBar: TToolBar;
     NavTree: TVirtualStringTree;
@@ -82,14 +82,14 @@ type
   end;
 
 var
-  Navigator: TNavigator;
+  NavigatorDevices: TNavigatorDevices;
   NavGroupIconIndex,NavAutoGroupIconIndex:integer;
 
 implementation
 
 {$R *.lfm}
 
-{ TNavigator }
+{ TNavigatorDevices }
 constructor TNodesStates.Create;
 begin
   OpenedNodes:=TNodesStatesVector.create;
@@ -298,7 +298,7 @@ begin
    RootNode:=nil;
    inherited;
 end;
-procedure TNavigator.FreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
+procedure TNavigatorDevices.FreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
 var
   pnd:PTNodeData;
 begin
@@ -306,7 +306,7 @@ begin
   if Assigned(pnd) then
      system.Finalize(pnd^);
 end;
-procedure TNavigator.VTFocuschanged(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex);
+procedure TNavigatorDevices.VTFocuschanged(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex);
 var
   pnd:PTNodeData;
   s:ansistring;
@@ -319,7 +319,7 @@ begin
    commandmanager.executecommandsilent(@s[1],drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
   end;
 end;
-procedure TNavigator._onCreate(Sender: TObject);
+procedure TNavigatorDevices._onCreate(Sender: TObject);
 begin
    ActionList1.Images:=ImagesManager.IconList;
    MainToolBar.Images:=ImagesManager.IconList;
@@ -334,7 +334,7 @@ begin
 
    ZCMsgCallBackInterface.RegisterHandler_GUIAction(AutoRefreshTree);
 end;
-procedure TNavigator.RefreshTree(Sender: TObject);
+procedure TNavigatorDevices.RefreshTree(Sender: TObject);
 var
   pv:pGDBObjEntity;
   ir:itrec;
@@ -362,13 +362,13 @@ begin
    end;
    NavTree.EndUpdate;
 end;
-procedure TNavigator.AutoRefreshTree(sender:TObject;GUIAction:TZMessageID);
+procedure TNavigatorDevices.AutoRefreshTree(sender:TObject;GUIAction:TZMessageID);
 begin
   if GUIAction=ZMsgID_GUIActionRebuild then
     RefreshTree(sender);
 end;
 
-procedure TNavigator.TVDblClick(Sender: TObject);
+procedure TNavigatorDevices.TVDblClick(Sender: TObject);
 var
   pnode:PVirtualNode;
   pnd:PTNodeData;
@@ -392,21 +392,21 @@ begin
   end;
 end;
 
-procedure TNavigator.TVOnMouseMove(Sender: TObject; Shift: TShiftState; X,
+procedure TNavigatorDevices.TVOnMouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Integer);
 begin
   NavMX:=x;
   NavMy:=y;
 end;
 
-procedure TNavigator.VTCompareNodes(Sender: TBaseVirtualTree; Node1,
+procedure TNavigatorDevices.VTCompareNodes(Sender: TBaseVirtualTree; Node1,
   Node2: PVirtualNode; Column: TColumnIndex; var Result: Integer);
 begin
   Result := //WideCompareStr(NavTree.Text[Node1, Column], NavTree.Text[Node2, Column]);
             AnsiNaturalCompare(NavTree.Text[Node1, Column], NavTree.Text[Node2, Column],False);
 end;
 
-procedure TNavigator.VTHeaderClick(Sender: TVTHeader; HitInfo: TVTHeaderHitInfo
+procedure TNavigatorDevices.VTHeaderClick(Sender: TVTHeader; HitInfo: TVTHeaderHitInfo
   );
 begin
   if HitInfo.Button = mbLeft then
@@ -428,7 +428,7 @@ begin
   end;
 end;
 
-procedure TNavigator.NavGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;
+procedure TNavigatorDevices.NavGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;
                          TextType: TVSTTextType; var CellText: String);
 var
   pnd:PTNodeData;
@@ -442,7 +442,7 @@ begin
                                    celltext:=GetEntityVariableValue(pnd^.pent,'NMO_Name','Absent Name');
   end;
 end;
-procedure TNavigator.NavGetImage(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
+procedure TNavigatorDevices.NavGetImage(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
                                  var Ghosted: Boolean; var ImageIndex: Integer);
 var
   pnd:PTNodeData;
@@ -479,7 +479,7 @@ else
   end;
 end;
 
-procedure TNavigator.CreateRoots;
+procedure TNavigatorDevices.CreateRoots;
 begin
   //CombinedNode:=TRootNodeDesk.Create(self, NavTree);
   //CombinedNode.ftext:='Combined devices';
@@ -488,7 +488,7 @@ begin
   StandaloneNode.ficonindex:=ImagesManager.GetImageIndex('basket');
 end;
 
-procedure TNavigator.EraseRoots;
+procedure TNavigatorDevices.EraseRoots;
 begin
   if assigned(CombinedNode) then
   begin

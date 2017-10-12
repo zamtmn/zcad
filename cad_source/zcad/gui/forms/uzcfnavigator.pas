@@ -106,16 +106,13 @@ var
   child:PVirtualNode;
   pnd:PTNodeData;
 begin
-  //if vsExpanded in Node.states then
+  pnd:=Tree.GetNodeData(Node);
+  if pnd<>nil then
   begin
-    pnd:=Tree.GetNodeData(Node);
-    if pnd<>nil then
-    begin
-      if vsExpanded in Node.states then
-        NodesStates.OpenedNodes.PushBack(pnd^);
-      if Tree.Selected[Node]then
-        NodesStates.SelectedNode:=pnd^;
-    end;
+    if vsExpanded in Node.states then
+      NodesStates.OpenedNodes.PushBack(pnd^);
+    if Tree.Selected[Node]then
+      NodesStates.SelectedNode:=pnd^;
   end;
   child:=Node^.FirstChild;
   while child<>nil do
@@ -134,7 +131,7 @@ var
   i:integer;
   deb:TNodeData;
 begin
-  for i:={StartInNodestates+1}0 to NodesStates.OpenedNodes.Size-1 do
+  for i:=0 to NodesStates.OpenedNodes.Size-1 do
   begin
   deb:=NodesStates.OpenedNodes[i];
   if (pnd^.id=deb.id)
@@ -163,8 +160,6 @@ begin
     and(pnd.name=NodesStates.SelectedNode.name)
     and(pnd.id=NodesStates.SelectedNode.id) then
       Tree.AddToSelection(Node);
-      //Node^.Expand(True);
-      //Node.states:=Node.states+[vsExpanded];
   end;
   if StartInNodestates=NodesStates.OpenedNodes.Size then
                                                         exit;
@@ -322,8 +317,6 @@ begin
   begin
    s:='SelectObjectByAddres('+inttostr(GDBPlatformUInt(pnd^.pent))+')';
    commandmanager.executecommandsilent(@s[1],drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
-   //pnd^.pent.select(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.selector);
-   //if assigned(redrawoglwndproc) then redrawoglwndproc;
   end;
 end;
 procedure TNavigator._onCreate(Sender: TObject);
@@ -331,9 +324,6 @@ begin
    ActionList1.Images:=ImagesManager.IconList;
    MainToolBar.Images:=ImagesManager.IconList;
    Refresh.ImageIndex:=ImagesManager.GetImageIndex('Refresh');
-
-   //CombinedNode:=nil;
-   //StandaloneNode:=nil;
 
    NavTree.OnGetText:=NavGetText;
    NavTree.OnGetImageIndex:=NavGetImage;
@@ -371,7 +361,6 @@ begin
    freeandnil(StandaloneNodeStates);
    end;
    NavTree.EndUpdate;
-   //NavTree.UpdateRanges;
 end;
 procedure TNavigator.AutoRefreshTree(sender:TObject;GUIAction:TZMessageID);
 begin

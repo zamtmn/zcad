@@ -77,7 +77,7 @@
         <Action Name="ACN_SHOW_OBJECTINSPECTOR"/>
         <Action Name="ACN_SHOW_PAGECONTROL"/>
         <Action Name="ACN_SHOW_COMMANDLINE"/>
-        <Action Name="ACN_SHOW_NAVIGATOR"/>
+        <Action Name="ACN_SHOW_NAVIGATOR_DEVICES"/>
         <Action Name="ACN_TEXTWINDOW"/>
         <MainMenuItem Name="ToolBars">
           <ToolBars/>

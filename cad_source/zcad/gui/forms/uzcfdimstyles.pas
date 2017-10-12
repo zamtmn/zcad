@@ -50,16 +50,15 @@ type
   { TDimStylesForm}
 
   TDimStylesForm= class(TForm)
+    CoolBar1: TCoolBar;
     DelStyle: TAction;
     MkCurrentStyle: TAction;
     PurgeStyles: TAction;
     RefreshStyles: TAction;
     AddStyle: TAction;
     ActionList1: TActionList;
-    FontTypeFilterComboBox: TComboBox;
     Bevel1: TBevel;
     ButtonApplyClose: TBitBtn;
-    FontTypeFilterDesc: TLabel;
     DescLabel: TLabel;
     ListView1: TZListView;
     ToolBar1: TToolBar;
@@ -71,7 +70,6 @@ type
     ToolButton_Refresh: TToolButton;
     procedure Aply(Sender: TObject);
     procedure AplyClose(Sender: TObject);
-    procedure FontsTypesChange(Sender: TObject);
     procedure PurgeTStyles(Sender: TObject);
     procedure DimStyleAdd(Sender: TObject);
     procedure DeleteItem(Sender: TObject);
@@ -97,7 +95,6 @@ type
     procedure UpdateItem2(Item:TObject);
     procedure CreateUndoStartMarkerNeeded;
     procedure CreateUndoEndMarkerNeeded;
-    procedure GetFontsTypesComboValue;
     procedure doTStyleDelete(ProcessedItem:TListItem);
 
   public
@@ -133,11 +130,6 @@ begin
    TMethod(OldFunction).code:=@TForm.IsShortcut;
    TMethod(OldFunction).Data:=self;
    result:=IsZShortcut(Message,ActiveControl,nil,OldFunction);
-end;
-
-procedure TDimStylesForm.GetFontsTypesComboValue;
-begin
-     FontTypeFilterComboBox.ItemIndex:=ord(FontsFilter);
 end;
 
 procedure TDimStylesForm.CreateUndoStartMarkerNeeded;
@@ -177,7 +169,6 @@ begin
      end;
      ListView1.UpdateItem2(TListItem(Item));
      FontChange:=false;
-     FontTypeFilterComboBox.enabled:=true;
 end;
 
 {Style name handle procedures}
@@ -200,7 +191,6 @@ begin
   //FillFontsSelector(PGDBTextStyle(Item.Data)^.pfont^.fontfile,PGDBTextStyle(Item.Data)^.pfont);
   FillTextStyleSelector(PGDBDimStyle(Item.Data)^.Text.DIMTXSTY^.Name,PGDBDimStyle(Item.Data)^.Text.DIMTXSTY);
   FontChange:=true;
-  FontTypeFilterComboBox.enabled:=false;
   result:=SupportTypedEditors.createeditor(ListView1,Item,r,FontsSelector,'TEnumData',nil,r.Bottom-r.Top,false)
 end;
 //{Font path handle procedures}
@@ -329,7 +319,6 @@ begin
 end;
 procedure TDimStylesForm.FormShow(Sender: TObject);
 begin
-     GetFontsTypesComboValue;
      RefreshListItems(nil);
 end;
 procedure TDimStylesForm.RefreshListItems(Sender: TObject);
@@ -493,11 +482,6 @@ end;
 procedure TDimStylesForm.AplyClose(Sender: TObject);
 begin
      close;
-end;
-
-procedure TDimStylesForm.FontsTypesChange(Sender: TObject);
-begin
-  FontsFilter:=TFTFilter(FontTypeFilterComboBox.ItemIndex);
 end;
 
 procedure TDimStylesForm.PurgeTStyles(Sender: TObject);

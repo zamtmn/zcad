@@ -242,13 +242,14 @@ end;
 procedure TRootNodeDesk.ProcessEntity(pent:pGDBObjEntity);
 var
   BaseName,Name:string;
-  basenode,namenode,pnode:PVirtualNode;
+  basenode,basenode2,namenode,pnode:PVirtualNode;
   pnd:PTNodeData;
 begin
   if pent^.GetObjType=GDBDeviceID then
   begin
-  BaseName:=GetEntityVariableValue(pent,'NMO_BaseName','Absent BaseName');
   Name:=GetEntityVariableValue(pent,'NMO_Name','Absent Name');
+
+  BaseName:=GetEntityVariableValue(pent,'NMO_Prefix','Absent Prefix');
   basenode:=FindGroupNodeById(rootnode,BaseName);
   if basenode=nil then
   begin
@@ -261,13 +262,28 @@ begin
                          pnd^.name:=BaseName;
                        end;
   end;
-  namenode:=FindGroupNodeByName(basenode,Name);
+
+  BaseName:=GetEntityVariableValue(pent,'NMO_BaseName','Absent BaseName');
+  basenode2:=FindGroupNodeById(basenode,BaseName);
+  if basenode2=nil then
+  begin
+    basenode2:=Tree.AddChild(basenode,nil);
+    pnd:=Tree.GetNodeData(basenode2);
+    if Assigned(pnd) then
+                       begin
+                         pnd^.NodeMode:=TNMGroup;
+                         pnd^.id:=BaseName;
+                         pnd^.name:=BaseName;
+                       end;
+  end;
+
+  namenode:=FindGroupNodeByName(basenode2,Name);
   if namenode<>nil then
                        begin
                          ConvertNameNodeToGroupNode(namenode);
-                         basenode:=namenode;
+                         basenode2:=namenode;
                        end;
-  pnode:=Tree.AddChild(basenode,nil);
+  pnode:=Tree.AddChild(basenode2,nil);
   pnd := Tree.GetNodeData(pnode);
   if Assigned(pnd) then
                       begin

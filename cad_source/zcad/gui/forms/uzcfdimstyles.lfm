@@ -9,7 +9,6 @@ object DimStylesForm: TDimStylesForm
   ClientWidth = 800
   Constraints.MinHeight = 500
   Constraints.MinWidth = 800
-  DesignTimePPI = 113
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
@@ -22,10 +21,10 @@ object DimStylesForm: TDimStylesForm
     AnchorSideRight.Control = FontTypeFilterDesc
     AnchorSideBottom.Control = FontTypeFilterComboBox
     AnchorSideBottom.Side = asrBottom
-    Left = 125
-    Height = 27
+    Left = 145
+    Height = 21
     Top = 1
-    Width = 493
+    Width = 492
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Left = 2
     BorderSpacing.Top = 1
@@ -38,10 +37,10 @@ object DimStylesForm: TDimStylesForm
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Bevel1
     AnchorSideBottom.Side = asrBottom
-    Left = 126
-    Height = 25
+    Left = 146
+    Height = 19
     Top = 2
-    Width = 491
+    Width = 490
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Around = 1
     Layout = tlCenter
@@ -71,8 +70,8 @@ object DimStylesForm: TDimStylesForm
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = ButtonApplyClose
     Left = 1
-    Height = 527
-    Top = 30
+    Height = 533
+    Top = 24
     Width = 798
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Left = 1
@@ -116,14 +115,14 @@ object DimStylesForm: TDimStylesForm
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     Left = 727
-    Height = 27
+    Height = 21
     Top = 1
     Width = 72
     Anchors = [akTop, akRight]
     AutoSelect = False
     BorderSpacing.Top = 1
     BorderSpacing.Right = 1
-    ItemHeight = 19
+    ItemHeight = 13
     ItemIndex = 0
     Items.Strings = (
       'All'
@@ -140,10 +139,10 @@ object DimStylesForm: TDimStylesForm
     AnchorSideRight.Control = FontTypeFilterComboBox
     AnchorSideBottom.Control = FontTypeFilterComboBox
     AnchorSideBottom.Side = asrBottom
-    Left = 620
-    Height = 27
+    Left = 639
+    Height = 21
     Top = 1
-    Width = 105
+    Width = 86
     Anchors = [akTop, akRight, akBottom]
     BorderSpacing.Right = 2
     Caption = 'Fonts types filter:'
@@ -154,9 +153,9 @@ object DimStylesForm: TDimStylesForm
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
     Left = 2
-    Height = 22
+    Height = 26
     Top = 1
-    Width = 121
+    Width = 141
     Align = alNone
     AutoSize = True
     BorderSpacing.Left = 2
@@ -174,36 +173,36 @@ object DimStylesForm: TDimStylesForm
       ShowHint = True
     end
     object ToolButton_Delete: TToolButton
-      Left = 24
+      Left = 28
       Top = 0
       Action = DelStyle
     end
     object ToolButton_MkCurrent: TToolButton
-      Left = 47
+      Left = 55
       Top = 0
       Action = MkCurrentStyle
     end
     object Separator1: TToolButton
-      Left = 70
-      Height = 22
+      Left = 82
+      Height = 26
       Top = 0
       Caption = 'Separator1'
       Style = tbsDivider
     end
     object ToolButton_Purge: TToolButton
-      Left = 75
+      Left = 87
       Top = 0
       Action = PurgeStyles
     end
     object ToolButton_Refresh: TToolButton
-      Left = 98
+      Left = 114
       Top = 0
       Action = RefreshStyles
     end
   end
   object ActionList1: TActionList
-    Left = 632
-    Top = 312
+    left = 632
+    top = 312
     object AddStyle: TAction
       Caption = 'AddStyle'
       DisableIfNoHandler = False

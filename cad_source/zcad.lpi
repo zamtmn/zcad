@@ -1018,7 +1018,7 @@
       <Unit185>
         <Filename Value="zcad/gui/forms/uzcfnavigatorentities.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="TNavigatorEntities"/>
+        <ComponentName Value="NavigatorEntities"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit185>

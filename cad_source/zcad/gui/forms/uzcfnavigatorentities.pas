@@ -18,7 +18,7 @@ type
   PTNodeData=^TNodeData;
   TNodeData=record
     NodeMode:TNodeMode;
-    name,id:string;
+    name:string;
     pent:PGDBObjEntity;
   end;
   TNodesStatesVector=tvector<TNodeData>;
@@ -37,7 +37,7 @@ type
     destructor Destroy;override;
     procedure ProcessEntity(pent:pGDBObjEntity);
     procedure ConvertNameNodeToGroupNode(pnode:PVirtualNode);
-    function FindGroupNodeById(RootNode:PVirtualNode;id:string):PVirtualNode;
+    //function FindGroupNodeById(RootNode:PVirtualNode;id:string):PVirtualNode;
     function FindGroupNodeByName(RootNode:PVirtualNode;Name:string):PVirtualNode;
     function SaveState:TNodesStates;
     procedure RecursiveSaveState(Node:PVirtualNode;NodesStates:TNodesStates);
@@ -69,10 +69,8 @@ type
                           var Ghosted: Boolean; var ImageIndex: Integer);
 
   private
-    CombinedNode:TRootNodeDesk;
-    CombinedNodeStates:TNodesStates;
-    StandaloneNode:TRootNodeDesk;
-    StandaloneNodeStates:TNodesStates;
+    EntitiesNode:TRootNodeDesk;
+    EntitiesNodeStates:TNodesStates;
     NavMX,NavMy:integer;
   public
     procedure CreateRoots;
@@ -93,7 +91,6 @@ implementation
 constructor TNodesStates.Create;
 begin
   OpenedNodes:=TNodesStatesVector.create;
-  SelectedNode.id:='';
   SelectedNode.name:='';
   SelectedNode.pent:=nil;
 end;
@@ -134,8 +131,7 @@ begin
   for i:=0 to NodesStates.OpenedNodes.Size-1 do
   begin
   deb:=NodesStates.OpenedNodes[i];
-  if (pnd^.id=deb.id)
-  and(pnd^.name=deb.name)
+  if (pnd^.name=deb.name)
   and(pnd^.NodeMode=deb.NodeMode)
   and(pnd^.pent=deb.pent)then
    begin
@@ -157,8 +153,7 @@ begin
     if findin(pnd,StartInNodestates,NodesStates) then
       Tree.Expanded[Node]:=true;
     if (pnd.pent=NodesStates.SelectedNode.pent)
-    and(pnd.name=NodesStates.SelectedNode.name)
-    and(pnd.id=NodesStates.SelectedNode.id) then
+    and(pnd.name=NodesStates.SelectedNode.name)then
       Tree.AddToSelection(Node);
   end;
   if StartInNodestates=NodesStates.OpenedNodes.Size then
@@ -190,22 +185,6 @@ begin
        if pvd<>nil then
                        result:=pvd.data.PTD^.GetValueAsString(pvd.data.Instance);
   end;
-end;
-function TRootNodeDesk.FindGroupNodeById(RootNode:PVirtualNode;id:string):PVirtualNode;
-var
-  child:PVirtualNode;
-  pnd:PTNodeData;
-begin
-  child:=RootNode^.FirstChild;
-  while child<>nil do
-  begin
-    pnd := Tree.GetNodeData(child);
-    if Assigned(pnd) then
-    if pnd^.id=id then
-                      system.Break;
-   child:=child^.NextSibling;
-  end;
-  result:=child;
 end;
 function TRootNodeDesk.FindGroupNodeByName(RootNode:PVirtualNode;Name:string):PVirtualNode;
 var
@@ -241,42 +220,20 @@ end;
 
 procedure TRootNodeDesk.ProcessEntity(pent:pGDBObjEntity);
 var
-  BaseName,Name:string;
+  {BaseName,}Name:string;
   basenode,namenode,pnode:PVirtualNode;
   pnd:PTNodeData;
 begin
-  if pent^.GetObjType=GDBDeviceID then
-  begin
-  BaseName:=GetEntityVariableValue(pent,'NMO_BaseName','Absent BaseName');
-  Name:=GetEntityVariableValue(pent,'NMO_Name','Absent Name');
-  basenode:=FindGroupNodeById(rootnode,BaseName);
-  if basenode=nil then
-  begin
-    basenode:=Tree.AddChild(rootnode,nil);
-    pnd:=Tree.GetNodeData(basenode);
-    if Assigned(pnd) then
-                       begin
-                         pnd^.NodeMode:=TNMGroup;
-                         pnd^.id:=BaseName;
-                         pnd^.name:=BaseName;
-                       end;
-  end;
-  namenode:=FindGroupNodeByName(basenode,Name);
-  if namenode<>nil then
-                       begin
-                         ConvertNameNodeToGroupNode(namenode);
-                         basenode:=namenode;
-                       end;
+  Name:=pent.GetObjTypeName;
+  basenode:=rootnode;
   pnode:=Tree.AddChild(basenode,nil);
   pnd := Tree.GetNodeData(pnode);
   if Assigned(pnd) then
                       begin
                       pnd^.NodeMode:=TNMData;
                       pnd^.pent:=pent;
-                      pnd^.id:=Name;
                       pnd^.name:=Name;
                       end;
-  end;
 end;
 constructor TRootNodeDesk.create(AOwner:TComponent; ATree: TVirtualStringTree; AName:string);
 var
@@ -347,18 +304,16 @@ begin
      pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
      if pv<>nil then
      repeat
-       if assigned(CombinedNode)then
-         CombinedNode.ProcessEntity(pv);
-       if assigned(StandaloneNode)then
-         StandaloneNode.ProcessEntity(pv);
+       if assigned(EntitiesNode)then
+         EntitiesNode.ProcessEntity(pv);
        pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
      until pv=nil;
    end;
 
-   if assigned(StandaloneNodeStates) then
+   if assigned(EntitiesNodeStates) then
    begin
-   StandaloneNode.RestoreState(StandaloneNodeStates);
-   freeandnil(StandaloneNodeStates);
+   EntitiesNode.RestoreState(EntitiesNodeStates);
+   freeandnil(EntitiesNodeStates);
    end;
    NavTree.EndUpdate;
 end;
@@ -402,8 +357,8 @@ end;
 procedure TNavigatorEntities.VTCompareNodes(Sender: TBaseVirtualTree; Node1,
   Node2: PVirtualNode; Column: TColumnIndex; var Result: Integer);
 begin
-  Result := //WideCompareStr(NavTree.Text[Node1, Column], NavTree.Text[Node2, Column]);
-            AnsiNaturalCompare(NavTree.Text[Node1, Column], NavTree.Text[Node2, Column],False);
+  Result := 0;
+            //AnsiNaturalCompare(NavTree.Text[Node1, Column], NavTree.Text[Node2, Column],False);
 end;
 
 procedure TNavigatorEntities.VTHeaderClick(Sender: TVTHeader; HitInfo: TVTHeaderHitInfo
@@ -434,13 +389,7 @@ var
   pnd:PTNodeData;
 begin
   pnd := Sender.GetNodeData(Node);
-  if assigned(pnd) then
-  begin
-     if pnd^.NodeMode<>TNMData then
-                                   celltext:=pnd^.name
-                               else
-                                   celltext:=GetEntityVariableValue(pnd^.pent,'NMO_Name','Absent Name');
-  end;
+  celltext:=pnd^.name
 end;
 procedure TNavigatorEntities.NavGetImage(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
                                  var Ghosted: Boolean; var ImageIndex: Integer);
@@ -452,10 +401,8 @@ begin
   if NavAutoGroupIconIndex=-1 then
                               NavAutoGroupIconIndex:=ImagesManager.GetImageIndex('navautogroup');
 
-     if (assigned(CombinedNode))and(node=CombinedNode.RootNode) then
-                                       ImageIndex:=CombinedNode.ficonindex
-else if (assigned(StandaloneNode))and(node=StandaloneNode.RootNode) then
-                                       ImageIndex:=StandaloneNode.ficonindex
+  if (assigned(EntitiesNode))and(node=EntitiesNode.RootNode) then
+                                       ImageIndex:=EntitiesNode.ficonindex
 else
   begin
     pnd := Sender.GetNodeData(Node);
@@ -484,21 +431,16 @@ begin
   //CombinedNode:=TRootNodeDesk.Create(self, NavTree);
   //CombinedNode.ftext:='Combined devices';
   //CombinedNode.ficonindex:=ImagesManager.GetImageIndex('caddie');
-  StandaloneNode:=TRootNodeDesk.Create(self, NavTree,'Standalone devices');
-  StandaloneNode.ficonindex:=ImagesManager.GetImageIndex('basket');
+  EntitiesNode:=TRootNodeDesk.Create(self, NavTree,'Entities');
+  EntitiesNode.ficonindex:=ImagesManager.GetImageIndex('basket');
 end;
 
 procedure TNavigatorEntities.EraseRoots;
 begin
-  if assigned(CombinedNode) then
+  if assigned(EntitiesNode) then
   begin
-    CombinedNodeStates:=CombinedNode.SaveState;
-    FreeAndNil(CombinedNode);
-  end;
-  if assigned(StandaloneNode) then
-  begin
-    StandaloneNodeStates:=StandaloneNode.SaveState;
-    FreeAndNil(StandaloneNode);
+    EntitiesNodeStates:=EntitiesNode.SaveState;
+    FreeAndNil(EntitiesNode);
   end;
 end;
 begin

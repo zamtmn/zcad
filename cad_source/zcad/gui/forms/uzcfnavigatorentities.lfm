@@ -1,4 +1,4 @@
-object TNavigatorEntities: TTNavigatorEntities
+object NavigatorEntities: TNavigatorEntities
   Left = 316
   Height = 885
   Top = 107

@@ -36,7 +36,8 @@
       <ZAction Name="ACN_SHOW_OBJECTINSPECTOR" Command="Show(ObjectInspector)" Img="#OI" Caption="Object inspector"/>
       <ZAction Name="ACN_SHOW_PAGECONTROL" Command="Show(PageControl)" Img="#DW" Caption="Drawings window"/>
       <ZAction Name="ACN_SHOW_COMMANDLINE" Command="Show(CommandLine)" Img="#CL" Caption="Command line and history"/>
-      <ZAction Name="ACN_SHOW_NAVIGATOR_DEVICES" Command="Show(NavigatorDevices)" Img="#NV" Caption="Navigator(Devices)"/>
+      <ZAction Name="ACN_SHOW_NAVIGATORDEVICES" Command="Show(NavigatorDevices)" Img="#NV" Caption="Navigator(Devices)"/>
+      <ZAction Name="ACN_SHOW_NAVIGATORENTITIES" Command="Show(NavigatorEntities)" Img="#NV" Caption="Navigator(Entities)"/>
       <ZAction Name="ACN_SAVELAYOUT" Command="SaveLayout" Img="#SLay" Caption="Save window layout as default"/>
       <ZAction Name="ACN_DOCKOPT" Command="DockingOptions" Img="#DO" Caption="Docking options"/>
       <ZAction Name="ACN_TEXTWINDOW" Command="TextWindow" Img="#TW" Caption="View text window" ShortCut="F2"/>

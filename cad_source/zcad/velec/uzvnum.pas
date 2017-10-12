@@ -659,7 +659,7 @@ begin
                   ourListGroup.listVertexWayGroup.Mutable[numEdgeNow]^.afterLength:=bAfterLength + ourListGroup.listVertexWayGroup[numEdgeNow].afterLength;
             end;
         end;
-      // HistoryOutStr('длина списка' + IntToStr(ourListGroup.listVertexWayGroup.Size));
+       //HistoryOutStr('длина списка' + IntToStr(ourListGroup.listVertexWayGroup.Size));
 
     end;
       end;

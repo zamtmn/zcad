@@ -41,8 +41,6 @@ const
      LinearScaleColumn=1;
      TextStyleNameColumn=2;
      TextHeightColumn=3;
-     //WidthFactorColumn=4;
-     //ObliqueColumn=5;
 
      ColumnCount=3+1;
 
@@ -85,7 +83,7 @@ type
       Selected: Boolean);
     procedure MkCurrent(Sender: TObject);
     procedure MaceItemCurrent(ListItem:TListItem);
-    procedure FillFontsSelector(currentitem:string;currentitempfont:PGDBfont);
+    procedure FillTextStyleSelector(currentitem:string;currentitempstyle:PGDBTextStyle);
     procedure onrsz(Sender: TObject);
     procedure countstyle(pdimstyle:PGDBDimStyle;out e,b,inDimStyles:GDBInteger);
   private
@@ -120,12 +118,7 @@ type
     {TextHeight handle procedures}
     function GetTextHeight(Item: TListItem):string;
     function CreateTextHeightEditor(Item: TListItem;r: TRect):boolean;
-    //{Wfactor handle procedures}
-    //function GetWidthFactor(Item: TListItem):string;
-    //function CreateWidthFactorEditor(Item: TListItem;r: TRect):boolean;
-    //{Oblique handle procedures}
-    //function GetOblique(Item: TListItem):string;
-    //function CreateObliqueEditor(Item: TListItem;r: TRect):boolean;
+
   end;
 
 var
@@ -158,22 +151,26 @@ end;
 
 procedure TDimStylesForm.UpdateItem2(Item:TObject);
 var
-   newfont:PGDBfont;
+   ir:itrec;
+   currentextstyle,plp:PGDBTextStyle;
 begin
      if FontChange then
      begin
-          newfont:=FontManager.addFonf(FindInPaths(sysvarPATHFontsPath,pstring(FontsSelector.Enums.getDataMutable(FontsSelector.Selected))^));
-          if  newfont<>PGDBDimStyle(TListItem(Item).Data)^.Text.DIMTXSTY^.pfont then
+       plp:=drawings.GetCurrentDWG^.TextStyleTable.beginiterate(ir);
+       if plp<>nil then
+       repeat
+            if plp^.Name=pstring(FontsSelector.Enums.getDataMutable(FontsSelector.Selected))^ then
+             currentextstyle:=plp;
+            plp:=drawings.GetCurrentDWG^.TextStyleTable.iterate(ir);
+       until plp=nil;
+          if  currentextstyle<>PGDBDimStyle(TListItem(Item).Data)^.Text.DIMTXSTY then
           begin
+                 ZCMsgCallBackInterface.TextMessage(pstring(FontsSelector.Enums.getDataMutable(FontsSelector.Selected))^,TMWOHistoryOut);
+
                CreateUndoStartMarkerNeeded;
-               with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pointer(PGDBDimStyle(TListItem(Item).Data)^.Text.DIMTXSTY^.pfont))^ do
+               with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pointer(PGDBDimStyle(TListItem(Item).Data)^.Text.DIMTXSTY))^ do
                begin
-               PGDBDimStyle(TListItem(Item).Data)^.Text.DIMTXSTY^.pfont:=newfont;
-               ComitFromObj;
-               end;
-               with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBTextStyle(TListItem(Item).Data)^.dxfname)^ do
-               begin
-               PGDBDimStyle(TListItem(Item).Data)^.Text.DIMTXSTY^.dxfname:=PGDBDimStyle(TListItem(Item).Data)^.Text.DIMTXSTY^.pfont^.Name;
+               PGDBDimStyle(TListItem(Item).Data)^.Text.DIMTXSTY:=currentextstyle;
                ComitFromObj;
                end;
           end;
@@ -196,12 +193,12 @@ end;
 function TDimStylesForm.GetTextStyleName(Item: TListItem):string;
 begin
   //result:=ExtractFileName(PGDBDimStyle(Item.Data)^.pfont^.fontfile);
-  result:=ExtractFileName(PGDBDimStyle(Item.Data)^.Text.DIMTXSTY^.pfont^.fontfile);
+  result:=ExtractFileName(PGDBDimStyle(Item.Data)^.Text.DIMTXSTY^.Name);
 end;
 function TDimStylesForm.CreateTextStyleNameEditor(Item: TListItem;r: TRect):boolean;
 begin
   //FillFontsSelector(PGDBTextStyle(Item.Data)^.pfont^.fontfile,PGDBTextStyle(Item.Data)^.pfont);
-  FillFontsSelector(PGDBDimStyle(Item.Data)^.Text.DIMTXSTY^.pfont^.fontfile,PGDBDimStyle(Item.Data)^.Text.DIMTXSTY^.pfont);
+  FillTextStyleSelector(PGDBDimStyle(Item.Data)^.Text.DIMTXSTY^.Name,PGDBDimStyle(Item.Data)^.Text.DIMTXSTY);
   FontChange:=true;
   FontTypeFilterComboBox.enabled:=false;
   result:=SupportTypedEditors.createeditor(ListView1,Item,r,FontsSelector,'TEnumData',nil,r.Bottom-r.Top,false)
@@ -229,55 +226,29 @@ function TDimStylesForm.CreateTextHeightEditor(Item: TListItem;r: TRect):boolean
 begin
   result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBDimStyle(Item.Data)^.Text.DIMTXT,'GDBDouble',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
 end;
-{Wfactor handle procedures}
-//function TDimStylesForm.GetWidthFactor(Item: TListItem):string;
-//begin
-//  //result:=floattostr(PGDBTextStyle(Item.Data)^.prop.wfactor);
-//end;
-//function TDimStylesForm.CreateWidthFactorEditor(Item: TListItem;r: TRect):boolean;
-//begin
-//  //result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.prop.wfactor,'GDBDouble',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
-//end;
-//{Oblique handle procedures}
-//function TDimStylesForm.GetOblique(Item: TListItem):string;
-//begin
-//  //result:=floattostr(PGDBTextStyle(Item.Data)^.prop.oblique);
-//end;
-//function TDimStylesForm.CreateObliqueEditor(Item: TListItem;r: TRect):boolean;
-//begin
-//  //result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.prop.oblique,'GDBDouble',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
-//end;
-procedure TDimStylesForm.FillFontsSelector(currentitem:string;currentitempfont:PGDBfont);
-var i:integer;
+
+procedure TDimStylesForm.FillTextStyleSelector(currentitem:string;currentitempstyle:PGDBTextStyle);
+var
     s:string;
     CurrentFontIndex:integer;
+    pdwg:PTSimpleDrawing;
+   ir:itrec;
+   plp:PGDBTextStyle;
 begin
-     CurrentFontIndex:=-1;
+
      FontsSelector.Enums.Free;
-     if FontsFilter<>TFTF_SHX then
-     for i:=0 to FontManager.ttffontfiles.Count-1 do
-     begin
-          S:=FontManager.ttffontfiles[i];
-          if S=currentitem then
-           CurrentFontIndex:=FontsSelector.Enums.Count;
-          S:=extractfilename(S);
-          FontsSelector.Enums.PushBackData(S);
-     end;
-     if FontsFilter<>TFTF_TTF then
-     for i:=0 to FontManager.shxfontfiles.Count-1 do
-     begin
-          S:=FontManager.shxfontfiles[i];
-          if S=currentitem then
-           CurrentFontIndex:=FontsSelector.Enums.Count;
-          S:=extractfilename(S);
-          FontsSelector.Enums.PushBackData(S);
-     end;
-     if CurrentFontIndex=-1 then
-     begin
-          CurrentFontIndex:=FontsSelector.Enums.Count;
-          S:=extractfilename(currentitempfont^.fontfile);
-          FontsSelector.Enums.PushBackData(S);
-     end;
+     CurrentFontIndex:=-1;
+     pdwg:=drawings.GetCurrentDWG;
+
+       plp:=pdwg^.TextStyleTable.beginiterate(ir);
+       if plp<>nil then
+       repeat
+            S:= plp^.Name;
+            if S=currentitem then
+             CurrentFontIndex:=FontsSelector.Enums.Count;
+            FontsSelector.Enums.PushBackData(S);
+            plp:=pdwg^.TextStyleTable.iterate(ir);
+       until plp=nil;
      FontsSelector.Selected:=CurrentFontIndex;
      FontsSelector.Enums.SortAndSaveIndex(FontsSelector.Selected);
 end;
@@ -329,16 +300,6 @@ begin
        OnGetName:=@GetTextHeight;
        OnClick:=@CreateTextHeightEditor;
   end;
-  //with ListView1.SubItems[WidthFactorColumn] do
-  //begin
-  //     OnGetName:=@GetWidthFactor;
-  //     OnClick:=@CreateWidthFactorEditor;
-  //end;
-  //with ListView1.SubItems[ObliqueColumn] do
-  //begin
-  //     OnGetName:=@GetOblique;
-  //     OnClick:=@CreateObliqueEditor;
-  //end;
 end;
 procedure TDimStylesForm.MaceItemCurrent(ListItem:TListItem);
 begin

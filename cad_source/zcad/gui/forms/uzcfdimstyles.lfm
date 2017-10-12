@@ -1,47 +1,47 @@
 object DimStylesForm: TDimStylesForm
-  Left = 326
-  Height = 590
-  Top = 506
+  Left = 56
+  Height = 500
+  Top = 50
   Width = 800
   ActiveControl = ButtonApplyClose
   Caption = 'Dimantion styles'
-  ClientHeight = 590
+  ClientHeight = 500
   ClientWidth = 800
   Constraints.MinHeight = 500
   Constraints.MinWidth = 800
+  DesignTimePPI = 113
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
   Position = poMainFormCenter
   LCLVersion = '1.9.0.0'
   object Bevel1: TBevel
-    AnchorSideLeft.Control = ToolBar1
-    AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = Owner
-    AnchorSideRight.Control = FontTypeFilterDesc
-    AnchorSideBottom.Control = FontTypeFilterComboBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = ButtonApplyClose
+    AnchorSideRight.Control = ButtonApplyClose
+    AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
-    Left = 145
-    Height = 21
-    Top = 1
-    Width = 492
+    Left = 2
+    Height = 27
+    Top = 471
+    Width = 672
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Left = 2
-    BorderSpacing.Top = 1
+    BorderSpacing.Top = 2
     BorderSpacing.Right = 2
+    BorderSpacing.Bottom = 2
   end
   object DescLabel: TLabel
     AnchorSideLeft.Control = Bevel1
+    AnchorSideLeft.Side = asrCenter
     AnchorSideTop.Control = Bevel1
-    AnchorSideRight.Control = Bevel1
-    AnchorSideRight.Side = asrBottom
-    AnchorSideBottom.Control = Bevel1
-    AnchorSideBottom.Side = asrBottom
-    Left = 146
-    Height = 19
-    Top = 2
-    Width = 490
-    Anchors = [akTop, akLeft, akRight, akBottom]
+    AnchorSideTop.Side = asrCenter
+    AnchorSideRight.Side = asrCenter
+    AnchorSideBottom.Side = asrCenter
+    Left = 338
+    Height = 1
+    Top = 484
+    Width = 1
     BorderSpacing.Around = 1
     Layout = tlCenter
     ParentColor = False
@@ -51,33 +51,36 @@ object DimStylesForm: TDimStylesForm
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
-    Left = 645
-    Height = 30
-    Top = 559
-    Width = 154
+    Left = 676
+    Height = 29
+    Top = 469
+    Width = 122
     Anchors = [akRight, akBottom]
-    BorderSpacing.Right = 1
-    BorderSpacing.Bottom = 1
+    AutoSize = True
+    BorderSpacing.Left = 2
+    BorderSpacing.Top = 2
+    BorderSpacing.Right = 2
+    BorderSpacing.Bottom = 2
     Caption = 'Apply and close'
     OnClick = AplyClose
     TabOrder = 0
   end
   object ListView1: TZListView
     AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = Bevel1
+    AnchorSideTop.Control = CoolBar1
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = ButtonApplyClose
     Left = 1
-    Height = 533
-    Top = 24
+    Height = 430
+    Top = 37
     Width = 798
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Left = 1
-    BorderSpacing.Top = 2
+    BorderSpacing.Top = 1
     BorderSpacing.Right = 1
-    BorderSpacing.Bottom = 2
+    BorderSpacing.Bottom = 1
     Columns = <    
       item
         Caption = 'Status'
@@ -110,99 +113,73 @@ object DimStylesForm: TDimStylesForm
     OnSelectItem = ListView1SelectItem
     onMakeCurrent = MaceItemCurrent
   end
-  object FontTypeFilterComboBox: TComboBox
-    AnchorSideTop.Control = Owner
-    AnchorSideRight.Control = Owner
-    AnchorSideRight.Side = asrBottom
-    Left = 727
-    Height = 21
-    Top = 1
-    Width = 72
-    Anchors = [akTop, akRight]
-    AutoSelect = False
-    BorderSpacing.Top = 1
-    BorderSpacing.Right = 1
-    ItemHeight = 13
-    ItemIndex = 0
-    Items.Strings = (
-      'All'
-      'TTF'
-      'SHX'
-    )
-    OnChange = FontsTypesChange
-    Style = csDropDownList
-    TabOrder = 2
-    Text = 'All'
-  end
-  object FontTypeFilterDesc: TLabel
-    AnchorSideTop.Control = FontTypeFilterComboBox
-    AnchorSideRight.Control = FontTypeFilterComboBox
-    AnchorSideBottom.Control = FontTypeFilterComboBox
-    AnchorSideBottom.Side = asrBottom
-    Left = 639
-    Height = 21
-    Top = 1
-    Width = 86
-    Anchors = [akTop, akRight, akBottom]
-    BorderSpacing.Right = 2
-    Caption = 'Fonts types filter:'
-    Layout = tlCenter
-    ParentColor = False
-  end
-  object ToolBar1: TToolBar
-    AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = Owner
-    Left = 2
-    Height = 26
-    Top = 1
-    Width = 141
-    Align = alNone
+  object CoolBar1: TCoolBar
+    Left = 0
+    Height = 36
+    Top = 0
+    Width = 800
     AutoSize = True
-    BorderSpacing.Left = 2
-    BorderSpacing.Top = 1
-    Caption = 'ToolBar1'
-    EdgeBorders = []
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 3
-    object ToolButton_Add: TToolButton
-      Left = 1
-      Top = 0
-      Action = AddStyle
+    Bands = <    
+      item
+        Control = ToolBar1
+        Width = 150
+      end>
+    GrabWidth = 5
+    object ToolBar1: TToolBar
+      AnchorSideLeft.Control = CoolBar1
+      AnchorSideTop.Control = CoolBar1
+      Left = 19
+      Height = 26
+      Top = 5
+      Width = 126
+      Align = alNone
+      BorderSpacing.Left = 22
+      BorderSpacing.Top = 3
+      Caption = 'ToolBar1'
+      EdgeBorders = []
       ParentShowHint = False
       ShowHint = True
-    end
-    object ToolButton_Delete: TToolButton
-      Left = 28
-      Top = 0
-      Action = DelStyle
-    end
-    object ToolButton_MkCurrent: TToolButton
-      Left = 55
-      Top = 0
-      Action = MkCurrentStyle
-    end
-    object Separator1: TToolButton
-      Left = 82
-      Height = 26
-      Top = 0
-      Caption = 'Separator1'
-      Style = tbsDivider
-    end
-    object ToolButton_Purge: TToolButton
-      Left = 87
-      Top = 0
-      Action = PurgeStyles
-    end
-    object ToolButton_Refresh: TToolButton
-      Left = 114
-      Top = 0
-      Action = RefreshStyles
+      TabOrder = 0
+      Transparent = True
+      object ToolButton_Add: TToolButton
+        Left = 1
+        Top = 0
+        Action = AddStyle
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object ToolButton_Delete: TToolButton
+        Left = 28
+        Top = 0
+        Action = DelStyle
+      end
+      object ToolButton_MkCurrent: TToolButton
+        Left = 55
+        Top = 0
+        Action = MkCurrentStyle
+      end
+      object Separator1: TToolButton
+        Left = 82
+        Height = 26
+        Top = 0
+        Caption = 'Separator1'
+        Style = tbsDivider
+      end
+      object ToolButton_Purge: TToolButton
+        Left = 87
+        Top = 0
+        Action = PurgeStyles
+      end
+      object ToolButton_Refresh: TToolButton
+        Left = 1
+        Top = 26
+        Action = RefreshStyles
+      end
     end
   end
   object ActionList1: TActionList
-    left = 632
-    top = 312
+    Left = 632
+    Top = 312
     object AddStyle: TAction
       Caption = 'AddStyle'
       DisableIfNoHandler = False

@@ -1,4 +1,4 @@
-unit uzcfnavigator;
+unit uzcfnavigatordevices;
 
 {$mode delphi}
 

@@ -16,10 +16,10 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzcregnavigator;
+unit uzcregnavigatordevices;
 {$INCLUDE def.inc}
 interface
-uses uzcfnavigator,uzcfcommandline,uzbpaths,TypeDescriptors,uzctranslations,uzcshared,Forms,
+uses uzcfnavigatordevices,uzcfcommandline,uzbpaths,TypeDescriptors,uzctranslations,uzcshared,Forms,
      uzbtypes,varmandef,
      uzeentity,zcobjectinspector,uzcguimanager,
      Types,Controls,uzcdrawings,Varman,UUnitManager,uzcsysvars,uzcsysinfo,LazLogger;

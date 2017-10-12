@@ -374,13 +374,14 @@ var code{,ch}: GDBInteger;
   len: double;
   temp: gdbvertex;
   v:vardesk;
-  s,{xx,yy,zz,}expr:GDBString;
+  s,divider,preddivider,expr:GDBString;
   tv:gdbvertex;
   parseresult:PTZctnrVectorGDBString;
   cmd,subexpr,superexpr:string;
   parsed:gdbboolean;
   command,operands:GDBString;
   relativemarker:boolean;
+  l,a:double;
 begin
     //ch:=ord(key);
     if ord(key)=13 then
@@ -450,7 +451,7 @@ begin
              relativemarker:=false;
            superexpr:='';
            repeat
-           subexpr:=GetPredStr(cmd,',');
+           subexpr:=GetPredStr(cmd,[',','<'],divider);
            v:=evaluate(subexpr,SysUnit);
            parsed:=v.data.Instance<>nil;
            if parsed then
@@ -459,8 +460,9 @@ begin
            if superexpr='' then
                                superexpr:=s
                            else
-                               superexpr:=superexpr+','+s
+                               superexpr:=superexpr+preddivider+s
            end;
+           preddivider:=divider;
            until (cmd='')or(not parsed);
            if parsed then
            begin
@@ -485,6 +487,22 @@ begin
                  begin
                  len:=drawings.GetCurrentDWG.wa.param.ontrackarray.total;
                  temp:=CreateVertex(strtodouble(parseresult^.getData(0)),strtodouble(parseresult^.getData(1)),0);
+                 if relativemarker then
+                 if drawings.GetCurrentDWG.wa.tocommandmcliccount>0 then
+                   temp:=VertexAdd(temp,drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[0].worldcoord);
+                 commandmanager.sendcoordtocommandTraceOn(drawings.GetCurrentDWG.wa,temp,MZW_LBUTTON,nil);
+                 end;
+                 if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
+           end
+           else if IsParsed('_realnumber'#0'_softspace'#0'=<_realnumber'#0,superexpr,parseresult)then
+           begin
+                 if drawings.GetCurrentDWG<>nil then
+                 if drawings.GetCurrentDWG.wa.getviewcontrol<>nil then
+                 begin
+                 len:=drawings.GetCurrentDWG.wa.param.ontrackarray.total;
+                 l:=strtodouble(parseresult^.getData(0));
+                 a:=strtodouble(parseresult^.getData(1));
+                 temp:=CreateVertex(l*cos(a*pi/180),l*sin(a*pi/180),0);
                  if relativemarker then
                  if drawings.GetCurrentDWG.wa.tocommandmcliccount>0 then
                    temp:=VertexAdd(temp,drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[0].worldcoord);

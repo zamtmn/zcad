@@ -248,6 +248,7 @@ begin
           exit;
      end;
      if length(SubItems)>0 then
+     if length(SubItems)>=SubItem then
       begin
        PSubItemRec:=@SubItems[SubItem-1];
        if assigned(PSubItemRec)then

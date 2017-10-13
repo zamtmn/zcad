@@ -57,6 +57,7 @@ type
     CoolBar1: TCoolBar;
     DelStyle: TAction;
     MkCurrentStyle: TAction;
+    InspectListItem: TAction;
     PurgeStyles: TAction;
     RefreshStyles: TAction;
     AddStyle: TAction;
@@ -66,6 +67,7 @@ type
     DescLabel: TLabel;
     ListView1: TZListView;
     ToolBar1: TToolBar;
+    ToolButton_Inspect: TToolButton;
     ToolButton_Add: TToolButton;
     ToolButton_Delete: TToolButton;
     ToolButton_MkCurrent: TToolButton;
@@ -74,6 +76,7 @@ type
     ToolButton_Refresh: TToolButton;
     procedure Aply(Sender: TObject);
     procedure AplyClose(Sender: TObject);
+    procedure DimStyleInspect(Sender: TObject);
     procedure PurgeTStyles(Sender: TObject);
     procedure DimStyleAdd(Sender: TObject);
     procedure DeleteItem(Sender: TObject);
@@ -323,6 +326,7 @@ begin
   MkCurrentStyle.ImageIndex:=ImagesManager.GetImageIndex('ok');;
   PurgeStyles.ImageIndex:=ImagesManager.GetImageIndex('Purge');
   RefreshStyles.ImageIndex:=ImagesManager.GetImageIndex('Refresh');
+  InspectListItem.ImageIndex:=ImagesManager.GetImageIndex('inspectlistitem');
 
   ListView1.SmallImages:=ImagesManager.IconList;
   ListView1.DefaultItemIndex:=ImagesManager.GetImageIndex('ok');;
@@ -571,6 +575,11 @@ end;
 procedure TDimStylesForm.AplyClose(Sender: TObject);
 begin
      close;
+end;
+
+procedure TDimStylesForm.DimStyleInspect(Sender: TObject);
+begin
+
 end;
 
 procedure TDimStylesForm.PurgeTStyles(Sender: TObject);

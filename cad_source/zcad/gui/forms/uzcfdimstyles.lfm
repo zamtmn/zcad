@@ -100,6 +100,18 @@ object DimStylesForm: TDimStylesForm
       item
         Caption = 'TextHeight'
         Width = 70
+      end    
+      item
+        Caption = 'DIMBLK1'
+      end    
+      item
+        Caption = 'DIMBLK2'
+      end    
+      item
+        Caption = 'DIMLDRBLK'
+      end    
+      item
+        Caption = 'DIMASZ'
       end>
     HideSelection = False
     ReadOnly = True
@@ -133,7 +145,7 @@ object DimStylesForm: TDimStylesForm
       Top = 5
       Width = 126
       Align = alNone
-      BorderSpacing.Left = 22
+      BorderSpacing.Left = 17
       BorderSpacing.Top = 3
       Caption = 'ToolBar1'
       EdgeBorders = []

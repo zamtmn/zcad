@@ -140,27 +140,30 @@ var
    i:integer;
    psubitem:PTSubItemRec;
 begin
-     if Item.Data=CurrentItemData then
+     if assigned(Item) then
      begin
-      Item.ImageIndex:=DefaultItemIndex;
-      CurrentItem:=Item;
-     end;
-     Item.SubItems.Clear;
-     for i:=0 to high(SubItems) do
-     begin
-          psubitem:=@SubItems[i];
-          if assigned(psubitem^.IsOn) then
-           begin
-            if psubitem^.IsOn(item) then
-                                  Item.SubItems.Add('True')
-                              else
-                                  Item.SubItems.Add('False');
-           end
-     else if assigned(psubitem^.OnGetName) then
-           begin
-            Item.SubItems.Add(psubitem^.OnGetName(item));
-           end
-     else Item.SubItems.Add('');
+       if Item.Data=CurrentItemData then
+       begin
+        Item.ImageIndex:=DefaultItemIndex;
+        CurrentItem:=Item;
+       end;
+       Item.SubItems.Clear;
+       for i:=0 to high(SubItems) do
+       begin
+            psubitem:=@SubItems[i];
+            if assigned(psubitem^.IsOn) then
+             begin
+              if psubitem^.IsOn(item) then
+                                    Item.SubItems.Add('True')
+                                else
+                                    Item.SubItems.Add('False');
+             end
+       else if assigned(psubitem^.OnGetName) then
+             begin
+              Item.SubItems.Add(psubitem^.OnGetName(item));
+             end
+       else Item.SubItems.Add('');
+       end;
      end;
 end;
 constructor TZListView.Create(AOwner: TComponent);

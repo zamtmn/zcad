@@ -9,7 +9,8 @@ uses
   StdCtrls, ActnList, VirtualTrees, gvector,
   uzbtypes,gzctnrvectortypes,uzbgeomtypes ,uzegeometry, uzccommandsmanager,
   uzcinterface,uzeconsts,uzeentity,uzcimagesmanager,uzcdrawings,uzbtypesbase,
-  uzcenitiesvariablesextender,varmandef,uzbstrproc;
+  uzcenitiesvariablesextender,varmandef,uzbstrproc,uzcmainwindow,uzctreenode,
+  Varman;
 
 type
 
@@ -33,6 +34,7 @@ type
     RootNode:PVirtualNode;
     Tree: TVirtualStringTree;
     ficonindex:integer;
+    GroupByPrefix,GroupByBase:boolean;
     constructor Create(AOwner:TComponent; ATree: TVirtualStringTree; AName:string);
     destructor Destroy;override;
     procedure ProcessEntity(pent:pGDBObjEntity);
@@ -74,6 +76,7 @@ type
     StandaloneNode:TRootNodeDesk;
     StandaloneNodeStates:TNodesStates;
     NavMX,NavMy:integer;
+    pref,base:TmyVariableAction;
   public
     procedure CreateRoots;
     procedure EraseRoots;
@@ -249,33 +252,41 @@ begin
   begin
   Name:=GetEntityVariableValue(pent,'NMO_Name','Absent Name');
 
-  BaseName:=GetEntityVariableValue(pent,'NMO_Prefix','Absent Prefix');
-  basenode:=FindGroupNodeById(rootnode,BaseName);
-  if basenode=nil then
+  if GroupByPrefix then
   begin
-    basenode:=Tree.AddChild(rootnode,nil);
-    pnd:=Tree.GetNodeData(basenode);
-    if Assigned(pnd) then
-                       begin
-                         pnd^.NodeMode:=TNMGroup;
-                         pnd^.id:=BaseName;
-                         pnd^.name:=BaseName;
-                       end;
-  end;
+    BaseName:=GetEntityVariableValue(pent,'NMO_Prefix','Absent Prefix');
+    basenode:=FindGroupNodeById(rootnode,BaseName);
+    if basenode=nil then
+    begin
+      basenode:=Tree.AddChild(rootnode,nil);
+      pnd:=Tree.GetNodeData(basenode);
+      if Assigned(pnd) then
+                         begin
+                           pnd^.NodeMode:=TNMGroup;
+                           pnd^.id:=BaseName;
+                           pnd^.name:=BaseName;
+                         end;
+    end;
+  end else
+    basenode:=rootnode;
 
-  BaseName:=GetEntityVariableValue(pent,'NMO_BaseName','Absent BaseName');
-  basenode2:=FindGroupNodeById(basenode,BaseName);
-  if basenode2=nil then
+  if GroupByBase then
   begin
-    basenode2:=Tree.AddChild(basenode,nil);
-    pnd:=Tree.GetNodeData(basenode2);
-    if Assigned(pnd) then
-                       begin
-                         pnd^.NodeMode:=TNMGroup;
-                         pnd^.id:=BaseName;
-                         pnd^.name:=BaseName;
-                       end;
-  end;
+    BaseName:=GetEntityVariableValue(pent,'NMO_BaseName','Absent BaseName');
+    basenode2:=FindGroupNodeById(basenode,BaseName);
+    if basenode2=nil then
+    begin
+      basenode2:=Tree.AddChild(basenode,nil);
+      pnd:=Tree.GetNodeData(basenode2);
+      if Assigned(pnd) then
+                         begin
+                           pnd^.NodeMode:=TNMGroup;
+                           pnd^.id:=BaseName;
+                           pnd^.name:=BaseName;
+                         end;
+    end;
+  end else
+    basenode2:=basenode;
 
   namenode:=FindGroupNodeByName(basenode2,Name);
   if namenode<>nil then
@@ -337,6 +348,18 @@ begin
 end;
 procedure TNavigatorDevices._onCreate(Sender: TObject);
 begin
+   pref:=TmyVariableAction.Create(self);
+   pref.ActionList:=ZCADMainWindow.StandartActions;
+   pref.AssignToVar('DSGN_NavigatorsGroupByPrefix',0);
+   pref.Caption:='byPrefix';
+   ToolButton1.Action:=pref;
+
+   base:=TmyVariableAction.Create(self);
+   base.ActionList:=ZCADMainWindow.StandartActions;
+   base.AssignToVar('DSGN_NavigatorsGroupByBaseName',0);
+   base.Caption:='byBase';
+   ToolButton3.Action:=base;
+
    ActionList1.Images:=ImagesManager.IconList;
    MainToolBar.Images:=ImagesManager.IconList;
    Refresh.ImageIndex:=ImagesManager.GetImageIndex('Refresh');
@@ -354,10 +377,24 @@ procedure TNavigatorDevices.RefreshTree(Sender: TObject);
 var
   pv:pGDBObjEntity;
   ir:itrec;
+  pb:pboolean;
 begin
    NavTree.BeginUpdate;
    EraseRoots;
    CreateRoots;
+
+   pb:=SysVarUnit.FindValue('DSGN_NavigatorsGroupByPrefix');
+   if pb<>nil then
+     StandaloneNode.GroupByPrefix:=pb^
+   else
+     StandaloneNode.GroupByPrefix:=true;
+
+   pb:=SysVarUnit.FindValue('DSGN_NavigatorsGroupByBaseName');
+   if pb<>nil then
+     StandaloneNode.GroupByBase:=pb^
+   else
+     StandaloneNode.GroupByBase:=true;
+
    if drawings.GetCurrentDWG<>nil then
    begin
      pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);

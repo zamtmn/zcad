@@ -41,8 +41,12 @@ const
      LinearScaleColumn=1;
      TextStyleNameColumn=2;
      TextHeightColumn=3;
+     DIMBLK1Column=4;
+     DIMBLK2Column=5;
+     DIMLDRBLKColumn=6;
+     DIMASZColumn=7;
 
-     ColumnCount=3+1;
+     ColumnCount=7+1;
 
 type
   TFTFilter=(TFTF_All,TFTF_TTF,TFTF_SHX);
@@ -115,7 +119,14 @@ type
     {TextHeight handle procedures}
     function GetTextHeight(Item: TListItem):string;
     function CreateTextHeightEditor(Item: TListItem;r: TRect):boolean;
-
+    function GetDIMBLK1(Item: TListItem):string;
+    function CreateDIMBLK1Editor(Item: TListItem;r: TRect):boolean;
+    function GetDIMBLK2(Item: TListItem):string;
+    function CreateDIMBLK2Editor(Item: TListItem;r: TRect):boolean;
+    function GetDIMLDRBLK (Item: TListItem):string;
+    function CreateDIMLDRBLKEditor(Item: TListItem;r: TRect):boolean;
+    function GetDIMASZ (Item: TListItem):string;
+    function CreateDIMASZEditor(Item: TListItem;r: TRect):boolean;
   end;
 
 var
@@ -217,6 +228,60 @@ begin
   result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBDimStyle(Item.Data)^.Text.DIMTXT,'GDBDouble',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
 end;
 
+function TDimStylesForm.GetDIMBLK1(Item: TListItem):string;
+var
+   typemanager:PUserTypeDescriptor;
+begin
+  typemanager:=SysUnit^.TypeName2PTD('TArrowStyle');
+  if typemanager<>nil then
+    result:=typemanager^.GetUserValueAsString(@PGDBDimStyle(Item.Data)^.Arrows.DIMBLK1)
+  else
+    result:='Something wrong!'
+end;
+function TDimStylesForm.CreateDIMBLK1Editor(Item: TListItem;r: TRect):boolean;
+begin
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBDimStyle(Item.Data)^.Arrows.DIMBLK1,'TArrowStyle',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
+end;
+
+function TDimStylesForm.GetDIMBLK2(Item: TListItem):string;
+var
+   typemanager:PUserTypeDescriptor;
+begin
+  typemanager:=SysUnit^.TypeName2PTD('TArrowStyle');
+  if typemanager<>nil then
+    result:=typemanager^.GetUserValueAsString(@PGDBDimStyle(Item.Data)^.Arrows.DIMBLK2)
+  else
+    result:='Something wrong!'
+end;
+function TDimStylesForm.CreateDIMBLK2Editor(Item: TListItem;r: TRect):boolean;
+begin
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBDimStyle(Item.Data)^.Arrows.DIMBLK2,'TArrowStyle',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
+end;
+
+function TDimStylesForm.GetDIMLDRBLK (Item: TListItem):string;
+var
+   typemanager:PUserTypeDescriptor;
+begin
+  typemanager:=SysUnit^.TypeName2PTD('TArrowStyle');
+  if typemanager<>nil then
+    result:=typemanager^.GetUserValueAsString(@PGDBDimStyle(Item.Data)^.Arrows.DIMLDRBLK)
+  else
+    result:='Something wrong!'
+end;
+function TDimStylesForm.CreateDIMLDRBLKEditor(Item: TListItem;r: TRect):boolean;
+begin
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBDimStyle(Item.Data)^.Arrows.DIMLDRBLK,'TArrowStyle',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
+end;
+
+function TDimStylesForm.GetDIMASZ(Item: TListItem):string;
+begin
+  result:=floattostr(PGDBDimStyle(Item.Data)^.Arrows.DIMASZ);
+end;
+function TDimStylesForm.CreateDIMASZEditor(Item: TListItem;r: TRect):boolean;
+begin
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBDimStyle(Item.Data)^.Arrows.DIMASZ,'GDBDouble',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
+end;
+
 procedure TDimStylesForm.FillTextStyleSelector(currentitem:string;currentitempstyle:PGDBTextStyle);
 var
     s:string;
@@ -290,6 +355,30 @@ begin
        OnGetName:=@GetTextHeight;
        OnClick:=@CreateTextHeightEditor;
   end;
+  with ListView1.SubItems[DIMBLK1Column] do
+  begin
+       OnGetName:=@GetDIMBLK1;
+       OnClick:=@CreateDIMBLK1Editor;
+  end;
+  with ListView1.SubItems[DIMBLK2Column] do
+  begin
+       OnGetName:=@GetDIMBLK2;
+       OnClick:=@CreateDIMBLK2Editor;
+  end;
+  with ListView1.SubItems[DIMLDRBLKColumn] do
+  begin
+       OnGetName:=@GetDIMLDRBLK;
+       OnClick:=@CreateDIMLDRBLKEditor;
+  end;
+  with ListView1.SubItems[DIMASZColumn] do
+  begin
+       OnGetName:=@GetDIMASZ;
+       OnClick:=@CreateDIMASZEditor;
+  end;
+  //DIMBLK1Column=4;
+  //DIMBLK2Column=5;
+  //DIMLDRBLKColumn=6;
+  //DIMASZColumn=7;
 end;
 procedure TDimStylesForm.MaceItemCurrent(ListItem:TListItem);
 begin

@@ -1,7 +1,7 @@
 object DimStylesForm: TDimStylesForm
-  Left = 56
+  Left = 362
   Height = 500
-  Top = 50
+  Top = 42
   Width = 800
   ActiveControl = ButtonApplyClose
   Caption = 'Dimantion styles'
@@ -87,7 +87,7 @@ object DimStylesForm: TDimStylesForm
       end    
       item
         Caption = 'Name'
-        Width = 378
+        Width = 178
       end    
       item
         Caption = 'LinearScale'
@@ -143,8 +143,9 @@ object DimStylesForm: TDimStylesForm
       Left = 19
       Height = 26
       Top = 5
-      Width = 126
+      Width = 168
       Align = alNone
+      AutoSize = True
       BorderSpacing.Left = 17
       BorderSpacing.Top = 3
       Caption = 'ToolBar1'
@@ -170,21 +171,26 @@ object DimStylesForm: TDimStylesForm
         Top = 0
         Action = MkCurrentStyle
       end
-      object Separator1: TToolButton
+      object ToolButton_Inspect: TToolButton
         Left = 82
+        Top = 0
+        Action = InspectListItem
+      end
+      object Separator1: TToolButton
+        Left = 109
         Height = 26
         Top = 0
         Caption = 'Separator1'
         Style = tbsDivider
       end
       object ToolButton_Purge: TToolButton
-        Left = 87
+        Left = 114
         Top = 0
         Action = PurgeStyles
       end
       object ToolButton_Refresh: TToolButton
-        Left = 1
-        Top = 26
+        Left = 141
+        Top = 0
         Action = RefreshStyles
       end
     end
@@ -227,6 +233,12 @@ object DimStylesForm: TDimStylesForm
       Hint = 'Refresh styles list'
       OnExecute = RefreshListitems
       ShortCut = 115
+    end
+    object InspectListItem: TAction
+      Caption = 'InspectListItem'
+      DisableIfNoHandler = False
+      Hint = 'Inspect dimstyle'
+      OnExecute = DimStyleInspect
     end
   end
 end

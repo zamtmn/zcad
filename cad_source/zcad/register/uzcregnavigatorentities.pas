@@ -29,7 +29,7 @@ begin
   Form:=Form;
 end;
 initialization
-  ZCADGUIManager.RegisterZCADFormInfo('NavigatorEntities','Navigator(Entities)',TNavigatorEntities,rect(0,100,200,600),ZCADFormSetupProc,nil,@NavigatorEntities,true);
+  ZCADGUIManager.RegisterZCADFormInfo('NavigatorEntities','Entities',TNavigatorEntities,rect(0,100,200,600),ZCADFormSetupProc,nil,@NavigatorEntities,true);
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

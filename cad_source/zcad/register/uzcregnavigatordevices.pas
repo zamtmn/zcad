@@ -39,7 +39,7 @@ begin
   GDBobjinsp.Parent:=tform(Form);}
 end;
 initialization
-  ZCADGUIManager.RegisterZCADFormInfo('NavigatorDevices','Navigator(Devices)',TNavigatorDevices,rect(0,100,200,600),ZCADFormSetupProc,nil,@NavigatorDevices,true);
+  ZCADGUIManager.RegisterZCADFormInfo('NavigatorDevices','Devices',TNavigatorDevices,rect(0,100,200,600),ZCADFormSetupProc,nil,@NavigatorDevices,true);
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

@@ -7,12 +7,15 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
   StdCtrls, ActnList, VirtualTrees, gvector,
-  uzbtypes,gzctnrvectortypes,uzbgeomtypes ,uzegeometry, uzccommandsmanager,
-  uzcinterface,uzeconsts,uzeentity,uzcimagesmanager,uzcdrawings,uzbtypesbase,
+  uzbtypes,uzegeometry, uzccommandsmanager,
+  uzcinterface,uzeentity,uzcimagesmanager,uzcdrawings,
   uzcenitiesvariablesextender,varmandef,uzbstrproc,uzcmainwindow,uzctreenode,
   Varman;
 
 type
+  TBaseRootNodeDesk=class;
+  TFilterEntityProc=function(pent:pGDBObjEntity):Boolean of object;
+  TTraceEntityProc=function(rootdesk:TBaseRootNodeDesk;pent:pGDBObjEntity;out name:string):PVirtualNode of object;
   TNodeMode=(TNMGroup,TNMAutoGroup,TNMData);
   PTNodeData=^TNodeData;
   TNodeData=record
@@ -33,13 +36,12 @@ type
     RootNode:PVirtualNode;
     Tree: TVirtualStringTree;
     ficonindex:integer;
-    GroupByPrefix,GroupByBase:boolean;
     function FindById(pnd:Pointer; Criteria:string):boolean;
     function FindByName(pnd:Pointer; Criteria:string):boolean;
     constructor Create(AOwner:TComponent; ATree: TVirtualStringTree; AName:string);
     destructor Destroy;override;
     function find(BaseName:string;basenode:PVirtualNode):PVirtualNode;
-    procedure ProcessEntity(pent:pGDBObjEntity);
+    procedure ProcessEntity(pent:pGDBObjEntity;filterproc:TFilterEntityProc;traceproc:TTraceEntityProc);
     procedure ConvertNameNodeToGroupNode(pnode:PVirtualNode);
     function FindGroupNodeBy(RootNode:PVirtualNode;criteria:string;func:TFindFunc):PVirtualNode;
     function SaveState:TNodesStates;
@@ -47,8 +49,8 @@ type
     procedure RestoreState(State:TNodesStates);
     procedure RecursiveRestoreState(Node:PVirtualNode;var StartInNodestates:integer;NodesStates:TNodesStates);
 
-    function FilterEntity(pent:pGDBObjEntity):Boolean;virtual;
-    function TraceEntity(pent:pGDBObjEntity;out name:string):PVirtualNode;virtual;
+    //function FilterEntity(pent:pGDBObjEntity):Boolean;virtual;
+    function DefaultTraceEntity(rootdesk:TBaseRootNodeDesk;pent:pGDBObjEntity;out name:string):PVirtualNode;virtual;
   end;
 
 function GetEntityVariableValue(const pent:pGDBObjEntity;varname,defvalue:string):string;
@@ -218,26 +220,34 @@ begin
 end;
 
 
-function TBaseRootNodeDesk.FilterEntity(pent:pGDBObjEntity):Boolean;
+{function TBaseRootNodeDesk.FilterEntity(pent:pGDBObjEntity):Boolean;
 begin
   result:=true;
-end;
+end;}
 
-function TBaseRootNodeDesk.TraceEntity(pent:pGDBObjEntity;out name:string):PVirtualNode;
+function TBaseRootNodeDesk.DefaultTraceEntity(rootdesk:TBaseRootNodeDesk;pent:pGDBObjEntity;out name:string):PVirtualNode;
 begin
   name:=pent.GetObjTypeName;
   result:=rootnode;
 end;
 
-procedure TBaseRootNodeDesk.ProcessEntity(pent:pGDBObjEntity);
+procedure TBaseRootNodeDesk.ProcessEntity(pent:pGDBObjEntity;filterproc:TFilterEntityProc;traceproc:TTraceEntityProc);
 var
   Name:string;
   basenode2,namenode,pnode:PVirtualNode;
   pnd:PTNodeData;
+  include:boolean;
 begin
   basenode2:=nil;
-  if FilterEntity(pent) then begin
-    basenode2:=TraceEntity(pent,Name);
+  if assigned(filterproc) then
+    include:=filterproc(pent)
+  else
+    include:=true;
+  if include then begin
+    if assigned(traceproc)then
+      basenode2:=traceproc(self,pent,Name)
+    else
+      basenode2:=DefaultTraceEntity(self,pent,Name);
     if basenode2<>nil then begin
       namenode:=FindGroupNodeBy(basenode2,Name,FindByName);
       if namenode<>nil then begin

@@ -56,6 +56,7 @@ object ZCADMainWindow: TZCADMainWindow
     DockSite = True
     EdgeBorders = []
     GrabWidth = 5
+    Themed = False
     Vertical = True
   end
   object CoolBarR: TCoolBar
@@ -70,6 +71,7 @@ object ZCADMainWindow: TZCADMainWindow
     DockSite = True
     EdgeBorders = []
     GrabWidth = 5
+    Themed = False
     Vertical = True
   end
   object CoolBarD: TCoolBar
@@ -84,5 +86,6 @@ object ZCADMainWindow: TZCADMainWindow
     DockSite = True
     EdgeBorders = [ebBottom]
     GrabWidth = 5
+    Themed = False
   end
 end

@@ -28,11 +28,11 @@ type
     procedure TVDblClick(Sender: TObject);
     procedure TVOnMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure VTCompareNodes(Sender: TBaseVirtualTree; Node1,
-      Node2: PVirtualNode; Column: TColumnIndex; var Result: Integer);
+      Node2: PVirtualNode; Column: TColumnIndex; var Result: Integer);virtual;
     procedure VTHeaderClick(Sender: TVTHeader; HitInfo: TVTHeaderHitInfo);
     procedure _onCreate(Sender: TObject);
     procedure NavGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;
-                         TextType: TVSTTextType; var CellText: String);
+                         TextType: TVSTTextType; var CellText: String);virtual;
     procedure NavGetImage(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
                           var Ghosted: Boolean; var ImageIndex: Integer);
 
@@ -51,8 +51,8 @@ type
     procedure FreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure VTFocuschanged(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex);
 
-    function OnlyDevices(pent:pGDBObjEntity):Boolean;
-    function TraceEntity(rootdesk:TBaseRootNodeDesk;pent:pGDBObjEntity;out name:string):PVirtualNode;
+    function EntsFilter(pent:pGDBObjEntity):Boolean;virtual;
+    function TraceEntity(rootdesk:TBaseRootNodeDesk;pent:pGDBObjEntity;out name:string):PVirtualNode;virtual;
   end;
 
 var
@@ -63,7 +63,7 @@ implementation
 
 {$R *.lfm}
 
-function TNavigatorDevices.OnlyDevices(pent:pGDBObjEntity):Boolean;
+function TNavigatorDevices.EntsFilter(pent:pGDBObjEntity):Boolean;
 begin
   result:=pent^.GetObjType=GDBDeviceID;
 end;
@@ -136,6 +136,7 @@ begin
    NavTree.NodeDataSize:=sizeof(TNodeData);
    NavTree.OnFreeNode:=FreeNode;
    NavTree.OnFocusChanged:=VTFocuschanged;
+   NavTree.OnCompareNodes:=VTCompareNodes;
 
    ZCMsgCallBackInterface.RegisterHandler_GUIAction(AutoRefreshTree);
 end;
@@ -167,9 +168,9 @@ begin
      if pv<>nil then
      repeat
        if assigned(CombinedNode)then
-         CombinedNode.ProcessEntity(pv,OnlyDevices,TraceEntity);
+         CombinedNode.ProcessEntity(pv,EntsFilter,TraceEntity);
        if assigned(StandaloneNode)then
-         StandaloneNode.ProcessEntity(pv,OnlyDevices,TraceEntity);
+         StandaloneNode.ProcessEntity(pv,EntsFilter,TraceEntity);
        pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
      until pv=nil;
    end;

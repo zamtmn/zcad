@@ -78,6 +78,8 @@
         <Action Name="ACN_SHOW_PAGECONTROL"/>
         <Action Name="ACN_SHOW_COMMANDLINE"/>
         <Action Name="ACN_SHOW_NAVIGATORDEVICES"/>
+        <Action Name="ACN_SHOW_NAVIGATORRISERS"/>
+        <Action Name="ACN_SHOW_NAVIGATORCABLES"/>
         <Action Name="ACN_SHOW_NAVIGATORENTITIES"/>
         <Action Name="ACN_TEXTWINDOW"/>
         <MainMenuItem Name="ToolBars">

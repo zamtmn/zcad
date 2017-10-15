@@ -6,17 +6,13 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
-  StdCtrls, ActnList, VirtualTrees, gvector,
+  StdCtrls, ActnList, VirtualTrees,
   uzbtypes,gzctnrvectortypes,uzbgeomtypes ,uzegeometry, uzccommandsmanager,
   uzcinterface,uzeconsts,uzeentity,uzcimagesmanager,uzcdrawings,uzbtypesbase,
-  uzcenitiesvariablesextender,varmandef,uzbstrproc,uzcmainwindow,uzctreenode,
-  uzcnavigatorsnodedesk,Varman,uzcvariablesutils;
+  varmandef,uzbstrproc,uzcmainwindow,uzctreenode,
+  uzcnavigatorsnodedesk,Varman;
 
 type
-  TDeviceRootNodeDesk=class(TBaseRootNodeDesk)
-    function FilterEntity(pent:pGDBObjEntity):Boolean;override;
-    function TraceEntity(pent:pGDBObjEntity;out name:string):PVirtualNode;override;
-  end;
   { TNavigatorDevices }
   TNavigatorDevices = class(TForm)
     CoolBar1: TCoolBar;
@@ -41,17 +37,22 @@ type
                           var Ghosted: Boolean; var ImageIndex: Integer);
 
   private
-    CombinedNode:TDeviceRootNodeDesk;
+    CombinedNode:TBaseRootNodeDesk;
     CombinedNodeStates:TNodesStates;
-    StandaloneNode:TDeviceRootNodeDesk;
+    StandaloneNode:TBaseRootNodeDesk;
     StandaloneNodeStates:TNodesStates;
     NavMX,NavMy:integer;
     pref,base:TmyVariableAction;
+    GroupByPrefix,GroupByBase:boolean;
+
   public
     procedure CreateRoots;
     procedure EraseRoots;
     procedure FreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure VTFocuschanged(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex);
+
+    function OnlyDevices(pent:pGDBObjEntity):Boolean;
+    function TraceEntity(rootdesk:TBaseRootNodeDesk;pent:pGDBObjEntity;out name:string):PVirtualNode;
   end;
 
 var
@@ -62,12 +63,12 @@ implementation
 
 {$R *.lfm}
 
-function TDeviceRootNodeDesk.FilterEntity(pent:pGDBObjEntity):Boolean;
+function TNavigatorDevices.OnlyDevices(pent:pGDBObjEntity):Boolean;
 begin
   result:=pent^.GetObjType=GDBDeviceID;
 end;
 
-function TDeviceRootNodeDesk.TraceEntity(pent:pGDBObjEntity;out name:string):PVirtualNode;
+function  TNavigatorDevices.TraceEntity(rootdesk:TBaseRootNodeDesk;pent:pGDBObjEntity;out name:string):PVirtualNode;
 var
   BaseName:string;
   basenode:PVirtualNode;
@@ -77,13 +78,13 @@ begin
 
   if GroupByPrefix then begin
     BaseName:=GetEntityVariableValue(pent,'NMO_Prefix','Absent Prefix');
-    basenode:=find(BaseName,rootnode);
+    basenode:=rootdesk.find(BaseName,rootdesk.rootnode);
   end else
-    basenode:=rootnode;
+    basenode:=rootdesk.rootnode;
 
   if GroupByBase then begin
     BaseName:=GetEntityVariableValue(pent,'NMO_BaseName','Absent BaseName');
-    result:=find(BaseName,basenode);
+    result:=rootdesk.find(BaseName,basenode);
   end else
     result:=basenode;
 end;
@@ -150,15 +151,15 @@ begin
 
    pb:=SysVarUnit.FindValue('DSGN_NavigatorsGroupByPrefix');
    if pb<>nil then
-     StandaloneNode.GroupByPrefix:=pb^
+     GroupByPrefix:=pb^
    else
-     StandaloneNode.GroupByPrefix:=true;
+     GroupByPrefix:=true;
 
    pb:=SysVarUnit.FindValue('DSGN_NavigatorsGroupByBaseName');
    if pb<>nil then
-     StandaloneNode.GroupByBase:=pb^
+     GroupByBase:=pb^
    else
-     StandaloneNode.GroupByBase:=true;
+     GroupByBase:=true;
 
    if drawings.GetCurrentDWG<>nil then
    begin
@@ -166,9 +167,9 @@ begin
      if pv<>nil then
      repeat
        if assigned(CombinedNode)then
-         CombinedNode.ProcessEntity(pv);
+         CombinedNode.ProcessEntity(pv,OnlyDevices,TraceEntity);
        if assigned(StandaloneNode)then
-         StandaloneNode.ProcessEntity(pv);
+         StandaloneNode.ProcessEntity(pv,OnlyDevices,TraceEntity);
        pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
      until pv=nil;
    end;
@@ -302,7 +303,7 @@ begin
   //CombinedNode:=TRootNodeDesk.Create(self, NavTree);
   //CombinedNode.ftext:='Combined devices';
   //CombinedNode.ficonindex:=ImagesManager.GetImageIndex('caddie');
-  StandaloneNode:=TDeviceRootNodeDesk.Create(self, NavTree,'Standalone devices');
+  StandaloneNode:=TBaseRootNodeDesk.Create(self, NavTree,'Standalone devices');
   StandaloneNode.ficonindex:=ImagesManager.GetImageIndex('basket');
 end;
 

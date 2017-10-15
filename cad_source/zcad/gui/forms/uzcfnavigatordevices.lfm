@@ -26,7 +26,6 @@ object NavigatorDevices: TNavigatorDevices
     Header.Options = [hoAutoResize, hoColumnResize, hoDrag, hoShowSortGlyphs, hoVisible]
     Header.SortColumn = 0
     TabOrder = 0
-    OnCompareNodes = VTCompareNodes
     OnDblClick = TVDblClick
     OnHeaderClick = VTHeaderClick
     OnMouseMove = TVOnMouseMove

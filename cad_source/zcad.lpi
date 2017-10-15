@@ -229,7 +229,7 @@
         <PackageName Value="LCL"/>
       </Item18>
     </RequiredPackages>
-    <Units Count="187">
+    <Units Count="188">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -1026,6 +1026,10 @@
         <Filename Value="zcad/register/uzcregnavigatorentities.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit186>
+      <Unit187>
+        <Filename Value="zcad/register/uzcregnavigatordevices.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit187>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

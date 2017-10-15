@@ -41,6 +41,7 @@ object NavigatorDevices: TNavigatorDevices
         Control = MainToolBar
         Width = 513
       end>
+    Themed = False
     object MainToolBar: TToolBar
       AnchorSideLeft.Control = CoolBar1
       AnchorSideTop.Control = CoolBar1

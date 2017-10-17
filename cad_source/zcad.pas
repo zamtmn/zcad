@@ -112,6 +112,7 @@ uses
   uzccombase,
   uzccomdb,
   uzccomdraw,
+  uzccommand_print,
 
   //**for velec func**//
   //uzvslagcab, //автопрокладка кабелей по именным суперлиниям

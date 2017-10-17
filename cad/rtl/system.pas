@@ -308,7 +308,6 @@ GDBArrayVertex=packed array[0..0] of GDBvertex;
                    BGroup:TBlockGroup;(*'Block group'*)
              end;
   TENTID=GDBString;
-TCLineMode=(CLCOMMANDREDY,CLCOMMANDRUN);
 PGDBsymdolinfo=^GDBsymdolinfo;
 GDBsymdolinfo=packed record
     LLPrimitiveStartIndex: GDBInteger;
@@ -488,8 +487,10 @@ GZVector={$IFNDEF DELPHI}packed{$ENDIF}
           @return(индекс первого выделенного элемента в массиве)}
         function AllocData(SData:Word):Integer;virtual;abstract;
         {old}
-        {**Удалить элемент по индексу}
+        {**Удалить элемент по индексу, без уменьшениием размера массива, элемент затирается значением default(T)}
         function DeleteElement(index:Integer):Pointer;
+        {**Удалить элемент по индексу, с уменьшениием размера массива}
+        function EraseElement(index:Integer):Pointer;
         {**Перевод указателя в индекс}
         function P2I(pel:Pointer):Integer;
         {**Удалить элемент по указателю}
@@ -550,6 +551,7 @@ GZVectorP={$IFNDEF DELPHI}packed{$ENDIF}
                                        function iterate (var ir:itrec):Pointer;virtual;abstract;
                                        function beginiterate(out ir:itrec):Pointer;virtual;abstract;
                                        procedure RemoveData(const data:T);virtual;abstract;
+                                       procedure RemoveDataFromArray(const data:T);virtual;abstract;
                                        function DeleteElement(index:Integer):Pointer;
                                        function GetRealCount:Integer;
                                        constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:TArrayIndex);
@@ -743,9 +745,9 @@ GDBPoint3dArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)(*OpenArrayOf
                 function onpoint(p:gdbvertex;closed:GDBBoolean):gdbboolean;
                 function onmouse(const mf:ClipArray;const closed:GDBBoolean):GDBBoolean;virtual;abstract;
                 function CalcTrueInFrustum(frustum:ClipArray):TInBoundingVolume;virtual;abstract;
-                procedure DrawGeometry;virtual;abstract;
+                {procedure DrawGeometry;virtual;abstract;
                 procedure DrawGeometry2;virtual;abstract;
-                procedure DrawGeometryWClosed(closed:GDBBoolean);virtual;abstract;
+                procedure DrawGeometryWClosed(closed:GDBBoolean);virtual;}abstract;
                 function getoutbound:TBoundingBox;virtual;abstract;
              end;
 //Generate on E:/zcad/cad_source/zengine/containers/UGDBPolyLine2DArray.pas
@@ -1025,6 +1027,7 @@ TArrowStyle=(TSClosedFilled,TSClosedBlank,TSClosed,TSDot,TSArchitecturalTick,TSO
 TDimTextMove=(DTMMoveDimLine,DTMCreateLeader,DTMnothung);
 PTDimStyleDXFLoadingData=^TDimStyleDXFLoadingData;
 TDimStyleDXFLoadingData=packed record
+                              TextStyleName:string;
                               DIMBLK1handle,DIMBLK2handle,DIMLDRBLKhandle:TDWGHandle;
                         end;
 TGDBDimLinesProp=packed record
@@ -1085,6 +1088,7 @@ GDBDimStyle = {$IFNDEF DELPHI}packed{$ENDIF}object(GDBNamedObject)
                       procedure CreateLDIfNeed;
                       procedure ReleaseLDIfNeed;
                       procedure ResolveDXFHandles(const Handle2BlockName:TMapBlockHandle_BlockNames);
+                      procedure ResolveTextstyles(const tst:TGenericNamedObjectsArray);
                       destructor Done;virtual;abstract;
              end;
 PGDBDimStyleArray=^GDBDimStyleArray;
@@ -1092,6 +1096,7 @@ GDBDimStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*Op
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;
                     procedure ResolveDXFHandles(const Handle2BlockName:TMapBlockHandle_BlockNames);
+                    procedure ResolveTextstyles(const tst:TGenericNamedObjectsArray);
                     procedure ResolveLineTypes(const lta:GDBLtypeArray);
               end;
 //Generate on E:/zcad/cad_source/zengine/styles/uzestylestables.pas
@@ -3333,12 +3338,6 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
                              Scale:GDBVertex;(*'New scale'*)
                              Absolytly:GDBBoolean;(*'Absolytly'*)
                            end;}
-         PTPrintParams=^TPrintParams;
-         TPrintParams=packed record
-                            FitToPage:GDBBoolean;(*'Fit to page'*)
-                            Center:GDBBoolean;(*'Center'*)
-                            Scale:GDBDouble;(*'Scale'*)
-                      end;
          TST=(
                  TST_YX(*'Y-X'*),
                  TST_XY(*'X-Y'*),
@@ -3496,17 +3495,6 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
                          procedure ShowMenu;virtual;abstract;
                          procedure Run(pdata:GDBPlatformint); virtual;abstract;
              end;
-  Print_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
-                         VS:GDBInteger;
-                         p1,p2:GDBVertex;
-                         procedure CommandContinue; virtual;abstract;
-                         procedure CommandStart(Operands:TCommandOperands); virtual;abstract;
-                         procedure ShowMenu;virtual;abstract;
-                         procedure Print(pdata:GDBPlatformint); virtual;abstract;
-                         procedure SetWindow(pdata:GDBPlatformint); virtual;abstract;
-                         procedure SelectPrinter(pdata:GDBPlatformint); virtual;abstract;
-                         procedure SelectPaper(pdata:GDBPlatformint); virtual;abstract;
-          end;
   ITT_com = {$IFNDEF DELPHI}packed{$ENDIF} object(FloatInsert_com)
     procedure Command(Operands:TCommandOperands); virtual;abstract;
   end;
@@ -3866,6 +3854,8 @@ TZCADDrawingsManager={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorPGDBaseOb
                     function FindDrawingByName(DWGName:GDBString):PTSimpleDrawing;
                     function GetUnitsFormat:TzeUnitsFormat;
                     procedure SetUnitsFormat(f:TzeUnitsFormat);
+                    procedure redrawoglwnd(Sender:TObject;GUIAction:TZMessageID);
+                    procedure resetoglwnd(Sender:TObject;GUIAction:TZMessageID);
               end;
 //Generate on E:/zcad/cad_source/zcad/gui/odjectinspector/uzcoiwrapper.pas
   TWrapper2ObjInsp={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)

@@ -147,7 +147,8 @@ procedure Print_com.Print(pdata:GDBPlatformint);
  var
   //prn:TPrinterRasterizer;
   dx,dy,{cx,cy,}sx,sy,scale:gdbdouble;
-  tmatrix{,_clip}:DMatrix4D;
+  tmatrix,_clip:DMatrix4D;
+  _frustum:ClipArray;
   cdwg:PTSimpleDrawing;
   oldForeGround:TRGB;
   DC:TDrawContext;
@@ -249,6 +250,7 @@ begin
   //cdwg^.OGLwindow1.param.ShowDebugFrustum:=true;
   dc:=cdwg^.CreateDrawingRC(true);
   dc.DrawMode:=true;
+  dc.MaxDetail:=true;
   PrinterDrawer:=TZGLCanvasDrawer.create;
   dc.drawer:=PrinterDrawer;
 
@@ -269,7 +271,10 @@ begin
 
   //Printer.Canvas.Line(0,0,pw,ph);
 
-  drawings.GetCurrentROOT^.CalcVisibleByTree(cdwg^.pcamera^.frustum{calcfrustum(@_clip)},cdwg^.pcamera^.POSCOUNT,cdwg^.pcamera^.VISCOUNT,drawings.GetCurrentROOT^.ObjArray.ObjTree,cdwg^.pcamera^.totalobj,cdwg^.pcamera^.infrustum,@cdwg^.myGluProject2,cdwg^.pcamera^.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
+  _clip:=MatrixMultiply(modelMatrix,projMatrix);
+  _frustum:=calcfrustum(@_clip);
+
+  drawings.GetCurrentROOT^.CalcVisibleByTree(_frustum,cdwg^.pcamera^.POSCOUNT,cdwg^.pcamera^.VISCOUNT,drawings.GetCurrentROOT^.ObjArray.ObjTree,cdwg^.pcamera^.totalobj,cdwg^.pcamera^.infrustum,@cdwg^.myGluProject2,cdwg^.pcamera^.prop.zoom,0);
   //drawings.GetCurrentDWG^.OGLwindow1.draw;
   //prn.startrender;
   drawings.GetCurrentDWG^.wa.treerender(drawings.GetCurrentROOT^.ObjArray.ObjTree,0,{0}dc);

@@ -21,7 +21,7 @@ unit uzccommand_print;
 
 interface
 uses
-  uzglviewareageneral,
+  uzglviewareageneral,uzgldrawerabstract,
   uzgldrawercanvas,
   uzcoimultiobjects,uzepalette,
   uzgldrawcontext,
@@ -99,7 +99,7 @@ begin
 end;
 procedure Print_com.CommandStart(Operands:TCommandOperands);
 begin
-  Error(rsNotYetImplemented);
+  {Error}Prompt(rsNotYetImplemented);
   self.savemousemode:=drawings.GetCurrentDWG^.wa.param.md.mode;
   begin
        ShowMenu;
@@ -153,42 +153,35 @@ procedure Print_com.Print(pdata:GDBPlatformint);
   DC:TDrawContext;
 
   PrinterDrawer:TZGLCanvasDrawer;
-  pmatrix:DMatrix4D;
+
+  pw,ph:integer;
+  point1,point2:GDBVertex;
+
+  modelMatrix,smatrix:DMatrix4D;
+  projMatrix:DMatrix4D;
+  viewport:IMatrix4;
 begin
   cdwg:=drawings.GetCurrentDWG;
   oldForeGround:=ForeGround;
   ForeGround.r:=0;
   ForeGround.g:=0;
   ForeGround.b:=0;
-  //prn.init;
-  //OGLSM:=@prn;
-  dx:=p2.x-p1.x;
+  pw:=Printer.PageWidth;
+  ph:=Printer.PageHeight;
+  point2:=p2;
+  point1:=p1;
+
+  dx:=point2.x-point1.x;
   if dx=0 then
               dx:=1;
-  dy:=p2.y-p1.y;
+  dy:=point2.y-point1.y;
   if dy=0 then
               dy:=1;
-  ////cx:=(p2.x+p1.x)/2;
-  ////cy:=(p2.y+p1.y)/2;
-  //prn.model:=onematrix;//cdwg^.pcamera^.modelMatrix{LCS};
-  //prn.project:=cdwg^.pcamera^.projMatrix{LCS};
-  ////prn.w:=Printer.PaperSize.Width;
-  ////prn.h:=Printer.PaperSize.Height;
-  ////pr:=Printer.PaperSize.PaperRect;
-  //prn.w:=Printer.PageWidth;
-  //prn.h:=Printer.PageHeight;
-  //prn.wmm:=dx;
-  //prn.hmm:=dy;
-  {prn.project}pmatrix:=ortho(p1.x,p2.x,p1.y,p2.y,-1,1,@onematrix);
-
-  //prn.scalex:=1;
-  //prn.scaley:=dy/dx;
 
   if PrintParam.FitToPage then
      begin
-          sx:=((Printer.PageWidth/Printer.XDPI)*25.4);
-          sx:=((Printer.PageWidth/Printer.XDPI)*25.4)/dx;
-          sy:=((Printer.PageHeight/Printer.YDPI)*25.4)/dy;
+          sx:=((Printer.PageWidth{/Printer.XDPI}){*25.4})/dx;
+          sy:=((Printer.PageHeight{/Printer.YDPI}){*25.4})/dy;
           scale:=sy;
           if sx<sy then
                        scale:=sx;
@@ -196,6 +189,46 @@ begin
      end
   else
       scale:=PrintParam.Scale;
+
+  smatrix:=CreateScaleMatrix(CreateVertex(scale,scale,scale));
+
+  //projMatrix:=ortho(point1.x,point2.x,point1.y,point2.y,-1,1,@onematrix);
+
+
+  projMatrix:=ortho(-dx/2,dx/2,-dy/2,dy/2,-1,1,@onematrix);
+
+
+  //0,0 - 1,1
+  //projMatrix:=MatrixMultiply(projMatrix,CreateTranslationMatrix(CreateVertex(-point1.x-dx,-point1.y-dy,0)));
+  //1,1 - 2,2
+  //projMatrix:=MatrixMultiply(projMatrix,CreateTranslationMatrix(CreateVertex(-point1.x-2*dx,-point1.y-2*dy,0)));
+  //2,2 - 3,3
+  //projMatrix:=MatrixMultiply(projMatrix,CreateTranslationMatrix(CreateVertex(-point1.x-3*dx,-point1.y-3*dy,0)));
+
+  //projMatrix:=MatrixMultiply(projMatrix,CreateTranslationMatrix(CreateVertex(-(point2.x+point1.x)/(dx*2)+1/(point2.x-point1.x),-(point2.y+point1.y)/(dy*2)+1/(point2.x-point1.x),0)));
+  projMatrix:=MatrixMultiply(projMatrix,CreateTranslationMatrix(CreateVertex(-(point1.x)/(dx)-point2.x/(dx),-(point1.y)/(dy)-point2.y/(dy),0)));
+
+
+
+
+  modelMatrix:=OneMatrix;
+  //modelMatrix:=CreateTranslationMatrix(CreateVertex(-dx/{2}5,{dy/2}0,0));
+  //projMatrix:=onematrix;
+  //projMatrix:=MatrixMultiply(projMatrix,smatrix);
+
+  {point1:=VectorTransform3D(point1,projMatrix);
+  point1.x:=-point1.x;
+  point1.y:=(Printer.PageHeight-point1.y);}
+
+  //smatrix:=CreateTranslationMatrix(point1);
+  //projMatrix:=MatrixMultiply(projMatrix,smatrix);
+
+  //projMatrix:=MatrixMultiply(projMatrix,CreateScaleMatrix(CreateVertex(1,-1,1)));
+
+  point1:=VectorTransform3D(CreateVertex(0,0,0),projMatrix);
+  point1:=VectorTransform3D(CreateVertex(1,1,0),projMatrix);
+
+
   //prn.scalex:=prn.scalex*scale;
   //prn.scaley:=prn.scaley*scale;
 
@@ -218,8 +251,23 @@ begin
   dc.DrawMode:=true;
   PrinterDrawer:=TZGLCanvasDrawer.create;
   dc.drawer:=PrinterDrawer;
-  PrinterDrawer.pushMatrixAndSetTransform(pmatrix);
+
+  //modelMatrix:=onematrix;
+  //projMatrix:DMatrix4D;
+  viewport[0]:=0;
+  viewport[1]:=0;
+  viewport[2]:=pw;
+  viewport[3]:=ph;
+  dc.DrawingContext.matrixs.pmodelMatrix:=@modelMatrix;
+  dc.DrawingContext.matrixs.pprojMatrix:=@projMatrix;
+  dc.DrawingContext.matrixs.pviewport:=@viewport;
+
+  dc.drawer.startrender(TRM_ModelSpace,dc.DrawingContext.matrixs);
+  //PrinterDrawer.pushMatrixAndSetTransform(projMatrix);
   PrinterDrawer.canvas:=Printer.Canvas;
+
+  //Printer.Canvas.Line(0,0,pw,ph);
+
   drawings.GetCurrentROOT^.CalcVisibleByTree(cdwg^.pcamera^.frustum{calcfrustum(@_clip)},cdwg^.pcamera^.POSCOUNT,cdwg^.pcamera^.VISCOUNT,drawings.GetCurrentROOT^.ObjArray.ObjTree,cdwg^.pcamera^.totalobj,cdwg^.pcamera^.infrustum,@cdwg^.myGluProject2,cdwg^.pcamera^.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
   //drawings.GetCurrentDWG^.OGLwindow1.draw;
   //prn.startrender;
@@ -248,6 +296,7 @@ begin
 
   Print.init('Print',CADWG,0);
   PrintParam.Scale:=1;
+  PrintParam.FitToPage:=true;
   Print.SetCommandParam(@PrintParam,'PTPrintParams');
 
   PSD:=TPrinterSetupDialog.Create(nil);

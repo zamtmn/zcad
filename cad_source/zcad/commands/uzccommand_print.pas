@@ -265,6 +265,7 @@ begin
   dc.drawer.startrender(TRM_ModelSpace,dc.DrawingContext.matrixs);
   //PrinterDrawer.pushMatrixAndSetTransform(projMatrix);
   PrinterDrawer.canvas:=Printer.Canvas;
+  PrinterDrawer.WorkAreaResize(Rect(0,0,pw,ph));
 
   //Printer.Canvas.Line(0,0,pw,ph);
 

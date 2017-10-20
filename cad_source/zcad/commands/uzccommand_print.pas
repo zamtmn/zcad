@@ -181,8 +181,8 @@ begin
 
   if PrintParam.FitToPage then
      begin
-          sx:=((Printer.PageWidth{/Printer.XDPI}){*25.4})/dx;
-          sy:=((Printer.PageHeight{/Printer.YDPI}){*25.4})/dy;
+          sx:=((Printer.PageWidth))/dx;
+          sy:=((Printer.PageHeight))/dy;
           scale:=sy;
           if sx<sy then
                        scale:=sx;
@@ -197,17 +197,7 @@ begin
 
 
   projMatrix:=ortho(-dx/2,dx/2,-dy/2,dy/2,-1,1,@onematrix);
-
-
-  //0,0 - 1,1
-  //projMatrix:=MatrixMultiply(projMatrix,CreateTranslationMatrix(CreateVertex(-point1.x-dx,-point1.y-dy,0)));
-  //1,1 - 2,2
-  //projMatrix:=MatrixMultiply(projMatrix,CreateTranslationMatrix(CreateVertex(-point1.x-2*dx,-point1.y-2*dy,0)));
-  //2,2 - 3,3
-  //projMatrix:=MatrixMultiply(projMatrix,CreateTranslationMatrix(CreateVertex(-point1.x-3*dx,-point1.y-3*dy,0)));
-
-  //projMatrix:=MatrixMultiply(projMatrix,CreateTranslationMatrix(CreateVertex(-(point2.x+point1.x)/(dx*2)+1/(point2.x-point1.x),-(point2.y+point1.y)/(dy*2)+1/(point2.x-point1.x),0)));
-  projMatrix:=MatrixMultiply(projMatrix,CreateTranslationMatrix(CreateVertex(-(point1.x)/(dx)-point2.x/(dx),-(point1.y)/(dy)-point2.y/(dy),0)));
+  projMatrix:=MatrixMultiply(projMatrix,CreateTranslationMatrix(CreateVertex(-(point1.x+point2.x)/dx,-(point1.y+point2.y)/dy,0)));
 
 
 

@@ -22,7 +22,7 @@ unit uzccommand_print;
 interface
 uses
   uzglviewareageneral,uzgldrawerabstract,
-  uzgldrawercanvas,
+  uzgldrawercanvas,uzgldrawergdi,uzgldrawergeneral2d,
   uzcoimultiobjects,uzepalette,
   uzgldrawcontext,
   uzeentpoint,uzeentityfactory,
@@ -146,14 +146,14 @@ end;
 procedure Print_com.Print(pdata:GDBPlatformint);
  var
   //prn:TPrinterRasterizer;
-  dx,dy,{cx,cy,}sx,sy,scale:gdbdouble;
+  ddx,ddy,dx,dy,{cx,cy,}sx,sy,scale:gdbdouble;
   tmatrix,_clip:DMatrix4D;
   _frustum:ClipArray;
   cdwg:PTSimpleDrawing;
   oldForeGround:TRGB;
   DC:TDrawContext;
 
-  PrinterDrawer:TZGLCanvasDrawer;
+  PrinterDrawer:TZGLGeneral2DDrawer;
 
   pw,ph:integer;
   point1,point2:GDBVertex;
@@ -161,6 +161,7 @@ procedure Print_com.Print(pdata:GDBPlatformint);
   modelMatrix,smatrix:DMatrix4D;
   projMatrix:DMatrix4D;
   viewport:IMatrix4;
+  pd1,pd2:GDBvertex2D;
 begin
   cdwg:=drawings.GetCurrentDWG;
   oldForeGround:=ForeGround;
@@ -191,13 +192,22 @@ begin
   else
       scale:=PrintParam.Scale;
 
+  if sx>sy then begin
+    sx:=sx/sy;
+    sy:=1;
+  end else begin
+    sy:=sy/sx;
+    sx:=1;
+  end;
+
   smatrix:=CreateScaleMatrix(CreateVertex(scale,scale,scale));
 
   //projMatrix:=ortho(point1.x,point2.x,point1.y,point2.y,-1,1,@onematrix);
 
-
-  projMatrix:=ortho(-dx/2,dx/2,-dy/2,dy/2,-1,1,@onematrix);
+  projMatrix:=onematrix;
+  projMatrix:=ortho(-dx/2,dx/2,-dy/2,dy/2,-1,1,@projMatrix);
   projMatrix:=MatrixMultiply(projMatrix,CreateTranslationMatrix(CreateVertex(-(point1.x+point2.x)/dx,-(point1.y+point2.y)/dy,0)));
+  projMatrix:=MatrixMultiply(projMatrix,CreateScaleMatrix(CreateVertex(1/sx,1/sy,1)));
 
 
 
@@ -257,6 +267,7 @@ begin
   dc.drawer.startrender(TRM_ModelSpace,dc.DrawingContext.matrixs);
   //PrinterDrawer.pushMatrixAndSetTransform(projMatrix);
   PrinterDrawer.canvas:=Printer.Canvas;
+
   PrinterDrawer.WorkAreaResize(Rect(0,0,pw,ph));
 
   //Printer.Canvas.Line(0,0,pw,ph);
@@ -267,6 +278,11 @@ begin
   drawings.GetCurrentROOT^.CalcVisibleByTree(_frustum,cdwg^.pcamera^.POSCOUNT,cdwg^.pcamera^.VISCOUNT,drawings.GetCurrentROOT^.ObjArray.ObjTree,cdwg^.pcamera^.totalobj,cdwg^.pcamera^.infrustum,@cdwg^.myGluProject2,cdwg^.pcamera^.prop.zoom,0);
   //drawings.GetCurrentDWG^.OGLwindow1.draw;
   //prn.startrender;
+
+  pd1:=PrinterDrawer.ProjectPoint3DInModelSpace(p1,dc.DrawingContext.matrixs);
+  pd2:=PrinterDrawer.ProjectPoint3DInModelSpace(p2,dc.DrawingContext.matrixs);
+  PrinterDrawer.canvas.ClipRect:=rect(round(pd1.x),round(pd1.y),round(pd2.x),round(pd2.y));
+  PrinterDrawer.canvas.Clipping:=true;
   drawings.GetCurrentDWG^.wa.treerender(drawings.GetCurrentROOT^.ObjArray.ObjTree,0,{0}dc);
   //prn.endrender;
   inc(cdwg^.pcamera^.DRAWCOUNT);

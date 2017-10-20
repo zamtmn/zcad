@@ -88,6 +88,8 @@ TZGLGeneral2DDrawer=class(TZGLGeneralDrawer)
                           procedure DrawQuad3DInModelSpace(const normal,p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);override;
                           procedure DrawQuad3DInModelSpace(const p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);override;
 
+                          function ProjectPoint3DInModelSpace(const p:gdbvertex;var matrixs:tmatrixs):GDBvertex2D;override;
+
                           function CheckOutboundInDisplay(const PVertexBuffer:PZGLVertex3Sarray;const i1:TLLVertexIndex):boolean;override;
 
                     end;
@@ -165,7 +167,17 @@ begin
      InternalDrawQuad(x-ps, y-ps, x-ps, y+ps, x+ps, y+ps, x+ps, y-ps);
      //Rectangle(OffScreedDC, x-ps, y-ps, x+ps,y+ps);
 end;
+function TZGLGeneral2DDrawer.ProjectPoint3DInModelSpace(const p:gdbvertex;var matrixs:tmatrixs):GDBvertex2D;
+var
+   pp:GDBVertex;
+   ps:integer;
+   x,y:integer;
+begin
+    _myGluProject2(p,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp);
 
+     result.x:=round(pp.x);
+     result.y:=round(wh.cy-pp.y);
+end;
 procedure TZGLGeneral2DDrawer.DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);
 var
    pp1,pp2:GDBVertex;

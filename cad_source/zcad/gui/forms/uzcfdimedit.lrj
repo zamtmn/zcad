@@ -1,0 +1,13 @@
+{"version":1,"strings":[
+{"hash":28602141,"name":"tdimstyleeditform.caption","sourcebytes":[68,105,109,83,116,121,108,101,69,100,105,116,70,111,114,109],"value":"DimStyleEditForm"},
+{"hash":127854081,"name":"tdimstyleeditform.tabsheet1.caption","sourcebytes":[84,97,98,83,104,101,101,116,49],"value":"TabSheet1"},
+{"hash":146640072,"name":"tdimstyleeditform.button1.caption","sourcebytes":[82,101,102,114,101,115,104],"value":"Refresh"},
+{"hash":195026769,"name":"tdimstyleeditform.checkbox1.caption","sourcebytes":[67,104,101,99,107,66,111,120,49],"value":"CheckBox1"},
+{"hash":195026770,"name":"tdimstyleeditform.checkbox2.caption","sourcebytes":[67,104,101,99,107,66,111,120,50],"value":"CheckBox2"},
+{"hash":77656674,"name":"tdimstyleeditform.dlinecolor.text","sourcebytes":[100,108,105,110,101,67,111,108,111,114],"value":"dlineColor"},
+{"hash":4909909,"name":"tdimstyleeditform.dlinetype.text","sourcebytes":[100,108,105,110,101,84,121,112,101],"value":"dlineType"},
+{"hash":60021971,"name":"tdimstyleeditform.combobox3.text","sourcebytes":[67,111,109,98,111,66,111,120,51],"value":"ComboBox3"},
+{"hash":104363932,"name":"tdimstyleeditform.dlinecolorlabel.caption","sourcebytes":[100,108,105,110,101,67,111,108,111,114,76,97,98,101,108],"value":"dlineColorLabel"},
+{"hash":94819852,"name":"tdimstyleeditform.dlinetypelabel.caption","sourcebytes":[100,108,105,110,101,84,121,112,101,76,97,98,101,108],"value":"dlineTypeLabel"},
+{"hash":127854082,"name":"tdimstyleeditform.tabsheet2.caption","sourcebytes":[84,97,98,83,104,101,101,116,50],"value":"TabSheet2"}
+]}

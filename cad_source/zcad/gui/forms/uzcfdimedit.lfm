@@ -1,0 +1,123 @@
+object DimStyleEditForm: TDimStyleEditForm
+  Left = 152
+  Height = 547
+  Top = 373
+  Width = 949
+  Caption = 'DimStyleEditForm'
+  ClientHeight = 547
+  ClientWidth = 949
+  LCLVersion = '1.9.0.0'
+  object PageControl1: TPageControl
+    Left = 48
+    Height = 352
+    Top = 40
+    Width = 560
+    ActivePage = TabSheet1
+    TabIndex = 0
+    TabOrder = 0
+    object TabSheet1: TTabSheet
+      Caption = 'TabSheet1'
+      ClientHeight = 326
+      ClientWidth = 552
+      OnContextPopup = TabSheet1ContextPopup
+      object Button1: TButton
+        Left = 472
+        Height = 25
+        Top = 0
+        Width = 75
+        Caption = 'Refresh'
+        OnClick = RefreshClick
+        TabOrder = 0
+      end
+      object CheckBox1: TCheckBox
+        Left = 67
+        Height = 17
+        Top = 192
+        Width = 71
+        Caption = 'CheckBox1'
+        Checked = True
+        OnChange = CheckBox1Change
+        State = cbChecked
+        TabOrder = 1
+      end
+      object CheckBox2: TCheckBox
+        Left = 168
+        Height = 17
+        Top = 192
+        Width = 71
+        Caption = 'CheckBox2'
+        TabOrder = 2
+      end
+      object dlineColor: TComboBox
+        Left = 139
+        Height = 21
+        Top = 35
+        Width = 100
+        ItemHeight = 13
+        OnChange = dlineColorComboBoxChange
+        TabOrder = 3
+        Text = 'dlineColor'
+      end
+      object dlineType: TComboBox
+        Left = 139
+        Height = 21
+        Top = 64
+        Width = 100
+        ItemHeight = 13
+        OnChange = dlineTypeComboBoxChange
+        TabOrder = 4
+        Text = 'dlineType'
+      end
+      object ComboBox3: TComboBox
+        Left = 139
+        Height = 21
+        Top = 96
+        Width = 100
+        ItemHeight = 13
+        TabOrder = 5
+        Text = 'ComboBox3'
+      end
+      object FloatSpinEdit1: TFloatSpinEdit
+        Left = 189
+        Height = 21
+        Top = 128
+        Width = 50
+        Increment = 1
+        MaxValue = 100
+        MinValue = 0
+        TabOrder = 6
+        Value = 0
+      end
+      object FloatSpinEdit2: TFloatSpinEdit
+        Left = 189
+        Height = 21
+        Top = 160
+        Width = 50
+        Increment = 1
+        MaxValue = 100
+        MinValue = 0
+        TabOrder = 7
+        Value = 0
+      end
+      object dlineColorLabel: TLabel
+        Left = 24
+        Height = 13
+        Top = 38
+        Width = 72
+        Caption = 'dlineColorLabel'
+        ParentColor = False
+      end
+      object dlineTypeLabel: TLabel
+        Left = 24
+        Height = 13
+        Top = 68
+        Width = 71
+        Caption = 'dlineTypeLabel'
+        ParentColor = False
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = 'TabSheet2'
+    end
+  end
+end

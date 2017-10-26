@@ -49,7 +49,7 @@ const
      ColumnCount=7+1;
 
 type
-  TFTFilter=(TFTF_All,TFTF_TTF,TFTF_SHX);
+  //TFTFilter=(TFTF_All,TFTF_TTF,TFTF_SHX);
 
   { TDimStylesForm}
 
@@ -134,9 +134,12 @@ type
 
 var
   DimStylesForm: TDimStylesForm;
-  FontsFilter:TFTFilter;
+  //FontsFilter:TFTFilter;
 implementation
 {$R *.lfm}
+uses
+  uzcfdimedit;
+
 function TDimStylesForm.IsShortcut(var Message: TLMKey): boolean;
 var
    OldFunction:TIsShortcutFunc;
@@ -521,6 +524,26 @@ begin
 
   ListView1.AddCreatedItem(pcreatedstyle,drawings.GetCurrentDWG^.GetCurrentDimStyle);
 end;
+
+procedure TDimStylesForm.DimStyleInspect(Sender: TObject);
+var
+   editForm:TDimStyleEditForm;
+   pdwg:PTSimpleDrawing;
+   pstyle:PGDBDimStyle;
+begin
+  pdwg:=drawings.GetCurrentDWG;
+  if assigned(ListView1.Selected)then
+  begin
+    editForm:=TDimStyleEditForm.Create(Self);
+    uzcfdimedit.dimStyle:=(ListView1.Selected.Data);
+    //pstyle:=(ListView1.Selected.Data);
+    editForm.Show;
+    //editForm.Free;
+    end
+  else
+  ZCMsgCallBackInterface.TextMessage(rsStyleMustBeSelected,TMWOShowError);
+end;
+
 procedure TDimStylesForm.doTStyleDelete(ProcessedItem:TListItem);
 var
    domethod,undomethod:tmethod;
@@ -577,10 +600,10 @@ begin
      close;
 end;
 
-procedure TDimStylesForm.DimStyleInspect(Sender: TObject);
-begin
-
-end;
+//procedure TDimStylesForm.DimStyleInspect(Sender: TObject);
+//begin
+//
+//end;
 
 procedure TDimStylesForm.PurgeTStyles(Sender: TObject);
 var
@@ -629,7 +652,7 @@ begin
      FontsSelector.Enums.done;
      SupportTypedEditors.Free;
 end;
-initialization
-  FontsFilter:=TFTF_SHX;
+//initialization
+  //FontsFilter:=TFTF_SHX;
 end.
 

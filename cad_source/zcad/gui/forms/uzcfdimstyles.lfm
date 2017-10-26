@@ -9,7 +9,6 @@ object DimStylesForm: TDimStylesForm
   ClientWidth = 800
   Constraints.MinHeight = 500
   Constraints.MinWidth = 800
-  DesignTimePPI = 113
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
@@ -22,9 +21,9 @@ object DimStylesForm: TDimStylesForm
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
     Left = 2
-    Height = 27
-    Top = 471
-    Width = 672
+    Height = 21
+    Top = 477
+    Width = 693
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Left = 2
     BorderSpacing.Top = 2
@@ -38,9 +37,9 @@ object DimStylesForm: TDimStylesForm
     AnchorSideTop.Side = asrCenter
     AnchorSideRight.Side = asrCenter
     AnchorSideBottom.Side = asrCenter
-    Left = 338
+    Left = 348
     Height = 1
-    Top = 484
+    Top = 487
     Width = 1
     BorderSpacing.Around = 1
     Layout = tlCenter
@@ -51,10 +50,10 @@ object DimStylesForm: TDimStylesForm
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
-    Left = 676
-    Height = 29
-    Top = 469
-    Width = 122
+    Left = 697
+    Height = 23
+    Top = 475
+    Width = 101
     Anchors = [akRight, akBottom]
     AutoSize = True
     BorderSpacing.Left = 2
@@ -73,7 +72,7 @@ object DimStylesForm: TDimStylesForm
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = ButtonApplyClose
     Left = 1
-    Height = 430
+    Height = 436
     Top = 37
     Width = 798
     Anchors = [akTop, akLeft, akRight, akBottom]
@@ -196,8 +195,8 @@ object DimStylesForm: TDimStylesForm
     end
   end
   object ActionList1: TActionList
-    Left = 632
-    Top = 312
+    left = 632
+    top = 312
     object AddStyle: TAction
       Caption = 'AddStyle'
       DisableIfNoHandler = False

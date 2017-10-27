@@ -27,7 +27,7 @@ type
 PGDBfont=^GDBfont;
 GDBfont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
     fontfile:GDBString;
-    Internalname:GDBString;
+    Internalname:GDBString; // Международное полное имя с описанием авора
     family:GDBString;
     fullname:GDBString;
     font:PBASEFont;

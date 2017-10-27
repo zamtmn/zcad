@@ -28,25 +28,58 @@ type
   TDimStyleEditForm = class(TForm)
     //dimStyle:PGDBDimStyle;
     Button1: TButton;
-    CheckBox1: TCheckBox;
-    CheckBox2: TCheckBox;
+    lineExtColorComboBox: TComboBox;
+    lineExtLT1ComboBox: TComboBox;
+    lineExtLT2ComboBox: TComboBox;
+    lineExtLWComboBox: TComboBox;
     dlineColor: TComboBox;
     dlineType: TComboBox;
-    ComboBox3: TComboBox;
-    FloatSpinEdit1: TFloatSpinEdit;
-    FloatSpinEdit2: TFloatSpinEdit;
+    dlineWeight: TComboBox;
+    Label1: TLabel;
+    lineExtColorLabel: TLabel;
+    lineExtLT1Label: TLabel;
+    lineExtLT2Label: TLabel;
+    lineExtLWLabel: TLabel;
+    lineDimDLELabel: TLabel;
+    lineDimCENLabel: TLabel;
+    lineDimDLE: TFloatSpinEdit;
+    lineDimCEN: TFloatSpinEdit;
     dlineColorLabel: TLabel;
     dlineTypeLabel: TLabel;
+    GroupBox1: TGroupBox;
+    dlineWeightLabel: TLabel;
     PageControl1: TPageControl;
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
     procedure RefreshClick(Sender: TObject);
-    procedure CheckBox1Change(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure ColorComboBoxCreate(Sender: TObject;var colorBox:TComboBox;coloritem:TGDBPaletteColor);
+    function ColorComboBoxChange(Sender: TObject;colorBox:TComboBox;coloritemindex:integer):integer;
+
+    procedure lineTypeComboBoxCreate(Sender: TObject;var lineTypeComboBox:TComboBox;itemtype:PGDBLtypeProp);
+    function lineTypeComboBoxChange(Sender: TObject;lineTypeComboBox:TComboBox;index:integer):PGDBLtypeProp;
+
+    procedure lineWeightComboBoxCreate(Sender: TObject;var lineWeightComboBox:TComboBox;itemLW:TGDBLineWeight);
+    function lineWeightComboBoxChange(Sender: TObject;lineWeightComboBox:TComboBox;index:integer):TGDBLineWeight;
+
     procedure dlineColorComboBox(Sender: TObject);
     procedure dlineColorComboBoxChange(Sender: TObject);
     procedure dlineTypeComboBox(Sender: TObject);
     procedure dlineTypeComboBoxChange(Sender: TObject);
+    procedure dlineWeightComboBoxCreate(Sender: TObject);
+    procedure dlineWeightComboBoxChange(Sender: TObject);
+    procedure lineDimDLEChange(Sender: TObject);
+    procedure lineDimCENChange(Sender: TObject);
+
+    procedure lineExtColorComboBoxCreate(Sender: TObject);
+    procedure lineExtColorComboBoxChange(Sender: TObject);
+    procedure lineExtLT1ComboBoxCreate(Sender: TObject);
+    procedure lineExtLT1ComboBoxChange(Sender: TObject);  
+    procedure lineExtLT2ComboBoxCreate(Sender: TObject);
+    procedure lineExtLT2ComboBoxChange(Sender: TObject);
+    procedure lineExtLWComboBoxCreate(Sender: TObject);
+    procedure lineExtLWComboBoxChange(Sender: TObject);
+
     procedure TabSheet1ContextPopup(Sender: TObject; MousePos: TPoint;
       var Handled: Boolean);
   private
@@ -67,116 +100,80 @@ implementation
 
 { TDimStyleEditForm }
 
-
-procedure TDimStyleEditForm.CheckBox1Change(Sender: TObject);
-begin
-
-end;
-
-
-procedure TDimStyleEditForm.dlineColorComboBox(Sender: TObject);
+procedure TDimStyleEditForm.ColorComboBoxCreate(Sender: TObject;var colorBox:TComboBox;coloritem:TGDBPaletteColor);
 var
     i:integer;
     isColor:boolean;
 begin
-    dlineColor.Clear;
-    dlineColor.AddItem(GetColorNameFromIndex(256),Sender);
-    dlineColor.AddItem(GetColorNameFromIndex(0),Sender);
+    colorBox.Clear;
+    colorBox.AddItem(GetColorNameFromIndex(256),Sender);
+    colorBox.AddItem(GetColorNameFromIndex(0),Sender);
     for i:=1 to 7 do begin
-       dlineColor.AddItem(acadpalette[i].name,Sender);
+       colorBox.AddItem(acadpalette[i].name,Sender);
     end;
 
     isColor:=true;
-    for i:=0 to dlineColor.Items.Count-1 do begin
-       if GetColorNameFromIndex(dimStyle^.Lines.DIMCLRD) = dlineColor.Items[i] then begin
-          dlineColor.ItemIndex := i;
+    for i:=0 to colorBox.Items.Count-1 do begin
+       if GetColorNameFromIndex(coloritem) = colorBox.Items[i] then begin
+          colorBox.ItemIndex := i;
           isColor:=false;
           end;
     end;
 
     if isColor then begin
-       dlineColor.AddItem(inttostr(dimStyle^.Lines.DIMCLRD),Sender);
-       dlineColor.ItemIndex := dlineColor.Items.Count - 1;
+       colorBox.AddItem(inttostr(coloritem),Sender);
+       colorBox.ItemIndex := colorBox.Items.Count - 1;
     end;
+    colorBox.AddItem('Other...',Sender);
 
-    dlineColor.AddItem('Other...',Sender);
-
-
-    //dimStyle^.Lines.DIMCLRD:=;
-    //GetColorNameFromIndex(colorindex);
-    //ZCMsgCallBackInterface.TextMessage(GetColorNameFromIndex(dimStyle^.Lines.DIMCLRD),TMWOHistoryOut);
-
-
-    //ZCMsgCallBackInterface.TextMessage(GetColorNameFromIndex(dimStyle^.Lines.DIMCLRE),TMWOHistoryOut);
-    //with dlineColor.Items do
-    //begin
-    //  AddObject('самолет', TObject(2000));
-    //  AddObject('поезд', TObject(1500));
-    //  AddObject('автобус', TObject(1500));
-    //end;
-    //dlineColor.ItemIndex := 0;
 end;
-
-
-//**Решил в лоб наверное неправильно перебераю всю палитру
-procedure TDimStyleEditForm.dlineColorComboBoxChange(Sender: TObject);
-//var
-//    i:integer;
-//    indexCB:integer;
-//    isColor:boolean;
+function TDimStyleEditForm.ColorComboBoxChange(Sender: TObject;colorBox:TComboBox;coloritemindex:integer):integer;
 begin
-    //indexCB:=TComboBox(Sender).Items.Count;
-    if dlineColor.Items[TComboBox(Sender).ItemIndex] = 'Other...' then
+    if colorBox.Items[coloritemindex] = 'Other...' then
       begin
          ZCMsgCallBackInterface.TextMessage('не работает',TMWOHistoryOut);
       end
     else
-      case TComboBox(Sender).ItemIndex of
+      case coloritemindex of
         0:
         //ZCMsgCallBackInterface.TextMessage('0',TMWOHistoryOut);
-          dimStyle^.Lines.DIMCLRD:= 256;
+          result:= 256;
         1..8:
           //ZCMsgCallBackInterface.TextMessage('1-8',TMWOHistoryOut);
-          dimStyle^.Lines.DIMCLRD:= TComboBox(Sender).ItemIndex - 1;
+          result:= coloritemindex - 1;
       else
-          dimStyle^.Lines.DIMCLRD:= strtoint(string(dlineColor.Items[TComboBox(Sender).ItemIndex]));
+          result:= strtoint(string(colorBox.Items[coloritemindex]));
       end;
-    //ZCMsgCallBackInterface.TextMessage(inttostr(TComboBox(Sender).ItemIndex),TMWOHistoryOut);
+
 end;
 
-procedure TDimStyleEditForm.dlineTypeComboBox(Sender: TObject);
+procedure TDimStyleEditForm.lineTypeComboBoxCreate(Sender: TObject;var lineTypeComboBox:TComboBox;itemtype:PGDBLtypeProp);
 var
    pdwg:PTSimpleDrawing;
    ir:itrec;
    pltp:PGDBLtypeProp;
    i:integer;
-   //isDLType:boolean;
 begin
-    dlineType.Clear;
     pdwg:=drawings.GetCurrentDWG;
      if (pdwg<>nil) then
      begin
        pltp:=pdwg^.LTypeStyleTable.beginiterate(ir);
        if pltp<>nil then
        repeat
-            dlineType.AddItem(Tria_AnsiToUtf8(pltp^.Name),Sender);
+            lineTypeComboBox.AddItem(Tria_AnsiToUtf8(pltp^.Name),Sender);
             pltp:=pdwg^.LTypeStyleTable.iterate(ir);
        until pltp=nil;
      end;
 
-     for i:=0 to dlineType.Items.Count-1 do begin
-         if Tria_AnsiToUtf8(dimStyle^.Lines.DIMLTYPE^.Name) = dlineType.Items[i] then begin
-            dlineType.ItemIndex := i;
+     for i:=0 to lineTypeComboBox.Items.Count-1 do begin
+         if Tria_AnsiToUtf8(itemtype^.Name) = lineTypeComboBox.Items[i] then begin
+            lineTypeComboBox.ItemIndex := i;
             end;
      end;
 
-
-     //ZCMsgCallBackInterface.TextMessage('стили-',TMWOHistoryOut);
-     //ZCMsgCallBackInterface.TextMessage(dimStyle^.Lines.DIMLTYPE^.Name,TMWOHistoryOut);
-
 end;
-//**Решил в лоб наверное неправильно перебераю всю палитру
-procedure TDimStyleEditForm.dlineTypeComboBoxChange(Sender: TObject);
+
+function TDimStyleEditForm.lineTypeComboBoxChange(Sender: TObject;lineTypeComboBox:TComboBox;index:integer):PGDBLtypeProp;
 var
    pdwg:PTSimpleDrawing;
    ir:itrec;
@@ -188,8 +185,8 @@ begin
        pltp:=pdwg^.LTypeStyleTable.beginiterate(ir);
        if pltp<>nil then
        repeat
-            if Tria_AnsiToUtf8(pltp^.Name) = dlineType.Items[TComboBox(Sender).ItemIndex] then begin
-               dimStyle^.Lines.DIMLTYPE := pltp;
+            if Tria_AnsiToUtf8(pltp^.Name) = lineTypeComboBox.Items[index] then begin
+               result := pltp;
                //ZCMsgCallBackInterface.TextMessage(dimStyle^.Lines.DIMLTYPE^.Name,TMWOHistoryOut);
             end;
             pltp:=pdwg^.LTypeStyleTable.iterate(ir);
@@ -197,35 +194,164 @@ begin
      end;
 end;
 
+procedure TDimStyleEditForm.lineWeightComboBoxCreate(Sender: TObject;var lineWeightComboBox:TComboBox;itemLW:TGDBLineWeight);
+var
+   i:integer;
+begin
+     lineWeightComboBox.items.AddObject(rsByLayer,Sender);
+     lineWeightComboBox.items.AddObject(rsByBlock,Sender);
+     lineWeightComboBox.items.AddObject(rsdefault,Sender);
+     for i := low(lwarray) to high(lwarray) do
+     begin
+          lineWeightComboBox.items.AddObject(GetLWNameFromN(i),Sender);
+     end;
 
-    //dlineColor.AddItem(GetColorNameFromIndex(256),Sender);
-    //dlineColor.AddItem(GetColorNameFromIndex(0),Sender);
-    //for i:=1 to 7 do begin
-    //   dlineColor.AddItem(acadpalette[i].name,Sender);
-    //end;
-    //
-    //isColor:=true;
-    //for i:=0 to dlineColor.Items.Count-1 do begin
-    //   if GetColorNameFromIndex(dimStyle^.Lines.DIMCLRD) = dlineColor.Items[i] then begin
-    //      dlineColor.ItemIndex := i;
-    //      isColor:=false;
-    //      end;
-    //end;
-    //
-    //if isColor then begin
-    //   dlineColor.AddItem(inttostr(dimStyle^.Lines.DIMCLRD),Sender);
-    //   dlineColor.ItemIndex := dlineColor.Items.Count - 1;
-    //end;
-    //
-    //dlineColor.AddItem('Other...',Sender);
-//end;
+
+     lineWeightComboBox.ItemIndex:=0;
+
+     for i := 0 to lineWeightComboBox.items.Count-1 do
+     begin
+          if lineWeightComboBox.items[i]=GetLWNameFromLW(itemLW) then
+          begin
+               lineWeightComboBox.ItemIndex:=i;
+          end;
+     end;
+end;
+
+function TDimStyleEditForm.lineWeightComboBoxChange(Sender: TObject;lineWeightComboBox:TComboBox;index:integer):TGDBLineWeight;
+var
+   i:integer;
+begin
+     //if rsByLayer = lineWeightComboBox.Items[index] then
+               result:=-1;
+     if rsByBlock = lineWeightComboBox.Items[index] then
+               result:=-2;
+     if rsdefault = lineWeightComboBox.Items[index] then
+               result:=-3;
+
+     for i := low(lwarray) to high(lwarray) do
+       if GetLWNameFromN(i) = lineWeightComboBox.Items[index] then
+                 result:=integer(lwarray[i]);
+end;
+
+procedure TDimStyleEditForm.dlineColorComboBox(Sender: TObject);
+begin
+    dlineColor.Clear;
+    ColorComboBoxCreate(Sender,dlineColor,dimStyle^.Lines.DIMCLRD);
+end;
+
+
+procedure TDimStyleEditForm.dlineColorComboBoxChange(Sender: TObject);
+begin
+    dimStyle^.Lines.DIMCLRD:=ColorComboBoxChange(Sender,dlineColor,TComboBox(Sender).ItemIndex);
+end;
+
+procedure TDimStyleEditForm.lineExtColorComboBoxCreate(Sender: TObject);
+begin
+    lineExtColorComboBox.Clear;
+    ColorComboBoxCreate(Sender,lineExtColorComboBox,dimStyle^.Lines.DIMCLRE);
+end;
+
+procedure TDimStyleEditForm.lineExtColorComboBoxChange(Sender: TObject);
+begin
+    dimStyle^.Lines.DIMCLRE:=ColorComboBoxChange(Sender,lineExtColorComboBox,TComboBox(Sender).ItemIndex);
+end;
+
+procedure TDimStyleEditForm.dlineTypeComboBox(Sender: TObject);
+begin
+    dlineType.Clear;
+    lineTypeComboBoxCreate(Sender,dlineType,dimStyle^.Lines.DIMLTYPE);
+end;
+
+procedure TDimStyleEditForm.dlineTypeComboBoxChange(Sender: TObject);
+begin
+    dimStyle^.Lines.DIMLTYPE:= lineTypeComboBoxChange(Sender,dlineType,TComboBox(Sender).ItemIndex) ;
+end;
+
+procedure TDimStyleEditForm.lineExtLT1ComboBoxCreate(Sender: TObject);
+begin
+    lineExtLT1ComboBox.Clear;
+    lineTypeComboBoxCreate(Sender,lineExtLT1ComboBox,dimStyle^.Lines.DIMLTEX1);
+end;
+
+procedure TDimStyleEditForm.lineExtLT1ComboBoxChange(Sender: TObject);
+begin
+    dimStyle^.Lines.DIMLTEX1:= lineTypeComboBoxChange(Sender,lineExtLT1ComboBox,TComboBox(Sender).ItemIndex) ;
+end;
+
+procedure TDimStyleEditForm.lineExtLT2ComboBoxCreate(Sender: TObject);
+begin
+    lineExtLT2ComboBox.Clear;
+    lineTypeComboBoxCreate(Sender,lineExtLT2ComboBox,dimStyle^.Lines.DIMLTEX2);
+end;
+
+procedure TDimStyleEditForm.lineExtLT2ComboBoxChange(Sender: TObject);
+begin
+    dimStyle^.Lines.DIMLTEX2:= lineTypeComboBoxChange(Sender,lineExtLT2ComboBox,TComboBox(Sender).ItemIndex) ;
+end;
+
+
+
+procedure TDimStyleEditForm.dlineWeightComboBoxCreate(Sender: TObject);
+begin
+     dlineWeight.Clear;
+     lineWeightComboBoxCreate(Sender,dlineWeight,dimStyle^.Lines.DIMLWD);
+end;
+
+procedure TDimStyleEditForm.dlineWeightComboBoxChange(Sender: TObject);
+begin
+      dimStyle^.Lines.DIMLWD:=lineWeightComboBoxChange(Sender,dlineWeight,TComboBox(Sender).ItemIndex);
+end;
+
+
+
+procedure TDimStyleEditForm.lineExtLWComboBoxCreate(Sender: TObject);
+begin
+     lineExtLWComboBox.Clear;
+     lineWeightComboBoxCreate(Sender,lineExtLWComboBox,dimStyle^.Lines.DIMLWE);
+end;
+
+procedure TDimStyleEditForm.lineExtLWComboBoxChange(Sender: TObject);
+begin
+      dimStyle^.Lines.DIMLWE:=lineWeightComboBoxChange(Sender,lineExtLWComboBox,TComboBox(Sender).ItemIndex);
+end;
+
+
+
+procedure TDimStyleEditForm.lineDimDLEChange(Sender: TObject);
+begin
+     dimStyle^.Lines.DIMDLE:=lineDimDLE.Value;
+end;
+
+procedure TDimStyleEditForm.lineDimCENChange(Sender: TObject);
+begin
+     dimStyle^.Lines.DIMCEN:=lineDimCEN.Value;
+end;
 
 procedure TDimStyleEditForm.FormCreate(Sender: TObject);
-var
-   Transp : TStringList;
+//var
+   //Transp : TStringList;
 begin
    //TDimStyleEditForm.lineLayerView();
 
+     dlineColorLabel.Caption:='Color:';
+     dlineTypeLabel.Caption:='Linetype:';
+     dlineWeightLabel.Caption:='Lineweight:';
+     lineDimDLELabel.Caption:='Dimension line extension:';
+     lineDimCENLabel.Caption:='Size of center mark:';
+
+     lineExtColorLabel.Caption:='Color:';
+
+     dlineColorComboBox(Sender);
+     dlineTypeComboBox(Sender);
+     dlineWeightComboBoxCreate(Sender);
+     lineDimDLE.Value:=dimStyle^.Lines.DIMDLE;
+     lineDimCEN.Value:=dimStyle^.Lines.DIMCEN;
+
+     lineExtColorComboBoxCreate(Sender);
+     lineExtLT1ComboBoxCreate(Sender);
+     lineExtLT2ComboBoxCreate(Sender);
+     lineExtLWComboBoxCreate(Sender);
 
 
      //Transp := TStringList.Create;
@@ -239,7 +365,7 @@ begin
      //dlineColor.ItemIndex := 0;
      //
      //Transp.Clear;
-      ZCMsgCallBackInterface.TextMessage('1111111hf,jnftn',TMWOHistoryOut);
+      //ZCMsgCallBackInterface.TextMessage('1111111hf,jnftn',TMWOHistoryOut);
       //dlineColor.AddItem('123',Sender);
       //dlineColor.AddItem('222',Sender);
       //dlineColor.AddItem('333',Sender);

@@ -1,15 +1,16 @@
 object DimStyleEditForm: TDimStyleEditForm
-  Left = 152
+  Left = 527
   Height = 547
-  Top = 373
+  Top = 406
   Width = 949
   Caption = 'DimStyleEditForm'
   ClientHeight = 547
   ClientWidth = 949
+  OnCreate = FormCreate
   LCLVersion = '1.9.0.0'
   object PageControl1: TPageControl
     Left = 48
-    Height = 352
+    Height = 400
     Top = 40
     Width = 560
     ActivePage = TabSheet1
@@ -17,7 +18,7 @@ object DimStyleEditForm: TDimStyleEditForm
     TabOrder = 0
     object TabSheet1: TTabSheet
       Caption = 'TabSheet1'
-      ClientHeight = 326
+      ClientHeight = 374
       ClientWidth = 552
       OnContextPopup = TabSheet1ContextPopup
       object Button1: TButton
@@ -29,25 +30,6 @@ object DimStyleEditForm: TDimStyleEditForm
         OnClick = RefreshClick
         TabOrder = 0
       end
-      object CheckBox1: TCheckBox
-        Left = 67
-        Height = 17
-        Top = 192
-        Width = 71
-        Caption = 'CheckBox1'
-        Checked = True
-        OnChange = CheckBox1Change
-        State = cbChecked
-        TabOrder = 1
-      end
-      object CheckBox2: TCheckBox
-        Left = 168
-        Height = 17
-        Top = 192
-        Width = 71
-        Caption = 'CheckBox2'
-        TabOrder = 2
-      end
       object dlineColor: TComboBox
         Left = 139
         Height = 21
@@ -55,7 +37,7 @@ object DimStyleEditForm: TDimStyleEditForm
         Width = 100
         ItemHeight = 13
         OnChange = dlineColorComboBoxChange
-        TabOrder = 3
+        TabOrder = 1
         Text = 'dlineColor'
       end
       object dlineType: TComboBox
@@ -65,19 +47,20 @@ object DimStyleEditForm: TDimStyleEditForm
         Width = 100
         ItemHeight = 13
         OnChange = dlineTypeComboBoxChange
-        TabOrder = 4
+        TabOrder = 2
         Text = 'dlineType'
       end
-      object ComboBox3: TComboBox
+      object dlineWeight: TComboBox
         Left = 139
         Height = 21
         Top = 96
         Width = 100
         ItemHeight = 13
-        TabOrder = 5
-        Text = 'ComboBox3'
+        OnChange = dlineWeightComboBoxChange
+        TabOrder = 3
+        Text = 'dlineWeight'
       end
-      object FloatSpinEdit1: TFloatSpinEdit
+      object lineDimDLE: TFloatSpinEdit
         Left = 189
         Height = 21
         Top = 128
@@ -85,10 +68,11 @@ object DimStyleEditForm: TDimStyleEditForm
         Increment = 1
         MaxValue = 100
         MinValue = 0
-        TabOrder = 6
+        OnChange = lineDimDLEChange
+        TabOrder = 4
         Value = 0
       end
-      object FloatSpinEdit2: TFloatSpinEdit
+      object lineDimCEN: TFloatSpinEdit
         Left = 189
         Height = 21
         Top = 160
@@ -96,7 +80,8 @@ object DimStyleEditForm: TDimStyleEditForm
         Increment = 1
         MaxValue = 100
         MinValue = 0
-        TabOrder = 7
+        OnChange = lineDimCENChange
+        TabOrder = 5
         Value = 0
       end
       object dlineColorLabel: TLabel
@@ -113,6 +98,110 @@ object DimStyleEditForm: TDimStyleEditForm
         Top = 68
         Width = 71
         Caption = 'dlineTypeLabel'
+        ParentColor = False
+      end
+      object dlineWeightLabel: TLabel
+        Left = 24
+        Height = 13
+        Top = 104
+        Width = 81
+        Caption = 'dlineWeightLabel'
+        ParentColor = False
+      end
+      object lineDimDLELabel: TLabel
+        Left = 24
+        Height = 13
+        Top = 136
+        Width = 76
+        Caption = 'lineDimDLELabel'
+        ParentColor = False
+      end
+      object lineDimCENLabel: TLabel
+        Left = 24
+        Height = 13
+        Top = 168
+        Width = 78
+        Caption = 'lineDimCENLabel'
+        ParentColor = False
+      end
+      object lineExtColorComboBox: TComboBox
+        Left = 135
+        Height = 21
+        Top = 219
+        Width = 100
+        ItemHeight = 13
+        OnChange = lineExtColorComboBoxChange
+        TabOrder = 6
+        Text = 'lineExtColorComboBox'
+      end
+      object lineExtLT1ComboBox: TComboBox
+        Left = 135
+        Height = 21
+        Top = 248
+        Width = 100
+        ItemHeight = 13
+        OnChange = lineExtLT1ComboBoxChange
+        TabOrder = 7
+        Text = 'lineExtLT1ComboBox'
+      end
+      object lineExtLT2ComboBox: TComboBox
+        Left = 135
+        Height = 21
+        Top = 280
+        Width = 100
+        ItemHeight = 13
+        OnChange = lineExtLT2ComboBoxChange
+        TabOrder = 8
+        Text = 'lineExtLT2ComboBox'
+      end
+      object lineExtLWComboBox: TComboBox
+        Left = 135
+        Height = 21
+        Top = 312
+        Width = 100
+        ItemHeight = 13
+        OnChange = lineExtLWComboBoxChange
+        TabOrder = 9
+        Text = 'lineExtLWComboBox'
+      end
+      object Label1: TLabel
+        Left = 112
+        Height = 13
+        Top = 12
+        Width = 31
+        Caption = 'Label1'
+        ParentColor = False
+      end
+      object lineExtColorLabel: TLabel
+        Left = 24
+        Height = 13
+        Top = 227
+        Width = 82
+        Caption = 'lineExtColorLabel'
+        ParentColor = False
+      end
+      object lineExtLT1Label: TLabel
+        Left = 24
+        Height = 13
+        Top = 256
+        Width = 74
+        Caption = 'lineExtLT1Label'
+        ParentColor = False
+      end
+      object lineExtLT2Label: TLabel
+        Left = 24
+        Height = 13
+        Top = 288
+        Width = 74
+        Caption = 'lineExtLT2Label'
+        ParentColor = False
+      end
+      object lineExtLWLabel: TLabel
+        Left = 24
+        Height = 13
+        Top = 320
+        Width = 72
+        Caption = 'lineExtLWLabel'
         ParentColor = False
       end
     end

@@ -534,8 +534,8 @@ begin
   pdwg:=drawings.GetCurrentDWG;
   if assigned(ListView1.Selected)then
   begin
-    editForm:=TDimStyleEditForm.Create(Self);
     uzcfdimedit.dimStyle:=(ListView1.Selected.Data);
+    editForm:=TDimStyleEditForm.Create(Self);
     //pstyle:=(ListView1.Selected.Data);
     editForm.Show;
     //editForm.Free;

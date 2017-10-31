@@ -2319,7 +2319,7 @@ begin
                                                begin
                                                     if pdsp^.Arrows.DIMBLK1<>TSClosedFilled then
                                                     begin
-                                                    temphandle:=Handle2pointer.MyGetValue(drawing.BlockDefArray.getblockdef(pdsp^.GetDimBlockParam(0).name));
+                                                    Handle2pointer.MyGetOrCreateValue(drawing.BlockDefArray.getblockdef(pdsp^.GetDimBlockParam(0).name),handle,temphandle);
                                                     //GetHandle(drawing.BlockDefArray.getblockdef(pdsp^.GetDimBlockParam(0).name),temphandle);
                                                     if temphandle<>0 then
                                                     begin

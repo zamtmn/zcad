@@ -276,6 +276,7 @@ begin
   _frustum:=calcfrustum(@_clip);
 
   drawings.GetCurrentROOT^.CalcVisibleByTree(_frustum,cdwg^.pcamera^.POSCOUNT,cdwg^.pcamera^.VISCOUNT,drawings.GetCurrentROOT^.ObjArray.ObjTree,cdwg^.pcamera^.totalobj,cdwg^.pcamera^.infrustum,@cdwg^.myGluProject2,cdwg^.pcamera^.prop.zoom,0);
+  drawings.GetCurrentROOT^.FormatEntity(drawings.GetCurrentDWG^,dc);
   //drawings.GetCurrentDWG^.OGLwindow1.draw;
   //prn.startrender;
 

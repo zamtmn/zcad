@@ -15,7 +15,7 @@ uses
   uzeconsts,uzestylestexts,uzcdrawings,uzbtypesbase,uzbtypes,varmandef,
   uzcsuptypededitors,
 
-  uzestylesdim, uzeentdimension,
+  uzestylesdim, uzeentdimension,typinfo,
 
   uzbpaths,uzcinterface, uzcstrconsts, uzcsysinfo,uzbstrproc, uzcshared,UBaseTypeDescriptor,
   uzcimagesmanager, usupportgui, ZListView,uzefontmanager,varman,uzctnrvectorgdbstring,
@@ -26,8 +26,22 @@ type
   { TDimStyleEditForm }
 
   TDimStyleEditForm = class(TForm)
-    //dimStyle:PGDBDimStyle;
-    Button1: TButton;
+    arrowsDIMBLK1ComboBox: TComboBox;
+    arrowsDIMBLK2ComboBox: TComboBox;
+    arrowsDIMLDRBLKComboBox: TComboBox;
+    arrowsDIMASZEdit: TFloatSpinEdit;
+    arrowsDIMBLK1Label: TLabel;
+    arrowsDIMBLK2Label: TLabel;
+    arrowsDIMLDRBLKLabel: TLabel;
+    arrowsDIMASZLabel: TLabel;
+    DimPlacingSheet: TTabSheet;
+    DimUnitsSheet: TTabSheet;
+    TextSheet: TTabSheet;
+    titelLabelLineExt: TLabel;
+    lineExtLabelDIMEXE: TLabel;
+    lineExtLabelDIMEXO: TLabel;
+    lineExtSpinDIMEXE: TFloatSpinEdit;
+    lineExtSpinDIMEXO: TFloatSpinEdit;
     lineExtColorComboBox: TComboBox;
     lineExtLT1ComboBox: TComboBox;
     lineExtLT2ComboBox: TComboBox;
@@ -35,7 +49,7 @@ type
     dlineColor: TComboBox;
     dlineType: TComboBox;
     dlineWeight: TComboBox;
-    Label1: TLabel;
+    titelLabelLineDim: TLabel;
     lineExtColorLabel: TLabel;
     lineExtLT1Label: TLabel;
     lineExtLT2Label: TLabel;
@@ -49,8 +63,9 @@ type
     GroupBox1: TGroupBox;
     dlineWeightLabel: TLabel;
     PageControl1: TPageControl;
-    TabSheet1: TTabSheet;
-    TabSheet2: TTabSheet;
+    LineSheet: TTabSheet;
+    ArrowsSheet: TTabSheet;
+
     procedure RefreshClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure ColorComboBoxCreate(Sender: TObject;var colorBox:TComboBox;coloritem:TGDBPaletteColor);
@@ -62,6 +77,7 @@ type
     procedure lineWeightComboBoxCreate(Sender: TObject;var lineWeightComboBox:TComboBox;itemLW:TGDBLineWeight);
     function lineWeightComboBoxChange(Sender: TObject;lineWeightComboBox:TComboBox;index:integer):TGDBLineWeight;
 
+    ///********LINES**********///////
     procedure dlineColorComboBox(Sender: TObject);
     procedure dlineColorComboBoxChange(Sender: TObject);
     procedure dlineTypeComboBox(Sender: TObject);
@@ -79,8 +95,21 @@ type
     procedure lineExtLT2ComboBoxChange(Sender: TObject);
     procedure lineExtLWComboBoxCreate(Sender: TObject);
     procedure lineExtLWComboBoxChange(Sender: TObject);
+    procedure lineExtSpinDIMEXEChange(Sender: TObject);
+    procedure lineExtSpinDIMEXOChange(Sender: TObject);
 
-    procedure TabSheet1ContextPopup(Sender: TObject; MousePos: TPoint;
+    ///////********Arrows*********///////
+    procedure ArrowsComboBoxCreate(Sender: TObject;var arrowsBox:TComboBox;arrowsIndex:TArrowStyle);
+    procedure arrowsDIMBLK1ComboBoxCreate(Sender: TObject);
+    procedure arrowsDIMBLK1ComboBoxChange(Sender: TObject);
+    procedure arrowsDIMBLK2ComboBoxCreate(Sender: TObject);
+    procedure arrowsDIMBLK2ComboBoxChange(Sender: TObject);
+    procedure arrowsDIMLDRBLKComboBoxCreate(Sender: TObject);
+    procedure arrowsDIMLDRBLKComboBoxChange(Sender: TObject);
+    procedure arrowsDIMASZEditChange(Sender: TObject);
+
+
+    procedure LineSheetContextPopup(Sender: TObject; MousePos: TPoint;
       var Handled: Boolean);
   private
 
@@ -234,6 +263,19 @@ begin
                  result:=integer(lwarray[i]);
 end;
 
+procedure TDimStyleEditForm.ArrowsComboBoxCreate(Sender: TObject;var arrowsBox:TComboBox;arrowsIndex:TArrowStyle);
+var
+    i:integer;
+    D: PTypeData;
+    //i : integer;
+  begin
+    arrowsBox.Clear;
+    D := GetTypeData(TypeInfo(TArrowStyle));
+    for i := D^.MinValue to D^.MaxValue do
+      arrowsBox.AddItem(GetEnumName(TypeInfo(TArrowStyle), i),Sender);
+    arrowsBox.ItemIndex := Ord(arrowsIndex);
+end;
+
 procedure TDimStyleEditForm.dlineColorComboBox(Sender: TObject);
 begin
     dlineColor.Clear;
@@ -328,11 +370,66 @@ begin
      dimStyle^.Lines.DIMCEN:=lineDimCEN.Value;
 end;
 
+procedure TDimStyleEditForm.lineExtSpinDIMEXEChange(Sender: TObject);
+begin
+     dimStyle^.Lines.DIMEXE:=lineExtSpinDIMEXE.Value;
+end;
+
+procedure TDimStyleEditForm.lineExtSpinDIMEXOChange(Sender: TObject);
+begin
+     dimStyle^.Lines.DIMEXO:=lineExtSpinDIMEXO.Value;
+end;
+
+
+/////******arrows tab********///////
+procedure TDimStyleEditForm.arrowsDIMBLK1ComboBoxCreate(Sender: TObject);
+begin
+     ArrowsComboBoxCreate(Sender,arrowsDIMBLK1ComboBox,dimStyle^.Arrows.DIMBLK1);
+end;
+
+procedure TDimStyleEditForm.arrowsDIMBLK1ComboBoxChange(Sender: TObject);
+begin
+  dimStyle^.Arrows.DIMBLK1:=TArrowStyle(TComboBox(Sender).ItemIndex);
+end;
+
+procedure TDimStyleEditForm.arrowsDIMBLK2ComboBoxCreate(Sender: TObject);
+begin
+     ArrowsComboBoxCreate(Sender,arrowsDIMBLK2ComboBox,dimStyle^.Arrows.DIMBLK2);
+end;
+
+procedure TDimStyleEditForm.arrowsDIMBLK2ComboBoxChange(Sender: TObject);
+begin
+  dimStyle^.Arrows.DIMBLK2:=TArrowStyle(TComboBox(Sender).ItemIndex);
+end;
+
+procedure TDimStyleEditForm.arrowsDIMLDRBLKComboBoxCreate(Sender: TObject);
+begin
+     ArrowsComboBoxCreate(Sender,arrowsDIMLDRBLKComboBox,dimStyle^.Arrows.DIMLDRBLK);
+end;
+
+procedure TDimStyleEditForm.arrowsDIMLDRBLKComboBoxChange(Sender: TObject);
+begin
+  dimStyle^.Arrows.DIMLDRBLK:=TArrowStyle(TComboBox(Sender).ItemIndex);
+end;
+
+
+procedure TDimStyleEditForm.arrowsDIMASZEditChange(Sender: TObject);
+begin
+     dimStyle^.Arrows.DIMASZ:=arrowsDIMASZEdit.Value;
+end;
+
+///******////
+
+
 procedure TDimStyleEditForm.FormCreate(Sender: TObject);
 //var
    //Transp : TStringList;
 begin
    //TDimStyleEditForm.lineLayerView();
+
+     LineSheet.Caption:='Lines';
+
+     titelLabelLineDim.Caption:='Dimension lines:';
 
      dlineColorLabel.Caption:='Color:';
      dlineTypeLabel.Caption:='Linetype:';
@@ -340,19 +437,39 @@ begin
      lineDimDLELabel.Caption:='Dimension line extension:';
      lineDimCENLabel.Caption:='Size of center mark:';
 
-     lineExtColorLabel.Caption:='Color:';
-
      dlineColorComboBox(Sender);
      dlineTypeComboBox(Sender);
      dlineWeightComboBoxCreate(Sender);
      lineDimDLE.Value:=dimStyle^.Lines.DIMDLE;
      lineDimCEN.Value:=dimStyle^.Lines.DIMCEN;
 
+     titelLabelLineExt.Caption:='Extension lines:' ;
+
+     lineExtColorLabel.Caption:='Color:';
+     lineExtLT1Label.Caption:='Linetype ext line 1:';
+     lineExtLT2Label.Caption:='Linetype ext line 2:';
+     lineExtLWLabel.Caption:='Lineweight:';
+     lineExtLabelDIMEXE.Caption:='Extend beyond dim lines:';
+     lineExtLabelDIMEXO.Caption:='Offset from origin:';
+
      lineExtColorComboBoxCreate(Sender);
      lineExtLT1ComboBoxCreate(Sender);
      lineExtLT2ComboBoxCreate(Sender);
      lineExtLWComboBoxCreate(Sender);
+     lineExtSpinDIMEXE.Value:=dimStyle^.Lines.DIMEXE;
+     lineExtSpinDIMEXO.Value:=dimStyle^.Lines.DIMEXO;
 
+     ///***Arrows***///
+     ArrowsSheet.Caption:='Arrows';
+     arrowsDIMBLK1Label.Caption:='Arrowheads first:';
+     arrowsDIMBLK2Label.Caption:='Arrowheads second:';
+     arrowsDIMLDRBLKLabel.Caption:='Arrowheads leader:';
+     arrowsDIMASZLabel.Caption:='Arrow size';
+
+     arrowsDIMBLK1ComboBoxCreate(Sender);
+     arrowsDIMBLK2ComboBoxCreate(Sender);
+     arrowsDIMLDRBLKComboBoxCreate(Sender);
+     arrowsDIMASZEdit.Value:=dimStyle^.Arrows.DIMASZ;
 
      //Transp := TStringList.Create;
      //with Transp do
@@ -401,7 +518,7 @@ begin
 end;
 
 
-procedure TDimStyleEditForm.TabSheet1ContextPopup(Sender: TObject;
+procedure TDimStyleEditForm.LineSheetContextPopup(Sender: TObject;
   MousePos: TPoint; var Handled: Boolean);
 begin
 

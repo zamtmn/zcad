@@ -1,11 +1,11 @@
 object DimStyleEditForm: TDimStyleEditForm
-  Left = 527
+  Left = 577
   Height = 547
-  Top = 406
-  Width = 949
+  Top = 16
+  Width = 618
   Caption = 'DimStyleEditForm'
   ClientHeight = 547
-  ClientWidth = 949
+  ClientWidth = 618
   OnCreate = FormCreate
   LCLVersion = '1.9.0.0'
   object PageControl1: TPageControl
@@ -13,23 +13,13 @@ object DimStyleEditForm: TDimStyleEditForm
     Height = 400
     Top = 40
     Width = 560
-    ActivePage = TabSheet1
-    TabIndex = 0
+    ActivePage = ArrowsSheet
+    TabIndex = 1
     TabOrder = 0
-    object TabSheet1: TTabSheet
-      Caption = 'TabSheet1'
+    object LineSheet: TTabSheet
+      Caption = 'LineSheet'
       ClientHeight = 374
       ClientWidth = 552
-      OnContextPopup = TabSheet1ContextPopup
-      object Button1: TButton
-        Left = 472
-        Height = 25
-        Top = 0
-        Width = 75
-        Caption = 'Refresh'
-        OnClick = RefreshClick
-        TabOrder = 0
-      end
       object dlineColor: TComboBox
         Left = 139
         Height = 21
@@ -37,7 +27,7 @@ object DimStyleEditForm: TDimStyleEditForm
         Width = 100
         ItemHeight = 13
         OnChange = dlineColorComboBoxChange
-        TabOrder = 1
+        TabOrder = 0
         Text = 'dlineColor'
       end
       object dlineType: TComboBox
@@ -47,7 +37,7 @@ object DimStyleEditForm: TDimStyleEditForm
         Width = 100
         ItemHeight = 13
         OnChange = dlineTypeComboBoxChange
-        TabOrder = 2
+        TabOrder = 1
         Text = 'dlineType'
       end
       object dlineWeight: TComboBox
@@ -57,7 +47,7 @@ object DimStyleEditForm: TDimStyleEditForm
         Width = 100
         ItemHeight = 13
         OnChange = dlineWeightComboBoxChange
-        TabOrder = 3
+        TabOrder = 2
         Text = 'dlineWeight'
       end
       object lineDimDLE: TFloatSpinEdit
@@ -69,7 +59,7 @@ object DimStyleEditForm: TDimStyleEditForm
         MaxValue = 100
         MinValue = 0
         OnChange = lineDimDLEChange
-        TabOrder = 4
+        TabOrder = 3
         Value = 0
       end
       object lineDimCEN: TFloatSpinEdit
@@ -81,7 +71,7 @@ object DimStyleEditForm: TDimStyleEditForm
         MaxValue = 100
         MinValue = 0
         OnChange = lineDimCENChange
-        TabOrder = 5
+        TabOrder = 4
         Value = 0
       end
       object dlineColorLabel: TLabel
@@ -125,57 +115,57 @@ object DimStyleEditForm: TDimStyleEditForm
         ParentColor = False
       end
       object lineExtColorComboBox: TComboBox
-        Left = 135
+        Left = 139
         Height = 21
-        Top = 219
+        Top = 232
         Width = 100
         ItemHeight = 13
         OnChange = lineExtColorComboBoxChange
-        TabOrder = 6
+        TabOrder = 5
         Text = 'lineExtColorComboBox'
       end
       object lineExtLT1ComboBox: TComboBox
-        Left = 135
+        Left = 139
         Height = 21
-        Top = 248
+        Top = 264
         Width = 100
         ItemHeight = 13
         OnChange = lineExtLT1ComboBoxChange
-        TabOrder = 7
+        TabOrder = 6
         Text = 'lineExtLT1ComboBox'
       end
       object lineExtLT2ComboBox: TComboBox
-        Left = 135
+        Left = 139
         Height = 21
-        Top = 280
+        Top = 296
         Width = 100
         ItemHeight = 13
         OnChange = lineExtLT2ComboBoxChange
-        TabOrder = 8
+        TabOrder = 7
         Text = 'lineExtLT2ComboBox'
       end
       object lineExtLWComboBox: TComboBox
-        Left = 135
+        Left = 139
         Height = 21
-        Top = 312
+        Top = 328
         Width = 100
         ItemHeight = 13
         OnChange = lineExtLWComboBoxChange
-        TabOrder = 9
+        TabOrder = 8
         Text = 'lineExtLWComboBox'
       end
-      object Label1: TLabel
-        Left = 112
+      object titelLabelLineDim: TLabel
+        Left = 24
         Height = 13
-        Top = 12
-        Width = 31
-        Caption = 'Label1'
+        Top = 8
+        Width = 79
+        Caption = 'titelLabelLineDim'
         ParentColor = False
       end
       object lineExtColorLabel: TLabel
         Left = 24
         Height = 13
-        Top = 227
+        Top = 240
         Width = 82
         Caption = 'lineExtColorLabel'
         ParentColor = False
@@ -183,7 +173,7 @@ object DimStyleEditForm: TDimStyleEditForm
       object lineExtLT1Label: TLabel
         Left = 24
         Height = 13
-        Top = 256
+        Top = 272
         Width = 74
         Caption = 'lineExtLT1Label'
         ParentColor = False
@@ -191,7 +181,7 @@ object DimStyleEditForm: TDimStyleEditForm
       object lineExtLT2Label: TLabel
         Left = 24
         Height = 13
-        Top = 288
+        Top = 304
         Width = 74
         Caption = 'lineExtLT2Label'
         ParentColor = False
@@ -199,14 +189,147 @@ object DimStyleEditForm: TDimStyleEditForm
       object lineExtLWLabel: TLabel
         Left = 24
         Height = 13
-        Top = 320
+        Top = 336
         Width = 72
         Caption = 'lineExtLWLabel'
         ParentColor = False
       end
+      object lineExtSpinDIMEXE: TFloatSpinEdit
+        Left = 456
+        Height = 21
+        Top = 232
+        Width = 50
+        Increment = 1
+        MaxValue = 100
+        MinValue = 0
+        OnChange = lineExtSpinDIMEXEChange
+        TabOrder = 9
+        Value = 0
+      end
+      object lineExtSpinDIMEXO: TFloatSpinEdit
+        Left = 456
+        Height = 21
+        Top = 264
+        Width = 50
+        Increment = 1
+        MaxValue = 100
+        MinValue = 0
+        OnChange = lineExtSpinDIMEXOChange
+        TabOrder = 10
+        Value = 0
+      end
+      object lineExtLabelDIMEXE: TLabel
+        Left = 280
+        Height = 13
+        Top = 240
+        Width = 94
+        Caption = 'lineExtLabelDIMEXE'
+        ParentColor = False
+      end
+      object lineExtLabelDIMEXO: TLabel
+        Left = 280
+        Height = 13
+        Top = 272
+        Width = 96
+        Caption = 'lineExtLabelDIMEXO'
+        ParentColor = False
+      end
+      object titelLabelLineExt: TLabel
+        Left = 24
+        Height = 13
+        Top = 208
+        Width = 78
+        Caption = 'titelLabelLineExt'
+        ParentColor = False
+      end
     end
-    object TabSheet2: TTabSheet
-      Caption = 'TabSheet2'
+    object ArrowsSheet: TTabSheet
+      Caption = 'ArrowsSheet'
+      ClientHeight = 374
+      ClientWidth = 552
+      object arrowsDIMBLK1ComboBox: TComboBox
+        Left = 153
+        Height = 21
+        Top = 62
+        Width = 100
+        ItemHeight = 13
+        OnChange = arrowsDIMBLK1ComboBoxChange
+        TabOrder = 0
+        Text = 'arrowsDIMBLK1ComboBox'
+      end
+      object arrowsDIMBLK2ComboBox: TComboBox
+        Left = 153
+        Height = 21
+        Top = 96
+        Width = 100
+        ItemHeight = 13
+        OnChange = arrowsDIMBLK2ComboBoxChange
+        TabOrder = 1
+        Text = 'arrowsDIMBLK2ComboBox'
+      end
+      object arrowsDIMLDRBLKComboBox: TComboBox
+        Left = 153
+        Height = 21
+        Top = 128
+        Width = 100
+        ItemHeight = 13
+        OnChange = arrowsDIMLDRBLKComboBoxChange
+        TabOrder = 2
+        Text = 'arrowsDIMLDRBLKComboBox'
+      end
+      object arrowsDIMBLK1Label: TLabel
+        Left = 32
+        Height = 13
+        Top = 70
+        Width = 100
+        Caption = 'arrowsDIMBLK1Label'
+        ParentColor = False
+      end
+      object arrowsDIMBLK2Label: TLabel
+        Left = 32
+        Height = 13
+        Top = 104
+        Width = 100
+        Caption = 'arrowsDIMBLK2Label'
+        ParentColor = False
+      end
+      object arrowsDIMLDRBLKLabel: TLabel
+        Left = 32
+        Height = 13
+        Top = 136
+        Width = 113
+        Caption = 'arrowsDIMLDRBLKLabel'
+        ParentColor = False
+      end
+      object arrowsDIMASZEdit: TFloatSpinEdit
+        Left = 153
+        Height = 21
+        Top = 168
+        Width = 100
+        Increment = 1
+        MaxValue = 100
+        MinValue = 0
+        OnChange = arrowsDIMASZEditChange
+        TabOrder = 3
+        Value = 0
+      end
+      object arrowsDIMASZLabel: TLabel
+        Left = 32
+        Height = 13
+        Top = 176
+        Width = 96
+        Caption = 'arrowsDIMASZLabel'
+        ParentColor = False
+      end
+    end
+    object TextSheet: TTabSheet
+      Caption = 'TextSheet'
+    end
+    object DimPlacingSheet: TTabSheet
+      Caption = 'DimPlacingSheet'
+    end
+    object DimUnitsSheet: TTabSheet
+      Caption = 'DimUnitsSheet'
     end
   end
 end

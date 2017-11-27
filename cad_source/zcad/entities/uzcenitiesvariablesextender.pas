@@ -47,7 +47,46 @@ implementation
 procedure TVariablesExtender.onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);
 var
    vd:vardesk;
+   pvd,pvd2:pvardesk;
 begin
+                  pvd:=entityunit.FindVariable('DESC_MountingParts');
+                  if pvd<>nil then
+                  begin
+                       //pvd.name;
+                       pvd.username:='Закладная конструкция';
+                       pvd:=entityunit.FindVariable('DESC_MountingDrawing');
+                       if pvd=nil then
+                       begin
+                            entityunit.setvardesc(vd,'DESC_MountingDrawing','Чертеж установки','GDBString');
+                            entityunit.InterfaceVariables.createvariable(vd.name,vd);
+                       end;
+                  end;
+                  pvd:=entityunit.FindVariable('DESC_Function');
+                  if pvd<>nil then
+                  begin
+                       //pvd.name;
+                       pvd.username:='Функция';
+                  end;
+                  pvd:=entityunit.FindVariable('DESC_MountingDrawing');
+                  if pvd<>nil then
+                  begin
+                       //pvd.name;
+                       pvd.username:='Чертеж установки';
+                       pvd2:=entityunit.FindVariable('DESC_MountingPartsType');
+                       if pvd2=nil then
+                       begin
+                            entityunit.setvardesc(vd,'DESC_MountingPartsType','Тип закладной конструкции','GDBString');
+                            entityunit.InterfaceVariables.createvariable(vd.name,vd);
+                       end;
+                       pvd2:=entityunit.FindVariable('DESC_MountingPartsShortName');
+                       if pvd2=nil then
+                       begin
+                            entityunit.setvardesc(vd,'DESC_MountingPartsShortName','Имя закладной конструкции','GDBString');
+                            pvd2:=entityunit.InterfaceVariables.createvariable(vd.name,vd);
+                            pvd2^.data.PTD^.SetValueFromString(pvd2^.data.Instance,pvd^.data.PTD^.GetValueAsString(pvd^.data.Instance));
+                       end;
+                  end;
+
                   if entityunit.FindVariable('GC_HeadDevice')<>nil then
                   if entityunit.FindVariable('GC_Metric')=nil then
                   begin

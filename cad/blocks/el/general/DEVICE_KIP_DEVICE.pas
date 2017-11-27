@@ -8,9 +8,13 @@ usescopy blocktype;
 usescopy slcabagenmodul;
 var
   NMO_Type:GDBString;(*'Тип'*)
-  DESC_MountingSite:GDBString;(*'Место установки'*)
-  DESC_MountingParts:GDBString;(*'Чертеж установки'*)
-  DESC_MountingDrawing:GDBString;(*'Сокр. чертеж установки'*)
+  DESC_MountingSite:GDBString;(*'Место установки'*)//полное название места установки
+  DESC_MountingParts:GDBString;(*'Закладная конструкция'*)
+  DESC_MountingDrawing:GDBString;(*'Чертеж установки'*)
+
+  DESC_MountingPartsType:GDBString;(*'Тип закладной конструкции'*)
+  DESC_MountingPartsShortName:GDBString;(*'Имя закладной конструкции'*)
+
   DESC_Function:GDBString;(*'Функция'*)
   DESC_OutSignal:GDBString;(*'Выходной сигнал'*)
 

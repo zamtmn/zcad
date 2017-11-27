@@ -35,6 +35,7 @@
       <Button Command="OPS_Sensor_Mark" Img='#++' Hint="Numbering sensors on the plan"/>
       <Action Name="ACN_DEVNUMBERING"/>
       <Action Name="ACN_KIPCDBUILD"/>
+      <Action Name="ACN_KIPLUGTABLEBUILD"/>
       <Separator/>
       <Action Name="ACN_REBUILDTREE"/>
       <Separator/>

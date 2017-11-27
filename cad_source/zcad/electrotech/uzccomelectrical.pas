@@ -92,6 +92,11 @@ TBasicFinter=packed record
     procedure Command(Operands:TCommandOperands); virtual;
   end;
 
+  KIP_LugTableBuild_com=object(FloatInsert_com)
+    procedure Command(Operands:TCommandOperands); virtual;
+  end;
+
+
     (*PGDBEmSEPDeviceNode=^GDBEmSEPDeviceNode;
     GDBEmSEPDeviceNode=object(GDBVisNode)
                               NodeName:GDBString;
@@ -118,6 +123,7 @@ var
    EM_SEPBUILD:EM_SEPBUILD_com;
    em_sepbuild_params:TBasicFinter;
    KIP_CDBuild:KIP_CDBuild_com;
+   KIP_LugTableBuild:KIP_LugTableBuild_com;
 
    //treecontrol:ZTreeViewGeneric;
    //zf:zform;
@@ -644,11 +650,10 @@ begin
      dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
      drawings.GetCurrentDWG^.AddBlockFromDBIfNeed('HEAD_CONNECTIONDIAGRAM');
      PBH:=drawings.GetCurrentDWG^.BlockDefArray.getblockdef('HEAD_CONNECTIONDIAGRAM');
-     if not PBH.Formated then
-                             PBH.FormatEntity(drawings.GetCurrentDWG^,dc);
      if pbh=nil then
                     exit;
-
+     if not PBH.Formated then
+                             PBH.FormatEntity(drawings.GetCurrentDWG^,dc);
      dna:=devnamearray.Create;
      psd:=drawings.GetCurrentDWG^.SelObjArray.beginiterate(ir);
      if psd<>nil then
@@ -715,6 +720,148 @@ begin
 
             drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.AddPEntity(pnevdev^);
             currentcoord.x:=currentcoord.x+45;
+
+            //drawings.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(pb);
+
+
+       end;
+     {psd:=drawings.GetCurrentDWG^.SelObjArray.beginiterate(ir);
+     if psd<>nil then
+     repeat
+           if psd^.objaddr^.GetObjType=GDBDeviceID then
+           begin
+                pointer(pnevdev):=psd^.objaddr^.Clone(@drawings.GetCurrentDWG.ConstructObjRoot);
+
+                pnevdev.Local.P_insert:=currentcoord;
+                pnevdev.Local.Basis.oz:=xy_Z_Vertex;
+
+                pnevdev^.BuildGeometry(drawings.GetCurrentDWG^);
+                pnevdev^.BuildVarGeometry(drawings.GetCurrentDWG^);
+                pnevdev^.formatEntity(drawings.GetCurrentDWG^);
+
+                //PBH^.ObjArray.clonetransformedentityto(@pnevdev^.VarObjArray,pnevdev,t_matrix);
+                     pobj:=PBH.ObjArray.beginiterate(ir2);
+                     if pobj<>nil then
+                     repeat
+                           pcobj:=pobj.Clone(pnevdev);
+                           //pobj.FormatEntity(drawings.GetCurrentDWG^);
+                           pcobj.transformat(pobj,@t_matrix);
+                           //pcobj.ReCalcFromObjMatrix;
+                           if pcobj^.IsHaveLCS then
+                                                 pcobj^.FormatEntity(drawings.GetCurrentDWG^);
+                           pcobj^.FormatEntity(drawings.GetCurrentDWG^);
+                           pnevdev^.VarObjArray.add(@pcobj);
+                           pobj:=PBH.ObjArray.iterate(ir2);
+                     until pobj=nil;
+
+
+
+                pnevdev^.formatEntity(drawings.GetCurrentDWG^);
+
+                drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.add(addr(pnevdev));
+                currentcoord.x:=currentcoord.x+45;
+
+                //drawings.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(pb);
+
+           end;
+     psd:=drawings.GetCurrentDWG^.SelObjArray.iterate(ir);
+     until psd=nil;}
+
+     end;
+     dna.Destroy;
+end;
+
+procedure KIP_LugTableBuild_com.Command(Operands:TCommandOperands);
+var
+    psd:PSelectedObjDesc;
+    ir:itrec;
+    {pdev,}pnevdev:PGDBObjDevice;
+    PBH:PGDBObjBlockdef;
+    currentcoord:GDBVertex;
+    t_matrix:DMatrix4D;
+    pobj,pcobj:PGDBObjEntity;
+    ir2:itrec;
+    pvd:pvardesk;
+    dn:tdevname;
+    dna:devnamearray;
+    i:integer;
+    DC:TDrawContext;
+    pentvarext:PTVariablesExtender;
+begin
+     currentcoord:=nulvertex;
+     dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+     drawings.GetCurrentDWG^.AddBlockFromDBIfNeed('KIP_LUGTABLEELEMENT');
+     PBH:=drawings.GetCurrentDWG^.BlockDefArray.getblockdef('KIP_LUGTABLEELEMENT');
+     if pbh=nil then
+                    exit;
+     if not PBH.Formated then
+                             PBH.FormatEntity(drawings.GetCurrentDWG^,dc);
+     dna:=devnamearray.Create;
+     psd:=drawings.GetCurrentDWG^.SelObjArray.beginiterate(ir);
+     if psd<>nil then
+     repeat
+           if psd^.objaddr^.GetObjType=GDBDeviceID then
+           begin
+                pentvarext:=psd^.objaddr^.GetExtension(typeof(TVariablesExtender));
+                //pvd:=PTObjectUnit(psd^.objaddr^.ou.Instance)^.FindVariable('DESC_MountingSite');
+                pvd:=pentvarext^.entityunit.FindVariable({'DESC_MountingSite'}'NMO_Name');
+                if pvd<>nil then
+                                dn.name:=pvd.data.PTD.GetValueAsString(pvd.data.Instance)
+                            else
+                                dn.name:='';
+                dn.pdev:=pointer(psd^.objaddr);
+                dna.PushBack(dn);
+           end;
+           psd:=drawings.GetCurrentDWG^.SelObjArray.iterate(ir);
+     until psd=nil;
+
+     if dna.Size=0 then
+     begin
+          ZCMsgCallBackInterface.TextMessage(rscmSelDevsBeforeComm,TMWOHistoryOut);
+     end
+     else
+     begin
+     devnamesort.Sort(dna,dna.Size);
+     t_matrix:=uzegeometry.CreateTranslationMatrix(createvertex(50,12,0));
+
+
+     for i:=0 to dna.Size-1 do
+       begin
+            dn:=dna[i];
+
+            pointer(pnevdev):=dn.pdev^.Clone(@drawings.GetCurrentDWG.ConstructObjRoot);
+
+            pnevdev.Local.P_insert:=currentcoord;
+            pnevdev.Local.Basis.oz:=xy_Z_Vertex;
+            pnevdev.Local.Basis.ox:=_X_yzVertex;
+            pnevdev.Local.Basis.oy:=x_Y_zVertex;
+            pnevdev.rotate:=0;
+
+            //pnevdev^.BuildGeometry(drawings.GetCurrentDWG^);
+            //pnevdev^.BuildVarGeometry(drawings.GetCurrentDWG^);
+            pnevdev^.formatEntity(drawings.GetCurrentDWG^,dc);
+
+            //PBH^.ObjArray.clonetransformedentityto(@pnevdev^.VarObjArray,pnevdev,t_matrix);
+                 pobj:=PBH.ObjArray.beginiterate(ir2);
+                 if pobj<>nil then
+                 repeat
+                       pcobj:=pobj.Clone(pnevdev);
+                       //pobj.FormatEntity(drawings.GetCurrentDWG^);
+                       pcobj.transformat(pobj,@t_matrix);
+                       //pcobj.ReCalcFromObjMatrix;
+                       if pcobj^.IsHaveLCS then
+                                             pcobj^.FormatEntity(drawings.GetCurrentDWG^,dc);
+                       pcobj^.FormatEntity(drawings.GetCurrentDWG^,dc);
+                       pnevdev^.VarObjArray.AddPEntity(pcobj^);
+                       pobj:=PBH.ObjArray.iterate(ir2);
+                 until pobj=nil;
+
+
+
+            pnevdev^.formatEntity(drawings.GetCurrentDWG^,dc);
+
+            drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.AddPEntity(pnevdev^);
+            currentcoord.y:=currentcoord.y-24;
 
             //drawings.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(pb);
 
@@ -3269,6 +3416,7 @@ begin
   EM_SRBUILD.init('EM_SRBUILD',CADWG,0);
   EM_SEPBUILD.init('EM_SEPBUILD',CADWG,0);
   KIP_CDBuild.init('KIP_CDBuild',CADWG,0);
+  KIP_LugTableBuild.init('KIP_LugTableBuild',CADWG,0);
 
   EM_SEPBUILD.SetCommandParam(@em_sepbuild_params,'PTBasicFinter');
 

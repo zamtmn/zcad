@@ -537,7 +537,7 @@ begin
     uzcfdimedit.dimStyle:=(ListView1.Selected.Data);
     editForm:=TDimStyleEditForm.Create(Self);
     //pstyle:=(ListView1.Selected.Data);
-    editForm.Show;
+    editForm.ShowModal;
     //editForm.Free;
     end
   else

@@ -13,7 +13,7 @@ uses
   Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype, ActnList, Spin,
 
   uzeconsts,uzestylestexts,uzcdrawings,uzbtypesbase,uzbtypes,varmandef,
-  uzcsuptypededitors,
+  uzcsuptypededitors,  uzedimensionaltypes,
 
   uzestylesdim, uzeentdimension,typinfo,
 
@@ -34,8 +34,36 @@ type
     arrowsDIMBLK2Label: TLabel;
     arrowsDIMLDRBLKLabel: TLabel;
     arrowsDIMASZLabel: TLabel;
+    unitDIMLUNITComboBox: TComboBox;
+    untiDIMDSEPComboBox: TComboBox;
+    unitDIMPOSTEdit: TEdit;
+    unitDIMLFACEdit: TFloatSpinEdit;
+    unitDIMRNDEdit: TFloatSpinEdit;
+    unitDIMLUNITLabel: TLabel;
+    untiDIMDSEPLabel: TLabel;
+    unitDIMLFACLabel: TLabel;
+    unitDIMRNDLabel: TLabel;
+    unitDIMDECLabel: TLabel;
+    unitDIMPOSTLabel: TLabel;
+    placeDIMTMOVEComboBox: TComboBox;
+    placeDIMTMOVELabel: TLabel;
+    unitDIMDECEdit: TSpinEdit;
+    textDIMTIHLabel: TLabel;
+    textDIMTOHLabel: TLabel;
+    textDIMTIHCheckBox: TCheckBox;
+    textDIMTOHCheckBox: TCheckBox;
+    textDIMGAPEdit: TFloatSpinEdit;
+    texpDIMGAPLabel: TLabel;
+    textDIMTADComboBox: TComboBox;
+    textDIMTADLabel: TLabel;
+    textDIMTXTEdit: TFloatSpinEdit;
+    textDIMTXTLabel: TLabel;
+    textDIMCLRTComboBox: TComboBox;
+    textDIMCLRTLabel: TLabel;
+    textDIMTXSTYComboBox: TComboBox;
     DimPlacingSheet: TTabSheet;
     DimUnitsSheet: TTabSheet;
+    textDIMTXSTYLabel: TLabel;
     TextSheet: TTabSheet;
     titelLabelLineExt: TLabel;
     lineExtLabelDIMEXE: TLabel;
@@ -66,6 +94,10 @@ type
     LineSheet: TTabSheet;
     ArrowsSheet: TTabSheet;
 
+    procedure DimUnitsSheetContextPopup(Sender: TObject; MousePos: TPoint;
+      var Handled: Boolean);
+    procedure dlineColorLabelClick(Sender: TObject);
+    procedure lineExtLabelDIMEXOClick(Sender: TObject);
     procedure RefreshClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure ColorComboBoxCreate(Sender: TObject;var colorBox:TComboBox;coloritem:TGDBPaletteColor);
@@ -76,6 +108,11 @@ type
 
     procedure lineWeightComboBoxCreate(Sender: TObject;var lineWeightComboBox:TComboBox;itemLW:TGDBLineWeight);
     function lineWeightComboBoxChange(Sender: TObject;lineWeightComboBox:TComboBox;index:integer):TGDBLineWeight;
+//
+//    procedure enumComboBoxCreate(Sender: TObject;var enumComboBox:TComboBox;itemLW:TGDBLineWeight);
+//    function enumComboBoxChange(Sender: TObject;enumComboBox:TComboBox;index:integer):TGDBLineWeight;
+//
+
 
     ///********LINES**********///////
     procedure dlineColorComboBox(Sender: TObject);
@@ -107,6 +144,37 @@ type
     procedure arrowsDIMLDRBLKComboBoxCreate(Sender: TObject);
     procedure arrowsDIMLDRBLKComboBoxChange(Sender: TObject);
     procedure arrowsDIMASZEditChange(Sender: TObject);
+
+    ///////*******Text*******//////
+    procedure TextStyleComboBoxCreate(Sender: TObject;var textStyleBox:TComboBox;textStyleName:string);
+    function TextStyleComboBoxChange(Sender: TObject; textStyleBox:TComboBox; textStyleindex:integer):PGDBTextStyle;
+    //procedure TextStyleComboBoxChange(Sender: TObject;var textStyleBox:TComboBox;textStyleName:string);
+    procedure textDIMTXSTYComboBoxCreate(Sender: TObject);
+    procedure textDIMTXSTYComboBoxChange(Sender: TObject);
+    procedure textDIMCLRTComboBoxCreate(Sender: TObject);
+    procedure textDIMCLRTComboBoxChange(Sender: TObject);
+    procedure textDIMTXTEditChange(Sender: TObject);
+    procedure textDIMTADComboBoxCreate(Sender: TObject);
+    procedure textDIMTADComboBoxChange(Sender: TObject);
+    procedure textDIMGAPEditChange(Sender: TObject);
+    procedure textDIMTIHCheckBoxChange(Sender: TObject);
+    procedure textDIMTOHCheckBoxChange(Sender: TObject);
+
+    ///////*******DimPlacing*******//////
+    procedure placeDIMTMOVEComboBoxCreate(Sender: TObject);
+    procedure placeDIMTMOVEComboBoxChange(Sender: TObject);
+
+
+    ///////*******DimUnits*******//////
+    procedure unitDIMLUNITComboBoxCreate(Sender: TObject);
+    procedure unitDIMLUNITComboBoxChange(Sender: TObject);
+    procedure untiDIMDSEPComboBoxCreate(Sender: TObject);
+    procedure untiDIMDSEPComboBoxChange(Sender: TObject);
+    procedure unitDIMLFACEditChange(Sender: TObject);
+    procedure unitDIMRNDEditChange(Sender: TObject);
+    procedure unitDIMDECEditChange(Sender: TObject);
+    procedure unitDIMPOSTEditChange(Sender: TObject);
+
 
 
     procedure LineSheetContextPopup(Sender: TObject; MousePos: TPoint;
@@ -154,6 +222,9 @@ begin
        colorBox.ItemIndex := colorBox.Items.Count - 1;
     end;
     colorBox.AddItem('Other...',Sender);
+    //drawLW(aCanvas,ARect,ll,(colorindex) div 10,s);
+    //drawLW(aCanvas,ARect,ll,(colorindex) div 10,s);
+
 
 end;
 function TDimStyleEditForm.ColorComboBoxChange(Sender: TObject;colorBox:TComboBox;coloritemindex:integer):integer;
@@ -276,9 +347,52 @@ var
     arrowsBox.ItemIndex := Ord(arrowsIndex);
 end;
 
+
+
+procedure TDimStyleEditForm.TextStyleComboBoxCreate(Sender: TObject;var textStyleBox:TComboBox;textStyleName:string);
+var
+    s:string;
+    CurrentFontIndex:integer;
+    pdwg:PTSimpleDrawing;
+   ir:itrec;
+   plp:PGDBTextStyle;
+begin
+     textStyleBox.clear;
+     CurrentFontIndex:=-1;
+     pdwg:=drawings.GetCurrentDWG;
+     plp:=pdwg^.TextStyleTable.beginiterate(ir);
+     if plp<>nil then
+     repeat
+          inc(CurrentFontIndex);
+          S:= plp^.Name;
+          textStyleBox.AddItem(S,Sender);
+          if S=textStyleName then
+              textStyleBox.ItemIndex:=CurrentFontIndex;
+          plp:=pdwg^.TextStyleTable.iterate(ir);
+     until plp=nil;
+end;
+function TDimStyleEditForm.TextStyleComboBoxChange(Sender: TObject; textStyleBox:TComboBox; textStyleindex:integer):PGDBTextStyle;
+var
+    s:string;
+    //CurrentFontIndex:integer;
+    pdwg:PTSimpleDrawing;
+   ir:itrec;
+   plp:PGDBTextStyle;
+begin
+      plp:=drawings.GetCurrentDWG^.TextStyleTable.beginiterate(ir);
+      if plp<>nil then
+      repeat
+           if plp^.Name=textStyleBox.Items[textStyleindex] then
+            result:=plp;
+           plp:=drawings.GetCurrentDWG^.TextStyleTable.iterate(ir);
+      until plp=nil;
+end;
+
+
+
+
 procedure TDimStyleEditForm.dlineColorComboBox(Sender: TObject);
 begin
-    dlineColor.Clear;
     ColorComboBoxCreate(Sender,dlineColor,dimStyle^.Lines.DIMCLRD);
 end;
 
@@ -290,7 +404,6 @@ end;
 
 procedure TDimStyleEditForm.lineExtColorComboBoxCreate(Sender: TObject);
 begin
-    lineExtColorComboBox.Clear;
     ColorComboBoxCreate(Sender,lineExtColorComboBox,dimStyle^.Lines.DIMCLRE);
 end;
 
@@ -420,6 +533,135 @@ end;
 
 ///******////
 
+//***Text tab***///
+procedure TDimStyleEditForm.textDIMTXSTYComboBoxCreate(Sender: TObject);
+begin
+  TextStyleComboBoxCreate(Sender,textDIMTXSTYComboBox,dimStyle^.Text.DIMTXSTY^.Name)
+end;
+
+procedure TDimStyleEditForm.textDIMTXSTYComboBoxChange(Sender: TObject);
+begin
+  dimStyle^.Text.DIMTXSTY:=TextStyleComboBoxChange(Sender,textDIMTXSTYComboBox,TComboBox(Sender).ItemIndex);
+end;
+
+procedure TDimStyleEditForm.textDIMCLRTComboBoxCreate(Sender: TObject);
+begin
+    ColorComboBoxCreate(Sender,textDIMCLRTComboBox,dimStyle^.Text.DIMCLRT);
+end;
+
+
+procedure TDimStyleEditForm.textDIMCLRTComboBoxChange(Sender: TObject);
+begin
+    dimStyle^.Text.DIMCLRT:=ColorComboBoxChange(Sender,textDIMCLRTComboBox,TComboBox(Sender).ItemIndex);
+end;
+
+procedure TDimStyleEditForm.textDIMTXTEditChange(Sender: TObject);
+begin
+     dimStyle^.Text.DIMTXT:=textDIMTXTEdit.Value;
+end;
+
+procedure TDimStyleEditForm.textDIMTADComboBoxCreate(Sender: TObject);
+var
+    i:integer;
+    D: PTypeData;
+  begin
+    textDIMTADComboBox.Clear;
+
+    D := GetTypeData(TypeInfo(TDimTextVertPosition));
+    for i := D^.MinValue to D^.MaxValue do
+      textDIMTADComboBox.AddItem(GetEnumName(TypeInfo(TDimTextVertPosition), i),Sender);
+    textDIMTADComboBox.ItemIndex := Ord(dimStyle^.Text.DIMTAD);
+end;
+
+procedure TDimStyleEditForm.textDIMTADComboBoxChange(Sender: TObject);
+begin
+  dimStyle^.Text.DIMTAD:=TDimTextVertPosition(TComboBox(Sender).ItemIndex);
+end;
+
+procedure TDimStyleEditForm.textDIMGAPEditChange(Sender: TObject);
+begin
+     dimStyle^.Text.DIMGAP:=textDIMGAPEdit.Value;
+end;
+procedure TDimStyleEditForm.textDIMTIHCheckBoxChange(Sender: TObject);
+begin
+     dimStyle^.Text.DIMTIH:=textDIMTIHCheckBox.Checked;
+end;
+procedure TDimStyleEditForm.textDIMTOHCheckBoxChange(Sender: TObject);
+begin
+     dimStyle^.Text.DIMTOH:=textDIMTOHCheckBox.Checked;
+end;
+
+///////*******DimPlacing*******//////
+
+procedure TDimStyleEditForm.placeDIMTMOVEComboBoxCreate(Sender: TObject);
+var
+    i:integer;
+    D: PTypeData;
+  begin
+    placeDIMTMOVEComboBox.Clear;
+
+    D := GetTypeData(TypeInfo(TDimTextMove));
+    for i := D^.MinValue to D^.MaxValue do
+      placeDIMTMOVEComboBox.AddItem(GetEnumName(TypeInfo(TDimTextMove), i),Sender);
+    placeDIMTMOVEComboBox.ItemIndex := Ord(dimStyle^.Placing.DIMTMOVE);
+end;
+procedure TDimStyleEditForm.placeDIMTMOVEComboBoxChange(Sender: TObject);
+begin
+  dimStyle^.Placing.DIMTMOVE:=TDimTextMove(TComboBox(Sender).ItemIndex);
+end;
+
+///////*******DimUnits*******//////
+
+procedure TDimStyleEditForm.unitDIMLUNITComboBoxCreate(Sender: TObject);
+var
+    i:integer;
+    D: PTypeData;
+  begin
+    unitDIMLUNITComboBox.Clear;
+
+    D := GetTypeData(TypeInfo(TDimUnit));
+    for i := D^.MinValue to D^.MaxValue do
+      unitDIMLUNITComboBox.AddItem(GetEnumName(TypeInfo(TDimUnit), i),Sender);
+    unitDIMLUNITComboBox.ItemIndex := Ord(dimStyle^.Units.DIMLUNIT);
+end;
+procedure TDimStyleEditForm.unitDIMLUNITComboBoxChange(Sender: TObject);
+begin
+  dimStyle^.Units.DIMLUNIT:=TDimUnit(TComboBox(Sender).ItemIndex);
+end;
+
+procedure TDimStyleEditForm.untiDIMDSEPComboBoxCreate(Sender: TObject);
+var
+    i:integer;
+    D: PTypeData;
+  begin
+    untiDIMDSEPComboBox.Clear;
+
+    D := GetTypeData(TypeInfo(TDimDSep));
+    for i := D^.MinValue to D^.MaxValue do
+      untiDIMDSEPComboBox.AddItem(GetEnumName(TypeInfo(TDimDSep), i),Sender);
+    untiDIMDSEPComboBox.ItemIndex := Ord(dimStyle^.Units.DIMDSEP);
+end;
+procedure TDimStyleEditForm.untiDIMDSEPComboBoxChange(Sender: TObject);
+begin
+  dimStyle^.Units.DIMDSEP:=TDimDSep(TComboBox(Sender).ItemIndex);
+end;
+
+procedure TDimStyleEditForm.unitDIMLFACEditChange(Sender: TObject);
+begin
+     dimStyle^.Units.DIMLFAC:=unitDIMLFACEdit.Value;
+end;
+procedure TDimStyleEditForm.unitDIMRNDEditChange(Sender: TObject);
+begin
+     dimStyle^.Units.DIMRND:=unitDIMRNDEdit.Value;
+end;
+procedure TDimStyleEditForm.unitDIMDECEditChange(Sender: TObject);
+begin
+     dimStyle^.Units.DIMDEC:=unitDIMDECEdit.Value;
+end;
+procedure TDimStyleEditForm.unitDIMPOSTEditChange(Sender: TObject);
+begin
+     dimStyle^.Units.DIMPOST:=UTF8Encode(unitDIMPOSTEdit.Text);
+end;
 
 procedure TDimStyleEditForm.FormCreate(Sender: TObject);
 //var
@@ -427,6 +669,7 @@ procedure TDimStyleEditForm.FormCreate(Sender: TObject);
 begin
    //TDimStyleEditForm.lineLayerView();
 
+     PageControl1.TabIndex:=0;
      LineSheet.Caption:='Lines';
 
      titelLabelLineDim.Caption:='Dimension lines:';
@@ -464,28 +707,49 @@ begin
      arrowsDIMBLK1Label.Caption:='Arrowheads first:';
      arrowsDIMBLK2Label.Caption:='Arrowheads second:';
      arrowsDIMLDRBLKLabel.Caption:='Arrowheads leader:';
-     arrowsDIMASZLabel.Caption:='Arrow size';
+     arrowsDIMASZLabel.Caption:='Arrow size:';
 
      arrowsDIMBLK1ComboBoxCreate(Sender);
      arrowsDIMBLK2ComboBoxCreate(Sender);
      arrowsDIMLDRBLKComboBoxCreate(Sender);
      arrowsDIMASZEdit.Value:=dimStyle^.Arrows.DIMASZ;
 
-     //Transp := TStringList.Create;
-     //with Transp do
-     //begin
-     //   AddObject('самолет', TObject(2000));
-     //   AddObject('поезд', TObject(1500));
-     //   AddObject('автобус', TObject(1500));
-     //end;
-     //dlineColor.Items.Assign(Transp);
-     //dlineColor.ItemIndex := 0;
-     //
-     //Transp.Clear;
-      //ZCMsgCallBackInterface.TextMessage('1111111hf,jnftn',TMWOHistoryOut);
-      //dlineColor.AddItem('123',Sender);
-      //dlineColor.AddItem('222',Sender);
-      //dlineColor.AddItem('333',Sender);
+     ////***Text*****//////
+     TextSheet.Caption:='Text';
+     textDIMTXSTYLabel.Caption:='Text style:';
+     textDIMCLRTLabel.Caption:='Text color:';
+     textDIMTXTLabel.Caption:='Text height:';
+     textDIMTADLabel.Caption:='Text above dimension line:';
+     texpDIMGAPLabel.Caption:='Dimension line gap:';
+     textDIMTIHLabel.Caption:='Text inside horizontal:';
+     textDIMTOHLabel.Caption:='Text outside horizontal:';
+
+     textDIMTXSTYComboBoxCreate(Sender);
+     textDIMCLRTComboBoxCreate(Sender);
+     textDIMTXTEdit.Value:=dimStyle^.Text.DIMTXT;
+     textDIMTADComboBoxCreate(Sender);
+     textDIMGAPEdit.Value:=dimStyle^.Text.DIMGAP;
+     textDIMTIHCheckBox.Checked:=dimStyle^.Text.DIMTIH;
+     textDIMTOHCheckBox.Checked:=dimStyle^.Text.DIMTOH;
+
+     ///////*******DimPlacing*******//////
+     placeDIMTMOVELabel.Caption:='Dim Text Move:';
+     placeDIMTMOVEComboBoxCreate(Sender);
+
+         ///////*******DimUnits*******//////
+     unitDIMLUNITLabel.Caption:='Sets units for all dimension:';
+     untiDIMDSEPLabel.Caption:='Single-character decimal separator:';
+     unitDIMLFACLabel.Caption:='Linear measurements scale factor:';
+     unitDIMRNDLabel.Caption:='Rounding value for dimension:';
+     unitDIMDECLabel.Caption:='Number of decimal places:';
+     unitDIMPOSTLabel.Caption:='Dimension prefix:';
+
+     unitDIMLUNITComboBoxCreate(Sender);
+     untiDIMDSEPComboBoxCreate(Sender);
+     unitDIMLFACEdit.Value:=dimStyle^.Units.DIMLFAC;
+     unitDIMRNDEdit.Value:=dimStyle^.Units.DIMRND;
+     unitDIMDECEdit.Value:=dimStyle^.Units.DIMDEC;
+     unitDIMPOSTEdit.Text:=dimStyle^.Units.DIMPOST;
 
 end;
 
@@ -515,6 +779,22 @@ begin
 
 
     //dlineColor.ItemIndex := 1;
+end;
+
+procedure TDimStyleEditForm.DimUnitsSheetContextPopup(Sender: TObject;
+  MousePos: TPoint; var Handled: Boolean);
+begin
+
+end;
+
+procedure TDimStyleEditForm.dlineColorLabelClick(Sender: TObject);
+begin
+
+end;
+
+procedure TDimStyleEditForm.lineExtLabelDIMEXOClick(Sender: TObject);
+begin
+
 end;
 
 

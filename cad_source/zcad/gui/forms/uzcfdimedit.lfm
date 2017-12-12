@@ -1,27 +1,32 @@
 object DimStyleEditForm: TDimStyleEditForm
-  Left = 577
-  Height = 547
-  Top = 16
-  Width = 618
+  Left = 662
+  Height = 400
+  Top = 277
+  Width = 640
+  BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = bsSingle
   Caption = 'DimStyleEditForm'
-  ClientHeight = 547
-  ClientWidth = 618
+  ClientHeight = 400
+  ClientWidth = 640
   OnCreate = FormCreate
+  Position = poMainFormCenter
   LCLVersion = '1.9.0.0'
+  Scaled = False
   object PageControl1: TPageControl
-    Left = 48
+    Left = 0
     Height = 400
-    Top = 40
-    Width = 560
-    ActivePage = ArrowsSheet
-    TabIndex = 1
+    Top = 0
+    Width = 640
+    ActivePage = TextSheet
+    Align = alClient
+    TabIndex = 2
     TabOrder = 0
     object LineSheet: TTabSheet
       Caption = 'LineSheet'
       ClientHeight = 374
-      ClientWidth = 552
+      ClientWidth = 632
       object dlineColor: TComboBox
-        Left = 139
+        Left = 200
         Height = 21
         Top = 35
         Width = 100
@@ -31,9 +36,9 @@ object DimStyleEditForm: TDimStyleEditForm
         Text = 'dlineColor'
       end
       object dlineType: TComboBox
-        Left = 139
+        Left = 200
         Height = 21
-        Top = 64
+        Top = 65
         Width = 100
         ItemHeight = 13
         OnChange = dlineTypeComboBoxChange
@@ -41,9 +46,9 @@ object DimStyleEditForm: TDimStyleEditForm
         Text = 'dlineType'
       end
       object dlineWeight: TComboBox
-        Left = 139
+        Left = 200
         Height = 21
-        Top = 96
+        Top = 95
         Width = 100
         ItemHeight = 13
         OnChange = dlineWeightComboBoxChange
@@ -51,9 +56,9 @@ object DimStyleEditForm: TDimStyleEditForm
         Text = 'dlineWeight'
       end
       object lineDimDLE: TFloatSpinEdit
-        Left = 189
+        Left = 200
         Height = 21
-        Top = 128
+        Top = 125
         Width = 50
         Increment = 1
         MaxValue = 100
@@ -63,9 +68,9 @@ object DimStyleEditForm: TDimStyleEditForm
         Value = 0
       end
       object lineDimCEN: TFloatSpinEdit
-        Left = 189
+        Left = 200
         Height = 21
-        Top = 160
+        Top = 155
         Width = 50
         Increment = 1
         MaxValue = 100
@@ -75,15 +80,16 @@ object DimStyleEditForm: TDimStyleEditForm
         Value = 0
       end
       object dlineColorLabel: TLabel
-        Left = 24
+        Left = 25
         Height = 13
         Top = 38
         Width = 72
         Caption = 'dlineColorLabel'
         ParentColor = False
+        OnClick = dlineColorLabelClick
       end
       object dlineTypeLabel: TLabel
-        Left = 24
+        Left = 25
         Height = 13
         Top = 68
         Width = 71
@@ -91,33 +97,33 @@ object DimStyleEditForm: TDimStyleEditForm
         ParentColor = False
       end
       object dlineWeightLabel: TLabel
-        Left = 24
+        Left = 25
         Height = 13
-        Top = 104
+        Top = 98
         Width = 81
         Caption = 'dlineWeightLabel'
         ParentColor = False
       end
       object lineDimDLELabel: TLabel
-        Left = 24
+        Left = 25
         Height = 13
-        Top = 136
+        Top = 128
         Width = 76
         Caption = 'lineDimDLELabel'
         ParentColor = False
       end
       object lineDimCENLabel: TLabel
-        Left = 24
+        Left = 25
         Height = 13
-        Top = 168
+        Top = 158
         Width = 78
         Caption = 'lineDimCENLabel'
         ParentColor = False
       end
       object lineExtColorComboBox: TComboBox
-        Left = 139
+        Left = 200
         Height = 21
-        Top = 232
+        Top = 215
         Width = 100
         ItemHeight = 13
         OnChange = lineExtColorComboBoxChange
@@ -125,9 +131,9 @@ object DimStyleEditForm: TDimStyleEditForm
         Text = 'lineExtColorComboBox'
       end
       object lineExtLT1ComboBox: TComboBox
-        Left = 139
+        Left = 200
         Height = 21
-        Top = 264
+        Top = 245
         Width = 100
         ItemHeight = 13
         OnChange = lineExtLT1ComboBoxChange
@@ -135,9 +141,9 @@ object DimStyleEditForm: TDimStyleEditForm
         Text = 'lineExtLT1ComboBox'
       end
       object lineExtLT2ComboBox: TComboBox
-        Left = 139
+        Left = 200
         Height = 21
-        Top = 296
+        Top = 275
         Width = 100
         ItemHeight = 13
         OnChange = lineExtLT2ComboBoxChange
@@ -145,9 +151,9 @@ object DimStyleEditForm: TDimStyleEditForm
         Text = 'lineExtLT2ComboBox'
       end
       object lineExtLWComboBox: TComboBox
-        Left = 139
+        Left = 200
         Height = 21
-        Top = 328
+        Top = 305
         Width = 100
         ItemHeight = 13
         OnChange = lineExtLWComboBoxChange
@@ -155,7 +161,7 @@ object DimStyleEditForm: TDimStyleEditForm
         Text = 'lineExtLWComboBox'
       end
       object titelLabelLineDim: TLabel
-        Left = 24
+        Left = 25
         Height = 13
         Top = 8
         Width = 79
@@ -163,41 +169,41 @@ object DimStyleEditForm: TDimStyleEditForm
         ParentColor = False
       end
       object lineExtColorLabel: TLabel
-        Left = 24
+        Left = 25
         Height = 13
-        Top = 240
+        Top = 218
         Width = 82
         Caption = 'lineExtColorLabel'
         ParentColor = False
       end
       object lineExtLT1Label: TLabel
-        Left = 24
+        Left = 25
         Height = 13
-        Top = 272
+        Top = 248
         Width = 74
         Caption = 'lineExtLT1Label'
         ParentColor = False
       end
       object lineExtLT2Label: TLabel
-        Left = 24
+        Left = 25
         Height = 13
-        Top = 304
+        Top = 278
         Width = 74
         Caption = 'lineExtLT2Label'
         ParentColor = False
       end
       object lineExtLWLabel: TLabel
-        Left = 24
+        Left = 25
         Height = 13
-        Top = 336
+        Top = 308
         Width = 72
         Caption = 'lineExtLWLabel'
         ParentColor = False
       end
       object lineExtSpinDIMEXE: TFloatSpinEdit
-        Left = 456
+        Left = 550
         Height = 21
-        Top = 232
+        Top = 215
         Width = 50
         Increment = 1
         MaxValue = 100
@@ -207,9 +213,9 @@ object DimStyleEditForm: TDimStyleEditForm
         Value = 0
       end
       object lineExtSpinDIMEXO: TFloatSpinEdit
-        Left = 456
+        Left = 550
         Height = 21
-        Top = 264
+        Top = 245
         Width = 50
         Increment = 1
         MaxValue = 100
@@ -219,25 +225,26 @@ object DimStyleEditForm: TDimStyleEditForm
         Value = 0
       end
       object lineExtLabelDIMEXE: TLabel
-        Left = 280
+        Left = 350
         Height = 13
-        Top = 240
+        Top = 218
         Width = 94
         Caption = 'lineExtLabelDIMEXE'
         ParentColor = False
       end
       object lineExtLabelDIMEXO: TLabel
-        Left = 280
+        Left = 350
         Height = 13
-        Top = 272
+        Top = 248
         Width = 96
         Caption = 'lineExtLabelDIMEXO'
         ParentColor = False
+        OnClick = lineExtLabelDIMEXOClick
       end
       object titelLabelLineExt: TLabel
-        Left = 24
+        Left = 25
         Height = 13
-        Top = 208
+        Top = 188
         Width = 78
         Caption = 'titelLabelLineExt'
         ParentColor = False
@@ -246,11 +253,11 @@ object DimStyleEditForm: TDimStyleEditForm
     object ArrowsSheet: TTabSheet
       Caption = 'ArrowsSheet'
       ClientHeight = 374
-      ClientWidth = 552
+      ClientWidth = 632
       object arrowsDIMBLK1ComboBox: TComboBox
-        Left = 153
+        Left = 200
         Height = 21
-        Top = 62
+        Top = 35
         Width = 100
         ItemHeight = 13
         OnChange = arrowsDIMBLK1ComboBoxChange
@@ -258,9 +265,9 @@ object DimStyleEditForm: TDimStyleEditForm
         Text = 'arrowsDIMBLK1ComboBox'
       end
       object arrowsDIMBLK2ComboBox: TComboBox
-        Left = 153
+        Left = 200
         Height = 21
-        Top = 96
+        Top = 65
         Width = 100
         ItemHeight = 13
         OnChange = arrowsDIMBLK2ComboBoxChange
@@ -268,9 +275,9 @@ object DimStyleEditForm: TDimStyleEditForm
         Text = 'arrowsDIMBLK2ComboBox'
       end
       object arrowsDIMLDRBLKComboBox: TComboBox
-        Left = 153
+        Left = 200
         Height = 21
-        Top = 128
+        Top = 95
         Width = 100
         ItemHeight = 13
         OnChange = arrowsDIMLDRBLKComboBoxChange
@@ -278,33 +285,33 @@ object DimStyleEditForm: TDimStyleEditForm
         Text = 'arrowsDIMLDRBLKComboBox'
       end
       object arrowsDIMBLK1Label: TLabel
-        Left = 32
+        Left = 25
         Height = 13
-        Top = 70
+        Top = 38
         Width = 100
         Caption = 'arrowsDIMBLK1Label'
         ParentColor = False
       end
       object arrowsDIMBLK2Label: TLabel
-        Left = 32
+        Left = 25
         Height = 13
-        Top = 104
+        Top = 68
         Width = 100
         Caption = 'arrowsDIMBLK2Label'
         ParentColor = False
       end
       object arrowsDIMLDRBLKLabel: TLabel
-        Left = 32
+        Left = 25
         Height = 13
-        Top = 136
+        Top = 98
         Width = 113
         Caption = 'arrowsDIMLDRBLKLabel'
         ParentColor = False
       end
       object arrowsDIMASZEdit: TFloatSpinEdit
-        Left = 153
+        Left = 200
         Height = 21
-        Top = 168
+        Top = 125
         Width = 100
         Increment = 1
         MaxValue = 100
@@ -314,9 +321,9 @@ object DimStyleEditForm: TDimStyleEditForm
         Value = 0
       end
       object arrowsDIMASZLabel: TLabel
-        Left = 32
+        Left = 25
         Height = 13
-        Top = 176
+        Top = 128
         Width = 96
         Caption = 'arrowsDIMASZLabel'
         ParentColor = False
@@ -324,12 +331,275 @@ object DimStyleEditForm: TDimStyleEditForm
     end
     object TextSheet: TTabSheet
       Caption = 'TextSheet'
+      ClientHeight = 374
+      ClientWidth = 632
+      object textDIMTXSTYComboBox: TComboBox
+        Left = 200
+        Height = 21
+        Top = 35
+        Width = 100
+        ItemHeight = 13
+        OnChange = textDIMTXSTYComboBoxChange
+        TabOrder = 0
+        Text = 'textDIMTXSTYComboBox'
+      end
+      object textDIMTXSTYLabel: TLabel
+        Left = 25
+        Height = 13
+        Top = 38
+        Width = 94
+        Caption = 'textDIMTXSTYLabel'
+        ParentColor = False
+      end
+      object textDIMCLRTComboBox: TComboBox
+        Left = 200
+        Height = 21
+        Top = 65
+        Width = 100
+        ItemHeight = 13
+        OnChange = textDIMCLRTComboBoxChange
+        TabOrder = 1
+        Text = 'textDIMCLRTComboBox'
+      end
+      object textDIMCLRTLabel: TLabel
+        Left = 25
+        Height = 13
+        Top = 68
+        Width = 89
+        Caption = 'textDIMCLRTLabel'
+        ParentColor = False
+      end
+      object textDIMTXTEdit: TFloatSpinEdit
+        Left = 200
+        Height = 21
+        Top = 95
+        Width = 50
+        Increment = 1
+        MaxValue = 100
+        MinValue = 0
+        OnChange = textDIMTXTEditChange
+        TabOrder = 2
+        Value = 0
+      end
+      object textDIMTXTLabel: TLabel
+        Left = 25
+        Height = 13
+        Top = 98
+        Width = 82
+        Caption = 'textDIMTXTLabel'
+        ParentColor = False
+      end
+      object textDIMTADComboBox: TComboBox
+        Left = 200
+        Height = 21
+        Top = 125
+        Width = 100
+        ItemHeight = 13
+        OnChange = textDIMTADComboBoxChange
+        TabOrder = 3
+        Text = 'textDIMTADComboBox'
+      end
+      object textDIMTADLabel: TLabel
+        Left = 25
+        Height = 13
+        Top = 128
+        Width = 84
+        Caption = 'textDIMTADLabel'
+        ParentColor = False
+      end
+      object textDIMGAPEdit: TFloatSpinEdit
+        Left = 200
+        Height = 21
+        Top = 155
+        Width = 50
+        Increment = 1
+        MaxValue = 100
+        MinValue = 0
+        TabOrder = 4
+        Value = 0
+      end
+      object texpDIMGAPLabel: TLabel
+        Left = 25
+        Height = 13
+        Top = 158
+        Width = 86
+        Caption = 'texpDIMGAPLabel'
+        ParentColor = False
+      end
+      object textDIMTIHCheckBox: TCheckBox
+        Left = 200
+        Height = 17
+        Top = 185
+        Width = 18
+        BidiMode = bdRightToLeft
+        OnChange = textDIMTIHCheckBoxChange
+        ParentBidiMode = False
+        TabOrder = 5
+      end
+      object textDIMTOHCheckBox: TCheckBox
+        Left = 200
+        Height = 17
+        Top = 218
+        Width = 18
+        BidiMode = bdRightToLeft
+        OnChange = textDIMTOHCheckBoxChange
+        ParentBidiMode = False
+        TabOrder = 6
+      end
+      object textDIMTIHLabel: TLabel
+        Left = 24
+        Height = 13
+        Top = 188
+        Width = 81
+        Caption = 'textDIMTIHLabel'
+        ParentColor = False
+      end
+      object textDIMTOHLabel: TLabel
+        Left = 25
+        Height = 13
+        Top = 218
+        Width = 85
+        Caption = 'textDIMTOHLabel'
+        ParentColor = False
+      end
     end
     object DimPlacingSheet: TTabSheet
       Caption = 'DimPlacingSheet'
+      ClientHeight = 374
+      ClientWidth = 632
+      object placeDIMTMOVEComboBox: TComboBox
+        Left = 200
+        Height = 21
+        Top = 35
+        Width = 100
+        ItemHeight = 13
+        OnChange = placeDIMTMOVEComboBoxChange
+        TabOrder = 0
+        Text = 'placeDIMTMOVEComboBox'
+      end
+      object placeDIMTMOVELabel: TLabel
+        Left = 25
+        Height = 13
+        Top = 38
+        Width = 103
+        Caption = 'placeDIMTMOVELabel'
+        ParentColor = False
+      end
     end
     object DimUnitsSheet: TTabSheet
       Caption = 'DimUnitsSheet'
+      ClientHeight = 374
+      ClientWidth = 632
+      OnContextPopup = DimUnitsSheetContextPopup
+      object unitDIMLUNITComboBox: TComboBox
+        Left = 200
+        Height = 21
+        Top = 35
+        Width = 100
+        ItemHeight = 13
+        OnChange = unitDIMLUNITComboBoxChange
+        TabOrder = 0
+        Text = 'unitDIMLUNITComboBox'
+      end
+      object untiDIMDSEPComboBox: TComboBox
+        Left = 200
+        Height = 21
+        Top = 65
+        Width = 100
+        ItemHeight = 13
+        OnChange = untiDIMDSEPComboBoxChange
+        TabOrder = 1
+        Text = 'untiDIMDSEPComboBox'
+      end
+      object unitDIMLFACEdit: TFloatSpinEdit
+        Left = 200
+        Height = 21
+        Top = 95
+        Width = 50
+        Increment = 1
+        MaxValue = 100
+        MinValue = 0
+        OnChange = unitDIMLFACEditChange
+        TabOrder = 2
+        Value = 0
+      end
+      object unitDIMRNDEdit: TFloatSpinEdit
+        Left = 200
+        Height = 21
+        Top = 125
+        Width = 50
+        Increment = 1
+        MaxValue = 100
+        MinValue = 0
+        OnChange = unitDIMRNDEditChange
+        TabOrder = 3
+        Value = 0
+      end
+      object unitDIMDECEdit: TSpinEdit
+        Left = 200
+        Height = 21
+        Top = 155
+        Width = 50
+        OnChange = unitDIMDECEditChange
+        TabOrder = 4
+      end
+      object unitDIMPOSTEdit: TEdit
+        Left = 200
+        Height = 21
+        Top = 185
+        Width = 80
+        OnChange = unitDIMPOSTEditChange
+        TabOrder = 5
+        Text = 'unitDIMPOSTEdit'
+      end
+      object unitDIMLUNITLabel: TLabel
+        Left = 25
+        Height = 13
+        Top = 38
+        Width = 91
+        Caption = 'unitDIMLUNITLabel'
+        ParentColor = False
+      end
+      object untiDIMDSEPLabel: TLabel
+        Left = 25
+        Height = 13
+        Top = 68
+        Width = 87
+        Caption = 'untiDIMDSEPLabel'
+        ParentColor = False
+      end
+      object unitDIMLFACLabel: TLabel
+        Left = 25
+        Height = 13
+        Top = 98
+        Width = 87
+        Caption = 'unitDIMLFACLabel'
+        ParentColor = False
+      end
+      object unitDIMRNDLabel: TLabel
+        Left = 25
+        Height = 13
+        Top = 128
+        Width = 83
+        Caption = 'unitDIMRNDLabel'
+        ParentColor = False
+      end
+      object unitDIMDECLabel: TLabel
+        Left = 25
+        Height = 13
+        Top = 158
+        Width = 82
+        Caption = 'unitDIMDECLabel'
+        ParentColor = False
+      end
+      object unitDIMPOSTLabel: TLabel
+        Left = 25
+        Height = 13
+        Top = 188
+        Width = 88
+        Caption = 'unitDIMPOSTLabel'
+        ParentColor = False
+      end
     end
   end
 end

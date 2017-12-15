@@ -660,7 +660,7 @@ begin
 end;
 procedure TDimStyleEditForm.unitDIMPOSTEditChange(Sender: TObject);
 begin
-     dimStyle^.Units.DIMPOST:=UTF8Encode(unitDIMPOSTEdit.Text);
+     dimStyle^.Units.DIMPOST:=Tria_Utf8ToAnsi(unitDIMPOSTEdit.Text);
 end;
 
 procedure TDimStyleEditForm.FormCreate(Sender: TObject);
@@ -749,7 +749,7 @@ begin
      unitDIMLFACEdit.Value:=dimStyle^.Units.DIMLFAC;
      unitDIMRNDEdit.Value:=dimStyle^.Units.DIMRND;
      unitDIMDECEdit.Value:=dimStyle^.Units.DIMDEC;
-     unitDIMPOSTEdit.Text:=dimStyle^.Units.DIMPOST;
+     unitDIMPOSTEdit.Text:=Tria_AnsiToUtf8(dimStyle^.Units.DIMPOST);
 
 end;
 

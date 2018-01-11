@@ -1,7 +1,8 @@
-unit DEVICE_EL_SHUV;
+﻿unit DEVICE_EL_SHUV;
 interface
 uses system,devices;
 usescopy blocktype;
+usescopy vebconnectmodul;
 var
    NMO_Template:GDBString;(*'Шаблон Обозначения'*) 
    NMO_Name:GDBString;(*'Обозначение'*)

@@ -27,6 +27,7 @@ uses uzccommandsimpl,    //тут реализация объекта CommandRTE
      uzvcom,             //
      uzvnum,
      uzvagensl,
+     uzcinterface,
 
      uzcutils,
      Varman;             //Зкадовский RTTI
@@ -40,6 +41,7 @@ Tuzvslagcab_com=object(CommandRTEdObject)//определяем тип - объ�
              procedure visualInspectionGraph(pdata:GDBPlatformint); virtual;//построение графа и его визуализация
              procedure visualInspectionGroupHeadGraph(pdata:GDBPlatformint); virtual;//построение графа и его визуализация
              procedure cablingGroupHeadGraph(pdata:GDBPlatformint); virtual;//прокладка кабелей по трассе полученной в результате поисков пути и т.д.
+             procedure test(pdata:GDBPlatformint); virtual;//прокладка кабелей по трассе полученной в результате поисков пути и т.д.
 
              //procedure DoSomething(pdata:GDBPlatformint); virtual;//реализация какогото действия
              //procedure DoSomething2(pdata:GDBPlatformint); virtual;//реализация какогото другого действия
@@ -55,6 +57,7 @@ TuzvslagcabComParams=packed record       //определяем параметр
 end;
 const
   Epsilon=0.2;
+  systemVisualLayerName='systemTempCABLINEVisualLayer';
 var
  uzvslagcab_com:Tuzvslagcab_com;//определяем экземпляр нашей команды
  uzvslagcabComParams:TuzvslagcabComParams;//определяем экземпляр параметров нашей команды
@@ -72,6 +75,7 @@ begin
   commandmanager.DMAddMethod('Создать граф и визуал. его','Создает предварительный вид графа для его визуального анализа',visualInspectionGraph);
   commandmanager.DMAddMethod('Создать граф и визуал. шлейфы подключения','Создать граф и визуал. шлейфы подключения',visualInspectionGroupHeadGraph);
   commandmanager.DMAddMethod('Прокладка кабелей по группам','Прокладка кабелей по группам',cablingGroupHeadGraph);
+  commandmanager.DMAddMethod('test','Проtest',test);
   //commandmanager.DMAddMethod('DoSomething1','DoSomething1 hint',DoSomething);
   //commandmanager.DMAddMethod('DoSomething2','DoSomething2 hint)',DoSomething2);
   //показываем командное меню
@@ -102,7 +106,7 @@ begin
   //
   for i:=0 to graphCable.listEdge.Size-1 do
     begin
-       uzvcom.visualGraphEdge(graphCable.listEdge[i].VPoint1,graphCable.listEdge[i].VPoint2,2);
+       uzvcom.visualGraphEdge(graphCable.listEdge[i].VPoint1,graphCable.listEdge[i].VPoint2,2,systemVisualLayerName);
     end;
   zcPlaceUndoEndMarkerIfNeed(UndoMarcerIsPlazed);
   zcRedrawCurrentDrawing;
@@ -180,6 +184,46 @@ begin
     zcPlaceUndoEndMarkerIfNeed(UndoMarcerIsPlazed);
     zcRedrawCurrentDrawing;
     Commandmanager.executecommandend;
+end;
+procedure Tuzvslagcab_com.test(pdata:GDBPlatformint);
+var
+ listSLname:TGDBlistSLname;
+ name:string;
+begin
+    ZCMsgCallBackInterface.TextMessage('ТЕСТ РАБОТАЕТ!!!',TMWOHistoryOut);
+    //uzvcom.clearVisualGraph(systemVisualLayerName);
+
+    listSLname:=uzvcom.getListSuperline();
+    for name in listSLname do
+       ZCMsgCallBackInterface.TextMessage('имя-суперлинии--'+name,TMWOHistoryOut);
+
+    //****Сюда включить методы по созданию выподающего списка в инспекторе,
+    //****заполнитель данных в инспектор добавить сюда.
+    //****список хранится в listSLname
+
+
+  //тут делаем чтонибудь что будет усполнено по нажатию DoSomething2
+  //выполним Commandmanager.executecommandend;
+  //эту кнопку можно нажать 1 раз
+  //graphCable:=uzvcom.graphBulderFunc(uzvslagcabComParams.accuracy,uzvslagcabComParams.nameSL);
+  //
+  ////Визуализация графа
+  //UndoMarcerIsPlazed:=false;
+  //zcPlaceUndoStartMarkerIfNeed(UndoMarcerIsPlazed,'Visualisation Graph');
+  ////for i:=0 to graphCable.listVertex.Size-1 do
+  ////  if graphCable.listVertex[i].deviceEnt <> nil then
+  ////    //if graphCable.listVertex[i].break then
+  ////    begin
+  ////       uzvcom.testTempDrawCircle(graphCable.listVertex[i].centerPoint,Epsilon*25);
+  ////    end;
+  ////
+  //for i:=0 to graphCable.listEdge.Size-1 do
+  //  begin
+  //     uzvcom.visualGraphEdge(graphCable.listEdge[i].VPoint1,graphCable.listEdge[i].VPoint2,2);
+  //  end;
+  //zcPlaceUndoEndMarkerIfNeed(UndoMarcerIsPlazed);
+  //zcRedrawCurrentDrawing;
+  Commandmanager.executecommandend;
 end;
 
 

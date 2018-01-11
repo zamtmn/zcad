@@ -226,11 +226,14 @@ type
 
       TGDBDevice=specialize TVector<PGDBObjDevice>;
 
+      ///***список всех имен суперлиний ****///
+      TGDBlistSLname=specialize TVector<string>;
+
 
 
 
       function graphBulderFunc(Epsilon:double;nameCable:string):TGraphBuilder;
-      function visualGraphEdge(p1:GDBVertex;p2:GDBVertex;color:integer):TCommandResult;
+      function visualGraphEdge(p1:GDBVertex;p2:GDBVertex;color:integer;nameLayer:string):TCommandResult;
 
       function testTempDrawCircle(p1:GDBVertex;rr:GDBDouble):TCommandResult;
       function testTempDrawPolyLine(listVertex:GListVertexPoint;color:Integer):TCommandResult;
@@ -240,6 +243,8 @@ type
       function getAreaLine(point1:GDBVertex;point2:GDBVertex;accuracy:double):TBoundingBox;
       function getAreaVertex(vertexPoint:GDBVertex;accuracy:double):TBoundingBox;
       function vertexPointInAreaRectangle(rectLine:TRectangleLine;vertexPt:GDBVertex):boolean;
+      procedure clearVisualGraph(nameLayer:string);
+      function getListSuperline():TGDBlistSLname;
 
 implementation
 
@@ -395,7 +400,7 @@ begin
 end;
 
 //Визуализация линий графа для наглядности того что получилось построить в графе
-function visualGraphEdge(p1:GDBVertex;p2:GDBVertex;color:integer):TCommandResult;
+function visualGraphEdge(p1:GDBVertex;p2:GDBVertex;color:integer;nameLayer:string):TCommandResult;
 var
     pline:PGDBObjLine;
 begin
@@ -405,7 +410,7 @@ begin
     zcSetEntPropFromCurrentDrawingProp(pline);//присваиваем текущие слой, вес и т.п
     pline^.vp.LineWeight:=LnWt200;
     pline^.vp.Color:=color;
-    pline^.vp.Layer:=uzvtestdraw.getTestLayer();
+    pline^.vp.Layer:=uzvtestdraw.getTestLayer(nameLayer);
     zcAddEntToCurrentDrawingWithUndo(pline);                                    //добавляем в чертеж
     result:=cmd_ok;
 end;
@@ -1640,6 +1645,60 @@ begin
     //result.listVertex:=listDevice;
     //result.listEdge:=listEdge;
   end;
+
+
+///****Удаляет примитивы для визуализации графа трасс и устройств****////
+procedure clearVisualGraph(nameLayer:string);
+var
+    pobj: pGDBObjEntity;   //выделеные объекты в пространстве листа
+    ir:itrec;  // применяется для обработки списка выделений, но что это понятия не имею :)
+begin
+  //ZCMsgCallBackInterface.TextMessage('ТЕСТ старт!!!',TMWOHistoryOut);
+  pobj:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir); //зона уже выбрана в перспективе застовлять пользователя ее выбирать
+  if pobj<>nil then
+    repeat
+      if pobj^.vp.Layer^.GetName = nameLayer then
+        begin
+         ZCMsgCallBackInterface.TextMessage('должна быть команда удаления',TMWOHistoryOut);
+         //ZCMsgCallBackInterface.TextMessage(pobj^.vp.Layer^.GetName,TMWOHistoryOut);
+         //pobj^.EraseMi();
+        end;
+      pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir); //переход к следующем примитиву в списке выбраных примитивов
+    until pobj=nil;
+  //ZCMsgCallBackInterface.TextMessage('ТЕСТ финиш!!!',TMWOHistoryOut);
+end;
+
+///****Получить список всех суперлиний****////
+function getListSuperline():TGDBlistSLname;
+var
+    pobj: pGDBObjEntity;
+    ir:itrec;  // применяется для обработки списка выделений, но что это понятия не имею :)
+    pSuperLine:PGDBObjSuperLine;
+    pvd:pvardesk; //для работы со свойствами устройств
+    name:string;
+    isname:boolean;
+begin
+  //ZCMsgCallBackInterface.TextMessage('ТЕСТ старт!!!',TMWOHistoryOut);
+  result:=TGDBlistSLname.Create;
+  pobj:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
+  if pobj<>nil then
+    repeat
+      if pobj^.GetObjType=GDBSuperLineID then
+        begin
+         pSuperLine:=PGDBObjSuperLine(pobj);
+         pvd:=FindVariableInEnt(pSuperLine,'NMO_Name');
+         isname:=true;
+         for name in result do
+           if name = pgdbstring(pvd^.data.Instance)^ then
+             isname:=false;
+         if isname then
+            result.PushBack(pgdbstring(pvd^.data.Instance)^);
+        end;
+      pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir); //переход к следующем примитиву в списке выбраных примитивов
+    until pobj=nil;
+end;
+
+
   {*
   function NumPsIzvAndDlina_com(operands:TCommandOperands):TCommandResult;
   var

@@ -748,7 +748,7 @@ begin
      polyObj^.Closed:=false;
      polyObj^.vp.Color:=color;
      polyObj^.vp.LineWeight:=LnWt050;
-     polyObj^.vp.Layer:=uzvtestdraw.getTestLayer();
+     polyObj^.vp.Layer:=uzvtestdraw.getTestLayer('systemTempVisualLayer');
      for i:=0 to myVertex.Size-1 do
      begin
          polyObj^.VertexArrayInOCS.PushBackData(ourGraph.listVertex[myVertex[i]].centerPoint);
@@ -772,7 +772,7 @@ begin
       ptext^.Template:=mText;     // сам текст
       ptext^.vp.LineWeight:=LnWt100;
       ptext^.vp.Color:=color;
-      ptext^.vp.Layer:=uzvtestdraw.getTestLayer();
+      ptext^.vp.Layer:=uzvtestdraw.getTestLayer('systemTempVisualLayer');
       ptext^.textprop.size:=heightText;
       zcAddEntToCurrentDrawingWithUndo(ptext);   //добавляем в чертеж
       result:=cmd_ok;
@@ -790,7 +790,7 @@ begin
       zcSetEntPropFromCurrentDrawingProp(pcircle);                                        //присваиваем текущие слой, вес и т.п
       pcircle^.vp.LineWeight:=LnWt100;
       pcircle^.vp.Color:=color;
-      pcircle^.vp.Layer:=uzvtestdraw.getTestLayer();
+      pcircle^.vp.Layer:=uzvtestdraw.getTestLayer('systemTempVisualLayer');
       zcAddEntToCurrentDrawingWithUndo(pcircle);                                    //добавляем в чертеж
     end;
     result:=cmd_ok;
@@ -819,7 +819,7 @@ begin
      polyObj^.Closed:=false;
      polyObj^.vp.Color:=color;
      polyObj^.vp.LineWeight:=LnWt050;
-     polyObj^.vp.Layer:=uzvtestdraw.getTestLayer();
+     polyObj^.vp.Layer:=uzvtestdraw.getTestLayer('systemTempVisualLayer');
 
 
      //визуализация коробок распределения

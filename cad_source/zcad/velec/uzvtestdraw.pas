@@ -118,16 +118,16 @@ uses
   function testTempDrawPLCross(point:GDBVertex;rr:double;color:Integer):TCommandResult;
   function testDrawCircle(p1:GDBVertex;rr:GDBDouble;color:integer):TCommandResult;
 
-  function getTestLayer():PGDBLayerProp;
+  function getTestLayer(createdlayername:string):PGDBLayerProp;
 implementation
 
-  function getTestLayer():PGDBLayerProp;
+  function getTestLayer(createdlayername:string):PGDBLayerProp;
   var
       pproglayer:PGDBLayerProp;
       pnevlayer:PGDBLayerProp;
       pe:PGDBObjEntity;
-  const
-      createdlayername='systemTempVisualLayer';
+  //const
+  //    createdlayername='systemTempVisualLayer';
   begin
       result:=nil;
       //if commandmanager.getentity(rscmSelectSourceEntity,pe) then
@@ -156,7 +156,7 @@ implementation
         zcSetEntPropFromCurrentDrawingProp(pcircle);                                        //присваиваем текущие слой, вес и т.п
         pcircle^.vp.LineWeight:=LnWt100;
         pcircle^.vp.Color:=color;
-        pcircle^.vp.Layer:=getTestLayer();
+        pcircle^.vp.Layer:=getTestLayer('systemTempuzvtestdraw');
         zcAddEntToCurrentDrawingWithUndo(pcircle);                                    //добавляем в чертеж
       end;
       result:=cmd_ok;
@@ -171,7 +171,7 @@ implementation
         ptext^.TXTStyleIndex:=drawings.GetCurrentDWG^.GetCurrentTextStyle; //добавляет тип стиля текста, дефаултные свойства его не добавляют
         ptext^.Local.P_insert:=p1;  // координата
         ptext^.Template:=mText;     // сам текст
-        ptext^.vp.Layer:=getTestLayer();
+        ptext^.vp.Layer:=getTestLayer('systemTempuzvtestdraw');
         zcAddEntToCurrentDrawingWithUndo(ptext);   //добавляем в чертеж
         result:=cmd_ok;
   end;
@@ -187,7 +187,7 @@ implementation
         zcSetEntPropFromCurrentDrawingProp(pline);//присваиваем текущие слой, вес и т.п
         pline^.vp.LineWeight:=LnWt200;
         pline^.vp.Color:=6;
-        pline^.vp.Layer:=getTestLayer();
+        pline^.vp.Layer:=getTestLayer('systemTempuzvtestdraw');
         zcAddEntToCurrentDrawingWithUndo(pline);                                    //добавляем в чертеж
       end;
       result:=cmd_ok;
@@ -204,7 +204,7 @@ implementation
         zcSetEntPropFromCurrentDrawingProp(pline);//присваиваем текущие слой, вес и т.п
         pline^.vp.LineWeight:=LnWt200;
         pline^.vp.Color:=color;
-        pline^.vp.Layer:=getTestLayer();
+        pline^.vp.Layer:=getTestLayer('systemTempuzvtestdraw');
         zcAddEntToCurrentDrawingWithUndo(pline);                                    //добавляем в чертеж
       end;
       result:=cmd_ok;
@@ -231,7 +231,7 @@ implementation
         zcSetEntPropFromCurrentDrawingProp(pline);//присваиваем текущие слой, вес и т.п
         pline^.vp.LineWeight:=LnWt200;
         pline^.vp.Color:=color;
-        pline^.vp.Layer:=getTestLayer();
+        pline^.vp.Layer:=getTestLayer('systemTempuzvtestdraw');
         zcAddEntToCurrentDrawingWithUndo(pline);                                    //добавляем в чертеж
       end;
       result:=cmd_ok;
@@ -250,7 +250,7 @@ implementation
        polyObj^.Closed:=false;
        polyObj^.vp.Color:=color;
        polyObj^.vp.LineWeight:=LnWt200;
-       polyObj^.vp.Layer:=getTestLayer();
+       polyObj^.vp.Layer:=getTestLayer('systemTempuzvtestdraw');
 
        tempPoint.x:=point.x-rr;
        tempPoint.y:=point.y+rr;

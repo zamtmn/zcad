@@ -28,6 +28,7 @@ uses uzccommandsimpl,    //тут реализация объекта CommandRTE
      uzvnum,
      uzvagensl,
      uzcinterface,
+     uzctnrvectorgdbstring,
 
      uzcutils,
      Varman;             //Зкадовский RTTI
@@ -50,6 +51,7 @@ PTuzvslagcabComParams=^TuzvslagcabComParams;//указатель на тип д�
 TuzvslagcabComParams=packed record       //определяем параметры команды которые будут видны в инспекторе во время выполнения команды
                                       //регистрировать их будем паскалевским RTTI
                                       //не через экспорт исходников и парсинг файла с определениями типов
+  NamesList:TEnumData;//это тип для отображения списков в инспекторе
   nameSL:gdbstring;
   accuracy:gdbdouble;
   metricDev:gdbboolean;
@@ -253,6 +255,12 @@ end;
 
 initialization
   //начальные значения параметров
+  uzvslagcabComParams.NamesList.Enums.init(10);//инициализируем список
+  //uzvslagcabComParams.NamesList.Enums.Clear;//потом при нужде его так очищаем
+  uzvslagcabComParams.NamesList.Enums.PushBackData('нуль');//заполняем
+  uzvslagcabComParams.NamesList.Enums.PushBackData('адин');//заполняем
+  uzvslagcabComParams.NamesList.Enums.PushBackData('тва');//заполняем
+  uzvslagcabComParams.NamesList.Selected:=1;//изначально будет выбран 'адин'
   uzvslagcabComParams.nameSL:='-';
   uzvslagcabComParams.accuracy:=0.3;
   uzvslagcabComParams.metricDev:=false;
@@ -262,4 +270,6 @@ initialization
   SysUnit.SetTypeDesk(TypeInfo(TuzvslagcabComParams),['Имя суперлинии','Погрешность','Метрика нумерации по типам датчиков']);//Даем человечьи имена параметрам
   uzvslagcab_com.init('slagcab',CADWG,0);//инициализируем команду
   uzvslagcab_com.SetCommandParam(@uzvslagcabComParams,'PTuzvslagcabComParams');//привязываем параметры к команде
+finalization
+  uzvslagcabComParams.NamesList.Enums.done;//незабываем убить проинициализированный объект
 end.

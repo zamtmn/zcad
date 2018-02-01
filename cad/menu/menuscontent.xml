@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <MenusContent>
     <MainMenuItem Name="File">
@@ -176,6 +176,7 @@
         <Command Caption="Goes down" Command="Insert(DEVICE_EL_CABLE_DOWN)"/> 
         <Command Caption="Comes from above" Command="Insert(DEVICE_EL_CABLE_FROMUP)"/> 
         <Command Caption="Comes from below" Command="Insert(DEVICE_EL_CABLE_FROMDOWN)"/> 
+        <Command Caption="Break" Command="Insert(DEVICE_EL_CABLE_BREAK)"/>  
       </MainMenuItem>
       <MainMenuItem Name="Cable legend">
         <Command Caption="Process auto cables" Command="EL_ExternalKZ"/> 

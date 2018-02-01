@@ -29,7 +29,6 @@ uses
  LCLProc,Classes,{ SysUtils,} {fileutil}LazUTF8,{ LResources,} Forms, {stdctrls,} Controls, {Graphics, Dialogs,}ComCtrls,Clipbrd,lclintf,
  uzedimensionaltypes,
  uzcsysinfo,
-  //commandline,
   gzctnrvectortypes,uzccommandsabstract,
   uzccommandsimpl,
   uzbtypes,
@@ -50,7 +49,7 @@ uses
  uzcshared,
  uzcdrawing,
   {zmenus,}uzcfprojecttree,uzbtypesbase,{optionswnd,}uzcfabout,uzcfhelp,uzbmemman,uzcdialogsfiles,{txteditwnd,}
- {messages,}UUnitManager,{zguisct,}uzclog,Varman,UGDBNumerator,uzcfcommandline,
+ {messages,}UUnitManager,{zguisct,}uzclog,Varman,UGDBNumerator,uzcfcommandline,uzcfhistorywindow,
  AnchorDocking,dialogs,XMLPropStorage,xmlconf,{uzglviewareaogl,}
  {,uPSCompiler,
   uPSRuntime,
@@ -570,13 +569,13 @@ begin
 end;
 function tw_com(operands:TCommandOperands):TCommandResult;
 begin
-  if CWMemo.IsVisible then
+  if CWindow.CWMemo.IsVisible then
                                  CWindow.Hide
                              else
                                  begin
                                  CWindow.Show;
                                  CWindow.SetFocus;
-                                 CWMemo.SelStart:=Length(CWMemo.Lines.Text)-1;
+                                 CWindow.CWMemo.SelStart:=Length(CWindow.CWMemo.Lines.Text)-1;
                                  //CWMemo.SelLength:=2;
                                  end;
   result:=cmd_ok;

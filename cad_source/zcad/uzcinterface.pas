@@ -46,6 +46,7 @@ var
   ZMsgID_GUIReturnToDefaultObject:TZMessageID=-1;
   ZMsgID_GUIFreEditorProc:TZMessageID=-1;
   ZMsgID_GUIStoreAndFreeEditorProc:TZMessageID=-1;
+  ZMsgID_GUIBeforeCloseApp:TZMessageID=-1;
 type
     TProcedure_String_=procedure(s:String);
     TProcedure_String_HandlersVector=TMyVector<TProcedure_String_>;
@@ -488,6 +489,7 @@ initialization
   ZMsgID_GUIReturnToDefaultObject:=ZCMsgCallBackInterface.GetUniqueZMessageID;
   ZMsgID_GUIFreEditorProc:=ZCMsgCallBackInterface.GetUniqueZMessageID;
   ZMsgID_GUIStoreAndFreeEditorProc:=ZCMsgCallBackInterface.GetUniqueZMessageID;
+  ZMsgID_GUIBeforeCloseApp:=ZCMsgCallBackInterface.GetUniqueZMessageID;
 finalization
   ZCMsgCallBackInterface.free;
 end.

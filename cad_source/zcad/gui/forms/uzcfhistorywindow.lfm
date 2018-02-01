@@ -1,0 +1,26 @@
+object CWindow: TCWindow
+  Left = 183
+  Height = 282
+  Top = 221
+  Width = 377
+  BorderStyle = bsSizeToolWin
+  Caption = 'History'
+  ClientHeight = 282
+  ClientWidth = 377
+  DesignTimePPI = 113
+  Position = poScreenCenter
+  LCLVersion = '1.9.0.0'
+  object CWMemo: TMemo
+    Left = 0
+    Height = 282
+    Top = 0
+    Width = 377
+    Align = alClient
+    Lines.Strings = (
+      'CWMemo'
+    )
+    ReadOnly = True
+    ScrollBars = ssAutoBoth
+    TabOrder = 0
+  end
+end

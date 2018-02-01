@@ -48,7 +48,6 @@ type
   end;
 var
   CLine: TCLine;
-  //CWindow:TCWindow;
   cmdedit:TEdit;
   prompt:TLabel;
   panel:tpanel;

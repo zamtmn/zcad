@@ -567,19 +567,6 @@ begin
      end;
      result:=cmd_ok;
 end;
-function tw_com(operands:TCommandOperands):TCommandResult;
-begin
-  if CWindow.CWMemo.IsVisible then
-                                 CWindow.Hide
-                             else
-                                 begin
-                                 CWindow.Show;
-                                 CWindow.SetFocus;
-                                 CWindow.CWMemo.SelStart:=Length(CWindow.CWMemo.Lines.Text)-1;
-                                 //CWMemo.SelLength:=2;
-                                 end;
-  result:=cmd_ok;
-end;
 function SetObjInsp_com(operands:TCommandOperands):TCommandResult;
 var
    obj:gdbstring;
@@ -823,7 +810,6 @@ begin
   CreateCommandFastObjectPlugin(@About_com,'About',0,0);
   CreateCommandFastObjectPlugin(@Help_com,'Help',0,0);
   CreateCommandFastObjectPlugin(@ClearFileHistory_com,'ClearFileHistory',0,0);
-  CreateCommandFastObjectPlugin(@TW_com,'TextWindow',0,0).overlay:=true;
   CreateCommandFastObjectPlugin(@Options_com,'Options',0,0);
   CreateCommandFastObjectPlugin(@SaveOptions_com,'SaveOptions',0,0);
   CreateCommandFastObjectPlugin(@SetObjInsp_com,'SetObjInsp',CADWG,0);

@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  uzcinterface;
+  uzcinterface, uzccommandsabstract, uzbtypes, uzccommandsimpl;
 
 type
 
@@ -33,11 +33,24 @@ begin
     CWindow.CWMemo.Append(s);
 end;
 
+function tw_com(operands:TCommandOperands):TCommandResult;
+begin
+  if CWindow.CWMemo.IsVisible then
+                                 CWindow.Hide
+                             else
+                                 begin
+                                   CWindow.Show;
+                                   CWindow.SetFocus;
+                                   CWindow.CWMemo.SelStart:=Length(CWindow.CWMemo.Lines.Text)-1;
+                                   //CWMemo.SelLength:=2;
+                                 end;
+  result:=cmd_ok;
+end;
 
 initialization
  CWindow:=TCWindow.Create(application);
  ZCMsgCallBackInterface.RegisterHandler_HistoryOut(HistoryOut);
-
+ CreateCommandFastObjectPlugin(@TW_com,'TextWindow',0,0).overlay:=true;
 finalization;
  CWindow.Free;
 end.

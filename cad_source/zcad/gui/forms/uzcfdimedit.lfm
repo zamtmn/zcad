@@ -415,6 +415,7 @@ object DimStyleEditForm: TDimStyleEditForm
         Increment = 1
         MaxValue = 100
         MinValue = 0
+        OnChange = textDIMGAPEditChange
         TabOrder = 4
         Value = 0
       end

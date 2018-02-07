@@ -129,6 +129,9 @@ uses
   ExtType,
   Pointerv,
   Graphs,
+  AttrType,
+  AttrSet,
+  //*
 
    uzcenitiesvariablesextender,
    UUnitManager,
@@ -1923,9 +1926,191 @@ procedure errorSearchSLAGCAB(ourGraph:TGraphBuilder;Epsilon:double;var listError
     end;
     result:=cmd_ok;
   end;
+  function TestTREEUses_com(operands:TCommandOperands):TCommandResult;
+  var
+    G: TGraph;
+    EdgePath, VertexPath: TClassList;
+    //I: Integer;
+    //T: Float;
+    procedure ShowPath(const CorrectPath: array of Integer);
+      var
+        I: Integer;
+      begin
+        for I:=0 to VertexPath.Count - 1 do
+          if TVertex(VertexPath[I]).Index <> CorrectPath[I] then begin
+            ZCMsgCallBackInterface.TextMessage('Error!' + inttostr(TVertex(VertexPath[I]).Index),TMWOHistoryOut);
+            //write('Error!');
+            //readln;
+            //Exit;
+          end;
+        for I:=0 to VertexPath.Count - 1 do
+         ZCMsgCallBackInterface.TextMessage(inttostr(TVertex(VertexPath[I]).Index) + ' ',TMWOHistoryOut);
+          //write(TVertex(VertexPath[I]).Index, ' ');
+        //writeln;
+      end;
+  begin
 
+      ZCMsgCallBackInterface.TextMessage('*** tree Path ***',TMWOHistoryOut);
+      G:=TGraph.Create;
+      VertexPath:=TClassList.Create;
+      try
+        G.Features:=[Tree];
+        G.CreateVertexAttr('t', AttrBool);
+        G.Root:=G.AddVertex;
+        With G.Root do begin
+          With AddChild do begin
+            With AddChild do begin
+              AddChild.AsBool['t']:=True;
+              AddChild;
+            end;
+            AddChild;
+            AddChild.AddChild;
+          end;
+          AddChild;
+        end;
+        G.TreeTraversal(G.Root, VertexPath);
+        ShowPath([0, 1, 3, 2, 4, 5, 6, 7, 8]);
+        //G.ArrangeTree(G.Root, TAttrSet.CompareUser, TAttrSet.CompareUser);
+        G.TreeTraversal(G.Root, VertexPath);
+        ShowPath([0, 8, 1, 5, 6, 7, 2, 4, 3]);
+
+
+  ////  writeln('*** Min Weight Path ***');
+  //  G:=TGraph.Create;
+  //  G.Features:=[Tree];
+  //  EdgePath:=TClassList.Create;
+  //  VertexPath:=TClassList.Create;
+  //  try
+  //    G.AddVertices(10);
+  //    G.AddEdges([0, 2,  0, 3,  0, 1, 1, 4,  2, 5,  2, 6,  5, 7,  5, 8,
+  //      6, 9]);
+  //    //G.Edges[0].Weight:=5;
+  //    //G.Edges[1].Weight:=7;
+  //    //G.Edges[2].Weight:=2;
+  //    //G.Edges[3].Weight:=12;
+  //    //G.Edges[4].Weight:=2;
+  //    //G.Edges[5].Weight:=3;
+  //    //G.Edges[6].Weight:=2;
+  //    //G.Edges[7].Weight:=1;
+  //    //G.Edges[8].Weight:=2;
+  //    //G.Edges[9].Weight:=4;
+  //    //T:=G.FindMinWeightPath(G[0], G[6], EdgePath);
+  //
+  //    //if T <> 11 then begin
+  //    //     ZCMsgCallBackInterface.TextMessage('*** Error! ***',TMWOHistoryOut);
+  //    // // write('Error!');
+  //    // // readln;
+  //    //  Exit;
+  //    //end;
+  //    //ZCMsgCallBackInterface.TextMessage('Minimal Length: 'G.,TMWOHistoryOut);
+  //    //writeln('Minimal Length: ', T :4:2);
+  //    //G.EdgePathToVertexPath(G[0], EdgePath, VertexPath);
+  //    ZCMsgCallBackInterface.TextMessage('Vertices: ',TMWOHistoryOut);
+  //    //write('Vertices: ');
+  //    for I:=0 to VertexPath.Count - 1 do
+  //      ZCMsgCallBackInterface.TextMessage(IntToStr(TVertex(VertexPath[I]).Index) + ' ',TMWOHistoryOut);
+  //    //writeln;
+    finally
+      G.Free;
+      //EdgePath.Free;
+      VertexPath.Free;
+    end;
+    result:=cmd_ok;
+  end;
+  function TestTREEUses_com2(operands:TCommandOperands):TCommandResult;
+  var
+    G: TGraph;
+    EdgePath, VertexPath: TClassList;
+    i: Integer;
+    //user:TCompareEvent;
+  begin
+
+      ZCMsgCallBackInterface.TextMessage('*** tree Path ***',TMWOHistoryOut);
+    G:=TGraph.Create;
+    G.Features:=[Tree];
+    EdgePath:=TClassList.Create;
+    VertexPath:=TClassList.Create;
+    try
+      G.CreateVertexAttr('tt', AttrFloat32);
+      G.CreateEdgeAttr('length', AttrFloat32);
+
+      G.AddVertices(14);
+      G.Vertices[0].AsFloat32['tt']:=10;
+      G.Vertices[1].AsFloat32['tt']:=20;
+      G.Vertices[2].AsFloat32['tt']:=30;
+      G.Vertices[3].AsFloat32['tt']:=40;
+      G.Vertices[4].AsFloat32['tt']:=50;
+      G.Vertices[5].AsFloat32['tt']:=60;
+      G.Vertices[6].AsFloat32['tt']:=70;
+      G.Vertices[7].AsFloat32['tt']:=80;
+      G.Vertices[8].AsFloat32['tt']:=90;
+      G.Vertices[9].AsFloat32['tt']:=100;
+      G.Vertices[10].AsFloat32['tt']:=110;
+      G.Vertices[11].AsFloat32['tt']:=120;
+      G.Vertices[12].AsFloat32['tt']:=130;
+      G.Vertices[13].AsFloat32['tt']:=140;
+
+      G.AddEdgeI(2,1);
+      G.Edges[0].AsFloat32['length']:=10;
+      G.AddEdgeI(2,3);
+      G.Edges[1].AsFloat32['length']:=2;
+      G.AddEdgeI(2,4);
+      G.Edges[2].AsFloat32['length']:=15;
+      G.AddEdgeI(4,11);
+      G.Edges[3].AsFloat32['length']:=3;
+      G.AddEdgeI(4,12);
+      G.Edges[4].AsFloat32['length']:=8;
+      G.AddEdgeI(2,3);
+      G.Edges[5].AsFloat32['length']:=2;
+      G.AddEdgeI(3,0);
+      G.Edges[6].AsFloat32['length']:=7;
+      G.AddEdgeI(1,6);
+      G.Edges[6].AsFloat32['length']:=61;
+      G.AddEdgeI(1,5);
+      G.Edges[7].AsFloat32['length']:=7;
+      G.AddEdgeI(5,7);
+      G.Edges[8].AsFloat32['length']:=17;
+      G.AddEdgeI(7,8);
+      G.Edges[9].AsFloat32['length']:=14;
+      G.AddEdgeI(7,9);
+      G.Edges[10].AsFloat32['length']:=80;
+      G.AddEdgeI(2,13);
+      G.Edges[11].AsFloat32['length']:=81;
+
+
+      G.Root:=G.Vertices[12];
+      //G.CorrectTree;
+
+      for i:=0 to G.VertexCount - 1 do
+      ZCMsgCallBackInterface.TextMessage('*кол потомков для ' + inttostr(i) + ' = ' + inttostr(G.Vertices[i].ChildCount),TMWOHistoryOut);
+
+      ZCMsgCallBackInterface.TextMessage('***',TMWOHistoryOut);
+
+      G.TreeTraversal(G.Root, VertexPath);
+      for i:=0 to VertexPath.Count - 1 do
+        ZCMsgCallBackInterface.TextMessage(inttostr(TVertex(VertexPath[i]).Index) + ' ',TMWOHistoryOut);
+
+      //G.SortTree(G.Root,TAttrSet.CompareUser);
+
+
+      G.TreeTraversal(G.Root, VertexPath);
+      for i:=0 to VertexPath.Count - 1 do begin
+        ZCMsgCallBackInterface.TextMessage(inttostr(TVertex(VertexPath[i]).Index) + ' ',TMWOHistoryOut);
+        ZCMsgCallBackInterface.TextMessage('tt = ' + floattostr(TVertex(VertexPath[i]).AsFloat32['tt']) + ' ',TMWOHistoryOut);
+        end;
+      //end;
+      ZCMsgCallBackInterface.TextMessage('All good ',TMWOHistoryOut);
+    finally
+      G.Free;
+      EdgePath.Free;
+      VertexPath.Free;
+    end;
+    result:=cmd_ok;
+  end;
 
 initialization
   CreateCommandFastObjectPlugin(@NumPsIzvAndDlina_com,'test111',CADWG,0);
+  CreateCommandFastObjectPlugin(@TestTREEUses_com,'test222',CADWG,0);
+  CreateCommandFastObjectPlugin(@TestTREEUses_com2,'test333',CADWG,0);
 end.
 

@@ -143,6 +143,10 @@ uses
 
 
 type
+ TDummyComparer=class
+ function Compare (Item1, Item2: Pointer): Integer;
+ end;
+
     //+++Здесь описывается все переменые для выполения анализа чертежей с целью нумирации извещателе, иполучения длин продукции и тд.
 
 
@@ -322,6 +326,8 @@ PTDeviceInfoSubGraph=^TDeviceInfoSubGraph;
  procedure metricNumeric(metric:boolean;dev:PGDBObjDevice);
 
 implementation
+var
+  DummyComparer:TDummyComparer;
  //type
 
 
@@ -2060,10 +2066,10 @@ procedure errorSearchSLAGCAB(ourGraph:TGraphBuilder;Epsilon:double;var listError
       G.Edges[3].AsFloat32['length']:=3;
       G.AddEdgeI(4,12);
       G.Edges[4].AsFloat32['length']:=8;
-      G.AddEdgeI(2,3);
-      G.Edges[5].AsFloat32['length']:=2;
+      {G.AddEdgeI(2,3);
+      G.Edges[5].AsFloat32['length']:=2;}
       G.AddEdgeI(3,0);
-      G.Edges[6].AsFloat32['length']:=7;
+      G.Edges[5].AsFloat32['length']:=7;
       G.AddEdgeI(1,6);
       G.Edges[6].AsFloat32['length']:=61;
       G.AddEdgeI(1,5);
@@ -2078,10 +2084,10 @@ procedure errorSearchSLAGCAB(ourGraph:TGraphBuilder;Epsilon:double;var listError
       G.Edges[11].AsFloat32['length']:=81;
 
 
-      G.Root:=G.Vertices[12];
-      //G.CorrectTree;
+      G.Root:=G.Vertices[2];
+      G.CorrectTree;
 
-      for i:=0 to G.VertexCount - 1 do
+      {for i:=0 to G.VertexCount - 1 do
       ZCMsgCallBackInterface.TextMessage('*кол потомков для ' + inttostr(i) + ' = ' + inttostr(G.Vertices[i].ChildCount),TMWOHistoryOut);
 
       ZCMsgCallBackInterface.TextMessage('***',TMWOHistoryOut);
@@ -2089,8 +2095,8 @@ procedure errorSearchSLAGCAB(ourGraph:TGraphBuilder;Epsilon:double;var listError
       G.TreeTraversal(G.Root, VertexPath);
       for i:=0 to VertexPath.Count - 1 do
         ZCMsgCallBackInterface.TextMessage(inttostr(TVertex(VertexPath[i]).Index) + ' ',TMWOHistoryOut);
-
-      //G.SortTree(G.Root,TAttrSet.CompareUser);
+      }
+      G.SortTree(G.Root,@DummyComparer.Compare);
 
 
       G.TreeTraversal(G.Root, VertexPath);
@@ -2107,10 +2113,18 @@ procedure errorSearchSLAGCAB(ourGraph:TGraphBuilder;Epsilon:double;var listError
     end;
     result:=cmd_ok;
   end;
+function TDummyComparer.Compare (Item1, Item2: Pointer): Integer;
+begin
+  result:=-1;
+end;
+
 
 initialization
   CreateCommandFastObjectPlugin(@NumPsIzvAndDlina_com,'test111',CADWG,0);
   CreateCommandFastObjectPlugin(@TestTREEUses_com,'test222',CADWG,0);
   CreateCommandFastObjectPlugin(@TestTREEUses_com2,'test333',CADWG,0);
+  DummyComparer:=TDummyComparer.Create;
+finalization
+  DummyComparer.free;
 end.
 

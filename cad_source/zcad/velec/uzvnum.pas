@@ -144,7 +144,7 @@ uses
 
 type
  TDummyComparer=class
- function Compare (Item1, Item2: Pointer): Integer;
+ function Compare (Edge1, Edge2: Pointer): Integer;
  end;
 
     //+++Здесь описывается все переменые для выполения анализа чертежей с целью нумирации извещателе, иполучения длин продукции и тд.
@@ -2116,9 +2116,14 @@ procedure errorSearchSLAGCAB(ourGraph:TGraphBuilder;Epsilon:double;var listError
     end;
     result:=cmd_ok;
   end;
-function TDummyComparer.Compare (Item1, Item2: Pointer): Integer;
+function TDummyComparer.Compare (Edge1, Edge2: Pointer): Integer;
+var
+  e1,e2:TEdge;
 begin
-  result:=-1;
+   e1:=TEdge(Edge1);
+   e2:=TEdge(Edge2);
+   //тут e1 и e2 надо както сравнить по какомуто критерию и вернуть -1 0 1
+   //в зависимости что чего меньше-больше
 end;
 
 

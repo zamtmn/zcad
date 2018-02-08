@@ -1974,9 +1974,12 @@ procedure errorSearchSLAGCAB(ourGraph:TGraphBuilder;Epsilon:double;var listError
           end;
           AddChild;
         end;
+
+        G.CorrectTree;
         G.TreeTraversal(G.Root, VertexPath);
         ShowPath([0, 1, 3, 2, 4, 5, 6, 7, 8]);
         //G.ArrangeTree(G.Root, TAttrSet.CompareUser, TAttrSet.CompareUser);
+        G.SortTree(G.Root,@DummyComparer.Compare);
         G.TreeTraversal(G.Root, VertexPath);
         ShowPath([0, 8, 1, 5, 6, 7, 2, 4, 3]);
 
@@ -2085,7 +2088,7 @@ procedure errorSearchSLAGCAB(ourGraph:TGraphBuilder;Epsilon:double;var listError
 
 
       G.Root:=G.Vertices[2];
-      G.CorrectTree;
+      //G.CorrectTree;
 
       {for i:=0 to G.VertexCount - 1 do
       ZCMsgCallBackInterface.TextMessage('*кол потомков для ' + inttostr(i) + ' = ' + inttostr(G.Vertices[i].ChildCount),TMWOHistoryOut);

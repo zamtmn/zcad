@@ -197,8 +197,6 @@ type
     procedure ZMainMenuDrawings(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     procedure ZMainMenuSampleFiles(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     procedure ZMainMenuDebugFiles(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-    procedure ZMainCreateMenu(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-    procedure ZMainSetMenu(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     procedure DockMasterCreateControl(Sender: TObject; aName: string; var
     AControl: TControl; DoDisableAutoSizing: boolean);
 
@@ -1625,8 +1623,8 @@ begin
   ToolBarsManager.RegisterMenuCreateFunc('Drawings',ZMainMenuDrawings);
   ToolBarsManager.RegisterMenuCreateFunc('SampleFiles',ZMainMenuSampleFiles);
   ToolBarsManager.RegisterMenuCreateFunc('DebugFiles',ZMainMenuDebugFiles);
-  ToolBarsManager.RegisterMenuCreateFunc('CreateMenu',ZMainCreateMenu);
-  ToolBarsManager.RegisterMenuCreateFunc('SetMainMenu',ZMainSetMenu);
+  ToolBarsManager.RegisterMenuCreateFunc('CreateMenu',ToolBarsManager.CreateDefaultMenu);
+  ToolBarsManager.RegisterMenuCreateFunc('SetMainMenu',ToolBarsManager.DefaultSetMenu);
 
   ToolBarsManager.LoadMenus(ProgramPath+'menu/menuscontent.xml');
 
@@ -1799,42 +1797,6 @@ begin
   FromDirIterator(expandpath('*../errors/'),'*.dxf','',@bugfileiterator,nil);
   localpm.localpm:=nil;
   localpm.ImageIndex:=-1;
-end;
-
-procedure TZCADMainWindow.ZMainCreateMenu(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-var
-  ppopupmenu:TMenuItem;
-  ts:GDBString;
-  menuname:string;
-  createdmenu:TMenu;
-  TBSubNode:TDomNode;
-begin
-
-  createdmenu:=TMainMenu.Create(self);
-  createdmenu.Images:=actlist.Images;
-  createdmenu.Name:=MenuNameModifier+uppercase(getAttrValue(aNode,'Name',''));
-
-  if assigned(aNode) then
-    TBSubNode:=aNode.FirstChild;
-  if assigned(TBSubNode) then
-    while assigned(TBSubNode)do
-    begin
-      ppopupmenu:=tmenuitem(application.FindComponent(MenuNameModifier+uppercase(TBSubNode.NodeName)));
-
-      if ppopupmenu<>nil then
-                                begin
-                                     createdmenu.items.Add(ppopupmenu);
-                                end
-                            else
-                                ZCMsgCallBackInterface.TextMessage(format(rsMenuNotFounf,[ts]),TMWOShowError);
-
-      TBSubNode:=TBSubNode.NextSibling;
-    end;
-end;
-
-procedure TZCADMainWindow.ZMainSetMenu(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-begin
-  self.Menu:=TMainMenu(self.FindComponent(MenuNameModifier+uppercase(getAttrValue(aNode,'Name',''))));
 end;
 
 procedure TZCADMainWindow.AfterConstruction;

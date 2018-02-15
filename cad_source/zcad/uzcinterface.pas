@@ -19,8 +19,6 @@ unit uzcinterface;
 {$INCLUDE def.inc}
 interface
 uses controls,uzcstrconsts,uzedimensionaltypes,gzctnrstl,zeundostack,varmandef,forms,classes,uzbtypes,LCLType;
-const
-     MenuNameModifier='MENU_';
 
 var
   ZMsgID_GUIEnable:TZMessageID=-1;

@@ -25,7 +25,7 @@ uses
  menus,Forms,fileutil,graphics, uzbtypes, uzbmemman,uzcdrawings,uzccommandsmanager,
  varman,languade,varmandef,
  uzegeometry,uzctnrvectorgdbstring,uzcinterface,uzctreenode,uzclog,strmy,
- uzccommandlineutil;
+ uzccommandlineutil,uztoolbarsmanager;
 
 const
      cheight=48;

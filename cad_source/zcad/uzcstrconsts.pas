@@ -57,7 +57,7 @@ resourcestring
   rsUnknownFileExt='Unknown file format "%s". Saving failed.';
 
   rsfardeffilenotfounf='File definition of the variables can not be found for the device "%s";';
-  rsMenuNotFounf='Menu "%s" not found';
+  //rsMenuNotFounf='Menu "%s" not found';
 
   rsUnnamedWindowTitle='Unnamed%-3.3d';
   rsHardUnnamed='Unnamed';

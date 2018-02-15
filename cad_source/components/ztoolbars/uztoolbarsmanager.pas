@@ -7,7 +7,10 @@ interface
 uses
   Classes, SysUtils, ComCtrls, Controls, Graphics, Menus, Forms,ActnList,
   LazConfigStorage,Laz2_XMLCfg,Laz2_DOM,
-  Generics.Collections;
+  Generics.Collections, Generics.Defaults;
+
+const
+     MenuNameModifier='MENU_';
 
 type
   TActionCreateFunc=procedure (aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList) of object;
@@ -75,12 +78,16 @@ type
     procedure DefaultActionsGroupReader(aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList);
     procedure DefaultMainMenuItemReader(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     procedure CreateDefaultMenuAction(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+    procedure CreateDefaultMenu(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+    procedure DefaultSetMenu(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     procedure CreateDefaultMenuSeparator(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+    procedure DefaultAddToolbars(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
   end;
 
   function getAttrValue(const aNode:TDomNode;const AttrName,DefValue:string):string;overload;
   function getAttrValue(const aNode:TDomNode;const AttrName:string;const DefValue:integer):integer;overload;
   function ToolBarNameToActionName(tbname:string):string;
+  function FormNameToActionName(fname:string):string;
 
 var
   ToolBarsManager:TToolBarsManager;
@@ -96,6 +103,11 @@ end;
 function ToolBarNameToActionName(tbname:string):string;
 begin
   result:='ACN_SHOWTOOLBAR_'+uppercase(tbname);
+end;
+
+function FormNameToActionName(fname:string):string;
+begin
+  result:='ACN_SHOWFORM_'+uppercase(fname);
 end;
 
 procedure TToolBarsManager.SetupDefaultToolBar(aName,atype: string; tb:TToolBar);
@@ -687,7 +699,8 @@ procedure TToolBarsManager.DefaultMainMenuItemReader(aName: string;aNode: TDomNo
 begin
     CreatedMenuItem:=TMenuItem.Create(application);
     line:=getAttrValue(aNode,'Name','');
-    CreatedMenuItem.Name:=line;
+    if RootMenuItem=nil then
+      CreatedMenuItem.Name:=MenuNameModifier+line;
     CreatedMenuItem.Caption:=line;
     if assigned(aNode) then
       TBSubNode:=aNode.FirstChild;
@@ -697,6 +710,13 @@ begin
         TryRunMenuCreateFunc(TBSubNode.NodeName,TBSubNode,factionlist,CreatedMenuItem);
         TBSubNode:=TBSubNode.NextSibling;
       end;
+    if assigned(RootMenuItem) then
+    begin
+      if RootMenuItem is TMenuItem then
+        RootMenuItem.Add(CreatedMenuItem)
+      else
+        TPopUpMenu(RootMenuItem).Items.Add(CreatedMenuItem);
+    end;
 end;
 
 procedure TToolBarsManager.CreateDefaultMenuAction(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
@@ -715,6 +735,41 @@ begin
     TPopUpMenu(RootMenuItem).Items.Add(CreatedMenuItem);
 end;
 
+procedure TToolBarsManager.CreateDefaultMenu(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+var
+  ppopupmenu:TMenuItem;
+  ts:String;
+  createdmenu:TMenu;
+  TBSubNode:TDomNode;
+begin
+  createdmenu:=TMainMenu.Create(application);
+  createdmenu.Images:=actlist.Images;
+  createdmenu.Name:=MenuNameModifier+uppercase(getAttrValue(aNode,'Name',''));
+
+  if assigned(aNode) then
+    TBSubNode:=aNode.FirstChild;
+  if assigned(TBSubNode) then
+    while assigned(TBSubNode)do
+    begin
+      ppopupmenu:=tmenuitem(application.FindComponent(MenuNameModifier+uppercase(TBSubNode.NodeName)));
+
+      if ppopupmenu<>nil then
+                                begin
+                                     createdmenu.items.Add(ppopupmenu);
+                                end;
+                            {else
+                                ZCMsgCallBackInterface.TextMessage(format(rsMenuNotFounf,[ts]),TMWOShowError);}
+
+      TBSubNode:=TBSubNode.NextSibling;
+    end;
+end;
+
+procedure TToolBarsManager.DefaultSetMenu(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+begin
+  fmainform.Menu:=TMainMenu(application.FindComponent(MenuNameModifier+uppercase(getAttrValue(aNode,'Name',''))));
+end;
+
+
 procedure TToolBarsManager.CreateDefaultMenuSeparator(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
 var
   CreatedMenuItem:TMenuItem;
@@ -727,6 +782,11 @@ begin
       CreatedMenuItem.Caption:='-';
       TPopUpMenu(RootMenuItem).Items.Add(CreatedMenuItem);
     end;
+end;
+
+procedure TToolBarsManager.DefaultAddToolbars(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+begin
+  ToolBarsManager.EnumerateToolBars(@ToolBarsManager.DefaultAddToolBarToMenu,pointer(RootMenuItem));
 end;
 
 {initialization

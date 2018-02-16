@@ -4,10 +4,9 @@ object MainForm: TMainForm
   Top = 52
   Width = 457
   Caption = 'MainForm'
-  ClientHeight = 289
+  ClientHeight = 312
   ClientWidth = 457
   DesignTimePPI = 113
-  Menu = MainMenu1
   OnCreate = onCreateHandler
   LCLVersion = '1.9.0.0'
   object CoolBarUp: TCoolBar
@@ -24,7 +23,7 @@ object MainForm: TMainForm
   end
   object CoolBarLeft: TCoolBar
     Left = 0
-    Height = 257
+    Height = 280
     Top = 2
     Width = 2
     Align = alLeft
@@ -42,7 +41,7 @@ object MainForm: TMainForm
   object CoolBarDown: TCoolBar
     Left = 0
     Height = 2
-    Top = 259
+    Top = 282
     Width = 457
     Align = alBottom
     AutoSize = True
@@ -56,7 +55,7 @@ object MainForm: TMainForm
   end
   object CoolBarRight: TCoolBar
     Left = 455
-    Height = 257
+    Height = 280
     Top = 2
     Width = 2
     Align = alRight
@@ -73,30 +72,20 @@ object MainForm: TMainForm
   object StatusBar: TStatusBar
     Left = 0
     Height = 28
-    Top = 261
+    Top = 284
     Width = 457
     Panels = <>
     ParentFont = False
   end
   object DockPanel: TAnchorDockPanel
     Left = 2
-    Height = 257
+    Height = 280
     Top = 2
     Width = 453
     Align = alClient
     BevelOuter = bvNone
     Caption = 'DockPanel'
     TabOrder = 5
-  end
-  object MainMenu1: TMainMenu
-    Left = 47
-    Top = 85
-    object MenuItem1: TMenuItem
-      Caption = 'MenuItem1'
-      object MenuItem2: TMenuItem
-        Caption = 'MenuItem2'
-      end
-    end
   end
   object AcnList: TActionList
     Left = 122

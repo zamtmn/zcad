@@ -23,12 +23,9 @@ type
     CoolBarLeft: TCoolBar;
     CoolBarDown: TCoolBar;
     CoolBarRight: TCoolBar;
-    MenuItem1: TMenuItem;
-    MenuItem2: TMenuItem;
     StatusBar: TStatusBar;
     AcnFileExit: TFileExit;
     AcnFileOpen: TFileOpen;
-    MainMenu1: TMainMenu;
     AcnLoadLayout: TAction;
     AcnSaveLayout: TAction;
     function CreateControl(aName: string;DoDisableAlign:boolean=false):TControl;
@@ -113,12 +110,13 @@ begin
   end
   else
   begin
-    //tbdesk:=self.findtoolbatdesk(aName);
-    //if tbdesk=''then
     errmsg:=format('Form "%s" not registred, create empty form',[aName]);
     Application.MessageBox(pchar(errmsg),'Warning!');
 
-    result:=tform.Create(Application);
+    result:=Tform(tform.NewInstance);
+    if DoDisableAlign then
+      TWinControl(result).DisableAlign;
+    result.Create(Application);
   end;
   result.Name:=aname;
 end;

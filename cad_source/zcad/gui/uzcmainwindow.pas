@@ -907,7 +907,7 @@ begin
 
       DockMaster.LoadLayoutFromConfig(XMLConfig,false);
       DockMaster.LoadSettingsFromConfig(XMLConfig);
-      ToolBarsManager.RestoreToolBarsFromConfig(ZCADMainWindow,XMLConfig);
+      ToolBarsManager.RestoreToolBarsFromConfig(XMLConfig);
     finally
       XMLConfig.Free;
     end;

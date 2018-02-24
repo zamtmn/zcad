@@ -96,7 +96,7 @@ begin
     XMLConfig.Filename:='toolbarslayout.xml';
     Config:=TXMLConfigStorage.Create(XMLConfig);
     try
-      ToolBarsManager.SaveToolBarsToConfig(self,Config);
+      ToolBarsManager.SaveToolBarsToConfig(Config);
     finally
       Config.Free;
     end;
@@ -113,7 +113,7 @@ var
 begin
     XMLConfig:=TXMLConfigStorage.Create('toolbarslayout.xml',True);
     try
-      ToolBarsManager.RestoreToolBarsFromConfig(self,XMLConfig);
+      ToolBarsManager.RestoreToolBarsFromConfig(XMLConfig);
     finally
       XMLConfig.Free;
     end;

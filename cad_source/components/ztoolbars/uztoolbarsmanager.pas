@@ -46,8 +46,8 @@ type
     constructor Create(mainform:TForm;actlist:TActionList;defbuttonheight:integer);
     destructor Destroy;override;
 
-    procedure SaveToolBarsToConfig(MainForm:TForm; Config: TConfigStorage);
-    procedure RestoreToolBarsFromConfig(MainForm:TForm; Config: TConfigStorage);
+    procedure SaveToolBarsToConfig(Config: TConfigStorage);
+    procedure RestoreToolBarsFromConfig(Config: TConfigStorage);
     procedure ShowFloatToolbar(TBName:String;r:trect);
     function FindToolBar(TBName:String;out tb:TToolBar):boolean;
     procedure LoadToolBarsContent(filename:string);
@@ -287,7 +287,7 @@ begin
     result:=false;
 end;
 
-procedure TToolBarsManager.SaveToolBarsToConfig(MainForm:TForm; Config: TConfigStorage);
+procedure TToolBarsManager.SaveToolBarsToConfig(Config: TConfigStorage);
 var
   i,j,ItemCount:integer;
   cb:TCoolBar;
@@ -296,12 +296,12 @@ var
 begin
   ItemCount:=0;
   Config.AppendBasePath('ToolBarsConfig/');
-  for i:=0 to MainForm.ComponentCount-1 do
-  if MainForm.Components[i] is TControl then
+  for i:=0 to fmainform.ComponentCount-1 do
+  if fmainform.Components[i] is TControl then
   begin
-    if MainForm.Components[i] is TCoolBar then
+    if fmainform.Components[i] is TCoolBar then
     begin
-      cb:=MainForm.Components[i] as TCoolBar;
+      cb:=fmainform.Components[i] as TCoolBar;
       Config.AppendBasePath('Item'+inttostr(ItemCount));
       inc(ItemCount);
       Config.SetDeleteValue('Type','CoolBar','');
@@ -319,9 +319,9 @@ begin
       end;
       Config.UndoAppendBasePath;
     end;
-    if MainForm.Components[i] is TToolBar then
+    if fmainform.Components[i] is TToolBar then
     begin
-      tb:=MainForm.Components[i] as TToolBar;
+      tb:=fmainform.Components[i] as TToolBar;
       if tb.IsVisible then
       if IsFloatToolbar(tb,tf) then
       begin
@@ -596,7 +596,7 @@ begin
   end;
 end;
 
-procedure TToolBarsManager.RestoreToolBarsFromConfig(MainForm:TForm; Config: TConfigStorage);
+procedure TToolBarsManager.RestoreToolBarsFromConfig(Config: TConfigStorage);
 var
   i,j,ItemCount:integer;
   itemName,itemType:string;
@@ -605,7 +605,7 @@ var
   r:trect;
   FloatHost: TWinControl;
 begin
-  FreeAllToolBars(MainForm);
+  FreeAllToolBars(fmainform);
   Config.AppendBasePath('ToolBarsConfig/');
   ItemCount:=Config.GetValue('ItemCount',0);
   for i:=0 to ItemCount-1 do
@@ -615,7 +615,7 @@ begin
     itemName:=Config.GetValue('Name','');
     case itemType of
      'CoolBar':begin
-                 cb:=FindCoolBar(MainForm,itemName);
+                 cb:=FindCoolBar(fmainform,itemName);
                  ItemCount:=Config.GetValue('ItemCount',0);
                  if cb<>nil then
                  begin

@@ -1,11 +1,12 @@
 object Form1: TForm1
   Left = 574
-  Height = 265
+  Height = 312
   Top = 46
-  Width = 388
+  Width = 457
   Caption = 'Form1'
-  ClientHeight = 242
-  ClientWidth = 388
+  ClientHeight = 289
+  ClientWidth = 457
+  DesignTimePPI = 113
   Menu = MainMenu2
   OnCreate = onCreateHandler
   LCLVersion = '1.9.0.0'
@@ -13,14 +14,15 @@ object Form1: TForm1
     Left = 0
     Height = 4
     Top = 0
-    Width = 388
+    Width = 457
     AutoSize = True
     Bands = <>
     DockSite = True
+    ParentFont = False
   end
   object CoolBar2: TCoolBar
     Left = 0
-    Height = 206
+    Height = 253
     Top = 4
     Width = 4
     Align = alLeft
@@ -29,22 +31,24 @@ object Form1: TForm1
     Constraints.MinHeight = 2
     Constraints.MinWidth = 2
     DockSite = True
+    ParentFont = False
     Vertical = True
   end
   object CoolBar3: TCoolBar
     Left = 0
     Height = 4
-    Top = 210
-    Width = 388
+    Top = 257
+    Width = 457
     Align = alBottom
     AutoSize = True
     Bands = <>
     DockSite = True
     DragKind = dkDock
+    ParentFont = False
   end
   object CoolBar4: TCoolBar
-    Left = 384
-    Height = 206
+    Left = 453
+    Height = 253
     Top = 4
     Width = 4
     Align = alRight
@@ -52,22 +56,24 @@ object Form1: TForm1
     Bands = <>
     DockSite = True
     DragKind = dkDock
+    ParentFont = False
     Vertical = True
   end
   object StatusBar1: TStatusBar
     Left = 0
     Height = 28
-    Top = 214
-    Width = 388
+    Top = 261
+    Width = 457
     Panels = <>
+    ParentFont = False
   end
   object MainMenu1: TMainMenu
-    Left = 40
-    Top = 72
+    Left = 47
+    Top = 85
   end
   object ActionList1: TActionList
-    Left = 104
-    Top = 72
+    Left = 122
+    Top = 85
     object FileExit: TFileExit
       Category = 'File'
       Caption = 'E&xit'
@@ -91,8 +97,8 @@ object Form1: TForm1
     end
   end
   object MainMenu2: TMainMenu
-    Left = 176
-    Top = 72
+    Left = 207
+    Top = 85
     object MenuItem1: TMenuItem
       Caption = 'File'
       object MenuItem3: TMenuItem

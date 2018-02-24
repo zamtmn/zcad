@@ -457,7 +457,7 @@ begin
     try
       DockMaster.SaveLayoutToConfig(Config);
       DockMaster.SaveSettingsToConfig(Config);
-      ToolBarsManager.SaveToolBarsToConfig(ZCADMainWindow,Config);
+      ToolBarsManager.SaveToolBarsToConfig(Config);
     finally
       Config.Free;
     end;

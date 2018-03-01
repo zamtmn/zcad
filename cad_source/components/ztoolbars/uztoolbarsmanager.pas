@@ -7,12 +7,16 @@ interface
 uses
   Classes, SysUtils, ComCtrls, Controls, Graphics, Menus, Forms,ActnList,
   LazConfigStorage,Laz2_XMLCfg,Laz2_DOM,
-  Generics.Collections, Generics.Defaults;
+  Generics.Collections, Generics.Defaults, gvector;
 
 const
      MenuNameModifier='MENU_';
 
 type
+  TProgramActionsManagerClass=class
+    procedure CreateAndAddActionsToList(acnlist:TActionList);virtual;abstract;
+  end;
+  TActionsManagersVector=specialize TVector <TProgramActionsManagerClass>;
   TActionCreateFunc=procedure (aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList) of object;
   TMenuCreateFunc=procedure (aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem) of object;
 
@@ -82,15 +86,19 @@ type
     procedure DefaultSetMenu(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     procedure CreateDefaultMenuSeparator(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     procedure DefaultAddToolbars(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+
+    procedure CreateManagedActions;
   end;
 
   function getAttrValue(const aNode:TDomNode;const AttrName,DefValue:string):string;overload;
   function getAttrValue(const aNode:TDomNode;const AttrName:string;const DefValue:integer):integer;overload;
   function ToolBarNameToActionName(tbname:string):string;
   function FormNameToActionName(fname:string):string;
+  procedure RegisterActionsManager(am:TProgramActionsManagerClass);
 
 var
   ToolBarsManager:TToolBarsManager;
+  ActionsManagersVector:TActionsManagersVector;
 
 implementation
 
@@ -789,11 +797,29 @@ begin
   ToolBarsManager.EnumerateToolBars(@ToolBarsManager.DefaultAddToolBarToMenu,pointer(RootMenuItem));
 end;
 
-{initialization
-if not assigned(ToolBarsManager) then
+procedure TToolBarsManager.CreateManagedActions;
+var
+  am:TProgramActionsManagerClass;
+begin
+  if assigned(ActionsManagersVector) then
+    for am in ActionsManagersVector do
+      am.CreateAndAddActionsToList(factionlist);
+end;
+
+procedure RegisterActionsManager(am:TProgramActionsManagerClass);
+begin
+  if not assigned(ActionsManagersVector) then
+    ActionsManagersVector:=TActionsManagersVector.Create;
+  ActionsManagersVector.PushBack(am);
+end;
+
+initialization
+{if not assigned(ToolBarsManager) then
   ToolBarsManager.Create;}
 
 finalization
   if assigned(ToolBarsManager) then
     ToolBarsManager.Free;
+  if assigned(ActionsManagersVector)then
+    ActionsManagersVector.free;
 end.

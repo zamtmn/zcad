@@ -35,8 +35,8 @@ type
   TImageName2TImageDataMap=GKey2DataMap<GDBString,TImageData{$IFNDEF DELPHI},LessGDBString{$ENDIF}>;
   TImagesManager=class(TComponent)
     private
+      FDefaultImageIndex:integer;
       FIconList: TImageList;
-      defaultimageindex:integer;
       ImageDataMap:TImageName2TImageDataMap;
       procedure InternalCreate;
       //procedure FoundImage(filename:{AnsiString}GDBString);
@@ -50,6 +50,7 @@ type
       function GetImageIndex(ImageName:string):integer;
     published
       property IconList: TImageList read FIconList write FIconList;
+      property DefaultImageIndex:integer read FDefaultImageIndex write FDefaultImageIndex;
   end;
 
 var

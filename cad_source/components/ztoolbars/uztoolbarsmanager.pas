@@ -709,6 +709,7 @@ begin
     line:=getAttrValue(aNode,'Name','');
     if RootMenuItem=nil then
       CreatedMenuItem.Name:=MenuNameModifier+line;
+    line:=getAttrValue(aNode,'Caption',line);
     CreatedMenuItem.Caption:=line;
     if assigned(aNode) then
       TBSubNode:=aNode.FirstChild;

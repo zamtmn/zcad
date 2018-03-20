@@ -1369,7 +1369,7 @@ end;
 procedure TZCADMainWindow.ZActionsReader(aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList);
 var
   action:tmyaction;
-  actioncommand,actionshortcut:string;
+  actioncommand,actionshortcut,img:string;
 begin
   action:=TmyAction.Create(self);
   action.Name:=uppercase(getAttrValue(aNode,'Name',''));
@@ -1388,7 +1388,12 @@ begin
   action.Category:=getAttrValue(aNode,'Category',CategoryOverrider);
   action.DisableIfNoHandler:=false;
   action.ActionList:=actlist;
-  TmyActionList(actlist).SetImage(getAttrValue(aNode,'Img',''),action.Name+'~textimage',TZAction(action));
+  img:=getAttrValue(aNode,'Img','');
+  action.ImageIndex:=ImagesManager.GetImageIndex(img);
+  if action.ImageIndex=ImagesManager.defaultimageindex then begin
+    action.ImageIndex:=-1;
+    TmyActionList(actlist).SetImage(img,action.Name+'~textimage',TZAction(action));
+  end;
   action.pfoundcommand:=commandmanager.FindCommand(uppercase(action.command));
 end;
 procedure TZCADMainWindow.ZAction2VariableReader(aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList);
@@ -1583,7 +1588,7 @@ begin
 
   StandartActions:=TmyActionList.Create(self);
   if not assigned(StandartActions.Images) then
-                             StandartActions.Images:=TImageList.Create(StandartActions);
+                             StandartActions.Images:={TImageList.Create(StandartActions)}ImagesManager.IconList;
   StandartActions.brocenicon:=StandartActions.LoadImage(ProgramPath+
   'menu/BMP/noimage.bmp');
 

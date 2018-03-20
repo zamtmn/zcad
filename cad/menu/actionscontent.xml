@@ -2,32 +2,32 @@
 <CONFIG>
   <ActionsContent>
     <Group Category="File">
-      <ZAction Name="ACN_LOAD" Command="Load" Img="load.bmp" Caption="Open ..." Hint="Open drawing" ShortCut="CTRL+O"/>
+      <ZAction Name="ACN_LOAD" Command="Load" Img="open" Caption="Open ..." Hint="Open drawing" ShortCut="CTRL+O"/>
       <ZAction Name="ACN_LOADQS" Command="Load(QS)" Img="#QL" Caption="Open (Autosave)" Hint="Open last autosave"/>
       <ZAction Name="ACN_IMPORT" Command="Import" Img="#Import" Caption="Import ..." Hint="Import drawing"/>
-      <ZAction Name="ACN_NEW" Command="NewDWG" Img="new.bmp" Caption="New drawing" ShortCut="CTRL+N"/>
-      <ZAction Name="ACN_QSAVE" Command="QSave" Img="save.bmp" Caption="Save" Hint="Save drawing" ShortCut="CTRL+S"/>
-      <ZAction Name="ACN_SAVEAS" Command="SaveAs" Img="saveas.bmp" Caption="Save as ..." Hint="Save drawing as" ShortCut="CTRL+SHIFT+S"/>
+      <ZAction Name="ACN_NEW" Command="NewDWG" Img="new" Caption="New drawing" ShortCut="CTRL+N"/>
+      <ZAction Name="ACN_QSAVE" Command="QSave" Img="save" Caption="Save" Hint="Save drawing" ShortCut="CTRL+S"/>
+      <ZAction Name="ACN_SAVEAS" Command="SaveAs" Img="saveas" Caption="Save as ..." Hint="Save drawing as" ShortCut="CTRL+SHIFT+S"/>
       <ZAction Name="ACN_SAVEQS" Command="QSave(QS)" Img="#QS" Caption="Save (Autosave)" Hint="Autosave"/>
-      <ZAction Name="ACN_PRINT" Command="Print" Img="print.bmp" Caption="Print" Hint="Print" ShortCut="CTRL+P"/>
-      <ZAction Name="ACN_CLOSE" Command="CloseDWG" Img="close.bmp" Caption="Close drawing" ShortCut="CTRL+F4"/>
-      <ZAction Name="ACN_QUIT" Command="Quit" Img="exit.bmp" Caption="Quit" ShortCut="CTRL+Q"/>
+      <ZAction Name="ACN_PRINT" Command="Print" Img="print" Caption="Print" Hint="Print" ShortCut="CTRL+P"/>
+      <ZAction Name="ACN_CLOSE" Command="CloseDWG" Img="close" Caption="Close drawing" ShortCut="CTRL+F4"/>
+      <ZAction Name="ACN_QUIT" Command="Quit" Img="exit" Caption="Quit" ShortCut="CTRL+Q"/>
     </Group>
     <Group Category="Edit">
-      <ZAction Name="ACN_UNDO" Command="Undo" Img="undo.bmp" Caption="Undo" ShortCut="CTRL+Z"/>
-      <ZAction Name="ACN_REDO" Command="REdo" Img="redo.bmp" Caption="Redo" ShortCut="CTRL+SHIFT+Z"/>
-      <ZAction Name="ACN_CUTCLIP" Command="CutClip" Img="cutclip.bmp" Caption="Cut to clipboard" ShortCut="CTRL+X"/>
-      <ZAction Name="ACN_COPYCLIP" Command="CopyClip" Img="copyclip.bmp" Caption="Copy to clipboard" ShortCut="CTRL+C"/>
+      <ZAction Name="ACN_UNDO" Command="Undo" Img="undo" Caption="Undo" ShortCut="CTRL+Z"/>
+      <ZAction Name="ACN_REDO" Command="REdo" Img="redo" Caption="Redo" ShortCut="CTRL+SHIFT+Z"/>
+      <ZAction Name="ACN_CUTCLIP" Command="CutClip" Img="cutclip" Caption="Cut to clipboard" ShortCut="CTRL+X"/>
+      <ZAction Name="ACN_COPYCLIP" Command="CopyClip" Img="copyclip" Caption="Copy to clipboard" ShortCut="CTRL+C"/>
       <ZAction Name="ACN_COPYCLIPBASE" Command="CopyBase" Img="copyclipbase.bmp" Caption="Copy to clipboard with base point" ShortCut="CTRL+SHIFT+C"/>
       <ZAction Name="ACN_FAKECOPYCLIPBASE" Command="CopyBase" Img="#CB" ShortCut="CTRL+INS"/>
-      <ZAction Name="ACN_PASTE" Command="PasteClip" Img="pasteclip.bmp" Caption="Paste" Hint="Paste from clipboard" ShortCut="CTRL+V"/>
+      <ZAction Name="ACN_PASTE" Command="PasteClip" Img="pasteclip" Caption="Paste" Hint="Paste from clipboard" ShortCut="CTRL+V"/>
       <ZAction Name="ACN_FAKEPASTE" Command="PasteClip" Img="#Paste" ShortCut="SHIFT+INS"/>
       <ZAction Name="ACN_ERASE" Command="Erase" Img="erase.bmp" Caption="Erase" ShortCut="DEL"/>
       <ZAction Name="ACN_SELECTALL" Command="SelectAll" Img="#SA" Caption="Select all" ShortCut="CTRL+A"/>
       <ZAction Name="ACN_INVERSESELECTED" Command="InverseSelected" Img="#SI" Caption="Inverse selected"/>
       <ZAction Name="ACN_DESELECTALL" Command="DeSelectAll" Img="#DSA" Caption="DeSelect all" ShortCut="CTRL+SHIFT+A"/>
       <ZAction Name="ACN_SELSIM" Command="SelSim" Img="#SSim" Caption="Select similar"/>
-      <ZAction Name="ACN_El_FIND" Command="EL_Find" Img="find.bmp" Caption="Find device" ShortCut="CTRL+F"/>
+      <ZAction Name="ACN_El_FIND" Command="EL_Find" Img="find" Caption="Find device" ShortCut="CTRL+F"/>
     </Group>
     <Group Category="View">
       <ZAction Name="ACN_PROJECTTREE" Command="ProjectTree" Img="treeview.bmp" Caption="Project tree" ShortCut="CTRL+T"/>

@@ -87,7 +87,9 @@ end;
 
 function TmyPOFile.FindByIdentifier(const Identifier: String):TPOFileItem;
 begin
-     result:=TPOFileItem({FIdentifierToItem}FIdentLowVarToItem.Data[Identifier]);
+  result:=FindPoItem(Identifier);
+  //uncoment for lazarus < r57491
+  //result:=TPOFileItem({FIdentifierToItem}FIdentLowVarToItem.Data[Identifier]);
 end;
 procedure TmyPOFile.SaveToFile(const AFilename: string);
 begin
@@ -97,7 +99,7 @@ function TmyPOFile.exportcompileritems(sourcepo:TPOFile):integer;
 var
    j:integer;
    ident:string;
-   Item: TPOFileItem;
+   Item,NewItem: TPOFileItem;
 begin
       for j:=0 to Fitems.Count-1 do
            begin
@@ -106,8 +108,12 @@ begin
                  if (pos('~',ident)<=0)
                  and(pos('.',ident)>0) then
                  begin
-                      sourcepo.Add(ident, item.Original, item.Translation, item.Comments,
+                      NewItem:=nil;
+                      sourcepo.FillItem(NewItem,ident, item.Original, item.Translation, item.Comments,
                                     item.Context, item.Flags,'');
+                      //uncoment if Lazarus<r57425
+                      //sourcepo.Add(ident, item.Original, item.Translation, item.Comments,
+                      //              item.Context, item.Flags,'');
                  end;
            end;
       result:=items.Count-sourcepo.items.Count;
@@ -116,7 +122,9 @@ function TmyPOFile.Translate(const Identifier, OriginalValue: String): String;
 var
   Item: TPOFileItem;
 begin
-  Item:=TPOFileItem({FIdentifierToItem}FIdentLowVarToItem.Data[Identifier]);
+  Item:=FindPoItem(Identifier);
+  //uncoment for lazarus < r57491
+  //Item:=TPOFileItem({FIdentifierToItem}FIdentLowVarToItem.Data[Identifier]);
   if Item=nil then
     Item:=TPOFileItem(FOriginalToItem.Data[OriginalValue]);
   if Item<>nil then begin
@@ -129,10 +137,14 @@ procedure TmyPOFile.Add(const Identifier, OriginalValue, TranslatedValue,
   Comments, Context, Flags, PreviousID: string; SetFuzzy: boolean = false; LineNr: Integer = -1);
 var
    t:boolean;
+   NewItem:TPOFileItem;
 begin
      t:=self.FAllEntries;
      self.FAllEntries:=true;
-     inherited  Add(Identifier, OriginalValue, TranslatedValue, Comments,Context, Flags, PreviousID);
+     NewItem:=nil;
+     FillItem(NewItem,Identifier, OriginalValue, TranslatedValue, Comments,Context, Flags, PreviousID);
+     //uncoment if Lazarus<r57425
+     //inherited  Add(Identifier, OriginalValue, TranslatedValue, Comments,Context, Flags, PreviousID);
      self.FAllEntries:=t;
 end;
 
@@ -194,7 +206,9 @@ begin
 
     if uzcsysinfo.sysparam.updatepo then
      begin
-          Item:=TPOFileItem(po.{FIdentifierToItem}FIdentLowVarToItem{FOriginalToItem}.Data[UTF8LowerCase(Identifier)]);
+          Item:=po.FindPoItem(Identifier);
+          //uncoment for lazarus < r57491
+          //Item:=TPOFileItem(po.{FIdentifierToItem}FIdentLowVarToItem{FOriginalToItem}.Data[UTF8LowerCase(Identifier)]);
           if not assigned(item) then
           begin
                if (pos('**',OriginalValue)>0)or(pos('??',OriginalValue)>0)or(pos('__',OriginalValue)=1)then

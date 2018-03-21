@@ -1595,8 +1595,8 @@ begin
            +#13#10'File zcad.po must be rewriten. Confirm?';
                if ZCMsgCallBackInterface.TextQuestion(s,'UpdatePO',MB_YESNO)=IDNO then
                                                                          exit;
-               po.SaveToFile(expandpath(PODirectory + 'zcad.po.backup'));
-               actualypo.SaveToFile(expandpath(PODirectory + 'zcad.po'));
+               po.SaveToFile(expandpath(PODirectory + ZCADRTBackupPOFileName));
+               actualypo.SaveToFile(expandpath(PODirectory + ZCADRTPOFileName));
                uzcsysinfo.sysparam.updatepo:=false
           end;
      end

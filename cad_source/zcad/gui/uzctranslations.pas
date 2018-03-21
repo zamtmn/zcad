@@ -24,6 +24,12 @@ uses uzbpaths,LCLVersion,uzbstrproc{$IFNDEF DELPHI},LazUTF8,gettext,translations
      fileutil,LResources{$ENDIF},uzcsysinfo,sysutils,uzclog,forms,Classes, typinfo,
      LazLogger;
 
+const
+  ZCADTranslatedPOFileName='zcad.%s.po';
+  ZCADPOFileName='zcad.po';
+  ZCADRTTranslatedPOFileName='rtzcad.%s.po';
+  ZCADRTPOFileName='rtzcad.po';
+  ZCADRTBackupPOFileName='rtzcad.po.backup';
 type
     TmyPOFile = class(TPOFile)
                      function FindByIdentifier(const Identifier: String):TPOFileItem;
@@ -156,7 +162,7 @@ begin
      begin
            if Lang<>'' then
                            begin
-                                AFilename:=Format(PODirectory + 'zcad.%s.po',[Lang]);
+                                AFilename:=Format(PODirectory + ZCADRTTranslatedPOFileName,[Lang]);
                                 if FileExists{UTF8}(AFilename) then
                                                                  begin
                                                                       po:=TmyPOFile.Create(AFilename);
@@ -164,7 +170,7 @@ begin
                            end;
            if (FallbackLang<>'')and(not assigned(po)) then
                            begin
-                                AFilename:=Format(PODirectory + 'zcad.%s.po',[FallbackLang]);
+                                AFilename:=Format(PODirectory + ZCADRTTranslatedPOFileName,[FallbackLang]);
                                 if FileExists{UTF8}(AFilename) then
                                                                  begin
                                                                       po:=TmyPOFile.Create(AFilename);
@@ -178,7 +184,7 @@ begin
      end
      else
          begin
-              AFilename:=(PODirectory + 'zcad.po');
+              AFilename:=(PODirectory + ZCADRTPOFileName);
               if FileExists{UTF8}(AFilename) then
                                                begin
                                                     po:=TmyPOFile.Create(AFilename,true);
@@ -268,7 +274,7 @@ procedure initialize;
       LRSTranslator:=TPoTranslator.Create;
       if not uzcsysinfo.sysparam.updatepo then
                                        begin
-                                           TranslateResourceStrings(po);
+                                           TranslateResourceStrings(PODirectory + ZCADTranslatedPOFileName, Lang, FallbackLang);
                                            TranslateUnitResourceStrings('anchordockstr', PODirectory + 'anchordockstr.%s.po', Lang, FallbackLang);
                                            TranslateUnitResourceStrings('lclstrconsts', PODirectory + 'lclstrconsts.%S.po', Lang, FallbackLang);
                                        end;

@@ -152,7 +152,7 @@ begin
                                                       end;
                                         end
                                         else
-                                            result:='Не определен';
+                                            result:=rsNotSpecified;
 end;
 procedure Cable2CableMark(pcd:PTCableDesctiptor;pv:pGDBObjDevice);
 var

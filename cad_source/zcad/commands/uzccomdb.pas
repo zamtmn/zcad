@@ -188,27 +188,6 @@ begin
      end
         else
             ZCMsgCallBackInterface.TextMessage(rscmCommandOnlyCTXMenu,TMWOHistoryOut);
-{     if TempPGDBEqNode<>nil then
-     begin
-             c:=0;
-             pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
-             if pv<>nil then
-             repeat
-                  if pv^.Selected then
-                                      begin
-                                           pvd:=pv^.ou.FindVariable('DB_link');
-                                           if pvd<>nil then
-                                           begin
-                                                PGDBString(pvd^.data.Instance)^:=TempPGDBEqNode^.NodeName;
-                                                inc(c);
-                                           end;
-                                      end;
-             pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
-             until pv=nil;
-             HistoryOutSTR(inttostr(c)+' примитивов обработано');
-     end
-        else
-            TMWOHistoryOut('Команда работает только из контекстного меню');  }
     result:=cmd_ok;
 end;
 procedure startup;

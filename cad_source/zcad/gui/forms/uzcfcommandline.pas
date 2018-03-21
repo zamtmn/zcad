@@ -31,7 +31,6 @@ const
      cheight=48;
 type
   TCLine = class(TForm)
-    procedure beforeinit;virtual;
     procedure AfterConstruction; override;
   public
     utfpresent:boolean;
@@ -241,35 +240,6 @@ procedure TCLine.DoOnResize;
 begin
      inherited;
      myresize;
-end;
-
-procedure TCLine.beforeinit;
-begin
-(*
-  mode:=CLCOMMANDREDY;
-  prompttext:='Команда>';
-  prompt.initxywh(prompttext,@self,-1,clientheight-cheight-1,clientwidth+3,cheight+2,false);
-  //prompt.setextstyle(0,WS_EX_ClientEdge);
-  //prompt.setstyle(WS_Border,0);
-  //GDBGetMem({$IFDEF DEBUGBUILD}'{C5652242-FC00-4B6B-9C44-3CFAADC6D918}',{$ENDIF}GDBPointer(cmdedit),sizeof(ZEditWithProcedure));
-  cmdedit.initxywh('',@self,0,clientheight-cheight,clientwidth,cheight,false);
-  cmdedit.setextstyle(0,WS_EX_ClientEdge);
-  cmdedit.setstyle(WS_Border,0);
-  cmdedit.onenter:=keypressmy;
-
-
-  //GDBGetMem({$IFDEF DEBUGBUILD}'{1D86B21F-D1DE-4D07-82F3-AE8CEEAA25DF}',{$ENDIF}GDBPointer(HistoryLine),sizeof(zmemo));
-  HistoryLine.initxywh('',@self,0,0,clientwidth,clientheight-cheight+1,false);
-  HistoryLine.SetReadOnlyState(1);
-  //HistoryLine.align:=al_client;
-  //cmdedit^.align:=al_client;
-
-  DMenu.initxywh('DisplayMenu',@MainForm,200,100,10,10,false);
-
-//  dmenu.AddProcedure('test1','подсказка1',nil);
-//  dmenu.AddProcedure('test2','подсказка2',nil);
-//  dmenu.AddProcedure('test3 test3 test3 test3 test3','подсказка3',nil);
-*)
 end;
 
 procedure TCLine.keypressmy(Sender: TObject; var Key: char);

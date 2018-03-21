@@ -25,7 +25,8 @@ uses uzestyleslayers,uzepalette,uzeobjectextender,uabstractunit,uzeentityfactory
      UGDBOpenArrayOfByte,gzctnrvectorpobjects,uunitmanager,uzbmemman,uzegeometry,
      uzeconsts,uzeentity,uzeentsubordinated,varmandef,uzbtypesbase,
      uzbgeomtypes,uzeentblockinsert,uzbtypes,UGDBVisibleOpenArray,UGDBObjBlockdefArray,
-     gzctnrvectortypes,uzeblockdef,uzeffdxfsupport,UGDBSelectedObjArray,uzeentitiestree,LazLogger;
+     gzctnrvectortypes,uzeblockdef,uzeffdxfsupport,UGDBSelectedObjArray,uzeentitiestree,
+     LazLogger,uzcstrconsts;
 
 type
 {REGISTEROBJECTTYPE GDBObjDevice}
@@ -482,7 +483,7 @@ begin
                                                                                PBlockDefArray(PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).parray)^[index].formatEntity(drawing,dc);
           //index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
           index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(name));
-          assert((index>=0) and (index<PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).count), 'Неверный индекс блока');
+          assert((index>=0) and (index<PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).count), rsWrongBlockDefIndex);
           ConstObjArray.free;
           //pblockdef:=gdb.GetCurrentDWG.BlockDefArray.getDataMutable(index);
           pblockdef:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getDataMutable(index);
@@ -605,8 +606,6 @@ begin
           self.CalcObjMatrix;
           //index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
           index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(name));
-          assert((index>=0) and (index<PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).count), 'Неверный индекс блока');
-
           FormatFeatures(drawing);
 
           //CreateDeviceNameProcess(@self,drawing);

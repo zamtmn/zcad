@@ -18,7 +18,8 @@ uses
   uzccomdraw,UGDBVisibleOpenArray,uzeentline,uzbpaths,uzcshared,uzeentblockinsert,
   uzbgeomtypes,varman,uzccablemanager,uzeentdevice,uzeentmtext,math,
   uzcenitiesvariablesextender,uzeroot,uzglviewareadata,uzcentcable,UUnitManager,
-  gzctnrvectortypes,uzccomelectrical,URecordDescriptor,TypeDescriptors,LazLogger;
+  gzctnrvectortypes,uzccomelectrical,URecordDescriptor,TypeDescriptors,LazLogger,
+  uzcstrconsts;
 
 type
   TPlaceParam=record
@@ -380,7 +381,7 @@ begin
   drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,'DEVICE_PS_DAT_SMOKE');
   drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,'DEVICE_PS_DAT_TERMO');
   drawings.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera));
-  ZCMsgCallBackInterface.TextMessage('Первый угол:',TMWOHistoryOut);
+  ZCMsgCallBackInterface.TextMessage(rscmFirstCorner,TMWOHistoryOut);
   zcShowCommandParams(SysUnit.TypeName2PTD('CommandRTEdObject'),pco);
   result:=cmd_ok;
 end;
@@ -390,7 +391,7 @@ begin
   if (button and MZW_LBUTTON)<>0 then
     //if pco^.mouseclic = 1 then
     begin
-      ZCMsgCallBackInterface.TextMessage('Второй угол',TMWOHistoryOut);
+      ZCMsgCallBackInterface.TextMessage(rscmSecondCorner,TMWOHistoryOut);
       t3dp:=wc;
     end;
 end;
@@ -439,7 +440,7 @@ begin
 
        drawings.GetCurrentROOT.calcbb(dc);
        zcRedrawCurrentDrawing;
-       ZCMsgCallBackInterface.TextMessage('Первый угол:',TMWOHistoryOut);
+       ZCMsgCallBackInterface.TextMessage(rscmFirstCorner,TMWOHistoryOut);
        //commandend;
        //pcommandmanager^.executecommandend;
   end;
@@ -1105,7 +1106,7 @@ else if (sd.PFirstSelectedEnt^.GetObjType=GDBDeviceID) then
   zcRedrawCurrentDrawing;
   result:=cmd_ok;
   drawings.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera));
-  ZCMsgCallBackInterface.TextMessage('Первый угол:',TMWOHistoryOut);
+  ZCMsgCallBackInterface.TextMessage(rscmFirstCorner,TMWOHistoryOut);
   zcShowCommandParams(SysUnit.TypeName2PTD('CommandRTEdObject'),pco2);
   OPSPlaceSmokeDetectorOrtoParam.DMC:=TOPSMDC_1_2;
 end;
@@ -1320,7 +1321,7 @@ begin
 
        drawings.GetCurrentROOT.calcbb(dc);
        zcRedrawCurrentDrawing;
-       ZCMsgCallBackInterface.TextMessage('Первый угол:',TMWOHistoryOut);
+       ZCMsgCallBackInterface.TextMessage(rscmFirstCorner,TMWOHistoryOut);
        //commandend;
        //pcommandmanager^.executecommandend;
   end;

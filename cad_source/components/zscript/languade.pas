@@ -344,8 +344,6 @@ begin
   initvardesk(subrezult);
   initoperandstack(opstac);
   expr := readspace(expr);
-  if expr='_cables:=''Кабель''' then
-                                  expr:=expr;
   while expr <> '' do
   begin
     case expr[1] of

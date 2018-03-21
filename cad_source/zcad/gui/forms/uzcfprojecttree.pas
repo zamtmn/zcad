@@ -363,21 +363,6 @@ begin
   BlockCategory.loadfromfile(expandpath('*rtl/BlockCategory.cat'));
   EqCategory.loadfromfile(expandpath('*rtl/EqCategory.cat'));
   CreateCommandFastObjectPlugin(@ProjectTree_com,'ProjectTree',CADWG,0);
-  (*
-  ProgramDBContextMenuN:=TmyPopupMenu.create(nil);
-  cxmenumgr.RegisterLCLMenu(ProgramDBContextMenuN);
-  //ProgramDBContextMenuN.OnClose:=cxmenumgr.CloseNotify;
-  ProgramDBContextMenuN.Items.Add(TmyMenuItem.create(ProgramDBContextMenuN,'Добавить в базу данных чертежа','DBaseAdd'));
-
-  ProjectDBContextMenuN:=TmyPopupMenu.create(nil);
-  ProjectDBContextMenuN.Items.Add(TmyMenuItem.create(ProjectDBContextMenuN,'Cвязать с выделенными объектами','DBaseLink'));
-  ProjectDBContextMenuN.Items.Add(TmyMenuItem.create(ProjectDBContextMenuN,'Переименовать','DBaseRename'));
-
-  ProgramDEVContextMenuN:=TmyPopupMenu.create(nil);
-  ProgramDEVContextMenuN.Items.Add(TmyMenuItem.create(ProgramDEVContextMenuN,'Вставить в чертеж','Insert2'));
-  cxmenumgr.RegisterLCLMenu(ProgramDEVContextMenuN);
-  //ProgramDEVContextMenuN.OnClose:=cxmenumgr.CloseNotify;
-  *)
 end;
 finalization
 begin

@@ -96,35 +96,6 @@ begin
   CurrentDWG:=PTZCADDrawing(drawings.GetCurrentDWG);
   _CloseDWGPage(CurrentDWG,ZCADMainWindow.PageControl.ActivePage);
   result:=cmd_ok;
-  (*if CurrentDWG<>nil then
-  begin
-       if CurrentDWG.Changed then
-                                 begin
-                                      if MainFormN.MessageBox(@rsCloseDWGQuery[1],@rsWarningCaption[1],MB_YESNO)<>IDYES then exit;
-                                 end;
-       poglwnd:=CurrentDWG.OGLwindow1;
-       //mainform.PageControl.delpage(mainform.PageControl.onmouse);
-       drawings.eraseobj(CurrentDWG);
-       drawings.pack;
-       poglwnd.PDWG:=nil;
-       drawings.CurrentDWG:=nil;
-
-       poglwnd.free;
-
-       mainformn.PageControl.ActivePage.Free;
-       tobject(poglwnd):=mainformn.PageControl.ActivePage;
-
-       if poglwnd<>nil then
-       begin
-            tobject(poglwnd):=FindControlByType(poglwnd,TOGLWnd);
-            //pointer(poglwnd):=poglwnd^.FindKidsByType(typeof(TOGLWnd));
-            drawings.CurrentDWG:=poglwnd.PDWG;
-            poglwnd.GDBActivate;
-       end;
-       uzcshared.StatusLineTextOut('Закрыто');
-       GDBobjinsp.ReturnToDefault;
-       sharedgdb.updatevisible;
-  end;*)
 end;
 function NextDrawint_com(operands:TCommandOperands):TCommandResult;
 var

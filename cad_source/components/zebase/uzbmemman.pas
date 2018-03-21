@@ -159,7 +159,7 @@ begin
             freememdesk.PushBack(i);
             //freememdesk.AddData(@i,sizeof(i));
             memdeskarr[i].free:=true;
-            memdeskarr[i].getmemguid:='Освобождено';
+            memdeskarr[i].getmemguid:='Freed';
             memdeskarr[i].addr:=0;
             CurrentAlloc:=CurrentAlloc-memdeskarr[i].size;
             CurrentAllocMB:=CurrentAlloc div 1024;
@@ -174,7 +174,7 @@ begin
   else
       begin
             memdeskarr[lasti].free:=true;
-            memdeskarr[lasti].getmemguid:='Освобождено';
+            memdeskarr[lasti].getmemguid:='Freed';
             memdeskarr[lasti].addr:=0;
             CurrentAlloc:=CurrentAlloc-memdeskarr[lasti].size;
             CurrentAllocMB:=CurrentAlloc div 1024;
@@ -232,8 +232,6 @@ begin
      lasti:=-1;
      {$IFDEF DEBUGBUILD}
      freememdesk:=TFreememDesk.create;
-     //freememdesk.init({$IFDEF DEBUGBUILD}'Нужно для отладки',{$ENDIF}1024*1024*10);
-     //freememdesk.CreateArray;
      {$ENDIF}
 end;
 finalization;

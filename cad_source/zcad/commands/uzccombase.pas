@@ -49,6 +49,9 @@ uses
  uzbgeomtypes,dialogs,uzcinfoform,
  uzeentpolyline,UGDBPolyLine2DArray,uzeentlwpolyline,UGDBSelectedObjArray,
  gzctnrvectortypes,uzegeometry,uzelongprocesssupport,usimplegenerics,gzctnrstl;
+resourcestring
+  rsAboutCLSwithUpdatePO='Command line swith "UpdatePO" must be set. (or not the first time running this command)';
+  rsBeforeRunPoly='Before starting you must select a 2DPolyLine';
 type
   TTreeLevelStatistik=record
                           NodesCount,EntCount,OverflowCount:GDBInteger;
@@ -1562,7 +1565,7 @@ begin
   end;
   //else
   begin
-       ZCMsgCallBackInterface.TextMessage('перед запуском нужно выбрать 2D полилинию',TMWOHistoryOut);
+       ZCMsgCallBackInterface.TextMessage(rsBeforeRunPoly,TMWOHistoryOut);
        commandmanager.executecommandend;
   end;
 end;
@@ -1600,7 +1603,7 @@ begin
                uzcsysinfo.sysparam.updatepo:=false
           end;
      end
-        else ZCMsgCallBackInterface.TextMessage('Command line swith "UpdatePO" must be set. (or not the first time running this command)',TMWOShowError);
+        else ZCMsgCallBackInterface.TextMessage(rsAboutCLSwithUpdatePO,TMWOShowError);
      result:=cmd_ok;
 end;
 function Zoom_com(operands:TCommandOperands):TCommandResult;

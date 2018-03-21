@@ -72,14 +72,13 @@ const
                            );*)
      FPVMT:FieldDescriptor=
                            (
-                            base:(
-                                  ProgramName:'#';
-                           UserName:'Object';
-                           PFT:@FundamentalPointerDescriptorOdj;
-                           Attributes:FA_HIDDEN_IN_OBJ_INSP or FA_READONLY
-                           );
+                            base:(ProgramName:'#';
+                                  UserName:'Object';
+                                  PFT:@FundamentalPointerDescriptorOdj;
+                                  Attributes:FA_HIDDEN_IN_OBJ_INSP or FA_READONLY
+                                  );
                             //FieldName:'#';
-                            //UserName:'Объект';
+                            //UserName:'Object';
                             //PFT:@FundamentalPointerDescriptorOdj;
                             Offset:0;
                             Size:sizeof(GDBPointer);

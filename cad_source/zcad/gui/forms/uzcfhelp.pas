@@ -20,7 +20,7 @@ unit uzcfhelp;
 {$INCLUDE def.inc}
 interface
 uses
- uzcshared,uzclog,uzbstrproc,uzctreenode,FileUtil,Forms, stdctrls, Controls,uzbtypes,languade,uzbmemman;
+ uzcshared,uzclog,uzbstrproc,uzctreenode,FileUtil,Forms, stdctrls, Controls,uzbtypes,languade,uzbmemman,uzcstrconsts;
 type
   THelpForm = class(TFreedForm)
     Memo:TMemo;
@@ -39,14 +39,7 @@ begin
   memo:=tmemo.create(self);
   memo.scrollbars:=ssAutoBoth;
   memo.align:=alclient;
-
-  memo.text:=('Управление:'+#13#10+
-                   #9+'Средняя кнопка мыши'+#9+'-таскать чертеж'+#13#10+
-                   'CTRL+'+#9+'Средняя кнопка мыши'+#9+'-крутить чертеж'+#13#10+
-                   #9+'Колесо мыши'+#9+#9+'-масштаб'+#13#10+
-                   'DBLCLK'+#9+'Колесо мыши'+#9+#9+'-показать всё'+#13#10+
-                   'CTRL+'+#9+'A'+#9+#9+#9+'-выделить всё'+#13#10+#13#10+
-                   'Руководство пользователя см. файл UserGuide.pdf');
+  memo.text:=rsNotYetImplemented;
   Memo.Parent := self;
 end;
 begin

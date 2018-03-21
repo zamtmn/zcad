@@ -25,14 +25,6 @@ uses LCLProc,uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,
      UGDBSelectedObjArray,uzeent3d,uzeentity,UGDBOpenArrayOfByte,uzbtypes,uzeconsts,
      uzbgeomtypes,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzbmemman;
 type
-                 {l_1_4:GDBvertex;(*hidden_in_objinsp*)
-                 l_1_3:GDBvertex;(*hidden_in_objinsp*)
-                 l_1_2:GDBvertex;(*hidden_in_objinsp*)
-                 l_2_3:GDBvertex;(*hidden_in_objinsp*)
-                 l_3_4:GDBvertex;(*hidden_in_objinsp*)
-
-                 pdx:GDBDouble;(*'Проекция dx'*)(*hidden_in_objinsp*)
-                 pdy:GDBDouble;(*'Проекция dy'*)(*hidden_in_objinsp*)}
 {REGISTEROBJECTTYPE GDBObjLine}
 {Export+}
 PGDBObjLine=^GDBObjLine;
@@ -541,7 +533,7 @@ begin
             if not assigned(pgdbobjline(pobj)^.pprojpoint) then
                                                                begin
                                                                //pgdbobjline(pobj)^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,nil);
-                                                               debugln('Че за херня? для линии с которой считается пересечение оказывается еще не расчитаны дисплейные координаты...');
+                                                               debugln('{E}pobj)^.pprojpoint=nil;//(((((((');
                                                                osp.ostype:=os_none;
                                                                exit;
                                                                end;

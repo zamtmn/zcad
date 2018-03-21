@@ -231,7 +231,7 @@ function TDimStyleEditForm.ColorComboBoxChange(Sender: TObject;colorBox:TComboBo
 begin
     if colorBox.Items[coloritemindex] = 'Other...' then
       begin
-         ZCMsgCallBackInterface.TextMessage('не работает',TMWOHistoryOut);
+         ZCMsgCallBackInterface.TextMessage(rsNotYetImplemented,TMWOHistoryOut);
       end
     else
       case coloritemindex of
@@ -758,8 +758,8 @@ var
    i:integer;
 begin
      //ZCMsgCallBackInterface.TextMessage(dimStyle^.Text.DIMTXSTY^.GetFullName,TMWOHistoryOut);
-     dlineColorLabel.Caption:='Цвет';
-     dlineTypeLabel.Caption:='Тип линии';
+     dlineColorLabel.Caption:=rsColor;
+     dlineTypeLabel.Caption:=rsLineType;
      dlineColorComboBox(Sender);
      dlineTypeComboBox(Sender);
 

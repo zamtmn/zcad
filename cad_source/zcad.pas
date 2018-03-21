@@ -144,6 +144,9 @@ uses
 
   uzcinterface,
   uzccomdbgappexplorer;
+
+resourcestring
+ rsStartAutorun='Execute *components\autorun.cmd';
   //RegCnownTypes,URegisterObjects;
 
 //exports HistoryOut,redrawoglwnd,updatevisible,reloadlayer; {uzcshared}
@@ -182,7 +185,7 @@ begin
   ZCMsgCallBackInterface.TextMessage(format(rsZCADStarted,[sysvar.SYS.SYS_Version^]),TMWOHistoryOut);
   gdbplugins.loadplugins(ProgramPath+'PLUGINS\');
 
-  SplashForm.TXTOut('Выполнение *components\autorun.cmd',false);commandmanager.executefile('*components/autorun.cmd',drawings.GetCurrentDWG,nil);
+  SplashForm.TXTOut(rsStartAutorun,false);commandmanager.executefile('*components/autorun.cmd',drawings.GetCurrentDWG,nil);
   if sysparam.preloadedfile<>'' then
                                     begin
                                          commandmanager.executecommand('Load('+sysparam.preloadedfile+')',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);

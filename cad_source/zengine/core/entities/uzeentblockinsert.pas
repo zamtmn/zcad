@@ -22,7 +22,7 @@ interface
 uses uzeentity,uzgldrawcontext,uzeentityfactory,uzedrawingdef,uzestyleslayers,math,
      uzbtypesbase,uzeentcomplex,sysutils,UGDBObjBlockdefArray,uzeblockdef,uzbtypes,
      uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzbmemman,uzeentsubordinated,
-     gzctnrvectortypes,uzbgeomtypes,UGDBOpenArrayOfByte;
+     gzctnrvectortypes,uzbgeomtypes,UGDBOpenArrayOfByte,uzcstrconsts;
 const zcadmetric='!!ZMODIFIER:';
 type
 {REGISTEROBJECTTYPE GDBObjBlockInsert}
@@ -459,7 +459,7 @@ begin
           index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex({pansichar(}name{)});
           if index<0 then
                          index:=index;
-          assert((index>=0) and (index<PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).count), 'Неверный индекс блока');
+          assert((index>=0) and (index<PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).count), rsWrongBlockDefIndex);
 
           if not PBlockDefArray(PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).parray)^[index].Formated then
                                                                                begin

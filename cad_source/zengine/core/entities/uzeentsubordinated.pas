@@ -24,9 +24,6 @@ uses strutils,uzgldrawcontext,uzeentityextender,uzetextpreprocessor,uzedrawingde
      uzbstrproc{$IFNDEF DELPHI},LazUTF8{$ENDIF},UGDBOpenArrayOfByte,uzbgeomtypes,uzbtypes,
      gzctnrvectortypes,uzbtypesbase,sysutils,uzestyleslayers;
 type
-//Owner:PGDBObjGenericWithSubordinated;(*'Владелец'*)
-//PSelfInOwnerArray:TArrayIndex;(*'Индекс у владельца'*)
-
 {EXPORT+}
 GDBObjExtendable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                                  EntExtensions:{-}TEntityExtensions{/GDBPointer/};
@@ -232,22 +229,18 @@ begin
      if vn='HeadDevice' then
                       begin
                            nevname:='GC_HeadDevice';
-                           vun:='Обозначение головного устройства'
                       end;
      if vn='HeadDShortName' then
                       begin
                            nevname:='GC_HDShortName';
-                           vun:='Короткое Обозначение головного устройства'
                       end;
      if vn='GroupInHDevice' then
                       begin
                            nevname:='GC_HDGroup';
-                           vun:='Группа'
                       end;
      if vn='NumberInSleif' then
                       begin
                            nevname:='GC_NumberInGroup';
-                           vun:='Номер в группе'
                       end;
      if vn='RoundTo' then
                       begin
@@ -283,7 +276,6 @@ begin
      OldVersTextReplace(vv);
      if nevname<>'' then
                         begin
-                             //HistoryOutStr('Старая переменная '+vn+' обновлена до '+nevname);
                              vn:=nevname;
                         end;
 

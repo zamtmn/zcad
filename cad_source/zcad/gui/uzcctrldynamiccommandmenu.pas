@@ -20,7 +20,7 @@ unit uzcctrldynamiccommandmenu;
 {$INCLUDE def.inc}
 interface
 uses
- uzcinfoform,ComCtrls,uzbtypes,Controls,Forms,uzbmemman,uzbtypesbase,uzclog;
+ uzcinfoform,ComCtrls,uzbtypes,Controls,Forms,uzbmemman,uzbtypesbase,uzclog,uzcstrconsts;
 type
   DMMethod=procedure(sender:GDBPointer) of object;
   //PTDMenuWnd=^TDMenuWnd;
@@ -42,7 +42,7 @@ implementation
 procedure TDMenuWnd.AfterConstruction;
 begin
      FormStyle:=fsStayOnTop;
-     caption:=('Параметры команды');
+     caption:=(rscmCommandParams);
      borderstyle:=bsSizeToolWin;
      autosize:=true;
      CreateToolBar;

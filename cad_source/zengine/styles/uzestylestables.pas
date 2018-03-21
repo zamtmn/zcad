@@ -22,9 +22,6 @@ interface
 uses uzbtypesbase,sysutils,uzbtypes,uzegeometry,
      UGDBNamedObjectsArray,gzctnrvectordata;
 type
-{TCellJustify=(jcl(*'ВерхЛево'*),
-              jcm(*'ВерхЦентр'*),
-              jcr(*'ВерхПраво'*));}
 {EXPORT+}
 TTableCellJustify=(jcl(*'TopLeft'*),
               jcc(*'TopCenter'*),

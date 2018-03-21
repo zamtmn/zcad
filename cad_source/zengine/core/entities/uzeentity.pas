@@ -25,7 +25,6 @@ uses uzepalette,uzeobjectextender,uzgldrawerabstract,uzgldrawcontext,uzedrawingd
      uzglviewareadata,uzegeometry,uzeffdxfsupport,sysutils,uzbmemman,UGDBOpenArrayOfByte,
      uzestyleslayers,gzctnrvectorpobjects,uzeenrepresentation,LazLogger;
 type
-//Owner:{-}PGDBObjEntity{/GDBPointer/};(*'Владелец'*)
 taddotrac=procedure (var posr:os_record;const axis:GDBVertex) of object;
 {Export+}
 PGDBObjEntity=^GDBObjEntity;

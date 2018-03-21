@@ -402,7 +402,7 @@ begin
                             ppd^.Attr:=ownerattrib;
                             ppd^.Collapsed:=PCollapsed;
                             ppd^.valueAddres:=addr;
-                            ppd^.value:='Пусто';
+                            ppd^.value:='Empty';
 
                             //pvd:=PTObjectUnit(addr)^.InterfaceVariables.vardescarray.beginiterate(ir2);
                             //taa:=pvd^.data.Instance;

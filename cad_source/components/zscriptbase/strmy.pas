@@ -348,9 +348,6 @@ begin
                         //inc(i);
                         if lexema<>nil then
                                            begin
-                                                if lexema^='Номер' then
-                                                                      lexema:=lexema;
-
                                                 subexpr:=lexema^;
                                                 GDBStringarray.PushBackData(subexpr);
                                                 subexpr:='';

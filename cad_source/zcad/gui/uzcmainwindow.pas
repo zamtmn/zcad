@@ -50,6 +50,8 @@ uses
        zcchangeundocommand,uzgldrawcontext,uzglviewareaabstract,uzcguimanager,uzcinterfacedata,
        uzcenitiesvariablesextender,uzglviewareageneral;
   {}
+resourcestring
+  rsClosed='Closed';
 type
   TMyToolbar=class(TToolBar)
     public
@@ -816,7 +818,7 @@ begin
            drawings.freedwgvars;
        ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIFreEditorProc);
        ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
-       ZCMsgCallBackInterface.TextMessage('Закрыто',TMWOQuickly);
+       ZCMsgCallBackInterface.TextMessage(rsClosed,TMWOQuickly);
        ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);
        ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
        //if assigned(UpdateVisibleProc) then UpdateVisibleProc(ZMsgID_GUIActionRedraw);

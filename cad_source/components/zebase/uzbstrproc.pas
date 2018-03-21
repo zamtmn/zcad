@@ -114,8 +114,6 @@ begin
      if uch=44064 then
                      uch:=uch;
      s:=UnicodeToUtf8(uch);
-     if s='В' then
-                  s:=s;
      s:={UTF8toANSI}Tria_Utf8ToAnsi(s);
      //if length(s)=1 then
                         result:=ord(s[1]);

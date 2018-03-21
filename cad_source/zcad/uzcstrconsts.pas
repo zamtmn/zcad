@@ -22,6 +22,7 @@ unit uzcstrconsts;
 interface
 resourcestring
   {errors}
+  rsNotSpecified='Not specified';
   rsInvalidInput='Invalid input';
   rsNotRegistred='Not registred';
   rsInvalidInputForPropery='Property "%s" for entity "%s": %s';
@@ -75,6 +76,7 @@ resourcestring
   rsTemplateNotFound='Template file "%s" not found';
 
   {commands messages}
+  rscmCommandParams='Command params';
   rscmSelectSourceEntity='Select source entity:';
   rscmSelectDestinationEntity='Select destination entity:';
   rscmSpecifyX='Specify X:';
@@ -96,6 +98,8 @@ resourcestring
   rscmNoCTR='No comands to redo';
   rscmInStackData='In stack found following data:';
   rscmPoint='Point:';
+  rscmFirstCorner='First corner:';
+  rscmSecondCorner='Second corner:';
   rscmFirstPoint='First point:';
   rscmSecondPoint='Second point:';
   rscmBasePoint='Base point:';
@@ -122,9 +126,14 @@ resourcestring
   rscmPolyNotSel='Poly entities not selected';
   rscm2VNotRemove='Only 2 vertex there is nothing to remove';
 
+  rscmSegmentLengthTotalLength='Segment length: %s summary length: %s';
+
   rscmCommandOnlyCTXMenu='The command works only from context menu';
 
   {messages}
+  rsColor='Color';
+  rsLineType='Line type';
+  rsWrongBlockDefIndex='Wrong blockdef index';
   rsClipboardIsEmpty='Clipboard is empty, there is nothing to paste';
   rsNotYetImplemented='Not yet implemented';
   rsLayerDefpaontsCanNotBePrinted='Layer DEFPOINTS can not be printed';

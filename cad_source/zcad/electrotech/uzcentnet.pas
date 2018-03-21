@@ -14,6 +14,8 @@ uses uzcinterface,uzeobjectextender,uzeentityfactory,Varman,uzgldrawcontext,uzes
      varmandef,uzegeometry,uzbtypes,UGDBGraf,uzbmemman,uzeentsubordinated,uunitmanager,
      gzctnrvectortypes,uzbgeomtypes,uzcshared,sysutils,gzctnrvectorpobjects,
      uzcenitiesvariablesextender,uzeentline,uzeffdxfsupport,math,uzclog,LazLogger;
+resourcestring
+  rscannotbeconnected='Can not be connected';
 const
      UNNAMEDNET='NET';
 type
@@ -405,7 +407,7 @@ begin
                                       system.break;
                                       end
                                          else
-                                         ZCMsgCallBackInterface.TextMessage('Нельзя обьеденить',TMWOShowError);
+                                         ZCMsgCallBackInterface.TextMessage(rscannotbeconnected,TMWOShowError);
                                  end;
 
                            ptestline:=currentnet^.objarray.iterate(ir3);

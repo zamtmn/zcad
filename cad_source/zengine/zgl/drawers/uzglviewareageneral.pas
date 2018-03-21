@@ -2297,7 +2297,7 @@ end;
 procedure TGeneralViewArea.CalcOptimalMatrix;
 var ccsLBN,ccsRTF:GDBVertex;
     tm:DMatrix4D;
-    LBN:GDBvertex;(*'ЛевыйНижнийБлижний'*)
+    LBN:GDBvertex;
     RTF:GDBvertex;
     tbb,tbb2:TBoundingBox;
     //wa.pdwg:PTDrawing;

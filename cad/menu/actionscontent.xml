@@ -67,7 +67,7 @@
     </Group>
     <Group Category="Format">
       <ZAction Name="ACN_UNITS" Command="Units" Img="#0.0" Caption="Units format ..." Hint="Units format"/>
-      <ZAction Name="ACN_LAYER" Command="Layer" Img="layer.bmp" Caption="Layers ..." Hint="Layers properties manager"/>
+      <ZAction Name="ACN_LAYER" Command="Layer" Img="layers" Caption="Layers ..." Hint="Layers properties manager"/>
       <ZAction Name="ACN_COLORS" Command="Colors" Img="colors.bmp" Caption="Colors ..." Hint="Select current color"/>
       <ZAction Name="ACN_TSTYLES" Command="TextStyles" Img="textstyles.bmp" Caption="Text styles ..." Hint="Text styles properties manager"/>
       <ZAction Name="ACN_DSTYLES" Command="DimStyles" Img="dimstyles.bmp" Caption="Dimension styles ..." Hint="Dimension styles properties manager"/>
@@ -109,7 +109,7 @@
     </Group>
     <Group Category="Misc">
       <ZAction Name="ACN_CANCEL" Command="Cancel" Img="#C" Caption="Cancel"/>
-      <ZAction Name="ACN_SNAPRUNTIME" Command="SnapProperties" Img="magnet.bmp" Caption="Run time snap editor" ShortCut="ALT+S"/>
+      <ZAction Name="ACN_SNAPRUNTIME" Command="SnapProperties" Img="snap" Caption="Run time snap editor" ShortCut="ALT+S"/>
       <ZAction Name="ACN_MATCHPROP" Command="MatchProp" Img="matchprop.bmp" Caption="Match properties"/>
       <ZAction Name="ACN_WNEXT" Command="NextDrawing" Img="#N" Caption="Next window" ShortCut="CTRL+TAB"/>
       <ZAction Name="ACN_WPREV" Command="PrevDrawing" Img="#P" Caption="Previous window" ShortCut="SHIFT+CTRL+TAB"/>

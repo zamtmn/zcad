@@ -1401,7 +1401,7 @@ end;
 procedure TZCADMainWindow.ZAction2VariableReader(aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList);
 var
   va:TmyVariableAction;
-  actionvariable,actionshortcut:string;
+  actionvariable,actionshortcut,img:string;
   mask:DWord;
 begin
   va:=TmyVariableAction.create(self);
@@ -1421,7 +1421,12 @@ begin
 
   va.AssignToVar(actionvariable,mask);
 
-  TmyActionList(actlist).SetImage(getAttrValue(aNode,'Img',''),va.Name+'~textimage',TZAction(va));
+  img:=getAttrValue(aNode,'Img','');
+  va.ImageIndex:=ImagesManager.GetImageIndex(img);
+  if va.ImageIndex=ImagesManager.defaultimageindex then begin
+    va.ImageIndex:=-1;
+    TmyActionList(actlist).SetImage(img,va.Name+'~textimage',TZAction(va));
+  end;
 
   va.AutoCheck:=true;
   va.Enabled:=true;
@@ -1537,7 +1542,11 @@ begin
     b.hint:=(_hint);
     b.ShowHint:=true;
   end;
-  SetImage(tb,b,_img,false,'button_variable~'+_varname);
+  b.ImageIndex:=ImagesManager.GetImageIndex(_img);
+  if b.ImageIndex=ImagesManager.defaultimageindex then begin
+    b.ImageIndex:=-1;
+    SetImage(tb,b,_img,false,'button_variable~'+_varname);;
+  end;
   //AddToBar(tb,b);
   b.Parent:=tb;
   updatesbytton.Add(b);

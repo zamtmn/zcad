@@ -86,8 +86,8 @@
       <ZAction Name="ACN_ADDTOOWNER" Command="AddToOwner" Img="addtoowner.bmp" Caption="Add to owner"/>
       <ZAction Name="ACN_COPYFROMOWNER" Command="CopyFromOwner" Img="#COF" Caption="Copy from owner"/>
       <ZAction Name="ACN_POLYED" Command="PolyED" Img="polyed.bmp" Caption="Edit polyline"/>
-      <ZAction Name="ACN_OBJVARMAN" Command="ObjVarMan" Img="varman.bmp" Caption="Object variables manager"/>
-      <ZAction Name="ACN_MULTIOBJVARMAN" Command="MultiObjVarMan" Img="mvarman.bmp" Caption="Multi object variables manager"/>
+      <ZAction Name="ACN_OBJVARMAN" Command="ObjVarMan" Img="varman" Caption="Object variables manager"/>
+      <ZAction Name="ACN_MULTIOBJVARMAN" Command="MultiObjVarMan" Img="mvarman" Caption="Multi object variables manager"/>
     </Group>
     <Group Category="Draw">
       <ZAction Name="ACN_LINE" Command="Line" Img="line.bmp" Caption="Line" Hint="Draw line"/>

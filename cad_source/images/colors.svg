@@ -24,6 +24,16 @@
      id="defs4227">
     <linearGradient
        inkscape:collect="always"
+       xlink:href="#linearGradient4748"
+       id="linearGradient4750"
+       x1="16.998913"
+       y1="1042.8622"
+       x2="32.001087"
+       y2="1042.8622"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.0449912,0,0,1.0453849,-17.585649,-45.813679)" />
+    <linearGradient
+       inkscape:collect="always"
        id="linearGradient4748">
       <stop
          style="stop-color:#e6e6e6;stop-opacity:1;"
@@ -34,16 +44,6 @@
          offset="1"
          id="stop4746" />
     </linearGradient>
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient4748"
-       id="linearGradient4750"
-       x1="16.998913"
-       y1="1042.8622"
-       x2="32.001087"
-       y2="1042.8622"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.97777604,0,0,0.97814354,-15.955514,24.293268)" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -53,7 +53,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="32"
-     inkscape:cx="3.9451911"
+     inkscape:cx="-2.2891839"
      inkscape:cy="7.6030312"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -71,11 +71,11 @@
      inkscape:snap-object-midpoints="true"
      inkscape:snap-center="true"
      units="px"
-     inkscape:window-width="1338"
-     inkscape:window-height="1039"
-     inkscape:window-x="2722"
-     inkscape:window-y="101"
-     inkscape:window-maximized="0"
+     inkscape:window-width="2560"
+     inkscape:window-height="1414"
+     inkscape:window-x="1911"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
      showguides="true"
      inkscape:guide-bbox="true">
     <inkscape:grid
@@ -93,7 +93,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -103,32 +103,32 @@
      id="layer1"
      transform="translate(0,-1036.3622)">
     <rect
-       style="opacity:1;fill:url(#linearGradient4750);fill-opacity:1;stroke:#3771c8;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+       style="opacity:1;fill:url(#linearGradient4750);fill-opacity:1;stroke:#3771c8;stroke-width:1.00205564;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
        id="rect842"
-       width="14.002122"
-       height="14.002096"
-       x="0.99893892"
-       y="1037.3612" />
+       width="14.964669"
+       height="14.964656"
+       x="0.53430319"
+       y="1036.8965" />
     <rect
-       y="1037.8622"
-       x="1.5"
+       y="1037.3622"
+       x="1"
        height="1"
-       width="13"
+       width="14"
        id="rect836"
-       style="opacity:1;fill:#3771c8;fill-opacity:1;stroke:none;stroke-width:0.46547329;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal" />
+       style="opacity:1;fill:#3771c8;fill-opacity:1;stroke:none;stroke-width:0.48304448;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal" />
     <rect
        style="opacity:1;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:0.50000429;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
        id="rect856"
        width="1"
        height="1.0000174"
        x="13.5"
-       y="1037.3622" />
+       y="1036.8622" />
     <rect
-       style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.5000087;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+       style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.49999997;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
        id="rect843"
        width="0.5"
-       height="0.5000174"
-       x="13.5"
+       height="0.5"
+       x="13"
        y="1037.3622" />
     <rect
        y="1039.8622"

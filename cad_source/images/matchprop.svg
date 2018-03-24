@@ -15,8 +15,8 @@
    id="svg4225"
    version="1.1"
    inkscape:version="0.92.1 r15371"
-   sodipodi:docname="layers.svg"
-   inkscape:export-filename="layers.png"
+   sodipodi:docname="matchprop.svg"
+   inkscape:export-filename="default.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
   <defs
@@ -28,9 +28,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="32"
-     inkscape:cx="1.9379999"
-     inkscape:cy="7.4442222"
+     inkscape:zoom="19.549448"
+     inkscape:cx="-1.8982817"
+     inkscape:cy="-4.4683236"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -78,33 +78,10 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(0,-1036.3622)">
-    <g
-       id="g232"
-       transform="matrix(1.1428572,0,0,1.142858,-21.142859,-166.07459)">
-      <path
-         style="fill:#505050;fill-opacity:1;stroke:none;stroke-width:1.12089717;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m 25.5,1061.8238 -6.999999,2.1537 6.999999,2.1539 7.000001,-2.1539 L 25.5,1061.8238"
-         id="path9512"
-         inkscape:connector-curvature="0"
-         sodipodi:nodetypes="ccccc" />
-      <path
-         sodipodi:nodetypes="ccccc"
-         inkscape:connector-curvature="0"
-         id="path7215"
-         d="m 25.5,1058.593 -6.999999,2.1537 6.999999,2.1539 7.000001,-2.1539 L 25.5,1058.593"
-         style="fill:#a1260d;fill-opacity:1;stroke:none;stroke-width:1.12089717;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-      <path
-         style="fill:#c19b20;fill-opacity:1;stroke:none;stroke-width:1.12089717;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m 25.5,1055.3622 -6.999999,2.1537 6.999999,2.1539 7.000001,-2.1539 L 25.5,1055.3622"
-         id="path7213"
-         inkscape:connector-curvature="0"
-         sodipodi:nodetypes="ccccc" />
-      <path
-         sodipodi:nodetypes="ccccc"
-         inkscape:connector-curvature="0"
-         id="path7211"
-         d="m 25.500001,1052.1314 -7,2.1539 7,2.1537 7,-2.1537 -7,-2.1539"
-         style="fill:#06539b;fill-opacity:1;stroke:none;stroke-width:1.12089694;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-    </g>
+    <path
+       inkscape:connector-curvature="0"
+       id="path4501"
+       d="m 15.867794,1036.4945 c -0.104621,-0.1047 -0.25657,-0.1521 -0.401046,-0.1246 l -1.02877,0.187 c -0.08469,0.015 -0.161912,0.055 -0.226678,0.1122 l -8.0283882,7.3964 c -0.092166,0.085 -0.1444759,0.202 -0.1469669,0.3242 0,0.01 0.0025,0.01 0.0025,0.015 -0.00997,0 -0.017435,-0.01 -0.0274,-0.01 -0.1270399,0.01 -0.2490973,0.067 -0.3288083,0.1696 l -2.5806422,3.2244 c -0.07722,0.097 -0.1046206,0.2169 -0.094657,0.3316 -0.1992774,-0.07 -0.4085186,-0.1147 -0.6252328,-0.1147 -0.5156303,0 -1.001369,0.2045 -1.3650502,0.5736 -0.25158779,0.2543 -0.59035934,1.3416 -1.00635093,3.2269 -0.03238257,0.1521 0.01245484,0.3092 0.12205742,0.4189 0.0846929,0.085 0.20176837,0.1322 0.32133481,0.1322 0.0323826,0 0.0672562,-0.01 0.0996387,-0.01 l 2.0301386,-0.4563 c 0.1345122,-0.032 0.8270012,-0.217 1.1632818,-0.5586 0.5280851,-0.5362 0.6750522,-1.3067 0.458338,-1.9801 0.029892,0.01 0.059783,0.018 0.092166,0.018 0.099639,0 0.1992773,-0.032 0.2839702,-0.1 l 3.2208214,-2.5811 c 0.099638,-0.082 0.1619124,-0.202 0.1693859,-0.3291 0,-0.01 -0.005,-0.018 -0.005,-0.028 0.0025,0 0.0025,0 0.005,0 0.0025,0 0.00748,0 0.00997,0 0.1220574,0 0.2416238,-0.055 0.3238257,-0.1471 l 7.388211,-8.0373 c 0.05729,-0.062 0.09715,-0.1422 0.112093,-0.227 l 0.186823,-1.0299 c 0.0274,-0.1446 -0.01993,-0.2967 -0.124548,-0.4015 z m -12.7637181,14.2019 c -0.1021297,0.1047 -0.46332,0.2494 -0.7273626,0.3142 l -1.3177218,0.2967 c 0.234151,-0.975 0.4981935,-1.9201 0.6053051,-2.0847 0.1918045,-0.1945 0.4483742,-0.3018 0.7198897,-0.3018 0.2715154,0 0.5280851,0.1073 0.7198896,0.3018 0.4010458,0.4065 0.4010458,1.0673 0,1.4738 z m 1.2280469,-2.3865 -0.2665335,-0.2669 2.00772,-2.5111 0.7647269,0.768 z m 10.6040492,-10.6732 -6.9772006,7.5909 -0.8145464,-0.8154 7.584997,-6.985 0.256569,-0.047 z"
+       style="stroke-width:0.02492354" />
   </g>
 </svg>

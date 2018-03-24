@@ -71,7 +71,7 @@
       <ZAction Name="ACN_COLORS" Command="Colors" Img="colors.bmp" Caption="Colors ..." Hint="Select current color"/>
       <ZAction Name="ACN_TSTYLES" Command="TextStyles" Img="textstyles.bmp" Caption="Text styles ..." Hint="Text styles properties manager"/>
       <ZAction Name="ACN_DSTYLES" Command="DimStyles" Img="dimstyles.bmp" Caption="Dimension styles ..." Hint="Dimension styles properties manager"/>
-      <ZAction Name="ACN_LTYPES" Command="LineTypes" Img="linestyles.bmp" Caption="Line types ..." Hint="Line types properties manager"/>
+      <ZAction Name="ACN_LTYPES" Command="LineTypes" Img="linetypes" Caption="Line types ..." Hint="Line types properties manager"/>
     </Group>
     <Group Category="Modify">
       <ZAction Name="ACN_COPY" Command="Copy" Img="copy.bmp" Caption="Copy" Hint="Copy primitives"/>
@@ -110,7 +110,7 @@
     <Group Category="Misc">
       <ZAction Name="ACN_CANCEL" Command="Cancel" Img="#C" Caption="Cancel"/>
       <ZAction Name="ACN_SNAPRUNTIME" Command="SnapProperties" Img="snap" Caption="Run time snap editor" ShortCut="ALT+S"/>
-      <ZAction Name="ACN_MATCHPROP" Command="MatchProp" Img="matchprop.bmp" Caption="Match properties"/>
+      <ZAction Name="ACN_MATCHPROP" Command="MatchProp" Img="matchprop" Caption="Match properties"/>
       <ZAction Name="ACN_WNEXT" Command="NextDrawing" Img="#N" Caption="Next window" ShortCut="CTRL+TAB"/>
       <ZAction Name="ACN_WPREV" Command="PrevDrawing" Img="#P" Caption="Previous window" ShortCut="SHIFT+CTRL+TAB"/>
       <ZAction Name="ACN_ABOUT" Command="About" Img="about.bmp" Caption="About"/>

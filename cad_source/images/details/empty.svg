@@ -29,7 +29,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="55.29419"
-     inkscape:cx="7.1259316"
+     inkscape:cx="3.5179576"
      inkscape:cy="7.9181917"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -49,7 +49,7 @@
      units="px"
      inkscape:window-width="2560"
      inkscape:window-height="1414"
-     inkscape:window-x="1911"
+     inkscape:window-x="-9"
      inkscape:window-y="-9"
      inkscape:window-maximized="1"
      showguides="true"
@@ -59,7 +59,8 @@
        id="grid4241"
        spacingx="0.5"
        spacingy="0.5"
-       empspacing="2" />
+       empspacing="2"
+       dotted="true" />
   </sodipodi:namedview>
   <metadata
      id="metadata4230">

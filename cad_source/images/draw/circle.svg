@@ -15,7 +15,7 @@
    viewBox="0 0 16 16"
    id="svg4225"
    version="1.1"
-   inkscape:version="0.92.1 r15371"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="circle.svg"
    inkscape:export-filename="circle.png"
    inkscape:export-xdpi="96"
@@ -556,11 +556,11 @@
      inkscape:snap-object-midpoints="true"
      inkscape:snap-center="true"
      units="px"
-     inkscape:window-width="1457"
-     inkscape:window-height="1026"
-     inkscape:window-x="384"
-     inkscape:window-y="96"
-     inkscape:window-maximized="0"
+     inkscape:window-width="2560"
+     inkscape:window-height="1403"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
      showguides="true"
      inkscape:guide-bbox="true">
     <inkscape:grid
@@ -579,7 +579,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -640,7 +640,7 @@
        x="-8"
        y="1062.3622" />
     <ellipse
-       style="fill:none;fill-opacity:1;stroke:#004c00;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:none;fill-opacity:1;stroke:#008c00;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="path5236"
        ry="6.3362093"
        rx="6.3362069"

@@ -9,7 +9,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ru\n"
-"X-Generator: Poedit 1.6.10\n"
+"X-Generator: Poedit 2.0.2\n"
 
 #: zcadexternal.acn_3dpoly~caption
 msgctxt "zcadexternal.acn_3dpoly~caption"
@@ -18,7 +18,7 @@ msgstr "Чертить 3D полилинию"
 
 #: zcadexternal.acn_3dpoly~hint
 msgid "Draw 3DPolyLine"
-msgstr ""
+msgstr "Чертить 3D полилинию"
 
 #: zcadexternal.acn_about~caption
 msgctxt "zcadexternal.acn_about~caption"
@@ -314,17 +314,9 @@ msgctxt "zcadexternal.acn_erase~caption"
 msgid "Erase"
 msgstr "Стереть"
 
-#: zcadexternal.acn_fakecopyclipbase~caption
-msgid ""
-msgstr ""
-
 #: zcadexternal.acn_fakecopyclipbase~textimage
 msgctxt "zcadexternal.acn_fakecopyclipbase~textimage"
 msgid "CB"
-msgstr ""
-
-#: zcadexternal.acn_fakepaste~caption
-msgid ""
 msgstr ""
 
 #: zcadexternal.acn_fakepaste~textimage
@@ -635,10 +627,6 @@ msgctxt "zcadexternal.acn_print~hint"
 msgid "Print"
 msgstr "Печать"
 
-#: zcadexternal.acn_processkz~caption
-msgid ""
-msgstr ""
-
 #: zcadexternal.acn_projecttree~caption
 msgctxt "zcadexternal.acn_projecttree~caption"
 msgid "Project tree"
@@ -695,10 +683,6 @@ msgstr ""
 msgctxt "zcadexternal.acn_regen~caption"
 msgid "Regen all"
 msgstr "Регенерировать всё"
-
-#: zcadexternal.acn_remautocables~caption
-msgid ""
-msgstr ""
 
 #: zcadexternal.acn_rotate~caption
 msgctxt "zcadexternal.acn_rotate~caption"
@@ -1555,10 +1539,6 @@ msgctxt "zcadexternal.hint_panel~dwg_snapgrid"
 msgid "Snap"
 msgstr "Шаг"
 
-#: zcadexternal.hint_panel~inserttesttable
-msgid ""
-msgstr ""
-
 #: zcadexternal.hint_panel~layercombobox
 msgctxt "zcadexternal.hint_panel~layercombobox"
 msgid "Layer selection"
@@ -1568,10 +1548,6 @@ msgstr "Выбор слоя"
 msgctxt "zcadexternal.hint_panel~ops_sensor_mark"
 msgid ""
 msgstr "Нумерация извещателей на плане"
-
-#: zcadexternal.hint_panel~setobjinsp(current)
-msgid ""
-msgstr ""
 
 #: zcadexternal.menucommand~blockslist
 msgid "BlocksList"
@@ -3095,10 +3071,6 @@ msgstr "Нумеруесая переменная"
 msgid "Save start number"
 msgstr "Сохранять старовое значение"
 
-#: zcadexternal.tnumberingparams~sortmode
-msgid ""
-msgstr ""
-
 #: zcadexternal.tnumberingparams~startnumber
 msgid "Start"
 msgstr "Начальное значение"
@@ -3974,4 +3946,3 @@ msgstr ""
 #: zcadexternal.tuprec~uprec8
 msgid "0.00000000"
 msgstr ""
-

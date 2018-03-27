@@ -18,7 +18,7 @@
       <ZAction Name="ACN_REMAUTOCABLES" Command="EL_AutoGen_Cable_Remove" Img="removeautocable.bmp"/>
       <ZAction Name="ACN_KIPCDBUILD" Command="KIP_CDBuild" Img="#CDB" Caption="Connection diagram"/>
       <ZAction Name="ACN_KIPLUGTABLEBUILD" Command="KIP_LugTableBuild" Img="#ТЗК" Caption="Lug table build"/>
-      <ZAction Name="ACN_REGENZENTS" Command="RegenZEnts" Img="#RZ" Caption="Regenerate zcad entities"/>
+      <ZAction Name="ACN_REGENZENTS" Command="RegenZEnts" Img="regenz" Caption="Regenerate zcad entities"/>
     </Group>
   </ActionsContent>
 </CONFIG>

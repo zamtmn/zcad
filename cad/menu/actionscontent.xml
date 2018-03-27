@@ -31,7 +31,7 @@
     </Group>
     <Group Category="View">
       <ZAction Name="ACN_PROJECTTREE" Command="ProjectTree" Img="treeview.bmp" Caption="Project tree" ShortCut="CTRL+T"/>
-      <ZAction Name="ACN_REGEN" Command="Regen" Img="regen.bmp" Caption="Regen all" ShortCut="CTRL+R"/>
+      <ZAction Name="ACN_REGEN" Command="Regen" Img="regen" Caption="Regen all" ShortCut="CTRL+R"/>
       <ZAction Name="ACN_PERSPECTIVE" Command="ChangeProjType" Img="perspective.bmp" Caption="Perspective" Hint="Perspective on/off"/>
       <ZAction Name="ACN_SHOW_OBJECTINSPECTOR" Command="Show(ObjectInspector)" Img="#OI" Caption="Object inspector"/>
       <ZAction Name="ACN_SHOW_PAGECONTROL" Command="Show(PageControl)" Img="#DW" Caption="Drawings window"/>
@@ -90,7 +90,7 @@
       <ZAction Name="ACN_MULTIOBJVARMAN" Command="MultiObjVarMan" Img="mvarman" Caption="Multi object variables manager"/>
     </Group>
     <Group Category="Draw">
-      <ZAction Name="ACN_LINE" Command="Line" Img="line.bmp" Caption="Line" Hint="Draw line"/>
+      <ZAction Name="ACN_LINE" Command="Line" Img="line" Caption="Line" Hint="Draw line"/>
       <ZAction Name="ACN_3DPOLY" Command="3DPoly" Img="pline.bmp" Caption="3DPolyLine" Hint="Draw 3DPolyLine"/>
       <ZAction Name="ACN_RECTANGLE" Command="Rectangle" Img="rectangle.bmp" Caption="Rectangle" Hint="Draw rectangle"/>
       <ZAction Name="ACN_CIRCLE" Command="Circle" Img="circle.bmp" Caption="Circle(Center,radius)"/>

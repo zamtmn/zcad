@@ -538,7 +538,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="40.96"
-     inkscape:cx="1.2394216"
+     inkscape:cx="-3.6311839"
      inkscape:cy="6.0586043"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -579,7 +579,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -589,8 +589,8 @@
      id="layer1"
      transform="translate(0,-1036.3622)">
     <path
-       style="fill:none;stroke:#00bd00;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 3.5,1048.8622 9,-9"
+       style="fill:none;stroke:#004c00;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 3,1049.3622 10,-10"
        id="path5357-1"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
@@ -602,15 +602,15 @@
        id="rect856"
        width="4"
        height="4"
-       x="10.5"
-       y="1037.8622" />
+       x="11"
+       y="1037.3622" />
     <rect
        style="opacity:1;fill:#20a8ff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.99999952;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
        id="rect843"
        width="3"
        height="3"
-       x="10.5"
-       y="1037.8622" />
+       x="11"
+       y="1037.3622" />
     <rect
        style="opacity:1;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:1.49999976;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
        id="rect856-9"
@@ -630,14 +630,14 @@
        id="rect856-5"
        width="4"
        height="4"
-       x="1.5"
-       y="1046.8622" />
+       x="1"
+       y="1047.3622" />
     <rect
        style="opacity:1;fill:#20a8ff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.99999952;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
        id="rect843-1"
        width="3"
        height="3"
-       x="1.5"
-       y="1046.8622" />
+       x="1"
+       y="1047.3622" />
   </g>
 </svg>

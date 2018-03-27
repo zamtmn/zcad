@@ -93,7 +93,7 @@
       <ZAction Name="ACN_LINE" Command="Line" Img="line" Caption="Line" Hint="Draw line"/>
       <ZAction Name="ACN_3DPOLY" Command="3DPoly" Img="pline" Caption="3DPolyLine" Hint="Draw 3DPolyLine"/>
       <ZAction Name="ACN_RECTANGLE" Command="Rectangle" Img="rectangle.bmp" Caption="Rectangle" Hint="Draw rectangle"/>
-      <ZAction Name="ACN_CIRCLE" Command="Circle" Img="circle.bmp" Caption="Circle(Center,radius)"/>
+      <ZAction Name="ACN_CIRCLE" Command="Circle" Img="circle" Caption="Circle(Center,radius)"/>
       <ZAction Name="ACN_CIRCLECD" Command="Circle(CD)" Img="circlecd.bmp" Caption="Circle(Center,diameter)"/>
       <ZAction Name="ACN_CIRCLE2P" Command="Circle(2P)" Img="circle2p.bmp" Caption="Circle(2 points)"/>
       <ZAction Name="ACN_CIRCLE3P" Command="Circle(3P)" Img="circle3p.bmp" Caption="Circle(3 points)"/>

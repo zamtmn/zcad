@@ -3,12 +3,12 @@
   <ActionsContent>
     <Group Category="File">
       <ZAction Name="ACN_LOAD" Command="Load" Img="open" Caption="Open ..." Hint="Open drawing" ShortCut="CTRL+O"/>
-      <ZAction Name="ACN_LOADQS" Command="Load(QS)" Img="#QL" Caption="Open (Autosave)" Hint="Open last autosave"/>
+      <ZAction Name="ACN_LOADQS" Command="Load(QS)" Img="qload" Caption="Open (Autosave)" Hint="Open last autosave"/>
       <ZAction Name="ACN_IMPORT" Command="Import" Img="#Import" Caption="Import ..." Hint="Import drawing"/>
       <ZAction Name="ACN_NEW" Command="NewDWG" Img="new" Caption="New drawing" ShortCut="CTRL+N"/>
       <ZAction Name="ACN_QSAVE" Command="QSave" Img="save" Caption="Save" Hint="Save drawing" ShortCut="CTRL+S"/>
       <ZAction Name="ACN_SAVEAS" Command="SaveAs" Img="saveas" Caption="Save as ..." Hint="Save drawing as" ShortCut="CTRL+SHIFT+S"/>
-      <ZAction Name="ACN_SAVEQS" Command="QSave(QS)" Img="#QS" Caption="Save (Autosave)" Hint="Autosave"/>
+      <ZAction Name="ACN_SAVEQS" Command="QSave(QS)" Img="qsave" Caption="Save (Autosave)" Hint="Autosave"/>
       <ZAction Name="ACN_PRINT" Command="Print" Img="print" Caption="Print" Hint="Print" ShortCut="CTRL+P"/>
       <ZAction Name="ACN_CLOSE" Command="CloseDWG" Img="close" Caption="Close drawing" ShortCut="CTRL+F4"/>
       <ZAction Name="ACN_QUIT" Command="Quit" Img="exit" Caption="Quit" ShortCut="CTRL+Q"/>
@@ -30,7 +30,7 @@
       <ZAction Name="ACN_El_FIND" Command="EL_Find" Img="find" Caption="Find device" ShortCut="CTRL+F"/>
     </Group>
     <Group Category="View">
-      <ZAction Name="ACN_PROJECTTREE" Command="ProjectTree" Img="treeview.bmp" Caption="Project tree" ShortCut="CTRL+T"/>
+      <ZAction Name="ACN_PROJECTTREE" Command="ProjectTree" Img="projecttree" Caption="Project tree" ShortCut="CTRL+T"/>
       <ZAction Name="ACN_REGEN" Command="Regen" Img="regen" Caption="Regen all" ShortCut="CTRL+R"/>
       <ZAction Name="ACN_PERSPECTIVE" Command="ChangeProjType" Img="perspective.bmp" Caption="Perspective" Hint="Perspective on/off"/>
       <ZAction Name="ACN_SHOW_OBJECTINSPECTOR" Command="Show(ObjectInspector)" Img="#OI" Caption="Object inspector"/>
@@ -75,7 +75,7 @@
     </Group>
     <Group Category="Modify">
       <ZAction Name="ACN_COPY" Command="Copy" Img="copy.bmp" Caption="Copy" Hint="Copy primitives"/>
-      <ZAction Name="ACN_MOVE" Command="Move" Img="move.bmp" Caption="Move" Hint="Move primitives"/>
+      <ZAction Name="ACN_MOVE" Command="Move" Img="move" Caption="Move" Hint="Move primitives"/>
       <ZAction Name="ACN_ROTATE" Command="Rotate" Img="rotate.bmp" Caption="Rotate" Hint="Rotate primitives"/>
       <ZAction Name="ACN_SCALE" Command="Scale" Img="scale.bmp" Caption="Scale" Hint="Scale primitives"/>
       <ZAction Name="ACN_MIRROR" Command="Mirror" Img="mirror.bmp" Caption="Mirror" Hint="Mirror primitives"/>

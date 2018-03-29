@@ -76,16 +76,16 @@
     <Group Category="Modify">
       <ZAction Name="ACN_COPY" Command="Copy" Img="copy.bmp" Caption="Copy" Hint="Copy primitives"/>
       <ZAction Name="ACN_MOVE" Command="Move" Img="move" Caption="Move" Hint="Move primitives"/>
-      <ZAction Name="ACN_ROTATE" Command="Rotate" Img="rotate.bmp" Caption="Rotate" Hint="Rotate primitives"/>
+      <ZAction Name="ACN_ROTATE" Command="Rotate" Img="rotate" Caption="Rotate" Hint="Rotate primitives"/>
       <ZAction Name="ACN_SCALE" Command="Scale" Img="scale.bmp" Caption="Scale" Hint="Scale primitives"/>
       <ZAction Name="ACN_MIRROR" Command="Mirror" Img="mirror.bmp" Caption="Mirror" Hint="Mirror primitives"/>
-      <ZAction Name="ACN_BEDIT" Command="BEdit" Img="bedit.bmp" Caption="Block editor"/>
+      <ZAction Name="ACN_BEDIT" Command="BEdit" Img="bedit" Caption="Block editor"/>
       <ZAction Name="ACN_BREPLACE" Command="BlockReplace" Img="#BR" Caption="Block replace"/>
       <ZAction Name="ACN_BSCALE" Command="BlockScale" Img="#BS" Caption="Block scale"/>
       <ZAction Name="ACN_BROTATE" Command="BlockRotate" Img="#BR" Caption="Block rotate"/>
       <ZAction Name="ACN_ADDTOOWNER" Command="AddToOwner" Img="addtoowner.bmp" Caption="Add to owner"/>
       <ZAction Name="ACN_COPYFROMOWNER" Command="CopyFromOwner" Img="#COF" Caption="Copy from owner"/>
-      <ZAction Name="ACN_POLYED" Command="PolyED" Img="polyed.bmp" Caption="Edit polyline"/>
+      <ZAction Name="ACN_POLYED" Command="PolyED" Img="polyed" Caption="Edit polyline"/>
       <ZAction Name="ACN_OBJVARMAN" Command="ObjVarMan" Img="varman" Caption="Object variables manager"/>
       <ZAction Name="ACN_MULTIOBJVARMAN" Command="MultiObjVarMan" Img="mvarman" Caption="Multi object variables manager"/>
     </Group>

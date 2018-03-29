@@ -15,7 +15,7 @@
    viewBox="0 0 16 16"
    id="svg4225"
    version="1.1"
-   inkscape:version="0.91 r13725"
+   inkscape:version="0.92.1 r15371"
    sodipodi:docname="pline.svg"
    inkscape:export-filename="pline.png"
    inkscape:export-xdpi="96"
@@ -538,7 +538,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="22.994668"
-     inkscape:cx="-3.2699732"
+     inkscape:cx="-11.945898"
      inkscape:cy="2.7386066"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -557,9 +557,9 @@
      inkscape:snap-center="true"
      units="px"
      inkscape:window-width="2560"
-     inkscape:window-height="1403"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-height="1414"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
      inkscape:window-maximized="1"
      showguides="true"
      inkscape:guide-bbox="true">
@@ -573,7 +573,8 @@
     <sodipodi:guide
        position="14,16"
        orientation="0,1"
-       id="guide4382" />
+       id="guide4382"
+       inkscape:locked="false" />
   </sodipodi:namedview>
   <metadata
      id="metadata4230">
@@ -616,7 +617,7 @@
        x="-7.5"
        y="1047.3622" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#008c00;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       style="fill:none;fill-rule:evenodd;stroke:#008c00;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
        d="m 2.5,1038.8622 c 0,0 10,1 10,1 l -9,9 10,1"
        id="path3580"
        inkscape:connector-curvature="0" />

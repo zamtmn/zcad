@@ -15,8 +15,8 @@
    id="svg4225"
    version="1.1"
    inkscape:version="0.92.1 r15371"
-   sodipodi:docname="move.svg"
-   inkscape:export-filename="move.png"
+   sodipodi:docname="rotate.svg"
+   inkscape:export-filename="rotate.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
   <defs
@@ -28,9 +28,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="55.29419"
-     inkscape:cx="-3.6979904"
-     inkscape:cy="7.9181917"
+     inkscape:zoom="27.647095"
+     inkscape:cx="13.44977"
+     inkscape:cy="11.528836"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -80,13 +80,10 @@
      id="layer1"
      transform="translate(0,-1036.3622)">
     <path
-       style="fill:#00b6ff;fill-opacity:1;fill-rule:evenodd;stroke:#0044aa;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 8,1036.7621 -2.5,4.1001 H 7 v 2.5 H 4.5 v -1.5 L 0.39994864,1044.3555 4.5,1046.8622 v -1.5 H 7 v 2.5 H 5.5 l 2.5,4.1005 2.5,-4.1005 H 9 v -2.5 h 2.5 v 1.5 l 4.100052,-2.495 -4.100052,-2.505 v 1.5 H 9 v -2.5 h 1.5 z"
-       id="path842"
+       style="fill:#00b6ff;fill-opacity:1;fill-rule:evenodd;stroke:#0044aa;stroke-width:0.49889764;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 12.303416,1039.1447 -1.292679,1.2927 c -2.0197403,-2.0198 -5.2944084,-2.0198 -7.3141361,0 -2.0197643,2.0197 -2.0197642,5.2944 0,7.3141 2.0197402,2.0198 5.2944083,2.0198 7.3141361,0 l -1.6338038,-1.6338 c -1.1174925,1.1173 -2.9290304,1.1173 -4.0465288,0 -1.1172312,-1.1175 -1.117231,-2.929 -1e-7,-4.0465 1.1174927,-1.1172 2.9290304,-1.1172 4.046529,0 l -1.3161577,1.3162 c 1.5541758,0.3784 3.4619334,0.4032 5.0160384,0.7817 z"
+       id="path842-1"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccccccccccccccccccccccc"
-       inkscape:export-filename=".\path842.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
+       sodipodi:nodetypes="cccccccccccc" />
   </g>
 </svg>

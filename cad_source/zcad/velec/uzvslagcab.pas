@@ -531,6 +531,69 @@ end;
 //end;
 procedure Tuzvslagcab_com.test(pdata:GDBPlatformint);
 var
+ i,j,counterColor:integer;
+ UndoMarcerIsPlazed:boolean;
+ nameSL:string;
+ listError:TListError;
+ errorInfo:TErrorInfo;
+ //listSLname:TGDBlistSLname;
+ pConnect:GDBVertex;
+begin
+  //тут делаем чтонибудь что будет усполнено по нажатию DoSomething2
+  //выполним Commandmanager.executecommandend;
+  //эту кнопку можно нажать 1 раз
+
+  //создаем список ошибок
+  listError:=TListError.Create;
+
+  //listAllGraph:=TListAllGraph.Create;
+  //listSLname:=uzvcom.getListSuperline();
+  //
+  //получаем выбраное имя суперлинии
+  nameSL:=pstring(uzvslagcabComParams.NamesList.Enums.getDataMutable(integer(uzvslagcabComParams.NamesList.selected)))^;
+
+  //строим наш граф
+  graphCable:=uzvcom.graphBulderFunc(uzvslagcabComParams.accuracy,nameSL);
+
+  //Ищем ошибки
+  errorSearchSLAGCAB(graphCable,uzvslagcabComParams.accuracy,listError);
+
+
+  UndoMarcerIsPlazed:=false;
+  zcPlaceUndoStartMarkerIfNeed(UndoMarcerIsPlazed,'Visualisation Group Line');
+
+  //**Визуализация ошибок
+  for errorInfo in listError do
+    begin
+      ZCMsgCallBackInterface.TextMessage(errorInfo.name + ' - ошибка: ' + errorInfo.text,TMWOHistoryOut);
+      if getPointConnector(errorInfo.device,pConnect) then
+            uzvcom.visualGraphError(pConnect,4,6,systemVisualLayerName);
+            //uzvtestdraw.testTempDrawPLCross(pConnect,12*epsilon,4);
+
+  end;
+  listError.Destroy;
+
+
+  listHeadDevice:=uzvnum.buildListAllConnectDevice(graphCable,uzvslagcabComParams.accuracy,listError);
+
+  counterColor:=1;
+  //for i:=0 to listHeadDevice.Size-1 do
+  //begin
+  //   for j:=0 to listHeadDevice[i].listGroup.Size -1 do
+  //      begin
+  //           if counterColor=6 then
+  //                counterColor:=1;
+  //           uzvnum.visualGroupLine(listHeadDevice,graphCable,counterColor,i,j,uzvslagcabComParams.accuracy);
+  //           counterColor:=counterColor+1;
+  //           //inc(counterColor);
+  //      end;
+  //end;
+  zcPlaceUndoEndMarkerIfNeed(UndoMarcerIsPlazed);
+  zcRedrawCurrentDrawing;
+
+  Commandmanager.executecommandend;
+end;
+{*var
  listSLname:TGDBlistSLname;
  name:string;
 begin
@@ -584,7 +647,7 @@ begin
   //zcPlaceUndoEndMarkerIfNeed(UndoMarcerIsPlazed);
   //zcRedrawCurrentDrawing;
   //Commandmanager.executecommandend;
-end;
+end;  *}
 
 
 //procedure Tuzvslagcab_com.DoSomething(pdata:GDBPlatformint);

@@ -16,7 +16,7 @@
    id="svg4225"
    version="1.1"
    inkscape:version="0.92.1 r15371"
-   sodipodi:docname="line.svg"
+   sodipodi:docname="superline.svg"
    inkscape:export-filename="line.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
@@ -537,9 +537,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="40.96"
-     inkscape:cx="-13.067219"
-     inkscape:cy="6.0586043"
+     inkscape:zoom="14.481547"
+     inkscape:cx="4.0742626"
+     inkscape:cy="1.2165556"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -579,7 +579,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -590,7 +590,7 @@
      transform="translate(0,-1036.3622)">
     <path
        style="fill:none;stroke:#008c00;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 3,1049.3622 10,-10"
+       d="m 3.5,1049.8622 10,-10"
        id="path5357-1"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
@@ -602,42 +602,38 @@
        id="rect856"
        width="4"
        height="4"
-       x="11"
-       y="1037.3622" />
+       x="11.5"
+       y="1037.8622" />
     <rect
        style="opacity:1;fill:#20a8ff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.99999952;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
        id="rect843"
        width="3"
        height="3"
-       x="11"
-       y="1037.3622" />
-    <rect
-       style="opacity:1;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:1.49999976;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
-       id="rect856-9"
-       width="3"
-       height="3"
-       x="-7.5"
-       y="1047.3622" />
-    <rect
-       style="opacity:1;fill:#20a8ff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.49999976;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
-       id="rect843-5"
-       width="2.5"
-       height="2.5"
-       x="-7.5"
-       y="1047.3622" />
+       x="11.5"
+       y="1037.8622" />
     <rect
        style="opacity:1;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:1.99999964;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
        id="rect856-5"
        width="4"
        height="4"
-       x="1"
-       y="1047.3622" />
+       x="1.5"
+       y="1047.8622" />
     <rect
        style="opacity:1;fill:#20a8ff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.99999952;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
        id="rect843-1"
        width="3"
        height="3"
-       x="1"
-       y="1047.3622" />
+       x="1.5"
+       y="1047.8622" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.66666698px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#be0000;fill-opacity:1;stroke:none"
+       x="0.16666655"
+       y="1045.2788"
+       id="text5348"><tspan
+         sodipodi:role="line"
+         id="tspan7309"
+         x="0.16666655"
+         y="1045.2788">S</tspan></text>
   </g>
 </svg>

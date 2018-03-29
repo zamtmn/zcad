@@ -640,11 +640,11 @@
        x="-8"
        y="1062.3622" />
     <ellipse
-       style="fill:none;fill-opacity:1;stroke:#008c00;stroke-width:2.63636494;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:none;fill-opacity:1;stroke:#008c00;stroke-width:0.99364889;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="path5236"
-       ry="6.681829"
-       rx="6.6818175"
-       cy="1044.3622"
+       ry="6.5940909"
+       rx="6.6849928"
+       cy="1044.4531"
        cx="8"
        inkscape:export-filename=".\path5236.png"
        inkscape:export-xdpi="96"
@@ -654,14 +654,14 @@
        id="rect856-1"
        width="4"
        height="4"
-       x="11"
+       x="10.5"
        y="1037.3622" />
     <rect
        style="opacity:1;fill:#20a8ff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.99999952;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
        id="rect843-9"
        width="3"
        height="3"
-       x="11"
+       x="10.5"
        y="1037.3622" />
   </g>
 </svg>

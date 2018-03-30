@@ -78,7 +78,10 @@ TMasterDevice=class
            //listVertexTerminalBox:TListVertexTerminalBox; // список распред коробки, в каких вершинах и сколько кабелей
            LNumSubDevice:TVectorOfSubDev;
            LTreeDev:TVectorOfTreeDev;
+           LEasyTreeDev:TVectorOfTreeDev;
            name:String;
+
+           //function getIndexEdge(vt1,vt2:Tvertex):integer;
            public
            constructor Create;
            destructor Destroy;override;
@@ -117,11 +120,13 @@ constructor TMasterDevice.TGroupInfo.Create;
 begin
   LNumSubDevice:=TVectorOfSubDev.Create;
   LTreeDev:=TVectorOfTreeDev.Create;
+  LEasyTreeDev:=TVectorOfTreeDev.Create;
 end;
 destructor TMasterDevice.TGroupInfo.Destroy;
 begin
   LNumSubDevice.Destroy;
   LTreeDev.Destroy;
+  LEasyTreeDev.Destroy;
 end;
 //function TMasterDevice.getNumbyName(name:string):integer;
 //var
@@ -129,7 +134,12 @@ end;
 //begin
 //    //self.
 //end;
-
+//function TMasterDevice.TGroupInfo.getIndexEdge(vt1,vt2:Tvertex):integer;
+//var
+//i:integer;
+//begin
+//    self.LTreeDev;
+//end;
 //**Очистка текста на чертеже
 //function stripMtext_com(operands:TCommandOperands):TCommandResult;
 //var

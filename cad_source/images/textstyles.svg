@@ -23,28 +23,6 @@
   <defs
      id="defs4227">
     <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient4748"
-       id="linearGradient4750"
-       x1="16.998913"
-       y1="1042.8622"
-       x2="32.001087"
-       y2="1042.8622"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.0460801,0,0,1.0464742,-17.628966,-46.966101)" />
-    <linearGradient
-       inkscape:collect="always"
-       id="linearGradient4748">
-      <stop
-         style="stop-color:#e6e6e6;stop-opacity:1;"
-         offset="0"
-         id="stop4744" />
-      <stop
-         style="stop-color:#e6e6e6;stop-opacity:0;"
-         offset="1"
-         id="stop4746" />
-    </linearGradient>
-    <linearGradient
        id="linearGradient4751">
       <stop
          style="stop-color:#cccccc;stop-opacity:1"
@@ -629,7 +607,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="40.96"
-     inkscape:cx="1.2394216"
+     inkscape:cx="-3.6311839"
      inkscape:cy="6.0586043"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -680,7 +658,7 @@
      id="layer1"
      transform="translate(0,-1036.3622)">
     <rect
-       style="opacity:1;fill:url(#linearGradient4750);fill-opacity:1;stroke:#3771c8;stroke-width:1.0030998;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+       style="opacity:1;fill:#e6e6e6;fill-opacity:1;stroke:#3771c8;stroke-width:1.0030998;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
        id="rect842"
        width="14.980262"
        height="14.980247"

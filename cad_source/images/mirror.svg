@@ -15,8 +15,8 @@
    viewBox="0 0 16 16"
    id="svg4225"
    version="1.1"
-   inkscape:version="0.92.1 r15371"
-   sodipodi:docname="mirror.svg"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="tmp.svg"
    inkscape:export-filename="mirror.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
@@ -537,9 +537,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="40.96"
-     inkscape:cx="-11.168895"
-     inkscape:cy="3.7730727"
+     inkscape:zoom="10.24"
+     inkscape:cx="12.069525"
+     inkscape:cy="0.92822422"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -556,10 +556,10 @@
      inkscape:snap-object-midpoints="true"
      inkscape:snap-center="true"
      units="px"
-     inkscape:window-width="2560"
-     inkscape:window-height="1414"
-     inkscape:window-x="-9"
-     inkscape:window-y="-9"
+     inkscape:window-width="1280"
+     inkscape:window-height="1001"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1"
      showguides="true"
      inkscape:guide-bbox="true">
@@ -579,7 +579,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -588,15 +588,6 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(0,-1036.3622)">
-    <path
-       style="fill:none;stroke:#ff0000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 8.5,1051.3622 v -14"
-       id="path5357-1"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc"
-       inkscape:export-filename="dimstyles.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
     <path
        inkscape:connector-curvature="0"
        style="fill:none;fill-opacity:1;stroke:#008c00;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -609,5 +600,12 @@
        d="m 10.5,1037.8622 v 13 h 5 z"
        id="rect5857-5-2"
        sodipodi:nodetypes="cccc" />
+    <rect
+       style="opacity:1;fill:#d40000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.96499997;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect4225"
+       width="1"
+       height="14.000017"
+       x="8"
+       y="1037.3622" />
   </g>
 </svg>

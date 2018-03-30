@@ -141,8 +141,8 @@
     </Misc>
     <Status Type="ToolBar">
       <Separator/>
-      <Variable VarName="DWG_SnapGrid" Img="snaptogrid.bmp" Hint="Snap" ShortCut="F9"/>
-      <Variable VarName="DWG_DrawGrid" Img="1.bmp" Hint="Display grid" ShortCut="F7"/>
+      <Variable VarName="DWG_SnapGrid" Img="snaptogrid" Hint="Snap" ShortCut="F9"/>
+      <Variable VarName="DWG_DrawGrid" Img="grid" Hint="Display grid" ShortCut="F7"/>
       <Variable VarName="DWG_EditInSubEntry" Img="sub.bmp" Hint="On/Off Selecting parts of dynamic objects" ShortCut="F4"/>
       <Variable VarName="DWG_AdditionalGrips" Img="#+G" Hint="On/Off Additional grips"/>
       <Variable VarName="DWG_DrawMode" Img="lwt.bmp" Hint="Show/Hide Lineweight"/>

@@ -143,9 +143,9 @@
       <Separator/>
       <Variable VarName="DWG_SnapGrid" Img="snaptogrid" Hint="Snap" ShortCut="F9"/>
       <Variable VarName="DWG_DrawGrid" Img="grid" Hint="Display grid" ShortCut="F7"/>
-      <Variable VarName="DWG_EditInSubEntry" Img="sub.bmp" Hint="On/Off Selecting parts of dynamic objects" ShortCut="F4"/>
+      <Variable VarName="DWG_EditInSubEntry" Img="sub" Hint="On/Off Selecting parts of dynamic objects" ShortCut="F4"/>
       <Variable VarName="DWG_AdditionalGrips" Img="#+G" Hint="On/Off Additional grips"/>
-      <Variable VarName="DWG_DrawMode" Img="lwt.bmp" Hint="Show/Hide Lineweight"/>
+      <Variable VarName="DWG_DrawMode" Img="lwt" Hint="Show/Hide Lineweight"/>
       <Variable VarName="DWG_OSMode" Img="osnap.bmp" Hint="Object snap" ShortCut="F3"/>
       <Variable VarName="DWG_PolarMode" Img="polar.bmp" Hint="Polar tracking" ShortCut="F10"/>
       <Variable VarName="DWG_HelpGeometryDraw" Img="#AG" Hint="Auxiliary graphics (connectivity, direction, etc.)"/>

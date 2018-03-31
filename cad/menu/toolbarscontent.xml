@@ -146,8 +146,8 @@
       <Variable VarName="DWG_EditInSubEntry" Img="sub" Hint="On/Off Selecting parts of dynamic objects" ShortCut="F4"/>
       <Variable VarName="DWG_AdditionalGrips" Img="#+G" Hint="On/Off Additional grips"/>
       <Variable VarName="DWG_DrawMode" Img="lwt" Hint="Show/Hide Lineweight"/>
-      <Variable VarName="DWG_OSMode" Img="osnap.bmp" Hint="Object snap" ShortCut="F3"/>
-      <Variable VarName="DWG_PolarMode" Img="polar.bmp" Hint="Polar tracking" ShortCut="F10"/>
+      <Variable VarName="DWG_OSMode" Img="osnap" Hint="Object snap" ShortCut="F3"/>
+      <Variable VarName="DWG_PolarMode" Img="polar" Hint="Polar tracking" ShortCut="F10"/>
       <Variable VarName="DWG_HelpGeometryDraw" Img="#AG" Hint="Auxiliary graphics (connectivity, direction, etc.)"/>
       <Variable VarName="DISP_SystmGeometryDraw" Img="#SG" Hint="System graphics (size, communication, etc. for debugging)"/>
     </Status>

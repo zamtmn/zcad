@@ -540,8 +540,10 @@ var
   TBType:string;
 begin
   TBNode:=FindBarsContent(aName);
-  TBType:=getAttrValue(TBNode,'Type','');
-  CreateToolbarContent(tb,TBNode);
+  if TBNode<>nil then begin
+    TBType:=getAttrValue(TBNode,'Type','');
+    CreateToolbarContent(tb,TBNode);
+  end;
 end;
 function TToolBarsManager.FindToolBar(TBName:String;out tb:TToolBar):boolean;
 var

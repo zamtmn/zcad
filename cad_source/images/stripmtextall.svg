@@ -295,7 +295,7 @@
      inkscape:pageshadow="2"
      inkscape:zoom="64"
      inkscape:cx="6.0571893"
-     inkscape:cy="6.9536512"
+     inkscape:cy="8.8286512"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -335,7 +335,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -360,14 +360,14 @@
          y="1052.2782">Mt</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:6.66666651px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#d40000;fill-opacity:1;stroke:none"
-       x="6.8971357"
-       y="1041.3948"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:8px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#d40000;fill-opacity:1;stroke:none"
+       x="4.9765625"
+       y="1042.4012"
        id="text5348-9"><tspan
          sodipodi:role="line"
          id="tspan6358"
-         x="6.8971357"
-         y="1041.3948">All</tspan></text>
+         x="4.9765625"
+         y="1042.4012">All</tspan></text>
     <g
        transform="matrix(0.25,0,0,0.25,5.5007093,1041.4364)"
        id="g7897">

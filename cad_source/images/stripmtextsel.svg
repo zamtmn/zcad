@@ -18,9 +18,9 @@
    version="1.1"
    inkscape:version="0.92.1 r15371"
    sodipodi:docname="stripmtextsel.svg"
-   inkscape:export-filename="4.png"
-   inkscape:export-xdpi="768"
-   inkscape:export-ydpi="768">
+   inkscape:export-filename="stripmtextsel.png"
+   inkscape:export-xdpi="96.000008"
+   inkscape:export-ydpi="96.000008">
   <defs
      id="defs4227">
     <linearGradient
@@ -294,8 +294,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="64"
-     inkscape:cx="6.0571893"
-     inkscape:cy="6.9536512"
+     inkscape:cx="2.9400018"
+     inkscape:cy="8.2036512"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -335,7 +335,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -360,15 +360,15 @@
          y="1052.2782">Mt</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:6.66666651px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#d40000;fill-opacity:1;stroke:none"
-       x="4.9518237"
-       y="1041.3475"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:8px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#d40000;fill-opacity:1;stroke:none"
+       x="2.5839844"
+       y="1042.3446"
        id="text5348-9"><tspan
          sodipodi:role="line"
          id="tspan9988"
-         x="4.9518237"
-         y="1041.3475"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:6.66666651px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#d40000;fill-opacity:1">Sel</tspan></text>
+         x="2.5839844"
+         y="1042.3446"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:8px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#d40000;fill-opacity:1">Sel</tspan></text>
     <g
        transform="matrix(0.25,0,0,0.25,5.5007093,1041.4364)"
        id="g7897">

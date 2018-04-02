@@ -43,11 +43,11 @@
       <ZAction Name="ACN_SAVELAYOUT" Command="SaveLayout" Img="#SLay" Caption="Save window layout as default"/>
       <ZAction Name="ACN_DOCKOPT" Command="DockingOptions" Img="#DO" Caption="Docking options"/>
       <ZAction Name="ACN_TEXTWINDOW" Command="TextWindow" Img="#TW" Caption="View text window" ShortCut="F2"/>
-      <ZAction Name="ACN_ZOOMALL" Command="Zoom(ALL)" Img="zoomall.bmp" Caption="Zoom All" ShortCut="HOME"/>
-      <ZAction Name="ACN_ZOOMWINDOW" Command="ZoomWindow" Img="zoomwindow.bmp" Caption="Zoom window"/>
+      <ZAction Name="ACN_ZOOMALL" Command="Zoom(ALL)" Img="zoomall" Caption="Zoom All" ShortCut="HOME"/>
+      <ZAction Name="ACN_ZOOMWINDOW" Command="ZoomWindow" Img="zoomwindow" Caption="Zoom window"/>
       <ZAction Name="ACN_ZOOMSEL" Command="Zoom(SEL)" Img="#zsel" Caption="Zoom selected" ShortCut="END"/>
-      <ZAction Name="ACN_ZOOMIN" Command="Zoom(IN)" Img="zoomin.bmp" Caption="Zoom in" ShortCut="PGUP"/>
-      <ZAction Name="ACN_ZOOMOUT" Command="Zoom(OUT)" Img="zoomout.bmp" Caption="Zoom out" ShortCut="PGDN"/>
+      <ZAction Name="ACN_ZOOMIN" Command="Zoom(IN)" Img="zoomin" Caption="Zoom in" ShortCut="PGUP"/>
+      <ZAction Name="ACN_ZOOMOUT" Command="Zoom(OUT)" Img="zoomout" Caption="Zoom out" ShortCut="PGDN"/>
       <ZAction Name="ACN_PANLEFT" Command="Pan(LEFT)" Img="panleft" Caption="Pan left" ShortCut="LEFT"/>
       <ZAction Name="ACN_PANRIGHT" Command="Pan(RIGHT)" Img="panright" Caption="Pan right" ShortCut="RIGHT"/>
       <ZAction Name="ACN_PANUP" Command="Pan(UP)" Img="panup" Caption="Pan up" ShortCut="UP"/>
@@ -94,9 +94,9 @@
       <ZAction Name="ACN_3DPOLY" Command="3DPoly" Img="pline" Caption="3DPolyLine" Hint="Draw 3DPolyLine"/>
       <ZAction Name="ACN_RECTANGLE" Command="Rectangle" Img="rectangle" Caption="Rectangle" Hint="Draw rectangle"/>
       <ZAction Name="ACN_CIRCLE" Command="Circle" Img="circle" Caption="Circle(Center,radius)"/>
-      <ZAction Name="ACN_CIRCLECD" Command="Circle(CD)" Img="circlecd.bmp" Caption="Circle(Center,diameter)"/>
-      <ZAction Name="ACN_CIRCLE2P" Command="Circle(2P)" Img="circle2p.bmp" Caption="Circle(2 points)"/>
-      <ZAction Name="ACN_CIRCLE3P" Command="Circle(3P)" Img="circle3p.bmp" Caption="Circle(3 points)"/>
+      <ZAction Name="ACN_CIRCLECD" Command="Circle(CD)" Img="circlecd" Caption="Circle(Center,diameter)"/>
+      <ZAction Name="ACN_CIRCLE2P" Command="Circle(2P)" Img="circle2p" Caption="Circle(2 points)"/>
+      <ZAction Name="ACN_CIRCLE3P" Command="Circle(3P)" Img="circle3p" Caption="Circle(3 points)"/>
       <ZAction Name="ACN_BInsert" Command="Insert" Img="insert" Caption="Insert block"/>
       <ZAction Name="ACN_TEXT" Command="Text" Img="text" Caption="Draw text"/>
       <ZAction Name="ACN_ARC" Command="Arc" Img="arc.bmp" Caption="Draw arc"/>
@@ -125,7 +125,7 @@
       <ZAction Name="ACN_DIST" Command="Dist" Img="dist" Caption="Distance"/>
       <ZAction Name="ACN_REBUILDTREE" Command="RebuildTree" Img="#rtree" Caption="Rebuild current drawing spatial index"/>
       <ZAction Name="ACN_TREESTAT" Command="TreeStat" Img="#ti" Caption="Spatial index info" Hint="Current drawing spatial index info"/>
-      <ZAction Name="ACN_OPTIONS" Command="Options" Img="options.bmp" Caption="Options"/>
+      <ZAction Name="ACN_OPTIONS" Command="Options" Img="options" Caption="Options"/>
       <ZAction Name="ACN_SAVEOPTIONS" Command="SaveOptions" Img="#so" Caption="Save options"/>
     </Group>
     <Group Category="SL">

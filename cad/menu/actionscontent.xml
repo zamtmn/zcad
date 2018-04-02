@@ -22,7 +22,7 @@
       <ZAction Name="ACN_FAKECOPYCLIPBASE" Command="CopyBase" Img="#CB" ShortCut="CTRL+INS"/>
       <ZAction Name="ACN_PASTE" Command="PasteClip" Img="pasteclip" Caption="Paste" Hint="Paste from clipboard" ShortCut="CTRL+V"/>
       <ZAction Name="ACN_FAKEPASTE" Command="PasteClip" Img="#Paste" ShortCut="SHIFT+INS"/>
-      <ZAction Name="ACN_ERASE" Command="Erase" Img="erase.bmp" Caption="Erase" ShortCut="DEL"/>
+      <ZAction Name="ACN_ERASE" Command="Erase" Img="erase" Caption="Erase" ShortCut="DEL"/>
       <ZAction Name="ACN_SELECTALL" Command="SelectAll" Img="#SA" Caption="Select all" ShortCut="CTRL+A"/>
       <ZAction Name="ACN_INVERSESELECTED" Command="InverseSelected" Img="#SI" Caption="Inverse selected"/>
       <ZAction Name="ACN_DESELECTALL" Command="DeSelectAll" Img="#DSA" Caption="DeSelect all" ShortCut="CTRL+SHIFT+A"/>
@@ -32,7 +32,7 @@
     <Group Category="View">
       <ZAction Name="ACN_PROJECTTREE" Command="ProjectTree" Img="projecttree" Caption="Project tree" ShortCut="CTRL+T"/>
       <ZAction Name="ACN_REGEN" Command="Regen" Img="regen" Caption="Regen all" ShortCut="CTRL+R"/>
-      <ZAction Name="ACN_PERSPECTIVE" Command="ChangeProjType" Img="perspective.bmp" Caption="Perspective" Hint="Perspective on/off"/>
+      <ZAction Name="ACN_PERSPECTIVE" Command="ChangeProjType" Img="perspective" Caption="Perspective" Hint="Perspective on/off"/>
       <ZAction Name="ACN_SHOW_OBJECTINSPECTOR" Command="Show(ObjectInspector)" Img="#OI" Caption="Object inspector"/>
       <ZAction Name="ACN_SHOW_PAGECONTROL" Command="Show(PageControl)" Img="#DW" Caption="Drawings window"/>
       <ZAction Name="ACN_SHOW_COMMANDLINE" Command="Show(CommandLine)" Img="#CL" Caption="Command line and history"/>
@@ -48,18 +48,18 @@
       <ZAction Name="ACN_ZOOMSEL" Command="Zoom(SEL)" Img="#zsel" Caption="Zoom selected" ShortCut="END"/>
       <ZAction Name="ACN_ZOOMIN" Command="Zoom(IN)" Img="zoomin.bmp" Caption="Zoom in" ShortCut="PGUP"/>
       <ZAction Name="ACN_ZOOMOUT" Command="Zoom(OUT)" Img="zoomout.bmp" Caption="Zoom out" ShortCut="PGDN"/>
-      <ZAction Name="ACN_PANLEFT" Command="Pan(LEFT)" Img="panleft.bmp" Caption="Pan left" ShortCut="LEFT"/>
-      <ZAction Name="ACN_PANRIGHT" Command="Pan(RIGHT)" Img="panright.bmp" Caption="Pan right" ShortCut="RIGHT"/>
-      <ZAction Name="ACN_PANUP" Command="Pan(UP)" Img="panup.bmp" Caption="Pan up" ShortCut="UP"/>
-      <ZAction Name="ACN_PANDOWN" Command="Pan(DOWN)" Img="pandown.bmp" Caption="Pan down" ShortCut="DOWN"/>
-      <ZAction Name="ACN_VIEWTOP" Command="View(TOP)" Img="top.bmp" Caption="View top"/>
-      <ZAction Name="ACN_VIEWDOWN" Command="View(BOTTOM)" Img="bottom.bmp" Caption="View bottom"/>
-      <ZAction Name="ACN_VIEWLEFT" Command="View(LEFT)" Img="left.bmp" Caption="View left"/>
-      <ZAction Name="ACN_VIEWRIGHT" Command="View(RIGHT)" Img="right.bmp" Caption="View right"/>
-      <ZAction Name="ACN_VIEWSEISO" Command="View(SEISO)" Img="isose.bmp" Caption="View SE isometric"/>
-      <ZAction Name="ACN_VIEWNEISO" Command="View(NEISO)" Img="isone.bmp" Caption="View NE isometric"/>
-      <ZAction Name="ACN_VIEWSWISO" Command="View(SWISO)" Img="isosw.bmp" Caption="View SW isometric"/>
-      <ZAction Name="ACN_VIEWNWISO" Command="View(NWISO)" Img="isoNw.bmp" Caption="View NW isometric"/>
+      <ZAction Name="ACN_PANLEFT" Command="Pan(LEFT)" Img="panleft" Caption="Pan left" ShortCut="LEFT"/>
+      <ZAction Name="ACN_PANRIGHT" Command="Pan(RIGHT)" Img="panright" Caption="Pan right" ShortCut="RIGHT"/>
+      <ZAction Name="ACN_PANUP" Command="Pan(UP)" Img="panup" Caption="Pan up" ShortCut="UP"/>
+      <ZAction Name="ACN_PANDOWN" Command="Pan(DOWN)" Img="pandown" Caption="Pan down" ShortCut="DOWN"/>
+      <ZAction Name="ACN_VIEWTOP" Command="View(TOP)" Img="top" Caption="View top"/>
+      <ZAction Name="ACN_VIEWDOWN" Command="View(BOTTOM)" Img="bottom" Caption="View bottom"/>
+      <ZAction Name="ACN_VIEWLEFT" Command="View(LEFT)" Img="left" Caption="View left"/>
+      <ZAction Name="ACN_VIEWRIGHT" Command="View(RIGHT)" Img="right" Caption="View right"/>
+      <ZAction Name="ACN_VIEWSEISO" Command="View(SEISO)" Img="isose" Caption="View SE isometric"/>
+      <ZAction Name="ACN_VIEWNEISO" Command="View(NEISO)" Img="isone" Caption="View NE isometric"/>
+      <ZAction Name="ACN_VIEWSWISO" Command="View(SWISO)" Img="isosw" Caption="View SW isometric"/>
+      <ZAction Name="ACN_VIEWNWISO" Command="View(NWISO)" Img="isonw" Caption="View NW isometric"/>
       <ZAction Name="ACN_VIEWRL" Command="Pan(RL)" Img="#RL" Caption="Rotate camera left" ShortCut="CTRL+LEFT"/>
       <ZAction Name="ACN_VIEWRR" Command="Pan(RR)" Img="#RR" Caption="Rotate camera right" ShortCut="CTRL+RIGHT"/>
       <ZAction Name="ACN_VIEWRU" Command="Pan(RU)" Img="#RU" Caption="Rotate camera up" ShortCut="CTRL+UP"/>
@@ -122,7 +122,7 @@
       <ZAction Name="ACN_COPYVARNAMETOCLIP" Command="ObjInspCopyToClip(VAR)" Img="#CVN" Caption="Copy var name"/>
       <ZAction Name="ACN_COPYLINKTOVARTOCLIP" Command="ObjInspCopyToClip(LVAR)" Img="#CLV" Caption="Copy link to var"/>
       <ZAction Name="ACN_COPYVALUETOCLIP" Command="ObjInspCopyToClip(VALUE)" Img="#CVL" Caption="Copy value"/>
-      <ZAction Name="ACN_DIST" Command="Dist" Img="dist.bmp" Caption="Distance"/>
+      <ZAction Name="ACN_DIST" Command="Dist" Img="dist" Caption="Distance"/>
       <ZAction Name="ACN_REBUILDTREE" Command="RebuildTree" Img="#rtree" Caption="Rebuild current drawing spatial index"/>
       <ZAction Name="ACN_TREESTAT" Command="TreeStat" Img="#ti" Caption="Spatial index info" Hint="Current drawing spatial index info"/>
       <ZAction Name="ACN_OPTIONS" Command="Options" Img="options.bmp" Caption="Options"/>

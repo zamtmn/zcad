@@ -14,7 +14,7 @@
    viewBox="0 0 16 16"
    id="svg4225"
    version="1.1"
-   inkscape:version="0.92.1 r15371"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="mvarman.svg"
    inkscape:export-filename="mvarman.png"
    inkscape:export-xdpi="96"
@@ -48,9 +48,9 @@
      inkscape:snap-center="true"
      units="px"
      inkscape:window-width="2560"
-     inkscape:window-height="1414"
-     inkscape:window-x="1911"
-     inkscape:window-y="-9"
+     inkscape:window-height="1403"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      showguides="true"
      inkscape:guide-bbox="true">
@@ -69,7 +69,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -99,13 +99,14 @@
        sodipodi:nodetypes="cc" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.33333302px;line-height:1.25;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, ';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
-       x="1.7786459"
-       y="1051.1903"
-       id="text5066"><tspan
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:8px;line-height:125%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#be0000;fill-opacity:1;stroke:none"
+       x="0.453125"
+       y="1051.3622"
+       id="text5348"
+       sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
-         id="tspan5064"
-         x="1.7786459"
-         y="1051.1903">M</tspan></text>
+         id="tspan4806"
+         x="0.453125"
+         y="1051.3622">Mlt</tspan></text>
   </g>
 </svg>

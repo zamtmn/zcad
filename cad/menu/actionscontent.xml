@@ -83,7 +83,7 @@
       <ZAction Name="ACN_BREPLACE" Command="BlockReplace" Img="#BR" Caption="Block replace"/>
       <ZAction Name="ACN_BSCALE" Command="BlockScale" Img="#BS" Caption="Block scale"/>
       <ZAction Name="ACN_BROTATE" Command="BlockRotate" Img="#BR" Caption="Block rotate"/>
-      <ZAction Name="ACN_ADDTOOWNER" Command="AddToOwner" Img="addtoowner.bmp" Caption="Add to owner"/>
+      <ZAction Name="ACN_ADDTOOWNER" Command="AddToOwner" Img="addtoowner" Caption="Add to owner"/>
       <ZAction Name="ACN_COPYFROMOWNER" Command="CopyFromOwner" Img="#COF" Caption="Copy from owner"/>
       <ZAction Name="ACN_POLYED" Command="PolyED" Img="polyed" Caption="Edit polyline"/>
       <ZAction Name="ACN_OBJVARMAN" Command="ObjVarMan" Img="varman" Caption="Object variables manager"/>

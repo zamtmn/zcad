@@ -48,7 +48,7 @@ begin
 end;
 
 initialization
- CWindow:=TCWindow.Create(application);
+ CWindow:=TCWindow.Create(nil);
  ZCMsgCallBackInterface.RegisterHandler_HistoryOut(HistoryOut);
  CreateCommandFastObjectPlugin(@TW_com,'TextWindow',0,0).overlay:=true;
 finalization;

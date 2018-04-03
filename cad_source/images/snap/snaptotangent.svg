@@ -16,8 +16,8 @@
    id="svg4225"
    version="1.1"
    inkscape:version="0.92.1 r15371"
-   sodipodi:docname="circlecd.svg"
-   inkscape:export-filename="circlecd.png"
+   sodipodi:docname="snaptotangent.svg"
+   inkscape:export-filename="snaptotangent.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
   <defs
@@ -537,9 +537,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="40.96"
-     inkscape:cx="8.9291814"
-     inkscape:cy="3.9766075"
+     inkscape:zoom="45.254834"
+     inkscape:cx="8.7455192"
+     inkscape:cy="7.4918611"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -589,33 +589,44 @@
      id="layer1"
      transform="translate(0,-1036.3622)">
     <path
-       style="fill:none;stroke:#00b6ff;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 4,1049.3622 c 8,-10 8,-10 8,-10"
-       id="path4607"
-       inkscape:connector-curvature="0" />
-    <ellipse
-       style="fill:none;fill-opacity:1;stroke:#008c00;stroke-width:0.99401575;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="path5236"
-       ry="6.5940909"
-       rx="6.6849928"
-       cy="1044.4531"
-       cx="8"
+       sodipodi:open="true"
+       d="m 8.0155981,1040.3944 a 5.5,5.5909252 0 0 1 6.3986579,2.8655 5.5,5.5909252 0 0 1 -1.538408,6.9335 5.5,5.5909252 0 0 1 -6.9891649,-0.2041 5.5,5.5909252 0 0 1 -1.1443375,-7.0118"
+       sodipodi:end="3.6660286"
+       sodipodi:start="4.4385081"
+       sodipodi:ry="5.5909252"
+       sodipodi:rx="5.5"
+       sodipodi:cy="1045.777"
+       sodipodi:cx="9.5031815"
+       sodipodi:type="arc"
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
        inkscape:export-filename=".\path5236.png"
+       id="path8717"
+       style="fill:none;fill-opacity:1;stroke:#008c00;stroke-width:0.99364889;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <path
+       style="fill:none;stroke:#008c00;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 0.5,1046.8622 4.5031815,-4.1761"
+       id="path5357-1-6"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="dimstyles.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
-    <rect
-       style="opacity:1;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:1.99999964;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
-       id="rect856-1"
-       width="4"
-       height="4"
-       x="6"
-       y="1042.3622" />
-    <rect
-       style="opacity:1;fill:#20a8ff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.99999952;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
-       id="rect843-9"
-       width="3"
-       height="3"
-       x="6"
-       y="1042.3622" />
+    <path
+       style="fill:none;stroke:#008c00;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 8,1040.1122 3.5,-3.25"
+       id="path5357-1-6-7"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="dimstyles.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <ellipse
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#00b6ff;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="path4594-1"
+       ry="1.9999826"
+       rx="2"
+       cy="1041.686"
+       cx="6.5031815" />
   </g>
 </svg>

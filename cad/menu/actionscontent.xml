@@ -136,19 +136,19 @@
       <ZAction Name="ACN_smtextarea" Command="stripmtext" Img="stripmtextsel" Caption="Start command clear mtext area"/>
     </Group>
     <Group Category="Variables">
-      <ZAction2Variable Name="ACN_OS_INSERT" Variable="DWG_OSMode" Mask="1" Img="snaptoinsert.bmp" Caption="Snap to insert point"/>
-      <ZAction2Variable Name="ACN_OS_END" Variable="DWG_OSMode" Mask="2" Img="snaptoend.bmp" Caption="Snap to end point"/>
-      <ZAction2Variable Name="ACN_OS_MIDDLE" Variable="DWG_OSMode" Mask="4" Img="snaptomid.bmp" Caption="Snap to middle point"/>
+      <ZAction2Variable Name="ACN_OS_INSERT" Variable="DWG_OSMode" Mask="1" Img="snaptoinsert" Caption="Snap to insert point"/>
+      <ZAction2Variable Name="ACN_OS_END" Variable="DWG_OSMode" Mask="2" Img="snaptoend" Caption="Snap to end point"/>
+      <ZAction2Variable Name="ACN_OS_MIDDLE" Variable="DWG_OSMode" Mask="4" Img="snaptomid" Caption="Snap to middle point"/>
       <ZAction2Variable Name="ACN_OS_THIRD" Variable="DWG_OSMode" Mask="8" Img="#1/3" Caption="Snap to 1/3 point"/>
       <ZAction2Variable Name="ACN_OS_QUARTER" Variable="DWG_OSMode" Mask="16" Img="#1/4" Caption="Snap to 1/4 point"/>
-      <ZAction2Variable Name="ACN_OS_CENTER" Variable="DWG_OSMode" Mask="32" Img="snaptocenter.bmp" Caption="Snap to center point"/>
-      <ZAction2Variable Name="ACN_OS_QUADRANT" Variable="DWG_OSMode" Mask="64" Img="snaptoquadrant.bmp" Caption="Snap to quadrant"/>
+      <ZAction2Variable Name="ACN_OS_CENTER" Variable="DWG_OSMode" Mask="32" Img="snaptocenter" Caption="Snap to center point"/>
+      <ZAction2Variable Name="ACN_OS_QUADRANT" Variable="DWG_OSMode" Mask="64" Img="snaptoquadrant" Caption="Snap to quadrant"/>
       <ZAction2Variable Name="ACN_OS_POINT" Variable="DWG_OSMode" Mask="128" Img="#P" Caption="Snap to point"/>
       <ZAction2Variable Name="ACN_OS_INTERSECTION" Variable="DWG_OSMode" Mask="256" Img="snaptointersection.bmp" Caption="Snap to intersection"/>
-      <ZAction2Variable Name="ACN_OS_PERPENDICULAR" Variable="DWG_OSMode" Mask="512" Img="snaptoperpendicular.bmp" Caption="Snap to perpendicular"/>
-      <ZAction2Variable Name="ACN_OS_TANGENT" Variable="DWG_OSMode" Mask="1024" Img="snaptotangent.bmp" Caption="Snap to tangent"/>
-      <ZAction2Variable Name="ACN_OS_NEAREST" Variable="DWG_OSMode" Mask="2048" Img="snaptonearest.bmp" Caption="Snap to nearest point"/>
-      <ZAction2Variable Name="ACN_OS_APARENTINTERSECTION" Variable="DWG_OSMode" Mask="4096" Img="snaptoapparentintersection.bmp" Caption="Snap to apparent intersection"/>
+      <ZAction2Variable Name="ACN_OS_PERPENDICULAR" Variable="DWG_OSMode" Mask="512" Img="snaptoperpendicular" Caption="Snap to perpendicular"/>
+      <ZAction2Variable Name="ACN_OS_TANGENT" Variable="DWG_OSMode" Mask="1024" Img="snaptotangent" Caption="Snap to tangent"/>
+      <ZAction2Variable Name="ACN_OS_NEAREST" Variable="DWG_OSMode" Mask="2048" Img="snaptonearest" Caption="Snap to nearest point"/>
+      <ZAction2Variable Name="ACN_OS_APARENTINTERSECTION" Variable="DWG_OSMode" Mask="4096" Img="snaptoapparentintersection" Caption="Snap to apparent intersection"/>
       <ZAction2Variable Name="ACN_OS_PARALEL" Variable="DWG_OSMode" Mask="8192" Img="snaptoparalel.bmp" Caption="Snap to paralel"/>
       <ZAction2Variable Name="ACN_SHOWHIDDENFIELDINOBJINSP" Variable="ShowHiddenFieldInObjInsp" Img="#shf" Caption="Show hidden field in object inspector"/>
       <ZAction2Variable Name="ACN_SHOWHEADERSINOBJINSP" Variable="INTF_ObjInsp_ShowHeaders" Img="#sh" Caption="Show headers in object inspector"/>

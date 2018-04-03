@@ -12,6 +12,10 @@ uses
   varmandef,uzbstrproc,uzcmainwindow,uzctreenode,
   uzcnavigatorsnodedesk,Varman;
 
+resourcestring
+  rsByPrefix='byPrefix';
+  rsByBase='byBase';
+
 type
   { TNavigatorDevices }
   TNavigatorDevices = class(TForm)
@@ -117,13 +121,13 @@ begin
    pref:=TmyVariableAction.Create(self);
    pref.ActionList:=ZCADMainWindow.StandartActions;
    pref.AssignToVar('DSGN_NavigatorsGroupByPrefix',0);
-   pref.Caption:='byPrefix';
+   pref.Caption:=rsByPrefix;
    ToolButton1.Action:=pref;
 
    base:=TmyVariableAction.Create(self);
    base.ActionList:=ZCADMainWindow.StandartActions;
    base.AssignToVar('DSGN_NavigatorsGroupByBaseName',0);
-   base.Caption:='byBase';
+   base.Caption:=rsByBase;
    ToolButton3.Action:=base;
 
    ActionList1.Images:=ImagesManager.IconList;

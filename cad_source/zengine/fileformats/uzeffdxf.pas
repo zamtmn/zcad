@@ -26,6 +26,8 @@ uses LCLProc,uzbpaths,uzbstrproc,uzgldrawcontext,usimplegenerics,uzestylesdim,uz
     uzegeometry,uzeentsubordinated,uzbtypesbase,uzeentgenericsubentry,uzbtypes,
     uzedimensionaltypes,uzbgeomtypes,sysutils,uzbmemman,uzeconsts,UGDBObjBlockdefArray,
     UGDBOpenArrayOfByte,UGDBVisibleOpenArray,uzeentity,uzeblockdef,uzestyleslayers,uzeffmanager;
+resourcestring
+  rsLoadDXFFile='Load DXF file';
 type
    TCreateExtLoadData=function:pointer;
    TProcessExtLoadData=procedure(peld:pointer);
@@ -1430,7 +1432,7 @@ begin
      DWGVarsDict:=TGDBString2GDBStringDictionary.create;
      ReadDXFHeader(f,DWGVarsDict);
      h2p:=TMapHandleToPointer.create;
-  lph:=lps.StartLongProcess(f.Count,'Load DXF file',@f);
+  lph:=lps.StartLongProcess(f.Count,rsLoadDXFFile,@f);
   //if assigned(StartLongProcessProc)then
   //  StartLongProcessProc(f.Count,'Load DXF file');
 

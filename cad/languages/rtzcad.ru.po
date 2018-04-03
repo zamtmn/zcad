@@ -1757,7 +1757,7 @@ msgstr "Отладка"
 
 #: zcadexternal.menu~dimension
 msgid "Dimension"
-msgstr ""
+msgstr "Размеры"
 
 #: zcadexternal.menu~draw
 msgctxt "zcadexternal.menu~draw"

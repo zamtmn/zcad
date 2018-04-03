@@ -251,6 +251,7 @@ msgid "ToolButton3"
 msgstr ""
 
 #: tnavigatorentities.caption
+msgctxt "tnavigatorentities.caption"
 msgid "Entities"
 msgstr ""
 
@@ -404,8 +405,34 @@ msgstr ""
 msgid "Can not be connected"
 msgstr ""
 
+#: uzcfnavigatordevices.rsbybase
+msgid "byBase"
+msgstr ""
+
+#: uzcfnavigatordevices.rsbyprefix
+msgid "byPrefix"
+msgstr ""
+
 #: uzcmainwindow.rsclosed
 msgid "Closed"
+msgstr ""
+
+#: uzcregnavigatordevices.rscables
+msgid "Cables"
+msgstr ""
+
+#: uzcregnavigatordevices.rsdevices
+msgctxt "uzcregnavigatordevices.rsdevices"
+msgid "Devices"
+msgstr ""
+
+#: uzcregnavigatordevices.rsrisers
+msgid "Risers"
+msgstr ""
+
+#: uzcregnavigatorentities.rsentities
+msgctxt "uzcregnavigatorentities.rsentities"
+msgid "Entities"
 msgstr ""
 
 #: uzcstrconsts.rsaboutwndcaption
@@ -1066,6 +1093,10 @@ msgstr ""
 
 #: uzcstrconsts.rszcadstarted
 msgid "ZCAD v%s started"
+msgstr ""
+
+#: uzeffdxf.rsloaddxffile
+msgid "Load DXF file"
 msgstr ""
 
 #: uzestrconsts.fontnotfoundandreplace

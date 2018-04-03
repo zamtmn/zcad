@@ -23,6 +23,11 @@ uses uzcfnavigatordevices,uzcfcommandline,uzbpaths,TypeDescriptors,uzctranslatio
      uzbtypes,varmandef,uzeconsts,uzeentdevice,uzcnavigatorsnodedesk,
      uzeentity,zcobjectinspector,uzcguimanager,uzcenitiesvariablesextender,uzbstrproc,
      Types,Controls,uzcdrawings,Varman,UUnitManager,uzcsysvars,uzcsysinfo,LazLogger,VirtualTrees;
+resourcestring
+  rsDevices='Devices';
+  rsRisers='Risers';
+  rsCables='Cables';
+
 type
   TNavigatorRisers=class(TNavigatorDevices)
     procedure NavGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;
@@ -157,9 +162,9 @@ procedure ZCADFormSetupProc(Form:TControl);
 begin
 end;
 initialization
-  ZCADGUIManager.RegisterZCADFormInfo('NavigatorDevices','Devices',TNavigatorDevices,rect(0,100,200,600),ZCADFormSetupProc,nil,@NavigatorDevices,true);
-  ZCADGUIManager.RegisterZCADFormInfo('NavigatorRisers','Risers',TNavigatorRisers,rect(0,100,200,600),ZCADFormSetupProc,nil,@NavigatorRisers,true);
-  ZCADGUIManager.RegisterZCADFormInfo('NavigatorCables','Cables',TNavigatorCables,rect(0,100,200,600),ZCADFormSetupProc,nil,@NavigatorCables,true);
+  ZCADGUIManager.RegisterZCADFormInfo('NavigatorDevices',rsDevices,TNavigatorDevices,rect(0,100,200,600),ZCADFormSetupProc,nil,@NavigatorDevices,true);
+  ZCADGUIManager.RegisterZCADFormInfo('NavigatorRisers',rsRisers,TNavigatorRisers,rect(0,100,200,600),ZCADFormSetupProc,nil,@NavigatorRisers,true);
+  ZCADGUIManager.RegisterZCADFormInfo('NavigatorCables',rsCables,TNavigatorCables,rect(0,100,200,600),ZCADFormSetupProc,nil,@NavigatorCables,true);
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

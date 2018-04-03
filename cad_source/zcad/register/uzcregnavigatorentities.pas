@@ -23,13 +23,15 @@ uses uzcfnavigatorentities,uzcfcommandline,uzbpaths,TypeDescriptors,uzctranslati
      uzbtypes,varmandef,
      uzeentity,zcobjectinspector,uzcguimanager,
      Types,Controls,uzcdrawings,Varman,UUnitManager,uzcsysvars,uzcsysinfo,LazLogger;
+resourcestring
+  rsEntities='Entities';
 implementation
 procedure ZCADFormSetupProc(Form:TControl);
 begin
   Form:=Form;
 end;
 initialization
-  ZCADGUIManager.RegisterZCADFormInfo('NavigatorEntities','Entities',TNavigatorEntities,rect(0,100,200,600),ZCADFormSetupProc,nil,@NavigatorEntities,true);
+  ZCADGUIManager.RegisterZCADFormInfo('NavigatorEntities',rsEntities,TNavigatorEntities,rect(0,100,200,600),ZCADFormSetupProc,nil,@NavigatorEntities,true);
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

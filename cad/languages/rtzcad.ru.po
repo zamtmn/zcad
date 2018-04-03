@@ -103,10 +103,6 @@ msgctxt "zcadexternal.acn_cablejoin~caption"
 msgid "Glue cables"
 msgstr "Соединить кабели"
 
-#: zcadexternal.acn_cablejoin~textimage
-msgid "c+c"
-msgstr ""
-
 #: zcadexternal.acn_cablelegend~caption
 msgctxt "zcadexternal.acn_cablelegend~caption"
 msgid "Export cables legend"
@@ -116,11 +112,6 @@ msgstr "Экспорт кабельного журнала"
 msgctxt "zcadexternal.acn_cableselect~caption"
 msgid "Select connected devices"
 msgstr "Выбрать подключенные устройства"
-
-#: zcadexternal.acn_cableselect~textimage
-msgctxt "zcadexternal.acn_cableselect~textimage"
-msgid "csel"
-msgstr ""
 
 #: zcadexternal.acn_cable~caption
 msgctxt "zcadexternal.acn_cable~caption"
@@ -407,11 +398,6 @@ msgctxt "zcadexternal.acn_loadqs~hint"
 msgid "Open last autosave"
 msgstr "Открыть последнее автосохранение"
 
-#: zcadexternal.acn_loadqs~textimage
-msgctxt "zcadexternal.acn_loadqs~textimage"
-msgid "QL"
-msgstr ""
-
 #: zcadexternal.acn_load~caption
 msgctxt "zcadexternal.acn_load~caption"
 msgid "Open ..."
@@ -675,10 +661,6 @@ msgstr "Повторить"
 msgid "Regenerate zcad entities"
 msgstr ""
 
-#: zcadexternal.acn_regenzents~textimage
-msgid "RZ"
-msgstr ""
-
 #: zcadexternal.acn_regen~caption
 msgctxt "zcadexternal.acn_regen~caption"
 msgid "Regen all"
@@ -731,11 +713,6 @@ msgstr "Сохранить (Автосохранение)"
 msgctxt "zcadexternal.acn_saveqs~hint"
 msgid "Autosave"
 msgstr "Автосохранение"
-
-#: zcadexternal.acn_saveqs~textimage
-msgctxt "zcadexternal.acn_saveqs~textimage"
-msgid "QS"
-msgstr ""
 
 #: zcadexternal.acn_scale~caption
 msgctxt "zcadexternal.acn_scale~caption"
@@ -1115,6 +1092,10 @@ msgstr ""
 #: zcadexternal.button_variable~disp_systmgeometrydraw
 msgctxt "zcadexternal.button_variable~disp_systmgeometrydraw"
 msgid "SG"
+msgstr ""
+
+#: zcadexternal.button_variable~dsgn_selnew
+msgid "1"
 msgstr ""
 
 #: zcadexternal.button_variable~dsgn_selsamename
@@ -2031,15 +2012,15 @@ msgstr ""
 
 #: zcadexternal.oimultiproperty_linetypescale~
 msgid "Linetype scale"
-msgstr ""
+msgstr "Масштаб типа линии"
 
 #: zcadexternal.oimultiproperty_linetype~
 msgid "Linetype"
-msgstr ""
+msgstr "Тип линии"
 
 #: zcadexternal.oimultiproperty_lineweight~
 msgid "Lineweight"
-msgstr ""
+msgstr "Вес линии"
 
 #: zcadexternal.oimultiproperty_majorradius~
 msgid "Major radius"
@@ -2052,15 +2033,15 @@ msgstr "Имя"
 
 #: zcadexternal.oimultiproperty_normal_x~
 msgid "Normal X"
-msgstr ""
+msgstr "Нормаль X"
 
 #: zcadexternal.oimultiproperty_normal_y~
 msgid "Normal Y"
-msgstr ""
+msgstr "Нормаль Y"
 
 #: zcadexternal.oimultiproperty_normal_z~
 msgid "Normal Z"
-msgstr ""
+msgstr "Нормаль Z"
 
 #: zcadexternal.oimultiproperty_oblique~
 msgctxt "zcadexternal.oimultiproperty_oblique~"
@@ -2083,43 +2064,43 @@ msgstr "Поворот"
 
 #: zcadexternal.oimultiproperty_scale_x~
 msgid "Scale X"
-msgstr ""
+msgstr "Масштаб X"
 
 #: zcadexternal.oimultiproperty_scale_y~
 msgid "Scale Y"
-msgstr ""
+msgstr "Масштаб Y"
 
 #: zcadexternal.oimultiproperty_scale_z~
 msgid "Scale Z"
-msgstr ""
+msgstr "Масштаб Z"
 
 #: zcadexternal.oimultiproperty_startangle~
 msgid "Start angle"
-msgstr ""
+msgstr "СЧтартовый угол"
 
 #: zcadexternal.oimultiproperty_start_x~
 msgid "Start X"
-msgstr ""
+msgstr "Старт X"
 
 #: zcadexternal.oimultiproperty_start_y~
 msgid "Start Y"
-msgstr ""
+msgstr "Старт Y"
 
 #: zcadexternal.oimultiproperty_start_z~
 msgid "Start Z"
-msgstr ""
+msgstr "Старт Z"
 
 #: zcadexternal.oimultiproperty_totalarea~
 msgid "Total area"
-msgstr ""
+msgstr "Площадь, всего"
 
 #: zcadexternal.oimultiproperty_totallength~
 msgid "Total length"
-msgstr ""
+msgstr "Длина, всего"
 
 #: zcadexternal.oimultiproperty_totalvertexcount~
 msgid "Total vertex count"
-msgstr ""
+msgstr "Кол-во вершин, всего"
 
 #: zcadexternal.oimultiproperty_txtcontent~
 msgid "Content"
@@ -2523,11 +2504,11 @@ msgstr "Показывать ось Z"
 
 #: zcadexternal.tdisp~disp_gripsize
 msgid "Grip size"
-msgstr ""
+msgstr "Размер ручек"
 
 #: zcadexternal.tdisp~disp_hotgripcolor
 msgid "Hot grip color"
-msgstr ""
+msgstr "Цвет \"горячих\" ручек"
 
 #: zcadexternal.tdisp~disp_lwdisplayscale
 msgid "LWDisplayScale"
@@ -2894,11 +2875,11 @@ msgstr ""
 
 #: zcadexternal.tinterface~intf_defaultcontrolheight
 msgid "Default control height"
-msgstr ""
+msgstr "Размер контролов по умолчанию"
 
 #: zcadexternal.tinterface~intf_defaulteditorfontheight
 msgid "Default editor font height"
-msgstr ""
+msgstr "Размер шрифта редактора по умолчанию"
 
 #: zcadexternal.tinterface~intf_dwgtabsposition
 msgid "Drawing tabs position"
@@ -2969,48 +2950,48 @@ msgstr ""
 
 #: zcadexternal.tmatchpropparam~processcolor
 msgid "Process color"
-msgstr ""
+msgstr "Обрабатывать цвет"
 
 #: zcadexternal.tmatchpropparam~processlayer
 msgid "Process layer"
-msgstr ""
+msgstr "Обрабатывать слой"
 
 #: zcadexternal.tmatchpropparam~processlinetype
 msgid "Process line type"
-msgstr ""
+msgstr "Обрабатывать тип линий"
 
 #: zcadexternal.tmatchpropparam~processlinetypescale
 msgid "Process line type scale"
-msgstr ""
+msgstr "Обрабатывать масштаб типа линий"
 
 #: zcadexternal.tmatchpropparam~processlineweight
 msgctxt "zcadexternal.tmatchpropparam~processlineweight"
 msgid "Process line weight"
-msgstr ""
+msgstr "Обрабатывать вес линий"
 
 #: zcadexternal.tmatchpropparam~textparams
 msgid "Text params"
-msgstr ""
+msgstr "Параметры текста"
 
 #: zcadexternal.tmatchproptextparam~processtextjustify
 msgid "Process justify"
-msgstr ""
+msgstr "Обрабатывать выравнивание"
 
 #: zcadexternal.tmatchproptextparam~processtextoblique
 msgid "Process oblique"
-msgstr ""
+msgstr "Обрабатывать скос"
 
 #: zcadexternal.tmatchproptextparam~processtextsize
 msgid "Process size"
-msgstr ""
+msgstr "Обрабатывать пвзмер"
 
 #: zcadexternal.tmatchproptextparam~processtextstyle
 msgid "Process style"
-msgstr ""
+msgstr "Обрабатывать стиль"
 
 #: zcadexternal.tmatchproptextparam~processtextwfactor
 msgid "Process wfactor"
-msgstr ""
+msgstr "Обрабатывать коэфф. растяжения"
 
 #: zcadexternal.tmirrorparam~sourceents
 msgid "Source entities"
@@ -3023,15 +3004,15 @@ msgstr "Общие"
 
 #: zcadexternal.tmseditor~geometryunit
 msgid "Geometry"
-msgstr ""
+msgstr "Геометрия"
 
 #: zcadexternal.tmseditor~miscunit
 msgid "Misc"
-msgstr ""
+msgstr "Разное"
 
 #: zcadexternal.tmseditor~summaryunit
 msgid "Summary"
-msgstr ""
+msgstr "Суммарно"
 
 #: zcadexternal.tmseditor~txtenttype
 msgctxt "zcadexternal.tmseditor~txtenttype"
@@ -3077,7 +3058,7 @@ msgstr "Начальное значение"
 
 #: zcadexternal.tobjinspinterface~intf_objinsp_alwaysusemultiselectwrapper
 msgid "Always use multiselect wrapper"
-msgstr ""
+msgstr "Всегда использовать врапер множественного выбора"
 
 #: zcadexternal.tobjinspinterface~intf_objinsp_oldstyledraw
 msgctxt "zcadexternal.tobjinspinterface~intf_objinsp_oldstyledraw"
@@ -3659,11 +3640,11 @@ msgstr "Совпадает слой"
 
 #: zcadexternal.tselgeneralparams~samelinetype
 msgid "Same line type"
-msgstr ""
+msgstr "Совпадает тип линий"
 
 #: zcadexternal.tselgeneralparams~samelinetypescale
 msgid "Same line type scale"
-msgstr ""
+msgstr "Совпадает масштаб типа линий"
 
 #: zcadexternal.tselgeneralparams~samelineweight
 msgctxt "zcadexternal.tselgeneralparams~samelineweight"

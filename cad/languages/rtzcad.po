@@ -83,20 +83,12 @@ msgstr ""
 msgid "Glue cables"
 msgstr ""
 
-#: zcadexternal.acn_cablejoin~textimage
-msgid "c+c"
-msgstr ""
-
 #: zcadexternal.acn_cablelegend~caption
 msgid "Export cables legend"
 msgstr ""
 
 #: zcadexternal.acn_cableselect~caption
 msgid "Select connected devices"
-msgstr ""
-
-#: zcadexternal.acn_cableselect~textimage
-msgid "csel"
 msgstr ""
 
 #: zcadexternal.acn_cable~caption
@@ -368,10 +360,6 @@ msgstr ""
 msgid "Open last autosave"
 msgstr ""
 
-#: zcadexternal.acn_loadqs~textimage
-msgid "QL"
-msgstr ""
-
 #: zcadexternal.acn_load~caption
 msgid "Open ..."
 msgstr ""
@@ -616,10 +604,6 @@ msgstr ""
 msgid "Regenerate zcad entities"
 msgstr ""
 
-#: zcadexternal.acn_regenzents~textimage
-msgid "RZ"
-msgstr ""
-
 #: zcadexternal.acn_regen~caption
 msgid "Regen all"
 msgstr ""
@@ -668,10 +652,6 @@ msgstr ""
 #: zcadexternal.acn_saveqs~hint
 msgctxt "zcadexternal.acn_saveqs~hint"
 msgid "Autosave"
-msgstr ""
-
-#: zcadexternal.acn_saveqs~textimage
-msgid "QS"
 msgstr ""
 
 #: zcadexternal.acn_scale~caption
@@ -1030,6 +1010,10 @@ msgstr ""
 
 #: zcadexternal.button_variable~disp_systmgeometrydraw
 msgid "SG"
+msgstr ""
+
+#: zcadexternal.button_variable~dsgn_selnew
+msgid "1"
 msgstr ""
 
 #: zcadexternal.button_variable~dsgn_selsamename

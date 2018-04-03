@@ -1595,8 +1595,8 @@ begin
                cleaned:=po.exportcompileritems(actualypo);
                s:='Cleaned items: '+inttostr(cleaned)
            +#13#10'Added items: '+inttostr(_UpdatePO)
-           +#13#10'File zcad.po must be rewriten. Confirm?';
-               if ZCMsgCallBackInterface.TextQuestion(s,'UpdatePO',MB_YESNO)=IDNO then
+           +#13#10'File zcadrt.po must be rewriten. Confirm?';
+               if ZCMsgCallBackInterface.TextQuestion('UpdatePO',s,MB_YESNO)=IDNO then
                                                                          exit;
                po.SaveToFile(expandpath(PODirectory + ZCADRTBackupPOFileName));
                actualypo.SaveToFile(expandpath(PODirectory + ZCADRTPOFileName));

@@ -443,7 +443,7 @@ msgstr "Стояки"
 #: uzcregnavigatorentities.rsentities
 msgctxt "uzcregnavigatorentities.rsentities"
 msgid "Entities"
-msgstr ""
+msgstr "Примитивы"
 
 #: uzcstrconsts.rsaboutwndcaption
 msgctxt "uzcstrconsts.rsaboutwndcaption"

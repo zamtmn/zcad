@@ -201,7 +201,7 @@ type
   gdbsysvariable=packed record
     PATH:tpath;(*'Paths'*)
     RD:trd;(*'Render'*)
-    DISP:tdisp;
+    DISP:tdisp;(*'Display'*)
     SYS:tsys;(*'System'*)
     SAVE:tsave;(*'Saving'*)
     DWG:tdwg;(*'Drawing'*)

@@ -393,6 +393,14 @@ msgstr ""
 msgid "ToolBarD"
 msgstr ""
 
+#: uzccablemanager.defcablename
+msgid "Created. Not named"
+msgstr ""
+
+#: uzccablemanager.unnamedcable
+msgid "Name absent"
+msgstr ""
+
 #: uzccombase.rsaboutclswithupdatepo
 msgid "Command line swith \"UpdatePO\" must be set. (or not the first time running this command)"
 msgstr ""
@@ -468,6 +476,10 @@ msgctxt "uzcstrconsts.rsbylayer"
 msgid "ByLayer"
 msgstr ""
 
+#: uzcstrconsts.rscautionnosyntaxcheckyet
+msgid "CAUTION! There is no syntax check yet. Clicking \"OK\" the object will be updated. Error - CRASHES!!!"
+msgstr ""
+
 #: uzcstrconsts.rsclipboardisempty
 msgid "Clipboard is empty, there is nothing to paste"
 msgstr ""
@@ -478,6 +490,10 @@ msgstr ""
 
 #: uzcstrconsts.rscm2vnotremove
 msgid "Only 2 vertex there is nothing to remove"
+msgstr ""
+
+#: uzcstrconsts.rscmadd
+msgid "Add"
 msgstr ""
 
 #: uzcstrconsts.rscmbasepoint
@@ -492,12 +508,28 @@ msgstr ""
 msgid "Center point for circle:"
 msgstr ""
 
+#: uzcstrconsts.rscmchange
+msgid "Change"
+msgstr ""
+
 #: uzcstrconsts.rscmcommandonlyctxmenu
 msgid "The command works only from context menu"
 msgstr ""
 
 #: uzcstrconsts.rscmcommandparams
 msgid "Command params"
+msgstr ""
+
+#: uzcstrconsts.rscmcopy
+msgid "Copy"
+msgstr ""
+
+#: uzcstrconsts.rscmexport
+msgid "Export"
+msgstr ""
+
+#: uzcstrconsts.rscmfind
+msgid "Find"
 msgstr ""
 
 #: uzcstrconsts.rscmfirstcorner
@@ -564,6 +596,10 @@ msgstr ""
 msgid "Do not cut off here"
 msgstr ""
 
+#: uzcstrconsts.rscmnumber
+msgid "Number"
+msgstr ""
+
 #: uzcstrconsts.rscmoptions2oi
 msgid "Options are available in the Object Inspector"
 msgstr ""
@@ -586,6 +622,10 @@ msgstr ""
 
 #: uzcstrconsts.rscmpolynotsel
 msgid "Poly entities not selected"
+msgstr ""
+
+#: uzcstrconsts.rscmreplace
+msgid "Replace"
 msgstr ""
 
 #: uzcstrconsts.rscmsecondcorner
@@ -662,6 +702,10 @@ msgstr ""
 
 #: uzcstrconsts.rscmspecifyz
 msgid "Specify Z:"
+msgstr ""
+
+#: uzcstrconsts.rscmstore
+msgid "Store"
 msgstr ""
 
 #: uzcstrconsts.rscolor
@@ -752,6 +796,10 @@ msgstr ""
 #: uzcstrconsts.rsdrawingwindowwndname
 msgctxt "uzcstrconsts.rsdrawingwindowwndname"
 msgid "Drawings window"
+msgstr ""
+
+#: uzcstrconsts.rsdwgalreadycontainsdata
+msgid "Drawing already contains data. Load anyway?"
 msgstr ""
 
 #: uzcstrconsts.rsempty

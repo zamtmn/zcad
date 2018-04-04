@@ -1322,6 +1322,10 @@ msgctxt "zcadexternal.gdbsysvariable~debug"
 msgid "Debug"
 msgstr ""
 
+#: zcadexternal.gdbsysvariable~disp
+msgid "Display"
+msgstr ""
+
 #: zcadexternal.gdbsysvariable~dsgn
 msgid "Design"
 msgstr ""

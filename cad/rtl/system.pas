@@ -162,18 +162,18 @@ tarcrtmodify=packed record
                       p1,p2,p3:GDBVertex2d;
                 end;
 //Generate on E:/zcad/cad_source/components/zebase/uzbtypes.pas
-(*varcategoryforoi SUMMARY='Суммарно'*)
-(*varcategoryforoi CABLE='Параметры кабеля'*)
-(*varcategoryforoi DEVICE='Параметры устройства'*)
-(*varcategoryforoi OBJFUNC='Функция:объект'*)
-(*varcategoryforoi NMO='Имя'*)
-(*varcategoryforoi DB='База данных'*)
-(*varcategoryforoi GC='Групповое подключение'*)
-(*varcategoryforoi LENGTH='Параметры длинны'*)
-(*varcategoryforoi BTY='Параметры определения блока'*)
-(*varcategoryforoi EL='El(Устаревшая группа)'*)
-(*varcategoryforoi UNITPARAM='Измеряемый параметр'*)
-(*varcategoryforoi DESC='Описание'*)
+(*varcategoryforoi SUMMARY='Summary'*)
+(*varcategoryforoi CABLE='Cable params'*)
+(*varcategoryforoi DEVICE='Device params'*)
+(*varcategoryforoi OBJFUNC='Function:object'*)
+(*varcategoryforoi NMO='Name'*)
+(*varcategoryforoi DB='Data base'*)
+(*varcategoryforoi GC='Group connection'*)
+(*varcategoryforoi LENGTH='Length params'*)
+(*varcategoryforoi BTY='Blockdef params'*)
+(*varcategoryforoi EL='El(deprecated)'*)
+(*varcategoryforoi UNITPARAM='Measured parameter'*)
+(*varcategoryforoi DESC='Description'*)
 (*varcategoryforoi CENTER='Center'*)
 (*varcategoryforoi START='Start'*)
 (*varcategoryforoi END='End'*)
@@ -838,7 +838,7 @@ SHXFont={$IFNDEF DELPHI}packed{$ENDIF} object(BASEFont)
 PGDBfont=^GDBfont;
 GDBfont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
     fontfile:GDBString;
-    Internalname:GDBString;
+    Internalname:GDBString; // Международное полное имя с описанием авора
     family:GDBString;
     fullname:GDBString;
     font:PBASEFont;
@@ -1295,7 +1295,7 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorPObects)(*OpenArrayO
   gdbsysvariable=packed record
     PATH:tpath;(*'Paths'*)
     RD:trd;(*'Render'*)
-    DISP:tdisp;
+    DISP:tdisp;(*'Display'*)
     SYS:tsys;(*'System'*)
     SAVE:tsave;(*'Saving'*)
     DWG:tdwg;(*'Drawing'*)

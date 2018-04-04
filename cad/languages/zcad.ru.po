@@ -403,6 +403,14 @@ msgstr ""
 msgid "ToolBarD"
 msgstr ""
 
+#: uzccablemanager.defcablename
+msgid "Created. Not named"
+msgstr ""
+
+#: uzccablemanager.unnamedcable
+msgid "Name absent"
+msgstr ""
+
 #: uzccombase.rsaboutclswithupdatepo
 msgid "Command line swith \"UpdatePO\" must be set. (or not the first time running this command)"
 msgstr ""
@@ -478,18 +486,25 @@ msgctxt "uzcstrconsts.rsbylayer"
 msgid "ByLayer"
 msgstr "По Слою"
 
+#: uzcstrconsts.rscautionnosyntaxcheckyet
+msgid "CAUTION! There is no syntax check yet. Clicking \"OK\" the object will be updated. Error - CRASHES!!!"
+msgstr ""
+
 #: uzcstrconsts.rsclipboardisempty
 msgid "Clipboard is empty, there is nothing to paste"
 msgstr ""
 
 #: uzcstrconsts.rsclosedwgquery
-#| msgid "Drawing \"%s\" not saved. Close?"
 msgid "Drawing \"%s\" not saved. Save?"
 msgstr "Чертеж \"%s\" не сохранен. Сохранить?"
 
 #: uzcstrconsts.rscm2vnotremove
 msgid "Only 2 vertex there is nothing to remove"
 msgstr "Всего 2 вершины, нечего удалять тут"
+
+#: uzcstrconsts.rscmadd
+msgid "Add"
+msgstr ""
 
 #: uzcstrconsts.rscmbasepoint
 msgid "Base point:"
@@ -503,12 +518,28 @@ msgstr "Не возможно получить имя блока для заме
 msgid "Center point for circle:"
 msgstr "Центр окружности:"
 
+#: uzcstrconsts.rscmchange
+msgid "Change"
+msgstr ""
+
 #: uzcstrconsts.rscmcommandonlyctxmenu
 msgid "The command works only from context menu"
 msgstr "Команда работает только из контекстного меню"
 
 #: uzcstrconsts.rscmcommandparams
 msgid "Command params"
+msgstr ""
+
+#: uzcstrconsts.rscmcopy
+msgid "Copy"
+msgstr ""
+
+#: uzcstrconsts.rscmexport
+msgid "Export"
+msgstr ""
+
+#: uzcstrconsts.rscmfind
+msgid "Find"
 msgstr ""
 
 #: uzcstrconsts.rscmfirstcorner
@@ -575,6 +606,10 @@ msgstr "Невозможно отменить. Стек отмен пуст"
 msgid "Do not cut off here"
 msgstr "Нельзя резать здесь"
 
+#: uzcstrconsts.rscmnumber
+msgid "Number"
+msgstr ""
+
 #: uzcstrconsts.rscmoptions2oi
 msgid "Options are available in the Object Inspector"
 msgstr "Настройки доступны в инспекторе обьектов"
@@ -598,6 +633,10 @@ msgstr "Точка на окружности:"
 #: uzcstrconsts.rscmpolynotsel
 msgid "Poly entities not selected"
 msgstr "Poly объект не выбран"
+
+#: uzcstrconsts.rscmreplace
+msgid "Replace"
+msgstr ""
 
 #: uzcstrconsts.rscmsecondcorner
 msgid "Second corner:"
@@ -673,6 +712,10 @@ msgstr ""
 
 #: uzcstrconsts.rscmspecifyz
 msgid "Specify Z:"
+msgstr ""
+
+#: uzcstrconsts.rscmstore
+msgid "Store"
 msgstr ""
 
 #: uzcstrconsts.rscolor
@@ -764,6 +807,10 @@ msgstr "Деление на ноль"
 msgctxt "uzcstrconsts.rsdrawingwindowwndname"
 msgid "Drawings window"
 msgstr "Окно чертежей"
+
+#: uzcstrconsts.rsdwgalreadycontainsdata
+msgid "Drawing already contains data. Load anyway?"
+msgstr ""
 
 #: uzcstrconsts.rsempty
 msgctxt "uzcstrconsts.rsempty"
@@ -1027,6 +1074,7 @@ msgid "Text editor"
 msgstr "Редактор текста"
 
 #: uzcstrconsts.rstextstyleusedin
+#, fuzzy,badformat
 msgid "Text style \"%s\" used in: %d-model, %d-blockdef table, %d-dimstyle table"
 msgstr "Стиль текста \"%s\" используется: %d-в модели, %d-в таблице блоков"
 
@@ -1180,3 +1228,4 @@ msgstr "Неизвестный формат файла"
 #: zcad.rsstartautorun
 msgid "Execute *components\\autorun.cmd"
 msgstr ""
+

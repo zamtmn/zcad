@@ -1431,6 +1431,10 @@ msgctxt "zcadexternal.gdbsysvariable~debug"
 msgid "Debug"
 msgstr "Отладка"
 
+#: zcadexternal.gdbsysvariable~disp
+msgid "Display"
+msgstr "Отображение"
+
 #: zcadexternal.gdbsysvariable~dsgn
 msgctxt "zcadexternal.gdbsysvariable~dsgn"
 msgid "Design"
@@ -2521,7 +2525,7 @@ msgstr "Размер апертуры привязки"
 
 #: zcadexternal.tdisp~disp_selectedgripcolor
 msgid "Selected grip color"
-msgstr ""
+msgstr "Цвет выбраных ручек"
 
 #: zcadexternal.tdisp~disp_systmgeometrycolor
 msgctxt "zcadexternal.tdisp~disp_systmgeometrycolor"
@@ -2535,7 +2539,7 @@ msgstr "Системная геометрия"
 
 #: zcadexternal.tdisp~disp_unselectedgripcolor
 msgid "Unselected grip color"
-msgstr ""
+msgstr "Цвет не выбраных ручек"
 
 #: zcadexternal.tdisp~disp_zoomfactor
 msgctxt "zcadexternal.tdisp~disp_zoomfactor"
@@ -2736,11 +2740,11 @@ msgstr ""
 
 #: zcadexternal.tgdbintegeroverrider~enable
 msgid "Enable"
-msgstr ""
+msgstr "Разрешить"
 
 #: zcadexternal.tgdbintegeroverrider~value
 msgid "New value"
-msgstr ""
+msgstr "Новое значение"
 
 #: zcadexternal.tgdidata~rd_renderer
 msgctxt "zcadexternal.tgdidata~rd_renderer"
@@ -2926,27 +2930,27 @@ msgstr "Слой"
 #: zcadexternal.tlunits~luarchitectural
 msgctxt "zcadexternal.tlunits~luarchitectural"
 msgid "Architectural"
-msgstr ""
+msgstr "Архитектурный"
 
 #: zcadexternal.tlunits~ludecimal
 msgctxt "zcadexternal.tlunits~ludecimal"
 msgid "Decimal"
-msgstr ""
+msgstr "Десятичный"
 
 #: zcadexternal.tlunits~luengineering
 msgctxt "zcadexternal.tlunits~luengineering"
 msgid "Engineering"
-msgstr ""
+msgstr "Инженерный"
 
 #: zcadexternal.tlunits~lufractional
 msgctxt "zcadexternal.tlunits~lufractional"
 msgid "Fractional"
-msgstr ""
+msgstr "Дробный"
 
 #: zcadexternal.tlunits~luscientific
 msgctxt "zcadexternal.tlunits~luscientific"
 msgid "Scientific"
-msgstr ""
+msgstr "Научный"
 
 #: zcadexternal.tmatchpropparam~processcolor
 msgid "Process color"
@@ -3071,7 +3075,7 @@ msgstr "Высота строки"
 
 #: zcadexternal.tobjinspinterface~intf_objinsp_showemptysections
 msgid "Show empty sections"
-msgstr ""
+msgstr "Показывать пустые секции"
 
 #: zcadexternal.tobjinspinterface~intf_objinsp_showfasteditors
 msgid "Show fast editors"
@@ -3087,11 +3091,11 @@ msgstr "Показывать кнопки редакторов при навед
 
 #: zcadexternal.tobjinspinterface~intf_objinsp_showseparator
 msgid "Show separator"
-msgstr "показывать разделитель"
+msgstr "Показывать разделитель"
 
 #: zcadexternal.tobjinspinterface~intf_objinsp_spaceheight
 msgid "Space height"
-msgstr ""
+msgstr "Высота отступа"
 
 #: zcadexternal.tobjinspinterface~intf_objinsp_whitebackground
 msgid "White background"
@@ -3463,7 +3467,7 @@ msgstr "Режим"
 
 #: zcadexternal.trd~rd_drawinsidepaintmessage
 msgid "Draw inside paint message"
-msgstr ""
+msgstr "Отрисовка чертежа внутри сообщения отрисовки"
 
 #: zcadexternal.trd~rd_gluextensions
 msgid "GLU Extensions"

@@ -10,9 +10,9 @@ interface
 uses uzcenitiesvariablesextender,uzcvariablesutils,Varman,uzbstrproc,uzcentcable,
      uzeentdevice,uzeconsts,gzctnrvectorpobjects,languade,gzctnrvectorobjects,
      gzctnrvectortypes,SysUtils,uzbtypesbase,uzbtypes,varmandef,uzbmemman,uzcdrawings;
-const
-     DefCableName='Создан. Не назван';
-     UnNamedCable='Имя отсутствует';
+resourcestring
+     DefCableName='Created. Not named';
+     UnNamedCable='Name absent';
 type
 {EXPORT+}
     PTCableDesctiptor=^TCableDesctiptor;
@@ -223,7 +223,7 @@ begin
      {pcd:=beginiterate(ir2);
      if (pcd<>nil) then
      repeat
-           HistoryOutStr('Кабель "'+pcd^.Name+'", сегментов '+inttostr(pcd^.Segments.Count));
+           HistoryOutStr('Cable "'+pcd^.Name+'", segments '+inttostr(pcd^.Segments.Count));
            pcd:=iterate(ir2);
      until pcd=nil;}
 end;

@@ -221,7 +221,7 @@ begin
      if drawings.currentdwg<>PTSimpleDrawing(BlockBaseDWG) then
      if drawings.GetCurrentROOT.ObjArray.Count>0 then
                                                      begin
-                                                          if ZCMsgCallBackInterface.TextQuestion('Чертеж уже содержит данные. Осуществить подгрузку?','QLOAD',MB_YESNO)=IDNO then
+                                                          if ZCMsgCallBackInterface.TextQuestion(rsDWGAlreadyContainsData,'QLOAD',MB_YESNO)=IDNO then
                                                           exit;
                                                      end;
      s:=operands;
@@ -385,7 +385,7 @@ begin
 end;
 function Cam_reset_com(operands:TCommandOperands):TCommandResult;
 begin
-  PTZCADDrawing(drawings.GetCurrentDWG).UndoStack.PushStartMarker('Камера в начало');
+  PTZCADDrawing(drawings.GetCurrentDWG).UndoStack.PushStartMarker('Reset camera');
   with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG).UndoStack,drawings.GetCurrentDWG.pcamera^.prop)^ do
   begin
   drawings.GetCurrentDWG.pcamera^.prop.point.x := 0;
@@ -845,7 +845,7 @@ begin
   InfoFormVar:=TInfoForm.create(application.MainForm);
   InfoFormVar.DialogPanel.HelpButton.Hide;
   InfoFormVar.DialogPanel.CancelButton.Hide;
-  InfoFormVar.caption:=('ОСТОРОЖНО! Проверки синтаксиса пока нет. При нажатии "ОК" объект обновится. При ошибке - ВЫЛЕТ!');
+  InfoFormVar.caption:=(rsCAUTIONnoSyntaxCheckYet);
   end;
 end;
 function EditUnit(var entityunit:TSimpleUnit):boolean;
@@ -1314,12 +1314,12 @@ begin
   begin
   drawings.GetCurrentDWG.wa.SetMouseMode((MGet3DPointWOOP) or (MMoveCamera) or (MRotateCamera) or (MGet3DPoint));
   //drawings.GetCurrentDWG.OGLwindow1.param.seldesc.MouseFrameON := true;
-  ZCMsgCallBackInterface.TextMessage('тыкаем и проверяем внутри\снаружи 2D полилинии:',TMWOHistoryOut);
+  ZCMsgCallBackInterface.TextMessage('Click and test inside/outside of a 2D polyline:',TMWOHistoryOut);
   exit;
   end;
   //else
   begin
-       ZCMsgCallBackInterface.TextMessage('перед запуском нужно выбрать 2D полилинию',TMWOHistoryOut);
+       ZCMsgCallBackInterface.TextMessage('Before run 2DPolyline must be selected',TMWOHistoryOut);
        commandmanager.executecommandend;
   end;
 end;
@@ -1330,9 +1330,9 @@ begin
   if (button and MZW_LBUTTON)<>0 then
   begin
        if pgdbobjlwpolyline(drawings.GetCurrentDWG.GetLastSelected).isPointInside(wc) then
-       ZCMsgCallBackInterface.TextMessage('Внутри!',TMWOHistoryOut)
+       ZCMsgCallBackInterface.TextMessage('Inside!',TMWOHistoryOut)
        else
-       ZCMsgCallBackInterface.TextMessage('Снаружи!',TMWOHistoryOut)
+       ZCMsgCallBackInterface.TextMessage('Outside!',TMWOHistoryOut)
   end;
 end;
 function isrect(const p1,p2,p3,p4:GDBVertex2D):boolean;

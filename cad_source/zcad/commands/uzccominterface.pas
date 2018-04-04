@@ -223,7 +223,6 @@ begin
                            {merge_com(@tn[1])}Load_merge(tn,TLOLoad)
                        else
                            ZCMsgCallBackInterface.TextMessage(format(rsTemplateNotFound,[tn]),TMWOShowError);
-                           //TMWOShowError('Не найден файл шаблона "'+tn+'"');
      end;
      wpowner.Drawer.delmyscrbuf;//буфер чистить, потому что он может оказаться невалидным в случае отрисовки во время
                                 //создания или загрузки

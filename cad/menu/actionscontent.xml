@@ -102,10 +102,10 @@
       <ZAction Name="ACN_ARC" Command="Arc" Img="arc.bmp" Caption="Draw arc"/>
     </Group>
     <Group Category="Dimension">
-      <ZAction Name="ACN_DIMALIGNED" Command="DimAligned" Img="dimaligned.bmp" Caption="Draw aligned dimension"/>
-      <ZAction Name="ACN_DIMLINEAR" Command="DimLinear" Img="dimlinear.bmp" Caption="Draw linear dimension"/>
-      <ZAction Name="ACN_DIMRADIAL" Command="DimRadius" Img="dimradial.bmp" Caption="Draw radial dimension"/>
-      <ZAction Name="ACN_DIMDIAMETRIC" Command="DimDiameter" Img="dimdiametric.bmp" Caption="Draw diametric dimension"/>
+      <ZAction Name="ACN_DIMALIGNED" Command="DimAligned" Img="dimaligned" Caption="Draw aligned dimension"/>
+      <ZAction Name="ACN_DIMLINEAR" Command="DimLinear" Img="dimlinear" Caption="Draw linear dimension"/>
+      <ZAction Name="ACN_DIMRADIAL" Command="DimRadius" Img="dimradial" Caption="Draw radial dimension"/>
+      <ZAction Name="ACN_DIMDIAMETRIC" Command="DimDiameter" Img="dimdiametric" Caption="Draw diametric dimension"/>
     </Group>
     <Group Category="Misc">
       <ZAction Name="ACN_CANCEL" Command="Cancel" Img="#C" Caption="Cancel"/>
@@ -113,7 +113,7 @@
       <ZAction Name="ACN_MATCHPROP" Command="MatchProp" Img="matchprop" Caption="Match properties"/>
       <ZAction Name="ACN_WNEXT" Command="NextDrawing" Img="#N" Caption="Next window" ShortCut="CTRL+TAB"/>
       <ZAction Name="ACN_WPREV" Command="PrevDrawing" Img="#P" Caption="Previous window" ShortCut="SHIFT+CTRL+TAB"/>
-      <ZAction Name="ACN_ABOUT" Command="About" Img="about.bmp" Caption="About"/>
+      <ZAction Name="ACN_ABOUT" Command="About" Img="about" Caption="About"/>
       <ZAction Name="ACN_HELP" Command="Help" Img="help.bmp" Caption="Help" ShortCut="F1"/>
       <ZAction Name="ACN_DBASEADD" Command="DBaseAdd" Img="#DBAdd" Caption="Add to drawing database"/>
       <ZAction Name="ACN_DBASELINK" Command="DBaseLink" Img="#DBLink" Caption="Link to selected entities"/>

@@ -565,7 +565,7 @@ begin
 end;
 procedure BlockRotate_com.BuildDM(Operands:TCommandOperands);
 begin
-  commandmanager.DMAddMethod('Изменить','Изменить угол поворота выделенных блоков',@run);
+  commandmanager.DMAddMethod(rscmChange,'Change rotate selected blocks',@run);
   commandmanager.DMShow;
 end;
 procedure BlockRotate_com.Run(pdata:{pointer}GDBPlatformint);
@@ -633,7 +633,7 @@ begin
 end;
 procedure BlockScale_com.BuildDM(Operands:TCommandOperands);
 begin
-  commandmanager.DMAddMethod('Изменить','Изменить масштаб выделенных блоков',@run);
+  commandmanager.DMAddMethod(rscmChange,'Change scale selected blocks',@run);
   commandmanager.DMShow;
 end;
 
@@ -709,7 +709,7 @@ begin
 end;
 procedure BlockReplace_com.BuildDM(Operands:TCommandOperands);
 begin
-  commandmanager.DMAddMethod('Заменить','Заменить блоки',@run);
+  commandmanager.DMAddMethod(rscmReplace,'Replace blocks',@run);
   commandmanager.DMShow;
 end;
 procedure BlockReplace_com.Run(pdata:GDBPlatformint);
@@ -858,7 +858,7 @@ begin
 end;
 procedure CFO_com.ShowMenu;
 begin
-  commandmanager.DMAddMethod('Копировать','Копировать примитивы в выбраные устройства',@run);
+  commandmanager.DMAddMethod(rscmCopy,'Copy entities to selected devices',@run);
   commandmanager.DMShow;
 end;
 procedure CFO_com.Run(pdata:GDBPlatformint);
@@ -927,7 +927,7 @@ begin
 end;
 procedure ExportDevWithAxis_com.ShowMenu;
 begin
-  commandmanager.DMAddMethod('Export','Экспортировать выбранные устройства с привязкой к осям',@run);
+  commandmanager.DMAddMethod(rscmExport,'Export selected devices with axis',@run);
   commandmanager.DMShow;
 end;
 procedure GetNearestAxis(axisarray:taxisdescarray;coord:gdbvertex;out nearestaxis,secondaxis:integer);
@@ -1142,7 +1142,7 @@ begin
 end;
 procedure Number_com.ShowMenu;
 begin
-  commandmanager.DMAddMethod('Нумеровать','Нумеровать выбранные устройства',@run);
+  commandmanager.DMAddMethod(rscmNumber,'Number selected devices',@run);
   commandmanager.DMShow;
 end;
 class function TGDBNameLess.c(a,b:tdevname):boolean;
@@ -1292,7 +1292,7 @@ end;
 
 procedure ATO_com.ShowMenu;
 begin
-  commandmanager.DMAddMethod('Добавить','Добавить выбранные примитивы к устройству',@run);
+  commandmanager.DMAddMethod(rscmAdd,'Add selected ents to device',@run);
   commandmanager.DMShow;
 end;
 
@@ -1363,8 +1363,8 @@ begin
 
   if GetSelCount>0 then
   begin
-       commandmanager.DMAddMethod('Запомнить','Запомнить примитивы и выделить примитивы для поиска подобных',@sel);
-       commandmanager.DMAddMethod('Найти','Найти подобные примитивы (если "шаблонные" примитивы не были запомнены, посиск пройдет во всем чертеже)',@run);
+       commandmanager.DMAddMethod(rscmStore,'Store ents and select ents to select similar',@sel);
+       commandmanager.DMAddMethod(rscmFind,'Select similar ents (if "template" ents were not stored, the entire drawing will be searched)',@run);
        commandmanager.DMShow;
        inherited CommandStart('');
   end
@@ -1751,7 +1751,6 @@ begin
            //s:=memsubstr.ReadAnsiString;
            memsubstr.free;
                          if fileexists(utf8tosys(s)) then
-              //if TMWOMessageBox(mainform.handle,'В данной версии возможна двойная загрузка файлов, ПРИВОДЯЩАЯ К ДУБЛИРОВАНИЮ ОБЪЕКТОВ НА ЧЕРТЕЖЕ Осуществить вставку?','QLOAD',MB_YESNO)=IDYES then
               begin
                     addfromdxf(s,@drawings.GetCurrentDWG^.ConstructObjRoot,{tloload}TLOMerge,drawings.GetCurrentDWG^);
                     {ReloadLayer;
@@ -1766,34 +1765,6 @@ begin
      end
        else
          ZCMsgCallBackInterface.TextMessage(rsClipboardIsEmpty,TMWOHistoryOut);
-(*    res:=OpenClipboard(mainformn.handle);
-    if res then
-    begin
-         uFormat:=RegisterClipboardFormat(ZCAD_DXF_CLIPBOARD_NAME);
-
-         hData:=GetClipboardData(uFormat);
-         if hdata<>0 then
-         begin
-              pbuf:=GlobalLock(hData);
-              s:=pbuf;
-              GlobalUnlock(hData);
-              if fileexists(s) then
-              //if TMWOMessageBox(mainform.handle,'В данной версии возможна двойная загрузка файлов, ПРИВОДЯЩАЯ К ДУБЛИРОВАНИЮ ОБЪЕКТОВ НА ЧЕРТЕЖЕ Осуществить вставку?','QLOAD',MB_YESNO)=IDYES then
-              begin
-                    addfromdxf(s,@drawings.GetCurrentDWG^.ConstructObjRoot);
-                    {ReloadLayer;
-                    drawings.GetCurrentROOT^.calcbb;
-                    drawings.GetCurrentROOT^.format;
-                    drawings.GetCurrentROOT^.format;
-                    updatevisible;
-                    redrawoglwnd;}
-              end;
-
-
-         end;
-         CloseClipboard;
-         drawings.GetCurrentDWG^.OGLwindow1.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
-    end;*)
 end;
 procedure copybase_com.CommandStart(Operands:TCommandOperands);
 var //i: GDBInteger;
@@ -2233,7 +2204,7 @@ begin
   begin
     begin
       dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-      drawings.GetCurrentDWG^{.UndoStack}.PushStartMarker('Редактирование на чертеже');
+      drawings.GetCurrentDWG^{.UndoStack}.PushStartMarker('On drawing edit');
       modifyobj(dist,wc,true,pobj,drawings.GetCurrentDWG^,@drawings.GetCurrentDWG^.SelObjArray);
       drawings.GetCurrentDWG^{.UndoStack}.PushEndMarker;
       drawings.GetCurrentDWG^.SelObjArray.resprojparam(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,@drawings.GetCurrentDWG^.myGluProject2,dc);
@@ -2417,13 +2388,9 @@ begin
   result:=0;
   if (button and MZW_LBUTTON)<>0 then
   begin
-    //TMWOHistoryOut('Вторая точка:');
     dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
     PCreatedGDBLine := PGDBObjLine(ENTF_CreateLine(@drawings.GetCurrentDWG^.ConstructObjRoot,@drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray,[wc.x,wc.y,wc.z,wc.x,wc.y,wc.z]));
     zcSetEntPropFromCurrentDrawingProp(PCreatedGDBLine);
-    //PCreatedGDBLine := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,drawings.GetCurrentROOT));
-    //GDBObjSetLineProp(PCreatedGDBLine,drawings.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^, sysvar.dwg.DWG_CLinew^, wc, wc);
-    //GDBObjLineInit(drawings.GetCurrentROOT,PCreatedGDBLine,drawings.GetCurrentDWG^.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, wc, wc);
     PCreatedGDBLine^.FormatEntity(drawings.GetCurrentDWG^,dc);
   end
 end;
@@ -3112,7 +3079,6 @@ begin
                         ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD('TPolyEdit'),@PEProp,drawings.GetCurrentDWG);
                         drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
                         drawings.GetCurrentDWG^.SelObjArray.Free;
-                        //TMWOHistoryOut('Поехали:');
                    end;
   result:=cmd_ok;
 end;
@@ -3538,8 +3504,6 @@ else if (sd.PFirstSelectedEnt^.GetObjType=GDBDeviceID) then
           zcRedrawCurrentDrawing;
           if tn<>'' then
                         bedit_format(nil);
-          //poglwnd^.md.mode := (MGet3DPoint) or (MMoveCamera) or (MRotateCamera);
-          //TMWOHistoryOut('Точка вставки:');
      end
         else
             begin

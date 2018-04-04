@@ -76,6 +76,14 @@ resourcestring
   rsTemplateNotFound='Template file "%s" not found';
 
   {commands messages}
+  rscmChange='Change';
+  rscmReplace='Replace';
+  rscmCopy='Copy';
+  rscmExport='Export';
+  rscmNumber='Number';
+  rscmAdd='Add';
+  rscmStore='Store';
+  rscmFind='Find';
   rscmCommandParams='Command params';
   rscmSelectSourceEntity='Select source entity:';
   rscmSelectDestinationEntity='Select destination entity:';
@@ -131,6 +139,8 @@ resourcestring
   rscmCommandOnlyCTXMenu='The command works only from context menu';
 
   {messages}
+  rsDWGAlreadyContainsData='Drawing already contains data. Load anyway?';
+  rsCAUTIONnoSyntaxCheckYet='CAUTION! There is no syntax check yet. Clicking "OK" the object will be updated. Error - CRASHES!!!';
   rsColor='Color';
   rsLineType='Line type';
   rsWrongBlockDefIndex='Wrong blockdef index';

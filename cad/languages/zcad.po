@@ -2,17 +2,14 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8"
 
 #: tdimstylesform.addstyle.caption
-msgctxt "tdimstylesform.addstyle.caption"
 msgid "AddStyle"
 msgstr ""
 
 #: tdimstylesform.addstyle.hint
-msgctxt "tdimstylesform.addstyle.hint"
 msgid "Add text style"
 msgstr ""
 
 #: tdimstylesform.buttonapplyclose.caption
-msgctxt "tdimstylesform.buttonapplyclose.caption"
 msgid "Apply and close"
 msgstr ""
 
@@ -21,12 +18,10 @@ msgid "Dimantion styles"
 msgstr ""
 
 #: tdimstylesform.delstyle.caption
-msgctxt "tdimstylesform.delstyle.caption"
 msgid "DelStyle"
 msgstr ""
 
 #: tdimstylesform.delstyle.hint
-msgctxt "tdimstylesform.delstyle.hint"
 msgid "Delete text style"
 msgstr ""
 
@@ -39,12 +34,10 @@ msgid "Inspect dimstyle"
 msgstr ""
 
 #: tdimstylesform.listview1.columns[0].caption
-msgctxt "tdimstylesform.listview1.columns[0].caption"
 msgid "Status"
 msgstr ""
 
 #: tdimstylesform.listview1.columns[1].caption
-msgctxt "tdimstylesform.listview1.columns[1].caption"
 msgid "Name"
 msgstr ""
 
@@ -77,42 +70,34 @@ msgid "DIMASZ"
 msgstr ""
 
 #: tdimstylesform.mkcurrentstyle.caption
-msgctxt "tdimstylesform.mkcurrentstyle.caption"
 msgid "MkCurrentStyle"
 msgstr ""
 
 #: tdimstylesform.mkcurrentstyle.hint
-msgctxt "tdimstylesform.mkcurrentstyle.hint"
 msgid "Make selected style curretn"
 msgstr ""
 
 #: tdimstylesform.purgestyles.caption
-msgctxt "tdimstylesform.purgestyles.caption"
 msgid "PurgeStyles"
 msgstr ""
 
 #: tdimstylesform.purgestyles.hint
-msgctxt "tdimstylesform.purgestyles.hint"
 msgid "Purge not used styles"
 msgstr ""
 
 #: tdimstylesform.refreshstyles.caption
-msgctxt "tdimstylesform.refreshstyles.caption"
 msgid "RefreshStyles"
 msgstr ""
 
 #: tdimstylesform.refreshstyles.hint
-msgctxt "tdimstylesform.refreshstyles.hint"
 msgid "Refresh styles list"
 msgstr ""
 
 #: tdimstylesform.separator1.caption
-msgctxt "tdimstylesform.separator1.caption"
 msgid "Separator1"
 msgstr ""
 
 #: tdimstylesform.toolbar1.caption
-msgctxt "tdimstylesform.toolbar1.caption"
 msgid "ToolBar1"
 msgstr ""
 
@@ -125,17 +110,14 @@ msgid "Add layer"
 msgstr ""
 
 #: tlayersform.buttonapplyclose.caption
-msgctxt "TLAYERSFORM.BUTTONAPPLYCLOSE.CAPTION"
 msgid "Apply and close"
 msgstr ""
 
 #: tlayersform.button_apply.caption
-msgctxt "TLAYERSFORM.BUTTON_APPLY.CAPTION"
 msgid "Apply"
 msgstr ""
 
 #: tlayersform.caption
-msgctxt "TLAYERSFORM.CAPTION"
 msgid "Layers"
 msgstr ""
 
@@ -148,52 +130,42 @@ msgid "Delete layer"
 msgstr ""
 
 #: tlayersform.listview1.columns[0].caption
-msgctxt "TLAYERSFORM.LISTVIEW1.COLUMNS[0].CAPTION"
 msgid "Status"
 msgstr ""
 
 #: tlayersform.listview1.columns[1].caption
-msgctxt "TLAYERSFORM.LISTVIEW1.COLUMNS[1].CAPTION"
 msgid "Name"
 msgstr ""
 
 #: tlayersform.listview1.columns[2].caption
-msgctxt "TLAYERSFORM.LISTVIEW1.COLUMNS[2].CAPTION"
 msgid "On"
 msgstr ""
 
 #: tlayersform.listview1.columns[3].caption
-msgctxt "TLAYERSFORM.LISTVIEW1.COLUMNS[3].CAPTION"
 msgid "Freze"
 msgstr ""
 
 #: tlayersform.listview1.columns[4].caption
-msgctxt "TLAYERSFORM.LISTVIEW1.COLUMNS[4].CAPTION"
 msgid "Lock"
 msgstr ""
 
 #: tlayersform.listview1.columns[5].caption
-msgctxt "TLAYERSFORM.LISTVIEW1.COLUMNS[5].CAPTION"
 msgid "Color"
 msgstr ""
 
 #: tlayersform.listview1.columns[6].caption
-msgctxt "TLAYERSFORM.LISTVIEW1.COLUMNS[6].CAPTION"
 msgid "Line type"
 msgstr ""
 
 #: tlayersform.listview1.columns[7].caption
-msgctxt "TLAYERSFORM.LISTVIEW1.COLUMNS[7].CAPTION"
 msgid "Line weight"
 msgstr ""
 
 #: tlayersform.listview1.columns[8].caption
-msgctxt "TLAYERSFORM.LISTVIEW1.COLUMNS[8].CAPTION"
 msgid "Plot"
 msgstr ""
 
 #: tlayersform.listview1.columns[9].caption
-msgctxt "TLAYERSFORM.LISTVIEW1.COLUMNS[9].CAPTION"
 msgid "Description"
 msgstr ""
 
@@ -222,7 +194,6 @@ msgid "Refresh layers"
 msgstr ""
 
 #: tlayersform.toolbar1.caption
-msgctxt "TLAYERSFORM.TOOLBAR1.CAPTION"
 msgid "ToolBar1"
 msgstr ""
 
@@ -231,32 +202,26 @@ msgid "ToolButton4"
 msgstr ""
 
 #: tnavigatordevices.caption
-msgctxt "tnavigatordevices.caption"
 msgid "Devices"
 msgstr ""
 
 #: tnavigatordevices.maintoolbar.caption
-msgctxt "tnavigatordevices.maintoolbar.caption"
 msgid "MainToolBar"
 msgstr ""
 
 #: tnavigatordevices.toolbutton1.caption
-msgctxt "tnavigatordevices.toolbutton1.caption"
 msgid "ToolButton1"
 msgstr ""
 
 #: tnavigatordevices.toolbutton3.caption
-msgctxt "tnavigatordevices.toolbutton3.caption"
 msgid "ToolButton3"
 msgstr ""
 
 #: tnavigatorentities.caption
-msgctxt "tnavigatorentities.caption"
 msgid "Entities"
 msgstr ""
 
 #: tnavigatorentities.maintoolbar.caption
-msgctxt "tnavigatorentities.maintoolbar.caption"
 msgid "MainToolBar"
 msgstr ""
 
@@ -265,127 +230,102 @@ msgid "Refresh"
 msgstr ""
 
 #: tnavigatorentities.toolbutton1.caption
-msgctxt "tnavigatorentities.toolbutton1.caption"
 msgid "ToolButton1"
 msgstr ""
 
 #: tnavigatorentities.toolbutton3.caption
-msgctxt "tnavigatorentities.toolbutton3.caption"
 msgid "ToolButton3"
 msgstr ""
 
 #: ttextstylesform.addstyle.caption
-msgctxt "TTEXTSTYLESFORM.ADDSTYLE.CAPTION"
 msgid "AddStyle"
 msgstr ""
 
 #: ttextstylesform.addstyle.hint
-msgctxt "TTEXTSTYLESFORM.ADDSTYLE.HINT"
 msgid "Add text style"
 msgstr ""
 
 #: ttextstylesform.buttonapplyclose.caption
-msgctxt "TTEXTSTYLESFORM.BUTTONAPPLYCLOSE.CAPTION"
 msgid "Apply and close"
 msgstr ""
 
 #: ttextstylesform.caption
-msgctxt "ttextstylesform.caption"
 msgid "Text styles"
 msgstr ""
 
 #: ttextstylesform.delstyle.caption
-msgctxt "TTEXTSTYLESFORM.DELSTYLE.CAPTION"
 msgid "DelStyle"
 msgstr ""
 
 #: ttextstylesform.delstyle.hint
-msgctxt "TTEXTSTYLESFORM.DELSTYLE.HINT"
 msgid "Delete text style"
 msgstr ""
 
 #: ttextstylesform.fonttypefiltercombobox.text
-msgctxt "TTEXTSTYLESFORM.FONTTYPEFILTERCOMBOBOX.TEXT"
 msgid "All"
 msgstr ""
 
 #: ttextstylesform.fonttypefilterdesc.caption
-msgctxt "TTEXTSTYLESFORM.FONTTYPEFILTERDESC.CAPTION"
 msgid "Fonts types filter:"
 msgstr ""
 
 #: ttextstylesform.listview1.columns[0].caption
-msgctxt "TTEXTSTYLESFORM.LISTVIEW1.COLUMNS[0].CAPTION"
 msgid "Status"
 msgstr ""
 
 #: ttextstylesform.listview1.columns[1].caption
-msgctxt "TTEXTSTYLESFORM.LISTVIEW1.COLUMNS[1].CAPTION"
 msgid "Name"
 msgstr ""
 
 #: ttextstylesform.listview1.columns[2].caption
-msgctxt "TTEXTSTYLESFORM.LISTVIEW1.COLUMNS[2].CAPTION"
 msgid "FontName"
 msgstr ""
 
 #: ttextstylesform.listview1.columns[3].caption
-msgctxt "TTEXTSTYLESFORM.LISTVIEW1.COLUMNS[3].CAPTION"
 msgid "FontPath"
 msgstr ""
 
 #: ttextstylesform.listview1.columns[4].caption
-msgctxt "TTEXTSTYLESFORM.LISTVIEW1.COLUMNS[4].CAPTION"
 msgid "Height"
 msgstr ""
 
 #: ttextstylesform.listview1.columns[5].caption
-msgctxt "TTEXTSTYLESFORM.LISTVIEW1.COLUMNS[5].CAPTION"
 msgid "Width factor"
 msgstr ""
 
 #: ttextstylesform.listview1.columns[6].caption
-msgctxt "TTEXTSTYLESFORM.LISTVIEW1.COLUMNS[6].CAPTION"
 msgid "Oblique"
 msgstr ""
 
 #: ttextstylesform.mkcurrentstyle.caption
-msgctxt "TTEXTSTYLESFORM.MKCURRENTSTYLE.CAPTION"
 msgid "MkCurrentStyle"
 msgstr ""
 
 #: ttextstylesform.mkcurrentstyle.hint
-msgctxt "TTEXTSTYLESFORM.MKCURRENTSTYLE.HINT"
 msgid "Make selected style curretn"
 msgstr ""
 
 #: ttextstylesform.purgestyles.caption
-msgctxt "TTEXTSTYLESFORM.PURGESTYLES.CAPTION"
 msgid "PurgeStyles"
 msgstr ""
 
 #: ttextstylesform.purgestyles.hint
-msgctxt "TTEXTSTYLESFORM.PURGESTYLES.HINT"
 msgid "Purge not used styles"
 msgstr ""
 
 #: ttextstylesform.refreshstyles.caption
-msgctxt "TTEXTSTYLESFORM.REFRESHSTYLES.CAPTION"
 msgid "RefreshStyles"
 msgstr ""
 
 #: ttextstylesform.refreshstyles.hint
-msgctxt "TTEXTSTYLESFORM.REFRESHSTYLES.HINT"
 msgid "Refresh styles list"
 msgstr ""
 
 #: ttextstylesform.separator1.caption
-msgctxt "TTEXTSTYLESFORM.SEPARATOR1.CAPTION"
 msgid "Separator1"
 msgstr ""
 
 #: ttextstylesform.toolbar1.caption
-msgctxt "TTEXTSTYLESFORM.TOOLBAR1.CAPTION"
 msgid "ToolBar1"
 msgstr ""
 
@@ -430,7 +370,6 @@ msgid "Cables"
 msgstr ""
 
 #: uzcregnavigatordevices.rsdevices
-msgctxt "uzcregnavigatordevices.rsdevices"
 msgid "Devices"
 msgstr ""
 
@@ -439,12 +378,10 @@ msgid "Risers"
 msgstr ""
 
 #: uzcregnavigatorentities.rsentities
-msgctxt "uzcregnavigatorentities.rsentities"
 msgid "Entities"
 msgstr ""
 
 #: uzcstrconsts.rsaboutwndcaption
-msgctxt "uzcstrconsts.rsaboutwndcaption"
 msgid "About ZCAD"
 msgstr ""
 
@@ -457,22 +394,18 @@ msgid "Writeln by Andrey M. Zubarev"
 msgstr ""
 
 #: uzcstrconsts.rsautosave
-msgctxt "uzcstrconsts.rsautosave"
 msgid "Autosave"
 msgstr ""
 
 #: uzcstrconsts.rsblocks
-msgctxt "uzcstrconsts.rsblocks"
 msgid "Blocks"
 msgstr ""
 
 #: uzcstrconsts.rsbyblock
-msgctxt "uzcstrconsts.rsbyblock"
 msgid "ByBlock"
 msgstr ""
 
 #: uzcstrconsts.rsbylayer
-msgctxt "uzcstrconsts.rsbylayer"
 msgid "ByLayer"
 msgstr ""
 
@@ -709,7 +642,6 @@ msgid "Store"
 msgstr ""
 
 #: uzcstrconsts.rscolor
-msgctxt "uzcstrconsts.rscolor"
 msgid "Color"
 msgstr ""
 
@@ -718,22 +650,18 @@ msgid "Color %d"
 msgstr ""
 
 #: uzcstrconsts.rscommandlinewndname
-msgctxt "uzcstrconsts.rscommandlinewndname"
 msgid "Command line"
 msgstr ""
 
 #: uzcstrconsts.rscommandnrinc
-msgctxt "uzcstrconsts.rscommandnrinc"
 msgid "Command can not run"
 msgstr ""
 
 #: uzcstrconsts.rscommenteeport
-msgctxt "uzcstrconsts.rscommenteeport"
 msgid "Registered commands - %d; registered entities - %d; registered DXF entities - %d"
 msgstr ""
 
 #: uzcstrconsts.rscompiledtimemsg
-msgctxt "uzcstrconsts.rscompiledtimemsg"
 msgid "Done.  %s second"
 msgstr ""
 
@@ -766,22 +694,18 @@ msgid "Current style cannot be deleted"
 msgstr ""
 
 #: uzcstrconsts.rsdefault
-msgctxt "uzcstrconsts.rsdefault"
 msgid "Default"
 msgstr ""
 
 #: uzcstrconsts.rsdefaultpromot
-msgctxt "uzcstrconsts.rsdefaultpromot"
 msgid "Command"
 msgstr ""
 
 #: uzcstrconsts.rsdevices
-msgctxt "uzcstrconsts.rsdevices"
 msgid "Devices"
 msgstr ""
 
 #: uzcstrconsts.rsdifferent
-msgctxt "uzcstrconsts.rsdifferent"
 msgid "Different"
 msgstr ""
 
@@ -794,7 +718,6 @@ msgid "Divide by zero"
 msgstr ""
 
 #: uzcstrconsts.rsdrawingwindowwndname
-msgctxt "uzcstrconsts.rsdrawingwindowwndname"
 msgid "Drawings window"
 msgstr ""
 
@@ -803,7 +726,6 @@ msgid "Drawing already contains data. Load anyway?"
 msgstr ""
 
 #: uzcstrconsts.rsempty
-msgctxt "uzcstrconsts.rsempty"
 msgid "Empty"
 msgstr ""
 
@@ -820,12 +742,10 @@ msgid "Error!"
 msgstr ""
 
 #: uzcstrconsts.rserrorprefix
-msgctxt "uzcstrconsts.rserrorprefix"
 msgid "ERROR: "
 msgstr ""
 
 #: uzcstrconsts.rsexprouttext
-msgctxt "uzcstrconsts.rsexprouttext"
 msgid "Expression %s return %s"
 msgstr ""
 
@@ -838,12 +758,10 @@ msgid "Form \"%s\" is not found!"
 msgstr ""
 
 #: uzcstrconsts.rsgdbobjinspwndname
-msgctxt "uzcstrconsts.rsgdbobjinspwndname"
 msgid "Object inspector"
 msgstr ""
 
 #: uzcstrconsts.rshardunnamed
-msgctxt "uzcstrconsts.rshardunnamed"
 msgid "Unnamed"
 msgstr ""
 
@@ -876,12 +794,10 @@ msgid "Layer \"%s\" used in: %d-model, %d-blockdef table"
 msgstr ""
 
 #: uzcstrconsts.rslayoutload
-msgctxt "uzcstrconsts.rslayoutload"
 msgid "Error loading layout from file"
 msgstr ""
 
 #: uzcstrconsts.rslinetype
-msgctxt "uzcstrconsts.rslinetype"
 msgid "Line type"
 msgstr ""
 
@@ -904,7 +820,6 @@ msgid "Message:"
 msgstr ""
 
 #: uzcstrconsts.rsmm
-msgctxt "uzcstrconsts.rsmm"
 msgid "mm"
 msgstr ""
 
@@ -913,7 +828,6 @@ msgid "MText editor"
 msgstr ""
 
 #: uzcstrconsts.rsnameall
-msgctxt "uzcstrconsts.rsnameall"
 msgid "All"
 msgstr ""
 
@@ -922,12 +836,10 @@ msgid "%s (%d)"
 msgstr ""
 
 #: uzcstrconsts.rsncoglc
-msgctxt "uzcstrconsts.rsncoglc"
 msgid "OpenGL context is not created"
 msgstr ""
 
 #: uzcstrconsts.rsnewdimstylenameformat
-msgctxt "uzcstrconsts.rsnewdimstylenameformat"
 msgid "Style%-3.3d"
 msgstr ""
 
@@ -936,7 +848,6 @@ msgid "Layer%-3.3d"
 msgstr ""
 
 #: uzcstrconsts.rsnewtextstylenameformat
-msgctxt "uzcstrconsts.rsnewtextstylenameformat"
 msgid "Style%-3.3d"
 msgstr ""
 
@@ -977,7 +888,6 @@ msgid "Property"
 msgstr ""
 
 #: uzcstrconsts.rsquitcaption
-msgctxt "uzcstrconsts.rsquitcaption"
 msgid "Quit"
 msgstr ""
 
@@ -986,7 +896,6 @@ msgid "Do yo want to quit ZCAD?"
 msgstr ""
 
 #: uzcstrconsts.rsrecreating
-msgctxt "uzcstrconsts.rsrecreating"
 msgid "Re-creating %s!"
 msgstr ""
 
@@ -1004,17 +913,14 @@ msgid "%s \"%s\" renamed to \"%s\""
 msgstr ""
 
 #: uzcstrconsts.rsrevstr
-msgctxt "uzcstrconsts.rsrevstr"
 msgid "Revision SVN:"
 msgstr ""
 
 #: uzcstrconsts.rsruncommand
-msgctxt "uzcstrconsts.rsruncommand"
 msgid "Running command"
 msgstr ""
 
 #: uzcstrconsts.rsrunscript
-msgctxt "uzcstrconsts.rsrunscript"
 msgid "Running script \"%s\";"
 msgstr ""
 
@@ -1039,7 +945,6 @@ msgid "Style must be selected"
 msgstr ""
 
 #: uzcstrconsts.rssyslinetypewarning
-msgctxt "uzcstrconsts.rssyslinetypewarning"
 msgid "This is system line type!"
 msgstr ""
 
@@ -1052,7 +957,6 @@ msgid " TEXT: "
 msgstr ""
 
 #: uzcstrconsts.rstexteditor
-msgctxt "uzcstrconsts.rstexteditor"
 msgid "Text editor"
 msgstr ""
 
@@ -1061,7 +965,6 @@ msgid "Text style \"%s\" used in: %d-model, %d-blockdef table, %d-dimstyle table
 msgstr ""
 
 #: uzcstrconsts.rstoolbarnotfound
-msgctxt "uzcstrconsts.rstoolbarnotfound"
 msgid "Toolbar \"%s\" is not found! Create a blank window"
 msgstr ""
 
@@ -1106,7 +1009,6 @@ msgid "Uncategorized"
 msgstr ""
 
 #: uzcstrconsts.rsunknowncommand
-msgctxt "uzcstrconsts.rsunknowncommand"
 msgid "Unknown command"
 msgstr ""
 
@@ -1115,7 +1017,6 @@ msgid "Unknown file format \"%s\". Saving failed."
 msgstr ""
 
 #: uzcstrconsts.rsunnamedwindowtitle
-msgctxt "uzcstrconsts.rsunnamedwindowtitle"
 msgid "Unnamed%-3.3d"
 msgstr ""
 

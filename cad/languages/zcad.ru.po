@@ -9,20 +9,17 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ru\n"
-"X-Generator: Poedit 2.0.2\n"
+"X-Generator: Poedit 2.0.6\n"
 
 #: tdimstylesform.addstyle.caption
-msgctxt "tdimstylesform.addstyle.caption"
 msgid "AddStyle"
 msgstr ""
 
 #: tdimstylesform.addstyle.hint
-msgctxt "tdimstylesform.addstyle.hint"
 msgid "Add text style"
 msgstr "Добавить стиль текста"
 
 #: tdimstylesform.buttonapplyclose.caption
-msgctxt "tdimstylesform.buttonapplyclose.caption"
 msgid "Apply and close"
 msgstr "Применить и закрыть"
 
@@ -31,12 +28,10 @@ msgid "Dimantion styles"
 msgstr ""
 
 #: tdimstylesform.delstyle.caption
-msgctxt "tdimstylesform.delstyle.caption"
 msgid "DelStyle"
 msgstr ""
 
 #: tdimstylesform.delstyle.hint
-msgctxt "tdimstylesform.delstyle.hint"
 msgid "Delete text style"
 msgstr "Удалить стиль текста"
 
@@ -49,12 +44,10 @@ msgid "Inspect dimstyle"
 msgstr ""
 
 #: tdimstylesform.listview1.columns[0].caption
-msgctxt "tdimstylesform.listview1.columns[0].caption"
 msgid "Status"
 msgstr "Статус"
 
 #: tdimstylesform.listview1.columns[1].caption
-msgctxt "tdimstylesform.listview1.columns[1].caption"
 msgid "Name"
 msgstr "Имя"
 
@@ -87,42 +80,34 @@ msgid "DIMASZ"
 msgstr ""
 
 #: tdimstylesform.mkcurrentstyle.caption
-msgctxt "tdimstylesform.mkcurrentstyle.caption"
 msgid "MkCurrentStyle"
 msgstr ""
 
 #: tdimstylesform.mkcurrentstyle.hint
-msgctxt "tdimstylesform.mkcurrentstyle.hint"
 msgid "Make selected style curretn"
 msgstr ""
 
 #: tdimstylesform.purgestyles.caption
-msgctxt "tdimstylesform.purgestyles.caption"
 msgid "PurgeStyles"
 msgstr ""
 
 #: tdimstylesform.purgestyles.hint
-msgctxt "tdimstylesform.purgestyles.hint"
 msgid "Purge not used styles"
 msgstr ""
 
 #: tdimstylesform.refreshstyles.caption
-msgctxt "tdimstylesform.refreshstyles.caption"
 msgid "RefreshStyles"
 msgstr ""
 
 #: tdimstylesform.refreshstyles.hint
-msgctxt "tdimstylesform.refreshstyles.hint"
 msgid "Refresh styles list"
 msgstr ""
 
 #: tdimstylesform.separator1.caption
-msgctxt "tdimstylesform.separator1.caption"
 msgid "Separator1"
 msgstr ""
 
 #: tdimstylesform.toolbar1.caption
-msgctxt "tdimstylesform.toolbar1.caption"
 msgid "ToolBar1"
 msgstr ""
 
@@ -135,17 +120,14 @@ msgid "Add layer"
 msgstr ""
 
 #: tlayersform.buttonapplyclose.caption
-msgctxt "tlayersform.buttonapplyclose.caption"
 msgid "Apply and close"
 msgstr "Применить и закрыть"
 
 #: tlayersform.button_apply.caption
-msgctxt "tlayersform.button_apply.caption"
 msgid "Apply"
 msgstr "Применить"
 
 #: tlayersform.caption
-msgctxt "tlayersform.caption"
 msgid "Layers"
 msgstr "Слои"
 
@@ -158,52 +140,42 @@ msgid "Delete layer"
 msgstr ""
 
 #: tlayersform.listview1.columns[0].caption
-msgctxt "tlayersform.listview1.columns[0].caption"
 msgid "Status"
 msgstr "Статус"
 
 #: tlayersform.listview1.columns[1].caption
-msgctxt "tlayersform.listview1.columns[1].caption"
 msgid "Name"
 msgstr "Имя"
 
 #: tlayersform.listview1.columns[2].caption
-msgctxt "tlayersform.listview1.columns[2].caption"
 msgid "On"
 msgstr "Включен"
 
 #: tlayersform.listview1.columns[3].caption
-msgctxt "tlayersform.listview1.columns[3].caption"
 msgid "Freze"
 msgstr "Заморожен"
 
 #: tlayersform.listview1.columns[4].caption
-msgctxt "tlayersform.listview1.columns[4].caption"
 msgid "Lock"
 msgstr "Заблокирован"
 
 #: tlayersform.listview1.columns[5].caption
-msgctxt "tlayersform.listview1.columns[5].caption"
 msgid "Color"
 msgstr "Цвет"
 
 #: tlayersform.listview1.columns[6].caption
-msgctxt "tlayersform.listview1.columns[6].caption"
 msgid "Line type"
 msgstr "Тип линии"
 
 #: tlayersform.listview1.columns[7].caption
-msgctxt "tlayersform.listview1.columns[7].caption"
 msgid "Line weight"
 msgstr "Вес линии"
 
 #: tlayersform.listview1.columns[8].caption
-msgctxt "tlayersform.listview1.columns[8].caption"
 msgid "Plot"
 msgstr "Печать"
 
 #: tlayersform.listview1.columns[9].caption
-msgctxt "tlayersform.listview1.columns[9].caption"
 msgid "Description"
 msgstr "Описание"
 
@@ -232,7 +204,6 @@ msgid "Refresh layers"
 msgstr ""
 
 #: tlayersform.toolbar1.caption
-msgctxt "tlayersform.toolbar1.caption"
 msgid "ToolBar1"
 msgstr ""
 
@@ -241,32 +212,26 @@ msgid "ToolButton4"
 msgstr ""
 
 #: tnavigatordevices.caption
-msgctxt "tnavigatordevices.caption"
 msgid "Devices"
 msgstr "Устройства"
 
 #: tnavigatordevices.maintoolbar.caption
-msgctxt "tnavigatordevices.maintoolbar.caption"
 msgid "MainToolBar"
 msgstr ""
 
 #: tnavigatordevices.toolbutton1.caption
-msgctxt "tnavigatordevices.toolbutton1.caption"
 msgid "ToolButton1"
 msgstr ""
 
 #: tnavigatordevices.toolbutton3.caption
-msgctxt "tnavigatordevices.toolbutton3.caption"
 msgid "ToolButton3"
 msgstr ""
 
 #: tnavigatorentities.caption
-msgctxt "tnavigatorentities.caption"
 msgid "Entities"
 msgstr "Примитивы"
 
 #: tnavigatorentities.maintoolbar.caption
-msgctxt "tnavigatorentities.maintoolbar.caption"
 msgid "MainToolBar"
 msgstr ""
 
@@ -275,127 +240,102 @@ msgid "Refresh"
 msgstr ""
 
 #: tnavigatorentities.toolbutton1.caption
-msgctxt "tnavigatorentities.toolbutton1.caption"
 msgid "ToolButton1"
 msgstr ""
 
 #: tnavigatorentities.toolbutton3.caption
-msgctxt "tnavigatorentities.toolbutton3.caption"
 msgid "ToolButton3"
 msgstr ""
 
 #: ttextstylesform.addstyle.caption
-msgctxt "ttextstylesform.addstyle.caption"
 msgid "AddStyle"
 msgstr ""
 
 #: ttextstylesform.addstyle.hint
-msgctxt "ttextstylesform.addstyle.hint"
 msgid "Add text style"
 msgstr "Добавить стиль текста"
 
 #: ttextstylesform.buttonapplyclose.caption
-msgctxt "ttextstylesform.buttonapplyclose.caption"
 msgid "Apply and close"
 msgstr "Применить и закрыть"
 
 #: ttextstylesform.caption
-msgctxt "ttextstylesform.caption"
 msgid "Text styles"
 msgstr "Стили текста"
 
 #: ttextstylesform.delstyle.caption
-msgctxt "ttextstylesform.delstyle.caption"
 msgid "DelStyle"
 msgstr ""
 
 #: ttextstylesform.delstyle.hint
-msgctxt "ttextstylesform.delstyle.hint"
 msgid "Delete text style"
 msgstr "Удалить стиль текста"
 
 #: ttextstylesform.fonttypefiltercombobox.text
-msgctxt "ttextstylesform.fonttypefiltercombobox.text"
 msgid "All"
 msgstr "Все"
 
 #: ttextstylesform.fonttypefilterdesc.caption
-msgctxt "ttextstylesform.fonttypefilterdesc.caption"
 msgid "Fonts types filter:"
 msgstr "Фильтр типа шрифтов:"
 
 #: ttextstylesform.listview1.columns[0].caption
-msgctxt "ttextstylesform.listview1.columns[0].caption"
 msgid "Status"
 msgstr "Статус"
 
 #: ttextstylesform.listview1.columns[1].caption
-msgctxt "ttextstylesform.listview1.columns[1].caption"
 msgid "Name"
 msgstr "Имя"
 
 #: ttextstylesform.listview1.columns[2].caption
-msgctxt "ttextstylesform.listview1.columns[2].caption"
 msgid "FontName"
 msgstr "Файл шрифта"
 
 #: ttextstylesform.listview1.columns[3].caption
-msgctxt "ttextstylesform.listview1.columns[3].caption"
 msgid "FontPath"
 msgstr "Путь к файлу"
 
 #: ttextstylesform.listview1.columns[4].caption
-msgctxt "ttextstylesform.listview1.columns[4].caption"
 msgid "Height"
 msgstr "Высота"
 
 #: ttextstylesform.listview1.columns[5].caption
-msgctxt "ttextstylesform.listview1.columns[5].caption"
 msgid "Width factor"
 msgstr "Фактор ширины"
 
 #: ttextstylesform.listview1.columns[6].caption
-msgctxt "ttextstylesform.listview1.columns[6].caption"
 msgid "Oblique"
 msgstr "Наклон"
 
 #: ttextstylesform.mkcurrentstyle.caption
-msgctxt "ttextstylesform.mkcurrentstyle.caption"
 msgid "MkCurrentStyle"
 msgstr ""
 
 #: ttextstylesform.mkcurrentstyle.hint
-msgctxt "ttextstylesform.mkcurrentstyle.hint"
 msgid "Make selected style curretn"
 msgstr ""
 
 #: ttextstylesform.purgestyles.caption
-msgctxt "ttextstylesform.purgestyles.caption"
 msgid "PurgeStyles"
 msgstr ""
 
 #: ttextstylesform.purgestyles.hint
-msgctxt "ttextstylesform.purgestyles.hint"
 msgid "Purge not used styles"
 msgstr ""
 
 #: ttextstylesform.refreshstyles.caption
-msgctxt "ttextstylesform.refreshstyles.caption"
 msgid "RefreshStyles"
 msgstr ""
 
 #: ttextstylesform.refreshstyles.hint
-msgctxt "ttextstylesform.refreshstyles.hint"
 msgid "Refresh styles list"
 msgstr ""
 
 #: ttextstylesform.separator1.caption
-msgctxt "ttextstylesform.separator1.caption"
 msgid "Separator1"
 msgstr ""
 
 #: ttextstylesform.toolbar1.caption
-msgctxt "ttextstylesform.toolbar1.caption"
 msgid "ToolBar1"
 msgstr ""
 
@@ -440,7 +380,6 @@ msgid "Cables"
 msgstr "Кабели"
 
 #: uzcregnavigatordevices.rsdevices
-msgctxt "uzcregnavigatordevices.rsdevices"
 msgid "Devices"
 msgstr "Устройства"
 
@@ -449,46 +388,40 @@ msgid "Risers"
 msgstr "Стояки"
 
 #: uzcregnavigatorentities.rsentities
-msgctxt "uzcregnavigatorentities.rsentities"
 msgid "Entities"
 msgstr "Примитивы"
 
 #: uzcstrconsts.rsaboutwndcaption
-msgctxt "uzcstrconsts.rsaboutwndcaption"
 msgid "About ZCAD"
 msgstr "О программе ZCAD"
 
 #: uzcstrconsts.rsadditionalselected
 msgid "Additional were selected %d primitives"
-msgstr ""
+msgstr "Дополнительно выбрано %d примитивов"
 
 #: uzcstrconsts.rsauthor
 msgid "Writeln by Andrey M. Zubarev"
 msgstr "Автор: Зубарев А.М."
 
 #: uzcstrconsts.rsautosave
-msgctxt "uzcstrconsts.rsautosave"
 msgid "Autosave"
 msgstr "Автосохранение"
 
 #: uzcstrconsts.rsblocks
-msgctxt "uzcstrconsts.rsblocks"
 msgid "Blocks"
 msgstr "Блоки"
 
 #: uzcstrconsts.rsbyblock
-msgctxt "uzcstrconsts.rsbyblock"
 msgid "ByBlock"
 msgstr "По Блоку"
 
 #: uzcstrconsts.rsbylayer
-msgctxt "uzcstrconsts.rsbylayer"
 msgid "ByLayer"
 msgstr "По Слою"
 
 #: uzcstrconsts.rscautionnosyntaxcheckyet
 msgid "CAUTION! There is no syntax check yet. Clicking \"OK\" the object will be updated. Error - CRASHES!!!"
-msgstr ""
+msgstr "ВНИМАНИЕ! проверки синтаксиса нет. При нажатии \"OK\" объекты будут обновлены. Ошибка=Вылет!"
 
 #: uzcstrconsts.rsclipboardisempty
 msgid "Clipboard is empty, there is nothing to paste"
@@ -544,7 +477,7 @@ msgstr ""
 
 #: uzcstrconsts.rscmfirstcorner
 msgid "First corner:"
-msgstr ""
+msgstr "Первый угол:"
 
 #: uzcstrconsts.rscmfirstpoint
 msgid "First point:"
@@ -640,7 +573,7 @@ msgstr ""
 
 #: uzcstrconsts.rscmsecondcorner
 msgid "Second corner:"
-msgstr ""
+msgstr "Второй угол:"
 
 #: uzcstrconsts.rscmsecondpoint
 msgid "Second point:"
@@ -648,7 +581,7 @@ msgstr "Вторая точка:"
 
 #: uzcstrconsts.rscmsegmentlengthtotallength
 msgid "Segment length: %s summary length: %s"
-msgstr ""
+msgstr "Длина сегмента: %s суммарная длина: %s"
 
 #: uzcstrconsts.rscmseldevbeforecomm
 msgid "Device must be selected before run the command"
@@ -660,11 +593,11 @@ msgstr "Устройства должны быть выбраны до запу�
 
 #: uzcstrconsts.rscmselectdestinationentity
 msgid "Select destination entity:"
-msgstr ""
+msgstr "Выберете целевой примитив:"
 
 #: uzcstrconsts.rscmselectsourceentity
 msgid "Select source entity:"
-msgstr ""
+msgstr "Выберете исходный примитив:"
 
 #: uzcstrconsts.rscmselentbeforecomm
 msgid "Entities must be selected before run the command"
@@ -676,50 +609,49 @@ msgstr "Выбери или укажи в параметрах примитив!
 
 #: uzcstrconsts.rscmspecifyfirstpoint
 msgid "Specify first point:"
-msgstr ""
+msgstr "Укажите первую точку:"
 
 #: uzcstrconsts.rscmspecifyinsertpoint
 msgid "Specify insert point:"
-msgstr ""
+msgstr "Укажите точку вставки:"
 
 #: uzcstrconsts.rscmspecifypoint
 msgid "Specify point:"
-msgstr ""
+msgstr "Укажите точку:"
 
 #: uzcstrconsts.rscmspecifyrotate
 msgid "Specify rotate:"
-msgstr ""
+msgstr "Укажите поворот:"
 
 #: uzcstrconsts.rscmspecifyscale
 msgid "Specify scale:"
-msgstr ""
+msgstr "Укажите масштаб точку:"
 
 #: uzcstrconsts.rscmspecifysecondpoint
 msgid "Specify second point:"
-msgstr ""
+msgstr "Укажите вторую точку:"
 
 #: uzcstrconsts.rscmspecifythirdpoint
 msgid "Specify third point:"
-msgstr ""
+msgstr "Укажите третью точку:"
 
 #: uzcstrconsts.rscmspecifyx
 msgid "Specify X:"
-msgstr ""
+msgstr "Укажите X:"
 
 #: uzcstrconsts.rscmspecifyy
 msgid "Specify Y:"
-msgstr ""
+msgstr "Укажите Y:"
 
 #: uzcstrconsts.rscmspecifyz
 msgid "Specify Z:"
-msgstr ""
+msgstr "Укажите Z:"
 
 #: uzcstrconsts.rscmstore
 msgid "Store"
-msgstr ""
+msgstr "Запомнить"
 
 #: uzcstrconsts.rscolor
-msgctxt "uzcstrconsts.rscolor"
 msgid "Color"
 msgstr "Цвет"
 
@@ -728,32 +660,28 @@ msgid "Color %d"
 msgstr "Цвет %d"
 
 #: uzcstrconsts.rscommandlinewndname
-msgctxt "uzcstrconsts.rscommandlinewndname"
 msgid "Command line"
 msgstr "Командная строка"
 
 #: uzcstrconsts.rscommandnrinc
-msgctxt "uzcstrconsts.rscommandnrinc"
 msgid "Command can not run"
 msgstr "Команда не может быть запущена"
 
 #: uzcstrconsts.rscommenteeport
-msgctxt "uzcstrconsts.rscommenteeport"
 msgid "Registered commands - %d; registered entities - %d; registered DXF entities - %d"
 msgstr "Зарегистрированных команд - %d; зарегистрированных примитивов - %d; зарегистрированных DXF примитивов - %d"
 
 #: uzcstrconsts.rscompiledtimemsg
-msgctxt "uzcstrconsts.rscompiledtimemsg"
 msgid "Done.  %s second"
 msgstr "Выполнено за  %s сек."
 
 #: uzcstrconsts.rscountdimstylesfound
 msgid "%d Dimension styles found"
-msgstr ""
+msgstr "%d Стилей размеров найдено"
 
 #: uzcstrconsts.rscountdimstylespurged
 msgid "%d Dimension styles purged"
-msgstr ""
+msgstr "%d Стилей размеров очищено"
 
 #: uzcstrconsts.rscounttstylesfound
 msgid "%d Text styles found"
@@ -765,7 +693,7 @@ msgstr "%d Стилей текста очищено"
 
 #: uzcstrconsts.rscurrentdimstylecannotbedeleted
 msgid "Current dimension style cannot be deleted"
-msgstr ""
+msgstr "Текущий стиль размеров неможет быть удален"
 
 #: uzcstrconsts.rscurrentlayeroff
 msgid "The current layer is turned off"
@@ -776,50 +704,44 @@ msgid "Current style cannot be deleted"
 msgstr "Текущий стиль не может быть удален"
 
 #: uzcstrconsts.rsdefault
-msgctxt "uzcstrconsts.rsdefault"
 msgid "Default"
 msgstr "Обычный"
 
 #: uzcstrconsts.rsdefaultpromot
-msgctxt "uzcstrconsts.rsdefaultpromot"
 msgid "Command"
 msgstr "Команда"
 
 #: uzcstrconsts.rsdevices
-msgctxt "uzcstrconsts.rsdevices"
 msgid "Devices"
 msgstr "Устройства"
 
 #: uzcstrconsts.rsdifferent
-msgctxt "uzcstrconsts.rsdifferent"
 msgid "Different"
 msgstr "Разный"
 
 #: uzcstrconsts.rsdimstyleusedin
 msgid "Dimension style \"%s\" used in: %d-model, %d-blockdef table, %d-dimstyle table"
-msgstr ""
+msgstr "Стиль размеров \"%s\" используется в: %d-модели, %d-таблице определений блоков, %d-ьаблице стилей размеров"
 
 #: uzcstrconsts.rsdivbyzero
 msgid "Divide by zero"
 msgstr "Деление на ноль"
 
 #: uzcstrconsts.rsdrawingwindowwndname
-msgctxt "uzcstrconsts.rsdrawingwindowwndname"
 msgid "Drawings window"
 msgstr "Окно чертежей"
 
 #: uzcstrconsts.rsdwgalreadycontainsdata
 msgid "Drawing already contains data. Load anyway?"
-msgstr ""
+msgstr "Чертеж уже содержит данные. Загрузить всеравно?"
 
 #: uzcstrconsts.rsempty
-msgctxt "uzcstrconsts.rsempty"
 msgid "Empty"
 msgstr "Пусто"
 
 #: uzcstrconsts.rsentryalreadyexist
 msgid "Entry \"%s\" already exist"
-msgstr ""
+msgstr "Вхождение \"%s\" уже присутствует"
 
 #: uzcstrconsts.rsequipment
 msgid "Equipment"
@@ -827,15 +749,13 @@ msgstr "Оборудование"
 
 #: uzcstrconsts.rserrorcaption
 msgid "Error!"
-msgstr ""
+msgstr "Ошибка!"
 
 #: uzcstrconsts.rserrorprefix
-msgctxt "uzcstrconsts.rserrorprefix"
 msgid "ERROR: "
 msgstr "ОШИБКА: "
 
 #: uzcstrconsts.rsexprouttext
-msgctxt "uzcstrconsts.rsexprouttext"
 msgid "Expression %s return %s"
 msgstr "Выражение  %s возвращает %s"
 
@@ -845,17 +765,15 @@ msgstr "Файл определения переменных не найден �
 
 #: uzcstrconsts.rsformnotfound
 msgid "Form \"%s\" is not found!"
-msgstr ""
+msgstr "Форма \"%s\" не найдена!"
 
 #: uzcstrconsts.rsgdbobjinspwndname
-msgctxt "uzcstrconsts.rsgdbobjinspwndname"
 msgid "Object inspector"
 msgstr "Инспектор объектов"
 
 #: uzcstrconsts.rshardunnamed
-msgctxt "uzcstrconsts.rshardunnamed"
 msgid "Unnamed"
-msgstr ""
+msgstr "БезИмени"
 
 #: uzcstrconsts.rsinitialization
 msgid "Initialization:"
@@ -871,7 +789,7 @@ msgstr "Неверный ввод"
 
 #: uzcstrconsts.rsinvalidinputforpropery
 msgid "Property \"%s\" for entity \"%s\": %s"
-msgstr ""
+msgstr "Свойство \"%s\" для примитива \"%s\": %s"
 
 #: uzcstrconsts.rslayerdefpaontscannotbeprinted
 msgid "Layer DEFPOINTS can not be printed"
@@ -886,21 +804,17 @@ msgid "Layer \"%s\" used in: %d-model, %d-blockdef table"
 msgstr "Слой  \"%s\" используется: %d-в модели, %d-в таблице блоков"
 
 #: uzcstrconsts.rslayoutload
-msgctxt "uzcstrconsts.rslayoutload"
 msgid "Error loading layout from file"
 msgstr "Ошибка загрузки файла разбивки окон"
 
 #: uzcstrconsts.rslinetype
-msgctxt "uzcstrconsts.rslinetype"
 msgid "Line type"
 msgstr "Тип линии"
 
 #: uzcstrconsts.rslinetypedesk
-msgid ""
-";;Pattern length %f\n"
+msgid ";;Pattern length %f\n"
 "%s\n"
-msgstr ""
-";;Длина шаблона %f\n"
+msgstr ";;Длина шаблона %f\n"
 "%s\n"
 
 #: uzcstrconsts.rslinetypeusedin
@@ -913,10 +827,9 @@ msgstr "Загрузка файла шрифтов \"%S\""
 
 #: uzcstrconsts.rsmessagecaption
 msgid "Message:"
-msgstr ""
+msgstr "Сообщение:"
 
 #: uzcstrconsts.rsmm
-msgctxt "uzcstrconsts.rsmm"
 msgid "mm"
 msgstr "мм"
 
@@ -925,7 +838,6 @@ msgid "MText editor"
 msgstr "Редактор многострочного текста"
 
 #: uzcstrconsts.rsnameall
-msgctxt "uzcstrconsts.rsnameall"
 msgid "All"
 msgstr "Все"
 
@@ -934,12 +846,10 @@ msgid "%s (%d)"
 msgstr ""
 
 #: uzcstrconsts.rsncoglc
-msgctxt "uzcstrconsts.rsncoglc"
 msgid "OpenGL context is not created"
 msgstr "Контекст OpenGL не создан"
 
 #: uzcstrconsts.rsnewdimstylenameformat
-msgctxt "uzcstrconsts.rsnewdimstylenameformat"
 msgid "Style%-3.3d"
 msgstr "Стиль%-3.3d"
 
@@ -948,17 +858,16 @@ msgid "Layer%-3.3d"
 msgstr "Слой%-3.3d"
 
 #: uzcstrconsts.rsnewtextstylenameformat
-msgctxt "uzcstrconsts.rsnewtextstylenameformat"
 msgid "Style%-3.3d"
 msgstr "Стиль%-3.3d"
 
 #: uzcstrconsts.rsnotregistred
 msgid "Not registred"
-msgstr ""
+msgstr "Не зарегистрировано"
 
 #: uzcstrconsts.rsnotspecified
 msgid "Not specified"
-msgstr ""
+msgstr "Не указано"
 
 #: uzcstrconsts.rsnotyetimplemented
 msgid "Not yet implemented"
@@ -989,7 +898,6 @@ msgid "Property"
 msgstr "Свойство"
 
 #: uzcstrconsts.rsquitcaption
-msgctxt "uzcstrconsts.rsquitcaption"
 msgid "Quit"
 msgstr "Выход"
 
@@ -998,19 +906,16 @@ msgid "Do yo want to quit ZCAD?"
 msgstr "Закрыть ZCAD?"
 
 #: uzcstrconsts.rsrecreating
-msgctxt "uzcstrconsts.rsrecreating"
 msgid "Re-creating %s!"
 msgstr "Повторное создание %s!"
 
 #: uzcstrconsts.rsreleasenotes
-msgid ""
-"-UNDO\\REDO - yet it is better not to use;\n"
+msgid "-UNDO\\REDO - yet it is better not to use;\n"
 "\n"
 "-If you have problems with rendering or selecting entities, run \"Regen\" and \"RebuildTree\" in command line;\n"
 "\n"
 "-To disable the display of this window comment out line \"About\" in the file \"components\\autorun.cmd\". Encoding of all configuration files - UTF8;\n"
-msgstr ""
-"-UNDO\\REDO - пока лучше не пользоваться;\n"
+msgstr "-UNDO\\REDO - пока лучше не пользоваться;\n"
 "\n"
 "-При проблемах с отображением или выделением примитивов, запустите \"Regen\" и \"RebuildTree\" в командной строке;\n"
 "\n"
@@ -1018,20 +923,17 @@ msgstr ""
 
 #: uzcstrconsts.rsrenamedto
 msgid "%s \"%s\" renamed to \"%s\""
-msgstr ""
+msgstr "%s \"%s\" переименован в \"%s\""
 
 #: uzcstrconsts.rsrevstr
-msgctxt "uzcstrconsts.rsrevstr"
 msgid "Revision SVN:"
 msgstr "Ревизия SVN:"
 
 #: uzcstrconsts.rsruncommand
-msgctxt "uzcstrconsts.rsruncommand"
 msgid "Running command"
 msgstr "Запущена команда"
 
 #: uzcstrconsts.rsrunscript
-msgctxt "uzcstrconsts.rsrunscript"
 msgid "Running script \"%s\";"
 msgstr "Выполняется скрипт \"%s\";"
 
@@ -1056,7 +958,6 @@ msgid "Style must be selected"
 msgstr "Стиль должен быть выбран"
 
 #: uzcstrconsts.rssyslinetypewarning
-msgctxt "uzcstrconsts.rssyslinetypewarning"
 msgid "This is system line type!"
 msgstr "Это системный тип линии!"
 
@@ -1069,17 +970,14 @@ msgid " TEXT: "
 msgstr " ТЕКСТ: "
 
 #: uzcstrconsts.rstexteditor
-msgctxt "uzcstrconsts.rstexteditor"
 msgid "Text editor"
 msgstr "Редактор текста"
 
 #: uzcstrconsts.rstextstyleusedin
-#, fuzzy,badformat
 msgid "Text style \"%s\" used in: %d-model, %d-blockdef table, %d-dimstyle table"
 msgstr "Стиль текста \"%s\" используется: %d-в модели, %d-в таблице блоков"
 
 #: uzcstrconsts.rstoolbarnotfound
-msgctxt "uzcstrconsts.rstoolbarnotfound"
 msgid "Toolbar \"%s\" is not found! Create a blank window"
 msgstr "Панель инструментов \"%s\" не найдена! Создано пусте окно"
 
@@ -1097,7 +995,7 @@ msgstr "Нельзя удалить, стиль используется"
 
 #: uzcstrconsts.rsunableselectfreedimstylername
 msgid "Unable select free dimension style name"
-msgstr ""
+msgstr "Не могу выбрать свободное имя стиля размеров"
 
 #: uzcstrconsts.rsunableselectfreelayername
 msgid "Unable select free layer name"
@@ -1124,7 +1022,6 @@ msgid "Uncategorized"
 msgstr "Без категории"
 
 #: uzcstrconsts.rsunknowncommand
-msgctxt "uzcstrconsts.rsunknowncommand"
 msgid "Unknown command"
 msgstr "Неизвестная команда"
 
@@ -1133,7 +1030,6 @@ msgid "Unknown file format \"%s\". Saving failed."
 msgstr "Неизвестный формат файла \"%s\". Сохранение не произведено."
 
 #: uzcstrconsts.rsunnamedwindowtitle
-msgctxt "uzcstrconsts.rsunnamedwindowtitle"
 msgid "Unnamed%-3.3d"
 msgstr "Без имени%-3.3d"
 
@@ -1151,7 +1047,7 @@ msgstr "Внимание!"
 
 #: uzcstrconsts.rswarningprefix
 msgid "WARNING: "
-msgstr ""
+msgstr "ВНИМАНИЕ: "
 
 #: uzcstrconsts.rswrongblockdefindex
 msgid "Wrong blockdef index"
@@ -1166,66 +1062,54 @@ msgid "Load DXF file"
 msgstr "Файл DXF загружен"
 
 #: uzestrconsts.fontnotfoundandreplace
-msgctxt "uzestrconsts.fontnotfoundandreplace"
 msgid "For text style \"%s\" not found font \"%s\", is replaced by an alternative"
 msgstr "Для стиля текста \"%s\" не найден фонт \"%s\", заменен на альтернативный"
 
 #: uzestrconsts.rsalternatefontnotfoundin
-msgctxt "uzestrconsts.rsalternatefontnotfoundin"
 msgid "Alternate font \"%s\" is not found in \"%s\""
 msgstr "Альтернативный фонт \"%s\" не найден в  \"%s\""
 
 #: uzestrconsts.rsblockignored
-msgctxt "uzestrconsts.rsblockignored"
 msgid "Ignored block \"%s\""
 msgstr "Игнорирован блок \"%s\""
 
 #: uzestrconsts.rsdoubleblockignored
-msgctxt "uzestrconsts.rsdoubleblockignored"
 msgid "Ignored double definition block \"%s\""
 msgstr "Игнорировано повторное определение блока \"%s\""
 
 #: uzestrconsts.rsfileformat
-msgctxt "uzestrconsts.rsfileformat"
 msgid "%s file format"
 msgstr "Формат файла %s"
 
 #: uzestrconsts.rsgridtoodensity
-msgctxt "uzestrconsts.rsgridtoodensity"
 msgid "Grid too density"
 msgstr "Сетка слишком мелкая"
 
 #: uzestrconsts.rsloadingfile
-msgctxt "uzestrconsts.rsloadingfile"
 msgid "Loading file \"%s\""
 msgstr "Загрузка файла  \"%s\""
 
 #: uzestrconsts.rsreservefontnotfound
-msgctxt "uzestrconsts.rsreservefontnotfound"
 msgid "Reserve font is not found in the resources"
 msgstr "Резервный фонт не найден в расурсах программы"
 
 #: uzestrconsts.rsreservefontnotload
-msgctxt "uzestrconsts.rsreservefontnotload"
 msgid "Can not load reserve font"
 msgstr "Невозможно загрузить резервный фонт"
 
 #: uzestrconsts.rsunablerenamefiletobak
-msgctxt "uzestrconsts.rsunablerenamefiletobak"
 msgid "Could not rename file \"%s\" into \"*.bak\""
 msgstr "Не могу переименовать файл \"%s\" в \"*.bak\""
 
 #: uzestrconsts.rsunabletowritefile
-msgctxt "uzestrconsts.rsunabletowritefile"
 msgid "Unable to write file \"%s\""
 msgstr "Не могу записать файл \"%s\""
 
 #: uzestrconsts.rsunknownfileformat
-msgctxt "uzestrconsts.rsunknownfileformat"
 msgid "Unknown file format"
 msgstr "Неизвестный формат файла"
 
 #: zcad.rsstartautorun
 msgid "Execute *components\\autorun.cmd"
-msgstr ""
+msgstr "*components\autorun.cmd выполняется"
 

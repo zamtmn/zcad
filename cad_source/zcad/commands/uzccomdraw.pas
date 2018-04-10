@@ -1364,7 +1364,7 @@ begin
   if GetSelCount>0 then
   begin
        commandmanager.DMAddMethod(rscmStore,'Store ents and select ents to select similar',@sel);
-       commandmanager.DMAddMethod(rscmFind,'Select similar ents (if "template" ents were not stored, the entire drawing will be searched)',@run);
+       commandmanager.DMAddMethod(rscmSelect,'Select similar ents (if "template" ents were not stored, the entire drawing will be searched)',@run);
        commandmanager.DMShow;
        inherited CommandStart('');
   end

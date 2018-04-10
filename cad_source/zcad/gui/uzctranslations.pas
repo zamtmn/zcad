@@ -207,7 +207,7 @@ begin
                                    result:=OriginalValue;
                                    exit;
                               end;
-    result:=po.Translate({Identifier}'', OriginalValue);
+    result:=po.Translate(Identifier, OriginalValue);
     programlog.LogOutFormatStr('InterfaceTranslate: identifier:"%s" originalValue:"%s" translate to "%s"',[Identifier,OriginalValue,result],0,LM_Debug,TranslateLogModuleId);
 
     if uzcsysinfo.sysparam.updatepo then

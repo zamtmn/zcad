@@ -432,13 +432,16 @@ begin
                 typemode:begin
                                  parseresult:=getpattern(@parsetype,maxtype,line,typ); // длдл
                                 case typ of
-                                            variablecategory:
-                                                     begin
-                                                           unitpart:=unitpart;
-                                                           typename:=parseresult^.getData(0)+'_'+parseresult^.getData(1);
-                                                           VarCategory.PushBackIfNotPresent(typename);
-                                                           addtype:=false;
-                                                     end;
+                           variablecategory:
+                                            begin
+                                              addtype:=false;
+                                              typename:=parseresult^.getData(0)+'_'+parseresult^.getData(1);
+                                              GetPartOfPath(fieldtype,typename,'_');
+                                              if (typename<>'')and(fieldtype<>'')then begin
+                                                if assigned(TranslateFunc)then
+                                                  VarCategory.PushBackIfNotPresent(fieldtype+'_'+TranslateFunc('zcadexternal.variablecategory~'+fieldtype,typename));
+                                              end;
+                                            end;
                                   identtype:begin
                                                   typename:=parseresult^.getData(0);
                                                   if typename='GDBXCoordinate' then

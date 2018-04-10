@@ -15,6 +15,7 @@ uses
 resourcestring
   rsByPrefix='byPrefix';
   rsByBase='byBase';
+  rsStandaloneDevices='Standalone devices';
 
 type
   { TNavigatorDevices }
@@ -308,7 +309,7 @@ begin
   //CombinedNode:=TRootNodeDesk.Create(self, NavTree);
   //CombinedNode.ftext:='Combined devices';
   //CombinedNode.ficonindex:=ImagesManager.GetImageIndex('caddie');
-  StandaloneNode:=TBaseRootNodeDesk.Create(self, NavTree,'Standalone devices');
+  StandaloneNode:=TBaseRootNodeDesk.Create(self, NavTree,rsStandaloneDevices);
   StandaloneNode.ficonindex:=ImagesManager.GetImageIndex('basket');
 end;
 

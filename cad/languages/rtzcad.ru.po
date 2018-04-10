@@ -9,7 +9,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ru\n"
-"X-Generator: Poedit 2.0.2\n"
+"X-Generator: Poedit 2.0.6\n"
 
 #: zcadexternal.acn_3dpoly~caption
 msgid "3DPolyLine"
@@ -60,14 +60,16 @@ msgid "Block replace"
 msgstr "Замена блоков"
 
 #: zcadexternal.acn_breplace~textimage
+msgctxt "zcadexternal.acn_breplace~textimage"
 msgid "BR"
 msgstr ""
 
 #: zcadexternal.acn_brotate~caption
 msgid "Block rotate"
-msgstr ""
+msgstr "Повернуть блокки"
 
 #: zcadexternal.acn_brotate~textimage
+msgctxt "zcadexternal.acn_brotate~textimage"
 msgid "BR"
 msgstr ""
 
@@ -108,24 +110,25 @@ msgid "Cancel"
 msgstr "Отмена"
 
 #: zcadexternal.acn_cancel~textimage
+msgctxt "zcadexternal.acn_cancel~textimage"
 msgid "C"
 msgstr ""
 
 #: zcadexternal.acn_circle2p~caption
 msgid "Circle(2 points)"
-msgstr ""
+msgstr "Окружность (2 точки)"
 
 #: zcadexternal.acn_circle3p~caption
 msgid "Circle(3 points)"
-msgstr ""
+msgstr "Окружность (3 точки)"
 
 #: zcadexternal.acn_circlecd~caption
 msgid "Circle(Center,diameter)"
-msgstr ""
+msgstr "Окружность (Центр, диаметр)"
 
 #: zcadexternal.acn_circle~caption
 msgid "Circle(Center,radius)"
-msgstr "Центр; радиус"
+msgstr "Окружность (Центр, радиус)"
 
 #: zcadexternal.acn_close~caption
 msgid "Close drawing"
@@ -272,6 +275,7 @@ msgid "Find device"
 msgstr "Найти устройство"
 
 #: zcadexternal.acn_erase~caption
+msgctxt "zcadexternal.acn_erase~caption"
 msgid "Erase"
 msgstr "Стереть"
 
@@ -280,10 +284,12 @@ msgid "CB"
 msgstr ""
 
 #: zcadexternal.acn_fakepaste~textimage
+msgctxt "zcadexternal.acn_fakepaste~textimage"
 msgid "Paste"
 msgstr "Вставить"
 
 #: zcadexternal.acn_help~caption
+msgctxt "zcadexternal.acn_help~caption"
 msgid "Help"
 msgstr "Справка"
 
@@ -316,6 +322,7 @@ msgid "SI"
 msgstr ""
 
 #: zcadexternal.acn_kipcdbuild~caption
+msgctxt "zcadexternal.acn_kipcdbuild~caption"
 msgid "Connection diagram"
 msgstr "Схема соединений"
 
@@ -408,6 +415,7 @@ msgid "Object variables manager"
 msgstr "Менеджер переменных объекта"
 
 #: zcadexternal.acn_oldstyleinobjinsp~caption
+msgctxt "zcadexternal.acn_oldstyleinobjinsp~caption"
 msgid "Old style"
 msgstr "Старый стиль отображения"
 
@@ -416,6 +424,7 @@ msgid "os"
 msgstr ""
 
 #: zcadexternal.acn_options~caption
+msgctxt "zcadexternal.acn_options~caption"
 msgid "Options"
 msgstr "Параметры"
 
@@ -464,6 +473,7 @@ msgid "Snap to point"
 msgstr ""
 
 #: zcadexternal.acn_os_point~textimage
+msgctxt "zcadexternal.acn_os_point~textimage"
 msgid "P"
 msgstr ""
 
@@ -476,6 +486,7 @@ msgid "Snap to 1/4 point"
 msgstr ""
 
 #: zcadexternal.acn_os_quarter~textimage
+msgctxt "zcadexternal.acn_os_quarter~textimage"
 msgid "1/4"
 msgstr ""
 
@@ -488,6 +499,7 @@ msgid "Snap to 1/3 point"
 msgstr ""
 
 #: zcadexternal.acn_os_third~textimage
+msgctxt "zcadexternal.acn_os_third~textimage"
 msgid "1/3"
 msgstr ""
 
@@ -516,6 +528,7 @@ msgid "Pan up"
 msgstr ""
 
 #: zcadexternal.acn_paste~caption
+msgctxt "zcadexternal.acn_paste~caption"
 msgid "Paste"
 msgstr "Вставить"
 
@@ -540,10 +553,12 @@ msgid "Edit polyline"
 msgstr "Редактировать полиобъект"
 
 #: zcadexternal.acn_print~caption
+msgctxt "zcadexternal.acn_print~caption"
 msgid "Print"
 msgstr "Печать"
 
 #: zcadexternal.acn_print~hint
+msgctxt "zcadexternal.acn_print~hint"
 msgid "Print"
 msgstr "Печать"
 
@@ -592,6 +607,7 @@ msgid "Regen all"
 msgstr "Регенерировать всё"
 
 #: zcadexternal.acn_rotate~caption
+msgctxt "zcadexternal.acn_rotate~caption"
 msgid "Rotate"
 msgstr ""
 
@@ -628,10 +644,12 @@ msgid "Save (Autosave)"
 msgstr "Сохранить (Автосохранение)"
 
 #: zcadexternal.acn_saveqs~hint
+msgctxt "zcadexternal.acn_saveqs~hint"
 msgid "Autosave"
 msgstr "Автосохранение"
 
 #: zcadexternal.acn_scale~caption
+msgctxt "zcadexternal.acn_scale~caption"
 msgid "Scale"
 msgstr "Масштабировать"
 
@@ -660,6 +678,7 @@ msgid "Numbering sensors on the plan"
 msgstr "Нумерация извещателей на плане"
 
 #: zcadexternal.acn_sensormark~textimage
+msgctxt "zcadexternal.acn_sensormark~textimage"
 msgid "++"
 msgstr ""
 
@@ -732,6 +751,7 @@ msgid "Navigator(Devices)"
 msgstr ""
 
 #: zcadexternal.acn_show_navigatordevices~textimage
+msgctxt "zcadexternal.acn_show_navigatordevices~textimage"
 msgid "NV"
 msgstr ""
 
@@ -740,6 +760,7 @@ msgid "Navigator(Entities)"
 msgstr ""
 
 #: zcadexternal.acn_show_navigatorentities~textimage
+msgctxt "zcadexternal.acn_show_navigatorentities~textimage"
 msgid "NV"
 msgstr ""
 
@@ -836,6 +857,7 @@ msgid "Units format"
 msgstr ""
 
 #: zcadexternal.acn_units~textimage
+msgctxt "zcadexternal.acn_units~textimage"
 msgid "0.0"
 msgstr ""
 
@@ -928,6 +950,7 @@ msgid "Previous window"
 msgstr "Предыдущее окно"
 
 #: zcadexternal.acn_wprev~textimage
+msgctxt "zcadexternal.acn_wprev~textimage"
 msgid "P"
 msgstr ""
 
@@ -956,18 +979,22 @@ msgid "Zoom window"
 msgstr ""
 
 #: zcadexternal.brmode~brm_bd
+msgctxt "zcadexternal.brmode~brm_bd"
 msgid "Block and Device"
 msgstr "Блоки и Устройства"
 
 #: zcadexternal.brmode~brm_block
+msgctxt "zcadexternal.brmode~brm_block"
 msgid "Block"
 msgstr "Блоки"
 
 #: zcadexternal.brmode~brm_device
+msgctxt "zcadexternal.brmode~brm_device"
 msgid "Device"
 msgstr "Устройство"
 
 #: zcadexternal.button_command~ops_sensor_mark
+msgctxt "zcadexternal.button_command~ops_sensor_mark"
 msgid "++"
 msgstr ""
 
@@ -1032,18 +1059,22 @@ msgid "OZ Axis"
 msgstr "Ось OZ"
 
 #: zcadexternal.gdblayerprop~color
+msgctxt "zcadexternal.gdblayerprop~color"
 msgid "Color"
 msgstr "Цвет"
 
 #: zcadexternal.gdblayerprop~desk
+msgctxt "zcadexternal.gdblayerprop~desk"
 msgid "Description"
 msgstr "Описание"
 
 #: zcadexternal.gdblayerprop~lineweight
+msgctxt "zcadexternal.gdblayerprop~lineweight"
 msgid "Line weight"
 msgstr "Вес линии"
 
 #: zcadexternal.gdblayerprop~lt
+msgctxt "zcadexternal.gdblayerprop~lt"
 msgid "Line type"
 msgstr "Тип линии"
 
@@ -1056,6 +1087,7 @@ msgid "On"
 msgstr "Включен"
 
 #: zcadexternal.gdblayerprop~_print
+msgctxt "zcadexternal.gdblayerprop~_print"
 msgid "Print"
 msgstr "Печать"
 
@@ -1064,6 +1096,7 @@ msgid "Begin"
 msgstr "Начало"
 
 #: zcadexternal.gdblineprop~lend
+msgctxt "zcadexternal.gdblineprop~lend"
 msgid "End"
 msgstr "Конец"
 
@@ -1072,14 +1105,17 @@ msgid "DashInfo array"
 msgstr ""
 
 #: zcadexternal.gdbltypeprop~desk
+msgctxt "zcadexternal.gdbltypeprop~desk"
 msgid "Description"
 msgstr "Описание"
 
 #: zcadexternal.gdbltypeprop~h
+msgctxt "zcadexternal.gdbltypeprop~h"
 msgid "Height"
 msgstr "Высота"
 
 #: zcadexternal.gdbltypeprop~len
+msgctxt "zcadexternal.gdbltypeprop~len"
 msgid "Length"
 msgstr "Длина"
 
@@ -1096,6 +1132,7 @@ msgid "Text array"
 msgstr ""
 
 #: zcadexternal.gdbnamedobject~name
+msgctxt "zcadexternal.gdbnamedobject~name"
 msgid "Name"
 msgstr "Имя"
 
@@ -1108,14 +1145,17 @@ msgid "Insertion point OCS"
 msgstr "Точка вставки в OCS"
 
 #: zcadexternal.gdbobj3dface~pindcs
+msgctxt "zcadexternal.gdbobj3dface~pindcs"
 msgid "Coordinates DCS"
 msgstr "Координаты в DCS"
 
 #: zcadexternal.gdbobj3dface~pinocs
+msgctxt "zcadexternal.gdbobj3dface~pinocs"
 msgid "Coordinates OCS"
 msgstr "Координаты в OCS"
 
 #: zcadexternal.gdbobj3dface~pinwcs
+msgctxt "zcadexternal.gdbobj3dface~pinwcs"
 msgid "Coordinates WCS"
 msgstr "Координаты в WCS"
 
@@ -1128,18 +1168,22 @@ msgid "Tree"
 msgstr ""
 
 #: zcadexternal.gdbobjblockdef~blockdesc
+msgctxt "zcadexternal.gdbobjblockdef~blockdesc"
 msgid "Block params"
 msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
+msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
 msgid "Block params"
 msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjblockinsert~testrotate
+msgctxt "zcadexternal.gdbobjblockinsert~testrotate"
 msgid "Rotate"
 msgstr ""
 
 #: zcadexternal.gdbobjcircle~radius
+msgctxt "zcadexternal.gdbobjcircle~radius"
 msgid "Radius"
 msgstr "Радиус"
 
@@ -1156,18 +1200,22 @@ msgid "Visible"
 msgstr "Видимый"
 
 #: zcadexternal.gdbobjentity~vp
+msgctxt "zcadexternal.gdbobjentity~vp"
 msgid "General"
 msgstr "Общие"
 
 #: zcadexternal.gdbobjline~coordinocs
+msgctxt "zcadexternal.gdbobjline~coordinocs"
 msgid "Coordinates OCS"
 msgstr "Координаты в OCS"
 
 #: zcadexternal.gdbobjline~coordinwcs
+msgctxt "zcadexternal.gdbobjline~coordinwcs"
 msgid "Coordinates WCS"
 msgstr "Координаты в WCS"
 
 #: zcadexternal.gdbobjline~pprojpoint
+msgctxt "zcadexternal.gdbobjline~pprojpoint"
 msgid "Coordinates DCS"
 msgstr "Координаты в DCS"
 
@@ -1176,22 +1224,27 @@ msgid "Oriented area"
 msgstr "Ориентированная площадь"
 
 #: zcadexternal.gdbobjpoint~p_insertinocs
+msgctxt "zcadexternal.gdbobjpoint~p_insertinocs"
 msgid "Coordinates OCS"
 msgstr "Координаты в OCS"
 
 #: zcadexternal.gdbobjpoint~p_insertinwcs
+msgctxt "zcadexternal.gdbobjpoint~p_insertinwcs"
 msgid "Coordinates WCS"
 msgstr "Координаты в WCS"
 
 #: zcadexternal.gdbobjsolid~pindcs
+msgctxt "zcadexternal.gdbobjsolid~pindcs"
 msgid "Coordinates DCS"
 msgstr "Координаты в DCS"
 
 #: zcadexternal.gdbobjsolid~pinocs
+msgctxt "zcadexternal.gdbobjsolid~pinocs"
 msgid "Coordinates OCS"
 msgstr "Координаты в OCS"
 
 #: zcadexternal.gdbobjsolid~pinwcs
+msgctxt "zcadexternal.gdbobjsolid~pinwcs"
 msgid "Coordinates WCS"
 msgstr "Координаты в WCS"
 
@@ -1200,6 +1253,7 @@ msgid "Owner"
 msgstr "Владелец"
 
 #: zcadexternal.gdbobjtext~txtstyleindex
+msgctxt "zcadexternal.gdbobjtext~txtstyleindex"
 msgid "Style"
 msgstr "Стиль"
 
@@ -1208,10 +1262,12 @@ msgid "Bounding box"
 msgstr "Габарит"
 
 #: zcadexternal.gdbobjvisualprop~layer
+msgctxt "zcadexternal.gdbobjvisualprop~layer"
 msgid "Layer"
 msgstr "Слой"
 
 #: zcadexternal.gdbobjvisualprop~linetype
+msgctxt "zcadexternal.gdbobjvisualprop~linetype"
 msgid "Line type"
 msgstr "Тип линии"
 
@@ -1220,6 +1276,7 @@ msgid "Line type scale"
 msgstr "Масштаб типа линии"
 
 #: zcadexternal.gdbobjvisualprop~lineweight
+msgctxt "zcadexternal.gdbobjvisualprop~lineweight"
 msgid "Line weight"
 msgstr "Вес линии"
 
@@ -1256,6 +1313,7 @@ msgid "Spacing"
 msgstr "Шаг"
 
 #: zcadexternal.gdbsysvariable~debug
+msgctxt "zcadexternal.gdbsysvariable~debug"
 msgid "Debug"
 msgstr "Отладка"
 
@@ -1288,6 +1346,7 @@ msgid "Saving"
 msgstr "Сохранение"
 
 #: zcadexternal.gdbsysvariable~sys
+msgctxt "zcadexternal.gdbsysvariable~sys"
 msgid "System"
 msgstr "Система"
 
@@ -1296,10 +1355,12 @@ msgid "System graphics (size, communication, etc. for debugging)"
 msgstr "Системная графика (габариты, связи и т.п. для отладки)"
 
 #: zcadexternal.hint_panel~dsgn_selnew
+msgctxt "zcadexternal.hint_panel~dsgn_selnew"
 msgid "New selection set"
-msgstr ""
+msgstr "Новый набор выбора"
 
 #: zcadexternal.hint_panel~dsgn_selsamename
+msgctxt "zcadexternal.hint_panel~dsgn_selsamename"
 msgid "Auto select devices with same name"
 msgstr "Авто выбор устройств с совпадающим именем"
 
@@ -1308,6 +1369,7 @@ msgid "On/Off Additional grips"
 msgstr "Вкл./Выкл. добавочных ручек"
 
 #: zcadexternal.hint_panel~dwg_drawgrid
+msgctxt "zcadexternal.hint_panel~dwg_drawgrid"
 msgid "Display grid"
 msgstr "Показать сетку"
 
@@ -1324,6 +1386,7 @@ msgid "Auxiliary graphics (connectivity, direction, etc.)"
 msgstr "Вспомогательная графика (подключение, направление и т.п.)"
 
 #: zcadexternal.hint_panel~dwg_osmode
+msgctxt "zcadexternal.hint_panel~dwg_osmode"
 msgid "Object snap"
 msgstr "Объектные привязки"
 
@@ -1332,16 +1395,13 @@ msgid "Polar tracking"
 msgstr "Полярная трассировка"
 
 #: zcadexternal.hint_panel~dwg_snapgrid
+msgctxt "zcadexternal.hint_panel~dwg_snapgrid"
 msgid "Snap"
 msgstr "Шаг"
 
 #: zcadexternal.hint_panel~layercombobox
 msgid "Layer selection"
 msgstr "Выбор слоя"
-
-#: zcadexternal.hint_panel~ops_sensor_mark
-msgid ""
-msgstr "Нумерация извещателей на плане"
 
 #: zcadexternal.menucommand~blockslist
 msgid "BlocksList"
@@ -1436,6 +1496,7 @@ msgid "Report on memory allocation(for debugbuild)"
 msgstr "Отчет о выделениях памяти (отладка)"
 
 #: zcadexternal.menucommand~ops_spbuild
+msgctxt "zcadexternal.menucommand~ops_spbuild"
 msgid "Connection diagram"
 msgstr "Схема соединений"
 
@@ -1453,7 +1514,7 @@ msgstr "Камера"
 
 #: zcadexternal.menucommand~setobjinsp(dimstyles)
 msgid "Dim styles (objinsp)"
-msgstr ""
+msgstr "Стили размеров (в инспекторе)"
 
 #: zcadexternal.menucommand~setobjinsp(fonts)
 msgid "Fonts (objinsp)"
@@ -1472,6 +1533,7 @@ msgid "Numerators (objinsp)"
 msgstr "Нумераторы (в инспекторе)"
 
 #: zcadexternal.menucommand~setobjinsp(osmode)
+msgctxt "zcadexternal.menucommand~setobjinsp(osmode)"
 msgid "Object snap"
 msgstr "Объектные привязки"
 
@@ -1484,6 +1546,7 @@ msgid "Styles (objinsp)"
 msgstr "Стили (в инспекторе)"
 
 #: zcadexternal.menucommand~setobjinsp(vars)
+msgctxt "zcadexternal.menucommand~setobjinsp(vars)"
 msgid "Options"
 msgstr "Параметры"
 
@@ -1493,7 +1556,7 @@ msgstr ""
 
 #: zcadexternal.menucommand~varreport(nmo_name)
 msgid "Names of entities"
-msgstr ""
+msgstr "Имена примитивов"
 
 #: zcadexternal.menu~alarm system
 msgid "Alarm system"
@@ -1532,6 +1595,7 @@ msgid "DB"
 msgstr ""
 
 #: zcadexternal.menu~debug
+msgctxt "zcadexternal.menu~debug"
 msgid "Debug"
 msgstr "Отладка"
 
@@ -1560,6 +1624,7 @@ msgid "Format"
 msgstr "Формат"
 
 #: zcadexternal.menu~help
+msgctxt "zcadexternal.menu~help"
 msgid "Help"
 msgstr "Справка"
 
@@ -1577,7 +1642,7 @@ msgstr "КИПиА"
 
 #: zcadexternal.menu~last commands
 msgid "Last commands"
-msgstr ""
+msgstr "Последние команды"
 
 #: zcadexternal.menu~lighting
 msgid "Lighting"
@@ -1596,6 +1661,7 @@ msgid "Modify"
 msgstr "Изменить"
 
 #: zcadexternal.menu~object snap
+msgctxt "zcadexternal.menu~object snap"
 msgid "Object snap"
 msgstr "Объектные привязки"
 
@@ -1636,6 +1702,7 @@ msgid "Show window"
 msgstr "Показать окно"
 
 #: zcadexternal.menu~text
+msgctxt "zcadexternal.menu~text"
 msgid "Text"
 msgstr "Текст"
 
@@ -1656,6 +1723,7 @@ msgid "Zoom"
 msgstr "Масштаб"
 
 #: zcadexternal.oimultiproperty_angle~
+msgctxt "zcadexternal.oimultiproperty_angle~"
 msgid "Angle"
 msgstr "Угол"
 
@@ -1665,105 +1733,113 @@ msgstr "Площадь"
 
 #: zcadexternal.oimultiproperty_backward~
 msgid "Backward"
-msgstr ""
+msgstr "Задомнаперед"
 
 #: zcadexternal.oimultiproperty_center_x~
 msgid "Center X"
-msgstr ""
+msgstr "Центр X"
 
 #: zcadexternal.oimultiproperty_center_y~
 msgid "Center Y"
-msgstr ""
+msgstr "Центр Y"
 
 #: zcadexternal.oimultiproperty_center_z~
 msgid "Center Z"
-msgstr ""
+msgstr "Центр Z"
 
 #: zcadexternal.oimultiproperty_circumference~
 msgid "Circumference"
-msgstr ""
+msgstr "Длина окружности"
 
 #: zcadexternal.oimultiproperty_closed~
 msgid "Closed"
-msgstr ""
+msgstr "Замкнуто"
 
 #: zcadexternal.oimultiproperty_color~
+msgctxt "zcadexternal.oimultiproperty_color~"
 msgid "Color"
 msgstr "Цвет"
 
 #: zcadexternal.oimultiproperty_delta_x~
 msgid "Delta X"
-msgstr ""
+msgstr "Делта X"
 
 #: zcadexternal.oimultiproperty_delta_y~
 msgid "Delta Y"
-msgstr ""
+msgstr "Делта Y"
 
 #: zcadexternal.oimultiproperty_delta_z~
 msgid "Delta Z"
-msgstr ""
+msgstr "Делта Z"
 
 #: zcadexternal.oimultiproperty_diameter~
 msgid "Diameter"
-msgstr ""
+msgstr "Диаметр"
 
 #: zcadexternal.oimultiproperty_dimstyle~
+msgctxt "zcadexternal.oimultiproperty_dimstyle~"
 msgid "Style"
 msgstr "Стиль"
 
 #: zcadexternal.oimultiproperty_dimtextmoved~
 msgid "Text moved"
-msgstr ""
+msgstr "Текст передвинут"
 
 #: zcadexternal.oimultiproperty_endangle~
 msgid "End angle"
-msgstr ""
+msgstr "Конечный угол"
 
 #: zcadexternal.oimultiproperty_end_x~
 msgid "End X"
-msgstr ""
+msgstr "Конец X"
 
 #: zcadexternal.oimultiproperty_end_y~
 msgid "End Y"
-msgstr ""
+msgstr "Конец Y"
 
 #: zcadexternal.oimultiproperty_end_z~
 msgid "End Z"
-msgstr ""
+msgstr "Конец Z"
 
 #: zcadexternal.oimultiproperty_height~
+msgctxt "zcadexternal.oimultiproperty_height~"
 msgid "Height"
 msgstr "Высота"
 
 #: zcadexternal.oimultiproperty_insert_x~
 msgid "Insert X"
-msgstr ""
+msgstr "Вставка X"
 
 #: zcadexternal.oimultiproperty_insert_y~
 msgid "Insert Y"
-msgstr ""
+msgstr "Вставка Y"
 
 #: zcadexternal.oimultiproperty_insert_z~
 msgid "Insert Z"
-msgstr ""
+msgstr "Вставка Z"
 
 #: zcadexternal.oimultiproperty_layer~
+msgctxt "zcadexternal.oimultiproperty_layer~"
 msgid "Layer"
 msgstr "Слой"
 
 #: zcadexternal.oimultiproperty_leaderscale~
+msgctxt "zcadexternal.oimultiproperty_leaderscale~"
 msgid "Scale"
 msgstr "Масштабировать"
 
 #: zcadexternal.oimultiproperty_leadersize~
+msgctxt "zcadexternal.oimultiproperty_leadersize~"
 msgid "Size"
 msgstr "Размер"
 
 #: zcadexternal.oimultiproperty_leaderwidth~
+msgctxt "zcadexternal.oimultiproperty_leaderwidth~"
 msgid "Width"
 msgstr "Ширина"
 
 #: zcadexternal.oimultiproperty_length~
+msgctxt "zcadexternal.oimultiproperty_length~"
 msgid "Length"
 msgstr "Длина"
 
@@ -1785,9 +1861,10 @@ msgstr "Вес линии"
 
 #: zcadexternal.oimultiproperty_majorradius~
 msgid "Major radius"
-msgstr ""
+msgstr "Основной радиус"
 
 #: zcadexternal.oimultiproperty_name~
+msgctxt "zcadexternal.oimultiproperty_name~"
 msgid "Name"
 msgstr "Имя"
 
@@ -1804,18 +1881,21 @@ msgid "Normal Z"
 msgstr "Нормаль Z"
 
 #: zcadexternal.oimultiproperty_oblique~
+msgctxt "zcadexternal.oimultiproperty_oblique~"
 msgid "Oblique"
 msgstr "Наклон"
 
 #: zcadexternal.oimultiproperty_radiusratio~
 msgid "Radius ratio"
-msgstr ""
+msgstr "Соотношение радиусов"
 
 #: zcadexternal.oimultiproperty_radius~
+msgctxt "zcadexternal.oimultiproperty_radius~"
 msgid "Radius"
 msgstr "Радиус"
 
 #: zcadexternal.oimultiproperty_rotation~
+msgctxt "zcadexternal.oimultiproperty_rotation~"
 msgid "Rotation"
 msgstr "Поворот"
 
@@ -1833,19 +1913,19 @@ msgstr "Масштаб Z"
 
 #: zcadexternal.oimultiproperty_startangle~
 msgid "Start angle"
-msgstr "СЧтартовый угол"
+msgstr "Начальный угол"
 
 #: zcadexternal.oimultiproperty_start_x~
 msgid "Start X"
-msgstr "Старт X"
+msgstr "Начало X"
 
 #: zcadexternal.oimultiproperty_start_y~
 msgid "Start Y"
-msgstr "Старт Y"
+msgstr "Начало Y"
 
 #: zcadexternal.oimultiproperty_start_z~
 msgid "Start Z"
-msgstr "Старт Z"
+msgstr "Начало Z"
 
 #: zcadexternal.oimultiproperty_totalarea~
 msgid "Total area"
@@ -1861,41 +1941,46 @@ msgstr "Кол-во вершин, всего"
 
 #: zcadexternal.oimultiproperty_txtcontent~
 msgid "Content"
-msgstr ""
+msgstr "Содержимое"
 
 #: zcadexternal.oimultiproperty_txtjustify~
+msgctxt "zcadexternal.oimultiproperty_txtjustify~"
 msgid "Justify"
 msgstr "Выравнивание"
 
 #: zcadexternal.oimultiproperty_txtstyle~
+msgctxt "zcadexternal.oimultiproperty_txtstyle~"
 msgid "Style"
 msgstr "Стиль"
 
 #: zcadexternal.oimultiproperty_txttemplate~
 msgid "Template"
-msgstr ""
+msgstr "Шаблон"
 
 #: zcadexternal.oimultiproperty_upsidedown~
 msgid "Upside down"
-msgstr ""
+msgstr "Вверхногами"
 
 #: zcadexternal.oimultiproperty_vertex3dcontrol_~
 msgid "Vertex control"
-msgstr ""
+msgstr "Управление вершинами"
 
 #: zcadexternal.oimultiproperty_vertexcount~
 msgid "Vertex count"
-msgstr ""
+msgstr "Количество вершин"
 
 #: zcadexternal.oimultiproperty_widthfactor~
+msgctxt "zcadexternal.oimultiproperty_widthfactor~"
 msgid "Width factor"
 msgstr "Фактор ширины"
 
 #: zcadexternal.oimultiproperty_width~
+msgctxt "zcadexternal.oimultiproperty_width~"
 msgid "Width"
 msgstr "Ширина"
 
 #: zcadexternal.rgbcolorname~blue
+msgctxt "zcadexternal.rgbcolorname~blue"
 msgid "Blue"
 msgstr "Синий"
 
@@ -1904,6 +1989,7 @@ msgid "Cyan"
 msgstr "Голубой"
 
 #: zcadexternal.rgbcolorname~green
+msgctxt "zcadexternal.rgbcolorname~green"
 msgid "Green"
 msgstr "Зеленый"
 
@@ -1912,6 +1998,7 @@ msgid "Magenta"
 msgstr "Пурпурный"
 
 #: zcadexternal.rgbcolorname~red
+msgctxt "zcadexternal.rgbcolorname~red"
 msgid "Red"
 msgstr "Красный"
 
@@ -1925,31 +2012,31 @@ msgstr "Желтый"
 
 #: zcadexternal.tangdir~adclockwise
 msgid "Clockwise"
-msgstr ""
+msgstr "По часовой стрелке"
 
 #: zcadexternal.tangdir~adcounterclockwise
 msgid "Counterclockwise"
-msgstr ""
+msgstr "Против часовой стрелки"
 
 #: zcadexternal.taunits~audecimaldegrees
 msgid "Decimal degrees"
-msgstr ""
+msgstr "Десятичные градусы"
 
 #: zcadexternal.taunits~audegreesminutesseconds
 msgid "Degrees minutes seconds"
-msgstr ""
+msgstr "Градусы/минуты/секунды"
 
 #: zcadexternal.taunits~augradians
 msgid "Gradians"
-msgstr ""
+msgstr "Грады"
 
 #: zcadexternal.taunits~auradians
 msgid "Radians"
-msgstr ""
+msgstr "Радианы"
 
 #: zcadexternal.taunits~ausurveyorsunits
 msgid "Surveyors units"
-msgstr ""
+msgstr "Топографические единицы"
 
 #: zcadexternal.taxisreducedistancemode~tardm_allaxis
 msgid "All xxis"
@@ -2004,14 +2091,17 @@ msgid "Block type"
 msgstr "Тип блока"
 
 #: zcadexternal.tblockinsert~blocks
+msgctxt "zcadexternal.tblockinsert~blocks"
 msgid "Block"
 msgstr "Блоки"
 
 #: zcadexternal.tblockinsert~rotation
+msgctxt "zcadexternal.tblockinsert~rotation"
 msgid "Rotation"
 msgstr "Поворот"
 
 #: zcadexternal.tblockinsert~scale
+msgctxt "zcadexternal.tblockinsert~scale"
 msgid "Scale"
 msgstr "Масштабировать"
 
@@ -2032,14 +2122,16 @@ msgid "Save Variables"
 msgstr "Сохранять переменные"
 
 #: zcadexternal.tblockrotateparams~absolytly
+msgctxt "zcadexternal.tblockrotateparams~absolytly"
 msgid "Absolytly"
 msgstr "Абсолютно"
 
 #: zcadexternal.tblockrotateparams~rotate
 msgid "Rotation angle"
-msgstr ""
+msgstr "Угол поворота"
 
 #: zcadexternal.tblockscaleparams~absolytly
+msgctxt "zcadexternal.tblockscaleparams~absolytly"
 msgid "Absolytly"
 msgstr "Абсолютно"
 
@@ -2048,18 +2140,22 @@ msgid "New scale"
 msgstr "Новый масштаб"
 
 #: zcadexternal.tboundingbox~lbn
+msgctxt "zcadexternal.tboundingbox~lbn"
 msgid "Near"
 msgstr "Ближний"
 
 #: zcadexternal.tboundingbox~rtf
+msgctxt "zcadexternal.tboundingbox~rtf"
 msgid "Far"
 msgstr "Дальний"
 
 #: zcadexternal.tboundingrect~lb
+msgctxt "zcadexternal.tboundingrect~lb"
 msgid "Near"
 msgstr "Ближний"
 
 #: zcadexternal.tboundingrect~rt
+msgctxt "zcadexternal.tboundingrect~rt"
 msgid "Far"
 msgstr "Дальний"
 
@@ -2076,6 +2172,7 @@ msgid "P=F(I,Cos)"
 msgstr ""
 
 #: zcadexternal.tcanvasdata~rd_renderer
+msgctxt "zcadexternal.tcanvasdata~rd_renderer"
 msgid "Device"
 msgstr "Устройство"
 
@@ -2105,15 +2202,15 @@ msgstr "Время компиляции"
 
 #: zcadexternal.tcompileinfo~sys_environmentversion
 msgid "Environment version"
-msgstr ""
+msgstr "Версия окружения"
 
 #: zcadexternal.tcompileinfo~sys_lclfullversion
 msgid "LCL full version"
-msgstr ""
+msgstr "Полная версия LCL"
 
 #: zcadexternal.tcompileinfo~sys_lclversion
 msgid "LCL version"
-msgstr ""
+msgstr "Версия LCL"
 
 #: zcadexternal.tdebug~showhiddenfieldinobjinsp
 msgid "Show hidden fields"
@@ -2133,13 +2230,15 @@ msgstr "Ширина выносок по умолчанию"
 
 #: zcadexternal.tdesigning~dsgn_otracktimerinterval
 msgid "Object track timer interval"
-msgstr ""
+msgstr "Задержка объектной трассировки"
 
 #: zcadexternal.tdesigning~dsgn_selnew
+msgctxt "zcadexternal.tdesigning~dsgn_selnew"
 msgid "New selection set"
-msgstr ""
+msgstr "Новый набор выбора"
 
 #: zcadexternal.tdesigning~dsgn_selsamename
+msgctxt "zcadexternal.tdesigning~dsgn_selsamename"
 msgid "Auto select devices with same name"
 msgstr "Авто выбор устройств с совпадающим именем"
 
@@ -2156,26 +2255,32 @@ msgid "Not Diff"
 msgstr "Не различать"
 
 #: zcadexternal.tdimunit~duarchitectural
+msgctxt "zcadexternal.tdimunit~duarchitectural"
 msgid "Architectural"
-msgstr ""
+msgstr "Архитектурные"
 
 #: zcadexternal.tdimunit~dudecimal
+msgctxt "zcadexternal.tdimunit~dudecimal"
 msgid "Decimal"
-msgstr ""
+msgstr "Десятичные"
 
 #: zcadexternal.tdimunit~duengineering
+msgctxt "zcadexternal.tdimunit~duengineering"
 msgid "Engineering"
-msgstr ""
+msgstr "Инженерные"
 
 #: zcadexternal.tdimunit~dufractional
+msgctxt "zcadexternal.tdimunit~dufractional"
 msgid "Fractional"
-msgstr ""
+msgstr "Длобные"
 
 #: zcadexternal.tdimunit~duscientific
+msgctxt "zcadexternal.tdimunit~duscientific"
 msgid "Scientific"
-msgstr ""
+msgstr "Нацчные"
 
 #: zcadexternal.tdimunit~dusystem
+msgctxt "zcadexternal.tdimunit~dusystem"
 msgid "System"
 msgstr "Система"
 
@@ -2272,6 +2377,7 @@ msgid "Text style"
 msgstr "Стиль текста"
 
 #: zcadexternal.tdwg~dwg_drawgrid
+msgctxt "zcadexternal.tdwg~dwg_drawgrid"
 msgid "Display grid"
 msgstr "Показать сетку"
 
@@ -2316,14 +2422,17 @@ msgid "Snap settings"
 msgstr "Настройка шаговой привязки"
 
 #: zcadexternal.tdwg~dwg_snapgrid
+msgctxt "zcadexternal.tdwg~dwg_snapgrid"
 msgid "Snap"
 msgstr "Шаг"
 
 #: zcadexternal.tdxfcolor~name
+msgctxt "zcadexternal.tdxfcolor~name"
 msgid "Name"
 msgstr "Имя"
 
 #: zcadexternal.tdxfcolor~rgb
+msgctxt "zcadexternal.tdxfcolor~rgb"
 msgid "Color"
 msgstr "Цвет"
 
@@ -2336,30 +2445,37 @@ msgid "Trace (pointer)"
 msgstr "Трасса (указатель)"
 
 #: zcadexternal.telcablecomparam~traces
+msgctxt "zcadexternal.telcablecomparam~traces"
 msgid "Trace"
 msgstr "Трасса"
 
 #: zcadexternal.telleadercomparam~scale
+msgctxt "zcadexternal.telleadercomparam~scale"
 msgid "Scale"
 msgstr "Масштабировать"
 
 #: zcadexternal.telleadercomparam~size
+msgctxt "zcadexternal.telleadercomparam~size"
 msgid "Size"
 msgstr "Размер"
 
 #: zcadexternal.telleadercomparam~twidth
+msgctxt "zcadexternal.telleadercomparam~twidth"
 msgid "Width"
 msgstr "Ширина"
 
 #: zcadexternal.tentityadress~owner
+msgctxt "zcadexternal.tentityadress~owner"
 msgid "Adress"
 msgstr "Адрес"
 
 #: zcadexternal.tentityadress~selfindex
+msgctxt "zcadexternal.tentityadress~selfindex"
 msgid "Position"
 msgstr "Позиция"
 
 #: zcadexternal.tentityprocess~tep_erase
+msgctxt "zcadexternal.tentityprocess~tep_erase"
 msgid "Erase"
 msgstr "Стереть"
 
@@ -2376,6 +2492,7 @@ msgid "Use symbols *, ?"
 msgstr "Использовать символы *, ?"
 
 #: zcadexternal.tfinddeviceparam~findstring
+msgctxt "zcadexternal.tfinddeviceparam~findstring"
 msgid "Text"
 msgstr "Текст"
 
@@ -2416,10 +2533,12 @@ msgid "New value"
 msgstr "Новое значение"
 
 #: zcadexternal.tgdidata~rd_renderer
+msgctxt "zcadexternal.tgdidata~rd_renderer"
 msgid "Device"
 msgstr "Устройство"
 
 #: zcadexternal.tgdidata~rd_version
+msgctxt "zcadexternal.tgdidata~rd_version"
 msgid "Version"
 msgstr "Версия"
 
@@ -2428,6 +2547,7 @@ msgid "Current degradation factor"
 msgstr "Текущее ухудшение чертежа"
 
 #: zcadexternal.timagedegradation~rd_id_enabled
+msgctxt "zcadexternal.timagedegradation~rd_id_enabled"
 msgid "Enabled"
 msgstr "Включено"
 
@@ -2444,100 +2564,103 @@ msgid "MText"
 msgstr "Многострочный"
 
 #: zcadexternal.timode~tim_text
+msgctxt "zcadexternal.timode~tim_text"
 msgid "Text"
 msgstr "Текст"
 
 #: zcadexternal.tinserttype~tit_block
+msgctxt "zcadexternal.tinserttype~tit_block"
 msgid "Block"
 msgstr "Блоки"
 
 #: zcadexternal.tinserttype~tit_device
+msgctxt "zcadexternal.tinserttype~tit_device"
 msgid "Device"
 msgstr "Устройство"
 
 #: zcadexternal.tinsunits~iuangstroms
 msgid "Angstroms"
-msgstr ""
+msgstr "Ангстремы"
 
 #: zcadexternal.tinsunits~iuastronomicalunits
 msgid "Astronomical units"
-msgstr ""
+msgstr "Астрономические еденицы"
 
 #: zcadexternal.tinsunits~iucentimeters
 msgid "Centimeters"
-msgstr ""
+msgstr "Сантиметры"
 
 #: zcadexternal.tinsunits~iudecimeters
 msgid "Decimeters"
-msgstr ""
+msgstr "Дециметры"
 
 #: zcadexternal.tinsunits~iudekameters
 msgid "Dekameters"
-msgstr ""
+msgstr "Декаметры"
 
 #: zcadexternal.tinsunits~iufeet
 msgid "Feet"
-msgstr ""
+msgstr "Футы"
 
 #: zcadexternal.tinsunits~iugigameters
 msgid "Gigameters"
-msgstr ""
+msgstr "Гигаметры"
 
 #: zcadexternal.tinsunits~iuhectometers
 msgid "Hectometers"
-msgstr ""
+msgstr "Гектаметры"
 
 #: zcadexternal.tinsunits~iuinches
 msgid "Inches"
-msgstr ""
+msgstr "Дюймы"
 
 #: zcadexternal.tinsunits~iukilometers
 msgid "Kilometers"
-msgstr ""
+msgstr "Километры"
 
 #: zcadexternal.tinsunits~iulightyears
 msgid "Light years"
-msgstr ""
+msgstr "Световые года"
 
 #: zcadexternal.tinsunits~iumeters
 msgid "Meters"
-msgstr ""
+msgstr "Метры"
 
 #: zcadexternal.tinsunits~iumicroinches
 msgid "Microinches"
-msgstr ""
+msgstr "Микродюймы"
 
 #: zcadexternal.tinsunits~iumicrons
 msgid "Microns"
-msgstr ""
+msgstr "Микроны"
 
 #: zcadexternal.tinsunits~iumiles
 msgid "Miles"
-msgstr ""
+msgstr "Мили"
 
 #: zcadexternal.tinsunits~iumillimeters
 msgid "Millimeters"
-msgstr ""
+msgstr "Милиметры"
 
 #: zcadexternal.tinsunits~iumils
 msgid "Mils"
-msgstr ""
+msgstr "Милы"
 
 #: zcadexternal.tinsunits~iunanometers
 msgid "Nanometers"
-msgstr ""
+msgstr "Нанометры"
 
 #: zcadexternal.tinsunits~iuparsecs
 msgid "Parsecs"
-msgstr ""
+msgstr "Парсеки"
 
 #: zcadexternal.tinsunits~iuunspecified
 msgid "Unspecified"
-msgstr ""
+msgstr "Не заданы"
 
 #: zcadexternal.tinsunits~iuyards
 msgid "Yards"
-msgstr ""
+msgstr "Ярды"
 
 #: zcadexternal.tinterface~intf_defaultcontrolheight
 msgid "Default control height"
@@ -2580,6 +2703,7 @@ msgid "Nets"
 msgstr "Цепи-трассы"
 
 #: zcadexternal.tlayercontrol~enabled
+msgctxt "zcadexternal.tlayercontrol~enabled"
 msgid "Enabled"
 msgstr "Включено"
 
@@ -2588,22 +2712,27 @@ msgid "Layer name"
 msgstr "Слой"
 
 #: zcadexternal.tlunits~luarchitectural
+msgctxt "zcadexternal.tlunits~luarchitectural"
 msgid "Architectural"
 msgstr "Архитектурный"
 
 #: zcadexternal.tlunits~ludecimal
+msgctxt "zcadexternal.tlunits~ludecimal"
 msgid "Decimal"
 msgstr "Десятичный"
 
 #: zcadexternal.tlunits~luengineering
+msgctxt "zcadexternal.tlunits~luengineering"
 msgid "Engineering"
 msgstr "Инженерный"
 
 #: zcadexternal.tlunits~lufractional
+msgctxt "zcadexternal.tlunits~lufractional"
 msgid "Fractional"
 msgstr "Дробный"
 
 #: zcadexternal.tlunits~luscientific
+msgctxt "zcadexternal.tlunits~luscientific"
 msgid "Scientific"
 msgstr "Научный"
 
@@ -2656,6 +2785,7 @@ msgid "Source entities"
 msgstr "Исходные примитивы"
 
 #: zcadexternal.tmseditor~generalunit
+msgctxt "zcadexternal.tmseditor~generalunit"
 msgid "General"
 msgstr "Общие"
 
@@ -2668,6 +2798,7 @@ msgid "Misc"
 msgstr "Разное"
 
 #: zcadexternal.tmseditor~summaryunit
+msgctxt "zcadexternal.tmseditor~summaryunit"
 msgid "Summary"
 msgstr "Суммарно"
 
@@ -2708,6 +2839,7 @@ msgid "Save start number"
 msgstr "Сохранять старовое значение"
 
 #: zcadexternal.tnumberingparams~startnumber
+msgctxt "zcadexternal.tnumberingparams~startnumber"
 msgid "Start"
 msgstr "Начальное значение"
 
@@ -2716,6 +2848,7 @@ msgid "Always use multiselect wrapper"
 msgstr "Всегда использовать врапер множественного выбора"
 
 #: zcadexternal.tobjinspinterface~intf_objinsp_oldstyledraw
+msgctxt "zcadexternal.tobjinspinterface~intf_objinsp_oldstyledraw"
 msgid "Old style"
 msgstr "Старый стиль отображения"
 
@@ -2776,6 +2909,7 @@ msgid "Max width"
 msgstr "Максимальная ширина"
 
 #: zcadexternal.topengldata~rd_renderer
+msgctxt "zcadexternal.topengldata~rd_renderer"
 msgid "Device"
 msgstr "Устройство"
 
@@ -2788,6 +2922,7 @@ msgid "Vendor"
 msgstr "Производитель"
 
 #: zcadexternal.topengldata~rd_version
+msgctxt "zcadexternal.topengldata~rd_version"
 msgid "Version"
 msgstr "Версия"
 
@@ -2844,6 +2979,7 @@ msgid "Height of installation"
 msgstr "Высота установки"
 
 #: zcadexternal.topsplacesmokedetectorortoparam~inserttype
+msgctxt "zcadexternal.topsplacesmokedetectorortoparam~inserttype"
 msgid "Insert"
 msgstr "Вставлять"
 
@@ -2856,6 +2992,7 @@ msgid "Sensor-Wall(standard)"
 msgstr "Извещатель-стена(норм.)"
 
 #: zcadexternal.topsplacesmokedetectorortoparam~normalizepoint
+msgctxt "zcadexternal.topsplacesmokedetectorortoparam~normalizepoint"
 msgid "Normalize to grid (if enabled)"
 msgstr "Нормализовать по сетке"
 
@@ -2868,6 +3005,7 @@ msgid "Plan scale"
 msgstr "Масштаб плана"
 
 #: zcadexternal.topsplacesmokedetectorortoparam~scaleblock
+msgctxt "zcadexternal.topsplacesmokedetectorortoparam~scaleblock"
 msgid "Blocks scale"
 msgstr "Масштаб блоков"
 
@@ -2884,6 +3022,7 @@ msgid "\"Start\" signal"
 msgstr "Сигнал \"Пуск\""
 
 #: zcadexternal.tortodevplaceparam~angle
+msgctxt "zcadexternal.tortodevplaceparam~angle"
 msgid "Rotation"
 msgstr "Поворот"
 
@@ -2900,10 +3039,12 @@ msgid "Type of placement"
 msgstr "Тип размещения"
 
 #: zcadexternal.tortodevplaceparam~name
+msgctxt "zcadexternal.tortodevplaceparam~name"
 msgid "Block"
 msgstr "Блоки"
 
 #: zcadexternal.tortodevplaceparam~normalizepoint
+msgctxt "zcadexternal.tortodevplaceparam~normalizepoint"
 msgid "Normalize to grid (if enabled)"
 msgstr "Нормализовать по сетке (если включена)"
 
@@ -2916,22 +3057,27 @@ msgid "Number of width"
 msgstr "Кол-во по ширине"
 
 #: zcadexternal.tortodevplaceparam~scaleblock
+msgctxt "zcadexternal.tortodevplaceparam~scaleblock"
 msgid "Blocks scale"
 msgstr "Масштаб блоков"
 
 #: zcadexternal.tosmodeeditor~osm
+msgctxt "zcadexternal.tosmodeeditor~osm"
 msgid "Snap"
 msgstr "Шаг"
 
 #: zcadexternal.tosmodeeditor~trace
+msgctxt "zcadexternal.tosmodeeditor~trace"
 msgid "Trace"
 msgstr "Трассировка"
 
 #: zcadexternal.tosmode~kosm_3
+msgctxt "zcadexternal.tosmode~kosm_3"
 msgid "1/3"
 msgstr ""
 
 #: zcadexternal.tosmode~kosm_4
+msgctxt "zcadexternal.tosmode~kosm_4"
 msgid "1/4"
 msgstr ""
 
@@ -2940,6 +3086,7 @@ msgid "Apparent intersection"
 msgstr "Кажущееся пересечение"
 
 #: zcadexternal.tosmode~kosm_center
+msgctxt "zcadexternal.tosmode~kosm_center"
 msgid "Center"
 msgstr "Центр"
 
@@ -3032,6 +3179,7 @@ msgid "B"
 msgstr ""
 
 #: zcadexternal.tphase~_c
+msgctxt "zcadexternal.tphase~_c"
 msgid "C"
 msgstr ""
 
@@ -3176,14 +3324,17 @@ msgid "Alpha"
 msgstr "Прозрачность"
 
 #: zcadexternal.trgb~b
+msgctxt "zcadexternal.trgb~b"
 msgid "Blue"
 msgstr "Синий"
 
 #: zcadexternal.trgb~g
+msgctxt "zcadexternal.trgb~g"
 msgid "Green"
 msgstr "Зеленый"
 
 #: zcadexternal.trgb~r
+msgctxt "zcadexternal.trgb~r"
 msgid "Red"
 msgstr "Красный"
 
@@ -3200,10 +3351,12 @@ msgid "Time between autosaves"
 msgstr "Время между автосохранениями"
 
 #: zcadexternal.tsave~save_auto_on
+msgctxt "zcadexternal.tsave~save_auto_on"
 msgid "Autosave"
 msgstr "Автосохранение"
 
 #: zcadexternal.tselblockparams~diffblockdevice
+msgctxt "zcadexternal.tselblockparams~diffblockdevice"
 msgid "Block and Device"
 msgstr "Блоки и Устройства"
 
@@ -3236,6 +3389,7 @@ msgid "Blocks"
 msgstr "Блоки"
 
 #: zcadexternal.tselsimparams~general
+msgctxt "zcadexternal.tselsimparams~general"
 msgid "General"
 msgstr "Общие"
 
@@ -3296,22 +3450,27 @@ msgid "Program version"
 msgstr "Версия программы"
 
 #: zcadexternal.ttablecelljustify~jcc
+msgctxt "zcadexternal.ttablecelljustify~jcc"
 msgid "TopCenter"
 msgstr "ВерхЦентр"
 
 #: zcadexternal.ttablecelljustify~jcl
+msgctxt "zcadexternal.ttablecelljustify~jcl"
 msgid "TopLeft"
 msgstr "ВерхЛево"
 
 #: zcadexternal.ttablecelljustify~jcr
+msgctxt "zcadexternal.ttablecelljustify~jcr"
 msgid "TopRight"
 msgstr "ВерхПраво"
 
 #: zcadexternal.ttextinsertparams~h
+msgctxt "zcadexternal.ttextinsertparams~h"
 msgid "Height"
 msgstr "Высота"
 
 #: zcadexternal.ttextinsertparams~justify
+msgctxt "zcadexternal.ttextinsertparams~justify"
 msgid "Justify"
 msgstr "Выравнивание"
 
@@ -3324,6 +3483,7 @@ msgid "Entity"
 msgstr "Примитив"
 
 #: zcadexternal.ttextinsertparams~oblique
+msgctxt "zcadexternal.ttextinsertparams~oblique"
 msgid "Oblique"
 msgstr "Наклон"
 
@@ -3332,18 +3492,22 @@ msgid "Run text editor"
 msgstr "Запускать редактор текста"
 
 #: zcadexternal.ttextinsertparams~style
+msgctxt "zcadexternal.ttextinsertparams~style"
 msgid "Style"
 msgstr "Стиль"
 
 #: zcadexternal.ttextinsertparams~text
+msgctxt "zcadexternal.ttextinsertparams~text"
 msgid "Text"
 msgstr "Текст"
 
 #: zcadexternal.ttextinsertparams~width
+msgctxt "zcadexternal.ttextinsertparams~width"
 msgid "Width"
 msgstr "Ширина"
 
 #: zcadexternal.ttextinsertparams~widthfactor
+msgctxt "zcadexternal.ttextinsertparams~widthfactor"
 msgid "Width factor"
 msgstr "Фактор ширины"
 
@@ -3360,6 +3524,7 @@ msgid "BottomRight"
 msgstr "НизПраво"
 
 #: zcadexternal.ttextjustify~jsbtc
+msgctxt "zcadexternal.ttextjustify~jsbtc"
 msgid "Center"
 msgstr "Центр"
 
@@ -3384,14 +3549,17 @@ msgid "MiddleRight"
 msgstr "СерединаПраво"
 
 #: zcadexternal.ttextjustify~jstc
+msgctxt "zcadexternal.ttextjustify~jstc"
 msgid "TopCenter"
 msgstr "ВерхЦентр"
 
 #: zcadexternal.ttextjustify~jstl
+msgctxt "zcadexternal.ttextjustify~jstl"
 msgid "TopLeft"
 msgstr "ВерхЛево"
 
 #: zcadexternal.ttextjustify~jstr
+msgctxt "zcadexternal.ttextjustify~jstr"
 msgid "TopRight"
 msgstr "ВерхПраво"
 
@@ -3408,6 +3576,7 @@ msgid "90 deg"
 msgstr "90°"
 
 #: zcadexternal.ttracemode~angle
+msgctxt "zcadexternal.ttracemode~angle"
 msgid "Angle"
 msgstr "Угол"
 
@@ -3416,10 +3585,12 @@ msgid "Z Axis"
 msgstr "Ось Z"
 
 #: zcadexternal.ttreeadress~owner
+msgctxt "zcadexternal.ttreeadress~owner"
 msgid "Adress"
 msgstr "Адрес"
 
 #: zcadexternal.ttreeadress~selfindex
+msgctxt "zcadexternal.ttreeadress~selfindex"
 msgid "Position"
 msgstr "Позиция"
 
@@ -3436,6 +3607,7 @@ msgid "0"
 msgstr ""
 
 #: zcadexternal.tuprec~uprec1
+msgctxt "zcadexternal.tuprec~uprec1"
 msgid "0.0"
 msgstr ""
 
@@ -3465,4 +3637,88 @@ msgstr ""
 
 #: zcadexternal.tuprec~uprec8
 msgid "0.00000000"
+msgstr ""
+
+#: zcadexternal.variablecategory~bty
+msgid "Blockdef params"
+msgstr ""
+
+#: zcadexternal.variablecategory~cable
+msgid "Cable params"
+msgstr ""
+
+#: zcadexternal.variablecategory~center
+msgctxt "zcadexternal.variablecategory~center"
+msgid "Center"
+msgstr "Центр"
+
+#: zcadexternal.variablecategory~db
+msgid "Data base"
+msgstr "База данных"
+
+#: zcadexternal.variablecategory~delta
+msgid "Delta"
+msgstr "Дельта"
+
+#: zcadexternal.variablecategory~desc
+msgctxt "zcadexternal.variablecategory~desc"
+msgid "Description"
+msgstr "Описание"
+
+#: zcadexternal.variablecategory~device
+msgid "Device params"
+msgstr "Параметры устройства"
+
+#: zcadexternal.variablecategory~el
+msgid "El(deprecated)"
+msgstr "El(Устаревшее)"
+
+#: zcadexternal.variablecategory~end
+msgctxt "zcadexternal.variablecategory~end"
+msgid "End"
+msgstr "Конец"
+
+#: zcadexternal.variablecategory~gc
+msgid "Group connection"
+msgstr "Групповое подключение"
+
+#: zcadexternal.variablecategory~insert
+msgctxt "zcadexternal.variablecategory~insert"
+msgid "Insert"
+msgstr "Вставка"
+
+#: zcadexternal.variablecategory~length
+msgid "Length params"
+msgstr "Параметры длины"
+
+#: zcadexternal.variablecategory~nmo
+msgctxt "zcadexternal.variablecategory~nmo"
+msgid "Name"
+msgstr "Имя"
+
+#: zcadexternal.variablecategory~normal
+msgid "Normal"
+msgstr "Нормаль"
+
+#: zcadexternal.variablecategory~objfunc
+msgid "Function:object"
+msgstr ""
+
+#: zcadexternal.variablecategory~scale
+msgctxt "zcadexternal.variablecategory~scale"
+msgid "Scale"
+msgstr "Масштаб"
+
+#: zcadexternal.variablecategory~start
+msgctxt "zcadexternal.variablecategory~start"
+msgid "Start"
+msgstr "Начало"
+
+#: zcadexternal.variablecategory~summary
+msgctxt "zcadexternal.variablecategory~summary"
+msgid "Summary"
+msgstr "Суммарно"
+
+#: zcadexternal.variablecategory~unitparam
+msgid "Measured parameter"
 msgstr ""

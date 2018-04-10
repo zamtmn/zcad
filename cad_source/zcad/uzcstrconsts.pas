@@ -83,7 +83,8 @@ resourcestring
   rscmNumber='Number';
   rscmAdd='Add';
   rscmStore='Store';
-  rscmFind='Find';
+  //rscmFind='Find';
+  rscmSelect='Select';
   rscmCommandParams='Command params';
   rscmSelectSourceEntity='Select source entity:';
   rscmSelectDestinationEntity='Select destination entity:';

@@ -10,7 +10,7 @@ uses
   uzbtypes,gzctnrvectortypes,uzbgeomtypes ,uzegeometry, uzccommandsmanager,
   uzcinterface,uzeconsts,uzeentity,uzcimagesmanager,uzcdrawings,uzbtypesbase,
   varmandef,uzbstrproc,uzcmainwindow,uzctreenode,
-  uzcnavigatorsnodedesk,Varman;
+  uzcnavigatorsnodedesk,Varman,uzcstrconsts;
 
 resourcestring
   rsByPrefix='byPrefix';
@@ -79,16 +79,16 @@ var
   basenode:PVirtualNode;
 begin
   result:=nil;
-  Name:=GetEntityVariableValue(pent,'NMO_Name','Absent Name');
+  Name:=GetEntityVariableValue(pent,'NMO_Name',rsNameAbsent);
 
   if GroupByPrefix then begin
-    BaseName:=GetEntityVariableValue(pent,'NMO_Prefix','Absent Prefix');
+    BaseName:=GetEntityVariableValue(pent,'NMO_Prefix',rsPrefixAbsent);
     basenode:=rootdesk.find(BaseName,rootdesk.rootnode);
   end else
     basenode:=rootdesk.rootnode;
 
   if GroupByBase then begin
-    BaseName:=GetEntityVariableValue(pent,'NMO_BaseName','Absent BaseName');
+    BaseName:=GetEntityVariableValue(pent,'NMO_BaseName',rsBaseNameAbsent);
     result:=rootdesk.find(BaseName,basenode);
   end else
     result:=basenode;
@@ -264,7 +264,7 @@ begin
      if pnd^.NodeMode<>TNMData then
                                    celltext:=pnd^.name
                                else
-                                   celltext:=GetEntityVariableValue(pnd^.pent,'NMO_Name','Absent Name');
+                                   celltext:=GetEntityVariableValue(pnd^.pent,'NMO_Name',rsNameAbsent);
   end;
 end;
 procedure TNavigatorDevices.NavGetImage(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;

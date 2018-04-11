@@ -22,7 +22,8 @@ interface
 uses uzcfnavigatordevices,uzcfcommandline,uzbpaths,TypeDescriptors,uzctranslations,uzcshared,Forms,
      uzbtypes,varmandef,uzeconsts,uzeentdevice,uzcnavigatorsnodedesk,
      uzeentity,zcobjectinspector,uzcguimanager,uzcenitiesvariablesextender,uzbstrproc,
-     Types,Controls,uzcdrawings,Varman,UUnitManager,uzcsysvars,uzcsysinfo,LazLogger,VirtualTrees;
+     Types,Controls,uzcdrawings,Varman,UUnitManager,uzcsysvars,uzcsysinfo,LazLogger,VirtualTrees,
+     uzcstrconsts;
 resourcestring
   rsDevices='Devices';
   rsRisers='Risers';
@@ -64,7 +65,7 @@ begin
      if pnd^.NodeMode<>TNMData then
                                    celltext:=pnd^.name
                                else
-                                   celltext:=GetEntityVariableValue(pnd^.pent,'NMO_Name','Absent Name')+' (:'+GetEntityVariableValue(pnd^.pent,'CABLE_Segment','??')+')';
+                                   celltext:=GetEntityVariableValue(pnd^.pent,'NMO_Name',rsNameAbsent)+' (:'+GetEntityVariableValue(pnd^.pent,'CABLE_Segment','??')+')';
   end;
 end;
 
@@ -80,7 +81,7 @@ begin
      if pnd^.NodeMode<>TNMData then
                                    celltext:=pnd^.name
                                else
-                                   celltext:=GetEntityVariableValue(pnd^.pent,'RiserName','Absent Name')+' ('+GetEntityVariableValue(pnd^.pent,'Elevation','??')+')'+' "'+GetEntityVariableValue(pnd^.pent,'Text','??')+'"';
+                                   celltext:=GetEntityVariableValue(pnd^.pent,'RiserName',rsNameAbsent)+' ('+GetEntityVariableValue(pnd^.pent,'Elevation','??')+')'+' "'+GetEntityVariableValue(pnd^.pent,'Text','??')+'"';
   end;
 end;
 function TNavigatorRisers.NavGetOnlyText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex): String;
@@ -93,7 +94,7 @@ begin
      if pnd^.NodeMode<>TNMData then
                                    result:=pnd^.name
                                else
-                                   result:=GetEntityVariableValue(pnd^.pent,'RiserName','Absent Name');
+                                   result:=GetEntityVariableValue(pnd^.pent,'RiserName',rsNameAbsent);
   end;
 end;
  procedure TNavigatorRisers.VTCompareNodes(Sender: TBaseVirtualTree; Node1,
@@ -143,7 +144,7 @@ var
   basenode:PVirtualNode;
 begin
   result:={nil}rootdesk.rootnode;
-  Name:=GetEntityVariableValue(pent,'RiserName','Absent Name');
+  Name:=GetEntityVariableValue(pent,'RiserName',rsNameAbsent);
 
   //if GroupByPrefix then begin
     //BaseName:=GetEntityVariableValue(pent,'NMO_Prefix','Absent Prefix');

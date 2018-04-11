@@ -9,10 +9,10 @@ unit uzccablemanager;
 interface
 uses uzcenitiesvariablesextender,uzcvariablesutils,Varman,uzbstrproc,uzcentcable,
      uzeentdevice,uzeconsts,gzctnrvectorpobjects,languade,gzctnrvectorobjects,
-     gzctnrvectortypes,SysUtils,uzbtypesbase,uzbtypes,varmandef,uzbmemman,uzcdrawings;
+     gzctnrvectortypes,SysUtils,uzbtypesbase,uzbtypes,varmandef,uzbmemman,uzcdrawings,
+     uzcstrconsts;
 resourcestring
      DefCableName='Created. Not named';
-     UnNamedCable='Name absent';
 type
 {EXPORT+}
     PTCableDesctiptor=^TCableDesctiptor;
@@ -96,7 +96,7 @@ begin
                 if pvn<>nil then
                                 sname:=pgdbstring(pvn^.data.Instance)^
                             else
-                                sname:=UnNamedCable;
+                                sname:=rsNameAbsent;
                 if sname='RS' then
                                sname:=sname;
                 pcd:=FindOrCreate(sname);                                         //поиск или создание нового элемента в списки. Если такое имя в списке есть, то возвращает указатель на него, если нет то создает новый.

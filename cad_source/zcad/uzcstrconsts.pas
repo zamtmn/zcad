@@ -22,6 +22,10 @@ unit uzcstrconsts;
 interface
 resourcestring
   {errors}
+  rsNameAbsent='Absent Name';
+  rsPrefixAbsent='Absent Prefix';
+  rsBaseNameAbsent='Absent BaseName';
+
   rsNotSpecified='Not specified';
   rsInvalidInput='Invalid input';
   rsNotRegistred='Not registred';

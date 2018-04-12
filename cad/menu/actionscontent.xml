@@ -128,13 +128,6 @@
       <ZAction Name="ACN_OPTIONS" Command="Options" Img="options" Caption="Options"/>
       <ZAction Name="ACN_SAVEOPTIONS" Command="SaveOptions" Img="#so" Caption="Save options"/>
     </Group>
-    <Group Category="SL">
-      <ZAction Name="ACN_slagcabCom" Command="slagcab" Img="#D()" Caption="Start command panels for autocabeling SL"/>
-      <ZAction Name="ACN_agslr" Command="AGSLROOM" Img="#ASL" Caption="Start command ASL"/>
-      <ZAction Name="ACN_SupeLine" Command="DrawSuperLine" Img="superline.bmp" Caption="SuperLine"/>
-      <ZAction Name="ACN_smtextall" Command="stripmtext(ALL)" Img="stripmtextall" Caption="Start command clear mtext all"/>
-      <ZAction Name="ACN_smtextarea" Command="stripmtext" Img="stripmtextsel" Caption="Start command clear mtext area"/>
-    </Group>
     <Group Category="Variables">
       <ZAction2Variable Name="ACN_OS_INSERT" Variable="DWG_OSMode" Mask="1" Img="snaptoinsert" Caption="Snap to insert point"/>
       <ZAction2Variable Name="ACN_OS_END" Variable="DWG_OSMode" Mask="2" Img="snaptoend" Caption="Snap to end point"/>

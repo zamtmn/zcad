@@ -1005,7 +1005,7 @@ var
    i:integer;
 begin
   ToolBarsManager.LoadActions(ProgramPath+'menu/actionscontent.xml');
-  ToolBarsManager.LoadActions(ProgramPath+'menu/elactionscontent.xml');
+  ToolBarsManager.LoadActions(ProgramPath+'menu/electrotechactionscontent.xml');
   StandartActions.OnUpdate:=ActionUpdate;
 
   for i:=low(FileHistory) to high(FileHistory) do

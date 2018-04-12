@@ -34,6 +34,10 @@ msgid "aumsw"
 msgstr ""
 
 #: zcadexternal.acn_arc~caption
+msgid "Arc"
+msgstr ""
+
+#: zcadexternal.acn_arc~hint
 msgid "Draw arc"
 msgstr ""
 
@@ -42,6 +46,11 @@ msgid "Block editor"
 msgstr ""
 
 #: zcadexternal.acn_binsert~caption
+msgctxt "zcadexternal.acn_binsert~caption"
+msgid "Block"
+msgstr ""
+
+#: zcadexternal.acn_binsert~hint
 msgid "Insert block"
 msgstr ""
 
@@ -50,6 +59,7 @@ msgid "Block replace"
 msgstr ""
 
 #: zcadexternal.acn_breplace~textimage
+msgctxt "zcadexternal.acn_breplace~textimage"
 msgid "BR"
 msgstr ""
 
@@ -58,6 +68,7 @@ msgid "Block rotate"
 msgstr ""
 
 #: zcadexternal.acn_brotate~textimage
+msgctxt "zcadexternal.acn_brotate~textimage"
 msgid "BR"
 msgstr ""
 
@@ -98,6 +109,7 @@ msgid "Cancel"
 msgstr ""
 
 #: zcadexternal.acn_cancel~textimage
+msgctxt "zcadexternal.acn_cancel~textimage"
 msgid "C"
 msgstr ""
 
@@ -105,16 +117,32 @@ msgstr ""
 msgid "Circle(2 points)"
 msgstr ""
 
+#: zcadexternal.acn_circle2p~hint
+msgid "Draw circle(2 points)"
+msgstr ""
+
 #: zcadexternal.acn_circle3p~caption
 msgid "Circle(3 points)"
+msgstr ""
+
+#: zcadexternal.acn_circle3p~hint
+msgid "Draw circle(3 points)"
 msgstr ""
 
 #: zcadexternal.acn_circlecd~caption
 msgid "Circle(Center,diameter)"
 msgstr ""
 
+#: zcadexternal.acn_circlecd~hint
+msgid "Draw circle(Center,diameter)"
+msgstr ""
+
 #: zcadexternal.acn_circle~caption
 msgid "Circle(Center,radius)"
+msgstr ""
+
+#: zcadexternal.acn_circle~hint
+msgid "Draw circle(Center,radius)"
 msgstr ""
 
 #: zcadexternal.acn_close~caption
@@ -262,6 +290,7 @@ msgid "Find device"
 msgstr ""
 
 #: zcadexternal.acn_erase~caption
+msgctxt "zcadexternal.acn_erase~caption"
 msgid "Erase"
 msgstr ""
 
@@ -278,10 +307,12 @@ msgid ""
 msgstr ""
 
 #: zcadexternal.acn_fakepaste~textimage
+msgctxt "zcadexternal.acn_fakepaste~textimage"
 msgid "Paste"
 msgstr ""
 
 #: zcadexternal.acn_help~caption
+msgctxt "zcadexternal.acn_help~caption"
 msgid "Help"
 msgstr ""
 
@@ -314,6 +345,7 @@ msgid "SI"
 msgstr ""
 
 #: zcadexternal.acn_kipcdbuild~caption
+msgctxt "zcadexternal.acn_kipcdbuild~caption"
 msgid "Connection diagram"
 msgstr ""
 
@@ -406,6 +438,7 @@ msgid "Object variables manager"
 msgstr ""
 
 #: zcadexternal.acn_oldstyleinobjinsp~caption
+msgctxt "zcadexternal.acn_oldstyleinobjinsp~caption"
 msgid "Old style"
 msgstr ""
 
@@ -414,6 +447,7 @@ msgid "os"
 msgstr ""
 
 #: zcadexternal.acn_options~caption
+msgctxt "zcadexternal.acn_options~caption"
 msgid "Options"
 msgstr ""
 
@@ -462,6 +496,7 @@ msgid "Snap to point"
 msgstr ""
 
 #: zcadexternal.acn_os_point~textimage
+msgctxt "zcadexternal.acn_os_point~textimage"
 msgid "P"
 msgstr ""
 
@@ -474,6 +509,7 @@ msgid "Snap to 1/4 point"
 msgstr ""
 
 #: zcadexternal.acn_os_quarter~textimage
+msgctxt "zcadexternal.acn_os_quarter~textimage"
 msgid "1/4"
 msgstr ""
 
@@ -486,6 +522,7 @@ msgid "Snap to 1/3 point"
 msgstr ""
 
 #: zcadexternal.acn_os_third~textimage
+msgctxt "zcadexternal.acn_os_third~textimage"
 msgid "1/3"
 msgstr ""
 
@@ -514,6 +551,7 @@ msgid "Pan up"
 msgstr ""
 
 #: zcadexternal.acn_paste~caption
+msgctxt "zcadexternal.acn_paste~caption"
 msgid "Paste"
 msgstr ""
 
@@ -538,10 +576,12 @@ msgid "Edit polyline"
 msgstr ""
 
 #: zcadexternal.acn_print~caption
+msgctxt "zcadexternal.acn_print~caption"
 msgid "Print"
 msgstr ""
 
 #: zcadexternal.acn_print~hint
+msgctxt "zcadexternal.acn_print~hint"
 msgid "Print"
 msgstr ""
 
@@ -598,6 +638,7 @@ msgid ""
 msgstr ""
 
 #: zcadexternal.acn_rotate~caption
+msgctxt "zcadexternal.acn_rotate~caption"
 msgid "Rotate"
 msgstr ""
 
@@ -634,10 +675,12 @@ msgid "Save (Autosave)"
 msgstr ""
 
 #: zcadexternal.acn_saveqs~hint
+msgctxt "zcadexternal.acn_saveqs~hint"
 msgid "Autosave"
 msgstr ""
 
 #: zcadexternal.acn_scale~caption
+msgctxt "zcadexternal.acn_scale~caption"
 msgid "Scale"
 msgstr ""
 
@@ -666,6 +709,7 @@ msgid "Numbering sensors on the plan"
 msgstr ""
 
 #: zcadexternal.acn_sensormark~textimage
+msgctxt "zcadexternal.acn_sensormark~textimage"
 msgid "++"
 msgstr ""
 
@@ -738,6 +782,7 @@ msgid "Navigator(Devices)"
 msgstr ""
 
 #: zcadexternal.acn_show_navigatordevices~textimage
+msgctxt "zcadexternal.acn_show_navigatordevices~textimage"
 msgid "NV"
 msgstr ""
 
@@ -746,6 +791,7 @@ msgid "Navigator(Entities)"
 msgstr ""
 
 #: zcadexternal.acn_show_navigatorentities~textimage
+msgctxt "zcadexternal.acn_show_navigatorentities~textimage"
 msgid "NV"
 msgstr ""
 
@@ -806,6 +852,11 @@ msgid "TW"
 msgstr ""
 
 #: zcadexternal.acn_text~caption
+msgctxt "zcadexternal.acn_text~caption"
+msgid "Text"
+msgstr ""
+
+#: zcadexternal.acn_text~hint
 msgid "Draw text"
 msgstr ""
 
@@ -842,6 +893,7 @@ msgid "Units format"
 msgstr ""
 
 #: zcadexternal.acn_units~textimage
+msgctxt "zcadexternal.acn_units~textimage"
 msgid "0.0"
 msgstr ""
 
@@ -934,6 +986,7 @@ msgid "Previous window"
 msgstr ""
 
 #: zcadexternal.acn_wprev~textimage
+msgctxt "zcadexternal.acn_wprev~textimage"
 msgid "P"
 msgstr ""
 
@@ -962,18 +1015,22 @@ msgid "Zoom window"
 msgstr ""
 
 #: zcadexternal.brmode~brm_bd
+msgctxt "zcadexternal.brmode~brm_bd"
 msgid "Block and Device"
 msgstr ""
 
 #: zcadexternal.brmode~brm_block
+msgctxt "zcadexternal.brmode~brm_block"
 msgid "Block"
 msgstr ""
 
 #: zcadexternal.brmode~brm_device
+msgctxt "zcadexternal.brmode~brm_device"
 msgid "Device"
 msgstr ""
 
 #: zcadexternal.button_command~ops_sensor_mark
+msgctxt "zcadexternal.button_command~ops_sensor_mark"
 msgid "++"
 msgstr ""
 
@@ -1038,18 +1095,22 @@ msgid "OZ Axis"
 msgstr ""
 
 #: zcadexternal.gdblayerprop~color
+msgctxt "zcadexternal.gdblayerprop~color"
 msgid "Color"
 msgstr ""
 
 #: zcadexternal.gdblayerprop~desk
+msgctxt "zcadexternal.gdblayerprop~desk"
 msgid "Description"
 msgstr ""
 
 #: zcadexternal.gdblayerprop~lineweight
+msgctxt "zcadexternal.gdblayerprop~lineweight"
 msgid "Line weight"
 msgstr ""
 
 #: zcadexternal.gdblayerprop~lt
+msgctxt "zcadexternal.gdblayerprop~lt"
 msgid "Line type"
 msgstr ""
 
@@ -1062,6 +1123,7 @@ msgid "On"
 msgstr ""
 
 #: zcadexternal.gdblayerprop~_print
+msgctxt "zcadexternal.gdblayerprop~_print"
 msgid "Print"
 msgstr ""
 
@@ -1070,6 +1132,7 @@ msgid "Begin"
 msgstr ""
 
 #: zcadexternal.gdblineprop~lend
+msgctxt "zcadexternal.gdblineprop~lend"
 msgid "End"
 msgstr ""
 
@@ -1078,14 +1141,17 @@ msgid "DashInfo array"
 msgstr ""
 
 #: zcadexternal.gdbltypeprop~desk
+msgctxt "zcadexternal.gdbltypeprop~desk"
 msgid "Description"
 msgstr ""
 
 #: zcadexternal.gdbltypeprop~h
+msgctxt "zcadexternal.gdbltypeprop~h"
 msgid "Height"
 msgstr ""
 
 #: zcadexternal.gdbltypeprop~len
+msgctxt "zcadexternal.gdbltypeprop~len"
 msgid "Length"
 msgstr ""
 
@@ -1102,6 +1168,7 @@ msgid "Text array"
 msgstr ""
 
 #: zcadexternal.gdbnamedobject~name
+msgctxt "zcadexternal.gdbnamedobject~name"
 msgid "Name"
 msgstr ""
 
@@ -1114,14 +1181,17 @@ msgid "Insertion point OCS"
 msgstr ""
 
 #: zcadexternal.gdbobj3dface~pindcs
+msgctxt "zcadexternal.gdbobj3dface~pindcs"
 msgid "Coordinates DCS"
 msgstr ""
 
 #: zcadexternal.gdbobj3dface~pinocs
+msgctxt "zcadexternal.gdbobj3dface~pinocs"
 msgid "Coordinates OCS"
 msgstr ""
 
 #: zcadexternal.gdbobj3dface~pinwcs
+msgctxt "zcadexternal.gdbobj3dface~pinwcs"
 msgid "Coordinates WCS"
 msgstr ""
 
@@ -1134,18 +1204,22 @@ msgid "Tree"
 msgstr ""
 
 #: zcadexternal.gdbobjblockdef~blockdesc
+msgctxt "zcadexternal.gdbobjblockdef~blockdesc"
 msgid "Block params"
 msgstr ""
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
+msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
 msgid "Block params"
 msgstr ""
 
 #: zcadexternal.gdbobjblockinsert~testrotate
+msgctxt "zcadexternal.gdbobjblockinsert~testrotate"
 msgid "Rotate"
 msgstr ""
 
 #: zcadexternal.gdbobjcircle~radius
+msgctxt "zcadexternal.gdbobjcircle~radius"
 msgid "Radius"
 msgstr ""
 
@@ -1162,18 +1236,22 @@ msgid "Visible"
 msgstr ""
 
 #: zcadexternal.gdbobjentity~vp
+msgctxt "zcadexternal.gdbobjentity~vp"
 msgid "General"
 msgstr ""
 
 #: zcadexternal.gdbobjline~coordinocs
+msgctxt "zcadexternal.gdbobjline~coordinocs"
 msgid "Coordinates OCS"
 msgstr ""
 
 #: zcadexternal.gdbobjline~coordinwcs
+msgctxt "zcadexternal.gdbobjline~coordinwcs"
 msgid "Coordinates WCS"
 msgstr ""
 
 #: zcadexternal.gdbobjline~pprojpoint
+msgctxt "zcadexternal.gdbobjline~pprojpoint"
 msgid "Coordinates DCS"
 msgstr ""
 
@@ -1182,22 +1260,27 @@ msgid "Oriented area"
 msgstr ""
 
 #: zcadexternal.gdbobjpoint~p_insertinocs
+msgctxt "zcadexternal.gdbobjpoint~p_insertinocs"
 msgid "Coordinates OCS"
 msgstr ""
 
 #: zcadexternal.gdbobjpoint~p_insertinwcs
+msgctxt "zcadexternal.gdbobjpoint~p_insertinwcs"
 msgid "Coordinates WCS"
 msgstr ""
 
 #: zcadexternal.gdbobjsolid~pindcs
+msgctxt "zcadexternal.gdbobjsolid~pindcs"
 msgid "Coordinates DCS"
 msgstr ""
 
 #: zcadexternal.gdbobjsolid~pinocs
+msgctxt "zcadexternal.gdbobjsolid~pinocs"
 msgid "Coordinates OCS"
 msgstr ""
 
 #: zcadexternal.gdbobjsolid~pinwcs
+msgctxt "zcadexternal.gdbobjsolid~pinwcs"
 msgid "Coordinates WCS"
 msgstr ""
 
@@ -1206,6 +1289,7 @@ msgid "Owner"
 msgstr ""
 
 #: zcadexternal.gdbobjtext~txtstyleindex
+msgctxt "zcadexternal.gdbobjtext~txtstyleindex"
 msgid "Style"
 msgstr ""
 
@@ -1214,10 +1298,12 @@ msgid "Bounding box"
 msgstr ""
 
 #: zcadexternal.gdbobjvisualprop~layer
+msgctxt "zcadexternal.gdbobjvisualprop~layer"
 msgid "Layer"
 msgstr ""
 
 #: zcadexternal.gdbobjvisualprop~linetype
+msgctxt "zcadexternal.gdbobjvisualprop~linetype"
 msgid "Line type"
 msgstr ""
 
@@ -1226,6 +1312,7 @@ msgid "Line type scale"
 msgstr ""
 
 #: zcadexternal.gdbobjvisualprop~lineweight
+msgctxt "zcadexternal.gdbobjvisualprop~lineweight"
 msgid "Line weight"
 msgstr ""
 
@@ -1262,6 +1349,7 @@ msgid "Spacing"
 msgstr ""
 
 #: zcadexternal.gdbsysvariable~debug
+msgctxt "zcadexternal.gdbsysvariable~debug"
 msgid "Debug"
 msgstr ""
 
@@ -1294,6 +1382,7 @@ msgid "Saving"
 msgstr ""
 
 #: zcadexternal.gdbsysvariable~sys
+msgctxt "zcadexternal.gdbsysvariable~sys"
 msgid "System"
 msgstr ""
 
@@ -1302,10 +1391,12 @@ msgid "System graphics (size, communication, etc. for debugging)"
 msgstr ""
 
 #: zcadexternal.hint_panel~dsgn_selnew
+msgctxt "zcadexternal.hint_panel~dsgn_selnew"
 msgid "New selection set"
 msgstr ""
 
 #: zcadexternal.hint_panel~dsgn_selsamename
+msgctxt "zcadexternal.hint_panel~dsgn_selsamename"
 msgid "Auto select devices with same name"
 msgstr ""
 
@@ -1314,6 +1405,7 @@ msgid "On/Off Additional grips"
 msgstr ""
 
 #: zcadexternal.hint_panel~dwg_drawgrid
+msgctxt "zcadexternal.hint_panel~dwg_drawgrid"
 msgid "Display grid"
 msgstr ""
 
@@ -1330,6 +1422,7 @@ msgid "Auxiliary graphics (connectivity, direction, etc.)"
 msgstr ""
 
 #: zcadexternal.hint_panel~dwg_osmode
+msgctxt "zcadexternal.hint_panel~dwg_osmode"
 msgid "Object snap"
 msgstr ""
 
@@ -1338,6 +1431,7 @@ msgid "Polar tracking"
 msgstr ""
 
 #: zcadexternal.hint_panel~dwg_snapgrid
+msgctxt "zcadexternal.hint_panel~dwg_snapgrid"
 msgid "Snap"
 msgstr ""
 
@@ -1450,6 +1544,7 @@ msgid "Report on memory allocation(for debugbuild)"
 msgstr ""
 
 #: zcadexternal.menucommand~ops_spbuild
+msgctxt "zcadexternal.menucommand~ops_spbuild"
 msgid "Connection diagram"
 msgstr ""
 
@@ -1486,6 +1581,7 @@ msgid "Numerators (objinsp)"
 msgstr ""
 
 #: zcadexternal.menucommand~setobjinsp(osmode)
+msgctxt "zcadexternal.menucommand~setobjinsp(osmode)"
 msgid "Object snap"
 msgstr ""
 
@@ -1498,6 +1594,7 @@ msgid "Styles (objinsp)"
 msgstr ""
 
 #: zcadexternal.menucommand~setobjinsp(vars)
+msgctxt "zcadexternal.menucommand~setobjinsp(vars)"
 msgid "Options"
 msgstr ""
 
@@ -1558,6 +1655,7 @@ msgid "DB"
 msgstr ""
 
 #: zcadexternal.menu~debug
+msgctxt "zcadexternal.menu~debug"
 msgid "Debug"
 msgstr ""
 
@@ -1586,6 +1684,7 @@ msgid "Format"
 msgstr ""
 
 #: zcadexternal.menu~help
+msgctxt "zcadexternal.menu~help"
 msgid "Help"
 msgstr ""
 
@@ -1630,10 +1729,12 @@ msgid "Modify"
 msgstr ""
 
 #: zcadexternal.menu~object snap
+msgctxt "zcadexternal.menu~object snap"
 msgid "Object snap"
 msgstr ""
 
 #: zcadexternal.menu~object snap
+msgctxt "zcadexternal.menu~object snap"
 msgid "Object snap"
 msgstr ""
 
@@ -1694,6 +1795,7 @@ msgid "Show window"
 msgstr ""
 
 #: zcadexternal.menu~text
+msgctxt "zcadexternal.menu~text"
 msgid "Text"
 msgstr ""
 
@@ -1718,10 +1820,12 @@ msgid "Zoom"
 msgstr ""
 
 #: zcadexternal.oimultiproperty_angle~
+msgctxt "zcadexternal.oimultiproperty_angle~"
 msgid "Angle"
 msgstr ""
 
 #: zcadexternal.oimultiproperty_angle~
+msgctxt "zcadexternal.oimultiproperty_angle~"
 msgid "Angle"
 msgstr ""
 
@@ -1786,6 +1890,7 @@ msgid "Closed"
 msgstr ""
 
 #: zcadexternal.oimultiproperty_color~
+msgctxt "zcadexternal.oimultiproperty_color~"
 msgid "Color"
 msgstr ""
 
@@ -1822,18 +1927,22 @@ msgid "Diameter"
 msgstr ""
 
 #: zcadexternal.oimultiproperty_dimstyle~
+msgctxt "zcadexternal.oimultiproperty_dimstyle~"
 msgid "Style"
 msgstr ""
 
 #: zcadexternal.oimultiproperty_dimstyle~
+msgctxt "zcadexternal.oimultiproperty_dimstyle~"
 msgid "Style"
 msgstr ""
 
 #: zcadexternal.oimultiproperty_dimstyle~
+msgctxt "zcadexternal.oimultiproperty_dimstyle~"
 msgid "Style"
 msgstr ""
 
 #: zcadexternal.oimultiproperty_dimstyle~
+msgctxt "zcadexternal.oimultiproperty_dimstyle~"
 msgid "Style"
 msgstr ""
 
@@ -1886,10 +1995,12 @@ msgid "End Z"
 msgstr ""
 
 #: zcadexternal.oimultiproperty_height~
+msgctxt "zcadexternal.oimultiproperty_height~"
 msgid "Height"
 msgstr ""
 
 #: zcadexternal.oimultiproperty_height~
+msgctxt "zcadexternal.oimultiproperty_height~"
 msgid "Height"
 msgstr ""
 
@@ -1942,34 +2053,42 @@ msgid "Insert Z"
 msgstr ""
 
 #: zcadexternal.oimultiproperty_layer~
+msgctxt "zcadexternal.oimultiproperty_layer~"
 msgid "Layer"
 msgstr ""
 
 #: zcadexternal.oimultiproperty_leaderscale~
+msgctxt "zcadexternal.oimultiproperty_leaderscale~"
 msgid "Scale"
 msgstr ""
 
 #: zcadexternal.oimultiproperty_leadersize~
+msgctxt "zcadexternal.oimultiproperty_leadersize~"
 msgid "Size"
 msgstr ""
 
 #: zcadexternal.oimultiproperty_leaderwidth~
+msgctxt "zcadexternal.oimultiproperty_leaderwidth~"
 msgid "Width"
 msgstr ""
 
 #: zcadexternal.oimultiproperty_length~
+msgctxt "zcadexternal.oimultiproperty_length~"
 msgid "Length"
 msgstr ""
 
 #: zcadexternal.oimultiproperty_length~
+msgctxt "zcadexternal.oimultiproperty_length~"
 msgid "Length"
 msgstr ""
 
 #: zcadexternal.oimultiproperty_length~
+msgctxt "zcadexternal.oimultiproperty_length~"
 msgid "Length"
 msgstr ""
 
 #: zcadexternal.oimultiproperty_length~
+msgctxt "zcadexternal.oimultiproperty_length~"
 msgid "Length"
 msgstr ""
 
@@ -1994,10 +2113,12 @@ msgid "Major radius"
 msgstr ""
 
 #: zcadexternal.oimultiproperty_name~
+msgctxt "zcadexternal.oimultiproperty_name~"
 msgid "Name"
 msgstr ""
 
 #: zcadexternal.oimultiproperty_name~
+msgctxt "zcadexternal.oimultiproperty_name~"
 msgid "Name"
 msgstr ""
 
@@ -2086,6 +2207,7 @@ msgid "Normal Z"
 msgstr ""
 
 #: zcadexternal.oimultiproperty_oblique~
+msgctxt "zcadexternal.oimultiproperty_oblique~"
 msgid "Oblique"
 msgstr ""
 
@@ -2094,26 +2216,32 @@ msgid "Radius ratio"
 msgstr ""
 
 #: zcadexternal.oimultiproperty_radius~
+msgctxt "zcadexternal.oimultiproperty_radius~"
 msgid "Radius"
 msgstr ""
 
 #: zcadexternal.oimultiproperty_radius~
+msgctxt "zcadexternal.oimultiproperty_radius~"
 msgid "Radius"
 msgstr ""
 
 #: zcadexternal.oimultiproperty_rotation~
+msgctxt "zcadexternal.oimultiproperty_rotation~"
 msgid "Rotation"
 msgstr ""
 
 #: zcadexternal.oimultiproperty_rotation~
+msgctxt "zcadexternal.oimultiproperty_rotation~"
 msgid "Rotation"
 msgstr ""
 
 #: zcadexternal.oimultiproperty_rotation~
+msgctxt "zcadexternal.oimultiproperty_rotation~"
 msgid "Rotation"
 msgstr ""
 
 #: zcadexternal.oimultiproperty_rotation~
+msgctxt "zcadexternal.oimultiproperty_rotation~"
 msgid "Rotation"
 msgstr ""
 
@@ -2218,18 +2346,22 @@ msgid "Content"
 msgstr ""
 
 #: zcadexternal.oimultiproperty_txtjustify~
+msgctxt "zcadexternal.oimultiproperty_txtjustify~"
 msgid "Justify"
 msgstr ""
 
 #: zcadexternal.oimultiproperty_txtjustify~
+msgctxt "zcadexternal.oimultiproperty_txtjustify~"
 msgid "Justify"
 msgstr ""
 
 #: zcadexternal.oimultiproperty_txtstyle~
+msgctxt "zcadexternal.oimultiproperty_txtstyle~"
 msgid "Style"
 msgstr ""
 
 #: zcadexternal.oimultiproperty_txtstyle~
+msgctxt "zcadexternal.oimultiproperty_txtstyle~"
 msgid "Style"
 msgstr ""
 
@@ -2262,14 +2394,17 @@ msgid "Vertex count"
 msgstr ""
 
 #: zcadexternal.oimultiproperty_widthfactor~
+msgctxt "zcadexternal.oimultiproperty_widthfactor~"
 msgid "Width factor"
 msgstr ""
 
 #: zcadexternal.oimultiproperty_width~
+msgctxt "zcadexternal.oimultiproperty_width~"
 msgid "Width"
 msgstr ""
 
 #: zcadexternal.rgbcolorname~blue
+msgctxt "zcadexternal.rgbcolorname~blue"
 msgid "Blue"
 msgstr ""
 
@@ -2278,6 +2413,7 @@ msgid "Cyan"
 msgstr ""
 
 #: zcadexternal.rgbcolorname~green
+msgctxt "zcadexternal.rgbcolorname~green"
 msgid "Green"
 msgstr ""
 
@@ -2286,6 +2422,7 @@ msgid "Magenta"
 msgstr ""
 
 #: zcadexternal.rgbcolorname~red
+msgctxt "zcadexternal.rgbcolorname~red"
 msgid "Red"
 msgstr ""
 
@@ -2378,14 +2515,17 @@ msgid "Block type"
 msgstr ""
 
 #: zcadexternal.tblockinsert~blocks
+msgctxt "zcadexternal.tblockinsert~blocks"
 msgid "Block"
 msgstr ""
 
 #: zcadexternal.tblockinsert~rotation
+msgctxt "zcadexternal.tblockinsert~rotation"
 msgid "Rotation"
 msgstr ""
 
 #: zcadexternal.tblockinsert~scale
+msgctxt "zcadexternal.tblockinsert~scale"
 msgid "Scale"
 msgstr ""
 
@@ -2406,6 +2546,7 @@ msgid "Save Variables"
 msgstr ""
 
 #: zcadexternal.tblockrotateparams~absolytly
+msgctxt "zcadexternal.tblockrotateparams~absolytly"
 msgid "Absolytly"
 msgstr ""
 
@@ -2414,6 +2555,7 @@ msgid "Rotation angle"
 msgstr ""
 
 #: zcadexternal.tblockscaleparams~absolytly
+msgctxt "zcadexternal.tblockscaleparams~absolytly"
 msgid "Absolytly"
 msgstr ""
 
@@ -2422,18 +2564,22 @@ msgid "New scale"
 msgstr ""
 
 #: zcadexternal.tboundingbox~lbn
+msgctxt "zcadexternal.tboundingbox~lbn"
 msgid "Near"
 msgstr ""
 
 #: zcadexternal.tboundingbox~rtf
+msgctxt "zcadexternal.tboundingbox~rtf"
 msgid "Far"
 msgstr ""
 
 #: zcadexternal.tboundingrect~lb
+msgctxt "zcadexternal.tboundingrect~lb"
 msgid "Near"
 msgstr ""
 
 #: zcadexternal.tboundingrect~rt
+msgctxt "zcadexternal.tboundingrect~rt"
 msgid "Far"
 msgstr ""
 
@@ -2450,6 +2596,7 @@ msgid "P=F(I,Cos)"
 msgstr ""
 
 #: zcadexternal.tcanvasdata~rd_renderer
+msgctxt "zcadexternal.tcanvasdata~rd_renderer"
 msgid "Device"
 msgstr ""
 
@@ -2510,10 +2657,12 @@ msgid "Object track timer interval"
 msgstr ""
 
 #: zcadexternal.tdesigning~dsgn_selnew
+msgctxt "zcadexternal.tdesigning~dsgn_selnew"
 msgid "New selection set"
 msgstr ""
 
 #: zcadexternal.tdesigning~dsgn_selsamename
+msgctxt "zcadexternal.tdesigning~dsgn_selsamename"
 msgid "Auto select devices with same name"
 msgstr ""
 
@@ -2530,26 +2679,32 @@ msgid "Not Diff"
 msgstr ""
 
 #: zcadexternal.tdimunit~duarchitectural
+msgctxt "zcadexternal.tdimunit~duarchitectural"
 msgid "Architectural"
 msgstr ""
 
 #: zcadexternal.tdimunit~dudecimal
+msgctxt "zcadexternal.tdimunit~dudecimal"
 msgid "Decimal"
 msgstr ""
 
 #: zcadexternal.tdimunit~duengineering
+msgctxt "zcadexternal.tdimunit~duengineering"
 msgid "Engineering"
 msgstr ""
 
 #: zcadexternal.tdimunit~dufractional
+msgctxt "zcadexternal.tdimunit~dufractional"
 msgid "Fractional"
 msgstr ""
 
 #: zcadexternal.tdimunit~duscientific
+msgctxt "zcadexternal.tdimunit~duscientific"
 msgid "Scientific"
 msgstr ""
 
 #: zcadexternal.tdimunit~dusystem
+msgctxt "zcadexternal.tdimunit~dusystem"
 msgid "System"
 msgstr ""
 
@@ -2646,6 +2801,7 @@ msgid "Text style"
 msgstr ""
 
 #: zcadexternal.tdwg~dwg_drawgrid
+msgctxt "zcadexternal.tdwg~dwg_drawgrid"
 msgid "Display grid"
 msgstr ""
 
@@ -2690,14 +2846,17 @@ msgid "Snap settings"
 msgstr ""
 
 #: zcadexternal.tdwg~dwg_snapgrid
+msgctxt "zcadexternal.tdwg~dwg_snapgrid"
 msgid "Snap"
 msgstr ""
 
 #: zcadexternal.tdxfcolor~name
+msgctxt "zcadexternal.tdxfcolor~name"
 msgid "Name"
 msgstr ""
 
 #: zcadexternal.tdxfcolor~rgb
+msgctxt "zcadexternal.tdxfcolor~rgb"
 msgid "Color"
 msgstr ""
 
@@ -2710,30 +2869,37 @@ msgid "Trace (pointer)"
 msgstr ""
 
 #: zcadexternal.telcablecomparam~traces
+msgctxt "zcadexternal.telcablecomparam~traces"
 msgid "Trace"
 msgstr ""
 
 #: zcadexternal.telleadercomparam~scale
+msgctxt "zcadexternal.telleadercomparam~scale"
 msgid "Scale"
 msgstr ""
 
 #: zcadexternal.telleadercomparam~size
+msgctxt "zcadexternal.telleadercomparam~size"
 msgid "Size"
 msgstr ""
 
 #: zcadexternal.telleadercomparam~twidth
+msgctxt "zcadexternal.telleadercomparam~twidth"
 msgid "Width"
 msgstr ""
 
 #: zcadexternal.tentityadress~owner
+msgctxt "zcadexternal.tentityadress~owner"
 msgid "Adress"
 msgstr ""
 
 #: zcadexternal.tentityadress~selfindex
+msgctxt "zcadexternal.tentityadress~selfindex"
 msgid "Position"
 msgstr ""
 
 #: zcadexternal.tentityprocess~tep_erase
+msgctxt "zcadexternal.tentityprocess~tep_erase"
 msgid "Erase"
 msgstr ""
 
@@ -2750,6 +2916,7 @@ msgid "Use symbols *, ?"
 msgstr ""
 
 #: zcadexternal.tfinddeviceparam~findstring
+msgctxt "zcadexternal.tfinddeviceparam~findstring"
 msgid "Text"
 msgstr ""
 
@@ -2790,10 +2957,12 @@ msgid "New value"
 msgstr ""
 
 #: zcadexternal.tgdidata~rd_renderer
+msgctxt "zcadexternal.tgdidata~rd_renderer"
 msgid "Device"
 msgstr ""
 
 #: zcadexternal.tgdidata~rd_version
+msgctxt "zcadexternal.tgdidata~rd_version"
 msgid "Version"
 msgstr ""
 
@@ -2802,6 +2971,7 @@ msgid "Current degradation factor"
 msgstr ""
 
 #: zcadexternal.timagedegradation~rd_id_enabled
+msgctxt "zcadexternal.timagedegradation~rd_id_enabled"
 msgid "Enabled"
 msgstr ""
 
@@ -2818,14 +2988,17 @@ msgid "MText"
 msgstr ""
 
 #: zcadexternal.timode~tim_text
+msgctxt "zcadexternal.timode~tim_text"
 msgid "Text"
 msgstr ""
 
 #: zcadexternal.tinserttype~tit_block
+msgctxt "zcadexternal.tinserttype~tit_block"
 msgid "Block"
 msgstr ""
 
 #: zcadexternal.tinserttype~tit_device
+msgctxt "zcadexternal.tinserttype~tit_device"
 msgid "Device"
 msgstr ""
 
@@ -2954,6 +3127,7 @@ msgid "Nets"
 msgstr ""
 
 #: zcadexternal.tlayercontrol~enabled
+msgctxt "zcadexternal.tlayercontrol~enabled"
 msgid "Enabled"
 msgstr ""
 
@@ -2962,22 +3136,27 @@ msgid "Layer name"
 msgstr ""
 
 #: zcadexternal.tlunits~luarchitectural
+msgctxt "zcadexternal.tlunits~luarchitectural"
 msgid "Architectural"
 msgstr ""
 
 #: zcadexternal.tlunits~ludecimal
+msgctxt "zcadexternal.tlunits~ludecimal"
 msgid "Decimal"
 msgstr ""
 
 #: zcadexternal.tlunits~luengineering
+msgctxt "zcadexternal.tlunits~luengineering"
 msgid "Engineering"
 msgstr ""
 
 #: zcadexternal.tlunits~lufractional
+msgctxt "zcadexternal.tlunits~lufractional"
 msgid "Fractional"
 msgstr ""
 
 #: zcadexternal.tlunits~luscientific
+msgctxt "zcadexternal.tlunits~luscientific"
 msgid "Scientific"
 msgstr ""
 
@@ -3030,6 +3209,7 @@ msgid "Source entities"
 msgstr ""
 
 #: zcadexternal.tmseditor~generalunit
+msgctxt "zcadexternal.tmseditor~generalunit"
 msgid "General"
 msgstr ""
 
@@ -3042,6 +3222,7 @@ msgid "Misc"
 msgstr ""
 
 #: zcadexternal.tmseditor~summaryunit
+msgctxt "zcadexternal.tmseditor~summaryunit"
 msgid "Summary"
 msgstr ""
 
@@ -3086,6 +3267,7 @@ msgid ""
 msgstr ""
 
 #: zcadexternal.tnumberingparams~startnumber
+msgctxt "zcadexternal.tnumberingparams~startnumber"
 msgid "Start"
 msgstr ""
 
@@ -3094,6 +3276,7 @@ msgid "Always use multiselect wrapper"
 msgstr ""
 
 #: zcadexternal.tobjinspinterface~intf_objinsp_oldstyledraw
+msgctxt "zcadexternal.tobjinspinterface~intf_objinsp_oldstyledraw"
 msgid "Old style"
 msgstr ""
 
@@ -3154,6 +3337,7 @@ msgid "Max width"
 msgstr ""
 
 #: zcadexternal.topengldata~rd_renderer
+msgctxt "zcadexternal.topengldata~rd_renderer"
 msgid "Device"
 msgstr ""
 
@@ -3166,6 +3350,7 @@ msgid "Vendor"
 msgstr ""
 
 #: zcadexternal.topengldata~rd_version
+msgctxt "zcadexternal.topengldata~rd_version"
 msgid "Version"
 msgstr ""
 
@@ -3222,6 +3407,7 @@ msgid "Height of installation"
 msgstr ""
 
 #: zcadexternal.topsplacesmokedetectorortoparam~inserttype
+msgctxt "zcadexternal.topsplacesmokedetectorortoparam~inserttype"
 msgid "Insert"
 msgstr ""
 
@@ -3234,6 +3420,7 @@ msgid "Sensor-Wall(standard)"
 msgstr ""
 
 #: zcadexternal.topsplacesmokedetectorortoparam~normalizepoint
+msgctxt "zcadexternal.topsplacesmokedetectorortoparam~normalizepoint"
 msgid "Normalize to grid (if enabled)"
 msgstr ""
 
@@ -3246,6 +3433,7 @@ msgid "Plan scale"
 msgstr ""
 
 #: zcadexternal.topsplacesmokedetectorortoparam~scaleblock
+msgctxt "zcadexternal.topsplacesmokedetectorortoparam~scaleblock"
 msgid "Blocks scale"
 msgstr ""
 
@@ -3262,6 +3450,7 @@ msgid "\"Start\" signal"
 msgstr ""
 
 #: zcadexternal.tortodevplaceparam~angle
+msgctxt "zcadexternal.tortodevplaceparam~angle"
 msgid "Rotation"
 msgstr ""
 
@@ -3278,10 +3467,12 @@ msgid "Type of placement"
 msgstr ""
 
 #: zcadexternal.tortodevplaceparam~name
+msgctxt "zcadexternal.tortodevplaceparam~name"
 msgid "Block"
 msgstr ""
 
 #: zcadexternal.tortodevplaceparam~normalizepoint
+msgctxt "zcadexternal.tortodevplaceparam~normalizepoint"
 msgid "Normalize to grid (if enabled)"
 msgstr ""
 
@@ -3294,22 +3485,27 @@ msgid "Number of width"
 msgstr ""
 
 #: zcadexternal.tortodevplaceparam~scaleblock
+msgctxt "zcadexternal.tortodevplaceparam~scaleblock"
 msgid "Blocks scale"
 msgstr ""
 
 #: zcadexternal.tosmodeeditor~osm
+msgctxt "zcadexternal.tosmodeeditor~osm"
 msgid "Snap"
 msgstr ""
 
 #: zcadexternal.tosmodeeditor~trace
+msgctxt "zcadexternal.tosmodeeditor~trace"
 msgid "Trace"
 msgstr ""
 
 #: zcadexternal.tosmode~kosm_3
+msgctxt "zcadexternal.tosmode~kosm_3"
 msgid "1/3"
 msgstr ""
 
 #: zcadexternal.tosmode~kosm_4
+msgctxt "zcadexternal.tosmode~kosm_4"
 msgid "1/4"
 msgstr ""
 
@@ -3318,6 +3514,7 @@ msgid "Apparent intersection"
 msgstr ""
 
 #: zcadexternal.tosmode~kosm_center
+msgctxt "zcadexternal.tosmode~kosm_center"
 msgid "Center"
 msgstr ""
 
@@ -3410,6 +3607,7 @@ msgid "B"
 msgstr ""
 
 #: zcadexternal.tphase~_c
+msgctxt "zcadexternal.tphase~_c"
 msgid "C"
 msgstr ""
 
@@ -3554,14 +3752,17 @@ msgid "Alpha"
 msgstr ""
 
 #: zcadexternal.trgb~b
+msgctxt "zcadexternal.trgb~b"
 msgid "Blue"
 msgstr ""
 
 #: zcadexternal.trgb~g
+msgctxt "zcadexternal.trgb~g"
 msgid "Green"
 msgstr ""
 
 #: zcadexternal.trgb~r
+msgctxt "zcadexternal.trgb~r"
 msgid "Red"
 msgstr ""
 
@@ -3578,10 +3779,12 @@ msgid "Time between autosaves"
 msgstr ""
 
 #: zcadexternal.tsave~save_auto_on
+msgctxt "zcadexternal.tsave~save_auto_on"
 msgid "Autosave"
 msgstr ""
 
 #: zcadexternal.tselblockparams~diffblockdevice
+msgctxt "zcadexternal.tselblockparams~diffblockdevice"
 msgid "Block and Device"
 msgstr ""
 
@@ -3614,6 +3817,7 @@ msgid "Blocks"
 msgstr ""
 
 #: zcadexternal.tselsimparams~general
+msgctxt "zcadexternal.tselsimparams~general"
 msgid "General"
 msgstr ""
 
@@ -3674,22 +3878,27 @@ msgid "Program version"
 msgstr ""
 
 #: zcadexternal.ttablecelljustify~jcc
+msgctxt "zcadexternal.ttablecelljustify~jcc"
 msgid "TopCenter"
 msgstr ""
 
 #: zcadexternal.ttablecelljustify~jcl
+msgctxt "zcadexternal.ttablecelljustify~jcl"
 msgid "TopLeft"
 msgstr ""
 
 #: zcadexternal.ttablecelljustify~jcr
+msgctxt "zcadexternal.ttablecelljustify~jcr"
 msgid "TopRight"
 msgstr ""
 
 #: zcadexternal.ttextinsertparams~h
+msgctxt "zcadexternal.ttextinsertparams~h"
 msgid "Height"
 msgstr ""
 
 #: zcadexternal.ttextinsertparams~justify
+msgctxt "zcadexternal.ttextinsertparams~justify"
 msgid "Justify"
 msgstr ""
 
@@ -3702,6 +3911,7 @@ msgid "Entity"
 msgstr ""
 
 #: zcadexternal.ttextinsertparams~oblique
+msgctxt "zcadexternal.ttextinsertparams~oblique"
 msgid "Oblique"
 msgstr ""
 
@@ -3710,18 +3920,22 @@ msgid "Run text editor"
 msgstr ""
 
 #: zcadexternal.ttextinsertparams~style
+msgctxt "zcadexternal.ttextinsertparams~style"
 msgid "Style"
 msgstr ""
 
 #: zcadexternal.ttextinsertparams~text
+msgctxt "zcadexternal.ttextinsertparams~text"
 msgid "Text"
 msgstr ""
 
 #: zcadexternal.ttextinsertparams~width
+msgctxt "zcadexternal.ttextinsertparams~width"
 msgid "Width"
 msgstr ""
 
 #: zcadexternal.ttextinsertparams~widthfactor
+msgctxt "zcadexternal.ttextinsertparams~widthfactor"
 msgid "Width factor"
 msgstr ""
 
@@ -3738,6 +3952,7 @@ msgid "BottomRight"
 msgstr ""
 
 #: zcadexternal.ttextjustify~jsbtc
+msgctxt "zcadexternal.ttextjustify~jsbtc"
 msgid "Center"
 msgstr ""
 
@@ -3762,14 +3977,17 @@ msgid "MiddleRight"
 msgstr ""
 
 #: zcadexternal.ttextjustify~jstc
+msgctxt "zcadexternal.ttextjustify~jstc"
 msgid "TopCenter"
 msgstr ""
 
 #: zcadexternal.ttextjustify~jstl
+msgctxt "zcadexternal.ttextjustify~jstl"
 msgid "TopLeft"
 msgstr ""
 
 #: zcadexternal.ttextjustify~jstr
+msgctxt "zcadexternal.ttextjustify~jstr"
 msgid "TopRight"
 msgstr ""
 
@@ -3786,6 +4004,7 @@ msgid "90 deg"
 msgstr ""
 
 #: zcadexternal.ttracemode~angle
+msgctxt "zcadexternal.ttracemode~angle"
 msgid "Angle"
 msgstr ""
 
@@ -3794,10 +4013,12 @@ msgid "Z Axis"
 msgstr ""
 
 #: zcadexternal.ttreeadress~owner
+msgctxt "zcadexternal.ttreeadress~owner"
 msgid "Adress"
 msgstr ""
 
 #: zcadexternal.ttreeadress~selfindex
+msgctxt "zcadexternal.ttreeadress~selfindex"
 msgid "Position"
 msgstr ""
 
@@ -3814,6 +4035,7 @@ msgid "0"
 msgstr ""
 
 #: zcadexternal.tuprec~uprec1
+msgctxt "zcadexternal.tuprec~uprec1"
 msgid "0.0"
 msgstr ""
 
@@ -3854,6 +4076,7 @@ msgid "Cable params"
 msgstr ""
 
 #: zcadexternal.variablecategory~center
+msgctxt "zcadexternal.variablecategory~center"
 msgid "Center"
 msgstr ""
 
@@ -3866,6 +4089,7 @@ msgid "Delta"
 msgstr ""
 
 #: zcadexternal.variablecategory~desc
+msgctxt "zcadexternal.variablecategory~desc"
 msgid "Description"
 msgstr ""
 
@@ -3878,6 +4102,7 @@ msgid "El(deprecated)"
 msgstr ""
 
 #: zcadexternal.variablecategory~end
+msgctxt "zcadexternal.variablecategory~end"
 msgid "End"
 msgstr ""
 
@@ -3886,6 +4111,7 @@ msgid "Group connection"
 msgstr ""
 
 #: zcadexternal.variablecategory~insert
+msgctxt "zcadexternal.variablecategory~insert"
 msgid "Insert"
 msgstr ""
 
@@ -3894,6 +4120,7 @@ msgid "Length params"
 msgstr ""
 
 #: zcadexternal.variablecategory~nmo
+msgctxt "zcadexternal.variablecategory~nmo"
 msgid "Name"
 msgstr ""
 
@@ -3906,14 +4133,17 @@ msgid "Function:object"
 msgstr ""
 
 #: zcadexternal.variablecategory~scale
+msgctxt "zcadexternal.variablecategory~scale"
 msgid "Scale"
 msgstr ""
 
 #: zcadexternal.variablecategory~start
+msgctxt "zcadexternal.variablecategory~start"
 msgid "Start"
 msgstr ""
 
 #: zcadexternal.variablecategory~summary
+msgctxt "zcadexternal.variablecategory~summary"
 msgid "Summary"
 msgstr ""
 

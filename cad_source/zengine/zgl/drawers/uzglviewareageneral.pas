@@ -31,6 +31,10 @@ const
   ontracdist=10;
   ontracignoredist=25;
 
+resourcestring
+  rswonlyparalel='Works only for parallel projection!';
+  rswonlytop='Works only for top view!';
+
 type
     TOnActivateProc=Procedure;
     TCameraChangedNotify=procedure of object;
@@ -1134,10 +1138,11 @@ procedure TGeneralViewArea.ZoomToVolume(Volume:TBoundingBox);
     if param.projtype = PROJPerspective then
                                             begin
                                                  //historyout('Zoom: Works only for parallel projection!');
-                                                 DebugLn('{WH}'+'Zoom: Works only for parallel projection!');
+                                                 DebugLn('{WH}Zoom:'+rswonlyparalel);
                                             end;
     //historyout('Zoom: Works only for top view!');
-    DebugLn('{WH}'+'Zoom: Works only for top view!');
+    DebugLn('{WH}Zoom:'+rswonlytop);
+
 
 
     CalcOptimalMatrix;

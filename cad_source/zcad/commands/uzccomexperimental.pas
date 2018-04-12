@@ -450,7 +450,7 @@ begin
 
    zcShowCommandParams(PInternalRTTITypeDesk,@RectangParam);
 
-    if commandmanager.get3dpoint('Specify first point:',pe.p1) then
+    if commandmanager.get3dpoint(rscmSpecifyFirstPoint,pe.p1) then
     begin
 
      // pf:=PInternalRTTITypeDesk^.FindField('PolyWidth');
@@ -501,7 +501,7 @@ begin
          //PUser^.
          //PUser^.TypeName;
    //   if commandmanager.Get3DPointInteractive('Specify second point:',pe.p2,@InteractivePolyLineManipulator,pline) then
-      if commandmanager.Get3DPointInteractive('Specify second point:',pe.p2,@InteractiveLWRectangleManipulator,polyObj) then
+      if commandmanager.Get3DPointInteractive(rscmSpecifySecondPoint,pe.p2,@InteractiveLWRectangleManipulator,polyObj) then
 //      if commandmanager.Get3DPointInteractive(PUser^.TypeName,pe.p2,@Interactive2DRectangleManipulator,polyObj) then
       begin
           //незабываем вконце добавить всё что наконструировали в чертеж//

@@ -203,7 +203,7 @@ begin
   dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
   // try to get from the user first point
   // пытаемся получить от пользователя первую точку
-  if commandmanager.get3dpoint('Specify first point:',p1) then
+  if commandmanager.get3dpoint(rscmSpecifyFirstPoint,p1) then
     begin
       // Create a "temporary" line in the constructing entities list
       // Создаем "временную" линию в списке конструируемых примитивов
@@ -219,7 +219,7 @@ begin
  
       //try to get the second point from the user, using the interactive function to draw a line
       //пытаемся получить от пользователя вторую точку, используем интерактивную функцию для черчения линии
-      if commandmanager.Get3DPointInteractive('Specify second point:',p2,@InteractiveLineEndManipulator,pline) then  
+      if commandmanager.Get3DPointInteractive(rscmSpecifySecondPoint,p2,@InteractiveLineEndManipulator,pline) then
       begin
         // clear the constructed objects list (temporary line will be removed)
         // очищаем список конструируемых объектов (временная линия будет удалена)
@@ -240,7 +240,7 @@ begin
         // use the interactive function for final configuration entity
         //  используем интерактивную функцию для окончательной настройки примитива
         InteractiveADimManipulator(pd,p2,false);
-        if commandmanager.Get3DPointInteractive( 'Specify third point:',
+        if commandmanager.Get3DPointInteractive( rscmSpecifyThirdPoint,
                                                   p3,
                                                   @InteractiveADimManipulator,
                                                   pd )
@@ -480,16 +480,16 @@ var
     pe:T3PointPentity;
     dc:TDrawContext;
 begin
-    if commandmanager.get3dpoint('Specify first point:',pe.p1) then
+    if commandmanager.get3dpoint(rscmSpecifyFirstPoint,pe.p1) then
     begin
          pline := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,drawings.GetCurrentROOT));
          pline^.CoordInOCS.lBegin:=pe.p1;
          InteractiveLineEndManipulator(pline,pe.p1,false);
-      if commandmanager.Get3DPointInteractive('Specify second point:',pe.p2,@InteractiveLineEndManipulator,pline) then
+      if commandmanager.Get3DPointInteractive(rscmSpecifySecondPoint,pe.p2,@InteractiveLineEndManipulator,pline) then
       begin
            drawings.GetCurrentDWG^.FreeConstructionObjects;
            pe.pentity:= GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBArcID,drawings.GetCurrentROOT));
-        if commandmanager.Get3DPointInteractive('Specify third point:',pe.p3,@InteractiveArcManipulator,@pe) then
+        if commandmanager.Get3DPointInteractive(rscmSpecifyThirdPoint,pe.p3,@InteractiveArcManipulator,@pe) then
           begin
                drawings.GetCurrentDWG^.FreeConstructionObjects;
                pa := AllocEnt(GDBArcID);
@@ -529,12 +529,12 @@ else if s='3P' then pe.cdm:=TCDM_3P
 else pe.cdm:=TCDM_CR;
 
     pe.npoint:=0;
-    if commandmanager.get3dpoint('Specify first point:',pe.p1) then
+    if commandmanager.get3dpoint(rscmSpecifyFirstPoint,pe.p1) then
     begin
          inc(pe.npoint);
          pe.pentity := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBCircleID,drawings.GetCurrentROOT));
          InteractiveSmartCircleManipulator(@pe,pe.p1,false);
-      if commandmanager.Get3DPointInteractive( 'Specify second point:',
+      if commandmanager.Get3DPointInteractive( rscmSpecifySecondPoint,
                                                pe.p2,
                                                @InteractiveSmartCircleManipulator,
                                                @pe) then
@@ -542,7 +542,7 @@ else pe.cdm:=TCDM_CR;
            if pe.cdm=TCDM_3P then
            begin
                 inc(pe.npoint);
-                if commandmanager.Get3DPointInteractive('Specify second point:',pe.p3,@InteractiveSmartCircleManipulator,@pe) then
+                if commandmanager.Get3DPointInteractive(rscmSpecifySecondPoint,pe.p3,@InteractiveSmartCircleManipulator,@pe) then
                 begin
                      drawings.GetCurrentDWG^.FreeConstructionObjects;
                      pcircle := AllocEnt(GDBCircleID);
@@ -571,7 +571,7 @@ var
     //pe:T3PointCircleModePentity;
     p1,p2:gdbvertex;
 begin
-    if commandmanager.get3dpoint('Specify first point:',p1) then                //просим первую точку
+    if commandmanager.get3dpoint(rscmSpecifyFirstPoint,p1) then                //просим первую точку
     if commandmanager.get3dpoint('Specify first second:',p2) then               //просим вторую точку
     begin
       //старый способ
@@ -935,11 +935,11 @@ begin
     DrawSuperlineParams.pu:=psu;
     zcShowCommandParams(pointer(SysUnit^.TypeName2PTD('TDrawSuperlineParams')),@DrawSuperlineParams);
     UndoMarcerIsPlazed:=false;
-    if GetInteractiveLine('Specify first point:','Specify second point:',p1,p2) then
+    if GetInteractiveLine(rscmSpecifyFirstPoint,rscmSpecifySecondPoint,p1,p2) then
     begin
       createline;
       p1:=p2;
-      while GetInteractiveLineFrom1to2('Specify second point:',p1,p2)do
+      while GetInteractiveLineFrom1to2(rscmSpecifySecondPoint,p1,p2)do
       begin
        createline;
        p1:=p2;

@@ -758,9 +758,18 @@ begin
   ZCADMainWindow.PageControl.ActivePageIndex:=strtoint(Operands);
   result:=cmd_ok;
 end;
+procedure FixButtonCaption(_tb:TToolBar;_control:tcontrol);
+begin
+  if _control is TToolButton then
+    if assigned((_control as TToolButton).action) then
+       if ((_control as TToolButton).action)is TmyAction then
+         (_control as TToolButton).Caption:=(((_control as TToolButton).action)as TmyAction).imgstr;
+end;
+
 function LoadActions_com(operands:TCommandOperands):TCommandResult;
 begin
   ToolBarsManager.LoadActions(ExpandPath(operands));
+  ToolBarsManager.IterateToolBarsContent(FixButtonCaption);
   result:=cmd_ok;
 end;
 function LoadMenus_com(operands:TCommandOperands):TCommandResult;

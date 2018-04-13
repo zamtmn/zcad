@@ -20,6 +20,8 @@ type
   TActionCreateFunc=procedure (aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList) of object;
   TMenuCreateFunc=procedure (aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem) of object;
 
+  TIterateToolbarsContentProc=procedure (_tb:TToolBar;_control:tcontrol);
+
   TTBCreateFunc=function (aName,aType: string):TToolBar of object;
   TTBItemCreateFunc=procedure (aNode: TDomNode; TB:TToolBar) of object;
   TTBRegisterInAPPFunc=procedure (aTBNode: TDomNode;aName,aType: string; Data:Pointer) of object;
@@ -53,6 +55,7 @@ type
     procedure SaveToolBarsToConfig(Config: TConfigStorage);
     procedure RestoreToolBarsFromConfig(Config: TConfigStorage);
     procedure ShowFloatToolbar(TBName:String;r:trect);
+    procedure IterateToolBarsContent(ip:TIterateToolbarsContentProc);
     function FindToolBar(TBName:String;out tb:TToolBar):boolean;
     procedure LoadToolBarsContent(filename:string);
     procedure LoadActions(filename:string);
@@ -543,6 +546,44 @@ begin
   if TBNode<>nil then begin
     TBType:=getAttrValue(TBNode,'Type','');
     CreateToolbarContent(tb,TBNode);
+  end;
+end;
+procedure IterateTBContent(tb:TToolBar;ip:TIterateToolbarsContentProc);
+var
+  i:integer;
+begin
+  for i:=0 to tb.ControlCount-1 do
+    ip(tb,tb.Controls[i]);
+end;
+procedure TToolBarsManager.IterateToolBarsContent(ip:TIterateToolbarsContentProc);
+var
+  i,j:integer;
+  cb:TCoolBar;
+  tf:TCustomDockForm;
+  tb:TToolBar;
+begin
+  for i:=fmainform.ComponentCount-1 downto 0 do
+  if fmainform.Components[i] is TControl then
+  begin
+    if fmainform.Components[i] is TCoolBar then
+    begin
+      cb:=fmainform.Components[i] as TCoolBar;
+      for j:=cb.Bands.Count-1 downto 0 do
+      begin
+        if cb.Bands[j].Control is TToolBar then
+        begin
+          IterateTBContent(ttoolbar(cb.Bands[j].Control),ip)
+        end;
+      end;
+    end;
+    if fmainform.Components[i] is TToolBar then
+    begin
+      tb:=fmainform.Components[i] as TToolBar;
+      if IsFloatToolbar(tb,tf) then
+      begin
+        IterateTBContent(tb,ip)
+      end;
+    end;
   end;
 end;
 function TToolBarsManager.FindToolBar(TBName:String;out tb:TToolBar):boolean;

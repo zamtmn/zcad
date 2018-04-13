@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ToolBarsContent>
+    <ElectrotechActions Type="ToolBar">
+      <Action Name="ACN_DEVNUMBERING"/>
+      <Action Name="ACN_CABLEJOIN"/>
+      <Action Name="ACN_CABLESELECT"/>
+      <Action Name="ACN_CABLELEGEND"/>
+      <Action Name="ACN_MATERIALLEGEND"/>
+      <Action Name="ACN_PLACESMOKEDETECTORORTO"/>
+      <Action Name="ACN_SENSORMARK"/>
+      <Action Name="ACN_PROCESSKZ"/>
+      <Action Name="ACN_REMAUTOCABLES"/>
+      <Action Name="ACN_KIPCDBUILD"/>
+      <Action Name="ACN_KIPLUGTABLEBUILD"/>
+      <Action Name="ACN_REGENZENTS"/>
+    </ElectrotechActions>
+    <ElectrotechEnts Type="ToolBar">
+      <Action Name="ACN_CABLE"/>
+      <Action Name="ACN_WIRE"/>
+      <Action Name="ACN_SUPELINE"/>
+      <Action Name="ACN_LEADER"/>
+    </ElectrotechEnts>
+  </ToolBarsContent>
+</CONFIG>

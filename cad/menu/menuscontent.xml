@@ -439,24 +439,5 @@
       <Separator/>
       <Action Name="ACN_VIEWTOP"/>
     </PopUpMenu>
-    <CreateMenu Name="MainMenu">
-      <File/>
-      <Edit/>
-      <View/>
-      <Format/>
-      <Draw/>
-      <Dimension/>
-      <Modify/>
-      <Schematic/>
-      <Plan/>
-      <Info/>
-      <Model/>
-      <Settings/>
-      <Window/>
-      <Help/>
-      <Debug/>
-      <DB/>
-    </CreateMenu>
-    <SetMainMenu Name="MainMenu"/>
   </MenusContent>
 </CONFIG>

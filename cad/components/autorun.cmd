@@ -1,8 +1,6 @@
 ;Комментарий
 ;*-путь к программе
-LoadActions(*menu/electrotechactionscontent.xml)
-LoadActions(*menu/velecactionscontent.xml)
-LoadMenus(*menu/menuscontent.xml);
+LoadMenus(*menu/menus.xml);
 ;-------------------
 ;Загрузка УГО блоков
 ;-------------------

@@ -208,7 +208,10 @@ function getAttrValue(const aNode:TDomNode;const AttrName,DefValue:string):strin
 var
   aNodeAttr:TDomNode;
 begin
-  aNodeAttr:=aNode.Attributes.GetNamedItem(AttrName);
+  if assigned(aNode)then
+    aNodeAttr:=aNode.Attributes.GetNamedItem(AttrName)
+  else
+    aNodeAttr:=nil;
   if assigned(aNodeAttr) then
                               result:=aNodeAttr.NodeValue
                           else
@@ -443,14 +446,35 @@ begin
 end;
 
 procedure TToolBarsManager.LoadToolBarsContent(filename:string);
+var
+  tempTBConfig:TXMLConfig;
+  tempTBContentNode,TBContentNode,TBSubNode:TDomNode;
 begin
-  if not assigned(TBConfig) then
+  if not assigned(TBConfig) then begin
     TBConfig:=TXMLConfig.Create(nil);
-  TBConfig.Filename:=filename;
+    TBConfig.Filename:=filename;
+  end else begin
+    tempTBConfig:=TXMLConfig.Create(nil);
+    tempTBConfig.Filename:=filename;
+
+    tempTBContentNode:=tempTBConfig.FindNode('ToolBarsContent',false);
+    TBContentNode:=TBConfig.FindNode('ToolBarsContent',false);
+
+    TBSubNode:=tempTBContentNode.FirstChild;
+    while assigned(TBSubNode)do
+    begin
+      TBContentNode.AppendChild(TBSubNode.CloneNode(true,TBContentNode.OwnerDocument));
+
+      TBSubNode:=TBSubNode.NextSibling;
+    end;
+
+    tempTBConfig.Free;
+  end;
 end;
 procedure TToolBarsManager.LoadActions(filename:string);
 var
   ActionsConfig:TXMLConfig;
+
   TBNode,TBSubNode:TDomNode;
   acf:TActionCreateFunc;
 begin
@@ -533,8 +557,11 @@ begin
   TBNode:=FindBarsContent(aName);
   TBType:=getAttrValue(TBNode,'Type','');
   result:=DoTBCreateFunc(aName,TBType);
-  result.FloatingDockSiteClass:=TToolBarsManagerDockForm;
-  CreateToolbarContent(result,TBNode);
+  if assigned(result) then begin
+    result.FloatingDockSiteClass:=TToolBarsManagerDockForm;
+    if assigned(TBNode) then
+      CreateToolbarContent(result,TBNode);
+  end;
 end;
 
 function TToolBarsManager.AddContentToToolbar(tb:TToolBar;aName:string):TToolBar;

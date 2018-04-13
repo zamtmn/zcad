@@ -1005,7 +1005,7 @@ procedure TZCADMainWindow.LoadActions;
 var
    i:integer;
 begin
-  ToolBarsManager.LoadActions(ProgramPath+'menu/actionscontent.xml');
+  //ToolBarsManager.LoadActions(ProgramPath+'menu/actionscontent.xml');
   //ToolBarsManager.LoadActions(ProgramPath+'menu/electrotechactionscontent.xml');
   //ToolBarsManager.LoadActions(ProgramPath+'menu/velecactionscontent.xml');
   StandartActions.OnUpdate:=ActionUpdate;
@@ -1657,7 +1657,7 @@ begin
   ToolBarsManager.RegisterActionCreateFunc('ZAction2Variable',ZAction2VariableReader);
 
   ToolBarsManager.RegisterTBCreateFunc('ToolBar',TBCreateZCADToolBar);
-  ToolBarsManager.LoadToolBarsContent(ProgramPath+'menu/toolbarscontent.xml');
+  //ToolBarsManager.LoadToolBarsContent(ProgramPath+'menu/toolbarscontent.xml');
 
   LoadActions;
   toolbars:=tstringlist.Create;
@@ -1677,6 +1677,8 @@ begin
   ToolBarsManager.RegisterMenuCreateFunc('DebugFiles',ZMainMenuDebugFiles);
   ToolBarsManager.RegisterMenuCreateFunc('CreateMenu',ToolBarsManager.CreateDefaultMenu);
   ToolBarsManager.RegisterMenuCreateFunc('SetMainMenu',ToolBarsManager.DefaultSetMenu);
+
+  commandmanager.executefile('*components/stage0.cmd',drawings.GetCurrentDWG,nil);
 
   CreateAnchorDockingInterface;
 end;

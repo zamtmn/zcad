@@ -192,6 +192,7 @@ type
     procedure ZAction2VariableReader(aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList);
     procedure ZMainMenuItemReader(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     procedure ZPopUpMenuReader(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+    procedure MenuAction(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     procedure ZMainMenuFileHistory(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     procedure ZMainMenuCommandsHistory(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     procedure ZMainMenuCommand(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
@@ -1005,8 +1006,8 @@ var
    i:integer;
 begin
   ToolBarsManager.LoadActions(ProgramPath+'menu/actionscontent.xml');
-  ToolBarsManager.LoadActions(ProgramPath+'menu/electrotechactionscontent.xml');
-  ToolBarsManager.LoadActions(ProgramPath+'menu/velecactionscontent.xml');
+  //ToolBarsManager.LoadActions(ProgramPath+'menu/electrotechactionscontent.xml');
+  //ToolBarsManager.LoadActions(ProgramPath+'menu/velecactionscontent.xml');
   StandartActions.OnUpdate:=ActionUpdate;
 
   for i:=low(FileHistory) to high(FileHistory) do
@@ -1319,6 +1320,11 @@ var
 begin
   ActionName:=getAttrValue(aNode,'Name','');
   _action:=TZAction(StandartActions.ActionByName(ActionName));
+  if _action=nil then begin
+    _action:=TmyAction.Create(self);
+    _action.ActionList:=StandartActions;
+    _action.Name:=ActionName;
+  end;
   with TToolButton.Create(tb) do
   begin
     Action:=_action;
@@ -1372,11 +1378,17 @@ end;
 
 procedure TZCADMainWindow.ZActionsReader(aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList);
 var
+  acnname:string;
   action:tmyaction;
   actioncommand,actionshortcut,img:string;
 begin
-  action:=TmyAction.Create(self);
-  action.Name:=uppercase(getAttrValue(aNode,'Name',''));
+  acnname:=uppercase(getAttrValue(aNode,'Name',''));
+  action:=tmyaction(actlist.ActionByName(acnname));
+  if action=nil then begin
+    action:=TmyAction.Create(self);
+    action.ActionList:=actlist;
+    action.Name:=acnname;
+  end;
   action.Caption:=getAttrValue(aNode,'Caption','');
   action.Caption:=InterfaceTranslate(action.Name+'~caption',action.Caption);
   action.Hint:=getAttrValue(aNode,'Hint','');
@@ -1391,7 +1403,6 @@ begin
   ParseCommand(actioncommand,action.command,action.options);
   action.Category:=getAttrValue(aNode,'Category',CategoryOverrider);
   action.DisableIfNoHandler:=false;
-  action.ActionList:=actlist;
   img:=getAttrValue(aNode,'Img','');
   action.ImageIndex:=ImagesManager.GetImageIndex(img);
   if action.ImageIndex=ImagesManager.defaultimageindex then begin
@@ -1565,6 +1576,29 @@ begin
   end;
 end;
 
+procedure TZCADMainWindow.MenuAction(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+var
+  CreatedMenuItem:TMenuItem;
+  _action:TContainedAction;
+  ActionName:string;
+begin
+  ActionName:=getAttrValue(aNode,'Name','');
+
+  _action:=actlist.ActionByName(ActionName);
+  if _action=nil then begin
+    _action:=TmyAction.Create(self);
+    _action.ActionList:=actlist;
+    _action.Name:=ActionName;
+  end;
+
+  CreatedMenuItem:=TMenuItem.Create(RootMenuItem);
+  CreatedMenuItem.Action:=_action;
+  if RootMenuItem is TMenuItem then
+    RootMenuItem.Add(CreatedMenuItem)
+  else
+    TPopUpMenu(RootMenuItem).Items.Add(CreatedMenuItem);
+end;
+
 
 procedure TZCADMainWindow._onCreate(Sender: TObject);
 begin
@@ -1632,7 +1666,7 @@ begin
 
   ToolBarsManager.RegisterMenuCreateFunc('MainMenuItem',ZMainMenuItemReader);
   ToolBarsManager.RegisterMenuCreateFunc('PopUpMenu',ZPopUpMenuReader);
-  ToolBarsManager.RegisterMenuCreateFunc('Action',ToolBarsManager.CreateDefaultMenuAction);
+  ToolBarsManager.RegisterMenuCreateFunc('Action',MenuAction);
   ToolBarsManager.RegisterMenuCreateFunc('Separator',ToolBarsManager.CreateDefaultMenuSeparator);
   ToolBarsManager.RegisterMenuCreateFunc('FileHistory',ZMainMenuFileHistory);
   ToolBarsManager.RegisterMenuCreateFunc('LastCommands',ZMainMenuCommandsHistory);
@@ -1643,8 +1677,6 @@ begin
   ToolBarsManager.RegisterMenuCreateFunc('DebugFiles',ZMainMenuDebugFiles);
   ToolBarsManager.RegisterMenuCreateFunc('CreateMenu',ToolBarsManager.CreateDefaultMenu);
   ToolBarsManager.RegisterMenuCreateFunc('SetMainMenu',ToolBarsManager.DefaultSetMenu);
-
-  ToolBarsManager.LoadMenus(ProgramPath+'menu/menuscontent.xml');
 
   CreateAnchorDockingInterface;
 end;

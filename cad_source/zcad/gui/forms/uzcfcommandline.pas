@@ -290,7 +290,8 @@ begin
 end;
 procedure DisableCmdLine;
 begin
-  application.MainForm.ActiveControl:=nil;
+  if assigned(application.MainForm) then
+    application.MainForm.ActiveControl:=nil;
   if assigned(uzcfcommandline.cmdedit) then
                                   begin
                                       uzcfcommandline.cmdedit.Enabled:=false;

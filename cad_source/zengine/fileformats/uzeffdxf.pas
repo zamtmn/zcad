@@ -2117,6 +2117,7 @@ begin
                    pltp:=drawing.LTypeStyleTable.beginiterate(ir);
                    if pltp<>nil then
                    repeat
+                         debugln('{D}[DXF_CONTENTS]write linetype ',pltp^.Name);
                          outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
                          outstream.TXTAddGDBStringEOL(dxfName_LTYPE);
                          Handle2pointer.MyGetOrCreateValue(pltp,handle,temphandle);
@@ -2213,7 +2214,7 @@ begin
                                                              outstream.TXTAddGDBStringEOL(floattostr(PTP^.param.Y));
                                                              outstream.TXTAddGDBStringEOL(dxfGroupCode(9));
                                                              outstream.TXTAddGDBStringEOL(PTP^.TEXT);
-                                                             PTP:=pltp^.textarray.iterate(ir4);
+                                                             PTP:=pltp^.textarray.iterate(ir5);
                                                         end;
                                     end;
                                     TDI:=pltp^.dasharray.iterate(ir2);

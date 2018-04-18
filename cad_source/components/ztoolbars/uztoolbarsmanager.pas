@@ -506,7 +506,9 @@ begin
 
   TBNode:=ActionsConfig.FindNode('MenusContent',false);
   if assigned(TBNode) then
-    TBSubNode:=TBNode.FirstChild;
+    TBSubNode:=TBNode.FirstChild
+  else
+    TBSubNode:=nil;
   if assigned(TBSubNode) then
     while assigned(TBSubNode)do
     begin

@@ -5,6 +5,7 @@ unit uztoolbarsmanager;
 interface
 
 uses
+  LCLType,ImgList,
   Classes, SysUtils, ComCtrls, Controls, Graphics, Menus, Forms,ActnList,
   LazConfigStorage,Laz2_XMLCfg,Laz2_DOM,
   Generics.Collections, Generics.Defaults, gvector;
@@ -13,6 +14,63 @@ const
      MenuNameModifier='MENU_';
 
 type
+  TPopUpMenyProxyAction=class(TAction)
+    ToolButton:TToolButton;
+    MainAction:TAction;
+
+   {private
+    procedure SetAutoCheck(Value:Boolean);
+    function GetAutoCheck:boolean;
+    procedure SetCaption(Value:TTranslateString);
+    function GetCaption:TTranslateString;
+    procedure SetChecked(Value:Boolean);
+    function GetChecked:boolean;
+    procedure SetDisableIfNoHandler(Value:Boolean);
+    function GetDisableIfNoHandler:boolean;
+    procedure SetEnabled(Value:Boolean);
+    function GetEnabled:boolean;
+    procedure SetGroupIndex(Value:Integer);
+    function GetGroupIndex:Integer;
+    procedure SetHelpContext(Value:THelpContext);
+    function GetHelpContext:THelpContext;
+    procedure SetHelpKeyword(Value:string);
+    function GetHelpKeyword:string;
+    procedure SetHelpType(Value:THelpType);
+    function GetHelpType:THelpType;
+    procedure SetHint(Value:TTranslateString);
+    function GetHint:TTranslateString;
+    procedure SetImageIndex(Value:TImageIndex);
+    function GetImageIndex:TImageIndex;
+    procedure SetOnHint(Value:THintEvent);
+    function GetOnHint:THintEvent;
+    procedure SetSecondaryShortCuts(Value:TShortCutList);
+    function GetSecondaryShortCuts:TShortCutList;
+    procedure SetShortCut(Value:TShortCut);
+    function GetShortCut:TShortCut;
+    procedure SetVisible(Value:Boolean);
+    function GetVisible:boolean;
+  published
+  property AutoCheck: Boolean read GetAutoCheck write  SetAutoCheck default False;
+  property Caption: TTranslateString read GetCaption write SetCaption;
+  property Checked: Boolean read GetChecked write SetChecked default False;
+  property DisableIfNoHandler: Boolean read GetDisableIfNoHandler write SetDisableIfNoHandler default False;
+  property Enabled: Boolean read GetEnabled write SetEnabled default True;
+  property GroupIndex: Integer read GetGroupIndex write SetGroupIndex default 0;
+  property HelpContext: THelpContext read GetHelpContext write SetHelpContext default 0;
+  property HelpKeyword: string read GetHelpKeyword write SetHelpKeyword;
+  property HelpType: THelpType read GetHelpType write SetHelpType default htContext;
+  property Hint: TTranslateString read GetHint write SetHint;
+  property ImageIndex: TImageIndex read GetImageIndex write SetImageIndex default -1;
+  property OnHint: THintEvent read GetOnHint write SetOnHint;
+  property SecondaryShortCuts: TShortCutList read GetSecondaryShortCuts write SetSecondaryShortCuts{ stored IsSecondaryShortCutsStored};
+  property ShortCut: TShortCut read GetShortCut write SetShortCut default 0;
+  property Visible: Boolean read GetVisible write SetVisible default True;}
+
+
+    function Execute: Boolean; override;
+    procedure Assign(Source: TPersistent); override;
+  end;
+
   TProgramActionsManagerClass=class
     procedure CreateAndAddActionsToList(acnlist:TActionList);virtual;abstract;
   end;
@@ -105,6 +163,184 @@ var
 
 implementation
 
+function TPopUpMenyProxyAction.Execute: Boolean;
+begin
+  if assigned(ToolButton)then ToolButton.Action:=MainAction;
+  if MainAction.ImageIndex<>-1 then ToolButton.caption:='';
+  if assigned(MainAction)then result:=MainAction.Execute
+                         else result:=false;
+end;
+procedure TPopUpMenyProxyAction.Assign(Source: TPersistent);
+begin
+  if source is TAction then begin
+    AutoCheck:=(Source as TAction).AutoCheck;
+    Caption:=(Source as TAction).Caption;
+    Checked:=(Source as TAction).Checked;
+    DisableIfNoHandler:=(Source as TAction).DisableIfNoHandler;
+    Enabled:=(Source as TAction).Enabled;
+    GroupIndex:=(Source as TAction).GroupIndex;
+    HelpContext:=(Source as TAction).HelpContext;
+    HelpKeyword:=(Source as TAction).HelpKeyword;
+    HelpType:=(Source as TAction).HelpType;
+    Hint:=(Source as TAction).Hint;
+    ImageIndex:=(Source as TAction).ImageIndex;
+    OnHint:=(Source as TAction).OnHint;
+    SecondaryShortCuts:=(Source as TAction).SecondaryShortCuts;
+    ShortCut:=(Source as TAction).ShortCut;
+    Visible:=(Source as TAction).Visible;
+  end;
+end;
+
+{procedure TPopUpMenyProxyAction.SetAutoCheck(Value:Boolean);
+begin
+  if assigned(MainAction)then
+    MainAction.AutoCheck:=Value;
+end;
+function TPopUpMenyProxyAction.GetAutoCheck:boolean;
+begin
+  if assigned(MainAction)then
+    result:=MainAction.AutoCheck;
+end;
+procedure TPopUpMenyProxyAction.SetCaption(Value:TTranslateString);
+begin
+  if assigned(MainAction)then
+    MainAction.Caption:=Value;
+end;
+function TPopUpMenyProxyAction.GetCaption:TTranslateString;
+begin
+  if assigned(MainAction)then
+    result:=MainAction.Caption;
+end;
+procedure TPopUpMenyProxyAction.SetChecked(Value:Boolean);
+begin
+  if assigned(MainAction)then
+    MainAction.Checked:=Value;
+end;
+function TPopUpMenyProxyAction.GetChecked:boolean;
+begin
+  if assigned(MainAction)then
+    result:=MainAction.Checked;
+end;
+procedure TPopUpMenyProxyAction.SetDisableIfNoHandler(Value:Boolean);
+begin
+  if assigned(MainAction)then
+    MainAction.DisableIfNoHandler:=Value;
+end;
+function TPopUpMenyProxyAction.GetDisableIfNoHandler:boolean;
+begin
+  if assigned(MainAction)then
+    result:=MainAction.DisableIfNoHandler;
+end;
+procedure TPopUpMenyProxyAction.SetEnabled(Value:Boolean);
+begin
+  if assigned(MainAction)then
+    MainAction.AutoCheck:=Value;
+end;
+function TPopUpMenyProxyAction.GetEnabled:boolean;
+begin
+  if assigned(MainAction)then
+    result:=MainAction.Enabled;
+end;
+procedure TPopUpMenyProxyAction.SetGroupIndex(Value:Integer);
+begin
+  if assigned(MainAction)then
+    MainAction.GroupIndex:=GroupIndex;
+end;
+function TPopUpMenyProxyAction.GetGroupIndex:Integer;
+begin
+  if assigned(MainAction)then
+    result:=MainAction.GroupIndex;
+end;
+procedure TPopUpMenyProxyAction.SetHelpContext(Value:THelpContext);
+begin
+  if assigned(MainAction)then
+    MainAction.HelpContext:=HelpContext;
+end;
+function TPopUpMenyProxyAction.GetHelpContext:THelpContext;
+begin
+  if assigned(MainAction)then
+    result:=MainAction.HelpContext;
+end;
+procedure TPopUpMenyProxyAction.SetHelpKeyword(Value:string);
+begin
+  if assigned(MainAction)then
+    MainAction.HelpKeyword:=Value;
+end;
+function TPopUpMenyProxyAction.GetHelpKeyword:string;
+begin
+  if assigned(MainAction)then
+    result:=MainAction.HelpKeyword;
+end;
+procedure TPopUpMenyProxyAction.SetHelpType(Value:THelpType);
+begin
+  if assigned(MainAction)then
+    MainAction.HelpType:=Value;
+end;
+function TPopUpMenyProxyAction.GetHelpType:THelpType;
+begin
+  if assigned(MainAction)then
+    result:=MainAction.HelpType;
+end;
+procedure TPopUpMenyProxyAction.SetHint(Value:TTranslateString);
+begin
+  if assigned(MainAction)then
+    MainAction.Hint:=Value;
+end;
+function TPopUpMenyProxyAction.GetHint:TTranslateString;
+begin
+  if assigned(MainAction)then
+    result:=MainAction.Hint;
+end;
+procedure TPopUpMenyProxyAction.SetImageIndex(Value:TImageIndex);
+begin
+  if assigned(MainAction)then
+    MainAction.ImageIndex:=Value;
+end;
+function TPopUpMenyProxyAction.GetImageIndex:TImageIndex;
+begin
+  if assigned(MainAction)then
+    result:=MainAction.ImageIndex;
+end;
+procedure TPopUpMenyProxyAction.SetOnHint(Value:THintEvent);
+begin
+  if assigned(MainAction)then
+    MainAction.OnHint:=Value;
+end;
+function TPopUpMenyProxyAction.GetOnHint:THintEvent;
+begin
+  if assigned(MainAction)then
+    result:=MainAction.OnHint;
+end;
+procedure TPopUpMenyProxyAction.SetSecondaryShortCuts(Value:TShortCutList);
+begin
+  if assigned(MainAction)then
+    MainAction.SecondaryShortCuts:=SecondaryShortCuts;
+end;
+function TPopUpMenyProxyAction.GetSecondaryShortCuts:TShortCutList;
+begin
+  if assigned(MainAction)then
+    result:=MainAction.SecondaryShortCuts;
+end;
+procedure TPopUpMenyProxyAction.SetShortCut(Value:TShortCut);
+begin
+  if assigned(MainAction)then
+    MainAction.ShortCut:=Value;
+end;
+function TPopUpMenyProxyAction.GetShortCut:TShortCut;
+begin
+  if assigned(MainAction)then
+    result:=MainAction.ShortCut;
+end;
+procedure TPopUpMenyProxyAction.SetVisible(Value:Boolean);
+begin
+  if assigned(MainAction)then
+    MainAction.Visible:=Value;
+end;
+function TPopUpMenyProxyAction.GetVisible:boolean;
+begin
+  if assigned(MainAction)then
+    result:=MainAction.Visible;
+end;}
 procedure TToolBarsManagerDockForm.DoClose(var CloseAction: TCloseAction);
 begin
   ToolBarsManager.FloatDockSiteClose(self,CloseAction);

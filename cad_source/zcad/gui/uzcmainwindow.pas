@@ -178,6 +178,7 @@ type
     procedure processcommandhistory(Command:string);
     function CreateZCADControl(aName: string;DoDisableAlign:boolean=false):TControl;
     procedure TBActionCreateFunc(aNode: TDomNode; TB:TToolBar);
+    procedure TBGroupActionCreateFunc(aNode: TDomNode; TB:TToolBar);
     procedure TBButtonCreateFunc(aNode: TDomNode; TB:TToolBar);
     procedure TBLayerComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
     procedure TBColorComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
@@ -1336,6 +1337,53 @@ begin
     Visible:=true;
   end;
 end;
+procedure TZCADMainWindow.TBGroupActionCreateFunc(aNode: TDomNode; TB:TToolBar);
+var
+  ActionIndex:integer;
+  SubNode: TDomNode;
+  i:integer;
+  proxy:TPopUpMenyProxyAction;
+  tbutton:TToolButton;
+begin
+  ActionIndex:=getAttrValue(aNode,'Index',0);
+  tbutton:=TToolButton.Create(tb);
+  begin
+    //Action:=_action;
+    tbutton.style:=tbsButtonDrop;
+    tbutton.ShowCaption:=false;
+    tbutton.ShowHint:=true;
+    tbutton.PopupMenu:=TPopupMenu.Create(application);
+    tbutton.PopupMenu.Images:=StandartActions.Images;
+    {if assigned(_action) then
+      Caption:=_action.imgstr;}
+    tbutton.Parent:=tb;
+    tbutton.Visible:=true;
+
+  if assigned(aNode) then
+    SubNode:=aNode.FirstChild;
+  if assigned(SubNode) then
+    while assigned(SubNode)do
+    begin
+      ToolBarsManager.TryRunMenuCreateFunc(SubNode.NodeName,SubNode,StandartActions,tmenuitem(tbutton.PopupMenu));
+      SubNode:=SubNode.NextSibling;
+    end;
+  if (ActionIndex>=0)and(ActionIndex<tbutton.PopupMenu.Items.Count) then
+    tbutton.action:=tbutton.PopupMenu.Items[ActionIndex].action;
+  for i:=0 to tbutton.PopupMenu.Items.Count-1 do
+  begin
+    if assigned(tbutton.PopupMenu.Items[i].action)then begin
+      proxy:=TPopUpMenyProxyAction.Create(Application);
+      proxy.MainAction:=TAction(tbutton.PopupMenu.Items[i].action);
+      proxy.ToolButton:=tbutton;
+      proxy.Assign(tbutton.PopupMenu.Items[i].action);
+      tbutton.PopupMenu.Items[i].action:=proxy;
+      if proxy.MainAction.ImageIndex<>-1 then tbutton.caption:='';
+    end;
+  end;
+  Caption:='';
+
+  end;
+end;
 
 procedure TZCADMainWindow.TBButtonCreateFunc(aNode: TDomNode; TB:TToolBar);
 var
@@ -1643,6 +1691,7 @@ begin
   ToolBarsManager:=TToolBarsManager.create(self,StandartActions,sysvar.INTF.INTF_DefaultControlHeight^);
   ToolBarsManager.RegisterTBItemCreateFunc('Separator',ToolBarsManager.CreateDefaultSeparator);
   ToolBarsManager.RegisterTBItemCreateFunc('Action',TBActionCreateFunc);
+  ToolBarsManager.RegisterTBItemCreateFunc('GroupAction',TBGroupActionCreateFunc);
   ToolBarsManager.RegisterTBItemCreateFunc('Button',TBButtonCreateFunc);
   ToolBarsManager.RegisterTBItemCreateFunc('LayerComboBox',TBLayerComboBoxCreateFunc);
   ToolBarsManager.RegisterTBItemCreateFunc('ColorComboBox',TBColorComboBoxCreateFunc);

@@ -113,7 +113,12 @@
     <Draw Type="ToolBar">
       <Action Name="ACN_LINE"/>
       <Action Name="ACN_3DPOLY"/>"/>
-      <Action Name="ACN_CIRCLE"/>
+      <GroupAction Index="0">
+        <Action Name="ACN_CIRCLE"/>
+        <Action Name="ACN_CIRCLECD"/>
+        <Action Name="ACN_CIRCLE2P"/>
+        <Action Name="ACN_CIRCLE3P"/>
+      </GroupAction>
       <Action Name="ACN_RECTANGLE"/>
       <Action Name="ACN_BInsert"/>"/>
       <Action Name="ACN_TEXT"/>

@@ -1343,13 +1343,12 @@ var
   SubNode: TDomNode;
   i:integer;
   proxy:TPopUpMenyProxyAction;
-  tbutton:TToolButton;
+  tbutton:TZToolButton;
 begin
   ActionIndex:=getAttrValue(aNode,'Index',0);
-  tbutton:=TToolButton.Create(tb);
+  tbutton:=TZToolButton.Create(tb);
   begin
-    //Action:=_action;
-    tbutton.style:=tbsButtonDrop;
+    //tbutton.style:=tbsButtonDrop;
     tbutton.ShowCaption:=false;
     tbutton.ShowHint:=true;
     tbutton.PopupMenu:=TPopupMenu.Create(application);
@@ -1359,29 +1358,28 @@ begin
     tbutton.Parent:=tb;
     tbutton.Visible:=true;
 
-  if assigned(aNode) then
-    SubNode:=aNode.FirstChild;
-  if assigned(SubNode) then
-    while assigned(SubNode)do
+    if assigned(aNode) then
+      SubNode:=aNode.FirstChild;
+    if assigned(SubNode) then
+      while assigned(SubNode)do
+      begin
+        ToolBarsManager.TryRunMenuCreateFunc(SubNode.NodeName,SubNode,StandartActions,tmenuitem(tbutton.PopupMenu));
+        SubNode:=SubNode.NextSibling;
+      end;
+    if (ActionIndex>=0)and(ActionIndex<tbutton.PopupMenu.Items.Count) then
+      tbutton.action:=tbutton.PopupMenu.Items[ActionIndex].action;
+    for i:=0 to tbutton.PopupMenu.Items.Count-1 do
     begin
-      ToolBarsManager.TryRunMenuCreateFunc(SubNode.NodeName,SubNode,StandartActions,tmenuitem(tbutton.PopupMenu));
-      SubNode:=SubNode.NextSibling;
+      if assigned(tbutton.PopupMenu.Items[i].action)then begin
+        proxy:=TPopUpMenyProxyAction.Create(Application);
+        proxy.MainAction:=TAction(tbutton.PopupMenu.Items[i].action);
+        proxy.ToolButton:=tbutton;
+        proxy.Assign(tbutton.PopupMenu.Items[i].action);
+        tbutton.PopupMenu.Items[i].action:=proxy;
+        if proxy.MainAction.ImageIndex<>-1 then tbutton.caption:='';
+      end;
     end;
-  if (ActionIndex>=0)and(ActionIndex<tbutton.PopupMenu.Items.Count) then
-    tbutton.action:=tbutton.PopupMenu.Items[ActionIndex].action;
-  for i:=0 to tbutton.PopupMenu.Items.Count-1 do
-  begin
-    if assigned(tbutton.PopupMenu.Items[i].action)then begin
-      proxy:=TPopUpMenyProxyAction.Create(Application);
-      proxy.MainAction:=TAction(tbutton.PopupMenu.Items[i].action);
-      proxy.ToolButton:=tbutton;
-      proxy.Assign(tbutton.PopupMenu.Items[i].action);
-      tbutton.PopupMenu.Items[i].action:=proxy;
-      if proxy.MainAction.ImageIndex<>-1 then tbutton.caption:='';
-    end;
-  end;
-  Caption:='';
-
+    Caption:='';
   end;
 end;
 

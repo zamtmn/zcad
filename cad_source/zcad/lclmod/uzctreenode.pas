@@ -105,8 +105,12 @@ type
 
                procedure DoSelectionChanged; override;
                protected procedure DoContextPopup(MousePos: TPoint; var Handled: Boolean); override;
-
     end;
+    TZToolButton=class(TToolButton)
+     protected
+      procedure Paint; override;
+    end;
+
   PTFreedForm=^TFreedForm;
   TFreedForm = class(tform)
                          private
@@ -146,6 +150,22 @@ procedure SetHeightControl(_parent:TWinControl;h:integer);
 //var
 //   ACN_ShowObjInsp:TmyAction=nil;
 implementation
+
+procedure TZToolButton.Paint;
+var
+  PaintRect:TRect;
+  Details:TThemedElementDetails;
+begin
+  inherited;
+  if assigned(PopupMenu) then begin
+    Details:=ThemeServices.GetElementDetails(ttbSplitButtonDropDownNormal);
+    PaintRect:=ClientRect;
+    PaintRect.Top:=2*PaintRect.Bottom div 3;
+    PaintRect.Left:=2*PaintRect.Right div 3;
+    ThemeServices.DrawElement(Canvas.Handle,Details,PaintRect)
+  end;
+end;
+
 function TMySpeedButton.GetDrawDetails: TThemedElementDetails;
 
   function WindowPart: TThemedScrollBar;

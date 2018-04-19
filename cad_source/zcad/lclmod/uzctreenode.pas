@@ -158,13 +158,13 @@ var
 begin
   inherited;
   if assigned(PopupMenu) then begin
-    Details:=ThemeServices.GetElementDetails({$IFDEF LCLWIN}ttbSplitButtonDropDownNormal{$ENDIF}
+    Details:=ThemeServices.GetElementDetails({$IFDEF LCLWIN32}ttbSplitButtonDropDownNormal{$ENDIF}
                                              {$IFDEF LCLQT}tsDownNormal{$ENDIF}
                                              {$IFDEF LCLQT5}tsDownNormal{$ENDIF}
                                              {$IFDEF LCLgtk2}ttbSplitButtonDropDownNormal{$ENDIF}
                                              );
     PaintRect:=ClientRect;
-    {$IFDEF LCLWIN}PaintRect.Top:=2*PaintRect.Bottom div 3;PaintRect.Left:=2*PaintRect.Right div 3;{$ENDIF}
+    {$IFDEF LCLWIN32}PaintRect.Top:=2*PaintRect.Bottom div 3;PaintRect.Left:=2*PaintRect.Right div 3;{$ENDIF}
     {$IFDEF LCLQT}PaintRect.Top:=PaintRect.Bottom div 2;PaintRect.Left:=2*PaintRect.Right div 3;{$ENDIF}
     {$IFDEF LCLQT5}PaintRect.Top:=PaintRect.Bottom div 2;PaintRect.Left:=2*PaintRect.Right div 3;{$ENDIF}
     {$IFDEF LCLGTK2}PaintRect.Top:=2*PaintRect.Bottom div 3;PaintRect.Left:=PaintRect.Right div 2;{$ENDIF}

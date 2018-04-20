@@ -166,7 +166,7 @@ begin
                                              );
     PaintRect:=ClientRect;
     {$IFDEF LCLWIN32}if WindowsVersion<wvVista then begin
-                        PaintRect.Top:=PaintRect.Bottom;PaintRect.Left:=PaintRect.Right//это работает в XP тут нужно подобрать коэффициенты
+                        PaintRect.Top:=PaintRect.Bottom;PaintRect.Left:=6*PaintRect.Right div 11//это работает в XP тут нужно подобрать коэффициенты
                      end else begin
                         PaintRect.Top:=2*PaintRect.Bottom div 3;PaintRect.Left:=2*PaintRect.Right div 3 //это XP висте и выше
                      end;{$ENDIF}

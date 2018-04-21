@@ -1730,19 +1730,42 @@ begin
   CreateAnchorDockingInterface;
 end;
 
+function FindMenuItem(name,localizedcaption:string;RootMenuItem:TMenuItem):TMenuItem;
+var
+  i:integer;
+begin
+  result:=nil;
+  if RootMenuItem=nil then
+    result:=TMenuItem(application.FindComponent(MenuNameModifier+name))
+  else begin
+    for i:=0 to RootMenuItem.Count-1 do begin
+      if RootMenuItem.Items[i].Caption=localizedcaption then
+        exit(RootMenuItem.Items[i]);
+    end;
+  end;
+end;
+
 procedure TZCADMainWindow.ZMainMenuItemReader(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
  var
   CreatedMenuItem:TMenuItem;
-  line:string;
+  line,localizedcaption:string;
   TBSubNode:TDomNode;
   mcf:TMenuCreateFunc;
+  newitem:boolean;
 begin
-    CreatedMenuItem:=TMenuItem.Create(application);
     line:=getAttrValue(aNode,'Name','');
-    if RootMenuItem=nil then
-      CreatedMenuItem.Name:=MenuNameModifier+line;
-    line:=InterfaceTranslate('menu~'+line,line);
-    CreatedMenuItem.Caption:=line;
+    localizedcaption:=InterfaceTranslate('menu~'+line,line);
+    CreatedMenuItem:=FindMenuItem(line,localizedcaption,RootMenuItem);
+    if CreatedMenuItem=nil then begin
+      CreatedMenuItem:=TMenuItem.Create(application);
+      newitem:=true;
+    end else
+      newitem:=false;
+    if newitem then begin
+      if RootMenuItem=nil then
+        CreatedMenuItem.Name:=MenuNameModifier+line;
+      CreatedMenuItem.Caption:=localizedcaption;
+    end;
     if assigned(aNode) then
       TBSubNode:=aNode.FirstChild;
     if assigned(TBSubNode) then
@@ -1751,7 +1774,7 @@ begin
         ToolBarsManager.TryRunMenuCreateFunc(TBSubNode.NodeName,TBSubNode,actlist,CreatedMenuItem);
         TBSubNode:=TBSubNode.NextSibling;
       end;
-    if assigned(RootMenuItem) then
+    if (assigned(RootMenuItem))and newitem then
     begin
       if RootMenuItem is TMenuItem then
         RootMenuItem.Add(CreatedMenuItem)

@@ -77,10 +77,6 @@
         <Action Name="ACN_SHOW_OBJECTINSPECTOR"/>
         <Action Name="ACN_SHOW_PAGECONTROL"/>
         <Action Name="ACN_SHOW_COMMANDLINE"/>
-        <Action Name="ACN_SHOW_NAVIGATORDEVICES"/>
-        <Action Name="ACN_SHOW_NAVIGATORRISERS"/>
-        <Action Name="ACN_SHOW_NAVIGATORCABLES"/>
-        <Action Name="ACN_SHOW_NAVIGATORENTITIES"/>
         <Action Name="ACN_TEXTWINDOW"/>
         <MainMenuItem Name="ToolBars">
           <ToolBars/>
@@ -124,8 +120,6 @@
       <Action Name="ACN_ARC"/>
       <Action Name="ACN_BInsert"/>
       <Action Name="ACN_TEXT"/>
-      <Action Name="ACN_slagcabCom"/>
-      <Action Name="ACN_SupeLine"/>
     </MainMenuItem>
     <MainMenuItem Name="Dimension">
       <Action Name="ACN_DIMALIGNED"/>

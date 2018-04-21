@@ -1,1 +1,0 @@
-typeexporter.exe pathprefix=E:/zcad/cad_source/ outputfile=E:/zcad/cad/rtl/system.pas

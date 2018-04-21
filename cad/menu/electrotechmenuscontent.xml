@@ -1,6 +1,14 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <MenusContent>
+    <MainMenuItem Name="View">
+      <MainMenuItem Name="Show window">
+        <Action Name="ACN_SHOW_NAVIGATORDEVICES"/>
+        <Action Name="ACN_SHOW_NAVIGATORRISERS"/>
+        <Action Name="ACN_SHOW_NAVIGATORCABLES"/>
+        <Action Name="ACN_SHOW_NAVIGATORENTITIES"/>
+      </MainMenuItem>
+    </MainMenuItem>
     <MainMenuItem Name="Schematic">
       <MainMenuItem Name="Circuit diagram">
         <Command Caption="**Connection" Command="EL_Wire"/> 

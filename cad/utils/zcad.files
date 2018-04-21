@@ -84,7 +84,6 @@ zengine/core/entities/uzeentblockinsert.pas
 zengine/core/entities/uzeentdevice.pas
 zengine/core/entities/uzeentconnected.pas
 zengine/containers/UGDBGraf.pas
-zcad/electrotech/uzcentnet.pas
 zengine/core/entities/uzeentline.pas
 zengine/core/entities/uzeentlwpolyline.pas
 zengine/core/entities/uzeenttext.pas
@@ -93,11 +92,9 @@ zengine/core/entities/uzeentpoint.pas
 zengine/core/entities/uzeentcurve.pas
 zengine/core/entities/uzeentpolyline.pas
 zengine/core/entities/uzeentspline.pas
-zcad/electrotech/uzcentcable.pas
 zengine/core/objects/uzeroot.pas
 zengine/core/objects/uzecamera.pas
 zengine/core/entities/uzeenttable.pas
-zcad/electrotech/uzcentelleader.pas
 zcad/DeviceBase/uzcdevicebaseabstract.pas
 zcad/DeviceBase/uzcdevicebase.pas
 zcad/commands/uzccommandsabstract.pas
@@ -114,9 +111,6 @@ zengine/core/drawings/uzedrawingsimple.pas
 zcad/core/drawings/uzcdrawings.pas
 zcad/gui/odjectinspector/uzcoiwrapper.pas
 zcad/gui/odjectinspector/uzcoimultiobjects.pas
-zcad/electrotech/uzccomops.pas
-zcad/electrotech/uzccomelectrical.pas
-zcad/electrotech/uzccablemanager.pas 
 zengine/fonts/uzefontmanager.pas
 zengine/zgl/drawers/uzgldrawergdi.pas 
 zengine/zgl/drawers/uzgldrawerogl.pas 

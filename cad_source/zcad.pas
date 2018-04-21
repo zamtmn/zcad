@@ -31,6 +31,8 @@ program zcad;
   {$APPTYPE GUI}
 {$ENDIF}
 {$ifdef WIN64} {$imagebase $400000} {$endif}
+
+{DEFINE ELECTROTECH}
 uses
   {$IFDEF REPORTMMEMORYLEAKS}heaptrc,{$ENDIF}
   Interfaces,forms, classes,
@@ -53,7 +55,9 @@ uses
   uzcregenginefeatures,
   uzcreginterface,
   uzcregnavigatorentities,
+  {$IFDEF ELECTROTECH}
   uzcregnavigatordevices,
+  {$ENDIF}
   //
   //next line load system.pas
   //
@@ -101,7 +105,9 @@ uses
   URecordDescriptor,
   //gdbase,
   //splashwnd,
+  {$IFDEF ELECTROTECH}
   uzcfprojecttree,
+  {$ENDIF}
   //ugdbabstractdrawing,
   sysutils,
 
@@ -110,15 +116,19 @@ uses
   //commandline,
 
   uzccombase,
+  {$IFDEF ELECTROTECH}
   uzccomdb,
+  {$ENDIF}
   uzccomdraw,
   uzccommand_print,
 
+  {$IFDEF ELECTROTECH}
   //**for velec func**//
-  //uzvslagcab, //автопрокладка кабелей по именным суперлиниям
-  //uzvagslcom, //создания именных суперлиний в комнате между извещателями
+  uzvslagcab, //автопрокладка кабелей по именным суперлиниям
+  uzvagslcom, //создания именных суперлиний в комнате между извещателями
   uzvstripmtext, //очистка мтекста, сделано плохо, в будущем надо переделывать мтекст и механизм.
   //**//
+  {$ENDIF}
 
   //uzccomexample2,
   //uzventsuperline,
@@ -127,8 +137,10 @@ uses
   //uzccomexperimental,
   uzccominterface,
 
+  {$IFDEF ELECTROTECH}
   uzccomelectrical,
   uzccomops,
+  {$ENDIF}
   uzcplugins,
   //zcregisterobjectinspector,
   uzcmainwindow,

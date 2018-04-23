@@ -148,7 +148,7 @@ uses
 dialogs,uzcinfoform,
  uzelongprocesssupport,usimplegenerics,gzctnrstl,
 
-  uzvtestdraw;
+  uzvtestdraw,uzccomdrawsuperline;
 
 
 type
@@ -1848,7 +1848,7 @@ begin
 
            ZCMsgCallBackInterface.TextMessage('Количество вершин графа= ' + inttostr(graphASL.listVertex.size),TMWOHistoryOut);
            for i:=0 to listSL.size-1 do
-           uzccomexample.createSuperLine(listSL[i].p1,listSL[i].p2,autogenSuperLine.nameSL,autogenSuperLine.ProcessLayer,autogenSuperLine.LayerNamePrefix);
+           uzccomdrawsuperline.createSuperLine(listSL[i].p1,listSL[i].p2,autogenSuperLine.nameSL,autogenSuperLine.ProcessLayer,autogenSuperLine.LayerNamePrefix);
               //uzvtestdraw.testTempDrawLineColor(listSL[i].p1,listSL[i].p2,5);
 
            //for i:=0 to graphASL.listEdge.size-1 do

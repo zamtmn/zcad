@@ -137,18 +137,9 @@ type
                        PolyWidth:GDBDouble;(*'Polyline width'*)  //**< Ширина полилинии (если в качестве примитива выбран RET_LWPoly)
                  end;
 {EXPORT-}
-PTDrawSuperlineParams=^TDrawSuperlineParams;
-TDrawSuperlineParams=packed record
-                         pu:PTUnit;                //рантайм юнит с параметрами суперлинии
-                         LayerNamePrefix:GDBString;//префикс
-                         ProcessLayer:GDBBoolean;  //выключатель
-                     end;
 var
    MatchPropParam:TMatchPropParam; //**< Переменная содержащая опции команды MatchProp
    RectangParam:TRectangParam;     //**< Переменная содержащая опции команды Rectangle
-   DrawSuperlineParams:TDrawSuperlineParams;
-
-   function createSuperLine(p1,p2:GDBVertex;nameSL:string;changeLayer:boolean;LayerNamePrefix:string):TCommandResult;
 
 implementation
 //** блаблабла
@@ -833,121 +824,6 @@ begin
     zcHideCommandParams; //< Возвращает инспектор в значение по умолчанию
     result:=cmd_ok;
 end;
-function createSuperLine(p1,p2:GDBVertex;nameSL:string;changeLayer:boolean;LayerNamePrefix:string):TCommandResult;
-var
-    psuperline:PGDBObjSuperLine;
-    pvarext:PTVariablesExtender;
-    psu:ptunit;
-    pvd:pvardesk;        //для нахождения имени суперлинии
-    layername:gdbstring; //имя слоя куда будет помещена супелиния
-    player:PGDBLayerProp;//указатель на слой куда будет помещена супелиния
-begin
-    psuperline := AllocEnt(GDBSuperLineID);
-    psuperline^.init(nil,nil,0,p1,p2);
-    pvarext:=psuperline^.GetExtension(typeof(TVariablesExtender));
-    if pvarext<>nil then
-    begin
-      psu:=units.findunit(SupportPath,InterfaceTranslate,'superline');
-      if psu<>nil then
-        pvarext^.entityunit.copyfrom(psu);
-    end;
-    zcSetEntPropFromCurrentDrawingProp(psuperline);           //присваиваем умолчательные значения
-
-
-    //если манипуляции со слоем включены и ранее был найден "юнит" с параметрами
-    if (changeLayer)and(psu<>nil) then
-    begin
-      //ищем переменную 'NMO_Name'
-      pvd:=psu.FindVariable('NMO_Name');
-      pgdbstring(pvd^.data.Instance)^:=nameSL;
-      //если найдена
-      if pvd<>nil then
-      begin
-        //получаем желаемое имя слоя
-        layername:=LayerNamePrefix+nameSL;
-        //pvd.data.PTD^.GetValueAsString(pvd.data.Instance);
-        //ищем описание слоя по имени
-
-        player:=drawings.GetCurrentDWG.LayerTable.getAddres(Tria_Utf8ToAnsi(layername));
-        //если найден - присваиваем, иначе ругаемя
-        if player<>nil then
-                           psuperline.vp.Layer:=player
-                       else
-                           ZCMsgCallBackInterface.TextMessage(format('Layer "%s" not found',[layername]),TMWOHistoryOut);
-      end;
-    end;
-    //zcPlaceUndoStartMarkerIfNeed(UndoMarcerIsPlazed,'DrawSuperLine');
-    zcAddEntToCurrentDrawingWithUndo(psuperline);
-    zcRedrawCurrentDrawing;
-end;
-
-function DrawSuperLine_com(operands:TCommandOperands):TCommandResult;
-var
-    psuperline:PGDBObjSuperLine;
-    p1,p2:gdbvertex;
-    pvarext:PTVariablesExtender;
-    psu:ptunit;
-    UndoMarcerIsPlazed:boolean;
-
-procedure createline;
-var
-    pvd:pvardesk;        //для нахождения имени суперлинии
-    layername:gdbstring; //имя слоя куда будет помещена супелиния
-    player:PGDBLayerProp;//указатель на слой куда будет помещена супелиния
-begin
-    psuperline := AllocEnt(GDBSuperLineID);
-    psuperline^.init(nil,nil,0,p1,p2);
-    pvarext:=psuperline^.GetExtension(typeof(TVariablesExtender));
-    if pvarext<>nil then
-    begin
-      psu:=units.findunit(SupportPath,InterfaceTranslate,'superline');
-      if psu<>nil then
-        pvarext^.entityunit.copyfrom(psu);
-    end;
-    zcSetEntPropFromCurrentDrawingProp(psuperline);           //присваиваем умолчательные значения
-    //если манипуляции со слоем включены и ранее был найден "юнит" с параметрами
-    if (DrawSuperlineParams.ProcessLayer)and(psu<>nil) then
-    begin
-      //ищем переменную 'NMO_Name'
-      pvd:=psu.FindVariable('NMO_Name');
-      //если найдена
-      if pvd<>nil then
-      begin
-        //получаем желаемое имя слоя
-        layername:=DrawSuperlineParams.LayerNamePrefix+pvd.data.PTD^.GetValueAsString(pvd.data.Instance);
-        //ищем описание слоя по имени
-
-        player:=drawings.GetCurrentDWG.LayerTable.getAddres(Tria_Utf8ToAnsi(layername));
-        //если найден - присваиваем, иначе ругаемя
-        if player<>nil then
-                           psuperline.vp.Layer:=player
-                       else
-                           ZCMsgCallBackInterface.TextMessage(format('Layer "%s" not found',[layername]),TMWOHistoryOut);
-      end;
-    end;
-    zcPlaceUndoStartMarkerIfNeed(UndoMarcerIsPlazed,'DrawSuperLine');
-    zcAddEntToCurrentDrawingWithUndo(psuperline);
-    zcRedrawCurrentDrawing;
-end;
-
-begin
-    psu:=units.findunit(SupportPath,InterfaceTranslate,'superline');
-    DrawSuperlineParams.pu:=psu;
-    zcShowCommandParams(pointer(SysUnit^.TypeName2PTD('TDrawSuperlineParams')),@DrawSuperlineParams);
-    UndoMarcerIsPlazed:=false;
-    if GetInteractiveLine(rscmSpecifyFirstPoint,rscmSpecifySecondPoint,p1,p2) then
-    begin
-      createline;
-      p1:=p2;
-      while GetInteractiveLineFrom1to2(rscmSpecifySecondPoint,p1,p2)do
-      begin
-       createline;
-       p1:=p2;
-      end;
-    end;
-    zcPlaceUndoEndMarkerIfNeed(UndoMarcerIsPlazed);
-    result:=cmd_ok;
-end;
 function InsertDevice_com(operands:TCommandOperands):TCommandResult;
 var
     pdev:PGDBObjDevice;
@@ -1021,11 +897,6 @@ initialization
      CreateCommandFastObjectPlugin(@DrawRectangle_com,   'Rectangle',  CADWG,0);
      CreateCommandFastObjectPlugin(@matchprop_com,       'MatchProp',  CADWG,0);
 
-     SysUnit.RegisterType(TypeInfo(TDrawSuperlineParams));//регистрируем тип данных в зкадном RTTI
-     SysUnit.SetTypeDesk(TypeInfo(TDrawSuperlineParams),['SuperLineUnit','Layer name prefix','Layer change']);//даем человеческие имена параметрам
-     DrawSuperlineParams.LayerNamePrefix:='SYS_SL_';//начальное значение префикса
-     DrawSuperlineParams.ProcessLayer:=true;        //начальное значение выключателя
-     CreateCommandFastObjectPlugin(@DrawSuperLine_com,   'DrawSuperLine',   CADWG,0);
      CreateCommandFastObjectPlugin(@InsertDevice_com,    'ID',   CADWG,0);
 
      CreateCommandFastObjectPlugin(@ExampleCreateLayer_com,'ExampleCreateLayer',   CADWG,0);

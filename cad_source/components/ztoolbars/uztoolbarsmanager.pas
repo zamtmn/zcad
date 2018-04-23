@@ -793,12 +793,18 @@ var
   TBType:string;
 begin
   TBNode:=FindBarsContent(aName);
-  TBType:=getAttrValue(TBNode,'Type','');
-  result:=DoTBCreateFunc(aName,TBType);
-  if assigned(result) then begin
-    result.FloatingDockSiteClass:=TToolBarsManagerDockForm;
-    if assigned(TBNode) then
-      CreateToolbarContent(result,TBNode);
+  if TBNode<>nil then begin
+    TBType:=getAttrValue(TBNode,'Type','');
+    result:=DoTBCreateFunc(aName,TBType);
+    if assigned(result) then begin
+      result.FloatingDockSiteClass:=TToolBarsManagerDockForm;
+      if assigned(TBNode) then
+        CreateToolbarContent(result,TBNode);
+    end;
+  end else begin
+    TBType:=format('Toolbar "%s" content not found',[aName]);
+    Application.messagebox(pchar(TBType),'');
+    result:=nil;
   end;
 end;
 
@@ -942,11 +948,12 @@ begin
                      itemType:=Config.GetValue('Type','');
                      itemName:=Config.GetValue('Name','');
                      tb:=CreateToolbar(itemName);
-                     //tb:=TBCreateFunc(itemName,itemType);
-                     cb.InsertControl(tb,j);
-                     cb.Bands[j].Break:=Config.GetValue('Break',True);
-                     //if not cb.Bands[j].Break then
-                     cb.Bands[j].Width:=Config.GetValue('Width',100);
+                     if assigned(tb) then begin
+                       cb.InsertControl(tb,j);
+                       cb.Bands[j].Break:=Config.GetValue('Break',True);
+                       //if not cb.Bands[j].Break then
+                       cb.Bands[j].Width:=Config.GetValue('Width',100);
+                     end;
                      Config.UndoAppendBasePath;
                    end;
                    cb.EndUpdate;

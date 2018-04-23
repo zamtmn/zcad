@@ -32,7 +32,7 @@ program zcad;
 {$ENDIF}
 {$ifdef WIN64} {$imagebase $400000} {$endif}
 
-{DEFINE ELECTROTECH}
+{$DEFINE ELECTROTECH}
 uses
   {$IFDEF REPORTMMEMORYLEAKS}heaptrc,{$ENDIF}
   Interfaces,forms, classes,
@@ -124,6 +124,7 @@ uses
 
   {$IFDEF ELECTROTECH}
   //**for velec func**//
+  uzccomdrawsuperline,
   uzvslagcab, //автопрокладка кабелей по именным суперлиниям
   uzvagslcom, //создания именных суперлиний в комнате между извещателями
   uzvstripmtext, //очистка мтекста, сделано плохо, в будущем надо переделывать мтекст и механизм.

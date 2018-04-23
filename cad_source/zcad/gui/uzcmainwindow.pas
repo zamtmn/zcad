@@ -181,6 +181,7 @@ type
     procedure TBGroupActionCreateFunc(aNode: TDomNode; TB:TToolBar);
     procedure TBButtonCreateFunc(aNode: TDomNode; TB:TToolBar);
     procedure TBLayerComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
+    procedure TBLayoutComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
     procedure TBColorComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
     procedure TBLTypeComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
     procedure TBLineWComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
@@ -1092,13 +1093,13 @@ begin
     end;
 
   {Создаем на ToolBarD переключатель рабочих пространств}
-  if assigned(LayoutBox) then
+  {if assigned(LayoutBox) then
     ZCMsgCallBackInterface.TextMessage(format(rsReCreating,['LAYOUTBOX']),TMWOShowError);
   CreateLayoutbox(ToolBarD);
   LayoutBox.Parent:=ToolBarD;
   LayoutBox.AutoSize:=false;
   LayoutBox.Width:=200;
-  LayoutBox.Align:=alRight;
+  LayoutBox.Align:=alRight;}
 
 
   {Наcтраиваем докинг}
@@ -1535,6 +1536,29 @@ begin
   _Width:=getAttrValue(aNode,'Width',100);
   ColorBox:=CreateCBox('ColorComboBox',tb,TSupportColorCombo.ColorBoxDrawItem,ChangeCColor,DropDownColor,DropUpColor,FillColorCombo,_Width,_hint);
 end;
+procedure TZCADMainWindow.TBLayoutComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
+var
+  _hint:string;
+  _Width:integer;
+begin
+  _hint:=getAttrValue(aNode,'Hint','');
+  _Width:=getAttrValue(aNode,'Width',100);
+  //ColorBox:=CreateCBox('ColorComboBox',tb,TSupportColorCombo.ColorBoxDrawItem,ChangeCColor,DropDownColor,DropUpColor,FillColorCombo,_Width,_hint);
+    if assigned(LayoutBox) then
+    ZCMsgCallBackInterface.TextMessage(format(rsReCreating,['LAYOUTBOX']),TMWOShowError);
+  CreateLayoutbox(TB);
+  LayoutBox.Parent:=TB;
+  LayoutBox.AutoSize:=false;
+  if _Width>0 then
+    LayoutBox.Width:=_Width;
+  if _hint<>''then
+  begin
+       _hint:=InterfaceTranslate('combo~LayoutComboBox',_hint);
+       LayoutBox.hint:=(_hint);
+       LayoutBox.ShowHint:=true;
+  end;
+  //LayoutBox.Align:=alRight;
+end;
 procedure TZCADMainWindow.TBLTypeComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
 var
   _hint:string;
@@ -1692,6 +1716,7 @@ begin
   ToolBarsManager.RegisterTBItemCreateFunc('GroupAction',TBGroupActionCreateFunc);
   ToolBarsManager.RegisterTBItemCreateFunc('Button',TBButtonCreateFunc);
   ToolBarsManager.RegisterTBItemCreateFunc('LayerComboBox',TBLayerComboBoxCreateFunc);
+  ToolBarsManager.RegisterTBItemCreateFunc('LayoutComboBox',TBLayoutComboBoxCreateFunc);
   ToolBarsManager.RegisterTBItemCreateFunc('ColorComboBox',TBColorComboBoxCreateFunc);
   ToolBarsManager.RegisterTBItemCreateFunc('LTypeComboBox',TBLTypeComboBoxCreateFunc);
   ToolBarsManager.RegisterTBItemCreateFunc('LineWComboBox',TBLineWComboBoxCreateFunc);

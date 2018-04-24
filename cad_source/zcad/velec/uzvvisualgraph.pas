@@ -1,0 +1,654 @@
+{
+*****************************************************************************
+*                                                                           *
+*  This file is part of the ZCAD                                            *
+*                                                                           *
+*  See the file COPYING.modifiedLGPL.txt, included in this distribution,    *
+*  for details about the copyright.                                         *
+*                                                                           *
+*  This program is distributed in the hope that it will be useful,          *
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of           *
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                     *
+*                                                                           *
+*****************************************************************************
+}
+{
+@author(Vladimir Bobrov)
+}
+{$mode objfpc}
+
+unit uzvvisualgraph;
+{$INCLUDE def.inc}
+
+interface
+uses
+
+{*uzcenitiesvariablesextender,sysutils,UGDBOpenArrayOfPV,uzbtypesbase,uzbtypes,
+     uzeentity,varmandef,uzeentsubordinated,
+
+
+  uzeconsts, //base constants
+                      //описания базовых констант
+
+  uzccommandsmanager,
+  uzccommandsabstract,
+  uzccommandsimpl, //Commands manager and related objects
+                      //менеджер команд и объекты связанные с ним
+
+    uzeentline,             //unit describes line entity
+                       //модуль описывающий примитив линия
+
+  uzeentlwpolyline,             //unit describes line entity
+                       //модуль описывающий примитив двухмерная ПОЛИлиния
+
+  uzeentpolyline,             //unit describes line entity
+                       //модуль описывающий примитив трехмерная ПОЛИлиния
+
+     gvector,garrayutils, // Подключение Generics и модуля для работы с ним
+
+       //для работы графа
+  ExtType,
+  Pointerv,
+  Graphs,
+   *}
+   sysutils, math,
+
+  URecordDescriptor,TypeDescriptors,
+
+  Forms, //uzcfblockinsert,
+   uzcfarrayinsert,
+
+  uzeentblockinsert,      //unit describes blockinsert entity
+                       //модуль описывающий примитив вставка блока
+  uzeentline,             //unit describes line entity
+                       //модуль описывающий примитив линия
+  uzeentmtext,
+
+  uzeentlwpolyline,             //unit describes line entity
+                       //модуль описывающий примитив двухмерная ПОЛИлиния
+
+  uzeentpolyline,             //unit describes line entity
+                       //модуль описывающий примитив трехмерная ПОЛИлиния
+  uzeenttext,             //unit describes line entity
+                       //модуль описывающий примитив текст
+
+  uzeentdimaligned, //unit describes aligned dimensional entity
+                       //модуль описывающий выровненный размерный примитив
+  uzeentdimrotated,
+
+  uzeentdimdiametric,
+
+  uzeentdimradial,
+  uzeentarc,
+  uzeentcircle,
+  uzeentity,
+  uzbgeomtypes,
+
+
+  gvector,garrayutils, // Подключение Generics и модуля для работы с ним
+
+  uzcentcable,
+  uzeentdevice,
+  UGDBOpenArrayOfPV,
+
+  uzegeometry,
+  uzeentitiesmanager,
+
+  uzcshared,
+  uzeentityfactory,    //unit describing a "factory" to create primitives
+                      //модуль описывающий "фабрику" для создания примитивов
+  uzcsysvars,        //system global variables
+                      //системные переменные
+  uzgldrawcontext,
+  uzcinterface,
+  uzbtypesbase,uzbtypes, //base types
+                      //описания базовых типов
+  uzeconsts, //base constants
+                      //описания базовых констант
+  uzccommandsmanager,
+  uzccommandsabstract,
+  uzccommandsimpl, //Commands manager and related objects
+                      //менеджер команд и объекты связанные с ним
+  uzcdrawing,
+  uzedrawingsimple,
+  uzcdrawings,     //Drawings manager, all open drawings are processed him
+                      //"Менеджер" чертежей
+  uzcutils,         //different functions simplify the creation entities, while there are very few
+                      //разные функции упрощающие создание примитивов, пока их там очень мало
+  varmandef,
+  Varman,
+  {UGDBOpenArrayOfUCommands,}zcchangeundocommand,
+
+  uzclog,                //log system
+                      //<**система логирования
+  uzcvariablesutils, // для работы с ртти
+
+   gzctnrvectortypes,                  //itrec
+
+  //для работы графа
+  ExtType,
+  Pointerv,
+  Graphs,
+  AttrType,
+  AttrSet,
+  //*
+
+   uzcenitiesvariablesextender,
+   UUnitManager,
+   uzbpaths,
+   uzctranslations,
+
+  uzvcom,
+  uzvtmasterdev,
+  uzvtestdraw;
+
+
+type
+
+ //** Вектор графов деревьев
+ tvectorofGraph=specialize TVector<TGraph>;
+
+ procedure visualGraph(G: TGraph; var startPt:GDBVertex;height:double);
+ procedure visualAllTreesLMD(listMasterDevice:TVectorOfMasterDevice;startPt:GDBVertex;height:double);
+
+implementation
+const
+  size=5;
+  indent=30;
+type
+    PTInfoVertex=^TInfoVertex;
+    TInfoVertex=record
+        num,kol,childs:Integer;
+        poz:GDBVertex2D;
+    end;
+
+    TListVertex=specialize TVector<TInfoVertex>;
+
+  //рисуем прямоугольник с цветом  зная номера верши, координат возьмем из графа по номерам
+      procedure drawVertex(pt:GDBVertex;color:integer;height:double);
+      var
+          polyObj:PGDBObjPolyLine;
+      begin
+           polyObj:=GDBObjPolyline.CreateInstance;
+           zcSetEntPropFromCurrentDrawingProp(polyObj);
+           polyObj^.Closed:=true;
+           polyObj^.vp.Color:=color;
+           polyObj^.vp.LineWeight:=LnWt050;
+           //polyObj^.vp.Layer:=uzvtestdraw.getTestLayer('systemTempVisualLayer');
+           polyObj^.VertexArrayInOCS.PushBackData(uzegeometry.CreateVertex((pt.x-size)*height,(pt.y+size)*height,0));
+           polyObj^.VertexArrayInOCS.PushBackData(uzegeometry.CreateVertex((pt.x+size)*height,(pt.y+size)*height,0));
+           polyObj^.VertexArrayInOCS.PushBackData(uzegeometry.CreateVertex((pt.x+size)*height,(pt.y-size)*height,0));
+           polyObj^.VertexArrayInOCS.PushBackData(uzegeometry.CreateVertex((pt.x-size)*height,(pt.y-size)*height,0));
+           zcAddEntToCurrentDrawingWithUndo(polyObj);
+           //result:=cmd_ok;
+      end;
+
+      //рисуем прямоугольник с цветом  зная номера вершин, координат возьмем из графа по номерам
+      procedure drawConnectLine(pt1,pt2:GDBVertex;color:integer);
+      var
+          polyObj:PGDBObjPolyLine;
+      begin
+           polyObj:=GDBObjPolyline.CreateInstance;
+           zcSetEntPropFromCurrentDrawingProp(polyObj);
+           polyObj^.Closed:=false;
+           polyObj^.vp.Color:=color;
+           polyObj^.vp.LineWeight:=LnWt050;
+           //polyObj^.vp.Layer:=uzvtestdraw.getTestLayer('systemTempVisualLayer');
+           polyObj^.VertexArrayInOCS.PushBackData(pt1);
+           polyObj^.VertexArrayInOCS.PushBackData(uzegeometry.CreateVertex(pt1.x,pt2.y,0));
+           polyObj^.VertexArrayInOCS.PushBackData(pt2);
+           zcAddEntToCurrentDrawingWithUndo(polyObj);
+      end;
+      //Визуализация текста
+      procedure drawText(pt:GDBVertex;mText:GDBString;color:integer;height:double);
+      var
+          ptext:PGDBObjText;
+      begin
+          ptext := GDBObjText.CreateInstance;
+          zcSetEntPropFromCurrentDrawingProp(ptext); //добавляем дефаултные свойства
+          ptext^.TXTStyleIndex:=drawings.GetCurrentDWG^.GetCurrentTextStyle; //добавляет тип стиля текста, дефаултные свойства его не добавляют
+          ptext^.Local.P_insert:=pt;  // координата
+          ptext^.textprop.justify:=jsmc;
+          ptext^.Template:=mText;     // сам текст
+          ptext^.vp.LineWeight:=LnWt100;
+          ptext^.vp.Color:=color;
+          //ptext^.vp.Layer:=uzvtestdraw.getTestLayer('systemTempVisualLayer');
+          ptext^.textprop.size:=height*2.5;
+          zcAddEntToCurrentDrawingWithUndo(ptext);   //добавляем в чертеж
+          //result:=cmd_ok;
+      end;
+
+      ////
+      //Визуализация многострочный текст
+      procedure drawMText(pt:GDBVertex;mText:GDBString;color:integer;rotate,height:double);
+      var
+          pmtext:PGDBObjMText;
+      begin
+          pmtext := GDBObjMText.CreateInstance;
+          zcSetEntPropFromCurrentDrawingProp(pmtext); //добавляем дефаултные свойства
+          pmtext^.TXTStyleIndex:=drawings.GetCurrentDWG^.GetCurrentTextStyle; //добавляет тип стиля текста, дефаултные свойства его не добавляют
+
+
+          pmtext^.Local.P_insert:=pt;  // координата
+          pmtext^.textprop.justify:=jsml;
+          //ptext^.Template:=mText;     // сам текст
+          pmtext^.Template:=mText;
+          pmtext^.Content:=mText;
+          pmtext^.vp.LineWeight:=LnWt100;
+          pmtext^.linespacef:=1;
+          //pmtext^.textprop.aaaangle:=rotate;
+          rotate:=(rotate*pi)/180;
+          pmtext^.Local.basis.ox.x:=cos(rotate);
+          pmtext^.Local.basis.ox.y:=sin(rotate);
+
+          //pmtext^.vp.LineTypeScale:=1;
+          pmtext^.vp.Color:=color;
+          ////ptext^.vp.Layer:=uzvtestdraw.getTestLayer('systemTempVisualLayer');
+          pmtext^.textprop.size:=height*2.5;
+          zcAddEntToCurrentDrawingWithUndo(pmtext);   //добавляем в чертеж
+          ////result:=cmd_ok;
+      end;
+
+      ////
+
+
+      function howParent(listVertex:TListVertex;ch:integer):integer;
+      var
+          c:integer;
+      begin
+          result:=-1;
+
+          for c:=0 to listVertex.Size-1 do
+                if ch = listVertex[c].num then
+                   result:=c;
+      end;
+
+    //** Соберает внутри себя список всех деревьев, нужен для визуализации деревьев или еще чего то (пока незнаю)
+    function getListAllTrees(listMasterDevice:TVectorOfMasterDevice):TVectorOfGraph;
+    var
+       i,j,k: Integer;
+    begin
+
+         result:=TVectorOfGraph.Create;
+         for i:=0 to listMasterDevice.Size-1 do
+          for j:=0 to listMasterDevice[i].LGroup.Size-1 do
+           for k:=0 to listMasterDevice[i].LGroup[j].LTreeDev.Size-1 do
+           begin
+              result.PushBack(listMasterDevice[i].LGroup[j].LTreeDev[k]);
+           end;
+       end;
+
+      //Визуализация графа
+procedure visualAllTreesLMD(listMasterDevice:TVectorOfMasterDevice;startPt:GDBVertex;height:double);
+
+
+var
+    //ptext:PGDBObjText;
+    //indent,size:double;
+    x,y,i,tParent:integer;
+    listVertex:TListVertex;
+    infoVertex:TInfoVertex;
+    pt1,pt2,pt3,ptext,pt:GDBVertex;
+    VertexPath: TClassList;
+    listTrees:TVectorOfGraph ;
+
+
+
+begin
+      pt:=startPt;
+
+      listTrees:=getListAllTrees(listMasterDevice);
+      for i:=0 to listTrees.Size - 1 do begin
+         visualGraph(listTrees[i],pt,height);
+      end;
+
+      {x:=0;
+      y:=0;
+
+
+
+      VertexPath:=TClassList.Create;
+      listVertex:=TListVertex.Create;
+
+
+      infoVertex.num:=G.Root.Index;
+      infoVertex.poz:=uzegeometry.CreateVertex2D(x,0);
+      infoVertex.kol:=0;
+      infoVertex.childs:=G.Root.ChildCount;
+      listVertex.PushBack(infoVertex);
+      pt1:=uzegeometry.CreateVertex(startPt.x + x*indent,startPt.y + y*indent,0) ;
+      drawVertex(pt1,3,height);
+      //drawText(pt1,inttostr(G.Root.index),4);
+      //ptext:=uzegeometry.CreateVertex(pt1.x,pt1.y + indent/10,0) ;
+      //pt1.y+=indent/10;
+      drawMText(pt1,G.Root.AsString['infoVertex'],4,0,height);
+
+      G.TreeTraversal(G.Root, VertexPath); //получаем путь обхода графа
+      for i:=1 to VertexPath.Count - 1 do begin
+          tParent:=howParent(listVertex,TVertex(VertexPath[i]).Parent.Index);
+          if tParent>=0 then
+          begin
+            inc(listVertex.Mutable[tparent]^.kol);
+            if listVertex[tparent].kol = 1 then
+               infoVertex.poz:=uzegeometry.CreateVertex2D(listVertex[tparent].poz.x,listVertex[tparent].poz.y + 1)
+            else  begin
+              inc(x);
+              infoVertex.poz:=uzegeometry.CreateVertex2D(x,listVertex[tparent].poz.y + 1);
+            end;
+
+            infoVertex.num:=TVertex(VertexPath[i]).Index;
+            infoVertex.kol:=0;
+            infoVertex.childs:=TVertex(VertexPath[i]).ChildCount;
+            listVertex.PushBack(infoVertex);
+
+
+          pt1:=uzegeometry.CreateVertex(startPt.x + listVertex.Back.poz.x*indent,startPt.y - listVertex.Back.poz.y*indent,0) ;
+          drawVertex(pt1,3,height);
+          //drawText(pt1,inttostr(listVertex.Back.num),4);
+
+          drawMText(pt1,G.Vertices[listVertex.Back.num].AsString['infoVertex'],4,0,height);
+          pt3:=uzegeometry.CreateVertex(pt1.x,(pt1.y + size)*height,0) ;
+          ptext:=uzegeometry.CreateVertex(pt3.x,pt3.y + indent/20,0) ;
+          drawMText(ptext,G.GetEdge(G.Vertices[listVertex.Back.num],G.Vertices[listVertex.Back.num].Parent).AsString['infoEdge'],4,90,height);
+
+          if listVertex[tparent].kol = 1 then begin
+          pt2.x:=startPt.x + listVertex[tparent].poz.x*indent;
+          pt2.y:=startPt.y - listVertex[tparent].poz.y*indent-size;
+          pt2.z:=0;
+          end
+          else begin
+          pt2.x:=startPt.x + listVertex[tparent].poz.x*indent + size;
+          pt2.y:=startPt.y - listVertex[tparent].poz.y*indent-size+(listVertex[tparent].kol-1)*((2*size)/listVertex[tparent].childs);
+          pt2.z:=0;
+          end;
+          pt1.x:=startPt.x + listVertex.Back.poz.x*indent;
+          pt1.y:=startPt.y - listVertex.Back.poz.y*indent+size;
+          pt1.z:=0;
+          //pt2:=uzegeometry.CreateVertex(startPt.x + listVertex[tparent].poz.x*indent,startPt.y - listVertex[tparent].poz.y*indent,0) ;
+          drawConnectLine(pt1,pt2,4);
+
+          end;
+       end;
+      startPt.x:=(infoVertex.poz.x+1)*indent;
+      startPt.y:=0; }
+
+end;
+
+
+  //Визуализация графа
+procedure visualGraph(G: TGraph; var startPt:GDBVertex;height:double);
+
+
+var
+    //ptext:PGDBObjText;
+    //indent,size:double;
+    x,y,i,tParent:integer;
+    listVertex:TListVertex;
+    infoVertex:TInfoVertex;
+    pt1,pt2,pt3,ptext:GDBVertex;
+    VertexPath: TClassList;
+
+
+
+
+begin
+      x:=0;
+      y:=0;
+
+      VertexPath:=TClassList.Create;
+      listVertex:=TListVertex.Create;
+
+
+      infoVertex.num:=G.Root.Index;
+      infoVertex.poz:=uzegeometry.CreateVertex2D(x,0);
+      infoVertex.kol:=0;
+      infoVertex.childs:=G.Root.ChildCount;
+      listVertex.PushBack(infoVertex);
+      pt1:=uzegeometry.CreateVertex(startPt.x + x*indent,startPt.y + y*indent,0) ;
+      drawVertex(pt1,3,height);
+      //drawText(pt1,inttostr(G.Root.index),4);
+      //ptext:=uzegeometry.CreateVertex(pt1.x,pt1.y + indent/10,0) ;
+      //pt1.y+=indent/10;
+      drawMText(pt1,G.Root.AsString['infoVertex'],4,0,height);
+
+      G.TreeTraversal(G.Root, VertexPath); //получаем путь обхода графа
+      for i:=1 to VertexPath.Count - 1 do begin
+          tParent:=howParent(listVertex,TVertex(VertexPath[i]).Parent.Index);
+          if tParent>=0 then
+          begin
+            inc(listVertex.Mutable[tparent]^.kol);
+            if listVertex[tparent].kol = 1 then
+               infoVertex.poz:=uzegeometry.CreateVertex2D(listVertex[tparent].poz.x,listVertex[tparent].poz.y + 1)
+            else  begin
+              inc(x);
+              infoVertex.poz:=uzegeometry.CreateVertex2D(x,listVertex[tparent].poz.y + 1);
+            end;
+
+            infoVertex.num:=TVertex(VertexPath[i]).Index;
+            infoVertex.kol:=0;
+            infoVertex.childs:=TVertex(VertexPath[i]).ChildCount;
+            listVertex.PushBack(infoVertex);
+
+
+          pt1:=uzegeometry.CreateVertex(startPt.x + listVertex.Back.poz.x*indent,startPt.y - listVertex.Back.poz.y*indent,0) ;
+          drawVertex(pt1,3,height);
+          //drawText(pt1,inttostr(listVertex.Back.num),4);
+
+          drawMText(pt1,G.Vertices[listVertex.Back.num].AsString['infoVertex'],4,0,height);
+          pt3:=uzegeometry.CreateVertex(pt1.x,(pt1.y + size)*height,0) ;
+          ptext:=uzegeometry.CreateVertex(pt3.x,pt3.y + indent/20,0) ;
+          drawMText(ptext,G.GetEdge(G.Vertices[listVertex.Back.num],G.Vertices[listVertex.Back.num].Parent).AsString['infoEdge'],4,90,height);
+
+          if listVertex[tparent].kol = 1 then begin
+          pt2.x:=startPt.x + listVertex[tparent].poz.x*indent;
+          pt2.y:=startPt.y - listVertex[tparent].poz.y*indent-size;
+          pt2.z:=0;
+          end
+          else begin
+          pt2.x:=startPt.x + listVertex[tparent].poz.x*indent + size;
+          pt2.y:=startPt.y - listVertex[tparent].poz.y*indent-size+(listVertex[tparent].kol-1)*((2*size)/listVertex[tparent].childs);
+          pt2.z:=0;
+          end;
+          pt1.x:=startPt.x + listVertex.Back.poz.x*indent;
+          pt1.y:=startPt.y - listVertex.Back.poz.y*indent+size;
+          pt1.z:=0;
+          //pt2:=uzegeometry.CreateVertex(startPt.x + listVertex[tparent].poz.x*indent,startPt.y - listVertex[tparent].poz.y*indent,0) ;
+          drawConnectLine(pt1,pt2,4);
+
+          end;
+       end;
+      startPt.x:=startPt.x + (infoVertex.poz.x+1)*indent;
+      startPt.y:=0;
+
+end;
+
+  function TestTREEUses_com2(operands:TCommandOperands):TCommandResult;
+  var
+    G: TGraph;
+    EdgePath, VertexPath: TClassList;
+    i: Integer;
+    gg:GDBVertex;
+    //user:TCompareEvent;
+  begin
+
+      ZCMsgCallBackInterface.TextMessage('*** tree Path ***',TMWOHistoryOut);
+    G:=TGraph.Create;
+    G.Features:=[Tree];
+    EdgePath:=TClassList.Create;
+    VertexPath:=TClassList.Create;
+    try
+      G.CreateVertexAttr('tt', AttrFloat32);
+      G.CreateEdgeAttr('length', AttrFloat32);
+
+      //G.AddVertices(14);
+      //G.Vertices[0].AsFloat32['tt']:=10;
+      //G.Vertices[1].AsFloat32['tt']:=20;
+      //G.Vertices[2].AsFloat32['tt']:=30;
+      //G.Vertices[3].AsFloat32['tt']:=40;
+      //G.Vertices[4].AsFloat32['tt']:=50;
+      //G.Vertices[5].AsFloat32['tt']:=60;
+      //G.Vertices[6].AsFloat32['tt']:=70;
+      //G.Vertices[7].AsFloat32['tt']:=80;
+      //G.Vertices[8].AsFloat32['tt']:=90;
+      //G.Vertices[9].AsFloat32['tt']:=100;
+      //G.Vertices[10].AsFloat32['tt']:=110;
+      //G.Vertices[11].AsFloat32['tt']:=120;
+      //G.Vertices[12].AsFloat32['tt']:=130;
+      //G.Vertices[13].AsFloat32['tt']:=140;
+
+      //G.AddEdgeI(2,1);
+      //G.Edges[0].AsFloat32['length']:=10;
+      //G.AddEdgeI(2,3);
+      //G.Edges[1].AsFloat32['length']:=2;
+      //G.AddEdgeI(2,4);
+      //G.Edges[2].AsFloat32['length']:=15;
+      //G.AddEdgeI(4,11);
+      //G.Edges[3].AsFloat32['length']:=3;
+      //G.AddEdgeI(4,12);
+      //G.Edges[4].AsFloat32['length']:=8;
+      //{G.AddEdgeI(2,3);
+      //G.Edges[5].AsFloat32['length']:=2;}
+      //G.AddEdgeI(3,0);
+      //G.Edges[5].AsFloat32['length']:=7;
+      //G.AddEdgeI(1,6);
+      //G.Edges[6].AsFloat32['length']:=61;
+      //G.AddEdgeI(1,5);
+      //G.Edges[7].AsFloat32['length']:=7;
+      //G.AddEdgeI(5,7);
+      //G.Edges[8].AsFloat32['length']:=17;
+      //G.AddEdgeI(7,8);
+      //G.Edges[9].AsFloat32['length']:=14;
+      //G.AddEdgeI(7,9);
+      //G.Edges[10].AsFloat32['length']:=80;
+      //G.AddEdgeI(2,13);
+      //G.Edges[11].AsFloat32['length']:=81;
+
+
+      G.AddVertices(10);
+      G.Vertices[0].AsFloat32['tt']:=0;
+      G.Vertices[1].AsFloat32['tt']:=1;
+      G.Vertices[2].AsFloat32['tt']:=2;
+      G.Vertices[3].AsFloat32['tt']:=3;
+      G.Vertices[4].AsFloat32['tt']:=4;
+      G.Vertices[5].AsFloat32['tt']:=5;
+      G.Vertices[6].AsFloat32['tt']:=6;
+      G.Vertices[7].AsFloat32['tt']:=7;
+      G.Vertices[8].AsFloat32['tt']:=8;
+      G.Vertices[9].AsFloat32['tt']:=9;
+
+      //G.Vertices[0].set:=0;
+      //G.Vertices[1].AsFloat32['tt']:=1;
+      //G.Vertices[2].AsFloat32['tt']:=2;
+      //G.Vertices[3].AsFloat32['tt']:=3;
+      //G.Vertices[4].AsFloat32['tt']:=4;
+      //G.Vertices[5].AsFloat32['tt']:=5;
+      //G.Vertices[6].AsFloat32['tt']:=6;
+      //G.Vertices[7].AsFloat32['tt']:=7;
+      //G.Vertices[8].AsFloat32['tt']:=8;
+      //G.Vertices[9].AsFloat32['tt']:=9;
+      //
+      //G.Vertices[10].AsFloat32['tt']:=110;
+      //G.Vertices[11].AsFloat32['tt']:=120;
+      //G.Vertices[12].AsFloat32['tt']:=130;
+      //G.Vertices[13].AsFloat32['tt']:=140;
+
+      G.AddEdge(G.Vertices[2],G.Vertices[1]);
+      G.Edges[0].AsFloat32['length']:=10;
+      G.AddEdge(G.Vertices[1],G.Vertices[0]);
+      G.Edges[1].AsFloat32['length']:=2;
+      G.AddEdge(G.Vertices[1],G.Vertices[4]);
+      G.Edges[2].AsFloat32['length']:=15;
+      G.AddEdge(G.Vertices[2],G.Vertices[3]);
+      G.Edges[3].AsFloat32['length']:=3;
+      G.AddEdge(G.Vertices[1],G.Vertices[5]);
+      G.Edges[4].AsFloat32['length']:=22;
+      G.AddEdge(G.Vertices[1],G.Vertices[6]);
+      G.Edges[5].AsFloat32['length']:=11;
+      G.AddEdge(G.Vertices[0],G.Vertices[7]);
+      G.Edges[6].AsFloat32['length']:=17;
+      G.AddEdge(G.Vertices[6],G.Vertices[8]);
+      G.Edges[7].AsFloat32['length']:=18;
+      G.AddEdge(G.Vertices[6],G.Vertices[9]);
+      G.Edges[8].AsFloat32['length']:=1;
+      //G.AddEdgeI(4,12);
+      //G.Edges[4].AsFloat32['length']:=8;
+      //{G.AddEdgeI(2,3);
+      //G.Edges[5].AsFloat32['length']:=2;}
+      //G.AddEdgeI(3,0);
+      //G.Edges[5].AsFloat32['length']:=7;
+      //G.AddEdgeI(1,6);
+      //G.Edges[6].AsFloat32['length']:=61;
+      //G.AddEdgeI(1,5);
+      //G.Edges[7].AsFloat32['length']:=7;
+      //G.AddEdgeI(5,7);
+      //G.Edges[8].AsFloat32['length']:=17;
+      //G.AddEdgeI(7,8);
+      //G.Edges[9].AsFloat32['length']:=14;
+      //G.AddEdgeI(7,9);
+      //G.Edges[10].AsFloat32['length']:=80;
+      //G.AddEdgeI(2,13);
+      //G.Edges[11].AsFloat32['length']:=81;
+
+
+      G.Root:=G.Vertices[2];
+
+      if G.IsTree then
+         ZCMsgCallBackInterface.TextMessage('граф дерево',TMWOHistoryOut)
+      else
+         ZCMsgCallBackInterface.TextMessage('граф не дерево',TMWOHistoryOut) ;
+
+      G.CorrectTree;
+
+      //for i:=0 to G.VertexCount - 1 do
+      //ZCMsgCallBackInterface.TextMessage('*кол потомков для ' + inttostr(i) + ' = ' + inttostr(G.Vertices[i].ChildCount),TMWOHistoryOut);
+
+      {
+      ZCMsgCallBackInterface.TextMessage('***',TMWOHistoryOut);
+
+      G.TreeTraversal(G.Root, VertexPath);
+      for i:=0 to VertexPath.Count - 1 do
+        ZCMsgCallBackInterface.TextMessage(inttostr(TVertex(VertexPath[i]).Index) + ' ',TMWOHistoryOut);
+      }
+
+      for i:=0 to VertexPath.Count - 1 do begin
+        ZCMsgCallBackInterface.TextMessage(inttostr(TVertex(VertexPath[i]).Index) + '+',TMWOHistoryOut);
+        //ZCMsgCallBackInterface.TextMessage('tt = ' + floattostr(TVertex(VertexPath[i]).AsFloat32['tt']) + ' ',TMWOHistoryOut);
+        end;
+
+      G.TreeTraversal(G.Root, VertexPath);
+      gg:=uzegeometry.CreateVertex(0,0,0) ;
+      visualGraph(G,gg,1);
+
+      //G.SortTree(G.Root,@DummyComparer.Compare);
+
+
+
+      ZCMsgCallBackInterface.TextMessage('-кол верш lkz 2-q -' + inttostr(G.BFSFromVertex(G.Root) ),TMWOHistoryOut);
+
+      G.TreeTraversal(G.Root, VertexPath);
+
+      //gg:=uzegeometry.CreateVertex(0,-500,0) ;
+      //visualGraph(G,G.Root.index,gg,1);
+      //
+      G.SetTempToSubtreeSize(G.Root);
+
+      gg:=uzegeometry.CreateVertex(0,-300,0) ;
+      visualGraph(G,gg,1);
+
+      for i:=1 to VertexPath.Count - 1 do begin
+        ZCMsgCallBackInterface.TextMessage(inttostr(TVertex(VertexPath[i]).Index) + '- батя ' + inttostr(TVertex(VertexPath[i]).Parent.Index),TMWOHistoryOut);
+
+        ZCMsgCallBackInterface.TextMessage('-кол верш-' + inttostr(TVertex(VertexPath[i]).temp.AsPtrInt),TMWOHistoryOut);
+        //ZCMsgCallBackInterface.TextMessage('tt = ' + floattostr(TVertex(VertexPath[i]).AsFloat32['tt']) + ' ',TMWOHistoryOut);
+        end;
+      //end;
+      ZCMsgCallBackInterface.TextMessage('All good ',TMWOHistoryOut);
+    finally
+      G.Free;
+      EdgePath.Free;
+      VertexPath.Free;
+    end;
+    result:=cmd_ok;
+  end;
+end.
+

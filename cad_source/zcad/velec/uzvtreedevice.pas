@@ -17,7 +17,7 @@
 }
 {$mode objfpc}
 
-unit uzvnum;
+unit uzvtreedevice;
 {$INCLUDE def.inc}
 
 interface
@@ -140,6 +140,7 @@ uses
 
   uzvcom,
   uzvtmasterdev,
+  uzvvisualgraph,
   uzvtestdraw;
 
 
@@ -151,6 +152,9 @@ type
  TSortTreeLengthComparer=class
  function Compare (vertex1, vertex2: Pointer): Integer;
  end;
+
+ //** Вектор графов деревьев
+ //tvectorofGraph=specialize TVector<TGraph>;
 
     //+++Здесь описывается все переменые для выполения анализа чертежей с целью нумирации извещателе, иполучения длин продукции и тд.
 
@@ -197,7 +201,7 @@ PTDeviceInfoSubGraph=^TDeviceInfoSubGraph;
       ///////////////////////////////////////////////////////////////
 //      **************************СТАРАЯ ВЕРСИЯ
 
-
+      {*******
 
 
        //** описания новых ребер которые проложены между вершинами при оценки ситуации с трассой от головного прибора до устройства
@@ -309,6 +313,12 @@ PTDeviceInfoSubGraph=^TDeviceInfoSubGraph;
       TlistCableLaying=specialize TVector<TInfoCableLaying>;
 
              TListString=specialize TVector<string>;
+
+
+
+
+             ********}
+
       ////********************************************
       ////** Создания списка ребер графа для графа анализа групп устройств
       //PTInfoEdgeSubGraph=^TInfoEdgeSubGraph;
@@ -346,52 +356,35 @@ PTDeviceInfoSubGraph=^TDeviceInfoSubGraph;
 
 
 
-      function getGroupDeviceInGraph(ourGraph:TGraphBuilder;Epsilon:double; var listError:TListError):TListHeadDevice;
-  procedure getListOnlyVertexWayGroup(var ourListGroup:THeadGroupInfo;ourGraph:TGraphBuilder);
- function testTempDrawPolyLineNeed(myVertex:TListVertexWayOnlyVertex;ourGraph:TGraphBuilder;color:Integer):TCommandResult;
- function visualGroupLine(listHeadDevice:TListHeadDevice;ourGraph:TGraphBuilder;color:Integer;numHead:integer;numGroup:integer;accuracy:double):TCommandResult;
- function cablingGroupLine(listHeadDevice:TListHeadDevice;ourGraph:TGraphBuilder;numHead:integer;numGroup:integer):TCommandResult;
+ //     function getGroupDeviceInGraph(ourGraph:TGraphBuilder;Epsilon:double; var listError:TListError):TListHeadDevice;
+ // procedure getListOnlyVertexWayGroup(var ourListGroup:THeadGroupInfo;ourGraph:TGraphBuilder);
+ //function testTempDrawPolyLineNeed(myVertex:TListVertexWayOnlyVertex;ourGraph:TGraphBuilder;color:Integer):TCommandResult;
+ //function visualGroupLine(listHeadDevice:TListHeadDevice;ourGraph:TGraphBuilder;color:Integer;numHead:integer;numGroup:integer;accuracy:double):TCommandResult;
+ //function cablingGroupLine(listHeadDevice:TListHeadDevice;ourGraph:TGraphBuilder;numHead:integer;numGroup:integer):TCommandResult;
 
- function getListParamDev(nowDev:PGDBObjDevice;nameType:string):TListString;
- procedure errorSearchSLAGCAB(ourGraph:TGraphBuilder;Epsilon:double; var listError:TListError);
- procedure errorSearchAllParam(ourGraph:TGraphBuilder;Epsilon:double;var listError:TListError;listSLname:TGDBlistSLname);
- //procedure errorSearchSLAGCAB(ourGraph:TGraphBuilder;Epsilon:double; var listError:TListError;listSLname:TGDBlistSLname);
- procedure visualGraph(G: TGraph; var startPt:GDBVertex;height:double);
- procedure metricNumeric(metric:boolean;dev:PGDBObjDevice);
- //function buildListAllConnectDevice(listVertexEdge:TGraphBuilder;Epsilon:double; var listError:TListError):TListHeadDevice;
+ //procedure errorSearchAllParam(ourGraph:TGraphBuilder;Epsilon:double;var listError:TListError;listSLname:TGDBlistSLname);
+ //procedure errorSearchList(ourGraph:TGraphBuilder;Epsilon:double;var listError:TListError);
+ procedure errorSearchList(ourGraph:TGraphBuilder;Epsilon:double;var listError:TListError;listSLname:TGDBlistSLname);
+
+ //procedure visualGraph(G: TGraph; var startPt:GDBVertex;height:double);
+ //procedure metricNumeric(metric:boolean;dev:PGDBObjDevice);
+ function buildListAllConnectDevice(listVertexEdge:TGraphBuilder;Epsilon:double; var listError:TListError):TVectorOfMasterDevice;
 
 implementation
 var
   DummyComparer:TDummyComparer;
   SortTreeLengthComparer:TSortTreeLengthComparer;
-  //LengthSortComparer:TDummyComparer;
- //type
+
+  {***
 
 
-//constructor TSubGraphBuilder.Create;
-//begin
-//  listEdge:=TListEdgeSubGraph.Create;
-//  listVertex:=TListVertexSubGraph.Create;
-//end;
-//
-//destructor TSubGraphBuilder.Destroy;
-//begin
-//  listEdge.Destroy;
-//  listVertex.Destroy;
-//end;
-{
-constructor TInfoVertexSubGraph.Create;
-begin
-  afterDevice:=TListSubGraphDevice.Create;
-  vertexAfter:=TListVertexAfter.Create;
-  vertexBefore:=TListVertexBefore.Create;
-end;
-destructor TInfoVertexSubGraph.Destroy;
-begin
-  afterDevice.Destroy;
-  vertexAfter.Destroy;
-  vertexBefore.Destroy;
-end;           }
+
+
+
+
+
+
+
 
 constructor TDeviceInfo.Create;
 begin
@@ -459,70 +452,8 @@ end;
 //
 
 
-  //** Поиск номера по имени устройства из списка из списка устройства
-function getNumHeadDevice(listVertex:TListDeviceLine;name:string;G: TGraph;numDev:integer):integer;
-var
-   i: Integer;
-   pvd:pvardesk; //для работы со свойствами устройств
-   T: Float;
-   EdgePath, VertexPath: TClassList;
-begin
 
 
-     result:=-1;
-     for i:=0 to listVertex.Size-1 do
-        begin
-           if listVertex[i].deviceEnt<>nil then
-           begin
-               pvd:=FindVariableInEnt(listVertex[i].deviceEnt,'NMO_Name');
-               if pvd <> nil then
-               if pgdbstring(pvd^.data.Instance)^ = name then begin
-                  //result:=-1;
-                                         //работа с библиотекой Аграф
-                  EdgePath:=TClassList.Create;     //Создаем реберный путь
-                  VertexPath:=TClassList.Create;   //Создаем вершиный путь
-
-                  // Получение ребер минимального пути в графи из одной точки в другую
-                  T:=G.FindMinWeightPath(G[i], G[numDev], EdgePath);
-                  // Получение вершин минимального пути в графи на основе минимального пути в ребер, указывается из какой точки старт
-                  G.EdgePathToVertexPath(G[i], EdgePath, VertexPath);
-
-                   if VertexPath.Count > 1 then
-                    result:= i ;
-                    //else
-                    //result:= -2;
-
-                  EdgePath.Free;
-                  VertexPath.Free;
-               end;
-           end;
-
-        end;
-     // HistoryOutStr(IntToStr(result));
-end;
-
-//** Поиск существует ли устройства с нужным именем
-function isHaveDevice(listVertex:TListDeviceLine;name:string):boolean;
-var
-   i: Integer;
-   pvd:pvardesk; //для работы со свойствами устройств
-
-begin
-     result:=true;
-     for i:=0 to listVertex.Size-1 do
-        begin
-           if listVertex[i].deviceEnt<>nil then
-           begin
-               pvd:=FindVariableInEnt(listVertex[i].deviceEnt,'NMO_Name');
-               if pvd <> nil then
-               if pgdbstring(pvd^.data.Instance)^ = name then begin
-                  result:= false;
-               end;
-           end;
-
-        end;
-     // HistoryOutStr(IntToStr(result));
-end;
 function VertexCenter(const Vertex1, Vertex2: GDBVertex): GDBVertex;
 begin
   Result.X := (Vertex1.x + Vertex2.x)/2;
@@ -1674,6 +1605,69 @@ function getGroupDeviceInGraph(ourGraph:TGraphBuilder;Epsilon:double; var listEr
       VertexPath.Free;  *}
 
   end;
+    
+
+
+
+
+
+
+****************}
+
+
+
+
+
+
+
+
+
+
+//** Поиск номера по имени устройства из списка из списка устройства
+    function getNumHeadDevice(listVertex:TListDeviceLine;name:string;G: TGraph;numDev:integer):integer;
+    var
+       i: Integer;
+       pvd:pvardesk; //для работы со свойствами устройств
+       T: Float;
+       EdgePath, VertexPath: TClassList;
+    begin
+
+
+         result:=-1;
+         for i:=0 to listVertex.Size-1 do
+            begin
+               if listVertex[i].deviceEnt<>nil then
+               begin
+                   pvd:=FindVariableInEnt(listVertex[i].deviceEnt,'NMO_Name');
+                   if pvd <> nil then
+                   if pgdbstring(pvd^.data.Instance)^ = name then begin
+                      //result:=-1;
+                                             //работа с библиотекой Аграф
+                      EdgePath:=TClassList.Create;     //Создаем реберный путь
+                      VertexPath:=TClassList.Create;   //Создаем вершиный путь
+
+                      // Получение ребер минимального пути в графи из одной точки в другую
+                      T:=G.FindMinWeightPath(G[i], G[numDev], EdgePath);
+                      // Получение вершин минимального пути в графи на основе минимального пути в ребер, указывается из какой точки старт
+                      G.EdgePathToVertexPath(G[i], EdgePath, VertexPath);
+
+                       if VertexPath.Count > 1 then
+                        result:= i ;
+                        //else
+                        //result:= -2;
+
+                      EdgePath.Free;
+                      VertexPath.Free;
+                   end;
+               end;
+
+            end;
+         // HistoryOutStr(IntToStr(result));
+    end;
+
+
+
+
 
 function getListMasterDev(listVertexEdge:TGraphBuilder;globalGraph: TGraph):TVectorOfMasterDevice;
   type
@@ -1700,6 +1694,7 @@ function getListMasterDev(listVertexEdge:TGraphBuilder;globalGraph: TGraph):TVec
   i,j,k,m,counter,tnum: Integer;
   numHead,numHeadGroup,numHeadDev : integer;
 
+  isHeadnum:boolean;
   shortNameHead, headDevName, groupName:string;
   pvd:pvardesk; //для работы со свойствами устройств
 
@@ -1714,9 +1709,9 @@ function getListMasterDev(listVertexEdge:TGraphBuilder;globalGraph: TGraph):TVec
        listStr1,listStr2,listStr3:TVertexofString;
 
     begin
-         listStr1:=TListString.Create;
-         listStr2:=TListString.Create;
-         listStr3:=TListString.Create;
+         listStr1:=TVertexofString.Create;
+         listStr2:=TVertexofString.Create;
+         listStr3:=TVertexofString.Create;
 
          pvd:=FindVariableInEnt(nowDev,'SLCABAGEN_HeadDeviceName');
          if pvd<>nil then
@@ -1795,11 +1790,18 @@ function getListMasterDev(listVertexEdge:TGraphBuilder;globalGraph: TGraph):TVec
                     for j:=0 to result.Size-1 do    //проверяем существует ли уже такое же головное устройство
                        if result[j].name = headDevName then begin
                              numHead := j;
+
+                             //ZCMsgCallBackInterface.TextMessage('NAMENUMmaster = '+inttostr(numHead) + 'namemaster = ' + headDevName + ' = ' + result[j].name,TMWOHistoryOut);
+                             isHeadnum:=true;
                              //устройства иногда могут использоватся на разных планах и иметь подчиненных
                              //при обработке всех планов одно и тоже устройство может иметь несколько номеров в глобальном графе
-                             for tnum in result[j].LIndex do
-                                 if tnum <> numHead then
-                                    result.mutable[j]^.LIndex.PushBack(numHead);
+                             for tnum in result[j].LIndex do  begin
+                                 ZCMsgCallBackInterface.TextMessage('tnum = '+inttostr(tnum) + 'numHeadDev = ' + headDevName + ' = ' + inttostr(numHeadDev),TMWOHistoryOut);
+                                 if tnum = numHeadDev then
+                                    isHeadnum:=false;
+                                 end;
+                             if isHeadnum then
+                               result.mutable[j]^.LIndex.PushBack(numHeadDev);
                        end;
 
                     if numHead < 0 then        // если в списки устройства есть. Но нашего устройства нет, то добавляем его
@@ -2018,50 +2020,50 @@ end;
       end;
   end;
 
-  //** Добавляет пункт к ребрам графа длина с начала (от головного устройства)
-  procedure addItemLengthFromBegin(var listMasterDevice:TVectorOfMasterDevice);
-  var
-     i,j,k,l:integer;
-
-     VPath: TClassList;
-
-     edgeLength,edgeLengthParent:float;
-
-
-  begin
-      for i:=0 to listMasterDevice.Size-1 do
-      begin
-         for j:=0 to listMasterDevice[i].LGroup.Size -1 do
-            begin
-              for k:=0 to listMasterDevice[i].LGroup[j].LTreeDev.Size -1 do begin
-
-                listMasterDevice.mutable[i]^.LGroup.mutable[j]^.LTreeDev.mutable[k]^.CreateEdgeAttr('lengthfrombegin', AttrFloat32);
-
-                //**получаем обход графа
-                VPath:=TClassList.Create;
-                listMasterDevice.mutable[i]^.LGroup.mutable[j]^.LTreeDev.mutable[k]^.TreeTraversal(tvertex(listMasterDevice[i].LGroup[j].LTreeDev[k].Root), VPath); //получаем путь обхода графа
-
-
-                for l:= 1 to VPath.Count - 1 do
-                 begin
-
-                     if tvertex(VPath[l]).Parent.Parent = nil then
-                       edgeLengthParent:=0
-                     else
-                       edgeLengthParent:=listMasterDevice.mutable[i]^.LGroup.mutable[j]^.LTreeDev.mutable[k]^.GetEdge(tvertex(VPath[l]).Parent,tvertex(VPath[l]).Parent.Parent).AsFloat32['lengthfrombegin'];
-
-                       edgeLength:=listMasterDevice.mutable[i]^.LGroup.mutable[j]^.LTreeDev.mutable[k]^.GetEdge(tvertex(VPath[l]),tvertex(VPath[l]).Parent).AsFloat32['length'];
-                       listMasterDevice.mutable[i]^.LGroup.mutable[j]^.LTreeDev.mutable[k]^.GetEdge(tvertex(VPath[l]),tvertex(VPath[l]).Parent).AsFloat32['lengthfrombegin']:=edgeLength+edgeLengthParent;
+//  //** Добавляет пункт к ребрам графа длина с начала (от головного устройства)
+//  procedure addItemLengthFromBegin(var listMasterDevice:TVectorOfMasterDevice);
+//  var
+//     i,j,k,l:integer;
 //
-//                       listMasterDevice.mutable[i]^.LGroup.mutable[j]^.LTreeDev.mutable[k]^.GetEdge(tvertex(VPath[l]),tvertex(VPath[l]).Parent).AsString['infoEdge']:='ddd = '+floattostr(listMasterDevice.mutable[i]^.LGroup.mutable[j]^.LTreeDev.mutable[k]^.GetEdge(tvertex(VPath[l]),tvertex(VPath[l]).Parent).AsFloat32['lengthfrombegin']);
-                 end;
-               end;
-            end;
+//     VPath: TClassList;
+//
+//     edgeLength,edgeLengthParent:float;
+//
+//
+//  begin
+//      for i:=0 to listMasterDevice.Size-1 do
+//      begin
+//         for j:=0 to listMasterDevice[i].LGroup.Size -1 do
+//            begin
+//              for k:=0 to listMasterDevice[i].LGroup[j].LTreeDev.Size -1 do begin
+//
+//                listMasterDevice.mutable[i]^.LGroup.mutable[j]^.LTreeDev.mutable[k]^.CreateEdgeAttr('lengthfrombegin', AttrFloat32);
+//
+//                //**получаем обход графа
+//                VPath:=TClassList.Create;
+//                listMasterDevice.mutable[i]^.LGroup.mutable[j]^.LTreeDev.mutable[k]^.TreeTraversal(tvertex(listMasterDevice[i].LGroup[j].LTreeDev[k].Root), VPath); //получаем путь обхода графа
+//
+//
+//                for l:= 1 to VPath.Count - 1 do
+//                 begin
+//
+//                     if tvertex(VPath[l]).Parent.Parent = nil then
+//                       edgeLengthParent:=0
+//                     else
+//                       edgeLengthParent:=listMasterDevice.mutable[i]^.LGroup.mutable[j]^.LTreeDev.mutable[k]^.GetEdge(tvertex(VPath[l]).Parent,tvertex(VPath[l]).Parent.Parent).AsFloat32['lengthfrombegin'];
+//
+//                       edgeLength:=listMasterDevice.mutable[i]^.LGroup.mutable[j]^.LTreeDev.mutable[k]^.GetEdge(tvertex(VPath[l]),tvertex(VPath[l]).Parent).AsFloat32['length'];
+//                       listMasterDevice.mutable[i]^.LGroup.mutable[j]^.LTreeDev.mutable[k]^.GetEdge(tvertex(VPath[l]),tvertex(VPath[l]).Parent).AsFloat32['lengthfrombegin']:=edgeLength+edgeLengthParent;
+////
+////                       listMasterDevice.mutable[i]^.LGroup.mutable[j]^.LTreeDev.mutable[k]^.GetEdge(tvertex(VPath[l]),tvertex(VPath[l]).Parent).AsString['infoEdge']:='ddd = '+floattostr(listMasterDevice.mutable[i]^.LGroup.mutable[j]^.LTreeDev.mutable[k]^.GetEdge(tvertex(VPath[l]),tvertex(VPath[l]).Parent).AsFloat32['lengthfrombegin']);
+//                 end;
+//               end;
+//            end;
+//
+//      end;
+//  end;
 
-      end;
-  end;
-
-  //** Добавляет пункт к ребрам графа длина с начала (от головного устройства)
+  //** Добавляет пункт к вершинам графа длина с Конца (от головного устройства)
   procedure addItemLengthFromEnd(var listMasterDevice:TVectorOfMasterDevice);
   var
      i,j,k,l:integer;
@@ -2109,6 +2111,9 @@ end;
       end;
   end;
 
+
+
+
   //** Создание деревьев устройств
   procedure addTreeDevice(listVertexEdge:TGraphBuilder;globalGraph:TGraph;var listMasterDevice:TVectorOfMasterDevice);
   //type
@@ -2116,7 +2121,7 @@ end;
   var
      pvd:pvardesk; //для работы со свойствами устройств
      polyObj:PGDBObjPolyLine;
-     i,j,k,m,counter1,counter2,counter3:integer;
+     i,j,k,m,n,counter1,counter2,counter3:integer;
      tIndex,tIndexLocal,tIndexGlobal:integer;
      EdgePath, VertexPath: TClassList;
      infoGTree:TGraph;
@@ -2165,11 +2170,36 @@ end;
              result:=i;
      end;
 
+    //** Есть ли соединение данного устройства с данным номером головного устройства
+    //** суть в том что одно и тоже устройство может быть на разных планах, это нужно для избежания ошибок связей
+    function isHaveLineMaster(isMaster,isSub:integer):boolean;
+    begin
+      ZCMsgCallBackInterface.TextMessage('isMaster : ' + inttostr(isMaster)+' - isSub -  ' + inttostr(isSub),TMWOHistoryOut);
+
+        result:=true; // нет пути между головным устройством и подключаемым
+        EdgePath:=TClassList.Create;     //Создаем реберный путь
+        VertexPath:=TClassList.Create;   //Создаем вершиный путь
+        //Получение ребер минимального пути в графе из одной точки в другую
+        sumWeightPath:=globalGraph.FindMinWeightPath(globalGraph[isMaster], globalGraph[isSub], EdgePath);
+        //Получение вершин минимального пути в графе на основе минимального пути в ребер, указывается из какой точки старт
+        globalGraph.EdgePathToVertexPath(globalGraph[isMaster], EdgePath, VertexPath);
+
+        //Узнать существует уже граф если нет то создать его и добавляем начальную вершину
+        if VertexPath.Count > 1 then
+          result:=false;  //путь есть между головным устройством и подключаемым
+
+    end;
+
   begin
     for i:=0 to listMasterDevice.Size-1 do
       begin
          for j:=0 to listMasterDevice[i].LGroup.Size -1 do
             begin
+              for n:=0 to listMasterDevice[i].LIndex.Size -1 do
+              begin
+
+              ZCMsgCallBackInterface.TextMessage('khfskldhfskdhflksdhflksdhflksdflkshd - ' + inttostr(n),TMWOHistoryOut);
+
               infoGTree:=TGraph.Create;
               infoGTree.Features:=[Tree];
               //infoGTree.Root;
@@ -2179,11 +2209,18 @@ end;
               //infoGTree.CreateVertexAttr('isFork', AttrInt32);
               infoGTree.CreateEdgeAttr('length', AttrFloat32);
               infoGTree.CreateEdgeAttr('infoEdge', AttrString);
+              ZCMsgCallBackInterface.TextMessage('yfx Количство ребер - ' + inttostr(infoGTree.EdgeCount),TMWOHistoryOut);
+              ZCMsgCallBackInterface.TextMessage('yfx Количство вершин - ' + inttostr(infoGTree.VertexCount),TMWOHistoryOut);
+
 
               tempLVertex:=tvectorofinteger.create;
                 //listMasterDevice[i].LGroup[j].LNumSubDevice;
               for k:=0 to listMasterDevice[i].LGroup[j].LNumSubDevice.Size-1 do
                 begin
+
+                  if isHaveLineMaster(listMasterDevice[i].LIndex[n],listMasterDevice[i].LGroup[j].LNumSubDevice[k].indexSub) then
+                     continue;
+
                   EdgePath:=TClassList.Create;     //Создаем реберный путь
                   VertexPath:=TClassList.Create;   //Создаем вершиный путь
                   //Получение ребер минимального пути в графе из одной точки в другую
@@ -2197,8 +2234,6 @@ end;
                   tIndexGlobal:=-1; //промежуточная вершина для построения пути глобального графа
 
                   //ZCMsgCallBackInterface.TextMessage('количество - ' + inttostr(VertexPath.Count),TMWOHistoryOut);
-
-
 
                   //Узнать существует уже граф если нет то создать его и добавляем начальную вершину
                   if infoGTree.VertexCount <= 0 then begin
@@ -2225,7 +2260,7 @@ end;
                       end;
                     //infoGTree.Vertices[infoGTree.VertexCount-1].AsBool['isFork']:=false;
 
-                     ZCMsgCallBackInterface.TextMessage('РУУТ - ' + inttostr(infoGTree.VertexCount-1),TMWOHistoryOut);
+                     //ZCMsgCallBackInterface.TextMessage('РУУТ - ' + inttostr(infoGTree.VertexCount-1),TMWOHistoryOut);
 
                      infoGTree.Root:=infoGTree.Vertices[infoGTree.VertexCount-1];
                      tempLVertex.PushBack(listMasterDevice[i].LGroup[j].LNumSubDevice[k].indexMaster);
@@ -2274,7 +2309,7 @@ end;
                               //ZCMsgCallBackInterface.TextMessage('edgelocal : ' + inttostr(tIndexLocal)+' - ' + inttostr(infoGTree.VertexCount-1),TMWOHistoryOut);
                               infoGTree.AddEdge(infoGTree.Vertices[tIndexLocal],infoGTree.Vertices[infoGTree.VertexCount-1]);
 
-                              ZCMsgCallBackInterface.TextMessage('edgelength : ' + floattostr(getlength(listVertexEdge,tIndexGlobal,TVertex(VertexPath[m]).Index)),TMWOHistoryOut);
+                              //ZCMsgCallBackInterface.TextMessage('edgelength : ' + floattostr(getlength(listVertexEdge,tIndexGlobal,TVertex(VertexPath[m]).Index)),TMWOHistoryOut);
                               infoGTree.Edges[infoGTree.EdgeCount-1].AsFloat32['length']:=getlength(listVertexEdge,tIndexGlobal,TVertex(VertexPath[m]).Index);
                               infoGTree.Edges[infoGTree.EdgeCount-1].AsString['infoEdge']:='\P L='+floattostr(getlength(listVertexEdge,tIndexGlobal,TVertex(VertexPath[m]).Index))+'m';
 
@@ -2291,7 +2326,7 @@ end;
                             //ZCMsgCallBackInterface.TextMessage('edgelocal : ' + inttostr(tIndexLocal)+' - ' + inttostr(tIndex),TMWOHistoryOut);
                             infoGTree.AddEdge(infoGTree.Vertices[tIndexLocal],infoGTree.Vertices[tIndex]);
 
-                              ZCMsgCallBackInterface.TextMessage('edgelength : ' + floattostr(getlength(listVertexEdge,tIndexGlobal,TVertex(VertexPath[m]).Index)),TMWOHistoryOut);
+                              //ZCMsgCallBackInterface.TextMessage('edgelength : ' + floattostr(getlength(listVertexEdge,tIndexGlobal,TVertex(VertexPath[m]).Index)),TMWOHistoryOut);
                               infoGTree.Edges[infoGTree.EdgeCount-1].AsFloat32['length']:=getlength(listVertexEdge,tIndexGlobal,TVertex(VertexPath[m]).Index);
                               infoGTree.Edges[infoGTree.EdgeCount-1].AsString['infoEdge']:='\P L='+floattostr(getlength(listVertexEdge,tIndexGlobal,TVertex(VertexPath[m]).Index))+'m';
 
@@ -2308,72 +2343,61 @@ end;
               ZCMsgCallBackInterface.TextMessage('Количство ребер - ' + inttostr(infoGTree.EdgeCount),TMWOHistoryOut);
               ZCMsgCallBackInterface.TextMessage('Количство вершин - ' + inttostr(infoGTree.VertexCount),TMWOHistoryOut);
 
-              infoGTree.CorrectTree;
-
-              //gg:=uzegeometry.CreateVertex(0,0,0) ;
-              //visualGraph(infoGTree,gg,1) ;
-
+              // Такая проверку нужна, тогда когда бывает что головное устройство на разных планах установлено
+              // и может возникнуть ситуация когда на плане разные группы, что вызовит пустой граф
+              //что бы не было проблем выполнена данная проверка
+              if infoGTree.VertexCount > 0 then begin
+              infoGTree.CorrectTree; //Делает дерево корректным, добавляет родителей детей
               listMasterDevice.mutable[i]^.LGroup.mutable[j]^.LTreeDev.PushBack(infoGTree);
-              infoGTree:=nil;
+              end;
 
+              infoGTree:=nil;
               tempLVertex.Destroy;
             end;
+         end;
       end;
   end;
 
-function buildListAllConnectDevice(listVertexEdge:TGraphBuilder;Epsilon:double; var listError:TListError):TListHeadDevice;
-  var
+function buildListAllConnectDevice(listVertexEdge:TGraphBuilder;Epsilon:double; var listError:TListError):TVectorOfMasterDevice;
+var
 
     EdgePath, VertexPath: TClassList;
-      //Epsilon:double;
-      //deviceInfo: TDeviceInfo;
-      listSubDevice:TListSubDevice;  // список подчиненных устройств входит в список головных устройств
 
-      listHeadGroup:TListHeadGroup;
-      HeadGroupInfo:THeadGroupInfo;
-      headDeviceInfo:THeadDeviceInfo;
-      listHeadDevice:TListHeadDevice;
-
-
-
-      drawing:PTSimpleDrawing; //для работы с чертежом
-      pobj: pGDBObjEntity;   //выделеные объекты в пространстве листа
-      //ir:itrec;  // применяется для обработки списка выделений, но что это понятия не имею :)
-      numHead,numHeadGroup,numHeadDev : integer;
-      shortNameHead, headDevName, groupName:string;
-      counter,counter2,counterColor:integer; //счетчики
-    i,j,k,l,m,tnum: Integer;
-
-    pCenter,gg:GDBVertex;
-    ttt:TInfoVertexSubGraph;
-
-
-    //ourGraph:TGraphBuilder;
     pvd:pvardesk; //для работы со свойствами устройств
-
-    GListVert:GListVertexPoint;
-
-    //временое номера минимального пути от головного устройства до девайса
-    tempListNumVertexMinWeight:TListNumVertexMinWeight;
-    tempNumVertexMinWeight:TNumVertexMinWeight;
 
     globalGraph: TGraph;
     sumWeightPath: Float;
     listMasterDevice:TVectorOfMasterDevice;
 
-    //gg:GDBVertex;
+    i,j,k,l,m,tnum: Integer;
+    counter,counter2,counterColor:integer; //счетчики
+
+    listAllTree:tvectorofGraph;
+    gg:GDBVertex;
+
+
+    //** Поиск существует ли устройства с нужным именем
+    function isHaveDevice(listVertex:TListDeviceLine;name:string):boolean;
+    var
+       i: Integer;
+       pvd:pvardesk; //для работы со свойствами устройств
+    begin
+         result:=true;
+         for i:=0 to listVertex.Size-1 do
+            begin
+               if listVertex[i].deviceEnt<>nil then
+               begin
+                   pvd:=FindVariableInEnt(listVertex[i].deviceEnt,'NMO_Name');
+                   if pvd <> nil then
+                   if pgdbstring(pvd^.data.Instance)^ = name then begin
+                      result:= false;
+                   end;
+               end;
+
+            end;
+    end;
+
   begin
-
-    //listSubDevice := TListSubDevice.Create;
-    //listHeadGroup :=  TListHeadGroup.Create;
-    //listHeadDevice := TListHeadDevice.Create;
-
-    //
-    //Epsilon:=0.2;
-    counter:=0;
-
-
-
 
     //Создаем граф на основе класса TGraphBuilder полученого при обработке устройств и суперлиний
     globalGraph:=TGraph.Create;
@@ -2386,8 +2410,8 @@ function buildListAllConnectDevice(listVertexEdge:TGraphBuilder;Epsilon:double; 
     end;
 
 
-    counter:=0;
-    counter2:=0;
+    //counter:=0;
+    //counter2:=0;
 
     //**получаем список подключенных устройств к головным устройствам
     listMasterDevice:=getListMasterDev(listVertexEdge,globalGraph);
@@ -2400,7 +2424,6 @@ function buildListAllConnectDevice(listVertexEdge:TGraphBuilder;Epsilon:double; 
               for k:=0 to listMasterDevice[i].LGroup[j].LNumSubDevice.Size -1 do
                 ZCMsgCallBackInterface.TextMessage('приборы = '+ inttostr(listMasterDevice[i].LGroup[j].LNumSubDevice[k].indexSub),TMWOHistoryOut);
             end;
-
       end;
 
     //**Переробатываем список устройств подключенный к группам и на основе него создание деревьев усройств
@@ -2412,7 +2435,8 @@ function buildListAllConnectDevice(listVertexEdge:TGraphBuilder;Epsilon:double; 
     //**Добавляем к вершинам длины кабелей с конца, для правильной сортировки дерева по длине
     addItemLengthFromEnd(listMasterDevice);
 
-
+    //**Получить список деревьев для визуализации
+    //listAllTree:=getListAllTreesLMD(listMasterDevice);
 
 
 
@@ -2420,6 +2444,8 @@ function buildListAllConnectDevice(listVertexEdge:TGraphBuilder;Epsilon:double; 
 
     //visualGraph(listMasterDevice[0].LGroup[0].LTreeDev[0],gg,1) ;
     gg:=uzegeometry.CreateVertex(0,0,0);
+
+    //visualAllTreesLMD(listMasterDevice,gg,1);
 
     for i:=0 to listMasterDevice.Size-1 do
       begin
@@ -2432,9 +2458,9 @@ function buildListAllConnectDevice(listVertexEdge:TGraphBuilder;Epsilon:double; 
 
                 visualGraph(listMasterDevice[i].LGroup[j].LTreeDev[k],gg,1);
 
-                listMasterDevice.mutable[i]^.LGroup.mutable[j]^.LTreeDev.mutable[k]^.SortTree(listMasterDevice[i].LGroup[j].LTreeDev[k].Root,@SortTreeLengthComparer.Compare);
-
-                visualGraph(listMasterDevice[i].LGroup[j].LTreeDev[k],gg,1);
+                //listMasterDevice.mutable[i]^.LGroup.mutable[j]^.LTreeDev.mutable[k]^.SortTree(listMasterDevice[i].LGroup[j].LTreeDev[k].Root,@SortTreeLengthComparer.Compare);
+                //
+                //visualGraph(listMasterDevice[i].LGroup[j].LTreeDev[k],gg,1);
                end;
             end;
 
@@ -2510,12 +2536,30 @@ function buildListAllConnectDevice(listVertexEdge:TGraphBuilder;Epsilon:double; 
             end;
       end;
             }
-      result:=listHeadDevice;
+      result:=listMasterDevice;
 
   end;
 
 
-function getListParamDev(nowDev:PGDBObjDevice;nameType:string):TListString;
+//Процедура создания списка ошибок
+procedure errorSearchList(ourGraph:TGraphBuilder;Epsilon:double;var listError:TListError;listSLname:TGDBlistSLname);
+type
+    TListString=specialize TVector<string>;
+var
+    EdgePath, VertexPath: TClassList;
+    G: TGraph;
+    headNum : integer;
+
+    counter,counter2,counter3,counterColor:integer; //счетчики
+    i,j,k: Integer;
+    T: Float;
+
+    headName,GroupNum,typeSLine,nameSL:string;
+
+    listStr1,listStr2,listStr3:TListString;
+
+    ///Получить список  параметров устройства для подключения
+    function getListParamDev(nowDev:PGDBObjDevice;nameType:string):TListString;
     var
        pvd:pvardesk; //для работы со свойствами устройств
        tempName,nameParam:gdbstring;
@@ -2532,7 +2576,7 @@ function getListParamDev(nowDev:PGDBObjDevice;nameType:string):TListString;
             end;
 
     end;
-procedure addErrorinList(nowDev:PGDBObjDevice;var listError:TListError;textError:string);
+    procedure addErrorinList(nowDev:PGDBObjDevice;var listError:TListError;textError:string);
     var
        pvd:pvardesk; //для работы со свойствами устройств
        //tempName,nameParam:gdbstring;
@@ -2561,19 +2605,26 @@ procedure addErrorinList(nowDev:PGDBObjDevice;var listError:TListError;textError
          end;
     end;
 
-procedure errorSearchAllParam(ourGraph:TGraphBuilder;Epsilon:double;var listError:TListError;listSLname:TGDBlistSLname);
-  var
-    EdgePath, VertexPath: TClassList;
-    G: TGraph;
-    headNum : integer;
+    //** Поиск существует ли устройства с нужным именем
+    function isHaveDevice(listVertex:TListDeviceLine;name:string):boolean;
+    var
+       i: Integer;
+       pvd:pvardesk; //для работы со свойствами устройств
+    begin
+         result:=true;
+         for i:=0 to listVertex.Size-1 do
+            begin
+               if listVertex[i].deviceEnt<>nil then
+               begin
+                   pvd:=FindVariableInEnt(listVertex[i].deviceEnt,'NMO_Name');
+                   if pvd <> nil then
+                   if pgdbstring(pvd^.data.Instance)^ = name then begin
+                      result:= false;
+                   end;
+               end;
 
-    counter,counter2,counter3,counterColor:integer; //счетчики
-    i,j,k: Integer;
-    T: Float;
-
-    headName,GroupNum,typeSLine,nameSL:string;
-
-    listStr1,listStr2,listStr3:TListString;
+            end;
+    end;
 
   begin
 
@@ -2621,48 +2672,6 @@ procedure errorSearchAllParam(ourGraph:TGraphBuilder;Epsilon:double;var listErro
                      if isHaveDevice(ourGraph.listVertex,headName) then
                        addErrorinList(ourGraph.listVertex[i].deviceEnt,listError,'Одно из имен головного устройства не правильное');
                    end;
-
-
-                //for j:=0 to listStr1.size-1 do
-                // begin
-                //   headName:=listStr1[j];      //имя хозяина
-                //   GroupNum:=listStr2[j];      //№ шлейфа
-                //   typeSLine:=listStr3[j];     //название трассы
-                //   //for nameSL in listSLname do
-                //   //  begin
-                //     if typeSLine = ourGraph.nameSuperLine then
-                //     begin
-                //      headNum:=getNumHeadDevice(ourGraph.listVertex,headName);
-                //      if headNum >= 0 then begin
-                //       // Подключение созданного граффа к библиотеке Аграф
-                //        G:=TGraph.Create;
-                //        G.Features:=[Weighted];
-                //        G.AddVertices(ourGraph.listVertex.Size);
-                //        for k:=0 to ourGraph.listEdge.Size-1 do
-                //        begin
-                //          G.AddEdges([ourGraph.listEdge[k].VIndex1, ourGraph.listEdge[k].VIndex2]);
-                //          G.Edges[k].Weight:=ourGraph.listEdge[k].edgeLength;
-                //        end;
-                //
-                //        //работа с библиотекой Аграф
-                //        EdgePath:=TClassList.Create;     //Создаем реберный путь
-                //        VertexPath:=TClassList.Create;   //Создаем вершиный путь
-                //
-                //        // Получение ребер минимального пути в графи из одной точки в другую
-                //        T:=G.FindMinWeightPath(G[headNum], G[i], EdgePath);
-                //        // Получение вершин минимального пути в графи на основе минимального пути в ребер, указывается из какой точки старт
-                //        G.EdgePathToVertexPath(G[headNum], EdgePath, VertexPath);
-                //
-                //         if VertexPath.Count <= 1 then
-                //          addErrorinList(ourGraph.listVertex[i].deviceEnt,listError,'Нет пути до головного устройства');
-                //
-                //        EdgePath.Free;
-                //        VertexPath.Free;
-                //       end
-                //       else
-                //         addErrorinList(ourGraph.listVertex[i].deviceEnt,listError,'Головное устройство с таким именем отсутствует');
-                //     end;
-                // end;
               end
               else
                 addErrorinList(ourGraph.listVertex[i].deviceEnt,listError,'Не одинаковое количество параметров в настройках');
@@ -2671,9 +2680,22 @@ procedure errorSearchAllParam(ourGraph:TGraphBuilder;Epsilon:double;var listErro
       end;
   end;
 
-//procedure errorSearchSLAGCAB(ourGraph:TGraphBuilder;Epsilon:double;var listError:TListError;listSLname:TGDBlistSLname);
-procedure errorSearchSLAGCAB(ourGraph:TGraphBuilder;Epsilon:double;var listError:TListError);
-  var
+
+{*******
+
+procedure errorSearchList(ourGraph:TGraphBuilder;Epsilon:double;var listError:TListError);
+type
+    //**список для кабельной прокладки
+    PTCableLaying=^TCableLaying;
+     TCableLaying=record
+         headName:string;
+         GroupNum:string;
+         typeSLine:string;
+
+    end;
+    TVertexofCableLaying=specialize TVector<TCableLaying>;
+    TVertexofString=specialize TVector<string>;
+var
     G: TGraph;
     EdgePath, VertexPath: TClassList;
     T: Float;
@@ -2686,8 +2708,75 @@ procedure errorSearchSLAGCAB(ourGraph:TGraphBuilder;Epsilon:double;var listError
 
     headName,GroupNum,typeSLine:string;
 
-    listStr1,listStr2,listStr3:TListString;
+    listStr1,listStr2,listStr3:TVertexofString;
 
+    ///Получить список  параметров устройства для подключения
+    function getListParamDev(nowDev:PGDBObjDevice;nameType:string):TVertexofString;
+    var
+       pvd:pvardesk; //для работы со свойствами устройств
+       tempName,nameParam:gdbstring;
+    begin
+        result:=TVertexofString.Create;
+        pvd:=FindVariableInEnt(nowDev,nameType);
+         if pvd<>nil then
+            BEGIN
+             tempName:=pgdbstring(pvd^.data.Instance)^;
+             repeat
+                   GetPartOfPath(nameParam,tempName,';');
+                   result.PushBack(nameParam);
+             until tempName='';
+            end;
+
+    end;
+    procedure addErrorinList(nowDev:PGDBObjDevice;var listError:TListError;textError:string);
+    var
+       pvd:pvardesk; //для работы со свойствами устройств
+       //tempName,nameParam:gdbstring;
+       errorInfo:TErrorInfo;
+       //tempstring:string;
+       isNotDev:boolean;
+       i:integer;
+    begin
+       isNotDev:=true;
+       for i:=0 to listError.Size-1 do
+         begin
+           if listError[i].device = nowDev then
+             begin
+              //tempstring := concat(errorInfo.text,textError);
+               listError.Mutable[i]^.text := listError[i].text + textError;
+               isNotDev:=false;
+             end
+         end;
+       if isNotDev then
+         begin
+           //pvd:=FindVariableInEnt(nowDev,nameType);
+           errorInfo.device := nowDev;
+           errorInfo.name:=nowDev^.Name;
+           errorInfo.text:=textError;
+           listError.PushBack(errorInfo);
+         end;
+    end;
+
+    //** Поиск существует ли устройства с нужным именем
+    function isHaveDevice(listVertex:TListDeviceLine;name:string):boolean;
+    var
+       i: Integer;
+       pvd:pvardesk; //для работы со свойствами устройств
+    begin
+         result:=true;
+         for i:=0 to listVertex.Size-1 do
+            begin
+               if listVertex[i].deviceEnt<>nil then
+               begin
+                   pvd:=FindVariableInEnt(listVertex[i].deviceEnt,'NMO_Name');
+                   if pvd <> nil then
+                   if pgdbstring(pvd^.data.Instance)^ = name then begin
+                      result:= false;
+                   end;
+               end;
+
+            end;
+    end;
   begin
 
        // Подключение созданного граффа к библиотеке Аграф
@@ -2711,39 +2800,12 @@ procedure errorSearchSLAGCAB(ourGraph:TGraphBuilder;Epsilon:double;var listError
               listStr3:=getListParamDev(ourGraph.listVertex[i].deviceEnt,'SLCABAGEN_SLTypeagen');
               if (listStr1.size = listStr2.size) and (listStr1.size = listStr3.size) and (listStr2.size = listStr3.size) then
               begin
-                //if isALL then begin
-                //  counter3:=0;
-                //  for j:=0 to listStr1.size-1 do
-                //   begin
-                //     headName:=listStr1[j];      //имя хозяина
-                //     GroupNum:=listStr2[j];      //№ шлейфа
-                //     typeSLine:=listStr3[j];     //название трассы
-                //     for nameSL in listSLname do
-                //         if typeSLine = nameSL then
-                //           inc(counter3);
-                //   end;
-                //  if listStr1.size<>counter3 then
-                //    addErrorinList(ourGraph.listVertex[i].deviceEnt,listError,'Не правильное имя типа трассы *суперлинии* ');
-                //end;
-                //if isALL then begin
-                //  counter3:=0;
-                //  for j:=0 to listStr1.size-1 do
-                //   begin
-                //     headName:=listStr1[j];      //имя хозяина
-                //     GroupNum:=listStr2[j];      //№ шлейфа
-                //     typeSLine:=listStr3[j];     //название трассы
-                //     if getNumHeadDevice(ourGraph.listVertex,headName) < 0 then
-                //       addErrorinList(ourGraph.listVertex[i].deviceEnt,listError,'Одно из имен головного устройства не правильное');
-                //   end;
-                //end;
 
                 for j:=0 to listStr1.size-1 do
                  begin
                    headName:=listStr1[j];      //имя хозяина
                    GroupNum:=listStr2[j];      //№ шлейфа
                    typeSLine:=listStr3[j];     //название трассы
-                   //for nameSL in listSLname do
-                   //  begin
                      if typeSLine = ourGraph.nameSuperLine then
                      begin
                       headNum:=getNumHeadDevice(ourGraph.listVertex,headName,G,i);
@@ -2767,19 +2829,16 @@ procedure errorSearchSLAGCAB(ourGraph:TGraphBuilder;Epsilon:double;var listError
                        else
                        begin
                             addErrorinList(ourGraph.listVertex[i].deviceEnt,listError,'Головное устройство с таким именем отсутствует');
-                           //else
-                           //   addErrorinList(ourGraph.listVertex[i].deviceEnt,listError,'Нет пути до головного устройства');
                        end;
                      end;
                  end;
               end
               else
                 addErrorinList(ourGraph.listVertex[i].deviceEnt,listError,'Не одинаковое количество параметров в настройках');
-
         end;
       end;
   end;
-
+  ****}
 
   function TestgraphUses_com(operands:TCommandOperands):TCommandResult;
   var
@@ -2935,6 +2994,8 @@ procedure errorSearchSLAGCAB(ourGraph:TGraphBuilder;Epsilon:double;var listError
     result:=cmd_ok;
   end;
 
+
+  {*******
   //Визуализация графа
 procedure visualGraph(G: TGraph; var startPt:GDBVertex;height:double);
 const
@@ -3316,7 +3377,8 @@ end;
       VertexPath.Free;
     end;
     result:=cmd_ok;
-  end;
+  end;     ****}
+
 function TDummyComparer.Compare (Edge1, Edge2: Pointer): Integer;
 var
   e1,e2:TAttrSet;
@@ -3382,9 +3444,9 @@ end;
 
 
 initialization
-  CreateCommandFastObjectPlugin(@NumPsIzvAndDlina_com,'test111',CADWG,0);
-  CreateCommandFastObjectPlugin(@TestTREEUses_com,'test222',CADWG,0);
-  CreateCommandFastObjectPlugin(@TestTREEUses_com2,'test333',CADWG,0);
+  //CreateCommandFastObjectPlugin(@NumPsIzvAndDlina_com,'test111',CADWG,0);
+  //CreateCommandFastObjectPlugin(@TestTREEUses_com,'test222',CADWG,0);
+  //CreateCommandFastObjectPlugin(@TestTREEUses_com2,'test333',CADWG,0);
   DummyComparer:=TDummyComparer.Create;
 finalization
   DummyComparer.free;

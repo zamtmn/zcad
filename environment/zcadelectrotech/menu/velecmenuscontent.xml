@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <MenusContent>
+    <MainMenuItem Name="Draw">
+      <Action Name="ACN_slagcabCom"/>
+      <Action Name="ACN_SupeLine"/>
+    </MainMenuItem>
+  </MenusContent>
+</CONFIG>

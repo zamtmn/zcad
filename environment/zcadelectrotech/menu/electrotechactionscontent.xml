@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ActionsContent>
+    <Group Category="Electrotech">
+      <ZAction Name="ACN_DEVNUMBERING" Command="NumDevices" Img="#D++" Caption="Numbering Devices"/>
+      <ZAction Name="ACN_CABLE" Command="El_Cable" Img="cable" Caption="Draw cable,Draw cable"/>
+      <ZAction Name="ACN_WIRE" Command="El_Wire" Img="wire" Caption="Draw net\trace"/>
+      <ZAction Name="ACN_LEADER" Command="El_Leader" Img="leader" Caption="Mark cables"/>
+      <ZAction Name="ACN_CABLEJOIN" Command="El_Cable_Join" Img="cabpluscab" Caption="Glue cables"/>
+      <ZAction Name="ACN_CABLESELECT" Command="El_Cable_Select" Img="csel" Caption="Select connected devices"/>
+      <ZAction Name="ACN_CABLEINVERT" Command="El_Cable_Invert" Img="#inv" Caption="Reverse cable direction"/>
+      <ZAction Name="ACN_CABLELEGEND" Command="El_Cable_Legend" Img="#КЖ" Caption="Export cables legend"/>
+      <ZAction Name="ACN_MATERIALLEGEND" Command="El_Material_Legend" Img="#ВМ" Caption="Export materials legend,Export materials legend"/>
+      <ZAction Name="ACN_PLACESMOKEDETECTORORTO" Command="PlaceSmokeDetectorOrto" Img="ps" Caption="Automatic placement of fire detectors"/>
+      <ZAction Name="ACN_SENSORMARK" Command="OPS_Sensor_Mark" Img="#++" Caption="Numbering sensors on the plan"/>
+      <ZAction Name="ACN_ORTODEVPLACE" Command="OrtoDevPlace" Img="array" Caption="Device placement"/>
+      <ZAction Name="ACN_PROCESSKZ" Command="EL_ExternalKZ" Img="autocable.bmp"/>
+      <ZAction Name="ACN_REMAUTOCABLES" Command="EL_AutoGen_Cable_Remove" Img="removeautocable.bmp"/>
+      <ZAction Name="ACN_KIPCDBUILD" Command="KIP_CDBuild" Img="#CDB" Caption="Connection diagram"/>
+      <ZAction Name="ACN_KIPLUGTABLEBUILD" Command="KIP_LugTableBuild" Img="#ТЗК" Caption="Lug table build"/>
+      <ZAction Name="ACN_REGENZENTS" Command="RegenZEnts" Img="regenz" Caption="Regenerate zcad entities"/>
+    </Group>
+  </ActionsContent>
+</CONFIG>

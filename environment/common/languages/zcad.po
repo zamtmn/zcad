@@ -1,0 +1,1175 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: tdimstylesform.addstyle.caption
+msgctxt "tdimstylesform.addstyle.caption"
+msgid "AddStyle"
+msgstr ""
+
+#: tdimstylesform.addstyle.hint
+msgctxt "tdimstylesform.addstyle.hint"
+msgid "Add text style"
+msgstr ""
+
+#: tdimstylesform.buttonapplyclose.caption
+msgctxt "tdimstylesform.buttonapplyclose.caption"
+msgid "Apply and close"
+msgstr ""
+
+#: tdimstylesform.caption
+msgid "Dimantion styles"
+msgstr ""
+
+#: tdimstylesform.delstyle.caption
+msgctxt "tdimstylesform.delstyle.caption"
+msgid "DelStyle"
+msgstr ""
+
+#: tdimstylesform.delstyle.hint
+msgctxt "tdimstylesform.delstyle.hint"
+msgid "Delete text style"
+msgstr ""
+
+#: tdimstylesform.inspectlistitem.caption
+msgid "InspectListItem"
+msgstr ""
+
+#: tdimstylesform.inspectlistitem.hint
+msgid "Inspect dimstyle"
+msgstr ""
+
+#: tdimstylesform.listview1.columns[0].caption
+msgctxt "tdimstylesform.listview1.columns[0].caption"
+msgid "Status"
+msgstr ""
+
+#: tdimstylesform.listview1.columns[1].caption
+msgctxt "tdimstylesform.listview1.columns[1].caption"
+msgid "Name"
+msgstr ""
+
+#: tdimstylesform.listview1.columns[2].caption
+msgid "LinearScale"
+msgstr ""
+
+#: tdimstylesform.listview1.columns[3].caption
+msgid "TextStyleName"
+msgstr ""
+
+#: tdimstylesform.listview1.columns[4].caption
+msgid "TextHeight"
+msgstr ""
+
+#: tdimstylesform.listview1.columns[5].caption
+msgid "DIMBLK1"
+msgstr ""
+
+#: tdimstylesform.listview1.columns[6].caption
+msgid "DIMBLK2"
+msgstr ""
+
+#: tdimstylesform.listview1.columns[7].caption
+msgid "DIMLDRBLK"
+msgstr ""
+
+#: tdimstylesform.listview1.columns[8].caption
+msgid "DIMASZ"
+msgstr ""
+
+#: tdimstylesform.mkcurrentstyle.caption
+msgctxt "tdimstylesform.mkcurrentstyle.caption"
+msgid "MkCurrentStyle"
+msgstr ""
+
+#: tdimstylesform.mkcurrentstyle.hint
+msgctxt "tdimstylesform.mkcurrentstyle.hint"
+msgid "Make selected style curretn"
+msgstr ""
+
+#: tdimstylesform.purgestyles.caption
+msgctxt "tdimstylesform.purgestyles.caption"
+msgid "PurgeStyles"
+msgstr ""
+
+#: tdimstylesform.purgestyles.hint
+msgctxt "tdimstylesform.purgestyles.hint"
+msgid "Purge not used styles"
+msgstr ""
+
+#: tdimstylesform.refreshstyles.caption
+msgctxt "tdimstylesform.refreshstyles.caption"
+msgid "RefreshStyles"
+msgstr ""
+
+#: tdimstylesform.refreshstyles.hint
+msgctxt "tdimstylesform.refreshstyles.hint"
+msgid "Refresh styles list"
+msgstr ""
+
+#: tdimstylesform.separator1.caption
+msgctxt "tdimstylesform.separator1.caption"
+msgid "Separator1"
+msgstr ""
+
+#: tdimstylesform.toolbar1.caption
+msgctxt "tdimstylesform.toolbar1.caption"
+msgid "ToolBar1"
+msgstr ""
+
+#: tlayersform.addlayer.caption
+msgid "AddLayer"
+msgstr ""
+
+#: tlayersform.addlayer.hint
+msgid "Add layer"
+msgstr ""
+
+#: tlayersform.buttonapplyclose.caption
+msgctxt "tlayersform.buttonapplyclose.caption"
+msgid "Apply and close"
+msgstr ""
+
+#: tlayersform.button_apply.caption
+msgid "Apply"
+msgstr ""
+
+#: tlayersform.caption
+msgid "Layers"
+msgstr ""
+
+#: tlayersform.dellayer.caption
+msgid "DelLayer"
+msgstr ""
+
+#: tlayersform.dellayer.hint
+msgid "Delete layer"
+msgstr ""
+
+#: tlayersform.listview1.columns[0].caption
+msgctxt "tlayersform.listview1.columns[0].caption"
+msgid "Status"
+msgstr ""
+
+#: tlayersform.listview1.columns[1].caption
+msgctxt "tlayersform.listview1.columns[1].caption"
+msgid "Name"
+msgstr ""
+
+#: tlayersform.listview1.columns[2].caption
+msgid "On"
+msgstr ""
+
+#: tlayersform.listview1.columns[3].caption
+msgid "Freze"
+msgstr ""
+
+#: tlayersform.listview1.columns[4].caption
+msgid "Lock"
+msgstr ""
+
+#: tlayersform.listview1.columns[5].caption
+msgctxt "tlayersform.listview1.columns[5].caption"
+msgid "Color"
+msgstr ""
+
+#: tlayersform.listview1.columns[6].caption
+msgctxt "tlayersform.listview1.columns[6].caption"
+msgid "Line type"
+msgstr ""
+
+#: tlayersform.listview1.columns[7].caption
+msgid "Line weight"
+msgstr ""
+
+#: tlayersform.listview1.columns[8].caption
+msgid "Plot"
+msgstr ""
+
+#: tlayersform.listview1.columns[9].caption
+msgid "Description"
+msgstr ""
+
+#: tlayersform.mkcurrentlayer.caption
+msgid "MkCurrentLayer"
+msgstr ""
+
+#: tlayersform.mkcurrentlayer.hint
+msgid "Make selected layer current"
+msgstr ""
+
+#: tlayersform.purgelayers.caption
+msgid "PurgeLayers"
+msgstr ""
+
+#: tlayersform.purgelayers.hint
+msgid "Purge layers"
+msgstr ""
+
+#: tlayersform.refreshlayers.caption
+msgid "RefreshLayers"
+msgstr ""
+
+#: tlayersform.refreshlayers.hint
+msgid "Refresh layers"
+msgstr ""
+
+#: tlayersform.toolbar1.caption
+msgctxt "tlayersform.toolbar1.caption"
+msgid "ToolBar1"
+msgstr ""
+
+#: tlayersform.toolbutton4.caption
+msgid "ToolButton4"
+msgstr ""
+
+#: tnavigatordevices.caption
+msgctxt "tnavigatordevices.caption"
+msgid "Devices"
+msgstr ""
+
+#: tnavigatordevices.maintoolbar.caption
+msgctxt "tnavigatordevices.maintoolbar.caption"
+msgid "MainToolBar"
+msgstr ""
+
+#: tnavigatordevices.toolbutton1.caption
+msgctxt "tnavigatordevices.toolbutton1.caption"
+msgid "ToolButton1"
+msgstr ""
+
+#: tnavigatordevices.toolbutton3.caption
+msgctxt "tnavigatordevices.toolbutton3.caption"
+msgid "ToolButton3"
+msgstr ""
+
+#: tnavigatorentities.caption
+msgctxt "tnavigatorentities.caption"
+msgid "Entities"
+msgstr ""
+
+#: tnavigatorentities.maintoolbar.caption
+msgctxt "tnavigatorentities.maintoolbar.caption"
+msgid "MainToolBar"
+msgstr ""
+
+#: tnavigatorentities.refresh.caption
+msgid "Refresh"
+msgstr ""
+
+#: tnavigatorentities.toolbutton1.caption
+msgctxt "tnavigatorentities.toolbutton1.caption"
+msgid "ToolButton1"
+msgstr ""
+
+#: tnavigatorentities.toolbutton3.caption
+msgctxt "tnavigatorentities.toolbutton3.caption"
+msgid "ToolButton3"
+msgstr ""
+
+#: ttextstylesform.addstyle.caption
+msgctxt "ttextstylesform.addstyle.caption"
+msgid "AddStyle"
+msgstr ""
+
+#: ttextstylesform.addstyle.hint
+msgctxt "ttextstylesform.addstyle.hint"
+msgid "Add text style"
+msgstr ""
+
+#: ttextstylesform.buttonapplyclose.caption
+msgctxt "ttextstylesform.buttonapplyclose.caption"
+msgid "Apply and close"
+msgstr ""
+
+#: ttextstylesform.caption
+msgid "Text styles"
+msgstr ""
+
+#: ttextstylesform.delstyle.caption
+msgctxt "ttextstylesform.delstyle.caption"
+msgid "DelStyle"
+msgstr ""
+
+#: ttextstylesform.delstyle.hint
+msgctxt "ttextstylesform.delstyle.hint"
+msgid "Delete text style"
+msgstr ""
+
+#: ttextstylesform.fonttypefiltercombobox.text
+msgctxt "ttextstylesform.fonttypefiltercombobox.text"
+msgid "All"
+msgstr ""
+
+#: ttextstylesform.fonttypefilterdesc.caption
+msgid "Fonts types filter:"
+msgstr ""
+
+#: ttextstylesform.listview1.columns[0].caption
+msgctxt "ttextstylesform.listview1.columns[0].caption"
+msgid "Status"
+msgstr ""
+
+#: ttextstylesform.listview1.columns[1].caption
+msgctxt "ttextstylesform.listview1.columns[1].caption"
+msgid "Name"
+msgstr ""
+
+#: ttextstylesform.listview1.columns[2].caption
+msgid "FontName"
+msgstr ""
+
+#: ttextstylesform.listview1.columns[3].caption
+msgid "FontPath"
+msgstr ""
+
+#: ttextstylesform.listview1.columns[4].caption
+msgid "Height"
+msgstr ""
+
+#: ttextstylesform.listview1.columns[5].caption
+msgid "Width factor"
+msgstr ""
+
+#: ttextstylesform.listview1.columns[6].caption
+msgid "Oblique"
+msgstr ""
+
+#: ttextstylesform.mkcurrentstyle.caption
+msgctxt "ttextstylesform.mkcurrentstyle.caption"
+msgid "MkCurrentStyle"
+msgstr ""
+
+#: ttextstylesform.mkcurrentstyle.hint
+msgctxt "ttextstylesform.mkcurrentstyle.hint"
+msgid "Make selected style curretn"
+msgstr ""
+
+#: ttextstylesform.purgestyles.caption
+msgctxt "ttextstylesform.purgestyles.caption"
+msgid "PurgeStyles"
+msgstr ""
+
+#: ttextstylesform.purgestyles.hint
+msgctxt "ttextstylesform.purgestyles.hint"
+msgid "Purge not used styles"
+msgstr ""
+
+#: ttextstylesform.refreshstyles.caption
+msgctxt "ttextstylesform.refreshstyles.caption"
+msgid "RefreshStyles"
+msgstr ""
+
+#: ttextstylesform.refreshstyles.hint
+msgctxt "ttextstylesform.refreshstyles.hint"
+msgid "Refresh styles list"
+msgstr ""
+
+#: ttextstylesform.separator1.caption
+msgctxt "ttextstylesform.separator1.caption"
+msgid "Separator1"
+msgstr ""
+
+#: ttextstylesform.toolbar1.caption
+msgctxt "ttextstylesform.toolbar1.caption"
+msgid "ToolBar1"
+msgstr ""
+
+#: tzcadmainwindow.toolbard.caption
+msgid "ToolBarD"
+msgstr ""
+
+#: uzccablemanager.defcablename
+msgid "Created. Not named"
+msgstr ""
+
+#: uzccombase.rsaboutclswithupdatepo
+msgid "Command line swith \"UpdatePO\" must be set. (or not the first time running this command)"
+msgstr ""
+
+#: uzccombase.rsbeforerunpoly
+msgid "Before starting you must select a 2DPolyLine"
+msgstr ""
+
+#: uzcentnet.rscannotbeconnected
+msgid "Can not be connected"
+msgstr ""
+
+#: uzcfnavigatordevices.rsbybase
+msgid "byBase"
+msgstr ""
+
+#: uzcfnavigatordevices.rsbyprefix
+msgid "byPrefix"
+msgstr ""
+
+#: uzcfnavigatordevices.rsstandalonedevices
+msgid "Standalone devices"
+msgstr ""
+
+#: uzcmainwindow.rsclosed
+msgid "Closed"
+msgstr ""
+
+#: uzcregnavigatordevices.rscables
+msgid "Cables"
+msgstr ""
+
+#: uzcregnavigatordevices.rsdevices
+msgctxt "uzcregnavigatordevices.rsdevices"
+msgid "Devices"
+msgstr ""
+
+#: uzcregnavigatordevices.rsrisers
+msgid "Risers"
+msgstr ""
+
+#: uzcregnavigatorentities.rsentities
+msgctxt "uzcregnavigatorentities.rsentities"
+msgid "Entities"
+msgstr ""
+
+#: uzcstrconsts.rsaboutwndcaption
+msgid "About ZCAD"
+msgstr ""
+
+#: uzcstrconsts.rsadditionalselected
+msgid "Additional were selected %d primitives"
+msgstr ""
+
+#: uzcstrconsts.rsauthor
+msgid "Writeln by Andrey M. Zubarev"
+msgstr ""
+
+#: uzcstrconsts.rsautosave
+msgid "Autosave"
+msgstr ""
+
+#: uzcstrconsts.rsbasenameabsent
+msgid "Absent BaseName"
+msgstr ""
+
+#: uzcstrconsts.rsblocks
+msgid "Blocks"
+msgstr ""
+
+#: uzcstrconsts.rsbyblock
+msgid "ByBlock"
+msgstr ""
+
+#: uzcstrconsts.rsbylayer
+msgid "ByLayer"
+msgstr ""
+
+#: uzcstrconsts.rscautionnosyntaxcheckyet
+msgid "CAUTION! There is no syntax check yet. Clicking \"OK\" the object will be updated. Error - CRASHES!!!"
+msgstr ""
+
+#: uzcstrconsts.rsclipboardisempty
+msgid "Clipboard is empty, there is nothing to paste"
+msgstr ""
+
+#: uzcstrconsts.rsclosedwgquery
+msgid "Drawing \"%s\" not saved. Save?"
+msgstr ""
+
+#: uzcstrconsts.rscm2vnotremove
+msgid "Only 2 vertex there is nothing to remove"
+msgstr ""
+
+#: uzcstrconsts.rscmadd
+msgid "Add"
+msgstr ""
+
+#: uzcstrconsts.rscmbasepoint
+msgid "Base point:"
+msgstr ""
+
+#: uzcstrconsts.rscmcantgetblocktoreplace
+msgid "Unable get block name to replace"
+msgstr ""
+
+#: uzcstrconsts.rscmcenterpointcircle
+msgid "Center point for circle:"
+msgstr ""
+
+#: uzcstrconsts.rscmchange
+msgid "Change"
+msgstr ""
+
+#: uzcstrconsts.rscmcommandonlyctxmenu
+msgid "The command works only from context menu"
+msgstr ""
+
+#: uzcstrconsts.rscmcommandparams
+msgid "Command params"
+msgstr ""
+
+#: uzcstrconsts.rscmcopy
+msgid "Copy"
+msgstr ""
+
+#: uzcstrconsts.rscmexport
+msgid "Export"
+msgstr ""
+
+#: uzcstrconsts.rscmfirstcorner
+msgid "First corner:"
+msgstr ""
+
+#: uzcstrconsts.rscmfirstpoint
+msgid "First point:"
+msgstr ""
+
+#: uzcstrconsts.rscmindwgblockdefnotdeffined
+msgid "In drawing not defined any BlockDefs!"
+msgstr ""
+
+#: uzcstrconsts.rscmindwgtxtstylenotdeffined
+msgid "In drawing not defined any textstyle!"
+msgstr ""
+
+#: uzcstrconsts.rscminsertpoint
+msgid "Insert point:"
+msgstr ""
+
+#: uzcstrconsts.rscminstackdata
+msgid "In stack found following data:"
+msgstr ""
+
+#: uzcstrconsts.rscmnentitiesdeselected
+msgid "%d entities deselected"
+msgstr ""
+
+#: uzcstrconsts.rscmnentitiesprocessed
+msgid "%s entities processed"
+msgstr ""
+
+#: uzcstrconsts.rscmnewbasepoint
+msgid "New base point:"
+msgstr ""
+
+#: uzcstrconsts.rscmnoblockdefindwg
+msgid "No BlockDef \"%s\" in the drawing"
+msgstr ""
+
+#: uzcstrconsts.rscmnoblockdefindwgcxmenu
+msgid "No BlockDef \"%s\" in the drawing. Use context menu"
+msgstr ""
+
+#: uzcstrconsts.rscmnoblocksordevices
+msgid "No selected blocks or devices"
+msgstr ""
+
+#: uzcstrconsts.rscmnoctr
+msgid "No comands to redo"
+msgstr ""
+
+#: uzcstrconsts.rscmnoctu
+msgid "No comands to undo. Complete the current command"
+msgstr ""
+
+#: uzcstrconsts.rscmnoctuse
+msgid "No comands to undo. UNDO stack is empty"
+msgstr ""
+
+#: uzcstrconsts.rscmnotcuthere
+msgid "Do not cut off here"
+msgstr ""
+
+#: uzcstrconsts.rscmnumber
+msgid "Number"
+msgstr ""
+
+#: uzcstrconsts.rscmoptions2oi
+msgid "Options are available in the Object Inspector"
+msgstr ""
+
+#: uzcstrconsts.rscmpickorenterangle
+msgid "Pick or enter angle:"
+msgstr ""
+
+#: uzcstrconsts.rscmpickorenterscale
+msgid "Pick or enter scale:"
+msgstr ""
+
+#: uzcstrconsts.rscmpoint
+msgid "Point:"
+msgstr ""
+
+#: uzcstrconsts.rscmpointoncircle
+msgid "Point on a circle:"
+msgstr ""
+
+#: uzcstrconsts.rscmpolynotsel
+msgid "Poly entities not selected"
+msgstr ""
+
+#: uzcstrconsts.rscmreplace
+msgid "Replace"
+msgstr ""
+
+#: uzcstrconsts.rscmsecondcorner
+msgid "Second corner:"
+msgstr ""
+
+#: uzcstrconsts.rscmsecondpoint
+msgid "Second point:"
+msgstr ""
+
+#: uzcstrconsts.rscmsegmentlengthtotallength
+msgid "Segment length: %s summary length: %s"
+msgstr ""
+
+#: uzcstrconsts.rscmseldevbeforecomm
+msgid "Device must be selected before run the command"
+msgstr ""
+
+#: uzcstrconsts.rscmseldevsbeforecomm
+msgid "Devices must be selected before run the command"
+msgstr ""
+
+#: uzcstrconsts.rscmselect
+msgid "Select"
+msgstr ""
+
+#: uzcstrconsts.rscmselectdestinationentity
+msgid "Select destination entity:"
+msgstr ""
+
+#: uzcstrconsts.rscmselectsourceentity
+msgid "Select source entity:"
+msgstr ""
+
+#: uzcstrconsts.rscmselentbeforecomm
+msgid "Entities must be selected before run the command"
+msgstr ""
+
+#: uzcstrconsts.rscmselorspecentity
+msgid "Select or specify the parameters entity!"
+msgstr ""
+
+#: uzcstrconsts.rscmspecifyfirstpoint
+msgid "Specify first point:"
+msgstr ""
+
+#: uzcstrconsts.rscmspecifyinsertpoint
+msgid "Specify insert point:"
+msgstr ""
+
+#: uzcstrconsts.rscmspecifypoint
+msgid "Specify point:"
+msgstr ""
+
+#: uzcstrconsts.rscmspecifyrotate
+msgid "Specify rotate:"
+msgstr ""
+
+#: uzcstrconsts.rscmspecifyscale
+msgid "Specify scale:"
+msgstr ""
+
+#: uzcstrconsts.rscmspecifysecondpoint
+msgid "Specify second point:"
+msgstr ""
+
+#: uzcstrconsts.rscmspecifythirdpoint
+msgid "Specify third point:"
+msgstr ""
+
+#: uzcstrconsts.rscmspecifyx
+msgid "Specify X:"
+msgstr ""
+
+#: uzcstrconsts.rscmspecifyy
+msgid "Specify Y:"
+msgstr ""
+
+#: uzcstrconsts.rscmspecifyz
+msgid "Specify Z:"
+msgstr ""
+
+#: uzcstrconsts.rscmstore
+msgid "Store"
+msgstr ""
+
+#: uzcstrconsts.rscolor
+msgctxt "uzcstrconsts.rscolor"
+msgid "Color"
+msgstr ""
+
+#: uzcstrconsts.rscolornum
+msgid "Color %d"
+msgstr ""
+
+#: uzcstrconsts.rscommandlinewndname
+msgid "Command line"
+msgstr ""
+
+#: uzcstrconsts.rscommandnrinc
+msgid "Command can not run"
+msgstr ""
+
+#: uzcstrconsts.rscommenteeport
+msgid "Registered commands - %d; registered entities - %d; registered DXF entities - %d"
+msgstr ""
+
+#: uzcstrconsts.rscompiledtimemsg
+msgid "Done.  %s second"
+msgstr ""
+
+#: uzcstrconsts.rscountdimstylesfound
+msgid "%d Dimension styles found"
+msgstr ""
+
+#: uzcstrconsts.rscountdimstylespurged
+msgid "%d Dimension styles purged"
+msgstr ""
+
+#: uzcstrconsts.rscounttstylesfound
+msgid "%d Text styles found"
+msgstr ""
+
+#: uzcstrconsts.rscounttstylespurged
+msgid "%d Text styles purged"
+msgstr ""
+
+#: uzcstrconsts.rscurrentdimstylecannotbedeleted
+msgid "Current dimension style cannot be deleted"
+msgstr ""
+
+#: uzcstrconsts.rscurrentlayeroff
+msgid "The current layer is turned off"
+msgstr ""
+
+#: uzcstrconsts.rscurrentstylecannotbedeleted
+msgid "Current style cannot be deleted"
+msgstr ""
+
+#: uzcstrconsts.rsdefault
+msgid "Default"
+msgstr ""
+
+#: uzcstrconsts.rsdefaultpromot
+msgid "Command"
+msgstr ""
+
+#: uzcstrconsts.rsdevices
+msgctxt "uzcstrconsts.rsdevices"
+msgid "Devices"
+msgstr ""
+
+#: uzcstrconsts.rsdifferent
+msgid "Different"
+msgstr ""
+
+#: uzcstrconsts.rsdimstyleusedin
+msgid "Dimension style \"%s\" used in: %d-model, %d-blockdef table, %d-dimstyle table"
+msgstr ""
+
+#: uzcstrconsts.rsdivbyzero
+msgid "Divide by zero"
+msgstr ""
+
+#: uzcstrconsts.rsdrawingwindowwndname
+msgid "Drawings window"
+msgstr ""
+
+#: uzcstrconsts.rsdwgalreadycontainsdata
+msgid "Drawing already contains data. Load anyway?"
+msgstr ""
+
+#: uzcstrconsts.rsempty
+msgid "Empty"
+msgstr ""
+
+#: uzcstrconsts.rsentryalreadyexist
+msgid "Entry \"%s\" already exist"
+msgstr ""
+
+#: uzcstrconsts.rsequipment
+msgid "Equipment"
+msgstr ""
+
+#: uzcstrconsts.rserrorcaption
+msgid "Error!"
+msgstr ""
+
+#: uzcstrconsts.rserrorprefix
+msgid "ERROR: "
+msgstr ""
+
+#: uzcstrconsts.rsexprouttext
+msgid "Expression %s return %s"
+msgstr ""
+
+#: uzcstrconsts.rsfardeffilenotfounf
+msgid "File definition of the variables can not be found for the device \"%s\";"
+msgstr ""
+
+#: uzcstrconsts.rsformnotfound
+msgid "Form \"%s\" is not found!"
+msgstr ""
+
+#: uzcstrconsts.rsgdbobjinspwndname
+msgid "Object inspector"
+msgstr ""
+
+#: uzcstrconsts.rshardunnamed
+msgid "Unnamed"
+msgstr ""
+
+#: uzcstrconsts.rsinitialization
+msgid "Initialization:"
+msgstr ""
+
+#: uzcstrconsts.rsinvalididentificator
+msgid "\"%s\" not valid identificator"
+msgstr ""
+
+#: uzcstrconsts.rsinvalidinput
+msgid "Invalid input"
+msgstr ""
+
+#: uzcstrconsts.rsinvalidinputforpropery
+msgid "Property \"%s\" for entity \"%s\": %s"
+msgstr ""
+
+#: uzcstrconsts.rslayerdefpaontscannotbeprinted
+msgid "Layer DEFPOINTS can not be printed"
+msgstr ""
+
+#: uzcstrconsts.rslayermustbeselected
+msgid "Layer must be selected"
+msgstr ""
+
+#: uzcstrconsts.rslayerusedin
+msgid "Layer \"%s\" used in: %d-model, %d-blockdef table"
+msgstr ""
+
+#: uzcstrconsts.rslayoutload
+msgid "Error loading layout from file"
+msgstr ""
+
+#: uzcstrconsts.rslinetype
+msgctxt "uzcstrconsts.rslinetype"
+msgid "Line type"
+msgstr ""
+
+#: uzcstrconsts.rslinetypedesk
+msgid ""
+";;Pattern length %f\n"
+"%s\n"
+msgstr ""
+
+#: uzcstrconsts.rslinetypeusedin
+msgid "Line type \"%s\" used in: %d-model, %d-blockdef table"
+msgstr ""
+
+#: uzcstrconsts.rsloadingfontfile
+msgid "Loading font file \"%S\""
+msgstr ""
+
+#: uzcstrconsts.rsmessagecaption
+msgid "Message:"
+msgstr ""
+
+#: uzcstrconsts.rsmm
+msgid "mm"
+msgstr ""
+
+#: uzcstrconsts.rsmtexteditor
+msgid "MText editor"
+msgstr ""
+
+#: uzcstrconsts.rsnameabsent
+msgid "Absent Name"
+msgstr ""
+
+#: uzcstrconsts.rsnameall
+msgctxt "uzcstrconsts.rsnameall"
+msgid "All"
+msgstr ""
+
+#: uzcstrconsts.rsnamewithcounter
+msgid "%s (%d)"
+msgstr ""
+
+#: uzcstrconsts.rsncoglc
+msgid "OpenGL context is not created"
+msgstr ""
+
+#: uzcstrconsts.rsnewdimstylenameformat
+msgctxt "uzcstrconsts.rsnewdimstylenameformat"
+msgid "Style%-3.3d"
+msgstr ""
+
+#: uzcstrconsts.rsnewlayernameformat
+msgid "Layer%-3.3d"
+msgstr ""
+
+#: uzcstrconsts.rsnewtextstylenameformat
+msgctxt "uzcstrconsts.rsnewtextstylenameformat"
+msgid "Style%-3.3d"
+msgstr ""
+
+#: uzcstrconsts.rsnotregistred
+msgid "Not registred"
+msgstr ""
+
+#: uzcstrconsts.rsnotspecified
+msgid "Not specified"
+msgstr ""
+
+#: uzcstrconsts.rsnotyetimplemented
+msgid "Not yet implemented"
+msgstr ""
+
+#: uzcstrconsts.rsopenfile
+msgid "Open file..."
+msgstr ""
+
+#: uzcstrconsts.rsprefixabsent
+msgid "Absent Prefix"
+msgstr ""
+
+#: uzcstrconsts.rsprocesstimemsg
+msgid "%s:  %s second"
+msgstr ""
+
+#: uzcstrconsts.rsprogramdb
+msgid "Program DB"
+msgstr ""
+
+#: uzcstrconsts.rsprojectdb
+msgid "Project DB"
+msgstr ""
+
+#: uzcstrconsts.rsprojecttree
+msgid "Project Tree"
+msgstr ""
+
+#: uzcstrconsts.rsproperty
+msgid "Property"
+msgstr ""
+
+#: uzcstrconsts.rsquitcaption
+msgid "Quit"
+msgstr ""
+
+#: uzcstrconsts.rsquitquery
+msgid "Do yo want to quit ZCAD?"
+msgstr ""
+
+#: uzcstrconsts.rsrecreating
+msgid "Re-creating %s!"
+msgstr ""
+
+#: uzcstrconsts.rsreleasenotes
+msgid ""
+"-UNDO\\REDO - yet it is better not to use;\n"
+"\n"
+"-If you have problems with rendering or selecting entities, run \"Regen\" and \"RebuildTree\" in command line;\n"
+"\n"
+"-To disable the display of this window comment out line \"About\" in the file \"components\\autorun.cmd\". Encoding of all configuration files - UTF8;\n"
+msgstr ""
+
+#: uzcstrconsts.rsrenamedto
+msgid "%s \"%s\" renamed to \"%s\""
+msgstr ""
+
+#: uzcstrconsts.rsrevstr
+msgid "Revision SVN:"
+msgstr ""
+
+#: uzcstrconsts.rsruncommand
+msgid "Running command"
+msgstr ""
+
+#: uzcstrconsts.rsrunscript
+msgid "Running script \"%s\";"
+msgstr ""
+
+#: uzcstrconsts.rssaveemptydwg
+msgid "Drawing is empty. Sure?"
+msgstr ""
+
+#: uzcstrconsts.rssavefile
+msgid "Save file..."
+msgstr ""
+
+#: uzcstrconsts.rsselectcolor
+msgid "Select color..."
+msgstr ""
+
+#: uzcstrconsts.rsselectlt
+msgid "Select line type..."
+msgstr ""
+
+#: uzcstrconsts.rsstylemustbeselected
+msgid "Style must be selected"
+msgstr ""
+
+#: uzcstrconsts.rssyslinetypewarning
+msgid "This is system line type!"
+msgstr ""
+
+#: uzcstrconsts.rstemplatenotfound
+msgid "Template file \"%s\" not found"
+msgstr ""
+
+#: uzcstrconsts.rstextedcaption
+msgid " TEXT: "
+msgstr ""
+
+#: uzcstrconsts.rstexteditor
+msgid "Text editor"
+msgstr ""
+
+#: uzcstrconsts.rstextstyleusedin
+msgid "Text style \"%s\" used in: %d-model, %d-blockdef table, %d-dimstyle table"
+msgstr ""
+
+#: uzcstrconsts.rstoolbarnotfound
+msgid "Toolbar \"%s\" is not found! Create a blank window"
+msgstr ""
+
+#: uzcstrconsts.rstypenotdefinedinmodule
+msgid "Type \"%S\" not defined in unit \"%S\""
+msgstr ""
+
+#: uzcstrconsts.rsunabledelusedlayer
+msgid "Unable to delete, layer is used"
+msgstr ""
+
+#: uzcstrconsts.rsunabledelusedstyle
+msgid "Unable to delete, Style is used"
+msgstr ""
+
+#: uzcstrconsts.rsunableselectfreedimstylername
+msgid "Unable select free dimension style name"
+msgstr ""
+
+#: uzcstrconsts.rsunableselectfreelayername
+msgid "Unable select free layer name"
+msgstr ""
+
+#: uzcstrconsts.rsunableselectfreetextstylername
+msgid "Unable select free text style name"
+msgstr ""
+
+#: uzcstrconsts.rsunabletofindfile
+msgid "Unable to find file \"%s\""
+msgstr ""
+
+#: uzcstrconsts.rsunabletoopenfile
+msgid "Unable to open file \"%s\""
+msgstr ""
+
+#: uzcstrconsts.rsunassigned
+msgid "Unassigned"
+msgstr ""
+
+#: uzcstrconsts.rsuncategorized
+msgid "Uncategorized"
+msgstr ""
+
+#: uzcstrconsts.rsunknowncommand
+msgid "Unknown command"
+msgstr ""
+
+#: uzcstrconsts.rsunknownfileext
+msgid "Unknown file format \"%s\". Saving failed."
+msgstr ""
+
+#: uzcstrconsts.rsunnamedwindowtitle
+msgid "Unnamed%-3.3d"
+msgstr ""
+
+#: uzcstrconsts.rsvalue
+msgid "Value"
+msgstr ""
+
+#: uzcstrconsts.rsvinfotext
+msgid "Unstable version"
+msgstr ""
+
+#: uzcstrconsts.rswarningcaption
+msgid "Warning!"
+msgstr ""
+
+#: uzcstrconsts.rswarningprefix
+msgid "WARNING: "
+msgstr ""
+
+#: uzcstrconsts.rswrongblockdefindex
+msgid "Wrong blockdef index"
+msgstr ""
+
+#: uzcstrconsts.rszcadstarted
+msgid "ZCAD v%s started"
+msgstr ""
+
+#: uzeffdxf.rsloaddxffile
+msgid "Load DXF file"
+msgstr ""
+
+#: uzestrconsts.fontnotfoundandreplace
+msgid "For text style \"%s\" not found font \"%s\", is replaced by an alternative"
+msgstr ""
+
+#: uzestrconsts.rsalternatefontnotfoundin
+msgid "Alternate font \"%s\" is not found in \"%s\""
+msgstr ""
+
+#: uzestrconsts.rsblockignored
+msgid "Ignored block \"%s\""
+msgstr ""
+
+#: uzestrconsts.rsdoubleblockignored
+msgid "Ignored double definition block \"%s\""
+msgstr ""
+
+#: uzestrconsts.rsfileformat
+msgid "%s file format"
+msgstr ""
+
+#: uzestrconsts.rsgridtoodensity
+msgid "Grid too density"
+msgstr ""
+
+#: uzestrconsts.rsloadingfile
+msgid "Loading file \"%s\""
+msgstr ""
+
+#: uzestrconsts.rsreservefontnotfound
+msgid "Reserve font is not found in the resources"
+msgstr ""
+
+#: uzestrconsts.rsreservefontnotload
+msgid "Can not load reserve font"
+msgstr ""
+
+#: uzestrconsts.rsunablerenamefiletobak
+msgid "Could not rename file \"%s\" into \"*.bak\""
+msgstr ""
+
+#: uzestrconsts.rsunabletowritefile
+msgid "Unable to write file \"%s\""
+msgstr ""
+
+#: uzestrconsts.rsunknownfileformat
+msgid "Unknown file format"
+msgstr ""
+
+#: uzglviewareageneral.rswonlyparalel
+msgid "Works only for parallel projection!"
+msgstr ""
+
+#: uzglviewareageneral.rswonlytop
+msgid "Works only for top view!"
+msgstr ""
+
+#: zcad.rsstartautorun
+msgid "Execute *components\\autorun.cmd"
+msgstr ""
+

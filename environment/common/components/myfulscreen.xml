@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CONFIG>
+  <MainConfig>
+    <Nodes ChildCount="1">
+      <Item1 Name="AnchorDockPanel1" Type="CustomSite" ChildCount="1" WindowState="Maximized">
+        <Bounds Top="-9" Left="-9" Width="2560" Height="1414"/>
+        <Anchors Align="Client"/>
+        <Item1 Name="AnchorDockSite4" Type="Layout" ChildCount="7" WindowState="Maximized">
+          <Bounds Width="2522" Height="1296"/>
+          <Anchors Align="Client"/>
+          <Item1 Name="CommandLine" Type="Control" WindowState="Maximized">
+            <Bounds Top="1161" Left="307" Width="2215" Height="135"/>
+            <Anchors Top="AnchorDockSplitter1" Left="AnchorDockSplitter2"/>
+          </Item1>
+          <Item2 Name="AnchorDockSplitter1" Type="SplitterHorizontal" WindowState="Maximized">
+            <Bounds Top="1157" Left="307" Width="2215" Height="4"/>
+            <Anchors Left="AnchorDockSplitter2"/>
+          </Item2>
+          <Item3 Name="PageControl" Type="Control" WindowState="Maximized">
+            <Bounds Left="307" Width="2215" Height="1157"/>
+            <Anchors Left="AnchorDockSplitter2" Bottom="AnchorDockSplitter1"/>
+          </Item3>
+          <Item4 Name="AnchorDockSplitter2" Type="SplitterVertical" WindowState="Maximized">
+            <Bounds Left="303" Width="4" Height="1296"/>
+          </Item4>
+          <Item5 Name="ObjectInspector" Type="Control" WindowState="Maximized">
+            <Bounds Width="303" Height="606"/>
+            <Anchors Right="AnchorDockSplitter2" Bottom="AnchorDockSplitter3"/>
+          </Item5>
+          <Item6 Name="AnchorDockSplitter3" Type="SplitterHorizontal" WindowState="Maximized">
+            <Bounds Top="606" Width="303" Height="4"/>
+            <Anchors Right="AnchorDockSplitter2"/>
+          </Item6>
+          <Item7 Name="Navigator" Type="Control" WindowState="Maximized">
+            <Bounds Top="610" Width="303" Height="686"/>
+            <Anchors Top="AnchorDockSplitter3" Right="AnchorDockSplitter2"/>
+          </Item7>
+        </Item1>
+      </Item1>
+    </Nodes>
+  </MainConfig>
+  <Settings ShowHeader="False" HeaderStyle="Lines"/>
+  <ToolBarsConfig ItemCount="4">
+    <Item0 Name="CoolBarU" Type="CoolBar" ItemCount="2">
+      <Item0 Name="OIButtons" Type="ToolBar" Break="False" Width="229"/>
+      <Item1 Name="Standard" Type="ToolBar" Break="False" Width="1626"/>
+    </Item0>
+    <Item1 Name="CoolBarL" Type="CoolBar" ItemCount="0"/>
+    <Item2 Name="CoolBarR" Type="CoolBar" ItemCount="3">
+      <Item0 Name="Quick" Type="ToolBar" Width="105"/>
+      <Item1 Name="Modify" Type="ToolBar" Break="False" Width="213"/>
+      <Item2 Name="Draw" Type="ToolBar" Break="False" Width="213"/>
+    </Item2>
+    <Item3 Name="CoolBarD" Type="CoolBar" ItemCount="3">
+      <Item0 Name="Misc" Type="ToolBar" Width="471"/>
+      <Item1 Name="ObjectSnap" Type="ToolBar" Break="False" Width="407"/>
+      <Item2 Name="View" Type="ToolBar" Break="False" Width="615"/>
+    </Item3>
+  </ToolBarsConfig>
+</CONFIG>

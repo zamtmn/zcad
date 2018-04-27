@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ActionsContent>
+    <Group Category="File">
+      <ZAction Name="ACN_LOAD" Command="Load" Img="open" Caption="Open ..." Hint="Open drawing" ShortCut="CTRL+O"/>
+      <ZAction Name="ACN_LOADQS" Command="Load(QS)" Img="qload" Caption="Open (Autosave)" Hint="Open last autosave"/>
+      <ZAction Name="ACN_IMPORT" Command="Import" Img="#Import" Caption="Import ..." Hint="Import drawing"/>
+      <ZAction Name="ACN_NEW" Command="NewDWG" Img="new" Caption="New drawing" ShortCut="CTRL+N"/>
+      <ZAction Name="ACN_QSAVE" Command="QSave" Img="save" Caption="Save" Hint="Save drawing" ShortCut="CTRL+S"/>
+      <ZAction Name="ACN_SAVEAS" Command="SaveAs" Img="saveas" Caption="Save as ..." Hint="Save drawing as" ShortCut="CTRL+SHIFT+S"/>
+      <ZAction Name="ACN_SAVEQS" Command="QSave(QS)" Img="qsave" Caption="Save (Autosave)" Hint="Autosave"/>
+      <ZAction Name="ACN_PRINT" Command="Print" Img="print" Caption="Print" Hint="Print" ShortCut="CTRL+P"/>
+      <ZAction Name="ACN_CLOSE" Command="CloseDWG" Img="close" Caption="Close drawing" ShortCut="CTRL+F4"/>
+      <ZAction Name="ACN_QUIT" Command="Quit" Img="exit" Caption="Quit" ShortCut="CTRL+Q"/>
+    </Group>
+    <Group Category="Edit">
+      <ZAction Name="ACN_UNDO" Command="Undo" Img="undo" Caption="Undo" ShortCut="CTRL+Z"/>
+      <ZAction Name="ACN_REDO" Command="REdo" Img="redo" Caption="Redo" ShortCut="CTRL+SHIFT+Z"/>
+      <ZAction Name="ACN_CUTCLIP" Command="CutClip" Img="cutclip" Caption="Cut to clipboard" ShortCut="CTRL+X"/>
+      <ZAction Name="ACN_COPYCLIP" Command="CopyClip" Img="copyclip" Caption="Copy to clipboard" ShortCut="CTRL+C"/>
+      <ZAction Name="ACN_COPYCLIPBASE" Command="CopyBase" Img="copyclipbase.bmp" Caption="Copy to clipboard with base point" ShortCut="CTRL+SHIFT+C"/>
+      <ZAction Name="ACN_FAKECOPYCLIPBASE" Command="CopyBase" Img="#CB" ShortCut="CTRL+INS"/>
+      <ZAction Name="ACN_PASTE" Command="PasteClip" Img="pasteclip" Caption="Paste" Hint="Paste from clipboard" ShortCut="CTRL+V"/>
+      <ZAction Name="ACN_FAKEPASTE" Command="PasteClip" Img="#Paste" ShortCut="SHIFT+INS"/>
+      <ZAction Name="ACN_ERASE" Command="Erase" Img="erase" Caption="Erase" ShortCut="DEL"/>
+      <ZAction Name="ACN_SELECTALL" Command="SelectAll" Img="#SA" Caption="Select all" ShortCut="CTRL+A"/>
+      <ZAction Name="ACN_INVERSESELECTED" Command="InverseSelected" Img="#SI" Caption="Inverse selected"/>
+      <ZAction Name="ACN_DESELECTALL" Command="DeSelectAll" Img="#DSA" Caption="DeSelect all" ShortCut="CTRL+SHIFT+A"/>
+      <ZAction Name="ACN_SELSIM" Command="SelSim" Img="#SSim" Caption="Select similar"/>
+      <ZAction Name="ACN_El_FIND" Command="EL_Find" Img="find" Caption="Find device" ShortCut="CTRL+F"/>
+    </Group>
+    <Group Category="View">
+      <ZAction Name="ACN_PROJECTTREE" Command="ProjectTree" Img="projecttree" Caption="Project tree" ShortCut="CTRL+T"/>
+      <ZAction Name="ACN_REGEN" Command="Regen" Img="regen" Caption="Regen all" ShortCut="CTRL+R"/>
+      <ZAction Name="ACN_PERSPECTIVE" Command="ChangeProjType" Img="perspective" Caption="Perspective" Hint="Perspective on/off"/>
+      <ZAction Name="ACN_SHOW_OBJECTINSPECTOR" Command="Show(ObjectInspector)" Img="#OI" Caption="Object inspector"/>
+      <ZAction Name="ACN_SHOW_PAGECONTROL" Command="Show(PageControl)" Img="#DW" Caption="Drawings window"/>
+      <ZAction Name="ACN_SHOW_COMMANDLINE" Command="Show(CommandLine)" Img="#CL" Caption="Command line and history"/>
+      <ZAction Name="ACN_SHOW_NAVIGATORDEVICES" Command="Show(NavigatorDevices)" Img="#NV" Caption="Navigator(Devices)"/>
+      <ZAction Name="ACN_SHOW_NAVIGATORRISERS" Command="Show(NavigatorRisers)" Img="#NR" Caption="Navigator(Risers)"/>
+      <ZAction Name="ACN_SHOW_NAVIGATORCABLES" Command="Show(NavigatorCables)" Img="#NC" Caption="Navigator(Cables)"/>
+      <ZAction Name="ACN_SHOW_NAVIGATORENTITIES" Command="Show(NavigatorEntities)" Img="#NV" Caption="Navigator(Entities)"/>
+      <ZAction Name="ACN_SAVELAYOUT" Command="SaveLayout" Img="#SLay" Caption="Save window layout as default"/>
+      <ZAction Name="ACN_DOCKOPT" Command="DockingOptions" Img="#DO" Caption="Docking options"/>
+      <ZAction Name="ACN_TEXTWINDOW" Command="TextWindow" Img="#TW" Caption="View text window" ShortCut="F2"/>
+      <ZAction Name="ACN_ZOOMALL" Command="Zoom(ALL)" Img="zoomall" Caption="Zoom All" ShortCut="HOME"/>
+      <ZAction Name="ACN_ZOOMWINDOW" Command="ZoomWindow" Img="zoomwindow" Caption="Zoom window"/>
+      <ZAction Name="ACN_ZOOMSEL" Command="Zoom(SEL)" Img="#zsel" Caption="Zoom selected" ShortCut="END"/>
+      <ZAction Name="ACN_ZOOMIN" Command="Zoom(IN)" Img="zoomin" Caption="Zoom in" ShortCut="PGUP"/>
+      <ZAction Name="ACN_ZOOMOUT" Command="Zoom(OUT)" Img="zoomout" Caption="Zoom out" ShortCut="PGDN"/>
+      <ZAction Name="ACN_PANLEFT" Command="Pan(LEFT)" Img="panleft" Caption="Pan left" ShortCut="LEFT"/>
+      <ZAction Name="ACN_PANRIGHT" Command="Pan(RIGHT)" Img="panright" Caption="Pan right" ShortCut="RIGHT"/>
+      <ZAction Name="ACN_PANUP" Command="Pan(UP)" Img="panup" Caption="Pan up" ShortCut="UP"/>
+      <ZAction Name="ACN_PANDOWN" Command="Pan(DOWN)" Img="pandown" Caption="Pan down" ShortCut="DOWN"/>
+      <ZAction Name="ACN_VIEWTOP" Command="View(TOP)" Img="top" Caption="View top"/>
+      <ZAction Name="ACN_VIEWDOWN" Command="View(BOTTOM)" Img="bottom" Caption="View bottom"/>
+      <ZAction Name="ACN_VIEWLEFT" Command="View(LEFT)" Img="left" Caption="View left"/>
+      <ZAction Name="ACN_VIEWRIGHT" Command="View(RIGHT)" Img="right" Caption="View right"/>
+      <ZAction Name="ACN_VIEWSEISO" Command="View(SEISO)" Img="isose" Caption="View SE isometric"/>
+      <ZAction Name="ACN_VIEWNEISO" Command="View(NEISO)" Img="isone" Caption="View NE isometric"/>
+      <ZAction Name="ACN_VIEWSWISO" Command="View(SWISO)" Img="isosw" Caption="View SW isometric"/>
+      <ZAction Name="ACN_VIEWNWISO" Command="View(NWISO)" Img="isonw" Caption="View NW isometric"/>
+      <ZAction Name="ACN_VIEWRL" Command="Pan(RL)" Img="#RL" Caption="Rotate camera left" ShortCut="CTRL+LEFT"/>
+      <ZAction Name="ACN_VIEWRR" Command="Pan(RR)" Img="#RR" Caption="Rotate camera right" ShortCut="CTRL+RIGHT"/>
+      <ZAction Name="ACN_VIEWRU" Command="Pan(RU)" Img="#RU" Caption="Rotate camera up" ShortCut="CTRL+UP"/>
+      <ZAction Name="ACN_VIEWRD" Command="Pan(RD)" Img="#RD" Caption="Rotate camera down" ShortCut="CTRL+DOWN"/>
+    </Group>
+    <Group Category="Format">
+      <ZAction Name="ACN_UNITS" Command="Units" Img="#0.0" Caption="Units format ..." Hint="Units format"/>
+      <ZAction Name="ACN_LAYER" Command="Layer" Img="layers" Caption="Layers ..." Hint="Layers properties manager"/>
+      <ZAction Name="ACN_COLORS" Command="Colors" Img="colors.bmp" Caption="Colors ..." Hint="Select current color"/>
+      <ZAction Name="ACN_TSTYLES" Command="TextStyles" Img="textstyles.bmp" Caption="Text styles ..." Hint="Text styles properties manager"/>
+      <ZAction Name="ACN_DSTYLES" Command="DimStyles" Img="dimstyles.bmp" Caption="Dimension styles ..." Hint="Dimension styles properties manager"/>
+      <ZAction Name="ACN_LTYPES" Command="LineTypes" Img="linetypes" Caption="Line types ..." Hint="Line types properties manager"/>
+    </Group>
+    <Group Category="Modify">
+      <ZAction Name="ACN_COPY" Command="Copy" Img="copy" Caption="Copy" Hint="Copy primitives"/>
+      <ZAction Name="ACN_MOVE" Command="Move" Img="move" Caption="Move" Hint="Move primitives"/>
+      <ZAction Name="ACN_ROTATE" Command="Rotate" Img="rotate" Caption="Rotate" Hint="Rotate primitives"/>
+      <ZAction Name="ACN_SCALE" Command="Scale" Img="scale" Caption="Scale" Hint="Scale primitives"/>
+      <ZAction Name="ACN_MIRROR" Command="Mirror" Img="mirror" Caption="Mirror" Hint="Mirror primitives"/>
+      <ZAction Name="ACN_BEDIT" Command="BEdit" Img="bedit" Caption="Block editor"/>
+      <ZAction Name="ACN_BREPLACE" Command="BlockReplace" Img="#BR" Caption="Block replace"/>
+      <ZAction Name="ACN_BSCALE" Command="BlockScale" Img="#BS" Caption="Block scale"/>
+      <ZAction Name="ACN_BROTATE" Command="BlockRotate" Img="#BR" Caption="Block rotate"/>
+      <ZAction Name="ACN_ADDTOOWNER" Command="AddToOwner" Img="addtoowner" Caption="Add to owner"/>
+      <ZAction Name="ACN_COPYFROMOWNER" Command="CopyFromOwner" Img="#COF" Caption="Copy from owner"/>
+      <ZAction Name="ACN_POLYED" Command="PolyED" Img="polyed" Caption="Edit polyline"/>
+      <ZAction Name="ACN_OBJVARMAN" Command="ObjVarMan" Img="varman" Caption="Object variables manager"/>
+      <ZAction Name="ACN_MULTIOBJVARMAN" Command="MultiObjVarMan" Img="mvarman" Caption="Multi object variables manager"/>
+    </Group>
+    <Group Category="Draw">
+      <ZAction Name="ACN_LINE" Command="Line" Img="line" Caption="Line" Hint="Draw line"/>
+      <ZAction Name="ACN_3DPOLY" Command="3DPoly" Img="pline" Caption="3DPolyLine" Hint="Draw 3DPolyLine"/>
+      <ZAction Name="ACN_RECTANGLE" Command="Rectangle" Img="rectangle" Caption="Rectangle" Hint="Draw rectangle"/>
+      <ZAction Name="ACN_CIRCLE" Command="Circle" Img="circle" Caption="Circle(Center,radius)" Hint="Draw circle(Center,radius)"/>
+      <ZAction Name="ACN_CIRCLECD" Command="Circle(CD)" Img="circlecd" Caption="Circle(Center,diameter)" Hint="Draw circle(Center,diameter)"/>
+      <ZAction Name="ACN_CIRCLE2P" Command="Circle(2P)" Img="circle2p" Caption="Circle(2 points)" Hint="Draw circle(2 points)"/>
+      <ZAction Name="ACN_CIRCLE3P" Command="Circle(3P)" Img="circle3p" Caption="Circle(3 points)" Hint="Draw circle(3 points)"/>
+      <ZAction Name="ACN_BInsert" Command="Insert" Img="insert" Caption="Block" Hint="Insert block"/>
+      <ZAction Name="ACN_TEXT" Command="Text" Img="text" Caption="Text"  Hint="Draw text"/>
+      <ZAction Name="ACN_ARC" Command="Arc" Img="arc.bmp" Caption="Arc"  Hint="Draw arc"/>
+    </Group>
+    <Group Category="Dimension">
+      <ZAction Name="ACN_DIMALIGNED" Command="DimAligned" Img="dimaligned" Caption="Draw aligned dimension"/>
+      <ZAction Name="ACN_DIMLINEAR" Command="DimLinear" Img="dimlinear" Caption="Draw linear dimension"/>
+      <ZAction Name="ACN_DIMRADIAL" Command="DimRadius" Img="dimradial" Caption="Draw radial dimension"/>
+      <ZAction Name="ACN_DIMDIAMETRIC" Command="DimDiameter" Img="dimdiametric" Caption="Draw diametric dimension"/>
+    </Group>
+    <Group Category="Misc">
+      <ZAction Name="ACN_CANCEL" Command="Cancel" Img="#C" Caption="Cancel"/>
+      <ZAction Name="ACN_SNAPRUNTIME" Command="SnapProperties" Img="snap" Caption="Run time snap editor" ShortCut="ALT+S"/>
+      <ZAction Name="ACN_MATCHPROP" Command="MatchProp" Img="matchprop" Caption="Match properties"/>
+      <ZAction Name="ACN_WNEXT" Command="NextDrawing" Img="#N" Caption="Next window" ShortCut="CTRL+TAB"/>
+      <ZAction Name="ACN_WPREV" Command="PrevDrawing" Img="#P" Caption="Previous window" ShortCut="SHIFT+CTRL+TAB"/>
+      <ZAction Name="ACN_ABOUT" Command="About" Img="about" Caption="About"/>
+      <ZAction Name="ACN_HELP" Command="Help" Img="help.bmp" Caption="Help" ShortCut="F1"/>
+      <ZAction Name="ACN_DBASEADD" Command="DBaseAdd" Img="#DBAdd" Caption="Add to drawing database"/>
+      <ZAction Name="ACN_DBASELINK" Command="DBaseLink" Img="#DBLink" Caption="Link to selected entities"/>
+      <ZAction Name="ACN_DBASERENAME" Command="DBaseRename" Img="#DBRename" Caption="Rename"/>
+      <ZAction Name="ACN_INSERTTODRAWING" Command="Insert2" Img="#ITD" Caption="Insert to drawing"/>
+      <ZAction Name="ACN_COPYVARNAMETOCLIP" Command="ObjInspCopyToClip(VAR)" Img="#CVN" Caption="Copy var name"/>
+      <ZAction Name="ACN_COPYLINKTOVARTOCLIP" Command="ObjInspCopyToClip(LVAR)" Img="#CLV" Caption="Copy link to var"/>
+      <ZAction Name="ACN_COPYVALUETOCLIP" Command="ObjInspCopyToClip(VALUE)" Img="#CVL" Caption="Copy value"/>
+      <ZAction Name="ACN_DIST" Command="Dist" Img="dist" Caption="Distance"/>
+      <ZAction Name="ACN_REBUILDTREE" Command="RebuildTree" Img="#rtree" Caption="Rebuild current drawing spatial index"/>
+      <ZAction Name="ACN_TREESTAT" Command="TreeStat" Img="#ti" Caption="Spatial index info" Hint="Current drawing spatial index info"/>
+      <ZAction Name="ACN_OPTIONS" Command="Options" Img="options" Caption="Options"/>
+      <ZAction Name="ACN_SAVEOPTIONS" Command="SaveOptions" Img="#so" Caption="Save options"/>
+    </Group>
+    <Group Category="Variables">
+      <ZAction2Variable Name="ACN_OS_INSERT" Variable="DWG_OSMode" Mask="1" Img="snaptoinsert" Caption="Snap to insert point"/>
+      <ZAction2Variable Name="ACN_OS_END" Variable="DWG_OSMode" Mask="2" Img="snaptoend" Caption="Snap to end point"/>
+      <ZAction2Variable Name="ACN_OS_MIDDLE" Variable="DWG_OSMode" Mask="4" Img="snaptomid" Caption="Snap to middle point"/>
+      <ZAction2Variable Name="ACN_OS_THIRD" Variable="DWG_OSMode" Mask="8" Img="#1/3" Caption="Snap to 1/3 point"/>
+      <ZAction2Variable Name="ACN_OS_QUARTER" Variable="DWG_OSMode" Mask="16" Img="#1/4" Caption="Snap to 1/4 point"/>
+      <ZAction2Variable Name="ACN_OS_CENTER" Variable="DWG_OSMode" Mask="32" Img="snaptocenter" Caption="Snap to center point"/>
+      <ZAction2Variable Name="ACN_OS_QUADRANT" Variable="DWG_OSMode" Mask="64" Img="snaptoquadrant" Caption="Snap to quadrant"/>
+      <ZAction2Variable Name="ACN_OS_POINT" Variable="DWG_OSMode" Mask="128" Img="#P" Caption="Snap to point"/>
+      <ZAction2Variable Name="ACN_OS_INTERSECTION" Variable="DWG_OSMode" Mask="256" Img="snaptointersection.bmp" Caption="Snap to intersection"/>
+      <ZAction2Variable Name="ACN_OS_PERPENDICULAR" Variable="DWG_OSMode" Mask="512" Img="snaptoperpendicular" Caption="Snap to perpendicular"/>
+      <ZAction2Variable Name="ACN_OS_TANGENT" Variable="DWG_OSMode" Mask="1024" Img="snaptotangent" Caption="Snap to tangent"/>
+      <ZAction2Variable Name="ACN_OS_NEAREST" Variable="DWG_OSMode" Mask="2048" Img="snaptonearest" Caption="Snap to nearest point"/>
+      <ZAction2Variable Name="ACN_OS_APARENTINTERSECTION" Variable="DWG_OSMode" Mask="4096" Img="snaptoapparentintersection" Caption="Snap to apparent intersection"/>
+      <ZAction2Variable Name="ACN_OS_PARALEL" Variable="DWG_OSMode" Mask="8192" Img="snaptoparalel.bmp" Caption="Snap to paralel"/>
+      <ZAction2Variable Name="ACN_SHOWHIDDENFIELDINOBJINSP" Variable="ShowHiddenFieldInObjInsp" Img="#shf" Caption="Show hidden field in object inspector"/>
+      <ZAction2Variable Name="ACN_SHOWHEADERSINOBJINSP" Variable="INTF_ObjInsp_ShowHeaders" Img="#sh" Caption="Show headers in object inspector"/>
+      <ZAction2Variable Name="ACN_OLDSTYLEINOBJINSP" Variable="INTF_ObjInsp_OldStyleDraw" Img="#os" Caption="Old style"/>
+      <ZAction2Variable Name="ACN_WHITEBACKGROUNFDINOBJINSP" Variable="INTF_ObjInsp_WhiteBackground" Img="#wb" Caption="White background in object inspector"/>
+      <ZAction2Variable Name="ACN_SHOWSPLITERINOBJINSP" Variable="INTF_ObjInsp_ShowSeparator" Img="#ss" Caption="Show spliter in object inspector"/>
+      <ZAction2Variable Name="ACN_SHOWFASTEDITORSINOBJINSP" Variable="INTF_ObjInsp_ShowFastEditors" Img="#sfe" Caption="Show fast editors in object inspector"/>
+      <ZAction2Variable Name="ACN_SHOWONLYHOTFASTEDITORSINOBJINSP" Variable="INTF_ObjInsp_ShowOnlyHotFastEditors" Img="#sohfe" Caption="Show only hot fast editors in object inspector"/>
+      <ZAction2Variable Name="ACN_OVERRIDEROWHEIGHTINOBJINSP" Variable="INTF_ObjInsp_RowHeight_OverriderEnable" Img="#orh" Caption="Override row height in object inspector"/>
+      <ZAction2Variable Name="ACN_ALWAYSUSEMULTISELECTWWRAPPER" Variable="INTF_ObjInsp_AlwaysUseMultiSelectWrapper" Img="#aumsw" Caption="Always use multi select wrapper in object inspector"/>
+      <ZAction2Variable Name="ACN_SHOWEMPTYSECTIONS" Variable="INTF_ObjInsp_ShowEmptySections" Img="#ses" Caption="Show empty sections in object inspector"/>
+    </Group>
+  </ActionsContent>
+</CONFIG>

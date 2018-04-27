@@ -2247,7 +2247,7 @@ begin
   ProcessBar.Hide;
   ProcessBar.Align:=alLeft;
   ProcessBar.Width:=400;
-  ProcessBar.Height:=10;
+  ProcessBar.Height:=tb.ButtonHeight;
   ProcessBar.min:=0;
   ProcessBar.max:=0;
   ProcessBar.step:=10000;
@@ -2259,7 +2259,7 @@ begin
   HintText.Align:=alLeft;
   HintText.AutoSize:=false;
   HintText.Width:=400;
-  HintText.Height:=10;
+  HintText.Height:=tb.ButtonHeight;
   HintText.Layout:=tlCenter;
   HintText.Alignment:=taCenter;
   HintText.Parent:=tb;

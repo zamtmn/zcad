@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CONFIG>
+  <MainConfig>
+    <Nodes ChildCount="1">
+      <Item1 Name="AnchorDockPanel1" Type="CustomSite" ChildCount="1" WindowState="Maximized">
+        <Bounds Top="-4" Left="-4" Width="2560" Height="1393"/>
+        <Anchors Align="Client"/>
+        <Item1 Name="AnchorDockSite4" Type="Layout" ChildCount="5" WindowState="Maximized">
+          <Bounds Width="2526" Height="1324"/>
+          <Anchors Align="Client"/>
+          <Item1 Name="CommandLine" Type="Control" WindowState="Maximized">
+            <Bounds Top="1206" Width="239" Height="118"/>
+            <Anchors Top="AnchorDockSplitter2" Right="AnchorDockSplitter1"/>
+          </Item1>
+          <Item2 Name="PageControl" Type="Control" WindowState="Maximized">
+            <Bounds Left="243" Width="2283" Height="1324"/>
+            <Anchors Left="AnchorDockSplitter1"/>
+          </Item2>
+          <Item3 Name="AnchorDockSplitter1" Type="SplitterVertical" WindowState="Maximized">
+            <Bounds Left="239" Width="4" Height="1324"/>
+          </Item3>
+          <Item4 Name="ObjectInspector" Type="Control" WindowState="Maximized">
+            <Bounds Width="239" Height="1202"/>
+            <Anchors Right="AnchorDockSplitter1" Bottom="AnchorDockSplitter2"/>
+          </Item4>
+          <Item5 Name="AnchorDockSplitter2" Type="SplitterHorizontal" WindowState="Maximized">
+            <Bounds Top="1202" Width="239" Height="4"/>
+            <Anchors Right="AnchorDockSplitter1"/>
+          </Item5>
+        </Item1>
+      </Item1>
+    </Nodes>
+  </MainConfig>
+  <Settings HeaderStyle="Lines"/>
+  <ToolBarsConfig ItemCount="4">
+    <Item0 Name="CoolBarU" Type="CoolBar" ItemCount="2">
+      <Item0 Name="Standard" Type="ToolBar" Width="1426"/>
+      <Item1 Name="OIButtons" Type="ToolBar" Break="False" Width="229"/>
+    </Item0>
+    <Item1 Name="CoolBarL" Type="CoolBar" ItemCount="0"/>
+    <Item2 Name="CoolBarR" Type="CoolBar" ItemCount="4">
+      <Item0 Name="Quick" Type="ToolBar" Width="105"/>
+      <Item1 Name="Modify" Type="ToolBar" Break="False" Width="213"/>
+      <Item2 Name="Draw" Type="ToolBar" Break="False" Width="213"/>
+      <Item3 Name="Misc" Type="ToolBar" Break="False" Width="471"/>
+    </Item2>
+    <Item3 Name="CoolBarD" Type="CoolBar" ItemCount="0"/>
+  </ToolBarsConfig>
+</CONFIG>

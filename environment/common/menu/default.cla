@@ -1,0 +1,10 @@
+;
+; ';' - коментарий
+;псевдоним = команда
+;
+
+c          = Copy
+m          = Move
+r          = Rotate
+t          = Text
+exit       = quit

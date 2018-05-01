@@ -32,7 +32,7 @@ program zcad;
 {$ENDIF}
 {$ifdef WIN64} {$imagebase $400000} {$endif}
 
-{$DEFINE ELECTROTECH}
+{$INCLUDE buildmode.inc}
 uses
   {$IFDEF REPORTMMEMORYLEAKS}heaptrc,{$ENDIF}
   Interfaces,forms, classes,

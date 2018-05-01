@@ -52,7 +52,7 @@
     <Version Value="11"/>
     <PathDelim Value="\"/>
     <Target>
-      <Filename Value="..\..\CAD\utils\typeexporter"/>
+      <Filename Value="..\..\environment\typeexporter\typeexporter"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="..;..\u;..\gdb;..\commands;..\gui;..\DeviceBase;..\languade;..\LCLmod;..\CAD;$(ProjOutDir)"/>

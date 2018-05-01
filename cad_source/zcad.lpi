@@ -965,7 +965,7 @@
         <IsPartOfProject Value="True"/>
       </Unit170>
       <Unit171>
-        <Filename Value="zcad/commands/uzccomexample.pas"/>
+        <Filename Value="zcad/commands/uzccomdrawsuperline.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit171>
       <Unit172>

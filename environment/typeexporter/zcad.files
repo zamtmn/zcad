@@ -1,7 +1,7 @@
 components/zebase/uzbtypesbase.pas
 components/zebase/uzbgeomtypes.pas
 components/zebase/uzbtypes.pas
-components/zmath/uzedimensionaltypes.pas 
+components/zmath/uzedimensionaltypes.pas
 zengine/core/objects/uzepalette.pas
 components/zcontainers/gzctnrvectortypes.pas
 components/zcontainers/gzctnrvector.pas
@@ -49,8 +49,8 @@ zengine/zgl/uzgprimitives.pas
 zengine/zgl/uzgprimitivessarray.pas
 zengine/zgl/uzglvectorobject.pas
 zengine/zgl/uzglgeometry.pas
-zengine/geomlib/uzgeomentity.pas 
-zengine/geomlib/uzgeomentity3d.pas 
+zengine/geomlib/uzgeomentity.pas
+zengine/geomlib/uzgeomentity3d.pas
 zengine/geomlib/uzgeomline3d.pas
 zengine/geomlib/uzegeomentitiestree.pas
 zengine/core/entities/uzeentsubordinated.pas
@@ -95,14 +95,14 @@ zengine/core/entities/uzeentspline.pas
 zengine/core/objects/uzeroot.pas
 zengine/core/objects/uzecamera.pas
 zengine/core/entities/uzeenttable.pas
-zcad/DeviceBase/uzcdevicebaseabstract.pas
-zcad/DeviceBase/uzcdevicebase.pas
+zcad/devicebase/uzcdevicebaseabstract.pas
+zcad/devicebase/uzcdevicebase.pas
 zcad/commands/uzccommandsabstract.pas
 zcad/commands/uzccommandsimpl.pas
 zcad/commands/uzccomdraw.pas
 zcad/commands/uzccomexample.pas
 zengine/containers/UGDBTracePropArray.pas
-zengine/zgl/drawers/uzglviewareadata.pas 
+zengine/zgl/drawers/uzglviewareadata.pas
 components/zscript/UUnitManager.pas
 zengine/containers/UGDBNumerator.pas
 zengine/core/drawings/uzedrawingdef.pas
@@ -112,5 +112,5 @@ zcad/core/drawings/uzcdrawings.pas
 zcad/gui/odjectinspector/uzcoiwrapper.pas
 zcad/gui/odjectinspector/uzcoimultiobjects.pas
 zengine/fonts/uzefontmanager.pas
-zengine/zgl/drawers/uzgldrawergdi.pas 
-zengine/zgl/drawers/uzgldrawerogl.pas 
+zengine/zgl/drawers/uzgldrawergdi.pas
+zengine/zgl/drawers/uzgldrawerogl.pas

@@ -114,3 +114,4 @@ zcad/gui/odjectinspector/uzcoimultiobjects.pas
 zengine/fonts/uzefontmanager.pas
 zengine/zgl/drawers/uzgldrawergdi.pas
 zengine/zgl/drawers/uzgldrawerogl.pas
+zengine/zgl/drawers/uzgldrawerdx.pas

@@ -153,7 +153,7 @@ uses
   uzcregisterenitiesextenders,
   uzcoiregistermultiproperties,
   uzclibraryblocksregister,
-  uzglviewareaogl,uzglviewareagdi,uzglviewareacanvas,
+  uzglviewareaogl,uzglviewareagdi,uzglviewareacanvas,uzglviewareadx,
 
   uzcinterface,
   uzccomdbgappexplorer;

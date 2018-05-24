@@ -154,7 +154,7 @@ uses
   uzcoiregistermultiproperties,
   uzclibraryblocksregister,
   uzglviewareaogl,uzglviewareagdi,uzglviewareacanvas,
-  {$IFDEF WINDOWS}uzglviewareadx,{$ENDIF}
+  {$IFDEF WINDOWS}{uzglviewareadx,}{$ENDIF}
 
   uzcinterface,
   uzccomdbgappexplorer;
@@ -191,6 +191,7 @@ begin
   FontManager.EnumerateFontFiles;
   uzcdrawings.startup('*rtl/dwg/DrawingVars.pas','');
 
+  Application.MainFormOnTaskBar:=true;
   //создание окна программы
   Application.CreateForm(TZCADMainWindow,ZCADMainWindow);
   ZCADMainWindow.show;

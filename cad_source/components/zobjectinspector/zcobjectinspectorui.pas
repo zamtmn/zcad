@@ -30,6 +30,7 @@ procedure OIUI_ButtonDraw(canvas:TCanvas;r:trect;state:TFastEditorState;s:string
 procedure OIUI_FE_BooleanDraw(canvas:TCanvas;r:trect;PInstance:Pointer;state:TFastEditorState;boundr:trect);
 procedure OIUI_FE_ButtonDraw(canvas:TCanvas;r:trect;PInstance:Pointer;state:TFastEditorState;boundr:trect);
 procedure OIUI_FE_ButtonCrossDraw(canvas:TCanvas;r:trect;PInstance:Pointer;state:TFastEditorState;boundr:trect);
+procedure OIUI_FE_ButtonMultiplyDraw(canvas:TCanvas;r:trect;PInstance:Pointer;state:TFastEditorState;boundr:trect);
 procedure OIUI_FE_ButtonHLineDraw(canvas:TCanvas;r:trect;PInstance:Pointer;state:TFastEditorState;boundr:trect);
 procedure OIUI_FE_ButtonGreatThatDraw(canvas:TCanvas;r:trect;PInstance:Pointer;state:TFastEditorState;boundr:trect);
 procedure OIUI_FE_ButtonLessThatDraw(canvas:TCanvas;r:trect;PInstance:Pointer;state:TFastEditorState;boundr:trect);
@@ -142,6 +143,11 @@ procedure OIUI_FE_ButtonCrossDraw(canvas:TCanvas;r:trect;PInstance:Pointer;state
 begin
      OIUI_ButtonDraw(canvas,r,state,'+',boundr);
 end;
+procedure OIUI_FE_ButtonMultiplyDraw(canvas:TCanvas;r:trect;PInstance:Pointer;state:TFastEditorState;boundr:trect);
+begin
+     OIUI_ButtonDraw(canvas,r,state,'*',boundr);
+end;
+
 procedure OIUI_FE_ButtonHLineDraw(canvas:TCanvas;r:trect;PInstance:Pointer;state:TFastEditorState;boundr:trect);
 begin
      OIUI_ButtonDraw(canvas,r,state,'-',boundr);

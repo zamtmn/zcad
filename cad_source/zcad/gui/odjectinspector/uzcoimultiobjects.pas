@@ -73,6 +73,7 @@ type
             end;
 {Export-}
 procedure DeselectEnts(PInstance:GDBPointer);
+procedure SelectOnlyThisEnts(PInstance:GDBPointer);
 var
    MSEditor:TMSEditor;
 implementation
@@ -641,6 +642,34 @@ begin
     pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
     until pv=nil;}
 end;
+procedure SelectOnlyThisEnts(PInstance:GDBPointer);
+var
+    NeededObjType:TObjID;
+    pv:pGDBObjEntity;
+    ir:itrec;
+    count:integer;
+begin
+    NeededObjType:=MSEditor.GetObjType;
+    if NeededObjType<>0 then
+    begin
+      count:=0;
+      pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
+      if pv<>nil then
+      repeat
+        if pv^.Selected then
+        if (pv^.GetObjType<>NeededObjType)then
+        begin
+          inc(count);
+          pv^.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.DeSelector);
+        end;
+        pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
+      until pv=nil;
+      ZCMsgCallBackInterface.TextMessage(sysutils.Format(rscmNEntitiesDeselected,[count]),TMWOHistoryOut);
+      if count>0 then
+        ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,ZMsgID_GUIActionSelectionChanged);
+    end;
+end;
+
 
 procedure finalize;
 begin

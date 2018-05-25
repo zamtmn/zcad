@@ -1689,8 +1689,9 @@ begin
                                                       TED:=pp^.PTypeManager^.CreateEditor(self,tr,pp^.valueAddres,@vsa,{false}true,initialvalue,rowh);
      case ted.Mode of
                      TEM_Integrate:begin
+                                       TED.Editor.SetEditorBounds(pp,INTFObjInspShowOnlyHotFastEditors);
                                        editorcontrol:=TED.Editor.geteditor;
-                                       editorcontrol.SetBounds(tr.Left+2,tr.Top,tr.Right-tr.Left-2,tr.Bottom-tr.Top);
+                                       //editorcontrol.SetBounds(tr.Left+2,tr.Top,tr.Right-tr.Left-2,tr.Bottom-tr.Top);
                                        if (editorcontrol is TCombobox) then
                                                                            begin
                                                                                 {$IFDEF LINUX}
@@ -1942,8 +1943,8 @@ begin
 end;
 procedure TGDBobjinsp.updateeditorBounds;
 begin
-  if peditor<>nil then
-  peditor.geteditor.SetBounds(NameColumnWidth+1,EDContext.ppropcurrentedit.rect.Top,clientwidth-NameColumnWidth-2,EDContext.ppropcurrentedit.rect.Bottom-EDContext.ppropcurrentedit.rect.Top+1);
+  if (peditor<>nil)and(EDContext.ppropcurrentedit<>nil) then
+    pEditor.SetEditorBounds(EDContext.ppropcurrentedit,INTFObjInspShowOnlyHotFastEditors);
 end;
 procedure TGDBobjinsp._onresize(sender:tobject);
 //var x,xn:integer;

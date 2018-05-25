@@ -192,6 +192,7 @@ TPropEditor=class(TComponent)
                  procedure ExitEdit(Sender: TObject);
                  procedure keyPress(Sender: TObject; var Key: char);
                  function geteditor:TWinControl;
+                 procedure SetEditorBounds(pd:PBasePropertyDeskriptor;OnlyHotFasteditors:boolean);
             end;
   //pd=^GDBDouble;
   {-}{/pGDBInteger=^GDBInteger;/}
@@ -354,6 +355,23 @@ end;
 function TPropEditor.geteditor:TWinControl;
 begin
      tobject(result):=(self.Components[0]);
+end;
+procedure TPropEditor.SetEditorBounds(pd:PBasePropertyDeskriptor;OnlyHotFasteditors:boolean);
+var
+  editorcontrol:TWinControl;
+  r:trect;
+  i:integer;
+begin
+     if pd<>nil then begin
+       editorcontrol:=geteditor;
+       r:=pd^.rect;
+       if not OnlyHotFasteditors then
+         for i:=0 to pd^.FastEditors.Size-1 do
+           if pd^.FastEditors[i].FastEditorDrawed then
+             if pd^.FastEditors[i].FastEditorRect.Left<r.Right then
+               r.Right:=pd^.FastEditors[i].FastEditorRect.Left;
+       editorcontrol.SetBounds(r.Left+2,r.Top,r.Right-r.Left-2,r.Bottom-r.Top);
+     end;
 end;
 destructor TPropEditor.Destroy;
 begin

@@ -366,10 +366,11 @@ begin
        editorcontrol:=geteditor;
        r:=pd^.rect;
        if not OnlyHotFasteditors then
-         for i:=0 to pd^.FastEditors.Size-1 do
-           if pd^.FastEditors[i].FastEditorDrawed then
-             if pd^.FastEditors[i].FastEditorRect.Left<r.Right then
-               r.Right:=pd^.FastEditors[i].FastEditorRect.Left;
+         if assigned(pd^.FastEditors) then
+           for i:=0 to pd^.FastEditors.Size-1 do
+             if pd^.FastEditors[i].FastEditorDrawed then
+               if pd^.FastEditors[i].FastEditorRect.Left<r.Right then
+                 r.Right:=pd^.FastEditors[i].FastEditorRect.Left;
        editorcontrol.SetBounds(r.Left+2,r.Top,r.Right-r.Left-2,r.Bottom-r.Top);
      end;
 end;

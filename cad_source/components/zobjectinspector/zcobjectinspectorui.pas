@@ -66,10 +66,10 @@ begin
                                                         result.cy:=15;
                                                    end}
 
-     result.cx:=ARect.Bottom-ARect.Top-6;
+     result.cy:=ARect.Bottom-ARect.Top;
+     result.cx:=result.cy-4;
      if result.cx<15 then
                          result.cx:=15;
-     result.cy:=result.cx;
 end;
 function OIUI_FE_HalfButtonGetPrefferedSize(PInstance:Pointer;ARect:TRect):TSize;
 begin

@@ -1559,7 +1559,10 @@ begin
                                   EDContext.ppropcurrentedit:=pp;
                                   //pp.FastEditor.OnRunFastEditor(pp.valueAddres)
                                   if pp.FastEditors[i].Procs.UndoInsideFastEditor then
-                                                                            pp.FastEditors[i].Procs.OnRunFastEditor(pp.valueAddres)
+                                                                            begin
+                                                                            pp.FastEditors[i].Procs.OnRunFastEditor(pp.valueAddres);
+                                                                            system.Break;
+                                                                            end
                                                                         else
                                                                             begin
                                                                             if IsCurrObjInUndoContext(GDBobj,CurrPObj) then
@@ -1573,18 +1576,19 @@ begin
 
                                                                             //EDContext.UndoStack:=nil;
                                                                             EDContext.UndoCommand:=nil;
+                                                                            system.Break;
                                                                             end
                                                                             else
                                                                                 begin
                                                                                 pp.FastEditors[i].Procs.OnRunFastEditor(pp.valueAddres);
+                                                                                system.Break;
                                                                                 end;
                                                                             end;
+                                  end;
                                   end;
                                   UpdateObjectInInsp;
                                   EDContext.ppropcurrentedit:=nil;
                                   invalidate;
-
-                                  end;
                                  end
 
                                  (*-----if assigned(pp.FastEditor.OnGetPrefferedFastEditorSize) then

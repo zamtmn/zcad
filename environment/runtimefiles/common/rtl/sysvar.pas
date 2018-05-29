@@ -103,7 +103,7 @@ begin
   INTF_ObjInsp_ShowSeparator:=True;
   INTF_ObjInsp_OldStyleDraw:=False;
   INTF_ObjInsp_ShowFastEditors:=True;
-  INTF_ObjInsp_ShowOnlyHotFastEditors:=True;
+  INTF_ObjInsp_ShowOnlyHotFastEditors:=False;
   INTF_ObjInsp_RowHeight_OverriderEnable:=False;
   INTF_ObjInsp_RowHeight_OverriderValue:=21;
   INTF_ObjInsp_SpaceHeight:=3;

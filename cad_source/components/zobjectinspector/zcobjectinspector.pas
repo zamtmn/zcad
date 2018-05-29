@@ -1520,6 +1520,7 @@ var
   my:integer;
   FESize:TSize;
   i:integer;
+  needexit:boolean;
 begin
      inherited;
      if (button=mbLeft)
@@ -1547,6 +1548,7 @@ begin
                                                exit;
                                  if assigned(pp.FastEditors)then
                                  begin
+                                  needexit:=false;
                                   for i:=0 to pp.FastEditors.size-1 do
                                   if pp.FastEditors[i].FastEditorDrawed then
                                   if PtInRect(pp.FastEditors[i].FastEditorRect,point(x,y)) then
@@ -1561,7 +1563,7 @@ begin
                                   if pp.FastEditors[i].Procs.UndoInsideFastEditor then
                                                                             begin
                                                                             pp.FastEditors[i].Procs.OnRunFastEditor(pp.valueAddres);
-                                                                            system.Break;
+                                                                            needexit:=true;
                                                                             end
                                                                         else
                                                                             begin
@@ -1576,19 +1578,20 @@ begin
 
                                                                             //EDContext.UndoStack:=nil;
                                                                             EDContext.UndoCommand:=nil;
-                                                                            system.Break;
+                                                                            needexit:=true;
                                                                             end
                                                                             else
                                                                                 begin
                                                                                 pp.FastEditors[i].Procs.OnRunFastEditor(pp.valueAddres);
-                                                                                system.Break;
+                                                                                needexit:=true;
                                                                                 end;
                                                                             end;
-                                  end;
                                   end;
                                   UpdateObjectInInsp;
                                   EDContext.ppropcurrentedit:=nil;
                                   invalidate;
+                                  if needexit then system.break;
+                                  end;
                                  end
 
                                  (*-----if assigned(pp.FastEditor.OnGetPrefferedFastEditorSize) then

@@ -80,7 +80,19 @@ type
                                constructor create;
                                destructor destroy;override;
                                procedure reorder(oldsortedid,sortedid:integer;id:TObjID);
-                               procedure RegisterMultiproperty(name:GDBString;username:GDBString;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;GetVO,SetVO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;ebip:TEntBeforeIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc;CV:TCheckValueFunc=nil);
+                               procedure RegisterMultiproperty(name:GDBString;                 //уникальное имя проперти
+                                                               username:GDBString;             //имя проперти в инспекторе
+                                                               ptm:PUserTypeDescriptor;        //тип проперти
+                                                               category:TMultiPropertyCategory;//категория куда попадает проперти
+                                                               id:TObjID;                      //идентификатор примитивов с которыми будет данное проперти
+                                                               GetVO,                          //смещение откуда берется пропертя (может неиспользоваться)
+                                                               SetVO:GDBInteger;               //смещение куда задается пропертя (может неиспользоваться)
+                                                               bip:TBeforeIterateProc;         //функция выполняемая перед итерациями
+                                                               aip:TAfterIterateProc;          //функция выполняемая после итераций
+                                                               ebip:TEntBeforeIterateProc;     //функция выполняемая для каждого примитива до основной итерации
+                                                               eip:TEntIterateProc;            //основная функция итерации
+                                                               ECP:TEntChangeProc;             //функция присвоения нового значения
+                                                               CV:TCheckValueFunc=nil);        //функция проверки введенного значения
                                procedure RegisterFirstMultiproperty(name:GDBString;username:GDBString;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;GetVO,SetVO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;ebip:TEntBeforeIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc;CV:TCheckValueFunc=nil);
                                procedure sort;
                           end;

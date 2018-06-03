@@ -2,7 +2,7 @@ unit System;
 {Этот модуль создан автоматически. НЕ РЕДАКТИРОВАТЬ}
 interface
 type
-//Generate on E:/zcad/cad_source/components/zebase/uzbtypesbase.pas
+//Generate on ../cad_source/components/zebase/uzbtypesbase.pas
 PGDBDouble=^GDBDouble;
 GDBDouble=Double;
 PGDBFloat=^GDBFloat;
@@ -31,7 +31,7 @@ PGDBPointer=^GDBPointer;
 GDBPointer=Pointer;
 PGDBPtrUInt=^GDBPtrUInt;
 
-//Generate on E:/zcad/cad_source/components/zebase/uzbgeomtypes.pas
+//Generate on ../cad_source/components/zebase/uzbgeomtypes.pas
 PIMatrix4=^IMatrix4;
 IMatrix4=packed array[0..3]of GDBInteger;
 DVector4D=packed array[0..3]of GDBDouble;
@@ -161,7 +161,7 @@ ptarcrtmodify=^tarcrtmodify;
 tarcrtmodify=packed record
                       p1,p2,p3:GDBVertex2d;
                 end;
-//Generate on E:/zcad/cad_source/components/zebase/uzbtypes.pas
+//Generate on ../cad_source/components/zebase/uzbtypes.pas
 (*varcategoryforoi SUMMARY='Summary'*)
 (*varcategoryforoi CABLE='Cable params'*)
 (*varcategoryforoi DEVICE='Device params'*)
@@ -364,7 +364,7 @@ TImageDegradation=packed record
                         RD_ID_PrefferedRenderTime:PGDBInteger;(*'Prefered rendertime'*)
                     end;
 PExtensionData=GDBPointer;
-//Generate on E:/zcad/cad_source/components/zmath/uzedimensionaltypes.pas 
+//Generate on ../cad_source/components/zmath/uzedimensionaltypes.pas
     PGDBNonDimensionDouble=^GDBNonDimensionDouble;
     
     PGDBAngleDegDouble=^GDBAngleDegDouble;
@@ -416,7 +416,7 @@ PExtensionData=GDBPointer;
                IUAstronomicalUnits(*'Astronomical units'*),
                IULightYears(*'Light years'*),
                IUParsecs(*'Parsecs'*));
-//Generate on E:/zcad/cad_source/zengine/core/objects/uzepalette.pas
+//Generate on ../cad_source/zengine/core/objects/uzepalette.pas
   PTRGB=^TRGB;
   TRGB=packed record
             r:GDBByte;(*'Red'*)
@@ -432,14 +432,14 @@ PExtensionData=GDBPointer;
   PTGDBPaletteColor=^TGDBPaletteColor;
   TGDBPaletteColor=GDBInteger;
   TGDBPalette={$IFNDEF DELPHI}packed {$ENDIF}array[0..255] of TDXFCOLOR;
-//Generate on E:/zcad/cad_source/components/zcontainers/gzctnrvectortypes.pas
+//Generate on ../cad_source/components/zcontainers/gzctnrvectortypes.pas
   itrec=packed record
               itp:Pointer;
               itc:Integer;
         end;
   PTArrayIndex=^TArrayIndex;
   TArrayIndex=Integer;
-//Generate on E:/zcad/cad_source/components/zcontainers/gzctnrvector.pas
+//Generate on ../cad_source/components/zcontainers/gzctnrvector.pas
 {**Генерик объекта-массива}
 GZVector={$IFNDEF DELPHI}packed{$ENDIF}
   object(GDBaseObject)
@@ -533,18 +533,18 @@ GZVector={$IFNDEF DELPHI}packed{$ENDIF}
         {**Подрезать выделенную память по count}
         procedure Shrink;virtual;abstract;
   end;
-//Generate on E:/zcad/cad_source/components/zcontainers/gzctnrvectorsimple.pas
+//Generate on ../cad_source/components/zcontainers/gzctnrvectorsimple.pas
 GZVectorSimple={$IFNDEF DELPHI}packed{$ENDIF}
                                  object(GZVector)
                                    function PushBackIfNotPresent(data:T):Integer;
                                    function IsDataExist(pobj:T):Integer;
                                  end;
-//Generate on E:/zcad/cad_source/components/zcontainers/gzctnrvectordata.pas
+//Generate on ../cad_source/components/zcontainers/gzctnrvectordata.pas
 GZVectorData={$IFNDEF DELPHI}packed{$ENDIF}
                                  object(GZVector)
                                    procedure freewithproc(freeproc:TProcessProc);virtual;abstract;
                                  end;
-//Generate on E:/zcad/cad_source/components/zcontainers/gzctnrvectorp.pas
+//Generate on ../cad_source/components/zcontainers/gzctnrvectorp.pas
 GZVectorP={$IFNDEF DELPHI}packed{$ENDIF}
                                  object(GZVectorSimple)
                                        Deleted:TArrayIndex;(*hidden_in_objinsp*)
@@ -559,7 +559,7 @@ GZVectorP={$IFNDEF DELPHI}packed{$ENDIF}
                                        procedure Clear;virtual;abstract;
                                        function GetCount:Integer;
                                  end;
-//Generate on E:/zcad/cad_source/components/zcontainers/gzctnrvectorpdata.pas
+//Generate on ../cad_source/components/zcontainers/gzctnrvectorpdata.pas
 GZVectorPData={$IFNDEF DELPHI}packed{$ENDIF}
                                  object(GZVectorP)
                                        procedure cleareraseobjfrom(n:Integer);virtual;abstract;
@@ -570,7 +570,7 @@ GZVectorPData={$IFNDEF DELPHI}packed{$ENDIF}
                                        procedure free;virtual;abstract;
                                        destructor done;virtual;abstract;
                                  end;
-//Generate on E:/zcad/cad_source/components/zcontainers/gzctnrvectorpobjects.pas
+//Generate on ../cad_source/components/zcontainers/gzctnrvectorpobjects.pas
 GZVectorPObects
                              ={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorPData)
                              function CreateObject:PTObj;
@@ -578,19 +578,19 @@ GZVectorPObects
 TZctnrVectorPGDBaseObjects=packed object(GZVectorPData)
                               end;
 PGDBOpenArrayOfPObjects=^TZctnrVectorPGDBaseObjects;
-//Generate on E:/zcad/cad_source/components/zcontainers/gzctnrvectorobjects.pas
+//Generate on ../cad_source/components/zcontainers/gzctnrvectorobjects.pas
 GZVectorObjects={$IFNDEF DELPHI}packed{$ENDIF}
                       object(GZVectorData)
                              function CreateObject:PGDBaseObject;
                              procedure free;virtual;abstract;
                        end;
-//Generate on E:/zcad/cad_source/components/zcontainers/gzctnrvectorsimple.pas
+//Generate on ../cad_source/components/zcontainers/gzctnrvectorsimple.pas
 GZVectorSimple={$IFNDEF DELPHI}packed{$ENDIF}
                                  object(GZVector)
                                    function PushBackIfNotPresent(data:T):Integer;
                                    function IsDataExist(pobj:T):Integer;
                                  end;
-//Generate on E:/zcad/cad_source/components/zcontainers/uzctnrvectorgdbstring.pas
+//Generate on ../cad_source/components/zcontainers/uzctnrvectorgdbstring.pas
     PTZctnrVectorGDBString=^TZctnrVectorGDBString;
     TZctnrVectorGDBString={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorSimple)(*OpenArrayOfData=GDBString*)
                           constructor init(m:GDBInteger);
@@ -608,7 +608,7 @@ GZVectorSimple={$IFNDEF DELPHI}packed{$ENDIF}
                     Selected:GDBInteger;
                     Enums:TZctnrVectorGDBString;
               end;
-//Generate on E:/zcad/cad_source/components/zcontainers/UGDBOpenArrayOfByte.pas
+//Generate on ../cad_source/components/zcontainers/UGDBOpenArrayOfByte.pas
 PGDBOpenArrayOfByte=^GDBOpenArrayOfByte;
 GDBOpenArrayOfByte={$IFNDEF DELPHI}packed{$ENDIF} object(GZVector)
                       ReadPos:Integer;
@@ -638,12 +638,12 @@ GDBOpenArrayOfByte={$IFNDEF DELPHI}packed{$ENDIF} object(GZVector)
                       function readtoparser(break:AnsiString):AnsiString;
                       destructor done;virtual;abstract;
                    end;
-//Generate on E:/zcad/cad_source/components/zcontainers/uzctnrvectorgdbpointer.pas
+//Generate on ../cad_source/components/zcontainers/uzctnrvectorgdbpointer.pas
 PTZctnrVectorGDBPointer=^TZctnrVectorGDBPointer;
 TZctnrVectorGDBPointer=packed object(GZVectorP) //TODO:почемуто не работают синонимы с объектами, приходится наследовать
                                                                    //TODO:надо тут поменять GZVectorP на GZVectorSimple
                     end;
-//Generate on E:/zcad/cad_source/components/zcontainers/gzctnrtree.pas
+//Generate on ../cad_source/components/zcontainers/gzctnrtree.pas
          TStageMode=(TSMStart,TSMAccumulation,TSMCalc,TSMEnd);
          TNodeDir=(TND_Plus,TND_Minus,TND_Root);
          TElemPosition=(TEP_Plus,TEP_Minus,TEP_nul);
@@ -693,7 +693,7 @@ TZctnrVectorGDBPointer=packed object(GZVectorP) //TODO:почемуто не р�
             function nulbeginiterate(out ir:itrec):Pointer;
             function nulDeleteElement(index:Integer):Pointer;
           end;
-//Generate on E:/zcad/cad_source/zengine/containers/UGDBOpenArrayOfPV.pas
+//Generate on ../cad_source/zengine/containers/UGDBOpenArrayOfPV.pas
 PGDBObjOpenArrayOfPV=^GDBObjOpenArrayOfPV;
 GDBObjOpenArrayOfPV={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorPGDBaseObjects)
                       procedure DrawWithattrib(var DC:TDrawContext);virtual;abstract;
@@ -716,14 +716,14 @@ GDBObjOpenArrayOfPV={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorPGDBaseObj
                       function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;virtual;abstract;
                       //function FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjSubordinated;virtual;abstract;
                 end;
-//Generate on E:/zcad/cad_source/zengine/containers/UGDBVisibleOpenArray.pas
+//Generate on ../cad_source/zengine/containers/UGDBVisibleOpenArray.pas
 PGDBObjEntityOpenArray=^GDBObjEntityOpenArray;
 GDBObjEntityOpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjOpenArrayOfPV)(*OpenArrayOfPObj*)
                       function AddPEntity(var entity:GDBObjEntity):TArrayIndex;virtual;abstract;
                       procedure CloneEntityTo(PEA:PGDBObjEntityOpenArray;own:GDBPointer);virtual;abstract;
                       procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;abstract;
                 end;
-//Generate on E:/zcad/cad_source/zengine/containers/UGDBControlPointArray.pas
+//Generate on ../cad_source/zengine/containers/UGDBControlPointArray.pas
 PGDBControlPointArray=^GDBControlPointArray;
 GDBControlPointArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)
                            SelectedCount:GDBInteger;
@@ -732,14 +732,14 @@ GDBControlPointArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)
                            procedure getnearesttomouse(var td:tcontrolpointdist;mx,my:integer);virtual;abstract;
                            procedure selectcurrentcontrolpoint(key:GDBByte;mx,my,h:integer);virtual;abstract;
                      end;
-//Generate on E:/zcad/cad_source/zengine/containers/UGDBOutbound2DIArray.pas
+//Generate on ../cad_source/zengine/containers/UGDBOutbound2DIArray.pas
 PGDBOOutbound2DIArray=^GDBOOutbound2DIArray;
 GDBOOutbound2DIArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)
                       procedure DrawGeometry(var DC:TDrawContext);virtual;abstract;
                       function InRect(Frame1, Frame2: GDBvertex2DI):TInBoundingVolume;virtual;abstract;
                       function perimetr:GDBDouble;virtual;abstract;
                 end;
-//Generate on E:/zcad/cad_source/zengine/containers/UGDBPoint3DArray.pas
+//Generate on ../cad_source/zengine/containers/UGDBPoint3DArray.pas
 PGDBPoint3dArray=^GDBPoint3dArray;
 GDBPoint3dArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)(*OpenArrayOfData=GDBVertex*)
                 function onpoint(p:gdbvertex;closed:GDBBoolean):gdbboolean;
@@ -750,7 +750,7 @@ GDBPoint3dArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)(*OpenArrayOf
                 procedure DrawGeometryWClosed(closed:GDBBoolean);virtual;}abstract;
                 function getoutbound:TBoundingBox;virtual;abstract;
              end;
-//Generate on E:/zcad/cad_source/zengine/containers/UGDBPolyLine2DArray.pas
+//Generate on ../cad_source/zengine/containers/UGDBPolyLine2DArray.pas
 PGDBPolyline2DArray=^GDBPolyline2DArray;
 GDBPolyline2DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)(*OpenArrayOfData=GDBVertex2D*)
                       closed:GDBBoolean;(*saved_to_shd*)
@@ -762,14 +762,14 @@ GDBPolyline2DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)(*OpenArra
                       function ispointinside(point:GDBVertex2D):GDBBoolean;virtual;abstract;
                       procedure transform(const t_matrix:DMatrix4D);virtual;abstract;
                 end;
-//Generate on E:/zcad/cad_source/zengine/containers/UGDBPolyPoint2DArray.pas
+//Generate on ../cad_source/zengine/containers/UGDBPolyPoint2DArray.pas
 PGDBPolyPoint2DArray=^GDBPolyPoint2DArray;
 GDBPolyPoint2DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)
                       //procedure DrawGeometry;virtual;abstract;
                       function InRect(Frame1, Frame2: GDBvertex2DI):TInBoundingVolume;virtual;abstract;
                       procedure freeelement(PItem:PT);virtual;abstract;
                 end;
-//Generate on E:/zcad/cad_source/zengine/containers/UGDBSelectedObjArray.pas
+//Generate on ../cad_source/zengine/containers/UGDBSelectedObjArray.pas
 PSelectedObjDesc=^SelectedObjDesc;
 SelectedObjDesc=packed record
                       objaddr:PGDBObjEntity;
@@ -799,13 +799,13 @@ GDBSelectedObjArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)
                           procedure calcvisible(frustum:cliparray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;abstract;
                           procedure resprojparam(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);
                     end;
-//Generate on E:/zcad/cad_source/zengine/containers/uzctnrobjectschunk.pas
+//Generate on ../cad_source/zengine/containers/uzctnrobjectschunk.pas
 PTObjectsChunk=^TObjectsChunk;
 TObjectsChunk={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)(*OpenArrayOfData=GDBByte*)
                 function beginiterate(out ir:itrec):GDBPointer;virtual;abstract;
                 function iterate(var ir:itrec):GDBPointer;virtual;abstract;
              end;
-//Generate on E:/zcad/cad_source/zengine/fonts/uzefontbase.pas
+//Generate on ../cad_source/zengine/fonts/uzefontbase.pas
 TGDBUNISymbolInfoVector=GZVectorData;
 PBASEFont=^BASEFont;
 BASEFont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
@@ -825,7 +825,7 @@ BASEFont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
               function IsCanSystemDraw:GDBBoolean;virtual;abstract;
               procedure SetupSymbolLineParams(const matr:DMatrix4D; var SymsParam:TSymbolSParam);virtual;abstract;
         end;
-//Generate on E:/zcad/cad_source/zengine/fonts/uzefontshx.pas
+//Generate on ../cad_source/zengine/fonts/uzefontshx.pas
 PSHXFont=^SHXFont;
 SHXFont={$IFNDEF DELPHI}packed{$ENDIF} object(BASEFont)
               //compiledsize:GDBInteger;
@@ -834,7 +834,7 @@ SHXFont={$IFNDEF DELPHI}packed{$ENDIF} object(BASEFont)
               constructor init;
               destructor done;virtual;abstract;
         end;
-//Generate on E:/zcad/cad_source/zengine/fonts/uzefont.pas
+//Generate on ../cad_source/zengine/fonts/uzefont.pas
 PGDBfont=^GDBfont;
 GDBfont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
     fontfile:GDBString;
@@ -852,14 +852,14 @@ GDBfont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
     function GetOrReplaceSymbolInfo(symbol:GDBInteger{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;
     procedure CreateSymbol(drawer:TZGLAbstractDrawer;var geom:ZGLVectorObject;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var Bound:TBoundingRect;var LLSymbolLineIndex:TArrayIndex);
   end;
-//Generate on E:/zcad/cad_source/zengine/containers/UGDBXYZWStringArray.pas
+//Generate on ../cad_source/zengine/containers/UGDBXYZWStringArray.pas
 PGDBXYZWGDBStringArray=^XYZWGDBGDBStringArray;
 XYZWGDBGDBStringArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)
                              constructor init(m:GDBInteger);
                              procedure freeelement(PItem:PT);virtual;abstract;
                              //function add(p:GDBPointer):TArrayIndex;virtual;abstract;
                        end;
-//Generate on E:/zcad/cad_source/zengine/containers/UGDBVectorSnapArray.pas
+//Generate on ../cad_source/zengine/containers/UGDBVectorSnapArray.pas
 PVectotSnap=^VectorSnap;
 VectorSnap=packed record
                  l_1_4,l_1_3,l_1_2,l_2_3,l_3_4:GDBvertex;
@@ -867,10 +867,10 @@ VectorSnap=packed record
 PGDBVectorSnapArray=^GDBVectorSnapArray;
 GDBVectorSnapArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)
              end;
-//Generate on E:/zcad/cad_source/zengine/containers/UGDBLineWidthArray.pas
+//Generate on ../cad_source/zengine/containers/UGDBLineWidthArray.pas
 GDBLineWidthArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)(*OpenArrayOfData=GLLWWidth*)
              end;
-//Generate on E:/zcad/cad_source/zengine/containers/UGDBNamedObjectsArray.pas
+//Generate on ../cad_source/zengine/containers/UGDBNamedObjectsArray.pas
 TForCResult=(IsFounded(*'IsFounded'*)=1,
              IsCreated(*'IsCreated'*)=2,
              IsError(*'IsError'*)=3);
@@ -885,7 +885,7 @@ GDBNamedObjectsArray
                     function GetFreeName(NameFormat:GDBString;firstindex:integer):GDBString;
                     procedure IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);virtual;abstract;
               end;
-//Generate on E:/zcad/cad_source/zengine/styles/uzestylestexts.pas
+//Generate on ../cad_source/zengine/styles/uzestylestexts.pas
 PGDBTextStyleProp=^GDBTextStyleProp;
   GDBTextStyleProp=packed record
                     size:GDBDouble;(*saved_to_shd*)
@@ -911,7 +911,7 @@ GDBTextStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*O
                     function FindStyle(StyleName:GDBString;ult:GDBBoolean):PGDBTextStyle;
                     procedure freeelement(PItem:PT);virtual;abstract;
               end;
-//Generate on E:/zcad/cad_source/zengine/styles/uzestyleslayers.pas
+//Generate on ../cad_source/zengine/styles/uzestyleslayers.pas
 PPGDBLayerPropObjInsp=^PGDBLayerPropObjInsp;
 PGDBLayerPropObjInsp={GDBPtrUInt}GDBPointer;
 PGDBLayerProp=^GDBLayerProp;
@@ -940,7 +940,7 @@ GDBLayerArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenA
                     function createlayerifneed(_source:PGDBLayerProp):PGDBLayerProp;
                     function createlayerifneedbyname(lname:GDBString;_source:PGDBLayerProp):PGDBLayerProp;
               end;
-//Generate on E:/zcad/cad_source/zengine/styles/uzestyleslinetypes.pas
+//Generate on ../cad_source/zengine/styles/uzestyleslinetypes.pas
 TLTMode=(TLTContinous,TLTByLayer,TLTByBlock,TLTLineType);
 PTDashInfo=^TDashInfo;
 TDashInfo=(TDIDash,TDIText,TDIShape);
@@ -1020,7 +1020,7 @@ GDBLtypeArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenA
                     function createlayerifneed(_source:PGDBLayerProp):PGDBLayerProp;
                     function createlayerifneedbyname(lname:GDBString;_source:PGDBLayerProp):PGDBLayerProp;}
               end;
-//Generate on E:/zcad/cad_source/zengine/styles/uzestylesdim.pas
+//Generate on ../cad_source/zengine/styles/uzestylesdim.pas
 TDimTextVertPosition=(DTVPCenters,DTVPAbove,DTVPOutside,DTVPJIS,DTVPBellov);
 TArrowStyle=(TSClosedFilled,TSClosedBlank,TSClosed,TSDot,TSArchitecturalTick,TSOblique,TSOpen,TSOriginIndicator,TSOriginIndicator2,
             TSRightAngle,TSOpen30,TSDotSmall,TSDotBlank,TSDotSmallBlank,TSBox,TSBoxFilled,TSDatumTriangle,TSDatumtTriangleFilled,TSIntegral,TSUserDef);
@@ -1099,7 +1099,7 @@ GDBDimStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*Op
                     procedure ResolveTextstyles(const tst:TGenericNamedObjectsArray);
                     procedure ResolveLineTypes(const lta:GDBLtypeArray);
               end;
-//Generate on E:/zcad/cad_source/zengine/styles/uzestylestables.pas
+//Generate on ../cad_source/zengine/styles/uzestylestables.pas
 TTableCellJustify=(jcl(*'TopLeft'*),
               jcc(*'TopCenter'*),
               jcr(*'TopRight'*));
@@ -1125,14 +1125,14 @@ GDBTableStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*
                     constructor initnul;
                     function AddStyle(name:GDBString):PTGDBTableStyle;
               end;
-//Generate on E:/zcad/cad_source/zengine/containers/UGDBTable.pas
+//Generate on ../cad_source/zengine/containers/UGDBTable.pas
 PGDBTableArray=^GDBTableArray;
 GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorPObects)(*OpenArrayOfData=TZctnrVectorGDBString*)
                     columns,rows:GDBInteger;
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}c,r:GDBInteger);
                     //function copyto(var source:GDBOpenArrayOfData):GDBInteger;virtual;abstract;
               end;
-//Generate on E:/zcad/cad_source/zcad/uzcsysvars.pas
+//Generate on ../cad_source/zcad/uzcsysvars.pas
   tmemdeb=packed record
                 GetMemCount,FreeMemCount:PGDBInteger;
                 TotalAllocMb,CurrentAllocMB:PGDBInteger;
@@ -1303,11 +1303,11 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorPObects)(*OpenArrayO
     INTF:tinterface;(*'Interface'*)
     debug:tdebug;(*'Debug'*)
   end;
-//Generate on E:/zcad/cad_source/components/zscriptbase/uabstractunit.pas
+//Generate on ../cad_source/components/zscriptbase/uabstractunit.pas
   PTAbstractUnit=^TAbstractUnit;
   TAbstractUnit={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseobject)
             end;
-//Generate on E:/zcad/cad_source/components/zscriptbase/varmandef.pas
+//Generate on ../cad_source/components/zscriptbase/varmandef.pas
 TTraceAngle=(
               TTA90(*'90 deg'*),
               TTA45(*'45 deg'*),
@@ -1372,7 +1372,7 @@ varmanagerdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                  procedure createbasevaluefromGDBString(varname: TInternalScriptString; varvalue: TInternalScriptString; var vd: vardesk);virtual;abstract;
                  function findfieldcustom(var pdesc: pGDBByte; var offset: GDBInteger;var tc:PUserTypeDescriptor; nam: shortString): GDBBoolean;virtual;abstract;
            end;
-//Generate on E:/zcad/cad_source/components/zscript/varman.pas
+//Generate on ../cad_source/components/zscript/varman.pas
 ptypemanager=^typemanager;
 typemanager={$IFNDEF DELPHI}packed{$ENDIF} object(typemanagerdef)
                   protected
@@ -1452,7 +1452,7 @@ TUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleUnit)
             function RegisterPointerType(ti:PTypeInfo):PUserTypeDescriptor;
             function RegisterEnumType(ti:PTypeInfo):PUserTypeDescriptor;
       end;
-//Generate on E:/zcad/cad_source/zengine/zgl/uzgvertex3sarray.pas
+//Generate on ../cad_source/zengine/zgl/uzgvertex3sarray.pas
 PZGLVertex3Sarray=^ZGLVertex3Sarray;
 ZGLVertex3Sarray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)(*OpenArrayOfData=GDBvertex3S*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
@@ -1460,13 +1460,13 @@ ZGLVertex3Sarray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)(*OpenArrayO
                 function AddGDBVertex(const v:GDBvertex):TArrayIndex;virtual;abstract;
                 function GetLength(const i:TArrayIndex):GDBFloat;virtual;abstract;
              end;
-//Generate on E:/zcad/cad_source/zengine/zgl/uzgindexsarray.pas
+//Generate on ../cad_source/zengine/zgl/uzgindexsarray.pas
 PZGLIndexsArray=^ZGLIndexsArray;
 ZGLIndexsArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)(*OpenArrayOfData=TArrayIndex*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                 constructor initnul;
              end;
-//Generate on E:/zcad/cad_source/zengine/zgl/uzglgeomdata.pas
+//Generate on ../cad_source/zengine/zgl/uzglgeomdata.pas
 ZGLGeomData={$IFNDEF DELPHI}packed{$ENDIF}object(GDBaseObject)
                                                 Vertex3S:ZGLVertex3Sarray;
                                                 Indexes:ZGLIndexsArray;
@@ -1476,7 +1476,7 @@ ZGLGeomData={$IFNDEF DELPHI}packed{$ENDIF}object(GDBaseObject)
                                                 procedure Shrink;virtual;abstract;
                                                 function Add2DPoint(const x,y:fontfloat):TArrayIndex;virtual;abstract;
                                           end;
-//Generate on E:/zcad/cad_source/zengine/zgl/uzgprimitives.pas
+//Generate on ../cad_source/zengine/zgl/uzgprimitives.pas
 ZGLOptimizerData={$IFNDEF DELPHI}packed{$ENDIF}record
                                                      ignoretriangles:boolean;
                                                      ignorelines:boolean;
@@ -1590,11 +1590,11 @@ TLLPolyLine={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               procedure CorrectIndexes(const offset:TEntIndexesOffsetData);virtual;abstract;
               constructor init;
         end;
-//Generate on E:/zcad/cad_source/zengine/zgl/uzgprimitivessarray.pas
+//Generate on ../cad_source/zengine/zgl/uzgprimitivessarray.pas
 PTLLPrimitivesArray=^TLLPrimitivesArray;
 TLLPrimitivesArray={$IFNDEF DELPHI}packed{$ENDIF} object(TObjectsChunk)(*OpenArrayOfData=GDBByte*)
              end;
-//Generate on E:/zcad/cad_source/zengine/zgl/uzglvectorobject.pas
+//Generate on ../cad_source/zengine/zgl/uzglvectorobject.pas
 TAppearance=(TAMatching,TANeedProxy);
 TLLDrawResult=packed record
                        LLPStart,LLPEndi:TArrayIndex;
@@ -1629,7 +1629,7 @@ ZGLVectorObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                                  procedure DrawLLPrimitives(var rc:TDrawContext;var drawer:TZGLAbstractDrawer);virtual;
                                  procedure DrawCountedLLPrimitives(var rc:TDrawContext;var drawer:TZGLAbstractDrawer;var OptData:ZGLOptimizerData;StartOffset,Count:GDBInteger);virtual;
                                end;
-//Generate on E:/zcad/cad_source/zengine/zgl/uzglgeometry.pas
+//Generate on ../cad_source/zengine/zgl/uzglgeometry.pas
 PZGLGraphix=^ZGLGraphix;
 PZPolySegmentData=^ZPolySegmentData;
 ZPolySegmentData={$IFNDEF DELPHI}packed{$ENDIF} record
@@ -1669,22 +1669,22 @@ ZGLGraphix={$IFNDEF DELPHI}packed{$ENDIF} object(ZGLVectorObject)
                 procedure DrawTextContent(drawer:TZGLAbstractDrawer;content:gdbstring;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:GDBDouble;var Outbound:OutBound4V);
                 //function CanSimplyDrawInOCS(const DC:TDrawContext;const SqrParamSize,TargetSize:GDBDouble):GDBBoolean;
              end;
-//Generate on E:/zcad/cad_source/zengine/geomlib/uzgeomentity.pas 
+//Generate on ../cad_source/zengine/geomlib/uzgeomentity.pas
 PTGeomEntity=^TGeomEntity;
 TGeomEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                                              function GetBB:TBoundingBox;virtual;abstract;
                                            end;
-//Generate on E:/zcad/cad_source/zengine/geomlib/uzgeomentity3d.pas 
+//Generate on ../cad_source/zengine/geomlib/uzgeomentity3d.pas
 TGeomEntity3D={$IFNDEF DELPHI}packed{$ENDIF} object(TGeomEntity)
                                              end;
-//Generate on E:/zcad/cad_source/zengine/geomlib/uzgeomline3d.pas
+//Generate on ../cad_source/zengine/geomlib/uzgeomline3d.pas
 TGeomLine3D={$IFNDEF DELPHI}packed{$ENDIF} object(TGeomEntity3D)
                                            LineData:GDBLineProp;
                                            StartParam:GDBDouble;
                                            constructor init(const p1,p2:GDBvertex;const sp:GDBDouble);
                                            function GetBB:TBoundingBox;virtual;abstract;
                                            end;
-//Generate on E:/zcad/cad_source/zengine/geomlib/uzegeomentitiestree.pas
+//Generate on ../cad_source/zengine/geomlib/uzegeomentitiestree.pas
 TGeomTreeNodeData=packed record
                   end;
 TEntityArray={$IFNDEF DELPHI}packed{$ENDIF} object(TObjectsChunk)(*OpenArrayOfData=GDBByte*)
@@ -1700,7 +1700,7 @@ end;
             NodeData:TGeomTreeNodeData;
             LockCounter:GDBInteger;
                       end;
-//Generate on E:/zcad/cad_source/zengine/core/entities/uzeentsubordinated.pas
+//Generate on ../cad_source/zengine/core/entities/uzeentsubordinated.pas
 GDBObjExtendable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                                  EntExtensions:GDBPointer;
                                  procedure AddExtension(ExtObj:PTBaseEntityExtender;ObjSize:GDBInteger);
@@ -1749,7 +1749,7 @@ GDBObjSubordinated={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericWithSubord
                          //function FindShellByClass(_type:TDeviceClass):PGDBObjSubordinated;virtual;abstract;
                          destructor done;virtual;abstract;
          end;
-//Generate on E:/zcad/cad_source/zengine/core/entities/uzeentitiesprop.pas
+//Generate on ../cad_source/zengine/core/entities/uzeentitiesprop.pas
 PGDBObjVisualProp=^GDBObjVisualProp;
 GDBObjVisualProp=packed record
                       Layer:PGDBLayerPropObjInsp;(*'Layer'*)(*saved_to_shd*)
@@ -1760,7 +1760,7 @@ GDBObjVisualProp=packed record
                       LastCameraPos:TActulity;(*oi_readonly*)(*hidden_in_objinsp*)
                       Color:TGDBPaletteColor;
                  end;
-//Generate on E:/zcad/cad_source/zengine/core/entities/uzeenrepresentation.pas
+//Generate on ../cad_source/zengine/core/entities/uzeenrepresentation.pas
 PTZEntityRepresentation=^TZEntityRepresentation;
 TZEntityRepresentation={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                        
@@ -1780,7 +1780,7 @@ TZEntityRepresentation={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                        procedure DrawLineWithLT(var rc:TDrawContext;const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp);
                        procedure DrawPolyLineWithLT(var rc:TDrawContext;const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed,ltgen:GDBBoolean);virtual;abstract;
                        end;
-//Generate on E:/zcad/cad_source/zengine/core/entities/uzeentity.pas
+//Generate on ../cad_source/zengine/core/entities/uzeentity.pas
 PGDBObjEntity=^GDBObjEntity;
 
 
@@ -1908,10 +1908,10 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     class function GetDXFIOFeatures:TDXFEntIODataManager;
                     function GetNameInBlockTable:GDBString;virtual;abstract;
               end;
-//Generate on E:/zcad/cad_source/zengine/core/entities/uzeent3d.pas
+//Generate on ../cad_source/zengine/core/entities/uzeent3d.pas
 GDBObj3d={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjEntity)
          end;
-//Generate on E:/zcad/cad_source/zengine/core/entities/uzeent3dface.pas
+//Generate on ../cad_source/zengine/core/entities/uzeent3dface.pas
 PGDBObj3DFace=^GDBObj3DFace;
 GDBObj3DFace={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  PInOCS:OutBound4V;(*'Coordinates OCS'*)(*saved_to_shd*)
@@ -1944,7 +1944,7 @@ GDBObj3DFace={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  class function CreateInstance:PGDBObj3DFace;static;
                  function GetObjType:TObjID;virtual;abstract;
            end;
-//Generate on E:/zcad/cad_source/zengine/core/entities/uzeentwithmatrix.pas
+//Generate on ../cad_source/zengine/core/entities/uzeentwithmatrix.pas
 PGDBObjWithMatrix=^GDBObjWithMatrix;
 GDBObjWithMatrix={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjEntity)
                        ObjMatrix:DMatrix4D;(*'OCS Matrix'*)(*oi_readonly*)(*hidden_in_objinsp*)
@@ -1958,7 +1958,7 @@ GDBObjWithMatrix={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjEntity)
                        procedure CalcInFrustumByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;abstract;
                        procedure ProcessTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;OwnerInFrustum:TInBoundingVolume;OwnerFuldraw:TDrawType;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;abstract;
                  end;
-//Generate on E:/zcad/cad_source/zengine/core/entities/uzeentwithlocalcs.pas
+//Generate on ../cad_source/zengine/core/entities/uzeentwithlocalcs.pas
 PGDBObj2dprop=^GDBObj2dprop;
 GDBObj2dprop=packed record
                    Basis:GDBBasis;(*'Basis'*)(*saved_to_shd*)
@@ -1991,7 +1991,7 @@ GDBObjWithLocalCS={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                function IsHaveLCS:GDBBoolean;virtual;abstract;
                function CanSimplyDrawInOCS(const DC:TDrawContext;const ParamSize,TargetSize:GDBDouble):GDBBoolean;inline;
          end;
-//Generate on E:/zcad/cad_source/zengine/core/entities/uzeentsolid.pas
+//Generate on ../cad_source/zengine/core/entities/uzeentsolid.pas
 PGDBObjSolid=^GDBObjSolid;
 GDBObjSolid={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  PInOCS:OutBound4V;(*'Coordinates OCS'*)(*saved_to_shd*)
@@ -2023,17 +2023,17 @@ GDBObjSolid={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  function CreateInstance:PGDBObjSolid;static;
                  function GetObjType:TObjID;virtual;abstract;
            end;
-//Generate on E:/zcad/cad_source/zengine/core/entities/uzeentplain.pas
+//Generate on ../cad_source/zengine/core/entities/uzeentplain.pas
 GDBObjPlain={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                   Outbound:OutBound4V;(*oi_readonly*)(*hidden_in_objinsp*)
                   procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;abstract;
             end;
-//Generate on E:/zcad/cad_source/zengine/core/entities/uzeentplainwithox.pas
+//Generate on ../cad_source/zengine/core/entities/uzeentplainwithox.pas
 PGDBObjPlainWithOX=^GDBObjPlainWithOX;
 GDBObjPlainWithOX={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlain)
                procedure CalcObjMatrix;virtual;abstract;
          end;
-//Generate on E:/zcad/cad_source/zengine/core/entities/uzeentabstracttext.pas
+//Generate on ../cad_source/zengine/core/entities/uzeentabstracttext.pas
 PGDBTextProp=^GDBTextProp;
 GDBTextProp=packed record
                   size:GDBDouble;(*saved_to_shd*)
@@ -2066,7 +2066,7 @@ GDBObjAbstractText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlainWithOX)
                          procedure setrot(r:GDBDouble);
                          procedure transform(const t_matrix:DMatrix4D);virtual;abstract;
                    end;
-//Generate on E:/zcad/cad_source/zengine/core/entities/uzeentcircle.pas
+//Generate on ../cad_source/zengine/core/entities/uzeentcircle.pas
   ptcirclertmodify=^tcirclertmodify;
   tcirclertmodify=packed record
                         r,p_insert:GDBBoolean;
@@ -2121,7 +2121,7 @@ GDBObjCircle={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  class function CreateInstance:PGDBObjCircle;static;
                  function GetObjType:TObjID;virtual;abstract;
            end;
-//Generate on E:/zcad/cad_source/zengine/core/entities/uzeentarc.pas
+//Generate on ../cad_source/zengine/core/entities/uzeentarc.pas
 PGDBObjArc=^GDBObjARC;
 GDBObjArc={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlain)
                  R:GDBDouble;(*saved_to_shd*)
@@ -2169,7 +2169,7 @@ GDBObjArc={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlain)
                  class function CreateInstance:PGDBObjArc;static;
                  function GetObjType:TObjID;virtual;abstract;
            end;
-//Generate on E:/zcad/cad_source/zengine/core/entities/uzeentellipse.pas
+//Generate on ../cad_source/zengine/core/entities/uzeentellipse.pas
   ptEllipsertmodify=^tEllipsertmodify;
   tEllipsertmodify=packed record
                         p1,p2,p3:GDBVertex2d;
@@ -2217,7 +2217,7 @@ GDBObjEllipse={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlain)
                  function CreateInstance:PGDBObjEllipse;static;
                  function GetObjType:TObjID;virtual;abstract;
            end;
-//Generate on E:/zcad/cad_source/zengine/core/objects/uzeentitiestree.pas
+//Generate on ../cad_source/zengine/core/objects/uzeentitiestree.pas
 TDrawType=(TDTFulDraw,TDTSimpleDraw);
 TEntTreeNodeData=record
                      infrustum:TActulity;
@@ -2234,7 +2234,7 @@ TEntityArray=GZVectorPObects{GZVectorSimple};
                             procedure DrawNodeVolume(var DC:TDrawContext);
                             procedure DrawWithAttribExternalArray(var DC:TDrawContext);
                       end;
-//Generate on E:/zcad/cad_source/zengine/containers/UGDBVisibleTreeArray.pas
+//Generate on ../cad_source/zengine/containers/UGDBVisibleTreeArray.pas
 PGDBObjEntityTreeArray=^GDBObjEntityTreeArray;
 GDBObjEntityTreeArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjEntityOpenArray)(*OpenArrayOfPObj*)
                             ObjTree:TEntTreeNode;
@@ -2244,7 +2244,7 @@ GDBObjEntityTreeArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjEntityOpenArra
                             function AddPEntity(var entity:GDBObjEntity):TArrayIndex;virtual;abstract;
                             procedure RemoveFromTree(p:PGDBObjEntity);
                       end;
-//Generate on E:/zcad/cad_source/zengine/core/entities/uzeentgenericsubentry.pas
+//Generate on ../cad_source/zengine/core/entities/uzeentgenericsubentry.pas
 PTDrawingPreCalcData=^TDrawingPreCalcData;
 TDrawingPreCalcData=packed record
                           InverseObjMatrix:DMatrix4D;
@@ -2308,7 +2308,7 @@ GDBObjGenericSubEntry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                               function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;abstract;
                               procedure IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);virtual;abstract;
                       end;
-//Generate on E:/zcad/cad_source/zengine/core/objects/uzeblockdef.pas
+//Generate on ../cad_source/zengine/core/objects/uzeblockdef.pas
 PGDBObjBlockdef=^GDBObjBlockdef;
 GDBObjBlockdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericSubEntry)
                      Name:GDBString;(*saved_to_shd*)
@@ -2329,7 +2329,7 @@ GDBObjBlockdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericSubEntry)
                      function GetType:GDBPlatformint;virtual;abstract;
                      class function GetDXFIOFeatures:TDXFEntIODataManager;
                end;
-//Generate on E:/zcad/cad_source/zengine/containers/UGDBObjBlockdefArray.pas
+//Generate on ../cad_source/zengine/containers/UGDBObjBlockdefArray.pas
 PGDBObjBlockdefArray=^GDBObjBlockdefArray;
 PBlockdefArray=^BlockdefArray;
 BlockdefArray=packed array [0..0] of GDBObjBlockdef;
@@ -2345,7 +2345,7 @@ GDBObjBlockdefArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorObjects)(*Open
                       procedure Grow(newmax:Integer=0);virtual;abstract;
                       procedure IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);virtual;abstract;
                     end;
-//Generate on E:/zcad/cad_source/zengine/core/entities/uzeentcomplex.pas
+//Generate on ../cad_source/zengine/core/entities/uzeentcomplex.pas
 PGDBObjComplex=^GDBObjComplex;
 GDBObjComplex={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                     ConstObjArray:{GDBObjEntityOpenArray;}GDBObjEntityTreeArray;(*oi_readonly*)(*hidden_in_objinsp*)
@@ -2373,7 +2373,7 @@ GDBObjComplex={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                     procedure BuildGeometry(var drawing:TDrawingDef);virtual;abstract;
                     procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
               end;
-//Generate on E:/zcad/cad_source/zengine/core/entities/uzeentdimension.pas
+//Generate on ../cad_source/zengine/core/entities/uzeentdimension.pas
 PTDXFDimData2D=^TDXFDimData2D;
 TDXFDimData2D=packed record
   P10:GDBVertex2D;
@@ -2436,7 +2436,7 @@ GDBObjDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                 destructor done;virtual;abstract;
                 //function GetObjType:TObjID;virtual;abstract;
                 end;
-//Generate on E:/zcad/cad_source/zengine/core/entities/uzeentdimensiongeneric.pas
+//Generate on ../cad_source/zengine/core/entities/uzeentdimensiongeneric.pas
 TDimType=(DTRotated,DTAligned,DTAngular,DTDiameter,DTRadius,DTAngular3P,DTOrdinate);
 PGDBObjGenericDimension=^GDBObjGenericDimension;
 GDBObjGenericDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
@@ -2450,7 +2450,7 @@ GDBObjGenericDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                       function FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;abstract;
                       function GetObjType:TObjID;virtual;abstract;
                    end;
-//Generate on E:/zcad/cad_source/zengine/core/entities/uzeentdimaligned.pas
+//Generate on ../cad_source/zengine/core/entities/uzeentdimaligned.pas
 PGDBObjAlignedDimension=^GDBObjAlignedDimension;
 GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                       constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
@@ -2474,7 +2474,7 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                        function GetDimStr(var drawing:TDrawingDef):GDBString;virtual;abstract;
                        function GetObjType:TObjID;virtual;abstract;
                    end;
-//Generate on E:/zcad/cad_source/zengine/core/entities/uzeentdimrotated.pas
+//Generate on ../cad_source/zengine/core/entities/uzeentdimrotated.pas
 PGDBObjRotatedDimension=^GDBObjRotatedDimension;
 GDBObjRotatedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAlignedDimension)
                         function GetObjTypeName:GDBString;virtual;abstract;
@@ -2489,7 +2489,7 @@ GDBObjRotatedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAlignedDimens
                         constructor initnul(owner:PGDBObjGenericWithSubordinated);
                         function GetObjType:TObjID;virtual;abstract;
                    end;
-//Generate on E:/zcad/cad_source/zengine/core/entities/uzeentdimdiametric.pas
+//Generate on ../cad_source/zengine/core/entities/uzeentdimdiametric.pas
 PGDBObjDiametricDimension=^GDBObjDiametricDimension;
 GDBObjDiametricDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                         constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
@@ -2513,7 +2513,7 @@ GDBObjDiametricDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                         procedure SaveToDXF(var handle:TDWGHandle;var outhandle:GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;abstract;
                         function GetObjType:TObjID;virtual;abstract;
                    end;
-//Generate on E:/zcad/cad_source/zengine/core/entities/uzeentdimradial.pas
+//Generate on ../cad_source/zengine/core/entities/uzeentdimradial.pas
 PGDBObjRadialDimension=^GDBObjRadialDimension;
 GDBObjRadialDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDiametricDimension)
                         constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
@@ -2529,7 +2529,7 @@ GDBObjRadialDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDiametricDimen
                         procedure SaveToDXF(var handle:TDWGHandle;var outhandle:GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;abstract;
                         function GetObjType:TObjID;virtual;abstract;
                    end;
-//Generate on E:/zcad/cad_source/zengine/core/entities/uzeentblockinsert.pas
+//Generate on ../cad_source/zengine/core/entities/uzeentblockinsert.pas
 PGDBObjBlockInsert=^GDBObjBlockInsert;
 GDBObjBlockInsert={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                      scale:GDBvertex;(*saved_to_shd*)
@@ -2565,7 +2565,7 @@ GDBObjBlockInsert={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                      function GetNameInBlockTable:GDBString;virtual;abstract;
                      function GetObjType:TObjID;virtual;abstract;
                   end;
-//Generate on E:/zcad/cad_source/zengine/core/entities/uzeentdevice.pas
+//Generate on ../cad_source/zengine/core/entities/uzeentdevice.pas
 PGDBObjDevice=^GDBObjDevice;
 GDBObjDevice={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjBlockInsert)
                    VarObjArray:GDBObjEntityOpenArray;(*oi_readonly*)(*hidden_in_objinsp*)
@@ -2604,13 +2604,13 @@ GDBObjDevice={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjBlockInsert)
                    function GetNameInBlockTable:GDBString;virtual;abstract;
                    function GetObjType:TObjID;virtual;abstract;
              end;
-//Generate on E:/zcad/cad_source/zengine/core/entities/uzeentconnected.pas
+//Generate on ../cad_source/zengine/core/entities/uzeentconnected.pas
 PGDBObjConnected=^GDBObjConnected;
 GDBObjConnected={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericSubEntry)
                       procedure addtoconnect(pobj:pgdbobjEntity;var ConnectedArray:GDBObjOpenArrayOfPV);virtual;abstract;
                       procedure connectedtogdb(ConnectedArea:PGDBObjGenericSubEntry;var drawing:TDrawingDef);virtual;abstract;
                 end;
-//Generate on E:/zcad/cad_source/zengine/containers/UGDBGraf.pas
+//Generate on ../cad_source/zengine/containers/UGDBGraf.pas
 PTLinkType=^TLinkType;
 TLinkType=(LT_Normal,LT_OnlyLink);
 pgrafelement=^grafelement;
@@ -2638,7 +2638,7 @@ GDBGraf={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)(*OpenArrayOfData=gra
                 procedure BeginFindPath;
                 procedure FindPath(point1,point2:gdbvertex;l1,l2:pgdbobjEntity;var pa:GDBPoint3dArray);
              end;
-//Generate on E:/zcad/cad_source/zengine/core/entities/uzeentline.pas
+//Generate on ../cad_source/zengine/core/entities/uzeentline.pas
 PGDBObjLine=^GDBObjLine;
 GDBObjLine={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  CoordInOCS:GDBLineProp;(*'Coordinates OCS'*)(*saved_to_shd*)
@@ -2683,7 +2683,7 @@ GDBObjLine={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                   class function CreateInstance:PGDBObjLine;static;
                   function GetObjType:TObjID;virtual;abstract;
            end;
-//Generate on E:/zcad/cad_source/zengine/core/entities/uzeentlwpolyline.pas
+//Generate on ../cad_source/zengine/core/entities/uzeentlwpolyline.pas
 TWidth3D_in_WCS_Vector={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)
                 end;
 PGDBObjLWPolyline=^GDBObjLWpolyline;
@@ -2730,7 +2730,7 @@ GDBObjLWPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  class function CreateInstance:PGDBObjLWPolyline;static;
                  function GetObjType:TObjID;virtual;abstract;
            end;
-//Generate on E:/zcad/cad_source/zengine/core/entities/uzeenttext.pas
+//Generate on ../cad_source/zengine/core/entities/uzeenttext.pas
 PGDBObjText=^GDBObjText;
 GDBObjText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAbstractText)
                  Content:GDBAnsiString;
@@ -2761,7 +2761,7 @@ GDBObjText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAbstractText)
                  function CreateInstance:PGDBObjText;static;
                  function GetObjType:TObjID;virtual;abstract;
            end;
-//Generate on E:/zcad/cad_source/zengine/core/entities/uzeentmtext.pas
+//Generate on ../cad_source/zengine/core/entities/uzeentmtext.pas
 PGDBObjMText=^GDBObjMText;
 GDBObjMText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjText)
                  width:GDBDouble;(*saved_to_shd*)
@@ -2785,7 +2785,7 @@ GDBObjMText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjText)
                  function CreateInstance:PGDBObjMText;static;
                  function GetObjType:TObjID;virtual;abstract;
             end;
-//Generate on E:/zcad/cad_source/zengine/core/entities/uzeentpoint.pas
+//Generate on ../cad_source/zengine/core/entities/uzeentpoint.pas
 PGDBObjPoint=^GDBObjPoint;
 GDBObjPoint={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  P_insertInOCS:GDBvertex;(*'Coordinates OCS'*)(*saved_to_shd*)
@@ -2813,7 +2813,7 @@ GDBObjPoint={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  function CreateInstance:PGDBObjPoint;static;
                  function GetObjType:TObjID;virtual;abstract;
            end;
-//Generate on E:/zcad/cad_source/zengine/core/entities/uzeentcurve.pas
+//Generate on ../cad_source/zengine/core/entities/uzeentcurve.pas
 PGDBObjCurve=^GDBObjCurve;
 GDBObjCurve={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  VertexArrayInOCS:GDBPoint3dArray;(*saved_to_shd*)(*hidden_in_objinsp*)
@@ -2851,7 +2851,7 @@ GDBObjCurve={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  procedure DeleteVertex(const PolyData:TPolyData);
                  function GetLength:GDBDouble;virtual;abstract;
            end;
-//Generate on E:/zcad/cad_source/zengine/core/entities/uzeentpolyline.pas
+//Generate on ../cad_source/zengine/core/entities/uzeentpolyline.pas
 PGDBObjPolyline=^GDBObjPolyline;
 GDBObjPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  Closed:GDBBoolean;(*saved_to_shd*)
@@ -2872,7 +2872,7 @@ GDBObjPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  class function CreateInstance:PGDBObjPolyline;static;
                  function GetObjType:TObjID;virtual;abstract;
            end;
-//Generate on E:/zcad/cad_source/zengine/core/entities/uzeentspline.pas
+//Generate on ../cad_source/zengine/core/entities/uzeentspline.pas
 TKnotsVector={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)
                              end;
 TCPVector={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)
@@ -2905,7 +2905,7 @@ GDBObjSpline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  function CreateInstance:PGDBObjSpline;static;
                  function GetObjType:TObjID;virtual;abstract;
            end;
-//Generate on E:/zcad/cad_source/zengine/core/objects/uzeroot.pas
+//Generate on ../cad_source/zengine/core/objects/uzeroot.pas
 PGDBObjRoot=^GDBObjRoot;
 GDBObjRoot={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericSubEntry)
                  constructor initnul;
@@ -2927,7 +2927,7 @@ GDBObjRoot={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericSubEntry)
                  //function FindShellByClass(_type:TDeviceClass):PGDBObjSubordinated;virtual;abstract;
                  function GetObjType:TObjID;virtual;abstract;
            end;
-//Generate on E:/zcad/cad_source/zengine/core/objects/uzecamera.pas
+//Generate on ../cad_source/zengine/core/objects/uzecamera.pas
 PGDBObjCamera=^GDBObjCamera;
 GDBObjCamera={$IFNDEF DELPHI}packed{$ENDIF} object(GDBBaseCamera)
                    modelMatrixLCS:DMatrix4D;
@@ -2943,7 +2943,7 @@ GDBObjCamera={$IFNDEF DELPHI}packed{$ENDIF} object(GDBBaseCamera)
                    constructor initnul;
                    procedure NextPosition;virtual;abstract;
              end;
-//Generate on E:/zcad/cad_source/zengine/core/entities/uzeenttable.pas
+//Generate on ../cad_source/zengine/core/entities/uzeenttable.pas
 PTGDBTableItemFormat=^TGDBTableItemFormat;
 TGDBTableItemFormat=packed record
                  Width,TextWidth:GDBDouble;
@@ -2963,7 +2963,7 @@ GDBObjTable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
             procedure ReCalcFromObjMatrix;virtual;abstract;
             function GetObjType:TObjID;virtual;abstract;
             end;
-//Generate on E:/zcad/cad_source/zcad/DeviceBase/uzcdevicebaseabstract.pas
+//Generate on ../cad_source/zcad/devicebase/uzcdevicebaseabstract.pas
 TOborudCategory=(_misc(*'**Разное'*),
                  _elapp(*'**Электроаппараты'*),
                  _ppkop(*'**Приборы приемноконтрольные ОПС'*),
@@ -2989,7 +2989,7 @@ DbBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                        PartNumber:GDBString;(*'**Каталожный номер'*)(*oi_readonly*)
                        constructor initnul;
                  end;
-//Generate on E:/zcad/cad_source/zcad/DeviceBase/uzcdevicebase.pas
+//Generate on ../cad_source/zcad/devicebase/uzcdevicebase.pas
 PDeviceDbBaseObject=^DeviceDbBaseObject;
 DeviceDbBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DbBaseObject)
                        UID:GDBString;(*'**Уникальный идентификатор'*)(*oi_readonly*)
@@ -3014,7 +3014,7 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
                                    OuterDiameter:GDBDouble;(*'**Наружный диаметр'*)
                                    constructor initnul;
                              end;
-//Generate on E:/zcad/cad_source/zcad/commands/uzccommandsabstract.pas
+//Generate on ../cad_source/zcad/commands/uzccommandsabstract.pas
     TGetPointMode=(TGPWait{point},TGPWaitEnt,TGPEnt,TGPPoint,TGPCancel,TGPOtherCommand, TGPCloseDWG,TGPCloseApp);
     TInteractiveData=packed record
                        GetPointMode:TGetPointMode;(*hidden_in_objinsp*)
@@ -3067,7 +3067,7 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;abstract;
     function IsRTECommand:GDBBoolean;virtual;abstract;
   end;
-//Generate on E:/zcad/cad_source/zcad/commands/uzccommandsimpl.pas
+//Generate on ../cad_source/zcad/commands/uzccommandsimpl.pas
   CommandFastObject = {$IFNDEF DELPHI}packed{$ENDIF} object(CommandFastObjectDef)
     procedure CommandInit; virtual;abstract;
     procedure CommandEnd; virtual;abstract;
@@ -3120,7 +3120,7 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
               procedure Format;virtual;abstract;
               procedure GetState;
              end;
-//Generate on E:/zcad/cad_source/zcad/commands/uzccomdraw.pas
+//Generate on ../cad_source/zcad/commands/uzccomdraw.pas
          TEntityProcess=(
                        TEP_Erase(*'Erase'*),
                        TEP_leave(*'Leave'*)
@@ -3389,7 +3389,7 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
   ITT_com = {$IFNDEF DELPHI}packed{$ENDIF} object(FloatInsert_com)
     procedure Command(Operands:TCommandOperands); virtual;abstract;
   end;
-//Generate on E:/zcad/cad_source/zcad/commands/uzccomexample.pas
+//Generate on ../cad_source/zcad/commands/uzccomexample.pas
     //** Тип данных для отображения в инспекторе опций команды MatchProp о текстовых примитивах, составная часть TMatchPropParam
     TMatchPropTextParam=packed record
                        ProcessTextStyle:GDBBoolean;(*'Process style'*)
@@ -3418,7 +3418,7 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
                        //VNum:GDBInteger;(*'Number of vertices'*)  //**< Определение количества вершин
                        PolyWidth:GDBDouble;(*'Polyline width'*)  //**< Ширина полилинии (если в качестве примитива выбран RET_LWPoly)
                  end;
-//Generate on E:/zcad/cad_source/zengine/containers/UGDBTracePropArray.pas
+//Generate on ../cad_source/zengine/containers/UGDBTracePropArray.pas
 type
   ptraceprop=^traceprop;
   traceprop=packed record
@@ -3431,7 +3431,7 @@ type
   end;
 GDBtracepropArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)
              end;
-//Generate on E:/zcad/cad_source/zengine/zgl/drawers/uzglviewareadata.pas 
+//Generate on ../cad_source/zengine/zgl/drawers/uzglviewareadata.pas
   pmousedesc = ^mousedesc;
   mousedesc = packed record
     mode: GDBByte;
@@ -3542,7 +3542,7 @@ type
     constructor init;
     destructor done;virtual;abstract;
   end;
-//Generate on E:/zcad/cad_source/components/zscript/UUnitManager.pas
+//Generate on ../cad_source/components/zscript/UUnitManager.pas
     PTUnitManager=^TUnitManager;
     TUnitManager={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorObjects)
                        currentunit:PTUnit;
@@ -3561,7 +3561,7 @@ type
                        procedure free;virtual;abstract;
                        procedure CreateExtenalSystemVariable(PPaths:GDBString;sysunitname:GDBString;TranslateFunc:TTranslateFunction;varname,vartype:GDBString;pinstance:Pointer);
                  end;
-//Generate on E:/zcad/cad_source/zengine/containers/UGDBNumerator.pas
+//Generate on ../cad_source/zengine/containers/UGDBNumerator.pas
 PGDBNumItem=^GDBNumItem;
 GDBNumItem={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
                  Nymber:GDBInteger;
@@ -3575,7 +3575,7 @@ GDBNumerator={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray<PGDBNumI
                        function AddNumerator(Name:GDBString):PGDBNumItem;virtual;abstract;
                        procedure sort;
                        end;
-//Generate on E:/zcad/cad_source/zengine/core/drawings/uzedrawingdef.pas
+//Generate on ../cad_source/zengine/core/drawings/uzedrawingdef.pas
 PTDrawingDef=^TDrawingDef;
 TDrawingDef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseobject)
                        function CreateBlockDef(name:GDBString):GDBPointer;virtual;abstract;
@@ -3596,7 +3596,7 @@ TDrawingDef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseobject)
                        function CreateDrawingRC(_maxdetail:GDBBoolean=false):TDrawContext;virtual;abstract;
                        function GetUnitsFormat:TzeUnitsFormat;virtual;abstract;
                  end;
-//Generate on E:/zcad/cad_source/zengine/core/drawings/uzedrawingabstract.pas
+//Generate on ../cad_source/zengine/core/drawings/uzedrawingabstract.pas
 PTAbstractDrawing=^TAbstractDrawing;
 TAbstractDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TDrawingDef)
                        LWDisplay:GDBBoolean;
@@ -3638,7 +3638,7 @@ TAbstractDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TDrawingDef)
                        procedure rtmodify(obj:PGDBObjEntity;md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;abstract;
                        procedure FillDrawingPartRC(out dc:TDrawContext);virtual;abstract;
                  end;
-//Generate on E:/zcad/cad_source/zengine/core/drawings/uzedrawingsimple.pas
+//Generate on ../cad_source/zengine/core/drawings/uzedrawingsimple.pas
 PTSimpleDrawing=^TSimpleDrawing;
 TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        pObjRoot:PGDBObjGenericSubEntry;
@@ -3710,7 +3710,7 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        procedure Selector(PEntity,PGripsCreator:PGDBObjEntity;var SelectedObjCount:GDBInteger);virtual;abstract;
                        procedure DeSelector(PV:PGDBObjEntity;var SelectedObjCount:GDBInteger);virtual;abstract;
                  end;
-//Generate on E:/zcad/cad_source/zcad/core/drawings/uzcdrawings.pas
+//Generate on ../cad_source/zcad/core/drawings/uzcdrawings.pas
 PTZCADDrawingsManager=^TZCADDrawingsManager;
 TZCADDrawingsManager={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorPGDBaseObjects)
                     CurrentDWG:{PTZCADDrawing}PTSimpleDrawing;
@@ -3748,16 +3748,17 @@ TZCADDrawingsManager={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorPGDBaseOb
                     procedure redrawoglwnd(Sender:TObject;GUIAction:TZMessageID);
                     procedure resetoglwnd(Sender:TObject;GUIAction:TZMessageID);
               end;
-//Generate on E:/zcad/cad_source/zcad/gui/odjectinspector/uzcoiwrapper.pas
+//Generate on ../cad_source/zcad/gui/odjectinspector/uzcoiwrapper.pas
   TWrapper2ObjInsp={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
   end;
-//Generate on E:/zcad/cad_source/zcad/gui/odjectinspector/uzcoimultiobjects.pas
+//Generate on ../cad_source/zcad/gui/odjectinspector/uzcoimultiobjects.pas
   {TMSType=(
            TMST_All(*'All entities'*),
            TMST_Devices(*'Devices'*),
            TMST_Cables(*'Cables'*)
           );}
   TMSPrimitiveDetector=TEnumData;
+  TMSBlockNamesDetector=TEnumData;
   TMSEditor={$IFNDEF DELPHI}packed{$ENDIF} object(TWrapper2ObjInsp)
                 TxtEntType:TMSPrimitiveDetector;(*'Process primitives'*)
                 VariablesUnit:TObjectUnit;(*'Variables'*)
@@ -3781,7 +3782,7 @@ TZCADDrawingsManager={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorPGDBaseOb
                 procedure processProperty(const ID:TObjID; const pentity: pGDBObjEntity; const PMultiPropertyDataForObjects:PTMultiPropertyDataForObjects; const pu:PTObjectUnit; const PSourceVD:PVarDesk;const mp:TMultiProperty; var DC:TDrawContext);
                 procedure ClearErrorRange;
             end;
-//Generate on E:/zcad/cad_source/zengine/fonts/uzefontmanager.pas
+//Generate on ../cad_source/zengine/fonts/uzefontmanager.pas
   PGDBFontRecord=^GDBFontRecord;
   GDBFontRecord = packed record
     Name: GDBString;
@@ -3801,7 +3802,7 @@ GDBFontManager={$IFNDEF DELPHI}packed{$ENDIF} object({GDBOpenArrayOfData}GDBName
                     //function FindFonf(FontName:GDBString):GDBPointer;
                     {procedure freeelement(p:GDBPointer);virtual;}abstract;
               end;
-//Generate on E:/zcad/cad_source/zengine/zgl/drawers/uzgldrawergdi.pas 
+//Generate on ../cad_source/zengine/zgl/drawers/uzgldrawergdi.pas
 TGDIPrimitivesCounter=packed record
           Lines:GDBInteger;
           Triangles:GDBInteger;
@@ -3819,7 +3820,7 @@ TGDIData=packed record
           RD_Renderer:GDBString;(*'Device'*)(*oi_readonly*)
           RD_Version:GDBString;(*'Version'*)(*oi_readonly*)
     end;
-//Generate on E:/zcad/cad_source/zengine/zgl/drawers/uzgldrawerogl.pas 
+//Generate on ../cad_source/zengine/zgl/drawers/uzgldrawerogl.pas
 ptrestoremode=^trestoremode;
 TRestoreMode=(
               WND_AuxBuffer(*'AUX buffer'*),
@@ -3840,6 +3841,246 @@ TOpenglData=packed record
           RD_MaxLineWidth:GDBDouble;(*'Max line width'*)(*oi_readonly*)
           RD_MaxPointSize:GDBDouble;(*'Max point size'*)(*oi_readonly*)
     end;
+//Generate on ../cad_source/zengine/zgl/drawers/uzgldrawerdx.pas
+PTDXData=^TDXData;
+TDXData=packed record
+          RD_Renderer:GDBString;(*'Device'*)(*oi_readonly*)
+    end;
+//Generate on ../cad_source/zcad/electrotech/uzcentnet.pas
+PGDBObjNet=^GDBObjNet;
+GDBObjNet={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjConnected)
+                 graf:GDBGraf;
+                 riserarray:TZctnrVectorPGDBaseObjects;
+                 constructor initnul(owner:PGDBObjGenericWithSubordinated);
+                 function CanAddGDBObj(pobj:PGDBObjEntity):GDBBoolean;virtual;abstract;
+                 function EubEntryType:GDBInteger;virtual;abstract;
+                 procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;abstract;
+                 procedure restructure(var drawing:TDrawingDef);virtual;abstract;
+                 procedure DeSelect(var SelectedObjCount:GDBInteger;ds2s:TDeSelect2Stage);virtual;abstract;
+                 procedure BuildGraf(var drawing:TDrawingDef);virtual;abstract;
+                 procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;abstract;
+                 procedure EraseMi(pobj:pgdbobjEntity;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;abstract;
+                 function CalcNewName(Net1,Net2:PGDBObjNet):GDBInteger;
+                 procedure connectedtogdb(ConnectedArea:PGDBObjGenericSubEntry;var drawing:TDrawingDef);virtual;abstract;
+                 function GetObjTypeName:GDBString;virtual;abstract;
+                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
+                 procedure DelSelectedSubitem(var drawing:TDrawingDef);virtual;abstract;
+                 function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
+                 procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;abstract;
+                 procedure transform(const t_matrix:DMatrix4D);virtual;abstract;
+                 function GetNearestLine(const point:GDBVertex):PGDBObjEntity;
+                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;abstract;
+                 procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
+                 procedure SaveToDXFfollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;abstract;
+                 destructor done;virtual;abstract;
+                 procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
+                 function IsHaveGRIPS:GDBBoolean;virtual;abstract;
+                 class function GetDXFIOFeatures:TDXFEntIODataManager;
+                 function GetObjType:TObjID;virtual;abstract;
+           end;
+//Generate on ../cad_source/zcad/electrotech/uzcentcable.pas
+PTNodeProp=^TNodeProp;
+TNodeProp=packed record
+                //**Точка в котором кабель был усечен устройством исчез и появился
+                PrevP,NextP:GDBVertex;
+                //**Устройство коннектор которого попадает в узел кабеля
+                DevLink:PGDBObjDevice;
+          end;
+TNodePropArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)
+end;
+PGDBObjCable=^GDBObjCable;
+GDBObjCable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
+                 {**Список устройств DevLink коннектор которых попадает в узел кабеля,
+                    а так же показывается PrevP,NextP точка в котором кабель был усечен устройством
+                    и точка в которой появился**}
+                 NodePropArray:TNodePropArray;(*hidden_in_objinsp*)
+                 str11:GDBVertex;(*hidden_in_objinsp*)
+                 str12:GDBVertex;(*hidden_in_objinsp*)
+                 str13:GDBVertex;(*hidden_in_objinsp*)
+                 str21:GDBVertex;(*hidden_in_objinsp*)
+                 str22:GDBVertex;(*hidden_in_objinsp*)
+                 str23:GDBVertex;(*hidden_in_objinsp*)
+                 constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
+                 constructor initnul(owner:PGDBObjGenericWithSubordinated);
+                 procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;abstract;
+                 function GetObjTypeName:GDBString;virtual;abstract;
+                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
+                 procedure FormatFast(var drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
+                 procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
+                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;abstract;
+                 procedure SaveToDXFfollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;abstract;
+                 function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
+                 destructor done;virtual;abstract;
+                 class function GetDXFIOFeatures:TDXFEntIODataManager;
+                 //function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
+                 function GetObjType:TObjID;virtual;abstract;
+           end;
+//Generate on ../cad_source/zcad/electrotech/uzcentelleader.pas
+PGDBObjElLeader=^GDBObjElLeader;
+GDBObjElLeader={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
+            MainLine:GDBObjLine;
+            MarkLine:GDBObjLine;
+            Tbl:GDBObjTable;
+            size:GDBInteger;
+            scale:GDBDouble;
+            twidth:GDBDouble;
+            procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;abstract;
+            procedure DrawOnlyGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;abstract;
+            procedure getoutbound(var DC:TDrawContext);virtual;abstract;
+            function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;abstract;
+            function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;abstract;
+            function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;abstract;
+            procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;abstract;
+            procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
+            procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
+            procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;abstract;
+            function beforertmodify:GDBPointer;virtual;abstract;
+            function select(var SelectedObjCount:GDBInteger;s2s:TSelect2Stage):GDBBoolean;virtual;abstract;
+            procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
+            procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;abstract;
+            constructor initnul;
+            function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
+            procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;abstract;
+            procedure DXFOut(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;abstract;
+            function GetObjTypeName:GDBString;virtual;abstract;
+            function ReturnLastOnMouse(InSubEntry:GDBBoolean):PGDBObjEntity;virtual;abstract;
+            procedure ImSelected(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger);virtual;abstract;
+            procedure DeSelect(var SelectedObjCount:GDBInteger;ds2s:TDeSelect2Stage);virtual;abstract;
+            procedure SaveToDXFFollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;abstract;
+            //function InRect:TInRect;virtual;abstract;
+            destructor done;virtual;abstract;
+            procedure transform(const t_matrix:DMatrix4D);virtual;abstract;
+            procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;abstract;
+            procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;abstract;
+            function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;abstract;
+            function GetObjType:TObjID;virtual;abstract;
+            end;
+//Generate on ../cad_source/zcad/electrotech/uzccomops.pas
+  TInsertType=(
+               TIT_Block(*'Block'*),
+               TIT_Device(*'Device'*)
+              );
+  TOPSDatType=(
+               TOPSDT_Termo(*'Termo'*),
+               TOPSDT_Smoke(*'Smoke'*)
+              );
+  TOPSMinDatCount=(
+                   TOPSMDC_1_4(*'1 in the quarter'*),
+                   TOPSMDC_1_2(*'1 in the middle'*),
+                   TOPSMDC_2(*'2'*),
+                   TOPSMDC_3(*'3'*),
+                   TOPSMDC_4(*'4'*)
+                  );
+  TODPCountType=(
+                   TODPCT_by_Count(*'by number'*),
+                   TODPCT_by_XY(*'by width/height'*)
+                 );
+  TPlaceSensorsStrategy=(
+                  TPSS_Proportional(*'Proportional'*),
+                  TPSS_FixDD(*'Sensor-Sensor distance fix'*),
+                  TPSS_FixDW(*'Sensor-Wall distance fix'*),
+                  TPSS_ByNum(*'By number'*)
+                  );
+  TAxisReduceDistanceMode=(TARDM_Nothing(*'Nothing'*),
+                           TARDM_LongAxis(*'Long axis'*),
+                           TARDM_ShortAxis(*'Short axis'*),
+                           TARDM_AllAxis(*'All xxis'*));
+  PTOPSPlaceSmokeDetectorOrtoParam=^TOPSPlaceSmokeDetectorOrtoParam;
+  TOPSPlaceSmokeDetectorOrtoParam=packed record
+                                        InsertType:TInsertType;(*'Insert'*)
+                                        Scale:GDBDouble;(*'Plan scale'*)
+                                        ScaleBlock:GDBDouble;(*'Blocks scale'*)
+                                        StartAuto:GDBBoolean;(*'"Start" signal'*)
+                                        SensorSensorDistance:TAxisReduceDistanceMode;(*'Sensor-sensor distance reduction'*)
+                                        SensorWallDistance:TAxisReduceDistanceMode;(*'Sensor-wall distance reduction'*)
+                                        DatType:TOPSDatType;(*'Sensor type'*)
+                                        DMC:TOPSMinDatCount;(*'Min. number of sensors'*)
+                                        Height:TEnumData;(*'Height of installation'*)
+                                        ReductionFactor:GDBDouble;(*'Reduction factor'*)
+                                        NDD:GDBDouble;(*'Sensor-Sensor(standard)'*)
+                                        NDW:GDBDouble;(*'Sensor-Wall(standard)'*)
+                                        PlaceStrategy:TPlaceSensorsStrategy;
+                                        FDD:GDBDouble;(*'Sensor-Sensor(fact)'*)(*oi_readonly*)
+                                        FDW:GDBDouble;(*'Sensor-Wall(fact)'*)(*oi_readonly*)
+                                        NormalizePoint:GDBBoolean;(*'Normalize to grid (if enabled)'*)
+                                        oldth:GDBInteger;(*hidden_in_objinsp*)
+                                        oldsh:GDBInteger;(*hidden_in_objinsp*)
+                                        olddt:TOPSDatType;(*hidden_in_objinsp*)
+                                  end;
+  PTOrtoDevPlaceParam=^TOrtoDevPlaceParam;
+  TOrtoDevPlaceParam=packed record
+                                        Name:GDBString;(*'Block'*)(*oi_readonly*)
+                                        ScaleBlock:GDBDouble;(*'Blocks scale'*)
+                                        CountType:TODPCountType;(*'Type of placement'*)
+                                        Count:GDBInteger;(*'Total number'*)
+                                        NX:GDBInteger;(*'Number of length'*)
+                                        NY:GDBInteger;(*'Number of width'*)
+                                        Angle:GDBDouble;(*'Rotation'*)
+                                        AutoAngle:GDBBoolean;(*'Auto rotation'*)
+                                        NormalizePoint:GDBBoolean;(*'Normalize to grid (if enabled)'*)
+                     end;
+     GDBLine=packed record
+                  lBegin,lEnd:GDBvertex;
+              end;
+  OPS_SPBuild={$IFNDEF DELPHI}packed{$ENDIF} object(FloatInsert_com)
+    procedure Command(Operands:TCommandOperands); virtual;abstract;
+  end;
+//Generate on ../cad_source/zcad/electrotech/uzccomelectrical.pas
+  TFindType=(
+               TFT_Obozn(*'**обозначении'*),
+               TFT_DBLink(*'**материале'*),
+               TFT_DESC_MountingDrawing(*'**сокращенноммонтажномчертеже'*),
+               TFT_variable(*'??указанной переменной'*)
+             );
+PTBasicFinter=^TBasicFinter;
+TBasicFinter=packed record
+                   IncludeCable:GDBBoolean;(*'Include filter'*)
+                   IncludeCableMask:GDBString;(*'Include mask'*)
+                   ExcludeCable:GDBBoolean;(*'Exclude filter'*)
+                   ExcludeCableMask:GDBString;(*'Exclude mask'*)
+             end;
+  PTFindDeviceParam=^TFindDeviceParam;
+  TFindDeviceParam=packed record
+                        FindType:TFindType;(*'Find in'*)
+                        FindMethod:GDBBoolean;(*'Use symbols *, ?'*)
+                        FindString:GDBString;(*'Text'*)
+                    end;
+     GDBLine=packed record
+                  lBegin,lEnd:GDBvertex;
+              end;
+  PTELCableComParam=^TELCableComParam;
+  TELCableComParam=packed record
+                        Traces:TEnumData;(*'Trace'*)
+                        PCable:{PGDBObjCable}GDBPointer;(*'Cabel'*)
+                        PTrace:{PGDBObjNet}GDBPointer;(*'Trace (pointer)'*)
+                   end;
+  TELLeaderComParam=packed record
+                        Scale:GDBDouble;(*'Scale'*)
+                        Size:GDBInteger;(*'Size'*)
+                        twidth:GDBDouble;(*'Width'*)
+                   end;
+//Generate on ../cad_source/zcad/electrotech/uzccablemanager.pas
+    PTCableDesctiptor=^TCableDesctiptor;
+    TCableDesctiptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
+                     Name:GDBString;
+                     Segments:TZctnrVectorPGDBaseObjects;   // сборщик всех кабелей с одинаковым именем (ШС..)
+                     StartDevice,EndDevice:PGDBObjDevice;
+                     StartSegment:PGDBObjCable;
+                     Devices:TZctnrVectorPGDBaseObjects;
+                     length:GDBDouble;
+                     constructor init;
+                     destructor done;virtual;abstract;
+                     function GetObjTypeName:GDBString;virtual;abstract;
+                     function GetObjName:GDBString;virtual;abstract;
+                 end;
+    PTCableManager=^TCableManager;
+    TCableManager={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorObjects<TCableDesctiptor>)(*OpenArrayOfPObj*)
+                       constructor init;
+                       destructor done;virtual;abstract;
+                       procedure build;virtual;abstract;
+                       function FindOrCreate(sname:gdbstring):PTCableDesctiptor;virtual;abstract;
+                       function Find(sname:gdbstring):PTCableDesctiptor;virtual;abstract;
+                 end;
 implementation
 begin
 end.

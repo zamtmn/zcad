@@ -39,6 +39,12 @@ type
                     Selected:GDBInteger;
                     Enums:TZctnrVectorGDBString;
               end;
+    PTEnumDataWithOtherData=^TEnumDataWithOtherData;
+    TEnumDataWithOtherData=packed record
+                    Selected:GDBInteger;
+                    Enums:TZctnrVectorGDBString;
+                    PData:GDBPointer;
+              end;
 {EXPORT-}
 implementation
 uses UGDBOpenArrayOfByte;

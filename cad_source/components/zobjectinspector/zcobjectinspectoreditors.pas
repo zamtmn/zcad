@@ -132,6 +132,7 @@ begin
      cbedit.Text:=ptdesc^.GetValueAsString(pinstance);
      cbedit.OnChange:=propeditor.EditingProcess;
      cbedit.OnExit:=propeditor.ExitEdit;
+     SetComboSize(cbedit,{sysvar.INTF.INTF_DefaultControlHeight^}preferedHeight-6,true);
      {$IFNDEF DELPHI}
      cbedit.ReadOnly:=true;
      {$ENDIF}

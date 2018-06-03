@@ -336,13 +336,38 @@ begin
                                                   end;
                                                   bmodesave2:=ppda^.findvalkey(pvd^.name);
                                                   if bmodesave2<>0 then
+                                                  begin
+                                                       if (PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.TypeName='TEnumData')
+                                                       or (PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.TypeName='TEnumDataWithOtherData') then
+                                                                   begin
+                                                                        SaveDecorators:=GDBEnumDataDescriptorObj.Decorators;
+                                                                        SaveFastEditors:=GDBEnumDataDescriptorObj.FastEditors;
+                                                                        GDBEnumDataDescriptorObj.Decorators:=PTUserTypeDescriptor(pvd^.data.PTD)^.Decorators;
+                                                                        GDBEnumDataDescriptorObj.FastEditors:=PTUserTypeDescriptor(pvd^.data.PTD)^.FastEditors;
+                                                                        GDBEnumDataDescriptorObj.CreateProperties(f,PDM_Field,PPDA,tname,@pvd^.data.PTD^.collapsed,(ownerattrib or tw),bmodesave2,taa,pvd^.name,pvd^.data.ptd.TypeName);
+                                                                        GDBEnumDataDescriptorObj.Decorators:=SaveDecorators;
+                                                                        GDBEnumDataDescriptorObj.FastEditors:=SaveFastEditors;
+                                                                   end
+                                                               else
                                                   PTUserTypeDescriptor(pvd^.data.PTD)^.CreateProperties
-                                                  (f,PDM_Field,PPDA,tname,{pcollapsed}@pvd^.data.PTD^.collapsed,(ownerattrib or tw),bmodesave2,taa,pvd^.name,pvd^.data.ptd.TypeName)
+                                                  (f,PDM_Field,PPDA,tname,@pvd^.data.PTD^.collapsed,(ownerattrib or tw),bmodesave2,taa,pvd^.name,pvd^.data.ptd.TypeName)
+                                                  end
                                                                    else
                                                                    begin
                                                   bmodetemp:=property_build;
+                                                                        if (PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.TypeName='TEnumData')
+                                                                        or (PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.TypeName='TEnumDataWithOtherData') then                                                                   begin
+                                                                        SaveDecorators:=GDBEnumDataDescriptorObj.Decorators;
+                                                                        SaveFastEditors:=GDBEnumDataDescriptorObj.FastEditors;
+                                                                        GDBEnumDataDescriptorObj.Decorators:=PTUserTypeDescriptor(pvd^.data.PTD)^.Decorators;
+                                                                        GDBEnumDataDescriptorObj.FastEditors:=PTUserTypeDescriptor(pvd^.data.PTD)^.FastEditors;
+                                                                        GDBEnumDataDescriptorObj.CreateProperties(f,PDM_Field,PPDA,tname,@pvd^.data.PTD^.collapsed,(ownerattrib or tw),bmodetemp,taa,pvd^.name,pvd^.data.ptd.TypeName);
+                                                                        GDBEnumDataDescriptorObj.Decorators:=SaveDecorators;
+                                                                        GDBEnumDataDescriptorObj.FastEditors:=SaveFastEditors;
+                                                                   end
+                                                               else
                                                   PTUserTypeDescriptor(pvd^.data.PTD)^.CreateProperties
-                                                  (f,PDM_Field,PPDA,tname,{pcollapsed}@pvd^.data.PTD^.collapsed,(ownerattrib or tw),{bmode}bmodetemp,taa,pvd^.name,pvd^.data.ptd.TypeName);
+                                                  (f,PDM_Field,PPDA,tname,@pvd^.data.PTD^.collapsed,(ownerattrib or tw),{bmode}bmodetemp,taa,pvd^.name,pvd^.data.ptd.TypeName);
 
                                                   if (bmode<>property_build)then
                                                                                 inc(bmode);
@@ -369,13 +394,14 @@ begin
                            tname:=pfd^.base.ProgramName;
            if tname='Geometry' then
                                    tname:=tname;
-           if (pfd^.base.PFT^.GetFactTypedef^.TypeName='TEnumData') then
+           if (pfd^.base.PFT^.GetFactTypedef^.TypeName='TEnumData') or
+              (pfd^.base.PFT^.GetFactTypedef^.TypeName='TEnumDataWithOtherData') then
                        begin
                             SaveDecorators:=GDBEnumDataDescriptorObj.Decorators;
                             SaveFastEditors:=GDBEnumDataDescriptorObj.FastEditors;
                             GDBEnumDataDescriptorObj.Decorators:=pfd^.base.PFT^.Decorators;
                             GDBEnumDataDescriptorObj.FastEditors:=pfd^.base.PFT^.FastEditors;
-                            GDBEnumDataDescriptorObj.CreateProperties(f,PDM_Field,PPDA,{ppd^.Name}tname,@pfd^.collapsed,{ppd^.Attr}pfd^.base.Attributes or ownerattrib,bmode,addr,'','');
+                            GDBEnumDataDescriptorObj.CreateProperties(f,PDM_Field,PPDA,tname,@pfd^.collapsed,{ppd^.Attr}pfd^.base.Attributes or ownerattrib,bmode,addr,'','');
                             GDBEnumDataDescriptorObj.Decorators:=SaveDecorators;
                             GDBEnumDataDescriptorObj.FastEditors:=SaveFastEditors;
                        end

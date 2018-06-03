@@ -26,6 +26,7 @@ uses uzbstrproc,uzbtypesbase,uzbtypes,gzctnrstl,
 type
 {$IFNDEF DELPHI}
 LessPointer= TLess<pointer>;
+LessString= TLess<String>;
 LessGDBString= TLess<GDBString>;
 LessDWGHandle= TLess<TDWGHandle>;
 LessObjID= TLess<TObjID>;

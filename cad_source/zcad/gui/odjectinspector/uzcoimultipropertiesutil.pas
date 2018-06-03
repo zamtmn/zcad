@@ -21,7 +21,7 @@ unit uzcoimultipropertiesutil;
 
 interface
 uses
-  uzcoimultiobjects,uzepalette,uzbmemman,uzcshared,sysutils,uzeentityfactory,
+  uzbstrproc, uzctnrvectorgdbstring,uzcoimultiobjects,uzepalette,uzbmemman,uzcshared,sysutils,uzeentityfactory,
   uzbgeomtypes,uzbtypes,
   uzcdrawings,
   varmandef,
@@ -29,17 +29,20 @@ uses
   uzbtypesbase,
   Varman,UGDBPoint3DArray,
   uzedimensionaltypes,
-  gzctnrvectortypes,uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,
+  gzctnrvectortypes,gzctnrstl,uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,
   uzeenttext,uzeentmtext,uzeentpolyline,uzegeometry,uzcoimultiproperties,LazLogger;
 function GetOneVarData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
+function GetStringCounterData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
 function GetVertex3DControlData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
 procedure FreeOneVarData(piteratedata:GDBPointer;mp:TMultiProperty);
+procedure FreeStringCounterData(piteratedata:GDBPointer;mp:TMultiProperty);
 procedure FreeVertex3DControlData(piteratedata:GDBPointer;mp:TMultiProperty);
 procedure GeneralEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure PolylineVertex3DControlEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure PolylineVertex3DControlFromVarEntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 procedure GDBDouble2SumEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure TArrayIndex2SumEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+procedure Blockname2BlockNameCounterIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure PolylineVertex3DControlBeforeEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData);
 implementation
 var
@@ -73,6 +76,25 @@ begin
     FindOrCreateVar(pu,mp.MPName,mp.MPUserName,mp.MPType^.TypeName,PTOneVarData(result).PVarDesc);
 end;
 
+function GetStringCounterData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
+{
+создает структуру с описанием переменной осуществляющей подсчет стрингов
+mp - описание мультипроперти
+pu - модуль в котором будет создана переменная для мультипроперти
+возвращает указатель на созданную структуру
+}
+begin
+    GDBGetMem({$IFDEF DEBUGBUILD}'{831CDE55-8FC6-4ACD-8A4C-FEB861D44294}',{$ENDIF}result,sizeof(TStringCounterData));
+    PTStringCounterData(result)^.counter:=TStringCounter.Create;
+    if FindOrCreateVar(pu,mp.MPName,mp.MPUserName,mp.MPType^.TypeName,PTStringCounterData(result).PVarDesc) then begin
+      PTEnumDataWithOtherData(PTStringCounterData(result).PVarDesc^.data.Instance)^.Enums.init(10);
+      PTStringCounterData(result)^.totalcount:=0;
+      PTEnumDataWithOtherData(PTStringCounterData(result).PVarDesc^.data.Instance)^.Selected:=0;
+      GDBGetMem({$IFDEF DEBUGBUILD}'{831CDE55-8FC6-4ACD-8A4C-FEB861D44294}',{$ENDIF}PTEnumDataWithOtherData(PTStringCounterData(result).PVarDesc^.data.Instance)^.PData,sizeof(TZctnrVectorGDBString));
+      PTZctnrVectorGDBString(PTEnumDataWithOtherData(PTStringCounterData(result).PVarDesc^.data.Instance)^.PData)^.init(10);
+    end;
+end;
+
 function GetVertex3DControlData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
 {
 создает структуру с описанием контроля 3Д вершин
@@ -100,6 +122,28 @@ procedure FreeOneVarData(piteratedata:GDBPointer;mp:TMultiProperty);
 begin
     PTOneVarData(piteratedata)^.StrValue:='';
     GDBFreeMem(piteratedata);
+end;
+procedure FreeStringCounterData(piteratedata:GDBPointer;mp:TMultiProperty);
+var
+   t:TStringCounter.TPair;
+   iterator:TStringCounter.TIterator;
+   s:string;
+   c:integer;
+{уничтожает созданную GetStringCounterData структуру}
+begin
+    //PTStringCounterData(piteratedata)^.StrValue:='';
+  PTEnumDataWithOtherData(PTStringCounterData(piteratedata)^.PVarDesc^.data.Instance)^.Enums.PushBackData(format('Total (%d)',[PTStringCounterData(piteratedata)^.totalcount]));
+  PTZctnrVectorGDBString(PTEnumDataWithOtherData(PTStringCounterData(piteratedata)^.PVarDesc^.data.Instance)^.PData)^.PushBackData('*');
+  iterator:=PTStringCounterData(piteratedata)^.counter.Min;
+  if assigned(iterator) then
+  repeat
+        s:=iterator.GetKey;
+        c:=iterator.GetValue;
+        PTEnumDataWithOtherData(PTStringCounterData(piteratedata)^.PVarDesc^.data.Instance)^.Enums.PushBackData(format('%s (%d)',[Tria_AnsiToUtf8(s),c]));
+        PTZctnrVectorGDBString(PTEnumDataWithOtherData(PTStringCounterData(piteratedata)^.PVarDesc^.data.Instance)^.PData)^.PushBackData(s);
+  until not iterator.Next;
+  PTStringCounterData(piteratedata)^.counter.Free;
+  GDBFreeMem(piteratedata);
 end;
 procedure FreeVertex3DControlData(piteratedata:GDBPointer;mp:TMultiProperty);
 {уничтожает созданную GetVertex3DControlData структуру}
@@ -249,7 +293,17 @@ begin
                 else
                     PTArrayIndex(PTOneVarData(pdata).PVarDesc.data.Instance)^:=PTArrayIndex(PTOneVarData(pdata).PVarDesc.data.Instance)^+PTArrayIndex(ChangedData.PGetDataInEtity)^;
 end;
-
+procedure Blockname2BlockNameCounterIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+begin
+     PTStringCounterData(pdata)^.counter.CountKey(pansistring(ChangedData.PGetDataInEtity)^,1);
+     inc(PTStringCounterData(pdata)^.totalcount);
+     {if @ecp=nil then ProcessVariableAttributes(PTOneVarData(pdata).PVarDesc.attrib,vda_RO,0);
+     if fistrun then
+                    mp.MPType.CopyInstanceTo(ChangedData.PGetDataInEtity,PTOneVarData(pdata).PVarDesc.data.Instance)
+                else
+                    PTArrayIndex(PTOneVarData(pdata).PVarDesc.data.Instance)^:=PTArrayIndex(PTOneVarData(pdata).PVarDesc.data.Instance)^+PTArrayIndex(ChangedData.PGetDataInEtity)^;
+     }
+end;
 initialization
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');

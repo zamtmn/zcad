@@ -475,11 +475,15 @@ var
     i,j,usablecounter:integer;
     NeedObjID:TObjID;
 begin
+     //сброс счетчика использования
      for i:=0 to MultiPropertiesManager.MultiPropertyVector.Size-1 do
        MultiPropertiesManager.MultiPropertyVector[i].usecounter:=0;
+
      NeedObjID:=GetObjType;
+
      if NeedObjID=0 then
      begin
+          //Проперти для всех типов примитивов
           usablecounter:=0;
           for j:=1 to ObjIDVector.Size-1 do
           begin
@@ -491,13 +495,16 @@ begin
      end
      else
      begin
+          //Проперти для конкретного типа примитивов
           for i:=0 to MultiPropertiesManager.MultiPropertyVector.Size-1 do
             if (MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyContans(NeedObjID))or(MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyContans(0)) then
               inc(MultiPropertiesManager.MultiPropertyVector[i].usecounter);
           usablecounter:=1;
      end;
+
      for i:=0 to MultiPropertiesManager.MultiPropertyVector.Size-1 do
-       if MultiPropertiesManager.MultiPropertyVector[i].usecounter<>usablecounter then
+       if (MultiPropertiesManager.MultiPropertyVector[i].usecounter<>usablecounter)then
+        if (MultiPropertiesManager.MultiPropertyVector[i].UseMode=MPUM_AllEntsMatched)then
           MultiPropertiesManager.MultiPropertyVector[i].usecounter:=0;
 end;
 

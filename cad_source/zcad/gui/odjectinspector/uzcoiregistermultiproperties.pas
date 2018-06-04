@@ -459,7 +459,7 @@ begin
   {--Misc}
   MultiPropertiesManager.RegisterMultiproperty('Name','Name',sysunit^.TypeName2PTD('GDBAnsiString'),MPCMisc,GDBBlockInsertID,integer(@pblockinsert^.Name),integer(@pblockinsert^.Name),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,nil);
   MultiPropertiesManager.RegisterMultiproperty('Rotation','Rotation',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCMisc,GDBBlockInsertID,integer(@pblockinsert^.rotate),integer(@pblockinsert^.rotate),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
-  MultiPropertiesManager.RegisterMultiproperty('BlocksByName','Blocks by name',sysunit^.TypeName2PTD('TMSBlockNamesDetector'),MPCSummary,GDBBlockInsertID,integer(@pblockinsert^.Name),integer(@pblockinsert^.Name),@GetStringCounterData,@FreeStringCounterData,nil,@Blockname2BlockNameCounterIterateProc,nil);
+  MultiPropertiesManager.RegisterMultiproperty('BlocksByName','Blocks by name',sysunit^.TypeName2PTD('TMSBlockNamesDetector'),MPCSummary,GDBBlockInsertID,integer(@pblockinsert^.Name),integer(@pblockinsert^.Name),@GetStringCounterData,@FreeStringCounterData,nil,@Blockname2BlockNameCounterIterateProc,nil,nil,MPUM_AtLeastOneEntMatched);
 
   {Device uzegeometry}
   MultiPropertiesManager.RegisterFirstMultiproperty('INSERT_X','Insert X',sysunit^.TypeName2PTD('GDBXCoordinate'),MPCGeometry,GDBDeviceID,integer(@pblockinsert^.P_insert_in_WCS.x),integer(@pblockinsert^.Local.P_insert.x),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
@@ -474,7 +474,7 @@ begin
   {--Misc}
   MultiPropertiesManager.RegisterMultiproperty('Name','Name',sysunit^.TypeName2PTD('GDBAnsiString'),MPCMisc,GDBDeviceID,integer(@pblockinsert^.Name),integer(@pent^.vp.Color),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,nil);
   MultiPropertiesManager.RegisterMultiproperty('Rotation','Rotation',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCMisc,GDBDeviceID,integer(@pblockinsert^.rotate),integer(@pblockinsert^.rotate),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
-  MultiPropertiesManager.RegisterMultiproperty('BlocksByName','Blocks by name',sysunit^.TypeName2PTD('TMSBlockNamesDetector'),MPCSummary,GDBDeviceID,integer(@pblockinsert^.Name),integer(@pblockinsert^.Name),@GetStringCounterData,@FreeStringCounterData,nil,@Blockname2BlockNameCounterIterateProc,nil);
+  MultiPropertiesManager.RegisterMultiproperty('BlocksByName','Blocks by name',sysunit^.TypeName2PTD('TMSBlockNamesDetector'),MPCSummary,GDBDeviceID,integer(@pblockinsert^.Name),integer(@pblockinsert^.Name),@GetStringCounterData,@FreeStringCounterData,nil,@Blockname2BlockNameCounterIterateProc,nil,nil,MPUM_AtLeastOneEntMatched);
   MultiPropertiesManager.sort;
 
   {Text uzegeometry}

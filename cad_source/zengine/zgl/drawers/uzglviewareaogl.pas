@@ -145,18 +145,11 @@ var
 {$ENDIF}
 begin
   if VerboseLog^ then
-    debugln('{D+}TOGLWnd.InitOGL');
-  //programlog.logoutstr('TOGLWnd.InitOGL',lp_IncPos,LM_Debug);
+    debugln('{D+}TOpenGLViewArea.getareacaps');
   {$IFDEF LCLGTK2}
   Widget:=PGtkWidget(PtrUInt(OpenGLWindow.Handle));
   gtk_widget_add_events (Widget,GDK_POINTER_MOTION_HINT_MASK);
   {$ENDIF}
-
-  //MywglDeleteContext(OpenGLWindow.OGLContext);//wglDeleteContext(hrc);
-
-  //SetDCPixelFormat(OpenGLWindow.OGLContext);//SetDCPixelFormat(dc);
-  //MywglCreateContext(OpenGLWindow.OGLContext);//hrc := wglCreateContext(DC);
-  //MyglMakeCurrent(OpenGLWindow.OGLContext);//wglMakeCurrent(DC, hrc);
   OpenGLWindow.MakeCurrent();
   setdeicevariable;
 

@@ -58,94 +58,6 @@ const
   strides: UINT = SizeOf(vertices[Low(vertices)]);
   offsets: UINT = 0;
 
-  sShaderCode_Sample_1: AnsiString =
-    '// не изменяйте это определение' + sLineBreak +
-    'cbuffer cbConst : register ( b0 )' + sLineBreak +
-    '{' + sLineBreak +
-    '  float4x4 matView;' + sLineBreak +
-    '  float4x4 matProjection;' + sLineBreak +
-    '  float4x4 matWorld;' + sLineBreak +
-    '  float4x4 matResult;' + sLineBreak +
-    '  uint dwTimeInterval;' + sLineBreak +
-    '  uint dwGetTickCount;' + sLineBreak +
-    '};' + sLineBreak +
-    '' + sLineBreak +
-    'struct VS_OUTPUT' + sLineBreak +
-    '{' + sLineBreak +
-    '  float4 pos : SV_POSITION;' + sLineBreak +
-    '  float4 clr : COLOR0;' + sLineBreak +
-    '};' + sLineBreak +
-    '' + sLineBreak +
-    '// не изменяйте имя функции (VS)' + sLineBreak +
-    'VS_OUTPUT VS ( float4 Pos : POSITION, float4 Clr : COLOR )' + sLineBreak +
-    '{' + sLineBreak +
-    '  VS_OUTPUT output;' + sLineBreak +
-    '  ' + sLineBreak +
-    '  output.pos = mul ( Pos, matResult );' + sLineBreak +
-    '  output.clr = Clr;' + sLineBreak +
-    '  ' + sLineBreak +
-    '  return output;' + sLineBreak +
-    '}' + sLineBreak +
-    '' + sLineBreak +
-    '// не изменяйте имя функции (PS)' + sLineBreak +
-    'float4 PS ( VS_OUTPUT input ) : SV_Target' + sLineBreak +
-    '{' + sLineBreak +
-    '  return input.clr;' + sLineBreak +
-    '}' + sLineBreak +
-    '';
-
-  sShaderCode_Sample_2: AnsiString =
-    '// не изменяйте это определение' + sLineBreak +
-    'cbuffer cbConst : register ( b0 )' + sLineBreak +
-    '{' + sLineBreak +
-    '  float4x4 matView;' + sLineBreak +
-    '  float4x4 matProjection;' + sLineBreak +
-    '  float4x4 matWorld;' + sLineBreak +
-    '  float4x4 matResult;' + sLineBreak +
-    '  uint dwTimeInterval;' + sLineBreak +
-    '  uint dwGetTickCount;' + sLineBreak +
-    '};' + sLineBreak +
-    '' + sLineBreak +
-    'struct VS_OUTPUT' + sLineBreak +
-    '{' + sLineBreak +
-    '  float4 pos : SV_POSITION;' + sLineBreak +
-    '  float4 clr : COLOR0;' + sLineBreak +
-    '};' + sLineBreak +
-    '' + sLineBreak +
-    '// не изменяйте имя функции (VS)' + sLineBreak +
-    'VS_OUTPUT VS ( float4 Pos : POSITION, float4 Clr : COLOR, uint vId : SV_VertexID )' + sLineBreak +
-    '{' + sLineBreak +
-    '  VS_OUTPUT output;' + sLineBreak +
-    '  float tmp1;' + sLineBreak +
-    '  float tmp2;' + sLineBreak +
-    '  float tmp3;' + sLineBreak +
-    '  float tmp4;' + sLineBreak +
-    '  ' + sLineBreak +
-    '  tmp1 = ( sin ( ( dwGetTickCount % 4000 ) / 4000.0 * radians(180) ) );' + sLineBreak +
-    '  tmp2 = sin ( ( dwGetTickCount % 5000 ) / 5000.0 * radians(360) );' + sLineBreak +
-    '  tmp3 = cos ( ( dwGetTickCount % 5000 ) / 5000.0 * radians(360) );' + sLineBreak +
-    '  tmp4 = ( (vId + 1) * sin ( ( dwGetTickCount % 2000 ) / 2000.0 * radians(180) ) );' + sLineBreak +
-    '  ' + sLineBreak +
-    '  output.pos = float4 ( Pos[0], Pos[1] + 1.0 * tmp1, Pos[2], Pos[3] );' + sLineBreak +
-    '  output.pos = float4 ( output.pos[0] * tmp3 + output.pos[2] * tmp2, output.pos[1], output.pos[0] * (-tmp2) + output.pos[2] * tmp3, output.pos[3] );' + sLineBreak +
-    '  output.pos = mul ( output.pos, matResult );' + sLineBreak +
-    '  output.clr = float4 ( Clr[0] - 0.2 * tmp4, Clr[1] - 0.2 * tmp4, Clr[2] - 0.2 * tmp4, Clr[3] );' + sLineBreak +
-    '  ' + sLineBreak +
-    '  return output;' + sLineBreak +
-    '}' + sLineBreak +
-    '' + sLineBreak +
-    '// не изменяйте имя функции (PS)' + sLineBreak +
-    'float4 PS ( VS_OUTPUT input ) : SV_Target' + sLineBreak +
-    '{' + sLineBreak +
-    '  return input.clr;' + sLineBreak +
-    '}' + sLineBreak +
-    '';
-
-{$IFDEF FPC}
-function IsDebuggerPresent(): BOOL;
-  external 'kernel32.dll' name 'IsDebuggerPresent';
-{$ENDIF}
-
 type
     TRenderPanel = class(TCustomControl)
       private
@@ -196,8 +108,8 @@ type
         procedure Resize();  override;
         procedure Paint();  override;
       end;
-    PTOGLWnd = ^TOGLWnd;
-    TOGLWnd = class({TPanel}{TOpenGLControl}TRenderPanel)
+    PTDXWnd = ^TDXWnd;
+    TDXWnd = class(TRenderPanel)
     private
     public
       wa:TAbstractViewArea;
@@ -205,7 +117,7 @@ type
     end;
     TDX11ViewArea=class(TGeneralViewArea)
                       public
-                      OpenGLWindow:TOGLWnd;
+                      DXWindow:TDXWnd;
                       OpenGLParam:TDXData;
                       function CreateWorkArea(TheOwner: TComponent):TCADControl; override;
                       procedure CreateDrawer; override;
@@ -213,9 +125,6 @@ type
                       procedure WaResize(sender:tobject); override;
 
                       procedure SwapBuffers(var DC:TDrawContext); override;
-                      procedure LightOn(var DC:TDrawContext); override;
-                      procedure LightOff(var DC:TDrawContext); override;
-                      procedure DrawGrid(var DC:TDrawContext); override;
                       procedure getareacaps; override;
                       procedure GDBActivateGLContext; override;
                       function NeedDrawInsidePaintEvent:boolean; override;
@@ -806,7 +715,7 @@ begin
   result:=inherited CreateRC(_maxdetail);
   result.MaxWidth:={OpenGLParam.RD_MaxWidth}100;
 end;
-procedure TOGLWnd.EraseBackground(DC: HDC);
+procedure TDXWnd.EraseBackground(DC: HDC);
 begin
 end;
 function TDX11ViewArea.getParam;
@@ -820,8 +729,7 @@ begin
 end;
 procedure TDX11ViewArea.GDBActivateGLContext;
 begin
-                                      //OpenGLWindow.MakeCurrent;
-                                      drawer.delmyscrbuf;
+   drawer.delmyscrbuf;
 end;
 function TDX11ViewArea.NeedDrawInsidePaintEvent:boolean;
 begin
@@ -872,121 +780,22 @@ begin(*
 end;
 
 procedure TDX11ViewArea.getareacaps;
-{$IFDEF LCLGTK2}
-var
-   Widget:PGtkWidget;
-{$ENDIF}
 begin
   if VerboseLog^ then
-    debugln('{D+}TOGLWnd.InitOGL');
-  //programlog.logoutstr('TOGLWnd.InitOGL',lp_IncPos,LM_Debug);
-  {$IFDEF LCLGTK2}
-  Widget:=PGtkWidget(PtrUInt(OpenGLWindow.Handle));
-  gtk_widget_add_events (Widget,GDK_POINTER_MOTION_HINT_MASK);
-  {$ENDIF}
-
-  //MywglDeleteContext(OpenGLWindow.OGLContext);//wglDeleteContext(hrc);
-
-  //SetDCPixelFormat(OpenGLWindow.OGLContext);//SetDCPixelFormat(dc);
-  //MywglCreateContext(OpenGLWindow.OGLContext);//hrc := wglCreateContext(DC);
-  //MyglMakeCurrent(OpenGLWindow.OGLContext);//wglMakeCurrent(DC, hrc);
-  //OpenGLWindow.MakeCurrent();
+    debugln('{D+}TDX11ViewArea.getareacaps');
   setdeicevariable;
-
-  {$IFDEF WINDOWS}
-  //if assigned(OpenglParam.RD_VSync) then
-  (*if OpenglParam.RD_VSync<>T3SB_Default then
-  begin
-       Pointer(@wglSwapIntervalEXT) := wglGetProcAddress('wglSwapIntervalEXT');
-       if @wglSwapIntervalEXT<>nil then
-                                           begin
-                                                if OpenglParam.RD_VSync=T3SB_True then
-                                                                                 wglSwapIntervalEXT(1)
-                                                                             else
-                                                                                 wglSwapIntervalEXT(0);
-                                           end
-                                       else
-                                           begin
-                                                //uzcshared.LogError('wglSwapIntervalEXT not supported by your video driver. Please set the VSync in the defaul');
-                                                DebugLn('{EH}wglSwapIntervalEXT not supported by your video driver. Please set the VSync in the defaul');
-                                           end;
-  end;*)
-  {$ENDIF}
   if VerboseLog^ then
-    debugln('{D-}end;{TOGLWnd.InitOGL}');
-  //programlog.logoutstr('end;{TOGLWnd.InitOGL}',lp_DecPos,LM_Debug);
-end;
-procedure TDX11ViewArea.DrawGrid;
-var
-  pg:PGDBvertex2S;
-  i,j: GDBInteger;
-  v,v1:gdbvertex;
-begin
-  {//if sysvar.DWG.DWG_DrawGrid<>nil then
-  if (pdwg^.DrawGrid)and(param.md.WPPointUR.z=1) then
-  begin
-  v:=param.md.WPPointBL;
-  dc.drawer.SetColor(100, 100, 100, 100);
-  pg := @gridarray;
-  oglsm.myglbegin(gl_points);
-  for i := 0 to round(param.md.WPPointUR.x) do
-  begin
-       v1:=v;
-        for j := 0 to round(param.md.WPPointUR.y) do
-        begin
-          oglsm.myglVertex3d(v1);
-          v1.y:=v1.y+pdwg^.GridSpacing.y;
-          inc(pg);
-        end;
-        v.x:=v1.x-pdwg^.GridSpacing.x;
-  end;
-  oglsm.myglend;
-  end;}
+    debugln('{D-}end;{TDX11ViewArea.getareacaps}');
 end;
 
-procedure TDX11ViewArea.LightOn;
-var
-   p:GDBvertex4F;
-begin
-    if sysvarRDLight
-    then
-      begin
-        {oglsm.myglEnable(GL_LIGHTING);
-        oglsm.myglEnable(GL_LIGHT0);
-        oglsm.myglEnable (GL_COLOR_MATERIAL);
-
-        p.x:=PDWG.Getpcamera^.prop.point.x;
-        p.y:=PDWG.Getpcamera^.prop.point.y;
-        p.z:=PDWG.Getpcamera^.prop.point.z;
-        p.w:=0;
-        oglsm.myglLightfv(GL_LIGHT0,GL_POSITION,@p) ;
-        oglsm.myglMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,50.000000);
-        p.x:=0;
-        p.y:=0;
-        p.z:=0;
-        p.w:=1;
-        oglsm.myglMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,@p);
-        oglsm.myglLightModeli(GL_LIGHT_MODEL_TWO_SIDE,1);
-        oglsm.myglColorMaterial(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE);
-        oglsm.myglEnable(GL_COLOR_MATERIAL);}
-      end
-    else
-        LightOff(dc);
-end;
-procedure TDX11ViewArea.LightOff;
-begin
-    {oglsm.myglDisable(GL_LIGHTING);
-    oglsm.myglDisable(GL_LIGHT0);
-    oglsm.myglDisable(GL_COLOR_MATERIAL);}
-end;
 procedure TDX11ViewArea.SwapBuffers(var DC:TDrawContext);
 begin
      inherited;
-     //OpenGLWindow.SwapBuffers;
+     //DXWindow.SwapBuffers;
 end;
 function TDX11ViewArea.CreateWorkArea(TheOwner: TComponent):TCADControl;
 begin
-     result:=TCADControl(TOGLWnd.Create(TheOwner));
+     result:=TCADControl(TDXWnd.Create(TheOwner));
 end;
 procedure TDX11ViewArea.CreateDrawer;
 begin
@@ -994,51 +803,27 @@ begin
 end;
 procedure TDX11ViewArea.SetupWorkArea;
 begin
-     OpenGLWindow:=TOGLWnd(WorkArea);
-     OpenGLWindow.wa:=self;
-     {if assigned(sysvar.RD.RD_RemoveSystemCursorFromWorkArea) then}
-                                                                  RemoveCursorIfNeed(OpenGLWindow,sysvarRDRemoveSystemCursorFromWorkArea);
-                                                              {else
-                                                                  RemoveCursorIfNeed(OpenGLWindow,true);}
-     OpenGLWindow.ShowHint:=true;
+     DXWindow:=TDXWnd(WorkArea);
+     DXWindow.wa:=self;
+     RemoveCursorIfNeed(DXWindow,sysvarRDRemoveSystemCursorFromWorkArea);
+     DXWindow.ShowHint:=true;
      //fillchar(myscrbuf,sizeof(tmyscrbuf),0);
 
      {$if FPC_FULlVERSION>=20701}
-     //OpenGLWindow.AuxBuffers:=0;
-     //OpenGLWindow.StencilBits:=8;
-     //OpenGLWindow.ColorBits:=24;
-     //OpenGLWindow.DepthBits:=24;
+     //DXWindow.AuxBuffers:=0;
+     //DXWindow.StencilBits:=8;
+     //DXWindow.ColorBits:=24;
+     //DXWindow.DepthBits:=24;
      {$ENDIF}
-     OpenGLWindow.onpaint:=mypaint;
+     DXWindow.onpaint:=mypaint;
 end;
 procedure TDX11ViewArea.WaResize(sender:tobject);
 begin
      inherited;
-     //OpenGLWindow.MakeCurrent(false);
      param.lastonmouseobject:=nil;
-
-     //self.MakeCurrent(false);
-     //isOpenGLError;
-
      calcoptimalmatrix;
      calcgrid;
-
-     {переделать}//inherited size{(fwSizeType,nWidth,nHeight)};
-
-     //drawer.WorkAreaResize(getviewcontrol.clientwidth,getviewcontrol.clientheight);
-
-     {wa.param.md.glmouse.y := clientheight-wa.param.md.mouse.y;
-     CalcOptimalMatrix;
-     mouseunproject(wa.param.md.GLmouse.x, wa.param.md.GLmouse.y);
-     CalcMouseFrustum;}
-
-     //if param.pglscreen <> nil then
-     //GDBFreeMem(param.pglscreen);
-     //GDBGetMem({$IFDEF DEBUGBUILD}'ScreenBuf',{$ENDIF}param.pglscreen, getviewcontrol.clientwidth * getviewcontrol.clientheight * 4);
-
      param.firstdraw := true;
-     //draw;
-     //paint;
      getviewcontrol.Invalidate;
 end;
 begin

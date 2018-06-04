@@ -26,7 +26,7 @@ uses
     {$ENDIF}
     {$IFNDEF DELPHI}LCLIntf,LCLType,{$ENDIF}
     Classes,Controls,
-    uzgvertex3sarray,uzegeometry,uzgldrawergeneral,uzgldrawerabstract,uzgloglstatemanager,Graphics,uzbtypes,
+    uzgvertex3sarray,uzegeometry,uzgldrawergeneral,uzgldrawerabstract,{uzgloglstatemanager,}Graphics,uzbtypes,
     uzbgeomtypes,uzbtypesbase,uzecamera;
 const
   texturesize=128;
@@ -35,18 +35,10 @@ type
 PTDXData=^TDXData;
 TDXData=packed record
           RD_Renderer:GDBString;(*'Device'*)(*oi_readonly*)
-          {RD_Version:GDBString;(*'Version'*)(*oi_readonly*)
-          RD_Extensions:GDBString;(*'Extensions'*)(*oi_readonly*)
-          RD_Vendor:GDBString;(*'Vendor'*)(*oi_readonly*)
-          RD_Restore_Mode:trestoremode;(*'Restore mode'*)
-          RD_VSync:TGDB3StateBool;(*'VSync'*)
-          RD_MaxWidth:GDBInteger;(*'Max width'*)(*oi_readonly*)
-          RD_MaxLineWidth:GDBDouble;(*'Max line width'*)(*oi_readonly*)
-          RD_MaxPointSize:GDBDouble;(*'Max point size'*)(*oi_readonly*)}
     end;
 {EXPORT-}
 TZGLDXDrawer=class(TZGLGeneralDrawer)
-                        myscrbuf:tmyscrbuf;
+                        //myscrbuf:tmyscrbuf;
                         public
                         procedure SetPenStyle(const style:TZGLPenStyle);override;
                         procedure SetDrawMode(const mode:TZGLDrawMode);override;
@@ -250,7 +242,7 @@ begin
 end;
 procedure TZGLDXDrawer.startrender;
 begin
-     OGLSM.startrender;
+     //OGLSM.startrender;
      case mode of
                  TRM_ModelSpace:
                  begin

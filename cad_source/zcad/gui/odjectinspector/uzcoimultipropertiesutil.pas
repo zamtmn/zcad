@@ -21,7 +21,7 @@ unit uzcoimultipropertiesutil;
 
 interface
 uses
-  uzbstrproc, uzctnrvectorgdbstring,uzcoimultiobjects,uzepalette,uzbmemman,uzcshared,sysutils,uzeentityfactory,
+  uzctnrvectorgdbpointer,uzbstrproc, uzctnrvectorgdbstring,uzcoimultiobjects,uzepalette,uzbmemman,uzcshared,sysutils,uzeentityfactory,
   uzbgeomtypes,uzbtypes,
   uzcdrawings,
   varmandef,
@@ -33,9 +33,11 @@ uses
   uzeenttext,uzeentmtext,uzeentpolyline,uzegeometry,uzcoimultiproperties,LazLogger;
 function GetOneVarData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
 function GetStringCounterData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
+function GetPointerCounterData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
 function GetVertex3DControlData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
 procedure FreeOneVarData(piteratedata:GDBPointer;mp:TMultiProperty);
 procedure FreeStringCounterData(piteratedata:GDBPointer;mp:TMultiProperty);
+procedure FreePNamedObjectCounterData(piteratedata:GDBPointer;mp:TMultiProperty);
 procedure FreeVertex3DControlData(piteratedata:GDBPointer;mp:TMultiProperty);
 procedure GeneralEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure PolylineVertex3DControlEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
@@ -43,6 +45,7 @@ procedure PolylineVertex3DControlFromVarEntChangeProc(pu:PTObjectUnit;pdata:PVar
 procedure GDBDouble2SumEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure TArrayIndex2SumEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure Blockname2BlockNameCounterIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+procedure PStyle2PStyleCounterIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure PolylineVertex3DControlBeforeEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData);
 implementation
 var
@@ -95,6 +98,26 @@ begin
     end;
 end;
 
+function GetPointerCounterData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
+{
+создает структуру с описанием переменной осуществляющей подсчет указателей
+mp - описание мультипроперти
+pu - модуль в котором будет создана переменная для мультипроперти
+возвращает указатель на созданную структуру
+}
+begin
+    GDBGetMem({$IFDEF DEBUGBUILD}'{831CDE55-8FC6-4ACD-8A4C-FEB861D44294}',{$ENDIF}result,sizeof(TPointerCounterData));
+    PTPointerCounterData(result)^.counter:=TPointerCounter.Create;
+    if FindOrCreateVar(pu,mp.MPName,mp.MPUserName,mp.MPType^.TypeName,PTPointerCounterData(result).PVarDesc) then begin
+      PTEnumDataWithOtherData(PTPointerCounterData(result).PVarDesc^.data.Instance)^.Enums.init(10);
+      PTPointerCounterData(result)^.totalcount:=0;
+      PTEnumDataWithOtherData(PTPointerCounterData(result).PVarDesc^.data.Instance)^.Selected:=0;
+      GDBGetMem({$IFDEF DEBUGBUILD}'{831CDE55-8FC6-4ACD-8A4C-FEB861D44294}',{$ENDIF}PTEnumDataWithOtherData(PTPointerCounterData(result).PVarDesc^.data.Instance)^.PData,sizeof(TZctnrVectorGDBPointer));
+      PTZctnrVectorGDBPointer(PTEnumDataWithOtherData(PTPointerCounterData(result).PVarDesc^.data.Instance)^.PData)^.init(10);
+    end;
+end;
+
+
 function GetVertex3DControlData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
 {
 создает структуру с описанием контроля 3Д вершин
@@ -125,7 +148,6 @@ begin
 end;
 procedure FreeStringCounterData(piteratedata:GDBPointer;mp:TMultiProperty);
 var
-   t:TStringCounter.TPair;
    iterator:TStringCounter.TIterator;
    s:string;
    c:integer;
@@ -143,6 +165,26 @@ begin
         PTZctnrVectorGDBString(PTEnumDataWithOtherData(PTStringCounterData(piteratedata)^.PVarDesc^.data.Instance)^.PData)^.PushBackData(s);
   until not iterator.Next;
   PTStringCounterData(piteratedata)^.counter.Free;
+  GDBFreeMem(piteratedata);
+end;
+procedure FreePNamedObjectCounterData(piteratedata:GDBPointer;mp:TMultiProperty);
+var
+   iterator:TPointerCounter.TIterator;
+   s:PGDBNamedObject;
+   c:integer;
+{уничтожает созданную GetPointerCounterData структуру}
+begin
+  PTEnumDataWithOtherData(PTPointerCounterData(piteratedata)^.PVarDesc^.data.Instance)^.Enums.PushBackData(format('Total (%d)',[PTPointerCounterData(piteratedata)^.totalcount]));
+  PTZctnrVectorGDBPointer(PTEnumDataWithOtherData(PTPointerCounterData(piteratedata)^.PVarDesc^.data.Instance)^.PData)^.PushBackData(nil);
+  iterator:=PTPointerCounterData(piteratedata)^.counter.Min;
+  if assigned(iterator) then
+  repeat
+        s:=iterator.GetKey;
+        c:=iterator.GetValue;
+        PTEnumDataWithOtherData(PTPointerCounterData(piteratedata)^.PVarDesc^.data.Instance)^.Enums.PushBackData(format('%s (%d)',[{Tria_AnsiToUtf8}(s.GetFullName),c]));
+        PTZctnrVectorGDBPointer(PTEnumDataWithOtherData(PTPointerCounterData(piteratedata)^.PVarDesc^.data.Instance)^.PData)^.PushBackData(s);
+  until not iterator.Next;
+  PTPointerCounterData(piteratedata)^.counter.Free;
   GDBFreeMem(piteratedata);
 end;
 procedure FreeVertex3DControlData(piteratedata:GDBPointer;mp:TMultiProperty);
@@ -297,13 +339,13 @@ procedure Blockname2BlockNameCounterIterateProc(pdata:GDBPointer;ChangedData:TCh
 begin
      PTStringCounterData(pdata)^.counter.CountKey(pansistring(ChangedData.PGetDataInEtity)^,1);
      inc(PTStringCounterData(pdata)^.totalcount);
-     {if @ecp=nil then ProcessVariableAttributes(PTOneVarData(pdata).PVarDesc.attrib,vda_RO,0);
-     if fistrun then
-                    mp.MPType.CopyInstanceTo(ChangedData.PGetDataInEtity,PTOneVarData(pdata).PVarDesc.data.Instance)
-                else
-                    PTArrayIndex(PTOneVarData(pdata).PVarDesc.data.Instance)^:=PTArrayIndex(PTOneVarData(pdata).PVarDesc.data.Instance)^+PTArrayIndex(ChangedData.PGetDataInEtity)^;
-     }
 end;
+procedure PStyle2PStyleCounterIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+begin
+     PTPointerCounterData(pdata)^.counter.CountKey(pointer(ppointer(ChangedData.PGetDataInEtity)^),1);
+     inc(PTPointerCounterData(pdata)^.totalcount);
+end;
+
 initialization
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');

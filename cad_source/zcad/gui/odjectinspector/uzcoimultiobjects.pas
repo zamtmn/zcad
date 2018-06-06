@@ -31,9 +31,16 @@ type
                     PVarDesc:pvardesk;
               end;
   TStringCounter=TMyMapCounter<string,LessString>;
+  TPointerCounter=TMyMapCounter<pointer,LessPointer>;
   PTStringCounterData=^TStringCounterData;
   TStringCounterData=record
                     counter:TStringCounter;
+                    totalcount:integer;
+                    PVarDesc:pvardesk;
+              end;
+  PTPointerCounterData=^TPointerCounterData;
+  TPointerCounterData=record
+                    counter:TPointerCounter;
                     totalcount:integer;
                     PVarDesc:pvardesk;
               end;
@@ -54,6 +61,9 @@ type
           );}
   TMSPrimitiveDetector=TEnumData;
   TMSBlockNamesDetector=TEnumDataWithOtherData;
+  TMSTextsStylesDetector=TEnumDataWithOtherData;
+  TMSEntsLayersDetector=TEnumDataWithOtherData;
+  TMSEntsLinetypesDetector=TEnumDataWithOtherData;
   TMSEditor={$IFNDEF DELPHI}packed{$ENDIF} object(TWrapper2ObjInsp)
                 TxtEntType:TMSPrimitiveDetector;(*'Process primitives'*)
                 VariablesUnit:TObjectUnit;(*'Variables'*)

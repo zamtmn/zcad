@@ -1543,6 +1543,7 @@ begin
 
                 pt := GDBPointer(AllocEnt(GDBTextID));
                 pt^.init(@drawings.GetCurrentDWG^.ConstructObjRoot,drawings.GetCurrentDWG^.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,'',nulvertex,2.5,0,1,0,jstl);
+                zcSetEntPropFromCurrentDrawingProp(pt);
            end;
            TIM_MText:
            begin
@@ -1555,6 +1556,7 @@ begin
                 pt := GDBPointer(AllocEnt(GDBMTextID));
                 pgdbobjmtext(pt)^.init(@drawings.GetCurrentDWG^.ConstructObjRoot,drawings.GetCurrentDWG^.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,
                                   '',nulvertex,2.5,0,1,0,jstl,10,1);
+                zcSetEntPropFromCurrentDrawingProp(pt);
            end;
 
      end;

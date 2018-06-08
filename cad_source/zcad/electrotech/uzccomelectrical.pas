@@ -2740,7 +2740,7 @@ begin
   pleader^.scale:=ELLeaderComParam.Scale;
   pleader^.size:=ELLeaderComParam.Size;
   pleader^.twidth:=ELLeaderComParam.twidth;
-  pleader^.vp.Layer:=drawings.GetCurrentDWG.GetCurrentLayer;
+  zcSetEntPropFromCurrentDrawingProp(pleader);
   drawings.standardization(pleader,GDBELleaderID);
   pleader.MainLine.CoordInOCS.lBegin:=PCreatedGDBLine^.CoordInOCS.lBegin;
   pleader.MainLine.CoordInOCS.lEnd:=PCreatedGDBLine^.CoordInOCS.lEnd;

@@ -567,5 +567,8 @@ begin
      AddFastEditorToType(SysUnit.TypeName2PTD('TMSBlockNamesDetector'),@OIUI_FE_ButtonGetPrefferedSize,@OIUI_FE_ButtonHLineDraw,@DeselectBlocsByName,true);
      AddFastEditorToType(SysUnit.TypeName2PTD('TMSBlockNamesDetector'),@OIUI_FE_ButtonGetPrefferedSize,@OIUI_FE_ButtonMultiplyDraw,@SelectOnlyThisBlocsByName,true);
 
+     AddFastEditorToType(SysUnit.TypeName2PTD('TMSTextsStylesDetector'),@OIUI_FE_ButtonGetPrefferedSize,@OIUI_FE_ButtonHLineDraw,@DeselectTextsByStyle,true);
+     AddFastEditorToType(SysUnit.TypeName2PTD('TMSTextsStylesDetector'),@OIUI_FE_ButtonGetPrefferedSize,@OIUI_FE_ButtonMultiplyDraw,@SelectOnlyThisTextsByStyle,true);
+
 end;
 end.

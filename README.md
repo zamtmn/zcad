@@ -1,5 +1,5 @@
 # zcad
-Simple CAD program. You need trunk Lazarus and 3.0.4 (or trunk) FPC to compile
+Simple CAD program. **You need trunk Lazarus and 3.0.4 (or trunk) FPC to compile**
 
 License: mLGPLv2
 

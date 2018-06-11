@@ -73,10 +73,10 @@ begin
      result.minor:=9;
      result.release:=8;
 
-     MyVersion:=inttostr(result.major)+'.'+inttostr(result.minor)+'.'+inttostr(result.release)+' '+rsRevStr+RevisionStr;
+     MyVersion:=inttostr(result.major)+'.'+inttostr(result.minor)+'.'+inttostr(result.release)+' '+rsRevStr+Revision;
      result.versionstring:=MyVersion;
 
-     val(RevisionStr,result.revision,i);
+     val(Revision,result.revision,i);
 
 
 (* fillchar(result,sizeof(result),0);

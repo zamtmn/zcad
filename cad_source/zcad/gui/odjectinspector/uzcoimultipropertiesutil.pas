@@ -38,6 +38,7 @@ function GetVertex3DControlData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
 procedure FreeOneVarData(piteratedata:GDBPointer;mp:TMultiProperty);
 procedure FreeStringCounterData(piteratedata:GDBPointer;mp:TMultiProperty);
 procedure FreePNamedObjectCounterData(piteratedata:GDBPointer;mp:TMultiProperty);
+procedure FreePNamedObjectCounterDataUTF8(piteratedata:GDBPointer;mp:TMultiProperty);
 procedure FreeVertex3DControlData(piteratedata:GDBPointer;mp:TMultiProperty);
 procedure GeneralEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure PolylineVertex3DControlEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
@@ -181,12 +182,33 @@ begin
   repeat
         s:=iterator.GetKey;
         c:=iterator.GetValue;
-        PTEnumDataWithOtherData(PTPointerCounterData(piteratedata)^.PVarDesc^.data.Instance)^.Enums.PushBackData(format('%s (%d)',[{Tria_AnsiToUtf8}(s.GetFullName),c]));
+        PTEnumDataWithOtherData(PTPointerCounterData(piteratedata)^.PVarDesc^.data.Instance)^.Enums.PushBackData(format('%s (%d)',[Tria_AnsiToUtf8(s.GetFullName),c]));
         PTZctnrVectorGDBPointer(PTEnumDataWithOtherData(PTPointerCounterData(piteratedata)^.PVarDesc^.data.Instance)^.PData)^.PushBackData(s);
   until not iterator.Next;
   PTPointerCounterData(piteratedata)^.counter.Free;
   GDBFreeMem(piteratedata);
 end;
+procedure FreePNamedObjectCounterDataUTF8(piteratedata:GDBPointer;mp:TMultiProperty);
+var
+   iterator:TPointerCounter.TIterator;
+   s:PGDBNamedObject;
+   c:integer;
+{уничтожает созданную GetPointerCounterData структуру}
+begin
+  PTEnumDataWithOtherData(PTPointerCounterData(piteratedata)^.PVarDesc^.data.Instance)^.Enums.PushBackData(format('Total (%d)',[PTPointerCounterData(piteratedata)^.totalcount]));
+  PTZctnrVectorGDBPointer(PTEnumDataWithOtherData(PTPointerCounterData(piteratedata)^.PVarDesc^.data.Instance)^.PData)^.PushBackData(nil);
+  iterator:=PTPointerCounterData(piteratedata)^.counter.Min;
+  if assigned(iterator) then
+  repeat
+        s:=iterator.GetKey;
+        c:=iterator.GetValue;
+        PTEnumDataWithOtherData(PTPointerCounterData(piteratedata)^.PVarDesc^.data.Instance)^.Enums.PushBackData(format('%s (%d)',[(s.GetFullName),c]));
+        PTZctnrVectorGDBPointer(PTEnumDataWithOtherData(PTPointerCounterData(piteratedata)^.PVarDesc^.data.Instance)^.PData)^.PushBackData(s);
+  until not iterator.Next;
+  PTPointerCounterData(piteratedata)^.counter.Free;
+  GDBFreeMem(piteratedata);
+end;
+
 procedure FreeVertex3DControlData(piteratedata:GDBPointer;mp:TMultiProperty);
 {уничтожает созданную GetVertex3DControlData структуру}
 begin

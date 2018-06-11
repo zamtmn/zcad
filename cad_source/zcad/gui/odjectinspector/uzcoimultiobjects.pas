@@ -94,8 +94,12 @@ procedure DeselectEnts(PInstance:GDBPointer);
 procedure SelectOnlyThisEnts(PInstance:GDBPointer);
 procedure DeselectBlocsByName(PInstance:GDBPointer);
 procedure DeselectTextsByStyle(PInstance:GDBPointer);
+procedure DeselectEntsByLayer(PInstance:GDBPointer);
+procedure DeselectEntsByLinetype(PInstance:GDBPointer);
 procedure SelectOnlyThisBlocsByName(PInstance:GDBPointer);
 procedure SelectOnlyThisTextsByStyle(PInstance:GDBPointer);
+procedure SelectOnlyThisEntsByLayer(PInstance:GDBPointer);
+procedure SelectOnlyThisEntsByLinetype(PInstance:GDBPointer);
 var
    MSEditor:TMSEditor;
 implementation
@@ -724,6 +728,60 @@ begin
       ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,ZMsgID_GUIActionSelectionChanged);
 end;
 
+procedure DeselectEntsByLayer(PInstance:GDBPointer);
+var
+    pv:pGDBObjEntity;
+    ir:itrec;
+    count,selected:integer;
+    ptextstyle:pointer;
+begin
+    selected:=PTEnumDataWithOtherData(PInstance)^.Selected;
+    ptextstyle:=PTZctnrVectorGDBPointer(PTEnumDataWithOtherData(PInstance)^.PData).getData(selected);
+    count:=0;
+    pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
+    if pv<>nil then
+    repeat
+      if pv^.Selected then
+      if (selected=0)or(pv^.vp.Layer=ptextstyle)then
+      begin
+        inc(count);
+        pv^.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.DeSelector);
+      end;
+      pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
+    until pv=nil;
+    ZCMsgCallBackInterface.TextMessage(sysutils.Format(rscmNEntitiesDeselected,[count]),TMWOHistoryOut);
+    if count>0 then
+      ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,ZMsgID_GUIActionSelectionChanged);
+end;
+
+procedure DeselectEntsByLinetype(PInstance:GDBPointer);
+var
+    pv:pGDBObjEntity;
+    ir:itrec;
+    count,selected:integer;
+    plinetype:pointer;
+begin
+    selected:=PTEnumDataWithOtherData(PInstance)^.Selected;
+    plinetype:=PTZctnrVectorGDBPointer(PTEnumDataWithOtherData(PInstance)^.PData).getData(selected);
+    count:=0;
+    pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
+    if pv<>nil then
+    repeat
+      if pv^.Selected then
+      if (selected=0)or(pv^.vp.LineType=plinetype)then
+      begin
+        inc(count);
+        pv^.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.DeSelector);
+      end;
+      pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
+    until pv=nil;
+    ZCMsgCallBackInterface.TextMessage(sysutils.Format(rscmNEntitiesDeselected,[count]),TMWOHistoryOut);
+    if count>0 then
+      ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,ZMsgID_GUIActionSelectionChanged);
+end;
+
+
+
 procedure SelectOnlyThisBlocsByName(PInstance:GDBPointer);
 var
     NeededObjType:TObjID;
@@ -794,6 +852,78 @@ begin
         ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,ZMsgID_GUIActionSelectionChanged);
     end;
 end;
+
+procedure SelectOnlyThisEntsByLayer(PInstance:GDBPointer);
+var
+    pv:pGDBObjEntity;
+    ir:itrec;
+    count,selected:integer;
+    player:pointer;
+begin
+    selected:=PTEnumDataWithOtherData(PInstance)^.Selected;
+    player:=PTZctnrVectorGDBPointer(PTEnumDataWithOtherData(PInstance)^.PData).getData(selected);
+    //if NeededObjType<>0 then
+    begin
+      count:=0;
+      pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
+      if pv<>nil then
+      repeat
+        if pv^.Selected then
+        //if (pv^.GetObjType=GDBtextID)or(pv^.GetObjType=GDBMTextID) then
+        begin
+          if (selected<>0)and(pv^.vp.Layer<>player) then begin
+          inc(count);
+          pv^.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.DeSelector);
+          end;
+        end else
+        begin
+          inc(count);
+          pv^.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.DeSelector);
+        end;
+        pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
+      until pv=nil;
+      ZCMsgCallBackInterface.TextMessage(sysutils.Format(rscmNEntitiesDeselected,[count]),TMWOHistoryOut);
+      if count>0 then
+        ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,ZMsgID_GUIActionSelectionChanged);
+    end;
+end;
+
+procedure SelectOnlyThisEntsByLinetype(PInstance:GDBPointer);
+var
+    pv:pGDBObjEntity;
+    ir:itrec;
+    count,selected:integer;
+    plinetype:pointer;
+begin
+    selected:=PTEnumDataWithOtherData(PInstance)^.Selected;
+    plinetype:=PTZctnrVectorGDBPointer(PTEnumDataWithOtherData(PInstance)^.PData).getData(selected);
+    //if NeededObjType<>0 then
+    begin
+      count:=0;
+      pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
+      if pv<>nil then
+      repeat
+        if pv^.Selected then
+        //if (pv^.GetObjType=GDBtextID)or(pv^.GetObjType=GDBMTextID) then
+        begin
+          if (selected<>0)and(pv^.vp.LineType<>plinetype) then begin
+          inc(count);
+          pv^.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.DeSelector);
+          end;
+        end else
+        begin
+          inc(count);
+          pv^.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.DeSelector);
+        end;
+        pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
+      until pv=nil;
+      ZCMsgCallBackInterface.TextMessage(sysutils.Format(rscmNEntitiesDeselected,[count]),TMWOHistoryOut);
+      if count>0 then
+        ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,ZMsgID_GUIActionSelectionChanged);
+    end;
+end;
+
+
 
 
 procedure SelectOnlyThisEnts(PInstance:GDBPointer);

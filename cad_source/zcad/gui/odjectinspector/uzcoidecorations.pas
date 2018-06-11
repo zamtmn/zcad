@@ -570,5 +570,11 @@ begin
      AddFastEditorToType(SysUnit.TypeName2PTD('TMSTextsStylesDetector'),@OIUI_FE_ButtonGetPrefferedSize,@OIUI_FE_ButtonHLineDraw,@DeselectTextsByStyle,true);
      AddFastEditorToType(SysUnit.TypeName2PTD('TMSTextsStylesDetector'),@OIUI_FE_ButtonGetPrefferedSize,@OIUI_FE_ButtonMultiplyDraw,@SelectOnlyThisTextsByStyle,true);
 
+     AddFastEditorToType(SysUnit.TypeName2PTD('TMSEntsLayersDetector'),@OIUI_FE_ButtonGetPrefferedSize,@OIUI_FE_ButtonHLineDraw,@DeselectEntsByLayer,true);
+     AddFastEditorToType(SysUnit.TypeName2PTD('TMSEntsLayersDetector'),@OIUI_FE_ButtonGetPrefferedSize,@OIUI_FE_ButtonMultiplyDraw,@SelectOnlyThisEntsByLayer,true);
+
+     AddFastEditorToType(SysUnit.TypeName2PTD('TMSEntsLinetypesDetector'),@OIUI_FE_ButtonGetPrefferedSize,@OIUI_FE_ButtonHLineDraw,@DeselectEntsByLinetype,true);
+     AddFastEditorToType(SysUnit.TypeName2PTD('TMSEntsLinetypesDetector'),@OIUI_FE_ButtonGetPrefferedSize,@OIUI_FE_ButtonMultiplyDraw,@SelectOnlyThisEntsByLinetype,true);
+
 end;
 end.

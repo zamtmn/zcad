@@ -12,6 +12,7 @@ var
   INTF_ObjInsp_RowHeight_OverriderValue:GDBInteger;
   INTF_ObjInsp_SpaceHeight:GDBInteger;
   INTF_ObjInsp_ShowEmptySections:GDBBoolean;
+  INTF_ObjInspButtonSizeReducing:GDBInteger;
   ShowHiddenFieldInObjInsp:GDBBoolean;
   DISP_CursorSize:GDBInteger;
   DISP_OSSize:GDBDouble;
@@ -108,6 +109,7 @@ begin
   INTF_ObjInsp_RowHeight_OverriderValue:=21;
   INTF_ObjInsp_SpaceHeight:=3;
   INTF_ObjInsp_ShowEmptySections:=False;
+  INTF_ObjInspButtonSizeReducing:=4;
   ShowHiddenFieldInObjInsp:=False;
   DISP_CursorSize:=6;
   DISP_OSSize:=10.0;

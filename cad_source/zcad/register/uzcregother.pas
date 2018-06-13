@@ -113,6 +113,7 @@ initialization;
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_SpaceHeight,'INTF_ObjInsp_SpaceHeight');
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_AlwaysUseMultiSelectWrapper,'INTF_ObjInsp_AlwaysUseMultiSelectWrapper');
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowEmptySections,'INTF_ObjInsp_ShowEmptySections');
+  SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ButtonSizeReducing,'INTF_ObjInsp_ButtonSizeReducing');
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_DefaultEditorFontHeight,'INTF_DefaultEditorFontHeight');
 
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_PanObjectDegradation,'RD_PanObjectDegradation');

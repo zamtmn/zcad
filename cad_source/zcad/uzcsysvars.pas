@@ -170,6 +170,7 @@ type
                 INTF_ObjInsp_SpaceHeight:PGDBInteger;(*'Space height'*)
                 INTF_ObjInsp_AlwaysUseMultiSelectWrapper:PGDBBoolean;(*'Always use multiselect wrapper'*)
                 INTF_ObjInsp_ShowEmptySections:PGDBBoolean;(*'Show empty sections'*)
+                INTF_ObjInsp_ButtonSizeReducing:PGDBInteger;(*'Button size reducing'*)
                end;
   tinterface=packed record
               INTF_ShowScrollBars:PGDBBoolean;(*'Show scroll bars'*)

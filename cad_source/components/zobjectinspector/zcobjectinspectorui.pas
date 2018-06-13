@@ -39,6 +39,9 @@ procedure OIUI_FE_BooleanInverse(PInstance:Pointer);
 procedure OIUI_FE_IntegerInc(PInstance:Pointer);
 procedure OIUI_FE_IntegerDec(PInstance:Pointer);
 
+var
+  INTFObjInspButtonSizeReducing:Integer=4;
+
 implementation
 function OIUI_FE_ButtonGetPrefferedSize(PInstance:Pointer;ARect:TRect):TSize;
 var
@@ -66,10 +69,11 @@ begin
                                                         result.cy:=15;
                                                    end}
 
-     result.cy:=ARect.Bottom-ARect.Top;
-     result.cx:=result.cy-4;
-     if result.cx<15 then
-                         result.cx:=15;
+     result.cy:=ARect.Bottom-ARect.Top-INTFObjInspButtonSizeReducing;
+     result.cx:=result.cy{-INTFObjInspButtonSizeReducing};
+
+     {if result.cx<15 then
+                         result.cx:=15;}
 end;
 function OIUI_FE_HalfButtonGetPrefferedSize(PInstance:Pointer;ARect:TRect):TSize;
 begin

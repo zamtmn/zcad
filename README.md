@@ -1,5 +1,6 @@
-# zcad
-Simple CAD program. **You need trunk Lazarus and 3.0.4 (or trunk) FPC to compile**
+# ZCAD
+## Overview
+ZCAD is simple CAD program, written in Lazarus / FPC.
 
 License: mLGPLv2
 
@@ -21,3 +22,8 @@ ToDo:
 * ~~GDI and canvas render backends~~
 * DX render backend
 * ~~Printing~~
+
+## Build from source
+Requirements:
+
+* **You need trunk Lazarus and 3.0.4 (or trunk) FPC to build ZCAD**

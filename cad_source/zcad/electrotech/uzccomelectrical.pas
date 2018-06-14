@@ -1414,6 +1414,7 @@ begin
                  TempNet:=nil;
                  GDBGetMem({$IFDEF DEBUGBUILD}'{C92353C3-EA26-48A9-A47F-89F7723E3D16}',{$ENDIF}GDBPointer(TempNet),sizeof(GDBObjNet));
                  TempNet^.initnul(nil);
+                 zcSetEntPropFromCurrentDrawingProp(TempNet);
                  drawings.standardization(TempNet,GDBNetID);
                  ptempnetvarext:=TempNet^.GetExtension(typeof(TVariablesExtender));
                  ptempnetvarext^.entityunit.copyfrom(units.findunit(SupportPath,InterfaceTranslate,'trace'));

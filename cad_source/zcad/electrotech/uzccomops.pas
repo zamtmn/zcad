@@ -810,6 +810,7 @@ begin
                                          drawings.GetCurrentDWG.GetCurrentLayer,drawings.GetCurrentDWG.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
                                          currentcoord, 1, 0,@datname[1]);
      dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+     zcSetEntPropFromCurrentDrawingProp(pv);
      pv^.formatentity(drawings.GetCurrentDWG^,dc);
      pv^.getoutbound(dc);
 
@@ -828,9 +829,11 @@ begin
      if name<>'' then
      begin
      pt:=pointer(AllocEnt(GDBMtextID));
-     pt^.init({drawings.GetCurrentROOT}@root,drawings.GetCurrentDWG.LayerTable.getAddres('TEXT'),sysvar.dwg.DWG_CLinew^,name,tv,2.5,0,0.65,RightAngle,jsbc,1,1);
+     pt^.init({drawings.GetCurrentROOT}@root,sysvar.dwg.DWG_CLayer^,sysvar.dwg.DWG_CLinew^,name,tv,2.5,0,0.65,RightAngle,jsbc,1,1);
      pt^.TXTStyleIndex:=pointer(drawings.GetCurrentDWG.GetTextStyleTable^.getDataMutable(0));
-     {drawings.GetCurrentROOT}root.ObjArray.AddPEntity(pt^);
+     root.ObjArray.AddPEntity(pt^);
+     zcSetEntPropFromCurrentDrawingProp(pt);
+     pt^.vp.Layer:=drawings.GetCurrentDWG.LayerTable.getAddres('TEXT');
      pt^.Formatentity(drawings.GetCurrentDWG^,dc);
      end;
 
@@ -859,22 +862,26 @@ else if datcount>1 then
                        begin
                          pl:=pointer(AllocEnt(GDBLineID));
                          pl^.init({drawings.GetCurrentROOT}@root,drawings.GetCurrentDWG.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,oldcoord,oldcoord2);
-                         {drawings.GetCurrentROOT}root.ObjArray.AddPEntity(pl^);
+                         root.ObjArray.AddPEntity(pl^);
+                         zcSetEntPropFromCurrentDrawingProp(pl);
                          pl^.Formatentity(drawings.GetCurrentDWG^,dc);
                        end
 else if datcount>2 then
                        begin
                          pl:=pointer(AllocEnt(GDBLineID));
                          pl^.init({drawings.GetCurrentROOT}@root,drawings.GetCurrentDWG.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,oldcoord, Vertexmorphabs2(oldcoord,oldcoord2,2));
-                         {drawings.GetCurrentROOT}root.ObjArray.AddPEntity(pl^);
+                         root.ObjArray.AddPEntity(pl^);
+                         zcSetEntPropFromCurrentDrawingProp(pl);
                          pl^.Formatentity(drawings.GetCurrentDWG^,dc);
                          pl:=pointer(AllocEnt(GDBLineID));
                          pl^.init({drawings.GetCurrentROOT}@root,drawings.GetCurrentDWG.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,Vertexmorphabs2(oldcoord,oldcoord2,4), Vertexmorphabs2(oldcoord,oldcoord2,6));
-                         {drawings.GetCurrentROOT}root.ObjArray.AddPEntity(pl^);
+                         root.ObjArray.AddPEntity(pl^);
+                         zcSetEntPropFromCurrentDrawingProp(pl);
                          pl^.Formatentity(drawings.GetCurrentDWG^,dc);
                          pl:=pointer(AllocEnt(GDBLineID));
                          pl^.init({drawings.GetCurrentROOT}@root,drawings.GetCurrentDWG.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,Vertexmorphabs2(oldcoord,oldcoord2,8), oldcoord2);
-                         {drawings.GetCurrentROOT}root.ObjArray.AddPEntity(pl^);
+                         root.ObjArray.AddPEntity(pl^);
+                         zcSetEntPropFromCurrentDrawingProp(pl);
                          pl^.Formatentity(drawings.GetCurrentDWG^,dc);
                        end;
 
@@ -882,7 +889,8 @@ else if datcount>2 then
      currentcoord.y:=currentcoord.y+10;
      pl:=pointer(AllocEnt(GDBLineID));
      pl^.init({drawings.GetCurrentROOT}@root,drawings.GetCurrentDWG.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,oldcoord,currentcoord);
-     {drawings.GetCurrentROOT}root.ObjArray.AddPEntity(pl^);
+     root.ObjArray.AddPEntity(pl^);
+     zcSetEntPropFromCurrentDrawingProp(pl);
      pl^.Formatentity(drawings.GetCurrentDWG^,dc);
      result:=pl;
 end;
@@ -949,6 +957,7 @@ begin
                   pointer(pv):=old_ENTF_CreateBlockInsert(@drawings.GetCurrentDWG.ConstructObjRoot,@{drawings.GetCurrentROOT.ObjArray}drawings.GetCurrentDWG.ConstructObjRoot.ObjArray,
                                                       drawings.GetCurrentDWG.GetCurrentLayer,drawings.GetCurrentDWG.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
                                                       currentcoord, 1, 0,'DEVICE_CABLE_MARK');
+                  zcSetEntPropFromCurrentDrawingProp(pv);
 
                   SysVar.dwg.DWG_CLayer^:=lsave;
                   ppvvarext:=pv^.GetExtension(typeof(TVariablesExtender));

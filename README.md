@@ -26,4 +26,14 @@ ToDo:
 ## Build from source
 Requirements:
 
-* **You need trunk Lazarus and 3.0.4 (or trunk) FPC to build ZCAD**
+* **trunk Lazarus**
+* **FPC 3.0.4 (or trunk)**
+
+Build ZCAD:
+
+* install zcad packages from 'cad_sources/components' to lazarus
+* install third party packages from 'cad_sources/other' to lazarus
+* check whether the PATCH variable includes patch to lazbuild binary
+* if need set PATCH variable: `$ export PATH="$PATH:/your/patch/to/lazarus/"`
+* run 'zcad.sh' (or zcadelectrotech.sh) file
+* open zcad.lpi in lazarus and compile

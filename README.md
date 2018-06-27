@@ -1,4 +1,5 @@
 # ZCAD
+[→ Download ←](https://github.com/zamtmn/zcad/releases)
 ## Overview
 ZCAD is simple CAD program, written in Lazarus / FPC.
 

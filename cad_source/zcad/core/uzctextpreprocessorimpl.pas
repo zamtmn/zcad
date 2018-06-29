@@ -22,7 +22,7 @@ interface
 uses uzeentity,uzcvariablesutils,uzetextpreprocessor,languade,uzbstrproc,sysutils,
      uzbtypesbase,varmandef,uzbtypes,uzcenitiesvariablesextender,uzeentsubordinated;
 implementation
-procedure var2value(var str:gdbstring;startpos:integer;pobj:PGDBObjGenericWithSubordinated);
+procedure var2value(var str:gdbstring;var startpos:integer;pobj:PGDBObjGenericWithSubordinated);
 var
   endpos:integer;
   varname:GDBString;
@@ -44,7 +44,7 @@ begin
                    str:=copy(str,1,startpos-1)+'!!ERR('+varname+')!!'+copy(str,endpos+1,length(str)-endpos)
   end
 end;
-procedure evaluatesubstr(var str:gdbstring;startpos:integer;pobj:PGDBObjGenericWithSubordinated);
+procedure evaluatesubstr(var str:gdbstring;var startpos:integer;pobj:PGDBObjGenericWithSubordinated);
 var
   endpos:integer;
   varname:GDBString;
@@ -66,7 +66,25 @@ begin
   end
 end;
 
+procedure EscapeSeq(var str:gdbstring;var startpos:integer;pobj:PGDBObjGenericWithSubordinated);
+var
+  endpos:integer;
+  sym:char;
+begin
+  if startpos>0 then
+  if startpos<length(str) then
+  begin
+    sym:=str[startpos+1];
+    case sym of
+       'L','l':str:=copy(str,1,startpos-1)+chr(1)+copy(str,startpos+2,length(str)-startpos-1);
+       else str:=copy(str,1,startpos-1)+sym+copy(str,startpos+2,length(str)-startpos-1);
+    end;
+    inc(startpos);
+  end
+end;
+
 initialization
   Prefix2ProcessFunc.RegisterKey('@@[',@var2value);
   Prefix2ProcessFunc.RegisterKey('##[',@evaluatesubstr);
+  Prefix2ProcessFunc.RegisterKey('\',@EscapeSeq);
 end.

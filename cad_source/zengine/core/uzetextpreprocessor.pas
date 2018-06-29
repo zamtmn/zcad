@@ -21,7 +21,7 @@ unit uzetextpreprocessor;
 interface
 uses sysutils,uzbtypesbase,usimplegenerics,gzctnrstl,LazLogger;
 type
-TStrProcessFunc=procedure(var str:gdbstring;startpos:integer;pobj:pointer);
+TStrProcessFunc=procedure(var str:gdbstring;var startpos:integer;pobj:pointer);
 TPrefix2ProcessFunc=GKey2DataMap<GDBString,TStrProcessFunc{$IFNDEF DELPHI},LessGDBString{$ENDIF}>;
 var
     Prefix2ProcessFunc:TPrefix2ProcessFunc;
@@ -57,6 +57,7 @@ var i{,i2},counter:GDBInteger;
     {$IFNDEF DELPHI}
     iterator:Prefix2ProcessFunc.TIterator;
     {$ENDIF}
+    startsearhpos:integer;
 const
     maxitertations=100;
 begin
@@ -74,14 +75,15 @@ begin
      if assigned(iterator) then
      begin
      repeat
-       //s2:=iterator.key;
+       startsearhpos:=1;
        if assigned(iterator.value)then
        begin
          repeat
-           i:=pos(iterator.key,ps);
+           i:=pos(iterator.key,ps,startsearhpos);
            if i>0 then
            begin
              iterator.value(ps,i,pobj);
+             startsearhpos:=i;
              inc(counter);
            end;
          until (i<=0)or(counter>maxitertations);

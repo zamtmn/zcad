@@ -198,11 +198,15 @@ begin
       lastsymspace:=psyminfo.NextSymX-psyminfo.SymMaxX;
     end
     else
-      if copy(content,currsymbol,2)='\P' then          {\P}
+      if (copy(content,currsymbol,2)='\P')or(sym=10) then          {\P теперь уже тут не встретишь, оно заменено препроцессором на 10}
       begin
         currline := copy(content, lastbreak, currsymbol - lastbreak);
-        lastbreak := currsymbol + 2;
-        currsymbol := currsymbol + 1;
+        if sym<>10 then begin
+          lastbreak := currsymbol + 2;
+          currsymbol := currsymbol + 1;
+        end else begin
+          lastbreak := currsymbol + 1;
+        end;
         psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch}({integer(content[currsymbol])}sym){//-ttf-//,tdinfo});
         canbreak := false;
 

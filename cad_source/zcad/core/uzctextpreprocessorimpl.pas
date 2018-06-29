@@ -77,7 +77,11 @@ begin
     sym:=str[startpos+1];
     case sym of
        'L','l':str:=copy(str,1,startpos-1)+chr(1)+copy(str,startpos+2,length(str)-startpos-1);
-       else str:=copy(str,1,startpos-1)+sym+copy(str,startpos+2,length(str)-startpos-1);
+       'P','p':str:=copy(str,1,startpos-1)+chr(10)+copy(str,startpos+2,length(str)-startpos-1);
+       else begin str:=copy(str,1,startpos-1)+sym+copy(str,startpos+2,length(str)-startpos-1);
+                  dec(startpos);
+            end;
+       inc(startpos);
     end;
     inc(startpos);
   end

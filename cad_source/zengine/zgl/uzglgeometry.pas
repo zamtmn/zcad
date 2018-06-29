@@ -143,6 +143,9 @@ begin
           end;    ;
      end;
 
+
+     {
+     this move to uzctextpreprocessorimpl.EscapeSeq
      if length(s)>=i+1 then
      if s[i]='\' then
      begin
@@ -154,7 +157,7 @@ begin
                 end;
 
           end;
-     end;
+     end;}
 
      l:=1;
      if fontunicode then

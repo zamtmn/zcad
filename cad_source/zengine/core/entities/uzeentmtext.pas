@@ -975,6 +975,7 @@ var
   //bw: GDBByte;
   s: GDBString;
   ul:boolean;
+  quotedcontent:GDBAnsiString;
 begin
   ul:=false;
   SaveToDXFObjPrefix(handle,outhandle,'MTEXT','AcDbMText');
@@ -982,10 +983,11 @@ begin
   dxfGDBDoubleout(outhandle,40,textprop.size);
   dxfGDBDoubleout(outhandle,41,width);
   dxfGDBIntegerout(outhandle,71,j2b[textprop.justify]{ord(textprop.justify)+1});
-  if  convertfromunicode(template)=content then
+  quotedcontent:=StringReplace(content,#10,'\P',[rfReplaceAll]);
+  if  convertfromunicode(template)=quotedcontent then
                                                s := template
                                            else
-                                               s := content;
+                                               s := quotedcontent;
   //s := content;
   if length(s) < maxdxfmtextlen then
   begin

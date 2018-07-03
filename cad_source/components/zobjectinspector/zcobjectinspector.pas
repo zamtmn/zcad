@@ -718,7 +718,7 @@ var
    s2:string;}
 begin
      if (r.Right-r.Left)>1 then
-     ThemeServices.DrawText(cnvs,TextDetails,s,r,DT_END_ELLIPSIS,0)
+     ThemeServices.DrawText(cnvs,TextDetails,s,r,DT_END_ELLIPSIS or DT_SINGLELINE,0)
      {if length(s)<maxsize then
                           //cnvs.TextRect(r,L,T,s)
                           ThemeServices.DrawText(cnvs,TextDetails,s,r,DT_END_ELLIPSIS,0)

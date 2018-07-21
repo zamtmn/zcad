@@ -3123,6 +3123,8 @@ begin
                                             riser2:=net2.riserarray.beginiterate(ir_riser2);
                                             if (riser2<>nil) then
                                             repeat
+                                                  if not uzegeometry.vertexeq(riser2.P_insert_in_WCS,riser.P_insert_in_WCS) then
+                                                  begin
                                                   priser2varext:=riser2^.GetExtension(typeof(TVariablesExtender));
                                                   //pvd:=PTObjectUnit(riser.ou.Instance)^.FindVariable('RiserName');
                                                   //pvd2:=PTObjectUnit(riser2.ou.Instance)^.FindVariable('RiserName');
@@ -3184,7 +3186,7 @@ begin
                                                             pvd:=pvd;
                                                        end;
                                                   end;
-
+                                                  end;
 
                                                  riser2:=net2.riserarray.iterate(ir_riser2);
                                             until riser2=nil;

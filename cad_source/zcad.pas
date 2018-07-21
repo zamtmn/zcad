@@ -141,6 +141,7 @@ uses
   {$IFDEF ELECTROTECH}
   uzccomelectrical,
   uzccomops,
+  uzccommaps,
   {$ENDIF}
   uzcplugins,
   //zcregisterobjectinspector,

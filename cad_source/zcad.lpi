@@ -553,7 +553,7 @@
         <IsPartOfProject Value="True"/>
       </Unit67>
       <Unit68>
-        <Filename Value="zcad/electrotech/uzccomops.pas"/>
+        <Filename Value="zcad/electrotech/uzccommaps.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit68>
       <Unit69>

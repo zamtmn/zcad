@@ -1970,6 +1970,7 @@ begin
   begin
                      GDBGetMem({$IFDEF DEBUGBUILD}'{9F4AB2A7-1093-4FFB-8053-E8885D691B85}',{$ENDIF}pointer(pt),sizeof(GDBObjTable));
                      pt^.initnul;
+                     zcSetEntPropFromCurrentDrawingProp(pt);
                      pt^.ptablestyle:=drawings.GetCurrentDWG.TableStyleTable.getAddres('KZ');
                      pt^.tbl.free;
   repeat
@@ -2205,6 +2206,7 @@ begin
 
                      GDBGetMem({$IFDEF DEBUGBUILD}'{76882CEC-39E7-459C-9CCB-F596DE17539A}',{$ENDIF}pointer(pt),sizeof(GDBObjTable));
                      pt^.initnul;
+                     zcSetEntPropFromCurrentDrawingProp(pt);
                      pt^.ptablestyle:=drawings.GetCurrentDWG.TableStyleTable.getAddres('Spec');
                      pt^.tbl.free;
 

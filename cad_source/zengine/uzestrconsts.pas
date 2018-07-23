@@ -33,6 +33,7 @@ resourcestring
   rsGridTooDensity='Grid too density';
   rsBlockIgnored='Ignored block "%s"';
   rsDoubleBlockIgnored='Ignored double definition block "%s"';
+  rsWrongBlockDefIndex='Wrong blockdef index';
 
   {files}
   rsLoadingFile='Loading file "%s"';

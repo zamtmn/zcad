@@ -116,6 +116,8 @@ uses
   //commandline,
 
   uzccombase,
+  uzccommand_selectframe,
+  uzccommand_stretch,
   {$IFDEF ELECTROTECH}
   uzccomdb,
   {$ENDIF}

@@ -365,51 +365,36 @@ begin
   begin
     dc.drawer.SetDrawMode(TDM_Normal);
     if param.seldesc.MouseFrameInverse then
-    begin
-    {oglsm.myglLogicOp(GL_XOR);}
-    dc.drawer.SetPenStyle(TPS_Dash);
-    //dc.drawer.SetColor(255,0,0,0);
-    {oglsm.myglLineStipple(1, $F0F0);
-    oglsm.myglEnable(GL_LINE_STIPPLE);}
-    end;
-    dc.drawer.DrawLine2DInDCS(param.seldesc.Frame1.x, param.seldesc.Frame1.y,param.seldesc.Frame2.x, param.seldesc.Frame1.y);
-    dc.drawer.DrawLine2DInDCS(param.seldesc.Frame2.x, param.seldesc.Frame1.y,param.seldesc.Frame2.x, param.seldesc.Frame2.y);
-    dc.drawer.DrawLine2DInDCS(param.seldesc.Frame2.x, param.seldesc.Frame2.y,param.seldesc.Frame1.x, param.seldesc.Frame2.y);
-    dc.drawer.DrawLine2DInDCS(param.seldesc.Frame1.x, param.seldesc.Frame2.y,param.seldesc.Frame1.x, param.seldesc.Frame1.y);
+      dc.drawer.SetPenStyle(TPS_Dash);
+    dc.drawer.DrawLine2DInDCS(param.seldesc.Frame1.x,param.seldesc.Frame1.y,
+                              param.seldesc.Frame2.x,param.seldesc.Frame1.y);
+    dc.drawer.DrawLine2DInDCS(param.seldesc.Frame2.x,param.seldesc.Frame1.y,
+                              param.seldesc.Frame2.x,param.seldesc.Frame2.y);
+    dc.drawer.DrawLine2DInDCS(param.seldesc.Frame2.x,param.seldesc.Frame2.y,
+                              param.seldesc.Frame1.x,param.seldesc.Frame2.y);
+    dc.drawer.DrawLine2DInDCS(param.seldesc.Frame1.x,param.seldesc.Frame2.y,
+                              param.seldesc.Frame1.x,param.seldesc.Frame1.y);
 
-    {oglsm.myglbegin(GL_line_loop);
-    oglsm.myglVertex2i(param.seldesc.Frame1.x, param.seldesc.Frame1.y);
-    oglsm.myglVertex2i(param.seldesc.Frame2.x, param.seldesc.Frame1.y);
-    oglsm.myglVertex2i(param.seldesc.Frame2.x, param.seldesc.Frame2.y);
-    oglsm.myglVertex2i(param.seldesc.Frame1.x, param.seldesc.Frame2.y);
-    oglsm.myglend;}
-    if param.seldesc.MouseFrameInverse then
-                                           dc.drawer.SetPenStyle(TPS_Solid);
-                                          // oglsm.myglDisable(GL_LINE_STIPPLE);
+    dc.drawer.DrawLine2DInDCS(param.seldesc.Frame1.x,param.seldesc.Frame1.y,
+                              param.seldesc.Frame2.x,param.seldesc.Frame2.y);
+    dc.drawer.DrawLine2DInDCS(param.seldesc.Frame1.x,param.seldesc.Frame2.y,
+                              param.seldesc.Frame2.x,param.seldesc.Frame1.y);
 
     if param.seldesc.MouseFrameInverse then
+      dc.drawer.SetPenStyle(TPS_Solid);
+    if param.seldesc.MouseFrameInverse then
     begin
-    dc.drawer.SetDrawMode(TDM_XOR);
-    {oglsm.myglLogicOp(GL_XOR);}
-    dc.drawer.SetPenStyle(TPS_Dash);
-    //oglsm.myglLineStipple(1, $F0F0);
-    //oglsm.myglEnable(GL_LINE_STIPPLE);
+      dc.drawer.SetDrawMode(TDM_XOR);
+      dc.drawer.SetPenStyle(TPS_Dash);
     end;
     if param.seldesc.MouseFrameInverse then
-                                           dc.drawer.SetColor(0,40,0,10)
-                                       else
-                                           dc.drawer.SetColor(0,0,40,10);
+      dc.drawer.SetColor(0,40,0,10)
+    else
+      dc.drawer.SetColor(0,0,40,10);
     dc.drawer.SetDrawMode(TDM_XOR);
     dc.drawer.DrawQuad2DInDCS(param.seldesc.Frame1.x,param.seldesc.Frame1.y,param.seldesc.Frame2.x,param.seldesc.Frame2.y);
-    {oglsm.myglbegin(GL_QUADS);
-    oglsm.myglVertex2i(param.seldesc.Frame1.x, param.seldesc.Frame1.y);
-    oglsm.myglVertex2i(param.seldesc.Frame2.x, param.seldesc.Frame1.y);
-    oglsm.myglVertex2i(param.seldesc.Frame2.x, param.seldesc.Frame2.y);
-    oglsm.myglVertex2i(param.seldesc.Frame1.x, param.seldesc.Frame2.y);
-    oglsm.myglend;}
     if param.seldesc.MouseFrameInverse then
-                                           dc.drawer.SetPenStyle(TPS_Solid);
-                                           //oglsm.myglDisable(GL_LINE_STIPPLE);
+      dc.drawer.SetPenStyle(TPS_Solid);
   end;
 
 

@@ -26,7 +26,7 @@ uses uzestyleslayers,uzepalette,uzeobjectextender,uabstractunit,uzeentityfactory
      uzeconsts,uzeentity,uzeentsubordinated,varmandef,uzbtypesbase,
      uzbgeomtypes,uzeentblockinsert,uzbtypes,UGDBVisibleOpenArray,UGDBObjBlockdefArray,
      gzctnrvectortypes,uzeblockdef,uzeffdxfsupport,UGDBSelectedObjArray,uzeentitiestree,
-     LazLogger,uzcstrconsts;
+     LazLogger,uzestrconsts;
 
 type
 {REGISTEROBJECTTYPE GDBObjDevice}

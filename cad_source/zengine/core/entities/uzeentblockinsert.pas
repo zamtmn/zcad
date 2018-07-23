@@ -22,7 +22,7 @@ interface
 uses uzeentity,uzgldrawcontext,uzeentityfactory,uzedrawingdef,uzestyleslayers,math,
      uzbtypesbase,uzeentcomplex,sysutils,UGDBObjBlockdefArray,uzeblockdef,uzbtypes,
      uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzbmemman,uzeentsubordinated,
-     gzctnrvectortypes,uzbgeomtypes,UGDBOpenArrayOfByte,uzcstrconsts;
+     gzctnrvectortypes,uzbgeomtypes,UGDBOpenArrayOfByte,uzestrconsts;
 const zcadmetric='!!ZMODIFIER:';
 type
 {REGISTEROBJECTTYPE GDBObjBlockInsert}

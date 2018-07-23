@@ -148,7 +148,6 @@ resourcestring
   rsCAUTIONnoSyntaxCheckYet='CAUTION! There is no syntax check yet. Clicking "OK" the object will be updated. Error - CRASHES!!!';
   rsColor='Color';
   rsLineType='Line type';
-  rsWrongBlockDefIndex='Wrong blockdef index';
   rsClipboardIsEmpty='Clipboard is empty, there is nothing to paste';
   rsNotYetImplemented='Not yet implemented';
   rsLayerDefpaontsCanNotBePrinted='Layer DEFPOINTS can not be printed';

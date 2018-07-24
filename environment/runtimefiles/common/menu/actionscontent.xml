@@ -78,6 +78,7 @@
       <ZAction Name="ACN_MOVE" Command="Move" Img="move" Caption="Move" Hint="Move primitives"/>
       <ZAction Name="ACN_ROTATE" Command="Rotate" Img="rotate" Caption="Rotate" Hint="Rotate primitives"/>
       <ZAction Name="ACN_SCALE" Command="Scale" Img="scale" Caption="Scale" Hint="Scale primitives"/>
+      <ZAction Name="ACN_STRETCH" Command="Stretch" Img="stretch" Caption="Stretch" Hint="Stretch primitives"/>
       <ZAction Name="ACN_MIRROR" Command="Mirror" Img="mirror" Caption="Mirror" Hint="Mirror primitives"/>
       <ZAction Name="ACN_BEDIT" Command="BEdit" Img="bedit" Caption="Block editor"/>
       <ZAction Name="ACN_BREPLACE" Command="BlockReplace" Img="#BR" Caption="Block replace"/>

@@ -20,7 +20,7 @@ unit UGDBControlPointArray;
 {$INCLUDE def.inc}
 interface
 uses uzepalette,uzgldrawcontext,uzbtypesbase,gzctnrvectordata,sysutils,uzbtypes,uzegeometry,
-     uzbmemman;
+     uzbmemman,uzbgeomtypes;
 type
 {Export+}
 PGDBControlPointArray=^GDBControlPointArray;
@@ -29,6 +29,7 @@ GDBControlPointArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<contr
 
                            destructor done;virtual;
                            procedure draw(var DC:TDrawContext;const SelColor,UnSelColor:TRGB);virtual;
+                           procedure selectcontrolpointinframe(f1,f2: GDBvertex2DI);virtual;
                            procedure getnearesttomouse(var td:tcontrolpointdist;mx,my:integer);virtual;
                            procedure selectcurrentcontrolpoint(key:GDBByte;mx,my,h:integer);virtual;
                      end;
@@ -58,6 +59,24 @@ begin
                                    end;
             //glvertex2iv(@point^.dispcoord);
             dc.drawer.DrawPoint3DInModelSpace(point^.worldcoord,dc.DrawingContext.matrixs);
+            inc(point);
+       end;
+  end;
+end;
+procedure GDBControlPointArray.selectcontrolpointinframe(f1,f2: GDBvertex2DI);
+var point:^controlpointdesc;
+    i:GDBInteger;
+begin
+  if count<>0 then
+  begin
+       point:=GetParrayAsPointer;
+       for i:=0 to count-1 do
+       begin
+            if (point^.dispcoord.x>=f1.x)
+            and(point^.dispcoord.x<=f2.x)
+            and(point^.dispcoord.y>=f1.y)
+            and(point^.dispcoord.y<=f2.y) then
+              point^.selected:=true;
             inc(point);
        end;
   end;

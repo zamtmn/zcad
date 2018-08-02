@@ -42,6 +42,7 @@ GDBSelectedObjArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<select
                           function getnearesttomouse(mx,my:integer):tcontrolpointdist;virtual;
                           function getonlyoutbound(var DC:TDrawContext):TBoundingBox;
                           procedure selectcurrentcontrolpoint(key:GDBByte;mx,my,h:integer);virtual;
+                          procedure selectcontrolpointinframe(f1,f2: GDBvertex2DI);virtual;
                           procedure RenderFeedBack(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                           //destructor done;virtual;
                           procedure freeclones;
@@ -554,6 +555,22 @@ begin
     begin
       if tdesc^.ptempobj<>nil then
                                   tdesc^.ptempobj^.DrawWithAttrib({infrustumactualy,subrender}dc);
+      inc(tdesc);
+    end;
+  end;
+
+end;
+procedure GDBSelectedObjArray.selectcontrolpointinframe(f1,f2: GDBvertex2DI);
+var i: GDBInteger;
+  tdesc:pselectedobjdesc;
+begin
+  if count > 0 then
+  begin
+    tdesc:=GetParrayAsPointer;
+    for i := 0 to count - 1 do
+    begin
+      if tdesc^.pcontrolpoint<>nil then
+        tdesc^.pcontrolpoint^.selectcontrolpointinframe(f1,f2);
       inc(tdesc);
     end;
   end;

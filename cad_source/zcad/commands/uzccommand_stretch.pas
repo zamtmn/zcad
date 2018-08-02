@@ -49,14 +49,68 @@ uses
  gzctnrvectortypes,uzegeometry,uzelongprocesssupport,uzccommand_selectframe;
 
 implementation
+type
+  TStretchComMode=(SM_GetEnts,SM_FirstPoint);
+var
+  StretchComMode:TStretchComMode;
 
 procedure finalize;
 begin
 end;
+procedure Stretch_com_CommandStart(Operands:pansichar);
+begin
+  StretchComMode:=SM_GetEnts;
+  FrameEdit_com_CommandStart(Operands);
+end;
+
+function Stretch_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+begin
+  case StretchComMode of
+    SM_GetEnts:result:=FrameEdit_com_BeforeClick(wc,mc,button,osp,mclick);
+  end;
+end;
+procedure selectpoints;
+var
+  DC:TDrawContext;
+begin
+  dc:=drawings.GetCurrentDWG.wa.CreateRC;
+  drawings.GetCurrentDWG.GetSelObjArray.remappoints(drawings.GetCurrentDWG.GetPcamera.POSCOUNT,drawings.GetCurrentDWG.wa.param.scrollmode,drawings.GetCurrentDWG.GetPcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
+  drawings.GetCurrentDWG.GetSelObjArray.selectcontrolpointinframe(drawings.GetCurrentDWG.wa.param.seldesc.Frame1,drawings.GetCurrentDWG.wa.param.seldesc.Frame2);
+end;
+
+function Stretch_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+begin
+  case StretchComMode of
+    SM_GetEnts:begin
+      commandmanager.DisableExecuteCommandEnd;
+        result:=FrameEdit_com_AfterClick(wc,mc,button,osp,mclick);
+      commandmanager.EnableExecuteCommandEnd
+    end;
+  end;
+
+  if commandmanager.hasDisabledExecuteCommandEnd then begin
+    commandmanager.resetDisabledExecuteCommandEnd;
+    if (button and MZW_LBUTTON)<>0 then begin
+    case StretchComMode of
+      SM_GetEnts:begin
+                   StretchComMode:=SM_FirstPoint;
+                   selectpoints;
+                 end;
+   SM_FirstPoint:
+    end;
+      result:=0;
+    end;
+  end;
+
+end;
 
 procedure startup;
 begin
-  CreateCommandRTEdObjectPlugin(@FrameEdit_com_CommandStart,@FrameEdit_com_Command_End,nil,nil,@FrameEdit_com_BeforeClick,@FrameEdit_com_AfterClick,nil,nil,'Stretch',0,0);
+  CreateCommandRTEdObjectPlugin(@FrameEdit_com_CommandStart,
+                                @FrameEdit_com_Command_End,
+                                nil,nil,
+                                @Stretch_com_BeforeClick,
+                                @Stretch_com_AfterClick,nil,nil,'Stretch',0,0);
 end;
 initialization
   startup;

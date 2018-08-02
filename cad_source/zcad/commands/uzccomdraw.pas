@@ -47,7 +47,7 @@ uses
   uzcshared,uzeentsubordinated,uzeentblockinsert,uzeentpolyline,uzclog,gzctnrvectordata,
   math,uzeenttable,uzctnrvectorgdbstring,//uzcprinterspecfunc,
   uzeentcurve,uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray
-  ,uzelongprocesssupport,LazLogger;
+  ,uzelongprocesssupport,LazLogger,uzctnrvectorgdbpalettecolor;
 const
      modelspacename:GDBSTring='**Модель**';
 type
@@ -126,6 +126,7 @@ type
                                  SameLineType:GDBBoolean;(*'Same line type'*)
                                  SameLineTypeScale:GDBBoolean;(*'Same line type scale'*)
                                  SameEntType:GDBBoolean;(*'Same entity type'*)
+                                 SameColor:GDBBoolean;(*'Same color'*)
                            end;
          TDiff=(
                  TD_Diff(*'Diff'*),
@@ -292,6 +293,7 @@ type
                          created:boolean;
                          bnames,textcontents,textremplates:TZctnrVectorGDBString;
                          layers,linetypes:TZctnrVectorGDBPointer;
+                         colors:TZctnrVectorTGDBPaletteColor;
                          weights:TZctnrVectorGDBLineWeight;
                          objtypes:TZctnrVectorObjID;
                          linetypescales:TZctnrVectorGDBDouble;
@@ -1395,6 +1397,7 @@ begin
   objtypes.init({$IFDEF DEBUGBUILD}'{79828350-69E9-418A-A023-BB8B187639A1}',{$ENDIF}100);
   linetypes.init({$IFDEF DEBUGBUILD}'{79828350-69E9-418A-A023-BB8B187639A1}',{$ENDIF}100);
   linetypescales.init({$IFDEF DEBUGBUILD}'{79828350-69E9-418A-A023-BB8B187639A1}',{$ENDIF}100);
+  colors.init({$IFDEF DEBUGBUILD}'{79828350-69E9-418A-A023-BB8B187639A1}',{$ENDIF}100);
 
   pobj:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
   if pobj<>nil then
@@ -1405,6 +1408,7 @@ begin
          linetypes.PushBackIfNotPresent(pobj^.vp.LineType);
          linetypescales.PushBackIfNotPresent(pobj^.vp.LineTypeScale);
          weights.PushBackIfNotPresent(pobj^.vp.LineWeight);
+         colors.PushBackIfNotPresent(pobj^.vp.Color);
 
 
          oid:=pobj^.GetObjType;
@@ -1438,7 +1442,7 @@ var
    ir:itrec;
    oid:TObjID;
 
-   insel,islayer,isweght,isobjtype,select,islinetype,islinetypescale:boolean;
+   insel,islayer,isweght,isobjtype,select,islinetype,islinetypescale,iscolor:boolean;
 
 begin
      insel:=not created;
@@ -1453,11 +1457,14 @@ begin
            isobjtype:=false;
            islinetype:=false;
            islinetypescale:=false;
+           islinetypescale:=false;
+           iscolor:=false;
            if pobj^.selected then
                                 pobj^.DeSelect(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,@drawings.CurrentDWG^.DeSelector);
 
            islayer:=layers.IsDataExist(pobj^.vp.Layer)<>-1;
            islinetype:=linetypes.IsDataExist(pobj^.vp.LineType)<>-1;
+           iscolor:=colors.IsDataExist(pobj^.vp.Color)<>-1;
            islinetypescale:=linetypescales.IsDataExist(pobj^.vp.LineTypeScale)<>-1;
            isweght:=weights.IsDataExist(pobj^.vp.LineWeight)<>-1;
 
@@ -1503,6 +1510,10 @@ begin
                                                  begin
                                                       select:=select and isobjtype;
                                                  end;
+           if SelSimParams.General.SameColor then
+                                                 begin
+                                                      select:=select and iscolor;
+                                                 end;
            if select then
            begin
               pobj^.select(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,@drawings.CurrentDWG^.selector);
@@ -1523,6 +1534,7 @@ begin
      textcontents.Done;
      textremplates.Done;
      bnames.Done;
+     colors.done;
      created:=false;
      Commandmanager.executecommandend;
 end;
@@ -3871,6 +3883,7 @@ begin
   SelSimParams.General.SameLineWeight:=false;
   SelSimParams.General.SameLineTypeScale:=false;
   SelSimParams.General.SameLineType:=false;
+  SelSimParams.General.SameColor:=false;
   SelSimParams.Texts.SameContent:=false;
   SelSimParams.Texts.DiffTextMText:=TD_Diff;
   SelSimParams.Texts.SameTemplate:=false;

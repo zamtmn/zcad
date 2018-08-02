@@ -518,18 +518,21 @@ begin
           pdesc.pobject:=nil;
 
           pdesc.pointtype:=os_begin;
+          pdesc.attr:=[CPA_Strech];
           pdesc.worldcoord:=q0;
           {pdesc.dispcoord.x:=round(Pq0.x);
           pdesc.dispcoord.y:=round(Pq0.y);}
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
 
           pdesc.pointtype:=os_midle;
+          pdesc.attr:=[];
           pdesc.worldcoord:=q1;
           {pdesc.dispcoord.x:=round(Pq1.x);
           pdesc.dispcoord.y:=round(Pq1.y);}
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
 
           pdesc.pointtype:=os_end;
+          pdesc.attr:=[CPA_Strech];
           pdesc.worldcoord:=q1;
           {pdesc.dispcoord.x:=round(Pq2.x);
           pdesc.dispcoord.y:=round(Pq2.y);}

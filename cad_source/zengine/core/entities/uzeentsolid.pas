@@ -337,6 +337,7 @@ begin
           for i := 0 to 3 do
           begin
           pdesc.pointtype:=os_polymin-i;
+          pdesc.attr:=[CPA_Strech];
           pdesc.worldcoord:=PInWCS[i];
           {pdesc.dispcoord.x:=round(PInDCS[i].x);
           pdesc.dispcoord.y:=round(PInDCS[i].y);}

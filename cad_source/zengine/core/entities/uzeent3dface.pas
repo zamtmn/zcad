@@ -447,9 +447,8 @@ begin
           begin
           pdesc.selected:=false;
           pdesc.pointtype:=os_polymin-i;
+          pdesc.attr:=[CPA_Strech];
           pdesc.worldcoord:=PInWCS[i];
-          {pdesc.dispcoord.x:=round(PInDCS[i].x);
-          pdesc.dispcoord.y:=round(PInDCS[i].y);}
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
           end;
 end;

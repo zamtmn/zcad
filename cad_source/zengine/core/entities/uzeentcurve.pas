@@ -526,6 +526,7 @@ begin
           for i:=0 to {pprojpoint}VertexArrayInWCS.count-1 do
           begin
                pdesc.pointtype:=os_polymin-i;
+               pdesc.attr:=[CPA_Strech];
                pdesc.worldcoord:=pv^;
                (*pdesc.dispcoord.x:=round(pv2d^.x);
                pdesc.dispcoord.y:=round({GDB.GetCurrentDWG.OGLwindow1.height-}pv2d.y);*)

@@ -712,18 +712,21 @@ begin
           //renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,nil);
 
           pdesc.pointtype:=os_midle;
+          pdesc.attr:=[];
           pdesc.worldcoord:=Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 2);
           {pdesc.dispcoord.x:=round(PProjPoint[4].x);
           pdesc.dispcoord.y:=round(PProjPoint[4].y);}
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
 
           pdesc.pointtype:=os_begin;
+          pdesc.attr:=[CPA_Strech];
           pdesc.worldcoord:=CoordInWCS.lbegin;
           {pdesc.dispcoord.x:=round(PProjPoint[0].x);
           pdesc.dispcoord.y:=round(PProjPoint[0].y);}
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
 
           pdesc.pointtype:=os_end;
+          pdesc.attr:=[CPA_Strech];
           pdesc.worldcoord:=CoordInWCS.lend;
           {pdesc.dispcoord.x:=round(PProjPoint[1].x);
           pdesc.dispcoord.y:=round(PProjPoint[1].y);}

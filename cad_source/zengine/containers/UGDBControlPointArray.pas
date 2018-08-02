@@ -72,6 +72,7 @@ begin
        point:=GetParrayAsPointer;
        for i:=0 to count-1 do
        begin
+            if CPA_Strech in point^.attr then
             if (point^.dispcoord.x>=f1.x)
             and(point^.dispcoord.x<=f2.x)
             and(point^.dispcoord.y>=f1.y)

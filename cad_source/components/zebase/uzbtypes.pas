@@ -30,6 +30,8 @@ const
 type
 TZMessageID=type integer;
 TProcCounter=procedure(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
+TControlPointAttr=(CPA_Strech);
+TControlPointAttrs=set of TControlPointAttr;
 {REGISTEROBJECTTYPE GDBBaseCamera}
 {EXPORT+}
 (*varcategoryforoi SUMMARY='Summary'*)
@@ -142,6 +144,7 @@ GDBArrayVertex=packed array[0..0] of GDBvertex;
   pcontrolpointdesc=^controlpointdesc;
   controlpointdesc=packed record
                          pointtype:GDBInteger;
+                         attr:TControlPointAttrs;
                          pobject:GDBPointer;
                          worldcoord:GDBvertex;
                          dcoord:GDBvertex;

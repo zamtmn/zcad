@@ -260,6 +260,7 @@ begin
           pdesc.pobject:=nil;
 
           pdesc.pointtype:=os_point;
+          pdesc.attr:=[CPA_Strech];
           pdesc.worldcoord:=P_insertInOCS;
           {pdesc.dispcoord.x:=round(ProjPoint.x);
           pdesc.dispcoord.y:=round(ProjPoint.y);}

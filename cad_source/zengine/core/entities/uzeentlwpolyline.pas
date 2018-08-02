@@ -411,6 +411,7 @@ begin
           for i:=0 to {pprojpoint}Vertex3D_in_WCS_Array.count-1 do
           begin
                pdesc.pointtype:=os_polymin-i;
+               pdesc.attr:=[CPA_Strech];
                pdesc.worldcoord:=pv^;
                {pdesc.dispcoord.x:=round(pv2d^.x);
                pdesc.dispcoord.y:=round(pv2d.y);}

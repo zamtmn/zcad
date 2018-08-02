@@ -201,6 +201,7 @@ begin
           pdesc.selected:=false;
           pdesc.pobject:=nil;
           pdesc.pointtype:=os_point;
+          pdesc.attr:=[CPA_Strech];
           pdesc.worldcoord:=P_insert_in_WCS;//Local.P_insert;
           {pdesc.dispcoord.x:=round(ProjP_insert.x);
           pdesc.dispcoord.y:=round(ProjP_insert.y);}

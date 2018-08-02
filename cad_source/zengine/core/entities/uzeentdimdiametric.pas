@@ -165,14 +165,17 @@ begin
           pdesc.pobject:=nil;
 
           pdesc.pointtype:=os_p10;
+          pdesc.attr:=[CPA_Strech];
           pdesc.worldcoord:=DimData.P10InWCS;
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
 
           pdesc.pointtype:=os_p11;
+          pdesc.attr:=[CPA_Strech];
           pdesc.worldcoord:=DimData.P11InOCS;
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
 
           pdesc.pointtype:=os_p15;
+          pdesc.attr:=[CPA_Strech];
           pdesc.worldcoord:=DimData.P15InWCS;
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
 end;

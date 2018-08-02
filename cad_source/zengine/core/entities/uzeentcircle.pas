@@ -724,30 +724,35 @@ begin
           pdesc.selected:=false;
           pdesc.pobject:=nil;
           pdesc.pointtype:=os_center;
+          pdesc.attr:=[CPA_Strech];
           pdesc.worldcoord:=Local.p_insert;
           {pdesc.dispcoord.x:=round(ProjP_insert.x);
           pdesc.dispcoord.y:=round(ProjP_insert.y);}
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
 
           pdesc.pointtype:=os_q0;
+          pdesc.attr:=[];
           pdesc.worldcoord:=q0;
           {pdesc.dispcoord.x:=round(Pq0.x);
           pdesc.dispcoord.y:=round(Pq0.y);}
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
 
           pdesc.pointtype:=os_q1;
+          pdesc.attr:=[];
           pdesc.worldcoord:=q1;
           {pdesc.dispcoord.x:=round(Pq1.x);
           pdesc.dispcoord.y:=round(Pq1.y);}
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
 
           pdesc.pointtype:=os_q2;
+          pdesc.attr:=[];
           pdesc.worldcoord:=q2;
           {pdesc.dispcoord.x:=round(Pq2.x);
           pdesc.dispcoord.y:=round(Pq2.y);}
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
 
           pdesc.pointtype:=os_q3;
+          pdesc.attr:=[];
           pdesc.worldcoord:=q3;
           {pdesc.dispcoord.x:=round(Pq3.x);
           pdesc.dispcoord.y:=round(Pq3.y);}

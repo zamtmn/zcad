@@ -237,7 +237,7 @@
         <PackageName Value="LCL"/>
       </Item18>
     </RequiredPackages>
-    <Units Count="188">
+    <Units Count="190">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -1038,6 +1038,14 @@
         <Filename Value="zcad/register/uzcregnavigatordevices.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit187>
+      <Unit188>
+        <Filename Value="zcad/commands/uzccommand_selsim.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit188>
+      <Unit189>
+        <Filename Value="zcad/commands/uzccommand_stretch.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit189>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

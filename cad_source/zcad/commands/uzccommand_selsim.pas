@@ -21,35 +21,29 @@ unit uzccommand_selsim;
 
 interface
 uses
-  uzedrawingabstract,uzedrawingdef,gzctnrvector,uzglviewareageneral,zcobjectchangeundocommand2,zcmultiobjectchangeundocommand,
-  gzctnrvectortypes,zcmultiobjectcreateundocommand,uzeentitiesmanager,uzgldrawercanvas,
-  uzcoimultiobjects,uzcenitiesvariablesextender,uzcdrawing,uzepalette,
-  uzctnrvectorobjid,uzctnrvectorgdbdouble,uzctnrvectorgdblineweight,uzctnrvectorgdbpointer,uzctextenteditor,uzgldrawcontext,usimplegenerics,UGDBPoint3DArray,
-  uzeentpoint,uzeentitiestree,gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,uzeentityfactory,
-  uzedrawingsimple,uzcsysvars,uzcstrconsts,uzccomdrawdase,
-  PrintersDlgs,printers,graphics,uzeentdevice,uzeentwithlocalcs,
-  LazUTF8,Clipbrd,LCLType,classes,uzeenttext,uzeentabstracttext,uzestylestexts,
-  uzccommandsabstract,uzbstrproc,
-  uzbtypesbase,uzccommandsmanager,uzccombase,
+  gzctnrvectortypes,
+  uzctnrvectorobjid,
+  uzctnrvectorgdbdouble,
+  uzctnrvectorgdblineweight,
+  uzctnrvectorgdbpointer,
+  uzcstrconsts,
+  uzeenttext,
+  uzccommandsabstract,
+  uzbtypesbase,
+  uzccommandsmanager,
   uzccommandsimpl,
   uzbtypes,
   uzcdrawings,
-  uzeutils,uzcutils,
+  uzcutils,
   sysutils,
-  varmandef,
-  uzglviewareadata,
-  uzeffdxf,
   uzcinterface,
-  uzegeometry,
-  uzbmemman,
   uzeconsts,
-  uzbgeomtypes,uzeentity,uzeentcircle,uzeentline,uzeentgenericsubentry,uzeentmtext,
-  uzcshared,uzeentsubordinated,uzeentblockinsert,uzeentpolyline,uzclog,gzctnrvectordata,
-  math,uzeenttable,uzctnrvectorgdbstring,//uzcprinterspecfunc,
-  uzeentcurve,uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray
-  ,uzelongprocesssupport,LazLogger,uzctnrvectorgdbpalettecolor,uzccomdraw;
-const
-     modelspacename:GDBSTring='**Модель**';
+  uzeentity,
+  uzeentmtext,
+  uzeentblockinsert,
+  uzctnrvectorgdbstring,
+  Varman,
+  LazLogger,uzctnrvectorgdbpalettecolor;
 type
 TSelGeneralParams=packed record
                         SameLayer:GDBBoolean;(*'Same layer'*)
@@ -102,7 +96,7 @@ begin
   created:=false;
   self.savemousemode:=drawings.GetCurrentDWG^.wa.param.md.mode;
 
-  if GetSelCount>0 then
+  if zcGetRealSelEntsCount>0 then
   begin
        commandmanager.DMAddMethod(rscmStore,'Store ents and select ents to select similar',@sel);
        commandmanager.DMAddMethod(rscmSelect,'Select similar ents (if "template" ents were not stored, the entire drawing will be searched)',@run);

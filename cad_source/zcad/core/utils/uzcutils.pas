@@ -26,7 +26,7 @@ uses uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzepalette,
      uzeentityfactory,uzgldrawcontext,uzcdrawing,uzestyleslinetypes,uzcsysvars,
      uzestyleslayers,sysutils,uzbtypesbase,uzbtypes,uzcdrawings,varmandef,
      uzeconsts,UGDBVisibleOpenArray,uzeentgenericsubentry,uzeentity,
-     uzbgeomtypes,uzeentblockinsert,uzbmemman,uzcinterface;
+     uzbgeomtypes,uzeentblockinsert,uzbmemman,uzcinterface,gzctnrvectortypes;
 
   {**Добавление в чертеж примитива с обвязкой undo
     @param(PEnt Указатель на добавляемый примитив)
@@ -91,6 +91,7 @@ function GDBInsertBlock(own:PGDBObjGenericSubEntry;BlockName:GDBString;p_insert:
 function old_ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObjEntityOpenArray;
                                 layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:TGDBPaletteColor;LW:TGDBLineWeight;
                                 point: gdbvertex; scale, angle: GDBDouble; s: pansichar):PGDBObjBlockInsert;
+function zcGetRealSelEntsCount:integer;
 implementation
 function old_ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObjEntityOpenArray;
                                 layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:TGDBPaletteColor;LW:TGDBLineWeight;
@@ -134,6 +135,21 @@ begin
   pb^.formatEntity(drawings.GetCurrentDWG^,dc);
   owner.ObjArray.ObjTree.CorrectNodeBoundingBox(pb^);
   result:=pb;
+end;
+function zcGetRealSelEntsCount:integer;
+var
+  pobj: pGDBObjEntity;
+  ir:itrec;
+begin
+  result:=0;
+
+  pobj:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
+  if pobj<>nil then
+  repeat
+    if pobj^.selected then
+    inc(result);
+  pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
+  until pobj=nil;
 end;
 procedure zcAddEntToDrawingWithUndo(const PEnt:PGDBObjEntity;var Drawing:TZCADDrawing);
 var

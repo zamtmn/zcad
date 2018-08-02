@@ -364,7 +364,6 @@ var
 
 //procedure startup;
 //procedure Finalize;
-function GetSelCount:integer;
 function Line_com_CommandStart(operands:TCommandOperands):TCommandResult;
 procedure Line_com_CommandEnd(_self:pointer);
 function Line_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
@@ -799,21 +798,6 @@ begin
                                                        PRecordDescriptor(commanddata.PTD)^.SetAttrib('Find',FA_READONLY,0)
                                                    else
                                                        PRecordDescriptor(commanddata.PTD)^.SetAttrib('Find',0,FA_READONLY);
-end;
-function GetSelCount:integer;
-var
-  pobj: pGDBObjEntity;
-  ir:itrec;
-begin
-  result:=0;
-
-  pobj:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
-  if pobj<>nil then
-  repeat
-    if pobj^.selected then
-    inc(result);
-  pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
-  until pobj=nil;
 end;
 procedure CFO_com.ShowMenu;
 begin
@@ -1261,7 +1245,7 @@ var
 begin
   self.savemousemode:=drawings.GetCurrentDWG^.wa.param.md.mode;
   test:=false;
-  if (GetSelCount=1) then
+  if zcGetRealSelEntsCount=1 then
   if drawings.GetCurrentDWG^.wa.param.seldesc.LastSelectedObject<>nil then
   if PGDBObjEntity(drawings.GetCurrentDWG^.wa.param.seldesc.LastSelectedObject)^.GetObjType=GDBDeviceID then
   test:=true;

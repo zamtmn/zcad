@@ -48,10 +48,16 @@ type
                           varstack:tvarstack;
                           DMenu:TDMenuWnd;
                           OnCommandRun:TOnCommandRun;
+                          DisableExecuteCommandEndCounter:integer;
+                          DisabledExecuteCommandEndCounter:integer;
                           constructor init(m:GDBInteger);
                           procedure execute(const comm:string;silent:GDBBoolean;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
                           procedure executecommand(const comm:string;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
                           procedure executecommandsilent(const comm:pansichar;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
+                          procedure DisableExecuteCommandEnd;virtual;
+                          procedure EnableExecuteCommandEnd;virtual;
+                          function hasDisabledExecuteCommandEnd:boolean;virtual;
+                          procedure resetDisabledExecuteCommandEnd;virtual;
                           procedure executecommandend;virtual;
                           procedure executecommandtotalend;virtual;
                           procedure ChangeModeAndEnd(newmode:TGetPointMode);
@@ -640,13 +646,32 @@ begin
      varstack.vardescarray.Clear;
      varstack.vararray.Clear;
 end;
-
+procedure GDBcommandmanager.DisableExecuteCommandEnd;
+begin
+  inc(DisableExecuteCommandEndCounter);
+end;
+procedure GDBcommandmanager.EnableExecuteCommandEnd;
+begin
+  dec(DisableExecuteCommandEndCounter)
+end;
+function GDBcommandmanager.hasDisabledExecuteCommandEnd:boolean;
+begin
+  result:=DisabledExecuteCommandEndCounter>0;
+end;
+procedure GDBcommandmanager.resetDisabledExecuteCommandEnd;
+begin
+  DisabledExecuteCommandEndCounter:=0;
+end;
 procedure GDBcommandmanager.executecommandend;
 var
    temp:PCommandRTEdObjectDef;
    temp2:PCommandObjectDef;
 begin
-  //ReturnToDefault;
+  if DisableExecuteCommandEndCounter>0 then begin
+   inc(DisabledExecuteCommandEndCounter);
+   exit;
+  end;
+  DisabledExecuteCommandEndCounter:=0;
   if EndGetPoint(TGPCancel) then
                       exit;
   temp:=pcommandrunning;
@@ -714,6 +739,8 @@ constructor GDBcommandmanager.init;
 var
       pint:PGDBInteger;
 begin
+  DisableExecuteCommandEndCounter:=0;
+  DisabledExecuteCommandEndCounter:=0;
   inherited init({$IFDEF DEBUGBUILD}'{8B10F808-46AD-4EF1-BCDD-55B74D27187B}',{$ENDIF}m);
   //pcommandrunning^.GetPointMode:=TGPCancel;
   CommandsStack.init({$IFDEF DEBUGBUILD}'{8B10F808-46AD-4EF1-BCDD-55B74D27187B}',{$ENDIF}10);

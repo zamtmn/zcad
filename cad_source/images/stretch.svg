@@ -17,7 +17,7 @@
    version="1.1"
    inkscape:version="0.92.1 r15371"
    sodipodi:docname="stretch.svg"
-   inkscape:export-filename="scale.png"
+   inkscape:export-filename="E:\zcad\environment\runtimefiles\common\images\actions\stretch.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
   <defs
@@ -624,8 +624,8 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc" />
     <path
-       style="fill:#00b6ff;fill-opacity:1;fill-rule:evenodd;stroke:#0044aa;stroke-width:0.4336614;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 14.124657,1049.2387 11.12863,1046.4377 11,1047.8622 0.90990692,1047.4236 v 0 l 9.91857508,2.3379 -0.128664,1.4245 z"
+       style="fill:#00b6ff;fill-opacity:1;fill-rule:evenodd;stroke:#0044aa;stroke-width:0.48304954;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 14.31543,1048.2271 -2.159233,-4.0906 -0.613062,1.4981 -10.3018134,-4.031 v 0 l 9.4843984,6.0283 -0.613097,1.498 z"
        id="path842"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccccccc" />

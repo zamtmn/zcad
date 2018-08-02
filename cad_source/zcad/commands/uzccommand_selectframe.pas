@@ -60,12 +60,11 @@ function FrameEdit_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBBy
 implementation
 procedure FrameEdit_com_CommandStart(Operands:pansichar);
 begin
-  drawings.GetCurrentDWG.wa.SetMouseMode((MGet3DPointWOOP) or (MMoveCamera) {or (MRotateCamera)});
+  drawings.GetCurrentDWG.wa.SetMouseMode((MGet3DPointWOOP) or (MMoveCamera));
   ZCMsgCallBackInterface.TextMessage(rscmFirstPoint,TMWOHistoryOut);
 end;
 procedure FrameEdit_com_Command_End;
 begin
-  //ugdbdescriptor.poglwnd^.md.mode := (MGet3DPointWOOP) or (MMoveCamera) or (MRotateCamera);
   drawings.GetCurrentDWG.wa.param.seldesc.MouseFrameON := false;
 end;
 

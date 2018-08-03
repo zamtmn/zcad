@@ -22,11 +22,11 @@ unit uzccommand_stretch;
 interface
 uses
  {$IFDEF DEBUGBUILD}strutils,{$ENDIF}
- uzglviewareageneral,zeundostack,uzcoimultiobjects,
+ zeundostack,uzcoimultiobjects,
  uzgldrawcontext,uzbpaths,uzeffmanager,
  uzestylesdim,uzeenttext,
  URecordDescriptor,uzefontmanager,uzedrawingsimple,uzcsysvars,uzccommandsmanager,
- TypeDescriptors,uzcutils,uzcstrconsts,uzcctrlcontextmenu,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
+ TypeDescriptors,uzcctrlcontextmenu,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
  uzbstrproc,uzctreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,LazUTF8,Forms,Controls,Clipbrd,lclintf,
   uzcsysinfo,
@@ -39,20 +39,20 @@ uses
   UGDBOpenArrayOfByte,
   uzeffdxf,
   uzcinterface,
-  uzeconsts,
   uzeentity,
  uzcshared,
  uzbtypesbase,uzbmemman,uzcdialogsfiles,
  UUnitManager,uzclog,Varman,
  uzbgeomtypes,dialogs,uzcinfoform,
  uzeentpolyline,uzeentlwpolyline,UGDBSelectedObjArray,
- gzctnrvectortypes,uzegeometry,uzelongprocesssupport,uzccommand_selectframe;
+ uzegeometry,uzelongprocesssupport,uzccommand_selectframe;
 
 implementation
 type
-  TStretchComMode=(SM_GetEnts,SM_FirstPoint);
+  TStretchComMode=(SM_GetEnts,SM_FirstPoint,SM_SecondPoint);
 var
   StretchComMode:TStretchComMode;
+  firstpoint: GDBvertex;
 
 procedure finalize;
 begin
@@ -66,7 +66,14 @@ end;
 function Stretch_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 begin
   case StretchComMode of
-    SM_GetEnts:result:=FrameEdit_com_BeforeClick(wc,mc,button,osp,mclick);
+    SM_GetEnts:
+               result:=FrameEdit_com_BeforeClick(wc,mc,button,osp,mclick);
+ SM_FirstPoint:
+               if (button and MZW_LBUTTON)<>0 then begin
+                  firstpoint:=wc;
+                  StretchComMode:=SM_SecondPoint;
+                  result:=0;
+               end;
   end;
 end;
 procedure selectpoints;
@@ -91,22 +98,25 @@ begin
   if commandmanager.hasDisabledExecuteCommandEnd then begin
     commandmanager.resetDisabledExecuteCommandEnd;
     if (button and MZW_LBUTTON)<>0 then begin
-    case StretchComMode of
-      SM_GetEnts:begin
-                   StretchComMode:=SM_FirstPoint;
-                   selectpoints;
-                 end;
-   SM_FirstPoint:
-    end;
+      case StretchComMode of
+        SM_GetEnts:begin
+                     StretchComMode:=SM_FirstPoint;
+                     selectpoints;
+                   end;
+     SM_FirstPoint:begin end;
+      end;
       result:=0;
     end;
   end;
+
+  if (StretchComMode=SM_SecondPoint)and((button and MZW_LBUTTON)<>0)then
+    commandmanager.executecommandend;
 
 end;
 
 procedure startup;
 begin
-  CreateCommandRTEdObjectPlugin(@FrameEdit_com_CommandStart,
+  CreateCommandRTEdObjectPlugin(@Stretch_com_CommandStart,
                                 @FrameEdit_com_Command_End,
                                 nil,nil,
                                 @Stretch_com_BeforeClick,

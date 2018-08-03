@@ -117,6 +117,7 @@ uses
 
   uzccombase,
   uzccommand_selectframe,
+  uzccommand_ondrawinged,
   uzccommand_stretch,
   uzccommand_selsim,
   {$IFDEF ELECTROTECH}

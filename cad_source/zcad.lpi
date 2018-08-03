@@ -237,7 +237,7 @@
         <PackageName Value="LCL"/>
       </Item18>
     </RequiredPackages>
-    <Units Count="190">
+    <Units Count="191">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -1046,6 +1046,10 @@
         <Filename Value="zcad/commands/uzccommand_stretch.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit189>
+      <Unit190>
+        <Filename Value="zcad/commands/uzccommand_ondrawinged.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit190>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

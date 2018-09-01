@@ -77,7 +77,10 @@ begin
             and(point^.dispcoord.x<=f2.x)
             and(point^.dispcoord.y>=f1.y)
             and(point^.dispcoord.y<=f2.y) then
+            begin
               point^.selected:=true;
+              inc(SelectedCount);
+            end;
             inc(point);
        end;
   end;

@@ -22,7 +22,7 @@ unit uzccommand_stretch;
 interface
 uses
  {$IFDEF DEBUGBUILD}strutils,{$ENDIF}
- zeundostack,uzcoimultiobjects,
+ uzeconsts,zeundostack,uzcoimultiobjects,
  uzgldrawcontext,uzbpaths,uzeffmanager,
  uzestylesdim,uzeenttext,
  URecordDescriptor,uzefontmanager,uzedrawingsimple,uzcsysvars,uzccommandsmanager,
@@ -45,7 +45,7 @@ uses
  UUnitManager,uzclog,Varman,
  uzbgeomtypes,dialogs,uzcinfoform,
  uzeentpolyline,uzeentlwpolyline,UGDBSelectedObjArray,
- uzegeometry,uzelongprocesssupport,uzccommand_selectframe;
+ uzegeometry,uzelongprocesssupport,uzccommand_selectframe,uzccommand_ondrawinged;
 
 implementation
 type
@@ -71,8 +71,18 @@ begin
  SM_FirstPoint:
                if (button and MZW_LBUTTON)<>0 then begin
                   firstpoint:=wc;
+                  OnDrawingEd.BeforeClick(wc,mc,button,osp);
                   StretchComMode:=SM_SecondPoint;
                   result:=0;
+               end;
+ SM_SecondPoint:
+               begin
+               OnDrawingEd.mouseclic:=1;
+               OnDrawingEd.AfterClick(wc,mc,button,osp);
+               if (button and MZW_LBUTTON)<>0 then begin
+                  commandmanager.ExecuteCommandEnd;
+                  result:=0;
+               end;
                end;
   end;
 end;
@@ -87,6 +97,7 @@ end;
 
 function Stretch_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 begin
+  result:=0;
   case StretchComMode of
     SM_GetEnts:begin
       commandmanager.DisableExecuteCommandEnd;
@@ -100,6 +111,7 @@ begin
     if (button and MZW_LBUTTON)<>0 then begin
       case StretchComMode of
         SM_GetEnts:begin
+                     drawings.GetCurrentDWG.wa.SetMouseMode(MGet3DPoint or {MGet3DPointWoOP or }MMoveCamera or MRotateCamera);
                      StretchComMode:=SM_FirstPoint;
                      selectpoints;
                    end;

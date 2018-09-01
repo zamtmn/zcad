@@ -118,7 +118,10 @@ type
                             Find:TEnumData;(*'Find'*)
                             CurrentReplaceBlock:GDBString;(*'**CurrentReplace'*)(*oi_readonly*)(*hidden_in_objinsp*)
                             Replace:TEnumData;(*'Replace'*)
-                            SaveVariables:GDBBoolean;(*'Save Variables'*)
+                            SaveOrientation:GDBBoolean;(*'Save orientation'*)
+                            SaveVariables:GDBBoolean;(*'Save variables'*)
+                            SaveVariablePart:GDBBoolean;(*'Save variable part'*)
+                            SaveVariableText:GDBBoolean;(*'Save variable text'*)
                       end;
          PTBlockScaleParams=^TBlockScaleParams;
          TBlockScaleParams=packed record
@@ -671,21 +674,20 @@ var pb:PGDBObjBlockInsert;
 procedure rb(pb:PGDBObjBlockInsert);
 var
     nb,tb:PGDBObjBlockInsert;
+    psubobj:PGDBObjEntity;
+    ir:itrec;
     pnbvarext,ppbvarext:PTVariablesExtender;
 begin
 
-    nb := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID{,drawings.GetCurrentROOT}));
-    //PGDBObjBlockInsert(nb)^.initnul;//(@drawings.GetCurrentDWG^.ObjRoot,drawings.LayerTable.GetSystemLayer,0);
+    nb := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID));
     PGDBObjBlockInsert(nb)^.init(drawings.GetCurrentROOT,drawings.GetCurrentDWG^.LayerTable.GetSystemLayer,0);
-    nb^.Name:=newname;//'DEVICE_NOC';
+    nb^.Name:=newname;
     nb^.vp:=pb^.vp;
-    //nb^.vp.id:=GDBBlockInsertID;
     nb^.Local.p_insert:=pb^.Local.P_insert;
-    nb^.scale:=pb^.Scale;
-    //nb^.rotate:=pb.rotate;
-    //nb^.
-    //GDBObjCircleInit(pc,drawings.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, wc, 0);
-    //pc^.lod:=4;
+    if BlockReplaceParams.SaveOrientation then begin
+      nb^.scale:=pb^.Scale;
+      nb^.rotate:=pb^.rotate;
+    end;
     tb:=pointer(nb^.FromDXFPostProcessBeforeAdd(nil,drawings.GetCurrentDWG^));
     if tb<>nil then begin
                          tb^.bp:=nb^.bp;
@@ -698,15 +700,41 @@ begin
 
     nb^.CalcObjMatrix;
     nb^.BuildGeometry(drawings.GetCurrentDWG^);
-    nb^.BuildVarGeometry(drawings.GetCurrentDWG^);
+    if not BlockReplaceParams.SaveVariablePart then
+      nb^.BuildVarGeometry(drawings.GetCurrentDWG^);
 
-    if BlockReplaceParams.SaveVariables then
-    begin
+    if BlockReplaceParams.SaveVariables then begin
          pnbvarext:=nb^.GetExtension(typeof(TVariablesExtender));
          ppbvarext:=pb^.GetExtension(typeof(TVariablesExtender));
          pnbvarext^.entityunit.free;
-         //pb.OU.CopyTo(@nb.OU);
          pnbvarext^.entityunit.CopyFrom(@ppbvarext^.entityunit);
+    end;
+
+    if pb^.GetObjType=GDBDeviceID then begin
+      if BlockReplaceParams.SaveVariablePart then begin
+           PGDBObjDevice(nb)^.VarObjArray.free;
+           PGDBObjDevice(pb)^.VarObjArray.CloneEntityTo(@PGDBObjDevice(nb)^.VarObjArray,nil);
+           PGDBObjDevice(nb)^.correctobjects(pointer(PGDBObjDevice(nb)^.bp.ListPos.Owner),PGDBObjDevice(nb)^.bp.ListPos.SelfIndex);
+      end
+ else if BlockReplaceParams.SaveVariableText then begin
+           psubobj:=PGDBObjDevice(nb)^.VarObjArray.beginiterate(ir);
+           if psubobj<>nil then
+           repeat
+                 if (psubobj^.GetObjType=GDBtextID)or(psubobj^.GetObjType=GDBMTextID) then
+                   psubobj^.YouDeleted(drawings.GetCurrentDWG^);
+                 psubobj:=PGDBObjDevice(nb)^.VarObjArray.iterate(ir);
+           until psubobj=nil;
+
+           psubobj:=PGDBObjDevice(pb)^.VarObjArray.beginiterate(ir);
+           if psubobj<>nil then
+           repeat
+                 if (psubobj^.GetObjType=GDBtextID)or(psubobj^.GetObjType=GDBMTextID) then
+                   PGDBObjDevice(nb)^.VarObjArray.AddPEntity(psubobj^.Clone(nil)^);
+                 psubobj:=PGDBObjDevice(pb)^.VarObjArray.iterate(ir);
+           until psubobj=nil;
+
+           PGDBObjDevice(nb)^.correctobjects(pointer(PGDBObjDevice(nb)^.bp.ListPos.Owner),PGDBObjDevice(nb)^.bp.ListPos.SelfIndex);
+      end
     end;
 
     nb^.Formatentity(drawings.GetCurrentDWG^,dc);
@@ -3404,6 +3432,8 @@ begin
   BlockReplaceParams.Replace.Enums.init(10);
   BlockReplaceParams.Process:=BRM_Device;
   BlockReplaceParams.SaveVariables:=true;
+  BlockReplaceParams.SaveVariablePart:=true;
+  BlockReplaceParams.SaveOrientation:=true;
   BlockReplace.SetCommandParam(@BlockReplaceParams,'PTBlockReplaceParams');
 
 

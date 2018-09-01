@@ -59,6 +59,7 @@ type
                           function hasDisabledExecuteCommandEnd:boolean;virtual;
                           procedure resetDisabledExecuteCommandEnd;virtual;
                           procedure executecommandend;virtual;
+                          function GetSavedMouseMode:GDBByte;
                           procedure executecommandtotalend;virtual;
                           procedure ChangeModeAndEnd(newmode:TGetPointMode);
                           procedure executefile(fn:GDBString;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
@@ -662,6 +663,14 @@ procedure GDBcommandmanager.resetDisabledExecuteCommandEnd;
 begin
   DisabledExecuteCommandEndCounter:=0;
 end;
+function GDBcommandmanager.GetSavedMouseMode:GDBByte;
+begin
+  if pcommandrunning<>nil then
+    result:=pcommandrunning.savemousemode
+  else
+    result:=0;
+end;
+
 procedure GDBcommandmanager.executecommandend;
 var
    temp:PCommandRTEdObjectDef;

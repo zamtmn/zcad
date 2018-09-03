@@ -41,7 +41,6 @@ resourcestring
 
 
 
-  rsRevStr='Revision:';
   rsInitialization='Initialization:';
   rsVInfoText='Unstable version';
   rsCommEntEeport='Registered commands - %d; registered entities - %d; registered DXF entities - %d';

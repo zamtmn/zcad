@@ -116,6 +116,7 @@ function VertexDmorph(const Vector1, Vector2: GDBVertex; a: GDBDouble): GDBVerte
 //**нахождение точки смещения от одной точки к другой в зависимости от коэффициент а
 function VertexDmorph(const Vector1, Vector2: GDBVertex3S; a: GDBDouble): GDBVertex3S;overload;inline;
 function Vertexangle(const Vector1, Vector2: GDBVertex2d): GDBDouble;inline;
+function TwoVectorAngle(const Vector1, Vector2: GDBVertex): GDBDouble;inline;
 function oneVertexlength(const Vector1: GDBVertex): GDBDouble;inline;
 function SqrOneVertexlength(const Vector1: GDBVertex): GDBDouble;inline;
 function vertexlen2df(const x1, y1, x2, y2: GDBFloat): GDBFloat;inline;
@@ -1681,6 +1682,13 @@ begin
       else
         if (dx > 0) and (dy < 0) then
           result := 2 * pi - temp
+end;
+function TwoVectorAngle(const Vector1, Vector2: GDBVertex): GDBDouble;inline;
+var
+  dx, dy, temp: GDBDouble;
+begin
+  temp:=scalardot(Vector1, Vector2);
+  Result:=ArcCos(temp);
 end;
 function Vertexmorph(const Vector1, Vector2: GDBVertex; a: GDBDouble): GDBVertex;
 var

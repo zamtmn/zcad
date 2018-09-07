@@ -135,39 +135,31 @@ begin
 end;
 
 procedure GDBObjARC.transform;
-var {tv,}tv2:GDBVertex4D;
-    //a:gdbdouble;
+var
+  sav,eav,pins:gdbvertex;
 begin
-
-  {tv.x:=cos(startangle);
-  tv.y:=sin(startangle);
-  tv.z:=0;
-  //tv:=VectorTransform3D(tv,objmatrix);
-  tv:=VectorTransform3D(tv,t_matrix);
-
-  tv2.x:=cos(angle*pi/180);
-  tv2.y:=sin(angle*pi/180);
-  tv2.z:=0;
-  //tv2:=VectorTransform3D(tv2,objmatrix);
-  tv2:=VectorTransform3D(tv2,t_matrix);
-
-  startangle:=startangle+arccos(scalardot(PGDBVertex(@t_matrix[0])^,XWCS)/(uzegeometry.oneVertexlength(PGDBVertex(@t_matrix[0])^)));
-
-  endangle:=endangle+arccos(scalardot(PGDBVertex(@t_matrix[0])^,XWCS)/(uzegeometry.oneVertexlength(PGDBVertex(@t_matrix[0])^)));}
-
-
-  {inherited;}
+  if t_matrix[0][0]*t_matrix[1][1]*t_matrix[2][2]<eps then begin
+    sav:=q2;
+    eav:=q0;
+  end else begin
+    sav:=q0;
+    eav:=q2;
+  end;
+  pins:=P_insert_in_WCS;
+  sav:=VectorTransform3D(sav,t_matrix);
+  eav:=VectorTransform3D(eav,t_matrix);
+  pins:=VectorTransform3D(pins,t_matrix);
   inherited;
+  sav:=NormalizeVertex(VertexSub(sav,pins));
+  eav:=NormalizeVertex(VertexSub(eav,pins));
 
-  tv2:=PGDBVertex4D(@t_matrix[3])^;
-  PGDBVertex4D(@t_matrix[3])^:=NulVertex4D;
-  //MajorAxis:=VectorTransform3D(MajorAxis,t_matrix);
-  PGDBVertex4D(@t_matrix[3])^:=tv2;
+  StartAngle:=TwoVectorAngle(_X_yzVertex,sav);
+  if sav.y<eps then StartAngle:=2*pi-StartAngle;
 
-  ReCalcFromObjMatrix;
-
-
+  EndAngle:=TwoVectorAngle(_X_yzVertex,eav);
+  if eav.y<eps then EndAngle:=2*pi-EndAngle;
 end;
+
 procedure GDBObjARC.ReCalcFromObjMatrix;
 //var
     //ox:gdbvertex;

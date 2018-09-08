@@ -2102,7 +2102,8 @@ var //i: GDBInteger;
       tcd:TCopyObjectDesc;
       dc:TDrawContext;
 begin
-  self.savemousemode:=drawings.GetCurrentDWG^.wa.param.md.mode;
+  //self.savemousemode:=drawings.GetCurrentDWG^.wa.param.md.mode;
+  Inherited;
   counter:=0;
 
   pobj:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);

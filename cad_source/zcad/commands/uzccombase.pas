@@ -467,7 +467,7 @@ begin
   zcRedrawCurrentDrawing;
   result:=cmd_ok;
 end;
-function ShowWindow_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function ShowWindow_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 begin
   result:=mclick;
   drawings.GetCurrentDWG.wa.param.seldesc.Frame2 := mc;
@@ -1145,7 +1145,7 @@ begin
        commandmanager.executecommandend;
   end;
 end;
-function polytest_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function polytest_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 //var tb:PGDBObjSubordinated;
 begin
   result:=mclick+1;

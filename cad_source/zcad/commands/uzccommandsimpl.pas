@@ -27,7 +27,7 @@ uses uzcutils,uzgldrawcontext,uzglviewareageneral,uzeconsts,uzcsysvars,uzegeomet
      gzctnrvectortypes,uzcinterface,varman,uzclog;
 type
   comproc=procedure(_self:pointer);
-  commousefunc=function(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger):GDBInteger;
+  commousefunc=function(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger):GDBInteger;
   comdrawfunc=function(mclick:GDBInteger):TCommandResult;
   comfunc=function:GDBInteger;
   comfuncwithoper=function(operands:TCommandOperands):TCommandResult;
@@ -74,8 +74,8 @@ type
     procedure Format;virtual;
     procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;
     procedure CommandContinue; virtual;
-    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
-    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
+    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
+    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
     procedure DrawHeplGeometry;virtual;
   end;
   TOSModeEditor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)

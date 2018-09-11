@@ -63,7 +63,7 @@ begin
   FrameEdit_com_CommandStart(Operands);
 end;
 
-function Stretch_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function Stretch_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 begin
   case StretchComMode of
     SM_GetEnts:
@@ -95,14 +95,16 @@ begin
   drawings.GetCurrentDWG.GetSelObjArray.selectcontrolpointinframe(drawings.GetCurrentDWG.wa.param.seldesc.Frame1,drawings.GetCurrentDWG.wa.param.seldesc.Frame2);
 end;
 
-function Stretch_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function Stretch_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 begin
   result:=0;
   case StretchComMode of
     SM_GetEnts:begin
       commandmanager.DisableExecuteCommandEnd;
         result:=FrameEdit_com_AfterClick(wc,mc,button,osp,mclick);
-      commandmanager.EnableExecuteCommandEnd
+      commandmanager.EnableExecuteCommandEnd;
+      //button:=0;
+      drawings.GetCurrentDWG.wa.Clear0Ontrackpoint;//убираем нулевую точку трассировки
     end;
   end;
 
@@ -114,6 +116,9 @@ begin
                      drawings.GetCurrentDWG.wa.SetMouseMode(MGet3DPoint or {MGet3DPointWoOP or }MMoveCamera or MRotateCamera);
                      StretchComMode:=SM_FirstPoint;
                      selectpoints;
+                     ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedrawContent);
+                     //drawings.GetCurrentDWG.wa.Clear0Ontrackpoint;
+                     button:=0;//убираем нулевую точку трассировки, которая будет создана после выхода отсюда
                    end;
      SM_FirstPoint:begin end;
       end;

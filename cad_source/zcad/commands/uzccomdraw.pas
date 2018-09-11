@@ -178,43 +178,43 @@ type
     //constructor init;
     procedure CommandStart(Operands:TCommandOperands); virtual;
     procedure CommandCancel; virtual;
-    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
-    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
+    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
+    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
     function CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D; virtual;
     function Move(dispmatr:DMatrix4D;UndoMaker:GDBString): GDBInteger;
     procedure showprompt(mklick:integer);virtual;
   end;
   copy_com = {$IFNDEF DELPHI}packed{$ENDIF} object(move_com)
-    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
+    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
     function Copy(dispmatr:DMatrix4D;UndoMaker:GDBString): GDBInteger;
   end;
   mirror_com = {$IFNDEF DELPHI}packed{$ENDIF} object(copy_com)
     function CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D; virtual;
-    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
+    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
   end;
 
   rotate_com = {$IFNDEF DELPHI}packed{$ENDIF} object(move_com)
-    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
+    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
     procedure CommandContinue; virtual;
     procedure rot(a:GDBDouble; button: GDBByte);
     procedure showprompt(mklick:integer);virtual;
   end;
   scale_com = {$IFNDEF DELPHI}packed{$ENDIF} object(move_com)
-    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
+    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
     procedure scale(a:GDBDouble; button: GDBByte);
     procedure showprompt(mklick:integer);virtual;
     procedure CommandContinue; virtual;
   end;
   copybase_com = {$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
     procedure CommandStart(Operands:TCommandOperands); virtual;
-    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
+    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
   end;
   FloatInsert_com = {$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
     procedure CommandStart(Operands:TCommandOperands); virtual;
     procedure Build(Operands:TCommandOperands); virtual;
     procedure Command(Operands:TCommandOperands); virtual;abstract;
     function DoEnd(pdata:GDBPointer):GDBBoolean;virtual;
-    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
+    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
   end;
   TFIWPMode=(FIWPCustomize,FIWPRun);
   FloatInsertWithParams_com = {$IFNDEF DELPHI}packed{$ENDIF} object(FloatInsert_com)
@@ -222,7 +222,7 @@ type
     procedure CommandStart(Operands:TCommandOperands); virtual;
     procedure BuildDM(Operands:TCommandOperands); virtual;
     procedure Run(pdata:GDBPlatformint); virtual;
-    function MouseMoveCallback(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
+    function MouseMoveCallback(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
     //procedure Command(Operands:pansichar); virtual;abstract;
     //function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
   end;
@@ -359,8 +359,8 @@ var
 //procedure Finalize;
 function Line_com_CommandStart(operands:TCommandOperands):TCommandResult;
 procedure Line_com_CommandEnd(_self:pointer);
-function Line_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
-function Line_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function Line_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function Line_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 implementation
 function GetBlockDefNames(var BDefNames:TZctnrVectorGDBString;selname:GDBString):GDBInteger;
 var pb:PGDBObjBlockdef;
@@ -467,7 +467,7 @@ begin
      cmode:=FIWPRun;
      self.Build('');
 end;
-function FloatInsertWithParams_com.MouseMoveCallback(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger;
+function FloatInsertWithParams_com.MouseMoveCallback(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger;
 begin
      if CMode=FIWPRun then
                           inherited MouseMoveCallback(wc,mc,button,osp);
@@ -1455,7 +1455,7 @@ begin
      result:=true;
 end;
 
-function FloatInsert_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger;
+function FloatInsert_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger;
 var
     dist:gdbvertex;
     dispmatr:DMatrix4D;
@@ -1589,7 +1589,7 @@ begin
     Commandmanager.executecommandend;
   end;
 end;
-function copybase_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger;
+function copybase_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger;
 var
     dist:gdbvertex;
     dispmatr:DMatrix4D;
@@ -1694,7 +1694,7 @@ begin
             end;
   result:=cmd_ok;
 end;
-function Insert_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function Insert_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 var tb:PGDBObjSubordinated;
     domethod,undomethod:tmethod;
     DC:TDrawContext;
@@ -1923,7 +1923,7 @@ procedure Circle_com_CommandEnd(_self:pointer);
 begin
 end;
 
-function Circle_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function Circle_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 var
   dc:TDrawContext;
 begin
@@ -1944,7 +1944,7 @@ begin
   result:=0;
 end;
 
-function Circle_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function Circle_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 var
     domethod,undomethod:tmethod;
     dc:TDrawContext;
@@ -1987,7 +1987,7 @@ procedure Line_com_CommandEnd(_self:pointer);
 begin
 end;
 
-function Line_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function Line_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 var
     dc:TDrawContext;
 begin
@@ -2001,7 +2001,7 @@ begin
   end
 end;
 
-function Line_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function Line_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 var po:PGDBObjSubordinated;
     domethod,undomethod:tmethod;
     dc:TDrawContext;
@@ -2160,7 +2160,7 @@ begin
      inherited;
 end;
 
-function Move_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger;
+function Move_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger;
 //var i: GDBInteger;
 //  tv,pobj: pGDBObjEntity;
  //     ir:itrec;
@@ -2210,7 +2210,7 @@ begin
    PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushEndMarker;
    result:=cmd_ok;
 end;
-function Move_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger;
+function Move_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger;
 var //i:GDBInteger;
     //dist:gdbvertex;
     dispmatr{,im}:DMatrix4D;
@@ -2272,7 +2272,7 @@ begin
      PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushEndMarker;
      result:=cmd_ok;
 end;
-function Copy_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger;
+function Copy_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger;
 var
    dispmatr:DMatrix4D;
 begin
@@ -2300,7 +2300,7 @@ begin
         normalizeplane(plane);
         result:=CreateReflectionMatrix(plane);
 end;
-function Mirror_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger;
+function Mirror_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger;
 var
     dispmatr:DMatrix4D;
 begin
@@ -2399,7 +2399,7 @@ end;
 
 end;
 
-function rotate_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger;
+function rotate_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger;
 var
     //dispmatr,im,rotmatr:DMatrix4D;
     //ir:itrec;
@@ -2518,7 +2518,7 @@ commandmanager.executecommandend;
 end;
 end;
 
-function scale_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger;
+function scale_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger;
 var
     //dispmatr,im,rotmatr:DMatrix4D;
     //ir:itrec;
@@ -2574,7 +2574,7 @@ begin
 end;
 
 
-function _3DPoly_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function _3DPoly_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 var
     dc:TDrawContext;
 begin
@@ -2599,7 +2599,7 @@ begin
   end
 end;
 
-function _3DPoly_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function _3DPoly_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 var
     //ptv,ptvprev:pgdbvertex;
     //ir:itrec;
@@ -2691,7 +2691,7 @@ begin
 end;
 
 
-function _3DPolyEd_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function _3DPolyEd_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 var
     ptv,ptvprev:pgdbvertex;
     ir:itrec;

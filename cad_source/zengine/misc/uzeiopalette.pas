@@ -21,9 +21,32 @@ unit uzeiopalette;
 interface
 uses uzbpaths,uzepalette,uzcstrconsts,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
      uzbstrproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}{log,}sysutils,
-     UGDBOpenArrayOfByte,uzbtypesbase,uzbtypes;
+     UGDBOpenArrayOfByte,uzbtypesbase,uzbtypes,gstack;
+type
+  TPaletteStack=TStack<TGDBPalette>;
+var
+  PaletteStack:TPaletteStack=nil;
 procedure readpalette(filename:string);
+procedure PushAndSetNewPalette(NewPalette:TGDBPalette);
+procedure PopPalette;
 implementation
+procedure PushAndSetNewPalette(NewPalette:TGDBPalette);
+begin
+  if PaletteStack=nil then
+    PaletteStack:=TPaletteStack.Create;
+  PaletteStack.Push(palette);
+  palette:=NewPalette;
+end;
+procedure PopPalette;
+begin
+  if PaletteStack<>nil then begin
+    palette:=PaletteStack.Top;
+    PaletteStack.Pop
+  end else
+    DebugLn('{E}PopPalette: PaletteStack not created');
+end;
+
+
 procedure readpalette;
 var
   i,code:GDBInteger;

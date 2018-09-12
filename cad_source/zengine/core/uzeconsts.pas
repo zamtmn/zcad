@@ -244,6 +244,8 @@ const {as_normal=0;
   ClDifferent=258;
   ClSelColor=257;
   ClWhite=7;
+  ClBlack=0;
+  ClCanalMin=20;
 
   str_empty='**EMPTY STRING**';
 

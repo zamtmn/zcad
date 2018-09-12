@@ -170,7 +170,7 @@ var
    sysvarRDLight:boolean=false;
 
    OnActivateProc:TOnActivateProc=nil;
-   ForeGround:TRGB;
+   ForeGroundColorIndex:GDBInteger;
 
    sysvarDISPLWDisplayScale:GDBInteger=10;
    sysvarDISPDefaultLW:TGDBLineWeight=LnWt025;
@@ -256,7 +256,7 @@ begin
                                           dc.drawer.SetPointSize(1);
                                         end;
                                       end;
-  dc.drawer.SetColor(foreground);
+  dc.drawer.SetColor(palette[ForeGroundColorIndex].RGB);
   dc.drawer.SetDrawMode(TDM_Normal);
   if param.ShowDebugFrustum then
                           drawfrustustum(param.debugfrustum,dc);
@@ -321,7 +321,7 @@ begin
   dc.drawer.DrawLine3DInModelSpace(tv1,tv2,dc.DrawingContext.matrixs);
   end;
   end;
-  dc.drawer.SetColor(foreground);
+  dc.drawer.SetColor(palette[ForeGroundColorIndex].RGB);
   //dc.drawer.SetColor(255, 255, 255,255);
   d1:=uzegeometry.VertexAdd(param.md.mouseray.lbegin,param.md.mouseray.lend);
   d1:=uzegeometry.VertexMulOnSc(d1,0.5);
@@ -358,7 +358,7 @@ begin
   *)
   //glColor3ub(255, 255, 255);
   dc.drawer.startrender(TRM_WindowSpace,dc.DrawingContext.matrixs);
-  dc.drawer.SetColor(foreground);
+  dc.drawer.SetColor(palette[ForeGroundColorIndex].RGB);
   //oglsm.glColor3ubv(foreground);
 
   if param.seldesc.MouseFrameON then
@@ -685,10 +685,14 @@ begin
 
   //-----------------------------------MakeCurrent;{не забыть что обычный контекст не делает себя текущим сам!}
 
-
-  foreground.r:=not(sysvarDISPBackGroundColor.r);
+  if (sysvarDISPBackGroundColor.r<ClCanalMin)and(sysvarDISPBackGroundColor.g<ClCanalMin)
+  and(sysvarDISPBackGroundColor.b<ClCanalMin) then
+    ForeGroundColorIndex:=ClWhite
+  else
+    ForeGroundColorIndex:=ClBlack;
+  {foreground.r:=not(sysvarDISPBackGroundColor.r);
   foreground.g:=not(sysvarDISPBackGroundColor.g);
-  foreground.b:=not(sysvarDISPBackGroundColor.b);
+  foreground.b:=not(sysvarDISPBackGroundColor.b);}
   dc:=CreateRC;
   needredrawbydrawer:=startpaint;
   needredraw:=needredrawbydrawer or needredraw;
@@ -1798,7 +1802,7 @@ begin
   result.SystmGeometryDraw:=sysvarDISPSystmGeometryDraw;
   result.SystmGeometryColor:=sysvarDISPSystmGeometryColor;
   result.DrawingContext.GlobalLTScale:=1;
-  result.DrawingContext.ForeGround:=ForeGround;
+  result.DrawingContext.ForeGroundColorIndex:=ForeGroundColorIndex;
 end;
 procedure TGeneralViewArea.CorrectMouseAfterOS;
 var d,tv1,tv2:GDBVertex;

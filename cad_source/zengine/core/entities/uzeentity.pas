@@ -529,7 +529,7 @@ begin
   if color<>7 then
                   dc.drawer.SetColor(palette[color].RGB)
               else
-                  dc.drawer.SetColor(DC.DrawingContext.ForeGround);
+                  dc.drawer.SetColor(palette[DC.DrawingContext.ForeGroundColorIndex].RGB);
 end;
 
 begin

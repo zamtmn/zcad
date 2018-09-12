@@ -245,8 +245,6 @@ begin
                    PushAndSetNewPalette(grayscalepalette);
                   end;
   end;
-  oldforegroundindex:=dc.DrawingContext.ForeGroundColorIndex;
-  dc.DrawingContext.ForeGroundColorIndex:=uzeconsts.ClBlack;
 
   Printer.Title := 'zcadprint';
   Printer.BeginDoc;
@@ -264,6 +262,9 @@ begin
   dc.MaxDetail:=true;
   PrinterDrawer:=TZGLCanvasDrawer.create;
   dc.drawer:=PrinterDrawer;
+  oldforegroundindex:=dc.DrawingContext.ForeGroundColorIndex;
+  dc.DrawingContext.ForeGroundColorIndex:=uzeconsts.ClBlack;
+
 
   //modelMatrix:=onematrix;
   //projMatrix:DMatrix4D;

@@ -46,7 +46,7 @@ uses
   uzcshared,uzeentblockinsert,uzeentpolyline,uzclog,
   math,
   uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray
-  ,uzelongprocesssupport,LazLogger;
+  ,uzelongprocesssupport,LazLogger,uzeiopalette,uzeconsts;
 const
      modelspacename:GDBSTring='**Модель**';
 type
@@ -61,11 +61,13 @@ type
     procedure SelectPrinter(pdata:GDBPlatformint); virtual;
     procedure SelectPaper(pdata:GDBPlatformint); virtual;
   end;
+  TPrintinColor=(PC_Color(*'Color'*),PC_Grayscale(*'Grayscale'*),PC_Monochrome(*'Monochrome'*));
   PTPrintParams=^TPrintParams;
   TPrintParams=packed record
     FitToPage:GDBBoolean;(*'Fit to page'*)
     Center:GDBBoolean;(*'Center'*)
     Scale:GDBDouble;(*'Scale'*)
+    Palette:TPrintinColor;(*'Palette'*)
   end;
 var
   PrintParam:TPrintParams;
@@ -150,7 +152,6 @@ procedure Print_com.Print(pdata:GDBPlatformint);
   tmatrix,_clip:DMatrix4D;
   _frustum:ClipArray;
   cdwg:PTSimpleDrawing;
-  oldForeGround:TRGB;
   DC:TDrawContext;
 
   PrinterDrawer:TZGLGeneral2DDrawer;
@@ -162,12 +163,10 @@ procedure Print_com.Print(pdata:GDBPlatformint);
   projMatrix:DMatrix4D;
   viewport:IMatrix4;
   pd1,pd2:GDBvertex2D;
+
+  oldforegroundindex:integer;
 begin
   cdwg:=drawings.GetCurrentDWG;
-  oldForeGround:=ForeGround;
-  ForeGround.r:=0;
-  ForeGround.g:=0;
-  ForeGround.b:=0;
   pw:=Printer.PageWidth;
   ph:=Printer.PageHeight;
   point2:=p2;
@@ -237,6 +236,18 @@ begin
   //drawings.GetCurrentDWG^.pcamera^.projMatrix:=prn.project;
   //drawings.GetCurrentDWG^.pcamera^.modelMatrix:=prn.model;
   try
+
+  if PrintParam.Palette<>PC_Color then
+  case PrintParam.Palette of
+    PC_Monochrome:PushAndSetNewPalette(MonochromePalette);
+    PC_Grayscale:begin
+                   DebugLn('{WH}Print: Grayscale palette not yet implemented, use monochrome palette');
+                   PushAndSetNewPalette(grayscalepalette);
+                  end;
+  end;
+  oldforegroundindex:=dc.DrawingContext.ForeGroundColorIndex;
+  dc.DrawingContext.ForeGroundColorIndex:=uzeconsts.ClBlack;
+
   Printer.Title := 'zcadprint';
   Printer.BeginDoc;
 
@@ -291,6 +302,10 @@ begin
   Printer.EndDoc;
   drawings.GetCurrentDWG^.pcamera^.projMatrix:=tmatrix;
 
+  if PrintParam.Palette<>PC_Color then
+    PopPalette;
+  dc.DrawingContext.ForeGroundColorIndex:=oldforegroundindex;
+
   except
     on E:Exception do
     begin
@@ -298,7 +313,6 @@ begin
       ZCMsgCallBackInterface.TextMessage(e.message,TMWOShowError);
     end;
   end;
-  ForeGround:=oldForeGround;
   zcRedrawCurrentDrawing;
 end;
 
@@ -310,6 +324,7 @@ begin
   Print.init('Print',CADWG,0);
   PrintParam.Scale:=1;
   PrintParam.FitToPage:=true;
+  PrintParam.Palette:=PC_Monochrome;
   Print.SetCommandParam(@PrintParam,'PTPrintParams');
 
   PSD:=TPrinterSetupDialog.Create(nil);

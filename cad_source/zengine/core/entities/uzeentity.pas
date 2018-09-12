@@ -524,7 +524,7 @@ end;
 procedure GDBObjEntity.DrawWithAttrib;
 var lw: GDBInteger;
   sel,_selected: GDBBoolean;
-procedure SetEntColor(color:integer;var DC:TDrawContext);inline;
+procedure SetEntColor(color:integer;var DC:TDrawContext);
 begin
   if color<>7 then
                   dc.drawer.SetColor(palette[color].RGB)

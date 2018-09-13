@@ -61,7 +61,7 @@ GDBObjCircle={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
                  procedure rtsave(refp:GDBPointer);virtual;
-                 procedure createpoint;virtual;
+                 procedure createpoint(var DC:TDrawContext);virtual;
                  procedure projectpoint;virtual;
                  function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
                  //procedure higlight;virtual;
@@ -292,7 +292,7 @@ end;
 procedure GDBObjCircle.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 begin
   calcObjMatrix;
-  createpoint;
+  createpoint(dc);
   q0:=VectorTransform3d(CreateVertex(1,0,0),objMatrix);
   q1:=VectorTransform3d(CreateVertex(0,-1,0),objMatrix);
   q2:=VectorTransform3d(CreateVertex(-1,0,0),objMatrix);
@@ -345,7 +345,7 @@ begin
        PProjoutbound^.init({$IFDEF DEBUGBUILD}'{0793766F-F818-48DA-918B-D9326DB90240}',{$ENDIF}4);
   end;
 end;
-procedure GDBObjCircle.createpoint;
+procedure GDBObjCircle.createpoint(var DC:TDrawContext);
 var
    l{,i}:integer;
    ir:itrec;
@@ -354,11 +354,11 @@ var
    v:gdbvertex;
 begin
   Vertex3D_in_WCS_Array.clear;
-  if (lod>32) then
+  if (lod>32)or dc.MaxDetail then
                  begin
                       l:=lod;
-                      if l>CircleLODCount then
-                                   l:=CircleLODCount;
+                      if (l>CircleLODCount)or dc.MaxDetail then
+                        l:=CircleLODCount;
                  end
             else
                 l:=32;
@@ -412,7 +412,7 @@ begin
                 if lod<>round(d) then
                 begin
                      lod:=round(d);
-                     createpoint;
+                     createpoint(dc);
                 end;
                 projectpoint;
            end;

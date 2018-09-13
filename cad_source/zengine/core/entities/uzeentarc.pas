@@ -434,7 +434,7 @@ begin
                       maxlod:=20;
 
   l:=r*angle/(dc.DrawingContext.zoom*dc.DrawingContext.zoom*3);
-  if l>maxlod then lod:=maxlod
+  if (l>maxlod)or dc.MaxDetail then lod:=maxlod
            else
                begin
                     lod:=round(l);

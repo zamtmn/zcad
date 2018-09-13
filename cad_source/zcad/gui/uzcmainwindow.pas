@@ -1416,6 +1416,12 @@ begin
   pm1.Action:=action;
   TMenuItem(Data).Add(pm1);
 end;
+function MyTextToShortCut(const ShortCutText: string): TShortCut;
+begin
+  Result:=TextToShortCutRaw(ShortCutText);
+  if Result=0 then
+    Result:=TextToShortCut(ShortCutText);
+end;
 
 procedure TZCADMainWindow.ZActionsReader(aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList);
 var
@@ -1439,7 +1445,7 @@ begin
                          action.Hint:=action.Caption;
   actionshortcut:=getAttrValue(aNode,'ShortCut','');
   if actionshortcut<>'' then
-                          action.ShortCut:=TextToShortCut(actionshortcut);
+                          action.ShortCut:=MyTextToShortCut(actionshortcut);
   actioncommand:=getAttrValue(aNode,'Command','');
   ParseCommand(actioncommand,action.command,action.options);
   action.Category:=getAttrValue(aNode,'Category',CategoryOverrider);
@@ -1469,7 +1475,7 @@ begin
                      va.Hint:=va.Caption;
   actionshortcut:=getAttrValue(aNode,'ShortCut','');
   if actionshortcut<>'' then
-                            va.ShortCut:=TextToShortCut(actionshortcut);
+                            va.ShortCut:=MyTextToShortCut(actionshortcut);
   actionvariable:=getAttrValue(aNode,'Variable','');
   mask:=getAttrValue(aNode,'Mask',0);
 
@@ -1629,7 +1635,7 @@ begin
   updatesbytton.Add(b);
   if _shortcut<>'' then
   begin
-    shortcut:=TextToShortCut(_shortcut);
+    shortcut:=MyTextToShortCut(_shortcut);
     if shortcut>0 then
     begin
       baction:=TmyButtonAction.Create(StandartActions);

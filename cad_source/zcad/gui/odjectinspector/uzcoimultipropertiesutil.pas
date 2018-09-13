@@ -29,8 +29,9 @@ uses
   uzbtypesbase,
   Varman,UGDBPoint3DArray,
   uzedimensionaltypes,
-  gzctnrvectortypes,gzctnrstl,uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,
+  gzctnrvectortypes,uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,
   uzeenttext,uzeentmtext,uzeentpolyline,uzegeometry,uzcoimultiproperties,LazLogger;
+
 function GetOneVarData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
 function GetStringCounterData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
 function GetPointerCounterData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;

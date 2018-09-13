@@ -52,8 +52,6 @@ type
   TStretchComMode=(SM_GetEnts,SM_FirstPoint,SM_SecondPoint);
 var
   StretchComMode:TStretchComMode;
-  firstpoint: GDBvertex;
-
 procedure finalize;
 begin
 end;
@@ -70,7 +68,6 @@ begin
                result:=FrameEdit_com_BeforeClick(wc,mc,button,osp,mclick);
  SM_FirstPoint:
                if (button and MZW_LBUTTON)<>0 then begin
-                  firstpoint:=wc;
                   OnDrawingEd.BeforeClick(wc,mc,button,osp);
                   StretchComMode:=SM_SecondPoint;
                   result:=0;

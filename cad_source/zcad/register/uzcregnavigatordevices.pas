@@ -139,9 +139,6 @@ begin
     result:=false
 end;
 function  TNavigatorRisers.TraceEntity(rootdesk:TBaseRootNodeDesk;pent:pGDBObjEntity;out name:string):PVirtualNode;
-var
-  BaseName:string;
-  basenode:PVirtualNode;
 begin
   result:={nil}rootdesk.rootnode;
   Name:=GetEntityVariableValue(pent,'RiserName',rsNameAbsent);

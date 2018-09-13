@@ -1283,6 +1283,7 @@ begin
 
               drawings.CurrentDWG.ConstructObjRoot.ObjArray.AddPEntity(pt^);
               pt^.Build(drawings.GetCurrentDWG^);
+              dc:=drawings.CurrentDWG.CreateDrawingRC;
               pt^.FormatEntity(drawings.GetCurrentDWG^,dc);
               end;
 

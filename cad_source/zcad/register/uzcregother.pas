@@ -19,7 +19,7 @@
 unit uzcregother;
 {$INCLUDE def.inc}
 interface
-uses uzbpaths,UUnitManager,uzcsysvars,uzcstrconsts,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
+uses uzbpaths,UUnitManager,uzcsysvars,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
      uzbstrproc,Varman,languade,SysUtils,
      UBaseTypeDescriptor,uzcshared,uzbtypes,UGDBOpenArrayOfByte, strmy, varmandef,uzcsysinfo,
      TypeDescriptors,

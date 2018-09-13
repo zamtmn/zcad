@@ -253,7 +253,6 @@ destructor TCableManager.done;
 var
     pcd:PTCableDesctiptor;
     ir:itrec;
-    sn:gdbstring;
 begin
      pcd:=beginiterate(ir);
      if pcd<>nil then

@@ -132,7 +132,6 @@ begin
 end;
 procedure TImagesManager.LoadAliasesDir(path:string);
 var
-  i,code:GDBInteger;
   line,sub,internalname:GDBString;
   f:GDBOpenArrayOfByte;
   PID:TImageName2TImageDataMap.PTValue;

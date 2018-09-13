@@ -22,7 +22,7 @@ unit uzcgui2textstyles;
 interface
 
 uses
-  uzcinterfacedata,uzbtypesbase,usupportgui,StdCtrls,uzcdrawings,uzcstrconsts,Controls,Classes,
+  uzcinterfacedata,usupportgui,StdCtrls,uzcdrawings,uzcstrconsts,Controls,Classes,
   gzctnrvectortypes,uzestylestexts,uzbstrproc,uzcsysvars,uzccommandsmanager,uzcinterface;
 
 type

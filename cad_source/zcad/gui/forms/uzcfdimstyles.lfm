@@ -1,14 +1,15 @@
 object DimStylesForm: TDimStylesForm
   Left = 362
-  Height = 500
+  Height = 589
   Top = 42
-  Width = 800
+  Width = 942
   ActiveControl = ButtonApplyClose
   Caption = 'Dimantion styles'
-  ClientHeight = 500
-  ClientWidth = 800
-  Constraints.MinHeight = 500
-  Constraints.MinWidth = 800
+  ClientHeight = 589
+  ClientWidth = 942
+  Constraints.MinHeight = 589
+  Constraints.MinWidth = 942
+  DesignTimePPI = 113
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
@@ -22,7 +23,7 @@ object DimStylesForm: TDimStylesForm
     AnchorSideBottom.Side = asrBottom
     Left = 2
     Height = 21
-    Top = 477
+    Top = 561
     Width = 693
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Left = 2
@@ -37,13 +38,14 @@ object DimStylesForm: TDimStylesForm
     AnchorSideTop.Side = asrCenter
     AnchorSideRight.Side = asrCenter
     AnchorSideBottom.Side = asrCenter
-    Left = 348
+    Left = 410
     Height = 1
-    Top = 487
+    Top = 573
     Width = 1
     BorderSpacing.Around = 1
     Layout = tlCenter
     ParentColor = False
+    ParentFont = False
   end
   object ButtonApplyClose: TBitBtn
     AnchorSideRight.Control = Owner
@@ -62,6 +64,7 @@ object DimStylesForm: TDimStylesForm
     BorderSpacing.Bottom = 2
     Caption = 'Apply and close'
     OnClick = AplyClose
+    ParentFont = False
     TabOrder = 0
   end
   object ListView1: TZListView
@@ -73,7 +76,7 @@ object DimStylesForm: TDimStylesForm
     AnchorSideBottom.Control = ButtonApplyClose
     Left = 1
     Height = 436
-    Top = 37
+    Top = 44
     Width = 798
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Left = 1
@@ -83,36 +86,42 @@ object DimStylesForm: TDimStylesForm
     Columns = <    
       item
         Caption = 'Status'
+        Width = 59
       end    
       item
         Caption = 'Name'
-        Width = 178
+        Width = 210
       end    
       item
         Caption = 'LinearScale'
-        Width = 150
+        Width = 177
       end    
       item
         Caption = 'TextStyleName'
-        Width = 150
+        Width = 177
       end    
       item
         Caption = 'TextHeight'
-        Width = 70
+        Width = 82
       end    
       item
         Caption = 'DIMBLK1'
+        Width = 59
       end    
       item
         Caption = 'DIMBLK2'
+        Width = 59
       end    
       item
         Caption = 'DIMLDRBLK'
+        Width = 59
       end    
       item
         Caption = 'DIMASZ'
+        Width = 59
       end>
     HideSelection = False
+    ParentFont = False
     ReadOnly = True
     RowSelect = True
     ScrollBars = ssAutoBoth
@@ -136,19 +145,21 @@ object DimStylesForm: TDimStylesForm
         Width = 150
       end>
     GrabWidth = 5
+    ParentFont = False
     object ToolBar1: TToolBar
       AnchorSideLeft.Control = CoolBar1
       AnchorSideTop.Control = CoolBar1
       Left = 19
       Height = 26
       Top = 5
-      Width = 168
+      Width = 126
       Align = alNone
       AutoSize = True
-      BorderSpacing.Left = 17
-      BorderSpacing.Top = 3
+      BorderSpacing.Left = 20
+      BorderSpacing.Top = 4
       Caption = 'ToolBar1'
       EdgeBorders = []
+      ParentFont = False
       ParentShowHint = False
       ShowHint = True
       TabOrder = 0
@@ -161,42 +172,42 @@ object DimStylesForm: TDimStylesForm
         ShowHint = True
       end
       object ToolButton_Delete: TToolButton
-        Left = 28
+        Left = 33
         Top = 0
         Action = DelStyle
       end
       object ToolButton_MkCurrent: TToolButton
-        Left = 55
+        Left = 65
         Top = 0
         Action = MkCurrentStyle
       end
       object ToolButton_Inspect: TToolButton
-        Left = 82
+        Left = 97
         Top = 0
         Action = InspectListItem
       end
       object Separator1: TToolButton
-        Left = 109
-        Height = 26
+        Left = 128
+        Height = 6
         Top = 0
         Caption = 'Separator1'
         Style = tbsDivider
       end
       object ToolButton_Purge: TToolButton
-        Left = 114
+        Left = 134
         Top = 0
         Action = PurgeStyles
       end
       object ToolButton_Refresh: TToolButton
-        Left = 141
+        Left = 166
         Top = 0
         Action = RefreshStyles
       end
     end
   end
   object ActionList1: TActionList
-    left = 632
-    top = 312
+    Left = 744
+    Top = 367
     object AddStyle: TAction
       Caption = 'AddStyle'
       DisableIfNoHandler = False

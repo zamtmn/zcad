@@ -8,6 +8,7 @@ object DimStyleEditForm: TDimStyleEditForm
   Caption = 'DimStyleEditForm'
   ClientHeight = 400
   ClientWidth = 640
+  DesignTimePPI = 113
   OnCreate = FormCreate
   Position = poMainFormCenter
   LCLVersion = '1.9.0.0'
@@ -60,24 +61,16 @@ object DimStyleEditForm: TDimStyleEditForm
         Height = 21
         Top = 125
         Width = 50
-        Increment = 1
-        MaxValue = 100
-        MinValue = 0
         OnChange = lineDimDLEChange
         TabOrder = 3
-        Value = 0
       end
       object lineDimCEN: TFloatSpinEdit
         Left = 200
         Height = 21
         Top = 155
         Width = 50
-        Increment = 1
-        MaxValue = 100
-        MinValue = 0
         OnChange = lineDimCENChange
         TabOrder = 4
-        Value = 0
       end
       object dlineColorLabel: TLabel
         Left = 25
@@ -205,24 +198,16 @@ object DimStyleEditForm: TDimStyleEditForm
         Height = 21
         Top = 215
         Width = 50
-        Increment = 1
-        MaxValue = 100
-        MinValue = 0
         OnChange = lineExtSpinDIMEXEChange
         TabOrder = 9
-        Value = 0
       end
       object lineExtSpinDIMEXO: TFloatSpinEdit
         Left = 550
         Height = 21
         Top = 245
         Width = 50
-        Increment = 1
-        MaxValue = 100
-        MinValue = 0
         OnChange = lineExtSpinDIMEXOChange
         TabOrder = 10
-        Value = 0
       end
       object lineExtLabelDIMEXE: TLabel
         Left = 350
@@ -313,12 +298,8 @@ object DimStyleEditForm: TDimStyleEditForm
         Height = 21
         Top = 125
         Width = 100
-        Increment = 1
-        MaxValue = 100
-        MinValue = 0
         OnChange = arrowsDIMASZEditChange
         TabOrder = 3
-        Value = 0
       end
       object arrowsDIMASZLabel: TLabel
         Left = 25
@@ -374,12 +355,8 @@ object DimStyleEditForm: TDimStyleEditForm
         Height = 21
         Top = 95
         Width = 50
-        Increment = 1
-        MaxValue = 100
-        MinValue = 0
         OnChange = textDIMTXTEditChange
         TabOrder = 2
-        Value = 0
       end
       object textDIMTXTLabel: TLabel
         Left = 25
@@ -412,12 +389,8 @@ object DimStyleEditForm: TDimStyleEditForm
         Height = 21
         Top = 155
         Width = 50
-        Increment = 1
-        MaxValue = 100
-        MinValue = 0
         OnChange = textDIMGAPEditChange
         TabOrder = 4
-        Value = 0
       end
       object texpDIMGAPLabel: TLabel
         Left = 25
@@ -517,24 +490,16 @@ object DimStyleEditForm: TDimStyleEditForm
         Height = 21
         Top = 95
         Width = 50
-        Increment = 1
-        MaxValue = 100
-        MinValue = 0
         OnChange = unitDIMLFACEditChange
         TabOrder = 2
-        Value = 0
       end
       object unitDIMRNDEdit: TFloatSpinEdit
         Left = 200
         Height = 21
         Top = 125
         Width = 50
-        Increment = 1
-        MaxValue = 100
-        MinValue = 0
         OnChange = unitDIMRNDEditChange
         TabOrder = 3
-        Value = 0
       end
       object unitDIMDECEdit: TSpinEdit
         Left = 200

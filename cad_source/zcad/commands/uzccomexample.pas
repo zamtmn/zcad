@@ -50,7 +50,7 @@ uses
                        //модуль описывающий примитив вставка блока
   uzeentline,             //unit describes line entity
                        //модуль описывающий примитив линия
-  uzventsuperline,uzcenitiesvariablesextender,UUnitManager,uzbpaths,uzctranslations,
+  uzventsuperline,UUnitManager,uzbpaths,uzctranslations,
 
   uzeentlwpolyline,             //unit describes line entity
                        //модуль описывающий примитив двухмерная ПОЛИлиния
@@ -875,6 +875,7 @@ begin
         pnevlayer:=drawings.GetCurrentDWG.LayerTable.addlayer(createdlayername{имя},ClWhite{цвет},-1{вес},true{on},false{lock},true{print},'???'{описание},TLOLoad{режим создания - в данном случае неважен});
       pe^.vp.Layer:=pnevlayer;
     end;
+    result:=cmd_ok;
 end;
 
 initialization

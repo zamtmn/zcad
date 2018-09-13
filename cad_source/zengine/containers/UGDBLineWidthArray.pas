@@ -19,7 +19,7 @@
 unit UGDBLineWidthArray;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,gzctnrvectordata,sysutils,uzbtypes,uzbmemman;
+uses gzctnrvectordata,sysutils,uzbtypes,uzbmemman;
 type
 {REGISTEROBJECTTYPE GDBLineWidthArray}
 {Export+}

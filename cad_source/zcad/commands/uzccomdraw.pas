@@ -21,13 +21,13 @@ unit uzccomdraw;
 
 interface
 uses
-  uzedrawingabstract,uzedrawingdef,gzctnrvector,uzglviewareageneral,zcobjectchangeundocommand2,zcmultiobjectchangeundocommand,
+  gzctnrvector,uzglviewareageneral,zcobjectchangeundocommand2,zcmultiobjectchangeundocommand,
   gzctnrvectortypes,zcmultiobjectcreateundocommand,uzeentitiesmanager,uzgldrawercanvas,
   uzcoimultiobjects,uzcenitiesvariablesextender,uzcdrawing,uzepalette,
-  uzctnrvectorobjid,uzctnrvectorgdbdouble,uzctnrvectorgdblineweight,uzctnrvectorgdbpointer,uzctextenteditor,uzgldrawcontext,usimplegenerics,UGDBPoint3DArray,
+  uzctextenteditor,uzgldrawcontext,usimplegenerics,UGDBPoint3DArray,
   uzeentpoint,uzeentitiestree,gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,uzeentityfactory,
   uzedrawingsimple,uzcsysvars,uzcstrconsts,uzccomdrawdase,
-  PrintersDlgs,printers,graphics,uzeentdevice,uzeentwithlocalcs,
+  printers,graphics,uzeentdevice,uzeentwithlocalcs,
   LazUTF8,Clipbrd,LCLType,classes,uzeenttext,uzeentabstracttext,uzestylestexts,
   uzccommandsabstract,uzbstrproc,
   uzbtypesbase,uzccommandsmanager,uzccombase,
@@ -45,9 +45,9 @@ uses
   uzeconsts,
   uzbgeomtypes,uzeentity,uzeentcircle,uzeentline,uzeentgenericsubentry,uzeentmtext,
   uzcshared,uzeentsubordinated,uzeentblockinsert,uzeentpolyline,uzclog,gzctnrvectordata,
-  math,uzeenttable,uzctnrvectorgdbstring,//uzcprinterspecfunc,
+  math,uzeenttable,uzctnrvectorgdbstring,
   uzeentcurve,uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray
-  ,uzelongprocesssupport,LazLogger,uzctnrvectorgdbpalettecolor;
+  ,uzelongprocesssupport,LazLogger;
 const
      modelspacename:GDBSTring='**Модель**';
 type
@@ -2929,9 +2929,9 @@ begin
                                                                              p3dpl^.VertexArrayInOCS.DeleteElement(PEProp.nearestline{+1});
 
                                           end;
-                                        {if p3dpl2^.VertexArrayInOCS.Count>1 then
+                                        (*if p3dpl2^.VertexArrayInOCS.Count>1 then
                                                                                p3dpl2^.VertexArrayInOCS.InsertElement({0}1,{1,}_tv)
-                                                                           else}
+                                                                           else*)
                                                                                p3dpl2^.VertexArrayInOCS.InsertElement(0,{-1,}_tv);
                                         p3dpl^.VertexArrayInOCS.InsertElement(p3dpl^.VertexArrayInOCS.Count,{1,}_tv);
                                         p3dpl2^.Formatentity(drawings.GetCurrentDWG^,dc);

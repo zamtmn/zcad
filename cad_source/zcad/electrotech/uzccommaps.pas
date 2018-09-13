@@ -10,16 +10,16 @@ unit uzccommaps;
 interface
 uses
 
-  uzctranslations,uzeentitiesmanager,uzeentity,uzglviewareaabstract,uzgldrawcontext,
-  uzeenttext,uzctnrvectorgdbstring,uzeentityfactory,uzcsysvars,uzbstrproc,
+  uzctranslations,uzeentity,uzglviewareaabstract,uzgldrawcontext,
+  uzeenttext,uzeentityfactory,uzcsysvars,uzbstrproc,
   uzcinterface,uzbtypesbase,uzccommandsmanager,uzclog,gzctnrvectorpobjects,
   uzccommandsabstract,uzccommandsimpl,uzbtypes,uzcdrawings,uzeutils,uzcutils,sysutils,
   varmandef,UGDBOpenArrayOfByte,uzeffdxf,uzegeometry,uzbmemman,uzeconsts,
-  uzccomdraw,UGDBVisibleOpenArray,uzeentline,uzbpaths,uzcshared,uzeentblockinsert,
-  uzbgeomtypes,varman,uzccablemanager,uzeentdevice,uzeentmtext,math,
-  uzcenitiesvariablesextender,uzeroot,uzglviewareadata,uzcentcable,UUnitManager,
+  uzccomdraw,uzeentline,uzbpaths,uzcshared,uzeentblockinsert,
+  uzbgeomtypes,varman,uzeentdevice,uzeentmtext,math,
+  uzcentcable,UUnitManager,
   gzctnrvectortypes,uzccomelectrical,URecordDescriptor,TypeDescriptors,LazLogger,
-  uzcstrconsts,gzctnrstl,gutil;
+  gzctnrstl,gutil;
 
 const
   tabledy=-65.2763;
@@ -128,7 +128,7 @@ end;
 
 procedure TProfileBuildCom.drawdist(var t1:double; t2, FactTraceLength,TraceLength:double;DC:TDrawContext);
 var
-   temp,tx,lastx:double;
+   temp,tx:double;
    ts:string;
    pt:pGDBObjMText;
 begin
@@ -197,15 +197,14 @@ end;
 
 procedure TProfileBuildCom.DrawProfile(p1,p2:TMAPPoint;Intersections:TIntersections);
 var
-  FactTraceLength,TraceLength,temp,tx,lastx,x:double;
+  FactTraceLength,TraceLength,lastx,x:double;
   pv:PGDBObjBlockInsert;
   pl:pgdbobjline;
   pt:pGDBObjMText;
-  iterator,iterator2:TIntersections.TIterator;
+  iterator:TIntersections.TIterator;
   com:TIntersectedCom;
   DC:TDrawContext;
   i:integer;
-  ts:string;
 begin
   drawings.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
   dc:=drawings.GetCurrentDWG^.CreateDrawingRC;

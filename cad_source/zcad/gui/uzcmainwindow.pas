@@ -23,7 +23,7 @@ interface
 uses
   {LCL}
        Laz2_DOM,AnchorDockPanel,AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr,
-       ActnList,LCLType,LCLProc,uzctranslations,toolwin,LMessages,LCLIntf,
+       ActnList,LCLType,LCLProc,uzctranslations,LMessages,LCLIntf,
        Forms, stdctrls, ExtCtrls, ComCtrls,Controls,Classes,SysUtils,LazUTF8,
        menus,graphics,dialogs,XMLPropStorage,Buttons,Themes,
        Types,UniqueInstanceBase,simpleipc,{$ifdef windows}windows,{$endif}
@@ -278,9 +278,9 @@ end;
 {$ifdef windows}
 procedure TZCADMainWindow.SetTop;
 var
-  hWnd, hCurWnd, dwThreadID, dwCurThreadID: THandle;
+  hWnd{, hCurWnd, dwThreadID, dwCurThreadID}: THandle;
   OldTimeOut: Cardinal;
-  AResult: Boolean;
+  //AResult: Boolean;
 begin
   if GetActiveWindow=Application.MainForm.Handle then Exit;
      Application.Restore;
@@ -288,8 +288,8 @@ begin
      SystemParametersInfo(SPI_GETFOREGROUNDLOCKTIMEOUT, 0, @OldTimeOut, 0);
      SystemParametersInfo(SPI_SETFOREGROUNDLOCKTIMEOUT, 0, Pointer(0), 0);
      SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE or SWP_NOSIZE);
-     hCurWnd := GetForegroundWindow;
-     AResult := SetForegroundWindow(hWnd);{в вин7 почемуто это подвисает AResult := False;
+     {hCurWnd := }GetForegroundWindow;
+     {AResult := }SetForegroundWindow(hWnd);{в вин7 почемуто это подвисает AResult := False;
      while not AResult do
      begin
         dwThreadID := GetCurrentThreadId;
@@ -975,7 +975,6 @@ begin
     end;
 end;
 procedure TZCADMainWindow.InitSystemCalls;
-var tm:tmethod;
 begin
   //ShowAllCursorsProc:=self.ShowAllCursors;
   //RestoreAllCursorsProc:=self.RestoreCursors;
@@ -1207,11 +1206,7 @@ begin
 end;
 function TZCADMainWindow.CreateZCADControl(aName: string;DoDisableAlign:boolean=false):TControl;
 var
-  //pint:PGDBInteger;
-  TB:TToolBar;
-  tbdesk:string;
   ta:TmyAction;
-  //TempForm:TForm;
   PFID:PTFormInfoData;
 begin
   ta:=tmyaction(self.StandartActions.ActionByName('ACN_Show_'+aname));
@@ -1386,7 +1381,6 @@ end;
 
 procedure TZCADMainWindow.TBButtonCreateFunc(aNode: TDomNode; TB:TToolBar);
 var
-  _action:TZAction;
   command,img,_hint:string;
   CreatedButton:TmyCommandToolButton;
 begin
@@ -1775,7 +1769,6 @@ procedure TZCADMainWindow.ZMainMenuItemReader(aName: string;aNode: TDomNode;actl
   CreatedMenuItem:TMenuItem;
   line,localizedcaption:string;
   TBSubNode:TDomNode;
-  mcf:TMenuCreateFunc;
   newitem:boolean;
 begin
     line:=getAttrValue(aNode,'Name','');
@@ -1814,7 +1807,6 @@ procedure TZCADMainWindow.ZPopUpMenuReader(aName: string;aNode: TDomNode;actlist
   CreatedMenuItem:TPopupMenu;
   line:string;
   TBSubNode:TDomNode;
-  mcf:TMenuCreateFunc;
 begin
     CreatedMenuItem:=TmyPopupMenu.Create(application);
     line:=getAttrValue(aNode,'Name','');
@@ -1865,8 +1857,6 @@ end;
 procedure TZCADMainWindow.ZMainMenuCommandsHistory(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
 var
  i:integer;
- pstr:pstring;
- line:string;
  CreatedMenuItem:TMenuItem;
 begin
   for i:=low(CommandsHistory) to high(CommandsHistory) do
@@ -1883,7 +1873,6 @@ end;
 procedure TZCADMainWindow.ZMainMenuCommand(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
 var
   CreatedMenuItem:TmyMenuItem;
-  actioncommand,actionshortcut:string;
   captionstr,comstr:string;
 begin
   captionstr:=getAttrValue(aNode,'Caption','');
@@ -1924,8 +1913,6 @@ begin
 end;
 
 procedure TZCADMainWindow.ZMainMenuSampleFiles(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-var
-  i:integer;
 begin
   localpm.localpm:=RootMenuItem;
   localpm.ImageIndex:=ImagesManager.GetImageIndex('Dxf');
@@ -1936,8 +1923,6 @@ begin
 end;
 
 procedure TZCADMainWindow.ZMainMenuDebugFiles(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-var
-  i:integer;
 begin
   localpm.localpm:=RootMenuItem;
   localpm.ImageIndex:=ImagesManager.GetImageIndex('Dxf');
@@ -2002,9 +1987,9 @@ function TZCADMainWindow.CreateCBox(CBName:GDBString;owner:TToolBar;DrawItem:TDr
 begin
   result:=TComboBox.Create(owner);
   result.Style:=csOwnerDrawFixed;
-  SetComboSize(result,sysvar.INTF.INTF_DefaultControlHeight^-6,true);
+  SetComboSize(result,sysvar.INTF.INTF_DefaultControlHeight^-6,CBReadOnly);
   result.Clear;
-  result.readonly:=true;
+  {result.readonly:=true;//now it deprecated, see in SetComboSize}
   result.DropDownCount:=50;
   if w<>0 then
               result.Width:=w;

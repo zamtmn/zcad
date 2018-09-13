@@ -94,10 +94,10 @@ m1[0,1]:=sin(r);
 objMatrix:=MatrixMultiply(m1,objMatrix);
 end;
 procedure GDBObjAbstractText.FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);
-var
+(*var
    r:double;
    ox:gdbvertex;
-   {m,}m2,m3:DMAtrix4D;
+   {m,}m2,m3:DMAtrix4D;*)
 begin
      { TODO : removeing angle from text ents }
      (*

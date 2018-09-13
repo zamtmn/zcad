@@ -174,7 +174,7 @@ end;
 function ansitoutf8ifneed(var s:GDBString):boolean;
 begin
      {$IFNDEF DELPHI}
-     if FindInvalidUTF8Character(@s[1],length(s),false)<>-1
+     if FindInvalidUTF8Codepoint(@s[1],length(s),false)<>-1
         then
             begin
              s:=Tria_AnsiToUtf8(s);

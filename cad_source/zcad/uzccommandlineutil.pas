@@ -152,6 +152,7 @@ begin
            else
              relativemarker:=false;
            superexpr:='';
+           preddivider:='';
            repeat
            subexpr:=GetPredStr(cmd,[',','<'],divider);
            v:=evaluate(subexpr,SysUnit);

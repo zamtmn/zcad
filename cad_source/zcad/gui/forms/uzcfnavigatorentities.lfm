@@ -21,7 +21,7 @@ object NavigatorEntities: TNavigatorEntities
     Header.Columns = <    
       item
         Position = 0
-        Width = 480
+        Width = 484
       end>
     Header.Options = [hoAutoResize, hoColumnResize, hoDrag, hoShowSortGlyphs, hoVisible]
     Header.SortColumn = 0

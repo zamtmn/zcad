@@ -488,8 +488,6 @@ begin
   result:=cmd_ok;
 end;
 function ShowToolBar_com(operands:TCommandOperands):TCommandResult;
-var
-   ctrl:TControl;
 begin
   if Operands<>'' then
                       begin

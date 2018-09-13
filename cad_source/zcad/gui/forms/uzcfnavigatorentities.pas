@@ -6,10 +6,10 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
-  StdCtrls, ActnList, VirtualTrees, gvector,
+  StdCtrls, ActnList, VirtualTrees,
   uzbtypes,gzctnrvectortypes,uzbgeomtypes ,uzegeometry, uzccommandsmanager,
-  uzcinterface,uzeconsts,uzeentity,uzcimagesmanager,uzcdrawings,uzbtypesbase,
-  uzcenitiesvariablesextender,varmandef,uzbstrproc,uzcnavigatorsnodedesk;
+  uzcinterface,uzeentity,uzcimagesmanager,uzcdrawings,uzbtypesbase,
+  varmandef,uzbstrproc,uzcnavigatorsnodedesk;
 
 type
 
@@ -128,7 +128,7 @@ procedure TNavigatorEntities.TVDblClick(Sender: TObject);
 var
   pnode:PVirtualNode;
   pnd:PTNodeData;
-  pc,pp:gdbvertex;
+  pc:gdbvertex;
   bb:TBoundingBox;
 const
   scale=10;

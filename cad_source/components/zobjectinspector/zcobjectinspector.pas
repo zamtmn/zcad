@@ -1705,7 +1705,7 @@ begin
                                                                                 editorcontrol.Visible:=false;
                                                                                 {$ENDIF}
                                                                                 editorcontrol.Parent:=self;
-                                                                                SetComboSize(editorcontrol as TCombobox,rowh-6,(editorcontrol as TCombobox).ReadOnly);
+                                                                                SetComboSize(editorcontrol as TCombobox,rowh-6,CBDoNotTouch);
                                                                                 //(editorcontrol as TCombobox).itemheight:=pp^.rect.Bottom-pp^.rect.Top-6;
                                                                                 if (editorcontrol as TCombobox).ReadOnly then
                                                                                 (editorcontrol as TCombobox).droppeddown:=true;//автооткрытие комбика мещает вводу, открываем только те что без возможности ввода значений

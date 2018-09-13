@@ -19,7 +19,7 @@
 unit UGDBVectorSnapArray;
 {$INCLUDE def.inc}
 interface
-uses uzbgeomtypes,uzbtypesbase,gzctnrvectordata,sysutils,uzbtypes;
+uses uzbgeomtypes,gzctnrvectordata,sysutils,uzbtypes;
 type
 {Export+}
 PVectotSnap=^VectorSnap;

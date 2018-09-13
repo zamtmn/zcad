@@ -25,11 +25,12 @@ uses
 
 type
   TIsShortcutFunc=function(var Message: TLMKey): boolean of object;
+  TCBReadOnlyMode=(CBReadOnly,CBEditable,CBDoNotTouch);
 
 procedure SetcomboItemsCount(cb:tcombobox;ItemsCount:integer);
 procedure ComboBoxDrawItem(Control:TWinControl;ARect:TRect;State:TOwnerDrawState);
 function ListViewDrawSubItem(State: TCustomDrawState;canvas:tcanvas;Item: TListItem;SubItem: Integer): TRect;
-procedure SetComboSize(cb:tcombobox;ItemH:Integer;readonly:boolean);
+procedure SetComboSize(cb:tcombobox;ItemH:Integer;ReadOnlyMode:TCBReadOnlyMode);
 function IsZEditableShortCut(var Message: TLMKey):boolean;
 function IsZShortcut(var Message: TLMKey;const ActiveControl:TWinControl; const CMDEdit:TEdit; const OldFunction:TIsShortcutFunc): boolean;
 implementation
@@ -96,14 +97,14 @@ begin
                                           result:=false;
            end;
 end;
-procedure SetComboSize(cb:tcombobox;ItemH:Integer;readonly:boolean);
+procedure SetComboSize(cb:tcombobox;ItemH:Integer;ReadOnlyMode:TCBReadOnlyMode);
 begin
      cb.AutoSize:=false;
      {$IFDEF LCLWIN32}
-     if readonly then
-       cb.Style:=csOwnerDrawFixed
-     else
-       cb.Style:=csOwnerDrawEditableFixed;
+     case ReadOnlyMode of
+       CBReadOnly:cb.Style:=csOwnerDrawFixed;
+       CBEditable:cb.Style:=csOwnerDrawEditableFixed;
+     end;
      cb.ItemHeight:=ItemH;
      {$ENDIF}
 end;

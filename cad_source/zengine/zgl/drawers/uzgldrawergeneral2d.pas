@@ -170,8 +170,6 @@ end;
 function TZGLGeneral2DDrawer.ProjectPoint3DInModelSpace(const p:gdbvertex;var matrixs:tmatrixs):GDBvertex2D;
 var
    pp:GDBVertex;
-   ps:integer;
-   x,y:integer;
 begin
     _myGluProject2(p,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp);
 

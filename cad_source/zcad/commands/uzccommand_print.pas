@@ -21,7 +21,7 @@ unit uzccommand_print;
 
 interface
 uses
-  uzglviewareageneral,uzgldrawerabstract,
+  uzgldrawerabstract,
   uzgldrawercanvas,uzgldrawergdi,uzgldrawergeneral2d,
   uzcoimultiobjects,uzepalette,
   uzgldrawcontext,
@@ -148,7 +148,7 @@ end;
 procedure Print_com.Print(pdata:GDBPlatformint);
  var
   //prn:TPrinterRasterizer;
-  ddx,ddy,dx,dy,{cx,cy,}sx,sy,scale:gdbdouble;
+  dx,dy,{cx,cy,}sx,sy,scale:gdbdouble;
   tmatrix,_clip:DMatrix4D;
   _frustum:ClipArray;
   cdwg:PTSimpleDrawing;
@@ -159,7 +159,7 @@ procedure Print_com.Print(pdata:GDBPlatformint);
   pw,ph:integer;
   point1,point2:GDBVertex;
 
-  modelMatrix,smatrix:DMatrix4D;
+  modelMatrix{,smatrix}:DMatrix4D;
   projMatrix:DMatrix4D;
   viewport:IMatrix4;
   pd1,pd2:GDBvertex2D;
@@ -199,7 +199,7 @@ begin
     sx:=1;
   end;
 
-  smatrix:=CreateScaleMatrix(CreateVertex(scale,scale,scale));
+  //smatrix:=CreateScaleMatrix(CreateVertex(scale,scale,scale));
 
   //projMatrix:=ortho(point1.x,point2.x,point1.y,point2.y,-1,1,@onematrix);
 

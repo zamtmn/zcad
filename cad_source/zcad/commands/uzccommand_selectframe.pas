@@ -22,11 +22,11 @@ unit uzccommand_selectframe;
 interface
 uses
  {$IFDEF DEBUGBUILD}strutils,{$ENDIF}
- uzglviewareageneral,zeundostack,zcchangeundocommand,uzcoimultiobjects,
- uzcenitiesvariablesextender,uzgldrawcontext,uzcdrawing,uzbpaths,uzeffmanager,
- uzeentdimension,uzestylesdim,uzestylestexts,uzeenttext,uzestyleslinetypes,
+ uzglviewareageneral,zeundostack,uzcoimultiobjects,
+ uzgldrawcontext,uzbpaths,uzeffmanager,
+ uzestylesdim,uzeenttext,
  URecordDescriptor,uzefontmanager,uzedrawingsimple,uzcsysvars,uzccommandsmanager,
- TypeDescriptors,uzcutils,uzcstrconsts,uzcctrlcontextmenu,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
+ TypeDescriptors,uzcstrconsts,uzcctrlcontextmenu,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
  uzbstrproc,uzctreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,LazUTF8,Forms,Controls,Clipbrd,lclintf,
   uzcsysinfo,
@@ -43,12 +43,11 @@ uses
   uzeconsts,
   uzeentity,
  uzcshared,
- uzeentitiestree,
  uzbtypesbase,uzbmemman,uzcdialogsfiles,
  UUnitManager,uzclog,Varman,
  uzbgeomtypes,dialogs,uzcinfoform,
- uzeentpolyline,UGDBPolyLine2DArray,uzeentlwpolyline,UGDBSelectedObjArray,
- gzctnrvectortypes,uzegeometry,uzelongprocesssupport,usimplegenerics,gzctnrstl;
+ uzeentpolyline,uzeentlwpolyline,UGDBSelectedObjArray,
+ gzctnrvectortypes,uzegeometry,uzelongprocesssupport;
 var
   selframecommand:PCommandObjectDef;
 

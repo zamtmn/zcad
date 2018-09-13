@@ -22,7 +22,7 @@ unit uzcfdimstyles;
 interface
 
 uses
-  uzcutils,zcchangeundocommand,zcobjectchangeundocommand2,uzcdrawing,LMessages,uzefont,
+  uzcutils,zcchangeundocommand,zcobjectchangeundocommand2,uzcdrawing,LMessages,
   uzclog,uzedrawingsimple,uzcsysvars,Classes, SysUtils,
   FileUtil, LResources, Forms, Controls, Graphics, Dialogs,GraphType,
   Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype, ActnList,
@@ -528,20 +528,17 @@ end;
 procedure TDimStylesForm.DimStyleInspect(Sender: TObject);
 var
    editForm:TDimStyleEditForm;
-   pdwg:PTSimpleDrawing;
-   pstyle:PGDBDimStyle;
+   //pdwg:PTSimpleDrawing;
 begin
-  pdwg:=drawings.GetCurrentDWG;
-  if assigned(ListView1.Selected)then
-  begin
+  //pdwg:=drawings.GetCurrentDWG;
+  if assigned(ListView1.Selected)then begin
     uzcfdimedit.dimStyle:=(ListView1.Selected.Data);
     editForm:=TDimStyleEditForm.Create(Self);
     //pstyle:=(ListView1.Selected.Data);
     editForm.ShowModal;
     //editForm.Free;
-    end
-  else
-  ZCMsgCallBackInterface.TextMessage(rsStyleMustBeSelected,TMWOShowError);
+  end else
+    ZCMsgCallBackInterface.TextMessage(rsStyleMustBeSelected,TMWOShowError);
 end;
 
 procedure TDimStylesForm.doTStyleDelete(ProcessedItem:TListItem);

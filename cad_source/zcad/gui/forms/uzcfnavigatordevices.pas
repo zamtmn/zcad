@@ -197,7 +197,7 @@ procedure TNavigatorDevices.TVDblClick(Sender: TObject);
 var
   pnode:PVirtualNode;
   pnd:PTNodeData;
-  pc,pp:gdbvertex;
+  pc:gdbvertex;
   bb:TBoundingBox;
 const
   scale=10;

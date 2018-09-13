@@ -48,10 +48,10 @@ GZVector{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
         Count:TArrayIndex;(*hidden_in_objinsp*)               //**< Количество занятых элементов массива
         Max:TArrayIndex;(*hidden_in_objinsp*)                 //**< Размер массива (под сколько элементов выделено памяти)
 
-        {**Деструктор}
+        {**~Деструктор}
         destructor done;virtual;
         {**Деструктор}
-        destructor destroy;virtual;
+        procedure destroy;virtual;
         {**Конструктор}
         constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:TArrayIndex);
         {**Конструктор}
@@ -409,7 +409,7 @@ begin
   free;
   destroy;
 end;
-destructor GZVector<T>.destroy;
+procedure GZVector<T>.destroy;
 begin
   if PArray<>nil then
                      GDBFreeMem(PArray);

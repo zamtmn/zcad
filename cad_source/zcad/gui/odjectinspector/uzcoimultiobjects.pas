@@ -784,7 +784,6 @@ end;
 
 procedure SelectOnlyThisBlocsByName(PInstance:GDBPointer);
 var
-    NeededObjType:TObjID;
     pv:pGDBObjEntity;
     ir:itrec;
     count,selected:integer;

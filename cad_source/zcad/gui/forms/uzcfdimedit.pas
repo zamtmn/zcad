@@ -7,18 +7,17 @@ unit uzcfdimedit;
 interface
 
 uses
-  uzcutils,zcchangeundocommand,zcobjectchangeundocommand2,uzcdrawing,LMessages,uzefont,
   uzclog,uzedrawingsimple,uzcsysvars,Classes, SysUtils,
   FileUtil, LResources, Forms, Controls, Graphics, Dialogs,GraphType,
   Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype, ActnList, Spin,
 
-  uzeconsts,uzestylestexts,uzcdrawings,uzbtypesbase,uzbtypes,varmandef,
-  uzcsuptypededitors,  uzedimensionaltypes,
+  uzestylestexts,uzcdrawings,uzbtypes,varmandef,
+  uzedimensionaltypes,
 
-  uzestylesdim, uzeentdimension,typinfo,
+  uzestylesdim,typinfo,
 
   uzbpaths,uzcinterface, uzcstrconsts, uzcsysinfo,uzbstrproc, uzcshared,UBaseTypeDescriptor,
-  uzcimagesmanager, usupportgui, ZListView,uzefontmanager,varman,uzctnrvectorgdbstring,
+  uzcimagesmanager, uzefontmanager,varman,
   gzctnrvectortypes,uzeentity,uzeenttext,uzepalette, uzcflineweights,uzestyleslinetypes,Types;
 
 type
@@ -373,9 +372,6 @@ begin
 end;
 function TDimStyleEditForm.TextStyleComboBoxChange(Sender: TObject; textStyleBox:TComboBox; textStyleindex:integer):PGDBTextStyle;
 var
-    s:string;
-    //CurrentFontIndex:integer;
-    pdwg:PTSimpleDrawing;
    ir:itrec;
    plp:PGDBTextStyle;
 begin
@@ -754,8 +750,6 @@ begin
 end;
 
 procedure TDimStyleEditForm.RefreshClick(Sender: TObject);
-var
-   i:integer;
 begin
      //ZCMsgCallBackInterface.TextMessage(dimStyle^.Text.DIMTXSTY^.GetFullName,TMWOHistoryOut);
      dlineColorLabel.Caption:=rsColor;

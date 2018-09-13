@@ -68,7 +68,6 @@ end;
 
 procedure EscapeSeq(var str:gdbstring;var startpos:integer;pobj:PGDBObjGenericWithSubordinated);
 var
-  endpos:integer;
   sym:char;
 begin
   if startpos>0 then

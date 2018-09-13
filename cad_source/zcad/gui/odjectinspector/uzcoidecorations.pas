@@ -23,7 +23,7 @@ interface
 
 uses
   zcobjectinspectorui,uzctypesdecorations,uzccommandsabstract,zcobjectinspectoreditors,uzcsysinfo,uzepalette,UEnumDescriptor,zcobjectinspector,uzcinfoform,Forms,uzestyleslinetypes,sysutils,uzctreenode,uzcfsnapeditor,uzccominterface,
-  Graphics,LCLType,Themes,types,uzeconsts,UGDBNamedObjectsArray,uzctnrvectorgdbstring,
+  Graphics,LCLType,Themes,uzeconsts,UGDBNamedObjectsArray,uzctnrvectorgdbstring,
   varmandef,Varman,uzcfcolors,uzestyleslayers,uzbtypes,uzcflineweights,uzbtypesbase,usupportgui,
   StdCtrls,uzcdrawings,uzcstrconsts,Controls,Classes,uzbstrproc,uzcsysvars,uzccommandsmanager,
   gzctnrvectortypes,uzbgeomtypes,uzcinterface,uzcoimultiobjects,uzcgui2color,uzcgui2linewidth,uzcgui2linetypes;
@@ -64,9 +64,9 @@ begin
   cbedit:=TComboBox.Create(propeditor);
   cbedit.Text:=PTD.GetValueAsString(pinstance);
   cbedit.OnChange:=propeditor.EditingProcess;
-  SetComboSize(cbedit,sysvar.INTF.INTF_DefaultControlHeight^-6,true);
+  SetComboSize(cbedit,sysvar.INTF.INTF_DefaultControlHeight^-6,CBReadOnly);
   {$IFNDEF DELPHI}
-  cbedit.ReadOnly:=true;
+  {cbedit.ReadOnly:=true;//now it deprecated, see in SetComboSize}
   {$ENDIF}
 end;
 
@@ -106,7 +106,7 @@ end;
 
 begin
      CreateComboPropEditor(TheOwner,pinstance,FreeOnLostFocus,PTD,result.editor,cbedit);
-     SetComboSize(cbedit,sysvar.INTF.INTF_DefaultControlHeight^-6,true);
+     SetComboSize(cbedit,sysvar.INTF.INTF_DefaultControlHeight^-6,CBReadOnly);
      cbedit.Style:=csOwnerDrawFixed;
      cbedit.OnDrawItem:=TSupportLineWidthCombo.LineWBoxDrawItem;
 
@@ -133,7 +133,7 @@ var
 begin
      result:=NamedObjectsDecoratorCreateEditor(TheOwner,rect,pinstance,psa,FreeOnLostFocus,PTD,@drawings.GetCurrentDWG.LTypeStyleTable);
      cbedit:=TComboBox(result.Editor.geteditor);
-     SetComboSize(cbedit,sysvar.INTF.INTF_DefaultControlHeight^-6,true);
+     SetComboSize(cbedit,sysvar.INTF.INTF_DefaultControlHeight^-6,CBReadOnly);
      cbedit.Style:=csOwnerDrawFixed;
      cbedit.OnDrawItem:=TSupportLineTypeCombo.LTypeBoxDrawItem;
 end;
@@ -276,7 +276,7 @@ end;
 
 begin
      CreateComboPropEditor(TheOwner,pinstance,FreeOnLostFocus,PTD,result.editor,cbedit);
-     SetComboSize(cbedit,sysvar.INTF.INTF_DefaultControlHeight^-6,true);
+     SetComboSize(cbedit,sysvar.INTF.INTF_DefaultControlHeight^-6,CBReadOnly);
      cbedit.Style:=csOwnerDrawFixed;
      cbedit.OnDrawItem:=TSupportColorCombo.ColorDrawItem;
 

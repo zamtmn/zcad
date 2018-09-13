@@ -652,7 +652,7 @@ var
   Bound:TBoundingRect;
 
   lp{,tv}:gdbvertex;
-  plp,plp2:pgdbvertex;
+  //plp,plp2:pgdbvertex;
   pswp:pGDBStrWithPoint;
       ir:itrec;
   pl:GDBPoint3DArray;
@@ -814,7 +814,7 @@ begin
        PProjoutbound^.init({$IFDEF DEBUGBUILD}'{B510A218-FCAB-464A-B97F-F19DF29D0FB0}',{$ENDIF}4);
   end;
 
-  plp:=pl.beginiterate(ir);
+  {plp:=pl.beginiterate(ir);
   plp2:=pl.iterate(ir);
   if plp2<>nil then
   repeat
@@ -828,7 +828,7 @@ begin
 
         plp:=pl.iterate(ir);
         plp2:=pl.iterate(ir);
-  until plp2=nil;
+  until plp2=nil;}
 
 
 

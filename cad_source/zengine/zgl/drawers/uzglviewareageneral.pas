@@ -1629,8 +1629,6 @@ begin
      WaMouseMove(nil,[],param.md.mouse.x,param.md.mouse.y);
 end;
 destructor TGeneralViewArea.Destroy;
-var
-  i:integer;
 begin
   Drawer.delmyscrbuf;
   PolarAxis.done;

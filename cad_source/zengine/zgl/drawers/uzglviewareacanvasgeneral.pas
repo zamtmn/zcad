@@ -41,7 +41,6 @@ type
                       function CreateWorkArea(TheOwner: TComponent):TCADControl; override;
                       procedure SetupWorkArea; override;
                       procedure getareacaps; override;
-                      procedure GDBActivateGLContext; override;
                       function startpaint:boolean;override;
                       function NeedDrawInsidePaintEvent:boolean; override;
                   end;
@@ -61,10 +60,6 @@ begin
      inherited WMPaint(Message);
 
      //Exclude(FControlState, csCustomPaint);
-end;
-procedure TGeneralCanvasViewArea.GDBActivateGLContext;
-begin
-     inherited;
 end;
 function TGeneralCanvasViewArea.CreateWorkArea(TheOwner: TComponent):TCADControl;
 begin

@@ -1714,6 +1714,7 @@ begin
     //PGDBObjBlockInsert(pb)^.initnul;//(@drawings.GetCurrentDWG^.ObjRoot,drawings.LayerTable.GetSystemLayer,0);
     PGDBObjBlockInsert(pb)^.init(drawings.GetCurrentROOT,drawings.GetCurrentDWG^.GetCurrentLayer,0);
     pb^.Name:=PGDBObjBlockdef(drawings.GetCurrentDWG^.BlockDefArray.getDataMutable(BIProp.Blocks.Selected))^.Name;//'DEVICE_NOC';
+    zcSetEntPropFromCurrentDrawingProp(pb);
     //pb^.vp.ID:=GDBBlockInsertID;
     pb^.Local.p_insert:=wc;
     pb^.scale:=BIProp.Scale;
@@ -1770,6 +1771,7 @@ begin
     //PGDBObjBlockInsert(pb)^.initnul;//(@drawings.GetCurrentDWG^.ObjRoot,drawings.LayerTable.GetSystemLayer,0);
     PGDBObjBlockInsert(pb)^.init(drawings.GetCurrentROOT,drawings.GetCurrentDWG^.GetCurrentLayer,0);
     pb^.Name:=PGDBObjBlockdef(drawings.GetCurrentDWG^.BlockDefArray.getDataMutable(BIProp.Blocks.Selected))^.Name;//'NOC';//'TESTBLOCK';
+    zcSetEntPropFromCurrentDrawingProp(pb);
     //pb^.vp.ID:=GDBBlockInsertID;
     pb^.Local.p_insert:=wc;
 

@@ -64,7 +64,7 @@ begin
      _value:=UpperCase(_value);
      if _value='OFF' then
        PEnt^.vp.OSnapMode:=off
-else if _value='ASOVNER' then
+else if _value='ASOWNER' then
      PEnt^.vp.OSnapMode:=AsOwner;
      result:=true;
 end;

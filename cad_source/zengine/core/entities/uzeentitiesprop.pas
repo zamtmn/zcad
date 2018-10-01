@@ -24,6 +24,7 @@ uses uzedimensionaltypes,uzepalette,uzestyleslinetypes,uzbgeomtypes,uzbtypes,uze
 type
 //ID:TObjID;(*'Object type'*)(*oi_readonly*)(*hidden_in_objinsp*)
 {Export+}
+TOSnapMode=(On,Off,AsOwner);
 PGDBObjVisualProp=^GDBObjVisualProp;
 GDBObjVisualProp=packed record
                       Layer:{-}PGDBLayerProp{/PGDBLayerPropObjInsp/};(*'Layer'*)(*saved_to_shd*)
@@ -33,6 +34,7 @@ GDBObjVisualProp=packed record
                       BoundingBox:TBoundingBox;(*'Bounding box'*)(*oi_readonly*)(*hidden_in_objinsp*)
                       LastCameraPos:TActulity;(*oi_readonly*)(*hidden_in_objinsp*)
                       Color:TGDBPaletteColor;
+                      OSnapMode:TOSnapMode;(*'OSnap mode'*)
                  end;
 {Export-}
 function getLTfromVP(const vp:GDBObjVisualProp):PGDBLtypeProp;

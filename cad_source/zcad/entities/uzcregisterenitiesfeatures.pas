@@ -23,7 +23,7 @@ uses uzcinterface,uzeffdxf,uzbpaths,uzcsysvars,uzctranslations,sysutils,
      uzcenitiesvariablesextender,uzcstrconsts,uzcshared,uzeconsts,devices,uzccomdb,uzcentcable,uzcentnet,uzeentdevice,TypeDescriptors,uzeffdxfsupport,
      uzetextpreprocessor,UGDBOpenArrayOfByte,uzbtypesbase,uzbtypes,uzeobjectextender,
      uzeentsubordinated,uzeentity,uzeenttext,uzeblockdef,varmandef,Varman,UUnitManager,
-     gzctnrvectortypes,URecordDescriptor,UBaseTypeDescriptor,uzedrawingdef,uzbmemman;
+     gzctnrvectortypes,URecordDescriptor,UBaseTypeDescriptor,uzedrawingdef,uzbmemman,uzeentitiesprop;
 var
    PFCTTD:GDBPointer=nil;
    extvarunit:TUnit;
@@ -57,6 +57,15 @@ end;
 function EntIOLoad_LAYER(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
 begin
      PEnt^.vp.Layer:=drawing.getlayertable.getAddres(_value);
+     result:=true;
+end;
+function EntIOLoad_OSnapMode(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
+begin
+     _value:=UpperCase(_value);
+     if _value='OFF' then
+       PEnt^.vp.OSnapMode:=off
+else if _value='ASOVNER' then
+     PEnt^.vp.OSnapMode:=AsOwner;
      result:=true;
 end;
 function EntIOLoadUSES(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
@@ -210,6 +219,10 @@ begin
               until pvd=nil;
          end;
          dxfGDBStringout(outhandle,1000,'_OWNERHANDLE='+inttohex(PEnt^.bp.ListPos.owner.GetHandle,10));
+         case PEnt^.vp.OSnapMode of
+              off: dxfGDBStringout(outhandle,1000,'_OSNAPMODE=OFF');
+              AsOwner: dxfGDBStringout(outhandle,1000,'_OSNAPMODE=ASOWNER');
+         end;
     end;
 end;
 
@@ -503,6 +516,7 @@ begin
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('_HANDLE',@EntIOLoad_HANDLE);
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('_UPGRADE',@EntIOLoad_UPGRADE);
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('_LAYER',@EntIOLoad_LAYER);
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('_OSNAPMODE',@EntIOLoad_OSnapMode);
   GDBObjEntity.GetDXFIOFeatures.RegisterSaveFeature(@EntityIOSave_all);
 
   GDBObjEntity.GetDXFIOFeatures.RegisterCreateEntFeature(@ConstructorFeature,@DestructorFeature);

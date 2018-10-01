@@ -63,9 +63,9 @@ function EntIOLoad_OSnapMode(_Name,_Value:GDBString;ptu:PExtensionData;const dra
 begin
      _value:=UpperCase(_value);
      if _value='OFF' then
-       PEnt^.vp.OSnapMode:=off
+       PEnt^.OSnapMode:=off
 else if _value='ASOWNER' then
-     PEnt^.vp.OSnapMode:=AsOwner;
+     PEnt^.OSnapMode:=AsOwner;
      result:=true;
 end;
 function EntIOLoadUSES(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
@@ -219,7 +219,7 @@ begin
               until pvd=nil;
          end;
          dxfGDBStringout(outhandle,1000,'_OWNERHANDLE='+inttohex(PEnt^.bp.ListPos.owner.GetHandle,10));
-         case PEnt^.vp.OSnapMode of
+         case PEnt^.OSnapMode of
               off: dxfGDBStringout(outhandle,1000,'_OSNAPMODE=OFF');
               AsOwner: dxfGDBStringout(outhandle,1000,'_OSNAPMODE=ASOWNER');
          end;

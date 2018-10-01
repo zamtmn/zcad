@@ -293,7 +293,7 @@ begin
      vp.lineweight:=-1;
      vp.LineType:={''}nil;
      vp.LineTypeScale:=1;
-     vp.OSnapMode:=on;
+     OSnapMode:=on;
 
      {if gdb.GetCurrentDWG<>nil then
                                    vp.layer:=gdb.GetCurrentDWG.LayerTable.GetSystemLayer
@@ -493,7 +493,7 @@ begin
   vp.LineWeight := LW;
   vp.LineType:={''}nil;
   vp.LineTypeScale:=1;
-  vp.OSnapMode:=on;
+  OSnapMode:=on;
   bp.ListPos.owner:=own;
   Representation.init({$IFDEF DEBUGBUILD}'GDBObjEntity'{$ENDIF});
   GetDXFIOFeatures.RunConstructorFeature(@self);

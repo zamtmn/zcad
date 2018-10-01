@@ -21,12 +21,12 @@ unit uzglviewareageneral;
 interface
 uses
      gzctnrvectortypes,uzbgeomtypes,LCLProc,uzbmemman,uzemathutils,uzepalette,
-     uzegeometry,uzbtypesbase,uzbtypes,UGDBSelectedObjArray,
+     uzeentsubordinated,uzegeometry,uzbtypesbase,uzbtypes,UGDBSelectedObjArray,
      uzglviewareadata,uzgldrawcontext,uzeentity,uzedrawingabstract,UGDBPoint3DArray,uzeentitiestree,
      uzeconsts,uzestrconsts,UGDBTracePropArray,math,sysutils,uzedrawingdef,uzbstrproc,
      ExtCtrls,Controls,Classes,{$IFDEF DELPHI}Types,{$ENDIF}{$IFNDEF DELPHI}LCLType,{$ENDIF}Forms,
      UGDBOpenArrayOfPV,uzeentgenericsubentry,uzecamera,UGDBVisibleOpenArray,uzgldrawerabstract,
-     uzgldrawergeneral,uzglviewareaabstract;
+     uzgldrawergeneral,uzglviewareaabstract,uzeentitiesprop;
 const
   ontracdist=10;
   ontracignoredist=25;
@@ -2019,6 +2019,20 @@ begin
 
   //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.getonmouseobject------{end}',lp_DecPos);{$ENDIF}
 end;
+function GetFoctOSnapMode(pv:PGDBObjSubordinated):TOSnapMode;
+var
+  owner:PGDBObjSubordinated;
+begin
+  if pv.OSnapMode<>AsOwner then
+    exit(pv.OSnapMode)
+  else begin
+    owner:=pv.GetOwner;
+    if assigned(owner)then
+      result:=getFoctOSnapMode(owner)
+    else
+      result:=on;
+  end
+end;
 procedure TGeneralViewArea.getosnappoint({pva: PGDBObjEntityOpenArray; }radius: GDBFloat);
 var
   pv,pv2:PGDBObjEntity;
@@ -2059,6 +2073,7 @@ begin
      pv:=PDWG.GetOnMouseObj.beginiterate(ir);
      if pv<>nil then
      repeat
+     if GetFoctOSnapMode(pv)=on then
      begin
        pv.startsnap(osp,pdata);
        while pv.getsnap(osp,pdata,param,pdwg.myGluProject2,sysvarDWGOSMode) do
@@ -2115,6 +2130,7 @@ begin
   if pv2<>nil then
   repeat
   if pv<>pv2 then
+  if (GetFoctOSnapMode(pv)=on)and(GetFoctOSnapMode(pv2)=on) then
   begin
        pv.startsnap(osp,pdata);
        while pv.getintersect(osp,pv2,param,PDWG.myGluProject2,sysvarDWGOSMode) do
@@ -2993,6 +3009,8 @@ begin
             pobj:=PDWG.GetOnMouseObj.beginiterate(ir);
             if pobj<>nil then
             repeat
+                  if GetFoctOSnapMode(pobj)=on then
+                  begin
                   ip:=pobj.IsIntersect_Line(param.ontrackarray.otrackarray[i].worldcoord,pt.worldraycoord);
 
                   if ip.isintercept then
@@ -3006,6 +3024,7 @@ begin
                   param.ospoint.dispcoord := temp;
                   param.ospoint.ostype := {os_polar}os_apparentintersection;
                   lastontracdist:=currentontracdist;
+                  end;
                   end;
                   end;
 

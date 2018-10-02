@@ -37,6 +37,7 @@ units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),Inte
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_SelectedGripColor','TGDBPaletteColor',@sysvarDISPSelGripColor);
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_UnSelectedGripColor','TGDBPaletteColor',@sysvarDISPUnSelGripColor);
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DWG_OSMode','TGDBOSMode',@sysvarDWGOSMode);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DWG_OSModeControl','Boolean',@sysvarDWGOSModeControl);
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_GripSize','GDBInteger',@sysvarDISPGripSize);
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_ColorAxis','GDBBoolean',@sysvarDISPColorAxis);
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_DrawZAxis','GDBBoolean',@sysvarDISPDrawZAxis);

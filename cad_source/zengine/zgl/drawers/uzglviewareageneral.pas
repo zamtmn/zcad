@@ -149,6 +149,7 @@ var
    sysvarDISPSelGripColor:TGDBPaletteColor=3;
    sysvarDISPUnSelGripColor:TGDBPaletteColor=4;
    sysvarDWGOSMode:TGDBOSMode=0;
+   sysvarDWGOSModeControl:Boolean=True;
    sysvarDISPGripSize:GDBInteger=5;
    sysvarDISPColorAxis:boolean=true;
    sysvarDISPDrawZAxis:boolean=true;
@@ -2073,7 +2074,7 @@ begin
      pv:=PDWG.GetOnMouseObj.beginiterate(ir);
      if pv<>nil then
      repeat
-     if GetFoctOSnapMode(pv)=on then
+     if (not sysvarDWGOSModeControl) or (GetFoctOSnapMode(pv)=on) then
      begin
        pv.startsnap(osp,pdata);
        while pv.getsnap(osp,pdata,param,pdwg.myGluProject2,sysvarDWGOSMode) do
@@ -2130,7 +2131,7 @@ begin
   if pv2<>nil then
   repeat
   if pv<>pv2 then
-  if (GetFoctOSnapMode(pv)=on)and(GetFoctOSnapMode(pv2)=on) then
+  if (not sysvarDWGOSModeControl) or ((GetFoctOSnapMode(pv)=on)and(GetFoctOSnapMode(pv2)=on)) then
   begin
        pv.startsnap(osp,pdata);
        while pv.getintersect(osp,pv2,param,PDWG.myGluProject2,sysvarDWGOSMode) do
@@ -3009,7 +3010,7 @@ begin
             pobj:=PDWG.GetOnMouseObj.beginiterate(ir);
             if pobj<>nil then
             repeat
-                  if GetFoctOSnapMode(pobj)=on then
+                  if (not sysvarDWGOSModeControl) or(GetFoctOSnapMode(pobj)=on) then
                   begin
                   ip:=pobj.IsIntersect_Line(param.ontrackarray.otrackarray[i].worldcoord,pt.worldraycoord);
 

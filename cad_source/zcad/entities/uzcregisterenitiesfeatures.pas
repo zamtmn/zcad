@@ -63,9 +63,9 @@ function EntIOLoad_OSnapMode(_Name,_Value:GDBString;ptu:PExtensionData;const dra
 begin
      _value:=UpperCase(_value);
      if _value='OFF' then
-       PEnt^.OSnapMode:=off
-else if _value='ASOWNER' then
-     PEnt^.OSnapMode:=AsOwner;
+       PEnt^.OSnapModeControl:=off
+else if _value='ON' then
+     PEnt^.OSnapModeControl:=on;
      result:=true;
 end;
 function EntIOLoadUSES(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
@@ -219,9 +219,9 @@ begin
               until pvd=nil;
          end;
          dxfGDBStringout(outhandle,1000,'_OWNERHANDLE='+inttohex(PEnt^.bp.ListPos.owner.GetHandle,10));
-         case PEnt^.OSnapMode of
-              off: dxfGDBStringout(outhandle,1000,'_OSNAPMODE=OFF');
-              AsOwner: dxfGDBStringout(outhandle,1000,'_OSNAPMODE=ASOWNER');
+         case PEnt^.OSnapModeControl of
+              off: dxfGDBStringout(outhandle,1000,'_OSNAPMODECONTROL=OFF');
+              on: dxfGDBStringout(outhandle,1000,'_OSNAPMODECONTROL=ON');
          end;
     end;
 end;
@@ -516,7 +516,7 @@ begin
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('_HANDLE',@EntIOLoad_HANDLE);
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('_UPGRADE',@EntIOLoad_UPGRADE);
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('_LAYER',@EntIOLoad_LAYER);
-  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('_OSNAPMODE',@EntIOLoad_OSnapMode);
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('_OSNAPMODECONTROL',@EntIOLoad_OSnapMode);
   GDBObjEntity.GetDXFIOFeatures.RegisterSaveFeature(@EntityIOSave_all);
 
   GDBObjEntity.GetDXFIOFeatures.RegisterCreateEntFeature(@ConstructorFeature,@DestructorFeature);

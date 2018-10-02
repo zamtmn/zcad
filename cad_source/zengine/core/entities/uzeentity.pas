@@ -200,6 +200,7 @@ end;
 
 procedure GDBObjEntity.CopyVPto(var toObj:GDBObjEntity);
 begin
+  toObj.OSnapModeControl:=OSnapModeControl;
   toObj.vp.LineType:=vp.LineType;
   toObj.vp.LineTypeScale:=vp.LineTypeScale;
   toObj.vp.color:=vp.color;
@@ -293,7 +294,6 @@ begin
      vp.lineweight:=-1;
      vp.LineType:={''}nil;
      vp.LineTypeScale:=1;
-     OSnapMode:=on;
 
      {if gdb.GetCurrentDWG<>nil then
                                    vp.layer:=gdb.GetCurrentDWG.LayerTable.GetSystemLayer
@@ -493,7 +493,6 @@ begin
   vp.LineWeight := LW;
   vp.LineType:={''}nil;
   vp.LineTypeScale:=1;
-  OSnapMode:=on;
   bp.ListPos.owner:=own;
   Representation.init({$IFDEF DEBUGBUILD}'GDBObjEntity'{$ENDIF});
   GetDXFIOFeatures.RunConstructorFeature(@self);

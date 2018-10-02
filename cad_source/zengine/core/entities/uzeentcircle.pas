@@ -384,7 +384,10 @@ var //pm:DMatrix4D;
 begin
            //myGluProject(Local.p_insert.x,Local.p_insert.y,Local.p_insert.z,@POGLWnd^.pcamera^.modelMatrix,@POGLWnd^.pcamera^.projMatrix,@POGLWnd^.pcamera^.viewport,ProjP_insert.x,ProjP_insert.y,ProjP_insert.z);
            {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(P_insert_in_WCS,ProjP_insert);
-           pprojoutbound^.clear;
+           if assigned(pprojoutbound)then
+             pprojoutbound^.clear
+           else
+             getoutbound(dc);
            //pm:=gdb.GetCurrentDWG.pcamera^.modelMatrix;
            {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[0],tv);
            pprojoutbound^.PushBackIfNotLastWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);

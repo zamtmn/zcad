@@ -2019,14 +2019,14 @@ begin
 
   //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.getonmouseobject------{end}',lp_DecPos);{$ENDIF}
 end;
-function GetFoctOSnapMode(pv:PGDBObjSubordinated):TOSnapMode;
+function GetFoctOSnapMode(pv:PGDBObjSubordinated):TOSnapModeControl;
 var
   owner:PGDBObjSubordinated;
 begin
-  if pv.OSnapMode<>AsOwner then
-    exit(pv.OSnapMode)
+  if pv.OSnapModeControl<>AsOwner then
+    exit(pv.OSnapModeControl)
   else begin
-    owner:=pv.GetOwner;
+    owner:=pointer(pv.bp.ListPos.Owner);
     if assigned(owner)then
       result:=getFoctOSnapMode(owner)
     else

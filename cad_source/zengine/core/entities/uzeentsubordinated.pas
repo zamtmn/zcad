@@ -69,10 +69,10 @@ GDBObjBaseProp=packed record
                       ListPos:TEntityAdress;(*'List'*)
                       TreePos:TTreeAdress;(*'Tree'*)
                  end;
-TOSnapMode=(On,Off,AsOwner);
+TOSnapModeControl=(On,Off,AsOwner);
 GDBObjSubordinated={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericWithSubordinated)
                          bp:GDBObjBaseProp;(*'Owner'*)(*oi_readonly*)(*hidden_in_objinsp*)
-                         OSnapMode:TOSnapMode;(*'OSnap mode'*)
+                         OSnapModeControl:TOSnapModeControl;(*'OSnap mode control'*)
                          function GetOwner:PGDBObjSubordinated;virtual;abstract;
                          procedure createfield;virtual;
                          //function FindVariable(varname:GDBString):pvardesk;virtual;
@@ -291,6 +291,7 @@ begin
      inherited;
      bp.ListPos.owner:={gdb.GetCurrentROOT}nil;
      bp.ListPos.SelfIndex:=-1{nil};
+     OSnapModeControl:=AsOwner;
 end;
 procedure GDBObjGenericWithSubordinated.createfield;
 begin

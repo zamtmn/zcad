@@ -461,8 +461,8 @@ end;
 
 function GDBObjGenericSubEntry.getowner;
 begin
-     result:=@self;
-     //result:=pointer(bp.owner);
+     //result:=@self;
+     result:=pointer(bp.TreePos.owner);
 end;
 destructor GDBObjGenericSubEntry.done;
 begin

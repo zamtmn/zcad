@@ -1427,7 +1427,7 @@ procedure TZCADMainWindow.ZActionsReader(aName: string;aNode: TDomNode;CategoryO
 var
   acnname:string;
   action:tmyaction;
-  actioncommand,actionshortcut,img:string;
+  actioncommand,actionshortcut,actionshortcuts,img:string;
 begin
   acnname:=uppercase(getAttrValue(aNode,'Name',''));
   action:=tmyaction(actlist.ActionByName(acnname));
@@ -1446,6 +1446,13 @@ begin
   actionshortcut:=getAttrValue(aNode,'ShortCut','');
   if actionshortcut<>'' then
                           action.ShortCut:=MyTextToShortCut(actionshortcut);
+  actionshortcuts:=getAttrValue(aNode,'SecondaryShortCuts','');
+  if actionshortcuts<>'' then begin
+    repeat
+          GetPartOfPath(actionshortcut,actionshortcuts,'|');
+          action.SecondaryShortCuts.AddObject(actionshortcut,TObject(MyTextToShortCut(actionshortcut)));
+    until actionshortcuts='';
+  end;
   actioncommand:=getAttrValue(aNode,'Command','');
   ParseCommand(actioncommand,action.command,action.options);
   action.Category:=getAttrValue(aNode,'Category',CategoryOverrider);

@@ -103,9 +103,7 @@ type
 
     procedure ActionUpdate(AAction: TBasicAction; var Handled: Boolean);
     procedure AfterConstruction; override;
-    function setnormalfocus:TControlWithPriority;
 
-    //procedure loadpanels(pf:GDBString);
     procedure CreateLayoutbox(tb:TToolBar);
     //procedure loadmenu(var f:GDBOpenArrayOfByte;var line:GDBString);
     //procedure loadpopupmenu(var f:GDBOpenArrayOfByte;var line:GDBString);
@@ -961,19 +959,6 @@ begin
   end;
   result:=cmd_ok;
 end;
-function TZCADMainWindow.setnormalfocus:TControlWithPriority;
-begin
-      result.priority:=UnPriority;
-      result.control:=nil;
-
-      if assigned(cmdedit) then
-      if cmdedit.Enabled then
-      if cmdedit.{IsControlVisible}IsVisible then
-      if cmdedit.CanFocus then begin
-        result.priority:=CLinePriority;
-        result.control:=cmdedit;
-      end;
-end;
 procedure TZCADMainWindow.InitSystemCalls;
 begin
   //ShowAllCursorsProc:=self.ShowAllCursors;
@@ -994,8 +979,6 @@ begin
   ZCMsgCallBackInterface.RegisterHandler_AfterShowModal(RestoreCursors);
   commandmanager.OnCommandRun:=processcommandhistory;
   AppCloseProc:=asynccloseapp;
-  ZCMsgCallBackInterface.RegisterHandler_GetFocusedControl(self.setnormalfocus);
-  //uzcinterface.SetNormalFocus:=self.setnormalfocus;
   ZCMsgCallBackInterface.RegisterHandler_GUIAction(self.waSetObjInsp);
   {tm.Code:=pointer(self.waSetObjInsp);
   tm.Data:=@self;;

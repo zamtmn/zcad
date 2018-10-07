@@ -42,6 +42,7 @@ type
     procedure mypaint(sender:tobject);
     procedure FormCreate(Sender: TObject);
     procedure ButtonPressed(Sender: TObject);
+    function setnormalfocus:TControlWithPriority;
 
     destructor Destroy;override;
   end;
@@ -104,6 +105,20 @@ begin
       menu.PopUp;
     end;
 end;
+function TCLine.setnormalfocus:TControlWithPriority;
+begin
+      result.priority:=UnPriority;
+      result.control:=nil;
+
+      if assigned(cmdedit) then
+      if cmdedit.Enabled then
+      if cmdedit.IsVisible then
+      if cmdedit.CanFocus then begin
+        result.priority:=CLinePriority;
+        result.control:=cmdedit;
+      end;
+end;
+
 
 procedure TCLine.FormCreate(Sender: TObject);
 var
@@ -348,5 +363,6 @@ begin
   ZCMsgCallBackInterface.RegisterHandler_StatusLineTextOut(StatusLineTextOut);
   //uzcinterface.StatusLineTextOut:=StatusLineTextOut;
   ZCMsgCallBackInterface.RegisterHandler_LogError(LogError);
+  ZCMsgCallBackInterface.RegisterHandler_GetFocusedControl(CLine.setnormalfocus);
   //uzcinterface.TMWOSilentShowError:=LogError;
 end.

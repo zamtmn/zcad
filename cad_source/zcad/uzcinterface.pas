@@ -20,6 +20,9 @@ unit uzcinterface;
 interface
 uses controls,uzcstrconsts,uzedimensionaltypes,gzctnrstl,zeundostack,varmandef,forms,classes,uzbtypes,LCLType;
 
+const
+    CLinePriority=100;
+    UnPriority=-1;
 var
   ZMsgID_GUIEnable:TZMessageID=-1;
   ZMsgID_GUIDisable:TZMessageID=-1;
@@ -30,7 +33,7 @@ var
   ZMsgID_GUICMDLineRunMode:TZMessageID=-1;
 
   ZMsgID_GUIActionSelectionChanged:TZMessageID=-1;
-  ZMsgID_GUIActionSetNormalFocus:TZMessageID=-1;
+  //ZMsgID_GUIActionSetNormalFocus:TZMessageID=-1;
 
   ZMsgID_GUIActionRedrawContent:TZMessageID=-1;
   ZMsgID_GUIActionRedraw:TZMessageID=-1;
@@ -58,6 +61,13 @@ type
     TSimpleProcedure_TZMessageID=Procedure(GUIAction:TZMessageID);
     TSimpleProcedure=Procedure;
     TSimpleProcedure_TZMessageID_HandlersVector=TMyVector<TSimpleProcedure_TZMessageID>;
+
+    TControlWithPriority=record
+      control:TWinControl;
+      priority:integer;
+    end;
+    TGetControlWithPriority_TZMessageID__TControlWithPriority=function:TControlWithPriority of object;
+    TGetControlWithPriority_TZMessageID__TControlWithPriority_HandlersVector=TMyVector<TGetControlWithPriority_TZMessageID__TControlWithPriority>;
 
     TSimpleLCLMethod_TZMessageID=Procedure (sender:TObject;GUIAction:TZMessageID) of object;
     TSimpleLCLMethod_HandlersVector=TMyVector<TSimpleLCLMethod_TZMessageID>;
@@ -103,6 +113,8 @@ type
 
         procedure RegisterHandler_KeyDown(Handler:TKeyEvent);
 
+        procedure RegisterHandler_GetFocusedControl(Handler:TGetControlWithPriority_TZMessageID__TControlWithPriority);
+
         procedure Do_HistoryOut(s:String);
         procedure Do_LogError(s:String);
         procedure Do_StatusLineTextOut(s:String);
@@ -116,6 +128,7 @@ type
         procedure Do_PrepareObject(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:Pointer;popoldpos:boolean=false);
 
         procedure Do_KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+        procedure Do_SetNormalFocus;
 
 
         procedure TextMessage(msg:String;opt:TTextMessageWriteOptionsSet);
@@ -140,6 +153,8 @@ type
         procedure RegisterTKeyEvent_HandlersVector(var KEHV:TKeyEvent_HandlersVector;Handler:TKeyEvent);
         procedure Do_TKeyEvent_HandlersVector(var KEHV:TKeyEvent_HandlersVector;Sender: TObject; var Key: Word; Shift: TShiftState);
 
+        procedure RegisterTGetControlWithPriority_TZMessageID__TControlWithPriority_HandlersVector(var GCWPHV:TGetControlWithPriority_TZMessageID__TControlWithPriority_HandlersVector;Handler:TGetControlWithPriority_TZMessageID__TControlWithPriority);
+        function Do_TGetControlWithPriority_TZMessageID__TControlWithPriority_HandlersVector(var GCWPHV:TGetControlWithPriority_TZMessageID__TControlWithPriority_HandlersVector):TWinControl;
 
       private
         ZMessageIDSeed:TZMessageID;
@@ -156,6 +171,7 @@ type
         SetGDBObjInsp_HandlersVector:TSetGDBObjInsp_HandlersVector;
 
         onKeyDown:TKeyEvent_HandlersVector;
+        getfocusedcontrol:TGetControlWithPriority_TZMessageID__TControlWithPriority_HandlersVector;
 
 
     end;
@@ -376,6 +392,30 @@ begin
        end;
    end;
 end;
+procedure TZCMsgCallBackInterface.RegisterTGetControlWithPriority_TZMessageID__TControlWithPriority_HandlersVector(var GCWPHV:TGetControlWithPriority_TZMessageID__TControlWithPriority_HandlersVector;Handler:TGetControlWithPriority_TZMessageID__TControlWithPriority);
+begin
+   if not assigned(GCWPHV) then
+     GCWPHV:=TGetControlWithPriority_TZMessageID__TControlWithPriority_HandlersVector.Create;
+   GCWPHV.PushBack(Handler);
+end;
+function TZCMsgCallBackInterface.Do_TGetControlWithPriority_TZMessageID__TControlWithPriority_HandlersVector(var GCWPHV:TGetControlWithPriority_TZMessageID__TControlWithPriority_HandlersVector):TWinControl;
+var
+   i:integer;
+   acwp,ccwp:TControlWithPriority;
+begin
+   if assigned(GCWPHV) then begin
+     acwp.control:=nil;
+     acwp.priority:=-1;;
+     for i:=0 to GCWPHV.Size-1 do
+       begin
+         ccwp:=GCWPHV[i];
+         if ccwp.priority>acwp.priority then
+           acwp:=ccwp;
+       end;
+     result:=acwp.control;
+   end else
+     result:=nil;
+end;
 procedure TZCMsgCallBackInterface.RegisterHandler_HistoryOut(Handler:TProcedure_String_);
 begin
    RegisterTProcedure_String_HandlersVector(HistoryOutHandlers,Handler);
@@ -411,6 +451,10 @@ end;
 procedure TZCMsgCallBackInterface.RegisterHandler_KeyDown(Handler:TKeyEvent);
 begin
    RegisterTKeyEvent_HandlersVector(onKeyDown,Handler);
+end;
+procedure TZCMsgCallBackInterface.RegisterHandler_GetFocusedControl(Handler:TGetControlWithPriority_TZMessageID__TControlWithPriority);
+begin
+   RegisterTGetControlWithPriority_TZMessageID__TControlWithPriority_HandlersVector(getfocusedcontrol,Handler);
 end;
 procedure TZCMsgCallBackInterface.Do_HistoryOut(s:String);
 begin
@@ -448,7 +492,14 @@ procedure TZCMsgCallBackInterface.Do_KeyDown(Sender: TObject; var Key: Word; Shi
 begin
    Do_TKeyEvent_HandlersVector(onKeyDown,Sender,Key,Shift);
 end;
-
+procedure TZCMsgCallBackInterface.Do_SetNormalFocus;
+var
+  ctrl:TWinControl;
+begin
+  ctrl:=Do_TGetControlWithPriority_TZMessageID__TControlWithPriority_HandlersVector(getfocusedcontrol);
+  if assigned(ctrl) then
+    ctrl.SetFocus;
+end;
 function TZCMsgCallBackInterface.DoShowModal(MForm:TForm): Integer;
 begin
      Do_BeforeShowModal(MForm);
@@ -476,7 +527,7 @@ initialization
   ZMsgID_GUICMDLineRunMode:=ZCMsgCallBackInterface.GetUniqueZMessageID;
 
   ZMsgID_GUIActionSelectionChanged:=ZCMsgCallBackInterface.GetUniqueZMessageID;
-  ZMsgID_GUIActionSetNormalFocus:=ZCMsgCallBackInterface.GetUniqueZMessageID;
+  //ZMsgID_GUIActionSetNormalFocus:=ZCMsgCallBackInterface.GetUniqueZMessageID;
   ZMsgID_GUIActionRedrawContent:=ZCMsgCallBackInterface.GetUniqueZMessageID;
   ZMsgID_GUIActionRedraw:=ZCMsgCallBackInterface.GetUniqueZMessageID;
   ZMsgID_GUIActionRebuild:=ZCMsgCallBackInterface.GetUniqueZMessageID;

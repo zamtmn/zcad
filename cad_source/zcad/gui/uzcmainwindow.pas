@@ -103,7 +103,7 @@ type
 
     procedure ActionUpdate(AAction: TBasicAction; var Handled: Boolean);
     procedure AfterConstruction; override;
-    procedure setnormalfocus(Sender: TObject;GUIAction:TZMessageID);
+    function setnormalfocus:TControlWithPriority;
 
     //procedure loadpanels(pf:GDBString);
     procedure CreateLayoutbox(tb:TToolBar);
@@ -961,18 +961,18 @@ begin
   end;
   result:=cmd_ok;
 end;
-procedure TZCADMainWindow.setnormalfocus(Sender: TObject;GUIAction:TZMessageID);
+function TZCADMainWindow.setnormalfocus:TControlWithPriority;
 begin
-  if GUIAction=ZMsgID_GUIActionSetNormalFocus then
-    begin
+      result.priority:=UnPriority;
+      result.control:=nil;
+
       if assigned(cmdedit) then
       if cmdedit.Enabled then
       if cmdedit.{IsControlVisible}IsVisible then
-      if cmdedit.CanFocus then
-      begin
-           cmdedit.SetFocus;
+      if cmdedit.CanFocus then begin
+        result.priority:=CLinePriority;
+        result.control:=cmdedit;
       end;
-    end;
 end;
 procedure TZCADMainWindow.InitSystemCalls;
 begin
@@ -994,7 +994,7 @@ begin
   ZCMsgCallBackInterface.RegisterHandler_AfterShowModal(RestoreCursors);
   commandmanager.OnCommandRun:=processcommandhistory;
   AppCloseProc:=asynccloseapp;
-  ZCMsgCallBackInterface.RegisterHandler_GUIAction(self.setnormalfocus);
+  ZCMsgCallBackInterface.RegisterHandler_GetFocusedControl(self.setnormalfocus);
   //uzcinterface.SetNormalFocus:=self.setnormalfocus;
   ZCMsgCallBackInterface.RegisterHandler_GUIAction(self.waSetObjInsp);
   {tm.Code:=pointer(self.waSetObjInsp);
@@ -2187,7 +2187,7 @@ begin
      end;
      if ((ActiveControl=LayerBox)or(ActiveControl=LineWBox))then
                                                                  begin
-                                                                 ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionSetNormalFocus);
+                                                                 ZCMsgCallBackInterface.Do_SetNormalFocus;
                                                                  //self.setnormalfocus(nil);
                                                                  end;
      tempkey:=key;
@@ -2386,7 +2386,7 @@ begin
      //setvisualprop;
      ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRebuild);
      //setnormalfocus(nil);
-     ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionSetNormalFocus);
+     ZCMsgCallBackInterface.Do_SetNormalFocus;
 end;
 
 procedure  TZCADMainWindow.ChangeCColor(Sender:Tobject);
@@ -2436,7 +2436,7 @@ begin
      //setvisualprop;
      ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRebuild);
      //setnormalfocus(nil);
-     ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionSetNormalFocus);
+     ZCMsgCallBackInterface.Do_SetNormalFocus;
 end;
 
 procedure  TZCADMainWindow.ChangeCLineW(Sender:Tobject);
@@ -2461,7 +2461,7 @@ begin
   //setvisualprop;
   ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRebuild);
   //setnormalfocus(nil);
-  ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionSetNormalFocus);
+  ZCMsgCallBackInterface.Do_SetNormalFocus;
 end;
 
 procedure TZCADMainWindow.GeneralTick(Sender: TObject);
@@ -2585,7 +2585,7 @@ begin
 end;
 function TZCADMainWindow.MainMouseDown(Sender:TAbstractViewArea):GDBBoolean;
 begin
-     ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionSetNormalFocus);
+     ZCMsgCallBackInterface.Do_SetNormalFocus;
      //if @SetCurrentDWGProc<>nil then
      SetCurrentDWG{Proc}(Sender.PDWG);
      if (cxmenumgr.ismenupopup)or(ActivePopupMenu<>nil) then
@@ -2600,7 +2600,7 @@ begin
      {If assigned(UpdateObjInspProc)then
                                       UpdateObjInspProc;}
      ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRedraw);
-     ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionSetNormalFocus);
+     ZCMsgCallBackInterface.Do_SetNormalFocus;
 end;
 procedure TZCADMainWindow.ShowCXMenu;
 var
@@ -3053,7 +3053,7 @@ var
 begin
   if (ZCADMainWindow.HScrollBar<>nil)and(ZCADMainWindow.VScrollBar<>nil) then
   if (ZCADMainWindow.HScrollBar.Focused)or(ZCADMainWindow.VScrollBar.Focused)then
-    ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionSetNormalFocus);
+    ZCMsgCallBackInterface.Do_SetNormalFocus;
   pdwg:=drawings.GetCurrentDWG;
   if pdwg<>nil then
   if pdwg.wa<>nil then begin

@@ -173,6 +173,7 @@ type
                 INTF_ObjInsp_ButtonSizeReducing:PGDBInteger;(*'Button size reducing'*)
                end;
   tinterface=packed record
+              INTF_CommandLineEnabled:PGDBBoolean;(*'Command line enabled'*)
               INTF_ShowScrollBars:PGDBBoolean;(*'Show scroll bars'*)
               INTF_ShowDwgTabs:PGDBBoolean;(*'Show drawing tabs'*)
               INTF_DwgTabsPosition:PTAlign;(*'Drawing tabs position'*)

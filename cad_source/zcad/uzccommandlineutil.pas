@@ -29,6 +29,7 @@ const
 type
   TCLineMode=(CLCOMMANDREDY,CLCOMMANDRUN);
 var
+  INTFCommandLineEnabled:Boolean=true;
   aliases:TZctnrVectorGDBString;
   mode:TCLineMode;
 procedure processcommand(var input:string);

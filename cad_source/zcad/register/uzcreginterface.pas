@@ -20,7 +20,7 @@ unit uzcreginterface;
 {$INCLUDE def.inc}
 interface
 uses uzcsysvars,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,
-     Varman,uzcoidecorations,uzegluinterface,LazLogger;
+     Varman,uzcoidecorations,uzegluinterface,LazLogger,uzccommandlineutil;
 implementation
 
 initialization
@@ -32,6 +32,9 @@ initialization
   units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_GLUExtensions','String',@GLUExtensions);
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_GLUExtensions,'RD_GLUExtensions');
   sysvar.RD.RD_GLUExtensions^:=GLUExtensions;
+
+  units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'INTF_CommandLineEnabled','Boolean',@INTFCommandLineEnabled);
+  SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_CommandLineEnabled,'INTF_CommandLineEnabled');
 
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');

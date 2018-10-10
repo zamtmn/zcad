@@ -2299,6 +2299,7 @@ begin
                                 historychanged:=false;
                                 HistoryLine.SelStart:=utflen;
                                 HistoryLine.SelLength:=2;
+                                HistoryLine.ClearSelection;
                            end;
 end;
 procedure AddToComboIfNeed(cb:tcombobox;name:string;obj:TObject);
@@ -3065,6 +3066,8 @@ var
 begin
   if GUIMode<>ZMsgID_GUIActionRedraw then
     exit;
+
+  ZCMsgCallBackInterface.Do_GUIMode(ZMsgID_GUICMDLineCheck);
 
    pdwg:=drawings.GetCurrentDWG;
    if assigned(ZCADMainWindow)then

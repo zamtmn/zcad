@@ -118,8 +118,47 @@ begin
         result.control:=cmdedit;
       end;
 end;
+procedure DisableCmdLine;
+begin
+  if assigned(application.MainForm) then
+    application.MainForm.ActiveControl:=nil;
+  if assigned(uzcfcommandline.cmdedit) then
+                                  begin
+                                      uzcfcommandline.cmdedit.Enabled:=false;
+                                  end;
+  if assigned(prompt) then begin
+    prompt.Enabled:=false;
+    prompt.Color:=clBtnFace;
+  end;
+end;
 
+procedure EnableCmdLine;
+begin
+  if assigned(uzcfcommandline.cmdedit) then
+  if uzcfcommandline.cmdedit.IsVisible then
+                                  begin
+                                       uzcfcommandline.cmdedit.Enabled:=true;
+                                       uzcfcommandline.cmdedit.SetFocus;
+                                  end;
+  if assigned(prompt) then begin
+    prompt.Enabled:=true;
+    prompt.Color:=clDefault;
+  end;
+end;
 
+procedure HandleCmdLine(GUIMode:TZMessageID);
+begin
+     if GUIMode in [ZMsgID_GUICMDLineCheck] then begin
+     if INTFCommandLineEnabled then
+                                   EnableCmdLine
+                               else
+                                   DisableCmdLine;
+     end;
+     if GUIMode in [ZMsgID_GUIDisable] then
+                                           DisableCmdLine
+else if (GUIMode in [ZMsgID_GUIEnable])then
+                                          EnableCmdLine;
+end;
 procedure TCLine.FormCreate(Sender: TObject);
 var
    //bv:tbevel;
@@ -231,6 +270,7 @@ begin
     //CWindow:=TCWindow.CreateNew(application);
     //CWindow.Show;
     ZCMsgCallBackInterface.RegisterHandler_GUIMode(HandleCommandLineMode);
+    HandleCmdLine(ZMsgID_GUICMDLineCheck);
    // SetCommandLineMode:=self.SetMode;
 end;
 destructor TCLine.Destroy;
@@ -303,38 +343,6 @@ procedure HistoryOutStr(s:String);
 begin
      HistoryOut(pansichar(s));
 end;
-procedure DisableCmdLine;
-begin
-  if assigned(application.MainForm) then
-    application.MainForm.ActiveControl:=nil;
-  if assigned(uzcfcommandline.cmdedit) then
-                                  begin
-                                      uzcfcommandline.cmdedit.Enabled:=false;
-                                  end;
-  if assigned(HintText) then
-                          begin
-                            HintText.Enabled:=false;
-                          end;
-end;
-
-procedure EnableCmdLine;
-begin
-  if assigned(uzcfcommandline.cmdedit) then
-  if uzcfcommandline.cmdedit.IsVisible then
-                                  begin
-                                       uzcfcommandline.cmdedit.Enabled:=true;
-                                       uzcfcommandline.cmdedit.SetFocus;
-                                  end;
-  if assigned(HintText) then
-                            HintText.Enabled:=true;
-end;
-
-procedure HandleCmdLine(GUIMode:TZMessageID);
-begin
-     if GUIMode in [ZMsgID_GUIDisable{,ZMsgID_GUIDisableCMDLine}] then DisableCmdLine
-else if GUIMode in [ZMsgID_GUIEnable{,ZMsgID_GUIEnableCMDLine}] then EnableCmdLine;
-end;
-
 procedure StatusLineTextOut(s:String);
 begin
      if assigned(HintText) then

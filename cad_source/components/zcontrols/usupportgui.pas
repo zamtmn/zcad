@@ -63,7 +63,8 @@ begin
                 VK_LEFT,
                 VK_RIGHT,
                 VK_UP,
-                VK_DOWN
+                VK_DOWN,
+                VK_0..VK_Z
                     :begin
                          result:=true;
                      end
@@ -71,31 +72,69 @@ begin
 
      end;
 end;
+function IsZexceptionShortCut(var Message: TLMKey):boolean;
+var
+   chrcode:word;
+   ss:tshiftstate;
+begin
+     chrcode:=Message.CharCode;
+     ss:=MsgKeyDataToShiftState(Message.KeyData);
+     if ssShift in ss then
+                               chrcode:=chrcode or scShift;
+    if ssCtrl in ss then
+                              chrcode:=chrcode or scCtrl;
+
+     case chrcode of
+                VK_DELETE
+                    :begin
+                         result:=true;
+                     end
+                else result:=false;
+
+     end;
+end;
+
 function IsZShortcut(var Message: TLMKey;const ActiveControl:TWinControl; const CMDEdit:TEdit; const OldFunction:TIsShortcutFunc): boolean;
 var
    IsEditableFocus:boolean;
    IsCommandNotEmpty:boolean;
+   s:string;
 begin
      if message.charcode<>VK_SHIFT then
      if message.charcode<>VK_CONTROL then
                                       IsCommandNotEmpty:=IsCommandNotEmpty;
-  IsEditableFocus:=(((ActiveControl is tedit)and(ActiveControl<>cmdedit))
-                  or (ActiveControl is tmemo)
-                  or (ActiveControl is tcombobox));
-  if assigned(cmdedit) then
+  IsCommandNotEmpty:=false;
+  IsEditableFocus:=false;
+  if ActiveControl is tedit then begin
+   IsEditableFocus:=true;
+   IsCommandNotEmpty:=(ActiveControl as tedit).text<>'';
+  end;
+  IsEditableFocus:=(ActiveControl is tedit){and(ActiveControl<>cmdedit)};
+  if not IsEditableFocus then begin
+    if ActiveControl is tmemo then begin
+      IsEditableFocus:=not ((ActiveControl as tmemo).ReadOnly);
+      if not IsEditableFocus then
+        IsEditableFocus:=(ActiveControl as tmemo).SelLength<>0;
+    end;
+  end;
+  if not IsEditableFocus then IsEditableFocus:=(ActiveControl is tcombobox);
+  {if assigned(cmdedit) then
                            IsCommandNotEmpty:=((cmdedit.Text<>'')and(ActiveControl=cmdedit))
                        else
-                           IsCommandNotEmpty:=false;
+                           IsCommandNotEmpty:=false;}
   if IsZEditableShortCut(Message)
   and ((IsEditableFocus)or(IsCommandNotEmpty))
        then result:=false
        else
            begin
              if assigned(OldFunction) then
-                                          result:=OldFunction(Message)
+                                          exit(OldFunction(Message))
                                       else
-                                          result:=false;
+                                          exit(false);
            end;
+  if not IsCommandNotEmpty then
+  if IsZexceptionShortCut(Message) then
+    result:=OldFunction(Message)
 end;
 procedure SetComboSize(cb:tcombobox;ItemH:Integer;ReadOnlyMode:TCBReadOnlyMode);
 begin

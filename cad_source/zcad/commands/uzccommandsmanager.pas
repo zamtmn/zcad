@@ -417,6 +417,7 @@ begin
 
      //EnableCmdLine;
      ZCMsgCallBackInterface.Do_GUIMode({ZMsgID_GUIEnableCMDLine}ZMsgID_GUIEnable);
+     ZCMsgCallBackInterface.Do_GUIMode(ZMsgID_GUICMDLineCheck);
      busy:=false;
 end;
 procedure GDBcommandmanager.sendpoint2command;

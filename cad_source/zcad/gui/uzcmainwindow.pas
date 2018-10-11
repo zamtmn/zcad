@@ -78,12 +78,15 @@ type
   { TZCADMainWindow }
 
   TZCADMainWindow = class(TForm)
+    published
     AnchorDockPanel1:TAnchorDockPanel;
     CoolBarR: TCoolBar;
     CoolBarD: TCoolBar;
     CoolBarL: TCoolBar;
     CoolBarU: TCoolBar;
     ToolBarD: TToolBar;
+
+    procedure DrawStausBar(Sender: TObject);
 
     public
     MainPanel:TForm;
@@ -2486,12 +2489,14 @@ begin
           end;
      end;
 end;
+
 function TZCADMainWindow.MessageBox(Text, Caption: PChar; Flags: Longint): Integer;
 begin
      ShowAllCursors(nil);
      result:=application.MessageBox(Text, Caption,Flags);
      RestoreCursors(nil);
 end;
+
 procedure TZCADMainWindow.ShowAllCursors;
 begin
      if drawings.GetCurrentDWG<>nil then
@@ -2980,6 +2985,7 @@ begin
                          until pp=nil;
                     end;
 end;
+
 procedure TZCADMainWindow.WaShowCursor(Sender:TAbstractViewArea;var DC:TDrawContext);
 begin
      if sender.param.lastonmouseobject<>nil then
@@ -3057,6 +3063,21 @@ begin
   ZCADMainWindow.VScrollBar.SetParams(position,min,max,size);
   end;
 end;
+procedure TZCADMainWindow.DrawStausBar(Sender: TObject);
+var
+   det:TThemedElementDetails;
+   rect:trect;
+begin
+  if ThemeServices.ThemesEnabled then begin
+    rect:=TToolBar(Sender).ClientRect;
+    det:=ThemeServices.GetElementDetails(tsStatusRoot);
+    ThemeServices.DrawElement(TToolBar(Sender).Canvas.Handle,det,rect);
+    det:=ThemeServices.GetElementDetails(tsGripper);
+    rect.Left:=rect.Right-16;
+    ThemeServices.DrawElement(TToolBar(Sender).Canvas.Handle,det,rect);
+  end;
+end;
+
 procedure TZCADMainWindow.updatevisible(sender:TObject;GUIMode:TZMessageID);
 var
    GVA:TGeneralViewArea;

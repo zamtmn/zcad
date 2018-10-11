@@ -6,7 +6,6 @@ object ZCADMainWindow: TZCADMainWindow
   ClientHeight = 470
   ClientWidth = 632
   DesignTimePPI = 113
-  LCLVersion = '1.9.0.0'
   object AnchorDockPanel1: TAnchorDockPanel
     Left = 4
     Height = 440
@@ -29,7 +28,6 @@ object ZCADMainWindow: TZCADMainWindow
     GrabWidth = 5
   end
   object ToolBarD: TToolBar
-    AnchorSideTop.Control = CoolBarD
     Left = 0
     Height = 24
     Top = 446
@@ -39,10 +37,13 @@ object ZCADMainWindow: TZCADMainWindow
     Caption = 'ToolBarD'
     DragKind = dkDock
     EdgeBorders = []
+    EdgeInner = esNone
+    EdgeOuter = esNone
     ShowCaptions = True
     TabOrder = 2
     Transparent = True
     Wrapable = False
+    OnPaint = DrawStausBar
   end
   object CoolBarL: TCoolBar
     Left = 0
@@ -81,10 +82,11 @@ object ZCADMainWindow: TZCADMainWindow
     Width = 632
     Align = alBottom
     AutoSize = True
+    BandBorderStyle = bsNone
     BandMaximize = bmDblClick
     Bands = <>
     DockSite = True
-    EdgeBorders = [ebBottom]
+    EdgeBorders = []
     GrabWidth = 5
     Themed = False
   end

@@ -2294,13 +2294,13 @@ begin
                                                                                UpdateObjInspProc;}
                                         end;
      rt:=SysVar.SYS.SYS_RunTime^;
-     if historychanged then
+     {if historychanged then
                            begin
                                 historychanged:=false;
                                 HistoryLine.SelStart:=utflen;
                                 HistoryLine.SelLength:=2;
                                 HistoryLine.ClearSelection;
-                           end;
+                           end;}
 end;
 procedure AddToComboIfNeed(cb:tcombobox;name:string;obj:TObject);
 var

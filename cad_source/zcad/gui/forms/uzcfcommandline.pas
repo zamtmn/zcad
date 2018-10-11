@@ -33,7 +33,7 @@ type
   TCLine = class(TForm)
     procedure AfterConstruction; override;
   public
-    utfpresent:boolean;
+    //utfpresent:boolean;
     utflen:integer;
     procedure keypressmy(Sender: TObject; var Key: char);
     procedure SetMode(m:TCLineMode);virtual;
@@ -52,10 +52,9 @@ var
   prompt:TLabel;
   panel:tpanel;
   HistoryLine:TMemo;
-  utflen:integer;
 
   HintText:TLabel;
-  historychanged:boolean;
+  //historychanged:boolean;
 
 implementation
 
@@ -166,7 +165,7 @@ var
    sbutton:TmySpeedButton;
 begin
     self.Constraints.MinHeight:=36;
-    utfpresent:=false;
+    //utfpresent:=false;
     UTFLen:=0;
     //height:=100;
     //self.DoubleBuffered:=true;
@@ -313,31 +312,20 @@ procedure HistoryOut(s: pansichar); export;
 var
    a:string;
 begin
-     {if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
-     if sysvar.SYS.SYS_IsHistoryLineCreated^ then}
-     if assigned(HistoryLine) then
-     begin
-          a:=(s);
-               if HistoryLine.Lines.Count=0 then
-                                            utflen:=utflen+{UTF8}Length(a)
-                                        else
-                                            utflen:=2+utflen+{UTF8}Length(a);
-          {$IFNDEF DELPHI}
-          HistoryLine.Append(a);
-          //CWindow.CWMemo.Append(a);
-          {$ENDIF}
-          //application.ProcessMessages;
-
-          //HistoryLine.SelStart:=utflen{HistoryLine.GetTextLen};
-          //HistoryLine.SelLength:=2;
-          historychanged:=true;
-          //HistoryLine.SelLength:=0;
-          //{CLine}HistoryLine.append(s);
-          {CLine}//---------------------------------------------------------HistoryLine.repaint;
-          //a:=CLine.HistoryLine.Lines[CLine.HistoryLine.Lines.Count];
-     //SendMessageA(cline.HistoryLine.Handle, WM_vSCROLL, SB_PAGEDOWN	, 0);
-     end;
-     //programlog.logoutstr('HISTORY: '+s,0,LM_Info);
+  if assigned(HistoryLine) then
+  begin
+   a:=(s);
+   if HistoryLine.Lines.Count=0 then
+     CLine.utflen:=CLine.utflen+UTF8Length(a)
+   else
+     CLine.utflen:=2+CLine.utflen+UTF8Length(a);
+   {$IFNDEF DELPHI}
+   HistoryLine.Append(a);
+   {$ENDIF}
+   HistoryLine.SelStart:=CLine.utflen;
+   HistoryLine.SelLength:=2;
+   HistoryLine.ClearSelection;
+  end;
 end;
 procedure HistoryOutStr(s:String);
 begin
@@ -359,8 +347,7 @@ begin
      programlog.logoutstr(errstr,0,LM_Error);
 end;
 begin
-  utflen:=0;
-  historychanged:=false;
+  //historychanged:=false;
   ZCADGUIManager.RegisterZCADFormInfo('CommandLine',rsCommandLineWndName,TCLine,rect(200,100,600,100),nil,nil,@CLine);
 
   ZCMsgCallBackInterface.RegisterHandler_HistoryOut(HistoryOutStr);

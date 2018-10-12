@@ -72,7 +72,7 @@ begin
 
      end;
 end;
-function IsZexceptionShortCut(var Message: TLMKey):boolean;
+{function IsZexceptionShortCut(var Message: TLMKey):boolean;
 var
    chrcode:word;
    ss:tshiftstate;
@@ -92,7 +92,7 @@ begin
                 else result:=false;
 
      end;
-end;
+end;}
 
 function IsZShortcut(var Message: TLMKey;const ActiveControl:TWinControl; const CMDEdit:TEdit; const OldFunction:TIsShortcutFunc): boolean;
 var
@@ -133,7 +133,7 @@ begin
                                           exit(false);
            end;
   if not IsCommandNotEmpty then
-  if IsZexceptionShortCut(Message) then
+  //if IsZexceptionShortCut(Message) then
     result:=OldFunction(Message)
 end;
 procedure SetComboSize(cb:tcombobox;ItemH:Integer;ReadOnlyMode:TCBReadOnlyMode);

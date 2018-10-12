@@ -320,15 +320,17 @@ begin
   begin
    a:=(s);
    if HistoryLine.Lines.Count=0 then
-     CLine.utflen:=CLine.utflen+UTF8Length(a)
+     CLine.utflen:=CLine.utflen+{$IFDEF WINDOWS}UTF8Length(a){$ELSE}Length(a){$ENDIF}
    else
-     CLine.utflen:=2+CLine.utflen+UTF8Length(a);
+     CLine.utflen:=2+CLine.utflen+{$IFDEF WINDOWS}UTF8Length(a){$ELSE}Length(a){$ENDIF};
    {$IFNDEF DELPHI}
    HistoryLine.Append(a);
    {$ENDIF}
+   //{$IFDEF WINDOWS}
    HistoryLine.SelStart:=CLine.utflen;
    HistoryLine.SelLength:=2;
    HistoryLine.ClearSelection;
+   //{$ENDIF}
   end;
 end;
 procedure HistoryOutStr(s:String);

@@ -21,7 +21,8 @@ interface
 uses controls,uzcstrconsts,uzedimensionaltypes,gzctnrstl,zeundostack,varmandef,forms,classes,uzbtypes,LCLType;
 
 const
-    CLinePriority=100;
+    CLinePriority=500;
+    DrawingsFocusPriority=400;
     UnPriority=-1;
 var
   ZMsgID_GUIEnable:TZMessageID=-1;
@@ -496,10 +497,14 @@ end;
 procedure TZCMsgCallBackInterface.Do_SetNormalFocus;
 var
   ctrl:TWinControl;
+  aform:TCustomForm;
 begin
   ctrl:=Do_TGetControlWithPriority_TZMessageID__TControlWithPriority_HandlersVector(getfocusedcontrol);
-  if assigned(ctrl) then
+  if assigned(ctrl) then begin
+    aform:=GetParentForm(ctrl);
+    aform.SetFocus;
     ctrl.SetFocus;
+  end;
 end;
 function TZCMsgCallBackInterface.DoShowModal(MForm:TForm): Integer;
 begin

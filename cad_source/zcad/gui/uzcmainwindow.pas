@@ -223,6 +223,7 @@ type
     procedure IPCMessage(Sender: TObject);
     {$ifdef windows}procedure SetTop;{$endif}
     procedure UpdateVisible(sender:TObject;GUIMode:TZMessageID);
+    function GetFocusPriority:TControlWithPriority;
                end;
 //procedure UpdateVisible(GUIMode:TZMessageID);
 function LoadLayout_com(Operands:pansichar):GDBInteger;
@@ -983,6 +984,7 @@ begin
   commandmanager.OnCommandRun:=processcommandhistory;
   AppCloseProc:=asynccloseapp;
   ZCMsgCallBackInterface.RegisterHandler_GUIAction(self.waSetObjInsp);
+  ZCMsgCallBackInterface.RegisterHandler_GetFocusedControl(self.GetFocusPriority);
   {tm.Code:=pointer(self.waSetObjInsp);
   tm.Data:=@self;;
   tmethod(waSetObjInspProc):=tm;}
@@ -3076,6 +3078,19 @@ begin
     rect.Left:=rect.Right-16;
     ThemeServices.DrawElement(TToolBar(Sender).Canvas.Handle,det,rect);
   end;
+end;
+function TZCADMainWindow.GetFocusPriority:TControlWithPriority;
+begin
+      result.priority:=UnPriority;
+      result.control:=nil;
+
+      if assigned(PageControl) then
+      if PageControl.Enabled then
+      if PageControl.IsVisible then
+      if PageControl.CanFocus then begin
+        result.priority:=DrawingsFocusPriority;
+        result.control:=PageControl;
+      end;
 end;
 
 procedure TZCADMainWindow.updatevisible(sender:TObject;GUIMode:TZMessageID);

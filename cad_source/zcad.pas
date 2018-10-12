@@ -212,6 +212,7 @@ begin
                                          sysparam.preloadedfile:='';
                                     end;
   //убираем срлэш
+  ZCMsgCallBackInterface.Do_SetNormalFocus;
   removesplash;
 
   {MainFormN.show;

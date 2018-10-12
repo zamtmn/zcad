@@ -42,7 +42,7 @@ type
     procedure mypaint(sender:tobject);
     procedure FormCreate(Sender: TObject);
     procedure ButtonPressed(Sender: TObject);
-    function setnormalfocus:TControlWithPriority;
+    function GetCLineFocusPriority:TControlWithPriority;
 
     destructor Destroy;override;
   end;
@@ -104,7 +104,7 @@ begin
       menu.PopUp;
     end;
 end;
-function TCLine.setnormalfocus:TControlWithPriority;
+function TCLine.GetCLineFocusPriority:TControlWithPriority;
 begin
       result.priority:=UnPriority;
       result.control:=nil;
@@ -119,10 +119,12 @@ begin
 end;
 procedure DisableCmdLine;
 begin
-  if assigned(application.MainForm) then
-    application.MainForm.ActiveControl:=nil;
+  {if assigned(application.MainForm) then
+    application.MainForm.ActiveControl:=nil;}
   if assigned(uzcfcommandline.cmdedit) then
                                   begin
+                                      //if uzcfcommandline.cmdedit.Enabled<>false then
+                                      //   ZCMsgCallBackInterface.Do_SetNormalFocus;
                                       uzcfcommandline.cmdedit.Enabled:=false;
                                   end;
   if assigned(prompt) then begin
@@ -136,8 +138,10 @@ begin
   if assigned(uzcfcommandline.cmdedit) then
   if uzcfcommandline.cmdedit.IsVisible then
                                   begin
+                                       //if uzcfcommandline.cmdedit.Enabled<>true then
+                                       //  ZCMsgCallBackInterface.Do_SetNormalFocus;
                                        uzcfcommandline.cmdedit.Enabled:=true;
-                                       uzcfcommandline.cmdedit.SetFocus;
+                                       //uzcfcommandline.cmdedit.SetFocus;
                                   end;
   if assigned(prompt) then begin
     prompt.Enabled:=true;
@@ -358,6 +362,6 @@ begin
   ZCMsgCallBackInterface.RegisterHandler_StatusLineTextOut(StatusLineTextOut);
   //uzcinterface.StatusLineTextOut:=StatusLineTextOut;
   ZCMsgCallBackInterface.RegisterHandler_LogError(LogError);
-  ZCMsgCallBackInterface.RegisterHandler_GetFocusedControl(CLine.setnormalfocus);
+  ZCMsgCallBackInterface.RegisterHandler_GetFocusedControl(CLine.GetCLineFocusPriority);
   //uzcinterface.TMWOSilentShowError:=LogError;
 end.

@@ -181,8 +181,8 @@ initialization;
   SysVar.SYS.SYS_RunTime^:=0;
   //SysVarUnit.AssignToSymbol(SysVar.SYS.SYS_ActiveMouse,'SYS_ActiveMouse');
   //SysVarUnit.AssignToSymbol(SysVar.SYS.SYS_SystmGeometryColor,'SYS_SystmGeometryColor');
-  SysVarUnit.AssignToSymbol(SysVar.SYS.SYS_IsHistoryLineCreated,'SYS_IsHistoryLineCreated');
-  SysVar.SYS.SYS_IsHistoryLineCreated^:=FALSE;
+  //SysVarUnit.AssignToSymbol(SysVar.SYS.SYS_IsHistoryLineCreated,'SYS_IsHistoryLineCreated');
+  //SysVar.SYS.SYS_IsHistoryLineCreated^:=FALSE;
   //SysVarUnit.AssignToSymbol(SysVar.SYS.SYS_AlternateFont,'SYS_AlternateFont');
 
   SysVarUnit.AssignToSymbol(SysVar.PATH.device_library,'PATH_Device_Library');

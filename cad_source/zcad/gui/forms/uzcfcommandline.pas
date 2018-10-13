@@ -257,8 +257,6 @@ begin
     BorderWidth:=0;
     //---------------BevelOuter:=bvnone;
 
-      if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
-                                                  sysvar.SYS.SYS_IsHistoryLineCreated^:=true;
     aliases.init(100);
     aliases.loadfromfile(expandpath('*menu/default.cla'));
 

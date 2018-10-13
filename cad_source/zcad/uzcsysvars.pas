@@ -110,7 +110,6 @@ type
              SSY_CompileInfo:tcompileinfo;(*'Build info'*)(*oi_readonly*)
              SYS_RunTime:PGDBInteger;(*'Uptime'*)(*oi_readonly*)
              SYS_UniqueInstance:PGDBBoolean;(*'Unique instance'*)
-             SYS_IsHistoryLineCreated:PGDBBoolean;(*'IsHistoryLineCreated'*)(*oi_readonly*)
        end;
   tdwg=packed record
              DWG_DrawMode:PGDBBoolean;(*'Display line weights'*)

@@ -1285,6 +1285,16 @@ begin
                                                 TARight:ZCADMainWindow.PageControl.TabPosition:=tpRight;
        end;
   end;
+
+  if assigned(SysVar.INTF.INTF_ThemedUpToolbars) then
+    ZCADMainWindow.CoolBarU.Themed:=SysVar.INTF.INTF_ThemedUpToolbars^;
+  if assigned(SysVar.INTF.INTF_ThemedRightToolbars) then
+    ZCADMainWindow.CoolBarR.Themed:=SysVar.INTF.INTF_ThemedRightToolbars^;
+  if assigned(SysVar.INTF.INTF_ThemedDownToolbars) then
+    ZCADMainWindow.CoolBarD.Themed:=SysVar.INTF.INTF_ThemedDownToolbars^;
+  if assigned(SysVar.INTF.INTF_ThemedLeftToolbars) then
+    ZCADMainWindow.CoolBarL.Themed:=SysVar.INTF.INTF_ThemedLeftToolbars^;
+
   if assigned(SysVar.INTF.INTF_ShowDwgTabCloseBurron) then
   begin
        if SysVar.INTF.INTF_ShowDwgTabCloseBurron^ then
@@ -3146,6 +3156,16 @@ begin
                                                 TARight:ZCADMainWindow.PageControl.TabPosition:=tpRight;
        end;
   end;
+
+  if assigned(SysVar.INTF.INTF_ThemedUpToolbars) then
+    ZCADMainWindow.CoolBarU.Themed:=SysVar.INTF.INTF_ThemedUpToolbars^;
+  if assigned(SysVar.INTF.INTF_ThemedRightToolbars) then
+    ZCADMainWindow.CoolBarR.Themed:=SysVar.INTF.INTF_ThemedRightToolbars^;
+  if assigned(SysVar.INTF.INTF_ThemedDownToolbars) then
+    ZCADMainWindow.CoolBarD.Themed:=SysVar.INTF.INTF_ThemedDownToolbars^;
+  if assigned(SysVar.INTF.INTF_ThemedLeftToolbars) then
+    ZCADMainWindow.CoolBarL.Themed:=SysVar.INTF.INTF_ThemedLeftToolbars^;
+
   if assigned(ZCADMainWindow.PageControl) then
   if assigned(SysVar.INTF.INTF_ShowDwgTabCloseBurron) then
   begin

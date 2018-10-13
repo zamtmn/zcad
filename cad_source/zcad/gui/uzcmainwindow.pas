@@ -680,8 +680,8 @@ begin
      begin
           result:=true;
 
-          if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
-          if sysvar.SYS.SYS_IsHistoryLineCreated^ then
+          {if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
+          if sysvar.SYS.SYS_IsHistoryLineCreated^ then}
           begin
                pint:=SavedUnit.FindValue('DMenuX');
                if assigned(pint)then
@@ -2558,7 +2558,7 @@ end;
 
 procedure TZCADMainWindow.Say(word:gdbstring);
 begin
-     if sysvar.SYS.SYS_IsHistoryLineCreated^ then
+     //if sysvar.SYS.SYS_IsHistoryLineCreated^ then
      begin
           if assigned(HintText)then
           begin

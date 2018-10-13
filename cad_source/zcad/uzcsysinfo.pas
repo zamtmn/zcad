@@ -21,6 +21,8 @@ unit uzcsysinfo;
 interface
 uses LCLProc,uzclog,uzbpaths,uzbtypesbase,Forms,uzbtypes{$IFNDEF DELPHI},{fileutil}LazUTF8{$ENDIF},sysutils;
 {$INCLUDE revision.inc}
+const
+  zcaduniqueinstanceid='zcad unique instance';
 type
   TmyFileVersionInfo=packed record
                          major,minor,release,build,revision:GDBInteger;
@@ -30,7 +32,8 @@ type
                      ScreenX,ScreenY:GDBInteger;
                      DefaultHeight:GDBInteger;
                      Ver:TmyFileVersionInfo;
-                     NoSplash,NoLoadLayout,UpdatePO,otherinstancerun:GDBBoolean;
+                     NoSplash,NoLoadLayout,UpdatePO:GDBBoolean;
+                     otherinstancerun,UniqueInstance:GDBBoolean;
                      PreloadedFile:GDBString;
               end;
 var
@@ -110,6 +113,7 @@ begin
      //programlog.LogOutStr('ProcessParamStr',lp_IncPos,LM_Necessarily);
      debugln('{N+}ProcessParamStr');
      SysParam.otherinstancerun:=false;
+     SysParam.UniqueInstance:=true;
      SysParam.PreloadedFile:='';
      uzbtypes.VerboseLog:=@uzclog.VerboseLog;
      i:=paramcount;
@@ -124,6 +128,8 @@ begin
 
             if fileexists(UTF8toSys(param)) then
                                      SysParam.PreloadedFile:=param
+       else if (paramUC='NOTCHECKUNIQUEINSTANCE')or(paramUC='NCUI')then
+                                                   SysParam.UniqueInstance:=false
        else if (paramUC='NOSPLASH')or(paramUC='NS')then
                                                    SysParam.NoSplash:=true
        else if (paramUC='VERBOSELOG')or(paramUC='VL')then

@@ -50,6 +50,8 @@ initialization;
   SavedUnit:=units.findunit(SupportPath,InterfaceTranslate,'savedvar');
   DBUnit:=units.findunit(SupportPath,InterfaceTranslate,'devicebase');
 
+  SysVar.sys.SYS_UniqueInstance:=@SysParam.UniqueInstance;
+
   if SysVarUnit<>nil then
   begin
   //SysVarUnit.AssignToSymbol(SysVar.dwg.DWG_DrawMode,'DWG_DrawMode');

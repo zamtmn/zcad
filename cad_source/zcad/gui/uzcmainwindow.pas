@@ -48,7 +48,7 @@ uses
        uzcfcolors,uzcimagesmanager,uzcgui2textstyles,usupportgui,uzcgui2dimstyles,
   {}
        zcchangeundocommand,uzgldrawcontext,uzglviewareaabstract,uzcguimanager,uzcinterfacedata,
-       uzcenitiesvariablesextender,uzglviewareageneral;
+       uzcenitiesvariablesextender,uzglviewareageneral,UniqueInstanceRaw;
   {}
 resourcestring
   rsClosed='Closed';
@@ -1674,6 +1674,35 @@ begin
     TPopUpMenu(RootMenuItem).Items.Add(CreatedMenuItem);
 end;
 
+procedure SetupFIPCServer;
+begin
+  if assigned(UniqueInstanceBase.FIPCServer) then
+    UniqueInstanceBase.FIPCServer.OnMessage:=ZCADMainWindow.IPCMessage;
+end;
+
+function CreateOrRunFIPCServer:boolean;
+var
+  Client: TSimpleIPCClient;
+begin
+  result:=false;
+
+  Client := TSimpleIPCClient.Create(nil);
+  with Client do
+  try
+    ServerId := GetServerId(zcaduniqueinstanceid);
+    Result := Client.ServerRunning;
+  finally
+    Free;
+  end;
+
+  if result then exit;
+
+  if not assigned(UniqueInstanceBase.FIPCServer)then
+    result:=InstanceRunning(zcaduniqueinstanceid,true,true);
+  if not UniqueInstanceBase.FIPCServer.Active then
+    UniqueInstanceBase.FIPCServer.StartServer;
+  SetupFIPCServer;
+end;
 
 procedure TZCADMainWindow._onCreate(Sender: TObject);
 begin
@@ -1690,8 +1719,10 @@ begin
   FAppProps.OnException := ZcadException;
   FAppProps.CaptureExceptions := True;
 
-  UniqueInstanceBase.FIPCServer.OnMessage:=IPCMessage;
-   sysvar.INTF.INTF_DefaultControlHeight^:=sysparam.defaultheight;
+  if SysParam.UniqueInstance then
+    CreateOrRunFIPCServer;
+
+  sysvar.INTF.INTF_DefaultControlHeight^:=sysparam.defaultheight;
 
   //DecorateSysTypes;
   self.onclose:=self.FormClose;
@@ -2266,7 +2297,9 @@ var
    rc:TDrawContext;
 begin
      {IFDEF linux}
-     UniqueInstanceBase.FIPCServer.PeekMessage(0,true);
+     if assigned(UniqueInstanceBase.FIPCServer)then
+     if UniqueInstanceBase.FIPCServer.active then
+       UniqueInstanceBase.FIPCServer.PeekMessage(0,true);
      {endif}
      done:=true;
      sysvar.debug.languadedeb.UpdatePO:=_UpdatePO;
@@ -3109,9 +3142,29 @@ var
    name:gdbstring;
    i,k:Integer;
    pdwg:PTSimpleDrawing;
+   FIPCServerRunning:boolean;
+   otherinstancerunning:boolean;
 begin
   if GUIMode<>ZMsgID_GUIActionRedraw then
     exit;
+
+  if assigned(UniqueInstanceBase.FIPCServer) then
+    FIPCServerRunning:=UniqueInstanceBase.FIPCServer.Active
+  else
+    FIPCServerRunning:=false;
+
+  if (FIPCServerRunning xor SysParam.UniqueInstance) then
+    case SysParam.UniqueInstance of
+      false:begin
+              UniqueInstanceBase.FIPCServer.StopServer;
+            end;
+       true:begin
+              if CreateOrRunFIPCServer then begin
+                SysParam.UniqueInstance:=false;
+                ZCMsgCallBackInterface.TextMessage('Other unique instance found',TMWOShowError);
+              end;
+            end;
+    end;
 
   ZCMsgCallBackInterface.Do_GUIMode(ZMsgID_GUICMDLineCheck);
 

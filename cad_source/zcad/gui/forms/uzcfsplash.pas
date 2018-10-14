@@ -80,18 +80,18 @@ end;
 procedure createsplash;
 begin
      if RunUniqueInstance then
-       sysparam.otherinstancerun:=InstanceRunning(zcaduniqueinstanceid,true,true);
+       sysparam.notsaved.otherinstancerun:=InstanceRunning(zcaduniqueinstanceid,true,true);
      SplashForm:=TSplashForm.CreateNew(nil);
      //SplashForm.cb:=TComboBox.CreateParented(SplashForm.Handle);
      SplashForm.cb:=TComboBox.Create(NIL);
      SplashForm.cb.ParentWindow := SplashForm.Handle;
 
      SplashForm.cb.hide;
-     if not sysparam.otherinstancerun then
-     if not sysparam.nosplash then
+     if not sysparam.notsaved.otherinstancerun then
+     if not sysparam.saved.nosplash then
                                   SplashForm.show;
      application.ProcessMessages;
-     sysparam.defaultheight:=SplashForm.cb.Height;
+     sysparam.notsaved.defaultheight:=SplashForm.cb.Height;
 end;
 procedure removesplash;
 begin
@@ -106,7 +106,7 @@ end;
 initialization
   Application.Initialize;
   //RequireDerivedFormResource:=false;
-  createsplash(SysParam.UniqueInstance);
+  createsplash(SysParam.saved.UniqueInstance);
   SplashTextOut:=SplashTextOutProc;
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');

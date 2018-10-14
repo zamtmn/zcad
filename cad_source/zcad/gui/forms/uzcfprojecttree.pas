@@ -269,7 +269,7 @@ var
 begin
   inherited;
   //self.Position:=poScreenCenter;
-  self.BoundsRect:=GetBoundsFromSavedUnit('ProjectTreeWND',SysParam.ScreenX,SysParam.Screeny);
+  self.BoundsRect:=GetBoundsFromSavedUnit('ProjectTreeWND',SysParam.notsaved.ScreenX,SysParam.notsaved.Screeny);
   caption:=rsProjectTree;
   self.borderstyle:=bsSizeToolWin;
 

@@ -19,23 +19,93 @@
 unit uzcsysparams;
 {$INCLUDE def.inc}
 interface
-uses LCLProc,uzclog,uzbpaths,uzbtypesbase,Forms,uzbtypes{$IFNDEF DELPHI},LazUTF8{$ENDIF},sysutils;
+uses XMLConf,XMLPropStorage,LazConfigStorage,fileutil,
+  LCLProc,uzclog,uzbpaths,uzbtypesbase,Forms,uzbtypes{$IFNDEF DELPHI},LazUTF8{$ENDIF},sysutils;
 {$INCLUDE revision.inc}
 type
+{EXPORT+}
   TmyFileVersionInfo=packed record
-                         major,minor,release,build,revision:GDBInteger;
-                         versionstring:GDBstring;
-                     end;
-  tsysparam=record
-                     ScreenX,ScreenY:GDBInteger;
-                     DefaultHeight:GDBInteger;
-                     Ver:TmyFileVersionInfo;
-                     NoSplash,NoLoadLayout,UpdatePO:GDBBoolean;
-                     otherinstancerun,UniqueInstance:GDBBoolean;
-                     PreloadedFile:GDBString;
-              end;
+    major,minor,release,build,revision:GDBInteger;
+    versionstring:GDBstring;
+  end;
+  tsavedparams=packed record
+    UniqueInstance:GDBBoolean;(*'Unique instance'*)
+    NoSplash:GDBBoolean;(*'No splash screen'*)
+    NoLoadLayout:GDBBoolean;(*'No load layout'*)
+    UpdatePO:GDBBoolean;(*'Update PO file'*)
+  end;
+  tnotsavedparams=packed record
+    ScreenX:GDBInteger;(*'Screen X'*)(*oi_readonly*)
+    ScreenY:GDBInteger;(*'Screen Y'*)(*oi_readonly*)
+    otherinstancerun:GDBBoolean;(*'Other instance run'*)(*oi_readonly*)
+    PreloadedFile:GDBString;(*'Preloaded file'*)(*oi_readonly*)
+    Ver:TmyFileVersionInfo;(*'Version'*)(*oi_readonly*)
+    DefaultHeight:GDBInteger;(*'Default controls height'*)(*oi_readonly*)
+  end;
+  ptsysparam=^tsysparam;
+  tsysparam=packed record
+    saved:tsavedparams;(*'Saved params'*)
+    notsaved:tnotsavedparams;(*'Not saved params'*)(*oi_readonly*)
+  end;
+{EXPORT-}
+const
+  DefaultSavedParams:tsavedparams=(UniqueInstance:true;
+                                   NoSplash:false;
+                                   NoLoadLayout:false;
+                                   UpdatePO:false);
 var
   SysParam: tsysparam;
 
+procedure SaveParams(xmlfile:string;var Params:tsavedparams);
+procedure LoadParams(xmlfile:string;out Params:tsavedparams);
 implementation
+procedure SaveParamToConfig(Config: TConfigStorage; var Params:tsavedparams);
+begin
+  Config.AppendBasePath('Stage0Params/');
+  Config.SetDeleteValue('UniqueInstance',Params.UniqueInstance,DefaultSavedParams.UniqueInstance);
+  Config.SetDeleteValue('NoSplash',Params.NoSplash,DefaultSavedParams.NoSplash);
+  Config.SetDeleteValue('NoLoadLayout',Params.NoLoadLayout,DefaultSavedParams.NoLoadLayout);
+  Config.SetDeleteValue('UpdatePO',Params.UpdatePO,DefaultSavedParams.UpdatePO);
+  Config.UndoAppendBasePath;
+end;
+
+procedure SaveParams(xmlfile:string;var Params:tsavedparams);
+var
+  XMLConfig: TXMLConfig;
+  Config: TXMLConfigStorage;
+begin
+  If FileExists(xmlfile) then
+    DeleteFile(xmlfile);
+  XMLConfig:=TXMLConfig.Create(nil);
+  try
+    XMLConfig.StartEmpty:=true;
+    XMLConfig.Filename:=xmlfile;
+    Config:=TXMLConfigStorage.Create(XMLConfig);
+    try
+      SaveParamToConfig(Config,Params);
+    finally
+      Config.Free;
+    end;
+    XMLConfig.Flush;
+  finally
+    XMLConfig.Free;
+  end;
+end;
+procedure LoadParams(xmlfile:string;out Params:tsavedparams);
+var
+  ActionsConfig:TXMLConfig;
+begin
+  Params:=DefaultSavedParams;
+  ActionsConfig:=TXMLConfig.Create(nil);
+  ActionsConfig.Filename:=xmlfile;
+  ActionsConfig.OpenKey('Stage0Params');
+  Params.UniqueInstance:=ActionsConfig.GetValue('UniqueInstance',DefaultSavedParams.UniqueInstance);
+  Params.NoSplash:=ActionsConfig.GetValue('NoSplash',DefaultSavedParams.NoSplash);
+  Params.NoLoadLayout:=ActionsConfig.GetValue('NoLoadLayout',DefaultSavedParams.NoLoadLayout);
+  Params.UpdatePO:=ActionsConfig.GetValue('UpdatePO',DefaultSavedParams.UpdatePO);
+  ActionsConfig.CloseKey;
+end;
+
+
+
 end.

@@ -1097,10 +1097,10 @@ begin
   DockMaster.MakeDockPanel(AnchorDockPanel1,admrpChild);
   DockMaster.OnShowOptions:=ShowAnchorDockOptions;
   {Грузим раскладку окон}
-  if not sysparam.noloadlayout then
+  if not sysparam.saved.noloadlayout then
     LoadLayout_com(EmptyCommandOperands);
 
-  if sysparam.noloadlayout then
+  if sysparam.saved.noloadlayout then
   begin
        DockMaster.ShowControl('CommandLine', true);
        DockMaster.ShowControl('ObjectInspector', true);
@@ -1719,10 +1719,10 @@ begin
   FAppProps.OnException := ZcadException;
   FAppProps.CaptureExceptions := True;
 
-  if SysParam.UniqueInstance then
+  if SysParam.saved.UniqueInstance then
     CreateOrRunFIPCServer;
 
-  sysvar.INTF.INTF_DefaultControlHeight^:=sysparam.defaultheight;
+  sysvar.INTF.INTF_DefaultControlHeight^:=sysparam.notsaved.defaultheight;
 
   //DecorateSysTypes;
   self.onclose:=self.FormClose;
@@ -3153,14 +3153,14 @@ begin
   else
     FIPCServerRunning:=false;
 
-  if (FIPCServerRunning xor SysParam.UniqueInstance) then
-    case SysParam.UniqueInstance of
+  if (FIPCServerRunning xor SysParam.saved.UniqueInstance) then
+    case SysParam.saved.UniqueInstance of
       false:begin
               UniqueInstanceBase.FIPCServer.StopServer;
             end;
        true:begin
               if CreateOrRunFIPCServer then begin
-                SysParam.UniqueInstance:=false;
+                SysParam.saved.UniqueInstance:=false;
                 ZCMsgCallBackInterface.TextMessage('Other unique instance found',TMWOShowError);
               end;
             end;

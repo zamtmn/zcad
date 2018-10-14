@@ -406,8 +406,8 @@ begin
                                                     execute(p^,false,pdrawing,POGLWndParam)
                                                 else
                                                     begin
-                                                         if not sysparam.nosplash then
-                                                         if sysparam.preloadedfile='' then
+                                                         if not sysparam.saved.nosplash then
+                                                         if sysparam.notsaved.preloadedfile='' then
                                                                                       execute(p^,false,pdrawing,POGLWndParam)
                                                     end;
         p:=sa.iterate(ir);

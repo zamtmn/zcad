@@ -37,7 +37,7 @@ initialization
   units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'INTF_CommandLineEnabled','Boolean',@INTFCommandLineEnabled);
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_CommandLineEnabled,'INTF_CommandLineEnabled');
 
-  units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'SYS_UniqueInstance','Boolean',@SysParam.UniqueInstance);
+  units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'SYS_UniqueInstance','Boolean',@SysParam.saved.UniqueInstance);
   SysVarUnit.AssignToSymbol(SysVar.sys.SYS_UniqueInstance,'SYS_UniqueInstance');
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');

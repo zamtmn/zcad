@@ -326,7 +326,7 @@ begin
      if not assigned(InfoForm) then
      begin
      InfoForm:=TInfoForm.createnew(application.MainForm);
-     InfoForm.BoundsRect:=GetBoundsFromSavedUnit('TEdWND',SysParam.ScreenX,SysParam.Screeny);
+     InfoForm.BoundsRect:=GetBoundsFromSavedUnit('TEdWND',SysParam.notsaved.ScreenX,SysParam.notsaved.Screeny);
      end;
      InfoForm.caption:=(rsTextEdCaption);
      if assigned(SysVar.INTF.INTF_DefaultEditorFontHeight) then
@@ -348,7 +348,7 @@ begin
      if not assigned(InfoForm) then
      begin
      InfoForm:=TInfoForm.createnew(application.MainForm);
-     InfoForm.BoundsRect:=GetBoundsFromSavedUnit('TEdWND',SysParam.ScreenX,SysParam.Screeny);
+     InfoForm.BoundsRect:=GetBoundsFromSavedUnit('TEdWND',SysParam.notsaved.ScreenX,SysParam.notsaved.Screeny);
      end;
      InfoForm.caption:=(rsTextEdCaption);
      if assigned(SysVar.INTF.INTF_DefaultEditorFontHeight) then

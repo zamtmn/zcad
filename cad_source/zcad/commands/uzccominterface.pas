@@ -341,7 +341,7 @@ begin
    begin
        UnitsForm:=TUnitsForm.Create(nil);
        SetHeightControl(UnitsForm,sysvar.INTF.INTF_DefaultControlHeight^);
-       UnitsForm.BoundsRect:=GetBoundsFromSavedUnit('UnitsWND',SysParam.ScreenX,SysParam.Screeny)
+       UnitsForm.BoundsRect:=GetBoundsFromSavedUnit('UnitsWND',SysParam.notsaved.ScreenX,SysParam.notsaved.Screeny)
    end;
 
    _UnitsFormat:=drawings.GetUnitsFormat;
@@ -650,6 +650,7 @@ begin
            SysVarUnit^.SavePasToMem(mem);
            mem.SaveToFile(expandpath(ProgramPath+'rtl/sysvar.pas'));
            mem.done;
+           SaveParams(expandpath(ProgramPath+'rtl/config.xml'),SysParam.saved);
            result:=cmd_ok;
 end;
 function CommandList_com(operands:TCommandOperands):TCommandResult;

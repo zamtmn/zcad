@@ -182,7 +182,7 @@ resourcestring
 
 begin
   programlog.logoutstr('<<<<<<<<<<<<<<<End units initialization',0,LM_Debug);
-     if sysparam.otherinstancerun then
+     if sysparam.notsaved.otherinstancerun then
                                       exit;
 {$IFDEF REPORTMMEMORYLEAKS}printleakedblock:=true;{$ENDIF}
 {$IFDEF REPORTMMEMORYLEAKS}
@@ -206,10 +206,10 @@ begin
   gdbplugins.loadplugins(ProgramPath+'PLUGINS\');
 
   SplashForm.TXTOut(rsStartAutorun,false);commandmanager.executefile('*components/autorun.cmd',drawings.GetCurrentDWG,nil);
-  if sysparam.preloadedfile<>'' then
+  if sysparam.notsaved.preloadedfile<>'' then
                                     begin
-                                         commandmanager.executecommand('Load('+sysparam.preloadedfile+')',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
-                                         sysparam.preloadedfile:='';
+                                         commandmanager.executecommand('Load('+sysparam.notsaved.preloadedfile+')',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
+                                         sysparam.notsaved.preloadedfile:='';
                                     end;
   //убираем срлэш
   ZCMsgCallBackInterface.Do_SetNormalFocus;

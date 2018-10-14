@@ -20,7 +20,7 @@ unit uzcsysvars;
 {$INCLUDE def.inc}
 
 interface
-uses uzbtypesbase,uzbgeomtypes,uzepalette,
+uses uzcsysparams,uzbtypesbase,uzbgeomtypes,uzepalette,
      uzedimensionaltypes,uzbtypes,uzctnrvectorgdbstring,
 {$IFDEF LCLGTK2}
 gtk2,gdk2,
@@ -106,6 +106,7 @@ type
                end;
 
   tsys=packed record
+             SYSParams:ptsysparam;(*'Program params'*)
              SYS_Version:PGDBString;(*'Program version'*)(*oi_readonly*)
              SSY_CompileInfo:tcompileinfo;(*'Build info'*)(*oi_readonly*)
              SYS_RunTime:PGDBInteger;(*'Uptime'*)(*oi_readonly*)
@@ -248,6 +249,7 @@ begin
     {$ENDIF}
 
   {$ENDIF}
+    SysVar.SYS.SYSParams:=@SysParam;
     SysVar.debug.languadedeb.NotEnlishWord:=0;
     SysVar.debug.languadedeb.UpdatePO:=0;
     sysvar.RD.RD_RendererBackEnd:=nil;

@@ -1411,7 +1411,7 @@ var
    cleaned:integer;
    s:string;
 begin
-     if sysparam.updatepo then
+     if sysparam.saved.updatepo then
      begin
           begin
                cleaned:=po.exportcompileritems(actualypo);
@@ -1422,7 +1422,7 @@ begin
                                                                          exit;
                po.SaveToFile(expandpath(PODirectory + ZCADRTBackupPOFileName));
                actualypo.SaveToFile(expandpath(PODirectory + ZCADRTPOFileName));
-               sysparam.updatepo:=false
+               sysparam.saved.updatepo:=false
           end;
      end
         else ZCMsgCallBackInterface.TextMessage(rsAboutCLSwithUpdatePO,TMWOShowError);

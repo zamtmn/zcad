@@ -51,8 +51,8 @@ implementation
 procedure TDialogForm.AfterConstruction;
 begin
      inherited;
-     self.Width:=sysparam.screenx div 2;
-     self.Height:=sysparam.screeny div 2;
+     self.Width:=sysparam.notsaved.screenx div 2;
+     self.Height:=sysparam.notsaved.screeny div 2;
      self.Position:=poScreenCenter;
      self.BorderStyle:=bsSizeToolWin;
      {$IFNDEF DELPHI}

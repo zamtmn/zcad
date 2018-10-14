@@ -98,9 +98,10 @@ const
 begin
      //programlog.LogOutStr('ProcessParamStr',lp_IncPos,LM_Necessarily);
      debugln('{N+}ProcessParamStr');
-     SysParam.otherinstancerun:=false;
-     SysParam.UniqueInstance:=true;
-     SysParam.PreloadedFile:='';
+     SysParam.notsaved.otherinstancerun:=false;
+     SysParam.saved.UniqueInstance:=true;
+     LoadParams(expandpath(ProgramPath+'rtl/config.xml'),SysParam.saved);
+     SysParam.notsaved.PreloadedFile:='';
      uzbtypes.VerboseLog:=@uzclog.VerboseLog;
      i:=paramcount;
      for i:=1 to paramcount do
@@ -113,17 +114,17 @@ begin
             //programlog.LogOutStr(format('Found param command line parameter "%s"',[paramUC]),lp_OldPos,LM_Necessarily);
 
             if fileexists(UTF8toSys(param)) then
-                                     SysParam.PreloadedFile:=param
+                                     SysParam.notsaved.PreloadedFile:=param
        else if (paramUC='NOTCHECKUNIQUEINSTANCE')or(paramUC='NCUI')then
-                                                   SysParam.UniqueInstance:=false
+                                                   SysParam.saved.UniqueInstance:=false
        else if (paramUC='NOSPLASH')or(paramUC='NS')then
-                                                   SysParam.NoSplash:=true
+                                                   SysParam.saved.NoSplash:=true
        else if (paramUC='VERBOSELOG')or(paramUC='VL')then
                                                           uzclog.VerboseLog:=true
        else if (paramUC='NOLOADLAYOUT')or(paramUC='NLL')then
-                                                               SysParam.NoLoadLayout:=true
+                                                               SysParam.saved.NoLoadLayout:=true
        else if (paramUC='UPDATEPO')then
-                                                               SysParam.UpdatePO:=true
+                                                               SysParam.saved.UpdatePO:=true
        else if (paramUC='LM_TRACE')then
                                        programlog.SetLogMode(LM_Trace)
        else if (paramUC='LM_DEBUG')then
@@ -164,9 +165,8 @@ begin
      //programlog.LogOutStr('GetSysInfo',lp_IncPos,LM_Necessarily);
      debugln('{N+}GetSysInfo');
      SysDefaultFormatSettings:=DefaultFormatSettings;
-     //SysParam.ProgramPath:=programpath;
-     SysParam.ScreenX:={GetSystemMetrics(SM_CXSCREEN)}Screen.Width;
-     SysParam.ScreenY:={GetSystemMetrics(SM_CYSCREEN)}Screen.Height;
+     SysParam.notsaved.ScreenX:={GetSystemMetrics(SM_CXSCREEN)}Screen.Width;
+     SysParam.notsaved.ScreenY:={GetSystemMetrics(SM_CYSCREEN)}Screen.Height;
 
 
      {SysParam.ScreenX:=800;
@@ -175,14 +175,14 @@ begin
 
 
      {$IFDEF FPC}
-                 SysParam.Ver:=GetVersion({'zcad.exe'});
+                 SysParam.notsaved.Ver:=GetVersion({'zcad.exe'});
      {$ELSE}
                  sysparam.ver:=GetVersion({'ZCAD.exe'});
      {$ENDIF}
 
      ProcessParamStr;
      //SysParam.verstr:=Format('%d.%d.%d.%d SVN: %s',[SysParam.Ver.major,SysParam.Ver.minor,SysParam.Ver.release,SysParam.Ver.build,RevisionStr]);
-     debugln('{N}ZCAD log v'+sysparam.ver.versionstring+' started');
+     debugln('{N}ZCAD log v'+sysparam.notsaved.ver.versionstring+' started');
      //programlog.logoutstr('ZCAD log v'+sysparam.ver.versionstring+' started',0,LM_Necessarily);
 {$IFDEF FPC}                 debugln('{N}Program compiled on Free Pascal Compiler');{$ENDIF}
 {$IFDEF DEBUGBUILD}          debugln('{N}Program compiled with {$DEFINE DEBUGDUILD}');{$ENDIF}
@@ -201,17 +201,17 @@ begin
      //programlog.LogOutStr(format('SysParam.ProgramPath="%s"',[ProgramPath]),lp_OldPos,LM_Necessarily);
      debugln('{N}SysParam.TempPath="%s"',[TempPath]);
      //programlog.LogOutStr(format('SysParam.TempPath="%s"',[TempPath]),lp_OldPos,LM_Necessarily);
-     debugln('{N}SysParam.ScreenX=%d',[SysParam.ScreenX]);
+     debugln('{N}SysParam.ScreenX=%d',[SysParam.notsaved.ScreenX]);
      //programlog.LogOutStr(format('SysParam.ScreenX=%d',[SysParam.ScreenX]),lp_OldPos,LM_Necessarily);
-     debugln('{N}SysParam.ScreenY=%d',[SysParam.ScreenY]);
+     debugln('{N}SysParam.ScreenY=%d',[SysParam.notsaved.ScreenY]);
      //programlog.LogOutStr(format('SysParam.ScreenY=%d',[SysParam.ScreenY]),lp_OldPos,LM_Necessarily);
-     debugln('{N}SysParam.NoSplash=%s',[BoolToStr(SysParam.NoSplash,true)]);
+     debugln('{N}SysParam.NoSplash=%s',[BoolToStr(SysParam.saved.NoSplash,true)]);
      //programlog.LogOutStr(format('SysParam.NoSplash=%s',[BoolToStr(SysParam.NoSplash,true)]),lp_OldPos,LM_Necessarily);
-     debugln('{N}SysParam.NoLoadLayout=%s',[BoolToStr(SysParam.NoLoadLayout,true)]);
+     debugln('{N}SysParam.NoLoadLayout=%s',[BoolToStr(SysParam.saved.NoLoadLayout,true)]);
      //programlog.LogOutStr(format('SysParam.NoLoadLayout=%s',[BoolToStr(SysParam.NoLoadLayout,true)]),lp_OldPos,LM_Necessarily);
-     debugln('{N}SysParam.UpdatePO=%s',[BoolToStr(SysParam.UpdatePO,true)]);
+     debugln('{N}SysParam.UpdatePO=%s',[BoolToStr(SysParam.saved.UpdatePO,true)]);
      //programlog.LogOutStr(format('SysParam.UpdatePO=%s',[BoolToStr(SysParam.UpdatePO,true)]),lp_OldPos,LM_Necessarily);
-     debugln('{N}SysParam.PreloadedFile="%s"',[SysParam.PreloadedFile]);
+     debugln('{N}SysParam.PreloadedFile="%s"',[SysParam.notsaved.PreloadedFile]);
      //programlog.LogOutStr(format('SysParam.PreloadedFile="%s"',[SysParam.PreloadedFile]),lp_OldPos,LM_Necessarily);
 
      debugln('{N-}end;{GetSysInfo}');

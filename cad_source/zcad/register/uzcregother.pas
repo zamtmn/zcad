@@ -201,7 +201,7 @@ initialization;
   //sysvar.RD.RD_LastRenderTime^:=0;
   //sysvar.PATH.Program_Run^:=sysparam.programpath;
   //sysvar.PATH.Temp_files:=@temppath;
-  sysvar.SYS.SYS_Version^:=sysparam.ver.versionstring;
+  sysvar.SYS.SYS_Version^:=sysparam.notsaved.ver.versionstring;
   end;
 
 

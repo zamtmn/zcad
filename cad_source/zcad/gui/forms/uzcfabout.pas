@@ -20,7 +20,7 @@ unit uzcfabout;
 {$INCLUDE def.inc}
 interface
 uses
- uzcstrconsts,gettext,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
+ uzcsysparams,uzcstrconsts,gettext,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
  uzbstrproc,uzctreenode,FileUtil,Forms, stdctrls, Controls,
  uzbtypes,languade,uzcsysinfo,sysutils,
  uzeentityfactory,uzcshared,uzclog,uzccommandsmanager;

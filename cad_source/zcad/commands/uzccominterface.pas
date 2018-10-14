@@ -28,7 +28,7 @@ uses
  {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,{ SysUtils,} {fileutil}LazUTF8,{ LResources,} Forms, {stdctrls,} Controls, {Graphics, Dialogs,}ComCtrls,Clipbrd,lclintf,
  uzedimensionaltypes,
- uzcsysinfo,
+ uzcsysparams,uzcsysinfo,
   gzctnrvectortypes,uzccommandsabstract,
   uzccommandsimpl,
   uzbtypes,

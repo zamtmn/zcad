@@ -22,7 +22,7 @@ unit uzcmainwindow;
 interface
 uses
   {LCL}
-       Laz2_DOM,AnchorDockPanel,AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr,
+      Laz2_DOM,AnchorDockPanel,AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr,
        ActnList,LCLType,LCLProc,uzctranslations,LMessages,LCLIntf,
        Forms, stdctrls, ExtCtrls, ComCtrls,Controls,Classes,SysUtils,LazUTF8,
        menus,graphics,dialogs,XMLPropStorage,Buttons,Themes,
@@ -30,7 +30,7 @@ uses
   {FPC}
        lineinfo,
   {ZCAD BASE}
-       gzctnrvectortypes,uzcgui2color,uzcgui2linewidth,uzcgui2linetypes,uzemathutils,uzelongprocesssupport,
+       uzcsysparams,gzctnrvectortypes,uzcgui2color,uzcgui2linewidth,uzcgui2linetypes,uzemathutils,uzelongprocesssupport,
        {uzegluinterface,}uzgldrawergdi,uzcdrawing,UGDBOpenArrayOfPV,uzedrawingabstract,
        uzepalette,uzbpaths,uzglviewareadata,uzeentitiesprop,uzcinterface,
        UGDBOpenArrayOfByte,uzbmemman,uzbtypesbase,uzbtypes,

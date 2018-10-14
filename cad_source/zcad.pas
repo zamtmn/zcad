@@ -40,7 +40,7 @@ uses
   uzcsysvars,
 
   uzbmemman,uzclog,
-  uzcsysinfo,
+  uzcsysparams,uzcsysinfo,
   uzbpaths,
 
   varman,

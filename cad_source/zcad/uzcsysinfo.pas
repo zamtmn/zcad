@@ -19,25 +19,11 @@
 unit uzcsysinfo;
 {$INCLUDE def.inc}
 interface
-uses LCLProc,uzclog,uzbpaths,uzbtypesbase,Forms,uzbtypes{$IFNDEF DELPHI},{fileutil}LazUTF8{$ENDIF},sysutils;
+uses uzcsysparams,LCLProc,uzclog,uzbpaths,uzbtypesbase,Forms,uzbtypes{$IFNDEF DELPHI},{fileutil}LazUTF8{$ENDIF},sysutils;
 {$INCLUDE revision.inc}
 const
   zcaduniqueinstanceid='zcad unique instance';
-type
-  TmyFileVersionInfo=packed record
-                         major,minor,release,build,revision:GDBInteger;
-                         versionstring:GDBstring;
-                     end;
-  tsysparam=record
-                     ScreenX,ScreenY:GDBInteger;
-                     DefaultHeight:GDBInteger;
-                     Ver:TmyFileVersionInfo;
-                     NoSplash,NoLoadLayout,UpdatePO:GDBBoolean;
-                     otherinstancerun,UniqueInstance:GDBBoolean;
-                     PreloadedFile:GDBString;
-              end;
 var
-  SysParam: tsysparam;
   SysDefaultFormatSettings:TFormatSettings;
   disabledefaultmodule:boolean;
 

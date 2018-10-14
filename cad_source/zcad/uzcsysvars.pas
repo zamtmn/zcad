@@ -106,11 +106,14 @@ type
                end;
 
   tsys=packed record
-             SYSParams:ptsysparam;(*'Program params'*)
              SYS_Version:PGDBString;(*'Program version'*)(*oi_readonly*)
              SSY_CompileInfo:tcompileinfo;(*'Build info'*)(*oi_readonly*)
              SYS_RunTime:PGDBInteger;(*'Uptime'*)(*oi_readonly*)
              SYS_UniqueInstance:PGDBBoolean;(*'Unique instance'*)
+             SYS_NoSplash:PGDBBoolean;(*'No splash screen'*)
+             SYS_NoLoadLayout:PGDBBoolean;(*'No load layout'*)
+             SYS_UpdatePO:PGDBBoolean;(*'Update PO file'*)
+
        end;
   tdwg=packed record
              DWG_DrawMode:PGDBBoolean;(*'Display line weights'*)
@@ -249,7 +252,6 @@ begin
     {$ENDIF}
 
   {$ENDIF}
-    SysVar.SYS.SYSParams:=@SysParam;
     SysVar.debug.languadedeb.NotEnlishWord:=0;
     SysVar.debug.languadedeb.UpdatePO:=0;
     sysvar.RD.RD_RendererBackEnd:=nil;

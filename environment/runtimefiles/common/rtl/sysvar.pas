@@ -71,10 +71,6 @@ var
   INTF_DefaultControlHeight:GDBInteger;
   INTF_ObjInsp_AlwaysUseMultiSelectWrapper:GDBBoolean;
   INTF_DefaultEditorFontHeight:GDBInteger;
-  VIEW_CommandLineVisible:GDBBoolean;
-  VIEW_HistoryLineVisible:GDBBoolean;
-  VIEW_ObjInspVisible:GDBBoolean;
-  StatusPanelVisible:GDBBoolean;
   RD_Vendor:GDBString;
   RD_Renderer:GDBString;
   RD_Extensions:GDBString;
@@ -89,7 +85,6 @@ var
   SAVE_Auto_On:GDBBoolean;
   SYS_RunTime:GDBInteger;
   SYS_Version:GDBString;
-  SYS_IsHistoryLineCreated:GDBBoolean;
   PATH_Device_Library:GDBString;
   PATH_Template_Path:GDBString;
   PATH_Template_File:GDBString;
@@ -174,10 +169,6 @@ begin
   INTF_DefaultControlHeight:=27;
   INTF_ObjInsp_AlwaysUseMultiSelectWrapper:=True;
   INTF_DefaultEditorFontHeight:=0;
-  VIEW_CommandLineVisible:=True;
-  VIEW_HistoryLineVisible:=True;
-  VIEW_ObjInspVisible:=True;
-  StatusPanelVisible:=False;
   RD_Vendor:='NVIDIA Corporation';
   RD_Renderer:='GeForce GTX 460/PCIe/SSE2';
   RD_Extensions:='';
@@ -192,7 +183,6 @@ begin
   SAVE_Auto_On:=True;
   SYS_RunTime:=3233;
   SYS_Version:='0.9.8 Revision SVN:1609';
-  SYS_IsHistoryLineCreated:=True;
   PATH_Device_Library:='*programdb|c:/zcad/userdb';
   PATH_Template_Path:='*template';
   PATH_Template_File:='default.dxf';

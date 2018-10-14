@@ -23,7 +23,7 @@ uses Clipbrd,sysutils,uzccommandsabstract,uzcfcommandline,uzcutils,uzbpaths,Type
      uzbtypes,uzedrawingdef,uzgldrawcontext,uzctnrvectorgdbstring,varmandef,uzedrawingsimple,
      uzeentity,uzcenitiesvariablesextender,zcobjectinspector,uzcguimanager,uzcstrconsts,
      gzctnrvectortypes,Types,Controls,uzcdrawings,Varman,UUnitManager,uzcsysvars,
-     zcobjectinspectorui,uzcoimultiobjects,uzccommandsimpl,uzbtypesbase,uzcsysinfo,LazLogger;
+     uzcsysparams,zcobjectinspectorui,uzcoimultiobjects,uzccommandsimpl,uzbtypesbase,uzcsysinfo,LazLogger;
 type
   tdummyclass=class
     procedure UpdateObjInsp(sender:TObject;GUIMode:TZMessageID);

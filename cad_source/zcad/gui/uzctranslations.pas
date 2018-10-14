@@ -22,7 +22,7 @@ unit uzctranslations;
 interface
 uses uzbpaths,LCLVersion,uzbstrproc{$IFNDEF DELPHI},LazUTF8,gettext,translations,
      fileutil,LResources{$ENDIF},uzcsysinfo,sysutils,uzclog,forms,Classes, typinfo,
-     LazLogger;
+     uzcsysparams,LazLogger;
 
 const
   ZCADTranslatedPOFileName='zcad.%s.po';
@@ -158,7 +158,7 @@ procedure createpo;
 var
    AFilename:string;
 begin
-     if not uzcsysinfo.sysparam.updatepo then
+     if not sysparam.updatepo then
      begin
            if Lang<>'' then
                            begin
@@ -210,7 +210,7 @@ begin
     result:=po.Translate(Identifier, OriginalValue);
     programlog.LogOutFormatStr('InterfaceTranslate: identifier:"%s" originalValue:"%s" translate to "%s"',[Identifier,OriginalValue,result],0,LM_Debug,TranslateLogModuleId);
 
-    if uzcsysinfo.sysparam.updatepo then
+    if sysparam.updatepo then
      begin
           Item:=po.FindPoItem(Identifier);
           //uncoment for lazarus < r57491
@@ -272,7 +272,7 @@ procedure initialize;
       GetLanguageIDs(Lang, FallbackLang); // определено в модуле gettext
       createpo;
       LRSTranslator:=TPoTranslator.Create;
-      if not uzcsysinfo.sysparam.updatepo then
+      if not sysparam.updatepo then
                                        begin
                                            TranslateResourceStrings(PODirectory + ZCADTranslatedPOFileName, Lang, FallbackLang);
                                            TranslateUnitResourceStrings('anchordockstr', PODirectory + 'anchordockstr.%s.po', Lang, FallbackLang);

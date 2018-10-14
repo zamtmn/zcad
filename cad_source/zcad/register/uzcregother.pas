@@ -21,9 +21,8 @@ unit uzcregother;
 interface
 uses uzbpaths,UUnitManager,uzcsysvars,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
      uzbstrproc,Varman,languade,SysUtils,
-     UBaseTypeDescriptor,uzcshared,uzbtypes,UGDBOpenArrayOfByte, strmy, varmandef,uzcsysinfo,
-     TypeDescriptors,
-     URecordDescriptor,
+     UBaseTypeDescriptor,uzcshared,uzbtypes,UGDBOpenArrayOfByte, strmy, varmandef,
+     uzcsysparams,uzcsysinfo,TypeDescriptors,URecordDescriptor,
      uzclog,uzbmemman,LazLogger;
 implementation
 {$IFNDEF WINDOWS}
@@ -49,8 +48,6 @@ initialization;
   SysVarUnit:=units.findunit(SupportPath,InterfaceTranslate,'sysvar');
   SavedUnit:=units.findunit(SupportPath,InterfaceTranslate,'savedvar');
   DBUnit:=units.findunit(SupportPath,InterfaceTranslate,'devicebase');
-
-  SysVar.sys.SYS_UniqueInstance:=@SysParam.UniqueInstance;
 
   if SysVarUnit<>nil then
   begin

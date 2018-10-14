@@ -22,7 +22,7 @@ unit uzccombase;
 interface
 uses
  {$IFDEF DEBUGBUILD}strutils,{$ENDIF}
- zeundostack,zcchangeundocommand,uzcoimultiobjects,
+ uzcsysparams,zeundostack,zcchangeundocommand,uzcoimultiobjects,
  uzcenitiesvariablesextender,uzgldrawcontext,uzcdrawing,uzbpaths,uzeffmanager,
  uzeentdimension,uzestylesdim,uzestylestexts,uzeenttext,uzestyleslinetypes,
  URecordDescriptor,uzefontmanager,uzedrawingsimple,uzcsysvars,uzccommandsmanager,
@@ -1411,7 +1411,7 @@ var
    cleaned:integer;
    s:string;
 begin
-     if uzcsysinfo.sysparam.updatepo then
+     if sysparam.updatepo then
      begin
           begin
                cleaned:=po.exportcompileritems(actualypo);
@@ -1422,7 +1422,7 @@ begin
                                                                          exit;
                po.SaveToFile(expandpath(PODirectory + ZCADRTBackupPOFileName));
                actualypo.SaveToFile(expandpath(PODirectory + ZCADRTPOFileName));
-               uzcsysinfo.sysparam.updatepo:=false
+               sysparam.updatepo:=false
           end;
      end
         else ZCMsgCallBackInterface.TextMessage(rsAboutCLSwithUpdatePO,TMWOShowError);

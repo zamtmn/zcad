@@ -24,7 +24,7 @@ uses uzctnrvectorgdbpointer,gzctnrvectorpobjects,uzcsysvars,uzegeometry,uzglview
      gzctnrvectortypes,uzbgeomtypes,uzbstrproc,gzctnrvectorp,
      uzbtypesbase,uzccommandsabstract, sysutils,uzbtypes,uzglviewareadata,
      uzbmemman,uzclog,varmandef,varman,uzedrawingdef,uzcinterface,uzcshared,
-     uzedrawingsimple,uzctnrvectorgdbstring,forms,LazLogger;
+     uzcsysparams,uzedrawingsimple,uzctnrvectorgdbstring,forms,LazLogger;
 const
      tm:tmethod=(Code:nil;Data:nil);
      nullmethod:{tmethod}TButtonMethod=nil;

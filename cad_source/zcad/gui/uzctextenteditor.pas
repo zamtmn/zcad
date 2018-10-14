@@ -20,7 +20,7 @@ unit uzctextenteditor;
 {$INCLUDE def.inc}
 interface
 uses
-     uzcutils,uzcsysvars,uzbtypesbase,uzbtypes,uzcsysinfo,
+     uzcsysparams,uzcutils,uzcsysvars,uzbtypesbase,uzbtypes,uzcsysinfo,
      uzcinfoform,Varman,uzcinterface,
      uzedrawingdef,uzbstrproc,uzeenttext,uzeconsts,uzcstrconsts,uzcfsinglelinetexteditor,
      Controls,Classes,Forms,uzccommandsmanager;

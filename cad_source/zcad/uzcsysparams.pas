@@ -93,17 +93,17 @@ begin
 end;
 procedure LoadParams(xmlfile:string;out Params:tsavedparams);
 var
-  ActionsConfig:TXMLConfig;
+  XMLConfig:TXMLConfig;
 begin
   Params:=DefaultSavedParams;
-  ActionsConfig:=TXMLConfig.Create(nil);
-  ActionsConfig.Filename:=xmlfile;
-  ActionsConfig.OpenKey('Stage0Params');
-  Params.UniqueInstance:=ActionsConfig.GetValue('UniqueInstance',DefaultSavedParams.UniqueInstance);
-  Params.NoSplash:=ActionsConfig.GetValue('NoSplash',DefaultSavedParams.NoSplash);
-  Params.NoLoadLayout:=ActionsConfig.GetValue('NoLoadLayout',DefaultSavedParams.NoLoadLayout);
-  Params.UpdatePO:=ActionsConfig.GetValue('UpdatePO',DefaultSavedParams.UpdatePO);
-  ActionsConfig.CloseKey;
+  XMLConfig:=TXMLConfig.Create(nil);
+  XMLConfig.Filename:=xmlfile;
+  XMLConfig.OpenKey('Stage0Params');
+  Params.UniqueInstance:=XMLConfig.GetValue('UniqueInstance',DefaultSavedParams.UniqueInstance);
+  Params.NoSplash:=XMLConfig.GetValue('NoSplash',DefaultSavedParams.NoSplash);
+  Params.NoLoadLayout:=XMLConfig.GetValue('NoLoadLayout',DefaultSavedParams.NoLoadLayout);
+  Params.UpdatePO:=XMLConfig.GetValue('UpdatePO',DefaultSavedParams.UpdatePO);
+  XMLConfig.CloseKey;
 end;
 
 

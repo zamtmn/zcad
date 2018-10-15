@@ -22,7 +22,7 @@ interface
 uses sysutils,uzbtypesbase,usimplegenerics,gzctnrstl,LazLogger;
 type
 TStrProcessFunc=procedure(var str:gdbstring;var startpos:integer;pobj:pointer);
-TPrefix2ProcessFunc=GKey2DataMap<GDBString,TStrProcessFunc{$IFNDEF DELPHI},LessGDBString{$ENDIF}>;
+TPrefix2ProcessFunc=GKey2DataMap<String,TStrProcessFunc{$IFNDEF DELPHI},LessGDBString{$ENDIF}>;
 var
     Prefix2ProcessFunc:TPrefix2ProcessFunc;
 function textformat(s:GDBString;pobj:GDBPointer):GDBString;
@@ -51,6 +51,32 @@ begin
      }
      result:=ps;
 end;
+
+Function Pos_only_for_FPC304 (Const Substr : ansistring; Const Source : ansistring; Offset : SizeInt = 1) : SizeInt;
+var
+  i,MaxLen : SizeInt;
+  pc : pwidechar;
+begin
+  result:=0;
+  if (Length(SubStr)>0) and (Offset>0) and (Offset<=Length(Source)) then
+   begin
+     MaxLen:=Length(source)-Length(SubStr)-(Offset-1);
+     i:=0;
+     pc:=@source[Offset];
+     while (i<=MaxLen) do
+      begin
+        inc(i);
+        if (SubStr[1]=pc^) and
+           (CompareWord(Substr[1],pc^,Length(SubStr))=0) then
+         begin
+           result:=Offset+i-1;
+           exit;
+         end;
+        inc(pc);
+      end;
+   end;
+end;
+
 function textformat;
 var i{,i2},counter:GDBInteger;
     ps{,s2}:GDBString;
@@ -79,7 +105,7 @@ begin
        if assigned(iterator.value)then
        begin
          repeat
-           i:=pos(iterator.key,ps,startsearhpos);
+           i:=Pos_only_for_FPC304(iterator.key,ps,startsearhpos);
            if i>0 then
            begin
              iterator.value(ps,i,pobj);

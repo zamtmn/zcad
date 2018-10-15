@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Package Version="4">
+    <PathDelim Value="\"/>
+    <Name Value="rtl_generics"/>
+    <CompilerOptions>
+      <Version Value="11"/>
+      <PathDelim Value="\"/>
+      <SearchPaths>
+        <IncludeFiles Value="source\inc"/>
+        <OtherUnitFiles Value="source"/>
+        <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)\"/>
+      </SearchPaths>
+    </CompilerOptions>
+    <Files Count="8">
+      <Item1>
+        <Filename Value="source\generics.collections.pas"/>
+        <UnitName Value="Generics.Collections"/>
+      </Item1>
+      <Item2>
+        <Filename Value="source\generics.defaults.pas"/>
+        <UnitName Value="Generics.Defaults"/>
+      </Item2>
+      <Item3>
+        <Filename Value="source\generics.hashes.pas"/>
+        <UnitName Value="Generics.Hashes"/>
+      </Item3>
+      <Item4>
+        <Filename Value="source\generics.helpers.pas"/>
+        <UnitName Value="Generics.Helpers"/>
+      </Item4>
+      <Item5>
+        <Filename Value="source\generics.memoryexpanders.pas"/>
+        <UnitName Value="Generics.MemoryExpanders"/>
+      </Item5>
+      <Item6>
+        <Filename Value="source\generics.strings.pas"/>
+        <UnitName Value="Generics.Strings"/>
+      </Item6>
+      <Item7>
+        <Filename Value="source\inc\generics.dictionaries.inc"/>
+        <Type Value="Include"/>
+      </Item7>
+      <Item8>
+        <Filename Value="source\inc\generics.dictionariesh.inc"/>
+        <Type Value="Include"/>
+      </Item8>
+    </Files>
+    <RequiredPkgs Count="1">
+      <Item1>
+        <PackageName Value="FCL"/>
+      </Item1>
+    </RequiredPkgs>
+    <UsageOptions>
+      <UnitPath Value="$(PkgOutDir)"/>
+    </UsageOptions>
+    <PublishOptions>
+      <Version Value="2"/>
+    </PublishOptions>
+  </Package>
+</CONFIG>

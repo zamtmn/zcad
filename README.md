@@ -32,10 +32,10 @@ Requirements:
 
 Build ZCAD:
 
-* install cad_sources/other/rtl-generics_for_FPC304 package to lazarus if you use fpc 3.0.4
-* install cad_sources/other/rtl-generics_dummy package to lazarus if you use trunk fpc
-* install zcad packages from 'cad_sources/components' to lazarus
-* install third party packages from 'cad_sources/other' to lazarus
+* install **cad_sources/other/rtl-generics_for_FPC304** package to lazarus if you use **fpc 3.0.4**
+* install **cad_sources/other/rtl-generics_dummy package** to lazarus if you use **trunk fpc**
+* install zcad packages from '**cad_sources/components**' to lazarus
+* install third party packages from '**cad_sources/other**' to lazarus
 * check whether the PATCH variable includes patch to lazbuild binary
 * if need set PATCH variable: `$ export PATH="$PATH:/your/patch/to/lazarus/"`
 * run `$ ./zcad.sh` (or zcadelectrotech.sh) file

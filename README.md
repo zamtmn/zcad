@@ -27,7 +27,7 @@ ToDo:
 ## Build from source
 Requirements:
 
-* **trunk Lazarus**
+* **Lazarus 2.0 RC1 (or trunk)**
 * **FPC 3.0.4 (or trunk)**
 
 Build ZCAD:

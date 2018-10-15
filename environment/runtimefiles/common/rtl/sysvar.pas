@@ -71,6 +71,10 @@ var
   INTF_DefaultControlHeight:GDBInteger;
   INTF_ObjInsp_AlwaysUseMultiSelectWrapper:GDBBoolean;
   INTF_DefaultEditorFontHeight:GDBInteger;
+  INTF_ThemedUpToolbars:GDBBoolean;
+  INTF_ThemedRightToolbars:GDBBoolean;
+  INTF_ThemedDownToolbars:GDBBoolean;
+  INTF_ThemedLeftToolbars:GDBBoolean;
   RD_Vendor:GDBString;
   RD_Renderer:GDBString;
   RD_Extensions:GDBString;
@@ -169,6 +173,10 @@ begin
   INTF_DefaultControlHeight:=27;
   INTF_ObjInsp_AlwaysUseMultiSelectWrapper:=True;
   INTF_DefaultEditorFontHeight:=0;
+  INTF_ThemedUpToolbars:=true;
+  INTF_ThemedRightToolbars:=false;
+  INTF_ThemedDownToolbars:=false;
+  INTF_ThemedLeftToolbars:=false;
   RD_Vendor:='NVIDIA Corporation';
   RD_Renderer:='GeForce GTX 460/PCIe/SSE2';
   RD_Extensions:='';

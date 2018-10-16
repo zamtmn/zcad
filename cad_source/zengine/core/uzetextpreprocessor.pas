@@ -53,7 +53,7 @@ begin
 end;
 
 { TODO : Need remove Pos_only_for_FPC304, it only for fpc3.0.4 }
-Function (Const Substr : ansistring; Const Source : ansistring; Offset : SizeInt = 1) : SizeInt;
+Function Pos_only_for_FPC304(Const Substr : ansistring; Const Source : ansistring; Offset : SizeInt = 1) : SizeInt;
 var
   i,MaxLen : SizeInt;
   pc : pwidechar;

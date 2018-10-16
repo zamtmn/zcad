@@ -119,14 +119,8 @@ begin
 end;
 procedure DisableCmdLine;
 begin
-  {if assigned(application.MainForm) then
-    application.MainForm.ActiveControl:=nil;}
   if assigned(uzcfcommandline.cmdedit) then
-                                  begin
-                                      //if uzcfcommandline.cmdedit.Enabled<>false then
-                                      //   ZCMsgCallBackInterface.Do_SetNormalFocus;
-                                      uzcfcommandline.cmdedit.Enabled:=false;
-                                  end;
+    uzcfcommandline.cmdedit.Enabled:=false;
   if assigned(prompt) then begin
     prompt.Enabled:=false;
     prompt.Color:=clBtnFace;
@@ -136,26 +130,31 @@ end;
 procedure EnableCmdLine;
 begin
   if assigned(uzcfcommandline.cmdedit) then
-  if uzcfcommandline.cmdedit.IsVisible then
-                                  begin
-                                       //if uzcfcommandline.cmdedit.Enabled<>true then
-                                       //  ZCMsgCallBackInterface.Do_SetNormalFocus;
-                                       uzcfcommandline.cmdedit.Enabled:=true;
-                                       //uzcfcommandline.cmdedit.SetFocus;
-                                  end;
+    uzcfcommandline.cmdedit.Enabled:=true;
   if assigned(prompt) then begin
     prompt.Enabled:=true;
     prompt.Color:=clDefault;
   end;
 end;
-
+procedure HideCmdLine;
+begin
+  DisableCmdLine;
+  if assigned(panel) then
+    panel.visible:=false;
+end;
+procedure ShowCmdLine;
+begin
+  EnableCmdLine;
+  if assigned(panel) then
+    panel.visible:=true;
+end;
 procedure HandleCmdLine(GUIMode:TZMessageID);
 begin
      if GUIMode in [ZMsgID_GUICMDLineCheck] then begin
      if INTFCommandLineEnabled then
-                                   EnableCmdLine
+                                   ShowCmdLine
                                else
-                                   DisableCmdLine;
+                                   HideCmdLine;
      end;
      if GUIMode in [ZMsgID_GUIDisable] then
                                            DisableCmdLine

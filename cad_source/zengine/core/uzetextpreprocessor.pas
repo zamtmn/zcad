@@ -51,7 +51,7 @@ begin
      }
      result:=ps;
 end;
-
+{$if FPC_FULLVERSION<=30004}
 { TODO : Need remove Pos_only_for_FPC304, it only for fpc3.0.4 }
 Function Pos_only_for_FPC304(Const Substr : ansistring; Const Source : ansistring; Offset : SizeInt = 1) : SizeInt;
 var
@@ -77,7 +77,7 @@ begin
       end;
    end;
 end;
-
+{$endif}
 function textformat;
 var i{,i2},counter:GDBInteger;
     ps{,s2}:GDBString;
@@ -106,7 +106,7 @@ begin
        if assigned(iterator.value)then
        begin
          repeat
-           i:=Pos_only_for_FPC304(iterator.key,ps,startsearhpos);
+           i:={$if FPC_FULLVERSION<=30004}Pos_only_for_FPC304{$else}Pos{$endif}(iterator.key,ps,startsearhpos);
            if i>0 then
            begin
              iterator.value(ps,i,pobj);

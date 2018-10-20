@@ -97,6 +97,17 @@ const
     TMWOMessageBox=[TMWOToConsole,TMWOToLog,TMWOToModal];
     TMWOQuickly=[TMWOToQuicklyReplaceable];
 type
+    TZCStates=(ZCSGUIChanged);
+    TZCState=set of TZCStates;
+    TZCStatekInterface=class
+      public
+      state:TZCState;
+      constructor Create;
+      procedure SetState(st:TZCStates);
+      function CheckState(st:TZCStates):boolean;
+      function CheckAndResetState(st:TZCStates):boolean;
+    end;
+
     TZCMsgCallBackInterface=class
       public
         constructor Create;
@@ -229,7 +240,26 @@ var
 function GetUndoStack:pointer;
 var
    ZCMsgCallBackInterface:TZCMsgCallBackInterface;
+   ZCStatekInterface:TZCStatekInterface;
 implementation
+constructor TZCStatekInterface.Create;
+begin
+   state:=[];
+end;
+procedure TZCStatekInterface.SetState(st:TZCStates);
+begin
+   include(state,st);
+end;
+function TZCStatekInterface.CheckState(st:TZCStates):boolean;
+begin
+   result:=st in state;
+end;
+function TZCStatekInterface.CheckAndResetState(st:TZCStates):boolean;
+begin
+   result:=st in state;
+   if result then
+     exclude(state,st);
+end;
 constructor TZCMsgCallBackInterface.Create;
 begin
   ZMessageIDSeed:=0;
@@ -524,6 +554,7 @@ end;
 
 initialization
   ZCMsgCallBackInterface:=TZCMsgCallBackInterface.create;
+  ZCStatekInterface:=TZCStatekInterface.create;
   ZMsgID_GUIEnable:=ZCMsgCallBackInterface.GetUniqueZMessageID;
   ZMsgID_GUIDisable:=ZCMsgCallBackInterface.GetUniqueZMessageID;
   ZMsgID_GUICMDLineCheck:=ZCMsgCallBackInterface.GetUniqueZMessageID;
@@ -548,4 +579,5 @@ initialization
   ZMsgID_GUIBeforeCloseApp:=ZCMsgCallBackInterface.GetUniqueZMessageID;
 finalization
   ZCMsgCallBackInterface.free;
+  ZCStatekInterface.Free;
 end.

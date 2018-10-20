@@ -2342,6 +2342,8 @@ begin
                                                                                UpdateObjInspProc;}
                                         end;
      rt:=SysVar.SYS.SYS_RunTime^;
+     if ZCStatekInterface.CheckAndResetState(ZCSGUIChanged) then
+       ZCMsgCallBackInterface.Do_SetNormalFocus;
      {if historychanged then
                            begin
                                 historychanged:=false;

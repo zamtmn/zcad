@@ -141,12 +141,14 @@ begin
   DisableCmdLine;
   if assigned(panel) then
     panel.visible:=false;
+  ZCStatekInterface.SetState(ZCSGUIChanged);
 end;
 procedure ShowCmdLine;
 begin
   EnableCmdLine;
   if assigned(panel) then
     panel.visible:=true;
+  ZCStatekInterface.SetState(ZCSGUIChanged);
 end;
 procedure HandleCmdLine(GUIMode:TZMessageID);
 begin

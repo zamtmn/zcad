@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ToolBarsContent>
-    <Electrotech Type="ToolBar">
-      <Action Name="ACN_REGENZENTS"/>
-      <Separator/>
-      <Button Command="OPS_Sensor_Mark" Img='#++' Hint="Numbering sensors on the plan"/>
-      <Action Name="ACN_DEVNUMBERING"/>
-      <Action Name="ACN_KIPCDBUILD"/>
-      <Action Name="ACN_KIPLUGTABLEBUILD"/>
-      <Separator/>
-      <Action Name="ACN_PROCESSKZ"/>
-      <Action Name="ACN_REMAUTOCABLES"/>
-    </Electrotech>
     <ElectrotechEnts Type="ToolBar">
       <Action Name="ACN_CABLE"/>
       <Action Name="ACN_WIRE"/>

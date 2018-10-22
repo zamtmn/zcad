@@ -6,10 +6,10 @@
         <Bounds Top="4" Left="7" Width="967" Height="699"/>
         <Anchors Align="Client"/>
         <Item1 Name="AnchorDockSite7" Type="Layout" ChildCount="7">
-          <Bounds Width="929" Height="524"/>
+          <Bounds Width="929" Height="548"/>
           <Anchors Align="Client"/>
           <Item1 Name="CommandLine" Type="Control">
-            <Bounds Top="429" Left="220" Width="709" Height="95"/>
+            <Bounds Top="429" Left="220" Width="709" Height="119"/>
             <Anchors Top="AnchorDockSplitter1" Left="AnchorDockSplitter2"/>
           </Item1>
           <Item2 Name="AnchorDockSplitter1" Type="SplitterHorizontal">
@@ -21,10 +21,10 @@
             <Anchors Left="AnchorDockSplitter2" Right="AnchorDockSplitter3" Bottom="AnchorDockSplitter1"/>
           </Item3>
           <Item4 Name="AnchorDockSplitter2" Type="SplitterVertical">
-            <Bounds Left="216" Width="4" Height="524"/>
+            <Bounds Left="216" Width="4" Height="548"/>
           </Item4>
           <Item5 Name="ObjectInspector" Type="Control">
-            <Bounds Width="216" Height="524"/>
+            <Bounds Width="216" Height="548"/>
             <Anchors Right="AnchorDockSplitter2"/>
           </Item5>
           <Item6 Name="AnchorDockSplitter3" Type="SplitterVertical">
@@ -35,7 +35,7 @@
             <Bounds Left="719" Width="210" Height="425"/>
             <Anchors Left="AnchorDockSplitter3" Bottom="AnchorDockSplitter1"/>
             <Item1 Name="NavigatorDevices" Type="Control">
-              <Bounds Width="202" Height="393"/>
+              <Bounds Width="202" Height="367"/>
               <Anchors Align="Client"/>
             </Item1>
             <Item2 Name="NavigatorCables" Type="Control">
@@ -63,11 +63,10 @@
       <Item1 Name="Modify" Type="ToolBar" Break="False" Width="213"/>
       <Item2 Name="Draw" Type="ToolBar" Break="False" Width="186"/>
     </Item2>
-    <Item3 Name="CoolBarD" Type="CoolBar" ItemCount="4">
+    <Item3 Name="CoolBarD" Type="CoolBar" ItemCount="3">
       <Item0 Name="ElectrotechEnts" Type="ToolBar" Width="133"/>
       <Item1 Name="ElectrotechPlacing" Type="ToolBar" Break="False"/>
-      <Item2 Name="Electrotech" Type="ToolBar" Break="False" Width="248"/>
-      <Item3 Name="ElectrotechActions" Type="ToolBar" Break="False" Width="396"/>
+      <Item2 Name="ElectrotechActions" Type="ToolBar" Break="False" Width="396"/>
     </Item3>
   </ToolBarsConfig>
 </CONFIG>

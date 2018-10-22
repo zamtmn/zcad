@@ -18,8 +18,14 @@
 
 unit uzcstrconsts;
 {$INCLUDE def.inc}
-
+{$INCLUDE buildmode.inc}
 interface
+const
+  {$IFDEF ELECTROTECH}
+  programname='ZCADElectrotech';
+  {$ELSE}
+  programname='ZCAD';
+  {$ENDIF}
 resourcestring
   {errors}
   rsNameAbsent='Absent Name';
@@ -173,7 +179,7 @@ resourcestring
   rsCurrentDimStyleCannotBeDeleted='Current dimension style cannot be deleted';
 
   rsSaveEmptyDWG='Drawing is empty. Sure?';
-  rsZCADStarted='ZCAD v%s started';
+  rsZCADStarted='%s v%s started';
   rsLoadingFontFile='Loading font file "%S"';
   rsTypeNotDefinedInModule='Type "%S" not defined in unit "%S"';
   rsUnableSelectFreeLayerName='Unable select free layer name';

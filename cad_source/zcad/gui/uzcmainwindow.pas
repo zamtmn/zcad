@@ -1150,7 +1150,7 @@ begin
                                             system.Append(f)
                                         else
                                             system.Rewrite(f);
-     WriteLn(f,'');WriteLn(f,'ZCAD crashed((');WriteLn(f,'');
+     WriteLn(f,'');WriteLn(f,programname+' crashed((');WriteLn(f,'');
      myDumpExceptionBackTrace(f);
      system.close(f);
 
@@ -1187,7 +1187,7 @@ begin
      WriteLn(f,errmsg);
      WriteLn(f,'______________________________________________________________________________________');
      system.close(f);
-     errmsg:='ZCAD raised exception class "'+E.Message+'"'#13#10#13#10'A crash report generated (stack trace and latest log).'#13#10'Please send "'
+     errmsg:=programname+' raised exception class "'+E.Message+'"'#13#10#13#10'A crash report generated (stack trace and latest log).'#13#10'Please send "'
              +crashreportfilename+'" file at zamtmn@yandex.ru'#13#10#13#10'Attempt to continue running?';
      if MessageDlg(errmsg,mtError,[mbYes, mbAbort],0)=mrAbort then
                                                                   halt(0);
@@ -3180,7 +3180,7 @@ begin
   begin
   //ZCADMainWindow.setvisualprop;
   ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRebuild);
-  ZCADMainWindow.Caption:='ZCad v'+sysvar.SYS.SYS_Version^+' - ['+drawings.GetCurrentDWG.GetFileName+']';
+  ZCADMainWindow.Caption:=programname+' v'+sysvar.SYS.SYS_Version^+' - ['+drawings.GetCurrentDWG.GetFileName+']';
 
   if assigned(LayerBox) then
   LayerBox.enabled:=true;
@@ -3286,7 +3286,7 @@ begin
                          ZCADMainWindow.OpenedDrawings[i].visible:=false;
                          ZCADMainWindow.OpenedDrawings[i].command:='';
              end;
-           ZCADMainWindow.Caption:=('ZCad v'+sysvar.SYS.SYS_Version^);
+           ZCADMainWindow.Caption:=(programname+' v'+sysvar.SYS.SYS_Version^);
            {if assigned(LayerBox)then
            LayerBox.enabled:=false;
            if assigned(LineWBox)then

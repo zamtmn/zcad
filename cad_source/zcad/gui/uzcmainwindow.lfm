@@ -6,6 +6,7 @@ object ZCADMainWindow: TZCADMainWindow
   ClientHeight = 470
   ClientWidth = 632
   DesignTimePPI = 113
+  LCLVersion = '2.1.0.0'
   object AnchorDockPanel1: TAnchorDockPanel
     Left = 4
     Height = 440

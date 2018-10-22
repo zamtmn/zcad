@@ -183,7 +183,6 @@ begin
      ProcessParamStr;
      //SysParam.verstr:=Format('%d.%d.%d.%d SVN: %s',[SysParam.Ver.major,SysParam.Ver.minor,SysParam.Ver.release,SysParam.Ver.build,RevisionStr]);
      debugln('{N}ZCAD log v'+sysparam.notsaved.ver.versionstring+' started');
-     //programlog.logoutstr('ZCAD log v'+sysparam.ver.versionstring+' started',0,LM_Necessarily);
 {$IFDEF FPC}                 debugln('{N}Program compiled on Free Pascal Compiler');{$ENDIF}
 {$IFDEF DEBUGBUILD}          debugln('{N}Program compiled with {$DEFINE DEBUGDUILD}');{$ENDIF}
 {$IFDEF PERFOMANCELOG}       debugln('{N}Program compiled with {$DEFINE PERFOMANCELOG}');{$ENDIF}

@@ -269,7 +269,7 @@ type
       function getAreaVertex(vertexPoint:GDBVertex;accuracy:double):TBoundingBox;
       function vertexPointInAreaRectangle(rectLine:TRectangleLine;vertexPt:GDBVertex):boolean;
       procedure clearVisualGraph(nameLayer:string);
-      function getListSuperline():TGDBlistSLname;
+      procedure getListSuperline(var listSLname:TGDBlistSLname);
 
 implementation
 
@@ -1802,7 +1802,7 @@ begin
 end;
 
 ///****Получить список всех суперлиний****////
-function getListSuperline():TGDBlistSLname;
+procedure getListSuperline(var listSLname:TGDBlistSLname);
 var
     pobj: pGDBObjEntity;
     ir:itrec;  // применяется для обработки списка выделений, но что это понятия не имею :)
@@ -1812,7 +1812,8 @@ var
     isname:boolean;
 begin
   //ZCMsgCallBackInterface.TextMessage('ТЕСТ старт!!!',TMWOHistoryOut);
-  result:=TGDBlistSLname.Create;
+  //result:=TGDBlistSLname.Create;
+
   pobj:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
   if pobj<>nil then
     repeat
@@ -1821,11 +1822,11 @@ begin
          pSuperLine:=PGDBObjSuperLine(pobj);
          pvd:=FindVariableInEnt(pSuperLine,'NMO_Name');
          isname:=true;
-         for name in result do
+         for name in listSLname do
            if name = pgdbstring(pvd^.data.Instance)^ then
              isname:=false;
          if isname then
-            result.PushBack(pgdbstring(pvd^.data.Instance)^);
+            listSLname.PushBack(pgdbstring(pvd^.data.Instance)^);
         end;
       pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir); //переход к следующем примитиву в списке выбраных примитивов
     until pobj=nil;

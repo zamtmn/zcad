@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ToolBarsContent>
+      <ElectrotechVelec Type="ToolBar">
+      <Action Name="ACN_SUPELINE"/>
+      <Action Name="ACN_slagcabCom"/>
+      <Action Name="ACN_smtextall"/>
+      <Action Name="ACN_smtextarea"/>
+    </ElectrotechVelec>
   </ToolBarsContent>
 </CONFIG>

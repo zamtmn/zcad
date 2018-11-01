@@ -101,12 +101,22 @@ type
                          pentity:PGDBObjEntity;
                    end;
     TCircleDrawMode=(TCDM_CR,TCDM_CD,TCDM_2P,TCDM_3P);
+    TPolygonDrawMode=(TPDM_CV,TPDM_CC);
     PT3PointCircleModePentity=^T3PointCircleModePentity;
     T3PointCircleModePEntity=record
                                    p1,p2,p3:gdbvertex;
                                    cdm:TCircleDrawMode;
                                    npoint:GDBInteger;
                                    pentity:PGDBObjEntity;
+                             end;
+    PTPointPolygonDrawModePentity=^TPointPolygonDrawModePentity;
+    TPointPolygonDrawModePentity=record
+                                   p1:gdbvertex;
+                                   cdm:TPolygonDrawMode;
+                                   typeLWPoly:gdbboolean;
+                                   npoint:GDBInteger;
+                                   pentity:PGDBObjPolyline;
+                                   plwentity:PGDBObjLWPolyline;
                              end;
 
 procedure InteractiveLineEndManipulator( const PInteractiveData : PGDBObjLine {pointer to the line entity};
@@ -131,6 +141,9 @@ procedure InteractiveLWRectangleManipulator( const PInteractiveData : PGDBObjLWP
                                                           Point : GDBVertex  {new end coord};
                                                           Click : GDBBoolean {true if lmb presseed});
 procedure InteractiveRectangleManipulator( const PInteractiveData : PGDBObjPolyline {pointer to the line entity};
+                                                          Point : GDBVertex  {new end coord};
+                                                          Click : GDBBoolean {true if lmb presseed});
+procedure InteractivePolygonManipulator( const PInteractiveData : TPointPolygonDrawModePentity {pointer to the line entity};
                                                           Point : GDBVertex  {new end coord};
                                                           Click : GDBBoolean {true if lmb presseed});
 implementation
@@ -428,6 +441,70 @@ begin
   polyObj^.FormatEntity(drawings.GetCurrentDWG^,dc);
 
 end;
+
+procedure InteractivePolygonManipulator( const PInteractiveData : TPointPolygonDrawModePentity {pointer to the line entity};
+                                                          Point : GDBVertex  {new end coord};
+                                                          Click : GDBBoolean {true if lmb presseed});
+var
+  obj : TPointPolygonDrawModePentity absolute PInteractiveData;
+  stPoint: GDBvertex;
+  dc:TDrawContext;
+  i,countVert:integer;
+  radius,alpha,stalpha,xyline,xline:double;
+begin
+
+   countVert:=obj.npoint;
+   stPoint := obj.p1;
+   xyline:=uzegeometry.Vertexlength(stPoint,Point);
+   xline:=uzegeometry.Vertexlength(stPoint,CreateVertex(Point.x,stPoint.y,0));
+
+   radius := Vertexlength(stPoint,Point);
+   stalpha:=0;
+
+    case
+     obj.cdm of
+     TPDM_CC:begin
+               stalpha := pi/countVert;
+               radius := radius/(cos(pi/countVert));
+             end;
+    end;
+
+     alpha:=stalpha + arccos(xline/xyline)-pi;
+
+     if (stPoint.x <= Point.x) and (stPoint.y >= Point.y) then
+        alpha:=stalpha-arccos(xline/xyline);
+
+     if (stPoint.x >= Point.x) and (stPoint.y <= Point.y) then
+        alpha:=stalpha-arccos(xline/xyline)+pi;
+
+     if (stPoint.x <= Point.x) and (stPoint.y <= Point.y) then
+        alpha:=stalpha + arccos(xline/xyline);
+
+
+  if obj.typeLWPoly then  begin
+      zcSetEntPropFromCurrentDrawingProp(obj.plwentity);
+      for i := 0 to countVert - 1 do
+      begin
+      GDBvertex2D(obj.plwentity^.Vertex2D_in_OCS_Array.getDataMutable(i)^).x := stPoint.x + radius*cos(alpha + (2*pi*i/countVert));
+      GDBvertex2D(obj.plwentity^.Vertex2D_in_OCS_Array.getDataMutable(i)^).y := stPoint.y + radius*sin(alpha + (2*pi*i/countVert));
+      end;
+      dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+      obj.plwentity^.FormatEntity(drawings.GetCurrentDWG^,dc);
+  end
+  else
+  begin
+     zcSetEntPropFromCurrentDrawingProp(obj.pentity);
+     for i := 0 to countVert - 1 do
+      begin
+       PGDBvertex2D(obj.pentity^.VertexArrayInOCS.getDataMutable(i))^.x := stPoint.x + radius*cos(alpha + (2*pi*i/countVert));
+       PGDBvertex2D(obj.pentity^.VertexArrayInOCS.getDataMutable(i))^.y := stPoint.y + radius*sin(alpha + (2*pi*i/countVert));
+      end;
+     dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+     obj.pentity^.FormatEntity(drawings.GetCurrentDWG^,dc);
+   end;
+
+end;
+
 
 initialization
 end.

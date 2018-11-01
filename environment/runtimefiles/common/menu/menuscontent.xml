@@ -117,7 +117,11 @@
         <Action Name="ACN_CIRCLE2P"/>
         <Action Name="ACN_CIRCLE3P"/>
       </MainMenuItem>
-      <Action Name="ACN_RECTANGLE"/>
+      <MainMenuItem Name="Polygon">
+        <Action Name="ACN_RECTANGLE"/>
+        <Action Name="ACN_POLYGONCC"/>
+        <Action Name="ACN_POLYGONCV"/>
+      </MainMenuItem>
       <Action Name="ACN_ARC"/>
       <Action Name="ACN_BInsert"/>
       <Action Name="ACN_TEXT"/>

@@ -272,19 +272,94 @@ implementation
        result:=cmd_ok;
   end;
 
-//function TestModul_com(operands:TCommandOperands):TCommandResult;
-//var
-// test:string;
-// r:integer;
-// begin
-//        test:='УРА';
-//        r:=autoGenSLBetweenDevices(test);
-//
-//        HistoryOutStr(' работает ' + test);
-// end;
-//
-//initialization
-// CreateCommandFastObjectPlugin(@TestModul_com,'test45',CADWG,0);
+
+  procedure DrawInOutPoly(pt:GDBVertex; radius: double; sides, color, where, alpha: Integer);
+ var
+    x, y: Integer;
+    i   : Integer;
+    tempPt:GDBVertex;
+ begin
+   //SetColor(color);
+   {Вычисление производится по формуле:
+    xi = x0 + R cos(fi0 + 2*pi*i/n)
+    yi = y0 + R sin(fi0 + 2*pi*i/n)
+    n - число вершин
+    fi0 - начальный угол. Полагаю равным нулю
+    x0, y0 - координаты центра
+    R - радиус окружности, вписанной в многоугольник
+
+    Для окружности, описанной вокруг многоугольника,
+     r = R/cos(pi/n)
+    }
+   if where <> 0 then
+      radius := radius/(cos(pi/sides));
+   {i = 0 - Первая и последняя точка}
+   tempPt.x := pt.x + radius;
+   tempPt.y := pt.y;
+   {Перемещение без риования в эту точку
+    Перемещается, так называемый графический курсор -
+    "текущее" положение на графическом экране
+    Переведи обычный курсор на MoveTo и нажми Ctrl+F1 - получишь
+    справку об операции}
+   //MoveTo(x, y);
+   {Цикл вычисления других вершин и рисования линии
+    от текущего положения графического курсора}
+   for i := 0 to sides do
+   begin
+     //tempPt.x := pt.x + round(radius*cos(2*pi*i/sides));
+     //tempPt.y := pt.y + round(radius*sin(2*pi*i/sides));
+
+     tempPt.x := pt.x + radius*cos(alpha + (2*pi*i/sides));
+     tempPt.y := pt.y + radius*sin(alpha + (2*pi*i/sides));
+     {Коордианты очередной вершины вычислены
+      рисуем линию из текущего положения графического курсора
+      в вычисленную. Делается это с помощью поцедуры LineTo}
+     testDrawCircle(tempPt,1,color);
+   end
+
+
+
+
+ end;
+
+
+  //int n = 5;               // число вершин
+  //  double R = 25, r = 50;   // радиусы
+  //  double alpha = 0;        // поворот
+  //  double x0 = 60, y0 = 60; // центр
+  //
+  //  PointF[] points = new PointF[2 * n + 1];
+  //  double a = alpha, da = Math.PI / n, l;
+  //  for (int k = 0; k < 2 * n + 1; k++)
+  //  {
+  //      l = k % 2 == 0 ? r : R;
+  //      points[k] = new PointF((float)(x0 + l * Math.Cos(a)), (float)(y0 + l * Math.Sin(a)));
+  //      a += da;
+  //  }
+  //
+  //  e.Graphics.DrawLines(Pens.Black, points);
+
+
+function TestModul_com(operands:TCommandOperands):TCommandResult;
+
+
+     var
+    x, y: Integer;
+    i   : Integer;
+    tempPoint:GDBVertex;
+ begin
+       tempPoint.x:=0;
+       tempPoint.y:=0;
+       tempPoint.z:=0;
+      DrawInOutPoly(tempPoint, 20, 8, 4, 0, 10);
+      DrawInOutPoly(tempPoint, 20, 8, 3, 1, 0);
+      //DrawInOutPoly(tempPoint, 8, 8, 3, 0,5);
+      //DrawInOutPoly(tempPoint, 10, 4, 2, 1,0);
+
+ end;
+
+initialization
+ CreateCommandFastObjectPlugin(@TestModul_com,'test555',CADWG,0);
 end.
 
 

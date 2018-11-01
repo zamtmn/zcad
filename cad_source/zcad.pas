@@ -124,6 +124,7 @@ uses
   uzccomdb,
   {$ENDIF}
   uzccomdraw,
+  uzccommand_3dpoly,
   uzccommand_print,
 
   {$IFDEF ELECTROTECH}

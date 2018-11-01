@@ -80,8 +80,8 @@ tlog={$IFNDEF DELPHI}packed{$ENDIF} object
 
            constructor init(fn:AnsiString;LogMode:TLogMode);
            function registermodule(modulename:AnsiString):TLogModuleDeskIndex;
-           function enablemodule(modulename:AnsiString):TLogModuleDeskIndex;
-           function disablemodule(modulename:AnsiString):TLogModuleDeskIndex;
+           procedure enablemodule(modulename:AnsiString);
+           procedure disablemodule(modulename:AnsiString);
            procedure enableallmodules;
            procedure SetLogMode(LogMode:TLogMode);
            destructor done;
@@ -381,11 +381,11 @@ begin
     LogOutStr(format('Register log module "%s"',[modulename]),0,LM_Necessarily);
   end;
 end;
-function tlog.enablemodule(modulename:AnsiString):TLogModuleDeskIndex;
+procedure tlog.enablemodule(modulename:AnsiString);
 begin
   ModulesDeskArray.mutable[registermodule(modulename)]^.enabled:=true;
 end;
-function tlog.disablemodule(modulename:AnsiString):TLogModuleDeskIndex;
+procedure tlog.disablemodule(modulename:AnsiString);
 begin
   ModulesDeskArray.mutable[registermodule(modulename)]^.enabled:=false;
 end;
@@ -496,6 +496,7 @@ var
    CurrentTime:TMyTimeStamp;
    i:integer;
 begin
+     CurrentTime:=mynow();
      for i:=0 to ModulesDeskArray.Size-1 do
       if ModulesDeskArray[i].enabled then
                                          WriteToLog(format('Log module name "%s" state: Enabled',[ModulesDeskArray[i].name]),true,CurrentTime.time,0,CurrentTime.rdtsc,0,0)

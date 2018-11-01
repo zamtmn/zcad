@@ -122,50 +122,34 @@ end;
 
 function _3DPoly_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 var
-    //ptv,ptvprev:pgdbvertex;
-    //ir:itrec;
-    //v,l:gdbdouble;
-    domethod,undomethod:tmethod;
-    polydata:tpolydata;
-    //_tv:gdbvertex;
-    //p3dpl2:pgdbobjpolyline;
-    //i:integer;
-    dc:TDrawContext;
+  domethod,undomethod:tmethod;
+  polydata:tpolydata;
+  dc:TDrawContext;
 begin
   result:=mclick;
   p3dpl^.vp.Layer :=drawings.GetCurrentDWG^.GetCurrentLayer;
   p3dpl^.vp.lineweight := sysvar.dwg.DWG_CLinew^;
-  //p3dpl^.CoordInOCS.lEnd:= wc;
   dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
   p3dpl^.Formatentity(drawings.GetCurrentDWG^,dc);
-  if (button and MZW_LBUTTON)<>0 then
-  begin
-
-
-  //polydata.nearestvertex:=p3dpl^.VertexArrayInOCS.count;
-  //polydata.nearestline:=p3dpl^.VertexArrayInOCS.count-1;
-  //polydata.dir:=1;
-  polydata.index:=p3dpl^.VertexArrayInOCS.count;
-  polydata.wc:=wc;
-  domethod:=tmethod(@p3dpl^.InsertVertex);
-  {tmethod(domethod).Code:=pointer(p3dpl.InsertVertex);
-  tmethod(domethod).Data:=p3dpl;}
-  undomethod:=tmethod(@p3dpl^.DeleteVertex);
-  {tmethod(undomethod).Code:=pointer(p3dpl.DeleteVertex);
-  tmethod(undomethod).Data:=p3dpl;}
-  with PushCreateTGObjectChangeCommand2(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,polydata,tmethod(domethod),tmethod(undomethod))^ do
-  begin
-       AutoProcessGDB:=false;
-       comit;
-  end;
-
-    //p3dpl^.AddVertex(wc);
-    p3dpl^.Formatentity(drawings.GetCurrentDWG^,dc);
-    p3dpl^.RenderFeedback(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,@drawings.GetCurrentDWG^.myGluProject2,dc);
-    //drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeBoundingBox(p3dpl);
-    //drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count := 0;
-    result:=1;
-    zcRedrawCurrentDrawing;
+  if (button and MZW_LBUTTON)<>0 then begin
+    if (p3dpl^.VertexArrayInOCS.count>1) and vertexeq(wc,p3dpl^.VertexArrayInWCS.getData(0)) then begin
+      p3dpl^.Closed:=true;
+      commandmanager.executecommandend;
+    end else begin
+      polydata.index:=p3dpl^.VertexArrayInOCS.count;
+      polydata.wc:=wc;
+      domethod:=tmethod(@p3dpl^.InsertVertex);
+      undomethod:=tmethod(@p3dpl^.DeleteVertex);
+      with PushCreateTGObjectChangeCommand2(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,polydata,tmethod(domethod),tmethod(undomethod))^ do
+      begin
+        AutoProcessGDB:=false;
+        comit;
+      end;
+      p3dpl^.Formatentity(drawings.GetCurrentDWG^,dc);
+      p3dpl^.RenderFeedback(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,@drawings.GetCurrentDWG^.myGluProject2,dc);
+      result:=1;
+      zcRedrawCurrentDrawing;
+    end;
   end;
 end;
 

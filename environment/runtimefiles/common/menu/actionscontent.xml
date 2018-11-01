@@ -87,6 +87,8 @@
       <ZAction Name="ACN_POLYED" Command="PolyED" Img="polyed" Caption="Edit polyline"/>
       <ZAction Name="ACN_OBJVARMAN" Command="ObjVarMan" Img="varman" Caption="Object variables manager"/>
       <ZAction Name="ACN_MULTIOBJVARMAN" Command="MultiObjVarMan" Img="mvarman" Caption="Multi object variables manager"/>
+      <ZAction Name="ACN_smtextall" Command="stripmtext(ALL)" Img="stripmtextall" Caption="Start command clear mtext all"/>
+      <ZAction Name="ACN_smtextarea" Command="stripmtext" Img="stripmtextsel" Caption="Start command clear mtext area"/>
     </Group>
     <Group Category="Draw">
       <ZAction Name="ACN_LINE" Command="Line" Img="line" Caption="Line" Hint="Draw line" ShortCut="CTRL+ALT+L" SecondaryShortCuts="L"/>

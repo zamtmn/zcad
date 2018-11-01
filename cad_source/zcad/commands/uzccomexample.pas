@@ -136,10 +136,17 @@ type
                        //VNum:GDBInteger;(*'Number of vertices'*)  //**< Определение количества вершин
                        PolyWidth:GDBDouble;(*'Polyline width'*)  //**< Ширина полилинии (если в качестве примитива выбран RET_LWPoly)
                  end;
+        //** Тип данных для отображения в инспекторе опций команды Rectangle
+    TPolygonParam=packed record
+                       ET:TRectangEntType;(*'Entity type'*)      //**< Выбор типа примитива, которым будет создан прямоугольник - 3Dolyline или LWPolyline
+                       VNum:GDBInteger;(*'Number of vertices'*)  //**< Определение количества вершин
+                       PolyWidth:GDBDouble;(*'Polyline width'*)  //**< Ширина полилинии (если в качестве примитива выбран RET_LWPoly)
+                 end;
 {EXPORT-}
 var
    MatchPropParam:TMatchPropParam; //**< Переменная содержащая опции команды MatchProp
    RectangParam:TRectangParam;     //**< Переменная содержащая опции команды Rectangle
+   PolygonParam:TPolygonParam;     //**< Переменная содержащая опции команды Polygon
 
 implementation
 //** блаблабла
@@ -755,9 +762,10 @@ begin
    pf:=PInternalRTTITypeDesk^.FindField('ET'); //находим описание поля ET
    pf^.base.Attributes:=pf^.base.Attributes and (not FA_READONLY);//сбрасываем ему флаг ридонли
    pf:=PInternalRTTITypeDesk^.FindField('PolyWidth'); //находим описание поля ET
-   pf^.base.Attributes:=pf^.base.Attributes and (not FA_READONLY);//сбрасываем ему флаг ридонли
+   //pf^.base.Attributes:=pf^.base.Attributes and (not FA_READONLY);//сбрасываем ему флаг ридонли
    //pf:=PInternalRTTITypeDesk^.FindField('VNum');//находим описание поля VNum
    //pf^.base.Attributes:=pf^.base.Attributes or FA_HIDDEN_IN_OBJ_INSP;//устанавливаем ему флаг cкрытности
+   //pf^.base.Attributes:=pf^.base.Attributes and (not FA_READONLY);//сбрасываем ему флаг ридонли
    zcShowCommandParams(PInternalRTTITypeDesk,@RectangParam);
 
    if commandmanager.get3dpoint(rscmSpecifyFirstPoint,pe.p1) then
@@ -824,6 +832,106 @@ begin
     zcHideCommandParams; //< Возвращает инспектор в значение по умолчанию
     result:=cmd_ok;
 end;
+
+//** Чертим многоугольник центер вершина
+function DrawPolygon_com(operands:TCommandOperands):TCommandResult;
+var
+    vertexLWObj:GDBvertex2D;               //переменная для добавления вершин в полилинию
+    vertexObj:GDBvertex;
+    widthObj:GLLWWidth;                    //переменная для добавления веса линии в начале и конце пути
+    polyLWObj:PGDBObjLWPolyline;
+    polyObj:PGDBObjPolyline;
+    pe:T3PointPentity;
+    polygonDrawModePentity:TPointPolygonDrawModePentity;
+    i:integer;
+    PInternalRTTITypeDesk:PRecordDescriptor; //**< Доступ к панели упр в инспекторе
+    pf:PfieldDescriptor;  //**< Управление нашей панелью в инспекторе
+    UCoperands:string;
+begin
+    UCoperands:=uppercase(operands);
+    if UCoperands='CV' then polygonDrawModePentity.cdm:=TPDM_CV
+    else if UCoperands='CC' then polygonDrawModePentity.cdm:=TPDM_CC
+    else polygonDrawModePentity.cdm:=TPDM_CV;
+
+   PInternalRTTITypeDesk:=pointer(SysUnit^.TypeName2PTD('TPolygonParam'));//находим описание типа TRectangParam, мы сразу знаем что это описание записи, поэтому нужно привести тип
+   pf:=PInternalRTTITypeDesk^.FindField('ET'); //находим описание поля ET
+   pf^.base.Attributes:=pf^.base.Attributes and (not FA_READONLY);//сбрасываем ему флаг ридонли
+   pf:=PInternalRTTITypeDesk^.FindField('PolyWidth'); //находим описание поля ET
+   pf^.base.Attributes:=pf^.base.Attributes and (not FA_READONLY);//сбрасываем ему флаг ридонли
+   pf:=PInternalRTTITypeDesk^.FindField('VNum'); //находим описание поля ET
+   pf^.base.Attributes:=pf^.base.Attributes and (not FA_READONLY);//сбрасываем ему флаг ридонли
+   //pf:=PInternalRTTITypeDesk^.FindField('VNum');//находим описание поля VNum
+   //pf^.base.Attributes:=pf^.base.Attributes or FA_HIDDEN_IN_OBJ_INSP;//устанавливаем ему флаг cкрытности
+   zcShowCommandParams(PInternalRTTITypeDesk,@PolygonParam);
+
+   if commandmanager.get3dpoint(rscmSpecifyFirstPoint,pe.p1) then
+   begin
+      pf:=PInternalRTTITypeDesk^.FindField('ET');//находим описание поля ET
+      pf^.base.Attributes:=pf^.base.Attributes or FA_READONLY;//устанавливаем ему флаг ридонли
+      pf:=PInternalRTTITypeDesk^.FindField('PolyWidth');//находим описание поля ET
+      pf^.base.Attributes:=pf^.base.Attributes or FA_READONLY;//устанавливаем ему флаг ридонли
+      pf:=PInternalRTTITypeDesk^.FindField('VNum'); //находим описание поля ET
+      pf^.base.Attributes:=pf^.base.Attributes or FA_READONLY;//устанавливаем ему флаг ридонли
+
+      polygonDrawModePentity.npoint:=PolygonParam.VNum;
+      polygonDrawModePentity.typeLWPoly:=false;
+      polygonDrawModePentity.p1:=pe.p1;
+      //Создаем сразу 4-е точки прямоугольника, что бы в манипуляторе только управльть их координатами
+      if PolygonParam.ET = RET_LWPoly then
+        begin
+             polygonDrawModePentity.typeLWPoly:=true;
+             polygonDrawModePentity.plwentity:=GDBObjLWPolyline.CreateInstance;
+             polygonDrawModePentity.plwentity^.Closed:=true;
+
+             widthObj.endw:=PolygonParam.PolyWidth;
+             widthObj.startw:=PolygonParam.PolyWidth;
+
+             ////drawings.GetCurrentDWG^.ConstructObjRoot.AddMi(@polygonDrawModePentity.plwentity);//было, теперь стало, не @указатель, а просто указатель
+             zcAddEntToCurrentDrawingConstructRoot(polygonDrawModePentity.plwentity);
+             vertexLWObj.x:=pe.p1.x;
+             vertexLWObj.y:=pe.p1.y;
+             for i:= 0 to PolygonParam.VNum-1 do begin
+                 polygonDrawModePentity.plwentity^.Vertex2D_in_OCS_Array.PushBackData(vertexLWObj);
+                 polygonDrawModePentity.plwentity^.Width2D_in_OCS_Array.PushBackData(widthObj);
+             end;
+
+             InteractivePolygonManipulator(polygonDrawModePentity,pe.p1,false);
+             if commandmanager.Get3DPointInteractive(rscmSpecifySecondPoint,pe.p2,@InteractivePolygonManipulator,@polygonDrawModePentity) then
+             begin
+                zcAddEntToCurrentDrawingWithUndo(polygonDrawModePentity.plwentity); //Добавить объект из конструкторской области в чертеж через ундо//
+                {так как сейчас у нас объект находится и в чертеже и в конструируемой области,
+                нужно почистить список примитивов конструируемой области, без физического удаления примитивов}
+                //drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Clear;
+                zcClearCurrentDrawingConstructRoot;
+             end
+        end
+        else begin
+             polygonDrawModePentity.typeLWPoly:=false;
+             polygonDrawModePentity.pentity:=GDBObjPolyline.CreateInstance;
+             polygonDrawModePentity.pentity^.Closed:=true;
+             //drawings.GetCurrentDWG^.ConstructObjRoot.AddMi(@polyObj);
+             zcAddEntToCurrentDrawingConstructRoot(polygonDrawModePentity.pentity);
+             vertexObj:=CreateVertex(pe.p1.x,pe.p1.y,pe.p1.z);
+             for i:= 0 to PolygonParam.VNum-1 do begin
+                 polygonDrawModePentity.pentity^.VertexArrayInOCS.PushBackData(vertexObj);
+             end;
+
+             //ZCMsgCallBackInterface.TextMessage('---' + inttostr(polygonDrawModePentity.pentity^.VertexArrayInOCS.GetRealCount) + ' - ошибка: ',TMWOHistoryOut);
+             InteractivePolygonManipulator(polygonDrawModePentity,pe.p1,false);
+             if commandmanager.Get3DPointInteractive(rscmSpecifySecondPoint,pe.p2,@InteractivePolygonManipulator,@polygonDrawModePentity) then
+             begin
+                zcAddEntToCurrentDrawingWithUndo(polygonDrawModePentity.pentity); //Добавить объект из конструкторской области в чертеж через ундо//
+                {так как сейчас у нас объект находится и в чертеже и в конструируемой области,
+                нужно почистить список примитивов конструируемой области, без физического удаления примитивов}
+                //drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Clear;
+                zcClearCurrentDrawingConstructRoot;
+             end
+        end;
+    end;
+    zcHideCommandParams; //< Возвращает инспектор в значение по умолчанию
+    result:=cmd_ok;
+end;
+
 function InsertDevice_com(operands:TCommandOperands):TCommandResult;
 var
     pdev:PGDBObjDevice;
@@ -896,6 +1004,9 @@ initialization
      CreateCommandFastObjectPlugin(@DrawCircle_com,      'Circle',     CADWG,0);
      CreateCommandFastObjectPlugin(@DrawLine_com,        'DrawLine',   CADWG,0);
      CreateCommandFastObjectPlugin(@DrawRectangle_com,   'Rectangle',  CADWG,0);
+
+     CreateCommandFastObjectPlugin(@DrawPolygon_com,   'Polygon',  CADWG,0);
+
      CreateCommandFastObjectPlugin(@matchprop_com,       'MatchProp',  CADWG,0);
 
      CreateCommandFastObjectPlugin(@InsertDevice_com,    'ID',   CADWG,0);
@@ -916,4 +1027,7 @@ initialization
 
      RectangParam.ET:=RET_3DPoly;
      RectangParam.PolyWidth:=0;
+     PolygonParam.ET:=RET_3DPoly;
+     PolygonParam.PolyWidth:=0;
+     PolygonParam.VNum:=4;
 end.

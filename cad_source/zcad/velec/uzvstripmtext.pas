@@ -35,6 +35,7 @@ uses
   uzcdrawings,     //Drawings manager, all open drawings are processed him
   uzccombase,
   gzctnrvectortypes,
+  uzcinterface,
   RegExpr;
 
 
@@ -56,53 +57,42 @@ var
     begin
        clearText:=a;
        re := TRegExpr.Create;
-       re.Expression := '(\\P)';
-       clearText:= re.Replace(clearText, '#nachaloNovoyStroki#', false);
-       //HistoryOutStr(clearText);
-
-       re.Expression := '(\\{)';
-       clearText:= re.Replace(clearText, '#figurSkobkaOtkr#', false);
-       //HistoryOutStr(clearText);
-
-       re.Expression := '(\\})';
-       clearText:= re.Replace(clearText, '#figurSkobkaZakr#', false);
-       //HistoryOutStr(clearText);
 
        re.Expression := '(\\\\)';
        clearText:= re.Replace(clearText, '#levoeNaklonnayCherta#', false);
-       //HistoryOutStr(clearText);
+
+       re.Expression := '(\\P)';
+       clearText:= re.Replace(clearText, '#nachaloNovoyStroki#', false);
+
+       re.Expression := '(\\{)';
+       clearText:= re.Replace(clearText, '#figurSkobkaOtkr#', false);
+
+       re.Expression := '(\\})';
+       clearText:= re.Replace(clearText, '#figurSkobkaZakr#', false);
 
        re.Expression := '\\[^\\]*?;';
        clearText:= re.Replace(clearText, '', false);
-       //HistoryOutStr(clearText);
 
        re.Expression := '[\\][\\]';
        clearText:= re.Replace(clearText, '\', false);
-       //HistoryOutStr(clearText);
 
        re.Expression := '[{}]';
        clearText:= re.Replace(clearText, '', false);
-       //HistoryOutStr(clearText);
 
-       re.Expression := '(\\(L|O))';
+       re.Expression := '(\\([lL]|[oO]))';
        clearText:= re.Replace(clearText, '', false);
-       //HistoryOutStr(clearText);
 
        re.Expression := '(#figurSkobkaOtkr#)';
        clearText:= re.Replace(clearText, '\{', false);
-       //HistoryOutStr(clearText);
 
        re.Expression := '(#figurSkobkaZakr#)';
        clearText:= re.Replace(clearText, '\}', false);
-       //HistoryOutStr(clearText);
 
        re.Expression := '(#nachaloNovoyStroki#)';
        clearText:= re.Replace(clearText, '\P', false);
-       //HistoryOutStr(clearText);
 
        re.Expression := '(#levoeNaklonnayCherta#)';
-       clearText:= re.Replace(clearText, '\\\\', false);
-       //HistoryOutStr(clearText);
+       clearText:= re.Replace(clearText, '\\', false);
 
        re.free;
     end;
@@ -117,8 +107,9 @@ begin
            if pobj^.GetObjType=GDBMTextID then                //работа только с кабелями
            begin
             pmtext:=PGDBObjMText(pobj);
+            //ZCMsgCallBackInterface.TextMessage('Do : ' + pmtext^.Template,TMWOHistoryOut);
             newText:=clearText(pmtext^.Template);
-
+            //ZCMsgCallBackInterface.TextMessage('After : ' + newText,TMWOHistoryOut);
             pmtext^.Template:=newText;
             pmtext^.Content:=newText;
            end;

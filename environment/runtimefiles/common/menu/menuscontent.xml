@@ -151,6 +151,11 @@
       <Action Name="ACN_STRETCH"/>
       <Action Name="ACN_MIRROR"/>
     <Separator/>
+      <MainMenuItem Name="Text">
+        <Action Name="ACN_smtextall"/>
+        <Action Name="ACN_smtextarea"/>
+      </MainMenuItem>
+    <Separator/>
       <Action Name="ACN_OBJVARMAN"/>
       <Action Name="ACN_MULTIOBJVARMAN"/>
     </MainMenuItem>

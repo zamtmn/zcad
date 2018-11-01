@@ -72,27 +72,22 @@ begin
 
      end;
 end;
-{function IsZexceptionShortCut(var Message: TLMKey):boolean;
+function IsZexceptionShortCut(var Message: TLMKey):boolean;
 var
    chrcode:word;
    ss:tshiftstate;
 begin
      chrcode:=Message.CharCode;
      ss:=MsgKeyDataToShiftState(Message.KeyData);
-     if ssShift in ss then
-                               chrcode:=chrcode or scShift;
-    if ssCtrl in ss then
-                              chrcode:=chrcode or scCtrl;
-
      case chrcode of
-                VK_DELETE
+                VK_0..VK_Z
                     :begin
                          result:=true;
                      end
                 else result:=false;
 
      end;
-end;}
+end;
 
 function IsZShortcut(var Message: TLMKey;const ActiveControl:TWinControl; const CMDEdit:TEdit; const OldFunction:TIsShortcutFunc): boolean;
 var
@@ -132,7 +127,7 @@ begin
                                       else
                                           exit(false);
            end;
-  if not IsCommandNotEmpty then
+  if (not IsCommandNotEmpty)and not IsZexceptionShortCut(Message) then
   //if IsZexceptionShortCut(Message) then
     result:=OldFunction(Message)
 end;

@@ -690,13 +690,6 @@ begin
                if assigned(pint)then
                                     pint^:=commandmanager.DMenu.Top;
 
-          pint:=SavedUnit.FindValue('VIEW_CommandLineH');
-          if assigned(pint)then
-                               pint^:=Cline.Height;
-          pint:=SavedUnit.FindValue('VIEW_ObjInspV');
-          if assigned(pint)then
-                               if assigned(GetOIWidthProc)then
-                               pint^:=GetOIWidthProc;
           pint:=SavedUnit.FindValue('VIEW_ObjInspSubV');
           if assigned(pint)then
                                if assigned(GetNameColWidthProc)then
@@ -710,10 +703,6 @@ begin
           mem.SaveToFile(expandpath(ProgramPath+'rtl'+PathDelim+'savedvar.pas'));
           mem.done;
           end;
-
-          ZCMsgCallBackInterface.TextMessage('   Вот и всё бля...............',TMWOHistoryOut);
-
-
      end
      else
          result:=false;

@@ -111,7 +111,11 @@ begin
       if not IsEditableFocus then
         IsEditableFocus:=(ActiveControl as tmemo).SelLength<>0;
     end;
+    if not IsEditableFocus then
+      if ActiveControl is TComboBox then
+        IsEditableFocus:=True;
   end;
+
   if not IsEditableFocus then IsEditableFocus:=(ActiveControl is tcombobox);
   {if assigned(cmdedit) then
                            IsCommandNotEmpty:=((cmdedit.Text<>'')and(ActiveControl=cmdedit))

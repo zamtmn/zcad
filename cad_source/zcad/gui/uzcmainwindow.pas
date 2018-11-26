@@ -3156,8 +3156,8 @@ begin
               end;
             end;
     end;
-
-  ZCMsgCallBackInterface.Do_GUIMode(ZMsgID_GUICMDLineCheck);
+  if commandmanager.SilentCounter=0 then
+    ZCMsgCallBackInterface.Do_GUIMode(ZMsgID_GUICMDLineCheck);
 
    pdwg:=drawings.GetCurrentDWG;
    if assigned(ZCADMainWindow)then

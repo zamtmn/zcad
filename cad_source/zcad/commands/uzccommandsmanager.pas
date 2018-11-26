@@ -50,6 +50,7 @@ type
                           OnCommandRun:TOnCommandRun;
                           DisableExecuteCommandEndCounter:integer;
                           DisabledExecuteCommandEndCounter:integer;
+                          SilentCounter:Integer;
                           constructor init(m:GDBInteger);
                           procedure execute(const comm:string;silent:GDBBoolean;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
                           procedure executecommand(const comm:string;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
@@ -587,9 +588,10 @@ begin
 
           //lastcommand := command;
 
-          if silent then
-                        programlog.LogOutFormatStr('GDBCommandManager.ExecuteCommandSilent(%s)',[pfoundcommand^.CommandName],lp_OldPos,LM_Info)
-                    else
+          if silent then begin
+                        programlog.LogOutFormatStr('GDBCommandManager.ExecuteCommandSilent(%s)',[pfoundcommand^.CommandName],lp_OldPos,LM_Info);
+                        inc(SilentCounter);
+                    end else
                         begin
                         ZCMsgCallBackInterface.TextMessage(rsRunCommand+':'+pfoundcommand^.CommandName,TMWOHistoryOut);
                         lastcommand := command;
@@ -614,6 +616,8 @@ begin
   end;
   command:='';
   operands:='';
+  if silent then
+    dec(SilentCounter);
 end;
 procedure GDBcommandmanager.executecommand(const comm:string;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);
 begin
@@ -765,6 +769,7 @@ begin
   if assigned(pint)then
                        DMenu.Top:=pint^;
   end;
+  SilentCounter:=0;
 end;
 procedure GDBcommandmanager.CommandRegister(pc:PCommandObjectDef);
 begin

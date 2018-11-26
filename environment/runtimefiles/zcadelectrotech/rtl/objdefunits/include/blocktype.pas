@@ -7,9 +7,13 @@ var
    Device_Group:TDeviceGroup;(*'Группа устройства'*) 
    BTY_TreeCoord:GDBString;(*'Позиция в дереве'*)
    ENTID_Type:TENTID;(*'Object type'*)
+   ENTID_Representation:TEentityRepresentation;(*'Representation'*)
+   ENTID_Function:TEentityFunction;(*'Function'*)
 implementation
 begin
    BTY_TreeCoord:='';
    Device_Group:=TDG_ElDevice;
    ENTID_Type:='OBJT_Unknown';
+   ENTID_Representation:='Test';
+   ENTID_Function:='Test';
 end.

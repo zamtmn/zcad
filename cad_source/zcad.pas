@@ -144,6 +144,7 @@ uses
   uzccominterface,
 
   {$IFDEF ELECTROTECH}
+  uzcregelectrotechfeatures,
   uzccomelectrical,
   uzccomops,
   uzccommaps,

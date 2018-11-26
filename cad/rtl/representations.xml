@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <STRINGTREE>
+    <Graphical_symbol Desc="УГО">
+      <onPlan Desc="На плане"/>
+      <onScheme Desc="На схеме">
+        <Automation Desc="На схеме автоматизации"/>
+        <Connection Desc="На схеме соединений"/>
+        <Wiring Desc="На схеме подключений"/>
+        <Electrical_circuit Desc="На схеме электрической принципиальной"/>
+      </onScheme>
+    </Graphical_symbol>
+  </STRINGTREE>
+</CONFIG>

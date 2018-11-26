@@ -36,6 +36,8 @@ type
                          class procedure GetVertexZ(Pinstance:PtrInt);
     end;
 procedure DecorateSysTypes;
+procedure ButtonTxtDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState;boundr:trect);
+procedure RunAnsiStringEditor(PInstance:GDBPointer);
 implementation
 var
    count:integer;

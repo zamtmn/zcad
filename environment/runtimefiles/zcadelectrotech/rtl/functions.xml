@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <STRINGTREE>
+    <Electrotechnics Desc="Электротехника">
+      <Power_consumer Desc="Потребители энергии">
+        <Heating Desc="Отопление">
+          <Electric_heater Desc="ТЭН"/>
+        </Heating>
+        <Other Desc="Пока не классифицировано">
+          <Motor Desc="Двигатель"/>
+          <Lamp Desc="Лампа"/>
+        </Other>
+      </Power_consumer>
+    </Electrotechnics>
+  </STRINGTREE>
+</CONFIG>

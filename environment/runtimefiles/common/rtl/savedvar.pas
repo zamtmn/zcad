@@ -12,6 +12,10 @@ var
   ProjectTreeWND_Top:GDBInteger;
   ProjectTreeWND_Width:GDBInteger;
   ProjectTreeWND_Height:GDBInteger;
+  StringsTreeSelectorWND_Left:GDBInteger;
+  StringsTreeSelectorWND_Top:GDBInteger;
+  StringsTreeSelectorWND_Width:GDBInteger;
+  StringsTreeSelectorWND_Height:GDBInteger;
   VIEW_CommandLineH:GDBInteger;
   VIEW_ObjInspV:GDBInteger;
   VIEW_ObjInspSubV:GDBInteger;
@@ -45,6 +49,10 @@ begin
   ProjectTreeWND_Top:=123;
   ProjectTreeWND_Width:=526;
   ProjectTreeWND_Height:=883;
+  StringsTreeSelectorWND_Left:=100;
+  StringsTreeSelectorWND_Top:=100;
+  StringsTreeSelectorWND_Width:=200;
+  StringsTreeSelectorWND_Height:=200;
   VIEW_CommandLineH:=160;
   VIEW_ObjInspV:=280;
   VIEW_ObjInspSubV:=146;

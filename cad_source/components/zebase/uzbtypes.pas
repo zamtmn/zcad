@@ -184,9 +184,11 @@ GDBArrayVertex=packed array[0..0] of GDBvertex;
                    BBorder:TBlockBorder;(*'Border'*)
                    BGroup:TBlockGroup;(*'Block group'*)
              end;
-  TENTID=GDBString;
-  TEentityRepresentation=GDBString;
-  TEentityFunction=GDBString;
+  PStringTreeType=^TStringTreeType;
+  TStringTreeType=GDBString;
+  TENTID=TStringTreeType;
+  TEentityRepresentation=TStringTreeType;
+  TEentityFunction=TStringTreeType;
 PGDBsymdolinfo=^GDBsymdolinfo;
 GDBsymdolinfo=packed record
     LLPrimitiveStartIndex: GDBInteger;

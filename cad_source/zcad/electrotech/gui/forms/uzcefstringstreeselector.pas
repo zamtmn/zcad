@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ButtonPanel,
-  VirtualTrees, uzceltechtreeprop;
+  VirtualTrees, uzceltechtreeprop, uzbtypes;
 
 type
 
@@ -23,6 +23,8 @@ type
     StringsTree: TVirtualStringTree;
     procedure filltree(StringTreeNode:PVirtualNode;BlobTreeNode:TBlobTree.TTreeNodeType);
     procedure fill(BlobTree:TBlobTree);
+    procedure clear;
+    procedure setValue(value:TStringTreeType);
   private
 
   public
@@ -60,6 +62,18 @@ begin
   filltree(RootNode,BlobTree.Root);
   StringsTree.OnGetText:=gt;
 end;
+
+procedure TStringsTreeSelector.clear;
+begin
+  RootNode:=nil;
+  StringsTree.Clear;
+end;
+
+procedure TStringsTreeSelector.setValue(value:TStringTreeType);
+begin
+  ComboBox1.Text:=value;
+end;
+
 
 procedure TStringsTreeSelector.gt(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;
                                   TextType: TVSTTextType; var CellText: String);

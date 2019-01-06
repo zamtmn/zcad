@@ -25,7 +25,11 @@ uses uzbpaths,UUnitManager,uzcsysvars,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
      uzcsysparams,uzcsysinfo,TypeDescriptors,URecordDescriptor,
      uzclog,uzbmemman,LazLogger,uzceltechtreeprop,uzcefstringstreeselector,
      uzccommandsimpl,uzccommandsabstract,uzctypesdecorations,zcobjectinspectorui,
-     uzcoidecorations;
+     uzcoidecorations,uzbtypesbase,
+     Forms,Controls,
+     uzcinterface;
+var
+  StringsTreeSelector:TStringsTreeSelector=nil;
 implementation
 
 function FunctionsTest_com(operands:TCommandOperands):TCommandResult;
@@ -46,6 +50,50 @@ begin
   result:=cmd_ok;
 end;
 
+procedure RunEentityRepresentationEditor(PInstance:GDBPointer);
+var
+   modalresult:integer;
+begin
+     if not assigned(StringsTreeSelector) then
+     begin
+     StringsTreeSelector:=TStringsTreeSelector.create(application.MainForm);
+     StringsTreeSelector.BoundsRect:=GetBoundsFromSavedUnit('StringsTreeSelectorWND',SysParam.notsaved.ScreenX,SysParam.notsaved.Screeny);
+     end;
+     StringsTreeSelector.clear;
+     StringsTreeSelector.fill(RepresentationsTree.BlobTree);
+     StringsTreeSelector.setValue(PStringTreeType(PInstance)^);
+     StringsTreeSelector.caption:=('EentityRepresentationEditor');
+     modalresult:=ZCMsgCallBackInterface.DOShowModal(StringsTreeSelector);
+     if modalresult=MrOk then
+                         begin
+                              //pgdbstring(PInstance)^:=ConvertToDxfString(StringsTreeSelector.memo.text);
+                              //StoreBoundsToSavedUnit('TEdWND',StringsTreeSelector.BoundsRect);
+                         end;
+end;
+
+procedure RunEentityFunctionEditor(PInstance:GDBPointer);
+var
+   modalresult:integer;
+begin
+     if not assigned(StringsTreeSelector) then
+     begin
+     StringsTreeSelector:=TStringsTreeSelector.create(application.MainForm);
+     StringsTreeSelector.BoundsRect:=GetBoundsFromSavedUnit('StringsTreeSelectorWND',SysParam.notsaved.ScreenX,SysParam.notsaved.Screeny);
+     end;
+     StringsTreeSelector.clear;
+     StringsTreeSelector.fill(FunctionsTree.BlobTree);
+     StringsTreeSelector.setValue(PStringTreeType(PInstance)^);
+     StringsTreeSelector.caption:=('EentityFunctionEditor');
+     modalresult:=ZCMsgCallBackInterface.DOShowModal(StringsTreeSelector);
+     if modalresult=MrOk then
+                         begin
+                              //pgdbstring(PInstance)^:=ConvertToDxfString(StringsTreeSelector.memo.text);
+                              //StoreBoundsToSavedUnit('TEdWND',StringsTreeSelector.BoundsRect);
+                         end;
+end;
+
+
+
 initialization;
   FunctionsTree.LoadTree(expandpath('*rtl/functions.xml'),InterfaceTranslate);
   RepresentationsTree.LoadTree(expandpath('*rtl/representations.xml'),InterfaceTranslate);
@@ -56,8 +104,8 @@ initialization;
   //AddEditorToType(SysUnit.TypeName2PTD('TEentityRepresentation'),TBaseTypesEditors.BaseCreateEditor);
   //AddEditorToType(SysUnit.TypeName2PTD('TEentityFunction'),TBaseTypesEditors.BaseCreateEditor);
 
-  AddFastEditorToType(SysUnit.TypeName2PTD('TEentityRepresentation'),@OIUI_FE_ButtonGetPrefferedSize,@ButtonTxtDrawFastEditor,@RunAnsiStringEditor);
-  AddFastEditorToType(SysUnit.TypeName2PTD('TEentityFunction'),@OIUI_FE_ButtonGetPrefferedSize,@ButtonTxtDrawFastEditor,@RunAnsiStringEditor);
+  AddFastEditorToType(SysUnit.TypeName2PTD('TEentityRepresentation'),@OIUI_FE_ButtonGetPrefferedSize,@ButtonTxtDrawFastEditor,@RunEentityRepresentationEditor);
+  AddFastEditorToType(SysUnit.TypeName2PTD('TEentityFunction'),@OIUI_FE_ButtonGetPrefferedSize,@ButtonTxtDrawFastEditor,@RunEentityFunctionEditor);
 
 finalization;
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization')

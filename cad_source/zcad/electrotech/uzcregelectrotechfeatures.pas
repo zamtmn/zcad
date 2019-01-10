@@ -63,12 +63,10 @@ begin
      StringsTreeSelector.fill(RepresentationsTree.BlobTree);
      StringsTreeSelector.setValue(PStringTreeType(PInstance)^);
      StringsTreeSelector.caption:=('EentityRepresentationEditor');
+     StringsTreeSelector.ActiveControl:=StringsTreeSelector.StringsTree;
      modalresult:=ZCMsgCallBackInterface.DOShowModal(StringsTreeSelector);
      if modalresult=MrOk then
-                         begin
-                              //pgdbstring(PInstance)^:=ConvertToDxfString(StringsTreeSelector.memo.text);
-                              //StoreBoundsToSavedUnit('TEdWND',StringsTreeSelector.BoundsRect);
-                         end;
+       PStringTreeType(PInstance)^:=StringsTreeSelector.TreeResult;
 end;
 
 procedure RunEentityFunctionEditor(PInstance:GDBPointer);
@@ -84,12 +82,10 @@ begin
      StringsTreeSelector.fill(FunctionsTree.BlobTree);
      StringsTreeSelector.setValue(PStringTreeType(PInstance)^);
      StringsTreeSelector.caption:=('EentityFunctionEditor');
+     StringsTreeSelector.ActiveControl:=StringsTreeSelector.StringsTree;
      modalresult:=ZCMsgCallBackInterface.DOShowModal(StringsTreeSelector);
      if modalresult=MrOk then
-                         begin
-                              //pgdbstring(PInstance)^:=ConvertToDxfString(StringsTreeSelector.memo.text);
-                              //StoreBoundsToSavedUnit('TEdWND',StringsTreeSelector.BoundsRect);
-                         end;
+       PStringTreeType(PInstance)^:=StringsTreeSelector.TreeResult;
 end;
 
 

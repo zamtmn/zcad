@@ -8,14 +8,14 @@ uses
   LCLType,ImgList,
   Classes, SysUtils, ComCtrls, Controls, Graphics, Menus, Forms,ActnList,
   Laz2_XMLCfg,Laz2_DOM,
-  gvector, gtree;
+  gvector, gtree, uzbtypes;
 const
   NameSeparator='|';
 
 type
   TTranslateFunction=function (const Identifier, OriginalValue: String): String;
   TNodeData=record
-    Name,LocalizedName,FullName:string;
+    Name,LocalizedName,FullName:TStringTreeType;
   end;
 
   TBlobTree=specialize TTree<TNodeData>;

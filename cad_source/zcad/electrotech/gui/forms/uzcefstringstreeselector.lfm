@@ -7,7 +7,6 @@ object StringsTreeSelector: TStringsTreeSelector
   ClientHeight = 586
   ClientWidth = 603
   DesignTimePPI = 113
-  LCLVersion = '2.1.0.0'
   object StringsTree: TVirtualStringTree
     Left = 0
     Height = 508
@@ -20,7 +19,7 @@ object StringsTreeSelector: TStringsTreeSelector
     Header.Columns = <    
       item
         Position = 0
-        Width = 603
+        Width = 599
       end>
     Header.Options = [hoAutoResize, hoColumnResize, hoDrag, hoShowSortGlyphs, hoVisible]
     Header.SortColumn = 0
@@ -51,5 +50,6 @@ object StringsTreeSelector: TStringsTreeSelector
     CancelButton.Name = 'CancelButton'
     CancelButton.DefaultCaption = True
     TabOrder = 2
+    ShowButtons = [pbOK, pbCancel]
   end
 end

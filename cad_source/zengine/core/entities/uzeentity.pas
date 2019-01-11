@@ -161,7 +161,7 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     function CanSimplyDrawInWCS(const DC:TDrawContext;const ParamSize,TargetSize:GDBDouble):GDBBoolean;inline;
                     procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                     procedure IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);virtual;
-                    class function GetDXFIOFeatures:TDXFEntIODataManager;
+                    class function GetDXFIOFeatures:TDXFEntIODataManager;static;
                     function GetNameInBlockTable:GDBString;virtual;
               end;
 {Export-}

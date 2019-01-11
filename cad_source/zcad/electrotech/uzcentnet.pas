@@ -52,7 +52,7 @@ GDBObjNet={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjConnected)
                  destructor done;virtual;
                  procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  function IsHaveGRIPS:GDBBoolean;virtual;
-                 class function GetDXFIOFeatures:TDXFEntIODataManager;
+                 class function GetDXFIOFeatures:TDXFEntIODataManager;static;
                  function GetObjType:TObjID;virtual;
            end;
 {Export-}

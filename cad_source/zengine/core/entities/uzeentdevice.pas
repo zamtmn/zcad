@@ -68,7 +68,7 @@ GDBObjDevice={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjBlockInsert)
                    procedure EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;
                    procedure correctobjects(powner:PGDBObjEntity;pinownerarray:GDBInteger);virtual;
                    procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                   class function GetDXFIOFeatures:TDXFEntIODataManager;
+                   class function GetDXFIOFeatures:TDXFEntIODataManager;static;
 
                    function CreateInstance:PGDBObjDevice;static;
                    function GetNameInBlockTable:GDBString;virtual;

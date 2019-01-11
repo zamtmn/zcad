@@ -757,8 +757,8 @@ begin
           poa:=@drawings.GetCurrentROOT^.ObjArray;
           result:=0;
           //i:=0;
-          newname:=Tria_Utf8ToAnsi(TEnumDataDescriptor.GetValueAsString(@BlockReplaceParams.Replace));
-          selname:=Tria_Utf8ToAnsi(TEnumDataDescriptor.GetValueAsString(@BlockReplaceParams.Find));
+          newname:=Tria_Utf8ToAnsi(GDBEnumDataDescriptorObj.GetValueAsString(@BlockReplaceParams.Replace));
+          selname:=Tria_Utf8ToAnsi(GDBEnumDataDescriptorObj.GetValueAsString(@BlockReplaceParams.Find));
           selname:=uppercase(selname);
           pb:=poa^.beginiterate(ir);
           psdesc:=drawings.GetCurrentDWG^.SelObjArray.beginiterate(ir);
@@ -803,8 +803,8 @@ procedure BlockReplace_com.Format;
     //ir:itrec;
     //i:integer;
 begin
-     BlockReplaceParams.CurrentFindBlock:=TEnumDataDescriptor.GetValueAsString(@BlockReplaceParams.Find);
-     BlockReplaceParams.CurrentReplaceBlock:=TEnumDataDescriptor.GetValueAsString(@BlockReplaceParams.Replace);
+     BlockReplaceParams.CurrentFindBlock:=GDBEnumDataDescriptorObj.GetValueAsString(@BlockReplaceParams.Find);
+     BlockReplaceParams.CurrentReplaceBlock:=GDBEnumDataDescriptorObj.GetValueAsString(@BlockReplaceParams.Replace);
      BlockReplaceParams.Find.Enums.free;
      BlockReplaceParams.Find.Selected:=GetSelectedBlockNames(BlockReplaceParams.Find.Enums,BlockReplaceParams.CurrentFindBlock,BlockReplaceParams.Process);
      if BlockReplaceParams.Find.Selected<0 then

@@ -42,7 +42,7 @@ GDBObjBlockdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericSubEntry)
                      function GetHandle:GDBPlatformint;virtual;
                      function GetMainOwner:PGDBObjSubordinated;virtual;
                      function GetType:GDBPlatformint;virtual;
-                     class function GetDXFIOFeatures:TDXFEntIODataManager;
+                     class function GetDXFIOFeatures:TDXFEntIODataManager;static;
                end;
 {Export-}
 var

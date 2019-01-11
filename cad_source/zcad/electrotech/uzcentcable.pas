@@ -59,7 +59,7 @@ GDBObjCable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
 
                  destructor done;virtual;
-                 class function GetDXFIOFeatures:TDXFEntIODataManager;
+                 class function GetDXFIOFeatures:TDXFEntIODataManager;static;
 
                  //function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  function GetObjType:TObjID;virtual;

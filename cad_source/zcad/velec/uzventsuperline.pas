@@ -36,7 +36,7 @@ GDBObjSuperLine={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjLine)
                   function GetObjType:TObjID;virtual;
                   function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                   procedure SaveToDXFObjXData(var outhandle:GDBOpenArrayOfByte);virtual;
-                  class function GetDXFIOFeatures:TDXFEntIODataManager;
+                  class function GetDXFIOFeatures:TDXFEntIODataManager;static;
            end;
 {Export-}
 function AllocAndInitSuperLine(owner:PGDBObjGenericWithSubordinated):PGDBObjLine;

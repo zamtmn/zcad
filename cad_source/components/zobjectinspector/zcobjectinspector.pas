@@ -16,8 +16,6 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-{If you use lazarus rev50521 and before please revert zcobjectinspector.pas to rev1588}
-
 unit zcobjectinspector;
 {$INCLUDE def.inc}
 {$MODE DELPHI}
@@ -108,7 +106,7 @@ type
     procedure InternalDrawprop(PPA:PTPropertyDeskriptorArray; var y,sub:integer;miny:integer;arect:trect;var LastPropAddFreespace:Boolean);
     procedure calctreeh(PPA:PTPropertyDeskriptorArray; var y:integer);
     function gettreeh:integer; virtual;
-    procedure BeforeInit; virtual;
+    //procedure BeforeInit; virtual;
     procedure _onresize(sender:tobject);virtual;
     procedure updateeditorBounds;virtual;
     procedure buildproplist(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; bmode:integer; var addr:pointer);
@@ -170,6 +168,7 @@ procedure StoreAndSetGDBObjInsp(const UndoStack:PTZctnrVectorUndoCommands;const 
 function  GetCurrentObj:Pointer;
 //procedure ClrarIfItIs(addr:pointer);
 procedure SetNameColWidth(w:integer);
+procedure SetLastClientWidth(w:integer);
 function GetNameColWidth:integer;
 function GetOIWidth:integer;
 function GetPeditor:TComponent;
@@ -361,6 +360,15 @@ begin
                                        GDBobjinsp.NameColumnWidthCorrector.LastNameColumnWidth:=w;
                                   end;
 end;
+
+procedure SetLastClientWidth(w:integer);
+begin
+       if assigned(GDBobjinsp)then
+                                  begin
+                                       GDBobjinsp.NameColumnWidthCorrector.LastClientWidth:=w;
+                                  end;
+end;
+
 function GetPeditor:TComponent;
 begin
        if assigned(GDBobjinsp)then
@@ -1933,7 +1941,7 @@ begin
   //self.update;
 end;
 
-procedure TGDBobjinsp.beforeinit;
+{procedure TGDBobjinsp.beforeinit;
 begin
 
   PStoredObj:=nil;
@@ -1947,16 +1955,19 @@ begin
   NameColumnWidth:=50;
   NameColumnWidthCorrector.LastNameColumnWidth:=NameColumnWidth;
   NameColumnWidthCorrector.LastClientWidth:=clientwidth;
-end;
+end;}
 procedure TGDBobjinsp.updateeditorBounds;
 begin
   if (peditor<>nil)and(EDContext.ppropcurrentedit<>nil) then
     pEditor.SetEditorBounds(EDContext.ppropcurrentedit,INTFObjInspShowOnlyHotFastEditors);
 end;
 procedure TGDBobjinsp._onresize(sender:tobject);
-//var x,xn:integer;
+var x,xn:integer;
+   v:boolean;
 {$IFDEF LCLGTK2}var Widget: PGtkWidget;{$ENDIF}
 begin
+  x:=clientwidth;
+  v:=isVisible;
      if NameColumnWidthCorrector.LastClientWidth>0 then
        NameColumnWidth:=round(NameColumnWidthCorrector.LastNameColumnWidth*(clientwidth/NameColumnWidthCorrector.LastClientWidth));
      if NameColumnWidth>clientwidth-subtab then

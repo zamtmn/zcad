@@ -57,7 +57,7 @@ begin
                        SetNameColWidth(pint^);
   pint:=SavedUnit.FindValue('VIEW_ObjInspV');
   if assigned(pint)then
-                       GDBobjinsp.NameColumnWidthCorrector.LastClientWidth:=pint^;
+                       SetLastClientWidth(pint^);
   GDBobjinsp.Align:=alClient;
   GDBobjinsp.BorderStyle:=bsNone;
   GDBobjinsp.Parent:=tform(Form);

@@ -694,6 +694,10 @@ begin
           if assigned(pint)then
                                if assigned(GetNameColWidthProc)then
                                pint^:=GetNameColWidthProc;
+          pint:=SavedUnit.FindValue('VIEW_ObjInspV');
+          if assigned(pint)then
+                               if assigned(GetOIWidthProc)then
+                               pint^:=GetOIWidthProc;
 
      if assigned(InfoForm) then
                          StoreBoundsToSavedUnit('TEdWND_',InfoForm.BoundsRect);

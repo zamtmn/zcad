@@ -21,119 +21,222 @@ unit usupportgui;
 interface
 
 uses
-  StdCtrls,Controls,Classes,LCLType,ComCtrls,Graphics,LMessages,LCLIntf;
+  StdCtrls,Controls,Classes,LCLType,ComCtrls,Graphics,LMessages,LCLIntf,LCLProc,
+  Laz2_XMLCfg,Laz2_DOM,sysutils;
 
 type
   TIsShortcutFunc=function(var Message: TLMKey): boolean of object;
   TCBReadOnlyMode=(CBReadOnly,CBEditable,CBDoNotTouch);
+  TShortCutContextCheckMode=(SCCCM_All,SCCCM_One);
+  TShortCutContext=record
+    EditableInFocus,
+    DefaultInFocus,
+    NotEmptyInFocus,
+    WithSelectionInFocus:boolean;
+    ClassNameInFocus,
+    ControlNameInFocus:string;
+  end;
+  TShortCutContextCheckRec=record
+    EditableInFocus,
+    DefaultInFocus,
+    NotEmptyInFocus,
+    WithSelectionInFocus:Integer;
+    ClassNameInFocus,
+    ControlNameInFocus:string;
+  end;
 
 procedure SetcomboItemsCount(cb:tcombobox;ItemsCount:integer);
 procedure ComboBoxDrawItem(Control:TWinControl;ARect:TRect;State:TOwnerDrawState);
 function ListViewDrawSubItem(State: TCustomDrawState;canvas:tcanvas;Item: TListItem;SubItem: Integer): TRect;
 procedure SetComboSize(cb:tcombobox;ItemH:Integer;ReadOnlyMode:TCBReadOnlyMode);
-function IsZEditableShortCut(var Message: TLMKey):boolean;
-function IsZShortcut(var Message: TLMKey;const ActiveControl:TWinControl; const CMDEdit:TEdit; const OldFunction:TIsShortcutFunc): boolean;
+function IsZShortcut(var Message: TLMKey;const ActiveControl,DefaultControl:TWinControl; const OldFunction:TIsShortcutFunc;SuppressedShortcuts:TXMLConfig): boolean;
+function MyTextToShortCut(const ShortCutText: string): TShortCut;
 implementation
-function IsZEditableShortCut(var Message: TLMKey):boolean;
-var
-   chrcode:word;
-   ss:tshiftstate;
+
+function MyTextToShortCut(const ShortCutText: string): TShortCut;
 begin
-     chrcode:=Message.CharCode;
-     ss:=MsgKeyDataToShiftState(Message.KeyData);
-     if ssShift in ss then
-                               chrcode:=chrcode or scShift;
-    if ssCtrl in ss then
-                              chrcode:=chrcode or scCtrl;
-
-     case chrcode of
-               (scCtrl or VK_V),
-               (scCtrl or VK_A),
-               (scCtrl or VK_C),
-               (scCtrl or VK_INSERT),
-               (scShift or VK_INSERT),
-               (scCtrl or VK_Z),
-               (scCtrl or scShift or VK_Z),
-                VK_DELETE,
-                VK_INSERT,
-                VK_SPACE,
-                VK_HOME,VK_END,
-                VK_PRIOR,VK_NEXT,
-                VK_BACK,
-                VK_LEFT,
-                VK_RIGHT,
-                VK_UP,
-                VK_DOWN,
-                VK_0..VK_Z
-                    :begin
-                         result:=true;
-                     end
-                else result:=false;
-
-     end;
-end;
-function IsZexceptionShortCut(var Message: TLMKey):boolean;
-var
-   chrcode:word;
-   ss:tshiftstate;
-begin
-     chrcode:=Message.CharCode;
-     ss:=MsgKeyDataToShiftState(Message.KeyData);
-     case chrcode of
-                VK_0..VK_Z
-                    :begin
-                         result:=true;
-                     end
-                else result:=false;
-
-     end;
+  Result:=TextToShortCutRaw(ShortCutText);
+  if Result=0 then
+    Result:=TextToShortCut(ShortCutText);
 end;
 
-function IsZShortcut(var Message: TLMKey;const ActiveControl:TWinControl; const CMDEdit:TEdit; const OldFunction:TIsShortcutFunc): boolean;
-var
-   IsEditableFocus:boolean;
-   IsCommandNotEmpty:boolean;
-   s:string;
+function isEditable(const ActiveControl:TWinControl):boolean;
 begin
-     if message.charcode<>VK_SHIFT then
-     if message.charcode<>VK_CONTROL then
-                                      IsCommandNotEmpty:=IsCommandNotEmpty;
-  IsCommandNotEmpty:=false;
-  IsEditableFocus:=false;
-  if ActiveControl is tedit then begin
-   IsEditableFocus:=true;
-   IsCommandNotEmpty:=(ActiveControl as tedit).text<>'';
+  if (ActiveControl is TEdit)
+  or ((ActiveControl is TMemo)and((ActiveControl as TMemo).ReadOnly=false))
+  or ((ActiveControl is TComboBox)and((ActiveControl as TComboBox).Style in [csSimple,csDropDown,csOwnerDrawEditableFixed,csOwnerDrawEditableVariable])) then
+    result:=true
+  else
+    result:=false
+end;
+
+function isNotEmpty(const ActiveControl:TWinControl):boolean;
+begin
+  if ((ActiveControl is TEdit)and((ActiveControl as TEdit).Text<>''))
+  or ((ActiveControl is TMemo)and((ActiveControl as TMemo).Text<>''))
+  or ((ActiveControl is TComboBox)and((ActiveControl as TComboBox).Text<>'')) then
+    result:=true
+  else
+    result:=false
+end;
+
+function WithSelection(const ActiveControl:TWinControl):boolean;
+begin
+  if ((ActiveControl is TEdit)and((ActiveControl as TEdit).SelLength<>0))
+  or ((ActiveControl is TMemo)and((ActiveControl as TMemo).SelLength<>0))
+  or ((ActiveControl is TComboBox)and((ActiveControl as TComboBox).SelLength<>0)) then
+    result:=true
+  else
+    result:=false
+end;
+
+function GetCurrentShortCutContext(const ActiveControl,DefaultControl:TWinControl):TShortCutContext;
+begin
+   result.EditableInFocus:=isEditable(ActiveControl);
+   result.DefaultInFocus:=(ActiveControl=DefaultControl)and(ActiveControl<>nil);
+   result.NotEmptyInFocus:=isNotEmpty(ActiveControl);
+   result.WithSelectionInFocus:=WithSelection(ActiveControl);
+   result.ClassNameInFocus:=ActiveControl.ClassName;
+   result.ControlNameInFocus:=ActiveControl.Name;
+end;
+
+//эти две getAttrValue есть в uztoolbarsmanager, надо выкинуть в какоето одно место
+function getAttrValue(const aNode:TDomNode;const AttrName,DefValue:string):string;overload;
+var
+  aNodeAttr:TDomNode;
+begin
+  if assigned(aNode)then
+    aNodeAttr:=aNode.Attributes.GetNamedItem(AttrName)
+  else
+    aNodeAttr:=nil;
+  if assigned(aNodeAttr) then
+                              result:=aNodeAttr.NodeValue
+                          else
+                              result:=DefValue;
+end;
+function getAttrValue(const aNode:TDomNode;const AttrName:string;const DefValue:integer):integer;overload;
+var
+  aNodeAttr:TDomNode;
+  value:string;
+begin
+  value:='';
+  aNodeAttr:=aNode.Attributes.GetNamedItem(AttrName);
+  if assigned(aNodeAttr) then
+                              value:=aNodeAttr.NodeValue;
+  if not TryStrToInt(value,result) then
+    result:=DefValue;
+end;
+
+function getNodeMode(const aNode:TDomNode):TShortCutContextCheckMode;
+var
+  aNodeAttr:TDomNode;
+  value:string;
+begin
+  value:=uppercase(aNode.NodeName);
+  if value='IFONE' then
+    result:=SCCCM_One
+  else if value='IFALL' then
+    result:=SCCCM_All
+  else ;
+end;
+
+function CheckSuppresShortcut(TestedShortCut:TShortCut;ShortCutContext:TShortCutContext;SubNode:TDomNode):boolean;
+var
+   NodeMode:TShortCutContextCheckMode;
+   ShortCutNodeValue:string;
+   ShortCutContextRec:TShortCutContextCheckRec;
+   ShortCut:TShortCut;
+begin
+  result:=false;
+  ShortCutNodeValue:=getAttrValue(SubNode,'ShortCut','');
+  ShortCut:=MyTextToShortCut(ShortCutNodeValue);
+  if ShortCut<>TestedShortCut then
+    exit;
+  NodeMode:=getNodeMode(SubNode);
+  ShortCutContextRec.EditableInFocus:=getAttrValue(SubNode,'Editable',-1);
+  ShortCutContextRec.DefaultInFocus:=getAttrValue(SubNode,'Default',-1);
+  ShortCutContextRec.NotEmptyInFocus:=getAttrValue(SubNode,'NotEmpty',-1);
+  ShortCutContextRec.WithSelectionInFocus:=getAttrValue(SubNode,'WithSelection',-1);
+  ShortCutContextRec.ClassNameInFocus:=getAttrValue(SubNode,'ClassName','');
+  ShortCutContextRec.ControlNameInFocus:=getAttrValue(SubNode,'ControlName','');
+  case NodeMode of
+    SCCCM_One:begin
+                case ShortCutContextRec.EditableInFocus of
+                  0:if not ShortCutContext.EditableInFocus then
+                      exit(true);
+                  1:if ShortCutContext.EditableInFocus then
+                      exit(true);
+                end;
+                case ShortCutContextRec.DefaultInFocus of
+                  0:if not ShortCutContext.DefaultInFocus then
+                      exit(true);
+                  1:if ShortCutContext.DefaultInFocus then
+                      exit(true);
+                end;
+                case ShortCutContextRec.NotEmptyInFocus of
+                  0:if not ShortCutContext.NotEmptyInFocus then
+                      exit(true);
+                  1:if ShortCutContext.NotEmptyInFocus then
+                      exit(true);
+                end;
+                case ShortCutContextRec.WithSelectionInFocus of
+                  0:if not ShortCutContext.WithSelectionInFocus then
+                      exit(true);
+                  1:if ShortCutContext.WithSelectionInFocus then
+                      exit(true);
+                end;
+                exit(false);
+              end;
+    SCCCM_All:begin
+              end;
   end;
-  IsEditableFocus:=(ActiveControl is tedit){and(ActiveControl<>cmdedit)};
-  if not IsEditableFocus then begin
-    if ActiveControl is tmemo then begin
-      IsEditableFocus:=not ((ActiveControl as tmemo).ReadOnly);
-      if not IsEditableFocus then
-        IsEditableFocus:=(ActiveControl as tmemo).SelLength<>0;
+end;
+
+function SuppresShortcut(TestedShortCut:TShortCut;ShortCutContext:TShortCutContext;SuppressedShortcuts:TXMLConfig):boolean;
+var
+  Node,SubNode:TDomNode;
+begin
+  result:=false;
+  if assigned(SuppressedShortcuts)then begin
+    Node:=SuppressedShortcuts.FindNode('SUPRESSEDSHORTCUTS',false);
+    if assigned(Node)then begin
+      if ShortCutContext.DefaultInFocus then
+        Node:=Node.FindNode('DEFAULTCONTROLINFOCUS')
+      else
+        Node:=Node.FindNode('OTHERCONTROLINFOCUS');
+      if assigned(Node) then
+        SubNode:=Node.FirstChild
+      else
+        SubNode:=nil;
+      if assigned(SubNode) then
+      while assigned(SubNode)do
+      begin
+        result:=CheckSuppresShortcut(TestedShortCut,ShortCutContext,SubNode);
+        if result then exit;
+        SubNode:=SubNode.NextSibling;
+      end;
     end;
-    if not IsEditableFocus then
-      if ActiveControl is TComboBox then
-        IsEditableFocus:=True;
   end;
+end;
 
-  if not IsEditableFocus then IsEditableFocus:=(ActiveControl is tcombobox);
-  {if assigned(cmdedit) then
-                           IsCommandNotEmpty:=((cmdedit.Text<>'')and(ActiveControl=cmdedit))
-                       else
-                           IsCommandNotEmpty:=false;}
-  if IsZEditableShortCut(Message)
-  and ((IsEditableFocus)or(IsCommandNotEmpty))
-       then result:=false
-       else
-           begin
-             if assigned(OldFunction) then
-                                          exit(OldFunction(Message))
-                                      else
-                                          exit(false);
-           end;
-  if (not IsCommandNotEmpty)and not IsZexceptionShortCut(Message) then
-  //if IsZexceptionShortCut(Message) then
-    result:=OldFunction(Message)
+function IsZShortcut(var Message: TLMKey;const ActiveControl,DefaultControl:TWinControl; const OldFunction:TIsShortcutFunc;SuppressedShortcuts:TXMLConfig): boolean;
+var
+   s,TestedShortCutText:string;
+   KeyCode:word;
+   ShiftState:tshiftstate;
+   TestedShortCut:TShortCut;
+   ShortCutContext:TShortCutContext;
+begin
+  KeyCode:=Message.CharCode;
+  ShiftState:=MsgKeyDataToShiftState(Message.KeyData);
+  TestedShortCut:=KeyToShortCut(KeyCode,ShiftState);
+  TestedShortCutText:=ShortCutToText(TestedShortCut);
+  if TestedShortCutText<>'' then
+    TestedShortCutText:=TestedShortCutText;
+
+  ShortCutContext:=GetCurrentShortCutContext(ActiveControl,DefaultControl);
+  result:=not SuppresShortcut(TestedShortCut,ShortCutContext,SuppressedShortcuts);
+  if result then result:=OldFunction(Message);
 end;
 procedure SetComboSize(cb:tcombobox;ItemH:Integer;ReadOnlyMode:TCBReadOnlyMode);
 begin

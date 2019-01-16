@@ -16,6 +16,8 @@
       <IFONE ShortCut="CTRL+V" NotEmpty='1'/>
       <IFONE ShortCut="SHIFT+C" NotEmpty='1'/>
       <IFONE ShortCut="CTRL+X" NotEmpty='1'/>
+      <IFONE ShortCut="CTRL+Z" NotEmpty='1'/>
+      <IFONE ShortCut="SHIFT+CTRL+Z" NotEmpty='1'/>
       <IFONE ShortCut="A" Editable='1'/>
       <IFONE ShortCut="B" Editable='1'/>
       <IFONE ShortCut="C" Editable='1'/>
@@ -58,6 +60,34 @@
       <IFONE ShortCut="CTRL+V" Editable='1'/>
       <IFONE ShortCut="SHIFT+C" Editable='1'/>
       <IFONE ShortCut="CTRL+X" Editable='1'/>
+      <IFONE ShortCut="CTRL+Z" Editable='1'/>
+      <IFONE ShortCut="SHIFT+CTRL+Z" Editable='1'/>
+      <IFONE ShortCut="A" Editable='1'/>
+      <IFONE ShortCut="B" Editable='1'/>
+      <IFONE ShortCut="C" Editable='1'/>
+      <IFONE ShortCut="D" Editable='1'/>
+      <IFONE ShortCut="E" Editable='1'/>
+      <IFONE ShortCut="F" Editable='1'/>
+      <IFONE ShortCut="G" Editable='1'/>
+      <IFONE ShortCut="H" Editable='1'/>
+      <IFONE ShortCut="I" Editable='1'/>
+      <IFONE ShortCut="J" Editable='1'/>
+      <IFONE ShortCut="K" Editable='1'/>
+      <IFONE ShortCut="L" Editable='1'/>
+      <IFONE ShortCut="M" Editable='1'/>
+      <IFONE ShortCut="N" Editable='1'/>
+      <IFONE ShortCut="O" Editable='1'/>
+      <IFONE ShortCut="P" Editable='1'/>
+      <IFONE ShortCut="Q" Editable='1'/>
+      <IFONE ShortCut="R" Editable='1'/>
+      <IFONE ShortCut="S" Editable='1'/>
+      <IFONE ShortCut="T" Editable='1'/>
+      <IFONE ShortCut="U" Editable='1'/>
+      <IFONE ShortCut="W" Editable='1'/>
+      <IFONE ShortCut="V" Editable='1'/>
+      <IFONE ShortCut="X" Editable='1'/>
+      <IFONE ShortCut="Y" Editable='1'/>
+      <IFONE ShortCut="Z" Editable='1'/>
     </OTHERCONTROLINFOCUS>
   </SUPRESSEDSHORTCUTS>
 </CONFIG>

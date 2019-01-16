@@ -26,7 +26,7 @@ uses
        ActnList,LCLType,LCLProc,uzctranslations,LMessages,LCLIntf,
        Forms, stdctrls, ExtCtrls, ComCtrls,Controls,Classes,SysUtils,LazUTF8,
        menus,graphics,dialogs,XMLPropStorage,Buttons,Themes,
-       Types,UniqueInstanceBase,simpleipc,{$ifdef windows}windows,{$endif}
+       Types,UniqueInstanceBase,simpleipc,{$ifdef windows}windows,{$endif}Laz2_XMLCfg,
   {FPC}
        lineinfo,
   {ZCAD BASE}
@@ -147,6 +147,7 @@ type
 
     public
     FAppProps:TApplicationProperties;
+    SuppressedShortcuts:TXMLConfig;
     rt:GDBInteger;
     FileHistory:TFileHistory;
     OpenedDrawings:TOpenedDrawings;
@@ -1407,13 +1408,6 @@ begin
   pm1.Action:=action;
   TMenuItem(Data).Add(pm1);
 end;
-function MyTextToShortCut(const ShortCutText: string): TShortCut;
-begin
-  Result:=TextToShortCutRaw(ShortCutText);
-  if Result=0 then
-    Result:=TextToShortCut(ShortCutText);
-end;
-
 procedure TZCADMainWindow.ZActionsReader(aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList);
 var
   acnname:string;
@@ -1711,6 +1705,9 @@ begin
   FAppProps := TApplicationProperties.Create(Self);
   FAppProps.OnException := ZcadException;
   FAppProps.CaptureExceptions := True;
+
+  SuppressedShortcuts:=TXMLConfig.Create(nil);
+  SuppressedShortcuts.Filename:=ProgramPath+'components/suppressedshortcuts.xml';
 
   if SysParam.saved.UniqueInstance then
     CreateOrRunFIPCServer;
@@ -2107,12 +2104,13 @@ end;
 
 destructor TZCADMainWindow.Destroy;
 begin
-    if DockMaster<>nil then
+  if DockMaster<>nil then
     DockMaster.CloseAll;
-    freeandnil(toolbars);
-    freeandnil(updatesbytton);
-    freeandnil(updatescontrols);
-    inherited;
+  freeandnil(toolbars);
+  freeandnil(updatesbytton);
+  freeandnil(updatescontrols);
+  freeandnil(SuppressedShortcuts);
+  inherited;
 end;
 procedure TZCADMainWindow.ActionUpdate(AAction: TBasicAction; var Handled: Boolean);
 var
@@ -2187,7 +2185,7 @@ var
 begin
    TMethod(OldFunction).code:=@TForm.IsShortcut;
    TMethod(OldFunction).Data:=self;
-   result:=IsZShortcut(Message,Screen.ActiveControl,cmdedit,OldFunction);
+   result:=IsZShortcut(Message,Screen.ActiveControl,ZCMsgCallBackInterface.GetPriorityFocus,OldFunction,SuppressedShortcuts);
 end;
 
 procedure TZCADMainWindow.myKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);

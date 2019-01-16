@@ -142,6 +142,7 @@ type
 
         procedure Do_KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
         procedure Do_SetNormalFocus;
+        function GetPriorityFocus:TWinControl;
 
 
         procedure TextMessage(msg:String;opt:TTextMessageWriteOptionsSet);
@@ -524,12 +525,17 @@ procedure TZCMsgCallBackInterface.Do_KeyDown(Sender: TObject; var Key: Word; Shi
 begin
    Do_TKeyEvent_HandlersVector(onKeyDown,Sender,Key,Shift);
 end;
+function TZCMsgCallBackInterface.GetPriorityFocus:TWinControl;
+begin
+  result:=Do_TGetControlWithPriority_TZMessageID__TControlWithPriority_HandlersVector(getfocusedcontrol);
+end;
+
 procedure TZCMsgCallBackInterface.Do_SetNormalFocus;
 var
   ctrl:TWinControl;
   aform:TCustomForm;
 begin
-  ctrl:=Do_TGetControlWithPriority_TZMessageID__TControlWithPriority_HandlersVector(getfocusedcontrol);
+  ctrl:=GetPriorityFocus;
   if assigned(ctrl) then begin
     aform:=GetParentForm(ctrl);
     aform.SetFocus;

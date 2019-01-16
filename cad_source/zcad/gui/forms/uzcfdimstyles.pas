@@ -146,7 +146,7 @@ var
 begin
    TMethod(OldFunction).code:=@TForm.IsShortcut;
    TMethod(OldFunction).Data:=self;
-   result:=IsZShortcut(Message,ActiveControl,nil,OldFunction);
+   result:=IsZShortcut(Message,ActiveControl,nil,OldFunction,nil);
 end;
 
 procedure TDimStylesForm.CreateUndoStartMarkerNeeded;

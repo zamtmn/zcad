@@ -2,6 +2,17 @@
 <CONFIG>
   <SUPRESSEDSHORTCUTS>
     <DEFAULTCONTROLINFOCUS>
+      <!--Эта ветка работает когда в фокусе контрол поумолчанию - командная строка-->
+      <!--IFONE шорткат будет подавлен при выполнении хотябы одного условия-->
+      <!--IFALL шорткат будет подавлен при выполнении всех условий (пока не реализвано)-->
+      <!--Возможные условия:-->
+                       <!--Default - это контрол поумолчанию, надо это выпилить - выделил в отдельную ветку-->
+                       <!--NotEmpty - не пустое содержимое контрола-->
+                       <!--WithSelection - в контроле есть выделенный текст-->
+                       <!--Editable - контрол который можно редактировать-->
+                       <!--выше перечисленное может принимать значения '1'-true '0'-false-->
+                       <!--ClassName - шаблон имени класса контрола (пока не реализвано)-->
+                       <!--ControlName - шаблон имени контрола (пока не реализвано)-->
       <IFONE ShortCut="INSERT" NotEmpty='1'/>
       <IFONE ShortCut="SPACE" NotEmpty='1'/>
       <IFONE ShortCut="HOME" NotEmpty='1'/>
@@ -46,6 +57,7 @@
       <IFONE ShortCut="Z" Editable='1'/>
     </DEFAULTCONTROLINFOCUS>
     <OTHERCONTROLINFOCUS>
+      <!--Эта ветка работает когда в фокусе какойто другой контрол - например tedit инспектора обьектов-->
       <IFONE ShortCut="INSERT" Editable='1'/>
       <IFONE ShortCut="SPACE" Editable='1'/>
       <IFONE ShortCut="HOME" Editable='1'/>

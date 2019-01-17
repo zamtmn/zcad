@@ -105,7 +105,7 @@ function getAttrValue(const aNode:TDomNode;const AttrName,DefValue:string):strin
 var
   aNodeAttr:TDomNode;
 begin
-  if assigned(aNode)then
+  if (assigned(aNode) and assigned(aNode.Attributes)) then
     aNodeAttr:=aNode.Attributes.GetNamedItem(AttrName)
   else
     aNodeAttr:=nil;
@@ -120,7 +120,11 @@ var
   value:string;
 begin
   value:='';
-  aNodeAttr:=aNode.Attributes.GetNamedItem(AttrName);
+  if (assigned(aNode) and assigned(aNode.Attributes)) then
+    aNodeAttr:=aNode.Attributes.GetNamedItem(AttrName)
+  else
+    aNodeAttr:=nil;
+  //aNodeAttr:=aNode.Attributes.GetNamedItem(AttrName);
   if assigned(aNodeAttr) then
                               value:=aNodeAttr.NodeValue;
   if not TryStrToInt(value,result) then

@@ -67,10 +67,10 @@
       <IFONE ShortCut="UP" Editable='1'/>
       <IFONE ShortCut="DOWN" Editable='1'/>
       <IFONE ShortCut="DEL" Editable='1'/>
-      <IFONE ShortCut="CTRL+INS" Editable='1'/>
+      <IFONE ShortCut="CTRL+INS" Editable='1' WithSelection='1'/>
       <IFONE ShortCut="SHIFT+INS" Editable='1'/>
       <IFONE ShortCut="CTRL+V" Editable='1'/>
-      <IFONE ShortCut="SHIFT+C" Editable='1'/>
+      <IFONE ShortCut="SHIFT+C" Editable='1' WithSelection='1'/>
       <IFONE ShortCut="CTRL+X" Editable='1'/>
       <IFONE ShortCut="CTRL+Z" Editable='1'/>
       <IFONE ShortCut="SHIFT+CTRL+Z" Editable='1'/>

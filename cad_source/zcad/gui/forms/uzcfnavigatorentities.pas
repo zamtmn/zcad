@@ -90,6 +90,8 @@ begin
    NavTree.OnFreeNode:=FreeNode;
    NavTree.OnFocusChanged:=VTFocuschanged;
 
+   OnShow:=RefreshTree;
+
    ZCMsgCallBackInterface.RegisterHandler_GUIAction(AutoRefreshTree);
 end;
 procedure TNavigatorEntities.RefreshTree(Sender: TObject);
@@ -97,6 +99,8 @@ var
   pv:pGDBObjEntity;
   ir:itrec;
 begin
+   if not isvisible then exit;
+
    NavTree.BeginUpdate;
    EraseRoots;
    CreateRoots;

@@ -143,6 +143,8 @@ begin
    NavTree.OnFocusChanged:=VTFocuschanged;
    NavTree.OnCompareNodes:=VTCompareNodes;
 
+   OnShow:=RefreshTree;
+
    ZCMsgCallBackInterface.RegisterHandler_GUIAction(AutoRefreshTree);
 end;
 procedure TNavigatorDevices.RefreshTree(Sender: TObject);
@@ -151,6 +153,8 @@ var
   ir:itrec;
   pb:pboolean;
 begin
+   if not isvisible then exit;
+
    NavTree.BeginUpdate;
    EraseRoots;
    CreateRoots;

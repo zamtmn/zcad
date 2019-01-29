@@ -198,7 +198,7 @@ begin
       lastsymspace:=psyminfo.NextSymX-psyminfo.SymMaxX;
     end
     else
-      if (copy(content,currsymbol,2)='\P')or(sym=10) then          {\P теперь уже тут не встретишь, оно заменено препроцессором на 10}
+      if {(copy(content,currsymbol,2)='\P')or}(sym=10) then          {\P теперь уже тут не встретишь, оно заменено препроцессором на 10}
       begin
         currline := copy(content, lastbreak, currsymbol - lastbreak);
         if sym<>10 then begin

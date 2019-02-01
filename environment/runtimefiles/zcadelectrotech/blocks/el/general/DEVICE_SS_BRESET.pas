@@ -1,4 +1,4 @@
-unit DEVICE_SS_BIAS;
+unit DEVICE_SS_BRESET;
 interface
 usescopy firesensor;
 implementation

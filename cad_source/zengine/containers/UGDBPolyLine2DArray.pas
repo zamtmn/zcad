@@ -19,7 +19,8 @@
 unit UGDBPolyLine2DArray;
 {$INCLUDE def.inc}
 interface
-uses uzbgeomtypes,uzbtypesbase,gzctnrvectordata,sysutils,uzbtypes, uzegeometry;
+uses uzbgeomtypes,uzbtypesbase,gzctnrvectordata,sysutils,uzbtypes, uzegeometry,
+     gzctnrvectortypes,math;
 type
 {REGISTEROBJECTTYPE GDBPolyline2DArray}
 {Export+}
@@ -32,13 +33,49 @@ GDBPolyline2DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<GDBVert
                       procedure optimize;virtual;
                       function _optimize:GDBBoolean;virtual;
                       function inrect(Frame1, Frame2: GDBvertex2DI;inv:GDBBoolean):GDBBoolean;virtual;
+                      function inrectd(Frame1, Frame2: GDBvertex2D;inv:GDBBoolean):GDBBoolean;virtual;
                       function ispointinside(point:GDBVertex2D):GDBBoolean;virtual;
                       procedure transform(const t_matrix:DMatrix4D);virtual;
-
+                      function getoutbound:TBoundingBox;virtual;
                 end;
 {Export-}
 function _intercept2d(const p1,p2,p:GDBVertex2D;const dirx, diry: GDBDouble): GDBBoolean;
 implementation
+function GDBPolyline2DArray.getoutbound;
+var
+    tt,b,l,r:GDBDouble;
+    ptv:pGDBVertex2D;
+    ir:itrec;
+begin
+  l:=Infinity;
+  b:=Infinity;
+  r:=NegInfinity;
+  tt:=NegInfinity;
+  ptv:=beginiterate(ir);
+  if ptv<>nil then
+  begin
+  repeat
+        if ptv.x<l then
+                 l:=ptv.x;
+        if ptv.x>r then
+                 r:=ptv.x;
+        if ptv.y<b then
+                 b:=ptv.y;
+        if ptv.y>tt then
+                 tt:=ptv.y;
+        ptv:=iterate(ir);
+  until ptv=nil;
+  result.LBN:=CreateVertex(l,B,0);
+  result.RTF:=CreateVertex(r,Tt,0);
+
+  end
+              else
+  begin
+  result.LBN:=CreateVertex(-1,-1,-1);
+  result.RTF:=CreateVertex(1,1,1);
+  end;
+end;
+
 procedure GDBPolyline2DArray.transform(const t_matrix:DMatrix4D);
 var
     pv:PGDBVertex2D;
@@ -217,30 +254,71 @@ begin
   end;
   end;
 end;
-{function GDBPolyline2DArray.onmouse;
-var i:GDBInteger;
-    d:GDBDouble;
-    ptpv0,ptpv1:PGDBVertex2D;
+function GDBPolyline2DArray.inrectd;
+var p,pp:PGDBVertex2D;
+//    counter:GDBInteger;
+    i:GDBInteger;
+//    lines:GDBBoolean;
 begin
-  result:=false;
-   ptpv0:=parray;
-   ptpv1:=ptpv0;
-   inc(ptpv1);
-   i:=0;
-   while i<(count-1) do
-   begin
-     d:=distance2piece(mc,ptpv1^,ptpv0^);
-     if d<2*sysvar.DISP.DISP_CursorSize^ then
+  result := false;
+  if (count<2){or(not POGLWND^.seldesc.MouseFrameInverse)} then exit;
+  p:=GetParrayAsPointer;
+  i:=count;
+
+  if {GDB.GetCurrentDWG.OGLwindow1.param.seldesc.MouseFrame}Inv{erse} then
+  begin
+  while i>0 do{or i:=0 to count-1 do}
+  begin
      begin
-          result:=true;
-          exit;
-     end;
+          pp:=p;
+          //inc(p);
+          if (i<>1) and pointinquad2d(Frame1.x, Frame1.y, Frame2.x, Frame2.y, p.x,p.y)
+          then
+          begin
+               result := true;
+               exit;
+          end
+          else
+          if pointinquad2d(Frame1.x, Frame1.y, Frame2.x, Frame2.y, pp.x,pp.y)
+          then
+          begin
+               result := true;
+               exit;
+          end
+          else
+          if
+          (i<>1) and
+          intercept2d2(Frame1.x, Frame1.y, Frame2.x, Frame1.y, p.x,p.y,pp.x,pp.y)
+       or intercept2d2(Frame2.x, Frame1.y, Frame2.x, Frame2.y, p.x,p.y,pp.x,pp.y)
+       or intercept2d2(Frame2.x, Frame2.y, Frame1.x, Frame2.y, p.x,p.y,pp.x,pp.y)
+       or intercept2d2(Frame1.x, Frame2.y, Frame1.x, Frame1.y, p.x,p.y,pp.x,pp.y)
+          then
+          begin
+               result := true;
+               exit;
+          end;
+          inc(p);
+          dec(i);
+     end
+  end;
+  end
+  else
+  begin
+  result := true;
+  while i>0 do{or i:=0 to count-1 do}
+  begin
      begin
-                            inc(i);
-                            inc(ptpv1);
-                            inc(ptpv0);
-                       end;
-   end;
-end;}
+          if not pointinquad2d(Frame1.x, Frame1.y, Frame2.x, Frame2.y, p.x,p.y)
+          then
+          begin
+               result := false;
+               exit;
+          end;
+          inc(p);
+          dec(i);
+     end
+  end;
+  end;
+end;
 begin
 end.

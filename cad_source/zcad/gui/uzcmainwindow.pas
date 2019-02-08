@@ -858,16 +858,6 @@ begin
 end;
 procedure TZCADMainWindow.DockMasterCreateControl(Sender: TObject; aName: string; var
   AControl: TControl; DoDisableAutoSizing: boolean);
-  procedure CreateForm(Caption: string; NewBounds: TRect);
-  begin
-       begin
-           AControl:=tform.create(Application);
-           AControl.Name:=aname;
-           Acontrol.Caption:=caption;
-           Acontrol.BoundsRect:=NewBounds;
-       end;
-  end;
-
 begin
   // first check if the form already exists
   // the LCL Screen has a list of all existing forms.
@@ -884,7 +874,7 @@ begin
       AControl.DisableAutoSizing;
     exit;
   end;
-  aControl:=CreateZCADControl(aName,true);
+  aControl:=CreateZCADControl(aName,DoDisableAutoSizing);
   if assigned(aControl)then
   if not DoDisableAutoSizing then
                                Acontrol.EnableAutoSizing;

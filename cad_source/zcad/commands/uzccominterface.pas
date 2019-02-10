@@ -781,6 +781,11 @@ begin
   ToolBarsManager.LoadToolBarsContent(ExpandPath(operands));
   result:=cmd_ok;
 end;
+function LoadPalettes_com(operands:TCommandOperands):TCommandResult;
+begin
+  ToolBarsManager.LoadPalettes(ExpandPath(operands));
+  result:=cmd_ok;
+end;
 procedure startup;
 begin
   CreateCommandFastObjectPlugin(@newdwg_com,'NewDWG',0,0).CEndActionAttr:=CEDWGNChanged;
@@ -813,6 +818,7 @@ begin
   CreateCommandFastObjectPlugin(@LoadActions_com,'LoadActions',0,0);
   CreateCommandFastObjectPlugin(@LoadMenus_com,'LoadMenus',0,0);
   CreateCommandFastObjectPlugin(@LoadToolbars_com,'LoadToolbars',0,0);
+  CreateCommandFastObjectPlugin(@LoadPalettes_com,'LoadPalettes',0,0);
   AboutForm:=nil;
   HelpForm:=nil;
 end;

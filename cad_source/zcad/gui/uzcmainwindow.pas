@@ -1184,39 +1184,37 @@ begin
   ta:=tmyaction(self.StandartActions.ActionByName('ACN_Show_'+aname));
   if ta<>nil then
                  ta.Checked:=true;
-  if ZCADGUIManager.GetZCADFormInfo(aname,PFID) then
-  begin
-       aname:=aname;
-       if assigned(PFID^.CreateProc)then
-                                       result:=PFID^.CreateProc
-                                   else
-                                       begin
-                                       result:=Tform(PFID^.FormClass.NewInstance);
-                                       tobject(PFID.PInstanceVariable^):=result;
-                                       end;
-       if DoDisableAlign then
-                             if result is TWinControl then
-                                                          TWinControl(result).DisableAlign;
-       if result is TCustomForm then
-       begin
-         if PFID^.DesignTimeForm then
-                                    TCustomForm(result).Create(Application)
-                                 else
-                                    TCustomForm(result).CreateNew(Application);
-       end;
-       //tobject(PFID.PInstanceVariable^):=result;
-       result.Caption:=PFID.FormCaption;
-       result.Name:=aname;
-       if @PFID.SetupProc<>nil then
-                                  PFID.SetupProc(result);
+  if pos(ToolPaletteNamePrefix,uppercase(aname))=1 then begin
+    result:=ToolBarsManager.CreateToolPalette(aName,DoDisableAlign);
   end
-  else
-  begin
-    //tbdesk:=self.findtoolbatdesk(aName);
-    //if tbdesk=''then
-      ZCMsgCallBackInterface.TextMessage(format(rsFormNotFound,[aName]),TMWOShowError);
-    result:=nil;
-  end;
+  else if ZCADGUIManager.GetZCADFormInfo(aname,PFID) then begin
+    aname:=aname;
+    if assigned(PFID^.CreateProc)then
+      result:=PFID^.CreateProc
+    else begin
+      result:=Tform(PFID^.FormClass.NewInstance);
+      tobject(PFID.PInstanceVariable^):=result;
+    end;
+    if DoDisableAlign then
+      if result is TWinControl then
+        TWinControl(result).DisableAlign;
+    if result is TCustomForm then begin
+      if PFID^.DesignTimeForm then
+        TCustomForm(result).Create(Application)
+      else
+        TCustomForm(result).CreateNew(Application);
+    end;
+    //tobject(PFID.PInstanceVariable^):=result;
+    result.Caption:=PFID.FormCaption;
+    result.Name:=aname;
+    if @PFID.SetupProc<>nil then
+      PFID.SetupProc(result);
+   end else begin
+     //tbdesk:=self.findtoolbatdesk(aName);
+     //if tbdesk=''then
+     ZCMsgCallBackInterface.TextMessage(format(rsFormNotFound,[aName]),TMWOShowError);
+     result:=nil;
+   end;
 end;
 
 

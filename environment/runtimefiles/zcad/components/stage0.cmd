@@ -2,4 +2,5 @@
 ;*-путь к программе
 LoadActions(*menu/actionscontent.xml)
 LoadToolBars(*menu/toolbarscontent.xml)
+LoadPalettes(*menu/palettescontent.xml)
 LoadMenus(*menu/menuscontent.xml)

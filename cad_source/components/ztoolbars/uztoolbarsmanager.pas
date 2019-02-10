@@ -100,7 +100,7 @@ type
     fdefbuttonheight:integer;
     fmainform:TForm;
 
-    TBConfig:TXMLConfig;
+    TBConfig,PalettesConfig:TXMLConfig;
     TBCreateFuncRegister:TTBCreateFuncRegister;
     TBItemCreateFuncRegister:TTBItemCreateFuncRegister;
     ActionCreateFuncRegister:TActionCreateFuncRegister;
@@ -116,6 +116,7 @@ type
     procedure IterateToolBarsContent(ip:TIterateToolbarsContentProc);
     function FindToolBar(TBName:String;out tb:TToolBar):boolean;
     procedure LoadToolBarsContent(filename:string);
+    procedure LoadPalettes(filename:string);
     procedure LoadActions(filename:string);
     procedure LoadMenus(filename:string);
     function FindBarsContent(toolbarname:string):TDomNode;
@@ -127,6 +128,7 @@ type
     procedure RegisterMenuCreateFunc(aNodeName:string;MenuCreateFunc:TMenuCreateFunc);
     procedure TryRunMenuCreateFunc(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     function CreateToolbar(aName:string):TToolBar;
+    function CreateToolPalette(aName: string;DoDisableAlign:boolean=false):TControl;
     function AddContentToToolbar(tb:TToolBar;aName:string):TToolBar;
     function DoTBCreateFunc(aName,aType:string):TToolBar;
     procedure DoTBItemCreateFunc(aNodeName:string; aNode: TDomNode; TB:TToolBar);
@@ -160,6 +162,7 @@ type
 var
   ToolBarsManager:TToolBarsManager;
   ActionsManagersVector:TActionsManagersVector;
+  ToolPaletteNamePrefix:String='TOOLPALETTE_';
 
 implementation
 
@@ -422,6 +425,7 @@ begin
   fdefbuttonheight:=defbuttonheight;
 
   TBConfig:=nil;
+  PalettesConfig:=nil;
   TBCreateFuncRegister:=nil;
   TBItemCreateFuncRegister:=nil;
   ActionCreateFuncRegister:=nil;
@@ -431,6 +435,8 @@ destructor TToolBarsManager.Destroy;
 begin
     if assigned(TBConfig) then
       TBConfig.Free;
+    if assigned(PalettesConfig) then
+      PalettesConfig.Free;
     if assigned(TBCreateFuncRegister) then
       TBCreateFuncRegister.Free;
     if assigned(TBItemCreateFuncRegister) then
@@ -696,17 +702,48 @@ begin
     tempTBContentNode:=tempTBConfig.FindNode('ToolBarsContent',false);
     TBContentNode:=TBConfig.FindNode('ToolBarsContent',false);
 
-    TBSubNode:=tempTBContentNode.FirstChild;
-    while assigned(TBSubNode)do
-    begin
-      TBContentNode.AppendChild(TBSubNode.CloneNode(true,TBContentNode.OwnerDocument));
+    if assigned(tempTBContentNode) and assigned(TBContentNode)then begin
+      TBSubNode:=tempTBContentNode.FirstChild;
+      while assigned(TBSubNode)do
+      begin
+        TBContentNode.AppendChild(TBSubNode.CloneNode(true,TBContentNode.OwnerDocument));
 
-      TBSubNode:=TBSubNode.NextSibling;
+        TBSubNode:=TBSubNode.NextSibling;
+      end;
     end;
 
     tempTBConfig.Free;
   end;
 end;
+procedure TToolBarsManager.LoadPalettes(filename:string);
+var
+  tempPalettesConfig:TXMLConfig;
+  tempPalettesContentNode,TBContentNode,TBSubNode:TDomNode;
+begin
+  if not assigned(PalettesConfig) then begin
+    PalettesConfig:=TXMLConfig.Create(nil);
+    PalettesConfig.Filename:=filename;
+  end else begin
+    tempPalettesConfig:=TXMLConfig.Create(nil);
+    tempPalettesConfig.Filename:=filename;
+
+    tempPalettesContentNode:=tempPalettesConfig.FindNode('PalettesContent',false);
+    TBContentNode:=PalettesConfig.FindNode('PalettesContent',false);
+
+    if assigned(tempPalettesContentNode) and assigned(TBContentNode)then begin
+      TBSubNode:=tempPalettesContentNode.FirstChild;
+      while assigned(TBSubNode)do
+      begin
+        TBContentNode.AppendChild(TBSubNode.CloneNode(true,TBContentNode.OwnerDocument));
+
+        TBSubNode:=TBSubNode.NextSibling;
+      end;
+    end;
+
+    tempPalettesConfig.Free;
+  end;
+end;
+
 procedure TToolBarsManager.LoadActions(filename:string);
 var
   ActionsConfig:TXMLConfig;
@@ -787,6 +824,16 @@ begin
   end;
 end;
 
+function TToolBarsManager.CreateToolPalette(aName: string;DoDisableAlign:boolean=false):TControl;
+begin
+  result:=TCustomForm(Tform.NewInstance);
+//if DoDisableAlign then
+  if result is TWinControl then
+    TWinControl(result).DisableAlign;
+  TCustomForm(result).CreateNew(Application);
+  TCustomForm(result).Name:=aName;
+  TCustomForm(result).Caption:='test';
+end;
 function TToolBarsManager.CreateToolbar(aName:string):TToolBar;
 var
   TBNode,TBSubNode:TDomNode;

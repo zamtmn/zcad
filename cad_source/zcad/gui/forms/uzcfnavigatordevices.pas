@@ -364,6 +364,7 @@ begin
     FreeAndNil(StandaloneNode);
   end;
 end;
+
 procedure SelectSubNodes(nav:TVirtualStringTree;pnode:PVirtualNode);
 var
   psubnode:PVirtualNode;
@@ -393,6 +394,7 @@ begin
        nav:=commandmanager.ContextCommandParams;
        pnode:=nav.GetFirstSelected;
        SelectSubNodes(nav,pnode);
+       ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,ZMsgID_GUIActionSelectionChanged);
        result:=cmd_ok;
      end else
        ZCMsgCallBackInterface.TextMessage(rscmCommandOnlyCTXMenu,TMWOHistoryOut);

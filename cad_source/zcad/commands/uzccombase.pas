@@ -160,22 +160,15 @@ begin
 end;
 function SelectObjectByAddres_com(operands:TCommandOperands):TCommandResult;
 var
-   pp:PGDBObjEntity;
-   code:integer;
+  pp:PGDBObjEntity;
+  code:integer;
 begin
-     val(Operands,GDBPlatformUInt(pp),code);
-     if (code=0)and(assigned(pp))then
-                                     begin
-                                     pp^.select(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.Selector);
-                                     drawings.CurrentDWG.wa.param.SelDesc.LastSelectedObject:=pp;
-                                     end;
-     ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
-     //if assigned(updatevisibleproc) then updatevisibleproc(ZMsgID_GUIActionRedraw);
-     ZCMsgCallBackInterface.Do_GUIaction(drawings.CurrentDWG.wa,ZMsgID_GUIActionSelectionChanged);
-     //drawings.CurrentDWG.wa.SetObjInsp;
-     result:=cmd_ok;
-     //SetObjInsp;
-     //commandmanager.executecommandsilent('MultiSelect2ObjIbsp');
+  val(Operands,GDBPlatformUInt(pp),code);
+  if (code=0)and(assigned(pp))then
+    zcSelectEntity(pp);
+  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
+  ZCMsgCallBackInterface.Do_GUIaction(drawings.CurrentDWG.wa,ZMsgID_GUIActionSelectionChanged);
+  result:=cmd_ok;
 end;
 procedure remapprjdb(pu:ptunit);
 var

@@ -84,6 +84,9 @@ uses uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzepalette,
   {**Перерисовать окно текущего чертежа}
   procedure zcRedrawCurrentDrawing();
 
+  {**Выбрать примитив}
+  procedure zcSelectEntity(pp:PGDBObjEntity);
+
 function GDBInsertBlock(own:PGDBObjGenericSubEntry;BlockName:GDBString;p_insert:GDBVertex;
                         scale:GDBVertex;rotate:GDBDouble;needundo:GDBBoolean=false
                         ):PGDBObjBlockInsert;
@@ -214,6 +217,11 @@ end;
 procedure zcRedrawCurrentDrawing();
 begin
   ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedrawContent);
+end;
+procedure zcSelectEntity(pp:PGDBObjEntity);
+begin
+  pp^.select(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.Selector);
+  drawings.CurrentDWG.wa.param.SelDesc.LastSelectedObject:=pp;
 end;
 function GDBInsertBlock(own:PGDBObjGenericSubEntry;//владелец
                         BlockName:GDBString;       //имя блока

@@ -222,6 +222,9 @@
     <PopUpMenu Name="PROGRAMBLOCKSCXMENU">
       <Action Name="ACN_INSERTTODRAWING"/>
     </PopUpMenu>
+    <PopUpMenu Name="NAVIGATORNODECONTEXTMENU">
+      <Action Name="ACN_NAVSELECTSUBNODES"/>
+    </PopUpMenu>
     <PopUpMenu Name="OBJINSPVARCXMENU">
       <Action Name="ACN_COPYVARNAMETOCLIP"/>
       <Action Name="ACN_COPYLINKTOVARTOCLIP"/>

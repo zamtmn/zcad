@@ -10,7 +10,8 @@ uses
   uzbtypes,gzctnrvectortypes,uzbgeomtypes ,uzegeometry, uzccommandsmanager,
   uzcinterface,uzeconsts,uzeentity,uzcimagesmanager,uzcdrawings,uzbtypesbase,
   varmandef,uzbstrproc,uzcmainwindow,uzctreenode,
-  uzcnavigatorsnodedesk,Varman,uzcstrconsts;
+  uzcnavigatorsnodedesk,Varman,uzcstrconsts,uztoolbarsmanager,
+  uzccommandsimpl,uzccommandsabstract,uzcutils;
 
 resourcestring
   rsByPrefix='byPrefix';
@@ -32,6 +33,8 @@ type
     procedure AutoRefreshTree(sender:TObject;GUIAction:TZMessageID);
     procedure TVDblClick(Sender: TObject);
     procedure TVOnMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure VTOnContextMenu(Sender: TObject; MousePos: TPoint;
+                                 var Handled: Boolean);
     procedure VTCompareNodes(Sender: TBaseVirtualTree; Node1,
       Node2: PVirtualNode; Column: TColumnIndex; var Result: Integer);virtual;
     procedure VTHeaderClick(Sender: TVTHeader; HitInfo: TVTHeaderHitInfo);
@@ -145,6 +148,8 @@ begin
 
    OnShow:=RefreshTree;
 
+   NavTree.OnContextPopup:=VTOnContextMenu;
+
    ZCMsgCallBackInterface.RegisterHandler_GUIAction(AutoRefreshTree);
 end;
 procedure TNavigatorDevices.RefreshTree(Sender: TObject);
@@ -222,12 +227,41 @@ begin
 end;
 
 procedure TNavigatorDevices.TVOnMouseMove(Sender: TObject; Shift: TShiftState; X,
-  Y: Integer);
+Y: Integer);
 begin
   NavMX:=x;
   NavMy:=y;
 end;
-
+procedure TNavigatorDevices.VTOnContextMenu(Sender: TObject; MousePos: TPoint;
+                             var Handled: Boolean);
+var
+  pnode:PVirtualNode;
+  pnd:PTNodeData;
+  pc:gdbvertex;
+  bb:TBoundingBox;
+  PopupMenu:TmyPopupMenu;
+begin
+  Handled:=true;
+  pnode:=NavTree.GetNodeAt(MousePos.X,MousePos.Y);
+  if pnode<>nil then
+  begin
+    NavTree.Selected[pnode]:=true;
+    PopupMenu:=TmyPopupMenu(application.FindComponent(MenuNameModifier+'NAVIGATORNODECONTEXTMENU'));
+    if assigned(PopupMenu) then begin
+      CommandManager.ContextCommandParams:=NavTree;
+      PopupMenu.PopUp;
+    end;
+    {pnd:=NavTree.GetNodeData(pnode);
+    if pnd<>nil then
+    if pnd^.pent<>nil then
+    begin
+      pc:=Vertexmorph(pnd^.pent^.vp.BoundingBox.LBN,pnd^.pent^.vp.BoundingBox.RTF,0.5);
+      bb.LBN:=VertexAdd(pc,VertexMulOnSc(VertexSub(pc,pnd^.pent^.vp.BoundingBox.LBN),scale));
+      bb.RTF:=VertexAdd(pc,VertexMulOnSc(VertexSub(pc,pnd^.pent^.vp.BoundingBox.RTF),scale));
+      drawings.GetCurrentDWG.wa.ZoomToVolume(bb);
+    end;}
+  end;
+end;
 procedure TNavigatorDevices.VTCompareNodes(Sender: TBaseVirtualTree; Node1,
   Node2: PVirtualNode; Column: TColumnIndex; var Result: Integer);
 begin
@@ -330,7 +364,42 @@ begin
     FreeAndNil(StandaloneNode);
   end;
 end;
+procedure SelectSubNodes(nav:TVirtualStringTree;pnode:PVirtualNode);
+var
+  psubnode:PVirtualNode;
+  pnd:PTNodeData;
+  i:integer;
+  s:string;
 begin
+  if pnode^.ChildCount>0 then begin
+    psubnode:=pnode^.FirstChild;
+    for i:=1 to pnode^.ChildCount do begin
+      SelectSubNodes(nav,psubnode);
+      pnd:=nav.GetNodeData(psubnode);
+      if pnd<>nil then
+        if pnd.NodeMode=TNMData then
+          zcSelectEntity(pnd^.pent);
+      psubnode:=psubnode^.NextSibling;
+    end;
+  end;
+end;
+
+function NavSelectSubNodes_com(operands:TCommandOperands):TCommandResult;
+var
+  pnode:PVirtualNode;
+  nav:TVirtualStringTree;
+begin
+     if commandmanager.ContextCommandParams<>nil then begin
+       nav:=commandmanager.ContextCommandParams;
+       pnode:=nav.GetFirstSelected;
+       SelectSubNodes(nav,pnode);
+       result:=cmd_ok;
+     end else
+       ZCMsgCallBackInterface.TextMessage(rscmCommandOnlyCTXMenu,TMWOHistoryOut);
+end;
+
+begin
+  CreateCommandFastObjectPlugin(@NavSelectSubNodes_com,'NavSelectSubNodes',CADWG,0);
   NavGroupIconIndex:=-1;
   NavAutoGroupIconIndex:=-1;
 end.

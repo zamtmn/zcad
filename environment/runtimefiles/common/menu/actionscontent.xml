@@ -130,6 +130,7 @@
       <ZAction Name="ACN_TREESTAT" Command="TreeStat" Img="#ti" Caption="Spatial index info" Hint="Current drawing spatial index info"/>
       <ZAction Name="ACN_OPTIONS" Command="Options" Img="options" Caption="Options"/>
       <ZAction Name="ACN_SAVEOPTIONS" Command="SaveOptions" Img="#so" Caption="Save options"/>
+      <ZAction Name="ACN_NAVSELECTSUBNODES" Command="NavSelectSubNodes" Img="#NSSN" Caption="SelectSubNodes"/>
     </Group>
     <Group Category="Variables">
       <ZAction2Variable Name="ACN_OS_INSERT" Variable="DWG_OSMode" Mask="1" Img="snaptoinsert" Caption="Snap to insert point"/>

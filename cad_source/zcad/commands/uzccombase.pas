@@ -83,6 +83,7 @@ TTreeStatistik=record
    function Merge_com(operands:TCommandOperands):TCommandResult;
    function MergeBlocks_com(operands:TCommandOperands):TCommandResult;
    procedure ReCreateClipboardDWG;
+   function PointerToNodeName(node:pointer):string;
 const
      ZCAD_DXF_CLIPBOARD_NAME='DXF2000@ZCADv0.9';
 implementation
@@ -1027,7 +1028,7 @@ begin
      gdbfreemem(pointer(tr.PLevelStat));
      tr.pc.destroy;
 end;
-function PNodeToNodeName(node:PTEntTreeNode):string;
+function PointerToNodeName(node:pointer):string;
 begin
   result:=format(' _%s',[inttohex(ptruint(node),8)])
 end;
@@ -1036,7 +1037,7 @@ procedure WriteNode(node:PTEntTreeNode;infrustum:TActulity;nodedepth:integer);
 var
    nodename:string;
 begin
-  nodename:=PNodeToNodeName(node);
+  nodename:=PointerToNodeName(node);
   ZCMsgCallBackInterface.TextMessage(format(' %s [label="None with %d ents"]',[nodename,node.nul.count]),TMWOHistoryOut);
   if node^.NodeData.infrustum=infrustum then
     ZCMsgCallBackInterface.TextMessage(format(' %s [fillcolor=red, style=filled]',[nodename,node.nul.count]),TMWOHistoryOut);
@@ -1044,12 +1045,12 @@ begin
   //{ rank = same; "past"
   if assigned(node.pplusnode)then
   begin
-    ZCMsgCallBackInterface.TextMessage(format(' %s->%s [label="+"]',[nodename,PNodeToNodeName(PTEntTreeNode(node.pplusnode))]),TMWOHistoryOut);
+    ZCMsgCallBackInterface.TextMessage(format(' %s->%s [label="+"]',[nodename,PointerToNodeName(PTEntTreeNode(node.pplusnode))]),TMWOHistoryOut);
     WriteNode(PTEntTreeNode(node.pplusnode),infrustum,nodedepth+1);
   end;
   if assigned(node.pminusnode)then
   begin
-    ZCMsgCallBackInterface.TextMessage(format(' %s->%s [label="-"]',[nodename,PNodeToNodeName(PTEntTreeNode(node.pminusnode))]),TMWOHistoryOut);
+    ZCMsgCallBackInterface.TextMessage(format(' %s->%s [label="-"]',[nodename,PointerToNodeName(PTEntTreeNode(node.pminusnode))]),TMWOHistoryOut);
     WriteNode(PTEntTreeNode(node.pminusnode),infrustum,nodedepth+1);
   end;
 end;

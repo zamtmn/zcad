@@ -34,7 +34,8 @@ uses
   uzcshared,uzeentsubordinated,uzcentcable,varman,uzcdialogsfiles,uunitmanager,
   gzctnrvectorpobjects,uzcbillofmaterial,uzccablemanager,uzeentdevice,uzeenttable,
   uzbpaths,uzctnrvectorgdbstring,math,Masks,uzclog,uzccombase,uzbstrproc,
-  uzeentmtext,uzeblockdef,UGDBPoint3DArray,uzcdevicebaseabstract,uzelongprocesssupport,LazLogger;
+  uzeentmtext,uzeblockdef,UGDBPoint3DArray,uzcdevicebaseabstract,uzelongprocesssupport,LazLogger,
+  generics.Collections;
 type
 {Export+}
   TFindType=(
@@ -3389,6 +3390,90 @@ begin
   result:=cmd_ok;
 end;
 
+function Connection2Dot_com(operands:TCommandOperands):TCommandResult;
+var
+  cman:TCableManager;
+  pv:PTCableDesctiptor;
+  segment:PGDBObjCable;
+  node:PTNodeProp;
+  nodeend,nodestart:PGDBObjDevice;
+  ir,ir2,ir_inNodeArray:itrec;
+  pvd,pvd2:pvardesk;
+  startnodename,endnodename,startnodelabel,endnodelabel:string;
+
+  alreadywrite:TDictionary<pointer,integer>;
+  inriser:boolean;
+begin
+  cman.init;
+  cman.build;
+  alreadywrite:=TDictionary<pointer,integer>.create;
+
+  ZCMsgCallBackInterface.TextMessage('DiGraph Classes {',TMWOHistoryOut);
+
+  pv:=cman.beginiterate(ir);
+  if pv<>nil then
+  begin
+    repeat
+    inriser:=false;
+    segment:=pv^.Segments.beginiterate(ir2);
+    if segment<>nil then
+    repeat
+    begin
+      node:=segment^.NodePropArray.beginiterate(ir_inNodeArray);
+      if node<>nil then begin
+        if not inriser then
+          nodestart:=node.DevLink;
+        node:=segment^.NodePropArray.iterate(ir_inNodeArray);
+        if (node<>nil)and(nodestart<>nil) then
+        repeat
+          nodeend:=node.DevLink;
+          if nodeend<>nil then begin
+          pvd:=FindVariableInEnt(nodestart,'NMO_Name');
+          pvd2:=FindVariableInEnt(nodeend,'NMO_Name');
+          if pvd2=nil then begin
+             if FindVariableInEnt(nodeend,'RiserName')<>nil then
+                inriser:=true;
+          end else
+            inriser:=false;
+          if (pvd<>nil)and(pvd2<>nil) then begin
+            startnodename:=PointerToNodeName(nodestart);
+            endnodename:=PointerToNodeName(nodeend);
+            startnodelabel:=pstring(pvd^.data.Instance)^;
+            endnodelabel:=pstring(pvd2^.data.Instance)^;
+
+            if not alreadywrite.ContainsKey(nodestart) then begin
+              ZCMsgCallBackInterface.TextMessage(format(' %s [label="%s"]',[startnodename,startnodelabel]),TMWOHistoryOut);
+              alreadywrite.add(nodestart,1);
+            end;
+            if not alreadywrite.ContainsKey(nodeend) then begin
+              ZCMsgCallBackInterface.TextMessage(format(' %s [label="%s"]',[endnodename,endnodelabel]),TMWOHistoryOut);
+              alreadywrite.add(nodeend,1);
+              if endnodelabel='П1-ШУ' then
+                endnodelabel:=endnodelabel;
+            end;
+            ZCMsgCallBackInterface.TextMessage(format(' %s->%s [label="%s"]',[startnodename,endnodename,pv^.Name]),TMWOHistoryOut);
+            nodestart:=nodeend;
+          end;
+          end;
+          {if pvd=nil then
+            nodestart:=nodeend;}
+        node:=segment^.NodePropArray.iterate(ir_inNodeArray);
+      until node=nil;
+      end;
+    end;
+    segment:=pv^.Segments.iterate(ir2);
+    until segment=nil;
+  pv:=cman.iterate(ir);
+  until pv=nil;
+
+  ZCMsgCallBackInterface.TextMessage('}',TMWOHistoryOut);
+  cman.done;
+  alreadywrite.free;
+  result:=cmd_ok;
+end;
+
+end;
+
 procedure startup;
 //var
   // s:gdbstring;
@@ -3418,6 +3503,7 @@ begin
   CreateCommandFastObjectPlugin(@_test_com,'test',CADWG,0);
   CreateCommandFastObjectPlugin(@_El_ExternalKZ_com,'El_ExternalKZ',CADWG,0);
   CreateCommandFastObjectPlugin(@_AutoGenCableRemove_com,'EL_AutoGen_Cable_Remove',CADWG,0);
+  CreateCommandFastObjectPlugin(@Connection2Dot_com,'Connection2Dot',CADWG,0);
 
   EM_SRBUILD.init('EM_SRBUILD',CADWG,0);
   EM_SEPBUILD.init('EM_SEPBUILD',CADWG,0);

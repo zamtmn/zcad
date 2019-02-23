@@ -234,7 +234,7 @@ begin
 end;
 procedure TextIOSave_TMPL1(var outhandle:GDBOpenArrayOfByte;PEnt:PGDBObjText);
 begin
-     if pent^.content<>convertfromunicode(pent^.template) then
+     if StringReplace(pent^.content,#10,'\P',[rfReplaceAll])<>convertfromunicode(pent^.template) then
        dxfGDBStringout(outhandle,1000,'_TMPL1='+pent^.template);
 end;
 

@@ -37,6 +37,6 @@ Build ZCAD:
 * install zcad packages from '**cad_sources/components**' to lazarus
 * install third party packages from '**cad_sources/other**' to lazarus
 * check whether the **PATH** variable includes path to lazbuild binary
-* if need set **PATCH** variable: `$ export PATH="$PATH:/your/patch/to/lazarus/"`
+* if need set **PATH** variable: `$ export PATH="$PATH:/your/patch/to/lazarus/"`
 * run `$ ./zcad.sh` (or zcadelectrotech.sh) file
 * open zcad.lpi in lazarus and compile

@@ -53,6 +53,19 @@ uses
 resourcestring
   rsClosed='Closed';
 type
+  TZPaletteListItem=class(TListItem)
+    public
+      Command:ansistring;
+  end;
+  TZPaletteListView=class(TListView)
+    procedure ProcessClick(ListItem:TListItem;DblClck:Boolean);
+
+    protected
+    MouseDownItem:TListItem;
+    DoubleClick:Boolean;
+      procedure MouseDown(Button: TMouseButton; Shift:TShiftState; X,Y:Integer); override;
+      procedure MouseUp(Button: TMouseButton; Shift:TShiftState; X,Y:Integer); override;
+  end;
   TMyToolbar=class(TToolBar)
     public
     destructor Destroy; override;
@@ -204,6 +217,8 @@ type
     procedure ZMainMenuDrawings(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     procedure ZMainMenuSampleFiles(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     procedure ZMainMenuDebugFiles(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+    function ZPalettevsIconCreator(aName,aCaption,aType: string):TPaletteControlBaseType;
+    procedure ZPalettevsIconItemCreator(aNode: TDomNode; palette:TPaletteControlBaseType);
     procedure DockMasterCreateControl(Sender: TObject; aName: string; var
     AControl: TControl; DoDisableAutoSizing: boolean);
 
@@ -247,6 +262,48 @@ var
 
 implementation
 {$R *.lfm}
+
+procedure TZPaletteListView.MouseDown(Button: TMouseButton; Shift:TShiftState; X,Y:Integer);
+begin
+  if Button=mbLeft then
+  begin
+   MouseDownItem:=GetItemAt(x,y);
+   if ssDouble in Shift then
+     doubleclick:=true
+   else
+     doubleclick:=false;
+  end;
+end;
+
+procedure TZPaletteListView.MouseUp(Button: TMouseButton; Shift:TShiftState; X,Y:Integer);
+var
+   li:TListItem;
+begin
+     if Button=mbLeft then
+     begin
+       li:=GetItemAt(x,y);
+       if li=MouseDownItem then
+         ProcessClick(li,DoubleClick);
+     end;
+     MouseDownItem:=nil;
+     DoubleClick:=false;
+end;
+
+procedure TZPaletteListView.ProcessClick(ListItem:TListItem;DblClck:Boolean);
+var i:integer;
+begin
+  if DblClck then
+     ListItem:=ListItem;
+     {BeginUpdate;
+     process(ListItem,SubItem,DblClck);
+     for i:=0 to Items.Count-1 do
+     begin
+          if Items[i].Selected then
+          if Items[i]<>ListItem then
+             process(Items[i],SubItem,false);
+     end;
+     EndUpdate;}
+end;
 
 destructor TmyToolBar.Destroy;
 var
@@ -1764,6 +1821,9 @@ begin
   ToolBarsManager.RegisterMenuCreateFunc('CreateMenu',ToolBarsManager.CreateDefaultMenu);
   ToolBarsManager.RegisterMenuCreateFunc('SetMainMenu',ToolBarsManager.DefaultSetMenu);
 
+  ToolBarsManager.RegisterPaletteCreateFunc('vsIcon',ZPalettevsIconCreator);
+  ToolBarsManager.RegisterPaletteItemCreateFunc('ZVSICommand',ZPalettevsIconItemCreator);
+
   commandmanager.executefile('*components/stage0.cmd',drawings.GetCurrentDWG,nil);
 
   CreateAnchorDockingInterface;
@@ -1949,6 +2009,39 @@ begin
   FromDirIterator(expandpath('*../errors/'),'*.dxf','',@bugfileiterator,nil);
   localpm.localpm:=nil;
   localpm.ImageIndex:=-1;
+end;
+
+function TZCADMainWindow.ZPalettevsIconCreator(aName,aCaption,aType: string):TPaletteControlBaseType;
+begin
+  result:=TCustomForm(Tform.NewInstance);
+//if DoDisableAlign then
+  if result is TWinControl then
+    TWinControl(result).DisableAlign;
+  TCustomForm(result).CreateNew(Application);
+  TCustomForm(result).Name:=aName;
+  TCustomForm(result).Caption:=aCaption;
+  with TZPaletteListView.Create(result) do
+  begin
+    LargeImages:=ImagesManager.IconList;
+    //SmallImages:=ImagesManager.IconList;
+    align:=alClient;
+    ViewStyle:=vsIcon;
+    ReadOnly:=true;
+    IconOptions.AutoArrange:=True;
+    DragMode:=dmAutomatic;
+    Parent:=result;
+  end;
+end;
+procedure TZCADMainWindow.ZPalettevsIconItemCreator(aNode: TDomNode; palette:TPaletteControlBaseType);
+var
+  LI:TZPaletteListItem;
+begin
+  LI:=TZPaletteListItem.Create(TListView(palette).Items);
+  TListView(palette).Items.AddItem(LI);
+  LI.Caption:=getAttrValue(aNode,'Caption','');
+  LI.Caption:=InterfaceTranslate(palette.Parent.Name+'~caption',LI.Caption);
+  LI.ImageIndex:=ImagesManager.GetImageIndex(getAttrValue(aNode,'Img',''));
+  LI.Command:=getAttrValue(aNode,'Command','');
 end;
 
 procedure TZCADMainWindow.AfterConstruction;

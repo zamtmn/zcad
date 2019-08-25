@@ -217,7 +217,8 @@ type
     procedure ZMainMenuDrawings(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     procedure ZMainMenuSampleFiles(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     procedure ZMainMenuDebugFiles(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-    function ZPalettevsIconCreator(aName,aCaption,aType: string):TPaletteControlBaseType;
+    procedure ZPalettevsIconDoubleClick(Sender: TObject);
+    function ZPalettevsIconCreator(aControlName,aInternalCaption,aType: string;TBNode:TDomNode):TPaletteControlBaseType;
     procedure ZPalettevsIconItemCreator(aNode: TDomNode; palette:TPaletteControlBaseType);
     procedure DockMasterCreateControl(Sender: TObject; aName: string; var
     AControl: TControl; DoDisableAutoSizing: boolean);
@@ -2011,27 +2012,40 @@ begin
   localpm.ImageIndex:=-1;
 end;
 
-function TZCADMainWindow.ZPalettevsIconCreator(aName,aCaption,aType: string):TPaletteControlBaseType;
+function TZCADMainWindow.ZPalettevsIconCreator(aControlName,aInternalCaption,aType: string;TBNode:TDomNode):TPaletteControlBaseType;
 begin
   result:=TCustomForm(Tform.NewInstance);
 //if DoDisableAlign then
   if result is TWinControl then
     TWinControl(result).DisableAlign;
   TCustomForm(result).CreateNew(Application);
-  TCustomForm(result).Name:=aName;
-  TCustomForm(result).Caption:=aCaption;
+  TCustomForm(result).Name:=aControlName;
+  TCustomForm(result).Caption:=getAttrValue(TBNode,'Caption',aInternalCaption);
   with TZPaletteListView.Create(result) do
   begin
+    LargeImagesWidth:=getAttrValue(TBNode,'ImagesWidth',64);
+    SmallImagesWidth:=LargeImagesWidth;
     LargeImages:=ImagesManager.IconList;
-    //SmallImages:=ImagesManager.IconList;
+    SmallImages:=ImagesManager.IconList;
     align:=alClient;
     ViewStyle:=vsIcon;
     ReadOnly:=true;
     IconOptions.AutoArrange:=True;
     DragMode:=dmAutomatic;
     Parent:=result;
+    OnDblClick:=ZPalettevsIconDoubleClick;
   end;
 end;
+procedure TZCADMainWindow.ZPalettevsIconDoubleClick(Sender: TObject);
+var
+    cmd:AnsiString;
+begin
+  if TZPaletteListView(Sender).Selected=nil then  exit;
+  cmd:=TZPaletteListItem(TZPaletteListView(Sender).Selected).Command;
+  if cmd<>'' then
+    commandmanager.executecommandsilent(@cmd[1],drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
+end;
+
 procedure TZCADMainWindow.ZPalettevsIconItemCreator(aNode: TDomNode; palette:TPaletteControlBaseType);
 var
   LI:TZPaletteListItem;

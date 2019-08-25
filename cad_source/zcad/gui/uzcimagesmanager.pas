@@ -72,6 +72,7 @@ var
    PNG:TPortableNetworkGraphic;
 begin
   FIconList:=TImageList.Create(self);
+  FIconList.RegisterResolutions([16,24,32,48,64]);
   ImageDataMap:=TImageName2TImageDataMap.create;
 
   PNG:=TPortableNetworkGraphic.create;

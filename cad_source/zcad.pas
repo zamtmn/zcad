@@ -126,6 +126,7 @@ uses
   uzccomdraw,
   uzccommand_3dpoly,
   uzccommand_print,
+  uzccommand_blockpreviewexport,
 
   {$IFDEF ELECTROTECH}
   //**for velec func**//

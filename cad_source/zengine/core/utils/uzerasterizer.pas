@@ -105,8 +105,8 @@ begin
 
   //projMatrix:=MatrixMultiply(projMatrix,CreateScaleMatrix(CreateVertex(1,-1,1)));
 
-  point1:=VectorTransform3D(CreateVertex(0,0,0),projMatrix);
-  point1:=VectorTransform3D(CreateVertex(1,1,0),projMatrix);
+  //point1:=VectorTransform3D(CreateVertex(0,0,0),projMatrix);
+  //point1:=VectorTransform3D(CreateVertex(1,1,0),projMatrix);
 
 
   //prn.scalex:=prn.scalex*scale;
@@ -140,7 +140,7 @@ begin
   dc:=cdwg^.CreateDrawingRC(true);
   dc.DrawMode:=true;
   dc.MaxDetail:=true;
-  PrinterDrawer:=TZGLCanvasDrawer.create;
+  //PrinterDrawer:=TZGLCanvasDrawer.create;
   dc.drawer:=PrinterDrawer;
   oldforegroundindex:=dc.DrawingContext.ForeGroundColorIndex;
   dc.DrawingContext.ForeGroundColorIndex:=uzeconsts.ClBlack;

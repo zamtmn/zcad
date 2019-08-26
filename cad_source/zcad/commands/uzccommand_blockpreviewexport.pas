@@ -41,19 +41,92 @@ uses
   uzeffdxf,
   uzcinterface,
   uzegeometry,
-  uzbmemman,
+  uzbmemman,uzbpaths,
   uzbgeomtypes,uzeentity,uzeentcircle,uzeentline,uzeentgenericsubentry,uzeentmtext,
   uzcshared,uzeentblockinsert,uzeentpolyline,uzclog,
-  math,
-  uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray
+  math,zcmultiobjectcreateundocommand,uzcdrawing,
+  uzeentsubordinated,uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray
   ,uzelongprocesssupport,LazLogger,uzeiopalette,uzeconsts,uzerasterizer;
 implementation
 function BlockPreViewExport_com(operands:TCommandOperands):TCommandResult;
+//const
+  //BlockName='DEVICE_PS_DAT_HAND';
+  //sx=64;
 var
-   i:integer;
-begin
-     zcRedrawCurrentDrawing;
-     result:=cmd_ok;
+   cdwg:PTSimpleDrawing;
+   pb:PGDBObjBlockInsert;
+   tb:PGDBObjSubordinated;
+   domethod,undomethod:tmethod;
+   DC:TDrawContext;
+   BMP:{TBitmap}TPortableNetworkGraphic;
+   PrinterDrawer:TZGLGeneral2DDrawer;
+   PrintParam:TRasterizeParams;
+   BlockName,imgsize:AnsiString;
+   sx:integer;
+begin //BlockPreViewExport(128|DEVICE_PS_DAT_HAND|*images\palettes)
+      //ExecuteFile(*components\blockpreviewexport.cmd)
+  GetPartOfPath(imgsize,operands,'|');
+  TryStrToInt(imgsize,sx);
+  GetPartOfPath(BlockName,operands,'|');
+  cdwg:=drawings.GetCurrentDWG;
+  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+  drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,BlockName);
+  pb := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID));
+  pb^.init(drawings.GetCurrentROOT,drawings.GetCurrentDWG^.GetCurrentLayer,0);
+  pb^.Name:=BlockName;
+  zcSetEntPropFromCurrentDrawingProp(pb);
+  pb^.Local.p_insert:=NulVertex;
+  pb^.scale:=ScaleOne;
+  pb^.CalcObjMatrix;
+  pb^.setrot(0);
+  tb:=pb^.FromDXFPostProcessBeforeAdd(nil,drawings.GetCurrentDWG^);
+  if tb<>nil then begin
+    tb^.bp:=pb^.bp;
+    pb^.done;
+    gdbfreemem(pointer(pb));
+    pb:=pointer(tb);
+  end;
+
+  SetObjCreateManipulator(domethod,undomethod);
+  with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),1)^ do
+  begin
+       AddObject(pb);
+       comit;
+  end;
+
+  //drawings.GetCurrentROOT^.AddObjectToObjArray{ObjArray.add}(addr(pb));
+  PGDBObjEntity(pb)^.FromDXFPostProcessAfterAdd;
+  pb^.CalcObjMatrix;
+  pb^.BuildGeometry(drawings.GetCurrentDWG^);
+  pb^.BuildVarGeometry(drawings.GetCurrentDWG^);
+  pb^.FormatEntity(drawings.GetCurrentDWG^,dc);
+  drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeBoundingBox(pb^);
+  //pb^.Visible:=0;
+  drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count := 0;
+  pb^.RenderFeedback(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,@drawings.GetCurrentDWG^.myGluProject2,dc);
+
+
+  PrintParam.FitToPage:=true;
+  PrintParam.Center:=false;
+  PrintParam.Scale:=1;
+  PrintParam.Palette:=PC_Color;
+
+
+  BMP:=TPortableNetworkGraphic.Create;
+  BMP.SetSize(sx,sx);
+  BMP.Canvas.Brush.Color:=graphics.clWhite;
+  BMP.Canvas.Brush.Style:=bsSolid;
+  BMP.Canvas.FillRect(0,0,sx-1,sx-1);
+  PrinterDrawer:=TZGLCanvasDrawer.create;
+  rasterize(cdwg,sx,sx,VertexMulOnSc(pb^.vp.BoundingBox.LBN,1.1),VertexMulOnSc(pb^.vp.BoundingBox.RTF,1.1),PrintParam,BMP.Canvas,PrinterDrawer);
+  BMP.SaveToFile(ExpandPath(operands)+BlockName+'.png');
+  BMP.Free;
+  PrinterDrawer.Free;
+
+  zcRedrawCurrentDrawing;
+
+  zcRedrawCurrentDrawing;
+  result:=cmd_ok;
 end;
 
 {procedure Print_com.Print(pdata:GDBPlatformint);

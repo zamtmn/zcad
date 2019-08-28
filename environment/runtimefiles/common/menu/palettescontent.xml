@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <PalettesContent>
+    <General Type="vsIcon">
+      <ZVSICommand Command="Insert(Test)" Img='caddie1212' Caption='blya blya blya blya BLYA BLYA'/>
+      <ZVSICommand Command="Insert(Test)" Img='caddie' Caption='blya blya blya blya'/>
+      <ZVSICommand Command="Insert(Test)" Img='caddie' Caption='blya blya blya blya'/>
+      <ZVSICommand Command="Insert(Test)" Img='caddie' Caption='blya blya blya blya'/>
+      <ZVSICommand Command="Insert(Test)" Img='caddie' Caption='blya blya blya blya'/>
+      <ZVSICommand Command="Insert(Test)" Img='caddie' Caption='blya blya blya blya'/>
+      <ZVSICommand Command="Insert(Test)" Img='caddie' Caption='blya blya blya blya'/>
+      <ZVSICommand Command="Insert(Test)" Img='caddie' Caption='blya blya blya blya'/>
+      <ZVSICommand Command="Insert(Test)" Img='caddie' Caption='blya blya blya blya'/>
+      <ZVSICommand Command="Insert(Test)" Img='caddie' Caption='blya blya blya blya'/>
+      <ZVSICommand Command="Insert(Test)" Img='caddie' Caption='blya blya blya blya'/>
+      <ZVSICommand Command="Insert(Test)" Img='caddie' Caption='blya blya blya blya'/>
+      <ZVSICommand Command="Insert(Test)" Img='caddie' Caption='blya blya blya blya'/>
+      <ZVSICommand Command="Insert(Test)" Img='caddie' Caption='blya blya blya blya'/>
+      <ZVSICommand Command="Insert(Test)" Img='caddie' Caption='blya blya blya blya'/>
+      <ZVSICommand Command="Insert(Test)" Img='caddie' Caption='blya blya blya blya'/>
+      <Action Name="ACN_SAVELAYOUT"/>
+    </General>
+  </PalettesContent>
+</CONFIG>

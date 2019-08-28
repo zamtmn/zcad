@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ButtonPanel,
-  VirtualTrees, uzceltechtreeprop, uzbtypes, math;
+  laz.VirtualTrees, uzceltechtreeprop, uzbtypes, math;
 
 type
 

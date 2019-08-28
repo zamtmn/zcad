@@ -80,10 +80,15 @@ type
 
   TIterateToolbarsContentProc=procedure (_tb:TToolBar;_control:tcontrol);
 
+  TPaletteControlBaseType=TWinControl;
+  TPaletteCreateFunc=function (aName,aCaption,aType: string;TBNode:TDomNode):TPaletteControlBaseType of object;
+  TPaletteItemCreateFunc=procedure (aNode: TDomNode; palette:TPaletteControlBaseType) of object;
   TTBCreateFunc=function (aName,aType: string):TToolBar of object;
   TTBItemCreateFunc=procedure (aNode: TDomNode; TB:TToolBar) of object;
   TTBRegisterInAPPFunc=procedure (aTBNode: TDomNode;aName,aType: string; Data:Pointer) of object;
 
+  TPaletteCreateFuncRegister=specialize TDictionary <string,TPaletteCreateFunc>;
+  TPaletteItemCreateFuncRegister=specialize TDictionary <string,TPaletteItemCreateFunc>;
   TTBCreateFuncRegister=specialize TDictionary <string,TTBCreateFunc>;
   TTBItemCreateFuncRegister=specialize TDictionary <string,TTBItemCreateFunc>;
   TActionCreateFuncRegister=specialize TDictionary <string,TActionCreateFunc>;
@@ -105,6 +110,8 @@ type
     TBItemCreateFuncRegister:TTBItemCreateFuncRegister;
     ActionCreateFuncRegister:TActionCreateFuncRegister;
     MenuCreateFuncRegister:TMenuCreateFuncRegister;
+    PaletteCreateFuncRegister:TPaletteCreateFuncRegister;
+    PaletteItemCreateFuncRegister:TPaletteItemCreateFuncRegister;
 
     public
     constructor Create(mainform:TForm;actlist:TActionList;defbuttonheight:integer);
@@ -120,18 +127,24 @@ type
     procedure LoadActions(filename:string);
     procedure LoadMenus(filename:string);
     function FindBarsContent(toolbarname:string):TDomNode;
+    function FindPalettesContent(PaletteName:string):TDomNode;
     procedure EnumerateToolBars(rf:TTBRegisterInAPPFunc;Data:Pointer);
     procedure CreateToolbarContent(tb:TToolBar;TBNode:TDomNode);
+    procedure CreatePaletteContent(Palette:TPaletteControlBaseType;TBNode:TDomNode);
     procedure RegisterTBCreateFunc(TBType:string;TBCreateFunc:TTBCreateFunc);
+    procedure RegisterPaletteCreateFunc(PaletteType:string;PaletteCreateFunc:TPaletteCreateFunc);
+    procedure RegisterPaletteItemCreateFunc(aNodeName:string;PaletteItemCreateFunc:TPaletteItemCreateFunc);
     procedure RegisterTBItemCreateFunc(aNodeName:string;TBItemCreateFunc:TTBItemCreateFunc);
     procedure RegisterActionCreateFunc(aNodeName:string;ActionCreateFunc:TActionCreateFunc);
     procedure RegisterMenuCreateFunc(aNodeName:string;MenuCreateFunc:TMenuCreateFunc);
     procedure TryRunMenuCreateFunc(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     function CreateToolbar(aName:string):TToolBar;
-    function CreateToolPalette(aName: string;DoDisableAlign:boolean=false):TControl;
+    function CreateToolPalette(aControlName: string;DoDisableAlign:boolean=false):TPaletteControlBaseType;
     function AddContentToToolbar(tb:TToolBar;aName:string):TToolBar;
     function DoTBCreateFunc(aName,aType:string):TToolBar;
+    function DoToolPaletteCreateFunc(aControlName,aInternalName:string;TBNode:TDomNode):TPaletteControlBaseType;
     procedure DoTBItemCreateFunc(aNodeName:string; aNode: TDomNode; TB:TToolBar);
+    procedure DoToolPaletteItemCreateFunc(aNodeName:string; aNode: TDomNode; PC:TPaletteControlBaseType);
 
     procedure SetupDefaultToolBar(aName,atype: string; tb:TToolBar);
     function CreateDefaultToolBar(aName,atype: string):TToolBar;
@@ -427,6 +440,8 @@ begin
   TBConfig:=nil;
   PalettesConfig:=nil;
   TBCreateFuncRegister:=nil;
+  PaletteCreateFuncRegister:=nil;
+  PaletteItemCreateFuncRegister:=nil;
   TBItemCreateFuncRegister:=nil;
   ActionCreateFuncRegister:=nil;
   MenuCreateFuncRegister:=nil;
@@ -439,6 +454,10 @@ begin
       PalettesConfig.Free;
     if assigned(TBCreateFuncRegister) then
       TBCreateFuncRegister.Free;
+    if assigned(PaletteCreateFuncRegister) then
+      PaletteCreateFuncRegister.Free;
+    if assigned(PaletteItemCreateFuncRegister) then
+      PaletteItemCreateFuncRegister.Free;
     if assigned(TBItemCreateFuncRegister) then
       TBItemCreateFuncRegister.Free;
     if assigned(ActionCreateFuncRegister) then
@@ -478,6 +497,20 @@ begin
   if not assigned(TBCreateFuncRegister) then
     TBCreateFuncRegister:=TTBCreateFuncRegister.create;
   TBCreateFuncRegister.add(uppercase(TBType),TBCreateFunc);
+end;
+
+procedure TToolBarsManager.RegisterPaletteCreateFunc(PaletteType:string;PaletteCreateFunc:TPaletteCreateFunc);
+begin
+  if not assigned(PaletteCreateFuncRegister) then
+    PaletteCreateFuncRegister:=TPaletteCreateFuncRegister.create;
+  PaletteCreateFuncRegister.add(uppercase(PaletteType),PaletteCreateFunc);
+end;
+
+procedure TToolBarsManager.RegisterPaletteItemCreateFunc(aNodeName:string;PaletteItemCreateFunc:TPaletteItemCreateFunc);
+begin
+  if not assigned(PaletteItemCreateFuncRegister) then
+    PaletteItemCreateFuncRegister:=TPaletteItemCreateFuncRegister.create;
+  PaletteItemCreateFuncRegister.add(uppercase(aNodeName),PaletteItemCreateFunc);
 end;
 
 function TToolBarsManager.DoTBCreateFunc(aName,aType:string):TToolBar;
@@ -532,6 +565,26 @@ begin
   if assigned(TBItemCreateFuncRegister) then
     if TBItemCreateFuncRegister.TryGetValue(uppercase(aNodeName),tbicf)then
       tbicf(aNode,TB);
+end;
+
+procedure TToolBarsManager.DoToolPaletteItemCreateFunc(aNodeName:string; aNode: TDomNode; PC:TPaletteControlBaseType);
+var
+  picf:TPaletteItemCreateFunc;
+begin
+  if assigned(PaletteItemCreateFuncRegister) then
+    if PaletteItemCreateFuncRegister.TryGetValue(uppercase(aNodeName),picf)then
+      picf(aNode,PC);
+end;
+
+function TToolBarsManager.DoToolPaletteCreateFunc(aControlName,aInternalName:string;TBNode:TDomNode):TPaletteControlBaseType;
+var
+  tpcf:TPaletteCreateFunc;
+  aType:string;
+begin
+  aType:=getAttrValue(TBNode,'Type','');
+  if assigned(PaletteCreateFuncRegister) then
+    if PaletteCreateFuncRegister.TryGetValue(uppercase(aType),tpcf)then
+      result:=tpcf(aControlName,aInternalName,aType,TBNode);
 end;
 
 function IsFloatToolbar(tb:TToolBar;out tf:TCustomDockForm):boolean;
@@ -686,7 +739,13 @@ begin
   result:=nil;
   result:=TBConfig.FindNode('ToolBarsContent/'+toolbarname,false);
 end;
-
+function TToolBarsManager.FindPalettesContent(PaletteName:string):TDomNode;
+begin
+  if not assigned(PalettesConfig) then
+    exit(nil);
+  result:=nil;
+  result:=PalettesConfig.FindNode('PalettesContent/'+PaletteName,false);
+end;
 procedure TToolBarsManager.LoadToolBarsContent(filename:string);
 var
   tempTBConfig:TXMLConfig;
@@ -814,7 +873,6 @@ end;
 procedure TToolBarsManager.CreateToolbarContent(tb:TToolBar;TBNode:TDomNode);
 var
   TBSubNode:TDomNode;
-  TBType:string;
 begin
   TBSubNode:=TBNode.FirstChild;
   while assigned(TBSubNode)do
@@ -823,16 +881,36 @@ begin
      TBSubNode:=TBSubNode.NextSibling;
   end;
 end;
-
-function TToolBarsManager.CreateToolPalette(aName: string;DoDisableAlign:boolean=false):TControl;
+procedure TToolBarsManager.CreatePaletteContent(Palette:TPaletteControlBaseType;TBNode:TDomNode);
+var
+  TBSubNode:TDomNode;
+  PaletteControl:TPaletteControlBaseType;
 begin
-  result:=TCustomForm(Tform.NewInstance);
-//if DoDisableAlign then
-  if result is TWinControl then
-    TWinControl(result).DisableAlign;
-  TCustomForm(result).CreateNew(Application);
-  TCustomForm(result).Name:=aName;
-  TCustomForm(result).Caption:='test';
+  PaletteControl:=TListView(Palette.Controls[0]);
+  TBSubNode:=TBNode.FirstChild;
+  while assigned(TBSubNode)do
+  begin
+    DoToolPaletteItemCreateFunc(TBSubNode.NodeName,TBSubNode,PaletteControl);
+    TBSubNode:=TBSubNode.NextSibling;
+  end;
+end;
+
+function TToolBarsManager.CreateToolPalette(aControlName: string;DoDisableAlign:boolean=false):TPaletteControlBaseType;
+var
+  aInternalName:string;
+  TBNode,TBSubNode:TDomNode;
+begin
+  aInternalName:=copy(aControlName,length(ToolPaletteNamePrefix)+1,length(aControlName)-length(ToolPaletteNamePrefix));
+  TBNode:=FindPalettesContent(aInternalName);
+  if TBNode<>nil then begin
+    result:=DoToolPaletteCreateFunc(aControlName,aInternalName,TBNode);
+    if assigned(TBNode) then
+      CreatePaletteContent(result,TBNode);
+  end else begin
+    aInternalName:=format('Palette "%s" content not found',[aInternalName]);
+    Application.messagebox(pchar(aInternalName),'');
+    result:=nil;
+  end;
 end;
 function TToolBarsManager.CreateToolbar(aName:string):TToolBar;
 var

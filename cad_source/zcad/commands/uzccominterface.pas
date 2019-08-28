@@ -333,6 +333,11 @@ begin
                end;
         //ZCMsgCallBackInterface.TextMessage('GDBCommandsBase.LOAD: Не могу открыть файл: '+s+'('+Operands+')');
 end;
+function ExecuteFile_com(operands:TCommandOperands):TCommandResult;
+begin
+  commandmanager.executefile(ExpandPath(operands),drawings.GetCurrentDWG,nil);
+  result:=cmd_ok;
+end;
 function units_cmd(operands:TCommandOperands):TCommandResult;
 var
     _UnitsFormat:TzeUnitsFormat;
@@ -819,6 +824,7 @@ begin
   CreateCommandFastObjectPlugin(@LoadMenus_com,'LoadMenus',0,0);
   CreateCommandFastObjectPlugin(@LoadToolbars_com,'LoadToolbars',0,0);
   CreateCommandFastObjectPlugin(@LoadPalettes_com,'LoadPalettes',0,0);
+  CreateCommandFastObjectPlugin(@ExecuteFile_com,'ExecuteFile',0,0);
   AboutForm:=nil;
   HelpForm:=nil;
 end;

@@ -69,7 +69,7 @@ begin //BlockPreViewExport(128|DEVICE_PS_DAT_HAND|*images\palettes)
   TryStrToInt(imgsize,sx);
   GetPartOfPath(BlockName,operands,'|');
   cdwg:=drawings.GetCurrentDWG;
-  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+  dc:=cdwg^.CreateDrawingRC;
   drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,BlockName);
   pb := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID));
   pb^.init(drawings.GetCurrentROOT,drawings.GetCurrentDWG^.GetCurrentLayer,0);
@@ -87,12 +87,14 @@ begin //BlockPreViewExport(128|DEVICE_PS_DAT_HAND|*images\palettes)
     pb:=pointer(tb);
   end;
 
-  SetObjCreateManipulator(domethod,undomethod);
+  cdwg^.GetCurrentROOT^.GoodAddObjectToObjArray(pb^);
+
+  {SetObjCreateManipulator(domethod,undomethod);
   with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),1)^ do
   begin
        AddObject(pb);
        comit;
-  end;
+  end;}
 
   //drawings.GetCurrentROOT^.AddObjectToObjArray{ObjArray.add}(addr(pb));
   PGDBObjEntity(pb)^.FromDXFPostProcessAfterAdd;
@@ -116,9 +118,10 @@ begin //BlockPreViewExport(128|DEVICE_PS_DAT_HAND|*images\palettes)
   BMP.SetSize(sx,sx);
   BMP.Canvas.Brush.Color:=graphics.clWhite;
   BMP.Canvas.Brush.Style:=bsSolid;
-  BMP.Canvas.FillRect(0,0,sx-1,sx-1);
+  BMP.Canvas.FillRect(0,0,sx,sx);
   PrinterDrawer:=TZGLCanvasDrawer.create;
   rasterize(cdwg,sx,sx,VertexMulOnSc(pb^.vp.BoundingBox.LBN,1.1),VertexMulOnSc(pb^.vp.BoundingBox.RTF,1.1),PrintParam,BMP.Canvas,PrinterDrawer);
+  cdwg^.GetCurrentROOT^.GoodRemoveMiFromArray(pb^);
   BMP.SaveToFile(ExpandPath(operands)+BlockName+'.png');
   BMP.Free;
   PrinterDrawer.Free;

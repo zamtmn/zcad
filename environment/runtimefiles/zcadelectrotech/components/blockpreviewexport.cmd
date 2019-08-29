@@ -1,0 +1,7 @@
+;run thisfile in zcad by command: ExecuteFile(*components\blockpreviewexport.cmd)
+BlockPreViewExport(64|DEVICE_PS_DAT_SMOKE|*images\palettes)
+BlockPreViewExport(64|DEVICE_PS_DAT_SMOKE_FALSH|*images\palettes)
+BlockPreViewExport(64|DEVICE_PS_DAT_SMOKE_FALSH2|*images\palettes)
+BlockPreViewExport(64|DEVICE_PS_DAT_SMOKE_AVTON|*images\palettes)
+BlockPreViewExport(64|DEVICE_PS_DAT_TERMO|*images\palettes)
+BlockPreViewExport(64|DEVICE_PS_DAT_HAND|*images\palettes)

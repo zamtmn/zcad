@@ -32,6 +32,8 @@ const
   vGInfoEdge='infoEdge';
   vGLengthFromEnd='lengthfromend';
   vTempLayerName='systemTempVisualLayer';
+  vpTVertexTree='TVertexTree';
+  vpTEdgeTree='TEdgeTree';
 
 implementation
 

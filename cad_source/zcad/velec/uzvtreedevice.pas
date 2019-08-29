@@ -804,6 +804,7 @@ begin
 
                    listInteger.PushBack(tvertex(VPath[l]).AsInt32[vGGIndex]);
 
+                   if listInteger.Size > 1 then
                    if (tvertex(VPath[l]).ChildCount > 1) or (tvertex(VPath[l]).ChildCount = 0) or tvertex(VPath[l]).AsBool[vGIsDevice] then
                      begin
                         visualDrawPolyLine(listInteger,colorNum);
@@ -973,14 +974,26 @@ begin
                 needParent:=false;
                 for l:= 0 to VPath.Count - 1 do
                  begin
-
-                   if needParent then
+                  //ZCMsgCallBackInterface.TextMessage('вершина - '+inttostr(tvertex(VPath[l]).AsInt32[vGGIndex]),TMWOHistoryOut);
+                   //Создаем список точек кабеля который передадим в отрисовку кабельной линии
+                   if needParent then begin
                      listInteger.PushBack(tvertex(VPath[l]).Parent.AsInt32[vGGIndex]);
+                     needParent:=false;
+                     end;
 
-                   listInteger.PushBack(tvertex(VPath[l]).AsInt32[vGGIndex]);
+                     listInteger.PushBack(tvertex(VPath[l]).AsInt32[vGGIndex]);
 
-                   if (tvertex(VPath[l]).ChildCount > 1) or (tvertex(VPath[l]).ChildCount = 0) or tvertex(VPath[l]).AsBool[vGIsDevice] then
+                     if listVertexEdge.listVertex[tvertex(VPath[l]).AsInt32[vGGIndex]].break and listVertexEdge.listVertex[tvertex(VPath[l]).Parent.AsInt32[vGGIndex]].break then begin
+                       needParent:=true;
+                       listInteger:=TVectorofInteger.Create;
+                     end else
+
+                   //ZCMsgCallBackInterface.TextMessage('длина списка - '+inttostr(listInteger.Size),TMWOHistoryOut);
+                   if listInteger.Size > 1 then
+                   if (tvertex(VPath[l]).ChildCount > 1) or (tvertex(VPath[l]).ChildCount = 0) or tvertex(VPath[l]).AsBool[vGIsDevice] or (listVertexEdge.listVertex[tvertex(VPath[l]).AsInt32[vGGIndex]].break and listVertexEdge.listVertex[tvertex(VPath[l]).Parent.AsInt32[vGGIndex]].break) then
+                   //if (tvertex(VPath[l]).ChildCount > 1) or (tvertex(VPath[l]).ChildCount = 0) or (listVertexEdge.listVertex[tvertex(VPath[l]).AsInt32[vGGIndex]].break and listVertexEdge.listVertex[tvertex(VPath[l]).Parent.AsInt32[vGGIndex]].break) then
                      begin
+                       //ZCMsgCallBackInterface.TextMessage('Строем кабель',TMWOHistoryOut);
                         drawCableLine(listInteger,i,j,counterSegment);
                         listInteger:=TVectorofInteger.Create;
                         inc(counterSegment);

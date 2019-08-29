@@ -124,9 +124,12 @@ type
 
  procedure visualGraph(GGraph:TGraphBuilder;G: TGraph; var startPt:GDBVertex;height:double);
  procedure visualPtNameSL(GGraph:TGraphBuilder; height:double);
+ procedure visualGraphTest(G: TGraph; height:double);
  //procedure visualAllTreesLMD(listMasterDevice:TVectorOfMasterDevice;startPt:GDBVertex;height:double);
 
 implementation
+uses
+uzvopsscheme;
 const
   size=5;
   indent=30;
@@ -355,7 +358,103 @@ begin
       //startPt.y:=0;
 
 end;
+   //Визуализация графа
+procedure visualGraphTest(G: TGraph; height:double);
 
+
+var
+    //ptext:PGDBObjText;
+    //indent,size:double;
+    x,y,i,tParent:integer;
+    listVertex:TListVertex;
+    infoVertex:TInfoVertex;
+    pt1,pt2,pt3,ptext:GDBVertex;
+    VertexPath: TClassList;
+
+    startPt:GDBVertex;
+
+begin
+      x:=0;
+      y:=0;
+
+
+      startPt:=uzegeometry.CreateVertex(0,0,0);
+
+      VertexPath:=TClassList.Create;
+      listVertex:=TListVertex.Create;
+
+
+      infoVertex.num:=G.Root.Index;
+      infoVertex.poz:=uzegeometry.CreateVertex2D(x,0);
+      infoVertex.kol:=0;
+      infoVertex.childs:=G.Root.ChildCount;
+      listVertex.PushBack(infoVertex);
+      pt1:=uzegeometry.CreateVertex(startPt.x + x*indent,startPt.y + y*indent,0) ;
+      drawVertex(pt1,3,height);
+
+      //drawMText(pt1,G.Root.AsString[vGInfoVertex],4,0,height);
+      drawMText(pt1,inttostr(0),4,0,height);
+
+
+      //drawMText(GGraph.listVertex[G.Root.AsInt32[vGGIndex]].centerPoint,inttostr(G.Root.AsInt32[vGGIndex]),4,0,height);
+      //drawMText(GGraph.pt1,G.Root.AsString['infoVertex'],4,0,height);
+
+      G.TreeTraversal(G.Root, VertexPath); //получаем путь обхода графа
+      for i:=1 to VertexPath.Count - 1 do begin
+          tParent:=howParent(listVertex,TVertex(VertexPath[i]).Parent.Index);
+          if tParent>=0 then
+          begin
+            inc(listVertex.Mutable[tparent]^.kol);
+            if listVertex[tparent].kol = 1 then
+               infoVertex.poz:=uzegeometry.CreateVertex2D(listVertex[tparent].poz.x,listVertex[tparent].poz.y + 1)
+            else  begin
+              inc(x);
+              infoVertex.poz:=uzegeometry.CreateVertex2D(x,listVertex[tparent].poz.y + 1);
+            end;
+
+            infoVertex.num:=TVertex(VertexPath[i]).Index;
+            infoVertex.kol:=0;
+            infoVertex.childs:=TVertex(VertexPath[i]).ChildCount;
+            listVertex.PushBack(infoVertex);
+
+
+          pt1:=uzegeometry.CreateVertex(startPt.x + listVertex.Back.poz.x*indent,startPt.y - listVertex.Back.poz.y*indent,0) ;
+          drawVertex(pt1,3,height);
+
+          //drawMText(pt1,G.Vertices[listVertex.Back.num].AsString[vGInfoVertex],4,0,height);
+          drawMText(pt1,inttostr(i),4,0,height); //номера вершин
+
+
+          pt3:=uzegeometry.CreateVertex(pt1.x,(pt1.y + size)*height,0) ;
+          ptext:=uzegeometry.CreateVertex(pt3.x,pt3.y + indent/20,0) ;
+          //drawMText(ptext,G.GetEdge(G.Vertices[listVertex.Back.num],G.Vertices[listVertex.Back.num].Parent).AsString[vGInfoEdge],4,90,height);
+
+          drawMText(ptext,floattostr(TEdgeTree(G.GetEdge(G.Vertices[listVertex.Back.num],G.Vertices[listVertex.Back.num].Parent).AsPointer[vpTEdgeTree]^).length),4,90,height);
+
+          //drawMText(ptext,inttostr(i),4,90,height); //длина ребер
+
+          if listVertex[tparent].kol = 1 then begin
+          pt2.x:=startPt.x + listVertex[tparent].poz.x*indent;
+          pt2.y:=startPt.y - listVertex[tparent].poz.y*indent-size;
+          pt2.z:=0;
+          end
+          else begin
+          pt2.x:=startPt.x + listVertex[tparent].poz.x*indent + size;
+          pt2.y:=startPt.y - listVertex[tparent].poz.y*indent-size+(listVertex[tparent].kol-1)*((2*size)/listVertex[tparent].childs);
+          pt2.z:=0;
+          end;
+          pt1.x:=startPt.x + listVertex.Back.poz.x*indent;
+          pt1.y:=startPt.y - listVertex.Back.poz.y*indent+size;
+          pt1.z:=0;
+
+          drawConnectLine(pt1,pt2,4);
+
+          end;
+       end;
+      startPt.x:=startPt.x + (infoVertex.poz.x+1)*indent;
+      //startPt.y:=0;
+
+end;
   function TestTREEUses_com2(operands:TCommandOperands):TCommandResult;
   var
     G: TGraph;

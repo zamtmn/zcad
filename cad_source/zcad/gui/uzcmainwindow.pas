@@ -57,6 +57,10 @@ type
     public
       Command:ansistring;
   end;
+  TZPaletteTreeNode=class(TTreeNode)
+    public
+      Command:ansistring;
+  end;
   TZPaletteListView=class(TListView)
     procedure ProcessClick(ListItem:TListItem;DblClck:Boolean);
 
@@ -65,6 +69,8 @@ type
     DoubleClick:Boolean;
       procedure MouseDown(Button: TMouseButton; Shift:TShiftState; X,Y:Integer); override;
       procedure MouseUp(Button: TMouseButton; Shift:TShiftState; X,Y:Integer); override;
+  end;
+  TZPaletteTreeView=class(TTreeView)
   end;
   TMyToolbar=class(TToolBar)
     public
@@ -219,7 +225,13 @@ type
     procedure ZMainMenuDebugFiles(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     procedure ZPalettevsIconDoubleClick(Sender: TObject);
     function ZPalettevsIconCreator(aControlName,aInternalCaption,aType: string;TBNode:TDomNode):TPaletteControlBaseType;
-    procedure ZPalettevsIconItemCreator(aNode: TDomNode; palette:TPaletteControlBaseType);
+    procedure ZPalettevsIconItemCreator(aNode: TDomNode;rootnode:TPersistent;palette:TPaletteControlBaseType);
+
+    procedure ZPaletteTreeCreatorClass(Sender: TCustomTreeView;var NodeClass: TTreeNodeClass);
+    function ZPaletteTreeCreator(aControlName,aInternalCaption,aType: string;TBNode:TDomNode):TPaletteControlBaseType;
+    procedure ZPaletteTreeItemCreator(aNode: TDomNode;rootnode:TPersistent;palette:TPaletteControlBaseType);
+    procedure ZPaletteTreeNodeCreator(aNode: TDomNode;rootnode:TPersistent;palette:TPaletteControlBaseType);
+
     procedure DockMasterCreateControl(Sender: TObject; aName: string; var
     AControl: TControl; DoDisableAutoSizing: boolean);
 
@@ -1825,6 +1837,10 @@ begin
   ToolBarsManager.RegisterPaletteCreateFunc('vsIcon',ZPalettevsIconCreator);
   ToolBarsManager.RegisterPaletteItemCreateFunc('ZVSICommand',ZPalettevsIconItemCreator);
 
+  ToolBarsManager.RegisterPaletteCreateFunc('Tree',ZPaletteTreeCreator);
+  ToolBarsManager.RegisterPaletteItemCreateFunc('ZTreeCommand',ZPaletteTreeItemCreator);
+  ToolBarsManager.RegisterPaletteItemCreateFunc('ZTreeNode',ZPaletteTreeNodeCreator);
+
   commandmanager.executefile('*components/stage0.cmd',drawings.GetCurrentDWG,nil);
 
   CreateAnchorDockingInterface;
@@ -2036,17 +2052,87 @@ begin
     OnDblClick:=ZPalettevsIconDoubleClick;
   end;
 end;
+procedure TZCADMainWindow.ZPaletteTreeCreatorClass(Sender: TCustomTreeView;var NodeClass: TTreeNodeClass);
+begin
+  NodeClass:=TZPaletteTreeNode;
+end;
+
+function TZCADMainWindow.ZPaletteTreeCreator(aControlName,aInternalCaption,aType: string;TBNode:TDomNode):TPaletteControlBaseType;
+begin
+  result:=TCustomForm(Tform.NewInstance);
+//if DoDisableAlign then
+  if result is TWinControl then
+    TWinControl(result).DisableAlign;
+  TCustomForm(result).CreateNew(Application);
+  TCustomForm(result).Name:=aControlName;
+  TCustomForm(result).Caption:=getAttrValue(TBNode,'Caption',aInternalCaption);
+  with TZPaletteTreeView.Create(result) do
+  begin
+    OnCreateNodeClass:=ZPaletteTreeCreatorClass;
+    //OnCustomCreateItem:=
+    ImagesWidth:=getAttrValue(TBNode,'ImagesWidth',64);
+    //SmallImagesWidth:=LargeImagesWidth;
+    Images:=ImagesManager.IconList;
+    StateImages:=ImagesManager.IconList;
+    //select
+    //SmallImages:=ImagesManager.IconList;
+    align:=alClient;
+    //ViewStyle:=vsIcon;
+    ReadOnly:=true;
+    //IconOptions.AutoArrange:=True;
+    DragMode:=dmAutomatic;
+    Parent:=result;
+    OnDblClick:=ZPalettevsIconDoubleClick;
+  end;
+end;
+procedure TZCADMainWindow.ZPaletteTreeItemCreator(aNode: TDomNode;rootnode:TPersistent; palette:TPaletteControlBaseType);
+var
+  TN:TZPaletteTreeNode;
+begin
+  TN:=TZPaletteTreeNode(TZPaletteTreeView(palette).Items.AddChild(TTreeNode(rootnode),getAttrValue(aNode,'Caption','')));
+  TN.Text:=InterfaceTranslate(palette.Parent.Name+'~caption',TN.Text);
+  TN.ImageIndex:=ImagesManager.GetImageIndex(getAttrValue(aNode,'Img',''));
+  TN.SelectedIndex:=TN.ImageIndex;
+  TN.Command:=getAttrValue(aNode,'Command','');
+end;
+procedure TZCADMainWindow.ZPaletteTreeNodeCreator(aNode: TDomNode;rootnode:TPersistent; palette:TPaletteControlBaseType);
+var
+  TN:TZPaletteTreeNode;
+  TBSubNode:TDomNode;
+  imgname:AnsiString;
+begin
+  TN:=TZPaletteTreeNode(TZPaletteTreeView(palette).Items.AddChild(TTreeNode(rootnode),getAttrValue(aNode,'Caption','')));
+  TN.Text:=InterfaceTranslate(palette.Parent.Name+'~caption',TN.Text);
+  imgname:=getAttrValue(aNode,'Img','');
+  if imgname<>'' then
+    TN.ImageIndex:=ImagesManager.GetImageIndex(imgname);
+  TBSubNode:=aNode.FirstChild;
+  while assigned(TBSubNode)do
+  begin
+    ToolBarsManager.DoToolPaletteItemCreateFunc(TBSubNode.NodeName,TBSubNode,TN,palette);
+    TBSubNode:=TBSubNode.NextSibling;
+  end;
+end;
+
 procedure TZCADMainWindow.ZPalettevsIconDoubleClick(Sender: TObject);
 var
     cmd:AnsiString;
+    TN:TZPaletteTreeNode;
 begin
-  if TZPaletteListView(Sender).Selected=nil then  exit;
-  cmd:=TZPaletteListItem(TZPaletteListView(Sender).Selected).Command;
+  if Sender is TZPaletteListView then begin
+    if TZPaletteListView(Sender).Selected=nil then  exit;
+    cmd:=TZPaletteListItem(TZPaletteListView(Sender).Selected).Command;
+  end else
+  if Sender is TZPaletteTreeView then begin
+    if TZPaletteTreeView(Sender).Selected=nil then  exit;
+    TN:=TZPaletteTreeNode(TZPaletteTreeView(Sender).Selected);
+    cmd:=TZPaletteTreeNode(TZPaletteTreeView(Sender).Selected).Command;
+  end;
   if cmd<>'' then
     commandmanager.executecommandsilent(@cmd[1],drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
 end;
 
-procedure TZCADMainWindow.ZPalettevsIconItemCreator(aNode: TDomNode; palette:TPaletteControlBaseType);
+procedure TZCADMainWindow.ZPalettevsIconItemCreator(aNode: TDomNode;rootnode:TPersistent; palette:TPaletteControlBaseType);
 var
   LI:TZPaletteListItem;
 begin

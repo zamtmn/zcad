@@ -1,13 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <PalettesContent>
-    <General Type="vsIcon" Caption='Извещатели ПС' ImagesWidth='64'>
+    <General Type="Tree" Caption='Извещатели ПС' ImagesWidth='16'>
+      <ZTreeNode Caption='Сдаботочка'>
+        <ZTreeNode Caption='Сигнализация'>
+          <ZTreeCommand Command="Insert(DEVICE_PS_ARK_DEVICE)" Img='DEVICE_PS_ARK_DEVICE' Caption='Прибор'/>
+          <ZTreeNode Caption='ПС'>
+            <ZTreeNode Caption='Извещатели'>
+              <ZTreeCommand Command="Insert(DEVICE_PS_DAT_SMOKE)" Img='DEVICE_PS_DAT_SMOKE' Caption='Дымовой'/>
+              <ZTreeCommand Command="Insert(DEVICE_PS_DAT_SMOKE_FALSH)" Img='DEVICE_PS_DAT_SMOKE_FALSH' Caption='Дымовой запотолочный1'/>
+              <ZTreeCommand Command="Insert(DEVICE_PS_DAT_SMOKE_FALSH2)" Img='DEVICE_PS_DAT_SMOKE_FALSH2' Caption='Дымовой запотолочный2'/>
+              <ZTreeCommand Command="Insert(DEVICE_PS_DAT_SMOKE_AVTON)" Img='DEVICE_PS_DAT_SMOKE_AVTON' Caption='Дымовой автономный'/>
+              <ZTreeCommand Command="Insert(DEVICE_PS_DAT_TERMO)" Img='DEVICE_PS_DAT_TERMO' Caption='Тепловой'/>
+              <ZTreeCommand Command="Insert(DEVICE_PS_DAT_HAND)" Img='DEVICE_PS_DAT_HAND' Caption='Ручной'/>
+            </ZTreeNode>
+          </ZTreeNode>
+        </ZTreeNode>
+     </ZTreeNode>
+    </General>
+    <General2 Type="vsIcon" Caption='test' ImagesWidth='48'>
       <ZVSICommand Command="Insert(DEVICE_PS_DAT_SMOKE)" Img='DEVICE_PS_DAT_SMOKE' Caption='Дымовой'/>
       <ZVSICommand Command="Insert(DEVICE_PS_DAT_SMOKE_FALSH)" Img='DEVICE_PS_DAT_SMOKE_FALSH' Caption='Дымовой запотолочный1'/>
       <ZVSICommand Command="Insert(DEVICE_PS_DAT_SMOKE_FALSH2)" Img='DEVICE_PS_DAT_SMOKE_FALSH2' Caption='Дымовой запотолочный2'/>
       <ZVSICommand Command="Insert(DEVICE_PS_DAT_SMOKE_AVTON)" Img='DEVICE_PS_DAT_SMOKE_AVTON' Caption='Дымовой автономный'/>
       <ZVSICommand Command="Insert(DEVICE_PS_DAT_TERMO)" Img='DEVICE_PS_DAT_TERMO' Caption='Тепловой'/>
       <ZVSICommand Command="Insert(DEVICE_PS_DAT_HAND)" Img='DEVICE_PS_DAT_HAND' Caption='Ручной'/>
-    </General>
+    </General2>
   </PalettesContent>
 </CONFIG>

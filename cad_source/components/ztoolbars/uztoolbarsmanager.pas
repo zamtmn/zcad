@@ -82,7 +82,7 @@ type
 
   TPaletteControlBaseType=TWinControl;
   TPaletteCreateFunc=function (aName,aCaption,aType: string;TBNode:TDomNode):TPaletteControlBaseType of object;
-  TPaletteItemCreateFunc=procedure (aNode: TDomNode; palette:TPaletteControlBaseType) of object;
+  TPaletteItemCreateFunc=procedure (aNode: TDomNode;rootnode:TPersistent;palette:TPaletteControlBaseType) of object;
   TTBCreateFunc=function (aName,aType: string):TToolBar of object;
   TTBItemCreateFunc=procedure (aNode: TDomNode; TB:TToolBar) of object;
   TTBRegisterInAPPFunc=procedure (aTBNode: TDomNode;aName,aType: string; Data:Pointer) of object;
@@ -130,7 +130,7 @@ type
     function FindPalettesContent(PaletteName:string):TDomNode;
     procedure EnumerateToolBars(rf:TTBRegisterInAPPFunc;Data:Pointer);
     procedure CreateToolbarContent(tb:TToolBar;TBNode:TDomNode);
-    procedure CreatePaletteContent(Palette:TPaletteControlBaseType;TBNode:TDomNode);
+    procedure CreatePaletteContent(Palette:TPaletteControlBaseType;TBNode:TDomNode;rootnode:TPersistent);
     procedure RegisterTBCreateFunc(TBType:string;TBCreateFunc:TTBCreateFunc);
     procedure RegisterPaletteCreateFunc(PaletteType:string;PaletteCreateFunc:TPaletteCreateFunc);
     procedure RegisterPaletteItemCreateFunc(aNodeName:string;PaletteItemCreateFunc:TPaletteItemCreateFunc);
@@ -144,7 +144,7 @@ type
     function DoTBCreateFunc(aName,aType:string):TToolBar;
     function DoToolPaletteCreateFunc(aControlName,aInternalName:string;TBNode:TDomNode):TPaletteControlBaseType;
     procedure DoTBItemCreateFunc(aNodeName:string; aNode: TDomNode; TB:TToolBar);
-    procedure DoToolPaletteItemCreateFunc(aNodeName:string; aNode: TDomNode; PC:TPaletteControlBaseType);
+    procedure DoToolPaletteItemCreateFunc(aNodeName:string; aNode: TDomNode;rootnode:TPersistent;PC:TPaletteControlBaseType);
 
     procedure SetupDefaultToolBar(aName,atype: string; tb:TToolBar);
     function CreateDefaultToolBar(aName,atype: string):TToolBar;
@@ -567,13 +567,13 @@ begin
       tbicf(aNode,TB);
 end;
 
-procedure TToolBarsManager.DoToolPaletteItemCreateFunc(aNodeName:string; aNode: TDomNode; PC:TPaletteControlBaseType);
+procedure TToolBarsManager.DoToolPaletteItemCreateFunc(aNodeName:string; aNode: TDomNode;rootnode:TPersistent;PC:TPaletteControlBaseType);
 var
   picf:TPaletteItemCreateFunc;
 begin
   if assigned(PaletteItemCreateFuncRegister) then
     if PaletteItemCreateFuncRegister.TryGetValue(uppercase(aNodeName),picf)then
-      picf(aNode,PC);
+      picf(aNode,rootnode,PC);
 end;
 
 function TToolBarsManager.DoToolPaletteCreateFunc(aControlName,aInternalName:string;TBNode:TDomNode):TPaletteControlBaseType;
@@ -881,7 +881,7 @@ begin
      TBSubNode:=TBSubNode.NextSibling;
   end;
 end;
-procedure TToolBarsManager.CreatePaletteContent(Palette:TPaletteControlBaseType;TBNode:TDomNode);
+procedure TToolBarsManager.CreatePaletteContent(Palette:TPaletteControlBaseType;TBNode:TDomNode;rootnode:TPersistent);
 var
   TBSubNode:TDomNode;
   PaletteControl:TPaletteControlBaseType;
@@ -890,7 +890,7 @@ begin
   TBSubNode:=TBNode.FirstChild;
   while assigned(TBSubNode)do
   begin
-    DoToolPaletteItemCreateFunc(TBSubNode.NodeName,TBSubNode,PaletteControl);
+    DoToolPaletteItemCreateFunc(TBSubNode.NodeName,TBSubNode,rootnode,PaletteControl);
     TBSubNode:=TBSubNode.NextSibling;
   end;
 end;
@@ -905,7 +905,7 @@ begin
   if TBNode<>nil then begin
     result:=DoToolPaletteCreateFunc(aControlName,aInternalName,TBNode);
     if assigned(TBNode) then
-      CreatePaletteContent(result,TBNode);
+      CreatePaletteContent(result,TBNode,nil);
   end else begin
     aInternalName:=format('Palette "%s" content not found',[aInternalName]);
     Application.messagebox(pchar(aInternalName),'');

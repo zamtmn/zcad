@@ -69,67 +69,70 @@ begin //BlockPreViewExport(128|DEVICE_PS_DAT_HAND|*images\palettes)
   TryStrToInt(imgsize,sx);
   GetPartOfPath(BlockName,operands,'|');
   cdwg:=drawings.GetCurrentDWG;
-  dc:=cdwg^.CreateDrawingRC;
-  drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,BlockName);
-  pb := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID));
-  pb^.init(drawings.GetCurrentROOT,drawings.GetCurrentDWG^.GetCurrentLayer,0);
-  pb^.Name:=BlockName;
-  zcSetEntPropFromCurrentDrawingProp(pb);
-  pb^.Local.p_insert:=NulVertex;
-  pb^.scale:=ScaleOne;
-  pb^.CalcObjMatrix;
-  pb^.setrot(0);
-  tb:=pb^.FromDXFPostProcessBeforeAdd(nil,drawings.GetCurrentDWG^);
-  if tb<>nil then begin
-    tb^.bp:=pb^.bp;
-    pb^.done;
-    gdbfreemem(pointer(pb));
-    pb:=pointer(tb);
+  if cdwg<>nil then begin
+    dc:=cdwg^.CreateDrawingRC;
+    drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,BlockName);
+    pb := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID));
+    pb^.init(drawings.GetCurrentROOT,drawings.GetCurrentDWG^.GetCurrentLayer,0);
+    pb^.Name:=BlockName;
+    zcSetEntPropFromCurrentDrawingProp(pb);
+    pb^.Local.p_insert:=NulVertex;
+    pb^.scale:=ScaleOne;
+    pb^.CalcObjMatrix;
+    pb^.setrot(0);
+    tb:=pb^.FromDXFPostProcessBeforeAdd(nil,drawings.GetCurrentDWG^);
+    if tb<>nil then begin
+      tb^.bp:=pb^.bp;
+      pb^.done;
+      gdbfreemem(pointer(pb));
+      pb:=pointer(tb);
+    end;
+
+    cdwg^.GetCurrentROOT^.GoodAddObjectToObjArray(pb^);
+
+    {SetObjCreateManipulator(domethod,undomethod);
+    with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),1)^ do
+    begin
+         AddObject(pb);
+         comit;
+    end;}
+
+    //drawings.GetCurrentROOT^.AddObjectToObjArray{ObjArray.add}(addr(pb));
+    PGDBObjEntity(pb)^.FromDXFPostProcessAfterAdd;
+    pb^.CalcObjMatrix;
+    pb^.BuildGeometry(drawings.GetCurrentDWG^);
+    pb^.BuildVarGeometry(drawings.GetCurrentDWG^);
+    pb^.FormatEntity(drawings.GetCurrentDWG^,dc);
+    drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeBoundingBox(pb^);
+    //pb^.Visible:=0;
+    drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count := 0;
+    pb^.RenderFeedback(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,@drawings.GetCurrentDWG^.myGluProject2,dc);
+
+
+    PrintParam.FitToPage:=true;
+    PrintParam.Center:=false;
+    PrintParam.Scale:=1;
+    PrintParam.Palette:=PC_Color;
+
+
+    BMP:=TPortableNetworkGraphic.Create;
+    BMP.SetSize(sx,sx);
+    BMP.Canvas.Brush.Color:=graphics.clWhite;
+    BMP.Canvas.Brush.Style:=bsSolid;
+    BMP.Canvas.FillRect(0,0,sx,sx);
+    PrinterDrawer:=TZGLCanvasDrawer.create;
+    rasterize(cdwg,sx,sx,VertexMulOnSc(pb^.vp.BoundingBox.LBN,1.1),VertexMulOnSc(pb^.vp.BoundingBox.RTF,1.1),PrintParam,BMP.Canvas,PrinterDrawer);
+    cdwg^.GetCurrentROOT^.GoodRemoveMiFromArray(pb^);
+    BMP.SaveToFile(ExpandPath(operands)+BlockName+'.png');
+    BMP.Free;
+    PrinterDrawer.Free;
+
+    zcRedrawCurrentDrawing;
+    result:=cmd_ok;
+  end else begin
+    ZCMsgCallBackInterface.TextMessage('No current drawing???',TMWOSilentShowError);
+    result:=cmd_error;
   end;
-
-  cdwg^.GetCurrentROOT^.GoodAddObjectToObjArray(pb^);
-
-  {SetObjCreateManipulator(domethod,undomethod);
-  with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),1)^ do
-  begin
-       AddObject(pb);
-       comit;
-  end;}
-
-  //drawings.GetCurrentROOT^.AddObjectToObjArray{ObjArray.add}(addr(pb));
-  PGDBObjEntity(pb)^.FromDXFPostProcessAfterAdd;
-  pb^.CalcObjMatrix;
-  pb^.BuildGeometry(drawings.GetCurrentDWG^);
-  pb^.BuildVarGeometry(drawings.GetCurrentDWG^);
-  pb^.FormatEntity(drawings.GetCurrentDWG^,dc);
-  drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeBoundingBox(pb^);
-  //pb^.Visible:=0;
-  drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count := 0;
-  pb^.RenderFeedback(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,@drawings.GetCurrentDWG^.myGluProject2,dc);
-
-
-  PrintParam.FitToPage:=true;
-  PrintParam.Center:=false;
-  PrintParam.Scale:=1;
-  PrintParam.Palette:=PC_Color;
-
-
-  BMP:=TPortableNetworkGraphic.Create;
-  BMP.SetSize(sx,sx);
-  BMP.Canvas.Brush.Color:=graphics.clWhite;
-  BMP.Canvas.Brush.Style:=bsSolid;
-  BMP.Canvas.FillRect(0,0,sx,sx);
-  PrinterDrawer:=TZGLCanvasDrawer.create;
-  rasterize(cdwg,sx,sx,VertexMulOnSc(pb^.vp.BoundingBox.LBN,1.1),VertexMulOnSc(pb^.vp.BoundingBox.RTF,1.1),PrintParam,BMP.Canvas,PrinterDrawer);
-  cdwg^.GetCurrentROOT^.GoodRemoveMiFromArray(pb^);
-  BMP.SaveToFile(ExpandPath(operands)+BlockName+'.png');
-  BMP.Free;
-  PrinterDrawer.Free;
-
-  zcRedrawCurrentDrawing;
-
-  zcRedrawCurrentDrawing;
-  result:=cmd_ok;
 end;
 
 {procedure Print_com.Print(pdata:GDBPlatformint);

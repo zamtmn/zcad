@@ -121,9 +121,9 @@ begin //BlockPreViewExport(128|DEVICE_PS_DAT_HAND|*images\palettes)
     BMP.Canvas.Brush.Style:=bsSolid;
     BMP.Canvas.FillRect(0,0,sx,sx);
     PrinterDrawer:=TZGLCanvasDrawer.create;
-    rasterize(cdwg,sx,sx,VertexMulOnSc(pb^.vp.BoundingBox.LBN,1.1),VertexMulOnSc(pb^.vp.BoundingBox.RTF,1.1),PrintParam,BMP.Canvas,PrinterDrawer);
+    rasterize(cdwg,sx,sx,VertexMulOnSc(pb^.vp.BoundingBox.LBN,1.2),VertexMulOnSc(pb^.vp.BoundingBox.RTF,1.01),PrintParam,BMP.Canvas,PrinterDrawer);
     cdwg^.GetCurrentROOT^.GoodRemoveMiFromArray(pb^);
-    BMP.SaveToFile(ExpandPath(operands)+BlockName+'.png');
+    BMP.SaveToFile(ExpandPath(operands));
     BMP.Free;
     PrinterDrawer.Free;
 

@@ -3,51 +3,60 @@
   <MainConfig>
     <Nodes ChildCount="1">
       <Item1 Name="AnchorDockPanel1" Type="CustomSite" ChildCount="1">
-        <Bounds Top="4" Left="7" Width="1254" Height="869"/>
+        <Bounds Top="4" Left="7" Width="1332" Height="923"/>
         <Anchors Align="Client"/>
-        <Item1 Name="AnchorDockSite8" Type="Layout" ChildCount="7">
-          <Bounds Width="1216" Height="718"/>
+        <Item1 Name="AnchorDockSite7" Type="Layout" ChildCount="7">
+          <Bounds Width="1290" Height="758"/>
           <Anchors Align="Client"/>
-          <Item1 Name="CommandLine" Type="Control">
-            <Bounds Top="561" Left="287" Width="929" Height="157"/>
+          <Item1 Name="AnchorDockSite1" Type="Pages" ChildCount="2">
+            <Bounds Top="596" Left="305" Width="985" Height="162"/>
             <Anchors Top="AnchorDockSplitter1" Left="AnchorDockSplitter2"/>
+            <Item1 Name="CommandLine" Type="Control">
+              <Bounds Width="964" Height="129"/>
+              <Anchors Align="Client"/>
+            </Item1>
+            <Item2 Name="TOOLPALETTE_PSDat" Type="Control">
+              <Bounds Width="964" Height="129"/>
+              <Anchors Align="Client"/>
+            </Item2>
           </Item1>
           <Item2 Name="AnchorDockSplitter1" Type="SplitterHorizontal">
-            <Bounds Top="557" Left="287" Width="929" Height="4"/>
+            <Bounds Top="592" Left="305" Width="985" Height="4"/>
             <Anchors Left="AnchorDockSplitter2"/>
           </Item2>
           <Item3 Name="PageControl" Type="Control">
-            <Bounds Left="287" Width="706" Height="557"/>
+            <Bounds Left="305" Width="707" Height="592"/>
             <Anchors Left="AnchorDockSplitter2" Right="AnchorDockSplitter3" Bottom="AnchorDockSplitter1"/>
           </Item3>
           <Item4 Name="AnchorDockSplitter2" Type="SplitterVertical">
-            <Bounds Left="283" Width="4" Height="718"/>
+            <Bounds Left="301" Width="4" Height="758"/>
           </Item4>
           <Item5 Name="ObjectInspector" Type="Control">
-            <Bounds Width="283" Height="718"/>
+            <Bounds Width="301" Height="758"/>
             <Anchors Right="AnchorDockSplitter2"/>
           </Item5>
           <Item6 Name="AnchorDockSplitter3" Type="SplitterVertical">
-            <Bounds Left="993" Width="4" Height="557"/>
+            <Bounds Left="1012" Width="4" Height="592"/>
             <Anchors Bottom="AnchorDockSplitter1"/>
           </Item6>
-          <Item7 Name="AnchorDockSite9" Type="Pages" ChildCount="4">
-            <Bounds Left="997" Width="219" Height="557"/>
+          <Item7 Name="AnchorDockSite8" Type="Pages" ChildCount="4">
+            <Bounds Left="1016" Width="274" Height="592"/>
             <Anchors Left="AnchorDockSplitter3" Bottom="AnchorDockSplitter1"/>
+            <Header PageIndex="3"/>
             <Item1 Name="NavigatorDevices" Type="Control">
-              <Bounds Width="211" Height="504"/>
+              <Bounds Width="223" Height="537"/>
               <Anchors Align="Client"/>
             </Item1>
             <Item2 Name="NavigatorCables" Type="Control">
-              <Bounds Width="392" Height="503"/>
+              <Bounds Width="369" Height="474"/>
               <Anchors Align="Client"/>
             </Item2>
             <Item3 Name="NavigatorRisers" Type="Control">
-              <Bounds Width="208" Height="503"/>
+              <Bounds Width="196" Height="474"/>
               <Anchors Align="Client"/>
             </Item3>
-            <Item4 Name="TOOLPALETTE_General" Type="Control">
-              <Bounds Width="211" Height="504"/>
+            <Item4 Name="TOOLPALETTE_BlockLib" Type="Control">
+              <Bounds Width="266" Height="537"/>
               <Anchors Align="Client"/>
             </Item4>
           </Item7>

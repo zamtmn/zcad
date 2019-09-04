@@ -192,6 +192,7 @@ type
     procedure TBVariableCreateFunc(aNode: TDomNode; TB:TToolBar);
     function TBCreateZCADToolBar(aName,atype: string):TToolBar;
     procedure TTBRegisterInAPPFunc(aTBNode: TDomNode;aName,aType: string;Data:Pointer);
+    procedure TTPRegisterInAPPFunc(aTBNode: TDomNode;aName,aType: string;Data:Pointer);
     procedure ZActionsReader(aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList);
     procedure ZAction2VariableReader(aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList);
     procedure ZMainMenuItemReader(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
@@ -201,6 +202,7 @@ type
     procedure ZMainMenuCommandsHistory(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     procedure ZMainMenuCommand(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     procedure ZMainMenuToolBars(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+    procedure ZMainMenuToolPalettes(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     procedure ZMainMenuDrawings(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     procedure ZMainMenuSampleFiles(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     procedure ZMainMenuDebugFiles(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
@@ -1392,7 +1394,24 @@ begin
   action.options:=aName;
   action.DisableIfNoHandler:=false;
   self.StandartActions.AddMyAction(action);
-  action.pfoundcommand:=commandmanager.FindCommand('ShowToolBar');
+  action.pfoundcommand:=commandmanager.FindCommand(action.command);
+  pm1:=TMenuItem.Create(TMenuItem(Data));
+  pm1.Action:=action;
+  TMenuItem(Data).Add(pm1);
+end;
+procedure TZCADMainWindow.TTPRegisterInAPPFunc(aTBNode: TDomNode;aName,aType: string;Data:Pointer);
+var
+    pm1:TMenuItem;
+    action:tmyaction;
+begin
+  action:=TmyAction.Create(self);
+  action.Name:=ToolPaletteNameToActionName(aName);
+  action.Caption:=aName;
+  action.command:='Show';
+  action.options:=ToolPaletteNamePrefix+aName;
+  action.DisableIfNoHandler:=false;
+  self.StandartActions.AddMyAction(action);
+  action.pfoundcommand:=commandmanager.FindCommand(action.command);
   pm1:=TMenuItem.Create(TMenuItem(Data));
   pm1.Action:=action;
   TMenuItem(Data).Add(pm1);
@@ -1759,6 +1778,7 @@ begin
   ToolBarsManager.RegisterMenuCreateFunc('LastCommands',ZMainMenuCommandsHistory);
   ToolBarsManager.RegisterMenuCreateFunc('Command',ZMainMenuCommand);
   ToolBarsManager.RegisterMenuCreateFunc('Toolbars',ZMainMenuToolBars);
+  ToolBarsManager.RegisterMenuCreateFunc('ToolPalettes',ZMainMenuToolPalettes);
   ToolBarsManager.RegisterMenuCreateFunc('Drawings',ZMainMenuDrawings);
   ToolBarsManager.RegisterMenuCreateFunc('SampleFiles',ZMainMenuSampleFiles);
   ToolBarsManager.RegisterMenuCreateFunc('DebugFiles',ZMainMenuDebugFiles);
@@ -1916,6 +1936,12 @@ procedure TZCADMainWindow.ZMainMenuToolBars(aName: string;aNode: TDomNode;actlis
 begin
   ToolBarsManager.EnumerateToolBars(TTBRegisterInAPPFunc,RootMenuItem);
 end;
+
+procedure TZCADMainWindow.ZMainMenuToolPalettes(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+begin
+  ToolBarsManager.EnumerateToolPalettes(TTPRegisterInAPPFunc,RootMenuItem);
+end;
+
 
 procedure TZCADMainWindow.ZMainMenuDrawings(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
 var

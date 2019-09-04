@@ -101,6 +101,7 @@ uses
    AttrType,
    uzvconsts,
    uzvvisualgraph,
+   uzvtestdraw,
 
    uzcstrconsts,
    uzcdevicebaseabstract,
@@ -540,6 +541,8 @@ begin
        exit;
      end;
 
+
+
      //** Получаем список кабельных групп в виде списка деревьев
     listGraph:=TListGraph.Create;
     listGraph:=getListGroupGraph();
@@ -547,19 +550,13 @@ begin
 
 
 
-    //** Строим структурную схему
-    a:=createvertex(100,100,0);
+
 
 //    InsertDat('rrrrr','aaaaa','nnnnnn',5,a,drawings.GetCurrentDWG^.ConstructObjRoot);
     buildSSScheme(listGraph,insertPoint);
 
     zcRedrawCurrentDrawing;
-    //InsertDat2('PS_DAT_SMOKE','nnnnnn',a,drawings.GetCurrentDWG^.mainObjRoot);
 
-    //InsertDat(nodestart^.name,startname,prevname,count,currentcoord,drawings.GetCurrentDWG^.ConstructObjRoot);
-
-
-    zcRedrawCurrentDrawing;
 end;
 
 
@@ -613,7 +610,7 @@ var
    var
        pvaredge:PTVariablesExtender;
        pvedge,pvlength,eq:pvardesk;
-       i,j:integer;
+       i,j,last:integer;
        line,linetemp:gdbstring;
        listCab:TListiCable;
        iCab,nowCab:TiCable;
@@ -623,7 +620,11 @@ var
         listCab:= TListiCable.create;
         iCab.name:='';
         iCab.length:=0;
+        last:=0;
         for i := 0 to gGroup.EdgeCount-1 do begin
+            if TEdgeTree(gGroup.Edges[i].AsPointer[vpTEdgeTree]^).isRiser = FALSE then begin
+
+
             pvaredge:=TEdgeTree(gGroup.Edges[i].AsPointer[vpTEdgeTree]^).segm^.GetExtension(typeof(TVariablesExtender));
             pvedge:=pvaredge^.entityunit.FindVariable('DB_link');
             pvlength:=pvaredge^.entityunit.FindVariable('AmountD');
@@ -648,6 +649,7 @@ var
                           if listcab[j].name = linetemp then
                           begin
                              istrue:=false;
+                             last:=j;
                              //ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
                              listcab.mutable[j]^.length:=listcab[j].length + pdouble(pvlength^.data.Instance)^;
                           end;
@@ -679,6 +681,7 @@ var
                             if listcab[j].name = linetemp then
                             begin
                               istrue:=false;
+                              last:=j;
                               //ZCMsgCallBackInterface.TextMessage('6',TMWOHistoryOut);
                               listcab.mutable[j]^.length:=listcab[j].length + pdouble(pvlength^.data.Instance)^;
                             end;
@@ -700,6 +703,12 @@ var
                 iCab.length:=pdouble(pvlength^.data.Instance)^;
                 listcab.PushBack(iCab);
             end;
+
+            end ELSE begin
+                  listcab.mutable[last]^.length:=listcab[last].length + TEdgeTree(gGroup.Edges[i].AsPointer[vpTEdgeTree]^).length;
+
+            end;
+
             result:=listcab;
 
 
@@ -737,6 +746,7 @@ var
        i:integer;
        strNameCab:string;
        lengthCab,dy,uy:double;
+       DC:TDrawContext;
     begin
 
           drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,'DEVICE_CABLE_MARK');
@@ -785,6 +795,9 @@ var
           if pvmc<>nil then
               pstring(pvmc^.data.Instance)^:=strNameCab;
 
+          dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+          pv^.FormatEntity(drawings.GetCurrentDWG^,dc);
+
           dy:=pv^.P_insert_in_WCS.y-pv^.vp.BoundingBox.LBN.y;
           uy:=pv^.vp.BoundingBox.RTF.y-pv^.P_insert_in_WCS.y;
           insertPoint.y:=insertPoint.y+dy+uy;
@@ -817,10 +830,19 @@ var
        strNameCab:string;
        lengthCab:double;
    begin
-
+         //ZCMsgCallBackInterface.TextMessage('s1',TMWOHistoryOut);
         listDev:= TListDev.Create;
         for i := 1 to gGroup.VertexCount-1 do begin
            if TVertexTree(gGroup.Vertices[i].AsPointer[vpTVertexTree]^).dev <> nil then begin
+              //ZCMsgCallBackInterface.TextMessage(TVertexTree(gGroup.Vertices[i].AsPointer[vpTVertexTree]^).dev^.Name,TMWOHistoryOut);
+
+              pvarv:=TVertexTree(gGroup.Vertices[i].AsPointer[vpTVertexTree]^).dev^.GetExtension(typeof(TVariablesExtender));
+              pvv:=pvarv^.entityunit.FindVariable('RiserName');
+              if pvv<>nil then
+                 continue;
+
+
+
               idev.dev:=TVertexTree(gGroup.Vertices[i].AsPointer[vpTVertexTree]^).dev;
               pvarv:=TVertexTree(gGroup.Vertices[i].AsPointer[vpTVertexTree]^).dev^.GetExtension(typeof(TVariablesExtender));
               pvv:=pvarv^.entityunit.FindVariable('NMO_Name');
@@ -848,18 +870,24 @@ var
               listDev.PushBack(idev);
            end;
         end;
-
+          //ZCMsgCallBackInterface.TextMessage('s2',TMWOHistoryOut);
         for i := 0 to listDev.Size-1 do begin
+           //ZCMsgCallBackInterface.TextMessage(listDev[i].dev^.Name,TMWOHistoryOut);
            col:=0;
-           //stdev:=nil;
-           //enddev:=nil;
+           //stdev.dev:=nil;
+           //enddev.dev:=nil;
            if listdev[i].isRes then begin
+              //ZCMsgCallBackInterface.TextMessage('st3',TMWOHistoryOut);
               stdev:=listDev[i];
+              enddev:=listDev[i];
               listdev.mutable[i]^.isRes:=false;
               col:=1;
-           end else
+           end else begin
+             //ZCMsgCallBackInterface.TextMessage('st4',TMWOHistoryOut);
                continue;
-
+               //ZCMsgCallBackInterface.TextMessage('st5',TMWOHistoryOut);
+           end;
+           //ZCMsgCallBackInterface.TextMessage('st2',TMWOHistoryOut);
            for j := 1 to listDev.Size-1 do begin
               if (stdev.shortname = listDev[j].shortname) and listDev[j].isRes then begin
                     enddev:=listDev[j];
@@ -868,79 +896,33 @@ var
               end;
            end;
 
-           if (enddev.numDev <> col ) then
-              ZCMsgCallBackInterface.TextMessage('ОШИБКА!!! количество устройств не соответствует счетчику',TMWOHistoryOut);
-
-
-
+           //uzvtestdraw.testTempDrawText(enddev.dev^.P_insert_in_WCS,enddev.fullname);
+            //ZCMsgCallBackInterface.TextMessage('st',TMWOHistoryOut);
+           InsertDat(stdev.dev^.Name,stdev.fullname,enddev.fullname,col,insertPoint,drawings.GetCurrentDWG^.mainObjRoot);
+             //ZCMsgCallBackInterface.TextMessage('fn',TMWOHistoryOut);
         end;
 
-
-//
-//          drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,'DEVICE_CABLE_MARK');
-//          pointer(pv):=old_ENTF_CreateBlockInsert(@drawings.GetCurrentDWG^.mainObjRoot,@{drawings.GetCurrentROOT.ObjArray}drawings.GetCurrentDWG^.mainObjRoot.ObjArray,
-//                                              drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
-//                                              insertPoint, 1, 0,'DEVICE_CABLE_MARK');
-//          zcSetEntPropFromCurrentDrawingProp(pv);
-//          ppvvarext:=pv^.GetExtension(typeof(TVariablesExtender));
-//
-//          //**Заполняем имя группы(шлейфа)
-//          pvmc:=ppvvarext^.entityunit.FindVariable('CableName');
-//          if pvmc<>nil then
-//          begin
-//              pvaredge:=TEdgeTree(gGroup.Edges[0].AsPointer[vpTEdgeTree]^).segm^.GetExtension(typeof(TVariablesExtender));
-//              pvedge:=pvaredge^.entityunit.FindVariable('NMO_Name');
-//              pstring(pvmc^.data.Instance)^:=pstring(pvedge^.data.Instance)^;
-//          end;
-//
-//          //ZCMsgCallBackInterface.TextMessage('CableLength',TMWOHistoryOut);
-//
-//          //**Заполняем длину кабеля
-//
-//          listCab:=TListiCable.Create;
-//          //ZCMsgCallBackInterface.TextMessage('до',TMWOHistoryOut);
-//          listCab:=GetNamesLengthGroupCable(gGroup);
-//                    //ZCMsgCallBackInterface.TextMessage('после='+inttostr(listCab.size),TMWOHistoryOut);
-//
-//
-//          strNameCab:='';
-//          lengthCab:=0;
-//          for i := 0 to listCab.size-1 do begin
-//             //ZCMsgCallBackInterface.TextMessage('='+strNameCab,TMWOHistoryOut);
-//              strNameCab:= strNameCab + #10 +  listCab[i].Name;
-//              if i=0 then
-//                 strNameCab:=listCab[i].Name;
-//              lengthCab:= lengthCab +  listCab[i].length;
-//          end;
-//
-//
-//          pvmc:=ppvvarext^.entityunit.FindVariable('CableLength');
-//          if pvmc<>nil then
-//              pdouble(pvmc^.data.Instance)^:=lengthCab;
-//
-//          //**Заполняем марку кабеля
-//          pvmc:=ppvvarext^.entityunit.FindVariable('CableMaterial');
-//          if pvmc<>nil then
-//              pstring(pvmc^.data.Instance)^:=strNameCab;
-//
-//          dy:=pv.P_insert_in_WCS.y-pv.vp.BoundingBox.LBN.y;
-//          uy:=pv.vp.BoundingBox.RTF.y-pv.P_insert_in_WCS.y;
-//          insertPoint.y:=insertPoint.y+dy+uy;
-//
     end;
 
 begin
 
     coord_x:=insertPoint.x;
-    for i := 0 to listGraph.Size-1 do  begin
+    for i := 0 to listGraph.Size-1 do begin
       coord_y:= insertPoint.y;
       insertPoint.x:=coord_x + 12*i;
+      //ZCMsgCallBackInterface.TextMessage('last111',TMWOHistoryOut);
       //строим и заполняем кабельный маркер
       AddGroupCable(listGraph[i],insertPoint);
+
+      //ZCMsgCallBackInterface.TextMessage('last122',TMWOHistoryOut);
+
       //Строии и заполняем устройства
       AddDeviceCable(listGraph[i],insertPoint);
 
+      //дОБАВЛЕМ
+      //ZCMsgCallBackInterface.TextMessage('last222',TMWOHistoryOut);
       insertPoint.y:=coord_y;
+      //ZCMsgCallBackInterface.TextMessage('last333',TMWOHistoryOut);
     end;
 
 end;
@@ -960,6 +942,7 @@ var
     oGraphEdge:TEdge;
     stVertexIndex:integer;
 
+    graphVizPt:GDBVertex;
 
     count: GDBInteger;
     pcabledesk:PTCableDesctiptor;
@@ -998,9 +981,9 @@ var
          result:=-1;
          for i:= 0 to oGraph.VertexCount-1 do
            if TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).dev = devVertex then begin
-             if TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).dev <> nil then
-               ZCMsgCallBackInterface.TextMessage(TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).dev^.Name,TMWOHistoryOut);
-             ZCMsgCallBackInterface.TextMessage(inttostr(i),TMWOHistoryOut);
+             //if TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).dev <> nil then
+             //  ZCMsgCallBackInterface.TextMessage(TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).dev^.Name,TMWOHistoryOut);
+             //ZCMsgCallBackInterface.TextMessage(inttostr(i),TMWOHistoryOut);
              result:=i;
            end;
     end;
@@ -1012,10 +995,10 @@ var
          result:=-1;
          for i:= 0 to oGraph.VertexCount-1 do
            if vertexeq(TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).vertex,vertex) then begin
-             if TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).dev <> nil then
-               ZCMsgCallBackInterface.TextMessage(TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).dev^.Name + '---gggggggggggggggggggg',TMWOHistoryOut);
-             ZCMsgCallBackInterface.TextMessage(inttostr(i)+ '---hhhhhhhhhhhhhhhhhh',TMWOHistoryOut);
-             result:=i;
+             //if TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).dev <> nil then
+             //    ZCMsgCallBackInterface.TextMessage(TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).dev^.Name + '---gggggggggggggggggggg',TMWOHistoryOut);
+             //  ZCMsgCallBackInterface.TextMessage(inttostr(i)+ '---hhhhhhhhhhhhhhhhhh',TMWOHistoryOut);
+               result:=i;
            end;
     end;
 
@@ -1102,9 +1085,11 @@ var
                 pnodestartvarext:=TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).dev^.GetExtension(typeof(TVariablesExtender));
                 pvstart:=nil;
                 pvstart:=pnodestartvarext^.entityunit.FindVariable('RiserName');
+
                 //pvstartelevation:=pnodestartvarext^.entityunit.FindVariable('Elevation');
                 if (pvstart <> nil) then
                   begin
+                     //ZCMsgCallBackInterface.TextMessage(pstring(pvstart^.data.Instance)^,TMWOHistoryOut);
                      for j:=0 to listRiserName.Size-1 do
                        begin
                           if pstring(pvstart^.data.Instance)^ = listRiserName[j] then
@@ -1120,6 +1105,7 @@ var
           //ZCMsgCallBackInterface.TextMessage('получили список имен разрывов',TMWOHistoryOut);
           for i:=0 to listRiserName.Size-1 do
             begin
+              //ZCMsgCallBackInterface.TextMessage(listRiserName[i],TMWOHistoryOut);
                  // созаем список вершн разрывово с нужным нам именем
                  listRiserNumber:=TListInteger.Create;
                  for j:= 0 to oGraph.VertexCount-1 do  begin
@@ -1129,7 +1115,7 @@ var
                       pvstart:=nil;
                       pvstart:=pnodestartvarext^.entityunit.FindVariable('RiserName');
                       //pvstartelevation:=pnodestartvarext^.entityunit.FindVariable('Elevation');
-                      if (pvstart <> nil) and (pstring(pvstart^.data.Instance)^ = listRiserName[0]) then
+                      if (pvstart <> nil) and (pstring(pvstart^.data.Instance)^ = listRiserName[i]) then
                         begin
                            listRiserNumber.PushBack(j);
                         end;
@@ -1172,7 +1158,7 @@ var
                   edgeGraph^.segm:=nil;
                   edgeGraph^.isSegm:=false;
                   edgeGraph^.isRiser:=true;
-                  sum:= abs(pdouble(pvendelevation^.data.Instance)^ + pdouble(pvstartelevation^.data.Instance)^);
+                  sum:= abs(pdouble(pvendelevation^.data.Instance)^ - pdouble(pvstartelevation^.data.Instance)^);
                   edgeGraph^.length:=sum;
                   //ZCMsgCallBackInterface.TextMessage('создали ребро в граф',TMWOHistoryOut);
                   oGraphEdge:=oGraph.AddEdge(oGraph.Vertices[listRiserNumber[j-1]],oGraph.Vertices[listRiserNumber[j]]);
@@ -1208,6 +1194,9 @@ begin
   cman.build;
 
          //drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
+
+  //** Строим структурную схему
+  graphVizPt:=createvertex(0,0,0);
 
   //coord:=uzegeometry.NulVertex;
   //coord.y:=0;
@@ -1260,7 +1249,7 @@ begin
                         pvSegmLength:=pSegmCablevarext^.entityunit.FindVariable('AmountD');
                         edgeGraph^.length:=pdouble(pvSegmLength^.data.Instance)^;
 
-                        ZCMsgCallBackInterface.TextMessage('Сегмент № ' + inttostr(pinteger(pvSegm^.data.Instance)^),TMWOHistoryOut);
+                        //ZCMsgCallBackInterface.TextMessage('Сегмент № ' + inttostr(pinteger(pvSegm^.data.Instance)^),TMWOHistoryOut);
 
                         //перебераем вершины сегмента
                         node:=segmCable^.NodePropArray.beginiterate(ir_inNodeArray);
@@ -1293,7 +1282,7 @@ begin
                         else
                         begin
 
-                          ZCMsgCallBackInterface.TextMessage('номер ноде --- ' + floattostr(node^.PrevP.x),TMWOHistoryOut);
+                          //ZCMsgCallBackInterface.TextMessage('номер ноде --- ' + floattostr(node^.PrevP.x),TMWOHistoryOut);
                           ///**** создания связи между разрывами
                           if node^.DevLink <> nil then
                           begin
@@ -1314,7 +1303,7 @@ begin
 
                                 oGraphStartVertex.AsPointer[vpTVertexTree]:=vertexGraph;
 
-                                ZCMsgCallBackInterface.TextMessage('Устройство --- РАЗРЫВ',TMWOHistoryOut);
+                                //ZCMsgCallBackInterface.TextMessage('Устройство --- РАЗРЫВ',TMWOHistoryOut);
 
                                 //createRiserEdgeGraph(oGraph,node^.DevLink);
                             end;
@@ -1324,7 +1313,7 @@ begin
                           if stVertexIndex >= 0 then begin
                              oGraphStartVertex:= oGraph.Vertices[stVertexIndex];
                              node:=segmCable^.NodePropArray.iterate(ir_inNodeArray);
-                             ZCMsgCallBackInterface.TextMessage('нашел',TMWOHistoryOut);
+                             //ZCMsgCallBackInterface.TextMessage('нашел',TMWOHistoryOut);
                           end;
                         end;
 
@@ -1338,7 +1327,7 @@ begin
                               if node^.DevLink <> nil then begin
 
                                   //ZCMsgCallBackInterface.TextMessage('Устройство --- ' + floattostr(node^.DevLink^.GetCenterPoint.x),TMWOHistoryOut);
-                                  ZCMsgCallBackInterface.TextMessage('Устройство111 --- ' + PGDBObjDevice(node^.DevLink^.bp.ListPos.Owner)^.Name,TMWOHistoryOut);
+                                  //ZCMsgCallBackInterface.TextMessage('Устройство111 --- ' + PGDBObjDevice(node^.DevLink^.bp.ListPos.Owner)^.Name,TMWOHistoryOut);
                                   //vertexGraph^.dev:=node^.DevLink;
                                   vertexGraph^.dev:=PGDBObjDevice(node^.DevLink^.bp.ListPos.Owner);
                                   vertexGraph^.connector:=node^.DevLink;
@@ -1350,7 +1339,7 @@ begin
                                   pvd:=pnodeendvarext^.entityunit.FindVariable('RiserName');
                                   if pvd <> nil then
                                   begin
-                                     ZCMsgCallBackInterface.TextMessage('Устройство --- РАЗРЫВ',TMWOHistoryOut);
+                                     //ZCMsgCallBackInterface.TextMessage('Устройство --- РАЗРЫВ',TMWOHistoryOut);
                                      vertexGraph^.isRiser:=true;
                                      //ZCMsgCallBackInterface.TextMessage('Устройство --- РАЗРЫВ',TMWOHistoryOut);
                                   end;
@@ -1365,7 +1354,7 @@ begin
                                   //ZCMsgCallBackInterface.TextMessage('Ус --- ' + endname,TMWOHistoryOut)
                               end
                               else begin
-                                  ZCMsgCallBackInterface.TextMessage('Устройство --- не устройство ',TMWOHistoryOut);
+                                  //ZCMsgCallBackInterface.TextMessage('Устройство --- не устройство ',TMWOHistoryOut);
                                   //ZCMsgCallBackInterface.TextMessage('Устройство --- ' + floattostr(node^.PrevP.x),TMWOHistoryOut);
                                   vertexGraph^.dev:=nil;
                                   vertexGraph^.connector:=nil;
@@ -1390,134 +1379,16 @@ begin
                         segmCable:=pcabledesk^.Segments.iterate(irSegment);
                   until segmCable=nil;
 
-
-
-
-                  //ZCMsgCallBackInterface.TextMessage(pcabledesk^.Name,TMWOHistoryOut);
-                  //pcabledesk^.StartDevice^.;
-                  //pcabledesk^.Segments.beginiterate(irSegment);
-
-        //          //programlog.logoutstr(pcabledesk.Name,0);
-        //          currentcoord:=coord;
-        //          PTCableType(pvd^.data.Instance)^:=TCT_ShleifOPS;
-        //          lsave:=SysVar.dwg.DWG_CLayer^;
-        //          SysVar.dwg.DWG_CLayer^:=drawings.GetCurrentDWG^.LayerTable.GetSystemLayer;
-        //
-        //          drawings.AddBlockFromDBI fNeed(drawings.GetCurrentDWG,'DEVICE_CABLE_MARK');
-        //          pointer(pv):=old_ENTF_CreateBlockInsert(@drawings.GetCurrentDWG^.ConstructObjRoot,@{drawings.GetCurrentROOT.ObjArray}drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray,
-        //                                              drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
-        //                                              currentcoord, 1, 0,'DEVICE_CABLE_MARK');
-        //          zcSetEntPropFromCurrentDrawingProp(pv);
-        //
-        //          SysVar.dwg.DWG_CLayer^:=lsave;
-        //          ppvvarext:=pv^.GetExtension(typeof(TVariablesExtender));
-        ////          //pvmc:=PTObjectUnit(pv^.ou.Instance)^.FindVariable('CableName');
-        //          pvmc:=ppvvarext^.entityunit.FindVariable('CableName');
-        //          if pvmc<>nil then
-        //          begin
-        //              pstring(pvmc^.data.Instance)^:=pcabledesk^.Name;
-        //          end;
-        //          Cable2CableMark(pcabledesk,pv);
-        //          pv^.formatentity(drawings.GetCurrentDWG^,dc);
-        //          pv^.getoutbound(dc);
-        //
-        //          //lx:=pv.P_insert_in_WCS.x-pv.vp.BoundingBox.LBN.x;
-        //          //rx:=pv.vp.BoundingBox.RTF.x-pv.P_insert_in_WCS.x;
-        //          dy:=pv^.P_insert_in_WCS.y-pv^.vp.BoundingBox.LBN.y;
-        //          uy:=pv^.vp.BoundingBox.RTF.y-pv^.P_insert_in_WCS.y;
-        //
-        //          pv^.Local.P_insert.y:=pv^.Local.P_insert.y+dy;
-        //          pv^.Formatentity(drawings.GetCurrentDWG^,dc);
-        //          currentcoord.y:=currentcoord.y+dy+uy;
-        //
-        //
-        //          isfirst:=true;
-        //          {nodeend:=}pcabledesk^.Devices.beginiterate(ir_inNodeArray);
-        //          nodeend:=pcabledesk^.Devices.iterate(ir_inNodeArray);
-        ////          nodestart:=nil;
-        ////          count:=0;
-        //          if nodeend<>nil then
-        //          repeat
-        //                ZCMsgCallBackInterface.TextMessage(nodeend^.Name,TMWOHistoryOut);
-        ////                if nodeend^.bp.ListPos.Owner<>pointer(drawings.GetCurrentROOT) then
-        ////                                                                  nodeend:=pointer(nodeend^.bp.ListPos.Owner);
-        ////                pnodeendvarext:=nodeend^.GetExtension(typeof(TVariablesExtender));
-        ////                //pvd:=PTObjectUnit(nodeend^.ou.Instance)^.FindVariable('NMO_Name');
-        ////                pvd:=pnodeendvarext^.entityunit.FindVariable('NMO_Name');
-        ////                if pvd<>nil then
-        ////                begin
-        ////                     //endname:=pstring(pvd^.data.Instance)^;
-        ////                     endname:=pvd^.data.PTD^.GetValueAsString(pvd^.data.Instance);
-        ////                end
-        ////                   else endname:='';
-        ////                //pvd:=PTObjectUnit(nodeend^.ou.Instance)^.FindVariable('DB_link');
-        ////                pvd:=pnodeendvarext^.entityunit.FindVariable('DB_link');
-        ////                if pvd<>nil then
-        ////                begin
-        ////                    //endmat:=pstring(pvd^.data.Instance)^;
-        ////                    endmat:=pvd^.data.PTD^.GetValueAsString(pvd^.data.Instance);
-        ////                    if isfirst then
-        ////                                   begin
-        ////                                        isfirst:=false;
-        ////                                        nodestart:=nodeend;
-        ////                                        startmat:=endmat;
-        ////                                        startname:=endname;
-        ////                                   end;
-        ////                    if startmat<>endmat then
-        ////                    begin
-        ////                         InsertDat(nodestart^.name,startname,prevname,count,currentcoord,drawings.GetCurrentDWG^.ConstructObjRoot);
-        ////                         count:=0;
-        ////                         nodestart:=nodeend;
-        ////                         startmat:=endmat;
-        ////                         startname:=endname;
-        ////                         //isfirst:=true;
-        ////                    end;
-        ////                    inc(count);
-        ////                end;
-        ////                prevname:=endname;
-        //                nodeend:=pcabledesk^.Devices.iterate(ir_inNodeArray);
-        //          until nodeend=nil;
-
-
-                  //{nodeend:=}pcabledesk^.Devices.beginiterate(ir_inNodeArray);
-                  //nodeend:=pcabledesk^.Devices.iterate(ir_inNodeArray);
-                  //if nodeend<>nil then
-                  //  repeat
-                  //        ppvvarext:=nodeend^.GetExtension(typeof(TVariablesExtender));
-                  //        pvmc:=ppvvarext^.entityunit.FindVariable('NMO_Name');
-                  //        ZCMsgCallBackInterface.TextMessage(pstring(pvmc^.data.Instance)^,TMWOHistoryOut);
-                  //        ZCMsgCallBackInterface.TextMessage(nodeend^.name,TMWOHistoryOut);
-                  //        nodeend:=pcabledesk^.Devices.iterate(ir_inNodeArray);
-                  //  until nodeend=nil;
-
-
-
-
-
-        //          if nodestart<>nil then
-        //                                InsertDat(nodestart^.name,startname,endname,count,currentcoord,drawings.GetCurrentDWG^.ConstructObjRoot)^.YouDeleted(drawings.GetCurrentDWG^)
-        //                            else
-        //                                InsertDat('_error_here',startname,endname,count,currentcoord,drawings.GetCurrentDWG^.ConstructObjRoot)^.YouDeleted(drawings.GetCurrentDWG^);
-        //
-        //          //pvd:=PTObjectUnit(PCableSS.ou.Instance)^.FindVariable('CABLE_WireCount');
-        //          pvd:=pCableSSvarext^.entityunit.FindVariable('CABLE_WireCount');
-        //          if pvd=nil then
-        //                         coord.x:=coord.x+12
-        //                     else
-        //                         begin
-        //                              if pgdbinteger(pvd^.data.Instance)^<>0 then
-        //                                                                          coord.x:=coord.x+6*pgdbinteger(pvd^.data.Instance)^
-        //                                                                      else
-        //                                                                          coord.x:=coord.x+12;
-        //                         end;
              end;
         //
         end;
 
         graphAddEdgeRiser(oGraph);
-
+  //ZCMsgCallBackInterface.TextMessage('111111 ',TMWOHistoryOut);
+  //uzvvisualgraph.visualGraphPlan(oGraph,1);  //метод проверки графа соединений
   oGraph.CorrectTree;
-  uzvvisualgraph.visualGraphTest(oGraph,1);
+  //ZCMsgCallBackInterface.TextMessage('22222 ',TMWOHistoryOut);
+  //uzvvisualgraph.visualGraphTest(oGraph,1,graphVizPt);
   result.PushBack(oGraph);
   pcabledesk:=cman.iterate(irCable);
   until pcabledesk=nil;
@@ -1527,7 +1398,7 @@ end;
 
 
 initialization
- CreateCommandFastObjectPlugin(@createStructureSchema_com,'test777',CADWG,0);
+ CreateCommandFastObjectPlugin(@createStructureSchema_com,'vBuildSSSchema',CADWG,0);
  CreateCommandFastObjectPlugin(@TestModul_com,'test888',CADWG,0);
 end.
 

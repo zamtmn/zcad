@@ -3,6 +3,7 @@
   <ActionsContent>
     <Group Category="SL">
       <ZAction Name="ACN_slagcabCom" Command="slagcab" Img="#D()" Caption="Start command panels for autocabeling SL"/>
+      <ZAction Name="ACN_vBuildSSSchema" Command="vBuildSSSchema" Img="#vSS" Caption="Start building vSS Schema"/>
       <ZAction Name="ACN_agslr" Command="AGSLROOM" Img="#ASL" Caption="Start command ASL"/>
       <ZAction Name="ACN_SupeLine" Command="DrawSuperLine" Img="superline.bmp" Caption="SuperLine"/>
     </Group>

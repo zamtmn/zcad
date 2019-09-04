@@ -18,55 +18,6 @@ type
     ToolButton:TToolButton;
     MainAction:TAction;
 
-   {private
-    procedure SetAutoCheck(Value:Boolean);
-    function GetAutoCheck:boolean;
-    procedure SetCaption(Value:TTranslateString);
-    function GetCaption:TTranslateString;
-    procedure SetChecked(Value:Boolean);
-    function GetChecked:boolean;
-    procedure SetDisableIfNoHandler(Value:Boolean);
-    function GetDisableIfNoHandler:boolean;
-    procedure SetEnabled(Value:Boolean);
-    function GetEnabled:boolean;
-    procedure SetGroupIndex(Value:Integer);
-    function GetGroupIndex:Integer;
-    procedure SetHelpContext(Value:THelpContext);
-    function GetHelpContext:THelpContext;
-    procedure SetHelpKeyword(Value:string);
-    function GetHelpKeyword:string;
-    procedure SetHelpType(Value:THelpType);
-    function GetHelpType:THelpType;
-    procedure SetHint(Value:TTranslateString);
-    function GetHint:TTranslateString;
-    procedure SetImageIndex(Value:TImageIndex);
-    function GetImageIndex:TImageIndex;
-    procedure SetOnHint(Value:THintEvent);
-    function GetOnHint:THintEvent;
-    procedure SetSecondaryShortCuts(Value:TShortCutList);
-    function GetSecondaryShortCuts:TShortCutList;
-    procedure SetShortCut(Value:TShortCut);
-    function GetShortCut:TShortCut;
-    procedure SetVisible(Value:Boolean);
-    function GetVisible:boolean;
-  published
-  property AutoCheck: Boolean read GetAutoCheck write  SetAutoCheck default False;
-  property Caption: TTranslateString read GetCaption write SetCaption;
-  property Checked: Boolean read GetChecked write SetChecked default False;
-  property DisableIfNoHandler: Boolean read GetDisableIfNoHandler write SetDisableIfNoHandler default False;
-  property Enabled: Boolean read GetEnabled write SetEnabled default True;
-  property GroupIndex: Integer read GetGroupIndex write SetGroupIndex default 0;
-  property HelpContext: THelpContext read GetHelpContext write SetHelpContext default 0;
-  property HelpKeyword: string read GetHelpKeyword write SetHelpKeyword;
-  property HelpType: THelpType read GetHelpType write SetHelpType default htContext;
-  property Hint: TTranslateString read GetHint write SetHint;
-  property ImageIndex: TImageIndex read GetImageIndex write SetImageIndex default -1;
-  property OnHint: THintEvent read GetOnHint write SetOnHint;
-  property SecondaryShortCuts: TShortCutList read GetSecondaryShortCuts write SetSecondaryShortCuts{ stored IsSecondaryShortCutsStored};
-  property ShortCut: TShortCut read GetShortCut write SetShortCut default 0;
-  property Visible: Boolean read GetVisible write SetVisible default True;}
-
-
     function Execute: Boolean; override;
     procedure Assign(Source: TPersistent); override;
   end;

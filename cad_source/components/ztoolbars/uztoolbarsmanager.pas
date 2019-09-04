@@ -18,55 +18,6 @@ type
     ToolButton:TToolButton;
     MainAction:TAction;
 
-   {private
-    procedure SetAutoCheck(Value:Boolean);
-    function GetAutoCheck:boolean;
-    procedure SetCaption(Value:TTranslateString);
-    function GetCaption:TTranslateString;
-    procedure SetChecked(Value:Boolean);
-    function GetChecked:boolean;
-    procedure SetDisableIfNoHandler(Value:Boolean);
-    function GetDisableIfNoHandler:boolean;
-    procedure SetEnabled(Value:Boolean);
-    function GetEnabled:boolean;
-    procedure SetGroupIndex(Value:Integer);
-    function GetGroupIndex:Integer;
-    procedure SetHelpContext(Value:THelpContext);
-    function GetHelpContext:THelpContext;
-    procedure SetHelpKeyword(Value:string);
-    function GetHelpKeyword:string;
-    procedure SetHelpType(Value:THelpType);
-    function GetHelpType:THelpType;
-    procedure SetHint(Value:TTranslateString);
-    function GetHint:TTranslateString;
-    procedure SetImageIndex(Value:TImageIndex);
-    function GetImageIndex:TImageIndex;
-    procedure SetOnHint(Value:THintEvent);
-    function GetOnHint:THintEvent;
-    procedure SetSecondaryShortCuts(Value:TShortCutList);
-    function GetSecondaryShortCuts:TShortCutList;
-    procedure SetShortCut(Value:TShortCut);
-    function GetShortCut:TShortCut;
-    procedure SetVisible(Value:Boolean);
-    function GetVisible:boolean;
-  published
-  property AutoCheck: Boolean read GetAutoCheck write  SetAutoCheck default False;
-  property Caption: TTranslateString read GetCaption write SetCaption;
-  property Checked: Boolean read GetChecked write SetChecked default False;
-  property DisableIfNoHandler: Boolean read GetDisableIfNoHandler write SetDisableIfNoHandler default False;
-  property Enabled: Boolean read GetEnabled write SetEnabled default True;
-  property GroupIndex: Integer read GetGroupIndex write SetGroupIndex default 0;
-  property HelpContext: THelpContext read GetHelpContext write SetHelpContext default 0;
-  property HelpKeyword: string read GetHelpKeyword write SetHelpKeyword;
-  property HelpType: THelpType read GetHelpType write SetHelpType default htContext;
-  property Hint: TTranslateString read GetHint write SetHint;
-  property ImageIndex: TImageIndex read GetImageIndex write SetImageIndex default -1;
-  property OnHint: THintEvent read GetOnHint write SetOnHint;
-  property SecondaryShortCuts: TShortCutList read GetSecondaryShortCuts write SetSecondaryShortCuts{ stored IsSecondaryShortCutsStored};
-  property ShortCut: TShortCut read GetShortCut write SetShortCut default 0;
-  property Visible: Boolean read GetVisible write SetVisible default True;}
-
-
     function Execute: Boolean; override;
     procedure Assign(Source: TPersistent); override;
   end;
@@ -82,7 +33,7 @@ type
 
   TPaletteControlBaseType=TWinControl;
   TPaletteCreateFunc=function (aName,aCaption,aType: string;TBNode:TDomNode):TPaletteControlBaseType of object;
-  TPaletteItemCreateFunc=procedure (aNode: TDomNode; palette:TPaletteControlBaseType) of object;
+  TPaletteItemCreateFunc=procedure (aNode: TDomNode;rootnode:TPersistent;palette:TPaletteControlBaseType) of object;
   TTBCreateFunc=function (aName,aType: string):TToolBar of object;
   TTBItemCreateFunc=procedure (aNode: TDomNode; TB:TToolBar) of object;
   TTBRegisterInAPPFunc=procedure (aTBNode: TDomNode;aName,aType: string; Data:Pointer) of object;
@@ -129,8 +80,9 @@ type
     function FindBarsContent(toolbarname:string):TDomNode;
     function FindPalettesContent(PaletteName:string):TDomNode;
     procedure EnumerateToolBars(rf:TTBRegisterInAPPFunc;Data:Pointer);
+    procedure EnumerateToolPalettes(rf:TTBRegisterInAPPFunc;Data:Pointer);
     procedure CreateToolbarContent(tb:TToolBar;TBNode:TDomNode);
-    procedure CreatePaletteContent(Palette:TPaletteControlBaseType;TBNode:TDomNode);
+    procedure CreatePaletteContent(Palette:TPaletteControlBaseType;TBNode:TDomNode;rootnode:TPersistent);
     procedure RegisterTBCreateFunc(TBType:string;TBCreateFunc:TTBCreateFunc);
     procedure RegisterPaletteCreateFunc(PaletteType:string;PaletteCreateFunc:TPaletteCreateFunc);
     procedure RegisterPaletteItemCreateFunc(aNodeName:string;PaletteItemCreateFunc:TPaletteItemCreateFunc);
@@ -144,7 +96,7 @@ type
     function DoTBCreateFunc(aName,aType:string):TToolBar;
     function DoToolPaletteCreateFunc(aControlName,aInternalName:string;TBNode:TDomNode):TPaletteControlBaseType;
     procedure DoTBItemCreateFunc(aNodeName:string; aNode: TDomNode; TB:TToolBar);
-    procedure DoToolPaletteItemCreateFunc(aNodeName:string; aNode: TDomNode; PC:TPaletteControlBaseType);
+    procedure DoToolPaletteItemCreateFunc(aNodeName:string; aNode: TDomNode;rootnode:TPersistent;PC:TPaletteControlBaseType);
 
     procedure SetupDefaultToolBar(aName,atype: string; tb:TToolBar);
     function CreateDefaultToolBar(aName,atype: string):TToolBar;
@@ -169,6 +121,7 @@ type
   function getAttrValue(const aNode:TDomNode;const AttrName,DefValue:string):string;overload;
   function getAttrValue(const aNode:TDomNode;const AttrName:string;const DefValue:integer):integer;overload;
   function ToolBarNameToActionName(tbname:string):string;
+  function ToolPaletteNameToActionName(tbname:string):string;
   function FormNameToActionName(fname:string):string;
   procedure RegisterActionsManager(am:TProgramActionsManagerClass);
 
@@ -367,7 +320,10 @@ function ToolBarNameToActionName(tbname:string):string;
 begin
   result:='ACN_SHOWTOOLBAR_'+uppercase(tbname);
 end;
-
+function ToolPaletteNameToActionName(tbname:string):string;
+begin
+  result:='ACN_SHOWTOOLPALETTE_'+uppercase(tbname);
+end;
 function FormNameToActionName(fname:string):string;
 begin
   result:='ACN_SHOWFORM_'+uppercase(fname);
@@ -567,13 +523,13 @@ begin
       tbicf(aNode,TB);
 end;
 
-procedure TToolBarsManager.DoToolPaletteItemCreateFunc(aNodeName:string; aNode: TDomNode; PC:TPaletteControlBaseType);
+procedure TToolBarsManager.DoToolPaletteItemCreateFunc(aNodeName:string; aNode: TDomNode;rootnode:TPersistent;PC:TPaletteControlBaseType);
 var
   picf:TPaletteItemCreateFunc;
 begin
   if assigned(PaletteItemCreateFuncRegister) then
     if PaletteItemCreateFuncRegister.TryGetValue(uppercase(aNodeName),picf)then
-      picf(aNode,PC);
+      picf(aNode,rootnode,PC);
 end;
 
 function TToolBarsManager.DoToolPaletteCreateFunc(aControlName,aInternalName:string;TBNode:TDomNode):TPaletteControlBaseType;
@@ -870,6 +826,24 @@ begin
   end;
 end;
 
+procedure TToolBarsManager.EnumerateToolPalettes(rf:TTBRegisterInAPPFunc;Data:Pointer);
+var
+  TBNode,TBSubNode,TBNodeType:TDomNode;
+begin
+  if assigned(rf) then
+  begin
+    TBNode:=PalettesConfig.FindNode('PalettesContent',false);
+    if assigned(TBNode) then
+      TBSubNode:=TBNode.FirstChild;
+    if assigned(TBSubNode) then
+      while assigned(TBSubNode)do
+      begin
+         rf(TBSubNode,TBSubNode.NodeName,getAttrValue(TBSubNode,'Type',''),data);
+         TBSubNode:=TBSubNode.NextSibling;
+      end;
+  end;
+end;
+
 procedure TToolBarsManager.CreateToolbarContent(tb:TToolBar;TBNode:TDomNode);
 var
   TBSubNode:TDomNode;
@@ -881,7 +855,7 @@ begin
      TBSubNode:=TBSubNode.NextSibling;
   end;
 end;
-procedure TToolBarsManager.CreatePaletteContent(Palette:TPaletteControlBaseType;TBNode:TDomNode);
+procedure TToolBarsManager.CreatePaletteContent(Palette:TPaletteControlBaseType;TBNode:TDomNode;rootnode:TPersistent);
 var
   TBSubNode:TDomNode;
   PaletteControl:TPaletteControlBaseType;
@@ -890,7 +864,7 @@ begin
   TBSubNode:=TBNode.FirstChild;
   while assigned(TBSubNode)do
   begin
-    DoToolPaletteItemCreateFunc(TBSubNode.NodeName,TBSubNode,PaletteControl);
+    DoToolPaletteItemCreateFunc(TBSubNode.NodeName,TBSubNode,rootnode,PaletteControl);
     TBSubNode:=TBSubNode.NextSibling;
   end;
 end;
@@ -905,7 +879,7 @@ begin
   if TBNode<>nil then begin
     result:=DoToolPaletteCreateFunc(aControlName,aInternalName,TBNode);
     if assigned(TBNode) then
-      CreatePaletteContent(result,TBNode);
+      CreatePaletteContent(result,TBNode,nil);
   end else begin
     aInternalName:=format('Palette "%s" content not found',[aInternalName]);
     Application.messagebox(pchar(aInternalName),'');

@@ -47,25 +47,12 @@ uses
        uztoolbarsmanager,uzctextenteditor,{uzcoidecorations,}uzcfcommandline,uzctreenode,uzcflineweights,uzcctrllayercombobox,uzcctrlcontextmenu,
        uzcfcolors,uzcimagesmanager,uzcgui2textstyles,usupportgui,uzcgui2dimstyles,
   {}
-       zcchangeundocommand,uzgldrawcontext,uzglviewareaabstract,uzcguimanager,uzcinterfacedata,
+       uzcpalettes,zcchangeundocommand,uzgldrawcontext,uzglviewareaabstract,uzcguimanager,uzcinterfacedata,
        uzcenitiesvariablesextender,uzglviewareageneral,UniqueInstanceRaw;
   {}
 resourcestring
   rsClosed='Closed';
 type
-  TZPaletteListItem=class(TListItem)
-    public
-      Command:ansistring;
-  end;
-  TZPaletteListView=class(TListView)
-    procedure ProcessClick(ListItem:TListItem;DblClck:Boolean);
-
-    protected
-    MouseDownItem:TListItem;
-    DoubleClick:Boolean;
-      procedure MouseDown(Button: TMouseButton; Shift:TShiftState; X,Y:Integer); override;
-      procedure MouseUp(Button: TMouseButton; Shift:TShiftState; X,Y:Integer); override;
-  end;
   TMyToolbar=class(TToolBar)
     public
     destructor Destroy; override;
@@ -205,6 +192,7 @@ type
     procedure TBVariableCreateFunc(aNode: TDomNode; TB:TToolBar);
     function TBCreateZCADToolBar(aName,atype: string):TToolBar;
     procedure TTBRegisterInAPPFunc(aTBNode: TDomNode;aName,aType: string;Data:Pointer);
+    procedure TTPRegisterInAPPFunc(aTBNode: TDomNode;aName,aType: string;Data:Pointer);
     procedure ZActionsReader(aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList);
     procedure ZAction2VariableReader(aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList);
     procedure ZMainMenuItemReader(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
@@ -214,12 +202,11 @@ type
     procedure ZMainMenuCommandsHistory(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     procedure ZMainMenuCommand(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     procedure ZMainMenuToolBars(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+    procedure ZMainMenuToolPalettes(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     procedure ZMainMenuDrawings(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     procedure ZMainMenuSampleFiles(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     procedure ZMainMenuDebugFiles(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-    procedure ZPalettevsIconDoubleClick(Sender: TObject);
-    function ZPalettevsIconCreator(aControlName,aInternalCaption,aType: string;TBNode:TDomNode):TPaletteControlBaseType;
-    procedure ZPalettevsIconItemCreator(aNode: TDomNode; palette:TPaletteControlBaseType);
+
     procedure DockMasterCreateControl(Sender: TObject; aName: string; var
     AControl: TControl; DoDisableAutoSizing: boolean);
 
@@ -264,48 +251,6 @@ var
 implementation
 {$R *.lfm}
 
-procedure TZPaletteListView.MouseDown(Button: TMouseButton; Shift:TShiftState; X,Y:Integer);
-begin
-  if Button=mbLeft then
-  begin
-   MouseDownItem:=GetItemAt(x,y);
-   if ssDouble in Shift then
-     doubleclick:=true
-   else
-     doubleclick:=false;
-  end;
-end;
-
-procedure TZPaletteListView.MouseUp(Button: TMouseButton; Shift:TShiftState; X,Y:Integer);
-var
-   li:TListItem;
-begin
-     if Button=mbLeft then
-     begin
-       li:=GetItemAt(x,y);
-       if li=MouseDownItem then
-         ProcessClick(li,DoubleClick);
-     end;
-     MouseDownItem:=nil;
-     DoubleClick:=false;
-end;
-
-procedure TZPaletteListView.ProcessClick(ListItem:TListItem;DblClck:Boolean);
-var i:integer;
-begin
-  if DblClck then
-     ListItem:=ListItem;
-     {BeginUpdate;
-     process(ListItem,SubItem,DblClck);
-     for i:=0 to Items.Count-1 do
-     begin
-          if Items[i].Selected then
-          if Items[i]<>ListItem then
-             process(Items[i],SubItem,false);
-     end;
-     EndUpdate;}
-end;
-
 destructor TmyToolBar.Destroy;
 var
   I: Integer;
@@ -334,7 +279,7 @@ begin
      lp.Freze:=false;
      lp.Lock:=player^._lock;
      lp.Name:=Tria_AnsiToUtf8(player.Name);
-     lp.PLayer:=player;;
+     lp.PLayer:=player;
 end;
 {$ifdef windows}
 procedure TZCADMainWindow.SetTop;
@@ -1449,7 +1394,24 @@ begin
   action.options:=aName;
   action.DisableIfNoHandler:=false;
   self.StandartActions.AddMyAction(action);
-  action.pfoundcommand:=commandmanager.FindCommand('ShowToolBar');
+  action.pfoundcommand:=commandmanager.FindCommand(action.command);
+  pm1:=TMenuItem.Create(TMenuItem(Data));
+  pm1.Action:=action;
+  TMenuItem(Data).Add(pm1);
+end;
+procedure TZCADMainWindow.TTPRegisterInAPPFunc(aTBNode: TDomNode;aName,aType: string;Data:Pointer);
+var
+    pm1:TMenuItem;
+    action:tmyaction;
+begin
+  action:=TmyAction.Create(self);
+  action.Name:=ToolPaletteNameToActionName(aName);
+  action.Caption:=aName;
+  action.command:='Show';
+  action.options:=ToolPaletteNamePrefix+aName;
+  action.DisableIfNoHandler:=false;
+  self.StandartActions.AddMyAction(action);
+  action.pfoundcommand:=commandmanager.FindCommand(action.command);
   pm1:=TMenuItem.Create(TMenuItem(Data));
   pm1.Action:=action;
   TMenuItem(Data).Add(pm1);
@@ -1816,14 +1778,19 @@ begin
   ToolBarsManager.RegisterMenuCreateFunc('LastCommands',ZMainMenuCommandsHistory);
   ToolBarsManager.RegisterMenuCreateFunc('Command',ZMainMenuCommand);
   ToolBarsManager.RegisterMenuCreateFunc('Toolbars',ZMainMenuToolBars);
+  ToolBarsManager.RegisterMenuCreateFunc('ToolPalettes',ZMainMenuToolPalettes);
   ToolBarsManager.RegisterMenuCreateFunc('Drawings',ZMainMenuDrawings);
   ToolBarsManager.RegisterMenuCreateFunc('SampleFiles',ZMainMenuSampleFiles);
   ToolBarsManager.RegisterMenuCreateFunc('DebugFiles',ZMainMenuDebugFiles);
   ToolBarsManager.RegisterMenuCreateFunc('CreateMenu',ToolBarsManager.CreateDefaultMenu);
   ToolBarsManager.RegisterMenuCreateFunc('SetMainMenu',ToolBarsManager.DefaultSetMenu);
 
-  ToolBarsManager.RegisterPaletteCreateFunc('vsIcon',ZPalettevsIconCreator);
-  ToolBarsManager.RegisterPaletteItemCreateFunc('ZVSICommand',ZPalettevsIconItemCreator);
+  ToolBarsManager.RegisterPaletteCreateFunc('vsIcon',TPaletteHelper.ZPalettevsIconCreator);
+  ToolBarsManager.RegisterPaletteItemCreateFunc('ZVSICommand',TPaletteHelper.ZPalettevsIconItemCreator);
+
+  ToolBarsManager.RegisterPaletteCreateFunc('Tree',TPaletteHelper.ZPaletteTreeCreator);
+  ToolBarsManager.RegisterPaletteItemCreateFunc('ZTreeCommand',TPaletteHelper.ZPaletteTreeItemCreator);
+  ToolBarsManager.RegisterPaletteItemCreateFunc('ZTreeNode',TPaletteHelper.ZPaletteTreeNodeCreator);
 
   commandmanager.executefile('*components/stage0.cmd',drawings.GetCurrentDWG,nil);
 
@@ -1970,6 +1937,12 @@ begin
   ToolBarsManager.EnumerateToolBars(TTBRegisterInAPPFunc,RootMenuItem);
 end;
 
+procedure TZCADMainWindow.ZMainMenuToolPalettes(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+begin
+  ToolBarsManager.EnumerateToolPalettes(TTPRegisterInAPPFunc,RootMenuItem);
+end;
+
+
 procedure TZCADMainWindow.ZMainMenuDrawings(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
 var
   i:integer;
@@ -2010,52 +1983,6 @@ begin
   FromDirIterator(expandpath('*../errors/'),'*.dxf','',@bugfileiterator,nil);
   localpm.localpm:=nil;
   localpm.ImageIndex:=-1;
-end;
-
-function TZCADMainWindow.ZPalettevsIconCreator(aControlName,aInternalCaption,aType: string;TBNode:TDomNode):TPaletteControlBaseType;
-begin
-  result:=TCustomForm(Tform.NewInstance);
-//if DoDisableAlign then
-  if result is TWinControl then
-    TWinControl(result).DisableAlign;
-  TCustomForm(result).CreateNew(Application);
-  TCustomForm(result).Name:=aControlName;
-  TCustomForm(result).Caption:=getAttrValue(TBNode,'Caption',aInternalCaption);
-  with TZPaletteListView.Create(result) do
-  begin
-    LargeImagesWidth:=getAttrValue(TBNode,'ImagesWidth',64);
-    SmallImagesWidth:=LargeImagesWidth;
-    LargeImages:=ImagesManager.IconList;
-    SmallImages:=ImagesManager.IconList;
-    align:=alClient;
-    ViewStyle:=vsIcon;
-    ReadOnly:=true;
-    IconOptions.AutoArrange:=True;
-    DragMode:=dmAutomatic;
-    Parent:=result;
-    OnDblClick:=ZPalettevsIconDoubleClick;
-  end;
-end;
-procedure TZCADMainWindow.ZPalettevsIconDoubleClick(Sender: TObject);
-var
-    cmd:AnsiString;
-begin
-  if TZPaletteListView(Sender).Selected=nil then  exit;
-  cmd:=TZPaletteListItem(TZPaletteListView(Sender).Selected).Command;
-  if cmd<>'' then
-    commandmanager.executecommandsilent(@cmd[1],drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
-end;
-
-procedure TZCADMainWindow.ZPalettevsIconItemCreator(aNode: TDomNode; palette:TPaletteControlBaseType);
-var
-  LI:TZPaletteListItem;
-begin
-  LI:=TZPaletteListItem.Create(TListView(palette).Items);
-  TListView(palette).Items.AddItem(LI);
-  LI.Caption:=getAttrValue(aNode,'Caption','');
-  LI.Caption:=InterfaceTranslate(palette.Parent.Name+'~caption',LI.Caption);
-  LI.ImageIndex:=ImagesManager.GetImageIndex(getAttrValue(aNode,'Img',''));
-  LI.Command:=getAttrValue(aNode,'Command','');
 end;
 
 procedure TZCADMainWindow.AfterConstruction;

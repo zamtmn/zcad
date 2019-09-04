@@ -1,13 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <PalettesContent>
-    <General Type="vsIcon" Caption='Извещатели ПС' ImagesWidth='64'>
-      <ZVSICommand Command="Insert(DEVICE_PS_DAT_SMOKE)" Img='DEVICE_PS_DAT_SMOKE' Caption='Дымовой'/>
-      <ZVSICommand Command="Insert(DEVICE_PS_DAT_SMOKE_FALSH)" Img='DEVICE_PS_DAT_SMOKE_FALSH' Caption='Дымовой запотолочный1'/>
-      <ZVSICommand Command="Insert(DEVICE_PS_DAT_SMOKE_FALSH2)" Img='DEVICE_PS_DAT_SMOKE_FALSH2' Caption='Дымовой запотолочный2'/>
-      <ZVSICommand Command="Insert(DEVICE_PS_DAT_SMOKE_AVTON)" Img='DEVICE_PS_DAT_SMOKE_AVTON' Caption='Дымовой автономный'/>
-      <ZVSICommand Command="Insert(DEVICE_PS_DAT_TERMO)" Img='DEVICE_PS_DAT_TERMO' Caption='Тепловой'/>
-      <ZVSICommand Command="Insert(DEVICE_PS_DAT_HAND)" Img='DEVICE_PS_DAT_HAND' Caption='Ручной'/>
-    </General>
+    <BlockLib Type="Tree" Caption='Библиотека блоков' ImagesWidth='24'>
+      <ZTreeNode Caption='Сдаботочка'>
+        <ZTreeNode Caption='Сигнализация'>
+          <ZTreeCommand Command="Insert(DEVICE_PS_ARK_DEVICE)" Img='DEVICE_PS_ARK_DEVICE_150' Caption='Прибор'/>
+          <ZTreeNode Caption='ПС'>
+            <ZTreeNode Caption='Извещатели'>
+              <ZTreeCommand Command="Insert(DEVICE_PS_DAT_SMOKE)" Img='DEVICE_PS_DAT_SMOKE_150' Caption='Дымовой'/>
+              <ZTreeCommand Command="Insert(DEVICE_PS_DAT_SMOKE_FALSH)" Img='DEVICE_PS_DAT_SMOKE_FALSH_150' Caption='Дымовой запотолочный1'/>
+              <ZTreeCommand Command="Insert(DEVICE_PS_DAT_SMOKE_FALSH2)" Img='DEVICE_PS_DAT_SMOKE_FALSH2_150' Caption='Дымовой запотолочный2'/>
+              <ZTreeCommand Command="Insert(DEVICE_PS_DAT_SMOKE_AVTON)" Img='DEVICE_PS_DAT_SMOKE_AVTON_150' Caption='Дымовой автономный'/>
+              <ZTreeCommand Command="Insert(DEVICE_PS_DAT_TERMO)" Img='DEVICE_PS_DAT_TERMO_150' Caption='Тепловой'/>
+              <ZTreeCommand Command="Insert(DEVICE_PS_DAT_HAND)" Img='DEVICE_PS_DAT_HAND_150' Caption='Ручной'/>
+            </ZTreeNode>
+          </ZTreeNode>
+        </ZTreeNode>
+     </ZTreeNode>
+    </BlockLib>
+    <PSDat Type="vsIcon" Caption='Извещатели ПС' ImagesWidth='48'>
+      <ZVSICommand Command="Insert(DEVICE_PS_DAT_SMOKE)" Img='DEVICE_PS_DAT_SMOKE_300' Caption='Дымовой'/>
+      <ZVSICommand Command="Insert(DEVICE_PS_DAT_SMOKE_FALSH)" Img='DEVICE_PS_DAT_SMOKE_FALSH_300' Caption='Дымовой запотолочный1'/>
+      <ZVSICommand Command="Insert(DEVICE_PS_DAT_SMOKE_FALSH2)" Img='DEVICE_PS_DAT_SMOKE_FALSH2_300' Caption='Дымовой запотолочный2'/>
+      <ZVSICommand Command="Insert(DEVICE_PS_DAT_SMOKE_AVTON)" Img='DEVICE_PS_DAT_SMOKE_AVTON_300' Caption='Дымовой автономный'/>
+      <ZVSICommand Command="Insert(DEVICE_PS_DAT_TERMO)" Img='DEVICE_PS_DAT_TERMO_300' Caption='Тепловой'/>
+      <ZVSICommand Command="Insert(DEVICE_PS_DAT_HAND)" Img='DEVICE_PS_DAT_HAND_300' Caption='Ручной'/>
+    </PSDat>
   </PalettesContent>
 </CONFIG>

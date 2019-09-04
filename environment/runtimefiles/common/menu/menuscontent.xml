@@ -82,6 +82,9 @@
         <MainMenuItem Name="ToolBars">
           <ToolBars/>
         </MainMenuItem>
+        <MainMenuItem Name="ToolPalettes">
+          <ToolPalettes/>
+        </MainMenuItem>
         <Separator/>
         <Action Name="ACN_SAVELAYOUT"/>
       </MainMenuItem>

@@ -129,6 +129,7 @@ type
     function FindBarsContent(toolbarname:string):TDomNode;
     function FindPalettesContent(PaletteName:string):TDomNode;
     procedure EnumerateToolBars(rf:TTBRegisterInAPPFunc;Data:Pointer);
+    procedure EnumerateToolPalettes(rf:TTBRegisterInAPPFunc;Data:Pointer);
     procedure CreateToolbarContent(tb:TToolBar;TBNode:TDomNode);
     procedure CreatePaletteContent(Palette:TPaletteControlBaseType;TBNode:TDomNode;rootnode:TPersistent);
     procedure RegisterTBCreateFunc(TBType:string;TBCreateFunc:TTBCreateFunc);
@@ -169,6 +170,7 @@ type
   function getAttrValue(const aNode:TDomNode;const AttrName,DefValue:string):string;overload;
   function getAttrValue(const aNode:TDomNode;const AttrName:string;const DefValue:integer):integer;overload;
   function ToolBarNameToActionName(tbname:string):string;
+  function ToolPaletteNameToActionName(tbname:string):string;
   function FormNameToActionName(fname:string):string;
   procedure RegisterActionsManager(am:TProgramActionsManagerClass);
 
@@ -367,7 +369,10 @@ function ToolBarNameToActionName(tbname:string):string;
 begin
   result:='ACN_SHOWTOOLBAR_'+uppercase(tbname);
 end;
-
+function ToolPaletteNameToActionName(tbname:string):string;
+begin
+  result:='ACN_SHOWTOOLPALETTE_'+uppercase(tbname);
+end;
 function FormNameToActionName(fname:string):string;
 begin
   result:='ACN_SHOWFORM_'+uppercase(fname);
@@ -859,6 +864,24 @@ begin
   if assigned(rf) then
   begin
     TBNode:=TBConfig.FindNode('ToolBarsContent',false);
+    if assigned(TBNode) then
+      TBSubNode:=TBNode.FirstChild;
+    if assigned(TBSubNode) then
+      while assigned(TBSubNode)do
+      begin
+         rf(TBSubNode,TBSubNode.NodeName,getAttrValue(TBSubNode,'Type',''),data);
+         TBSubNode:=TBSubNode.NextSibling;
+      end;
+  end;
+end;
+
+procedure TToolBarsManager.EnumerateToolPalettes(rf:TTBRegisterInAPPFunc;Data:Pointer);
+var
+  TBNode,TBSubNode,TBNodeType:TDomNode;
+begin
+  if assigned(rf) then
+  begin
+    TBNode:=PalettesConfig.FindNode('PalettesContent',false);
     if assigned(TBNode) then
       TBSubNode:=TBNode.FirstChild;
     if assigned(TBSubNode) then

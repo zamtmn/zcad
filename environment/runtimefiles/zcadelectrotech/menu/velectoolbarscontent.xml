@@ -4,6 +4,7 @@
       <ElectrotechVelec Type="ToolBar">
       <Action Name="ACN_SUPELINE"/>
       <Action Name="ACN_slagcabCom"/>
+      <Action Name="ACN_vBuildSSSchema"/>
     </ElectrotechVelec>
   </ToolBarsContent>
 </CONFIG>

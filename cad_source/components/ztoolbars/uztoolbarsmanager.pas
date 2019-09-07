@@ -32,7 +32,7 @@ type
   TIterateToolbarsContentProc=procedure (_tb:TToolBar;_control:tcontrol);
 
   TPaletteControlBaseType=TWinControl;
-  TPaletteCreateFunc=function (aName,aCaption,aType: string;TBNode:TDomNode):TPaletteControlBaseType of object;
+  TPaletteCreateFunc=function (aName,aCaption,aType: string;TBNode:TDomNode;var PaletteControl:TPaletteControlBaseType):TPaletteControlBaseType of object;
   TPaletteItemCreateFunc=procedure (aNode: TDomNode;rootnode:TPersistent;palette:TPaletteControlBaseType) of object;
   TTBCreateFunc=function (aName,aType: string):TToolBar of object;
   TTBItemCreateFunc=procedure (aNode: TDomNode; TB:TToolBar) of object;
@@ -82,7 +82,7 @@ type
     procedure EnumerateToolBars(rf:TTBRegisterInAPPFunc;Data:Pointer);
     procedure EnumerateToolPalettes(rf:TTBRegisterInAPPFunc;Data:Pointer);
     procedure CreateToolbarContent(tb:TToolBar;TBNode:TDomNode);
-    procedure CreatePaletteContent(Palette:TPaletteControlBaseType;TBNode:TDomNode;rootnode:TPersistent);
+    procedure CreatePaletteContent(Palette:TPaletteControlBaseType;TBNode:TDomNode;rootnode:TPersistent;PaletteControl:TPaletteControlBaseType);
     procedure RegisterTBCreateFunc(TBType:string;TBCreateFunc:TTBCreateFunc);
     procedure RegisterPaletteCreateFunc(PaletteType:string;PaletteCreateFunc:TPaletteCreateFunc);
     procedure RegisterPaletteItemCreateFunc(aNodeName:string;PaletteItemCreateFunc:TPaletteItemCreateFunc);
@@ -94,7 +94,7 @@ type
     function CreateToolPalette(aControlName: string;DoDisableAlign:boolean=false):TPaletteControlBaseType;
     function AddContentToToolbar(tb:TToolBar;aName:string):TToolBar;
     function DoTBCreateFunc(aName,aType:string):TToolBar;
-    function DoToolPaletteCreateFunc(aControlName,aInternalName:string;TBNode:TDomNode):TPaletteControlBaseType;
+    function DoToolPaletteCreateFunc(aControlName,aInternalName:string;TBNode:TDomNode;var PaletteControl:TPaletteControlBaseType):TPaletteControlBaseType;
     procedure DoTBItemCreateFunc(aNodeName:string; aNode: TDomNode; TB:TToolBar);
     procedure DoToolPaletteItemCreateFunc(aNodeName:string; aNode: TDomNode;rootnode:TPersistent;PC:TPaletteControlBaseType);
 
@@ -532,7 +532,7 @@ begin
       picf(aNode,rootnode,PC);
 end;
 
-function TToolBarsManager.DoToolPaletteCreateFunc(aControlName,aInternalName:string;TBNode:TDomNode):TPaletteControlBaseType;
+function TToolBarsManager.DoToolPaletteCreateFunc(aControlName,aInternalName:string;TBNode:TDomNode;var PaletteControl:TPaletteControlBaseType):TPaletteControlBaseType;
 var
   tpcf:TPaletteCreateFunc;
   aType:string;
@@ -540,7 +540,7 @@ begin
   aType:=getAttrValue(TBNode,'Type','');
   if assigned(PaletteCreateFuncRegister) then
     if PaletteCreateFuncRegister.TryGetValue(uppercase(aType),tpcf)then
-      result:=tpcf(aControlName,aInternalName,aType,TBNode);
+      result:=tpcf(aControlName,aInternalName,aType,TBNode,PaletteControl);
 end;
 
 function IsFloatToolbar(tb:TToolBar;out tf:TCustomDockForm):boolean;
@@ -855,12 +855,11 @@ begin
      TBSubNode:=TBSubNode.NextSibling;
   end;
 end;
-procedure TToolBarsManager.CreatePaletteContent(Palette:TPaletteControlBaseType;TBNode:TDomNode;rootnode:TPersistent);
+procedure TToolBarsManager.CreatePaletteContent(Palette:TPaletteControlBaseType;TBNode:TDomNode;rootnode:TPersistent;PaletteControl:TPaletteControlBaseType);
 var
   TBSubNode:TDomNode;
-  PaletteControl:TPaletteControlBaseType;
 begin
-  PaletteControl:=TListView(Palette.Controls[0]);
+  //PaletteControl:=TListView(Palette.Controls[1]);
   TBSubNode:=TBNode.FirstChild;
   while assigned(TBSubNode)do
   begin
@@ -873,13 +872,14 @@ function TToolBarsManager.CreateToolPalette(aControlName: string;DoDisableAlign:
 var
   aInternalName:string;
   TBNode,TBSubNode:TDomNode;
+  PaletteControl:TPaletteControlBaseType;
 begin
   aInternalName:=copy(aControlName,length(ToolPaletteNamePrefix)+1,length(aControlName)-length(ToolPaletteNamePrefix));
   TBNode:=FindPalettesContent(aInternalName);
   if TBNode<>nil then begin
-    result:=DoToolPaletteCreateFunc(aControlName,aInternalName,TBNode);
+    result:=DoToolPaletteCreateFunc(aControlName,aInternalName,TBNode,PaletteControl);
     if assigned(TBNode) then
-      CreatePaletteContent(result,TBNode,nil);
+      CreatePaletteContent(result,TBNode,nil,PaletteControl);
   end else begin
     aInternalName:=format('Palette "%s" content not found',[aInternalName]);
     Application.messagebox(pchar(aInternalName),'');

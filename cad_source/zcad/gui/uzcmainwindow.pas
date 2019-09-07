@@ -178,7 +178,7 @@ type
     procedure asynccloseapp(Data: PtrInt);
     procedure processfilehistory(filename:string);
     procedure processcommandhistory(Command:string);
-    function CreateZCADControl(aName: string;DoDisableAlign:boolean=false):TControl;
+    function CreateZCADControl(aName: string;DoDisableAutoSizing:boolean=false):TControl;
     procedure TBActionCreateFunc(aNode: TDomNode; TB:TToolBar);
     procedure TBGroupActionCreateFunc(aNode: TDomNode; TB:TToolBar);
     procedure TBButtonCreateFunc(aNode: TDomNode; TB:TToolBar);
@@ -878,9 +878,9 @@ begin
     exit;
   end;
   aControl:=CreateZCADControl(aName,DoDisableAutoSizing);
-  if assigned(aControl)then
+  {if assigned(aControl)then
   if not DoDisableAutoSizing then
-                               Acontrol.EnableAutoSizing;
+                               Acontrol.EnableAutoSizing;}
 end;
 
 procedure LoadLayoutFromFile(Filename: string);
@@ -1179,7 +1179,7 @@ begin
      if MessageDlg(errmsg,mtError,[mbYes, mbAbort],0)=mrAbort then
                                                                   halt(0);
 end;
-function TZCADMainWindow.CreateZCADControl(aName: string;DoDisableAlign:boolean=false):TControl;
+function TZCADMainWindow.CreateZCADControl(aName: string;DoDisableAutoSizing:boolean=false):TControl;
 var
   ta:TmyAction;
   PFID:PTFormInfoData;
@@ -1188,7 +1188,7 @@ begin
   if ta<>nil then
                  ta.Checked:=true;
   if pos(ToolPaletteNamePrefix,uppercase(aname))=1 then begin
-    result:=ToolBarsManager.CreateToolPalette(aName,DoDisableAlign);
+    result:=ToolBarsManager.CreateToolPalette(aName,DoDisableAutoSizing);
   end
   else if ZCADGUIManager.GetZCADFormInfo(aname,PFID) then begin
     aname:=aname;
@@ -1198,9 +1198,9 @@ begin
       result:=Tform(PFID^.FormClass.NewInstance);
       tobject(PFID.PInstanceVariable^):=result;
     end;
-    if DoDisableAlign then
+    if DoDisableAutoSizing then
       if result is TWinControl then
-        TWinControl(result).DisableAlign;
+        TWinControl(result).DisableAutoSizing;
     if result is TCustomForm then begin
       if PFID^.DesignTimeForm then
         TCustomForm(result).Create(Application)

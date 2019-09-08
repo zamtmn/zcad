@@ -20,10 +20,10 @@ unit uzcpalettes;
 {$INCLUDE def.inc}
 interface
 uses
-     uzcsysparams,uzcutils,uzcsysvars,uzbtypesbase,uzbtypes,uzcsysinfo,
+     uzcstrconsts,uzcsysparams,uzcsysvars,uzbtypes,uzcsysinfo,
      uzcinfoform,Varman,uzcinterface,laz.VirtualTrees,
-     uzedrawingdef,uzbstrproc,uzeenttext,uzeconsts,uzcstrconsts,uzcfsinglelinetexteditor,
-     Masks,StdCtrls,Controls,Classes,Forms,uzccommandsmanager,Laz2_DOM,ComCtrls,uztoolbarsmanager,uzcimagesmanager,uzctranslations,uzcdrawings;
+     uzbstrproc,uzeenttext,
+     EditBtn,Masks,StdCtrls,Controls,Classes,Forms,uzccommandsmanager,Laz2_DOM,ComCtrls,uztoolbarsmanager,uzcimagesmanager,uzctranslations,uzcdrawings;
 type
     TZPaletteListItem=class(TListItem)
     public
@@ -31,15 +31,10 @@ type
   end;
   PTPaletteTreeNodeData=^TPaletteTreeNodeData;
   TPaletteTreeNodeData=record
-    //NodeMode:TNodeMode;
     text,command:string;
     imageindex:integer;
-    //pent:PGDBObjEntity;
   end;
-  PZPaletteTreeNode=PVirtualNode;{class(TTreeNode)
-    public
-      Command:ansistring;
-  end;}
+  PZPaletteTreeNode=PVirtualNode;
   TZPaletteListView=class(TListView)
     procedure ProcessClick(ListItem:TListItem;DblClck:Boolean);
 
@@ -51,14 +46,14 @@ type
   end;
   TZPaletteTreeView=class(TVirtualStringTree)
   public
-    //root:PVirtualNode;
     procedure _GetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;
                          TextType: TVSTTextType; var CellText: String);
     procedure _GetImage(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
                           var Ghosted: Boolean; var ImageIndex: Integer);
   end;
-  TZPaletteTreeViewFilter=class(TEdit)
+  TZPaletteTreeViewFilter=class(TEditButton)
     tree:TZPaletteTreeView;
+    procedure PurgeFilter(Sender: TObject);
   end;
 
 TPaletteHelper=class
@@ -67,7 +62,6 @@ class procedure ZPalettevsIconDoubleClick(Sender: TObject);
 class function ZPalettevsIconCreator(aControlName,aInternalCaption,aType: string;TBNode:TDomNode;var PaletteControl:TPaletteControlBaseType):TPaletteControlBaseType;
 class procedure ZPalettevsIconItemCreator(aNode: TDomNode;rootnode:TPersistent;palette:TPaletteControlBaseType);
 
-//class procedure ZPaletteTreeCreatorClass(Sender: TCustomTreeView;var NodeClass: TTreeNodeClass);
 class function ZPaletteTreeCreator(aControlName,aInternalCaption,aType: string;TBNode:TDomNode;var PaletteControl:TPaletteControlBaseType):TPaletteControlBaseType;
 class procedure ZPaletteTreeItemCreator(aNode: TDomNode;rootnode:TPersistent;palette:TPaletteControlBaseType);
 class procedure ZPaletteTreeNodeCreator(aNode: TDomNode;rootnode:TPersistent;palette:TPaletteControlBaseType);
@@ -130,22 +124,12 @@ var i:integer;
 begin
   if DblClck then
      ListItem:=ListItem;
-     {BeginUpdate;
-     process(ListItem,SubItem,DblClck);
-     for i:=0 to Items.Count-1 do
-     begin
-          if Items[i].Selected then
-          if Items[i]<>ListItem then
-             process(Items[i],SubItem,false);
-     end;
-     EndUpdate;}
 end;
 
 
 class function TPaletteHelper.ZPalettevsIconCreator(aControlName,aInternalCaption,aType: string;TBNode:TDomNode;var PaletteControl:TPaletteControlBaseType):TPaletteControlBaseType;
 begin
   result:=TCustomForm(Tform.NewInstance);
-//if DoDisableAlign then
   if result is TWinControl then
     TWinControl(result).DisableAlign;
   TCustomForm(result).CreateNew(Application);
@@ -208,6 +192,11 @@ begin
   until (node=nil)or(node=node.NextSibling);
 end;
 
+procedure TZPaletteTreeViewFilter.PurgeFilter(Sender: TObject);
+begin
+  Text:='';
+end;
+
 class procedure TPaletteHelper.ZPaletteTreeFilter(Sender: TObject);
 var
    ZPaletteTreeViewFilter:TZPaletteTreeViewFilter;
@@ -232,7 +221,6 @@ var
    PaletteTreeViewFilter:TZPaletteTreeViewFilter;
 begin
   result:=TCustomForm(Tform.NewInstance);
-//if DoDisableAlign then
   if result is TWinControl then
     TWinControl(result).DisableAlign;
   TCustomForm(result).CreateNew(Application);
@@ -241,9 +229,15 @@ begin
   PaletteTreeViewFilter:=TZPaletteTreeViewFilter.Create(result);
   with PaletteTreeViewFilter do
   begin
+    TextHint:=rsFilterHint;
+    Edit.BorderStyle:=bsNone;
+    Flat:=true;
     align:=alTop;
     Parent:=result;
     OnChange:=ZPaletteTreeFilter;
+    Button.Images:=ImagesManager.IconList;
+    Button.ImageIndex:=ImagesManager.GetImageIndex('purge');
+    Button.OnClick:=ZPaletteTreeFilter;
   end;
   PaletteControl:=TZPaletteTreeView.Create(result);
   with TZPaletteTreeView(PaletteControl) do
@@ -252,45 +246,30 @@ begin
     ho:=ho+[hoVisible,hoAutoResize];
     Header.Options:=ho;
     col1:=Header.Columns.Add;
-    col1.Text:='Desk';
+    col1.Text:=rsDescription;
     col1.CaptionAlignment:=taCenter;
     col1.Width:=2;
     col2:=Header.Columns.Add;
-    col2.Text:='Command';
+    col2.Text:=rsCommand;
     col2.CaptionAlignment:=taCenter;
     col1.Width:=20;
 
     po:=TreeOptions.PaintOptions;
-    po:=po-[toShowFilteredNodes]{-[toShowRoot]};
+    po:=po-[toShowFilteredNodes];
     TreeOptions.PaintOptions:=po;
-    (*mo:=TreeOptions.MiscOptions;
-    mo:=mo+[toReportMode]{-[toShowRoot]};
-    TreeOptions.MiscOptions:=mo;*)
 
     NodeDataSize:=sizeof(TPaletteTreeNodeData);
-    {root:=AddChild(nil,nil);
-    pTND:=GetNodeData(root);
-    pTND^.ImageIndex:=-1;
-    pTND^.text:='Root';}
     OnGetText:=_GetText;
     OnGetImageIndex:=_GetImage;
-    //OnCreateNodeClass:=ZPaletteTreeCreatorClass;
-    //OnCustomCreateItem:=
     ImagesWidth:=getAttrValue(TBNode,'ImagesWidth',64);
-    //SmallImagesWidth:=LargeImagesWidth;
     Images:=ImagesManager.IconList;
-    //StateImages:=ImagesManager.IconList;
-    //select
-    //SmallImages:=ImagesManager.IconList;
     align:=alClient;
-    //ViewStyle:=vsIcon;
-    //ReadOnly:=true;
-    //IconOptions.AutoArrange:=True;
     DragMode:=dmAutomatic;
     Parent:=result;
     OnDblClick:=ZPalettevsIconDoubleClick;
   end;
   PaletteTreeViewFilter.tree:=TZPaletteTreeView(PaletteControl);
+  PaletteTreeViewFilter.Button.OnClick:=PaletteTreeViewFilter.PurgeFilter;
 end;
 class procedure TPaletteHelper.ZPaletteTreeItemCreator(aNode: TDomNode;rootnode:TPersistent; palette:TPaletteControlBaseType);
 var
@@ -301,13 +280,7 @@ begin
   pTND:=TZPaletteTreeView(palette).GetNodeData(TN);
   pTND^.Text:=InterfaceTranslate(palette.Parent.Name+'~caption',getAttrValue(aNode,'Caption',''));
   pTND^.ImageIndex:=ImagesManager.GetImageIndex(getAttrValue(aNode,'Img',''));
-  //TN.SelectedIndex:=TN.ImageIndex;
   pTND^.Command:=getAttrValue(aNode,'Command','');
-  {TN:=PZPaletteTreeNode(TZPaletteTreeView(palette).Items.AddChild(TTreeNode(rootnode),getAttrValue(aNode,'Caption','')));
-  TN.Text:=InterfaceTranslate(palette.Parent.Name+'~caption',TN.Text);
-  TN.ImageIndex:=ImagesManager.GetImageIndex(getAttrValue(aNode,'Img',''));
-  TN.SelectedIndex:=TN.ImageIndex;
-  TN.Command:=getAttrValue(aNode,'Command','');}
 end;
 class procedure TPaletteHelper.ZPaletteTreeNodeCreator(aNode: TDomNode;rootnode:TPersistent; palette:TPaletteControlBaseType);
 var
@@ -316,11 +289,8 @@ var
   TBSubNode:TDomNode;
   imgname:AnsiString;
 begin
-  {if rootnode=nil then
-    rootnode:=pointer(TZPaletteTreeView(palette).root);}
   TN:=TZPaletteTreeView(palette).AddChild(PZPaletteTreeNode(rootnode),nil);
   pTND:=TZPaletteTreeView(palette).GetNodeData(TN);
-  //TN:=PZPaletteTreeNode(TZPaletteTreeView(palette).Items.AddChild(TTreeNode(rootnode),getAttrValue(aNode,'Caption','')));
   pTND^.Text:=InterfaceTranslate(palette.Parent.Name+'~caption',getAttrValue(aNode,'Caption',''));
   imgname:=getAttrValue(aNode,'Img','');
   if imgname<>'' then

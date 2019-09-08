@@ -225,6 +225,10 @@ resourcestring
   rsSelectLT='Select line type...';
   rsColorNum='Color %d';
   rsEmpty='Empty';
+  rsFilterHint='(filter)';
+  rsCommand='Command';
+  rsDescription='Description';
+
   rsmm='mm';
   rscompiledtimemsg='Done.  %s second';
   rsprocesstimemsg='%s:  %s second';

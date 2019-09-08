@@ -22,7 +22,7 @@ interface
 
 uses
   StdCtrls,Controls,Classes,LCLType,ComCtrls,Graphics,LMessages,LCLIntf,LCLProc,
-  Laz2_XMLCfg,Laz2_DOM,sysutils;
+  Laz2_XMLCfg,Laz2_DOM,sysutils,EditBtn;
 
 type
   TIsShortcutFunc=function(var Message: TLMKey): boolean of object;
@@ -63,6 +63,7 @@ end;
 function isEditable(const ActiveControl:TWinControl):boolean;
 begin
   if (ActiveControl is TEdit)
+  or (ActiveControl is TEbEdit)
   or ((ActiveControl is TMemo)and((ActiveControl as TMemo).ReadOnly=false))
   or ((ActiveControl is TComboBox)and((ActiveControl as TComboBox).Style in [csSimple,csDropDown,csOwnerDrawEditableFixed,csOwnerDrawEditableVariable])) then
     result:=true

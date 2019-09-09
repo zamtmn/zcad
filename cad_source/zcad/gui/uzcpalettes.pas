@@ -173,7 +173,9 @@ begin
   repeat
     SubNode := node.FirstChild;
     if assigned(SubNode) then
-      MatchInChildren:=DoNode(tree,SubNode,pattern);
+      MatchInChildren:=DoNode(tree,SubNode,pattern)
+    else
+      MatchInChildren:=false;
     if MatchInChildren then
       node.States:=node.States+[vsExpanded];
     if pattern='' then
@@ -275,12 +277,18 @@ class procedure TPaletteHelper.ZPaletteTreeItemCreator(aNode: TDomNode;rootnode:
 var
   TN:PZPaletteTreeNode;
   pTND:PTPaletteTreeNodeData;
+  command,operands:AnsiString;
 begin
   TN:=TZPaletteTreeView(palette).AddChild(PZPaletteTreeNode(rootnode),nil);
   pTND:=TZPaletteTreeView(palette).GetNodeData(TN);
-  pTND^.Text:=InterfaceTranslate(palette.Parent.Name+'~caption',getAttrValue(aNode,'Caption',''));
-  pTND^.ImageIndex:=ImagesManager.GetImageIndex(getAttrValue(aNode,'Img',''));
   pTND^.Command:=getAttrValue(aNode,'Command','');
+  ParseCommand(pTND^.Command,command,operands);
+  pTND^.Text:=getAttrValue(aNode,'Caption','');
+  if pTND^.Text='' then
+    pTND^.Text:=operands
+  else
+    pTND^.Text:=InterfaceTranslate(palette.Parent.Name+'~caption',pTND^.Text);
+  pTND^.ImageIndex:=ImagesManager.GetImageIndex(getAttrValue(aNode,'Img',operands));
 end;
 class procedure TPaletteHelper.ZPaletteTreeNodeCreator(aNode: TDomNode;rootnode:TPersistent; palette:TPaletteControlBaseType);
 var

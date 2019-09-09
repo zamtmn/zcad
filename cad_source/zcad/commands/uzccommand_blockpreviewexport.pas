@@ -63,6 +63,7 @@ var
    PrintParam:TRasterizeParams;
    BlockName,imgsize:AnsiString;
    sx:integer;
+   tv:GDBvertex;
 begin //BlockPreViewExport(128|DEVICE_PS_DAT_HAND|*images\palettes)
       //ExecuteFile(*components\blockpreviewexport.cmd)
   GetPartOfPath(imgsize,operands,'|');
@@ -121,7 +122,9 @@ begin //BlockPreViewExport(128|DEVICE_PS_DAT_HAND|*images\palettes)
     BMP.Canvas.Brush.Style:=bsSolid;
     BMP.Canvas.FillRect(0,0,sx,sx);
     PrinterDrawer:=TZGLCanvasDrawer.create;
-    rasterize(cdwg,sx,sx,VertexMulOnSc(pb^.vp.BoundingBox.LBN,1.2),VertexMulOnSc(pb^.vp.BoundingBox.RTF,1.01),PrintParam,BMP.Canvas,PrinterDrawer);
+    tv:=VertexSub(pb^.vp.BoundingBox.RTF,pb^.vp.BoundingBox.LBN);
+    tv:=VertexMulOnSc(tv,0.1);
+    rasterize(cdwg,sx,sx,VertexSub(pb^.vp.BoundingBox.LBN,tv),VertexAdd(pb^.vp.BoundingBox.RTF,tv),PrintParam,BMP.Canvas,PrinterDrawer);
     cdwg^.GetCurrentROOT^.GoodRemoveMiFromArray(pb^);
     BMP.SaveToFile(ExpandPath(operands));
     BMP.Free;

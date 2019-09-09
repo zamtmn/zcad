@@ -123,7 +123,7 @@ begin //BlockPreViewExport(128|DEVICE_PS_DAT_HAND|*images\palettes)
     BMP.Canvas.FillRect(0,0,sx,sx);
     PrinterDrawer:=TZGLCanvasDrawer.create;
     tv:=VertexSub(pb^.vp.BoundingBox.RTF,pb^.vp.BoundingBox.LBN);
-    tv:=VertexMulOnSc(tv,0.1);
+    tv:=VertexMulOnSc(tv,0.15);
     rasterize(cdwg,sx,sx,VertexSub(pb^.vp.BoundingBox.LBN,tv),VertexAdd(pb^.vp.BoundingBox.RTF,tv),PrintParam,BMP.Canvas,PrinterDrawer);
     cdwg^.GetCurrentROOT^.GoodRemoveMiFromArray(pb^);
     BMP.SaveToFile(ExpandPath(operands));

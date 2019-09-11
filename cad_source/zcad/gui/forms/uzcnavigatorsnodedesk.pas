@@ -13,10 +13,11 @@ uses
   Varman;
 
 type
+  TCreateEntityNodeFunc=function(Tree: TVirtualStringTree;basenode:PVirtualNode;pent:pGDBObjEntity;Name:string):PVirtualNode of object;
   TBaseRootNodeDesk=class;
   TFilterEntityProc=function(pent:pGDBObjEntity):Boolean of object;
   TTraceEntityProc=function(rootdesk:TBaseRootNodeDesk;pent:pGDBObjEntity;out name:string):PVirtualNode of object;
-  TNodeMode=(TNMGroup,TNMAutoGroup,TNMData);
+  TNodeMode=(TNMGroup,TNMAutoGroup,TNMData,TNMHardGroup);
   PTNodeData=^TNodeData;
   TNodeData=record
     NodeMode:TNodeMode;
@@ -41,7 +42,8 @@ type
     constructor Create(AOwner:TComponent; ATree: TVirtualStringTree; AName:string);
     destructor Destroy;override;
     function find(BaseName:string;basenode:PVirtualNode):PVirtualNode;
-    procedure ProcessEntity(pent:pGDBObjEntity;filterproc:TFilterEntityProc;traceproc:TTraceEntityProc);
+    procedure ProcessEntity(CreateEntityNode:TCreateEntityNodeFunc;pent:pGDBObjEntity;filterproc:TFilterEntityProc;traceproc:TTraceEntityProc);
+    function CreateEntityNode(Tree: TVirtualStringTree;basenode:PVirtualNode;pent:pGDBObjEntity;Name:string):PVirtualNode;virtual;
     procedure ConvertNameNodeToGroupNode(pnode:PVirtualNode);
     function FindGroupNodeBy(RootNode:PVirtualNode;criteria:string;func:TFindFunc):PVirtualNode;
     function SaveState:TNodesStates;
@@ -54,8 +56,21 @@ type
   end;
 
 function GetEntityVariableValue(const pent:pGDBObjEntity;varname,defvalue:string):string;
+function GetMainFunction(const pent:pGDBObjEntity):pGDBObjEntity;
 
 implementation
+
+function GetMainFunction(const pent:pGDBObjEntity):pGDBObjEntity;
+var
+  pentvarext:PTVariablesExtender;
+  pvd:pvardesk;
+begin
+  pentvarext:=pent^.GetExtension(typeof(TVariablesExtender));
+  if pentvarext<>nil then
+    result:=pentvarext^.pMainFuncEntity
+  else
+    result:=nil;
+end;
 
 function GetEntityVariableValue(const pent:pGDBObjEntity;varname,defvalue:string):string;
 var
@@ -75,11 +90,17 @@ end;
 
 function TBaseRootNodeDesk.FindById(pnd:Pointer; Criteria:string):boolean;
 begin
-  result:=PTNodeData(pnd)^.id=Criteria;
+  if PTNodeData(pnd)^.NodeMode<>TNMHardGroup then
+    result:=PTNodeData(pnd)^.id=Criteria
+  else
+    result:=false;
 end;
 function TBaseRootNodeDesk.FindByName(pnd:Pointer; Criteria:string):boolean;
 begin
-  result:=PTNodeData(pnd)^.name=Criteria;
+  if PTNodeData(pnd)^.NodeMode<>TNMHardGroup then
+    result:=PTNodeData(pnd)^.name=Criteria
+  else
+    result:=false;
 end;
 
 { TNavigatorDevices }
@@ -231,7 +252,21 @@ begin
   result:=rootnode;
 end;
 
-procedure TBaseRootNodeDesk.ProcessEntity(pent:pGDBObjEntity;filterproc:TFilterEntityProc;traceproc:TTraceEntityProc);
+function TBaseRootNodeDesk.CreateEntityNode(Tree: TVirtualStringTree;basenode:PVirtualNode;pent:pGDBObjEntity;Name:string):PVirtualNode;
+var
+   pnd:PTNodeData;
+begin
+  result:=Tree.AddChild(basenode,nil);
+  pnd := Tree.GetNodeData(result);
+  if Assigned(pnd) then begin
+    pnd^.NodeMode:=TNMData;
+    pnd^.pent:=pent;
+    pnd^.id:=Name;
+    pnd^.name:=Name;
+  end;
+end;
+
+procedure TBaseRootNodeDesk.ProcessEntity(CreateEntityNode:TCreateEntityNodeFunc;pent:pGDBObjEntity;filterproc:TFilterEntityProc;traceproc:TTraceEntityProc);
 var
   Name:string;
   basenode2,namenode,pnode:PVirtualNode;
@@ -254,14 +289,7 @@ begin
         ConvertNameNodeToGroupNode(namenode);
         basenode2:=namenode;
       end;
-      pnode:=Tree.AddChild(basenode2,nil);
-      pnd := Tree.GetNodeData(pnode);
-      if Assigned(pnd) then begin
-        pnd^.NodeMode:=TNMData;
-        pnd^.pent:=pent;
-        pnd^.id:=Name;
-        pnd^.name:=Name;
-      end;
+      pnode:=CreateEntityNode(tree,basenode2,pent,Name);
     end;
   end;
 end;

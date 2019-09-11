@@ -11,7 +11,7 @@ uses
   uzcinterface,uzeconsts,uzeentity,uzcimagesmanager,uzcdrawings,uzbtypesbase,
   varmandef,uzbstrproc,uzcmainwindow,uzctreenode,
   uzcnavigatorsnodedesk,Varman,uzcstrconsts,uztoolbarsmanager,
-  uzccommandsimpl,uzccommandsabstract,uzcutils;
+  uzccommandsimpl,uzccommandsabstract,uzcutils,uzcenitiesvariablesextender,GraphType,generics.collections;
 
 resourcestring
   rsByPrefix='byPrefix';
@@ -19,16 +19,19 @@ resourcestring
   rsStandaloneDevices='Standalone devices';
 
 type
+  TEnt2NodeMap=TDictionary<pGDBObjEntity,PVirtualNode>;
   { TNavigatorDevices }
   TNavigatorDevices = class(TForm)
     CoolBar1: TCoolBar;
     MainToolBar: TToolBar;
     NavTree: TVirtualStringTree;
+    Ent2NodeMap:TEnt2NodeMap;
     ToolButton1: TToolButton;
     RefreshToolButton: TToolButton;
     ToolButton3: TToolButton;
     ActionList1:TActionList;
     Refresh:TAction;
+    function CreateEntityNode(Tree: TVirtualStringTree;basenode:PVirtualNode;pent:pGDBObjEntity;Name:string):PVirtualNode;virtual;
     procedure RefreshTree(Sender: TObject);
     procedure AutoRefreshTree(sender:TObject;GUIAction:TZMessageID);
     procedure TVDblClick(Sender: TObject);
@@ -43,15 +46,18 @@ type
                          TextType: TVSTTextType; var CellText: String);virtual;
     procedure NavGetImage(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
                           var Ghosted: Boolean; var ImageIndex: Integer);
+    procedure bcp(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode;
+        Column: TColumnIndex; CellPaintMode: TVTCellPaintMode; CellRect: TRect; var ContentRect: TRect);
 
   private
-    CombinedNode:TBaseRootNodeDesk;
+    CombinedNode:TBaseRootNodeDesk;//удаляем ее, ненужно!!!
     CombinedNodeStates:TNodesStates;
     StandaloneNode:TBaseRootNodeDesk;
     StandaloneNodeStates:TNodesStates;
     NavMX,NavMy:integer;
     pref,base:TmyVariableAction;
     GroupByPrefix,GroupByBase:boolean;
+    MainFunctionIconIndex:integer;
 
   public
     procedure CreateRoots;
@@ -80,7 +86,47 @@ function  TNavigatorDevices.TraceEntity(rootdesk:TBaseRootNodeDesk;pent:pGDBObjE
 var
   BaseName:string;
   basenode:PVirtualNode;
+  MainFunction:pGDBObjEntity;
+  mainfuncnode:PVirtualNode;
+  pnd:PTNodeData;
 begin
+  MainFunction:=GetMainFunction(pent);
+  if mainfunction<>nil then
+  begin
+     mainfunction:=mainfunction;
+     if Ent2NodeMap.TryGetValue(MainFunction,mainfuncnode) then
+       basenode:=mainfuncnode.Parent
+     else begin
+        StandaloneNode.ProcessEntity(self.CreateEntityNode,MainFunction,EntsFilter,TraceEntity);
+        if Ent2NodeMap.TryGetValue(pent,mainfuncnode) then
+          basenode:=mainfuncnode.Parent
+     end;
+     if mainfuncnode<>nil then
+     begin
+       pnd:=rootdesk.Tree.GetNodeData(mainfuncnode);
+       if pnd^.NodeMode<>TNMHardGroup then
+         rootdesk.ConvertNameNodeToGroupNode(mainfuncnode);
+       pnd^.NodeMode:=TNMHardGroup;
+       exit(mainfuncnode);
+     end;
+  end;
+
+  {procedure TBaseRootNodeDesk.ConvertNameNodeToGroupNode(pnode:PVirtualNode);
+  var
+    pnewnode:PVirtualNode;
+    pnd,pnewnd:PTNodeData;
+  begin
+      if pnode^.FirstChild<>nil then
+                                    exit;
+      pnewnode:=Tree.AddChild(pnode,nil);
+      pnd:=Tree.GetNodeData(pnode);
+      pnewnd:=Tree.GetNodeData(pnewnode);
+      if (pnewnd<>nil)and(pnd<>nil) then
+       pnewnd^:=pnd^;
+      pnd^.NodeMode:=TNMAutoGroup;
+      pnd^.pent:=nil;
+  end;}
+
   result:=nil;
   Name:=GetEntityVariableValue(pent,'NMO_Name',rsNameAbsent);
 
@@ -145,6 +191,8 @@ begin
    NavTree.OnFreeNode:=FreeNode;
    NavTree.OnFocusChanged:=VTFocuschanged;
    NavTree.OnCompareNodes:=VTCompareNodes;
+   NavTree.OnBeforeCellPaint:=bcp;
+   MainFunctionIconIndex:=-1;
 
    OnShow:=RefreshTree;
 
@@ -152,6 +200,43 @@ begin
 
    ZCMsgCallBackInterface.RegisterHandler_GUIAction(AutoRefreshTree);
 end;
+procedure TNavigatorDevices.bcp(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode;
+    Column: TColumnIndex; CellPaintMode: TVTCellPaintMode; CellRect: TRect; var ContentRect: TRect);
+var
+  pnd:PTNodeData;
+  pentvarext:PTVariablesExtender;
+begin
+  pnd:=Sender.GetNodeData(Node);
+  if pnd<>nil then
+  if pnd^.pent<>nil then
+  begin
+    pentvarext:=pnd^.pent^.GetExtension(typeof(TVariablesExtender));
+    if pentvarext^.isMainFunction then begin
+      if MainFunctionIconIndex=-1 then begin
+        MainFunctionIconIndex:=ImagesManager.GetImageIndex('basket');
+      end;
+      if CellPaintMode=cpmPaint then
+        ImagesManager.IconList.Draw(TargetCanvas,ContentRect.Left,0,MainFunctionIconIndex,gdeNormal);
+      ContentRect.Left:=ContentRect.Left+ImagesManager.IconList.Width;
+    end;
+  end;
+end;
+function TNavigatorDevices.CreateEntityNode(Tree: TVirtualStringTree;basenode:PVirtualNode;pent:pGDBObjEntity;Name:string):PVirtualNode;
+var
+  pnd:PTNodeData;
+  pentvarext:PTVariablesExtender;
+begin
+  result:=StandaloneNode.CreateEntityNode(Tree,basenode,pent,Name);
+  pentvarext:=pent^.GetExtension(typeof(TVariablesExtender));
+  if pentvarext<>nil then begin
+    if pentvarext^.isMainFunction then begin
+      pnd:=Tree.GetNodeData(result);
+      pnd^.NodeMode:=TNMHardGroup;
+    end;
+  end;
+  Ent2NodeMap.add(pent,result);
+end;
+
 procedure TNavigatorDevices.RefreshTree(Sender: TObject);
 var
   pv:pGDBObjEntity;
@@ -181,10 +266,10 @@ begin
      pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
      if pv<>nil then
      repeat
-       if assigned(CombinedNode)then
-         CombinedNode.ProcessEntity(pv,EntsFilter,TraceEntity);
+       {if assigned(CombinedNode)then
+         CombinedNode.ProcessEntity(pv,EntsFilter,TraceEntity);}
        if assigned(StandaloneNode)then
-         StandaloneNode.ProcessEntity(pv,EntsFilter,TraceEntity);
+         StandaloneNode.ProcessEntity(self.CreateEntityNode,pv,EntsFilter,TraceEntity);
        pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
      until pv=nil;
    end;
@@ -327,7 +412,7 @@ else
           case pnd^.NodeMode of
           TNMGroup:ImageIndex:=NavGroupIconIndex;
           TNMAutoGroup:ImageIndex:=NavAutoGroupIconIndex;
-          TNMData:begin
+          TNMData,TNMHardGroup:begin
                     if pnd^.pent<>nil then
                                           begin
                                            ImageIndex:=ImagesManager.GetImageIndex(GetEntityVariableValue(pnd^.pent,{'ENTID_Type'}'ENTID_Representation','bug'));
@@ -349,6 +434,7 @@ begin
   //CombinedNode.ficonindex:=ImagesManager.GetImageIndex('caddie');
   StandaloneNode:=TBaseRootNodeDesk.Create(self, NavTree,rsStandaloneDevices);
   StandaloneNode.ficonindex:=ImagesManager.GetImageIndex('basket');
+  Ent2NodeMap:=TEnt2NodeMap.create;
 end;
 
 procedure TNavigatorDevices.EraseRoots;
@@ -363,6 +449,7 @@ begin
     StandaloneNodeStates:=StandaloneNode.SaveState;
     FreeAndNil(StandaloneNode);
   end;
+  Ent2NodeMap.Free;
 end;
 
 procedure SelectSubNodes(nav:TVirtualStringTree;pnode:PVirtualNode);

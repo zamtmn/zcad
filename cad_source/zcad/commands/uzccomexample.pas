@@ -103,6 +103,8 @@ uses
 
   uzcstrconsts,       //resouce strings
 
+  gzctnrvectortypes,uzcenitiesvariablesextender,
+
   uzclog;             //log system
                       //система логирования
 
@@ -986,6 +988,37 @@ begin
     result:=cmd_ok;
 end;
 
+function LinkDevices_com(operands:TCommandOperands):TCommandResult;
+var
+    pobj: pGDBObjEntity;
+    pmainobj: pGDBObjEntity;
+    ir:itrec;
+
+    pCentralVarext,pVarext:PTVariablesExtender;
+begin
+    pCentralVarext:=nil;
+    pobj:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
+    if pobj<>nil then
+    repeat
+      if pobj^.Selected then begin
+        if pCentralVarext=nil then begin
+           pCentralVarext:=pobj^.GetExtension(typeof(TVariablesExtender));
+           if pCentralVarext<>nil then
+             pmainobj:=pobj;
+        end
+        else begin
+           pVarext:=pobj^.GetExtension(typeof(TVariablesExtender));
+           if pVarext<>nil then begin
+             pVarext^.entityunit.InterfaceUses.PushBackIfNotPresent(@pCentralVarext^.entityunit);
+             pVarext^.pMainFuncEntity:=pmainobj;
+           end;
+        end;
+      end;
+    pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
+    until pobj=nil;
+    result:=cmd_ok;
+end;
+
 initialization
 { тут регистрация функций в интерфейсе зкада}
 
@@ -1012,6 +1045,8 @@ initialization
      CreateCommandFastObjectPlugin(@InsertDevice_com,    'ID',   CADWG,0);
 
      CreateCommandFastObjectPlugin(@ExampleCreateLayer_com,'ExampleCreateLayer',   CADWG,0);
+
+     CreateCommandFastObjectPlugin(@LinkDevices_com,'LD',   CADWG,0);
 
      MatchPropParam.ProcessLayer:=true;
      MatchPropParam.ProcessLineType:=true;

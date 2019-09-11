@@ -110,7 +110,7 @@ begin
      if pv<>nil then
      repeat
        if assigned(EntitiesNode)then
-         EntitiesNode.ProcessEntity(pv,nil,nil);
+         EntitiesNode.ProcessEntity(EntitiesNode.CreateEntityNode,pv,nil,nil);
        pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
      until pv=nil;
    end;

@@ -30,6 +30,7 @@ TBaseVariablesExtender={$IFNDEF DELPHI}packed{$ENDIF} object(TBaseEntityExtender
 PTVariablesExtender=^TVariablesExtender;
 TVariablesExtender={$IFNDEF DELPHI}packed{$ENDIF} object(TBaseVariablesExtender)
     entityunit:{tunit}TObjectUnit;
+    pMainFuncEntity:pointer;
     class function CreateEntVariablesExtender(pEntity:Pointer; out ObjSize:Integer):PTVariablesExtender;static;
     constructor init(pEntity:Pointer);
     destructor Done;virtual;
@@ -38,12 +39,18 @@ TVariablesExtender={$IFNDEF DELPHI}packed{$ENDIF} object(TBaseVariablesExtender)
     procedure onEntityBuildVarGeometry(pEntity:pointer;const drawing:TDrawingDef);virtual;
     procedure onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);virtual;
     procedure CopyExt2Ent(pSourceEntity,pDestEntity:pointer);virtual;
+    function isMainFunction:boolean;
   end;
 
 var
    PFCTTD:GDBPointer=nil;
 function AddVariablesToEntity(PEnt:PGDBObjEntity):PTVariablesExtender;
 implementation
+function TVariablesExtender.isMainFunction:boolean;
+begin
+  result:=pMainFuncEntity=nil;
+end;
+
 procedure TVariablesExtender.onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);
 var
    vd:vardesk;
@@ -135,6 +142,7 @@ begin
      entityunit.InterfaceUses.PushBackData(SysUnit);
      if PFCTTD=nil then
                        PFCTTD:=sysunit.TypeName2PTD('PTObjectUnit');
+     pMainFuncEntity:=nil;
      //PGDBObjEntity(pEntity).OU.Instance:=@entityunit;
      //PGDBObjEntity(pEntity).OU.PTD:=PFCTTD;
 end;

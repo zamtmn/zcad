@@ -107,7 +107,9 @@ uses
 
   uzclog;             //log system
                       //система логирования
-
+resourcestring
+  rscmSelectEntityWithMainFunction='Select entity with main function';
+  rscmSelectLinkedEntity='Select linked entity';
 type
 {EXPORT+}
     //** Тип данных для отображения в инспекторе опций команды MatchProp о текстовых примитивах, составная часть TMatchPropParam
@@ -995,29 +997,194 @@ var
     ir:itrec;
 
     pCentralVarext,pVarext:PTVariablesExtender;
+    UndoStartMarkerPlaced:boolean;
 begin
-    pCentralVarext:=nil;
-    pobj:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
-    if pobj<>nil then
-    repeat
-      if pobj^.Selected then begin
-        if pCentralVarext=nil then begin
-           pCentralVarext:=pobj^.GetExtension(typeof(TVariablesExtender));
-           if pCentralVarext<>nil then
-             pmainobj:=pobj;
-        end
-        else begin
-           pVarext:=pobj^.GetExtension(typeof(TVariablesExtender));
-           if pVarext<>nil then begin
-             pVarext^.entityunit.InterfaceUses.PushBackIfNotPresent(@pCentralVarext^.entityunit);
-             pVarext^.pMainFuncEntity:=pmainobj;
-           end;
-        end;
-      end;
-    pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
-    until pobj=nil;
+  // UndoStartMarkerPlaced:=false;
+  pmainobj:=nil;
+  repeat
+    if pmainobj=nil then
+      if not commandmanager.getentity(rscmSelectEntityWithMainFunction,pmainobj) then
+        exit(cmd_ok);
+    pCentralVarext:=pmainobj^.GetExtension(typeof(TVariablesExtender));
+    if pCentralVarext=nil then begin
+      pmainobj:=nil;
+      ZCMsgCallBackInterface.TextMessage('Please select device with variables',TMWOSilentShowError);
+    end;
+  until pCentralVarext<>nil;
+
+  repeat
+    if not commandmanager.getentity(rscmSelectLinkedEntity,pobj) then
+      exit(cmd_ok);
+    pVarext:=pobj^.GetExtension(typeof(TVariablesExtender));
+    if pVarext=nil then begin
+      ZCMsgCallBackInterface.TextMessage('Please select device with variables',TMWOSilentShowError);
+    end else begin
+      pVarext^.entityunit.InterfaceUses.PushBackIfNotPresent(@pCentralVarext^.entityunit);
+      pVarext^.pMainFuncEntity:=pmainobj;
+    end;
+  until false;
+
+  result:=cmd_ok;
+end;
+(*
+function matchprop_com(operands:TCommandOperands):TCommandResult;
+var
+    ps,pd:PGDBObjEntity;
+    SourceObjType:TObjID;
+    isSourceObjText:boolean;
+    dc:TDrawContext;
+    UndoStartMarkerPlaced:boolean;
+    drawing:PTZCADDrawing;
+    EntChange:boolean;
+const
+    CommandName='MatchProp';
+function isTextEnt(ObjType:TObjID):boolean;
+begin
+     if (ObjType=GDBtextID)
+     or(ObjType=GDBMTextID)then
+                               result:=true
+                           else
+                               result:=false;
+end;
+
+begin
+    UndoStartMarkerPlaced:=false;
+    if commandmanager.getentity(rscmSelectSourceEntity,ps) then
+    begin
+         zcShowCommandParams(SysUnit^.TypeName2PTD('TMatchPropParam'),@MatchPropParam);
+         drawing:=PTZCADDrawing(drawings.GetCurrentDWG);
+         dc:=drawing^.CreateDrawingRC;
+         SourceObjType:=ps^.GetObjType;
+         isSourceObjText:=isTextEnt(SourceObjType);
+         while commandmanager.getentity(rscmSelectDestinationEntity,pd) do
+         begin
+              EntChange:=false;
+              if MatchPropParam.ProcessLayer then
+                if pd^.vp.Layer<>ps^.vp.Layer then
+                  begin
+                    zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
+                    with PushCreateTGChangeCommand(drawing.UndoStack,pd^.vp.Layer)^ do
+                    begin
+                         pd^.vp.Layer:=ps^.vp.Layer;
+                         ComitFromObj;
+                    end;
+                    EntChange:=true;
+                  end;
+              if MatchPropParam.ProcessLineType then
+                if pd^.vp.LineType<>ps^.vp.LineType then
+                  begin
+                    zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
+                    with PushCreateTGChangeCommand(drawing.UndoStack,pd^.vp.LineType)^ do
+                    begin
+                         pd^.vp.LineType:=ps^.vp.LineType;
+                         ComitFromObj;
+                    end;
+                    EntChange:=true;
+                  end;
+              if MatchPropParam.ProcessLineWeight then
+                if pd^.vp.LineWeight<>ps^.vp.LineWeight then
+                  begin
+                    zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
+                    with PushCreateTGChangeCommand(drawing.UndoStack,pd^.vp.LineWeight)^ do
+                    begin
+                         pd^.vp.LineWeight:=ps^.vp.LineWeight;
+                         ComitFromObj;
+                    end;
+                    EntChange:=true;
+                  end;
+              if MatchPropParam.ProcessColor then
+                if pd^.vp.color<>ps^.vp.Color then
+                  begin
+                    zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
+                    with PushCreateTGChangeCommand(drawing.UndoStack,pd^.vp.color)^ do
+                    begin
+                         pd^.vp.color:=ps^.vp.Color;
+                         ComitFromObj;
+                    end;
+                    EntChange:=true;
+                  end;
+              if MatchPropParam.ProcessLineTypeScale then
+                if pd^.vp.LineTypeScale<>ps^.vp.LineTypeScale then
+                  begin
+                    zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
+                    with PushCreateTGChangeCommand(drawing.UndoStack,pd^.vp.LineTypeScale)^ do
+                    begin
+                         pd^.vp.LineTypeScale:=ps^.vp.LineTypeScale;
+                         ComitFromObj;
+                    end;
+                    EntChange:=true;
+                  end;
+              if (isSourceObjText)and(isTextEnt(pd^.GetObjType))then
+              begin
+                if MatchPropParam.TextParams.ProcessTextStyle then
+                  if PGDBObjText(pd)^.TXTStyleIndex<>PGDBObjText(ps)^.TXTStyleIndex then
+                    begin
+                      zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
+                      with PushCreateTGChangeCommand(drawing.UndoStack,PGDBObjText(pd)^.TXTStyleIndex)^ do
+                      begin
+                           PGDBObjText(pd)^.TXTStyleIndex:=PGDBObjText(ps)^.TXTStyleIndex;
+                           ComitFromObj;
+                      end;
+                      EntChange:=true;
+                    end;
+                if MatchPropParam.TextParams.ProcessTextSize then
+                  if PGDBObjText(pd)^.textprop.size<>PGDBObjText(ps)^.textprop.size then
+                    begin
+                      zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
+                      with PushCreateTGChangeCommand(drawing.UndoStack,PGDBObjText(pd)^.textprop.size)^ do
+                      begin
+                           PGDBObjText(pd)^.textprop.size:=PGDBObjText(ps)^.textprop.size;
+                           ComitFromObj;
+                      end;
+                      EntChange:=true;
+                    end;
+                if MatchPropParam.TextParams.ProcessTextOblique then
+                  if PGDBObjText(pd)^.textprop.Oblique<>PGDBObjText(ps)^.textprop.Oblique then
+                    begin
+                      zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
+                      with PushCreateTGChangeCommand(drawing.UndoStack,PGDBObjText(pd)^.textprop.Oblique)^ do
+                      begin
+                           PGDBObjText(pd)^.textprop.Oblique:=PGDBObjText(ps)^.textprop.Oblique;
+                           ComitFromObj;
+                      end;
+                      EntChange:=true;
+                    end;
+                if MatchPropParam.TextParams.ProcessTextWFactor then
+                  if PGDBObjText(pd)^.textprop.wfactor<>PGDBObjText(ps)^.textprop.wfactor then
+                    begin
+                      zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
+                      with PushCreateTGChangeCommand(drawing.UndoStack,PGDBObjText(pd)^.textprop.wfactor)^ do
+                      begin
+                           PGDBObjText(pd)^.textprop.wfactor:=PGDBObjText(ps)^.textprop.wfactor;
+                           ComitFromObj;
+                      end;
+                      EntChange:=true;
+                    end;
+                if MatchPropParam.TextParams.ProcessTextJustify then
+                  if PGDBObjText(pd)^.textprop.justify<>PGDBObjText(ps)^.textprop.justify then
+                    begin
+                      zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
+                      with PushCreateTGChangeCommand(drawing.UndoStack,PGDBObjText(pd)^.textprop.justify)^ do
+                      begin
+                           PGDBObjText(pd)^.textprop.justify:=PGDBObjText(ps)^.textprop.justify;
+                           ComitFromObj;
+                      end;
+                      EntChange:=true;
+                    end;
+              end;
+              if EntChange then
+                begin
+                  pd^.FormatEntity(drawings.GetCurrentDWG^,dc);
+                  zcRedrawCurrentDrawing;
+                end;
+         end;
+         zcPlaceUndoEndMarkerIfNeed(UndoStartMarkerPlaced);
+         zcHideCommandParams;
+    end;
     result:=cmd_ok;
 end;
+
+*)
 
 initialization
 { тут регистрация функций в интерфейсе зкада}

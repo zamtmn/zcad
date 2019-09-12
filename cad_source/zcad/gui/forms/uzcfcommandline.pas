@@ -306,8 +306,8 @@ begin
     if ord(key)=13 then
     begin
       s:=CmdEdit.text;
+      CmdEdit.text:='';
       processcommand(s);
-      CmdEdit.text:=s;
     end;
 end;
 

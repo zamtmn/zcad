@@ -22,15 +22,17 @@ interface
 uses sysutils,UGDBObjBlockdefArray,uzedrawingdef,uzeentityextender,uzcshared,
      uzeentdevice,TypeDescriptors,uzetextpreprocessor,UGDBOpenArrayOfByte,
      uzbtypesbase,uzbtypes,uzeentsubordinated,uzeentity,uzeenttext,uzeblockdef,
-     varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,uzbmemman;
+     varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,uzbmemman,
+     uzeentitiestree;
 
 type
 TBaseVariablesExtender={$IFNDEF DELPHI}packed{$ENDIF} object(TBaseEntityExtender)
   end;
 PTVariablesExtender=^TVariablesExtender;
 TVariablesExtender={$IFNDEF DELPHI}packed{$ENDIF} object(TBaseVariablesExtender)
-    entityunit:{tunit}TObjectUnit;
-    pMainFuncEntity:pointer;
+    entityunit:TObjectUnit;
+    pMainFuncEntity:PGDBObjEntity;
+    DelegatesArray:TEntityArray;
     class function CreateEntVariablesExtender(pEntity:Pointer; out ObjSize:Integer):PTVariablesExtender;static;
     constructor init(pEntity:Pointer);
     destructor Done;virtual;
@@ -40,6 +42,7 @@ TVariablesExtender={$IFNDEF DELPHI}packed{$ENDIF} object(TBaseVariablesExtender)
     procedure onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);virtual;
     procedure CopyExt2Ent(pSourceEntity,pDestEntity:pointer);virtual;
     function isMainFunction:boolean;
+    procedure addDelegate(pEntity,pDelegateEntity:PGDBObjEntity;pDelegateEntityVarext:PTVariablesExtender);
   end;
 
 var
@@ -49,6 +52,13 @@ implementation
 function TVariablesExtender.isMainFunction:boolean;
 begin
   result:=pMainFuncEntity=nil;
+end;
+
+procedure TVariablesExtender.addDelegate(pEntity,pDelegateEntity:PGDBObjEntity;pDelegateEntityVarext:PTVariablesExtender);
+begin
+  pDelegateEntityVarext^.entityunit.InterfaceUses.PushBackIfNotPresent(@entityunit);
+  pDelegateEntityVarext^.pMainFuncEntity:=pEntity;
+  DelegatesArray.PushBackIfNotPresent(pDelegateEntity);
 end;
 
 procedure TVariablesExtender.onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);
@@ -143,12 +153,15 @@ begin
      if PFCTTD=nil then
                        PFCTTD:=sysunit.TypeName2PTD('PTObjectUnit');
      pMainFuncEntity:=nil;
+     DelegatesArray.init(10) ;
      //PGDBObjEntity(pEntity).OU.Instance:=@entityunit;
      //PGDBObjEntity(pEntity).OU.PTD:=PFCTTD;
 end;
 destructor TVariablesExtender.Done;
 begin
      entityunit.done;
+     DelegatesArray.Clear;
+     DelegatesArray.done;
 end;
 procedure TVariablesExtender.onEntityClone(pSourceEntity,pDestEntity:pointer);
 var

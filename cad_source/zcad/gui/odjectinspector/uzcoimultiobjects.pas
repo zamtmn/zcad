@@ -59,6 +59,11 @@ type
            TMST_Devices(*'Devices'*),
            TMST_Cables(*'Cables'*)
           );}
+  TVariableProcessSelector=(
+           VPS_OnlyThisEnts(*'Only this ents'*),
+           VPS_OnlyRelatedEnts(*'Only related ents'*),
+           VPS_AllEnts(*'All ents'*)
+          );
   TMSPrimitiveDetector=TEnumData;
   TMSBlockNamesDetector=TEnumDataWithOtherData;
   TMSTextsStylesDetector=TEnumDataWithOtherData;
@@ -66,6 +71,7 @@ type
   TMSEntsLinetypesDetector=TEnumDataWithOtherData;
   TMSEditor={$IFNDEF DELPHI}packed{$ENDIF} object(TWrapper2ObjInsp)
                 TxtEntType:TMSPrimitiveDetector;(*'Process primitives'*)
+                VariableProcessSelector:TVariableProcessSelector;(*'Process variables'*)
                 VariablesUnit:TObjectUnit;(*'Variables'*)
                 GeneralUnit:TObjectUnit;(*'General'*)
                 GeometryUnit:TObjectUnit;(*'Geometry'*)
@@ -80,6 +86,7 @@ type
                 function GetObjType:TObjID;virtual;
                 constructor init;
                 destructor done;virtual;
+                procedure processunit(var entunit:TObjectUnit);
 
                 procedure CheckMultiPropertyUse;
                 procedure CreateMultiPropertys(const f:TzeUnitsFormat);
@@ -112,6 +119,7 @@ begin
      SummaryUnit.init('SummaryUnit');
      TxtEntType.Enums.init(10);
      TxtEntType.Selected:=0;
+     VariableProcessSelector:=VPS_OnlyThisEnts;
 
      ObjID2Counter:=TObjID2Counter.Create;
      ObjIDVector:=TObjIDVector.create;
@@ -128,12 +136,35 @@ begin
      ObjID2Counter.Free;
      ObjIDVector.Free;
 end;
+function SetVariable(pentity: pGDBObjEntity;pentvarext: PTVariablesExtender;PSourceVD:pvardesk):boolean;
+var
+  PDestVD: pvardesk;
+begin
+  result:=false;
+    if pentvarext<>nil then
+    begin
+         PDestVD:=pentvarext^.entityunit.InterfaceVariables.findvardesc(PSourceVD^.name);
+         if PDestVD<>nil then
+           if PSourceVD^.data.PTD=PDestVD^.data.PTD then
+           begin
+                PDestVD.data.PTD.CopyInstanceTo(PSourceVD.data.Instance,PDestVD.data.Instance);
+
+                pentity^.YouChanged(drawings.GetCurrentDWG^);
+                result:=true;
+
+                if PSourceVD^.data.PTD.GetValueAsString(PSourceVD^.data.Instance)<>PDestVD^.data.PTD.GetValueAsString(PDestVD^.data.Instance) then
+                PSourceVD.attrib:=PSourceVD.attrib or vda_different;
+           end;
+    end;
+
+end;
+
 procedure TMSEditor.SetVariables(PSourceVD:pvardesk;NeededObjType:TObjID);
 var
-  pentvarext: PTVariablesExtender;
+  pentvarext,pmainentvarext: PTVariablesExtender;
   EntIterator: itrec;
-  PDestVD: pvardesk;
-  pentity: pGDBObjEntity;
+  //PDestVD: pvardesk;
+  pentity,pmainentity: pGDBObjEntity;
   //DC:TDrawContext;
 begin
   PSourceVD.attrib:=PSourceVD.attrib and (not vda_different);
@@ -144,21 +175,16 @@ begin
     if (pentity^.Selected)and((pentity^.GetObjType=NeededObjType)or(NeededObjType=0)) then
     begin
       pentvarext:=pentity^.GetExtension(typeof(TVariablesExtender));
-    if pentvarext<>nil then
-    begin
-         PDestVD:=pentvarext^.entityunit.InterfaceVariables.findvardesc(PSourceVD^.name);
-         if PDestVD<>nil then
-           if PSourceVD^.data.PTD=PDestVD^.data.PTD then
-           begin
-                PDestVD.data.PTD.CopyInstanceTo(PSourceVD.data.Instance,PDestVD.data.Instance);
-
-                //pentity^.Formatentity(drawings.GetCurrentDWG^,dc);
-                pentity^.YouChanged(drawings.GetCurrentDWG^);
-
-                if PSourceVD^.data.PTD.GetValueAsString(PSourceVD^.data.Instance)<>PDestVD^.data.PTD.GetValueAsString(PDestVD^.data.Instance) then
-                PSourceVD.attrib:=PSourceVD.attrib or vda_different;
+         if VariableProcessSelector<>VPS_OnlyThisEnts then begin
+           if pentvarext^.pMainFuncEntity<>nil then begin
+             pmainentity:=pentvarext^.pMainFuncEntity;
+             pmainentvarext:=pmainentity^.GetExtension(typeof(TVariablesExtender));
+             SetVariable(pmainentity,pmainentvarext,PSourceVD);
            end;
-    end;
+         end;
+         if VariableProcessSelector<>VPS_OnlyRelatedEnts then
+           if not SetVariable(pentity,pentvarext,PSourceVD) then
+             pentity^.YouChanged(drawings.GetCurrentDWG^);
     end;
     pentity:=drawings.GetCurrentROOT.ObjArray.iterate(EntIterator);
   until pentity=nil;
@@ -289,7 +315,7 @@ var //i: GDBInteger;
     //ir2:itrec;
     //etype:integer;
 begin
-      if PFIELD=@self.TxtEntType then
+      if (PFIELD=@self.TxtEntType)or(PFIELD=@self.VariableProcessSelector) then
       begin
            PFIELD:=@TxtEntType;
            CreateUnit(SavezeUnitsFormat,false);
@@ -523,6 +549,48 @@ begin
         if (MultiPropertiesManager.MultiPropertyVector[i].UseMode=MPUM_AllEntsMatched)then
           MultiPropertiesManager.MultiPropertyVector[i].usecounter:=0;
 end;
+procedure TMSEditor.processunit(var entunit:TObjectUnit);
+var
+    pu:pointer;
+    pvd,pvdmy:pvardesk;
+    vd:vardesk;
+    ir2:itrec;
+begin
+  pu:=entunit.InterfaceUses.beginiterate(ir2);
+  if pu<>nil then
+  repeat
+    if typeof(PTSimpleUnit(pu)^)<>typeof(TObjectUnit) then
+      VariablesUnit.InterfaceUses.PushBackIfNotPresent(pu);
+    pu:=entunit.InterfaceUses.iterate(ir2)
+  until pu=nil;
+  pvd:=entunit.InterfaceVariables.vardescarray.beginiterate(ir2);
+  if pvd<>nil then
+  repeat
+        pvdmy:=VariablesUnit.InterfaceVariables.findvardesc(pvd^.name);
+        if pvdmy=nil then
+                         begin
+                              //if (pvd^.data.PTD^.GetTypeAttributes and TA_COMPOUND)=0 then
+                              begin
+                              vd:=pvd^;
+                              //vd.attrib:=vda_different;
+                              vd.data.Instance:=nil;
+                              VariablesUnit.InterfaceVariables.createvariable(pvd^.name,vd);
+                              pvd^.data.PTD.CopyInstanceTo(pvd.data.Instance,vd.data.Instance);
+                              end
+                              {   else
+                              begin
+
+                              end;}
+                         end
+                     else
+                         begin
+                              if pvd^.data.PTD.GetValueAsString(pvd^.data.Instance)<>pvdmy^.data.PTD.GetValueAsString(pvdmy^.data.Instance) then
+                                 pvdmy.attrib:=vda_different;
+                         end;
+
+        pvd:=entunit.InterfaceVariables.vardescarray.iterate(ir2)
+  until pvd=nil;
+end;
 
 procedure  TMSEditor.createunit;
 var //i: GDBInteger;
@@ -588,39 +656,17 @@ begin
        pentvarext:=pv^.GetExtension(typeof(TVariablesExtender));
        if ((pv^.GetObjType=GetObjType)or(GetObjType=0))and(pentvarext<>nil) then
        begin
-            pu:=pentvarext^.entityunit.InterfaceUses.beginiterate(ir2);
-            if pu<>nil then
-            repeat
-                  VariablesUnit.InterfaceUses.PushBackIfNotPresent(pu);
-                  pu:=pentvarext^.entityunit.InterfaceUses.iterate(ir2)
-            until pu=nil;
-            pvd:=pentvarext^.entityunit.InterfaceVariables.vardescarray.beginiterate(ir2);
-            if pvd<>nil then
-            repeat
-                  pvdmy:=VariablesUnit.InterfaceVariables.findvardesc(pvd^.name);
-                  if pvdmy=nil then
-                                   begin
-                                        //if (pvd^.data.PTD^.GetTypeAttributes and TA_COMPOUND)=0 then
-                                        begin
-                                        vd:=pvd^;
-                                        //vd.attrib:=vda_different;
-                                        vd.data.Instance:=nil;
-                                        VariablesUnit.InterfaceVariables.createvariable(pvd^.name,vd);
-                                        pvd^.data.PTD.CopyInstanceTo(pvd.data.Instance,vd.data.Instance);
-                                        end
-                                        {   else
-                                        begin
-
-                                        end;}
-                                   end
-                               else
-                                   begin
-                                        if pvd^.data.PTD.GetValueAsString(pvd^.data.Instance)<>pvdmy^.data.PTD.GetValueAsString(pvdmy^.data.Instance) then
-                                           pvdmy.attrib:=vda_different;
-                                   end;
-
-                  pvd:=pentvarext^.entityunit.InterfaceVariables.vardescarray.iterate(ir2)
-            until pvd=nil;
+         if VariableProcessSelector<>VPS_OnlyRelatedEnts then
+           processunit(pentvarext^.entityunit);
+         if VariableProcessSelector<>VPS_OnlyThisEnts then begin
+           pu:=pentvarext^.entityunit.InterfaceUses.beginiterate(ir2);
+           if pu<>nil then
+           repeat
+             if typeof(PTSimpleUnit(pu)^)=typeof(TObjectUnit) then
+               processunit(PTObjectUnit(pu)^);
+             pu:=pentvarext^.entityunit.InterfaceUses.iterate(ir2)
+           until pu=nil;
+         end;
        end;
        end;
      //pv:=drawings.GetCurrentDWG.ObjRoot.ObjArray.iterate(ir);

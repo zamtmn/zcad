@@ -168,7 +168,7 @@ varmanager={$IFNDEF DELPHI}packed{$ENDIF} object(varmanagerdef)
                  function findvardesc(varname:TInternalScriptString): pvardesk;virtual;
                  function findvardescbyinst(varinst:GDBPointer):pvardesk;virtual;
                  function findvardescbytype(pt:PUserTypeDescriptor):pvardesk;virtual;
-                 function createvariable(varname:TInternalScriptString; var vd:vardesk): pvardesk;virtual;
+                 function createvariable(varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0): pvardesk;virtual;
                  function findfieldcustom(var pdesc: pGDBByte; var offset: GDBInteger;var tc:PUserTypeDescriptor; nam: ShortString): GDBBoolean;virtual;
                  destructor done;virtual;
                  procedure free;virtual;
@@ -760,7 +760,7 @@ begin
 
      //programlog.LogOutStr('end;',lp_DecPos,LM_Trace);
 end;
-function varmanager.createvariable(varname: TInternalScriptString; var vd: vardesk):pvardesk;
+function varmanager.createvariable(varname: TInternalScriptString; var vd: vardesk;attr:TVariableAttributes=0):pvardesk;
 var
   size: GDBLongword;
   i:TArrayIndex;
@@ -776,7 +776,7 @@ begin
          vd.data.Instance:=vararray.getDataMutable(vararray.AllocData(size));
          vd.data.PTD.InitInstance(vd.data.Instance);
        end;
-       vd.attrib:=0;
+       vd.attrib:=attr;
        i:=vardescarray.PushBackData(vd);
        result:=vardescarray.getDataMutable(i);
        //KillString(vd.name);

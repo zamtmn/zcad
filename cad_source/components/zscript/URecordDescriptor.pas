@@ -316,6 +316,8 @@ begin
                                                                                            tw:=tw or FA_APPROXIMATELY;
                                                   if (pvd^.attrib and vda_RO)>0 then
                                                                                            tw:=tw or FA_READONLY;
+                                                  if (pvd^.attrib and vda_colored1)>0 then
+                                                    tw:=tw or FA_COLORED1;
                                                   oldppda:=ppda;
                                                   if i>0 then
                                                   begin

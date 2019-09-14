@@ -33,6 +33,7 @@ const
      FA_READONLY=2;
      FA_DIFFERENT=4;
      FA_APPROXIMATELY=8;
+     FA_COLORED1=16;
      SA_SAVED_TO_SHD=1;
 
      property_correct=1;

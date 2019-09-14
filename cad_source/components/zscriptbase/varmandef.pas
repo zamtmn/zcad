@@ -52,6 +52,7 @@ const
   vda_different=1;
   vda_RO=2;
   vda_approximately=4;
+  vda_colored1=8;
 type
 TInternalScriptString=Ansistring;
 TCompareResult=(CRLess,CREqual,CRGreater,CRNotEqual);
@@ -262,7 +263,7 @@ varmanagerdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                  {vardescarray:GDBOpenArrayOfData;
                  vararray:GDBOpenArrayOfByte;}
                  function findvardesc(varname:TInternalScriptString): pvardesk;virtual;abstract;
-                 function createvariable(varname:TInternalScriptString; var vd:vardesk): pvardesk;virtual;abstract;
+                 function createvariable(varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0): pvardesk;virtual;abstract;
                  procedure createvariablebytype(varname,vartype:TInternalScriptString);virtual;abstract;
                  procedure createbasevaluefromGDBString(varname: TInternalScriptString; varvalue: TInternalScriptString; var vd: vardesk);virtual;abstract;
                  function findfieldcustom(var pdesc: pGDBByte; var offset: GDBInteger;var tc:PUserTypeDescriptor; nam: shortString): GDBBoolean;virtual;abstract;

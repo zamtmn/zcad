@@ -86,7 +86,7 @@ type
                 function GetObjType:TObjID;virtual;
                 constructor init;
                 destructor done;virtual;
-                procedure processunit(var entunit:TObjectUnit);
+                procedure processunit(var entunit:TObjectUnit;linkedunit:boolean=false);
 
                 procedure CheckMultiPropertyUse;
                 procedure CreateMultiPropertys(const f:TzeUnitsFormat);
@@ -549,7 +549,7 @@ begin
         if (MultiPropertiesManager.MultiPropertyVector[i].UseMode=MPUM_AllEntsMatched)then
           MultiPropertiesManager.MultiPropertyVector[i].usecounter:=0;
 end;
-procedure TMSEditor.processunit(var entunit:TObjectUnit);
+procedure TMSEditor.processunit(var entunit:TObjectUnit;linkedunit:boolean=false);
 var
     pu:pointer;
     pvd,pvdmy:pvardesk;
@@ -574,7 +574,9 @@ begin
                               vd:=pvd^;
                               //vd.attrib:=vda_different;
                               vd.data.Instance:=nil;
-                              VariablesUnit.InterfaceVariables.createvariable(pvd^.name,vd);
+                              if linkedunit then
+                                vd.attrib:=vd.attrib or vda_colored1;
+                              VariablesUnit.InterfaceVariables.createvariable(pvd^.name,vd,vd.attrib);
                               pvd^.data.PTD.CopyInstanceTo(pvd.data.Instance,vd.data.Instance);
                               end
                               {   else
@@ -585,7 +587,9 @@ begin
                      else
                          begin
                               if pvd^.data.PTD.GetValueAsString(pvd^.data.Instance)<>pvdmy^.data.PTD.GetValueAsString(pvdmy^.data.Instance) then
-                                 pvdmy.attrib:=vda_different;
+                                pvdmy.attrib:=vda_different;
+                              if linkedunit then
+                                pvdmy.attrib:=pvdmy.attrib or vda_colored1;
                          end;
 
         pvd:=entunit.InterfaceVariables.vardescarray.iterate(ir2)
@@ -663,7 +667,7 @@ begin
            if pu<>nil then
            repeat
              if typeof(PTSimpleUnit(pu)^)=typeof(TObjectUnit) then
-               processunit(PTObjectUnit(pu)^);
+               processunit(PTObjectUnit(pu)^,true);
              pu:=pentvarext^.entityunit.InterfaceUses.iterate(ir2)
            until pu=nil;
          end;

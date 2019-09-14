@@ -762,6 +762,10 @@ begin
   begin
     tempcolor:=canvas.Font.Color;
     //canvas.Font.Color:=clGrayText;
+    if (ppd^.Attr and FA_COLORED1)<>0 then
+    begin
+          canvas.Font.StrikeThrough:=true;
+    end;
     if fulldraw then
     if (assigned(ppd.Decorators.OnDrawProperty) and(ppd^.valueAddres<>nil)and((ppd^.Attr and FA_DIFFERENT)=0)) then
                                        ppd.Decorators.OnDrawProperty(canvas,r,ppd^.valueAddres)
@@ -775,6 +779,10 @@ begin
          //ppd.FastEditorDrawed:=false;
          if NeedDrawFasteditor(onm) then
          drawfasteditors(ppd,canvas,r);
+     if (ppd^.Attr and FA_COLORED1)<>0 then
+     begin
+           canvas.Font.StrikeThrough:=true;
+     end;
     if fulldraw then
     if (assigned(ppd.Decorators.OnDrawProperty) and(ppd^.valueAddres<>nil)and((ppd^.Attr and FA_DIFFERENT)=0)) then
                                                    ppd.Decorators.OnDrawProperty(canvas,r,ppd^.valueAddres)
@@ -786,6 +794,11 @@ if (ppd^.Attr and FA_HIDDEN_IN_OBJ_INSP)<>0 then
 begin
       canvas.Font.Italic:=false;
 end;
+if (ppd^.Attr and FA_COLORED1)<>0 then
+begin
+      canvas.Font.StrikeThrough:=false;
+end;
+
 
 end;
 procedure TGDBobjinsp.drawprop(PPA:PTPropertyDeskriptorArray;arect:trect);

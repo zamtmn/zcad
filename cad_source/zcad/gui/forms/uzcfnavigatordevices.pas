@@ -465,7 +465,7 @@ begin
       SelectSubNodes(nav,psubnode);
       pnd:=nav.GetNodeData(psubnode);
       if pnd<>nil then
-        if pnd.NodeMode=TNMData then
+        if ((pnd.NodeMode=TNMData)or(pnd.NodeMode=TNMHardGroup))and(pnd^.pent<>nil) then
           zcSelectEntity(pnd^.pent);
       psubnode:=psubnode^.NextSibling;
     end;

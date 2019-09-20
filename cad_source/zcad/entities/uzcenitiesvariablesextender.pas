@@ -33,6 +33,7 @@ TVariablesExtender={$IFNDEF DELPHI}packed{$ENDIF} object(TBaseVariablesExtender)
     entityunit:TObjectUnit;
     pMainFuncEntity:PGDBObjEntity;
     DelegatesArray:TEntityArray;
+    pThisEntity:PGDBObjEntity;
     class function CreateEntVariablesExtender(pEntity:Pointer; out ObjSize:Integer):PTVariablesExtender;static;
     constructor init(pEntity:Pointer);
     destructor Done;virtual;
@@ -42,7 +43,7 @@ TVariablesExtender={$IFNDEF DELPHI}packed{$ENDIF} object(TBaseVariablesExtender)
     procedure onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);virtual;
     procedure CopyExt2Ent(pSourceEntity,pDestEntity:pointer);virtual;
     function isMainFunction:boolean;
-    procedure addDelegate(pEntity,pDelegateEntity:PGDBObjEntity;pDelegateEntityVarext:PTVariablesExtender);
+    procedure addDelegate({pEntity,}pDelegateEntity:PGDBObjEntity;pDelegateEntityVarext:PTVariablesExtender);
   end;
 
 var
@@ -54,10 +55,10 @@ begin
   result:=pMainFuncEntity=nil;
 end;
 
-procedure TVariablesExtender.addDelegate(pEntity,pDelegateEntity:PGDBObjEntity;pDelegateEntityVarext:PTVariablesExtender);
+procedure TVariablesExtender.addDelegate({pEntity,}pDelegateEntity:PGDBObjEntity;pDelegateEntityVarext:PTVariablesExtender);
 begin
   pDelegateEntityVarext^.entityunit.InterfaceUses.PushBackIfNotPresent(@entityunit);
-  pDelegateEntityVarext^.pMainFuncEntity:=pEntity;
+  pDelegateEntityVarext^.pMainFuncEntity:={pEntity}pThisEntity;
   DelegatesArray.PushBackIfNotPresent(pDelegateEntity);
 end;
 
@@ -148,6 +149,8 @@ begin
 end;
 constructor TVariablesExtender.init;
 begin
+     inherited;
+     pThisEntity:=pEntity;
      entityunit.init('entity');
      entityunit.InterfaceUses.PushBackData(SysUnit);
      if PFCTTD=nil then

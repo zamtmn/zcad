@@ -1,16 +1,38 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <STRINGTREE>
-    <Electrotechnics Desc="Электротехника">
-      <Power_consumer Desc="Потребители энергии">
-        <Heating Desc="Отопление">
-          <Electric_heater Desc="ТЭН"/>
+    <Electrotechnics Desc="Electrotechnics">
+      <Power_consumer Desc="Power consumer">
+        <Heating Desc="Heating">
+          <Electric_heater Desc="Electric_heater"/>
         </Heating>
-        <Other Desc="Пока не классифицировано">
-          <Motor Desc="Двигатель"/>
-          <Lamp Desc="Лампа"/>
-        </Other>
+        <Lighting Desc="Lighting">
+          <Lamp Desc="Lamp"/>
+        </Lighting>
+        <Drives Desc="Drives">
+          <Motor Desc="Motor"/>
+        </Drives>
       </Power_consumer>
     </Electrotechnics>
+    <Measuring_equipment Desc="Measuring equipment">
+      <Pressure Desc="Pressure">
+        <Gauge Desc="Gauge"/>
+        <Switch Desc="Switch"/>
+        <Sensor Desc="Sensor"/>
+      </Pressure>
+      <Temperature Desc="Temperature">
+        <Gauge Desc="Gauge"/>
+        <Switch Desc="Switch"/>
+        <Sensor Desc="Sensor"/>
+      </Temperature>
+      <Level Desc="Level">
+        <Gauge Desc="Gauge"/>
+        <Switch Desc="Switch"/>
+        <Sensor Desc="Sensor"/>
+      </Level>
+    </Measuring_equipment>
+    <Not_classified Desc="Not classified">
+      <Motor Desc="test"/>
+    </Not_classified>
   </STRINGTREE>
 </CONFIG>

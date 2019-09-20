@@ -9,6 +9,18 @@
         <Wiring Desc="На схеме подключений"/>
         <Electrical_circuit Desc="На схеме электрической принципиальной"/>
       </onScheme>
+    <test1 Desc="test1">
+      <test1 Desc="test1">
+        <test1 Desc="test1">
+        </test1>
+      </test1>
+    </test1>
     </Graphical_symbol>
+    <test2 Desc="t">
+      <test1 Desc="test1">
+        <test1 Desc="test1">
+        </test1>
+      </test1>
+    </test2>
   </STRINGTREE>
 </CONFIG>

@@ -10,7 +10,7 @@ uses
   Laz2_XMLCfg,Laz2_DOM,
   gvector, gtree, uzbtypes;
 const
-  NameSeparator='|';
+  NameSeparator='~';
   TreeRootName='Root';
 
 type
@@ -61,14 +61,26 @@ begin
   end;
   result:=nil;
 end;
-
-function FindOrCreateChildrenNode(var CurrentBlobNode:TBlobTree.TTreeNodeType;NodeName:string;TranslateFunc:TTranslateFunction):TBlobTree.TTreeNodeType;
+function getAttrValue(const aNode:TDomNode;const AttrName,DefValue:string):string;
+var
+  aNodeAttr:TDomNode;
+begin
+  if assigned(aNode)then
+    aNodeAttr:=aNode.Attributes.GetNamedItem(AttrName)
+  else
+    aNodeAttr:=nil;
+  if assigned(aNodeAttr) then
+                              result:=aNodeAttr.NodeValue
+                          else
+                              result:=DefValue;
+end;
+function FindOrCreateChildrenNode(var CurrentBlobNode:TBlobTree.TTreeNodeType;SubXMLNode:TDomNode;TranslateFunc:TTranslateFunction):TBlobTree.TTreeNodeType;
 var
   InitData:TNodeData;
   Identifier:string;
 begin
   if Assigned(CurrentBlobNode) then begin
-    result:=FindChildrenNode(CurrentBlobNode,NodeName);
+    result:=FindChildrenNode(CurrentBlobNode,SubXMLNode.NodeName);
     if Assigned(Result) then begin
       {InitData:=Result.Data;
       InitData.FullName:=NodeName;
@@ -78,32 +90,29 @@ begin
     end else begin
       Result:=TBlobTree.TTreeNodeType.Create;
       if CurrentBlobNode.Data.FullName='' then
-         InitData.FullName:=NodeName
+         InitData.FullName:=SubXMLNode.NodeName
       else
-          InitData.FullName:=CurrentBlobNode.Data.FullName+NameSeparator+NodeName;
+          InitData.FullName:=CurrentBlobNode.Data.FullName+NameSeparator+SubXMLNode.NodeName;
       Identifier:=TreeRootName+NameSeparator+InitData.FullName;
       //InitData.FullName:=CurrentBlobNode.Data.FullName+NameSeparator+NodeName;
       if Assigned(TranslateFunc)then
-        InitData.LocalizedName:=TranslateFunc(Identifier,NodeName)
+        InitData.LocalizedName:=TranslateFunc(Identifier,getAttrValue(SubXMLNode,'Desc',SubXMLNode.NodeName))
       else
-        InitData.LocalizedName:=NodeName;
-      InitData.Name:=NodeName;
+        InitData.LocalizedName:=SubXMLNode.NodeName;
+      InitData.Name:=SubXMLNode.NodeName;
       Result.Data:=InitData;
       CurrentBlobNode.Children.PushBack(Result);
     end;
   end else begin
     CurrentBlobNode:=TBlobTree.TTreeNodeType.Create;
-    InitData.LocalizedName:='Root';
-    InitData.FullName:='Root';
+    InitData.LocalizedName:=TreeRootName;
+    InitData.FullName:='';
     InitData.Name:='';
     CurrentBlobNode.Data:=InitData;
     Result:=TBlobTree.TTreeNodeType.Create;
-    InitData.FullName:=NodeName;
-    if Assigned(TranslateFunc)then
-      InitData.LocalizedName:=TranslateFunc(InitData.FullName,NodeName)
-    else
-      InitData.LocalizedName:=NodeName;
-    InitData.Name:=NodeName;
+    InitData.FullName:=SubXMLNode.NodeName;
+    InitData.LocalizedName:=SubXMLNode.NodeName;
+    InitData.Name:=SubXMLNode.NodeName;
     Result.Data:=InitData;
     CurrentBlobNode.Children.PushBack(Result);
   end;
@@ -117,7 +126,7 @@ begin
   SubXMLNode:=CurrentXmlNode.FirstChild;
   while assigned(SubXMLNode)do
   begin
-    SubBlobNode:=FindOrCreateChildrenNode(CurrentBlobNode,SubXMLNode.NodeName,TranslateFunc);
+    SubBlobNode:=FindOrCreateChildrenNode(CurrentBlobNode,SubXMLNode,TranslateFunc);
     //SubBlobNode:=TBlobTree.TTreeNodeType.Create;
     //CurrentBlobNode.Children.PushBack(SubBlobNode);
     ProcessNode(SubXMLNode,SubBlobNode,TranslateFunc);
@@ -139,7 +148,7 @@ begin
   while assigned(SubXMLNode)do
   begin
     root:=BlobTree.Root;
-    root:=FindOrCreateChildrenNode(root,SubXMLNode.NodeName,TranslateFunc);
+    root:=FindOrCreateChildrenNode(root,SubXMLNode,TranslateFunc);
     ProcessNode(SubXMLNode,root,TranslateFunc);
     SubXMLNode:=SubXMLNode.NextSibling;
   end;

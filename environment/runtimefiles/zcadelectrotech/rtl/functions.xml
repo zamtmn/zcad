@@ -4,7 +4,7 @@
     <Electrotechnics Desc="Electrotechnics">
       <Power_consumer Desc="Power consumer">
         <Heating Desc="Heating">
-          <Electric_heater Desc="Electric_heater"/>
+          <Electric_heater Desc="Electric heater"/>
         </Heating>
         <Lighting Desc="Lighting">
           <Lamp Desc="Lamp"/>

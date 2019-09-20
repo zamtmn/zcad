@@ -11,6 +11,7 @@ uses
   gvector, gtree, uzbtypes;
 const
   NameSeparator='|';
+  TreeRootName='Root';
 
 type
   TTranslateFunction=function (const Identifier, OriginalValue: String): String;
@@ -38,9 +39,9 @@ var
 begin
   BlobTree:=TBlobTree.Create;
   BlobTree.root:=TBlobTree.TTreeNodeType.Create;
-  InitData.LocalizedName:='Root';
-  InitData.FullName:='Root';
-  InitData.Name:='Root';
+  InitData.LocalizedName:=TreeRootName;
+  InitData.FullName:=''{TreeRootName};
+  InitData.Name:=TreeRootName;
   BlobTree.root.Data:=InitData;
 end;
 
@@ -64,6 +65,7 @@ end;
 function FindOrCreateChildrenNode(var CurrentBlobNode:TBlobTree.TTreeNodeType;NodeName:string;TranslateFunc:TTranslateFunction):TBlobTree.TTreeNodeType;
 var
   InitData:TNodeData;
+  Identifier:string;
 begin
   if Assigned(CurrentBlobNode) then begin
     result:=FindChildrenNode(CurrentBlobNode,NodeName);
@@ -75,9 +77,14 @@ begin
       Result.Data:=InitData;}
     end else begin
       Result:=TBlobTree.TTreeNodeType.Create;
-      InitData.FullName:=CurrentBlobNode.Data.FullName+NameSeparator+NodeName;
+      if CurrentBlobNode.Data.FullName='' then
+         InitData.FullName:=NodeName
+      else
+          InitData.FullName:=CurrentBlobNode.Data.FullName+NameSeparator+NodeName;
+      Identifier:=TreeRootName+NameSeparator+InitData.FullName;
+      //InitData.FullName:=CurrentBlobNode.Data.FullName+NameSeparator+NodeName;
       if Assigned(TranslateFunc)then
-        InitData.LocalizedName:=TranslateFunc(InitData.FullName,NodeName)
+        InitData.LocalizedName:=TranslateFunc(Identifier,NodeName)
       else
         InitData.LocalizedName:=NodeName;
       InitData.Name:=NodeName;

@@ -53,7 +53,8 @@ var
   childNode:PVirtualNode;
 begin
   PNodeData:=StringsTree.GetNodeData(StringTreeNode);
-  PNodeData^.data:=BlobTreeNode;
+  if PNodeData<>nil then
+    PNodeData^.data:=BlobTreeNode;
   for Child in BlobTreeNode.Children do begin
     childNode:=StringsTree.AddChild(StringTreeNode,nil);
     filltree(childNode,Child);
@@ -77,7 +78,7 @@ end;
 procedure TStringsTreeSelector.fill(BlobTree:TBlobTree);
 begin
   StringsTree.NodeDataSize:=sizeof(TStringsTreeNodeData);
-  RootNode:=StringsTree.AddChild(nil,nil);
+  RootNode:={StringsTree.AddChild(nil,nil)}nil;
   filltree(RootNode,BlobTree.Root);
   StringsTree.OnGetText:=gt;
   StringsTree.OnFocusChanged:=VTFocuschanged;

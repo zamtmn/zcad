@@ -33,8 +33,15 @@ var
 implementation
 
 constructor TTreePropManager.Create;
+var
+  InitData:TNodeData;
 begin
   BlobTree:=TBlobTree.Create;
+  BlobTree.root:=TBlobTree.TTreeNodeType.Create;
+  InitData.LocalizedName:='Root';
+  InitData.FullName:='Root';
+  InitData.Name:='Root';
+  BlobTree.root.Data:=InitData;
 end;
 
 destructor TTreePropManager.Destroy;
@@ -120,16 +127,17 @@ begin
   XMLFile.Filename:=FileName;
 
   RootXMLNode:=XMLFile.FindNode('STRINGTREE',false);
-  root:=BlobTree.Root;
 
   SubXMLNode:=RootXMLNode.FirstChild;
   while assigned(SubXMLNode)do
   begin
+    root:=BlobTree.Root;
+    root:=FindOrCreateChildrenNode(root,SubXMLNode.NodeName,TranslateFunc);
     ProcessNode(SubXMLNode,root,TranslateFunc);
     SubXMLNode:=SubXMLNode.NextSibling;
   end;
 
-  BlobTree.Root:=root;
+  //BlobTree.Root:=root;
   XMLFile.Free;
 end;
 

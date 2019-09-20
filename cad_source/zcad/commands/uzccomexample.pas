@@ -1019,7 +1019,7 @@ begin
     if pVarext=nil then begin
       ZCMsgCallBackInterface.TextMessage('Please select device with variables',TMWOSilentShowError);
     end else begin
-      pCentralVarext^.addDelegate(pmainobj,pobj,pVarext);
+      pCentralVarext^.addDelegate({pmainobj,}pobj,pVarext);
     end;
   until false;
 

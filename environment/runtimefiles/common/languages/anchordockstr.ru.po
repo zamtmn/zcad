@@ -12,26 +12,35 @@ msgstr ""
 "X-Generator: Poedit 1.7.7\n"
 
 #: anchordockstr.adrsafreesideofasplittermustnotbeanchorednodetypeancho
+#, object-pascal-format
 msgid "A free side of a splitter must not be anchored: Node=\"%s\" Type=%s Anchors[%s]=\"%s\""
 msgstr "Свободная сторона разделителя не должна иметь привязки: Узел=\"%s\" Тип=%s Anchors[%s]=\"%s\""
+
+#: anchordockstr.adrsallowdocksitestobeminimized
+msgid "Allow dock sites to be minimized"
+msgstr "Разрешать областям стыковки сворачиваться"
 
 #: anchordockstr.adrsamountofpixelthemousehastodragbeforedragstarts
 msgid "Amount of pixel the mouse has to drag before drag starts"
 msgstr "Число пикселов, на которые должна переместиться мышь для начала операции перетаскивания"
 
 #: anchordockstr.adrsanchorisnotsplitternodeanchors
+#, object-pascal-format
 msgid "Anchor is not splitter: Node=\"%s\" Anchors[%s]=\"%s\""
 msgstr "Привязка не является разделителем: Узел=\"%s\" Anchors[%s]=\"%s\""
 
 #: anchordockstr.adrsanchornotfoundnodeanchors
+#, object-pascal-format
 msgid "Anchor not found: Node=\"%s\" Anchors[%s]=\"%s\""
 msgstr "Привязка не найдена: Узел=\"%s\" Anchors[%s]=\"%s\""
 
 #: anchordockstr.adrsanchortowrongsideofsplitternodeanchors
+#, object-pascal-format
 msgid "Anchor to wrong side of splitter: Node=\"%s\" Anchors[%s]=\"%s\""
 msgstr "Привязка к неверной стороне разделителя: Узел=\"%s\" Anchors[%s]=\"%s\""
 
 #: anchordockstr.adrsapagemustnotbeanchorednodeparentparenttypeanchors
+#, object-pascal-format
 msgid "A page must not be anchored: Node=\"%s\" Parent=%s ParentType=%s Anchors[%s]=\"%s\""
 msgstr "Вкладка не должна иметь привязок: Узел=\"%s\" Родитель=%s Тип родителя=%s Anchors[%s]=\"%s\""
 
@@ -52,6 +61,7 @@ msgid "control is already a docksite"
 msgstr "объект уже является областью стыковки"
 
 #: anchordockstr.adrscustomdocksitecanhaveonlyonesite
+#, object-pascal-format
 msgid "Custom dock site \"%s\" can have only one site."
 msgstr "Пользовательская область стыковки \"%s\" может иметь только один стыковочный элемент."
 
@@ -64,6 +74,7 @@ msgid "Docking options"
 msgstr "Параметры стыковки"
 
 #: anchordockstr.adrsdraganddockc
+#, object-pascal-format
 msgid "Use the mouse to drag and dock window \"%s\""
 msgstr "Используйте мышь для перетаскивания и стыковки окна \"%s\""
 
@@ -88,6 +99,7 @@ msgid "Enlarge"
 msgstr "Расширить"
 
 #: anchordockstr.adrsenlargeside
+#, object-pascal-format
 msgid "Enlarge %s side"
 msgstr "Расширить край %s"
 
@@ -151,6 +163,10 @@ msgstr "Зафиксирован"
 msgid "Merge"
 msgstr "Объединить"
 
+#: anchordockstr.adrsminimize
+msgid "Minimize"
+msgstr "Свернуть"
+
 #: anchordockstr.adrsmissingcontrolname
 msgid "missing control name"
 msgstr "отсутствует имя объекта"
@@ -188,18 +204,22 @@ msgid "No captions for floating sites"
 msgstr "Не показывать названия непристыкованных объектов"
 
 #: anchordockstr.adrsnochildrenallowedfornodetype
+#, object-pascal-format
 msgid "No children allowed for Node=\"%s\" Type=%s"
 msgstr "Не разрешается иметь потомков для Узла=\"%s\" Тип=%s"
 
 #: anchordockstr.adrsnotsupportedhasparent
+#, object-pascal-format
 msgid "Not supported: %s has parent %s"
 msgstr "Не поддерживается: %s имеет родителя %s"
 
 #: anchordockstr.adrsquit
+#, object-pascal-format
 msgid "Quit %s"
 msgstr "Выход из %s"
 
 #: anchordockstr.adrsrequestedbutcreated
+#, object-pascal-format
 msgid "%s requested, but %s created"
 msgstr "Запрошен %s, но создан %s"
 
@@ -240,6 +260,7 @@ msgid "Tab position"
 msgstr "Положение заголовков вкладок"
 
 #: anchordockstr.adrsthereisanotherdockmasterinstalledonlyonedockingpac
+#, object-pascal-format
 msgid "There is another dock master installed. Only one docking package can be installed at a time. Please uninstall the other dock master %s and restart the IDE"
 msgstr "Установленный диспетчер стыковки уже имеется. В каждый момент времени может быть установлен только один такой пакет. Удалите диспетчер стыковки %s и перезапустите IDE"
 
@@ -248,6 +269,7 @@ msgid "top"
 msgstr "сверху"
 
 #: anchordockstr.adrstouseanchordockingyoumustfirstuninstall
+#, object-pascal-format
 msgid "To use anchordocking you must first uninstall %s"
 msgstr "Для использования anchordocking сначала удалите %s"
 

@@ -9,9 +9,6 @@ uses
   Classes, SysUtils, ComCtrls, Controls, Graphics, Menus, Forms,ActnList,
   Laz2_XMLCfg,Laz2_DOM,
   gvector, gtree, uzbtypes;
-const
-  NameSeparator='~';
-  TreeRootName='Root';
 
 type
   TTranslateFunction=function (const Identifier, OriginalValue: String): String;
@@ -23,9 +20,13 @@ type
 
   TTreePropManager=class
     BlobTree:TBlobTree;
-    constructor Create;
+    NameSeparator,TreeRootName:string;
+    constructor Create(_NameSeparator,_TreeRootName:string);
     destructor Destroy;
     procedure LoadTree(FileName:string;TranslateFunc:TTranslateFunction);
+    function FindOrCreateChildrenNode(var CurrentBlobNode:TBlobTree.TTreeNodeType;SubXMLNode:TDomNode;TranslateFunc:TTranslateFunction):TBlobTree.TTreeNodeType;
+    procedure ProcessNode(CurrentXmlNode:TDomNode;var CurrentBlobNode:TBlobTree.TTreeNodeType;TranslateFunc:TTranslateFunction);
+    function FindChildrenNode(var CurrentBlobNode:TBlobTree.TTreeNodeType;NodeName:string):TBlobTree.TTreeNodeType;
   end;
 
 var
@@ -33,10 +34,12 @@ var
 
 implementation
 
-constructor TTreePropManager.Create;
+constructor TTreePropManager.Create(_NameSeparator,_TreeRootName:string);
 var
   InitData:TNodeData;
 begin
+  NameSeparator:=_NameSeparator;
+  TreeRootName:=_TreeRootName;
   BlobTree:=TBlobTree.Create;
   BlobTree.root:=TBlobTree.TTreeNodeType.Create;
   InitData.LocalizedName:=TreeRootName;
@@ -50,7 +53,7 @@ begin
   BlobTree.Destroy;
 end;
 
-function FindChildrenNode(var CurrentBlobNode:TBlobTree.TTreeNodeType;NodeName:string):TBlobTree.TTreeNodeType;
+function TTreePropManager.FindChildrenNode(var CurrentBlobNode:TBlobTree.TTreeNodeType;NodeName:string):TBlobTree.TTreeNodeType;
 var
   i:integer;
 begin
@@ -74,7 +77,7 @@ begin
                           else
                               result:=DefValue;
 end;
-function FindOrCreateChildrenNode(var CurrentBlobNode:TBlobTree.TTreeNodeType;SubXMLNode:TDomNode;TranslateFunc:TTranslateFunction):TBlobTree.TTreeNodeType;
+function TTreePropManager.FindOrCreateChildrenNode(var CurrentBlobNode:TBlobTree.TTreeNodeType;SubXMLNode:TDomNode;TranslateFunc:TTranslateFunction):TBlobTree.TTreeNodeType;
 var
   InitData:TNodeData;
   Identifier:string;
@@ -118,7 +121,7 @@ begin
   end;
 end;
 
-procedure ProcessNode(CurrentXmlNode:TDomNode;var CurrentBlobNode:TBlobTree.TTreeNodeType;TranslateFunc:TTranslateFunction);
+procedure TTreePropManager.ProcessNode(CurrentXmlNode:TDomNode;var CurrentBlobNode:TBlobTree.TTreeNodeType;TranslateFunc:TTranslateFunction);
 var
   SubXMLNode:TDomNode;
   SubBlobNode:TBlobTree.TTreeNodeType;
@@ -158,9 +161,8 @@ begin
 end;
 
 initialization
-  FunctionsTree:=TTreePropManager.Create;
-  RepresentationsTree:=TTreePropManager.Create;
-
+  FunctionsTree:=TTreePropManager.Create('~','FunctionsRoot');
+  RepresentationsTree:=TTreePropManager.Create('~','RepresentationsRoot');
 finalization;
   FunctionsTree.Destroy;
   RepresentationsTree.Destroy;

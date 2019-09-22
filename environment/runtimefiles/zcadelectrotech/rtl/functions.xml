@@ -30,6 +30,22 @@
           <Sensor Desc="Level sensor"/>
         </Level>
       </Measuring_equipment>
+      <Alarm Desc="Alarm">
+        <Fire Desc="Fire">
+          <Detectors Desc="Detectors">
+            <Smoke Desc="Smoke">
+              <Spot Desc="Spot"/>
+              <Linear Desc="Linear"/>
+            </Smoke>
+            <Thermal Desc="Thermal">
+              <Spot Desc="Spot"/>
+              <Linear Desc="Linear"/>
+            </Thermal>
+          </Detectors>
+        </Fire>
+        <Security  Desc="Security">
+        </Security>
+      </Alarm>
     </Electrotechnics>
     <Not_classified Desc="Not classified"/>
   </STRINGTREE>

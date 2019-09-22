@@ -219,7 +219,7 @@ else
           TNMData:begin
                     if pnd^.pent<>nil then
                                           begin
-                                           ImageIndex:=ImagesManager.GetImageIndex(GetEntityVariableValue(pnd^.pent,'ENTID_Type','bug'));
+                                           ImageIndex:=ImagesManager.GetImageIndex(GetEntityVariableValue(pnd^.pent,'ENTID_Representation','bug'));
                                           end
                     else
                       ImageIndex:=3;

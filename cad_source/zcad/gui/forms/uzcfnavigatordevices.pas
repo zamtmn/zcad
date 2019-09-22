@@ -415,7 +415,7 @@ else
           TNMData,TNMHardGroup:begin
                     if pnd^.pent<>nil then
                                           begin
-                                           ImageIndex:=ImagesManager.GetImageIndex(GetEntityVariableValue(pnd^.pent,{'ENTID_Type'}'ENTID_Representation','bug'));
+                                           ImageIndex:=ImagesManager.GetImageIndex(GetEntityVariableValue(pnd^.pent,'ENTID_Representation','bug'));
                                           end
                     else
                       ImageIndex:=3;

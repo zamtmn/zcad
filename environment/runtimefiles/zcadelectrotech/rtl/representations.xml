@@ -1,26 +1,15 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <STRINGTREE>
-    <Graphical_symbol Desc="УГО">
-      <onPlan Desc="На плане"/>
-      <onScheme Desc="На схеме">
-        <Automation Desc="На схеме автоматизации"/>
-        <Connection Desc="На схеме соединений"/>
-        <Wiring Desc="На схеме подключений"/>
-        <Electrical_circuit Desc="На схеме электрической принципиальной"/>
+    <GraphSymbol Desc="Symbols">
+      <onPlan Desc="On plan"/>
+      <onScheme Desc="On scheme">
+        <Automation Desc="On automation scheme"/>
+        <Connection Desc="On connection scheme"/>
+        <Wiring Desc="On wiring scheme"/>
+        <Electrical_circuit Desc="On electrical circuit scheme"/>
       </onScheme>
-    <test1 Desc="test1">
-      <test1 Desc="test1">
-        <test1 Desc="test1">
-        </test1>
-      </test1>
-    </test1>
-    </Graphical_symbol>
-    <test2 Desc="t">
-      <test1 Desc="test1">
-        <test1 Desc="test1">
-        </test1>
-      </test1>
-    </test2>
+    </GraphSymbol>
+    <Not_classified Desc="Not classified"/>
   </STRINGTREE>
 </CONFIG>

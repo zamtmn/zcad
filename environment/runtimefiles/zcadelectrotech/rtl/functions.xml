@@ -2,7 +2,7 @@
 <CONFIG>
   <STRINGTREE>
     <Electrotechnics Desc="Electrotechnics">
-      <Power_consumer Desc="Power consumer">
+      <Power_consumer Desc="Power consumers">
         <Heating Desc="Heating">
           <Electric_heater Desc="Electric heater"/>
         </Heating>
@@ -13,26 +13,24 @@
           <Motor Desc="Motor"/>
         </Drives>
       </Power_consumer>
+      <Measuring_equipment Desc="Measuring equipment">
+        <Pressure Desc="Pressure">
+          <Gauge Desc="Pressure gauge"/>
+          <Switch Desc="Pressure switch"/>
+          <Sensor Desc="Pressure sensor"/>
+        </Pressure>
+        <Temperature Desc="Temperature">
+          <Gauge Desc="Temperature gauge"/>
+          <Switch Desc="Temperature switch"/>
+          <Sensor Desc="Temperature sensor"/>
+        </Temperature>
+        <Level Desc="Level">
+          <Gauge Desc="Level gauge"/>
+          <Switch Desc="Level switch"/>
+          <Sensor Desc="Level sensor"/>
+        </Level>
+      </Measuring_equipment>
     </Electrotechnics>
-    <Measuring_equipment Desc="Measuring equipment">
-      <Pressure Desc="Pressure">
-        <Gauge Desc="Gauge"/>
-        <Switch Desc="Switch"/>
-        <Sensor Desc="Sensor"/>
-      </Pressure>
-      <Temperature Desc="Temperature">
-        <Gauge Desc="Gauge"/>
-        <Switch Desc="Switch"/>
-        <Sensor Desc="Sensor"/>
-      </Temperature>
-      <Level Desc="Level">
-        <Gauge Desc="Gauge"/>
-        <Switch Desc="Switch"/>
-        <Sensor Desc="Sensor"/>
-      </Level>
-    </Measuring_equipment>
-    <Not_classified Desc="Not classified">
-      <Motor Desc="test"/>
-    </Not_classified>
+    <Not_classified Desc="Not classified"/>
   </STRINGTREE>
 </CONFIG>

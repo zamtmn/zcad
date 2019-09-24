@@ -11,7 +11,8 @@ uses
   uzcinterface,uzeconsts,uzeentity,uzcimagesmanager,uzcdrawings,uzbtypesbase,
   varmandef,uzbstrproc,uzcmainwindow,uzctreenode,
   uzcnavigatorsnodedesk,Varman,uzcstrconsts,uztoolbarsmanager,
-  uzccommandsimpl,uzccommandsabstract,uzcutils,uzcenitiesvariablesextender,GraphType,generics.collections;
+  uzccommandsimpl,uzccommandsabstract,uzcutils,uzcenitiesvariablesextender,
+  GraphType,generics.collections,uzglviewareaabstract;
 
 resourcestring
   rsByPrefix='byPrefix';
@@ -49,7 +50,6 @@ type
     procedure getImageindex;
     procedure bcp(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode;
         Column: TColumnIndex; CellPaintMode: TVTCellPaintMode; CellRect: TRect; var ContentRect: TRect);
-
   private
     CombinedNode:TBaseRootNodeDesk;//удаляем ее, ненужно!!!
     CombinedNodeStates:TNodesStates;
@@ -169,6 +169,8 @@ begin
   end;
 end;
 procedure TNavigatorDevices._onCreate(Sender: TObject);
+var
+  po:TVTPaintOptions;
 begin
    pref:=TmyVariableAction.Create(self);
    pref.ActionList:=ZCADMainWindow.StandartActions;
@@ -194,6 +196,9 @@ begin
    NavTree.OnFocusChanged:=VTFocuschanged;
    NavTree.OnCompareNodes:=VTCompareNodes;
    NavTree.OnBeforeCellPaint:=bcp;
+   po:=NavTree.TreeOptions.PaintOptions;
+   po:=po-[toShowFilteredNodes,toHideSelection]+[toPopupMode];
+   NavTree.TreeOptions.PaintOptions:=po;
    MainFunctionIconIndex:=-1;
    BuggyIconIndex:=-1;
 
@@ -289,11 +294,31 @@ begin
    NavTree.EndUpdate;
 end;
 procedure TNavigatorDevices.AutoRefreshTree(sender:TObject;GUIAction:TZMessageID);
+var
+  sender_wa:TAbstractViewArea;
+  devnode:PVirtualNode;
 begin
   if GUIAction=ZMsgID_GUIActionRebuild then
     RefreshTree(sender);
+  if (sender is (TAbstractViewArea))and(GUIAction=ZMsgID_GUIActionSelectionChanged) then begin
+    sender_wa:=sender as TAbstractViewArea;
+    if sender_wa.param.SelDesc.LastSelectedObject<>nil then begin
+      if (pGDBObjEntity(sender_wa.param.SelDesc.LastSelectedObject)^.GetObjType=GDBDeviceID)and(assigned(Ent2NodeMap)) then begin
+        if Ent2NodeMap.TryGetValue(sender_wa.param.SelDesc.LastSelectedObject,devnode) then begin
+          NavTree.Selected[devnode]:=true;
+          NavTree.VisiblePath[devnode]:=true;
+          NavTree.ScrollIntoView(devnode,true);
+        end;
+      end;
+    end else begin
+      NavTree.ClearSelection;
+      if assigned (StandaloneNodeStates) then
+        freeandnil(StandaloneNodeStates);
+      if assigned (StandaloneNode) then
+      StandaloneNodeStates:=StandaloneNode.SaveState;
+    end;
+  end;
 end;
-
 procedure TNavigatorDevices.TVDblClick(Sender: TObject);
 var
   pnode:PVirtualNode;
@@ -316,7 +341,6 @@ begin
       drawings.GetCurrentDWG.wa.ZoomToVolume(bb);
     end;
   end;
-  ZCMsgCallBackInterface.Do_SetNormalFocus;
 end;
 
 procedure TNavigatorDevices.TVOnMouseMove(Sender: TObject; Shift: TShiftState; X,

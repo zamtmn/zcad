@@ -46,6 +46,7 @@ type
                          TextType: TVSTTextType; var CellText: String);virtual;
     procedure NavGetImage(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
                           var Ghosted: Boolean; var ImageIndex: Integer);
+    procedure getImageindex;
     procedure bcp(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode;
         Column: TColumnIndex; CellPaintMode: TVTCellPaintMode; CellRect: TRect; var ContentRect: TRect);
 
@@ -58,6 +59,7 @@ type
     pref,base:TmyVariableAction;
     GroupByPrefix,GroupByBase:boolean;
     MainFunctionIconIndex:integer;
+    BuggyIconIndex:integer;
 
   public
     procedure CreateRoots;
@@ -193,6 +195,7 @@ begin
    NavTree.OnCompareNodes:=VTCompareNodes;
    NavTree.OnBeforeCellPaint:=bcp;
    MainFunctionIconIndex:=-1;
+   BuggyIconIndex:=-1;
 
    OnShow:=RefreshTree;
 
@@ -211,13 +214,17 @@ begin
   if pnd^.pent<>nil then
   begin
     pentvarext:=pnd^.pent^.GetExtension(typeof(TVariablesExtender));
-    if pentvarext^.isMainFunction then begin
-      if MainFunctionIconIndex=-1 then begin
-        MainFunctionIconIndex:=ImagesManager.GetImageIndex('basket');
-      end;
-      if CellPaintMode=cpmPaint then
-        ImagesManager.IconList.Draw(TargetCanvas,ContentRect.Left,0,MainFunctionIconIndex,gdeNormal);
+    if pentvarext<>nil then begin
+
+    getImageIndex;
+
+    if CellPaintMode=cpmPaint then begin
+      ImagesManager.IconList.Draw(TargetCanvas,ContentRect.Left,(ContentRect.Bottom-ImagesManager.IconList.Width) div 2,ImagesManager.GetImageIndex(GetEntityVariableValue(pnd^.pent,'ENTID_Function','bug'),BuggyIconIndex),gdeNormal);
       ContentRect.Left:=ContentRect.Left+ImagesManager.IconList.Width;
+      ImagesManager.IconList.Draw(TargetCanvas,ContentRect.Left,(ContentRect.Bottom-ImagesManager.IconList.Width) div 2,ImagesManager.GetImageIndex(GetEntityVariableValue(pnd^.pent,'ENTID_Representation','bug'),BuggyIconIndex),gdeNormal);
+      ContentRect.Left:=ContentRect.Left+ImagesManager.IconList.Width;
+    end;
+
     end;
   end;
 end;
@@ -309,6 +316,7 @@ begin
       drawings.GetCurrentDWG.wa.ZoomToVolume(bb);
     end;
   end;
+  ZCMsgCallBackInterface.Do_SetNormalFocus;
 end;
 
 procedure TNavigatorDevices.TVOnMouseMove(Sender: TObject; Shift: TShiftState; X,
@@ -390,16 +398,25 @@ begin
                                    celltext:=GetEntityVariableValue(pnd^.pent,'NMO_Name',rsNameAbsent);
   end;
 end;
-procedure TNavigatorDevices.NavGetImage(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
-                                 var Ghosted: Boolean; var ImageIndex: Integer);
-var
-  pnd:PTNodeData;
+procedure TNavigatorDevices.getImageIndex;
 begin
+  if MainFunctionIconIndex=-1 then
+    MainFunctionIconIndex:=ImagesManager.GetImageIndex('basket');
+  if BuggyIconIndex=-1 then
+    BuggyIconIndex:=ImagesManager.GetImageIndex('bug');
   if NavGroupIconIndex=-1 then
                               NavGroupIconIndex:=ImagesManager.GetImageIndex('navmanualgroup');
   if NavAutoGroupIconIndex=-1 then
                               NavAutoGroupIconIndex:=ImagesManager.GetImageIndex('navautogroup');
+end;
 
+procedure TNavigatorDevices.NavGetImage(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
+                                 var Ghosted: Boolean; var ImageIndex: Integer);
+var
+  pnd:PTNodeData;
+  pentvarext:PTVariablesExtender;
+begin
+  getImageIndex;
      if (assigned(CombinedNode))and(node=CombinedNode.RootNode) then
                                        ImageIndex:=CombinedNode.ficonindex
 else if (assigned(StandaloneNode))and(node=StandaloneNode.RootNode) then
@@ -415,10 +432,19 @@ else
           TNMData,TNMHardGroup:begin
                     if pnd^.pent<>nil then
                                           begin
-                                           ImageIndex:=ImagesManager.GetImageIndex(GetEntityVariableValue(pnd^.pent,'ENTID_Representation','bug'));
+                                           pentvarext:=pnd^.pent^.GetExtension(typeof(TVariablesExtender));
+                                           if pentvarext<>nil then
+                                           begin
+                                             if pentvarext^.isMainFunction then
+                                               ImageIndex:=MainFunctionIconIndex
+                                             else
+                                               ImageIndex:=-1;
+                                           end
+                                           else
+                                             ImageIndex:=BuggyIconIndex;
                                           end
                     else
-                      ImageIndex:=3;
+                      ImageIndex:=BuggyIconIndex;
                   end;
           end;
         end

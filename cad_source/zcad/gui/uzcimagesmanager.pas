@@ -47,7 +47,8 @@ type
       function loadicon(f:string):integer;
       procedure ScanDir(path:string);
       procedure LoadAliasesDir(path:string);
-      function GetImageIndex(ImageName:string):integer;
+      function GetImageIndex(ImageName:string):integer;overload;
+      function GetImageIndex(ImageName:string;DefaultInd:integer):integer;overload;
     published
       property IconList: TImageList read FIconList write FIconList;
       property DefaultImageIndex:integer read FDefaultImageIndex write FDefaultImageIndex;
@@ -114,6 +115,10 @@ begin
     end;
 end;
 function TImagesManager.GetImageIndex(ImageName:string):integer;
+begin
+  result:=GetImageIndex(ImageName,defaultimageindex)
+end;
+function TImagesManager.GetImageIndex(ImageName:string;DefaultInd:integer):integer;
 var
    PID:TImageName2TImageDataMap.PTValue;
    internalname:string;
@@ -128,7 +133,7 @@ begin
      end
    else
      begin
-       result:=defaultimageindex;
+       result:=DefaultInd;
      end;
 end;
 procedure TImagesManager.LoadAliasesDir(path:string);

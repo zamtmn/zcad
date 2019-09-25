@@ -307,7 +307,7 @@ begin
         if Ent2NodeMap.TryGetValue(sender_wa.param.SelDesc.LastSelectedObject,devnode) then begin
           NavTree.Selected[devnode]:=true;
           NavTree.VisiblePath[devnode]:=true;
-          NavTree.ScrollIntoView(devnode,true);
+          NavTree.ScrollIntoView(devnode,false);
         end;
       end;
     end else begin

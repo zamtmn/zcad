@@ -48,8 +48,12 @@ type
     procedure NavGetImage(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
                           var Ghosted: Boolean; var ImageIndex: Integer);
     procedure getImageindex;
-    procedure bcp(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode;
-        Column: TColumnIndex; CellPaintMode: TVTCellPaintMode; CellRect: TRect; var ContentRect: TRect);
+    procedure AfterCellPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode;
+    Column: TColumnIndex; const CellRect: TRect);
+    procedure DrawText(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode;
+        Column: TColumnIndex; const CellText: String; const CellRect: TRect; var DefaultDraw: Boolean) ;
+    procedure MeasureTextWidth(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode;
+    Column: TColumnIndex; const CellText: String; var Extent: Integer);
   private
     CombinedNode:TBaseRootNodeDesk;//удаляем ее, ненужно!!!
     CombinedNodeStates:TNodesStates;
@@ -60,6 +64,7 @@ type
     GroupByPrefix,GroupByBase:boolean;
     MainFunctionIconIndex:integer;
     BuggyIconIndex:integer;
+    SaveCellRectLeft:integer;
 
   public
     procedure CreateRoots;
@@ -171,6 +176,8 @@ end;
 procedure TNavigatorDevices._onCreate(Sender: TObject);
 var
   po:TVTPaintOptions;
+  //mo:TVTMiscOptions;
+  //ts:TVirtualTreeStates;
 begin
    pref:=TmyVariableAction.Create(self);
    pref.ActionList:=ZCADMainWindow.StandartActions;
@@ -195,10 +202,18 @@ begin
    NavTree.OnFreeNode:=FreeNode;
    NavTree.OnFocusChanged:=VTFocuschanged;
    NavTree.OnCompareNodes:=VTCompareNodes;
-   NavTree.OnBeforeCellPaint:=bcp;
+   NavTree.OnAfterCellPaint:=AfterCellPaint;
+   NavTree.OnMeasureTextWidth:=MeasureTextWidth;
+   NavTree.OnDrawText:=DrawText;
+   {ts:=NavTree.TreeStates;
+   ts:=ts+[tsUseThemes];
+   NavTree.TreeStates:=ts;}
    po:=NavTree.TreeOptions.PaintOptions;
    po:=po-[toShowFilteredNodes,toHideSelection]+[toPopupMode];
    NavTree.TreeOptions.PaintOptions:=po;
+   {mo:=NavTree.TreeOptions.MiscOptions;
+   mo:=mo+[toGridExtensions];
+   NavTree.TreeOptions.MiscOptions:=mo;}
    MainFunctionIconIndex:=-1;
    BuggyIconIndex:=-1;
 
@@ -208,11 +223,12 @@ begin
 
    ZCMsgCallBackInterface.RegisterHandler_GUIAction(AutoRefreshTree);
 end;
-procedure TNavigatorDevices.bcp(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode;
-    Column: TColumnIndex; CellPaintMode: TVTCellPaintMode; CellRect: TRect; var ContentRect: TRect);
+procedure TNavigatorDevices.AfterCellPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode;
+    Column: TColumnIndex; const CellRect: TRect);
 var
   pnd:PTNodeData;
   pentvarext:PTVariablesExtender;
+  myContentRect:TRect;
 begin
   pnd:=Sender.GetNodeData(Node);
   if pnd<>nil then
@@ -223,16 +239,58 @@ begin
 
     getImageIndex;
 
-    if CellPaintMode=cpmPaint then begin
-      ImagesManager.IconList.Draw(TargetCanvas,ContentRect.Left,(ContentRect.Bottom-ImagesManager.IconList.Width) div 2,ImagesManager.GetImageIndex(GetEntityVariableValue(pnd^.pent,'ENTID_Function','bug'),BuggyIconIndex),gdeNormal);
-      ContentRect.Left:=ContentRect.Left+ImagesManager.IconList.Width;
-      ImagesManager.IconList.Draw(TargetCanvas,ContentRect.Left,(ContentRect.Bottom-ImagesManager.IconList.Width) div 2,ImagesManager.GetImageIndex(GetEntityVariableValue(pnd^.pent,'ENTID_Representation','bug'),BuggyIconIndex),gdeNormal);
-      ContentRect.Left:=ContentRect.Left+ImagesManager.IconList.Width;
-    end;
+    //if CellPaintMode=cpmPaint then begin
+      myContentRect:=CellRect;
+      myContentRect.Left:=SaveCellRectLeft;
 
+      ImagesManager.IconList.Draw(TargetCanvas,myContentRect.Left,(myContentRect.Bottom-ImagesManager.IconList.Width) div 2,ImagesManager.GetImageIndex(GetEntityVariableValue(pnd^.pent,'ENTID_Function','bug'),BuggyIconIndex),gdeNormal);
+      myContentRect.Left:=myContentRect.Left+ImagesManager.IconList.Width;
+      ImagesManager.IconList.Draw(TargetCanvas,myContentRect.Left,(myContentRect.Bottom-ImagesManager.IconList.Width) div 2,ImagesManager.GetImageIndex(GetEntityVariableValue(pnd^.pent,'ENTID_Representation','bug'),BuggyIconIndex),gdeNormal);
+      myContentRect.Left:=myContentRect.Left+ImagesManager.IconList.Width;
+    //end;
     end;
   end;
 end;
+procedure TNavigatorDevices.DrawText(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode;
+    Column: TColumnIndex; const CellText: String; const CellRect: TRect; var DefaultDraw: Boolean);
+var
+  pnd:PTNodeData;
+  pentvarext:PTVariablesExtender;
+  myCellRect:TRect;
+begin
+  pnd:=Sender.GetNodeData(Node);
+  if pnd<>nil then
+  if pnd^.pent<>nil then
+  begin
+    pentvarext:=pnd^.pent^.GetExtension(typeof(TVariablesExtender));
+    if pentvarext<>nil then begin
+      SaveCellRectLeft:=CellRect.Left;
+      myCellRect:=CellRect;
+      DefaultDraw:=false;
+      myCellRect.Left:=myCellRect.Left+2*ImagesManager.IconList.Width;
+      TargetCanvas.TextRect(myCellRect,myCellRect.Left,myCellRect.Top,CellText);
+      //DrawText(TargetCanvas.Handle, PChar(Text), Length(Text), CellRect, DrawFormat);
+      //ImagesManager.IconList.Draw(TargetCanvas,ContentRect.Left,(ContentRect.Bottom-ImagesManager.IconList.Width) div 2,ImagesManager.GetImageIndex(GetEntityVariableValue(pnd^.pent,'ENTID_Function','bug'),BuggyIconIndex),gdeNormal);
+      //ImagesManager.IconList.Draw(TargetCanvas,ContentRect.Left,(ContentRect.Bottom-ImagesManager.IconList.Width) div 2,ImagesManager.GetImageIndex(GetEntityVariableValue(pnd^.pent,'ENTID_Representation','bug'),BuggyIconIndex),gdeNormal);
+    end;
+  end;
+end;
+procedure TNavigatorDevices.MeasureTextWidth(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode;
+Column: TColumnIndex; const CellText: String; var Extent: Integer);
+var
+  pnd:PTNodeData;
+  pentvarext:PTVariablesExtender;
+begin
+  pnd:=Sender.GetNodeData(Node);
+  if pnd<>nil then
+  if pnd^.pent<>nil then
+  begin
+    pentvarext:=pnd^.pent^.GetExtension(typeof(TVariablesExtender));
+    if pentvarext<>nil then
+      Extent:=Extent+2*ImagesManager.IconList.Width;
+  end;
+end;
+
 function TNavigatorDevices.CreateEntityNode(Tree: TVirtualStringTree;basenode:PVirtualNode;pent:pGDBObjEntity;Name:string):PVirtualNode;
 var
   pnd:PTNodeData;

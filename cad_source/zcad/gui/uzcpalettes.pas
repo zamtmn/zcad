@@ -59,10 +59,10 @@ type
 TPaletteHelper=class
 
 class procedure ZPalettevsIconDoubleClick(Sender: TObject);
-class function ZPalettevsIconCreator(aControlName,aInternalCaption,aType: string;TBNode:TDomNode;var PaletteControl:TPaletteControlBaseType):TPaletteControlBaseType;
+class function ZPalettevsIconCreator(aControlName,aInternalCaption,aType: string;TBNode:TDomNode;var PaletteControl:TPaletteControlBaseType;DoDisableAlign:boolean):TPaletteControlBaseType;
 class procedure ZPalettevsIconItemCreator(aNode: TDomNode;rootnode:TPersistent;palette:TPaletteControlBaseType);
 
-class function ZPaletteTreeCreator(aControlName,aInternalCaption,aType: string;TBNode:TDomNode;var PaletteControl:TPaletteControlBaseType):TPaletteControlBaseType;
+class function ZPaletteTreeCreator(aControlName,aInternalCaption,aType: string;TBNode:TDomNode;var PaletteControl:TPaletteControlBaseType;DoDisableAlign:boolean):TPaletteControlBaseType;
 class procedure ZPaletteTreeItemCreator(aNode: TDomNode;rootnode:TPersistent;palette:TPaletteControlBaseType);
 class procedure ZPaletteTreeNodeCreator(aNode: TDomNode;rootnode:TPersistent;palette:TPaletteControlBaseType);
 class procedure ZPaletteTreeFilter(Sender: TObject);
@@ -127,12 +127,14 @@ begin
 end;
 
 
-class function TPaletteHelper.ZPalettevsIconCreator(aControlName,aInternalCaption,aType: string;TBNode:TDomNode;var PaletteControl:TPaletteControlBaseType):TPaletteControlBaseType;
+class function TPaletteHelper.ZPalettevsIconCreator(aControlName,aInternalCaption,aType: string;TBNode:TDomNode;var PaletteControl:TPaletteControlBaseType;DoDisableAlign:boolean):TPaletteControlBaseType;
 begin
   result:=TCustomForm(Tform.NewInstance);
-  if result is TWinControl then
-    TWinControl(result).DisableAlign;
+  {if result is TWinControl then
+    TWinControl(result).DisableAlign;}
   TCustomForm(result).CreateNew(Application);
+  if DoDisableAlign then
+      TWinControl(result).DisableAutoSizing;
   TCustomForm(result).Name:=aControlName;
   TCustomForm(result).Caption:=getAttrValue(TBNode,'Caption',aInternalCaption);
   PaletteControl:=TZPaletteListView.Create(result);
@@ -213,7 +215,7 @@ begin
   ZPaletteTreeViewFilter.tree.Invalidate;
 end;
 
-class function TPaletteHelper.ZPaletteTreeCreator(aControlName,aInternalCaption,aType: string;TBNode:TDomNode;var PaletteControl:TPaletteControlBaseType):TPaletteControlBaseType;
+class function TPaletteHelper.ZPaletteTreeCreator(aControlName,aInternalCaption,aType: string;TBNode:TDomNode;var PaletteControl:TPaletteControlBaseType;DoDisableAlign:boolean):TPaletteControlBaseType;
 var
    pTND:PTPaletteTreeNodeData;
    po:TVTPaintOptions;
@@ -223,9 +225,11 @@ var
    PaletteTreeViewFilter:TZPaletteTreeViewFilter;
 begin
   result:=TCustomForm(Tform.NewInstance);
-  if result is TWinControl then
-    TWinControl(result).DisableAlign;
+  {if result is TWinControl then
+    TWinControl(result).DisableAlign;}
   TCustomForm(result).CreateNew(Application);
+  if DoDisableAlign then
+      TWinControl(result).DisableAutoSizing;
   TCustomForm(result).Name:=aControlName;
   TCustomForm(result).Caption:=getAttrValue(TBNode,'Caption',aInternalCaption);
   PaletteTreeViewFilter:=TZPaletteTreeViewFilter.Create(result);

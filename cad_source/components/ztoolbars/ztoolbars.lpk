@@ -11,11 +11,19 @@
         <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
     </CompilerOptions>
-    <Files Count="1">
+    <Files Count="3">
       <Item1>
         <Filename Value="uztoolbarsmanager.pas"/>
         <UnitName Value="uztoolbarsmanager"/>
       </Item1>
+      <Item2>
+        <Filename Value="uzcontextmenus.pas"/>
+        <UnitName Value="uzcontextmenus"/>
+      </Item2>
+      <Item3>
+        <Filename Value="ugcontextchecker.pas"/>
+        <UnitName Value="ugcontextchecker"/>
+      </Item3>
     </Files>
     <RequiredPkgs Count="3">
       <Item1>

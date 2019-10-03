@@ -8,7 +8,7 @@ uses
   LCLType,ImgList,
   Classes, SysUtils, ComCtrls, Controls, Graphics, Menus, Forms,ActnList,
   LazConfigStorage,Laz2_XMLCfg,Laz2_DOM,
-  Generics.Collections, Generics.Defaults, gvector;
+  Generics.Collections, Generics.Defaults, gvector,uzcontextmenus;
 
 const
      MenuNameModifier='MENU_';

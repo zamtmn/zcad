@@ -25,7 +25,7 @@ uses
  menus,Forms,fileutil,graphics, uzbtypes, uzbmemman,uzcdrawings,uzccommandsmanager,
  varman,languade,varmandef,
  uzegeometry,uzctnrvectorgdbstring,uzcinterface,uzctreenode,uzclog,strmy,
- uzccommandlineutil,uztoolbarsmanager;
+ uzccommandlineutil,uztoolbarsmanager,uzmenusmanager;
 
 const
      cheight=48;
@@ -98,7 +98,7 @@ procedure TCLine.ButtonPressed(Sender: TObject);
 var
   menu:TmyPopupMenu;
 begin
-    menu:=TmyPopupMenu(application.FindComponent(MenuNameModifier+'LASTCOMMANDSCXMENU'));
+    menu:=TmyPopupMenu(MenusManager.GetMenu_tmp('LASTCOMMANDSCXMENU'));
     if menu<>nil then
     begin
       menu.PopUp;

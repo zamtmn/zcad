@@ -108,7 +108,7 @@ TUserTypeDescriptor=object(UserTypeDescriptor)
                           function FindField(fn:TInternalScriptString):PFieldDescriptor;virtual;
                    end;
 var zcpmode:tzcpmode;
-    currpd:PPropertyDeskriptor;
+    //currpd:PPropertyDeskriptor;
     debugShowHiddenFieldInObjInsp:boolean=false;
 implementation
 uses strmy;

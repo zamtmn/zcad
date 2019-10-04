@@ -23,7 +23,8 @@ uses Clipbrd,sysutils,uzccommandsabstract,uzcfcommandline,uzcutils,uzbpaths,Type
      uzbtypes,uzedrawingdef,uzgldrawcontext,uzctnrvectorgdbstring,varmandef,uzedrawingsimple,
      uzeentity,uzcenitiesvariablesextender,zcobjectinspector,uzcguimanager,uzcstrconsts,
      gzctnrvectortypes,Types,Controls,uzcdrawings,Varman,UUnitManager,uzcsysvars,
-     uzcsysparams,zcobjectinspectorui,uzcoimultiobjects,uzccommandsimpl,uzbtypesbase,uzcsysinfo,LazLogger;
+     uzcsysparams,zcobjectinspectorui,uzcoimultiobjects,uzccommandsimpl,uzbtypesbase,
+     uzmenusmanager,uzcsysinfo,LazLogger,menus;
 type
   tdummyclass=class
     procedure UpdateObjInsp(sender:TObject;GUIMode:TZMessageID);
@@ -32,6 +33,7 @@ type
     procedure FreEditor(sender:TObject;GUIMode:TZMessageID);
     procedure StoreAndFreeEditor(sender:TObject;GUIMode:TZMessageID);
     procedure ReturnToDefault(sender:TObject;GUIMode:TZMessageID);
+    procedure ContextPopup(Sender: TObject; MousePos: TPoint;var Handled: Boolean);
   end;
 var
   INTFObjInspRowHeight:TGDBIntegerOverrider;
@@ -171,6 +173,7 @@ begin
      //result:=GDBobjinsp;
      result:=tform(TForm.NewInstance);
      GDBobjinsp._IsCurrObjInUndoContext:=IsCurrObjInUndoContext;
+     GDBobjinsp.OnContextPopup:=dummyclass.ContextPopup;
 end;
 
 function ObjInspCopyToClip_com(operands:TCommandOperands):TCommandResult;
@@ -180,12 +183,12 @@ begin
                          else
                              begin
                                   if uppercase(Operands)='VAR' then
-                                                                   clipbrd.clipboard.AsText:={Objinsp.}currpd.ValKey
+                                                                   clipbrd.clipboard.AsText:=GDBobjinsp.currpd.ValKey
                              else if uppercase(Operands)='LVAR' then
-                                                                   clipbrd.clipboard.AsText:='@@['+{Objinsp.}currpd.ValKey+']'
+                                                                   clipbrd.clipboard.AsText:='@@['+GDBobjinsp.currpd.ValKey+']'
                              else if uppercase(Operands)='VALUE' then
-                                                                   clipbrd.clipboard.AsText:={Objinsp.}currpd.Value;
-                                  {Objinsp.}currpd:=nil;
+                                                                   clipbrd.clipboard.AsText:=GDBobjinsp.currpd.Value;
+                                  GDBobjinsp.currpd:=nil;
                              end;
    result:=cmd_ok;
 end;
@@ -240,7 +243,26 @@ begin
                                        GDBobjinsp.ReturnToDefault;
                                   end;
 end;
-
+procedure tdummyclass.ContextPopup(Sender: TObject; MousePos: TPoint;var Handled: Boolean);
+var
+  menu:TPopupMenu;
+begin
+  if sender is TGDBobjinsp then begin
+  menu:=nil;
+  if {(clickonheader)or}(sender as TGDBobjinsp).currpd=nil then
+  menu:=TPopupMenu(MenusManager.GetMenu_tmp('OBJINSPHEADERCXMENU'))
+else if (sender as TGDBobjinsp).currpd^.valkey<>''then
+  menu:=TPopupMenu(MenusManager.GetMenu_tmp('OBJINSPVARCXMENU'))
+else if (sender as TGDBobjinsp).currpd^.Value<>''then
+  menu:=TPopupMenu(MenusManager.GetMenu_tmp('OBJINSPCXMENU'))
+else
+  menu:=TPopupMenu(MenusManager.GetMenu_tmp('OBJINSPHEADERCXMENU'));
+  if menu<>nil then
+  begin
+  menu.PopUp;
+  end;
+  end;
+end;
 
 initialization
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'INTF_ObjInsp_WhiteBackground','GDBBoolean',@INTFObjInspWhiteBackground);
@@ -269,7 +291,7 @@ onUpdateObjectInInsp:=_onUpdateObjectInInsp;
 onNotify:=_onNotify;
 onAfterFreeEditor:=_onAfterFreeEditor;
 
-currpd:=nil;
+//GDBobjinsp.currpd:=nil;
 ZCMsgCallBackInterface.RegisterHandler_PrepareObject(StoreAndSetGDBObjInsp());
 //PrepareObject:={TSetGDBObjInsp}(StoreAndSetGDBObjInsp);
 //StoreAndSetGDBObjInspProc:=TSetGDBObjInsp(StoreAndSetGDBObjInsp);

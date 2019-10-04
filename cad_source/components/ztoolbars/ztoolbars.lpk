@@ -17,8 +17,8 @@
         <UnitName Value="uztoolbarsmanager"/>
       </Item1>
       <Item2>
-        <Filename Value="uzcontextmenus.pas"/>
-        <UnitName Value="uzcontextmenus"/>
+        <Filename Value="uzmenusmanager.pas"/>
+        <UnitName Value="uzmenusmanager"/>
       </Item2>
       <Item3>
         <Filename Value="ugcontextchecker.pas"/>

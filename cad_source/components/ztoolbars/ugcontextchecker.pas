@@ -30,11 +30,6 @@ type
     function ContextCheck(const ContextId:TGContextIdType;const Context:TGContextType):TGContextStateType;
     function CashedContextCheck(var Cashe:TContextStateRegister;const ContextId:TGContextIdType;const Context:TGContextType):TGContextStateType;
   end;
-  TTestManipulator=specialize TGCContextIdManipulator<string,boolean>;
-  TTestContextChecker=specialize TGCContextChecker<integer,string,boolean,TTestManipulator>;
-var
-  CC:TTestContextChecker;
-  Cashe:TTestContextChecker.TContextStateRegister;
 implementation
 
 class function TGCContextIdManipulator.Standartize(id:TGContextIdType):TGContextIdType;
@@ -94,21 +89,6 @@ begin
       end;
     end;
 end;
-function testCheck(const Context:integer):boolean;
-begin
-  if Context=5 then
-    result:=true
-  else
-    result:=false;
-end;
-
 initialization
-  CC:=TTestContextChecker.create;
-  CC.RegisterContextCheckFunc('test',@testCheck);
-  Cashe:={TContextStateRegister.create}nil;
-  CC.CashedContextCheck(Cashe,'test',5);
-  CC.CashedContextCheck(Cashe,'test',5);
-  if assigned(Cashe) then
-    Cashe.free;
 finalization
 end.

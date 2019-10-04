@@ -44,7 +44,7 @@ uses
   {ZCAD COMMANDS}
        uzccommandsabstract,uzccommandsimpl,uzccommandsmanager,
   {GUI}
-       uztoolbarsmanager,uzctextenteditor,{uzcoidecorations,}uzcfcommandline,uzctreenode,uzcflineweights,uzcctrllayercombobox,uzcctrlcontextmenu,
+       uzmenusmanager,uztoolbarsmanager,uzctextenteditor,{uzcoidecorations,}uzcfcommandline,uzctreenode,uzcflineweights,uzcctrllayercombobox,uzcctrlcontextmenu,
        uzcfcolors,uzcimagesmanager,uzcgui2textstyles,usupportgui,uzcgui2dimstyles,
   {}
        uzcpalettes,zcchangeundocommand,uzgldrawcontext,uzglviewareaabstract,uzcguimanager,uzcinterfacedata,
@@ -1342,7 +1342,7 @@ begin
     if assigned(SubNode) then
       while assigned(SubNode)do
       begin
-        ToolBarsManager.TryRunMenuCreateFunc(SubNode.NodeName,SubNode,StandartActions,tmenuitem(tbutton.PopupMenu));
+        MenusManager.TryRunMenuCreateFunc(SubNode.NodeName,SubNode,StandartActions,tmenuitem(tbutton.PopupMenu));
         SubNode:=SubNode.NextSibling;
       end;
     if (ActionIndex>=0)and(ActionIndex<tbutton.PopupMenu.Items.Count) then
@@ -1745,6 +1745,8 @@ begin
 
 
   ToolBarsManager:=TToolBarsManager.create(self,StandartActions,sysvar.INTF.INTF_DefaultControlHeight^);
+  MenusManager:=TMenusManager.create(self,StandartActions);
+
   ToolBarsManager.RegisterTBItemCreateFunc('Separator',ToolBarsManager.CreateDefaultSeparator);
   ToolBarsManager.RegisterTBItemCreateFunc('Action',TBActionCreateFunc);
   ToolBarsManager.RegisterTBItemCreateFunc('GroupAction',TBGroupActionCreateFunc);
@@ -1770,20 +1772,20 @@ begin
   toolbars.Sorted:=true;
   CreateInterfaceLists;
 
-  ToolBarsManager.RegisterMenuCreateFunc('MainMenuItem',ZMainMenuItemReader);
-  ToolBarsManager.RegisterMenuCreateFunc('PopUpMenu',ZPopUpMenuReader);
-  ToolBarsManager.RegisterMenuCreateFunc('Action',MenuAction);
-  ToolBarsManager.RegisterMenuCreateFunc('Separator',ToolBarsManager.CreateDefaultMenuSeparator);
-  ToolBarsManager.RegisterMenuCreateFunc('FileHistory',ZMainMenuFileHistory);
-  ToolBarsManager.RegisterMenuCreateFunc('LastCommands',ZMainMenuCommandsHistory);
-  ToolBarsManager.RegisterMenuCreateFunc('Command',ZMainMenuCommand);
-  ToolBarsManager.RegisterMenuCreateFunc('Toolbars',ZMainMenuToolBars);
-  ToolBarsManager.RegisterMenuCreateFunc('ToolPalettes',ZMainMenuToolPalettes);
-  ToolBarsManager.RegisterMenuCreateFunc('Drawings',ZMainMenuDrawings);
-  ToolBarsManager.RegisterMenuCreateFunc('SampleFiles',ZMainMenuSampleFiles);
-  ToolBarsManager.RegisterMenuCreateFunc('DebugFiles',ZMainMenuDebugFiles);
-  ToolBarsManager.RegisterMenuCreateFunc('CreateMenu',ToolBarsManager.CreateDefaultMenu);
-  ToolBarsManager.RegisterMenuCreateFunc('SetMainMenu',ToolBarsManager.DefaultSetMenu);
+  MenusManager.RegisterMenuCreateFunc('MainMenuItem',ZMainMenuItemReader);
+  MenusManager.RegisterMenuCreateFunc('PopUpMenu',ZPopUpMenuReader);
+  MenusManager.RegisterMenuCreateFunc('Action',MenuAction);
+  MenusManager.RegisterMenuCreateFunc('Separator',MenusManager.CreateDefaultMenuSeparator);
+  MenusManager.RegisterMenuCreateFunc('FileHistory',ZMainMenuFileHistory);
+  MenusManager.RegisterMenuCreateFunc('LastCommands',ZMainMenuCommandsHistory);
+  MenusManager.RegisterMenuCreateFunc('Command',ZMainMenuCommand);
+  MenusManager.RegisterMenuCreateFunc('Toolbars',ZMainMenuToolBars);
+  MenusManager.RegisterMenuCreateFunc('ToolPalettes',ZMainMenuToolPalettes);
+  MenusManager.RegisterMenuCreateFunc('Drawings',ZMainMenuDrawings);
+  MenusManager.RegisterMenuCreateFunc('SampleFiles',ZMainMenuSampleFiles);
+  MenusManager.RegisterMenuCreateFunc('DebugFiles',ZMainMenuDebugFiles);
+  MenusManager.RegisterMenuCreateFunc('CreateMenu',MenusManager.CreateDefaultMenu);
+  MenusManager.RegisterMenuCreateFunc('SetMainMenu',MenusManager.DefaultSetMenu);
 
   ToolBarsManager.RegisterPaletteCreateFunc('vsIcon',TPaletteHelper.ZPalettevsIconCreator);
   ToolBarsManager.RegisterPaletteItemCreateFunc('ZVSICommand',TPaletteHelper.ZPalettevsIconItemCreator);
@@ -1837,7 +1839,7 @@ begin
     if assigned(TBSubNode) then
       while assigned(TBSubNode)do
       begin
-        ToolBarsManager.TryRunMenuCreateFunc(TBSubNode.NodeName,TBSubNode,actlist,CreatedMenuItem);
+        MenusManager.TryRunMenuCreateFunc(TBSubNode.NodeName,TBSubNode,actlist,CreatedMenuItem);
         TBSubNode:=TBSubNode.NextSibling;
       end;
     if (assigned(RootMenuItem))and newitem then
@@ -1866,7 +1868,7 @@ begin
     if assigned(TBSubNode) then
       while assigned(TBSubNode)do
       begin
-        ToolBarsManager.TryRunMenuCreateFunc(TBSubNode.NodeName,TBSubNode,actlist,tmenuitem(CreatedMenuItem));
+        MenusManager.TryRunMenuCreateFunc(TBSubNode.NodeName,TBSubNode,actlist,tmenuitem(CreatedMenuItem));
         TBSubNode:=TBSubNode.NextSibling;
       end;
     cxmenumgr.RegisterLCLMenu(CreatedMenuItem);
@@ -2653,23 +2655,23 @@ begin
 end;
 procedure TZCADMainWindow.ShowCXMenu;
 var
-  menu:TmyPopupMenu;
+  menu:TPopupMenu;
 begin
   menu:=nil;
-                                  if drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount>0 then
-                                                                          menu:=TmyPopupMenu(application.FindComponent(MenuNameModifier+'SELECTEDENTSCXMENU'))
-                                                                      else
-                                                                          menu:=TmyPopupMenu(application.FindComponent(MenuNameModifier+'NONSELECTEDENTSCXMENU'));
-                                  if menu<>nil then
-                                  begin
-                                       menu.PopUp;
-                                  end;
+  if drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount>0 then
+    menu:=MenusManager.GetMenu_tmp('SELECTEDENTSCXMENU')
+  else
+    menu:=MenusManager.GetMenu_tmp('NONSELECTEDENTSCXMENU');
+  if menu<>nil then
+  begin
+    menu.PopUp;
+  end;
 end;
 procedure TZCADMainWindow.ShowFMenu;
 var
-  menu:TmyPopupMenu;
+  menu:TPopupMenu;
 begin
-    menu:=TmyPopupMenu(application.FindComponent(MenuNameModifier+'FASTMENU'));
+    menu:=MenusManager.GetMenu_tmp('FASTMENU');
     if menu<>nil then
     begin
          menu.PopUp;

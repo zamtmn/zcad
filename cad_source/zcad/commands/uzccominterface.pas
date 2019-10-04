@@ -29,7 +29,7 @@ uses
  LCLProc,Classes,{ SysUtils,} {fileutil}LazUTF8,{ LResources,} Forms, {stdctrls,} Controls, {Graphics, Dialogs,}ComCtrls,Clipbrd,lclintf,
  uzedimensionaltypes,
  uzcsysparams,uzcsysinfo,
-  gzctnrvectortypes,uzccommandsabstract,
+  gzctnrvectortypes,uzccommandsabstract,uzmenusmanager,
   uzccommandsimpl,
   uzbtypes,
   uzcdrawings,
@@ -778,7 +778,7 @@ begin
 end;
 function LoadMenus_com(operands:TCommandOperands):TCommandResult;
 begin
-  ToolBarsManager.LoadMenus(ExpandPath(operands));
+  MenusManager.LoadMenus(ExpandPath(operands));
   result:=cmd_ok;
 end;
 function LoadToolbars_com(operands:TCommandOperands):TCommandResult;

@@ -10,9 +10,6 @@ uses
   LazConfigStorage,Laz2_XMLCfg,Laz2_DOM,
   Generics.Collections, Generics.Defaults, gvector;
 
-const
-     MenuNameModifier='MENU_';
-
 type
   TPopUpMenyProxyAction=class(TAction)
     ToolButton:TToolButton;
@@ -27,7 +24,6 @@ type
   end;
   TActionsManagersVector=specialize TVector <TProgramActionsManagerClass>;
   TActionCreateFunc=procedure (aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList) of object;
-  TMenuCreateFunc=procedure (aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem) of object;
 
   TIterateToolbarsContentProc=procedure (_tb:TToolBar;_control:tcontrol);
 
@@ -43,7 +39,6 @@ type
   TTBCreateFuncRegister=specialize TDictionary <string,TTBCreateFunc>;
   TTBItemCreateFuncRegister=specialize TDictionary <string,TTBItemCreateFunc>;
   TActionCreateFuncRegister=specialize TDictionary <string,TActionCreateFunc>;
-  TMenuCreateFuncRegister=specialize TDictionary <string,TMenuCreateFunc>;
 
   TToolBarsManagerDockForm=class(TCustomDockForm)
   protected
@@ -60,7 +55,6 @@ type
     TBCreateFuncRegister:TTBCreateFuncRegister;
     TBItemCreateFuncRegister:TTBItemCreateFuncRegister;
     ActionCreateFuncRegister:TActionCreateFuncRegister;
-    MenuCreateFuncRegister:TMenuCreateFuncRegister;
     PaletteCreateFuncRegister:TPaletteCreateFuncRegister;
     PaletteItemCreateFuncRegister:TPaletteItemCreateFuncRegister;
 
@@ -76,7 +70,6 @@ type
     procedure LoadToolBarsContent(filename:string);
     procedure LoadPalettes(filename:string);
     procedure LoadActions(filename:string);
-    procedure LoadMenus(filename:string);
     function FindBarsContent(toolbarname:string):TDomNode;
     function FindPalettesContent(PaletteName:string):TDomNode;
     procedure EnumerateToolBars(rf:TTBRegisterInAPPFunc;Data:Pointer);
@@ -88,8 +81,6 @@ type
     procedure RegisterPaletteItemCreateFunc(aNodeName:string;PaletteItemCreateFunc:TPaletteItemCreateFunc);
     procedure RegisterTBItemCreateFunc(aNodeName:string;TBItemCreateFunc:TTBItemCreateFunc);
     procedure RegisterActionCreateFunc(aNodeName:string;ActionCreateFunc:TActionCreateFunc);
-    procedure RegisterMenuCreateFunc(aNodeName:string;MenuCreateFunc:TMenuCreateFunc);
-    procedure TryRunMenuCreateFunc(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     function CreateToolbar(aName:string):TToolBar;
     function CreateToolPalette(aControlName: string;DoDisableAlign:boolean=false):TPaletteControlBaseType;
     function AddContentToToolbar(tb:TToolBar;aName:string):TToolBar;
@@ -108,11 +99,6 @@ type
     procedure DefaultAddToolBarToMenu(aTBNode: TDomNode;aName,aType: string; Data:Pointer);
 
     procedure DefaultActionsGroupReader(aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList);
-    procedure DefaultMainMenuItemReader(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-    procedure CreateDefaultMenuAction(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-    procedure CreateDefaultMenu(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-    procedure DefaultSetMenu(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-    procedure CreateDefaultMenuSeparator(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     procedure DefaultAddToolbars(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
 
     procedure CreateManagedActions;
@@ -400,7 +386,6 @@ begin
   PaletteItemCreateFuncRegister:=nil;
   TBItemCreateFuncRegister:=nil;
   ActionCreateFuncRegister:=nil;
-  MenuCreateFuncRegister:=nil;
 end;
 destructor TToolBarsManager.Destroy;
 begin
@@ -418,8 +403,6 @@ begin
       TBItemCreateFuncRegister.Free;
     if assigned(ActionCreateFuncRegister) then
       ActionCreateFuncRegister.Free;
-    if assigned(MenuCreateFuncRegister) then
-      MenuCreateFuncRegister.Free;
 end;
 function getAttrValue(const aNode:TDomNode;const AttrName,DefValue:string):string;overload;
 var
@@ -491,27 +474,6 @@ begin
   if not assigned(ActionCreateFuncRegister) then
     ActionCreateFuncRegister:=TActionCreateFuncRegister.create;
   ActionCreateFuncRegister.add(uppercase(aNodeName),ActionCreateFunc);
-end;
-
-procedure TToolBarsManager.RegisterMenuCreateFunc(aNodeName:string;MenuCreateFunc:TMenuCreateFunc);
-begin
-  if not assigned(MenuCreateFuncRegister) then
-    MenuCreateFuncRegister:=TMenuCreateFuncRegister.create;
-  MenuCreateFuncRegister.add(uppercase(aNodeName),MenuCreateFunc);
-end;
-
-procedure TToolBarsManager.TryRunMenuCreateFunc(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-var
-  mcf:TMenuCreateFunc;
-  msg:string;
-begin
-if assigned(ToolBarsManager.MenuCreateFuncRegister) then
-  if MenuCreateFuncRegister.TryGetValue(uppercase(aName),mcf)then
-    mcf(aName,aNode,actlist,RootMenuItem)
-  else begin
-    msg:=format('"%s" not found in MenuCreateFuncRegister',[aName]);
-    Application.MessageBox(@msg[1],'Error');
-  end;
 end;
 
 procedure TToolBarsManager.DoTBItemCreateFunc(aNodeName:string; aNode: TDomNode; TB:TToolBar);
@@ -783,30 +745,6 @@ begin
 
   ActionsConfig.Free;
 end;
-
-procedure TToolBarsManager.LoadMenus(filename:string);
-var
-  ActionsConfig:TXMLConfig;
-  TBNode,TBSubNode:TDomNode;
-begin
-  ActionsConfig:=TXMLConfig.Create(nil);
-  ActionsConfig.Filename:=filename;
-
-  TBNode:=ActionsConfig.FindNode('MenusContent',false);
-  if assigned(TBNode) then
-    TBSubNode:=TBNode.FirstChild
-  else
-    TBSubNode:=nil;
-  if assigned(TBSubNode) then
-    while assigned(TBSubNode)do
-    begin
-      TryRunMenuCreateFunc(TBSubNode.NodeName,TBSubNode,factionlist,nil);
-      TBSubNode:=TBSubNode.NextSibling;
-    end;
-
-  ActionsConfig.Free;
-end;
-
 
 procedure TToolBarsManager.EnumerateToolBars(rf:TTBRegisterInAPPFunc;Data:Pointer);
 var
@@ -1110,101 +1048,6 @@ begin
             acf(TBSubNode.NodeName,TBSubNode,category,factionlist);
         TBSubNode:=TBSubNode.NextSibling;
       end;
-end;
-
-procedure TToolBarsManager.DefaultMainMenuItemReader(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
- var
-  CreatedMenuItem:TMenuItem;
-  line:string;
-  TBSubNode:TDomNode;
-  mcf:TMenuCreateFunc;
-begin
-    CreatedMenuItem:=TMenuItem.Create(application);
-    line:=getAttrValue(aNode,'Name','');
-    if RootMenuItem=nil then
-      CreatedMenuItem.Name:=MenuNameModifier+line;
-    line:=getAttrValue(aNode,'Caption',line);
-    CreatedMenuItem.Caption:=line;
-    if assigned(aNode) then
-      TBSubNode:=aNode.FirstChild;
-    if assigned(TBSubNode) then
-      while assigned(TBSubNode)do
-      begin
-        TryRunMenuCreateFunc(TBSubNode.NodeName,TBSubNode,factionlist,CreatedMenuItem);
-        TBSubNode:=TBSubNode.NextSibling;
-      end;
-    if assigned(RootMenuItem) then
-    begin
-      if RootMenuItem is TMenuItem then
-        RootMenuItem.Add(CreatedMenuItem)
-      else
-        TPopUpMenu(RootMenuItem).Items.Add(CreatedMenuItem);
-    end;
-end;
-
-procedure TToolBarsManager.CreateDefaultMenuAction(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-var
-  CreatedMenuItem:TMenuItem;
-  _action:TContainedAction;
-  ActionName:string;
-begin
-  ActionName:=getAttrValue(aNode,'Name','');
-  _action:=factionlist.ActionByName(ActionName);
-  CreatedMenuItem:=TMenuItem.Create(RootMenuItem);
-  CreatedMenuItem.Action:=_action;
-  if RootMenuItem is TMenuItem then
-    RootMenuItem.Add(CreatedMenuItem)
-  else
-    TPopUpMenu(RootMenuItem).Items.Add(CreatedMenuItem);
-end;
-
-procedure TToolBarsManager.CreateDefaultMenu(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-var
-  ppopupmenu:TMenuItem;
-  ts:String;
-  createdmenu:TMenu;
-  TBSubNode:TDomNode;
-begin
-  createdmenu:=TMainMenu.Create(application);
-  createdmenu.Images:=actlist.Images;
-  createdmenu.Name:=MenuNameModifier+uppercase(getAttrValue(aNode,'Name',''));
-
-  if assigned(aNode) then
-    TBSubNode:=aNode.FirstChild;
-  if assigned(TBSubNode) then
-    while assigned(TBSubNode)do
-    begin
-      ppopupmenu:=tmenuitem(application.FindComponent(MenuNameModifier+uppercase(TBSubNode.NodeName)));
-
-      if ppopupmenu<>nil then
-                                begin
-                                     createdmenu.items.Add(ppopupmenu);
-                                end;
-                            {else
-                                ZCMsgCallBackInterface.TextMessage(format(rsMenuNotFounf,[ts]),TMWOShowError);}
-
-      TBSubNode:=TBSubNode.NextSibling;
-    end;
-end;
-
-procedure TToolBarsManager.DefaultSetMenu(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-begin
-  fmainform.Menu:=TMainMenu(application.FindComponent(MenuNameModifier+uppercase(getAttrValue(aNode,'Name',''))));
-end;
-
-
-procedure TToolBarsManager.CreateDefaultMenuSeparator(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-var
-  CreatedMenuItem:TMenuItem;
-begin
-  if RootMenuItem is TMenuItem then
-    RootMenuItem.AddSeparator
-  else
-    begin
-      CreatedMenuItem:=TMenuItem.Create(RootMenuItem);
-      CreatedMenuItem.Caption:='-';
-      TPopUpMenu(RootMenuItem).Items.Add(CreatedMenuItem);
-    end;
 end;
 
 procedure TToolBarsManager.DefaultAddToolbars(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);

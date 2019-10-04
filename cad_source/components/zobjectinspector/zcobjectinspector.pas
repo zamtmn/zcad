@@ -73,6 +73,7 @@ type
 
   TGDBobjinsp=class(TObjInspCustom)
     public
+    currpd:PPropertyDeskriptor;
     GDBobj:boolean;
     EDContext:TEditorContext;
 
@@ -99,6 +100,7 @@ type
 
     MResplit:boolean;
     _IsCurrObjInUndoContext:TIsCurrObjInUndoContext;
+    property OnContextPopup;
 
     procedure draw; virtual;
     procedure mypaint(sender:tobject);
@@ -1766,10 +1768,11 @@ procedure TGDBobjinsp.MouseDown(Button: TMouseButton; Shift: TShiftState;X, Y: I
 var
   my:integer;
   pp:PPropertyDeskriptor;
-  menu:TPopupMenu;
+  //menu:TPopupMenu;
   fesize:tsize;
   clickonheader:boolean;
   i,count:integer;
+  handled:boolean;
 begin
   inherited;
   if (y<0)or(y>clientheight)or(x<0)or(x>clientwidth) then
@@ -1842,7 +1845,10 @@ begin
                      else
                          begin
                               begin
-                                   menu:=nil;
+                                   currpd:=pp;
+                                   if assigned(OnContextPopup) then
+                                     OnContextPopup(self,point(X,Y),handled);
+                                   (*menu:=nil;
                                    if (clickonheader)or(pp=nil) then
                                    menu:=TPopupMenu(application.FindComponent({MenuNameModifier}'MENU_'+'OBJINSPHEADERCXMENU'))
                               else if pp^.valkey<>''then
@@ -1855,8 +1861,7 @@ begin
                                    begin
                                    currpd:=pp;
                                    menu.PopUp;
-                                   end;
-                                   //cxmenumgr.PopUpMenu(menu);
+                                   end;*)
                               end;
                          end;
 

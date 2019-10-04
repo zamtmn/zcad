@@ -10,7 +10,7 @@ uses
   uzbtypes,gzctnrvectortypes,uzbgeomtypes ,uzegeometry, uzccommandsmanager,
   uzcinterface,uzeconsts,uzeentity,uzcimagesmanager,uzcdrawings,uzbtypesbase,
   varmandef,uzbstrproc,uzcmainwindow,uzctreenode,
-  uzcnavigatorsnodedesk,Varman,uzcstrconsts,uztoolbarsmanager,
+  uzcnavigatorsnodedesk,Varman,uzcstrconsts,uztoolbarsmanager,uzmenusmanager,
   uzccommandsimpl,uzccommandsabstract,uzcutils,uzcenitiesvariablesextender,
   GraphType,generics.collections,uzglviewareaabstract;
 
@@ -421,7 +421,7 @@ begin
   if pnode<>nil then
   begin
     NavTree.Selected[pnode]:=true;
-    PopupMenu:=TmyPopupMenu(application.FindComponent(MenuNameModifier+'NAVIGATORNODECONTEXTMENU'));
+    PopupMenu:=TmyPopupMenu(MenusManager.GetMenu_tmp('NAVIGATORNODECONTEXTMENU'));
     if assigned(PopupMenu) then begin
       CommandManager.ContextCommandParams:=NavTree;
       PopupMenu.PopUp;

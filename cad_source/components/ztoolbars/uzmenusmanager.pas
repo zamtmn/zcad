@@ -13,7 +13,7 @@ const
      MenuNameModifier='MENU_';
 
 type
-  TMenuCreateFunc=procedure (aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem) of object;
+  TMenuCreateFunc=procedure (fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem) of object;
   TMenuCreateFuncRegister=specialize TDictionary <string,TMenuCreateFunc>;
 
   TMenuContextNameType=string;
@@ -24,11 +24,19 @@ type
   end;
   generic TCMContextChecker<T>=class (specialize TGCContextChecker<T,TMenuContextNameType,TContextStateType,TCMenuContextNameManipulator>)
   end;
+  TMenuDefaults=class
+    class procedure CreateDefaultMenu(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+    class procedure CreateDefaultMenuSeparator(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+    class procedure DefaultSetMenu(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+    //class procedure TMenuDefaults
+  end;
+
   TMenusManager=class
   private
     factionlist:TActionList;
     fmainform:TForm;
     MenuCreateFuncRegister:TMenuCreateFuncRegister;
+    MenuConfig:TXMLConfig;
 
   public
     constructor Create(mainform:TForm;actlist:TActionList);
@@ -36,14 +44,9 @@ type
 
     procedure LoadMenus(filename:string);
     procedure TryRunMenuCreateFunc(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-    procedure RegisterMenuCreateFunc(aNodeName:string;MenuCreateFunc:TMenuCreateFunc);
     procedure DefaultMainMenuItemReader(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-    procedure CreateDefaultMenuAction(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-    procedure CreateDefaultMenu(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-    procedure DefaultSetMenu(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-    procedure CreateDefaultMenuSeparator(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+    procedure RegisterMenuCreateFunc(aNodeName:string;MenuCreateFunc:TMenuCreateFunc);
     function GetMenu_tmp(aName: string):TPopupMenu;
-
   end;
 
 var
@@ -71,12 +74,15 @@ begin
   fmainform:=mainform;
   factionlist:=actlist;
 
+  MenuConfig:=nil;
   MenuCreateFuncRegister:=nil;
 end;
 destructor TMenusManager.Destroy;
 begin
   if assigned(MenuCreateFuncRegister) then
     MenuCreateFuncRegister.Free;
+  if assigned(MenuConfig) then
+    MenuConfig.Free;
 end;
 procedure TMenusManager.LoadMenus(filename:string);
 var
@@ -108,7 +114,7 @@ var
 begin
 if assigned(MenuCreateFuncRegister) then
   if MenuCreateFuncRegister.TryGetValue(uppercase(aName),mcf)then
-    mcf(aName,aNode,actlist,RootMenuItem)
+    mcf(fmainform,aName,aNode,actlist,RootMenuItem)
   else begin
     msg:=format('"%s" not found in MenuCreateFuncRegister',[aName]);
     Application.MessageBox(@msg[1],'Error');
@@ -152,23 +158,7 @@ begin
     end;
 end;
 
-procedure TMenusManager.CreateDefaultMenuAction(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-var
-  CreatedMenuItem:TMenuItem;
-  _action:TContainedAction;
-  ActionName:string;
-begin
-  ActionName:=getAttrValue(aNode,'Name','');
-  _action:=factionlist.ActionByName(ActionName);
-  CreatedMenuItem:=TMenuItem.Create(RootMenuItem);
-  CreatedMenuItem.Action:=_action;
-  if RootMenuItem is TMenuItem then
-    RootMenuItem.Add(CreatedMenuItem)
-  else
-    TPopUpMenu(RootMenuItem).Items.Add(CreatedMenuItem);
-end;
-
-procedure TMenusManager.CreateDefaultMenu(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+class procedure TMenuDefaults.CreateDefaultMenu(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
 var
   ppopupmenu:TMenuItem;
   ts:String;
@@ -197,13 +187,13 @@ begin
     end;
 end;
 
-procedure TMenusManager.DefaultSetMenu(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+class procedure TMenuDefaults.DefaultSetMenu(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
 begin
-  fmainform.Menu:=TMainMenu(application.FindComponent(MenuNameModifier+uppercase(getAttrValue(aNode,'Name',''))));
+  fmf.Menu:=TMainMenu(application.FindComponent(MenuNameModifier+uppercase(getAttrValue(aNode,'Name',''))));
 end;
 
 
-procedure TMenusManager.CreateDefaultMenuSeparator(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+class procedure TMenuDefaults.CreateDefaultMenuSeparator(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
 var
   CreatedMenuItem:TMenuItem;
 begin

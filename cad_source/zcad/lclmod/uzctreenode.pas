@@ -51,14 +51,11 @@ type
                    button:TToolButton;
                    function Execute: Boolean; override;
               end;
-
-    TmyActionList=class(TActionList)
-                       procedure SetImage(img,identifer:string;var action:TZAction);
-                       function LoadImage(imgfile:GDBString):Integer;
-                       procedure AddMyAction(Action:TZAction);
-                       public
-                       brocenicon:integer;
-                  end;
+    TMyActionListHelper = class helper for TActionList
+      procedure AddMyAction(Action:TZAction);
+      function LoadImage(imgfile:GDBString):Integer;
+      procedure SetImage(img,identifer:string;var action:TZAction);
+    end;
     TmyPopupMenu = class (TPopupMenu)
                    end;
     {TmyToolButton=class(TToolButton)
@@ -148,7 +145,8 @@ function IterateFindCategoryN (node:TmyTreeNode;PExpr:Pointer):Boolean;
 function FindControlByType(_parent:TWinControl;_class:TClass):TControl;
 function FindComponentByType(_owner:TComponent;_class:TClass):TComponent;
 procedure SetHeightControl(_parent:TWinControl;h:integer);
-//var
+var
+  brocenicon:integer;
 //   ACN_ShowObjInsp:TmyAction=nil;
 implementation
 
@@ -364,12 +362,12 @@ begin
                                    commandmanager.executecommand(s,drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
      result:=true;
 end;
-procedure TmyActionList.AddMyAction(Action:TZAction);
+procedure TMyActionListHelper.AddMyAction(Action:TZAction);
 begin
-     self.AddAction(action);
+     AddAction(action);
 end;
 
-function TmyActionList.LoadImage(imgfile:GDBString):Integer;
+function TMyActionListHelper.LoadImage(imgfile:GDBString):Integer;
 var
     bmp:TBitmap;
 begin
@@ -387,7 +385,7 @@ begin
       result:=-1;
 end;
 
-procedure TmyActionList.SetImage(img,identifer:string;var action:TZAction);
+procedure TMyActionListHelper.SetImage(img,identifer:string;var action:TZAction);
 //var
     //bmp:TBitmap;
 begin
@@ -399,7 +397,7 @@ begin
                               action.ImageIndex:=LoadImage(ProgramPath+'menu/BMP/'+img);
                               if action.ImageIndex=-1 then
                                                   begin
-                                                       action.ImageIndex:=self.brocenicon;
+                                                       action.ImageIndex:=brocenicon;
                                                   end;
                               if action.ImageIndex=-1 then
                                                   begin

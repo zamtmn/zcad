@@ -8,7 +8,8 @@ unit ztoolbars;
 interface
 
 uses
-  uztoolbarsmanager, uzmenusmanager, ugcontextchecker, LazarusPackageIntf;
+  uztoolbarsmanager, uzmenusmanager, ugcontextchecker, uzmenusdefaults, 
+  LazarusPackageIntf;
 
 implementation
 

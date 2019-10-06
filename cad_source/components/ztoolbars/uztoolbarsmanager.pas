@@ -32,7 +32,7 @@ type
   TPaletteItemCreateFunc=procedure (aNode: TDomNode;rootnode:TPersistent;palette:TPaletteControlBaseType) of object;
   TTBCreateFunc=function (aName,aType: string):TToolBar of object;
   TTBItemCreateFunc=procedure (aNode: TDomNode; TB:TToolBar) of object;
-  TTBRegisterInAPPFunc=procedure (aTBNode: TDomNode;aName,aType: string; Data:Pointer) of object;
+  TTBRegisterInAPPFunc=procedure (fmf:TForm;actlist:TActionList;aTBNode: TDomNode;aName,aType: string;Data:Pointer) of object;
 
   TPaletteCreateFuncRegister=specialize TDictionary <string,TPaletteCreateFunc>;
   TPaletteItemCreateFuncRegister=specialize TDictionary <string,TPaletteItemCreateFunc>;
@@ -96,7 +96,7 @@ type
     procedure FloatDockSiteClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure SetActionChecked(aName:string;newChecked:boolean);
     procedure DefaultShowToolbar(Sender: TObject);
-    procedure DefaultAddToolBarToMenu(aTBNode: TDomNode;aName,aType: string; Data:Pointer);
+    procedure DefaultAddToolBarToMenu(fmf:TForm;actlist:TActionList;aTBNode: TDomNode;aName,aType: string; Data:Pointer);
 
     procedure DefaultActionsGroupReader(aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList);
     procedure DefaultAddToolbars(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
@@ -758,7 +758,7 @@ begin
     if assigned(TBSubNode) then
       while assigned(TBSubNode)do
       begin
-         rf(TBSubNode,TBSubNode.NodeName,getAttrValue(TBSubNode,'Type',''),data);
+         rf(fmainform,factionlist,TBSubNode,TBSubNode.NodeName,getAttrValue(TBSubNode,'Type',''),data);
          TBSubNode:=TBSubNode.NextSibling;
       end;
   end;
@@ -776,7 +776,7 @@ begin
     if assigned(TBSubNode) then
       while assigned(TBSubNode)do
       begin
-         rf(TBSubNode,TBSubNode.NodeName,getAttrValue(TBSubNode,'Type',''),data);
+         rf(fmainform,factionlist,TBSubNode,TBSubNode.NodeName,getAttrValue(TBSubNode,'Type',''),data);
          TBSubNode:=TBSubNode.NextSibling;
       end;
   end;
@@ -1014,7 +1014,7 @@ begin
 end;
 
 //Add to menu callback procedure for enumerate toolbars
-procedure TToolBarsManager.DefaultAddToolBarToMenu(aTBNode: TDomNode;aName,aType: string; Data:Pointer);
+procedure TToolBarsManager.DefaultAddToolBarToMenu(fmf:TForm;actlist:TActionList;aTBNode: TDomNode;aName,aType: string; Data:Pointer);
 var
   pm1:TMenuItem;
   aaction:taction;

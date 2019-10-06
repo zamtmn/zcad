@@ -531,11 +531,11 @@ begin
           pstr:=SavedUnit.FindValue('PATH_File'+inttostr(i));
           if assigned(pstr) then
           pstr^:='';
-          if assigned(ZCADMainWindow.FileHistory[i]) then
+          if assigned(FileHistory[i]) then
           begin
-              ZCADMainWindow.FileHistory[i].Caption:='';
-              ZCADMainWindow.FileHistory[i].command:='';
-              ZCADMainWindow.FileHistory[i].Visible:=false;
+              FileHistory[i].Caption:='';
+              FileHistory[i].command:='';
+              FileHistory[i].Visible:=false;
           end;
      end;
      result:=cmd_ok;

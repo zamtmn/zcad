@@ -74,6 +74,25 @@ type
   TOpenedDrawings=Array [0..9] of TmyAction;
   TCommandHistory=Array [0..9] of TmyAction;
 
+  ZMenuExt = class
+    class procedure ZMenuExtMainMenuItemReader(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+    class procedure ZMenuExtPopUpMenuReader(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+    class procedure ZMenuExtAction(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+    class procedure ZMenuExtFileHistory(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+    class procedure ZMenuExtCommandsHistory(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+    class procedure ZMenuExtCommand(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+    class procedure ZMenuExtToolBars(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+    class procedure ZMenuExtToolPalettes(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+    class procedure ZMenuExtDrawings(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+    class procedure ZMenuExtSampleFiles(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+    class procedure ZMenuExtDebugFiles(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+
+    class procedure TTBRegisterInAPPFunc(fmf:TForm;actlist:TActionList;aTBNode: TDomNode;aName,aType: string;Data:Pointer);
+    class procedure TTPRegisterInAPPFunc(fmf:TForm;actlist:TActionList;aTBNode: TDomNode;aName,aType: string;Data:Pointer);
+
+  end;
+
+
 
   { TZCADMainWindow }
 
@@ -94,7 +113,7 @@ type
     PageControl:TmyPageControl;
     DHPanel:TPanel;
     HScrollBar,VScrollBar:TScrollBar;
-    StandartActions:TmyActionList;
+    StandartActions:TActionList;
     SystemTimer: TTimer;
     toolbars:tstringlist;
     updatesbytton,updatescontrols:tlist;
@@ -149,9 +168,6 @@ type
     FAppProps:TApplicationProperties;
     SuppressedShortcuts:TXMLConfig;
     rt:GDBInteger;
-    FileHistory:TFileHistory;
-    OpenedDrawings:TOpenedDrawings;
-    CommandsHistory:TCommandHistory;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     destructor Destroy;override;
     procedure CreateAnchorDockingInterface;
@@ -191,21 +207,8 @@ type
     procedure TBDimStyleComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
     procedure TBVariableCreateFunc(aNode: TDomNode; TB:TToolBar);
     function TBCreateZCADToolBar(aName,atype: string):TToolBar;
-    procedure TTBRegisterInAPPFunc(aTBNode: TDomNode;aName,aType: string;Data:Pointer);
-    procedure TTPRegisterInAPPFunc(aTBNode: TDomNode;aName,aType: string;Data:Pointer);
     procedure ZActionsReader(aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList);
     procedure ZAction2VariableReader(aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList);
-    procedure ZMainMenuItemReader(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-    procedure ZPopUpMenuReader(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-    procedure MenuAction(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-    procedure ZMainMenuFileHistory(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-    procedure ZMainMenuCommandsHistory(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-    procedure ZMainMenuCommand(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-    procedure ZMainMenuToolBars(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-    procedure ZMainMenuToolPalettes(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-    procedure ZMainMenuDrawings(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-    procedure ZMainMenuSampleFiles(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-    procedure ZMainMenuDebugFiles(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
 
     procedure DockMasterCreateControl(Sender: TObject; aName: string; var
     AControl: TControl; DoDisableAutoSizing: boolean);
@@ -234,6 +237,10 @@ function LoadLayout_com(Operands:pansichar):GDBInteger;
 function _CloseDWGPage(ClosedDWG:PTZCADDrawing;lincedcontrol:TObject):Integer;
 
 var
+  FileHistory:TFileHistory;
+  CommandsHistory:TCommandHistory;
+  OpenedDrawings:TOpenedDrawings;
+
   ZCADMainWindow: TZCADMainWindow;
   LayerBox:TZCADLayerComboBox;
   LineWBox,ColorBox,LTypeBox,TStyleBox,DimStyleBox:TComboBox;
@@ -1342,7 +1349,7 @@ begin
     if assigned(SubNode) then
       while assigned(SubNode)do
       begin
-        MenusManager.TryRunMenuCreateFunc(SubNode.NodeName,SubNode,StandartActions,tmenuitem(tbutton.PopupMenu));
+        TMenuDefaults.TryRunMenuCreateFunc(self,SubNode.NodeName,SubNode,StandartActions,tmenuitem(tbutton.PopupMenu));
         SubNode:=SubNode.NextSibling;
       end;
     if (ActionIndex>=0)and(ActionIndex<tbutton.PopupMenu.Items.Count) then
@@ -1382,35 +1389,35 @@ begin
   SetImage(tb,CreatedButton,img,true,'button_command~'+command);
   CreatedButton.Parent:=tb;
 end;
-procedure TZCADMainWindow.TTBRegisterInAPPFunc(aTBNode: TDomNode;aName,aType: string;Data:Pointer);
+class procedure ZMenuExt.TTBRegisterInAPPFunc(fmf:TForm;actlist:TActionList;aTBNode: TDomNode;aName,aType: string;Data:Pointer);
 var
     pm1:TMenuItem;
     action:tmyaction;
 begin
-  action:=TmyAction.Create(self);
+  action:=TmyAction.Create(fmf);
   action.Name:=ToolBarNameToActionName(aName);
   action.Caption:=aName;
   action.command:='ShowToolBar';
   action.options:=aName;
   action.DisableIfNoHandler:=false;
-  self.StandartActions.AddMyAction(action);
+  actlist.AddMyAction(action);
   action.pfoundcommand:=commandmanager.FindCommand(action.command);
   pm1:=TMenuItem.Create(TMenuItem(Data));
   pm1.Action:=action;
   TMenuItem(Data).Add(pm1);
 end;
-procedure TZCADMainWindow.TTPRegisterInAPPFunc(aTBNode: TDomNode;aName,aType: string;Data:Pointer);
+class procedure ZMenuExt.TTPRegisterInAPPFunc(fmf:TForm;actlist:TActionList;aTBNode: TDomNode;aName,aType: string;Data:Pointer);
 var
     pm1:TMenuItem;
     action:tmyaction;
 begin
-  action:=TmyAction.Create(self);
+  action:=TmyAction.Create(fmf);
   action.Name:=ToolPaletteNameToActionName(aName);
   action.Caption:=aName;
   action.command:='Show';
   action.options:=ToolPaletteNamePrefix+aName;
   action.DisableIfNoHandler:=false;
-  self.StandartActions.AddMyAction(action);
+  actlist.AddMyAction(action);
   action.pfoundcommand:=commandmanager.FindCommand(action.command);
   pm1:=TMenuItem.Create(TMenuItem(Data));
   pm1.Action:=action;
@@ -1454,7 +1461,7 @@ begin
   action.ImageIndex:=ImagesManager.GetImageIndex(img);
   if action.ImageIndex=ImagesManager.defaultimageindex then begin
     action.ImageIndex:=-1;
-    TmyActionList(actlist).SetImage(img,action.Name+'~textimage',TZAction(action));
+    actlist.SetImage(img,action.Name+'~textimage',TZAction(action));
   end;
   action.pfoundcommand:=commandmanager.FindCommand(uppercase(action.command));
 end;
@@ -1485,7 +1492,7 @@ begin
   va.ImageIndex:=ImagesManager.GetImageIndex(img);
   if va.ImageIndex=ImagesManager.defaultimageindex then begin
     va.ImageIndex:=-1;
-    TmyActionList(actlist).SetImage(img,va.Name+'~textimage',TZAction(va));
+    actlist.SetImage(img,va.Name+'~textimage',TZAction(va));
   end;
 
   va.AutoCheck:=true;
@@ -1646,7 +1653,7 @@ begin
   end;
 end;
 
-procedure TZCADMainWindow.MenuAction(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+class procedure ZMenuExt.ZMenuExtAction(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
 var
   CreatedMenuItem:TMenuItem;
   _action:TContainedAction;
@@ -1656,7 +1663,7 @@ begin
 
   _action:=actlist.ActionByName(ActionName);
   if _action=nil then begin
-    _action:=TmyAction.Create(self);
+    _action:=TmyAction.Create(fmf);
     _action.ActionList:=actlist;
     _action.Name:=ActionName;
   end;
@@ -1737,11 +1744,10 @@ begin
   ImagesManager.ScanDir(ProgramPath+'images/');
   ImagesManager.LoadAliasesDir(ProgramPath+'images/navigator.ima');
 
-  StandartActions:=TmyActionList.Create(self);
+  StandartActions:=TActionList.Create(self);
   if not assigned(StandartActions.Images) then
                              StandartActions.Images:={TImageList.Create(StandartActions)}ImagesManager.IconList;
-  StandartActions.brocenicon:=StandartActions.LoadImage(ProgramPath+
-  'menu/BMP/noimage.bmp');
+  brocenicon:=StandartActions.LoadImage(ProgramPath+'menu/BMP/noimage.bmp');
 
 
   ToolBarsManager:=TToolBarsManager.create(self,StandartActions,sysvar.INTF.INTF_DefaultControlHeight^);
@@ -1772,20 +1778,21 @@ begin
   toolbars.Sorted:=true;
   CreateInterfaceLists;
 
-  MenusManager.RegisterMenuCreateFunc('MainMenuItem',ZMainMenuItemReader);
-  MenusManager.RegisterMenuCreateFunc('PopUpMenu',ZPopUpMenuReader);
-  MenusManager.RegisterMenuCreateFunc('Action',MenuAction);
-  MenusManager.RegisterMenuCreateFunc('Separator',TMenuDefaults.CreateDefaultMenuSeparator);
-  MenusManager.RegisterMenuCreateFunc('FileHistory',ZMainMenuFileHistory);
-  MenusManager.RegisterMenuCreateFunc('LastCommands',ZMainMenuCommandsHistory);
-  MenusManager.RegisterMenuCreateFunc('Command',ZMainMenuCommand);
-  MenusManager.RegisterMenuCreateFunc('Toolbars',ZMainMenuToolBars);
-  MenusManager.RegisterMenuCreateFunc('ToolPalettes',ZMainMenuToolPalettes);
-  MenusManager.RegisterMenuCreateFunc('Drawings',ZMainMenuDrawings);
-  MenusManager.RegisterMenuCreateFunc('SampleFiles',ZMainMenuSampleFiles);
-  MenusManager.RegisterMenuCreateFunc('DebugFiles',ZMainMenuDebugFiles);
-  MenusManager.RegisterMenuCreateFunc('CreateMenu',TMenuDefaults.CreateDefaultMenu);
-  MenusManager.RegisterMenuCreateFunc('SetMainMenu',TMenuDefaults.DefaultSetMenu);
+  TMenuDefaults.RegisterMenuCreateFunc('MainMenuItem',ZMenuExt.ZMenuExtMainMenuItemReader);
+  TMenuDefaults.RegisterMenuCreateFunc('PopUpMenu',ZMenuExt.ZMenuExtPopUpMenuReader);
+  TMenuDefaults.RegisterMenuCreateFunc('Action',ZMenuExt.ZMenuExtAction);
+  TMenuDefaults.RegisterMenuCreateFunc('FileHistory',ZMenuExt.ZMenuExtFileHistory);
+  TMenuDefaults.RegisterMenuCreateFunc('LastCommands',ZMenuExt.ZMenuExtCommandsHistory);
+  TMenuDefaults.RegisterMenuCreateFunc('Command',ZMenuExt.ZMenuExtCommand);
+  TMenuDefaults.RegisterMenuCreateFunc('Toolbars',ZMenuExt.ZMenuExtToolBars);
+  TMenuDefaults.RegisterMenuCreateFunc('ToolPalettes',ZMenuExt.ZMenuExtToolPalettes);
+  TMenuDefaults.RegisterMenuCreateFunc('Drawings',ZMenuExt.ZMenuExtDrawings);
+  TMenuDefaults.RegisterMenuCreateFunc('SampleFiles',ZMenuExt.ZMenuExtSampleFiles);
+  TMenuDefaults.RegisterMenuCreateFunc('DebugFiles',ZMenuExt.ZMenuExtDebugFiles);
+
+  TMenuDefaults.RegisterMenuCreateFunc('CreateMenu',TMenuDefaults.CreateDefaultMenu);
+  TMenuDefaults.RegisterMenuCreateFunc('SetMainMenu',TMenuDefaults.DefaultSetMenu);
+  TMenuDefaults.RegisterMenuCreateFunc('Separator',TMenuDefaults.CreateDefaultMenuSeparator);
 
   ToolBarsManager.RegisterPaletteCreateFunc('vsIcon',TPaletteHelper.ZPalettevsIconCreator);
   ToolBarsManager.RegisterPaletteItemCreateFunc('ZVSICommand',TPaletteHelper.ZPalettevsIconItemCreator);
@@ -1814,7 +1821,7 @@ begin
   end;
 end;
 
-procedure TZCADMainWindow.ZMainMenuItemReader(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+class procedure ZMenuExt.ZMenuExtMainMenuItemReader(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
  var
   CreatedMenuItem:TMenuItem;
   line,localizedcaption:string;
@@ -1839,7 +1846,7 @@ begin
     if assigned(TBSubNode) then
       while assigned(TBSubNode)do
       begin
-        MenusManager.TryRunMenuCreateFunc(TBSubNode.NodeName,TBSubNode,actlist,CreatedMenuItem);
+        TMenuDefaults.TryRunMenuCreateFunc(fmf,TBSubNode.NodeName,TBSubNode,actlist,CreatedMenuItem);
         TBSubNode:=TBSubNode.NextSibling;
       end;
     if (assigned(RootMenuItem))and newitem then
@@ -1852,7 +1859,7 @@ begin
 end;
 
 
-procedure TZCADMainWindow.ZPopUpMenuReader(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+class procedure ZMenuExt.ZMenuExtPopUpMenuReader(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
  var
   CreatedMenuItem:TPopupMenu;
   line:string;
@@ -1868,13 +1875,13 @@ begin
     if assigned(TBSubNode) then
       while assigned(TBSubNode)do
       begin
-        MenusManager.TryRunMenuCreateFunc(TBSubNode.NodeName,TBSubNode,actlist,tmenuitem(CreatedMenuItem));
+        TMenuDefaults.TryRunMenuCreateFunc(fmf,TBSubNode.NodeName,TBSubNode,actlist,tmenuitem(CreatedMenuItem));
         TBSubNode:=TBSubNode.NextSibling;
       end;
     cxmenumgr.RegisterLCLMenu(CreatedMenuItem);
 end;
 
-procedure TZCADMainWindow.ZMainMenuFileHistory(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+class procedure ZMenuExt.ZMenuExtFileHistory(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
 var
  i:integer;
  pstr:pstring;
@@ -1904,7 +1911,7 @@ begin
   end;
 end;
 
-procedure TZCADMainWindow.ZMainMenuCommandsHistory(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+class procedure ZMenuExt.ZMenuExtCommandsHistory(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
 var
  i:integer;
  CreatedMenuItem:TMenuItem;
@@ -1920,7 +1927,7 @@ begin
   end;
 end;
 
-procedure TZCADMainWindow.ZMainMenuCommand(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+class procedure ZMenuExt.ZMenuExtCommand(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
 var
   CreatedMenuItem:TmyMenuItem;
   captionstr,comstr:string;
@@ -1934,18 +1941,18 @@ begin
     TPopUpMenu(RootMenuItem).Items.Add(CreatedMenuItem);
 end;
 
-procedure TZCADMainWindow.ZMainMenuToolBars(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+class procedure ZMenuExt.ZMenuExtToolBars(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
 begin
   ToolBarsManager.EnumerateToolBars(TTBRegisterInAPPFunc,RootMenuItem);
 end;
 
-procedure TZCADMainWindow.ZMainMenuToolPalettes(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+class procedure ZMenuExt.ZMenuExtToolPalettes(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
 begin
   ToolBarsManager.EnumerateToolPalettes(TTPRegisterInAPPFunc,RootMenuItem);
 end;
 
 
-procedure TZCADMainWindow.ZMainMenuDrawings(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+class procedure ZMenuExt.ZMenuExtDrawings(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
 var
   i:integer;
   CreatedMenuItem:TMenuItem;
@@ -1968,7 +1975,7 @@ begin
   localpm.localpm.Add(myitem);
 end;
 
-procedure TZCADMainWindow.ZMainMenuSampleFiles(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+class procedure ZMenuExt.ZMenuExtSampleFiles(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
 begin
   localpm.localpm:=RootMenuItem;
   localpm.ImageIndex:=ImagesManager.GetImageIndex('Dxf');
@@ -1978,7 +1985,7 @@ begin
   localpm.ImageIndex:=-1;
 end;
 
-procedure TZCADMainWindow.ZMainMenuDebugFiles(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+class procedure ZMenuExt.ZMenuExtDebugFiles(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
 begin
   localpm.localpm:=RootMenuItem;
   localpm.ImageIndex:=ImagesManager.GetImageIndex('Dxf');
@@ -3277,29 +3284,29 @@ begin
                                                                  else
                                                                      ZCADMainWindow.PageControl.Pages[i].caption:='BEdit('+name+':'+Tria_AnsiToUtf8(PGDBObjBlockdef(PTZCADDrawing(GVA.PDWG).pObjRoot).Name)+')';
 
-                if k<=high(ZCADMainWindow.OpenedDrawings) then
+                if k<=high(OpenedDrawings) then
                 begin
-                ZCADMainWindow.OpenedDrawings[k].Caption:=ZCADMainWindow.PageControl.Pages[i].caption;
-                ZCADMainWindow.OpenedDrawings[k].visible:=true;
-                ZCADMainWindow.OpenedDrawings[k].command:='ShowPage';
-                ZCADMainWindow.OpenedDrawings[k].options:=inttostr(i);
+                OpenedDrawings[k].Caption:=ZCADMainWindow.PageControl.Pages[i].caption;
+                OpenedDrawings[k].visible:=true;
+                OpenedDrawings[k].command:='ShowPage';
+                OpenedDrawings[k].options:=inttostr(i);
                 inc(k);
                 end;
                 end;
 
             end;
-  for i:=k to high(ZCADMainWindow.OpenedDrawings) do
+  for i:=k to high(OpenedDrawings) do
   begin
-       ZCADMainWindow.OpenedDrawings[i].visible:=false;
+       OpenedDrawings[i].visible:=false;
   end;
   end
   else
       begin
-           for i:=low(ZCADMainWindow.OpenedDrawings) to high(ZCADMainWindow.OpenedDrawings) do
+           for i:=low(OpenedDrawings) to high(OpenedDrawings) do
              begin
-                         ZCADMainWindow.OpenedDrawings[i].Caption:='';
-                         ZCADMainWindow.OpenedDrawings[i].visible:=false;
-                         ZCADMainWindow.OpenedDrawings[i].command:='';
+                         OpenedDrawings[i].Caption:='';
+                         OpenedDrawings[i].visible:=false;
+                         OpenedDrawings[i].command:='';
              end;
            ZCADMainWindow.Caption:=(programname+' v'+sysvar.SYS.SYS_Version^);
            {if assigned(LayerBox)then

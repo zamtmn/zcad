@@ -21,8 +21,8 @@ unit uzbpaths;
 interface
 uses uzbtypes,Masks,LCLProc,uzbtypesbase,{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils;
 type
-  TFromDirIterator=procedure (filename:GDBString);
-  TFromDirIteratorObj=procedure (filename:GDBString) of object;
+  TFromDirIterator=procedure (filename:String);
+  TFromDirIteratorObj=procedure (filename:String) of object;
 function ExpandPath(path:GDBString):GDBString;
 function FindInSupportPath(PPaths:GDBString;FileName:GDBString):GDBString;
 function FindInPaths(Paths,FileName:GDBString):GDBString;

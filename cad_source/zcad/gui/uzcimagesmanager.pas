@@ -92,7 +92,7 @@ begin
   FreeAndNil(FIconList);
   FreeAndNil(ImageDataMap);
 end;
-procedure {TImagesManager.}FoundImage(filename:{AnsiString}GDBString);
+procedure {TImagesManager.}FoundImage(filename:String);
 var
    ID:TImageData;
    PID:TImageName2TImageDataMap.PTValue;

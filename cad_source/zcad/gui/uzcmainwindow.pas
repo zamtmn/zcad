@@ -1803,7 +1803,7 @@ begin
   AddToBar(owner,result);
   updatescontrols.Add(result);
 end;
-procedure addfiletoLayoutbox(filename:GDBString);
+procedure addfiletoLayoutbox(filename:String);
 var
     s:string;
 begin

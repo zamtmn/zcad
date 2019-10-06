@@ -188,11 +188,11 @@ begin
      until s='';
      EnableTranslate;
 end;
-procedure loaddev(fn:gdbstring);
+procedure loaddev(fn:string);
 begin
      units.loadunit(SupportPath,InterfaceTranslate,{utf8tosys}(fn),nil);
 end;
-procedure loadvariants(fn:gdbstring);
+procedure loadvariants(fn:string);
 var
    pvd:pvardesk;
    pfd:PFieldDescriptor;

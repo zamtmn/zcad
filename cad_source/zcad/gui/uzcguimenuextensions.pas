@@ -22,36 +22,27 @@ unit uzcguimenuextensions;
 interface
 uses
   {LCL}
-      Laz2_DOM,AnchorDockPanel,AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr,
-       ActnList,LCLType,LCLProc,uzctranslations,LMessages,LCLIntf,
+      Laz2_DOM,
+       ActnList,LCLType,LCLProc,uzctranslations,LCLIntf,
        Forms, stdctrls, ExtCtrls, ComCtrls,Controls,Classes,SysUtils,LazUTF8,
-       menus,graphics,dialogs,XMLPropStorage,Buttons,Themes,
-       Types,UniqueInstanceBase,simpleipc,{$ifdef windows}windows,{$endif}Laz2_XMLCfg,
-  {FPC}
-       lineinfo,
+       menus,graphics,
   {ZCAD BASE}
-       uzcsysparams,gzctnrvectortypes,uzcgui2color,uzcgui2linewidth,uzcgui2linetypes,uzemathutils,uzelongprocesssupport,
-       {uzegluinterface,}uzgldrawergdi,uzcdrawing,UGDBOpenArrayOfPV,uzedrawingabstract,
-       uzepalette,uzbpaths,uzglviewareadata,uzeentitiesprop,uzcinterface,
-       UGDBOpenArrayOfByte,uzbmemman,uzbtypesbase,uzbtypes,
-       uzegeometry,uzcsysvars,uzcstrconsts,uzbstrproc,UGDBNamedObjectsArray,uzclog,
-       uzedimensionaltypes,varmandef, varman,UUnitManager,uzcsysinfo,uzcshared,strmy,uzestylestexts,uzestylesdim,
+       uzbpaths,
+       //UGDBOpenArrayOfByte,uzbmemman,uzbtypesbase,uzbtypes,
+       uzegeometry,uzcsysvars,uzbstrproc,uzclog,
+       varmandef, varman,UUnitManager,uzcsysinfo,uzcshared,strmy,uzestylesdim,
   {ZCAD SIMPLE PASCAL SCRIPT}
        languade,
   {ZCAD ENTITIES}
-       uzbgeomtypes,uzeentity,UGDBSelectedObjArray,uzestyleslayers,uzedrawingsimple,
-       uzeblockdef,uzcdrawings,uzcutils,uzestyleslinetypes,uzeconsts,uzeenttext,uzeentdimension,
+       uzeentity,uzestyleslayers,
+       uzeblockdef,uzcdrawings,uzeenttext,
   {ZCAD COMMANDS}
-       uzccommandsabstract,uzccommandsimpl,uzccommandsmanager,
+       uzccommandsmanager,
   {GUI}
-       uzmenusdefaults,uzmenusmanager,uztoolbarsmanager,uzctextenteditor,{uzcoidecorations,}uzcfcommandline,uzctreenode,uzcflineweights,uzcctrllayercombobox,uzcctrlcontextmenu,
-       uzcfcolors,uzcimagesmanager,uzcgui2textstyles,usupportgui,uzcgui2dimstyles,
+       uzmenusdefaults,uzmenusmanager,uztoolbarsmanager,uzcfcommandline,uzctreenode,uzcctrlcontextmenu,
+       uzcimagesmanager,
   {}
-       uzcpalettes,zcchangeundocommand,uzgldrawcontext,uzglviewareaabstract,uzcguimanager,uzcinterfacedata,
-       uzcenitiesvariablesextender,uzglviewareageneral,UniqueInstanceRaw;
-  {}
-resourcestring
-  rsClosed='Closed';
+       uzcguimanager;
 type
   PTDummyMyActionsArray=^TDummyMyActionsArray;
   TDummyMyActionsArray=Array [0..0] of TmyAction;
@@ -103,7 +94,7 @@ begin
   end;
 end;
 
-procedure bugfileiterator(filename:GDBString);
+procedure bugfileiterator(filename:String);
 var
     myitem:TmyMenuItem;
 begin

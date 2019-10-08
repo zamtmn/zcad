@@ -13,7 +13,7 @@
 *****************************************************************************
 }
 {**
-@author(Andrey Zubarev <zamtmn@yandex.ru>)
+@author(Vladimir Bobrov)
 }
 
 unit uzvslagcab;

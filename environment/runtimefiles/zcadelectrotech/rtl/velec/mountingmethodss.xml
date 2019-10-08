@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <STRINGTREE>
+    <Hidden Desc="Скрытая">
+      <inPipe Desc="В трубе"/>
+      <podStukaturkoi Desc="под штукатуркой"/>
+    </Hidden>
+    <open Desc="Открытая">
+      <inTrust Desc="На чесном слове"/>
+    </open>
+  </STRINGTREE>
+</CONFIG>

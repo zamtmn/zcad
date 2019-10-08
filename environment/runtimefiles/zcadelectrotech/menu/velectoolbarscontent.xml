@@ -5,6 +5,7 @@
       <Action Name="ACN_SUPELINE"/>
       <Action Name="ACN_slagcabCom"/>
       <Action Name="ACN_vBuildSSSchema"/>
+      <Action Name="ACN_vBuildELSchema"/>
     </ElectrotechVelec>
   </ToolBarsContent>
 </CONFIG>

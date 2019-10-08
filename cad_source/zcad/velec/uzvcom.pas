@@ -137,6 +137,7 @@ type
       TStructCableLine=record
                          //cableEnt:PGDBObjCable;
                          cableEnt:PGDBObjSuperLine;
+                         typeMount:string;
                          stPoint:GDBVertex;
                          edPoint:GDBVertex;
                          stIndex:Integer; //незнаю нужне ли он будет ну пускай пока будет

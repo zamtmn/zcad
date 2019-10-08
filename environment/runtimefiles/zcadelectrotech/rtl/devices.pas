@@ -52,7 +52,18 @@ type
             _A(*'A'*),
             _B(*'B'*),
             _C(*'C'*));
-
+  
+  PTTypeCableRouting=^TTypeCableRouting;
+  TTypeCableRouting=(
+               TDT_SingleRouting(*'Одиночная прокладка'*),
+               TDT_GroupRouting(*'Групповая прокладка'*)
+              );
+  
+  PTDevConnectMethod=^TDevConnectMethod;
+  TDevConnectMethod=(
+               TDT_CableConnectParallel(*'Параллельно'*),
+               TDT_CableConnectSeries(*'Последовательно'*)
+              );
 
 implementation
 begin

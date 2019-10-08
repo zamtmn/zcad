@@ -34,6 +34,7 @@ type
 
     procedure LoadMenus(filename:string);
     function GetMenu_tmp(aName: string):TPopupMenu;
+    procedure CheckMainMenu(node:TDomNode);
   end;
 
 var
@@ -72,8 +73,36 @@ procedure TMenusManager.LoadMenus(filename:string);
 var
   ActionsConfig:TXMLConfig;
   TBNode,TBSubNode:TDomNode;
+
+  tempMenuConfig:TXMLConfig;
+  tempTBContentNode,TBContentNode:TDomNode;
 begin
-  ActionsConfig:=TXMLConfig.Create(nil);
+
+  if not assigned(MenuConfig) then begin
+    MenuConfig:=TXMLConfig.Create(nil);
+    MenuConfig.Filename:=filename;
+  end else begin
+    tempMenuConfig:=TXMLConfig.Create(nil);
+    tempMenuConfig.Filename:=filename;
+
+    tempTBContentNode:=tempMenuConfig.FindNode('MenusContent',false);
+    CheckMainMenu(tempTBContentNode);
+    TBContentNode:=MenuConfig.FindNode('MenusContent',false);
+
+    if assigned(tempTBContentNode) and assigned(TBContentNode)then begin
+      TBSubNode:=tempTBContentNode.FirstChild;
+      while assigned(TBSubNode)do
+      begin
+        TBContentNode.AppendChild(TBSubNode.CloneNode(true,TBContentNode.OwnerDocument));
+
+        TBSubNode:=TBSubNode.NextSibling;
+      end;
+    end;
+
+    tempMenuConfig.Free;
+  end;
+
+  {ActionsConfig:=TXMLConfig.Create(nil);
   ActionsConfig.Filename:=filename;
 
   TBNode:=ActionsConfig.FindNode('MenusContent',false);
@@ -88,16 +117,59 @@ begin
       TBSubNode:=TBSubNode.NextSibling;
     end;
 
-  ActionsConfig.Free;
+  ActionsConfig.Free;}
 end;
+
+
 
 function TMenusManager.GetMenu_tmp(aName: string):TPopupMenu;
+var
+  TBNode,TBSubNode:TDomNode;
+  menuname:string;
 begin
-  result:=TPopupMenu(application.FindComponent(MenuNameModifier+aName))
+  menuname:='';
+  result:=TPopupMenu(application.FindComponent(MenuNameModifier+aName));
+  if result=nil then begin
+    TBNode:=MenuConfig.FindNode('MenusContent',false);
+    if assigned(TBNode) then begin
+      TBSubNode:=TBNode.FirstChild;
+      menuname:=getAttrValue(TBSubNode,'Name','');
+    end
+    else
+      TBSubNode:=nil;
+    if assigned(TBSubNode) then
+      while (assigned(TBSubNode))and(menuname<>aName)do
+      begin
+        TBSubNode:=TBSubNode.NextSibling;
+        if assigned(TBSubNode) then
+          menuname:=getAttrValue(TBSubNode,'Name','');
+      end;
+    if assigned(TBSubNode) then
+      TMenuDefaults.TryRunMenuCreateFunc(fmainform,TBSubNode.NodeName,TBSubNode,factionlist,nil);
+  end;
 end;
 
-
-
+procedure TMenusManager.CheckMainMenu(node:TDomNode);
+var
+  TBSubNode:TDomNode;
+  menuname:string;
+begin
+    if assigned(node) then begin
+      TBSubNode:=node.FirstChild;
+      //menuname:=getAttrValue(TBSubNode,'Name','');
+    end
+    else
+      TBSubNode:=nil;
+    if assigned(TBSubNode) then
+      while assigned(TBSubNode)do
+      begin
+        if TBSubNode.nodeName='CreateMenu' then begin
+          TMenuDefaults.TryRunMenuCreateFunc(fmainform,TBSubNode.NodeName,TBSubNode,factionlist,nil);
+          exit;
+        end;
+        TBSubNode:=TBSubNode.NextSibling;
+      end;
+end;
 
 {function testCheck(const Context:integer):boolean;
 begin

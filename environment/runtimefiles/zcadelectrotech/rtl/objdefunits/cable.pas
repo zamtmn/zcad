@@ -11,6 +11,7 @@ var
    LENGTH_KReserve:GDBDouble;(*'Коэфф. запаса'*)
 
    CABLE_Type:TCableType;(*'Тип'*)
+   Cable_Mounting_Method:TCableMountingMethod;(*'Метод монтажа'*)
    CABLE_Segment:GDBInteger;(*'Сегмент'*)
    CABLE_WireCount:GDBInteger;(*'Число жил'*)
    CABLE_TotalCD:GDBInteger;(*'Подключено устройств'*)

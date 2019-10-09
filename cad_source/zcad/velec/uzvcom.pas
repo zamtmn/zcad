@@ -1540,6 +1540,7 @@ begin
              if nameCable=tempName then
                begin
                  infoCable.cableEnt:=pSuperLine;
+                 infoCable.typeMount:=pgdbstring(FindVariableInEnt(pSuperLine,'Cable_Mounting_Method')^.data.Instance)^;
                  infoCable.stPoint:=pSuperLine^.CoordInOCS.lBegin;
                  infoCable.stPoint.z:=0;
                  infoCable.edPoint:=pSuperLine^.CoordInOCS.lEnd;

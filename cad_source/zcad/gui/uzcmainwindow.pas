@@ -1621,6 +1621,15 @@ begin
   SetupFIPCServer;
 end;
 
+function testCheck(const Context:TObject):boolean;
+begin
+  result:=true;
+end;
+function test2Check(const Context:TObject):boolean;
+begin
+  result:=false;
+end;
+
 procedure TZCADMainWindow._onCreate(Sender: TObject);
 begin
   {
@@ -1666,7 +1675,9 @@ begin
 
 
   ToolBarsManager:=TToolBarsManager.create(self,StandartActions,sysvar.INTF.INTF_DefaultControlHeight^);
-  MenusManager:=TMenusManager.create(self,StandartActions);
+  MenusManager:=TMenuManagerByTObject.create(self,StandartActions);
+  MenusManager.RegisterContextCheckFunc('test',@testCheck);
+  MenusManager.RegisterContextCheckFunc('test2',@test2Check);
 
   ToolBarsManager.RegisterTBItemCreateFunc('Separator',ToolBarsManager.CreateDefaultSeparator);
   ToolBarsManager.RegisterTBItemCreateFunc('Action',TBActionCreateFunc);
@@ -2393,9 +2404,9 @@ var
 begin
   menu:=nil;
   if drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount>0 then
-    menu:=MenusManager.GetMenu_tmp('SELECTEDENTSCXMENU')
+    menu:=MenusManager.GetMenu_tmp('SELECTEDENTSCXMENU',nil)
   else
-    menu:=MenusManager.GetMenu_tmp('NONSELECTEDENTSCXMENU');
+    menu:=MenusManager.GetMenu_tmp('NONSELECTEDENTSCXMENU',nil);
   if menu<>nil then
   begin
     menu.PopUp;
@@ -2405,7 +2416,7 @@ procedure TZCADMainWindow.ShowFMenu;
 var
   menu:TPopupMenu;
 begin
-    menu:=MenusManager.GetMenu_tmp('FASTMENU');
+    menu:=MenusManager.GetMenu_tmp('FASTMENU',nil);
     if menu<>nil then
     begin
          menu.PopUp;

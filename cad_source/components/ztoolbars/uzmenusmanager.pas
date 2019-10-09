@@ -22,23 +22,31 @@ type
   generic TCMContextChecker<T>=class (specialize TGCContextChecker<T,TMenuContextNameType,TContextStateType,TCMenuContextNameManipulator>)
   end;
 
-  TMenusManager=class
+  generic TGMenusManager<T>=class(specialize TCMContextChecker<T>)
   private
     factionlist:TActionList;
     fmainform:TForm;
     MenuConfig:TXMLConfig;
+    CurrentContext:T;
+    Cashe:TContextStateRegister;
 
   public
     constructor Create(mainform:TForm;actlist:TActionList);
     destructor Destroy;override;
 
+    procedure GetPart(out part:String;var path:String;const separator:String);
+    function readspace(expr:String):String;
+    procedure DoIfOneNode(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);virtual;
+    procedure DoIfAllNode(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);virtual;
+
     procedure LoadMenus(filename:string);
-    function GetMenu_tmp(aName: string):TPopupMenu;
+    function GetMenu_tmp(aName: string;ctx:T):TPopupMenu;
     procedure CheckMainMenu(node:TDomNode);
   end;
+  TMenuManagerByTObject=specialize TGMenusManager<TObject>;
 
 var
-  MenusManager:TMenusManager;
+  MenusManager:TMenuManagerByTObject;
 
   {TTestContextChecker=specialize TCMContextChecker<integer>;
 var
@@ -57,19 +65,19 @@ begin
 end;
 
 
-constructor TMenusManager.Create(mainform:TForm;actlist:TActionList);
+constructor TGMenusManager.Create(mainform:TForm;actlist:TActionList);
 begin
   fmainform:=mainform;
   factionlist:=actlist;
 
   MenuConfig:=nil;
 end;
-destructor TMenusManager.Destroy;
+destructor TGMenusManager.Destroy;
 begin
   if assigned(MenuConfig) then
     MenuConfig.Free;
 end;
-procedure TMenusManager.LoadMenus(filename:string);
+procedure TGMenusManager.LoadMenus(filename:string);
 var
   ActionsConfig:TXMLConfig;
   TBNode,TBSubNode:TDomNode;
@@ -120,13 +128,98 @@ begin
   ActionsConfig.Free;}
 end;
 
+procedure TGMenusManager.DoIfOneNode(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+var
+  TBSubNode:TDomNode;
+  conditions,condition:string;
+  passed:boolean;
+begin
+  conditions:=getAttrValue(aNode,'Сonditions','');
+  passed:=false;
+  repeat
+    GetPart(condition,conditions,',');
+    condition:=readspace(condition);
+    if condition<>''  then begin
+      if condition[1]<>'~'  then
+        passed:=passed or CashedContextCheck(Cashe,condition,CurrentContext)
+      else
+        if length(condition)>1  then
+          passed:=passed or (not CashedContextCheck(Cashe,copy(condition,2,length(condition)-1),CurrentContext));
+    end;
+  until (condition='')or(passed);
+  if passed then begin
+    TBSubNode:=aNode.FirstChild;
+    if assigned(TBSubNode) then
+      TMenuDefaults.TryRunMenuCreateFunc(fmf,TBSubNode.NodeName,TBSubNode,factionlist,RootMenuItem);
+  end;
+end;
+
+procedure TGMenusManager.GetPart(out part:String;var path:String;const separator:String);
+var
+   i:Integer;
+begin
+           i:=pos(separator,path);
+           if i<>0 then
+                       begin
+                            part:=copy(path,1,i-1);
+                            path:=copy(path,i+1,length(path)-i);
+                       end
+                   else
+                       begin
+                            part:=path;
+                            path:='';
+                       end;
+end;
+
+function TGMenusManager.readspace(expr:String):String;
+var
+  i:Integer;
+begin
+  if expr='' then exit('');
+  i := 1;
+  while not (expr[i] in ['@','{','}','a'..'z', 'A'..'Z', '0'..'9', '$', '(', ')', '+', '-', '*', '/', ':', '=','_', '''','~']) do
+  begin
+    if i = length(expr) then
+      system.break;
+    i := i + 1;
+  end;
+  result := copy(expr, i, length(expr) - i + 1);
+end;
 
 
-function TMenusManager.GetMenu_tmp(aName: string):TPopupMenu;
+procedure TGMenusManager.DoIfAllNode(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+var
+  TBSubNode:TDomNode;
+  conditions,condition:string;
+  passed:boolean;
+begin
+  conditions:=getAttrValue(aNode,'Сonditions','');
+  passed:=true;
+  repeat
+    GetPart(condition,conditions,',');
+    condition:=readspace(condition);
+    if condition<>''  then begin
+      if condition[1]<>'~'  then
+        passed:=passed and CashedContextCheck(Cashe,condition,CurrentContext)
+      else
+        if length(condition)>1  then
+          passed:=passed and (not CashedContextCheck(Cashe,copy(condition,2,length(condition)-1),CurrentContext));
+    end;
+  until (condition='')or(not passed);
+  if passed then begin
+    TBSubNode:=aNode.FirstChild;
+    if assigned(TBSubNode) then
+      TMenuDefaults.TryRunMenuCreateFunc(fmf,TBSubNode.NodeName,TBSubNode,factionlist,RootMenuItem);
+  end;
+end;
+
+
+function TGMenusManager.GetMenu_tmp(aName: string;ctx:T):TPopupMenu;
 var
   TBNode,TBSubNode:TDomNode;
   menuname:string;
 begin
+  CurrentContext:=ctx;
   menuname:='';
   result:=TPopupMenu(application.FindComponent(MenuNameModifier+aName));
   if result=nil then begin
@@ -144,12 +237,20 @@ begin
         if assigned(TBSubNode) then
           menuname:=getAttrValue(TBSubNode,'Name','');
       end;
-    if assigned(TBSubNode) then
+    if assigned(TBSubNode) then begin
+      TMenuDefaults.RegisterMenuCreateFunc('IFONE',@DoIfOneNode);
+      TMenuDefaults.RegisterMenuCreateFunc('IFALL',@DoIfAllNode);
       TMenuDefaults.TryRunMenuCreateFunc(fmainform,TBSubNode.NodeName,TBSubNode,factionlist,nil);
+      TMenuDefaults.UnRegisterMenuCreateFunc('IFONE');
+      TMenuDefaults.UnRegisterMenuCreateFunc('IFALL');
+      if assigned(Cashe) then
+        FreeAndNil(Cashe);
+    end;
   end;
+  CurrentContext:=default(t);
 end;
 
-procedure TMenusManager.CheckMainMenu(node:TDomNode);
+procedure TGMenusManager.CheckMainMenu(node:TDomNode);
 var
   TBSubNode:TDomNode;
   menuname:string;
@@ -187,6 +288,7 @@ initialization
   CC.CashedContextCheck(Cashe,'tEst',5);
   if assigned(Cashe) then
     Cashe.free;*)
+
 finalization
 if assigned(MenusManager) then
   MenusManager.Free;

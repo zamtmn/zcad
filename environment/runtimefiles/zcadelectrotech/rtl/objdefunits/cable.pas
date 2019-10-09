@@ -11,7 +11,7 @@ var
    LENGTH_KReserve:GDBDouble;(*'Коэфф. запаса'*)
 
    CABLE_Type:TCableType;(*'Тип'*)
-   Cable_Mounting_Method:TCableMountingMethod;(*'Метод монтажа'*)
+   Cable_Mounting_Method:TDCableMountingMethod;(*'Метод монтажа'*)
    CABLE_Segment:GDBInteger;(*'Сегмент'*)
    CABLE_WireCount:GDBInteger;(*'Число жил'*)
    CABLE_TotalCD:GDBInteger;(*'Подключено устройств'*)
@@ -30,6 +30,7 @@ begin
    LENGTH_Scale:=0.1;
    CABLE_Material:='не задан ??;
    CABLE_WireCount:=0;
+   Cable_Mounting_Method:='-';
 
    GC_HeadDevice:='??';
    GC_HDShortName:='??';

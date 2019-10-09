@@ -26,7 +26,7 @@ type
                      Cable_KZap:GDBDouble;(*'Коэффициент запаса'*)
                      Cable_Scale:GDBDouble;(*'Масштаб'*)
                end;
-
+  TDCableMountingMethod=GDBString;
 implementation
 begin
 end.

@@ -421,7 +421,7 @@ begin
   if pnode<>nil then
   begin
     NavTree.Selected[pnode]:=true;
-    PopupMenu:=TmyPopupMenu(MenusManager.GetMenu_tmp('NAVIGATORNODECONTEXTMENU'));
+    PopupMenu:=TmyPopupMenu(MenusManager.GetMenu_tmp('NAVIGATORNODECONTEXTMENU',nil));
     if assigned(PopupMenu) then begin
       CommandManager.ContextCommandParams:=NavTree;
       PopupMenu.PopUp;

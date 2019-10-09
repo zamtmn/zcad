@@ -24,6 +24,7 @@ type
 
     class procedure TryRunMenuCreateFunc(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
     class procedure RegisterMenuCreateFunc(aNodeName:string;MenuCreateFunc:TMenuCreateFunc);
+    class procedure UnRegisterMenuCreateFunc(aNodeName:string);
   end;
 implementation
 
@@ -97,6 +98,11 @@ begin
   TMenuDefaults.MenuCreateFuncRegister.add(uppercase(aNodeName),MenuCreateFunc);
 end;
 
+class procedure TMenuDefaults.UnRegisterMenuCreateFunc(aNodeName:string);
+begin
+  if assigned(TMenuDefaults.MenuCreateFuncRegister) then
+    TMenuDefaults.MenuCreateFuncRegister.Remove(uppercase(aNodeName));
+end;
 
 class procedure TMenuDefaults.DefaultMainMenuItemReader(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
  var

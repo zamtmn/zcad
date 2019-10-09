@@ -136,7 +136,7 @@ begin
                        begin
                             T_ProjectDB.Selected:=nil;
                             self.ProjectEquipmentN.DeleteChildren;
-                            BuildTreeByEQ(ProjectEquipmentN,PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName),TmyPopupMenu(MenusManager.GetMenu_tmp('PROJECTDBCXMENU')));
+                            BuildTreeByEQ(ProjectEquipmentN,PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName),TmyPopupMenu(MenusManager.GetMenu_tmp('PROJECTDBCXMENU',nil)));
                             (*
                             ProjectEquipmentNodeN.free;
                             gdbgetmem({$IFDEF DEBUGBUILD}'{B941B71E-2BA6-4B5E-B436-633B6C8FC500}',{$ENDIF}pointer(ProjectEquipmentNode.SubNode),sizeof(TGDBTree));
@@ -337,15 +337,15 @@ begin
         TmyTreeView(CurrNode.TreeView).NodeType:=TBlockTreeNode;
         BlockNode:=TBlockTreeNode(T_ProgramDB.Items.addchild(CurrNode,(treepos)));
         BlockNode.fBlockName:=pb^.name;
-        BlockNode.FPopupMenu:={ProgramDEVContextMenuN}TmyPopupMenu(MenusManager.GetMenu_tmp('PROGRAMBLOCKSCXMENU'));
+        BlockNode.FPopupMenu:={ProgramDEVContextMenuN}TmyPopupMenu(MenusManager.GetMenu_tmp('PROGRAMBLOCKSCXMENU',nil));
 
         pb:=BlockBaseDWG.BlockDefArray.iterate(ir);
   until pb=nil;
   end;
 
-  BuildTreeByEQ(ProgramEquipmentN,DBUnit,{ProgramDBContextMenuN}{}TmyPopupMenu(MenusManager.GetMenu_tmp('PROGRAMDBCXMENU')){});
+  BuildTreeByEQ(ProgramEquipmentN,DBUnit,{ProgramDBContextMenuN}{}TmyPopupMenu(MenusManager.GetMenu_tmp('PROGRAMDBCXMENU',nil)){});
   if drawings.GetCurrentDWG<>nil then
-  BuildTreeByEQ(ProjectEquipmentN,PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName),{ProjectDBContextMenuN}TmyPopupMenu(MenusManager.GetMenu_tmp('PROJECTDBCXMENU')));
+  BuildTreeByEQ(ProjectEquipmentN,PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName),{ProjectDBContextMenuN}TmyPopupMenu(MenusManager.GetMenu_tmp('PROJECTDBCXMENU',nil)));
 
 end;
 function ProjectTree_com(Operands:pansichar):GDBInteger;

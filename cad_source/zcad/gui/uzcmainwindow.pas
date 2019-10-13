@@ -877,9 +877,10 @@ begin
       if assigned(ZCADMainWindow.updatescontrols) then
         ZCADMainWindow.updatescontrols.Clear;}
 
+      ToolBarsManager.RestoreToolBarsFromConfig(XMLConfig);
+      Application.Processmessages;
       DockMaster.LoadSettingsFromConfig(XMLConfig);
       DockMaster.LoadLayoutFromConfig(XMLConfig,false);
-      ToolBarsManager.RestoreToolBarsFromConfig(XMLConfig);
     finally
       XMLConfig.Free;
     end;

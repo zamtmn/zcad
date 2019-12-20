@@ -163,6 +163,7 @@ type
                          VIndex2:GDBInteger; //номер 2-й вершниы по списку
                          VPoint1:GDBVertex;  //координаты 1й вершниы
                          VPoint2:GDBVertex;  //координаты 2й вершниы
+                         cableEnt:PGDBObjSuperLine;
                          edgeLength:GDBDouble; // длина ребра
       end;
       TListEdgeGraph=specialize TVector<TInfoEdgeGraph>;
@@ -1062,6 +1063,7 @@ begin
              infoEdge.VPoint2:=graph.listVertex[tempListNumVertex[k].num].centerPoint;
              infoEdge.VPoint2.z:=0;
              infoEdge.edgeLength:=uzegeometry.Vertexlength(infoEdge.VPoint1,infoEdge.VPoint2);
+             infoEdge.cableEnt:=listCable[i].cableEnt;
              graph.listEdge.PushBack(infoEdge);
          end;
        end;
@@ -1184,8 +1186,7 @@ begin
                   infoEdge.VIndex2:=numVertDevice;
                   infoEdge.VPoint1:=vertexLine;
                   infoEdge.VPoint1.z:=0;
-
-                  //testTempDrawCircle(infoEdge.VPoint1,3);
+                  infoEdge.cableEnt:=nil;
 
                   infoEdge.VPoint2:=graph.listVertex[numVertDevice].centerPoint;
                   infoEdge.VPoint2.z:=0;
@@ -1430,6 +1431,7 @@ begin
        infoEdge.VPoint1.z:=0;
        infoEdge.VPoint2:=graph.listVertex[listBreak[i].listNumbers[j+1].num].centerPoint;
        infoEdge.VPoint2.z:=0;
+       infoEdge.cableEnt:=nil;
        infoEdge.edgeLength:=abs(listBreak[i].listNumbers[j].num-listBreak[i].listNumbers[j+1].num);
        graph.listEdge.PushBack(infoEdge);
      end;
@@ -1540,7 +1542,7 @@ begin
              if nameCable=tempName then
                begin
                  infoCable.cableEnt:=pSuperLine;
-                 infoCable.typeMount:=pgdbstring(FindVariableInEnt(pSuperLine,'Cable_Mounting_Method')^.data.Instance)^;
+                 //infoCable.typeMount:=pgdbstring(FindVariableInEnt(pSuperLine,'Cable_Mounting_Method')^.data.Instance)^;
                  infoCable.stPoint:=pSuperLine^.CoordInOCS.lBegin;
                  infoCable.stPoint.z:=0;
                  infoCable.edPoint:=pSuperLine^.CoordInOCS.lEnd;

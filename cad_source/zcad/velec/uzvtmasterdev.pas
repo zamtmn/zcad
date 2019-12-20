@@ -78,6 +78,7 @@ TMasterDevice=class
            //listVertexTerminalBox:TListVertexTerminalBox; // список распред коробки, в каких вершинах и сколько кабелей
            LNumSubDevice:TVectorOfSubDev;
            LTreeDev:TVectorOfTreeDev;
+           groupTreeDev:TGraph; //дерево оформляемое по новому для каждой группы свое
            LEasyTreeDev:TVectorOfTreeDev;
            name:String;
 
@@ -92,6 +93,7 @@ TMasterDevice=class
      LIndex:TVectorOfInteger; //номера устройства в глобальном графе
      name:String;             //полное имя
      shortName:String;        //короткое имя
+
      LGroup:TVectorOfGroup;   //список отходящих групп
 
      //function getNumbyName(name:string):integer;

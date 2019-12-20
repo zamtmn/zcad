@@ -64,6 +64,13 @@ type
                TDT_CableConnectParallel(*'Параллельно'*),
                TDT_CableConnectSeries(*'Последовательно'*)
               );
+  
+  PTDevNodeSeparateMethod=^TDevNodeSeparateMethod;
+  TDevNodeSeparateMethod=(
+               TDT_NodeSeparateNo(*'Нет'*),
+               TDT_NodeSeparateInside(*'Внутри устройства'*),
+               TDT_NodeSeparateNeighbor(*'Соседний узел'*)
+              );            
 
 implementation
 begin

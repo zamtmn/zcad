@@ -35,6 +35,10 @@ const
   vpTVertexTree='TVertexTree';
   vpTEdgeTree='TEdgeTree';
 
+  vGPGDBObjSuperLine='vGPGDBObjSuperLine';
+  vGPGDBObjDevice='vGPGDBObjDevice';
+
+
 implementation
 
 end.

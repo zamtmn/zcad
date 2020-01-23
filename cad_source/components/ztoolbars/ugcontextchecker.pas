@@ -30,6 +30,7 @@ type
     procedure CasheContextState(Cashe:TContextStateRegister;ContextId:TGContextIdType;ContextCheckFunc:TContextCheckFunc;value:TGContextStateType);
     function ContextCheck(const ContextId:TGContextIdType;const Context:TGContextType):TGContextStateType;
     function CashedContextCheck(var Cashe:TContextStateRegister;const ContextId:TGContextIdType;const Context:TGContextType):TGContextStateType;
+    function ContainContext(const ContextId:TGContextIdType):boolean;
   end;
 implementation
 
@@ -90,6 +91,13 @@ begin
       end;
     end;
 end;
+function TGCContextChecker.ContainContext(const ContextId:TGContextIdType):boolean;
+var
+  state:TContextCheckFunc;
+begin
+  result:=ContextStateRegister.TryGetValue(TGContextIdManipulator.Standartize(ContextId),state);
+end;
+
 initialization
 finalization
 end.

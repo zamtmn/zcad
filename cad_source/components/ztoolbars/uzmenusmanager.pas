@@ -118,11 +118,18 @@ begin
     GetPart(condition,conditions,',');
     condition:=readspace(condition);
     if condition<>''  then begin
-      if condition[1]<>'~'  then
-        passed:=passed or CashedContextCheck(Cashe,condition,CurrentContext)
-      else
-        if length(condition)>1  then
-          passed:=passed or (not CashedContextCheck(Cashe,copy(condition,2,length(condition)-1),CurrentContext));
+      if condition[1]<>'~'  then begin
+        if GeneralContextChecker.ContainContext(condition) then
+          passed:=passed or GeneralContextChecker.CashedContextCheck(GeneralContextChecker.Cashe,condition,GeneralContextChecker.CurrentContext)
+        else
+          passed:=passed or CashedContextCheck(Cashe,condition,CurrentContext)
+      end else
+        if length(condition)>1  then begin
+          if GeneralContextChecker.ContainContext(condition) then
+            passed:=passed or (not GeneralContextChecker.CashedContextCheck(GeneralContextChecker.Cashe,copy(condition,2,length(condition)-1),GeneralContextChecker.CurrentContext))
+          else
+            passed:=passed or (not CashedContextCheck(Cashe,copy(condition,2,length(condition)-1),CurrentContext));
+        end;
     end;
   until (condition='')or(passed);
   if passed then begin
@@ -198,6 +205,7 @@ var
   menuname:string;
 begin
   SetCurrentContext(ctx);
+  GeneralContextChecker.SetCurrentContext(Application);
   menuname:='';
   result:=TPopupMenu(application.FindComponent(MenuNameModifier+aName));
   if result=nil then begin
@@ -221,10 +229,11 @@ begin
       TMenuDefaults.TryRunMenuCreateFunc(fmainform,TBSubNode.NodeName,TBSubNode,factionlist,nil);
       TMenuDefaults.UnRegisterMenuCreateFunc('IFONE');
       TMenuDefaults.UnRegisterMenuCreateFunc('IFALL');
-      if assigned(Cashe) then
-        FreeAndNil(Cashe);
     end;
   end;
+  GeneralContextChecker.ReleaseCashe;
+  GeneralContextChecker.ReSetCurrentContext(Application);
+  ReleaseCashe;
   ReSetCurrentContext(ctx);
 end;
 

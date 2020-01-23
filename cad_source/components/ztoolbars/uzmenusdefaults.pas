@@ -25,6 +25,7 @@ type
     Cashe:TContextStateRegister;
     procedure SetCurrentContext(ctx:T);
     procedure ReSetCurrentContext(ctx:T);
+    procedure ReleaseCashe;
   end;
 
   TGeneralContextChecker=specialize TCMContextChecker<TObject>;
@@ -59,6 +60,11 @@ end;
 generic procedure TCMContextChecker<T>.ReSetCurrentContext(ctx:T);
 begin
   CurrentContext:=default(T);
+end;
+generic procedure TCMContextChecker<T>.ReleaseCashe;
+begin
+  if assigned(Cashe) then
+    FreeAndNil(Cashe);
 end;
 
 class function TCMenuContextNameManipulator.Standartize(id:TMenuContextNameType):TMenuContextNameType;

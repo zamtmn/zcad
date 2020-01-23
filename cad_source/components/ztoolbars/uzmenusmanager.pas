@@ -10,26 +10,14 @@ uses
   sysutils,Generics.Collections;
 
 const
-     MenuNameModifier='MENU_';
+  MenuNameModifier='MENU_';
 
 type
-  TMenuContextNameType=string;
-  TContextStateType=boolean;
-  TCMenuContextNameManipulator=class
-    class function Standartize(id:TMenuContextNameType):TMenuContextNameType;
-    class function DefaultContexCheckState:TContextStateType;
-  end;
-  generic TCMContextChecker<T>=class (specialize TGCContextChecker<T,TMenuContextNameType,TContextStateType,TCMenuContextNameManipulator>)
-  end;
-
   generic TGMenusManager<T>=class(specialize TCMContextChecker<T>)
   private
     factionlist:TActionList;
     fmainform:TForm;
     MenuConfig:TXMLConfig;
-    CurrentContext:T;
-    Cashe:TContextStateRegister;
-
   public
     constructor Create(mainform:TForm;actlist:TActionList);
     destructor Destroy;override;
@@ -54,16 +42,6 @@ var
   Cashe:TTestContextChecker.TContextStateRegister;}
 
 implementation
-
-class function TCMenuContextNameManipulator.Standartize(id:TMenuContextNameType):TMenuContextNameType;
-begin
-  result:=uppercase(id);
-end;
-class function TCMenuContextNameManipulator.DefaultContexCheckState:TContextStateType;
-begin
-  result:=false;
-end;
-
 
 constructor TGMenusManager.Create(mainform:TForm;actlist:TActionList);
 begin
@@ -219,7 +197,7 @@ var
   TBNode,TBSubNode:TDomNode;
   menuname:string;
 begin
-  CurrentContext:=ctx;
+  SetCurrentContext(ctx);
   menuname:='';
   result:=TPopupMenu(application.FindComponent(MenuNameModifier+aName));
   if result=nil then begin
@@ -247,7 +225,7 @@ begin
         FreeAndNil(Cashe);
     end;
   end;
-  CurrentContext:=default(t);
+  ReSetCurrentContext(ctx);
 end;
 
 procedure TGMenusManager.CheckMainMenu(node:TDomNode);

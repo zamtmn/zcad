@@ -13,6 +13,22 @@ const
      MenuNameModifier='MENU_';
 
 type
+  TMenuContextNameType=string;
+  TContextStateType=boolean;
+  TCMenuContextNameManipulator=class
+    class function Standartize(id:TMenuContextNameType):TMenuContextNameType;
+    class function DefaultContexCheckState:TContextStateType;
+  end;
+
+  generic TCMContextChecker<T>=class (specialize TGCContextChecker<T,TMenuContextNameType,TContextStateType,TCMenuContextNameManipulator>)
+    CurrentContext:T;
+    Cashe:TContextStateRegister;
+    procedure SetCurrentContext(ctx:T);
+    procedure ReSetCurrentContext(ctx:T);
+  end;
+
+  TGeneralContextChecker=specialize TCMContextChecker<TObject>;
+
   TMenuCreateFunc=procedure (fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem) of object;
   TMenuCreateFuncRegister=specialize TDictionary <string,TMenuCreateFunc>;
   TMenuDefaults=class
@@ -26,7 +42,33 @@ type
     class procedure RegisterMenuCreateFunc(aNodeName:string;MenuCreateFunc:TMenuCreateFunc);
     class procedure UnRegisterMenuCreateFunc(aNodeName:string);
   end;
+procedure RegisterGeneralContextCheckFunc(ContextId:TGeneralContextChecker.TContextIdType;ContextCheckFunc:TGeneralContextChecker.TContextCheckFunc);
+var
+  GeneralContextChecker:TGeneralContextChecker;
 implementation
+procedure RegisterGeneralContextCheckFunc(ContextId:TGeneralContextChecker.TContextIdType;ContextCheckFunc:TGeneralContextChecker.TContextCheckFunc);
+begin
+  if GeneralContextChecker=nil then GeneralContextChecker:=TGeneralContextChecker.Create;
+  GeneralContextChecker.RegisterContextCheckFunc(ContextId,ContextCheckFunc);
+end;
+
+generic procedure TCMContextChecker<T>.SetCurrentContext(ctx:T);
+begin
+  CurrentContext:=ctx;
+end;
+generic procedure TCMContextChecker<T>.ReSetCurrentContext(ctx:T);
+begin
+  CurrentContext:=default(T);
+end;
+
+class function TCMenuContextNameManipulator.Standartize(id:TMenuContextNameType):TMenuContextNameType;
+begin
+  result:=uppercase(id);
+end;
+class function TCMenuContextNameManipulator.DefaultContexCheckState:TContextStateType;
+begin
+  result:=false;
+end;
 
 class procedure TMenuDefaults.CreateDefaultMenu(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
 var
@@ -135,8 +177,10 @@ begin
 end;
 initialization
   TMenuDefaults.MenuCreateFuncRegister:=nil;
+  GeneralContextChecker:=nil;
 finalization
   if assigned(TMenuDefaults.MenuCreateFuncRegister) then
    FreeAndNil(TMenuDefaults.MenuCreateFuncRegister);
-
+  if assigned(GeneralContextChecker) then
+   FreeAndNil(GeneralContextChecker);
 end.

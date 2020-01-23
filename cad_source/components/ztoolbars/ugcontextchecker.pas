@@ -19,6 +19,7 @@ type
   type
     //TGContextIdType=String;
     //TGContextStateType=Boolean;
+    TContextIdType=TGContextIdType;
     TContextCheckFunc=function(const Context:TGContextType):TGContextStateType;
     TContextCheckFuncRegister=specialize TDictionary <TGContextIdType,TContextCheckFunc>;
     TContextStateRegister=specialize TDictionary <TContextCheckFunc,TGContextStateType>;

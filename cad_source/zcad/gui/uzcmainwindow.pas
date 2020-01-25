@@ -1667,7 +1667,12 @@ begin
 
   ToolBarsManager:=TToolBarsManager.create(self,StandartActions,sysvar.INTF.INTF_DefaultControlHeight^);
   MenusManager:=TGeneralMenuManager.create(self,StandartActions);
-  MenusManager.RegisterContextCheckFunc('True',@GMCCFTrue);
+  RegisterGeneralContextCheckFunc('True',@GMCCFTrue);
+  RegisterGeneralContextCheckFunc('False',@GMCCFFalse);
+  RegisterGeneralContextCheckFunc('DebugMode',@GMCCFDebugMode);
+  RegisterGeneralContextCheckFunc('CtrlPressed',@GMCCFCtrlPressed);
+  RegisterGeneralContextCheckFunc('ShiftPressed',@GMCCFCtrlPressed);
+  RegisterGeneralContextCheckFunc('AltPressed',@GMCCFCtrlPressed);
 
   ToolBarsManager.RegisterTBItemCreateFunc('Separator',ToolBarsManager.CreateDefaultSeparator);
   ToolBarsManager.RegisterTBItemCreateFunc('Action',TBActionCreateFunc);

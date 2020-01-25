@@ -31,10 +31,10 @@ type
     function GetMenu_tmp(aName: string;ctx:T):TPopupMenu;
     procedure CheckMainMenu(node:TDomNode);
   end;
-  TMenuManagerByTObject=specialize TGMenusManager<TObject>;
+  TGeneralMenuManager=specialize TGMenusManager<TObject>;
 
 var
-  MenusManager:TMenuManagerByTObject;
+  MenusManager:TGeneralMenuManager;
 
   {TTestContextChecker=specialize TCMContextChecker<integer>;
 var

@@ -44,7 +44,7 @@ uses
   {ZCAD COMMANDS}
        uzccommandsabstract,uzccommandsimpl,uzccommandsmanager,
   {GUI}
-       uzcguimenuextensions,uzmenusdefaults,uzmenusmanager,uztoolbarsmanager,uzctextenteditor,{uzcoidecorations,}uzcfcommandline,uzctreenode,uzcflineweights,uzcctrllayercombobox,uzcctrlcontextmenu,
+       uzcmenucontextcheckfuncs,uzcguimenuextensions,uzmenusdefaults,uzmenusmanager,uztoolbarsmanager,uzctextenteditor,{uzcoidecorations,}uzcfcommandline,uzctreenode,uzcflineweights,uzcctrllayercombobox,uzcctrlcontextmenu,
        uzcfcolors,uzcimagesmanager,uzcgui2textstyles,usupportgui,uzcgui2dimstyles,
   {}
        uzcpalettes,zcchangeundocommand,uzgldrawcontext,uzglviewareaabstract,uzcguimanager,uzcinterfacedata,
@@ -1621,16 +1621,6 @@ begin
     UniqueInstanceBase.FIPCServer.StartServer;
   SetupFIPCServer;
 end;
-
-function testCheck(const Context:TObject):boolean;
-begin
-  result:=true;
-end;
-function test2Check(const Context:TObject):boolean;
-begin
-  result:=false;
-end;
-
 procedure TZCADMainWindow._onCreate(Sender: TObject);
 begin
   {
@@ -1676,9 +1666,8 @@ begin
 
 
   ToolBarsManager:=TToolBarsManager.create(self,StandartActions,sysvar.INTF.INTF_DefaultControlHeight^);
-  MenusManager:=TMenuManagerByTObject.create(self,StandartActions);
-  MenusManager.RegisterContextCheckFunc('test',@testCheck);
-  MenusManager.RegisterContextCheckFunc('test2',@test2Check);
+  MenusManager:=TGeneralMenuManager.create(self,StandartActions);
+  MenusManager.RegisterContextCheckFunc('True',@GMCCFTrue);
 
   ToolBarsManager.RegisterTBItemCreateFunc('Separator',ToolBarsManager.CreateDefaultSeparator);
   ToolBarsManager.RegisterTBItemCreateFunc('Action',TBActionCreateFunc);

@@ -1671,8 +1671,8 @@ begin
   RegisterGeneralContextCheckFunc('False',@GMCCFFalse);
   RegisterGeneralContextCheckFunc('DebugMode',@GMCCFDebugMode);
   RegisterGeneralContextCheckFunc('CtrlPressed',@GMCCFCtrlPressed);
-  RegisterGeneralContextCheckFunc('ShiftPressed',@GMCCFCtrlPressed);
-  RegisterGeneralContextCheckFunc('AltPressed',@GMCCFCtrlPressed);
+  RegisterGeneralContextCheckFunc('ShiftPressed',@GMCCFShiftPressed);
+  RegisterGeneralContextCheckFunc('AltPressed',@GMCCFAltPressed);
 
   ToolBarsManager.RegisterTBItemCreateFunc('Separator',ToolBarsManager.CreateDefaultSeparator);
   ToolBarsManager.RegisterTBItemCreateFunc('Action',TBActionCreateFunc);

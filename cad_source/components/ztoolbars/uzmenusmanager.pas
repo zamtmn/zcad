@@ -106,39 +106,6 @@ begin
   ActionsConfig.Free;}
 end;
 
-procedure TGMenusManager.DoIfOneNode(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-var
-  TBSubNode:TDomNode;
-  conditions,condition:string;
-  passed:boolean;
-begin
-  conditions:=getAttrValue(aNode,'Сonditions','');
-  passed:=false;
-  repeat
-    GetPart(condition,conditions,',');
-    condition:=readspace(condition);
-    if condition<>''  then begin
-      if condition[1]<>'~'  then begin
-        if GeneralContextChecker.ContainContext(condition) then
-          passed:=passed or GeneralContextChecker.CashedContextCheck(GeneralContextChecker.Cashe,condition,GeneralContextChecker.CurrentContext)
-        else
-          passed:=passed or CashedContextCheck(Cashe,condition,CurrentContext)
-      end else
-        if length(condition)>1  then begin
-          if GeneralContextChecker.ContainContext(condition) then
-            passed:=passed or (not GeneralContextChecker.CashedContextCheck(GeneralContextChecker.Cashe,copy(condition,2,length(condition)-1),GeneralContextChecker.CurrentContext))
-          else
-            passed:=passed or (not CashedContextCheck(Cashe,copy(condition,2,length(condition)-1),CurrentContext));
-        end;
-    end;
-  until (condition='')or(passed);
-  if passed then begin
-    TBSubNode:=aNode.FirstChild;
-    if assigned(TBSubNode) then
-      TMenuDefaults.TryRunMenuCreateFunc(fmf,TBSubNode.NodeName,TBSubNode,factionlist,RootMenuItem);
-  end;
-end;
-
 procedure TGMenusManager.GetPart(out part:String;var path:String;const separator:String);
 var
    i:Integer;
@@ -171,6 +138,39 @@ begin
   result := copy(expr, i, length(expr) - i + 1);
 end;
 
+procedure TGMenusManager.DoIfOneNode(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+var
+  TBSubNode:TDomNode;
+  conditions,condition:string;
+  passed:boolean;
+begin
+  conditions:=getAttrValue(aNode,'Сonditions','');
+  passed:=false;
+  repeat
+    GetPart(condition,conditions,',');
+    condition:=readspace(condition);
+    if condition<>''  then begin
+      if condition[1]<>'~'  then begin
+        if GeneralContextChecker.ContainContext(condition) then
+          passed:=passed or GeneralContextChecker.CashedContextCheck(GeneralContextChecker.Cashe,condition,GeneralContextChecker.CurrentContext)
+        else
+          passed:=passed or CashedContextCheck(Cashe,condition,CurrentContext)
+      end else
+        if length(condition)>1  then begin
+          condition:=copy(condition,2,length(condition)-1);
+          if GeneralContextChecker.ContainContext(condition) then
+            passed:=passed or (not GeneralContextChecker.CashedContextCheck(GeneralContextChecker.Cashe,condition,GeneralContextChecker.CurrentContext))
+          else
+            passed:=passed or (not CashedContextCheck(Cashe,condition,CurrentContext));
+        end;
+    end;
+  until (condition='')or(passed);
+  if passed then begin
+    TBSubNode:=aNode.FirstChild;
+    if assigned(TBSubNode) then
+      TMenuDefaults.TryRunMenuCreateFunc(fmf,TBSubNode.NodeName,TBSubNode,factionlist,RootMenuItem);
+  end;
+end;
 
 procedure TGMenusManager.DoIfAllNode(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
 var
@@ -184,11 +184,20 @@ begin
     GetPart(condition,conditions,',');
     condition:=readspace(condition);
     if condition<>''  then begin
-      if condition[1]<>'~'  then
-        passed:=passed and CashedContextCheck(Cashe,condition,CurrentContext)
+      if condition[1]<>'~' then begin
+        if GeneralContextChecker.ContainContext(condition) then
+          passed:=passed and GeneralContextChecker.CashedContextCheck(GeneralContextChecker.Cashe,condition,GeneralContextChecker.CurrentContext)
+        else
+          passed:=passed and CashedContextCheck(Cashe,condition,CurrentContext)
+      end
       else
-        if length(condition)>1  then
-          passed:=passed and (not CashedContextCheck(Cashe,copy(condition,2,length(condition)-1),CurrentContext));
+        if length(condition)>1  then begin
+          condition:=copy(condition,2,length(condition)-1);
+          if GeneralContextChecker.ContainContext(condition) then
+            passed:=passed and (not GeneralContextChecker.CashedContextCheck(GeneralContextChecker.Cashe,condition,GeneralContextChecker.CurrentContext))
+          else
+            passed:=passed and (not CashedContextCheck(Cashe,condition,CurrentContext));
+        end;
     end;
   until (condition='')or(not passed);
   if passed then begin
@@ -204,9 +213,9 @@ var
   TBNode,TBSubNode:TDomNode;
   menuname:string;
 begin
-  SetCurrentContext(ctx);
-  GeneralContextChecker.SetCurrentContext(Application);
   menuname:='';
+  result:=TPopupMenu(application.FindComponent(MenuNameModifier+aName));
+  if result<>nil then FreeAndNil(result);
   result:=TPopupMenu(application.FindComponent(MenuNameModifier+aName));
   if result=nil then begin
     TBNode:=MenuConfig.FindNode('MenusContent',false);
@@ -224,17 +233,20 @@ begin
           menuname:=getAttrValue(TBSubNode,'Name','');
       end;
     if assigned(TBSubNode) then begin
+      SetCurrentContext(ctx);
+      GeneralContextChecker.SetCurrentContext(Application);
       TMenuDefaults.RegisterMenuCreateFunc('IFONE',@DoIfOneNode);
       TMenuDefaults.RegisterMenuCreateFunc('IFALL',@DoIfAllNode);
       TMenuDefaults.TryRunMenuCreateFunc(fmainform,TBSubNode.NodeName,TBSubNode,factionlist,nil);
       TMenuDefaults.UnRegisterMenuCreateFunc('IFONE');
       TMenuDefaults.UnRegisterMenuCreateFunc('IFALL');
+      GeneralContextChecker.ReleaseCashe;
+      GeneralContextChecker.ReSetCurrentContext(Application);
+      ReleaseCashe;
+      ReSetCurrentContext(ctx);
+      result:=TPopupMenu(application.FindComponent(MenuNameModifier+aName));
     end;
   end;
-  GeneralContextChecker.ReleaseCashe;
-  GeneralContextChecker.ReSetCurrentContext(Application);
-  ReleaseCashe;
-  ReSetCurrentContext(ctx);
 end;
 
 procedure TGMenusManager.CheckMainMenu(node:TDomNode);

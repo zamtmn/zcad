@@ -215,7 +215,7 @@ var
 begin
   menuname:='';
   result:=TPopupMenu(application.FindComponent(MenuNameModifier+aName));
-  if result<>nil then FreeAndNil(result);
+  //if result<>nil then FreeAndNil(result);
   result:=TPopupMenu(application.FindComponent(MenuNameModifier+aName));
   if result=nil then begin
     TBNode:=MenuConfig.FindNode('MenusContent',false);
@@ -265,7 +265,11 @@ begin
       begin
         if TBSubNode.nodeName='CreateMenu' then begin
           TMenuDefaults.TryRunMenuCreateFunc(fmainform,TBSubNode.NodeName,TBSubNode,factionlist,nil);
-          exit;
+          //exit;
+        end;
+        if TBSubNode.nodeName='SetMainMenu' then begin
+          TMenuDefaults.TryRunMenuCreateFunc(fmainform,TBSubNode.NodeName,TBSubNode,factionlist,nil);
+          //exit;
         end;
         TBSubNode:=TBSubNode.NextSibling;
       end;

@@ -47,6 +47,7 @@ procedure RegisterGeneralContextCheckFunc(ContextId:TGeneralContextChecker.TCont
 var
   GeneralContextChecker:TGeneralContextChecker;
 implementation
+uses uzmenusmanager;
 procedure RegisterGeneralContextCheckFunc(ContextId:TGeneralContextChecker.TContextIdType;ContextCheckFunc:TGeneralContextChecker.TContextCheckFunc);
 begin
   if GeneralContextChecker=nil then GeneralContextChecker:=TGeneralContextChecker.Create;
@@ -93,7 +94,10 @@ begin
     while assigned(TBSubNode)do
     begin
       ppopupmenu:=tmenuitem(application.FindComponent(MenuNameModifier+uppercase(TBSubNode.NodeName)));
-
+      if ppopupmenu=nil then begin
+        ppopupmenu:=TMenuItem(MenusManager.GetMenu_tmp(TBSubNode.NodeName,nil));
+        //ppopupmenu:=tmenuitem(application.FindComponent(MenuNameModifier+uppercase(TBSubNode.NodeName)));
+      end;
       if ppopupmenu<>nil then
                                 begin
                                      createdmenu.items.Add(ppopupmenu);
@@ -107,7 +111,7 @@ end;
 
 class procedure TMenuDefaults.DefaultSetMenu(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
 begin
-  fmf.Menu:=TMainMenu(application.FindComponent(MenuNameModifier+uppercase(getAttrValue(aNode,'Name',''))));
+  fmf.Menu:=TMainMenu(TMenuItem(MenusManager.GetMenu_tmp(getAttrValue(aNode,'Name',''),nil)))//;{application.FindComponent(MenuNameModifier+uppercase(getAttrValue(aNode,'Name','')))});
 end;
 
 

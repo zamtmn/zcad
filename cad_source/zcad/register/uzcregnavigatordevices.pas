@@ -23,7 +23,7 @@ uses uzcfnavigatordevices,uzcfcommandline,uzbpaths,TypeDescriptors,uzctranslatio
      uzbtypes,varmandef,uzeconsts,uzeentdevice,uzcnavigatorsnodedesk,
      uzeentity,zcobjectinspector,uzcguimanager,uzcenitiesvariablesextender,uzbstrproc,
      Types,Controls,uzcdrawings,Varman,UUnitManager,uzcsysvars,uzcsysinfo,LazLogger,laz.VirtualTrees,
-     uzcstrconsts;
+     uzcstrconsts,uzcfnavigatordevicescxmenu,uzcmainwindow;
 resourcestring
   rsDevices='Devices';
   rsRisers='Risers';
@@ -155,9 +155,20 @@ begin
   //end else
   //  result:=basenode;
 end;
-
+function NDMCCFHaveSubNodes(const Context:TNavigatorDevicesContext):boolean;
+begin
+  if Context.pnode<>nil then begin
+    if Context.pnode^.ChildCount>0 then
+      result:=true
+    else
+      result:=false;
+  end else
+    result:=false;
+end;
 procedure ZCADFormSetupProc(Form:TControl);
 begin
+  NavigatorDevicesMenuManager:=TNavigatorDevicesMenuManager.Create(ZCADMainWindow,ZCADMainWindow.StandartActions);
+  NavigatorDevicesMenuManager.RegisterContextCheckFunc('HaveSubNodes',NDMCCFHaveSubNodes);
 end;
 initialization
   ZCADGUIManager.RegisterZCADFormInfo('NavigatorDevices',rsDevices,TNavigatorDevices,rect(0,100,200,600),ZCADFormSetupProc,nil,@NavigatorDevices,true);

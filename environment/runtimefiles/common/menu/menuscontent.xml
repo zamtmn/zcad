@@ -227,7 +227,9 @@
       <Action Name="ACN_INSERTTODRAWING"/>
     </PopUpMenu>
     <PopUpMenu Name="NAVIGATORNODECONTEXTMENU">
-      <Action Name="ACN_NAVSELECTSUBNODES"/>
+      <IFONE Сonditions="HaveSubNodes">
+        <Action Name="ACN_NAVSELECTSUBNODES"/>
+      </IFONE>
     </PopUpMenu>
     <PopUpMenu Name="OBJINSPVARCXMENU">
       <Action Name="ACN_COPYVARNAMETOCLIP"/>
@@ -330,6 +332,9 @@
       <Action Name="ACN_CANCEL"/>
     </PopUpMenu>
     <PopUpMenu Name="LASTCOMMANDSCXMENU">
+      <IFONE Сonditions="CtrlPressed,ShiftPressed">
+        <Action Name="ACN_PASTE"/>
+      </IFONE>
       <LastCommands/>
     </PopUpMenu>
     <PopUpMenu Name="FASTMENU">

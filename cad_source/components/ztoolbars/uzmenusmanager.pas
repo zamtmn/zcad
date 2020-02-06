@@ -11,13 +11,15 @@ uses
 
 const
   MenuNameModifier='MENU_';
+var
+  MenuConfig:TXMLConfig=nil;
 
 type
   generic TGMenusManager<T>=class(specialize TCMContextChecker<T>)
   private
     factionlist:TActionList;
     fmainform:TForm;
-    MenuConfig:TXMLConfig;
+
   public
     constructor Create(mainform:TForm;actlist:TActionList);
     destructor Destroy;override;
@@ -28,7 +30,7 @@ type
     procedure DoIfAllNode(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);virtual;
 
     procedure LoadMenus(filename:string);
-    function GetMenu_tmp(aName: string;ctx:T):TPopupMenu;
+    function GetMenu_tmp(aName: string;ctx:T;ForceReCreate:boolean=false):TPopupMenu;
     procedure CheckMainMenu(node:TDomNode);
   end;
   TGeneralMenuManager=specialize TGMenusManager<TObject>;
@@ -47,13 +49,9 @@ constructor TGMenusManager.Create(mainform:TForm;actlist:TActionList);
 begin
   fmainform:=mainform;
   factionlist:=actlist;
-
-  MenuConfig:=nil;
 end;
 destructor TGMenusManager.Destroy;
 begin
-  if assigned(MenuConfig) then
-    MenuConfig.Free;
 end;
 procedure TGMenusManager.LoadMenus(filename:string);
 var
@@ -208,14 +206,16 @@ begin
 end;
 
 
-function TGMenusManager.GetMenu_tmp(aName: string;ctx:T):TPopupMenu;
+function TGMenusManager.GetMenu_tmp(aName: string;ctx:T;ForceReCreate:boolean=false):TPopupMenu;
 var
   TBNode,TBSubNode:TDomNode;
   menuname:string;
 begin
   menuname:='';
   result:=TPopupMenu(application.FindComponent(MenuNameModifier+aName));
-  //if result<>nil then FreeAndNil(result);
+  if ForceReCreate then
+    if result<>nil then
+      FreeAndNil(result);
   result:=TPopupMenu(application.FindComponent(MenuNameModifier+aName));
   if result=nil then begin
     TBNode:=MenuConfig.FindNode('MenusContent',false);
@@ -284,15 +284,11 @@ begin
 end;}
 
 initialization
-  (*CC:=TTestContextChecker.create;
-  CC.RegisterContextCheckFunc('test',@testCheck);
-  Cashe:={TContextStateRegister.create}nil;
-  CC.CashedContextCheck(Cashe,'teSt',5);
-  CC.CashedContextCheck(Cashe,'tEst',5);
-  if assigned(Cashe) then
-    Cashe.free;*)
+  MenuConfig:=nil;
 
 finalization
-if assigned(MenusManager) then
-  MenusManager.Free;
+  if assigned(MenuConfig) then
+    FreeAndNil(MenuConfig);
+  if assigned(MenusManager) then
+    FreeAndNil(MenusManager);
 end.

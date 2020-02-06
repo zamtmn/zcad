@@ -12,7 +12,7 @@ uses
   varmandef,uzbstrproc,uzcmainwindow,uzctreenode,
   uzcnavigatorsnodedesk,Varman,uzcstrconsts,uztoolbarsmanager,uzmenusmanager,
   uzccommandsimpl,uzccommandsabstract,uzcutils,uzcenitiesvariablesextender,
-  GraphType,generics.collections,uzglviewareaabstract;
+  GraphType,generics.collections,uzglviewareaabstract,Menus,uzcfnavigatordevicescxmenu;
 
 resourcestring
   rsByPrefix='byPrefix';
@@ -414,27 +414,18 @@ var
   pnd:PTNodeData;
   pc:gdbvertex;
   bb:TBoundingBox;
-  PopupMenu:TmyPopupMenu;
+  PopupMenu:TPopupMenu;
 begin
   Handled:=true;
   pnode:=NavTree.GetNodeAt(MousePos.X,MousePos.Y);
   if pnode<>nil then
   begin
     NavTree.Selected[pnode]:=true;
-    PopupMenu:=TmyPopupMenu(MenusManager.GetMenu_tmp('NAVIGATORNODECONTEXTMENU',nil));
+    PopupMenu:=NavigatorDevicesMenuManager.GetMenu_tmp('NAVIGATORNODECONTEXTMENU',CreateNavigatorDevicesContext(NavTree,pnode),true);
     if assigned(PopupMenu) then begin
       CommandManager.ContextCommandParams:=NavTree;
       PopupMenu.PopUp;
     end;
-    {pnd:=NavTree.GetNodeData(pnode);
-    if pnd<>nil then
-    if pnd^.pent<>nil then
-    begin
-      pc:=Vertexmorph(pnd^.pent^.vp.BoundingBox.LBN,pnd^.pent^.vp.BoundingBox.RTF,0.5);
-      bb.LBN:=VertexAdd(pc,VertexMulOnSc(VertexSub(pc,pnd^.pent^.vp.BoundingBox.LBN),scale));
-      bb.RTF:=VertexAdd(pc,VertexMulOnSc(VertexSub(pc,pnd^.pent^.vp.BoundingBox.RTF),scale));
-      drawings.GetCurrentDWG.wa.ZoomToVolume(bb);
-    end;}
   end;
 end;
 procedure TNavigatorDevices.VTCompareNodes(Sender: TBaseVirtualTree; Node1,

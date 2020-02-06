@@ -116,7 +116,7 @@ const ls = $AAAA;
       GL_TRUE={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_TRUE;
       GL_FALSE={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_FALSE;
 
-      maxmybufer=200;
+      maxmybufer=1024;
 type
     tmyscrbuf = array [0..maxmybufer] of GLuint;
     {$IFNDEF DELPHI}

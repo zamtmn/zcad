@@ -19,10 +19,17 @@
 unit uzcsysinfo;
 {$INCLUDE def.inc}
 interface
-uses uzcsysparams,LCLProc,uzclog,uzbpaths,uzbtypesbase,Forms,uzbtypes{$IFNDEF DELPHI},{fileutil}LazUTF8{$ENDIF},sysutils;
+uses MacroDefIntf,uzmacros,uzcsysparams,LCLProc,uzclog,uzbpaths,uzbtypesbase,Forms,uzbtypes{$IFNDEF DELPHI},{fileutil}LazUTF8{$ENDIF},sysutils;
 {$INCLUDE revision.inc}
 const
   zcaduniqueinstanceid='zcad unique instance';
+type
+  TZCADPathsMacroMethods=class
+    class function MacroFuncZCADPath(const {%H-}Param: string; const Data: PtrInt;
+                                       var {%H-}Abort: boolean): string;
+    class function MacroFuncTEMPPath(const {%H-}Param: string; const Data: PtrInt;
+                                       var {%H-}Abort: boolean): string;
+  end;
 var
   SysDefaultFormatSettings:TFormatSettings;
   disabledefaultmodule:boolean;
@@ -217,7 +224,19 @@ begin
      //programlog.LogOutStr('end;{GetSysInfo}',lp_DecPos,LM_Necessarily);
      if disabledefaultmodule then programlog.disablemodule('DEFAULT');
 end;
+class function TZCADPathsMacroMethods.MacroFuncZCADPath(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
+begin
+  result:=ProgramPath;
+end;
+class function TZCADPathsMacroMethods.MacroFuncTEMPPath(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
+begin
+  result:=TempPath;
+end;
 initialization
 GetSysInfo;
+DefaultMacros.AddMacro(TTransferMacro.Create('ZCADPath','',
+                       'Path to ZCAD',TZCADPathsMacroMethods.MacroFuncZCADPath,[]));
+DefaultMacros.AddMacro(TTransferMacro.Create('TEMP','',
+                       'TEMP path',TZCADPathsMacroMethods.MacroFuncTEMPPath,[]));
 disabledefaultmodule:=false;
 end.

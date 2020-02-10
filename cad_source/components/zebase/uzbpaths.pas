@@ -19,7 +19,7 @@
 unit uzbpaths;
 {$INCLUDE def.inc}
 interface
-uses uzbtypes,Masks,LCLProc,uzbtypesbase,{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils;
+uses uzbtypes,Masks,LCLProc,uzbtypesbase,{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils,uzmacros;
 type
   TFromDirIterator=procedure (filename:String);
   TFromDirIteratorObj=procedure (filename:String) of object;
@@ -148,6 +148,7 @@ begin
 end;
 function ExpandPath(path:GDBString):GDBString;
 begin
+  DefaultMacros.SubstituteMacros(path);
      if path='' then
                     result:=programpath
 else if path[1]='*' then

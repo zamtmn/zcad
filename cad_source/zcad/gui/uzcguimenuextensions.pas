@@ -42,6 +42,7 @@ uses
        uzmenusdefaults,uzmenusmanager,uztoolbarsmanager,uzcfcommandline,uzctreenode,uzcctrlcontextmenu,
        uzcimagesmanager,
   {}
+       uzmacros,
        uzcguimanager;
 type
   PTDummyMyActionsArray=^TDummyMyActionsArray;
@@ -122,30 +123,6 @@ begin
   FromDirIterator(expandpath('*../errors/'),'*.dxf','',@bugfileiterator,nil);
   localpm.localpm:=nil;
   localpm.ImageIndex:=-1;
-end;
-
-
-class procedure ZMenuExt.ZMenuExtAction(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-var
-  CreatedMenuItem:TMenuItem;
-  _action:TContainedAction;
-  ActionName:string;
-begin
-  ActionName:=getAttrValue(aNode,'Name','');
-
-  _action:=actlist.ActionByName(ActionName);
-  if _action=nil then begin
-    _action:=TmyAction.Create(fmf);
-    _action.ActionList:=actlist;
-    _action.Name:=ActionName;
-  end;
-
-  CreatedMenuItem:=TMenuItem.Create(RootMenuItem);
-  CreatedMenuItem.Action:=_action;
-  if RootMenuItem is TMenuItem then
-    RootMenuItem.Add(CreatedMenuItem)
-  else
-    TPopUpMenu(RootMenuItem).Items.Add(CreatedMenuItem);
 end;
 
 class procedure ZMenuExt.ZMenuExtMainMenuItemReader(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
@@ -257,11 +234,40 @@ end;
 class procedure ZMenuExt.ZMenuExtCommand(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
 var
   CreatedMenuItem:TmyMenuItem;
-  captionstr,comstr:string;
+  captionstr,comstr,faceactionname:string;
+  _action:TContainedAction;
 begin
   captionstr:=getAttrValue(aNode,'Caption','');
   comstr:=getAttrValue(aNode,'Command','');
+  DefaultMacros.SubstituteMacros(comstr);
+  faceactionname:=getAttrValue(aNode,'FaceAction','');
+  _action:=actlist.ActionByName(faceactionname);
   CreatedMenuItem:=TmyMenuItem.Create(RootMenuItem,InterfaceTranslate('menucommand~'+comstr,captionstr),comstr);
+  if _action<>nil then
+    CreatedMenuItem.Action:=_action;
+  if RootMenuItem is TMenuItem then
+    RootMenuItem.Add(CreatedMenuItem)
+  else
+    TPopUpMenu(RootMenuItem).Items.Add(CreatedMenuItem);
+end;
+
+class procedure ZMenuExt.ZMenuExtAction(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+var
+  CreatedMenuItem:TMenuItem;
+  _action:TContainedAction;
+  ActionName:string;
+begin
+  ActionName:=getAttrValue(aNode,'Name','');
+
+  _action:=actlist.ActionByName(ActionName);
+  if _action=nil then begin
+    _action:=TmyAction.Create(fmf);
+    _action.ActionList:=actlist;
+    _action.Name:=ActionName;
+  end;
+
+  CreatedMenuItem:=TMenuItem.Create(RootMenuItem);
+  CreatedMenuItem.Action:=_action;
   if RootMenuItem is TMenuItem then
     RootMenuItem.Add(CreatedMenuItem)
   else

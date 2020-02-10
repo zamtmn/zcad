@@ -648,12 +648,17 @@ begin
 end;
 
 procedure TmyMenuItem.Click;
+var
+  _action:TBasicAction;
 begin
+     _action:=Action;
+     ACtion:=nil;
      if fsilent then
                     commandmanager.executecommandsilent(@Fcommand[1],drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam)
                 else
                     commandmanager.executecommand(Fcommand,drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
      inherited;
+     ACtion:=_action;
 end;
 procedure TmyMenuItem.SetCommand(_Caption,_Command:TTranslateString);
 begin

@@ -38,11 +38,6 @@ type
 var
   MenusManager:TGeneralMenuManager;
 
-  {TTestContextChecker=specialize TCMContextChecker<integer>;
-var
-  CC:TTestContextChecker;
-  Cashe:TTestContextChecker.TContextStateRegister;}
-
 implementation
 
 constructor TGMenusManager.Create(mainform:TForm;actlist:TActionList);
@@ -166,7 +161,10 @@ begin
   if passed then begin
     TBSubNode:=aNode.FirstChild;
     if assigned(TBSubNode) then
-      TMenuDefaults.TryRunMenuCreateFunc(fmf,TBSubNode.NodeName,TBSubNode,factionlist,RootMenuItem);
+      while assigned(TBSubNode)do begin
+        TMenuDefaults.TryRunMenuCreateFunc(fmf,TBSubNode.NodeName,TBSubNode,factionlist,RootMenuItem);
+        TBSubNode:=TBSubNode.NextSibling;
+      end;
   end;
 end;
 
@@ -201,7 +199,10 @@ begin
   if passed then begin
     TBSubNode:=aNode.FirstChild;
     if assigned(TBSubNode) then
-      TMenuDefaults.TryRunMenuCreateFunc(fmf,TBSubNode.NodeName,TBSubNode,factionlist,RootMenuItem);
+      while assigned(TBSubNode)do begin
+        TMenuDefaults.TryRunMenuCreateFunc(fmf,TBSubNode.NodeName,TBSubNode,factionlist,RootMenuItem);
+        TBSubNode:=TBSubNode.NextSibling;
+      end;
   end;
 end;
 

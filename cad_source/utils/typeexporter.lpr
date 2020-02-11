@@ -19,7 +19,7 @@
 program typeexporter;
 {$APPTYPE CONSOLE}
  uses
-  SysUtils,iolow,classes,uzbpaths;
+  SysUtils,iolow,classes{,uzbpaths};
 
 const IgnoreSHP=#13;
       BreakSHP=#10;
@@ -278,6 +278,23 @@ for i:=1 to paramcount do
          writeln;
       end
   end;
+end;
+function GetPartOfPath(out part:String;var path:String;const separator:String):String;
+var
+   i:Integer;
+begin
+           i:=pos(separator,path);
+           if i<>0 then
+                       begin
+                            part:=copy(path,1,i-1);
+                            path:=copy(path,i+1,length(path)-i);
+                       end
+                   else
+                       begin
+                            part:=path;
+                            path:='';
+                       end;
+     result:=part;
 end;
 begin
      writeln('ZCAD data types export utility');

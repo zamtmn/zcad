@@ -5,7 +5,7 @@ unit uzmenusmanager;
 interface
 
 uses
-  ugcontextchecker,uztoolbarsmanager,uzmenusdefaults,
+  ugcontextchecker,uztoolbarsmanager,uzmenusdefaults,uzmacros,
   ActnList,Laz2_XMLCfg,Laz2_DOM,Menus,Forms,
   sysutils,Generics.Collections;
 
@@ -16,6 +16,8 @@ var
 
 type
   generic TGMenusManager<T>=class(specialize TCMContextChecker<T>)
+  type
+    TMenusMacros=specialize TZMacros<T>;
   private
     factionlist:TActionList;
     fmainform:TForm;
@@ -26,12 +28,13 @@ type
 
     procedure GetPart(out part:String;var path:String;const separator:String);
     function readspace(expr:String):String;
-    procedure DoIfOneNode(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);virtual;
-    procedure DoIfAllNode(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);virtual;
+    procedure DoIfOneNode(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);virtual;
+    procedure DoIfAllNode(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);virtual;
 
-    procedure LoadMenus(filename:string);
-    function GetMenu_tmp(aName: string;ctx:T;ForceReCreate:boolean=false):TPopupMenu;
-    procedure CheckMainMenu(node:TDomNode);
+    procedure LoadMenus(filename:string;MMProcessor:TMenusMacros=nil);
+    function GetMacroProcessFuncAddr(MMProcessor:TMenusMacros):TMacroProcessFunc;
+    function GetMenu_tmp(aName: string;ctx:T;ForceReCreate:boolean=false;MMProcessor:TMenusMacros=nil):TPopupMenu;
+    procedure CheckMainMenu(node:TDomNode;MMProcessor:TMenusMacros=nil);
   end;
   TGeneralMenuManager=specialize TGMenusManager<TObject>;
 
@@ -48,7 +51,7 @@ end;
 destructor TGMenusManager.Destroy;
 begin
 end;
-procedure TGMenusManager.LoadMenus(filename:string);
+procedure TGMenusManager.LoadMenus(filename:string;MMProcessor:TMenusMacros=nil);
 var
   ActionsConfig:TXMLConfig;
   TBNode,TBSubNode:TDomNode;
@@ -131,7 +134,7 @@ begin
   result := copy(expr, i, length(expr) - i + 1);
 end;
 
-procedure TGMenusManager.DoIfOneNode(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+procedure TGMenusManager.DoIfOneNode(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
 var
   TBSubNode:TDomNode;
   conditions,condition:string;
@@ -162,13 +165,13 @@ begin
     TBSubNode:=aNode.FirstChild;
     if assigned(TBSubNode) then
       while assigned(TBSubNode)do begin
-        TMenuDefaults.TryRunMenuCreateFunc(fmf,TBSubNode.NodeName,TBSubNode,factionlist,RootMenuItem);
+        TMenuDefaults.TryRunMenuCreateFunc(fmf,TBSubNode.NodeName,TBSubNode,factionlist,RootMenuItem,MPF);
         TBSubNode:=TBSubNode.NextSibling;
       end;
   end;
 end;
 
-procedure TGMenusManager.DoIfAllNode(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+procedure TGMenusManager.DoIfAllNode(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
 var
   TBSubNode:TDomNode;
   conditions,condition:string;
@@ -200,17 +203,25 @@ begin
     TBSubNode:=aNode.FirstChild;
     if assigned(TBSubNode) then
       while assigned(TBSubNode)do begin
-        TMenuDefaults.TryRunMenuCreateFunc(fmf,TBSubNode.NodeName,TBSubNode,factionlist,RootMenuItem);
+        TMenuDefaults.TryRunMenuCreateFunc(fmf,TBSubNode.NodeName,TBSubNode,factionlist,RootMenuItem,MPF);
         TBSubNode:=TBSubNode.NextSibling;
       end;
   end;
 end;
 
+function TGMenusManager.GetMacroProcessFuncAddr(MMProcessor:TMenusMacros):TMacroProcessFunc;
+begin
+  if assigned(MMProcessor)then
+    result:=@MMProcessor.SubstituteMacrosWithCurrentContext
+  else
+    result:=nil;
+end;
 
-function TGMenusManager.GetMenu_tmp(aName: string;ctx:T;ForceReCreate:boolean=false):TPopupMenu;
+function TGMenusManager.GetMenu_tmp(aName: string;ctx:T;ForceReCreate:boolean=false;MMProcessor:TMenusMacros=nil):TPopupMenu;
 var
   TBNode,TBSubNode:TDomNode;
   menuname:string;
+  MPF:TMacroProcessFunc;
 begin
   menuname:='';
   result:=TPopupMenu(application.FindComponent(MenuNameModifier+aName));
@@ -234,26 +245,32 @@ begin
           menuname:=getAttrValue(TBSubNode,'Name','');
       end;
     if assigned(TBSubNode) then begin
+      MPF:=GetMacroProcessFuncAddr(MMProcessor);
+      if assigned(MMProcessor)then
+        MMProcessor.SetCurrentContext(ctx);
       SetCurrentContext(ctx);
       GeneralContextChecker.SetCurrentContext(Application);
       TMenuDefaults.RegisterMenuCreateFunc('IFONE',@DoIfOneNode);
       TMenuDefaults.RegisterMenuCreateFunc('IFALL',@DoIfAllNode);
-      TMenuDefaults.TryRunMenuCreateFunc(fmainform,TBSubNode.NodeName,TBSubNode,factionlist,nil);
+      TMenuDefaults.TryRunMenuCreateFunc(fmainform,TBSubNode.NodeName,TBSubNode,factionlist,nil,MPF);
       TMenuDefaults.UnRegisterMenuCreateFunc('IFONE');
       TMenuDefaults.UnRegisterMenuCreateFunc('IFALL');
       GeneralContextChecker.ReleaseCashe;
       GeneralContextChecker.ReSetCurrentContext(Application);
       ReleaseCashe;
+      if assigned(MMProcessor)then
+        MMProcessor.ReSetCurrentContext(ctx);
       ReSetCurrentContext(ctx);
       result:=TPopupMenu(application.FindComponent(MenuNameModifier+aName));
     end;
   end;
 end;
 
-procedure TGMenusManager.CheckMainMenu(node:TDomNode);
+procedure TGMenusManager.CheckMainMenu(node:TDomNode;MMProcessor:TMenusMacros=nil);
 var
   TBSubNode:TDomNode;
   menuname:string;
+  MPF:TMacroProcessFunc;
 begin
     if assigned(node) then begin
       TBSubNode:=node.FirstChild;
@@ -265,11 +282,11 @@ begin
       while assigned(TBSubNode)do
       begin
         if TBSubNode.nodeName='CreateMenu' then begin
-          TMenuDefaults.TryRunMenuCreateFunc(fmainform,TBSubNode.NodeName,TBSubNode,factionlist,nil);
+          TMenuDefaults.TryRunMenuCreateFunc(fmainform,TBSubNode.NodeName,TBSubNode,factionlist,nil,mpf);
           //exit;
         end;
         if TBSubNode.nodeName='SetMainMenu' then begin
-          TMenuDefaults.TryRunMenuCreateFunc(fmainform,TBSubNode.NodeName,TBSubNode,factionlist,nil);
+          TMenuDefaults.TryRunMenuCreateFunc(fmainform,TBSubNode.NodeName,TBSubNode,factionlist,nil,mpf);
           //exit;
         end;
         TBSubNode:=TBSubNode.NextSibling;

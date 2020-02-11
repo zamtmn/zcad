@@ -5,7 +5,7 @@ unit uzmenusdefaults;
 interface
 
 uses
-  ugcontextchecker,uztoolbarsmanager,
+  ugcontextchecker,uztoolbarsmanager,uzmacros,
   ActnList,Laz2_XMLCfg,Laz2_DOM,Menus,Forms,
   sysutils,Generics.Collections;
 
@@ -30,16 +30,16 @@ type
 
   TGeneralContextChecker=specialize TCMContextChecker<TObject>;
 
-  TMenuCreateFunc=procedure (fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem) of object;
+  TMenuCreateFunc=procedure (fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc) of object;
   TMenuCreateFuncRegister=specialize TDictionary <string,TMenuCreateFunc>;
   TMenuDefaults=class
     class var MenuCreateFuncRegister:TMenuCreateFuncRegister;
-    class procedure CreateDefaultMenu(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-    class procedure CreateDefaultMenuSeparator(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-    class procedure DefaultSetMenu(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-    class procedure DefaultMainMenuItemReader(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+    class procedure CreateDefaultMenu(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
+    class procedure CreateDefaultMenuSeparator(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
+    class procedure DefaultSetMenu(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
+    class procedure DefaultMainMenuItemReader(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
 
-    class procedure TryRunMenuCreateFunc(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+    class procedure TryRunMenuCreateFunc(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
     class procedure RegisterMenuCreateFunc(aNodeName:string;MenuCreateFunc:TMenuCreateFunc);
     class procedure UnRegisterMenuCreateFunc(aNodeName:string);
   end;
@@ -77,7 +77,7 @@ begin
   result:=false;
 end;
 
-class procedure TMenuDefaults.CreateDefaultMenu(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+class procedure TMenuDefaults.CreateDefaultMenu(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
 var
   ppopupmenu:TMenuItem;
   ts:String;
@@ -109,13 +109,13 @@ begin
     end;
 end;
 
-class procedure TMenuDefaults.DefaultSetMenu(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+class procedure TMenuDefaults.DefaultSetMenu(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
 begin
   fmf.Menu:=TMainMenu(TMenuItem(MenusManager.GetMenu_tmp(getAttrValue(aNode,'Name',''),nil)))//;{application.FindComponent(MenuNameModifier+uppercase(getAttrValue(aNode,'Name','')))});
 end;
 
 
-class procedure TMenuDefaults.CreateDefaultMenuSeparator(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+class procedure TMenuDefaults.CreateDefaultMenuSeparator(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
 var
   CreatedMenuItem:TMenuItem;
 begin
@@ -129,14 +129,14 @@ begin
     end;
 end;
 
-class procedure TMenuDefaults.TryRunMenuCreateFunc(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+class procedure TMenuDefaults.TryRunMenuCreateFunc(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
 var
   mcf:TMenuCreateFunc;
   msg:string;
 begin
 if assigned(MenuCreateFuncRegister) then
   if MenuCreateFuncRegister.TryGetValue(uppercase(aName),mcf)then
-    mcf(fmf,aName,aNode,actlist,RootMenuItem)
+    mcf(fmf,aName,aNode,actlist,RootMenuItem,mpf)
   else begin
     msg:=format('"%s" not found in MenuCreateFuncRegister',[aName]);
     Application.MessageBox(@msg[1],'Error');
@@ -156,7 +156,7 @@ begin
     TMenuDefaults.MenuCreateFuncRegister.Remove(uppercase(aNodeName));
 end;
 
-class procedure TMenuDefaults.DefaultMainMenuItemReader(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+class procedure TMenuDefaults.DefaultMainMenuItemReader(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
  var
   CreatedMenuItem:TMenuItem;
   line:string;
@@ -174,7 +174,7 @@ begin
     if assigned(TBSubNode) then
       while assigned(TBSubNode)do
       begin
-        TryRunMenuCreateFunc(fmf,TBSubNode.NodeName,TBSubNode,actlist,CreatedMenuItem);
+        TryRunMenuCreateFunc(fmf,TBSubNode.NodeName,TBSubNode,actlist,CreatedMenuItem,mpf);
         TBSubNode:=TBSubNode.NextSibling;
       end;
     if assigned(RootMenuItem) then

@@ -421,7 +421,7 @@ begin
   if pnode<>nil then
   begin
     NavTree.Selected[pnode]:=true;
-    PopupMenu:=NavigatorDevicesMenuManager.GetMenu_tmp('NAVIGATORNODECONTEXTMENU',CreateNavigatorDevicesContext(NavTree,pnode),true);
+    PopupMenu:=NavigatorDevicesMenuManager.GetMenu_tmp('NAVIGATORNODECONTEXTMENU',CreateNavigatorDevicesContext(NavTree,pnode),true,NavigatorDevicesMacros);
     if assigned(PopupMenu) then begin
       CommandManager.ContextCommandParams:=NavTree;
       PopupMenu.PopUp;

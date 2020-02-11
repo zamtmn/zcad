@@ -48,7 +48,8 @@ uses
        uzcfcolors,uzcimagesmanager,uzcgui2textstyles,usupportgui,uzcgui2dimstyles,
   {}
        uzcpalettes,zcchangeundocommand,uzgldrawcontext,uzglviewareaabstract,uzcguimanager,uzcinterfacedata,
-       uzcenitiesvariablesextender,uzglviewareageneral,UniqueInstanceRaw;
+       uzcenitiesvariablesextender,uzglviewareageneral,UniqueInstanceRaw,
+      uzmacros;
   {}
 resourcestring
   rsClosed='Closed';
@@ -1302,6 +1303,7 @@ var
   i:integer;
   proxy:TPopUpMenyProxyAction;
   tbutton:TZToolButton;
+  MPF:TMacroProcessFunc;
 begin
   ActionIndex:=getAttrValue(aNode,'Index',0);
   tbutton:=TZToolButton.Create(tb);
@@ -1321,7 +1323,7 @@ begin
     if assigned(SubNode) then
       while assigned(SubNode)do
       begin
-        TMenuDefaults.TryRunMenuCreateFunc(self,SubNode.NodeName,SubNode,StandartActions,tmenuitem(tbutton.PopupMenu));
+        TMenuDefaults.TryRunMenuCreateFunc(self,SubNode.NodeName,SubNode,StandartActions,tmenuitem(tbutton.PopupMenu),mpf);
         SubNode:=SubNode.NextSibling;
       end;
     if (ActionIndex>=0)and(ActionIndex<tbutton.PopupMenu.Items.Count) then

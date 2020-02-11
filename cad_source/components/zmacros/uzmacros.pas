@@ -9,30 +9,59 @@ uses
   MacroIntf,TransferMacros,MacroDefIntf;//From lazarus ide
 
 type
+  TMacroProcessFunc=function (var s: string): boolean of object;
   TDefaultMacroMethods=class
     function MacroFuncTargetCPU(const {%H-}Param: string; const Data: PtrInt;
                                   var {%H-}Abort: boolean): string;
     function MacroFuncTargetOS (const {%H-}Param: string; const Data: PtrInt;
                                   var {%H-}Abort: boolean): string;
   end;
-  TZMacros = class
+  generic TZMacros<T> = class
   public
+    CurrentContext:T;
+    procedure setMarkUnhandled(m:boolean);
     function SubstituteMacros(var s: string): boolean;virtual;
+    function SubstituteMacrosWithCurrentContext(var s: string): boolean;virtual;
     procedure AddMacro(NewMacro:TTransferMacro);virtual;
+
+    procedure SetCurrentContext(ctx:T);
+    procedure ReSetCurrentContext(ctx:T);
+
   end;
+  TDefaultMacros=specialize TZMacros<tobject>;
 
 
 
 var
   DMM:TDefaultMacroMethods;
-  DefaultMacros:TZMacros = nil;
+  DefaultMacros:TDefaultMacros = nil;
   MainMacroList: TTransferMacroList = nil;
 implementation
+
+generic procedure TZMacros<T>.SetCurrentContext(ctx:T);
+begin
+  CurrentContext:=ctx;
+end;
+generic procedure TZMacros<T>.ReSetCurrentContext(ctx:T);
+begin
+  CurrentContext:=default(T);
+end;
+
+procedure TZMacros.setMarkUnhandled(m:boolean);
+begin
+  MainMacroList.MarkUnhandledMacros:=m;
+end;
 
 function TZMacros.SubstituteMacros(var s: string): boolean;
 begin
   Result:=MainMacroList.SubstituteStr(s);
 end;
+
+function TZMacros.SubstituteMacrosWithCurrentContext(var s: string): boolean;
+begin
+  //Result:=MainMacroList.SubstituteStr(s,PtrInt(@CurrentContext));
+end;
+
 procedure TZMacros.AddMacro(NewMacro:TTransferMacro);
 begin
   MainMacroList.Add(NewMacro);
@@ -50,7 +79,7 @@ begin
 end;
 
 initialization
-  DefaultMacros:=TZMacros.Create;
+  DefaultMacros:=TDefaultMacros.Create;
   MainMacroList:=TTransferMacroList.Create;
   DMM:=TDefaultMacroMethods.Create;
   DefaultMacros.AddMacro(TTransferMacro.Create('CPU','',

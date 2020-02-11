@@ -23,13 +23,19 @@ uses uzcfnavigatordevices,uzcfcommandline,uzbpaths,TypeDescriptors,uzctranslatio
      uzbtypes,varmandef,uzeconsts,uzeentdevice,uzcnavigatorsnodedesk,
      uzeentity,zcobjectinspector,uzcguimanager,uzcenitiesvariablesextender,uzbstrproc,
      Types,Controls,uzcdrawings,Varman,UUnitManager,uzcsysvars,uzcsysinfo,LazLogger,laz.VirtualTrees,
-     uzcstrconsts,uzcfnavigatordevicescxmenu,uzcmainwindow;
+     uzcstrconsts,uzcfnavigatordevicescxmenu,uzcmainwindow,MacroDefIntf,sysutils;
 resourcestring
   rsDevices='Devices';
   rsRisers='Risers';
   rsCables='Cables';
 
 type
+
+  TNavigatorDevicesMacroMethods=class
+    function MacroFuncEntInNodeAddr(const {%H-}Param: string; const Data: PtrInt;
+                                      var {%H-}Abort: boolean): string;
+  end;
+
   TNavigatorRisers=class(TNavigatorDevices)
     procedure NavGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;
                          TextType: TVSTTextType; var CellText: String);override;
@@ -49,6 +55,8 @@ type
 var
   NavigatorRisers:TNavigatorRisers;
   NavigatorCables:TNavigatorCables;
+
+  NavigatorDevicesMacroMethods:TNavigatorDevicesMacroMethods;
 implementation
 function TNavigatorCables.EntsFilter(pent:pGDBObjEntity):Boolean;
 begin
@@ -165,10 +173,44 @@ begin
   end else
     result:=false;
 end;
-procedure ZCADFormSetupProc(Form:TControl);
+function NDMCCFNodeHaveEntity(const Context:TNavigatorDevicesContext):boolean;
+var
+  pnd:PTNodeData;
+begin
+  if (Context.pnode<>nil)and(Context.tree<>nil) then begin
+    pnd:=Context.tree.GetNodeData(Context.pnode);
+    if pnd<>Nil then
+      if pnd^.pent<>nil  then
+        exit(true);
+  end;
+  result:=false;
+end;
+
+function TNavigatorDevicesMacroMethods.MacroFuncEntInNodeAddr(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
+var
+  pnd:PTNodeData;
+begin
+  if Data<>0 then begin
+    if (PTNavigatorDevicesContext(data).pnode<>nil)and(PTNavigatorDevicesContext(data).tree<>nil) then begin
+      pnd:=PTNavigatorDevicesContext(data).tree.GetNodeData(PTNavigatorDevicesContext(data).pnode);
+      if pnd<>Nil then
+        if pnd^.pent<>nil  then
+          exit('$'+inttohex(ptrint(pnd^.pent),8));
+    end;
+  end;
+    Abort:=true;
+end;
+
+ procedure ZCADFormSetupProc(Form:TControl);
 begin
   NavigatorDevicesMenuManager:=TNavigatorDevicesMenuManager.Create(ZCADMainWindow,ZCADMainWindow.StandartActions);
   NavigatorDevicesMenuManager.RegisterContextCheckFunc('HaveSubNodes',NDMCCFHaveSubNodes);
+  NavigatorDevicesMenuManager.RegisterContextCheckFunc('HaveEntity',NDMCCFNodeHaveEntity);
+
+  NavigatorDevicesMacros:=TNavigatorDevicesMacros.Create;
+  NavigatorDevicesMacros.AddMacro(TTransferMacro.Create('EntInNodeAddr','',
+                                  'Addres of entity  in node',NavigatorDevicesMacroMethods.MacroFuncEntInNodeAddr,[]));
+
 end;
 initialization
   ZCADGUIManager.RegisterZCADFormInfo('NavigatorDevices',rsDevices,TNavigatorDevices,rect(0,100,200,600),ZCADFormSetupProc,nil,@NavigatorDevices,true);

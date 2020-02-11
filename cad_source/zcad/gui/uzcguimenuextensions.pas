@@ -52,17 +52,17 @@ type
   TCommandHistory=Array [0..9] of TmyAction;
 
   ZMenuExt = class
-    class procedure ZMenuExtMainMenuItemReader(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-    class procedure ZMenuExtPopUpMenuReader(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-    class procedure ZMenuExtAction(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-    class procedure ZMenuExtFileHistory(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-    class procedure ZMenuExtCommandsHistory(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-    class procedure ZMenuExtCommand(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-    class procedure ZMenuExtToolBars(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-    class procedure ZMenuExtToolPalettes(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-    class procedure ZMenuExtDrawings(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-    class procedure ZMenuExtSampleFiles(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
-    class procedure ZMenuExtDebugFiles(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+    class procedure ZMenuExtMainMenuItemReader(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
+    class procedure ZMenuExtPopUpMenuReader(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
+    class procedure ZMenuExtAction(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
+    class procedure ZMenuExtFileHistory(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
+    class procedure ZMenuExtCommandsHistory(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
+    class procedure ZMenuExtCommand(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
+    class procedure ZMenuExtToolBars(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
+    class procedure ZMenuExtToolPalettes(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
+    class procedure ZMenuExtDrawings(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
+    class procedure ZMenuExtSampleFiles(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
+    class procedure ZMenuExtDebugFiles(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
 
     class procedure TTBRegisterInAPPFunc(fmf:TForm;actlist:TActionList;aTBNode: TDomNode;aName,aType: string;Data:Pointer);
     class procedure TTPRegisterInAPPFunc(fmf:TForm;actlist:TActionList;aTBNode: TDomNode;aName,aType: string;Data:Pointer);
@@ -106,7 +106,7 @@ begin
 end;
 
 
-class procedure ZMenuExt.ZMenuExtSampleFiles(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+class procedure ZMenuExt.ZMenuExtSampleFiles(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
 begin
   localpm.localpm:=RootMenuItem;
   localpm.ImageIndex:=ImagesManager.GetImageIndex('Dxf');
@@ -116,7 +116,7 @@ begin
   localpm.ImageIndex:=-1;
 end;
 
-class procedure ZMenuExt.ZMenuExtDebugFiles(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+class procedure ZMenuExt.ZMenuExtDebugFiles(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
 begin
   localpm.localpm:=RootMenuItem;
   localpm.ImageIndex:=ImagesManager.GetImageIndex('Dxf');
@@ -125,7 +125,7 @@ begin
   localpm.ImageIndex:=-1;
 end;
 
-class procedure ZMenuExt.ZMenuExtMainMenuItemReader(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+class procedure ZMenuExt.ZMenuExtMainMenuItemReader(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
  var
   CreatedMenuItem:TMenuItem;
   line,localizedcaption:string;
@@ -150,7 +150,7 @@ begin
     if assigned(TBSubNode) then
       while assigned(TBSubNode)do
       begin
-        TMenuDefaults.TryRunMenuCreateFunc(fmf,TBSubNode.NodeName,TBSubNode,actlist,CreatedMenuItem);
+        TMenuDefaults.TryRunMenuCreateFunc(fmf,TBSubNode.NodeName,TBSubNode,actlist,CreatedMenuItem,mpf);
         TBSubNode:=TBSubNode.NextSibling;
       end;
     if (assigned(RootMenuItem))and newitem then
@@ -163,7 +163,7 @@ begin
 end;
 
 
-class procedure ZMenuExt.ZMenuExtPopUpMenuReader(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+class procedure ZMenuExt.ZMenuExtPopUpMenuReader(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
  var
   CreatedMenuItem:TPopupMenu;
   line:string;
@@ -179,13 +179,13 @@ begin
     if assigned(TBSubNode) then
       while assigned(TBSubNode)do
       begin
-        TMenuDefaults.TryRunMenuCreateFunc(fmf,TBSubNode.NodeName,TBSubNode,actlist,tmenuitem(CreatedMenuItem));
+        TMenuDefaults.TryRunMenuCreateFunc(fmf,TBSubNode.NodeName,TBSubNode,actlist,tmenuitem(CreatedMenuItem),mpf);
         TBSubNode:=TBSubNode.NextSibling;
       end;
     cxmenumgr.RegisterLCLMenu(CreatedMenuItem);
 end;
 
-class procedure ZMenuExt.ZMenuExtFileHistory(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+class procedure ZMenuExt.ZMenuExtFileHistory(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
 var
  i:integer;
  pstr:pstring;
@@ -215,7 +215,7 @@ begin
   end;
 end;
 
-class procedure ZMenuExt.ZMenuExtCommandsHistory(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+class procedure ZMenuExt.ZMenuExtCommandsHistory(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
 var
  i:integer;
  CreatedMenuItem:TMenuItem;
@@ -231,7 +231,7 @@ begin
   end;
 end;
 
-class procedure ZMenuExt.ZMenuExtCommand(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+class procedure ZMenuExt.ZMenuExtCommand(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
 var
   CreatedMenuItem:TmyMenuItem;
   captionstr,comstr,faceactionname:string;
@@ -239,9 +239,13 @@ var
 begin
   captionstr:=getAttrValue(aNode,'Caption','');
   comstr:=getAttrValue(aNode,'Command','');
-  DefaultMacros.SubstituteMacros(comstr);
+  if assigned(mpf)then
+    mpf(comstr);
   faceactionname:=getAttrValue(aNode,'FaceAction','');
-  _action:=actlist.ActionByName(faceactionname);
+  if faceactionname<>'' then
+    _action:=actlist.ActionByName(faceactionname)
+  else
+    _action:=nil;
   CreatedMenuItem:=TmyMenuItem.Create(RootMenuItem,InterfaceTranslate('menucommand~'+comstr,captionstr),comstr);
   if _action<>nil then
     CreatedMenuItem.Action:=_action;
@@ -251,7 +255,7 @@ begin
     TPopUpMenu(RootMenuItem).Items.Add(CreatedMenuItem);
 end;
 
-class procedure ZMenuExt.ZMenuExtAction(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+class procedure ZMenuExt.ZMenuExtAction(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
 var
   CreatedMenuItem:TMenuItem;
   _action:TContainedAction;
@@ -274,18 +278,18 @@ begin
     TPopUpMenu(RootMenuItem).Items.Add(CreatedMenuItem);
 end;
 
-class procedure ZMenuExt.ZMenuExtToolBars(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+class procedure ZMenuExt.ZMenuExtToolBars(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
 begin
   ToolBarsManager.EnumerateToolBars(TTBRegisterInAPPFunc,RootMenuItem);
 end;
 
-class procedure ZMenuExt.ZMenuExtToolPalettes(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+class procedure ZMenuExt.ZMenuExtToolPalettes(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
 begin
   ToolBarsManager.EnumerateToolPalettes(TTPRegisterInAPPFunc,RootMenuItem);
 end;
 
 
-class procedure ZMenuExt.ZMenuExtDrawings(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+class procedure ZMenuExt.ZMenuExtDrawings(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
 var
   i:integer;
   CreatedMenuItem:TMenuItem;

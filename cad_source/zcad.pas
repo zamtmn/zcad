@@ -199,7 +199,7 @@ begin
   FontManager.EnumerateFontFiles;
   uzcdrawings.startup('*rtl/dwg/DrawingVars.pas','');
 
-  Application.Scaled:=True;
+  Application.Scaled:=False;
   Application.MainFormOnTaskBar:=true;
   //создание окна программы
   Application.CreateForm(TZCADMainWindow,ZCADMainWindow);

@@ -49,7 +49,7 @@ uses
   {}
        uzcpalettes,zcchangeundocommand,uzgldrawcontext,uzglviewareaabstract,uzcguimanager,uzcinterfacedata,
        uzcenitiesvariablesextender,uzglviewareageneral,UniqueInstanceRaw,
-      uzmacros;
+      uzmacros,uzcviewareacxmenu;
   {}
 resourcestring
   rsClosed='Closed';
@@ -1235,6 +1235,7 @@ begin
   ZCADMainWindow.HScrollBar.Enabled:=false;
   ZCADMainWindow.HScrollBar.Parent:=ZCADMainWindow.DHPanel;
 
+  InitializeViewAreaCXMenu(ZCADMainWindow,ZCADMainWindow.StandartActions);
   ZCADMainWindow.PageControl:=TmyPageControl.Create(ZCADMainWindow.MainPanel);
   ZCADMainWindow.PageControl.Constraints.MinHeight:=32;
   ZCADMainWindow.PageControl.Parent:=ZCADMainWindow.MainPanel;
@@ -2400,10 +2401,7 @@ var
   menu:TPopupMenu;
 begin
   menu:=nil;
-  if drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount>0 then
-    menu:=MenusManager.GetMenu_tmp('SELECTEDENTSCXMENU',nil)
-  else
-    menu:=MenusManager.GetMenu_tmp('NONSELECTEDENTSCXMENU',nil);
+  menu:=ViewAreaContextMenuManager.GetMenu_tmp('VIEWAREACXMENU',CreateViewAreaContext(drawings.GetCurrentDWG.wa),true,ViewAreaMacros);
   if menu<>nil then
   begin
     menu.PopUp;

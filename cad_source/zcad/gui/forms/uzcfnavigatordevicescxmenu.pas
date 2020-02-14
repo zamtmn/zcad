@@ -6,7 +6,7 @@ interface
 
 uses
   sysutils,
-  uzmenusmanager,laz.VirtualTrees,uzmacros,TransferMacros,MacroDefIntf;
+  uzmenusmanager,laz.VirtualTrees,uzmacros,TransferMacros,MacroDefIntf,Forms,ActnList;
 
 type
   PTNavigatorDevicesContext=^TNavigatorDevicesContext;
@@ -28,6 +28,8 @@ var
 
 
 function CreateNavigatorDevicesContext(const tree:TVirtualStringTree;const pnode:PVirtualNode):TNavigatorDevicesContext;
+procedure InitializeNavigatorDevicesCXMenu(mainform:TForm;actlist:TActionList);
+procedure FinalizeNavigatorDevicesCXMenu;
 implementation
 function TNavigatorDevicesMacros.SubstituteMacrosWithCurrentContext(var s: string): boolean;
 begin
@@ -50,12 +52,25 @@ begin
   result.pnode:=pnode;
 end;
 
+procedure InitializeNavigatorDevicesCXMenu(mainform:TForm;actlist:TActionList);
+begin
+  if not assigned(NavigatorDevicesMenuManager) then
+    NavigatorDevicesMenuManager:=TNavigatorDevicesMenuManager.Create(mainform,actlist);
+  if not assigned(NavigatorDevicesMacros) then
+    NavigatorDevicesMacros:=TNavigatorDevicesMacros.Create;
+end;
+
+procedure FinalizeNavigatorDevicesCXMenu;
+begin
+  if assigned(NavigatorDevicesMenuManager) then
+    FreeAndNil(NavigatorDevicesMenuManager);
+  if assigned(NavigatorDevicesMacros) then
+    FreeAndNil(NavigatorDevicesMacros);
+  if assigned(NavigatorDevicesMacroList) then
+    FreeAndNil(NavigatorDevicesMacroList);
+end;
+
 finalization
-if assigned(NavigatorDevicesMenuManager) then
-  FreeAndNil(NavigatorDevicesMenuManager);
-if assigned(NavigatorDevicesMacros) then
-  FreeAndNil(NavigatorDevicesMacros);
-if assigned(NavigatorDevicesMacroList) then
-  FreeAndNil(NavigatorDevicesMacroList);
+  FinalizeNavigatorDevicesCXMenu;
 end.
 

@@ -195,7 +195,7 @@ begin
       pnd:=PTNavigatorDevicesContext(data).tree.GetNodeData(PTNavigatorDevicesContext(data).pnode);
       if pnd<>Nil then
         if pnd^.pent<>nil  then
-          exit('$'+inttohex(ptrint(pnd^.pent),8));
+          exit('$'+inttohex(ptruint(pnd^.pent),8));
     end;
   end;
     Abort:=true;
@@ -203,11 +203,11 @@ end;
 
  procedure ZCADFormSetupProc(Form:TControl);
 begin
-  NavigatorDevicesMenuManager:=TNavigatorDevicesMenuManager.Create(ZCADMainWindow,ZCADMainWindow.StandartActions);
+  InitializeNavigatorDevicesCXMenu(ZCADMainWindow,ZCADMainWindow.StandartActions);
+
   NavigatorDevicesMenuManager.RegisterContextCheckFunc('HaveSubNodes',NDMCCFHaveSubNodes);
   NavigatorDevicesMenuManager.RegisterContextCheckFunc('HaveEntity',NDMCCFNodeHaveEntity);
 
-  NavigatorDevicesMacros:=TNavigatorDevicesMacros.Create;
   NavigatorDevicesMacros.AddMacro(TTransferMacro.Create('EntInNodeAddr','',
                                   'Addres of entity  in node',NavigatorDevicesMacroMethods.MacroFuncEntInNodeAddr,[]));
 

@@ -49,10 +49,18 @@ begin
 end;
 
 procedure TGCContextChecker.RegisterContextCheckFunc(ContextId:TGContextIdType;ContextCheckFunc:TContextCheckFunc);
+var
+  StandartizedContextId:TContextIdType;
+  OldContextCheckFunc:TContextCheckFunc;
 begin
   if not assigned(ContextStateRegister) then
     ContextStateRegister:=TContextCheckFuncRegister.create;
-  ContextStateRegister.add(TGContextIdManipulator.Standartize(ContextId),ContextCheckFunc);
+  StandartizedContextId:=TGContextIdManipulator.Standartize(ContextId);
+
+  if ContextStateRegister.TryGetValue(StandartizedContextId,OldContextCheckFunc) then
+    //logmessage
+  else
+    ContextStateRegister.add(StandartizedContextId,ContextCheckFunc);
 end;
 
 function TGCContextChecker.ContextCheck(const ContextId:TGContextIdType;const Context:TGContextType):TGContextStateType;

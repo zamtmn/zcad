@@ -297,9 +297,6 @@
         <Action Name="ACN_SELECTALL"/>
         <Separator/>
       </IFONE>
-      <MainMenuItem Name="Last commands">
-        <LastCommands/>
-      </MainMenuItem>
       <MainMenuItem Name="Object snap">
         <Action Name="ACN_OS_INSERT"/>
         <Action Name="ACN_OS_END"/>
@@ -316,7 +313,14 @@
         <Action Name="ACN_OS_APARENTINTERSECTION"/>
         <Action Name="ACN_OS_PARALEL"/>
       </MainMenuItem>
-      <Action Name="ACN_CANCEL"/>
+      <IFONE Сonditions="~CommandRunning">
+        <MainMenuItem Name="Last commands">
+          <LastCommands/>
+        </MainMenuItem>
+      </IFONE>
+        <IFONE Сonditions="CommandRunning">
+          <Action Name="ACN_CANCEL"/>
+        </IFONE>
     </PopUpMenu>
     <PopUpMenu Name="LASTCOMMANDSCXMENU">
       <IFONE Сonditions="CtrlPressed,ShiftPressed">

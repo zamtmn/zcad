@@ -6,7 +6,8 @@ interface
 
 uses
   sysutils,
-  uzglviewareaabstract,uzmenusmanager,uzmacros,TransferMacros,MacroDefIntf,Forms,ActnList;
+  uzglviewareaabstract,uzmenusmanager,uzmacros,TransferMacros,MacroDefIntf,Forms,
+  ActnList,uzccommandsmanager;
 
 type
   PTViewAreaContext=^TViewAreaContext;
@@ -48,9 +49,15 @@ function CreateViewAreaContext(VA:TAbstractViewArea):TViewAreaContext;
 begin
   result.VA:=VA;
 end;
+
 function EntsSelectedCCF(const vac:TViewAreaContext):boolean;
 begin
   result:=vac.VA.param.SelDesc.Selectedobjcount>0;
+end;
+
+function CommandRunningCCF(const vac:TViewAreaContext):boolean;
+begin
+  result:=commandmanager.pcommandrunning<>nil;
 end;
 
 procedure InitializeViewAreaCXMenu(mainform:TForm;actlist:TActionList);
@@ -60,6 +67,7 @@ begin
   if not assigned(ViewAreaMacros) then
     ViewAreaMacros:=TViewAreaMacros.Create;
   ViewAreaContextMenuManager.RegisterContextCheckFunc('EntsSelected',@EntsSelectedCCF);
+  ViewAreaContextMenuManager.RegisterContextCheckFunc('CommandRunning',@CommandRunningCCF);
 end;
 
 procedure FinalizeViewAreaCXMenu;

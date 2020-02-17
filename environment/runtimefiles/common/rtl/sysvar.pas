@@ -94,8 +94,6 @@ var
   PATH_Template_File:GDBString;
   PATH_Program_Run:GDBString;
   PATH_LayoutFile:GDBString;
-  testGDBBoolean:GDBBoolean;
-  pi:GDBDouble;
 implementation
 begin
   INTF_ObjInsp_WhiteBackground:=False;
@@ -148,9 +146,9 @@ begin
   RD_PanObjectDegradation:=False;
   DSGN_OTrackTimerInterval:=500;
   RD_Light:=False;
-  PATH_Fonts:='*fonts/|C:/Program Files/AutoCAD 2010/Fonts/|C:/APPS/MY/acad/support/|C:\Program Files\Autodesk\AutoCAD 2012 - Russian\Fonts\|C:\Windows\Fonts\';
+  PATH_Fonts:='$(ZCADPath)/fonts/|C:/APPS/MY/acad/support/|C:/Program Files/Autodesk/AutoCAD 2020/Fonts/|C:/Windows/Fonts/';
   PATH_AlternateFont:='_mipGost.shx';
-  PATH_Support_Path:='*rtl|*rtl/objdefunits|*rtl/objdefunits/include|*components|*blocks/el/general|*rtl/styles';
+  PATH_Support_Path:='$(ZCADPath)/rtl|$(ZCADPath)/rtl/objdefunits|$(ZCADPath)/rtl/objdefunits/include|$(ZCADPath)/components|$(ZCADPath)/blocks/el/general|$(ZCADPath)/rtl/styles';
   DWG_HelpGeometryDraw:=True;
   DWG_AdditionalGrips:=False;
   DWG_SelectedObjToInsp:=True;
@@ -177,25 +175,23 @@ begin
   INTF_ThemedRightToolbars:=false;
   INTF_ThemedDownToolbars:=false;
   INTF_ThemedLeftToolbars:=false;
-  RD_Vendor:='NVIDIA Corporation';
-  RD_Renderer:='GeForce GTX 460/PCIe/SSE2';
+  RD_Vendor:='';
+  RD_Renderer:='';
   RD_Extensions:='';
   RD_Version:='4.3.0';
   RD_GLUVersion:='1.3';
-  RD_GLUExtensions:='GLU_EXT_nurbs_tessellator GLU_EXT_object_space_tess ';
+  RD_GLUExtensions:='';
   RD_Restore_Mode:=WND_Texture;
   RD_VSync:=T3SB_Fale;
   SAVE_Auto_Interval:=300;
   SAVE_Auto_Current_Interval:=300;
-  SAVE_Auto_FileName:='*autosave/autosave.dxf';
+  SAVE_Auto_FileName:='$(ZCADPath)/autosave/autosave.dxf';
   SAVE_Auto_On:=True;
   SYS_RunTime:=3233;
-  SYS_Version:='0.9.8 Revision SVN:1609';
-  PATH_Device_Library:='*programdb|c:/zcad/userdb';
-  PATH_Template_Path:='*template';
+  SYS_Version:='';
+  PATH_Device_Library:='$(ZCADPath)/programdb|$(ZCADPath)/userdb';
+  PATH_Template_Path:='$(ZCADPath)/template';
   PATH_Template_File:='default.dxf';
-  PATH_Program_Run:='E:\zcad\cad\';
-  PATH_LayoutFile:='E:\zcad\cad\components/defaultlayout.xml';
-  testGDBBoolean:=False;
-  pi:=3.14159265359;
+  PATH_Program_Run:='';
+  PATH_LayoutFile:='$(ZCADPath)/defaultlayout.xml';
 end.

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <PalettesContent>
-    <BlockLib Type="Tree" Caption='Библиотека блоков' ImagesWidth='24'>
-      <ZTreeNode Caption='Сдаботочка'>
+    <BlockLib Type="Tree" Caption='Blocks library' ImagesWidth='24'>
+      <ZTreeNode Caption='Слаботочка'>
         <ZTreeNode Caption='Сигнализация'>
           <ZTreeCommand Command="Insert(DEVICE_PS_ARK_DEVICE)" Img='DEVICE_PS_ARK_DEVICE' Caption='Прибор'/>
           <ZTreeNode Caption='ПС'>
@@ -17,7 +17,7 @@
           </ZTreeNode>
         </ZTreeNode>
      </ZTreeNode>
-     <ZTreeNode Caption='Не сортировано'>
+     <ZTreeNode Caption='Unsorted'>
         <ZTreeCommand Command="Insert(DEVICE_CABLE_MARK)"/>
         <ZTreeCommand Command="Insert(DEVICE_CONNECTOR)"/>
         <ZTreeCommand Command="Insert(DEVICE_CONNECTOR_POINT)"/>
@@ -127,7 +127,7 @@
               <ZTreeCommand Command="Insert(DEVICE_TEST)"/>
      </ZTreeNode>
     </BlockLib>
-    <PSDat Type="vsIcon" Caption='Извещатели ПС' ImagesWidth='48'>
+    <PSDat Type="vsIcon" Caption='Fire alarm' ImagesWidth='48'>
       <ZVSICommand Command="Insert(DEVICE_PS_DAT_SMOKE)" Img='DEVICE_PS_DAT_SMOKE_300' Caption='Дымовой'/>
       <ZVSICommand Command="Insert(DEVICE_PS_DAT_SMOKE_FALSH)" Img='DEVICE_PS_DAT_SMOKE_FALSH_300' Caption='Дымовой запотолочный1'/>
       <ZVSICommand Command="Insert(DEVICE_PS_DAT_SMOKE_FALSH2)" Img='DEVICE_PS_DAT_SMOKE_FALSH2_300' Caption='Дымовой запотолочный2'/>

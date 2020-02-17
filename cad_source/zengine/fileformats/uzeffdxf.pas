@@ -36,10 +36,11 @@ type
               end;
    TLongProcessIndicator=Procedure(a:integer) of object;
 const
-     acadentignoredcol=1;
+     acadentignoredcol=2;
      ignorenamtable:array[1..acadentignoredcol]of entnamindex=
      (
-     (entname:'HATCH')
+     (entname:'HATCH'),
+     (entname:'ACAD_PROXY_ENTITY')
      );
      {acadentsupportcol=14;
      entnamtable:array[1..acadentsupportcol]of entnamindex=
@@ -1792,6 +1793,7 @@ begin
               if {p}drawing.BlockDefArray.count>0 then
               for i := 0 to {p}drawing.BlockDefArray.count - 1 do
               begin
+                debugln('{D}[DXF_CONTENTS]write BlockDef '+PBlockdefArray({p}drawing.BlockDefArray.parray)^[i].name);
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
                 outstream.TXTAddGDBStringEOL('BLOCK');
 

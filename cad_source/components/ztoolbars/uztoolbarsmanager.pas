@@ -5,7 +5,7 @@ unit uztoolbarsmanager;
 interface
 
 uses
-  LCLType,ImgList,
+  LCLType,ImgList,uzmacros,
   Classes, SysUtils, ComCtrls, Controls, Graphics, Menus, Forms,ActnList,
   LazConfigStorage,Laz2_XMLCfg,Laz2_DOM,
   Generics.Collections, Generics.Defaults, gvector;
@@ -99,7 +99,7 @@ type
     procedure DefaultAddToolBarToMenu(fmf:TForm;actlist:TActionList;aTBNode: TDomNode;aName,aType: string; Data:Pointer);
 
     procedure DefaultActionsGroupReader(aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList);
-    procedure DefaultAddToolbars(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+    procedure DefaultAddToolbars(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
 
     procedure CreateManagedActions;
   end;
@@ -1050,7 +1050,7 @@ begin
       end;
 end;
 
-procedure TToolBarsManager.DefaultAddToolbars(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+procedure TToolBarsManager.DefaultAddToolbars(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
 begin
   ToolBarsManager.EnumerateToolBars(@ToolBarsManager.DefaultAddToolBarToMenu,pointer(RootMenuItem));
 end;

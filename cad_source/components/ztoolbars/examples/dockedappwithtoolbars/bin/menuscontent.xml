@@ -1,22 +1,22 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <MenusContent>
-    <MainMenuItem Name="File">
+    <SubMenu Name="File">
       <Action Name="AcnFileOpen"/>
       <Separator/>
       <Action Name="AcnFileExit"/>
-    </MainMenuItem>
-    <MainMenuItem Name="View">
-        <MainMenuItem Name="Forms">
+    </SubMenu>
+    <SubMenu Name="View">
+        <SubMenu Name="Forms">
           <Forms/>
-        </MainMenuItem>
-        <MainMenuItem Name="ToolBars">
+        </SubMenu>
+        <SubMenu Name="ToolBars">
           <ToolBars/>
-        </MainMenuItem>
+        </SubMenu>
         <Separator/>
         <Action Name="AcnLoadLayout"/>
         <Action Name="AcnSaveLayout"/>
-      </MainMenuItem>
+    </SubMenu>
     <CreateMenu Name="MainMenu">
       <File/>
       <View/>

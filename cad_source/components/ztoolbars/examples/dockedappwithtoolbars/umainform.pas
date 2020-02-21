@@ -1,6 +1,6 @@
 unit umainform;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 
@@ -10,7 +10,7 @@ uses
   StdActns, AnchorDocking, AnchorDockOptionsDlg, AnchorDockPanel, AnchorDockStr,
   ButtonPanel,
   Generics.Collections,
-  uztoolbarsmanager,uformsmanager;
+  uztoolbarsmanager,uformsmanager,uzmenusmanager,uzmenusdefaults,uzmacros;
 
 type
 
@@ -42,7 +42,7 @@ type
 
   private
     procedure CreateYourOwnTBitem(aNode: TDomNode; TB:TToolBar);
-    procedure EnumerateRegistredForms(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+    procedure EnumerateRegistredForms(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
     procedure DefaultShowForm(Sender: TObject);
   public
     procedure LoadToolBars;
@@ -78,7 +78,7 @@ begin
 
     BtnPanel:=TButtonPanel.Create(Dlg);
     BtnPanel.ShowButtons:=[pbOK, pbCancel];
-    BtnPanel.OKButton.OnClick:=@OptsFrame.OkClick;
+    BtnPanel.OKButton.OnClick:=OptsFrame.OkClick;
     BtnPanel.Parent:=Dlg;
     Dlg.EnableAutoSizing;
     Result:=Dlg.ShowModal;
@@ -105,7 +105,7 @@ begin
          if result is TWinControl then
            TWinControl(result).DisableAlign;
        result.Create(Application);
-       if PFID^.SetupProc<>nil then
+       if @PFID^.SetupProc<>nil then
          PFID^.SetupProc(result);
   end
   else
@@ -162,41 +162,43 @@ begin
   DragManager.DragImmediate:=false;
   DragManager.DragThreshold:=32;
 
+  MenusManager:=TGeneralMenuManager.Create(self{mainform},AcnList{main AcnList});
+
   //Create ToolBarsManager
   ToolBarsManager:=TToolBarsManager.create(self{mainform},AcnList{main AcnList},-1{default button height});
 
   //Register 'Separator' node handler for create toolbar content proc
-  ToolBarsManager.RegisterTBItemCreateFunc('Separator',@ToolBarsManager.CreateDefaultSeparator);
+  ToolBarsManager.RegisterTBItemCreateFunc('Separator',ToolBarsManager.CreateDefaultSeparator);
 
   //Register 'Action' node handler for create toolbar content proc
-  ToolBarsManager.RegisterTBItemCreateFunc('Action',@ToolBarsManager.CreateDefaultAction);
+  ToolBarsManager.RegisterTBItemCreateFunc('Action',ToolBarsManager.CreateDefaultAction);
 
   //Register 'YourOwnTBitem' node fake handler for create toolbar content proc
-  ToolBarsManager.RegisterTBItemCreateFunc('YourOwnTBitem',@CreateYourOwnTBitem);
+  ToolBarsManager.RegisterTBItemCreateFunc('YourOwnTBitem',CreateYourOwnTBitem);
 
   //Register 'ToolBar' create proc
-  ToolBarsManager.RegisterTBCreateFunc('ToolBar',@ToolBarsManager.CreateDefaultToolBar);
+  ToolBarsManager.RegisterTBCreateFunc('ToolBar',ToolBarsManager.CreateDefaultToolBar);
 
   //Load toolbars content from toolbarscontent.xml
   ToolBarsManager.LoadToolBarsContent('toolbarscontent.xml');
 
-  ToolBarsManager.RegisterMenuCreateFunc('MainMenuItem',@ToolBarsManager.DefaultMainMenuItemReader);
-  ToolBarsManager.RegisterMenuCreateFunc('Action',@ToolBarsManager.CreateDefaultMenuAction);
-  ToolBarsManager.RegisterMenuCreateFunc('Separator',@ToolBarsManager.CreateDefaultMenuSeparator);
-  ToolBarsManager.RegisterMenuCreateFunc('CreateMenu',@ToolBarsManager.CreateDefaultMenu);
-  ToolBarsManager.RegisterMenuCreateFunc('SetMainMenu',@ToolBarsManager.DefaultSetMenu);
-  ToolBarsManager.RegisterMenuCreateFunc('ToolBars',@ToolBarsManager.DefaultAddToolbars);
-  ToolBarsManager.RegisterMenuCreateFunc('Forms',@EnumerateRegistredForms);
+  TMenuDefaults.RegisterMenuCreateFunc('SubMenu',TMenuDefaults.DefaultMainMenuItemReader);
+  TMenuDefaults.RegisterMenuCreateFunc('Action',TMenuDefaults.DefaultCreateMenuAction);
+  TMenuDefaults.RegisterMenuCreateFunc('Separator',TMenuDefaults.DefaultCreateMenuSeparator);
+  TMenuDefaults.RegisterMenuCreateFunc('CreateMenu',TMenuDefaults.DefaultCreateMenu);
+  TMenuDefaults.RegisterMenuCreateFunc('SetMainMenu',TMenuDefaults.DefaultSetMenu);
+  TMenuDefaults.RegisterMenuCreateFunc('ToolBars',ToolBarsManager.DefaultAddToolbars);
+  TMenuDefaults.RegisterMenuCreateFunc('Forms',EnumerateRegistredForms);
 
 
   //Enumerate all toolbars and add them to view\tooldars menu
   //ToolBarsManager.EnumerateToolBars(@ToolBarsManager.DefaultAddToolBarToMenu,pointer(MenuItem6));
 
   //Load menus content from menuscontent.xml
-  ToolBarsManager.LoadMenus('menuscontent.xml');
+  MenusManager.LoadMenus('menuscontent.xml');
 
   DockMaster.ManagerClass:=TAnchorDockManager;
-  DockMaster.OnCreateControl:=@DockMasterCreateControl;
+  DockMaster.OnCreateControl:=DockMasterCreateControl;
   DockMaster.MakeDockPanel(DockPanel,admrpChild);
   DockMaster.OnShowOptions:=@ShowAnchorDockOptions;
 
@@ -216,7 +218,7 @@ begin
     XMLConfig.Filename:='toolbarslayout.xml';
     Config:=TXMLConfigStorage.Create(XMLConfig);
     try
-      ToolBarsManager.SaveToolBarsToConfig(self,Config);
+      ToolBarsManager.SaveToolBarsToConfig(Config);
     finally
       Config.Free;
     end;
@@ -256,7 +258,7 @@ end;
 //this used in actions
 procedure TMainForm.AsyncLoadTBLayout(Sender: TObject);
 begin
- Application.QueueAsyncCall(@DoLoadLayout, 0);
+ Application.QueueAsyncCall(DoLoadLayout, 0);
 end;
 
 //sync wrapper for load toolbar procedure
@@ -288,7 +290,7 @@ var
 begin
   XMLConfig:=TXMLConfigStorage.Create('toolbarslayout.xml', True);
   try
-    ToolBarsManager.RestoreToolBarsFromConfig(self, XMLConfig);
+    ToolBarsManager.RestoreToolBarsFromConfig(XMLConfig);
   finally
     XMLConfig.Free;
   end;
@@ -330,9 +332,9 @@ begin
     DockMaster.ShowControl((Sender as TAction).Caption,true)
 end;
 
-procedure TMainForm.EnumerateRegistredForms(aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem);
+procedure TMainForm.EnumerateRegistredForms(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
 var
-  FormData:specialize TPair<string,TFormInfoData>;
+  FormData:TPair<string,TFormInfoData>;
   pm1:TMenuItem;
   aaction:taction;
 begin
@@ -341,7 +343,7 @@ begin
     aaction:=TAction.Create(self);
     aaction.Name:=FormNameToActionName(FormData.Value.FormName);
     aaction.Caption:=FormData.Value.FormName;
-    aaction.OnExecute:=@DefaultShowForm;
+    aaction.OnExecute:=DefaultShowForm;
     aaction.DisableIfNoHandler:=false;
     aaction.ActionList:=AcnList;
 

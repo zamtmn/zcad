@@ -1702,7 +1702,7 @@ begin
   toolbars.Sorted:=true;
   CreateInterfaceLists;
 
-  TMenuDefaults.RegisterMenuCreateFunc('MainMenuItem',ZMenuExt.ZMenuExtMainMenuItemReader);
+  TMenuDefaults.RegisterMenuCreateFunc('SubMenu',ZMenuExt.ZMenuExtMainMenuItemReader);
   TMenuDefaults.RegisterMenuCreateFunc('PopUpMenu',ZMenuExt.ZMenuExtPopUpMenuReader);
   TMenuDefaults.RegisterMenuCreateFunc('Action',ZMenuExt.ZMenuExtAction);
   TMenuDefaults.RegisterMenuCreateFunc('FileHistory',ZMenuExt.ZMenuExtFileHistory);
@@ -1714,9 +1714,9 @@ begin
   TMenuDefaults.RegisterMenuCreateFunc('SampleFiles',ZMenuExt.ZMenuExtSampleFiles);
   TMenuDefaults.RegisterMenuCreateFunc('DebugFiles',ZMenuExt.ZMenuExtDebugFiles);
 
-  TMenuDefaults.RegisterMenuCreateFunc('CreateMenu',TMenuDefaults.CreateDefaultMenu);
+  TMenuDefaults.RegisterMenuCreateFunc('CreateMenu',TMenuDefaults.DefaultCreateMenu);
   TMenuDefaults.RegisterMenuCreateFunc('SetMainMenu',TMenuDefaults.DefaultSetMenu);
-  TMenuDefaults.RegisterMenuCreateFunc('Separator',TMenuDefaults.CreateDefaultMenuSeparator);
+  TMenuDefaults.RegisterMenuCreateFunc('Separator',TMenuDefaults.DefaultCreateMenuSeparator);
 
   ToolBarsManager.RegisterPaletteCreateFunc('vsIcon',TPaletteHelper.ZPalettevsIconCreator);
   ToolBarsManager.RegisterPaletteItemCreateFunc('ZVSICommand',TPaletteHelper.ZPalettevsIconItemCreator);

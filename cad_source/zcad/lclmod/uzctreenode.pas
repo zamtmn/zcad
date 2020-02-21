@@ -56,14 +56,6 @@ type
       function LoadImage(imgfile:GDBString):Integer;
       procedure SetImage(img,identifer:string;var action:TZAction);
     end;
-    TmyPopupMenu = class (TPopupMenu)
-                   end;
-    {TmyToolButton=class(TToolButton)
-                  protected
-                                 procedure CalculatePreferredSize(
-                                                  var PreferredWidth, PreferredHeight: integer;
-                                                  WithThemeSpace: Boolean); override;
-                  end;}
     TmyCommandToolButton=class({Tmy}TToolButton)
                   public
                   FCommand:String;{**<Command to manager commands}
@@ -90,7 +82,7 @@ type
     TmyTreeNode=class(TTreeNode)
                public
                     FCategory:String;
-                    FPopupMenu:TmyPopupMenu;
+                    FPopupMenu:TPopupMenu;
                     procedure Select;virtual;
                     function GetParams:Pointer;virtual;
                     function ContextPopup(const X,Y: Integer):boolean;virtual;

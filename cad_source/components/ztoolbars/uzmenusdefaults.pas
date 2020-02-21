@@ -95,7 +95,7 @@ begin
     begin
       ppopupmenu:=tmenuitem(application.FindComponent(MenuNameModifier+uppercase(TBSubNode.NodeName)));
       if ppopupmenu=nil then begin
-        ppopupmenu:=TMenuItem(MenusManager.GetMenu_tmp(TBSubNode.NodeName,nil));
+        ppopupmenu:=MenusManager.GetSubMenu(TBSubNode.NodeName,nil);
         //ppopupmenu:=tmenuitem(application.FindComponent(MenuNameModifier+uppercase(TBSubNode.NodeName)));
       end;
       if ppopupmenu<>nil then
@@ -111,7 +111,7 @@ end;
 
 class procedure TMenuDefaults.DefaultSetMenu(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
 begin
-  fmf.Menu:=TMainMenu(TMenuItem(MenusManager.GetMenu_tmp(getAttrValue(aNode,'Name',''),nil)))//;{application.FindComponent(MenuNameModifier+uppercase(getAttrValue(aNode,'Name','')))});
+  fmf.Menu:=TMainMenu(MenusManager.GetMainMenu(getAttrValue(aNode,'Name',''),nil))//;{application.FindComponent(MenuNameModifier+uppercase(getAttrValue(aNode,'Name','')))});
 end;
 
 

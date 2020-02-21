@@ -152,7 +152,7 @@ end;
 function SelectOnMouseObjects_com(operands:TCommandOperands):TCommandResult;
 begin
      cxmenumgr.closecurrentmenu;
-     MSelectCXMenu:=TmyPopupMenu.create(nil);
+     MSelectCXMenu:=TPopupMenu.create(nil);
      if GetOnMouseObjWAddr(MSelectCXMenu)=0 then
                                                          FreeAndNil(MSelectCXMenu)
                                                      else

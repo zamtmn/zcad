@@ -96,9 +96,9 @@ end;
 
 procedure TCLine.ButtonPressed(Sender: TObject);
 var
-  menu:TmyPopupMenu;
+  menu:TPopupMenu;
 begin
-    menu:=TmyPopupMenu(MenusManager.GetMenu_tmp('LASTCOMMANDSCXMENU',nil));
+    menu:=MenusManager.GetPopupMenu('LASTCOMMANDSCXMENU',nil);
     if menu<>nil then
     begin
       menu.PopUp;

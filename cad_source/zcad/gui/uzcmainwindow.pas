@@ -2401,7 +2401,7 @@ var
   menu:TPopupMenu;
 begin
   menu:=nil;
-  menu:=ViewAreaContextMenuManager.GetMenu_tmp('VIEWAREACXMENU',CreateViewAreaContext(drawings.GetCurrentDWG.wa),true,ViewAreaMacros);
+  menu:=ViewAreaContextMenuManager.GetPopupMenu('VIEWAREACXMENU',CreateViewAreaContext(drawings.GetCurrentDWG.wa),ViewAreaMacros);
   if menu<>nil then
   begin
     menu.PopUp;
@@ -2411,7 +2411,7 @@ procedure TZCADMainWindow.ShowFMenu;
 var
   menu:TPopupMenu;
 begin
-    menu:=MenusManager.GetMenu_tmp('FASTMENU',nil);
+    menu:=MenusManager.GetPopupMenu('FASTMENU',nil);
     if menu<>nil then
     begin
          menu.PopUp;

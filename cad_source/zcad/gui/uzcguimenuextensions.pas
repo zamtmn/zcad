@@ -169,7 +169,7 @@ class procedure ZMenuExt.ZMenuExtPopUpMenuReader(fmf:TForm;aName: string;aNode: 
   line:string;
   TBSubNode:TDomNode;
 begin
-    CreatedMenuItem:=TmyPopupMenu.Create(application);
+    CreatedMenuItem:=TPopupMenu.Create(application);
     line:=getAttrValue(aNode,'Name','');
     CreatedMenuItem.Name:=MenuNameModifier+line;
     CreatedMenuItem.Images := actlist.Images;
@@ -227,7 +227,7 @@ begin
        if RootMenuItem is TMenuItem then
                               RootMenuItem.Add(CreatedMenuItem)
                           else
-                              TMyPopUpMenu(RootMenuItem).Items.Add(CreatedMenuItem);
+                              TPopUpMenu(RootMenuItem).Items.Add(CreatedMenuItem);
   end;
 end;
 

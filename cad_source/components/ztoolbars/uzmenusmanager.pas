@@ -22,7 +22,7 @@ type
   private
     factionlist:TActionList;
     fmainform:TForm;
-    function GetMenu_tmp(aName: string;ctx:T;ForceReCreate:boolean=false;MMProcessor:TMenusMacros=nil):TPopupMenu;
+    function GetMenu_tmp(aName: string;ctx:T;ForceReCreate:boolean=false;MMProcessor:TMenusMacros=nil):TMenu;
 
   public
     constructor Create(mainform:TForm;actlist:TActionList);
@@ -35,10 +35,11 @@ type
 
     procedure LoadMenus(filename:string;MMProcessor:TMenusMacros=nil);
     function GetMacroProcessFuncAddr(MMProcessor:TMenusMacros):TMacroProcessFunc;
+    procedure CheckMainMenu(node:TDomNode;MMProcessor:TMenusMacros=nil);
+
     function GetMainMenu(aName: string;ctx:T;MMProcessor:TMenusMacros=nil):TMenu;
     function GetPopupMenu(aName: string;ctx:T;MMProcessor:TMenusMacros=nil):TPopupMenu;
-    function GetSubMenu(aName: string;ctx:T;MMProcessor:TMenusMacros=nil):TMenuItem;
-    procedure CheckMainMenu(node:TDomNode;MMProcessor:TMenusMacros=nil);
+    function GetSubMenu(aName:string;ctx:T;MMProcessor:TMenusMacros=nil):TMenuItem;
   end;
   TGeneralMenuManager=specialize TGMenusManager<TObject>;
 
@@ -226,13 +227,13 @@ begin
 end;
 function TGMenusManager.GetPopupMenu(aName: string;ctx:T;MMProcessor:TMenusMacros=nil):TPopupMenu;
 begin
-  result:=GetMenu_tmp(aName,ctx,true,MMProcessor);
+  result:=TPopupMenu(GetMenu_tmp(aName,ctx,true,MMProcessor));
 end;
 function TGMenusManager.GetSubMenu(aName: string;ctx:T;MMProcessor:TMenusMacros=nil):TMenuItem;
 begin
   result:=TMenuItem(GetMenu_tmp(aName,ctx,true,MMProcessor));
 end;
-function TGMenusManager.GetMenu_tmp(aName: string;ctx:T;ForceReCreate:boolean=false;MMProcessor:TMenusMacros=nil):TPopupMenu;
+function TGMenusManager.GetMenu_tmp(aName: string;ctx:T;ForceReCreate:boolean=false;MMProcessor:TMenusMacros=nil):TMenu;
 var
   TBNode,TBSubNode:TDomNode;
   menuname:string;

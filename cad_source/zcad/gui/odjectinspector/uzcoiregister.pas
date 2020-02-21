@@ -250,13 +250,13 @@ begin
   if sender is TGDBobjinsp then begin
   menu:=nil;
   if {(clickonheader)or}(sender as TGDBobjinsp).currpd=nil then
-  menu:=TPopupMenu(MenusManager.GetMenu_tmp('OBJINSPHEADERCXMENU',nil))
+  menu:=MenusManager.GetPopupMenu('OBJINSPHEADERCXMENU',nil)
 else if (sender as TGDBobjinsp).currpd^.valkey<>''then
-  menu:=TPopupMenu(MenusManager.GetMenu_tmp('OBJINSPVARCXMENU',nil))
+  menu:=MenusManager.GetPopupMenu('OBJINSPVARCXMENU',nil)
 else if (sender as TGDBobjinsp).currpd^.Value<>''then
-  menu:=TPopupMenu(MenusManager.GetMenu_tmp('OBJINSPCXMENU',nil))
+  menu:=MenusManager.GetPopupMenu('OBJINSPCXMENU',nil)
 else
-  menu:=TPopupMenu(MenusManager.GetMenu_tmp('OBJINSPHEADERCXMENU',nil));
+  menu:=MenusManager.GetPopupMenu('OBJINSPHEADERCXMENU',nil);
   if menu<>nil then
   begin
   menu.PopUp;

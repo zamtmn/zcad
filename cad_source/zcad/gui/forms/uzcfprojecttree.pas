@@ -64,7 +64,7 @@ type
     procedure AfterConstruction; override;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction); override;
     private
-    procedure BuildTreeByEQ(var BuildNode:TmyTreeNode;PDBUNIT:PTUnit;pcm:TmyPopupMenu);
+    procedure BuildTreeByEQ(var BuildNode:TmyTreeNode;PDBUNIT:PTUnit;pcm:TPopupMenu);
     procedure ChangePage(Sender: TObject);
   end;
 var
@@ -136,7 +136,7 @@ begin
                        begin
                             T_ProjectDB.Selected:=nil;
                             self.ProjectEquipmentN.DeleteChildren;
-                            BuildTreeByEQ(ProjectEquipmentN,PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName),TmyPopupMenu(MenusManager.GetMenu_tmp('PROJECTDBCXMENU',nil)));
+                            BuildTreeByEQ(ProjectEquipmentN,PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName),MenusManager.GetPopupMenu('PROJECTDBCXMENU',nil));
                             (*
                             ProjectEquipmentNodeN.free;
                             gdbgetmem({$IFDEF DEBUGBUILD}'{B941B71E-2BA6-4B5E-B436-633B6C8FC500}',{$ENDIF}pointer(ProjectEquipmentNode.SubNode),sizeof(TGDBTree));
@@ -172,7 +172,7 @@ begin
      i:=pos('_',treepos);
      until (i=0)or(category=uncat);
 end;
-procedure TProjectTreeForm.BuildTreeByEQ(var BuildNode:TmyTreeNode;PDBUNIT:PTUnit;pcm:TmyPopupMenu);
+procedure TProjectTreeForm.BuildTreeByEQ(var BuildNode:TmyTreeNode;PDBUNIT:PTUnit;pcm:TPopupMenu);
 var
    pvdeq:pvardesk;
    ir:itrec;
@@ -337,15 +337,15 @@ begin
         TmyTreeView(CurrNode.TreeView).NodeType:=TBlockTreeNode;
         BlockNode:=TBlockTreeNode(T_ProgramDB.Items.addchild(CurrNode,(treepos)));
         BlockNode.fBlockName:=pb^.name;
-        BlockNode.FPopupMenu:={ProgramDEVContextMenuN}TmyPopupMenu(MenusManager.GetMenu_tmp('PROGRAMBLOCKSCXMENU',nil));
+        BlockNode.FPopupMenu:=MenusManager.GetPopupMenu('PROGRAMBLOCKSCXMENU',nil);
 
         pb:=BlockBaseDWG.BlockDefArray.iterate(ir);
   until pb=nil;
   end;
 
-  BuildTreeByEQ(ProgramEquipmentN,DBUnit,{ProgramDBContextMenuN}{}TmyPopupMenu(MenusManager.GetMenu_tmp('PROGRAMDBCXMENU',nil)){});
+  BuildTreeByEQ(ProgramEquipmentN,DBUnit,MenusManager.GetPopupMenu('PROGRAMDBCXMENU',nil));
   if drawings.GetCurrentDWG<>nil then
-  BuildTreeByEQ(ProjectEquipmentN,PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName),{ProjectDBContextMenuN}TmyPopupMenu(MenusManager.GetMenu_tmp('PROJECTDBCXMENU',nil)));
+  BuildTreeByEQ(ProjectEquipmentN,PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName),MenusManager.GetPopupMenu('PROJECTDBCXMENU',nil));
 
 end;
 function ProjectTree_com(Operands:pansichar):GDBInteger;

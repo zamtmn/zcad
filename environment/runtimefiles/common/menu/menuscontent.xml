@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <MenusContent>
-    <MainMenuItem Name="File">
+    <Menu Name="File">
       <Action Name="ACN_NEW"/>
       <Separator/>
       <Action Name="ACN_LOAD"/>
@@ -20,8 +20,8 @@
       <FileHistory/>
       <Separator/>
       <Action Name="ACN_QUIT"/>
-    </MainMenuItem>
-    <MainMenuItem Name="Edit">
+    </Menu>
+    <Menu Name="Edit">
       <Action Name="ACN_UNDO"/>
       <Action Name="ACN_REDO"/>
       <Separator/>
@@ -37,12 +37,12 @@
       <Action Name="ACN_SELSIM"/>
       <Separator/>
       <Action Name="ACN_El_FIND"/>
-    </MainMenuItem>
-    <MainMenuItem Name="View">
+    </Menu>
+    <Menu Name="View">
       <Action Name="ACN_REGEN"/>
       <Action Name="ACN_PROJECTTREE"/>
       <Separator/>
-      <MainMenuItem Name="View">
+      <SubMenu Name="View">
         <Action Name="ACN_VIEWTOP"/>
         <Action Name="ACN_VIEWDOWN"/>
         <Action Name="ACN_VIEWLEFT"/>
@@ -57,52 +57,52 @@
         <Action Name="ACN_VIEWRR"/>
         <Action Name="ACN_VIEWRU"/>
         <Action Name="ACN_VIEWRD"/>
-      </MainMenuItem>
-      <MainMenuItem Name="Zoom">
+      </SubMenu>
+      <SubMenu Name="Zoom">
         <Action Name="ACN_ZOOMIN"/>
         <Action Name="ACN_ZOOMOUT"/>
         <Action Name="ACN_ZOOMALL"/>
         <Action Name="ACN_ZOOMSEL"/>
         <Action Name="ACN_ZOOMWINDOW"/>
-      </MainMenuItem>
-      <MainMenuItem Name="Pan">
+      </SubMenu>
+      <SubMenu Name="Pan">
         <Action Name="ACN_PANUP"/>
         <Action Name="ACN_PANDOWN"/>
         <Action Name="ACN_PANLEFT"/>
         <Action Name="ACN_PANRIGHT"/>
-      </MainMenuItem>
+      </SubMenu>
       <Command Caption="Reset camera" Command="Cam_reset"/>
       <Action Name="ACN_PERSPECTIVE"/>
-      <MainMenuItem Name="Show window">
+      <SubMenu Name="Show window">
         <Action Name="ACN_SHOW_OBJECTINSPECTOR"/>
         <Action Name="ACN_SHOW_PAGECONTROL"/>
         <Action Name="ACN_SHOW_COMMANDLINE"/>
         <Action Name="ACN_TEXTWINDOW"/>
         <Action Name="ACN_SHOW_NAVIGATORENTITIES"/>
-        <MainMenuItem Name="ToolBars">
+        <SubMenu Name="ToolBars">
           <ToolBars/>
-        </MainMenuItem>
-        <MainMenuItem Name="ToolPalettes">
+        </SubMenu>
+        <SubMenu Name="ToolPalettes">
           <ToolPalettes/>
-        </MainMenuItem>
+        </SubMenu>
         <Separator/>
         <Action Name="ACN_SAVELAYOUT"/>
-      </MainMenuItem>
-      <MainMenuItem Name="Inspector">
+      </SubMenu>
+      <SubMenu Name="Inspector">
         <Command Caption="Options" Command="SetObjInsp(VARS)"/>
         <Command Caption="Camera" Command="SetObjInsp(CAMERA)"/>
         <Command Caption="Object snap" Command="SetObjInsp(OSMODE)"/>
-      </MainMenuItem>
-    </MainMenuItem>
-    <MainMenuItem Name="Format">
+      </SubMenu>
+    </Menu>
+    <Menu Name="Format">
       <Action Name="ACN_UNITS"/>
       <Command Caption="Layers (objinsp)" Command="SetObjInsp(LAYERS)"/> 
       <Action Name="ACN_LAYER"/>
-      <MainMenuItem Name="Text">
+      <SubMenu Name="Text">
         <Action Name="ACN_TSTYLES"/>
         <Command Caption="Styles (objinsp)" Command="SetObjInsp(TSTYLES)"/> 
         <Command Caption="Fonts (objinsp)" Command="SetObjInsp(FONTS)"/> 
-      </MainMenuItem>
+      </SubMenu>
       <Action Name="ACN_LTYPES"/>
       <Action Name="ACN_DSTYLES"/>
       <Command Caption="Line type styles (objinsp)" Command="SetObjInsp(LINETYPESTYLES)"/> 
@@ -110,34 +110,34 @@
       <Command Caption="Dim styles (objinsp)" Command="SetObjInsp(DIMSTYLES)"/> 
       <Command Caption="Numerators (objinsp)" Command="SetObjInsp(NUMERATORS)"/> 
       <Command Caption="Layouts (not impl)" Command="fuckoff"/> 
-    </MainMenuItem>
-    <MainMenuItem Name="Draw">
+    </Menu>
+    <Menu Name="Draw">
       <Action Name="ACN_LINE"/>
       <Action Name="ACN_3DPOLY"/>
-      <MainMenuItem Name="Circle">
+      <SubMenu Name="Circle">
         <Action Name="ACN_CIRCLE"/>
         <Action Name="ACN_CIRCLECD"/>
         <Action Name="ACN_CIRCLE2P"/>
         <Action Name="ACN_CIRCLE3P"/>
-      </MainMenuItem>
-      <MainMenuItem Name="Polygon">
+      </SubMenu>
+      <SubMenu Name="Polygon">
         <Action Name="ACN_RECTANGLE"/>
         <Action Name="ACN_POLYGONCC"/>
         <Action Name="ACN_POLYGONCV"/>
-      </MainMenuItem>
+      </SubMenu>
       <Action Name="ACN_ARC"/>
       <Action Name="ACN_BInsert"/>
       <Action Name="ACN_TEXT"/>
-    </MainMenuItem>
-    <MainMenuItem Name="Dimension">
+    </Menu>
+    <Menu Name="Dimension">
       <Action Name="ACN_DIMALIGNED"/>
       <Action Name="ACN_DIMLINEAR"/>
       <Action Name="ACN_DIMRADIAL"/>
       <Action Name="ACN_DIMDIAMETRIC"/>
-    </MainMenuItem>
-    <MainMenuItem Name="Modify">
+    </Menu>
+    <Menu Name="Modify">
       <Action Name="ACN_POLYED"/>
-      <MainMenuItem Name="Block/Device">
+      <SubMenu Name="Block/Device">
         <Action Name="ACN_BEDIT"/>
         <Action Name="ACN_ADDTOOWNER"/>
         <Action Name="ACN_COPYFROMOWNER"/>
@@ -145,7 +145,7 @@
         <Action Name="ACN_BREPLACE"/>
         <Action Name="ACN_BSCALE"/>
         <Action Name="ACN_BROTATE"/>
-      </MainMenuItem>
+      </SubMenu>
     <Separator/>
       <Action Name="ACN_COPY"/>
       <Action Name="ACN_MOVE"/>
@@ -154,52 +154,52 @@
       <Action Name="ACN_STRETCH"/>
       <Action Name="ACN_MIRROR"/>
     <Separator/>
-      <MainMenuItem Name="Text">
+      <SubMenu Name="Text">
         <Action Name="ACN_smtextall"/>
         <Action Name="ACN_smtextarea"/>
-      </MainMenuItem>
+      </SubMenu>
     <Separator/>
       <Action Name="ACN_OBJVARMAN"/>
       <Action Name="ACN_MULTIOBJVARMAN"/>
-    </MainMenuItem>
-    <MainMenuItem Name="Info">
+    </Menu>
+    <Menu Name="Info">
       <Action Name="ACN_DIST"/>
       <Separator/>
       <Command Caption="Names of entities" Command="VarReport(NMO_Name)"/> 
       <Command Caption="Names of devices with axis" Command="ExportDevWithAxis"/> 
-    </MainMenuItem>
-    <MainMenuItem Name="Settings">
+    </Menu>
+    <Menu Name="Settings">
       <Action Name="ACN_OPTIONS"/>
       <Action Name="ACN_SAVEOPTIONS"/>
       <Separator/>
       <Action Name="ACN_DOCKOPT"/>
       <Action Name="ACN_SAVELAYOUT"/>
-    </MainMenuItem>
-    <MainMenuItem Name="Window">
+    </Menu>
+    <Menu Name="Window">
       <Action Name="ACN_CLOSE"/>
       <Separator/>
       <Drawings/>
       <Separator/>
       <Action Name="ACN_WNEXT"/>
       <Action Name="ACN_WPREV"/>
-    </MainMenuItem>
-    <MainMenuItem Name="Help">
+    </Menu>
+    <Menu Name="Help">
       <Action Name="ACN_HELP"/>
       <Action Name="ACN_ABOUT"/>
-    </MainMenuItem>
-    <MainMenuItem Name="Debug">
-      <MainMenuItem Name="Sample files">
+    </Menu>
+    <Menu Name="Debug">
+      <SubMenu Name="Sample files">
         <SampleFiles/>
-      </MainMenuItem>
-      <MainMenuItem Name="**Files with errors (current debug)">
+      </SubMenu>
+      <SubMenu Name="**Files with errors (current debug)">
         <DebugFiles/>
-      </MainMenuItem>
-      <MainMenuItem Name="**Other Commands (current debug);">
+      </SubMenu>
+      <SubMenu Name="**Other Commands (current debug);">
         <Command Caption="TestInsert1" Command="TestInsert1"/>
         <Command Caption="TestInsert1" Command="TestInsert1"/>
         <Command Caption="Find all intersections (lines only)" Command="FindAllIntersections"/>
-      </MainMenuItem>
-      <MainMenuItem Name="**Utils">
+      </SubMenu>
+      <SubMenu Name="**Utils">
         <Command Caption="Command list" Command="CommandList"/>
         <Command Caption="Clear File History" Command="ClearFileHistory"/>
         <Command Caption="PlaceAllBlocks" Command="PlaceAllBlocks"/>
@@ -209,13 +209,13 @@
         <Command Caption="BlockPreviewExport" Command="ExecuteFile(*components\blockpreviewexport.cmd)"/>
         <Action Name="ACN_TREESTAT"/>
         <Command Caption="AppExplorer" Command="DbgAppExplorer"/>
-      </MainMenuItem>
-      <MainMenuItem Name="Inspector">
+      </SubMenu>
+      <SubMenu Name="Inspector">
         <Command Caption="**Fix the current" Command="SetObjInsp(CURRENT)"/>
         <Command Caption="**GDB" Command="SetObjInsp(GDBDescriptor)"/>
         <Command Caption="**OGLWND (отладка)" Command="SetObjInsp(OGLWND_DEBUG)"/>
-      </MainMenuItem>
-    </MainMenuItem>
+      </SubMenu>
+    </Menu>
     <PopUpMenu Name="PROGRAMDBCXMENU">
       <Action Name="ACN_DBASEADD"/>
     </PopUpMenu>
@@ -297,7 +297,7 @@
         <Action Name="ACN_SELECTALL"/>
         <Separator/>
       </IFONE>
-      <MainMenuItem Name="Object snap">
+      <SubMenu Name="Object snap">
         <Action Name="ACN_OS_INSERT"/>
         <Action Name="ACN_OS_END"/>
         <Action Name="ACN_OS_MIDDLE"/>
@@ -312,11 +312,11 @@
         <Action Name="ACN_OS_NEAREST"/>
         <Action Name="ACN_OS_APARENTINTERSECTION"/>
         <Action Name="ACN_OS_PARALEL"/>
-      </MainMenuItem>
+      </SubMenu>
       <IFONE Сonditions="~CommandRunning">
-        <MainMenuItem Name="Last commands">
+        <SubMenu Name="Last commands">
           <LastCommands/>
-        </MainMenuItem>
+        </SubMenu>
       </IFONE>
         <IFONE Сonditions="CommandRunning">
           <Action Name="ACN_CANCEL"/>

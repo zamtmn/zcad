@@ -1703,6 +1703,7 @@ begin
   CreateInterfaceLists;
 
   TMenuDefaults.RegisterMenuCreateFunc('SubMenu',ZMenuExt.ZMenuExtMainMenuItemReader);
+  TMenuDefaults.RegisterMenuCreateFunc('Menu',ZMenuExt.ZMenuExtMainMenuItemReader);
   TMenuDefaults.RegisterMenuCreateFunc('PopUpMenu',ZMenuExt.ZMenuExtPopUpMenuReader);
   TMenuDefaults.RegisterMenuCreateFunc('Action',ZMenuExt.ZMenuExtAction);
   TMenuDefaults.RegisterMenuCreateFunc('FileHistory',ZMenuExt.ZMenuExtFileHistory);

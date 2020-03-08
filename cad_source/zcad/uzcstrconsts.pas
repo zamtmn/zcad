@@ -95,6 +95,7 @@ resourcestring
   //rscmFind='Find';
   rscmSelect='Select';
   rscmCommandParams='Command params';
+  rscmSelectEntity='Select entity:';
   rscmSelectSourceEntity='Select source entity:';
   rscmSelectDestinationEntity='Select destination entity:';
   rscmSpecifyX='Specify X:';

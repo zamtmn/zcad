@@ -100,6 +100,7 @@ type
      protected
       procedure Paint; override;
       procedure MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: Integer);override;
+      procedure MouseLeave;override;
       procedure MouseMove(Shift: TShiftState; X, Y: Integer); override;
       procedure KillPopupTimer(Sender: TObject);
       procedure SetPopupTimer(Sender: TObject);
@@ -186,6 +187,11 @@ begin
   if assigned(PopupMenu) then begin
     KillPopupTimer(self);
   end;
+end;
+procedure TZToolButton.MouseLeave;
+begin
+  inherited;
+  KillPopupTimer(self);
 end;
 procedure TZToolButton.KillPopupTimer(Sender: TObject);
 begin

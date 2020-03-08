@@ -99,6 +99,11 @@ type
     TZToolButton=class(TToolButton)
      protected
       procedure Paint; override;
+      procedure MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: Integer);override;
+      procedure MouseMove(Shift: TShiftState; X, Y: Integer); override;
+      procedure KillPopupTimer(Sender: TObject);
+      procedure SetPopupTimer(Sender: TObject);
+      procedure ShowPopUp(Sender: TObject);
     end;
 
   PTFreedForm=^TFreedForm;
@@ -139,6 +144,8 @@ function FindComponentByType(_owner:TComponent;_class:TClass):TComponent;
 procedure SetHeightControl(_parent:TWinControl;h:integer);
 var
   brocenicon:integer;
+  PopUpTimer:TTimer=nil;
+  ButtonPopUpInterval:integer=800;
 //   ACN_ShowObjInsp:TmyAction=nil;
 implementation
 
@@ -164,6 +171,43 @@ begin
     {$IFDEF LCLQT5}PaintRect.Top:=PaintRect.Bottom div 2;PaintRect.Left:=2*PaintRect.Right div 3;{$ENDIF}
     {$IFDEF LCLGTK2}PaintRect.Top:=2*PaintRect.Bottom div 3;PaintRect.Left:=PaintRect.Right div 2;{$ENDIF}
     ThemeServices.DrawElement(Canvas.Handle,Details,PaintRect)
+  end;
+end;
+procedure TZToolButton.MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+  inherited;
+  if assigned(PopupMenu) then begin
+    SetPopupTimer(self);
+  end;
+end;
+procedure TZToolButton.MouseMove(Shift: TShiftState; X, Y: Integer);
+begin
+  inherited;
+  if assigned(PopupMenu) then begin
+    KillPopupTimer(self);
+  end;
+end;
+procedure TZToolButton.KillPopupTimer(Sender: TObject);
+begin
+  if assigned(PopUpTimer) then begin
+   PopUpTimer.Enabled:=false;
+   PopUpTimer.OnTimer:=nil;
+  end;
+end;
+
+procedure TZToolButton.SetPopupTimer(Sender: TObject);
+begin
+  if PopUpTimer=nil then
+    PopUpTimer:=TTimer.Create(nil);
+  PopUpTimer.Interval:=ButtonPopUpInterval;
+  PopUpTimer.Enabled:=true;
+  PopUpTimer.OnTimer:=Self.ShowPopUp;
+end;
+procedure TZToolButton.ShowPopUp(Sender: TObject);
+begin
+  if assigned(PopupMenu) then begin
+    KillPopupTimer(nil);
+    PopupMenu.PopUp;
   end;
 end;
 
@@ -777,5 +821,8 @@ end;
 initialization
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  if PopUpTimer<>nil then
+    FreeAndNil(PopUpTimer);
+
 end.
 

@@ -26,19 +26,21 @@ uses
   uzcstrconsts,uzcutils,zcchangeundocommand,uzbtypes,uzccommandsimpl;
 
 implementation
+const
+  LayOffCommandName='LayOff';
 function LayOff_com(operands:TCommandOperands):TCommandResult;
 var
-  pd:PGDBObjEntity;
+  PEntity:PGDBObjEntity;
   UndoStartMarkerPlaced:boolean;
 begin
   UndoStartMarkerPlaced:=false;
-  while commandmanager.getentity(rscmSelectEntity,pd) do
+  while commandmanager.getentity(rscmSelectEntity,PEntity) do
   begin
-   if pd^.vp.Layer._on then begin
-     zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,'LayOff',true);
-     with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pd^.vp.Layer._on)^ do
+   if PEntity^.vp.Layer._on then begin
+     zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,LayOffCommandName,true);
+     with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PEntity^.vp.Layer._on)^ do
      begin
-       pd^.vp.Layer._on:=not pd^.vp.Layer._on;
+       PEntity^.vp.Layer._on:=not PEntity^.vp.Layer._on;
        ComitFromObj;
      end;
      zcRedrawCurrentDrawing;
@@ -48,5 +50,5 @@ begin
   result:=cmd_ok;
 end;
 initialization
-  CreateCommandFastObjectPlugin(@LayOff_com,'LayOff',CADWG,0);
+  CreateCommandFastObjectPlugin(@LayOff_com,LayOffCommandName,CADWG,0);
 end.

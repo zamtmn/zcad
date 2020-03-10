@@ -55,8 +55,9 @@ uses uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzepalette,
   {**Помещение в стек undo маркера начала команды. Используется для группировки
      операций отмены. Допускаются вложеные команды. Количество маркеров начала и
      конца должно совпадать
-    @param(CommandName Имя команды. Будет показано в окне истории при отмене\повторе)}
-  procedure zcStartUndoCommand(CommandName:GDBString);
+    @param(CommandName Имя команды. Будет показано в окне истории при отмене\повторе)
+    @param(PushStone Поместить в стек ундо "камень". Ундо не сможет пройти через него пока не завершена текущая команда)}
+  procedure zcStartUndoCommand(CommandName:GDBString;PushStone:boolean=false);
 
   {**Помещение в стек undo маркера конца команды. Используется для группировки
      операций отмены. Допускаются вложеные команды. Количество маркеров начала и
@@ -65,8 +66,9 @@ uses uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzepalette,
 
   {**Добавление в стек undo маркера начала команды при необходимости
     @param(UndoStartMarkerPlaced Флаг установки маркера: false - маркер еще не поставлен, ставим маркер, поднимаем флаг. true - ничего не делаем)
-    @param(CommandName Имя команды. Будет показано в окне истории при отмене\повторе)}
-  procedure zcPlaceUndoStartMarkerIfNeed(var UndoStartMarkerPlaced:boolean;const CommandName:GDBString);
+    @param(CommandName Имя команды. Будет показано в окне истории при отмене\повторе)
+    @param(PushStone Поместить в стек ундо "камень". Ундо не сможет пройти через него пока не завершена текущая команда)}
+  procedure zcPlaceUndoStartMarkerIfNeed(var UndoStartMarkerPlaced:boolean;const CommandName:GDBString;PushStone:boolean=false);
 
   {**Добавление в стек undo маркера конца команды при необходимости
     @param(UndoStartMarkerPlaced Флаг установки маркера начала: true - маркер начала поставлен, ставим маркер конца, сбрасываем флаг. false - ничего не делаем)}
@@ -169,9 +171,11 @@ procedure zcAddEntToCurrentDrawingWithUndo(const PEnt:PGDBObjEntity);
 begin
      zcAddEntToDrawingWithUndo(PEnt,PTZCADDrawing(drawings.GetCurrentDWG)^);
 end;
-procedure zcStartUndoCommand(CommandName:GDBString);
+procedure zcStartUndoCommand(CommandName:GDBString;PushStone:boolean=false);
 begin
      PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushStartMarker(CommandName);
+     if PushStone then
+       PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushStone;
 end;
 procedure zcAddEntToCurrentDrawingConstructRoot(const PEnt: PGDBObjEntity);
 begin
@@ -190,10 +194,10 @@ procedure zcEndUndoCommand;
 begin
      PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushEndMarker;
 end;
-procedure zcPlaceUndoStartMarkerIfNeed(var UndoStartMarkerPlaced:boolean;const CommandName:GDBString);
+procedure zcPlaceUndoStartMarkerIfNeed(var UndoStartMarkerPlaced:boolean;const CommandName:GDBString;PushStone:boolean=false);
 begin
     if UndoStartMarkerPlaced then exit;
-    zcStartUndoCommand(CommandName);
+    zcStartUndoCommand(CommandName,PushStone);
     UndoStartMarkerPlaced:=true;
 end;
 procedure zcPlaceUndoEndMarkerIfNeed(var UndoStartMarkerPlaced:boolean);

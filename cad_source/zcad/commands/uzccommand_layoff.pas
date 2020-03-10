@@ -12,7 +12,7 @@
 *                                                                           *
 *****************************************************************************
 }
-{**
+{
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 {$mode delphi}
@@ -35,13 +35,12 @@ begin
   while commandmanager.getentity(rscmSelectEntity,pd) do
   begin
    if pd^.vp.Layer._on then begin
-     zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,'LayOff');
+     zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,'LayOff',true);
      with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pd^.vp.Layer._on)^ do
      begin
        pd^.vp.Layer._on:=not pd^.vp.Layer._on;
        ComitFromObj;
      end;
-
      zcRedrawCurrentDrawing;
    end;
   end;
@@ -49,5 +48,5 @@ begin
   result:=cmd_ok;
 end;
 initialization
-     CreateCommandFastObjectPlugin(@LayOff_com,'LayOff',CADWG,0);
+  CreateCommandFastObjectPlugin(@LayOff_com,'LayOff',CADWG,0);
 end.

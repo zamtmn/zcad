@@ -47,7 +47,6 @@ type
   pCommandRTEdObject=^CommandRTEdObject;
   CommandRTEdObject = {$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObjectDef)
     saveosmode:GDBInteger;(*hidden_in_objinsp*)
-    UndoTop:TArrayIndex;(*hidden_in_objinsp*)
     commanddata:TTypedData;(*'Command options'*)
     procedure CommandStart(Operands:TCommandOperands); virtual;
     procedure CommandEnd; virtual;
@@ -214,8 +213,10 @@ procedure CommandFastObjectPlugin.CommandStart;
 var
    rez:integer;
 begin
-     if assigned(onCommandStart) then rez:=onCommandStart(Operands);
-     if rez<>ZCMD_OK_NOEND then commandmanager.executecommandend;
+  if assigned(drawings.GetCurrentDWG)then
+    UndoTop:=drawings.GetCurrentDWG.GetUndoTop{UndoStack.CurrentCommand};
+  if assigned(onCommandStart) then rez:=onCommandStart(Operands);
+  if rez<>ZCMD_OK_NOEND then commandmanager.executecommandend;
 end;
 procedure CommandFastObjectPlugin.CommandCancel;
 begin

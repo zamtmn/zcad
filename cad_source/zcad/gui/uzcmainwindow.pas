@@ -435,14 +435,23 @@ begin
      result:=false;
      case numprop of
                     0:begin
-                           PGDBLayerProp(PLayer)^._on:=not(PGDBLayerProp(PLayer)^._on);
-                           if PLayer=cdwg^.GetCurrentLayer then
-                           if not PGDBLayerProp(PLayer)^._on then
-                                                                 MessageBox(@rsCurrentLayerOff[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
-
+                        with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(PLayer)^._on)^ do
+                        begin
+                          PGDBLayerProp(PLayer)^._on:=not(PGDBLayerProp(PLayer)^._on);
+                          ComitFromObj;
+                        end;
+                        if PLayer=cdwg^.GetCurrentLayer then
+                          if not PGDBLayerProp(PLayer)^._on then
+                            MessageBox(@rsCurrentLayerOff[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
                       end;
                     {1:;}
-                    2:PGDBLayerProp(PLayer)^._lock:=not(PGDBLayerProp(PLayer)^._lock);
+                    2:begin
+                        with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(PLayer)^._lock)^ do
+                        begin
+                          PGDBLayerProp(PLayer)^._lock:=not(PGDBLayerProp(PLayer)^._lock);
+                          ComitFromObj;
+                        end;
+                      end;
                     3:begin
                            cdwg:=drawings.GetCurrentDWG;
                            if cdwg<>nil then

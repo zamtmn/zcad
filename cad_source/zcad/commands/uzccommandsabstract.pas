@@ -19,7 +19,7 @@
 unit uzccommandsabstract;
 {$INCLUDE def.inc}
 interface
-uses uzbgeomtypes,uzbtypesbase,uzbtypes,uzglviewareadata,uzclog;
+uses uzbgeomtypes,uzbtypesbase,uzbtypes,uzglviewareadata,uzclog,gzctnrvectortypes;
 const
      CADWG=1;
      CASelEnt=2;
@@ -72,6 +72,7 @@ TInteractiveProcObjBuild=procedure(const PInteractiveData:GDBPointer;Point:GDBVe
     procedure CommandContinue; virtual;
   end;
   CommandFastObjectDef ={$IFNDEF DELPHI}packed{$ENDIF} object(CommandObjectDef)
+    UndoTop:TArrayIndex;(*hidden_in_objinsp*)
     procedure CommandInit; virtual;abstract;
     procedure CommandEnd; virtual;abstract;
   end;

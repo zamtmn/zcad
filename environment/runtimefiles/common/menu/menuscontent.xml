@@ -137,6 +137,9 @@
     </Menu>
     <Menu Name="Modify">
       <Action Name="ACN_POLYED"/>
+      <SubMenu Name="Layers">
+        <Action Name="ACN_LAYOFF"/>
+      </SubMenu>
       <SubMenu Name="Block/Device">
         <Action Name="ACN_BEDIT"/>
         <Action Name="ACN_ADDTOOWNER"/>
@@ -272,6 +275,22 @@
       <Action Name="ACN_ALWAYSUSEMULTISELECTWWRAPPER"/>
       <Action Name="ACN_SHOWEMPTYSECTIONS"/>
     </PopUpMenu>
+    <Menu Name="Object snap">
+      <Action Name="ACN_OS_INSERT"/>
+      <Action Name="ACN_OS_END"/>
+      <Action Name="ACN_OS_MIDDLE"/>
+      <Action Name="ACN_OS_THIRD"/>
+      <Action Name="ACN_OS_QUARTER"/>
+      <Action Name="ACN_OS_CENTER"/>
+      <Action Name="ACN_OS_QUADRANT"/>
+      <Action Name="ACN_OS_POINT"/>
+      <Action Name="ACN_OS_INTERSECTION"/>
+      <Action Name="ACN_OS_PERPENDICULAR"/>
+      <Action Name="ACN_OS_TANGENT"/>
+      <Action Name="ACN_OS_NEAREST"/>
+      <Action Name="ACN_OS_APARENTINTERSECTION"/>
+      <Action Name="ACN_OS_PARALEL"/>
+    </Menu>
     <PopUpMenu Name="VIEWAREACXMENU">
       <IFONE Сonditions="EntsSelected">
         <Action Name="ACN_COPY"/>
@@ -297,6 +316,7 @@
         <Action Name="ACN_SELECTALL"/>
         <Separator/>
       </IFONE>
+      <InsertMenu Name="Object snap"/>
       <SubMenu Name="Object snap">
         <Action Name="ACN_OS_INSERT"/>
         <Action Name="ACN_OS_END"/>

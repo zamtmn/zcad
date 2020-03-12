@@ -68,6 +68,8 @@ begin
   if not assigned(MenuConfig) then begin
     MenuConfig:=TXMLConfig.Create(nil);
     MenuConfig.Filename:=filename;
+    tempTBContentNode:=MenuConfig.FindNode('MenusContent',false);
+    CheckMainMenu(tempTBContentNode);
   end else begin
     tempMenuConfig:=TXMLConfig.Create(nil);
     tempMenuConfig.Filename:=filename;
@@ -265,14 +267,17 @@ begin
       if assigned(MMProcessor)then
         MMProcessor.SetCurrentContext(ctx);
       SetCurrentContext(ctx);
-      GeneralContextChecker.SetCurrentContext(Application);
+      if assigned(GeneralContextChecker) then
+        GeneralContextChecker.SetCurrentContext(Application);
       TMenuDefaults.RegisterMenuCreateFunc('IFONE',@DoIfOneNode);
       TMenuDefaults.RegisterMenuCreateFunc('IFALL',@DoIfAllNode);
       TMenuDefaults.TryRunMenuCreateFunc(fmainform,TBSubNode.NodeName,TBSubNode,factionlist,nil,MPF);
       TMenuDefaults.UnRegisterMenuCreateFunc('IFONE');
       TMenuDefaults.UnRegisterMenuCreateFunc('IFALL');
-      GeneralContextChecker.ReleaseCashe;
-      GeneralContextChecker.ReSetCurrentContext(Application);
+      if assigned(GeneralContextChecker) then
+        GeneralContextChecker.ReleaseCashe;
+      if assigned(GeneralContextChecker) then
+        GeneralContextChecker.ReSetCurrentContext(Application);
       ReleaseCashe;
       if assigned(MMProcessor)then
         MMProcessor.ReSetCurrentContext(ctx);

@@ -107,7 +107,7 @@ begin
 end;
 function FindInSupportPath(PPaths:GDBString;FileName:GDBString):GDBString;
 const
-     FindInSupportPath='[FILEOPS]FindInSupportPath: found file:"%s"';
+     cFindInSupportPath='[FILEOPS]FindInSupportPath: found file:"%s"';
 var
    s,ts:gdbstring;
 begin
@@ -121,7 +121,7 @@ begin
                                       result:=FileName;
                                       //programlog.LogOutStr(format(FindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)]),0,LM_Info);
                                       if VerboseLog^ then
-                                        DebugLn(sysutils.Format(FindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]));
+                                        DebugLn(sysutils.Format(cFindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]));
                                       exit;
                                  end;
      //if PPaths<>nil then
@@ -137,7 +137,7 @@ begin
                                  begin
                                       result:=ts;
                                       if VerboseLog^ then
-                                        DebugLn(sysutils.Format(FindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(result)]));
+                                        DebugLn(sysutils.Format(cFindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(result)]));
                                       exit;
                                  end;
      until s='';

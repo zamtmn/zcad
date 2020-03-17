@@ -1333,7 +1333,7 @@ begin
     if assigned(SubNode) then
       while assigned(SubNode)do
       begin
-        TMenuDefaults.TryRunMenuCreateFunc(self,SubNode.NodeName,SubNode,StandartActions,tmenuitem(tbutton.PopupMenu),mpf);
+        TMenuDefaults.TryRunMenuCreateFunc(TMenuType.TMT_PopupMenu,self,SubNode.NodeName,SubNode,StandartActions,tmenuitem(tbutton.PopupMenu),mpf);
         SubNode:=SubNode.NextSibling;
       end;
     if (ActionIndex>=0)and(ActionIndex<tbutton.PopupMenu.Items.Count) then

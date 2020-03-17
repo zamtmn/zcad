@@ -15,14 +15,13 @@ var
   MenuConfig:TXMLConfig=nil;
 
 type
-  TMenuType=(TMT_MainMenu,TMT_PopupMenu);
   generic TGMenusManager<T>=class(specialize TCMContextChecker<T>)
   type
     TMenusMacros=specialize TZMacros<T>;
   private
     factionlist:TActionList;
     fmainform:TForm;
-    function GetMenu_tmp(aName: string;ctx:T;ForceReCreate:boolean=false;MMProcessor:TMenusMacros=nil):TMenu;
+    function GetMenu_tmp(MT:TMenuType;aName: string;ctx:T;ForceReCreate:boolean=false;MMProcessor:TMenusMacros=nil):TMenu;
 
   public
     constructor Create(mainform:TForm;actlist:TActionList);
@@ -30,8 +29,8 @@ type
 
     procedure GetPart(out part:String;var path:String;const separator:String);
     function readspace(expr:String):String;
-    procedure DoIfOneNode(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);virtual;
-    procedure DoIfAllNode(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);virtual;
+    procedure DoIfOneNode(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);virtual;
+    procedure DoIfAllNode(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);virtual;
 
     procedure LoadMenus(filename:string;MMProcessor:TMenusMacros=nil);
     function GetMacroProcessFuncAddr(MMProcessor:TMenusMacros):TMacroProcessFunc;
@@ -39,7 +38,7 @@ type
 
     function GetMainMenu(aName: string;ctx:T;MMProcessor:TMenusMacros=nil):TMenu;
     function GetPopupMenu(aName: string;ctx:T;MMProcessor:TMenusMacros=nil):TPopupMenu;
-    function GetSubMenu(aName:string;ctx:T;MMProcessor:TMenusMacros=nil):TMenuItem;
+    function GetSubMenu(MT:TMenuType;aName:string;ctx:T;MMProcessor:TMenusMacros=nil):TMenuItem;
   end;
   TGeneralMenuManager=specialize TGMenusManager<TObject>;
 
@@ -141,7 +140,7 @@ begin
   result := copy(expr, i, length(expr) - i + 1);
 end;
 
-procedure TGMenusManager.DoIfOneNode(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
+procedure TGMenusManager.DoIfOneNode(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
 var
   TBSubNode:TDomNode;
   conditions,condition:string;
@@ -172,13 +171,13 @@ begin
     TBSubNode:=aNode.FirstChild;
     if assigned(TBSubNode) then
       while assigned(TBSubNode)do begin
-        TMenuDefaults.TryRunMenuCreateFunc(fmf,TBSubNode.NodeName,TBSubNode,factionlist,RootMenuItem,MPF);
+        TMenuDefaults.TryRunMenuCreateFunc(MT,fmf,TBSubNode.NodeName,TBSubNode,factionlist,RootMenuItem,MPF);
         TBSubNode:=TBSubNode.NextSibling;
       end;
   end;
 end;
 
-procedure TGMenusManager.DoIfAllNode(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
+procedure TGMenusManager.DoIfAllNode(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
 var
   TBSubNode:TDomNode;
   conditions,condition:string;
@@ -210,7 +209,7 @@ begin
     TBSubNode:=aNode.FirstChild;
     if assigned(TBSubNode) then
       while assigned(TBSubNode)do begin
-        TMenuDefaults.TryRunMenuCreateFunc(fmf,TBSubNode.NodeName,TBSubNode,factionlist,RootMenuItem,MPF);
+        TMenuDefaults.TryRunMenuCreateFunc(MT,fmf,TBSubNode.NodeName,TBSubNode,factionlist,RootMenuItem,MPF);
         TBSubNode:=TBSubNode.NextSibling;
       end;
   end;
@@ -225,17 +224,17 @@ begin
 end;
 function TGMenusManager.GetMainMenu(aName: string;ctx:T;MMProcessor:TMenusMacros=nil):TMenu;
 begin
-  result:=GetMenu_tmp(aName,ctx,false,MMProcessor);
+  result:=GetMenu_tmp(TMenuType.TMT_MainMenu,aName,ctx,false,MMProcessor);
 end;
 function TGMenusManager.GetPopupMenu(aName: string;ctx:T;MMProcessor:TMenusMacros=nil):TPopupMenu;
 begin
-  result:=TPopupMenu(GetMenu_tmp(aName,ctx,true,MMProcessor));
+  result:=TPopupMenu(GetMenu_tmp(TMenuType.TMT_PopupMenu,aName,ctx,true,MMProcessor));
 end;
-function TGMenusManager.GetSubMenu(aName: string;ctx:T;MMProcessor:TMenusMacros=nil):TMenuItem;
+function TGMenusManager.GetSubMenu(MT:TMenuType;aName: string;ctx:T;MMProcessor:TMenusMacros=nil):TMenuItem;
 begin
-  result:=TMenuItem(GetMenu_tmp(aName,ctx,true,MMProcessor));
+  result:=TMenuItem(GetMenu_tmp(MT,aName,ctx,true,MMProcessor));
 end;
-function TGMenusManager.GetMenu_tmp(aName: string;ctx:T;ForceReCreate:boolean=false;MMProcessor:TMenusMacros=nil):TMenu;
+function TGMenusManager.GetMenu_tmp(MT:TMenuType;aName: string;ctx:T;ForceReCreate:boolean=false;MMProcessor:TMenusMacros=nil):TMenu;
 var
   TBNode,TBSubNode:TDomNode;
   menuname:string;
@@ -271,7 +270,7 @@ begin
         GeneralContextChecker.SetCurrentContext(Application);
       TMenuDefaults.RegisterMenuCreateFunc('IFONE',@DoIfOneNode);
       TMenuDefaults.RegisterMenuCreateFunc('IFALL',@DoIfAllNode);
-      TMenuDefaults.TryRunMenuCreateFunc(fmainform,TBSubNode.NodeName,TBSubNode,factionlist,nil,MPF);
+      TMenuDefaults.TryRunMenuCreateFunc(MT,fmainform,TBSubNode.NodeName,TBSubNode,factionlist,nil,MPF);
       TMenuDefaults.UnRegisterMenuCreateFunc('IFONE');
       TMenuDefaults.UnRegisterMenuCreateFunc('IFALL');
       if assigned(GeneralContextChecker) then
@@ -303,11 +302,11 @@ begin
       while assigned(TBSubNode)do
       begin
         if TBSubNode.nodeName='CreateMenu' then begin
-          TMenuDefaults.TryRunMenuCreateFunc(fmainform,TBSubNode.NodeName,TBSubNode,factionlist,nil,mpf);
+          TMenuDefaults.TryRunMenuCreateFunc(TMenuType.TMT_MainMenu,fmainform,TBSubNode.NodeName,TBSubNode,factionlist,nil,mpf);
           //exit;
         end;
         if TBSubNode.nodeName='SetMainMenu' then begin
-          TMenuDefaults.TryRunMenuCreateFunc(fmainform,TBSubNode.NodeName,TBSubNode,factionlist,nil,mpf);
+          TMenuDefaults.TryRunMenuCreateFunc(TMenuType.TMT_MainMenu,fmainform,TBSubNode.NodeName,TBSubNode,factionlist,nil,mpf);
           //exit;
         end;
         TBSubNode:=TBSubNode.NextSibling;

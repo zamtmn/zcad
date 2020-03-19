@@ -9,7 +9,7 @@ interface
 
 uses
   uztoolbarsmanager, uzmenusmanager, ugcontextchecker, uzmenusdefaults, 
-  LazarusPackageIntf;
+  uzxmlnodesutils, LazarusPackageIntf;
 
 implementation
 

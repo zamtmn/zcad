@@ -11,37 +11,41 @@
         <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
     </CompilerOptions>
-    <Files Count="4">
-      <Item1>
+    <Files>
+      <Item>
         <Filename Value="uztoolbarsmanager.pas"/>
         <UnitName Value="uztoolbarsmanager"/>
-      </Item1>
-      <Item2>
+      </Item>
+      <Item>
         <Filename Value="uzmenusmanager.pas"/>
         <UnitName Value="uzmenusmanager"/>
-      </Item2>
-      <Item3>
+      </Item>
+      <Item>
         <Filename Value="ugcontextchecker.pas"/>
         <UnitName Value="ugcontextchecker"/>
-      </Item3>
-      <Item4>
+      </Item>
+      <Item>
         <Filename Value="uzmenusdefaults.pas"/>
         <UnitName Value="uzmenusdefaults"/>
-      </Item4>
+      </Item>
+      <Item>
+        <Filename Value="uzxmlnodesutils.pas"/>
+        <UnitName Value="uzxmlnodesutils"/>
+      </Item>
     </Files>
-    <RequiredPkgs Count="4">
-      <Item1>
+    <RequiredPkgs>
+      <Item>
         <PackageName Value="zmacros"/>
-      </Item1>
-      <Item2>
+      </Item>
+      <Item>
         <PackageName Value="rtl_generics"/>
-      </Item2>
-      <Item3>
+      </Item>
+      <Item>
         <PackageName Value="LCL"/>
-      </Item3>
-      <Item4>
+      </Item>
+      <Item>
         <PackageName Value="FCL"/>
-      </Item4>
+      </Item>
     </RequiredPkgs>
     <UsageOptions>
       <UnitPath Value="$(PkgOutDir)"/>

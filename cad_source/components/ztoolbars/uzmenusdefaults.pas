@@ -5,7 +5,7 @@ unit uzmenusdefaults;
 interface
 
 uses
-  ugcontextchecker,uztoolbarsmanager,uzmacros,
+  ugcontextchecker,uztoolbarsmanager,uzmacros,uzxmlnodesutils,
   ActnList,Laz2_XMLCfg,Laz2_DOM,Menus,Forms,
   sysutils,Generics.Collections;
 

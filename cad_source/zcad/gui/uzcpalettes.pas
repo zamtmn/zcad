@@ -23,7 +23,7 @@ uses
      uzcstrconsts,uzcsysparams,uzcsysvars,uzbtypes,uzcsysinfo,
      uzcinfoform,Varman,uzcinterface,laz.VirtualTrees,
      uzbstrproc,uzeenttext,
-     EditBtn,Masks,StdCtrls,Controls,Classes,Forms,uzccommandsmanager,Laz2_DOM,ComCtrls,uztoolbarsmanager,uzcimagesmanager,uzctranslations,uzcdrawings;
+     EditBtn,Masks,StdCtrls,Controls,Classes,Forms,uzccommandsmanager,Laz2_DOM,ComCtrls,uztoolbarsmanager,uzxmlnodesutils,uzcimagesmanager,uzctranslations,uzcdrawings;
 type
     TZPaletteListItem=class(TListItem)
     public

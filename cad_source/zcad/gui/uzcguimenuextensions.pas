@@ -42,7 +42,7 @@ uses
        uzmenusdefaults,uzmenusmanager,uztoolbarsmanager,uzcfcommandline,uzctreenode,uzcctrlcontextmenu,
        uzcimagesmanager,
   {}
-       uzmacros,
+       uzmacros,uzxmlnodesutils,
        uzcguimanager;
 type
   PTDummyMyActionsArray=^TDummyMyActionsArray;
@@ -52,6 +52,7 @@ type
   TCommandHistory=Array [0..9] of TmyAction;
 
   ZMenuExt = class
+    class procedure ZMenuExtMenuItemReader(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
     class procedure ZMenuExtMainMenuItemReader(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
     class procedure ZMenuExtPopUpMenuReader(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
     class procedure ZMenuExtAction(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
@@ -134,6 +135,7 @@ class procedure ZMenuExt.ZMenuExtMainMenuItemReader(MT:TMenuType;fmf:TForm;aName
 begin
     line:=getAttrValue(aNode,'Name','');
     localizedcaption:=InterfaceTranslate('menu~'+line,line);
+
     CreatedMenuItem:=FindMenuItem(line,localizedcaption,RootMenuItem);
     if CreatedMenuItem=nil then begin
       CreatedMenuItem:=TMenuItem.Create(application);
@@ -161,16 +163,16 @@ begin
         TPopUpMenu(RootMenuItem).Items.Add(CreatedMenuItem);
     end;
 end;
-
-
 class procedure ZMenuExt.ZMenuExtPopUpMenuReader(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
  var
   CreatedMenuItem:TPopupMenu;
-  line:string;
+  line,localizedcaption:string;
   TBSubNode:TDomNode;
 begin
-    CreatedMenuItem:=TPopupMenu.Create(application);
     line:=getAttrValue(aNode,'Name','');
+    localizedcaption:=InterfaceTranslate('menu~'+line,line);
+
+    CreatedMenuItem:=TPopupMenu.Create(application);
     CreatedMenuItem.Name:=MenuNameModifier+line;
     CreatedMenuItem.Images := actlist.Images;
 
@@ -184,7 +186,13 @@ begin
       end;
     cxmenumgr.RegisterLCLMenu(CreatedMenuItem);
 end;
-
+class procedure ZMenuExt.ZMenuExtMenuItemReader(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
+begin
+    case MT of
+      TMT_MainMenu:ZMenuExt.ZMenuExtMainMenuItemReader(MT,fmf,aName,aNode,actlist,RootMenuItem,MPF);
+     TMT_PopupMenu:ZMenuExt.ZMenuExtPopUpMenuReader(MT,fmf,aName,aNode,actlist,RootMenuItem,MPF);
+    end;
+end;
 class procedure ZMenuExt.ZMenuExtFileHistory(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
 var
  i:integer;

@@ -5,12 +5,16 @@ unit uzmenusmanager;
 interface
 
 uses
-  ugcontextchecker,uztoolbarsmanager,uzmenusdefaults,uzmacros,
+  ugcontextchecker,uztoolbarsmanager,uzmenusdefaults,uzmacros,uzxmlnodesutils,
   ActnList,Laz2_XMLCfg,Laz2_DOM,Menus,Forms,
-  sysutils,Generics.Collections;
+  sysutils,Generics.Collections,Classes;
 
 const
   MenuNameModifier='MENU_';
+  MenuNodeName='Menu';
+  SubMenuNodeName='SubMenu';
+  UCMenuNodeName='MENU';
+  UCSubMenuNodeName='SUBMENU';
 var
   MenuConfig:TXMLConfig=nil;
 
@@ -31,6 +35,10 @@ type
     function readspace(expr:String):String;
     procedure DoIfOneNode(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);virtual;
     procedure DoIfAllNode(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);virtual;
+
+    procedure ConcatNodes(Child,NewChild: TDOMNode);
+    function FindsubNodeWithAttrName(node: TDOMNode;attrname:DOMString): TDOMNode;
+    function isMenu(Child: TDOMNode):boolean;
 
     procedure LoadMenus(filename:string;MMProcessor:TMenusMacros=nil);
     function GetMacroProcessFuncAddr(MMProcessor:TMenusMacros):TMacroProcessFunc;
@@ -55,6 +63,58 @@ end;
 destructor TGMenusManager.Destroy;
 begin
 end;
+
+function TGMenusManager.isMenu(Child: TDOMNode):boolean;
+var
+  s:DOMString;
+begin
+  if assigned(child) then begin
+    s:=uppercase(child.NodeName);
+    if (s=UCMenuNodeName)or(s=UCSubMenuNodeName)then
+      result:=true
+    else
+      result:=false;
+  end else
+    result:=false;
+
+end;
+
+function TGMenusManager.FindsubNodeWithAttrName(node: TDOMNode;attrname:DOMString): TDOMNode;
+var
+  TBSubNode,TBSubNode2:TDomNode;
+  s:DOMString;
+begin
+  if attrname='' then exit(nil);
+  TBSubNode2:=node.FirstChild;
+  while assigned(TBSubNode2)do
+  begin
+    s:=TBSubNode2.NodeName;
+    if getAttrValue(TBSubNode2,'Name','')=attrname then
+      exit(TBSubNode2);
+    TBSubNode2:=TBSubNode2.NextSibling;
+  end;
+  exit(nil);
+end;
+
+procedure TGMenusManager.ConcatNodes(Child,NewChild: TDOMNode);
+var
+  TBSubNode,TBSubNode2:TDomNode;
+  s:DOMString;
+begin
+  TBSubNode:=FindsubNodeWithAttrName(Child,getAttrValue(NewChild,'Name',''));
+  if (assigned(TBSubNode))and(isMenu(TBSubNode))and(isMenu(NewChild)) then begin
+    TBSubNode2:=NewChild.FirstChild;
+    while assigned(TBSubNode2)do
+    begin
+      s:=TBSubNode2.NodeName;
+      ConcatNodes(TBSubNode,TBSubNode2);
+      TBSubNode2:=TBSubNode2.NextSibling;
+    end;
+  end else begin
+    Child.AppendChild(NewChild.CloneNode(true,Child.OwnerDocument));
+  end;
+end;
+
 procedure TGMenusManager.LoadMenus(filename:string;MMProcessor:TMenusMacros=nil);
 var
   ActionsConfig:TXMLConfig;
@@ -62,6 +122,8 @@ var
 
   tempMenuConfig:TXMLConfig;
   tempTBContentNode,TBContentNode:TDomNode;
+  s: TFileStream;
+  ss:string;
 begin
 
   if not assigned(MenuConfig) then begin
@@ -74,38 +136,26 @@ begin
     tempMenuConfig.Filename:=filename;
 
     tempTBContentNode:=tempMenuConfig.FindNode('MenusContent',false);
+    ss:=tempTBContentNode.NodeName;
     CheckMainMenu(tempTBContentNode);
     TBContentNode:=MenuConfig.FindNode('MenusContent',false);
+    ss:=TBContentNode.NodeName;
 
     if assigned(tempTBContentNode) and assigned(TBContentNode)then begin
       TBSubNode:=tempTBContentNode.FirstChild;
+      ss:=TBSubNode.NodeName;
       while assigned(TBSubNode)do
       begin
-        TBContentNode.AppendChild(TBSubNode.CloneNode(true,TBContentNode.OwnerDocument));
-
+        ConcatNodes(TBContentNode,TBSubNode);
         TBSubNode:=TBSubNode.NextSibling;
       end;
     end;
-
     tempMenuConfig.Free;
+
+    {s:=TFileStream.Create('d:\test.xml',fmCreate);
+    MenuConfig.WriteToStream(S);
+    s.Free;}
   end;
-
-  {ActionsConfig:=TXMLConfig.Create(nil);
-  ActionsConfig.Filename:=filename;
-
-  TBNode:=ActionsConfig.FindNode('MenusContent',false);
-  if assigned(TBNode) then
-    TBSubNode:=TBNode.FirstChild
-  else
-    TBSubNode:=nil;
-  if assigned(TBSubNode) then
-    while assigned(TBSubNode)do
-    begin
-      TMenuDefaults.TryRunMenuCreateFunc(fmainform,TBSubNode.NodeName,TBSubNode,factionlist,nil);
-      TBSubNode:=TBSubNode.NextSibling;
-    end;
-
-  ActionsConfig.Free;}
 end;
 
 procedure TGMenusManager.GetPart(out part:String;var path:String;const separator:String);

@@ -49,7 +49,7 @@ uses
   {}
        uzcpalettes,zcchangeundocommand,uzgldrawcontext,uzglviewareaabstract,uzcguimanager,uzcinterfacedata,
        uzcenitiesvariablesextender,uzglviewareageneral,UniqueInstanceRaw,
-      uzmacros,uzcviewareacxmenu;
+      uzmacros,uzcviewareacxmenu,uzxmlnodesutils;
   {}
 resourcestring
   rsClosed='Closed';
@@ -1712,8 +1712,7 @@ begin
   CreateInterfaceLists;
 
   TMenuDefaults.RegisterMenuCreateFunc('SubMenu',ZMenuExt.ZMenuExtMainMenuItemReader);
-  TMenuDefaults.RegisterMenuCreateFunc('Menu',ZMenuExt.ZMenuExtMainMenuItemReader);
-  TMenuDefaults.RegisterMenuCreateFunc('PopUpMenu',ZMenuExt.ZMenuExtPopUpMenuReader);
+  TMenuDefaults.RegisterMenuCreateFunc('Menu',ZMenuExt.ZMenuExtMenuItemReader);
   TMenuDefaults.RegisterMenuCreateFunc('Action',ZMenuExt.ZMenuExtAction);
   TMenuDefaults.RegisterMenuCreateFunc('FileHistory',ZMenuExt.ZMenuExtFileHistory);
   TMenuDefaults.RegisterMenuCreateFunc('LastCommands',ZMenuExt.ZMenuExtCommandsHistory);

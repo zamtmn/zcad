@@ -318,15 +318,20 @@ class procedure ZMenuExt.TTBRegisterInAPPFunc(fmf:TForm;actlist:TActionList;aTBN
 var
     pm1:TMenuItem;
     action:tmyaction;
+    acnname:string;
 begin
-  action:=TmyAction.Create(fmf);
-  action.Name:=ToolBarNameToActionName(aName);
-  action.Caption:=aName;
-  action.command:='ShowToolBar';
-  action.options:=aName;
-  action.DisableIfNoHandler:=false;
-  actlist.AddMyAction(action);
-  action.pfoundcommand:=commandmanager.FindCommand(action.command);
+  acnname:=ToolBarNameToActionName(aName);
+  action:=tmyaction(actlist.ActionByName(acnname));
+  if action=nil then begin
+    action:=TmyAction.Create(fmf);
+    action.Name:=acnname;
+    action.Caption:=aName;
+    action.command:='ShowToolBar';
+    action.options:=aName;
+    action.DisableIfNoHandler:=false;
+    actlist.AddMyAction(action);
+    action.pfoundcommand:=commandmanager.FindCommand(action.command);
+  end;
   pm1:=TMenuItem.Create(TMenuItem(Data));
   pm1.Action:=action;
   TMenuItem(Data).Add(pm1);
@@ -335,15 +340,20 @@ class procedure ZMenuExt.TTPRegisterInAPPFunc(fmf:TForm;actlist:TActionList;aTBN
 var
     pm1:TMenuItem;
     action:tmyaction;
+    acnname:string;
 begin
-  action:=TmyAction.Create(fmf);
-  action.Name:=ToolPaletteNameToActionName(aName);
-  action.Caption:=aName;
-  action.command:='Show';
-  action.options:=ToolPaletteNamePrefix+aName;
-  action.DisableIfNoHandler:=false;
-  actlist.AddMyAction(action);
-  action.pfoundcommand:=commandmanager.FindCommand(action.command);
+  acnname:=ToolPaletteNameToActionName(aName);
+  action:=tmyaction(actlist.ActionByName(acnname));
+  if action=nil then begin
+    action:=TmyAction.Create(fmf);
+    action.Name:=ToolPaletteNameToActionName(aName);
+    action.Caption:=aName;
+    action.command:='Show';
+    action.options:=ToolPaletteNamePrefix+aName;
+    action.DisableIfNoHandler:=false;
+    actlist.AddMyAction(action);
+    action.pfoundcommand:=commandmanager.FindCommand(action.command);
+  end;
   pm1:=TMenuItem.Create(TMenuItem(Data));
   pm1.Action:=action;
   TMenuItem(Data).Add(pm1);

@@ -35,7 +35,8 @@ begin
   setMarkUnhandled(false);
   Result:=inherited SubstituteMacros(s);
   setMarkUnhandled(true);
-  {Result:=Result or }ViewAreaMacroList.SubstituteStr(s,PtrInt(@CurrentContext));
+  if assigned(ViewAreaMacroList) then
+    ViewAreaMacroList.SubstituteStr(s,PtrInt(@CurrentContext));
 end;
 
 procedure TViewAreaMacros.AddMacro(NewMacro:TTransferMacro);

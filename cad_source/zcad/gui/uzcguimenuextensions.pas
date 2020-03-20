@@ -172,9 +172,13 @@ begin
     line:=getAttrValue(aNode,'Name','');
     localizedcaption:=InterfaceTranslate('menu~'+line,line);
 
-    CreatedMenuItem:=TPopupMenu.Create(application);
-    CreatedMenuItem.Name:=MenuNameModifier+line;
-    CreatedMenuItem.Images := actlist.Images;
+    if RootMenuItem=nil then  begin
+      CreatedMenuItem:=TPopupMenu.Create(application);
+      CreatedMenuItem.Name:=MenuNameModifier+line;
+      CreatedMenuItem.Images := actlist.Images;
+    end else begin
+      CreatedMenuItem:=TPopupMenu(RootMenuItem);
+    end;
 
     if assigned(aNode) then
       TBSubNode:=aNode.FirstChild;

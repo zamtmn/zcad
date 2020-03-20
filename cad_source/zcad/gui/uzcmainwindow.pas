@@ -1724,6 +1724,8 @@ begin
   TMenuDefaults.RegisterMenuCreateFunc('DebugFiles',ZMenuExt.ZMenuExtDebugFiles);
 
   TMenuDefaults.RegisterMenuCreateFunc('CreateMenu',TMenuDefaults.DefaultCreateMenu);
+  TMenuDefaults.RegisterMenuCreateFunc('InsertMenuContent',TMenuDefaults.DefaultInsertMenuContent);
+  TMenuDefaults.RegisterMenuCreateFunc('InsertMenu',TMenuDefaults.DefaultInsertMenu);
   TMenuDefaults.RegisterMenuCreateFunc('SetMainMenu',TMenuDefaults.DefaultSetMenu);
   TMenuDefaults.RegisterMenuCreateFunc('Separator',TMenuDefaults.DefaultCreateMenuSeparator);
 

@@ -36,6 +36,8 @@ type
   TMenuDefaults=class
     class var MenuCreateFuncRegister:TMenuCreateFuncRegister;
     class procedure DefaultCreateMenu(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
+    class procedure DefaultInsertMenuContent(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
+    class procedure DefaultInsertMenu(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
     class procedure DefaultCreateMenuSeparator(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
     class procedure DefaultCreateMenuAction(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
     class procedure DefaultSetMenu(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
@@ -78,6 +80,52 @@ class function TCMenuContextNameManipulator.DefaultContexCheckState:TContextStat
 begin
   result:=false;
 end;
+
+function FindMenuContent(aName:string):TDomNode;
+var
+  TBNode,TBSubNode:TDomNode;
+  menuname:string;
+begin
+  if not assigned(MenuConfig) then
+    exit(nil);
+  TBNode:=MenuConfig.FindNode('MenusContent',false);
+  if assigned(TBNode) then begin
+    TBSubNode:=TBNode.FirstChild;
+    menuname:=uppercase(getAttrValue(TBSubNode,'Name',''));
+  end
+  else
+    TBSubNode:=nil;
+  aName:=uppercase(aName);
+  if assigned(TBSubNode) then
+    while (assigned(TBSubNode))and(menuname<>aName)do
+    begin
+      TBSubNode:=TBSubNode.NextSibling;
+      if assigned(TBSubNode) then
+        menuname:=uppercase(getAttrValue(TBSubNode,'Name',''));
+    end;
+  result:=TBSubNode;
+end;
+
+class procedure TMenuDefaults.DefaultInsertMenuContent(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
+var
+  MenuName:string;
+  MenuNode:TDomNode;
+begin
+  MenuName:=getAttrValue(aNode,'Name','');
+  MenuNode:=FindMenuContent(MenuName);
+  TMenuDefaults.TryRunMenuCreateFunc(MT,fmf,'Menu',MenuNode,actlist,RootMenuItem,MPF);
+end;
+
+class procedure TMenuDefaults.DefaultInsertMenu(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
+var
+  MenuName:string;
+  MenuNode:TDomNode;
+begin
+  MenuName:=getAttrValue(aNode,'Name','');
+  MenuNode:=FindMenuContent(MenuName);
+  TMenuDefaults.TryRunMenuCreateFunc(MT,fmf,'SubMenu',MenuNode,actlist,RootMenuItem,MPF);
+end;
+
 
 class procedure TMenuDefaults.DefaultCreateMenu(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
 var

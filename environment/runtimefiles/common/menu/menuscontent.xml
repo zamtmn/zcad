@@ -219,25 +219,25 @@
         <Command Caption="**OGLWND (отладка)" Command="SetObjInsp(OGLWND_DEBUG)"/>
       </SubMenu>
     </Menu>
-    <PopUpMenu Name="PROGRAMDBCXMENU">
+    <Menu Name="PROGRAMDBCXMENU">
       <Action Name="ACN_DBASEADD"/>
-    </PopUpMenu>
-    <PopUpMenu Name="PROJECTDBCXMENU">
+    </Menu>
+    <Menu Name="PROJECTDBCXMENU">
       <Action Name="ACN_DBASELINK"/>
       <Action Name="ACN_DBASERENAME"/>
-    </PopUpMenu>
-    <PopUpMenu Name="PROGRAMBLOCKSCXMENU">
+    </Menu>
+    <Menu Name="PROGRAMBLOCKSCXMENU">
       <Action Name="ACN_INSERTTODRAWING"/>
-    </PopUpMenu>
-    <PopUpMenu Name="NAVIGATORNODECONTEXTMENU">
+    </Menu>
+    <Menu Name="NAVIGATORNODECONTEXTMENU">
       <IFONE Сonditions="HaveSubNodes">
         <Action Name="ACN_NAVSELECTSUBNODES"/>
       </IFONE>
       <IFONE Сonditions="HaveEntity">
         <Command FaceAction="ACN_LOAD" Caption="Select entity" Command="SelectObjectByAddres($(EntInNodeAddr))"/>
       </IFONE>
-    </PopUpMenu>
-    <PopUpMenu Name="OBJINSPVARCXMENU">
+    </Menu>
+    <Menu Name="OBJINSPVARCXMENU">
       <Action Name="ACN_COPYVARNAMETOCLIP"/>
       <Action Name="ACN_COPYLINKTOVARTOCLIP"/>
       <Action Name="ACN_COPYVALUETOCLIP"/>
@@ -250,8 +250,8 @@
       <Action Name="ACN_SHOWFASTEDITORSINOBJINSP"/>
       <Action Name="ACN_SHOWONLYHOTFASTEDITORSINOBJINSP"/>
       <Action Name="ACN_OVERRIDEROWHEIGHTINOBJINSP"/>
-    </PopUpMenu>
-    <PopUpMenu Name="OBJINSPCXMENU">
+    </Menu>
+    <Menu Name="OBJINSPCXMENU">
       <Action Name="ACN_COPYVALUETOCLIP"/>
       <Separator/>
       <Action Name="ACN_SHOWHIDDENFIELDINOBJINSP"/>
@@ -262,8 +262,8 @@
       <Action Name="ACN_SHOWFASTEDITORSINOBJINSP"/>
       <Action Name="ACN_SHOWONLYHOTFASTEDITORSINOBJINSP"/>
       <Action Name="ACN_OVERRIDEROWHEIGHTINOBJINSP"/>
-    </PopUpMenu>
-    <PopUpMenu Name="OBJINSPHEADERCXMENU">
+    </Menu>
+    <Menu Name="OBJINSPHEADERCXMENU">
       <Action Name="ACN_SHOWHIDDENFIELDINOBJINSP"/>
       <Action Name="ACN_SHOWHEADERSINOBJINSP"/>
       <Action Name="ACN_OLDSTYLEINOBJINSP"/>
@@ -274,7 +274,7 @@
       <Action Name="ACN_OVERRIDEROWHEIGHTINOBJINSP"/>
       <Action Name="ACN_ALWAYSUSEMULTISELECTWWRAPPER"/>
       <Action Name="ACN_SHOWEMPTYSECTIONS"/>
-    </PopUpMenu>
+    </Menu>
     <Menu Name="Object snap">
       <Action Name="ACN_OS_INSERT"/>
       <Action Name="ACN_OS_END"/>
@@ -291,7 +291,7 @@
       <Action Name="ACN_OS_APARENTINTERSECTION"/>
       <Action Name="ACN_OS_PARALEL"/>
     </Menu>
-    <PopUpMenu Name="VIEWAREACXMENU">
+    <Menu Name="VIEWAREACXMENU">
       <IFONE Сonditions="EntsSelected">
         <Action Name="ACN_COPY"/>
         <Action Name="ACN_MOVE"/>
@@ -317,22 +317,6 @@
         <Separator/>
       </IFONE>
       <InsertMenu Name="Object snap"/>
-      <SubMenu Name="Object snap">
-        <Action Name="ACN_OS_INSERT"/>
-        <Action Name="ACN_OS_END"/>
-        <Action Name="ACN_OS_MIDDLE"/>
-        <Action Name="ACN_OS_THIRD"/>
-        <Action Name="ACN_OS_QUARTER"/>
-        <Action Name="ACN_OS_CENTER"/>
-        <Action Name="ACN_OS_QUADRANT"/>
-        <Action Name="ACN_OS_POINT"/>
-        <Action Name="ACN_OS_INTERSECTION"/>
-        <Action Name="ACN_OS_PERPENDICULAR"/>
-        <Action Name="ACN_OS_TANGENT"/>
-        <Action Name="ACN_OS_NEAREST"/>
-        <Action Name="ACN_OS_APARENTINTERSECTION"/>
-        <Action Name="ACN_OS_PARALEL"/>
-      </SubMenu>
       <IFONE Сonditions="~CommandRunning">
         <SubMenu Name="Last commands">
           <LastCommands/>
@@ -341,19 +325,19 @@
         <IFONE Сonditions="CommandRunning">
           <Action Name="ACN_CANCEL"/>
         </IFONE>
-    </PopUpMenu>
-    <PopUpMenu Name="LASTCOMMANDSCXMENU">
+    </Menu>
+    <Menu Name="LASTCOMMANDSCXMENU">
       <IFONE Сonditions="CtrlPressed,ShiftPressed">
         <Action Name="ACN_PASTE"/>
       </IFONE>
       <LastCommands/>
-    </PopUpMenu>
-    <PopUpMenu Name="FASTMENU">
+    </Menu>
+    <Menu Name="FASTMENU">
       <Action Name="ACN_PASTE"/>
       <Separator/>
       <Action Name="ACN_SELECTALL"/>
       <Separator/>
       <Action Name="ACN_VIEWTOP"/>
-    </PopUpMenu>
+    </Menu>
   </MenusContent>
 </CONFIG>

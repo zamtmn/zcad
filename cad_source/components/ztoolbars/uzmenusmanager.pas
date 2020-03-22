@@ -25,7 +25,7 @@ type
   private
     factionlist:TActionList;
     fmainform:TForm;
-    function GetMenu_tmp(MT:TMenuType;aName: string;ctx:T;ForceReCreate:boolean=false;MMProcessor:TMenusMacros=nil):TMenu;
+    function GetMenu_tmp(MT:TMenuType;aName: string;ctx:T;ForceReCreate:boolean=false;MMProcessor:TMenusMacros=nil):TMainMenu;
 
   public
     constructor Create(mainform:TForm;actlist:TActionList);
@@ -44,7 +44,7 @@ type
     function GetMacroProcessFuncAddr(MMProcessor:TMenusMacros):TMacroProcessFunc;
     procedure CheckMainMenu(node:TDomNode;MMProcessor:TMenusMacros=nil);
 
-    function GetMainMenu(aName: string;ctx:T;MMProcessor:TMenusMacros=nil):TMenu;
+    function GetMainMenu(aName: string;ctx:T;MMProcessor:TMenusMacros=nil):TMainMenu;
     function GetPopupMenu(aName: string;ctx:T;MMProcessor:TMenusMacros=nil):TPopupMenu;
     function GetSubMenu(MT:TMenuType;aName:string;ctx:T;MMProcessor:TMenusMacros=nil):TMenuItem;
   end;
@@ -272,7 +272,7 @@ begin
   else
     result:=nil;
 end;
-function TGMenusManager.GetMainMenu(aName: string;ctx:T;MMProcessor:TMenusMacros=nil):TMenu;
+function TGMenusManager.GetMainMenu(aName: string;ctx:T;MMProcessor:TMenusMacros=nil):TMainMenu;
 begin
   result:=GetMenu_tmp(TMenuType.TMT_MainMenu,aName,ctx,false,MMProcessor);
 end;
@@ -284,18 +284,19 @@ function TGMenusManager.GetSubMenu(MT:TMenuType;aName: string;ctx:T;MMProcessor:
 begin
   result:=TMenuItem(GetMenu_tmp(MT,aName,ctx,true,MMProcessor));
 end;
-function TGMenusManager.GetMenu_tmp(MT:TMenuType;aName: string;ctx:T;ForceReCreate:boolean=false;MMProcessor:TMenusMacros=nil):TMenu;
+function TGMenusManager.GetMenu_tmp(MT:TMenuType;aName: string;ctx:T;ForceReCreate:boolean=false;MMProcessor:TMenusMacros=nil):TMainMenu;
 var
   TBNode,TBSubNode:TDomNode;
   menuname:string;
   MPF:TMacroProcessFunc;
+  IFONERegistred,IFALLRegistred:boolean;
 begin
   menuname:='';
-  result:=TPopupMenu(application.FindComponent(MenuNameModifier+aName));
+  result:={TMainMenu(application.FindComponent(MenuNameModifier+aName))}nil;
   if ForceReCreate then
     if result<>nil then
       FreeAndNil(result);
-  result:=TPopupMenu(application.FindComponent(MenuNameModifier+aName));
+  result:={TMainMenu(application.FindComponent(MenuNameModifier+aName))}nil;
   if result=nil then begin
     TBNode:=MenuConfig.FindNode('MenusContent',false);
     if assigned(TBNode) then begin
@@ -318,11 +319,13 @@ begin
       SetCurrentContext(ctx);
       if assigned(GeneralContextChecker) then
         GeneralContextChecker.SetCurrentContext(Application);
-      TMenuDefaults.RegisterMenuCreateFunc('IFONE',@DoIfOneNode);
-      TMenuDefaults.RegisterMenuCreateFunc('IFALL',@DoIfAllNode);
+      IFONERegistred:=TMenuDefaults.RegisterMenuCreateFunc('IFONE',@DoIfOneNode);
+      IFALLRegistred:=TMenuDefaults.RegisterMenuCreateFunc('IFALL',@DoIfAllNode);
       TMenuDefaults.TryRunMenuCreateFunc(MT,fmainform,TBSubNode.NodeName,TBSubNode,factionlist,nil,MPF);
-      TMenuDefaults.UnRegisterMenuCreateFunc('IFONE');
-      TMenuDefaults.UnRegisterMenuCreateFunc('IFALL');
+      if IFONERegistred then
+        TMenuDefaults.UnRegisterMenuCreateFunc('IFONE');
+      if IFALLRegistred then
+        TMenuDefaults.UnRegisterMenuCreateFunc('IFALL');
       if assigned(GeneralContextChecker) then
         GeneralContextChecker.ReleaseCashe;
       if assigned(GeneralContextChecker) then
@@ -331,7 +334,7 @@ begin
       if assigned(MMProcessor)then
         MMProcessor.ReSetCurrentContext(ctx);
       ReSetCurrentContext(ctx);
-      result:=TPopupMenu(application.FindComponent(MenuNameModifier+aName));
+      result:=TMainMenu(application.FindComponent(MenuNameModifier+aName));
     end;
   end;
 end;

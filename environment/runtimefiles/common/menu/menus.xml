@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <MenusContent>
-    <CreateMenu Name="MainMenu">
+    <CreateMenu2 Name="MainMenu">
       <File/>
       <Edit/>
       <View/>
@@ -18,7 +18,7 @@
       <Help/>
       <Debug/>
       <DB/>
-    </CreateMenu>
-    <SetMainMenu Name="MainMenu"/>
+    </CreateMenu2>
+    <SetMainMenu2 Name="MainMenu"/>
   </MenusContent>
 </CONFIG>

@@ -137,6 +137,8 @@ begin
     localizedcaption:=InterfaceTranslate('menu~'+line,line);
 
     CreatedMenuItem:=FindMenuItem(line,localizedcaption,RootMenuItem);
+    //newitem:=true;
+    //if MT=TMenuType.TMT_PopupMenu then begin
     if CreatedMenuItem=nil then begin
       CreatedMenuItem:=TMenuItem.Create(application);
       newitem:=true;
@@ -147,6 +149,9 @@ begin
         CreatedMenuItem.Name:=MenuNameModifier+line;
       CreatedMenuItem.Caption:=localizedcaption;
     end;
+    //end else begin
+    //  CreatedMenuItem:=RootMenuItem;
+    //end;
     if assigned(aNode) then
       TBSubNode:=aNode.FirstChild;
     if assigned(TBSubNode) then
@@ -160,6 +165,7 @@ begin
       if RootMenuItem is TMenuItem then
         RootMenuItem.Add(CreatedMenuItem)
       else
+        //if TPopUpMenu(RootMenuItem) is TPopUpMenu then
         TPopUpMenu(RootMenuItem).Items.Add(CreatedMenuItem);
     end;
 end;
@@ -191,9 +197,18 @@ begin
     cxmenumgr.RegisterLCLMenu(CreatedMenuItem);
 end;
 class procedure ZMenuExt.ZMenuExtMenuItemReader(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
+var
+  createdmenu:TMenu;
 begin
     case MT of
-      TMT_MainMenu:ZMenuExt.ZMenuExtMainMenuItemReader(MT,fmf,aName,aNode,actlist,RootMenuItem,MPF);
+      TMT_MainMenu:begin
+                     if RootMenuItem=nil then begin
+                       createdmenu:=TMainMenu.Create(application);
+                       createdmenu.Images:=actlist.Images;
+                       createdmenu.Name:=MenuNameModifier+getAttrValue(aNode,'Name','');
+                     end;
+                       ZMenuExt.ZMenuExtMainMenuItemReader(MT,fmf,aName,aNode,actlist,{RootMenuItem}tmenuitem(createdmenu),MPF);
+                   end;
      TMT_PopupMenu:ZMenuExt.ZMenuExtPopUpMenuReader(MT,fmf,aName,aNode,actlist,RootMenuItem,MPF);
     end;
 end;

@@ -44,7 +44,7 @@ type
     class procedure DefaultMainMenuItemReader(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
 
     class procedure TryRunMenuCreateFunc(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
-    class procedure RegisterMenuCreateFunc(aNodeName:string;MenuCreateFunc:TMenuCreateFunc);
+    class function RegisterMenuCreateFunc(aNodeName:string;MenuCreateFunc:TMenuCreateFunc):boolean;
     class procedure UnRegisterMenuCreateFunc(aNodeName:string);
   end;
 procedure RegisterGeneralContextCheckFunc(ContextId:TGeneralContextChecker.TContextIdType;ContextCheckFunc:TGeneralContextChecker.TContextCheckFunc);
@@ -216,11 +216,16 @@ if assigned(MenuCreateFuncRegister) then
   end;
 end;
 
-class procedure TMenuDefaults.RegisterMenuCreateFunc(aNodeName:string;MenuCreateFunc:TMenuCreateFunc);
+class function TMenuDefaults.RegisterMenuCreateFunc(aNodeName:string;MenuCreateFunc:TMenuCreateFunc):boolean;
+var
+  nn:string;
 begin
   if not assigned(TMenuDefaults.MenuCreateFuncRegister) then
     TMenuDefaults.MenuCreateFuncRegister:=TMenuCreateFuncRegister.create;
-  TMenuDefaults.MenuCreateFuncRegister.add(uppercase(aNodeName),MenuCreateFunc);
+  nn:=uppercase(aNodeName);
+  result:=not TMenuDefaults.MenuCreateFuncRegister.ContainsKey(nn);
+  if result then
+    TMenuDefaults.MenuCreateFuncRegister.add(nn,MenuCreateFunc);
 end;
 
 class procedure TMenuDefaults.UnRegisterMenuCreateFunc(aNodeName:string);

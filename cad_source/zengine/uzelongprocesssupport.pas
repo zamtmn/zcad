@@ -67,10 +67,16 @@ TZELongProcessSupport=class
                          procedure AddOnLPEndHandler(proc:TOnLPEndProc);
                          constructor Create;
                          destructor Destroy;override;
+                         function isProcessed:boolean;
                        end;
 var
   LPS:TZELongProcessSupport;
 implementation
+function TZELongProcessSupport.isProcessed:boolean;
+begin
+  result:=ActiveProcessCount>0;
+end;
+
 procedure TZELongProcessSupport.DoStartLongProcess(plpi:PTLPInfo;LPHandle:TLPSHandle);
 var
   i:integer;

@@ -20,7 +20,8 @@ unit uzcmenucontextcheckfuncs;
 {$INCLUDE def.inc}
 interface
 uses
-  LCLIntf,LCLType;
+  LCLIntf,LCLType,
+  uzedrawingsimple,uzcdrawings;
 function GMCCFTrue(const Context:TObject):boolean;
 function GMCCFFalse(const Context:TObject):boolean;
 function GMCCFDebugMode(const Context:TObject):boolean;
@@ -28,6 +29,7 @@ function GMCCFDebugMode(const Context:TObject):boolean;
 function GMCCFCtrlPressed(const Context:TObject):boolean;
 function GMCCFShiftPressed(const Context:TObject):boolean;
 function GMCCFAltPressed(const Context:TObject):boolean;
+function GMCCFActiveDrawing(const Context:TObject):boolean;
 implementation
 function GMCCFTrue(const Context:TObject):boolean;
 begin
@@ -53,6 +55,17 @@ function GMCCFAltPressed(const Context:TObject):boolean;
 begin
   result:=(GetKeyState(VK_MENU) and $8000 <> 0);
 end;
+function GMCCFActiveDrawing(const Context:TObject):boolean;
+var
+  pdwg:PTSimpleDrawing;
+begin
+  //if assigned(drawings)then begin
+    pdwg:=drawings.GetCurrentDWG;
+    result:=(pdwg<>nil)and(pdwg<>PTSimpleDrawing(BlockBaseDWG));
+  //end else
+  //  result:=false;
+end;
+
 
 begin
 end.

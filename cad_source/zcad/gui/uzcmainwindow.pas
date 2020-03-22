@@ -206,6 +206,7 @@ type
     procedure MainMouseUp;
     procedure IPCMessage(Sender: TObject);
     {$ifdef windows}procedure SetTop;{$endif}
+    procedure AsyncFree(Data:PtrInt);
     procedure UpdateVisible(sender:TObject;GUIMode:TZMessageID);
     function GetFocusPriority:TControlWithPriority;
                end;
@@ -1685,6 +1686,7 @@ begin
   RegisterGeneralContextCheckFunc('CtrlPressed',@GMCCFCtrlPressed);
   RegisterGeneralContextCheckFunc('ShiftPressed',@GMCCFShiftPressed);
   RegisterGeneralContextCheckFunc('AltPressed',@GMCCFAltPressed);
+  RegisterGeneralContextCheckFunc('ActiveDrawing',@GMCCFActiveDrawing);
 
   ToolBarsManager.RegisterTBItemCreateFunc('Separator',ToolBarsManager.CreateDefaultSeparator);
   ToolBarsManager.RegisterTBItemCreateFunc('Action',TBActionCreateFunc);
@@ -2904,6 +2906,15 @@ begin
       end;
 end;
 
+procedure TZCADMainWindow.AsyncFree(Data:PtrInt);
+begin
+  if (commandmanager.pcommandrunning=nil)and(not LPS.isProcessed) then
+    Tobject(Data).Free
+  else
+    Application.QueueAsyncCall(AsyncFree,Data);
+end;
+
+
 procedure TZCADMainWindow.updatevisible(sender:TObject;GUIMode:TZMessageID);
 var
    GVA:TGeneralViewArea;
@@ -2912,9 +2923,18 @@ var
    pdwg:PTSimpleDrawing;
    FIPCServerRunning:boolean;
    otherinstancerunning:boolean;
+   oldmenu:TMainMenu;
 begin
   if GUIMode<>ZMsgID_GUIActionRedraw then
     exit;
+
+  oldmenu:=self.Menu;
+  if assigned(oldmenu) then
+    oldmenu.Name:='';
+  self.Menu:=TMainMenu(MenusManager.GetMainMenu('MAINMENU',application));
+  if assigned(oldmenu) then
+    Application.QueueAsyncCall(AsyncFree,PtrInt(oldmenu));
+  //  oldmenu.Free;
 
   if assigned(UniqueInstanceBase.FIPCServer) then
     FIPCServerRunning:=UniqueInstanceBase.FIPCServer.Active

@@ -352,9 +352,7 @@
         <InsertMenu Name="Dimension"/>
         <InsertMenu Name="Modify"/>
         <InsertMenu Name="Info"/>
-        <InsertMenu Name="Model"/>
         <InsertMenu Name="Settings"/>
-        <InsertMenu Name="DB"/>
         <InsertMenu Name="Window"/>
       </IFONE>
       <InsertMenu Name="Help"/>

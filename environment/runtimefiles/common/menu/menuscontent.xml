@@ -8,14 +8,16 @@
       <Action Name="ACN_LOADQS"/>
       <Separator/>
       <Action Name="ACN_IMPORT"/>
-      <Separator/>
-      <Action Name="ACN_QSAVE"/>
-      <Action Name="ACN_SAVEAS"/>
-      <Action Name="ACN_SAVEQS"/>
-      <Separator/>
-      <Action Name="ACN_PRINT"/>
-      <Separator/>
-      <Action Name="ACN_CLOSE"/>
+      <IFONE Сonditions="ActiveDrawing">
+        <Separator/>
+        <Action Name="ACN_QSAVE"/>
+        <Action Name="ACN_SAVEAS"/>
+        <Action Name="ACN_SAVEQS"/>
+        <Separator/>
+        <Action Name="ACN_PRINT"/>
+        <Separator/>
+        <Action Name="ACN_CLOSE"/>
+      </IFONE>
       <Separator/>
       <FileHistory/>
       <Separator/>

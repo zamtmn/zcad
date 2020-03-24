@@ -81,7 +81,7 @@ var
   localpm:TFiletoMenuIteratorData;
 implementation
 
-function FindMenuItem(name,localizedcaption:string;RootMenuItem:TMenuItem):TMenuItem;
+{function FindMenuItem(name,localizedcaption:string;RootMenuItem:TMenuItem):TMenuItem;
 var
   i:integer;
 begin
@@ -94,7 +94,7 @@ begin
         exit(RootMenuItem.Items[i]);
     end;
   end;
-end;
+end;}
 
 procedure bugfileiterator(filename:String);
 var
@@ -129,6 +129,7 @@ end;
 class procedure ZMenuExt.ZMenuExtMainMenuItemReader(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
  var
   CreatedMenuItem:TMenuItem;
+  //createdmenu:TMenu;
   line,localizedcaption:string;
   TBSubNode:TDomNode;
   newitem:boolean;
@@ -136,7 +137,16 @@ begin
     line:=getAttrValue(aNode,'Name','');
     localizedcaption:=InterfaceTranslate('menu~'+line,line);
 
-    CreatedMenuItem:=FindMenuItem(line,localizedcaption,RootMenuItem);
+    if RootMenuItem=nil then begin
+      TMenu(CreatedMenuItem):=TMainMenu.Create(application);
+      TMenu(CreatedMenuItem).Images:=actlist.Images;
+      TMenu(CreatedMenuItem).Name:=MenuNameModifier+getAttrValue(aNode,'Name','');
+      //CreatedMenuItem:=RootMenuItem;
+    end
+    else
+      CreatedMenuItem:=nil;
+    //CreatedMenuItem:=FindMenuItem(line,localizedcaption,RootMenuItem);
+
     //newitem:=true;
     //if MT=TMenuType.TMT_PopupMenu then begin
     if CreatedMenuItem=nil then begin
@@ -165,8 +175,7 @@ begin
       if RootMenuItem is TMenuItem then
         RootMenuItem.Add(CreatedMenuItem)
       else
-        //if TPopUpMenu(RootMenuItem) is TPopUpMenu then
-        TPopUpMenu(RootMenuItem).Items.Add(CreatedMenuItem);
+         TMenu(RootMenuItem).Items.Add(CreatedMenuItem);
     end;
 end;
 class procedure ZMenuExt.ZMenuExtPopUpMenuReader(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
@@ -202,12 +211,12 @@ var
 begin
     case MT of
       TMT_MainMenu:begin
-                     if RootMenuItem=nil then begin
+                     {if RootMenuItem=nil then begin
                        createdmenu:=TMainMenu.Create(application);
                        createdmenu.Images:=actlist.Images;
                        createdmenu.Name:=MenuNameModifier+getAttrValue(aNode,'Name','');
-                     end;
-                       ZMenuExt.ZMenuExtMainMenuItemReader(MT,fmf,aName,aNode,actlist,{RootMenuItem}tmenuitem(createdmenu),MPF);
+                     end;}
+                       ZMenuExt.ZMenuExtMainMenuItemReader(MT,fmf,aName,aNode,actlist,RootMenuItem{tmenuitem(createdmenu)},MPF);
                    end;
      TMT_PopupMenu:ZMenuExt.ZMenuExtPopUpMenuReader(MT,fmf,aName,aNode,actlist,RootMenuItem,MPF);
     end;

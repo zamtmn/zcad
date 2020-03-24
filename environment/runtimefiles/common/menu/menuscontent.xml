@@ -351,8 +351,6 @@
         <InsertMenu Name="Draw"/>
         <InsertMenu Name="Dimension"/>
         <InsertMenu Name="Modify"/>
-        <InsertMenu Name="Schematic"/>
-        <InsertMenu Name="Plan"/>
         <InsertMenu Name="Info"/>
         <InsertMenu Name="Model"/>
         <InsertMenu Name="Settings"/>
@@ -362,23 +360,5 @@
       <InsertMenu Name="Help"/>
       <InsertMenu Name="Debug"/>
     </Menu>
-    <Menu2 Name="MAINMENU2">
-      <InsertMenu Name="File"/>
-      <InsertMenu Name="Edit"/>
-      <InsertMenu Name="View"/>
-      <InsertMenu Name="Format"/>
-      <InsertMenu Name="Draw"/>
-      <InsertMenu Name="Dimension"/>
-      <InsertMenu Name="Modify"/>
-      <InsertMenu Name="Schematic"/>
-      <InsertMenu Name="Plan"/>
-      <InsertMenu Name="Info"/>
-      <InsertMenu Name="Model"/>
-      <InsertMenu Name="Settings"/>
-      <InsertMenu Name="Window"/>
-      <InsertMenu Name="Help"/>
-      <InsertMenu Name="Debug"/>
-      <InsertMenu Name="DB"/>
-    </Menu2>
   </MenusContent>
 </CONFIG>

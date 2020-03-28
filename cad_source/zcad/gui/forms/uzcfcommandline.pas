@@ -25,7 +25,7 @@ uses
  menus,Forms,fileutil,graphics, uzbtypes, uzbmemman,uzcdrawings,uzccommandsmanager,
  varman,languade,varmandef,
  uzegeometry,uzctnrvectorgdbstring,uzcinterface,uzctreenode,uzclog,strmy,
- uzccommandlineutil,uztoolbarsmanager,uzmenusmanager;
+ uzccommandlineutil,uztoolbarsmanager,uzmenusmanager,uzccommandsabstract,gzctnrvectortypes;
 
 const
      cheight=48;
@@ -48,7 +48,7 @@ type
   end;
 var
   CLine: TCLine;
-  cmdedit:TEdit;
+  cmdedit:TComboBox;
   prompt:TLabel;
   panel:tpanel;
   HistoryLine:TMemo;
@@ -168,6 +168,9 @@ var
    //bv:tbevel;
    //pint:PGDBInteger;
    sbutton:TmySpeedButton;
+   p:PCommandObjectDef;
+   ir:itrec;
+   clist:TZctnrVectorGDBString;
 begin
     self.Constraints.MinHeight:=36;
     //utfpresent:=false;
@@ -234,7 +237,20 @@ begin
     sbutton.Color:=panel.Color;
     sbutton.parent:=panel;
 
-    cmdedit:=TEdit.create(panel);
+    cmdedit:=TComboBox.create(panel);
+    cmdedit.Style:=csOwnerDrawEditableVariable;
+    clist.init(200);
+    p:=commandmanager.beginiterate(ir);
+    if p<>nil then
+    repeat
+          clist.PushBackData(p^.CommandName);
+          p:=commandmanager.iterate(ir);
+    until p=nil;
+    clist.sort;
+    cmdedit.Items.Text:=clist.GetTextWithEOL;
+    clist.done;
+    cmdedit.AutoComplete:=true;
+    cmdedit.AutoDropDown:=true;
     cmdedit.Align:=alClient;
     cmdedit.BorderStyle:=bsnone;
     cmdedit.BorderWidth:=0;

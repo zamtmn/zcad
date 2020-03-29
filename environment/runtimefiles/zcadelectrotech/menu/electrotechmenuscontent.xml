@@ -106,8 +106,6 @@
       <Command Caption="Cable manager" Command="EL_CableMan"/> 
       <SubMenu Name="Alarm system">
         <Command Caption="Connection diagram" Command="OPS_SPBuild"/> 
-      </SubMenu>
-      <SubMenu Name="Alarm system">
         <Command Caption="Создание расчетной схемы распределительной сети" Command="EM_SRBuild"/> 
         <Command Caption="Создание схемы электрической принципиальной распределительной сети" Command="EM_SEPBuild"/> 
       </SubMenu>

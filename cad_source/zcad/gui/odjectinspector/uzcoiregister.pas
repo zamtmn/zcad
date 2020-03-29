@@ -19,12 +19,12 @@
 unit uzcoiregister;
 {$INCLUDE def.inc}
 interface
-uses Clipbrd,sysutils,uzccommandsabstract,uzcfcommandline,uzcutils,uzbpaths,TypeDescriptors,uzctranslations,uzcshared,Forms,uzcinterface,uzeroot,
+uses Laz2_DOM,Toolwin,Clipbrd,sysutils,uzccommandsabstract,uzcfcommandline,uzcutils,uzbpaths,TypeDescriptors,uzctranslations,uzcshared,Forms,uzcinterface,uzeroot,
      uzbtypes,uzedrawingdef,uzgldrawcontext,uzctnrvectorgdbstring,varmandef,uzedrawingsimple,
      uzeentity,uzcenitiesvariablesextender,zcobjectinspector,uzcguimanager,uzcstrconsts,
      gzctnrvectortypes,Types,Controls,uzcdrawings,Varman,UUnitManager,uzcsysvars,
      uzcsysparams,zcobjectinspectorui,uzcoimultiobjects,uzccommandsimpl,uzbtypesbase,
-     uzmenusmanager,uzcsysinfo,LazLogger,menus;
+     uzmenusmanager,uzcsysinfo,LazLogger,menus,ComCtrls,uztoolbarsmanager,uzcimagesmanager;
 type
   tdummyclass=class
     procedure UpdateObjInsp(sender:TObject;GUIMode:TZMessageID);
@@ -46,10 +46,25 @@ begin
                                        GDBobjinsp.SetCurrentObjDefault;
                                   end;
 end;
+function IsCurrObjInUndoContext(_GDBobj:boolean;_pcurrobj:pointer):boolean;
+begin
+  result:=false;
+  if _GDBobj then
+    if PGDBaseObject(_pcurrobj)^.IsEntity then
+      //if PGDBObjEntity(pcurrobj).bp.ListPos.Owner=PTDrawingDef(pcurcontext)^.GetCurrentRootSimple then
+      result:=true;
+end;
 procedure ZCADFormSetupProc(Form:TControl);
 var
   pint:PGDBInteger;
+  TBNode:TDomNode;
+  tb:TToolBar;
 begin
+
+  GDBobjinsp:=TGDBObjInsp.Create(Application);
+  GDBobjinsp._IsCurrObjInUndoContext:=IsCurrObjInUndoContext;
+  GDBobjinsp.OnContextPopup:=dummyclass.ContextPopup;
+
   StoreAndSetGDBObjInsp(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar,nil);
   SetCurrentObjDefault;
   //pint:=SavedUnit.FindValue('VIEW_ObjInspV');
@@ -60,6 +75,19 @@ begin
   pint:=SavedUnit.FindValue('VIEW_ObjInspV');
   if assigned(pint)then
                        SetLastClientWidth(pint^);
+  TBNode:=nil;
+  if assigned(ToolBarsManager)then
+    TBNode:=ToolBarsManager.FindBarsContent('ObjInspUpToolbar');
+  if assigned(TBNode)then begin
+    tb:=ttoolbar.create(form);
+    tb.Images:=ImagesManager.IconList;
+    tb.AutoSize:=true;
+    tb.ShowCaptions:=true;
+    tb.Align:=alTop;
+    tb.EdgeBorders:=[ebBottom];
+    ToolBarsManager.CreateToolbarContent(tb,TBNode);
+    tb.Parent:=tform(Form);
+  end;
   GDBobjinsp.Align:=alClient;
   GDBobjinsp.BorderStyle:=bsNone;
   GDBobjinsp.Parent:=tform(Form);
@@ -158,22 +186,9 @@ begin
       if uzcfcommandline.cmdedit.CanFocus then
         uzcfcommandline.cmdedit.SetFocus;
 end;
-function IsCurrObjInUndoContext(_GDBobj:boolean;_pcurrobj:pointer):boolean;
-begin
-  result:=false;
-  if _GDBobj then
-    if PGDBaseObject(_pcurrobj)^.IsEntity then
-      //if PGDBObjEntity(pcurrobj).bp.ListPos.Owner=PTDrawingDef(pcurcontext)^.GetCurrentRootSimple then
-      result:=true;
-end;
-
 function CreateObjInspInstance:TForm;
 begin
-     GDBobjinsp:=TGDBObjInsp.Create(Application);
-     //result:=GDBobjinsp;
-     result:=tform(TForm.NewInstance);
-     GDBobjinsp._IsCurrObjInUndoContext:=IsCurrObjInUndoContext;
-     GDBobjinsp.OnContextPopup:=dummyclass.ContextPopup;
+  result:=tform(TForm.NewInstance);
 end;
 
 function ObjInspCopyToClip_com(operands:TCommandOperands):TCommandResult;

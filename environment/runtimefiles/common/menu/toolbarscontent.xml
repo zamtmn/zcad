@@ -39,7 +39,7 @@
       <Separator/>
       <Action Name="ACN_REBUILDTREE"/>
     </Standard>
-    <OIButtons Type="ToolBar">
+    <ObjInspUpToolbar Type="ToolBar2">
       <Action Name="ACN_SNAPRUNTIME"/>
       <Separator/>
       <Action Name="ACN_El_FIND"/>
@@ -49,7 +49,7 @@
       <Separator/>
       <Variable VarName="DSGN_SelNew" Img="#1" Hint="New selection set"/>
       <Variable VarName="DSGN_SelSameName" Img="#SN" Hint="Auto select devices with same name"/>
-    </OIButtons>
+    </ObjInspUpToolbar>
     <ObjectSnap Type="ToolBar">
       <Action Name="ACN_OS_INSERT"/>
       <Action Name="ACN_OS_END"/>"/>

@@ -74,10 +74,14 @@ begin
      CLCOMMANDREDY:
      begin
            prompt.Caption:=commandprefix+rsdefaultpromot+commandsuffix;
+           cmdedit.AutoComplete:=true;
+           cmdedit.AutoDropDown:=true;
      end;
      CLCOMMANDRUN:
      begin
           prompt.Caption:=commandsuffix;
+          cmdedit.AutoComplete:=false;
+          cmdedit.AutoDropDown:=false;
      end;
      end;
      mode:=m;

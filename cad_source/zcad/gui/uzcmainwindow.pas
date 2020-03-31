@@ -2914,7 +2914,42 @@ begin
   else
     Application.QueueAsyncCall(AsyncFree,Data);
 end;
+function IsDifferentMenuitem(oldmenuitem,newmenuitem:TMenuItem):boolean;
+var
+  i:integer;
+begin
+  if oldmenuitem.Action<>newmenuitem.Action then
+    exit(true);
+  if oldmenuitem.Caption<>newmenuitem.Caption then
+    exit(true);
+  if @oldmenuitem.OnClick<>@newmenuitem.OnClick then
+    exit(true);
+  if oldmenuitem.Count<>newmenuitem.Count then
+    exit(true);
+  for i:=0 to oldmenuitem.Count-1 do begin
+    result:=IsDifferentMenuitem(oldmenuitem.Items[i],newmenuitem.Items[i]);
+    if result then
+      exit(true);
+  end;
+  result:=false;
+end;
 
+function IsDifferentMenu(oldmenu,newmenu:TMainMenu):boolean;
+var
+  i:integer;
+begin
+  if (oldmenu=nil)or(newmenu=nil) then
+    exit(true);
+  if oldmenu.Items.Count=newmenu.Items.Count then begin
+    for i:=0 to oldmenu.Items.Count-1 do begin
+      result:=IsDifferentMenuitem(oldmenu.Items[i],newmenu.Items[i]);
+      if result then
+        exit(true);
+    end;
+    result:=false;
+  end else
+    result:=true;
+end;
 
 procedure TZCADMainWindow.updatevisible(sender:TObject;GUIMode:TZMessageID);
 var
@@ -2924,7 +2959,7 @@ var
    pdwg:PTSimpleDrawing;
    FIPCServerRunning:boolean;
    otherinstancerunning:boolean;
-   oldmenu:TMainMenu;
+   oldmenu,newmenu:TMainMenu;
 begin
   if GUIMode<>ZMsgID_GUIActionRedraw then
     exit;
@@ -2932,10 +2967,13 @@ begin
   oldmenu:=self.Menu;
   if assigned(oldmenu) then
     oldmenu.Name:='';
-  self.Menu:=TMainMenu(MenusManager.GetMainMenu('MAINMENU',application));
-  if assigned(oldmenu) then
-    Application.QueueAsyncCall(AsyncFree,PtrInt(oldmenu));
-  //  oldmenu.Free;
+  newmenu:=TMainMenu(MenusManager.GetMainMenu('MAINMENU',application));
+  if IsDifferentMenu(oldmenu,newmenu) then begin
+    self.Menu:=newmenu;
+    if assigned(oldmenu) then
+      Application.QueueAsyncCall(AsyncFree,PtrInt(oldmenu));
+  end else
+    FreeAndNil(newmenu);
 
   if assigned(UniqueInstanceBase.FIPCServer) then
     FIPCServerRunning:=UniqueInstanceBase.FIPCServer.Active

@@ -292,7 +292,7 @@ var
   IFONERegistred,IFALLRegistred:boolean;
 begin
   menuname:='';
-  result:={TMainMenu(application.FindComponent(MenuNameModifier+aName))}nil;
+  result:=TMainMenu(application.FindComponent(MenuNameModifier+aName));
   if ForceReCreate then
     if result<>nil then
       FreeAndNil(result);

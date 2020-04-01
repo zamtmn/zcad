@@ -174,6 +174,7 @@ var
    iterator:TPointerCounter.TIterator;
    s:PGDBNamedObject;
    c:integer;
+   name:string;
 {уничтожает созданную GetPointerCounterData структуру}
 begin
   PTEnumDataWithOtherData(PTPointerCounterData(piteratedata)^.PVarDesc^.data.Instance)^.Enums.PushBackData(format('Total (%d)',[PTPointerCounterData(piteratedata)^.totalcount]));
@@ -183,7 +184,11 @@ begin
   repeat
         s:=iterator.GetKey;
         c:=iterator.GetValue;
-        PTEnumDataWithOtherData(PTPointerCounterData(piteratedata)^.PVarDesc^.data.Instance)^.Enums.PushBackData(format('%s (%d)',[Tria_AnsiToUtf8(s.GetFullName),c]));
+        if assigned(s) then
+          name:=Tria_AnsiToUtf8(s.GetFullName)
+        else
+          name:='nil';
+        PTEnumDataWithOtherData(PTPointerCounterData(piteratedata)^.PVarDesc^.data.Instance)^.Enums.PushBackData(format('%s (%d)',[name,c]));
         PTZctnrVectorGDBPointer(PTEnumDataWithOtherData(PTPointerCounterData(piteratedata)^.PVarDesc^.data.Instance)^.PData)^.PushBackData(s);
   until not iterator.Next;
   PTPointerCounterData(piteratedata)^.counter.Free;

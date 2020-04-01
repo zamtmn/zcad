@@ -124,6 +124,8 @@ uses
   uzccomdb,
   {$ENDIF}
   uzccomdraw,
+  uzccommand_copy,
+  uzccommand_move,
   uzccommand_3dpoly,
   uzccommand_print,
   uzccommand_blockpreviewexport,

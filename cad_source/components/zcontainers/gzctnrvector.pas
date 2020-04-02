@@ -88,7 +88,8 @@ GZVector{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
         {old}
         {**Удалить элемент по индексу, без уменьшениием размера массива, элемент затирается значением default(T)}
         function DeleteElement(index:Integer):Pointer;
-        {**Удалить элемент по индексу, с уменьшениием размера массива}
+        //TODO:исправить пиздеж
+        {**Пиздеж!!! уменьшается!!! Удалить элемент по индексу, с уменьшениием размера массива}
         function EraseElement(index:Integer):Pointer;
         {**Перевод указателя в индекс}
         function P2I(pel:Pointer):Integer;

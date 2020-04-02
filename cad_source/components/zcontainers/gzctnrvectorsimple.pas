@@ -26,6 +26,8 @@ GZVectorSimple{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                                  object(GZVector{-}<T>{//})
                                    function PushBackIfNotPresent(data:T):Integer;
                                    function IsDataExist(pobj:T):Integer;
+                                   {**Удалить элемент по содержимому, с уменьшениием размера массива}
+                                   procedure EraseData(data:T);
                                  end;
 {Export-}
 implementation
@@ -52,6 +54,13 @@ begin
                           exit;
                         end;
   result:=PushBackData(data);}
+end;
+procedure GZVectorSimple<T>.EraseData(data:T);
+var i:integer;
+begin
+  for i:=0 to count-1 do
+    if PArray^[i]=data then
+      EraseElement(i);
 end;
 begin
 end.

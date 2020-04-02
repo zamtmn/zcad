@@ -45,7 +45,8 @@ TVariablesExtender={$IFNDEF DELPHI}packed{$ENDIF} object(TBaseVariablesExtender)
     procedure ReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);virtual;
 
     function isMainFunction:boolean;
-    procedure addDelegate({pEntity,}pDelegateEntity:PGDBObjEntity;pDelegateEntityVarext:PTVariablesExtender);
+    procedure addDelegate(pDelegateEntity:PGDBObjEntity;pDelegateEntityVarext:PTVariablesExtender);
+    procedure removeDelegate(pDelegateEntity:PGDBObjEntity;pDelegateEntityVarext:PTVariablesExtender);
   end;
 
 var
@@ -57,11 +58,17 @@ begin
   result:=pMainFuncEntity=nil;
 end;
 
-procedure TVariablesExtender.addDelegate({pEntity,}pDelegateEntity:PGDBObjEntity;pDelegateEntityVarext:PTVariablesExtender);
+procedure TVariablesExtender.addDelegate(pDelegateEntity:PGDBObjEntity;pDelegateEntityVarext:PTVariablesExtender);
 begin
   pDelegateEntityVarext^.entityunit.InterfaceUses.PushBackIfNotPresent(@entityunit);
-  pDelegateEntityVarext^.pMainFuncEntity:={pEntity}pThisEntity;
+  pDelegateEntityVarext^.pMainFuncEntity:=pThisEntity;
   DelegatesArray.PushBackIfNotPresent(pDelegateEntity);
+end;
+procedure TVariablesExtender.removeDelegate(pDelegateEntity:PGDBObjEntity;pDelegateEntityVarext:PTVariablesExtender);
+begin
+  pDelegateEntityVarext^.entityunit.InterfaceUses.EraseData(@entityunit);
+  pDelegateEntityVarext^.pMainFuncEntity:=nil;
+  DelegatesArray.EraseData(pDelegateEntity)
 end;
 
 procedure TVariablesExtender.onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);
@@ -170,15 +177,17 @@ begin
 end;
 procedure TVariablesExtender.onEntityClone(pSourceEntity,pDestEntity:pointer);
 var
-    pdestunit:PTVariablesExtender;
+    pDestVariablesExtender,pbdunit:PTVariablesExtender;
 begin
-     pdestunit:=PGDBObjEntity(pDestEntity)^.EntExtensions.GetExtension(typeof(TVariablesExtender));
-     if pdestunit=nil then
-                       pdestunit:=AddVariablesToEntity(pDestEntity);
-     entityunit.CopyTo(@pdestunit^.entityunit);
-     {if ou.Instance<>nil then
-     PTObjectUnit(ou.Instance)^.CopyTo(PTObjectUnit(tvo.ou.Instance));
-     tvo^.BlockDesc:=BlockDesc;}
+     pDestVariablesExtender:=PGDBObjEntity(pDestEntity)^.EntExtensions.GetExtension(typeof(TVariablesExtender));
+     if pDestVariablesExtender=nil then
+                       pDestVariablesExtender:=AddVariablesToEntity(pDestEntity);
+     entityunit.CopyTo(@pDestVariablesExtender^.entityunit);
+     if pMainFuncEntity<>nil then begin
+       pbdunit:=pMainFuncEntity^.EntExtensions.GetExtension(typeof(TVariablesExtender));
+       if pbdunit<>nil then
+         pbdunit^.addDelegate(pDestEntity,pDestVariablesExtender);
+     end;
 end;
 procedure TVariablesExtender.onEntityBuildVarGeometry(pEntity:pointer;const drawing:TDrawingDef);
 var
@@ -198,7 +207,20 @@ begin
      onEntityClone(pSourceEntity,pDestEntity);
 end;
 procedure TVariablesExtender.ReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);
+var CopiedMainfunction:PGDBObjEntity;
+    pbdunit:PTVariablesExtender;
 begin
+  if pMainFuncEntity<>nil then begin
+    if OldEnts2NewEntsMap.TryGetValue(pMainFuncEntity,CopiedMainfunction)then
+      if CopiedMainfunction<>nil then begin
+        pbdunit:=pMainFuncEntity^.EntExtensions.GetExtension(typeof(TVariablesExtender));
+        if pbdunit<>nil then
+          pbdunit^.removeDelegate(pThisEntity,@self);
+        pbdunit:=CopiedMainfunction^.EntExtensions.GetExtension(typeof(TVariablesExtender));
+        if pbdunit<>nil then
+          pbdunit^.addDelegate(pThisEntity,@self);
+      end;
+  end;
 end;
 
 class function TVariablesExtender.CreateEntVariablesExtender(pEntity:Pointer; out ObjSize:Integer):PTVariablesExtender;

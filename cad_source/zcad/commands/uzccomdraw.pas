@@ -166,10 +166,6 @@ type
                     CurrentEditBlock:GDBString;(*'Current block'*)(*oi_readonly*)
                     Blocks:TEnumData;(*'Select block'*)
               end;
-  PTCopyObjectDesc=^TCopyObjectDesc;
-  TCopyObjectDesc=packed record
-                 obj,clone:PGDBObjEntity;
-                 end;
   ptpcoavector=^tpcoavector;
   tpcoavector={-}specialize{//}
               GZVectorData{-}<TCopyObjectDesc>{//};
@@ -2130,12 +2126,12 @@ if (button and MZW_LBUTTON)=0 then
                    pcd:=pcoa^.beginiterate(ir);
                   if pcd<>nil then
                   repeat
-                      m:=TMethod(@pcd^.obj^.Transform);
+                      m:=TMethod(@pcd^.sourceEnt^.Transform);
                       {m.Data:=pcd.obj;
                       m.Code:=pointer(pcd.obj^.Transform);}
                       AddMethod(m);
 
-                      dec(pcd^.obj^.vp.LastCameraPos);
+                      dec(pcd^.sourceEnt^.vp.LastCameraPos);
                       //pcd.obj^.Format;
 
                       pcd:=pcoa^.iterate(ir);
@@ -2249,12 +2245,12 @@ if (button and MZW_LBUTTON)=0 then
                     pcd:=pcoa^.beginiterate(ir);
                    if pcd<>nil then
                    repeat
-                       m:=TMEthod(@pcd^.obj^.Transform);
+                       m:=TMEthod(@pcd^.sourceEnt^.Transform);
                        {m.Data:=pcd.obj;
                        m.Code:=pointer(pcd.obj^.Transform);}
                        AddMethod(m);
 
-                       dec(pcd^.obj^.vp.LastCameraPos);
+                       dec(pcd^.sourceEnt^.vp.LastCameraPos);
                        //pcd.obj^.Format;
 
                        pcd:=pcoa^.iterate(ir);

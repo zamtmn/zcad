@@ -40,6 +40,7 @@ TBaseEntityExtender={$IFNDEF DELPHI}packed{$ENDIF} object(TBaseObjExtender)
                   procedure onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);virtual;abstract;
 
                   procedure CopyExt2Ent(pSourceEntity,pDestEntity:pointer);virtual;abstract;
+                  procedure ReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);virtual;abstract;
 end;
 TEntityExtenderVector= TMyVector<PTBaseEntityExtender>;
 TEntityExtenderMap= GKey2DataMap<Pointer,SizeUInt{$IFNDEF DELPHI},LessPointer{$ENDIF}>;
@@ -56,6 +57,7 @@ TEntityExtensions=class
                        procedure RunOnCloneProcedures(source,dest:pointer);
                        procedure RunOnBuildVarGeometryProcedures(pEntity:pointer;const drawing:TDrawingDef);
                        procedure RunSupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);
+                       procedure RunReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);
                   end;
 implementation
 constructor TBaseEntityExtender.init(pEntity:Pointer);
@@ -139,6 +141,14 @@ begin
      if assigned(fEntityExtensions)then
      for i:=0 to fEntityExtensions.Size-1 do
        fEntityExtensions[i]^.CopyExt2Ent(pSourceEntity,pDestEntity);
+end;
+procedure TEntityExtensions.RunReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);
+var
+  i:integer;
+begin
+     if assigned(fEntityExtensions)then
+     for i:=0 to fEntityExtensions.Size-1 do
+       fEntityExtensions[i]^.ReorganizeEnts(OldEnts2NewEntsMap);
 end;
 end.
 

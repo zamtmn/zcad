@@ -23,7 +23,7 @@ uses sysutils,UGDBObjBlockdefArray,uzedrawingdef,uzeentityextender,uzcshared,
      uzeentdevice,TypeDescriptors,uzetextpreprocessor,UGDBOpenArrayOfByte,
      uzbtypesbase,uzbtypes,uzeentsubordinated,uzeentity,uzeenttext,uzeblockdef,
      varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,uzbmemman,
-     uzeentitiestree;
+     uzeentitiestree,usimplegenerics;
 
 type
 TBaseVariablesExtender={$IFNDEF DELPHI}packed{$ENDIF} object(TBaseEntityExtender)
@@ -42,6 +42,8 @@ TVariablesExtender={$IFNDEF DELPHI}packed{$ENDIF} object(TBaseVariablesExtender)
     procedure onEntityBuildVarGeometry(pEntity:pointer;const drawing:TDrawingDef);virtual;
     procedure onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);virtual;
     procedure CopyExt2Ent(pSourceEntity,pDestEntity:pointer);virtual;
+    procedure ReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);virtual;
+
     function isMainFunction:boolean;
     procedure addDelegate({pEntity,}pDelegateEntity:PGDBObjEntity;pDelegateEntityVarext:PTVariablesExtender);
   end;
@@ -194,6 +196,9 @@ end;
 procedure TVariablesExtender.CopyExt2Ent(pSourceEntity,pDestEntity:pointer);
 begin
      onEntityClone(pSourceEntity,pDestEntity);
+end;
+procedure TVariablesExtender.ReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);
+begin
 end;
 
 class function TVariablesExtender.CreateEntVariablesExtender(pEntity:Pointer; out ObjSize:Integer):PTVariablesExtender;

@@ -51,7 +51,7 @@ type
 {EXPORT+}
   PTCopyObjectDesc=^TCopyObjectDesc;
   TCopyObjectDesc=packed record
-                 obj,clone:PGDBObjEntity;
+                 sourceEnt,tmpProxy,copyEnt:PGDBObjEntity;
                  end;
   ptpcoavector=^tpcoavector;
   tpcoavector={-}specialize{//}
@@ -114,7 +114,8 @@ begin
   showprompt(0);
    dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
    GDBGetMem({$IFDEF DEBUGBUILD}'{7702D93A-064E-4935-BFB5-DFDDBAFF9A93}',{$ENDIF}GDBPointer(pcoa),sizeof(tpcoavector));
-   pcoa^.init({$IFDEF DEBUGBUILD}'{379DC609-F39E-42E5-8E79-6D15F8630061}',{$ENDIF}counter{,sizeof(TCopyObjectDesc)});   pobj:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
+   pcoa^.init({$IFDEF DEBUGBUILD}'{379DC609-F39E-42E5-8E79-6D15F8630061}',{$ENDIF}counter{,sizeof(TCopyObjectDesc)});
+   pobj:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
    if pobj<>nil then
    repeat
           begin
@@ -124,8 +125,9 @@ begin
                 if tv<>nil then
                 begin
                     drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.AddPEntity(tv^);
-                    tcd.obj:=pobj;
-                    tcd.clone:=tv;
+                    tcd.sourceEnt:=pobj;
+                    tcd.tmpProxy:=tv;
+                    tcd.copyEnt:=nil;
                     pcoa^.PushBackData(tcd);
                     tv^.formatentity(drawings.GetCurrentDWG^,dc);
                 end;
@@ -187,13 +189,13 @@ begin
      pcd:=pcoa^.beginiterate(ir);
    if pcd<>nil then
    repeat
-        m:=tmethod(@pcd^.obj^.Transform);
-        (*m.Data:=pcd^.obj;
-        m.Code:={pointer}(@pcd^.obj^.Transform);*)
+        m:=tmethod(@pcd^.sourceEnt^.Transform);
+        (*m.Data:=pcd^.sourceEnt;
+        m.Code:={pointer}(@pcd^.sourceEnt^.Transform);*)
         AddMethod(m);
 
-        dec(pcd^.obj^.vp.LastCameraPos);
-        pcd^.obj^.Formatentity(drawings.GetCurrentDWG^,dc);
+        dec(pcd^.sourceEnt^.vp.LastCameraPos);
+        pcd^.sourceEnt^.Formatentity(drawings.GetCurrentDWG^,dc);
 
         pcd:=pcoa^.iterate(ir);
    until pcd=nil;

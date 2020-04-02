@@ -45,6 +45,7 @@ end;
 TGDBString2GDBStringDictionary=TMyGDBStringDictionary<GDBString>;
 
 TMapPointerToHandle=TMyMap<pointer,TDWGHandle{$IFNDEF DELPHI}, LessPointer{$ENDIF}>;
+TMapPointerToPointer=TMyMap<pointer,pointer{$IFNDEF DELPHI}, LessPointer{$ENDIF}>;
 
 TMapHandleToHandle=TMyMap<TDWGHandle,TDWGHandle{$IFNDEF DELPHI}, LessDWGHandle{$ENDIF}>;
 TMapHandleToPointer=TMyMap<TDWGHandle,pointer{$IFNDEF DELPHI}, LessDWGHandle{$ENDIF}>;

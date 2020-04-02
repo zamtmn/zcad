@@ -22,6 +22,7 @@ unit uzccommand_copy;
 interface
 uses
   gzctnrvectortypes,zcmultiobjectcreateundocommand,
+  usimplegenerics,
   uzcdrawing,
   uzgldrawcontext,
   uzbtypesbase,
@@ -46,25 +47,46 @@ var
   ir:itrec;
   pcd:PTCopyObjectDesc;
   domethod,undomethod:tmethod;
-  pcopyofcopyobj:pGDBObjEntity;
   dc:TDrawContext;
+  OldEnts2NewEntsMap:TMapPointerToPointer;
 begin
   PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushStartMarker(UndoMaker);
   SetObjCreateManipulator(domethod,undomethod);
   dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+  OldEnts2NewEntsMap:=TMapPointerToPointer.Create;
   with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),1)^ do
   begin
+
     pcd:=pcoa^.beginiterate(ir);
     if pcd<>nil then
     repeat
-      pcopyofcopyobj:=pcd^.obj^.Clone(pcd^.obj^.bp.ListPos.Owner);
-      pcopyofcopyobj^.TransformAt(pcd^.obj,@dispmatr);
-      pcopyofcopyobj^.formatentity(drawings.GetCurrentDWG^,dc);
-      AddObject(pcopyofcopyobj);
+      pcd^.copyEnt:=pcd^.sourceEnt^.Clone(pcd^.sourceEnt^.bp.ListPos.Owner);
+      pcd^.copyEnt^.TransformAt(pcd^.sourceEnt,@dispmatr);
+      OldEnts2NewEntsMap.Insert(pcd^.sourceEnt,pcd^.copyEnt);
       pcd:=pcoa^.iterate(ir);
     until pcd=nil;
+
+    pcd:=pcoa^.beginiterate(ir);
+    if pcd<>nil then
+    repeat
+      if assigned(pcd^.copyEnt^.EntExtensions)then
+        pcd^.copyEnt^.EntExtensions.RunReorganizeEnts(OldEnts2NewEntsMap);
+      pcd:=pcoa^.iterate(ir);
+    until pcd=nil;
+
+
+    pcd:=pcoa^.beginiterate(ir);
+    if pcd<>nil then
+    repeat
+      pcd^.copyEnt^.formatentity(drawings.GetCurrentDWG^,dc);
+      AddObject(pcd^.copyEnt);
+      pcd:=pcoa^.iterate(ir);
+    until pcd=nil;
+
+
     comit;
   end;
+  OldEnts2NewEntsMap.Free;
   PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushEndMarker;
   result:=cmd_ok;
 end;

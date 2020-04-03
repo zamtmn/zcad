@@ -40,7 +40,7 @@ GDBObjBlockInsert={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                      constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                      procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
-                     procedure SaveToDXF(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
+                     procedure SaveToDXF(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                      procedure CalcObjMatrix;virtual;
                      function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                      //procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
@@ -663,13 +663,13 @@ else if not dxfGDBStringload(f,2,byt,name)then {s := }f.readgdbstring;
       index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(name));
       //format;
 end;
-procedure GDBObjBlockInsert.SaveToDXF(var handle: TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);
+procedure GDBObjBlockInsert.SaveToDXF(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
 //var
   //i, j: GDBInteger;
   //hv, vv: GDBByte;
   //s: GDBString;
 begin
-  SaveToDXFObjPrefix(handle,outhandle,'INSERT','AcDbBlockReference');
+  SaveToDXFObjPrefix(outhandle,'INSERT','AcDbBlockReference',IODXFContext);
   dxfGDBStringout(outhandle,2,name);
   dxfvertexout(outhandle,10,Local.p_insert);
   dxfvertexout1(outhandle,41,scale);

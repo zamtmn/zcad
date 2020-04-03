@@ -157,7 +157,7 @@ begin
      result:=true;
 end;
 
-procedure EntityIOSave_all(var outhandle:GDBOpenArrayOfByte;PEnt:PGDBObjEntity);
+procedure EntityIOSave_all(var outhandle:GDBOpenArrayOfByte;PEnt:PGDBObjEntity;var IODXFContext:TIODXFContext);
 var
    ishavevars:boolean;
    pvd:pvardesk;
@@ -168,6 +168,7 @@ var
    i:integer;
    tp:pointer;
    vardata:PTVariablesExtender;
+   th: TDWGHandle;
 begin
      ishavevars:=false;
      vardata:=PEnt^.GetExtension(typeof(TVariablesExtender));
@@ -180,10 +181,18 @@ begin
               pvu:=vardata^.entityunit.InterfaceUses.beginiterate(ir);
               if pvu<>nil then
               repeat
-                    str:='USES='+pvu^.Name;
-                    dxfGDBStringout(outhandle,1000,str);
+                    if typeof(pvu^)<>typeof(TObjectUnit) then begin
+                      str:='USES='+pvu^.Name;
+                      dxfGDBStringout(outhandle,1000,str);
+                    end;
               pvu:=vardata^.entityunit.InterfaceUses.iterate(ir);
               until pvu=nil;
+
+              if vardata^.pMainFuncEntity<>nil then begin
+                IODXFContext.p2h.MyGetOrCreateValue(vardata^.pMainFuncEntity,IODXFContext.handle,th);
+                str:='MAINFUNCTION='+inttohex(th,0);
+                dxfGDBStringout(outhandle,1000,str);
+              end;
 
               i:=0;
               pvd:=vardata^.entityunit.InterfaceVariables.vardescarray.beginiterate(ir);

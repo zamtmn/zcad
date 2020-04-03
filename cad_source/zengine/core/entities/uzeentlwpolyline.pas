@@ -45,7 +45,7 @@ GDBObjLWPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  constructor initnul;
                  procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
-                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
+                 procedure SaveToDXF(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  function CalcSquare:GDBDouble;virtual;
@@ -755,7 +755,7 @@ var j: GDBInteger;
     tv:gdbvertex;
     //m:DMatrix4D;
 begin
-  SaveToDXFObjPrefix(handle,outhandle,'LWPOLYLINE','AcDbPolyline');
+  SaveToDXFObjPrefix(outhandle,'LWPOLYLINE','AcDbPolyline',IODXFContext);
   dxfGDBStringout(outhandle,90,inttostr(Vertex2D_in_OCS_Array.Count));
   //WriteString_EOL(outhandle, '90');
   //WriteString_EOL(outhandle, inttostr(Vertex2D_in_OCS_Array.Count));

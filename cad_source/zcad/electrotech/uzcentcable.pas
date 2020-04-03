@@ -52,9 +52,9 @@ GDBObjCable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  function GetObjTypeName:GDBString;virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure FormatFast(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                 procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
-                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
-                 procedure SaveToDXFfollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
+                 procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXF(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXFfollow(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
 
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
 
@@ -107,7 +107,7 @@ begin
   if ptn1<>nil then
   begin
   repeat
-        SaveToDXFObjPrefix(handle,outhandle,'LINE','AcDbLine');
+        SaveToDXFObjPrefix(outhandle,'LINE','AcDbLine',IODXFContext,true);
         dxfvertexout(outhandle,10,ptn2^.Nextp);
         dxfvertexout(outhandle,11,ptn1^.PrevP);
 
@@ -123,7 +123,7 @@ begin
   until ptn1=nil;
   end;
 end;
-procedure GDBObjCable.SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);
+procedure GDBObjCable.SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var IODXFContext:TIODXFContext);
 //var
    //s:gdbstring;
 begin
@@ -140,7 +140,7 @@ begin
   pl:=vp.Layer;
   vp.Layer:=drawing.GetLayerTable^.{gdb.GetCurrentDWG.LayerTable.}getAddres('SYS_METRIC');
 
-  SaveToDXFObjPrefix(handle,outhandle,'POLYLINE','AcDb3dPolyline');
+  SaveToDXFObjPrefix(outhandle,'POLYLINE','AcDb3dPolyline',IODXFContext);
   dxfGDBIntegerout(outhandle,66,1);
   dxfvertexout(outhandle,10,uzegeometry.NulVertex);
   dxfGDBIntegerout(outhandle,70,8);

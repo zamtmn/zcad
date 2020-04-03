@@ -55,7 +55,7 @@ GDBObjCircle={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                  procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
-                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
+                 procedure SaveToDXF(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
@@ -283,7 +283,7 @@ begin
 end;
 procedure GDBObjCircle.SaveToDXF;
 begin
-  SaveToDXFObjPrefix(handle,outhandle,'CIRCLE','AcDbCircle');
+  SaveToDXFObjPrefix(outhandle,'CIRCLE','AcDbCircle',IODXFContext);
   dxfvertexout(outhandle,10,Local.p_insert);
   dxfGDBDoubleout(outhandle,40,Radius);
   SaveToDXFObjPostfix(outhandle);

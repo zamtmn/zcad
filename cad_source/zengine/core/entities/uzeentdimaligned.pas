@@ -67,7 +67,7 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                       function P14ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                       //function P15ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                       //function P16ChangeTo(tv:GDBVertex):GDBVertex;virtual;
-                       procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
+                       procedure SaveToDXF(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                        function GetDimStr(var drawing:TDrawingDef):GDBString;virtual;
                        function GetObjType:TObjID;virtual;
                    end;
@@ -131,7 +131,7 @@ begin
 end;
 procedure GDBObjAlignedDimension.SaveToDXF;
 begin
-  SaveToDXFObjPrefix(handle,outhandle,'DIMENSION','AcDbDimension');
+  SaveToDXFObjPrefix(outhandle,'DIMENSION','AcDbDimension',IODXFContext);
   dxfvertexout(outhandle,10,DimData.P10InWCS);
   dxfvertexout(outhandle,11,DimData.P11InOCS);
   if DimData.TextMoved then

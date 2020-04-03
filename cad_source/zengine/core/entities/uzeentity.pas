@@ -47,7 +47,7 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     destructor done;virtual;
                     constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                     constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                    procedure SaveToDXFObjPrefix(var handle:TDWGHandle;var  outhandle:{GDBInteger}GDBOpenArrayOfByte;entname,dbname:GDBString);
+                    procedure SaveToDXFObjPrefix(var  outhandle:{GDBInteger}GDBOpenArrayOfByte;entname,dbname:GDBString;var IODXFContext:TIODXFContext;notprocessHandle:boolean=false);
                     function LoadFromDXFObjShared(var f:GDBOpenArrayOfByte;dxfcod:GDBInteger;ptu:PExtensionData;var drawing:TDrawingDef):GDBBoolean;
                     function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef):GDBBoolean;virtual;
                     function FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
@@ -59,11 +59,11 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     function AddExtAttrib:PTExtAttrib;
                     function CopyExtAttrib:PTExtAttrib;
                     procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;abstract;
-                    procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
-                    procedure DXFOut(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
-                    procedure SaveToDXFfollow(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
-                    procedure SaveToDXFPostProcess(var handle:GDBOpenArrayOfByte);
-                    procedure SaveToDXFObjXData(var outhandle:GDBOpenArrayOfByte);virtual;
+                    procedure SaveToDXF(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                    procedure DXFOut(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                    procedure SaveToDXFfollow(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                    procedure SaveToDXFPostProcess(var handle:GDBOpenArrayOfByte;var IODXFContext:TIODXFContext);
+                    procedure SaveToDXFObjXData(var outhandle:GDBOpenArrayOfByte;var IODXFContext:TIODXFContext);virtual;
                     procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                     procedure FormatFeatures(var drawing:TDrawingDef);virtual;
                     procedure FormatFast(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
@@ -673,9 +673,9 @@ begin
 end;
 procedure GDBObjEntity.DXFOut;
 begin
-     SaveToDXF(handle, outhandle,drawing);
-     SaveToDXFPostProcess(outhandle);
-     SaveToDXFFollow(handle, outhandle,drawing);
+     SaveToDXF(outhandle,drawing,IODXFContext);
+     SaveToDXFPostProcess(outhandle,IODXFContext);
+     SaveToDXFFollow(outhandle,drawing,IODXFContext);
 end;
 procedure GDBObjEntity.SaveToDXF;
 begin
@@ -683,9 +683,9 @@ end;
 procedure GDBObjEntity.SaveToDXFfollow;
 begin
 end;
-procedure GDBObjEntity.SaveToDXFObjXData(var outhandle:GDBOpenArrayOfByte);
+procedure GDBObjEntity.SaveToDXFObjXData(var outhandle:GDBOpenArrayOfByte;var IODXFContext:TIODXFContext);
 begin
-     GetDXFIOFeatures.RunSaveFeatures(outhandle,@self);
+     GetDXFIOFeatures.RunSaveFeatures(outhandle,@self,IODXFContext);
      inherited;
 end;
 
@@ -693,7 +693,7 @@ procedure GDBObjEntity.SaveToDXFPostProcess;
 begin
   dxfGDBStringout(handle,1001,ZCADAppNameInDXF);
   dxfGDBStringout(handle,1002,'{');
-  self.SaveToDXFObjXData(handle);
+  self.SaveToDXFObjXData(handle,IODXFContext);
   dxfGDBStringout(handle,1002,'}');
 end;
 function GDBObjEntity.CalcInFrustum;
@@ -1087,10 +1087,21 @@ procedure GDBObjEntity.transform;
 begin
 end;
 procedure GDBObjEntity.SaveToDXFObjPrefix;
+var
+  tmpHandle:TDWGHandle;
 begin
   dxfGDBStringout(outhandle,0,entname);
-  dxfGDBStringout(outhandle,5,inttohex(handle, 0));
-  inc(handle);
+  //TODO: MyGetOrCreateValue можно желать не для всех примитивов, а только для главных функций
+  //TODO: это чуток ускорит сохранение с ним 0.35сек, без 0.34~0.33 в тесте
+  if notprocessHandle then begin
+    tmpHandle:=IODXFContext.handle;
+    inc(IODXFContext.handle);
+  end else
+    IODXFContext.p2h.MyGetOrCreateValue(@self,IODXFContext.handle,tmpHandle);
+  if $4796=tmpHandle then
+    tmpHandle:=tmpHandle;
+
+  dxfGDBStringout(outhandle,5,inttohex(tmpHandle{IODXFContext.handle}, 0));
   dxfGDBStringout(outhandle,100,dxfName_AcDbEntity);
   dxfGDBStringout(outhandle,8,vp.layer^.name);
   if vp.color<>ClByLayer then

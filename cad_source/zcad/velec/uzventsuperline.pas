@@ -35,7 +35,7 @@ GDBObjSuperLine={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjLine)
                   class function CreateInstance:PGDBObjLine;static;
                   function GetObjType:TObjID;virtual;
                   function Clone(own:GDBPointer):PGDBObjEntity;virtual;
-                  procedure SaveToDXFObjXData(var outhandle:GDBOpenArrayOfByte);virtual;
+                  procedure SaveToDXFObjXData(var outhandle:GDBOpenArrayOfByte;var IODXFContext:TIODXFContext);virtual;
                   class function GetDXFIOFeatures:TDXFEntIODataManager;static;
            end;
 {Export-}
@@ -53,7 +53,7 @@ begin
      inherited;
      GetDXFIOFeatures.AddExtendersToEntity(@self);
 end;
-procedure GDBObjSuperLine.SaveToDXFObjXData(var outhandle:GDBOpenArrayOfByte);
+procedure GDBObjSuperLine.SaveToDXFObjXData(var outhandle:GDBOpenArrayOfByte;var IODXFContext:TIODXFContext);
 begin
      inherited;
      dxfGDBStringout(outhandle,1000,'_UPGRADE=10');

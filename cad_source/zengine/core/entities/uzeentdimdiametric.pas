@@ -59,7 +59,7 @@ GDBObjDiametricDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                         function GetRadius:GDBDouble;virtual;
                         function GetDIMTMOVE:TDimTextMove;virtual;
 
-                        procedure SaveToDXF(var handle:TDWGHandle;var outhandle:GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
+                        procedure SaveToDXF(var outhandle:GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                         function GetObjType:TObjID;virtual;
                    end;
 {EXPORT-}
@@ -67,7 +67,7 @@ implementation
 //uses log;
 procedure GDBObjDiametricDimension.SaveToDXF;
 begin
-  SaveToDXFObjPrefix(handle,outhandle,'DIMENSION','AcDbDimension');
+  SaveToDXFObjPrefix(outhandle,'DIMENSION','AcDbDimension',IODXFContext);
   dxfvertexout(outhandle,10,DimData.P10InWCS);
   dxfvertexout(outhandle,11,DimData.P11InOCS);
   {if DimData.TextMoved then}

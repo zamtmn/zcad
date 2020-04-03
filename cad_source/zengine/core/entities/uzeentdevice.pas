@@ -58,8 +58,8 @@ GDBObjDevice={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjBlockInsert)
                    procedure BuildGeometry(var drawing:TDrawingDef);virtual;
                    procedure BuildVarGeometry(var drawing:TDrawingDef);virtual;
 
-                   procedure SaveToDXFFollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
-                   procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
+                   procedure SaveToDXFFollow(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                   procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var IODXFContext:TIODXFContext);virtual;
                    procedure AddMi(pobj:PGDBObjSubordinated);virtual;
                    //procedure select;virtual;
                    procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;
@@ -176,7 +176,7 @@ end;
 procedure GDBObjDevice.SaveToDXFFollow;
 var
   //i:GDBInteger;
-  pv,pvc:pgdbobjEntity;
+  pv,pvc,pvc2:pgdbobjEntity;
   ir:itrec;
   m4:DMatrix4D;
   DC:TDrawContext;
@@ -189,6 +189,7 @@ begin
      if pv<>nil then
      repeat
          pvc:=pv^.Clone(@self{.bp.Owner});
+         pvc2:=pv^.Clone(@self{.bp.Owner});
          //historyoutstr(pv^.ObjToGDBString('','')+'  cloned obj='+pvc^.ObjToGDBString('',''));
          if pvc^.GetObjType=GDBTextID then
             pvc:=pvc;
@@ -206,21 +207,26 @@ begin
 
 
          //pvc^.DXFOut(handle, outhandle);
-
-              pvc^.SaveToDXF(handle, outhandle,drawing);
-              pv^.SaveToDXFPostProcess(outhandle);
-              pv^.SaveToDXFFollow(handle, outhandle,drawing);
+              pv.rtsave(pvc2);
+              pvc.rtsave(pv);
+              //pvc^.SaveToDXF(outhandle,drawing,IODXFContext);
+              pv^.SaveToDXF(outhandle,drawing,IODXFContext);
+              pvc2.rtsave(pv);
+              pv^.SaveToDXFPostProcess(outhandle,IODXFContext);
+              pv^.SaveToDXFFollow(outhandle,drawing,IODXFContext);
 
 
          pvc^.done;
+         pvc2.rtsave(pv);
          GDBFREEMEM(pointer(pvc));
+         GDBFREEMEM(pointer(pvc2));
          pv:=VarObjArray.iterate(ir);
      until pv=nil;
      objmatrix:=m4;
      //historyout('Device DXFOut end');
      //self.CalcObjMatrix;
 end;
-procedure GDBObjDevice.SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);
+procedure GDBObjDevice.SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var IODXFContext:TIODXFContext);
 //var
    //s:gdbstring;
 begin

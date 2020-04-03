@@ -38,7 +38,7 @@ GDBObj3DFace={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
-                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
+                 procedure SaveToDXF(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
 
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
@@ -179,7 +179,7 @@ begin
 end;
 procedure GDBObj3DFace.SaveToDXF;
 begin
-  SaveToDXFObjPrefix(handle,outhandle,'3DFACE','AcDbFace');
+  SaveToDXFObjPrefix(outhandle,'3DFACE','AcDbFace',IODXFContext);
   dxfvertexout(outhandle,10,PInOCS[0]);
   dxfvertexout(outhandle,11,PInOCS[1]);
   dxfvertexout(outhandle,12,PInOCS[2]);

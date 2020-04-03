@@ -40,7 +40,7 @@ GDBObjText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAbstractText)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBString;p:GDBvertex;s,o,w,a:GDBDouble;j:TTextJustify);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
-                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
+                 procedure SaveToDXF(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure CalcGabarit(const drawing:TDrawingDef);virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
@@ -54,7 +54,7 @@ GDBObjText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAbstractText)
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
                  function IsHaveObjXData:GDBBoolean;virtual;
-                 procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
+                 procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var IODXFContext:TIODXFContext);virtual;
                  function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef):GDBBoolean;virtual;
                  class function GetDXFIOFeatures:TDXFEntIODataManager;static;
 
@@ -575,7 +575,7 @@ begin
 end;
 procedure GDBObjText.SaveToDXFObjXData;
 begin
-     GetDXFIOFeatures.RunSaveFeatures(outhandle,@self);
+     GetDXFIOFeatures.RunSaveFeatures(outhandle,@self,IODXFContext);
      inherited;
 end;
 function z2dxftext(s:gdbstring):gdbstring;
@@ -590,7 +590,7 @@ begin
                      end;
      until i<=0;
 end;
-procedure GDBObjText.SaveToDXF(var handle: TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);
+procedure GDBObjText.SaveToDXF(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
 var
   hv, vv,bw: GDBByte;
   tv:gdbvertex;
@@ -598,7 +598,7 @@ var
 begin
   vv := acadvjustify(textprop.justify);
   hv := (j2b[textprop.justify]{ord(textprop.justify)} - 1) mod 3;
-  SaveToDXFObjPrefix(handle,outhandle,'TEXT','AcDbText');
+  SaveToDXFObjPrefix(outhandle,'TEXT','AcDbText',IODXFContext);
   tv:=Local.p_insert;
   tv.x:=tv.x+P_drawInOCS.x;
   tv.y:=tv.y+P_drawInOCS.y;

@@ -1500,9 +1500,8 @@ begin
   debugln('{D-}end; {AddFromDXF}');
   //programlog.LogOutStr('end; {AddFromDXF}',lp_DecPos,LM_Debug);
 end;
-procedure saveentitiesdxf2000(pva: PGDBObjEntityOpenArray; var outhandle:{GDBInteger}GDBOpenArrayOfByte; var handle: TDWGHandle;var drawing:TSimpleDrawing);
+procedure saveentitiesdxf2000(pva: PGDBObjEntityOpenArray; var outhandle:GDBOpenArrayOfByte;var drawing:TSimpleDrawing;var IODXFContext:TIODXFContext);
 var
-//  i:GDBInteger;
   pv:pgdbobjEntity;
   ir:itrec;
   lph:TLPSHandle;
@@ -1511,10 +1510,8 @@ begin
      pv:=pva^.beginiterate(ir);
      if pv<>nil then
      repeat
-          //if assigned(ProcessLongProcessProc)then
-          //                                       ProcessLongProcessProc(ir.itc);
           lps.ProgressLongProcess(lph,ir.itc);
-          pv^.DXFOut(handle, outhandle,drawing);
+          pv^.DXFOut(outhandle,drawing,IODXFContext);
      pv:=pva^.iterate(ir);
      until pv=nil;
      lps.EndLongProcess(lph);
@@ -1631,7 +1628,7 @@ var
   outstream: {GDBInteger}GDBOpenArrayOfByte;
   groups, values, {ucvalues,}ts: GDBString;
   groupi, valuei, intable,attr: GDBInteger;
-  temphandle,temphandle2,{temphandle3,temphandle4,}handle,lasthandle,vporttablehandle,plottablefansdle,dimtablehandle: TDWGHandle;
+  temphandle,temphandle2,{temphandle3,temphandle4,}{handle,}lasthandle,vporttablehandle,plottablefansdle,dimtablehandle: TDWGHandle;
   i: integer;
   OldHandele2NewHandle:TMapHandleToHandle;
   //phandlea: pdxfhandlerecopenarray;
@@ -1650,8 +1647,9 @@ var
   PSP:PShapeProp;
   PTP:PTextProp;
   p:pointer;
-  Handle2pointer:TMapPointerToHandle;
-  VarsDict:TGDBString2GDBStringDictionary;
+  IODXFContext:TIODXFContext;
+  //p2h:TMapPointerToHandle;
+  //VarsDict:TGDBString2GDBStringDictionary;
   //DWGHandle:TDWGHandle;
   laststrokewrited:boolean;
   pcurrtextstyle:PGDBTextStyle;
@@ -1659,8 +1657,8 @@ var
   processedvarscount:integer;
   lph:TLPSHandle;
 begin
-  Handle2pointer:=TMapPointerToHandle.Create;
-  VarsDict:=TGDBString2GDBStringDictionary.create;
+  IODXFContext.p2h:=TMapPointerToHandle.Create;
+  IODXFContext.VarsDict:=TGDBString2GDBStringDictionary.create;
   DefaultFormatSettings.DecimalSeparator := '.';
   //standartstylehandle:=0;
   //olddwg:=nil;//@drawing;
@@ -1679,7 +1677,7 @@ begin
   //phandlea := dxfhandlearraycreate(10000);
   //pushhandle(phandlea,0,0);
   templatefile.InitFromFile(ProgramPath + 'components/empty.dxf');
-  handle := $2;
+  IODXFContext.handle := $2;
   inlayertable := false;
   inblocksec := false;
   inblocktable := false;
@@ -1689,13 +1687,10 @@ begin
   inlttypetable:=false;
   indimstyletable:=false;
   inappidtable:=false;
-  MakeVariablesDict(VarsDict,drawing);
-  processedvarscount:=VarsDict.{$IFDEF DELPHI}count{$ENDIF}{$IFNDEF DELPHI}size{$ENDIF};
+  MakeVariablesDict(IODXFContext.VarsDict,drawing);
+  processedvarscount:=IODXFContext.VarsDict.{$IFDEF DELPHI}count{$ENDIF}{$IFNDEF DELPHI}size{$ENDIF};
   while templatefile.notEOF do
   begin
-    if  (templatefile.count-templatefile.ReadPos)<10
-    then
-        handle:=handle;
     groups := templatefile.readGDBString;
     values := templatefile.readGDBString;
     //ucvalues:=uppercase(values);
@@ -1704,7 +1699,7 @@ begin
     if (groupi = 9)and(processedvarscount>0) then
     begin
       variablenotprocessed:=false;
-      if VarsDict.mygetvalue(values,ts) then
+      if IODXFContext.VarsDict.mygetvalue(values,ts) then
         begin
              outstream.TXTAddGDBStringEOL(groups);
              outstream.TXTAddGDBStringEOL(values);
@@ -1750,15 +1745,15 @@ begin
         end
         else
         begin
-          OldHandele2NewHandle.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}(valuei, handle);
+          OldHandele2NewHandle.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}(valuei, IODXFContext.handle);
           //pushhandle(phandlea, valuei, handle);
           if not ignoredsource then
           begin
           outstream.TXTAddGDBStringEOL(groups);
-          outstream.TXTAddGDBStringEOL(inttohex(handle, 0));
+          outstream.TXTAddGDBStringEOL(inttohex(IODXFContext.handle, 0));
           end;
-          lasthandle:=handle;
-          inc(handle);
+          lasthandle:=IODXFContext.handle;
+          inc(IODXFContext.handle);
         end;
         if inlayertable and (groupi=390) then
                                              plottablefansdle:=lasthandle;  {поймать плоттабле}
@@ -1775,7 +1770,7 @@ begin
           outstream.TXTAddGDBStringEOL(values);
           //WriteString_EOL(outstream, values);
           //historyoutstr('Entities start here_______________________________________________________');
-          saveentitiesdxf2000(@{p}drawing.pObjRoot^.ObjArray, outstream, handle,drawing);
+          saveentitiesdxf2000(@{p}drawing.pObjRoot^.ObjArray, outstream,drawing,IODXFContext);
         end
         else
           if (groupi = 2) and (values = 'BLOCKS') then
@@ -1800,8 +1795,8 @@ begin
                 //GetOrCreateHandle(@(PBlockdefArray(drawing.BlockDefArray.parray)^[i]),handle,temphandle);
                 //
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(5));
-                outstream.TXTAddGDBStringEOL(inttohex(handle{temphandle}, 0));
-                inc(handle);
+                outstream.TXTAddGDBStringEOL(inttohex(IODXFContext.handle{temphandle}, 0));
+                inc(IODXFContext.handle);
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
                 outstream.TXTAddGDBStringEOL(dxfName_AcDbEntity);
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(8));
@@ -1823,13 +1818,13 @@ begin
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(1));
                 outstream.TXTAddGDBStringEOL('');
 
-                saveentitiesdxf2000(@PBlockdefArray({p}drawing.BlockDefArray.parray)^[i].ObjArray, outstream, handle,drawing);
+                saveentitiesdxf2000(@PBlockdefArray({p}drawing.BlockDefArray.parray)^[i].ObjArray, outstream,drawing,IODXFContext);
 
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
                 outstream.TXTAddGDBStringEOL('ENDBLK');
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(5));
-                outstream.TXTAddGDBStringEOL(inttohex(handle, 0));
-                inc(handle);
+                outstream.TXTAddGDBStringEOL(inttohex(IODXFContext.handle, 0));
+                inc(IODXFContext.handle);
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
                 outstream.TXTAddGDBStringEOL(dxfName_AcDbEntity);
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(8));
@@ -1850,9 +1845,9 @@ begin
                ignoredsource:=false;
 
                outstream.TXTAddGDBStringEOL(dxfGroupCode(5));
-               outstream.TXTAddGDBStringEOL(inttohex(handle,0));
-               vporttablehandle:=handle;
-               inc(handle);
+               outstream.TXTAddGDBStringEOL(inttohex(IODXFContext.handle,0));
+               vporttablehandle:=IODXFContext.handle;
+               inc(IODXFContext.handle);
 
                outstream.TXTAddGDBStringEOL(dxfGroupCode(330));
                outstream.TXTAddGDBStringEOL('0');
@@ -1863,8 +1858,8 @@ begin
                outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
                outstream.TXTAddGDBStringEOL('VPORT');
                outstream.TXTAddGDBStringEOL(dxfGroupCode(5));
-               outstream.TXTAddGDBStringEOL(inttohex(handle,0));
-               inc(handle);
+               outstream.TXTAddGDBStringEOL(inttohex(IODXFContext.handle,0));
+               inc(IODXFContext.handle);
                outstream.TXTAddGDBStringEOL(dxfGroupCode(330));
                outstream.TXTAddGDBStringEOL(inttohex(vporttablehandle,0));
 
@@ -2021,7 +2016,7 @@ begin
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
                 outstream.TXTAddGDBStringEOL(dxfName_BLOCK_RECORD);
 
-                Handle2pointer.MyGetOrCreateValue(@(PBlockdefArray(drawing.BlockDefArray.parray)^[i]),handle,temphandle);
+                IODXFContext.p2h.MyGetOrCreateValue(@(PBlockdefArray(drawing.BlockDefArray.parray)^[i]),IODXFContext.handle,temphandle);
                 //GetOrCreateHandle(@(PBlockdefArray(drawing.BlockDefArray.parray)^[i]),handle,temphandle);
 
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(5));
@@ -2054,8 +2049,8 @@ begin
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
                     outstream.TXTAddGDBStringEOL(dxfName_Layer);
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(5));
-                    outstream.TXTAddGDBStringEOL(inttohex(handle, 0));
-                    inc(handle);
+                    outstream.TXTAddGDBStringEOL(inttohex(IODXFContext.handle, 0));
+                    inc(IODXFContext.handle);
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
                     outstream.TXTAddGDBStringEOL(dxfName_AcDbSymbolTableRecord);
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
@@ -2115,14 +2110,14 @@ begin
               begin
                    inlttypetable := false;
                    ignoredsource:=false;
-                   temphandle:=handle-1;
+                   temphandle:=IODXFContext.handle-1;
                    pltp:=drawing.LTypeStyleTable.beginiterate(ir);
                    if pltp<>nil then
                    repeat
                          debugln('{D}[DXF_CONTENTS]write linetype ',pltp^.Name);
                          outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
                          outstream.TXTAddGDBStringEOL(dxfName_LTYPE);
-                         Handle2pointer.MyGetOrCreateValue(pltp,handle,temphandle);
+                         IODXFContext.p2h.MyGetOrCreateValue(pltp,IODXFContext.handle,temphandle);
                          outstream.TXTAddGDBStringEOL(dxfGroupCode(5));
                          outstream.TXTAddGDBStringEOL(inttohex(temphandle, 0));
                          {outstream.TXTAddGDBStringEOL(inttohex(handle, 0));
@@ -2177,7 +2172,7 @@ begin
                                                              outstream.TXTAddGDBStringEOL(dxfGroupCode(75));
                                                              outstream.TXTAddGDBStringEOL(inttostr(PSP^.Psymbol^.number));
 
-                                                             Handle2pointer.MyGetOrCreateValue(PSP^.param.PStyle,handle,temphandle);
+                                                             IODXFContext.p2h.MyGetOrCreateValue(PSP^.param.PStyle,IODXFContext.handle,temphandle);
                                                              //GetOrCreateHandle(PSP^.param.PStyle,handle,temphandle);
 
                                                              outstream.TXTAddGDBStringEOL(dxfGroupCode(340));
@@ -2199,7 +2194,7 @@ begin
                                                              outstream.TXTAddGDBStringEOL(dxfGroupCode(75));
                                                              outstream.TXTAddGDBStringEOL('0');
 
-                                                             Handle2pointer.MyGetOrCreateValue(PTP^.param.PStyle,handle,temphandle);
+                                                             IODXFContext.p2h.MyGetOrCreateValue(PTP^.param.PStyle,IODXFContext.handle,temphandle);
                                                              //GetOrCreateHandle(PTP^.param.PStyle,handle,temphandle);
 
                                                              {else
@@ -2250,8 +2245,8 @@ begin
                       outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
                       outstream.TXTAddGDBStringEOL('DIMSTYLE');
                       outstream.TXTAddGDBStringEOL(dxfGroupCode(105));
-                      outstream.TXTAddGDBStringEOL(inttohex({temphandle3}handle, 0));
-                      inc(handle);
+                      outstream.TXTAddGDBStringEOL(inttohex({temphandle3}IODXFContext.handle, 0));
+                      inc(IODXFContext.handle);
 
                       outstream.TXTAddGDBStringEOL(dxfGroupCode(330));
                       outstream.TXTAddGDBStringEOL(inttohex({temphandle4}{temphandle3}dimtablehandle, 0));
@@ -2290,7 +2285,7 @@ begin
 
                       if pdsp^.Arrows.DIMLDRBLK<>TSClosedFilled then
                       begin
-                           Handle2pointer.MyGetOrCreateValue(drawing.BlockDefArray.getblockdef(pdsp^.GetDimBlockParam(-1).name),handle,temphandle);
+                           IODXFContext.p2h.MyGetOrCreateValue(drawing.BlockDefArray.getblockdef(pdsp^.GetDimBlockParam(-1).name),IODXFContext.handle,temphandle);
                            //GetOrCreateHandle(drawing.BlockDefArray.getblockdef(pdsp^.GetDimBlockParam(-1).name),handle,temphandle);
                            outstream.TXTAddGDBStringEOL(dxfGroupCode(341));
                            outstream.TXTAddGDBStringEOL(inttohex(temphandle,0));
@@ -2301,7 +2296,7 @@ begin
                                                                         begin
                                                                              if pdsp^.Arrows.DIMBLK1<>TSClosedFilled then
                                                                              begin
-                                                                                   Handle2pointer.MyGetOrCreateValue(drawing.BlockDefArray.getblockdef(pdsp^.GetDimBlockParam(0).name),handle,temphandle);
+                                                                                   IODXFContext.p2h.MyGetOrCreateValue(drawing.BlockDefArray.getblockdef(pdsp^.GetDimBlockParam(0).name),IODXFContext.handle,temphandle);
                                                                                    //GetOrCreateHandle(drawing.BlockDefArray.getblockdef(pdsp^.GetDimBlockParam(0).name),handle,temphandle);
                                                                                    if temphandle<>0 then
                                                                                    begin
@@ -2311,7 +2306,7 @@ begin
                                                                              end;
                                                                              if pdsp^.Arrows.DIMBLK2<>TSClosedFilled then
                                                                              begin
-                                                                                   Handle2pointer.MyGetOrCreateValue(drawing.BlockDefArray.getblockdef(pdsp^.GetDimBlockParam(1).name),handle,temphandle);
+                                                                                   IODXFContext.p2h.MyGetOrCreateValue(drawing.BlockDefArray.getblockdef(pdsp^.GetDimBlockParam(1).name),IODXFContext.handle,temphandle);
                                                                                    //GetOrCreateHandle(drawing.BlockDefArray.getblockdef(pdsp^.GetDimBlockParam(1).name),handle,temphandle);
                                                                                    if temphandle<>0 then
                                                                                    begin
@@ -2324,7 +2319,7 @@ begin
                                                begin
                                                     if pdsp^.Arrows.DIMBLK1<>TSClosedFilled then
                                                     begin
-                                                    Handle2pointer.MyGetOrCreateValue(drawing.BlockDefArray.getblockdef(pdsp^.GetDimBlockParam(0).name),handle,temphandle);
+                                                    IODXFContext.p2h.MyGetOrCreateValue(drawing.BlockDefArray.getblockdef(pdsp^.GetDimBlockParam(0).name),IODXFContext.handle,temphandle);
                                                     //GetHandle(drawing.BlockDefArray.getblockdef(pdsp^.GetDimBlockParam(0).name),temphandle);
                                                     if temphandle<>0 then
                                                     begin
@@ -2434,7 +2429,7 @@ begin
                       outstream.TXTAddGDBStringEOL(dxfGroupCode(340));
                       p:=pdsp^.Text.DIMTXSTY{drawing.TextStyleTable.FindStyle('Standard',false)};
 
-                      Handle2pointer.MyGetOrCreateValue(p,handle,temphandle);
+                      IODXFContext.p2h.MyGetOrCreateValue(p,IODXFContext.handle,temphandle);
                       //GetOrCreateHandle(p,handle,temphandle);
 
                       outstream.TXTAddGDBStringEOL(inttohex(temphandle, 0));
@@ -2447,7 +2442,7 @@ begin
                            outstream.TXTAddGDBStringEOL(dxfGroupCode(1070));
                            outstream.TXTAddGDBStringEOL('380');
                            outstream.TXTAddGDBStringEOL(dxfGroupCode(1005));
-                           Handle2pointer.MyGetOrCreateValue(pdsp^.Lines.DIMLTYPE,handle,temphandle);
+                           IODXFContext.p2h.MyGetOrCreateValue(pdsp^.Lines.DIMLTYPE,IODXFContext.handle,temphandle);
                            outstream.TXTAddGDBStringEOL(inttohex(temphandle,0));
                       end;
                       if (pdsp^.Lines.DIMLTEX1<>pltp)and(pdsp^.Lines.DIMLTEX1<>nil)then
@@ -2457,7 +2452,7 @@ begin
                            outstream.TXTAddGDBStringEOL(dxfGroupCode(1070));
                            outstream.TXTAddGDBStringEOL('381');
                            outstream.TXTAddGDBStringEOL(dxfGroupCode(1005));
-                           Handle2pointer.MyGetOrCreateValue(pdsp^.Lines.DIMLTEX1,handle,temphandle);
+                           IODXFContext.p2h.MyGetOrCreateValue(pdsp^.Lines.DIMLTEX1,IODXFContext.handle,temphandle);
                            outstream.TXTAddGDBStringEOL(inttohex(temphandle,0));
                       end;
                       if (pdsp^.Lines.DIMLTEX2<>pltp)and(pdsp^.Lines.DIMLTEX2<>nil)then
@@ -2467,7 +2462,7 @@ begin
                            outstream.TXTAddGDBStringEOL(dxfGroupCode(1070));
                            outstream.TXTAddGDBStringEOL('382');
                            outstream.TXTAddGDBStringEOL(dxfGroupCode(1005));
-                           Handle2pointer.MyGetOrCreateValue(pdsp^.Lines.DIMLTEX2,handle,temphandle);
+                           IODXFContext.p2h.MyGetOrCreateValue(pdsp^.Lines.DIMLTEX2,IODXFContext.handle,temphandle);
                            outstream.TXTAddGDBStringEOL(inttohex(temphandle,0));
                       end;
 
@@ -2500,14 +2495,14 @@ ENDTAB}
                   inappidtable := false;
                   ignoredsource:=false;
 
-                  RegisterAcadAppInDXF('ACAD',@outstream,handle);
-                  RegisterAcadAppInDXF('ACAD_PSEXT',@outstream,handle);
-                  RegisterAcadAppInDXF('AcAecLayerStandard',@outstream,handle);
-                  RegisterAcadAppInDXF(ZCADAppNameInDXF,@outstream,handle);
+                  RegisterAcadAppInDXF('ACAD',@outstream,IODXFContext.handle);
+                  RegisterAcadAppInDXF('ACAD_PSEXT',@outstream,IODXFContext.handle);
+                  RegisterAcadAppInDXF('AcAecLayerStandard',@outstream,IODXFContext.handle);
+                  RegisterAcadAppInDXF(ZCADAppNameInDXF,@outstream,IODXFContext.handle);
                   //RegisterAcadAppInDXF('ACAD_NAV_VCDISPLAY',@outstream,handle);
-                  RegisterAcadAppInDXF('ACAD_DSTYLE_DIM_LINETYPE',@outstream,handle);
-                  RegisterAcadAppInDXF('ACAD_DSTYLE_DIM_EXT1_LINETYPE',@outstream,handle);
-                  RegisterAcadAppInDXF('ACAD_DSTYLE_DIM_EXT2_LINETYPE',@outstream,handle);
+                  RegisterAcadAppInDXF('ACAD_DSTYLE_DIM_LINETYPE',@outstream,IODXFContext.handle);
+                  RegisterAcadAppInDXF('ACAD_DSTYLE_DIM_EXT1_LINETYPE',@outstream,IODXFContext.handle);
+                  RegisterAcadAppInDXF('ACAD_DSTYLE_DIM_EXT2_LINETYPE',@outstream,IODXFContext.handle);
 
                   outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
                   outstream.TXTAddGDBStringEOL('ENDTAB');
@@ -2517,7 +2512,7 @@ ENDTAB}
               begin
                 instyletable := false;
                 ignoredsource:=false;
-                temphandle2:=handle-2;
+                temphandle2:=IODXFContext.handle-2;
                 if drawing.TextStyleTable.GetRealCount>0 then
                 begin
                 pcurrtextstyle:=drawing.TextStyleTable.beginiterate(ir);
@@ -2531,12 +2526,12 @@ ENDTAB}
                   outstream.TXTAddGDBStringEOL(dxfName_Style);
                   p:={drawing.TextStyleTable.getelement(i))}pcurrtextstyle;
 
-                  Handle2pointer.MyGetOrCreateValue({drawing.TextStyleTable.getelement(i))}pcurrtextstyle,handle,temphandle);
+                  IODXFContext.p2h.MyGetOrCreateValue({drawing.TextStyleTable.getelement(i))}pcurrtextstyle,IODXFContext.handle,temphandle);
                   //GetOrCreateHandle(drawing.TextStyleTable.getelement(i),handle,temphandle);
 
                   outstream.TXTAddGDBStringEOL(dxfGroupCode(5));
                   outstream.TXTAddGDBStringEOL(inttohex({handle}temphandle, 0));
-                  inc(handle);
+                  inc(IODXFContext.handle);
                   outstream.TXTAddGDBStringEOL(dxfGroupCode(330));
                   outstream.TXTAddGDBStringEOL(inttohex(temphandle2, 0));
                   outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
@@ -2579,7 +2574,7 @@ ENDTAB}
                     begin
                     p:={drawing.TextStyleTable.getelement(i))}pcurrtextstyle;
 
-                    Handle2pointer.MyGetOrCreateValue(p,handle,temphandle);
+                    IODXFContext.p2h.MyGetOrCreateValue(p,IODXFContext.handle,temphandle);
                     //GetOrCreateHandle(p,handle,temphandle);
 
                     outstream.TXTAddGDBStringEOL(inttohex(temphandle, 0));
@@ -2705,7 +2700,7 @@ ENDTAB}
 
   i:=outstream.Count;
   outstream.Count:=handlepos;
-  outstream.TXTAddGDBStringEOL(inttohex(handle+$100000000,9){'100000013'});
+  outstream.TXTAddGDBStringEOL(inttohex(IODXFContext.handle+$100000000,9){'100000013'});
   outstream.Count:=i;
 
   //-------------FileSeek(outstream,handlepos,0);
@@ -2745,8 +2740,8 @@ ENDTAB}
                                if olddwg<>nil then
                                                   SetCurrentDWGProc(olddwg);*)
   {$IFNDEF DELPHI}
-  Handle2pointer.Destroy;
-  VarsDict.destroy;
+  IODXFContext.p2h.Destroy;
+  IODXFContext.VarsDict.destroy;
   {$ENDIF}
   //gdb.SetCurrentDWG(olddwg);
 end;

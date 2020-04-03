@@ -45,13 +45,13 @@ GDBObjElLeader={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
 
             constructor initnul;
             function Clone(own:GDBPointer):PGDBObjEntity;virtual;
-            procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
-            procedure DXFOut(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
+            procedure SaveToDXF(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+            procedure DXFOut(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
             function GetObjTypeName:GDBString;virtual;
             function ReturnLastOnMouse(InSubEntry:GDBBoolean):PGDBObjEntity;virtual;
             procedure ImSelected(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger);virtual;
             procedure DeSelect(var SelectedObjCount:GDBInteger;ds2s:TDeSelect2Stage);virtual;
-            procedure SaveToDXFFollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
+            procedure SaveToDXFFollow(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
             //function InRect:TInRect;virtual;
 
             destructor done;virtual;
@@ -155,14 +155,14 @@ begin
 end;
 procedure GDBObjElLeader.DXFOut;
 begin
-     SaveToDXF(handle, outhandle,drawing);
+     SaveToDXF(outhandle,drawing,IODXFContext);
      //SaveToDXFPostProcess(outhandle);
-     SaveToDXFFollow(handle, outhandle,drawing);
+     SaveToDXFFollow(outhandle,drawing,IODXFContext);
 end;
 procedure GDBObjElLeader.SaveToDXF;
 begin
   MainLine.bp.ListPos.Owner:={gdb.GetCurrentROOT}self.GetMainOwner;
-  MainLine.SaveToDXF(handle,outhandle,drawing);
+  MainLine.SaveToDXF(outhandle,drawing,IODXFContext);
   dxfGDBStringout(outhandle,1001,ZCADAppNameInDXF);
   dxfGDBStringout(outhandle,1002,'{');
   dxfGDBStringout(outhandle,1000,'_UPGRADE='+inttostr(UD_LineToLeader));
@@ -173,18 +173,18 @@ begin
   MainLine.bp.ListPos.Owner:=@self;
 
   MarkLine.bp.ListPos.Owner:=@gdbtrash;
-  MarkLine.SaveToDXF(handle,outhandle,drawing);
-  MarkLine.SaveToDXFPostProcess(outhandle);
+  MarkLine.SaveToDXF(outhandle,drawing,IODXFContext);
+  MarkLine.SaveToDXFPostProcess(outhandle,IODXFContext);
   MarkLine.bp.ListPos.Owner:=@self;
 
   tbl.bp.ListPos.Owner:=@gdbtrash;
-  tbl.SaveToDXFFollow(handle,outhandle,drawing);
+  tbl.SaveToDXFFollow(outhandle,drawing,IODXFContext);
   tbl.bp.ListPos.Owner:=@self;
 end;
 procedure GDBObjElLeader.SaveToDXFFollow;
 var
-  //i:GDBInteger;
-  pv,pvc:pgdbobjEntity;
+  p:pointer;
+  pv,pvc,pvc2:pgdbobjEntity;
   ir:itrec;
   m4:DMatrix4D;
   DC:TDrawContext;
@@ -198,24 +198,37 @@ begin
      if pv<>nil then
      repeat
          pvc:=pv^.Clone(@self{.bp.Owner});
+         pvc2:=pv^.Clone(@self{.bp.Owner});
          //historyoutstr(pv^.ObjToGDBString('','')+'  cloned obj='+pvc^.ObjToGDBString('',''));
          if pvc^.GetObjType=GDBDeviceID then
             pvc:=pvc;
 
-         pvc^.bp.ListPos.Owner:=@gdbtrash;
+         //pvc^.bp.ListPos.Owner:=@gdbtrash;
+         p:=pv^.bp.ListPos.Owner;
+         pv^.bp.ListPos.Owner:=@gdbtrash;
          self.ObjMatrix:=onematrix;
          if pvc^.IsHaveLCS then
                                pvc^.Formatentity(drawing,dc);
          pvc^.transform(m4);
          pvc^.Formatentity(drawing,dc);
 
-              pvc^.SaveToDXF(handle, outhandle,drawing);
-              pvc^.SaveToDXFPostProcess(outhandle);
-              pvc^.SaveToDXFFollow(handle, outhandle,drawing);
+              //pvc^.SaveToDXF(outhandle,drawing,IODXFContext);
+              //pvc^.SaveToDXFPostProcess(outhandle,IODXFContext);
+              //pvc^.SaveToDXFFollow(outhandle,drawing,IODXFContext);
+
+              pv.rtsave(pvc2);
+              pvc.rtsave(pv);
+              pv^.SaveToDXF(outhandle,drawing,IODXFContext);
+              pv^.SaveToDXFPostProcess(outhandle,IODXFContext);
+              pv^.SaveToDXFFollow(outhandle,drawing,IODXFContext);
+              pvc2.rtsave(pv);
+              pv^.bp.ListPos.Owner:=p;
 
 
          pvc^.done;
          GDBFREEMEM(pointer(pvc));
+         pvc2^.done;
+         GDBFREEMEM(pointer(pvc2));
          pv:=ConstObjArray.iterate(ir);
      until pv=nil;
      objmatrix:=m4;

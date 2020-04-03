@@ -39,7 +39,7 @@ GDBObjSolid={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
-                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
+                 procedure SaveToDXF(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure createpoint;virtual;
 
@@ -147,7 +147,7 @@ begin
 end;
 procedure GDBObjSolid.SaveToDXF;
 begin
-  SaveToDXFObjPrefix(handle,outhandle,'SOLID','AcDbTrace');
+  SaveToDXFObjPrefix(outhandle,'SOLID','AcDbTrace',IODXFContext);
   dxfvertexout(outhandle,10,PInOCS[0]);
   dxfvertexout(outhandle,11,PInOCS[1]);
   dxfvertexout(outhandle,12,PInOCS[2]);

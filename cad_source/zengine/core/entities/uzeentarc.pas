@@ -43,7 +43,7 @@ GDBObjArc={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlain)
                  constructor initnul;
                  procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
-                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
+                 procedure SaveToDXF(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
@@ -239,7 +239,7 @@ begin
 end;
 procedure GDBObjArc.SaveToDXF;
 begin
-  SaveToDXFObjPrefix(handle,outhandle,'ARC','AcDbCircle');
+  SaveToDXFObjPrefix(outhandle,'ARC','AcDbCircle',IODXFContext);
   dxfvertexout(outhandle,10,Local.p_insert);
   dxfGDBDoubleout(outhandle,40,r);
     SaveToDXFObjPostfix(outhandle);

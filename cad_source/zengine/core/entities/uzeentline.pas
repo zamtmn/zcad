@@ -37,7 +37,7 @@ GDBObjLine={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
-                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
+                 procedure SaveToDXF(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure CalcGeometry;virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
@@ -593,7 +593,7 @@ begin
 end;
 procedure GDBObjLine.SaveToDXF;
 begin
-  SaveToDXFObjPrefix(handle,outhandle,'LINE','AcDbLine');
+  SaveToDXFObjPrefix(outhandle,'LINE','AcDbLine',IODXFContext);
   dxfvertexout(outhandle,10,CoordInOCS.lbegin);
   dxfvertexout(outhandle,11,CoordInOCS.lend);
 end;

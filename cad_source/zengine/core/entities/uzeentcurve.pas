@@ -59,7 +59,7 @@ GDBObjCurve={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
 
                  procedure AddVertex(Vertex:GDBVertex);virtual;
 
-                 procedure SaveToDXFfollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
+                 procedure SaveToDXFfollow(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
                  procedure transform(const t_matrix:DMatrix4D);virtual;
 
@@ -201,13 +201,13 @@ begin
   ptv:=vertexarrayinocs.beginiterate(ir);
   if ptv<>nil then
   repeat
-        SaveToDXFObjPrefix(handle,outhandle,'VERTEX','AcDbVertex');
+        SaveToDXFObjPrefix(outhandle,'VERTEX','AcDbVertex',IODXFContext,true);
         dxfGDBStringout(outhandle,100,'AcDb3dPolylineVertex');
         dxfvertexout(outhandle,10,ptv^);
 
         ptv:=vertexarrayinocs.iterate(ir);
   until ptv=nil;
-  SaveToDXFObjPrefix(handle,outhandle,'SEQEND','');
+  SaveToDXFObjPrefix(outhandle,'SEQEND','',IODXFContext,true);
 end;
 procedure GDBObjCurve.AddVertex(Vertex:GDBVertex);
 begin

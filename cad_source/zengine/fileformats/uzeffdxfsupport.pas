@@ -20,7 +20,7 @@ unit uzeffdxfsupport;
 {$INCLUDE def.inc}
 
 interface
-uses uzbgeomtypes,uzbtypesbase,uzbtypes,sysutils,UGDBOpenArrayOfByte;
+uses uzbgeomtypes,uzbtypesbase,uzbtypes,sysutils,UGDBOpenArrayOfByte,usimplegenerics;
 
 const
   dxfName_AcDbEntity='AcDbEntity';
@@ -39,6 +39,13 @@ const
   dxfName_Layer='LAYER';
   dxfName_Style='STYLE';
   dxfName_LType='LTYPE';
+
+type
+  TIODXFContext=record
+    handle: TDWGHandle;
+    p2h:TMapPointerToHandle;
+    VarsDict:TGDBString2GDBStringDictionary;
+  end;
 
 
 

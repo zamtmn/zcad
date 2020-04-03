@@ -38,7 +38,7 @@ GDBObjPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  procedure startsnap(out osp:os_record; out pdata:GDBPointer);virtual;
                  function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
 
-                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
+                 procedure SaveToDXF(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  function GetObjTypeName:GDBString;virtual;
@@ -176,7 +176,7 @@ procedure GDBObjPolyline.SaveToDXF;
 //    ptv:pgdbvertex;
 //    ir:itrec;
 begin
-  SaveToDXFObjPrefix(handle,outhandle,'POLYLINE','AcDb3dPolyline');
+  SaveToDXFObjPrefix(outhandle,'POLYLINE','AcDb3dPolyline',IODXFContext);
   dxfGDBIntegerout(outhandle,66,1);
   dxfvertexout(outhandle,10,uzegeometry.NulVertex);
   if closed then

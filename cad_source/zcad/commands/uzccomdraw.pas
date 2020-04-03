@@ -776,9 +776,9 @@ begin
      end;
 end;
 procedure BlockReplace_com.Format;
-//var pb:PGDBObjBlockdef;
+var //pb:PGDBObjBlockdef;
     //ir:itrec;
-    //i:integer;
+    i:integer;
 begin
      BlockReplaceParams.CurrentFindBlock:=GDBEnumDataDescriptorObj.GetValueAsString(@BlockReplaceParams.Find);
      BlockReplaceParams.CurrentReplaceBlock:=GDBEnumDataDescriptorObj.GetValueAsString(@BlockReplaceParams.Replace);
@@ -789,6 +789,16 @@ begin
                                                          BlockReplaceParams.Find.Selected:=0;
                                                          BlockReplaceParams.CurrentFindBlock:='';
                                                end ;
+     BlockReplaceParams.CurrentFindBlock:=GDBEnumDataDescriptorObj.GetValueAsString(@BlockReplaceParams.Find);
+     BlockReplaceParams.Replace.Enums.free;
+     i:=GetBlockDefNames(BlockReplaceParams.Replace.Enums,DevicePrefix+BlockReplaceParams.CurrentFindBlock);
+     if BlockReplaceParams.Replace.Enums.Count>0 then
+     begin
+          if i>0 then
+                     BlockReplaceParams.Replace.Selected:=i
+                 else
+     end;
+
      if BlockReplaceParams.Find.Enums.Count=0 then
                                                        PRecordDescriptor(commanddata.PTD)^.SetAttrib('Find',FA_READONLY,0)
                                                    else

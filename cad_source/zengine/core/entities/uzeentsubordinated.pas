@@ -22,7 +22,7 @@ unit uzeentsubordinated;
 interface
 uses strutils,uzgldrawcontext,uzeentityextender,uzetextpreprocessor,uzedrawingdef,
      uzbstrproc{$IFNDEF DELPHI},LazUTF8{$ENDIF},UGDBOpenArrayOfByte,uzbgeomtypes,uzbtypes,
-     gzctnrvectortypes,uzbtypesbase,sysutils,uzestyleslayers;
+     gzctnrvectortypes,uzbtypesbase,sysutils,uzestyleslayers,usimplegenerics,uzeffdxfsupport;
 type
 {EXPORT+}
 GDBObjExtendable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
@@ -78,7 +78,7 @@ GDBObjSubordinated={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericWithSubord
                          //function FindVariable(varname:GDBString):pvardesk;virtual;
                          //function FindShellByClass(_type:TDeviceClass):PGDBObjSubordinated;virtual;
                          destructor done;virtual;
-
+                         procedure postload(var context:TIODXFLoadContext);virtual;abstract;
          end;
 {EXPORT-}
 

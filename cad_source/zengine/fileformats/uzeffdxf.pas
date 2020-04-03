@@ -311,7 +311,7 @@ begin
                                          end;
   end;
 end;
-procedure addentitiesfromdxf(var f: GDBOpenArrayOfByte;exitGDBString: GDBString;owner:PGDBObjSubordinated;var drawing:TSimpleDrawing;h2p:TMapHandleToPointer);
+procedure addentitiesfromdxf(var f: GDBOpenArrayOfByte;exitGDBString: GDBString;owner:PGDBObjSubordinated;var drawing:TSimpleDrawing;var context:TIODXFLoadContext);
 var
 //  byt,LayerColor: GDBInteger;
   s{, sname, sx1, sy1, sz1,scode,LayerName}: GDBString;
@@ -375,10 +375,13 @@ begin
                                 if PGDBObjEntity(pobj)^.PExtAttrib<>nil then
                                 begin
                                      if PGDBObjEntity(pobj)^.PExtAttrib^.Handle>200 then
-                                                                                      h2p.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}(PGDBObjEntity(pobj)^.PExtAttrib^.Handle,pobj);
+                                                                                      begin
+                                                                                      context.h2p.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}(PGDBObjEntity(pobj)^.PExtAttrib^.Handle,pobj);
+                                                                                      context.h2p.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}(PGDBObjEntity(pobj)^.PExtAttrib^.dwgHandle,pobj);
+                                                                                      end;
                                                                                       //pushhandle(phandlearray,PGDBObjEntity(pobj)^.PExtAttrib^.Handle,GDBPlatformint(pobj));
                                      if PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle>200 then
-                                                                                      newowner:=h2p.MyGetValue(PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle);
+                                                                                      newowner:=context.h2p.MyGetValue(PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle);
                                                                                       //newowner:=pointer(getnevhandleWithNil(phandlearray,PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle));
                                      if PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle=h_trash then
                                                                                       trash:=true;
@@ -430,7 +433,7 @@ begin
                                 if PGDBObjEntity(pobj)^.PExtAttrib<>nil then
                                 begin
                                      if PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle>200 then
-                                                                                      newowner:=h2p.MyGetValue(PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle);
+                                                                                      newowner:=context.h2p.MyGetValue(PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle);
                                                                                       //newowner:=pointer(getnevhandleWithNil(phandlearray,PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle));
                                 end;
                                 if newowner<>nil then
@@ -438,7 +441,10 @@ begin
                                 if PGDBObjEntity(pobj)^.PExtAttrib<>nil then
                                 begin
                                      if PGDBObjEntity(pobj)^.PExtAttrib^.Handle>200 then
-                                                                                      h2p.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}(PGDBObjEntity(pobj)^.PExtAttrib^.Handle,postobj);
+                                                                                      begin
+                                                                                      context.h2p.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}(PGDBObjEntity(pobj)^.PExtAttrib^.Handle,postobj);
+                                                                                      context.h2p.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}(PGDBObjEntity(pobj)^.PExtAttrib^.dwgHandle,postobj);
+                                                                                      end
                                                                                       //pushhandle(phandlearray,PGDBObjEntity(pobj)^.PExtAttrib^.Handle,GDBPlatformint(postobj));
                                 end;
                                 if newowner=pointer($ffffffff) then
@@ -506,6 +512,7 @@ begin
   end;
   if Assigned(FreeExtLoadData) then
                                    FreeExtLoadData(PExtLoadData);
+  owner.postload(context);
   //additionalunit.done;
   lps.EndLongProcess(lph);
 end;
@@ -519,7 +526,7 @@ var
 //  pobj,postobj: PGDBObjEntity;
   tp: PGDBObjBlockdef;
   //phandlearray: pdxfhandlerecopenarray;
-  h2p:TMapHandleToPointer;
+  context:TIODXFLoadContext;
   lph:TLPSHandle;
 begin
   s:='';
@@ -527,7 +534,7 @@ begin
   debugln('{D+}AddFromDXF12');
   //programlog.LogOutStr('AddFromDXF12',lp_IncPos,LM_Debug);
   //phandlearray := dxfhandlearraycreate(10000);
-  h2p:=TMapHandleToPointer.Create;
+  context.h2p:=TMapHandleToPointer.Create;
   while (f.notEOF) and (s <> exitGDBString) do
   begin
   lps.ProgressLongProcess(lph,f.ReadPos);
@@ -579,7 +586,7 @@ begin
             tp := drawing.BlockDefArray.create(s);
             debugln('{D+}[DXF_CONTENTS]Found block ',s);
             //programlog.LogOutFormatStr('Found block "%s"',[s],lp_IncPos,LM_Debug);
-            {addfromdxf12}addentitiesfromdxf(f, 'ENDBLK',tp,drawing,h2p);
+            {addfromdxf12}addentitiesfromdxf(f, 'ENDBLK',tp,drawing,context);
             debugln('{D-}[DXF_CONTENTS]end; {block}');
             //programlog.LogOutFormatStr('end; {block "%s"}',[s],lp_DecPos,LM_Debug);
           end;
@@ -593,18 +600,18 @@ begin
     begin
          debugln('{D+}[DXF_CONTENTS]Found entities section');
          //programlog.LogOutStr('Found entities section',lp_IncPos,LM_Debug);
-         addentitiesfromdxf(f, 'EOF',owner,drawing,h2p);
+         addentitiesfromdxf(f, 'EOF',owner,drawing,context);
          debugln('{D-}[DXF_CONTENTS]end {entities section}');
          //programlog.LogOutStr('end {entities section}',lp_DecPos,LM_Debug);
     end;
   end;
   //GDBFreeMem(GDBPointer(phandlearray));
-  h2p.Destroy;
+  context.h2p.Destroy;
   lps.EndLongProcess(lph);
   debugln('{D-}end; {AddFromDXF12}');
   //programlog.LogOutStr('end; {AddFromDXF12}',lp_DecPos,LM_Debug);
 end;
-procedure ReadLTStyles(var s:ansiString;cltype:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var h2p:TMapHandleToPointer);
+procedure ReadLTStyles(var s:ansiString;cltype:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var context:TIODXFLoadContext);
 var
    pltypeprop:PGDBLtypeProp;
    byt: GDBInteger;
@@ -636,7 +643,7 @@ begin
            case drawing.LTypeStyleTable.AddItem(s,pointer(pltypeprop)) of
                         IsFounded:
                                   begin
-                                       h2p.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}(DWGHandle,pltypeprop);
+                                       context.h2p.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}(DWGHandle,pltypeprop);
                                        if LoadMode=TLOLoad then
                                        begin
                                        end
@@ -647,7 +654,7 @@ begin
                                   begin
                                        pltypeprop^.init(s);
                                        dashinfo:=TDIDash;
-                                       h2p.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}(DWGHandle,pltypeprop);
+                                       context.h2p.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}(DWGHandle,pltypeprop);
                                   end;
                         IsError:
                                   begin
@@ -837,7 +844,7 @@ begin
                                              drawing.CurrentLayer:=player;
   end;
 end;
-procedure ReadTextstyles(var s:ansistring;ctstyle:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var h2p:TMapHandleToPointer);
+procedure ReadTextstyles(var s:ansistring;ctstyle:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var context:TIODXFLoadContext);
 var
    tstyle:GDBTextStyle;
    ptstyle:PGDBTextStyle;
@@ -925,7 +932,7 @@ begin
         end;
     if ti<>nil then
     begin
-         h2p.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}(DWGHandle,ti);
+         context.h2p.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}(DWGHandle,ti);
          ptstyle:={drawing.TextStyleTable.getelement}(ti);
          pltypeprop:=drawing.LTypeStyleTable.beginiterate(ir);
          if pltypeprop<>nil then
@@ -1141,7 +1148,7 @@ begin
      end;
      debugln('{D-}[DXF_CONTENTS]end;{ReadVport}');
 end;
-procedure ReadDimStyles(var s:ansistring;cdimstyle:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var h2p:TMapHandleToPointer);
+procedure ReadDimStyles(var s:ansistring;cdimstyle:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var context:TIODXFLoadContext);
 var
    psimstyleprop:PGDBDimStyle;
    byt:integer;
@@ -1176,7 +1183,7 @@ begin
                          end;
      end
      else
-         psimstyleprop^.SetValueFromDxf(ReadDimStylesMode,byt,s,h2p);
+         psimstyleprop^.SetValueFromDxf(ReadDimStylesMode,byt,s,context);
      end;
 end;
 end;
@@ -1207,7 +1214,7 @@ begin
 end;
 end;
 
-procedure addfromdxf2000(var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;h2p:TMapHandleToPointer;DWGVarsDict:TGDBString2GDBStringDictionary);
+procedure addfromdxf2000(var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var context:TIODXFLoadContext;DWGVarsDict:TGDBString2GDBStringDictionary);
 var
   byt: GDBInteger;
   error: GDBInteger;
@@ -1266,7 +1273,7 @@ begin
                                     begin
                                       debugln('{D+}[DXF_CONTENTS]Found dimstyles table');
                                       //programlog.LogOutStr('Found dimstyles table',lp_IncPos,LM_Debug);
-                                      ReadDimStyles(s,cdimstyle,f,exitGDBString,owner,LoadMode,drawing,h2p);
+                                      ReadDimStyles(s,cdimstyle,f,exitGDBString,owner,LoadMode,drawing,context);
                                       debugln('{D-}[DXF_CONTENTS]end; {dimstyles table}');
                                       //programlog.LogOutStr('end; {dimstyles table}',lp_DecPos,LM_Debug);
                                     end
@@ -1281,14 +1288,14 @@ begin
                                     begin
                                       debugln('{D+}[DXF_CONTENTS]Found line types table');
                                       //programlog.LogOutStr('Found line types table',lp_IncPos,LM_Debug);
-                                      ReadLTStyles(s,cltype,f,exitGDBString,owner,LoadMode,drawing,h2p);
+                                      ReadLTStyles(s,cltype,f,exitGDBString,owner,LoadMode,drawing,context);
                                       debugln('{D-}[DXF_CONTENTS]end; (line types table)');
                                       //programlog.LogOutStr('end; (line types table)',lp_DecPos,LM_Debug);
                                     end
                       else if s = dxfName_Style{:}then
                                     begin
                                       debugln('{D+}[DXF_CONTENTS]Found style table');
-                                      ReadTextstyles(s,ctstyle,f,exitGDBString,owner,LoadMode,drawing,h2p);
+                                      ReadTextstyles(s,ctstyle,f,exitGDBString,owner,LoadMode,drawing,context);
                                       debugln('{D-}[DXF_CONTENTS]end; {style table}');
                                     end
                               else if s = 'UCS'{:}then
@@ -1315,7 +1322,7 @@ begin
         debugln('{D+}[DXF_CONTENTS]Found entities section');
         //programlog.LogOutStr('Found entities section',lp_IncPos,LM_Debug);
         //inc(foc);
-        {addfromdxf12}addentitiesfromdxf(f, dxfName_ENDSEC,owner,drawing,h2p);
+        {addfromdxf12}addentitiesfromdxf(f, dxfName_ENDSEC,owner,drawing,context);
         owner^.ObjArray.pack;
         owner^.correctobjects(nil,0);
         //inc(foc);
@@ -1377,7 +1384,7 @@ begin
                 tp^.Base.z := strtofloat(s);
                 //programlog.LogOutFormatStr('Base x:%g y:%g z:%g',[tp^.Base.x,tp^.Base.y,tp^.Base.z],lp_OldPos,LM_Info);
                 inc(foc);
-                AddEntitiesFromDXF(f,'ENDBLK',tp,drawing,h2p);
+                AddEntitiesFromDXF(f,'ENDBLK',tp,drawing,context);
                 dec(foc);
                 if tp^.name='TX' then
                                                            tp^.name:=tp^.name;
@@ -1418,7 +1425,8 @@ var
   f: GDBOpenArrayOfByte;
   s,s1,s2: GDBString;
   dxfversion,code:integer;
-  h2p:TMapHandleToPointer;
+  Context:TIODXFLoadContext;
+  //h2p:TMapHandleToPointer;
   DWGVarsDict:TGDBString2GDBStringDictionary;
   dc:TDrawContext;
   lph:TLPSHandle;
@@ -1432,7 +1440,7 @@ begin
   begin
      DWGVarsDict:=TGDBString2GDBStringDictionary.create;
      ReadDXFHeader(f,DWGVarsDict);
-     h2p:=TMapHandleToPointer.create;
+     Context.h2p:=TMapHandleToPointer.create;
   lph:=lps.StartLongProcess(f.Count,rsLoadDXFFile,@f);
   //if assigned(StartLongProcessProc)then
   //  StartLongProcessProc(f.Count,'Load DXF file');
@@ -1455,22 +1463,22 @@ begin
                                1015:begin
                                          //HistoryOutStr(format(rsFileFormat,['DXF2000 ('+s+')']));
                                          DebugLn('{IH}'+rsFileFormat,['DXF2000 ('+s+')']);
-                                         addfromdxf2000(f,'EOF',owner,loadmode,drawing,h2p,DWGVarsDict)
+                                         addfromdxf2000(f,'EOF',owner,loadmode,drawing,context,DWGVarsDict)
                                     end;
                                1018:begin
                                          //HistoryOutStr(format(rsFileFormat,['DXF2004 ('+s+')']));
                                          DebugLn('{IH}'+rsFileFormat,['DXF2004 ('+s+')']);
-                                         addfromdxf2000(f,'EOF',owner,loadmode,drawing,h2p,DWGVarsDict)
+                                         addfromdxf2000(f,'EOF',owner,loadmode,drawing,context,DWGVarsDict)
                                     end;
                                1021:begin
                                          //HistoryOutStr(format(rsFileFormat,['DXF2007 ('+s+')']));
                                          DebugLn('{IH}'+rsFileFormat,['DXF2007 ('+s+')']);
-                                         addfromdxf2000(f,'EOF',owner,loadmode,drawing,h2p,DWGVarsDict)
+                                         addfromdxf2000(f,'EOF',owner,loadmode,drawing,context,DWGVarsDict)
                                     end;
                                1024:begin
                                          //HistoryOutStr(format(rsFileFormat,['DXF2010 ('+s+')']));
                                          DebugLn('{IH}'+rsFileFormat,['DXF2010 ('+s+')']);
-                                         addfromdxf2000(f,'EOF',owner,loadmode,drawing,h2p,DWGVarsDict)
+                                         addfromdxf2000(f,'EOF',owner,loadmode,drawing,context,DWGVarsDict)
                                     end;
                                else
                                        begin
@@ -1489,7 +1497,7 @@ begin
   //  EndLongProcessProc;
   dc:=drawing.CreateDrawingRC;
   owner^.calcbb(dc);
-  h2p.Destroy;
+  context.h2p.Destroy;
   DWGVarsDict.destroy;
   //GDBFreeMem(GDBPointer(phandlearray));
   end

@@ -21,7 +21,7 @@ unit uzestylesdim;
 interface
 uses uzepalette,uzeconsts,uzestyleslinetypes,uzestylestexts,usimplegenerics,uzbtypesbase,
      uzedimensionaltypes,sysutils,uzbtypes,uzegeometry,
-     gzctnrvectortypes,uzbstrproc,UGDBNamedObjectsArray,uzbmemman;
+     gzctnrvectortypes,uzbstrproc,UGDBNamedObjectsArray,uzbmemman,uzeffdxfsupport;
 const
      DIMLWEDefaultValue=LnWtByBlock;
      DIMCLREDefaultValue=ClByBlock;
@@ -99,7 +99,7 @@ GDBDimStyle = {$IFNDEF DELPHI}packed{$ENDIF}object(GDBNamedObject)
                       Units:TGDBDimUnitsProp;
                       PDXFLoadingData:PTDimStyleDXFLoadingData;
                       procedure SetDefaultValues;virtual;
-                      procedure SetValueFromDxf(var mode:TDimStyleReadMode;group:GDBInteger;value:GDBString;var h2p:TMapHandleToPointer);virtual;
+                      procedure SetValueFromDxf(var mode:TDimStyleReadMode;group:GDBInteger;value:GDBString;var context:TIODXFLoadContext);virtual;
                       function GetDimBlockParam(nline:GDBInteger):TDimArrowBlockParam;
                       function GetDimBlockTypeByName(bname:String):TArrowStyle;
                       procedure CreateLDIfNeed;
@@ -240,7 +240,7 @@ begin
      result:=high(TArrowStyle);
 end;
 
-procedure GDBDimStyle.SetValueFromDxf(var mode:TDimStyleReadMode; group:GDBInteger;value:GDBString;var h2p:TMapHandleToPointer);
+procedure GDBDimStyle.SetValueFromDxf(var mode:TDimStyleReadMode; group:GDBInteger;value:GDBString;var context:TIODXFLoadContext);
 var
    temp:QWord;
 begin
@@ -250,17 +250,17 @@ begin
   TDSRM_ACAD_DSTYLE_DIM_LINETYPE:
               begin
                    if group=1005 then
-                                     Lines.DIMLTYPE:=h2p.MyGetValue(StrToQWord('$'+value));
+                                     Lines.DIMLTYPE:=context.h2p.MyGetValue(StrToQWord('$'+value));
               end;
   TDSRM_ACAD_DSTYLE_DIM_EXT1_LINETYPE:
               begin
                    if group=1005 then
-                                     Lines.DIMLTEX1:=h2p.MyGetValue(StrToQWord('$'+value));
+                                     Lines.DIMLTEX1:=context.h2p.MyGetValue(StrToQWord('$'+value));
               end;
   TDSRM_ACAD_DSTYLE_DIM_EXT2_LINETYPE:
               begin
                    if group=1005 then
-                                     Lines.DIMLTEX2:=h2p.MyGetValue(StrToQWord('$'+value));
+                                     Lines.DIMLTEX2:=context.h2p.MyGetValue(StrToQWord('$'+value));
               end;
   TDSRM_ACAD:
               begin
@@ -386,7 +386,7 @@ begin
                 340:
                 begin
                      if TryStrToQWord('$'+value,temp) then
-                       Text.DIMTXSTY:=h2p.MyGetValue(temp)
+                       Text.DIMTXSTY:=context.h2p.MyGetValue(temp)
                      else
                        begin
                          CreateLDIfNeed;

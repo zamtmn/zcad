@@ -33,6 +33,8 @@ PGDBObjEntity=^GDBObjEntity;
 PTExtAttrib=^TExtAttrib;
 TExtAttrib=packed record
                  OwnerHandle:GDBQWord;
+                 MainFunctionHandle:GDBQWord;
+                 dwgHandle:GDBQWord;
                  Handle:GDBQWord;
                  Upgrade:TEntUpgradeInfo;
                  ExtAttrib2:GDBBoolean;
@@ -1134,6 +1136,15 @@ var APP_NAME:GDBString;
 begin
      result:=false;
      case dxfcod of
+                5:begin
+                          {$IFNDEF DELPHI}
+                          if not TryStrToQWord('$'+readmystr(f),AddExtAttrib^.dwgHandle)then
+                          {$ENDIF}
+                          begin
+                               //нужно залупиться
+                          end;
+                          result:=true;
+                  end;
                 6:begin
                        //vp.LineType:=readmystr(f);
                        vp.LineType:=drawing.GetLTypeTable.getAddres(readmystr(f));

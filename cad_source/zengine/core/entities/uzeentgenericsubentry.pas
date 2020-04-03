@@ -23,7 +23,7 @@ interface
 uses uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,uzestyleslayers,
      gzctnrvectorpobjects,UGDBVisibleTreeArray,UGDBOpenArrayOfPV,uzbtypesbase,
      uzeentwithmatrix,uzeentsubordinated,uzbtypes,uzegeometry,uzeentity,
-     gzctnrvectortypes,uzbgeomtypes,uzeconsts,uzbmemman,uzeentitiestree;
+     gzctnrvectortypes,uzbgeomtypes,uzeconsts,uzbmemman,uzeentitiestree,usimplegenerics,uzeffdxfsupport;
 type
 //GDBObjGenericSubEntry=object(GDBObjWithLocalCS)
 //GDBObjGenericSubEntry=object(GDBObj3d)
@@ -97,6 +97,8 @@ GDBObjGenericSubEntry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
 
                               procedure IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);virtual;
 
+                              procedure postload(var context:TIODXFLoadContext);virtual;
+
                       end;
 {Export-}
 implementation
@@ -117,6 +119,18 @@ begin
     ObjTree.addtonul(pobj);
     CorrectNodeTreeBB(pobj);
 end;}
+procedure GDBObjGenericSubEntry.postload(var context:TIODXFLoadContext);
+var p:pGDBObjEntity;
+    ir:itrec;
+begin
+    p:=objarray.beginiterate(ir);
+    if p<>nil then
+    repeat
+      if assigned(p^.EntExtensions) then
+        p^.EntExtensions.RunPostload(context);
+    p:=objarray.iterate(ir);
+    until p=nil;
+end;
 procedure GDBObjGenericSubEntry.IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);
 var p:pGDBObjEntity;
     ir:itrec;

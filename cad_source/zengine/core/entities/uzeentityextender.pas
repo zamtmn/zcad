@@ -21,7 +21,7 @@ unit uzeentityextender;
 
 interface
 uses uzbmemman,uzedrawingdef,uzbtypesbase,uzbtypes,usimplegenerics,
-     UGDBOpenArrayOfByte,gzctnrstl;
+     UGDBOpenArrayOfByte,gzctnrstl,uzeffdxfsupport;
 
 type
 TBaseObjExtender={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
@@ -41,6 +41,7 @@ TBaseEntityExtender={$IFNDEF DELPHI}packed{$ENDIF} object(TBaseObjExtender)
 
                   procedure CopyExt2Ent(pSourceEntity,pDestEntity:pointer);virtual;abstract;
                   procedure ReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);virtual;abstract;
+                  procedure PostLoad(var context:TIODXFLoadContext);virtual;abstract;
 end;
 TEntityExtenderVector= TMyVector<PTBaseEntityExtender>;
 TEntityExtenderMap= GKey2DataMap<Pointer,SizeUInt{$IFNDEF DELPHI},LessPointer{$ENDIF}>;
@@ -58,6 +59,7 @@ TEntityExtensions=class
                        procedure RunOnBuildVarGeometryProcedures(pEntity:pointer;const drawing:TDrawingDef);
                        procedure RunSupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);
                        procedure RunReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);
+                       procedure RunPostload(var context:TIODXFLoadContext);
                   end;
 implementation
 constructor TBaseEntityExtender.init(pEntity:Pointer);
@@ -149,6 +151,14 @@ begin
      if assigned(fEntityExtensions)then
      for i:=0 to fEntityExtensions.Size-1 do
        fEntityExtensions[i]^.ReorganizeEnts(OldEnts2NewEntsMap);
+end;
+procedure TEntityExtensions.RunPostLoad(var context:TIODXFLoadContext);
+var
+  i:integer;
+begin
+     if assigned(fEntityExtensions)then
+     for i:=0 to fEntityExtensions.Size-1 do
+       fEntityExtensions[i]^.PostLoad(context);
 end;
 end.
 

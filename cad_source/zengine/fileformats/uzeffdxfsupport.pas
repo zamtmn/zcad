@@ -48,7 +48,9 @@ type
     VarsDict:TGDBString2GDBStringDictionary;
   end;
 
-
+  TIODXFLoadContext=record
+    h2p:TMapHandleToPointer
+  end;
 
 procedure dxfvertexout(var f:GDBOpenArrayOfByte;dxfcode:GDBInteger;const v:gdbvertex);
 procedure dxfvertexout1(var f:GDBOpenArrayOfByte;dxfcode:GDBInteger;const v:gdbvertex);

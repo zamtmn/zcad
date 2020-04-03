@@ -91,6 +91,17 @@ begin
      PTObjectUnit(PEnt^.ou.Instance)^.InterfaceUses.addnodouble(@usedunit);
      result:=true;}
 end;
+function EntIOLoadMainFunction(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
+begin
+  {$IFNDEF DELPHI}
+  if not TryStrToQWord('$'+_value,PEnt^.AddExtAttrib^.MainFunctionHandle)then
+  {$ENDIF}
+  begin
+       //нужно залупиться
+  end;
+  result:=true;
+end;
+
 function EntIOLoadDollar(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
 var
     svn,vn,vv:GDBString;
@@ -532,6 +543,7 @@ begin
 
   {from GDBObjGenericWithSubordinated}
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('USES',@EntIOLoadUSES);
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('MAINFUNCTION',@EntIOLoadMainFunction);
   GDBObjEntity.GetDXFIOFeatures.RegisterPrefixLoadFeature('$',@EntIOLoadDollar);
   GDBObjEntity.GetDXFIOFeatures.RegisterPrefixLoadFeature('&',@EntIOLoadAmpersand);
   GDBObjEntity.GetDXFIOFeatures.RegisterPrefixLoadFeature('%',@EntIOLoadPercent);

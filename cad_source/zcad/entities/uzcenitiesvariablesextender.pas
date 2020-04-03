@@ -23,7 +23,7 @@ uses sysutils,UGDBObjBlockdefArray,uzedrawingdef,uzeentityextender,uzcshared,
      uzeentdevice,TypeDescriptors,uzetextpreprocessor,UGDBOpenArrayOfByte,
      uzbtypesbase,uzbtypes,uzeentsubordinated,uzeentity,uzeenttext,uzeblockdef,
      varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,uzbmemman,
-     uzeentitiestree,usimplegenerics;
+     uzeentitiestree,usimplegenerics,uzeffdxfsupport;
 
 type
 TBaseVariablesExtender={$IFNDEF DELPHI}packed{$ENDIF} object(TBaseEntityExtender)
@@ -43,6 +43,7 @@ TVariablesExtender={$IFNDEF DELPHI}packed{$ENDIF} object(TBaseVariablesExtender)
     procedure onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);virtual;
     procedure CopyExt2Ent(pSourceEntity,pDestEntity:pointer);virtual;
     procedure ReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);virtual;
+    procedure PostLoad(var context:TIODXFLoadContext);virtual;
 
     function isMainFunction:boolean;
     procedure addDelegate(pDelegateEntity:PGDBObjEntity;pDelegateEntityVarext:PTVariablesExtender);
@@ -221,6 +222,22 @@ begin
           pbdunit^.addDelegate(pThisEntity,@self);
       end;
   end;
+end;
+
+procedure TVariablesExtender.PostLoad(var context:TIODXFLoadContext);
+var
+ PMF:PGDBObjEntity;
+ pbdunit:PTVariablesExtender;
+begin
+  if pThisEntity<>nil then
+    if pThisEntity.PExtAttrib<>nil then
+      if pThisEntity.PExtAttrib^.MainFunctionHandle<>0 then begin
+        if context.h2p.TryGetValue(pThisEntity.PExtAttrib^.MainFunctionHandle,pmf)then begin
+          pbdunit:=pmf^.EntExtensions.GetExtension(typeof(TVariablesExtender));
+          if pbdunit<>nil then
+            pbdunit^.addDelegate(pThisEntity,@self);
+        end;
+      end;
 end;
 
 class function TVariablesExtender.CreateEntVariablesExtender(pEntity:Pointer; out ObjSize:Integer):PTVariablesExtender;

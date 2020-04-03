@@ -1097,8 +1097,16 @@ begin
     tmpHandle:=IODXFContext.handle;
     inc(IODXFContext.handle);
   end else
-    IODXFContext.p2h.MyGetOrCreateValue(@self,IODXFContext.handle,tmpHandle);
-  if $4796=tmpHandle then
+    begin
+      if IODXFContext.currentEntAddrOverrider=nil then
+        IODXFContext.p2h.MyGetOrCreateValue(@self,IODXFContext.handle,tmpHandle)
+      else begin
+        IODXFContext.p2h.MyGetOrCreateValue(IODXFContext.currentEntAddrOverrider,IODXFContext.handle,tmpHandle);
+        IODXFContext.currentEntAddrOverrider:=nil;
+        inc(IODXFContext.handle);
+      end;
+    end;
+  if $3d=tmpHandle then
     tmpHandle:=tmpHandle;
 
   dxfGDBStringout(outhandle,5,inttohex(tmpHandle{IODXFContext.handle}, 0));

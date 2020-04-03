@@ -179,6 +179,7 @@ begin
           tvp:=pobj^.vp;
           pobj^.vp:=vp;
           pobj.bp.ListPos.Owner:=self.GetMainOwner;{ gdb.GetCurrentROOT;}
+          IODXFContext.currentEntAddrOverrider:=@self;
           pobj.SaveToDXF(outhandle,drawing,IODXFContext);
           pobj.bp.ListPos.Owner:=@self;
           pobj^.vp:=tvp;

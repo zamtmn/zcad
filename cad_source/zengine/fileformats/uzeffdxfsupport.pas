@@ -43,6 +43,7 @@ const
 type
   TIODXFContext=record
     handle: TDWGHandle;
+    currentEntAddrOverrider:pointer;
     p2h:TMapPointerToHandle;
     VarsDict:TGDBString2GDBStringDictionary;
   end;

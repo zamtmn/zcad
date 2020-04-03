@@ -1658,6 +1658,7 @@ var
   lph:TLPSHandle;
 begin
   IODXFContext.p2h:=TMapPointerToHandle.Create;
+  IODXFContext.currentEntAddrOverrider:=nil;
   IODXFContext.VarsDict:=TGDBString2GDBStringDictionary.create;
   DefaultFormatSettings.DecimalSeparator := '.';
   //standartstylehandle:=0;

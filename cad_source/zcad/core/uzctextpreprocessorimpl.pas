@@ -69,6 +69,8 @@ end;
 procedure EscapeSeq(var str:gdbstring;var startpos:integer;pobj:PGDBObjGenericWithSubordinated);
 var
   sym:char;
+  value,s1,s2:string;
+  num,code:integer;
 begin
   if startpos>0 then
   if startpos<length(str) then
@@ -77,6 +79,12 @@ begin
     case sym of
        'L','l':str:=copy(str,1,startpos-1)+chr(1)+copy(str,startpos+2,length(str)-startpos-1);
        'P','p':str:=copy(str,1,startpos-1)+chr(10)+copy(str,startpos+2,length(str)-startpos-1);
+       'U','u':begin
+                 value:='$'+copy(str,startpos+3,4);
+                 val(value,num,code);
+                 if code=0 then
+                   str:=copy(str,1,startpos-1)+Chr(uch2ach(num))+copy(str,startpos+7,length(str)-startpos-1-5);
+               end
        else begin str:=copy(str,1,startpos-1)+sym+copy(str,startpos+2,length(str)-startpos-1);
                   dec(startpos);
             end;

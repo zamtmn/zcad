@@ -29,6 +29,7 @@ type
     Ent2NodeMap:TEnt2NodeMap;
     ToolButton1: TToolButton;
     RefreshToolButton: TToolButton;
+    UMFToolButton: TToolButton;
     ToolButton3: TToolButton;
     ActionList1:TActionList;
     Refresh:TAction;
@@ -60,7 +61,7 @@ type
     StandaloneNode:TBaseRootNodeDesk;
     StandaloneNodeStates:TNodesStates;
     NavMX,NavMy:integer;
-    pref,base:TmyVariableAction;
+    pref,base,umf:TmyVariableAction;
     GroupByPrefix,GroupByBase:boolean;
     MainFunctionIconIndex:integer;
     BuggyIconIndex:integer;
@@ -79,6 +80,7 @@ type
 var
   NavigatorDevices: TNavigatorDevices;
   NavGroupIconIndex,NavAutoGroupIconIndex:integer;
+  UseMainFunction:Boolean=false;
 
 implementation
 
@@ -97,25 +99,27 @@ var
   mainfuncnode:PVirtualNode;
   pnd:PTNodeData;
 begin
-  MainFunction:=GetMainFunction(pent);
-  if mainfunction<>nil then
-  begin
-     mainfunction:=mainfunction;
-     if Ent2NodeMap.TryGetValue(MainFunction,mainfuncnode) then
-       basenode:=mainfuncnode.Parent
-     else begin
-        StandaloneNode.ProcessEntity(self.CreateEntityNode,MainFunction,EntsFilter,TraceEntity);
-        if Ent2NodeMap.TryGetValue(pent,mainfuncnode) then
-          basenode:=mainfuncnode.Parent
-     end;
-     if mainfuncnode<>nil then
-     begin
-       pnd:=rootdesk.Tree.GetNodeData(mainfuncnode);
-       if pnd^.NodeMode<>TNMHardGroup then
-         rootdesk.ConvertNameNodeToGroupNode(mainfuncnode);
-       pnd^.NodeMode:=TNMHardGroup;
-       exit(mainfuncnode);
-     end;
+  if UseMainFunction then begin
+    MainFunction:=GetMainFunction(pent);
+    if mainfunction<>nil then
+    begin
+       mainfunction:=mainfunction;
+       if Ent2NodeMap.TryGetValue(MainFunction,mainfuncnode) then
+         basenode:=mainfuncnode.Parent
+       else begin
+          StandaloneNode.ProcessEntity(self.CreateEntityNode,MainFunction,EntsFilter,TraceEntity);
+          if Ent2NodeMap.TryGetValue(pent,mainfuncnode) then
+            basenode:=mainfuncnode.Parent
+       end;
+       if mainfuncnode<>nil then
+       begin
+         pnd:=rootdesk.Tree.GetNodeData(mainfuncnode);
+         if pnd^.NodeMode<>TNMHardGroup then
+           rootdesk.ConvertNameNodeToGroupNode(mainfuncnode);
+         pnd^.NodeMode:=TNMHardGroup;
+         exit(mainfuncnode);
+       end;
+    end;
   end;
 
   {procedure TBaseRootNodeDesk.ConvertNameNodeToGroupNode(pnode:PVirtualNode);
@@ -190,6 +194,13 @@ begin
    base.AssignToVar('DSGN_NavigatorsGroupByBaseName',0);
    base.Caption:=rsByBase;
    ToolButton3.Action:=base;
+
+   umf:=TmyVariableAction.Create(self);
+   umf.ActionList:=ZCADMainWindow.StandartActions;
+   umf.AssignToVar('DSGN_NavigatorsUseMainFunction',0);
+   umf.Caption:='MF';
+   umfToolButton.Action:=umf;
+
 
    ActionList1.Images:=ImagesManager.IconList;
    MainToolBar.Images:=ImagesManager.IconList;

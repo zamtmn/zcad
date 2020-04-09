@@ -60,10 +60,16 @@ object NavigatorDevices: TNavigatorDevices
       TabOrder = 0
       Transparent = True
       object RefreshToolButton: TToolButton
-        Left = 169
+        Left = 253
         Top = 0
         Action = Refresh
         ShowCaption = False
+      end
+      object UMFToolButton: TToolButton
+        Left = 169
+        Top = 0
+        Action = Refresh
+        Caption = 'UMFToolButton'
       end
       object ToolButton1: TToolButton
         Left = 1

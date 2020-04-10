@@ -108,7 +108,7 @@ begin
          basenode:=mainfuncnode.Parent
        else begin
           StandaloneNode.ProcessEntity(self.CreateEntityNode,MainFunction,EntsFilter,TraceEntity);
-          if Ent2NodeMap.TryGetValue(pent,mainfuncnode) then
+          if Ent2NodeMap.TryGetValue(MainFunction,mainfuncnode) then
             basenode:=mainfuncnode.Parent
        end;
        if mainfuncnode<>nil then
@@ -307,15 +307,17 @@ var
   pnd:PTNodeData;
   pentvarext:PTVariablesExtender;
 begin
-  result:=StandaloneNode.CreateEntityNode(Tree,basenode,pent,Name);
-  pentvarext:=pent^.GetExtension(typeof(TVariablesExtender));
-  if pentvarext<>nil then begin
-    if pentvarext^.isMainFunction then begin
-      pnd:=Tree.GetNodeData(result);
-      pnd^.NodeMode:=TNMHardGroup;
+  if not Ent2NodeMap.trygetvalue(pent,result) then begin
+    result:=StandaloneNode.CreateEntityNode(Tree,basenode,pent,Name);
+    pentvarext:=pent^.GetExtension(typeof(TVariablesExtender));
+    if pentvarext<>nil then begin
+      if pentvarext^.isMainFunction then begin
+        pnd:=Tree.GetNodeData(result);
+        pnd^.NodeMode:=TNMHardGroup;
+      end;
     end;
+    Ent2NodeMap.add(pent,result);
   end;
-  Ent2NodeMap.add(pent,result);
 end;
 
 procedure TNavigatorDevices.RefreshTree(Sender: TObject);

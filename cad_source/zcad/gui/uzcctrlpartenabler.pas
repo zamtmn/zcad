@@ -33,13 +33,15 @@ type
       TGetCountFunc=function(const value:T):integer of object;
       TGetStateFunc=function(const value:T;const n:integer; out _name:string):boolean of object;
       TSetStateProc=procedure(var value:T;const n:integer;state:boolean) of object;
+      TPartsEditFunc=function(var value:T):boolean of object;
    private
     var
       fpvalue:PT;
       fGetCountFunc:TGetCountFunc;
       fGetStateFunc:TGetStateFunc;
       fSetStateProc:TSetStateProc;
-      fOnPartChanged: TNotifyEvent;
+      fOnPartChanged:TNotifyEvent;
+      fPartsEditFunc:TPartsEditFunc;
 
    public
       constructor Create(TheOwner: TComponent); override;
@@ -48,8 +50,10 @@ type
       function DoGetStateFunc(const value:T;const n:integer; out _name:string):boolean;
       procedure DoSetStateProc(var value:T;const n:integer;state:boolean);
       procedure DoButtonClick(Sender: TObject);
+      function ButtonIndex2PartIndex(index:integer):integer;
 
       property pvalue:PT read fpvalue write fpvalue;
+      property PartsEditFunc:TPartsEditFunc read fPartsEditFunc write fPartsEditFunc;
       property GetCountFunc:TGetCountFunc read fGetCountFunc write fGetCountFunc;
       property GetStateFunc:TGetStateFunc read fGetStateFunc write fGetStateFunc;
       property SetStateProc:TSetStateProc read fSetStateProc write fSetStateProc;
@@ -85,6 +89,7 @@ begin
   Wrapable:=false;
   Transparent:=true;
   EdgeBorders:=[];
+  fPartsEditFunc:=nil;
 end;
 
 generic procedure TPartEnabler<T>.setup(var value:T);
@@ -94,12 +99,15 @@ var
   _state:boolean;
 begin
   fpvalue:=@value;
+  for i:=ButtonCount-1 downto 0 do
+    Buttons[i].free;
+  if assigned(fPartsEditFunc)then
   with TToolButton.create(self) do
   begin
     Caption:='Ed';
     ShowCaption:=false;
-    //ShowHint:=true;
     Visible:=true;
+    left:=0;
     parent:=self;
     onClick:=@DoButtonClick;
   end;
@@ -113,20 +121,37 @@ begin
       Down:=_state;
       style:=tbsCheck;
       Visible:=true;
+      left:=30*i;
       parent:=self;
       onClick:=@DoButtonClick;
     end;
   end;
 end;
 
+function TPartEnabler.ButtonIndex2PartIndex(index:integer):integer;
+begin
+  if assigned(fPartsEditFunc)then
+   result:=index
+  else
+   result:=index+1;
+end;
+
 procedure TPartEnabler.DoButtonClick(Sender: TObject);
 var
   i:integer;
   st:boolean;
+  pts:T;
 begin
   if sender is TToolButton then begin
-    i:=(sender as TToolButton).Index;
+    i:=ButtonIndex2PartIndex((sender as TToolButton).Index);
     if i=0 then begin
+      if assigned(PartsEditFunc)then begin
+        pts:=fpvalue^;
+        if PartsEditFunc(pts) then begin
+          fpvalue^:=pts;
+          setup(fpvalue^);
+        end;
+      end;
     end else begin
       st:=(sender as TToolButton).Down;
       DoSetStateProc(fpvalue^,i,st);

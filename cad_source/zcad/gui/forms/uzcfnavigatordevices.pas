@@ -13,7 +13,8 @@ uses
   uzcnavigatorsnodedesk,Varman,uzcstrconsts,uztoolbarsmanager,uzmenusmanager,
   uzccommandsimpl,uzccommandsabstract,uzcutils,uzcenitiesvariablesextender,
   GraphType,generics.collections,uzglviewareaabstract,Menus,
-  uzcfnavigatordevicescxmenu,uzbpaths,Toolwin,uzcctrlpartenabler,StrUtils;
+  uzcfnavigatordevicescxmenu,uzbpaths,Toolwin,uzcctrlpartenabler,StrUtils,
+  uzctextenteditor,uzcinfoform,uzcsysparams,uzcsysvars;
 
 resourcestring
   rsByPrefix='byPrefix';
@@ -82,6 +83,7 @@ type
     function GetPartsCount(const parts:string):integer;
     function GetPartState(const parts:string;const n:integer; out _name:string):boolean;
     procedure SetPartState(var parts:string;const n:integer;state:boolean);
+    function PartsEditor(var parts:string):boolean;
 
   end;
 
@@ -91,7 +93,7 @@ var
 
 
   UseMainFunction:Boolean=false;
-  TreeBuildMap:string='-NMO_Prefix|-NMO_BaseName';
+  TreeBuildMap:string='+NMO_Prefix|+NMO_BaseName';
 
 implementation
 
@@ -215,6 +217,27 @@ begin
   else
     parts[partstartposition]:='-';
 end;
+function TNavigatorDevices.PartsEditor(var parts:string):boolean;
+var
+   modalresult:integer;
+   astring:ansistring;
+begin
+  result:=false;
+  if not assigned(InfoForm) then begin
+    InfoForm:=TInfoForm.createnew(application.MainForm);
+    InfoForm.BoundsRect:=GetBoundsFromSavedUnit('PartsEdWND',SysParam.notsaved.ScreenX,SysParam.notsaved.Screeny);
+  end;
+  InfoForm.caption:=('Parts editor');
+  InfoForm.memo.text:=ReplaceStr(parts,'|',#13#10);
+  if assigned(SysVar.INTF.INTF_DefaultEditorFontHeight) then
+    InfoForm.memo.Font.Height:=SysVar.INTF.INTF_DefaultEditorFontHeight^;
+  modalresult:=ZCMsgCallBackInterface.DOShowModal(InfoForm);
+  if modalresult=MrOk then begin
+    parts:=ReplaceStr(InfoForm.memo.text,#13#10,'|');
+    StoreBoundsToSavedUnit('PartsEdWND',InfoForm.BoundsRect);
+    result:=true;
+  end;
+end;
 
 
 procedure TNavigatorDevices._onCreate(Sender: TObject);
@@ -259,6 +282,7 @@ begin
    TreeEnabler.GetCountFunc:=GetPartsCount;
    TreeEnabler.GetStateFunc:=GetPartState;
    TreeEnabler.SetStateProc:=SetPartState;
+   TreeEnabler.PartsEditFunc:=PartsEditor;
 
    TreeEnabler.setup(TreeBuildMap);
 

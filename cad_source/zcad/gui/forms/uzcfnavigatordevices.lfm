@@ -35,7 +35,6 @@ object NavigatorDevices: TNavigatorDevices
     Height = 32
     Top = 0
     Width = 484
-    AutoSize = True
     Bands = <    
       item
         Control = MainToolBar
@@ -51,7 +50,6 @@ object NavigatorDevices: TNavigatorDevices
       Top = 3
       Width = 196
       Align = alNone
-      AutoSize = True
       BorderSpacing.Left = 22
       BorderSpacing.Top = 3
       Caption = 'MainToolBar'
@@ -59,27 +57,17 @@ object NavigatorDevices: TNavigatorDevices
       ShowCaptions = True
       TabOrder = 0
       Transparent = True
-      object RefreshToolButton: TToolButton
-        Left = 253
-        Top = 0
-        Action = Refresh
-        ShowCaption = False
-      end
       object UMFToolButton: TToolButton
-        Left = 169
+        Left = 0
         Top = 0
         Action = Refresh
         Caption = 'UMFToolButton'
       end
-      object ToolButton1: TToolButton
-        Left = 1
+      object RefreshToolButton: TToolButton
+        Left = 40
         Top = 0
-        Caption = 'ToolButton1'
-      end
-      object ToolButton3: TToolButton
-        Left = 85
-        Top = 0
-        Caption = 'ToolButton3'
+        Action = Refresh
+        ShowCaption = False
       end
     end
   end

@@ -12,7 +12,8 @@ uses
   varmandef,uzbstrproc,uzcmainwindow,uzctreenode,
   uzcnavigatorsnodedesk,Varman,uzcstrconsts,uztoolbarsmanager,uzmenusmanager,
   uzccommandsimpl,uzccommandsabstract,uzcutils,uzcenitiesvariablesextender,
-  GraphType,generics.collections,uzglviewareaabstract,Menus,uzcfnavigatordevicescxmenu;
+  GraphType,generics.collections,uzglviewareaabstract,Menus,
+  uzcfnavigatordevicescxmenu,uzbpaths,Toolwin,uzcctrlpartenabler,StrUtils;
 
 resourcestring
   rsByPrefix='byPrefix';
@@ -20,6 +21,7 @@ resourcestring
   rsStandaloneDevices='Standalone devices';
 
 type
+  TStringPartEnabler=TPartEnabler<String>;
   TEnt2NodeMap=TDictionary<pGDBObjEntity,PVirtualNode>;
   { TNavigatorDevices }
   TNavigatorDevices = class(TForm)
@@ -27,10 +29,10 @@ type
     MainToolBar: TToolBar;
     NavTree: TVirtualStringTree;
     Ent2NodeMap:TEnt2NodeMap;
-    ToolButton1: TToolButton;
     RefreshToolButton: TToolButton;
     UMFToolButton: TToolButton;
-    ToolButton3: TToolButton;
+    {ToolButton1: TToolButton;
+    ToolButton3: TToolButton;}
     ActionList1:TActionList;
     Refresh:TAction;
     function CreateEntityNode(Tree: TVirtualStringTree;basenode:PVirtualNode;pent:pGDBObjEntity;Name:string):PVirtualNode;virtual;
@@ -66,6 +68,7 @@ type
     MainFunctionIconIndex:integer;
     BuggyIconIndex:integer;
     SaveCellRectLeft:integer;
+    TreeEnabler:TStringPartEnabler;
 
   public
     procedure CreateRoots;
@@ -75,12 +78,20 @@ type
 
     function EntsFilter(pent:pGDBObjEntity):Boolean;virtual;
     function TraceEntity(rootdesk:TBaseRootNodeDesk;pent:pGDBObjEntity;out name:string):PVirtualNode;virtual;
+
+    function GetPartsCount(const parts:string):integer;
+    function GetPartState(const parts:string;const n:integer; out _name:string):boolean;
+    procedure SetPartState(var parts:string;const n:integer;state:boolean);
+
   end;
 
 var
   NavigatorDevices: TNavigatorDevices;
   NavGroupIconIndex,NavAutoGroupIconIndex:integer;
+
+
   UseMainFunction:Boolean=false;
+  TreeBuildMap:string='-NMO_Prefix|-NMO_BaseName';
 
 implementation
 
@@ -98,6 +109,7 @@ var
   MainFunction:pGDBObjEntity;
   mainfuncnode:PVirtualNode;
   pnd:PTNodeData;
+  cn,an:string;
 begin
   if UseMainFunction then begin
     MainFunction:=GetMainFunction(pent);
@@ -122,26 +134,24 @@ begin
     end;
   end;
 
-  {procedure TBaseRootNodeDesk.ConvertNameNodeToGroupNode(pnode:PVirtualNode);
-  var
-    pnewnode:PVirtualNode;
-    pnd,pnewnd:PTNodeData;
-  begin
-      if pnode^.FirstChild<>nil then
-                                    exit;
-      pnewnode:=Tree.AddChild(pnode,nil);
-      pnd:=Tree.GetNodeData(pnode);
-      pnewnd:=Tree.GetNodeData(pnewnode);
-      if (pnewnd<>nil)and(pnd<>nil) then
-       pnewnd^:=pnd^;
-      pnd^.NodeMode:=TNMAutoGroup;
-      pnd^.pent:=nil;
-  end;}
-
   result:=nil;
   Name:=GetEntityVariableValue(pent,'NMO_Name',rsNameAbsent);
+  basenode:=rootdesk.rootnode;
 
-  if GroupByPrefix then begin
+  an:=TreeBuildMap;
+  repeat
+    GetPartOfPath(cn,an,'|');
+    if cn<>'' then
+      if cn[1]<>'-'then begin
+        cn:=copy(cn,2,length(cn)-1);
+        BaseName:=GetEntityVariableValue(pent,cn,rsPrefixAbsent);
+        basenode:=rootdesk.find(BaseName,basenode);
+      end;
+  until an='';
+
+  result:=basenode;
+
+  {if GroupByPrefix then begin
     BaseName:=GetEntityVariableValue(pent,'NMO_Prefix',rsPrefixAbsent);
     basenode:=rootdesk.find(BaseName,rootdesk.rootnode);
   end else
@@ -151,7 +161,7 @@ begin
     BaseName:=GetEntityVariableValue(pent,'NMO_BaseName',rsBaseNameAbsent);
     result:=rootdesk.find(BaseName,basenode);
   end else
-    result:=basenode;
+    result:=basenode;}
 end;
 
 
@@ -177,13 +187,44 @@ begin
    commandmanager.executecommandsilent(@s[1],drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
   end;
 end;
+function TNavigatorDevices.GetPartsCount(const parts:string):integer;
+begin
+  result:=WordCount(parts,['|']);
+end;
+
+function TNavigatorDevices.GetPartState(const parts:string;const n:integer; out _name:string):boolean;
+var
+  partstartposition,nextpartstartposition:integer;
+begin
+  partstartposition:=WordPosition(n,parts,['|']);
+  nextpartstartposition:=WordPosition(n+1,parts,['|']);
+  result:=parts[partstartposition]='+';
+  if nextpartstartposition<>0 then
+    _name:=copy(parts,partstartposition+1,nextpartstartposition-3)
+  else
+    _name:=copy(parts,partstartposition+1,length(parts)-partstartposition+2);
+end;
+
+procedure TNavigatorDevices.SetPartState(var parts:string;const n:integer;state:boolean);
+var
+  partstartposition,nextpartstartposition:integer;
+begin
+  partstartposition:=WordPosition(n,parts,['|']);
+  if state then
+    parts[partstartposition]:='+'
+  else
+    parts[partstartposition]:='-';
+end;
+
+
 procedure TNavigatorDevices._onCreate(Sender: TObject);
 var
   po:TVTPaintOptions;
+  i:integer;
   //mo:TVTMiscOptions;
   //ts:TVirtualTreeStates;
 begin
-   pref:=TmyVariableAction.Create(self);
+   {pref:=TmyVariableAction.Create(self);
    pref.ActionList:=ZCADMainWindow.StandartActions;
    pref.AssignToVar('DSGN_NavigatorsGroupByPrefix',0);
    pref.Caption:=rsByPrefix;
@@ -193,7 +234,7 @@ begin
    base.ActionList:=ZCADMainWindow.StandartActions;
    base.AssignToVar('DSGN_NavigatorsGroupByBaseName',0);
    base.Caption:=rsByBase;
-   ToolButton3.Action:=base;
+   ToolButton3.Action:=base;}
 
    umf:=TmyVariableAction.Create(self);
    umf.ActionList:=ZCADMainWindow.StandartActions;
@@ -205,6 +246,25 @@ begin
    ActionList1.Images:=ImagesManager.IconList;
    MainToolBar.Images:=ImagesManager.IconList;
    Refresh.ImageIndex:=ImagesManager.GetImageIndex('Refresh');
+   MainToolBar.Wrapable:=false;
+   CoolBar1.AutoSize:=true;
+   CoolBar1.Bands.Items[0].Width:=3000;
+
+   TreeEnabler:=TStringPartEnabler.Create(self);
+   TreeEnabler.EdgeBorders:=[ebLeft{,ebTop,ebRight,ebBottom}];
+   TreeEnabler.Left:=80;
+   TreeEnabler.Width:=2000;
+
+   TreeEnabler.OnPartChanged:=RefreshTree;
+   TreeEnabler.GetCountFunc:=GetPartsCount;
+   TreeEnabler.GetStateFunc:=GetPartState;
+   TreeEnabler.SetStateProc:=SetPartState;
+
+   TreeEnabler.setup(TreeBuildMap);
+
+   UMFToolButton.Parent:=MainToolBar;
+   RefreshToolButton.Parent:=MainToolBar;
+   TreeEnabler.Parent:=MainToolBar;
 
    NavTree.OnGetText:=NavGetText;
    NavTree.OnGetImageIndex:=NavGetImage;
@@ -327,6 +387,8 @@ var
   pb:pboolean;
 begin
    if not isvisible then exit;
+
+   TreeEnabler.Height:=MainToolBar.Height;
 
    NavTree.BeginUpdate;
    EraseRoots;

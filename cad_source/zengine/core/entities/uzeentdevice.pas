@@ -185,6 +185,7 @@ begin
      inherited;
      m4:={self.ObjMatrix; //}getmatrix^;
      //MatrixInvert(m4);
+     dc:=drawing.createdrawingrc;
      pv:=VarObjArray.beginiterate(ir);
      if pv<>nil then
      repeat
@@ -197,7 +198,6 @@ begin
          pvc^.bp.ListPos.Owner:=@self;
 
          self.ObjMatrix:=onematrix;
-         dc:=drawing.createdrawingrc;
          if pvc^.IsHaveLCS then
                                begin
                                pvc^.FormatEntity(drawing,dc);
@@ -210,19 +210,26 @@ begin
               pv.rtsave(pvc2);
               pvc.rtsave(pv);
               //pvc^.SaveToDXF(outhandle,drawing,IODXFContext);
+
+              //if pv^.IsHaveLCS then
+                               begin
+                               pv^.FormatEntity(drawing,dc);
+                               end;
+
               pv^.SaveToDXF(outhandle,drawing,IODXFContext);
-              pvc2.rtsave(pv);
               pv^.SaveToDXFPostProcess(outhandle,IODXFContext);
               pv^.SaveToDXFFollow(outhandle,drawing,IODXFContext);
-
+              pvc2.rtsave(pv);
 
          pvc^.done;
          pvc2.rtsave(pv);
+         //pv^.FormatEntity(drawing,dc);
          GDBFREEMEM(pointer(pvc));
          GDBFREEMEM(pointer(pvc2));
          pv:=VarObjArray.iterate(ir);
      until pv=nil;
      objmatrix:=m4;
+     FormatEntity(drawing,dc);
      //historyout('Device DXFOut end');
      //self.CalcObjMatrix;
 end;

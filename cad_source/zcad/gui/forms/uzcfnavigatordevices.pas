@@ -72,6 +72,8 @@ type
     TreeEnabler:TStringPartEnabler;
 
   public
+    TreeBuildMap:string;
+
     procedure CreateRoots;
     procedure EraseRoots;
     procedure FreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
@@ -93,7 +95,7 @@ var
 
 
   UseMainFunction:Boolean=false;
-  DevicesTreeBuildMap:string='+NMO_Prefix|+NMO_BaseName|+@@[NMO_Name]';
+  //DevicesTreeBuildMap:string='+NMO_Prefix|+NMO_BaseName|+@@[NMO_Name]';
 
 implementation
 
@@ -140,7 +142,7 @@ begin
   Name:='';
   basenode:=rootdesk.rootnode;
 
-  an:=DevicesTreeBuildMap;
+  an:=TreeBuildMap;
   repeat
     GetPartOfPath(cn,an,'|');
     if an<>'' then begin
@@ -150,7 +152,7 @@ begin
           BaseName:=GetEntityVariableValue(pent,cn,rsPrefixAbsent);
           basenode:=rootdesk.find(BaseName,basenode);
         end;
-    end else begin
+    end else if cn<>'' then begin
       if cn[1]<>'-'then begin
        cn:=copy(cn,2,length(cn)-1);
        Name:=textformat(cn,pent)
@@ -301,7 +303,7 @@ begin
    TreeEnabler.SetStateProc:=SetPartState;
    TreeEnabler.PartsEditFunc:=PartsEditor;
 
-   TreeEnabler.setup(DevicesTreeBuildMap);
+   TreeEnabler.setup(TreeBuildMap);
 
    UMFToolButton.Parent:=MainToolBar;
    RefreshToolButton.Parent:=MainToolBar;

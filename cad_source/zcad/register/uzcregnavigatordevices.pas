@@ -44,7 +44,7 @@ type
       Node2: PVirtualNode; Column: TColumnIndex; var Result: Integer);override;
 
     function EntsFilter(pent:pGDBObjEntity):Boolean;override;
-    function TraceEntity(rootdesk:TBaseRootNodeDesk;pent:pGDBObjEntity;out name:string):PVirtualNode;override;
+    //function TraceEntity(rootdesk:TBaseRootNodeDesk;pent:pGDBObjEntity;out name:string):PVirtualNode;override;
   end;
   TNavigatorCables=class(TNavigatorDevices)
     procedure NavGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;
@@ -146,7 +146,7 @@ begin
   else
     result:=false
 end;
-function  TNavigatorRisers.TraceEntity(rootdesk:TBaseRootNodeDesk;pent:pGDBObjEntity;out name:string):PVirtualNode;
+(*function  TNavigatorRisers.TraceEntity(rootdesk:TBaseRootNodeDesk;pent:pGDBObjEntity;out name:string):PVirtualNode;
 begin
   result:={nil}rootdesk.rootnode;
   Name:=GetEntityVariableValue(pent,'RiserName',rsNameAbsent);
@@ -162,7 +162,7 @@ begin
     //result:=rootdesk.find(BaseName,basenode);
   //end else
   //  result:=basenode;
-end;
+end;*)
 function NDMCCFHaveSubNodes(const Context:TNavigatorDevicesContext):boolean;
 begin
   if Context.pnode<>nil then begin
@@ -201,7 +201,7 @@ begin
     Abort:=true;
 end;
 
- procedure ZCADFormSetupProc(Form:TControl);
+procedure ZCADFormSetupProc(Form:TControl);
 begin
   InitializeNavigatorDevicesCXMenu(ZCADMainWindow,ZCADMainWindow.StandartActions);
 
@@ -212,11 +212,27 @@ begin
                                   'Addres of entity  in node',NavigatorDevicesMacroMethods.MacroFuncEntInNodeAddr,[]));
 
 end;
+function CreateNavigatorDevices:TForm;
+begin
+ result:=tform(TNavigatorDevices.NewInstance);
+ TNavigatorDevices(result).TreeBuildMap:='+NMO_Prefix|+NMO_BaseName|+@@[NMO_Name]';
+end;
+function CreateNavigatorRisers:TForm;
+begin
+ result:=tform(TNavigatorRisers.NewInstance);
+ TNavigatorRisers(result).TreeBuildMap:='+@@[RiserName]:@@[Elevation]:@@[Text]';
+end;
+function CreateNavigatorCables:TForm;
+begin
+ result:=tform(TNavigatorCables.NewInstance);
+ TNavigatorCables(result).TreeBuildMap:='+NMO_BaseName|+@@[NMO_Name]:@@[CABLE_Segment]';
+end;
+
 initialization
   units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DSGN_NavigatorsUseMainFunction','GDBBoolean',@UseMainFunction);
-  ZCADGUIManager.RegisterZCADFormInfo('NavigatorDevices',rsDevices,TNavigatorDevices,rect(0,100,200,600),ZCADFormSetupProc,nil,@NavigatorDevices,true);
-  ZCADGUIManager.RegisterZCADFormInfo('NavigatorRisers',rsRisers,TNavigatorRisers,rect(0,100,200,600),ZCADFormSetupProc,nil,@NavigatorRisers,true);
-  ZCADGUIManager.RegisterZCADFormInfo('NavigatorCables',rsCables,TNavigatorCables,rect(0,100,200,600),ZCADFormSetupProc,nil,@NavigatorCables,true);
+  ZCADGUIManager.RegisterZCADFormInfo('NavigatorDevices',rsDevices,TNavigatorDevices,rect(0,100,200,600),ZCADFormSetupProc,CreateNavigatorDevices,@NavigatorDevices,true);
+  ZCADGUIManager.RegisterZCADFormInfo('NavigatorRisers',rsRisers,TNavigatorRisers,rect(0,100,200,600),ZCADFormSetupProc,CreateNavigatorRisers,@NavigatorRisers,true);
+  ZCADGUIManager.RegisterZCADFormInfo('NavigatorCables',rsCables,TNavigatorCables,rect(0,100,200,600),ZCADFormSetupProc,CreateNavigatorCables,@NavigatorCables,true);
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

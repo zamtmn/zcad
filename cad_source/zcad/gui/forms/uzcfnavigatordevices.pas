@@ -14,7 +14,7 @@ uses
   uzccommandsimpl,uzccommandsabstract,uzcutils,uzcenitiesvariablesextender,
   GraphType,generics.collections,uzglviewareaabstract,Menus,
   uzcfnavigatordevicescxmenu,uzbpaths,Toolwin,uzcctrlpartenabler,StrUtils,
-  uzctextenteditor,uzcinfoform,uzcsysparams,uzcsysvars;
+  uzctextenteditor,uzcinfoform,uzcsysparams,uzcsysvars,uzetextpreprocessor;
 
 resourcestring
   rsByPrefix='byPrefix';
@@ -81,7 +81,7 @@ type
     function TraceEntity(rootdesk:TBaseRootNodeDesk;pent:pGDBObjEntity;out name:string):PVirtualNode;virtual;
 
     function GetPartsCount(const parts:string):integer;
-    function GetPartState(const parts:string;const n:integer; out _name:string):boolean;
+    function GetPartState(const parts:string;const nmax,n:integer; out _name:string;out _enabled:boolean):boolean;
     procedure SetPartState(var parts:string;const n:integer;state:boolean);
     function PartsEditor(var parts:string):boolean;
 
@@ -93,7 +93,7 @@ var
 
 
   UseMainFunction:Boolean=false;
-  TreeBuildMap:string='+NMO_Prefix|+NMO_BaseName';
+  DevicesTreeBuildMap:string='+NMO_Prefix|+NMO_BaseName|+@@[NMO_Name]';
 
 implementation
 
@@ -137,19 +137,30 @@ begin
   end;
 
   result:=nil;
-  Name:=GetEntityVariableValue(pent,'NMO_Name',rsNameAbsent);
+  Name:='';
   basenode:=rootdesk.rootnode;
 
-  an:=TreeBuildMap;
+  an:=DevicesTreeBuildMap;
   repeat
     GetPartOfPath(cn,an,'|');
-    if cn<>'' then
+    if an<>'' then begin
+      if cn<>'' then
+        if cn[1]<>'-'then begin
+          cn:=copy(cn,2,length(cn)-1);
+          BaseName:=GetEntityVariableValue(pent,cn,rsPrefixAbsent);
+          basenode:=rootdesk.find(BaseName,basenode);
+        end;
+    end else begin
       if cn[1]<>'-'then begin
-        cn:=copy(cn,2,length(cn)-1);
-        BaseName:=GetEntityVariableValue(pent,cn,rsPrefixAbsent);
-        basenode:=rootdesk.find(BaseName,basenode);
-      end;
+       cn:=copy(cn,2,length(cn)-1);
+       Name:=textformat(cn,pent)
+      end else
+       Name:=GetEntityVariableValue(pent,'NMO_Name',rsNameAbsent);
+    end;
   until an='';
+
+  if name='' then
+    Name:=GetEntityVariableValue(pent,'NMO_Name',rsNameAbsent);
 
   result:=basenode;
 
@@ -194,15 +205,21 @@ begin
   result:=WordCount(parts,['|']);
 end;
 
-function TNavigatorDevices.GetPartState(const parts:string;const n:integer; out _name:string):boolean;
+function TNavigatorDevices.GetPartState(const parts:string;const nmax,n:integer;out _name:string;out _enabled:boolean):boolean;
 var
   partstartposition,nextpartstartposition:integer;
 begin
   partstartposition:=WordPosition(n,parts,['|']);
   nextpartstartposition:=WordPosition(n+1,parts,['|']);
-  result:=parts[partstartposition]='+';
+  if {nmax<>n}true then begin
+    _enabled:=true;
+    result:=parts[partstartposition]='+';
+  end else begin
+    _enabled:=false;
+    result:=false;
+  end;
   if nextpartstartposition<>0 then
-    _name:=copy(parts,partstartposition+1,nextpartstartposition-3)
+    _name:=copy(parts,partstartposition+1,nextpartstartposition-partstartposition-2)
   else
     _name:=copy(parts,partstartposition+1,length(parts)-partstartposition+2);
 end;
@@ -284,7 +301,7 @@ begin
    TreeEnabler.SetStateProc:=SetPartState;
    TreeEnabler.PartsEditFunc:=PartsEditor;
 
-   TreeEnabler.setup(TreeBuildMap);
+   TreeEnabler.setup(DevicesTreeBuildMap);
 
    UMFToolButton.Parent:=MainToolBar;
    RefreshToolButton.Parent:=MainToolBar;

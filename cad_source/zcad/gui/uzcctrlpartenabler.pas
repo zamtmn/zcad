@@ -31,7 +31,7 @@ type
     type
       PT=^T;
       TGetCountFunc=function(const value:T):integer of object;
-      TGetStateFunc=function(const value:T;const n:integer; out _name:string):boolean of object;
+      TGetStateFunc=function(const value:T;const nmax,n:integer; out _name:string;out _enabled:boolean):boolean of object;
       TSetStateProc=procedure(var value:T;const n:integer;state:boolean) of object;
       TPartsEditFunc=function(var value:T):boolean of object;
    private
@@ -47,7 +47,7 @@ type
       constructor Create(TheOwner: TComponent); override;
       procedure setup(var value:T);
       function DoGetCountFunc(const value:T):integer;
-      function DoGetStateFunc(const value:T;const n:integer; out _name:string):boolean;
+      function DoGetStateFunc(const value:T;const nmax,n:integer; out _name:string;out _enabled:boolean):boolean;
       procedure DoSetStateProc(var value:T;const n:integer;state:boolean);
       procedure DoButtonClick(Sender: TObject);
       function ButtonIndex2PartIndex(index:integer):integer;
@@ -68,12 +68,13 @@ begin
   else
     result:=10;
 end;
-generic function TPartEnabler<T>.DoGetStateFunc(const value:T;const n:integer; out _name:string):boolean;
+generic function TPartEnabler<T>.DoGetStateFunc(const value:T;const nmax,n:integer; out _name:string;out _enabled:boolean):boolean;
 begin
   if assigned(fGetStateFunc)then
-    result:=fGetStateFunc(value,n,_name)
+    result:=fGetStateFunc(value,nmax,n,_name,_enabled)
   else begin
     result:=true;
+    _enabled:=true;
     _name:='n'+inttostr(n);
   end;
 end;
@@ -94,9 +95,10 @@ end;
 
 generic procedure TPartEnabler<T>.setup(var value:T);
 var
-  i:integer;
+  nmax,i:integer;
   _name:string;
   _state:boolean;
+  _enabled:boolean;
 begin
   fpvalue:=@value;
   for i:=ButtonCount-1 downto 0 do
@@ -111,17 +113,19 @@ begin
     parent:=self;
     onClick:=@DoButtonClick;
   end;
-  for i:=1 to DoGetCountFunc(value) do begin
-    _state:=DoGetStateFunc(value,i,_name);
+  nmax:=DoGetCountFunc(value);
+  for i:=1 to nmax do begin
+    _state:=DoGetStateFunc(value,nmax,i,_name,_enabled);
     with TToolButton.create(self) do
     begin
       Caption:=_name;
       ShowCaption:=false;
       ShowHint:=true;
       Down:=_state;
+      Enabled:=_enabled;
       style:=tbsCheck;
       Visible:=true;
-      left:=30*i;
+      left:=300*i;
       parent:=self;
       onClick:=@DoButtonClick;
     end;

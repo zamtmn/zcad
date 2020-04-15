@@ -36,8 +36,12 @@ type
     ToolButton3: TToolButton;}
     ActionList1:TActionList;
     Refresh:TAction;
+    IncludeEnts:TAction;
+    ExcludeEnts:TAction;
     function CreateEntityNode(Tree: TVirtualStringTree;basenode:PVirtualNode;pent:pGDBObjEntity;Name:string):PVirtualNode;virtual;
     procedure RefreshTree(Sender: TObject);
+    procedure EditIncludeEnts(Sender: TObject);
+    procedure EditExcludeEnts(Sender: TObject);
     procedure AutoRefreshTree(sender:TObject;GUIAction:TZMessageID);
     procedure TVDblClick(Sender: TObject);
     procedure TVOnMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
@@ -64,7 +68,7 @@ type
     StandaloneNode:TBaseRootNodeDesk;
     StandaloneNodeStates:TNodesStates;
     NavMX,NavMy:integer;
-    pref,base,umf:TmyVariableAction;
+    umf:TmyVariableAction;
     GroupByPrefix,GroupByBase:boolean;
     MainFunctionIconIndex:integer;
     BuggyIconIndex:integer;
@@ -73,6 +77,7 @@ type
 
   public
     TreeBuildMap:string;
+    UseMainFunctions:Boolean;
 
     procedure CreateRoots;
     procedure EraseRoots;
@@ -281,8 +286,12 @@ begin
    umf:=TmyVariableAction.Create(self);
    umf.ActionList:=ZCADMainWindow.StandartActions;
    umf.AssignToVar('DSGN_NavigatorsUseMainFunction',0);
-   umf.Caption:='MF';
+   umf.Caption:='Use main functions';
    umfToolButton.Action:=umf;
+   if UseMainFunctions then
+     umfToolButton.Visible:=true
+   else
+     umfToolButton.Visible:=False;
 
 
    ActionList1.Images:=ImagesManager.IconList;
@@ -296,6 +305,10 @@ begin
    TreeEnabler.EdgeBorders:=[ebLeft{,ebTop,ebRight,ebBottom}];
    TreeEnabler.Left:=80;
    TreeEnabler.Width:=2000;
+   TreeEnabler.AutoSize:=true;
+   TreeEnabler.actns:=[umf,IncludeEnts,ExcludeEnts,Refresh];
+
+   //TreeEnabler.Align:=alLeft;
 
    TreeEnabler.OnPartChanged:=RefreshTree;
    TreeEnabler.GetCountFunc:=GetPartsCount;
@@ -308,6 +321,7 @@ begin
    UMFToolButton.Parent:=MainToolBar;
    RefreshToolButton.Parent:=MainToolBar;
    TreeEnabler.Parent:=MainToolBar;
+   //MainToolBar.AutoSize:=true;
 
    NavTree.OnGetText:=NavGetText;
    NavTree.OnGetImageIndex:=NavGetImage;
@@ -421,6 +435,15 @@ begin
     end;
     Ent2NodeMap.add(pent,result);
   end;
+end;
+
+procedure TNavigatorDevices.EditIncludeEnts(Sender: TObject);
+begin
+ if not isvisible then exit;
+end;
+procedure TNavigatorDevices.EditExcludeEnts(Sender: TObject);
+begin
+ if not isvisible then exit;
 end;
 
 procedure TNavigatorDevices.RefreshTree(Sender: TObject);

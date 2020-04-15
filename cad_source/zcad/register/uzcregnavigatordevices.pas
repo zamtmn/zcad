@@ -216,16 +216,19 @@ function CreateNavigatorDevices:TForm;
 begin
  result:=tform(TNavigatorDevices.NewInstance);
  TNavigatorDevices(result).TreeBuildMap:='+NMO_Prefix|+NMO_BaseName|+@@[NMO_Name]';
+ TNavigatorDevices(result).UseMainFunctions:=True;
 end;
 function CreateNavigatorRisers:TForm;
 begin
  result:=tform(TNavigatorRisers.NewInstance);
  TNavigatorRisers(result).TreeBuildMap:='+@@[RiserName]:@@[Elevation]:@@[Text]';
+ TNavigatorRisers(result).UseMainFunctions:=False;
 end;
 function CreateNavigatorCables:TForm;
 begin
  result:=tform(TNavigatorCables.NewInstance);
  TNavigatorCables(result).TreeBuildMap:='+NMO_BaseName|+@@[NMO_Name]:@@[CABLE_Segment]';
+ TNavigatorCables(result).UseMainFunctions:=False;
 end;
 
 initialization

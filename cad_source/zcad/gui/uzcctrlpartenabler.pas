@@ -23,7 +23,7 @@ interface
 
 uses
   StdCtrls,GraphType,LCLIntf,LCLType,
-  Controls,Classes,Graphics,Buttons,ExtCtrls,ComCtrls,Forms,Themes,
+  Controls,Classes,Graphics,Buttons,ExtCtrls,ComCtrls,Forms,Themes,ActnList,Menus,
   sysutils;
 
 type
@@ -37,6 +37,7 @@ type
    private
     var
       fpvalue:PT;
+      actns:array of taction;
       fGetCountFunc:TGetCountFunc;
       fGetStateFunc:TGetStateFunc;
       fSetStateProc:TSetStateProc;
@@ -50,6 +51,7 @@ type
       function DoGetStateFunc(const value:T;const nmax,n:integer; out _name:string;out _enabled:boolean):boolean;
       procedure DoSetStateProc(var value:T;const n:integer;state:boolean);
       procedure DoButtonClick(Sender: TObject);
+      procedure DoPartsEditor(Sender: TObject);
       function ButtonIndex2PartIndex(index:integer):integer;
 
       property pvalue:PT read fpvalue write fpvalue;
@@ -99,6 +101,8 @@ var
   _name:string;
   _state:boolean;
   _enabled:boolean;
+  _menu:TPopupMenu;
+  CreatedMenuItem:TMenuItem;
 begin
   fpvalue:=@value;
   for i:=ButtonCount-1 downto 0 do
@@ -108,6 +112,17 @@ begin
   begin
     Caption:='Ed';
     ShowCaption:=false;
+    if length(actns)>0 then begin
+      _menu:=TPopupMenu.Create(self);
+      style:=tbsDropDown;
+      for i:=0 to length(actns)-1 do begin
+        CreatedMenuItem:=TMenuItem.Create(_menu);
+        CreatedMenuItem.Action:=actns[i];
+        _menu.items.Add(CreatedMenuItem);
+      end;
+    end;
+    PopupMenu:=_menu;
+    DropDownMenu:=_menu;
     Visible:=true;
     left:=0;
     parent:=self;
@@ -140,6 +155,19 @@ begin
    result:=index+1;
 end;
 
+procedure TPartEnabler.DoPartsEditor(Sender: TObject);
+var
+  pts:T;
+begin
+  if assigned(PartsEditFunc)then begin
+    pts:=fpvalue^;
+    if PartsEditFunc(pts) then begin
+      fpvalue^:=pts;
+      setup(fpvalue^);
+    end;
+  end;
+end;
+
 procedure TPartEnabler.DoButtonClick(Sender: TObject);
 var
   i:integer;
@@ -149,13 +177,7 @@ begin
   if sender is TToolButton then begin
     i:=ButtonIndex2PartIndex((sender as TToolButton).Index);
     if i=0 then begin
-      if assigned(PartsEditFunc)then begin
-        pts:=fpvalue^;
-        if PartsEditFunc(pts) then begin
-          fpvalue^:=pts;
-          setup(fpvalue^);
-        end;
-      end;
+      DoPartsEditor(Sender);
     end else begin
       st:=(sender as TToolButton).Down;
       DoSetStateProc(fpvalue^,i,st);

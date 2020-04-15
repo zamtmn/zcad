@@ -76,6 +76,15 @@ object NavigatorDevices: TNavigatorDevices
     Top = 76
     object Refresh: TAction
       OnExecute = RefreshTree
+      Caption = 'Refresh tree'
+    end
+    object IncludeEnts: TAction
+      OnExecute = EditIncludeEnts
+      Caption = 'Include entities'
+    end
+    object ExcludeEnts: TAction
+      OnExecute = EditExcludeEnts
+      Caption = 'Exclde entities'
     end
   end
 end

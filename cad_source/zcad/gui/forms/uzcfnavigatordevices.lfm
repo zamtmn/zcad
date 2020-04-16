@@ -35,41 +35,8 @@ object NavigatorDevices: TNavigatorDevices
     Height = 32
     Top = 0
     Width = 484
-    Bands = <    
-      item
-        Control = MainToolBar
-        Width = 513
-      end>
     EdgeBorders = []
     Themed = False
-    object MainToolBar: TToolBar
-      AnchorSideLeft.Control = CoolBar1
-      AnchorSideTop.Control = CoolBar1
-      Left = 22
-      Height = 26
-      Top = 3
-      Width = 196
-      Align = alNone
-      BorderSpacing.Left = 22
-      BorderSpacing.Top = 3
-      Caption = 'MainToolBar'
-      EdgeBorders = []
-      ShowCaptions = True
-      TabOrder = 0
-      Transparent = True
-      object UMFToolButton: TToolButton
-        Left = 0
-        Top = 0
-        Action = Refresh
-        Caption = 'UMFToolButton'
-      end
-      object RefreshToolButton: TToolButton
-        Left = 40
-        Top = 0
-        Action = Refresh
-        ShowCaption = False
-      end
-    end
   end
   object ActionList1: TActionList
     Left = 365

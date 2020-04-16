@@ -17,8 +17,6 @@ uses
   uzctextenteditor,uzcinfoform,uzcsysparams,uzcsysvars,uzetextpreprocessor;
 
 resourcestring
-  rsByPrefix='byPrefix';
-  rsByBase='byBase';
   rsStandaloneDevices='Standalone devices';
 
 type
@@ -27,7 +25,6 @@ type
   { TNavigatorDevices }
   TNavigatorDevices = class(TForm)
     CoolBar1: TCoolBar;
-    MainToolBar: TToolBar;
     NavTree: TVirtualStringTree;
     Ent2NodeMap:TEnt2NodeMap;
     RefreshToolButton: TToolButton;
@@ -69,7 +66,6 @@ type
     StandaloneNodeStates:TNodesStates;
     NavMX,NavMy:integer;
     umf:TmyVariableAction;
-    GroupByPrefix,GroupByBase:boolean;
     MainFunctionIconIndex:integer;
     BuggyIconIndex:integer;
     SaveCellRectLeft:integer;
@@ -77,6 +73,7 @@ type
 
   public
     TreeBuildMap:string;
+    IncludeEntities,IncludeByVars:string;
     UseMainFunctions:Boolean;
 
     procedure CreateRoots;
@@ -268,47 +265,22 @@ procedure TNavigatorDevices._onCreate(Sender: TObject);
 var
   po:TVTPaintOptions;
   i:integer;
-  //mo:TVTMiscOptions;
-  //ts:TVirtualTreeStates;
 begin
-   {pref:=TmyVariableAction.Create(self);
-   pref.ActionList:=ZCADMainWindow.StandartActions;
-   pref.AssignToVar('DSGN_NavigatorsGroupByPrefix',0);
-   pref.Caption:=rsByPrefix;
-   ToolButton1.Action:=pref;
-
-   base:=TmyVariableAction.Create(self);
-   base.ActionList:=ZCADMainWindow.StandartActions;
-   base.AssignToVar('DSGN_NavigatorsGroupByBaseName',0);
-   base.Caption:=rsByBase;
-   ToolButton3.Action:=base;}
 
    umf:=TmyVariableAction.Create(self);
    umf.ActionList:=ZCADMainWindow.StandartActions;
    umf.AssignToVar('DSGN_NavigatorsUseMainFunction',0);
    umf.Caption:='Use main functions';
-   umfToolButton.Action:=umf;
-   if UseMainFunctions then
-     umfToolButton.Visible:=true
-   else
-     umfToolButton.Visible:=False;
 
 
    ActionList1.Images:=ImagesManager.IconList;
-   MainToolBar.Images:=ImagesManager.IconList;
    Refresh.ImageIndex:=ImagesManager.GetImageIndex('Refresh');
-   MainToolBar.Wrapable:=false;
    CoolBar1.AutoSize:=true;
-   CoolBar1.Bands.Items[0].Width:=3000;
 
    TreeEnabler:=TStringPartEnabler.Create(self);
-   TreeEnabler.EdgeBorders:=[ebLeft{,ebTop,ebRight,ebBottom}];
-   TreeEnabler.Left:=80;
-   TreeEnabler.Width:=2000;
+   TreeEnabler.EdgeBorders:=[{ebLeft,ebTop,ebRight,ebBottom}];
    TreeEnabler.AutoSize:=true;
    TreeEnabler.actns:=[umf,IncludeEnts,ExcludeEnts,Refresh];
-
-   //TreeEnabler.Align:=alLeft;
 
    TreeEnabler.OnPartChanged:=RefreshTree;
    TreeEnabler.GetCountFunc:=GetPartsCount;
@@ -317,11 +289,7 @@ begin
    TreeEnabler.PartsEditFunc:=PartsEditor;
 
    TreeEnabler.setup(TreeBuildMap);
-
-   UMFToolButton.Parent:=MainToolBar;
-   RefreshToolButton.Parent:=MainToolBar;
-   TreeEnabler.Parent:=MainToolBar;
-   //MainToolBar.AutoSize:=true;
+   TreeEnabler.Parent:=CoolBar1;
 
    NavTree.OnGetText:=NavGetText;
    NavTree.OnGetImageIndex:=NavGetImage;
@@ -333,15 +301,9 @@ begin
    NavTree.OnAfterCellPaint:=AfterCellPaint;
    NavTree.OnMeasureTextWidth:=MeasureTextWidth;
    NavTree.OnDrawText:=DrawText;
-   {ts:=NavTree.TreeStates;
-   ts:=ts+[tsUseThemes];
-   NavTree.TreeStates:=ts;}
    po:=NavTree.TreeOptions.PaintOptions;
    po:=po-[toShowFilteredNodes,toHideSelection]+[toPopupMode];
    NavTree.TreeOptions.PaintOptions:=po;
-   {mo:=NavTree.TreeOptions.MiscOptions;
-   mo:=mo+[toGridExtensions];
-   NavTree.TreeOptions.MiscOptions:=mo;}
    MainFunctionIconIndex:=-1;
    BuggyIconIndex:=-1;
 
@@ -454,23 +416,11 @@ var
 begin
    if not isvisible then exit;
 
-   TreeEnabler.Height:=MainToolBar.Height;
+   //TreeEnabler.Height:=MainToolBar.Height;
 
    NavTree.BeginUpdate;
    EraseRoots;
    CreateRoots;
-
-   pb:=SysVarUnit.FindValue('DSGN_NavigatorsGroupByPrefix');
-   if pb<>nil then
-     GroupByPrefix:=pb^
-   else
-     GroupByPrefix:=true;
-
-   pb:=SysVarUnit.FindValue('DSGN_NavigatorsGroupByBaseName');
-   if pb<>nil then
-     GroupByBase:=pb^
-   else
-     GroupByBase:=true;
 
    if drawings.GetCurrentDWG<>nil then
    begin

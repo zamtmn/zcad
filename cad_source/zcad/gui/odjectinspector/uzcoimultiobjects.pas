@@ -21,38 +21,13 @@ unit uzcoimultiobjects;
 
 interface
 uses
-  uzeenttext,uzctnrvectorgdbpointer,uzeentblockinsert,uzeconsts,uzcinterface,LazLoggerBase,uzcoimultiproperties,uzcoiwrapper,uzctranslations,uzepalette,uzbmemman,uzcshared,
-  uzedimensionaltypes,uzcstrconsts,sysutils,uzeentityfactory,uzcenitiesvariablesextender,uzgldrawcontext,
-  usimplegenerics,gzctnrstl,gzctnrvectortypes,uzbtypes,uzcdrawings,varmandef,uzeentity,uzbtypesbase,Varman,uzctnrvectorgdbstring,UGDBSelectedObjArray;
+  uzeenttext,uzctnrvectorgdbpointer,uzeentblockinsert,uzeconsts,uzcinterface,
+  LazLoggerBase,uzcoimultiproperties,uzcoiwrapper,uzctranslations,uzepalette,
+  uzbmemman,uzcshared,uzedimensionaltypes,uzcstrconsts,sysutils,uzeentityfactory,
+  uzcenitiesvariablesextender,uzgldrawcontext,usimplegenerics,gzctnrstl,
+  gzctnrvectortypes,uzbtypes,uzcdrawings,varmandef,uzeentity,uzbtypesbase,
+  Varman,uzctnrvectorgdbstring,UGDBSelectedObjArray,uzcoimultipropertiesutil;
 type
-  PTOneVarData=^TOneVarData;
-  TOneVarData=record
-                    StrValue:GDBString;
-                    PVarDesc:pvardesk;
-              end;
-  TStringCounter=TMyMapCounter<string,LessString>;
-  TPointerCounter=TMyMapCounter<pointer,LessPointer>;
-  PTStringCounterData=^TStringCounterData;
-  TStringCounterData=record
-                    counter:TStringCounter;
-                    totalcount:integer;
-                    PVarDesc:pvardesk;
-              end;
-  PTPointerCounterData=^TPointerCounterData;
-  TPointerCounterData=record
-                    counter:TPointerCounter;
-                    totalcount:integer;
-                    PVarDesc:pvardesk;
-              end;
-  PTVertex3DControlVarData=^TVertex3DControlVarData;
-  TVertex3DControlVarData=record
-                            StrValueX,StrValueY,StrValueZ:GDBString;
-                            PArrayIndexVarDesc,
-                            PXVarDesc,
-                            PYVarDesc,
-                            PZVarDesc:pvardesk;
-                            PGDBDTypeDesc:PUserTypeDescriptor;
-                          end;
 {Export+}
   {TMSType=(
            TMST_All(*'All entities'*),
@@ -201,12 +176,6 @@ begin
                                                                                   result:=false;
                         end;
 
-end;
-function CreateChangedData(pentity:pointer;GetVO,SetVO:GDBInteger):TChangedData;
-begin
-     result.pentity:=pentity;
-     result.PGetDataInEtity:=Pointer(PtrUInt(pentity)+GetVO);
-     result.PSetDataInEtity:=Pointer(PtrUInt(pentity)+SetVO);
 end;
 procedure TMSEditor.ClearErrorRange;
 var

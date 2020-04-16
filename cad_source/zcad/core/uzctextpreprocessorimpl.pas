@@ -20,8 +20,28 @@ unit uzctextpreprocessorimpl;
 
 interface
 uses uzeentity,uzcvariablesutils,uzetextpreprocessor,languade,uzbstrproc,sysutils,
-     uzbtypesbase,varmandef,uzbtypes,uzcenitiesvariablesextender,uzeentsubordinated;
+     uzbtypesbase,varmandef,uzbtypes,uzcenitiesvariablesextender,uzeentsubordinated,
+     uzcpropertiesutils;
 implementation
+procedure prop2value(var str:gdbstring;var startpos:integer;pobj:PGDBObjGenericWithSubordinated);
+var
+  endpos:integer;
+  propertyname,propertyvalue:GDBString;
+  finded:boolean;
+begin
+  if startpos>0 then
+  begin
+    endpos:=pos(']',str,startpos);
+    if endpos<startpos then exit;
+    propertyname:=copy(str,startpos+3,endpos-startpos-3);
+    finded:=GetProperty(pobj,propertyname,propertyvalue);
+    if finded then
+      str:=copy(str,1,startpos-1)+propertyvalue+copy(str,endpos+1,length(str)-endpos)
+    else
+      str:=copy(str,1,startpos-1)+'!!ERRprop('+propertyname+')!!'+copy(str,endpos+1,length(str)-endpos)
+  end
+end;
+
 procedure var2value(var str:gdbstring;var startpos:integer;pobj:PGDBObjGenericWithSubordinated);
 var
   endpos:integer;
@@ -30,7 +50,7 @@ var
 begin
   if startpos>0 then
   begin
-    endpos:=pos(']',str);
+    endpos:=pos(']',str,startpos);
     if endpos<startpos then exit;
     varname:=copy(str,startpos+3,endpos-startpos-3);
     pv:=nil;
@@ -96,6 +116,7 @@ end;
 
 initialization
   Prefix2ProcessFunc.RegisterKey('@@[',@var2value);
+  Prefix2ProcessFunc.RegisterKey('%%[',@prop2value);
   Prefix2ProcessFunc.RegisterKey('##[',@evaluatesubstr);
   Prefix2ProcessFunc.RegisterKey('\',@EscapeSeq);
 end.

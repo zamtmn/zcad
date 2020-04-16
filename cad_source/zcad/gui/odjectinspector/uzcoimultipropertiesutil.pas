@@ -21,7 +21,7 @@ unit uzcoimultipropertiesutil;
 
 interface
 uses
-  uzctnrvectorgdbpointer,uzbstrproc, uzctnrvectorgdbstring,uzcoimultiobjects,uzepalette,uzbmemman,uzcshared,sysutils,uzeentityfactory,
+  uzctnrvectorgdbpointer,uzbstrproc, uzctnrvectorgdbstring,{uzcoimultiobjects,}uzepalette,uzbmemman,uzcshared,sysutils,uzeentityfactory,
   uzbgeomtypes,uzbtypes,
   uzcdrawings,
   varmandef,
@@ -30,7 +30,39 @@ uses
   Varman,UGDBPoint3DArray,
   uzedimensionaltypes,
   gzctnrvectortypes,uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,
-  uzeenttext,uzeentmtext,uzeentpolyline,uzegeometry,uzcoimultiproperties,LazLogger;
+  uzeenttext,uzeentmtext,uzeentpolyline,uzegeometry,uzcoimultiproperties,LazLogger,gzctnrstl,usimplegenerics;
+type
+  PTOneVarData=^TOneVarData;
+  TOneVarData=record
+                    StrValue:GDBString;
+                    PVarDesc:pvardesk;
+              end;
+  TStringCounter=TMyMapCounter<string,LessString>;
+  PTStringCounterData=^TStringCounterData;
+  TStringCounterData=record
+                    counter:TStringCounter;
+                    totalcount:integer;
+                    PVarDesc:pvardesk;
+              end;
+  TPointerCounter=TMyMapCounter<pointer,LessPointer>;
+  PTPointerCounterData=^TPointerCounterData;
+  TPointerCounterData=record
+                    counter:TPointerCounter;
+                    totalcount:integer;
+                    PVarDesc:pvardesk;
+              end;
+  PTVertex3DControlVarData=^TVertex3DControlVarData;
+  TVertex3DControlVarData=record
+                            StrValueX,StrValueY,StrValueZ:GDBString;
+                            PArrayIndexVarDesc,
+                            PXVarDesc,
+                            PYVarDesc,
+                            PZVarDesc:pvardesk;
+                            PGDBDTypeDesc:PUserTypeDescriptor;
+                          end;
+
+
+
 
 function GetOneVarData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
 function GetStringCounterData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
@@ -49,6 +81,7 @@ procedure TArrayIndex2SumEntIterateProc(pdata:GDBPointer;ChangedData:TChangedDat
 procedure Blockname2BlockNameCounterIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure PStyle2PStyleCounterIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure PolylineVertex3DControlBeforeEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData);
+function CreateChangedData(pentity:pointer;GetVO,SetVO:GDBInteger):TChangedData;
 implementation
 var
    Vertex3DControl:TArrayIndex=0;
@@ -373,6 +406,13 @@ begin
      PTPointerCounterData(pdata)^.counter.CountKey(pointer(ppointer(ChangedData.PGetDataInEtity)^),1);
      inc(PTPointerCounterData(pdata)^.totalcount);
 end;
+function CreateChangedData(pentity:pointer;GetVO,SetVO:GDBInteger):TChangedData;
+begin
+     result.pentity:=pentity;
+     result.PGetDataInEtity:=Pointer(PtrUInt(pentity)+GetVO);
+     result.PSetDataInEtity:=Pointer(PtrUInt(pentity)+SetVO);
+end;
+
 
 initialization
 finalization

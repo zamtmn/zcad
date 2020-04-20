@@ -47,11 +47,11 @@ object NavigatorDevices: TNavigatorDevices
     end
     object IncludeEnts: TAction
       OnExecute = EditIncludeEnts
-      Caption = 'Include entities'
+      Caption = 'Edit include entities'
     end
-    object ExcludeEnts: TAction
-      OnExecute = EditExcludeEnts
-      Caption = 'Exclde entities'
+    object IncludeProps: TAction
+      OnExecute = EditIncludeProperties
+      Caption = 'Edit include properties'
     end
   end
 end

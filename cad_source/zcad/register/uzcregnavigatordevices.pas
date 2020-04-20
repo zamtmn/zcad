@@ -37,20 +37,20 @@ type
   end;
 
   TNavigatorRisers=class(TNavigatorDevices)
-    procedure NavGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;
+    {procedure NavGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;
                          TextType: TVSTTextType; var CellText: String);override;
     function NavGetOnlyText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex): String;
     procedure VTCompareNodes(Sender: TBaseVirtualTree; Node1,
-      Node2: PVirtualNode; Column: TColumnIndex; var Result: Integer);override;
+      Node2: PVirtualNode; Column: TColumnIndex; var Result: Integer);override;}
 
-    function EntsFilter(pent:pGDBObjEntity):Boolean;override;
+    //function EntsFilter(pent:pGDBObjEntity):Boolean;override;
     //function TraceEntity(rootdesk:TBaseRootNodeDesk;pent:pGDBObjEntity;out name:string):PVirtualNode;override;
   end;
   TNavigatorCables=class(TNavigatorDevices)
-    procedure NavGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;
-                         TextType: TVSTTextType; var CellText: String);override;
+    //procedure NavGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;
+    //                     TextType: TVSTTextType; var CellText: String);override;
 
-    function EntsFilter(pent:pGDBObjEntity):Boolean;override;
+    //function EntsFilter(pent:pGDBObjEntity):Boolean;override;
   end;
 var
   NavigatorRisers:TNavigatorRisers;
@@ -58,11 +58,11 @@ var
 
   NavigatorDevicesMacroMethods:TNavigatorDevicesMacroMethods;
 implementation
-function TNavigatorCables.EntsFilter(pent:pGDBObjEntity):Boolean;
+{function TNavigatorCables.EntsFilter(pent:pGDBObjEntity):Boolean;
 begin
   result:=pent^.GetObjType=GDBCableID;
-end;
-procedure TNavigatorCables.NavGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;
+end;}
+{procedure TNavigatorCables.NavGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;
                          TextType: TVSTTextType; var CellText: String);
 var
   pnd:PTNodeData;
@@ -75,10 +75,10 @@ begin
                                else
                                    celltext:=GetEntityVariableValue(pnd^.pent,'NMO_Name',rsNameAbsent)+' (:'+GetEntityVariableValue(pnd^.pent,'CABLE_Segment','??')+')';
   end;
-end;
+end;}
 
 
-procedure TNavigatorRisers.NavGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;
+{procedure TNavigatorRisers.NavGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;
                          TextType: TVSTTextType; var CellText: String);
 var
   pnd:PTNodeData;
@@ -134,9 +134,9 @@ begin
        end;
      end;
   end;
-end;
+end;}
 
-function TNavigatorRisers.EntsFilter(pent:pGDBObjEntity):Boolean;
+{function TNavigatorRisers.EntsFilter(pent:pGDBObjEntity):Boolean;
 begin
   if pent^.GetObjType=GDBDeviceID then
     if pos('EL_CABLE_',PGDBObjDevice(pent).Name)=1 then
@@ -145,7 +145,7 @@ begin
       result:=false
   else
     result:=false
-end;
+end;}
 (*function  TNavigatorRisers.TraceEntity(rootdesk:TBaseRootNodeDesk;pent:pGDBObjEntity;out name:string):PVirtualNode;
 begin
   result:={nil}rootdesk.rootnode;
@@ -216,18 +216,29 @@ function CreateNavigatorDevices:TForm;
 begin
  result:=tform(TNavigatorDevices.NewInstance);
  TNavigatorDevices(result).TreeBuildMap:='+NMO_Prefix|+NMO_BaseName|+@@[NMO_Name]';
+ TNavigatorDevices(result).IncludeEntities:='+GDBObjDevice';
+ TNavigatorDevices(result).IncludeProperties:='';//'+*|-%%[Name]=EL_CABLE_*';
  TNavigatorDevices(result).UseMainFunctions:=True;
 end;
 function CreateNavigatorRisers:TForm;
 begin
  result:=tform(TNavigatorRisers.NewInstance);
  TNavigatorRisers(result).TreeBuildMap:='+@@[RiserName]:@@[Elevation]:@@[Text]';
+ TNavigatorRisers(result).IncludeEntities:='+GDBObjDevice';
+ TNavigatorRisers(result).IncludeProperties:='+%%[Name]=EL_CABLE_*';
  TNavigatorRisers(result).UseMainFunctions:=False;
 end;
 function CreateNavigatorCables:TForm;
 begin
  result:=tform(TNavigatorCables.NewInstance);
- TNavigatorCables(result).TreeBuildMap:='+NMO_BaseName|+@@[NMO_Name]:@@[CABLE_Segment]';
+ {TNavigatorCables(result).TreeBuildMap:='+NMO_BaseName|+@@[NMO_Name]:@@[CABLE_Segment]';
+ TNavigatorRisers(result).IncludeEntities:='+GDBObjCable';
+ TNavigatorRisers(result).IncludeProperties:='+*';
+ TNavigatorCables(result).UseMainFunctions:=False;}
+
+ TNavigatorCables(result).TreeBuildMap:='+%%[Layer]';
+ TNavigatorRisers(result).IncludeEntities:='';
+ TNavigatorRisers(result).IncludeProperties:='';
  TNavigatorCables(result).UseMainFunctions:=False;
 end;
 

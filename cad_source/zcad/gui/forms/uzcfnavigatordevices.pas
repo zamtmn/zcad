@@ -14,7 +14,8 @@ uses
   uzccommandsimpl,uzccommandsabstract,uzcutils,uzcenitiesvariablesextender,
   GraphType,generics.collections,uzglviewareaabstract,Menus,
   uzcfnavigatordevicescxmenu,uzbpaths,Toolwin,uzcctrlpartenabler,StrUtils,
-  uzctextenteditor,uzcinfoform,uzcsysparams,uzcsysvars,uzetextpreprocessor;
+  uzctextenteditor,uzcinfoform,uzcsysparams,uzcsysvars,uzetextpreprocessor,
+  Masks,uzelongprocesssupport;
 
 resourcestring
   rsStandaloneDevices='Standalone devices';
@@ -34,11 +35,11 @@ type
     ActionList1:TActionList;
     Refresh:TAction;
     IncludeEnts:TAction;
-    ExcludeEnts:TAction;
+    IncludeProps:TAction;
     function CreateEntityNode(Tree: TVirtualStringTree;basenode:PVirtualNode;pent:pGDBObjEntity;Name:string):PVirtualNode;virtual;
     procedure RefreshTree(Sender: TObject);
     procedure EditIncludeEnts(Sender: TObject);
-    procedure EditExcludeEnts(Sender: TObject);
+    procedure EditIncludeProperties(Sender: TObject);
     procedure AutoRefreshTree(sender:TObject;GUIAction:TZMessageID);
     procedure TVDblClick(Sender: TObject);
     procedure TVOnMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
@@ -73,7 +74,7 @@ type
 
   public
     TreeBuildMap:string;
-    IncludeEntities,IncludeByVars:string;
+    IncludeEntities,IncludeProperties:string;
     UseMainFunctions:Boolean;
 
     procedure CreateRoots;
@@ -104,8 +105,74 @@ implementation
 {$R *.lfm}
 
 function TNavigatorDevices.EntsFilter(pent:pGDBObjEntity):Boolean;
+var
+  cn,an,entname:string;
+  match:boolean;
+  alreadyinclude:boolean;
+  operation:char;
+
+  function processproperty(cn:string):boolean;
+  var
+    operpos:integer;
+    s1,s2,n1,n2:string;
+  begin
+    if cn='*' then
+      exit(true);
+    operpos:=pos('=',cn);
+    if operpos>0 then begin
+      s1:=copy(cn,1,operpos-1);
+      s2:=copy(cn,operpos+1,length(cn)-operpos);
+      n1:=textformat(s1,pent);
+      n2:=textformat(s2,pent);
+      result:=MatchesMask(n1,n2,false);
+      exit;
+    end;
+    result:=false;
+  end;
+
 begin
-  result:=pent^.GetObjType=GDBDeviceID;
+  an:=IncludeEntities;
+  if an<>'' then begin
+    entname:=pent^.GetObjTypeName;
+    alreadyinclude:=false;
+    repeat
+      GetPartOfPath(cn,an,'|');
+      if cn<>'' then begin
+        operation:=cn[1];
+        if not((operation='+') and alreadyinclude) then begin
+          cn:=(copy(cn,2,length(cn)-1));
+          match:=MatchesMask(entname,cn,false);
+          if (operation='+')and match then
+            alreadyinclude:=true;
+          if (operation='-')and match then
+            exit(false);
+        end;
+      end;
+    until an='';
+    if not alreadyinclude then
+      exit(false);
+  end;
+
+  an:=IncludeProperties;
+  if an<>'' then begin
+    alreadyinclude:=false;
+    repeat
+      GetPartOfPath(cn,an,'|');
+      if cn<>'' then begin
+        operation:=cn[1];
+        if not((operation='+') and alreadyinclude) then begin
+          cn:=(copy(cn,2,length(cn)-1));
+          match:=processproperty(cn);
+          if (operation='+')and match then
+            alreadyinclude:=true;
+          if (operation='-')and match then
+            exit(false);
+        end;
+      end;
+    until an='';
+    exit(alreadyinclude);
+  end;
+  exit(true);
 end;
 
 function  TNavigatorDevices.TraceEntity(rootdesk:TBaseRootNodeDesk;pent:pGDBObjEntity;out name:string):PVirtualNode;
@@ -145,6 +212,7 @@ begin
   basenode:=rootdesk.rootnode;
 
   an:=TreeBuildMap;
+  if an<>'' then
   repeat
     GetPartOfPath(cn,an,'|');
     if an<>'' then begin
@@ -159,12 +227,12 @@ begin
        cn:=copy(cn,2,length(cn)-1);
        Name:=textformat(cn,pent)
       end else
-       Name:=GetEntityVariableValue(pent,'NMO_Name',rsNameAbsent);
+       Name:={GetEntityVariableValue(pent,'NMO_Name',rsNameAbsent)}pent^.GetObjTypeName;
     end;
   until an='';
 
   if name='' then
-    Name:=GetEntityVariableValue(pent,'NMO_Name',rsNameAbsent);
+    Name:={GetEntityVariableValue(pent,'NMO_Name',rsNameAbsent)}pent^.GetObjTypeName;
 
   result:=basenode;
 
@@ -280,7 +348,7 @@ begin
    TreeEnabler:=TStringPartEnabler.Create(self);
    TreeEnabler.EdgeBorders:=[{ebLeft,ebTop,ebRight,ebBottom}];
    TreeEnabler.AutoSize:=true;
-   TreeEnabler.actns:=[umf,IncludeEnts,ExcludeEnts,Refresh];
+   TreeEnabler.actns:=[umf,IncludeEnts,IncludeProps,Refresh];
 
    TreeEnabler.OnPartChanged:=RefreshTree;
    TreeEnabler.GetCountFunc:=GetPartsCount;
@@ -386,16 +454,21 @@ var
   pnd:PTNodeData;
   pentvarext:PTVariablesExtender;
 begin
-  if not Ent2NodeMap.trygetvalue(pent,result) then begin
-    result:=StandaloneNode.CreateEntityNode(Tree,basenode,pent,Name);
-    pentvarext:=pent^.GetExtension(typeof(TVariablesExtender));
-    if pentvarext<>nil then begin
-      if pentvarext^.isMainFunction then begin
-        pnd:=Tree.GetNodeData(result);
-        pnd^.NodeMode:=TNMHardGroup;
+  pentvarext:=pent^.GetExtension(typeof(TVariablesExtender));
+  if (UseMainFunctions)and(pentvarext<>nil) then begin
+    if not Ent2NodeMap.trygetvalue(pent,result) then begin
+      result:=StandaloneNode.CreateEntityNode(Tree,basenode,pent,Name);
+      pentvarext:=pent^.GetExtension(typeof(TVariablesExtender));
+      {if pentvarext<>nil then} begin
+        if pentvarext^.isMainFunction then begin
+          pnd:=Tree.GetNodeData(result);
+          pnd^.NodeMode:=TNMHardGroup;
+        end;
       end;
+      Ent2NodeMap.add(pent,result);
     end;
-    Ent2NodeMap.add(pent,result);
+  end else begin
+    result:=StandaloneNode.CreateEntityNode(Tree,basenode,pent,Name);
   end;
 end;
 
@@ -403,7 +476,7 @@ procedure TNavigatorDevices.EditIncludeEnts(Sender: TObject);
 begin
  if not isvisible then exit;
 end;
-procedure TNavigatorDevices.EditExcludeEnts(Sender: TObject);
+procedure TNavigatorDevices.EditIncludeProperties(Sender: TObject);
 begin
  if not isvisible then exit;
 end;
@@ -413,12 +486,15 @@ var
   pv:pGDBObjEntity;
   ir:itrec;
   pb:pboolean;
+  lpsh:TLPSHandle;
 begin
    if not isvisible then exit;
 
    //TreeEnabler.Height:=MainToolBar.Height;
 
    NavTree.BeginUpdate;
+
+   lpsh:=LPS.StartLongProcess(0,'NavigatorEntities.RefreshTree',@self);
    EraseRoots;
    CreateRoots;
 
@@ -440,8 +516,11 @@ begin
    StandaloneNode.RestoreState(StandaloneNodeStates);
    freeandnil(StandaloneNodeStates);
    end;
+
+   LPS.EndLongProcess(lpsh);
    NavTree.EndUpdate;
 end;
+
 procedure TNavigatorDevices.AutoRefreshTree(sender:TObject;GUIAction:TZMessageID);
 var
   sender_wa:TAbstractViewArea;
@@ -556,10 +635,11 @@ begin
   pnd := Sender.GetNodeData(Node);
   if assigned(pnd) then
   begin
-     if pnd^.NodeMode<>TNMData then
-                                   celltext:=pnd^.name
-                               else
-                                   celltext:=GetEntityVariableValue(pnd^.pent,'NMO_Name',rsNameAbsent);
+    celltext:=pnd^.name;
+    // if pnd^.NodeMode<>TNMData then
+    //                               celltext:=pnd^.name
+    //                           else
+    //                               celltext:=GetEntityVariableValue(pnd^.pent,'NMO_Name',rsNameAbsent);
   end;
 end;
 procedure TNavigatorDevices.getImageIndex;

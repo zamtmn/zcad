@@ -429,8 +429,8 @@ begin
      changed:=true;
      selectableeditor:=false;
      if self.geteditor is TCombobox then
-     if TCombobox(self.geteditor).ReadOnly  then
-                                                selectableeditor:=true;
+     if TCombobox(self.geteditor).Style in [csDropDownList,csOwnerDrawFixed,csOwnerDrawVariable]  then
+       selectableeditor:=true;
      if (not fFreeOnLostFocus)or(selectableeditor) then
      begin
      rfs:=false;

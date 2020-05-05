@@ -1558,7 +1558,7 @@ begin
                                                  peditor.geteditor.Visible:=true;
                                                  peditor.geteditor.setfocus;
                                                  if  peditor.geteditor is  TComboBox then
-                                                 if  (peditor.geteditor as  TComboBox).ReadOnly then
+                                                 if  (peditor.geteditor as  TComboBox).Style in [csDropDownList,csOwnerDrawFixed,csOwnerDrawVariable] then
                                                  TComboBox(peditor.geteditor).DroppedDown:=true;//автооткрытие комбика мещает вводу, открываем только те что без возможности ввода значений
                                                  exit;
                                             end;
@@ -1730,7 +1730,7 @@ begin
                                                                                 editorcontrol.Parent:=self;
                                                                                 SetComboSize(editorcontrol as TCombobox,rowh-6,CBDoNotTouch);
                                                                                 //(editorcontrol as TCombobox).itemheight:=pp^.rect.Bottom-pp^.rect.Top-6;
-                                                                                if (editorcontrol as TCombobox).ReadOnly then
+                                                                                if (editorcontrol as TCombobox).Style in [csDropDownList,csOwnerDrawFixed,csOwnerDrawVariable] then
                                                                                 (editorcontrol as TCombobox).droppeddown:=true;//автооткрытие комбика мещает вводу, открываем только те что без возможности ввода значений
                                                                            end
                                                                        else

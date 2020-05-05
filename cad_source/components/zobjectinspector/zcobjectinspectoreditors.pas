@@ -107,7 +107,7 @@ begin
      cbedit.OnChange:=propeditor.EditingProcess;
      SetComboSize(cbedit,{sysvar.INTF.INTF_DefaultControlHeight^}preferedHeight-6,CBReadOnly);
      {$IFNDEF DELPHI}
-     cbedit.ReadOnly:=true;
+     cbedit.Style:=csDropDownList;
      {$ENDIF}
 
      cbedit.Items.Add('True');
@@ -134,7 +134,7 @@ begin
      cbedit.OnExit:=propeditor.ExitEdit;
      SetComboSize(cbedit,{sysvar.INTF.INTF_DefaultControlHeight^}preferedHeight-6,CBReadOnly);
      {$IFNDEF DELPHI}
-     cbedit.ReadOnly:=true;
+     cbedit.Style:=csDropDownList;
      {$ENDIF}
 
                              p:=PTEnumData(Pinstance)^.Enums.beginiterate(ir);
@@ -163,7 +163,7 @@ begin
      cbedit.OnChange:=propeditor.EditingProcess;
      SetComboSize(cbedit,{sysvar.INTF.INTF_DefaultControlHeight^}preferedHeight-6,CBReadOnly);
      {$IFNDEF DELPHI}
-     cbedit.ReadOnly:=true;
+     cbedit.Style:=csDropDownList;
      {$ENDIF}
 
                              p:=PEnumDescriptor(ptdesc)^.UserValue.beginiterate(ir);

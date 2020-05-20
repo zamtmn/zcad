@@ -17,106 +17,107 @@
 } 
 unit uzctextpreprocessorimpl;
 {$INCLUDE def.inc}
+{$mode objfpc}
 
 interface
 uses uzeentity,uzcvariablesutils,uzetextpreprocessor,languade,uzbstrproc,sysutils,
      uzbtypesbase,varmandef,uzbtypes,uzcenitiesvariablesextender,uzeentsubordinated,
-     uzcpropertiesutils;
-implementation
-procedure prop2value(var str:gdbstring;var startpos:integer;pobj:PGDBObjGenericWithSubordinated);
+     uzcpropertiesutils,uzeparser;
 var
-  endpos:integer;
-  propertyname,propertyvalue:GDBString;
-  finded:boolean;
+  TokenTextInfo:TTokenTextInfo;
+implementation
+function prop2value(const str:gdbstring;const operands:gdbstring;var NextSymbolPos:integer;pobj:Pointer):gdbstring;
 begin
-  if startpos>0 then
-  begin
-    endpos:=pos(']',str,startpos);
-    if endpos<startpos then exit;
-    propertyname:=copy(str,startpos+3,endpos-startpos-3);
-    finded:=GetProperty(pobj,propertyname,propertyvalue);
-    if finded then
-      str:=copy(str,1,startpos-1)+propertyvalue+copy(str,endpos+1,length(str)-endpos)
+  if GetProperty(pobj,operands,result) then
     else
-      str:=copy(str,1,startpos-1)+'!!ERRprop('+propertyname+')!!'+copy(str,endpos+1,length(str)-endpos)
-  end
+      result:='!!ERRprop('+operands+')!!';
 end;
 
-procedure var2value(var str:gdbstring;var startpos:integer;pobj:PGDBObjGenericWithSubordinated);
+function var2value(const str:gdbstring;const operands:gdbstring;var NextSymbolPos:integer;pobj:Pointer):gdbstring;
 var
   endpos:integer;
   varname:GDBString;
   pv:pvardesk;
 begin
-  if startpos>0 then
-  begin
-    endpos:=pos(']',str,startpos);
-    if endpos<startpos then exit;
-    varname:=copy(str,startpos+3,endpos-startpos-3);
-    pv:=nil;
-    if pobj<>nil then
-                     pv:=FindVariableInEnt(PGDBObjEntity(pobj),varname);
-    if pv<>nil then
-                   begin
-                        str:=copy(str,1,startpos-1)+pv.data.ptd^.GetValueAsString(pv^.data.Instance)+copy(str,endpos+1,length(str)-endpos)
-                   end
-               else
-                   str:=copy(str,1,startpos-1)+'!!ERR('+varname+')!!'+copy(str,endpos+1,length(str)-endpos)
-  end
+  pv:=nil;
+  if pobj<>nil then
+    pv:=FindVariableInEnt(PGDBObjEntity(pobj),operands);
+  if pv<>nil then
+    result:=pv^.data.ptd^.GetValueAsString(pv^.data.Instance)
+  else
+    result:='!!ERR('+varname+')!!';
 end;
-procedure evaluatesubstr(var str:gdbstring;var startpos:integer;pobj:PGDBObjGenericWithSubordinated);
+{function evaluatesubstr(var str:gdbstring;var startpos:integer;pobj:PGDBObjGenericWithSubordinated):gdbstring;
 var
   endpos:integer;
   varname:GDBString;
   //pv:pvardesk;
   vd:vardesk;
   pentvarext:PTVariablesExtender;
+  NextSymbolPos:integer;
 begin
+  NextSymbolPos:=startpos+1;
   if startpos>0 then
   begin
     endpos:=pos(']',str);
-    if endpos<startpos then exit;
-    varname:=copy(str,startpos+3,endpos-startpos-3);
+    if endpos<NextSymbolPos-1 then exit;
+    varname:=copy(str,NextSymbolPos-1+3,endpos-NextSymbolPos-1-3);
     pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
     vd:=evaluate(varname,@pentvarext^.entityunit);
     if (assigned(vd.data.ptd))and(assigned(vd.data.Instance)) then
-                                                                  str:=copy(str,1,startpos-1)+vd.data.ptd^.GetValueAsString(vd.data.Instance)+copy(str,endpos+1,length(str)-endpos)
+                                                                  str:=copy(str,1,NextSymbolPos-1-1)+vd.data.ptd^.GetValueAsString(vd.data.Instance)+copy(str,endpos+1,length(str)-endpos)
                                                               else
-                                                                  str:=copy(str,1,startpos-1)+'!!ERR('+varname+')!!'+copy(str,endpos+1,length(str)-endpos)
-  end
-end;
+                                                                  str:=copy(str,1,NextSymbolPos-1-1)+'!!ERR('+varname+')!!'+copy(str,endpos+1,length(str)-endpos)
+  end;
+  startpos:=NextSymbolPos-1;
+end;}
 
-procedure EscapeSeq(var str:gdbstring;var startpos:integer;pobj:PGDBObjGenericWithSubordinated);
+function EscapeSeq(const str:gdbstring;const operands:gdbstring;var NextSymbolPos:integer;pobj:Pointer):gdbstring;
 var
   sym:char;
   value,s1,s2:string;
   num,code:integer;
 begin
-  if startpos>0 then
-  if startpos<length(str) then
+  result:='';
+  if NextSymbolPos>0 then
+  if NextSymbolPos<length(str) then
   begin
-    sym:=str[startpos+1];
+    sym:=str[NextSymbolPos];
     case sym of
-       'L','l':str:=copy(str,1,startpos-1)+chr(1)+copy(str,startpos+2,length(str)-startpos-1);
-       'P','p':str:=copy(str,1,startpos-1)+chr(10)+copy(str,startpos+2,length(str)-startpos-1);
-       'U','u':begin
-                 value:='$'+copy(str,startpos+3,4);
-                 val(value,num,code);
-                 if code=0 then
-                   str:=copy(str,1,startpos-1)+Chr(uch2ach(num))+copy(str,startpos+7,length(str)-startpos-1-5);
-               end
-       else begin str:=copy(str,1,startpos-1)+sym+copy(str,startpos+2,length(str)-startpos-1);
-                  dec(startpos);
-            end;
-       inc(startpos);
+      'L','l':result:=Chr(1);
+      'P','p':result:=Chr(10);
+      'U','u':begin
+                value:='$'+copy(str,NextSymbolPos+2,4);
+                val(value,num,code);
+                result:=Chr(uch2ach(num));
+                NextSymbolPos:=NextSymbolPos+5;
+              end
+    else
+      result:=sym;
     end;
-    inc(startpos);
-  end
+    inc(NextSymbolPos);
+  end;
+end;
+
+function date2value(const str:gdbstring;const operands:gdbstring;var NextSymbolPos:integer;pobj:Pointer):gdbstring;
+begin
+  result:=datetostr(date);
 end;
 
 initialization
-  Prefix2ProcessFunc.RegisterKey('@@[',@var2value);
-  Prefix2ProcessFunc.RegisterKey('%%[',@prop2value);
-  Prefix2ProcessFunc.RegisterKey('##[',@evaluatesubstr);
-  Prefix2ProcessFunc.RegisterKey('\',@EscapeSeq);
+  Prefix2ProcessFunc.RegisterProcessor('@@','[',']',@var2value,true);
+  Prefix2ProcessFunc.RegisterProcessor('%%','[',']',@prop2value,true);
+  //Prefix2ProcessFunc.RegisterProcessor('##','[',']',@evaluatesubstr);
+  Prefix2ProcessFunc.RegisterProcessor('\',#0,#0,@EscapeSeq);
+  Prefix2ProcessFunc.RegisterProcessor('%%DATE',#0,#0,@date2value,true);
+
+  Parser.RegisterToken('@@[','[',']',@var2value,[TOIncludeBrackeOpen,TOVariable]);
+  Parser.RegisterToken('%%[','[',']',@prop2value,[TOIncludeBrackeOpen,TOVariable]);
+  Parser.RegisterToken('\',#0,#0,@EscapeSeq);
+  Parser.RegisterToken('%%DATE',#0,#0,@date2value,[TOVariable]);
+  a:=Parser.GetToken('END @@[Layer] BEGIN;;',1,TokenTextInfo);
+  a:=Parser.GetToken('END @@[Layer] BEGIN;;',TokenTextInfo.TokenStartPos+TokenTextInfo.TokenLength,TokenTextInfo);
+  a:=Parser.GetToken('END @@[Layer] BEGIN;;',TokenTextInfo.TokenStartPos+TokenTextInfo.TokenLength,TokenTextInfo);
+  a:=Parser.GetToken('END @@[Layer] BEGIN;;',TokenTextInfo.TokenStartPos+TokenTextInfo.TokenLength,TokenTextInfo);
+
 end.

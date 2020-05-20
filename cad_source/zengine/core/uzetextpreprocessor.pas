@@ -19,17 +19,49 @@ unit uzetextpreprocessor;
 {$INCLUDE def.inc}
 
 interface
-uses sysutils,uzbtypesbase,usimplegenerics,gzctnrstl,LazLogger;
+uses sysutils,uzbtypesbase,usimplegenerics,gzctnrstl,LazLogger,gutil,uzeparser;
 type
-TStrProcessFunc=procedure(var str:gdbstring;var startpos:integer;pobj:pointer);
-TPrefix2ProcessFunc=GKey2DataMap<String,TStrProcessFunc{$IFNDEF DELPHI},LessGDBString{$ENDIF}>;
+  TStrProcessFunc=function(const str:gdbstring;const operands:gdbstring;var startpos:integer;pobj:pointer):gdbstring;
+  TStrProcessorData=record
+    Id:string;
+    OBracket,CBracket:char;
+    IsVariable:Boolean;
+    Func:TStrProcessFunc;
+  end;
+
+  TPrefix2ProcessFunc=class (GKey2DataMap<String,TStrProcessorData{$IFNDEF DELPHI},LessGDBString{$ENDIF}>)
+    procedure RegisterProcessor(const Id:string;const OBracket,CBracket:char;const Func:TStrProcessFunc;IsVariable:Boolean=false);
+  end;
+
 var
     Prefix2ProcessFunc:TPrefix2ProcessFunc;
+    //Tokenizer:TTokenizer;
+    Parser:TParser;
+    {TokenPos,}a:integer;
 function textformat(s:GDBString;pobj:GDBPointer):GDBString;
 function convertfromunicode(s:GDBString):GDBString;
 implementation
-//uses
-//   log;
+
+
+procedure TPrefix2ProcessFunc.RegisterProcessor(const Id:string;const OBracket,CBracket:char;const Func:TStrProcessFunc;IsVariable:Boolean=false);
+var
+  key:String;
+  data:TStrProcessorData;
+begin
+  if OBracket<>#0 then
+    key:=Id+OBracket
+  else
+    key:=Id;
+
+  data.Id:=id;
+  data.OBracket:=OBracket;
+  data.CBracket:=CBracket;
+  data.Func:=Func;
+  data.IsVariable:=IsVariable;
+
+  RegisterKey(key,data);
+end;
+
 function convertfromunicode(s:GDBString):GDBString;
 var //i,i2:GDBInteger;
     ps{,varname}:GDBString;
@@ -79,8 +111,8 @@ begin
 end;
 {$endif}
 function textformat;
-var i{,i2},counter:GDBInteger;
-    ps{,s2}:GDBString;
+var FindedIdPos,ContinuePos,EndBracketPos,i2,counter:GDBInteger;
+    ps{,s2},res,operands:GDBString;
     {$IFNDEF DELPHI}
     iterator:Prefix2ProcessFunc.TIterator;
     {$ENDIF}
@@ -89,13 +121,13 @@ const
     maxitertations=100;
 begin
      ps:=convertfromunicode(s);
-     repeat
-          i:=pos('%%DATE',uppercase(ps));
-          if i>0 then
+     {repeat
+          FindedIdPos:=pos('%%DATE',uppercase(ps));
+          if FindedIdPos>0 then
                      begin
-                          ps:=copy(ps,1,i-1)+datetostr(date)+copy(ps,i+6,length(ps)-i-5)
+                          ps:=copy(ps,1,FindedIdPos-1)+datetostr(date)+copy(ps,FindedIdPos+6,length(ps)-FindedIdPos-5)
                      end;
-     until i<=0;
+     until FindedIdPos<=0;}
      {$IFNDEF DELPHI}
      counter:=0;
      iterator:=Prefix2ProcessFunc.Min;
@@ -103,17 +135,26 @@ begin
      begin
      repeat
        startsearhpos:=1;
-       if assigned(iterator.value)then
+       if assigned(iterator.value.func)then
        begin
          repeat
-           i:={$if FPC_FULLVERSION<=30004}Pos_only_for_FPC304{$else}Pos{$endif}(iterator.key,ps,startsearhpos);
-           if i>0 then
+           FindedIdPos:={$if FPC_FULLVERSION<=30004}Pos_only_for_FPC304{$else}Pos{$endif}(iterator.key,ps,startsearhpos);
+           if FindedIdPos>0 then
            begin
-             iterator.value(ps,i,pobj);
-             startsearhpos:=i;
+             ContinuePos:=FindedIdPos+length(iterator.key);
+             if iterator.Value.CBracket<>#0 then begin
+               EndBracketPos:={$if FPC_FULLVERSION<=30004}Pos_only_for_FPC304{$else}Pos{$endif}(iterator.Value.CBracket,ps,ContinuePos)+1;
+               operands:=copy(ps,ContinuePos,EndBracketPos-ContinuePos-1);
+             end else
+               EndBracketPos:=ContinuePos;
+             ContinuePos:=EndBracketPos;
+             res:=iterator.value.func(ps,operands,ContinuePos,pobj);
+             if res<>'' then
+               ps:=copy(ps,1,FindedIdPos-1)+res+copy(ps,{EndBracketPos}ContinuePos,length(ps)-{EndBracketPos}ContinuePos+1);
+             startsearhpos:=FindedIdPos+length(res);
              inc(counter);
            end;
-         until (i<=0)or(counter>maxitertations);
+         until (FindedIdPos<=0)or(counter>maxitertations);
        end;
      until (not iterator.Next)or(counter>maxitertations);
      iterator.destroy;
@@ -126,6 +167,7 @@ begin
 end;
 initialization
   Prefix2ProcessFunc:=TPrefix2ProcessFunc.Create;
+  Parser:=TParser.create;
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   Prefix2ProcessFunc.Destroy;

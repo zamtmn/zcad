@@ -315,10 +315,7 @@ end;
 
 end;
 begin
-  k:=1;
-  {$if FPC_FULlVERSION>=20701}
   k:=1/pttf^.ftFont.CapHeight;
-  {$ENDIF}
   BS.VectorData:=@pttf^.FontData;//----//
 
   BS.fmode:=TSM_WaitStartCountur;

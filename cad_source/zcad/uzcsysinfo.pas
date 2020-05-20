@@ -194,7 +194,6 @@ begin
 {$IFDEF DEBUGBUILD}          debugln('{N}Program compiled with {$DEFINE DEBUGDUILD}');{$ENDIF}
 {$IFDEF PERFOMANCELOG}       debugln('{N}Program compiled with {$DEFINE PERFOMANCELOG}');{$ENDIF}
 {$IFDEF BREACKPOINTSONERRORS}debugln('{N}Program compiled with {$DEFINE BREACKPOINTSONERRORS}');{$ENDIF}
-                             {$if FPC_FULlVERSION>=20701}
                              debugln('{N}DefaultSystemCodePage:='+inttostr(DefaultSystemCodePage));
                              //programlog.logoutstr('DefaultSystemCodePage:='+inttostr(DefaultSystemCodePage),0,LM_Necessarily);
                              debugln('{N}DefaultUnicodeCodePage:='+inttostr(DefaultUnicodeCodePage));
@@ -202,7 +201,6 @@ begin
                              debugln('{N}UTF8CompareLocale:='+inttostr(UTF8CompareLocale));
                              //programlog.logoutstr('UTF8CompareLocale:='+inttostr(UTF8CompareLocale),0,LM_Necessarily);
                              {modeswitch systemcodepage}
-                             {$ENDIF}
      debugln('{N}SysParam.ProgramPath="%s"',[ProgramPath]);
      //programlog.LogOutStr(format('SysParam.ProgramPath="%s"',[ProgramPath]),lp_OldPos,LM_Necessarily);
      debugln('{N}SysParam.TempPath="%s"',[TempPath]);

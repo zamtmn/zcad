@@ -660,23 +660,11 @@ end;
 var
   tv,tv1:functiontype;
 begin
-     {if FPC_FULlVERSION>=20701}
-     //foneGDBInteger:=TTypesArray.create(@GDBIntegerDescriptorObj);
-     {ELSE}
      setlength(foneGDBInteger,1);foneGDBInteger[0]:=@FundamentalLongIntDescriptorObj;
-     {ENDIF}
-     {if FPC_FULlVERSION>=20701}
-     //foneGDBDouble:=TTypesArray.create(@FundamentalDoubleDescriptorObj);
-     {ELSE}
      setlength(foneGDBDouble,1);foneGDBDouble[0]:=@FundamentalDoubleDescriptorObj;
-     {ENDIF}
      tv.name:='cos';tv.param:=foneGDBInteger;tv.addr:=Cos_TGDBInteger;
      tv1.name:='cos';tv1.param:=foneGDBDouble;tv1.addr:=Cos_TGDBDouble;
-     {if FPC_FULlVERSION>=20701}
-     //basicfunctionparam:=TFunctionTypeArray.create(tv,tv1);
-     {ELSE}
      setlength(basicfunctionparam,2);
      basicfunctionparam[0]:=tv;
      basicfunctionparam[1]:=tv1;
-     {ENDIF}
 end.

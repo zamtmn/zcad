@@ -263,12 +263,10 @@ begin
      OpenGLWindow.ShowHint:=true;
      //fillchar(myscrbuf,sizeof(tmyscrbuf),0);
 
-     {$if FPC_FULlVERSION>=20701}
      OpenGLWindow.AuxBuffers:=0;
      OpenGLWindow.StencilBits:=8;
      //OpenGLWindow.ColorBits:=24;
      OpenGLWindow.DepthBits:=24;
-     {$ENDIF}
      OpenGLWindow.onpaint:=mypaint;
 end;
 procedure TOpenGLViewArea.WaResize(sender:tobject);

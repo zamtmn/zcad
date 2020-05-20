@@ -39,7 +39,6 @@ function createnewfontfromttf(name:GDBString;var pf:PGDBfont):GDBBoolean;
 var
    i:integer;
    chcode:integer;
-   //k:gdbdouble;
    pttf:PTTFFont;
    si:TTTFSymInfo;
    Iterator:TMapChar.TIterator;
@@ -73,10 +72,6 @@ begin
     pttf^.ftFont.TextWidth('');//It's just a guarantee font loading. I do not need to calculate the any width
     pttf^.ftFont.SizeInPoints:={pttf^.ftFont.SizeInPoints*10}10000;
     pf.font.unicode:=true;
-    //k:=1;
-    {$if FPC_FULlVERSION>=20701}
-    //k:=1/pttf^.ftFont.CapHeight;
-    {$ENDIF}
     for i:=0 to 65535 do
       begin
            chcode:=pttf^.ftFont.CharIndex[i];

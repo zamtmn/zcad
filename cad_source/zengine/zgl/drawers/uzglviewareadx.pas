@@ -809,12 +809,10 @@ begin
      DXWindow.ShowHint:=true;
      //fillchar(myscrbuf,sizeof(tmyscrbuf),0);
 
-     {$if FPC_FULlVERSION>=20701}
      //DXWindow.AuxBuffers:=0;
      //DXWindow.StencilBits:=8;
      //DXWindow.ColorBits:=24;
      //DXWindow.DepthBits:=24;
-     {$ENDIF}
      DXWindow.onpaint:=mypaint;
 end;
 procedure TDX11ViewArea.WaResize(sender:tobject);

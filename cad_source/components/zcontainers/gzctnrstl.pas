@@ -124,11 +124,6 @@ end;
 function TMyHashMap<TKey, TValue{$IFNDEF DELPHI},Thash{$ENDIF}>.MyGetValue(key:TKey; out Value:TValue):boolean;
 {$IFNDEF DELPHI}var i,h,bs:longint;{$ENDIF}
 begin
-  (*
-  {IF FPC_FULlVERSION<=20701}
-  result:=contains(key);
-  if result then value:=self.GetData(key);
-  *)
   {$IFNDEF DELPHI}
   h:=Thash.hash(key,FData.size);
   bs:=(FData[h]).size;
@@ -260,31 +255,9 @@ end;
 function GKey2DataMap<TKey, TValue{$IFNDEF DELPHI},TCompare{$ENDIF}>.MyContans(key:TKey):boolean;
 {$IFNDEF DELPHI}
 var
-   (*
-   {$IF FPC_FULlVERSION<=20701}
-   {$IFDEF OldIteratorDef}
-   TParent:specialize TMap<TKey, TValue, TCompare>;
-   Iterator:TParent.TIterator;
-   {$ELSE}
-   Iterator:TIterator;
-   {$ENDIF}
-   {$ELSE}
-   *)
    Pair:TPair;
    Node: TMSet.PNode;
 begin
-  (*
-  {$IF FPC_FULlVERSION<=20701}
-  Iterator:=Find(key);
-  if Iterator<>nil then
-                           begin
-                                result:=true;
-                                Iterator.Destroy;
-                           end
-                       else
-                           result:=false;
-  {$ELSE}
-  *)
   Pair.Key:=key;
   Node := FSet.NFind(Pair);
   Result := Node <> nil;

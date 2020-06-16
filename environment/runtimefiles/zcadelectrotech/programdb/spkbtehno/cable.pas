@@ -104,12 +104,134 @@ TSPKBTEHNO_TEHNOKIPNGAFRLS_WCS=(_1_2_0_2(*'1х2х0.20'*),
                         _05_06_00(*'5х6'*),
                         _05_10_00(*'5х10'*));
 
+     TSPKBTEHNO_PPGNGA_HF_WCS=(_01_01_50(*'1х1.5'*),
+                        _01_02_50(*'1х2.5'*),
+                        _01_04_00(*'1х4'*),
+                        _01_06_00(*'1х6'*),
+                        _01_10_00(*'1х10'*),
+                        _02_01_50(*'2х1.5'*),
+                        _02_02_50(*'2х2.5'*),
+                        _02_04_00(*'2х4'*),
+                        _02_06_00(*'2х6'*),
+                        _02_10_00(*'2х10'*),
+                        _03_01_50(*'3х1.5'*),
+                        _03_02_50(*'3х2.5'*),
+                        _03_04_00(*'3х4'*),
+                        _03_06_00(*'3х6'*),
+                        _03_10_00(*'3х10'*),
+                        _04_01_50(*'4х1.5'*),
+                        _04_02_50(*'4х2.5'*),
+                        _04_04_00(*'4х4'*),
+                        _04_06_00(*'4х6'*),
+                        _04_10_00(*'4х10'*),
+                        _05_01_50(*'5х1.5'*),
+                        _05_02_50(*'5х2.5'*),
+                        _05_04_00(*'5х4'*),
+                        _05_06_00(*'5х6'*),
+                        _05_10_00(*'5х10'*));
+
+     TSPKBTEHNO_KPPGNGA_HF_WCS=(_04_00_75(*'4х0.75'*),
+                        _05_00_75(*'5х0.75'*),
+                        _07_00_75(*'7х0.75'*),
+                        _10_00_75(*'10х0.75'*),
+                        _14_00_75(*'14х0.75'*),
+                        _19_00_75(*'19х0.75'*),
+                        _27_00_75(*'27х0.75'*),
+                        _37_00_75(*'37х0.75'*),
+                        _52_00_75(*'52х0.75'*),
+                        _04_01_00(*'4х1.0'*),
+                        _05_01_00(*'5х1.0'*),
+                        _07_01_00(*'7х1.0'*),
+                        _10_01_00(*'10х1.0'*),
+                        _14_01_00(*'14х1.0'*),
+                        _19_01_00(*'19х1.0'*),
+                        _27_01_00(*'27х1.0'*),
+                        _37_01_00(*'37х1.0'*),
+                        _52_01_00(*'52х1.0'*),
+                        _04_01_50(*'4х1.5'*),
+                        _05_01_50(*'5х1.5'*),
+                        _07_01_50(*'7х1.5'*),
+                        _10_01_50(*'10х1.5'*),
+                        _14_01_50(*'14х1.5'*),
+                        _19_01_50(*'19х1.5'*),
+                        _27_01_50(*'27х1.5'*),
+                        _37_01_50(*'37х1.5'*),
+                        _52_01_50(*'52х1.5'*),
+                        _04_02_50(*'4х2.5'*),
+                        _05_02_50(*'5х2.5'*),
+                        _07_02_50(*'7х2.5'*),
+                        _10_02_50(*'10х2.5'*),
+                        _14_02_50(*'14х2.5'*),
+                        _19_02_50(*'19х2.5'*),
+                        _27_02_50(*'27х2.5'*),
+                        _37_02_50(*'37х2.5'*),
+                        _52_02_50(*'52х2.5'*),
+                        _04_04_00(*'4х4.0'*),
+                        _07_04_00(*'7х4.0'*),
+                        _10_04_00(*'10х4.0'*),
+                        _04_06_00(*'4х6.0'*),
+                        _07_06_00(*'7х6.0'*),
+                        _10_06_00(*'10х6.0'*));
+
+     TSPKBTEHNO_KPPGNEGA_HF_WCS=(_04_00_75(*'4х0.75'*),
+                        _05_00_75(*'5х0.75'*),
+                        _07_00_75(*'7х0.75'*),
+                        _10_00_75(*'10х0.75'*),
+                        _14_00_75(*'14х0.75'*),
+                        _19_00_75(*'19х0.75'*),
+                        _27_00_75(*'27х0.75'*),
+                        _37_00_75(*'37х0.75'*),
+                        _52_00_75(*'52х0.75'*),
+                        _04_01_00(*'4х1.0'*),
+                        _05_01_00(*'5х1.0'*),
+                        _07_01_00(*'7х1.0'*),
+                        _10_01_00(*'10х1.0'*),
+                        _14_01_00(*'14х1.0'*),
+                        _19_01_00(*'19х1.0'*),
+                        _27_01_00(*'27х1.0'*),
+                        _37_01_00(*'37х1.0'*),
+                        _52_01_00(*'52х1.0'*),
+                        _04_01_50(*'4х1.5'*),
+                        _05_01_50(*'5х1.5'*),
+                        _07_01_50(*'7х1.5'*),
+                        _10_01_50(*'10х1.5'*),
+                        _14_01_50(*'14х1.5'*),
+                        _19_01_50(*'19х1.5'*),
+                        _27_01_50(*'27х1.5'*),
+                        _37_01_50(*'37х1.5'*),
+                        _52_01_50(*'52х1.5'*),
+                        _04_02_50(*'4х2.5'*),
+                        _05_02_50(*'5х2.5'*),
+                        _07_02_50(*'7х2.5'*),
+                        _10_02_50(*'10х2.5'*),
+                        _14_02_50(*'14х2.5'*),
+                        _19_02_50(*'19х2.5'*),
+                        _27_02_50(*'27х2.5'*),
+                        _37_02_50(*'37х2.5'*),
+                        _52_02_50(*'52х2.5'*),
+                        _04_04_00(*'4х4.0'*),
+                        _07_04_00(*'7х4.0'*),
+                        _10_04_00(*'10х4.0'*),
+                        _04_06_00(*'4х6.0'*),
+                        _07_06_00(*'7х6.0'*),
+                        _10_06_00(*'10х6.0'*));
+
+
 
     TSPKBTEHNO_KPKEV_ng_LS=packed object(CableDeviceBaseObject)
                 Wire_Count_Section_DESC:TSPKBTEHNO_KPKEV_WCS;
            end;
     TSPKBTEHNO_PPGNGA_FRHF=packed object(CableDeviceBaseObject)
                 Wire_Count_Section_DESC:TSPKBTEHNO_PPGNGA_FRHF_WCS;
+           end;
+    TSPKBTEHNO_PPGNGA_HF=packed object(CableDeviceBaseObject)
+                Wire_Count_Section_DESC:TSPKBTEHNO_PPGNGA_HF_WCS;
+           end;
+    TSPKBTEHNO_KPPGNGA_HF=packed object(CableDeviceBaseObject)
+                Wire_Count_Section_DESC:TSPKBTEHNO_KPPGNGA_HF_WCS;
+           end;
+    TSPKBTEHNO_KPPGENGA_HF=packed object(CableDeviceBaseObject)
+                Wire_Count_Section_DESC:TSPKBTEHNO_KPPGNEGA_HF_WCS;
            end;
     TSPKBTEHNO_TEHNOKIPNGAFRLS=packed object(CableDeviceBaseObject)
                 Wire_Count_Section_DESC:TSPKBTEHNO_TEHNOKIPNGAFRLS_WCS;
@@ -118,6 +240,9 @@ TSPKBTEHNO_TEHNOKIPNGAFRLS_WCS=(_1_2_0_2(*'1х2х0.20'*),
 var
    _EQ_SPKBTEHNO_KPKEV_ng_LS:TSPKBTEHNO_KPKEV_ng_LS;
    _EQ_SPKBTEHNO_PPGNGA_FRHF:TSPKBTEHNO_PPGNGA_FRHF;
+   _EQ_SPKBTEHNO_PPGNGA_HF:TSPKBTEHNO_PPGNGA_HF;
+   _EQ_SPKBTEHNO_KPPGNGA_HF:TSPKBTEHNO_KPPGNGA_HF;
+   _EQ_SPKBTEHNO_KPPGENGA_HF:TSPKBTEHNO_KPPGENGA_HF;
    _EQ_SPKBTEHNO_TEHNOKIPNGAFRLS:TSPKBTEHNO_TEHNOKIPNGAFRLS;
 implementation
 begin
@@ -172,5 +297,55 @@ begin
      _EQ_SPKBTEHNO_PPGNGA_FRHF.TreeCoord:='BP_СПКБ Техно_Силовые_ППГнг(А)-FRHF|BC_Кабельная продукция_Силовые_ППГнг(А)-FRHF(СПКБ Техно)';
      _EQ_SPKBTEHNO_PPGNGA_FRHF.format;
 
+     _EQ_SPKBTEHNO_PPGNGA_HF.initnul;
+     _EQ_SPKBTEHNO_PPGNGA_HF.Category:=_kables;
+     _EQ_SPKBTEHNO_PPGNGA_HF.Group:=_cables;
+     _EQ_SPKBTEHNO_PPGNGA_HF.EdIzm:=_m;
+     _EQ_SPKBTEHNO_PPGNGA_HF.ID:='SPKBTEHNO_PPGNGA_HF';
+     _EQ_SPKBTEHNO_PPGNGA_HF.Standard:='ТУ 16.К71-304-2001';
+     _EQ_SPKBTEHNO_PPGNGA_HF.OKP:='';
+     _EQ_SPKBTEHNO_PPGNGA_HF.Manufacturer:='ЗАО "СПКБ Техно" г.Подольск';
+     _EQ_SPKBTEHNO_PPGNGA_HF.Description:='Кабели с индексом нг(А)-HF применяются для прокладки в многофункциональных высотных зданиях, комплексах и сооружениях с массовым пребыванием людей и т.п.';
+     _EQ_SPKBTEHNO_PPGNGA_HF.NameShortTemplate:='ППГнг(А)-HF %%[Wire_Count_Section_DESC]';
+     _EQ_SPKBTEHNO_PPGNGA_HF.NameTemplate:='Кабель не распространяющий горение, безгалогенный ППГнг(А)-HF %%[Wire_Count_Section_DESC]';
+     _EQ_SPKBTEHNO_PPGNGA_HF.UIDTemplate:='%%[ID]-%%[Wire_Count_Section_DESC]';
+     _EQ_SPKBTEHNO_PPGNGA_HF.NameFullTemplate:='Кабель не распространяющий горение, безгалогенный ППГнг(А)-HF %%[Wire_Count_Section_DESC]';
+     _EQ_SPKBTEHNO_PPGNGA_HF.Wire_Count_Section_DESC:=_01_02_50;
+     _EQ_SPKBTEHNO_PPGNGA_HF.TreeCoord:='BP_СПКБ Техно_Силовые_ППГнг(А)-HF|BC_Кабельная продукция_Силовые_ППГнг(А)-HF(СПКБ Техно)';
+     _EQ_SPKBTEHNO_PPGNGA_HF.format;
+
+     _EQ_SPKBTEHNO_KPPGNGA_HF.initnul;
+     _EQ_SPKBTEHNO_KPPGNGA_HF.Category:=_kables;
+     _EQ_SPKBTEHNO_KPPGNGA_HF.Group:=_cables;
+     _EQ_SPKBTEHNO_KPPGNGA_HF.EdIzm:=_m;
+     _EQ_SPKBTEHNO_KPPGNGA_HF.ID:='SPKBTEHNO_KPPGNGA_HF';
+     _EQ_SPKBTEHNO_KPPGNGA_HF.Standard:='ТУ 16.К71-304-2001';
+     _EQ_SPKBTEHNO_KPPGNGA_HF.OKP:='';
+     _EQ_SPKBTEHNO_KPPGNGA_HF.Manufacturer:='ЗАО "СПКБ Техно" г.Подольск';
+     _EQ_SPKBTEHNO_KPPGNGA_HF.Description:='Кабели с индексом нг(А)-HF применяются для прокладки в многофункциональных высотных зданиях, комплексах и сооружениях с массовым пребыванием людей и т.п.';
+     _EQ_SPKBTEHNO_KPPGNGA_HF.NameShortTemplate:='КППГнг(А)-HF %%[Wire_Count_Section_DESC]';
+     _EQ_SPKBTEHNO_KPPGNGA_HF.NameTemplate:='Кабель не распространяющий горение, безгалогенный КППГнг(А)-HF %%[Wire_Count_Section_DESC]';
+     _EQ_SPKBTEHNO_KPPGNGA_HF.UIDTemplate:='%%[ID]-%%[Wire_Count_Section_DESC]';
+     _EQ_SPKBTEHNO_KPPGNGA_HF.NameFullTemplate:='Кабель не распространяющий горение, безгалогенный КППГнг(А)-HF %%[Wire_Count_Section_DESC]';
+     _EQ_SPKBTEHNO_KPPGNGA_HF.Wire_Count_Section_DESC:=_04_01_00;
+     _EQ_SPKBTEHNO_KPPGNGA_HF.TreeCoord:='BP_СПКБ Техно_Контрольные_КППГнг(А)-HF|BC_Кабельная продукция_Контрольные_КППГнг(А)-HF(СПКБ Техно)';
+     _EQ_SPKBTEHNO_KPPGNGA_HF.format;
+
+     _EQ_SPKBTEHNO_KPPGENGA_HF.initnul;
+     _EQ_SPKBTEHNO_KPPGENGA_HF.Category:=_kables;
+     _EQ_SPKBTEHNO_KPPGENGA_HF.Group:=_cables;
+     _EQ_SPKBTEHNO_KPPGENGA_HF.EdIzm:=_m;
+     _EQ_SPKBTEHNO_KPPGENGA_HF.ID:='SPKBTEHNO_KPPGENGA_HF';
+     _EQ_SPKBTEHNO_KPPGENGA_HF.Standard:='ТУ 16.К71-304-2001';
+     _EQ_SPKBTEHNO_KPPGENGA_HF.OKP:='';
+     _EQ_SPKBTEHNO_KPPGENGA_HF.Manufacturer:='ЗАО "СПКБ Техно" г.Подольск';
+     _EQ_SPKBTEHNO_KPPGENGA_HF.Description:='Кабели с индексом нг(А)-HF применяются для прокладки в многофункциональных высотных зданиях, комплексах и сооружениях с массовым пребыванием людей и т.п. Экранированные кабели применяются в зданиях и сооружениях с повышенным уровнем электромагнитных помех.';
+     _EQ_SPKBTEHNO_KPPGENGA_HF.NameShortTemplate:='КППГЭнг(А)-HF %%[Wire_Count_Section_DESC]';
+     _EQ_SPKBTEHNO_KPPGENGA_HF.NameTemplate:='Кабель не распространяющий горение, безгалогенный КППГЭнг(А)-HF %%[Wire_Count_Section_DESC]';
+     _EQ_SPKBTEHNO_KPPGENGA_HF.UIDTemplate:='%%[ID]-%%[Wire_Count_Section_DESC]';
+     _EQ_SPKBTEHNO_KPPGENGA_HF.NameFullTemplate:='Кабель не распространяющий горение, безгалогенный, экранированный КППГЭнг(А)-HF %%[Wire_Count_Section_DESC]';
+     _EQ_SPKBTEHNO_KPPGENGA_HF.Wire_Count_Section_DESC:=_04_01_00;
+     _EQ_SPKBTEHNO_KPPGENGA_HF.TreeCoord:='BP_СПКБ Техно_Контрольные_КППГнг(А)-HF|BC_Кабельная продукция_Контрольные_КППГнг(А)-HF(СПКБ Техно)';
+     _EQ_SPKBTEHNO_KPPGENGA_HF.format;
 
 end.

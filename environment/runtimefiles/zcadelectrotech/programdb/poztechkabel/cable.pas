@@ -19,6 +19,24 @@ type
     TPOZTECHCABEL_KPS_ng_FRLSLTX=packed object(CableDeviceBaseObject)
                 Wire_Count_Section_DESC:TPOZTECHCABEL_KPS_ng_FRLSLTX_WCS;
            end;
+     TPOZTECHCABEL_KPS_ng_FRHF_WCS=(_1_2_0_20(*'1х2х0.2'*),
+                                       _2_2_0_20(*'2х2х0.2'*),
+                                       _1_2_0_35(*'1х2х0.35'*),
+                                       _2_2_0_35(*'2х2х0.35'*),
+                                       _1_2_0_5(*'1х2х0.5'*),
+                                       _2_2_0_5(*'2х2х0.5'*),
+                                       _1_2_0_75(*'1х2х0.75'*),
+                                       _2_2_0_75(*'2х2х0.75'*),
+                                       _1_2_1_0(*'1х2х1'*),
+                                       _2_2_1_0(*'2х2х1'*),
+                                       _1_2_1_5(*'1х2х1.5'*),
+                                       _2_2_1_5(*'2х2х1.5'*),
+                                       _1_2_2_5(*'1х2х2.5'*),
+                                       _2_2_2_5(*'2х2х2.5'*));
+    TPOZTECHCABEL_KPS_ng_FRHF=packed object(CableDeviceBaseObject)
+                Wire_Count_Section_DESC:TPOZTECHCABEL_KPS_ng_FRHF_WCS;
+           end;
+
      TPOZTECHCABEL_VVG_ng_FRLSLTX_WCS=(_01_01_50(*'1х1.5'*),
                                        _01_02_50(*'1х2.5'*),
                                        _01_04_00(*'1х4'*),
@@ -55,6 +73,7 @@ type
 
 var
    _EQ_POZTECHCABEL_KPS_ng_FRLSLTX:TPOZTECHCABEL_KPS_ng_FRLSLTX;
+   _EQ_POZTECHCABEL_KPS_ng_FRHF:TPOZTECHCABEL_KPS_ng_FRHF;
    _EQ_POZTECHCABEL_VVG_ng_FRLSLTX:TPOZTECHCABEL_VVG_ng_FRLSLTX;
 implementation
 begin
@@ -74,6 +93,23 @@ begin
      _EQ_POZTECHCABEL_KPS_ng_FRLSLTX.Wire_Count_Section_DESC:=_1_2_0_5;
      _EQ_POZTECHCABEL_KPS_ng_FRLSLTX.TreeCoord:='BP_ПожТехКабель_Сигнальный_КПСнг(А)-FRLSLTx|BC_Кабельная продукция_Связи_КПСнг(А)-FRLSLTx(ПожТехКабель)';
      _EQ_POZTECHCABEL_KPS_ng_FRLSLTX.format;
+
+     _EQ_POZTECHCABEL_KPS_ng_FRHF.initnul;
+     _EQ_POZTECHCABEL_KPS_ng_FRHF.Category:=_kables;
+     _EQ_POZTECHCABEL_KPS_ng_FRHF.Group:=_cables_sv;
+     _EQ_POZTECHCABEL_KPS_ng_FRHF.EdIzm:=_m;
+     _EQ_POZTECHCABEL_KPS_ng_FRHF.ID:='POZTECHCABEL_KPS_ng_FRHF';
+     _EQ_POZTECHCABEL_KPS_ng_FRHF.Standard:='ТУ 3581-003-70304115-2015';
+     _EQ_POZTECHCABEL_KPS_ng_FRHF.OKP:='';
+     _EQ_POZTECHCABEL_KPS_ng_FRHF.Manufacturer:='ООО "ПожТехКабель" г.Саратов';
+     _EQ_POZTECHCABEL_KPS_ng_FRHF.Description:='Предназначен для одиночной и групповой прокладки в системах противопожарной защиты, включая системы охранно-пожарной сигнализации (ОПС), оповещения и управления эвакуацией (СОУЭ), автоматического пожаротушения (АУПТ), противодымной защиты, а также в других автоматических системах безопасности и жизнеобеспечения, которые должны сохранять работоспособность в условиях пожара';
+     _EQ_POZTECHCABEL_KPS_ng_FRHF.NameShortTemplate:='КПСнг(А)-FRHF %%[Wire_Count_Section_DESC]';
+     _EQ_POZTECHCABEL_KPS_ng_FRHF.NameTemplate:='Кабель сигнальный огнестойкий, безгалогенный КПСнг(А)-FRHF %%[Wire_Count_Section_DESC]';
+     _EQ_POZTECHCABEL_KPS_ng_FRHF.UIDTemplate:='%%[ID]-%%[Wire_Count_Section_DESC]';
+     _EQ_POZTECHCABEL_KPS_ng_FRHF.NameFullTemplate:='Кабель сигнальный огнестойкий, безгалогенный КПСнг(А)-FRHF, сечением  %%[Wire_Count_Section_DESC]';
+     _EQ_POZTECHCABEL_KPS_ng_FRHF.Wire_Count_Section_DESC:=_1_2_0_5;
+     _EQ_POZTECHCABEL_KPS_ng_FRHF.TreeCoord:='BP_ПожТехКабель_Сигнальный_КПСнг(А)-FRHF|BC_Кабельная продукция_Связи_КПСнг(А)-FRHF(ПожТехКабель)';
+     _EQ_POZTECHCABEL_KPS_ng_FRHF.format;
 
      _EQ_POZTECHCABEL_VVG_ng_FRLSLTX.initnul;
      _EQ_POZTECHCABEL_VVG_ng_FRLSLTX.Category:=_kables;

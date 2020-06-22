@@ -37,7 +37,10 @@ type
   TChars=set of TTokenizerSymbol;
   TIncludedChars=array [1..MaxIncludedChars+1] of TChars;
   TTokenizerString=gdbstring;
-  TTokenOption=(TOIncludeBrackeOpen,TOVariable,TOFake);
+  TTokenOption=(TOIncludeBrackeOpen,//открывающая скобка входит в имя
+                TONestedBracke,//возможны вложенные скобки
+                TOVariable,//переменный, значение всегда нужно пересчитывать
+                TOFake);//не является токеном
   TTokenOptions=set of TTokenOption;
   TTokenData=record
     Token:string;
@@ -86,14 +89,14 @@ type
     AllChars:TChars;
     Tokenizer:TTokenizer;
     TokenDataVector:TTokenDataVector;
-    tkEmpty,tkRawText,tkEOF:TTokenId;
+    tkEmpty,tkRawText,tkEOF,tkLastPredefToken:TTokenId;
     StoredTokenTextInfo:TTokenTextInfo;
     constructor create;
     procedure clearStoredToken;
     function RegisterToken(const Token:string;const BrackeOpen,BrackeClose:char;const Func:TStrProcessFunc;Options:TTokenOptions=[]):TTokenId;
     procedure OptimizeTokens;
     function GetToken(Text:TTokenizerString;CurrentPos:integer;out TokenTextInfo:TTokenTextInfo):TTokenId;
-
+    procedure ReadOperands(Text:TTokenizerString;TokenId:TTokenId;out TokenTextInfo:TTokenTextInfo);
   end;
 
 implementation
@@ -223,6 +226,8 @@ var
   startpos:integer;
 begin
   //inc(debParserGetTonenCount);
+
+  //если есть запомненый токен на текущей позиции то возвращаем его и выходим
   if StoredTokenTextInfo.TokenId<>tkEmpty then begin
     if StoredTokenTextInfo.TokenStartPos=CurrentPos then begin
       TokenTextInfo:=StoredTokenTextInfo;
@@ -232,16 +237,61 @@ begin
       clearStoredToken;
     end;
   end;
+  //пытаемся прочитать новый токен
   startpos:=CurrentPos;
   result:=Tokenizer.GetToken(Text,CurrentPos,TokenTextInfo,IncludedCharsPos,AllChars);
-  //if result<>tkEOF then
-   if startpos<>TokenTextInfo.TokenStartPos then begin
-     StoredTokenTextInfo:=TokenTextInfo;
-     TokenTextInfo.TokenId:=tkRawText;
-     TokenTextInfo.TokenStartPos:=startpos;
-     TokenTextInfo.TokenLength:=StoredTokenTextInfo.TokenStartPos-startpos;
-     exit(TokenTextInfo.TokenId);
-   end;
+  //пытаемся прочитать операнды токена
+  ReadOperands(Text,result,TokenTextInfo);
+  //если прочитаный токен не на стартовой позиции, запоминаем его и возвращаем tkRawText
+  if startpos<>TokenTextInfo.TokenStartPos then begin
+    StoredTokenTextInfo:=TokenTextInfo;
+    TokenTextInfo.TokenId:=tkRawText;
+    TokenTextInfo.TokenStartPos:=startpos;
+    TokenTextInfo.TokenLength:=StoredTokenTextInfo.TokenStartPos-startpos;
+    exit(TokenTextInfo.TokenId);
+  end;
+end;
+procedure TParser.ReadOperands(Text:TTokenizerString;TokenId:TTokenId;out TokenTextInfo:TTokenTextInfo);
+var
+  currpos:integer;
+  openedbrcount,brcount:integer;
+begin
+    if (not(TOFake in TokenDataVector[TokenId].Options))
+      and (TokenDataVector[TokenId].BrackeOpen<>'')
+      and (TokenDataVector[TokenId].BrackeClose<>'') then
+      begin
+        currpos:=TokenTextInfo.TokenStartPos+TokenTextInfo.TokenLength;
+        if TOIncludeBrackeOpen in TokenDataVector[TokenId].Options then begin
+         openedbrcount:=1;
+         TokenTextInfo.OperandsStartPos:=TokenTextInfo.TokenStartPos+TokenTextInfo.TokenLength;
+        end else begin
+         openedbrcount:=0;
+         TokenTextInfo.OperandsStartPos:=-1;
+        end;
+        brcount:=0;
+        while (currpos<=length(Text))and(not((openedbrcount=0)and(brcount>0))) do
+        begin
+          if Text[currpos]=TokenDataVector[TokenId].BrackeOpen then begin
+            if TokenTextInfo.OperandsStartPos=-1 then
+              TokenTextInfo.OperandsStartPos:=currpos+1;
+            if TONestedBracke in TokenDataVector[TokenId].Options then
+              inc(openedbrcount);
+            inc(brcount);
+          end;
+          if Text[currpos]=TokenDataVector[TokenId].BrackeClose then begin
+            dec(openedbrcount);
+            inc(brcount);
+            if (openedbrcount=0)and(TokenTextInfo.OperandsStartPos>0) then
+              TokenTextInfo.OperandsLength:=currpos-TokenTextInfo.OperandsStartPos;
+          end;
+          inc(currpos);
+        end;
+      end
+    else
+      begin
+        TokenTextInfo.OperandsLength:=0;
+        TokenTextInfo.OperandsStartPos:=TokenTextInfo.TokenStartPos;
+      end
 end;
 
 constructor TParser.create;
@@ -258,6 +308,7 @@ begin
  tkEmpty:=RegisterToken('Empty',#0,#0,nil,[TOFake]);
  tkEOF:=RegisterToken('EOF',#0,#0,nil,[TOFake]);
  tkRawText:=RegisterToken('RawText',#0,#0,nil,[TOFake]);
+ tkLastPredefToken:=tkRawText;
 end;
 
 procedure TParser.clearStoredToken;
@@ -274,8 +325,8 @@ begin
 
   result:=TokenDataVector.Size;
   td.Token:=Token;
-  td.BrackeClose:=BrackeOpen;
-  td.BrackeOpen:=BrackeClose;
+  td.BrackeClose:=BrackeClose;
+  td.BrackeOpen:=BrackeOpen;
   td.Options:=Options;
   td.Func:=Func;
 

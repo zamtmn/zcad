@@ -54,8 +54,12 @@ type
   end;
   TTokenTextInfo=record
     TokenId:TTokenId;
-    TokenStartPos,TokenLength,OperandsStartPos,OperandsLength:integer;
+    TokenStartPos,TokenLength,
+    OperandsStartPos,OperandsLength:integer;
+    NextPos:integer;
   end;
+
+  TTokenTextInfoVector=TMyVector<TTokenTextInfo>;
 
   LessTTokenizerSymbol=TLess<TTokenizerSymbol>;
   TTokenizer=class(GKey2DataMap<TTokenizerSymbol,TTokenizerSymbolData,LessTTokenizerSymbol>)
@@ -83,6 +87,30 @@ type
   end;
   TTokenDataVector=TMyVector<TTokenData>;
 
+  TAbstractParsedText=class
+    Source:TTokenizerString;
+    function GetResult:TTokenizerString;virtual;abstract;
+    constructor Create(_Source:TTokenizerString);
+  end;
+
+  TParsedTextWithoutTokens=class(TAbstractParsedText)
+    function GetResult:TTokenizerString;override;
+  end;
+
+  TParsedTextWithOneToken=class(TAbstractParsedText)
+    TokenTextInfo:TTokenTextInfo;
+    function GetResult:TTokenizerString;override;
+    constructor CreateWithToken(_Source:TTokenizerString;_TokenTextInfo:TTokenTextInfo);
+  end;
+
+
+  TParsedText=class(TAbstractParsedText)
+    Tokens:TTokenTextInfoVector;
+    constructor Create(_Source:TTokenizerString);
+    constructor CreateWithToken(_Source:TTokenizerString;_TokenTextInfo:TTokenTextInfo);
+    procedure AddToken(_TokenTextInfo:TTokenTextInfo);
+  end;
+
   TParser=class
     public
     IncludedCharsPos:TIncludedChars;
@@ -96,16 +124,55 @@ type
     function RegisterToken(const Token:string;const BrackeOpen,BrackeClose:char;const Func:TStrProcessFunc;Options:TTokenOptions=[]):TTokenId;
     procedure OptimizeTokens;
     function GetToken(Text:TTokenizerString;CurrentPos:integer;out TokenTextInfo:TTokenTextInfo):TTokenId;
+    function GetTokens(Text:TTokenizerString):TAbstractParsedText;
     procedure ReadOperands(Text:TTokenizerString;TokenId:TTokenId;out TokenTextInfo:TTokenTextInfo);
   end;
 
 implementation
+
+constructor TAbstractParsedText.Create(_Source:TTokenizerString);
+begin
+  source:=_Source;
+end;
+
+function TParsedTextWithoutTokens.GetResult;
+begin
+  result:=source;
+end;
+
+function TParsedTextWithOneToken.GetResult;
+begin
+  result:=source;
+end;
+constructor TParsedTextWithOneToken.CreateWithToken(_Source:TTokenizerString;_TokenTextInfo:TTokenTextInfo);
+begin
+  Create(_Source);
+  TokenTextInfo:=_TokenTextInfo;
+end;
+
+constructor TParsedText.Create(_Source:TTokenizerString);
+begin
+  inherited Create(_Source);
+  Tokens:=TTokenTextInfoVector.Create;
+end;
+
+procedure TParsedText.AddToken(_TokenTextInfo:TTokenTextInfo);
+begin
+  Tokens.PushBack(_TokenTextInfo);
+end;
+
+constructor TParsedText.CreateWithToken(_Source:TTokenizerString;_TokenTextInfo:TTokenTextInfo);
+begin
+  Create(_Source);
+  AddToken(_TokenTextInfo);
+end;
 
 function TTokenizer.GetToken(Text:TTokenizerString;CurrentPos:integer;out TokenTextInfo:TTokenTextInfo;var IncludedCharsPos:TIncludedChars;var AllChars:TChars):TTokenId;
 begin
   //inc(debTokenizerGetToken);
   TokenTextInfo.TokenStartPos:=CurrentPos;
   result:=SubGetToken(Text,CurrentPos,TokenTextInfo,1,IncludedCharsPos,AllChars);
+  TokenTextInfo.NextPos:=TokenTextInfo.TokenStartPos+TokenTextInfo.TokenLength;
 end;
 
 function TTokenizer.SubGetToken(Text:TTokenizerString;CurrentPos:integer;out TokenTextInfo:TTokenTextInfo;level:integer;var IncludedCharsPos:TIncludedChars;var AllChars:TChars):TTokenId;
@@ -248,9 +315,41 @@ begin
     TokenTextInfo.TokenId:=tkRawText;
     TokenTextInfo.TokenStartPos:=startpos;
     TokenTextInfo.TokenLength:=StoredTokenTextInfo.TokenStartPos-startpos;
+    TokenTextInfo.NextPos:=StoredTokenTextInfo.TokenStartPos;
+    TokenTextInfo.OperandsStartPos:=0;
+    TokenTextInfo.OperandsLength:=0;
     exit(TokenTextInfo.TokenId);
   end;
 end;
+function TParser.GetTokens(Text:TTokenizerString):TAbstractParsedText;
+var
+  TokenTextInfo,PrevTokenTextInfo:TTokenTextInfo;
+  TokensCounter:integer;
+begin
+  result:=nil;
+  TokenTextInfo.NextPos:=1;
+  TokenTextInfo.TokenId:=tkEmpty;
+  TokensCounter:=1;
+  GetToken(Text,TokenTextInfo.NextPos,PrevTokenTextInfo);
+  TokenTextInfo:=PrevTokenTextInfo;
+  while TokenTextInfo.TokenId<>tkEOF do begin
+    inc(TokensCounter);
+    GetToken(Text,TokenTextInfo.NextPos,TokenTextInfo);
+    if (TokenTextInfo.TokenId=tkEOF)and(TokensCounter=2) then begin
+      if PrevTokenTextInfo.TokenId=tkRawText then
+        result:=TParsedTextWithoutTokens.Create(Text)
+      else
+        result:=TParsedTextWithOneToken.CreateWithToken(Text,PrevTokenTextInfo)
+    end else begin
+      if result=nil then
+        result:=TParsedText.CreateWithToken(Text,PrevTokenTextInfo)
+      else
+        TParsedText(result).AddToken(PrevTokenTextInfo);
+    end;
+    PrevTokenTextInfo:=TokenTextInfo;
+  end;
+end;
+
 procedure TParser.ReadOperands(Text:TTokenizerString;TokenId:TTokenId;out TokenTextInfo:TTokenTextInfo);
 var
   currpos:integer;
@@ -286,6 +385,7 @@ begin
           end;
           inc(currpos);
         end;
+        TokenTextInfo.NextPos:=currpos;
       end
     else
       begin

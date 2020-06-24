@@ -115,9 +115,10 @@ initialization
   Parser.RegisterToken('%%[','[',']',@prop2value,[TOIncludeBrackeOpen,TOVariable]);
   Parser.RegisterToken('\',#0,#0,@EscapeSeq);
   Parser.RegisterToken('%%DATE',#0,#0,@date2value,[TOVariable]);
-  a:=Parser.GetToken('END @@[Layer] BEGIN;;',1,TokenTextInfo);
-  a:=Parser.GetToken('END @@[Layer] BEGIN;;',TokenTextInfo.TokenStartPos+TokenTextInfo.TokenLength,TokenTextInfo);
-  a:=Parser.GetToken('END @@[Layer] BEGIN;;',TokenTextInfo.TokenStartPos+TokenTextInfo.TokenLength,TokenTextInfo);
-  a:=Parser.GetToken('END @@[Layer] BEGIN;;',TokenTextInfo.TokenStartPos+TokenTextInfo.TokenLength,TokenTextInfo);
-
+  parser.OptimizeTokens;
+  Parser.GetTokens('@@[Layer]@@[Layer]');
+  a:=Parser.GetToken('_@@[Layer]',1,TokenTextInfo);
+  a:=Parser.GetToken('_@@[Layer]',TokenTextInfo.NextPos,TokenTextInfo);
+  a:=Parser.GetToken('_@@[Layer]',TokenTextInfo.NextPos,TokenTextInfo);
+  a:=Parser.GetToken('_@@[Layer]',TokenTextInfo.NextPos,TokenTextInfo);
 end.

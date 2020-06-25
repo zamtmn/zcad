@@ -15,7 +15,7 @@ uses
   GraphType,generics.collections,uzglviewareaabstract,Menus,
   uzcfnavigatordevicescxmenu,uzbpaths,Toolwin,uzcctrlpartenabler,StrUtils,
   uzctextenteditor,uzcinfoform,uzcsysparams,uzcsysvars,uzetextpreprocessor,
-  Masks,uzelongprocesssupport;
+  Masks,uzelongprocesssupport,uzeentitiestypefilter;
 
 resourcestring
   rsStandaloneDevices='Standalone devices';
@@ -71,6 +71,7 @@ type
     BuggyIconIndex:integer;
     SaveCellRectLeft:integer;
     TreeEnabler:TStringPartEnabler;
+    EntsTypeFilter:TEntsTypeFilter;
 
   public
     TreeBuildMap:string;
@@ -90,6 +91,8 @@ type
     procedure SetPartState(var parts:string;const n:integer;state:boolean);
     function PartsEditor(var parts:string):boolean;
 
+    destructor Destroy; override;
+
   end;
 
 var
@@ -103,6 +106,12 @@ var
 implementation
 
 {$R *.lfm}
+
+destructor TNavigatorDevices.Destroy;
+begin
+  FreeAndNil(EntsTypeFilter);
+  inherited;
+end;
 
 function TNavigatorDevices.EntsFilter(pent:pGDBObjEntity):Boolean;
 var
@@ -131,7 +140,7 @@ var
   end;
 
 begin
-  an:=IncludeEntities;
+  {an:=IncludeEntities;
   if an<>'' then begin
     entname:=pent^.GetObjTypeName;
     alreadyinclude:=false;
@@ -151,7 +160,11 @@ begin
     until an='';
     if not alreadyinclude then
       exit(false);
-  end;
+  end;}
+  {if pent^.GetObjTypeName<>ObjN_GDBObjDevice then
+      exit(false);}
+  if not EntsTypeFilter.IsEntytyTypeAccepted(pent^.GetObjType)then
+      exit(false);
 
   an:=IncludeProperties;
   if an<>'' then begin
@@ -698,7 +711,32 @@ else
 end;
 
 procedure TNavigatorDevices.CreateRoots;
+var
+  cn,an,entname:string;
+  match:boolean;
+  alreadyinclude:boolean;
+  operation:char;
 begin
+  if EntsTypeFilter<>nil then
+    EntsTypeFilter.ResetFilter
+  else
+    EntsTypeFilter:=TEntsTypeFilter.Create;
+  an:=IncludeEntities;
+  if an<>'' then begin
+    repeat
+      GetPartOfPath(cn,an,'|');
+      if cn<>'' then begin
+        operation:=cn[1];
+          cn:=(copy(cn,2,length(cn)-1));
+          if (operation='+') then
+            EntsTypeFilter.AddTypeNameMask(cn);
+          if (operation='-') then
+            EntsTypeFilter.SubTypeNameMask(cn);
+      end;
+    until an='';
+  end;
+  EntsTypeFilter.SetFilter;
+
   //CombinedNode:=TRootNodeDesk.Create(self, NavTree);
   //CombinedNode.ftext:='Combined devices';
   //CombinedNode.ficonindex:=ImagesManager.GetImageIndex('caddie');

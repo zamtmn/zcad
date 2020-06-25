@@ -216,7 +216,7 @@ function CreateNavigatorDevices:TForm;
 begin
  result:=tform(TNavigatorDevices.NewInstance);
  TNavigatorDevices(result).TreeBuildMap:='+NMO_Prefix|+NMO_BaseName|+@@[NMO_Name]';
- TNavigatorDevices(result).IncludeEntities:='+GDBObjDevice';
+ TNavigatorDevices(result).IncludeEntities:='+Device';
  TNavigatorDevices(result).IncludeProperties:='';//'+*|-%%[Name]=EL_CABLE_*';
  TNavigatorDevices(result).UseMainFunctions:=True;
 end;
@@ -224,7 +224,7 @@ function CreateNavigatorRisers:TForm;
 begin
  result:=tform(TNavigatorRisers.NewInstance);
  TNavigatorRisers(result).TreeBuildMap:='+@@[RiserName]:@@[Elevation]:@@[Text]';
- TNavigatorRisers(result).IncludeEntities:='+GDBObjDevice';
+ TNavigatorRisers(result).IncludeEntities:='+Device';
  TNavigatorRisers(result).IncludeProperties:='+%%[Name]=EL_CABLE_*';
  TNavigatorRisers(result).UseMainFunctions:=False;
 end;

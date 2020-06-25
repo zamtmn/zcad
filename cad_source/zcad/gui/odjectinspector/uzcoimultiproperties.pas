@@ -25,8 +25,6 @@ uses
   uzedimensionaltypes,usimplegenerics,varmandef,Varman,garrayutils,gzctnrstl;
 type
   TMultiPropertyUseMode=(MPUM_AllEntsMatched,MPUM_AtLeastOneEntMatched);
-  TObjID2Counter=TMyMapCounter<TObjID,LessObjID>;
-  TObjIDVector=TMyVector<TObjID>;
 
   TMultiProperty=class;
   TMultiPropertyCategory=(MPCGeneral,MPCGeometry,MPCMisc,MPCSummary);

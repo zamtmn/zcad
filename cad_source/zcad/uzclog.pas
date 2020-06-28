@@ -24,8 +24,8 @@ uses UGDBOpenArrayOfByte,gzctnrvectordata,gzctnrstl,LazLoggerBase,
      LazLogger,strutils,sysutils{$IFNDEF DELPHI},LazUTF8{$ENDIF};
 const {$IFDEF DELPHI}filelog='log/zcad_delphi.log';{$ENDIF}
       {$IFDEF FPC}
-                  {$IFDEF LINUX}filelog='log/zcad_linux.log';{$ENDIF}
-                  {$IFDEF WINDOWS}filelog='log/zcad_windows.log';{$ENDIF}
+                  {$IFDEF LINUX}filelog='../../log/zcad_linux.log';{$ENDIF}
+                  {$IFDEF WINDOWS}filelog='../../log/zcad_windows.log';{$ENDIF}
       {$ENDIF}
       lp_IncPos=1;
       lp_DecPos=-lp_IncPos;

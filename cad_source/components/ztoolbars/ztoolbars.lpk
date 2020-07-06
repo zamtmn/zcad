@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
-  <Package Version="5">
+  <Package Version="4">
     <PathDelim Value="\"/>
     <Name Value="ztoolbars"/>
     <Type Value="RunAndDesignTime"/>
@@ -11,41 +11,38 @@
         <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
     </CompilerOptions>
-    <Files>
-      <Item>
+    <Files Count="5">
+      <Item1>
         <Filename Value="uztoolbarsmanager.pas"/>
         <UnitName Value="uztoolbarsmanager"/>
-      </Item>
-      <Item>
+      </Item1>
+      <Item2>
         <Filename Value="uzmenusmanager.pas"/>
         <UnitName Value="uzmenusmanager"/>
-      </Item>
-      <Item>
+      </Item2>
+      <Item3>
         <Filename Value="ugcontextchecker.pas"/>
         <UnitName Value="ugcontextchecker"/>
-      </Item>
-      <Item>
+      </Item3>
+      <Item4>
         <Filename Value="uzmenusdefaults.pas"/>
         <UnitName Value="uzmenusdefaults"/>
-      </Item>
-      <Item>
+      </Item4>
+      <Item5>
         <Filename Value="uzxmlnodesutils.pas"/>
         <UnitName Value="uzxmlnodesutils"/>
-      </Item>
+      </Item5>
     </Files>
-    <RequiredPkgs>
-      <Item>
+    <RequiredPkgs Count="3">
+      <Item1>
         <PackageName Value="zmacros"/>
-      </Item>
-      <Item>
-        <PackageName Value="rtl_generics"/>
-      </Item>
-      <Item>
+      </Item1>
+      <Item2>
         <PackageName Value="LCL"/>
-      </Item>
-      <Item>
+      </Item2>
+      <Item3>
         <PackageName Value="FCL"/>
-      </Item>
+      </Item3>
     </RequiredPkgs>
     <UsageOptions>
       <UnitPath Value="$(PkgOutDir)"/>

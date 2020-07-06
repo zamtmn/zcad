@@ -1,0 +1,46 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: laz.virtualtrees.scannotsetuserdata
+msgctxt "laz.virtualtrees.scannotsetuserdata"
+msgid "Cannot set initial user data because there is not enough user data space allocated."
+msgstr ""
+
+#: laz.virtualtrees.sclipboardfailed
+msgctxt "laz.virtualtrees.sclipboardfailed"
+msgid "Clipboard operation failed."
+msgstr ""
+
+#: laz.virtualtrees.scorruptstream1
+msgctxt "laz.virtualtrees.scorruptstream1"
+msgid "Stream data corrupt. A node's anchor chunk is missing."
+msgstr ""
+
+#: laz.virtualtrees.scorruptstream2
+msgctxt "laz.virtualtrees.scorruptstream2"
+msgid "Stream data corrupt. Unexpected data after node's end position."
+msgstr ""
+
+#: laz.virtualtrees.sstreamtoosmall
+#, fuzzy
+msgctxt "laz.virtualtrees.sstreamtoosmall"
+msgid "Unable to load tree structure, not enough data available."
+msgstr "Ei pystytä lataamaan puurakennetta, ei ole tarpeeksi dataa saatavilla"
+
+#: laz.virtualtrees.swrongmoveerror
+msgctxt "laz.virtualtrees.swrongmoveerror"
+msgid "Target node cannot be a child node of the node to be moved."
+msgstr ""
+
+#: laz.virtualtrees.swrongstreamformat
+#, fuzzy
+msgctxt "laz.virtualtrees.swrongstreamformat"
+msgid "Unable to load tree structure, the format is wrong."
+msgstr "Ei pystytä lataamaan puurakennetta, sen formaatti on väärä"
+
+#: laz.virtualtrees.swrongstreamversion
+#, fuzzy
+msgctxt "laz.virtualtrees.swrongstreamversion"
+msgid "Unable to load tree structure, the version is unknown."
+msgstr "Ei pystytä lataamaan puurakennetta, versio on tuntematon."
+

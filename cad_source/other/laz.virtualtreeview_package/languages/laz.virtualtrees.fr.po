@@ -1,0 +1,53 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2019-02-04 12:59+0100\n"
+"Last-Translator: h.mira@free.fr\n"
+"Language-Team: http://lazarus.developpez.com/\n"
+"MIME-Version: 1.0\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"X-Generator: Poedit 2.2.1\n"
+
+#: laz.virtualtrees.scannotsetuserdata
+msgctxt "laz.virtualtrees.scannotsetuserdata"
+msgid "Cannot set initial user data because there is not enough user data space allocated."
+msgstr "Impossible de définir les données utilisateur initiales parce qu’il n’y a pas suffisamment d'espace de données utilisateur alloué."
+
+#: laz.virtualtrees.sclipboardfailed
+msgctxt "laz.virtualtrees.sclipboardfailed"
+msgid "Clipboard operation failed."
+msgstr "L'opération de presse-papiers a échoué."
+
+#: laz.virtualtrees.scorruptstream1
+msgctxt "laz.virtualtrees.scorruptstream1"
+msgid "Stream data corrupt. A node's anchor chunk is missing."
+msgstr "Flux de données corrompu. Un bloc d’ancrage d'un nœud est manquant."
+
+#: laz.virtualtrees.scorruptstream2
+msgctxt "laz.virtualtrees.scorruptstream2"
+msgid "Stream data corrupt. Unexpected data after node's end position."
+msgstr "Flux de données corrompu. Données inattendues après la position de fin d'un nœud."
+
+#: laz.virtualtrees.sstreamtoosmall
+msgctxt "laz.virtualtrees.sstreamtoosmall"
+msgid "Unable to load tree structure, not enough data available."
+msgstr "Impossible de charger la structure arborescente : pas assez de données disponibles."
+
+#: laz.virtualtrees.swrongmoveerror
+msgctxt "laz.virtualtrees.swrongmoveerror"
+msgid "Target node cannot be a child node of the node to be moved."
+msgstr "Le nœud cible ne peut pas être un nœud enfant du nœud à déplacer."
+
+#: laz.virtualtrees.swrongstreamformat
+msgctxt "laz.virtualtrees.swrongstreamformat"
+msgid "Unable to load tree structure, the format is wrong."
+msgstr "Impossible de charger la structure arborescente : le format est incorrect."
+
+#: laz.virtualtrees.swrongstreamversion
+msgctxt "laz.virtualtrees.swrongstreamversion"
+msgid "Unable to load tree structure, the version is unknown."
+msgstr "Impossible de charger la structure arborescente : la version est inconnue."
+

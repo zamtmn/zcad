@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Package Version="5">
+    <Name Value="laz.virtualtreeview_package"/>
+    <Type Value="RunAndDesignTime"/>
+    <Author Value="Mike Lischke (LCL Port: Luiz Américo)"/>
+    <CompilerOptions>
+      <Version Value="11"/>
+      <SearchPaths>
+        <IncludeFiles Value="include/intf/$(LCLWidgetType);units;include/intf"/>
+        <OtherUnitFiles Value="units/$(LCLWidgetType)"/>
+        <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)-$(LCLWidgetType)"/>
+      </SearchPaths>
+      <Conditionals Value="if VirtualTreeView_Debug = &apos;True&apos; then
+begin
+  CustomOptions := &apos;-dDEBUG_VTV&apos;;
+  UnitPath += &apos;;$PkgOutDir(multiloglaz)&apos;;
+  UsageUnitPath += &apos;;$PkgOutDir(multiloglaz)&apos;;
+end;"/>
+      <BuildMacros>
+        <Count Value="1"/>
+        <Item1>
+          <Identifier Value="VirtualTreeView_Debug"/>
+          <Description Value="Enables debugging of VTV. Requires MultiLog package"/>
+          <Values Count="2">
+            <Item1 Value="True"/>
+            <Item2 Value="False"/>
+          </Values>
+          <ValueDescriptions Count="2"/>
+        </Item1>
+      </BuildMacros>
+      <Parsing>
+        <SyntaxOptions>
+          <CStyleMacros Value="True"/>
+          <UseAnsiStrings Value="False"/>
+        </SyntaxOptions>
+      </Parsing>
+      <Other>
+        <CustomOptions Value="$(IDEBuildOptions)"/>
+      </Other>
+    </CompilerOptions>
+    <Description Value="Virtual Treeview is an advanced TreeView component
+"/>
+    <License Value=" Mozilla Public License 1.1 (MPL 1.1) or GNU Lesser General Public License
+"/>
+    <Version Major="5" Minor="5" Release="3" Build="1"/>
+    <Files Count="8">
+      <Item1>
+        <Filename Value="laz.virtualtrees.pas"/>
+        <UnitName Value="laz.VirtualTrees"/>
+        <CustomOptions Items="FPMake" Version="2">
+          <_FPMake Items="AllCPUs/AllOSes/TargetCPUs/TargetOSes"/>
+        </CustomOptions>
+      </Item1>
+      <Item2>
+        <Filename Value="laz.vtheaderpopup.pas"/>
+        <UnitName Value="laz.VTHeaderPopup"/>
+      </Item2>
+      <Item3>
+        <Filename Value="laz.registervirtualtreeview.pas"/>
+        <HasRegisterProc Value="True"/>
+        <UnitName Value="laz.RegisterVirtualTreeView"/>
+      </Item3>
+      <Item4>
+        <Filename Value="laz.vtgraphics.pas"/>
+        <UnitName Value="laz.VTGraphics"/>
+      </Item4>
+      <Item5>
+        <Filename Value="laz.virtualtrees.res"/>
+        <Type Value="Binary"/>
+      </Item5>
+      <Item6>
+        <Filename Value="laz.vtideeditors.pas"/>
+        <UnitName Value="laz.VTIDEEditors"/>
+      </Item6>
+      <Item7>
+        <Filename Value="laz.ideicons.res"/>
+        <Type Value="Binary"/>
+      </Item7>
+      <Item8>
+        <Filename Value="laz.vtconfig.inc"/>
+        <Type Value="Include"/>
+      </Item8>
+    </Files>
+    <i18n>
+      <EnableI18N Value="True"/>
+      <OutDir Value="languages"/>
+      <EnableI18NForLFM Value="True"/>
+    </i18n>
+    <RequiredPkgs Count="3">
+      <Item1>
+        <PackageName Value="IDEIntf"/>
+      </Item1>
+      <Item2>
+        <PackageName Value="lclextensions_package"/>
+        <MaxVersion Minor="6"/>
+        <MinVersion Minor="6" Valid="True"/>
+      </Item2>
+      <Item3>
+        <PackageName Value="LCL"/>
+      </Item3>
+    </RequiredPkgs>
+    <UsageOptions>
+      <UnitPath Value="$(PkgOutDir)"/>
+    </UsageOptions>
+    <PublishOptions>
+      <Version Value="2"/>
+    </PublishOptions>
+    <CustomOptions Items="ExternHelp" Version="2">
+      <_ExternHelp Items="Count"/>
+    </CustomOptions>
+  </Package>
+</CONFIG>

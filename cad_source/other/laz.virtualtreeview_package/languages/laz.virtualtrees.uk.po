@@ -1,0 +1,55 @@
+# Olexandr Pylypchuk <pilipchukap@rambler.ru>, 2017, 2018.
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2018-01-09 15:08+0200\n"
+"Last-Translator: Olexandr Pylypchuk <lxlalexlxl@ukr.net>\n"
+"Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ru\n"
+"X-Generator: Lokalize 2.0\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: laz.virtualtrees.scannotsetuserdata
+msgctxt "laz.virtualtrees.scannotsetuserdata"
+msgid "Cannot set initial user data because there is not enough user data space allocated."
+msgstr "Неможливо встановити початкові дані користувача через нестачу виділеної для них пам'яті."
+
+#: laz.virtualtrees.sclipboardfailed
+msgctxt "laz.virtualtrees.sclipboardfailed"
+msgid "Clipboard operation failed."
+msgstr "Операція з буфером обміну завершилась з помилкою."
+
+#: laz.virtualtrees.scorruptstream1
+msgctxt "laz.virtualtrees.scorruptstream1"
+msgid "Stream data corrupt. A node's anchor chunk is missing."
+msgstr "Потік даних пошкоджено. Відсутня заголовкова послідовність елемента."
+
+#: laz.virtualtrees.scorruptstream2
+msgctxt "laz.virtualtrees.scorruptstream2"
+msgid "Stream data corrupt. Unexpected data after node's end position."
+msgstr "Потік даних пошкоджено. Виявлено несподівані дані після кінця елемента."
+
+#: laz.virtualtrees.sstreamtoosmall
+msgctxt "laz.virtualtrees.sstreamtoosmall"
+msgid "Unable to load tree structure, not enough data available."
+msgstr "Неможливо завантажити структуру дерева через нестачу даних."
+
+#: laz.virtualtrees.swrongmoveerror
+msgctxt "laz.virtualtrees.swrongmoveerror"
+msgid "Target node cannot be a child node of the node to be moved."
+msgstr "Цільовий елемент не може бути дочірнім щодо переміщуваного."
+
+#: laz.virtualtrees.swrongstreamformat
+msgctxt "laz.virtualtrees.swrongstreamformat"
+msgid "Unable to load tree structure, the format is wrong."
+msgstr "Неможливо завантажити структуру дерева через неправильний формат."
+
+#: laz.virtualtrees.swrongstreamversion
+msgctxt "laz.virtualtrees.swrongstreamversion"
+msgid "Unable to load tree structure, the version is unknown."
+msgstr "Неможливо завантажити структуру дерева, невідома версія."
+

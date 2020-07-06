@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Makefile Value="2"/>
+  <Params Value=" -Fuunits/$(LCL_PLATFORM);../../packager/units/$(CPU_TARGET)-$(OS_TARGET);../lazutils/lib/$(CPU_TARGET)-$(OS_TARGET);../../lcl/units/$(CPU_TARGET)-$(OS_TARGET);../../lcl/units/$(CPU_TARGET)-$(OS_TARGET)/$(LCL_PLATFORM);../lazcontrols/lib/$(CPU_TARGET)-$(OS_TARGET)/$(LCL_PLATFORM);../lclextensions/lib/$(CPU_TARGET)-$(OS_TARGET)-$(LCL_PLATFORM);../ideintf/units/$(CPU_TARGET)-$(OS_TARGET)/$(LCL_PLATFORM);. -Fiinclude/intf/$(LCL_PLATFORM);units;include/intf  -MObjFPC -Scgim -O1 -g -gl -l -vewnhibq -dLCL -dLCL$(LCL_PLATFORM) laz.virtualtreeview_package.pas"/>
+</CONFIG>

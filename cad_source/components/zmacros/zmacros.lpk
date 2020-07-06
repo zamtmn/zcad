@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
-  <Package Version="5">
+  <Package Version="4">
     <PathDelim Value="\"/>
     <Name Value="zmacros"/>
     <Type Value="RunAndDesignTime"/>
@@ -12,22 +12,22 @@
         <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
     </CompilerOptions>
-    <Files>
-      <Item>
+    <Files Count="1">
+      <Item1>
         <Filename Value="uzmacros.pas"/>
         <UnitName Value="uzmacros"/>
-      </Item>
+      </Item1>
     </Files>
-    <RequiredPkgs>
-      <Item>
+    <RequiredPkgs Count="3">
+      <Item1>
         <PackageName Value="CodeTools"/>
-      </Item>
-      <Item>
+      </Item1>
+      <Item2>
         <PackageName Value="IDEIntf"/>
-      </Item>
-      <Item>
+      </Item2>
+      <Item3>
         <PackageName Value="FCL"/>
-      </Item>
+      </Item3>
     </RequiredPkgs>
     <UsageOptions>
       <UnitPath Value="$(PkgOutDir)"/>

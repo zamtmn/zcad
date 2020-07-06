@@ -1,0 +1,54 @@
+# Valdas Jankunas <zmuogs@gmail.com>, 2017.
+msgid ""
+msgstr ""
+"Last-Translator: Valdas Jankunas <zmuogs@gmail.com>\n"
+"PO-Revision-Date: 2017-07-05 19:52+0200\n"
+"Project-Id-Version: \n"
+"Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
+"Language: lt\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"MIME-Version: 1.0\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Lokalize 2.0\n"
+
+#: laz.virtualtrees.scannotsetuserdata
+#, fuzzy
+msgid "Cannot set initial user data because there is not enough user data space allocated."
+msgstr "Nepavyko nustatyti pradinių naudotojo duomenų, nes naudotojo duomenims priskirta nepakankamai atminties."
+
+#: laz.virtualtrees.sclipboardfailed
+#, fuzzy
+msgid "Clipboard operation failed."
+msgstr "Operacija su iškarpine žlugo."
+
+#: laz.virtualtrees.scorruptstream1
+#, fuzzy
+msgid "Stream data corrupt. A node's anchor chunk is missing."
+msgstr "Srauto duomenys sugedę. Trūksta mazgo prieraišos dalies."
+
+#: laz.virtualtrees.scorruptstream2
+#, fuzzy
+msgid "Stream data corrupt. Unexpected data after node's end position."
+msgstr "Srauto duomenys sugedę. Mazgo gale yra duomenų, kurių nesitikėta."
+
+#: laz.virtualtrees.sstreamtoosmall
+#, fuzzy
+msgid "Unable to load tree structure, not enough data available."
+msgstr "Nepavyko įkelti medžio struktūrą, nes nepakanka duomenų."
+
+#: laz.virtualtrees.swrongmoveerror
+#, fuzzy
+msgid "Target node cannot be a child node of the node to be moved."
+msgstr "Paskirties mazgas negali būti perkeliamojo mazgo pomazgiu."
+
+#: laz.virtualtrees.swrongstreamformat
+#, fuzzy
+msgid "Unable to load tree structure, the format is wrong."
+msgstr "Nepavyko įkelti medžio struktūrą, nes netinkamas formatas."
+
+#: laz.virtualtrees.swrongstreamversion
+#, fuzzy
+msgid "Unable to load tree structure, the version is unknown."
+msgstr "Nepavyko įkelti medžio struktūrą, nes nežinoma laida."
+

@@ -1,0 +1,35 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: laz.virtualtrees.scannotsetuserdata
+msgid "Cannot set initial user data because there is not enough user data space allocated."
+msgstr ""
+
+#: laz.virtualtrees.sclipboardfailed
+msgid "Clipboard operation failed."
+msgstr ""
+
+#: laz.virtualtrees.scorruptstream1
+msgid "Stream data corrupt. A node's anchor chunk is missing."
+msgstr ""
+
+#: laz.virtualtrees.scorruptstream2
+msgid "Stream data corrupt. Unexpected data after node's end position."
+msgstr ""
+
+#: laz.virtualtrees.sstreamtoosmall
+msgid "Unable to load tree structure, not enough data available."
+msgstr ""
+
+#: laz.virtualtrees.swrongmoveerror
+msgid "Target node cannot be a child node of the node to be moved."
+msgstr ""
+
+#: laz.virtualtrees.swrongstreamformat
+msgid "Unable to load tree structure, the format is wrong."
+msgstr ""
+
+#: laz.virtualtrees.swrongstreamversion
+msgid "Unable to load tree structure, the version is unknown."
+msgstr ""
+

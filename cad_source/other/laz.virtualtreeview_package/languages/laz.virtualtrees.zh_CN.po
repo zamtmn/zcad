@@ -1,0 +1,46 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Project-Id-Version: X-1.9\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: 郑建平@夏宗萍 aka  robsean <robsean@126.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_CN\n"
+"X-Generator: Poedit 1.8.7.1\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+
+#: laz.virtualtrees.scannotsetuserdata
+msgid "Cannot set initial user data because there is not enough user data space allocated."
+msgstr "不能设置初始化用户数据 因为这里没有足够的用户数据空间被分配."
+
+#: laz.virtualtrees.sclipboardfailed
+msgid "Clipboard operation failed."
+msgstr "剪贴板操作失败."
+
+#: laz.virtualtrees.scorruptstream1
+msgid "Stream data corrupt. A node's anchor chunk is missing."
+msgstr "流数据损坏.一个节点的锚/固定chunk(块)丢失."
+
+#: laz.virtualtrees.scorruptstream2
+msgid "Stream data corrupt. Unexpected data after node's end position."
+msgstr "流数据损坏.意外数据在节点的end位置"
+
+#: laz.virtualtrees.sstreamtoosmall
+msgid "Unable to load tree structure, not enough data available."
+msgstr "不能加载树结构,没有足够的数据可用"
+
+#: laz.virtualtrees.swrongmoveerror
+msgid "Target node cannot be a child node of the node to be moved."
+msgstr "目标(Target)节点不能是一个将被移动节点的子节点"
+
+#: laz.virtualtrees.swrongstreamformat
+msgid "Unable to load tree structure, the format is wrong."
+msgstr "不能加载树结构,该格式是错误的"
+
+#: laz.virtualtrees.swrongstreamversion
+msgid "Unable to load tree structure, the version is unknown."
+msgstr "不能加载树结构,该版本是未知的"
+

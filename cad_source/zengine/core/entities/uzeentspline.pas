@@ -242,7 +242,7 @@ begin
   AproxPointInWCS.Shrink;
 
   Representation.Clear;
-  Representation.DrawPolyLineWithLT(dc,AproxPointInWCS,vp,closed,false);
+  Representation.DrawPolyLineWithLT(dc,AproxPointInWCS,vp,false,false);
   calcbb(dc);
 end;
 

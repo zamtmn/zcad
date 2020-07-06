@@ -166,8 +166,10 @@ constructor TGLUInterface.init;
 begin
 
 end;
+
 var
    p:pchar;
+initialization
 begin
      GLUIntrf.init;
      p:=GLUIntrf.mygluGetString(GLU_VERSION);
@@ -178,4 +180,7 @@ begin
      GLUExtensions:=p;
      debugln('{I}GLU Extensions:="%s"',[p]);
      //programlog.LogOutFormatStr('GLU Extensions:="%s"',[p],0,LM_Info);
+end
+finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

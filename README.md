@@ -27,15 +27,13 @@ ToDo:
 ## Build from source
 Requirements:
 
-* **Lazarus 2.0 RC1 (or trunk)**
-* **FPC 3.0.4 (or trunk)**
+* **Lazarus 2.0.10 (or trunk)**
+* **FPC 3.2 (or trunk)**
 
 Build ZCAD:
 
-* install **cad_sources/other/rtl-generics_for_FPC304** package to lazarus if you use **fpc 3.0.4**
-* install **cad_sources/other/rtl-generics_dummy** package to lazarus if you use **trunk fpc**
 * install zcad packages from '**cad_sources/components**' to lazarus
-* install third party packages from '**cad_sources/other**' to lazarus
+* install third party packages from '**cad_sources/other**' to lazarus (cad_source\other\AGraphLaz\lazarus\*.lpk; cad_source\other\laz.virtualtreeview_package\laz.virtualtreeview_package.lpk)
 * check whether the **PATH** variable includes path to lazbuild binary
 * if need set **PATH** variable: `$ export PATH="$PATH:/your/patch/to/lazarus/"`
 * run `$ ./zcad.sh` (or zcadelectrotech.sh) file

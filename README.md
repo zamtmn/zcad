@@ -34,7 +34,7 @@ Build ZCAD:
 
 * install zcad packages from '**cad_sources/components**' to lazarus
 * install third party packages from '**cad_sources/other**' to lazarus:
-  * cad_source\other\AGraphLaz\lazarus\*.lpk
+  * cad_source\other\AGraphLaz\lazarus\ *.lpk
   * cad_source\other\laz.virtualtreeview_package\laz.virtualtreeview_package.lpk
   * cad_source\other\uniqueinstance\uniqueinstance_package.lpk
 * check whether the **PATH** variable includes path to lazbuild binary

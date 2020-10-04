@@ -2354,7 +2354,7 @@ begin
           ProcessBar.max:=0;
           ProcessBar.position:=0;
      end;
-    application.ProcessMessages;
+    //application.ProcessMessages;//halg zcad after Lazarus r63888
     time:=(now-LPTime)*10e4;
     str(time:3:2,ts);
     if pname='' then

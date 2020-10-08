@@ -121,6 +121,9 @@ GDBStringGeneralDescriptor<T,TManipulator>=object(BaseTypeDescriptor<T,TManipula
                           procedure MagicFreeInstance(PInstance:Pointer);virtual;
                           procedure MagicAfterCopyInstance(PInstance:Pointer);virtual;
                     end;
+TSTM_UnicodeString=TStringTypeManipulator<UnicodeString>;
+GDBUnicodeStringDescriptor=object(GDBStringGeneralDescriptor<string,TSTM_UnicodeString>)
+                    end;
 TSTM_String=TStringTypeManipulator<String>;
 GDBStringDescriptor=object(GDBStringGeneralDescriptor<string,{TStringTypeManipulator<string>}TSTM_String>)
                           procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:Pointer;prefix:TInternalScriptString);virtual;
@@ -150,6 +153,7 @@ function MyDataToStr(data:TEnumData):string;overload;*)
 
 var
 FundamentalDoubleDescriptorObj:GDBDoubleDescriptor;
+FundamentalUnicodeStringDescriptorObj:GDBUnicodeStringDescriptor;
 FundamentalStringDescriptorObj:GDBStringDescriptor;
 FundamentalAnsiStringDescriptorObj:GDBAnsiStringDescriptor;
 FundamentalWordDescriptorObj:TFundamentalWordDescriptor;
@@ -483,17 +487,17 @@ begin
 end;
 procedure GDBStringGeneralDescriptor<T,TManipulator>.CopyInstanceTo;
 begin
-     pstring(dest)^:=pstring(source)^;
+     PT(dest)^:=PT(source)^;
 end;
 procedure GDBStringGeneralDescriptor<T,TManipulator>.MagicFreeInstance;
 begin
-     pstring(Pinstance)^:='';
+     {pstring}PT(Pinstance)^:='';
 end;
 procedure GDBStringGeneralDescriptor<T,TManipulator>.MagicAfterCopyInstance;
 var
-   s:TInternalScriptString;
+   s:{TInternalScriptString}T;
 begin
-     s:=pstring(Pinstance)^;
+     s:=pt(Pinstance)^;
      killstring(s);
      //pointer(s):=nil;
      //KillString(pstring(Pinstance)^);
@@ -590,6 +594,7 @@ begin
      FundamentalInt64Descriptor.init('Int64',nil);
 
      FundamentalStringDescriptorObj.init('String',nil);
+     FundamentalUnicodeStringDescriptorObj.init('UnicodeString',nil);
      FundamentalAnsiStringDescriptorObj.init('AnsiString',nil);
 
      FundamentalDoubleDescriptorObj.init('Double',nil);

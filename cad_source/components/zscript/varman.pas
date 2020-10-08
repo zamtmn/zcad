@@ -706,6 +706,7 @@ begin
      AddTypeByRef(FundamentalQWordDescriptorObj);
      AddTypeByRef(FundamentalDoubleDescriptorObj);
      AddTypeByRef(FundamentalStringDescriptorObj);
+     AddTypeByRef(FundamentalUnicodeStringDescriptorObj);
      AddTypeByRef(FundamentalAnsiStringDescriptorObj);
      AddTypeByRef(FundamentalSingleDescriptorObj);
      AddTypeByRef(GDBEnumDataDescriptorObj);

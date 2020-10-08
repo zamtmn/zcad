@@ -51,6 +51,7 @@ type
                renderdeb:trenderdeb;
                languadedeb:tlanguadedeb;
                ShowHiddenFieldInObjInsp:PGDBBoolean;(*'Show hidden fields'*)
+               TestUnicodeString:UnicodeString;
         end;
   tpath=packed record
              Device_Library:PGDBString;(*'Device base'*)
@@ -254,6 +255,7 @@ begin
   {$ENDIF}
     SysVar.debug.languadedeb.NotEnlishWord:=0;
     SysVar.debug.languadedeb.UpdatePO:=0;
+    SysVar.debug.TestUnicodeString:=UTF8ToString('你好来自俄罗斯');
     sysvar.RD.RD_RendererBackEnd:=nil;
 end.
 

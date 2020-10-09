@@ -626,7 +626,7 @@ begin
              canvas.Font.Underline:=true;
              end;}
   if (r.Right-r.Left)>1 then
-  ThemeServices.DrawText(Canvas,TextDetails,name,r,DT_END_ELLIPSIS,0);
+  ThemeServices.DrawText(Canvas,TextDetails,name,r,DT_END_ELLIPSIS or DT_NOPREFIX,0);
   {//canvas.TextRect(r,r.Left,r.Top,(name));
   canvas.Font.Italic:=false;
   if onm then
@@ -728,7 +728,7 @@ var
    s2:string;}
 begin
      if (r.Right-r.Left)>1 then
-     ThemeServices.DrawText(cnvs,TextDetails,s,r,DT_END_ELLIPSIS or DT_SINGLELINE,0)
+     ThemeServices.DrawText(cnvs,TextDetails,s,r,DT_END_ELLIPSIS or DT_SINGLELINE or DT_NOPREFIX,0)
      {if length(s)<maxsize then
                           //cnvs.TextRect(r,L,T,s)
                           ThemeServices.DrawText(cnvs,TextDetails,s,r,DT_END_ELLIPSIS,0)
@@ -921,7 +921,7 @@ begin
                                       end;}
                    //canvas.TextRect(r,r.Left,r.Top,(ppd^.Name));
                    if (r.Right-r.Left)>1 then
-                   ThemeServices.DrawText(Canvas,TextDetails,ppd^.Name,r,DT_END_ELLIPSIS,0);
+                   ThemeServices.DrawText(Canvas,TextDetails,ppd^.Name,r,DT_END_ELLIPSIS or DT_NOPREFIX,0);
                    {if OnMouseProp then
                                       begin
                                       //canvas.Font.bold:=false;
@@ -1070,14 +1070,14 @@ begin
 
     DefaultDetails := ThemeServices.GetElementDetails(thHeaderItemNormal);
     ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, hrect, nil);
-    ThemeServices.DrawText(Canvas,DefaultDetails,PropertyRowName,hrect,DT_END_ELLIPSIS or DT_CENTER or DT_VCENTER,0);
+    ThemeServices.DrawText(Canvas,DefaultDetails,PropertyRowName,hrect,DT_END_ELLIPSIS or DT_CENTER or DT_VCENTER or DT_NOPREFIX,0);
 
     DefaultDetails := ThemeServices.GetElementDetails(thHeaderItemRightNormal);
     hrect.Left:=hrect.right;
     {$IFDEF WINDOWS}hrect.right:=ARect.Right-1;{$ENDIF}
     {$IFNDEF WINDOWS}hrect.right:=ARect.Right-2;{$ENDIF}
     ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, hrect, nil);
-    ThemeServices.DrawText(Canvas,DefaultDetails,ValueRowName,hrect,DT_END_ELLIPSIS or DT_CENTER or DT_VCENTER,0);
+    ThemeServices.DrawText(Canvas,DefaultDetails,ValueRowName,hrect,DT_END_ELLIPSIS or DT_CENTER or DT_VCENTER or DT_NOPREFIX,0);
 end;
 if NeedShowSeparator then
 begin

@@ -122,7 +122,7 @@ GDBStringGeneralDescriptor<T,TManipulator>=object(BaseTypeDescriptor<T,TManipula
                           procedure MagicAfterCopyInstance(PInstance:Pointer);virtual;
                     end;
 TSTM_UnicodeString=TStringTypeManipulator<UnicodeString>;
-GDBUnicodeStringDescriptor=object(GDBStringGeneralDescriptor<string,TSTM_UnicodeString>)
+GDBUnicodeStringDescriptor=object(GDBStringGeneralDescriptor<UnicodeString,TSTM_UnicodeString>)
                     end;
 TSTM_String=TStringTypeManipulator<String>;
 GDBStringDescriptor=object(GDBStringGeneralDescriptor<string,{TStringTypeManipulator<string>}TSTM_String>)
@@ -498,8 +498,8 @@ var
    s:{TInternalScriptString}T;
 begin
      s:=pt(Pinstance)^;
-     killstring(s);
-     //pointer(s):=nil;
+     //killstring(s);
+     pointer(s):=nil;
      //KillString(pstring(Pinstance)^);
 end;
 

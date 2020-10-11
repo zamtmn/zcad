@@ -255,6 +255,7 @@ begin
   {$ENDIF}
     SysVar.debug.languadedeb.NotEnlishWord:=0;
     SysVar.debug.languadedeb.UpdatePO:=0;
+    //SysVar.debug.TestUnicodeString:=UTF8ToString('test ゔ&#12436');
     SysVar.debug.TestUnicodeString:=UTF8ToString('你好来自俄罗斯');
     sysvar.RD.RD_RendererBackEnd:=nil;
 end.

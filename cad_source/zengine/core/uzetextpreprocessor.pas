@@ -35,9 +35,7 @@ type
 
 var
     Prefix2ProcessFunc:TPrefix2ProcessFunc;
-    //Tokenizer:TTokenizer;
     Parser:TParser;
-    {TokenPos,}a:integer;
 function textformat(s:GDBString;pobj:GDBPointer):GDBString;
 function convertfromunicode(s:GDBString):GDBString;
 implementation
@@ -149,7 +147,7 @@ begin
                EndBracketPos:=ContinuePos;
              ContinuePos:=EndBracketPos;
              res:=iterator.value.func(ps,operands,ContinuePos,pobj);
-             if res<>'' then
+             //if res<>'' then
                ps:=copy(ps,1,FindedIdPos-1)+res+copy(ps,{EndBracketPos}ContinuePos,length(ps)-{EndBracketPos}ContinuePos+1);
              startsearhpos:=FindedIdPos+length(res);
              inc(counter);

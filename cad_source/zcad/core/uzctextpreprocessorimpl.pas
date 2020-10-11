@@ -22,10 +22,30 @@ unit uzctextpreprocessorimpl;
 interface
 uses uzeentity,uzcvariablesutils,uzetextpreprocessor,languade,uzbstrproc,sysutils,
      uzbtypesbase,varmandef,uzbtypes,uzcenitiesvariablesextender,uzeentsubordinated,
-     uzcpropertiesutils,uzeparser;
+     uzcpropertiesutils,uzeparser,LazUTF8;
+type
+  TStr2VarProcessor=class(TDynamicStrProcessor)
+    function GetResult(const str:gdbstring;const operands:gdbstring;var NextSymbolPos:integer;pobj:Pointer):gdbstring;
+  end;
 var
   TokenTextInfo:TTokenTextInfo;
+  pt:TAbstractParsedText;
+  s:gdbstring;
 implementation
+function TStr2VarProcessor.GetResult(const str:gdbstring;const operands:gdbstring;var NextSymbolPos:integer;pobj:Pointer):gdbstring;
+var
+  varname:GDBString;
+  pv:pvardesk;
+begin
+  pv:=nil;
+  if pobj<>nil then
+    pv:=FindVariableInEnt(PGDBObjEntity(pobj),operands);
+  if pv<>nil then
+    result:=pv^.data.ptd^.GetValueAsString(pv^.data.Instance)
+  else
+    result:='!!ERR('+varname+')!!';
+end;
+
 function prop2value(const str:gdbstring;const operands:gdbstring;var NextSymbolPos:integer;pobj:Pointer):gdbstring;
 begin
   if GetProperty(pobj,operands,result) then
@@ -89,7 +109,7 @@ begin
       'U','u':begin
                 value:='$'+copy(str,NextSymbolPos+2,4);
                 val(value,num,code);
-                result:=Chr(uch2ach(num));
+                result:={Chr(uch2ach(num))}{Tria_Utf8ToAnsi}(UnicodeToUtf8(num));
                 NextSymbolPos:=NextSymbolPos+5;
               end
     else
@@ -111,14 +131,20 @@ initialization
   Prefix2ProcessFunc.RegisterProcessor('\',#0,#0,@EscapeSeq);
   Prefix2ProcessFunc.RegisterProcessor('%%DATE',#0,#0,@date2value,true);
 
-  Parser.RegisterToken('@@[','[',']',@var2value,[TOIncludeBrackeOpen,TOVariable]);
-  Parser.RegisterToken('%%[','[',']',@prop2value,[TOIncludeBrackeOpen,TOVariable]);
-  Parser.RegisterToken('\',#0,#0,@EscapeSeq);
-  Parser.RegisterToken('%%DATE',#0,#0,@date2value,[TOVariable]);
+  Parser.RegisterToken('@@[','[',']',{@var2value}TStr2VarProcessor,[TOIncludeBrackeOpen,TOVariable]);
+  //Parser.RegisterToken('%%[','[',']',@prop2value,[TOIncludeBrackeOpen,TOVariable]);
+  //Parser.RegisterToken('\',#0,#0,@EscapeSeq);
+  //Parser.RegisterToken('%%DATE',#0,#0,@date2value,[TOVariable]);
   parser.OptimizeTokens;
-  Parser.GetTokens('@@[Layer]@@[Layer]');
-  a:=Parser.GetToken('_@@[Layer]',1,TokenTextInfo);
+  pt:=Parser.GetTokens('@@[Layer]@@[Layer]');
+  {pt.SetOperands;
+  pt.SetData;
+  pt.GetResult;}
+  pt.Free;
+ { a:=Parser.GetToken('_@@[Layer]',1,TokenTextInfo);
   a:=Parser.GetToken('_@@[Layer]',TokenTextInfo.NextPos,TokenTextInfo);
   a:=Parser.GetToken('_@@[Layer]',TokenTextInfo.NextPos,TokenTextInfo);
   a:=Parser.GetToken('_@@[Layer]',TokenTextInfo.NextPos,TokenTextInfo);
+  vp:=TStr2VarProcessor.create;
+  spc:=TStr2VarProcessor;}
 end.

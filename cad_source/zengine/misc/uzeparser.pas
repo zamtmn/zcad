@@ -23,6 +23,30 @@ uses sysutils,uzbtypesbase,gzctnrstl,LazLogger,gutil;
 const MaxCashedValues=4;
       MaxIncludedChars=2;
 type
+  TSubStr=record
+    StartPos,Length:integer;
+  end;
+
+  TProcessorType=(PTStatic,PTDynamic);
+  TProcessorState=(PSDataChanged,PSOperandsChanged);
+  TProcessorStates=set of TProcessorState;
+  TStrProcessor=class
+    procedure SetDataAndResult(data:pointer)virtual;abstract;
+    procedure SetOperands(operands:gdbstring)virtual;abstract;
+    //function GetResult:TTokenizerString;virtual;abstract;
+
+    class function StaticGetResult(const str:gdbstring;const operands:gdbstring;var startpos:integer;data:pointer):gdbstring;virtual;abstract;
+    //function GetResult(const str:gdbstring;const operands:gdbstring;var startpos:integer;data:pointer):gdbstring;virtual;abstract;
+    class function GetProcessorType:TProcessorType;virtual;abstract;
+  end;
+  TStrProcessorClass=class of TStrProcessor;
+  TStaticStrProcessor=class(TStrProcessor)
+    class function GetProcessorType:TProcessorType;override;
+  end;
+  TDynamicStrProcessor=class(TStrProcessor)
+    class function GetProcessorType:TProcessorType;override;
+  end;
+
   TStrProcessFunc=function(const str:gdbstring;const operands:gdbstring;var startpos:integer;pobj:pointer):gdbstring;
   TStrProcessorData=record
     Id:gdbstring;
@@ -46,20 +70,28 @@ type
     Token:string;
     BrackeOpen,BrackeClose:char;
     Options:TTokenOptions;
-    Func:TStrProcessFunc;
+    {Func}ProcessorClass:{TStrProcessFunc}TStrProcessorClass;
   end;
   TTokenizerSymbolData=record
     NextSymbol:TTokenizer;
     TokenId:TTokenId;
   end;
+
   TTokenTextInfo=record
     TokenId:TTokenId;
-    TokenStartPos,TokenLength,
-    OperandsStartPos,OperandsLength:integer;
+    TokenPos:TSubStr;
+    OperandsPos:TSubStr;
     NextPos:integer;
   end;
 
-  TTokenTextInfoVector=TMyVector<TTokenTextInfo>;
+  TTextPart=record
+    TextInfo:TTokenTextInfo;
+    TokenInfo:TTokenData;
+    Processor:TStrProcessor;
+    Rez:gdbstring;
+  end;
+
+  TTextPartsVector=TMyVector<{TTokenTextInfo}TTextPart>;
 
   LessTTokenizerSymbol=TLess<TTokenizerSymbol>;
   TTokenizer=class(GKey2DataMap<TTokenizerSymbol,TTokenizerSymbolData,LessTTokenizerSymbol>)
@@ -87,27 +119,36 @@ type
   end;
   TTokenDataVector=TMyVector<TTokenData>;
 
+  TParser=class;
   TAbstractParsedText=class
     Source:TTokenizerString;
+    Parser:TParser;
+    procedure SetOperands;virtual;abstract;
+    procedure SetData;virtual;abstract;
     function GetResult:TTokenizerString;virtual;abstract;
-    constructor Create(_Source:TTokenizerString);
+    constructor Create(_Source:TTokenizerString;_Parser:TParser);
   end;
 
   TParsedTextWithoutTokens=class(TAbstractParsedText)
+    procedure SetOperands;override;
+    procedure SetData;override;
     function GetResult:TTokenizerString;override;
   end;
 
   TParsedTextWithOneToken=class(TAbstractParsedText)
-    TokenTextInfo:TTokenTextInfo;
+    Part:TTextPart;
+    {procedure SetOperands;override;
+    procedure SetData;override;}
+
     function GetResult:TTokenizerString;override;
-    constructor CreateWithToken(_Source:TTokenizerString;_TokenTextInfo:TTokenTextInfo);
+    constructor CreateWithToken(_Source:TTokenizerString;_TokenTextInfo:TTokenTextInfo;_Parser:TParser);
   end;
 
 
   TParsedText=class(TAbstractParsedText)
-    Tokens:TTokenTextInfoVector;
-    constructor Create(_Source:TTokenizerString);
-    constructor CreateWithToken(_Source:TTokenizerString;_TokenTextInfo:TTokenTextInfo);
+    Parts:TTextPartsVector;
+    constructor Create(_Source:TTokenizerString;_Parser:TParser);
+    constructor CreateWithToken(_Source:TTokenizerString;_TokenTextInfo:TTokenTextInfo;_Parser:TParser);
     procedure AddToken(_TokenTextInfo:TTokenTextInfo);
   end;
 
@@ -121,7 +162,7 @@ type
     StoredTokenTextInfo:TTokenTextInfo;
     constructor create;
     procedure clearStoredToken;
-    function RegisterToken(const Token:string;const BrackeOpen,BrackeClose:char;const Func:TStrProcessFunc;Options:TTokenOptions=[]):TTokenId;
+    function RegisterToken(const Token:string;const BrackeOpen,BrackeClose:char;{const Func:TStrProcessFunc}const ProcessorClass:TStrProcessorClass;Options:TTokenOptions=[]):TTokenId;
     procedure OptimizeTokens;
     function GetToken(Text:TTokenizerString;CurrentPos:integer;out TokenTextInfo:TTokenTextInfo):TTokenId;
     function GetTokens(Text:TTokenizerString):TAbstractParsedText;
@@ -129,11 +170,31 @@ type
   end;
 
 implementation
+class function TStaticStrProcessor.GetProcessorType:TProcessorType;
+begin
+  result:=PTStatic;
+end;
+class function TDynamicStrProcessor.GetProcessorType:TProcessorType;
+begin
+  result:=PTDynamic;
+end;
 
-constructor TAbstractParsedText.Create(_Source:TTokenizerString);
+constructor TAbstractParsedText.Create(_Source:TTokenizerString;_Parser:TParser);
 begin
   source:=_Source;
+  Parser:=_Parser;
 end;
+
+procedure TParsedTextWithoutTokens.SetOperands;
+begin
+
+end;
+
+procedure TParsedTextWithoutTokens.SetData;
+begin
+
+end;
+
 
 function TParsedTextWithoutTokens.GetResult;
 begin
@@ -144,35 +205,42 @@ function TParsedTextWithOneToken.GetResult;
 begin
   result:=source;
 end;
-constructor TParsedTextWithOneToken.CreateWithToken(_Source:TTokenizerString;_TokenTextInfo:TTokenTextInfo);
+constructor TParsedTextWithOneToken.CreateWithToken(_Source:TTokenizerString;_TokenTextInfo:TTokenTextInfo;_Parser:TParser);
 begin
-  Create(_Source);
-  TokenTextInfo:=_TokenTextInfo;
+  Create(_Source,_Parser);
+  Part.TextInfo:=_TokenTextInfo;
+  Part.TokenInfo:=_Parser.TokenDataVector[_TokenTextInfo.TokenId] ;
+  Part.Processor:=nil;
 end;
 
-constructor TParsedText.Create(_Source:TTokenizerString);
+constructor TParsedText.Create(_Source:TTokenizerString;_Parser:TParser);
 begin
-  inherited Create(_Source);
-  Tokens:=TTokenTextInfoVector.Create;
+  inherited Create(_Source,_Parser);
+  Parts:=TTextPartsVector.Create;
 end;
 
 procedure TParsedText.AddToken(_TokenTextInfo:TTokenTextInfo);
+var
+  Part:TTextPart;
 begin
-  Tokens.PushBack(_TokenTextInfo);
+  Part.TextInfo:=_TokenTextInfo;
+  Part.TokenInfo:=Parser.TokenDataVector[_TokenTextInfo.TokenId] ;
+  Part.Processor:=nil;
+  Parts.PushBack(Part);
 end;
 
-constructor TParsedText.CreateWithToken(_Source:TTokenizerString;_TokenTextInfo:TTokenTextInfo);
+constructor TParsedText.CreateWithToken(_Source:TTokenizerString;_TokenTextInfo:TTokenTextInfo;_Parser:TParser);
 begin
-  Create(_Source);
+  Create(_Source,_Parser);
   AddToken(_TokenTextInfo);
 end;
 
 function TTokenizer.GetToken(Text:TTokenizerString;CurrentPos:integer;out TokenTextInfo:TTokenTextInfo;var IncludedCharsPos:TIncludedChars;var AllChars:TChars):TTokenId;
 begin
   //inc(debTokenizerGetToken);
-  TokenTextInfo.TokenStartPos:=CurrentPos;
+  TokenTextInfo.TokenPos.StartPos:=CurrentPos;
   result:=SubGetToken(Text,CurrentPos,TokenTextInfo,1,IncludedCharsPos,AllChars);
-  TokenTextInfo.NextPos:=TokenTextInfo.TokenStartPos+TokenTextInfo.TokenLength;
+  TokenTextInfo.NextPos:=TokenTextInfo.TokenPos.StartPos+TokenTextInfo.TokenPos.Length;
 end;
 
 function TTokenizer.SubGetToken(Text:TTokenizerString;CurrentPos:integer;out TokenTextInfo:TTokenTextInfo;level:integer;var IncludedCharsPos:TIncludedChars;var AllChars:TChars):TTokenId;
@@ -188,13 +256,13 @@ begin
     if {comparesubstr(Text,isOnlyOneToken,CurrentPos,level)}CompareByte(Text[CurrentPos],isOnlyOneToken[level],length(isOnlyOneToken)-level+1)=0 then begin
       result:=isOnlyOneTokenId;
       TokenTextInfo.TokenId:=result;
-      TokenTextInfo.TokenLength:=length(isOnlyOneToken);
+      TokenTextInfo.TokenPos.Length:=length(isOnlyOneToken);
       exit;
     end;
 
 
     inc(CurrentPos);
-    TokenTextInfo.TokenStartPos:=CurrentPos;
+    TokenTextInfo.TokenPos.StartPos:=CurrentPos;
   end;
   end else begin
 
@@ -205,7 +273,7 @@ begin
       if PTokenizerSymbolData^.TokenId<>0 then begin
         result:=PTokenizerSymbolData^.TokenId;
         TokenTextInfo.TokenId:=result;
-        TokenTextInfo.TokenLength:=CurrentPos-TokenTextInfo.TokenStartPos+1;
+        TokenTextInfo.TokenPos.Length:=CurrentPos-TokenTextInfo.TokenPos.StartPos+1;
         exit;
       end
       else begin
@@ -225,13 +293,13 @@ begin
       else
         inc(step);
     inc(CurrentPos,step);
-    TokenTextInfo.TokenStartPos:=CurrentPos;
+    TokenTextInfo.TokenPos.StartPos:=CurrentPos;
   end;
   end;
   result:=1;
   TokenTextInfo.TokenId:=result;
-  TokenTextInfo.TokenStartPos:=length(Text)+1;
-  TokenTextInfo.TokenLength:=0;
+  TokenTextInfo.TokenPos.StartPos:=length(Text)+1;
+  TokenTextInfo.TokenPos.Length:=0;
 end;
 
 function TTokenizer.GetSymbolData(const Text:TTokenizerString;const CurrentPos:integer;out PTokenizerSymbolData:TTokenizer.PTValue):boolean;
@@ -261,7 +329,7 @@ begin
     if {comparesubstr(Text,isOnlyOneToken,CurrentPos,level)}CompareByte(Text[CurrentPos],isOnlyOneToken[level],length(isOnlyOneToken)-level+1)=0 then begin
       result:=isOnlyOneTokenId;
       TokenTextInfo.TokenId:=result;
-      TokenTextInfo.TokenLength:=length(isOnlyOneToken);
+      TokenTextInfo.TokenPos.Length:=length(isOnlyOneToken);
       exit;
     end else
       result:=0;
@@ -273,7 +341,7 @@ begin
       if PTokenizerSymbolData^.TokenId<>0 then begin
         result:=PTokenizerSymbolData^.TokenId;
         TokenTextInfo.TokenId:=result;
-        TokenTextInfo.TokenLength:=CurrentPos-TokenTextInfo.TokenStartPos+1;
+        TokenTextInfo.TokenPos.Length:=CurrentPos-TokenTextInfo.TokenPos.StartPos+1;
         exit;
       end
       else begin
@@ -296,7 +364,7 @@ begin
 
   //если есть запомненый токен на текущей позиции то возвращаем его и выходим
   if StoredTokenTextInfo.TokenId<>tkEmpty then begin
-    if StoredTokenTextInfo.TokenStartPos=CurrentPos then begin
+    if StoredTokenTextInfo.TokenPos.StartPos=CurrentPos then begin
       TokenTextInfo:=StoredTokenTextInfo;
       clearStoredToken;
       exit(TokenTextInfo.TokenId);
@@ -310,14 +378,14 @@ begin
   //пытаемся прочитать операнды токена
   ReadOperands(Text,result,TokenTextInfo);
   //если прочитаный токен не на стартовой позиции, запоминаем его и возвращаем tkRawText
-  if startpos<>TokenTextInfo.TokenStartPos then begin
+  if startpos<>TokenTextInfo.TokenPos.StartPos then begin
     StoredTokenTextInfo:=TokenTextInfo;
     TokenTextInfo.TokenId:=tkRawText;
-    TokenTextInfo.TokenStartPos:=startpos;
-    TokenTextInfo.TokenLength:=StoredTokenTextInfo.TokenStartPos-startpos;
-    TokenTextInfo.NextPos:=StoredTokenTextInfo.TokenStartPos;
-    TokenTextInfo.OperandsStartPos:=0;
-    TokenTextInfo.OperandsLength:=0;
+    TokenTextInfo.TokenPos.StartPos:=startpos;
+    TokenTextInfo.TokenPos.Length:=StoredTokenTextInfo.TokenPos.StartPos-startpos;
+    TokenTextInfo.NextPos:=StoredTokenTextInfo.TokenPos.StartPos;
+    TokenTextInfo.OperandsPos.StartPos:=0;
+    TokenTextInfo.OperandsPos.Length:=0;
     exit(TokenTextInfo.TokenId);
   end;
 end;
@@ -337,12 +405,12 @@ begin
     GetToken(Text,TokenTextInfo.NextPos,TokenTextInfo);
     if (TokenTextInfo.TokenId=tkEOF)and(TokensCounter=2) then begin
       if PrevTokenTextInfo.TokenId=tkRawText then
-        result:=TParsedTextWithoutTokens.Create(Text)
+        result:=TParsedTextWithoutTokens.Create(Text,self)
       else
-        result:=TParsedTextWithOneToken.CreateWithToken(Text,PrevTokenTextInfo)
+        result:=TParsedTextWithOneToken.CreateWithToken(Text,PrevTokenTextInfo,self)
     end else begin
       if result=nil then
-        result:=TParsedText.CreateWithToken(Text,PrevTokenTextInfo)
+        result:=TParsedText.CreateWithToken(Text,PrevTokenTextInfo,self)
       else
         TParsedText(result).AddToken(PrevTokenTextInfo);
     end;
@@ -359,20 +427,20 @@ begin
       and (TokenDataVector[TokenId].BrackeOpen<>'')
       and (TokenDataVector[TokenId].BrackeClose<>'') then
       begin
-        currpos:=TokenTextInfo.TokenStartPos+TokenTextInfo.TokenLength;
+        currpos:=TokenTextInfo.TokenPos.StartPos+TokenTextInfo.TokenPos.Length;
         if TOIncludeBrackeOpen in TokenDataVector[TokenId].Options then begin
          openedbrcount:=1;
-         TokenTextInfo.OperandsStartPos:=TokenTextInfo.TokenStartPos+TokenTextInfo.TokenLength;
+         TokenTextInfo.OperandsPos.StartPos:=TokenTextInfo.TokenPos.StartPos+TokenTextInfo.TokenPos.Length;
         end else begin
          openedbrcount:=0;
-         TokenTextInfo.OperandsStartPos:=-1;
+         TokenTextInfo.OperandsPos.StartPos:=-1;
         end;
         brcount:=0;
         while (currpos<=length(Text))and(not((openedbrcount=0)and(brcount>0))) do
         begin
           if Text[currpos]=TokenDataVector[TokenId].BrackeOpen then begin
-            if TokenTextInfo.OperandsStartPos=-1 then
-              TokenTextInfo.OperandsStartPos:=currpos+1;
+            if TokenTextInfo.OperandsPos.StartPos=-1 then
+              TokenTextInfo.OperandsPos.StartPos:=currpos+1;
             if TONestedBracke in TokenDataVector[TokenId].Options then
               inc(openedbrcount);
             inc(brcount);
@@ -380,8 +448,8 @@ begin
           if Text[currpos]=TokenDataVector[TokenId].BrackeClose then begin
             dec(openedbrcount);
             inc(brcount);
-            if (openedbrcount=0)and(TokenTextInfo.OperandsStartPos>0) then
-              TokenTextInfo.OperandsLength:=currpos-TokenTextInfo.OperandsStartPos;
+            if (openedbrcount=0)and(TokenTextInfo.OperandsPos.StartPos>0) then
+              TokenTextInfo.OperandsPos.Length:=currpos-TokenTextInfo.OperandsPos.StartPos;
           end;
           inc(currpos);
         end;
@@ -389,8 +457,8 @@ begin
       end
     else
       begin
-        TokenTextInfo.OperandsLength:=0;
-        TokenTextInfo.OperandsStartPos:=TokenTextInfo.TokenStartPos;
+        TokenTextInfo.OperandsPos.Length:=0;
+        TokenTextInfo.OperandsPos.StartPos:=TokenTextInfo.TokenPos.StartPos;
       end
 end;
 
@@ -414,10 +482,10 @@ end;
 procedure TParser.clearStoredToken;
 begin
   StoredTokenTextInfo.TokenId:=tkEmpty;
-  StoredTokenTextInfo.TokenStartPos:=0;
+  StoredTokenTextInfo.TokenPos.StartPos:=0;
 end;
 
-function TParser.RegisterToken(const Token:string;const BrackeOpen,BrackeClose:char;const Func:TStrProcessFunc;Options:TTokenOptions=[]):TTokenId;
+function TParser.RegisterToken(const Token:string;const BrackeOpen,BrackeClose:char;{const Func:TStrProcessFunc}const ProcessorClass:TStrProcessorClass;Options:TTokenOptions=[]):TTokenId;
 var
   sym:integer;
   td:TTokenData;
@@ -428,7 +496,8 @@ begin
   td.BrackeClose:=BrackeClose;
   td.BrackeOpen:=BrackeOpen;
   td.Options:=Options;
-  td.Func:=Func;
+  //td.Func:=Func;
+  td.ProcessorClass:=ProcessorClass;
 
   TokenDataVector.PushBack(td);
 

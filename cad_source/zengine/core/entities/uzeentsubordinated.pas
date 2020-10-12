@@ -85,7 +85,8 @@ GDBObjSubordinated={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericWithSubord
 procedure extractvarfromdxfstring2(_Value:GDBString;out vn,vt,vun:GDBString);
 procedure extractvarfromdxfstring(_Value:GDBString;out vn,vt,vv,vun:GDBString);
 procedure OldVersVarRename(var vn,vt,vv,vun:GDBString);
-procedure OldVersTextReplace(var vv:GDBString);
+procedure OldVersTextReplace(var vv:GDBString);overload;
+procedure OldVersTextReplace(var vv:unicodestring);overload;
 implementation
 //uses {uzcshared,}log;
 procedure GDBObjExtendable.AddExtension(ExtObj:PTBaseEntityExtender;ObjSize:GDBInteger);
@@ -188,6 +189,22 @@ begin
             result:=false;
 end;
 procedure OldVersTextReplace(var vv:GDBString);
+begin
+     vv:=AnsiReplaceStr(vv,'@@[Name]','@@[NMO_Name]');
+     vv:=AnsiReplaceStr(vv,'@@[ShortName]','@@[NMO_BaseName]');
+     vv:=AnsiReplaceStr(vv,'@@[Name_Template]','@@[NMO_Template]');
+     vv:=AnsiReplaceStr(vv,'@@[Material]','@@[DB_link]');
+     vv:=AnsiReplaceStr(vv,'@@[HeadDevice]','@@[GC_HeadDevice]');
+     vv:=AnsiReplaceStr(vv,'@@[HeadDShortName]','@@[GC_HDShortName]');
+     vv:=AnsiReplaceStr(vv,'@@[GroupInHDevice]','@@[GC_HDGroup]');
+     vv:=AnsiReplaceStr(vv,'@@[NumberInSleif]','@@[GC_NumberInGroup]');
+     vv:=AnsiReplaceStr(vv,'@@[RoundTo]','@@[LENGTH_RoundTo]');
+     vv:=AnsiReplaceStr(vv,'@@[Cable_AddLength]','@@[LENGTH_Add]');
+     vv:=AnsiReplaceStr(vv,'@@[Cable_Scale]','@@[LENGTH_Scale]');
+     vv:=AnsiReplaceStr(vv,'@@[TotalConnectedDevice]','@@[CABLE_TotalCD]');
+     vv:=AnsiReplaceStr(vv,'@@[Segment]','@@[CABLE_Segment]');
+end;
+procedure OldVersTextReplace(var vv:unicodestring);overload;
 begin
      vv:=AnsiReplaceStr(vv,'@@[Name]','@@[NMO_Name]');
      vv:=AnsiReplaceStr(vv,'@@[ShortName]','@@[NMO_BaseName]');

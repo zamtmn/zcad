@@ -31,8 +31,8 @@ type
 {Export+}
 PGDBObjText=^GDBObjText;
 GDBObjText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAbstractText)
-                 Content:GDBAnsiString;
-                 Template:GDBAnsiString;(*saved_to_shd*)
+                 Content:{GDBAnsiString}UnicodeString;
+                 Template:{GDBAnsiString}UnicodeString;(*saved_to_shd*)
                  TXTStyleIndex:{-}PGDBTextStyle{/PGDBTextStyleObjInsp/};(*saved_to_shd*)(*'Style'*)
                  obj_height:GDBDouble;(*oi_readonly*)(*hidden_in_objinsp*)
                  obj_width:GDBDouble;(*oi_readonly*)(*hidden_in_objinsp*)
@@ -134,8 +134,8 @@ begin
   TCP:=CodePage;
   CodePage:=CP_win;
      if template='' then
-                      template:=content;
-  content:=textformat(template,@self);
+                      template:={UTF8Encode}(content);
+  content:=utf8tostring(textformat(template,@self));
        CodePage:=TCP;
   if (content='')and(template='') then content:=str_empty;
   lod:=0;
@@ -646,7 +646,7 @@ var //s{, layername}: GDBString;
   doublepoint,angleload: GDBBoolean;
   angle:double;
   vv, gv, textbackward: GDBInteger;
-  style:GDBString;
+  style,tcontent:GDBString;
 begin
   //initnul;
   vv := 0;
@@ -655,6 +655,7 @@ begin
   angleload:=false;
   doublepoint:=false;
   style:='';
+  tcontent:='';
   textbackward:=0;
   while byt <> 0 do
   begin
@@ -680,7 +681,7 @@ else if     dxfGDBStringload(f,7,byt,style)then
 else if not dxfGDBIntegerload(f,72,byt,gv)then
      if not dxfGDBIntegerload(f,73,byt,vv)then
      if not dxfGDBIntegerload(f,71,byt,textbackward)then
-     if not dxfGDBStringload(f,1,byt,content)then
+     if not dxfGDBStringload(f,1,byt,tcontent)then
                                                {s := }f.readgdbstring;
     byt:=readmystrtoint(f);
   end;
@@ -699,7 +700,8 @@ else if not dxfGDBIntegerload(f,72,byt,gv)then
                                                         TXTStyleIndex:=sysvar.DWG.DWG_CTStyle^;}
                            end;
   OldVersTextReplace(Template);
-  OldVersTextReplace(Content);
+  OldVersTextReplace(tcontent);
+  content:=utf8tostring(Tria_AnsiToUtf8(tcontent));
   textprop.justify := jt[vv, gv];
   if doublepoint then Local.p_Insert := P_drawInOCS;
   //assert(angleload, 'GDBText отсутствует dxf код 50 (угол поворота)');

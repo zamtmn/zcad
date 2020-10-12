@@ -67,7 +67,8 @@ function dxfvertexload1(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBInteger
 function dxfGDBDoubleload(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBInteger; out v:GDBDouble):GDBBoolean;
 function dxfGDBFloatload(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBInteger; out v:GDBFloat):GDBBoolean;
 function dxfGDBIntegerload(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBInteger; out v:GDBInteger):GDBBoolean;
-function dxfGDBStringload(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBInteger; var v:GDBString):GDBBoolean;
+function dxfGDBStringload(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBInteger; var v:GDBString):GDBBoolean;overload;
+function dxfGDBStringload(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBInteger; var v:UnicodeString):GDBBoolean;overload;
 function dxfGroupCode(const dxfcod:GDBInteger):GDBString;
 function DXFHandle(sh:string):TDWGHandle;
 
@@ -245,6 +246,11 @@ begin
      if currentdxfcod=dxfcod then begin
                                        v:=v+readmystr(f); result:=true end
 end;
-
+function dxfGDBStringload(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBInteger; var v:UnicodeString):GDBBoolean;
+begin
+     result:=false;
+     if currentdxfcod=dxfcod then begin
+                                       v:=v+readmystr(f); result:=true end
+end;
 begin
 end.

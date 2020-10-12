@@ -69,7 +69,7 @@ ZGLGraphix={$IFNDEF DELPHI}packed{$ENDIF} object(ZGLVectorObject)
 var
     sysvarDWGRotateTextInLT:boolean=true;
     SysVarRDMaxLTPatternsInEntity:integer=1000;
-function getsymbol_fromGDBText(s:gdbstring; i:integer;out l:integer;const fontunicode:gdbboolean):word;
+function getsymbol_fromGDBText(s:UnicodeString; i:integer;out l:integer;const fontunicode:gdbboolean):word;
 implementation
 {function ZGLGraphix.CanSimplyDrawInOCS(const DC:TDrawContext;const SqrParamSize,TargetSize:GDBDouble):GDBBoolean;
 //false - не упрощать, true - упрощать. в GDBObjWithLocalCS.CanSimplyDrawInOCS наоборот
@@ -82,7 +82,7 @@ begin
                                result:=true;
 end;}
 
-function getsymbol_fromGDBText(s:gdbstring; i:integer;out l:integer;const fontunicode:gdbboolean):word;
+function getsymbol_fromGDBText(s:UnicodeString; i:integer;out l:integer;const fontunicode:gdbboolean):word;
 var
    ts:gdbstring;
    code:integer;
@@ -161,9 +161,9 @@ begin
 
      l:=1;
      if fontunicode then
-                        result:=ach2uch(ord(s[i]))
+                        result:={ach2uch}(ord(s[i]))
                     else
-                        result:=ord(s[i]);
+                        result:=uch2ach(ord(s[i]));
 end;
 
 procedure ZGLGraphix.DrawTextContent(drawer:TZGLAbstractDrawer;content:gdbstring;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:GDBDouble;var Outbound:OutBound4V);

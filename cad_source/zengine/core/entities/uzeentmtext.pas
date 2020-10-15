@@ -57,7 +57,7 @@ GDBObjMText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjText)
                  function GetObjType:TObjID;virtual;
             end;
 {Export-}
-procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:GDBDouble;content:GDBString;var text:XYZWGDBGDBStringArray);
+procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:GDBDouble;content:UnicodeString;var text:XYZWGDBGDBStringArray);
 function GetLinesH(linespace,size:GDBDouble;var lines:XYZWGDBGDBStringArray):GDBDouble;
 function GetLinesW(var lines:XYZWGDBGDBStringArray):GDBDouble;
 function GetLineSpaceFromLineSpaceF(linespacef,size:GDBDouble):GDBDouble;
@@ -150,12 +150,12 @@ begin
                else
                    result:=0;
 end;
-procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:GDBDouble;content:GDBString;var text:XYZWGDBGDBStringArray);
+procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:GDBDouble;content:UnicodeString;var text:XYZWGDBGDBStringArray);
 var
   canbreak: GDBBoolean;
   currsymbol, lastbreak, lastcanbreak: GDBInteger;
   linewidth, lastlinewidth, maxlinewidth,lastsymspace: GDBDouble;
-  currline: GDBString;
+  currline: UnicodeString;
   swp:GDBStrWithPoint;
   psyminfo:PGDBsymdolinfo;
   l:GDBInteger;
@@ -900,7 +900,7 @@ var //s{, layername}: GDBString;
   angleload: GDBBoolean;
   angle:double;
   j:GDBInteger;
-  style:GDBString;
+  style,ttemplate:GDBString;
 begin
   //initnul;
   angleload := false;
@@ -919,8 +919,8 @@ begin
     if not dxfGDBDoubleload(f,44,byt,linespacef) then
     if not dxfGDBDoubleload(f,51,byt,textprop.oblique) then
     if not dxfGDBIntegerload(f,71,byt,j)then
-    if not dxfGDBStringload(f,1,byt,template)then
-    if not dxfGDBStringload(f,3,byt,template)then
+    if not dxfGDBStringload(f,1,byt,ttemplate)then
+    if not dxfGDBStringload(f,3,byt,ttemplate)then
     if dxfGDBDoubleload(f,50,byt,angle) then angleload := true
 
     else if     dxfGDBStringload(f,7,byt,style)then
@@ -938,8 +938,9 @@ begin
                                {if TXTStyleIndex=nil then
                                                         TXTStyleIndex:=sysvar.DWG.DWG_CTStyle^;}
                            end;
-  OldVersTextReplace(Template);
-  OldVersTextReplace(Content);  
+  OldVersTextReplace(ttemplate);
+  //OldVersTextReplace(Content);
+  template:=utf8tostring(Tria_AnsiToUtf8(ttemplate));
   textprop.justify:=b2j[j];
   P_drawInOCS := Local.p_insert;
   linespace := textprop.size * linespacef * 5 / 3;
@@ -975,7 +976,7 @@ var
   //bw: GDBByte;
   s: GDBString;
   ul:boolean;
-  quotedcontent:GDBAnsiString;
+  quotedcontent:UnicodeString;
 begin
   ul:=false;
   SaveToDXFObjPrefix(outhandle,'MTEXT','AcDbMText',IODXFContext);
@@ -985,9 +986,9 @@ begin
   dxfGDBIntegerout(outhandle,71,j2b[textprop.justify]{ord(textprop.justify)+1});
   quotedcontent:=StringReplace(content,#10,'\P',[rfReplaceAll]);
   if  convertfromunicode(template)=quotedcontent then
-                                               s := template
+                                               s := Tria_Utf8ToAnsi(UTF8Encode(template))
                                            else
-                                               s := quotedcontent;
+                                               s := Tria_Utf8ToAnsi(UTF8Encode(quotedcontent));
   //s := content;
   if length(s) < maxdxfmtextlen then
   begin

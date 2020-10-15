@@ -631,9 +631,9 @@ begin
 
 
     if  convertfromunicode(template)=content then
-                                               s := template
+                                               s := Tria_Utf8ToAnsi(UTF8Encode(template))
                                            else
-                                               s := content;
+                                               s := Tria_Utf8ToAnsi(UTF8Encode(content));
 
 
   dxfGDBStringout(outhandle,1,z2dxftext({content}s));

@@ -62,7 +62,7 @@ ZGLGraphix={$IFNDEF DELPHI}packed{$ENDIF} object(ZGLVectorObject)
                 procedure PlaceShape(drawer:TZGLAbstractDrawer;const StartPatternPoint:GDBVertex; PSP:PShapeProp;scale,angle:GDBDouble);
                 procedure PlaceText(drawer:TZGLAbstractDrawer;const StartPatternPoint:GDBVertex;PTP:PTextProp;scale,angle:GDBDouble);
 
-                procedure DrawTextContent(drawer:TZGLAbstractDrawer;content:gdbstring;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:GDBDouble;var Outbound:OutBound4V);
+                procedure DrawTextContent(drawer:TZGLAbstractDrawer;content:UnicodeString;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:GDBDouble;var Outbound:OutBound4V);
                 //function CanSimplyDrawInOCS(const DC:TDrawContext;const SqrParamSize,TargetSize:GDBDouble):GDBBoolean;
              end;
 {Export-}
@@ -84,7 +84,7 @@ end;}
 
 function getsymbol_fromGDBText(s:UnicodeString; i:integer;out l:integer;const fontunicode:gdbboolean):word;
 var
-   ts:gdbstring;
+   ts:UnicodeString;
    code:integer;
 begin
      if length(s)>=i+6 then
@@ -166,7 +166,7 @@ begin
                         result:=uch2ach(ord(s[i]));
 end;
 
-procedure ZGLGraphix.DrawTextContent(drawer:TZGLAbstractDrawer;content:gdbstring;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:GDBDouble;var Outbound:OutBound4V);
+procedure ZGLGraphix.DrawTextContent(drawer:TZGLAbstractDrawer;content:UnicodeString;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:GDBDouble;var Outbound:OutBound4V);
 var
   i: GDBInteger;
   matr,m1: DMatrix4D;

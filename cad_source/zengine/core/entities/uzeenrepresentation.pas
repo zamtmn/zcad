@@ -44,7 +44,7 @@ TZEntityRepresentation={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                        function GetGraphix:PZGLGraphix;
 
                        {Команды которыми примитив рисует сам себя}
-                       procedure DrawTextContent(drawer:TZGLAbstractDrawer;content:gdbstring;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:GDBDouble;var Outbound:OutBound4V);
+                       procedure DrawTextContent(drawer:TZGLAbstractDrawer;content:UnicodeString;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:GDBDouble;var Outbound:OutBound4V);
                        procedure DrawLineWithLT(var rc:TDrawContext;const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp);
                        procedure DrawPolyLineWithLT(var rc:TDrawContext;const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed,ltgen:GDBBoolean);virtual;
                        end;
@@ -88,7 +88,7 @@ begin
   Graphix.Shrink;
   Geometry.Shrink;
 end;
-procedure TZEntityRepresentation.DrawTextContent(drawer:TZGLAbstractDrawer;content:gdbstring;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:GDBDouble;var Outbound:OutBound4V);
+procedure TZEntityRepresentation.DrawTextContent(drawer:TZGLAbstractDrawer;content:UnicodeString;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:GDBDouble;var Outbound:OutBound4V);
 begin
   Graphix.DrawTextContent(drawer,content,_pfont,DrawMatrix,objmatrix,textprop_size,Outbound);
 end;

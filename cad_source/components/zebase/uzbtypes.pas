@@ -132,7 +132,7 @@ GLLWWidth=packed record
           end;
 PGDBStrWithPoint=^GDBStrWithPoint;
 GDBStrWithPoint=packed record
-                      str:GDBString;
+                      str:UnicodeString;
                       x,y,z,w:GDBDouble;
                 end;
 GDBArrayVertex2D=packed array[0..300] of GDBVertex2D;

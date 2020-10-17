@@ -39,8 +39,8 @@ function ach2uch(ach:byte):word;
 function CompareNUMSTR(str1,str2:GDBString):GDBBoolean;
 function AnsiNaturalCompare(const str1, str2: string; vCaseSensitive: boolean = False): integer;
 
-function ConvertFromDxfString(str:GDBString):GDBString;
-function ConvertToDxfString(str:GDBString):GDBString;
+function ConvertFromDxfString(str:UnicodeString):GDBString;
+function ConvertToDxfString(str:GDBString):UnicodeString;
 function MakeHash(const s: GDBString):SizeUInt;//TODO в gzctnrstl есть копия этой процедуры. надо убирать
 
 procedure KillString(var str:GDBString);inline;
@@ -94,16 +94,16 @@ begin
     Result := ((Result shl 7) or (Result shr 25)) + Ord(s[I]);
 end;
 
-function ConvertFromDxfString(str:GDBString):GDBString;
+function ConvertFromDxfString(str:UnicodeString):GDBString;
 begin
-     result:=Tria_AnsiToUtf8(str);
-     {$IFNDEF DELPHI}result:=StringsReplace(result, ['\P'],[LineEnding],[rfReplaceAll,rfIgnoreCase]);{$ENDIF}
+     //result:=Tria_AnsiToUtf8(str);
+     {$IFNDEF DELPHI}result:=UTF8Encode(StringsReplace(str, ['\P'],[LineEnding],[rfReplaceAll,rfIgnoreCase]));{$ENDIF}
 end;
 
-function ConvertToDxfString(str:GDBString):GDBString;
+function ConvertToDxfString(str:GDBString):UnicodeString;
 begin
-     {$IFNDEF DELPHI}result:=StringsReplace(str, [LineEnding],['\P'],[rfReplaceAll,rfIgnoreCase]);{$ENDIF}
-     result:=Tria_Utf8ToAnsi(result);
+     //{$IFNDEF DELPHI}result:=StringsReplace(str, [LineEnding],['\P'],[rfReplaceAll,rfIgnoreCase]);{$ENDIF}
+     result:={Tria_Utf8ToAnsi}UTF8ToString(StringsReplace(str, [LineEnding],['\P'],[rfReplaceAll,rfIgnoreCase]));
 end;
 function uch2ach(uch:word):byte;
 var s:gdbstring;

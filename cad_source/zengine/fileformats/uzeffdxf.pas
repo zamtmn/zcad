@@ -355,7 +355,7 @@ begin
     if owner <> nil then
       begin
         if VerboseLog^ then
-          debugln('{D}[DXF_CONTENTS]AddEntitiesFromDXF.Found primitive ',s);
+          debugln('{D+}[DXF_CONTENTS]AddEntitiesFromDXF.Found primitive ',s);
         {$IFDEF DEBUGBUILD}inc(i2);if i2=4349 then
                                                   i2:=i2;{$ENDIF}
         pobj := EntInfoData.AllocAndInitEntity(nil);
@@ -491,6 +491,8 @@ begin
                                    pobj^.done;
                                    GDBFreeMem(pointer(pobj));
                             end;
+       if VerboseLog^ then
+         debugln('{D-}[DXF_CONTENTS]End primitive ',s);
       end;
       //additionalunit.free;
         if Assigned(ClearExtLoadData) then

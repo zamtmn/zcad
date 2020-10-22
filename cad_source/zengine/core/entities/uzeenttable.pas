@@ -192,7 +192,7 @@ ConstObjArray.free;
                            if pstr^<>'' then
                            begin
                            pointer(pgdbmtext):=self.ConstObjArray.CreateInitObj(GDBMtextID,@self);
-                           pgdbmtext.Template:={Tria_Utf8ToAnsi}(pstr^);
+                           pgdbmtext.Template:=UTF8ToString(Tria_AnsiToUtf8(pstr^));
                            pgdbmtext.textprop.size:=PTableStyle^.textheight*scale;
                            pgdbmtext.linespacef:=1;
                            pgdbmtext.linespacef:=PTableStyle^.rowheight/pgdbmtext.textprop.size*3/5;

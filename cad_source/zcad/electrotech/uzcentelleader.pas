@@ -490,7 +490,7 @@ begin
           begin
           ptext:=pointer(self.ConstObjArray.CreateInitObj(GDBMTextID,@self));
           ptext.vp.Layer:=vp.Layer;
-          ptext.Template:=s;
+          ptext.Template:=UTF8ToString(Tria_AnsiToUtf8(s));
           ptext.Local.P_insert:=tbl.Local.P_insert;
           ptext.Local.P_insert.y:=ptext.Local.P_insert.y+1.5*scale;
           ptext.textprop.justify:=jsbl;

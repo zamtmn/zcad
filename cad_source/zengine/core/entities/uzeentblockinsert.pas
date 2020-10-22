@@ -22,7 +22,7 @@ interface
 uses uzeentity,uzgldrawcontext,uzeentityfactory,uzedrawingdef,uzestyleslayers,math,
      uzbtypesbase,uzeentcomplex,sysutils,UGDBObjBlockdefArray,uzeblockdef,uzbtypes,
      uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzbmemman,uzeentsubordinated,
-     gzctnrvectortypes,uzbgeomtypes,UGDBOpenArrayOfByte,uzestrconsts;
+     gzctnrvectortypes,uzbgeomtypes,UGDBOpenArrayOfByte,uzestrconsts,LCLProc;
 const zcadmetric='!!ZMODIFIER:';
 type
 {REGISTEROBJECTTYPE GDBObjBlockInsert}
@@ -656,8 +656,10 @@ else if not dxfGDBStringload(f,2,byt,name)then {s := }f.readgdbstring;
           s := f.readworld(#10, #13);
         until s = 'SEQEND'
       end;}
-      if name='EL_LIGHT_SWIITH' then
-                                        name:=name;
+  if VerboseLog^ then
+    debugln('{D-}[DXF_CONTENTS]Name=',name);
+  if name='EL_LIGHT_SWIITH' then
+    name:=name;
       //programlog.LogOutFormatStr('BlockInsert name="%s" loaded',[name],lp_OldPos,LM_Debug);
       //index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
       index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(name));

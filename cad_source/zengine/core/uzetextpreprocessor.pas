@@ -19,29 +19,29 @@ unit uzetextpreprocessor;
 {$INCLUDE def.inc}
 
 interface
-uses sysutils,uzbtypesbase,usimplegenerics,gzctnrstl,LazLogger,gutil,uzeparser;
+uses uzbstrproc,sysutils,uzbtypesbase,usimplegenerics,gzctnrstl,LazLogger,gutil,uzeparser;
 type
-  TStrProcessFunc=function(const str:gdbstring;const operands:gdbstring;var startpos:integer;pobj:pointer):gdbstring;
+  TStrProcessFunc=function(const str:UnicodeString;const operands:UnicodeString;var startpos:integer;pobj:pointer):gdbstring;
   TStrProcessorData=record
-    Id:string;
+    Id:UnicodeString;
     OBracket,CBracket:char;
     IsVariable:Boolean;
     Func:TStrProcessFunc;
   end;
 
   TPrefix2ProcessFunc=class (GKey2DataMap<String,TStrProcessorData{$IFNDEF DELPHI},LessGDBString{$ENDIF}>)
-    procedure RegisterProcessor(const Id:string;const OBracket,CBracket:char;const Func:TStrProcessFunc;IsVariable:Boolean=false);
+    procedure RegisterProcessor(const Id:UnicodeString;const OBracket,CBracket:char;const Func:TStrProcessFunc;IsVariable:Boolean=false);
   end;
 
 var
     Prefix2ProcessFunc:TPrefix2ProcessFunc;
     Parser:TParser;
-function textformat(s:GDBString;pobj:GDBPointer):GDBString;
+function textformat(s:UnicodeString;pobj:GDBPointer):UnicodeString;
 function convertfromunicode(s:GDBString):GDBString;
 implementation
 
 
-procedure TPrefix2ProcessFunc.RegisterProcessor(const Id:string;const OBracket,CBracket:char;const Func:TStrProcessFunc;IsVariable:Boolean=false);
+procedure TPrefix2ProcessFunc.RegisterProcessor(const Id:UnicodeString;const OBracket,CBracket:char;const Func:TStrProcessFunc;IsVariable:Boolean=false);
 var
   key:String;
   data:TStrProcessorData;
@@ -110,11 +110,12 @@ end;
 {$endif}
 function textformat;
 var FindedIdPos,ContinuePos,EndBracketPos,i2,counter:GDBInteger;
-    ps{,s2},res,operands:GDBString;
+    ps{,s2},res,operands:UnicodeString;
     {$IFNDEF DELPHI}
     iterator:Prefix2ProcessFunc.TIterator;
     {$ENDIF}
     startsearhpos:integer;
+    TCP:TCodePage;
 const
     maxitertations=100;
 begin
@@ -146,7 +147,10 @@ begin
              end else
                EndBracketPos:=ContinuePos;
              ContinuePos:=EndBracketPos;
-             res:=iterator.value.func(ps,operands,ContinuePos,pobj);
+             TCP:=CodePage;
+             CodePage:=CP_utf8;
+             res:=UTF8Decode(iterator.value.func(ps,operands,ContinuePos,pobj));
+             CodePage:=TCP;
              //if res<>'' then
                ps:=copy(ps,1,FindedIdPos-1)+res+copy(ps,{EndBracketPos}ContinuePos,length(ps)-{EndBracketPos}ContinuePos+1);
              startsearhpos:=FindedIdPos+length(res);

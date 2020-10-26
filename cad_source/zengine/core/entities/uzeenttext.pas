@@ -37,7 +37,7 @@ GDBObjText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAbstractText)
                  obj_height:GDBDouble;(*oi_readonly*)(*hidden_in_objinsp*)
                  obj_width:GDBDouble;(*oi_readonly*)(*hidden_in_objinsp*)
                  obj_y:GDBDouble;(*oi_readonly*)(*hidden_in_objinsp*)
-                 constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBString;p:GDBvertex;s,o,w,a:GDBDouble;j:TTextJustify);
+                 constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:UnicodeString;p:GDBvertex;s,o,w,a:GDBDouble;j:TTextJustify);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
                  procedure SaveToDXF(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;

@@ -19,7 +19,7 @@
 unit uzbstrproc;
 {$INCLUDE def.inc}
 interface
-uses {$IFNDEF DELPHI}{fileutil,}{$ENDIF}uzbtypesbase,sysutils,strutils{$IFNDEF DELPHI},{LCLProc}LazUTF8,lazutf16{$ENDIF};
+uses {$IFNDEF DELPHI}{fileutil,}{$ENDIF}uzbtypesbase,uzbtypes,sysutils,strutils{$IFNDEF DELPHI},{LCLProc}LazUTF8,lazutf16{$ENDIF};
 function GetPredStr(var s: GDBString; substr: GDBString): GDBString;overload;
 function GetPredStr(var s: GDBString; substrs: array of const; out nearestsubstr:string): GDBString;overload;
 function readspace(expr: GDBString): GDBString;
@@ -39,8 +39,8 @@ function ach2uch(ach:byte):word;
 function CompareNUMSTR(str1,str2:GDBString):GDBBoolean;
 function AnsiNaturalCompare(const str1, str2: string; vCaseSensitive: boolean = False): integer;
 
-function ConvertFromDxfString(str:UnicodeString):GDBString;
-function ConvertToDxfString(str:GDBString):UnicodeString;
+function ConvertFromDxfString(str:TDXFEntsInternalStringType):GDBString;
+function ConvertToDxfString(str:GDBString):TDXFEntsInternalStringType;
 function MakeHash(const s: GDBString):SizeUInt;//TODO в gzctnrstl есть копия этой процедуры. надо убирать
 
 procedure KillString(var str:GDBString);inline;
@@ -94,13 +94,13 @@ begin
     Result := ((Result shl 7) or (Result shr 25)) + Ord(s[I]);
 end;
 
-function ConvertFromDxfString(str:UnicodeString):GDBString;
+function ConvertFromDxfString(str:TDXFEntsInternalStringType):GDBString;
 begin
      //result:=Tria_AnsiToUtf8(str);
      {$IFNDEF DELPHI}result:=UTF8Encode(StringsReplace(str, ['\P'],[LineEnding],[rfReplaceAll,rfIgnoreCase]));{$ENDIF}
 end;
 
-function ConvertToDxfString(str:GDBString):UnicodeString;
+function ConvertToDxfString(str:GDBString):TDXFEntsInternalStringType;
 begin
      //{$IFNDEF DELPHI}result:=StringsReplace(str, [LineEnding],['\P'],[rfReplaceAll,rfIgnoreCase]);{$ENDIF}
      result:={Tria_Utf8ToAnsi}UTF8ToString(StringsReplace(str, [LineEnding],['\P'],[rfReplaceAll,rfIgnoreCase]));
@@ -126,7 +126,7 @@ begin
 end;
 function ach2uch(ach:byte):word;
 var s:gdbstring;
-    {$IFNDEF DELPHI}tstr:{UTF16String}UnicodeString;{$ENDIF}
+    {$IFNDEF DELPHI}tstr:{UTF16String}TDXFEntsInternalStringType;{$ENDIF}
     CharLen: integer;
 begin
     {$IFNDEF DELPHI}

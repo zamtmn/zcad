@@ -46,14 +46,14 @@ begin
     result:='!!ERR('+varname+')!!';
 end;
 
-function prop2value(const str:UnicodeString;const operands:UnicodeString;var NextSymbolPos:integer;pobj:Pointer):gdbstring;
+function prop2value(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;pobj:Pointer):gdbstring;
 begin
   if GetProperty(pobj,operands,result) then
     else
       result:='!!ERRprop('+operands+')!!';
 end;
 
-function var2value(const str:UnicodeString;const operands:UnicodeString;var NextSymbolPos:integer;pobj:Pointer):gdbstring;
+function var2value(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;pobj:Pointer):gdbstring;
 var
   endpos:integer;
   varname:GDBString;
@@ -92,7 +92,7 @@ begin
   startpos:=NextSymbolPos-1;
 end;}
 
-function EscapeSeq(const str:UnicodeString;const operands:UnicodeString;var NextSymbolPos:integer;pobj:Pointer):gdbstring;
+function EscapeSeq(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;pobj:Pointer):gdbstring;
 var
   sym:char;
   value,s1,s2:string;
@@ -119,7 +119,7 @@ begin
   end;
 end;
 
-function date2value(const str:UnicodeString;const operands:UnicodeString;var NextSymbolPos:integer;pobj:Pointer):gdbstring;
+function date2value(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;pobj:Pointer):gdbstring;
 begin
   result:=datetostr(date);
 end;

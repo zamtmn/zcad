@@ -86,7 +86,7 @@ procedure extractvarfromdxfstring2(_Value:GDBString;out vn,vt,vun:GDBString);
 procedure extractvarfromdxfstring(_Value:GDBString;out vn,vt,vv,vun:GDBString);
 procedure OldVersVarRename(var vn,vt,vv,vun:GDBString);
 procedure OldVersTextReplace(var vv:GDBString);overload;
-procedure OldVersTextReplace(var vv:unicodestring);overload;
+procedure OldVersTextReplace(var vv:TDXFEntsInternalStringType);overload;
 implementation
 //uses {uzcshared,}log;
 procedure GDBObjExtendable.AddExtension(ExtObj:PTBaseEntityExtender;ObjSize:GDBInteger);
@@ -204,7 +204,7 @@ begin
      vv:=AnsiReplaceStr(vv,'@@[TotalConnectedDevice]','@@[CABLE_TotalCD]');
      vv:=AnsiReplaceStr(vv,'@@[Segment]','@@[CABLE_Segment]');
 end;
-procedure OldVersTextReplace(var vv:unicodestring);overload;
+procedure OldVersTextReplace(var vv:TDXFEntsInternalStringType);overload;
 begin
      vv:=AnsiReplaceStr(vv,'@@[Name]','@@[NMO_Name]');
      vv:=AnsiReplaceStr(vv,'@@[ShortName]','@@[NMO_BaseName]');

@@ -130,9 +130,10 @@ GLLWWidth=packed record
                 hw:GDBBoolean;(*saved_to_shd*)
                 quad:GDBQuad2d;
           end;
+TDXFEntsInternalStringType=UnicodeString;
 PGDBStrWithPoint=^GDBStrWithPoint;
 GDBStrWithPoint=packed record
-                      str:UnicodeString;
+                      str:TDXFEntsInternalStringType;
                       x,y,z,w:GDBDouble;
                 end;
 GDBArrayVertex2D=packed array[0..300] of GDBVertex2D;

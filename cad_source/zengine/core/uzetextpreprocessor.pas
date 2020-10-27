@@ -19,29 +19,29 @@ unit uzetextpreprocessor;
 {$INCLUDE def.inc}
 
 interface
-uses uzbstrproc,sysutils,uzbtypesbase,usimplegenerics,gzctnrstl,LazLogger,gutil,uzeparser;
+uses uzbtypes,uzbstrproc,sysutils,uzbtypesbase,usimplegenerics,gzctnrstl,LazLogger,gutil,uzeparser;
 type
-  TStrProcessFunc=function(const str:UnicodeString;const operands:UnicodeString;var startpos:integer;pobj:pointer):gdbstring;
+  TStrProcessFunc=function(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var startpos:integer;pobj:pointer):gdbstring;
   TStrProcessorData=record
-    Id:UnicodeString;
+    Id:TDXFEntsInternalStringType;
     OBracket,CBracket:char;
     IsVariable:Boolean;
     Func:TStrProcessFunc;
   end;
 
   TPrefix2ProcessFunc=class (GKey2DataMap<String,TStrProcessorData{$IFNDEF DELPHI},LessGDBString{$ENDIF}>)
-    procedure RegisterProcessor(const Id:UnicodeString;const OBracket,CBracket:char;const Func:TStrProcessFunc;IsVariable:Boolean=false);
+    procedure RegisterProcessor(const Id:TDXFEntsInternalStringType;const OBracket,CBracket:char;const Func:TStrProcessFunc;IsVariable:Boolean=false);
   end;
 
 var
     Prefix2ProcessFunc:TPrefix2ProcessFunc;
     Parser:TParser;
-function textformat(s:UnicodeString;pobj:GDBPointer):UnicodeString;
+function textformat(s:TDXFEntsInternalStringType;pobj:GDBPointer):TDXFEntsInternalStringType;
 function convertfromunicode(s:GDBString):GDBString;
 implementation
 
 
-procedure TPrefix2ProcessFunc.RegisterProcessor(const Id:UnicodeString;const OBracket,CBracket:char;const Func:TStrProcessFunc;IsVariable:Boolean=false);
+procedure TPrefix2ProcessFunc.RegisterProcessor(const Id:TDXFEntsInternalStringType;const OBracket,CBracket:char;const Func:TStrProcessFunc;IsVariable:Boolean=false);
 var
   key:String;
   data:TStrProcessorData;
@@ -110,7 +110,7 @@ end;
 {$endif}
 function textformat;
 var FindedIdPos,ContinuePos,EndBracketPos,i2,counter:GDBInteger;
-    ps{,s2},res,operands:UnicodeString;
+    ps{,s2},res,operands:TDXFEntsInternalStringType;
     {$IFNDEF DELPHI}
     iterator:Prefix2ProcessFunc.TIterator;
     {$ENDIF}

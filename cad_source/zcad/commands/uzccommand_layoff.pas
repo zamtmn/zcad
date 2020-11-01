@@ -30,17 +30,17 @@ const
   LayOffCommandName='LayOff';
 function LayOff_com(operands:TCommandOperands):TCommandResult;
 var
-  PEntity:PGDBObjEntity;
+  _PEntity:PGDBObjEntity;
   UndoStartMarkerPlaced:boolean;
 begin
   UndoStartMarkerPlaced:=false;
-  while commandmanager.getentity(rscmSelectEntity,PEntity) do
+  while commandmanager.getentity(rscmSelectEntity,_PEntity) do
   begin
-   if PEntity^.vp.Layer._on then begin
+   if _PEntity^.vp.Layer._on then begin
      zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,LayOffCommandName,true);
-     with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PEntity^.vp.Layer._on)^ do
+     with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,_PEntity^.vp.Layer._on)^ do
      begin
-       PEntity^.vp.Layer._on:=not PEntity^.vp.Layer._on;
+       _PEntity^.vp.Layer._on:=not _PEntity^.vp.Layer._on;
        ComitFromObj;
      end;
      zcRedrawCurrentDrawing;

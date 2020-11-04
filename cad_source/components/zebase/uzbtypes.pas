@@ -21,10 +21,6 @@ interface
 uses uzbtypesbase,uzbgeomtypes,sysutils;
      //gdbobjectsconstdef;
 const
-     cmd_ok=-1;
-     cmd_error=1;
-     cmd_cancel=-2;
-     ZCMD_OK_NOEND=-10;
      GDBBaseObjectID = 30000;
      ObjN_NotRecognized='NotRecognized';
 type

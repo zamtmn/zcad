@@ -130,6 +130,7 @@ uses
   uzccommand_print,
   uzccommand_blockpreviewexport,
   uzccommand_layoff,
+  uzccommand_loadmenus,
 
   {$IFDEF ELECTROTECH}
   //**for velec func**//

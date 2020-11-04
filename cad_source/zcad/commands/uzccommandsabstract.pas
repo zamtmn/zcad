@@ -28,6 +28,11 @@ const
      CACanRedo=16;
      CADWGChanged=32;
 
+     cmd_ok=-1;
+     cmd_error=1;
+     cmd_cancel=-2;
+     ZCMD_OK_NOEND=-10;
+
 
      CEDeSelect=1;
      CEDWGNChanged=2;

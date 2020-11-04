@@ -777,11 +777,6 @@ begin
   ToolBarsManager.IterateToolBarsContent(FixButtonCaption);
   result:=cmd_ok;
 end;
-function LoadMenus_com(operands:TCommandOperands):TCommandResult;
-begin
-  MenusManager.LoadMenus(ExpandPath(operands));
-  result:=cmd_ok;
-end;
 function LoadToolbars_com(operands:TCommandOperands):TCommandResult;
 begin
   ToolBarsManager.LoadToolBarsContent(ExpandPath(operands));
@@ -822,7 +817,6 @@ begin
   CreateCommandFastObjectPlugin(@MemSummary_com,'MeMSummary',0,0);
   CreateCommandFastObjectPlugin(@ShowPage_com,'ShowPage',0,0);
   CreateCommandFastObjectPlugin(@LoadActions_com,'LoadActions',0,0);
-  CreateCommandFastObjectPlugin(@LoadMenus_com,'LoadMenus',0,0);
   CreateCommandFastObjectPlugin(@LoadToolbars_com,'LoadToolbars',0,0);
   CreateCommandFastObjectPlugin(@LoadPalettes_com,'LoadPalettes',0,0);
   CreateCommandFastObjectPlugin(@ExecuteFile_com,'ExecuteFile',0,0);

@@ -31,6 +31,7 @@ uses
   uzeutils,uzcutils,
   uzglviewareadata,
   uzccommand_move,
+  uzccommandsabstract,
   uzbgeomtypes,uzeentity,LazLogger;
 type
 {EXPORT+}

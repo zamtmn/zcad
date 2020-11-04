@@ -131,6 +131,10 @@ uses
   uzccommand_blockpreviewexport,
   uzccommand_layoff,
   uzccommand_loadmenus,
+  uzccommand_loadpalettes,
+  uzccommand_loadtoolbars,
+  uzccommand_loadactions,
+
 
   {$IFDEF ELECTROTECH}
   //**for velec func**//

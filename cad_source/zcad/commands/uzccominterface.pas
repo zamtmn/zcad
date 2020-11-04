@@ -763,30 +763,6 @@ begin
   ZCADMainWindow.PageControl.ActivePageIndex:=strtoint(Operands);
   result:=cmd_ok;
 end;
-procedure FixButtonCaption(_tb:TToolBar;_control:tcontrol);
-begin
-  if _control is TToolButton then
-    if assigned((_control as TToolButton).action) then
-       if ((_control as TToolButton).action)is TmyAction then
-         (_control as TToolButton).Caption:=(((_control as TToolButton).action)as TmyAction).imgstr;
-end;
-
-function LoadActions_com(operands:TCommandOperands):TCommandResult;
-begin
-  ToolBarsManager.LoadActions(ExpandPath(operands));
-  ToolBarsManager.IterateToolBarsContent(FixButtonCaption);
-  result:=cmd_ok;
-end;
-function LoadToolbars_com(operands:TCommandOperands):TCommandResult;
-begin
-  ToolBarsManager.LoadToolBarsContent(ExpandPath(operands));
-  result:=cmd_ok;
-end;
-function LoadPalettes_com(operands:TCommandOperands):TCommandResult;
-begin
-  ToolBarsManager.LoadPalettes(ExpandPath(operands));
-  result:=cmd_ok;
-end;
 procedure startup;
 begin
   CreateCommandFastObjectPlugin(@newdwg_com,'NewDWG',0,0).CEndActionAttr:=CEDWGNChanged;
@@ -816,9 +792,6 @@ begin
   CreateCommandFastObjectPlugin(@DebClip_com,'DebClip',0,0);
   CreateCommandFastObjectPlugin(@MemSummary_com,'MeMSummary',0,0);
   CreateCommandFastObjectPlugin(@ShowPage_com,'ShowPage',0,0);
-  CreateCommandFastObjectPlugin(@LoadActions_com,'LoadActions',0,0);
-  CreateCommandFastObjectPlugin(@LoadToolbars_com,'LoadToolbars',0,0);
-  CreateCommandFastObjectPlugin(@LoadPalettes_com,'LoadPalettes',0,0);
   CreateCommandFastObjectPlugin(@ExecuteFile_com,'ExecuteFile',0,0);
   AboutForm:=nil;
   HelpForm:=nil;

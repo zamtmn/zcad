@@ -118,7 +118,7 @@ begin
   ps.pfont:=FontManager.addFonf(FindInPaths(sysvarPATHFontsPath,FontFile));
   if not assigned(ps.pfont) then
                                 begin
-                                     debugln('{WH}'+fontnotfoundandreplace,[Tria_AnsiToUtf8(stylename),FontFile]);
+                                     debugln('{WHM}'+fontnotfoundandreplace,[Tria_AnsiToUtf8(stylename),FontFile]);
                                      //programlog.LogOutFormatStr(fontnotfoundandreplace,[Tria_AnsiToUtf8(stylename),FontFile],lp_OldPos,LM_Debug);
                                      //uzcshared.LogError(sysutils.format(fontnotfoundandreplace,[Tria_AnsiToUtf8(stylename),FontFile]));
                                      ps.pfont:=pbasefont;
@@ -150,7 +150,7 @@ begin
   ts.pfont:=FontManager.addFonf(FindInPaths(sysvarPATHFontsPath,FontFile));
   if not assigned(ts.pfont) then
                                 begin
-                                     debugln('{WH}'+fontnotfoundandreplace,[Tria_AnsiToUtf8(stylename),FontFile]);
+                                     debugln('{WHM}'+fontnotfoundandreplace,[Tria_AnsiToUtf8(stylename),FontFile]);
                                      //programlog.LogOutFormatStr(fontnotfoundandreplace,[Tria_AnsiToUtf8(stylename),FontFile],lp_OldPos,LM_Debug);
                                      //uzcshared.LogError(sysutils.format(fontnotfoundandreplace,[Tria_AnsiToUtf8(stylename),FontFile]));
                                      ts.pfont:=pbasefont;

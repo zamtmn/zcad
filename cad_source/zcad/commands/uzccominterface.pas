@@ -212,7 +212,7 @@ begin
 
      ZCADMainWindow.PageControl.ActivePage:=myts;
      //programlog.logoutstr('MainFormN.PageControl.ActivePage:=myts;',0);
-     ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
+     //ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);//после lazarus r63888 это вызывает вис на показе мессагебокса при загрузке файла
      //if assigned(UpdateVisibleProc) then UpdateVisibleProc(ZMsgID_GUIActionRedraw);
      //programlog.logoutstr('sharedgdb.updatevisible;',0);
      operands:=operands;

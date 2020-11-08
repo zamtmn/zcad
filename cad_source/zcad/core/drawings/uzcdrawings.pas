@@ -29,7 +29,8 @@ uses
     UGDBSelectedObjArray,uzestylestexts,uzefontmanager,uzestyleslinetypes,
     UGDBOpenArrayOfPV,uzefont,gzctnrvectorpobjects,UGDBVisibleOpenArray,
     gzctnrvectortypes,uzedimensionaltypes,uzetrash,UGDBOpenArrayOfByte,uzglviewareadata,
-    uzccommandsabstract,uzcshared;
+    uzccommandsabstract,
+    LCLProc;
 type
 {TDWGProps=packed record
                 Name:GDBString;
@@ -594,25 +595,22 @@ var
    //pvisible,pvisible2:PGDBObjEntity;
   // pl:PGDBLayerProp;
 begin
-     td:=PTSimpleDrawing(_to).BlockDefArray.getblockdef(name);
-     if td=nil then
-     begin
-          td:=BlockBaseDWG.BlockDefArray.getblockdef(name);
-          if td=nil then
-                        begin
-                             td:=CreateBlockDef(_to,name);
-                             if td=nil  then
-                                            td:=BlockBaseDWG.BlockDefArray.getblockdef(name)
-                                        else
-                                            exit;
-                        end;
-          if td=nil then
-                        begin
-                          exit;
-                          uzcshared.FatalError(sysutils.format('Block "%s" not found! If this dimension arrow block - manually creating block not implemented yet((',[name]));
-                        end;
-          CopyBlock(BlockBaseDWG,PTSimpleDrawing(_to),td);
-     end;
+  td:=PTSimpleDrawing(_to).BlockDefArray.getblockdef(name);
+  if td=nil then begin
+    td:=BlockBaseDWG.BlockDefArray.getblockdef(name);
+    if td=nil then begin
+      td:=CreateBlockDef(_to,name);
+      if td=nil then
+        td:=BlockBaseDWG.BlockDefArray.getblockdef(name)
+      else
+        exit;
+    end;
+    if td=nil then begin
+      DebugLn(sysutils.format('{EW}Block "%s" not found! If this dimension arrow block - manually creating block not implemented yet((',[name]));
+      exit;
+    end;
+    CopyBlock(BlockBaseDWG,PTSimpleDrawing(_to),td);
+  end;
 end;
 function createtstylebyindex(_from,_to:PTSimpleDrawing;oldti:{TArrayIndex}PGDBTextStyle):PGDBTextStyle;
 var

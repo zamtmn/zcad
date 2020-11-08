@@ -330,7 +330,7 @@
         <IsPartOfProject Value="True"/>
       </Unit2>
       <Unit3>
-        <Filename Value="zcad/uzcshared.pas"/>
+        <Filename Value="zcad/gui/uzcmessagedialogs.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit3>
       <Unit4>

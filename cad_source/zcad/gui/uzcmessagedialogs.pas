@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzcshared;
+unit uzcmessagedialogs;
 {$INCLUDE def.inc}
 interface
 uses

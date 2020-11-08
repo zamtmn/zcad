@@ -20,11 +20,25 @@ unit uzcmessagedialogs;
 {$INCLUDE def.inc}
 interface
 uses
-    SysUtils,Forms,{$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}
+    LCLTaskDialog,SysUtils,Forms,{$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}
     uzcinterface,uzclog;
 
+resourcestring
+  rsMsgWndTitle='ZCad';
+  rsMsgNoAsk='Do no ask next time';
+
+type
+  TMsgDialogResult=record
+    ModalResult:integer;
+    RadioRes: integer;
+    SelectionRes: integer;
+    VerifyChecked: Boolean;
+  end;
+
 procedure FatalError(errstr:String);
-//procedure ShowError(errstr:String);
+function zcMsgDlgError(ErrStr:String;NeedNoAsk:boolean=false):TMsgDialogResult;
+function zcMsgDlgWarning(ErrStr:String;NeedNoAsk:boolean=false):TMsgDialogResult;
+function zcMsgDlgInformation(ErrStr:String;NeedNoAsk:boolean=false):TMsgDialogResult;
 
 implementation
 procedure FatalError(errstr:String);
@@ -39,15 +53,45 @@ begin
 
      halt(0);
 end;
-{procedure ShowError(errstr:String);
+function zcMsgDlg(MsgStr:String;aDialogIcon: TTaskDialogIcon;NeedNoAsk:boolean=false):TMsgDialogResult;
 var
-   ts:String;
+  Task: TTaskDialog;
 begin
-     ZCMsgCallBackInterface.TextMessage(errstr,TMWOSilentShowError);
-     ts:=(errstr);
-     ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
-     Application.MessageBox(@ts[1],'',MB_OKCANCEL or MB_ICONERROR);
-     ZCMsgCallBackInterface.Do_AfterShowModal(nil);
-end;}
+  ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
+
+  Task.Title:=rsMsgWndTitle;
+  Task.Inst:='';
+  Task.Content:=MsgStr;
+  if NeedNoAsk then
+    Task.Verify:=rsMsgNoAsk
+  else
+    Task.Verify:='';
+  Task.VerifyChecked := false;
+
+  Result.ModalResult:=Task.Execute([],0,[tdfPositionRelativeToWindow],aDialogIcon);//controls.mrOk
+  Result.RadioRes:=Task.RadioRes;
+  Result.SelectionRes:=Task.SelectionRes;
+  Result.VerifyChecked:=Task.VerifyChecked;
+
+  ZCMsgCallBackInterface.Do_AfterShowModal(nil);
+end;
+function zcMsgDlgError(ErrStr:String;NeedNoAsk:boolean=false):TMsgDialogResult;
+var
+  Task: TTaskDialog;
+begin
+  Result:=zcMsgDlg(ErrStr,tiError,NeedNoAsk);
+end;
+function zcMsgDlgWarning(ErrStr:String;NeedNoAsk:boolean=false):TMsgDialogResult;
+var
+  Task: TTaskDialog;
+begin
+  Result:=zcMsgDlg(ErrStr,tiWarning,NeedNoAsk);
+end;
+function zcMsgDlgInformation(ErrStr:String;NeedNoAsk:boolean=false):TMsgDialogResult;
+var
+  Task: TTaskDialog;
+begin
+  Result:=zcMsgDlg(ErrStr,tiInformation,NeedNoAsk);
+end;
 begin
 end.

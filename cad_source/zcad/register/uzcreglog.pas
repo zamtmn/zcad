@@ -23,20 +23,30 @@ uses uzclog,uzcinterface,uzcmessagedialogs,
      {$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}LCLProc,Forms;
 implementation
 
+procedure ShowMessageForLog(errstr:String);
+var
+   dr:TMsgDialogResult;
+begin
+  dr:=zcMsgDlgInformation(ErrStr,true);
+end;
+procedure ShowWarningForLog(errstr:String);
+var
+   dr:TMsgDialogResult;
+begin
+  dr:=zcMsgDlgWarning(ErrStr,true);
+end;
 procedure ShowErrorForLog(errstr:String);
 var
-   ts:String;
+   dr:TMsgDialogResult;
 begin
-     ZCMsgCallBackInterface.TextMessage(errstr,TMWOSilentShowError);
-     ts:=(errstr);
-     ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
-     Application.MessageBox(@ts[1],'',MB_OKCANCEL or MB_ICONERROR);
-     ZCMsgCallBackInterface.Do_AfterShowModal(nil);
+  dr:=zcMsgDlgError(ErrStr,true);
 end;
 
 initialization
   uzclog.HistoryTextOut:=ZCMsgCallBackInterface.Do_HistoryOut();
-  uzclog.MessageBoxTextOut:=@ShowErrorForLog;
+  uzclog.MessageBoxTextOut:=@ShowMessageForLog;
+  uzclog.WarningBoxTextOut:=@ShowWarningForLog;
+  uzclog.ErrorBoxTextOut:=@ShowErrorForLog;
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

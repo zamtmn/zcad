@@ -110,7 +110,7 @@ var programlog:tlog;
    VerboseLog:boolean;
    SplashTextOut:TSplashTextOutProc;
    HistoryTextOut:THistoryTextOutMethod;
-   MessageBoxTextOut:THistoryTextOutProc;
+   MessageBoxTextOut,WarningBoxTextOut,ErrorBoxTextOut:THistoryTextOutProc;
 implementation
 var
     PerfomaneBuf:GDBOpenArrayOfByte;
@@ -452,6 +452,7 @@ begin
                 'D':dbgmode:=LM_Debug;
                 'I':dbgmode:=LM_Info;
                 'W':dbgmode:=LM_Warning;
+                'E':dbgmode:=LM_Error;
                 'F':dbgmode:=LM_Fatal;
                 'N':dbgmode:=LM_Necessarily;
                 '+':_indent:=lp_IncPos;
@@ -485,8 +486,14 @@ begin
        if assigned(HistoryTextOut) then
          HistoryTextOut(s);
      if NeedMessageBox then
-       if assigned(MessageBoxTextOut) then
-         MessageBoxTextOut(s);
+       case dbgmode of
+         LM_Warning:if assigned(WarningBoxTextOut) then
+                      WarningBoxTextOut(s);
+  LM_Error,LM_Fatal:if assigned(ErrorBoxTextOut) then
+                      ErrorBoxTextOut(s);
+               else if assigned(MessageBoxTextOut) then
+                      MessageBoxTextOut(s);
+       end;
      if IsNeedToLog(dbgmode,lmdi) then
       LogOutStr(S,_indent,dbgmode,lmdi);
 end;

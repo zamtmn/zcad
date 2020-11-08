@@ -16,30 +16,14 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzcmessagedialogs;
+unit uzcreglog;
 {$INCLUDE def.inc}
 interface
-uses
-    SysUtils,Forms,{$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}
-    uzcinterface,uzclog;
-
-procedure FatalError(errstr:String);
-//procedure ShowError(errstr:String);
-
+uses uzclog,uzcinterface,uzcmessagedialogs,
+     {$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}LCLProc,Forms;
 implementation
-procedure FatalError(errstr:String);
-var s:String;
-begin
-     s:='FATALERROR: '+errstr;
-     programlog.logoutstr(s,0,LM_Fatal);
-     s:=(s);
-     ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
-     Application.MessageBox(@s[1],'',MB_OK or MB_ICONSTOP);
-     ZCMsgCallBackInterface.Do_AfterShowModal(nil);
 
-     halt(0);
-end;
-{procedure ShowError(errstr:String);
+procedure ShowErrorForLog(errstr:String);
 var
    ts:String;
 begin
@@ -48,6 +32,12 @@ begin
      ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
      Application.MessageBox(@ts[1],'',MB_OKCANCEL or MB_ICONERROR);
      ZCMsgCallBackInterface.Do_AfterShowModal(nil);
-end;}
-begin
+end;
+
+initialization
+  uzclog.HistoryTextOut:=ZCMsgCallBackInterface.Do_HistoryOut();
+  uzclog.MessageBoxTextOut:=@ShowErrorForLog;
+finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.
+

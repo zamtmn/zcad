@@ -72,7 +72,6 @@ uses
 
   uzegeometry,
 
-  uzcshared,
   uzeentityfactory,    //unit describing a "factory" to create primitives
                       //модуль описывающий "фабрику" для создания примитивов
   uzcsysvars,        //system global variables

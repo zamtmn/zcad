@@ -157,19 +157,15 @@ begin
   //if assigned(OpenglParam.RD_VSync) then
   if OpenglParam.RD_VSync<>T3SB_Default then
   begin
-       Pointer(@wglSwapIntervalEXT) := wglGetProcAddress('wglSwapIntervalEXT');
-       if @wglSwapIntervalEXT<>nil then
-                                           begin
-                                                if OpenglParam.RD_VSync=T3SB_True then
-                                                                                 wglSwapIntervalEXT(1)
-                                                                             else
-                                                                                 wglSwapIntervalEXT(0);
-                                           end
-                                       else
-                                           begin
-                                                //uzcshared.LogError('wglSwapIntervalEXT not supported by your video driver. Please set the VSync in the defaul');
-                                                DebugLn('{EH}wglSwapIntervalEXT not supported by your video driver. Please set the VSync in the defaul');
-                                           end;
+    Pointer(@wglSwapIntervalEXT) := wglGetProcAddress('wglSwapIntervalEXT');
+    if @wglSwapIntervalEXT<>nil then begin
+      if OpenglParam.RD_VSync=T3SB_True then
+        wglSwapIntervalEXT(1)
+      else
+        wglSwapIntervalEXT(0);
+    end else begin
+      DebugLn('{EH}wglSwapIntervalEXT not supported by your video driver. Please set the VSync in the defaul');
+    end;
   end;
   {$ENDIF}
   if VerboseLog^ then

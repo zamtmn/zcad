@@ -40,7 +40,6 @@ uses
   uzeffdxf,
   uzcinterface,
   uzeentity,
- uzcshared,
  uzbtypesbase,uzbmemman,uzcdialogsfiles,
  UUnitManager,uzclog,Varman,
  uzbgeomtypes,dialogs,uzcinfoform,

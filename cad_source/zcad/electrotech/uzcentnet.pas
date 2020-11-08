@@ -12,7 +12,7 @@ uses uzcinterface,uzeobjectextender,uzeentityfactory,Varman,uzgldrawcontext,uzes
      uzeentgenericsubentry,uzedrawingdef,uzeentitiesprop,uzcsysvars,UGDBOpenArrayOfByte,
      uzbtypesbase,uzeentity,UGDBOpenArrayOfPV,uzeentconnected,uzeconsts,
      varmandef,uzegeometry,uzbtypes,UGDBGraf,uzbmemman,uzeentsubordinated,uunitmanager,
-     gzctnrvectortypes,uzbgeomtypes,uzcshared,sysutils,gzctnrvectorpobjects,
+     gzctnrvectortypes,uzbgeomtypes,sysutils,gzctnrvectorpobjects,
      uzcenitiesvariablesextender,uzeentline,uzeffdxfsupport,math,uzclog,LazLogger;
 resourcestring
   rscannotbeconnected='Can not be connected';

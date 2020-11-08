@@ -11,7 +11,7 @@ uses
 
   uzcgui2linetypes,uzeconsts,uzestyleslayers,uzcdrawings,uzbtypesbase,uzbtypes,varmandef,
 
-  uzcinterface, uzcstrconsts, uzbstrproc, uzcshared, UBaseTypeDescriptor,
+  uzcinterface, uzcstrconsts, uzbstrproc,UBaseTypeDescriptor,
   gzctnrvectortypes,uzcimagesmanager, usupportgui, ZListView;
 
 const

@@ -44,7 +44,7 @@ uses
   uzbmemman,
   uzeconsts,
   uzbgeomtypes,uzeentity,uzeentcircle,uzeentline,uzeentgenericsubentry,uzeentmtext,
-  uzcshared,uzeentblockinsert,uzeentpolyline,uzclog,
+  uzeentblockinsert,uzeentpolyline,uzclog,
   uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,TypeDescriptors
   ,uzelongprocesssupport,LazLogger;
 const

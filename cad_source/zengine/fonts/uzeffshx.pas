@@ -31,9 +31,9 @@ type ptsyminfo=^tsyminfo;
                            number,size:word;
                      end;
 function createnewfontfromshx(name:GDBString;var pf:PGDBfont):GDBBoolean;
+
 implementation
-//uses
-//    uzcshared;
+
 function createsymbol(pf:PGDBfont;symbol:GDBInteger;pshxdata:system.pbyte;unicode:boolean;symname:gdbstring):GDBInteger;
 var
   i,sizeshp,sizeshx,stackheap:GDBInteger;

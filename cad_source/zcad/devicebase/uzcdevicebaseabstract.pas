@@ -2,7 +2,7 @@ unit uzcdevicebaseabstract;
 {$INCLUDE def.inc}
 interface
 uses uzcsysvars,{$IFNDEF DELPHI}fileutil,{$ENDIF}uzbstrproc,strmy,uzbtypesbase,
-     uzbtypes,UUnitManager,varman,sysutils,typedescriptors,uzcshared,uzclog;
+     uzbtypes,UUnitManager,varman,sysutils,typedescriptors,uzclog;
 type
 {REGISTEROBJECTTYPE DbBaseObject}
 {EXPORT+}

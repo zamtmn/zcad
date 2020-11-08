@@ -25,7 +25,7 @@ uses
   uzcutils,uzbpaths,Themes,uzcinterface,uzccommandsabstract,ExtCtrls,lclproc,Graphics,ActnList,ComCtrls,
   Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,{$ENDIF}LazUTF8,Buttons,
   {$IFNDEF DELPHI}uzctranslations,{$ENDIF}sysutils,uzbstrproc,varmandef,
-  uzcshared,uzccommandsmanager,uzclog,uzcdrawings,Varman,UBaseTypeDescriptor,uzbtypesbase,uzcsysinfo,UGDBOpenArrayOfByte;
+  uzccommandsmanager,uzclog,uzcdrawings,Varman,UBaseTypeDescriptor,uzbtypesbase,uzcsysinfo,UGDBOpenArrayOfByte;
 type
     TZAction=class(TAction)
                    public

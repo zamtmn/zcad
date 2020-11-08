@@ -30,7 +30,7 @@ uses
        uzbpaths,
        //UGDBOpenArrayOfByte,uzbmemman,uzbtypesbase,uzbtypes,
        uzegeometry,uzcsysvars,uzbstrproc,uzclog,
-       varmandef, varman,UUnitManager,uzcsysinfo,uzcshared,strmy,uzestylesdim,
+       varmandef, varman,UUnitManager,uzcsysinfo,strmy,uzestylesdim,
   {ZCAD SIMPLE PASCAL SCRIPT}
        languade,
   {ZCAD ENTITIES}

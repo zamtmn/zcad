@@ -20,7 +20,7 @@ unit uzcfhelp;
 {$INCLUDE def.inc}
 interface
 uses
- uzcshared,uzclog,uzbstrproc,uzctreenode,FileUtil,Forms, stdctrls, Controls,uzbtypes,languade,uzbmemman,uzcstrconsts;
+ uzclog,uzbstrproc,uzctreenode,FileUtil,Forms, stdctrls, Controls,uzbtypes,languade,uzbmemman,uzcstrconsts;
 type
   THelpForm = class(TFreedForm)
     Memo:TMemo;

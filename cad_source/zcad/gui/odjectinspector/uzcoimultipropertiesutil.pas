@@ -21,7 +21,7 @@ unit uzcoimultipropertiesutil;
 
 interface
 uses
-  uzctnrvectorgdbpointer,uzbstrproc, uzctnrvectorgdbstring,{uzcoimultiobjects,}uzepalette,uzbmemman,uzcshared,sysutils,uzeentityfactory,
+  uzctnrvectorgdbpointer,uzbstrproc, uzctnrvectorgdbstring,{uzcoimultiobjects,}uzepalette,uzbmemman,sysutils,uzeentityfactory,
   uzbgeomtypes,uzbtypes,
   uzcdrawings,
   varmandef,

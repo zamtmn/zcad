@@ -19,7 +19,7 @@ unit uzcenitiesvariablesextender;
 {$INCLUDE def.inc}
 
 interface
-uses sysutils,UGDBObjBlockdefArray,uzedrawingdef,uzeentityextender,uzcshared,
+uses sysutils,UGDBObjBlockdefArray,uzedrawingdef,uzeentityextender,
      uzeentdevice,TypeDescriptors,uzetextpreprocessor,UGDBOpenArrayOfByte,
      uzbtypesbase,uzbtypes,uzeentsubordinated,uzeentity,uzeenttext,uzeblockdef,
      varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,uzbmemman,

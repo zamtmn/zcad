@@ -66,7 +66,7 @@ TZCADDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleDrawing)
 {EXPORT-}
 //procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
 implementation
- uses uzcdrawings,uzeenttext,uzeentdevice,uzeentblockinsert,uzeffdxf,uzcshared,uzccommandsmanager;
+ uses uzcdrawings,uzeenttext,uzeentdevice,uzeentblockinsert,uzeffdxf,uzccommandsmanager;
 procedure TZCADDrawing.FillDrawingPartRC(out dc:TDrawContext);
 var
   vd:pvardesk;

@@ -19,7 +19,7 @@
 unit uzcregnavigatorentities;
 {$INCLUDE def.inc}
 interface
-uses uzcfnavigatorentities,uzcfcommandline,uzbpaths,TypeDescriptors,uzctranslations,uzcshared,Forms,
+uses uzcfnavigatorentities,uzcfcommandline,uzbpaths,TypeDescriptors,uzctranslations,Forms,
      uzbtypes,varmandef,
      uzeentity,zcobjectinspector,uzcguimanager,
      Types,Controls,uzcdrawings,Varman,UUnitManager,uzcsysvars,uzcsysinfo,LazLogger;

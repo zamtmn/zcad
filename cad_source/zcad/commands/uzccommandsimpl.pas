@@ -23,7 +23,7 @@ unit uzccommandsimpl;
 interface
 uses uzcutils,uzgldrawcontext,uzglviewareageneral,uzeconsts,uzcsysvars,uzegeometry,
      varmandef,uzbtypesbase,uzbtypes,uzccommandsabstract,uzccommandsmanager,
-     uzbgeomtypes,uzglviewareadata,uzcdrawings,uzbmemman,uzcshared,
+     uzbgeomtypes,uzglviewareadata,uzcdrawings,uzbmemman,
      gzctnrvectortypes,uzcinterface,varman,uzclog;
 type
   comproc=procedure(_self:pointer);

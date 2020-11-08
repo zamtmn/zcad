@@ -161,7 +161,7 @@ uses
   uzcplugins,
   //zcregisterobjectinspector,
   uzcmainwindow,
-  uzcshared,
+  uzcmessagedialogs,
   uzcstrconsts,
   uzeiopalette,
   uzctextpreprocessorimpl,

@@ -19,7 +19,7 @@
 unit uzcoiregister;
 {$INCLUDE def.inc}
 interface
-uses Laz2_DOM,Toolwin,Clipbrd,sysutils,uzccommandsabstract,uzcfcommandline,uzcutils,uzbpaths,TypeDescriptors,uzctranslations,uzcshared,Forms,uzcinterface,uzeroot,
+uses Laz2_DOM,Toolwin,Clipbrd,sysutils,uzccommandsabstract,uzcfcommandline,uzcutils,uzbpaths,TypeDescriptors,uzctranslations,Forms,uzcinterface,uzeroot,
      uzbtypes,uzedrawingdef,uzgldrawcontext,uzctnrvectorgdbstring,varmandef,uzedrawingsimple,
      uzeentity,uzcenitiesvariablesextender,zcobjectinspector,uzcguimanager,uzcstrconsts,
      gzctnrvectortypes,Types,Controls,uzcdrawings,Varman,UUnitManager,uzcsysvars,

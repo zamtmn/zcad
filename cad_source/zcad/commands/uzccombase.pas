@@ -42,7 +42,6 @@ uses
   uzcinterface,
   uzeconsts,
   uzeentity,
- uzcshared,
  uzeentitiestree,
  uzbtypesbase,uzbmemman,uzcdialogsfiles,
  UUnitManager,uzclog,Varman,

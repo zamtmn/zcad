@@ -87,8 +87,9 @@ procedure extractvarfromdxfstring(_Value:GDBString;out vn,vt,vv,vun:GDBString);
 procedure OldVersVarRename(var vn,vt,vv,vun:GDBString);
 procedure OldVersTextReplace(var vv:GDBString);overload;
 procedure OldVersTextReplace(var vv:TDXFEntsInternalStringType);overload;
+
 implementation
-//uses {uzcshared,}log;
+
 procedure GDBObjExtendable.AddExtension(ExtObj:PTBaseEntityExtender;ObjSize:GDBInteger);
 begin
      if not assigned(EntExtensions) then

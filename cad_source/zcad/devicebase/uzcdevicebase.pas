@@ -3,7 +3,7 @@ unit uzcdevicebase;
 interface
 uses uzcinterface,uzbpaths,uzctranslations,gvector,varmandef,CsvDocument,uzcdevicebaseabstract,uzcsysvars,
      LazUTF8,uzcsysinfo,strmy,uzbtypesbase,uzbtypes,UUnitManager,varman,sysutils,
-     typedescriptors,URecordDescriptor,UObjectDescriptor,uzcshared,uzclog;
+     typedescriptors,URecordDescriptor,UObjectDescriptor,uzclog;
 type
 {REGISTEROBJECTTYPE DeviceDbBaseObject}
 {REGISTEROBJECTTYPE ElDeviceBaseObject}

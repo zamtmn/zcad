@@ -25,7 +25,7 @@ uses
      {$ENDIF}*)
      uzgldrawercanvas,uzglviewareaabstract,sysutils,uzbmemman,
      uzbtypesbase,uzbtypes,
-     varmandef,uzccommandsmanager,uzcsysvars,uzegeometry,uzcshared,LCLType,
+     varmandef,uzccommandsmanager,uzcsysvars,uzegeometry,LCLType,
      ExtCtrls,classes,Controls,Graphics,uzglbackendmanager,
      uzglviewareacanvasgeneral;
 type

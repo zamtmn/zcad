@@ -23,7 +23,7 @@ interface
 uses
   uzeenttext,uzctnrvectorgdbpointer,uzeentblockinsert,uzeconsts,uzcinterface,
   LazLoggerBase,uzcoimultiproperties,uzcoiwrapper,uzctranslations,uzepalette,
-  uzbmemman,uzcshared,uzedimensionaltypes,uzcstrconsts,sysutils,uzeentityfactory,
+  uzbmemman,uzedimensionaltypes,uzcstrconsts,sysutils,uzeentityfactory,
   uzcenitiesvariablesextender,uzgldrawcontext,usimplegenerics,gzctnrstl,
   gzctnrvectortypes,uzbtypes,uzcdrawings,varmandef,uzeentity,uzbtypesbase,
   Varman,uzctnrvectorgdbstring,UGDBSelectedObjArray,uzcoimultipropertiesutil;

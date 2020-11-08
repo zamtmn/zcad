@@ -29,7 +29,7 @@ uses
     UGDBSelectedObjArray,uzestylestexts,uzefontmanager,uzestyleslinetypes,
     UGDBOpenArrayOfPV,uzefont,gzctnrvectorpobjects,UGDBVisibleOpenArray,
     gzctnrvectortypes,uzedimensionaltypes,uzetrash,UGDBOpenArrayOfByte,uzglviewareadata,
-    uzccommandsabstract;
+    uzccommandsabstract,uzcshared;
 type
 {TDWGProps=packed record
                 Name:GDBString;
@@ -97,7 +97,7 @@ function dwgQSave_com(dwg:PTSimpleDrawing):GDBInteger;
 function SetCurrentDWG(PDWG:pointer):pointer;
 //procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
 implementation
- uses uzcenitiesvariablesextender,uzeenttext,uzeentdevice,uzeentblockinsert,uzeffdxf,uzcshared,uzccommandsmanager;
+ uses uzcenitiesvariablesextender,uzeenttext,uzeentdevice,uzeentblockinsert,uzeffdxf,uzccommandsmanager;
 procedure TZCADDrawingsManager.redrawoglwnd(Sender:TObject;GUIAction:TZMessageID);
 var
    pdwg:PTSimpleDrawing;

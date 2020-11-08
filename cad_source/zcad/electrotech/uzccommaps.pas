@@ -15,7 +15,7 @@ uses
   uzcinterface,uzbtypesbase,uzccommandsmanager,uzclog,gzctnrvectorpobjects,
   uzccommandsabstract,uzccommandsimpl,uzbtypes,uzcdrawings,uzeutils,uzcutils,sysutils,
   varmandef,UGDBOpenArrayOfByte,uzeffdxf,uzegeometry,uzbmemman,uzeconsts,
-  uzccomdraw,uzeentline,uzbpaths,uzcshared,uzeentblockinsert,
+  uzccomdraw,uzeentline,uzbpaths,uzeentblockinsert,
   uzbgeomtypes,varman,uzeentdevice,uzeentmtext,math,
   uzcentcable,UUnitManager,
   gzctnrvectortypes,uzccomelectrical,URecordDescriptor,TypeDescriptors,LazLogger,

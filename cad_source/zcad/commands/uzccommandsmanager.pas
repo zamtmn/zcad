@@ -23,7 +23,7 @@ uses uzctnrvectorgdbpointer,gzctnrvectorpobjects,uzcsysvars,uzegeometry,uzglview
      uzeconsts,uzcctrldynamiccommandmenu,uzcinfoform,uzcstrconsts,uzcsysinfo,
      gzctnrvectortypes,uzbgeomtypes,uzbstrproc,gzctnrvectorp,
      uzbtypesbase,uzccommandsabstract, sysutils,uzbtypes,uzglviewareadata,
-     uzbmemman,uzclog,varmandef,varman,uzedrawingdef,uzcinterface,uzcshared,
+     uzbmemman,uzclog,varmandef,varman,uzedrawingdef,uzcinterface,
      uzcsysparams,uzedrawingsimple,uzctnrvectorgdbstring,forms,LazLogger;
 const
      tm:tmethod=(Code:nil;Data:nil);

@@ -47,7 +47,6 @@ uses
   //UGDBVisibleOpenArray,
   //gdbobjectsconstdef,
   uzeentity,
- uzcshared,
  uzcdrawing,
   {zmenus,}uzcfprojecttree,uzbtypesbase,{optionswnd,}uzcfabout,uzcfhelp,uzbmemman,uzcdialogsfiles,{txteditwnd,}
  {messages,}UUnitManager,{zguisct,}uzclog,Varman,UGDBNumerator,uzcfcommandline,uzcfhistorywindow,

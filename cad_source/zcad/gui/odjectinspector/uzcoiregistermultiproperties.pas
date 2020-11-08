@@ -21,7 +21,7 @@ unit uzcoiregistermultiproperties;
 
 interface
 uses
-  uzeentwithlocalcs,math,uzcoimultiobjects,uzepalette,uzbmemman,uzcshared,sysutils,uzeentityfactory,
+  uzeentwithlocalcs,math,uzcoimultiobjects,uzepalette,uzbmemman,sysutils,uzeentityfactory,
   uzbgeomtypes,uzbtypes,
   uzcdrawings,
   varmandef,

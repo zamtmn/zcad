@@ -21,7 +21,7 @@ unit uzeffdwg;
 {$MODE OBJFPC}
 interface
 uses LCLIntf,gdbentityfactory,zcadinterface,GDBLine,gdbobjectsconstdef,typinfo,
-     zcadstrconsts,iodxf,fileutil,varman,uzegeometry,uzcshared,gdbasetypes,//log,
+     zcadstrconsts,iodxf,fileutil,varman,uzegeometry,gdbasetypes,
      GDBGenericSubEntry,SysInfo,gdbase, GDBManager, sysutils, memman,UGDBDescriptor,
      UGDBOpenArrayOfByte,GDBEntity,TypeDescriptors,ugdbsimpledrawing;
 procedure addfromdwg(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);

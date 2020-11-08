@@ -177,17 +177,7 @@ uses
 
 resourcestring
  rsStartAutorun='Execute *components\autorun.cmd';
-  //RegCnownTypes,URegisterObjects;
 
-//exports HistoryOut,redrawoglwnd,updatevisible,reloadlayer; {uzcshared}
-//exports getcommandmanager; {commandline}
-//exports GDBObjLineInit,GDBObjCircleInit,getgdb,addblockinsert,CreateInitObjFree,CreateObjFree; {GDBManager}
-//exports getpsysvar,GetPVarMan; {varman}
-//exports Vertexmorph,Vertexlength,Vertexangle,VertexAdd,VertexDmorph,Vertexdmorphabs,Vertexmorphabs,intercept2d2,pointinquad2d; {uzegeometry}
-//exports CreateCommandRTEdObjectPlugin,CreateCommandFastObjectPlugin; {commanddefinternal}
-//exports getprogramlog; {log}
-//exports GDBGetMem,GDBFreeMem; {memman}
-//exports GetPZWinManager; {ZWinMan}
 
 {$R *.res}
 

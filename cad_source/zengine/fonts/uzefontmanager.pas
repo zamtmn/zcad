@@ -119,11 +119,9 @@ begin
   if pbasefont=nil then
   begin
        DebugLn('{E}'+rsAlternateFontNotFoundIn,[sysvarAlternateFont,sysvarPATHFontsPath]);
-       //uzcshared.LogError(format(rsAlternateFontNotFoundIn,[sysvarAlternateFont,sysvarPATHFontsPath]));
        r := LazarusResources.Find(resname);
        if r = nil then
                       DebugLn('{F}'+rsReserveFontNotFound)
-                      //uzcshared.FatalError(rsReserveFontNotFound)
                   else
                       begin
                            f.init({$IFDEF DEBUGBUILD}'{94091172-3DD7-4038-99B6-90CD8B8E971D}',{$ENDIF}length(r.Value));
@@ -133,7 +131,6 @@ begin
                            f.done;
                            if pbasefont=nil then
                                                 DebugLn('{F}'+rsReserveFontNotLoad)
-                                                //uzcshared.FatalError(rsReserveFontNotLoad);
                       end;
   end;
   addFonf(FindInPaths(sysvarPATHFontsPath,'ltypeshp.shx'));

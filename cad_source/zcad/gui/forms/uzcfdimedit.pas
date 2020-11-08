@@ -16,7 +16,7 @@ uses
 
   uzestylesdim,typinfo,
 
-  uzbpaths,uzcinterface, uzcstrconsts, uzcsysinfo,uzbstrproc, uzcshared,UBaseTypeDescriptor,
+  uzbpaths,uzcinterface, uzcstrconsts, uzcsysinfo,uzbstrproc,UBaseTypeDescriptor,
   uzcimagesmanager, uzefontmanager,varman,
   gzctnrvectortypes,uzeentity,uzeenttext,uzepalette, uzcflineweights,uzestyleslinetypes,Types;
 

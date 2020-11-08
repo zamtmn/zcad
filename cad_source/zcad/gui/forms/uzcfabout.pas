@@ -23,7 +23,7 @@ uses
  uzcsysparams,uzcstrconsts,gettext,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
  uzbstrproc,uzctreenode,FileUtil,Forms, stdctrls, Controls,
  uzbtypes,languade,uzcsysinfo,sysutils,
- uzeentityfactory,uzcshared,uzclog,uzccommandsmanager;
+ uzeentityfactory,uzclog,uzccommandsmanager;
 type
   TAboutForm = class(TFreedForm)
     Memo:TMemo;

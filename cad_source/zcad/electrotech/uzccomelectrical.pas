@@ -31,7 +31,7 @@ uses
   uzeconsts,
   uzeentity,uzeentline,
   uzcentnet,
-  uzcshared,uzeentsubordinated,uzcentcable,varman,uzcdialogsfiles,uunitmanager,
+  uzeentsubordinated,uzcentcable,varman,uzcdialogsfiles,uunitmanager,
   gzctnrvectorpobjects,uzcbillofmaterial,uzccablemanager,uzeentdevice,uzeenttable,
   uzbpaths,uzctnrvectorgdbstring,math,Masks,uzclog,uzccombase,uzbstrproc,
   uzeentmtext,uzeblockdef,UGDBPoint3DArray,uzcdevicebaseabstract,uzelongprocesssupport,LazLogger,

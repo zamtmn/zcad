@@ -45,7 +45,7 @@ GDBObjCamera={$IFNDEF DELPHI}packed{$ENDIF} object(GDBBaseCamera)
 {EXPORT-}
 
 implementation
-//uses {uzcshared,}log;
+
 procedure GDBObjCamera.NextPosition;
 begin
      Inc(POSCOUNT);

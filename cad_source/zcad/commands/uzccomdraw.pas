@@ -45,7 +45,7 @@ uses
   uzeconsts,
   uzccommand_move,uzccommand_copy,
   uzbgeomtypes,uzeentity,uzeentcircle,uzeentline,uzeentgenericsubentry,uzeentmtext,
-  uzcshared,uzeentsubordinated,uzeentblockinsert,uzeentpolyline,uzclog,gzctnrvectordata,
+  uzeentsubordinated,uzeentblockinsert,uzeentpolyline,uzclog,gzctnrvectordata,
   math,uzeenttable,uzctnrvectorgdbstring,
   uzeentcurve,uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray
   ,uzelongprocesssupport,LazLogger;

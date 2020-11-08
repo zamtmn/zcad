@@ -19,33 +19,33 @@
 unit uzcshared;
 {$INCLUDE def.inc}
 interface
-uses uzcinterface,uzclog,uzbpaths,{$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}Controls,
-     uzbtypesbase,Classes, SysUtils, {$IFNDEF DELPHI}fileutil,{$ENDIF}Forms,
-     ExtCtrls{, ComCtrls}{$IFNDEF DELPHI},LCLProc{$ENDIF};
+uses
+    SysUtils,Forms,{$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}
+    uzcinterface,uzclog;
 
-procedure FatalError(errstr:GDBString);
+procedure FatalError(errstr:String);
 
 implementation
-procedure FatalError(errstr:GDBString);
-var s:GDBString;
+procedure FatalError(errstr:String);
+var s:String;
 begin
      s:='FATALERROR: '+errstr;
      programlog.logoutstr(s,0,LM_Fatal);
      s:=(s);
      ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
-     Application.MessageBox(@s[1],'',MB_OK);
+     Application.MessageBox(@s[1],'',MB_OK or MB_ICONSTOP);
      ZCMsgCallBackInterface.Do_AfterShowModal(nil);
 
      halt(0);
 end;
 procedure ShowError(errstr:String); export;
 var
-   ts:GDBString;
+   ts:String;
 begin
      ZCMsgCallBackInterface.TextMessage(errstr,TMWOSilentShowError);
      ts:=(errstr);
      ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
-     Application.MessageBox(@ts[1],'',MB_ICONERROR);
+     Application.MessageBox(@ts[1],'',MB_OKCANCEL or MB_ICONERROR);
      ZCMsgCallBackInterface.Do_AfterShowModal(nil);
 end;
 begin

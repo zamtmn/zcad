@@ -24,8 +24,8 @@ uses
     uzcinterface,uzclog;
 
 resourcestring
-  rsMsgWndTitle='ZCad';
-  rsMsgNoAsk='Do no ask next time';
+  rsMsgWndTitle='ZCAD';
+  rsMsgNoShow='Do no show this next time';
 
 type
   TMsgDialogResult=record
@@ -63,7 +63,7 @@ begin
   Task.Inst:='';
   Task.Content:=MsgStr;
   if NeedNoAsk then
-    Task.Verify:=rsMsgNoAsk
+    Task.Verify:=rsMsgNoShow
   else
     Task.Verify:='';
   Task.VerifyChecked := false;

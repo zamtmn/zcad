@@ -52,6 +52,7 @@ uses
   uzcreggeneralwiewarea,
   uzcregfontmanager,
   uzcregpaths,
+  uzcreglog,
   uzcregenginefeatures,
   uzcreginterface,
   uzcregnavigatorentities,

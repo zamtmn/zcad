@@ -52,12 +52,12 @@ TZELongProcessSupport=class
                          OnLPStartProcVector:TOnLPStartProcVector;
                          OnLPProgressProcVector:TOnLPProgressProcVector;
                          OnLPEndProcVector:TOnLPEndProcVector;
-                         ActiveProcessCount:Integer;
                          procedure DoStartLongProcess(plpi:PTLPInfo;LPHandle:TLPSHandle);
                          procedure DoProgressLongProcess(plpi:PTLPInfo;LPHandle:TLPSHandle;Current:TLPSCounter);
                          procedure DoEndLongProcess(plpi:PTLPInfo;LPHandle:TLPSHandle);
 
                        public
+                         ActiveProcessCount:Integer;
                          function StartLongProcess(Total:TLPSCounter;LPName:TLPName;Context:pointer):TLPSHandle;
                          procedure ProgressLongProcess(LPHandle:TLPSHandle;Current:TLPSCounter);
                          procedure EndLongProcess(LPHandle:TLPSHandle);

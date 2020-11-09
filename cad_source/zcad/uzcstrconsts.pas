@@ -167,7 +167,7 @@ resourcestring
   rsLineTypeUsedIn='Line type "%s" used in: %d-model, %d-blockdef table';
   rsLineTypeDesk=';;Pattern length %f'#13#10'%s';
   rsSysLineTypeWarning='This is system line type!';
-  rsQuitQuery='Do yo want to quit ZCAD?';
+  rsQuitQuery='Do you want to quit ZCAD?';
   rsCloseDWGQuery='Drawing "%s" not saved. Save?';
   rsCurrentLayerOff='The current layer is turned off';
 

@@ -25,19 +25,19 @@ implementation
 
 procedure ShowMessageForLog(errstr:String);
 var
-   dr:TMsgDialogResult;
+   dr:TZCMsgDialogResult;
 begin
   dr:=zcMsgDlgInformation(ErrStr,true);
 end;
 procedure ShowWarningForLog(errstr:String);
 var
-   dr:TMsgDialogResult;
+   dr:TZCMsgDialogResult;
 begin
   dr:=zcMsgDlgWarning(ErrStr,true);
 end;
 procedure ShowErrorForLog(errstr:String);
 var
-   dr:TMsgDialogResult;
+   dr:TZCMsgDialogResult;
 begin
   dr:=zcMsgDlgError(ErrStr,true);
 end;

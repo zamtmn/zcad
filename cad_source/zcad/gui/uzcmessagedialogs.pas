@@ -25,27 +25,27 @@ uses
 
 resourcestring
   rsMsgWndTitle='ZCAD';
-  rsMsgNoShow='Do no show this next time';
+  rsMsgNoShow='Don''t show this next time (for current task)';
 
 type
-
-  TMsgDialogResult=record
+  TZCMsgDlgIcon=(diWarning, diQuestion, diError, diInformation, diNotUsed);
+  TZCMsgDialogResult=record
     ModalResult:integer;
     RadioRes: integer;
     SelectionRes: integer;
     VerifyChecked: Boolean;
   end;
 
-  TMessagesDictionary=TDictionary<string,TMsgDialogResult>;
+  TMessagesDictionary=TDictionary<string,TZCMsgDialogResult>;
 
   TLPSSupporthelper=class
     class procedure EndLongProcessHandler(LPHandle:TLPSHandle;TotalLPTime:TDateTime);
   end;
 
 procedure FatalError(errstr:String);
-function zcMsgDlgError(ErrStr:String;NeedNoAsk:boolean=false):TMsgDialogResult;
-function zcMsgDlgWarning(ErrStr:String;NeedNoAsk:boolean=false):TMsgDialogResult;
-function zcMsgDlgInformation(ErrStr:String;NeedNoAsk:boolean=false):TMsgDialogResult;
+function zcMsgDlgError(ErrStr:String;NeedNoAsk:boolean=false):TZCMsgDialogResult;
+function zcMsgDlgWarning(ErrStr:String;NeedNoAsk:boolean=false):TZCMsgDialogResult;
+function zcMsgDlgInformation(ErrStr:String;NeedNoAsk:boolean=false):TZCMsgDialogResult;
 
 implementation
 var
@@ -92,8 +92,20 @@ begin
     end;
   end;
 end;
-function zcMsgDlg(MsgStr:String;aDialogIcon: TTaskDialogIcon;NeedNoAsk:boolean=false):TMsgDialogResult;
-  function isMsgSupressed(MsgID:String;var PrevResult:TMsgDialogResult):boolean;
+
+function TZCMsgDlgIcon2TTaskDialogIcon(value:TZCMsgDlgIcon):TTaskDialogIcon;
+begin
+  case value of
+    diWarning:result:=tiWarning;
+   diQuestion:result:=tiQuestion;
+      diError:result:=tiError;
+diInformation:result:=tiInformation;
+    diNotUsed:result:=tiNotUsed;
+  end;
+end;
+
+function zcMsgDlg(MsgStr:String;aDialogIcon:TZCMsgDlgIcon;NeedNoAsk:boolean=false;MsgTitle:string=''):TZCMsgDialogResult;
+  function isMsgSupressed(MsgID:String;var PrevResult:TZCMsgDialogResult):boolean;
   begin
     if assigned(SuppressedMessages) then
       if SuppressedMessages.TryGetValue(MsgID,PrevResult) then
@@ -120,16 +132,20 @@ begin
     MsgID:='';
   ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
 
-  Task.Title:=rsMsgWndTitle;
+  if MsgTitle='' then
+    Task.Title:=rsMsgWndTitle
+  else
+    Task.Title:=MsgTitle;
+
   Task.Inst:='';
   Task.Content:=MsgStr;
-  if NeedNoAsk then
+  if (NeedNoAsk)and(lps.ActiveProcessCount>0) then
     Task.Verify:=rsMsgNoShow
   else
     Task.Verify:='';
   Task.VerifyChecked := false;
 
-  Result.ModalResult:=Task.Execute([],0,[tdfPositionRelativeToWindow],aDialogIcon);//controls.mrOk
+  Result.ModalResult:=Task.Execute([],0,[tdfPositionRelativeToWindow],TZCMsgDlgIcon2TTaskDialogIcon(aDialogIcon));//controls.mrOk
   Result.RadioRes:=Task.RadioRes;
   Result.SelectionRes:=Task.SelectionRes;
   Result.VerifyChecked:=Task.VerifyChecked;
@@ -144,23 +160,23 @@ begin
     SuppressedMessages.add(MsgID,Result);
   end;
 end;
-function zcMsgDlgError(ErrStr:String;NeedNoAsk:boolean=false):TMsgDialogResult;
+function zcMsgDlgError(ErrStr:String;NeedNoAsk:boolean=false):TZCMsgDialogResult;
 var
   Task: TTaskDialog;
 begin
-  Result:=zcMsgDlg(ErrStr,tiError,NeedNoAsk);
+  Result:=zcMsgDlg(ErrStr,diError,NeedNoAsk);
 end;
-function zcMsgDlgWarning(ErrStr:String;NeedNoAsk:boolean=false):TMsgDialogResult;
+function zcMsgDlgWarning(ErrStr:String;NeedNoAsk:boolean=false):TZCMsgDialogResult;
 var
   Task: TTaskDialog;
 begin
-  Result:=zcMsgDlg(ErrStr,tiWarning,NeedNoAsk);
+  Result:=zcMsgDlg(ErrStr,diWarning,NeedNoAsk);
 end;
-function zcMsgDlgInformation(ErrStr:String;NeedNoAsk:boolean=false):TMsgDialogResult;
+function zcMsgDlgInformation(ErrStr:String;NeedNoAsk:boolean=false):TZCMsgDialogResult;
 var
   Task: TTaskDialog;
 begin
-  Result:=zcMsgDlg(ErrStr,tiInformation,NeedNoAsk);
+  Result:=zcMsgDlg(ErrStr,diInformation,NeedNoAsk);
 end;
 initialization
   lps.AddOnLPEndHandler(TLPSSupporthelper.EndLongProcessHandler);

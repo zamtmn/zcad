@@ -27,19 +27,19 @@ procedure ShowMessageForLog(errstr:String);
 var
    dr:TZCMsgDialogResult;
 begin
-  dr:=zcMsgDlgInformation(ErrStr,true);
+  dr:=zcMsgDlg(ErrStr,zcdiInformation,[],true);
 end;
 procedure ShowWarningForLog(errstr:String);
 var
    dr:TZCMsgDialogResult;
 begin
-  dr:=zcMsgDlgWarning(ErrStr,true);
+  dr:=zcMsgDlg(ErrStr,zcdiWarning,[],true);
 end;
 procedure ShowErrorForLog(errstr:String);
 var
    dr:TZCMsgDialogResult;
 begin
-  dr:=zcMsgDlgError(ErrStr,true);
+  dr:=zcMsgDlg(ErrStr,zcdiError,[],true);
 end;
 
 initialization

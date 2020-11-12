@@ -149,6 +149,10 @@ resourcestring
 
   rscmCommandOnlyCTXMenu='The command works only from context menu';
 
+
+  {task names}
+  rsCloseDrawings='Close drawings';
+
   {messages}
   rsDWGAlreadyContainsData='Drawing already contains data. Load anyway?';
   rsCAUTIONnoSyntaxCheckYet='CAUTION! There is no syntax check yet. Clicking "OK" the object will be updated. Error - CRASHES!!!';

@@ -94,7 +94,7 @@ var
 begin
   application.ProcessMessages;
   CurrentDWG:=PTZCADDrawing(drawings.GetCurrentDWG);
-  _CloseDWGPage(CurrentDWG,ZCADMainWindow.PageControl.ActivePage);
+  _CloseDWGPage(CurrentDWG,ZCADMainWindow.PageControl.ActivePage,nil);
   result:=cmd_ok;
 end;
 function NextDrawint_com(operands:TCommandOperands):TCommandResult;

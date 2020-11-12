@@ -39,9 +39,13 @@ type
     VerifyChecked: Boolean;
   end;
 
-  TMessagesDictionary=TDictionary<string,TZCMsgDialogResult>;
+  TMessagesContext=class(TDictionary<string,TZCMsgDialogResult>)
+    TaskName:TLPName;
+    constructor Create(TN:TLPName);
+  end;
 
   TLPSSupporthelper=class
+    class procedure StartLongProcessHandler(LPHandle:TLPSHandle;Total:TLPSCounter;LPName:TLPName);
     class procedure EndLongProcessHandler(LPHandle:TLPSHandle;TotalLPTime:TDateTime);
   end;
 
@@ -56,11 +60,34 @@ type
   TZCMsgCommonButtons2TCommonButtons=TSetConverter<TZCMsgCommonButton,TZCMsgCommonButtons,TCommonButton,TCommonButtons,TZCMsgCommonButton2TCommonButton_Converter>;
 
 procedure FatalError(errstr:String);
-function zcMsgDlg(MsgStr:String;aDialogIcon:TZCMsgDlgIcon;buttons:TZCMsgCommonButtons;NeedAskDonShow:boolean=false;MsgTitle:string=''):TZCMsgDialogResult;
+function zcMsgDlg(MsgStr:String;aDialogIcon:TZCMsgDlgIcon;buttons:TZCMsgCommonButtons;NeedAskDonShow:boolean=false;Context:TMessagesContext=nil;MsgTitle:string=''):TZCMsgDialogResult;
+
+function CreateMessagesContext(TN:TLPName):TMessagesContext;
+procedure FreeMessagesContext(var Context:TMessagesContext);
 
 implementation
+type
+  PTMessagesContext=^TMessagesContext;//тупо, но эффективно
 var
-  SuppressedMessages:TMessagesDictionary=nil;
+  SuppressedMessages:TMessagesContext=nil;
+  TaskNameSave:TLPName;
+
+function CreateMessagesContext(TN:TLPName):TMessagesContext;
+begin
+  result:=TMessagesContext.Create(TN);
+end;
+
+procedure FreeMessagesContext(var Context:TMessagesContext);
+begin
+  if assigned(Context) then
+    FreeAndNil(Context);
+end;
+
+constructor TMessagesContext.Create(TN:TLPName);
+begin
+  TaskName:=TN;
+  inherited create;
+end;
 
 class function TZCMsgCommonButton2TCommonButton_Converter.Convert(valueIn:TZCMsgCommonButton;out valueOut:TCommonButton):boolean;
 begin
@@ -99,6 +126,15 @@ begin
   if lps.isProcessed then
     if assigned(SuppressedMessages)then
       SuppressedMessages.clear;
+  TaskNameSave:='';
+end;
+class procedure TLPSSupporthelper.StartLongProcessHandler(LPHandle:TLPSHandle;Total:TLPSCounter;LPName:TLPName);
+begin
+  if lps.isFirstProcess then begin
+    if assigned(SuppressedMessages)then
+        SuppressedMessages.TaskName:=LPName;
+    TaskNameSave:=LPName;
+  end;
 end;
 
 procedure FatalError(errstr:String);
@@ -153,28 +189,38 @@ begin
     buttons:=[zccbOK];
 end;
 
-function zcMsgDlg(MsgStr:String;aDialogIcon:TZCMsgDlgIcon;buttons:TZCMsgCommonButtons;NeedAskDonShow:boolean=false;MsgTitle:string=''):TZCMsgDialogResult;
-  function isMsgSupressed(MsgID:String;var PrevResult:TZCMsgDialogResult):boolean;
+function zcMsgDlg(MsgStr:String;aDialogIcon:TZCMsgDlgIcon;buttons:TZCMsgCommonButtons;NeedAskDonShow:boolean=false;Context:TMessagesContext=nil;MsgTitle:string=''):TZCMsgDialogResult;
+  function isMsgSupressed(PC:PTMessagesContext;MsgID:String;var PrevResult:TZCMsgDialogResult):boolean;
   begin
-    if assigned(SuppressedMessages) then
-      if SuppressedMessages.TryGetValue(MsgID,PrevResult) then
+    if assigned(PC^) then
+      if PC^.TryGetValue(MsgID,PrevResult) then
         exit(true);
     result:=false;
   end;
-  function isSupressedMsgPresent:boolean;
+  function isSupressedMsgPresent(PC:PTMessagesContext):boolean;
   begin
-    if assigned(SuppressedMessages) then
-      if SuppressedMessages.count>0 then
+    if assigned(PC^) then
+      if PC^.count>0 then
         exit(true);
     result:=false;
   end;
 var
   Task:TTaskDialog;
   MsgID:String;
+  PContext:PTMessagesContext;
+  TaskName:TLPName;
 begin
-  if isSupressedMsgPresent then begin
+  FillChar(Task,SizeOf(Task),0);
+  if assigned(Context) then begin
+    PContext:=@Context;
+    TaskName:=Context.TaskName;
+  end else begin
+    PContext:=@SuppressedMessages;
+    TaskName:=TaskNameSave;
+  end;
+  if isSupressedMsgPresent(PContext) then begin
     MsgID:=getMsgID(MsgStr);
-    if isMsgSupressed(MsgID,Result) then begin
+    if isMsgSupressed(PContext,MsgID,Result) then begin
       exit;
     end;
   end else
@@ -190,11 +236,11 @@ begin
 
   Task.Inst:='';
   Task.Content:=MsgStr;
-  if (NeedAskDonShow)and(lps.isProcessed) then begin
+  if (NeedAskDonShow)and((lps.isProcessed)or(assigned(PContext^))) then begin
     if buttons=[zccbOK] then
-      Task.Verify:=format(rsDontShowThisNextTime,[lps.getLPName(0)])
+      Task.Verify:=format(rsDontShowThisNextTime,[TaskName])
     else
-      Task.Verify:=format(rsMsgKeepChoice,[lps.getLPName(0)]);
+      Task.Verify:=format(rsMsgKeepChoice,[TaskName]);
   end
   else
     Task.Verify:='';
@@ -210,13 +256,14 @@ begin
   if Task.VerifyChecked then begin
     if MsgID='' then
       MsgID:=getMsgID(MsgStr);
-    if not assigned(SuppressedMessages) then
-      SuppressedMessages:=TMessagesDictionary.create;
-    SuppressedMessages.add(MsgID,Result);
+    if not assigned(PContext^) then
+      PContext^:=TMessagesContext.Create(TaskNameSave);
+    PContext^.add(MsgID,Result);
   end;
 end;
 initialization
   lps.AddOnLPEndHandler(TLPSSupporthelper.EndLongProcessHandler);
+  lps.AddOnLPStartHandler(TLPSSupporthelper.StartLongProcessHandler);
 finalization
   if assigned(SuppressedMessages)then
     freeandnil(SuppressedMessages);

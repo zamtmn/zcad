@@ -68,19 +68,25 @@ TZELongProcessSupport=class
                          constructor Create;
                          destructor Destroy;override;
                          function isProcessed:boolean;
-                         function getLPName(index:integer):TLPName;
+                         function isFirstProcess:boolean;
+                         //function getLPName(index:integer):TLPName;
                        end;
 var
   LPS:TZELongProcessSupport;
 implementation
-function TZELongProcessSupport.getLPName(index:integer):TLPName;
+{function TZELongProcessSupport.getLPName(index:integer):TLPName;
 begin
   result:=LPInfoVector.Mutable[index].LPName;
-end;
+end;}
 
 function TZELongProcessSupport.isProcessed:boolean;
 begin
   result:=ActiveProcessCount>0;
+end;
+
+function TZELongProcessSupport.isFirstProcess:boolean;
+begin
+  result:=ActiveProcessCount=1;
 end;
 
 procedure TZELongProcessSupport.DoStartLongProcess(plpi:PTLPInfo;LPHandle:TLPSHandle);

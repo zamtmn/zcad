@@ -45,7 +45,7 @@ uses
        uzccommandsabstract,uzccommandsimpl,uzccommandsmanager,
   {GUI}
        uzcmenucontextcheckfuncs,uzcguimenuextensions,uzmenusdefaults,uzmenusmanager,uztoolbarsmanager,uzctextenteditor,{uzcoidecorations,}uzcfcommandline,uzctreenode,uzcflineweights,uzcctrllayercombobox,uzcctrlcontextmenu,
-       uzcfcolors,uzcimagesmanager,uzcgui2textstyles,usupportgui,uzcgui2dimstyles,
+       uzcfcolors,uzcimagesmanager,uzcgui2textstyles,usupportgui,uzcgui2dimstyles,uzcmessagedialogs,
   {}
        uzcpalettes,zcchangeundocommand,uzgldrawcontext,uzglviewareaabstract,uzcguimanager,uzcinterfacedata,
        uzcenitiesvariablesextender,uzglviewareageneral,UniqueInstanceRaw,
@@ -640,6 +640,7 @@ var
    pint:PGDBInteger;
    mem:GDBOpenArrayOfByte;
    i:integer;
+   dr:TZCMsgDialogResult;
    GVA:TGeneralViewArea;
 begin
      result:=false;
@@ -663,13 +664,14 @@ begin
      if not result then
                        begin
                        if drawings.GetCurrentDWG<>nil then
-                                                     i:=ZCADMainWindow.messagebox(@rsQuitQuery[1],@rsQuitCaption[1],MB_YESNO or MB_ICONQUESTION)
+                                                     //i:=ZCADMainWindow.messagebox(@rsQuitQuery[1],@rsQuitCaption[1],MB_YESNO or MB_ICONQUESTION)
+                                                     dr:=zcMsgDlg(rsQuitQuery,zcdiQuestion,[zccbYes,zccbNo],false,rsQuitCaption)
                                                  else
-                                                     i:=IDYES;
+                                                     dr.ModalResult:=mrYes;
                        end
                    else
-                       i:=IDYES;
-     if i=IDYES then
+                       dr.ModalResult:=mrYes;
+     if dr.ModalResult=mrYes then
      begin
           result:=true;
 

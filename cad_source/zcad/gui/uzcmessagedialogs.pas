@@ -25,7 +25,8 @@ uses
 
 resourcestring
   rsMsgWndTitle='ZCAD';
-  rsMsgNoShow='Don''t show this next time (for current task)';
+  rsDontShowThisNextTime='Don''t show this next time (for task "%s")';
+  rsMsgKeepChoice='Keep choice (for task "%s")';
 
 type
   TZCMsgCommonButton=(zccbOK,zccbYes,zccbNo,zccbCancel,zccbRetry,zccbClose);
@@ -95,7 +96,7 @@ end;
 
 class procedure TLPSSupporthelper.EndLongProcessHandler(LPHandle:TLPSHandle;TotalLPTime:TDateTime);
 begin
-  if lps.ActiveProcessCount=1 then
+  if lps.isProcessed then
     if assigned(SuppressedMessages)then
       SuppressedMessages.clear;
 end;
@@ -180,6 +181,8 @@ begin
     MsgID:='';
   ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
 
+  CorrectButtons(buttons);
+
   if MsgTitle='' then
     Task.Title:=rsMsgWndTitle
   else
@@ -187,13 +190,15 @@ begin
 
   Task.Inst:='';
   Task.Content:=MsgStr;
-  if (NeedAskDonShow)and(lps.ActiveProcessCount>0) then
-    Task.Verify:=rsMsgNoShow
+  if (NeedAskDonShow)and(lps.isProcessed) then begin
+    if buttons=[zccbOK] then
+      Task.Verify:=format(rsDontShowThisNextTime,[lps.getLPName(0)])
+    else
+      Task.Verify:=format(rsMsgKeepChoice,[lps.getLPName(0)]);
+  end
   else
     Task.Verify:='';
   Task.VerifyChecked := false;
-
-  CorrectButtons(buttons);
 
   Result.ModalResult:=Task.Execute(TZCMsgCommonButtons2TCommonButtons.Convert(buttons),0,[tdfPositionRelativeToWindow],TZCMsgDlgIcon2TTaskDialogIcon(aDialogIcon));//controls.mrOk
   Result.RadioRes:=Task.RadioRes;

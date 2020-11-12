@@ -117,11 +117,11 @@ type
 
     procedure SetImage(ppanel:TToolBar;b:TToolButton;img:string;autosize:boolean;identifer:string);
 
-    function MessageBox(Text, Caption: PChar; Flags: Longint): Integer;
+    //function MessageBox(Text, Caption: PChar; Flags: Longint): Integer;
     procedure ShowAllCursors(ShowedForm:TForm);
     procedure RestoreCursors(ShowedForm:TForm);
     procedure CloseDWGPageInterf(Sender: TObject);
-    function CloseDWGPage(Sender: TObject):integer;
+    function CloseDWGPage(Sender: TObject;MCtx:TMessagesContext):integer;
 
     procedure PageControlMouseDown(Sender: TObject;Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure correctscrollbars;
@@ -212,7 +212,7 @@ type
                end;
 //procedure UpdateVisible(GUIMode:TZMessageID);
 function LoadLayout_com(Operands:pansichar):GDBInteger;
-function _CloseDWGPage(ClosedDWG:PTZCADDrawing;lincedcontrol:TObject):Integer;
+function _CloseDWGPage(ClosedDWG:PTZCADDrawing;lincedcontrol:TObject;MCtx:TMessagesContext):Integer;
 
 var
   ZCADMainWindow: TZCADMainWindow;
@@ -443,7 +443,8 @@ begin
                         end;
                         if PLayer=cdwg^.GetCurrentLayer then
                           if not PGDBLayerProp(PLayer)^._on then
-                            MessageBox(@rsCurrentLayerOff[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
+                            zcMsgDlg(rsCurrentLayerOff,zcdiWarning,[],false,nil,rsWarningCaption);
+                            //MessageBox(@rsCurrentLayerOff[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
                       end;
                     {1:;}
                     2:begin
@@ -469,7 +470,8 @@ begin
                                                end;
                                           end;
                                           if not PGDBLayerProp(PLayer)^._on then
-                                                                            MessageBox(@rsCurrentLayerOff[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
+                                            zcMsgDlg(rsCurrentLayerOff,zcdiWarning,[],false,nil,rsWarningCaption);
+                                            //MessageBox(@rsCurrentLayerOff[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
                                           //setvisualprop;
                                           ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);
                                 end
@@ -665,7 +667,7 @@ begin
                        begin
                        if drawings.GetCurrentDWG<>nil then
                                                      //i:=ZCADMainWindow.messagebox(@rsQuitQuery[1],@rsQuitCaption[1],MB_YESNO or MB_ICONQUESTION)
-                                                     dr:=zcMsgDlg(rsQuitQuery,zcdiQuestion,[zccbYes,zccbNo],false,rsQuitCaption)
+                                                     dr:=zcMsgDlg(rsQuitQuery,zcdiQuestion,[zccbYes,zccbNo],false,nil,rsQuitCaption)
                                                  else
                                                      dr.ModalResult:=mrYes;
                        end
@@ -709,24 +711,45 @@ begin
 end;
 
 function CloseApp:GDBInteger;
+var
+   MCtx:TMessagesContext=nil;
+   i,count:integer;
+   wa:TGeneralViewArea;
+   ClosedDWG:PTZCADDrawing;
 begin
-     result:=0;
-     if IsRealyQuit then
-     begin
-          if ZCADMainWindow.PageControl<>nil then
-          begin
-               while ZCADMainWindow.PageControl.ActivePage<>nil do
-               begin
-                    if ZCADMainWindow.CloseDWGPage(ZCADMainWindow.PageControl.ActivePage)=IDCANCEL then
-                                                                                             exit;
-               end;
-          end;
-          ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIFreEditorProc);
-          ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
-          ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIBeforeCloseApp);
-          application.terminate;
-     end;
+  result:=0;
+  if IsRealyQuit then
+  begin
+    if ZCADMainWindow.PageControl<>nil then
+    begin
+      count:=0;
+      for i:=0 to ZCADMainWindow.PageControl.PageCount-1 do begin
+         wa:=TGeneralViewArea(FindComponentByType(ZCADMainWindow.PageControl.ActivePage,TGeneralViewArea));
+         if wa<>nil then begin
+           Closeddwg:=PTZCADDrawing(wa.PDWG);
+           if ClosedDWG<>nil then
+             if ClosedDWG.Changed then
+               inc(count);
+         end;
+      end;
+      if count>1 then
+        MCtx:=CreateMessagesContext(rsCloseDrawings);
+      while ZCADMainWindow.PageControl.ActivePage<>nil do
+      begin
+        if ZCADMainWindow.CloseDWGPage(ZCADMainWindow.PageControl.ActivePage,MCtx)=IDCANCEL then begin
+          FreeMessagesContext(MCtx);
+          exit;
+        end;
+      end;
+      FreeMessagesContext(MCtx);
+    end;
+    ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIFreEditorProc);
+    ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
+    ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIBeforeCloseApp);
+    application.terminate;
+  end;
 end;
+
 procedure TZCADMainWindow.asynccloseapp(Data: PtrInt);
 begin
       CloseApp;
@@ -766,28 +789,31 @@ begin
     Dlg.Free;
   end;
 end;
-function _CloseDWGPage(ClosedDWG:PTZCADDrawing;lincedcontrol:TObject):Integer;
+function _CloseDWGPage(ClosedDWG:PTZCADDrawing;lincedcontrol:TObject;MCtx:TMessagesContext):Integer;
 var
    viewcontrol:TCADControl;
    s:string;
    TAWA:TAbstractViewArea;
+   dr:TZCMsgDialogResult;
 begin
   if ClosedDWG<>nil then
   begin
-       result:=IDYES;
+       result:=mrYes;
        if ClosedDWG.Changed then
                                  begin
                                       repeat
                                       s:=format(rsCloseDWGQuery,[ClosedDWG.FileName]);
-                                      result:=ZCADMainWindow.MessageBox(@s[1],@rsWarningCaption[1],MB_YESNOCANCEL);
-                                      if result=IDCANCEL then exit;
-                                      if result=IDNO then system.break;
-                                      if result=IDYES then
+                                      dr:=zcMsgDlg(s,zcdiQuestion,[zccbYes,zccbNo,zccbCancel],true,MCTx);
+                                      result:=dr.ModalResult;
+                                      //result:=ZCADMainWindow.MessageBox(@s[1],@rsWarningCaption[1],MB_YESNOCANCEL);
+                                      if result=mrCancel then exit;
+                                      if result=mrNo then system.break;
+                                      if result=mrYes then
                                       begin
                                            result:=dwgQSave_com(ClosedDWG);
                                       end;
                                       until result<>cmd_error;
-                                      result:=IDYES;
+                                      result:=mrYes;
                                  end;
        commandmanager.ChangeModeAndEnd(TGPCloseDWG);
        viewcontrol:=ClosedDWG.wa.getviewcontrol;
@@ -819,10 +845,10 @@ begin
 end;
 procedure TZCADMainWindow.CloseDWGPageInterf(Sender: TObject);
 begin
-     CloseDWGPage(Sender);
+     CloseDWGPage(Sender,nil);
 end;
 
-function TZCADMainWindow.CloseDWGPage(Sender: TObject):integer;
+function TZCADMainWindow.CloseDWGPage(Sender: TObject;MCtx:TMessagesContext):integer;
 var
    wa:TGeneralViewArea;
    ClosedDWG:PTZCADDrawing;
@@ -831,9 +857,8 @@ begin
   Closeddwg:=nil;
   wa:=TGeneralViewArea(FindComponentByType(TTabSheet(sender),TGeneralViewArea));
   if wa<>nil then
-                      Closeddwg:=PTZCADDrawing(wa.PDWG);
-  result:=_CloseDWGPage(ClosedDWG,Sender);
-
+    Closeddwg:=PTZCADDrawing(wa.PDWG);
+  result:=_CloseDWGPage(ClosedDWG,Sender,mctx);
 end;
 procedure TZCADMainWindow.PageControlMouseDown(Sender: TObject;
   Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
@@ -844,7 +869,7 @@ begin
   if i>-1 then
   if ssMiddle in Shift then
   if (Sender is TPageControl) then
-                                  CloseDWGPage((Sender as TPageControl).Pages[I]);
+                                  CloseDWGPage((Sender as TPageControl).Pages[I],nil);
 end;
 procedure TZCADMainWindow.ShowFastMenu(Sender: TObject);
 begin
@@ -2311,12 +2336,12 @@ begin
      end;
 end;
 
-function TZCADMainWindow.MessageBox(Text, Caption: PChar; Flags: Longint): Integer;
+{function TZCADMainWindow.MessageBox(Text, Caption: PChar; Flags: Longint): Integer;
 begin
      ShowAllCursors(nil);
      result:=application.MessageBox(Text, Caption,Flags);
      RestoreCursors(nil);
-end;
+end;}
 
 procedure TZCADMainWindow.ShowAllCursors;
 begin

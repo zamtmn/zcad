@@ -48,6 +48,7 @@ TZELongProcessSupport=class
                        {type
                          PTLPInfo=TLPInfoVector.PT;}
                        var
+                         ActiveProcessCount:Integer;
                          LPInfoVector:TLPInfoVector;
                          OnLPStartProcVector:TOnLPStartProcVector;
                          OnLPProgressProcVector:TOnLPProgressProcVector;
@@ -57,7 +58,6 @@ TZELongProcessSupport=class
                          procedure DoEndLongProcess(plpi:PTLPInfo;LPHandle:TLPSHandle);
 
                        public
-                         ActiveProcessCount:Integer;
                          function StartLongProcess(Total:TLPSCounter;LPName:TLPName;Context:pointer):TLPSHandle;
                          procedure ProgressLongProcess(LPHandle:TLPSHandle;Current:TLPSCounter);
                          procedure EndLongProcess(LPHandle:TLPSHandle);
@@ -68,10 +68,16 @@ TZELongProcessSupport=class
                          constructor Create;
                          destructor Destroy;override;
                          function isProcessed:boolean;
+                         function getLPName(index:integer):TLPName;
                        end;
 var
   LPS:TZELongProcessSupport;
 implementation
+function TZELongProcessSupport.getLPName(index:integer):TLPName;
+begin
+  result:=LPInfoVector.Mutable[index].LPName;
+end;
+
 function TZELongProcessSupport.isProcessed:boolean;
 begin
   result:=ActiveProcessCount>0;

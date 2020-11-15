@@ -16,41 +16,32 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzccommand_mergeblocks;
+unit uzccommand_merge;
 {$INCLUDE def.inc}
 
 interface
 uses
   LCLProc,
-  uzbpaths,
+  uzbpaths,uzbtypes,
 
   uzeffmanager,
   uzccommand_newdwg,
-  uzccommand_merge,uzccommandsimpl,uzccommandsabstract,
-  uzcdrawings,uzedrawingsimple;
+  uzccmdload,
+  uzccommandsimpl,uzccommandsabstract,
+  uzcdrawings;
 
-function MergeBlocks_com(operands:TCommandOperands):TCommandResult;
+function Merge_com(operands:TCommandOperands):TCommandResult;
 
 implementation
 
-function MergeBlocks_com(operands:TCommandOperands):TCommandResult;
-var
-   pdwg:PTSimpleDrawing;
-   s:AnsiString;
+function Merge_com(operands:TCommandOperands):TCommandResult;
 begin
-  pdwg:=(drawings.CurrentDWG);
-  drawings.CurrentDWG:=BlockBaseDWG;
-
-  if length(operands)>0 then
-  s:=FindInSupportPath(SupportPath,operands);
-  result:=Merge_com(s);
-
-  drawings.CurrentDWG:=pdwg;
+  result:=Load_merge(operands,TLOMerge);
 end;
 
 procedure startup;
 begin
-  CreateCommandFastObjectPlugin(@MergeBlocks_com,'MergeBlocks',0,0);
+  CreateCommandFastObjectPlugin(@Merge_com,'Merge',CADWG,0);
 end;
 procedure finalize;
 begin

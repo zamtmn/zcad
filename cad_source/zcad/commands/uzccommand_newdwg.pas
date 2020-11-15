@@ -26,7 +26,8 @@ uses
   uzbtypes,uzbpaths,
   uzglbackendmanager,uzglviewareaabstract,
 
-  uzccombase,uzccommandsimpl,uzccommandsabstract,
+  uzccmdload,
+  uzccommandsimpl,uzccommandsabstract,
   uzcsysvars,
   uzcstrconsts,
   uzcdrawing,uzcdrawings,

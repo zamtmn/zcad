@@ -135,6 +135,7 @@ uses
   uzccommand_loadpalettes,
   uzccommand_loadtoolbars,
   uzccommand_loadactions,
+  uzccommand_newdwg,
 
 
   {$IFDEF ELECTROTECH}

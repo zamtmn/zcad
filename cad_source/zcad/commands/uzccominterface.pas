@@ -98,23 +98,7 @@ begin
   _CloseDWGPage(CurrentDWG,ZCADMainWindow.PageControl.ActivePage,nil);
   result:=cmd_ok;
 end;
-function NextDrawint_com(operands:TCommandOperands):TCommandResult;
-var
-   i:integer;
-begin
-     if assigned(ZCADMainWindow.PageControl)then
-     if ZCADMainWindow.PageControl.PageCount>1 then
-     begin
-          i:=ZCADMainWindow.PageControl.ActivePageIndex+1;
-          if i=ZCADMainWindow.PageControl.PageCount
-                                              then
-                                                  i:=0;
-             ZCADMainWindow.PageControl.ActivePageIndex:=i;
-     end;
-     zcRedrawCurrentDrawing;
-     result:=cmd_ok;
-end;
-function PrevDrawint_com(operands:TCommandOperands):TCommandResult;
+function PrevDrawing_com(operands:TCommandOperands):TCommandResult;
 var
    i:integer;
 begin
@@ -656,8 +640,7 @@ begin
 end;
 procedure startup;
 begin
-  CreateCommandFastObjectPlugin(@NextDrawint_com,'NextDrawing',0,0);
-  CreateCommandFastObjectPlugin(@PrevDrawint_com,'PrevDrawing',0,0);
+  CreateCommandFastObjectPlugin(@PrevDrawing_com,'PrevDrawing',0,0);
   CreateCommandFastObjectPlugin(@CloseDWG_com,'CloseDWG',CADWG,0).CEndActionAttr:=CEDWGNChanged;
   CreateCommandFastObjectPlugin(@Load_com,'Load',0,0).CEndActionAttr:=CEDWGNChanged;
   CreateCommandFastObjectPlugin(@Import_com,'Import',0,0).CEndActionAttr:=CEDWGNChanged;

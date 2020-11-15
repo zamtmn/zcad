@@ -34,7 +34,7 @@ var
 begin
   application.ProcessMessages;
   CurrentDWG:=PTZCADDrawing(drawings.GetCurrentDWG);
-  _CloseDWGPage(CurrentDWG,ZCADMainWindow.PageControl.ActivePage,nil);
+  _CloseDWGPage(CurrentDWG,ZCADMainWindow.PageControl.ActivePage,false,nil);
   result:=cmd_ok;
 end;
 

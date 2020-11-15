@@ -80,7 +80,6 @@ TTreeStatistik=record
    function Regen_com(operands:TCommandOperands):TCommandResult;
    function Load_Merge(Operands:TCommandOperands;LoadMode:TLoadOpt):GDBInteger;
    function Merge_com(operands:TCommandOperands):TCommandResult;
-   function MergeBlocks_com(operands:TCommandOperands):TCommandResult;
    procedure ReCreateClipboardDWG;
    function PointerToNodeName(node:pointer):string;
 const
@@ -302,21 +301,7 @@ begin
   //if assigned(updatevisibleproc) then updatevisibleproc(ZMsgID_GUIActionRedraw);
   result:=cmd_ok;
 end;
-function MergeBlocks_com(operands:TCommandOperands):TCommandResult;
-var
-   pdwg:PTSimpleDrawing;
-   s:gdbstring;
-begin
-     pdwg:=(drawings.CurrentDWG);
-     drawings.CurrentDWG:=BlockBaseDWG;
 
-     if length(operands)>0 then
-     s:=FindInSupportPath(SupportPath,operands);
-     result:=Merge_com(s);
-
-
-     drawings.CurrentDWG:=pdwg;
-end;
 function SaveDXFDPAS(s:gdbstring):GDBInteger;
 begin
      result:=dwgSaveDXFDPAS(s, drawings.GetCurrentDWG);
@@ -1740,7 +1725,6 @@ begin
   //deselall.CEndActionAttr:=0;
   CreateCommandFastObjectPlugin(@QSave_com,'QSave',CADWG or CADWGChanged,0).CEndActionAttr:=CEDWGNChanged;
   CreateCommandFastObjectPlugin(@Merge_com,'Merge',CADWG,0);
-  CreateCommandFastObjectPlugin(@MergeBlocks_com,'MergeBlocks',0,0);
   CreateCommandFastObjectPlugin(@SaveAs_com,'SaveAs',CADWG,0);
   CreateCommandFastObjectPlugin(@Cam_reset_com,'Cam_Reset',CADWG,0);
   CreateCommandFastObjectPlugin(@ObjVarMan_com,'ObjVarMan',CADWG or CASelEnt,0);

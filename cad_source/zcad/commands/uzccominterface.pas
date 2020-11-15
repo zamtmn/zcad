@@ -88,16 +88,6 @@ uses
    //function Regen_com(Operands:pansichar):GDBInteger;
 //var DWGPageCxMenu:pzpopupmenu;
 implementation
-function CloseDWG_com(operands:TCommandOperands):TCommandResult;
-var
-   //poglwnd:toglwnd;
-   CurrentDWG:PTZCADDrawing;
-begin
-  application.ProcessMessages;
-  CurrentDWG:=PTZCADDrawing(drawings.GetCurrentDWG);
-  _CloseDWGPage(CurrentDWG,ZCADMainWindow.PageControl.ActivePage,nil);
-  result:=cmd_ok;
-end;
 function Import_com(operands:TCommandOperands):TCommandResult;
 var
    s: GDBString;
@@ -624,7 +614,6 @@ begin
 end;
 procedure startup;
 begin
-  CreateCommandFastObjectPlugin(@CloseDWG_com,'CloseDWG',CADWG,0).CEndActionAttr:=CEDWGNChanged;
   CreateCommandFastObjectPlugin(@Load_com,'Load',0,0).CEndActionAttr:=CEDWGNChanged;
   CreateCommandFastObjectPlugin(@Import_com,'Import',0,0).CEndActionAttr:=CEDWGNChanged;
   CreateCommandFastObjectPlugin(@LoadLayout_com,'LoadLayout',0,0);

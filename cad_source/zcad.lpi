@@ -316,7 +316,7 @@
         <PackageName Value="LCL"/>
       </Item20>
     </RequiredPackages>
-    <Units Count="197">
+    <Units Count="199">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -1156,6 +1156,14 @@
         <Filename Value="zcad/register/uzcregpaths.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit196>
+      <Unit197>
+        <Filename Value="zcad/commands/uzccommand_nextdrawing.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit197>
+      <Unit198>
+        <Filename Value="zcad/commands/uzccommand_prevdrawing.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit198>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

@@ -32,7 +32,8 @@ uses
   uzcsysvars,
   uzcstrconsts,
   uzcdrawings,
-  uzcinterface;
+  uzcinterface,
+  uzccmdload;
 
 implementation
 

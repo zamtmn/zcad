@@ -140,6 +140,7 @@ uses
   uzccommand_closedwg,
   uzccommand_load,
   uzccommand_mergeblocks,
+  uzccommand_merge,
 
 
   {$IFDEF ELECTROTECH}

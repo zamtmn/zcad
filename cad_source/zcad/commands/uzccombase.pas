@@ -78,8 +78,6 @@ TTreeStatistik=record
    procedure CopyToClipboard;
    function CopyClip_com(operands:TCommandOperands):TCommandResult;
    function Regen_com(operands:TCommandOperands):TCommandResult;
-   function Load_Merge(Operands:TCommandOperands;LoadMode:TLoadOpt):GDBInteger;
-   function Merge_com(operands:TCommandOperands):TCommandResult;
    procedure ReCreateClipboardDWG;
    function PointerToNodeName(node:pointer):string;
 const
@@ -168,97 +166,6 @@ begin
   ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
   ZCMsgCallBackInterface.Do_GUIaction(drawings.CurrentDWG.wa,ZMsgID_GUIActionSelectionChanged);
   result:=cmd_ok;
-end;
-procedure remapprjdb(pu:ptunit);
-var
-   pv,pvindb:pvardesk;
-   ir:itrec;
-   ptd:PUserTypeDescriptor;
-   pfd:PFieldDescriptor;
-   pf,pfindb:ppointer;
-begin
-     pv:=pu.InterfaceVariables.vardescarray.beginiterate(ir);
-      if pv<>nil then
-        repeat
-              ptd:=DBUnit.TypeName2PTD(pv.data.PTD.TypeName);
-              if ptd<>nil then
-              if (ptd.GetTypeAttributes and TA_OBJECT)=TA_OBJECT then
-              begin
-                   pvindb:=DBUnit.InterfaceVariables.findvardescbytype(pv.data.PTD);
-                   if pvindb<>nil then
-                   begin
-                        pfd:=PRecordDescriptor(pvindb^.data.PTD)^.FindField('Variants');
-                        if pfd<>nil then
-                        begin
-                        pf:=pv.data.Instance+pfd.Offset;
-                        pfindb:=pvindb.data.Instance+pfd.Offset;
-                        pf^:=pfindb^;
-                        end;
-                   end;
-              end;
-              pv:=pu.InterfaceVariables.vardescarray.iterate(ir);
-        until pv=nil;
-end;
-
-
-function Load_Merge(Operands:TCommandOperands;LoadMode:TLoadOpt):GDBInteger;
-var
-   s: GDBString;
-   //fileext:GDBString;
-   isload:boolean;
-   mem:GDBOpenArrayOfByte;
-   pu:ptunit;
-   loadproc:TFileLoadProcedure;
-   DC:TDrawContext;
-begin
-     if drawings.currentdwg<>PTSimpleDrawing(BlockBaseDWG) then
-     if drawings.GetCurrentROOT.ObjArray.Count>0 then
-                                                     begin
-                                                          if ZCMsgCallBackInterface.TextQuestion(rsDWGAlreadyContainsData,'QLOAD',MB_YESNO)=IDNO then
-                                                          exit;
-                                                     end;
-     s:=operands;
-     loadproc:=Ext2LoadProcMap.GetLoadProc(extractfileext(s));
-     isload:=(assigned(loadproc))and(FileExists(utf8tosys(s)));
-     if isload then
-     begin
-          //fileext:=uppercase(ExtractFileEXT(s));
-          loadproc(s,@drawings.GetCurrentDWG^.pObjRoot^,loadmode,drawings.GetCurrentDWG^);
-     if FileExists(utf8tosys(s+'.dbpas')) then
-     begin
-           pu:=PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
-           mem.InitFromFile(s+'.dbpas');
-           //pu^.free;
-           units.parseunit(SupportPath,InterfaceTranslate,mem,PTSimpleUnit(pu));
-           remapprjdb(pu);
-           mem.done;
-     end;
-     dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-     drawings.GetCurrentROOT.calcbb(dc);
-     //drawings.GetCurrentDWG.ObjRoot.format;//FormatAfterEdit;
-     //drawings.GetCurrentROOT.sddf
-     //drawings.GetCurrentROOT.format;
-     drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree.maketreefrom(drawings.GetCurrentDWG^.pObjRoot.ObjArray,drawings.GetCurrentDWG^.pObjRoot.vp.BoundingBox,nil);
-     //drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree:=createtree(drawings.GetCurrentDWG^.pObjRoot.ObjArray,drawings.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
-     drawings.GetCurrentROOT.FormatEntity(drawings.GetCurrentDWG^,dc);
-     ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
-     //if assigned(updatevisibleproc) then updatevisibleproc(ZMsgID_GUIActionRedraw);
-     if drawings.currentdwg<>PTSimpleDrawing(BlockBaseDWG) then
-                                         begin
-                                         drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree.maketreefrom(drawings.GetCurrentDWG^.pObjRoot.ObjArray,drawings.GetCurrentDWG^.pObjRoot.vp.BoundingBox,nil);
-                                         //drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree:=createtree(drawings.GetCurrentDWG^.pObjRoot.ObjArray,drawings.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
-                                         //isOpenGLError;
-                                         zcRedrawCurrentDrawing;
-                                         end;
-     result:=cmd_ok;
-
-     end
-        else
-        ZCMsgCallBackInterface.TextMessage('MERGE:'+format(rsUnableToOpenFile,[s]),TMWOShowError);
-end;
-function Merge_com(operands:TCommandOperands):TCommandResult;
-begin
-     result:=Load_merge(operands,TLOMerge);
 end;
 function DeSelectAll_com(operands:TCommandOperands):TCommandResult;
 begin
@@ -1724,7 +1631,6 @@ begin
   deselall^.overlay:=true;
   //deselall.CEndActionAttr:=0;
   CreateCommandFastObjectPlugin(@QSave_com,'QSave',CADWG or CADWGChanged,0).CEndActionAttr:=CEDWGNChanged;
-  CreateCommandFastObjectPlugin(@Merge_com,'Merge',CADWG,0);
   CreateCommandFastObjectPlugin(@SaveAs_com,'SaveAs',CADWG,0);
   CreateCommandFastObjectPlugin(@Cam_reset_com,'Cam_Reset',CADWG,0);
   CreateCommandFastObjectPlugin(@ObjVarMan_com,'ObjVarMan',CADWG or CASelEnt,0);

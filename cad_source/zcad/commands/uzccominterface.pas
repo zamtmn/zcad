@@ -124,65 +124,6 @@ begin
      ZCMsgCallBackInterface.TextMessage('LOAD:'+format(rsUnableToOpenFile,[s+'('+Operands+')']),TMWOShowError);
      //TMWOShowError('GDBCommandsBase.LOAD: Не могу открыть файл: '+s+'('+Operands+')');
 end;
-function Load_com(operands:TCommandOperands):TCommandResult;
-var
-   s: GDBString;
-   //fileext:GDBString;
-   isload:boolean;
-   //mem:GDBOpenArrayOfByte;
-   //pu:ptunit;
-begin
-     if length(operands)=0 then
-                        begin
-                             ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
-                             isload:=OpenFileDialog(s,Ext2LoadProcMap.GetDefaultFileFilterIndex,{'dxf'}Ext2LoadProcMap.GetDefaultFileExt,{ProjectFileFilter}Ext2LoadProcMap.GetCurrentFileFilter,'',rsOpenFile);
-                             ZCMsgCallBackInterface.Do_AfterShowModal(nil);
-                             //s:=utf8tosys(s);
-                             if not isload then
-                                               begin
-                                                    result:=cmd_cancel;
-                                                    exit;
-                                               end
-                                           else
-                                               begin
-
-                                               end;    
-
-                        end
-                    else
-                    begin
-                         if operands='QS' then
-                                              s:=ExpandPath(sysvar.SAVE.SAVE_Auto_FileName^)
-                                          else
-                                              begin
-                                                   s:=FindInSupportPath(SupportPath,operands);
-                                                   if s='' then
-                                                               s:=ExpandPath(operands);
-                                              end;
-                    end;
-     isload:=FileExists(utf8tosys(s));
-     if isload then
-     begin
-          newdwg_com(s);
-          //if operands<>'QS' then
-                                drawings.GetCurrentDWG.SetFileName(s);
-          //programlog.logoutstr('gdb.GetCurrentDWG.FileName:=s;',0);
-          load_merge(s,tloload);
-          drawings.GetCurrentDWG.wa.Drawer.delmyscrbuf;//буфер чистить, потому что он может оказаться невалидным в случае отрисовки во время
-                                                  //создания или загрузки
-          ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedrawContent);
-          //programlog.logoutstr('load_merge(@s[1],tloload);',0);
-          if assigned(ProcessFilehistoryProc) then
-           ProcessFilehistoryProc(s);
-          result:=cmd_ok;
-     end
-               else
-               begin
-                    ZCMsgCallBackInterface.TextMessage('LOAD:'+format(rsUnableToOpenFile,[s+'('+Operands+')']),TMWOShowError);
-                    result:=cmd_error;
-               end;
-        //ZCMsgCallBackInterface.TextMessage('GDBCommandsBase.LOAD: Не могу открыть файл: '+s+'('+Operands+')');
-end;
 function ExecuteFile_com(operands:TCommandOperands):TCommandResult;
 begin
   commandmanager.executefile(ExpandPath(operands),drawings.GetCurrentDWG,nil);
@@ -614,7 +555,6 @@ begin
 end;
 procedure startup;
 begin
-  CreateCommandFastObjectPlugin(@Load_com,'Load',0,0).CEndActionAttr:=CEDWGNChanged;
   CreateCommandFastObjectPlugin(@Import_com,'Import',0,0).CEndActionAttr:=CEDWGNChanged;
   CreateCommandFastObjectPlugin(@LoadLayout_com,'LoadLayout',0,0);
   CreateCommandFastObjectPlugin(@quit_com,'Quit',0,0);

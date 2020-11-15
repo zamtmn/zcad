@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzccommand_nextdrawing;
+unit uzccommand_prevdrawing;
 {$INCLUDE def.inc}
 
 interface
@@ -27,15 +27,15 @@ uses
 
 implementation
 
-function NextDrawing_com(operands:TCommandOperands):TCommandResult;
+function PrevDrawing_com(operands:TCommandOperands):TCommandResult;
 var
    i:integer;
 begin
   if assigned(ZCADMainWindow.PageControl)then
     if ZCADMainWindow.PageControl.PageCount>1 then begin
-      i:=ZCADMainWindow.PageControl.ActivePageIndex+1;
-      if i=ZCADMainWindow.PageControl.PageCount then
-        i:=0;
+      i:=ZCADMainWindow.PageControl.ActivePageIndex-1;
+      if i<0 then
+        i:=ZCADMainWindow.PageControl.PageCount-1;
       ZCADMainWindow.PageControl.ActivePageIndex:=i;
       ZCADMainWindow.ChangedDWGTab(ZCADMainWindow.PageControl);
     end;
@@ -44,7 +44,7 @@ end;
 
 procedure startup;
 begin
-  CreateCommandFastObjectPlugin(@NextDrawing_com,'NextDrawing',0,0);
+  CreateCommandFastObjectPlugin(@PrevDrawing_com,'PrevDrawing',0,0);
 end;
 procedure finalize;
 begin

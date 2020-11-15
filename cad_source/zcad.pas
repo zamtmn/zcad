@@ -136,7 +136,7 @@ uses
   uzccommand_loadtoolbars,
   uzccommand_loadactions,
   uzccommand_newdwg,
-  uzccommand_nextdrawing,
+  uzccommand_nextdrawing,uzccommand_prevdrawing,
 
 
   {$IFDEF ELECTROTECH}

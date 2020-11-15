@@ -98,22 +98,6 @@ begin
   _CloseDWGPage(CurrentDWG,ZCADMainWindow.PageControl.ActivePage,nil);
   result:=cmd_ok;
 end;
-function PrevDrawing_com(operands:TCommandOperands):TCommandResult;
-var
-   i:integer;
-begin
-     if assigned(ZCADMainWindow.PageControl)then
-     if ZCADMainWindow.PageControl.PageCount>1 then
-     begin
-          i:=ZCADMainWindow.PageControl.ActivePageIndex-1;
-          if i<0
-                                            then
-                                                  i:=ZCADMainWindow.PageControl.PageCount-1;
-             ZCADMainWindow.PageControl.ActivePageIndex:=i;
-     end;
-     zcRedrawCurrentDrawing;
-     result:=cmd_ok;
-end;
 function Import_com(operands:TCommandOperands):TCommandResult;
 var
    s: GDBString;
@@ -640,7 +624,6 @@ begin
 end;
 procedure startup;
 begin
-  CreateCommandFastObjectPlugin(@PrevDrawing_com,'PrevDrawing',0,0);
   CreateCommandFastObjectPlugin(@CloseDWG_com,'CloseDWG',CADWG,0).CEndActionAttr:=CEDWGNChanged;
   CreateCommandFastObjectPlugin(@Load_com,'Load',0,0).CEndActionAttr:=CEDWGNChanged;
   CreateCommandFastObjectPlugin(@Import_com,'Import',0,0).CEndActionAttr:=CEDWGNChanged;

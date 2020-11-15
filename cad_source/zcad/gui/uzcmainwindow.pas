@@ -110,7 +110,8 @@ type
     //procedure setmainmenu(var f:GDBOpenArrayOfByte;var line:GDBString);
     //procedure loadsubmenu(var f:GDBOpenArrayOfByte;var pm:TMenuItem;var line:GDBString);
 
-    procedure ChangedDWGTabCtrl(Sender: TObject);
+    procedure ChangedDWGTabByClick(Sender: TObject);
+    procedure ChangedDWGTab(Sender: TObject);
     procedure UpdateControls;
 
     procedure Say(word:gdbstring);
@@ -1277,7 +1278,7 @@ begin
   ZCADMainWindow.PageControl.Constraints.MinHeight:=32;
   ZCADMainWindow.PageControl.Parent:=ZCADMainWindow.MainPanel;
   ZCADMainWindow.PageControl.Align:=alClient;
-  ZCADMainWindow.PageControl.OnChange:=ZCADMainWindow.ChangedDWGTabCtrl;
+  ZCADMainWindow.PageControl.OnChange:=ZCADMainWindow.ChangedDWGTabByClick;
   ZCADMainWindow.PageControl.BorderWidth:=0;
   if assigned(SysVar.INTF.INTF_DwgTabsPosition) then
   begin
@@ -1897,17 +1898,21 @@ begin
           TControl(updatescontrols[i]).Invalidate;
      end;
 end;
-
-procedure  TZCADMainWindow.ChangedDWGTabCtrl(Sender: TObject);
+procedure TZCADMainWindow.ChangedDWGTab(Sender: TObject);
 var
    ogl:TAbstractViewArea;
 begin
-     tcomponent(OGL):=FindComponentByType(TPageControl(sender).ActivePage,TAbstractViewArea);
-     if assigned(OGL) then
-                          OGL.GDBActivate;
-     OGL.param.firstdraw:=true;
-     OGL.draworinvalidate;
-     ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
+  tcomponent(OGL):=FindComponentByType(TPageControl(sender).ActivePage,TAbstractViewArea);
+  if assigned(OGL) then
+    OGL.GDBActivate;
+  OGL.param.firstdraw:=true;
+  OGL.draworinvalidate;
+  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
+end;
+procedure TZCADMainWindow.ChangedDWGTabByClick(Sender: TObject);
+begin
+  commandmanager.executecommandend;
+  ChangedDWGTab(Sender);
 end;
 
 destructor TZCADMainWindow.Destroy;

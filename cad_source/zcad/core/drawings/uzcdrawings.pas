@@ -484,7 +484,7 @@ end;
 
 procedure TZCADDrawingsManager.SetCurrentDWG(PDWG:PTAbstractDrawing);
 begin
- commandmanager.executecommandend;
+ //commandmanager.executecommandend;
  CurrentDWG:=PTZCADDrawing(PDWG);
  asociatedwgvars;
 end;

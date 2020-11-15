@@ -316,7 +316,7 @@
         <PackageName Value="LCL"/>
       </Item20>
     </RequiredPackages>
-    <Units Count="199">
+    <Units Count="200">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -1164,6 +1164,10 @@
         <Filename Value="zcad/commands/uzccommand_prevdrawing.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit198>
+      <Unit199>
+        <Filename Value="zcad/commands/uzccommand_closedwg.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit199>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

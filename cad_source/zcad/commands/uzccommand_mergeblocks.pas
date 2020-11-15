@@ -21,17 +21,13 @@ unit uzccommand_mergeblocks;
 
 interface
 uses
-  LazUTF8,LCLProc,
-  uzcdialogsfiles,
-  sysutils,
-  uzbtypes,uzbpaths,
+  LCLProc,
+  uzbpaths,
 
   uzeffmanager,
   uzccommand_newdwg,
   uzccombase,uzccommandsimpl,uzccommandsabstract,
-  uzcsysvars,
-  uzcdrawings,uzedrawingsimple,
-  uzcinterface;
+  uzcdrawings,uzedrawingsimple;
 
 function MergeBlocks_com(operands:TCommandOperands):TCommandResult;
 
@@ -42,15 +38,14 @@ var
    pdwg:PTSimpleDrawing;
    s:AnsiString;
 begin
-     pdwg:=(drawings.CurrentDWG);
-     drawings.CurrentDWG:=BlockBaseDWG;
+  pdwg:=(drawings.CurrentDWG);
+  drawings.CurrentDWG:=BlockBaseDWG;
 
-     if length(operands)>0 then
-     s:=FindInSupportPath(SupportPath,operands);
-     result:=Merge_com(s);
+  if length(operands)>0 then
+  s:=FindInSupportPath(SupportPath,operands);
+  result:=Merge_com(s);
 
-
-     drawings.CurrentDWG:=pdwg;
+  drawings.CurrentDWG:=pdwg;
 end;
 
 procedure startup;

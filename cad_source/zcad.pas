@@ -141,7 +141,7 @@ uses
   uzccommand_load,
   uzccommand_mergeblocks,
   uzccommand_merge,
-
+  uzccommand_cancel,
 
   {$IFDEF ELECTROTECH}
   //**for velec func**//

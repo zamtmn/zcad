@@ -283,7 +283,7 @@ begin
   result:=application.MessageBox(ps,pc,Flags);
   Do_AfterShowModal(nil);
 end;
-
+{ #todo : TextMessage need rewrite with zcMsgDlg instead MessageBox}
 procedure TZCMsgCallBackInterface.TextMessage(msg:String;opt:TTextMessageWriteOptionsSet);
 var
    Caption: string;

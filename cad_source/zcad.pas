@@ -145,6 +145,7 @@ uses
   uzccommand_zoom,
   uzccommand_pan,
   uzccommand_view,
+  uzccommand_camreset,
 
   {$IFDEF ELECTROTECH}
   //**for velec func**//

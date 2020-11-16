@@ -16,21 +16,31 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 {$mode delphi}
-unit uzccommand_cancel;
+unit uzccommand_zoom;
 
 {$INCLUDE def.inc}
 
 interface
 uses
-  uzccommandsabstract,uzccommandsimpl;
+  sysutils,
+  uzccommandsabstract,uzccommandsimpl,
+  uzcdrawings;
 
 implementation
 
-function Cancel_com(operands:TCommandOperands):TCommandResult;
+function Zoom_com(operands:TCommandOperands):TCommandResult;
 begin
+  if uppercase(operands)='ALL' then
+    drawings.GetCurrentDWG.wa.ZoomAll
+  else if uppercase(operands)='SEL' then
+    drawings.GetCurrentDWG.wa.ZoomSel
+  else if uppercase(operands)='IN' then
+    drawings.GetCurrentDWG.wa.ZoomIn
+  else if uppercase(operands)='OUT' then
+    drawings.GetCurrentDWG.wa.ZoomOut;
   result:=cmd_ok;
 end;
 
 initialization
-  CreateCommandFastObjectPlugin(@Cancel_com,'Cancel',0,0);
+  CreateCommandFastObjectPlugin(@Zoom_com,'Zoom',CADWG,0).overlay:=true;
 end.

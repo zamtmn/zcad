@@ -16,21 +16,38 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 {$mode delphi}
-unit uzccommand_cancel;
+unit uzccommand_pan;
 
 {$INCLUDE def.inc}
 
 interface
 uses
-  uzccommandsabstract,uzccommandsimpl;
+  sysutils,
+  uzccommandsabstract,uzccommandsimpl,
+  uzcdrawings;
 
 implementation
 
-function Cancel_com(operands:TCommandOperands):TCommandResult;
+function Pan_com(operands:TCommandOperands):TCommandResult;
+const
+  pix=50;
+var
+  x,y:integer;
 begin
+  x:=drawings.GetCurrentDWG.wa.getviewcontrol.ClientWidth div 2;
+  y:=drawings.GetCurrentDWG.wa.getviewcontrol.ClientHeight div 2;
+  if uppercase(operands)='LEFT' then
+    drawings.GetCurrentDWG.wa.PanScreen(x,y,x+pix,y)
+  else if uppercase(operands)='RIGHT' then
+    drawings.GetCurrentDWG.wa.PanScreen(x,y,x-pix,y)
+  else if uppercase(operands)='UP' then
+    drawings.GetCurrentDWG.wa.PanScreen(x,y,x,y+pix)
+  else if uppercase(operands)='DOWN' then
+    drawings.GetCurrentDWG.wa.PanScreen(x,y,x,y-pix);
+  drawings.GetCurrentDWG.wa.RestoreMouse;
   result:=cmd_ok;
 end;
 
 initialization
-  CreateCommandFastObjectPlugin(@Cancel_com,'Cancel',0,0);
+  CreateCommandFastObjectPlugin(@Pan_com,'Pan',CADWG,0).overlay:=true;
 end.

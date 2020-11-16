@@ -142,6 +142,9 @@ uses
   uzccommand_mergeblocks,
   uzccommand_merge,
   uzccommand_cancel,
+  uzccommand_zoom,
+  uzccommand_pan,
+  uzccommand_view,
 
   {$IFDEF ELECTROTECH}
   //**for velec func**//

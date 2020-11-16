@@ -267,36 +267,7 @@ begin
           end;
      end;
      result:=cmd_ok;
-     ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
-end;
-function Cam_reset_com(operands:TCommandOperands):TCommandResult;
-begin
-  PTZCADDrawing(drawings.GetCurrentDWG).UndoStack.PushStartMarker('Reset camera');
-  with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG).UndoStack,drawings.GetCurrentDWG.pcamera^.prop)^ do
-  begin
-  drawings.GetCurrentDWG.pcamera^.prop.point.x := 0;
-  drawings.GetCurrentDWG.pcamera^.prop.point.y := 0;
-  drawings.GetCurrentDWG.pcamera^.prop.point.z := 50;
-  drawings.GetCurrentDWG.pcamera^.prop.look.x := 0;
-  drawings.GetCurrentDWG.pcamera^.prop.look.y := 0;
-  drawings.GetCurrentDWG.pcamera^.prop.look.z := -1;
-  drawings.GetCurrentDWG.pcamera^.prop.ydir.x := 0;
-  drawings.GetCurrentDWG.pcamera^.prop.ydir.y := 1;
-  drawings.GetCurrentDWG.pcamera^.prop.ydir.z := 0;
-  drawings.GetCurrentDWG.pcamera^.prop.xdir.x := -1;
-  drawings.GetCurrentDWG.pcamera^.prop.xdir.y := 0;
-  drawings.GetCurrentDWG.pcamera^.prop.xdir.z := 0;
-  drawings.GetCurrentDWG.pcamera^.anglx := -pi;
-  drawings.GetCurrentDWG.pcamera^.angly := -pi / 2;
-  drawings.GetCurrentDWG.pcamera^.zmin := 1;
-  drawings.GetCurrentDWG.pcamera^.zmax := 100000;
-  drawings.GetCurrentDWG.pcamera^.fovy := 35;
-  drawings.GetCurrentDWG.pcamera^.prop.zoom := 0.1;
-  ComitFromObj;
-  end;
-  PTZCADDrawing(drawings.GetCurrentDWG).UndoStack.PushEndMarker;
-  zcRedrawCurrentDrawing;
-  result:=cmd_ok;
+     ZCMsgCallBackInterface.Do_AfterShowModal(nil);
 end;
 function Undo_com(operands:TCommandOperands):TCommandResult;
 var
@@ -1471,7 +1442,6 @@ begin
   //deselall.CEndActionAttr:=0;
   CreateCommandFastObjectPlugin(@QSave_com,'QSave',CADWG or CADWGChanged,0).CEndActionAttr:=CEDWGNChanged;
   CreateCommandFastObjectPlugin(@SaveAs_com,'SaveAs',CADWG,0);
-  CreateCommandFastObjectPlugin(@Cam_reset_com,'Cam_Reset',CADWG,0);
   CreateCommandFastObjectPlugin(@ObjVarMan_com,'ObjVarMan',CADWG or CASelEnt,0);
   CreateCommandFastObjectPlugin(@MultiObjVarMan_com,'MultiObjVarMan',CADWG or CASelEnts,0);
   CreateCommandFastObjectPlugin(@BlockDefVarMan_com,'BlockDefVarMan',CADWG,0);

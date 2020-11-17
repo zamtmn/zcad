@@ -208,46 +208,6 @@ begin
   result:=cmd_ok;
 end;
 
-function Undo_com(operands:TCommandOperands):TCommandResult;
-var
-   prevundo:integer;
-   overlay:GDBBoolean;
-   msg:string;
-begin
-  drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.deselector);
-  drawings.GetCurrentDWG.GetSelObjArray.Free;
-  if commandmanager.CommandsStack.Count>0 then
-                                              begin
-                                                   prevundo:=pCommandRTEdObject(ppointer(commandmanager.CommandsStack.getDataMutable(commandmanager.CommandsStack.Count-1))^)^.UndoTop;
-                                                   overlay:=true;
-                                              end
-                                          else
-                                              begin
-                                                   prevundo:=0;
-                                                   overlay:=false;
-                                                   ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
-                                              end;
-  case PTZCADDrawing(drawings.GetCurrentDWG).UndoStack.undo(msg,prevundo,overlay) of
-    URRNoCommandsToUndoInOverlayMode:ZCMsgCallBackInterface.TextMessage(rscmNoCTUSE,TMWOShowError);
-    URRNoCommandsToUndo:ZCMsgCallBackInterface.TextMessage(rscmNoCTU,TMWOShowError);
-  end;
-  if msg<>'' then ZCMsgCallBackInterface.TextMessage(msg,TMWOHistoryOut);
-  zcRedrawCurrentDrawing;
-  result:=cmd_ok;
-end;
-function Redo_com(operands:TCommandOperands):TCommandResult;
-var
-   msg:string;
-begin
-  drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.deselector);
-  case PTZCADDrawing(drawings.GetCurrentDWG).UndoStack.redo(msg) of
-    URRNoCommandsToUndo:ZCMsgCallBackInterface.TextMessage(rscmNoCTR,TMWOShowError);
-  end;
-  if msg<>'' then ZCMsgCallBackInterface.TextMessage(msg,TMWOHistoryOut);
-  zcRedrawCurrentDrawing;
-  result:=cmd_ok;
-end;
-
 function ChangeProjType_com(operands:TCommandOperands):TCommandResult;
 begin
   if drawings.GetCurrentDWG.wa.param.projtype = projparalel then
@@ -1395,8 +1355,6 @@ begin
   CreateCommandFastObjectPlugin(@SelObjChangeDimStyleToCurrent_com,'SelObjChangeDimStyleToCurrent',CADWG,0);
   CreateCommandFastObjectPlugin(@RebuildTree_com,'RebuildTree',CADWG,0);
   CreateCommandFastObjectPlugin(@TreeStat_com,'TreeStat',CADWG,0);
-  CreateCommandFastObjectPlugin(@undo_com,'Undo',CADWG or CACanUndo,0).overlay:=true;
-  CreateCommandFastObjectPlugin(@redo_com,'Redo',CADWG or CACanRedo,0).overlay:=true;
 
   CreateCommandRTEdObjectPlugin(@polytest_com_CommandStart,nil,nil,nil,@polytest_com_BeforeClick,@polytest_com_BeforeClick,nil,nil,'PolyTest',0,0);
 

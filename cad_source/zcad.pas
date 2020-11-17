@@ -148,6 +148,7 @@ uses
   uzccommand_pan,
   uzccommand_view,
   uzccommand_camreset,
+  uzccommand_undo,uzccommand_redo,
 
   {$IFDEF ELECTROTECH}
   //**for velec func**//

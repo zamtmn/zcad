@@ -141,6 +141,8 @@ uses
   uzccommand_load,
   uzccommand_mergeblocks,
   uzccommand_merge,
+  uzccommand_saveas,
+  uzccommand_qsave,
   uzccommand_cancel,
   uzccommand_zoom,
   uzccommand_pan,

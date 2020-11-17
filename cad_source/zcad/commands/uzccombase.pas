@@ -74,7 +74,6 @@ TTreeStatistik=record
 
        MSelectCXMenu:TPopupMenu=nil;
 
-   function SaveAs_com(operands:TCommandOperands):TCommandResult;
    procedure CopyToClipboard;
    function CopyClip_com(operands:TCommandOperands):TCommandResult;
    function Regen_com(operands:TCommandOperands):TCommandResult;
@@ -209,66 +208,6 @@ begin
   result:=cmd_ok;
 end;
 
-function SaveDXFDPAS(s:gdbstring):GDBInteger;
-begin
-     result:=dwgSaveDXFDPAS(s, drawings.GetCurrentDWG);
-     if assigned(ProcessFilehistoryProc) then
-                                             ProcessFilehistoryProc(s);
-end;
-function QSave_com(operands:TCommandOperands):TCommandResult;
-var s,s1:GDBString;
-    itautoseve:boolean;
-begin
-     itautoseve:=false;
-     if operands='QS' then
-                          begin
-                               s1:=ExpandPath(sysvar.SAVE.SAVE_Auto_FileName^);
-                               s:=rsAutoSave+': '''+s1+'''';
-                               ZCMsgCallBackInterface.TextMessage(s,TMWOHistoryOut);
-                               itautoseve:=true;
-                          end
-                      else
-                          begin
-                               //if drawings.GetCurrentDWG.GetFileName=rsUnnamedWindowTitle then
-                                 if extractfilepath(drawings.GetCurrentDWG.GetFileName)='' then
-                                                                      begin
-                                                                           SaveAs_com(EmptyCommandOperands);
-                                                                           exit;
-                                                                      end;
-                               s1:=drawings.GetCurrentDWG.GetFileName;
-                          end;
-     result:=SaveDXFDPAS(s1);
-     if (not itautoseve)and(result=cmd_ok) then
-                           drawings.GetCurrentDWG.ChangeStampt(false);
-     SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;
-end;
-function SaveAs_com(operands:TCommandOperands):TCommandResult;
-var
-   s: GDBString;
-   fileext:GDBString;
-begin
-     ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
-     s:=drawings.GetCurrentDWG.GetFileName;
-     if SaveFileDialog(s,'dxf',ProjectFileFilter,'',rsSaveFile) then
-     begin
-          fileext:=uppercase(ExtractFileEXT(s));
-          if fileext='.ZCP' then
-                                saveZCP(s, drawings.GetCurrentDWG^)
-     else if fileext='.DXF' then
-                                begin
-                                     SaveDXFDPAS(s);
-                                     drawings.GetCurrentDWG.SetFileName(s);
-                                     drawings.GetCurrentDWG.ChangeStampt(false);
-                                     ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
-                                     //if assigned(updatevisibleproc) then updatevisibleproc(ZMsgID_GUIActionRedraw);
-                                end
-     else begin
-          ZCMsgCallBackInterface.TextMessage(Format(rsunknownFileExt, [fileext]),TMWOShowError);
-          end;
-     end;
-     result:=cmd_ok;
-     ZCMsgCallBackInterface.Do_AfterShowModal(nil);
-end;
 function Undo_com(operands:TCommandOperands):TCommandResult;
 var
    prevundo:integer;
@@ -1439,9 +1378,7 @@ begin
   deselall:=CreateCommandFastObjectPlugin(@DeSelectAll_com,'DeSelectAll',CADWG  or CASelEnts,0);
   deselall.CEndActionAttr:=CEDeSelect;
   deselall^.overlay:=true;
-  //deselall.CEndActionAttr:=0;
-  CreateCommandFastObjectPlugin(@QSave_com,'QSave',CADWG or CADWGChanged,0).CEndActionAttr:=CEDWGNChanged;
-  CreateCommandFastObjectPlugin(@SaveAs_com,'SaveAs',CADWG,0);
+
   CreateCommandFastObjectPlugin(@ObjVarMan_com,'ObjVarMan',CADWG or CASelEnt,0);
   CreateCommandFastObjectPlugin(@MultiObjVarMan_com,'MultiObjVarMan',CADWG or CASelEnts,0);
   CreateCommandFastObjectPlugin(@BlockDefVarMan_com,'BlockDefVarMan',CADWG,0);
@@ -1462,7 +1399,7 @@ begin
   CreateCommandFastObjectPlugin(@redo_com,'Redo',CADWG or CACanRedo,0).overlay:=true;
 
   CreateCommandRTEdObjectPlugin(@polytest_com_CommandStart,nil,nil,nil,@polytest_com_BeforeClick,@polytest_com_BeforeClick,nil,nil,'PolyTest',0,0);
-  //CreateCommandFastObjectPlugin(@SelObjChangeLWToCurrent_com,'SelObjChangeLWToCurrent',CADWG,0);
+
   CreateCommandFastObjectPlugin(@PolyDiv_com,'PolyDiv',CADWG,0).CEndActionAttr:=CEDeSelect;
   CreateCommandFastObjectPlugin(@UpdatePO_com,'UpdatePO',0,0);
 

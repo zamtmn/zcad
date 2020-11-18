@@ -160,6 +160,8 @@ uses
   uzccommand_selobjchangecolortocurrent,uzccommand_selobjchangeltypetocurrent,
   uzccommand_selobjchangetstyletocurrent,uzccommand_selobjchangedimstyletocurrent,
   uzccommand_polydiv,
+  uzccommand_selectobjectbyaddres,
+  uzccommand_selectonmouseobjects,
 
   {$IFDEF ELECTROTECH}
   //**for velec func**//

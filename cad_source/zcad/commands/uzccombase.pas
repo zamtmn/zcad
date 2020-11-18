@@ -53,72 +53,7 @@ uses
 var
        InfoFormVar:TInfoForm=nil;
 
-       MSelectCXMenu:TPopupMenu=nil;
-
 implementation
-
-function GetOnMouseObjWAddr(var ContextMenu:TPopupMenu):GDBInteger;
-var
-  pp:PGDBObjEntity;
-  ir:itrec;
-  //inr:TINRect;
-  line,saddr:GDBString;
-  pvd:pvardesk;
-  pentvarext:PTVariablesExtender;
-begin
-     result:=0;
-     pp:=drawings.GetCurrentDWG.OnMouseObj.beginiterate(ir);
-     if pp<>nil then
-                    begin
-                         repeat
-                         pentvarext:=pp^.GetExtension(typeof(TVariablesExtender));
-                         if pentvarext<>nil then
-                         begin
-                         pvd:=pentvarext^.entityunit.FindVariable('NMO_Name');
-                         if pvd<>nil then
-                                         begin
-                                         if Result=20 then
-                                         begin
-                                              //result:=result+#13#10+'...';
-                                              exit;
-                                         end;
-                                         line:=pp^.GetObjName+' Layer='+pp^.vp.Layer.GetFullName;
-                                         line:=line+' Name='+pvd.data.PTD.GetValueAsString(pvd.data.Instance);
-                                         system.str(GDBPlatformUInt(pp),saddr);
-                                         ContextMenu.Items.Add(TmyMenuItem.create(ContextMenu,line,'SelectObjectByAddres('+saddr+')'));
-                                         //if result='' then
-                                         //                 result:=line
-                                         //             else
-                                         //                 result:=result+#13#10+line;
-                                         inc(Result);
-                                         end;
-                         end;
-                               pp:=drawings.GetCurrentDWG.OnMouseObj.iterate(ir);
-                         until pp=nil;
-                    end;
-end;
-function SelectOnMouseObjects_com(operands:TCommandOperands):TCommandResult;
-begin
-     cxmenumgr.closecurrentmenu;
-     MSelectCXMenu:=TPopupMenu.create(nil);
-     if GetOnMouseObjWAddr(MSelectCXMenu)=0 then
-                                                         FreeAndNil(MSelectCXMenu)
-                                                     else
-                                                         cxmenumgr.PopUpMenu(MSelectCXMenu);
-     result:=cmd_ok;
-end;
-function SelectObjectByAddres_com(operands:TCommandOperands):TCommandResult;
-var
-  pp:PGDBObjEntity;
-  code:integer;
-begin
-  val(Operands,GDBPlatformUInt(pp),code);
-  if (code=0)and(assigned(pp))then
-    zcSelectEntity(pp);
-  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
-  ZCMsgCallBackInterface.Do_GUIaction(drawings.CurrentDWG.wa,ZMsgID_GUIActionSelectionChanged);
-  result:=cmd_ok;
-end;
 
 function ChangeProjType_com(operands:TCommandOperands):TCommandResult;
 begin
@@ -437,9 +372,6 @@ procedure startup;
    //pmenuitem:pzmenuitem;
 begin
   Randomize;
-  CreateCommandFastObjectPlugin(@SelectOnMouseObjects_com,'SelectOnMouseObjects',CADWG,0);
-  CreateCommandFastObjectPlugin(@SelectObjectByAddres_com,'SelectObjectByAddres',CADWG,0);
-
   CreateCommandFastObjectPlugin(@ObjVarMan_com,'ObjVarMan',CADWG or CASelEnt,0);
   CreateCommandFastObjectPlugin(@MultiObjVarMan_com,'MultiObjVarMan',CADWG or CASelEnts,0);
   CreateCommandFastObjectPlugin(@BlockDefVarMan_com,'BlockDefVarMan',CADWG,0);

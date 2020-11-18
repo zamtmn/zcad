@@ -43,7 +43,7 @@ uses
   uzegeometry,
   uzbmemman,
   uzeconsts,
-  uzccommand_move,uzccommand_copy,
+  uzccommand_move,uzccommand_copy,uzccommand_regen,
   uzbgeomtypes,uzeentity,uzeentcircle,uzeentline,uzeentgenericsubentry,uzeentmtext,
   uzeentsubordinated,uzeentblockinsert,uzeentpolyline,uzclog,gzctnrvectordata,
   math,uzeenttable,uzctnrvectorgdbstring,

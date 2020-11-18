@@ -50,7 +50,6 @@ uses
  gzctnrvectortypes,uzegeometry,uzelongprocesssupport,usimplegenerics,gzctnrstl,
  uzccommand_selectframe;
 resourcestring
-  rsAboutCLSwithUpdatePO='Command line swith "UpdatePO" must be set. (or not the first time running this command)';
   rsBeforeRunPoly='Before starting you must select a 2DPolyLine';
 type
   TTreeLevelStatistik=record
@@ -75,7 +74,6 @@ TTreeStatistik=record
 
    procedure CopyToClipboard;
    function CopyClip_com(operands:TCommandOperands):TCommandResult;
-   function Regen_com(operands:TCommandOperands):TCommandResult;
    procedure ReCreateClipboardDWG;
    function PointerToNodeName(node:pointer):string;
 const
@@ -545,41 +543,6 @@ begin
     result:=cmd_ok;
 end;
 
-function Regen_com(operands:TCommandOperands):TCommandResult;
-var //i: GDBInteger;
-    pv:pGDBObjEntity;
-        ir:itrec;
-    drawing:PTSimpleDrawing;
-    DC:TDrawContext;
-    lpsh:TLPSHandle;
-begin
-  lpsh:=lps.StartLongProcess(drawings.GetCurrentROOT.ObjArray.count,'Regenerate drawing',nil);
-  //if assigned(StartLongProcessProc) then StartLongProcessProc(drawings.GetCurrentROOT.ObjArray.count,'Regenerate drawing');
-  drawing:=drawings.GetCurrentDwg;
-  drawing.wa.CalcOptimalMatrix;
-  dc:=drawings.GetCurrentDwg^.CreateDrawingRC;
-  pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
-  if pv<>nil then
-  repeat
-    pv^.FormatEntity(drawing^,dc);
-  pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
-  lps.ProgressLongProcess(lpsh,ir.itc);
-  //if assigned(ProcessLongProcessProc) then ProcessLongProcessProc(ir.itc);
-  until pv=nil;
-  drawings.GetCurrentROOT.getoutbound(dc);
-  lps.EndLongProcess(lpsh);
-  //if assigned(EndLongProcessProc) then EndLongProcessProc;
-
-  drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;
-  drawings.GetCurrentDWG.wa.param.seldesc.OnMouseObject:=nil;
-  drawings.GetCurrentDWG.wa.param.seldesc.LastSelectedObject:=nil;
-  drawings.GetCurrentDWG.wa.param.lastonmouseobject:=nil;
-  {objinsp.GDBobjinsp.}
-  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
-  clearcp;
-  //redrawoglwnd;
-  result:=cmd_ok;
-end;
 procedure CopyToClipboard;
 var //res:longbool;
     //uFormat:longword;
@@ -1117,28 +1080,6 @@ begin
   ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,dbunit.TypeName2PTD('TOSModeEditor'),@OSModeEditor,drawings.GetCurrentDWG,true);
   result:=cmd_ok;
 end;
-function UpdatePO_com(operands:TCommandOperands):TCommandResult;
-var
-   cleaned:integer;
-   s:string;
-begin
-     if sysparam.saved.updatepo then
-     begin
-          begin
-               cleaned:=po.exportcompileritems(actualypo);
-               s:='Cleaned items: '+inttostr(cleaned)
-           +#13#10'Added items: '+inttostr(_UpdatePO)
-           +#13#10'File zcadrt.po must be rewriten. Confirm?';
-               if ZCMsgCallBackInterface.TextQuestion('UpdatePO',s,MB_YESNO)=IDNO then
-                                                                         exit;
-               po.SaveToFile(expandpath(PODirectory + ZCADRTBackupPOFileName));
-               actualypo.SaveToFile(expandpath(PODirectory + ZCADRTPOFileName));
-               sysparam.saved.updatepo:=false
-          end;
-     end
-        else ZCMsgCallBackInterface.TextMessage(rsAboutCLSwithUpdatePO,TMWOShowError);
-     result:=cmd_ok;
-end;
 function StoreFrustum_com(operands:TCommandOperands):TCommandResult;
 //var
    //p:PCommandObjectDef;
@@ -1204,81 +1145,6 @@ begin
     Result := False;
 end;
 *)
-procedure test;
-var
-  Script:GDBString;
-begin
-                   Script:='GDBString;';
-                   ZCMsgCallBackInterface.TextMessage(Script,TMWOShowError);
-end;
-function TestScript_com(operands:TCommandOperands):TCommandResult;
-(*var
-  Compiler: TPSPascalCompiler;
-  { TPSPascalCompiler is the compiler part of the scriptengine. This will
-    translate a Pascal script into a compiled form the executer understands. }
-  Exec: TPSExec;
-   { TPSExec is the executer part of the scriptengine. It uses the output of
-    the compiler to run a script. }
-  {$IFDEF UNICODE}Data: AnsiString;{$ELSE}Data: string;{$ENDIF}
-  Script,Messages:GDBString;
-  i:integer;
-  CI: TPSRuntimeClassImporter; *)
-begin
-  result:=cmd_ok;
-(*старое чтото
-var f: TForm; i: Longint; begin f := TForm.CreateNew(f{, 0}); f.Show; while f.Visible do Application.ProcessMessages; F.free;  end.
-*)
-  (*
-     Script:='var r1,r2:GDBInteger; begin r1:=10;r2:=2;r1:=r1/r2; ShowError(IntToStr(r1)); end.';
-     Compiler := TPSPascalCompiler.Create; // create an instance of the compiler.
-     Compiler.OnUses := ScriptOnUses; // assign the OnUses event.
-     if not Compiler.Compile(Script) then  // Compile the Pascal script into bytecode.
-     begin
-       //Compiler.
-       for i := 0 to Compiler.MsgCount -1 do
-         Messages := Messages +
-                     Compiler.Msg[i].MessageToString +
-                     #13#10;
-       TMWOShowError(Messages);
-       Compiler.Free;
-        // You could raise an exception here.
-       Exit;
-     end;
-
-     Compiler.GetOutput(Data); // Save the output of the compiler in the string Data.
-     Compiler.Free; // After compiling the script, there is no need for the compiler anymore.
-
-     CI := TPSRuntimeClassImporter.Create;
-     { Create an instance of the runtime class importer.}
-
-     RIRegister_Std(CI);  // uPSR_std.pas unit.
-     RIRegister_Controls(CI); // uPSR_controls.pas unti.
-     RIRegister_stdctrls(CI);  // uPSR_stdctrls.pas unit.
-     RIRegister_Forms(CI);  // uPSR_forms.pas unit.
-
-     Exec := TPSExec.Create;  // Create an instance of the executer.
-     RegisterClassLibraryRuntime(Exec, CI);
-     Exec.RegisterDelphiFunction(@test, 'test', cdRegister);
-     Exec.RegisterDelphiFunction(@TMWOShowError, 'ShowError', cdRegister);
-     //----Exec.RegisterDelphiFunction(@MyOwnFunction, 'MYOWNFUNCTION', cdRegister);
-     { This will register the function to the executer. The first parameter is a
-       pointer to the function. The second parameter is the name of the function (in uppercase).
-   	And the last parameter is the calling convention (usually Register). }
-
-     if not  Exec.LoadData(Data) then // Load the data from the Data string.
-     begin
-         Exec.LastEx;
-
-       { For some reason the script could not be loaded. This is usually the case when a
-         library that has been used at compile time isn't registered at runtime. }
-       Exec.Free;
-        // You could raise an exception here.
-       Exit;
-     end;
-
-     Exec.RunScript; // Run the script.
-     Exec.Free; // Free the executer. *)
-end;
 
 procedure startup;
 //var
@@ -1296,7 +1162,6 @@ begin
   CreateCommandFastObjectPlugin(@BlockDefVarMan_com,'BlockDefVarMan',CADWG,0);
   CreateCommandFastObjectPlugin(@BlockDefVarMan_com,'BlockDefVarMan',CADWG,0);
   CreateCommandFastObjectPlugin(@UnitsMan_com,'UnitsMan',0,0);
-  CreateCommandFastObjectPlugin(@Regen_com,'Regen',CADWG,0);
   CreateCommandFastObjectPlugin(@Copyclip_com,'CopyClip',CADWG or CASelEnts,0);
   CreateCommandFastObjectPlugin(@ChangeProjType_com,'ChangeProjType',CADWG,0);
   CreateCommandFastObjectPlugin(@SelObjChangeLayerToCurrent_com,'SelObjChangeLayerToCurrent',CADWG,0);
@@ -1311,7 +1176,6 @@ begin
   CreateCommandRTEdObjectPlugin(@polytest_com_CommandStart,nil,nil,nil,@polytest_com_BeforeClick,@polytest_com_BeforeClick,nil,nil,'PolyTest',0,0);
 
   CreateCommandFastObjectPlugin(@PolyDiv_com,'PolyDiv',CADWG,0).CEndActionAttr:=CEDeSelect;
-  CreateCommandFastObjectPlugin(@UpdatePO_com,'UpdatePO',0,0);
 
   CreateCommandFastObjectPlugin(@SnapProp_com,'SnapProperties',CADWG,0).overlay:=true;
 

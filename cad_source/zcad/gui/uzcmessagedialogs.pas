@@ -209,6 +209,8 @@ var
   MsgID:String;
   PContext:PTMessagesContext;
   TaskName:TLPName;
+  PriorityFocusCtrl:TWinControl;
+  ParentHWND:THandle;
 begin
   FillChar(Task,SizeOf(Task),0);
   if assigned(Context) then begin
@@ -246,7 +248,15 @@ begin
     Task.Verify:='';
   Task.VerifyChecked := false;
 
-  Result.ModalResult:=Task.Execute(TZCMsgCommonButtons2TCommonButtons.Convert(buttons),0,[tdfPositionRelativeToWindow],TZCMsgDlgIcon2TTaskDialogIcon(aDialogIcon));//controls.mrOk
+  ParentHWND:=0;
+  PriorityFocusCtrl:= ZCMsgCallBackInterface.GetPriorityFocus;
+  if PriorityFocusCtrl<>nil then begin
+    while PriorityFocusCtrl.Parent<>nil do
+      PriorityFocusCtrl:=PriorityFocusCtrl.Parent;
+    ParentHWND:=PriorityFocusCtrl.Handle;
+  end;
+
+  Result.ModalResult:=Task.Execute(TZCMsgCommonButtons2TCommonButtons.Convert(buttons),0,[tdfPositionRelativeToWindow],TZCMsgDlgIcon2TTaskDialogIcon(aDialogIcon),tfiWarning,0,0,ParentHWND);//controls.mrOk
   Result.RadioRes:=Task.RadioRes;
   Result.SelectionRes:=Task.SelectionRes;
   Result.VerifyChecked:=Task.VerifyChecked;

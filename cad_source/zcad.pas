@@ -159,6 +159,7 @@ uses
   uzccommand_selobjchangelayertocurrent,uzccommand_selobjchangelwtocurrent,
   uzccommand_selobjchangecolortocurrent,uzccommand_selobjchangeltypetocurrent,
   uzccommand_selobjchangetstyletocurrent,uzccommand_selobjchangedimstyletocurrent,
+  uzccommand_polydiv,
 
   {$IFDEF ELECTROTECH}
   //**for velec func**//

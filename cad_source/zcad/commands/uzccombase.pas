@@ -50,9 +50,6 @@ uses
  gzctnrvectortypes,uzegeometry,uzelongprocesssupport,usimplegenerics,gzctnrstl,
  uzccommand_selectframe;
 
-var
-       InfoFormVar:TInfoForm=nil;
-
 implementation
 
 function ChangeProjType_com(operands:TCommandOperands):TCommandResult;
@@ -68,178 +65,6 @@ begin
     end;
   zcRedrawCurrentDrawing;
   result:=cmd_ok;
-end;
-
-procedure createInfoFormVar;
-begin
-  if not assigned(InfoFormVar) then
-  begin
-  InfoFormVar:=TInfoForm.create(application.MainForm);
-  InfoFormVar.DialogPanel.HelpButton.Hide;
-  InfoFormVar.DialogPanel.CancelButton.Hide;
-  InfoFormVar.caption:=(rsCAUTIONnoSyntaxCheckYet);
-  end;
-end;
-function EditUnit(var entityunit:TSimpleUnit):boolean;
-var
-   mem:GDBOpenArrayOfByte;
-   //pobj:PGDBObjEntity;
-   //op:gdbstring;
-   modalresult:integer;
-   u8s:UTF8String;
-   astring:ansistring;
-begin
-     mem.init({$IFDEF DEBUGBUILD}'{A1891083-67C6-4C21-8012-6D215935F6A6}',{$ENDIF}1024);
-     entityunit.SaveToMem(mem);
-     //mem.SaveToFile(expandpath(ProgramPath+'autosave\lastvariableset.pas'));
-     setlength(astring,mem.Count);
-     StrLCopy(@astring[1],mem.GetParrayAsPointer,mem.Count);
-     u8s:=(astring);
-
-     createInfoFormVar;
-
-     InfoFormVar.memo.text:=u8s;
-     modalresult:=ZCMsgCallBackInterface.DOShowModal(InfoFormVar);
-     if modalresult=MrOk then
-                         begin
-                               u8s:=InfoFormVar.memo.text;
-                               astring:={utf8tosys}(u8s);
-                               mem.Clear;
-                               mem.AddData(@astring[1],length(astring));
-
-                               entityunit.free;
-                               units.parseunit(SupportPath,InterfaceTranslate,mem,@entityunit);
-                               result:=true;
-                         end
-                         else
-                             result:=false;
-     mem.done;
-end;
-
-function ObjVarMan_com(operands:TCommandOperands):TCommandResult;
-var
-   pobj:PGDBObjEntity;
-   //op:gdbstring;
-   pentvarext:PTVariablesExtender;
-begin
-  if drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount=1 then
-                                                               pobj:=PGDBObjEntity(drawings.GetCurrentDWG.GetLastSelected)
-                                                           else
-                                                               pobj:=nil;
-  if pobj<>nil
-  then
-      begin
-           pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
-           if pentvarext<>nil then
-           begin
-            if EditUnit(pentvarext^.entityunit) then
-              ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIRePrepareObject);
-           end;
-      end
-  else
-      ZCMsgCallBackInterface.TextMessage(rscmSelEntBeforeComm,TMWOHistoryOut);
-  result:=cmd_ok;
-end;
-function BlockDefVarMan_com(operands:TCommandOperands):TCommandResult;
-var
-   pobj:PGDBObjEntity;
-   op:gdbstring;
-   pentvarext:PTVariablesExtender;
-begin
-     pobj:=nil;
-     if drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount=1 then
-                                                                  begin
-                                                                       op:=PGDBObjEntity(drawings.GetCurrentDWG.GetLastSelected)^.GetNameInBlockTable;
-                                                                       if op<>'' then
-                                                                                     pobj:=drawings.GetCurrentDWG.BlockDefArray.getblockdef(op)
-                                                                  end
-else if length(Operands)>0 then
-                               begin
-                                  op:=Operands;
-                                  pobj:=drawings.GetCurrentDWG.BlockDefArray.getblockdef(op)
-                               end;
-  if pobj<>nil
-  then
-      begin
-           pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
-           if pentvarext<>nil then
-           begin
-            if EditUnit(pentvarext^.entityunit) then
-              ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIRePrepareObject);
-           end;
-      end
-  else
-      ZCMsgCallBackInterface.TextMessage(rscmSelOrSpecEntity,TMWOHistoryOut);
-  result:=cmd_ok;
-end;
-function UnitsMan_com(operands:TCommandOperands):TCommandResult;
-var
-   PUnit:ptunit;
-   //op:gdbstring;
-   //pentvarext:PTVariablesExtender;
-begin
-    if length(Operands)>0 then
-                               begin
-                                  PUnit:=units.findunit(SupportPath,InterfaceTranslate,operands);
-                                  if PUnit<>nil then
-                                                    begin
-                                                      EditUnit(PUnit^);
-                                                    end
-                                                 else
-                                                    ZCMsgCallBackInterface.TextMessage('unit not found!',TMWOHistoryOut);
-                               end
-                          else
-                              ZCMsgCallBackInterface.TextMessage('Specify unit name!',TMWOHistoryOut);
-  result:=cmd_ok;
-end;
-function MultiObjVarMan_com(operands:TCommandOperands):TCommandResult;
-var
-   mem:GDBOpenArrayOfByte;
-   pobj:PGDBObjEntity;
-   modalresult:integer;
-   u8s:UTF8String;
-   astring:ansistring;
-   counter:integer;
-   ir:itrec;
-   pentvarext:PTVariablesExtender;
-begin
-      begin
-           mem.init({$IFDEF DEBUGBUILD}'{A1891083-67C6-4C21-8012-6D215935F6A6}',{$ENDIF}1024);
-
-           createInfoFormVar;
-           counter:=0;
-
-           InfoFormVar.memo.text:='';
-           modalresult:=ZCMsgCallBackInterface.DOShowModal(InfoFormVar);
-           if modalresult=MrOk then
-                               begin
-                                     u8s:=InfoFormVar.memo.text;
-                                     astring:={utf8tosys}(u8s);
-                                     mem.Clear;
-                                     mem.AddData(@astring[1],length(astring));
-
-                                     pobj:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
-                                     if pobj<>nil then
-                                     repeat
-                                           if pobj^.Selected then
-                                           begin
-                                                pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
-                                                pentvarext^.entityunit.free;
-                                                units.parseunit(SupportPath,InterfaceTranslate,mem,@pentvarext^.entityunit);
-                                                mem.Seek(0);
-                                                inc(counter);
-                                           end;
-                                           pobj:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
-                                     until pobj=nil;
-                                     ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIRePrepareObject);
-                               end;
-
-
-           //InfoFormVar.Free;
-           mem.done;
-           ZCMsgCallBackInterface.TextMessage(format(rscmNEntitiesProcessed,[inttostr(counter)]),TMWOHistoryOut);
-      end;
-    result:=cmd_ok;
 end;
 
 function RebuildTree_com(operands:TCommandOperands):TCommandResult;
@@ -372,11 +197,6 @@ procedure startup;
    //pmenuitem:pzmenuitem;
 begin
   Randomize;
-  CreateCommandFastObjectPlugin(@ObjVarMan_com,'ObjVarMan',CADWG or CASelEnt,0);
-  CreateCommandFastObjectPlugin(@MultiObjVarMan_com,'MultiObjVarMan',CADWG or CASelEnts,0);
-  CreateCommandFastObjectPlugin(@BlockDefVarMan_com,'BlockDefVarMan',CADWG,0);
-  CreateCommandFastObjectPlugin(@BlockDefVarMan_com,'BlockDefVarMan',CADWG,0);
-  CreateCommandFastObjectPlugin(@UnitsMan_com,'UnitsMan',0,0);
   CreateCommandFastObjectPlugin(@ChangeProjType_com,'ChangeProjType',CADWG,0);
   CreateCommandFastObjectPlugin(@RebuildTree_com,'RebuildTree',CADWG,0);
 

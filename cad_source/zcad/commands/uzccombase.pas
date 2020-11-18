@@ -65,22 +65,14 @@ TTreeStatistik=record
                end;
 
    var
-       zoomwindowcommand:PCommandObjectDef;
        ms2objinsp:PCommandObjectDef;
 
        InfoFormVar:TInfoForm=nil;
 
        MSelectCXMenu:TPopupMenu=nil;
 
-   procedure CopyToClipboard;
-   function CopyClip_com(operands:TCommandOperands):TCommandResult;
-   procedure ReCreateClipboardDWG;
-
-const
-     ZCAD_DXF_CLIPBOARD_NAME='DXF2000@ZCADv0.9';
 implementation
-var
-   CopyClipFile:GDBString;
+
 function MultiSelect2ObjIbsp_com(operands:TCommandOperands):TCommandResult;
 {$IFDEF DEBUGBUILD}
 var
@@ -177,22 +169,6 @@ begin
     end;
   zcRedrawCurrentDrawing;
   result:=cmd_ok;
-end;
-function ShowWindow_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
-begin
-  result:=mclick;
-  drawings.GetCurrentDWG.wa.param.seldesc.Frame2 := mc;
-  drawings.GetCurrentDWG.wa.param.seldesc.Frame23d := wc;
-  if (button and MZW_LBUTTON)<>0 then
-  begin
-    begin
-      drawings.GetCurrentDWG.wa.param.seldesc.MouseFrameON := false;
-      drawings.GetCurrentDWG.wa.ZoomToVolume(CreateBBFrom2Point(drawings.GetCurrentDWG.wa.param.seldesc.Frame13d,drawings.GetCurrentDWG.wa.param.seldesc.Frame23d));
-      drawings.GetCurrentDWG.wa.param.seldesc.MouseFrameON := false;
-      commandmanager.executecommandend;
-      result:=cmd_ok;
-    end;
-  end;
 end;
 function SelObjChangeLTypeToCurrent_com(operands:TCommandOperands):TCommandResult;
 var pv:pGDBObjEntity;
@@ -541,123 +517,6 @@ begin
            ZCMsgCallBackInterface.TextMessage(format(rscmNEntitiesProcessed,[inttostr(counter)]),TMWOHistoryOut);
       end;
     result:=cmd_ok;
-end;
-
-procedure CopyToClipboard;
-var //res:longbool;
-    //uFormat:longword;
-
-//    lpszFormatName:string[200];
-//    hData:THANDLE;
-    //pbuf:pchar;
-    //hgBuffer:HGLOBAL;
-
-    s,suni:ansistring;
-    I:gdbinteger;
-      //tv,pobj: pGDBObjEntity;
-      //ir:itrec;
-
-    zcformat:TClipboardFormat;
-
-    //memsubstr:TMemoryStream;
-begin
-     if fileexists(utf8tosys(CopyClipFile)) then
-                                    SysUtils.deletefile(CopyClipFile);
-     s:=temppath+'Z$C'+inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)
-                              +inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)
-                              +'.dxf';
-     CopyClipFile:=s;
-     savedxf2000(s, {drawings.GetCurrentDWG}ClipboardDWG^);
-     setlength(suni,length(s)*2+2);
-     fillchar(suni[1],length(suni),0);
-     s:=s+#0;
-     for I := 1 to length(s) do
-                               suni[i*2-1]:=s[i];
-{    res:=OpenClipboard(mainformn.handle);
-    if res then
-    begin
-         EmptyClipboard();
-
-         uFormat:=RegisterClipboardFormat(ZCAD_DXF_CLIPBOARD_NAME);
-         hgBuffer:= GlobalAlloc(GMEM_DDESHARE, length(s));//выделим память
-         pbuf:=GlobalLock(hgBuffer);
-         //запишем данные в память
-         Move(s[1],pbuf^,length(s));
-         GlobalUnlock(hgBuffer);
-         SetClipboardData(uformat, hgBuffer); //помещаем данные в буфер обмена
-
-         uFormat:=RegisterClipboardFormat('AutoCAD.r16');
-         hgBuffer:= GlobalAlloc(GMEM_DDESHARE, length(s));
-         pbuf:=GlobalLock(hgBuffer);
-         Move(s[1],pbuf^,length(s));
-         GlobalUnlock(hgBuffer);
-         SetClipboardData(uformat, hgBuffer);
-
-         uFormat:=RegisterClipboardFormat('AutoCAD.r18');
-         hgBuffer:= GlobalAlloc(GMEM_DDESHARE, length(suni));
-         pbuf:=GlobalLock(hgBuffer);
-         Move(suni[1],pbuf^,length(suni));
-         GlobalUnlock(hgBuffer);
-         SetClipboardData(uformat, hgBuffer);
-
-
-         CloseClipboard;
-    end;
-}
-    //memsubstr:=TMemoryStream.create;
-    //memsubstr.WriteAnsiString(s);
-    //memsubstr.Write(s[1],length(s));
-
-    Clipboard.Open;
-    Clipboard.Clear;
-    zcformat:=RegisterClipboardFormat(ZCAD_DXF_CLIPBOARD_NAME);
-    clipboard.AddFormat(zcformat,s[1],length(s));
-
-    zcformat:=RegisterClipboardFormat('AutoCAD.r16');
-    clipboard.AddFormat(zcformat,s[1],length(s));
-
-    zcformat:=RegisterClipboardFormat('AutoCAD.r18');
-    clipboard.AddFormat(zcformat,suni[1],length(suni));
-    Clipboard.Close;
-
-    //memsubstr.free;
-end;
-procedure ReCreateClipboardDWG;
-begin
-  ClipboardDWG.done;
-  ClipboardDWG:=drawings.CreateDWG('*rtl/dwg/DrawingVars.pas','');
-  //ClipboardDWG.DimStyleTable.AddItem('Standart',pds);
-end;
-function CopyClip_com(operands:TCommandOperands):TCommandResult;
-var
-   pobj: pGDBObjEntity;
-   ir:itrec;
-   DC:TDrawContext;
-   NeedReCreateClipboardDWG:boolean;
-begin
-   ClipboardDWG.pObjRoot.ObjArray.free;
-   dc:=drawings.GetCurrentDwg^.CreateDrawingRC;
-   NeedReCreateClipboardDWG:=true;
-   pobj:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
-   if pobj<>nil then
-   repeat
-          begin
-              if pobj.selected then
-              begin
-                   if NeedReCreateClipboardDWG then
-                                                   begin
-                                                        ReCreateClipboardDWG;
-                                                        NeedReCreateClipboardDWG:=false;
-                                                   end;
-                drawings.CopyEnt(drawings.GetCurrentDWG,ClipboardDWG,pobj).Formatentity(drawings.GetCurrentDWG^,dc);
-              end;
-          end;
-          pobj:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
-   until pobj=nil;
-
-   copytoclipboard;
-
-   result:=cmd_ok;
 end;
 
 function RebuildTree_com(operands:TCommandOperands):TCommandResult;
@@ -1024,7 +883,6 @@ procedure startup;
    //pmenuitem:pzmenuitem;
 begin
   Randomize;
-  CopyClipFile:='Empty';
   ms2objinsp:=CreateCommandFastObjectPlugin(@MultiSelect2ObjIbsp_com,'MultiSelect2ObjIbsp',CADWG,0);
   ms2objinsp.CEndActionAttr:=0;
   CreateCommandFastObjectPlugin(@SelectOnMouseObjects_com,'SelectOnMouseObjects',CADWG,0);
@@ -1035,7 +893,6 @@ begin
   CreateCommandFastObjectPlugin(@BlockDefVarMan_com,'BlockDefVarMan',CADWG,0);
   CreateCommandFastObjectPlugin(@BlockDefVarMan_com,'BlockDefVarMan',CADWG,0);
   CreateCommandFastObjectPlugin(@UnitsMan_com,'UnitsMan',0,0);
-  CreateCommandFastObjectPlugin(@Copyclip_com,'CopyClip',CADWG or CASelEnts,0);
   CreateCommandFastObjectPlugin(@ChangeProjType_com,'ChangeProjType',CADWG,0);
   CreateCommandFastObjectPlugin(@SelObjChangeLayerToCurrent_com,'SelObjChangeLayerToCurrent',CADWG,0);
   CreateCommandFastObjectPlugin(@SelObjChangeLWToCurrent_com,'SelObjChangeLWToCurrent',CADWG,0);
@@ -1052,11 +909,6 @@ begin
   CreateCommandFastObjectPlugin(@SnapProp_com,'SnapProperties',CADWG,0).overlay:=true;
 
   CreateCommandFastObjectPlugin(@StoreFrustum_com,'StoreFrustum',CADWG,0).overlay:=true;
-
-  zoomwindowcommand:=CreateCommandRTEdObjectPlugin(@FrameEdit_com_CommandStart,@FrameEdit_com_Command_End,nil,nil,@FrameEdit_com_BeforeClick,@ShowWindow_com_AfterClick,nil,nil,'ZoomWindow',0,0);
-  zoomwindowcommand^.overlay:=true;
-  zoomwindowcommand.CEndActionAttr:=0;
-
 end;
 initialization
   OSModeEditor.initnul;

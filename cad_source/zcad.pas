@@ -162,6 +162,8 @@ uses
   uzccommand_polydiv,
   uzccommand_selectobjectbyaddres,
   uzccommand_selectonmouseobjects,
+  uzccommand_multiobjvarman,uzccommand_objvarman,uzccommand_blockdefvarman,
+  uzccommand_unitsman,
 
   {$IFDEF ELECTROTECH}
   //**for velec func**//

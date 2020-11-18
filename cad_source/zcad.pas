@@ -155,6 +155,7 @@ uses
   uzccommand_updatepo,
   uzccommand_treestat,
   uzccommand_copyclip,
+  uzccommand_multiselect2objinsp,
 
   {$IFDEF ELECTROTECH}
   //**for velec func**//

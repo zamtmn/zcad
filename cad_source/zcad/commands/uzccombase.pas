@@ -51,48 +51,13 @@ uses
  uzccommand_selectframe;
 resourcestring
   rsBeforeRunPoly='Before starting you must select a 2DPolyLine';
-type
-  TTreeLevelStatistik=record
-                          NodesCount,EntCount,OverflowCount:GDBInteger;
-                    end;
-  TPopulationCounter=TMyMapCounter<integer,LessInteger>;
-PTTreeLevelStatistikArray=^TTreeLevelStatistikArray;
-TTreeLevelStatistikArray=Array [0..0] of  TTreeLevelStatistik;
-TTreeStatistik=record
-                     NodesCount,EntCount,OverflowCount,MaxDepth,MemCount:GDBInteger;
-                     PLevelStat:PTTreeLevelStatistikArray;
-                     pc:TPopulationCounter;
-               end;
-
-   var
-       ms2objinsp:PCommandObjectDef;
-
+var
        InfoFormVar:TInfoForm=nil;
 
        MSelectCXMenu:TPopupMenu=nil;
 
 implementation
 
-function MultiSelect2ObjIbsp_com(operands:TCommandOperands):TCommandResult;
-{$IFDEF DEBUGBUILD}
-var
-   membuf:GDBOpenArrayOfByte;
-{$ENDIF}
-begin
-     MSEditor.CreateUnit(drawings.GetUnitsFormat);
-     if {MSEditor.SelCount>0}true then
-                                begin
-                                 {$IFDEF DEBUGBUILD}
-                                 membuf.init({$IFDEF DEBUGBUILD}'{6F6386AC-95B5-4B6D-AEC3-7EE5DD53F8A3}',{$ENDIF}10000);
-                                 MSEditor.VariablesUnit.SaveToMem(membuf);
-                                 membuf.SaveToFile(expandpath('*log\lms.pas'));
-                                 {$ENDIF}
-                                 ZCMsgCallBackInterface.Do_PrepareObject(drawings.GetUndoStack,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('TMSEditor'),@MSEditor,drawings.GetCurrentDWG);
-                                end
-                            {else
-                                commandmanager.executecommandend};
-     result:=cmd_ok;
-end;
 function GetOnMouseObjWAddr(var ContextMenu:TPopupMenu):GDBInteger;
 var
   pp:PGDBObjEntity;
@@ -883,8 +848,6 @@ procedure startup;
    //pmenuitem:pzmenuitem;
 begin
   Randomize;
-  ms2objinsp:=CreateCommandFastObjectPlugin(@MultiSelect2ObjIbsp_com,'MultiSelect2ObjIbsp',CADWG,0);
-  ms2objinsp.CEndActionAttr:=0;
   CreateCommandFastObjectPlugin(@SelectOnMouseObjects_com,'SelectOnMouseObjects',CADWG,0);
   CreateCommandFastObjectPlugin(@SelectObjectByAddres_com,'SelectObjectByAddres',CADWG,0);
 

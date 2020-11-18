@@ -68,7 +68,6 @@ TTreeStatistik=record
    var
        zoomwindowcommand:PCommandObjectDef;
        ms2objinsp:PCommandObjectDef;
-       deselall,selall:pCommandFastObjectPlugin;
 
        InfoFormVar:TInfoForm=nil;
 
@@ -164,47 +163,6 @@ begin
     zcSelectEntity(pp);
   ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
   ZCMsgCallBackInterface.Do_GUIaction(drawings.CurrentDWG.wa,ZMsgID_GUIActionSelectionChanged);
-  result:=cmd_ok;
-end;
-function DeSelectAll_com(operands:TCommandOperands):TCommandResult;
-begin
-     ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
-     //if assigned(updatevisibleproc) then updatevisibleproc(ZMsgID_GUIActionRedraw);
-     result:=cmd_ok;
-end;
-
-function SelectAll_com(operands:TCommandOperands):TCommandResult;
-var
-    pv:pGDBObjEntity;
-    ir:itrec;
-    count:integer;
-begin
-  if drawings.GetCurrentROOT.ObjArray.Count = 0 then exit;
-  drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount:=0;
-
-  count:=0;
-
-  pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
-  if pv<>nil then
-  repeat
-    inc(count);
-  pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
-  until pv=nil;
-
-
-  pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
-  if pv<>nil then
-  repeat
-        if count>10000 then
-                           pv^.SelectQuik//:=true
-                       else
-                           pv^.select(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.selector);
-
-  pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
-  until pv=nil;
-
-  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
-  //if assigned(updatevisibleproc) then updatevisibleproc(ZMsgID_GUIActionRedraw);
   result:=cmd_ok;
 end;
 
@@ -1332,12 +1290,6 @@ begin
   ms2objinsp.CEndActionAttr:=0;
   CreateCommandFastObjectPlugin(@SelectOnMouseObjects_com,'SelectOnMouseObjects',CADWG,0);
   CreateCommandFastObjectPlugin(@SelectObjectByAddres_com,'SelectObjectByAddres',CADWG,0);
-  selall:=CreateCommandFastObjectPlugin(@SelectAll_com,'SelectAll',CADWG,0);
-  selall^.overlay:=true;
-  selall.CEndActionAttr:=0;
-  deselall:=CreateCommandFastObjectPlugin(@DeSelectAll_com,'DeSelectAll',CADWG  or CASelEnts,0);
-  deselall.CEndActionAttr:=CEDeSelect;
-  deselall^.overlay:=true;
 
   CreateCommandFastObjectPlugin(@ObjVarMan_com,'ObjVarMan',CADWG or CASelEnt,0);
   CreateCommandFastObjectPlugin(@MultiObjVarMan_com,'MultiObjVarMan',CADWG or CASelEnts,0);

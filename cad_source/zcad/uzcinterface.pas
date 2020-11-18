@@ -146,6 +146,7 @@ type
 
 
         procedure TextMessage(msg:String;opt:TTextMessageWriteOptionsSet);
+
         function TextQuestion(Caption,Question:String;Flags: Longint):integer;
         function DoShowModal(MForm:TForm):Integer;
       private

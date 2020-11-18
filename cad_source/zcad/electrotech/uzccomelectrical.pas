@@ -35,7 +35,8 @@ uses
   gzctnrvectorpobjects,uzcbillofmaterial,uzccablemanager,uzeentdevice,uzeenttable,
   uzbpaths,uzctnrvectorgdbstring,math,Masks,uzclog,uzccombase,uzbstrproc,
   uzeentmtext,uzeblockdef,UGDBPoint3DArray,uzcdevicebaseabstract,uzelongprocesssupport,LazLogger,
-  generics.Collections;
+  generics.Collections,
+  uzccommand_treestat;
 type
 {Export+}
   TFindType=(

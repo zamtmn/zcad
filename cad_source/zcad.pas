@@ -152,6 +152,7 @@ uses
   uzccommand_selectall,uzccommand_deselectall,
   uzccommand_regen,
   uzccommand_updatepo,
+  uzccommand_treestat,
 
   {$IFDEF ELECTROTECH}
   //**for velec func**//

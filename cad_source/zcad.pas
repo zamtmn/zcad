@@ -156,6 +156,9 @@ uses
   uzccommand_treestat,
   uzccommand_copyclip,
   uzccommand_multiselect2objinsp,
+  uzccommand_selobjchangelayertocurrent,uzccommand_selobjchangelwtocurrent,
+  uzccommand_selobjchangecolortocurrent,uzccommand_selobjchangeltypetocurrent,
+  uzccommand_selobjchangetstyletocurrent,uzccommand_selobjchangedimstyletocurrent,
 
   {$IFDEF ELECTROTECH}
   //**for velec func**//

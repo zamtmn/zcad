@@ -145,6 +145,7 @@ uses
   uzccommand_qsave,
   uzccommand_cancel,
   uzccommand_zoom,
+  uzccommand_zoomwindow,
   uzccommand_pan,
   uzccommand_view,
   uzccommand_camreset,
@@ -153,6 +154,7 @@ uses
   uzccommand_regen,
   uzccommand_updatepo,
   uzccommand_treestat,
+  uzccommand_copyclip,
 
   {$IFDEF ELECTROTECH}
   //**for velec func**//

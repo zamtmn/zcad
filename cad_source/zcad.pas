@@ -164,6 +164,11 @@ uses
   uzccommand_selectonmouseobjects,
   uzccommand_multiobjvarman,uzccommand_objvarman,uzccommand_blockdefvarman,
   uzccommand_unitsman,
+  uzccommand_rebuildtree,
+  uzccommand_changeprojtype,
+  uzccommand_storefrustum,
+  uzccommand_snapproperties,
+  uzccommand_polytest,
 
   {$IFDEF ELECTROTECH}
   //**for velec func**//

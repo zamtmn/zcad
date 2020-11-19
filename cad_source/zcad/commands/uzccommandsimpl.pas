@@ -449,5 +449,8 @@ begin
 end;
 
 begin
+  OSModeEditor.initnul;
+  OSModeEditor.trace.ZAxis:=false;
+  OSModeEditor.trace.Angle:=TTA45;
 end.
 

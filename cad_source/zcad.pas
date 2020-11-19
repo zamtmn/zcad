@@ -116,7 +116,6 @@ uses
 
   //commandline,
 
-  uzccombase,
   uzccommand_selectframe,
   uzccommand_ondrawinged,
   uzccommand_stretch,

@@ -28,7 +28,7 @@ uses
 
   uzeffmanager,
   uzccommand_newdwg,
-  uzccombase,uzccommandsimpl,uzccommandsabstract,
+  uzccommandsimpl,uzccommandsabstract,
   uzcsysvars,
   uzcstrconsts,
   uzcdrawings,

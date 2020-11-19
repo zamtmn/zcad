@@ -23,7 +23,7 @@ interface
 uses
   uzcinterface,uzcstrconsts,{GL,}printers,graphics,fileutil,Clipbrd,LCLType,classes,
   uzccommandsabstract,
-  uzbtypesbase,uzccommandsmanager,uzccombase,
+  uzbtypesbase,uzccommandsmanager,
   uzccommandsimpl,
   uzbtypes,
   uzcdrawings,

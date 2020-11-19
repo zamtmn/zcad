@@ -206,7 +206,7 @@ uses
   {$IFDEF WINDOWS}{uzglviewareadx,}{$ENDIF}
 
   uzcinterface,
-  uzccomdbgappexplorer;
+  uzccommand_dbgappexplorer;
 
 resourcestring
  rsStartAutorun='Execute *components\autorun.cmd';

@@ -21,34 +21,21 @@ unit uzccommand_ondrawinged;
 
 interface
 uses
-  uzedrawingabstract,uzedrawingdef,
-  uzgldrawercanvas,
-  uzcoimultiobjects,
-  uzgldrawcontext,
-  uzeentpoint,UGDBSelectedObjArray,uzeentityfactory,
-  uzedrawingsimple,uzcsysvars,uzccomdrawdase,
-  printers,graphics,uzeentdevice,uzeentwithlocalcs,
-  LazUTF8,Clipbrd,LCLType,classes,uzeenttext,
-  uzccommandsabstract,uzbstrproc,
-  uzbtypesbase,uzccommandsmanager,
+  uzccommandsabstract,
+  uzccommandsmanager,
   uzccommandsimpl,
-  uzbtypes,
+  uzedrawingabstract,uzedrawingdef,
+
+  uzgldrawcontext,
+  UGDBSelectedObjArray,
+
+  uzeentwithlocalcs,uzeentity,uzeentgenericsubentry,
+  uzbtypesbase,uzbtypes,
   uzcdrawings,
-  uzeutils,
-  sysutils,
-  varmandef,
   uzglviewareadata,
-  uzeffdxf,
-  uzcinterface,
-  uzegeometry,
-  uzbmemman,
+  uzbgeomtypes,uzegeometry,
   uzeconsts,
-  uzbgeomtypes,uzeentity,uzeentcircle,uzeentline,uzeentgenericsubentry,uzeentmtext,
-  uzeentblockinsert,uzeentpolyline,uzclog,
-  uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,TypeDescriptors
-  ,uzelongprocesssupport,LazLogger;
-const
-     modelspacename:GDBSTring='**Модель**';
+  LazLogger;
 type
   OnDrawingEd_com =packed  object(CommandRTEdObject)
     t3dp: gdbvertex;
@@ -160,7 +147,7 @@ begin
            if not uzegeometry.IsVectorNul(xdir) then
            begin
            if pgdbobjentity(osp^.PGDBObject)^.IsHaveLCS then
-                                                           ydir:=normalizevertex(uzegeometry.vectordot(pgdbobjlwPolyline(osp^.PGDBObject)^.Local.basis.OZ,xdir))
+                                                           ydir:=normalizevertex(uzegeometry.vectordot(PGDBObjWithLocalCS(osp^.PGDBObject)^.Local.basis.OZ,xdir))
                                                        else
                                                            ydir:=normalizevertex(uzegeometry.vectordot(ZWCS,xdir));
            tv:=wc;
@@ -171,7 +158,7 @@ begin
            PGDBVertex(@rotmatr[0])^:=xdir;
            PGDBVertex(@rotmatr[1])^:=ydir;
            if pgdbobjentity(osp^.PGDBObject)^.IsHaveLCS then
-                                                           PGDBVertex(@rotmatr[2])^:=pgdbobjlwPolyline(osp^.PGDBObject)^.Local.basis.OZ
+                                                           PGDBVertex(@rotmatr[2])^:=PGDBObjWithLocalCS(osp^.PGDBObject)^.Local.basis.OZ
                                                        else
                                                            PGDBVertex(@rotmatr[2])^:={ZWCS}normalizevertex(uzegeometry.vectordot(ydir,xdir));
            //rotmatr:=uzegeometry.MatrixMultiply(dispmatr,rotmatr);
@@ -205,7 +192,7 @@ begin
            if not uzegeometry.IsVectorNul(xdir) then
            begin
            if pgdbobjentity(osp^.PGDBObject)^.IsHaveLCS then
-                                                           ydir:=normalizevertex(uzegeometry.vectordot(pgdbobjlwPolyline(osp^.PGDBObject)^.Local.basis.OZ,xdir))
+                                                           ydir:=normalizevertex(uzegeometry.vectordot(PGDBObjWithLocalCS(osp^.PGDBObject)^.Local.basis.OZ,xdir))
                                                        else
                                                            ydir:=normalizevertex(uzegeometry.vectordot(ZWCS,xdir));
 
@@ -217,7 +204,7 @@ begin
            PGDBVertex(@rotmatr[0])^:=xdir;
            PGDBVertex(@rotmatr[1])^:=ydir;
            if pgdbobjentity(osp^.PGDBObject)^.IsHaveLCS then
-                                                           PGDBVertex(@rotmatr[2])^:=pgdbobjlwPolyline(osp^.PGDBObject)^.Local.basis.OZ
+                                                           PGDBVertex(@rotmatr[2])^:=PGDBObjWithLocalCS(osp^.PGDBObject)^.Local.basis.OZ
                                                        else
                                                            PGDBVertex(@rotmatr[2])^:={ZWCS}normalizevertex(uzegeometry.vectordot(ydir,xdir));;
            {xdir:=normalizevertex(xdir);

@@ -30,7 +30,7 @@ uses
   printers,graphics,uzeentdevice,uzeentwithlocalcs,
   LazUTF8,Clipbrd,LCLType,classes,uzeenttext,uzeentabstracttext,uzestylestexts,
   uzccommandsabstract,uzbstrproc,
-  uzbtypesbase,uzccommandsmanager,uzccombase,
+  uzbtypesbase,uzccommandsmanager,
   uzccommandsimpl,
   uzbtypes,
   uzcdrawings,

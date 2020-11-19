@@ -22,7 +22,7 @@ unit uzccominterface;
 interface
 uses
  uzcutils,uzccomimport,uzbpaths,uzeffmanager,uzglbackendmanager,uzglviewareaabstract,
- uzcfcolors,uzcfdimstyles,uzcflinetypes,uzcftextstyles,uzcinfoform,uzefontmanager,uzedrawingsimple,uzccombase,
+ uzcfcolors,uzcfdimstyles,uzcflinetypes,uzcftextstyles,uzcinfoform,uzefontmanager,uzedrawingsimple,
  uzcsysvars,uzccommandsmanager,TypeDescriptors,uzcstrconsts,uzctnrvectorgdbstring,uzcctrlcontextmenu,
  {$IFNDEF DELPHI}uzctranslations,{$ENDIF}uzcflayers,uzcfunits,uzbstrproc,uzctreenode,menus,
  {$IFDEF FPC}lcltype,{$ENDIF}

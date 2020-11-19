@@ -25,7 +25,7 @@ uses
   uzbpaths,uzbtypes,
 
   uzeffmanager,uzctranslations,
-  uzccombase,uzccommandsimpl,uzccommandsabstract,
+  uzccommandsimpl,uzccommandsabstract,
   uzcdrawings,uzcdrawing,
   UGDBOpenArrayOfByte,UUnitManager,URecordDescriptor,gzctnrvectortypes,
   Varman,varmandef,typedescriptors,

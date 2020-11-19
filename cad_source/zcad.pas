@@ -194,7 +194,7 @@ uses
   uzcplugins,
   //zcregisterobjectinspector,
   uzcmainwindow,
-  uzcmessagedialogs,
+  uzcdialogs,
   uzcstrconsts,
   uzeiopalette,
   uzctextpreprocessorimpl,

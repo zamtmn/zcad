@@ -169,6 +169,8 @@ uses
   uzccommand_snapproperties,
   uzccommand_polytest,
 
+  uzccommand_loadlayout,
+
   {$IFDEF ELECTROTECH}
   //**for velec func**//
   //uzccomdrawsuperline,

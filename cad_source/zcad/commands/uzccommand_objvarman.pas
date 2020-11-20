@@ -22,6 +22,7 @@ unit uzccommand_objvarman;
 
 interface
 uses
+  LazLogger,
   Controls,
   sysutils,
   uzbpaths,
@@ -60,5 +61,8 @@ begin
 end;
 
 initialization
+  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
   CreateCommandFastObjectPlugin(@ObjVarMan_com,'ObjVarMan',CADWG or CASelEnt,0);
+finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

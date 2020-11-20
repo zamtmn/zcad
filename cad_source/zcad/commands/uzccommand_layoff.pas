@@ -22,6 +22,7 @@ unit uzccommand_layoff;
 
 interface
 uses
+  LazLogger,
   uzccommandsabstract,uzeentity,uzcdrawing,uzcdrawings,uzccommandsmanager,
   uzcstrconsts,uzcutils,zcchangeundocommand,uzbtypes,uzccommandsimpl;
 
@@ -50,5 +51,8 @@ begin
   result:=cmd_ok;
 end;
 initialization
+  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
   CreateCommandFastObjectPlugin(@LayOff_com,LayOffCommandName,CADWG,0);
+finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

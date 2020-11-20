@@ -22,6 +22,7 @@ unit uzccommand_redo;
 
 interface
 uses
+  LazLogger,
   uzccommandsabstract,uzccommandsimpl,
   uzcinterface,
   uzcdrawings,uzcdrawing,
@@ -46,5 +47,8 @@ begin
 end;
 
 initialization
+  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
   CreateCommandFastObjectPlugin(@redo_com,'Redo',CADWG or CACanRedo,0).overlay:=true;
+finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

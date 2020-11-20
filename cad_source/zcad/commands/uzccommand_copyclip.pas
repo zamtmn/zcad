@@ -22,6 +22,7 @@ unit uzccommand_copyclip;
 
 interface
 uses
+  LazLogger,
   SysUtils,
   LCLType,LazUTF8,Clipbrd,
   uzbpaths,
@@ -114,6 +115,9 @@ begin
 end;
 
 initialization
+  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
   CopyClipFile:='Empty';
   CreateCommandFastObjectPlugin(@Copyclip_com,'CopyClip',CADWG or CASelEnts,0);
+finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

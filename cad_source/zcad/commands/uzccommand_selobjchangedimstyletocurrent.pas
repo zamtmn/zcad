@@ -22,6 +22,7 @@ unit uzccommand_selobjchangedimstyletocurrent;
 
 interface
 uses
+  LazLogger,
   uzccommandsabstract,uzccommandsimpl,
   uzeentdimension,
   uzestylesdim,
@@ -77,5 +78,8 @@ end;
 
 
 initialization
+  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
   CreateCommandFastObjectPlugin(@SelObjChangeDimStyleToCurrent_com,'SelObjChangeDimStyleToCurrent',CADWG,0);
+finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

@@ -22,6 +22,7 @@ unit uzccommand_updatepo;
 
 interface
 uses
+  LazLogger,
   sysutils,
   LCLType,
   uzbpaths,
@@ -60,5 +61,8 @@ end;
 
 
 initialization
+  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
   CreateCommandFastObjectPlugin(@UpdatePO_com,'UpdatePO',0,0);
+finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

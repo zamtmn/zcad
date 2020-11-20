@@ -22,6 +22,7 @@ unit uzccommand_selectall;
 
 interface
 uses
+  LazLogger,
   uzccommandsabstract,uzccommandsimpl,
   uzeentity,
   uzcdrawings,
@@ -69,7 +70,10 @@ begin
 end;
 
 initialization
+  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
   selall:=CreateCommandFastObjectPlugin(@SelectAll_com,'SelectAll',CADWG,0);
   selall^.overlay:=true;
   selall.CEndActionAttr:=0;
+finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

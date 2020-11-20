@@ -22,6 +22,7 @@ unit uzccommand_polydiv;
 
 interface
 uses
+  LazLogger,
   uzccommandsabstract,uzccommandsimpl,
   uzbgeomtypes,uzegeometry,
   UGDBPolyLine2DArray,
@@ -276,5 +277,8 @@ begin
 end;
 
 initialization
+  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
   CreateCommandFastObjectPlugin(@PolyDiv_com,'PolyDiv',CADWG,0).CEndActionAttr:=CEDeSelect;
+finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

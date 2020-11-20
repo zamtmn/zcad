@@ -22,6 +22,7 @@ unit uzccommand_zoomwindow;
 
 interface
 uses
+  LazLogger,
   sysutils,
   uzccommandsabstract,uzccommandsimpl,
   uzcdrawings,
@@ -54,9 +55,10 @@ begin
 end;
 
 initialization
-
-zoomwindowcommand:=CreateCommandRTEdObjectPlugin(@FrameEdit_com_CommandStart,@FrameEdit_com_Command_End,nil,nil,@FrameEdit_com_BeforeClick,@ShowWindow_com_AfterClick,nil,nil,'ZoomWindow',0,0);
-zoomwindowcommand^.overlay:=true;
-zoomwindowcommand.CEndActionAttr:=0;
-
+  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
+  zoomwindowcommand:=CreateCommandRTEdObjectPlugin(@FrameEdit_com_CommandStart,@FrameEdit_com_Command_End,nil,nil,@FrameEdit_com_BeforeClick,@ShowWindow_com_AfterClick,nil,nil,'ZoomWindow',0,0);
+  zoomwindowcommand^.overlay:=true;
+  zoomwindowcommand.CEndActionAttr:=0;
+finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

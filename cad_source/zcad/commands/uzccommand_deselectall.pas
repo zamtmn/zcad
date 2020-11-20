@@ -22,6 +22,7 @@ unit uzccommand_deselectall;
 
 interface
 uses
+  LazLogger,
   uzccommandsabstract,uzccommandsimpl,
   uzeentity,
   uzcdrawings,
@@ -40,7 +41,10 @@ begin
 end;
 
 initialization
+  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
   deselall:=CreateCommandFastObjectPlugin(@DeSelectAll_com,'DeSelectAll',CADWG  or CASelEnts,0);
   deselall.CEndActionAttr:=CEDeSelect;
   deselall^.overlay:=true;
+finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

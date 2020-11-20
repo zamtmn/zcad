@@ -22,6 +22,7 @@ unit uzccommand_regen;
 
 interface
 uses
+  LazLogger,
   uzccommandsabstract,uzccommandsimpl,
   uzeentity,
   gzctnrvectortypes,
@@ -72,5 +73,8 @@ end;
 
 
 initialization
+  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
   CreateCommandFastObjectPlugin(@Regen_com,'Regen',CADWG,0);
+finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

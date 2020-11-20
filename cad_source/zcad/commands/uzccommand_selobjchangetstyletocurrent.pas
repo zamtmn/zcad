@@ -22,6 +22,7 @@ unit uzccommand_selobjchangetstyletocurrent;
 
 interface
 uses
+  LazLogger,
   uzccommandsabstract,uzccommandsimpl,
   uzeenttext,
   uzestylestexts,
@@ -76,5 +77,8 @@ begin
 end;
 
 initialization
+  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
   CreateCommandFastObjectPlugin(@SelObjChangeTStyleToCurrent_com,'SelObjChangeTStyleToCurrent',CADWG,0);
+finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

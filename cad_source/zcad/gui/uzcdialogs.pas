@@ -21,7 +21,8 @@ unit uzcdialogs;
 interface
 uses
     Controls,LCLTaskDialog,SysUtils,Forms,{$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}
-    uzcinterface,uzclog,uzelongprocesssupport,Generics.Collections,gvector;
+    uzcinterface,uzclog,uzelongprocesssupport,
+    uzcdialogstypes,uzcdialogsutils;
 
 resourcestring
   rsMsgWndTitle='ZCAD';
@@ -29,35 +30,22 @@ resourcestring
   rsMsgKeepChoice='Keep choice (for task "%s")';
 
 type
-  TZCMsgCommonButton=(zccbOK,zccbYes,zccbNo,zccbCancel,zccbRetry,zccbClose);
-  TZCMsgCommonButtons=set of TZCMsgCommonButton;
-  TZCMsgDlgIcon=(zcdiWarning, zcdiQuestion, zcdiError, zcdiInformation, zcdiNotUsed);
-  TZCMsgDialogResult=record
-    ModalResult:integer;
-    RadioRes: integer;
-    SelectionRes: integer;
-    VerifyChecked: Boolean;
-  end;
-
-  TMessagesContext=class(TDictionary<string,TZCMsgDialogResult>)
-    TaskName:TLPName;
-    constructor Create(TN:TLPName);
-  end;
 
   TLPSSupporthelper=class
     class procedure StartLongProcessHandler(LPHandle:TLPSHandle;Total:TLPSCounter;LPName:TLPName);
     class procedure EndLongProcessHandler(LPHandle:TLPSHandle;TotalLPTime:TDateTime);
   end;
 
-  TSetConverter<TGEnumIn,TGSetIn,TGEnumOut,TGSetOut,TGEnumConverter>=class
-    class function Convert(value:TGSetIn):TGSetOut;
-  end;
-
   TZCMsgCommonButton2TCommonButton_Converter=class
     class function Convert(valueIn:TZCMsgCommonButton;out valueOut:TCommonButton):boolean;
   end;
 
-  TZCMsgCommonButtons2TCommonButtons=TSetConverter<TZCMsgCommonButton,TZCMsgCommonButtons,TCommonButton,TCommonButtons,TZCMsgCommonButton2TCommonButton_Converter>;
+  TLCLModalResult2TZCMsgModalResult_Converter=class
+    class function Convert(valueIn:Integer;out valueOut:TZCMsgModalResult):boolean;
+  end;
+
+  TZCMsgCommonButtons2TCommonButtons=TGSetConverter<TZCMsgCommonButton,TZCMsgCommonButtons,TCommonButton,TCommonButtons,TZCMsgCommonButton2TCommonButton_Converter>;
+  TLCLModalResult2TZCMsgModalResult=TGConverter<Integer,TZCMsgModalResult,TLCLModalResult2TZCMsgModalResult_Converter>;
 
 procedure FatalError(errstr:String);
 function zcMsgDlg(MsgStr:String;aDialogIcon:TZCMsgDlgIcon;buttons:TZCMsgCommonButtons;NeedAskDonShow:boolean=false;Context:TMessagesContext=nil;MsgTitle:string=''):TZCMsgDialogResult;
@@ -83,12 +71,6 @@ begin
     FreeAndNil(Context);
 end;
 
-constructor TMessagesContext.Create(TN:TLPName);
-begin
-  TaskName:=TN;
-  inherited create;
-end;
-
 class function TZCMsgCommonButton2TCommonButton_Converter.Convert(valueIn:TZCMsgCommonButton;out valueOut:TCommonButton):boolean;
 begin
   result:=true;
@@ -103,22 +85,30 @@ begin
   end;
 end;
 
-class function TSetConverter<TGEnumIn,TGSetIn,TGEnumOut,TGSetOut,TGEnumConverter>.Convert(value:TGSetIn):TGSetOut;
-var
- CurrentEnumIn:TGEnumIn;
- CurrentEnumOut:TGEnumOut;
- tvalue:TGSetIn;
+class function TLCLModalResult2TZCMsgModalResult_Converter.Convert(valueIn:Integer;out valueOut:TZCMsgModalResult):boolean;
 begin
-  result:=[];
-  for CurrentEnumIn:=low(TGEnumIn) to high(TGEnumIn) do begin
-    tvalue:=value-[CurrentEnumIn];
-    if tvalue<>value then begin
-      if TGEnumConverter.convert(CurrentEnumIn,CurrentEnumOut) then
-        result:=result+[CurrentEnumOut];
-      if tvalue=[] then exit;
-      value:=tvalue;
-    end;
-  end;
+  result:=true;
+  if valueIn in [mrNone..mrLast] then
+    case valueIn of
+      mrNone:    valueOut:=ZCmrNone;
+      mrOK:      valueOut:=ZCmrOK;
+      mrCancel:  valueOut:=ZCmrCancel;
+      mrAbort:   valueOut:=ZCmrAbort;
+      mrRetry:   valueOut:=ZCmrRetry;
+      mrIgnore:  valueOut:=ZCmrIgnore;
+      mrYes:     valueOut:=ZCmrYes;
+      mrNo:      valueOut:=ZCmrNo;
+      mrAll:     valueOut:=ZCmrAll;
+      mrNoToAll: valueOut:=ZCmrNoToAll;
+      mrYesToAll:valueOut:=ZCmrYesToAll;
+      mrClose:   valueOut:=ZCmrClose;
+      else begin
+        result:=false;
+        valueOut:=ZCmrNone;
+      end;
+    end
+  else
+    valueOut:=valueIn;
 end;
 
 class procedure TLPSSupporthelper.EndLongProcessHandler(LPHandle:TLPSHandle;TotalLPTime:TDateTime);
@@ -149,28 +139,6 @@ begin
 
      halt(0);
 end;
-function getMsgID(MsgID:String):String;
-var
-  quoted:boolean;
-  count,i,j:integer;
-begin
-  quoted:=false;
-  count:=0;
-  for i:=1 to length(MsgID) do begin
-    if MsgID[i]='"' then quoted:=not quoted;
-    if not quoted then inc(count);
-  end;
-  setlength(result,count);
-  quoted:=false;
-  j:=1;
-  for i:=1 to length(MsgID) do begin
-    if MsgID[i]='"' then quoted:=not quoted;
-    if not quoted then begin
-      result[j]:=MsgID[i];
-      inc(j);
-    end;
-  end;
-end;
 
 function TZCMsgDlgIcon2TTaskDialogIcon(value:TZCMsgDlgIcon):TTaskDialogIcon;
 begin
@@ -181,12 +149,6 @@ begin
 zcdiInformation:result:=tiInformation;
     zcdiNotUsed:result:=tiNotUsed;
   end;
-end;
-
-procedure CorrectButtons(var buttons:TZCMsgCommonButtons);
-begin
-  if buttons=[] then
-    buttons:=[zccbOK];
 end;
 
 function zcMsgDlg(MsgStr:String;aDialogIcon:TZCMsgDlgIcon;buttons:TZCMsgCommonButtons;NeedAskDonShow:boolean=false;Context:TMessagesContext=nil;MsgTitle:string=''):TZCMsgDialogResult;
@@ -256,7 +218,7 @@ begin
     ParentHWND:=PriorityFocusCtrl.Handle;
   end;
 
-  Result.ModalResult:=Task.Execute(TZCMsgCommonButtons2TCommonButtons.Convert(buttons),0,[tdfPositionRelativeToWindow],TZCMsgDlgIcon2TTaskDialogIcon(aDialogIcon),tfiWarning,0,0,ParentHWND);//controls.mrOk
+  Result.ModalResult:=TLCLModalResult2TZCMsgModalResult.Convert(Task.Execute(TZCMsgCommonButtons2TCommonButtons.Convert(buttons),0,[tdfPositionRelativeToWindow],TZCMsgDlgIcon2TTaskDialogIcon(aDialogIcon),tfiWarning,0,0,ParentHWND));//controls.mrOk
   Result.RadioRes:=Task.RadioRes;
   Result.SelectionRes:=Task.SelectionRes;
   Result.VerifyChecked:=Task.VerifyChecked;

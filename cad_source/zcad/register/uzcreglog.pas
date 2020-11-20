@@ -19,7 +19,7 @@
 unit uzcreglog;
 {$INCLUDE def.inc}
 interface
-uses uzclog,uzcinterface,uzcdialogs,
+uses uzclog,uzcinterface,uzcdialogs,uzcdialogstypes,
      {$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}LCLProc,Forms;
 implementation
 

@@ -170,6 +170,9 @@ uses
   uzccommand_polytest,
 
   uzccommand_loadlayout,
+  uzccommand_quit,
+  uzccommand_units,
+  uzccommand_layer,
 
   {$IFDEF ELECTROTECH}
   //**for velec func**//

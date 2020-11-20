@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   StdCtrls, Buttons, ButtonPanel,
-  uzedimensionaltypes,uzbtypes,uzemathutils;
+  uzedimensionaltypes,uzbtypes,uzemathutils,uzcdialogstypes,uzcdialogs;
 
 const
      UPrecByLUnits:array[TLUnits,0..8]of string=(
@@ -139,7 +139,7 @@ type
     LocalInsUnits:TInsUnits;
   public
     { public declarations }
-    function RunModal(var _UnitsFormat:TzeUnitsFormat; var _InsUnits:TInsUnits):Integer; virtual;
+    function RunModal(var _UnitsFormat:TzeUnitsFormat; var _InsUnits:TInsUnits):TZCMsgModalResult; virtual;
     procedure UpdateSample; //реализация с меня
     procedure SetLUprecFromLUnits;
     procedure SetAUprecFromAUnits;
@@ -256,6 +256,7 @@ begin
                         _UnitsFormat:=LocalUnitsFormat;
                         _InsUnits:=LocalInsUnits;
                         end;
+     result:=TLCLModalResult2TZCMsgModalResult.Convert(result);
 end;
 
 end.

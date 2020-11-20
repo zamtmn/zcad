@@ -82,7 +82,6 @@ uses
 
    function SaveAs_com(Operands:pansichar):GDBInteger;
    procedure CopyToClipboard;}
-   function quit_com(operands:TCommandOperands):TCommandResult;
    function layer_cmd(operands:TCommandOperands):TCommandResult;
    function Colors_cmd(operands:TCommandOperands):TCommandResult;
    //function Regen_com(Operands:pansichar):GDBInteger;
@@ -128,31 +127,6 @@ function ExecuteFile_com(operands:TCommandOperands):TCommandResult;
 begin
   commandmanager.executefile(ExpandPath(operands),drawings.GetCurrentDWG,nil);
   result:=cmd_ok;
-end;
-function units_cmd(operands:TCommandOperands):TCommandResult;
-var
-    _UnitsFormat:TzeUnitsFormat;
-begin
-   if not assigned(UnitsForm)then
-   begin
-       UnitsForm:=TUnitsForm.Create(nil);
-       SetHeightControl(UnitsForm,sysvar.INTF.INTF_DefaultControlHeight^);
-       UnitsForm.BoundsRect:=GetBoundsFromSavedUnit('UnitsWND',SysParam.notsaved.ScreenX,SysParam.notsaved.Screeny)
-   end;
-
-   _UnitsFormat:=drawings.GetUnitsFormat;
-
-   ZCMsgCallBackInterface.Do_BeforeShowModal(UnitsForm);
-   result:=UnitsForm.runmodal(_UnitsFormat,sysvar.DWG.DWG_InsUnits^);
-   if result=mrok then
-                      begin
-                        drawings.SetUnitsFormat(_UnitsFormat);
-                        ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
-                      end;
-   ZCMsgCallBackInterface.Do_AfterShowModal(UnitsForm);
-   StoreBoundsToSavedUnit('UnitsWND',UnitsForm.BoundsRect);
-   Freeandnil(UnitsForm);
-   result:=cmd_ok;
 end;
 function layer_cmd(operands:TCommandOperands):TCommandResult;
 begin
@@ -292,12 +266,6 @@ begin
                   else
                       ZCMsgCallBackInterface.TextMessage('Show command must have one operand!',TMWOShowError);
   result:=cmd_ok;
-end;
-function quit_com(operands:TCommandOperands):TCommandResult;
-begin
-     //Application.QueueAsyncCall(MainFormN.asynccloseapp, 0);
-     CloseApp;
-     result:=cmd_ok;
 end;
 function About_com(operands:TCommandOperands):TCommandResult;
 begin
@@ -556,8 +524,6 @@ end;
 procedure startup;
 begin
   CreateCommandFastObjectPlugin(@Import_com,'Import',0,0).CEndActionAttr:=CEDWGNChanged;
-  CreateCommandFastObjectPlugin(@quit_com,'Quit',0,0);
-  CreateCommandFastObjectPlugin(@units_cmd,'Units',CADWG,0);
   CreateCommandFastObjectPlugin(@layer_cmd,'Layer',CADWG,0);
   CreateCommandFastObjectPlugin(@TextStyles_cmd,'TextStyles',CADWG,0);
   CreateCommandFastObjectPlugin(@DimStyles_cmd,'DimStyles',CADWG,0);

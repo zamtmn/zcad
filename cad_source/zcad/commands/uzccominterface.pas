@@ -556,7 +556,6 @@ end;
 procedure startup;
 begin
   CreateCommandFastObjectPlugin(@Import_com,'Import',0,0).CEndActionAttr:=CEDWGNChanged;
-  CreateCommandFastObjectPlugin(@LoadLayout_com,'LoadLayout',0,0);
   CreateCommandFastObjectPlugin(@quit_com,'Quit',0,0);
   CreateCommandFastObjectPlugin(@units_cmd,'Units',CADWG,0);
   CreateCommandFastObjectPlugin(@layer_cmd,'Layer',CADWG,0);

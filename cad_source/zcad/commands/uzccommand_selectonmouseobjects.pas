@@ -22,6 +22,7 @@ unit uzccommand_selectonmouseobjects;
 
 interface
 uses
+  LazLogger,
   Menus,
   SysUtils,
   uzctreenode,
@@ -90,5 +91,8 @@ begin
 end;
 
 initialization
+  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
   CreateCommandFastObjectPlugin(@SelectOnMouseObjects_com,'SelectOnMouseObjects',CADWG,0);
+finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

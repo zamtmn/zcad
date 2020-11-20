@@ -22,6 +22,7 @@ unit uzccommand_treestat;
 
 interface
 uses
+  LazLogger,
   sysutils,
   uzbtypes,
   uzeentitiestree,
@@ -184,5 +185,8 @@ begin
 end;
 
 initialization
+  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
   CreateCommandFastObjectPlugin(@TreeStat_com,'TreeStat',CADWG,0);
+finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

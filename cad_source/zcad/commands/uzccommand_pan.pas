@@ -22,6 +22,7 @@ unit uzccommand_pan;
 
 interface
 uses
+  LazLogger,
   sysutils,
   uzccommandsabstract,uzccommandsimpl,
   uzcdrawings;
@@ -49,5 +50,8 @@ begin
 end;
 
 initialization
+  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
   CreateCommandFastObjectPlugin(@Pan_com,'Pan',CADWG,0).overlay:=true;
+finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

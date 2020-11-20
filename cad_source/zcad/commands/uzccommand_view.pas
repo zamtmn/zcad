@@ -22,6 +22,7 @@ unit uzccommand_view;
 
 interface
 uses
+  LazLogger,
   sysutils,
   uzbgeomtypes,uzegeometry,
   uzccommandsabstract,uzccommandsimpl,
@@ -122,5 +123,8 @@ begin
 end;
 
 initialization
+  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
   CreateCommandFastObjectPlugin(@view_com,'View',CADWG,0).overlay:=true;
+finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

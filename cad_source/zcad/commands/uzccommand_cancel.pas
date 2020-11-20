@@ -22,6 +22,7 @@ unit uzccommand_cancel;
 
 interface
 uses
+  LazLogger,
   uzccommandsabstract,uzccommandsimpl;
 
 implementation
@@ -32,5 +33,8 @@ begin
 end;
 
 initialization
+  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
   CreateCommandFastObjectPlugin(@Cancel_com,'Cancel',0,0);
+finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

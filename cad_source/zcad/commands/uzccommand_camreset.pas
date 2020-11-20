@@ -23,6 +23,7 @@ unit uzccommand_camreset;
 interface
 uses
   sysutils,
+  LazLogger,
   uzccommandsabstract,uzccommandsimpl,
   zcchangeundocommand,
   uzcutils,uzecamera,
@@ -69,5 +70,8 @@ begin
 end;
 
 initialization
+  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
   CreateCommandFastObjectPlugin(@Cam_reset_com,'Cam_Reset',CADWG,0);
+finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

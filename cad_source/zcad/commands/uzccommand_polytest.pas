@@ -22,6 +22,7 @@ unit uzccommand_polytest;
 
 interface
 uses
+  LazLogger,
   uzccommandsimpl,
   uzbtypesbase,
   uzglviewareadata,
@@ -64,5 +65,8 @@ begin
 end;
 
 initialization
+  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
   CreateCommandRTEdObjectPlugin(@polytest_com_CommandStart,nil,nil,nil,@polytest_com_BeforeClick,@polytest_com_BeforeClick,nil,nil,'PolyTest',0,0);
+finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

@@ -22,6 +22,7 @@ unit uzccommand_unitsman;
 
 interface
 uses
+  LazLogger,
   Controls,
   uzbpaths,
   uzccommandsabstract,uzccommandsimpl,
@@ -50,5 +51,8 @@ end;
 
 
 initialization
+  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
   CreateCommandFastObjectPlugin(@UnitsMan_com,'UnitsMan',0,0);
+finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

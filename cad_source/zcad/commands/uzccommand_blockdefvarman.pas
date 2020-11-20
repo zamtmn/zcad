@@ -22,6 +22,7 @@ unit uzccommand_blockdefvarman;
 
 interface
 uses
+  LazLogger,
   Controls,
   sysutils,
   uzbpaths,
@@ -67,5 +68,8 @@ begin
 end;
 
 initialization
+  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
   CreateCommandFastObjectPlugin(@BlockDefVarMan_com,'BlockDefVarMan',CADWG,0);
+finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

@@ -22,6 +22,7 @@ unit uzccommand_undo;
 
 interface
 uses
+  LazLogger,
   uzccommandsabstract,uzccommandsimpl,
   uzcinterface,
   uzcdrawings,uzcdrawing,
@@ -58,5 +59,8 @@ begin
 end;
 
 initialization
+  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
   CreateCommandFastObjectPlugin(@undo_com,'Undo',CADWG or CACanUndo,0).overlay:=true;
+finalization
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

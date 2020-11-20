@@ -44,12 +44,13 @@ uses
   {ZCAD COMMANDS}
        uzccommandsabstract,uzccommandsimpl,uzccommandsmanager,
   {GUI}
+       uzcdialogstypes,
        uzcmenucontextcheckfuncs,uzcguimenuextensions,uzmenusdefaults,uzmenusmanager,uztoolbarsmanager,uzctextenteditor,{uzcoidecorations,}uzcfcommandline,uzctreenode,uzcflineweights,uzcctrllayercombobox,uzcctrlcontextmenu,
        uzcfcolors,uzcimagesmanager,uzcgui2textstyles,usupportgui,uzcgui2dimstyles,uzcdialogs,
   {}
        uzcpalettes,zcchangeundocommand,uzgldrawcontext,uzglviewareaabstract,uzcguimanager,uzcinterfacedata,
        uzcenitiesvariablesextender,uzglviewareageneral,UniqueInstanceRaw,
-      uzmacros,uzcviewareacxmenu,uzxmlnodesutils;
+       uzmacros,uzcviewareacxmenu,uzxmlnodesutils;
   {}
 resourcestring
   rsClosed='Closed';
@@ -670,11 +671,11 @@ begin
                                                      //i:=ZCADMainWindow.messagebox(@rsQuitQuery[1],@rsQuitCaption[1],MB_YESNO or MB_ICONQUESTION)
                                                      dr:=zcMsgDlg(rsQuitQuery,zcdiQuestion,[zccbYes,zccbNo],false,nil,rsQuitCaption)
                                                  else
-                                                     dr.ModalResult:=mrYes;
+                                                     dr.ModalResult:=ZCmrYes;
                        end
                    else
-                       dr.ModalResult:=mrYes;
-     if dr.ModalResult=mrYes then
+                       dr.ModalResult:=ZCmrYes;
+     if dr.ModalResult=ZCmrYes then
      begin
           result:=true;
 
@@ -812,12 +813,12 @@ begin
         dr:=zcMsgDlg(s,zcdiQuestion,[zccbYes,zccbNo,zccbCancel],NeedAskDonShow,MCTx);
         result:=dr.ModalResult;
         //result:=ZCADMainWindow.MessageBox(@s[1],@rsWarningCaption[1],MB_YESNOCANCEL);
-        if result=mrCancel then exit;
-        if result=mrNo then system.break;
-        if result=mrYes then
+        if result=ZCmrCancel then exit;
+        if result=ZCmrNo then system.break;
+        if result=ZCmrYes then
           result:=dwgQSave_com(ClosedDWG);
       until result<>cmd_error;
-      result:=mrYes;
+      result:=ZCmrYes;
     end;
     commandmanager.ChangeModeAndEnd(TGPCloseDWG);
     viewcontrol:=ClosedDWG.wa.getviewcontrol;

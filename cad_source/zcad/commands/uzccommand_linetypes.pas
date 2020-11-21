@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 {$mode delphi}
-unit uzccommand_layer;
+unit uzccommand_linetypes;
 
 {$INCLUDE def.inc}
 
@@ -24,29 +24,27 @@ interface
 uses
   SysUtils,
   LazLogger,
-  uzcflayers,
+  uzcflinetypes,
   uzctreenode,
   uzcsysvars,
   uzcinterface,
   Varman,
   uzccommandsabstract,uzccommandsimpl;
 
-function layer_cmd(operands:TCommandOperands):TCommandResult;
-
 implementation
 
-function layer_cmd(operands:TCommandOperands):TCommandResult;
+function LineTypes_cmd(operands:TCommandOperands):TCommandResult;
 begin
-  LayersForm:=TLayersForm.Create(nil);
-  SetHeightControl(LayersForm,sysvar.INTF.INTF_DefaultControlHeight^);
-  ZCMsgCallBackInterface.DOShowModal(LayersForm);
-  Freeandnil(LayersForm);
+  LineTypesForm:=TLineTypesForm.Create(nil);
+  SetHeightControl(LineTypesForm,sysvar.INTF.INTF_DefaultControlHeight^);
+  ZCMsgCallBackInterface.DOShowModal(LineTypesForm);
+  Freeandnil(LineTypesForm);
   result:=cmd_ok;
 end;
 
 initialization
   debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
-  CreateCommandFastObjectPlugin(@layer_cmd,'Layer',CADWG,0);
+  CreateCommandFastObjectPlugin(@LineTypes_cmd,'LineTypes',CADWG,0);
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

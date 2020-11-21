@@ -25,7 +25,7 @@ interface
 uses
   uzepalette,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   StdCtrls, Buttons, {ColorBox,} ButtonPanel, Spin, ExtCtrls, ComCtrls,math,
-  uzeconsts,uzbtypes,uzcstrconsts;
+  uzeconsts,uzbtypes,uzcstrconsts,uzcdialogs;
 
 type
   ColorGeometry=record
@@ -144,7 +144,7 @@ begin
                         self.SpinEdit1.MaxValue:=255;
                         self.SpinEdit1.MinValue:=1;
                    end;
-     result:=showmodal;
+     result:=TLCLModalResult2TZCMsgModalResult.Convert(showmodal);
 end;
 procedure TColorSelectForm.PalettePainter(canvas:Tcanvas; StartIndex,IncIndex,startx,starty,dx,dy,cx,cy:integer);
 var

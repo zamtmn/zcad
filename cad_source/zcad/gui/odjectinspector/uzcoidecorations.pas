@@ -26,7 +26,8 @@ uses
   Graphics,LCLType,Themes,uzeconsts,UGDBNamedObjectsArray,uzctnrvectorgdbstring,
   varmandef,Varman,uzcfcolors,uzestyleslayers,uzbtypes,uzcflineweights,uzbtypesbase,usupportgui,
   StdCtrls,uzcdrawings,uzcstrconsts,Controls,Classes,uzbstrproc,uzcsysvars,uzccommandsmanager,
-  uzcsysparams,gzctnrvectortypes,uzbgeomtypes,uzcinterface,uzcoimultiobjects,uzcgui2color,uzcgui2linewidth,uzcgui2linetypes;
+  uzcsysparams,gzctnrvectortypes,uzbgeomtypes,uzcinterface,uzcoimultiobjects,uzcgui2color,uzcgui2linewidth,uzcgui2linetypes,
+  uzccommand_layer;
 type
     AsyncCommHelper=class
                          class procedure GetVertex(Pinstance:PtrInt);

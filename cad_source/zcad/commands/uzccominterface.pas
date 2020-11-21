@@ -457,7 +457,6 @@ begin
   CreateCommandFastObjectPlugin(@ShowToolBar_com,'ShowToolBar',0,0);
   CreateCommandFastObjectPlugin(@About_com,'About',0,0);
   CreateCommandFastObjectPlugin(@Help_com,'Help',0,0);
-  CreateCommandFastObjectPlugin(@ClearFileHistory_com,'ClearFileHistory',0,0);
   CreateCommandFastObjectPlugin(@Options_com,'Options',0,0);
   CreateCommandFastObjectPlugin(@SaveOptions_com,'SaveOptions',0,0);
   CreateCommandFastObjectPlugin(@SetObjInsp_com,'SetObjInsp',CADWG,0);

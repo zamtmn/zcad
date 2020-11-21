@@ -184,6 +184,10 @@ uses
   uzccommand_debclip,
   uzccommand_import,
   uzccommand_commandlist,
+  uzccommand_saveoptions,
+  uzccommand_showpage,
+  uzccommand_options,
+  uzccommand_about,uzccommand_help,
 
   {$IFDEF ELECTROTECH}
   //**for velec func**//
@@ -199,7 +203,6 @@ uses
   uzccomexample,
   uzccomobjectinspector,
   //uzccomexperimental,
-  uzccominterface,
 
   {$IFDEF ELECTROTECH}
   uzcregelectrotechfeatures,

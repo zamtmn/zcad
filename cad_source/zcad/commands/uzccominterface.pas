@@ -82,8 +82,6 @@ uses
 
    function SaveAs_com(Operands:pansichar):GDBInteger;
    procedure CopyToClipboard;}
-   function layer_cmd(operands:TCommandOperands):TCommandResult;
-   function Colors_cmd(operands:TCommandOperands):TCommandResult;
    //function Regen_com(Operands:pansichar):GDBInteger;
 //var DWGPageCxMenu:pzpopupmenu;
 implementation
@@ -128,58 +126,6 @@ begin
   commandmanager.executefile(ExpandPath(operands),drawings.GetCurrentDWG,nil);
   result:=cmd_ok;
 end;
-function layer_cmd(operands:TCommandOperands):TCommandResult;
-begin
-  LayersForm:=TLayersForm.Create(nil);
-  SetHeightControl(LayersForm,sysvar.INTF.INTF_DefaultControlHeight^);
-  ZCMsgCallBackInterface.DOShowModal(LayersForm);
-  Freeandnil(LayersForm);
-  result:=cmd_ok;
-end;
-function TextStyles_cmd(operands:TCommandOperands):TCommandResult;
-begin
-  TextStylesForm:=TTextStylesForm.Create(nil);
-  SetHeightControl(TextStylesForm,sysvar.INTF.INTF_DefaultControlHeight^);
-  ZCMsgCallBackInterface.DOShowModal(TextStylesForm);
-  Freeandnil(TextStylesForm);
-  result:=cmd_ok;
-end;
-function DimStyles_cmd(operands:TCommandOperands):TCommandResult;
-begin
-  DimStylesForm:=TDimStylesForm.Create(nil);
-  SetHeightControl(DimStylesForm,sysvar.INTF.INTF_DefaultControlHeight^);
-  ZCMsgCallBackInterface.DOShowModal(DimStylesForm);
-  Freeandnil(DimStylesForm);
-  result:=cmd_ok;
-end;
- function LineTypes_cmd(operands:TCommandOperands):TCommandResult;
-begin
-  LineTypesForm:=TLineTypesForm.Create(nil);
-  SetHeightControl(LineTypesForm,sysvar.INTF.INTF_DefaultControlHeight^);
-  ZCMsgCallBackInterface.DOShowModal(LineTypesForm);
-  Freeandnil(LineTypesForm);
-  result:=cmd_ok;
-end;
-function Colors_cmd(operands:TCommandOperands):TCommandResult;
-var
-   mr:integer;
-begin
-     if not assigned(ColorSelectForm)then
-     Application.CreateForm(TColorSelectForm, ColorSelectForm);
-     SetHeightControl(ColorSelectForm,sysvar.INTF.INTF_DefaultControlHeight^);
-     ZCMsgCallBackInterface.Do_BeforeShowModal(ColorSelectForm);
-     mr:=ColorSelectForm.run(SysVar.dwg.DWG_CColor^,true){showmodal};
-     if mr=mrOk then
-                    begin
-                    SysVar.dwg.DWG_CColor^:=ColorSelectForm.ColorInfex;
-                    end;
-     ZCMsgCallBackInterface.Do_AfterShowModal(ColorSelectForm);
-     freeandnil(ColorSelectForm);
-     result:=cmd_ok;
-end;
-
-
-
 
 procedure finalize;
 begin
@@ -524,11 +470,6 @@ end;
 procedure startup;
 begin
   CreateCommandFastObjectPlugin(@Import_com,'Import',0,0).CEndActionAttr:=CEDWGNChanged;
-  CreateCommandFastObjectPlugin(@layer_cmd,'Layer',CADWG,0);
-  CreateCommandFastObjectPlugin(@TextStyles_cmd,'TextStyles',CADWG,0);
-  CreateCommandFastObjectPlugin(@DimStyles_cmd,'DimStyles',CADWG,0);
-  CreateCommandFastObjectPlugin(@LineTypes_cmd,'LineTypes',CADWG,0);
-  CreateCommandFastObjectPlugin(@Colors_cmd,'Colors',CADWG,0);
   CreateCommandFastObjectPlugin(@SaveLayout_com,'SaveLayout',0,0);
   CreateCommandFastObjectPlugin(@Show_com,'Show',0,0);
   CreateCommandFastObjectPlugin(@ShowToolBar_com,'ShowToolBar',0,0);

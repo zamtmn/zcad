@@ -171,8 +171,8 @@ uses
 
   uzccommand_loadlayout,
   uzccommand_quit,
-  uzccommand_units,
-  uzccommand_layer,
+  uzccommand_units,uzccommand_layer,uzccommand_textstyles,uzccommand_dimstyles,
+  uzccommand_linetypes,uzccommand_colors,
 
   {$IFDEF ELECTROTECH}
   //**for velec func**//

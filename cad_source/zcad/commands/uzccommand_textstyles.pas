@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 {$mode delphi}
-unit uzccommand_layer;
+unit uzccommand_textstyles;
 
 {$INCLUDE def.inc}
 
@@ -24,29 +24,27 @@ interface
 uses
   SysUtils,
   LazLogger,
-  uzcflayers,
+  uzcftextstyles,
   uzctreenode,
   uzcsysvars,
   uzcinterface,
   Varman,
   uzccommandsabstract,uzccommandsimpl;
 
-function layer_cmd(operands:TCommandOperands):TCommandResult;
-
 implementation
 
-function layer_cmd(operands:TCommandOperands):TCommandResult;
+function TextStyles_cmd(operands:TCommandOperands):TCommandResult;
 begin
-  LayersForm:=TLayersForm.Create(nil);
-  SetHeightControl(LayersForm,sysvar.INTF.INTF_DefaultControlHeight^);
-  ZCMsgCallBackInterface.DOShowModal(LayersForm);
-  Freeandnil(LayersForm);
+  TextStylesForm:=TTextStylesForm.Create(nil);
+  SetHeightControl(TextStylesForm,sysvar.INTF.INTF_DefaultControlHeight^);
+  ZCMsgCallBackInterface.DOShowModal(TextStylesForm);
+  Freeandnil(TextStylesForm);
   result:=cmd_ok;
 end;
 
 initialization
   debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
-  CreateCommandFastObjectPlugin(@layer_cmd,'Layer',CADWG,0);
+  CreateCommandFastObjectPlugin(@TextStyles_cmd,'TextStyles',CADWG,0);
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

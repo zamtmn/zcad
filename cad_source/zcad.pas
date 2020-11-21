@@ -174,6 +174,8 @@ uses
   uzccommand_units,uzccommand_layer,uzccommand_textstyles,uzccommand_dimstyles,
   uzccommand_linetypes,uzccommand_colors,
 
+  uzccommand_clearfilehistory,
+
   {$IFDEF ELECTROTECH}
   //**for velec func**//
   //uzccomdrawsuperline,

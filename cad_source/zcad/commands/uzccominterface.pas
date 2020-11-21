@@ -227,24 +227,6 @@ begin
   ZCMsgCallBackInterface.DOShowModal(HelpForm);
   result:=cmd_ok;
 end;
-function ClearFileHistory_com(operands:TCommandOperands):TCommandResult;
-var i:integer;
-    pstr:PGDBString;
-begin
-     for i:=0 to 9 do
-     begin
-          pstr:=SavedUnit.FindValue('PATH_File'+inttostr(i));
-          if assigned(pstr) then
-          pstr^:='';
-          if assigned(FileHistory[i]) then
-          begin
-              FileHistory[i].Caption:='';
-              FileHistory[i].command:='';
-              FileHistory[i].Visible:=false;
-          end;
-     end;
-     result:=cmd_ok;
-end;
 function SetObjInsp_com(operands:TCommandOperands):TCommandResult;
 var
    obj:gdbstring;

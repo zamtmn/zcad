@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 {$mode delphi}
-unit uzccommand_colors;
+unit uzccommand_clearfilehistory;
 
 {$INCLUDE def.inc}
 
@@ -24,35 +24,35 @@ interface
 uses
   SysUtils,
   LazLogger,
-  uzcfcolors,
-  uzctreenode,
-  uzcsysvars,
-  uzcinterface,
-  Varman,
   uzccommandsabstract,uzccommandsimpl,
-  uzcdialogstypes;
+  Varman,
+  uzcguimenuextensions;
 
 implementation
 
-function Colors_cmd(operands:TCommandOperands):TCommandResult;
-var
-   mr:integer;
+function ClearFileHistory_com(operands:TCommandOperands):TCommandResult;
+var i:integer;
+    pstr:PAnsiString;
 begin
-  if not assigned(ColorSelectForm)then
-    ColorSelectForm:=TColorSelectForm.Create(nil);
-  SetHeightControl(ColorSelectForm,sysvar.INTF.INTF_DefaultControlHeight^);
-  ZCMsgCallBackInterface.Do_BeforeShowModal(ColorSelectForm);
-  mr:=ColorSelectForm.run(SysVar.dwg.DWG_CColor^,true){showmodal};
-  if mr=ZCmrOK then
-    SysVar.dwg.DWG_CColor^:=ColorSelectForm.ColorInfex;
-  ZCMsgCallBackInterface.Do_AfterShowModal(ColorSelectForm);
-  freeandnil(ColorSelectForm);
-  result:=cmd_ok;
+     for i:=0 to 9 do
+     begin
+          pstr:=SavedUnit.FindValue('PATH_File'+inttostr(i));
+          if assigned(pstr) then
+          pstr^:='';
+          if assigned(FileHistory[i]) then
+          begin
+              FileHistory[i].Caption:='';
+              FileHistory[i].command:='';
+              FileHistory[i].Visible:=false;
+          end;
+     end;
+     result:=cmd_ok;
 end;
+
 
 initialization
   debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
-  CreateCommandFastObjectPlugin(@Colors_cmd,'Colors',CADWG,0);
+  CreateCommandFastObjectPlugin(@ClearFileHistory_com,'ClearFileHistory',0,0);
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

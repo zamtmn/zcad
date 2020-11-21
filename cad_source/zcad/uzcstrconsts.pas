@@ -138,6 +138,7 @@ resourcestring
   rscmNoBlockDefInDWG='No BlockDef "%s" in the drawing';
   rscmNoBlockDefInDWGCXMenu='No BlockDef "%s" in the drawing. Use context menu';
   rscmInDwgBlockDefNotDeffined='In drawing not defined any BlockDefs!';
+  rscmCmdMustHaveOperand='Command must have operand(s)!';
 
   rscmSelEntBeforeComm='Entities must be selected before run the command';
   rscmSelDevBeforeComm='Device must be selected before run the command';

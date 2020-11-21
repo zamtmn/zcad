@@ -200,7 +200,7 @@ begin
                                            end;
                       end
                   else
-                      ZCMsgCallBackInterface.TextMessage('Show command must have one operand!',TMWOShowError);
+                      ZCMsgCallBackInterface.TextMessage(rscmCmdMustHaveOperand,TMWOShowError);
   result:=cmd_ok;
 end;
 function ShowToolBar_com(operands:TCommandOperands):TCommandResult;
@@ -210,7 +210,7 @@ begin
                         ToolBarsManager.ShowFloatToolbar(operands,rect(0,0,300,50));
                       end
                   else
-                      ZCMsgCallBackInterface.TextMessage('Show command must have one operand!',TMWOShowError);
+                      ZCMsgCallBackInterface.TextMessage(rscmCmdMustHaveOperand,TMWOShowError);
   result:=cmd_ok;
 end;
 function About_com(operands:TCommandOperands):TCommandResult;

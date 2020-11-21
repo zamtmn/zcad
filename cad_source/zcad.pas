@@ -169,12 +169,21 @@ uses
   uzccommand_snapproperties,
   uzccommand_polytest,
 
-  uzccommand_loadlayout,
+  uzccommand_loadlayout,uzccommand_savelayout,
   uzccommand_quit,
   uzccommand_units,uzccommand_layer,uzccommand_textstyles,uzccommand_dimstyles,
   uzccommand_linetypes,uzccommand_colors,
 
   uzccommand_clearfilehistory,
+
+  uzccommand_show,uzccommand_showtoolbar,
+
+  uzccommand_setobjinsp,
+  uzccommand_memsummary,
+  uzccommand_executefile,
+  uzccommand_debclip,
+  uzccommand_import,
+  uzccommand_commandlist,
 
   {$IFDEF ELECTROTECH}
   //**for velec func**//

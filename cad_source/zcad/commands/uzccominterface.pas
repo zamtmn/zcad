@@ -85,134 +85,6 @@ uses
    //function Regen_com(Operands:pansichar):GDBInteger;
 //var DWGPageCxMenu:pzpopupmenu;
 implementation
-function Import_com(operands:TCommandOperands):TCommandResult;
-var
-   s: GDBString;
-   //fileext:GDBString;
-   isload:boolean;
-begin
-  if length(operands)=0 then
-                     begin
-                          ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
-                          //mainformn.ShowAllCursors;
-                          isload:=OpenFileDialog(s,1,'svg',ImportFileFilter,'','Import...');
-                          ZCMsgCallBackInterface.Do_AfterShowModal(nil);
-                          //mainformn.RestoreCursors;
-                          //s:=utf8tosys(s);
-                          if not isload then
-                                            begin
-                                                 result:=cmd_cancel;
-                                                 exit;
-                                            end
-                     end
-                 else
-                 begin
-                   s:=ExpandPath(operands);
-                   s:=FindInSupportPath(SupportPath,operands);
-                 end;
-  isload:=FileExists(utf8tosys(s));
-  if isload then
-  begin
-       newdwg_com(s);
-       drawings.GetCurrentDWG.SetFileName(s);
-       import(s,drawings.GetCurrentDWG^);
-  end
-            else
-     ZCMsgCallBackInterface.TextMessage('LOAD:'+format(rsUnableToOpenFile,[s+'('+Operands+')']),TMWOShowError);
-     //TMWOShowError('GDBCommandsBase.LOAD: Не могу открыть файл: '+s+'('+Operands+')');
-end;
-function ExecuteFile_com(operands:TCommandOperands):TCommandResult;
-begin
-  commandmanager.executefile(ExpandPath(operands),drawings.GetCurrentDWG,nil);
-  result:=cmd_ok;
-end;
-
-procedure finalize;
-begin
-end;
-procedure SaveLayoutToFile(Filename: string);
-var
-  XMLConfig: TXMLConfig;
-  Config: TXMLConfigStorage;
-begin
-  XMLConfig:=TXMLConfig.Create(nil);
-  try
-    XMLConfig.StartEmpty:=true;
-    XMLConfig.Filename:=Filename;
-    Config:=TXMLConfigStorage.Create(XMLConfig);
-    try
-      DockMaster.SaveLayoutToConfig(Config);
-      DockMaster.SaveSettingsToConfig(Config);
-      ToolBarsManager.SaveToolBarsToConfig(Config);
-    finally
-      Config.Free;
-    end;
-    XMLConfig.Flush;
-  finally
-    XMLConfig.Free;
-  end;
-end;
-function SaveLayout_com(operands:TCommandOperands):TCommandResult;
-var
-  XMLConfig: TXMLConfigStorage;
-  filename:string;
-begin
-  try
-    // create a new xml config file
-    filename:=utf8tosys(ProgramPath+'components/defaultlayout.xml');
-    SaveLayoutToFile(filename);
-    exit;
-    XMLConfig:=TXMLConfigStorage.Create(filename,false);
-    try
-      // save the current layout of all forms
-      DockMaster.SaveLayoutToConfig(XMLConfig);
-      XMLConfig.WriteToDisk;
-    finally
-      XMLConfig.Free;
-    end;
-  except
-    on E: Exception do begin
-      MessageDlg('Error',
-        'Error saving layout to file '+Filename+':'#13+E.Message,mtError,
-        [mbCancel],0);
-    end;
-  end;
-  result:=cmd_ok;
-end;
-function Show_com(operands:TCommandOperands):TCommandResult;
-var
-   ctrl:TControl;
-begin
-  if Operands<>'' then
-                      begin
-                           ctrl:=DockMaster.FindControl(Operands);
-                           if (ctrl<>nil)and(ctrl.IsVisible) then
-                                           begin
-                                                DockMaster.ManualFloat(ctrl);
-                                                DockMaster.GetAnchorSite(ctrl).Close;
-                                           end
-                                       else
-                                           begin
-                                                If IsValidIdent(Operands) then
-                                                                              DockMaster.ShowControl(Operands,true)
-                                                                          else
-                                                                              ZCMsgCallBackInterface.TextMessage('Show: invalid identificator!',TMWOShowError);
-                                           end;
-                      end
-                  else
-                      ZCMsgCallBackInterface.TextMessage(rscmCmdMustHaveOperand,TMWOShowError);
-  result:=cmd_ok;
-end;
-function ShowToolBar_com(operands:TCommandOperands):TCommandResult;
-begin
-  if Operands<>'' then
-                      begin
-                        ToolBarsManager.ShowFloatToolbar(operands,rect(0,0,300,50));
-                      end
-                  else
-                      ZCMsgCallBackInterface.TextMessage(rscmCmdMustHaveOperand,TMWOShowError);
-  result:=cmd_ok;
-end;
 function About_com(operands:TCommandOperands):TCommandResult;
 begin
   if not assigned(AboutForm) then
@@ -227,107 +99,6 @@ begin
   ZCMsgCallBackInterface.DOShowModal(HelpForm);
   result:=cmd_ok;
 end;
-function SetObjInsp_com(operands:TCommandOperands):TCommandResult;
-var
-   obj:gdbstring;
-   objt:PUserTypeDescriptor;
-  pp:PGDBObjEntity;
-  ir:itrec;
-begin
-     if Operands='VARS' then
-                            begin
-                              ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar,drawings.GetCurrentDWG);
-                            end
-else if Operands='CAMERA' then
-                            begin
-                              ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('GDBObjCamera'),drawings.GetCurrentDWG.pcamera,drawings.GetCurrentDWG);
-                            end
-else if Operands='CURRENT' then
-                            begin
-
-                                 if (drawings.GetCurrentDWG.GetLastSelected <> nil)
-                                 then
-                                     begin
-                                          obj:=pGDBObjEntity(drawings.GetCurrentDWG.GetLastSelected)^.GetObjTypeName;
-                                          objt:=SysUnit.TypeName2PTD(obj);
-                                          ZCMsgCallBackInterface.Do_PrepareObject(drawings.GetUndoStack,drawings.GetUnitsFormat,objt,drawings.GetCurrentDWG.GetLastSelected,drawings.GetCurrentDWG);
-                                     end
-                                 else
-                                     begin
-                                          ZCMsgCallBackInterface.TextMessage('ugdbdescriptor.poglwnd^.SelDesc.LastSelectedObject=NIL, try SetObjInsp(SELECTED)...',TMWOShowError);
-                                     end;
-                                 SysVar.DWG.DWG_SelectedObjToInsp^:=false;
-                            end
-else if Operands='SELECTED' then
-                            begin
-                                     begin
-                                          //ZCMsgCallBackInterface.TextMessage('ugdbdescriptor.poglwnd^.SelDesc.LastSelectedObject=NIL, try find selected in DRAWING...');
-                                          pp:=drawings.GetCurrentROOT.objarray.beginiterate(ir);
-                                          if pp<>nil then
-                                         begin
-                                              repeat
-                                              if pp^.Selected then
-                                                              begin
-                                                                   obj:=pp^.GetObjTypeName;
-                                                                   objt:=SysUnit.TypeName2PTD(obj);
-                                                                   ZCMsgCallBackInterface.Do_PrepareObject(drawings.GetUndoStack,drawings.GetUnitsFormat,objt,pp,drawings.GetCurrentDWG);
-                                                                   exit;
-                                                              end;
-                                              pp:=drawings.GetCurrentROOT.objarray.iterate(ir);
-                                              until pp=nil;
-                                         end;
-                                     end;
-                                 SysVar.DWG.DWG_SelectedObjToInsp^:=false;
-                            end
-else if Operands='OGLWND_DEBUG' then
-                            begin
-                                 ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('OGLWndtype'),@drawings.GetCurrentDWG.wa.param,drawings.GetCurrentDWG);
-                            end
-else if Operands='GDBDescriptor' then
-                            begin
-                                 ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('GDBDescriptor'),@drawings,drawings.GetCurrentDWG);
-                            end
-else if Operands='RELE_DEBUG' then
-                            begin
-                                 ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,dbunit.TypeName2PTD('vardesk'),dbunit.FindVariable('SEVCABLEkvvg'),drawings.GetCurrentDWG);
-                            end
-else if Operands='LAYERS' then
-                            begin
-                                 ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,dbunit.TypeName2PTD('GDBLayerArray'),@drawings.GetCurrentDWG.LayerTable,drawings.GetCurrentDWG);
-                            end
-else if Operands='TSTYLES' then
-                            begin
-                                 ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,dbunit.TypeName2PTD('GDBTextStyleArray'),@drawings.GetCurrentDWG.TextStyleTable,drawings.GetCurrentDWG);
-                            end
-else if Operands='FONTS' then
-                            begin
-                                 ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,dbunit.TypeName2PTD('GDBFontManager'),@FontManager,drawings.GetCurrentDWG);
-                            end
-else if Operands='OSMODE' then
-                            begin
-                                 OSModeEditor.GetState;
-                                 ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,dbunit.TypeName2PTD('TOSModeEditor'),@OSModeEditor,drawings.GetCurrentDWG);
-                            end
-else if Operands='NUMERATORS' then
-                            begin
-                                 ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('GDBNumerator'),@drawings.GetCurrentDWG.Numerator,drawings.GetCurrentDWG);
-                            end
-else if Operands='LINETYPESTYLES' then
-                            begin
-                                 ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('GDBLtypeArray'),@drawings.GetCurrentDWG.LTypeStyleTable,drawings.GetCurrentDWG);
-                            end
-else if Operands='TABLESTYLES' then
-                            begin
-                                 ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('GDBTableStyleArray'),@drawings.GetCurrentDWG.TableStyleTable,drawings.GetCurrentDWG);
-                            end
-else if Operands='DIMSTYLES' then
-                            begin
-                                 ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('GDBDimStyleArray'),@drawings.GetCurrentDWG.DimStyleTable,drawings.GetCurrentDWG);
-                            end;
-     ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUISetDefaultObject);
-     result:=cmd_ok;
-end;
-
 function Options_com(operands:TCommandOperands):TCommandResult;
 begin
   ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar,drawings.GetCurrentDWG);
@@ -345,103 +116,6 @@ begin
            SaveParams(expandpath(ProgramPath+'rtl/config.xml'),SysParam.saved);
            result:=cmd_ok;
 end;
-function CommandList_com(operands:TCommandOperands):TCommandResult;
-var
-   p:PCommandObjectDef;
-   ir:itrec;
-   clist:TZctnrVectorGDBString;
-begin
-   clist.init(200);
-   p:=commandmanager.beginiterate(ir);
-   if p<>nil then
-   repeat
-         clist.PushBackData(p^.CommandName);
-         p:=commandmanager.iterate(ir);
-   until p=nil;
-   clist.sort;
-   ZCMsgCallBackInterface.TextMessage(clist.GetTextWithEOL,TMWOHistoryOut);
-   clist.done;
-   result:=cmd_ok;
-end;
-function DebClip_com(operands:TCommandOperands):TCommandResult;
-var
-   pbuf:pansichar;
-   i:gdbinteger;
-   cf:TClipboardFormat;
-   ts:string;
-
-   memsubstr:TMemoryStream;
-   InfoForm:TInfoForm;
-begin
-     InfoForm:=TInfoForm.create(application.MainForm);
-     InfoForm.DialogPanel.HelpButton.Hide;
-     InfoForm.DialogPanel.CancelButton.Hide;
-     InfoForm.DialogPanel.CloseButton.Hide;
-     InfoForm.caption:=('Clipboard:');
-
-     memsubstr:=TMemoryStream.Create;
-     ts:=Clipboard.AsText;
-     i:=Clipboard.FormatCount;
-     for i:=0 to Clipboard.FormatCount-1 do
-     begin
-          cf:=Clipboard.Formats[i];
-          ts:=ClipboardFormatToMimeType(cf);
-          if ts='' then
-                       ts:=inttostr(cf);
-          InfoForm.Memo.lines.Add(ts);
-          Clipboard.GetFormat(cf,memsubstr);
-          pbuf:=memsubstr.Memory;
-          InfoForm.Memo.lines.Add('  ANSI: '+pbuf);
-          memsubstr.Clear;
-     end;
-     memsubstr.Free;
-
-     ZCMsgCallBackInterface.DOShowModal(InfoForm);
-     InfoForm.Free;
-
-     result:=cmd_ok;
-end;
-function MemSummary_com(operands:TCommandOperands):TCommandResult;
-var
-    memcount:GDBNumerator;
-    pmemcounter:PGDBNumItem;
-    ir:itrec;
-    s:gdbstring;
-    I:gdbinteger;
-    InfoForm:TInfoForm;
-begin
-
-     InfoForm:=TInfoForm.create(application.MainForm);
-     InfoForm.DialogPanel.HelpButton.Hide;
-     InfoForm.DialogPanel.CancelButton.Hide;
-     InfoForm.DialogPanel.CloseButton.Hide;
-     InfoForm.caption:=('Memory is used to:');
-     memcount.init(100);
-     for i := 0 to memdesktotal do
-     begin
-          if not(memdeskarr[i].free) then
-          begin
-               pmemcounter:=memcount.addnumerator(memdeskarr[i].getmemguid);
-               inc(pmemcounter^.Nymber,memdeskarr[i].size);
-           end;
-     end;
-     memcount.sort;
-
-     pmemcounter:=memcount.beginiterate(ir);
-     if pmemcounter<>nil then
-     repeat
-
-           s:=pmemcounter^.Name+' '+inttostr(pmemcounter^.Nymber);
-           InfoForm.Memo.lines.Add(s);
-           pmemcounter:=memcount.iterate(ir);
-     until pmemcounter=nil;
-
-
-     ZCMsgCallBackInterface.DOShowModal(InfoForm);
-     InfoForm.Free;
-     memcount.Done;
-    result:=cmd_ok;
-end;
 function ShowPage_com(operands:TCommandOperands):TCommandResult;
 begin
   if assigned(ZCADMainWindow)then
@@ -451,20 +125,11 @@ begin
 end;
 procedure startup;
 begin
-  CreateCommandFastObjectPlugin(@Import_com,'Import',0,0).CEndActionAttr:=CEDWGNChanged;
-  CreateCommandFastObjectPlugin(@SaveLayout_com,'SaveLayout',0,0);
-  CreateCommandFastObjectPlugin(@Show_com,'Show',0,0);
-  CreateCommandFastObjectPlugin(@ShowToolBar_com,'ShowToolBar',0,0);
   CreateCommandFastObjectPlugin(@About_com,'About',0,0);
   CreateCommandFastObjectPlugin(@Help_com,'Help',0,0);
   CreateCommandFastObjectPlugin(@Options_com,'Options',0,0);
   CreateCommandFastObjectPlugin(@SaveOptions_com,'SaveOptions',0,0);
-  CreateCommandFastObjectPlugin(@SetObjInsp_com,'SetObjInsp',CADWG,0);
-  CreateCommandFastObjectPlugin(@CommandList_com,'CommandList',0,0);
-  CreateCommandFastObjectPlugin(@DebClip_com,'DebClip',0,0);
-  CreateCommandFastObjectPlugin(@MemSummary_com,'MeMSummary',0,0);
   CreateCommandFastObjectPlugin(@ShowPage_com,'ShowPage',0,0);
-  CreateCommandFastObjectPlugin(@ExecuteFile_com,'ExecuteFile',0,0);
   AboutForm:=nil;
   HelpForm:=nil;
 end;
@@ -472,5 +137,4 @@ initialization
   startup;
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
-  finalize;
 end.

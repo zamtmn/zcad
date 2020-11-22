@@ -27,7 +27,7 @@ uses uzbpaths,UUnitManager,uzcsysvars,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
      uzccommandsimpl,uzccommandsabstract,uzctypesdecorations,zcobjectinspectorui,
      uzcoidecorations,uzbtypesbase,
      Forms,Controls,
-     uzcinterface;
+     uzcinterface,uzcdialogstypes;
 var
   StringsTreeSelector:TStringsTreeSelector=nil;
 implementation
@@ -65,7 +65,7 @@ begin
      StringsTreeSelector.caption:=('EentityRepresentationEditor');
      StringsTreeSelector.ActiveControl:=StringsTreeSelector.StringsTree;
      modalresult:=ZCMsgCallBackInterface.DOShowModal(StringsTreeSelector);
-     if modalresult=MrOk then
+     if modalresult=ZCMrOk then
        PStringTreeType(PInstance)^:=StringsTreeSelector.TreeResult;
 end;
 
@@ -84,7 +84,7 @@ begin
      StringsTreeSelector.caption:=('EentityFunctionEditor');
      StringsTreeSelector.ActiveControl:=StringsTreeSelector.StringsTree;
      modalresult:=ZCMsgCallBackInterface.DOShowModal(StringsTreeSelector);
-     if modalresult=MrOk then
+     if modalresult=ZCMrOk then
        PStringTreeType(PInstance)^:=StringsTreeSelector.TreeResult;
 end;
 

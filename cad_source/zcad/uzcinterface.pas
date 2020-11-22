@@ -18,7 +18,8 @@
 unit uzcinterface;
 {$INCLUDE def.inc}
 interface
-uses controls,uzcstrconsts,uzedimensionaltypes,gzctnrstl,zeundostack,varmandef,forms,classes,uzbtypes,LCLType;
+uses controls,uzcstrconsts,uzedimensionaltypes,gzctnrstl,zeundostack,varmandef,
+     uzcdialogslcl2zc,forms,classes,uzbtypes,LCLType;
 
 const
     CLinePriority=500;
@@ -546,7 +547,7 @@ end;
 function TZCMsgCallBackInterface.DoShowModal(MForm:TForm): Integer;
 begin
      Do_BeforeShowModal(MForm);
-     result:=MForm.ShowModal;
+     result:=TLCLModalResult2TZCMsgModalResult.Convert(MForm.ShowModal);
      Do_BeforeShowModal(MForm);
 end;
 

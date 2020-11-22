@@ -32,7 +32,8 @@ uses
   UGDBOpenArrayOfByte,
   uzeentity,
   uzcdevicebaseabstract,UUnitManager,uzbtypesbase,strutils,forms,Controls,uzcinterface,uzedrawingdef,uzctnrvectorgdbstring,strmy,uzbmemman,
-  uzcenitiesvariablesextender,uzcfsinglelinetexteditor,UObjectDescriptor,uzcfprojecttree,uzccommandsmanager,uzclog,uzeentsubordinated;
+  uzcenitiesvariablesextender,uzcfsinglelinetexteditor,UObjectDescriptor,uzcfprojecttree,uzccommandsmanager,uzclog,uzeentsubordinated,
+  uzcdialogstypes;
 
 procedure DBLinkProcess(pEntity:PGDBObjEntity;const drawing:TDrawingDef);
 
@@ -84,7 +85,7 @@ begin
                  SingleLineTextEditorForm.EditField.Caption:=copy(pdbv.name,4,length(pdbv.name)-3);
                  renamed:=false;
                  repeat
-                 if ZCMsgCallBackInterface.DoShowModal(SingleLineTextEditorForm)=mrok then
+                 if ZCMsgCallBackInterface.DoShowModal(SingleLineTextEditorForm)=ZCmrok then
                  begin
                       s:='_EQ'+SingleLineTextEditorForm.EditField.Caption;
                       s1:=s;

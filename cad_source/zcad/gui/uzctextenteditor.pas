@@ -23,7 +23,7 @@ uses
      uzcsysparams,uzcutils,uzcsysvars,uzbtypesbase,uzbtypes,uzcsysinfo,
      uzcinfoform,Varman,uzcinterface,
      uzedrawingdef,uzbstrproc,uzeenttext,uzeconsts,uzcstrconsts,uzcfsinglelinetexteditor,
-     Controls,Classes,Forms,uzccommandsmanager;
+     Controls,Classes,Forms,uzccommandsmanager,uzcdialogstypes;
 var
     InfoForm:TInfoForm=nil;
 procedure RunTextEditor(Pobj:GDBPointer;var drawing:TDrawingDef);
@@ -50,7 +50,7 @@ begin
      if assigned(SysVar.INTF.INTF_DefaultEditorFontHeight) then
         InfoForm.memo.Font.Height:=SysVar.INTF.INTF_DefaultEditorFontHeight^;
      modalresult:=ZCMsgCallBackInterface.DOShowModal(InfoForm);
-     if modalresult=MrOk then
+     if modalresult=ZCMrOk then
                          begin
                               PGDBObjText(pobj)^.Template:=ConvertToDxfString(InfoForm.memo.text);
                               StoreBoundsToSavedUnit('TEdWND',InfoForm.BoundsRect);
@@ -69,12 +69,12 @@ begin
 
      modalresult:=ZCMsgCallBackInterface.DOShowModal(SingleLineTextEditorForm);
 
-     if modalresult=MrOk then
+     if modalresult=ZCMrOk then
                          begin
                               PGDBObjText(pobj)^.Template:=ConvertToDxfString(SingleLineTextEditorForm.EditField.text);
                          end;
      end;
-     if modalresult=MrOk then
+     if modalresult=ZCMrOk then
                          begin
                               PGDBObjText(pobj)^.YouChanged(drawing);
                               zcRedrawCurrentDrawing;

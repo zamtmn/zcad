@@ -30,7 +30,8 @@ uses
   UGDBOpenArrayOfByte,
   uzcinterface,
   uzctranslations,
-  Controls;
+  Controls,
+  uzcdialogstypes;
 
 function EditUnit(var entityunit:TSimpleUnit):boolean;
 
@@ -56,7 +57,7 @@ begin
 
      InfoFormVar.memo.text:=u8s;
      modalresult:=ZCMsgCallBackInterface.DOShowModal(InfoFormVar);
-     if modalresult=MrOk then
+     if modalresult=ZCmrOK then
                          begin
                                u8s:=InfoFormVar.memo.text;
                                astring:={utf8tosys}(u8s);

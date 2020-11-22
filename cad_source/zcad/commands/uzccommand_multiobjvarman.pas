@@ -36,7 +36,7 @@ uses
   uzcstrconsts,
   uzcdrawings,
   UUnitManager,
-  uzctranslations;
+  uzctranslations,uzcdialogstypes;
 
 implementation
 
@@ -58,7 +58,7 @@ begin
 
   InfoFormVar.memo.text:='';
   modalresult:=ZCMsgCallBackInterface.DOShowModal(InfoFormVar);
-  if modalresult=MrOk then begin
+  if modalresult=ZCMrOk then begin
     u8s:=InfoFormVar.memo.text;
     astring:={utf8tosys}(u8s);
     mem.Clear;

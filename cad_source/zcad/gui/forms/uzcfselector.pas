@@ -4,7 +4,7 @@ interface
 
 uses
   uzbstrproc,uzcdrawings,uzbtypes,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ButtonPanel, types, lclintf,lcltype, ComCtrls;
+  ButtonPanel, types, lclintf,lcltype, ComCtrls, uzcdialogslcl2zc;
 
 type
 
@@ -88,6 +88,7 @@ begin
     result:=showmodal;
     if data=nil then
                     result:=mrcancel;
+    result:=TLCLModalResult2TZCMsgModalResult.Convert(result);
 end;
 
 end.

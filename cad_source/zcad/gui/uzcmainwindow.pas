@@ -806,7 +806,7 @@ var
 begin
   if ClosedDWG<>nil then
   begin
-    result:=mrYes;
+    result:=ZCmrYes;
     if ClosedDWG.Changed then begin
       repeat
         s:=format(rsCloseDWGQuery,[ClosedDWG.FileName]);
@@ -1130,6 +1130,8 @@ begin
      system.close(f);
      errmsg:=programname+' raised exception class "'+E.Message+'"'#13#10#13#10'A crash report generated (stack trace and latest log).'#13#10'Please send "'
              +crashreportfilename+'" file at zamtmn@yandex.ru'#13#10#13#10'Attempt to continue running?';
+
+     { #todo : Избавится везде от MessageDlg }
      if MessageDlg(errmsg,mtError,[mbYes, mbAbort],0)=mrAbort then
                                                                   halt(0);
 end;
@@ -2176,7 +2178,7 @@ begin
                                Application.CreateForm(TColorSelectForm, ColorSelectForm);
                                ShowAllCursors(ColorSelectForm);
                                mr:=ColorSelectForm.run(SysVar.dwg.DWG_CColor^,true){showmodal};
-                               if mr=mrOk then
+                               if mr=ZCmrOK then
                                               begin
                                               ColorIndex:=ColorSelectForm.ColorInfex;
                                               if assigned(Sender)then

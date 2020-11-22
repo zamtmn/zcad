@@ -12,7 +12,7 @@ uses
   uzcgui2linetypes,uzeconsts,uzestyleslayers,uzcdrawings,uzbtypesbase,uzbtypes,varmandef,
 
   uzcinterface, uzcstrconsts, uzbstrproc,UBaseTypeDescriptor,
-  gzctnrvectortypes,uzcimagesmanager, usupportgui, ZListView;
+  gzctnrvectortypes,uzcimagesmanager, usupportgui, ZListView, uzcdialogstypes;
 
 const
      NameColumn=0;
@@ -250,7 +250,7 @@ begin
   ZCMsgCallBackInterface.Do_BeforeShowModal(ColorSelectForm);
   mr:=ColorSelectForm.run(PGDBLayerProp(Item.Data)^.color,false);
   ZCMsgCallBackInterface.Do_AfterShowModal(ColorSelectForm);
-  if mr=mrOk then
+  if mr=ZCmrOK then
     begin
       if PGDBLayerProp(Item.Data)^.color<>ColorSelectForm.ColorInfex then
         begin
@@ -317,7 +317,7 @@ begin
   ZCMsgCallBackInterface.Do_BeforeShowModal(SelectorForm);
   mr:=SelectorForm.run;
   ZCMsgCallBackInterface.Do_AfterShowModal(SelectorForm);
-  if mr=mrOk then
+  if mr=ZCmrOk then
                  begin
                       PGDBLayerProp(Item.Data)^.LT:=SelectorForm.data;
                       result:=true;
@@ -357,7 +357,7 @@ begin
   ZCMsgCallBackInterface.Do_BeforeShowModal(LineWeightSelectForm);
   mr:=LineWeightSelectForm.run(PGDBLayerProp(Item.Data)^.lineweight,false);
   ZCMsgCallBackInterface.Do_AfterShowModal(LineWeightSelectForm);
-  if mr=mrOk then
+  if mr=ZCmrOk then
                  begin
                       PGDBLayerProp(Item.Data)^.lineweight:=LineWeightSelectForm.SelectedLW;
                       Item.SubItems[6]:=GetLWNameFromLW(LineWeightSelectForm.SelectedLW);

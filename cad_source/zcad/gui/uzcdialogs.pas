@@ -22,7 +22,7 @@ interface
 uses
     Controls,LCLTaskDialog,SysUtils,Forms,{$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}
     uzcinterface,uzclog,uzelongprocesssupport,
-    uzcdialogstypes,uzcdialogsutils;
+    uzcdialogstypes,uzcdialogsutils,uzcdialogslcl2zc;
 
 resourcestring
   rsMsgWndTitle='ZCAD';

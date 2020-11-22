@@ -21,7 +21,7 @@ unit uzcdialogsutils;
 interface
 uses
     Controls,LCLTaskDialog,SysUtils,Forms,{$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}
-    uzcinterface,uzclog,uzelongprocesssupport,Generics.Collections,gvector,uzcdialogstypes;
+    uzclog,uzelongprocesssupport,Generics.Collections,gvector,uzcdialogstypes;
 
 type
 

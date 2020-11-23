@@ -45,9 +45,9 @@ uses
        uzccommandsabstract,uzccommandsimpl,uzccommandsmanager,
        uzccommand_loadlayout,
   {GUI}
-       uzcdialogstypes,
+       uzcuitypes,
        uzcmenucontextcheckfuncs,uzcguimenuextensions,uzmenusdefaults,uzmenusmanager,uztoolbarsmanager,uzctextenteditor,{uzcoidecorations,}uzcfcommandline,uzctreenode,uzcflineweights,uzcctrllayercombobox,uzcctrlcontextmenu,
-       uzcfcolors,uzcimagesmanager,uzcgui2textstyles,usupportgui,uzcgui2dimstyles,uzcdialogs,
+       uzcfcolors,uzcimagesmanager,uzcgui2textstyles,usupportgui,uzcgui2dimstyles,uzcuidialogs,
   {}
        uzcpalettes,zcchangeundocommand,uzgldrawcontext,uzglviewareaabstract,uzcguimanager,uzcinterfacedata,
        uzcenitiesvariablesextender,uzglviewareageneral,UniqueInstanceRaw,

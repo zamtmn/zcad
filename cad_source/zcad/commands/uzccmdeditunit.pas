@@ -31,7 +31,7 @@ uses
   uzcinterface,
   uzctranslations,
   Controls,
-  uzcdialogstypes;
+  uzcuitypes;
 
 function EditUnit(var entityunit:TSimpleUnit):boolean;
 

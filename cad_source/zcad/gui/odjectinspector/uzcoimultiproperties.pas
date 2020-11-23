@@ -21,7 +21,7 @@ unit uzcoimultiproperties;
 
 interface
 uses
-  uzcdialogs,uzctranslations,uzbtypesbase,uzbtypes,uzclog,
+  uzcuidialogs,uzctranslations,uzbtypesbase,uzbtypes,uzclog,
   uzedimensionaltypes,usimplegenerics,varmandef,Varman,garrayutils,gzctnrstl;
 type
   TMultiPropertyUseMode=(MPUM_AllEntsMatched,MPUM_AtLeastOneEntMatched);
@@ -140,7 +140,7 @@ begin
      if MultiPropertiesManager.MultiPropertyDictionary.MyGetValue(name,mp) then
                                                         begin
                                                              if mp.MPCategory<>category then
-                                                               uzcdialogs.FatalError('Category error in "'+name+'" multiproperty');
+                                                               uzcuidialogs.FatalError('Category error in "'+name+'" multiproperty');
                                                              mp.BeforeIterateProc:=bip;
                                                              mp.AfterIterateProc:=aip;
                                                              mpdfo.EntIterateProc:=eip;

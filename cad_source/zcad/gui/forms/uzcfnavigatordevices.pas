@@ -15,7 +15,7 @@ uses
   GraphType,generics.collections,uzglviewareaabstract,Menus,
   uzcfnavigatordevicescxmenu,uzbpaths,Toolwin,uzcctrlpartenabler,StrUtils,
   uzctextenteditor,uzcinfoform,uzcsysparams,uzcsysvars,uzetextpreprocessor,
-  Masks,uzelongprocesssupport,uzeentitiestypefilter,uzcdialogstypes;
+  Masks,uzelongprocesssupport,uzeentitiestypefilter,uzcuitypes;
 
 resourcestring
   rsStandaloneDevices='Standalone devices';

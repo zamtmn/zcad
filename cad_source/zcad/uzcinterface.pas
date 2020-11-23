@@ -19,7 +19,7 @@ unit uzcinterface;
 {$INCLUDE def.inc}
 interface
 uses controls,uzcstrconsts,uzedimensionaltypes,gzctnrstl,zeundostack,varmandef,
-     uzcdialogslcl2zc,forms,classes,uzbtypes,LCLType;
+     uzcuilcl2zc,forms,classes,uzbtypes,LCLType;
 
 const
     CLinePriority=500;

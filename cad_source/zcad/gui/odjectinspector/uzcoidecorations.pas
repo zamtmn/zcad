@@ -27,7 +27,7 @@ uses
   varmandef,Varman,uzcfcolors,uzestyleslayers,uzbtypes,uzcflineweights,uzbtypesbase,usupportgui,
   StdCtrls,uzcdrawings,uzcstrconsts,Controls,Classes,uzbstrproc,uzcsysvars,uzccommandsmanager,
   uzcsysparams,gzctnrvectortypes,uzbgeomtypes,uzcinterface,uzcoimultiobjects,uzcgui2color,uzcgui2linewidth,uzcgui2linetypes,
-  uzccommand_layer,uzcdialogstypes;
+  uzccommand_layer,uzcuitypes;
 type
     AsyncCommHelper=class
                          class procedure GetVertex(Pinstance:PtrInt);

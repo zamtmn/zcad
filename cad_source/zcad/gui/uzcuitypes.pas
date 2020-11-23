@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzcdialogstypes;
+unit uzcuitypes;
 
 {$INCLUDE def.inc}
 

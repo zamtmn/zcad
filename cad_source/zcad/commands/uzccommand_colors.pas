@@ -30,7 +30,7 @@ uses
   uzcinterface,
   Varman,
   uzccommandsabstract,uzccommandsimpl,
-  uzcdialogstypes;
+  uzcuitypes;
 
 implementation
 

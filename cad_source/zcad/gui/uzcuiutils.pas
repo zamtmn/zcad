@@ -16,12 +16,12 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzcdialogsutils;
+unit uzcuiutils;
 {$INCLUDE def.inc}
 interface
 uses
     Controls,LCLTaskDialog,SysUtils,Forms,{$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}
-    uzclog,uzelongprocesssupport,Generics.Collections,gvector,uzcdialogstypes;
+    uzclog,uzelongprocesssupport,uzcuitypes;
 
 type
 

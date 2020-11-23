@@ -36,7 +36,7 @@ uses
   uzcstrconsts,
   uzcdrawings,
   UUnitManager,
-  uzctranslations,uzcdialogstypes;
+  uzctranslations,uzcuitypes;
 
 implementation
 

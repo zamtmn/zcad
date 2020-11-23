@@ -16,13 +16,13 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzcdialogs;
+unit uzcuidialogs;
 {$INCLUDE def.inc}
 interface
 uses
     Controls,LCLTaskDialog,SysUtils,Forms,{$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}
     uzcinterface,uzclog,uzelongprocesssupport,
-    uzcdialogstypes,uzcdialogsutils,uzcdialogslcl2zc;
+    uzcuitypes,uzcuiutils,uzcuilcl2zc;
 
 resourcestring
   rsMsgWndTitle='ZCAD';

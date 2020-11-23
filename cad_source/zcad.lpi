@@ -316,7 +316,7 @@
         <PackageName Value="LCL"/>
       </Item20>
     </RequiredPackages>
-    <Units Count="200">
+    <Units Count="203">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -330,7 +330,7 @@
         <IsPartOfProject Value="True"/>
       </Unit2>
       <Unit3>
-        <Filename Value="zcad/gui/uzcdialogs.pas"/>
+        <Filename Value="zcad/gui/uzcuidialogs.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit3>
       <Unit4>
@@ -1168,6 +1168,18 @@
         <Filename Value="zcad/commands/uzccommand_closedwg.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit199>
+      <Unit200>
+        <Filename Value="zcad/gui/uzcuilcl2zc.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit200>
+      <Unit201>
+        <Filename Value="zcad/gui/uzcuitypes.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit201>
+      <Unit202>
+        <Filename Value="zcad/gui/uzcuiutils.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit202>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

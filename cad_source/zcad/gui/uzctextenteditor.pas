@@ -23,7 +23,7 @@ uses
      uzcsysparams,uzcutils,uzcsysvars,uzbtypesbase,uzbtypes,uzcsysinfo,
      uzcinfoform,Varman,uzcinterface,
      uzedrawingdef,uzbstrproc,uzeenttext,uzeconsts,uzcstrconsts,uzcfsinglelinetexteditor,
-     Controls,Classes,Forms,uzccommandsmanager,uzcdialogstypes;
+     Controls,Classes,Forms,uzccommandsmanager,uzcuitypes;
 var
     InfoForm:TInfoForm=nil;
 procedure RunTextEditor(Pobj:GDBPointer;var drawing:TDrawingDef);

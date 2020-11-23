@@ -33,7 +33,7 @@ uses
   uzeentity,
   uzcdevicebaseabstract,UUnitManager,uzbtypesbase,strutils,forms,Controls,uzcinterface,uzedrawingdef,uzctnrvectorgdbstring,strmy,uzbmemman,
   uzcenitiesvariablesextender,uzcfsinglelinetexteditor,UObjectDescriptor,uzcfprojecttree,uzccommandsmanager,uzclog,uzeentsubordinated,
-  uzcdialogstypes;
+  uzcuitypes;
 
 procedure DBLinkProcess(pEntity:PGDBObjEntity;const drawing:TDrawingDef);
 

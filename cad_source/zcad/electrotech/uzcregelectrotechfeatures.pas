@@ -27,7 +27,7 @@ uses uzbpaths,UUnitManager,uzcsysvars,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
      uzccommandsimpl,uzccommandsabstract,uzctypesdecorations,zcobjectinspectorui,
      uzcoidecorations,uzbtypesbase,
      Forms,Controls,
-     uzcinterface,uzcdialogstypes;
+     uzcinterface,uzcuitypes;
 var
   StringsTreeSelector:TStringsTreeSelector=nil;
 implementation

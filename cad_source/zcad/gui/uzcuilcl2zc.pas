@@ -16,12 +16,12 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzcdialogslcl2zc;
+unit uzcuilcl2zc;
 {$INCLUDE def.inc}
 interface
 uses
     Controls,LCLTaskDialog,SysUtils,Forms,{$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}
-    uzcdialogstypes,uzcdialogsutils;
+    uzcuitypes,uzcuiutils;
 type
   TZCMsgCommonButton2TCommonButton_Converter=class
     class function Convert(valueIn:TZCMsgCommonButton;out valueOut:TCommonButton):boolean;

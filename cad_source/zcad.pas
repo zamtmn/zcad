@@ -213,7 +213,7 @@ uses
   uzcplugins,
   //zcregisterobjectinspector,
   uzcmainwindow,
-  uzcdialogs,
+  uzcuidialogs,
   uzcstrconsts,
   uzeiopalette,
   uzctextpreprocessorimpl,

@@ -4,7 +4,7 @@ interface
 
 uses
   uzbstrproc,uzcdrawings,uzbtypes,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ButtonPanel, types, lclintf,lcltype, ComCtrls, uzcdialogslcl2zc;
+  ButtonPanel, types, lclintf,lcltype, ComCtrls, uzcuilcl2zc;
 
 type
 

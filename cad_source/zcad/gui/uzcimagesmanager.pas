@@ -22,7 +22,7 @@ unit uzcimagesmanager;
 interface
 
 uses
-  uzbpaths,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
+  uzbpaths,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics,
   Buttons, ExtCtrls, LazUTF8,
   uzbtypes,uzcsysvars,uzcsysinfo,uzbtypesbase,gzctnrstl,usimplegenerics,UGDBOpenArrayOfByte,
   uzbstrproc,LazLogger;

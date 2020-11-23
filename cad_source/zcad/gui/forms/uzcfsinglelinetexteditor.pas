@@ -6,7 +6,7 @@ interface
 uses
   Classes, SysUtils,
   {$IFNDEF DELPHI}FileUtil, LResources,LCLType,{$ENDIF}
-   Forms, Controls, Graphics, Dialogs,
+   Forms, Controls, Graphics,
   StdCtrls;
 
 type

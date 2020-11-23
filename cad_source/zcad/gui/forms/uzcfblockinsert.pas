@@ -5,7 +5,7 @@ unit uzcfblockinsert;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
+  Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics,
   StdCtrls, EditBtn, ButtonPanel, Spin, ExtCtrls,
 
   UGDBObjBlockdefArray, //описание таблицы блоков

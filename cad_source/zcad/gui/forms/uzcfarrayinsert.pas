@@ -5,7 +5,7 @@ unit uzcfarrayinsert;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
+  Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics,
   ComCtrls, StdCtrls, Buttons, ExtCtrls;
 
 type

@@ -5,7 +5,7 @@ unit uzcfunits;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
+  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, ExtCtrls,
   StdCtrls, Buttons, ButtonPanel,
   uzedimensionaltypes,uzbtypes,uzemathutils,uzcuitypes,uzcuidialogs;
 

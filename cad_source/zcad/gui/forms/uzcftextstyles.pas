@@ -24,7 +24,7 @@ interface
 uses
   uzcutils,zcchangeundocommand,zcobjectchangeundocommand2,uzcdrawing,LMessages,uzefont,
   uzclog,uzedrawingsimple,uzcsysvars,Classes, SysUtils,
-  FileUtil, LResources, Forms, Controls, Graphics, Dialogs,GraphType,
+  FileUtil, LResources, Forms, Controls, Graphics, GraphType,
   Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype, ActnList,
 
   uzeconsts,uzestylestexts,uzcdrawings,uzbtypesbase,uzbtypes,varmandef,

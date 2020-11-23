@@ -5,7 +5,7 @@ unit uzcflinetypes;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
+  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, StdCtrls,
   ButtonPanel, Buttons, ExtCtrls, ComCtrls, Spin,
 
   uzcinterface,uzcgui2linetypes,uzcflinetypesload,uzcsysvars, uzedrawingsimple,uzbtypesbase,uzbtypes,

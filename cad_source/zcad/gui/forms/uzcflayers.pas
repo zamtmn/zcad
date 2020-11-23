@@ -6,7 +6,7 @@ interface
 
 uses
   UGDBNamedObjectsArray,uzcutils,zcchangeundocommand,zcobjectchangeundocommand2,uzcdrawing,uzepalette,uzcsuptypededitors,LMessages,uzcfselector,uzestyleslinetypes,uzeutils,uzclog,uzcflineweights,uzcfcolors,uzedrawingsimple,uzcsysvars,Classes, SysUtils,
-  FileUtil, LResources, Forms, Controls, Graphics, Dialogs,GraphType,
+  FileUtil, LResources, Forms, Controls, Graphics, GraphType,
   Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype, ActnList,
 
   uzcgui2linetypes,uzeconsts,uzestyleslayers,uzcdrawings,uzbtypesbase,uzbtypes,varmandef,

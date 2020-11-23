@@ -3,7 +3,7 @@ unit uzcflineweights;
 interface
 
 uses
-  uzepalette,uzeconsts,uzbtypes,uzcstrconsts,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
+  uzepalette,uzeconsts,uzbtypes,uzcstrconsts,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics,
   ButtonPanel, StdCtrls, types, lclintf,lcltype;
 
 type

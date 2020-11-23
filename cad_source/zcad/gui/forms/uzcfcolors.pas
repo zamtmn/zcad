@@ -23,7 +23,7 @@ unit uzcfcolors;
 interface
 
 uses
-  uzepalette,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
+  uzepalette,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics,
   StdCtrls, Buttons, {ColorBox,} ButtonPanel, Spin, ExtCtrls, ComCtrls,math,
   uzeconsts,uzbtypes,uzcstrconsts,uzcuidialogs;
 

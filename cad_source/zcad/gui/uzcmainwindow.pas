@@ -25,7 +25,7 @@ uses
       Laz2_DOM,AnchorDockPanel,AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr,
        ActnList,LCLType,LCLProc,uzctranslations,LMessages,LCLIntf,
        Forms, stdctrls, ExtCtrls, ComCtrls,Controls,Classes,SysUtils,LazUTF8,
-       menus,graphics,dialogs,XMLPropStorage,Buttons,Themes,
+       menus,graphics,{dialogs,}XMLPropStorage,Buttons,Themes,
        Types,UniqueInstanceBase,simpleipc,{$ifdef windows}windows,{$endif}Laz2_XMLCfg,
   {FPC}
        lineinfo,
@@ -1131,9 +1131,8 @@ begin
      errmsg:=programname+' raised exception class "'+E.Message+'"'#13#10#13#10'A crash report generated (stack trace and latest log).'#13#10'Please send "'
              +crashreportfilename+'" file at zamtmn@yandex.ru'#13#10#13#10'Attempt to continue running?';
 
-     { #todo : Избавится везде от MessageDlg }
-     if MessageDlg(errmsg,mtError,[mbYes, mbAbort],0)=mrAbort then
-                                                                  halt(0);
+     if zcMsgDlg(errmsg,zcdiError,[zccbYes,zccbCancel]).ModalResult=ZCmrCancel then
+       halt(0);
 end;
 function TZCADMainWindow.CreateZCADControl(aName: string;DoDisableAutoSizing:boolean=false):TControl;
 var

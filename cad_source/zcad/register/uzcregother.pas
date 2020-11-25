@@ -183,16 +183,16 @@ initialization;
   //SysVarUnit.AssignToSymbol(SysVar.SYS.SYS_AlternateFont,'SYS_AlternateFont');
 
   SysVarUnit.AssignToSymbol(SysVar.PATH.device_library,'PATH_Device_Library');
-  s:=SysVar.PATH.device_library^;
+  //s:=SysVar.PATH.device_library^;
   //SysVarUnit.AssignToSymbol(SysVar.PATH.Program_Run,'PATH_Program_Run');
   //s:=SysVar.PATH.Program_Run^;
   //SysVarUnit.AssignToSymbol(SysVar.PATH.Support_Path,'PATH_Support_Path');
   //s:=SysVar.PATH.Support_Path^;
 
   SysVarUnit.AssignToSymbol(SysVar.PATH.Template_Path,'PATH_Template_Path');
-  s:=SysVar.PATH.Template_Path^;
+  //s:=SysVar.PATH.Template_Path^;
   SysVarUnit.AssignToSymbol(SysVar.PATH.Template_File,'PATH_Template_File');
-  s:=SysVar.PATH.Template_File^;
+  //s:=SysVar.PATH.Template_File^;
 
   SysVarUnit.AssignToSymbol(SysVar.PATH.LayoutFile,'PATH_LayoutFile');
 

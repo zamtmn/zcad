@@ -182,6 +182,7 @@ var
    i:integer;
    CurrNode{,CurrFindNode,tn}:TmyTreeNode;
    eqnode:TEqTreeNode;
+   s:AnsiString;
 begin
   pvdeq:=PDBUNIT^.InterfaceVariables.vardescarray.beginiterate(ir);
   if pvdeq<>nil then

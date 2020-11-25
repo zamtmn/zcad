@@ -22,9 +22,9 @@ unit languade;
 interface
 uses
   uzbstrproc,uzbtypesbase,varman, langsystem, sysutils,varmandef,uzbmemman,UObjectDescriptor;
-var
+{var
   s, s1: GDBString;
-  v: vardesk;
+  v: vardesk;}
 function evaluate(expr:GDBString;_unit:PTUnit): vardesk;
 procedure deletetempvar(var v: vardesk);
 

@@ -63,8 +63,10 @@ end;
 
 procedure InitializeViewAreaCXMenu(mainform:TForm;actlist:TActionList);
 begin
-  if not assigned(ViewAreaContextMenuManager) then
-    ViewAreaContextMenuManager:=TViewAreaContextMenuManager.Create(mainform,actlist);
+  if not assigned(ViewAreaContextMenuManager) then begin
+    ViewAreaContextMenuManager:=TViewAreaContextMenuManager.Create;
+    ViewAreaContextMenuManager.setup(mainform,actlist);
+  end;
   if not assigned(ViewAreaMacros) then
     ViewAreaMacros:=TViewAreaMacros.Create;
   ViewAreaContextMenuManager.RegisterContextCheckFunc('EntsSelected',@EntsSelectedCCF);

@@ -59,9 +59,10 @@ type
     PaletteItemCreateFuncRegister:TPaletteItemCreateFuncRegister;
 
     public
-    constructor Create(mainform:TForm;actlist:TActionList;defbuttonheight:integer);
+    constructor Create;
     destructor Destroy;override;
 
+    procedure Setup(mainform:TForm;actlist:TActionList;defbuttonheight:integer);
     procedure SaveToolBarsToConfig(Config: TConfigStorage);
     procedure RestoreToolBarsFromConfig(Config: TConfigStorage);
     procedure ShowFloatToolbar(TBName:String;r:trect);
@@ -371,11 +372,9 @@ begin
   end;
 end;
 
-constructor TToolBarsManager.Create(mainform:TForm;actlist:TActionList;defbuttonheight:integer);
+constructor TToolBarsManager.Create;
 begin
-  fmainform:=mainform;
-  factionlist:=actlist;
-  fdefbuttonheight:=defbuttonheight;
+  Setup(nil,nil,21);
 
   TBConfig:=nil;
   PalettesConfig:=nil;
@@ -385,6 +384,14 @@ begin
   TBItemCreateFuncRegister:=nil;
   ActionCreateFuncRegister:=nil;
 end;
+
+procedure TToolBarsManager.Setup(mainform:TForm;actlist:TActionList;defbuttonheight:integer);
+begin
+  fmainform:=mainform;
+  factionlist:=actlist;
+  fdefbuttonheight:=defbuttonheight;
+end;
+
 destructor TToolBarsManager.Destroy;
 begin
     if assigned(TBConfig) then
@@ -1044,8 +1051,8 @@ begin
 end;
 
 initialization
-{if not assigned(ToolBarsManager) then
-  ToolBarsManager.Create;}
+  //if not assigned(ToolBarsManager) then
+  ToolBarsManager:=TToolBarsManager.create;
 
 finalization
   if assigned(ToolBarsManager) then

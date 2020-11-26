@@ -54,8 +54,10 @@ end;
 
 procedure InitializeNavigatorDevicesCXMenu(mainform:TForm;actlist:TActionList);
 begin
-  if not assigned(NavigatorDevicesMenuManager) then
-    NavigatorDevicesMenuManager:=TNavigatorDevicesMenuManager.Create(mainform,actlist);
+  if not assigned(NavigatorDevicesMenuManager) then begin
+    NavigatorDevicesMenuManager:=TNavigatorDevicesMenuManager.Create;
+    NavigatorDevicesMenuManager.setup(mainform,actlist);
+  end;
   if not assigned(NavigatorDevicesMacros) then
     NavigatorDevicesMacros:=TNavigatorDevicesMacros.Create;
 end;

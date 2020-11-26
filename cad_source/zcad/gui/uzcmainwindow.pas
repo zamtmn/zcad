@@ -75,6 +75,8 @@ type
     ToolBarD: TToolBar;
 
     procedure DrawStausBar(Sender: TObject);
+    //onXxxxx handlers
+    procedure _onCreate(Sender: TObject);
 
     public
     MainPanel:TForm;
@@ -93,7 +95,6 @@ type
     procedure CreateHTPB(tb:TToolBar);
 
     procedure ActionUpdate(AAction: TBasicAction; var Handled: Boolean);
-    procedure AfterConstruction; override;
 
     //procedure loadmenu(var f:GDBOpenArrayOfByte;var line:GDBString);
     //procedure loadpopupmenu(var f:GDBOpenArrayOfByte;var line:GDBString);
@@ -125,9 +126,6 @@ type
     function GetEntsDesc(ents:PGDBObjOpenArrayOfPV):GDBString;
     procedure waSetObjInsp(Sender:{TAbstractViewArea}tobject;GUIAction:TZMessageID);
     procedure WaShowCursor(Sender:TAbstractViewArea;var DC:TDrawContext);
-
-    //onXxxxx handlers
-    procedure _onCreate(Sender: TObject);
 
     //Long process support - draw progressbar. See uzelongprocesssupport unit
     procedure StartLongProcess(LPHandle:TLPSHandle;Total:TLPSCounter;processname:TLPName);
@@ -1120,14 +1118,6 @@ begin
 
   CreateAnchorDockingInterface;
   ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
-end;
-
-procedure TZCADMainWindow.AfterConstruction;
-
-begin
-    name:='MainForm';
-    OnCreate:=_onCreate;
-    inherited;
 end;
 
 procedure TZCADMainWindow.UpdateControls;

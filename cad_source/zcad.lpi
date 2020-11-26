@@ -451,7 +451,7 @@
       <Unit23>
         <Filename Value="zcad/gui/uzcmainwindow.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="ZCADMainWindow"/>
+        <ComponentName Value="MainForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit23>

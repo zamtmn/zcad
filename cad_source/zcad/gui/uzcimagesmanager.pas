@@ -92,7 +92,7 @@ begin
   FreeAndNil(FIconList);
   FreeAndNil(ImageDataMap);
 end;
-procedure {TImagesManager.}FoundImage(filename:String);
+procedure {TImagesManager.}FoundImage(filename:String;pdata:pointer);
 var
    ID:TImageData;
    PID:TImageName2TImageDataMap.PTValue;

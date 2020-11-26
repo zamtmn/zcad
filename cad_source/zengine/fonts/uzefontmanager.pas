@@ -46,8 +46,8 @@ GDBFontManager={$IFNDEF DELPHI}packed{$ENDIF} object({GDBOpenArrayOfData}GDBName
 
                     function addFonf(FontPathName:String):PGDBfont;
                     procedure EnumerateFontFiles;
-                    procedure EnumerateTTFFontFile(filename:String);
-                    procedure EnumerateSHXFontFile(filename:String);
+                    procedure EnumerateTTFFontFile(filename:String;pdata:pointer);
+                    procedure EnumerateSHXFontFile(filename:String;pdata:pointer);
                     //function FindFonf(FontName:GDBString):GDBPointer;
                     {procedure freeelement(p:GDBPointer);virtual;}
               end;
@@ -71,14 +71,14 @@ begin
      FontExt2LoadProc.RegisterKey(_FontExt,EntInfoData);
 end;
 
-procedure GDBFontManager.EnumerateTTFFontFile(filename:String);
+procedure GDBFontManager.EnumerateTTFFontFile(filename:String;pdata:pointer);
 {var
    r:longint;}
 begin
      if AddFontResourceFile(filename)>0 then
         ttffontfiles.Add(filename);
 end;
-procedure GDBFontManager.EnumerateSHXFontFile(filename:String);
+procedure GDBFontManager.EnumerateSHXFontFile(filename:String;pdata:pointer);
 begin
      shxfontfiles.Add(filename);
 end;

@@ -30,20 +30,28 @@ uses
   usupportgui,uzccommandsmanager,uzcimagesmanager,uzcctrllayercombobox,
   uzcgui2color,uzeconsts,uzcfcolors,uzcuitypes,uzepalette,uzcdrawings,uzcinterface,
   uzcstrconsts,uzccommand_loadlayout,uzcgui2linetypes,uzestyleslinetypes,uzcinterfacedata,
-  uzcgui2linewidth,uzcflineweights,uzcgui2textstyles,uzcgui2dimstyles;
+  uzcgui2linewidth,uzcflineweights,uzcgui2textstyles,uzcgui2dimstyles,
+  uzedrawingsimple,uzcdrawing,uzcuidialogs,uzbstrproc,
+  uzestyleslayers,zcchangeundocommand,uzcutils,gzctnrvectortypes;
 type
+  TMyToolbar=class(TToolBar)
+    public
+    destructor Destroy; override;
+  end;
+  TComboFiller=procedure(cb:TCustomComboBox) of object;
+
   TZTBZCADExtensions=class
-    class procedure TBActionCreateFunc(aNode: TDomNode; TB:TToolBar);
-    class procedure TBGroupActionCreateFunc(aNode: TDomNode; TB:TToolBar);
-    class procedure TBButtonCreateFunc(aNode: TDomNode; TB:TToolBar);
-    class procedure TBLayerComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
-    class procedure TBLayoutComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
-    class procedure TBColorComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
-    class procedure TBLTypeComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
-    class procedure TBLineWComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
-    class procedure TBTStyleComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
-    class procedure TBDimStyleComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
-    class procedure TBVariableCreateFunc(aNode: TDomNode; TB:TToolBar);
+    class procedure TBActionCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
+    class procedure TBGroupActionCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
+    class procedure TBButtonCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
+    class procedure TBLayerComboBoxCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
+    class procedure TBLayoutComboBoxCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
+    class procedure TBColorComboBoxCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
+    class procedure TBLTypeComboBoxCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
+    class procedure TBLineWComboBoxCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
+    class procedure TBTStyleComboBoxCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
+    class procedure TBDimStyleComboBoxCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
+    class procedure TBVariableCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
     class function TBCreateZCADToolBar(aName,atype: string):TToolBar;
     class procedure ZActionsReader(aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList);
     class procedure ZAction2VariableReader(aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList);
@@ -59,24 +67,182 @@ type
     class procedure ChangeLType(Sender:Tobject);
     class procedure ChangeCLineW(Sender:Tobject);
     class procedure ChangeLayout(Sender:Tobject);
+    class function GetLayerProp(PLayer:Pointer;out lp:TLayerPropRecord):boolean;
+    class function GetLayersArray(out la:TLayerArray):boolean;
+    class function ClickOnLayerProp(PLayer:Pointer;NumProp:integer;out newlp:TLayerPropRecord):boolean;
 
-
-    class procedure CreateLayoutbox(tb:TToolBar);
+    class function CreateLayoutbox(tb:TToolBar):TComboBox;
   end;
 implementation
 
-uses uzcmainwindow;//Убрать нахуй это порно
+var
+  OLDColor:integer;
 
-class procedure TZTBZCADExtensions.TBActionCreateFunc(aNode: TDomNode; TB:TToolBar);
+destructor TmyToolBar.Destroy;
+var
+  I: Integer;
+  c:tcontrol;
+begin
+  for I := 0 to controlCount - 1 do
+    begin
+      c:=controls[I];
+      if assigned(updatescontrols)  then
+        updatescontrols.Remove(c);
+      if assigned(updatesbytton)  then
+        updatesbytton.Remove(c);
+    end;
+  inherited Destroy;
+end;
+
+
+procedure setlayerstate(PLayer:PGDBLayerProp;out lp:TLayerPropRecord);
+begin
+     lp._On:=player^._on;
+     lp.Freze:=false;
+     lp.Lock:=player^._lock;
+     lp.Name:=Tria_AnsiToUtf8(player.Name);
+     lp.PLayer:=player;
+end;
+
+class function TZTBZCADExtensions.ClickOnLayerProp(PLayer:Pointer;NumProp:integer;out newlp:TLayerPropRecord):boolean;
+var
+   cdwg:PTSimpleDrawing;
+   tcl:PGDBLayerProp;
+begin
+     CDWG:=drawings.GetCurrentDWG;
+     result:=false;
+     case numprop of
+                    0:begin
+                        with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(PLayer)^._on)^ do
+                        begin
+                          PGDBLayerProp(PLayer)^._on:=not(PGDBLayerProp(PLayer)^._on);
+                          ComitFromObj;
+                        end;
+                        if PLayer=cdwg^.GetCurrentLayer then
+                          if not PGDBLayerProp(PLayer)^._on then
+                            zcMsgDlg(rsCurrentLayerOff,zcdiWarning,[],false,nil,rsWarningCaption);
+                            //MessageBox(@rsCurrentLayerOff[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
+                      end;
+                    {1:;}
+                    2:begin
+                        with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(PLayer)^._lock)^ do
+                        begin
+                          PGDBLayerProp(PLayer)^._lock:=not(PGDBLayerProp(PLayer)^._lock);
+                          ComitFromObj;
+                        end;
+                      end;
+                    3:begin
+                           cdwg:=drawings.GetCurrentDWG;
+                           if cdwg<>nil then
+                           begin
+                                if drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0 then
+                                begin
+                                          if assigned(sysvar.dwg.DWG_CLayer) then
+                                          if sysvar.dwg.DWG_CLayer^<>Player then
+                                          begin
+                                               with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,sysvar.dwg.DWG_CLayer^)^ do
+                                               begin
+                                                    sysvar.dwg.DWG_CLayer^:=Player;
+                                                    ComitFromObj;
+                                               end;
+                                          end;
+                                          if not PGDBLayerProp(PLayer)^._on then
+                                            zcMsgDlg(rsCurrentLayerOff,zcdiWarning,[],false,nil,rsWarningCaption);
+                                            //MessageBox(@rsCurrentLayerOff[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
+                                          //setvisualprop;
+                                          ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);
+                                end
+                                else
+                                begin
+                                       tcl:=SysVar.dwg.DWG_CLayer^;
+                                       SysVar.dwg.DWG_CLayer^:=Player;
+                                       commandmanager.ExecuteCommand('SelObjChangeLayerToCurrent',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
+                                       SysVar.dwg.DWG_CLayer^:=tcl;
+                                       //setvisualprop;
+                                       ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);
+                                end;
+                           result:=true;
+                           end;
+                      end;
+     end;
+     setlayerstate(PLayer,newlp);
+     if not result then
+                       begin
+                         ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
+                         //if assigned(UpdateVisibleProc) then UpdateVisibleProc(ZMsgID_GUIActionRedraw);
+                         zcRedrawCurrentDrawing;
+                       end;
+end;
+
+class function TZTBZCADExtensions.GetLayersArray(out la:TLayerArray):boolean;
+var
+   cdwg:PTSimpleDrawing;
+   pcl:PGDBLayerProp;
+   ir:itrec;
+   counter:integer;
+begin
+     result:=false;
+     cdwg:=drawings.GetCurrentDWG;
+     if cdwg<>nil then
+     begin
+         if assigned(cdwg^.wa.getviewcontrol) then
+         begin
+              setlength(la,cdwg^.LayerTable.Count);
+              counter:=0;
+              pcl:=cdwg^.LayerTable.beginiterate(ir);
+              if pcl<>nil then
+              repeat
+                    setlayerstate(pcl,la[counter]);
+                    inc(counter);
+                    pcl:=cdwg^.LayerTable.iterate(ir);
+              until pcl=nil;
+              setlength(la,counter);
+              if counter>0 then
+                               result:=true;
+         end;
+     end;
+end;
+class function TZTBZCADExtensions.GetLayerProp(PLayer:Pointer;out lp:TLayerPropRecord):boolean;
+var
+   cdwg:PTSimpleDrawing;
+begin
+     if player=nil then
+                       begin
+                            result:=false;
+                            cdwg:=drawings.GetCurrentDWG;
+                            if cdwg<>nil then
+                            begin
+                                 if assigned(cdwg^.wa) then
+                                 begin
+                                      if IVars.CLayer<>nil then
+                                      begin
+                                           setlayerstate(IVars.CLayer,lp);
+                                           result:=true;
+                                      end
+                                      else
+                                          lp.Name:=rsDifferent;
+                                end;
+                            end;
+
+                       end
+                   else
+                       begin
+                            result:=true;
+                            setlayerstate(PLayer,lp);
+                       end;
+
+end;
+
+class procedure TZTBZCADExtensions.TBActionCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
 var
   _action:TZAction;
   ActionName:string;
 begin
   ActionName:=getAttrValue(aNode,'Name','');
-  _action:=TZAction(ZCADMainWindow.StandartActions.ActionByName(ActionName));
+  _action:=TZAction(actlist.ActionByName(ActionName));
   if _action=nil then begin
     _action:=TmyAction.Create(TB);
-    _action.ActionList:=ZCADMainWindow.StandartActions;
+    _action.ActionList:=actlist;
     _action.Name:=ActionName;
   end;
   with TToolButton.Create(tb) do
@@ -90,7 +256,7 @@ begin
     Visible:=true;
   end;
 end;
-class procedure TZTBZCADExtensions.TBGroupActionCreateFunc(aNode: TDomNode; TB:TToolBar);
+class procedure TZTBZCADExtensions.TBGroupActionCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
 var
   ActionIndex:integer;
   SubNode: TDomNode;
@@ -106,7 +272,7 @@ begin
     tbutton.ShowCaption:=false;
     tbutton.ShowHint:=true;
     tbutton.PopupMenu:=TPopupMenu.Create(application);
-    tbutton.PopupMenu.Images:=ZCADMainWindow.StandartActions.Images;
+    tbutton.PopupMenu.Images:=actlist.Images;
     {if assigned(_action) then
       Caption:=_action.imgstr;}
     tbutton.Parent:=tb;
@@ -117,7 +283,7 @@ begin
     if assigned(SubNode) then
       while assigned(SubNode)do
       begin
-        TMenuDefaults.TryRunMenuCreateFunc(TMenuType.TMT_PopupMenu,ZCADMainWindow,SubNode.NodeName,SubNode,ZCADMainWindow.StandartActions,tmenuitem(tbutton.PopupMenu),mpf);
+        TMenuDefaults.TryRunMenuCreateFunc(TMenuType.TMT_PopupMenu,fmf,SubNode.NodeName,SubNode,actlist,tmenuitem(tbutton.PopupMenu),mpf);
         SubNode:=SubNode.NextSibling;
       end;
     if (ActionIndex>=0)and(ActionIndex<tbutton.PopupMenu.Items.Count) then
@@ -137,7 +303,7 @@ begin
   end;
 end;
 
-procedure {TZCADMainWindow.}SetImage(ppanel:TToolBar;b:TToolButton;img:string;autosize:boolean;identifer:string);
+procedure SetImage(actlist:TActionList;ppanel:TToolBar;b:TToolButton;img:string;autosize:boolean;identifer:string);
 var
     bmp:Graphics.TBitmap;
 begin
@@ -150,7 +316,7 @@ begin
                               bmp.LoadFromFile(img);
                               bmp.Transparent:=true;
                               if not assigned(ppanel.Images) then
-                                                                 ppanel.Images:=ZCADMainWindow.standartactions.Images;
+                                                                 ppanel.Images:=actlist.Images;
                               b.ImageIndex:=
                               ppanel.Images.Add(bmp,nil);
                               freeandnil(bmp);
@@ -169,7 +335,7 @@ begin
                               b.Width:=ppanel.ButtonWidth;
 end;
 
-class procedure TZTBZCADExtensions.TBButtonCreateFunc(aNode: TDomNode; TB:TToolBar);
+class procedure TZTBZCADExtensions.TBButtonCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
 var
   command,img,_hint:string;
   CreatedButton:TmyCommandToolButton;
@@ -186,7 +352,7 @@ begin
      CreatedButton.hint:=_hint;
      CreatedButton.ShowHint:=true;
    end;
-  SetImage(tb,CreatedButton,img,true,'button_command~'+command);
+  SetImage(actlist,tb,CreatedButton,img,true,'button_command~'+command);
   CreatedButton.Parent:=tb;
 end;
 
@@ -266,10 +432,11 @@ begin
   va.Enabled:=true;
   va.ActionList:=actlist;
 end;
-class procedure TZTBZCADExtensions.TBLayerComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
+class procedure TZTBZCADExtensions.TBLayerComboBoxCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
 var
   _hint:string;
   _Width:integer;
+  LayerBox:TZCADLayerComboBox;
 begin
   _hint:=getAttrValue(aNode,'Hint','');
   _Width:=getAttrValue(aNode,'Width',100);
@@ -284,9 +451,9 @@ begin
   LayerBox.Index_ON:=ImagesManager.GetImageIndex('on');
   LayerBox.Index_OFF:=ImagesManager.GetImageIndex('off');
 
-  LayerBox.fGetLayerProp:=ZCADMainWindow.GetLayerProp;
-  LayerBox.fGetLayersArray:=ZCADMainWindow.GetLayersArray;
-  LayerBox.fClickOnLayerProp:=ZCADMainWindow.ClickOnLayerProp;
+  LayerBox.fGetLayerProp:=TZTBZCADExtensions.GetLayerProp;
+  LayerBox.fGetLayersArray:=TZTBZCADExtensions.GetLayersArray;
+  LayerBox.fClickOnLayerProp:=TZTBZCADExtensions.ClickOnLayerProp;
 
   LayerBox.Width:=_Width;
 
@@ -299,7 +466,8 @@ begin
   LayerBox.AutoSize:=false;
   LayerBox.Parent:=tb;
   LayerBox.Height:=10;
-  ZCADMainWindow.updatescontrols.Add(LayerBox);
+  updatescontrols.Add(LayerBox);
+  enabledcontrols.Add(LayerBox);
 end;
 procedure AddToBar(tb:TToolBar;b:TControl);
 begin
@@ -343,7 +511,7 @@ begin
   result.ItemIndex:=0;
 
   AddToBar(owner,result);
-  ZCADMainWindow.updatescontrols.Add(result);
+  updatescontrols.Add(result);
 end;
 procedure AddToComboIfNeed(cb:tcombobox;name:string;obj:TObject);
 var
@@ -365,7 +533,8 @@ begin
                            begin
                                if not assigned(ColorSelectForm)then
                                Application.CreateForm(TColorSelectForm, ColorSelectForm);
-                               ZCADMainWindow.ShowAllCursors(ColorSelectForm);
+                               //ZCADMainWindow.ShowAllCursors(ColorSelectForm);
+                               ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
                                mr:=ColorSelectForm.run(SysVar.dwg.DWG_CColor^,true){showmodal};
                                if mr=ZCmrOK then
                                               begin
@@ -381,7 +550,8 @@ begin
                                                    tcombobox(Sender).ItemIndex:=OldColor;
                                                    ColorIndex:=-1;
                                               end;
-                               ZCADMainWindow.RestoreCursors(ColorSelectForm);
+                               ZCMsgCallBackInterface.Do_AfterShowModal(nil);
+                               //ZCADMainWindow.RestoreCursors(ColorSelectForm);
                                freeandnil(ColorSelectForm);
                            end;
      if colorindex<0 then
@@ -399,7 +569,7 @@ begin
           SysVar.dwg.DWG_CColor^:=CColorSave;
      end;
      //setvisualprop;
-     ZCMsgCallBackInterface.Do_GUIaction(ZCADMainWindow,ZMsgID_GUIActionRebuild);
+     ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);
      //setnormalfocus(nil);
      ZCMsgCallBackInterface.Do_SetNormalFocus;
 end;
@@ -433,54 +603,61 @@ class procedure TZTBZCADExtensions.ChangeLayout(Sender:Tobject);
 var
     s:string;
 begin
-  s:=ProgramPath+'components/'+LayoutBox.text+'.xml';
-  LoadLayoutFromFile(s);
+  if sender is TComboBox then begin
+    s:=ProgramPath+'components/'+(sender as TComboBox).text+'.xml';
+    LoadLayoutFromFile(s);
+  end;
 end;
 
 
-procedure addfiletoLayoutbox(filename:String);
+procedure addfiletoLayoutbox(filename:String;pdata:pointer);
 var
     s:string;
 begin
-     s:=ExtractFileName(filename);
-     LayoutBox.AddItem(copy(s,1,length(s)-4),nil);
+  if assigned(pdata) then begin
+    s:=ExtractFileName(filename);
+    TComboBox(pdata).AddItem(copy(s,1,length(s)-4),nil);
+  end;
 end;
 
 
-class procedure TZTBZCADExtensions.CreateLayoutbox(tb:TToolBar);
+class function TZTBZCADExtensions.CreateLayoutbox(tb:TToolBar):TComboBox;
 var
     s:string;
+
 begin
-  LayoutBox:=TComboBox.Create(tb);
-  LayoutBox.Style:=csDropDownList;
-  LayoutBox.Sorted:=true;
-  FromDirIterator(ProgramPath+'components/','*.xml','',addfiletoLayoutbox,nil);
-  LayoutBox.OnChange:=ChangeLayout;
+  result:=TComboBox.Create(tb);
+  result.Style:=csDropDownList;
+  result.Sorted:=true;
+  FromDirIterator(ProgramPath+'components/','*.xml','',addfiletoLayoutbox,nil,pointer(result));
+  result.OnChange:=ChangeLayout;
 
   s:=extractfilename(sysvar.PATH.LayoutFile^);
-  LayoutBox.ItemIndex:=LayoutBox.Items.IndexOf(copy(s,1,length(s)-4));
-
+  result.ItemIndex:=result.Items.IndexOf(copy(s,1,length(s)-4));
 end;
 
-class procedure TZTBZCADExtensions.TBColorComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
+class procedure TZTBZCADExtensions.TBColorComboBoxCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
 var
   _hint:string;
   _Width:integer;
+  ColorBox:TComboBox;
 begin
   _hint:=getAttrValue(aNode,'Hint','');
   _Width:=getAttrValue(aNode,'Width',100);
   ColorBox:=CreateCBox('ColorComboBox',tb,TSupportColorCombo.ColorBoxDrawItem,ChangeCColor,DropDownColor,DropUpColor,FillColorCombo,_Width,_hint);
+  enabledcontrols.Add(ColorBox);
 end;
-class procedure TZTBZCADExtensions.TBLayoutComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
+class procedure TZTBZCADExtensions.TBLayoutComboBoxCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
 var
   _hint:string;
   _Width:integer;
+  LayoutBox:tcombobox;
 begin
   _hint:=getAttrValue(aNode,'Hint','');
   _Width:=getAttrValue(aNode,'Width',100);
   //ColorBox:=CreateCBox('ColorComboBox',tb,TSupportColorCombo.ColorBoxDrawItem,ChangeCColor,DropDownColor,DropUpColor,FillColorCombo,_Width,_hint);
-    if assigned(LayoutBox) then
-    ZCMsgCallBackInterface.TextMessage(format(rsReCreating,['LAYOUTBOX']),TMWOShowError);
+  {  if assigned(LayoutBox) then
+    ZCMsgCallBackInterface.TextMessage(format(rsReCreating,['LAYOUTBOX']),TMWOShowError);}
   CreateLayoutbox(TB);
   LayoutBox.Parent:=TB;
   LayoutBox.AutoSize:=false;
@@ -524,7 +701,7 @@ begin
      end;
      end;
      //setvisualprop;
-     ZCMsgCallBackInterface.Do_GUIaction(ZCADMainWindow,ZMsgID_GUIActionRebuild);
+     ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);
      //setnormalfocus(nil);
      ZCMsgCallBackInterface.Do_SetNormalFocus;
 end;
@@ -547,14 +724,16 @@ begin
      tcombobox(Sender).Items.Objects[drawings.GetCurrentDWG.LTypeStyleTable.Count]:=LTEditor;
 end;
 
-class procedure TZTBZCADExtensions.TBLTypeComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
+class procedure TZTBZCADExtensions.TBLTypeComboBoxCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
 var
   _hint:string;
   _Width:integer;
+  LTypeBox:TComboBox;
 begin
   _hint:=getAttrValue(aNode,'Hint','');
   _Width:=getAttrValue(aNode,'Width',100);
   LTypeBox:=CreateCBox('LTypeComboBox',tb,TSupportLineTypeCombo.LTypeBoxDrawItem,ChangeLType,DropDownLType,DropUpLType,FillLTCombo,_Width,_hint);
+  enabledcontrols.Add(LTypeBox);
 end;
 
 class procedure TZTBZCADExtensions.FillLTCombo(cb:TCustomComboBox);
@@ -582,7 +761,7 @@ begin
            end;
   end;
   //setvisualprop;
-  ZCMsgCallBackInterface.Do_GUIaction(ZCADMainWindow,ZMsgID_GUIActionRebuild);
+  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);
   //setnormalfocus(nil);
   ZCMsgCallBackInterface.Do_SetNormalFocus;
 end;
@@ -603,32 +782,38 @@ begin
 end;
 
 
-class procedure TZTBZCADExtensions.TBLineWComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
+class procedure TZTBZCADExtensions.TBLineWComboBoxCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
 var
   _hint:string;
   _Width:integer;
+  LineWBox:TComboBox;
 begin
   _hint:=getAttrValue(aNode,'Hint','');
   _Width:=getAttrValue(aNode,'Width',100);
   LineWBox:=CreateCBox('LineWComboBox',tb,TSupportLineWidthCombo.LineWBoxDrawIVarsItem,ChangeCLineW,DropDownColor,DropUpColor,FillLWCombo,_Width,_hint);
+  enabledcontrols.Add(LineWBox);
 end;
-class procedure TZTBZCADExtensions.TBTStyleComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
+class procedure TZTBZCADExtensions.TBTStyleComboBoxCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
 var
   _hint:string;
   _Width:integer;
+  TStyleBox:TComboBox;
 begin
   _hint:=getAttrValue(aNode,'Hint','');
   _Width:=getAttrValue(aNode,'Width',100);
   TStyleBox:=CreateCBox('TStyleComboBox',tb,TSupportTStyleCombo.DrawItemTStyle,TSupportTStyleCombo.ChangeLType,TSupportTStyleCombo.DropDownTStyle,TSupportTStyleCombo.CloseUpTStyle,TSupportTStyleCombo.FillLTStyle,_Width,_hint);
+  enabledcontrols.Add(TStyleBox);
 end;
-class procedure TZTBZCADExtensions.TBDimStyleComboBoxCreateFunc(aNode: TDomNode; TB:TToolBar);
+class procedure TZTBZCADExtensions.TBDimStyleComboBoxCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
 var
   _hint:string;
   _Width:integer;
+  DimStyleBox:TComboBox;
 begin
   _hint:=getAttrValue(aNode,'Hint','');
   _Width:=getAttrValue(aNode,'Width',100);
   DimStyleBox:=CreateCBox('DimStyleComboBox',tb,TSupportDimStyleCombo.DrawItemTStyle,TSupportDimStyleCombo.ChangeLType,TSupportDimStyleCombo.DropDownTStyle,TSupportDimStyleCombo.CloseUpTStyle,TSupportDimStyleCombo.FillLTStyle,_Width,_hint);
+  enabledcontrols.Add(DimStyleBox);
 end;
 
 class function TZTBZCADExtensions.TBCreateZCADToolBar(aName,atype: string):TToolBar;
@@ -637,7 +822,7 @@ begin
   ToolBarsManager.SetupDefaultToolBar(aName,atype, result);
 end;
 
-class procedure TZTBZCADExtensions.TBVariableCreateFunc(aNode: TDomNode; TB:TToolBar);
+class procedure TZTBZCADExtensions.TBVariableCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
 var
   _varname,_img,_hint,_shortcut:string;
   _mask:integer;
@@ -663,25 +848,43 @@ begin
   b.ImageIndex:=ImagesManager.GetImageIndex(_img);
   if b.ImageIndex=ImagesManager.defaultimageindex then begin
     b.ImageIndex:=-1;
-    SetImage(tb,b,_img,false,'button_variable~'+_varname);;
+    SetImage(actlist,tb,b,_img,false,'button_variable~'+_varname);;
   end;
   //AddToBar(tb,b);
   b.Parent:=tb;
-  ZCADMainWindow.updatesbytton.Add(b);
+  updatesbytton.Add(b);
   if _shortcut<>'' then
   begin
     shortcut:=MyTextToShortCut(_shortcut);
     if shortcut>0 then
     begin
-      baction:=TmyButtonAction.Create(ZCADMainWindow.StandartActions);
+      baction:=TmyButtonAction.Create(actlist);
       baction.button:=b;
       baction.ShortCut:=shortcut;
-      ZCADMainWindow.StandartActions.AddMyAction(baction);
+      actlist.AddMyAction(baction);
     end;
   end;
 end;
 
-
 initialization
+  ToolBarsManager.RegisterTBItemCreateFunc('Action',TZTBZCADExtensions.TBActionCreateFunc);
+  ToolBarsManager.RegisterTBItemCreateFunc('GroupAction',TZTBZCADExtensions.TBGroupActionCreateFunc);
+  ToolBarsManager.RegisterTBItemCreateFunc('Button',TZTBZCADExtensions.TBButtonCreateFunc);
+  ToolBarsManager.RegisterTBItemCreateFunc('LayerComboBox',TZTBZCADExtensions.TBLayerComboBoxCreateFunc);
+  ToolBarsManager.RegisterTBItemCreateFunc('LayoutComboBox',TZTBZCADExtensions.TBLayoutComboBoxCreateFunc);
+  ToolBarsManager.RegisterTBItemCreateFunc('ColorComboBox',TZTBZCADExtensions.TBColorComboBoxCreateFunc);
+  ToolBarsManager.RegisterTBItemCreateFunc('LTypeComboBox',TZTBZCADExtensions.TBLTypeComboBoxCreateFunc);
+  ToolBarsManager.RegisterTBItemCreateFunc('LineWComboBox',TZTBZCADExtensions.TBLineWComboBoxCreateFunc);
+  ToolBarsManager.RegisterTBItemCreateFunc('TStyleComboBox',TZTBZCADExtensions.TBTStyleComboBoxCreateFunc);
+  ToolBarsManager.RegisterTBItemCreateFunc('DimStyleComboBox',TZTBZCADExtensions.TBDimStyleComboBoxCreateFunc);
+  ToolBarsManager.RegisterTBItemCreateFunc('ColorComboBox',TZTBZCADExtensions.TBColorComboBoxCreateFunc);
+  ToolBarsManager.RegisterTBItemCreateFunc('LTypeComboBox',TZTBZCADExtensions.TBLTypeComboBoxCreateFunc);
+  ToolBarsManager.RegisterTBItemCreateFunc('LineWComboBox',TZTBZCADExtensions.TBLineWComboBoxCreateFunc);
+  ToolBarsManager.RegisterTBItemCreateFunc('TStyleComboBox',TZTBZCADExtensions.TBTStyleComboBoxCreateFunc);
+  ToolBarsManager.RegisterTBItemCreateFunc('DimStyleComboBox',TZTBZCADExtensions.TBDimStyleComboBoxCreateFunc);
+  ToolBarsManager.RegisterActionCreateFunc('ZAction',TZTBZCADExtensions.ZActionsReader);
+  ToolBarsManager.RegisterActionCreateFunc('ZAction2Variable',TZTBZCADExtensions.ZAction2VariableReader);
+  ToolBarsManager.RegisterTBCreateFunc('ToolBar',TZTBZCADExtensions.TBCreateZCADToolBar);
+
 finalization
 end.

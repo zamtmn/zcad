@@ -31,7 +31,7 @@ uses
   lineinfo,
   {ZCAD BASE}
        uzcsysparams,gzctnrvectortypes,uzemathutils,uzelongprocesssupport,
-       {uzegluinterface,}uzgldrawergdi,uzcdrawing,UGDBOpenArrayOfPV,uzedrawingabstract,
+       uzgldrawergdi,uzcdrawing,UGDBOpenArrayOfPV,uzedrawingabstract,
        uzepalette,uzbpaths,uzglviewareadata,uzeentitiesprop,uzcinterface,
        UGDBOpenArrayOfByte,uzbmemman,uzbtypesbase,uzbtypes,
        uzegeometry,uzcsysvars,uzcstrconsts,uzbstrproc,UGDBNamedObjectsArray,uzclog,
@@ -40,28 +40,23 @@ uses
        //languade,
   {ZCAD ENTITIES}
        uzbgeomtypes,uzeentity,UGDBSelectedObjArray,uzestyleslayers,uzedrawingsimple,
-       uzeblockdef,uzcdrawings,uzcutils,uzestyleslinetypes,uzeconsts,uzeenttext,uzeentdimension,
+       uzeblockdef,uzcdrawings,uzestyleslinetypes,uzeconsts,uzeenttext,uzeentdimension,
   {ZCAD COMMANDS}
        uzccommandsabstract,uzccommandsimpl,uzccommandsmanager,
        uzccommand_loadlayout,
   {GUI}
-  uztbzcextensions,
+  //uztbzcextensions,
        uzcuitypes,
        uzcmenucontextcheckfuncs,uzcguimenuextensions,uzmenusdefaults,uzmenusmanager,uztoolbarsmanager,uzctextenteditor,uzcfcommandline,uzctreenode,uzcflineweights,uzcctrllayercombobox,uzcctrlcontextmenu,
        uzcimagesmanager,usupportgui,uzcuidialogs,
   {}
-       uzcpalettes,zcchangeundocommand,uzgldrawcontext,uzglviewareaabstract,uzcguimanager,uzcinterfacedata,
+       uzcpalettes,uzgldrawcontext,uzglviewareaabstract,uzcguimanager,uzcinterfacedata,
        uzcenitiesvariablesextender,uzglviewareageneral,UniqueInstanceRaw,
        uzmacros,uzcviewareacxmenu;
   {}
 resourcestring
   rsClosed='Closed';
 type
-  TMyToolbar=class(TToolBar)
-    public
-    destructor Destroy; override;
-  end;
-  TComboFiller=procedure(cb:TCustomComboBox) of object;
 
   TmyAnchorDockSplitter = class(TAnchorDockSplitter)
   public
@@ -96,11 +91,11 @@ type
     StandartActions:TActionList;
     SystemTimer: TTimer;
     toolbars:tstringlist;
-    updatesbytton,updatescontrols:tlist;
+    //updatesbytton,updatescontrols:tlist;
     procedure ZcadException(Sender: TObject; E: Exception);
     //function findtoolbatdesk(tbn:string):string;
     //procedure CreateToolbarFromDesk(tb:TToolBar;tbname,tbdesk:string);
-    function CreateCBox(CBName:GDBString;owner:TToolBar;DrawItem:TDrawItemEvent;Change,DropDown,CloseUp:TNotifyEvent;Filler:TComboFiller;w:integer;ts:GDBString):TComboBox;
+    //function CreateCBox(CBName:GDBString;owner:TToolBar;DrawItem:TDrawItemEvent;Change,DropDown,CloseUp:TNotifyEvent;Filler:TComboFiller;w:integer;ts:GDBString):TComboBox;
     procedure CreateHTPB(tb:TToolBar);
 
     procedure ActionUpdate(AAction: TBasicAction; var Handled: Boolean);
@@ -115,6 +110,7 @@ type
     procedure ChangedDWGTabByClick(Sender: TObject);
     procedure ChangedDWGTab(Sender: TObject);
     procedure UpdateControls;
+    procedure EnableControls(enbl:boolean);
 
     procedure Say(word:gdbstring);
 
@@ -170,9 +166,6 @@ type
     AControl: TControl; DoDisableAutoSizing: boolean);
 
     function IsShortcut(var Message: TLMKey): boolean; override;
-    function GetLayerProp(PLayer:Pointer;out lp:TLayerPropRecord):boolean;
-    function GetLayersArray(out la:TLayerArray):boolean;
-    function ClickOnLayerProp(PLayer:Pointer;NumProp:integer;out newlp:TLayerPropRecord):boolean;
 
     procedure setvisualprop(sender:TObject;GUIAction:TZMessageID);
 
@@ -194,13 +187,13 @@ function _CloseDWGPage(ClosedDWG:PTZCADDrawing;lincedcontrol:TObject;NeedAskDonS
 
 var
   ZCADMainWindow: TZCADMainWindow;
-  LayerBox:TZCADLayerComboBox;
-  LineWBox,ColorBox,LTypeBox,TStyleBox,DimStyleBox:TComboBox;
-  LayoutBox:TComboBox;
+  //LayerBox:TZCADLayerComboBox;
+  //LineWBox:TComboBox;
+  //LayoutBox:TComboBox;
   LPTime:Tdatetime;
   pname:GDBString;
   oldlongprocess:integer;
-  OLDColor:integer;
+  //OLDColor:integer;
   ProcessBar:TProgressBar;
   //StoreBackTraceStrFunc:TBackTraceStrFunc;//this unneed after fpc rev 31026 see http://bugs.freepascal.org/view.php?id=13518
   function CloseApp:GDBInteger;
@@ -209,36 +202,12 @@ var
 implementation
 {$R *.lfm}
 
-destructor TmyToolBar.Destroy;
-var
-  I: Integer;
-  c:tcontrol;
-begin
-  for I := 0 to controlCount - 1 do
-    begin
-      c:=controls[I];
-      if assigned(ZCADMainWindow.updatescontrols)  then
-        ZCADMainWindow.updatescontrols.Remove(c);
-      if assigned(ZCADMainWindow.updatesbytton)  then
-        ZCADMainWindow.updatesbytton.Remove(c);
-    end;
-  inherited Destroy;
-end;
-
 constructor TmyAnchorDockSplitter.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   self.MinSize:=1;
 end;
 
-procedure setlayerstate(PLayer:PGDBLayerProp;out lp:TLayerPropRecord);
-begin
-     lp._On:=player^._on;
-     lp.Freze:=false;
-     lp.Lock:=player^._lock;
-     lp.Name:=Tria_AnsiToUtf8(player.Name);
-     lp.PLayer:=player;
-end;
 {$ifdef windows}
 procedure TZCADMainWindow.SetTop;
 var
@@ -306,9 +275,9 @@ begin
   if drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0
   then
       begin
-           if assigned(LinewBox) then
+           {if assigned(LinewBox) then
            if sysvar.dwg.DWG_CLinew^<0 then LineWbox.ItemIndex:=(sysvar.dwg.DWG_CLinew^+3)
-                                       else LinewBox.ItemIndex:=((sysvar.dwg.DWG_CLinew^ div 10)+3);
+                                       else LinewBox.ItemIndex:=((sysvar.dwg.DWG_CLinew^ div 10)+3);}
            {if assigned(LayerBox) then
            LayerBox.ItemIndex:=getsortedindex(SysVar.dwg.DWG_CLayer^);}
            IVars.CColor:=sysvar.dwg.DWG_CColor^;
@@ -405,134 +374,6 @@ begin
       UpdateControls;
 end;
 
-function TZCADMainWindow.ClickOnLayerProp(PLayer:Pointer;NumProp:integer;out newlp:TLayerPropRecord):boolean;
-var
-   cdwg:PTSimpleDrawing;
-   tcl:PGDBLayerProp;
-begin
-     CDWG:=drawings.GetCurrentDWG;
-     result:=false;
-     case numprop of
-                    0:begin
-                        with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(PLayer)^._on)^ do
-                        begin
-                          PGDBLayerProp(PLayer)^._on:=not(PGDBLayerProp(PLayer)^._on);
-                          ComitFromObj;
-                        end;
-                        if PLayer=cdwg^.GetCurrentLayer then
-                          if not PGDBLayerProp(PLayer)^._on then
-                            zcMsgDlg(rsCurrentLayerOff,zcdiWarning,[],false,nil,rsWarningCaption);
-                            //MessageBox(@rsCurrentLayerOff[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
-                      end;
-                    {1:;}
-                    2:begin
-                        with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(PLayer)^._lock)^ do
-                        begin
-                          PGDBLayerProp(PLayer)^._lock:=not(PGDBLayerProp(PLayer)^._lock);
-                          ComitFromObj;
-                        end;
-                      end;
-                    3:begin
-                           cdwg:=drawings.GetCurrentDWG;
-                           if cdwg<>nil then
-                           begin
-                                if drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0 then
-                                begin
-                                          if assigned(sysvar.dwg.DWG_CLayer) then
-                                          if sysvar.dwg.DWG_CLayer^<>Player then
-                                          begin
-                                               with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,sysvar.dwg.DWG_CLayer^)^ do
-                                               begin
-                                                    sysvar.dwg.DWG_CLayer^:=Player;
-                                                    ComitFromObj;
-                                               end;
-                                          end;
-                                          if not PGDBLayerProp(PLayer)^._on then
-                                            zcMsgDlg(rsCurrentLayerOff,zcdiWarning,[],false,nil,rsWarningCaption);
-                                            //MessageBox(@rsCurrentLayerOff[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
-                                          //setvisualprop;
-                                          ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);
-                                end
-                                else
-                                begin
-                                       tcl:=SysVar.dwg.DWG_CLayer^;
-                                       SysVar.dwg.DWG_CLayer^:=Player;
-                                       commandmanager.ExecuteCommand('SelObjChangeLayerToCurrent',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
-                                       SysVar.dwg.DWG_CLayer^:=tcl;
-                                       //setvisualprop;
-                                       ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRebuild);
-                                end;
-                           result:=true;
-                           end;
-                      end;
-     end;
-     setlayerstate(PLayer,newlp);
-     if not result then
-                       begin
-                         ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
-                         //if assigned(UpdateVisibleProc) then UpdateVisibleProc(ZMsgID_GUIActionRedraw);
-                         zcRedrawCurrentDrawing;
-                       end;
-end;
-
-function TZCADMainWindow.GetLayersArray(out la:TLayerArray):boolean;
-var
-   cdwg:PTSimpleDrawing;
-   pcl:PGDBLayerProp;
-   ir:itrec;
-   counter:integer;
-begin
-     result:=false;
-     cdwg:=drawings.GetCurrentDWG;
-     if cdwg<>nil then
-     begin
-         if assigned(cdwg^.wa.getviewcontrol) then
-         begin
-              setlength(la,cdwg^.LayerTable.Count);
-              counter:=0;
-              pcl:=cdwg^.LayerTable.beginiterate(ir);
-              if pcl<>nil then
-              repeat
-                    setlayerstate(pcl,la[counter]);
-                    inc(counter);
-                    pcl:=cdwg^.LayerTable.iterate(ir);
-              until pcl=nil;
-              setlength(la,counter);
-              if counter>0 then
-                               result:=true;
-         end;
-     end;
-end;
-function TZCADMainWindow.GetLayerProp(PLayer:Pointer;out lp:TLayerPropRecord):boolean;
-var
-   cdwg:PTSimpleDrawing;
-begin
-     if player=nil then
-                       begin
-                            result:=false;
-                            cdwg:=drawings.GetCurrentDWG;
-                            if cdwg<>nil then
-                            begin
-                                 if assigned(cdwg^.wa) then
-                                 begin
-                                      if IVars.CLayer<>nil then
-                                      begin
-                                           setlayerstate(IVars.CLayer,lp);
-                                           result:=true;
-                                      end
-                                      else
-                                          lp.Name:=rsDifferent;
-                                end;
-                            end;
-
-                       end
-                   else
-                       begin
-                            result:=true;
-                            setlayerstate(PLayer,lp);
-                       end;
-
-end;
 function FindIndex(taa:PTDummyMyActionsArray;l,h:integer;ca:string):integer;
 var
     i:integer;
@@ -936,6 +777,7 @@ procedure TZCADMainWindow.CreateInterfaceLists;
 begin
   updatesbytton:=tlist.Create;
   updatescontrols:=tlist.Create;
+  enabledcontrols:=tlist.Create;
 end;
 
 procedure TZCADMainWindow.CreateAnchorDockingInterface;
@@ -1276,23 +1118,8 @@ begin
   RegisterGeneralContextCheckFunc('ActiveDrawing',@GMCCFActiveDrawing);
 
   ToolBarsManager.RegisterTBItemCreateFunc('Separator',ToolBarsManager.CreateDefaultSeparator);
-  ToolBarsManager.RegisterTBItemCreateFunc('Action',TZTBZCADExtensions.TBActionCreateFunc);
-  ToolBarsManager.RegisterTBItemCreateFunc('GroupAction',TZTBZCADExtensions.TBGroupActionCreateFunc);
-  ToolBarsManager.RegisterTBItemCreateFunc('Button',TZTBZCADExtensions.TBButtonCreateFunc);
-  ToolBarsManager.RegisterTBItemCreateFunc('LayerComboBox',TZTBZCADExtensions.TBLayerComboBoxCreateFunc);
-  ToolBarsManager.RegisterTBItemCreateFunc('LayoutComboBox',TZTBZCADExtensions.TBLayoutComboBoxCreateFunc);
-  ToolBarsManager.RegisterTBItemCreateFunc('ColorComboBox',TZTBZCADExtensions.TBColorComboBoxCreateFunc);
-  ToolBarsManager.RegisterTBItemCreateFunc('LTypeComboBox',TZTBZCADExtensions.TBLTypeComboBoxCreateFunc);
-  ToolBarsManager.RegisterTBItemCreateFunc('LineWComboBox',TZTBZCADExtensions.TBLineWComboBoxCreateFunc);
-  ToolBarsManager.RegisterTBItemCreateFunc('TStyleComboBox',TZTBZCADExtensions.TBTStyleComboBoxCreateFunc);
-  ToolBarsManager.RegisterTBItemCreateFunc('DimStyleComboBox',TZTBZCADExtensions.TBDimStyleComboBoxCreateFunc);
-  ToolBarsManager.RegisterTBItemCreateFunc('Variable',TZTBZCADExtensions.TBVariableCreateFunc);
 
   ToolBarsManager.RegisterActionCreateFunc('Group',ToolBarsManager.DefaultActionsGroupReader);
-  ToolBarsManager.RegisterActionCreateFunc('ZAction',TZTBZCADExtensions.ZActionsReader);
-  ToolBarsManager.RegisterActionCreateFunc('ZAction2Variable',TZTBZCADExtensions.ZAction2VariableReader);
-
-  ToolBarsManager.RegisterTBCreateFunc('ToolBar',TZTBZCADExtensions.TBCreateZCADToolBar);
   //ToolBarsManager.LoadToolBarsContent(ProgramPath+'menu/toolbarscontent.xml');
 
   LoadActions;
@@ -1369,57 +1196,7 @@ begin
                               b.Height:=ppanel.ButtonHeight;
                               b.Width:=ppanel.ButtonWidth;
 end;
-procedure AddToBar(tb:TToolBar;b:TControl);
-begin
-     if tb.ClientHeight<tb.ClientWidth then
-                                                   begin
-                                                        //b.Left:=100;
-                                                        //b.align:=alLeft
-                                                   end
-                                               else
-                                                   begin
-                                                        //b.top:=100;
-                                                        //b.align:=alTop;
-                                                   end;
-    b.Parent:=tb;
-end;
-function TZCADMainWindow.CreateCBox(CBName:GDBString;owner:TToolBar;DrawItem:TDrawItemEvent;Change,DropDown,CloseUp:TNotifyEvent;Filler:TComboFiller;w:integer;ts:GDBString):TComboBox;
-begin
-  result:=TComboBox.Create(owner);
-  result.Style:=csOwnerDrawFixed;
-  SetComboSize(result,sysvar.INTF.INTF_DefaultControlHeight^-6,CBReadOnly);
-  result.Clear;
-  {result.readonly:=true;//now it deprecated, see in SetComboSize}
-  result.DropDownCount:=50;
-  if w<>0 then
-              result.Width:=w;
-  if ts<>''then
-  begin
-       ts:=InterfaceTranslate('combo~'+CBName,ts);
-       result.hint:=(ts);
-       result.ShowHint:=true;
-  end;
 
-  result.OnDrawItem:=DrawItem;
-  result.OnChange:=Change;
-  result.OnDropDown:=DropDown;
-  result.OnCloseUp:=CloseUp;
-  //result.OnMouseLeave:=setnormalfocus;
-
-  if assigned(Filler)then
-                         Filler(result);
-  result.ItemIndex:=0;
-
-  AddToBar(owner,result);
-  updatescontrols.Add(result);
-end;
-procedure addfiletoLayoutbox(filename:String);
-var
-    s:string;
-begin
-     s:=ExtractFileName(filename);
-     LayoutBox.AddItem(copy(s,1,length(s)-4),nil);
-end;
 procedure TZCADMainWindow.UpdateControls;
 var
     i:integer;
@@ -1435,6 +1212,16 @@ begin
           TControl(updatescontrols[i]).Invalidate;
      end;
 end;
+procedure TZCADMainWindow.EnableControls(enbl:boolean);
+var
+    i:integer;
+begin
+  if assigned(enabledcontrols) then
+   for i:=0 to enabledcontrols.Count-1 do
+    if tobject(enabledcontrols[i]) is TControl then
+      (tobject(enabledcontrols[i]) as TControl).Enabled:=enbl;
+end;
+
 procedure TZCADMainWindow.ChangedDWGTab(Sender: TObject);
 var
    ogl:TAbstractViewArea;
@@ -1459,6 +1246,7 @@ begin
   freeandnil(toolbars);
   freeandnil(updatesbytton);
   freeandnil(updatescontrols);
+  freeandnil(enabledcontrols);
   freeandnil(SuppressedShortcuts);
   inherited;
 end;
@@ -1546,7 +1334,7 @@ begin
      ZCMsgCallBackInterface.Do_KeyDown(Sender,Key,Shift);
      if key=0 then exit;
 
-     if ((ActiveControl<>cmdedit)and(ActiveControl<>HistoryLine)and(ActiveControl<>LayerBox)and(ActiveControl<>LineWBox))then
+     if ((ActiveControl<>cmdedit)and(ActiveControl<>HistoryLine){and(ActiveControl<>LayerBox)and(ActiveControl<>LineWBox)})then
      begin
      if (ActiveControl is tedit)or (ActiveControl is tmemo)or (ActiveControl is TComboBox)then
                                                                                               exit;
@@ -1555,11 +1343,10 @@ begin
      if (ActiveControl=TPropEditor(GetPeditorProc).geteditor) then
                                                             exit;}
      end;
-     if ((ActiveControl=LayerBox)or(ActiveControl=LineWBox))then
+    { if ((ActiveControl=LayerBox)or(ActiveControl=LineWBox))then
                                                                  begin
                                                                  ZCMsgCallBackInterface.Do_SetNormalFocus;
-                                                                 //self.setnormalfocus(nil);
-                                                                 end;
+                                                                 end;}
      tempkey:=key;
 
      comtext:='';
@@ -2439,18 +2226,20 @@ begin
   ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRebuild);
   ZCADMainWindow.Caption:=programname+' v'+sysvar.SYS.SYS_Version^+' - ['+drawings.GetCurrentDWG.GetFileName+']';
 
-  if assigned(LayerBox) then
-  LayerBox.enabled:=true;
-  if assigned(LineWBox) then
-  LineWBox.enabled:=true;
-  if assigned(ColorBox) then
-  ColorBox.enabled:=true;
-  if assigned(LTypeBox) then
-  LTypeBox.enabled:=true;
-  if assigned(TStyleBox) then
-  TStyleBox.enabled:=true;
-  if assigned(DimStyleBox) then
-  DimStyleBox.enabled:=true;
+  EnableControls(true);
+
+  {if assigned(LayerBox) then
+  LayerBox.enabled:=true;}
+  {if assigned(LineWBox) then
+  LineWBox.enabled:=true;}
+  {if assigned(ColorBox) then
+  ColorBox.enabled:=true;}
+  {if assigned(LTypeBox) then
+  LTypeBox.enabled:=true;}
+  {if assigned(TStyleBox) then
+  TStyleBox.enabled:=true;}
+  {if assigned(DimStyleBox) then
+  DimStyleBox.enabled:=true;}
 
 
   if assigned(ZCADMainWindow.PageControl) then
@@ -2544,6 +2333,7 @@ begin
                          OpenedDrawings[i].command:='';
              end;
            ZCADMainWindow.Caption:=(programname+' v'+sysvar.SYS.SYS_Version^);
+           EnableControls(false);
            {if assigned(LayerBox)then
            LayerBox.enabled:=false;
            if assigned(LineWBox)then

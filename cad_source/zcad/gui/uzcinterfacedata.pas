@@ -21,7 +21,8 @@ unit uzcinterfacedata;
 
 interface
 uses
-       uzbtypesbase,uzestyleslayers,uzestyleslinetypes,uzestylestexts,uzestylesdim;
+       uzbtypesbase,uzestyleslayers,uzestyleslinetypes,uzestylestexts,uzestylesdim,
+       classes;
 type
   TInterfaceVars=record
                        CColor,CLWeight:GDBInteger;
@@ -32,6 +33,7 @@ type
                  end;
 var
   IVars:TInterfaceVars;
+  updatesbytton,updatescontrols,enabledcontrols:tlist;
 const
      LTEditor:pointer=@IVars;//пофиг что, используем только цифру
 implementation

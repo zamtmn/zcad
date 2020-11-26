@@ -21,8 +21,8 @@ unit uzbpaths;
 interface
 uses uzbtypes,Masks,LCLProc,uzbtypesbase,{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils,uzmacros;
 type
-  TFromDirIterator=procedure (filename:String);
-  TFromDirIteratorObj=procedure (filename:String) of object;
+  TFromDirIterator=procedure (filename:String;pdata:pointer);
+  TFromDirIteratorObj=procedure (filename:String;pdata:pointer) of object;
 function ExpandPath(path:GDBString):GDBString;
 function FindInSupportPath(PPaths:GDBString;FileName:GDBString):GDBString;
 function FindInPaths(Paths,FileName:GDBString):GDBString;
@@ -33,8 +33,8 @@ function FindInPaths(Paths,FileName:GDBString):GDBString;
 //**part - переменная которая возвращает куски текста
 function GetPartOfPath(out part:GDBString;var path:GDBString;const separator:GDBString):GDBString;
 
-procedure FromDirIterator(const path,mask,firstloadfilename:GDBSTring;proc:TFromDirIterator;method:TFromDirIteratorObj);
-procedure FromDirsIterator(const path,mask,firstloadfilename:GDBString;proc:TFromDirIterator;method:TFromDirIteratorObj);
+procedure FromDirIterator(const path,mask,firstloadfilename:GDBSTring;proc:TFromDirIterator;method:TFromDirIteratorObj;pdata:pointer=nil);
+procedure FromDirsIterator(const path,mask,firstloadfilename:GDBString;proc:TFromDirIterator;method:TFromDirIteratorObj;pdata:pointer=nil);
 var ProgramPath,SupportPath,TempPath:gdbstring;
 implementation
 //uses log;
@@ -161,7 +161,7 @@ if DirectoryExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(result)) then
   then
                                      result:=result+PathDelim;
 end;
-procedure FromDirsIterator(const path,mask,firstloadfilename:GDBString;proc:TFromDirIterator;method:TFromDirIteratorObj);
+procedure FromDirsIterator(const path,mask,firstloadfilename:GDBString;proc:TFromDirIterator;method:TFromDirIteratorObj;pdata:pointer);
 var
    s,ts:gdbstring;
 begin
@@ -169,11 +169,11 @@ begin
      repeat
            GetPartOfPath(ts,s,'|');
            ts:=ExpandPath(ts);
-           FromDirIterator(ts,mask,firstloadfilename,proc,method);
+           FromDirIterator(ts,mask,firstloadfilename,proc,method,pdata);
      until s='';
 end;
 
-procedure FromDirIterator(const path,mask,firstloadfilename:GDBSTring;proc:TFromDirIterator;method:TFromDirIteratorObj);
+procedure FromDirIterator(const path,mask,firstloadfilename:GDBSTring;proc:TFromDirIterator;method:TFromDirIteratorObj;pdata:pointer);
 var sr: TSearchRec;
     s:gdbstring;
 procedure processfile(s:gdbstring);
@@ -201,9 +201,9 @@ begin
        DebugLn(sysutils.Format('{D}[FILEOPS]Process file %s',[fn]));
      //programlog.LogOutFormatStr('Process file %s',[fn],lp_OldPos,LM_Trace);
      if @method<>nil then
-                         method(fn);
+                         method(fn,pdata);
      if @proc<>nil then
-                         proc(fn);
+                         proc(fn,pdata);
 
 end;
 begin
@@ -218,7 +218,7 @@ begin
     repeat
       if (sr.Name <> '.') and (sr.Name <> '..') then
       begin
-        if DirectoryExists(path + sr.Name) then FromDirIterator(path + sr.Name + '/',mask,firstloadfilename,proc,method)
+        if DirectoryExists(path + sr.Name) then FromDirIterator(path + sr.Name + '/',mask,firstloadfilename,proc,method,pdata)
         else
         begin
           s:=lowercase(sr.Name);

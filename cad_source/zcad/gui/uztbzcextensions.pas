@@ -877,14 +877,10 @@ initialization
   ToolBarsManager.RegisterTBItemCreateFunc('LineWComboBox',TZTBZCADExtensions.TBLineWComboBoxCreateFunc);
   ToolBarsManager.RegisterTBItemCreateFunc('TStyleComboBox',TZTBZCADExtensions.TBTStyleComboBoxCreateFunc);
   ToolBarsManager.RegisterTBItemCreateFunc('DimStyleComboBox',TZTBZCADExtensions.TBDimStyleComboBoxCreateFunc);
-  ToolBarsManager.RegisterTBItemCreateFunc('ColorComboBox',TZTBZCADExtensions.TBColorComboBoxCreateFunc);
-  ToolBarsManager.RegisterTBItemCreateFunc('LTypeComboBox',TZTBZCADExtensions.TBLTypeComboBoxCreateFunc);
-  ToolBarsManager.RegisterTBItemCreateFunc('LineWComboBox',TZTBZCADExtensions.TBLineWComboBoxCreateFunc);
-  ToolBarsManager.RegisterTBItemCreateFunc('TStyleComboBox',TZTBZCADExtensions.TBTStyleComboBoxCreateFunc);
-  ToolBarsManager.RegisterTBItemCreateFunc('DimStyleComboBox',TZTBZCADExtensions.TBDimStyleComboBoxCreateFunc);
   ToolBarsManager.RegisterActionCreateFunc('ZAction',TZTBZCADExtensions.ZActionsReader);
   ToolBarsManager.RegisterActionCreateFunc('ZAction2Variable',TZTBZCADExtensions.ZAction2VariableReader);
   ToolBarsManager.RegisterTBCreateFunc('ToolBar',TZTBZCADExtensions.TBCreateZCADToolBar);
-
+  ToolBarsManager.RegisterTBItemCreateFunc('Separator',ToolBarsManager.CreateDefaultSeparator);
+  ToolBarsManager.RegisterActionCreateFunc('Group',ToolBarsManager.DefaultActionsGroupReader);
 finalization
 end.

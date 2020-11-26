@@ -1,38 +1,40 @@
 object ZCADMainWindow: TZCADMainWindow
   Left = 649
-  Height = 470
+  Height = 599
   Top = 205
-  Width = 632
-  ClientHeight = 470
-  ClientWidth = 632
-  DesignTimePPI = 113
+  Width = 805
+  ClientHeight = 599
+  ClientWidth = 805
+  DesignTimePPI = 144
   LCLVersion = '2.1.0.0'
   object AnchorDockPanel1: TAnchorDockPanel
     Left = 4
-    Height = 440
+    Height = 569
     Top = 4
-    Width = 624
+    Width = 797
     Align = alClient
     BevelOuter = bvNone
+    ParentFont = False
     TabOrder = 0
   end
   object CoolBarU: TCoolBar
     Left = 0
     Height = 4
     Top = 0
-    Width = 632
+    Width = 805
     AutoSize = True
     BandMaximize = bmDblClick
     Bands = <>
     DockSite = True
     EdgeBorders = []
     GrabWidth = 5
+    ParentFont = False
   end
   object ToolBarD: TToolBar
     Left = 0
     Height = 24
-    Top = 446
-    Width = 632
+    Top = 575
+    Width = 805
     Align = alBottom
     AutoSize = True
     Caption = 'ToolBarD'
@@ -40,6 +42,7 @@ object ZCADMainWindow: TZCADMainWindow
     EdgeBorders = []
     EdgeInner = esNone
     EdgeOuter = esNone
+    ParentFont = False
     ShowCaptions = True
     TabOrder = 2
     Transparent = True
@@ -48,7 +51,7 @@ object ZCADMainWindow: TZCADMainWindow
   end
   object CoolBarL: TCoolBar
     Left = 0
-    Height = 440
+    Height = 569
     Top = 4
     Width = 4
     Align = alLeft
@@ -58,12 +61,13 @@ object ZCADMainWindow: TZCADMainWindow
     DockSite = True
     EdgeBorders = []
     GrabWidth = 5
+    ParentFont = False
     Themed = False
     Vertical = True
   end
   object CoolBarR: TCoolBar
-    Left = 628
-    Height = 440
+    Left = 801
+    Height = 569
     Top = 4
     Width = 4
     Align = alRight
@@ -73,14 +77,15 @@ object ZCADMainWindow: TZCADMainWindow
     DockSite = True
     EdgeBorders = []
     GrabWidth = 5
+    ParentFont = False
     Themed = False
     Vertical = True
   end
   object CoolBarD: TCoolBar
     Left = 0
     Height = 2
-    Top = 444
-    Width = 632
+    Top = 573
+    Width = 805
     Align = alBottom
     AutoSize = True
     BandBorderStyle = bsNone
@@ -89,6 +94,7 @@ object ZCADMainWindow: TZCADMainWindow
     DockSite = True
     EdgeBorders = []
     GrabWidth = 5
+    ParentFont = False
     Themed = False
   end
 end

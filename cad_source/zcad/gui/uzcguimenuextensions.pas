@@ -22,15 +22,14 @@ unit uzcguimenuextensions;
 interface
 uses
   {LCL}
-      Laz2_DOM,
-       ActnList,LCLType,LCLProc,uzctranslations,LCLIntf,
-       Forms, stdctrls, ExtCtrls, ComCtrls,Controls,Classes,SysUtils,LazUTF8,
-       menus,graphics,
+    Laz2_DOM,
+    ActnList,LCLType,LCLProc,uzctranslations,LCLIntf,
+    Forms, stdctrls, ExtCtrls, ComCtrls,Controls,Classes,SysUtils,LazUTF8,
+    menus,graphics,
   {ZCAD BASE}
-       uzbpaths,
-       //UGDBOpenArrayOfByte,uzbmemman,uzbtypesbase,uzbtypes,
-       uzegeometry,uzcsysvars,uzbstrproc,uzclog,
-       varmandef, varman,UUnitManager,uzcsysinfo,strmy,uzestylesdim,
+    uzbpaths,
+    uzegeometry,uzcsysvars,uzbstrproc,uzclog,
+    varmandef, varman,UUnitManager,uzcsysinfo,strmy,uzestylesdim,
   {ZCAD SIMPLE PASCAL SCRIPT}
        languade,
   {ZCAD ENTITIES}
@@ -384,6 +383,23 @@ begin
 end;
 
 initialization
+  TMenuDefaults.RegisterMenuCreateFunc('SubMenu',ZMenuExt.ZMenuExtMainMenuItemReader);
+  TMenuDefaults.RegisterMenuCreateFunc('Menu',ZMenuExt.ZMenuExtMenuItemReader);
+  TMenuDefaults.RegisterMenuCreateFunc('Action',ZMenuExt.ZMenuExtAction);
+  TMenuDefaults.RegisterMenuCreateFunc('FileHistory',ZMenuExt.ZMenuExtFileHistory);
+  TMenuDefaults.RegisterMenuCreateFunc('LastCommands',ZMenuExt.ZMenuExtCommandsHistory);
+  TMenuDefaults.RegisterMenuCreateFunc('Command',ZMenuExt.ZMenuExtCommand);
+  TMenuDefaults.RegisterMenuCreateFunc('Toolbars',ZMenuExt.ZMenuExtToolBars);
+  TMenuDefaults.RegisterMenuCreateFunc('ToolPalettes',ZMenuExt.ZMenuExtToolPalettes);
+  TMenuDefaults.RegisterMenuCreateFunc('Drawings',ZMenuExt.ZMenuExtDrawings);
+  TMenuDefaults.RegisterMenuCreateFunc('SampleFiles',ZMenuExt.ZMenuExtSampleFiles);
+  TMenuDefaults.RegisterMenuCreateFunc('DebugFiles',ZMenuExt.ZMenuExtDebugFiles);
+
+  TMenuDefaults.RegisterMenuCreateFunc('CreateMenu',TMenuDefaults.DefaultCreateMenu);
+  TMenuDefaults.RegisterMenuCreateFunc('InsertMenuContent',TMenuDefaults.DefaultInsertMenuContent);
+  TMenuDefaults.RegisterMenuCreateFunc('InsertMenu',TMenuDefaults.DefaultInsertMenu);
+  TMenuDefaults.RegisterMenuCreateFunc('SetMainMenu',TMenuDefaults.DefaultSetMenu);
+  TMenuDefaults.RegisterMenuCreateFunc('Separator',TMenuDefaults.DefaultCreateMenuSeparator);
 finalization
 end.
 

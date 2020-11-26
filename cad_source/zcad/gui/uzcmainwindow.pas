@@ -22,10 +22,10 @@ unit uzcmainwindow;
 interface
 uses
  {LCL}
-  Laz2_DOM,AnchorDockPanel,AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr,
+  AnchorDockPanel,AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr,
   ActnList,LCLType,LCLProc,uzctranslations,LMessages,LCLIntf,
   Forms, stdctrls, ExtCtrls, ComCtrls,Controls,Classes,SysUtils,LazUTF8,
-  menus,graphics,Buttons,Themes,
+  menus,graphics,Themes,
   Types,UniqueInstanceBase,simpleipc,Laz2_XMLCfg,
  {FPC}
   lineinfo,
@@ -45,12 +45,11 @@ uses
        uzccommandsabstract,uzccommandsimpl,uzccommandsmanager,
        uzccommand_loadlayout,
   {GUI}
-  //uztbzcextensions,
        uzcuitypes,
        uzcmenucontextcheckfuncs,uzcguimenuextensions,uzmenusdefaults,uzmenusmanager,uztoolbarsmanager,uzctextenteditor,uzcfcommandline,uzctreenode,uzcflineweights,uzcctrllayercombobox,uzcctrlcontextmenu,
        uzcimagesmanager,usupportgui,uzcuidialogs,
   {}
-       uzcpalettes,uzgldrawcontext,uzglviewareaabstract,uzcguimanager,uzcinterfacedata,
+       uzgldrawcontext,uzglviewareaabstract,uzcguimanager,uzcinterfacedata,
        uzcenitiesvariablesextender,uzglviewareageneral,UniqueInstanceRaw,
        uzmacros,uzcviewareacxmenu;
   {}
@@ -63,11 +62,6 @@ type
     constructor Create(TheOwner: TComponent); override;
 
                           end;
-  PTDummyMyActionsArray=^TDummyMyActionsArray;
-  TDummyMyActionsArray=Array [0..0] of TmyAction;
-  TFileHistory=Array [0..9] of TmyAction;
-  TOpenedDrawings=Array [0..9] of TmyAction;
-  TCommandHistory=Array [0..9] of TmyAction;
 
   { TZCADMainWindow }
 
@@ -112,9 +106,9 @@ type
     procedure UpdateControls;
     procedure EnableControls(enbl:boolean);
 
-    procedure Say(word:gdbstring);
+    //procedure Say(word:gdbstring);
 
-    procedure SetImage(ppanel:TToolBar;b:TToolButton;img:string;autosize:boolean;identifer:string);
+    //procedure SetImage(ppanel:TToolBar;b:TToolButton;img:string;autosize:boolean;identifer:string);
 
     //function MessageBox(Text, Caption: PChar; Flags: Longint): Integer;
     procedure ShowAllCursors(ShowedForm:TForm);
@@ -1107,8 +1101,8 @@ begin
   brocenicon:=StandartActions.LoadImage(ProgramPath+'menu/BMP/noimage.bmp');
 
 
-  ToolBarsManager:=TToolBarsManager.create(self,StandartActions,sysvar.INTF.INTF_DefaultControlHeight^);
-  MenusManager:=TGeneralMenuManager.create(self,StandartActions);
+  ToolBarsManager.setup(self,StandartActions,sysvar.INTF.INTF_DefaultControlHeight^);
+  MenusManager.setup(self,StandartActions);
   RegisterGeneralContextCheckFunc('True',@GMCCFTrue);
   RegisterGeneralContextCheckFunc('False',@GMCCFFalse);
   RegisterGeneralContextCheckFunc('DebugMode',@GMCCFDebugMode);
@@ -1117,40 +1111,10 @@ begin
   RegisterGeneralContextCheckFunc('AltPressed',@GMCCFAltPressed);
   RegisterGeneralContextCheckFunc('ActiveDrawing',@GMCCFActiveDrawing);
 
-  ToolBarsManager.RegisterTBItemCreateFunc('Separator',ToolBarsManager.CreateDefaultSeparator);
-
-  ToolBarsManager.RegisterActionCreateFunc('Group',ToolBarsManager.DefaultActionsGroupReader);
-  //ToolBarsManager.LoadToolBarsContent(ProgramPath+'menu/toolbarscontent.xml');
-
   LoadActions;
   toolbars:=tstringlist.Create;
   toolbars.Sorted:=true;
   CreateInterfaceLists;
-
-  TMenuDefaults.RegisterMenuCreateFunc('SubMenu',ZMenuExt.ZMenuExtMainMenuItemReader);
-  TMenuDefaults.RegisterMenuCreateFunc('Menu',ZMenuExt.ZMenuExtMenuItemReader);
-  TMenuDefaults.RegisterMenuCreateFunc('Action',ZMenuExt.ZMenuExtAction);
-  TMenuDefaults.RegisterMenuCreateFunc('FileHistory',ZMenuExt.ZMenuExtFileHistory);
-  TMenuDefaults.RegisterMenuCreateFunc('LastCommands',ZMenuExt.ZMenuExtCommandsHistory);
-  TMenuDefaults.RegisterMenuCreateFunc('Command',ZMenuExt.ZMenuExtCommand);
-  TMenuDefaults.RegisterMenuCreateFunc('Toolbars',ZMenuExt.ZMenuExtToolBars);
-  TMenuDefaults.RegisterMenuCreateFunc('ToolPalettes',ZMenuExt.ZMenuExtToolPalettes);
-  TMenuDefaults.RegisterMenuCreateFunc('Drawings',ZMenuExt.ZMenuExtDrawings);
-  TMenuDefaults.RegisterMenuCreateFunc('SampleFiles',ZMenuExt.ZMenuExtSampleFiles);
-  TMenuDefaults.RegisterMenuCreateFunc('DebugFiles',ZMenuExt.ZMenuExtDebugFiles);
-
-  TMenuDefaults.RegisterMenuCreateFunc('CreateMenu',TMenuDefaults.DefaultCreateMenu);
-  TMenuDefaults.RegisterMenuCreateFunc('InsertMenuContent',TMenuDefaults.DefaultInsertMenuContent);
-  TMenuDefaults.RegisterMenuCreateFunc('InsertMenu',TMenuDefaults.DefaultInsertMenu);
-  TMenuDefaults.RegisterMenuCreateFunc('SetMainMenu',TMenuDefaults.DefaultSetMenu);
-  TMenuDefaults.RegisterMenuCreateFunc('Separator',TMenuDefaults.DefaultCreateMenuSeparator);
-
-  ToolBarsManager.RegisterPaletteCreateFunc('vsIcon',TPaletteHelper.ZPalettevsIconCreator);
-  ToolBarsManager.RegisterPaletteItemCreateFunc('ZVSICommand',TPaletteHelper.ZPalettevsIconItemCreator);
-
-  ToolBarsManager.RegisterPaletteCreateFunc('Tree',TPaletteHelper.ZPaletteTreeCreator);
-  ToolBarsManager.RegisterPaletteItemCreateFunc('ZTreeCommand',TPaletteHelper.ZPaletteTreeItemCreator);
-  ToolBarsManager.RegisterPaletteItemCreateFunc('ZTreeNode',TPaletteHelper.ZPaletteTreeNodeCreator);
 
   commandmanager.executefile('*components/stage0.cmd',drawings.GetCurrentDWG,nil);
 
@@ -1164,37 +1128,6 @@ begin
     name:='MainForm';
     OnCreate:=_onCreate;
     inherited;
-end;
-procedure TZCADMainWindow.SetImage(ppanel:TToolBar;b:TToolButton;img:string;autosize:boolean;identifer:string);
-var
-    bmp:Graphics.TBitmap;
-begin
-     if length(img)>1 then
-     begin
-          if img[1]<>'#' then
-                              begin
-                              img:={SysToUTF8}(ProgramPath)+'menu/BMP/'+img;
-                              bmp:=Graphics.TBitmap.create;
-                              bmp.LoadFromFile(img);
-                              bmp.Transparent:=true;
-                              if not assigned(ppanel.Images) then
-                                                                 ppanel.Images:=standartactions.Images;
-                              b.ImageIndex:=
-                              ppanel.Images.Add(bmp,nil);
-                              freeandnil(bmp);
-                              //-----------b^.SetImageFromFile(img)
-                              end
-                          else
-                              begin
-                              b.caption:=(system.copy(img,2,length(img)-1));
-                              b.caption:=InterfaceTranslate(identifer,b.caption);
-                              if autosize then
-                               if utf8length(img)>3 then
-                                                    b.Font.size:=11-utf8length(img);
-                              end;
-     end;
-                              b.Height:=ppanel.ButtonHeight;
-                              b.Width:=ppanel.ButtonWidth;
 end;
 
 procedure TZCADMainWindow.UpdateControls;
@@ -1549,7 +1482,7 @@ begin
      drawings.GetCurrentDWG.wa.hidemousecursor;
 end;
 
-procedure TZCADMainWindow.Say(word:gdbstring);
+{procedure TZCADMainWindow.Say(word:gdbstring);
 begin
      //if sysvar.SYS.SYS_IsHistoryLineCreated^ then
      begin
@@ -1559,7 +1492,7 @@ begin
           HintText.repaint;
           end;
      end;
-end;
+end;}
 procedure TZCADMainWindow.EndLongProcess;
 var
    Time:Tdatetime;

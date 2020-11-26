@@ -28,9 +28,10 @@ type
     function GetMenu_tmp(MT:TMenuType;aName: string;ctx:T;ForceReCreate:boolean=false;MMProcessor:TMenusMacros=nil):TMainMenu;
 
   public
-    constructor Create(mainform:TForm;actlist:TActionList);
+    constructor Create;
     destructor Destroy;override;
 
+    procedure setup(mainform:TForm;actlist:TActionList);
     procedure GetPart(out part:String;var path:String;const separator:String);
     function readspace(expr:String):String;
     procedure DoIfOneNode(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);virtual;
@@ -55,7 +56,11 @@ var
 
 implementation
 
-constructor TGMenusManager.Create(mainform:TForm;actlist:TActionList);
+constructor TGMenusManager.Create;
+begin
+  setup(nil,nil);
+end;
+procedure TGMenusManager.setup(mainform:TForm;actlist:TActionList);
 begin
   fmainform:=mainform;
   factionlist:=actlist;
@@ -376,6 +381,7 @@ end;}
 
 initialization
   MenuConfig:=nil;
+  MenusManager:=TGeneralMenuManager.create;
 
 finalization
   if assigned(MenuConfig) then

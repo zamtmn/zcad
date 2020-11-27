@@ -46,7 +46,7 @@ uses
        uzccommand_loadlayout,
   {GUI}
        uzcuitypes,
-       uzcmenucontextcheckfuncs,uzcguimenuextensions,uzmenusdefaults,uzmenusmanager,uztoolbarsmanager,uzctextenteditor,uzcfcommandline,uzctreenode,uzcflineweights,uzcctrllayercombobox,uzcctrlcontextmenu,
+       uzcmenucontextcheckfuncs,uzctbextmenus,uzmenusdefaults,uzmenusmanager,uztoolbarsmanager,uzctextenteditor,uzcfcommandline,uzctreenode,uzcflineweights,uzcctrllayercombobox,uzcctrlcontextmenu,
        uzcimagesmanager,usupportgui,uzcuidialogs,
   {}
        uzgldrawcontext,uzglviewareaabstract,uzcguimanager,uzcinterfacedata,

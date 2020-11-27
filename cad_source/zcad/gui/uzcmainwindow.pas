@@ -80,38 +80,19 @@ type
 
     public
     MainPanel:TForm;
-    //FToolBar:TToolButtonForm;
     PageControl:TmyPageControl;
     DHPanel:TPanel;
     HScrollBar,VScrollBar:TScrollBar;
     StandartActions:TActionList;
     SystemTimer: TTimer;
     toolbars:tstringlist;
-    //updatesbytton,updatescontrols:tlist;
     procedure ZcadException(Sender: TObject; E: Exception);
-    //function findtoolbatdesk(tbn:string):string;
-    //procedure CreateToolbarFromDesk(tb:TToolBar;tbname,tbdesk:string);
-    //function CreateCBox(CBName:GDBString;owner:TToolBar;DrawItem:TDrawItemEvent;Change,DropDown,CloseUp:TNotifyEvent;Filler:TComboFiller;w:integer;ts:GDBString):TComboBox;
     procedure CreateHTPB(tb:TToolBar);
-
     procedure ActionUpdate(AAction: TBasicAction; var Handled: Boolean);
-
-    //procedure loadmenu(var f:GDBOpenArrayOfByte;var line:GDBString);
-    //procedure loadpopupmenu(var f:GDBOpenArrayOfByte;var line:GDBString);
-    //procedure createmenu(var f:GDBOpenArrayOfByte;var line:GDBString);
-    //procedure setmainmenu(var f:GDBOpenArrayOfByte;var line:GDBString);
-    //procedure loadsubmenu(var f:GDBOpenArrayOfByte;var pm:TMenuItem;var line:GDBString);
-
     procedure ChangedDWGTabByClick(Sender: TObject);
     procedure ChangedDWGTab(Sender: TObject);
     procedure UpdateControls;
     procedure EnableControls(enbl:boolean);
-
-    //procedure Say(word:gdbstring);
-
-    //procedure SetImage(ppanel:TToolBar;b:TToolButton;img:string;autosize:boolean;identifer:string);
-
-    //function MessageBox(Text, Caption: PChar; Flags: Longint): Integer;
     procedure ShowAllCursors(ShowedForm:TForm);
     procedure RestoreCursors(ShowedForm:TForm);
     procedure CloseDWGPageInterf(Sender: TObject);

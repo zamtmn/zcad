@@ -1,4 +1,4 @@
-object MainForm: TZCADMainWindow
+object ZCADMainWindow: TZCADMainWindow
   Left = 649
   Height = 599
   Top = 205

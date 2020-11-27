@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzcpalettes;
+unit uzctbextpalettes;
 {$INCLUDE def.inc}
 interface
 uses

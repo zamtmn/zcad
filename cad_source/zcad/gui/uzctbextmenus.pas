@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzcguimenuextensions;
+unit uzctbextmenus;
 {$INCLUDE def.inc}
 
 interface

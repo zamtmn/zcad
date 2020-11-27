@@ -26,7 +26,7 @@ uses
   LazLogger,
   uzccommandsabstract,uzccommandsimpl,
   Varman,
-  uzcguimenuextensions;
+  uzctbextmenus;
 
 implementation
 

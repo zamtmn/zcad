@@ -1177,7 +1177,7 @@
         <IsPartOfProject Value="True"/>
       </Unit201>
       <Unit202>
-        <Filename Value="zcad/gui/uzcguimenuextensions.pas"/>
+        <Filename Value="zcad/gui/uzctbextmenus.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit202>
       <Unit203>

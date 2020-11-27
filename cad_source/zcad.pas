@@ -224,7 +224,7 @@ uses
   uzglviewareaogl,uzglviewareagdi,uzglviewareacanvas,
   {$IFDEF WINDOWS}{uzglviewareadx,}{$ENDIF}
 
-  uztbzcextensions,uzcguimenuextensions,uzcpalettes,
+  uzctbexttoolbars,uzcguimenuextensions, uzctbextpalettes,
 
   uzcinterface,
   uzccommand_dbgappexplorer;

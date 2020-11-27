@@ -316,7 +316,7 @@
         <PackageName Value="LCL"/>
       </Item20>
     </RequiredPackages>
-    <Units Count="201">
+    <Units Count="204">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -1172,6 +1172,18 @@
         <Filename Value="zcad/gui/uzcuiutils.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit200>
+      <Unit201>
+        <Filename Value="zcad/gui/uzctbexttoolbars.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit201>
+      <Unit202>
+        <Filename Value="zcad/gui/uzcguimenuextensions.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit202>
+      <Unit203>
+        <Filename Value="zcad/gui/uzctbextpalettes.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit203>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

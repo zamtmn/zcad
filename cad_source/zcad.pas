@@ -35,6 +35,7 @@ program zcad;
 {$INCLUDE buildmode.inc}
 uses
   {$IFDEF REPORTMMEMORYLEAKS}heaptrc,{$ENDIF}
+  uzcexceptions,
   Interfaces,forms, classes,
   uzcfsplash,
   uzcsysvars,

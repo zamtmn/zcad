@@ -238,8 +238,11 @@ begin
 end;
 initialization
   programpath:={$IFNDEF DELPHI}SysToUTF8{$ENDIF}(SysUtils.ExpandFileName(ExtractFilePath(paramstr(0))+'..\..\'));
-  TempPath:=GetEnvironmentVariable('TEMP');
-  {$IFNDEF DELPHI}TempPath:=gettempdir;{$ENDIF}
+  {$IfNDef DELPHI}
+    TempPath:=gettempdir;
+  {$elseif}
+    TempPath:=GetEnvironmentVariable('TEMP');
+  {$EndIf}
   if (TempPath[length(TempPath)]<>PathDelim)
    then
        TempPath:=TempPath+PathDelim;

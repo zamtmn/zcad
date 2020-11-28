@@ -20,24 +20,34 @@ unit uzcexceptions;
 {$INCLUDE def.inc}
 interface
 uses
-  //Forms,
   SysUtils,
   lineinfo,
-  LazLogger,
-  uzbpaths,uzcstrconsts,uzclog,uzcsysvars;
+  uzcstrconsts,gzctnrstl;
+
+type
+  TCrashInfoProvider=procedure(var f:system.text);
+  TCrashInfoProviders=TMyVector<TCrashInfoProvider>;
+
 
 function ProcessException (handlername:shortstring;Obj : TObject; Addr: CodePointer; _FrameCount: Longint; _Frames: PCodePointer):string;
+procedure RegisterCrashInfoProvider(provider:TCrashInfoProvider);
+//procedure RmoveCrashInfoProvider(provider:TCrashInfoProvider);
 
 implementation
 
 var
-  OldExceptProc:TExceptProc;
+  OldExceptProc:TExceptProc=nil;
+  CrashInfoProviders:TCrashInfoProviders=nil;
+
+procedure RegisterCrashInfoProvider(provider:TCrashInfoProvider);
+begin
+   if not assigned(CrashInfoProviders) then
+     CrashInfoProviders:=TCrashInfoProviders.Create;
+   CrashInfoProviders.PushBack(provider);
+end;
+
 
 procedure myDumpAddr(Addr: Pointer;var f:system.text);
-//var
-  //func,source:shortstring;
-  //line:longint;
-  //FoundLine:boolean;
 begin
     //BackTraceStrFunc:=StoreBackTraceStrFunc;//this unneed after fpc rev 31026 see http://bugs.freepascal.org/view.php?id=13518
   try
@@ -47,7 +57,7 @@ begin
   end;
 end;
 
-procedure MyDumpExceptionBackTrace2(var f:system.text; _FrameCount: Longint; _Frames: PCodePointer);
+procedure MyDumpExceptionBackTrace(var f:system.text; _FrameCount: Longint; _Frames: PCodePointer);
 var
   FrameCount: integer;
   Frames: PPointer;
@@ -65,6 +75,7 @@ function ProcessException (handlername:shortstring;Obj : TObject; Addr: CodePoin
 var
   f:system.text;
   crashreportfilename,errmsg:shortstring;
+  i:integer;
 begin
   crashreportfilename:=GetTempDir+'zcadcrashreport.txt';
   system.Assign(f,crashreportfilename);
@@ -85,34 +96,20 @@ begin
     end;
   end;
 
-  myDumpExceptionBackTrace2(f,_FrameCount,_Frames);
+  myDumpExceptionBackTrace(f,_FrameCount,_Frames);
 
   system.close(f);
 
-  system.Assign(f,crashreportfilename);
-  system.Append(f);
-  WriteLn(f);
-  WriteLn(f,'Latest log:');
-  programlog.WriteLatestToFile(f);
-  WriteLn(f,'Log end.');
-  system.close(f);
+  if assigned(CrashInfoProviders) then
+    for i:=0 to CrashInfoProviders.Size-1 do
+      if @CrashInfoProviders[i]<>nil then begin
+        system.Assign(f,crashreportfilename);
+        system.Append(f);
 
-  system.Assign(f,crashreportfilename);
-  system.Append(f);
-  WriteLn(f);
-  WriteLn(f,'Build and runtime info:');
-  Write(f,  '  ZCAD ');WriteLn(f,sysvar.SYS.SYS_Version^);
-  Write(f,  '  Build with ');Write(f,sysvar.SYS.SSY_CompileInfo.SYS_Compiler);Write(f,' v');WriteLn(f,sysvar.SYS.SSY_CompileInfo.SYS_CompilerVer);
-  Write(f,  '  Target CPU: ');WriteLn(f,sysvar.SYS.SSY_CompileInfo.SYS_CompilerTargetCPU);
-  Write(f,  '  Target OS: ');WriteLn(f,sysvar.SYS.SSY_CompileInfo.SYS_CompilerTargetOS);
-  Write(f,  '  Compile date: ');WriteLn(f,sysvar.SYS.SSY_CompileInfo.SYS_CompileDate);
-  Write(f,  '  Compile time: ');WriteLn(f,sysvar.SYS.SSY_CompileInfo.SYS_CompileTime);
-  Write(f,  '  LCL version: ');WriteLn(f,sysvar.SYS.SSY_CompileInfo.SYS_LCLVersion);
-  Write(f,  '  Environment version: ');WriteLn(f,sysvar.SYS.SSY_CompileInfo.SYS_EnvironmentVersion);
-  Write(f,  '  Program  path: ');WriteLn(f,ProgramPath);
-  Write(f,  '  Temporary  path: ');WriteLn(f,TempPath);
-  WriteLn(f,'end.');
-  system.close(f);
+        CrashInfoProviders[i](f);
+
+        system.close(f);
+      end;
 
   errmsg:=DateTimeToStr(Now);
   system.Assign(f,crashreportfilename);
@@ -133,8 +130,6 @@ begin
 end;
 
 initialization
-  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
-
   {
   //this unneed after fpc rev 31026 see http://bugs.freepascal.org/view.php?id=13518
   StoreBackTraceStrFunc:=BackTraceStrFunc;
@@ -147,5 +142,4 @@ initialization
   OldExceptProc:=ExceptProc;
   ExceptProc:=@ZCCatchUnhandledException;
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

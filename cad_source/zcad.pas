@@ -40,7 +40,7 @@ uses
   uzcfsplash,
   uzcsysvars,
 
-  uzbmemman,uzclog,
+  uzbmemman,uzclog,uzcregexceptions,
   uzcsysparams,uzcsysinfo,
   uzbpaths,
 

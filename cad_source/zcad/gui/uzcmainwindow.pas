@@ -36,6 +36,7 @@ uses
        UGDBOpenArrayOfByte,uzbmemman,uzbtypesbase,uzbtypes,
        uzegeometry,uzcsysvars,uzcstrconsts,uzbstrproc,UGDBNamedObjectsArray,uzclog,
        uzedimensionaltypes,varmandef, varman,UUnitManager,uzcsysinfo,strmy,uzestylestexts,uzestylesdim,
+  uzcexceptions,
   {ZCAD SIMPLE PASCAL SCRIPT}
        //languade,
   {ZCAD ENTITIES}
@@ -807,91 +808,19 @@ begin
   end;
 end;
 
-procedure myDumpAddr(Addr: Pointer;var f:system.text);
-//var
-  //func,source:shortstring;
-  //line:longint;
-  //FoundLine:boolean;
-begin
-    //BackTraceStrFunc:=StoreBackTraceStrFunc;//this unneed after fpc rev 31026 see http://bugs.freepascal.org/view.php?id=13518
-  try
-    WriteLn(f,BackTraceStrFunc(Addr));
-  except
-    writeLn(f,SysBackTraceStr(Addr));
-  end;
-end;
-
-
-procedure MyDumpExceptionBackTrace(var f:system.text);
-var
-  FrameCount: integer;
-  Frames: PPointer;
-  FrameNumber:Integer;
-begin
-  WriteLn(f,'Stack trace:');
-  myDumpAddr(ExceptAddr,f);
-  FrameCount:=ExceptFrameCount;
-  Frames:=ExceptFrames;
-  for FrameNumber := 0 to FrameCount-1 do
-    myDumpAddr(Frames[FrameNumber],f);
-end;
-
 procedure TZCADMainWindow.ZcadException(Sender: TObject; E: Exception);
 var
-  f:system.text;
-  crashreportfilename,errmsg:shortstring;
-  //ST:TSystemTime;
-  //i:integer;
+  crashreportfilename,errmsg:string;
 begin
-     crashreportfilename:=TempPath+'zcadcrashreport.txt';
-     system.Assign(f,crashreportfilename);
-     if FileExists(crashreportfilename) then
-                                            system.Append(f)
-                                        else
-                                            system.Rewrite(f);
-     WriteLn(f,'');WriteLn(f,programname+' crashed((');WriteLn(f,'');
-     myDumpExceptionBackTrace(f);
-     system.close(f);
+  crashreportfilename:=ProcessException ('Handled by TZCADMainWindow.ZCADException',Sender,ExceptAddr,ExceptFrameCount,ExceptFrames);
 
-     system.Assign(f,crashreportfilename);
-     system.Append(f);
-     WriteLn(f);
-     WriteLn(f,'Latest log:');
-     programlog.WriteLatestToFile(f);
-     WriteLn(f,'Log end.');
-     system.close(f);
+  errmsg:=programname+' raised exception class "'+E.Message+'"'#13#10#13#10'A crash report generated (stack trace and latest log).'#13#10'Please send "'
+         +crashreportfilename+'" file at zamtmn@yandex.ru'#13#10#13#10'Attempt to continue running?';
 
-     system.Assign(f,crashreportfilename);
-     system.Append(f);
-     WriteLn(f);
-     WriteLn(f,'Build and runtime info:');
-     Write(f,'  ZCAD ');WriteLn(f,sysvar.SYS.SYS_Version^);
-     Write(f,'  Build with ');Write(f,sysvar.SYS.SSY_CompileInfo.SYS_Compiler);Write(f,' v');WriteLn(f,sysvar.SYS.SSY_CompileInfo.SYS_CompilerVer);
-     Write(f,'  Target CPU: ');WriteLn(f,sysvar.SYS.SSY_CompileInfo.SYS_CompilerTargetCPU);
-     Write(f,'  Target OS: ');WriteLn(f,sysvar.SYS.SSY_CompileInfo.SYS_CompilerTargetOS);
-     Write(f,'  Compile date: ');WriteLn(f,sysvar.SYS.SSY_CompileInfo.SYS_CompileDate);
-     Write(f,'  Compile time: ');WriteLn(f,sysvar.SYS.SSY_CompileInfo.SYS_CompileTime);
-     Write(f,'  LCL version: ');WriteLn(f,sysvar.SYS.SSY_CompileInfo.SYS_LCLVersion);
-     Write(f,'  Environment version: ');WriteLn(f,sysvar.SYS.SSY_CompileInfo.SYS_EnvironmentVersion);
-     Write(f,'  Program  path: ');WriteLn(f,ProgramPath);
-     Write(f,'  Temporary  path: ');WriteLn(f,TempPath);
-     WriteLn(f,'end.');
-     system.close(f);
-
-     errmsg:=DateTimeToStr(Now);
-     system.Assign(f,crashreportfilename);
-     system.Append(f);
-     WriteLn(f);
-     WriteLn(f,'Date:');
-     WriteLn(f,errmsg);
-     WriteLn(f,'______________________________________________________________________________________');
-     system.close(f);
-     errmsg:=programname+' raised exception class "'+E.Message+'"'#13#10#13#10'A crash report generated (stack trace and latest log).'#13#10'Please send "'
-             +crashreportfilename+'" file at zamtmn@yandex.ru'#13#10#13#10'Attempt to continue running?';
-
-     if zcMsgDlg(errmsg,zcdiError,[zccbYes,zccbCancel]).ModalResult=ZCmrCancel then
-       halt(0);
+  if zcMsgDlg(errmsg,zcdiError,[zccbYes,zccbCancel]).ModalResult=ZCmrCancel then
+    halt(0);
 end;
+
 function TZCADMainWindow.CreateZCADControl(aName: string;DoDisableAutoSizing:boolean=false):TControl;
 var
   ta:TmyAction;
@@ -1038,15 +967,8 @@ begin
 end;
 procedure TZCADMainWindow._onCreate(Sender: TObject);
 begin
-  {
-  //this unneed after fpc rev 31026 see http://bugs.freepascal.org/view.php?id=13518
-  StoreBackTraceStrFunc:=BackTraceStrFunc;
-  BackTraceStrFunc:=@SysBackTraceStr;
-  }
-  {$if FPC_FULlVERSION>=30002}
-  AllowReuseOfLineInfoData:=false;
-  {$endif}
   ZCADGUIManager.RegisterZCADFormInfo('PageControl',rsDrawingWindowWndName,Tform,types.rect(200,200,600,500),ZCADMainPanelSetupProc,nil,@ZCADMainWindow.MainPanel);
+
   FAppProps := TApplicationProperties.Create(Self);
   FAppProps.OnException := ZcadException;
   FAppProps.CaptureExceptions := True;

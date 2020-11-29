@@ -20,30 +20,49 @@ unit uzcexceptions;
 {$INCLUDE def.inc}
 interface
 uses
-  SysUtils,
-  lineinfo,
-  uzcstrconsts,gzctnrstl;
+  SysUtils,lineinfo,gvector;
+
+const
+  InitialCrashReportFilename='crashreport.txt';
 
 type
-  TCrashInfoProvider=procedure(var f:system.text);
-  TCrashInfoProviders=TMyVector<TCrashInfoProvider>;
+  TCrashInfoProvider=procedure(var f:system.text;Obj : TObject; Addr: CodePointer; _FrameCount: Longint; _Frames: PCodePointer);
+  TCrashInfoProviders=TVector<TCrashInfoProvider>;
 
-
-function ProcessException (handlername:shortstring;Obj : TObject; Addr: CodePointer; _FrameCount: Longint; _Frames: PCodePointer):string;
-procedure RegisterCrashInfoProvider(provider:TCrashInfoProvider);
-//procedure RmoveCrashInfoProvider(provider:TCrashInfoProvider);
+procedure SetCrashReportFilename(fn:ansistring);
+function GetCrashReportFilename:ansistring;
+procedure ProcessException (Obj : TObject; Addr: CodePointer; _FrameCount: Longint; _Frames: PCodePointer);
+procedure RegisterCrashInfoProvider(provider:TCrashInfoProvider;atBegining:boolean=false);
+procedure RmoveCrashInfoProvider(provider:TCrashInfoProvider);
 
 implementation
 
 var
   OldExceptProc:TExceptProc=nil;
   CrashInfoProviders:TCrashInfoProviders=nil;
+  CrashReportFilename:ansistring;
 
-procedure RegisterCrashInfoProvider(provider:TCrashInfoProvider);
+procedure RegisterCrashInfoProvider(provider:TCrashInfoProvider;atBegining:boolean=false);
 begin
    if not assigned(CrashInfoProviders) then
      CrashInfoProviders:=TCrashInfoProviders.Create;
-   CrashInfoProviders.PushBack(provider);
+   if atBegining then
+     CrashInfoProviders.insert(0,provider)
+   else
+     CrashInfoProviders.PushBack(provider)
+end;
+
+procedure RmoveCrashInfoProvider(provider:TCrashInfoProvider);
+var
+  i:integer;
+begin
+   if assigned(CrashInfoProviders) then begin
+     i:=0;
+     while i<=CrashInfoProviders.Size-1 do begin
+       if @CrashInfoProviders[i]=@provider then
+         CrashInfoProviders.Erase(i);
+     end;
+   end;
 end;
 
 
@@ -71,75 +90,90 @@ begin
     myDumpAddr(Frames[FrameNumber],f);
 end;
 
-function ProcessException (handlername:shortstring;Obj : TObject; Addr: CodePointer; _FrameCount: Longint; _Frames: PCodePointer):string;
+procedure WriteStack(var f:system.text;Obj : TObject; Addr: CodePointer; _FrameCount: Longint; _Frames: PCodePointer);
 var
-  f:system.text;
-  crashreportfilename,errmsg:shortstring;
-  i:integer;
+  errmsg:shortstring;
 begin
-  crashreportfilename:=GetTempDir+'zcadcrashreport.txt';
-  system.Assign(f,crashreportfilename);
-  if FileExists(crashreportfilename) then
-                                        system.Append(f)
-                                    else
-                                        system.Rewrite(f);
-  WriteLn(f,'');
-  WriteLn(f,programname+' crashed((');WriteLn(f,'');
-  WriteLn(f,handlername);
-  WriteLn(f,'');
-
   if Obj is Exception then begin
-    WriteLn(f,(Obj as Exception).Message);WriteLn(f,'');
+    WriteLn(f,'Crashed with message: ',(Obj as Exception).Message);WriteLn(f,'');
   end else begin
     if Obj<>nil then begin
-      WriteLn(f,obj.ClassName);WriteLn(f,'');
+      WriteLn(f,'Crashed in class: ',obj.ClassName);WriteLn(f,'');
     end;
   end;
 
+  errmsg:=DateTimeToStr(Now);
+  WriteLn(f,'Date: ',errmsg);
+  WriteLn(f,'');
+
   myDumpExceptionBackTrace(f,_FrameCount,_Frames);
+WriteLn(f,'');
+end;
 
-  system.close(f);
-
+procedure ProcessException (Obj : TObject; Addr: CodePointer; _FrameCount: Longint; _Frames: PCodePointer);
+var
+  f:system.text;
+  i:integer;
+begin
   if assigned(CrashInfoProviders) then
     for i:=0 to CrashInfoProviders.Size-1 do
       if @CrashInfoProviders[i]<>nil then begin
-        system.Assign(f,crashreportfilename);
-        system.Append(f);
-
-        CrashInfoProviders[i](f);
+        system.Assign(f,CrashReportFilename);
+        if FileExists(CrashReportFilename) then
+          system.Append(f)
+        else
+          system.Rewrite(f);
+         CrashInfoProviders[i](f,Obj,Addr,_FrameCount,_Frames);
 
         system.close(f);
       end;
-
-  errmsg:=DateTimeToStr(Now);
-  system.Assign(f,crashreportfilename);
-  system.Append(f);
-  WriteLn(f);
-  WriteLn(f,'Date:');
-  WriteLn(f,errmsg);
-  WriteLn(f,'______________________________________________________________________________________');
-  system.close(f);
-  result:=crashreportfilename;
 end;
 
 
 
 Procedure ZCCatchUnhandledException (Obj : TObject; Addr: CodePointer; _FrameCount: Longint; _Frames: PCodePointer);
 begin
-  ProcessException('Handled by UZCExceptions',Obj,Addr,_FrameCount,_Frames);
+  ProcessException(Obj,Addr,_FrameCount,_Frames);
 end;
 
-initialization
-  {
+procedure InstallHandler;
+begin
+  RegisterCrashInfoProvider(WriteStack);
+
   //this unneed after fpc rev 31026 see http://bugs.freepascal.org/view.php?id=13518
-  StoreBackTraceStrFunc:=BackTraceStrFunc;
-  BackTraceStrFunc:=@SysBackTraceStr;
-  }
+  //StoreBackTraceStrFunc:=BackTraceStrFunc;
+  //BackTraceStrFunc:=@SysBackTraceStr;
+
   {$if FPC_FULlVERSION>=30002}
   AllowReuseOfLineInfoData:=false;
   {$endif}
 
   OldExceptProc:=ExceptProc;
   ExceptProc:=@ZCCatchUnhandledException;
+end;
+
+procedure UnInstallHandler;
+begin
+  ExceptProc:=OldExceptProc;
+  OldExceptProc:=nil;
+end;
+
+procedure SetCrashReportFilename(fn:ansistring);
+begin
+   CrashReportFilename:=fn;
+end;
+
+function GetCrashReportFilename:ansistring;
+begin
+   result:=CrashReportFilename;
+end;
+
+
+initialization
+  SetCrashReportFilename(GetTempDir+InitialCrashReportFilename);
+  InstallHandler;
 finalization
+  UnInstallHandler;
+  if Assigned(CrashInfoProviders) then
+    FreeAndNil(CrashInfoProviders);
 end.

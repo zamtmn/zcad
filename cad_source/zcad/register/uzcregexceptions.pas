@@ -21,11 +21,26 @@ unit uzcregexceptions;
 interface
 
 uses
-  LazLogger,uzclog,uzcsysvars,uzbpaths,uzcexceptions;
+  SysUtils,LazLogger,uzclog,uzcsysvars,uzbpaths,uzcexceptions,uzcstrconsts;
+
+const
+  CrashReportFilename='zcadcrashreport.txt';
 
 implementation
 
-procedure ProvideLog(var f:system.text);
+procedure ProvideHeader(var f:system.text;Obj : TObject; Addr: CodePointer; _FrameCount: Longint; _Frames: PCodePointer);
+begin
+  WriteLn(f);
+  WriteLn(f,programname,' crashed ((');
+  WriteLn(f);
+end;
+
+procedure ProvideFooter(var f:system.text;Obj : TObject; Addr: CodePointer; _FrameCount: Longint; _Frames: PCodePointer);
+begin
+  WriteLn(f,'______________________________________________________________________________________');
+end;
+
+procedure ProvideLog(var f:system.text;Obj : TObject; Addr: CodePointer; _FrameCount: Longint; _Frames: PCodePointer);
 begin
   WriteLn(f);
   WriteLn(f,'Latest log:');
@@ -33,7 +48,7 @@ begin
   WriteLn(f,'Log end.');
 end;
 
-procedure ProvideBuildAndRunTimeInfo(var f:system.text);
+procedure ProvideBuildAndRunTimeInfo(var f:system.text;Obj : TObject; Addr: CodePointer; _FrameCount: Longint; _Frames: PCodePointer);
 begin
   WriteLn(f);
   WriteLn(f,'Build and runtime info:');
@@ -52,8 +67,11 @@ end;
 
 initialization
   debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
+  SetCrashReportFilename(GetTempDir+CrashReportFilename);
+  RegisterCrashInfoProvider(ProvideHeader,true);
   RegisterCrashInfoProvider(ProvideLog);
   RegisterCrashInfoProvider(ProvideBuildAndRunTimeInfo);
+  RegisterCrashInfoProvider(ProvideFooter);
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

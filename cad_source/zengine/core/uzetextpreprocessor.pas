@@ -117,7 +117,7 @@ var FindedIdPos,ContinuePos,EndBracketPos,i2,counter:GDBInteger;
     startsearhpos:integer;
     TCP:TCodePage;
 const
-    maxitertations=100;
+    maxitertations=10000;
 begin
      ps:=convertfromunicode(s);
      {repeat

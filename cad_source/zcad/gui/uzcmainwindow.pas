@@ -810,8 +810,9 @@ procedure TZCADMainWindow.ZcadException(Sender: TObject; E: Exception);
 var
   crashreportfilename,errmsg:string;
 begin
-  crashreportfilename:=ProcessException ('Handled by TZCADMainWindow.ZCADException',Sender,ExceptAddr,ExceptFrameCount,ExceptFrames);
+  ProcessException (Sender,ExceptAddr,ExceptFrameCount,ExceptFrames);
 
+  crashreportfilename:=GetCrashReportFilename;
   errmsg:=programname+' raised exception class "'+E.Message+'"'#13#10#13#10'A crash report generated (stack trace and latest log).'#13#10'Please send "'
          +crashreportfilename+'" file at zamtmn@yandex.ru'#13#10#13#10'Attempt to continue running?';
 

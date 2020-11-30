@@ -21,7 +21,7 @@ unit uzcsysparams;
 interface
 uses XMLConf,XMLPropStorage,LazConfigStorage,fileutil,
   LCLProc,uzclog,uzbpaths,uzbtypesbase,Forms,uzbtypes{$IFNDEF DELPHI},LazUTF8{$ENDIF},sysutils;
-{$INCLUDE revision.inc}
+{$INCLUDE zcadrev.inc}
 type
 {EXPORT+}
   TmyFileVersionInfo=packed record

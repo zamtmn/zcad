@@ -75,13 +75,13 @@ begin
      begin
            prompt.Caption:=commandprefix+rsdefaultpromot+commandsuffix;
            cmdedit.AutoComplete:=true;
-           cmdedit.AutoDropDown:=true;
+           //cmdedit.AutoDropDown:=true;
      end;
      CLCOMMANDRUN:
      begin
           prompt.Caption:=commandsuffix;
           cmdedit.AutoComplete:=false;
-          cmdedit.AutoDropDown:=false;
+          //cmdedit.AutoDropDown:=false;
      end;
      end;
      mode:=m;
@@ -254,7 +254,7 @@ begin
     cmdedit.Items.Text:=clist.GetTextWithEOL;
     clist.done;
     cmdedit.AutoComplete:=true;
-    cmdedit.AutoDropDown:=true;
+    cmdedit.AutoDropDown:={true}false;
     cmdedit.Align:=alClient;
     cmdedit.BorderStyle:=bsnone;
     cmdedit.BorderWidth:=0;

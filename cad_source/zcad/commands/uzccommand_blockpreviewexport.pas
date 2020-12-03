@@ -21,13 +21,12 @@ unit uzccommand_blockpreviewexport;
 
 interface
 uses
-  uzgldrawerabstract,
   uzgldrawercanvas,uzgldrawergdi,uzgldrawergeneral2d,
   uzcoimultiobjects,uzepalette,
   uzgldrawcontext,
   uzeentpoint,uzeentityfactory,
-  uzedrawingsimple,uzcsysvars,uzcstrconsts,uzccomdrawdase,
-  PrintersDlgs,printers,graphics,uzeentdevice,
+  uzedrawingsimple,uzcsysvars,
+  printers,graphics,uzeentdevice,
   LazUTF8,Clipbrd,LCLType,classes,uzeenttext,
   uzccommandsabstract,uzbstrproc,
   uzbtypesbase,uzccommandsmanager,
@@ -37,16 +36,15 @@ uses
   uzeutils,uzcutils,
   sysutils,
   varmandef,
-  uzglviewareadata,
   uzeffdxf,
   uzcinterface,
   uzegeometry,
   uzbmemman,uzbpaths,
-  uzbgeomtypes,uzeentity,uzeentcircle,uzeentline,uzeentgenericsubentry,uzeentmtext,
-  uzeentblockinsert,uzeentpolyline,uzclog,
-  math,zcmultiobjectcreateundocommand,uzcdrawing,
-  uzeentsubordinated,uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray
-  ,uzelongprocesssupport,LazLogger,uzeiopalette,uzeconsts,uzerasterizer;
+  uzbgeomtypes,uzeentity,uzeentcircle,uzeentline,uzeentgenericsubentry,
+  uzeentmtext,uzeentblockinsert,uzeentpolyline,uzclog,
+  uzeentsubordinated,uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,
+  URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray,uzelongprocesssupport,
+  LazLogger,uzeiopalette,uzeconsts,uzerasterizer;
 implementation
 function BlockPreViewExport_com(operands:TCommandOperands):TCommandResult;
 //const

@@ -26,7 +26,7 @@ uses
   uzcoimultiobjects,uzepalette,
   uzgldrawcontext,
   uzeentpoint,uzeentityfactory,
-  uzedrawingsimple,uzcsysvars,uzcstrconsts,uzccomdrawdase,
+  uzedrawingsimple,uzcsysvars,uzcstrconsts,
   PrintersDlgs,printers,graphics,uzeentdevice,
   LazUTF8,Clipbrd,LCLType,classes,uzeenttext,
   uzccommandsabstract,uzbstrproc,

@@ -43,7 +43,8 @@ TInteractiveProcObjBuild=procedure(const PInteractiveData:GDBPointer;Point:GDBVe
     TGetPointMode=(TGPWait{point},TGPWaitEnt,TGPEnt,TGPPoint,TGPCancel,TGPOtherCommand, TGPCloseDWG,TGPCloseApp);
     TInteractiveData=packed record
                        GetPointMode:TGetPointMode;(*hidden_in_objinsp*)
-                       GetPointValue:GDBVertex;(*hidden_in_objinsp*)
+                       BasePoint,currentPointValue,GetPointValue:GDBVertex;(*hidden_in_objinsp*)
+                       DrawFromBasePoint:Boolean;(*hidden_in_objinsp*)
                        PInteractiveData:GDBPointer;
                        PInteractiveProc:{-}TInteractiveProcObjBuild{/GDBPointer/};
                     end;

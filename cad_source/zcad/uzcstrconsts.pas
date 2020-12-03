@@ -104,6 +104,7 @@ resourcestring
   rscmSpecifyPoint='Specify point:';
   rscmSpecifyFirstPoint='Specify first point:';
   rscmSpecifySecondPoint='Specify second point:';
+  rscmSpecifyNextPoint='Specify next point:';
   rscmSpecifyThirdPoint='Specify third point:';
   rscmSpecifyInsertPoint='Specify insert point:';
   rscmSpecifyScale='Specify scale:';

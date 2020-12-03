@@ -21,16 +21,18 @@ unit uzetextpreprocessor;
 interface
 uses uzbtypes,uzbstrproc,sysutils,uzbtypesbase,usimplegenerics,gzctnrstl,LazLogger,gutil,uzeparser;
 type
+  TInternalCharType=UnicodeChar;
+  TInternalStringType=UnicodeString;
   TStrProcessFunc=function(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var startpos:integer;pobj:pointer):gdbstring;
   TStrProcessorData=record
-    Id:TDXFEntsInternalStringType;
-    OBracket,CBracket:char;
+    Id:TInternalStringType;
+    OBracket,CBracket:TInternalCharType;
     IsVariable:Boolean;
     Func:TStrProcessFunc;
   end;
 
-  TPrefix2ProcessFunc=class (GKey2DataMap<String,TStrProcessorData{$IFNDEF DELPHI},LessGDBString{$ENDIF}>)
-    procedure RegisterProcessor(const Id:TDXFEntsInternalStringType;const OBracket,CBracket:char;const Func:TStrProcessFunc;IsVariable:Boolean=false);
+  TPrefix2ProcessFunc=class (GKey2DataMap<TInternalStringType,TStrProcessorData{$IFNDEF DELPHI},LessUnicodeString{$ENDIF}>)
+    procedure RegisterProcessor(const Id:TInternalStringType;const OBracket,CBracket:TInternalCharType;const Func:TStrProcessFunc;IsVariable:Boolean=false);
   end;
 
 var
@@ -41,9 +43,9 @@ function convertfromunicode(s:GDBString):GDBString;
 implementation
 
 
-procedure TPrefix2ProcessFunc.RegisterProcessor(const Id:TDXFEntsInternalStringType;const OBracket,CBracket:char;const Func:TStrProcessFunc;IsVariable:Boolean=false);
+procedure TPrefix2ProcessFunc.RegisterProcessor(const Id:TInternalStringType;const OBracket,CBracket:TInternalCharType;const Func:TStrProcessFunc;IsVariable:Boolean=false);
 var
-  key:String;
+  key:TInternalStringType;
   data:TStrProcessorData;
 begin
   if OBracket<>#0 then

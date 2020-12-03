@@ -28,6 +28,7 @@ type
 LessPointer= TLess<pointer>;
 LessString= TLess<String>;
 LessGDBString= TLess<GDBString>;
+LessUnicodeString= TLess<UnicodeString>;
 LessDWGHandle= TLess<TDWGHandle>;
 LessObjID= TLess<TObjID>;
 LessInteger= TLess<Integer>;

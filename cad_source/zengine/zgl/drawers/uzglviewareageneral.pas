@@ -177,6 +177,8 @@ var
    sysvarDISPDefaultLW:TGDBLineWeight=LnWt025;
 
 implementation
+uses
+  uzccommandsmanager;
 procedure RemoveCursorIfNeed(acontrol:TControl;RemoveCursor:boolean);
 begin
      if RemoveCursor then
@@ -246,6 +248,15 @@ begin
                           exit;
   CalcOptimalMatrix;
   dc.drawer.startrender(TRM_ModelSpace,dc.DrawingContext.matrixs);
+
+  if commandmanager.pcommandrunning<>nil then begin
+    if commandmanager.pcommandrunning.IData.DrawFromBasePoint then begin
+      dc.drawer.SetColor(palette[7].rgb);
+      dc.drawer.DrawLine3DInModelSpace(commandmanager.pcommandrunning.IData.BasePoint,commandmanager.pcommandrunning.IData.currentPointValue,dc.DrawingContext.matrixs);
+    end;
+
+  end;
+
   if PDWG.GetSelObjArray.Count<>0 then
                                       begin
                                         PDWG.GetSelObjArray.drawpoint(dc,sysvarDISPGripSize,palette[sysvarDISPSelGripColor].RGB,palette[sysvarDISPUnSelGripColor].RGB);

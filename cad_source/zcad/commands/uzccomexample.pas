@@ -568,29 +568,31 @@ else pe.cdm:=TCDM_CR;
 end;
 function DrawLine_com(operands:TCommandOperands):TCommandResult;
 var
-    pline:PGDBObjLine;
-    //pe:T3PointCircleModePentity;
-    p1,p2:gdbvertex;
+  pline:PGDBObjLine;
+  p1,p2:gdbvertex;
 begin
-    if commandmanager.get3dpoint(rscmSpecifyFirstPoint,p1) then                //просим первую точку
-    if commandmanager.get3dpoint('Specify first second:',p2) then               //просим вторую точку
-    begin
-      //старый способ
+ {запрос первой координаты}
+ if commandmanager.get3dpoint(rscmSpecifyFirstPoint,p1) then
+   while true do
+     {запрос следующей координаты
+      с рисованием резиновой линии от базовой точки p1}
+     if commandmanager.Get3DPointWithLineFromBase(rscmSpecifyNextPoint,p1,p2) then begin
 
-      pline := AllocEnt(GDBLineID);                                             //выделяем память
-      pline^.init(nil,nil,0,p1,p2);                                             //инициализируем
+       //создаем и инициализируем примитив
+       pline:=AllocEnt(GDBLineID);
+       pline^.init(nil,nil,LnWtByLayer,p1,p2);
 
-      //конец старого способа
+       //присваиваем текущие цвет, толщину, и т.д. от настроек чертежа
+       zcSetEntPropFromCurrentDrawingProp(pline);
+       //добавляем в чертеж
+       zcAddEntToCurrentDrawingWithUndo(pline);
+       //перерисовываем
+       zcRedrawCurrentDrawing;
 
-
-      //новый способ
-      //pline:=pointer(ENTF_CreateLine(nil,nil,[p1.x,p1.y,p1.z,p2.x,p2.y,p2.z])); //создаем примитив с зпданой геометрией, не указывая владельца и список во владельце
-      //конец нового способа
-
-      zcSetEntPropFromCurrentDrawingProp(pline);                                        //присваиваем текущие слой, вес и т.п
-      zcAddEntToCurrentDrawingWithUndo(pline);                                    //добавляем в чертеж
-    end;
-    result:=cmd_ok;
+       p1:=p2;
+     end else
+       system.break;
+ result:=cmd_ok;
 end;
 function matchprop_com(operands:TCommandOperands):TCommandResult;
 var

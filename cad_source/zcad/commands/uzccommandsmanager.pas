@@ -84,6 +84,7 @@ type
                           function CurrentCommandNotUseCommandLine:GDBBoolean;
                           procedure PrepairVarStack;
                           function Get3DPoint(prompt:GDBString;out p:GDBVertex):GDBBoolean;
+                          function Get3DPointWithLineFromBase(prompt:GDBString;const base:GDBVertex;out p:GDBVertex):GDBBoolean;
                           function GetEntity(prompt:GDBString;out p:GDBPointer):GDBBoolean;
                           function Get3DPointInteractive(prompt:GDBString;out p:GDBVertex;const InteractiveProc:TInteractiveProcObjBuild;const PInteractiveData:GDBPointer):GDBBoolean;
                           function EndGetPoint(newmode:TGetPointMode):GDBBoolean;
@@ -261,6 +262,14 @@ end;
 function GDBcommandmanager.Get3DPoint(prompt:GDBString;out p:GDBVertex):GDBBoolean;
 begin
   result:=Get3DPointInteractive(prompt,p,nil,nil);
+end;
+
+function GDBcommandmanager.Get3DPointWithLineFromBase(prompt:GDBString;const base:GDBVertex;out p:GDBVertex):GDBBoolean;
+begin
+  pcommandrunning^.IData.BasePoint:=base;
+  pcommandrunning^.IData.DrawFromBasePoint:=true;
+  result:=Get3DPointInteractive(prompt,p,nil,nil);
+  pcommandrunning^.IData.DrawFromBasePoint:=False;
 end;
 function GDBcommandmanager.GetEntity(prompt:GDBString;out p:GDBPointer):GDBBoolean;
 var
@@ -442,8 +451,11 @@ begin
                                                 pcommandrunning^.IData.GetPointValue:=p3d;
                                            end
                                            else
+                                             begin
+                                               pcommandrunning^.IData.currentPointValue:=p3d;
                                                if assigned(pcommandrunning^.IData.PInteractiveProc) then
                                                 pcommandrunning^.IData.PInteractiveProc(pcommandrunning^.IData.PInteractiveData,p3d,false);
+                                             end;
                                       end;
      //clearotrack;
         p:=CommandsStack.beginiterate(ir);

@@ -189,6 +189,8 @@ uses
   uzccommand_showpage,
   uzccommand_options,
   uzccommand_about,uzccommand_help,
+  uzccommand_get3dpoint,uzccommand_get3dpoint_drawrect,uzccommand_getrect,
+  uzccommand_dist,
 
   {$IFDEF ELECTROTECH}
   //**for velec func**//

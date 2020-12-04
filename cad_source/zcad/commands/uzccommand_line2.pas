@@ -128,7 +128,7 @@ end;
 
 initialization
   debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
-  CreateCommandRTEdObjectPlugin(@Line_com_CommandStart,@Line_com_CommandEnd,nil,nil,@Line_com_BeforeClick,@Line_com_AfterClick,nil,nil,'Line',0,0);
+  CreateCommandRTEdObjectPlugin(@Line_com_CommandStart,@Line_com_CommandEnd,nil,nil,@Line_com_BeforeClick,@Line_com_AfterClick,nil,nil,'LineOld',0,0);
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

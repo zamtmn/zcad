@@ -63,7 +63,7 @@ end;
 
 initialization
   debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
-  CreateCommandFastObjectPlugin(@DrawLine_com,'DrawLine',   CADWG,0);
+  CreateCommandFastObjectPlugin(@DrawLine_com,'Line',   CADWG,0);
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

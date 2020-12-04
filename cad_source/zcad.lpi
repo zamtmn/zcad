@@ -1040,7 +1040,7 @@
         <IsPartOfProject Value="True"/>
       </Unit169>
       <Unit170>
-        <Filename Value="zcad/commands/uzccomdrawsuperline.pas"/>
+        <Filename Value="zcad/commands/uzccommand_drawsuperline.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit170>
       <Unit171>

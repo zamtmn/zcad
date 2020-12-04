@@ -566,34 +566,6 @@ else pe.cdm:=TCDM_CR;
     end;
     result:=cmd_ok;
 end;
-function DrawLine_com(operands:TCommandOperands):TCommandResult;
-var
-  pline:PGDBObjLine;
-  p1,p2:gdbvertex;
-begin
- {запрос первой координаты}
- if commandmanager.get3dpoint(rscmSpecifyFirstPoint,p1) then
-   while true do
-     {запрос следующей координаты
-      с рисованием резиновой линии от базовой точки p1}
-     if commandmanager.Get3DPointWithLineFromBase(rscmSpecifyNextPoint,p1,p2) then begin
-
-       //создаем и инициализируем примитив
-       pline:=AllocEnt(GDBLineID);
-       pline^.init(nil,nil,LnWtByLayer,p1,p2);
-
-       //присваиваем текущие цвет, толщину, и т.д. от настроек чертежа
-       zcSetEntPropFromCurrentDrawingProp(pline);
-       //добавляем в чертеж
-       zcAddEntToCurrentDrawingWithUndo(pline);
-       //перерисовываем
-       zcRedrawCurrentDrawing;
-
-       p1:=p2;
-     end else
-       system.break;
- result:=cmd_ok;
-end;
 function matchprop_com(operands:TCommandOperands):TCommandResult;
 var
     ps,pd:PGDBObjEntity;
@@ -1202,7 +1174,6 @@ initialization
 
      CreateCommandFastObjectPlugin(@DrawArc_com,         'Arc',        CADWG,0);
      CreateCommandFastObjectPlugin(@DrawCircle_com,      'Circle',     CADWG,0);
-     CreateCommandFastObjectPlugin(@DrawLine_com,        'DrawLine',   CADWG,0);
      CreateCommandFastObjectPlugin(@DrawRectangle_com,   'Rectangle',  CADWG,0);
 
      CreateCommandFastObjectPlugin(@DrawPolygon_com,   'Polygon',  CADWG,0);

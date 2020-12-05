@@ -474,98 +474,6 @@ begin
     result:=cmd_ok;
 end;
 
-function DrawArc_com(operands:TCommandOperands):TCommandResult;
-var
-    pa:PGDBObjArc;
-    pline:PGDBObjLine;
-    pe:T3PointPentity;
-    dc:TDrawContext;
-begin
-    if commandmanager.get3dpoint(rscmSpecifyFirstPoint,pe.p1) then
-    begin
-         pline := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,drawings.GetCurrentROOT));
-         pline^.CoordInOCS.lBegin:=pe.p1;
-         InteractiveLineEndManipulator(pline,pe.p1,false);
-      if commandmanager.Get3DPointInteractive(rscmSpecifySecondPoint,pe.p2,@InteractiveLineEndManipulator,pline) then
-      begin
-           drawings.GetCurrentDWG^.FreeConstructionObjects;
-           pe.pentity:= GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBArcID,drawings.GetCurrentROOT));
-        if commandmanager.Get3DPointInteractive(rscmSpecifyThirdPoint,pe.p3,@InteractiveArcManipulator,@pe) then
-          begin
-               drawings.GetCurrentDWG^.FreeConstructionObjects;
-               pa := AllocEnt(GDBArcID);
-               pe.pentity:=pa;
-               pa^.initnul;
-
-               InteractiveArcManipulator(@pe,pe.p3,false);
-               dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-               pa^.FormatEntity(drawings.GetCurrentDWG^,dc);
-
-               {drawings.}zcAddEntToCurrentDrawingWithUndo(pa);
-          end;
-      end;
-    end;
-    result:=cmd_ok;
-end;
-
-function DrawCircle_com(operands:TCommandOperands):TCommandResult;
-var
-    pcircle:PGDBObjCircle;
-    pe:T3PointCircleModePentity;
-    s:string;
-begin
-    s:=uppercase(operands);
-    {case s of
-                               'CR':pe.cdm:=TCDM_CR;
-                               'CD':pe.cdm:=TCDM_CD;
-                               '2P':pe.cdm:=TCDM_2P;
-                               '3P':pe.cdm:=TCDM_3P;
-                               else
-                                   pe.cdm:=TCDM_CR;
-    end;}
-     if s='CR' then pe.cdm:=TCDM_CR
-else if s='CD' then pe.cdm:=TCDM_CD
-else if s='2P' then pe.cdm:=TCDM_2P
-else if s='3P' then pe.cdm:=TCDM_3P
-else pe.cdm:=TCDM_CR;
-
-    pe.npoint:=0;
-    if commandmanager.get3dpoint(rscmSpecifyFirstPoint,pe.p1) then
-    begin
-         inc(pe.npoint);
-         pe.pentity := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBCircleID,drawings.GetCurrentROOT));
-         InteractiveSmartCircleManipulator(@pe,pe.p1,false);
-      if commandmanager.Get3DPointInteractive( rscmSpecifySecondPoint,
-                                               pe.p2,
-                                               @InteractiveSmartCircleManipulator,
-                                               @pe) then
-      begin
-           if pe.cdm=TCDM_3P then
-           begin
-                inc(pe.npoint);
-                if commandmanager.Get3DPointInteractive(rscmSpecifySecondPoint,pe.p3,@InteractiveSmartCircleManipulator,@pe) then
-                begin
-                     drawings.GetCurrentDWG^.FreeConstructionObjects;
-                     pcircle := AllocEnt(GDBCircleID);
-                     pe.pentity:=pcircle;
-                     pcircle^.initnul;
-                     InteractiveSmartCircleManipulator(@pe,pe.p3,false);
-                     {drawings.}zcAddEntToCurrentDrawingWithUndo(pcircle);
-                end;
-           end
-           else
-           begin
-               drawings.GetCurrentDWG^.FreeConstructionObjects;
-               pcircle := AllocEnt(GDBCircleID);
-               pe.pentity:=pcircle;
-               pcircle^.initnul;
-               InteractiveSmartCircleManipulator(@pe,pe.p2,false);
-               {drawings.}zcAddEntToCurrentDrawingWithUndo(pcircle);
-           end;
-      end;
-    end;
-    result:=cmd_ok;
-end;
 function matchprop_com(operands:TCommandOperands):TCommandResult;
 var
     ps,pd:PGDBObjEntity;
@@ -1172,8 +1080,6 @@ initialization
      CreateCommandFastObjectPlugin(@DrawDiametricDim_com,'DimDiameter',CADWG,0);
      CreateCommandFastObjectPlugin(@DrawRadialDim_com,   'DimRadius',  CADWG,0);
 
-     CreateCommandFastObjectPlugin(@DrawArc_com,         'Arc',        CADWG,0);
-     CreateCommandFastObjectPlugin(@DrawCircle_com,      'Circle',     CADWG,0);
      CreateCommandFastObjectPlugin(@DrawRectangle_com,   'Rectangle',  CADWG,0);
 
      CreateCommandFastObjectPlugin(@DrawPolygon_com,   'Polygon',  CADWG,0);

@@ -138,6 +138,8 @@ const
       );
 type
 TNameToIndex=TMyGDBAnsiStringDictionary<TArrayIndex>;
+TFieldName=(FNUser,FNProgram);
+TFieldNames=set of TFieldName;
 {EXPORT+}
 ptypemanager=^typemanager;
 typemanager={$IFNDEF DELPHI}packed{$ENDIF} object(typemanagerdef)
@@ -214,7 +216,7 @@ TUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleUnit)
             destructor done;virtual;
             procedure free;virtual;
             function RegisterType(ti:PTypeInfo):PUserTypeDescriptor;
-            function SetTypeDesk(ti:PTypeInfo;fieldnames:array of const):PUserTypeDescriptor;
+            function SetTypeDesk(ti:PTypeInfo;fieldnames:array of const;SetNames:TFieldNames=[FNUser,FNProgram]):PUserTypeDescriptor;
             function RegisterRecordType(ti:PTypeInfo):PUserTypeDescriptor;
             function RegisterPointerType(ti:PTypeInfo):PUserTypeDescriptor;
             function RegisterEnumType(ti:PTypeInfo):PUserTypeDescriptor;
@@ -464,7 +466,7 @@ begin
        tkEnumeration:result:=RegisterEnumType(ti);
      end;
 end;
-function TUnit.SetTypeDesk(ti:PTypeInfo;fieldnames:array of const):PUserTypeDescriptor;
+function TUnit.SetTypeDesk(ti:PTypeInfo;fieldnames:array of const;SetNames:TFieldNames=[FNUser,FNProgram]):PUserTypeDescriptor;
 function GetFieldName(index:integer;oldname:string):string;
 begin
   if index>high(fieldnames) then
@@ -488,13 +490,21 @@ begin
     case ti^.Kind of
       tkRecord:
       begin
-        for i:=0 to PRecordDescriptor(result)^.Fields.Count-1 do
-          PRecordDescriptor(result)^.Fields.PArray^[i].base.UserName:=GetFieldName(i,PRecordDescriptor(result)^.Fields.PArray^[i].base.UserName);
+        for i:=0 to PRecordDescriptor(result)^.Fields.Count-1 do begin
+          if FNUser in SetNames then
+            PRecordDescriptor(result)^.Fields.PArray^[i].base.UserName:=GetFieldName(i,PRecordDescriptor(result)^.Fields.PArray^[i].base.UserName);
+          if FNProgram in SetNames then
+            PRecordDescriptor(result)^.Fields.PArray^[i].base.ProgramName:=GetFieldName(i,PRecordDescriptor(result)^.Fields.PArray^[i].base.UserName);
+        end;
       end;
       tkEnumeration:
       begin
-        for i:=0 to PEnumDescriptor(result)^.UserValue.Count-1 do
-         PEnumDescriptor(result)^.UserValue.PArray^[i]:=GetFieldName(i,PEnumDescriptor(result)^.UserValue.PArray^[i]);
+        for i:=0 to PEnumDescriptor(result)^.UserValue.Count-1 do begin
+          if FNUser in SetNames then
+            PEnumDescriptor(result)^.UserValue.PArray^[i]:=GetFieldName(i,PEnumDescriptor(result)^.UserValue.PArray^[i]);
+          if FNProgram in SetNames then
+            PEnumDescriptor(result)^.SourceValue.PArray^[i]:=GetFieldName(i,PEnumDescriptor(result)^.SourceValue.PArray^[i]);
+        end;
       end;
     end;
 end;

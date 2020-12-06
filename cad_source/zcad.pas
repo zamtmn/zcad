@@ -193,6 +193,7 @@ uses
   uzccommand_dist,
 
   uzccommand_line,uzccommand_line2,uzccommand_circle,uzccommand_arc,
+  uzccommand_polygon,uzccommand_rectangle,
 
   {$IFDEF ELECTROTECH}
   //**for velec func**//

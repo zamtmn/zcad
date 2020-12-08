@@ -194,6 +194,7 @@ uses
 
   uzccommand_line,uzccommand_line2,uzccommand_circle,uzccommand_arc,
   uzccommand_polygon,uzccommand_rectangle,
+  uzccommand_matchprop,
 
   {$IFDEF ELECTROTECH}
   //**for velec func**//

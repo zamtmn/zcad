@@ -37,11 +37,13 @@ procedure Line_com_CommandEnd(_self:pointer);
 function Line_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 function Line_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 
+var
+  PCreatedGDBLine:pgdbobjline;
+
 implementation
 
 var
   pold:PGDBObjEntity;
-  PCreatedGDBLine:pgdbobjline;
 
 function Line_com_CommandStart(operands:TCommandOperands):TCommandResult;
 begin

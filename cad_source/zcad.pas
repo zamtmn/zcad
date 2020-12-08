@@ -198,6 +198,10 @@ uses
   uzccommand_dimlinear,uzccommand_dimaligned,uzccommand_dimdiameter,
   uzccommand_dimradius,
 
+  uzccommand_exampleinsertdevice,uzccommand_examplecreatelayer,
+
+  uzccommand_ld,
+
   {$IFDEF ELECTROTECH}
   //**for velec func**//
   //uzccomdrawsuperline,
@@ -209,7 +213,6 @@ uses
 
   //uzccomexample2,
   //uzventsuperline,
-  uzccomexample,
   uzccomobjectinspector,
   //uzccomexperimental,
 

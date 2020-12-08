@@ -195,6 +195,8 @@ uses
   uzccommand_line,uzccommand_line2,uzccommand_circle,uzccommand_arc,
   uzccommand_polygon,uzccommand_rectangle,
   uzccommand_matchprop,
+  uzccommand_dimlinear,uzccommand_dimaligned,uzccommand_dimdiameter,
+  uzccommand_dimradius,
 
   {$IFDEF ELECTROTECH}
   //**for velec func**//

@@ -301,7 +301,7 @@ var
    BIProp:TBlockInsert;
    pc:pgdbobjcircle;
    pb:PGDBObjBlockInsert;
-   PCreatedGDBLine:pgdbobjline;
+
    pold:PGDBObjEntity;
    p3dpl:pgdbobjpolyline;
    p3dplold:PGDBObjEntity;
@@ -335,6 +335,8 @@ var
 //procedure startup;
 //procedure Finalize;
 implementation
+var
+  PCreatedGDBLine:pgdbobjline;
 function GetBlockDefNames(var BDefNames:TZctnrVectorGDBString;selname:GDBString):GDBInteger;
 var pb:PGDBObjBlockdef;
     ir:itrec;

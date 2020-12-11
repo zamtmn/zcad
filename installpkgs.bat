@@ -9,6 +9,9 @@ lazbuild --add-package cad_source\other\AGraphLaz\lazarus\ag_graph.lpk
 lazbuild --add-package cad_source\other\AGraphLaz\lazarus\ag_math.lpk
 lazbuild --add-package cad_source\other\AGraphLaz\lazarus\ag_vectors.lpk
 lazbuild --add-package cad_source\other\AGraphLaz\lazarus\ag_vectors.lpk
+lazbuild --add-package cad_source\other\uniqueinstance\uniqueinstance_package.lpk
+;lazbuild --add-package cad_source\other\laz.virtualtreeview_package\laz.virtualtreeview_package.lpk
+lazbuild --add-package cad_source\other\laz.virtualtreeview_package\test.lpk
 lazbuild --add-package cad_source\components\zebase\zebase.lpk
 lazbuild --add-package cad_source\components\zcontainers\zcontainers.lpk
 lazbuild --add-package cad_source\components\zcontrols\zcontrols.lpk
@@ -19,3 +22,4 @@ lazbuild --add-package cad_source\components\zscriptbase\zscriptbase.lpk
 lazbuild --add-package cad_source\components\zscript\zscript.lpk
 lazbuild --add-package cad_source\components\ztoolbars\ztoolbars.lpk
 lazbuild --add-package cad_source\components\zundostack\zundostack.lpk
+lazbuild -B -r --build-ide=clean

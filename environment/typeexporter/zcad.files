@@ -103,7 +103,6 @@ zcad/commands/uzccommandsimpl.pas
 zcad/commands/uzccommand_move.pas
 zcad/commands/uzccommand_copy.pas
 zcad/commands/uzccomdraw.pas
-zcad/commands/uzccomexample.pas
 zengine/containers/UGDBTracePropArray.pas
 zengine/zgl/drawers/uzglviewareadata.pas
 components/zscript/UUnitManager.pas

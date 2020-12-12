@@ -10,8 +10,7 @@ lazbuild --add-package cad_source\other\AGraphLaz\lazarus\ag_math.lpk
 lazbuild --add-package cad_source\other\AGraphLaz\lazarus\ag_vectors.lpk
 lazbuild --add-package cad_source\other\AGraphLaz\lazarus\ag_vectors.lpk
 lazbuild --add-package cad_source\other\uniqueinstance\uniqueinstance_package.lpk
-;lazbuild --add-package cad_source\other\laz.virtualtreeview_package\laz.virtualtreeview_package.lpk
-lazbuild --add-package cad_source\other\laz.virtualtreeview_package\test.lpk
+lazbuild --add-package cad_source\other\laz.virtualtreeview_package\laz.virtualtreeview_package.lpk
 lazbuild --add-package cad_source\components\zebase\zebase.lpk
 lazbuild --add-package cad_source\components\zcontainers\zcontainers.lpk
 lazbuild --add-package cad_source\components\zcontrols\zcontrols.lpk

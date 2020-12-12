@@ -544,7 +544,7 @@
         <IsPartOfProject Value="True"/>
       </Unit45>
       <Unit46>
-        <Filename Value="zcad/commands/uzccomexperimental.pas"/>
+        <Filename Value="zcad/velec/uzccomexperimental.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit46>
       <Unit47>

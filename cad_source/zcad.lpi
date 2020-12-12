@@ -540,7 +540,7 @@
         <IsPartOfProject Value="True"/>
       </Unit44>
       <Unit45>
-        <Filename Value="zcad/commands/uzccomdb.pas"/>
+        <Filename Value="zcad/electrotech/uzccomdb.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit45>
       <Unit46>

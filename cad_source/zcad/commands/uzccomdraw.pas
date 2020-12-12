@@ -48,7 +48,7 @@ uses
   uzeentsubordinated,uzeentblockinsert,uzeentpolyline,uzclog,gzctnrvectordata,
   math,uzeenttable,uzctnrvectorgdbstring,
   uzeentcurve,uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray
-  ,uzelongprocesssupport,LazLogger;
+  ,uzelongprocesssupport,LazLogger,uzccommand_circle2;
 const
      modelspacename:GDBSTring='**Модель**';
 type
@@ -299,7 +299,6 @@ var
    PEProp:TPolyEdit;
    pworkvertex:pgdbvertex;
    BIProp:TBlockInsert;
-   pc:pgdbobjcircle;
    pb:PGDBObjBlockInsert;
 
    pold:PGDBObjEntity;
@@ -1899,64 +1898,6 @@ begin
   clearcp;
   redrawoglwnd;
 end;}
-function Circle_com_CommandStart(operands:TCommandOperands):TCommandResult;
-begin
-  drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
-  ZCMsgCallBackInterface.TextMessage(rscmCenterPointCircle,TMWOHistoryOut);
-  result:=cmd_ok;
-end;
-
-procedure Circle_com_CommandEnd(_self:pointer);
-begin
-end;
-
-function Circle_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
-var
-  dc:TDrawContext;
-begin
-  if (button and MZW_LBUTTON)<>0 then
-  begin
-    dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-    ZCMsgCallBackInterface.TextMessage(rscmPointOnCircle,TMWOHistoryOut);
-
-    pc := PGDBObjCircle(ENTF_CreateCircle(@drawings.GetCurrentDWG^.ConstructObjRoot,@drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray,[wc.x,wc.y,wc.z,0]));
-    zcSetEntPropFromCurrentDrawingProp(pc);
-    //pc := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBCircleID,drawings.GetCurrentROOT));
-    //GDBObjSetCircleProp(pc,drawings.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^, sysvar.dwg.DWG_CLinew^, wc, 0);
-
-    dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-    pc^.Formatentity(drawings.GetCurrentDWG^,dc);
-    pc^.RenderFeedback(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,@drawings.GetCurrentDWG^.myGluProject2,dc);
-  end;
-  result:=0;
-end;
-
-function Circle_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
-var
-    domethod,undomethod:tmethod;
-    dc:TDrawContext;
-begin
-  result:=mclick;
-  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-  zcSetEntPropFromCurrentDrawingProp(pc);
-  pc^.Radius := Vertexlength(pc^.local.P_insert, wc);
-  pc^.Formatentity(drawings.GetCurrentDWG^,dc);
-  pc^.RenderFeedback(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,@drawings.GetCurrentDWG^.myGluProject2,dc);
-  if (button and MZW_LBUTTON)<>0 then
-  begin
-
-         SetObjCreateManipulator(domethod,undomethod);
-         with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),1)^ do
-         begin
-              AddObject(pc);
-              comit;
-         end;
-
-    drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count := 0;
-    commandmanager.executecommandend;
-  end;
-end;
-
 
 function Mirror_com.CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D;
 var
@@ -2955,7 +2896,6 @@ begin
   BIProp.Rotation:=0;
   PEProp.Action:=TSPE_Insert;
 
-  CreateCommandRTEdObjectPlugin(@Circle_com_CommandStart,@Circle_com_CommandEnd,nil,nil,@Circle_com_BeforeClick,@Circle_com_AfterClick,nil,nil,'Circle2',0,0);
   CreateCommandRTEdObjectPlugin(@_3DPolyEd_com_CommandStart,nil,nil,nil,@_3DPolyEd_com_BeforeClick,@_3DPolyEd_com_BeforeClick,nil,nil,'PolyEd',0,0);
   CreateCommandRTEdObjectPlugin(@Insert_com_CommandStart,@Insert_com_CommandEnd,nil,nil,@Insert_com_BeforeClick,@Insert_com_BeforeClick,nil,nil,'Insert',0,0);
 

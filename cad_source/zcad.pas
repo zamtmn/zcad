@@ -192,7 +192,10 @@ uses
   uzccommand_get3dpoint,uzccommand_get3dpoint_drawrect,uzccommand_getrect,
   uzccommand_dist,
 
-  uzccommand_line,uzccommand_line2,uzccommand_circle,uzccommand_arc,
+  uzccommand_line,uzccommand_circle,uzccommand_arc,
+
+  uzccommand_line2,uzccommand_circle2,//old commands
+
   uzccommand_polygon,uzccommand_rectangle,
   uzccommand_matchprop,
   uzccommand_dimlinear,uzccommand_dimaligned,uzccommand_dimdiameter,

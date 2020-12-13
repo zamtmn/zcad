@@ -1783,40 +1783,6 @@ begin
    Erase_com(EmptyCommandOperands);
    result:=cmd_ok;
 end;
-function InverseSelected_com(operands:TCommandOperands):TCommandResult;
-var pv:pGDBObjEntity;
-    ir:itrec;
-    count:integer;
-    //domethod,undomethod:tmethod;
-begin
-  //if (drawings.GetCurrentROOT^.ObjArray.count = 0)or(drawings.GetCurrentDWG^.OGLwindow1.param.seldesc.Selectedobjcount=0) then exit;
-  count:=0;
-  pv:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
-  if pv<>nil then
-  repeat
-    if pv^.Selected then
-                        begin
-                             pv^.deselect(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,@drawings.CurrentDWG^.DeSelector);
-                             inc(count);
-                        end
-                    else
-                        begin
-                          pv^.select(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,@drawings.CurrentDWG^.selector);
-                          inc(count);
-                        end;
-
-  pv:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
-  until pv=nil;
-  drawings.GetCurrentDWG^.wa.param.seldesc.Selectedobjcount:=count;
-  drawings.GetCurrentDWG^.wa.param.seldesc.OnMouseObject:=nil;
-  drawings.GetCurrentDWG^.wa.param.seldesc.LastSelectedObject:=nil;
-  drawings.GetCurrentDWG^.wa.param.lastonmouseobject:=nil;
-  //{objinsp.GDBobjinsp.}ReturnToDefault;
-  //clearcp;
-  zcRedrawCurrentDrawing;
-  result:=cmd_ok;
-end;
-
 function Mirror_com.CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D;
 var
     dist,p3:gdbvertex;
@@ -2631,12 +2597,10 @@ begin
   BlockReplace.SetCommandParam(@BlockReplaceParams,'PTBlockReplaceParams');
 
 
-  CreateCommandFastObjectPlugin(@Erase_com,'Erase',CADWG,0);
   CreateCommandFastObjectPlugin(@CutClip_com,'CutClip',CADWG or CASelEnts,0);
   CreateCommandFastObjectPlugin(@Insert2_com,'Insert2',CADWG,0);
   CreateCommandFastObjectPlugin(@PlaceAllBlocks_com,'PlaceAllBlocks',CADWG,0);
   CreateCommandFastObjectPlugin(@BlocksList_com,'BlocksList',CADWG,0);
-  CreateCommandFastObjectPlugin(@InverseSelected_com,'InverseSelected',CADWG or CASelEnts,0);
   //CreateCommandFastObjectPlugin(@bedit_com,'BEdit');
   pbeditcom:=CreateCommandRTEdObjectPlugin(@bedit_com,nil,nil,@bedit_format,nil,nil,nil,nil,'BEdit',0,0);
   BEditParam.Blocks.Enums.init(100);

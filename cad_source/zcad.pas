@@ -196,6 +196,8 @@ uses
 
   uzccommand_line2,uzccommand_circle2,//old commands
 
+  uzccommand_scale,
+
   uzccommand_polygon,uzccommand_rectangle,
   uzccommand_matchprop,
   uzccommand_dimlinear,uzccommand_dimaligned,uzccommand_dimdiameter,

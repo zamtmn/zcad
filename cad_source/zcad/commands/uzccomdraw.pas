@@ -180,12 +180,6 @@ type
     procedure rot(a:GDBDouble; button: GDBByte);
     procedure showprompt(mklick:integer);virtual;
   end;
-  scale_com = {$IFNDEF DELPHI}packed{$ENDIF} object(move_com)
-    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
-    procedure scale(a:GDBDouble; button: GDBByte);
-    procedure showprompt(mklick:integer);virtual;
-    procedure CommandContinue; virtual;
-  end;
   copybase_com = {$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
     procedure CommandStart(Operands:TCommandOperands); virtual;
     function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
@@ -306,7 +300,6 @@ var
    p3dplold:PGDBObjEntity;
    mirror:mirror_com;
    rotate:rotate_com;
-   scale:Scale_com;
    copybase:copybase_com;
    PasteClip:PasteClip_com;
 
@@ -1883,22 +1876,6 @@ begin
   result:=cmd_ok;
 end;
 
-{var i, newend, objdel: GDBInteger;
-begin
-  if drawings.ObjRoot.ObjArray.count = 0 then exit;
-  newend := 0;
-  objdel := 0;
-  for i := 0 to drawings.ObjRoot.ObjArray.count - 1 do
-  begin
-    if newend <> i then PGDBObjEntityArray(drawings.ObjRoot.ObjArray.PArray)[newend] := PGDBObjEntityArray(drawings.ObjRoot.ObjArray.PArray)[i];
-    if PGDBObjEntityArray(drawings.ObjRoot.ObjArray.PArray)[i].selected = false then inc(newend)
-    else inc(objdel);
-  end;
-  drawings.ObjRoot.ObjArray.count := drawings.ObjRoot.ObjArray.count - objdel;
-  clearcp;
-  redrawoglwnd;
-end;}
-
 function Mirror_com.CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D;
 var
     dist,p3:gdbvertex;
@@ -2031,119 +2008,6 @@ begin
       rot(a,button);
 
       //dispmatr:=onematrix;
-      result:=cmd_ok;
-end;
-procedure scale_com.CommandContinue;
-var v1:vardesk;
-    td:gdbdouble;
-begin
-   if (commandmanager.GetValueHeap{-vs})>0 then
-   begin
-   v1:=commandmanager.PopValue;
-   td:=Pgdbdouble(v1.data.Instance)^;
-   scale(td,MZW_LBUTTON);
-   end;
-end;
-
-procedure scale_com.showprompt(mklick:integer);
-begin
-     case mklick of
-     0:inherited;
-     1:ZCMsgCallBackInterface.TextMessage(rscmPickOrEnterScale,TMWOHistoryOut);
-     end;
-end;
-procedure scale_com.scale(a:GDBDouble; button: GDBByte);
-var
-    dispmatr,im,rotmatr:DMatrix4D;
-    ir:itrec;
-    pcd:PTCopyObjectDesc;
-    //v:GDBVertex;
-    m:tmethod;
-    dc:TDrawContext;
-begin
-if a<eps then a:=1;
-
-dispmatr:=uzegeometry.CreateTranslationMatrix(createvertex(-t3dp.x,-t3dp.y,-t3dp.z));
-
-rotmatr:=onematrix;
-rotmatr[0][0]:=a;
-rotmatr[1][1]:=a;
-rotmatr[2][2]:=a;
-
-rotmatr:=uzegeometry.MatrixMultiply(dispmatr,rotmatr);
-dispmatr:=uzegeometry.CreateTranslationMatrix(createvertex(t3dp.x,t3dp.y,t3dp.z));
-dispmatr:=uzegeometry.MatrixMultiply(rotmatr,dispmatr);
-dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-{pcd:=pcoa^.beginiterate(ir);
-if pcd<>nil then
-repeat
-  pcd.clone^.TransformAt(pcd.obj,@dispmatr);
-  pcd.clone^.format;
-  if button = 1 then
-                    begin
-                    pcd.clone^.rtsave(pcd.obj);
-                    pcd.obj^.Format;
-                    end;
-
-  pcd:=pcoa^.iterate(ir);
-until pcd=nil;}
-if (button and MZW_LBUTTON)=0 then
-                  begin
-                        drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=dispmatr;
-                        {pcd:=pcoa^.beginiterate(ir);
-                        if pcd<>nil then
-                        repeat
-                             pcd.clone^.TransformAt(pcd.obj,@dispmatr);
-                             pcd.clone^.format;
-                             pcd:=pcoa^.iterate(ir);
-                        until pcd=nil;}
-                  end
-             else
-                 begin
-                   im:=dispmatr;
-                   uzegeometry.MatrixInvert(im);
-                   PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushStartMarker('Scale');
-                   with PushCreateTGMultiObjectChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,dispmatr,im,pcoa^.Count)^ do
-                   begin
-                    pcd:=pcoa^.beginiterate(ir);
-                   if pcd<>nil then
-                   repeat
-                       m:=TMEthod(@pcd^.sourceEnt^.Transform);
-                       {m.Data:=pcd.obj;
-                       m.Code:=pointer(pcd.obj^.Transform);}
-                       AddMethod(m);
-
-                       dec(pcd^.sourceEnt^.vp.LastCameraPos);
-                       //pcd.obj^.Format;
-
-                       pcd:=pcoa^.iterate(ir);
-                   until pcd=nil;
-                   comit;
-                   end;
-                   PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushEndMarker;
-                 end;
-
-if (button and MZW_LBUTTON)<>0 then
-begin
-drawings.GetCurrentROOT^.FormatAfterEdit(drawings.GetCurrentDWG^,dc);
-drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.free;
-commandend;
-commandmanager.executecommandend;
-end;
-end;
-
-function scale_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger;
-var
-    //dispmatr,im,rotmatr:DMatrix4D;
-    //ir:itrec;
-    //pcd:PTCopyObjectDesc;
-    a:double;
-    //v:GDBVertex;
-    //m:tmethod;
-begin
-      //v:=uzegeometry.VertexSub(t3dp,wc);
-      a:=uzegeometry.Vertexlength(t3dp,wc);
-      scale(a,button);
       result:=cmd_ok;
 end;
 
@@ -2899,14 +2763,10 @@ begin
   CreateCommandRTEdObjectPlugin(@_3DPolyEd_com_CommandStart,nil,nil,nil,@_3DPolyEd_com_BeforeClick,@_3DPolyEd_com_BeforeClick,nil,nil,'PolyEd',0,0);
   CreateCommandRTEdObjectPlugin(@Insert_com_CommandStart,@Insert_com_CommandEnd,nil,nil,@Insert_com_BeforeClick,@Insert_com_BeforeClick,nil,nil,'Insert',0,0);
 
-  copy.init('Copy',0,0);
   mirror.init('Mirror',0,0);
   mirror.SetCommandParam(@MirrorParam,'PTMirrorParam');
-  move.init('Move',0,0);
   rotate.init('Rotate',0,0);
   rotate.NotUseCommandLine:=false;
-  scale.init('Scale',0,0);
-  scale.NotUseCommandLine:=false;
   copybase.init('CopyBase',CADWG or CASelEnts,0);
   PasteClip.init('PasteClip',0,0);
 

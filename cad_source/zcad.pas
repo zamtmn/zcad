@@ -199,6 +199,8 @@ uses
   uzccommand_scale,uzccommand_rotate,uzccommand_erase,
   uzccommand_inverseselected,uzccommand_cutclip,
 
+  uzccommand_polyed,
+
   uzccommand_polygon,uzccommand_rectangle,
   uzccommand_matchprop,
   uzccommand_dimlinear,uzccommand_dimaligned,uzccommand_dimdiameter,

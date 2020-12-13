@@ -1777,12 +1777,6 @@ begin
                          pb:=nil;
                     end;
 end;
-function CutClip_com(operands:TCommandOperands):TCommandResult;
-begin
-   copyclip_com(EmptyCommandOperands);
-   Erase_com(EmptyCommandOperands);
-   result:=cmd_ok;
-end;
 function Mirror_com.CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D;
 var
     dist,p3:gdbvertex;
@@ -2596,8 +2590,6 @@ begin
   BlockReplaceParams.SaveOrientation:=true;
   BlockReplace.SetCommandParam(@BlockReplaceParams,'PTBlockReplaceParams');
 
-
-  CreateCommandFastObjectPlugin(@CutClip_com,'CutClip',CADWG or CASelEnts,0);
   CreateCommandFastObjectPlugin(@Insert2_com,'Insert2',CADWG,0);
   CreateCommandFastObjectPlugin(@PlaceAllBlocks_com,'PlaceAllBlocks',CADWG,0);
   CreateCommandFastObjectPlugin(@BlocksList_com,'BlocksList',CADWG,0);

@@ -197,7 +197,7 @@ uses
   uzccommand_line2,uzccommand_circle2,//old commands
 
   uzccommand_scale,uzccommand_rotate,uzccommand_erase,
-  uzccommand_inverseselected,
+  uzccommand_inverseselected,uzccommand_cutclip,
 
   uzccommand_polygon,uzccommand_rectangle,
   uzccommand_matchprop,

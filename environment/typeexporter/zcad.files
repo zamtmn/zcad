@@ -101,6 +101,7 @@ zcad/devicebase/uzcdevicebase.pas
 zcad/commands/uzccommandsabstract.pas
 zcad/commands/uzccommandsimpl.pas
 zcad/commands/uzccmdfloatinsert.pas
+zcad/commands/uzccommand_text.pas
 zcad/commands/uzccommand_move.pas
 zcad/commands/uzccommand_copy.pas
 zcad/commands/uzccomdraw.pas

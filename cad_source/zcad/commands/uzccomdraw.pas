@@ -48,7 +48,7 @@ uses
   uzeentsubordinated,uzeentblockinsert,uzeentpolyline,uzclog,gzctnrvectordata,
   math,uzeenttable,uzctnrvectorgdbstring,
   uzeentcurve,uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray
-  ,uzelongprocesssupport,LazLogger,uzccommand_circle2,uzccommand_erase;
+  ,uzelongprocesssupport,LazLogger,uzccommand_circle2,uzccommand_erase,uzccmdfloatinsert;
 const
      modelspacename:GDBSTring='**Модель**';
 type
@@ -154,23 +154,6 @@ type
     procedure CommandStart(Operands:TCommandOperands); virtual;
     function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
   end;
-  FloatInsert_com = {$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
-    procedure CommandStart(Operands:TCommandOperands); virtual;
-    procedure Build(Operands:TCommandOperands); virtual;
-    procedure Command(Operands:TCommandOperands); virtual;abstract;
-    function DoEnd(pdata:GDBPointer):GDBBoolean;virtual;
-    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
-  end;
-  TFIWPMode=(FIWPCustomize,FIWPRun);
-  FloatInsertWithParams_com = {$IFNDEF DELPHI}packed{$ENDIF} object(FloatInsert_com)
-    CMode:TFIWPMode;
-    procedure CommandStart(Operands:TCommandOperands); virtual;
-    procedure BuildDM(Operands:TCommandOperands); virtual;
-    procedure Run(pdata:GDBPlatformint); virtual;
-    function MouseMoveCallback(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
-    //procedure Command(Operands:pansichar); virtual;abstract;
-    //function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
-  end;
   PasteClip_com = {$IFNDEF DELPHI}packed{$ENDIF} object(FloatInsert_com)
     procedure Command(Operands:TCommandOperands); virtual;
   end;
@@ -183,7 +166,7 @@ type
                        procedure Command(Operands:TCommandOperands); virtual;
                        procedure BuildPrimitives; virtual;
                        procedure Format;virtual;
-                       function DoEnd(pdata:GDBPointer):GDBBoolean;virtual;
+                       function DoEnd(pdata:Pointer):Boolean;virtual;
   end;
 
   BlockReplace_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
@@ -386,36 +369,6 @@ begin
            pb:=drawings.GetCurrentDWG^.TextStyleTable.iterate(ir);
            inc(i);
      until pb=nil;
-end;
-procedure FloatInsertWithParams_com.BuildDM(Operands:TCommandOperands);
-begin
-
-end;
-procedure FloatInsertWithParams_com.CommandStart(Operands:TCommandOperands);
-begin
-     CommandRTEdObject.CommandStart(Operands);
-     CMode:=FIWPCustomize;
-     BuildDM(Operands);
-end;
-procedure FloatInsertWithParams_com.Run(pdata:GDBPlatformint);
-begin
-     cmode:=FIWPRun;
-     self.Build('');
-end;
-function FloatInsertWithParams_com.MouseMoveCallback(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger;
-begin
-     if CMode=FIWPRun then
-                          inherited MouseMoveCallback(wc,mc,button,osp);
-     result:=cmd_ok;
-end;
-procedure FloatInsert_com.Build(Operands:TCommandOperands);
-begin
-     Command(operands);
-     if drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count-drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Deleted<=0
-     then
-         begin
-              commandmanager.executecommandend;
-         end
 end;
 {BlockScale_com=object(CommandRTEdObject)
                        procedure CommandStart(Operands:pansichar); virtual;
@@ -1338,7 +1291,7 @@ begin
      format;
      end;
 end;
-function TextInsert_com.DoEnd(pdata:GDBPointer):GDBBoolean;
+function TextInsert_com.DoEnd(pdata:Pointer):Boolean;
 begin
      result:=false;
      dec(self.mouseclic);
@@ -1389,75 +1342,6 @@ begin
      end;
      dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
      pt^.FormatEntity(drawings.GetCurrentDWG^,dc);
-end;
-procedure FloatInsert_com.CommandStart(Operands:TCommandOperands);
-begin
-     inherited CommandStart(Operands);
-     build(operands);
-end;
-function FloatInsert_com.DoEnd(pdata:GDBPointer):GDBBoolean;
-begin
-     result:=true;
-end;
-
-function FloatInsert_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger;
-var
-    dist:gdbvertex;
-    dispmatr:DMatrix4D;
-    ir:itrec;
-    tv,pobj: pGDBObjEntity;
-    domethod,undomethod:tmethod;
-    dc:TDrawContext;
-begin
-
-      //drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=dispmatr;
-      dist.x := wc.x;
-      dist.y := wc.y;
-      dist.z := wc.z;
-
-      dispmatr:=onematrix;
-      PGDBVertex(@dispmatr[3])^:=dist;
-
-      drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=dispmatr;
-
-  if (button and MZW_LBUTTON)<>0 then
-  begin
-   pobj:=drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.beginiterate(ir);
-   if pobj<>nil then
-   repeat
-          begin
-              //if pobj^.selected then
-              begin
-                tv:=drawings.CopyEnt(drawings.GetCurrentDWG,drawings.GetCurrentDWG,pobj);
-                if tv^.IsHaveLCS then
-                                    PGDBObjWithLocalCS(tv)^.CalcObjMatrix;
-                tv^.transform(dispmatr);
-                tv^.build(drawings.GetCurrentDWG^);
-                tv^.YouChanged(drawings.GetCurrentDWG^);
-
-                SetObjCreateManipulator(domethod,undomethod);
-                with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),1)^ do
-                begin
-                     AddObject(tv);
-                     FreeArray:=false;
-                     //comit;
-                end;
-
-              end;
-          end;
-          pobj:=drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.iterate(ir);
-   until pobj=nil;
-
-   dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-   drawings.GetCurrentROOT^.calcbb(dc);
-
-   //CopyToClipboard;
-
-   drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=onematrix;
-   //commandend;
-   if DoEnd(tv) then commandmanager.executecommandend;
-  end;
-  result:=cmd_ok;
 end;
 procedure pasteclip_com.Command(Operands:TCommandOperands);
 var //res:longbool;

@@ -19,7 +19,7 @@ uses
   uzbgeomtypes,varman,uzeentdevice,uzeentmtext,math,
   uzcentcable,UUnitManager,
   gzctnrvectortypes,uzccomelectrical,URecordDescriptor,TypeDescriptors,LazLogger,
-  gzctnrstl,gutil;
+  gzctnrstl,gutil,uzccmdfloatinsert;
 
 const
   tabledy=-65.2763;

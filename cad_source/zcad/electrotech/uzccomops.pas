@@ -19,7 +19,7 @@ uses
   uzbgeomtypes,varman,uzccablemanager,uzeentdevice,uzeentmtext,math,
   uzcenitiesvariablesextender,uzeroot,uzglviewareadata,uzcentcable,UUnitManager,
   gzctnrvectortypes,uzccomelectrical,URecordDescriptor,TypeDescriptors,LazLogger,
-  uzcstrconsts;
+  uzcstrconsts,uzccmdfloatinsert;
 
 type
   TPlaceParam=record

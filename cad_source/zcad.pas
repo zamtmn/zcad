@@ -210,6 +210,8 @@ uses
 
   uzccommand_ld,
 
+  uzccommand_text,
+
   {$IFDEF ELECTROTECH}
   //**for velec func**//
   //uzccomdrawsuperline,

@@ -67,23 +67,6 @@ type
          TMirrorParam=packed record
                             SourceEnts:TEntityProcess;(*'Source entities'*)
                       end;
-         TIMode=(
-                 TIM_Text(*'Text'*),
-                 TIM_MText(*'MText'*)
-                );
-         PTTextInsertParams=^TTextInsertParams;
-         TTextInsertParams=packed record
-                            mode:TIMode;(*'Entity'*)
-                            Style:TEnumData;(*'Style'*)
-                            justify:TTextJustify;(*'Justify'*)
-                            h:GDBDouble;(*'Height'*)
-                            WidthFactor:GDBDouble;(*'Width factor'*)
-                            Oblique:GDBDouble;(*'Oblique'*)
-                            Width:GDBDouble;(*'Width'*)
-                            LineSpace:GDBDouble;(*'Line space factor'*)
-                            text:GDBAnsiString;(*'Text'*)
-                            runtexteditor:GDBBoolean;(*'Run text editor'*)
-                      end;
          BRMode=(
                  BRM_Block(*'Block'*),
                  BRM_Device(*'Device'*),
@@ -157,18 +140,6 @@ type
   PasteClip_com = {$IFNDEF DELPHI}packed{$ENDIF} object(FloatInsert_com)
     procedure Command(Operands:TCommandOperands); virtual;
   end;
-
-  TextInsert_com={$IFNDEF DELPHI}packed{$ENDIF} object(FloatInsert_com)
-                       pt:PGDBObjText;
-                       //procedure Build(Operands:pansichar); virtual;
-                       procedure CommandStart(Operands:TCommandOperands); virtual;
-                       procedure CommandEnd; virtual;
-                       procedure Command(Operands:TCommandOperands); virtual;
-                       procedure BuildPrimitives; virtual;
-                       procedure Format;virtual;
-                       function DoEnd(pdata:Pointer):Boolean;virtual;
-  end;
-
   BlockReplace_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
                          procedure CommandStart(Operands:TCommandOperands); virtual;
                          procedure BuildDM(Operands:TCommandOperands); virtual;
@@ -259,8 +230,6 @@ var
    pbeditcom:pCommandRTEdObjectPlugin;
    BEditParam:TBEditParam;
 
-   TextInsert:TextInsert_com;
-   TextInsertParams:TTextInsertParams;
    BlockReplace:BlockReplace_com;
    BlockReplaceParams:TBlockReplaceParams;
    ATO:ATO_com;
@@ -278,8 +247,7 @@ var
 //procedure startup;
 //procedure Finalize;
 implementation
-var
-  PCreatedGDBLine:pgdbobjline;
+
 function GetBlockDefNames(var BDefNames:TZctnrVectorGDBString;selname:GDBString):GDBInteger;
 var pb:PGDBObjBlockdef;
     ir:itrec;
@@ -1215,134 +1183,6 @@ begin
      Commandmanager.executecommandend;
 end;
 
-procedure TextInsert_com.BuildPrimitives;
-begin
-     if drawings.GetCurrentDWG^.TextStyleTable.GetRealCount>0 then
-     begin
-     drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.free;
-     case TextInsertParams.mode of
-           TIM_Text:
-           begin
-             PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('Oblique',0,FA_READONLY);
-             PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('WidthFactor',0,FA_READONLY);
-
-             PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('Width',FA_READONLY,0);
-             PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('LineSpace',FA_READONLY,0);
-
-                pt := GDBPointer(AllocEnt(GDBTextID));
-                pt^.init(@drawings.GetCurrentDWG^.ConstructObjRoot,drawings.GetCurrentDWG^.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,'',nulvertex,2.5,0,1,0,jstl);
-                zcSetEntPropFromCurrentDrawingProp(pt);
-           end;
-           TIM_MText:
-           begin
-                PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('Oblique',FA_READONLY,0);
-                PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('WidthFactor',FA_READONLY,0);
-
-                PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('Width',0,FA_READONLY);
-                PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('LineSpace',0,FA_READONLY);
-
-                pt := GDBPointer(AllocEnt(GDBMTextID));
-                pgdbobjmtext(pt)^.init(@drawings.GetCurrentDWG^.ConstructObjRoot,drawings.GetCurrentDWG^.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,
-                                  '',nulvertex,2.5,0,1,0,jstl,10,1);
-                zcSetEntPropFromCurrentDrawingProp(pt);
-           end;
-
-     end;
-     drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.AddPEntity(pt^);
-     end;
-end;
-procedure TextInsert_com.CommandStart(Operands:TCommandOperands);
-begin
-     inherited;
-     if drawings.GetCurrentDWG^.TextStyleTable.GetRealCount<1 then
-     begin
-          ZCMsgCallBackInterface.TextMessage(rscmInDwgTxtStyleNotDeffined,TMWOShowError);
-          commandmanager.executecommandend;
-     end;
-end;
-procedure TextInsert_com.CommandEnd;
-begin
-
-end;
-
-procedure TextInsert_com.Command(Operands:TCommandOperands);
-var
-   s:string;
-   i:integer;
-begin
-       if drawings.GetCurrentDWG^.TextStyleTable.GetRealCount>0 then
-     begin
-     if TextInsertParams.Style.Selected>=TextInsertParams.Style.Enums.Count then
-                                                                                begin
-                                                                                     s:=drawings.GetCurrentDWG^.GetCurrentTextStyle^.Name;
-                                                                                end
-                                                                            else
-                                                                                begin
-                                                                                     s:=TextInsertParams.Style.Enums.getData(TextInsertParams.Style.Selected);
-                                                                                end;
-      //TextInsertParams.Style.Enums.Clear;
-      TextInsertParams.Style.Enums.free;
-      i:=GetStyleNames(TextInsertParams.Style.Enums,s);
-      if i<0 then
-                 TextInsertParams.Style.Selected:=0;
-      ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
-      BuildPrimitives;
-     drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
-     format;
-     end;
-end;
-function TextInsert_com.DoEnd(pdata:Pointer):Boolean;
-begin
-     result:=false;
-     dec(self.mouseclic);
-     zcRedrawCurrentDrawing;
-     if TextInsertParams.runtexteditor then
-                                           RunTextEditor(pdata,drawings.GetCurrentDWG^);
-     //redrawoglwnd;
-     build('');
-end;
-
-procedure TextInsert_com.Format;
-var
-   DC:TDrawContext;
-begin
-     if ((pt^.GetObjType=GDBTextID)and(TextInsertParams.mode=TIM_MText))
-     or ((pt^.GetObjType=GDBMTextID)and(TextInsertParams.mode=TIM_Text)) then
-                                                                        BuildPrimitives;
-     pt^.vp.Layer:=drawings.GetCurrentDWG^.GetCurrentLayer;
-     pt^.vp.LineWeight:=sysvar.dwg.DWG_CLinew^;
-     //pt^.TXTStyleIndex:=drawings.GetCurrentDWG^.TextStyleTable.getMutableData(TextInsertParams.Style.Selected);
-     pt^.TXTStyleIndex:=drawings.GetCurrentDWG^.TextStyleTable.FindStyle(pgdbstring(TextInsertParams.Style.Enums.getDataMutable(TextInsertParams.Style.Selected))^,false);
-     pt^.textprop.size:=TextInsertParams.h;
-     pt^.Content:='';
-     pt^.Template:=(TextInsertParams.text);
-
-     case TextInsertParams.mode of
-     TIM_Text:
-              begin
-                   pt^.textprop.oblique:=TextInsertParams.Oblique;
-                   pt^.textprop.wfactor:=TextInsertParams.WidthFactor;
-                   byte(pt^.textprop.justify):=byte(TextInsertParams.justify);
-              end;
-     TIM_MText:
-              begin
-                   pgdbobjmtext(pt)^.width:=TextInsertParams.Width;
-                   pgdbobjmtext(pt)^.linespace:=TextInsertParams.LineSpace;
-
-                   if TextInsertParams.LineSpace<0 then
-                                               pgdbobjmtext(pt)^.linespacef:=(-TextInsertParams.LineSpace*3/5)/TextInsertParams.h
-                                           else
-                                               pgdbobjmtext(pt)^.linespacef:=TextInsertParams.LineSpace;
-
-                   //linespace := textprop.size * linespacef * 5 / 3;
-
-                   byte(pt^.textprop.justify):=byte(TextInsertParams.justify);
-              end;
-
-     end;
-     dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-     pt^.FormatEntity(drawings.GetCurrentDWG^,dc);
-end;
 procedure pasteclip_com.Command(Operands:TCommandOperands);
 var //res:longbool;
     //uFormat:longword;
@@ -2089,19 +1929,6 @@ begin
   copybase.init('CopyBase',CADWG or CASelEnts,0);
   PasteClip.init('PasteClip',0,0);
 
-  TextInsert.init('Text',0,0);
-  TextInsertParams.Style.Enums.init(10);
-  TextInsertParams.Style.Selected:=0;
-  TextInsertParams.h:=2.5;
-  TextInsertParams.Oblique:=0;
-  TextInsertParams.WidthFactor:=1;
-  TextInsertParams.justify:=uzbtypes.jstl;
-  TextInsertParams.text:='text';
-  TextInsertParams.runtexteditor:=false;
-  TextInsertParams.Width:=100;
-  TextInsertParams.LineSpace:=1;
-  TextInsert.SetCommandParam(@TextInsertParams,'PTTextInsertParams');
-
   BlockReplace.init('BlockReplace',0,0);
   BlockReplaceParams.Find.Enums.init(10);
   BlockReplaceParams.Replace.Enums.init(10);
@@ -2161,7 +1988,6 @@ procedure Finalize;
 begin
   BIProp.Blocks.Enums.done;
   BEditParam.Blocks.Enums.done;
-  TextInsertParams.Style.Enums.done;
 end;
 initialization
   startup;

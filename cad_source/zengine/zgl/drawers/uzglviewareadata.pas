@@ -20,12 +20,15 @@ unit uzglviewareadata;
 {$INCLUDE def.inc}
 
 interface
-uses uzegeometry,uzeconsts,uzbgeomtypes,uzbtypesbase,uzbtypes, UGDBPoint3DArray,UGDBTracePropArray;
+uses
+  uzegeometry,uzeconsts,uzbgeomtypes,uzbtypesbase,uzbtypes, UGDBPoint3DArray,
+  UGDBTracePropArray,uzgldrawcontext;
 const
 MZW_LBUTTON=1;
 MZW_SHIFT=128;
 MZW_CONTROL=64;
 type
+  TShowCursorHandler=procedure (var DC:TDrawContext) of object;
 {Export+}
   pmousedesc = ^mousedesc;
   mousedesc = packed record

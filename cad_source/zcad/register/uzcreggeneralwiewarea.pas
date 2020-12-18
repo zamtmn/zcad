@@ -20,10 +20,28 @@ unit uzcreggeneralwiewarea;
 {$INCLUDE def.inc}
 interface
 uses uzglbackendmanager,uzglgeometry,uzeentitiestree,uzcsysvars,uzglviewareageneral,
-     uzeentabstracttext,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,LazLogger;
+     uzeentabstracttext,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,LazLogger,
+     uzgldrawcontext,uzccommandsmanager,uzepalette;
+type
+  TShowCursorHelper=class
+    class procedure ShowCursorHandlerDrawLine(var DC:TDrawContext);
+  end;
+
 implementation
 
+class procedure TShowCursorHelper.ShowCursorHandlerDrawLine(var DC:TDrawContext);
+begin
+  if commandmanager.pcommandrunning<>nil then begin
+    if commandmanager.pcommandrunning.IData.DrawFromBasePoint then begin
+      dc.drawer.SetColor(palette[{7}DC.SystmGeometryColor].rgb);
+      dc.drawer.DrawLine3DInModelSpace(commandmanager.pcommandrunning.IData.BasePoint,commandmanager.pcommandrunning.IData.currentPointValue,dc.DrawingContext.matrixs);
+    end;
+  end;
+end;
+
+
 initialization
+  TGeneralViewArea.RegisterShowCursorHandler(TShowCursorHelper.ShowCursorHandlerDrawLine);
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_CursorSize','GDBInteger',@sysvarDISPCursorSize);
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_OSSize','GDBDouble',@sysvarDISPOSSize);
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_CrosshairSize','GDBDouble',@SysVarDISPCrosshairSize);

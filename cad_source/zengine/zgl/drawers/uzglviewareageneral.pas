@@ -26,7 +26,7 @@ uses
      uzeconsts,uzestrconsts,UGDBTracePropArray,math,sysutils,uzedrawingdef,uzbstrproc,
      ExtCtrls,Controls,Classes,{$IFDEF DELPHI}Types,{$ENDIF}{$IFNDEF DELPHI}LCLType,{$ENDIF}Forms,
      UGDBOpenArrayOfPV,uzeentgenericsubentry,uzecamera,UGDBVisibleOpenArray,uzgldrawerabstract,
-     uzgldrawergeneral,uzglviewareaabstract,uzeentitiesprop;
+     uzgldrawergeneral,uzglviewareaabstract,uzeentitiesprop,gzctnrstl;
 const
   ontracdist=10;
   ontracignoredist=25;
@@ -36,16 +36,20 @@ resourcestring
   rswonlytop='Works only for top view!';
 
 type
-    TOnActivateProc=Procedure;
-    TCameraChangedNotify=procedure of object;
-    TGeneralViewArea=class(TAbstractViewArea)
-                           public
+  TShowCursorHandlersVector=TMyVector<TShowCursorHandler>;
+  TOnActivateProc=Procedure;
+  TCameraChangedNotify=procedure of object;
+  TGeneralViewArea=class(TAbstractViewArea)
+    public
+      class var ShowCursorHandlersVector:TShowCursorHandlersVector;
+
                            WorkArea:TCADControl;
                            InsidePaintMessage:integer;
 
                            function getviewcontrol:TCADControl;override;
 
-
+                           class procedure RegisterShowCursorHandler(handler:TShowCursorHandler);
+                           class procedure DoShowCursorHandlers(var DC:TDrawContext);
                            procedure calcgrid;override;
                            procedure Clear0Ontrackpoint;override;
                            procedure ClearOntrackpoint;override;
@@ -177,8 +181,6 @@ var
    sysvarDISPDefaultLW:TGDBLineWeight=LnWt025;
 
 implementation
-uses
-  uzccommandsmanager;
 procedure RemoveCursorIfNeed(acontrol:TControl;RemoveCursor:boolean);
 begin
      if RemoveCursor then
@@ -186,6 +188,24 @@ begin
                      else
                          acontrol.cursor:=crDefault;
 end;
+
+class procedure TGeneralViewArea.RegisterShowCursorHandler(handler:TShowCursorHandler);
+begin
+  if not assigned(ShowCursorHandlersVector) then
+    ShowCursorHandlersVector:=TShowCursorHandlersVector.Create;
+  ShowCursorHandlersVector.PushBack(handler);
+end;
+
+class procedure TGeneralViewArea.DoShowCursorHandlers(var DC:TDrawContext);
+var
+   i:integer;
+begin
+   if assigned(ShowCursorHandlersVector) then begin
+     for i:=0 to ShowCursorHandlersVector.Size-1 do
+       ShowCursorHandlersVector[i](DC);
+   end;
+end;
+
 procedure TGeneralViewArea.mypaint;
 begin
      //param.firstdraw:=true;
@@ -249,13 +269,7 @@ begin
   CalcOptimalMatrix;
   dc.drawer.startrender(TRM_ModelSpace,dc.DrawingContext.matrixs);
 
-  if commandmanager.pcommandrunning<>nil then begin
-    if commandmanager.pcommandrunning.IData.DrawFromBasePoint then begin
-      dc.drawer.SetColor(palette[7].rgb);
-      dc.drawer.DrawLine3DInModelSpace(commandmanager.pcommandrunning.IData.BasePoint,commandmanager.pcommandrunning.IData.currentPointValue,dc.DrawingContext.matrixs);
-    end;
-
-  end;
+  DoShowCursorHandlers(dc);
 
   if PDWG.GetSelObjArray.Count<>0 then
                                       begin
@@ -687,6 +701,7 @@ var
   const msec=1;
 begin
   if not assigned(pdwg) then exit;
+  if not assigned(getviewcontrol) then exit;
   if (getviewcontrol.clientwidth=0)or(getviewcontrol.clientheight=0) then exit;
   LPTime:=now;
   needredraw:=param.firstdraw{ or true};
@@ -3370,5 +3385,8 @@ begin
      end;
 end;
 
-begin
+initialization
+finalization
+  if Assigned(TGeneralViewArea.ShowCursorHandlersVector) then
+    FreeAndNil(TGeneralViewArea.ShowCursorHandlersVector);
 end.

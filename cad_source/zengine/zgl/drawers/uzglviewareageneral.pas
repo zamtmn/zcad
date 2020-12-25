@@ -2346,6 +2346,8 @@ begin
   //pdwg:=gdb.GetCurrentDWG;
   //self.MakeCurrent;
   if pdwg=nil then exit;
+  if getviewcontrol.ClientWidth=0 then exit;
+  if getviewcontrol.ClientHeight=0 then exit;
   proot:=PDWG.GetCurrentROOT;
   pcamera:=pdwg.getpcamera;
 
@@ -3267,6 +3269,8 @@ var
     l,u,r,b,maxh,maxv,ph,pv:GDBDouble;
 begin
      if pdwg=NIL then exit;
+     if getviewcontrol.ClientWidth=0 then exit;
+     if getviewcontrol.ClientHeight=0 then exit;
      tempv.x:=0;
      tempv.y:=0;
      tempv.z:=0;

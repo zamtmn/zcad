@@ -1,0 +1,382 @@
+object Form1: TForm1
+  Left = 185
+  Height = 1338
+  Top = 137
+  Width = 1659
+  ActiveControl = BtnAddLines
+  Caption = 'ZCAD engine demo program'
+  ClientHeight = 1338
+  ClientWidth = 1659
+  DesignTimePPI = 144
+  KeyPreview = True
+  OnCreate = _FormCreate
+  OnDestroy = _DestroyApp
+  OnKeyDown = _KeyDown
+  OnShow = _FormShow
+  LCLVersion = '2.1.0.0'
+  object Panel1: TPanel
+    Left = 0
+    Height = 1338
+    Top = 0
+    Width = 1236
+    Align = alLeft
+    BevelOuter = bvNone
+    ClientHeight = 1338
+    ClientWidth = 1236
+    ParentFont = False
+    TabOrder = 0
+    object GroupBox2: TGroupBox
+      Left = 0
+      Height = 1338
+      Top = 0
+      Width = 1236
+      Align = alClient
+      Caption = 'GDI:'
+      ClientHeight = 1308
+      ClientWidth = 1232
+      ParentFont = False
+      TabOrder = 0
+      object Panel2: TPanel
+        Left = 0
+        Height = 1308
+        Top = 0
+        Width = 1232
+        Align = alClient
+        Caption = 'PanelDown'
+        ParentFont = False
+        TabOrder = 0
+      end
+    end
+  end
+  object Splitter1: TSplitter
+    Left = 1236
+    Height = 1338
+    Top = 0
+    Width = 15
+  end
+  object BtnAddLines: TButton
+    AnchorSideLeft.Control = Splitter1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 1251
+    Height = 48
+    Top = 36
+    Width = 408
+    Anchors = [akTop, akLeft, akRight]
+    Caption = 'Add lines'
+    OnClick = BtnAddLinesClick
+    ParentFont = False
+    TabOrder = 2
+  end
+  object BtnAddCircles: TButton
+    AnchorSideLeft.Control = Splitter1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 1251
+    Height = 50
+    Top = 84
+    Width = 408
+    Anchors = [akTop, akLeft, akRight]
+    Caption = 'Add circles'
+    OnClick = BtnAddCirclesClick
+    ParentFont = False
+    TabOrder = 3
+  end
+  object BtnRebuild: TButton
+    AnchorSideLeft.Control = CheckBox1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = CheckBox1
+    AnchorSideTop.Side = asrCenter
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 1360
+    Height = 34
+    Top = 918
+    Width = 299
+    Anchors = [akTop, akLeft, akRight]
+    Caption = 'Rebuild tree'
+    OnClick = BtnRebuildClick
+    ParentFont = False
+    TabOrder = 4
+  end
+  object CheckBox1: TCheckBox
+    AnchorSideLeft.Control = Splitter1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideRight.Side = asrBottom
+    Left = 1251
+    Height = 29
+    Top = 921
+    Width = 109
+    Caption = 'Show tree'
+    OnChange = TreeChange
+    ParentFont = False
+    TabOrder = 5
+  end
+  object SpinEdit1: TSpinEdit
+    AnchorSideLeft.Control = Label1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 1457
+    Height = 33
+    Top = 0
+    Width = 202
+    Anchors = [akTop, akLeft, akRight]
+    MaxValue = 1000000
+    MinValue = 1
+    ParentFont = False
+    TabOrder = 6
+    Value = 1000
+  end
+  object BtnEraseSel: TButton
+    AnchorSideLeft.Control = Splitter1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 1251
+    Height = 56
+    Top = 624
+    Width = 408
+    Anchors = [akTop, akLeft, akRight]
+    Caption = 'Erase Selected'
+    OnClick = BtnEraseSelClick
+    ParentFont = False
+    TabOrder = 7
+  end
+  object BtnAddTexts: TButton
+    AnchorSideLeft.Control = Splitter1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 1251
+    Height = 48
+    Top = 180
+    Width = 408
+    Anchors = [akTop, akLeft, akRight]
+    Caption = 'Add texts'
+    OnClick = BtnAddTextsClick
+    ParentFont = False
+    TabOrder = 8
+  end
+  object BtnOpenDXF: TButton
+    AnchorSideLeft.Control = Splitter1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 1251
+    Height = 42
+    Top = 794
+    Width = 408
+    Anchors = [akTop, akLeft, akRight]
+    Caption = 'Open DXF'
+    OnClick = BtnOpenDXFClick
+    ParentFont = False
+    TabOrder = 9
+  end
+  object BtnSaveDXF: TButton
+    AnchorSideLeft.Control = Splitter1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 1251
+    Height = 39
+    Top = 842
+    Width = 408
+    Anchors = [akTop, akLeft, akRight]
+    Caption = 'Save DXF'
+    OnClick = BtnSaveDXFClick
+    ParentFont = False
+    TabOrder = 10
+  end
+  object BtnSelectAll: TButton
+    AnchorSideLeft.Control = Splitter1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 1251
+    Height = 48
+    Top = 576
+    Width = 408
+    Anchors = [akTop, akLeft, akRight]
+    Caption = 'Select All'
+    OnClick = BtnSelectAllClick
+    ParentFont = False
+    TabOrder = 11
+  end
+  object Label1: TLabel
+    AnchorSideLeft.Control = Splitter1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = SpinEdit1
+    AnchorSideTop.Side = asrCenter
+    Left = 1251
+    Height = 25
+    Top = 4
+    Width = 206
+    Alignment = taCenter
+    Caption = 'Number of entities to add'
+    Layout = tlCenter
+    ParentColor = False
+    ParentFont = False
+  end
+  object BtnAdd3DpolyLines: TButton
+    AnchorSideLeft.Control = Splitter1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 1251
+    Height = 46
+    Top = 228
+    Width = 408
+    Anchors = [akTop, akLeft, akRight]
+    Caption = 'Add 3DPolyLines'
+    OnClick = BtnAdd3DpolyLinesClick
+    ParentFont = False
+    TabOrder = 12
+  end
+  object BtnAddLWPolyLines1: TButton
+    AnchorSideLeft.Control = Splitter1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 1251
+    Height = 46
+    Top = 276
+    Width = 408
+    Anchors = [akTop, akLeft, akRight]
+    Caption = 'Add LWPolyLines'
+    OnClick = BtnAddLWPolylines1Click
+    ParentFont = False
+    TabOrder = 13
+  end
+  object ChkBox3D: TCheckBox
+    AnchorSideLeft.Control = Splitter1
+    AnchorSideLeft.Side = asrBottom
+    Left = 1251
+    Height = 29
+    Top = 892
+    Width = 157
+    Caption = '3D(ZCoord<>0)'
+    ParentFont = False
+    TabOrder = 14
+  end
+  object BtnProcessObjects: TButton
+    AnchorSideLeft.Control = Splitter1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 1251
+    Height = 48
+    Top = 432
+    Width = 408
+    Anchors = [akTop, akLeft, akRight]
+    Caption = 'Process Lines'
+    OnClick = BtnProcessObjectsClick
+    ParentFont = False
+    TabOrder = 15
+  end
+  object BtnProcessObjects1: TButton
+    AnchorSideLeft.Control = Splitter1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 1251
+    Height = 48
+    Top = 480
+    Width = 408
+    Anchors = [akTop, akLeft, akRight]
+    Caption = 'Off entity layer'
+    OnClick = OffEntLayerClick
+    ParentFont = False
+    TabOrder = 16
+  end
+  object BtnProcessObjects2: TButton
+    AnchorSideLeft.Control = Splitter1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 1251
+    Height = 48
+    Top = 528
+    Width = 408
+    Anchors = [akTop, akLeft, akRight]
+    Caption = 'On all layer'
+    OnClick = OnAllLayerClick
+    ParentFont = False
+    TabOrder = 17
+  end
+  object Memo1: TMemo
+    AnchorSideLeft.Control = Splitter1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = BtnRebuild
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
+    Left = 1251
+    Height = 386
+    Top = 952
+    Width = 408
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    ParentFont = False
+    TabOrder = 18
+  end
+  object BtnAdd3DFaces: TButton
+    AnchorSideLeft.Control = Splitter1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 1251
+    Height = 46
+    Top = 324
+    Width = 408
+    Anchors = [akTop, akLeft, akRight]
+    Caption = 'Add 3DFaces'
+    OnClick = BtnAdd3DFaces1Click
+    ParentFont = False
+    TabOrder = 19
+  end
+  object BtnAddCircles1: TButton
+    AnchorSideLeft.Control = Splitter1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 1251
+    Height = 50
+    Top = 132
+    Width = 408
+    Anchors = [akTop, akLeft, akRight]
+    Caption = 'Add arcs'
+    OnClick = BtnAddArcsClick
+    ParentFont = False
+    TabOrder = 20
+  end
+  object BtnAdd3DFaces1: TButton
+    AnchorSideLeft.Control = Splitter1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 1251
+    Height = 46
+    Top = 372
+    Width = 408
+    Anchors = [akTop, akLeft, akRight]
+    Caption = 'Add splines'
+    OnClick = BtnAddSplines1Click
+    ParentFont = False
+    TabOrder = 21
+  end
+  object OpenDialog1: TOpenDialog
+    DefaultExt = '.dxf'
+    Filter = 'DXF File|*.dxf'
+    Left = 1317
+    Top = 732
+  end
+  object SaveDialog1: TSaveDialog
+    Filter = 'DXF file|*.dxf'
+    Left = 1401
+    Top = 732
+  end
+end

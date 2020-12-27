@@ -153,6 +153,7 @@ begin
             if symbol=1055{П}then
                                  symbol:=symbol;
             psyminfo:=pf^.GetOrCreateSymbolInfo(symbol);
+            PSHXFont(pf^.font).FontData.LLprimitives.AlignDataSize;
             psyminfo.{addr}LLPrimitiveStartIndex:=PSHXFont(pf^.font).FontData.LLprimitives{SHXdata}.Count;//----//
             onlyver:=0;
             sizeshx:=0;

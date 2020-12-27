@@ -494,6 +494,7 @@ function TLLGDIPrimitivesCreator.CreateLLSymbol(var pa:TLLPrimitivesArray):TArra
 var
    pgdisymbol:PTLLGDISymbol;
 begin
+  pa.AlignDataSize;
      result:=pa.count;
      pointer(pgdisymbol):=pa.getDataMutable(pa.AllocData(sizeof(TLLGDISymbol)));
      pgdisymbol.init;

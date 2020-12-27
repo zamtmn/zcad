@@ -76,7 +76,7 @@ begin
      PPrimitive:=LLprimitives.GetParrayAsPointer;
      while ProcessedSize<LLprimitives.count do
      begin
-          CurrentSize:=PPrimitive.draw(Drawer,rc,GeomData,LLprimitives,OptData);
+          CurrentSize:=LLprimitives.Align(PPrimitive.draw(Drawer,rc,GeomData,LLprimitives,OptData));
           ProcessedSize:=ProcessedSize+CurrentSize;
           inc(pbyte(PPrimitive),CurrentSize);
      end;
@@ -92,7 +92,7 @@ begin
      PPrimitive:=pointer(LLprimitives.getDataMutable(StartOffset));
      while count>0 do
      begin
-          CurrentSize:=PPrimitive.draw(Drawer,rc,GeomData,LLprimitives,OptData);
+          CurrentSize:=LLprimitives.Align(PPrimitive.draw(Drawer,rc,GeomData,LLprimitives,OptData));
           ProcessedSize:=ProcessedSize+CurrentSize;
           inc(pbyte(PPrimitive),CurrentSize);
           dec(count);
@@ -109,7 +109,7 @@ begin
      PLLPrimitive:=pointer(LLprimitives.getDataMutable(LLPrimitivesStartIndex));
      for i:=1 to LLPCount do
      begin
-          CurrLLPrimitiveSize:=PLLPrimitive.getPrimitiveSize;
+          CurrLLPrimitiveSize:=LLprimitives.Align(PLLPrimitive.getPrimitiveSize);
           PLLPrimitive.CorrectIndexes(Offset);
           inc(pbyte(PLLPrimitive),CurrLLPrimitiveSize);
      end;
@@ -183,7 +183,7 @@ begin
      result.EID.IndexsIndexMax:=-1;
      for i:=1 to LLPCount do
      begin
-          CurrLLPrimitiveSize:=PLLPrimitive.getPrimitiveSize;
+          CurrLLPrimitiveSize:=LLprimitives.Align(PLLPrimitive.getPrimitiveSize);
           PLLPrimitive.getEntIndexs(GeomData,eid);
           ProcessIndexs;
           result.LLPrimitivesDataSize:=result.LLPrimitivesDataSize+CurrLLPrimitiveSize;
@@ -197,6 +197,7 @@ var
    DestGeomDataAddr,SourceGeomDataAddr,DestIndexsDataAddr,SourceIndexsDataAddr:PGDBvertex3S;
 begin
      result.LLPrimitivesDataSize:=CopyParam.LLPrimitivesDataSize;
+     dest.LLprimitives.AlignDataSize;
      result.LLPrimitivesStartIndex:=dest.LLprimitives.Count;
      pointer(LLPrimitivesDestAddr):=dest.LLprimitives.getDataMutable(dest.LLprimitives.AllocData(CopyParam.LLPrimitivesDataSize));
      LLPrimitivesSourceAddr:=pointer(LLprimitives.getDataMutable(CopyParam.LLPrimitivesStartIndex));
@@ -306,7 +307,7 @@ begin
   PPrimitive:=pointer(LLprimitives.getDataMutable(StartOffset));
   if count>0 then
   begin
-       CurrentSize:=PPrimitive.CalcTrueInFrustum(frustum,GeomData,result);
+       CurrentSize:=LLprimitives.Align(PPrimitive.CalcTrueInFrustum(frustum,GeomData,result));
        if not FullCheck then
          if result<>IREmpty then
            exit;
@@ -318,7 +319,7 @@ begin
   end;
   while count>0 do
   begin
-       CurrentSize:=PPrimitive.CalcTrueInFrustum(frustum,GeomData,InRect);
+       CurrentSize:=LLprimitives.Align(PPrimitive.CalcTrueInFrustum(frustum,GeomData,InRect));
        case InRect of
          IREmpty:if result=IRFully then
                                         result:=IRPartially;
@@ -355,7 +356,7 @@ begin
   PPrimitive:=LLprimitives.GetParrayAsPointer;
   if ProcessedSize<LLprimitives.count then
   begin
-       CurrentSize:=PPrimitive.CalcTrueInFrustum(frustum,GeomData,result);
+       CurrentSize:=LLprimitives.Align(PPrimitive.CalcTrueInFrustum(frustum,GeomData,result));
        if not FullCheck then
          if result<>IREmpty then
                                 begin
@@ -369,7 +370,7 @@ begin
   end;
   while ProcessedSize<LLprimitives.count do
   begin
-       CurrentSize:=PPrimitive.CalcTrueInFrustum(frustum,GeomData,InRect);
+       CurrentSize:=LLprimitives.Align(PPrimitive.CalcTrueInFrustum(frustum,GeomData,InRect));
        case InRect of
          IREmpty:if result=IRFully then
                                         result:=IRPartially;

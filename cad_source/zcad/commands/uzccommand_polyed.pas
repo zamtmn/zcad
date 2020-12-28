@@ -53,7 +53,7 @@ type
     TPEM_Nearest(*'Paste in nearest segment'*),
     TPEM_Select(*'Choose a segment'*)
   );
-  TPolyEdit=packed record
+  TPolyEdit=record
     Action:TSubPolyEdit;(*'Action'*)
     Mode:TPolyEditMode;(*'Mode'*)
     vdist:gdbdouble;(*hidden_in_objinsp*)

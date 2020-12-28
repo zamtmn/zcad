@@ -26,7 +26,7 @@ uses uzbpaths,sysutils,uzeblockdef,usimplegenerics,uzedrawingdef,gzctnrstl,
 type
 TBlockDefCreateFunc=function(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:GDBString):PGDBObjBlockdef;
 PTBlockDefCreateData=^TBlockDefCreateData;
-TBlockDefCreateData=packed record
+TBlockDefCreateData=record
                           BlockName:GDBString;
                           BlockDependsOn:GDBString;
                           BlockDeffinedIn:GDBString;

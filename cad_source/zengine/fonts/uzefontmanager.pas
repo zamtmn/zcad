@@ -25,7 +25,7 @@ uses UGDBOpenArrayOfByte,{$IFNDEF DELPHI}LResources,{$ENDIF}LCLProc,uzbpaths,
      UGDBNamedObjectsArray,classes;
 type
 TFontLoadProcedure=function(name:GDBString;var pf:PGDBfont):GDBBoolean;
-TFontLoadProcedureData=packed record
+TFontLoadProcedureData=record
                 FontDesk:GDBString;
                 FontLoadProcedure:TFontLoadProcedure;
                 end;

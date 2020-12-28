@@ -21,7 +21,7 @@ interface
 uses uzepalette,uzbtypesbase,uzbtypes,uzgldrawerabstract,uzeconsts,uzegeometry;
 type
 TDrawHeplGeometry=procedure  of object;
-TDrawingContext=packed record
+TDrawingContext=record
                    VisibleActualy:TActulity;
                    InfrustumActualy:TActulity;
                    DRAWCOUNT:TActulity;
@@ -33,7 +33,7 @@ TDrawingContext=packed record
                    DrawHeplGeometryProc:TDrawHeplGeometry;
                    ForeGroundColorIndex:GDBInteger;
 end;
-TDrawContext=packed record
+TDrawContext=record
                    DrawingContext:TDrawingContext;
                    Subrender:GDBInteger;
                    Selected:GDBBoolean;

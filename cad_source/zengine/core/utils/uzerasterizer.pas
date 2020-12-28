@@ -29,7 +29,7 @@ uses
 type
   TRasterizeColor=(PC_Color,PC_Grayscale,PC_Monochrome);
   PTRasterizeParams=^TRasterizeParams;
-  TRasterizeParams=packed record
+  TRasterizeParams=record
     FitToPage:GDBBoolean;
     Center:GDBBoolean;
     Scale:GDBDouble;

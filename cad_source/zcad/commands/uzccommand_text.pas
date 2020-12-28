@@ -49,7 +49,7 @@ TIMode=(
         TIM_MText(*'MText'*)
        );
 PTTextInsertParams=^TTextInsertParams;
-TTextInsertParams=packed record
+TTextInsertParams=record
                    mode:TIMode;(*'Entity'*)
                    Style:TEnumData;(*'Style'*)
                    justify:TTextJustify;(*'Justify'*)

@@ -32,10 +32,6 @@ uses
     uzccommandsabstract,
     LCLProc;
 type
-{TDWGProps=packed record
-                Name:GDBString;
-                Number:GDBInteger;
-          end;}
 {EXPORT+}
 {REGISTEROBJECTTYPE TZCADDrawingsManager}
 PTZCADDrawingsManager=^TZCADDrawingsManager;

@@ -102,6 +102,7 @@ var
    pfd:pFieldDescriptor;
 begin
      td:=GetTypeData(ti);
+     self.SizeInGDBBytes:=td.RecSize;
      mf:=@td.ManagedFldCount;
      inc(pointer(mf),sizeof(td.ManagedFldCount));
      for i:=0 to td.ManagedFldCount-1 do

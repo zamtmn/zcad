@@ -22,7 +22,8 @@ unit URecordDescriptor;
 {$ASMMODE intel}
 interface
 uses LCLProc,UPointerDescriptor,uzbstrproc,{log,}UGDBOpenArrayOfByte,sysutils,UBaseTypeDescriptor,
-  gzctnrvectortypes,uzedimensionaltypes,TypeDescriptors,gzctnrvectordata,uzbtypesbase,varmandef,uzbtypes,uzbmemman;
+  gzctnrvectortypes,uzedimensionaltypes,TypeDescriptors,gzctnrvectordata,uzbtypesbase,
+  TypInfo,varmandef,uzbtypes,uzbmemman;
 type
 TFieldDescriptor=GZVectorData<FieldDescriptor>;
 PRecordDescriptor=^RecordDescriptor;
@@ -45,6 +46,7 @@ RecordDescriptor=object(TUserTypeDescriptor)
                        procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:Pointer;prefix:TInternalScriptString);virtual;
                        procedure MagicAfterCopyInstance(PInstance:Pointer);virtual;
                        function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
+                       procedure RegisterTypeinfo(ti:PTypeInfo);virtual;
                    end;
 function typeformat(s:TInternalScriptString;PInstance,PTypeDescriptor:Pointer):TInternalScriptString;
 var
@@ -85,6 +87,12 @@ begin
      until i<=0;
      result:=ps;
 end;
+procedure RecordDescriptor.RegisterTypeinfo(ti:PTypeInfo);
+var pd:PFieldDescriptor;
+begin
+  ti:=ti;
+end;
+
 procedure RecordDescriptor.MagicFreeInstance(PInstance:Pointer);
 var pd:PFieldDescriptor;
 //     d:FieldDescriptor;

@@ -23,7 +23,7 @@ interface
 uses
   LCLProc,SysUtils,UGDBTree,gzctnrstl,uzctnrvectorgdbstring,strutils,uzbtypesbase,
   uzedimensionaltypes,UGDBOpenArrayOfByte,uzbtypes,
-  gzctnrvectortypes,Classes,Controls,StdCtrls,Graphics,types;
+  gzctnrvectortypes,Classes,Controls,StdCtrls,Graphics,types,TypInfo;
 const
   {Ttypenothing=-1;
   Ttypecustom=1;
@@ -173,6 +173,7 @@ UserTypeDescriptor=object(GDBaseObject)
                          procedure IncAddr(var addr:GDBPointer);virtual;
                          function GetFactTypedef:PUserTypeDescriptor;virtual;
                          procedure Format;virtual;
+                         procedure RegisterTypeinfo(ti:PTypeInfo);virtual;
                    end;
 TPropEditor=class(TComponent)
                  public
@@ -480,6 +481,9 @@ begin
      result:=@self;
 end;
 procedure UserTypeDescriptor.Format;
+begin
+end;
+procedure UserTypeDescriptor.RegisterTypeinfo(ti:PTypeInfo);
 begin
 end;
 procedure UserTypeDescriptor.SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:Pointer;prefix:TInternalScriptString);

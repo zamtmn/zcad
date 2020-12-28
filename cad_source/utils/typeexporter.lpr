@@ -206,6 +206,7 @@ begin
                                                  end;
                             CreateRegistrationFile('areg'+line,line,fn,allgeneratedfiles);
                             alreadyinuses:=true;
+                            line:='';
                        end;
          find:=pos(recregtoken,uppercase(line));
          if find>0 then
@@ -218,6 +219,7 @@ begin
                                                  end;
                             CreateRecRegistrationFile('areg'+line,line,fn,allgeneratedfiles);
                             alreadyinuses:=true;
+                            line:='';
                        end;
          find:=pos('OBJECT',uppercase(line));
          if find>0 then inobj:=true;

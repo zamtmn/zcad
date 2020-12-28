@@ -22,7 +22,6 @@ interface
 uses uzbtypesbase,sysutils,uzbtypes,uzegeometry,
      uzeconsts,UGDBNamedObjectsArray,uzbstrproc;
 type
-{REGISTEROBJECTTYPE GDBLayerArray}
 {EXPORT+}
 PPGDBLayerPropObjInsp=^PGDBLayerPropObjInsp;
 PGDBLayerPropObjInsp={GDBPtrUInt}GDBPointer;
@@ -44,6 +43,7 @@ GDBLayerProp={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
 PGDBLayerPropArray=^GDBLayerPropArray;
 GDBLayerPropArray=packed array [0..0] of PGDBLayerProp;
 PGDBLayerArray=^GDBLayerArray;
+{REGISTEROBJECTTYPE GDBLayerArray}
 GDBLayerArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray{-}<PGDBLayerProp,GDBLayerProp>{//})(*OpenArrayOfData=GDBLayerProp*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger;psyslt:GDBPointer);
                     constructor initnul;

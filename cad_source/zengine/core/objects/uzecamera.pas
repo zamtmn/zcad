@@ -24,9 +24,9 @@ uses LCLProc,uzbtypesbase,uzbgeomtypes,uzbtypes,uzegeometry;
 
 type
 GDBProjectProc=procedure (objcoord:GDBVertex; out wincoord:GDBVertex) of object;
-{REGISTEROBJECTTYPE GDBObjCamera}
 {EXPORT+}
 PGDBObjCamera=^GDBObjCamera;
+{REGISTEROBJECTTYPE GDBObjCamera}
 GDBObjCamera={$IFNDEF DELPHI}packed{$ENDIF} object(GDBBaseCamera)
                    modelMatrixLCS:DMatrix4D;
                    zminLCS,zmaxLCS:GDBDouble;

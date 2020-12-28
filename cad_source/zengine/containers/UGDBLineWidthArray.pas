@@ -21,8 +21,8 @@ unit UGDBLineWidthArray;
 interface
 uses gzctnrvectordata,sysutils,uzbtypes,uzbmemman;
 type
-{REGISTEROBJECTTYPE GDBLineWidthArray}
 {Export+}
+{REGISTEROBJECTTYPE GDBLineWidthArray}
 GDBLineWidthArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<GLLWWidth>{//})(*OpenArrayOfData=GLLWWidth*)
              end;
 {Export-}

@@ -36,8 +36,8 @@ type
                 Name:GDBString;
                 Number:GDBInteger;
           end;}
-{REGISTEROBJECTTYPE TZCADDrawingsManager}
 {EXPORT+}
+{REGISTEROBJECTTYPE TZCADDrawingsManager}
 PTZCADDrawingsManager=^TZCADDrawingsManager;
 TZCADDrawingsManager={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorPGDBaseObjects)
                     CurrentDWG:{PTZCADDrawing}PTSimpleDrawing;

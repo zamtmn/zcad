@@ -26,13 +26,13 @@ uses LCLProc,uzegluinterface,uzeentityfactory,uzgldrawcontext,uzgloglstatemanage
      uzeentity,UGDBOpenArrayOfByte,uzbtypes,uzeconsts,uzglviewareadata,
      gzctnrvectortypes,uzbgeomtypes,uzegeometry,uzeffdxfsupport,sysutils,uzbmemman;
 type
-{REGISTEROBJECTTYPE GDBObjSpline}
 {Export+}
 TKnotsVector={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<GDBFloat>{//})
                              end;
 TCPVector={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<GDBvertex4S>{//})
                              end;
 PGDBObjSpline=^GDBObjSpline;
+{REGISTEROBJECTTYPE GDBObjSpline}
 GDBObjSpline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  ControlArrayInOCS:GDBPoint3dArray;(*saved_to_shd*)(*hidden_in_objinsp*)
                  ControlArrayInWCS:GDBPoint3dArray;(*saved_to_shd*)(*hidden_in_objinsp*)

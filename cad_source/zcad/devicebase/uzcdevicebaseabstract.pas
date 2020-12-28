@@ -4,7 +4,6 @@ interface
 uses uzcsysvars,{$IFNDEF DELPHI}fileutil,{$ENDIF}uzbstrproc,strmy,uzbtypesbase,
      uzbtypes,UUnitManager,varman,sysutils,typedescriptors,uzclog;
 type
-{REGISTEROBJECTTYPE DbBaseObject}
 {EXPORT+}
 TOborudCategory=(_misc(*'**Разное'*),
                  _elapp(*'**Электроаппараты'*),
@@ -13,7 +12,8 @@ TOborudCategory=(_misc(*'**Разное'*),
                  _kables(*'**Кабельная продукция'*));
 TEdIzm=(_sht(*'**шт.'*),
         _m(*'**м'*));
-PDbBaseObject=^DbBaseObject;        
+PDbBaseObject=^DbBaseObject;
+{REGISTEROBJECTTYPE DbBaseObject}
 DbBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                        Category:TOborudCategory;(*'**Категория'*)(*oi_readonly*)
                        Group:GDBString;(*'**Группа'*)

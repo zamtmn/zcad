@@ -27,9 +27,9 @@ uses
     uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzbmemman,uzeentsubordinated,LazLogger,
     uzbgeomtypes,uzestylestexts;
 type
-{REGISTEROBJECTTYPE GDBObjText}
 {Export+}
 PGDBObjText=^GDBObjText;
+{REGISTEROBJECTTYPE GDBObjText}
 GDBObjText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAbstractText)
                  Content:TDXFEntsInternalStringType;
                  Template:TDXFEntsInternalStringType;(*saved_to_shd*)

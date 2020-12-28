@@ -24,10 +24,10 @@ uses uzeentityfactory,uzeentwithlocalcs,uzeentdimension,uzestylesdim,uzestylesla
      sysutils,uzeentity,uzbtypes,uzeconsts,uzeffdxfsupport,uzbmemman,uzeentsubordinated,
      uzeentdimradial,uzeentdimdiametric,uzeentdimrotated,uzeentdimaligned;
 type
-{REGISTEROBJECTTYPE GDBObjGenericDimension}
 {EXPORT+}
 TDimType=(DTRotated,DTAligned,DTAngular,DTDiameter,DTRadius,DTAngular3P,DTOrdinate);
 PGDBObjGenericDimension=^GDBObjGenericDimension;
+{REGISTEROBJECTTYPE GDBObjGenericDimension}
 GDBObjGenericDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                       DimData:TDXFDimData;
                       PDimStyle:PGDBDimStyle;

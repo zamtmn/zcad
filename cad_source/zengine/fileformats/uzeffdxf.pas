@@ -908,6 +908,10 @@ begin
                //tstyle.pfont:=FontManager.getAddres(s);
                //if tstyle.pfont:=;
            end;
+        1000:
+          begin
+               lname:=s;
+           end;
       end;
     end;
     ti:=nil;

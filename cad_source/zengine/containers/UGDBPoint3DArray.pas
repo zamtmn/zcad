@@ -22,8 +22,8 @@ interface
 uses uzbgeomtypes,uzbtypesbase,gzctnrvectordata,sysutils,uzbtypes,uzbmemman,math,
      gzctnrvectortypes,{uzgloglstatemanager,}uzegeometry;
 type
-{REGISTEROBJECTTYPE GDBPoint3dArray}
 {Export+}
+{REGISTEROBJECTTYPE GDBPoint3dArray}
 PGDBPoint3dArray=^GDBPoint3dArray;
 GDBPoint3dArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<GDBVertex>{//})(*OpenArrayOfData=GDBVertex*)
                 function onpoint(p:gdbvertex;closed:GDBBoolean):gdbboolean;

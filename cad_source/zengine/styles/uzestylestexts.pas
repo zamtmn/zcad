@@ -23,7 +23,6 @@ uses LCLProc,uzbpaths,uzefontmanager,uzbtypesbase,sysutils,uzbtypes,uzegeometry,
      uzbstrproc,uzefont,uzestrconsts,UGDBNamedObjectsArray,uzbmemman;
 type
   //ptextstyle = ^textstyle;
-{REGISTEROBJECTTYPE GDBTextStyleArray}
 {EXPORT+}
 PGDBTextStyleProp=^GDBTextStyleProp;
   GDBTextStyleProp=packed record
@@ -42,6 +41,7 @@ PGDBTextStyleProp=^GDBTextStyleProp;
     destructor Done;virtual;
   end;
 PGDBTextStyleArray=^GDBTextStyleArray;
+{REGISTEROBJECTTYPE GDBTextStyleArray}
 GDBTextStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray{-}<PGDBTextStyle,GDBTextStyle>{//})(*OpenArrayOfData=GDBTextStyle*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;

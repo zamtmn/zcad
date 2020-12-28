@@ -25,9 +25,9 @@ uses uzeentityfactory,uzgldrawcontext,uzeffdxfsupport,uzedrawingdef,uzecamera,
      uzeentsubordinated,uzeent3d,uzeentity,sysutils,UGDBOpenArrayOfByte,
      uzbgeomtypes,uzbtypes,uzeconsts,uzglviewareadata,uzegeometry,uzbmemman;
 type
-{REGISTEROBJECTTYPE GDBObjPoint}
 {Export+}
 PGDBObjPoint=^GDBObjPoint;
+{REGISTEROBJECTTYPE GDBObjPoint}
 GDBObjPoint={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  P_insertInOCS:GDBvertex;(*'Coordinates OCS'*)(*saved_to_shd*)
                  P_insertInWCS:GDBvertex;(*'Coordinates WCS'*)(*hidden_in_objinsp*)

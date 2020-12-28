@@ -25,8 +25,8 @@ uses uzeobjectextender,LCLProc,uzeentityfactory,uzedrawingdef,
      uzeentline,uzeentity,UGDBOpenArrayOfByte,uzbtypes,uzeconsts,
      uzbgeomtypes,uzegeometry,uzeffdxfsupport,uzbmemman;
 type
-{REGISTEROBJECTTYPE GDBObjSuperLine}
 {Export+}
+{REGISTEROBJECTTYPE GDBObjSuperLine}
 PGDBObjSuperLine=^GDBObjSuperLine;
 GDBObjSuperLine={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjLine)
                   constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p1,p2:GDBvertex);

@@ -23,7 +23,8 @@ unit UObjectDescriptor;
 interface
 uses LCLProc,gzctnrvectorobjects,URecordDescriptor,UGDBOpenArrayOfByte,sysutils,
      gzctnrvectortypes,uzedimensionaltypes,UBaseTypeDescriptor,TypeDescriptors,
-     strmy,uzctnrvectorgdbstring,gzctnrvectorp,gzctnrvectordata,uzbtypesbase,varmandef,uzbtypes,uzbmemman,uzbstrproc;
+     strmy,uzctnrvectorgdbstring,gzctnrvectorp,gzctnrvectordata,uzbtypesbase,
+     varmandef,uzbtypes,uzbmemman,uzbstrproc,TypInfo;
 type
 GDBTOperandStoreMode=GDBByte;
 GDBOperandDesc=record
@@ -83,6 +84,7 @@ ObjectDescriptor=object(RecordDescriptor)
                        function GetTypeAttributes:TTypeAttr;virtual;
                        procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:Pointer;prefix:TInternalScriptString);virtual;
                        procedure MagicFreeInstance(PInstance:Pointer);virtual;
+                       procedure RegisterTypeinfo(ti:PTypeInfo);virtual;
                  end;
 PTGenericVectorData=^TGenericVectorData;
 TGenericVectorData=GZVectorData<byte>;
@@ -166,6 +168,9 @@ procedure ObjectDescriptor.MagicFreeInstance(PInstance:Pointer);
 begin
      //RunMetod('Done',PInstance);
      inherited;
+end;
+procedure ObjectDescriptor.RegisterTypeinfo(ti:PTypeInfo);
+begin
 end;
 
 procedure ObjectDescriptor.AddProperty(var pd:PropertyDescriptor);

@@ -20,6 +20,7 @@ unit uzbgeomtypes;
 interface
 uses uzbtypesbase;
 type
+{REGISTERRECORDTYPE GDBvertex}
 {EXPORT+}
 PIMatrix4=^IMatrix4;
 IMatrix4=packed array[0..3]of GDBInteger;

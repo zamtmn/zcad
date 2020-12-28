@@ -29,6 +29,7 @@ TProcCounter=procedure(const PInstance,PCounted:GDBPointer;var Counter:GDBIntege
 TControlPointAttr=(CPA_Strech);
 TControlPointAttrs=set of TControlPointAttr;
 {REGISTEROBJECTTYPE GDBBaseCamera}
+{REGISTERRECORDTYPE TArcData}
 {EXPORT+}
 (*varcategoryforoi SUMMARY='Summary'*)
 (*varcategoryforoi CABLE='Cable params'*)

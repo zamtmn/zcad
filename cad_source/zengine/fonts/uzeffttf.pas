@@ -23,7 +23,7 @@ uses uzefontmanager,EasyLazFreeType,uzefontttf,uzegeometry,
     uzefont,uzbstrproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}sysutils,
     UGDBOpenArrayOfByte,uzbtypesbase,uzbtypes,uzbmemman;
 type ptsyminfo=^tsyminfo;
-     tsyminfo=packed record
+     tsyminfo=record
                            number,size:word;
                      end;
 function createnewfontfromttf(name:GDBString;var pf:PGDBfont):GDBBoolean;

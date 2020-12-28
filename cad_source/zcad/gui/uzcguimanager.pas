@@ -28,7 +28,7 @@ type
 TZCADFormSetupProc=procedure(Form:TControl);
 TZCADFormCreateProc=function:TForm;
 PTFormInfoData=^TFormInfoData;
-TFormInfoData=packed record
+TFormInfoData=record
                           FormName,FormCaption:GDBString;
                           DefaultBounds:TRect;
                           FormClass:TClass;

@@ -45,7 +45,7 @@ uses
   Varman,
   LazLogger,uzctnrvectorgdbpalettecolor;
 type
-TSelGeneralParams=packed record
+TSelGeneralParams=record
                         SameLayer:GDBBoolean;(*'Same layer'*)
                         SameLineWeight:GDBBoolean;(*'Same line weight'*)
                         SameLineType:GDBBoolean;(*'Same line type'*)
@@ -57,17 +57,17 @@ TDiff=(
         TD_Diff(*'Diff'*),
         TD_NotDiff(*'Not Diff'*)
        );
-TSelBlockParams=packed record
+TSelBlockParams=record
                         SameName:GDBBoolean;(*'Same name'*)
                         DiffBlockDevice:TDiff;(*'Block and Device'*)
                   end;
-TSelTextParams=packed record
+TSelTextParams=record
                         SameContent:GDBBoolean;(*'Same content'*)
                         SameTemplate:GDBBoolean;(*'Same template'*)
                         DiffTextMText:TDiff;(*'Text and Mtext'*)
                   end;
 PTSelSimParams=^TSelSimParams;
-TSelSimParams=packed record
+TSelSimParams=record
                     General:TSelGeneralParams;(*'General'*)
                     Blocks:TSelBlockParams;(*'Blocks'*)
                     Texts:TSelTextParams;(*'Texts'*)

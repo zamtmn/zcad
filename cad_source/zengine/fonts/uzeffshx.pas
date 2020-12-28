@@ -27,7 +27,7 @@ const
   fontdirect:array[0..$F,0..1] of GDBDouble=
   ((1,0),(1,0.5),(1,1),(0.5,1),(0,1),(-0.5,1),(-1,1),(-1,0.5),(-1,0),(-1,-0.5),(-1,-1),(-0.5,-1),(0,-1),(0.5,-1),(1,-1),(1,-0.5));
 type ptsyminfo=^tsyminfo;
-     tsyminfo=packed record
+     tsyminfo=record
                            number,size:word;
                      end;
 function createnewfontfromshx(name:GDBString;var pf:PGDBfont):GDBBoolean;

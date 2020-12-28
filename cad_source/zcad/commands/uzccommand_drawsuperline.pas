@@ -72,7 +72,7 @@ uses
 
 type
 PTDrawSuperlineParams=^TDrawSuperlineParams;
-TDrawSuperlineParams=packed record
+TDrawSuperlineParams=record
                          pu:PTUnit;                //рантайм юнит с параметрами суперлинии
                          LayerNamePrefix:GDBString;//префикс
                          ProcessLayer:GDBBoolean;  //выключатель

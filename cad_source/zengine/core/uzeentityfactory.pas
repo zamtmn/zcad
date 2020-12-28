@@ -29,7 +29,7 @@ TAllocAndInitEntFunc=function (owner:PGDBObjGenericWithSubordinated): PGDBObjEnt
 TAllocAndInitAndSetGeomPropsFunc=function (owner:PGDBObjGenericWithSubordinated;args:array of const): PGDBObjEntity;
 TSetGeomPropsFunc=procedure (ent:PGDBObjEntity;args:array of const);
 TEntityUpgradeFunc=function (ptu:PExtensionData;ent:PGDBObjEntity;const drawing:TDrawingDef): PGDBObjEntity;
-TEntInfoData=packed record
+TEntInfoData=record
                           DXFName,UserName:GDBString;
                           EntityID:TObjID;
                           AllocEntity:TAllocEntFunc;

@@ -61,7 +61,7 @@ PDMode=(PDM_Field,PDM_Property);
 PUserTypeDescriptor=^UserTypeDescriptor;
 TPropEditor=class;
 TEditorMode=(TEM_Integrate,TEM_Nothing);
-TEditorDesc=packed record
+TEditorDesc=record
                   Editor:TPropEditor;
                   Mode:TEditorMode;
             end;
@@ -75,18 +75,18 @@ TGetPrefferedFastEditorSize=function (PInstance:Pointer;ARect:TRect):TSize;
 TDrawFastEditor=procedure (canvas:TCanvas;r:trect;PInstance:Pointer;state:TFastEditorState;boundr:trect);
 TRunFastEditor=procedure (PInstance:Pointer);
 
-TDecoratedProcs=packed record
+TDecoratedProcs=record
                 OnGetValueAsString:TOnGetValueAsString;
                 OnCreateEditor:TOnCreateEditor;
                 OnDrawProperty:TOnDrawProperty;
                 end;
-TFastEditorProcs=packed record
+TFastEditorProcs=record
                 OnGetPrefferedFastEditorSize:TGetPrefferedFastEditorSize;
                 OnDrawFastEditor:TDrawFastEditor;
                 OnRunFastEditor:TRunFastEditor;
                 UndoInsideFastEditor:Boolean;
                 end;
-TFastEditorRunTimeData=packed record
+TFastEditorRunTimeData=record
                       Procs:TFastEditorProcs;
                       FastEditorState:TFastEditorState;
                       FastEditorDrawed:GDBBoolean;

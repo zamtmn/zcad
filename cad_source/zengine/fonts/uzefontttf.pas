@@ -24,7 +24,7 @@ uses LCLProc,uzgprimitivescreator,uzgprimitives,uzglvectorobject,uzefontbase,uze
   gzctnrvectortypes,uzbgeomtypes,uzbtypes,uzegeometry,gzctnrstl;
 type
 PTTTFSymInfo=^TTTFSymInfo;
-TTTFSymInfo=packed record
+TTTFSymInfo=record
                       GlyphIndex:Integer;
                       PSymbolInfo:PGDBSymdolInfo;
                       //-ttf-//TrianglesDataInfo:TTrianglesDataInfo;

@@ -45,7 +45,7 @@ TExample_com=object(CommandRTEdObject)//определяем тип - объек
              procedure DoSomething2(pdata:GDBPlatformint); virtual;//реализация какогото другого действия
             end;
 PTExampleComParams=^TExampleComParams;//указатель на тип данных параметров команды. зкад работает с ними через указатель
-TExampleComParams=packed record       //определяем параметры команды которые будут видны в инспекторе во время выполнения команды
+TExampleComParams=record       //определяем параметры команды которые будут видны в инспекторе во время выполнения команды
                                       //регистрировать их будем паскалевским RTTI
                                       //не через экспорт исходников и парсинг файла с определениями типов
   option3:gdbstring;

@@ -240,7 +240,7 @@ type
 
 
       TSetTypeAGSL=(Var1,Var2,Var3);
-      TAutogenSuperLine=packed record
+      TAutogenSuperLine=record
          nameSL:string;
          setTypeAGSL:TSetTypeAGSL;
          accuracy:double;

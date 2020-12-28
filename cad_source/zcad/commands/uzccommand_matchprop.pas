@@ -42,7 +42,7 @@ implementation
 
 type
   //** Тип данных для отображения в инспекторе опций команды MatchProp о текстовых примитивах, составная часть TMatchPropParam
-  TMatchPropTextParam=packed record
+  TMatchPropTextParam=record
     ProcessTextStyle:Boolean;(*'Process style'*)
     ProcessTextSize:Boolean;(*'Process size'*)
     ProcessTextOblique:Boolean;(*'Process oblique'*)
@@ -50,7 +50,7 @@ type
     ProcessTextJustify:Boolean;(*'Process justify'*)
   end;
   //** Тип данных для отображения в инспекторе опций команды MatchProp
-  TMatchPropParam=packed record
+  TMatchPropParam=record
     ProcessLayer:Boolean;(*'Process layer'*)
     ProcessLineWeight:Boolean;(*'Process line weight'*)
     ProcessLineType:Boolean;(*'Process line type'*)

@@ -7,7 +7,7 @@ uses Generics.Collections,
 type
 TFormSetupProc=procedure(Form:TControl);
 PTFormInfoData=^TFormInfoData;
-TFormInfoData=packed record
+TFormInfoData=record
                           FormName:string;
                           DefaultBounds:TRect;
                           FormClass:TClass;

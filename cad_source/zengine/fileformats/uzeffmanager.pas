@@ -24,7 +24,7 @@ uses uzbtypesbase,uzbtypes,usimplegenerics,uzeentgenericsubentry,uzedrawingsimpl
 
 type
 TFileLoadProcedure=procedure(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
-TFileFormatData=packed record
+TFileFormatData=record
                 FormatDesk:GDBString;
                 FileLoadProcedure:TFileLoadProcedure;
                 end;

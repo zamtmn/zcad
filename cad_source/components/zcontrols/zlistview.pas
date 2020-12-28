@@ -33,7 +33,7 @@ type
   TOnMakeCurrent=procedure(Item: TListItem)of object;
 
   PTSubItemRec=^TSubItemRec;
-  TSubItemRec=packed record
+  TSubItemRec=record
     OnDraw:TDrawProc;
     IsOn:TIsOnFunc;
     OnClick,On2Click:TOnClick;

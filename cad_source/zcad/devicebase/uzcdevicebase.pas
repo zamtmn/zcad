@@ -5,11 +5,9 @@ uses uzcinterface,uzbpaths,uzctranslations,gvector,varmandef,CsvDocument,uzcdevi
      LazUTF8,uzcsysinfo,strmy,uzbtypesbase,uzbtypes,UUnitManager,varman,sysutils,
      typedescriptors,URecordDescriptor,UObjectDescriptor,uzclog;
 type
-{REGISTEROBJECTTYPE DeviceDbBaseObject}
-{REGISTEROBJECTTYPE ElDeviceBaseObject}
-{REGISTEROBJECTTYPE CableDeviceBaseObject}
 {EXPORT+}
 PDeviceDbBaseObject=^DeviceDbBaseObject;
+{REGISTEROBJECTTYPE DeviceDbBaseObject}
 DeviceDbBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DbBaseObject)
                        UID:GDBString;(*'**Уникальный идентификатор'*)(*oi_readonly*)
 
@@ -23,11 +21,13 @@ DeviceDbBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DbBaseObject)
                        procedure Format;virtual;
                        procedure SetOtherFields(PField,PTypeDescriptor:GDBPointer);virtual;
                  end;
+{REGISTEROBJECTTYPE ElDeviceBaseObject}
 ElDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
                                    Pins:GDBString;(*'**Клеммы'*)
                                    constructor initnul;
                                    procedure Format;virtual;
                              end;
+{REGISTEROBJECTTYPE CableDeviceBaseObject}
 CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
                                    CoreCrossSection:GDBDouble;(*'**Сечение жилы'*)
                                    NumberOfCores:GDBDouble;(*'**Количество жил'*)

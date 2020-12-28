@@ -25,9 +25,9 @@ Uses
    uzeconsts,uzeentity,uzeentgenericsubentry,uzeentconnected,uzeentsubordinated,
    gzctnrvectortypes,uzbgeomtypes,uzegeometry;
 type
-{REGISTEROBJECTTYPE GDBObjRoot}
 {Export+}
 PGDBObjRoot=^GDBObjRoot;
+{REGISTEROBJECTTYPE GDBObjRoot}
 GDBObjRoot={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericSubEntry)
                  constructor initnul;
                  destructor done;virtual;

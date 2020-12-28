@@ -25,8 +25,8 @@ uses uzeentity,uzgldrawcontext,uzeentityfactory,uzedrawingdef,uzestyleslayers,ma
      gzctnrvectortypes,uzbgeomtypes,UGDBOpenArrayOfByte,uzestrconsts,LCLProc;
 const zcadmetric='!!ZMODIFIER:';
 type
-{REGISTEROBJECTTYPE GDBObjBlockInsert}
 {Export+}
+{REGISTEROBJECTTYPE GDBObjBlockInsert}
 PGDBObjBlockInsert=^GDBObjBlockInsert;
 GDBObjBlockInsert={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                      scale:GDBvertex;(*saved_to_shd*)

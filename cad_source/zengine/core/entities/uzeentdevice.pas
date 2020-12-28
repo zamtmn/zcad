@@ -29,9 +29,9 @@ uses uzestyleslayers,uzepalette,uzeobjectextender,uabstractunit,uzeentityfactory
      LazLogger,uzestrconsts;
 
 type
-{REGISTEROBJECTTYPE GDBObjDevice}
 {EXPORT+}
 PGDBObjDevice=^GDBObjDevice;
+{REGISTEROBJECTTYPE GDBObjDevice}
 GDBObjDevice={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjBlockInsert)
                    VarObjArray:GDBObjEntityOpenArray;(*oi_readonly*)(*hidden_in_objinsp*)
                    lstonmouse:PGDBObjEntity;(*oi_readonly*)(*hidden_in_objinsp*)

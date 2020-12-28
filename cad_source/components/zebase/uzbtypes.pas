@@ -28,8 +28,6 @@ TZMessageID=type integer;
 TProcCounter=procedure(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
 TControlPointAttr=(CPA_Strech);
 TControlPointAttrs=set of TControlPointAttr;
-{REGISTEROBJECTTYPE GDBBaseCamera}
-{REGISTERRECORDTYPE TArcData}
 {EXPORT+}
 (*varcategoryforoi SUMMARY='Summary'*)
 (*varcategoryforoi CABLE='Cable params'*)
@@ -70,6 +68,7 @@ GDBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object
     function IsEntity:GDBBoolean;virtual;
 
   end;
+{REGISTERRECORDTYPE TArcData}
 TArcData=packed record
                r,startangle,endangle:gdbdouble;
                p:GDBvertex2D;
@@ -89,6 +88,7 @@ end;
 TActulity=GDBInteger;
 TEntUpgradeInfo=GDBLongword;
 PGDBBaseCamera=^GDBBaseCamera;
+{REGISTEROBJECTTYPE GDBBaseCamera}
 GDBBaseCamera={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                 modelMatrix:DMatrix4D;
                 fovy:GDBDouble;

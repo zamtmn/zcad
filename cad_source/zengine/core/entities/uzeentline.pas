@@ -25,9 +25,9 @@ uses LCLProc,uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,
      UGDBSelectedObjArray,uzeent3d,uzeentity,UGDBOpenArrayOfByte,uzbtypes,uzeconsts,
      uzbgeomtypes,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzbmemman;
 type
-{REGISTEROBJECTTYPE GDBObjLine}
 {Export+}
 PGDBObjLine=^GDBObjLine;
+{REGISTEROBJECTTYPE GDBObjLine}
 GDBObjLine={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  CoordInOCS:GDBLineProp;(*'Coordinates OCS'*)(*saved_to_shd*)
                  CoordInWCS:GDBLineProp;(*'Coordinates WCS'*)(*hidden_in_objinsp*)

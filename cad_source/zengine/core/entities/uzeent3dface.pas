@@ -24,8 +24,8 @@ uses
     uzegeometry,uzeffdxfsupport,uzestyleslayers,uzbtypesbase,UGDBSelectedObjArray,uzeentsubordinated,
     uzbgeomtypes,uzeent3d,uzeentity,sysutils,UGDBOpenArrayOfByte,uzbtypes,uzeconsts,uzbmemman;
 type
-{REGISTEROBJECTTYPE GDBObj3DFace}
 {Export+}
+{REGISTEROBJECTTYPE GDBObj3DFace}
 PGDBObj3DFace=^GDBObj3DFace;
 GDBObj3DFace={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  PInOCS:OutBound4V;(*'Coordinates OCS'*)(*saved_to_shd*)

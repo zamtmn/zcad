@@ -22,8 +22,8 @@ interface
 uses LCLProc,uzgldrawcontext,uzedrawingdef,uzbstrproc,uzeblockdef,gzctnrvectorobjects,
      gzctnrvectortypes,sysutils,uzbtypes,uzbmemman,uzegeometry,uzbtypesbase;
 type
-{REGISTEROBJECTTYPE GDBObjBlockdefArray}
 {Export+}
+{REGISTEROBJECTTYPE GDBObjBlockdefArray}
 PGDBObjBlockdefArray=^GDBObjBlockdefArray;
 PBlockdefArray=^BlockdefArray;
 BlockdefArray=packed array [0..0] of GDBObjBlockdef;

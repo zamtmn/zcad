@@ -21,8 +21,8 @@ unit UGDBVisibleOpenArray;
 interface
 uses gzctnrvectortypes,uzbgeomtypes,uzeentity,uzecamera,uzbtypesbase,UGDBOpenArrayOfPV,sysutils,uzbtypes,uzegeometry,uzbmemman;
 type
-{REGISTEROBJECTTYPE GDBObjEntityOpenArray}
 {Export+}
+{REGISTEROBJECTTYPE GDBObjEntityOpenArray}
 PGDBObjEntityOpenArray=^GDBObjEntityOpenArray;
 GDBObjEntityOpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjOpenArrayOfPV)(*OpenArrayOfPObj*)
                       function AddPEntity(var entity:GDBObjEntity):TArrayIndex;virtual;

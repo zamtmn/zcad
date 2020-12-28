@@ -25,9 +25,9 @@ uses
     UGDBSelectedObjArray,uzeentsubordinated,uzeentity,sysutils,UGDBOpenArrayOfByte,
     uzbgeomtypes,uzbtypes,uzeconsts,uzbmemman;
 type
-{REGISTEROBJECTTYPE GDBObjSolid}
 {Export+}
 PGDBObjSolid=^GDBObjSolid;
+{REGISTEROBJECTTYPE GDBObjSolid}
 GDBObjSolid={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  PInOCS:OutBound4V;(*'Coordinates OCS'*)(*saved_to_shd*)
                  PInWCS:OutBound4V;(*'Coordinates WCS'*)(*hidden_in_objinsp*)

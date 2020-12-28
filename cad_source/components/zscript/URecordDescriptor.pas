@@ -47,6 +47,7 @@ RecordDescriptor=object(TUserTypeDescriptor)
                        procedure MagicAfterCopyInstance(PInstance:Pointer);virtual;
                        function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
                        procedure RegisterTypeinfo(ti:PTypeInfo);virtual;
+                       procedure CorrectFieldsOffset(ti:PTypeInfo);
                    end;
 function typeformat(s:TInternalScriptString;PInstance,PTypeDescriptor:Pointer):TInternalScriptString;
 var
@@ -88,10 +89,35 @@ begin
      result:=ps;
 end;
 procedure RecordDescriptor.RegisterTypeinfo(ti:PTypeInfo);
-var pd:PFieldDescriptor;
 begin
-  ti:=ti;
+  CorrectFieldsOffset(ti);
 end;
+
+procedure RecordDescriptor.CorrectFieldsOffset(ti:PTypeInfo);
+var
+   td:PTypeData;
+   mf: PManagedField;
+   i:integer;
+   etd:PRecordDescriptor;
+   pfd:pFieldDescriptor;
+begin
+     td:=GetTypeData(ti);
+     mf:=@td.ManagedFldCount;
+     inc(pointer(mf),sizeof(td.ManagedFldCount));
+     for i:=0 to td.ManagedFldCount-1 do
+     begin
+          ti:=mf.TypeRef;
+          pfd:=Fields.getDataMutable(i);
+          {fd.base.ProgramName:=ti.Name;
+          fd.base.PFT:=RegisterType(ti);;
+          fd.base.Attributes:=0;
+          fd.base.Saved:=0;
+          fd.Collapsed:=true;}
+          Pfd.Offset:=mf.FldOffset;
+          inc(mf);
+     end;
+end;
+
 
 procedure RecordDescriptor.MagicFreeInstance(PInstance:Pointer);
 var pd:PFieldDescriptor;

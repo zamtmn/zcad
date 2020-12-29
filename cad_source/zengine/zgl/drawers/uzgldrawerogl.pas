@@ -42,7 +42,7 @@ TRestoreMode=(
              );
 PTOpenglData=^TOpenglData;
 {REGISTERRECORDTYPE TOpenglData}
-TOpenglData=packed record
+TOpenglData=record
           RD_Renderer:GDBString;(*'Device'*)(*oi_readonly*)
           RD_Version:GDBString;(*'Version'*)(*oi_readonly*)
           RD_Extensions:GDBString;(*'Extensions'*)(*oi_readonly*)

@@ -28,7 +28,7 @@ type
 {Export+}
   ptEllipsertmodify=^tEllipsertmodify;
   {REGISTERRECORDTYPE tEllipsertmodify}
-  tEllipsertmodify=packed record
+  tEllipsertmodify=record
                         p1,p2,p3:GDBVertex2d;
                   end;
 PGDBObjEllipse=^GDBObjEllipse;

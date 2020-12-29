@@ -24,7 +24,7 @@ type
 {EXPORT+}
   PTRGB=^TRGB;
   {REGISTERRECORDTYPE TRGB}
-  TRGB=packed record
+  TRGB=record
             r:GDBByte;(*'Red'*)
             g:GDBByte;(*'Green'*)
             b:GDBByte;(*'Blue'*)
@@ -32,7 +32,7 @@ type
       end;
   PTDXFCOLOR=^TDXFCOLOR;
   {REGISTERRECORDTYPE TDXFCOLOR}
-  TDXFCOLOR=packed record
+  TDXFCOLOR=record
             RGB:TRGB;(*'Color'*)
             name:GDBString;(*'Name'*)
       end;

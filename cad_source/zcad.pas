@@ -63,12 +63,13 @@ uses
   //
   //next line load system.pas
   //
-  uzcregother,//loading rtl/system.pas and setup SysVar
+  uzcregsystempas,//loading rtl/system.pas
+  {$INCLUDE allgeneratedfiles.inc}//correct defs in system.pas
+  uzcregother,//setup SysVar
   UUnitManager,
   uzefontmanager,
   uzeffshx,uzeffttf,
 
-  {$INCLUDE allgeneratedfiles.inc}
 
   uzcdrawings,
 
@@ -272,6 +273,7 @@ begin
   //инициализация drawings
   FontManager.EnumerateFontFiles;
   uzcdrawings.startup('*rtl/dwg/DrawingVars.pas','');
+  uzcdevicebase.startup;
 
   Application.Scaled:=False;
   Application.MainFormOnTaskBar:=true;

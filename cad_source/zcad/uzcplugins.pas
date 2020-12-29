@@ -24,7 +24,7 @@ uses uzbtypesbase,sysutils, dynlibs, uzclog,uzbmemman,gzctnrvectordata,uzeentity
 type
     {Export+}
   {REGISTERRECORDTYPE PluginVersionInfo}
-  PluginVersionInfo=packed record
+  PluginVersionInfo=record
     PluginName: pansichar;
     PluginVersion: GDBInteger;
   end;
@@ -32,7 +32,7 @@ type
   Initfunc=function: GDBInteger;
   pmoduledesc=^moduledesc;
   {REGISTERRECORDTYPE moduledesc}
-  moduledesc=packed record
+  moduledesc=record
     modulename:pansichar;
     modulehandle:thandle;
     ininfunction:function(path:pansichar):GDBInteger;
@@ -41,12 +41,12 @@ type
   arraymoduledesc=packed array[0..0] of moduledesc;
   popenarraymoduledesc=^openarraymoduledesc;
   {REGISTERRECORDTYPE openarraymoduledesc}
-  openarraymoduledesc=packed record
+  openarraymoduledesc=record
     count:GDBInteger;
     modarr:arraymoduledesc;
   end;
   {REGISTERRECORDTYPE copyobjectdesc}
-  copyobjectdesc=packed record
+  copyobjectdesc=record
                  oldnum,newnum:PGDBOBJENTITY;
                  end;
   copyobjectarray=packed array [0..0] of copyobjectdesc;

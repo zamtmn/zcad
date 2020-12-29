@@ -101,7 +101,7 @@ PropertyDescriptor=record
                 end;
 PTUserTypeDescriptor=^TUserTypeDescriptor;
 TUserTypeDescriptor=object(UserTypeDescriptor)
-                          function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;var addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;abstract;
+                          function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;abstract;
                           //procedure IncAddr(var addr:GDBPointer);virtual;
                           function CreatePD:GDBPointer;
                           function GetPPD(PPDA:PTPropertyDeskriptorArray;var bmode:GDBInteger):PPropertyDeskriptor;

@@ -24,7 +24,7 @@ type
 {Export+}
 PVectotSnap=^VectorSnap;
 {REGISTERRECORDTYPE VectorSnap}
-VectorSnap=packed record
+VectorSnap=record
                  l_1_4,l_1_3,l_1_2,l_2_3,l_3_4:GDBvertex;
            end;
 PGDBVectorSnapArray=^GDBVectorSnapArray;

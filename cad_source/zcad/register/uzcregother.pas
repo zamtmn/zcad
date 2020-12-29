@@ -30,17 +30,6 @@ var
   ptd:PUserTypeDescriptor;
 {$ENDIF}
 initialization;
-     programlog.logoutstr('urtl.initialization',lp_IncPos,LM_Debug);
-     //units.init;
-     if SysUnit=nil then
-       begin
-         units.loadunit(SupportPath,InterfaceTranslate,expandpath('*rtl/system.pas'),nil);
-         SysUnit:=units.findunit(SupportPath,InterfaceTranslate,'System');
-       end;
-
-  {RegCnownTypes.RegTypes;}
-  {URegisterObjects.startup;}
-
   units.loadunit(SupportPath,InterfaceTranslate,expandpath('*rtl/sysvar.pas'),nil);
   units.loadunit(SupportPath,InterfaceTranslate,expandpath('*rtl/savedvar.pas'),nil);
   units.loadunit(SupportPath,InterfaceTranslate,expandpath('*rtl/devicebase.pas'),nil);
@@ -248,8 +237,6 @@ initialization;
   SetCategoryCollapsed('GC',false);
   SetCategoryCollapsed('CABLE',false);
   end;
-  programlog.logoutstr('end; {urtl.initialization}',lp_DecPos,LM_Debug);
-
 finalization;
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization')
   //units.FreeAndDone;

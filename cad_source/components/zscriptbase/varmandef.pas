@@ -210,12 +210,12 @@ TTraceAngle=(
               TTA30(*'30 deg'*)
              );
 {REGISTERRECORDTYPE TTraceMode}
-TTraceMode=packed record
+TTraceMode=record
                  Angle:TTraceAngle;(*'Angle'*)
                  ZAxis:GDBBoolean;(*'Z Axis'*)
            end;
 {REGISTERRECORDTYPE TOSMode}
-TOSMode=packed record
+TOSMode=record
               kosm_inspoint:GDBBoolean;(*'Insertion'*)
               kosm_endpoint:GDBBoolean;(*'Endpoint'*)
               kosm_midpoint:GDBBoolean;(*'Midpoint'*)
@@ -238,7 +238,7 @@ TOSMode=packed record
   parrayindex = ^arrayindex;
   PTTypedData=^TTypedData;
   {REGISTERRECORDTYPE TTypedData}
-  TTypedData=packed record
+  TTypedData=record
                    Instance: GDBPointer;
                    PTD:{-}PUserTypeDescriptor{/GDBPointer/};
              end;

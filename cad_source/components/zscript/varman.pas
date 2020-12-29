@@ -197,6 +197,7 @@ TSimpleUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractUnit)
                   procedure CopyFrom(source:PTSimpleUnit);virtual;
             end;
 PTObjectUnit=^TObjectUnit;
+{REGISTEROBJECTTYPE TObjectUnit}
 TObjectUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleUnit)
                   //function SaveToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;
                   procedure free;virtual;

@@ -28,7 +28,7 @@ type
 {EXPORT+}
 PGDBTextProp=^GDBTextProp;
 {REGISTERRECORDTYPE GDBTextProp}
-GDBTextProp=packed record
+GDBTextProp=record
                   size:GDBDouble;(*saved_to_shd*)
                   oblique:GDBDouble;(*saved_to_shd*)
                   wfactor:GDBDouble;(*saved_to_shd*)

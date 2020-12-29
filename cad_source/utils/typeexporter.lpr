@@ -131,7 +131,10 @@ writestring(createdfilehandle,'unit '+filename+';');
 writestring(createdfilehandle,'{$INCLUDE def.inc}');
 writestring(createdfilehandle,'{Этот модуль создан автоматически. НЕ РЕДАКТИРОВАТЬ}');
 writestring(createdfilehandle,'interface');
-writestring(createdfilehandle,'uses UObjectDescriptor,Varman,TypeDescriptors,'+unitname+';');
+if uppercase(unitname)<>'VARMAN' then
+  writestring(createdfilehandle,'uses UObjectDescriptor,Varman,TypeDescriptors,'+unitname+';')
+else
+  writestring(createdfilehandle,'uses UObjectDescriptor,Varman,TypeDescriptors;');
 writestring(createdfilehandle,'implementation');
 writestring(createdfilehandle,'var');
 writestring(createdfilehandle,'pt:PObjectDescriptor;');

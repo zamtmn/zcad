@@ -26,7 +26,7 @@ type
 {Export+}
 PGDBObjVisualProp=^GDBObjVisualProp;
 {REGISTERRECORDTYPE GDBObjVisualProp}
-GDBObjVisualProp=packed record
+GDBObjVisualProp=record
                       Layer:{-}PGDBLayerProp{/PGDBLayerPropObjInsp/};(*'Layer'*)(*saved_to_shd*)
                       LineWeight:TGDBLineWeight;(*'Line weight'*)(*saved_to_shd*)
                       LineType:{-}PGDBLtypeProp{/PGDBLtypePropObjInsp/};(*'Line type'*)(*saved_to_shd*)

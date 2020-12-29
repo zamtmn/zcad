@@ -24,7 +24,7 @@ type
 {EXPORT+}
 PGDBBOMItem=^GDBBOMItem;
 {REGISTERRECORDTYPE GDBBOMItem}
-GDBBOMItem=packed record
+GDBBOMItem=record
                  Material:GDBString;
                  Amount:GDBDouble;
                  Names:GDBString;

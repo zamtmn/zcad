@@ -66,6 +66,7 @@ begin
   GDBobjinsp.OnContextPopup:=dummyclass.ContextPopup;
 
   StoreAndSetGDBObjInsp(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar,nil);
+  //StoreAndSetGDBObjInsp(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('PTLayerControl'),@sysvar.DSGN.DSGN_LayerControls.DSGN_LC_Cable,nil);
   SetCurrentObjDefault;
   //pint:=SavedUnit.FindValue('VIEW_ObjInspV');
   SetNameColWidth(Form.Width div 2);

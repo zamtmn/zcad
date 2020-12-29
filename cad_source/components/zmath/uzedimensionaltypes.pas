@@ -43,7 +43,7 @@ type
     PTUnitMode=^TUnitMode;
     TUnitMode=(UMWithSpaces(*'With spaces'*),UMWithoutSpaces(*'Without spaces'*));
     {REGISTERRECORDTYPE TzeUnitsFormat}
-    TzeUnitsFormat=packed record
+    TzeUnitsFormat=record
                          abase:GDBAngleDegDouble;
                          adir:TAngDir;
                          aformat:TAUnits;

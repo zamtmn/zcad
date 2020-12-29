@@ -36,13 +36,13 @@ type
                     end;
     PTEnumData=^TEnumData;
     {REGISTERRECORDTYPE TEnumData}
-    TEnumData=packed record
+    TEnumData=record
                     Selected:GDBInteger;
                     Enums:TZctnrVectorGDBString;
               end;
     PTEnumDataWithOtherData=^TEnumDataWithOtherData;
     {REGISTERRECORDTYPE TEnumDataWithOtherData}
-    TEnumDataWithOtherData=packed record
+    TEnumDataWithOtherData=record
                     Selected:GDBInteger;
                     Enums:TZctnrVectorGDBString;
                     PData:GDBPointer;

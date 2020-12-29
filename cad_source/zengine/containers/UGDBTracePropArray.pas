@@ -24,7 +24,7 @@ uses uzbgeomtypes,gzctnrvectordata,sysutils,uzbtypesbase,uzbtypes;
 type
   ptraceprop=^traceprop;
   {REGISTERRECORDTYPE traceprop}
-  traceprop=packed record
+  traceprop=record
     trace:gdbboolean;
     tmouse: GDBDouble;
     dmouse: GDBInteger;

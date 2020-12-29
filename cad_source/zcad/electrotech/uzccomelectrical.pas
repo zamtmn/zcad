@@ -47,7 +47,7 @@ type
              );
 PTBasicFinter=^TBasicFinter;
 {REGISTERRECORDTYPE TBasicFinter}
-TBasicFinter=packed record
+TBasicFinter=record
                    IncludeCable:GDBBoolean;(*'Include filter'*)
                    IncludeCableMask:GDBString;(*'Include mask'*)
                    ExcludeCable:GDBBoolean;(*'Exclude filter'*)
@@ -55,24 +55,24 @@ TBasicFinter=packed record
              end;
   PTFindDeviceParam=^TFindDeviceParam;
   {REGISTERRECORDTYPE TFindDeviceParam}
-  TFindDeviceParam=packed record
+  TFindDeviceParam=record
                         FindType:TFindType;(*'Find in'*)
                         FindMethod:GDBBoolean;(*'Use symbols *, ?'*)
                         FindString:GDBString;(*'Text'*)
                     end;
   {REGISTERRECORDTYPE GDBLine}
-     GDBLine=packed record
+     GDBLine=record
                   lBegin,lEnd:GDBvertex;
               end;
   PTELCableComParam=^TELCableComParam;
   {REGISTERRECORDTYPE TELCableComParam}
-  TELCableComParam=packed record
+  TELCableComParam=record
                         Traces:TEnumData;(*'Trace'*)
                         PCable:{PGDBObjCable}GDBPointer;(*'Cabel'*)
                         PTrace:{PGDBObjNet}GDBPointer;(*'Trace (pointer)'*)
                    end;
   {REGISTERRECORDTYPE TELLeaderComParam}
-  TELLeaderComParam=packed record
+  TELLeaderComParam=record
                         Scale:GDBDouble;(*'Scale'*)
                         Size:GDBInteger;(*'Size'*)
                         twidth:GDBDouble;(*'Width'*)

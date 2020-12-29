@@ -51,7 +51,7 @@ type
 {EXPORT+}
   PTCopyObjectDesc=^TCopyObjectDesc;
   {REGISTERRECORDTYPE TCopyObjectDesc}
-  TCopyObjectDesc=packed record
+  TCopyObjectDesc=record
                  sourceEnt,tmpProxy,copyEnt:PGDBObjEntity;
                  end;
   ptpcoavector=^tpcoavector;

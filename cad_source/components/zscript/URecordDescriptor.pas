@@ -19,7 +19,6 @@
 unit URecordDescriptor;
 {$INCLUDE def.inc}
 {$MODE DELPHI}
-{$ASMMODE intel}
 interface
 uses LCLProc,UPointerDescriptor,uzbstrproc,{log,}UGDBOpenArrayOfByte,sysutils,UBaseTypeDescriptor,
   gzctnrvectortypes,uzedimensionaltypes,TypeDescriptors,gzctnrvectordata,uzbtypesbase,

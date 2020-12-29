@@ -19,7 +19,6 @@
 unit UObjectDescriptor;
 {$INCLUDE def.inc}
 {$MODE DELPHI}
-{$ASMMODE intel}
 interface
 uses LCLProc,gzctnrvectorobjects,URecordDescriptor,UGDBOpenArrayOfByte,sysutils,
      gzctnrvectortypes,uzedimensionaltypes,UBaseTypeDescriptor,TypeDescriptors,

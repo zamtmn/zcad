@@ -26,7 +26,8 @@ uses
   UEnumDescriptor,uzctnrvectorgdbpointer,gzctnrvectordata,gzctnrvectorpobjects,LCLProc,uabstractunit,
   SysUtils,UBaseTypeDescriptor,uzbtypesbase,uzbtypes,UGDBOpenArrayOfByte,
   gzctnrvectortypes,uzctnrvectorgdbstring,varmandef,gzctnrstl,uzbmemman,
-  TypeDescriptors,URecordDescriptor,UObjectDescriptor,uzbstrproc,classes,typinfo,UPointerDescriptor;
+  TypeDescriptors,URecordDescriptor,UObjectDescriptor,uzbstrproc,classes,typinfo,UPointerDescriptor,
+  uzctnrobjectschunk;
 type
     td=record
              template:GDBString;
@@ -167,7 +168,7 @@ Tvardescarray=GZVectorData{-}<vardesk>{//};
 pvarmanager=^varmanager;
 varmanager=object(varmanagerdef)
             vardescarray:{GDBOpenArrayOfData}Tvardescarray;
-            vararray:GDBOpenArrayOfByte;
+            vararray:{GDBOpenArrayOfByte}TObjectsChunk;
                  constructor init;
                  function findvardesc(varname:TInternalScriptString): pvardesk;virtual;
                  function findvardescbyinst(varinst:GDBPointer):pvardesk;virtual;

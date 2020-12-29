@@ -15,6 +15,7 @@ components/zcontainers/gzctnrvectorobjects.pas
 components/zcontainers/uzctnrvectorgdbstring.pas
 components/zcontainers/UGDBOpenArrayOfByte.pas
 components/zcontainers/uzctnrvectorgdbpointer.pas
+components/zcontainers/uzctnrobjectschunk.pas
 components/zcontainers/gzctnrtree.pas
 zengine/containers/UGDBOpenArrayOfPV.pas
 zengine/containers/UGDBVisibleOpenArray.pas
@@ -24,7 +25,6 @@ zengine/containers/UGDBPoint3DArray.pas
 zengine/containers/UGDBPolyLine2DArray.pas
 zengine/containers/UGDBPolyPoint2DArray.pas
 zengine/containers/UGDBSelectedObjArray.pas
-zengine/containers/uzctnrobjectschunk.pas
 zengine/fonts/uzefontbase.pas
 zengine/fonts/uzefontshx.pas
 zengine/fonts/uzefont.pas

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
-  <Package Version="4">
+  <Package Version="5">
     <PathDelim Value="\"/>
     <Name Value="zcontainers"/>
     <Type Value="RunAndDesignTime"/>
@@ -18,7 +18,7 @@
         </SyntaxOptions>
       </Parsing>
     </CompilerOptions>
-    <Files Count="13">
+    <Files Count="14">
       <Item1>
         <Filename Value="gzctnrvector.pas"/>
         <UnitName Value="gzctnrvector"/>
@@ -71,7 +71,12 @@
         <Filename Value="gzctnrstl.pas"/>
         <UnitName Value="gzctnrstl"/>
       </Item13>
+      <Item14>
+        <Filename Value="uzctnrobjectschunk.pas"/>
+        <UnitName Value="uzctnrobjectschunk"/>
+      </Item14>
     </Files>
+    <CompatibilityMode Value="True"/>
     <RequiredPkgs Count="2">
       <Item1>
         <PackageName Value="zebase"/>

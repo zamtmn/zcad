@@ -31,6 +31,7 @@ GDBBOMItem=record
                  processed:GDBBoolean;
                 end;
 PBbillOfMaterial=^GDBBbillOfMaterial;
+{REGISTEROBJECTTYPE GDBBbillOfMaterial}
 GDBBbillOfMaterial={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<GDBBOMItem>{//})(*OpenArrayOfData=GDBNumItem*)
                        constructor init(m:GDBInteger);
                        procedure freeelement(PItem:PT);virtual;

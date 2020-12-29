@@ -24,6 +24,7 @@ uses uzefontbase,uzbmemman,UGDBOpenArrayOfByte,uzbtypesbase,sysutils,uzbtypes,
 type
 {EXPORT+}
 PSHXFont=^SHXFont;
+{REGISTEROBJECTTYPE SHXFont}
 SHXFont={$IFNDEF DELPHI}packed{$ENDIF} object(BASEFont)
               //compiledsize:GDBInteger;
               h,u:GDBByte;

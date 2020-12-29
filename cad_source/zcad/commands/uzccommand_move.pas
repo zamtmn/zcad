@@ -57,6 +57,7 @@ type
   ptpcoavector=^tpcoavector;
   tpcoavector={-}specialize{//}
               GZVectorData{-}<TCopyObjectDesc>{//};
+  {REGISTEROBJECTTYPE move_com}
   move_com = {$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
     t3dp: gdbvertex;
     pcoa:ptpcoavector;

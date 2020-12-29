@@ -50,6 +50,7 @@ TDXFDimData=record
   TextMoved:GDBBoolean;
 end;
 PGDBObjDimension=^GDBObjDimension;
+{REGISTEROBJECTTYPE GDBObjDimension}
 GDBObjDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                       DimData:TDXFDimData;
                       PDimStyle:{-}PGDBDimStyle{/PGDBDimStyleObjInsp/};

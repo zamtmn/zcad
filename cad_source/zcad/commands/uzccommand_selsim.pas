@@ -72,6 +72,7 @@ TSelSimParams=record
                     Blocks:TSelBlockParams;(*'Blocks'*)
                     Texts:TSelTextParams;(*'Texts'*)
              end;
+  {REGISTEROBJECTTYPE SelSim_com}
   SelSim_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
                          created:boolean;
                          bnames,textcontents,textremplates:TZctnrVectorGDBString;

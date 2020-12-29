@@ -22,6 +22,7 @@ interface
 uses {uzbtypesbase,uzbtypes,}gzctnrvector;
 type
 {Export+}
+{----REGISTEROBJECTTYPE GZVectorSimple}
 GZVectorSimple{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                                  object(GZVector{-}<T>{//})
                                    function PushBackIfNotPresent(data:T):Integer;

@@ -56,6 +56,7 @@ type
                           copyobjectarray:copyobjectarray;
                     end;
   PGDBPluginsArray=^GDBPluginsArray;
+  {REGISTEROBJECTTYPE GDBPluginsArray}
   GDBPluginsArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData<moduledesc>)
                         constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                         procedure loadplugins(path: GDBString);

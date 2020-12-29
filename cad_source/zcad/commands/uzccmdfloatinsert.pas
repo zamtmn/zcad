@@ -29,6 +29,7 @@ uses
 
 type
 {EXPORT+}
+  {REGISTEROBJECTTYPE FloatInsert_com}
   FloatInsert_com = {$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
     procedure CommandStart(Operands:TCommandOperands); virtual;
     procedure Build(Operands:TCommandOperands); virtual;
@@ -37,6 +38,7 @@ type
     function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
   end;
   TFIWPMode=(FIWPCustomize,FIWPRun);
+  {REGISTEROBJECTTYPE FloatInsertWithParams_com}
   FloatInsertWithParams_com = {$IFNDEF DELPHI}packed{$ENDIF} object(FloatInsert_com)
     CMode:TFIWPMode;
     procedure CommandStart(Operands:TCommandOperands); virtual;

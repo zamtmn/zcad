@@ -32,6 +32,7 @@ type
     dispraycoord: GDBVertex;
     worldraycoord: GDBVertex;
   end;
+  {REGISTEROBJECTTYPE GDBtracepropArray}
 GDBtracepropArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<traceprop>{//})
              end;
 {Export-}

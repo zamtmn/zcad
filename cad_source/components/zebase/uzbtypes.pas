@@ -56,6 +56,7 @@ GDBTypedPointer=record
                 end;
 TObjID=GDBWord;
 PGDBaseObject=^GDBaseObject;
+{----REGISTEROBJECTTYPE GDBaseObject----}
 GDBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object
     function ObjToGDBString(prefix,sufix:GDBString):GDBString; virtual;
     function GetObjType:TObjID;virtual;
@@ -111,6 +112,7 @@ GDBBaseCamera={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                 procedure NextPosition;virtual; abstract;
           end;
 PGDBNamedObject=^GDBNamedObject;
+{REGISTEROBJECTTYPE GDBNamedObject}
 GDBNamedObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                      Name:GDBAnsiString;(*saved_to_shd*)(*'Name'*)
                      constructor initnul;

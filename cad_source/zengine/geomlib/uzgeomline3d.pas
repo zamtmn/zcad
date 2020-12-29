@@ -24,6 +24,7 @@ uses
      {uzgeomentity,}uzgeomentity3d,uzbgeomtypes;
 type
 {Export+}
+{REGISTEROBJECTTYPE TGeomLine3D}
 TGeomLine3D={$IFNDEF DELPHI}packed{$ENDIF} object(TGeomEntity3D)
                                            LineData:GDBLineProp;
                                            StartParam:GDBDouble;

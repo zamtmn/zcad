@@ -197,7 +197,6 @@ type
 
     barray=array [0..100] of BITCODE_RC;
     pbarray=^barray;
-
     bit_chain={$IFNDEF DELPHI}packed{$ENDIF} object
                            chain:PDWGByte;
                            size:DWord;

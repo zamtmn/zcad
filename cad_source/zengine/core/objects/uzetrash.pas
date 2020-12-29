@@ -23,6 +23,7 @@ uses
     uzbgeomtypes,uzbtypesbase,uzbtypes,uzeentity,uzeconsts,uzegeometry;
 type
 {EXPORT+}
+{REGISTEROBJECTTYPE GDBObjTrash}
 GDBObjTrash={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjEntity)
                  function GetHandle:GDBPlatformint;virtual;
                  function GetMatrix:PDMatrix4D;virtual;

@@ -27,8 +27,10 @@ uses LCLProc,uzegluinterface,uzeentityfactory,uzgldrawcontext,uzgloglstatemanage
      gzctnrvectortypes,uzbgeomtypes,uzegeometry,uzeffdxfsupport,sysutils,uzbmemman;
 type
 {Export+}
+{REGISTEROBJECTTYPE TKnotsVector}
 TKnotsVector={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<GDBFloat>{//})
                              end;
+{REGISTEROBJECTTYPE TCPVector}
 TCPVector={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<GDBvertex4S>{//})
                              end;
 PGDBObjSpline=^GDBObjSpline;

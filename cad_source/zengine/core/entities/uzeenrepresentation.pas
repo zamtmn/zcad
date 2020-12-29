@@ -27,6 +27,7 @@ uses uzgldrawcontext,uzgldrawerabstract,uzglvectorobject,
 type
 {Export+}
 PTZEntityRepresentation=^TZEntityRepresentation;
+{REGISTEROBJECTTYPE TZEntityRepresentation}
 TZEntityRepresentation={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                        {-}//private{//}
                        Graphix:ZGLGraphix;

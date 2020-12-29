@@ -32,6 +32,7 @@ SelectedObjDesc=record
                       ptempobj:PGDBObjEntity;
                 end;
 PGDBSelectedObjArray=^GDBSelectedObjArray;
+{REGISTEROBJECTTYPE GDBSelectedObjArray}
 GDBSelectedObjArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<selectedobjdesc>{//})
                           SelectedCount:GDBInteger;
 

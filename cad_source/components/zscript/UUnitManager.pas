@@ -27,6 +27,7 @@ uses LCLProc,uzbpaths,uzbstrproc,Varman,languade,gzctnrvectorobjects,SysUtils,
 type
 {EXPORT+}
     PTUnitManager=^TUnitManager;
+    {REGISTEROBJECTTYPE TUnitManager}
     TUnitManager={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorObjects{-}<TUnit>{//})
                        currentunit:PTUnit;
                        NextUnitManager:PTUnitManager;

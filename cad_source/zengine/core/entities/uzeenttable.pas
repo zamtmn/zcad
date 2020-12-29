@@ -38,6 +38,7 @@ TGDBTableItemFormat=record
                  CF:TTableCellJustify;
                 end;
 PGDBObjTable=^GDBObjTable;
+{REGISTEROBJECTTYPE GDBObjTable}
 GDBObjTable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
             PTableStyle:PTGDBTableStyle;
             tbl:GDBTableArray;

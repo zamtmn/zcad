@@ -34,6 +34,7 @@ const
 type
 {Export+}
 {**Генерик объекта-массива}
+{----REGISTEROBJECTTYPE GZVector}
 GZVector{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
   object(GDBaseObject)
     {-}type{//}

@@ -33,8 +33,8 @@ uses
     LCLProc;
 type
 {EXPORT+}
-{REGISTEROBJECTTYPE TZCADDrawingsManager}
 PTZCADDrawingsManager=^TZCADDrawingsManager;
+{REGISTEROBJECTTYPE TZCADDrawingsManager}
 TZCADDrawingsManager={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorPGDBaseObjects)
                     CurrentDWG:{PTZCADDrawing}PTSimpleDrawing;
                     ProjectUnits:TUnitManager;

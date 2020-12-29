@@ -34,6 +34,7 @@ PGDBTextStyleProp=^GDBTextStyleProp;
   PPGDBTextStyleObjInsp=^PGDBTextStyleObjInsp;
   PGDBTextStyleObjInsp=GDBPointer;
   PGDBTextStyle=^GDBTextStyle;
+  {REGISTEROBJECTTYPE GDBTextStyle}
   GDBTextStyle = {$IFNDEF DELPHI}packed{$ENDIF}object(GDBNamedObject)
     dxfname: GDBAnsiString;(*saved_to_shd*)
     pfont: PGDBfont;

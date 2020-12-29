@@ -24,6 +24,7 @@ uses uzepalette,uzgldrawcontext,uzbtypesbase,gzctnrvectordata,sysutils,uzbtypes,
 type
 {Export+}
 PGDBControlPointArray=^GDBControlPointArray;
+{REGISTEROBJECTTYPE GDBControlPointArray}
 GDBControlPointArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<controlpointdesc>{//})
                            SelectedCount:GDBInteger;
 

@@ -26,6 +26,7 @@ uses
 type
 {EXPORT+}
 PTAbstractDrawing=^TAbstractDrawing;
+{REGISTEROBJECTTYPE TAbstractDrawing}
 TAbstractDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TDrawingDef)
                        LWDisplay:GDBBoolean;
                        SnapGrid:GDBBoolean;

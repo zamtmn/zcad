@@ -250,6 +250,7 @@ TOSMode=record
     attrib:TVariableAttributes;
   end;
 ptypemanagerdef=^typemanagerdef;
+{REGISTEROBJECTTYPE typemanagerdef}
 typemanagerdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                   procedure readbasetypes;virtual;abstract;
                   procedure readexttypes(fn: TInternalScriptString);virtual;abstract;
@@ -263,6 +264,7 @@ typemanagerdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                   function AddTypeByRef(var _type:UserTypeDescriptor):TArrayIndex;virtual;abstract;
             end;
 pvarmanagerdef=^varmanagerdef;
+{REGISTEROBJECTTYPE varmanagerdef}
 varmanagerdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                  {vardescarray:GDBOpenArrayOfData;
                  vararray:GDBOpenArrayOfByte;}

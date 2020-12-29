@@ -33,6 +33,7 @@ uses
   uzeentity,LazLogger,uzctnrvectorgdbstring,uzestylestexts,uzeconsts,uzcsysvars,uzctextenteditor;
 type
 {EXPORT+}
+  {REGISTEROBJECTTYPE TextInsert_com}
   TextInsert_com={$IFNDEF DELPHI}packed{$ENDIF} object(FloatInsert_com)
                        pt:PGDBObjText;
                        //procedure Build(Operands:pansichar); virtual;

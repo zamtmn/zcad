@@ -26,6 +26,7 @@ PIterateCmpareFunc=function(pnode:PGDBBaseNode;PExpr:Pointer):Boolean;
 IterateProc=procedure(pnode:PGDBBaseNode;PProcData:Pointer);
 {EXPORT+}
 PTGDBTree=^TGDBTree;
+{REGISTEROBJECTTYPE TGDBTree}
 TGDBTree={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorPGDBaseObjects)
                procedure AddNode(pnode:PGDBBaseNode);
                function IterateFind(CompareFunc:PIterateCmpareFunc;PExpr:Pointer;SubFind:Boolean):PGDBBaseNode;

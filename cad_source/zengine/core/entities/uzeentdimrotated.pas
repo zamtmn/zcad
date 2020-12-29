@@ -26,6 +26,7 @@ uses uzeentityfactory,uzeentdimaligned,uzeentdimension,uzestylesdim,
 type
 {EXPORT+}
 PGDBObjRotatedDimension=^GDBObjRotatedDimension;
+{REGISTEROBJECTTYPE GDBObjRotatedDimension}
 GDBObjRotatedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAlignedDimension)
                         function GetObjTypeName:GDBString;virtual;
                         procedure CalcDNVectors;virtual;

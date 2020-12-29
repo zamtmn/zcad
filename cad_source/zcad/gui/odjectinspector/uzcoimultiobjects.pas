@@ -44,7 +44,7 @@ type
   TMSTextsStylesDetector=TEnumDataWithOtherData;
   TMSEntsLayersDetector=TEnumDataWithOtherData;
   TMSEntsLinetypesDetector=TEnumDataWithOtherData;
-  {REGISTERRECORDTYPE TMSEditor}
+  {REGISTEROBJECTTYPE TMSEditor}
   TMSEditor={$IFNDEF DELPHI}packed{$ENDIF} object(TWrapper2ObjInsp)
                 TxtEntType:TMSPrimitiveDetector;(*'Process primitives'*)
                 VariableProcessSelector:TVariableProcessSelector;(*'Process variables'*)

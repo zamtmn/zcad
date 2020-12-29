@@ -29,6 +29,7 @@ type
 TMainBlockCreateProc=procedure (_to:PTDrawingDef;name:GDBString) of object;
 {EXPORT+}
 PTSimpleDrawing=^TSimpleDrawing;
+{REGISTEROBJECTTYPE TSimpleDrawing}
 TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        pObjRoot:PGDBObjGenericSubEntry;
                        mainObjRoot:GDBObjRoot;(*saved_to_shd*)

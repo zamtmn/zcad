@@ -24,6 +24,7 @@ uses
   uzbtypes,uzclog;
 type
 {Export+}
+  {REGISTEROBJECTTYPE TWrapper2ObjInsp}
   TWrapper2ObjInsp={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
   end;
 {Export-}

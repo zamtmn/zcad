@@ -58,7 +58,7 @@ type
                TestUnicodeString:UnicodeString;
         end;
   {REGISTERRECORDTYPE tpath}
-  tpath=packed record
+  tpath=record
              Device_Library:PGDBString;(*'Device base'*)
              Support_Path:PGDBString;(*'Support files'*)
              Fonts_Path:PGDBString;(*'Fonts'*)
@@ -71,7 +71,7 @@ type
         end;
   PTCanvasData=^TCanvasData;
   {REGISTERRECORDTYPE TCanvasData}
-  TCanvasData=packed record
+  TCanvasData=record
             RD_Renderer:GDBString;(*'Device'*)(*oi_readonly*)
       end;
   {REGISTERRECORDTYPE trd}

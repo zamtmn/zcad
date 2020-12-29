@@ -121,7 +121,7 @@ type
          end;
 
   POGLWndtype = ^OGLWndtype;
-  OGLWndtype = packed object(GDBaseObject)
+  OGLWndtype = object(GDBaseObject)
     polarlinetrace: GDBInteger;
     pointnum, axisnum: GDBInteger;
     CSIcon:TCSIcon;

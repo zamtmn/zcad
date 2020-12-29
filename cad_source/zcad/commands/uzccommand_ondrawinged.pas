@@ -37,7 +37,7 @@ uses
   uzeconsts,
   LazLogger;
 type
-  OnDrawingEd_com =packed  object(CommandRTEdObject)
+  OnDrawingEd_com =object(CommandRTEdObject)
     t3dp: gdbvertex;
     constructor init(cn:GDBString;SA,DA:TCStartAttr);
     procedure CommandStart(Operands:TCommandOperands); virtual;

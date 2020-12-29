@@ -23,7 +23,7 @@ uses uzeentity;
 type
 {EXPORT+}
 {REGISTEROBJECTTYPE GDBObj3d}
-GDBObj3d={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjEntity)
+GDBObj3d= object(GDBObjEntity)
          end;
 {EXPORT-}
 implementation

@@ -32,7 +32,7 @@ type
 {EXPORT+}
 PGDBObjDevice=^GDBObjDevice;
 {REGISTEROBJECTTYPE GDBObjDevice}
-GDBObjDevice={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjBlockInsert)
+GDBObjDevice= object(GDBObjBlockInsert)
                    VarObjArray:GDBObjEntityOpenArray;(*oi_readonly*)(*hidden_in_objinsp*)
                    lstonmouse:PGDBObjEntity;(*oi_readonly*)(*hidden_in_objinsp*)
                    function Clone(own:GDBPointer):PGDBObjEntity;virtual;

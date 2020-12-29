@@ -25,7 +25,7 @@ type
 {Export+}
 {REGISTEROBJECTTYPE GDBPoint3dArray}
 PGDBPoint3dArray=^GDBPoint3dArray;
-GDBPoint3dArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<GDBVertex>{//})(*OpenArrayOfData=GDBVertex*)
+GDBPoint3dArray= object(GZVectorData{-}<GDBVertex>{//})(*OpenArrayOfData=GDBVertex*)
                 function onpoint(p:gdbvertex;closed:GDBBoolean):gdbboolean;
                 function onmouse(const mf:ClipArray;const closed:GDBBoolean):GDBBoolean;virtual;
                 function CalcTrueInFrustum(frustum:ClipArray):TInBoundingVolume;virtual;

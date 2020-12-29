@@ -30,7 +30,7 @@ uses
 type
 {EXPORT+}
   {REGISTEROBJECTTYPE FloatInsert_com}
-  FloatInsert_com = {$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
+  FloatInsert_com =  object(CommandRTEdObject)
     procedure CommandStart(Operands:TCommandOperands); virtual;
     procedure Build(Operands:TCommandOperands); virtual;
     procedure Command(Operands:TCommandOperands); virtual;abstract;
@@ -39,7 +39,7 @@ type
   end;
   TFIWPMode=(FIWPCustomize,FIWPRun);
   {REGISTEROBJECTTYPE FloatInsertWithParams_com}
-  FloatInsertWithParams_com = {$IFNDEF DELPHI}packed{$ENDIF} object(FloatInsert_com)
+  FloatInsertWithParams_com =  object(FloatInsert_com)
     CMode:TFIWPMode;
     procedure CommandStart(Operands:TCommandOperands); virtual;
     procedure BuildDM(Operands:TCommandOperands); virtual;

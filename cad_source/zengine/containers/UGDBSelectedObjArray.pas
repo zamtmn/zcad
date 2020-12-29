@@ -33,7 +33,7 @@ SelectedObjDesc=record
                 end;
 PGDBSelectedObjArray=^GDBSelectedObjArray;
 {REGISTEROBJECTTYPE GDBSelectedObjArray}
-GDBSelectedObjArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<selectedobjdesc>{//})
+GDBSelectedObjArray= object(GZVectorData{-}<selectedobjdesc>{//})
                           SelectedCount:GDBInteger;
 
                           function addobject(PEntity:PGDBObjEntity):pselectedobjdesc;virtual;

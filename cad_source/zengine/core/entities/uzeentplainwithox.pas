@@ -26,7 +26,7 @@ type
 {EXPORT+}
 PGDBObjPlainWithOX=^GDBObjPlainWithOX;
 {REGISTEROBJECTTYPE GDBObjPlainWithOX}
-GDBObjPlainWithOX={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlain)
+GDBObjPlainWithOX= object(GDBObjPlain)
                procedure CalcObjMatrix;virtual;
          end;
 {EXPORT-}

@@ -57,7 +57,7 @@ GDBTypedPointer=record
 TObjID=GDBWord;
 PGDBaseObject=^GDBaseObject;
 {----REGISTEROBJECTTYPE GDBaseObject----}
-GDBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object
+GDBaseObject=object
     function ObjToGDBString(prefix,sufix:GDBString):GDBString; virtual;
     function GetObjType:TObjID;virtual;
     //procedure Format;virtual;
@@ -92,7 +92,7 @@ TActulity=GDBInteger;
 TEntUpgradeInfo=GDBLongword;
 PGDBBaseCamera=^GDBBaseCamera;
 {REGISTEROBJECTTYPE GDBBaseCamera}
-GDBBaseCamera={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
+GDBBaseCamera=object(GDBaseObject)
                 modelMatrix:DMatrix4D;
                 fovy:GDBDouble;
                 totalobj:GDBInteger;
@@ -113,7 +113,7 @@ GDBBaseCamera={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
           end;
 PGDBNamedObject=^GDBNamedObject;
 {REGISTEROBJECTTYPE GDBNamedObject}
-GDBNamedObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
+GDBNamedObject=object(GDBaseObject)
                      Name:GDBAnsiString;(*saved_to_shd*)(*'Name'*)
                      constructor initnul;
                      constructor init(n:GDBString);

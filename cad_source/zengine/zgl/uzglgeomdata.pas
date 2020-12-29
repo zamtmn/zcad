@@ -24,7 +24,7 @@ uses uzgindexsarray,uzgvertex3sarray,sysutils,uzbtypesbase,uzbtypes,uzbmemman,
 type
 {Export+}
 {REGISTEROBJECTTYPE ZGLGeomData}
-ZGLGeomData={$IFNDEF DELPHI}packed{$ENDIF}object(GDBaseObject)
+ZGLGeomData=object(GDBaseObject)
                                                 Vertex3S:ZGLVertex3Sarray;
                                                 Indexes:ZGLIndexsArray;
                                                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);

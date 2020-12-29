@@ -25,7 +25,7 @@ type
 {Export+}
 PGDBObjEntityTreeArray=^GDBObjEntityTreeArray;
 {REGISTEROBJECTTYPE GDBObjEntityTreeArray}
-GDBObjEntityTreeArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjEntityOpenArray)(*OpenArrayOfPObj*)
+GDBObjEntityTreeArray= object(GDBObjEntityOpenArray)(*OpenArrayOfPObj*)
                             ObjTree:TEntTreeNode;
                             constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                             constructor initnul;

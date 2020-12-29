@@ -27,7 +27,7 @@ type
 {Export+}
 PTObjectsChunk=^TObjectsChunk;
 {REGISTEROBJECTTYPE TObjectsChunk}
-TObjectsChunk={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<GDBByte>{//})(*OpenArrayOfData=GDBByte*)
+TObjectsChunk= object(GZVectorData{-}<GDBByte>{//})(*OpenArrayOfData=GDBByte*)
                 function beginiterate(out ir:itrec):GDBPointer;virtual;
                 function iterate(var ir:itrec):GDBPointer;virtual;
 

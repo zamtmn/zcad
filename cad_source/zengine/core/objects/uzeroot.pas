@@ -28,7 +28,7 @@ type
 {Export+}
 PGDBObjRoot=^GDBObjRoot;
 {REGISTEROBJECTTYPE GDBObjRoot}
-GDBObjRoot={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericSubEntry)
+GDBObjRoot= object(GDBObjGenericSubEntry)
                  constructor initnul;
                  destructor done;virtual;
                  //function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;

@@ -36,7 +36,7 @@ type
 {EXPORT+}
 PGDBObjRadialDimension=^GDBObjRadialDimension;
 {REGISTEROBJECTTYPE GDBObjRadialDimension}
-GDBObjRadialDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDiametricDimension)
+GDBObjRadialDimension= object(GDBObjDiametricDimension)
                         constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                         constructor initnul(owner:PGDBObjGenericWithSubordinated);
                         function GetObjTypeName:GDBString;virtual;

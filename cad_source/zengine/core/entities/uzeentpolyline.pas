@@ -28,7 +28,7 @@ type
 {Export+}
 PGDBObjPolyline=^GDBObjPolyline;
 {REGISTEROBJECTTYPE GDBObjPolyline}
-GDBObjPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
+GDBObjPolyline= object(GDBObjCurve)
                  Closed:GDBBoolean;(*saved_to_shd*)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBBoolean);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);

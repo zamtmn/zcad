@@ -23,10 +23,10 @@ uses gzctnrvector;
 type
 {Export+}
 {--------REGISTEROBJECTTYPE GZVectorData}
-GZVectorData{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
-                                 object(GZVector{-}<T>{//})
-                                   procedure freewithproc(freeproc:TProcessProc);virtual;
-                                 end;
+GZVectorData{-}<T>{//}=object
+                         (GZVector{-}<T>{//})
+                         procedure freewithproc(freeproc:TProcessProc);virtual;
+                       end;
 {Export-}
 implementation
 procedure GZVectorData<T>.freewithproc;

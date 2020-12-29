@@ -30,7 +30,7 @@ type
 {Export+}
 PGDBObjCurve=^GDBObjCurve;
 {REGISTEROBJECTTYPE GDBObjCurve}
-GDBObjCurve={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
+GDBObjCurve= object(GDBObj3d)
                  VertexArrayInOCS:GDBPoint3dArray;(*saved_to_shd*)(*hidden_in_objinsp*)
                  VertexArrayInWCS:GDBPoint3dArray;(*saved_to_shd*)(*hidden_in_objinsp*)
                  length:GDBDouble;

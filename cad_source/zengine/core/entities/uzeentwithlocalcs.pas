@@ -34,7 +34,7 @@ GDBObj2dprop=record
              end;
 PGDBObjWithLocalCS=^GDBObjWithLocalCS;
 {REGISTEROBJECTTYPE GDBObjWithLocalCS}
-GDBObjWithLocalCS={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
+GDBObjWithLocalCS= object(GDBObjWithMatrix)
                Local:GDBObj2dprop;(*'Object orientation'*)(*saved_to_shd*)
 
                //**получить на чтение координаты в мировой системе координат

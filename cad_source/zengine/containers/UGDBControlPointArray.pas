@@ -25,7 +25,7 @@ type
 {Export+}
 PGDBControlPointArray=^GDBControlPointArray;
 {REGISTEROBJECTTYPE GDBControlPointArray}
-GDBControlPointArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<controlpointdesc>{//})
+GDBControlPointArray= object(GZVectorData{-}<controlpointdesc>{//})
                            SelectedCount:GDBInteger;
 
                            destructor done;virtual;

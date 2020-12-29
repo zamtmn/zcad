@@ -26,7 +26,7 @@ type
 {Export+}
 PTGeomEntity=^TGeomEntity;
 {REGISTEROBJECTTYPE TGeomEntity}
-TGeomEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
+TGeomEntity= object(GDBaseObject)
                                              function GetBB:TBoundingBox;virtual;abstract;
                                            end;
 {Export-}

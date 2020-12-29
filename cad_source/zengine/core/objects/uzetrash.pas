@@ -24,7 +24,7 @@ uses
 type
 {EXPORT+}
 {REGISTEROBJECTTYPE GDBObjTrash}
-GDBObjTrash={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjEntity)
+GDBObjTrash= object(GDBObjEntity)
                  function GetHandle:GDBPlatformint;virtual;
                  function GetMatrix:PDMatrix4D;virtual;
                  constructor initnul;

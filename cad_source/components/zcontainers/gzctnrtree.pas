@@ -28,7 +28,7 @@ type
          TElemPosition=(TEP_Plus,TEP_Minus,TEP_nul);
          {----REGISTEROBJECTTYPE GZBInarySeparatedGeometry}
          GZBInarySeparatedGeometry{-}<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>{//}
-                                   ={$IFNDEF DELPHI}packed{$ENDIF} object
+                                   =object
          {-}type{//}
             {-}PGZBInarySeparatedGeometry=^GZBInarySeparatedGeometry<TBoundingBox,//ограничивающий объем{//}
                                                                   {-}TSeparator,//разделитель{//}

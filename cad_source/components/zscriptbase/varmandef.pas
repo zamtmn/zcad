@@ -251,7 +251,7 @@ TOSMode=record
   end;
 ptypemanagerdef=^typemanagerdef;
 {REGISTEROBJECTTYPE typemanagerdef}
-typemanagerdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
+typemanagerdef=object(GDBaseObject)
                   procedure readbasetypes;virtual;abstract;
                   procedure readexttypes(fn: TInternalScriptString);virtual;abstract;
                   function _TypeName2Index(name: TInternalScriptString): GDBInteger;virtual;abstract;
@@ -265,7 +265,7 @@ typemanagerdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
             end;
 pvarmanagerdef=^varmanagerdef;
 {REGISTEROBJECTTYPE varmanagerdef}
-varmanagerdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
+varmanagerdef=object(GDBaseObject)
                  {vardescarray:GDBOpenArrayOfData;
                  vararray:GDBOpenArrayOfByte;}
                  function findvardesc(varname:TInternalScriptString): pvardesk;virtual;abstract;

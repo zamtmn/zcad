@@ -27,7 +27,7 @@ TForCResult=(IsFounded(*'IsFounded'*)=1,
              IsError(*'IsError'*)=3);
 {------REGISTEROBJECTTYPE GDBNamedObjectsArray}
 GDBNamedObjectsArray{-}<PTObj,TObj>{//}
-                     ={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorPObects{-}<PTObj,TObj>{//})
+                     = object(GZVectorPObects{-}<PTObj,TObj>{//})
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     function getIndex(name: GDBString):GDBInteger;
                     function getAddres(name: GDBString):GDBPointer;

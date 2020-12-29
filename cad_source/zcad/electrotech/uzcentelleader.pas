@@ -19,7 +19,7 @@ type
 {EXPORT+}
 PGDBObjElLeader=^GDBObjElLeader;
 {REGISTEROBJECTTYPE GDBObjElLeader}
-GDBObjElLeader={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
+GDBObjElLeader= object(GDBObjComplex)
             MainLine:GDBObjLine;
             MarkLine:GDBObjLine;
             Tbl:GDBObjTable;

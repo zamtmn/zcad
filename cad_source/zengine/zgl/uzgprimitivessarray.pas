@@ -24,7 +24,7 @@ type
 {Export+}
 PTLLPrimitivesArray=^TLLPrimitivesArray;
 {REGISTEROBJECTTYPE TLLPrimitivesArray}
-TLLPrimitivesArray={$IFNDEF DELPHI}packed{$ENDIF} object(TObjectsChunk)(*OpenArrayOfData=GDBByte*)
+TLLPrimitivesArray= object(TObjectsChunk)(*OpenArrayOfData=GDBByte*)
              end;
 {Export-}
 implementation

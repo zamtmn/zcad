@@ -27,7 +27,7 @@ type
 {EXPORT+}
 PTAbstractDrawing=^TAbstractDrawing;
 {REGISTEROBJECTTYPE TAbstractDrawing}
-TAbstractDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TDrawingDef)
+TAbstractDrawing= object(TDrawingDef)
                        LWDisplay:GDBBoolean;
                        SnapGrid:GDBBoolean;
                        DrawGrid:GDBBoolean;

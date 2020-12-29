@@ -28,7 +28,7 @@ type
 {Export+}
 PTZEntityRepresentation=^TZEntityRepresentation;
 {REGISTEROBJECTTYPE TZEntityRepresentation}
-TZEntityRepresentation={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
+TZEntityRepresentation= object(GDBaseObject)
                        {-}//private{//}
                        Graphix:ZGLGraphix;
                        Geometry:TGeomEntTreeNode;

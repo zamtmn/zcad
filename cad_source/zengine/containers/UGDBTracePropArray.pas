@@ -33,7 +33,7 @@ type
     worldraycoord: GDBVertex;
   end;
   {REGISTEROBJECTTYPE GDBtracepropArray}
-GDBtracepropArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<traceprop>{//})
+GDBtracepropArray= object(GZVectorData{-}<traceprop>{//})
              end;
 {Export-}
 implementation

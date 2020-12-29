@@ -35,8 +35,7 @@ type
 {Export+}
 {**Генерик объекта-массива}
 {----REGISTEROBJECTTYPE GZVector}
-GZVector{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
-  object(GDBaseObject)
+GZVector{-}<T>{//}=object(GDBaseObject)
     {-}type{//}
         {-}PT=^T;{//}                                     //**< Тип указатель на тип данных T
         {-}TArr=array[0..0] of T;{//}                     //**< Тип массив данных T

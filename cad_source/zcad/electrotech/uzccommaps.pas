@@ -41,7 +41,7 @@ type
   TIntersections=GKey2DataMap<double,TIntersectedCom,LessDouble>;
   TPointMap=GKey2DataMap<GDBAnsiString,TMAPPoint,LessGDBAnsiString>;
   {REGISTEROBJECTTYPE TProfileBuildCom}
-  TProfileBuildCom={$IFNDEF DELPHI}packed{$ENDIF} object(FloatInsert_com)
+  TProfileBuildCom= object(FloatInsert_com)
     PointMap:TPointMap;
     PlanScale,VertScale,HorScale:double;
     k:double;

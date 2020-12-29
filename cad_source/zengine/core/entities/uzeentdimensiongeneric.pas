@@ -28,7 +28,7 @@ type
 TDimType=(DTRotated,DTAligned,DTAngular,DTDiameter,DTRadius,DTAngular3P,DTOrdinate);
 PGDBObjGenericDimension=^GDBObjGenericDimension;
 {REGISTEROBJECTTYPE GDBObjGenericDimension}
-GDBObjGenericDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
+GDBObjGenericDimension= object(GDBObjWithLocalCS)
                       DimData:TDXFDimData;
                       PDimStyle:PGDBDimStyle;
                       DimType:TDimType;

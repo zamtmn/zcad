@@ -35,7 +35,7 @@ type
                   end;
 PGDBObjCircle=^GDBObjCircle;
 {REGISTEROBJECTTYPE GDBObjCircle}
-GDBObjCircle={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
+GDBObjCircle= object(GDBObjWithLocalCS)
                  Radius:GDBLength;(*'Radius'*)(*saved_to_shd*)
                  q0:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
                  q1:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)

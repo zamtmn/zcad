@@ -28,14 +28,14 @@ uses LCLProc,uzegluinterface,uzeentityfactory,uzgldrawcontext,uzgloglstatemanage
 type
 {Export+}
 {REGISTEROBJECTTYPE TKnotsVector}
-TKnotsVector={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<GDBFloat>{//})
+TKnotsVector= object(GZVectorData{-}<GDBFloat>{//})
                              end;
 {REGISTEROBJECTTYPE TCPVector}
-TCPVector={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<GDBvertex4S>{//})
+TCPVector= object(GZVectorData{-}<GDBvertex4S>{//})
                              end;
 PGDBObjSpline=^GDBObjSpline;
 {REGISTEROBJECTTYPE GDBObjSpline}
-GDBObjSpline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
+GDBObjSpline= object(GDBObjCurve)
                  ControlArrayInOCS:GDBPoint3dArray;(*saved_to_shd*)(*hidden_in_objinsp*)
                  ControlArrayInWCS:GDBPoint3dArray;(*saved_to_shd*)(*hidden_in_objinsp*)
                  Knots:{GDBOpenArrayOfData}TKnotsVector;(*saved_to_shd*)(*hidden_in_objinsp*)

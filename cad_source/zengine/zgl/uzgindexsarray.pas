@@ -25,7 +25,7 @@ type
 {Export+}
 PZGLIndexsArray=^ZGLIndexsArray;
 {REGISTEROBJECTTYPE ZGLIndexsArray}
-ZGLIndexsArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<TArrayIndex>{//})(*OpenArrayOfData=TArrayIndex*)
+ZGLIndexsArray= object(GZVectorData{-}<TArrayIndex>{//})(*OpenArrayOfData=TArrayIndex*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                 constructor initnul;
              end;

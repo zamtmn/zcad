@@ -27,7 +27,7 @@ type
 PGDBObjBlockdefArray=^GDBObjBlockdefArray;
 PBlockdefArray=^BlockdefArray;
 BlockdefArray=packed array [0..0] of GDBObjBlockdef;
-GDBObjBlockdefArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorObjects{-}<GDBObjBlockdef>{//})(*OpenArrayOfData=GDBObjBlockdef*)
+GDBObjBlockdefArray= object(GZVectorObjects{-}<GDBObjBlockdef>{//})(*OpenArrayOfData=GDBObjBlockdef*)
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                       constructor initnul;
 

@@ -28,7 +28,7 @@ type
 {Export+}
 {REGISTEROBJECTTYPE GDBObjSuperLine}
 PGDBObjSuperLine=^GDBObjSuperLine;
-GDBObjSuperLine={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjLine)
+GDBObjSuperLine= object(GDBObjLine)
                   constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p1,p2:GDBvertex);
                   constructor initnul(owner:PGDBObjGenericWithSubordinated);
                   function GetObjTypeName:GDBString;virtual;

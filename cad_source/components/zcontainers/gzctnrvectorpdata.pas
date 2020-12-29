@@ -24,8 +24,8 @@ uses {uzbtypesbase,}gzctnrvectorp,
 type
 {Export+}
 {--------REGISTEROBJECTTYPE GZVectorPData}
-GZVectorPData{-}<PTData,TData>{//}={$IFNDEF DELPHI}packed{$ENDIF}
-                                 object(GZVectorP{-}<PTData>{//})
+GZVectorPData{-}<PTData,TData>{//}=object
+                                         (GZVectorP{-}<PTData>{//})
                                        procedure cleareraseobjfrom(n:Integer);virtual;
                                        procedure cleareraseobjfrom2(n:Integer);virtual;
                                        function getDataMutable(index:Integer):PTData;

@@ -27,7 +27,7 @@ type
 {Export+}
 {REGISTEROBJECTTYPE GDBObjArc}
 PGDBObjArc=^GDBObjARC;
-GDBObjArc={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlain)
+GDBObjArc= object(GDBObjPlain)
                  R:GDBDouble;(*saved_to_shd*)
                  StartAngle:GDBDouble;(*saved_to_shd*)
                  EndAngle:GDBDouble;(*saved_to_shd*)

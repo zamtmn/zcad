@@ -51,7 +51,7 @@ const
      modelspacename:GDBSTring='**Модель**';
 type
   {REGISTEROBJECTTYPE Print_com}
-  Print_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
+  Print_com= object(CommandRTEdObject)
     VS:GDBInteger;
     p1,p2:GDBVertex;
     procedure CommandContinue; virtual;

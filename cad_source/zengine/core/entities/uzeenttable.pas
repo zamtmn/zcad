@@ -39,7 +39,7 @@ TGDBTableItemFormat=record
                 end;
 PGDBObjTable=^GDBObjTable;
 {REGISTEROBJECTTYPE GDBObjTable}
-GDBObjTable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
+GDBObjTable= object(GDBObjComplex)
             PTableStyle:PTGDBTableStyle;
             tbl:GDBTableArray;
             w,h:GDBDouble;

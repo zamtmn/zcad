@@ -23,8 +23,8 @@ uses gzctnrvectortypes,{uzbtypesbase,}sysutils,gzctnrvector,gzctnrvectorsimple;
 type
 {Export+}
 {---------REGISTEROBJECTTYPE GZVectorP}
-GZVectorP{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
-                                 object(GZVectorSimple{-}<T>{//})
+GZVectorP{-}<T>{//}=object
+                          (GZVectorSimple{-}<T>{//})
                                        Deleted:TArrayIndex;(*hidden_in_objinsp*)
                                        function iterate (var ir:itrec):Pointer;virtual;
                                        function beginiterate(out ir:itrec):Pointer;virtual;

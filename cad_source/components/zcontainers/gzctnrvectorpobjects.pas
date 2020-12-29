@@ -25,7 +25,7 @@ type
 {Export+}
 {------------REGISTEROBJECTTYPE GZVectorPObects}
 GZVectorPObects{-}<PTObj,TObj>{//}
-                             ={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorPData{-}<PTObj,TObj>{//})
+                             =object(GZVectorPData{-}<PTObj,TObj>{//})
                              function CreateObject:PTObj;
                 end;
 TZctnrVectorPGDBaseObjects=packed object(GZVectorPData{-}<PGDBaseObject,GDBaseObject>{//})

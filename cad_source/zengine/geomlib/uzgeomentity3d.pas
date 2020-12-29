@@ -25,7 +25,7 @@ uses
 type
 {Export+}
 {REGISTEROBJECTTYPE TGeomEntity3D}
-TGeomEntity3D={$IFNDEF DELPHI}packed{$ENDIF} object(TGeomEntity)
+TGeomEntity3D= object(TGeomEntity)
                                              end;
 {Export-}
 implementation

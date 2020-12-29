@@ -28,7 +28,7 @@ type
 {Export+}
 PGDBObjPoint=^GDBObjPoint;
 {REGISTEROBJECTTYPE GDBObjPoint}
-GDBObjPoint={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
+GDBObjPoint= object(GDBObj3d)
                  P_insertInOCS:GDBvertex;(*'Coordinates OCS'*)(*saved_to_shd*)
                  P_insertInWCS:GDBvertex;(*'Coordinates WCS'*)(*hidden_in_objinsp*)
                  ProjPoint:GDBvertex;

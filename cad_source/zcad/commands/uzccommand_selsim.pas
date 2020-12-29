@@ -73,7 +73,7 @@ TSelSimParams=record
                     Texts:TSelTextParams;(*'Texts'*)
              end;
   {REGISTEROBJECTTYPE SelSim_com}
-  SelSim_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
+  SelSim_com= object(CommandRTEdObject)
                          created:boolean;
                          bnames,textcontents,textremplates:TZctnrVectorGDBString;
                          layers,linetypes:TZctnrVectorGDBPointer;

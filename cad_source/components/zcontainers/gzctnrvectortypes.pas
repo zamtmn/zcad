@@ -22,6 +22,7 @@ interface
 uses uzbmemman,{uzbtypesbase,}sysutils,{uzbtypes,}typinfo;
 type
 {Export+}
+  {REGISTERRECORDTYPE itrec}
   itrec=packed record
               itp:{-}PPointer{/Pointer/};
               itc:Integer;

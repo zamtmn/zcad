@@ -30,6 +30,7 @@ TFirstStageData=record
                   counter:integer;
                 end;
 {EXPORT+}
+{REGISTERRECORDTYPE TGeomTreeNodeData}
 TGeomTreeNodeData=packed record
                   end;
 TEntityArray={$IFNDEF DELPHI}packed{$ENDIF} object(TObjectsChunk)(*OpenArrayOfData=GDBByte*)

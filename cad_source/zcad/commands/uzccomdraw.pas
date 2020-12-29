@@ -57,13 +57,14 @@ type
                        TEP_Erase(*'Erase'*),
                        TEP_leave(*'Leave'*)
                        );
-
+         {REGISTERRECORDTYPE TBlockInsert}
          TBlockInsert=packed record
                             Blocks:TEnumData;(*'Block'*)
                             Scale:GDBvertex;(*'Scale'*)
                             Rotation:GDBDouble;(*'Rotation'*)
                       end;
          PTMirrorParam=^TMirrorParam;
+         {REGISTERRECORDTYPE TMirrorParam}
          TMirrorParam=packed record
                             SourceEnts:TEntityProcess;(*'Source entities'*)
                       end;
@@ -73,6 +74,7 @@ type
                  BRM_BD(*'Block and Device'*)
                 );
          PTBlockReplaceParams=^TBlockReplaceParams;
+         {REGISTERRECORDTYPE TBlockReplaceParams}
          TBlockReplaceParams=packed record
                             Process:BRMode;(*'Process'*)
                             CurrentFindBlock:GDBString;(*'**CurrentFind'*)(*oi_readonly*)(*hidden_in_objinsp*)
@@ -85,11 +87,13 @@ type
                             SaveVariableText:GDBBoolean;(*'Save variable text'*)
                       end;
          PTBlockScaleParams=^TBlockScaleParams;
+         {REGISTERRECORDTYPE TBlockScaleParams}
          TBlockScaleParams=packed record
                              Scale:GDBVertex;(*'New scale'*)
                              Absolytly:GDBBoolean;(*'Absolytly'*)
                            end;
          PTBlockRotateParams=^TBlockRotateParams;
+         {REGISTERRECORDTYPE TBlockRotateParams}
          TBlockRotateParams=packed record
                              Rotate:GDBDouble;(*'Rotation angle'*)
                              Absolytly:GDBBoolean;(*'Absolytly'*)
@@ -106,6 +110,7 @@ type
                  TST_UNSORTED(*'Unsorted'*)
                 );
          PTNumberingParams=^TNumberingParams;
+         {REGISTERRECORDTYPE TNumberingParams}
          TNumberingParams=packed record
                             SortMode:TST;(*''*)
                             InverseX:GDBBoolean;(*'Inverse X axis dir'*)
@@ -118,10 +123,12 @@ type
                             NumberVar:GDBString;(*'Number variable'*)
                       end;
          PTExportDevWithAxisParams=^TExportDevWithAxisParams;
+         {REGISTERRECORDTYPE TExportDevWithAxisParams}
          TExportDevWithAxisParams=packed record
                             AxisDeviceName:GDBString;(*'AxisDeviceName'*)
                       end;
   PTBEditParam=^TBEditParam;
+  {REGISTERRECORDTYPE TBEditParam}
   TBEditParam=packed record
                     CurrentEditBlock:GDBString;(*'Current block'*)(*oi_readonly*)
                     Blocks:TEnumData;(*'Select block'*)

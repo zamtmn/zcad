@@ -23,6 +23,7 @@ uses gzctnrvectortypes,uzbtypesbase,uzbtypes,gzctnrvectordata,sysutils;
 type
 {EXPORT+}
 PGDBBOMItem=^GDBBOMItem;
+{REGISTERRECORDTYPE GDBBOMItem}
 GDBBOMItem=packed record
                  Material:GDBString;
                  Amount:GDBDouble;

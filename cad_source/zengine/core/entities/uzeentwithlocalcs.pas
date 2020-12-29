@@ -27,6 +27,7 @@ type
 //pprojoutbound:{-}PGDBOOutbound2DIArray{/GDBPointer/};
 {EXPORT+}
 PGDBObj2dprop=^GDBObj2dprop;
+{REGISTERRECORDTYPE GDBObj2dprop}
 GDBObj2dprop=packed record
                    Basis:GDBBasis;(*'Basis'*)(*saved_to_shd*)
                    P_insert:GDBCoordinates3D;(*'Insertion point OCS'*)(*saved_to_shd*)

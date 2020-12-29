@@ -29,6 +29,7 @@ type
 //GDBObjGenericSubEntry=object(GDBObj3d)
 {Export+}
 PTDrawingPreCalcData=^TDrawingPreCalcData;
+{REGISTERRECORDTYPE TDrawingPreCalcData}
 TDrawingPreCalcData=packed record
                           InverseObjMatrix:DMatrix4D;
                     end;

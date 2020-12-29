@@ -25,6 +25,7 @@ type
 //ID:TObjID;(*'Object type'*)(*oi_readonly*)(*hidden_in_objinsp*)
 {Export+}
 PGDBObjVisualProp=^GDBObjVisualProp;
+{REGISTERRECORDTYPE GDBObjVisualProp}
 GDBObjVisualProp=packed record
                       Layer:{-}PGDBLayerProp{/PGDBLayerPropObjInsp/};(*'Layer'*)(*saved_to_shd*)
                       LineWeight:TGDBLineWeight;(*'Line weight'*)(*saved_to_shd*)

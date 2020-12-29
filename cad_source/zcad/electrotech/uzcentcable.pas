@@ -25,6 +25,7 @@ type
 {Export+}
 
 PTNodeProp=^TNodeProp;
+{REGISTERRECORDTYPE TNodeProp}
 TNodeProp=packed record
                 //**Точка в котором кабель был усечен устройством исчез и появился
                 PrevP,NextP:GDBVertex;

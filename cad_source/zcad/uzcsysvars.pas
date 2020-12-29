@@ -34,18 +34,21 @@ qtwidgets,qt5,qtint,
 {$IFNDEF DELPHI}LCLVersion{$ENDIF},sysutils;
 type
 {EXPORT+}
+  {REGISTERRECORDTYPE tmemdeb}
   tmemdeb=packed record
                 GetMemCount,FreeMemCount:PGDBInteger;
                 TotalAllocMb,CurrentAllocMB:PGDBInteger;
           end;
+  {REGISTERRECORDTYPE trenderdeb}
   trenderdeb=packed record
                    primcount,pointcount,bathcount:GDBInteger;
                    middlepoint:GDBVertex;
              end;
+  {REGISTERRECORDTYPE tlanguadedeb}
   tlanguadedeb=packed record
                    UpdatePO,NotEnlishWord,DebugWord:GDBInteger;
              end;
-
+  {REGISTERRECORDTYPE tdebug}
   tdebug=packed record
                memdeb:tmemdeb;
                renderdeb:trenderdeb;
@@ -53,6 +56,7 @@ type
                ShowHiddenFieldInObjInsp:PGDBBoolean;(*'Show hidden fields'*)
                TestUnicodeString:UnicodeString;
         end;
+  {REGISTERRECORDTYPE tpath}
   tpath=packed record
              Device_Library:PGDBString;(*'Device base'*)
              Support_Path:PGDBString;(*'Support files'*)
@@ -65,9 +69,11 @@ type
              Temp_files:PGDBString;(*'Temporary files'*)(*oi_readonly*)
         end;
   PTCanvasData=^TCanvasData;
+  {REGISTERRECORDTYPE TCanvasData}
   TCanvasData=packed record
             RD_Renderer:GDBString;(*'Device'*)(*oi_readonly*)
       end;
+  {REGISTERRECORDTYPE trd}
   trd=packed record
             RD_RendererBackEnd:PTEnumData;(*'Render backend'*)
             RD_CurrentWAParam:TFaceTypedData;
@@ -88,12 +94,14 @@ type
             RD_SpatialNodeCount:PGDBInteger;(*'Spatial index ents in node'*)(*hidden_in_objinsp*)
             RD_MaxLTPatternsInEntity:PGDBInteger;(*'Max LT patterns in entity'*)
       end;
+  {REGISTERRECORDTYPE tsave}
   tsave=packed record
               SAVE_Auto_On:PGDBBoolean;(*'Autosave'*)
               SAVE_Auto_Current_Interval:pGDBInteger;(*'Time to autosave'*)(*oi_readonly*)
               SAVE_Auto_Interval:PGDBInteger;(*'Time between autosaves'*)
               SAVE_Auto_FileName:PGDBString;(*'Autosave file name'*)
         end;
+  {REGISTERRECORDTYPE tcompileinfo}
   tcompileinfo=packed record
                      SYS_Compiler:GDBString;(*'Compiler'*)(*oi_readonly*)
                      SYS_CompilerVer:GDBString;(*'Compiler version'*)(*oi_readonly*)
@@ -105,7 +113,7 @@ type
                      SYS_LCLFullVersion:GDBString;(*'LCL full version'*)(*oi_readonly*)
                      SYS_EnvironmentVersion:GDBString;(*'Environment version'*)(*oi_readonly*)
                end;
-
+  {REGISTERRECORDTYPE tsys}
   tsys=packed record
              SYS_Version:PGDBString;(*'Program version'*)(*oi_readonly*)
              SSY_CompileInfo:tcompileinfo;(*'Build info'*)(*oi_readonly*)
@@ -116,6 +124,7 @@ type
              SYS_UpdatePO:PGDBBoolean;(*'Update PO file'*)
 
        end;
+  {REGISTERRECORDTYPE tdwg}
   tdwg=packed record
              DWG_DrawMode:PGDBBoolean;(*'Display line weights'*)
              DWG_OSMode:PTGDBOSMode;(*'Snap mode'*)
@@ -149,12 +158,13 @@ type
              DWG_SnapGrid:PGDBBoolean;(*'Snap'*)
              DWG_SelectedObjToInsp:PGDBBoolean;(*'Selected object to inspector'*)
        end;
+  {REGISTERRECORDTYPE TLayerControls}
   TLayerControls=packed record
                        DSGN_LC_Net:PTLayerControl;(*'Nets'*)
                        DSGN_LC_Cable:PTLayerControl;(*'Cables'*)
                        DSGN_LC_Leader:PTLayerControl;(*'Leaders'*)
                  end;
-
+  {REGISTERRECORDTYPE tdesigning}
   tdesigning=packed record
              DSGN_LayerControls:TLayerControls;(*'Control layers'*)
              DSGN_TraceAutoInc:PGDBBoolean;(*'Increment trace names'*)
@@ -164,6 +174,7 @@ type
              DSGN_SelSameName:PGDBBoolean;(*'Auto select devices with same name'*)
              DSGN_OTrackTimerInterval:PGDBInteger;(*'Object track timer interval'*)
        end;
+  {REGISTERRECORDTYPE tobjinspinterface}
   tobjinspinterface=packed record
                 INTF_ObjInsp_ShowHeaders:PGDBBoolean;(*'Show headers'*)
                 INTF_ObjInsp_OldStyleDraw:PGDBBoolean;(*'Old style'*)
@@ -177,6 +188,7 @@ type
                 INTF_ObjInsp_ShowEmptySections:PGDBBoolean;(*'Show empty sections'*)
                 INTF_ObjInsp_ButtonSizeReducing:PGDBInteger;(*'Button size reducing'*)
                end;
+  {REGISTERRECORDTYPE tinterface}
   tinterface=packed record
               INTF_CommandLineEnabled:PGDBBoolean;(*'Command line enabled'*)
               INTF_ShowScrollBars:PGDBBoolean;(*'Show scroll bars'*)
@@ -191,6 +203,7 @@ type
               INTF_DefaultEditorFontHeight:PGDBInteger;(*'Default editor font height'*)
               INTF_OBJINSP_Properties:tobjinspinterface;(*'Object inspector properties'*)
              end;
+  {REGISTERRECORDTYPE tdisp}
   tdisp=packed record
              DISP_SystmGeometryDraw:PGDBBoolean;(*'System geometry'*)
              DISP_SystmGeometryColor:PTGDBPaletteColor;(*'Help color'*)
@@ -209,6 +222,7 @@ type
              DISP_DefaultLW:PTGDBLineWeight;(*'DefaultLW'*)
         end;
   pgdbsysvariable=^gdbsysvariable;
+  {REGISTERRECORDTYPE gdbsysvariable}
   gdbsysvariable=packed record
     PATH:tpath;(*'Paths'*)
     RD:trd;(*'Render'*)

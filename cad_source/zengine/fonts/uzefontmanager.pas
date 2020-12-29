@@ -32,6 +32,7 @@ TFontLoadProcedureData=record
 TFontExt2LoadProcMap=GKey2DataMap<GDBString,TFontLoadProcedureData{$IFNDEF DELPHI},LessGDBString{$ENDIF}>;
 {Export+}
   PGDBFontRecord=^GDBFontRecord;
+  {REGISTERRECORDTYPE GDBFontRecord}
   GDBFontRecord = packed record
     Name: GDBString;
     Pfont: GDBPointer;

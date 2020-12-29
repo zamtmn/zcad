@@ -25,6 +25,7 @@ uses uzbgeomtypes,uzepalette,uzgldrawcontext,uzecamera,uzeentwithmatrix,uzeentit
 type
 {Export+}
 PSelectedObjDesc=^SelectedObjDesc;
+{REGISTERRECORDTYPE SelectedObjDesc}
 SelectedObjDesc=packed record
                       objaddr:PGDBObjEntity;
                       pcontrolpoint:PGDBControlPointArray;

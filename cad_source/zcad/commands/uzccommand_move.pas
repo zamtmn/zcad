@@ -50,6 +50,7 @@ uses
 type
 {EXPORT+}
   PTCopyObjectDesc=^TCopyObjectDesc;
+  {REGISTERRECORDTYPE TCopyObjectDesc}
   TCopyObjectDesc=packed record
                  sourceEnt,tmpProxy,copyEnt:PGDBObjEntity;
                  end;

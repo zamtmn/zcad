@@ -34,7 +34,7 @@ type
 {EXPORT+}
 PTDXData=^TDXData;
 {//REGISTERRECORDTYPE TDXData}
-TDXData=packed record
+TDXData=record
           RD_Renderer:GDBString;(*'Device'*)(*oi_readonly*)
     end;
 {EXPORT-}

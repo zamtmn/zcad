@@ -231,7 +231,7 @@ TOSMode=record
               kosm_apparentintersection:GDBBoolean;(*'Apparent intersection'*)
               kosm_paralel:GDBBoolean;(*'Paralel'*)
         end;
-  indexdesk =packed  record
+  indexdesk=record
     indexmin, count: GDBInteger;
   end;
   arrayindex =packed  array[1..2] of indexdesk;
@@ -243,7 +243,8 @@ TOSMode=record
                    PTD:{-}PUserTypeDescriptor{/GDBPointer/};
              end;
   TVariableAttributes=GDBInteger;
-  vardesk =packed  record
+  {REGISTERRECORDTYPE vardesk}
+  vardesk =record
     name: TInternalScriptString;
     username: TInternalScriptString;
     data: TTypedData;

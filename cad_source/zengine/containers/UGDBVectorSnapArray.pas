@@ -29,7 +29,7 @@ VectorSnap=record
            end;
 PGDBVectorSnapArray=^GDBVectorSnapArray;
 {REGISTEROBJECTTYPE GDBVectorSnapArray}
-GDBVectorSnapArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<VectorSnap>{//})
+GDBVectorSnapArray= object(GZVectorData{-}<VectorSnap>{//})
              end;
 {Export-}
 implementation

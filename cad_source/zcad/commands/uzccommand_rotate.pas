@@ -35,7 +35,7 @@ uses
   uzbgeomtypes,uzeentity,LazLogger;
 type
   {REGISTEROBJECTTYPE rotate_com}
-  rotate_com = {$IFNDEF DELPHI}packed{$ENDIF} object(move_com)
+  rotate_com =  object(move_com)
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
     procedure CommandContinue; virtual;
     procedure rot(a:GDBDouble; button: GDBByte);

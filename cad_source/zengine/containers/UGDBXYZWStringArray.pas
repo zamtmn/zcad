@@ -24,7 +24,7 @@ type
 {EXPORT+}
 PGDBXYZWGDBStringArray=^XYZWGDBGDBStringArray;
 {REGISTEROBJECTTYPE XYZWGDBGDBStringArray}
-XYZWGDBGDBStringArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<GDBStrWithPoint>{//})
+XYZWGDBGDBStringArray= object(GZVectorData{-}<GDBStrWithPoint>{//})
                              constructor init(m:GDBInteger);
                              procedure freeelement(PItem:PT);virtual;
                              //function add(p:GDBPointer):TArrayIndex;virtual;

@@ -39,7 +39,7 @@ GDBTextProp=record
             end;
 PGDBObjAbstractText=^GDBObjAbstractText;
 {REGISTEROBJECTTYPE GDBObjAbstractText}
-GDBObjAbstractText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlainWithOX)
+GDBObjAbstractText= object(GDBObjPlainWithOX)
                          textprop:GDBTextProp;(*saved_to_shd*)
                          P_drawInOCS:GDBvertex;(*saved_to_shd*)(*oi_readonly*)(*hidden_in_objinsp*)
                          DrawMatrix:DMatrix4D;(*oi_readonly*)(*hidden_in_objinsp*)

@@ -80,14 +80,14 @@ TInteractiveProcObjBuild=procedure(const PInteractiveData:GDBPointer;Point:GDBVe
     procedure CommandContinue; virtual;
   end;
   {REGISTEROBJECTTYPE CommandFastObjectDef}
-  CommandFastObjectDef ={$IFNDEF DELPHI}packed{$ENDIF} object(CommandObjectDef)
+  CommandFastObjectDef = object(CommandObjectDef)
     UndoTop:TArrayIndex;(*hidden_in_objinsp*)
     procedure CommandInit; virtual;abstract;
     procedure CommandEnd; virtual;abstract;
   end;
   PCommandRTEdObjectDef=^CommandRTEdObjectDef;
   {REGISTEROBJECTTYPE CommandRTEdObjectDef}
-  CommandRTEdObjectDef = {$IFNDEF DELPHI}packed{$ENDIF} object(CommandFastObjectDef)
+  CommandRTEdObjectDef =  object(CommandFastObjectDef)
     procedure CommandStart(Operands:TCommandOperands); virtual;abstract;
     procedure CommandEnd; virtual;abstract;
     procedure CommandCancel; virtual;abstract;

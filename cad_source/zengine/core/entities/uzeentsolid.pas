@@ -28,7 +28,7 @@ type
 {Export+}
 PGDBObjSolid=^GDBObjSolid;
 {REGISTEROBJECTTYPE GDBObjSolid}
-GDBObjSolid={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
+GDBObjSolid= object(GDBObjWithLocalCS)
                  PInOCS:OutBound4V;(*'Coordinates OCS'*)(*saved_to_shd*)
                  PInWCS:OutBound4V;(*'Coordinates WCS'*)(*hidden_in_objinsp*)
                  PInDCS:OutBound4V;(*'Coordinates DCS'*)(*hidden_in_objinsp*)

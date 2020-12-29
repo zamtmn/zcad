@@ -24,7 +24,7 @@ type
 {EXPORT+}
     PTZctnrVectorGDBString=^TZctnrVectorGDBString;
     {REGISTEROBJECTTYPE TZctnrVectorGDBString}
-    TZctnrVectorGDBString={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorSimple{-}<GDBString>{//})(*OpenArrayOfData=GDBString*)
+    TZctnrVectorGDBString=object(GZVectorSimple{-}<GDBString>{//})(*OpenArrayOfData=GDBString*)
                           constructor init(m:GDBInteger);
                           procedure loadfromfile(fname:GDBString);
                           function findstring(s:GDBString;ucase:gdbboolean):boolean;

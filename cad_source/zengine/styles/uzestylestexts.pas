@@ -35,7 +35,7 @@ PGDBTextStyleProp=^GDBTextStyleProp;
   PGDBTextStyleObjInsp=GDBPointer;
   PGDBTextStyle=^GDBTextStyle;
   {REGISTEROBJECTTYPE GDBTextStyle}
-  GDBTextStyle = {$IFNDEF DELPHI}packed{$ENDIF}object(GDBNamedObject)
+  GDBTextStyle = object(GDBNamedObject)
     dxfname: GDBAnsiString;(*saved_to_shd*)
     pfont: PGDBfont;
     prop:GDBTextStyleProp;(*saved_to_shd*)
@@ -44,7 +44,7 @@ PGDBTextStyleProp=^GDBTextStyleProp;
   end;
 PGDBTextStyleArray=^GDBTextStyleArray;
 {REGISTEROBJECTTYPE GDBTextStyleArray}
-GDBTextStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray{-}<PGDBTextStyle,GDBTextStyle>{//})(*OpenArrayOfData=GDBTextStyle*)
+GDBTextStyleArray= object(GDBNamedObjectsArray{-}<PGDBTextStyle,GDBTextStyle>{//})(*OpenArrayOfData=GDBTextStyle*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;
 

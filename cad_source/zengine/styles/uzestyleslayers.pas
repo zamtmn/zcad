@@ -27,7 +27,7 @@ PPGDBLayerPropObjInsp=^PGDBLayerPropObjInsp;
 PGDBLayerPropObjInsp={GDBPtrUInt}GDBPointer;
 PGDBLayerProp=^GDBLayerProp;
 {REGISTEROBJECTTYPE GDBLayerProp}
-GDBLayerProp={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
+GDBLayerProp= object(GDBNamedObject)
                color:GDBByte;(*saved_to_shd*)(*'Color'*)
                lineweight:GDBSmallint;(*saved_to_shd*)(*'Line weight'*)
                LT:GDBPointer;(*saved_to_shd*)(*'Line type'*)
@@ -45,7 +45,7 @@ PGDBLayerPropArray=^GDBLayerPropArray;
 GDBLayerPropArray=packed array [0..0] of PGDBLayerProp;
 PGDBLayerArray=^GDBLayerArray;
 {REGISTEROBJECTTYPE GDBLayerArray}
-GDBLayerArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray{-}<PGDBLayerProp,GDBLayerProp>{//})(*OpenArrayOfData=GDBLayerProp*)
+GDBLayerArray= object(GDBNamedObjectsArray{-}<PGDBLayerProp,GDBLayerProp>{//})(*OpenArrayOfData=GDBLayerProp*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger;psyslt:GDBPointer);
                     constructor initnul;
 

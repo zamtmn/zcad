@@ -32,7 +32,7 @@ type
 {Export+}
 PGDBObjMText=^GDBObjMText;
 {REGISTEROBJECTTYPE GDBObjMText}
-GDBObjMText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjText)
+GDBObjMText= object(GDBObjText)
                  width:GDBDouble;(*saved_to_shd*)
                  linespace:GDBDouble;(*saved_to_shd*)(*oi_readonly*)
                  linespacef:GDBDouble;(*saved_to_shd*)

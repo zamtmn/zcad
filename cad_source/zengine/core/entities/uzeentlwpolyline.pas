@@ -30,11 +30,11 @@ type
 //----------------snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)
 {Export+}
 {REGISTEROBJECTTYPE TWidth3D_in_WCS_Vector}
-TWidth3D_in_WCS_Vector={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<GDBQuad3d>{//})
+TWidth3D_in_WCS_Vector= object(GZVectorData{-}<GDBQuad3d>{//})
                 end;
 PGDBObjLWPolyline=^GDBObjLWpolyline;
 {REGISTEROBJECTTYPE GDBObjLWPolyline}
-GDBObjLWPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
+GDBObjLWPolyline= object(GDBObjWithLocalCS)
                  Closed:GDBBoolean;(*saved_to_shd*)
                  Vertex2D_in_OCS_Array:GDBpolyline2DArray;(*saved_to_shd*)
                  Vertex3D_in_WCS_Array:GDBPoint3dArray;

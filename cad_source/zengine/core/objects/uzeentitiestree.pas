@@ -41,7 +41,7 @@ TEntTreeNodeData=record
 TEntityArray=GZVectorPObects{GZVectorSimple}{-}<PGDBObjEntity,GDBObjEntity>{//}; {надо вынести куданить отдельно}
          PTEntTreeNode=^TEntTreeNode;
          {---REGISTEROBJECTTYPE TEntTreeNode}
-         TEntTreeNode={$IFNDEF DELPHI}packed{$ENDIF}object(GZBInarySeparatedGeometry{-}<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>{//})
+         TEntTreeNode=object(GZBInarySeparatedGeometry{-}<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>{//})
                             procedure MakeTreeFrom(var entitys:GDBObjEntityOpenArray;AABB:TBoundingBox;const RN:Pointer);
                             procedure DrawVolume(var DC:TDrawContext);
                             procedure DrawNodeVolume(var DC:TDrawContext);

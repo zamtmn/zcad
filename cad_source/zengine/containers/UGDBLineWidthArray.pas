@@ -23,7 +23,7 @@ uses gzctnrvectordata,sysutils,uzbtypes,uzbmemman;
 type
 {Export+}
 {REGISTEROBJECTTYPE GDBLineWidthArray}
-GDBLineWidthArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<GLLWWidth>{//})(*OpenArrayOfData=GLLWWidth*)
+GDBLineWidthArray= object(GZVectorData{-}<GLLWWidth>{//})(*OpenArrayOfData=GLLWWidth*)
              end;
 {Export-}
 implementation

@@ -27,7 +27,7 @@ type
 {EXPORT+}
 PGDBObjRotatedDimension=^GDBObjRotatedDimension;
 {REGISTEROBJECTTYPE GDBObjRotatedDimension}
-GDBObjRotatedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAlignedDimension)
+GDBObjRotatedDimension= object(GDBObjAlignedDimension)
                         function GetObjTypeName:GDBString;virtual;
                         procedure CalcDNVectors;virtual;
                         function Clone(own:GDBPointer):PGDBObjEntity;virtual;

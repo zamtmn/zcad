@@ -40,7 +40,7 @@ type
 {EXPORT+}
 PGDBObjAlignedDimension=^GDBObjAlignedDimension;
 {REGISTEROBJECTTYPE GDBObjAlignedDimension}
-GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
+GDBObjAlignedDimension= object(GDBObjDimension)
                       constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                       constructor initnul(owner:PGDBObjGenericWithSubordinated);
                       procedure DrawExtensionLine(p1,p2:GDBVertex;LineNumber:GDBInteger;var drawing:TDrawingDef;var DC:TDrawContext; part:integer);

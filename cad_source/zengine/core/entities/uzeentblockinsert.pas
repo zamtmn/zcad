@@ -28,7 +28,7 @@ type
 {Export+}
 {REGISTEROBJECTTYPE GDBObjBlockInsert}
 PGDBObjBlockInsert=^GDBObjBlockInsert;
-GDBObjBlockInsert={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
+GDBObjBlockInsert= object(GDBObjComplex)
                      scale:GDBvertex;(*saved_to_shd*)
                      rotate:GDBDouble;(*saved_to_shd*)
                      index:GDBInteger;(*saved_to_shd*)(*oi_readonly*)(*hidden_in_objinsp*)

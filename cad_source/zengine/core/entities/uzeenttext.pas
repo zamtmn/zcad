@@ -30,7 +30,7 @@ type
 {Export+}
 PGDBObjText=^GDBObjText;
 {REGISTEROBJECTTYPE GDBObjText}
-GDBObjText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAbstractText)
+GDBObjText= object(GDBObjAbstractText)
                  Content:TDXFEntsInternalStringType;
                  Template:TDXFEntsInternalStringType;(*saved_to_shd*)
                  TXTStyleIndex:{-}PGDBTextStyle{/PGDBTextStyleObjInsp/};(*saved_to_shd*)(*'Style'*)

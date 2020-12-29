@@ -35,7 +35,7 @@ type
 {EXPORT+}
 PTZCADDrawingsManager=^TZCADDrawingsManager;
 {REGISTEROBJECTTYPE TZCADDrawingsManager}
-TZCADDrawingsManager={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorPGDBaseObjects)
+TZCADDrawingsManager= object(TZctnrVectorPGDBaseObjects)
                     CurrentDWG:{PTZCADDrawing}PTSimpleDrawing;
                     ProjectUnits:TUnitManager;
                     FileNameCounter:integer;

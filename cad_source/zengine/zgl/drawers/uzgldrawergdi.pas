@@ -68,7 +68,7 @@ TGDIFontCacheKey=record
                   end;}
 PTLLGDISymbol=^TLLGDISymbol;
 {---REGISTEROBJECTTYPE TLLGDISymbol}
-TLLGDISymbol={$IFNDEF DELPHI}packed{$ENDIF} object(TLLSymbol)
+TLLGDISymbol= object(TLLSymbol)
               procedure drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;const PSymbolsParam:PTSymbolSParam);virtual;
         end;
 TLLGDIPrimitivesCreator=class(TLLPrimitivesCreator)

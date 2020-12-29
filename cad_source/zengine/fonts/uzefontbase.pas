@@ -26,7 +26,7 @@ type
 TGDBUNISymbolInfoVector=GZVectorData{-}<GDBUNISymbolInfo>{//};
 PBASEFont=^BASEFont;
 {REGISTEROBJECTTYPE BASEFont}
-BASEFont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
+BASEFont= object(GDBaseObject)
               unicode:GDBBoolean;
               symbolinfo:TSymbolInfoArray;
               unisymbolinfo:{GDBOpenArrayOfData}TGDBUNISymbolInfoVector;

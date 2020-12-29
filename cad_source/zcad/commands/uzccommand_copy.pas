@@ -36,7 +36,7 @@ uses
 type
 {EXPORT+}
   {REGISTEROBJECTTYPE copy_com}
-  copy_com = {$IFNDEF DELPHI}packed{$ENDIF} object(move_com)
+  copy_com =  object(move_com)
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
     function Copy(dispmatr:DMatrix4D;UndoMaker:GDBString): GDBInteger;
   end;

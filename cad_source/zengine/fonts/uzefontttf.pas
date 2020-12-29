@@ -34,7 +34,7 @@ TMapChar=TMyMapGen<integer,TTTFSymInfo{$IFNDEF DELPHI},LessInteger{$ENDIF}>;
 {EXPORT+}
 PTTFFont=^TTFFont;
 {REGISTEROBJECTTYPE TTFFont}
-TTFFont={$IFNDEF DELPHI}packed{$ENDIF} object({SHXFont}BASEFont)
+TTFFont= object({SHXFont}BASEFont)
               ftFont: TFreeTypeFont;
               MapChar:TMapChar;
               MapCharIterator:TMapChar.TIterator;

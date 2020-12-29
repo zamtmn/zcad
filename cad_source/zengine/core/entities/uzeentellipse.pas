@@ -33,7 +33,7 @@ type
                   end;
 PGDBObjEllipse=^GDBObjEllipse;
 {REGISTEROBJECTTYPE GDBObjEllipse}
-GDBObjEllipse={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlain)
+GDBObjEllipse= object(GDBObjPlain)
                  RR:GDBDouble;(*saved_to_shd*)
                  MajorAxis:GDBvertex;
                  Ratio:GDBDouble;(*saved_to_shd*)

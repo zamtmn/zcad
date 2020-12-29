@@ -23,8 +23,8 @@ uses {uzbtypesbase,uzbtypes,}gzctnrvector;
 type
 {Export+}
 {----REGISTEROBJECTTYPE GZVectorSimple}
-GZVectorSimple{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
-                                 object(GZVector{-}<T>{//})
+GZVectorSimple{-}<T>{//}=object
+                               (GZVector{-}<T>{//})
                                    function PushBackIfNotPresent(data:T):Integer;
                                    function IsDataExist(pobj:T):Integer;
                                    {**Удалить элемент по содержимому, с уменьшениием размера массива}

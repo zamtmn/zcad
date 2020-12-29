@@ -28,7 +28,7 @@ type
 {EXPORT+}
 PGDBObjComplex=^GDBObjComplex;
 {REGISTEROBJECTTYPE GDBObjComplex}
-GDBObjComplex={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
+GDBObjComplex= object(GDBObjWithLocalCS)
                     ConstObjArray:{GDBObjEntityOpenArray;}GDBObjEntityTreeArray;(*oi_readonly*)(*hidden_in_objinsp*)
                     procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                     procedure DrawOnlyGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;

@@ -25,7 +25,7 @@ uses
 type
 {Export+}
   {REGISTEROBJECTTYPE TWrapper2ObjInsp}
-  TWrapper2ObjInsp={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
+  TWrapper2ObjInsp= object(GDBaseObject)
   end;
 {Export-}
 implementation

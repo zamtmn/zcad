@@ -51,7 +51,7 @@ TDXFDimData=record
 end;
 PGDBObjDimension=^GDBObjDimension;
 {REGISTEROBJECTTYPE GDBObjDimension}
-GDBObjDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
+GDBObjDimension= object(GDBObjComplex)
                       DimData:TDXFDimData;
                       PDimStyle:{-}PGDBDimStyle{/PGDBDimStyleObjInsp/};
                       PProjPoint:PTDXFDimData2D;

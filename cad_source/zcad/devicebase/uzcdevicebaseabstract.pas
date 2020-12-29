@@ -14,7 +14,7 @@ TEdIzm=(_sht(*'**шт.'*),
         _m(*'**м'*));
 PDbBaseObject=^DbBaseObject;
 {REGISTEROBJECTTYPE DbBaseObject}
-DbBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
+DbBaseObject= object(GDBaseObject)
                        Category:TOborudCategory;(*'**Категория'*)(*oi_readonly*)
                        Group:GDBString;(*'**Группа'*)
                        Position:GDBString;(*'**Позиция'*)(*oi_readonly*)

@@ -143,7 +143,7 @@ TFieldNames=set of TFieldName;
 {EXPORT+}
 ptypemanager=^typemanager;
 {REGISTEROBJECTTYPE typemanager}
-typemanager={$IFNDEF DELPHI}packed{$ENDIF} object(typemanagerdef)
+typemanager=object(typemanagerdef)
                   protected
                   n2i:TNameToIndex;
                   public
@@ -165,7 +165,7 @@ typemanager={$IFNDEF DELPHI}packed{$ENDIF} object(typemanagerdef)
 Tvardescarray=GZVectorData{-}<vardesk>{//};
 {REGISTEROBJECTTYPE varmanager}
 pvarmanager=^varmanager;
-varmanager={$IFNDEF DELPHI}packed{$ENDIF} object(varmanagerdef)
+varmanager=object(varmanagerdef)
             vardescarray:{GDBOpenArrayOfData}Tvardescarray;
             vararray:GDBOpenArrayOfByte;
                  constructor init;
@@ -181,7 +181,7 @@ TunitPart=(TNothing,TInterf,TImpl,TProg);
 PTUnit=^TUnit;
 PTSimpleUnit=^TSimpleUnit;
 {REGISTEROBJECTTYPE TSimpleUnit}
-TSimpleUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractUnit)
+TSimpleUnit=object(TAbstractUnit)
                   Name:TInternalScriptString;
                   InterfaceUses:TZctnrVectorGDBPointer;
                   InterfaceVariables: varmanager;
@@ -201,12 +201,12 @@ TSimpleUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractUnit)
             end;
 PTObjectUnit=^TObjectUnit;
 {REGISTEROBJECTTYPE TObjectUnit}
-TObjectUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleUnit)
+TObjectUnit=object(TSimpleUnit)
                   //function SaveToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;
                   procedure free;virtual;
             end;
 {REGISTEROBJECTTYPE TUnit}
-TUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleUnit)
+TUnit=object(TSimpleUnit)
             InterfaceTypes:typemanager;
             //ImplementationUses:GDBInteger;
             ImplementationTypes:typemanager;

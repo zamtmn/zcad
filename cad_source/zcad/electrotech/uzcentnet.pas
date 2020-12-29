@@ -22,7 +22,7 @@ type
 {Export+}
 PGDBObjNet=^GDBObjNet;
 {REGISTEROBJECTTYPE GDBObjNet}
-GDBObjNet={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjConnected)
+GDBObjNet= object(GDBObjConnected)
                  graf:GDBGraf;
                  riserarray:TZctnrVectorPGDBaseObjects;
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);

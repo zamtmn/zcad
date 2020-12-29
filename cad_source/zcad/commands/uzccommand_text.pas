@@ -34,7 +34,7 @@ uses
 type
 {EXPORT+}
   {REGISTEROBJECTTYPE TextInsert_com}
-  TextInsert_com={$IFNDEF DELPHI}packed{$ENDIF} object(FloatInsert_com)
+  TextInsert_com= object(FloatInsert_com)
                        pt:PGDBObjText;
                        //procedure Build(Operands:pansichar); virtual;
                        procedure CommandStart(Operands:TCommandOperands); virtual;

@@ -28,7 +28,7 @@ type
 {EXPORT+}
     PTUnitManager=^TUnitManager;
     {REGISTEROBJECTTYPE TUnitManager}
-    TUnitManager={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorObjects{-}<TUnit>{//})
+    TUnitManager=object(GZVectorObjects{-}<TUnit>{//})
                        currentunit:PTUnit;
                        NextUnitManager:PTUnitManager;
                        constructor init;

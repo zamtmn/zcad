@@ -98,7 +98,7 @@ PPGDBDimStyleObjInsp=^PGDBDimStyleObjInsp;
 PGDBDimStyleObjInsp=GDBPointer;
 PGDBDimStyle=^GDBDimStyle;
 {REGISTEROBJECTTYPE GDBDimStyle}
-GDBDimStyle = {$IFNDEF DELPHI}packed{$ENDIF}object(GDBNamedObject)
+GDBDimStyle = object(GDBNamedObject)
                       Lines:TGDBDimLinesProp;
                       Arrows:TGDBDimArrowsProp;
                       Text:TGDBDimTextProp;
@@ -117,7 +117,7 @@ GDBDimStyle = {$IFNDEF DELPHI}packed{$ENDIF}object(GDBNamedObject)
              end;
 PGDBDimStyleArray=^GDBDimStyleArray;
 {REGISTEROBJECTTYPE GDBDimStyleArray}
-GDBDimStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray{-}<PGDBDimStyle,GDBDimStyle>{//})(*OpenArrayOfData=GDBDimStyle*)
+GDBDimStyleArray= object(GDBNamedObjectsArray{-}<PGDBDimStyle,GDBDimStyle>{//})(*OpenArrayOfData=GDBDimStyle*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;
                     procedure ResolveDXFHandles(const Handle2BlockName:TMapBlockHandle_BlockNames);

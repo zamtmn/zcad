@@ -35,7 +35,7 @@ TDrawingPreCalcData=record
                     end;
 PGDBObjGenericSubEntry=^GDBObjGenericSubEntry;
 {REGISTEROBJECTTYPE GDBObjGenericSubEntry}
-GDBObjGenericSubEntry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
+GDBObjGenericSubEntry= object(GDBObjWithMatrix)
                             ObjArray:GDBObjEntityTreeArray;(*saved_to_shd*)
                             ObjCasheArray:GDBObjOpenArrayOfPV;
                             ObjToConnectedArray:GDBObjOpenArrayOfPV;

@@ -24,12 +24,12 @@ uses uzbmemman,uzedrawingdef,uzbtypesbase,uzbtypes,usimplegenerics,
      UGDBOpenArrayOfByte,gzctnrstl,uzeffdxfsupport;
 
 type
-TBaseObjExtender={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
+TBaseObjExtender= object(GDBaseObject)
 
 end;
 PTBaseEntityExtender=^TBaseEntityExtender;
 TCreateThisExtender=function (pEntity:Pointer; out ObjSize:Integer):PTBaseEntityExtender;
-TBaseEntityExtender={$IFNDEF DELPHI}packed{$ENDIF} object(TBaseObjExtender)
+TBaseEntityExtender= object(TBaseObjExtender)
                   //class function CreateThisExtender(pEntity:Pointer; out ObjSize:Integer):PTBaseEntityExtender;
                   constructor init(pEntity:Pointer);
                   procedure onEntityDestruct(pEntity:Pointer);virtual;abstract;

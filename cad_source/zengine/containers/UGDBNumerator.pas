@@ -24,13 +24,13 @@ type
 {EXPORT+}
 PGDBNumItem=^GDBNumItem;
 {REGISTEROBJECTTYPE GDBNumItem}
-GDBNumItem={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
+GDBNumItem= object(GDBNamedObject)
                  Nymber:GDBInteger;
                  constructor Init(N:GDBString);
                 end;
 PGDBNumerator=^GDBNumerator;
 {---REGISTEROBJECTTYPE GDBNumerator}
-GDBNumerator={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray<PGDBNumItem,GDBNumItem>)(*OpenArrayOfData=GDBNumItem*)
+GDBNumerator= object(GDBNamedObjectsArray<PGDBNumItem,GDBNumItem>)(*OpenArrayOfData=GDBNumItem*)
                        constructor init(m:GDBInteger);
                        function getnamenumber(_Name:GDBString;AutoInc:GDBBoolean):GDBstring;
                        function getnumber(_Name:GDBString;AutoInc:GDBBoolean):GDBInteger;

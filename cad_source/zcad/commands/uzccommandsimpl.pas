@@ -33,13 +33,13 @@ type
   comfuncwithoper=function(operands:TCommandOperands):TCommandResult;
 {Export+}
 {REGISTEROBJECTTYPE CommandFastObject}
-  CommandFastObject = {$IFNDEF DELPHI}packed{$ENDIF} object(CommandFastObjectDef)
+  CommandFastObject =  object(CommandFastObjectDef)
     procedure CommandInit; virtual;
     procedure CommandEnd; virtual;
   end;
   PCommandFastObjectPlugin=^CommandFastObjectPlugin;
   {REGISTEROBJECTTYPE CommandFastObjectPlugin}
-  CommandFastObjectPlugin = {$IFNDEF DELPHI}packed{$ENDIF} object(CommandFastObjectDef)
+  CommandFastObjectPlugin =  object(CommandFastObjectDef)
     onCommandStart:comfuncwithoper;
     constructor Init(name:pansichar;func:comfuncwithoper);
     procedure CommandStart(Operands:TCommandOperands); virtual;
@@ -48,7 +48,7 @@ type
   end;
   pCommandRTEdObject=^CommandRTEdObject;
   {REGISTEROBJECTTYPE CommandRTEdObject}
-  CommandRTEdObject = {$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObjectDef)
+  CommandRTEdObject =  object(CommandRTEdObjectDef)
     saveosmode:GDBInteger;(*hidden_in_objinsp*)
     commanddata:TTypedData;(*'Command options'*)
     procedure CommandStart(Operands:TCommandOperands); virtual;
@@ -64,7 +64,7 @@ type
   end;
   pCommandRTEdObjectPlugin=^CommandRTEdObjectPlugin;
   {REGISTEROBJECTTYPE CommandRTEdObjectPlugin}
-  CommandRTEdObjectPlugin = {$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
+  CommandRTEdObjectPlugin =  object(CommandRTEdObject)
     onCommandStart:comfuncwithoper;
     onCommandEnd,onCommandCancel,onFormat:comproc;(*hidden_in_objinsp*)
     onBeforeClick,onAfterClick:commousefunc;(*hidden_in_objinsp*)
@@ -82,7 +82,7 @@ type
     procedure DrawHeplGeometry;virtual;
   end;
   {REGISTEROBJECTTYPE TOSModeEditor}
-  TOSModeEditor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
+  TOSModeEditor= object(GDBaseObject)
               osm:TOSMode;(*'Snap'*)
               trace:TTraceMode;(*'Trace'*)
               procedure Format;virtual;

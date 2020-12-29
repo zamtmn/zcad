@@ -27,7 +27,7 @@ type
 {Export+}
 PGDBOpenArrayOfByte=^GDBOpenArrayOfByte;
 {REGISTEROBJECTTYPE GDBOpenArrayOfByte}
-GDBOpenArrayOfByte={$IFNDEF DELPHI}packed{$ENDIF} object(GZVector{-}<byte>{//})
+GDBOpenArrayOfByte=object(GZVector{-}<byte>{//})
                       ReadPos:Integer;
                       name:AnsiString;
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:Integer);

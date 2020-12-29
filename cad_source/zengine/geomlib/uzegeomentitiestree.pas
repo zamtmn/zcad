@@ -34,11 +34,11 @@ TFirstStageData=record
 TGeomTreeNodeData=record
                   end;
 {---REGISTEROBJECTTYPE TEntityArray}
-TEntityArray={$IFNDEF DELPHI}packed{$ENDIF} object(TObjectsChunk)(*OpenArrayOfData=GDBByte*)
+TEntityArray= object(TObjectsChunk)(*OpenArrayOfData=GDBByte*)
 end;
          PTEntTreeNode=^TGeomEntTreeNode;
          {---REGISTEROBJECTTYPE TGeomEntTreeNode}
-         TGeomEntTreeNode={$IFNDEF DELPHI}packed{$ENDIF}object(GZBInarySeparatedGeometry{-}<TBoundingBox,DVector4D,TGeomTreeNodeData,TZEntsManipulator,TGeomEntity,PTGeomEntity,TEntityArray>{//})
+         TGeomEntTreeNode=object(GZBInarySeparatedGeometry{-}<TBoundingBox,DVector4D,TGeomTreeNodeData,TZEntsManipulator,TGeomEntity,PTGeomEntity,TEntityArray>{//})
             {-}{/pplusnode,pminusnode:PTEntTreeNode;/}
             {-}{/nul:TEntityArray;/}
             {-}{/Separator:DVector4D;/}

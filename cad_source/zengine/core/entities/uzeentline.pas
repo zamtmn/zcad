@@ -28,7 +28,7 @@ type
 {Export+}
 PGDBObjLine=^GDBObjLine;
 {REGISTEROBJECTTYPE GDBObjLine}
-GDBObjLine={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
+GDBObjLine= object(GDBObj3d)
                  CoordInOCS:GDBLineProp;(*'Coordinates OCS'*)(*saved_to_shd*)
                  CoordInWCS:GDBLineProp;(*'Coordinates WCS'*)(*hidden_in_objinsp*)
                  PProjPoint:PGDBLineProj;(*'Coordinates DCS'*)(*hidden_in_objinsp*)

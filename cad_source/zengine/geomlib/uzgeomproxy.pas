@@ -26,7 +26,7 @@ type
 {Export+}
 PTGeomProxy=^TGeomProxy;
 {REGISTEROBJECTTYPE TGeomProxy}
-TGeomProxy={$IFNDEF DELPHI}packed{$ENDIF} object(TGeomEntity)
+TGeomProxy= object(TGeomEntity)
                                              LLEntsStart,LLEntsEnd:TArrayIndex;
                                              BB:TBoundingBox;
                                              constructor init(const LLS,LLE:TArrayIndex;const _BB:TBoundingBox);

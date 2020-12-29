@@ -17,7 +17,7 @@ type
 {EXPORT+}
     PTCableDesctiptor=^TCableDesctiptor;
     {REGISTEROBJECTTYPE TCableDesctiptor}
-    TCableDesctiptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
+    TCableDesctiptor= object(GDBaseObject)
                      Name:GDBString;
                      Segments:TZctnrVectorPGDBaseObjects;   // сборщик всех кабелей с одинаковым именем (ШС..)
                      StartDevice,EndDevice:PGDBObjDevice;
@@ -32,7 +32,7 @@ type
 
     PTCableManager=^TCableManager;
     {---REGISTEROBJECTTYPE TCableManager}
-    TCableManager={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorObjects<TCableDesctiptor>)(*OpenArrayOfPObj*)
+    TCableManager= object(GZVectorObjects<TCableDesctiptor>)(*OpenArrayOfPObj*)
                        constructor init;
                        destructor done;virtual;
                        procedure build;virtual;

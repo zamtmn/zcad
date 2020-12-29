@@ -25,7 +25,7 @@ uses
 type
 {EXPORT+}
 {REGISTEROBJECTTYPE GDBObjPlain}
-GDBObjPlain={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
+GDBObjPlain= object(GDBObjWithLocalCS)
                   Outbound:OutBound4V;(*oi_readonly*)(*hidden_in_objinsp*)
 
                   procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;

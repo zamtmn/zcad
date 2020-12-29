@@ -30,7 +30,7 @@ type
 {Export+}
   ptcirclertmodify=^tcirclertmodify;
   {REGISTERRECORDTYPE tcirclertmodify}
-  tcirclertmodify=packed record
+  tcirclertmodify=record
                         r,p_insert:GDBBoolean;
                   end;
 PGDBObjCircle=^GDBObjCircle;

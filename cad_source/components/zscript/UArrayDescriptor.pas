@@ -34,7 +34,7 @@ ArrayDescriptor=object(TUserTypeDescriptor)
                      Indexs:{GDBOpenArrayOfData}TArrayIndexDescriptorVector;
                      constructor init(var t:PUserTypeDescriptor;tname:string;pu:pointer);
                      procedure AddIndex(var Index:ArrayIndexDescriptor);
-                     function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;var addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
+                     function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
                      destructor Done;virtual;
                      function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
                end;
@@ -103,7 +103,7 @@ begin
                                 //inc(pGDBByte(addr),SizeInGDBBytes);
                                 //if bmode=property_build then PPDA^.add(@ppd);
                            end;
-     IncAddr(addr);
+     //IncAddr(addr);
 end;
 begin
 end.

@@ -28,7 +28,7 @@ TTableCellJustify=(jcl(*'TopLeft'*),
               jcr(*'TopRight'*));
 PTGDBTableCellStyle=^TGDBTableCellStyle;
 {REGISTERRECORDTYPE TGDBTableCellStyle}
-TGDBTableCellStyle=packed record
+TGDBTableCellStyle=record
                           Width,TextWidth:GDBDouble;
                           CF:TTableCellJustify;
                     end;

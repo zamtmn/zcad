@@ -836,7 +836,10 @@ begin
       if (ppd^.IsVisible) then
       begin
         OnMouseProp:=(ppd=onmousepp);
-        r.Left:=arect.Left+{2+}(subtab+GetSizeTreeIcon(not ppd^.Collapsed^,false).cx)*sub;
+        if assigned(ppd^.Collapsed)then
+          r.Left:=arect.Left+{2+}(subtab+GetSizeTreeIcon(not ppd^.Collapsed^,false).cx)*sub
+        else
+          r.Left:=arect.Left+{2+}(subtab+GetSizeTreeIcon(true,false).cx)*sub;
         r.Top:=y;
         if NeedShowSeparator then
                                  r.Right:=NameColumnWidth-spliterhalfwidth

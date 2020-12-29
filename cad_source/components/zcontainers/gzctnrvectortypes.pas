@@ -23,7 +23,7 @@ uses uzbmemman,{uzbtypesbase,}sysutils,{uzbtypes,}typinfo;
 type
 {Export+}
   {REGISTERRECORDTYPE itrec}
-  itrec=packed record
+  itrec=record
               itp:{-}PPointer{/Pointer/};
               itc:Integer;
         end;

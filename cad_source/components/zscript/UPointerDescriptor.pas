@@ -31,7 +31,7 @@ GDBPointerDescriptor=object(TUserTypeDescriptor)
                      ReferType:GDBString;
                      //constructor init(var t:gdbtypedesk);
                      constructor init(ptype:GDBString;tname:string;pu:pointer);
-                     function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;var addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
+                     function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
                      //function Serialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
                      //function DeSerialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
                      procedure Format;virtual;
@@ -153,7 +153,7 @@ begin
                         end;
      if bm<>bmode then
      bmode:=bm;
-     IncAddr(addr);
+     //IncAddr(addr);
 end;
 procedure GDBPointerDescriptor.format;
 begin

@@ -26,7 +26,7 @@ type
 
 PTNodeProp=^TNodeProp;
 {REGISTERRECORDTYPE TNodeProp}
-TNodeProp=packed record
+TNodeProp=record
                 //**Точка в котором кабель был усечен устройством исчез и появился
                 PrevP,NextP:GDBVertex;
                 //**Устройство коннектор которого попадает в узел кабеля

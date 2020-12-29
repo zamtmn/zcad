@@ -45,6 +45,7 @@ type
     procedure CommandEnd; virtual;
   end;
   pCommandRTEdObject=^CommandRTEdObject;
+  {REGISTEROBJECTTYPE CommandRTEdObject}
   CommandRTEdObject = {$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObjectDef)
     saveosmode:GDBInteger;(*hidden_in_objinsp*)
     commanddata:TTypedData;(*'Command options'*)

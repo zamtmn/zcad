@@ -61,7 +61,7 @@ type
                            TARDM_AllAxis(*'All xxis'*));
   PTOPSPlaceSmokeDetectorOrtoParam=^TOPSPlaceSmokeDetectorOrtoParam;
   {REGISTERRECORDTYPE TOPSPlaceSmokeDetectorOrtoParam}
-  TOPSPlaceSmokeDetectorOrtoParam=packed record
+  TOPSPlaceSmokeDetectorOrtoParam=record
                                         InsertType:TInsertType;(*'Insert'*)
                                         Scale:GDBDouble;(*'Plan scale'*)
                                         ScaleBlock:GDBDouble;(*'Blocks scale'*)
@@ -85,7 +85,7 @@ type
                                   end;
   PTOrtoDevPlaceParam=^TOrtoDevPlaceParam;
   {REGISTERRECORDTYPE TOrtoDevPlaceParam}
-  TOrtoDevPlaceParam=packed record
+  TOrtoDevPlaceParam=record
                                         Name:GDBString;(*'Block'*)(*oi_readonly*)
                                         ScaleBlock:GDBDouble;(*'Blocks scale'*)
                                         CountType:TODPCountType;(*'Type of placement'*)
@@ -98,7 +98,7 @@ type
 
                      end;
   {REGISTERRECORDTYPE GDBLineOps}
-     GDBLineOps=packed record
+     GDBLineOps=record
                   lBegin,lEnd:GDBvertex;
               end;
   OPS_SPBuild={$IFNDEF DELPHI}packed{$ENDIF} object(FloatInsert_com)

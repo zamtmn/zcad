@@ -33,7 +33,7 @@ type
 {EXPORT+}
 PTGDBTableItemFormat=^TGDBTableItemFormat;
 {REGISTERRECORDTYPE TGDBTableItemFormat}
-TGDBTableItemFormat=packed record
+TGDBTableItemFormat=record
                  Width,TextWidth:GDBDouble;
                  CF:TTableCellJustify;
                 end;

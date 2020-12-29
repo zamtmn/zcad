@@ -25,19 +25,19 @@ uses XMLConf,XMLPropStorage,LazConfigStorage,fileutil,
 type
 {EXPORT+}
   {REGISTERRECORDTYPE TmyFileVersionInfo}
-  TmyFileVersionInfo=packed record
+  TmyFileVersionInfo=record
     major,minor,release,build,revision:GDBInteger;
     versionstring:GDBstring;
   end;
   {REGISTERRECORDTYPE tsavedparams}
-  tsavedparams=packed record
+  tsavedparams=record
     UniqueInstance:GDBBoolean;(*'Unique instance'*)
     NoSplash:GDBBoolean;(*'No splash screen'*)
     NoLoadLayout:GDBBoolean;(*'No load layout'*)
     UpdatePO:GDBBoolean;(*'Update PO file'*)
   end;
   {REGISTERRECORDTYPE tnotsavedparams}
-  tnotsavedparams=packed record
+  tnotsavedparams=record
     ScreenX:GDBInteger;(*'Screen X'*)(*oi_readonly*)
     ScreenY:GDBInteger;(*'Screen Y'*)(*oi_readonly*)
     otherinstancerun:GDBBoolean;(*'Other instance run'*)(*oi_readonly*)
@@ -47,7 +47,7 @@ type
   end;
   ptsysparam=^tsysparam;
   {REGISTERRECORDTYPE tsysparam}
-  tsysparam=packed record
+  tsysparam=record
     saved:tsavedparams;(*'Saved params'*)
     notsaved:tnotsavedparams;(*'Not saved params'*)(*oi_readonly*)
   end;

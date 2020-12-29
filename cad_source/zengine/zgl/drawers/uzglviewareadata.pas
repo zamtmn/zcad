@@ -32,7 +32,7 @@ type
 {Export+}
   pmousedesc = ^mousedesc;
   {REGISTERRECORDTYPE mousedesc}
-  mousedesc = packed record
+  mousedesc = record
     mode: GDBByte;
     mouse, mouseglue: GDBvertex2DI;
     glmouse:GDBvertex2DI;
@@ -48,7 +48,7 @@ type
 
   PSelectiondesc = ^Selectiondesc;
   {REGISTERRECORDTYPE Selectiondesc}
-  Selectiondesc = packed record
+  Selectiondesc = record
     OnMouseObject,LastSelectedObject:GDBPointer;
     Selectedobjcount:GDBInteger;
     MouseFrameON: GDBBoolean;
@@ -58,12 +58,12 @@ type
     BigMouseFrustum:ClipArray;
   end;
   {REGISTERRECORDTYPE tcpdist}
-  tcpdist = packed record
+  tcpdist = record
     cpnum: GDBInteger;
     cpdist: GDBInteger;
   end;
   {REGISTERRECORDTYPE traceprop2}
-  traceprop2 = packed record
+  traceprop2 = record
     tmouse: GDBDouble;
     dmouse: GDBInteger;
     dir: GDBVertex;
@@ -72,12 +72,12 @@ type
   end;
   arrtraceprop = packed array[0..0] of traceprop;
   {REGISTERRECORDTYPE GDBArraytraceprop_GDBWord}
-  GDBArraytraceprop_GDBWord = packed record
+  GDBArraytraceprop_GDBWord = record
     count: GDBWord;
     arr: arrtraceprop;
   end;
   {REGISTERRECORDTYPE objcontrolpoint}
-  objcontrolpoint = packed record
+  objcontrolpoint = record
     objnum: GDBInteger;
     newobjnum: GDBInteger;
     ostype: real;
@@ -88,7 +88,7 @@ type
   arrayobjcontrolpoint = packed array[0..0] of objcontrolpoint;
   popenarrayobjcontrolpoint_GDBWordwm = ^openarrayobjcontrolpoint_GDBWordwm;
   {REGISTERRECORDTYPE openarrayobjcontrolpoint_GDBWordwm}
-  openarrayobjcontrolpoint_GDBWordwm = packed record
+  openarrayobjcontrolpoint_GDBWordwm = record
     count, max: GDBWord;
     arraycp: arrayobjcontrolpoint;
   end;
@@ -96,7 +96,7 @@ type
   PGDBOpenArraytraceprop_GDBWord = ^GDBArraytraceprop_GDBWord;
   pos_record=^os_record;
   {REGISTERRECORDTYPE os_record}
-  os_record = packed record
+  os_record = record
     worldcoord: GDBVertex;
     dispcoord: GDBVertex;
     dmousecoord: GDBVertex;
@@ -108,12 +108,12 @@ type
     PGDBObject:GDBPointer;
   end;
   {REGISTERRECORDTYPE totrackarray}
-  totrackarray = packed record
+  totrackarray = record
     otrackarray: packed array[0..3] of os_record;
     total, current: GDBInteger;
   end;
   {REGISTERRECORDTYPE TCSIcon}
-  TCSIcon=packed record
+  TCSIcon=record
                CSIconCoord: GDBvertex;
                CSIconX,CSIconY,CSIconZ: GDBvertex;
                CSX, CSY, CSZ: GDBvertex2DI;

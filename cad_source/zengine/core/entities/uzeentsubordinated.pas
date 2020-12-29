@@ -58,17 +58,17 @@ GDBObjGenericWithSubordinated={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjExtend
 
 end;
 {REGISTERRECORDTYPE TEntityAdress}
-TEntityAdress=packed record
+TEntityAdress=record
                           Owner:PGDBObjGenericWithSubordinated;(*'Adress'*)
                           SelfIndex:TArrayIndex;(*'Position'*)
               end;
 {REGISTERRECORDTYPE TTreeAdress}
-TTreeAdress=packed record
+TTreeAdress=record
                           Owner:GDBPointer;(*'Adress'*)
                           SelfIndex:TArrayIndex;(*'Position'*)
               end;
 {REGISTERRECORDTYPE GDBObjBaseProp}
-GDBObjBaseProp=packed record
+GDBObjBaseProp=record
                       ListPos:TEntityAdress;(*'List'*)
                       TreePos:TTreeAdress;(*'Tree'*)
                  end;

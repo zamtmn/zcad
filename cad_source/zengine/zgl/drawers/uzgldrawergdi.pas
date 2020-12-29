@@ -40,7 +40,7 @@ const
 type
 {EXPORT+}
 {REGISTERRECORDTYPE TGDIPrimitivesCounter}
-TGDIPrimitivesCounter=packed record
+TGDIPrimitivesCounter=record
           Lines:GDBInteger;
           Triangles:GDBInteger;
           Quads:GDBInteger;
@@ -51,7 +51,7 @@ TGDIPrimitivesCounter=packed record
 TTextRenderingType=(TRT_System,TRT_ZGL,TRT_Both);
 PTGDIData=^TGDIData;
 {REGISTERRECORDTYPE TGDIData}
-TGDIData=packed record
+TGDIData=record
           RD_TextRendering:TTextRenderingType;
           RD_DrawDebugGeometry:GDBBoolean;
           DebugCounter:TGDIPrimitivesCounter;

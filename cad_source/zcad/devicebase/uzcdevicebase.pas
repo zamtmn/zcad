@@ -50,6 +50,7 @@ procedure finalize;}
 const
      firstfilename='_startup.pas';
 var devman:DeviceManager;
+procedure startup;
 implementation
 constructor CableDeviceBaseObject.initnul;
 begin
@@ -232,14 +233,17 @@ begin
      if assigned(sysunit) then
      begin
      pt:=SysUnit.ObjectTypeName2PTD('DbBaseObject');
+     pt^.RegisterTypeinfo(TypeInfo(DbBaseObject));
      pt^.RegisterVMT(TypeOf(DbBaseObject));
      pt^.AddMetod('','initnul','',@DbBaseObject.initnul,m_constructor);
 
      pt:=SysUnit.ObjectTypeName2PTD('ElDeviceBaseObject');
+     pt^.RegisterTypeinfo(TypeInfo(ElDeviceBaseObject));
      pt^.RegisterVMT(TypeOf(ElDeviceBaseObject));
      pt^.AddMetod('','initnul','',@ElDeviceBaseObject.initnul,m_constructor);
 
      pt:=SysUnit.ObjectTypeName2PTD('CableDeviceBaseObject');
+     pt^.RegisterTypeinfo(TypeInfo(CableDeviceBaseObject));
      pt^.RegisterVMT(TypeOf(CableDeviceBaseObject));
      pt^.AddMetod('','initnul','',@CableDeviceBaseObject.initnul,m_constructor);
 
@@ -255,5 +259,5 @@ procedure finalize;
 begin
 end;
 begin
-  startup;
+  //startup;
 end.

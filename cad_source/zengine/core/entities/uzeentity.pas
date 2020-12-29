@@ -32,7 +32,7 @@ PGDBObjEntity=^GDBObjEntity;
 {-}TDeSelect2Stage=procedure(PV:PGDBObjEntity;var SelectedObjCount:GDBInteger)of object;{//}
 PTExtAttrib=^TExtAttrib;
 {REGISTERRECORDTYPE TExtAttrib}
-TExtAttrib=packed record
+TExtAttrib=record
                  OwnerHandle:GDBQWord;
                  MainFunctionHandle:GDBQWord;
                  dwgHandle:GDBQWord;

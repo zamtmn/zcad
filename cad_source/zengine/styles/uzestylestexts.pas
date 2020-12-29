@@ -26,7 +26,7 @@ type
 {EXPORT+}
 PGDBTextStyleProp=^GDBTextStyleProp;
 {REGISTERRECORDTYPE GDBTextStyleProp}
-  GDBTextStyleProp=packed record
+  GDBTextStyleProp=record
                     size:GDBDouble;(*saved_to_shd*)
                     oblique:GDBDouble;(*saved_to_shd*)
                     wfactor:GDBDouble;(*saved_to_shd*)

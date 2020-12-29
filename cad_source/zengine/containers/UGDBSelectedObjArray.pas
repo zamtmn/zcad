@@ -26,7 +26,7 @@ type
 {Export+}
 PSelectedObjDesc=^SelectedObjDesc;
 {REGISTERRECORDTYPE SelectedObjDesc}
-SelectedObjDesc=packed record
+SelectedObjDesc=record
                       objaddr:PGDBObjEntity;
                       pcontrolpoint:PGDBControlPointArray;
                       ptempobj:PGDBObjEntity;

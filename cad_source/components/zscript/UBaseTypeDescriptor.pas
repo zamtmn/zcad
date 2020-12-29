@@ -77,7 +77,7 @@ BaseTypeDescriptor<T,TManipulator>=object(TUserTypeDescriptor)
 
                          function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
                          function GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;virtual;
-                         function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;var addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
+                         function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
                          procedure SetValueFromString(PInstance:Pointer;Value:TInternalScriptString);virtual;
                    end;
 TBTM_Boolean=TBoolTypeManipulator<Boolean>;
@@ -140,7 +140,7 @@ TEnumDataDescriptor=object(BaseTypeDescriptor<TEnumData,{TOrdinalTypeManipulator
                      constructor init;
                      function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
                      procedure SetValueFromString(PInstance:Pointer;_Value:TInternalScriptString);virtual;
-                     function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;var addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
+                     function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
                      destructor Done;virtual;
                end;
 (*function MyDataToStr(data:LongInt):string;overload;
@@ -273,7 +273,7 @@ begin
                                 //inc(pGDBByte(addr),SizeInGDBBytes);
                                 //if bmode=property_build then PPDA^.add(@ppd);
                            end;
-     IncAddr(addr);
+     //IncAddr(addr);
 end;
 class function TOrdinalTypeManipulator<T>.GetValueAsString(const data:T):TInternalScriptString;
 begin
@@ -479,7 +479,7 @@ begin
                                 //inc(pGDBByte(addr),SizeInGDBBytes);
                                 //if bmode=property_build then PPDA^.add(@ppd);
                            end;
-     IncAddr(addr);
+     //IncAddr(addr);
 end;
 procedure BaseTypeDescriptor<T,TManipulator>.SetValueFromString;
 begin

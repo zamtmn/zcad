@@ -25,14 +25,14 @@ type
 {Export+}
 TAppearance=(TAMatching,TANeedProxy);
 {REGISTERRECORDTYPE TLLDrawResult}
-TLLDrawResult=packed record
+TLLDrawResult=record
                        LLPStart,LLPEndi:TArrayIndex;
                        LLPCount:TArrayIndex;
                        Appearance:TAppearance;
                        BB:TBoundingBox;
               end;
 {REGISTERRECORDTYPE TZGLVectorDataCopyParam}
-TZGLVectorDataCopyParam=packed record
+TZGLVectorDataCopyParam=record
                              LLPrimitivesStartIndex:TArrayIndex;
                              LLPrimitivesDataSize:GDBInteger;
                              EID:TEntIndexesData;

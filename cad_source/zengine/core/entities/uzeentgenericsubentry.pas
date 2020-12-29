@@ -30,7 +30,7 @@ type
 {Export+}
 PTDrawingPreCalcData=^TDrawingPreCalcData;
 {REGISTERRECORDTYPE TDrawingPreCalcData}
-TDrawingPreCalcData=packed record
+TDrawingPreCalcData=record
                           InverseObjMatrix:DMatrix4D;
                     end;
 PGDBObjGenericSubEntry=^GDBObjGenericSubEntry;

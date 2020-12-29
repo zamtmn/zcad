@@ -469,7 +469,7 @@ begin
                                                                                  debugln('{W}Record "'+typename+'" not packed');
 
                                                                                end;
-                                                  if (typename) = 'GDBvertex'
+                                                  if (typename) = 'tmemdeb'
                                                   then
                                                        typename:=typename;
                                                   //GDBStringtypearray := chr(Trecord);

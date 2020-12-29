@@ -24,6 +24,7 @@ uses uzgldrawcontext,uzestylesdim,uzbtypesbase,uzbtypes,uzestyleslayers,uzestyle
 type
 {EXPORT+}
 PTDrawingDef=^TDrawingDef;
+{REGISTEROBJECTTYPE TDrawingDef}
 TDrawingDef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseobject)
                        function CreateBlockDef(name:GDBString):GDBPointer;virtual;abstract;
                        function GetLayerTable:PGDBLayerArray;virtual;abstract;

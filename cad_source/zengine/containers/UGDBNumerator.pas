@@ -23,11 +23,13 @@ uses uzbtypesbase,uzbtypes,gzctnrvectortypes,sysutils,UGDBNamedObjectsArray;
 type
 {EXPORT+}
 PGDBNumItem=^GDBNumItem;
+{REGISTEROBJECTTYPE GDBNumItem}
 GDBNumItem={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
                  Nymber:GDBInteger;
                  constructor Init(N:GDBString);
                 end;
 PGDBNumerator=^GDBNumerator;
+{---REGISTEROBJECTTYPE GDBNumerator}
 GDBNumerator={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray<PGDBNumItem,GDBNumItem>)(*OpenArrayOfData=GDBNumItem*)
                        constructor init(m:GDBInteger);
                        function getnamenumber(_Name:GDBString;AutoInc:GDBBoolean):GDBstring;

@@ -24,6 +24,7 @@ uses uzbtypesbase,gzctnrvectordata,sysutils,uzbtypes,uzbmemman,
 type
 {Export+}
 PZGLIndexsArray=^ZGLIndexsArray;
+{REGISTEROBJECTTYPE ZGLIndexsArray}
 ZGLIndexsArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<TArrayIndex>{//})(*OpenArrayOfData=TArrayIndex*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                 constructor initnul;

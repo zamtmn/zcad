@@ -18,6 +18,7 @@ uses uzcenitiesvariablesextender,uzeentityfactory,Varman,uzgldrawcontext,
 type
 {EXPORT+}
 PGDBObjElLeader=^GDBObjElLeader;
+{REGISTEROBJECTTYPE GDBObjElLeader}
 GDBObjElLeader={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
             MainLine:GDBObjLine;
             MarkLine:GDBObjLine;

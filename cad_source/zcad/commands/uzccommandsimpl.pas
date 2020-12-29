@@ -32,11 +32,13 @@ type
   comfunc=function:GDBInteger;
   comfuncwithoper=function(operands:TCommandOperands):TCommandResult;
 {Export+}
+{REGISTEROBJECTTYPE CommandFastObject}
   CommandFastObject = {$IFNDEF DELPHI}packed{$ENDIF} object(CommandFastObjectDef)
     procedure CommandInit; virtual;
     procedure CommandEnd; virtual;
   end;
   PCommandFastObjectPlugin=^CommandFastObjectPlugin;
+  {REGISTEROBJECTTYPE CommandFastObjectPlugin}
   CommandFastObjectPlugin = {$IFNDEF DELPHI}packed{$ENDIF} object(CommandFastObjectDef)
     onCommandStart:comfuncwithoper;
     constructor Init(name:pansichar;func:comfuncwithoper);
@@ -61,6 +63,7 @@ type
     //function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual; abstract;
   end;
   pCommandRTEdObjectPlugin=^CommandRTEdObjectPlugin;
+  {REGISTEROBJECTTYPE CommandRTEdObjectPlugin}
   CommandRTEdObjectPlugin = {$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
     onCommandStart:comfuncwithoper;
     onCommandEnd,onCommandCancel,onFormat:comproc;(*hidden_in_objinsp*)
@@ -78,6 +81,7 @@ type
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
     procedure DrawHeplGeometry;virtual;
   end;
+  {REGISTEROBJECTTYPE TOSModeEditor}
   TOSModeEditor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
               osm:TOSMode;(*'Snap'*)
               trace:TTraceMode;(*'Trace'*)

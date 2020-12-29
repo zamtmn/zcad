@@ -24,6 +24,7 @@ uses
  uzbgeomtypes,uzgldrawcontext,uzegeometry,uzeentwithlocalcs,uzbtypesbase,uzbtypes;
 type
 {EXPORT+}
+{REGISTEROBJECTTYPE GDBObjPlain}
 GDBObjPlain={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                   Outbound:OutBound4V;(*oi_readonly*)(*hidden_in_objinsp*)
 

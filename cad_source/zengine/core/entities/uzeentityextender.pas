@@ -29,7 +29,6 @@ TBaseObjExtender={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
 end;
 PTBaseEntityExtender=^TBaseEntityExtender;
 TCreateThisExtender=function (pEntity:Pointer; out ObjSize:Integer):PTBaseEntityExtender;
-
 TBaseEntityExtender={$IFNDEF DELPHI}packed{$ENDIF} object(TBaseObjExtender)
                   //class function CreateThisExtender(pEntity:Pointer; out ObjSize:Integer):PTBaseEntityExtender;
                   constructor init(pEntity:Pointer);

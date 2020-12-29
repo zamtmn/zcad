@@ -25,6 +25,7 @@ uses uzgeomentity,//uzgprimitivessarray,math,uzglgeomdata,uzgldrawcontext,uzgver
 type
 {Export+}
 PTGeomProxy=^TGeomProxy;
+{REGISTEROBJECTTYPE TGeomProxy}
 TGeomProxy={$IFNDEF DELPHI}packed{$ENDIF} object(TGeomEntity)
                                              LLEntsStart,LLEntsEnd:TArrayIndex;
                                              BB:TBoundingBox;

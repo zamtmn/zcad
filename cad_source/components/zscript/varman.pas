@@ -142,6 +142,7 @@ TFieldName=(FNUser,FNProgram);
 TFieldNames=set of TFieldName;
 {EXPORT+}
 ptypemanager=^typemanager;
+{REGISTEROBJECTTYPE typemanager}
 typemanager={$IFNDEF DELPHI}packed{$ENDIF} object(typemanagerdef)
                   protected
                   n2i:TNameToIndex;
@@ -162,6 +163,7 @@ typemanager={$IFNDEF DELPHI}packed{$ENDIF} object(typemanagerdef)
                   function AddTypeByRef(var _type:UserTypeDescriptor):TArrayIndex;virtual;
             end;
 Tvardescarray=GZVectorData{-}<vardesk>{//};
+{REGISTEROBJECTTYPE varmanager}
 pvarmanager=^varmanager;
 varmanager={$IFNDEF DELPHI}packed{$ENDIF} object(varmanagerdef)
             vardescarray:{GDBOpenArrayOfData}Tvardescarray;
@@ -178,6 +180,7 @@ varmanager={$IFNDEF DELPHI}packed{$ENDIF} object(varmanagerdef)
 TunitPart=(TNothing,TInterf,TImpl,TProg);
 PTUnit=^TUnit;
 PTSimpleUnit=^TSimpleUnit;
+{REGISTEROBJECTTYPE TSimpleUnit}
 TSimpleUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractUnit)
                   Name:TInternalScriptString;
                   InterfaceUses:TZctnrVectorGDBPointer;
@@ -202,6 +205,7 @@ TObjectUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleUnit)
                   //function SaveToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;
                   procedure free;virtual;
             end;
+{REGISTEROBJECTTYPE TUnit}
 TUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleUnit)
             InterfaceTypes:typemanager;
             //ImplementationUses:GDBInteger;

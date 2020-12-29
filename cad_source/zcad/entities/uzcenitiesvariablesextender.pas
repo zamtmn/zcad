@@ -26,9 +26,11 @@ uses sysutils,UGDBObjBlockdefArray,uzedrawingdef,uzeentityextender,
      uzeentitiestree,usimplegenerics,uzeffdxfsupport;
 
 type
+{REGISTEROBJECTTYPE TBaseVariablesExtender}
 TBaseVariablesExtender={$IFNDEF DELPHI}packed{$ENDIF} object(TBaseEntityExtender)
   end;
 PTVariablesExtender=^TVariablesExtender;
+{REGISTEROBJECTTYPE TVariablesExtender}
 TVariablesExtender={$IFNDEF DELPHI}packed{$ENDIF} object(TBaseVariablesExtender)
     entityunit:TObjectUnit;
     pMainFuncEntity:PGDBObjEntity;

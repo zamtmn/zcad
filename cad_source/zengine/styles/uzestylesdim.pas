@@ -97,6 +97,7 @@ TGDBDimUnitsProp=record
 PPGDBDimStyleObjInsp=^PGDBDimStyleObjInsp;
 PGDBDimStyleObjInsp=GDBPointer;
 PGDBDimStyle=^GDBDimStyle;
+{REGISTEROBJECTTYPE GDBDimStyle}
 GDBDimStyle = {$IFNDEF DELPHI}packed{$ENDIF}object(GDBNamedObject)
                       Lines:TGDBDimLinesProp;
                       Arrows:TGDBDimArrowsProp;
@@ -115,6 +116,7 @@ GDBDimStyle = {$IFNDEF DELPHI}packed{$ENDIF}object(GDBNamedObject)
                       destructor Done;virtual;
              end;
 PGDBDimStyleArray=^GDBDimStyleArray;
+{REGISTEROBJECTTYPE GDBDimStyleArray}
 GDBDimStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray{-}<PGDBDimStyle,GDBDimStyle>{//})(*OpenArrayOfData=GDBDimStyle*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;

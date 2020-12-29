@@ -33,6 +33,7 @@ GDBObj2dprop=record
                    P_insert:GDBCoordinates3D;(*'Insertion point OCS'*)(*saved_to_shd*)
              end;
 PGDBObjWithLocalCS=^GDBObjWithLocalCS;
+{REGISTEROBJECTTYPE GDBObjWithLocalCS}
 GDBObjWithLocalCS={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                Local:GDBObj2dprop;(*'Object orientation'*)(*saved_to_shd*)
 

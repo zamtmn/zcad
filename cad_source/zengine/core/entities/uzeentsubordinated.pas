@@ -25,6 +25,7 @@ uses strutils,uzgldrawcontext,uzeentityextender,uzetextpreprocessor,uzedrawingde
      gzctnrvectortypes,uzbtypesbase,sysutils,uzestyleslayers,usimplegenerics,uzeffdxfsupport;
 type
 {EXPORT+}
+{REGISTEROBJECTTYPE GDBObjExtendable}
 GDBObjExtendable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                                  EntExtensions:{-}TEntityExtensions{/GDBPointer/};
                                  procedure AddExtension(ExtObj:PTBaseEntityExtender;ObjSize:GDBInteger);
@@ -34,6 +35,7 @@ end;
 
 PGDBObjSubordinated=^GDBObjSubordinated;
 PGDBObjGenericWithSubordinated=^GDBObjGenericWithSubordinated;
+{REGISTEROBJECTTYPE GDBObjGenericWithSubordinated}
 GDBObjGenericWithSubordinated={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjExtendable)
                                     {OU:TFaceTypedData;(*'Variables'*)}
                                     procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;
@@ -73,6 +75,7 @@ GDBObjBaseProp=record
                       TreePos:TTreeAdress;(*'Tree'*)
                  end;
 TOSnapModeControl=(On,Off,AsOwner);
+{REGISTEROBJECTTYPE GDBObjSubordinated}
 GDBObjSubordinated={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericWithSubordinated)
                          bp:GDBObjBaseProp;(*'Owner'*)(*oi_readonly*)(*hidden_in_objinsp*)
                          OSnapModeControl:TOSnapModeControl;(*'OSnap mode control'*)

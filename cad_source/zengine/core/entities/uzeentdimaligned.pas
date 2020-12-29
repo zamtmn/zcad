@@ -39,6 +39,7 @@ X (13,23,33)     X (14,24,34)
 type
 {EXPORT+}
 PGDBObjAlignedDimension=^GDBObjAlignedDimension;
+{REGISTEROBJECTTYPE GDBObjAlignedDimension}
 GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                       constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                       constructor initnul(owner:PGDBObjGenericWithSubordinated);

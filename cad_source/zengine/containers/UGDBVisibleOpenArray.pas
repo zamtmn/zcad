@@ -22,8 +22,8 @@ interface
 uses gzctnrvectortypes,uzbgeomtypes,uzeentity,uzecamera,uzbtypesbase,UGDBOpenArrayOfPV,sysutils,uzbtypes,uzegeometry,uzbmemman;
 type
 {Export+}
-{REGISTEROBJECTTYPE GDBObjEntityOpenArray}
 PGDBObjEntityOpenArray=^GDBObjEntityOpenArray;
+{REGISTEROBJECTTYPE GDBObjEntityOpenArray}
 GDBObjEntityOpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjOpenArrayOfPV)(*OpenArrayOfPObj*)
                       function AddPEntity(var entity:GDBObjEntity):TArrayIndex;virtual;
                       procedure CloneEntityTo(PEA:PGDBObjEntityOpenArray;own:GDBPointer);virtual;

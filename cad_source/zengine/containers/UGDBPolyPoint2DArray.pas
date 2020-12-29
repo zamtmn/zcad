@@ -23,6 +23,7 @@ uses uzbgeomtypes,uzbtypesbase,gzctnrvectordata,sysutils,uzbtypes, uzegeometry;
 type
 {Export+}
 PGDBPolyPoint2DArray=^GDBPolyPoint2DArray;
+{REGISTEROBJECTTYPE GDBPolyPoint2DArray}
 GDBPolyPoint2DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<GDBPolyVertex2D>{//})
                       //procedure DrawGeometry;virtual;
                       function InRect(Frame1, Frame2: GDBvertex2DI):TInBoundingVolume;virtual;

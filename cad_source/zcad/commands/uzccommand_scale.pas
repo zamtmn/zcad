@@ -34,6 +34,7 @@ uses
   uzccommandsabstract,varmandef,uzccommandsmanager,uzcinterface,uzcstrconsts,uzegeometry,zcmultiobjectchangeundocommand,
   uzbgeomtypes,uzeentity,LazLogger;
 type
+  {REGISTEROBJECTTYPE scale_com}
   scale_com = {$IFNDEF DELPHI}packed{$ENDIF} object(move_com)
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
     procedure scale(a:GDBDouble; button: GDBByte);

@@ -42,6 +42,7 @@ TZGLVectorDataCopyParam=record
                        end;
 
 PZGLVectorObject=^ZGLVectorObject;
+{REGISTEROBJECTTYPE ZGLVectorObject}
 ZGLVectorObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                                  LLprimitives:TLLPrimitivesArray;
                                  GeomData:ZGLGeomData;

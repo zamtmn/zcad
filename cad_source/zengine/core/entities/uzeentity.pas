@@ -40,6 +40,7 @@ TExtAttrib=record
                  Upgrade:TEntUpgradeInfo;
                  ExtAttrib2:GDBBoolean;
            end;
+{REGISTEROBJECTTYPE GDBObjEntity}
 GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     vp:GDBObjVisualProp;(*'General'*)(*saved_to_shd*)
                     Selected:GDBBoolean;(*'Selected'*)(*hidden_in_objinsp*)

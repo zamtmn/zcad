@@ -23,6 +23,7 @@ uses gzctnrvectortypes,uzbtypesbase,uzbtypes,gzctnrvectorsimple,uzbstrproc,sysut
 type
 {EXPORT+}
     PTZctnrVectorGDBString=^TZctnrVectorGDBString;
+    {REGISTEROBJECTTYPE TZctnrVectorGDBString}
     TZctnrVectorGDBString={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorSimple{-}<GDBString>{//})(*OpenArrayOfData=GDBString*)
                           constructor init(m:GDBInteger);
                           procedure loadfromfile(fname:GDBString);

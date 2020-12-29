@@ -36,6 +36,7 @@ X<----X(text)----->X (10,20,30)
 type
 {EXPORT+}
 PGDBObjDiametricDimension=^GDBObjDiametricDimension;
+{REGISTEROBJECTTYPE GDBObjDiametricDimension}
 GDBObjDiametricDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                         constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                         constructor initnul(owner:PGDBObjGenericWithSubordinated);

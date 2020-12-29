@@ -136,53 +136,64 @@ type
   ptpcoavector=^tpcoavector;
   tpcoavector={-}specialize{//}
               GZVectorData{-}<TCopyObjectDesc>{//};
+  {REGISTEROBJECTTYPE mirror_com}
   mirror_com = {$IFNDEF DELPHI}packed{$ENDIF} object(copy_com)
     function CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D; virtual;
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
   end;
+  {REGISTEROBJECTTYPE copybase_com}
   copybase_com = {$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
     procedure CommandStart(Operands:TCommandOperands); virtual;
     function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
   end;
+  {REGISTEROBJECTTYPE PasteClip_com}
   PasteClip_com = {$IFNDEF DELPHI}packed{$ENDIF} object(FloatInsert_com)
     procedure Command(Operands:TCommandOperands); virtual;
   end;
+  {REGISTEROBJECTTYPE BlockReplace_com}
   BlockReplace_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
                          procedure CommandStart(Operands:TCommandOperands); virtual;
                          procedure BuildDM(Operands:TCommandOperands); virtual;
                          procedure Format;virtual;
                          procedure Run(pdata:{pointer}GDBPlatformint); virtual;
                    end;
+  {REGISTEROBJECTTYPE BlockScale_com}
   BlockScale_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
                          procedure CommandStart(Operands:TCommandOperands); virtual;
                          procedure BuildDM(Operands:TCommandOperands); virtual;
                          procedure Run(pdata:{pointer}GDBPlatformint); virtual;
                    end;
+  {REGISTEROBJECTTYPE BlockRotate_com}
   BlockRotate_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
                          procedure CommandStart(Operands:TCommandOperands); virtual;
                          procedure BuildDM(Operands:TCommandOperands); virtual;
                          procedure Run(pdata:{pointer}GDBPlatformint); virtual;
                    end;
+  {REGISTEROBJECTTYPE ATO_com}
   ATO_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
                          powner:PGDBObjDevice;
                          procedure CommandStart(Operands:TCommandOperands); virtual;
                          procedure ShowMenu;virtual;
                          procedure Run(pdata:GDBPlatformint); virtual;
           end;
+  {REGISTEROBJECTTYPE CFO_com}
   CFO_com={$IFNDEF DELPHI}packed{$ENDIF} object(ATO_com)
                          procedure ShowMenu;virtual;
                          procedure Run(pdata:GDBPlatformint); virtual;
           end;
+  {REGISTEROBJECTTYPE Number_com}
   Number_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
                          procedure CommandStart(Operands:TCommandOperands); virtual;
                          procedure ShowMenu;virtual;
                          procedure Run(pdata:GDBPlatformint); virtual;
              end;
+  {REGISTEROBJECTTYPE ExportDevWithAxis_com}
   ExportDevWithAxis_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
                          procedure CommandStart(Operands:TCommandOperands); virtual;
                          procedure ShowMenu;virtual;
                          procedure Run(pdata:GDBPlatformint); virtual;
              end;
+  {REGISTEROBJECTTYPE ITT_com}
   ITT_com = {$IFNDEF DELPHI}packed{$ENDIF} object(FloatInsert_com)
     procedure Command(Operands:TCommandOperands); virtual;
   end;

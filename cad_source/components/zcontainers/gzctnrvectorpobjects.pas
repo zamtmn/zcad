@@ -23,6 +23,7 @@ uses gzctnrvectorpdata,gzctnrvector,
      typinfo,uzbtypes,uzbmemman;
 type
 {Export+}
+{------------REGISTEROBJECTTYPE GZVectorPObects}
 GZVectorPObects{-}<PTObj,TObj>{//}
                              ={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorPData{-}<PTObj,TObj>{//})
                              function CreateObject:PTObj;

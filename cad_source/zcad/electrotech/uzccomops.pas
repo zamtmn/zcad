@@ -101,6 +101,7 @@ type
      GDBLineOps=record
                   lBegin,lEnd:GDBvertex;
               end;
+   {REGISTEROBJECTTYPE OPS_SPBuild}
   OPS_SPBuild={$IFNDEF DELPHI}packed{$ENDIF} object(FloatInsert_com)
     procedure Command(Operands:TCommandOperands); virtual;
   end;

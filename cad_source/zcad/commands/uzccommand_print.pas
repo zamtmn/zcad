@@ -50,6 +50,7 @@ uses
 const
      modelspacename:GDBSTring='**Модель**';
 type
+  {REGISTEROBJECTTYPE Print_com}
   Print_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
     VS:GDBInteger;
     p1,p2:GDBVertex;

@@ -32,9 +32,11 @@ TGDBTableCellStyle=record
                           Width,TextWidth:GDBDouble;
                           CF:TTableCellJustify;
                     end;
+{REGISTEROBJECTTYPE GDBCellFormatArray}
 GDBCellFormatArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<TGDBTableCellStyle>{//})(*OpenArrayOfData=TGDBTableCellStyle*)
                    end;
 PTGDBTableStyle=^TGDBTableStyle;
+{REGISTEROBJECTTYPE TGDBTableStyle}
 TGDBTableStyle={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
                      rowheight:gdbinteger;
                      textheight:gdbdouble;
@@ -44,6 +46,7 @@ TGDBTableStyle={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
                      destructor Done;virtual;
                end;
 PGDBTableStyleArray=^GDBTableStyleArray;
+{REGISTEROBJECTTYPE GDBTableStyleArray}
 GDBTableStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray{-}<PTGDBTableStyle,TGDBTableStyle>{//})(*OpenArrayOfData=TGDBTableStyle*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;

@@ -23,6 +23,7 @@ uses {uzbtypesbase,}gzctnrvectorp,
      gzctnrvectortypes,uzbtypes,uzbmemman;
 type
 {Export+}
+{--------REGISTEROBJECTTYPE GZVectorPData}
 GZVectorPData{-}<PTData,TData>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                                  object(GZVectorP{-}<PTData>{//})
                                        procedure cleareraseobjfrom(n:Integer);virtual;

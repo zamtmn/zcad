@@ -26,6 +26,7 @@ type
 PPGDBLayerPropObjInsp=^PGDBLayerPropObjInsp;
 PGDBLayerPropObjInsp={GDBPtrUInt}GDBPointer;
 PGDBLayerProp=^GDBLayerProp;
+{REGISTEROBJECTTYPE GDBLayerProp}
 GDBLayerProp={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
                color:GDBByte;(*saved_to_shd*)(*'Color'*)
                lineweight:GDBSmallint;(*saved_to_shd*)(*'Line weight'*)

@@ -32,10 +32,12 @@ TNodeProp=record
                 //**Устройство коннектор которого попадает в узел кабеля
                 DevLink:PGDBObjDevice;
           end;
+{REGISTEROBJECTTYPE TNodePropArray}
 TNodePropArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<TNodeProp>{//})
 end;
 
 PGDBObjCable=^GDBObjCable;
+{REGISTEROBJECTTYPE GDBObjCable}
 GDBObjCable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  {**Список устройств DevLink коннектор которых попадает в узел кабеля,
                     а так же показывается PrevP,NextP точка в котором кабель был усечен устройством

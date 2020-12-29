@@ -65,6 +65,7 @@ TLatestLogStrings=array of AnsiString;
 //PTDateTime=^TDateTime;
 {EXPORT+}
 ptlog=^tlog;
+{REGISTEROBJECTTYPE tlog}
 tlog={$IFNDEF DELPHI}packed{$ENDIF} object
            LogFileName:AnsiString;
            FileHandle:cardinal;

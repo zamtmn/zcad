@@ -12,7 +12,6 @@ components/zcontainers/gzctnrvectorp.pas
 components/zcontainers/gzctnrvectorpdata.pas
 components/zcontainers/gzctnrvectorpobjects.pas
 components/zcontainers/gzctnrvectorobjects.pas
-components/zcontainers/gzctnrvectorsimple.pas
 components/zcontainers/uzctnrvectorgdbstring.pas
 components/zcontainers/UGDBOpenArrayOfByte.pas
 components/zcontainers/uzctnrvectorgdbpointer.pas

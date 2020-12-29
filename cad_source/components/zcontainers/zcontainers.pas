@@ -4,13 +4,15 @@
 
 unit zcontainers;
 
+{$warn 5023 off : no warning about unused units}
 interface
 
 uses
   gzctnrvector, gzctnrvectorsimple, gzctnrvectordata, gzctnrvectorobjects, 
   gzctnrvectorp, gzctnrvectorpdata, gzctnrvectorpobjects, 
   uzctnrvectorgdbstring, uzctnrvectorgdbpointer, UGDBTree, 
-  UGDBOpenArrayOfByte, gzctnrtree, gzctnrstl, LazarusPackageIntf;
+  UGDBOpenArrayOfByte, gzctnrtree, gzctnrstl, uzctnrobjectschunk, 
+  LazarusPackageIntf;
 
 implementation
 

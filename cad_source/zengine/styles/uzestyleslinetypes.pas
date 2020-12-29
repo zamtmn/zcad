@@ -34,6 +34,7 @@ PTDashInfo=^TDashInfo;
 TDashInfo=(TDIDash,TDIText,TDIShape);
 TOuterDashInfo=(TODIUnknown,TODIShape,TODIPoint,TODILine,TODIBlank);
 TAngleDir=(TACAbs,TACRel,TACUpRight);
+{REGISTERRECORDTYPE shxprop}
 shxprop=packed record
                 Height,Angle,X,Y:GDBDouble;
                 AD:TAngleDir;

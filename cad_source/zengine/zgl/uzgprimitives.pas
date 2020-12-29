@@ -102,6 +102,7 @@ TLLPoint={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               procedure CorrectIndexes(const offset:TEntIndexesOffsetData);virtual;
         end;
 PTSymbolSParam=^TSymbolSParam;
+{REGISTERRECORDTYPE TSymbolSParam}
 TSymbolSParam=packed record
                    FirstSymMatr:DMatrix4D;
                    sx,Rotate,Oblique,NeededFontHeight{,offsety}:GDBFloat;

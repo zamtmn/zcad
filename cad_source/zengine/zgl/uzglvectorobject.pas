@@ -24,13 +24,14 @@ uses uzgldrawerabstract,uzgldrawcontext,uzgprimitives,uzglgeomdata,uzgprimitives
 type
 {Export+}
 TAppearance=(TAMatching,TANeedProxy);
+{REGISTERRECORDTYPE TLLDrawResult}
 TLLDrawResult=packed record
                        LLPStart,LLPEndi:TArrayIndex;
                        LLPCount:TArrayIndex;
                        Appearance:TAppearance;
                        BB:TBoundingBox;
               end;
-
+{REGISTERRECORDTYPE TZGLVectorDataCopyParam}
 TZGLVectorDataCopyParam=packed record
                              LLPrimitivesStartIndex:TArrayIndex;
                              LLPrimitivesDataSize:GDBInteger;

@@ -43,10 +43,12 @@ TArrowStyle=(TSClosedFilled,TSClosedBlank,TSClosed,TSDot,TSArchitecturalTick,TSO
             TSRightAngle,TSOpen30,TSDotSmall,TSDotBlank,TSDotSmallBlank,TSBox,TSBoxFilled,TSDatumTriangle,TSDatumtTriangleFilled,TSIntegral,TSUserDef);
 TDimTextMove=(DTMMoveDimLine,DTMCreateLeader,DTMnothung);
 PTDimStyleDXFLoadingData=^TDimStyleDXFLoadingData;
+{REGISTERRECORDTYPE TDimStyleDXFLoadingData}
 TDimStyleDXFLoadingData=packed record
                               TextStyleName:string;
                               DIMBLK1handle,DIMBLK2handle,DIMLDRBLKhandle:TDWGHandle;
                         end;
+{REGISTERRECORDTYPE TGDBDimLinesProp}
 TGDBDimLinesProp=packed record
                        //выносные линии
                        DIMEXE:GDBDouble;//Extension line extension//group44
@@ -62,12 +64,14 @@ TGDBDimLinesProp=packed record
                        DIMCLRD:TGDBPaletteColor;//DIMCLRD//group176
                        DIMLTYPE:{-}PGDBLtypeProp{/PGDBLtypePropObjInsp/};
                  end;
+{REGISTERRECORDTYPE TGDBDimArrowsProp}
 TGDBDimArrowsProp=packed record
                        DIMASZ:GDBDouble; //Dimensioning arrow size//group41
                        DIMBLK1:TArrowStyle;//First arrow block name//group343
                        DIMBLK2:TArrowStyle;//First arrow block name//group344
                        DIMLDRBLK:TArrowStyle;//Arrow block name for leaders//group341
                   end;
+{REGISTERRECORDTYPE TGDBDimTextProp}
 TGDBDimTextProp=packed record
                        DIMTXT:GDBDouble; //Text size//group140
                        DIMTIH:GDBBoolean;//Text inside horizontal if nonzero//group73
@@ -77,9 +81,11 @@ TGDBDimTextProp=packed record
                        DIMTXSTY:{-}PGDBTextStyle{/PGDBTextStyleObjInsp/};//340 DIMTXSTY (handle of referenced STYLE)
                        DIMCLRT:TGDBPaletteColor;//DIMCLRT//group176
                  end;
+{REGISTERRECORDTYPE TGDBDimPlacingProp}
 TGDBDimPlacingProp=packed record
                        DIMTMOVE:TDimTextMove;
                  end;
+{REGISTERRECORDTYPE TGDBDimUnitsProp}
 TGDBDimUnitsProp=packed record
                        DIMLFAC:GDBDouble;//Linear measurements scale factor//group144
                        DIMLUNIT:TDimUnit;//Sets units for all dimension types except Angular://group277

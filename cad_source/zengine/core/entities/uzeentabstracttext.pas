@@ -27,6 +27,7 @@ type
 //jstm(*'TopCenter'*)=2,
 {EXPORT+}
 PGDBTextProp=^GDBTextProp;
+{REGISTERRECORDTYPE GDBTextProp}
 GDBTextProp=packed record
                   size:GDBDouble;(*saved_to_shd*)
                   oblique:GDBDouble;(*saved_to_shd*)

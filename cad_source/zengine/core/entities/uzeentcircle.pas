@@ -29,6 +29,7 @@ type
 //PProjPoint:{-}PGDBPolyPoint2DArray{/GDBPointer/};
 {Export+}
   ptcirclertmodify=^tcirclertmodify;
+  {REGISTERRECORDTYPE tcirclertmodify}
   tcirclertmodify=packed record
                         r,p_insert:GDBBoolean;
                   end;

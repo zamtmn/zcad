@@ -33,6 +33,7 @@ const
 type
 {EXPORT+}
 PTDXData=^TDXData;
+{//REGISTERRECORDTYPE TDXData}
 TDXData=packed record
           RD_Renderer:GDBString;(*'Device'*)(*oi_readonly*)
     end;

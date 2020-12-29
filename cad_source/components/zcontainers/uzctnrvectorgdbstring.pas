@@ -35,11 +35,13 @@ type
                           function GetTextWithEOL:GDBString;
                     end;
     PTEnumData=^TEnumData;
+    {REGISTERRECORDTYPE TEnumData}
     TEnumData=packed record
                     Selected:GDBInteger;
                     Enums:TZctnrVectorGDBString;
               end;
     PTEnumDataWithOtherData=^TEnumDataWithOtherData;
+    {REGISTERRECORDTYPE TEnumDataWithOtherData}
     TEnumDataWithOtherData=packed record
                     Selected:GDBInteger;
                     Enums:TZctnrVectorGDBString;

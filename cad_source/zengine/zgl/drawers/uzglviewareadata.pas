@@ -31,6 +31,7 @@ type
   TShowCursorHandler=procedure (var DC:TDrawContext) of object;
 {Export+}
   pmousedesc = ^mousedesc;
+  {REGISTERRECORDTYPE mousedesc}
   mousedesc = packed record
     mode: GDBByte;
     mouse, mouseglue: GDBvertex2DI;
@@ -46,6 +47,7 @@ type
   end;
 
   PSelectiondesc = ^Selectiondesc;
+  {REGISTERRECORDTYPE Selectiondesc}
   Selectiondesc = packed record
     OnMouseObject,LastSelectedObject:GDBPointer;
     Selectedobjcount:GDBInteger;
@@ -55,11 +57,12 @@ type
     Frame13d, Frame23d: GDBVertex;
     BigMouseFrustum:ClipArray;
   end;
-type
+  {REGISTERRECORDTYPE tcpdist}
   tcpdist = packed record
     cpnum: GDBInteger;
     cpdist: GDBInteger;
   end;
+  {REGISTERRECORDTYPE traceprop2}
   traceprop2 = packed record
     tmouse: GDBDouble;
     dmouse: GDBInteger;
@@ -68,10 +71,12 @@ type
     worldraycoord: GDBVertex;
   end;
   arrtraceprop = packed array[0..0] of traceprop;
+  {REGISTERRECORDTYPE GDBArraytraceprop_GDBWord}
   GDBArraytraceprop_GDBWord = packed record
     count: GDBWord;
     arr: arrtraceprop;
   end;
+  {REGISTERRECORDTYPE objcontrolpoint}
   objcontrolpoint = packed record
     objnum: GDBInteger;
     newobjnum: GDBInteger;
@@ -82,6 +87,7 @@ type
   end;
   arrayobjcontrolpoint = packed array[0..0] of objcontrolpoint;
   popenarrayobjcontrolpoint_GDBWordwm = ^openarrayobjcontrolpoint_GDBWordwm;
+  {REGISTERRECORDTYPE openarrayobjcontrolpoint_GDBWordwm}
   openarrayobjcontrolpoint_GDBWordwm = packed record
     count, max: GDBWord;
     arraycp: arrayobjcontrolpoint;
@@ -89,6 +95,7 @@ type
 
   PGDBOpenArraytraceprop_GDBWord = ^GDBArraytraceprop_GDBWord;
   pos_record=^os_record;
+  {REGISTERRECORDTYPE os_record}
   os_record = packed record
     worldcoord: GDBVertex;
     dispcoord: GDBVertex;
@@ -100,10 +107,12 @@ type
     radius: GDBFloat;
     PGDBObject:GDBPointer;
   end;
+  {REGISTERRECORDTYPE totrackarray}
   totrackarray = packed record
     otrackarray: packed array[0..3] of os_record;
     total, current: GDBInteger;
   end;
+  {REGISTERRECORDTYPE TCSIcon}
   TCSIcon=packed record
                CSIconCoord: GDBvertex;
                CSIconX,CSIconY,CSIconZ: GDBvertex;

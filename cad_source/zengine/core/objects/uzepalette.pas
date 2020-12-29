@@ -23,6 +23,7 @@ uses uzbtypesbase;
 type
 {EXPORT+}
   PTRGB=^TRGB;
+  {REGISTERRECORDTYPE TRGB}
   TRGB=packed record
             r:GDBByte;(*'Red'*)
             g:GDBByte;(*'Green'*)
@@ -30,6 +31,7 @@ type
             a:GDBByte;(*'Alpha'*)
       end;
   PTDXFCOLOR=^TDXFCOLOR;
+  {REGISTERRECORDTYPE TDXFCOLOR}
   TDXFCOLOR=packed record
             RGB:TRGB;(*'Color'*)
             name:GDBString;(*'Name'*)

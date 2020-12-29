@@ -27,6 +27,7 @@ uses uzemathutils,uzgldrawcontext,uzeentabstracttext,uzestylestexts,UGDBXYZWStri
 type
 {EXPORT+}
 PTDXFDimData2D=^TDXFDimData2D;
+{REGISTERRECORDTYPE TDXFDimData2D}
 TDXFDimData2D=packed record
   P10:GDBVertex2D;
   P11:GDBVertex2D;
@@ -37,6 +38,7 @@ TDXFDimData2D=packed record
   P16:GDBVertex2D;
 end;
 PTDXFDimData=^TDXFDimData;
+{REGISTERRECORDTYPE TDXFDimData}
 TDXFDimData=packed record
   P10InWCS:GDBVertex;
   P11InOCS:GDBVertex;

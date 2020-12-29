@@ -49,7 +49,7 @@ TControlPointAttrs=set of TControlPointAttr;
 (*varcategoryforoi INSERT='Insert'*)
 (*varcategoryforoi NORMAL='Normal'*)
 (*varcategoryforoi SCALE='Scale'*)
-
+{REGISTERRECORDTYPE GDBTypedPointer}
 GDBTypedPointer=packed record
                       Instance:GDBPointer;
                       PTD:GDBPointer;
@@ -73,6 +73,7 @@ TArcData=packed record
                r,startangle,endangle:gdbdouble;
                p:GDBvertex2D;
 end;
+{REGISTERRECORDTYPE GDBCameraBaseProp}
 GDBCameraBaseProp=packed record
                         point:GDBvertex;
                         look:GDBvertex;
@@ -80,6 +81,7 @@ GDBCameraBaseProp=packed record
                         xdir:GDBvertex;
                         zoom: GDBDouble;
                   end;
+{REGISTERRECORDTYPE tmatrixs}
 tmatrixs=packed record
                    pmodelMatrix:PDMatrix4D;
                    pprojMatrix:PDMatrix4D;
@@ -121,6 +123,7 @@ GDBNamedObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                      procedure IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);virtual;
                end;
 PGLLWWidth=^GLLWWidth;
+{REGISTERRECORDTYPE GLLWWidth}
 GLLWWidth=packed record
                 startw:GDBDouble;(*saved_to_shd*)
                 endw:GDBDouble;(*saved_to_shd*)
@@ -129,6 +132,7 @@ GLLWWidth=packed record
           end;
 TDXFEntsInternalStringType=UnicodeString;
 PGDBStrWithPoint=^GDBStrWithPoint;
+{REGISTERRECORDTYPE GDBStrWithPoint}
 GDBStrWithPoint=packed record
                       str:TDXFEntsInternalStringType;
                       x,y,z,w:GDBDouble;
@@ -140,6 +144,7 @@ GDBArrayGLlwwidth=packed array[0..300] of GLLWWidth;
 PGDBArrayVertex=^GDBArrayVertex;
 GDBArrayVertex=packed array[0..0] of GDBvertex;
   pcontrolpointdesc=^controlpointdesc;
+  {REGISTERRECORDTYPE controlpointdesc}
   controlpointdesc=packed record
                          pointtype:GDBInteger;
                          attr:TControlPointAttrs;
@@ -149,14 +154,17 @@ GDBArrayVertex=packed array[0..0] of GDBvertex;
                          dispcoord:GDBvertex2DI;
                          selected:GDBBoolean;
                    end;
+  {REGISTERRECORDTYPE TRTModifyData}
   TRTModifyData=packed record
                      point:controlpointdesc;
                      dist,wc:gdbvertex;
                end;
+  {REGISTERRECORDTYPE tcontrolpointdist}
   tcontrolpointdist=packed record
     pcontrolpoint:pcontrolpointdesc;
     disttomouse:GDBInteger;
   end;
+  {REGISTERRECORDTYPE TPolyData}
   TPolyData=packed record
                   //nearestvertex:gdbinteger;
                   //nearestline:gdbinteger;
@@ -166,6 +174,7 @@ GDBArrayVertex=packed array[0..0] of GDBvertex;
             end;
   TLoadOpt=(TLOLoad,TLOMerge);
   PTLayerControl=^TLayerControl;
+  {REGISTERRECORDTYPE TLayerControl}
   TLayerControl=packed record
                       Enabled:GDBBoolean;(*'Enabled'*)
                       LayerName:GDBAnsiString;(*'Layer name'*)
@@ -177,6 +186,7 @@ GDBArrayVertex=packed array[0..0] of GDBvertex;
   TBlockType=(BT_Connector,BT_Unknown);
   TBlockBorder=(BB_Owner,BB_Self,BB_Empty);
   TBlockGroup=(BG_El_Device,BG_Unknown);
+  {REGISTERRECORDTYPE TBlockDesc}
   TBlockDesc=packed record
                    BType:TBlockType;(*'Block type'*)
                    BBorder:TBlockBorder;(*'Border'*)
@@ -188,6 +198,7 @@ GDBArrayVertex=packed array[0..0] of GDBvertex;
   TEentityRepresentation=TStringTreeType;
   TEentityFunction=TStringTreeType;
 PGDBsymdolinfo=^GDBsymdolinfo;
+{REGISTERRECORDTYPE GDBsymdolinfo}
 GDBsymdolinfo=packed record
     LLPrimitiveStartIndex: GDBInteger;
     LLPrimitiveCount: GDBInteger;
@@ -197,6 +208,7 @@ GDBsymdolinfo=packed record
     LatestCreate:GDBBoolean;
   end;
 PGDBUNISymbolInfo=^GDBUNISymbolInfo;
+{REGISTERRECORDTYPE GDBUNISymbolInfo}
 GDBUNISymbolInfo=packed record
     symbol:GDBInteger;
     symbolinfo:GDBsymdolinfo;
@@ -224,6 +236,7 @@ TGDBOSMode=GDBInteger;
 TGDB3StateBool=(T3SB_Fale(*'False'*),T3SB_True(*'True'*),T3SB_Default(*'Default'*));
 PTGDB3StateBool=^TGDB3StateBool;
 PTFaceTypedData=^TFaceTypedData;
+{REGISTERRECORDTYPE TFaceTypedData}
 TFaceTypedData=packed record
                  Instance: GDBPointer;
                  PTD: GDBPointer;
@@ -232,10 +245,12 @@ TLLPrimitiveAttrib=GDBInteger;
 PTLLVertexIndex=^TLLVertexIndex;
 TLLVertexIndex=GDBInteger;
 PTGDBIntegerOverrider=^TGDBIntegerOverrider;
+{REGISTERRECORDTYPE TGDBIntegerOverrider}
 TGDBIntegerOverrider=packed record
                       Enable:GDBBoolean;(*'Enable'*)
                       Value:GDBInteger;(*'New value'*)
                      end;
+{REGISTERRECORDTYPE TImageDegradation}
 TImageDegradation=packed record
                         RD_ID_Enabled:PGDBBoolean;(*'Enabled'*)
                         RD_ID_CurrentDegradationFactor:PGDBDouble;(*'Current degradation factor'*)(*oi_readonly*)

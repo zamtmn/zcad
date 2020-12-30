@@ -254,7 +254,7 @@
         </Mode0>
       </Modes>
     </RunParams>
-    <RequiredPackages Count="20">
+    <RequiredPackages Count="18">
       <Item1>
         <PackageName Value="uniqueinstance_package"/>
       </Item1>
@@ -268,53 +268,47 @@
         <PackageName Value="ztoolbars"/>
       </Item4>
       <Item5>
-        <PackageName Value="ag_graph"/>
+        <PackageName Value="zmath"/>
       </Item5>
       <Item6>
-        <PackageName Value="ag_vectors"/>
+        <PackageName Value="zobjectinspector"/>
       </Item6>
       <Item7>
-        <PackageName Value="zmath"/>
+        <PackageName Value="zundostack"/>
       </Item7>
       <Item8>
-        <PackageName Value="zobjectinspector"/>
+        <PackageName Value="zscript"/>
       </Item8>
       <Item9>
-        <PackageName Value="zundostack"/>
+        <PackageName Value="zscriptbase"/>
       </Item9>
       <Item10>
-        <PackageName Value="zscript"/>
+        <PackageName Value="zcontainers"/>
       </Item10>
       <Item11>
-        <PackageName Value="zscriptbase"/>
+        <PackageName Value="zebase"/>
       </Item11>
       <Item12>
-        <PackageName Value="zcontainers"/>
+        <PackageName Value="zcontrols"/>
       </Item12>
       <Item13>
-        <PackageName Value="zebase"/>
+        <PackageName Value="FCL"/>
       </Item13>
       <Item14>
-        <PackageName Value="zcontrols"/>
+        <PackageName Value="fpvectorialpkg"/>
       </Item14>
       <Item15>
-        <PackageName Value="FCL"/>
+        <PackageName Value="Printer4Lazarus"/>
       </Item15>
       <Item16>
-        <PackageName Value="fpvectorialpkg"/>
+        <PackageName Value="AnchorDocking"/>
       </Item16>
       <Item17>
-        <PackageName Value="Printer4Lazarus"/>
+        <PackageName Value="LazOpenGLContext"/>
       </Item17>
       <Item18>
-        <PackageName Value="AnchorDocking"/>
-      </Item18>
-      <Item19>
-        <PackageName Value="LazOpenGLContext"/>
-      </Item19>
-      <Item20>
         <PackageName Value="LCL"/>
-      </Item20>
+      </Item18>
     </RequiredPackages>
     <Units Count="204">
       <Unit0>

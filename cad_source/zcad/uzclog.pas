@@ -241,12 +241,13 @@ function mynow:TMyTimeStamp;
 var a:int64;
 begin
      result.time:=now();
-     asm
+     {asm
         rdtsc
         mov dword ptr [a],eax
         mov dword ptr [a+4],edx
      end;
-     result.rdtsc:=a;
+     result.rdtsc:=a;}
+     result.rdtsc:=GetTickCount64;
 end;
 
 procedure tlog.processstrtolog(str:AnsiString;IncIndent:integer;todisk:boolean);

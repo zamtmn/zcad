@@ -1588,9 +1588,7 @@ begin
                                   p:=InterfaceUses.iterate(ir);
                             until p=nil;
   {$IFDEF LOUDERRORS}
-     asm
-        //Raise Exception.Create('Something wrong');
-     end;
+    //Raise Exception.Create('Something wrong');
   {$ENDIF}
                        end;
 

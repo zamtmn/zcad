@@ -185,11 +185,8 @@ begin
             lastallocated:=0;
       end;
   {$ENDIF}
+    //Raise Exception.Create('Something wrong');
   {$IFDEF LOUDERRORS}
-  //if (p)=debp then
-  //                   asm
-  //                      int 3;
-  //                   end;
   {$ENDIF}
   if p<> nil then freemem(p);
   p:=nil;

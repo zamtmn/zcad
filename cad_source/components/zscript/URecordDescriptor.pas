@@ -499,9 +499,9 @@ begin
                                                                             begin
                                                                                  if (ppd^._ppda<>ppda)
                                                                                                       then
-                                                                                                           asm
-                                                                                                              int 3;
-                                                                                                           end;
+                                                                                                      {$IFDEF LOUDERRORS}
+                                                                                                        Raise Exception.Create('Something wrong');
+                                                                                                      {$ENDIF}
 
 
                                                                             end;

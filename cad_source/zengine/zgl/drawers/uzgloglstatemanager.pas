@@ -498,9 +498,9 @@ begin
                       begin
                            //s:='OPENGL ERROR! '+inttostr(result);
                            //MessageBox(0,@s[1],0,MB_OK);
-                           {asm
-                              int(3);
-                           end;}
+                        {$IFDEF LOUDERRORS}
+                           //Raise Exception.Create('Something wrong');
+                        {$ENDIF}
                       end;
 end;
 procedure TOGLStateManager.myglbegin(mode:GLenum);
@@ -525,10 +525,10 @@ begin
 
      inc(bcount);
      currentmode:=mode;
-     {if bcount>1 then
-                     asm
-                              int(3);
-                     end;}
+     (*if bcount>1 then
+        {$IFDEF LOUDERRORS}
+        //Raise Exception.Create('Something wrong');
+        {$ENDIF}*)
      pointcount:=0;
 //*)
 //    glbegin(mode)
@@ -537,9 +537,9 @@ procedure TOGLStateManager.myglend;
 begin
 (*
      if bcount<1 then
-                     asm
-                              {int(3);}
-                     end;
+       {$IFDEF LOUDERRORS}
+        //Raise Exception.Create('Something wrong');
+       {$ENDIF}
      dec(bcount);
 *)
 //     glend;
@@ -549,9 +549,9 @@ end;
 procedure TOGLStateManager.mytotalglend;
 begin
      (*if bcount<1 then
-                     asm
-                              {int(3);}
-                     end;*)
+         {$IFDEF LOUDERRORS}
+         //Raise Exception.Create('Something wrong');
+         {$ENDIF}*)
      //dec(bcount);
 
      if currentmode<>MY_EmptyMode then

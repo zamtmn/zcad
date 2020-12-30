@@ -248,9 +248,9 @@ begin
                                       if (ppd^._ppda<>ppda)
                                       //or (ppd^._bmode<>bmode)
                                                              then
-                                                                 asm
-                                                                    //int 3;
-                                                                 end;
+                                                             {$IFDEF LOUDERRORS}
+                                                               //Raise Exception.Create('Something wrong');
+                                                             {$ENDIF}
 
 
                                  end;
@@ -450,9 +450,7 @@ begin
                                       {if (ppd^._ppda<>ppda)
                                       //or (ppd^._bmode<>bmode)
                                                              then
-                                                                 asm
-                                                                    //int 3;
-                                                                 end;}
+                                                               Raise Exception.Create('Something wrong');}
 
 
                                  end;

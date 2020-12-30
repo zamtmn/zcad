@@ -193,7 +193,7 @@ begin
 {$IFDEF FPC}                 debugln('{N}Program compiled on Free Pascal Compiler');{$ENDIF}
 {$IFDEF DEBUGBUILD}          debugln('{N}Program compiled with {$DEFINE DEBUGDUILD}');{$ENDIF}
 {$IFDEF PERFOMANCELOG}       debugln('{N}Program compiled with {$DEFINE PERFOMANCELOG}');{$ENDIF}
-{$IFDEF BREACKPOINTSONERRORS}debugln('{N}Program compiled with {$DEFINE BREACKPOINTSONERRORS}');{$ENDIF}
+{$IFDEF LOUDERRORS}debugln('{N}Program compiled with {$DEFINE LOUDERRORS}');{$ENDIF}
                              debugln('{N}DefaultSystemCodePage:='+inttostr(DefaultSystemCodePage));
                              //programlog.logoutstr('DefaultSystemCodePage:='+inttostr(DefaultSystemCodePage),0,LM_Necessarily);
                              debugln('{N}DefaultUnicodeCodePage:='+inttostr(DefaultUnicodeCodePage));

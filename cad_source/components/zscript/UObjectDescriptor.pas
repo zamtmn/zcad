@@ -22,7 +22,7 @@ unit UObjectDescriptor;
 interface
 uses LCLProc,gzctnrvectorobjects,URecordDescriptor,UGDBOpenArrayOfByte,sysutils,
      gzctnrvectortypes,uzedimensionaltypes,UBaseTypeDescriptor,TypeDescriptors,
-     strmy,uzctnrvectorgdbstring,gzctnrvectorp,gzctnrvectordata,uzbtypesbase,
+     strmy,uzctnrvectorgdbstring,objects,gzctnrvectordata,uzbtypesbase,
      varmandef,uzbtypes,uzbmemman,uzbstrproc,TypInfo;
 type
 GDBTOperandStoreMode=GDBByte;
@@ -595,6 +595,9 @@ begin
       m_function:SimpleProcOfObj(tm);
       m_constructor:
                                                         begin
+                                                             //CallVoidConstructor(Ctor: codepointer; Obj: pointer; VMT: pointer): pointer;inline;
+                                                             CallVoidConstructor(tm.Code,obj,pvmt);
+                                                             (*
                                                              {$IFDEF DELPHI}
                                                              begin
                                                              asm
@@ -651,7 +654,7 @@ begin
                                                              //self.initnul;
                                                               end;
                                                             {$endif CPU64}
-                                                            {$ENDIF}
+                                                            {$ENDIF}*)
                                                         end;
                   end;
         //if parent<>nil then PobjectDescriptor(parent)^.RunMetod(mn,obj);

@@ -901,11 +901,9 @@ begin
                                                   end
                                               else
                                                   begin
-                                                       {$IFDEF BREACKPOINTSONERRORS}
-                                                       asm
-                                                          int 3;
-                                                       end;
-                                                      {$ENDIF}
+                                                    {$IFDEF LOUDERRORS}
+                                                       Raise Exception.Create('Something wrong');
+                                                    {$ENDIF}
                                                   end;
                                if uppercase(functionname)='FORMAT' then
                                                                    functionname:=functionname;
@@ -989,10 +987,8 @@ begin
                                   end
                               else
                                   begin
-                                       {$IFDEF BREACKPOINTSONERRORS}
-                                       asm
-                                          int 3;
-                                       end;
+                                       {$IFDEF LOUDERRORS}
+                                         Raise Exception.Create('Something wrong');
                                       {$ENDIF}
                                   end;
               //if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
@@ -1591,9 +1587,9 @@ begin
                                                      end;
                                   p:=InterfaceUses.iterate(ir);
                             until p=nil;
-  {$IFDEF BREACKPOINTSONERRORS}
+  {$IFDEF LOUDERRORS}
      asm
-        //int 3;
+        //Raise Exception.Create('Something wrong');
      end;
   {$ENDIF}
                        end;

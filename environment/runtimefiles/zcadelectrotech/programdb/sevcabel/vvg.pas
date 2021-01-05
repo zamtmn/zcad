@@ -91,14 +91,14 @@ begin
      _EQ_SEVCABLEVVGngLS.Manufacturer:='ОАО "СЕВКАБЕЛЬ-ХОЛДИНГ" г.Санкт-Петербург';
      _EQ_SEVCABLEVVGngLS.Description:='Кабели контрольные с ПВХ-изоляцией, не распространяющие горение';
 
-     _EQ_SEVCABLEVVGngLS.NameShortTemplate:='ВВГнг-LS-%%[Wire_Count_Section_DESC]';
-     _EQ_SEVCABLEVVGngLS.NameTemplate:='Кабель силовой ВВГнг-LS-%%[Wire_Count_Section_DESC]';
+     _EQ_SEVCABLEVVGngLS.NameShortTemplate:='ВВГнг(A)-LS-%%[Wire_Count_Section_DESC]';
+     _EQ_SEVCABLEVVGngLS.NameTemplate:='Кабель силовой ВВГнг(A)-LS-%%[Wire_Count_Section_DESC]';
      _EQ_SEVCABLEVVGngLS.UIDTemplate:='%%[ID]-%%[Wire_Count_Section_DESC]';
-     _EQ_SEVCABLEVVGngLS.NameFullTemplate:='Кабель силовой с пластмассовой изоляцией, не распространяющий горение, с низким дымо- и газовыделением на напряжение до 1 кВ (нг-LS), сечением %%[Wire_Count_Section_DESC]';
+     _EQ_SEVCABLEVVGngLS.NameFullTemplate:='Кабель силовой с пластмассовой изоляцией, не распространяющий горение, с низким дымо- и газовыделением на напряжение до 1 кВ (нг(A)-LS), сечением %%[Wire_Count_Section_DESC]';
 
      _EQ_SEVCABLEVVGngLS.Wire_Count_Section_DESC:=_01_1_50;
 
-     _EQ_SEVCABLEVVGngLS.TreeCoord:='BP_СЕВКАБЕЛЬ-ХОЛДИНГ_Силовые_ВВГнг-LS|BC_Кабельная продукция_Силовыее_ВВГнг-LS(СЕВКАБЕЛЬ)';
+     _EQ_SEVCABLEVVGngLS.TreeCoord:='BP_СЕВКАБЕЛЬ-ХОЛДИНГ_Силовые_ВВГнг(A)-LS|BC_Кабельная продукция_Силовыее_ВВГнг(A)-LS(СЕВКАБЕЛЬ)';
 
      _EQ_SEVCABLEVVGngLS.format;
 
@@ -107,7 +107,7 @@ begin
      _EQ_SEVCABLEVVGSV1.Category:=_kables;
      _EQ_SEVCABLEVVGSV1.Group:=_cables;
      _EQ_SEVCABLEVVGSV1.EdIzm:=_m;
-     _EQ_SEVCABLEVVGSV1.ID:='SEVCABLEVVGngLS';
+     _EQ_SEVCABLEVVGSV1.ID:='SEVCABLEVBBSHV';
      _EQ_SEVCABLEVVGSV1.Standard:='ТУ 16.К71-310-2001';
      _EQ_SEVCABLEVVGSV1.OKP:='35 3371';
      _EQ_SEVCABLEVVGSV1.Manufacturer:='ОАО "СЕВКАБЕЛЬ-ХОЛДИНГ" г.Санкт-Петербург';

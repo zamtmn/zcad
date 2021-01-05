@@ -130,12 +130,12 @@ begin
      _EQ_SPECCABLE_KPSVV_ng_LS.OKP:='35 8100';
      _EQ_SPECCABLE_KPSVV_ng_LS.Manufacturer:='НПП "Спецкабель" г.Москва';
      _EQ_SPECCABLE_KPSVV_ng_LS.Description:='Кабель предназначен для одиночной и пучковой прокладки в современных системах пожарной сигнализации, системах контроля доступа, а также для других систем управления, контроля и связи. Эксплуатируется внутри и вне помещений, при условии защиты от прямого воздействия солнечного излучения и атмосферных осадков.';
-     _EQ_SPECCABLE_KPSVV_ng_LS.NameShortTemplate:='КПСВВнг-LS %%[Wire_Count_Section_DESC]';
-     _EQ_SPECCABLE_KPSVV_ng_LS.NameTemplate:='Кабель для систем пожарной и охранной сигнализации КПСВВнг-LS %%[Wire_Count_Section_DESC]';
+     _EQ_SPECCABLE_KPSVV_ng_LS.NameShortTemplate:='КПСВВнг(A)-LS %%[Wire_Count_Section_DESC]';
+     _EQ_SPECCABLE_KPSVV_ng_LS.NameTemplate:='Кабель для систем пожарной и охранной сигнализации КПСВВнг(A)-LS %%[Wire_Count_Section_DESC]';
      _EQ_SPECCABLE_KPSVV_ng_LS.UIDTemplate:='%%[ID]-%%[Wire_Count_Section_DESC]';
      _EQ_SPECCABLE_KPSVV_ng_LS.NameFullTemplate:='Кабель для систем пожарной и охранной сигнализации пучковой прокладки, сечением %%[Wire_Count_Section_DESC]';
      _EQ_SPECCABLE_KPSVV_ng_LS.Wire_Count_Section_DESC:=_1_2_0_5;
-     _EQ_SPECCABLE_KPSVV_ng_LS.TreeCoord:='BP_СПЕЦКАБЕЛЬ_Для ОПС_КПСВВнг-LS|BC_Кабельная продукция_Связи_КПСВВнг-LS(СПЕЦКАБЕЛЬ)';
+     _EQ_SPECCABLE_KPSVV_ng_LS.TreeCoord:='BP_СПЕЦКАБЕЛЬ_Для ОПС_КПСВВнг(A)-LS|BC_Кабельная продукция_Связи_КПСВВнг(A)-LS(СПЕЦКАБЕЛЬ)';
      _EQ_SPECCABLE_KPSVV_ng_LS.format;
 
 
@@ -203,12 +203,12 @@ begin
      _EQ_SPECCABLE_KPSVEV_ng_LS.OKP:='35 8100';
      _EQ_SPECCABLE_KPSVEV_ng_LS.Manufacturer:='НПП "Спецкабель" г.Москва';
      _EQ_SPECCABLE_KPSVEV_ng_LS.Description:='';
-     _EQ_SPECCABLE_KPSVEV_ng_LS.NameShortTemplate:='КПСВЭВнг-LS %%[Wire_Count_Section_DESC]';
-     _EQ_SPECCABLE_KPSVEV_ng_LS.NameTemplate:='Кабель симметричный парной скрутки для систем сигнализации и управления КПСВЭВнг-LS %%[Wire_Count_Section_DESC]';
+     _EQ_SPECCABLE_KPSVEV_ng_LS.NameShortTemplate:='КПСВЭВнг(A)-LS %%[Wire_Count_Section_DESC]';
+     _EQ_SPECCABLE_KPSVEV_ng_LS.NameTemplate:='Кабель симметричный парной скрутки для систем сигнализации и управления КПСВЭВнг(A)-LS %%[Wire_Count_Section_DESC]';
      _EQ_SPECCABLE_KPSVEV_ng_LS.UIDTemplate:='%%[ID]-%%[Wire_Count_Section_DESC]';
-     _EQ_SPECCABLE_KPSVEV_ng_LS.NameFullTemplate:='Кабель симметричный парной скрутки для систем сигнализации и управления групповой прокладки  КПСВЭВнг-LS %%[Wire_Count_Section_DESC], сечением %%[Wire_Count_Section_DESC]';
+     _EQ_SPECCABLE_KPSVEV_ng_LS.NameFullTemplate:='Кабель симметричный парной скрутки для систем сигнализации и управления групповой прокладки  КПСВЭВнг(A)-LS %%[Wire_Count_Section_DESC], сечением %%[Wire_Count_Section_DESC]';
      _EQ_SPECCABLE_KPSVEV_ng_LS.Wire_Count_Section_DESC:=_1_2_0_5;
-     _EQ_SPECCABLE_KPSVEV_ng_LS.TreeCoord:='BP_СПЕЦКАБЕЛЬ_Для ОПС_КПСВЭВнг-LS|BC_Кабельная продукция_Связи_КПСВЭВнг-LS(СПЕЦКАБЕЛЬ)';
+     _EQ_SPECCABLE_KPSVEV_ng_LS.TreeCoord:='BP_СПЕЦКАБЕЛЬ_Для ОПС_КПСВЭВнг(A)-LS|BC_Кабельная продукция_Связи_КПСВЭВнг(A)-LS(СПЕЦКАБЕЛЬ)';
      _EQ_SPECCABLE_KPSVEV_ng_LS.format;
 
      _EQ_SPECCABLE_KPSVEVKVMN.initnul;

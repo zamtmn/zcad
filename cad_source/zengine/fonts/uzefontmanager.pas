@@ -22,7 +22,7 @@ interface
 uses UGDBOpenArrayOfByte,{$IFNDEF DELPHI}LResources,{$ENDIF}LCLProc,uzbpaths,
      uzelclintfex,uzestrconsts,uzbstrproc,uzefont,uzbtypesbase,uzbmemman,
      sysutils,uzbtypes,uzegeometry,usimplegenerics,gzctnrstl,
-     UGDBNamedObjectsArray,classes;
+     UGDBNamedObjectsArray,classes,uzefontttfpreloader;
 type
 TFontLoadProcedure=function(name:GDBString;var pf:PGDBfont):GDBBoolean;
 TFontLoadProcedureData=record
@@ -41,6 +41,7 @@ PGDBFontManager=^GDBFontManager;
 {REGISTEROBJECTTYPE GDBFontManager}
 GDBFontManager= object({GDBOpenArrayOfData}GDBNamedObjectsArray{-}<PGDBfont,GDBfont>{//})(*OpenArrayOfData=GDBfont*)
                     ttffontfiles:TStringList;
+                    ttfinternalnames:TStringList;
                     shxfontfiles:TStringList;
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     destructor done;virtual;
@@ -72,13 +73,14 @@ begin
      EntInfoData.FontLoadProcedure:=_FontLoadProcedure;
      FontExt2LoadProc.RegisterKey(_FontExt,EntInfoData);
 end;
-
 procedure GDBFontManager.EnumerateTTFFontFile(filename:String;pdata:pointer);
 {var
    r:longint;}
 begin
-     if AddFontResourceFile(filename)>0 then
+     if AddFontResourceFile(filename)>0 then begin
         ttffontfiles.Add(filename);
+        ttfinternalnames.Add(getTTFFileParams(filename).name);
+     end;
 end;
 procedure GDBFontManager.EnumerateSHXFontFile(filename:String;pdata:pointer);
 begin
@@ -89,6 +91,8 @@ begin
      inherited;
      if assigned(ttffontfiles)then
        ttffontfiles.Destroy;
+     if assigned(ttfinternalnames)then
+       ttfinternalnames.Destroy;
      if assigned(shxfontfiles)then
        shxfontfiles.Destroy;
 end;
@@ -96,6 +100,7 @@ procedure GDBFontManager.EnumerateFontFiles;
 begin
   ttffontfiles:=TStringList.create;
   ttffontfiles.Duplicates := dupIgnore;
+  ttfinternalnames:=TStringList.create;
   FromDirsIterator(sysvarPATHFontsPath,'*.ttf','',nil,EnumerateTTFFontFile);
   shxfontfiles:=TStringList.create;
   shxfontfiles.Duplicates := dupIgnore;

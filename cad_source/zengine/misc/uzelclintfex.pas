@@ -30,6 +30,7 @@ uses
 const
      GM_COMPATIBLE=1;
      GM_ADVANCED=2;
+     FR_PRIVATE=$10;//from WinGDI.h//#define FR_PRIVATE     0x10
  {$IFNDEF WINDOWS}type winbool=longint;{$ENDIF}
 
 function AddFontResourceFile(FontResourceFileName:string):integer;
@@ -54,7 +55,7 @@ end;
 function AddFontResourceFile(FontResourceFileName:string):integer;
 begin
   {$IFDEF WINDOWS}
-    result:=__AddFontResourceEx(@FontResourceFileName[1],$10,nil);
+    result:=__AddFontResourceEx(@FontResourceFileName[1],FR_PRIVATE,nil);
   {$Else}
     result:=1;
   {$ENDIF}

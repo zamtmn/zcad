@@ -69,15 +69,18 @@ TZELongProcessSupport=class
                          destructor Destroy;override;
                          function isProcessed:boolean;
                          function isFirstProcess:boolean;
-                         //function getLPName(index:integer):TLPName;
+                         function getLPName(index:integer):TLPName;
                        end;
 var
   LPS:TZELongProcessSupport;
 implementation
-{function TZELongProcessSupport.getLPName(index:integer):TLPName;
+function TZELongProcessSupport.getLPName(index:integer):TLPName;
 begin
-  result:=LPInfoVector.Mutable[index].LPName;
-end;}
+  if index<LPInfoVector.Size then
+    result:=LPInfoVector.Mutable[index].LPName
+  else
+    result:='';
+end;
 
 function TZELongProcessSupport.isProcessed:boolean;
 begin

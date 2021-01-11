@@ -22,7 +22,10 @@ unit uzefontttfpreloader;
 interface
 
 uses
-  sysutils,classes;
+  sysutils,classes,LCLProc;
+
+const
+  maxNameID=25;
 
 type
   TTTFFileParams=record
@@ -80,6 +83,29 @@ type
   end;
   TTableDirEntries=array of TTableDirEntry;
 
+  TNameRecord  = record
+    platformID : UShort;
+    encodingID : UShort;
+    languageID : UShort;
+    nameID     : UShort;
+    length     : UShort;
+    offset     : UShort;
+  end;
+  PNameRecord  = ^TNameRecord;
+  TNameRecords = array [0..maxNameID-1] of TNameRecord;
+  PNameRecords = ^TNameRecords;
+
+
+  PNameTable = ^TNameTable;
+  TNameTable = record
+    format         : UShort;
+    numNameRecords : UShort;
+    storageOffset  : UShort;
+    //names          : PNameRecords;
+    //storage        : PByte;
+  end;
+
+
   TTTFFileStream=class(TFileStream)
     public
       function GET_ULong:ULong;
@@ -103,15 +129,41 @@ begin
   result.rangeShift    := BEtoN(AStream.GET_UShort);
 end;
 
+function getTrueTypeTableIndex(const TableDirEntries:TTableDirEntries;aTag:string ):integer;
+var
+  ltag:Long;
+  i:integer;
+begin
+  ltag:=(Long(ord(aTag[1]))shl 24)+(Long(ord(aTag[2]))shl 16) +
+        (Long(ord(aTag[3]))shl 8 )+ Long(ord(aTag[4]));
+
+  for i:=low(TableDirEntries) to high(TableDirEntries) do
+    if TableDirEntries[i].Tag = lTag then
+      exit(i);
+
+  result:=-1;
+end;
+
+function isPriority(const NameRecord:TNameRecord):boolean;
+begin
+  result:=false;
+end;
+
 function getTTFFileParams(filename:String):TTTFFileParams;
 var
   AStream:TTTFFileStream;
   TTCHeader:TTTCHeader;
   TableDir:TTableDir;
-  i:integer;
+  i,nametableindex:integer;
   TableDirEntries:TTableDirEntries;
+  NameTable:TNameTable;
+  NameRecord:TNameRecord;
+  NameRecords:TNameRecords;
 begin
   result.name:=extractfilename(filename);
+  debugln('{E}TTFName "%s"',[result.name]);
+  if result.name='LinBiolinum_RB_G.ttf' then
+    result:=result;
   AStream:=TTTFFileStream.Create(filename, fmOpenRead or fmShareDenyWrite);
   try
     result.ValidTTFFile:=false;
@@ -138,6 +190,36 @@ begin
       TableDirEntries[i].Length:= BEtoN(AStream.Get_Long);
     end;
 
+    nametableindex:=getTrueTypeTableIndex(TableDirEntries,'name');
+    AStream.Seek(TableDirEntries[nametableindex].Offset,0);
+    NameTable.format:=BEtoN(AStream.GET_UShort);
+    NameTable.numNameRecords:=BEtoN(AStream.GET_UShort);
+    NameTable.storageOffset:=BEtoN(AStream.GET_UShort);
+
+    debugln('{E}NameTable.numNameRecords=%d',[NameTable.numNameRecords]);
+
+    //setlength(NameRecords,NameTable.numNameRecords);
+    for i:=low(NameRecords) to high(NameRecords) do
+    begin
+      NameRecords[i].length:=0;
+    end;
+
+    for i:=low(NameRecords) to high(NameRecords) do
+    begin
+      NameRecord.platformID:=BEtoN(AStream.GET_UShort);
+      NameRecord.encodingID:=BEtoN(AStream.GET_UShort);
+      NameRecord.languageID:=BEtoN(AStream.GET_UShort);
+      NameRecord.nameID:=BEtoN(AStream.GET_UShort);
+      NameRecord.length:=BEtoN(AStream.GET_UShort);
+      NameRecord.offset:=BEtoN(AStream.GET_UShort)+NameTable.storageOffset;
+      debugln('{E}i=%d; nameID=%d',[i,NameRecord.nameID]);
+      if NameRecord.nameID<=maxNameID then begin
+        if (NameRecords[NameRecord.nameID].length=0)or(isPriority(NameRecord)) then
+          NameRecords[NameRecord.nameID]:=NameRecord
+        else begin
+        end;
+      end;
+    end;
 
   finally
     setlength(TableDirEntries,0);

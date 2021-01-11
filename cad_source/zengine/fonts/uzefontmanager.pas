@@ -22,7 +22,7 @@ interface
 uses UGDBOpenArrayOfByte,{$IFNDEF DELPHI}LResources,{$ENDIF}LCLProc,uzbpaths,
      uzelclintfex,uzestrconsts,uzbstrproc,uzefont,uzbtypesbase,uzbmemman,
      sysutils,uzbtypes,uzegeometry,usimplegenerics,gzctnrstl,
-     UGDBNamedObjectsArray,classes,uzefontttfpreloader;
+     UGDBNamedObjectsArray,classes,uzefontttfpreloader,uzelongprocesssupport;
 type
 TFontLoadProcedure=function(name:GDBString;var pf:PGDBfont):GDBBoolean;
 TFontLoadProcedureData=record
@@ -97,14 +97,20 @@ begin
        shxfontfiles.Destroy;
 end;
 procedure GDBFontManager.EnumerateFontFiles;
+var
+  lpsh:TLPSHandle;
 begin
   ttffontfiles:=TStringList.create;
   ttffontfiles.Duplicates := dupIgnore;
   ttfinternalnames:=TStringList.create;
+  lpsh:=LPS.StartLongProcess('Enumerate *.ttf fonts',ttfinternalnames);
   FromDirsIterator(sysvarPATHFontsPath,'*.ttf','',nil,EnumerateTTFFontFile);
+  LPS.EndLongProcess(lpsh);
   shxfontfiles:=TStringList.create;
   shxfontfiles.Duplicates := dupIgnore;
+  lpsh:=LPS.StartLongProcess('Enumerate *.shx fonts',shxfontfiles);
   FromDirsIterator(sysvarPATHFontsPath,'*.shx','',nil,EnumerateSHXFontFile);
+  LPS.EndLongProcess(lpsh);
 end;
 constructor GDBFontManager.init;
 begin

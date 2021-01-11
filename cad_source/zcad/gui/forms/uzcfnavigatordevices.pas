@@ -507,7 +507,7 @@ begin
 
    NavTree.BeginUpdate;
 
-   lpsh:=LPS.StartLongProcess(0,'NavigatorEntities.RefreshTree',@self);
+   lpsh:=LPS.StartLongProcess('NavigatorEntities.RefreshTree',@self);
    EraseRoots;
    CreateRoots;
 

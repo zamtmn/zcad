@@ -1903,11 +1903,11 @@ begin
      lc:=0;
      parray.init({$IFDEF DEBUGBUILD}'{527C1C8F-E832-43F9-B8C4-2733AD9EAF67}',{$ENDIF}10000);
      LinesMap:=MapPointOnCurve3DPropArray.Create;
-     lph:=lps.StartLongProcess(10,'Search intersections and storing data',nil);
+     lph:=lps.StartLongProcess('Search intersections and storing data',nil);
      FindAllIntersectionsInNode(@drawings.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,lineAABBtests,linelinetests,intersectcount,@parray,LinesMap);
      lps.EndLongProcess(lph);
 
-     lph:=lps.StartLongProcess(10,'Placing points',nil);
+     lph:=lps.StartLongProcess('Placing points',nil);
        pv:=parray.beginiterate(ir);
        if pv<>nil then
        repeat
@@ -1916,7 +1916,7 @@ begin
        until pv=nil;
      lps.EndLongProcess(lph);
 
-     lph:=lps.StartLongProcess(10,'Cutting lines',nil);
+     lph:=lps.StartLongProcess('Cutting lines',nil);
       PlaceLines(LinesMap,lm,lc);
      lps.EndLongProcess(lph);
      ZCMsgCallBackInterface.TextMessage('Lines modified: '+inttostr(lm),TMWOHistoryOut);
@@ -1924,7 +1924,7 @@ begin
 
 
 
-     lph:=lps.StartLongProcess(10,'Freeing memory',nil);
+     lph:=lps.StartLongProcess('Freeing memory',nil);
      parray.done;
      LinesMap.Free;
      lps.EndLongProcess(lph);

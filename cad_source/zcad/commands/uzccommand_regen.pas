@@ -43,7 +43,7 @@ var //i: GDBInteger;
     DC:TDrawContext;
     lpsh:TLPSHandle;
 begin
-  lpsh:=lps.StartLongProcess(drawings.GetCurrentROOT.ObjArray.count,'Regenerate drawing',nil);
+  lpsh:=lps.StartLongProcess('Regenerate drawing',nil,drawings.GetCurrentROOT.ObjArray.count);
   //if assigned(StartLongProcessProc) then StartLongProcessProc(drawings.GetCurrentROOT.ObjArray.count,'Regenerate drawing');
   drawing:=drawings.GetCurrentDwg;
   drawing.wa.CalcOptimalMatrix;

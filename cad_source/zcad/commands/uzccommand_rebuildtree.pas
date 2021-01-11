@@ -35,7 +35,7 @@ function RebuildTree_com(operands:TCommandOperands):TCommandResult;
 var
   lpsh:TLPSHandle;
 begin
-  lpsh:=LPS.StartLongProcess(drawings.GetCurrentROOT.ObjArray.count,'Rebuild drawing spatial',nil);
+  lpsh:=LPS.StartLongProcess('Rebuild drawing spatial',nil,drawings.GetCurrentROOT.ObjArray.count);
   drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree.maketreefrom(drawings.GetCurrentDWG^.pObjRoot.ObjArray,drawings.GetCurrentDWG^.pObjRoot.vp.BoundingBox,nil);
   LPS.EndLongProcess(lpsh);
   drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;

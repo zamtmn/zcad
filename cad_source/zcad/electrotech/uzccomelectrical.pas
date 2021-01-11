@@ -3011,7 +3011,7 @@ begin
        FDoc:=TCSVDocument.Create;
        FDoc.Delimiter:=';';
        FDoc.LoadFromFile(utf8tosys(s));
-       lph:=lps.StartLongProcess(FDoc.RowCount,'Create cables',nil);
+       lph:=lps.StartLongProcess('Create cables',nil,FDoc.RowCount);
        netarray.init({$IFDEF DEBUGBUILD}'{6FC12C96-F62C-47A3-A5B4-35D9564DB25E}',{$ENDIF}100);
        for row:=0 to FDoc.RowCount-1 do
        begin
@@ -3372,7 +3372,7 @@ var
     DC:TDrawContext;
     lph:TLPSHandle;
 begin
-  lph:=lps.StartLongProcess(drawings.GetCurrentROOT.ObjArray.count,'Regenerate ZCAD entities',nil);
+  lph:=lps.StartLongProcess('Regenerate ZCAD entities',nil,drawings.GetCurrentROOT.ObjArray.count);
   drawing:=drawings.GetCurrentDwg;
   dc:=drawings.GetCurrentDwg^.CreateDrawingRC;
   pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);

@@ -332,7 +332,7 @@ objid: GDBInteger;
   lph:TLPSHandle;
 begin
   s:='';
-  lph:=lps.StartLongProcess(f.Count,'addentitiesfromdxf',@f);
+  lph:=lps.StartLongProcess('addentitiesfromdxf',@f,f.Count);
   if Assigned(CreateExtLoadData) then
                                      PExtLoadData:=CreateExtLoadData()
                                  else
@@ -532,7 +532,7 @@ var
   lph:TLPSHandle;
 begin
   s:='';
-  lph:=lps.StartLongProcess(f.Count,'addfromdxf12',@f);
+  lph:=lps.StartLongProcess('addfromdxf12',@f,f.Count);
   debugln('{D+}AddFromDXF12');
   //programlog.LogOutStr('AddFromDXF12',lp_IncPos,LM_Debug);
   //phandlearray := dxfhandlearraycreate(10000);
@@ -1237,7 +1237,7 @@ begin
   clayer:='';
   cltype:='';
   cdimstyle:='';
-  lph:=lps.StartLongProcess(f.Count,'addfromdxf2000',@f);
+  lph:=lps.StartLongProcess('addfromdxf2000',@f,f.Count);
   Handle2BlockName:=TMapBlockHandle_BlockNames.Create;
   blockload:=false;
   debugln('{D+}[DXF_CONTENTS]AddFromDXF2000');
@@ -1447,7 +1447,7 @@ begin
      DWGVarsDict:=TGDBString2GDBStringDictionary.create;
      ReadDXFHeader(f,DWGVarsDict);
      Context.h2p:=TMapHandleToPointer.create;
-  lph:=lps.StartLongProcess(f.Count,rsLoadDXFFile,@f);
+  lph:=lps.StartLongProcess(rsLoadDXFFile,@f,f.Count);
   //if assigned(StartLongProcessProc)then
   //  StartLongProcessProc(f.Count,'Load DXF file');
 
@@ -1520,7 +1520,7 @@ var
   ir:itrec;
   lph:TLPSHandle;
 begin
-     lph:=lps.StartLongProcess(pva^.Count,'saveentitiesdxf2000',@outhandle);
+     lph:=lps.StartLongProcess('saveentitiesdxf2000',@outhandle,pva^.Count);
      pv:=pva^.beginiterate(ir);
      if pv<>nil then
      repeat
@@ -1684,7 +1684,7 @@ begin
   outstream.init({$IFDEF DEBUGBUILD}'{51453949-893A-49C2-9588-42B25346D071}',{$ENDIF}10*1024*1024);
   //--------------------------if outstream>0 then
   begin
-    lph:=lps.StartLongProcess(drawing.pObjRoot^.ObjArray.Count,'Save DXF file',@outstream);
+    lph:=lps.StartLongProcess('Save DXF file',@outstream,drawing.pObjRoot^.ObjArray.Count);
     {if assigned(StartLongProcessProc)then
        StartLongProcessProc(drawing.pObjRoot^.ObjArray.Count,'Save DXF file');}
   OldHandele2NewHandle:=TMapHandleToHandle.Create;

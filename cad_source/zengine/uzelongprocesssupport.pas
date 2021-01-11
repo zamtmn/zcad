@@ -58,7 +58,7 @@ TZELongProcessSupport=class
                          procedure DoEndLongProcess(plpi:PTLPInfo;LPHandle:TLPSHandle);
 
                        public
-                         function StartLongProcess(Total:TLPSCounter;LPName:TLPName;Context:pointer):TLPSHandle;
+                         function StartLongProcess(LPName:TLPName;Context:pointer;Total:TLPSCounter=0):TLPSHandle;
                          procedure ProgressLongProcess(LPHandle:TLPSHandle;Current:TLPSCounter);
                          procedure EndLongProcess(LPHandle:TLPSHandle);
 
@@ -110,7 +110,7 @@ begin
   for i:=0 to OnLPEndProcVector.size-1 do
    OnLPEndProcVector[i](LPHandle,plpi^.LPTime);
 end;
-function TZELongProcessSupport.StartLongProcess(Total:TLPSCounter;LPName:TLPName;Context:pointer):TLPSHandle;
+function TZELongProcessSupport.StartLongProcess(LPName:TLPName;Context:pointer;Total:TLPSCounter):TLPSHandle;
 var
   LPI:TLPInfo;
   PLPI:PTLPInfo;

@@ -22,7 +22,7 @@ unit uzefontttfpreloader;
 interface
 
 uses
-  sysutils,classes,LCLProc;
+  sysutils,classes,LCLProc,bufstream;
 
 const
   maxNameID=25;
@@ -106,8 +106,9 @@ type
   end;
 
 
-  TTTFFileStream=class(TFileStream)
+  TTTFFileStream=class({TFileStream}{TMemoryStream}TBufferedFileStream)
     public
+      constructor CreateFromFile(const AFileName: string);
       function GET_ULong:ULong;
       function GET_Long:Long;
       function GET_UShort:UShort;
@@ -161,10 +162,10 @@ var
   NameRecords:TNameRecords;
 begin
   result.name:=extractfilename(filename);
-  debugln('{E}TTFName "%s"',[result.name]);
+  //debugln('{E}TTFName "%s"',[result.name]);
   if result.name='LinBiolinum_RB_G.ttf' then
     result:=result;
-  AStream:=TTTFFileStream.Create(filename, fmOpenRead or fmShareDenyWrite);
+  AStream:=TTTFFileStream.CreateFromFile(filename);
   try
     result.ValidTTFFile:=false;
 
@@ -196,7 +197,7 @@ begin
     NameTable.numNameRecords:=BEtoN(AStream.GET_UShort);
     NameTable.storageOffset:=BEtoN(AStream.GET_UShort);
 
-    debugln('{E}NameTable.numNameRecords=%d',[NameTable.numNameRecords]);
+    //debugln('{E}NameTable.numNameRecords=%d',[NameTable.numNameRecords]);
 
     //setlength(NameRecords,NameTable.numNameRecords);
     for i:=low(NameRecords) to high(NameRecords) do
@@ -212,7 +213,7 @@ begin
       NameRecord.nameID:=BEtoN(AStream.GET_UShort);
       NameRecord.length:=BEtoN(AStream.GET_UShort);
       NameRecord.offset:=BEtoN(AStream.GET_UShort)+NameTable.storageOffset;
-      debugln('{E}i=%d; nameID=%d',[i,NameRecord.nameID]);
+      //debugln('{E}i=%d; nameID=%d',[i,NameRecord.nameID]);
       if NameRecord.nameID<=maxNameID then begin
         if (NameRecords[NameRecord.nameID].length=0)or(isPriority(NameRecord)) then
           NameRecords[NameRecord.nameID]:=NameRecord
@@ -225,6 +226,15 @@ begin
     setlength(TableDirEntries,0);
     FreeAndNil(AStream);
   end;
+end;
+
+constructor TTTFFileStream.CreateFromFile(const AFileName: string);
+begin
+  {TFileStream}{TBufferedFileStream}
+  Create(AFileName, fmOpenRead or fmShareDenyWrite);
+  {TMemoryStream}
+  //Create;
+  //LoadFromFile(AFileName);
 end;
 
 function TTTFFileStream.GET_ULong:ULong;

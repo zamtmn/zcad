@@ -380,7 +380,7 @@ begin
     NewModuleDesk.name:=modulename;
     ModulesDeskArray.PushBack(NewModuleDesk);
     ModulesDeskDictionary.insert(uppercase(modulename),result);
-    LogOutStr(format('Register log module "%s"',[modulename]),0,LM_Necessarily);
+    LogOutStr(format('Register log module "%s"',[modulename]),0,LM_Info);
   end;
 end;
 procedure tlog.enablemodule(modulename:AnsiString);
@@ -521,7 +521,7 @@ begin
 end;
 initialization
 begin
-    programlog.init({$IFNDEF DELPHI}SysToUTF8{$ENDIF}(ExtractFilePath(paramstr(0)))+filelog,LM_Error);
+    programlog.init({$IFNDEF DELPHI}SysToUTF8{$ENDIF}(ExtractFilePath(paramstr(0)))+filelog,LM_Warning);
 end;
 finalization
     debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');

@@ -68,7 +68,7 @@ procedure finalize;
 begin
 end;
 initialization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
   startup;
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');

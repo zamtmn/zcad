@@ -79,7 +79,7 @@ procedure GDBFontManager.EnumerateTTFFontFile(filename:String;pdata:pointer);
 begin
      if AddFontResourceFile(filename)>0 then begin
         ttffontfiles.Add(filename);
-        ttfinternalnames.Add(getTTFFileParams(filename).name);
+        ttfinternalnames.Add(getTTFFileParams(filename).FullName);
      end;
 end;
 procedure GDBFontManager.EnumerateSHXFontFile(filename:String;pdata:pointer);

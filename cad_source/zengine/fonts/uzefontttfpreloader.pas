@@ -31,6 +31,7 @@ type
   TNameTableValueType=string;
   TTTFFileParams=record
     ValidTTFFile:boolean;
+    //this from https://developer.apple.com/fonts/TrueType-Reference-Manual/RM06/Chap6name.html
     CopyrightNotice,               //{0    }Copyright notice.
     FontFamily,                    //{1    }Font Family.
     FontSubfamily,                 //{2    }Font Subfamily.

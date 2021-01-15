@@ -74,13 +74,16 @@ begin
      FontExt2LoadProc.RegisterKey(_FontExt,EntInfoData);
 end;
 procedure GDBFontManager.EnumerateTTFFontFile(filename:String;pdata:pointer);
-{var
-   r:longint;}
+var
+  ttfparams:TTTFFileParams;
 begin
-     if AddFontResourceFile(filename)>0 then begin
-        ttffontfiles.Add(filename);
-        ttfinternalnames.Add(getTTFFileParams(filename).FullName);
-     end;
+  if AddFontResourceFile(filename)>0 then begin
+    ttfparams:=getTTFFileParams(filename);
+    if ttfparams.ValidTTFFile then begin
+      ttffontfiles.Add(filename);
+      ttfinternalnames.Add(getTTFFileParams(filename).FullName);
+    end;
+  end;
 end;
 procedure GDBFontManager.EnumerateSHXFontFile(filename:String;pdata:pointer);
 begin

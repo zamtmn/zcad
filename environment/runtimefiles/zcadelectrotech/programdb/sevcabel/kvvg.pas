@@ -46,6 +46,7 @@ type
 var
    _EQ_SEVCABLEkvvg:tSEVCABLEkvvg;
    _EQ_SEVCABLEkvvgE:tSEVCABLEkvvg;
+   _EQ_SEVCABLEkvvgEngLS:tSEVCABLEkvvg;
    _EQ_SEVCABLEkvvgng:tSEVCABLEkvvg;
    _EQ_SEVCABLEkvvgngLS:tSEVCABLEkvvg;
    _EQ_SEVCABLEkvvgngAFRLSLS:tSEVCABLEkvvg;
@@ -99,6 +100,30 @@ begin
      _EQ_SEVCABLEkvvgE.format;
 
 
+     _EQ_SEVCABLEkvvgEngLS.initnul;
+
+     _EQ_SEVCABLEkvvgEngLS.Category:=_kables;
+     _EQ_SEVCABLEkvvgEngLS.Group:=_cables;
+     _EQ_SEVCABLEkvvgEngLS.EdIzm:=_m;
+     _EQ_SEVCABLEkvvgEngLS.ID:='SEVCABLEkvvgЕngLS';
+     _EQ_SEVCABLEkvvgEngLS.Standard:='ГОСТ 1508-78, ГОСТ 26411-85';
+     _EQ_SEVCABLEkvvgEngLS.OKP:='35 6314';
+     _EQ_SEVCABLEkvvgEngLS.Manufacturer:='ОАО "СЕВКАБЕЛЬ-ХОЛДИНГ" г.Санкт-Петербург';
+     _EQ_SEVCABLEkvvgEngLS.Description:='Кабели контрольные с ПВХ-изоляцией, экранированный. Для неподвижного присоединения к электрическим приборам, аппаратам, сборкам зажимов распределительных устойств с номинальным переменным напряжением до 0,66 кВ,частотой до 100 Гц или постоянным напряжением до 1 кВ';
+
+     _EQ_SEVCABLEkvvgEngLS.NameShortTemplate:='КВВГЭнг(A)-LS-%%[Wire_Count_Section_DESC]';
+     _EQ_SEVCABLEkvvgEngLS.NameTemplate:='Кабель контрольный КВВГЭнг(A)-LS-%%[Wire_Count_Section_DESC]';
+     _EQ_SEVCABLEkvvgEngLS.UIDTemplate:='%%[ID]-%%[Wire_Count_Section_DESC]';
+     _EQ_SEVCABLEkvvgEngLS.NameFullTemplate:='Кабель контрольный с медными жилами с изоляцией и оболочкой из поливинилхлоридного пластиката экранированный, сечением %%[Wire_Count_Section_DESC], экранированный';
+
+     _EQ_SEVCABLEkvvgEngLS.Wire_Count_Section_DESC:=_04_1_50;
+
+     _EQ_SEVCABLEkvvgEngLS.TreeCoord:='BP_СЕВКАБЕЛЬ-ХОЛДИНГ_контрольные_КВВГЭнг(A)-LS|BC_Кабельная продукция_контрольные_КВВГЭнг(A)-LS(СЕВКАБЕЛЬ)';
+
+     _EQ_SEVCABLEkvvgEngLS.format;
+
+
+
 
 
 
@@ -142,14 +167,14 @@ begin
      _EQ_SEVCABLEkvvgngLS.Manufacturer:='ОАО "СЕВКАБЕЛЬ-ХОЛДИНГ" г.Санкт-Петербург';
      _EQ_SEVCABLEkvvgngLS.Description:='Кабели контрольные с ПВХ-изоляцией, не распространяющие горение, с низким дымо- и газовыделением';
 
-     _EQ_SEVCABLEkvvgngLS.NameShortTemplate:='КВВГнг-LS-%%[Wire_Count_Section_DESC]';
-     _EQ_SEVCABLEkvvgngLS.NameTemplate:='Кабель контрольный КВВГнг-LS-%%[Wire_Count_Section_DESC]';
+     _EQ_SEVCABLEkvvgngLS.NameShortTemplate:='КВВГнг(A)-LS-%%[Wire_Count_Section_DESC]';
+     _EQ_SEVCABLEkvvgngLS.NameTemplate:='Кабель контрольный КВВГнг(A)-LS-%%[Wire_Count_Section_DESC]';
      _EQ_SEVCABLEkvvgngLS.UIDTemplate:='%%[ID]-%%[Wire_Count_Section_DESC]';
      _EQ_SEVCABLEkvvgngLS.NameFullTemplate:='Кабель контрольный с медными жилами с изоляцией и оболочкой из поливинилхлоридного пластиката, не распространяющий горение, с низким дымо- и газовыделением, сечением %%[Wire_Count_Section_DESC]';
 
      _EQ_SEVCABLEkvvgngLS.Wire_Count_Section_DESC:=_04_1_50;
 
-     _EQ_SEVCABLEkvvgngLS.TreeCoord:='BP_СЕВКАБЕЛЬ-ХОЛДИНГ_контрольные_КВВГнг-LS|BC_Кабельная продукция_контрольные_КВВГнг-LS(СЕВКАБЕЛЬ)';
+     _EQ_SEVCABLEkvvgngLS.TreeCoord:='BP_СЕВКАБЕЛЬ-ХОЛДИНГ_контрольные_КВВГнг(A)-LS|BC_Кабельная продукция_контрольные_КВВГнг(A)-LS(СЕВКАБЕЛЬ)';
 
      _EQ_SEVCABLEkvvgngLS.format;
 

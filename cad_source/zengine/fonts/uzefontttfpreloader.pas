@@ -313,15 +313,15 @@ begin
 
     result.ValidTTFFile:=result.FontFamily<>'';
 
-    {debugln('TTFName "%s"',[filename]);
-    debugln('CopyrightNotice="%s"',[result.CopyrightNotice]);
+    debugln('TTFName "%s"',[filename]);
+    //debugln('CopyrightNotice="%s"',[result.CopyrightNotice]);
     debugln('FontFamily="%s"',[result.FontFamily]);
     debugln('FontSubfamily"%s"',[result.FontSubfamily]);
     debugln('UniqueSubfamily="%s"',[result.UniqueSubfamily]);
     debugln('FullName="%s"',[result.FullName]);
     debugln('Version="%s"',[result.Version]);
     debugln('PostScriptName="%s"',[result.PostScriptName]);
-    debugln('TrademarkNotice="%s"',[result.TrademarkNotice]);
+    {debugln('TrademarkNotice="%s"',[result.TrademarkNotice]);
     debugln('ManufacturerName="%s"',[result.ManufacturerName]);
     debugln('DesignerName="%s"',[result.DesignerName]);
     debugln('Description="%s"',[result.Description]);
@@ -329,11 +329,11 @@ begin
     debugln('URLDesigner="%s"',[result.URLDesigner]);
     debugln('LicenseDescription="%s"',[result.LicenseDescription]);
     debugln('LicenseInformationURL="%s"',[result.LicenseInformationURL]);
-    debugln('Reserved="%s"',[result.Reserved]);
+    debugln('Reserved="%s"',[result.Reserved]);}
     debugln('PreferredFamily="%s"',[result.PreferredFamily]);
     debugln('PreferredSubfamily="%s"',[result.PreferredSubfamily]);
     debugln('CompatibleFull="%s"',[result.CompatibleFull]);
-    debugln('SampleText="%s"',[result.SampleText]);
+    {debugln('SampleText="%s"',[result.SampleText]);
     debugln('VariationsPostScriptNamePrefix="%s"',[result.VariationsPostScriptNamePrefix]);}
 
   finally

@@ -19,16 +19,22 @@
 unit uzcsysinfo;
 {$INCLUDE def.inc}
 interface
-uses MacroDefIntf,uzmacros,uzcsysparams,LCLProc,uzclog,uzbpaths,uzbtypesbase,Forms,uzbtypes{$IFNDEF DELPHI},{fileutil}LazUTF8{$ENDIF},sysutils;
+uses
+  MacroDefIntf,uzmacros,uzcsysparams,LCLProc,uzclog,uzbpaths,uzbtypesbase,Forms,uzbtypes,
+  {$IFDEF WINDOWS}ShlObj,{$ENDIF}{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils;
 {$INCLUDE zcadrev.inc}
 const
   zcaduniqueinstanceid='zcad unique instance';
 type
   TZCADPathsMacroMethods=class
-    class function MacroFuncZCADPath(const {%H-}Param: string; const Data: PtrInt;
-                                       var {%H-}Abort: boolean): string;
-    class function MacroFuncTEMPPath(const {%H-}Param: string; const Data: PtrInt;
-                                       var {%H-}Abort: boolean): string;
+    class function MacroFuncZCADPath       (const {%H-}Param: string; const Data: PtrInt;
+                                              var {%H-}Abort: boolean): string;
+    class function MacroFuncTEMPPath       (const {%H-}Param: string; const Data: PtrInt;
+                                              var {%H-}Abort: boolean): string;
+    class function MacroFuncSystemFontsPath(const {%H-}Param: string; const Data: PtrInt;
+                                              var {%H-}Abort: boolean): string;
+    class function MacroFuncsUserFontsPath (const {%H-}Param: string; const Data: PtrInt;
+                                              var {%H-}Abort: boolean): string;
   end;
 var
   SysDefaultFormatSettings:TFormatSettings;
@@ -230,11 +236,45 @@ class function TZCADPathsMacroMethods.MacroFuncTEMPPath(const {%H-}Param: string
 begin
   result:=TempPath;
 end;
+class function TZCADPathsMacroMethods.MacroFuncSystemFontsPath(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
+{$IF defined(WINDOWS)}
+var
+  s: string;
+begin
+   SetLength(s,MAX_PATH );
+   if not SHGetSpecialFolderPath(0,PChar(s),CSIDL_FONTS,false) then
+      s:='';
+   Result:=PChar(s);
+end;
+{$ELSEIF defined(LINUX)}
+begin
+   Result:='/todo/';
+end;
+{$ENDIF}
+class function TZCADPathsMacroMethods.MacroFuncsUserFontsPath (const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
+{$IF defined(WINDOWS)}
+var
+  s: string;
+begin
+   SetLength(s,MAX_PATH );
+   if not SHGetSpecialFolderPath(0,PChar(s),CSIDL_LOCAL_APPDATA,false) then
+      s:='';
+   Result:=PChar(s)+'\Microsoft\Windows\Fonts';
+end;
+{$ELSEIF defined(LINUX)}
+begin
+   Result:='/todo/';
+end;
+{$ENDIF}
 initialization
 GetSysInfo;
 DefaultMacros.AddMacro(TTransferMacro.Create('ZCADPath','',
                        'Path to ZCAD',TZCADPathsMacroMethods.MacroFuncZCADPath,[]));
 DefaultMacros.AddMacro(TTransferMacro.Create('TEMP','',
                        'TEMP path',TZCADPathsMacroMethods.MacroFuncTEMPPath,[]));
+DefaultMacros.AddMacro(TTransferMacro.Create('SystemFontsPath','',
+                       'System fonts path',TZCADPathsMacroMethods.MacroFuncSystemFontsPath(),[]));
+DefaultMacros.AddMacro(TTransferMacro.Create('UserFontsPath','',
+                       'User fonts path',TZCADPathsMacroMethods.MacroFuncsUserFontsPath(),[]));
 disabledefaultmodule:=false;
 end.

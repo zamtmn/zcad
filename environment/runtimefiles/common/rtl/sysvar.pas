@@ -146,7 +146,7 @@ begin
   RD_PanObjectDegradation:=False;
   DSGN_OTrackTimerInterval:=500;
   RD_Light:=False;
-  PATH_Fonts:='$(ZCADPath)/fonts/|C:/APPS/MY/acad/support/|C:/Program Files/Autodesk/AutoCAD 2020/Fonts/|C:/Windows/Fonts/';
+  PATH_Fonts:='$(SystemFontsPath)/|$(UserFontsPath)/|$(ZCADPath)/fonts/|C:/APPS/MY/acad/support/|C:/Program Files/Autodesk/AutoCAD 2020/Fonts/';
   PATH_AlternateFont:='_mipGost.shx';
   PATH_Support_Path:='$(ZCADPath)/rtl|$(ZCADPath)/rtl/objdefunits|$(ZCADPath)/rtl/objdefunits/include|$(ZCADPath)/components|$(ZCADPath)/blocks/el/general|$(ZCADPath)/rtl/styles';
   DWG_HelpGeometryDraw:=True;

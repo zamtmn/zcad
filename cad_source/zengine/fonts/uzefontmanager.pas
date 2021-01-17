@@ -19,17 +19,25 @@
 unit uzefontmanager;
 {$INCLUDE def.inc}
 interface
-uses UGDBOpenArrayOfByte,{$IFNDEF DELPHI}LResources,{$ENDIF}LCLProc,uzbpaths,
-     uzelclintfex,uzestrconsts,uzbstrproc,uzefont,uzbtypesbase,uzbmemman,
-     sysutils,uzbtypes,uzegeometry,usimplegenerics,gzctnrstl,
-     UGDBNamedObjectsArray,classes,uzefontttfpreloader,uzelongprocesssupport;
+uses
+  UGDBOpenArrayOfByte,{$IFNDEF DELPHI}LResources,{$ENDIF}LCLProc,uzbpaths,
+  uzelclintfex,uzestrconsts,uzbstrproc,uzefont,uzbtypesbase,uzbmemman,
+  sysutils,uzbtypes,uzegeometry,usimplegenerics,gzctnrstl,
+  UGDBNamedObjectsArray,classes,uzefontttfpreloader,uzelongprocesssupport;
 type
-TFontLoadProcedure=function(name:GDBString;var pf:PGDBfont):GDBBoolean;
-TFontLoadProcedureData=record
-                FontDesk:GDBString;
-                FontLoadProcedure:TFontLoadProcedure;
-                end;
-TFontExt2LoadProcMap=GKey2DataMap<GDBString,TFontLoadProcedureData{$IFNDEF DELPHI},LessGDBString{$ENDIF}>;
+  TGeneralFontFileDesc=record
+    FontName:string;
+    FontFile:string;
+  end;
+  TFontName2FontFile=GKey2DataMap<GDBString,TGeneralFontFileDesc{$IFNDEF DELPHI},LessGDBString{$ENDIF}>;
+
+  TFontLoadProcedure=function(name:GDBString;var pf:PGDBfont):GDBBoolean;
+  TFontLoadProcedureData=record
+    FontDesk:GDBString;
+    FontLoadProcedure:TFontLoadProcedure;
+  end;
+
+  TFontExt2LoadProcMap=GKey2DataMap<GDBString,TFontLoadProcedureData{$IFNDEF DELPHI},LessGDBString{$ENDIF}>;
 {Export+}
   PGDBFontRecord=^GDBFontRecord;
   {REGISTERRECORDTYPE GDBFontRecord}
@@ -37,23 +45,23 @@ TFontExt2LoadProcMap=GKey2DataMap<GDBString,TFontLoadProcedureData{$IFNDEF DELPH
     Name: GDBString;
     Pfont: GDBPointer;
   end;
-PGDBFontManager=^GDBFontManager;
-{REGISTEROBJECTTYPE GDBFontManager}
-GDBFontManager= object({GDBOpenArrayOfData}GDBNamedObjectsArray{-}<PGDBfont,GDBfont>{//})(*OpenArrayOfData=GDBfont*)
-                    ttffontfiles:TStringList;
-                    ttfinternalnames:TStringList;
-                    shxfontfiles:TStringList;
-                    constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
-                    destructor done;virtual;
-                    procedure CreateBaseFont;
+  PGDBFontManager=^GDBFontManager;
+  {REGISTEROBJECTTYPE GDBFontManager}
+  GDBFontManager=object({GDBOpenArrayOfData}GDBNamedObjectsArray{-}<PGDBfont,GDBfont>{//})(*OpenArrayOfData=GDBfont*)
+    ttffontfiles:TStringList;
+    //ttfinternalnames:TStringList;
+    shxfontfiles:TStringList;
+    constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+    destructor done;virtual;
+    procedure CreateBaseFont;
 
-                    function addFonf(FontPathName:String):PGDBfont;
-                    procedure EnumerateFontFiles;
-                    procedure EnumerateTTFFontFile(filename:String;pdata:pointer);
-                    procedure EnumerateSHXFontFile(filename:String;pdata:pointer);
-                    //function FindFonf(FontName:GDBString):GDBPointer;
-                    {procedure freeelement(p:GDBPointer);virtual;}
-              end;
+    function addFonf(FontPathName:String):PGDBfont;
+    procedure EnumerateFontFiles;
+    procedure EnumerateTTFFontFile(filename:String;pdata:pointer);
+    procedure EnumerateSHXFontFile(filename:String;pdata:pointer);
+    //function FindFonf(FontName:GDBString):GDBPointer;
+    {procedure freeelement(p:GDBPointer);virtual;}
+  end;
 {Export-}
 var
    FontManager:GDBFontManager;
@@ -80,8 +88,9 @@ begin
   if AddFontResourceFile(filename)>0 then begin
     ttfparams:=getTTFFileParams(filename);
     if ttfparams.ValidTTFFile then begin
-      ttffontfiles.Add(filename);
-      ttfinternalnames.Add(getTTFFileParams(filename).FullName);
+      if ((ttfparams.FontSubfamily='')or(LowerCase(ttfparams.FontSubfamily)='regular'))and(ttffontfiles.IndexOf(ttfparams.FontFamily)<0) then
+      ttffontfiles.Add(filename{ttfparams.FontFamily}{+'('+ttfparams.FontSubfamily+')'});
+      //ttfinternalnames.Add(ttfparams.FullName);
     end;
   end;
 end;
@@ -94,8 +103,8 @@ begin
      inherited;
      if assigned(ttffontfiles)then
        ttffontfiles.Destroy;
-     if assigned(ttfinternalnames)then
-       ttfinternalnames.Destroy;
+     //if assigned(ttfinternalnames)then
+     //  ttfinternalnames.Destroy;
      if assigned(shxfontfiles)then
        shxfontfiles.Destroy;
 end;
@@ -105,8 +114,8 @@ var
 begin
   ttffontfiles:=TStringList.create;
   ttffontfiles.Duplicates := dupIgnore;
-  ttfinternalnames:=TStringList.create;
-  lpsh:=LPS.StartLongProcess('Enumerate *.ttf fonts',ttfinternalnames);
+  //ttfinternalnames:=TStringList.create;
+  lpsh:=LPS.StartLongProcess('Enumerate *.ttf fonts',ttffontfiles);
   FromDirsIterator(sysvarPATHFontsPath,'*.ttf','',nil,EnumerateTTFFontFile);
   LPS.EndLongProcess(lpsh);
   shxfontfiles:=TStringList.create;

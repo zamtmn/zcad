@@ -117,14 +117,14 @@ begin
   if pos('.',FontFile)=0 then
                              FontFile:=FontFile+'.shx';
 
-  ps.pfont:=FontManager.addFonf(FindInPaths(sysvarPATHFontsPath,FontFile));
+  ps.pfont:=FontManager.addFonfByFile(FindInPaths(sysvarPATHFontsPath,FontFile));
   if not assigned(ps.pfont) then
                                 begin
                                      debugln('{WHM}'+fontnotfoundandreplace,[Tria_AnsiToUtf8(stylename),FontFile]);
                                      ps.pfont:=pbasefont;
                                 end;
 
-  //ps.pfont:=FontManager.addFonf(FontFile);
+  //ps.pfont:=FontManager.addFonfByFile(FontFile);
   //ps.pfont:=FontManager.{FindFonf}getAddres(FontFile);
   //if ps.pfont=nil then ps.pfont:=FontManager.getAddres('normal.shx');
   ps.prop:=tp;
@@ -147,14 +147,14 @@ begin
   if pos('.',FontFile)=0 then
                              FontFile:=FontFile+'.shx';
 
-  ts.pfont:=FontManager.addFonf(FindInPaths(sysvarPATHFontsPath,FontFile));
+  ts.pfont:=FontManager.addFonfByFile(FindInPaths(sysvarPATHFontsPath,FontFile));
   if not assigned(ts.pfont) then
                                 begin
                                      debugln('{WHM}'+fontnotfoundandreplace,[Tria_AnsiToUtf8(stylename),FontFile]);
                                      ts.pfont:=pbasefont;
                                 end;
 
-  //ts.pfont:=FontManager.addFonf(FontFile);
+  //ts.pfont:=FontManager.addFonfByFile(FontFile);
   //ts.pfont:=FontManager.{FindFonf}getAddres(FontFile);
   //if ts.pfont=nil then ts.pfont:=FontManager.getAddres('normal.shx');
   ts.prop:=tp;

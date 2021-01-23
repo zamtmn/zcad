@@ -949,7 +949,7 @@ begin
 end;
 procedure addf(fn:gdbstring);
 begin
-     FontManager.addFonf(fn);
+     FontManager.addFonfByFile(fn);
 end;
 
 procedure startup(preloadedfile1,preloadedfile2:GDBString);
@@ -969,21 +969,21 @@ begin
 
   LTypeManager.LoadFromFile(FindInPaths(SupportPath,'zcad.lin'),TLOLoad);
 
-  //FontManager.addFonf('C:\Program Files\AutoCAD 2010\Fonts\times.shx');
-  //FontManager.addFonf('C:\Program Files\AutoCAD 2010\Fonts\GENISO.SHX');
-  //FontManager.addFonf('C:\Program Files\AutoCAD 2010\Fonts\amgdt.shx');
+  //FontManager.addFonfByFile('C:\Program Files\AutoCAD 2010\Fonts\times.shx');
+  //FontManager.addFonfByFile('C:\Program Files\AutoCAD 2010\Fonts\GENISO.SHX');
+  //FontManager.addFonfByFile('C:\Program Files\AutoCAD 2010\Fonts\amgdt.shx');
 
   //FromDirIterator({sysparam.programpath+'fonts/'}'C:\Program Files\AutoCAD 2010\Fonts\','*.shx','',addf,nil);
 
   FontManager.CreateBaseFont;
-  FontManager.addFonf(FindInPaths(sysvarPATHFontsPath,'ltypeshp.shx'));
+  FontManager.addFonfByFile(FindInPaths(sysvarPATHFontsPath,'ltypeshp.shx'));
 
 
   //pbasefont:=FontManager.getAddres(sysvar.SYS.SYS_AlternateFont^);
 
-  //FontManager.addFonf(sysparam.programpath+'fonts/gewind.shx');
-  //FontManager.addFonf('gothice.shx');
-  //FontManager.addFonf('romant.shx');
+  //FontManager.addFonfByFile(sysparam.programpath+'fonts/gewind.shx');
+  //FontManager.addFonfByFile('gothice.shx');
+  //FontManager.addFonfByFile('romant.shx');
 
   //pbasefont:=FontManager.getAddres('gewind.shx');
   //pbasefont:=FontManager.{FindFonf}getAddres('amgdt.shx');

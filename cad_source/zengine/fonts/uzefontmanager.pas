@@ -56,14 +56,14 @@ type
   PGDBFontManager=^GDBFontManager;
   {REGISTEROBJECTTYPE GDBFontManager}
   GDBFontManager=object({GDBOpenArrayOfData}GDBNamedObjectsArray{-}<PGDBfont,GDBfont>{//})(*OpenArrayOfData=GDBfont*)
-    FontFiles:TFontName2FontFileMap;
+    FontFiles:{-}TFontName2FontFileMap{/pointer/};
     shxfontfiles:TStringList;
     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
     destructor done;virtual;
     procedure CreateBaseFont;
 
     function addFonfByFile(FontPathName:String):PGDBfont;
-    function addFonfByName(FontPathName:String):PGDBfont;
+    function addFont(FontFile,FontFamily:String):PGDBfont;
     procedure EnumerateFontFiles;
     procedure EnumerateTTFFontFile(filename:String;pdata:pointer);
     procedure EnumerateSHXFontFile(filename:String;pdata:pointer);
@@ -192,28 +192,6 @@ begin
   {$ENDIF}
 end;
 
-{procedure GDBFontManager.freeelement;
-begin
-  PGDBFontRecord(p).Name:='';
-  PGDBfont(PGDBFontRecord(p).Pfont)^.fontfile:='';
-  PGDBfont(PGDBFontRecord(p).Pfont)^.name:='';
-  GDBFreeMem(PGDBFontRecord(p).Pfont);
-end;}
-(*function GDBFontManager.addFonfByFile(FontName:GDBString):GDBInteger;
-var
-  fr:GDBFontRecord;
-  ft:string;
-begin
-  if FindFonf(Fontname)=nil then
-  begin
-  fr.Name:=FontName;
-  ft:=uppercase(ExtractFileExt(fontname));
-  //if ft='.SHP' then fr.Pfont:=createnewfontfromshp(sysparam.programpath+'fonts/'+FontName);
-  if ft='.SHX' then fr.Pfont:=createnewfontfromshx(sysparam.programpath+'fonts/'+FontName);
-  add(@fr);
-  GDBPointer(fr.Name):=nil;
-  end;
-end;*)
 function GDBFontManager.addFonfByFile(FontPathName:String):PGDBfont;
 var
   p:PGDBfont;
@@ -285,17 +263,27 @@ begin
      debugln('{D-}end;{GDBFontManager.addFonf}');
      //programlog.logoutstr('end;{GDBFontManager.addFonf}',lp_DecPos,LM_Debug);
 end;
-function GDBFontManager.addFonfByName(FontPathName:String):PGDBfont;
+function GDBFontManager.addFont(FontFile,FontFamily:String):PGDBfont;
 var
   ffd:TGeneralFontFileDesc;
 begin
-  if FontFiles.MyGetValue(uppercase(FontPathName),ffd) then begin
+  if (FontFamily<>'')and(FontFiles.MyGetValue(uppercase(FontFamily),ffd)) then begin
     result:=addFonfByFile(ffd.FontFile);
     exit;
   end;
-  FontPathName:=FindInPaths(sysvarPATHFontsPath,FontPathName);
-  if FontPathName<>'' then
-    result:=FontManager.addFonfByFile(FontPathName);
+  if (FontFile<>'')and(FontFiles.MyGetValue(uppercase(FontFile),ffd)) then begin
+    result:=addFonfByFile(ffd.FontFile);
+    exit;
+  end;
+  FontFile:=FindInPaths(sysvarPATHFontsPath,FontFile);
+  if FontFile='' then
+    FontFile:=FindInPaths(sysvarPATHFontsPath,FontFile+'.shx');
+  if FontFile='' then
+    FontFile:=FindInPaths(sysvarPATHFontsPath,FontFile+'.ttf');
+  if FontFile<>'' then
+    result:=FontManager.addFonfByFile(FontFile)
+  else
+    result:=nil;
 end;
 
 {function GDBFontManager.FindFonf;

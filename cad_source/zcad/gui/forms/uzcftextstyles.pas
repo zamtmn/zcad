@@ -157,8 +157,7 @@ var
 begin
      if FontChange then
      begin
-          //newfont:=FontManager.addFonfByFile(FindInPaths(sysvarPATHFontsPath,pstring(FontsSelector.Enums.getDataMutable(FontsSelector.Selected))^));
-          newfont:=FontManager.addFonfByName(pstring(FontsSelector.Enums.getDataMutable(FontsSelector.Selected))^);
+          newfont:=FontManager.addFont('',pstring(FontsSelector.Enums.getDataMutable(FontsSelector.Selected))^);
           if  newfont<>PGDBTextStyle(TListItem(Item).Data)^.pfont then
           begin
                CreateUndoStartMarkerNeeded;
@@ -167,9 +166,9 @@ begin
                PGDBTextStyle(TListItem(Item).Data)^.pfont:=newfont;
                ComitFromObj;
                end;
-               with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBTextStyle(TListItem(Item).Data)^.dxfname)^ do
+               with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBTextStyle(TListItem(Item).Data)^.FontFile)^ do
                begin
-               PGDBTextStyle(TListItem(Item).Data)^.dxfname:=PGDBTextStyle(TListItem(Item).Data)^.pfont^.Name;
+               PGDBTextStyle(TListItem(Item).Data)^.FontFile:=PGDBTextStyle(TListItem(Item).Data)^.pfont^.Name;
                ComitFromObj;
                end;
           end;

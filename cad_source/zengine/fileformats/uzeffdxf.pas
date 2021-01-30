@@ -853,7 +853,7 @@ var
    DWGHandle:TDWGHandle;
    byt: GDBInteger;
    flags: GDBInteger;
-   lname: String;
+   FontFile,FontFamily: String;
    ti:PGDBTextStyle;
    pltypeprop:PGDBLtypeProp;
    ir,ir2:itrec;
@@ -864,6 +864,8 @@ begin
   if GoToDXForENDTAB(f, 0, dxfName_Style) then
   while s = dxfName_Style do
   begin
+    FontFile:='';
+    FontFamily:='';
     tstyle.name:='';
     tstyle.pfont:=nil;
     tstyle.prop.oblique:=0;
@@ -903,14 +905,14 @@ begin
            end;
         3:
           begin
-               lname:=s;
+               FontFile:=s;
                //FontManager.addFonf(FindInPaths(sysvar.PATH.Fonts_Path^,s));
                //tstyle.pfont:=FontManager.getAddres(s);
                //if tstyle.pfont:=;
            end;
         1000:
           begin
-               lname:=s;
+               FontFamily:=s;
            end;
       end;
     end;
@@ -921,20 +923,20 @@ begin
     if ti<>nil then
     begin
       if LoadMode=TLOLoad then
-                              ti:=drawing.TextStyleTable.setstyle(tstyle.Name,lname,tstyle.prop,false);
+                              ti:=drawing.TextStyleTable.setstyle(tstyle.Name,FontFile,FontFamily,tstyle.prop,false);
     end
        else
-           ti:=drawing.TextStyleTable.addstyle(tstyle.Name,lname,tstyle.prop,false);
+           ti:=drawing.TextStyleTable.addstyle(tstyle.Name,FontFile,FontFamily,tstyle.prop,false);
     end
     else
         begin
-          if drawing.TextStyleTable.FindStyle(lname,true)<>nil then
+          if drawing.TextStyleTable.FindStyle(FontFile,true)<>nil then
           begin
             if LoadMode=TLOLoad then
-                                    ti:=drawing.TextStyleTable.setstyle(lname,lname,tstyle.prop,true);
+                                    ti:=drawing.TextStyleTable.setstyle(FontFile,FontFile,FontFamily,tstyle.prop,true);
           end
              else
-                 ti:=drawing.TextStyleTable.addstyle(lname,lname,tstyle.prop,true);
+                 ti:=drawing.TextStyleTable.addstyle(FontFile,FontFile,FontFamily,tstyle.prop,true);
         end;
     if ti<>nil then
     begin
@@ -950,7 +952,7 @@ begin
                      if psp^.param.PStyle=pointer(DWGHandle) then
                      begin
                         psp^.param.PStyle:=ptstyle;
-                        psp^.FontName:=ptstyle^.dxfname;
+                        psp^.FontName:=ptstyle^.FontFile;
                         psp^.Psymbol:=ptstyle^.pfont^.GetOrReplaceSymbolInfo(integer(psp^.Psymbol){//-ttf-//,tdinfo});
                         psp^.SymbolName:=psp^.Psymbol^.Name;
                      end;
@@ -964,7 +966,7 @@ begin
                      if pTp^.param.PStyle=pointer(DWGHandle) then
                      begin
                         pTp^.param.PStyle:=ptstyle;
-                        {pTp^.FontName:=ptstyle^.dxfname;
+                        {pTp^.FontName:=ptstyle^.FontFile;
                         pTp^.Psymbol:=ptstyle^.pfont^.GetOrReplaceSymbolInfo(integer(pTp^.Psymbol));
                         pTp^.SymbolName:=pTp^.Psymbol^.Name;}
                      end;
@@ -2574,7 +2576,7 @@ ENDTAB}
                   outstream.TXTAddGDBStringEOL('2.5');
 
                   outstream.TXTAddGDBStringEOL(dxfGroupCode(3));
-                  outstream.TXTAddGDBStringEOL({drawing.TextStyleTable.getelement(i))}pcurrtextstyle^.dxfname);
+                  outstream.TXTAddGDBStringEOL({drawing.TextStyleTable.getelement(i))}pcurrtextstyle^.FontFile);
 
                   outstream.TXTAddGDBStringEOL(dxfGroupCode(4));
                   outstream.TXTAddGDBStringEOL('');
@@ -2624,11 +2626,16 @@ ENDTAB}
                     outstream.TXTAddGDBStringEOL('2.5');
 
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(3));
-                    outstream.TXTAddGDBStringEOL({drawing.TextStyleTable.getelement(i))}pcurrtextstyle^.dxfname);
+                    outstream.TXTAddGDBStringEOL({drawing.TextStyleTable.getelement(i))}pcurrtextstyle^.FontFile);
 
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(4));
                     outstream.TXTAddGDBStringEOL('');
-
+                    if pcurrtextstyle^.FontFamily<>'' then begin
+                      outstream.TXTAddGDBStringEOL(dxfGroupCode(1001));
+                      outstream.TXTAddGDBStringEOL('ACAD');
+                      outstream.TXTAddGDBStringEOL(dxfGroupCode(1000));
+                      outstream.TXTAddGDBStringEOL(pcurrtextstyle^.FontFamily);
+                    end;
                   end;
                 pcurrtextstyle:=drawing.TextStyleTable.iterate(ir);
                 until pcurrtextstyle=nil;

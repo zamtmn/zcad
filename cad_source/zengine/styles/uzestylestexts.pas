@@ -36,7 +36,8 @@ PGDBTextStyleProp=^GDBTextStyleProp;
   PGDBTextStyle=^GDBTextStyle;
   {REGISTEROBJECTTYPE GDBTextStyle}
   GDBTextStyle = object(GDBNamedObject)
-    dxfname: GDBAnsiString;(*saved_to_shd*)
+    FontFile:String;(*saved_to_shd*)
+    FontFamily:String;(*saved_to_shd*)
     pfont: PGDBfont;
     prop:GDBTextStyleProp;(*saved_to_shd*)
     UsedInLTYPE:GDBBoolean;
@@ -48,8 +49,9 @@ GDBTextStyleArray= object(GDBNamedObjectsArray{-}<PGDBTextStyle,GDBTextStyle>{//
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;
 
-                    function addstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):PGDBTextStyle;
-                    function setstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):PGDBTextStyle;
+                    function addstyle(StyleName,AFontFile,AFontFamily:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):PGDBTextStyle;
+                    function setstyle(StyleName,AFontFile,AFontFamily:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):PGDBTextStyle;
+                    procedure internalsetstyle(var style:GDBTextStyle;AFontFile,AFontFamily:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean);
                     function FindStyle(StyleName:GDBString;ult:GDBBoolean):PGDBTextStyle;
                     procedure freeelement(PItem:PT);virtual;
               end;
@@ -58,12 +60,12 @@ implementation
 destructor GDBTextStyle.Done;
 begin
      inherited;
-     dxfname:='';
+     FontFile:='';
 end;
 procedure GDBTextStyleArray.freeelement;
 begin
   PGDBTextStyle(PItem).name:='';
-  PGDBTextStyle(PItem).dxfname:='';
+  PGDBTextStyle(PItem).FontFile:='';
 end;
 constructor GDBTextStyleArray.initnul;
 begin
@@ -105,62 +107,41 @@ begin
       exit;
     end;
 end;}
-function GDBTextStyleArray.setstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):PGDBTextStyle;
+procedure GDBTextStyleArray.internalsetstyle(var style:GDBTextStyle;AFontFile,AFontFamily:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean);
+begin
+  style.FontFile:=AFontFile;
+  style.FontFamily:=AFontFamily;
+  style.UsedInLTYPE:=USedInLT;
+
+  {if pos('.',AFontFile)=0 then
+                             AFontFile:=AFontFile+'.shx';}
+
+  style.pfont:=FontManager.addFont(AFontFile,AFontFamily);
+  if not assigned(style.pfont) then
+                                begin
+                                     debugln('{WHM}'+fontnotfoundandreplace,[Tria_AnsiToUtf8(style.Name),AFontFile,AFontFamily]);
+                                     style.pfont:=pbasefont;
+                                end;
+
+  style.prop:=tp;
+end;
+
+function GDBTextStyleArray.setstyle(StyleName,AFontFile,AFontFamily:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):PGDBTextStyle;
 var
    ps:PGDBTextStyle;
 begin
   ps:=(FindStyle(StyleName,USedInLT));
-  ps.name:=stylename;
-  ps.dxfname:=FontFile;
-  ps.UsedInLTYPE:=USedInLT;
-
-  if pos('.',FontFile)=0 then
-                             FontFile:=FontFile+'.shx';
-
-  ps.pfont:=FontManager.addFonfByFile(FindInPaths(sysvarPATHFontsPath,FontFile));
-  if not assigned(ps.pfont) then
-                                begin
-                                     debugln('{WHM}'+fontnotfoundandreplace,[Tria_AnsiToUtf8(stylename),FontFile]);
-                                     ps.pfont:=pbasefont;
-                                end;
-
-  //ps.pfont:=FontManager.addFonfByFile(FontFile);
-  //ps.pfont:=FontManager.{FindFonf}getAddres(FontFile);
-  //if ps.pfont=nil then ps.pfont:=FontManager.getAddres('normal.shx');
-  ps.prop:=tp;
   result:=ps;
-  //result:=add(@ts);
-  //pointer(ts.name):=nil;
-  //pointer(ts.dxfname):=nil;
+  if ps<>nil then
+    internalsetstyle(ps^,AFontFile,AFontFamily,tp,USedInLT);
 end;
-function GDBTextStyleArray.addstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):{GDBInteger}PGDBTextStyle;
+function GDBTextStyleArray.addstyle(StyleName,AFontFile,AFontFamily:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):{GDBInteger}PGDBTextStyle;
 var ts:PGDBTextStyle;
-    //ff:gdbstring;
-    //p:GDBPointer;
 begin
   GDBGetmem({$IFDEF DEBUGBUILD}'{ED59B789-33EF-487E-9E1D-711F5988A194}',{$ENDIF}pointer(ts),sizeof(GDBTextStyle));
   ts.init(stylename);
-  //ts.name:=stylename;
-  ts.dxfname:=FontFile;
-  ts.UsedInLTYPE:=USedInLT;
-
-  if pos('.',FontFile)=0 then
-                             FontFile:=FontFile+'.shx';
-
-  ts.pfont:=FontManager.addFonfByFile(FindInPaths(sysvarPATHFontsPath,FontFile));
-  if not assigned(ts.pfont) then
-                                begin
-                                     debugln('{WHM}'+fontnotfoundandreplace,[Tria_AnsiToUtf8(stylename),FontFile]);
-                                     ts.pfont:=pbasefont;
-                                end;
-
-  //ts.pfont:=FontManager.addFonfByFile(FontFile);
-  //ts.pfont:=FontManager.{FindFonf}getAddres(FontFile);
-  //if ts.pfont=nil then ts.pfont:=FontManager.getAddres('normal.shx');
-  ts.prop:=tp;
+  internalsetstyle(ts^,AFontFile,AFontFamily,tp,USedInLT);
   result:=pointer(getDataMutable(PushBackData(ts)));
-  //pointer(ts.name):=nil;
-  //pointer(ts.dxfname):=nil;
 end;
 function GDBTextStyleArray.FindStyle;
 begin

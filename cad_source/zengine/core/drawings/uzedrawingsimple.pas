@@ -289,7 +289,7 @@ begin
      tp.oblique:=0;
      tp.size:=1;
      tp.wfactor:=1;
-     pts:=TextStyleTable.addstyle(psp.FontName,psp.FontName,tp,true);
+     pts:=TextStyleTable.addstyle(psp.FontName,'',psp.FontName,tp,true);
 end;
 
 begin

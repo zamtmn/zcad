@@ -22,7 +22,7 @@ unit uzestrconsts;
 interface
 resourcestring
 
-  fontnotfoundandreplace='For text style "%s" not found font "%s", is replaced by an alternative';
+  fontnotfoundandreplace='For text style "%s" not found font "%s" ("%s" fontfamily), is replaced by an alternative';
 
   {files}
   rsAlternateFontNotFoundIn='Alternate font "%s" is not found in "%s"';

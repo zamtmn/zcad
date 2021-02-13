@@ -524,9 +524,10 @@ begin
                                                       end
                                                   else
                                                       begin
-                                                           CharIterator:=MapChar.Min;
+                                                           {CharIterator:=MapChar.Min;
                                                            si:=CharIterator.value;
-                                                           result:=si.PSymbolInfo;
+                                                           result:=si.PSymbolInfo;}
+                                                           result:=GetOrReplaceSymbolInfo(ord('?'));
                                                       end;
                               end;
      //-ttf-//TrianglesDataInfo:=si.TrianglesDataInfo;

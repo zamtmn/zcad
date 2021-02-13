@@ -84,6 +84,8 @@ begin
                       end;
       end;
     {exit;}
+    (*if name='C:\WINDOWS\Fonts\GOST2304A.ttf' then
+      name:=name;
     iterator:=pttf^.MapChar.Min;
     if assigned(iterator) then
     begin
@@ -96,7 +98,7 @@ begin
 
     until {not iterator.next}true;
     iterator.Destroy;
-    end;
+    end;*)
 end;
 initialization
   RegisterFontLoadProcedure('ttf','TTF font',@createnewfontfromttf);

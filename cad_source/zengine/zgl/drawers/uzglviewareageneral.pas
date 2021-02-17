@@ -137,6 +137,7 @@ type
                            function NeedDrawInsidePaintEvent:boolean; virtual;abstract;
                            procedure ZoomIn;override;
                            procedure ZoomOut;override;
+                           procedure GDBActivateContext; override;
                       end;
 function MouseButton2ZKey(Shift: TShiftState):GDBByte;
 procedure RemoveCursorIfNeed(acontrol:TControl;RemoveCursor:boolean);
@@ -181,6 +182,12 @@ var
    sysvarDISPDefaultLW:TGDBLineWeight=LnWt025;
 
 implementation
+
+procedure TGeneralViewArea.GDBActivateContext;
+begin
+  //drawer.delmyscrbuf;
+end;
+
 procedure RemoveCursorIfNeed(acontrol:TControl;RemoveCursor:boolean);
 begin
      if RemoveCursor then
@@ -230,7 +237,7 @@ procedure TGeneralViewArea.GDBActivate;
 begin
     pdwg.SetCurrentDWG;
     param.firstdraw:=true;
-    GDBActivateGLContext;
+    GDBActivateContext;
     getviewcontrol.invalidate;
     if assigned(OnActivateProc) then OnActivateProc;
 end;

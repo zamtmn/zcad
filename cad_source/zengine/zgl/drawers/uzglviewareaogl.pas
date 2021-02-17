@@ -53,7 +53,7 @@ type
                       procedure LightOff(var DC:TDrawContext); override;
                       procedure DrawGrid(var DC:TDrawContext); override;
                       procedure getareacaps; override;
-                      procedure GDBActivateGLContext; override;
+                      procedure GDBActivateContext; override;
                       function NeedDrawInsidePaintEvent:boolean; override;
                       procedure setdeicevariable; override;
                       function getParam:pointer; override;
@@ -83,12 +83,13 @@ function TOpenGLViewArea.getParamTypeName;
 begin
      result:='PTOpenglData';
 end;
-procedure TOpenGLViewArea.GDBActivateGLContext;
+procedure TOpenGLViewArea.GDBActivateContext;
 begin
-                                      //MyglMakeCurrent(OpenGLWindow.OGLContext);
-                                      OpenGLWindow.MakeCurrent;
-                                      drawer.delmyscrbuf;
-                                      isOpenGLError;
+  inherited;
+  //MyglMakeCurrent(OpenGLWindow.OGLContext);
+  OpenGLWindow.MakeCurrent;
+  drawer.delmyscrbuf;
+  isOpenGLError;
 end;
 function TOpenGLViewArea.NeedDrawInsidePaintEvent:boolean;
 begin

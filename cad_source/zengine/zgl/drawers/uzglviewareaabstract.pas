@@ -79,7 +79,7 @@ type
                            OnWaShowCursor:TOnWaShowCursor;
 
                            procedure GDBActivate;virtual;abstract;
-                           procedure GDBActivateGLContext;virtual;abstract;
+                           procedure GDBActivateContext;virtual;abstract;
 
                            function getviewcontrol:TCADControl;virtual;abstract;
                            procedure getareacaps;virtual;abstract;

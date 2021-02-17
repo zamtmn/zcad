@@ -27,6 +27,28 @@ type
   TStr2VarProcessor=class(TDynamicStrProcessor)
     function GetResult(const str:gdbstring;const operands:gdbstring;var NextSymbolPos:integer;pobj:Pointer):gdbstring;
   end;
+
+  TNum2StrProcessor=class(TStaticStrProcessor)
+    class procedure StaticGetResult(const Source:TTokenizerString;
+                                    const Token :TSubStr;
+                                    const Operands :TSubStr;
+                                    var Result:TTokenizerString;
+                                    var ResultParam:TSubStr;
+                                    const data:pointer);override;
+  end;
+
+  TPointer2StrProcessor=class(TDynamicStrProcessor)
+    constructor vcreate(const Source:TTokenizerString;
+                        const Token :TSubStr;
+                        const Operands :TSubStr);override;
+    procedure GetResult(const Source:TTokenizerString;
+                        const Token :TSubStr;
+                        const Operands :TSubStr;
+                        var Result:TTokenizerString;
+                        var ResultParam:TSubStr;
+                        const data:pointer);override;
+  end;
+
 var
   TokenTextInfo:TTokenTextInfo;
   pt:TAbstractParsedText;
@@ -44,6 +66,40 @@ begin
     result:=pv^.data.ptd^.GetValueAsString(pv^.data.Instance)
   else
     result:='!!ERR('+varname+')!!';
+end;
+class procedure TNum2StrProcessor.StaticGetResult(const Source:ansistring;
+                                                  const Token :TSubStr;
+                                const Operands :TSubStr;
+                                var Result:ansistring;
+                                var ResultParam:TSubStr;
+                                const data:pointer);
+begin
+  ResultParam.Length:=2;
+  if ResultParam.StartPos<>OnlyGetLength then begin
+    Result[ResultParam.StartPos]:='9';
+    Result[ResultParam.StartPos+1]:='9';
+  end;
+end;
+
+constructor TPointer2StrProcessor.vcreate(const Source:TTokenizerString;
+                                          const Token :TSubStr;
+                                          const Operands :TSubStr);
+begin
+
+end;
+
+procedure TPointer2StrProcessor.GetResult(const Source:TTokenizerString;
+                                          const Token :TSubStr;
+                                          const Operands :TSubStr;
+                                          var Result:TTokenizerString;
+                                          var ResultParam:TSubStr;
+                                          const data:pointer);
+begin
+  ResultParam.Length:=2;
+  if ResultParam.StartPos<>OnlyGetLength then begin
+    Result[ResultParam.StartPos]:='0';
+    Result[ResultParam.StartPos+1]:='0';
+  end;
 end;
 
 function prop2value(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;pobj:Pointer):gdbstring;
@@ -131,15 +187,17 @@ initialization
   Prefix2ProcessFunc.RegisterProcessor('\',#0,#0,@EscapeSeq);
   Prefix2ProcessFunc.RegisterProcessor('%%DATE',#0,#0,@date2value,true);
 
-  Parser.RegisterToken('@@[','[',']',{@var2value}TStr2VarProcessor,[TOIncludeBrackeOpen,TOVariable]);
+  Parser.RegisterToken('@@[','[',']',{@var2value}TStr2VarProcessor,[TOIncludeBrackeOpen{,TOVariable}]);
+  Parser.RegisterToken('NUM',#0,#0,TNum2StrProcessor,[]);
+  Parser.RegisterToken('PTR',#0,#0,TPointer2StrProcessor,[{TOVariable}]);
   //Parser.RegisterToken('%%[','[',']',@prop2value,[TOIncludeBrackeOpen,TOVariable]);
   //Parser.RegisterToken('\',#0,#0,@EscapeSeq);
   //Parser.RegisterToken('%%DATE',#0,#0,@date2value,[TOVariable]);
   parser.OptimizeTokens;
-  pt:=Parser.GetTokens('@@[Layer]@@[Layer]');
-  {pt.SetOperands;
-  pt.SetData;
-  pt.GetResult;}
+  pt:=Parser.GetTokens('(PTR-NUM)');
+  //pt.SetOperands;
+  //pt.SetData;
+  s:=pt.GetResult(nil);
   pt.Free;
  { a:=Parser.GetToken('_@@[Layer]',1,TokenTextInfo);
   a:=Parser.GetToken('_@@[Layer]',TokenTextInfo.NextPos,TokenTextInfo);

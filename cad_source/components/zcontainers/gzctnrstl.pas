@@ -218,7 +218,9 @@ var
    Iterator:TParent.TIterator;
    {ELSE}
    *)
-   Iterator:TIterator;
+//   Iterator:TIterator;
+    Pair:TPair;
+    Node:TMSet.PNode;
 {$ENDIF}
 {$IFDEF DELPHI}
 var
@@ -227,15 +229,23 @@ var
 {$ENDIF}
 begin
 {$IFNDEF DELPHI}
-  Iterator:=Find(key);
-  if  Iterator=nil then
-                       result:=false
-                   else
-                       begin
-                            PValue:=Iterator.MutableValue;
-                            Iterator.Destroy;
-                            result:=true;
-                       end;
+  //Iterator:=Find(key);
+  //if  Iterator=nil then
+  //                     result:=false
+  //                 else
+  //                     begin
+  //                          PValue:=Iterator.MutableValue;
+  //                          Iterator.Destroy;
+  //                          result:=true;
+  //                     end;
+    Pair.Key:=key;
+    Node:=FSet.NFind(Pair);
+    if Node=nil then
+      result:=false
+    else begin
+      result:=true;
+      PValue:=@Node^.Data;
+    end;
 {$ENDIF}
 {$IFDEF DELPHI}
   hc:=Hash(Key);

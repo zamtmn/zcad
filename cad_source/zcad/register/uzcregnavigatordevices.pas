@@ -215,18 +215,19 @@ end;
 function CreateNavigatorDevices:TForm;
 begin
  result:=tform(TNavigatorDevices.NewInstance);
- TNavigatorDevices(result).TreeBuildMap:='+NMO_Prefix|+NMO_BaseName|+@@[NMO_Name]';
- TNavigatorDevices(result).IncludeEntities:='+Device';
- TNavigatorDevices(result).IncludeProperties:='';//'+*|-%%[Name]=EL_CABLE_*';
- TNavigatorDevices(result).UseMainFunctions:=True;
+ TNavigatorDevices(result).BP.TreeBuildMap:='+NMO_Prefix|+NMO_BaseName|+@@[NMO_Name]';
+ TNavigatorDevices(result).BP.IncludeEntities:='+Device';
+ TNavigatorDevices(result).BP.IncludeProperties:='';//'+*|-%%[Name]=EL_CABLE_*';
+ TNavigatorDevices(result).BP.UseMainFunctions:=True;
 end;
 function CreateNavigatorRisers:TForm;
 begin
  result:=tform(TNavigatorRisers.NewInstance);
- TNavigatorRisers(result).TreeBuildMap:='+@@[RiserName]:@@[Elevation]:@@[Text]';
- TNavigatorRisers(result).IncludeEntities:='+Device';
- TNavigatorRisers(result).IncludeProperties:='+%%[Name]=EL_CABLE_*';
- TNavigatorRisers(result).UseMainFunctions:=False;
+ TNavigatorRisers(result).BP.TreeBuildMap:='{+@@[RiserName]:@@[Elevation]:@@[Text]}';
+ //TNavigatorRisers(result).BP.IncludeEntities:='IncludeEnt(Device)';
+ TNavigatorRisers(result).BP.IncludeEntities:='+Device';
+ TNavigatorRisers(result).BP.IncludeProperties:='+%%[Name]=EL_CABLE_*';
+ TNavigatorRisers(result).BP.UseMainFunctions:=False;
 end;
 function CreateNavigatorCables:TForm;
 begin
@@ -236,10 +237,10 @@ begin
  TNavigatorRisers(result).IncludeProperties:='+*';
  TNavigatorCables(result).UseMainFunctions:=False;}
 
- TNavigatorCables(result).TreeBuildMap:='+%%[Layer]';
- TNavigatorRisers(result).IncludeEntities:='';
- TNavigatorRisers(result).IncludeProperties:='';
- TNavigatorCables(result).UseMainFunctions:=False;
+ TNavigatorCables(result).BP.TreeBuildMap:='+%%[Layer]';
+ TNavigatorRisers(result).BP.IncludeEntities:='';
+ TNavigatorRisers(result).BP.IncludeProperties:='';
+ TNavigatorCables(result).BP.UseMainFunctions:=False;
 end;
 
 initialization

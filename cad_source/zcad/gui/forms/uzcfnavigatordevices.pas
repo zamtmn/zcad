@@ -21,6 +21,12 @@ resourcestring
   rsStandaloneDevices='Standalone devices';
 
 type
+  TBuildParam=record
+    TreeBuildMap:string;
+    IncludeEntities,IncludeProperties:string;
+    UseMainFunctions:Boolean;
+  end;
+
   TStringPartEnabler=TPartEnabler<String>;
   TEnt2NodeMap=TDictionary<pGDBObjEntity,PVirtualNode>;
   { TNavigatorDevices }
@@ -74,9 +80,10 @@ type
     EntsTypeFilter:TEntsTypeFilter;
 
   public
-    TreeBuildMap:string;
+    BP:TBuildParam;
+    {TreeBuildMap:string;
     IncludeEntities,IncludeProperties:string;
-    UseMainFunctions:Boolean;
+    UseMainFunctions:Boolean;}
 
     procedure CreateRoots;
     procedure EraseRoots;
@@ -166,7 +173,7 @@ begin
   if not EntsTypeFilter.IsEntytyTypeAccepted(pent^.GetObjType)then
       exit(false);
 
-  an:=IncludeProperties;
+  an:=BP.IncludeProperties;
   if an<>'' then begin
     alreadyinclude:=false;
     repeat
@@ -224,7 +231,7 @@ begin
   Name:='';
   basenode:=rootdesk.rootnode;
 
-  an:=TreeBuildMap;
+  an:=BP.TreeBuildMap;
   if an<>'' then
   repeat
     GetPartOfPath(cn,an,'|');
@@ -369,7 +376,7 @@ begin
    TreeEnabler.SetStateProc:=SetPartState;
    TreeEnabler.PartsEditFunc:=PartsEditor;
 
-   TreeEnabler.setup(TreeBuildMap);
+   TreeEnabler.setup(BP.TreeBuildMap);
    TreeEnabler.Parent:=CoolBar1;
 
    NavTree.OnGetText:=NavGetText;
@@ -468,7 +475,7 @@ var
   pentvarext:PTVariablesExtender;
 begin
   pentvarext:=pent^.GetExtension(typeof(TVariablesExtender));
-  if (UseMainFunctions)and(pentvarext<>nil) then begin
+  if (BP.UseMainFunctions)and(pentvarext<>nil) then begin
     if not Ent2NodeMap.trygetvalue(pent,result) then begin
       result:=StandaloneNode.CreateEntityNode(Tree,basenode,pent,Name);
       pentvarext:=pent^.GetExtension(typeof(TVariablesExtender));
@@ -721,7 +728,7 @@ begin
     EntsTypeFilter.ResetFilter
   else
     EntsTypeFilter:=TEntsTypeFilter.Create;
-  an:=IncludeEntities;
+  an:=BP.IncludeEntities;
   if an<>'' then begin
     repeat
       GetPartOfPath(cn,an,'|');

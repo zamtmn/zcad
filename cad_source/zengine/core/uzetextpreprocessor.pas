@@ -30,14 +30,17 @@ type
     IsVariable:Boolean;
     Func:TStrProcessFunc;
   end;
+  TTokenizerString=ansistring;
+  TTokenizerSymbol=char;
 
   TPrefix2ProcessFunc=class (GKey2DataMap<TInternalStringType,TStrProcessorData{$IFNDEF DELPHI},LessUnicodeString{$ENDIF}>)
     procedure RegisterProcessor(const Id:TInternalStringType;const OBracket,CBracket:TInternalCharType;const Func:TStrProcessFunc;IsVariable:Boolean=false);
   end;
+  TMyParser=TParser<TTokenizerString,TTokenizerSymbol,pointer,TCharToOptChar<TTokenizerSymbol>>;
 
 var
     Prefix2ProcessFunc:TPrefix2ProcessFunc;
-    Parser:TParser;
+    Parser:TMyParser;
 function textformat(s:TDXFEntsInternalStringType;pobj:GDBPointer):TDXFEntsInternalStringType;
 function convertfromunicode(s:GDBString):GDBString;
 implementation
@@ -171,7 +174,7 @@ begin
 end;
 initialization
   Prefix2ProcessFunc:=TPrefix2ProcessFunc.Create;
-  Parser:=TParser.create;
+  Parser:=TMyParser.create;
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   Prefix2ProcessFunc.Destroy;

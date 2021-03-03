@@ -1,4 +1,4 @@
-{
+﻿{
 *****************************************************************************
 *                                                                           *
 *  This file is part of the ZCAD                                            *
@@ -16,209 +16,350 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 } 
 unit uzeparser;
-{$INCLUDE def.inc}
-{$mode delphi}
+{INCLUDE def.inc}
+{$IFDEF FPC}{$mode delphi}{$ENDIF}
+{$DEFINE USETDICTIONARY}
+{$DEFINE USETLIST}
 
 interface
-uses sysutils,gvector,gmap,{gzctnrstl,}{LazLogger,}gutil;
-const MaxCashedValues=4;
-      MaxIncludedChars=2;
+uses sysutils,
+     {$IFDEF FPC}gvector,gmap,gutil,{$ENDIF}
+     Generics.Collections;
+const MaxCashedValues={4}5;
+      MaxIncludedChars=3;
       OnlyGetLength=-1;
       InitialStartPos=1;
 type
-  TTokenizerString=string;
+  {GTokenizerString=ansistring;
+  GTokenizerSymbol=char;
+  GParserString=GTokenizerString;
+  GParserSymbol=GTokenizerSymbol;
+  GDataType=pointer;}
+
+
+
+
+  //TTokenizerString=ansistring;
+  //TTokenizerSymbol=char;
   TSubStr=record
     StartPos,Length:integer;
   end;
 
   TProcessorType=(PTStatic,PTDynamic);
-  TProcessorState=(PSDataChanged,PSOperandsChanged);
-  TProcessorStates=set of TProcessorState;
-  TStrProcessor=class
-    class procedure StaticGetResult(const Source:TTokenizerString;
-                                    const Token :TSubStr;
-                                    const Operands :TSubStr;
-                                    var Result:TTokenizerString;
-                                    var ResultParam:TSubStr;
-                                    //var NextSymbolPos:integer;
-                                    const data:pointer);virtual;abstract;
-    procedure GetResult(const Source:TTokenizerString;
-                        const Token :TSubStr;
-                        const Operands :TSubStr;
-                        var Result:TTokenizerString;
-                        var ResultParam:TSubStr;
-                        const data:pointer);virtual;abstract;
-    constructor vcreate(const Source:TTokenizerString;
-                        const Token :TSubStr;
-                        const Operands :TSubStr);virtual;abstract;
-    class function GetProcessorType:TProcessorType;virtual;abstract;
+
+  {$IFNDEF FPC}SizeUInt = LongWord;{$ENDIF}
+
+  TMyMap <TKey, TValue {$IFNDEF USETDICTIONARY}, TCompare{$ENDIF}> = class({$IFNDEF USETDICTIONARY}TMap{$ELSE}TDictionary{$ENDIF}<TKey, TValue{$IFNDEF USETDICTIONARY}, TCompare{$ENDIF}>)
+    {$IFNDEF FPC}type PValue=^TValue;{$ENDIF}
+    {$IFDEF USETDICTIONARY}type PTValue=PValue;{$ENDIF}
+    public
+    function MyGetMutableValue(key:TKey; out PValue:PTValue):boolean;inline;
+    {$IFDEF USETDICTIONARY}function IsEmpty:boolean;inline;{$ENDIF}
+    {$IFNDEF USETDICTIONARY}property count:SizeUInt read {$IFDEF FPC}Size{$ELSE}FCount{$ENDIF};{$ENDIF}
   end;
-  TStrProcessorClass=class of TStrProcessor;
-  TStaticStrProcessor=class(TStrProcessor)
-    class function GetProcessorType:TProcessorType;override;
-  end;
-  TFakeStrProcessor=class(TStaticStrProcessor)
-    class procedure StaticGetResult(const Source:TTokenizerString;
-                                    const Token :TSubStr;
-                                    const Operands :TSubStr;
-                                    var Result:TTokenizerString;
-                                    var ResultParam:TSubStr;
-                                    const data:pointer);override;
-  end;
-  TDynamicStrProcessor=class(TStrProcessor)
-    class function GetProcessorType:TProcessorType;override;
+  TMyVector<T> = class({$IFNDEF USETLIST}TVector{$ELSE}TList{$ENDIF}<T>)
+    {$IFDEF USETLIST}
+    {$IFNDEF FPC}type PT=^T;{$ENDIF}
+    function GetMutable(Position: SizeUInt): PT; inline;
+    procedure PushBack(const Value: T); inline;
+    property Mutable[i : SizeUInt]: PT read getMutable;
+    property size:{$IFDEF FPC}SizeInt{$ELSE}Integer{$ENDIF} read {$IFDEF FPC}FLength{$ELSE}FListHelper.FCount{$ENDIF};
+    {$ENDIF}
   end;
 
-  TStrProcessFunc=function(const str:string;const operands:string;var startpos:integer;pobj:pointer):string;
-  TStrProcessorData=record
-    Id:string;
-    OBracket,CBracket:char;
-    IsVariable:Boolean;
-    Func:TStrProcessFunc;
+  TOptChar=Byte;
+  TChars=set of TOptChar;
+
+  TCharToOptChar<T>=class
+    class function Convert(c:T):TOptChar;inline;
   end;
 
-  TTokenizer=class;
-  TTokenId=integer;
-  TTokenizerSymbol=char;
-  TChars=set of TTokenizerSymbol;
-  TIncludedChars=array [1..MaxIncludedChars+1] of TChars;
-  TTokenOption=(TOIncludeBrackeOpen,//открывающая скобка входит в имя
-                TONestedBracke,//возможны вложенные скобки
-                //TOVariable,//переменный, значение всегда нужно пересчитывать
-                TOFake);//не является токеном
-  TTokenOptions=set of TTokenOption;
-  TTokenData=record
-    Token:string;
-    BrackeOpen,BrackeClose:char;
-    Options:TTokenOptions;
-    ProcessorClass:TStrProcessorClass;
-  end;
-  TTokenizerSymbolData=record
-    NextSymbol:TTokenizer;
-    TokenId:TTokenId;
-  end;
 
-  TTokenTextInfo=record
-    TokenId:TTokenId;
-    TokenPos:TSubStr;
-    OperandsPos:TSubStr;
-    NextPos:integer;
-  end;
-
-  TTextPart=record
-    TextInfo:TTokenTextInfo;
-    TokenInfo:TTokenData;
-    Processor:TStrProcessor;
-    //Rez:string;
-  end;
-
-  TTextPartsVector=TVector<{TTokenTextInfo}TTextPart>;
-
-  LessTTokenizerSymbol=TLess<TTokenizerSymbol>;
-  TTokenizer=class({GKey2DataMap}TMap<TTokenizerSymbol,TTokenizerSymbolData,LessTTokenizerSymbol>)
+  TTokenizer<GTokenizerString,GTokenizerSymbol,GTokenizerSymbolToOptChar>=class
   type
+    TIncludedChars=array [1..MaxIncludedChars+1] of TChars;
+
+    TTokenId=integer;
+
+    TTokenTextInfo=record
+      TokenId:TTokenId;
+      TokenPos:TSubStr;
+      OperandsPos:TSubStr;
+      NextPos:integer;
+    end;
+
+    TTokenizerSymbolData=record
+      NextSymbol:TTokenizer<GTokenizerString,GTokenizerSymbol,GTokenizerSymbolToOptChar>;
+      TokenId:TTokenId;
+    end;
+
     TCashedData=record
-      Symbol:TTokenizerSymbol;
+      Symbol:GTokenizerSymbol;
       SymbolData:TTokenizerSymbolData
     end;
+
     TCashe=array [1..maxcashedvalues] of TCashedData;
+    TTokenizerMap=TmyMap<GTokenizerSymbol,TTokenizerSymbolData{$IFNDEF USETDICTIONARY},TLess<GTokenizerSymbol>{$ENDIF}>;
     public
   var
+    Map:TTokenizerMap;
     Cashe:TCashe;
-    isOnlyOneToken:TTokenizerString;
+    isOnlyOneToken:GTokenizerString;
     isOnlyOneTokenId:TTokenId;
     includedChars:TChars;
     constructor create;
-    procedure SubRegisterToken(Token:TTokenizerString;var sym:integer;_TokenId:TTokenId;var IncludedCharsPos:TIncludedChars);
-    procedure Sub2RegisterToken(Token:TTokenizerString;var sym:integer;_TokenId:TTokenId;var IncludedCharsPos:TIncludedChars);
-
-    function SubGetToken(Text:TTokenizerString;CurrentPos:integer;out TokenTextInfo:TTokenTextInfo;level:integer;var IncludedCharsPos:TIncludedChars;var AllChars:TChars):TTokenId;
-    function Sub2GetToken(Text:TTokenizerString;CurrentPos:integer;out TokenTextInfo:TTokenTextInfo;level:integer):TTokenId;
-    function GetToken(Text:TTokenizerString;CurrentPos:integer;out TokenTextInfo:TTokenTextInfo;var IncludedCharsPos:TIncludedChars;var AllChars:TChars):TTokenId;
-
-    function GetSymbolData(const Text:TTokenizerString;const CurrentPos:integer;out PTokenizerSymbolData:TTokenizer.PTValue):boolean;inline;
-  end;
-  TTokenDataVector=TVector<TTokenData>;
-
-  TParser=class;
-  TAbstractParsedText=class(tobject)
-    Source:TTokenizerString;
-    Parser:TParser;
-    procedure SetOperands;virtual;abstract;
-    function GetResult(data:pointer):TTokenizerString;virtual;abstract;
-    constructor Create(_Source:TTokenizerString;_Parser:TParser);
     destructor Destroy;override;
+    procedure SubRegisterToken(Token:GTokenizerString;var sym:integer;_TokenId:TTokenId;var IncludedCharsPos:TIncludedChars);
+    procedure Sub2RegisterToken(Token:GTokenizerString;var sym:integer;_TokenId:TTokenId;var IncludedCharsPos:TIncludedChars);
+
+    function SubGetToken(Text:GTokenizerString;CurrentPos:integer;out TokenTextInfo:TTokenTextInfo;level:integer;var IncludedCharsPos:TIncludedChars;var AllChars:TChars):TTokenId;//inline;
+    function Sub2GetToken(Text:GTokenizerString;CurrentPos:integer;out TokenTextInfo:TTokenTextInfo;level:integer):TTokenId;//inline;
+    function GetToken(Text:GTokenizerString;CurrentPos:integer;out TokenTextInfo:TTokenTextInfo;var IncludedCharsPos:TIncludedChars;var AllChars:TChars):TTokenId;//inline;
+
+    function GetSymbolData(const Text:GTokenizerString;const CurrentPos:integer):TTokenizerMap.PTValue;//inline;
   end;
 
-  TParsedTextWithoutTokens=class(TAbstractParsedText)
-    //procedure SetOperands;override;
-    function GetResult(data:pointer):TTokenizerString;override;
-  end;
+TStrProcessor<GString,GSymbol,GDataType>=class
+  class procedure StaticGetResult(const Source:GString;
+                                  const Token :TSubStr;
+                                  const Operands :TSubStr;
+                                  var Result:GString;
+                                  var ResultParam:TSubStr;
+                                  //var NextSymbolPos:integer;
+                                  const data:pointer);virtual;abstract;
+  procedure GetResult(const Source:GString;
+                      const Token :TSubStr;
+                      const Operands :TSubStr;
+                      var Result:GString;
+                      var ResultParam:TSubStr;
+                      const data:pointer);virtual;abstract;
+  constructor vcreate(const Source:GString;
+                      const Token :TSubStr;
+                      const Operands :TSubStr);virtual;abstract;
+  class function GetProcessorType:TProcessorType;virtual;abstract;
+end;
+TStaticStrProcessor<GString,GSymbol,GDataType>=class(TStrProcessor<GString,GSymbol,GDataType>)
+  class function GetProcessorType:TProcessorType;override;
+end;
+TGFakeStrProcessor<GString,GSymbol,GDataType> =class(TStaticStrProcessor<GString,GSymbol,GDataType>)
+  class procedure StaticGetResult(const Source:GString;
+                                  const Token :TSubStr;
+                                  const Operands :TSubStr;
+                                  var Result:GString;
+                                  var ResultParam:TSubStr;
+                                  const data:pointer);override;
+end;
+TDynamicStrProcessor<GString,GSymbol,GDataType>=class(TStrProcessor<GString,GSymbol,GDataType>)
+  class function GetProcessorType:TProcessorType;override;
+end;
 
-  TParsedTextWithOneToken=class(TAbstractParsedText)
-    Part:TTextPart;
-    {procedure SetOperands;override;
-    procedure SetData;override;}
-
-    function GetResult(data:pointer):TTokenizerString;override;
-    constructor CreateWithToken(_Source:TTokenizerString;_TokenTextInfo:TTokenTextInfo;_Parser:TParser);
-    destructor Destroy;override;
-  end;
-
-
-  TParsedText=class(TAbstractParsedText)
-    Parts:TTextPartsVector;
-    constructor Create(_Source:TTokenizerString;_Parser:TParser);
-    constructor CreateWithToken(_Source:TTokenizerString;_TokenTextInfo:TTokenTextInfo;_Parser:TParser);
-    procedure AddToken(_TokenTextInfo:TTokenTextInfo);
-    function GetResult(data:pointer):TTokenizerString;override;
-    destructor Destroy;override;
-  end;
-
-  TParser=class
+  TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>=class
     public
-    IncludedCharsPos:TIncludedChars;
+      type
+          TTokenOption=(TOIncludeBrackeOpen,//открывающая скобка входит в имя
+                        TONestedBracke,//возможны вложенные скобки
+                        //TOVariable,//переменный, значение всегда нужно пересчитывать
+                        TOFake);//не является токеном
+          TTokenOptions=set of TTokenOption;
+
+          TProcessor=TStrProcessor<GParserString,GParserSymbol,GDataType>;
+          TStaticProcessor=TStaticStrProcessor<GParserString,GParserSymbol,GDataType>;
+          TDynamicProcessor=TDynamicStrProcessor<GParserString,GParserSymbol,GDataType>;
+          TFakeStrProcessor=TGFakeStrProcessor<GParserString,GParserSymbol,GDataType>;
+          TStrProcessorClass=class of TProcessor;
+
+          TParserTokenizer=TTokenizer<GParserString,GParserSymbol,GSymbolToOptChar>;
+
+          TTokenData=record
+            Token:GParserString;
+            BrackeOpen,BrackeClose:GParserSymbol;
+            Options:TTokenOptions;
+            ProcessorClass:TStrProcessorClass;
+          end;
+
+          TTokenDataVector=TMyVector<TTokenData>;
+
+          TTextPart=record
+            TextInfo:TParserTokenizer.TTokenTextInfo;
+            TokenInfo:TTokenData;
+            Processor:TProcessor;
+            //Rez:string;
+          end;
+
+          TTextPartsVector=TMyVector<TTextPart>;
+
+          TAbstractParsedText=class
+            Source:GParserString;
+            Parser:TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>;
+            procedure SetOperands;virtual;abstract;
+            function GetResult(data:GDataType):GParserString;virtual;abstract;
+            constructor Create(_Source:GParserString;_Parser:TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>);
+            destructor Destroy;override;
+          end;
+
+          TParsedTextWithoutTokens=class(TAbstractParsedText)
+            function GetResult(data:GDataType):GParserString;override;
+          end;
+
+          TParsedTextWithOneToken=class(TAbstractParsedText)
+            Part:TTextPart;
+            function GetResult(data:GDataType):GParserString;override;
+            constructor CreateWithToken(_Source:GParserString;_TokenTextInfo:TParserTokenizer.TTokenTextInfo;_Parser:TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>);
+            destructor Destroy;override;
+          end;
+
+          TParsedText=class(TAbstractParsedText)
+            Parts:TTextPartsVector;
+            constructor Create(_Source:GParserString;_Parser:TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>);
+            constructor CreateWithToken(_Source:GParserString;_TokenTextInfo:TParserTokenizer.TTokenTextInfo;_Parser:TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>);
+            procedure AddToken(_TokenTextInfo:TParserTokenizer.TTokenTextInfo);
+            function GetResult(data:GDataType):GParserString;override;
+            destructor Destroy;override;
+          end;
+
+      var
+    IncludedCharsPos:TParserTokenizer.TIncludedChars;
     AllChars:TChars;
-    Tokenizer:TTokenizer;
+    Tokenizer:TParserTokenizer;
     TokenDataVector:TTokenDataVector;
-    tkEmpty,tkRawText,tkEOF,tkLastPredefToken:TTokenId;
-    StoredTokenTextInfo:TTokenTextInfo;
+    tkEmpty,tkRawText,tkEOF,tkLastPredefToken:TParserTokenizer.TTokenId;
+    StoredTokenTextInfo:TParserTokenizer.TTokenTextInfo;
     constructor create;
     procedure clearStoredToken;
-    function RegisterToken(const Token:string;const BrackeOpen,BrackeClose:char;{const Func:TStrProcessFunc}const ProcessorClass:TStrProcessorClass;Options:TTokenOptions=[]):TTokenId;
+    function RegisterToken(const Token:string;const BrackeOpen,BrackeClose:char;{const Func:TStrProcessFunc}const ProcessorClass:TStrProcessorClass;Options:TTokenOptions=[]):TParserTokenizer.TTokenId;
     procedure OptimizeTokens;
-    function GetToken(Text:TTokenizerString;CurrentPos:integer;out TokenTextInfo:TTokenTextInfo):TTokenId;
-    function GetTokens(Text:TTokenizerString):TAbstractParsedText;
-    procedure ReadOperands(Text:TTokenizerString;TokenId:TTokenId;out TokenTextInfo:TTokenTextInfo);
+    function GetToken(Text:GParserString;CurrentPos:integer;out TokenTextInfo:TParserTokenizer.TTokenTextInfo):TParserTokenizer.TTokenId;
+    function GetTokens(Text:GParserString):TAbstractParsedText;
+    procedure ReadOperands(Text:GParserString;TokenId:TParserTokenizer.TTokenId;var TokenTextInfo:TParserTokenizer.TTokenTextInfo);
   end;
 
+    {TAbstractParsedText=class
+      Source:TTokenizerString;
+      Parser:TParser;
+      procedure SetOperands;virtual;abstract;
+      function GetResult(data:pointer):TTokenizerString;virtual;abstract;
+      constructor Create(_Source:TTokenizerString;_Parser:TParser);
+      destructor Destroy;override;
+    end;
+
+    TParsedTextWithoutTokens=class(TAbstractParsedText)
+      function GetResult(data:pointer):TTokenizerString;override;
+    end;
+
+    TParsedTextWithOneToken=class(TAbstractParsedText)
+      Part:TTextPart;
+      function GetResult(data:pointer):TTokenizerString;override;
+      constructor CreateWithToken(_Source:TTokenizerString;_TokenTextInfo:TTokenTextInfo;_Parser:TParser);
+      destructor Destroy;override;
+    end;
+
+
+    TParsedText=class(TAbstractParsedText)
+      Parts:TTextPartsVector;
+      constructor Create(_Source:TTokenizerString;_Parser:TParser);
+      constructor CreateWithToken(_Source:TTokenizerString;_TokenTextInfo:TTokenTextInfo;_Parser:TParser);
+      procedure AddToken(_TokenTextInfo:TTokenTextInfo);
+      function GetResult(data:pointer):TTokenizerString;override;
+      destructor Destroy;override;
+    end;}
+procedure IncludeOptChar(var OptChars:TChars;const OptChar:TOptChar);
+function OptCharIncluded(const OptChars:TChars;const OptChar:TOptChar):boolean;
+
 implementation
-class function TStaticStrProcessor.GetProcessorType:TProcessorType;
+
+class function TCharToOptChar<T>.Convert(c:T):TOptChar;
+begin
+  if ord(c)>255 then
+    result:=0
+  else
+    result:=ord(c);
+end;
+
+{$IFDEF USETLIST}
+function TMyVector<T>.GetMutable(Position: SizeUInt): PT;
+{$IFNDEF FPC}
+type
+  myarrayofT = array of T;
+var
+  a:myarrayofT;
+{$ENDIF}
+begin
+{$IFDEF FPC}
+  Result:=@FItems[Position];
+{$ELSE}
+  a:=list;
+  result:=@a[Position];
+{$ENDIF}
+end;
+procedure TMyVector<T>.PushBack(const Value: T);
+begin
+  Add(Value);
+end;
+{$ENDIF}
+function TmyMap<TKey, TValue{$IFNDEF USETDICTIONARY},TCompare{$ENDIF}>.MyGetMutableValue(key:TKey; out PValue:PTValue):boolean;
+{$IFNDEF USETDICTIONARY}
+var Pair:TPair;
+    Node:TMSet.PNode;
+begin
+  Pair.Key:=key;
+  Node:=FSet.NFind(Pair);
+  if Node=nil then
+    result:=false
+  else begin
+    result:=true;
+    PValue:=@Node^.Data;
+  end;
+end;
+{$ELSE}
+var
+  Index: Integer;
+begin
+  Index := FindBucketIndex(Key);
+  if index >= 0 then
+    begin
+      PValue:=@FItems[Index].Pair.Value;
+      result:=true;
+    end
+  else
+    begin
+      PValue:=nil;
+      result:=false;
+    end;
+end;
+{$ENDIF}
+{$IFDEF USETDICTIONARY}
+function TmyMap<TKey, TValue{$IFNDEF USETDICTIONARY},TCompare{$ENDIF}>.IsEmpty:boolean;inline;
+begin
+  result:= count=0;
+end;
+{$ENDIF}
+
+class function TStaticStrProcessor<GString,GSymbol,GDataType>.GetProcessorType:TProcessorType;
 begin
   result:=PTStatic;
 end;
-class function TDynamicStrProcessor.GetProcessorType:TProcessorType;
+class function TDynamicStrProcessor<GString,GSymbol,GDataType>.GetProcessorType:TProcessorType;
 begin
   result:=PTDynamic;
 end;
 
-constructor TAbstractParsedText.Create(_Source:TTokenizerString;_Parser:TParser);
+constructor TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.TAbstractParsedText.Create(_Source:GParserString;_Parser:TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>);
 begin
   source:=_Source;
   Parser:=_Parser;
 end;
 
-destructor TAbstractParsedText.Destroy;
+destructor TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.TAbstractParsedText.Destroy;
 begin
-  source:='';
+  source:=default(GParserString);
   Parser:=nil;
   inherited;
 end;
 
-class procedure TFakeStrProcessor.StaticGetResult(const Source:TTokenizerString;
+class procedure TGFakeStrProcessor<GString,GSymbol,GDataType>.StaticGetResult(const Source:GString;
                                                   const Token :TSubStr;
                                                   const Operands :TSubStr;
-                                                  var Result:TTokenizerString;
+                                                  var Result:GString;
                                                   var ResultParam:TSubStr;
                                                   const data:pointer);
 var i:integer;
@@ -235,12 +376,12 @@ begin
 end;}
 
 
-function TParsedTextWithoutTokens.GetResult(data:pointer):TTokenizerString;
+function TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.TParsedTextWithoutTokens.GetResult(data:GDataType):GParserString;
 begin
   result:=source;
 end;
 
-function TParsedTextWithOneToken.GetResult(data:pointer):TTokenizerString;
+function TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.TParsedTextWithOneToken.GetResult(data:GDataType):GParserString;
 var
   ResultParam:TSubStr;
 begin
@@ -263,11 +404,12 @@ begin
   end;
 end;
 
-function TParsedText.GetResult(data:pointer):TTokenizerString;
+function TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.TParsedText.GetResult(data:GDataType):GParserString;
 var
   totallength,i:integer;
   ResultParam:TSubStr;
 begin
+  result:=default(GParserString);
   totallength:=0;
   for i:=0 to Parts.size-1 do begin
     if parts[i].TokenInfo.ProcessorClass.GetProcessorType=PTStatic then begin
@@ -297,7 +439,7 @@ begin
   end;
 end;
 
-destructor TParsedText.Destroy;
+destructor TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.TParsedText.Destroy;
 var
   i:integer;
 begin
@@ -305,7 +447,7 @@ begin
     if assigned(parts[i].Processor) then
       FreeAndNil(parts.Mutable[i]^.Processor);
 end;
-constructor TParsedTextWithOneToken.CreateWithToken(_Source:TTokenizerString;_TokenTextInfo:TTokenTextInfo;_Parser:TParser);
+constructor TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.TParsedTextWithOneToken.CreateWithToken(_Source:GParserString;_TokenTextInfo:TParserTokenizer.TTokenTextInfo;_Parser:TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>);
 begin
   Create(_Source,_Parser);
   Part.TextInfo:=_TokenTextInfo;
@@ -313,20 +455,20 @@ begin
   Part.Processor:=nil;
 end;
 
-destructor  TParsedTextWithOneToken.Destroy;
+destructor TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.TParsedTextWithOneToken.Destroy;
 begin
   inherited;
   if assigned(Part.Processor)then
     FreeAndNil(Part.Processor);
 end;
 
-constructor TParsedText.Create(_Source:TTokenizerString;_Parser:TParser);
+constructor TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.TParsedText.Create(_Source:GParserString;_Parser:TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>);
 begin
   inherited Create(_Source,_Parser);
   Parts:=TTextPartsVector.Create;
 end;
 
-procedure TParsedText.AddToken(_TokenTextInfo:TTokenTextInfo);
+procedure TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.TParsedText.AddToken(_TokenTextInfo:TParserTokenizer.TTokenTextInfo);
 var
   Part:TTextPart;
 begin
@@ -336,13 +478,13 @@ begin
   Parts.PushBack(Part);
 end;
 
-constructor TParsedText.CreateWithToken(_Source:TTokenizerString;_TokenTextInfo:TTokenTextInfo;_Parser:TParser);
+constructor TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.TParsedText.CreateWithToken(_Source:GParserString;_TokenTextInfo:TParserTokenizer.TTokenTextInfo;_Parser:TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>);
 begin
   Create(_Source,_Parser);
   AddToken(_TokenTextInfo);
 end;
 
-function TTokenizer.GetToken(Text:TTokenizerString;CurrentPos:integer;out TokenTextInfo:TTokenTextInfo;var IncludedCharsPos:TIncludedChars;var AllChars:TChars):TTokenId;
+function TTokenizer<GTokenizerString,GTokenizerSymbol,GTokenizerSymbolToOptChar>.GetToken(Text:GTokenizerString;CurrentPos:integer;out TokenTextInfo:TTokenTextInfo;var IncludedCharsPos:TIncludedChars;var AllChars:TChars):TTokenId;
 begin
   //inc(debTokenizerGetToken);
   TokenTextInfo.TokenPos.StartPos:=CurrentPos;
@@ -350,24 +492,39 @@ begin
   TokenTextInfo.NextPos:=TokenTextInfo.TokenPos.StartPos+TokenTextInfo.TokenPos.Length;
 end;
 
-function TTokenizer.SubGetToken(Text:TTokenizerString;CurrentPos:integer;out TokenTextInfo:TTokenTextInfo;level:integer;var IncludedCharsPos:TIncludedChars;var AllChars:TChars):TTokenId;
+function TTokenizer<GTokenizerString,GTokenizerSymbol,GTokenizerSymbolToOptChar>.SubGetToken(Text:GTokenizerString;CurrentPos:integer;out TokenTextInfo:TTokenTextInfo;level:integer;var IncludedCharsPos:TIncludedChars;var AllChars:TChars):TTokenId;
 var
-  PTokenizerSymbolData:TTokenizer.PTValue;
+  PTokenizerSymbolData:TTokenizerMap.PTValue;
   i,step:integer;
+  len:integer;
+  match:boolean;
+  OptChar:TOptChar;
 begin
   //inc(debTokenizerSubGetToken);
 
   if isOnlyOneToken<>'' then begin
   while CurrentPos<=length(Text) do begin
-    //inc(debCompareByte);
-    if {comparesubstr(Text,isOnlyOneToken,CurrentPos,level)}CompareByte(Text[CurrentPos],isOnlyOneToken[level],length(isOnlyOneToken)-level+1)=0 then begin
-      result:=isOnlyOneTokenId;
-      TokenTextInfo.TokenId:=result;
-      TokenTextInfo.TokenPos.Length:=length(isOnlyOneToken);
-      exit;
+    if (Text[CurrentPos]=isOnlyOneToken[level]) then begin
+    len:=length(isOnlyOneToken)-level+1;
+    case len of
+      1:match:=true;//match:=Text[CurrentPos]=isOnlyOneToken[level];
+      2:match:=((Text[CurrentPos]=isOnlyOneToken[level])and(Text[CurrentPos+1]=isOnlyOneToken[level+1]));
+      3:match:=((Text[CurrentPos]=isOnlyOneToken[level])and(Text[CurrentPos+1]=isOnlyOneToken[level+1])and(Text[CurrentPos+2]=isOnlyOneToken[level+2]));
+      else if (Text[CurrentPos]=isOnlyOneToken[level])
+           and(Text[CurrentPos+length(isOnlyOneToken)-level]=isOnlyOneToken[length(isOnlyOneToken)])
+           and(CompareByte(Text[CurrentPos],isOnlyOneToken[level],len*sizeof(GTokenizerSymbol))=0) then begin
+             match:=true;
+           end else
+             match:=false;
     end;
-
-
+      if match then begin
+        result:=isOnlyOneTokenId;
+        TokenTextInfo.TokenId:=result;
+        TokenTextInfo.TokenPos.Length:=length(isOnlyOneToken);
+        exit;
+      end;
+    end;{ else
+      match:=false;}
     inc(CurrentPos);
     TokenTextInfo.TokenPos.StartPos:=CurrentPos;
   end;
@@ -375,8 +532,13 @@ begin
 
   while CurrentPos<=length(Text) do begin
     //maxlevel:=1;
-    if {UpCase}(Text[CurrentPos]) in includedChars then begin
-      GetSymbolData(Text,CurrentPos,PTokenizerSymbolData);
+    OptChar:=GTokenizerSymbolToOptChar.convert(Text[CurrentPos]);
+    if OptCharIncluded(includedChars,OptChar) then
+      PTokenizerSymbolData:=GetSymbolData(Text,CurrentPos)
+    else
+      PTokenizerSymbolData:=nil;
+    if PTokenizerSymbolData<>nil then begin
+      //PTokenizerSymbolData:=GetSymbolData(Text,CurrentPos);
       if PTokenizerSymbolData^.TokenId<>0 then begin
         result:=PTokenizerSymbolData^.TokenId;
         TokenTextInfo.TokenId:=result;
@@ -389,13 +551,14 @@ begin
       end;
     end;
     step:=1;
-    for i:=1 to MaxIncludedChars do
-     if (Text[CurrentPos+i] in IncludedCharsPos[i]) then begin
-       step:=i;
-       break;
+    (*for i:=step to MaxIncludedChars do begin
+      step:=i;
+      if OptCharIncluded(IncludedCharsPos[i],GTokenizerSymbolToOptChar.convert(Text[CurrentPos+i])){((Text[CurrentPos+i]) in IncludedCharsPos[i])} then begin
+        break;
      end;
+    end;*)
      for i:=step to length(Text)-CurrentPos do
-      if Text[CurrentPos+i] in AllChars then
+      if OptCharIncluded(AllChars,GTokenizerSymbolToOptChar.convert(Text[CurrentPos+i])){(Text[CurrentPos+i]) in AllChars} then
         break
       else
         inc(step);
@@ -409,40 +572,83 @@ begin
   TokenTextInfo.TokenPos.Length:=0;
 end;
 
-function TTokenizer.GetSymbolData(const Text:TTokenizerString;const CurrentPos:integer;out PTokenizerSymbolData:TTokenizer.PTValue):boolean;
+function TTokenizer<GTokenizerString,GTokenizerSymbol,GTokenizerSymbolToOptChar>.GetSymbolData(const Text:GTokenizerString;const CurrentPos:integer):TTokenizerMap.PTValue;
 var i:integer;
 begin
-  if size<=MaxCashedValues then begin
+  if map.count<=MaxCashedValues then begin
     for i:=1 to MaxCashedValues do   begin
       if cashe[i].Symbol=Text[CurrentPos] then begin
-        PTokenizerSymbolData:=@cashe[i].SymbolData;
-        exit(true);
+        //PTokenizerSymbolData:=@cashe[i].SymbolData;
+        exit(@cashe[i].SymbolData);
       end;
     end;
-      PTokenizerSymbolData:=nil;
-      exit(false);
+      //PTokenizerSymbolData:=nil;
+      exit(nil);
   end else
-    result:={MyGetMutableValue}TryGetValue({UpCase}(Text[CurrentPos]),PTokenizerSymbolData^);
+    {result:=}map.MyGetMutableValue({UpCase}(Text[CurrentPos]),{PTokenizerSymbolData}result);
 end;
 
-function TTokenizer.Sub2GetToken(Text:TTokenizerString;CurrentPos:integer;out TokenTextInfo:TTokenTextInfo;level:integer):TTokenId;
+function TTokenizer<GTokenizerString,GTokenizerSymbol,GTokenizerSymbolToOptChar>.Sub2GetToken(Text:GTokenizerString;CurrentPos:integer;out TokenTextInfo:TTokenTextInfo;level:integer):TTokenId;
 var
-  PTokenizerSymbolData:TTokenizer.PTValue;
+  PTokenizerSymbolData:TTokenizerMap.PTValue;
+  OptChar:TOptChar;
+  len:integer;
+  match:boolean;
+  (*
+  if (Text[CurrentPos]=isOnlyOneToken[level]) then begin
+  len:=length(isOnlyOneToken)-level+1;
+  case len of
+    1:match:=true;//match:=Text[CurrentPos]=isOnlyOneToken[level];
+    2:match:=((Text[CurrentPos+1]=isOnlyOneToken[level+1]));
+    3:match:=((Text[CurrentPos+1]=isOnlyOneToken[level+1])and(Text[CurrentPos+2]=isOnlyOneToken[level+2]));
+    else if (Text[CurrentPos+length(isOnlyOneToken)-level]=isOnlyOneToken[length(isOnlyOneToken)])
+         and(CompareByte(Text[CurrentPos],isOnlyOneToken[level],len*sizeof(GTokenizerSymbol))=0) then begin
+           match:=true;
+         end else
+           match:=false;
+  end;
+    if match then begin
+      result:=isOnlyOneTokenId;
+      TokenTextInfo.TokenId:=result;
+      TokenTextInfo.TokenPos.Length:=length(isOnlyOneToken);
+      exit;
+    end;
+  end;
+  *)
 begin
   //inc(debTokenizerSub2GetToken);
   //maxlevel:=level;
   if isOnlyOneToken<>'' then begin
-    //inc(debCompareByte);
-    if {comparesubstr(Text,isOnlyOneToken,CurrentPos,level)}CompareByte(Text[CurrentPos],isOnlyOneToken[level],length(isOnlyOneToken)-level+1)=0 then begin
+  if (Text[CurrentPos]=isOnlyOneToken[level]) then begin
+    len:=length(isOnlyOneToken)-level+1;
+    case len of
+        1:match:=true;//match:=Text[CurrentPos]=isOnlyOneToken[level];
+        2:match:=((Text[CurrentPos+1]=isOnlyOneToken[level+1]));
+        3:match:=((Text[CurrentPos+1]=isOnlyOneToken[level+1])and(Text[CurrentPos+2]=isOnlyOneToken[level+2]));
+        else if (Text[CurrentPos+length(isOnlyOneToken)-level]=isOnlyOneToken[length(isOnlyOneToken)])
+             and(CompareByte(Text[CurrentPos],isOnlyOneToken[level],len*sizeof(GTokenizerSymbol))=0) then begin
+               match:=true;
+             end else
+               match:=false;
+      end;
+    if match then begin
       result:=isOnlyOneTokenId;
       TokenTextInfo.TokenId:=result;
       TokenTextInfo.TokenPos.Length:=length(isOnlyOneToken);
       exit;
     end else
       result:=0;
+  end else
+      result:=0;
   end else begin
-    if {UpCase}(Text[CurrentPos]) in includedChars then begin
-      GetSymbolData(Text,CurrentPos,PTokenizerSymbolData);
+    OptChar:=GTokenizerSymbolToOptChar.convert(Text[CurrentPos]);
+    if OptCharIncluded(includedChars,OptChar) then
+      PTokenizerSymbolData:=GetSymbolData(Text,CurrentPos)
+    else
+      PTokenizerSymbolData:=nil;
+    if PTokenizerSymbolData<>nil then begin
+    //if {UpCase}(Text[CurrentPos]) in includedChars then begin
+      //PTokenizerSymbolData:=GetSymbolData(Text,CurrentPos);
       {if (PTokenizerSymbolData^.NextSymbol=nil)and(PTokenizerSymbolData^.TokenId=0) then
        includedChars:=includedChars;}
       if PTokenizerSymbolData^.TokenId<>0 then begin
@@ -462,9 +668,9 @@ begin
 end;
 
 
-function TParser.GetToken(Text:TTokenizerString;CurrentPos:integer;out TokenTextInfo:TTokenTextInfo):TTokenId;
+function TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.GetToken(Text:GParserString;CurrentPos:integer;out TokenTextInfo:TParserTokenizer.TTokenTextInfo):TParserTokenizer.TTokenId;
 var
-  PTokenizerSymbolData:TTokenizer.PTValue;
+  PTokenizerSymbolData:TParserTokenizer.TTokenizerMap.PTValue;
   startpos:integer;
 begin
   //inc(debParserGetTonenCount);
@@ -496,9 +702,9 @@ begin
     exit(TokenTextInfo.TokenId);
   end;
 end;
-function TParser.GetTokens(Text:TTokenizerString):TAbstractParsedText;
+function TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.GetTokens(Text:GParserString):TAbstractParsedText;
 var
-  TokenTextInfo,PrevTokenTextInfo:TTokenTextInfo;
+  TokenTextInfo,PrevTokenTextInfo:TParserTokenizer.TTokenTextInfo;
   TokensCounter:integer;
 begin
   result:=nil;
@@ -525,7 +731,7 @@ begin
   end;
 end;
 
-procedure TParser.ReadOperands(Text:TTokenizerString;TokenId:TTokenId;out TokenTextInfo:TTokenTextInfo);
+procedure TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.ReadOperands(Text:GParserString;TokenId:TParserTokenizer.TTokenId;var TokenTextInfo:TParserTokenizer.TTokenTextInfo);
 var
   currpos:integer;
   openedbrcount,brcount:integer;
@@ -569,13 +775,13 @@ begin
       end
 end;
 
-constructor TParser.create;
+constructor TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.create;
 var
   i:integer;
 begin
  for i:=1 to MaxIncludedChars do
   IncludedCharsPos[i]:=[];
- Tokenizer:=TTokenizer.create;
+ Tokenizer:=TParserTokenizer.create;
  TokenDataVector:=TTokenDataVector.create;
 
  clearStoredToken;
@@ -586,13 +792,13 @@ begin
  tkLastPredefToken:=tkRawText;
 end;
 
-procedure TParser.clearStoredToken;
+procedure TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.clearStoredToken;
 begin
   StoredTokenTextInfo.TokenId:=tkEmpty;
   StoredTokenTextInfo.TokenPos.StartPos:=0;
 end;
 
-function TParser.RegisterToken(const Token:string;const BrackeOpen,BrackeClose:char;{const Func:TStrProcessFunc}const ProcessorClass:TStrProcessorClass;Options:TTokenOptions=[]):TTokenId;
+function TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.RegisterToken(const Token:string;const BrackeOpen,BrackeClose:char;{const Func:TStrProcessFunc}const ProcessorClass:TStrProcessorClass;Options:TTokenOptions=[]):TParserTokenizer.TTokenId;
 var
   sym:integer;
   td:TTokenData;
@@ -615,7 +821,7 @@ begin
 
 end;
 
-procedure TParser.OptimizeTokens;
+procedure TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.OptimizeTokens;
 var
   i:integer;
 begin
@@ -626,21 +832,27 @@ begin
     AllChars:=AllChars+IncludedCharsPos[i];
 end;
 
-constructor TTokenizer.create;
+constructor TTokenizer<GTokenizerString,GTokenizerSymbol,GTokenizerSymbolToOptChar>.create;
 begin
   inherited;
+  Map:=TTokenizerMap.Create;
   includedChars:=[];
   isOnlyOneToken:='';
   isOnlyOneTokenId:=0;
 end;
-
-procedure TTokenizer.SubRegisterToken(Token:TTokenizerString;var sym:integer;_TokenId:TTokenId;var IncludedCharsPos:TIncludedChars);
+destructor TTokenizer<GTokenizerString,GTokenizerSymbol,GTokenizerSymbolToOptChar>.Destroy;
+begin
+  inherited;
+  FreeAndNil(Map);
+  includedChars:=[];
+  isOnlyOneToken:='';
+  isOnlyOneTokenId:=0;
+end;
+procedure TTokenizer<GTokenizerString,GTokenizerSymbol,GTokenizerSymbolToOptChar>.SubRegisterToken(Token:GTokenizerString;var sym:integer;_TokenId:TTokenId;var IncludedCharsPos:TIncludedChars);
 var
-  PTokenizerSymbolData:TTokenizer.PTValue;
-  data:TTokenizerSymbolData;
   tmpsym:integer;
 begin
-  if IsEmpty and (isOnlyOneToken='') then begin
+  if map.IsEmpty and (isOnlyOneToken='') then begin
     isOnlyOneToken:=Token;
     isOnlyOneTokenId:=_TokenId;
   end else begin
@@ -653,16 +865,29 @@ begin
   end;
 end;
 
-procedure TTokenizer.Sub2RegisterToken(Token:TTokenizerString;var sym:integer;_TokenId:TTokenId;var IncludedCharsPos:TIncludedChars);
-var
-  PTokenizerSymbolData:TTokenizer.PTValue;
-  data:TTokenizerSymbolData;
-  i:integer;
+procedure IncludeOptChar(var OptChars:TChars;const OptChar:TOptChar);
 begin
-  if {MyGetMutableValue}TryGetValue(Token[sym],PTokenizerSymbolData^)then begin
+  if OptChar<>0 then
+    include(OptChars,OptChar);
+end;
+function OptCharIncluded(const OptChars:TChars;const OptChar:TOptChar):boolean;
+begin
+  if OptChar<>0 then
+    result:=(OptChar in OptChars)
+  else
+    result:=true;
+end;
+
+procedure TTokenizer<GTokenizerString,GTokenizerSymbol,GTokenizerSymbolToOptChar>.Sub2RegisterToken(Token:GTokenizerString;var sym:integer;_TokenId:TTokenId;var IncludedCharsPos:TIncludedChars);
+var
+  PTokenizerSymbolData:TTokenizerMap.PTValue;
+  data:TTokenizerSymbolData;
+  OptChar:TOptChar;
+begin
+  if map.MyGetMutableValue(Token[sym],PTokenizerSymbolData)then begin
     if sym<length(Token) then begin
       if not assigned(PTokenizerSymbolData^.NextSymbol) then
-        PTokenizerSymbolData^.NextSymbol:=TTokenizer.Create;
+        PTokenizerSymbolData^.NextSymbol:=TTokenizer<GTokenizerString,GTokenizerSymbol,GTokenizerSymbolToOptChar>.Create;
       inc(sym);
       PTokenizerSymbolData^.NextSymbol.SubRegisterToken(Token,sym,_TokenId,IncludedCharsPos);
       dec(sym);
@@ -673,7 +898,7 @@ begin
     if sym<length(Token) then
       begin
         data.TokenId:=0;
-        data.NextSymbol:=TTokenizer.Create;
+        data.NextSymbol:=TTokenizer<GTokenizerString,GTokenizerSymbol,GTokenizerSymbolToOptChar>.Create;
         inc(sym);
         data.NextSymbol.SubRegisterToken(Token,sym,_TokenId,IncludedCharsPos);
         dec(sym);
@@ -683,14 +908,17 @@ begin
         data.TokenId:=_TokenId;
         data.NextSymbol:=nil;
       end;
-    Insert(Token[sym],data);
-    includedChars:=includedChars+[Token[sym]];
+    map.{$IFNDEF USETDICTIONARY}Insert{$ELSE}Add{$ENDIF}(Token[sym],data);
+    OptChar:=GTokenizerSymbolToOptChar.Convert(Token[sym]);
+    IncludeOptChar(includedChars,OptChar);
+    //includedChars:=includedChars+[(Token[sym])];
     if sym<=MaxIncludedChars then begin
-      IncludedCharsPos[sym]:=IncludedCharsPos[sym]+[Token[sym]];
+      IncludeOptChar(IncludedCharsPos[sym],OptChar);
+      //IncludedCharsPos[sym]:=IncludedCharsPos[sym]+[(Token[sym])];
     end;
-    if size<=MaxCashedValues then begin
-      cashe[size].Symbol:=Token[sym];
-      cashe[size].SymbolData:=data;
+    if map.count<=MaxCashedValues then begin
+      cashe[map.count].Symbol:=Token[sym];
+      cashe[map.count].SymbolData:=data;
     end;
   end;
 end;

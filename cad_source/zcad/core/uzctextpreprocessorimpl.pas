@@ -24,11 +24,11 @@ uses uzeentity,uzcvariablesutils,uzetextpreprocessor,languade,uzbstrproc,sysutil
      uzbtypesbase,varmandef,uzbtypes,uzcenitiesvariablesextender,uzeentsubordinated,
      uzcpropertiesutils,uzeparser,LazUTF8;
 type
-  TStr2VarProcessor=class(TDynamicStrProcessor)
+  TStr2VarProcessor=class(TMyParser.TDynamicProcessor)
     function GetResult(const str:gdbstring;const operands:gdbstring;var NextSymbolPos:integer;pobj:Pointer):gdbstring;
   end;
 
-  TNum2StrProcessor=class(TStaticStrProcessor)
+  TNum2StrProcessor=class(TMyParser.TStaticProcessor)
     class procedure StaticGetResult(const Source:TTokenizerString;
                                     const Token :TSubStr;
                                     const Operands :TSubStr;
@@ -37,7 +37,7 @@ type
                                     const data:pointer);override;
   end;
 
-  TPointer2StrProcessor=class(TDynamicStrProcessor)
+  TPointer2StrProcessor=class(TMyParser.TDynamicProcessor)
     constructor vcreate(const Source:TTokenizerString;
                         const Token :TSubStr;
                         const Operands :TSubStr);override;
@@ -50,8 +50,8 @@ type
   end;
 
 var
-  TokenTextInfo:TTokenTextInfo;
-  pt:TAbstractParsedText;
+  TokenTextInfo:TMyParser.TParserTokenizer.TTokenTextInfo;
+  pt:TMyParser.TAbstractParsedText;
   s:gdbstring;
 implementation
 function TStr2VarProcessor.GetResult(const str:gdbstring;const operands:gdbstring;var NextSymbolPos:integer;pobj:Pointer):gdbstring;
@@ -67,10 +67,10 @@ begin
   else
     result:='!!ERR('+varname+')!!';
 end;
-class procedure TNum2StrProcessor.StaticGetResult(const Source:ansistring;
+class procedure TNum2StrProcessor.StaticGetResult(const Source:TTokenizerString;
                                                   const Token :TSubStr;
                                 const Operands :TSubStr;
-                                var Result:ansistring;
+                                var Result:TTokenizerString;
                                 var ResultParam:TSubStr;
                                 const data:pointer);
 begin

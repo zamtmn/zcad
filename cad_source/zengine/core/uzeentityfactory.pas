@@ -65,6 +65,7 @@ procedure RegisterEntityUpgradeInfo(const _EntityID:TObjID;
                                     const _EntityUpgradeFunc:TEntityUpgradeFunc);
 var
   DXFName2EntInfoData:TDXFName2EntInfoDataMap;
+  ENTName2EntInfoData:TDXFName2EntInfoDataMap;
   ObjID2EntInfoData:TObjID2EntInfoDataMap;
   EntUpgradeKey2EntUpgradeData:TEntUpgradeDataMap;
   NeedInit:boolean=true;
@@ -90,6 +91,7 @@ begin
      if needinit then
      begin
        DXFName2EntInfoData:=TDXFName2EntInfoDataMap.create;
+       ENTName2EntInfoData:=TDXFName2EntInfoDataMap.Create;
        ObjID2EntInfoData:=TObjID2EntInfoDataMap.create;
        EntUpgradeKey2EntUpgradeData:=TEntUpgradeDataMap.Create;
        NeedInit:=false;
@@ -111,6 +113,7 @@ begin
 
      if dxfent then
        DXFName2EntInfoData.RegisterKey(_DXFName,EntInfoData);
+     ENTName2EntInfoData.RegisterKey(_DXFName,EntInfoData);
      ObjID2EntInfoData.RegisterKey(_EntityID,EntInfoData);
 end;
 

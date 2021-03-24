@@ -669,6 +669,8 @@ end;
 
 procedure TCSVRow.InsertCell(ACol: Integer; const AValue: String);
 begin
+  while FCells.Count<=ACol do
+    AddCell;
   FCells.Insert(ACol, CreateNewCell(AValue));
 end;
 

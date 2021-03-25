@@ -32,10 +32,10 @@ type
     constructor Create;
     destructor Destroy;override;
     procedure AddType(EntType:TObjID);
-    procedure AddTypeName(EntTypeName:GDBString);//не работает
+    procedure AddTypeName(EntTypeName:GDBString);
     procedure AddTypeNameMask(EntTypeNameMask:GDBString);
     procedure SubType(EntType:TObjID);
-    procedure SubTypeName(EntTypeName:GDBString);//не работает
+    procedure SubTypeName(EntTypeName:GDBString);
     procedure SubTypeNameMask(EntTypeNameMask:GDBString);
     procedure SetFilter;
     procedure ResetFilter;

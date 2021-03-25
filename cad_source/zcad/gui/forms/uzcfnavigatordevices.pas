@@ -16,7 +16,7 @@ uses
   uzcfnavigatordevicescxmenu,uzbpaths,Toolwin,uzcctrlpartenabler,StrUtils,
   uzctextenteditor,uzcinfoform,uzcsysparams,uzcsysvars,uzetextpreprocessor,
   Masks,uzelongprocesssupport,uzeentitiestypefilter,uzcuitypes,
-  uzeparser;
+  uzeparserenttypefilter,uzeparserentpropfilter;
 
 resourcestring
   rsStandaloneDevices='Standalone devices';
@@ -177,7 +177,7 @@ begin
   if not EntsTypeFilter.IsEntytyTypeAccepted(pent^.GetObjType)then
       exit(false);
 
-  EntityIncluder.Doit(pent);
+  EntityIncluder.Doit(pointer(pent));
 
   exit(true);
   an:=BP.IncludeProperties;

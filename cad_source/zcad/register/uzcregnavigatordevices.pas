@@ -23,7 +23,7 @@ uses uzcfnavigatordevices,uzcfcommandline,uzbpaths,TypeDescriptors,uzctranslatio
      uzbtypes,varmandef,uzeconsts,uzeentdevice,uzcnavigatorsnodedesk,
      uzeentity,zcobjectinspector,uzcguimanager,uzcenitiesvariablesextender,uzbstrproc,
      Types,Controls,uzcdrawings,Varman,UUnitManager,uzcsysvars,uzcsysinfo,LazLogger,laz.VirtualTrees,
-     uzcstrconsts,uzcfnavigatordevicescxmenu,uzcmainwindow,MacroDefIntf,sysutils;
+     uzcstrconsts,uzcfnavigatordevicescxmenu,uzcmainwindow,MacroDefIntf,sysutils,fgl;
 resourcestring
   rsDevices='Devices';
   rsRisers='Risers';
@@ -216,16 +216,16 @@ function CreateNavigatorDevices:TForm;
 begin
  result:=tform(TNavigatorDevices.NewInstance);
  TNavigatorDevices(result).BP.TreeBuildMap:='+NMO_Prefix|+NMO_BaseName|+@@[NMO_Name]';
- TNavigatorDevices(result).BP.IncludeEntities:='+Device';
- TNavigatorDevices(result).BP.IncludeProperties:='';//'+*|-%%[Name]=EL_CABLE_*';
+ TNavigatorDevices(result).BP.IncludeEntities:='IncludeEntityMask(''Cable*'');'#13#10'ExcludeEntityName(''Device'')';
+ TNavigatorDevices(result).BP.IncludeProperties:='IncludeIfMask(%%(''Layer''),''EL_CABLE_*'')';//'+*|-%%[Name]=EL_CABLE_*';
+ //TNavigatorDevices(result).BP.IncludeProperties:='IncludeIfMask(%%(''Name''),''EL_CABLE_*'')';//'+*|-%%[Name]=EL_CABLE_*';
  TNavigatorDevices(result).BP.UseMainFunctions:=True;
 end;
 function CreateNavigatorRisers:TForm;
 begin
  result:=tform(TNavigatorRisers.NewInstance);
  TNavigatorRisers(result).BP.TreeBuildMap:='{+@@[RiserName]:@@[Elevation]:@@[Text]}';
- //TNavigatorRisers(result).BP.IncludeEntities:='IncludeEnt(Device)';
- TNavigatorRisers(result).BP.IncludeEntities:='+Device';
+ TNavigatorRisers(result).BP.IncludeEntities:='IncludeEntityMask(Device)';
  TNavigatorRisers(result).BP.IncludeProperties:='+%%[Name]=EL_CABLE_*';
  TNavigatorRisers(result).BP.UseMainFunctions:=False;
 end;

@@ -79,7 +79,7 @@ type
     SaveCellRectLeft:integer;
     TreeEnabler:TStringPartEnabler;
     EntsTypeFilter:TEntsTypeFilter;
-    EntityIncluder:EntityIncluderParser.TGeneralParsedText;
+    EntityIncluder:ParserEntityPropFilter.TGeneralParsedText;
 
   public
     BP:TBuildParam;
@@ -129,6 +129,7 @@ var
   match:boolean;
   alreadyinclude:boolean;
   operation:char;
+  propdata:TPropFilterData;
 
   function processproperty(cn:string):boolean;
   var
@@ -177,9 +178,11 @@ begin
   if not EntsTypeFilter.IsEntytyTypeAccepted(pent^.GetObjType)then
       exit(false);
 
-  EntityIncluder.Doit(pointer(pent));
+  propdata.CurrentEntity:=pent;
+  propdata.IncludeEntity:=T3SB_Default;
+  EntityIncluder.Doit(PropData);
 
-  exit(true);
+  exit(propdata.IncludeEntity=T3SB_True);
   an:=BP.IncludeProperties;
   if an<>'' then begin
     alreadyinclude:=false;
@@ -724,19 +727,19 @@ end;
 
 procedure TNavigatorDevices.CreateFilters;
 var
-  pt:TEntityFilterParser.TGeneralParsedText;
+  pt:TParserEntityTypeFilter.TGeneralParsedText;
 begin
   if EntsTypeFilter<>nil then
     EntsTypeFilter.ResetFilter
   else
     EntsTypeFilter:=TEntsTypeFilter.Create;
-  pt:=EntityFilterParser.GetTokens(BP.IncludeEntities);
+  pt:=ParserEntityTypeFilter.GetTokens(BP.IncludeEntities);
   pt.Doit(EntsTypeFilter);
   EntsTypeFilter.SetFilter;
   pt.Free;
   if assigned(EntityIncluder) then
     FreeAndNil(EntityIncluder);
-  EntityIncluder:=EntityIncluderParser.GetTokens(BP.IncludeProperties);
+  EntityIncluder:=ParserEntityPropFilter.GetTokens(BP.IncludeProperties);
 end;
 
 procedure TNavigatorDevices.CreateRoots;

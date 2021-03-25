@@ -78,8 +78,8 @@ type
     GSymbolToOptChar=TCharToOptChar<ansichar>;}
 
     TAbstractParsedText<GParserString,GDataType>=class
-      procedure Doit(data:GDataType);virtual;abstract;
-      function GetResult(data:GDataType):GParserString;virtual;abstract;
+      procedure Doit(var data:GDataType);virtual;abstract;
+      function GetResult(var data:GDataType):GParserString;virtual;abstract;
     end;
 
     TStrProcessor<GString,GSymbol,GDataType>=class
@@ -113,6 +113,13 @@ type
     TStaticStrProcessor<GString,GSymbol,GDataType>=class(TStrProcessor<GString,GSymbol,GDataType>)
       class function GetProcessorType:TProcessorType;override;
     end;
+    TStaticStrProcessorString<GString,GSymbol,GDataType>=class(TStaticStrProcessor<GString,GSymbol,GDataType>)
+      class procedure StaticGetResult(const Source:GString;const Token :TSubStr;const Operands :TSubStr;
+                                      const ParsedOperands:TAbstractParsedText<GString,GDataType>;
+                                      var Result:GString;
+                                      var ResultParam:TSubStr;
+                                      var data:GDataType);override;
+    end;
     TGFakeStrProcessor<GString,GSymbol,GDataType> =class(TStaticStrProcessor<GString,GSymbol,GDataType>)
       class procedure StaticGetResult(const Source:GString;
                                       const Token :TSubStr;
@@ -133,6 +140,7 @@ type
     TStaticProcessor=TStaticStrProcessor<GTokenizerString,GTokenizerSymbol,GTokenizerDataType>;
     TDynamicProcessor=TDynamicStrProcessor<GTokenizerString,GTokenizerSymbol,GTokenizerDataType>;
     TFakeStrProcessor=TGFakeStrProcessor<GTokenizerString,GTokenizerSymbol,GTokenizerDataType>;
+    TStringProcessor=TStaticStrProcessorString<GTokenizerString,GTokenizerSymbol,GTokenizerDataType>;
     TStrProcessorClass=class of TProcessor;
 
     TTokenOption=(TOIncludeBrackeOpen,//открывающая скобка входит в имя
@@ -225,14 +233,14 @@ type
           end;
 
           TParsedTextWithoutTokens=class(TGeneralParsedText)
-            function GetResult(data:GDataType):GParserString;override;
-            procedure Doit(data:GDataType);override;
+            function GetResult(var data:GDataType):GParserString;override;
+            procedure Doit(var data:GDataType);override;
           end;
 
           TParsedTextWithOneToken=class(TGeneralParsedText)
             Part:TTextPart;
-            function GetResult(data:GDataType):GParserString;override;
-            procedure Doit(data:GDataType);override;
+            function GetResult(var data:GDataType):GParserString;override;
+            procedure Doit(var data:GDataType);override;
             constructor CreateWithToken(_Source:GParserString;_TokenTextInfo:TParserTokenizer.TTokenTextInfo;Operands:TGeneralParsedText;_Parser:TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>);
             destructor Destroy;override;
           end;
@@ -242,8 +250,8 @@ type
             constructor Create(_Source:GParserString;_Parser:TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>);
             constructor CreateWithToken(_Source:GParserString;_TokenTextInfo:TParserTokenizer.TTokenTextInfo;Operands:TGeneralParsedText;_Parser:TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>);
             procedure AddToken(_TokenTextInfo:TParserTokenizer.TTokenTextInfo;Operands:TGeneralParsedText);
-            function GetResult(data:GDataType):GParserString;override;
-            procedure Doit(data:GDataType);override;
+            function GetResult(var data:GDataType):GParserString;override;
+            procedure Doit(var data:GDataType);override;
             destructor Destroy;override;
           end;
 
@@ -395,6 +403,20 @@ begin
   inherited;
 end;
 
+class procedure TStaticStrProcessorString<GString,GSymbol,GDataType>.StaticGetResult(const Source:GString;const Token :TSubStr;const Operands :TSubStr;
+                                  const ParsedOperands:TAbstractParsedText<GString,GDataType>;
+                                  var Result:GString;
+                                  var ResultParam:TSubStr;
+                                  var data:GDataType);
+var
+  i:integer;
+begin
+  ResultParam.Length:=Operands.Length;
+  if ResultParam.StartPos<>OnlyGetLength then
+    for i:=0 to Operands.Length-1 do
+      Result[ResultParam.StartPos+i]:=Source[Operands.StartPos+i];
+end;
+
 class procedure TGFakeStrProcessor<GString,GSymbol,GDataType>.StaticGetResult(const Source:GString;
                                                   const Token :TSubStr;
                                                   const Operands :TSubStr;
@@ -416,14 +438,14 @@ begin
 end;}
 
 
-function TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.TParsedTextWithoutTokens.GetResult(data:GDataType):GParserString;
+function TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.TParsedTextWithoutTokens.GetResult(var data:GDataType):GParserString;
 begin
   result:=source;
 end;
-procedure TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.TParsedTextWithoutTokens.Doit(data:GDataType);
+procedure TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.TParsedTextWithoutTokens.Doit(var data:GDataType);
 begin
 end;
-function TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.TParsedTextWithOneToken.GetResult(data:GDataType):GParserString;
+function TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.TParsedTextWithOneToken.GetResult(var data:GDataType):GParserString;
 var
   ResultParam:TSubStr;
 begin
@@ -466,12 +488,12 @@ begin
   end;
 end;
 
-procedure TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.TParsedTextWithOneToken.Doit(data:GDataType);
+procedure TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.TParsedTextWithOneToken.Doit(var data:GDataType);
 begin
   DoItWithPart(Source,part,data);
 end;
 
-function TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.TParsedText.GetResult(data:GDataType):GParserString;
+function TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.TParsedText.GetResult(var data:GDataType):GParserString;
 var
   totallength,i:integer;
   ResultParam:TSubStr;
@@ -510,7 +532,7 @@ begin
     end;}
   end;
 end;
-procedure TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.TParsedText.Doit(data:GDataType);
+procedure TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.TParsedText.Doit(var data:GDataType);
 var
   i:integer;
 begin

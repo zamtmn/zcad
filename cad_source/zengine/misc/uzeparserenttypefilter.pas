@@ -10,113 +10,107 @@ uses
   uzcoimultiproperties,uzedimensionaltypes;
 
 type
-  TEntityFilterParserString=AnsiString;
-  TEntityFilterParserChar=AnsiChar;
-  TEntityFilterParser=TParser<TEntityFilterParserString,TEntityFilterParserChar,TEntsTypeFilter,TCharToOptChar<AnsiChar>>;
+  TParserEntityTypeFilterString=AnsiString;
+  TParserEntityTypeFilterChar=AnsiChar;
+  TParserEntityTypeFilter=TParser<TParserEntityTypeFilterString,TParserEntityTypeFilterChar,TEntsTypeFilter,TCharToOptChar<AnsiChar>>;
 
-  TIncludeIfMask=class(TEntityFilterParser.TParserTokenizer.TStaticProcessor)
-    class procedure StaticDoit(const Source:TEntityFilterParserString;
+  TIncludeIfMask=class(TParserEntityTypeFilter.TParserTokenizer.TStaticProcessor)
+    class procedure StaticDoit(const Source:TParserEntityTypeFilterString;
                                const Token :TSubStr;
                                const Operands :TSubStr;
-                               const ParsedOperands :TAbstractParsedText<TEntityFilterParserString,TEntsTypeFilter>;
+                               const ParsedOperands :TAbstractParsedText<TParserEntityTypeFilterString,TEntsTypeFilter>;
                                var Data:TEntsTypeFilter);override;
   end;
-  TGetEntParam=class(TEntityFilterParser.TParserTokenizer.TDynamicProcessor)
+  TGetEntParam=class(TParserEntityTypeFilter.TParserTokenizer.TDynamicProcessor)
     mp:TMultiProperty;
-    tempresult:TEntityFilterParserString;
-    constructor vcreate(const Source:TEntityFilterParserString;
+    tempresult:TParserEntityTypeFilterString;
+    constructor vcreate(const Source:TParserEntityTypeFilterString;
                             const Token :TSubStr;
                             const Operands :TSubStr;
-                            const ParsedOperands:TAbstractParsedText<TEntityFilterParserString,TEntsTypeFilter>;
+                            const ParsedOperands:TAbstractParsedText<TParserEntityTypeFilterString,TEntsTypeFilter>;
                             var Data:TEntsTypeFilter);override;
-    procedure GetResult(const Source:TEntityFilterParserString;
+    procedure GetResult(const Source:TParserEntityTypeFilterString;
                         const Token :TSubStr;
                         const Operands :TSubStr;
-                        const ParsedOperands:TAbstractParsedText<TEntityFilterParserString,TEntsTypeFilter>;
-                        var Result:TEntityFilterParserString;
+                        const ParsedOperands:TAbstractParsedText<TParserEntityTypeFilterString,TEntsTypeFilter>;
+                        var Result:TParserEntityTypeFilterString;
                         var ResultParam:TSubStr;
                         var data:TEntsTypeFilter);override;
   end;
 
 
-  TIncludeEntityNameMask=class(TEntityFilterParser.TParserTokenizer.TStaticProcessor)
-    class procedure StaticDoit(const Source:TEntityFilterParserString;
+  TIncludeEntityNameMask=class(TParserEntityTypeFilter.TParserTokenizer.TStaticProcessor)
+    class procedure StaticDoit(const Source:TParserEntityTypeFilterString;
                                const Token :TSubStr;
                                const Operands :TSubStr;
-                               const ParsedOperands :TAbstractParsedText<TEntityFilterParserString,TEntsTypeFilter>;
+                               const ParsedOperands :TAbstractParsedText<TParserEntityTypeFilterString,TEntsTypeFilter>;
                                var Data:TEntsTypeFilter);override;
   end;
-  TIncludeEntityName=class(TEntityFilterParser.TParserTokenizer.TStaticProcessor)
-    class procedure StaticDoit(const Source:TEntityFilterParserString;
+  TIncludeEntityName=class(TParserEntityTypeFilter.TParserTokenizer.TStaticProcessor)
+    class procedure StaticDoit(const Source:TParserEntityTypeFilterString;
                                const Token :TSubStr;
                                const Operands :TSubStr;
-                               const ParsedOperands :TAbstractParsedText<TEntityFilterParserString,TEntsTypeFilter>;
+                               const ParsedOperands :TAbstractParsedText<TParserEntityTypeFilterString,TEntsTypeFilter>;
                                var Data:TEntsTypeFilter);override;
   end;
-  TExcludeEntityNameMask=class(TEntityFilterParser.TParserTokenizer.TStaticProcessor)
-    class procedure StaticDoit(const Source:TEntityFilterParserString;
+  TExcludeEntityNameMask=class(TParserEntityTypeFilter.TParserTokenizer.TStaticProcessor)
+    class procedure StaticDoit(const Source:TParserEntityTypeFilterString;
                                const Token :TSubStr;
                                const Operands :TSubStr;
-                               const ParsedOperands :TAbstractParsedText<TEntityFilterParserString,TEntsTypeFilter>;
+                               const ParsedOperands :TAbstractParsedText<TParserEntityTypeFilterString,TEntsTypeFilter>;
                                var Data:TEntsTypeFilter);override;
   end;
-  TExcludeEntityName=class(TEntityFilterParser.TParserTokenizer.TStaticProcessor)
-    class procedure StaticDoit(const Source:TEntityFilterParserString;
+  TExcludeEntityName=class(TParserEntityTypeFilter.TParserTokenizer.TStaticProcessor)
+    class procedure StaticDoit(const Source:TParserEntityTypeFilterString;
                                const Token :TSubStr;
                                const Operands :TSubStr;
-                               const ParsedOperands :TAbstractParsedText<TEntityFilterParserString,TEntsTypeFilter>;
+                               const ParsedOperands :TAbstractParsedText<TParserEntityTypeFilterString,TEntsTypeFilter>;
                                var Data:TEntsTypeFilter);override;
   end;
 
-  TEntityFilterString=class(TEntityFilterParser.TParserTokenizer.TStaticProcessor)
-    class procedure StaticGetResult(const Source:TEntityFilterParserString;
-                                          const Token :TSubStr;
-                                          const Operands :TSubStr;
-                                          const ParsedOperands:TAbstractParsedText<TEntityFilterParserString,TEntsTypeFilter>;
-                                          var Result:TEntityFilterParserString;
-                                          var ResultParam:TSubStr;
-                                          var data:TEntsTypeFilter);override;
-  end;
-  TEntityFilterExcluder=class(TEntityFilterParser.TParserTokenizer.TStaticProcessor)
-    class procedure StaticDoit(const Source:TEntityFilterParserString;
+  TEntityFilterExcluder=class(TParserEntityTypeFilter.TParserTokenizer.TStaticProcessor)
+    class procedure StaticDoit(const Source:TParserEntityTypeFilterString;
                                const Token :TSubStr;
                                const Operands :TSubStr;
-                               const ParsedOperands :TAbstractParsedText<TEntityFilterParserString,TEntsTypeFilter>;
+                               const ParsedOperands :TAbstractParsedText<TParserEntityTypeFilterString,TEntsTypeFilter>;
                                var Data:TEntsTypeFilter);override;
   end;
 
 var
-  EntityFilterParser:TEntityFilterParser;
-  BracketTockenId:EntityFilterParser.TParserTokenizer.TTokenId;
+  ParserEntityTypeFilter:TParserEntityTypeFilter;
+
 implementation
 
-class procedure TIncludeIfMask.StaticDoit(const Source:TEntityFilterParserString;
+var
+  BracketTockenId:ParserEntityTypeFilter.TParserTokenizer.TTokenId;
+
+class procedure TIncludeIfMask.StaticDoit(const Source:TParserEntityTypeFilterString;
                            const Token :TSubStr;
                            const Operands :TSubStr;
-                           const ParsedOperands :TAbstractParsedText<TEntityFilterParserString,TEntsTypeFilter>;
+                           const ParsedOperands :TAbstractParsedText<TParserEntityTypeFilterString,TEntsTypeFilter>;
                            var Data:TEntsTypeFilter);
 var
-  op1,op2:TEntityFilterParserString;
+  op1,op2:TParserEntityTypeFilterString;
   ResultParam:TSubStr;
 begin
   if (ParsedOperands<>nil)
-     and(ParsedOperands is TEntityFilterParser.TParsedText)
-     and((ParsedOperands as TEntityFilterParser.TParsedText).Parts.size=3)
-     {and((ParsedOperands as TEntityFilterParser.TParsedTextWithOneToken).Part.TextInfo.TokenId=StringId)} then begin
-       op1:=inttostr((ParsedOperands as TEntityFilterParser.TParsedText).Parts.size);
+     and(ParsedOperands is TParserEntityTypeFilter.TParsedText)
+     and((ParsedOperands as TParserEntityTypeFilter.TParsedText).Parts.size=3)
+     {and((ParsedOperands as TParserEntityTypeFilter.TParsedTextWithOneToken).Part.TextInfo.TokenId=StringId)} then begin
+       op1:=inttostr((ParsedOperands as TParserEntityTypeFilter.TParsedText).Parts.size);
          ResultParam.StartPos:=OnlyGetLength;
          ResultParam.Length:=0;
-         TEntityFilterParser.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TEntityFilterParser.TParsedText).Parts.Mutable[0]^,data,op1,ResultParam);
+         TParserEntityTypeFilter.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserEntityTypeFilter.TParsedText).Parts.Mutable[0]^,data,op1,ResultParam);
          SetLength(op1,ResultParam.Length);
          ResultParam.StartPos:=InitialStartPos;
-         TEntityFilterParser.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TEntityFilterParser.TParsedText).Parts.Mutable[0]^,data,op1,ResultParam);
+         TParserEntityTypeFilter.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserEntityTypeFilter.TParsedText).Parts.Mutable[0]^,data,op1,ResultParam);
 
          ResultParam.StartPos:=OnlyGetLength;
          ResultParam.Length:=0;
-         TEntityFilterParser.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TEntityFilterParser.TParsedText).Parts.Mutable[2]^,data,op2,ResultParam);
+         TParserEntityTypeFilter.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserEntityTypeFilter.TParsedText).Parts.Mutable[2]^,data,op2,ResultParam);
          SetLength(op2,ResultParam.Length);
          ResultParam.StartPos:=InitialStartPos;
-         TEntityFilterParser.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TEntityFilterParser.TParsedText).Parts.Mutable[2]^,data,op2,ResultParam);
+         TParserEntityTypeFilter.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserEntityTypeFilter.TParsedText).Parts.Mutable[2]^,data,op2,ResultParam);
 
        if MatchesMask(op1,op2,false)
            or (AnsiCompareText(op1,op2)=0) then
@@ -128,11 +122,11 @@ begin
     Raise Exception.CreateFmt(rsRunTimeError,[Operands.StartPos]);
 end;
 
-procedure TGetEntParam.GetResult(const Source:TEntityFilterParserString;
+procedure TGetEntParam.GetResult(const Source:TParserEntityTypeFilterString;
                     const Token :TSubStr;
                     const Operands :TSubStr;
-                    const ParsedOperands:TAbstractParsedText<TEntityFilterParserString,TEntsTypeFilter>;
-                    var Result:TEntityFilterParserString;
+                    const ParsedOperands:TAbstractParsedText<TParserEntityTypeFilterString,TEntsTypeFilter>;
+                    var Result:TParserEntityTypeFilterString;
                     var ResultParam:TSubStr;
                     var data:TEntsTypeFilter);
 var
@@ -157,10 +151,10 @@ begin
       Result[ResultParam.StartPos+i]:=tempresult[i+1];
 end;
 
-constructor TGetEntParam.vcreate(const Source:TEntityFilterParserString;
+constructor TGetEntParam.vcreate(const Source:TParserEntityTypeFilterString;
                         const Token :TSubStr;
                         const Operands :TSubStr;
-                        const ParsedOperands:TAbstractParsedText<TEntityFilterParserString,TEntsTypeFilter>;
+                        const ParsedOperands:TAbstractParsedText<TParserEntityTypeFilterString,TEntsTypeFilter>;
                         var Data:TEntsTypeFilter);
 var
   propertyname:string;
@@ -170,17 +164,17 @@ begin
     mp:=nil;
 end;
 
-class procedure TIncludeEntityNameMask.StaticDoit(const Source:TEntityFilterParserString;
+class procedure TIncludeEntityNameMask.StaticDoit(const Source:TParserEntityTypeFilterString;
                            const Token :TSubStr;
                            const Operands :TSubStr;
-                           const ParsedOperands :TAbstractParsedText<TEntityFilterParserString,TEntsTypeFilter>;
+                           const ParsedOperands :TAbstractParsedText<TParserEntityTypeFilterString,TEntsTypeFilter>;
                            var Data:TEntsTypeFilter);
 var
-  s:TEntityFilterParserString;
+  s:TParserEntityTypeFilterString;
 begin
   if (ParsedOperands<>nil)
-     //and(ParsedOperands is TEntityFilterParser.TParsedTextWithOneToken)
-     {and((ParsedOperands as TEntityFilterParser.TParsedTextWithOneToken).Part.TextInfo.TokenId=StringId)} then begin
+     //and(ParsedOperands is TParserEntityTypeFilter.TParsedTextWithOneToken)
+     {and((ParsedOperands as TParserEntityTypeFilter.TParsedTextWithOneToken).Part.TextInfo.TokenId=StringId)} then begin
        s:=ParsedOperands.GetResult(data);
 
        TEntsTypeFilter(Data).AddTypeNameMask(s)
@@ -188,17 +182,17 @@ begin
   else
     Raise Exception.CreateFmt(rsRunTimeError,[Operands.StartPos]);
 end;
-class procedure TIncludeEntityName.StaticDoit(const Source:TEntityFilterParserString;
+class procedure TIncludeEntityName.StaticDoit(const Source:TParserEntityTypeFilterString;
                            const Token :TSubStr;
                            const Operands :TSubStr;
-                           const ParsedOperands :TAbstractParsedText<TEntityFilterParserString,TEntsTypeFilter>;
+                           const ParsedOperands :TAbstractParsedText<TParserEntityTypeFilterString,TEntsTypeFilter>;
                            var Data:TEntsTypeFilter);
 var
-  s:TEntityFilterParserString;
+  s:TParserEntityTypeFilterString;
 begin
   if (ParsedOperands<>nil)
-     //and(ParsedOperands is TEntityFilterParser.TParsedTextWithOneToken)
-     {and((ParsedOperands as TEntityFilterParser.TParsedTextWithOneToken).Part.TextInfo.TokenId=StringId)} then begin
+     //and(ParsedOperands is TParserEntityTypeFilter.TParsedTextWithOneToken)
+     {and((ParsedOperands as TParserEntityTypeFilter.TParsedTextWithOneToken).Part.TextInfo.TokenId=StringId)} then begin
        s:=ParsedOperands.GetResult(data);
 
        TEntsTypeFilter(Data).AddTypeName(s)
@@ -206,17 +200,17 @@ begin
   else
     Raise Exception.CreateFmt(rsRunTimeError,[Operands.StartPos]);
 end;
-class procedure TExcludeEntityNameMask.StaticDoit(const Source:TEntityFilterParserString;
+class procedure TExcludeEntityNameMask.StaticDoit(const Source:TParserEntityTypeFilterString;
                            const Token :TSubStr;
                            const Operands :TSubStr;
-                           const ParsedOperands :TAbstractParsedText<TEntityFilterParserString,TEntsTypeFilter>;
+                           const ParsedOperands :TAbstractParsedText<TParserEntityTypeFilterString,TEntsTypeFilter>;
                            var Data:TEntsTypeFilter);
 var
-  s:TEntityFilterParserString;
+  s:TParserEntityTypeFilterString;
 begin
   if (ParsedOperands<>nil)
-     //and(ParsedOperands is TEntityFilterParser.TParsedTextWithOneToken)
-     {and((ParsedOperands as TEntityFilterParser.TParsedTextWithOneToken).Part.TextInfo.TokenId=StringId)} then begin
+     //and(ParsedOperands is TParserEntityTypeFilter.TParsedTextWithOneToken)
+     {and((ParsedOperands as TParserEntityTypeFilter.TParsedTextWithOneToken).Part.TextInfo.TokenId=StringId)} then begin
        s:=ParsedOperands.GetResult(data);
 
        TEntsTypeFilter(Data).SubTypeNameMask(s)
@@ -224,17 +218,17 @@ begin
   else
     Raise Exception.CreateFmt(rsRunTimeError,[Operands.StartPos]);
 end;
-class procedure TExcludeEntityName.StaticDoit(const Source:TEntityFilterParserString;
+class procedure TExcludeEntityName.StaticDoit(const Source:TParserEntityTypeFilterString;
                            const Token :TSubStr;
                            const Operands :TSubStr;
-                           const ParsedOperands :TAbstractParsedText<TEntityFilterParserString,TEntsTypeFilter>;
+                           const ParsedOperands :TAbstractParsedText<TParserEntityTypeFilterString,TEntsTypeFilter>;
                            var Data:TEntsTypeFilter);
 var
-  s:TEntityFilterParserString;
+  s:TParserEntityTypeFilterString;
 begin
   if (ParsedOperands<>nil)
-     //and(ParsedOperands is TEntityFilterParser.TParsedTextWithOneToken)
-     {and((ParsedOperands as TEntityFilterParser.TParsedTextWithOneToken).Part.TextInfo.TokenId=StringId)} then begin
+     //and(ParsedOperands is TParserEntityTypeFilter.TParsedTextWithOneToken)
+     {and((ParsedOperands as TParserEntityTypeFilter.TParsedTextWithOneToken).Part.TextInfo.TokenId=StringId)} then begin
        s:=ParsedOperands.GetResult(data);
 
        TEntsTypeFilter(Data).SubTypeName(s)
@@ -243,45 +237,29 @@ begin
     Raise Exception.CreateFmt(rsRunTimeError,[Operands.StartPos]);
 end;
 
-
-class procedure TEntityFilterString.StaticGetResult(const Source:TEntityFilterParserString;
-                                      const Token :TSubStr;
-                                      const Operands :TSubStr;
-                                      const ParsedOperands:TAbstractParsedText<TEntityFilterParserString,TEntsTypeFilter>;
-                                      var Result:TEntityFilterParserString;
-                                      var ResultParam:TSubStr;
-                                      var data:TEntsTypeFilter);
-var
-  i:integer;
-begin
-  ResultParam.Length:=Operands.Length;
-  if ResultParam.StartPos<>OnlyGetLength then
-    for i:=0 to Operands.Length-1 do
-      Result[ResultParam.StartPos+i]:=Source[Operands.StartPos+i];
-end;
-class procedure TEntityFilterExcluder.StaticDoit(const Source:TEntityFilterParserString;
+class procedure TEntityFilterExcluder.StaticDoit(const Source:TParserEntityTypeFilterString;
                            const Token :TSubStr;
                            const Operands :TSubStr;
-                           const ParsedOperands :TAbstractParsedText<TEntityFilterParserString,TEntsTypeFilter>;
+                           const ParsedOperands :TAbstractParsedText<TParserEntityTypeFilterString,TEntsTypeFilter>;
                            var Data:TEntsTypeFilter);
 begin
 end;
 
 initialization
-  EntityFilterParser:=TEntityFilterParser.create;
-  BracketTockenId:=EntityFilterParser.RegisterToken('(','(',')',TIncludeEntityNameMask,EntityFilterParser,[TONestedBracke,TOIncludeBrackeOpen,TOSeparator]);
-  EntityFilterParser.RegisterToken('IncludeEntityMask',#0,#0,TIncludeEntityNameMask,EntityFilterParser,[TOWholeWordOnly],BracketTockenId);
-  EntityFilterParser.RegisterToken('IncludeEntityName',#0,#0,TIncludeEntityName,EntityFilterParser,[TOWholeWordOnly],BracketTockenId);
-  EntityFilterParser.RegisterToken('ExcludeEntityMask',#0,#0,TExcludeEntityNameMask,EntityFilterParser,[TOWholeWordOnly],BracketTockenId);
-  EntityFilterParser.RegisterToken('ExcludeEntityName',#0,#0,TExcludeEntityName,EntityFilterParser,[TOWholeWordOnly],BracketTockenId);
-  EntityFilterParser.RegisterToken('''','''','''',TEntityFilterString,nil,[TOIncludeBrackeOpen]);
-  EntityFilterParser.RegisterToken(',',#0,#0,nil,nil,[TOSeparator]);
-  EntityFilterParser.RegisterToken(';',#0,#0,nil,nil,[TOSeparator]);
-  EntityFilterParser.RegisterToken(' ',#0,#0,nil,nil,[TOSeparator,TOCanBeOmitted]);
-  EntityFilterParser.RegisterToken(#10,#0,#0,nil,nil,[TOSeparator,TOCanBeOmitted]);
-  EntityFilterParser.RegisterToken(#13,#0,#0,nil,nil,[TOSeparator,TOCanBeOmitted]);
-  //EntityFilterParser.RegisterToken('ExcludeEntityNameMask(','(',')',TEntityFilterExcluder,[TOIncludeBrackeOpen]);
+  ParserEntityTypeFilter:=TParserEntityTypeFilter.create;
+  BracketTockenId:=ParserEntityTypeFilter.RegisterToken('(','(',')',TIncludeEntityNameMask,ParserEntityTypeFilter,[TONestedBracke,TOIncludeBrackeOpen,TOSeparator]);
+  ParserEntityTypeFilter.RegisterToken('IncludeEntityMask',#0,#0,TIncludeEntityNameMask,ParserEntityTypeFilter,[TOWholeWordOnly],BracketTockenId);
+  ParserEntityTypeFilter.RegisterToken('IncludeEntityName',#0,#0,TIncludeEntityName,ParserEntityTypeFilter,[TOWholeWordOnly],BracketTockenId);
+  ParserEntityTypeFilter.RegisterToken('ExcludeEntityMask',#0,#0,TExcludeEntityNameMask,ParserEntityTypeFilter,[TOWholeWordOnly],BracketTockenId);
+  ParserEntityTypeFilter.RegisterToken('ExcludeEntityName',#0,#0,TExcludeEntityName,ParserEntityTypeFilter,[TOWholeWordOnly],BracketTockenId);
+  ParserEntityTypeFilter.RegisterToken('''','''','''',ParserEntityTypeFilter.TParserTokenizer.TStringProcessor,nil,[TOIncludeBrackeOpen]);
+  ParserEntityTypeFilter.RegisterToken(',',#0,#0,nil,nil,[TOSeparator]);
+  ParserEntityTypeFilter.RegisterToken(';',#0,#0,nil,nil,[TOSeparator]);
+  ParserEntityTypeFilter.RegisterToken(' ',#0,#0,nil,nil,[TOSeparator,TOCanBeOmitted]);
+  ParserEntityTypeFilter.RegisterToken(#10,#0,#0,nil,nil,[TOSeparator,TOCanBeOmitted]);
+  ParserEntityTypeFilter.RegisterToken(#13,#0,#0,nil,nil,[TOSeparator,TOCanBeOmitted]);
+  //ParserEntityTypeFilter.RegisterToken('ExcludeEntityNameMask(','(',')',TEntityFilterExcluder,[TOIncludeBrackeOpen]);
 finalization;
-  EntityFilterParser.Free;
+  ParserEntityTypeFilter.Free;
 end.
 

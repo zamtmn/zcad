@@ -6,114 +6,96 @@ interface
 
 uses
   SysUtils,
-  uzeentity,uzeparser,uzeentitiestypefilter,Masks,
-  uzcoimultiproperties,uzedimensionaltypes;
+  uzeentity,uzeparser,Masks,
+  uzcoimultiproperties,uzedimensionaltypes,
+  uzbtypes;
 
 type
-  TEntityIncluderParserString=AnsiString;
-  TEntityIncluderParserChar=AnsiChar;
-  TEntityIncluderParser=TParser<TEntityIncluderParserString,TEntityIncluderParserChar,TEntsTypeFilter,TCharToOptChar<AnsiChar>>;
+  TPropFilterData=record
+    CurrentEntity:PGDBObjEntity;
+    IncludeEntity:TGDB3StateBool;
+  end;
 
-  TIncludeIfMask=class(TEntityIncluderParser.TParserTokenizer.TStaticProcessor)
-    class procedure StaticDoit(const Source:TEntityIncluderParserString;
+  TParserEntityPropFilterString=AnsiString;
+  TParserEntityPropFilterChar=AnsiChar;
+  TParserEntityPropFilter=TParser<TParserEntityPropFilterString,TParserEntityPropFilterChar,TPropFilterData,TCharToOptChar<AnsiChar>>;
+
+  TIncludeIfMask=class(TParserEntityPropFilter.TParserTokenizer.TStaticProcessor)
+    class procedure StaticDoit(const Source:TParserEntityPropFilterString;
                                const Token :TSubStr;
                                const Operands :TSubStr;
-                               const ParsedOperands :TAbstractParsedText<TEntityIncluderParserString,TEntsTypeFilter>;
-                               var Data:TEntsTypeFilter);override;
+                               const ParsedOperands :TAbstractParsedText<TParserEntityPropFilterString,TPropFilterData>;
+                               var Data:TPropFilterData);override;
   end;
-  TGetEntParam=class(TEntityIncluderParser.TParserTokenizer.TDynamicProcessor)
+  TGetEntParam=class(TParserEntityPropFilter.TParserTokenizer.TDynamicProcessor)
     mp:TMultiProperty;
-    tempresult:TEntityIncluderParserString;
-    constructor vcreate(const Source:TEntityIncluderParserString;
+    tempresult:TParserEntityPropFilterString;
+    constructor vcreate(const Source:TParserEntityPropFilterString;
                             const Token :TSubStr;
                             const Operands :TSubStr;
-                            const ParsedOperands:TAbstractParsedText<TEntityIncluderParserString,TEntsTypeFilter>;
-                            var Data:TEntsTypeFilter);override;
-    procedure GetResult(const Source:TEntityIncluderParserString;
+                            const ParsedOperands:TAbstractParsedText<TParserEntityPropFilterString,TPropFilterData>;
+                            var Data:TPropFilterData);override;
+    procedure GetResult(const Source:TParserEntityPropFilterString;
                         const Token :TSubStr;
                         const Operands :TSubStr;
-                        const ParsedOperands:TAbstractParsedText<TEntityIncluderParserString,TEntsTypeFilter>;
-                        var Result:TEntityIncluderParserString;
+                        const ParsedOperands:TAbstractParsedText<TParserEntityPropFilterString,TPropFilterData>;
+                        var Result:TParserEntityPropFilterString;
                         var ResultParam:TSubStr;
-                        var data:TEntsTypeFilter);override;
+                        var data:TPropFilterData);override;
   end;
-  TEntityFilterString=class(TEntityIncluderParser.TParserTokenizer.TStaticProcessor)
-    class procedure StaticGetResult(const Source:TEntityIncluderParserString;
-                                          const Token :TSubStr;
-                                          const Operands :TSubStr;
-                                          const ParsedOperands:TAbstractParsedText<TEntityIncluderParserString,TEntsTypeFilter>;
-                                          var Result:TEntityIncluderParserString;
-                                          var ResultParam:TSubStr;
-                                          var data:TEntsTypeFilter);override;
-  end;
-
 var
-  EntityIncluderParser:TEntityIncluderParser;
-  BracketTockenId:TEntityIncluderParser.TParserTokenizer.TTokenId;
+  ParserEntityPropFilter:TParserEntityPropFilter;
+
 implementation
 
-class procedure TEntityFilterString.StaticGetResult(const Source:TEntityIncluderParserString;
-                                      const Token :TSubStr;
-                                      const Operands :TSubStr;
-                                      const ParsedOperands:TAbstractParsedText<TEntityIncluderParserString,TEntsTypeFilter>;
-                                      var Result:TEntityIncluderParserString;
-                                      var ResultParam:TSubStr;
-                                      var data:TEntsTypeFilter);
 var
-  i:integer;
-begin
-  ResultParam.Length:=Operands.Length;
-  if ResultParam.StartPos<>OnlyGetLength then
-    for i:=0 to Operands.Length-1 do
-      Result[ResultParam.StartPos+i]:=Source[Operands.StartPos+i];
-end;
+  BracketTockenId:TParserEntityPropFilter.TParserTokenizer.TTokenId;
 
-
-class procedure TIncludeIfMask.StaticDoit(const Source:TEntityIncluderParserString;
+class procedure TIncludeIfMask.StaticDoit(const Source:TParserEntityPropFilterString;
                            const Token :TSubStr;
                            const Operands :TSubStr;
-                           const ParsedOperands :TAbstractParsedText<TEntityIncluderParserString,TEntsTypeFilter>;
-                           var Data:TEntsTypeFilter);
+                           const ParsedOperands :TAbstractParsedText<TParserEntityPropFilterString,TPropFilterData>;
+                           var Data:TPropFilterData);
 var
-  op1,op2:TEntityIncluderParserString;
+  op1,op2:TParserEntityPropFilterString;
   ResultParam:TSubStr;
 begin
   if (ParsedOperands<>nil)
-     and(ParsedOperands is TEntityIncluderParser.TParsedText)
-     and((ParsedOperands as TEntityIncluderParser.TParsedText).Parts.size=3)
+     and(ParsedOperands is TParserEntityPropFilter.TParsedText)
+     and((ParsedOperands as TParserEntityPropFilter.TParsedText).Parts.size=3)
      {and((ParsedOperands as TEntityFilterParser.TParsedTextWithOneToken).Part.TextInfo.TokenId=StringId)} then begin
-       op1:=inttostr((ParsedOperands as TEntityIncluderParser.TParsedText).Parts.size);
+       if Data.IncludeEntity<>T3SB_Fale then begin
+         op1:=inttostr((ParsedOperands as TParserEntityPropFilter.TParsedText).Parts.size);
          ResultParam.StartPos:=OnlyGetLength;
          ResultParam.Length:=0;
-         TEntityIncluderParser.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TEntityIncluderParser.TParsedText).Parts.Mutable[0]^,data,op1,ResultParam);
+         TParserEntityPropFilter.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserEntityPropFilter.TParsedText).Parts.Mutable[0]^,data,op1,ResultParam);
          SetLength(op1,ResultParam.Length);
          ResultParam.StartPos:=InitialStartPos;
-         TEntityIncluderParser.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TEntityIncluderParser.TParsedText).Parts.Mutable[0]^,data,op1,ResultParam);
+         TParserEntityPropFilter.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserEntityPropFilter.TParsedText).Parts.Mutable[0]^,data,op1,ResultParam);
 
          ResultParam.StartPos:=OnlyGetLength;
          ResultParam.Length:=0;
-         TEntityIncluderParser.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TEntityIncluderParser.TParsedText).Parts.Mutable[2]^,data,op2,ResultParam);
+         TParserEntityPropFilter.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserEntityPropFilter.TParsedText).Parts.Mutable[2]^,data,op2,ResultParam);
          SetLength(op2,ResultParam.Length);
          ResultParam.StartPos:=InitialStartPos;
-         TEntityIncluderParser.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TEntityIncluderParser.TParsedText).Parts.Mutable[2]^,data,op2,ResultParam);
-
-       if MatchesMask(op1,op2,false)
-           or (AnsiCompareText(op1,op2)=0) then
-           op1:=op2;
-
+         TParserEntityPropFilter.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserEntityPropFilter.TParsedText).Parts.Mutable[2]^,data,op2,ResultParam);
+         if MatchesMask(op1,op2,false)
+             or (AnsiCompareText(op1,op2)=0) then
+               Data.IncludeEntity:=T3SB_True;
+       end;
        //TEntsTypeFilter(Data).AddTypeNameMask(op1)
      end
   else
     Raise Exception.CreateFmt(rsRunTimeError,[Operands.StartPos]);
 end;
 
-procedure TGetEntParam.GetResult(const Source:TEntityIncluderParserString;
+procedure TGetEntParam.GetResult(const Source:TParserEntityPropFilterString;
                     const Token :TSubStr;
                     const Operands :TSubStr;
-                    const ParsedOperands:TAbstractParsedText<TEntityIncluderParserString,TEntsTypeFilter>;
-                    var Result:TEntityIncluderParserString;
+                    const ParsedOperands:TAbstractParsedText<TParserEntityPropFilterString,TPropFilterData>;
+                    var Result:TParserEntityPropFilterString;
                     var ResultParam:TSubStr;
-                    var data:TEntsTypeFilter);
+                    var data:TPropFilterData);
 var
   i:integer;
   mpd:TMultiPropertyDataForObjects;
@@ -122,9 +104,9 @@ begin
   if ResultParam.StartPos=OnlyGetLength then begin
     if mp<>nil then begin
       if mp.MPObjectsData.MyGetValue(0,mpd) then begin
-        tempresult:=mp.MPType.GetDecoratedValueAsString(Pointer(PtrUInt(data)+mpd.GetValueOffset),f);
-      end else if mp.MPObjectsData.MyGetValue(PGDBObjEntity(data)^.GetObjType,mpd) then begin
-        tempresult:=mp.MPType.GetDecoratedValueAsString(Pointer(PtrUInt(data)+mpd.GetValueOffset),f);
+        tempresult:=mp.MPType.GetDecoratedValueAsString(Pointer(PtrUInt(data.CurrentEntity)+mpd.GetValueOffset),f);
+      end else if mp.MPObjectsData.MyGetValue(PGDBObjEntity(data.CurrentEntity)^.GetObjType,mpd) then begin
+        tempresult:=mp.MPType.GetDecoratedValueAsString(Pointer(PtrUInt(data.CurrentEntity)+mpd.GetValueOffset),f);
       end else
         tempresult:='';
     end else
@@ -136,11 +118,11 @@ begin
       Result[ResultParam.StartPos+i]:=tempresult[i+1];
 end;
 
-constructor TGetEntParam.vcreate(const Source:TEntityIncluderParserString;
+constructor TGetEntParam.vcreate(const Source:TParserEntityPropFilterString;
                         const Token :TSubStr;
                         const Operands :TSubStr;
-                        const ParsedOperands:TAbstractParsedText<TEntityIncluderParserString,TEntsTypeFilter>;
-                        var Data:TEntsTypeFilter);
+                        const ParsedOperands:TAbstractParsedText<TParserEntityPropFilterString,TPropFilterData>;
+                        var Data:TPropFilterData);
 var
   propertyname:string;
 begin
@@ -150,17 +132,17 @@ begin
 end;
 
 initialization
-  EntityIncluderParser:=TEntityIncluderParser.create;
-  BracketTockenId:=EntityIncluderParser.RegisterToken('(','(',')',nil,EntityIncluderParser,[TONestedBracke,TOIncludeBrackeOpen,TOSeparator]);
-  EntityIncluderParser.RegisterToken('IncludeIfMask',#0,#0,TIncludeIfMask,EntityIncluderParser,[TOWholeWordOnly],BracketTockenId);
-  EntityIncluderParser.RegisterToken('%%',#0,#0,TGetEntParam,EntityIncluderParser,[TOWholeWordOnly],BracketTockenId);
-  EntityIncluderParser.RegisterToken('''','''','''',TEntityFilterString,nil,[TOIncludeBrackeOpen]);
-  EntityIncluderParser.RegisterToken(',',#0,#0,nil,nil,[TOSeparator]);
-  EntityIncluderParser.RegisterToken(';',#0,#0,nil,nil,[TOSeparator]);
-  EntityIncluderParser.RegisterToken(' ',#0,#0,nil,nil,[TOSeparator,TOCanBeOmitted]);
-  EntityIncluderParser.RegisterToken(#10,#0,#0,nil,nil,[TOSeparator,TOCanBeOmitted]);
-  EntityIncluderParser.RegisterToken(#13,#0,#0,nil,nil,[TOSeparator,TOCanBeOmitted]);
+  ParserEntityPropFilter:=TParserEntityPropFilter.create;
+  BracketTockenId:=ParserEntityPropFilter.RegisterToken('(','(',')',nil,ParserEntityPropFilter,[TONestedBracke,TOIncludeBrackeOpen,TOSeparator]);
+  ParserEntityPropFilter.RegisterToken('IncludeIfMask',#0,#0,TIncludeIfMask,ParserEntityPropFilter,[TOWholeWordOnly],BracketTockenId);
+  ParserEntityPropFilter.RegisterToken('%%',#0,#0,TGetEntParam,ParserEntityPropFilter,[TOWholeWordOnly],BracketTockenId);
+  ParserEntityPropFilter.RegisterToken('''','''','''',ParserEntityPropFilter.TParserTokenizer.TStringProcessor,nil,[TOIncludeBrackeOpen]);
+  ParserEntityPropFilter.RegisterToken(',',#0,#0,nil,nil,[TOSeparator]);
+  ParserEntityPropFilter.RegisterToken(';',#0,#0,nil,nil,[TOSeparator]);
+  ParserEntityPropFilter.RegisterToken(' ',#0,#0,nil,nil,[TOSeparator,TOCanBeOmitted]);
+  ParserEntityPropFilter.RegisterToken(#10,#0,#0,nil,nil,[TOSeparator,TOCanBeOmitted]);
+  ParserEntityPropFilter.RegisterToken(#13,#0,#0,nil,nil,[TOSeparator,TOCanBeOmitted]);
 finalization;
-  EntityIncluderParser.Free;
+  ParserEntityPropFilter.Free;
 end.
 

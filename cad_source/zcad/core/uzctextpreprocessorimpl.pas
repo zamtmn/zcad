@@ -57,6 +57,7 @@ var
   TokenTextInfo:TMyParser.TParserTokenizer.TTokenTextInfo;
   pt:TMyParser.TGeneralParsedText;
   s:gdbstring;
+  p:pointer;
 implementation
 function TStr2VarProcessor.GetResult(const str:gdbstring;const operands:gdbstring;var NextSymbolPos:integer;pobj:Pointer):gdbstring;
 var
@@ -205,7 +206,8 @@ initialization
   pt:=Parser.GetTokens('(PTR-NUM)');
   //pt.SetOperands;
   //pt.SetData;
-  s:=pt.GetResult(nil);
+  p:=nil;
+  s:=pt.GetResult(p);
   pt.Free;
  { a:=Parser.GetTokenFromSubStr('_@@[Layer]',1,TokenTextInfo);
   a:=Parser.GetTokenFromSubStr('_@@[Layer]',TokenTextInfo.NextPos,TokenTextInfo);

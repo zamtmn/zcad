@@ -24,26 +24,30 @@ uses uzeentity,uzcvariablesutils,uzetextpreprocessor,languade,uzbstrproc,sysutil
      uzbtypesbase,varmandef,uzbtypes,uzcenitiesvariablesextender,uzeentsubordinated,
      uzcpropertiesutils,uzeparser,LazUTF8;
 type
-  TStr2VarProcessor=class(TMyParser.TDynamicProcessor)
+  TStr2VarProcessor=class(TMyParser.TParserTokenizer.TDynamicProcessor)
     function GetResult(const str:gdbstring;const operands:gdbstring;var NextSymbolPos:integer;pobj:Pointer):gdbstring;
   end;
 
-  TNum2StrProcessor=class(TMyParser.TStaticProcessor)
+  TNum2StrProcessor=class(TMyParser.TParserTokenizer.TStaticProcessor)
     class procedure StaticGetResult(const Source:TTokenizerString;
                                     const Token :TSubStr;
                                     const Operands :TSubStr;
+                                    const ParsedOperands :TAbstractParsedText{<TTokenizerString,pointer>};
                                     var Result:TTokenizerString;
                                     var ResultParam:TSubStr;
                                     const data:pointer);override;
   end;
 
-  TPointer2StrProcessor=class(TMyParser.TDynamicProcessor)
+  TPointer2StrProcessor=class(TMyParser.TParserTokenizer.TDynamicProcessor)
     constructor vcreate(const Source:TTokenizerString;
                         const Token :TSubStr;
-                        const Operands :TSubStr);override;
+                        const Operands :TSubStr;
+                        const ParsedOperands :TAbstractParsedText{<TTokenizerString,pointer>};
+                        const Data:{TEntsTypeFilter}pointer);override;
     procedure GetResult(const Source:TTokenizerString;
                         const Token :TSubStr;
                         const Operands :TSubStr;
+                        const ParsedOperands :TAbstractParsedText{<TTokenizerString,pointer>};
                         var Result:TTokenizerString;
                         var ResultParam:TSubStr;
                         const data:pointer);override;
@@ -51,7 +55,7 @@ type
 
 var
   TokenTextInfo:TMyParser.TParserTokenizer.TTokenTextInfo;
-  pt:TMyParser.TAbstractParsedText;
+  pt:TMyParser.TGeneralParsedText;
   s:gdbstring;
 implementation
 function TStr2VarProcessor.GetResult(const str:gdbstring;const operands:gdbstring;var NextSymbolPos:integer;pobj:Pointer):gdbstring;
@@ -70,6 +74,7 @@ end;
 class procedure TNum2StrProcessor.StaticGetResult(const Source:TTokenizerString;
                                                   const Token :TSubStr;
                                 const Operands :TSubStr;
+                                const ParsedOperands :TAbstractParsedText{<TTokenizerString,pointer>};
                                 var Result:TTokenizerString;
                                 var ResultParam:TSubStr;
                                 const data:pointer);
@@ -83,7 +88,9 @@ end;
 
 constructor TPointer2StrProcessor.vcreate(const Source:TTokenizerString;
                                           const Token :TSubStr;
-                                          const Operands :TSubStr);
+                                          const Operands :TSubStr;
+                                          const ParsedOperands :TAbstractParsedText{<TTokenizerString,pointer>};
+                                          const Data:{TEntsTypeFilter}pointer);
 begin
 
 end;
@@ -91,6 +98,7 @@ end;
 procedure TPointer2StrProcessor.GetResult(const Source:TTokenizerString;
                                           const Token :TSubStr;
                                           const Operands :TSubStr;
+                                          const ParsedOperands :TAbstractParsedText{<TTokenizerString,pointer>};
                                           var Result:TTokenizerString;
                                           var ResultParam:TSubStr;
                                           const data:pointer);
@@ -187,9 +195,9 @@ initialization
   Prefix2ProcessFunc.RegisterProcessor('\',#0,#0,@EscapeSeq);
   Prefix2ProcessFunc.RegisterProcessor('%%DATE',#0,#0,@date2value,true);
 
-  Parser.RegisterToken('@@[','[',']',{@var2value}TStr2VarProcessor,[TOIncludeBrackeOpen{,TOVariable}]);
-  Parser.RegisterToken('NUM',#0,#0,TNum2StrProcessor,[]);
-  Parser.RegisterToken('PTR',#0,#0,TPointer2StrProcessor,[{TOVariable}]);
+  Parser.RegisterToken('@@[','[',']',{@var2value}TStr2VarProcessor,nil,[TOIncludeBrackeOpen{,TOVariable}]);
+  Parser.RegisterToken('NUM',#0,#0,TNum2StrProcessor,nil,[]);
+  Parser.RegisterToken('PTR',#0,#0,TPointer2StrProcessor,nil,[{TOVariable}]);
   //Parser.RegisterToken('%%[','[',']',@prop2value,[TOIncludeBrackeOpen,TOVariable]);
   //Parser.RegisterToken('\',#0,#0,@EscapeSeq);
   //Parser.RegisterToken('%%DATE',#0,#0,@date2value,[TOVariable]);
@@ -199,10 +207,10 @@ initialization
   //pt.SetData;
   s:=pt.GetResult(nil);
   pt.Free;
- { a:=Parser.GetToken('_@@[Layer]',1,TokenTextInfo);
-  a:=Parser.GetToken('_@@[Layer]',TokenTextInfo.NextPos,TokenTextInfo);
-  a:=Parser.GetToken('_@@[Layer]',TokenTextInfo.NextPos,TokenTextInfo);
-  a:=Parser.GetToken('_@@[Layer]',TokenTextInfo.NextPos,TokenTextInfo);
+ { a:=Parser.GetTokenFromSubStr('_@@[Layer]',1,TokenTextInfo);
+  a:=Parser.GetTokenFromSubStr('_@@[Layer]',TokenTextInfo.NextPos,TokenTextInfo);
+  a:=Parser.GetTokenFromSubStr('_@@[Layer]',TokenTextInfo.NextPos,TokenTextInfo);
+  a:=Parser.GetTokenFromSubStr('_@@[Layer]',TokenTextInfo.NextPos,TokenTextInfo);
   vp:=TStr2VarProcessor.create;
   spc:=TStr2VarProcessor;}
 end.

@@ -15,7 +15,8 @@ uses
   GraphType,generics.collections,uzglviewareaabstract,Menus,
   uzcfnavigatordevicescxmenu,uzbpaths,Toolwin,uzcctrlpartenabler,StrUtils,
   uzctextenteditor,uzcinfoform,uzcsysparams,uzcsysvars,uzetextpreprocessor,
-  Masks,uzelongprocesssupport,uzeentitiestypefilter,uzcuitypes;
+  Masks,uzelongprocesssupport,uzeentitiestypefilter,uzcuitypes,
+  uzeparser;
 
 resourcestring
   rsStandaloneDevices='Standalone devices';
@@ -78,6 +79,7 @@ type
     SaveCellRectLeft:integer;
     TreeEnabler:TStringPartEnabler;
     EntsTypeFilter:TEntsTypeFilter;
+    EntityIncluder:EntityIncluderParser.TGeneralParsedText;
 
   public
     BP:TBuildParam;
@@ -86,6 +88,7 @@ type
     UseMainFunctions:Boolean;}
 
     procedure CreateRoots;
+    procedure CreateFilters;
     procedure EraseRoots;
     procedure FreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure VTFocuschanged(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex);
@@ -170,9 +173,13 @@ begin
   end;}
   {if pent^.GetObjTypeName<>ObjN_GDBObjDevice then
       exit(false);}
+
   if not EntsTypeFilter.IsEntytyTypeAccepted(pent^.GetObjType)then
       exit(false);
 
+  EntityIncluder.Doit(pent);
+
+  exit(true);
   an:=BP.IncludeProperties;
   if an<>'' then begin
     alreadyinclude:=false;
@@ -230,7 +237,6 @@ begin
   result:=nil;
   Name:='';
   basenode:=rootdesk.rootnode;
-
   an:=BP.TreeBuildMap;
   if an<>'' then
   repeat
@@ -250,7 +256,6 @@ begin
        Name:={GetEntityVariableValue(pent,'NMO_Name',rsNameAbsent)}pent^.GetObjTypeName;
     end;
   until an='';
-
   if name='' then
     Name:={GetEntityVariableValue(pent,'NMO_Name',rsNameAbsent)}pent^.GetObjTypeName;
 
@@ -717,36 +722,26 @@ else
   end;
 end;
 
-procedure TNavigatorDevices.CreateRoots;
+procedure TNavigatorDevices.CreateFilters;
 var
-  cn,an,entname:string;
-  match:boolean;
-  alreadyinclude:boolean;
-  operation:char;
+  pt:TEntityFilterParser.TGeneralParsedText;
 begin
   if EntsTypeFilter<>nil then
     EntsTypeFilter.ResetFilter
   else
     EntsTypeFilter:=TEntsTypeFilter.Create;
-  an:=BP.IncludeEntities;
-  if an<>'' then begin
-    repeat
-      GetPartOfPath(cn,an,'|');
-      if cn<>'' then begin
-        operation:=cn[1];
-          cn:=(copy(cn,2,length(cn)-1));
-          if (operation='+') then
-            EntsTypeFilter.AddTypeNameMask(cn);
-          if (operation='-') then
-            EntsTypeFilter.SubTypeNameMask(cn);
-      end;
-    until an='';
-  end;
+  pt:=EntityFilterParser.GetTokens(BP.IncludeEntities);
+  pt.Doit(EntsTypeFilter);
   EntsTypeFilter.SetFilter;
+  pt.Free;
+  if assigned(EntityIncluder) then
+    FreeAndNil(EntityIncluder);
+  EntityIncluder:=EntityIncluderParser.GetTokens(BP.IncludeProperties);
+end;
 
-  //CombinedNode:=TRootNodeDesk.Create(self, NavTree);
-  //CombinedNode.ftext:='Combined devices';
-  //CombinedNode.ficonindex:=ImagesManager.GetImageIndex('caddie');
+procedure TNavigatorDevices.CreateRoots;
+begin
+  CreateFilters;
   StandaloneNode:=TBaseRootNodeDesk.Create(self, NavTree,rsStandaloneDevices);
   StandaloneNode.ficonindex:=ImagesManager.GetImageIndex('basket');
   Ent2NodeMap:=TEnt2NodeMap.create;
@@ -764,7 +759,8 @@ begin
     StandaloneNodeStates:=StandaloneNode.SaveState;
     FreeAndNil(StandaloneNode);
   end;
-  Ent2NodeMap.Free;
+  FreeAndNil(Ent2NodeMap);
+  FreeAndNil(EntityIncluder);
 end;
 
 procedure SelectSubNodes(nav:TVirtualStringTree;pnode:PVirtualNode);

@@ -32,25 +32,25 @@ type
     class procedure StaticGetResult(const Source:TTokenizerString;
                                     const Token :TSubStr;
                                     const Operands :TSubStr;
-                                    const ParsedOperands :TAbstractParsedText{<TTokenizerString,pointer>};
+                                    const ParsedOperands :specialize TAbstractParsedText<TTokenizerString,pointer>;
                                     var Result:TTokenizerString;
                                     var ResultParam:TSubStr;
-                                    const data:pointer);override;
+                                    var data:pointer);override;
   end;
 
   TPointer2StrProcessor=class(TMyParser.TParserTokenizer.TDynamicProcessor)
     constructor vcreate(const Source:TTokenizerString;
                         const Token :TSubStr;
                         const Operands :TSubStr;
-                        const ParsedOperands :TAbstractParsedText{<TTokenizerString,pointer>};
-                        const Data:{TEntsTypeFilter}pointer);override;
+                        const ParsedOperands :specialize TAbstractParsedText<TTokenizerString,pointer>;
+                        var Data:{TEntsTypeFilter}pointer);override;
     procedure GetResult(const Source:TTokenizerString;
                         const Token :TSubStr;
                         const Operands :TSubStr;
-                        const ParsedOperands :TAbstractParsedText{<TTokenizerString,pointer>};
+                        const ParsedOperands :specialize TAbstractParsedText<TTokenizerString,pointer>;
                         var Result:TTokenizerString;
                         var ResultParam:TSubStr;
-                        const data:pointer);override;
+                        var data:pointer);override;
   end;
 
 var
@@ -74,10 +74,10 @@ end;
 class procedure TNum2StrProcessor.StaticGetResult(const Source:TTokenizerString;
                                                   const Token :TSubStr;
                                 const Operands :TSubStr;
-                                const ParsedOperands :TAbstractParsedText{<TTokenizerString,pointer>};
+                                const ParsedOperands :specialize TAbstractParsedText<TTokenizerString,pointer>;
                                 var Result:TTokenizerString;
                                 var ResultParam:TSubStr;
-                                const data:pointer);
+                                var data:pointer);
 begin
   ResultParam.Length:=2;
   if ResultParam.StartPos<>OnlyGetLength then begin
@@ -89,8 +89,8 @@ end;
 constructor TPointer2StrProcessor.vcreate(const Source:TTokenizerString;
                                           const Token :TSubStr;
                                           const Operands :TSubStr;
-                                          const ParsedOperands :TAbstractParsedText{<TTokenizerString,pointer>};
-                                          const Data:{TEntsTypeFilter}pointer);
+                                          const ParsedOperands :specialize TAbstractParsedText<TTokenizerString,pointer>;
+                                          var Data:{TEntsTypeFilter}pointer);
 begin
 
 end;
@@ -98,10 +98,10 @@ end;
 procedure TPointer2StrProcessor.GetResult(const Source:TTokenizerString;
                                           const Token :TSubStr;
                                           const Operands :TSubStr;
-                                          const ParsedOperands :TAbstractParsedText{<TTokenizerString,pointer>};
+                                          const ParsedOperands :specialize TAbstractParsedText<TTokenizerString,pointer>;
                                           var Result:TTokenizerString;
                                           var ResultParam:TSubStr;
-                                          const data:pointer);
+                                          var data:pointer);
 begin
   ResultParam.Length:=2;
   if ResultParam.StartPos<>OnlyGetLength then begin

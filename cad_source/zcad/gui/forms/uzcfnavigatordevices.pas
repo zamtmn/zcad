@@ -176,13 +176,15 @@ begin
       exit(false);}
 
   if not EntsTypeFilter.IsEntytyTypeAccepted(pent^.GetObjType)then
-      exit(false);
+    exit(false);
+  if assigned(EntityIncluder) then begin
+    propdata.CurrentEntity:=pent;
+    propdata.IncludeEntity:=T3SB_Default;
+    EntityIncluder.Doit(PropData);
+    exit(propdata.IncludeEntity=T3SB_True);
+  end else
+    exit(true);
 
-  propdata.CurrentEntity:=pent;
-  propdata.IncludeEntity:=T3SB_Default;
-  EntityIncluder.Doit(PropData);
-
-  exit(propdata.IncludeEntity=T3SB_True);
   an:=BP.IncludeProperties;
   if an<>'' then begin
     alreadyinclude:=false;

@@ -216,30 +216,24 @@ function CreateNavigatorDevices:TForm;
 begin
  result:=tform(TNavigatorDevices.NewInstance);
  TNavigatorDevices(result).BP.TreeBuildMap:='+NMO_Prefix|+NMO_BaseName|+@@[NMO_Name]';
- TNavigatorDevices(result).BP.IncludeEntities:='IncludeEntityMask(''Cable*'');'#13#10'IncludeEntityName(''Device'')';
- TNavigatorDevices(result).BP.IncludeProperties:='IncludeIfMask(%%(''Layer''),''EL_*'')';//'+*|-%%[Name]=EL_CABLE_*';
- //TNavigatorDevices(result).BP.IncludeProperties:='IncludeIfMask(%%(''Name''),''EL_CABLE_*'')';//'+*|-%%[Name]=EL_CABLE_*';
+ TNavigatorDevices(result).BP.IncludeEntities:='IncludeEntityName(''Device'')';
+ TNavigatorDevices(result).BP.IncludeProperties:='';
  TNavigatorDevices(result).BP.UseMainFunctions:=True;
 end;
 function CreateNavigatorRisers:TForm;
 begin
  result:=tform(TNavigatorRisers.NewInstance);
- TNavigatorRisers(result).BP.TreeBuildMap:='{+@@[RiserName]:@@[Elevation]:@@[Text]}';
- TNavigatorRisers(result).BP.IncludeEntities:='IncludeEntityMask(Device)';
- TNavigatorRisers(result).BP.IncludeProperties:='+%%[Name]=EL_CABLE_*';
+ TNavigatorRisers(result).BP.TreeBuildMap:='+@@[RiserName]:@@[Elevation]:@@[Text]';
+ TNavigatorRisers(result).BP.IncludeEntities:='IncludeEntityName(''Device'')';
+ TNavigatorRisers(result).BP.IncludeProperties:='IncludeIfMask(%%(''Name''),''EL_CABLE_*'')';
  TNavigatorRisers(result).BP.UseMainFunctions:=False;
 end;
 function CreateNavigatorCables:TForm;
 begin
  result:=tform(TNavigatorCables.NewInstance);
- {TNavigatorCables(result).TreeBuildMap:='+NMO_BaseName|+@@[NMO_Name]:@@[CABLE_Segment]';
- TNavigatorRisers(result).IncludeEntities:='+GDBObjCable';
- TNavigatorRisers(result).IncludeProperties:='+*';
- TNavigatorCables(result).UseMainFunctions:=False;}
-
- TNavigatorCables(result).BP.TreeBuildMap:='+%%[Layer]';
- TNavigatorRisers(result).BP.IncludeEntities:='';
- TNavigatorRisers(result).BP.IncludeProperties:='';
+ TNavigatorCables(result).BP.TreeBuildMap:='+NMO_Prefix|+NMO_BaseName|+@@[NMO_Name]';
+ TNavigatorRisers(result).BP.IncludeEntities:='IncludeEntityMask(''Cable*'');'#13#10'IncludeEntityName(''Device'')';
+ TNavigatorRisers(result).BP.IncludeProperties:='IncludeIfMask(%%(''Name''),''CABLE_*'');IncludeIfMask(%%(''Name''),''EL_*'')';
  TNavigatorCables(result).BP.UseMainFunctions:=False;
 end;
 

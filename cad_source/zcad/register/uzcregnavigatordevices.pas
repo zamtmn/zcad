@@ -217,7 +217,7 @@ begin
  result:=tform(TNavigatorDevices.NewInstance);
  TNavigatorDevices(result).BP.TreeBuildMap:='+NMO_Prefix|+NMO_BaseName|+@@[NMO_Name]';
  TNavigatorDevices(result).BP.IncludeEntities:='IncludeEntityName(''Device'')';
- TNavigatorDevices(result).BP.IncludeProperties:='';
+ TNavigatorDevices(result).BP.IncludeProperties:='IncludeIfMask(%%(''Name''),''EL_CABLE_*'')';
  TNavigatorDevices(result).BP.UseMainFunctions:=True;
 end;
 function CreateNavigatorRisers:TForm;

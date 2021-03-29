@@ -598,7 +598,7 @@ begin
     result:=ZCmrYes;
     if ClosedDWG.Changed then begin
       repeat
-        s:=format(rsCloseDWGQuery,[ClosedDWG.FileName]);
+        s:=format(rsCloseDWGQuery,[StringReplace(ClosedDWG.FileName,'\','\\',[rfReplaceAll])]);
         dr:=zcMsgDlg(s,zcdiQuestion,[zccbYes,zccbNo,zccbCancel],NeedAskDonShow,MCTx);
         result:=dr.ModalResult;
         //result:=ZCADMainWindow.MessageBox(@s[1],@rsWarningCaption[1],MB_YESNOCANCEL);

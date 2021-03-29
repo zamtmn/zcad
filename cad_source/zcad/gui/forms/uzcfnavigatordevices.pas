@@ -16,7 +16,7 @@ uses
   uzcfnavigatordevicescxmenu,uzbpaths,Toolwin,uzcctrlpartenabler,StrUtils,
   uzctextenteditor,uzcinfoform,uzcsysparams,uzcsysvars,uzetextpreprocessor,
   Masks,uzelongprocesssupport,uzeentitiestypefilter,uzcuitypes,
-  uzeparserenttypefilter,uzeparserentpropfilter;
+  uzeparserenttypefilter,uzeparserentpropfilter,uzclog,uzcuidialogs;
 
 resourcestring
   rsStandaloneDevices='Standalone devices';
@@ -108,6 +108,7 @@ type
 var
   NavigatorDevices: TNavigatorDevices;
   NavGroupIconIndex,NavAutoGroupIconIndex:integer;
+  NDMsgCtx:TMessagesContext=nil;
 
 
   UseMainFunction:Boolean=false;
@@ -336,7 +337,7 @@ begin
   else
     parts[partstartposition]:='-';
 end;
-function TNavigatorDevices.PartsEditor(var parts:string):boolean;
+function RunEditor(const cpt,BoundsSaveName:string;var AText:string):boolean;
 var
    modalresult:integer;
    astring:ansistring;
@@ -344,18 +345,22 @@ begin
   result:=false;
   if not assigned(InfoForm) then begin
     InfoForm:=TInfoForm.createnew(application.MainForm);
-    InfoForm.BoundsRect:=GetBoundsFromSavedUnit('PartsEdWND',SysParam.notsaved.ScreenX,SysParam.notsaved.Screeny);
+    InfoForm.BoundsRect:=GetBoundsFromSavedUnit(BoundsSaveName,SysParam.notsaved.ScreenX,SysParam.notsaved.Screeny);
   end;
-  InfoForm.caption:=('Parts editor');
-  InfoForm.memo.text:=ReplaceStr(parts,'|',#13#10);
+  InfoForm.caption:=cpt;
+  InfoForm.memo.text:=AText;
   if assigned(SysVar.INTF.INTF_DefaultEditorFontHeight) then
     InfoForm.memo.Font.Height:=SysVar.INTF.INTF_DefaultEditorFontHeight^;
   modalresult:=ZCMsgCallBackInterface.DOShowModal(InfoForm);
   if modalresult=ZCMrOk then begin
-    parts:=ReplaceStr(InfoForm.memo.text,#13#10,'|');
-    StoreBoundsToSavedUnit('PartsEdWND',InfoForm.BoundsRect);
+    AText:=InfoForm.memo.text;
+    StoreBoundsToSavedUnit(BoundsSaveName,InfoForm.BoundsRect);
     result:=true;
   end;
+end;
+function TNavigatorDevices.PartsEditor(var parts:string):boolean;
+begin
+  result:=RunEditor('Parts editor','PartsEdWND',parts);
 end;
 
 
@@ -505,10 +510,19 @@ end;
 procedure TNavigatorDevices.EditIncludeEnts(Sender: TObject);
 begin
  if not isvisible then exit;
+ if RunEditor('Included entities editor','IncludeEntsEdWND',BP.IncludeEntities) then begin
+   RefreshTree(nil);
+ end;
 end;
 procedure TNavigatorDevices.EditIncludeProperties(Sender: TObject);
 begin
  if not isvisible then exit;
+ if RunEditor('Included properties editor','IncludePropertiesEdWND',BP.IncludeProperties) then begin
+   if assigned(EntityIncluder) then
+     FreeAndNil(EntityIncluder);
+   EntityIncluder:=ParserEntityPropFilter.GetTokens(BP.IncludeProperties);
+   RefreshTree(nil);
+ end;
 end;
 
 procedure TNavigatorDevices.RefreshTree(Sender: TObject);
@@ -517,8 +531,11 @@ var
   ir:itrec;
   pb:pboolean;
   lpsh:TLPSHandle;
+  dr:TZCMsgDialogResult;
+  HaveErrors:boolean;
 begin
    if not isvisible then exit;
+   HaveErrors:=false;
 
    //TreeEnabler.Height:=MainToolBar.Height;
 
@@ -528,18 +545,32 @@ begin
    EraseRoots;
    CreateRoots;
 
-   if drawings.GetCurrentDWG<>nil then
-   begin
-     pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
-     if pv<>nil then
-     repeat
-       {if assigned(CombinedNode)then
-         CombinedNode.ProcessEntity(pv,EntsFilter,TraceEntity);}
-       if assigned(StandaloneNode)then
-         StandaloneNode.ProcessEntity(self.CreateEntityNode,pv,EntsFilter,TraceEntity);
-       pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
-     until pv=nil;
+   try
+     if drawings.GetCurrentDWG<>nil then
+     begin
+       pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
+       if pv<>nil then
+       repeat
+         {if assigned(CombinedNode)then
+           CombinedNode.ProcessEntity(pv,EntsFilter,TraceEntity);}
+         if assigned(StandaloneNode)then
+           StandaloneNode.ProcessEntity(self.CreateEntityNode,pv,EntsFilter,TraceEntity);
+         pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
+       until pv=nil;
+     end;
+   except
+     on
+        E:Exception do begin
+          programlog.LogOutStr('Error in TNavigatorDevices.RefreshTree '+E.Message,lp_OldPos,LM_Error);
+          if NDMsgCtx=nil then
+            NDMsgCtx:=TMessagesContext.create('TNavigatorDevices');
+          dr:=zcMsgDlg('Error in TNavigatorDevices.RefreshTree '+E.Message,zcdiError,[],true,NDMsgCtx);
+          HaveErrors:=true;
+        end;
    end;
+   if not HaveErrors then
+     if assigned(NDMsgCtx) then
+       NDMsgCtx.clear;
 
    if assigned(StandaloneNodeStates) then
    begin
@@ -803,9 +834,12 @@ begin
        ZCMsgCallBackInterface.TextMessage(rscmCommandOnlyCTXMenu,TMWOHistoryOut);
 end;
 
-begin
+initialization
   CreateCommandFastObjectPlugin(@NavSelectSubNodes_com,'NavSelectSubNodes',CADWG,0);
   NavGroupIconIndex:=-1;
   NavAutoGroupIconIndex:=-1;
+finalization
+  if assigned(NDMsgCtx) then
+    freeandnil(NDMsgCtx);
 end.
 

@@ -30,7 +30,9 @@ uses
   Varman,UGDBPoint3DArray,
   uzedimensionaltypes,
   gzctnrvectortypes,uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,
-  uzeenttext,uzeentmtext,uzeentpolyline,uzegeometry,uzcoimultiproperties,LazLogger,gzctnrstl,usimplegenerics;
+  uzeenttext,uzeentmtext,uzeentpolyline,uzegeometry,uzcoimultiproperties,LazLogger,
+  uzcstrconsts,
+  gzctnrstl,usimplegenerics;
 type
   PTOneVarData=^TOneVarData;
   TOneVarData=record
@@ -74,6 +76,7 @@ procedure FreePNamedObjectCounterData(piteratedata:GDBPointer;mp:TMultiProperty)
 procedure FreePNamedObjectCounterDataUTF8(piteratedata:GDBPointer;mp:TMultiProperty);
 procedure FreeVertex3DControlData(piteratedata:GDBPointer;mp:TMultiProperty);
 procedure GeneralEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+procedure EntityNameEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure PolylineVertex3DControlEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure PolylineVertex3DControlFromVarEntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 procedure GDBDouble2SumEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
@@ -339,6 +342,46 @@ begin
      end;
 end;
 
+procedure EntityNameEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+var
+ ts:GDBAnsiString;
+ entinfo:TEntInfoData;
+{
+общая процедура копирования имени примитива в мультипроперти
+pdata - указатель на структуру созданную GetOneVarData
+pentity - указатель на примитив
+mp - описание мультипроперти
+fistrun - флаг установлен при первой итерации (только копировать, не сравнивать)
+ecp - указатель на процедуру копирования значения из мультипроперти в примитив, если nil то делаем readonly
+}
+begin
+     if @ecp=nil then ProcessVariableAttributes(PTOneVarData(pdata).PVarDesc.attrib,vda_RO,0);
+     if fistrun then
+                    begin
+                      ProcessVariableAttributes(PTOneVarData(pdata).PVarDesc.attrib,0,vda_different);
+
+                      if ObjID2EntInfoData.MyGetValue(PGDBObjEntity(ChangedData.PEntity)^.GetObjType,entinfo) then
+                        ts:=entinfo.UserName
+                      else
+                        ts:=rsNotRegistred;
+
+                      mp.MPType.CopyInstanceTo(@ts,PTOneVarData(pdata).PVarDesc.data.Instance);
+                      PTOneVarData(pdata).StrValue:=mp.MPType.GetDecoratedValueAsString(@ts,f);
+                    end
+                else
+                    begin
+                      if (PTOneVarData(pdata).PVarDesc.attrib and vda_different)=0 then begin
+
+                        if ObjID2EntInfoData.MyGetValue(PGDBObjEntity(ChangedData.PEntity)^.GetObjType,entinfo) then
+                          ts:=entinfo.UserName
+                        else
+                          ts:=rsNotRegistred;
+
+                        if PTOneVarData(pdata).StrValue<>ts then
+                          ProcessVariableAttributes(PTOneVarData(pdata).PVarDesc.attrib,vda_different,vda_approximately);
+                      end;
+                    end;
+end;
 procedure GeneralEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 {
 общая процедура копирования значения в мультипроперти
@@ -364,6 +407,7 @@ begin
                             ProcessVariableAttributes(PTOneVarData(pdata).PVarDesc.attrib,vda_different,vda_approximately);
                     end;
 end;
+
 procedure GDBDouble2SumEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 {
 процедура суммирования GDBDouble значения в мультипроперти

@@ -217,7 +217,7 @@ begin
  result:=tform(TNavigatorDevices.NewInstance);
  TNavigatorDevices(result).BP.TreeBuildMap:='+NMO_Prefix|+NMO_BaseName|+@@[NMO_Name]';
  TNavigatorDevices(result).BP.IncludeEntities:='IncludeEntityName(''Device'')';
- TNavigatorDevices(result).BP.IncludeProperties:='IncludeIfMask(%%(''Name''),''EL_CABLE_*'')';
+ TNavigatorDevices(result).BP.IncludeProperties:='';
  TNavigatorDevices(result).BP.UseMainFunctions:=True;
 end;
 function CreateNavigatorRisers:TForm;
@@ -232,8 +232,10 @@ function CreateNavigatorCables:TForm;
 begin
  result:=tform(TNavigatorCables.NewInstance);
  TNavigatorCables(result).BP.TreeBuildMap:='+NMO_Prefix|+NMO_BaseName|+@@[NMO_Name]';
- TNavigatorRisers(result).BP.IncludeEntities:='IncludeEntityMask(''Cable*'');'#13#10'IncludeEntityName(''Device'')';
- TNavigatorRisers(result).BP.IncludeProperties:='IncludeIfMask(%%(''Name''),''CABLE_*'');IncludeIfMask(%%(''Name''),''EL_*'')';
+ TNavigatorRisers(result).BP.IncludeEntities:='IncludeEntityName(''Cable'');'#13#10'IncludeEntityName(''Device'')';
+ TNavigatorRisers(result).BP.IncludeProperties:='IncludeIfSame(Or(SameMask(%%(''Name''),''CABLE_*''),SameMask(%%(''EntityName''),''Cable'')))';
+ //TNavigatorRisers(result).BP.IncludeProperties:='IncludeIfSame(SameMask(%%(''EntityName''),''Cable''))';
+ //TNavigatorRisers(result).BP.IncludeProperties:='IncludeIfSame(''+'')';
  TNavigatorCables(result).BP.UseMainFunctions:=False;
 end;
 

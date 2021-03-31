@@ -26,8 +26,6 @@ uses
   SysUtils,
   math,
   uzccommandsabstract,uzccommandsimpl,
-  uzccominteractivemanipulators,
-  uzcstrconsts,
   uzbgeomtypes,
   uzccommandsmanager,
   uzeentlwpolyline,uzeentpolyline,uzeentityfactory,
@@ -35,7 +33,7 @@ uses
   uzcutils,
   uzbtypes,
   uzegeometry,
-  uzeentity,uzeenttext,uzgldrawcontext,uzcdrawing,uzeconsts,zcchangeundocommand,
+  uzeentity,uzeenttext,uzeconsts,
   URecordDescriptor,typedescriptors,Varman,gzctnrvectortypes;
 
 implementation
@@ -50,7 +48,7 @@ type
 var
    ExportTextToCSVParam:TExportTextToCSVParam; //**< Переменная содержащая опции команды ExportTextToCSVParam
 
-function matchprop_com(operands:TCommandOperands):TCommandResult;
+function ExportTextToCSV_com(operands:TCommandOperands):TCommandResult;
 var
   count,x,y:integer;
   pv:PGDBObjText;
@@ -111,7 +109,7 @@ initialization
   SysUnit^.RegisterType(TypeInfo(TExportTextToCSVParam));//регистрируем тип данных в зкадном RTTI
   SysUnit^.SetTypeDesk(TypeInfo(TExportTextToCSVParam),['W','H','FileName'],[FNProgram]);//Даем програмные имена параметрам, по идее это должно быть в ртти, но ненашел
 
-  CreateCommandFastObjectPlugin(@matchprop_com,'ExportTextToCSV',  CADWG,0);
+  CreateCommandFastObjectPlugin(@ExportTextToCSV_com,'ExportTextToCSV',  CADWG,0);
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

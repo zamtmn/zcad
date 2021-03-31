@@ -535,8 +535,10 @@ end;
 procedure TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.TParsedText.Doit(var data:GDataType);
 var
   i:integer;
+  prt:TTextPart;
 begin
   for i:=0 to Parts.size-1 do begin
+    prt:=parts[i];
     if (parts[i].TokenInfo.ProcessorClass<>nil)and(not(TOFake in parts[i].TokenInfo.Options)) then begin
       if parts[i].TokenInfo.ProcessorClass.GetProcessorType=PTStatic then begin
         parts[i].TokenInfo.ProcessorClass.StaticDoit(Source,parts[i].TextInfo.TokenPos,parts[i].TextInfo.OperandsPos,parts[i].Operands,data);

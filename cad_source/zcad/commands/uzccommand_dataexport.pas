@@ -236,7 +236,6 @@ begin
             Data.FDoc.Cells[c,r]:=op1;
             inc(c);
           end;
-          Data.FDoc.SaveToFile(DataExportParam.FileName);
         end;
     end
   else

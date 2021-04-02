@@ -96,6 +96,7 @@ begin
     pv:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
     until pv=nil;
     FDoc.SaveToFile(ExportTextToCSVParam.FileName);
+    FDoc.Free;
   end else
   ;
 end;

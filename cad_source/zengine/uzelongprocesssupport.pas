@@ -22,6 +22,8 @@ unit uzelongprocesssupport;
 
 interface
 uses sysutils,gzctnrstl,LazLogger;
+const
+  LPSHEmpty=-1;
 type
 TLPSHandle=integer;
 TLPSCounter=integer;

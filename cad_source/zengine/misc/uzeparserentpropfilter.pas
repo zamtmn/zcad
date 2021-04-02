@@ -63,7 +63,6 @@ type
 
   TGetEntParam=class(TParserEntityPropFilter.TParserTokenizer.TDynamicProcessor)
     mp:TMultiProperty;
-    //bip:pointer;
     tempresult:TParserEntityPropFilterString;
     constructor vcreate(const Source:TParserEntityPropFilterString;
                             const Token :TSubStr;

@@ -316,10 +316,10 @@ implementation
 
 class function TCharToOptChar<T>.Convert(c:T):TOptChar;
 begin
-  if ord(c)>255 then
+  if ord(word(c))>255 then
     result:=0
   else
-    result:=ord(c);
+    result:=ord(word(c));
 end;
 
 {$IFDEF USETLIST}

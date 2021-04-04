@@ -35,15 +35,15 @@ uses
   URecordDescriptor,typedescriptors,Varman,gzctnrvectortypes,
   uzeparserenttypefilter,uzeparserentpropfilter,uzeentitiestypefilter,
   uzelongprocesssupport,uzeparser,uzcoimultiproperties,uzedimensionaltypes,
-  uzcoimultipropertiesutil,varmandef,uzcvariablesutils,Masks,uzcregother;
+  uzcoimultipropertiesutil,varmandef,uzcvariablesutils,Masks,uzcregother,uzbtypesbase;
 
 type
   //** Тип данных для отображения в инспекторе опций
   TDataExportParam=record
-    EntFilter:PAnsiString;
-    PropFilter:PAnsiString;
-    Exporter:PAnsiString;
-    FileName:PAnsiString;
+    EntFilter:PGDBString;
+    PropFilter:PGDBString;
+    Exporter:PGDBString;
+    FileName:PGDBString;
   end;
 
 var

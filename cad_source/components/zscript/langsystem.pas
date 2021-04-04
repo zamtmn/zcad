@@ -20,15 +20,16 @@ unit langsystem;
 {$INCLUDE def.inc}
 {$MODE DELPHI}
 interface
-uses uzbstrproc,uzbtypesbase,varmandef,uzbmemman,UBaseTypeDescriptor;
+uses uzbstrproc,uzbtypesbase,varmandef,uzbmemman,UBaseTypeDescriptor,
+     base64;
 type
     TTypesArray=array of pointer;
 var
-   foneGDBInteger,foneGDBDouble:TTypesArray;
+   foneGDBString,foneGDBInteger,foneGDBDouble:TTypesArray;
 const
 
   basicoperatorcount = 5;
-  basicfunctioncount = 1;
+  basicfunctioncount = 2;
   basicoperatorparamcount = 28;
   basicfunctionparamcount = 1;
   {foneGDBBoolean = #7;
@@ -109,6 +110,8 @@ function TEnum_let_TIdentificator(var rez, hrez: vardesk): vardesk;
 
 
 function Cos_TGDBInteger(var stack: operandstack): vardesk;
+//function DecodeStringBase64_TAnsiString(var stack: operandstack): vardesk;
+function DecodeStringBase64_TGBDString(var stack: operandstack): vardesk;
 
 function itbasicoperator(expr: GDBString): GDBInteger;
 function itbasicfunction(expr: GDBString): GDBInteger;
@@ -127,6 +130,7 @@ const
   basicfunctionname: array[1..basicfunctioncount] of functionnam =
   (
     (name: 'cos')
+   ,(name: 'DecodeStringBase64')
     );
 
   basicoperatorparam: array[1..basicoperatorparamcount] of operatortype =
@@ -238,6 +242,28 @@ begin
   r.name := '';
   GDBGetMem({$IFDEF DEBUGBUILD}'{EF01E8D1-A060-4C72-B5A1-894B5AD95E65}',{$ENDIF}r.data.Instance,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
   pdouble(r.data.Instance)^ := cos(pGDBInteger(stack.stack[1].data.Instance)^);
+  result := r;
+end;
+(*function DecodeStringBase64_TAnsiString(var stack: operandstack): vardesk;
+var
+  r: vardesk;
+begin
+  pGDBDouble(r.data.Instance) := nil;
+  r.data.ptd:=@FundamentalAnsiStringDescriptorObj;
+  r.name := '';
+  GDBGetMem({$IFDEF DEBUGBUILD}'{EF01E8D1-A060-4C72-B5A1-894B5AD95E65}',{$ENDIF}r.data.Instance,FundamentalAnsiStringDescriptorObj.SizeInGDBBytes);
+  pAnsiString(r.data.Instance)^ := DecodeStringBase64(PGDBAnsiString(stack.stack[1].data.Instance)^);
+  result := r;
+end;*)
+function DecodeStringBase64_TGBDString(var stack: operandstack): vardesk;
+var
+  r: vardesk;
+begin
+  pGDBDouble(r.data.Instance) := nil;
+  r.data.ptd:=@FundamentalStringDescriptorObj;
+  r.name := '';
+  GDBGetMem({$IFDEF DEBUGBUILD}'{EF01E8D1-A060-4C72-B5A1-894B5AD95E65}',{$ENDIF}r.data.Instance,FundamentalStringDescriptorObj.SizeInGDBBytes);
+  PGDBString(r.data.Instance)^ := DecodeStringBase64(PGDBString(stack.stack[1].data.Instance)^);
   result := r;
 end;
 function Cos_TGDBDouble(var stack: operandstack): vardesk;
@@ -658,13 +684,16 @@ begin
   end
 end;
 var
-  tv,tv1:functiontype;
+  tv,tv1,tv2:functiontype;
 begin
      setlength(foneGDBInteger,1);foneGDBInteger[0]:=@FundamentalLongIntDescriptorObj;
      setlength(foneGDBDouble,1);foneGDBDouble[0]:=@FundamentalDoubleDescriptorObj;
+     setlength(foneGDBString,1);foneGDBString[0]:=@FundamentalStringDescriptorObj;
      tv.name:='cos';tv.param:=foneGDBInteger;tv.addr:=Cos_TGDBInteger;
      tv1.name:='cos';tv1.param:=foneGDBDouble;tv1.addr:=Cos_TGDBDouble;
-     setlength(basicfunctionparam,2);
+     tv2.name:='DecodeStringBase64';tv2.param:=foneGDBString;tv2.addr:=DecodeStringBase64_TGBDString;
+     setlength(basicfunctionparam,3);
      basicfunctionparam[0]:=tv;
      basicfunctionparam[1]:=tv1;
+     basicfunctionparam[2]:=tv2;
 end.

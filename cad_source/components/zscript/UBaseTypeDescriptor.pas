@@ -24,7 +24,8 @@ uses
       typinfo,LCLProc,Graphics,classes,Themes,
       gzctnrvectortypes,uzemathutils,uzegeometry,uzbstrproc,TypeDescriptors,
       sysutils,UGDBOpenArrayOfByte,uzbtypesbase,
-      USinonimDescriptor,uzedimensionaltypes,varmandef,uzbtypes,{gzctnrvectordata,}uzctnrvectorgdbstring,uzbmemman,math;
+      USinonimDescriptor,uzedimensionaltypes,varmandef,uzbtypes,
+      base64,uzctnrvectorgdbstring,uzbmemman,math;
 resourcestring
   rsDifferent='Different';
 type
@@ -530,11 +531,11 @@ begin
 end;
 procedure GDBStringDescriptor.SavePasToMem;
 begin
-     membuf.TXTAddGDBStringEOL(prefix+':='''+{pvd.data.PTD.}GetValueAsString(PInstance)+''';');
+     membuf.TXTAddGDBStringEOL(prefix+':=DecodeStringBase64('''+EncodeStringBase64(GetValueAsString(PInstance))+''');');
 end;
 procedure GDBAnsiStringDescriptor.SavePasToMem;
 begin
-     membuf.TXTAddGDBStringEOL(prefix+':='''+{pvd.data.PTD.}GetValueAsString(PInstance)+''';');
+     membuf.TXTAddGDBStringEOL(prefix+':=DecodeStringBase64('''+EncodeStringBase64(GetValueAsString(PInstance))+''');');
 end;
 destructor TEnumDataDescriptor.done;
 begin

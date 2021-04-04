@@ -35,18 +35,23 @@ uses
   URecordDescriptor,typedescriptors,Varman,gzctnrvectortypes,
   uzeparserenttypefilter,uzeparserentpropfilter,uzeentitiestypefilter,
   uzelongprocesssupport,uzeparser,uzcoimultiproperties,uzedimensionaltypes,
-  uzcoimultipropertiesutil,varmandef,uzcvariablesutils,Masks;
-
-implementation
+  uzcoimultipropertiesutil,varmandef,uzcvariablesutils,Masks,uzcregother;
 
 type
   //** Тип данных для отображения в инспекторе опций
   TDataExportParam=record
-    EntFilter,PropFilter:AnsiString;
-    Exporter:AnsiString;
-    FileName:AnsiString;
+    EntFilter:PAnsiString;
+    PropFilter:PAnsiString;
+    Exporter:PAnsiString;
+    FileName:PAnsiString;
   end;
 
+var
+  DataExportParam:TDataExportParam; //**< Переменная содержащая опции команды ExportTextToCSVParam
+
+implementation
+
+type
   TDataExport=record
     FDoc:TCSVDocument;
     CurrentEntity:pGDBObjEntity;
@@ -119,7 +124,6 @@ type
 
 
 var
-  DataExportParam:TDataExportParam; //**< Переменная содержащая опции команды ExportTextToCSVParam
   BracketTockenId:TParserEntityPropFilter.TParserTokenizer.TTokenId;
   ExporterParser:TExporterParser;
   VU:TObjectUnit;
@@ -364,14 +368,14 @@ begin
 
 
   EntsTypeFilter:=TEntsTypeFilter.Create;
-  pt:=ParserEntityTypeFilter.GetTokens(DataExportParam.EntFilter);
+  pt:=ParserEntityTypeFilter.GetTokens(DataExportParam.EntFilter^);
   pt.Doit(EntsTypeFilter);
   EntsTypeFilter.SetFilter;
   pt.Free;
 
-  pet:=ExporterParser.GetTokens(DataExportParam.Exporter);
+  pet:=ExporterParser.GetTokens(DataExportParam.Exporter^);
 
-  EntityIncluder:=ParserEntityPropFilter.GetTokens(DataExportParam.PropFilter);
+  EntityIncluder:=ParserEntityPropFilter.GetTokens(DataExportParam.PropFilter^);
   lpsh:=LPSHEmpty;
 
    Data.FDoc:=TCSVDocument.Create;
@@ -403,7 +407,7 @@ begin
   if lpsh<>LPSHEmpty then
     LPS.EndLongProcess(lpsh);
   Data.FDoc.Delimiter:=';';
-  Data.FDoc.SaveToFile(DataExportParam.FileName);
+  Data.FDoc.SaveToFile(DataExportParam.FileName^);
   Data.FDoc.Free;
   EntsTypeFilter.Free;
   EntityIncluder.Free;
@@ -415,14 +419,21 @@ initialization
   VU.init('test');
   VU.InterfaceUses.PushBackIfNotPresent(sysunit);
 
-  DataExportParam.EntFilter:='IncludeEntityName(''Cable'');'#13#10'IncludeEntityName(''Device'')';
-  DataExportParam.PropFilter:='';
-  //DataExportParam.Exporter:='Export(%%(''EntityName''))';
-  DataExportParam.Exporter:='DoIf(SameMask(%%(''EntityName''),''Device''),Export(%%(''EntityName''),''NMO_Name'',@@(''NMO_Name''),''Position'',@@(''Position'')))'+
-                     #10+'DoIf(SameMask(%%(''EntityName''),''Device''),Export(%%(''EntityName''),''NMO_Name'',@@(''NMO_Name''),''Power'',@@(''Power'')))'+
-                     #10+'DoIf(SameMask(%%(''EntityName''),''Cable''),Export(%%(''EntityName''),''NMO_Name'',@@(''NMO_Name''),''AmountD'',@@(''AmountD'')))'+
-                     #10+'DoIf(SameMask(%%(''EntityName''),''Cable''),Export(%%(''EntityName''),''NMO_Name'',@@(''NMO_Name''),''CABLE_Segment'',@@(''CABLE_Segment'')))';
-  DataExportParam.FileName:='d:\test.csv';
+  DataExportParam.EntFilter:=savedunit.FindOrCreateValue('tmpCmdParamSave_DataExportParam_EntFilter','GDBAnsiString');
+  if DataExportParam.EntFilter^='' then
+    DataExportParam.EntFilter^:='IncludeEntityName(''Cable'');'#13#10'IncludeEntityName(''Device'')';
+  DataExportParam.PropFilter:=savedunit.FindOrCreateValue('tmpCmdParamSave_DataExportParam_PropFilter','GDBAnsiString');
+  //if DataExportParam.PropFilter^='' then
+  //  DataExportParam.PropFilter:='';
+  DataExportParam.Exporter:=savedunit.FindOrCreateValue('tmpCmdParamSave_DataExportParam_Exporter','GDBAnsiString');
+  if DataExportParam.Exporter^='' then
+    DataExportParam.Exporter^:='DoIf(SameMask(%%(''EntityName''),''Device''),Export(%%(''EntityName''),''NMO_Name'',@@(''NMO_Name''),''Position'',@@(''Position'')))'+
+                           #10+'DoIf(SameMask(%%(''EntityName''),''Device''),Export(%%(''EntityName''),''NMO_Name'',@@(''NMO_Name''),''Power'',@@(''Power'')))'+
+                           #10+'DoIf(SameMask(%%(''EntityName''),''Cable''),Export(%%(''EntityName''),''NMO_Name'',@@(''NMO_Name''),''AmountD'',@@(''AmountD'')))'+
+                           #10+'DoIf(SameMask(%%(''EntityName''),''Cable''),Export(%%(''EntityName''),''NMO_Name'',@@(''NMO_Name''),''CABLE_Segment'',@@(''CABLE_Segment'')))';
+  DataExportParam.FileName:=savedunit.FindOrCreateValue('tmpCmdParamSave_DataExportParam_FileName','GDBAnsiString');
+  if DataExportParam.FileName^='' then
+    DataExportParam.FileName^:='d:\test.csv';
 
   SysUnit^.RegisterType(TypeInfo(TDataExportParam));//регистрируем тип данных в зкадном RTTI
   SysUnit^.SetTypeDesk(TypeInfo(TDataExportParam),['EntFilter','PropFilter','Exporter','FileName'],[FNProgram]);//Даем програмные имена параметрам, по идее это должно быть в ртти, но ненашел

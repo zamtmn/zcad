@@ -191,6 +191,7 @@ TSimpleUnit=object(TAbstractUnit)
                   function FindVariable(varname:TInternalScriptString):pvardesk;virtual;
                   function FindVariableByInstance(_Instance:GDBPointer):pvardesk;virtual;
                   function FindValue(varname:TInternalScriptString):GDBPointer;virtual;
+                  function FindOrCreateValue(varname,vartype:TInternalScriptString):GDBPointer;virtual;
                   function TypeName2PTD(n: TInternalScriptString):PUserTypeDescriptor;virtual;
                   function SaveToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;
                   function SavePasToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;abstract;
@@ -1416,6 +1417,13 @@ begin
                       else
                           result:=nil;
 end;
+function tsimpleunit.FindOrCreateValue(varname,vartype:TInternalScriptString):GDBPointer;
+begin
+  result:=FindValue(varname);
+  if result=nil then
+    result:=CreateVariable(varname,vartype);
+end;
+
 function tsimpleunit.FindVariableByInstance(_Instance:GDBPointer):pvardesk;
 begin
      result:=InterfaceVariables.findvardescbyinst(_Instance)

@@ -263,6 +263,7 @@ begin
   r.data.ptd:=@FundamentalStringDescriptorObj;
   r.name := '';
   GDBGetMem({$IFDEF DEBUGBUILD}'{EF01E8D1-A060-4C72-B5A1-894B5AD95E65}',{$ENDIF}r.data.Instance,FundamentalStringDescriptorObj.SizeInGDBBytes);
+  ppointer(r.data.Instance)^:=nil;
   PGDBString(r.data.Instance)^ := DecodeStringBase64(PGDBString(stack.stack[1].data.Instance)^);
   result := r;
 end;

@@ -41,6 +41,10 @@ type
                   value:GDBLongword;
             end;
 const
+     SuffLeft='_Left';
+     SuffTop='_Top';
+     SuffWidth='_Width';
+     SuffHeight='_Height';
      identtype=1;
      ptype=2;
      recordtype=3;
@@ -249,6 +253,8 @@ procedure SetCategoryCollapsed(category:TInternalScriptString;value:GDBBoolean);
 function GetBoundsFromSavedUnit(name:string;w,h:integer):Trect;
 procedure StoreBoundsToSavedUnit(name:string;tr:Trect);
 procedure SetTypedDataVariable(out TypedTataVariable:TTypedData;pTypedTata:pointer;TypeName:string);
+function GetIntegerFromSavedUnit(name,suffix:string;def,min,max:integer):integer;
+procedure StoreIntegerToSavedUnit(name,suffix:string;value:integer);
 implementation
 uses strmy;
 
@@ -270,10 +276,6 @@ begin
                     TypedTataVariable.PTD:=nil;
               end
 end;
-
-function GetBoundsFromSavedUnit(name:string;w,h:integer):Trect;
-var
-   pint:PGDBInteger;
 function setfrominterval(value,vmin,vmax:integer):integer;
 begin
      if (value<vmin)or(value>vmax)then
@@ -281,20 +283,46 @@ begin
                                   else
                                       result:=value;
 end;
+function GetIntegerFromSavedUnit(name,suffix:string;def,min,max:integer):integer;
+var
+   pint:PGDBInteger;
+begin
+  pint:=SavedUnit.FindValue(name+suffix);
+  if assigned(pint)then begin
+    result:=pint^;
+    result:=setfrominterval(result,min,max);
+  end else
+    result:=def;
+end;
+procedure StoreIntegerToSavedUnit(name,suffix:string;value:integer);
+var
+   pint:PGDBInteger;
+   vn:TInternalScriptString;
+begin
+     vn:=name+suffix;
+     pint:=SavedUnit.FindValue(vn);
+     if not assigned(pint)then
+                              pint:=SavedUnit.CreateVariable(vn,'GDBInteger');
+     pint^:=value;
+end;
+
+function GetBoundsFromSavedUnit(name:string;w,h:integer):Trect;
+var
+   pint:PGDBInteger;
 begin
      result:=rect(0,0,100,100);
-     pint:=SavedUnit.FindValue(name+'_Left');
+     pint:=SavedUnit.FindValue(name+SuffLeft);
      if assigned(pint)then
                           result.Left:=pint^;
      result.Left:=setfrominterval(result.Left,0,w);
-     pint:=SavedUnit.FindValue(name+'_Top');
+     pint:=SavedUnit.FindValue(name+SuffTop);
      if assigned(pint)then
                           result.Top:=pint^;
      result.Top:=setfrominterval(result.Top,0,h);
-     pint:=SavedUnit.FindValue(name+'_Width');
+     pint:=SavedUnit.FindValue(name+SuffWidth);
      if assigned(pint)then
                           result.Right:=result.Left+pint^;
-     pint:=SavedUnit.FindValue(name+'_Height');
+     pint:=SavedUnit.FindValue(name+SuffHeight);
      if assigned(pint)then
                           result.Bottom:=result.Top+pint^;
 end;
@@ -303,22 +331,22 @@ var
    pint:PGDBInteger;
    vn:TInternalScriptString;
 begin
-     vn:=name+'_Left';
+     vn:=name+SuffLeft;
      pint:=SavedUnit.FindValue(vn);
      if not assigned(pint)then
                               pint:=SavedUnit.CreateVariable(vn,'GDBInteger');
      pint^:=tr.Left;
-     vn:=name+'_Top';
+     vn:=name+SuffTop;
      pint:=SavedUnit.FindValue(vn);
      if not assigned(pint)then
                               pint:=SavedUnit.CreateVariable(vn,'GDBInteger');
      pint^:=tr.Top;
-     vn:=name+'_Width';
+     vn:=name+SuffWidth;
      pint:=SavedUnit.FindValue(vn);
      if not assigned(pint)then
                               pint:=SavedUnit.CreateVariable(vn,'GDBInteger');
      pint^:=tr.Right-tr.Left;
-     vn:=name+'_Height';
+     vn:=name+SuffHeight;
      pint:=SavedUnit.FindValue(vn);
      if not assigned(pint)then
                               pint:=SavedUnit.CreateVariable(vn,'GDBInteger');

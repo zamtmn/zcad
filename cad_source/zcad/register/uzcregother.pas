@@ -26,9 +26,11 @@ uses uzbpaths,UUnitManager,uzcsysvars,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
      uzclog,uzbmemman,LazLogger;
 implementation
 {$IFNDEF WINDOWS}
-var
-  ptd:PUserTypeDescriptor;
+//var
+//  ptd:PUserTypeDescriptor;
 {$ENDIF}
+var
+  mem:GDBOpenArrayOfByte;
 initialization;
   units.loadunit(SupportPath,InterfaceTranslate,expandpath('*rtl/sysvar.pas'),nil);
   units.loadunit(SupportPath,InterfaceTranslate,expandpath('*rtl/savedvar.pas'),nil);
@@ -238,6 +240,11 @@ initialization;
   SetCategoryCollapsed('CABLE',false);
   end;
 finalization;
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization')
+  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+
+  mem.init({$IFDEF DEBUGBUILD}'{71D987B4-8C57-4C62-8C12-CFC24A0A9C9A}',{$ENDIF}1024);
+  SavedUnit^.SavePasToMem(mem);
+  mem.SaveToFile(expandpath(ProgramPath+'rtl'+PathDelim+'savedvar.pas'));
+  mem.done;
   //units.FreeAndDone;
 end.

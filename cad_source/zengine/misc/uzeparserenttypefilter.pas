@@ -14,13 +14,6 @@ type
   TParserEntityTypeFilterChar=AnsiChar;
   TParserEntityTypeFilter=TParser<TParserEntityTypeFilterString,TParserEntityTypeFilterChar,TEntsTypeFilter,TCharToOptChar<AnsiChar>>;
 
-  TIncludeIfMask=class(TParserEntityTypeFilter.TParserTokenizer.TStaticProcessor)
-    class procedure StaticDoit(const Source:TParserEntityTypeFilterString;
-                               const Token :TSubStr;
-                               const Operands :TSubStr;
-                               const ParsedOperands :TAbstractParsedText<TParserEntityTypeFilterString,TEntsTypeFilter>;
-                               var Data:TEntsTypeFilter);override;
-  end;
   TGetEntParam=class(TParserEntityTypeFilter.TParserTokenizer.TDynamicProcessor)
     mp:TMultiProperty;
     tempresult:TParserEntityTypeFilterString;
@@ -83,44 +76,6 @@ implementation
 
 var
   BracketTockenId:ParserEntityTypeFilter.TParserTokenizer.TTokenId;
-
-class procedure TIncludeIfMask.StaticDoit(const Source:TParserEntityTypeFilterString;
-                           const Token :TSubStr;
-                           const Operands :TSubStr;
-                           const ParsedOperands :TAbstractParsedText<TParserEntityTypeFilterString,TEntsTypeFilter>;
-                           var Data:TEntsTypeFilter);
-var
-  op1,op2:TParserEntityTypeFilterString;
-  ResultParam:TSubStr;
-begin
-  if (ParsedOperands<>nil)
-     and(ParsedOperands is TParserEntityTypeFilter.TParsedText)
-     and((ParsedOperands as TParserEntityTypeFilter.TParsedText).Parts.size=3)
-     {and((ParsedOperands as TParserEntityTypeFilter.TParsedTextWithOneToken).Part.TextInfo.TokenId=StringId)} then begin
-       op1:=inttostr((ParsedOperands as TParserEntityTypeFilter.TParsedText).Parts.size);
-         ResultParam.StartPos:=OnlyGetLength;
-         ResultParam.Length:=0;
-         TParserEntityTypeFilter.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserEntityTypeFilter.TParsedText).Parts.Mutable[0]^,data,op1,ResultParam);
-         SetLength(op1,ResultParam.Length);
-         ResultParam.StartPos:=InitialStartPos;
-         TParserEntityTypeFilter.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserEntityTypeFilter.TParsedText).Parts.Mutable[0]^,data,op1,ResultParam);
-
-         ResultParam.StartPos:=OnlyGetLength;
-         ResultParam.Length:=0;
-         TParserEntityTypeFilter.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserEntityTypeFilter.TParsedText).Parts.Mutable[2]^,data,op2,ResultParam);
-         SetLength(op2,ResultParam.Length);
-         ResultParam.StartPos:=InitialStartPos;
-         TParserEntityTypeFilter.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserEntityTypeFilter.TParsedText).Parts.Mutable[2]^,data,op2,ResultParam);
-
-       if MatchesMask(op1,op2,false)
-           or (AnsiCompareText(op1,op2)=0) then
-           op1:=op2;
-
-       //TEntsTypeFilter(Data).AddTypeNameMask(op1)
-     end
-  else
-    Raise Exception.CreateFmt(rsRunTimeError,[Operands.StartPos]);
-end;
 
 procedure TGetEntParam.GetResult(const Source:TParserEntityTypeFilterString;
                     const Token :TSubStr;

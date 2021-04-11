@@ -218,6 +218,7 @@ begin
  TNavigatorDevices(result).BP.TreeBuildMap:='+NMO_Prefix|+NMO_BaseName|+@@[NMO_Name]';
  TNavigatorDevices(result).BP.IncludeEntities:='IncludeEntityName(''Device'')';
  TNavigatorDevices(result).BP.IncludeProperties:='';
+ TNavigatorDevices(result).BP.Header:='SetColumnsCount(3,2);SetColumnParams(0,''Tree'',''@@[NMO_Name]'',''tmpGUIParamSave_NavDev_C0'',1);SetColumnParams(1,''Name'',''NMO_Name'',''tmpGUIParamSave_NavDev_C1'',1);SetColumnParams(2,''Comment'',''NMO_Name'',''tmpGUIParamSave_NavDev_C2'',1)';
  TNavigatorDevices(result).BP.UseMainFunctions:=True;
 end;
 function CreateNavigatorRisers:TForm;

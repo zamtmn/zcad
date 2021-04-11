@@ -16,7 +16,7 @@ uses
   uzcfnavigatordevicescxmenu,uzbpaths,Toolwin,uzcctrlpartenabler,StrUtils,
   uzctextenteditor,uzcinfoform,uzcsysparams,uzcsysvars,uzetextpreprocessor,
   Masks,uzelongprocesssupport,uzeentitiestypefilter,uzcuitypes,
-  uzeparserenttypefilter,uzeparserentpropfilter,uzclog,uzcuidialogs;
+  uzeparserenttypefilter,uzeparserentpropfilter,uzeparsernavparam,uzclog,uzcuidialogs;
 
 resourcestring
   rsStandaloneDevices='Standalone devices';
@@ -25,9 +25,9 @@ type
   TBuildParam=record
     TreeBuildMap:string;
     IncludeEntities,IncludeProperties:string;
+    Header:string;
     UseMainFunctions:Boolean;
   end;
-
   TStringPartEnabler=TPartEnabler<String>;
   TEnt2NodeMap=TDictionary<pGDBObjEntity,PVirtualNode>;
   { TNavigatorDevices }
@@ -83,6 +83,7 @@ type
 
   public
     BP:TBuildParam;
+    ExtTreeParam:TExtTreeParam;
     {TreeBuildMap:string;
     IncludeEntities,IncludeProperties:string;
     UseMainFunctions:Boolean;}
@@ -119,7 +120,12 @@ implementation
 {$R *.lfm}
 
 destructor TNavigatorDevices.Destroy;
+var
+  i:integer;
 begin
+  for i:=low(ExtTreeParam.ExtColumnsParams) to high(ExtTreeParam.ExtColumnsParams) do
+    if ExtTreeParam.ExtColumnsParams[i].SaveWidthVar<>'' then
+      StoreIntegerToSavedUnit(ExtTreeParam.ExtColumnsParams[i].SaveWidthVar,SuffWidth,NavTree.Header.Columns[i].Width);
   FreeAndNil(EntsTypeFilter);
   inherited;
 end;
@@ -368,6 +374,8 @@ procedure TNavigatorDevices._onCreate(Sender: TObject);
 var
   po:TVTPaintOptions;
   i:integer;
+  params:TParserNavParam.TGeneralParsedText;
+  data:TNavParamData;
 begin
 
    umf:=TmyVariableAction.Create(self);
@@ -394,6 +402,8 @@ begin
    TreeEnabler.setup(BP.TreeBuildMap);
    TreeEnabler.Parent:=CoolBar1;
 
+   NavTree.BeginUpdate;
+   //NavTree.columnclBeginUpdate;
    NavTree.OnGetText:=NavGetText;
    NavTree.OnGetImageIndex:=NavGetImage;
    NavTree.Images:=ImagesManager.IconList;
@@ -410,9 +420,27 @@ begin
    MainFunctionIconIndex:=-1;
    BuggyIconIndex:=-1;
 
+   params:=ParserNavParam.GetTokens(bp.Header);
+   data.NavTree:=NavTree;
+   data.ColumnCount:=0;
+   data.PExtTreeParam:=@ExtTreeParam;
+   NavTree.Header.Columns.Clear;
+   //NavTree.Header.Columns.ItemClass:=TMyVirtualTreeColumn;
+   NavTree.Header.AutoSizeIndex:=0;
+   if assigned(params) then
+     params.Doit(data);
+   params.free;
+
+   {NavTree.Header.AutoSizeIndex := 0;
+   NavTree.Header.MainColumn := 1;
+   NavTree.Header.SortColumn := 1;}
+
+
    OnShow:=RefreshTree;
 
    NavTree.OnContextPopup:=VTOnContextMenu;
+
+   NavTree.EndUpdate;
 
    ZCMsgCallBackInterface.RegisterHandler_GUIAction(AutoRefreshTree);
 end;
@@ -696,11 +724,11 @@ begin
   pnd := Sender.GetNodeData(Node);
   if assigned(pnd) then
   begin
-    celltext:=pnd^.name;
-    // if pnd^.NodeMode<>TNMData then
-    //                               celltext:=pnd^.name
-    //                           else
-    //                               celltext:=GetEntityVariableValue(pnd^.pent,'NMO_Name',rsNameAbsent);
+    //celltext:=pnd^.name;
+  if pnd^.pent=nil then
+    celltext:=pnd^.name
+  else
+    celltext:=GetEntityVariableValue(pnd^.pent,'NMO_Name',rsNameAbsent);
   end;
 end;
 procedure TNavigatorDevices.getImageIndex;
@@ -729,7 +757,7 @@ else if (assigned(StandaloneNode))and(node=StandaloneNode.RootNode) then
 else
   begin
     pnd := Sender.GetNodeData(Node);
-      if assigned(pnd) then
+      if (assigned(pnd))or(Column>0) then
         begin
           case pnd^.NodeMode of
           TNMGroup:ImageIndex:=NavGroupIconIndex;

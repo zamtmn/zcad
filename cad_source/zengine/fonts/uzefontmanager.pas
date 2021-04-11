@@ -156,6 +156,7 @@ begin
 end;
 constructor GDBFontManager.init;
 begin
+  FontFiles:=TFontName2FontFileMap.Create;
   inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m);
 end;
 procedure GDBFontManager.CreateBaseFont;

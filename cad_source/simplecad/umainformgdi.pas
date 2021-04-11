@@ -546,7 +546,7 @@ begin
   begin
        tp.size:=2.5;
        tp.oblique:=0;
-       GetCurrentDrawing^.TextStyleTable.addstyle('standart','txt.shx',tp,false);
+       GetCurrentDrawing^.TextStyleTable.addstyle('standart','txt.shx','',tp,false);
   end;
   ts:= GetCurrentDrawing^.TextStyleTable.getAddres('standart');
   _StartLongProcess(0,'Add texts');

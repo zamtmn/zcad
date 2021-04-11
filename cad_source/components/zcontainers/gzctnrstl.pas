@@ -185,17 +185,13 @@ end;
 function GKey2DataMap<TKey, TValue{$IFNDEF DELPHI},TCompare{$ENDIF}>.MyGetValue(key:TKey; out Value:TValue):boolean;
 {$IFNDEF DELPHI}
 var
-   (*
-   {IFDEF OldIteratorDef}
-   TParent:specialize TMap<TKey, TValue, TCompare>;
-   Iterator:TParent.TIterator;
-   {ELSE}
-   *)
-   Iterator:TIterator;
+   //Iterator:TIterator;
+   Pair:TPair;
+   Node:TMSet.PNode;
 {$ENDIF}
 begin
 {$IFNDEF DELPHI}
-  Iterator:=Find(key);
+  {Iterator:=Find(key);
   if  Iterator=nil then
                        result:=false
                    else
@@ -203,7 +199,15 @@ begin
                             Value:=Iterator.GetValue;
                             Iterator.Destroy;
                             result:=true;
-                       end;
+                       end;}
+  Pair.Key:=key;
+  Node:=FSet.NFind(Pair);
+  if Node=nil then
+    result:=false
+  else begin
+    result:=true;
+    Value:=Node^.Data.Value;
+  end;
 {$ENDIF}
 {$IFDEF DELPHI}
   result:=TryGetValue(Key,Value);
@@ -244,7 +248,7 @@ begin
       result:=false
     else begin
       result:=true;
-      PValue:=@Node^.Data;
+      PValue:=@Node^.Data.Value;
     end;
 {$ENDIF}
 {$IFDEF DELPHI}

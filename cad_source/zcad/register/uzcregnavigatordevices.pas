@@ -218,7 +218,7 @@ begin
  TNavigatorDevices(result).BP.TreeBuildMap:='+NMO_Prefix|+NMO_BaseName|+@@[NMO_Name]';
  TNavigatorDevices(result).BP.IncludeEntities:='IncludeEntityName(''Device'')';
  TNavigatorDevices(result).BP.IncludeProperties:='';
- TNavigatorDevices(result).BP.Header:='SetColumnsCount(2,0);SetColumnParams(0,''Tree'',''@@[NMO_Name]'',''tmpGUIParamSave_NavDev_C0'',1);SetColumnParams(1,''Comment'',''Тут чтото тоже надо сделать'',''tmpGUIParamSave_NavDev_C1'',1)';
+ TNavigatorDevices(result).BP.TreeProperties:='SetColumnsCount(2,0);SetColumnParams(0,''Tree'',''@@[NMO_Name]'',''tmpGUIParamSave_NavDev_C0'',1);SetColumnParams(1,''Comment'',''Тут чтото тоже надо сделать'',''tmpGUIParamSave_NavDev_C1'',1)';
  TNavigatorDevices(result).BP.UseMainFunctions:=True;
 end;
 function CreateNavigatorRisers:TForm;
@@ -227,7 +227,7 @@ begin
  TNavigatorRisers(result).BP.TreeBuildMap:='+@@[RiserName]';
  TNavigatorRisers(result).BP.IncludeEntities:='IncludeEntityName(''Device'')';
  TNavigatorRisers(result).BP.IncludeProperties:='IncludeIfMask(%%(''Name''),''EL_CABLE_*'')';
- TNavigatorRisers(result).BP.Header:='SetColumnsCount(3,0);SetColumnParams(0,''Tree'',''@@[RiserName]'',''tmpGUIParamSave_NavRis_C0'',1);SetColumnParams(1,''Elevation'',''@@[Elevation]'',''tmpGUIParamSave_NavRis_C1'',1);SetColumnParams(2,''Text'',''@@[Text]'',''tmpGUIParamSave_NavRis_C2'',1)';
+ TNavigatorRisers(result).BP.TreeProperties:='SetColumnsCount(3,0);SetColumnParams(0,''Tree'',''@@[RiserName]'',''tmpGUIParamSave_NavRis_C0'',1);SetColumnParams(1,''Elevation'',''@@[Elevation]'',''tmpGUIParamSave_NavRis_C1'',1);SetColumnParams(2,''Text'',''@@[Text]'',''tmpGUIParamSave_NavRis_C2'',1)';
  TNavigatorRisers(result).BP.UseMainFunctions:=False;
 end;
 function CreateNavigatorCables:TForm;
@@ -236,7 +236,7 @@ begin
  TNavigatorCables(result).BP.TreeBuildMap:='+NMO_Prefix|+NMO_BaseName|+@@[NMO_Name]';
  TNavigatorCables(result).BP.IncludeEntities:='IncludeEntityName(''Cable'');'#13#10'IncludeEntityName(''Device'')';
  TNavigatorCables(result).BP.IncludeProperties:='IncludeIfSame(Or(SameMask(%%(''Name''),''CABLE_*''),SameMask(%%(''EntityName''),''Cable'')))';
- TNavigatorCables(result).BP.Header:='SetColumnsCount(2,0);SetColumnParams(0,''Tree'',''@@[NMO_Name]'',''tmpGUIParamSave_NavCab_C0'',1);SetColumnParams(1,''Segment'',''@@[CABLE_Segment]'',''tmpGUIParamSave_NavCab_C1'',1)';
+ TNavigatorCables(result).BP.TreeProperties:='SetColumnsCount(2,0);SetColumnParams(0,''Tree'',''@@[NMO_Name]'',''tmpGUIParamSave_NavCab_C0'',1);SetColumnParams(1,''Segment'',''@@[CABLE_Segment]'',''tmpGUIParamSave_NavCab_C1'',1)';
  TNavigatorCables(result).BP.UseMainFunctions:=False;
 end;
 

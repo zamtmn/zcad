@@ -25,7 +25,7 @@ type
   TBuildParam=record
     TreeBuildMap:string;
     IncludeEntities,IncludeProperties:string;
-    Header:string;
+    TreeProperties:string;
     UseMainFunctions:Boolean;
   end;
   TStringPartEnabler=TPartEnabler<String>;
@@ -43,10 +43,12 @@ type
     Refresh:TAction;
     IncludeEnts:TAction;
     IncludeProps:TAction;
+    TreeProps:TAction;
     function CreateEntityNode(Tree: TVirtualStringTree;basenode:PVirtualNode;pent:pGDBObjEntity;Name:string):PVirtualNode;virtual;
     procedure RefreshTree(Sender: TObject);
     procedure EditIncludeEnts(Sender: TObject);
     procedure EditIncludeProperties(Sender: TObject);
+    procedure EditTreeProperties(Sender: TObject);
     procedure AutoRefreshTree(sender:TObject;GUIAction:TZMessageID);
     procedure TVDblClick(Sender: TObject);
     procedure TVOnMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
@@ -92,6 +94,7 @@ type
     procedure CreateFilters;
     procedure EraseRoots;
     procedure FreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
+    procedure SetTreeProp;
     procedure VTFocuschanged(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex);
 
     function EntsFilter(pent:pGDBObjEntity):Boolean;virtual;
@@ -296,6 +299,25 @@ begin
   if Assigned(pnd) then
      system.Finalize(pnd^);
 end;
+
+procedure TNavigatorDevices.SetTreeProp;
+var
+  data: TNavParamData;
+  params: TParserNavParam.TGeneralParsedText;
+begin
+  NavTree.BeginUpdate;
+  params:=ParserNavParam.GetTokens(bp.TreeProperties);
+  data.NavTree:=NavTree;
+  data.ColumnCount:=0;
+  data.PExtTreeParam:=@ExtTreeParam;
+  NavTree.Header.Columns.Clear;
+  NavTree.Header.AutoSizeIndex:=0;
+  if assigned(params) then
+    params.Doit(data);
+  params.free;
+  NavTree.EndUpdate;
+end;
+
 procedure TNavigatorDevices.VTFocuschanged(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex);
 var
   pnd:PTNodeData;
@@ -374,8 +396,6 @@ procedure TNavigatorDevices._onCreate(Sender: TObject);
 var
   po:TVTPaintOptions;
   i:integer;
-  params:TParserNavParam.TGeneralParsedText;
-  data:TNavParamData;
 begin
 
    umf:=TmyVariableAction.Create(self);
@@ -391,7 +411,7 @@ begin
    TreeEnabler:=TStringPartEnabler.Create(self);
    TreeEnabler.EdgeBorders:=[{ebLeft,ebTop,ebRight,ebBottom}];
    TreeEnabler.AutoSize:=true;
-   TreeEnabler.actns:=[umf,IncludeEnts,IncludeProps,Refresh];
+   TreeEnabler.actns:=[umf,IncludeEnts,IncludeProps,TreeProps,Refresh];
 
    TreeEnabler.OnPartChanged:=RefreshTree;
    TreeEnabler.GetCountFunc:=GetPartsCount;
@@ -421,16 +441,7 @@ begin
    MainFunctionIconIndex:=-1;
    BuggyIconIndex:=-1;
 
-   params:=ParserNavParam.GetTokens(bp.Header);
-   data.NavTree:=NavTree;
-   data.ColumnCount:=0;
-   data.PExtTreeParam:=@ExtTreeParam;
-   NavTree.Header.Columns.Clear;
-   //NavTree.Header.Columns.ItemClass:=TMyVirtualTreeColumn;
-   NavTree.Header.AutoSizeIndex:=0;
-   if assigned(params) then
-     params.Doit(data);
-   params.free;
+   SetTreeProp;
 
    {NavTree.Header.AutoSizeIndex := 0;
    NavTree.Header.MainColumn := 1;
@@ -555,7 +566,14 @@ begin
    RefreshTree(nil);
  end;
 end;
-
+procedure TNavigatorDevices.EditTreeProperties(Sender: TObject);
+begin
+ if not isvisible then exit;
+ if RunEditor('Tree properties editor','TreePropertiesEdWND',BP.TreeProperties) then begin
+   SetTreeProp;
+   RefreshTree(nil);
+ end;
+end;
 procedure TNavigatorDevices.RefreshTree(Sender: TObject);
 var
   pv:pGDBObjEntity;

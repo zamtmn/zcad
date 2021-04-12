@@ -415,8 +415,9 @@ begin
    NavTree.OnMeasureTextWidth:=MeasureTextWidth;
    NavTree.OnDrawText:=DrawText;
    po:=NavTree.TreeOptions.PaintOptions;
-   po:=po-[toShowFilteredNodes,toHideSelection]+[toPopupMode];
+   po:=po-[toShowFilteredNodes,toHideSelection]+[toPopupMode,toShowVertGridLines,toShowHorzGridLines];
    NavTree.TreeOptions.PaintOptions:=po;
+   NavTree.TreeOptions.SelectionOptions:=NavTree.TreeOptions.SelectionOptions+[toFullRowSelect];
    MainFunctionIconIndex:=-1;
    BuggyIconIndex:=-1;
 
@@ -451,6 +452,7 @@ var
   pentvarext:PTVariablesExtender;
   myContentRect:TRect;
 begin
+  if Column>0 then exit;
   pnd:=Sender.GetNodeData(Node);
   if pnd<>nil then
   if pnd^.pent<>nil then
@@ -488,7 +490,8 @@ begin
       SaveCellRectLeft:=CellRect.Left;
       myCellRect:=CellRect;
       DefaultDraw:=false;
-      myCellRect.Left:=myCellRect.Left+2*ImagesManager.IconList.Width;
+      if Column=0 then
+        myCellRect.Left:=myCellRect.Left+2*ImagesManager.IconList.Width;
       TargetCanvas.TextRect(myCellRect,myCellRect.Left,myCellRect.Top,CellText);
       //DrawText(TargetCanvas.Handle, PChar(Text), Length(Text), CellRect, DrawFormat);
       //ImagesManager.IconList.Draw(TargetCanvas,ContentRect.Left,(ContentRect.Bottom-ImagesManager.IconList.Width) div 2,ImagesManager.GetImageIndex(GetEntityVariableValue(pnd^.pent,'ENTID_Function','bug'),BuggyIconIndex),gdeNormal);
@@ -721,14 +724,19 @@ procedure TNavigatorDevices.NavGetText(Sender: TBaseVirtualTree; Node: PVirtualN
 var
   pnd:PTNodeData;
 begin
+  if Column<0 then
+    Column:=0;
   pnd := Sender.GetNodeData(Node);
   if assigned(pnd) then
   begin
     //celltext:=pnd^.name;
-  if pnd^.pent=nil then
-    celltext:=pnd^.name
-  else
-    celltext:=GetEntityVariableValue(pnd^.pent,'NMO_Name',rsNameAbsent);
+  if pnd^.pent=nil then begin
+    if Column=0 then
+      celltext:=pnd^.name
+    else
+      celltext:='';
+  end else
+    celltext:=textformat(ExtTreeParam.ExtColumnsParams[Column].Pattern,pnd^.pent);//GetEntityVariableValue(pnd^.pent,'NMO_Name',rsNameAbsent);
   end;
 end;
 procedure TNavigatorDevices.getImageIndex;
@@ -749,6 +757,11 @@ var
   pnd:PTNodeData;
   pentvarext:PTVariablesExtender;
 begin
+  if Column>0 then begin
+    ImageIndex:=-1;
+    exit;
+  end;
+
   getImageIndex;
      if (assigned(CombinedNode))and(node=CombinedNode.RootNode) then
                                        ImageIndex:=CombinedNode.ficonindex

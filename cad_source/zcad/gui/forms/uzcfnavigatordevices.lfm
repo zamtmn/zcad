@@ -53,5 +53,9 @@ object NavigatorDevices: TNavigatorDevices
       OnExecute = EditIncludeProperties
       Caption = 'Edit include properties'
     end
+    object TreeProps: TAction
+      OnExecute = EditTreeProperties
+      Caption = 'Edit tree properties'
+    end
   end
 end

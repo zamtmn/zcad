@@ -26,6 +26,7 @@ type
   var
     ContextStateRegister:TContextCheckFuncRegister;
     constructor Create;
+    destructor Destroy; override;
     procedure RegisterContextCheckFunc(ContextId:TGContextIdType;ContextCheckFunc:TContextCheckFunc);
     procedure CasheContextState(Cashe:TContextStateRegister;ContextId:TGContextIdType;ContextCheckFunc:TContextCheckFunc;value:TGContextStateType);
     function ContextCheck(const ContextId:TGContextIdType;const Context:TGContextType):TGContextStateType;
@@ -46,6 +47,12 @@ end;
 constructor TGCContextChecker.Create;
 begin
   ContextStateRegister:=nil;
+end;
+
+destructor TGCContextChecker.Destroy;
+begin
+  if assigned(ContextStateRegister)then
+    FreeAndNil(ContextStateRegister);
 end;
 
 procedure TGCContextChecker.RegisterContextCheckFunc(ContextId:TGContextIdType;ContextCheckFunc:TContextCheckFunc);

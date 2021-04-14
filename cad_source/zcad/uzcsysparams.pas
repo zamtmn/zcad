@@ -108,6 +108,7 @@ begin
   Params.NoLoadLayout:=XMLConfig.GetValue('NoLoadLayout',DefaultSavedParams.NoLoadLayout);
   Params.UpdatePO:=XMLConfig.GetValue('UpdatePO',DefaultSavedParams.UpdatePO);
   XMLConfig.CloseKey;
+  FreeAndNil(XMLConfig);
 end;
 
 

@@ -75,6 +75,7 @@ initialization
   pu.init('test');
   pu.InterfaceUses.PushBackIfNotPresent(sysunit);
 finalization
-  pu.free;
+  //pu.free;
+  pu.done;
 end.
 

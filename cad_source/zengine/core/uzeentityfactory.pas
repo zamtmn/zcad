@@ -202,7 +202,8 @@ initialization
   end;
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
-  DXFName2EntInfoData.Destroy;
-  ObjID2EntInfoData.Destroy;
-  EntUpgradeKey2EntUpgradeData.Destroy;
+  FreeAndNil(DXFName2EntInfoData);
+  FreeAndNil(ObjID2EntInfoData);
+  FreeAndNil(EntUpgradeKey2EntUpgradeData);
+  FreeAndNil(ENTName2EntInfoData);
 end.

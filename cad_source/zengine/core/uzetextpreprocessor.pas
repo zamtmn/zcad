@@ -177,5 +177,6 @@ initialization
   Parser:=TMyParser.create;
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
-  Prefix2ProcessFunc.Destroy;
+  FreeAndNil(Prefix2ProcessFunc);
+  FreeAndNil(Parser);
 end.

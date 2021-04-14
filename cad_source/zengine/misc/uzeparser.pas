@@ -263,6 +263,7 @@ type
     tkEmpty,tkRawText,tkEOF,tkLastPredefToken:TParserTokenizer.TTokenId;
     StoredTokenTextInfo:TTokenTextInfoQueue;
     constructor create;
+    destructor Destroy;override;
     procedure clearStoredToken;
     function RegisterToken(
                            const Token:string;
@@ -557,10 +558,14 @@ destructor TGZParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.TPa
 var
   i:integer;
 begin
-  for i:=0 to Parts.size-1 do
+  inherited;
+  for i:=0 to Parts.size-1 do begin
     if assigned(parts[i].Processor) then
       FreeAndNil(parts.Mutable[i]^.Processor);
-  Parts.Free;
+    if assigned(parts[i].Operands) then
+      FreeAndNil(parts.Mutable[i]^.Operands);
+  end;
+  FreeAndNil(Parts);
 end;
 constructor TGZParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.TParsedTextWithOneToken.CreateWithToken(_Source:GParserString;_TokenTextInfo:TParserTokenizer.TTokenTextInfo;Operands:TGeneralParsedText;_Parser:TGZParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>);
 begin
@@ -576,6 +581,8 @@ begin
   inherited;
   if assigned(Part.Processor)then
     FreeAndNil(Part.Processor);
+  if assigned(Part.Operands) then
+    FreeAndNil(Part.Operands);
 end;
 
 constructor TGZParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.TParsedText.Create(_Source:GParserString;_Parser:TGZParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>);
@@ -977,7 +984,13 @@ begin
  tkRawText:=RegisterToken('RawText',#0,#0,TParserTokenizer.TFakeStrProcessor,nil,[TOFake]);
  tkLastPredefToken:=tkRawText;
 end;
-
+Destructor TGZParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.Destroy;
+begin
+  clearStoredToken;
+  FreeAndNil(Tokenizer);
+  FreeAndNil(TokenDataVector);
+  FreeAndNil(StoredTokenTextInfo);
+end;
 procedure TGZParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.clearStoredToken;
 begin
   //while not StoredTokenTextInfo.isempty do
@@ -1037,8 +1050,19 @@ begin
   isOnlyOneTokenId:=0;
 end;
 destructor TGZTokenizer<GTokenizerString,GTokenizerSymbol,GTokenizerSymbolToOptChar,GTokenizerDataType>.Destroy;
+var
+  sd:TPair<GTokenizerSymbol,TTokenizerSymbolData>;
+  i:integer;
 begin
   inherited;
+  for sd in Map do begin
+    sd.Value.NextSymbol.Free;
+  end;
+
+  {for i:=1 to maxcashedvalues do
+    if Assigned(Cashe[i].SymbolData.NextSymbol)then
+      Cashe[i].SymbolData.NextSymbol.Free;}
+
   FreeAndNil(Map);
   includedChars:=[];
   isOnlyOneToken:='';

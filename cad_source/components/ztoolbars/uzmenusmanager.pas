@@ -67,6 +67,7 @@ begin
 end;
 destructor TGMenusManager.Destroy;
 begin
+  inherited;
 end;
 
 function TGMenusManager.isMenu(Child: TDOMNode):boolean;

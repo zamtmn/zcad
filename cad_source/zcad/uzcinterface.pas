@@ -19,7 +19,7 @@ unit uzcinterface;
 {$INCLUDE def.inc}
 interface
 uses controls,uzcstrconsts,uzedimensionaltypes,gzctnrstl,zeundostack,varmandef,
-     uzcuilcl2zc,forms,classes,uzbtypes,LCLType;
+     uzcuilcl2zc,forms,classes,uzbtypes,LCLType,SysUtils;
 
 const
     CLinePriority=500;
@@ -112,6 +112,7 @@ type
     TZCMsgCallBackInterface=class
       public
         constructor Create;
+        destructor Destroy;override;
         function GetUniqueZMessageID:TZMessageID;
         procedure RegisterHandler_HistoryOut(Handler:TProcedure_String_);
         procedure RegisterHandler_LogError(Handler:TProcedure_String_);
@@ -267,6 +268,25 @@ constructor TZCMsgCallBackInterface.Create;
 begin
   ZMessageIDSeed:=0;
 end;
+destructor TZCMsgCallBackInterface.Destroy;
+begin
+     FreeAndNil(HistoryOutHandlers);
+     FreeAndNil(LogErrorHandlers);
+     FreeAndNil(StatusLineTextOutHandlers);
+
+     FreeAndNil(BeforeShowModalHandlers);
+     FreeAndNil(AfterShowModalHandlers);
+
+     FreeAndNil(GUIModeHandlers);
+     FreeAndNil(GUIActionsHandlers);
+
+     FreeAndNil(SetGDBObjInsp_HandlersVector);
+
+     FreeAndNil(onKeyDown);
+     FreeAndNil(getfocusedcontrol);
+
+end;
+
 function TZCMsgCallBackInterface.GetUniqueZMessageID:TZMessageID;
 begin
   inc(ZMessageIDSeed);

@@ -486,7 +486,8 @@ begin
                   opstac.stack[opstac.count] := evaluate(s,_unit);
                   functiontype := findbasicfunction(basicfunctionname[functionname].name, opstac);
                   rez := basicfunctionparam[functiontype].addr(opstac);
-
+                  for i:=1 to opstac.count do
+                    deletetempvar(opstac.stack[i]);
                 end
                 else
                 begin

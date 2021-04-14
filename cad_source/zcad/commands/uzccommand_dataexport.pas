@@ -59,7 +59,7 @@ type
 
   TParserExporterString=AnsiString;
   TParserExporterChar=AnsiChar;
-  TExporterParser=TParser<TParserExporterString,TParserExporterChar,TDataExport,TCharToOptChar<TParserExporterChar>>;
+  TExporterParser=TGZParser<TParserExporterString,TParserExporterChar,TDataExport,TCharToOptChar<TParserExporterChar>>;
 
   TExport=class(TExporterParser.TParserTokenizer.TStaticProcessor)
     class procedure StaticDoit(const Source:TParserExporterString;

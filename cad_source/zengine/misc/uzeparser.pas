@@ -560,6 +560,7 @@ begin
   for i:=0 to Parts.size-1 do
     if assigned(parts[i].Processor) then
       FreeAndNil(parts.Mutable[i]^.Processor);
+  Parts.Free;
 end;
 constructor TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.TParsedTextWithOneToken.CreateWithToken(_Source:GParserString;_TokenTextInfo:TParserTokenizer.TTokenTextInfo;Operands:TGeneralParsedText;_Parser:TParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>);
 begin

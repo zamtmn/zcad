@@ -818,7 +818,7 @@ end;
 
 class function TZTBZCADExtensions.TBCreateZCADToolBar(aName,atype: string):TToolBar;
 begin
-  result:=TmyToolBar.Create(nil);
+  result:=TmyToolBar.Create(Application);
   ToolBarsManager.SetupDefaultToolBar(aName,atype, result);
 end;
 

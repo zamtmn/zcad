@@ -50,6 +50,7 @@ type
                          TextType: TVSTTextType; var CellText: String);
     procedure _GetImage(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
                           var Ghosted: Boolean; var ImageIndex: Integer);
+    procedure _FreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
   end;
   TZPaletteTreeViewFilter=class(TEditButton)
     tree:TZPaletteTreeView;
@@ -91,6 +92,15 @@ begin
     pnd := Sender.GetNodeData(Node);
     ImageIndex:=pnd^.imageindex;
   end;
+end;
+
+procedure TZPaletteTreeView._FreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
+var
+  pnd:PTPaletteTreeNodeData;
+begin
+  pnd := Sender.GetNodeData(Node);
+  pnd^.command:='';
+  pnd^.text:='';
 end;
 
 procedure TZPaletteListView.MouseDown(Button: TMouseButton; Shift:TShiftState; X,Y:Integer);
@@ -267,6 +277,7 @@ begin
     NodeDataSize:=sizeof(TPaletteTreeNodeData);
     OnGetText:=_GetText;
     OnGetImageIndex:=_GetImage;
+    OnFreeNode:=_FreeNode;
     ImagesWidth:=getAttrValue(TBNode,'ImagesWidth',64);
     Images:=ImagesManager.IconList;
     align:=alClient;

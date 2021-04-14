@@ -12,7 +12,7 @@ uses
 type
   TParserEntityTypeFilterString=AnsiString;
   TParserEntityTypeFilterChar=AnsiChar;
-  TParserEntityTypeFilter=TParser<TParserEntityTypeFilterString,TParserEntityTypeFilterChar,TEntsTypeFilter,TCharToOptChar<AnsiChar>>;
+  TParserEntityTypeFilter=TGZParser<TParserEntityTypeFilterString,TParserEntityTypeFilterChar,TEntsTypeFilter,TCharToOptChar<AnsiChar>>;
 
   TGetEntParam=class(TParserEntityTypeFilter.TParserTokenizer.TDynamicProcessor)
     mp:TMultiProperty;

@@ -18,7 +18,7 @@ type
 
   TParserEntityPropFilterString=AnsiString;
   TParserEntityPropFilterChar=AnsiChar;
-  TParserEntityPropFilter=TParser<TParserEntityPropFilterString,TParserEntityPropFilterChar,TPropFilterData,TCharToOptChar<AnsiChar>>;
+  TParserEntityPropFilter=TGZParser<TParserEntityPropFilterString,TParserEntityPropFilterChar,TPropFilterData,TCharToOptChar<AnsiChar>>;
 
   TIncludeIfMask=class(TParserEntityPropFilter.TParserTokenizer.TStaticProcessor)
     class procedure StaticDoit(const Source:TParserEntityPropFilterString;

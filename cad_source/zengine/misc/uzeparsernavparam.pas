@@ -23,7 +23,7 @@ type
   end;
   TParserNavParamString=AnsiString;
   TParserNavParamChar=AnsiChar;
-  TParserNavParam=TParser<TParserNavParamString,TParserNavParamChar,TNavParamData,TCharToOptChar<AnsiChar>>;
+  TParserNavParam=TGZParser<TParserNavParamString,TParserNavParamChar,TNavParamData,TCharToOptChar<AnsiChar>>;
 
   TSetColumnParams=class(TParserNavParam.TParserTokenizer.TStaticProcessor)
     class procedure StaticDoit(const Source:TParserNavParamString;

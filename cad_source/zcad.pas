@@ -266,7 +266,7 @@ begin
                                       exit;
 {$IFDEF REPORTMMEMORYLEAKS}printleakedblock:=true;{$ENDIF}
 {$IFDEF REPORTMMEMORYLEAKS}
-       SetHeapTraceOutput('log/memory-heaptrace.txt');
+       SetHeapTraceOutput(sysvar.PATH.Program_Run^+'log/memory-heaptrace.txt');
        keepreleased:=true;
 {$ENDIF}
   //Application_Initialize перемещен в инициализацию uzcfsplash чтоб показать сплэш пораньше

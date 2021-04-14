@@ -319,5 +319,6 @@ initialization
   ParserEntityPropFilter.RegisterToken(#13,#0,#0,nil,nil,[TOSeparator,TOCanBeOmitted]);
 finalization;
   ParserEntityPropFilter.Free;
+  VU.done;
 end.
 

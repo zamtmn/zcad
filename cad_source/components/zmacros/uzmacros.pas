@@ -87,6 +87,7 @@ initialization
   DefaultMacros.AddMacro(TTransferMacro.Create('OS','',
                          'OS',@DMM.MacroFuncTargetOS,[]));
 finalization
+  FreeAndNil(DefaultMacros);
   FreeAndNil(DMM);
   FreeAndNil(MainMacroList);
 end.

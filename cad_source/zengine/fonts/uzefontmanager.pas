@@ -144,7 +144,7 @@ procedure GDBFontManager.EnumerateFontFiles;
 var
   lpsh:TLPSHandle;
 begin
-  FontFiles:=TFontName2FontFileMap.create;
+  //FontFiles:=TFontName2FontFileMap.create;
   lpsh:=LPS.StartLongProcess('Enumerate *.ttf fonts',FontFiles);
   FromDirsIterator(sysvarPATHFontsPath,'*.ttf','',nil,EnumerateTTFFontFile);
   LPS.EndLongProcess(lpsh);

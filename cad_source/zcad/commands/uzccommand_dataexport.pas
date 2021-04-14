@@ -458,4 +458,5 @@ initialization
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   ExporterParser.Free;
+  VU.done;
 end.

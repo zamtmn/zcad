@@ -26,7 +26,7 @@ uses usimplegenerics,gzctnrstl,
      Forms,LazLogger;
 type
 TZCADFormSetupProc=procedure(Form:TControl);
-TZCADFormCreateProc=function:TForm;
+TZCADFormCreateProc=function(FormName:string):TForm;
 PTFormInfoData=^TFormInfoData;
 TFormInfoData=record
                           FormName,FormCaption:GDBString;

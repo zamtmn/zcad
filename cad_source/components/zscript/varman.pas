@@ -254,7 +254,9 @@ function GetBoundsFromSavedUnit(name:string;w,h:integer):Trect;
 procedure StoreBoundsToSavedUnit(name:string;tr:Trect);
 procedure SetTypedDataVariable(out TypedTataVariable:TTypedData;pTypedTata:pointer;TypeName:string);
 function GetIntegerFromSavedUnit(name,suffix:string;def,min,max:integer):integer;
+function GetAnsiStringFromSavedUnit(name,suffix:ansistring;def:ansistring):ansistring;
 procedure StoreIntegerToSavedUnit(name,suffix:string;value:integer);
+procedure StoreAnsiStringToSavedUnit(name,suffix:string;value:string);
 implementation
 uses strmy;
 
@@ -294,6 +296,16 @@ begin
   end else
     result:=def;
 end;
+function GetAnsiStringFromSavedUnit(name,suffix:ansistring;def:ansistring):ansistring;
+var
+   pstr:PAnsiString;
+begin
+  pstr:=SavedUnit.FindValue(name+suffix);
+  if assigned(pstr)then begin
+    result:=pstr^;
+  end else
+    result:=def;
+end;
 procedure StoreIntegerToSavedUnit(name,suffix:string;value:integer);
 var
    pint:PGDBInteger;
@@ -302,10 +314,20 @@ begin
      vn:=name+suffix;
      pint:=SavedUnit.FindValue(vn);
      if not assigned(pint)then
-                              pint:=SavedUnit.CreateVariable(vn,'GDBInteger');
+       pint:=SavedUnit.CreateVariable(vn,'GDBInteger');
      pint^:=value;
 end;
-
+procedure StoreAnsiStringToSavedUnit(name,suffix:string;value:string);
+var
+   pas:PAnsiString;
+   vn:TInternalScriptString;
+begin
+     vn:=name+suffix;
+     pas:=SavedUnit.FindValue(vn);
+     if not assigned(pas)then
+       pas:=SavedUnit.CreateVariable(vn,'GDBAnsiString');
+     pas^:=value;
+end;
 function GetBoundsFromSavedUnit(name:string;w,h:integer):Trect;
 var
    pint:PGDBInteger;

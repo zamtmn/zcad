@@ -21,11 +21,17 @@ uses
 resourcestring
   rsStandaloneDevices='Standalone devices';
 
+const
+  TreeBuildMapSaveVarSuffix='_TreeBuildMap';
+  IncludeEntitiesSaveVarSuffix='_IncludeEntities';
+  IncludePropertiesSaveVarSuffix='_IncludeProperties';
+  TreePropertiesSaveVarSuffix='_TreeProperties';
+
 type
   TBuildParam=record
-    TreeBuildMap:string;
-    IncludeEntities,IncludeProperties:string;
-    TreeProperties:string;
+    TreeBuildMap:ansistring;
+    IncludeEntities,IncludeProperties:ansistring;
+    TreeProperties:ansistring;
     UseMainFunctions:Boolean;
   end;
   TStringPartEnabler=TPartEnabler<String>;
@@ -129,7 +135,14 @@ begin
   for i:=low(ExtTreeParam.ExtColumnsParams) to high(ExtTreeParam.ExtColumnsParams) do
     if ExtTreeParam.ExtColumnsParams[i].SaveWidthVar<>'' then
       StoreIntegerToSavedUnit(ExtTreeParam.ExtColumnsParams[i].SaveWidthVar,SuffWidth,NavTree.Header.Columns[i].Width);
-  FreeAndNil(EntsTypeFilter);
+
+  StoreAnsiStringToSavedUnit(Name,TreeBuildMapSaveVarSuffix,BP.TreeBuildMap);
+  StoreAnsiStringToSavedUnit(Name,IncludeEntitiesSaveVarSuffix,BP.IncludeEntities);
+  StoreAnsiStringToSavedUnit(Name,IncludePropertiesSaveVarSuffix,BP.IncludeProperties);
+  StoreAnsiStringToSavedUnit(Name,TreePropertiesSaveVarSuffix,BP.TreeProperties);
+
+  if Assigned(EntsTypeFilter) then
+    FreeAndNil(EntsTypeFilter);
   if Assigned(Ent2NodeMap) then
     FreeAndNil(Ent2NodeMap);
   if assigned (StandaloneNodeStates) then

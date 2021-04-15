@@ -834,7 +834,7 @@ begin
   else if ZCADGUIManager.GetZCADFormInfo(aname,PFID) then begin
     aname:=aname;
     if assigned(PFID^.CreateProc)then
-      result:=PFID^.CreateProc
+      result:=PFID^.CreateProc(aname)
     else begin
       result:=Tform(PFID^.FormClass.NewInstance);
       tobject(PFID.PInstanceVariable^):=result;

@@ -187,7 +187,7 @@ begin
       if uzcfcommandline.cmdedit.CanFocus then
         uzcfcommandline.cmdedit.SetFocus;
 end;
-function CreateObjInspInstance:TForm;
+function CreateObjInspInstance(FormName:string):TForm;
 begin
   result:=tform(TForm.NewInstance);
 end;

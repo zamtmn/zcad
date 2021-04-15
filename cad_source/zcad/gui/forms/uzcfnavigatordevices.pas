@@ -130,6 +130,10 @@ begin
     if ExtTreeParam.ExtColumnsParams[i].SaveWidthVar<>'' then
       StoreIntegerToSavedUnit(ExtTreeParam.ExtColumnsParams[i].SaveWidthVar,SuffWidth,NavTree.Header.Columns[i].Width);
   FreeAndNil(EntsTypeFilter);
+  if Assigned(Ent2NodeMap) then
+    FreeAndNil(Ent2NodeMap);
+  if assigned (StandaloneNodeStates) then
+    FreeAndNil(StandaloneNodeStates);
   inherited;
 end;
 
@@ -623,8 +627,8 @@ begin
 
    if assigned(StandaloneNodeStates) then
    begin
-   StandaloneNode.RestoreState(StandaloneNodeStates);
-   freeandnil(StandaloneNodeStates);
+     StandaloneNode.RestoreState(StandaloneNodeStates);
+     FreeAndNil(StandaloneNodeStates);
    end;
 
    LPS.EndLongProcess(lpsh);
@@ -651,7 +655,7 @@ begin
     end else begin
       NavTree.ClearSelection;
       if assigned (StandaloneNodeStates) then
-        freeandnil(StandaloneNodeStates);
+        FreeAndNil(StandaloneNodeStates);
       if assigned (StandaloneNode) then
       StandaloneNodeStates:=StandaloneNode.SaveState;
     end;
@@ -851,6 +855,8 @@ begin
   end;
   if assigned(StandaloneNode) then
   begin
+    if Assigned(StandaloneNodeStates)then
+      FreeAndNil(StandaloneNodeStates);
     StandaloneNodeStates:=StandaloneNode.SaveState;
     FreeAndNil(StandaloneNode);
   end;

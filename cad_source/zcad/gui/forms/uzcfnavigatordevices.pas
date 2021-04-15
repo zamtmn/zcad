@@ -147,6 +147,8 @@ begin
     FreeAndNil(Ent2NodeMap);
   if assigned (StandaloneNodeStates) then
     FreeAndNil(StandaloneNodeStates);
+  if assigned (EntityIncluder) then
+    FreeAndNil(EntityIncluder);
   inherited;
 end;
 

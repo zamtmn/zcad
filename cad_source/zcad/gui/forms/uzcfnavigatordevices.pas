@@ -875,8 +875,10 @@ begin
     StandaloneNodeStates:=StandaloneNode.SaveState;
     FreeAndNil(StandaloneNode);
   end;
-  FreeAndNil(Ent2NodeMap);
-  FreeAndNil(EntityIncluder);
+  if assigned(Ent2NodeMap) then
+    FreeAndNil(Ent2NodeMap);
+  if assigned(EntityIncluder) then
+    FreeAndNil(EntityIncluder);
 end;
 
 procedure SelectSubNodes(nav:TVirtualStringTree;pnode:PVirtualNode);

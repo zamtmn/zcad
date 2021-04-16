@@ -3017,84 +3017,25 @@ begin
        begin
             if FDoc.ColCount[row]>4 then
             begin
-                 //if FDoc.Cells[0,row]='0S1' then
-                 //                                 log.LogOut('asdasd');
-                 //s:='прочитана строка';
-                 //for col:=0 to FDoc.ColCount[row] do
-                 //begin
-                 //s:=s+' '+FDoc.Cells[col,row];
-                 //end;
-                 //log.LogOut(s);
-
-
             netarray.Clear;
             drawings.FindMultiEntityByVar(GDBNetID,'NMO_Name',FDoc.Cells[3,row],netarray);
 
                  GetStartEndPin(FDoc.Cells[1,row],FDoc.Cells[2,row]);
-
-                 {PGDBObjEntity(startdev):=drawings.FindEntityByVar(GDBDeviceID,'NMO_Name',FDoc.Cells[1,row]);
-                 PGDBObjEntity(enddev):=drawings.FindEntityByVar(GDBDeviceID,'NMO_Name',FDoc.Cells[2,row]);
-                 if startdev=nil then
-                                     ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+' не найдено стартовое устройство '+FDoc.Cells[1,row])
-                                 else
-                                     begin
-                                     startdev:=findconnector(startdev);
-                                     if startdev=nil then
-                                                         ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+' не найден коннектор стартового устройства '+FDoc.Cells[1,row]);
-                                     end;
-                 if enddev=nil then
-                                     ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+' не найдено конечное устройство '+FDoc.Cells[2,row])
-                                 else
-                                     begin
-                                     enddev:=findconnector(enddev);
-                                     if enddev=nil then
-                                                         ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+' не найден коннектор конечного устройства '+FDoc.Cells[2,row]);
-
-                                     end;}
                  if (startdev<>nil)and(enddev<>nil) then
                  if netarray.Count=1 then
                  begin
                   PGDBaseObject(net):=netarray.getDataMutable(0);
-                 //PGDBObjEntity(net):=drawings.FindEntityByVar(GDBNetID,'NMO_Name',FDoc.Cells[3,row]);
                  if net=nil then
                                      ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+' не найдена трасса '+FDoc.Cells[3,row],TMWOHistoryOut);
                  if (net<>nil) then
                  begin
-                 //startdev:=findconnector(startdev);
-                 //enddev:=findconnector(enddev);
-                 //if startdev=nil then
-                 //                    ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+' не найден коннектор стартового устройства '+FDoc.Cells[1,row]);
-                 //if enddev=nil then
-                 //                    ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+' не найден коннектор конечного устройства '+FDoc.Cells[2,row]);
                  if (startdev<>nil)and(enddev<>nil) then
                  begin
                  cable:=CreateCable(FDoc.Cells[0,row],FDoc.Cells[4,row]);
-                 {
-                 cable := GDBPointer(drawings.GetCurrentROOT.ObjArray.CreateinitObj(GDBCableID,drawings.GetCurrentROOT));
-                 cable^.ou.copyfrom(units.findunit('cable'));
-                 pvd:=cable.ou.FindVariable('NMO_Suffix');
-                 pstring(pvd^.data.Instance)^:='';
-                 pvd:=cable.ou.FindVariable('NMO_Prefix');
-                 pstring(pvd^.data.Instance)^:='';
-                 pvd:=cable.ou.FindVariable('NMO_BaseName');
-                 pstring(pvd^.data.Instance)^:='';
-                 pvd:=cable.ou.FindVariable('NMO_Template');
-                 pstring(pvd^.data.Instance)^:='';
-                 pvd:=cable.ou.FindVariable('NMO_Name');
-                 pstring(pvd^.data.Instance)^:=FDoc.Cells[0,row];
-                 pvd:=cable.ou.FindVariable('DB_link');
-                 pstring(pvd^.data.Instance)^:=FDoc.Cells[4,row];
-
-                 pvd:=cable.ou.FindVariable('CABLE_AutoGen');
-                 pgdbboolean(pvd^.data.Instance)^:=true;}
-
-                 //drawings.GetCurrentROOT.ObjArray.ObjTree.{AddObjectToNodeTree(cable)}CorrectNodeBoundingBox(cable^);
-
                  rootbytrace(startdev.P_insert_in_WCS,enddev.P_insert_in_WCS,net,Cable,true);
                  zcAddEntToCurrentDrawingWithUndo(Cable);
                  Cable^.Formatentity(drawings.GetCurrentDWG^,dc);
                  Cable^.RenderFeedback(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
-                 //drawings.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeBoundingBox(Cable^);
                  end;
 
                  end;
@@ -3116,16 +3057,12 @@ begin
                           if (net<>nil) then
                           repeat
                                 pnetvarext:=net^.GetExtension(typeof(TVariablesExtender));
-                                //ir_net2:=ir_net;
-                                //net2:=netarray.iterate(ir_net2);
                                 net2:=netarray.beginiterate(ir_net2);
 
                                 if (net2<>nil) then
                                 repeat
                                       if net<>net2 then
                                       begin
-
-                                      //net2processed:=false;
                                       riser:=net.riserarray.beginiterate(ir_riser);
                                       if (riser<>nil) then
                                       repeat
@@ -3136,8 +3073,6 @@ begin
                                                   if not uzegeometry.vertexeq(riser2.P_insert_in_WCS,riser.P_insert_in_WCS) then
                                                   begin
                                                   priser2varext:=riser2^.GetExtension(typeof(TVariablesExtender));
-                                                  //pvd:=PTObjectUnit(riser.ou.Instance)^.FindVariable('RiserName');
-                                                  //pvd2:=PTObjectUnit(riser2.ou.Instance)^.FindVariable('RiserName');
                                                   pvd:=priservarext^.entityunit.FindVariable('RiserName');
                                                   pvd2:=priser2varext^.entityunit.FindVariable('RiserName');
                                                   if (pvd<>nil)and(pvd2<>nil) then
@@ -3149,31 +3084,22 @@ begin
                                                                  gdbgetmem({$IFDEF DEBUGBUILD}'{79828350-69E9-418A-A023-BB8B187639A1}',{$ENDIF}supernet,sizeof(GDBObjNet));
                                                                  supernet.initnul(nil);
                                                                  psupernetvarext:=supernet.GetExtension(typeof(TVariablesExtender));
-
-                                                                 //PTObjectUnit(supernet.ou.Instance)^.copyfrom(PTObjectUnit(net.ou.Instance));
                                                                  psupernetvarext^.entityunit.copyfrom(@pnetvarext.entityunit);
-                                                                 //log.LogOut('supernet.initnul(nil); Примитивов в графе: '+inttostr(supernet^.objarray.count));
                                                             end;
                                                             if not processednets.IsDataExist(net)<>-1 then
                                                             begin
                                                                  net.objarray.copyto(supernet.ObjArray);
                                                                  processednets.PushBackData(net);
-                                                                 //net2processed:=true;
-                                                                 //log.LogOut('processednets.AddByRef(net^); Примитивов в графе: '+inttostr(supernet^.objarray.count));
                                                             end;
 
                                                             if not processednets.IsDataExist(net2)<>-1 then
                                                             begin
                                                                  net2.objarray.copyto(supernet.ObjArray);
                                                                  processednets.PushBackData(net2);
-                                                                 //net2processed:=true;
-                                                                 //log.LogOut('processednets.AddByRef(net2^); Примитивов в графе: '+inttostr(supernet^.objarray.count));
                                                             end;
 
                                                                 New_line:=PGDBObjLine(ENTF_CreateLine(drawings.GetCurrentROOT,{@drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray}nil,[riser.P_insert_in_WCS.x,riser.P_insert_in_WCS.y,riser.P_insert_in_WCS.z,riser2.P_insert_in_WCS.x,riser2.P_insert_in_WCS.y,riser2.P_insert_in_WCS.z]));
                                                                 zcSetEntPropFromCurrentDrawingProp(New_line);
-                                                                //New_line := GDBPointer(drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID{,drawings.GetCurrentROOT}));
-                                                                //GDBObjLineInit(drawings.GetCurrentROOT,New_line,drawings.GetCurrentDWG.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,riser.P_insert_in_WCS,riser2.P_insert_in_WCS);
                                                                 plinevarext:=New_line^.GetExtension(typeof(TVariablesExtender));
                                                                 if plinevarext=nil then
                                                                                        plinevarext:=AddVariablesToEntity(New_line);
@@ -3187,12 +3113,8 @@ begin
                                                                      pgdbdouble(vd^.data.Instance)^:=abs(pgdbdouble(pvn^.data.Instance)^-pgdbdouble(pvn2^.data.Instance)^);
                                                                 end;
                                                                 New_line^.Formatentity(drawings.GetCurrentDWG^,dc);
-                                                                //New_line.bp.ListPos.Owner^.RemoveInArray(New_line.bp.ListPos.SelfIndex);
                                                                 supernet^.ObjArray.AddPEntity(New_line^);
                                                                 linesarray.PushBackData(New_line);
-                                                                //log.LogOut('supernet^.ObjArray.add(addr(New_line)); Примитивов в графе: '+inttostr(supernet^.objarray.count));
-
-
                                                             pvd:=pvd;
                                                        end;
                                                   end;
@@ -3210,7 +3132,7 @@ begin
                                 until net2=nil;
 
                                 net:=netarray.iterate(ir_net);
-                          until (net=nil){or(supernet<>nil)};
+                          until (net=nil);
                           riserarray.Clear;
                           riserarray.Done;
                           if supernet<>nil then
@@ -3219,32 +3141,9 @@ begin
                              else
                                  supernet:=supernet;
 
-                          //supernet.BuildGraf;
-
                           if supernet<>nil then
                           begin
                           cable:=CreateCable(FDoc.Cells[0,row],FDoc.Cells[4,row]);
-                          {cable := GDBPointer(drawings.GetCurrentROOT.ObjArray.CreateinitObj(GDBCableID,drawings.GetCurrentROOT));
-                          cable^.ou.copyfrom(units.findunit('cable'));
-                          pvd:=cable.ou.FindVariable('NMO_Suffix');
-                          pstring(pvd^.data.Instance)^:='';
-                          pvd:=cable.ou.FindVariable('NMO_Prefix');
-                          pstring(pvd^.data.Instance)^:='';
-                          pvd:=cable.ou.FindVariable('NMO_BaseName');
-                          pstring(pvd^.data.Instance)^:='';
-                          pvd:=cable.ou.FindVariable('NMO_Template');
-                          pstring(pvd^.data.Instance)^:='';
-                          pvd:=cable.ou.FindVariable('NMO_Name');
-                          pstring(pvd^.data.Instance)^:=FDoc.Cells[0,row];
-                          pvd:=cable.ou.FindVariable('DB_link');
-                          pstring(pvd^.data.Instance)^:=FDoc.Cells[4,row];
-
-                          pvd:=cable.ou.FindVariable('CABLE_AutoGen');
-                          pgdbboolean(pvd^.data.Instance)^:=true;}
-
-                          //drawings.GetCurrentROOT.ObjArray.ObjTree.{AddObjectToNodeTree(cable)}CorrectNodeBoundingBox(cable^);
-
-                          //log.LogOut('Примитивов в графе: '+inttostr(supernet^.objarray.count));
 
                           segments:=rootbymultitrace(startdev.P_insert_in_WCS,enddev.P_insert_in_WCS,supernet,Cable,true);
                           zcAddEntToCurrentDrawingWithUndo(Cable);
@@ -3252,7 +3151,6 @@ begin
                           drawings.standardization(Cable,GDBCableID);
                           Cable^.Formatentity(drawings.GetCurrentDWG^,dc);
                           Cable^.RenderFeedback(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
-                          //drawings.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeBoundingBox(Cable^);
 
                           cable:=segments.beginiterate(ir_net);
                           if (cable<>nil) then
@@ -3262,24 +3160,14 @@ begin
                                 drawings.standardization(Cable,GDBCableID);
                                 Cable^.Formatentity(drawings.GetCurrentDWG^,dc);
                                 Cable^.RenderFeedback(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
-                                //drawings.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeBoundingBox(Cable^);
 
                           cable:=segments.iterate(ir_net);
                           until cable=nil;
-
-                          //supernet.objarray.Clear;
-                          //supernet.riserarray.clear;
-                          //supernet.done;
                           segments.Clear;
                           segments.done;
-                          //drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.Clear;
                           end
                           else
                               ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+' обнаружено несколько не связанных трасс "'+FDoc.Cells[3,row],TMWOShowError);
-
-
-
-                          //TMWOShowError('В строке '+inttostr(row)+' обнаружена множественная трасса "'+FDoc.Cells[3,row]+'". Пока недопилено((');
                           end
                           else
                               ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+' обнаружена трасса "'+FDoc.Cells[3,row]+'" отсутствующая в чертеже((',TMWOShowError);

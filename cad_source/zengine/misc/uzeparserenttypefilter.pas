@@ -22,6 +22,7 @@ type
                             const Operands :TSubStr;
                             const ParsedOperands:TAbstractParsedText<TParserEntityTypeFilterString,TEntsTypeFilter>;
                             var Data:TEntsTypeFilter);override;
+    destructor Destroy;override;
     procedure GetResult(const Source:TParserEntityTypeFilterString;
                         const Token :TSubStr;
                         const Operands :TSubStr;
@@ -117,6 +118,15 @@ begin
   propertyname:=ParsedOperands.GetResult(Data);
   if not MultiPropertiesManager.MultiPropertyDictionary.MyGetValue(propertyname,mp) then
     mp:=nil;
+end;
+
+destructor TGetEntParam.Destroy;
+begin
+  if mp<>nil then begin
+    if @mp.AfterIterateProc<>nil then
+      mp.AfterIterateProc({bip}mp.PIiterateData,mp);
+    //mp.Free;{ #todo : нужно делать копию mp, но пока пусть так }
+  end;
 end;
 
 class procedure TIncludeEntityNameMask.StaticDoit(const Source:TParserEntityTypeFilterString;

@@ -295,6 +295,7 @@ begin
   propertyname:=ParsedOperands.GetResult(Data);
   if MultiPropertiesManager.MultiPropertyDictionary.MyGetValue(propertyname,mp) then begin
     {bip}mp.PIiterateData:=mp.BeforeIterateProc(mp,@VU);
+    { #todo : нужно делать копию mp, но пока пусть так }
   end else
     mp:=nil;
 end;
@@ -304,7 +305,7 @@ begin
   if mp<>nil then begin
     if @mp.AfterIterateProc<>nil then
       mp.AfterIterateProc({bip}mp.PIiterateData,mp);
-    mp.Free;
+    //mp.Free;{ #todo : нужно делать копию mp, но пока пусть так }
   end;
   inherited;
 end;

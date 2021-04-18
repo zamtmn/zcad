@@ -165,6 +165,7 @@ var
    sysvarRDUseStencil:GDBBoolean=false;
    sysvarRDLastRenderTime:integer=0;
    sysvarRDLastUpdateTime:integer=0;
+   sysvarRDEnableAnimation:boolean=true;
    SysVarRDImageDegradationEnabled:boolean=false;
    SysVarRDImageDegradationPrefferedRenderTime:integer=0;
    SysVarRDImageDegradationCurrentDegradationFactor:GDBDouble=0;
@@ -1220,27 +1221,26 @@ procedure TGeneralViewArea.ZoomToVolume(Volume:TBoundingBox);
 
     tzoom:=abs((wcsRTF.x-wcsLBN.x){*wa.pdwg.GetPcamera.prop.xdir.x}/getviewcontrol.clientwidth);
     tpz:=abs((wcsRTF.y-wcsLBN.y){*wa.pdwg.GetPcamera.prop.ydir.y}/getviewcontrol.clientheight);
-
+    if tpz>tzoom then tzoom:=tpz;
+    tzoom:=tzoom-PDWG.Getpcamera^.prop.zoom;
     //-------with gdb.GetCurrentDWG.UndoStack.PushCreateTGChangeCommand(gdb.GetCurrentDWG.pcamera^.prop)^ do
     pucommand:=PDWG^.StoreOldCamerapPos;
-    begin
-
-    if tpz>tzoom then tzoom:=tpz;
-
-    tzoom:=tzoom-PDWG.Getpcamera^.prop.zoom;
-
-    for i:=1 to steps do
-    begin
-    SetCameraPosZoom(vertexadd(camerapos,uzegeometry.VertexMulOnSc(target,i/steps)),PDWG.Getpcamera^.prop.zoom+tzoom{*i}/steps,i=steps);
-    //if assigned(sysvar.RD.RD_LastRenderTime)then
-    if sysvarRDLastRenderTime<30 then
-                                          sleep(30-sysvarRDLastRenderTime);
-    end;
-    PDWG^.StoreNewCamerapPos(pucommand);
-    calcgrid;
-
-    draw;
-    doCameraChanged;
+    if sysvarRDEnableAnimation then begin
+      for i:=1 to steps do begin
+        SetCameraPosZoom(vertexadd(camerapos,uzegeometry.VertexMulOnSc(target,i/steps)),PDWG.Getpcamera^.prop.zoom+tzoom{*i}/steps,i=steps);
+        if (sysvarRDLastRenderTime<30)and(i<>steps) then
+          sleep(30-sysvarRDLastRenderTime);
+      end;
+      PDWG^.StoreNewCamerapPos(pucommand);
+      calcgrid;
+      draw;
+      doCameraChanged;
+    end else begin
+      SetCameraPosZoom(vertexadd(camerapos,target),PDWG.Getpcamera^.prop.zoom+tzoom,true);
+      PDWG^.StoreNewCamerapPos(pucommand);
+      calcgrid;
+      draw;
+      doCameraChanged;
     end;
   end;
 procedure TGeneralViewArea.DISP_ZoomFactor;

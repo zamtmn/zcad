@@ -24,7 +24,11 @@ uses
   uzestyleslayers,uzestylestexts,                                            //layers and text steles support
   uzeentitiestree,                                                                  //entities spatial binary tree
   uzedrawingsimple,                                                            //drawing
+  uzestyleslinetypes,UGDBNamedObjectsArray,
   gzctnrvectortypes,uzeconsts;                                                           //some consts
+
+const
+  lttypename='test_lt';
 
 type
 
@@ -38,6 +42,7 @@ type
     BtnAddCircles: TButton;
     BtnAdd3DpolyLines: TButton;
     BtnAdd3DFaces: TButton;
+    BtnEraseSel1: TButton;
     BtnProcessObjects1: TButton;
     BtnProcessObjects2: TButton;
     BtnSelectAll: TButton;
@@ -69,6 +74,7 @@ type
     procedure BtnAddCirclesClick(Sender: TObject);     //Add circles to current drawing
     procedure BtnAddLWPolylines1Click(Sender: TObject);//Add lwpolylines to current drawing
     procedure BtnAddSplines1Click(Sender: TObject);
+    procedure BtnCreateAndUseLT(Sender: TObject);
     procedure BtnProcessObjectsClick(Sender: TObject); //Move lines and circles in current drawing
     procedure BtnRebuildClick(Sender: TObject);        //Rebuild spatial tree in current drawing
     procedure BtnEraseSelClick(Sender: TObject);       //Erase selected ents in current drawing
@@ -241,12 +247,14 @@ var
    dc:TDrawContext;                                         //drawing context
    CurrentDrawing:PTSimpleDrawing;                          //pointer to current drawing
    _3d:boolean;
+   plt:PGDBLtypeProp;
 begin
   _StartLongProcess(0,'Add lines');                         //just for time interval measure
 
   _3d:=Form1.ChkBox3D.Checked;
   CurrentDrawing:=GetCurrentDrawing;                        //get cirrent drawing
   dc:=CurrentDrawing^.CreateDrawingRC;                      //create drawing context, need for format entity
+  plt:=CurrentDrawing^.LTypeStyleTable.getAddres(lttypename);
   for i:=1 to SpinEdit1.Value do
   begin
     v1:=CreateRandomVertex(1000,500,_3d);                       //line coord
@@ -256,6 +264,8 @@ begin
     PLineEnt^.CoordInOCS.lBegin:=v1;                        //setup coord
     PLineEnt^.CoordInOCS.lEnd:=v2;                          //setup coord
     SetEntityLayer(PLineEnt,CurrentDrawing);                //Setup line propertues
+    if plt<>nil then
+      PLineEnt^.vp.LineType:=plt;
     CurrentDrawing^.GetCurrentRoot^.AddMi(@PLineEnt);       //add line to drawing
 
     PLineEnt^.BuildGeometry(CurrentDrawing^);               //internal entity proc for create subentities,
@@ -277,11 +287,13 @@ var
    lw:GLLWWidth;                                                   //lwpolyline vertex width props
    dc:TDrawContext;                                                //drawing context
    CurrentDrawing:PTSimpleDrawing;                                 //pointer to current drawing
+   plt:PGDBLtypeProp;
 begin
   _StartLongProcess(0,'Add lwpolylines');                          //just for time interval measure
 
   CurrentDrawing:=GetCurrentDrawing;                               //get cirrent drawing
   dc:=CurrentDrawing^.CreateDrawingRC;                             //create drawing context, need for format entity
+  plt:=CurrentDrawing^.LTypeStyleTable.getAddres(lttypename);
 
   for i:=1 to SpinEdit1.Value do
   begin
@@ -302,6 +314,8 @@ begin
 
     CurrentDrawing^.GetCurrentRoot^.AddMi(@PLWPolyLineEnt);        //add lwpolyline to drawing
     SetEntityLayer(PLWPolyLineEnt,GetCurrentDrawing);              //Setup line propertues
+    if plt<>nil then
+      PLWPolyLineEnt^.vp.LineType:=plt;
     PLWPolyLineEnt^.BuildGeometry(CurrentDrawing^);                //internal entity proc for create subentities,
                                                                    //for line entity this unneed, but for complex entities
                                                                    //like BlockInsert thes necessarily
@@ -319,9 +333,11 @@ var
    pobj:PGDBObjSpline;
    v1:gdbvertex;
    dc:TDrawContext;
+   plt:PGDBLtypeProp;
 begin
   _StartLongProcess(0,'Add splines');
   dc:=GetCurrentDrawing^.CreateDrawingRC;
+  plt:=GetCurrentDrawing^.LTypeStyleTable.getAddres(lttypename);
   for i:=1 to SpinEdit1.Value do
   begin
     pobj := GDBObjSpline.CreateInstance;
@@ -343,12 +359,27 @@ begin
     pobj^.Degree:=3;
     GetCurrentDrawing^.GetCurrentRoot^.AddMi(@pobj);
     SetEntityLayer(pobj,GetCurrentDrawing);
+    if plt<>nil then
+      pobj^.vp.LineType:=plt;
     pobj^.BuildGeometry(GetCurrentDrawing^);
     pobj^.formatEntity(GetCurrentDrawing^,dc);
   end;
   _EndLongProcess;
   //FormatEntitysAndRebuildTreeAndRedraw;
   BtnRebuildClick(self);
+end;
+
+procedure TForm1.BtnCreateAndUseLT(Sender: TObject);
+var
+  plt:PGDBLtypeProp;
+  linetypestr:string;//передача по var поэтому нужна переменная, исправлю
+begin
+  if GetCurrentDrawing^.LTypeStyleTable.AddItem(lttypename,plt)=IsCreated then begin
+    linetypestr:='A,1.0,-.5,1.0,-.5,0,-.5';
+    plt^.init(lttypename);
+    plt^.CreateLineTypeFrom(linetypestr);
+    plt^.Format;
+  end;
 end;
 
 procedure TForm1.BtnAdd3DFaces1Click(Sender: TObject);
@@ -358,9 +389,11 @@ var
    pobj:PGDBObj3DFace;
    v1:gdbvertex;
    dc:TDrawContext;
+   plt:PGDBLtypeProp;
 begin
   _StartLongProcess(0,'Add 3dfaces');
   dc:=GetCurrentDrawing^.CreateDrawingRC;
+  plt:=GetCurrentDrawing^.LTypeStyleTable.getAddres(lttypename);
   for i:=1 to SpinEdit1.Value do
   begin
     pobj := GDBObj3DFace.CreateInstance;
@@ -377,6 +410,8 @@ begin
                       pobj^.PInOCS[3]:=v1;
     GetCurrentDrawing^.GetCurrentRoot^.AddMi(@pobj);
     SetEntityLayer(pobj,GetCurrentDrawing);
+    if plt<>nil then
+      pobj^.vp.LineType:=plt;
     pobj^.BuildGeometry(GetCurrentDrawing^);
     pobj^.formatEntity(GetCurrentDrawing^,dc);
   end;
@@ -424,9 +459,11 @@ var
    pobj:PGDBObjCircle;
    v1:gdbvertex;
    dc:TDrawContext;
+   plt:PGDBLtypeProp;
 begin
   _StartLongProcess(0,'Add circles');
   dc:=GetCurrentDrawing^.CreateDrawingRC;
+  plt:=GetCurrentDrawing^.LTypeStyleTable.getAddres(lttypename);
   for i:=1 to SpinEdit1.Value do
   begin
     pobj := GDBObjCircle.CreateInstance ;
@@ -435,6 +472,8 @@ begin
     pobj^.Radius:=CreateRandomDouble(9.9)+0.1;
     GetCurrentDrawing^.GetCurrentRoot^.AddMi(@pobj);
     SetEntityLayer(pobj,GetCurrentDrawing);
+    if plt<>nil then
+      pobj^.vp.LineType:=plt;
     pobj^.BuildGeometry(GetCurrentDrawing^);
     pobj^.formatEntity(GetCurrentDrawing^,dc);
   end;
@@ -449,9 +488,11 @@ var
    pobj:PGDBObjPolyline;
    v1:gdbvertex;
    dc:TDrawContext;
+   plt:PGDBLtypeProp;
 begin
   _StartLongProcess(0,'Add 3dpolylines');
   dc:=GetCurrentDrawing^.CreateDrawingRC;
+  plt:=GetCurrentDrawing^.LTypeStyleTable.getAddres(lttypename);
   for i:=1 to SpinEdit1.Value do
   begin
     pobj := GDBObjPolyline.CreateInstance;
@@ -466,6 +507,8 @@ begin
                     pobj^.closed:=random(10)>5;
     GetCurrentDrawing^.GetCurrentRoot^.AddMi(@pobj);
     SetEntityLayer(pobj,GetCurrentDrawing);
+    if plt<>nil then
+      pobj^.vp.LineType:=plt;
     pobj^.BuildGeometry(GetCurrentDrawing^);
     pobj^.formatEntity(GetCurrentDrawing^,dc);
   end;
@@ -479,9 +522,11 @@ var
    i:integer;
    pobj:PGDBObjArc;
    dc:TDrawContext;
+   plt:PGDBLtypeProp;
 begin
   _StartLongProcess(0,'Add arcs');
   dc:=GetCurrentDrawing^.CreateDrawingRC;
+  plt:=GetCurrentDrawing^.LTypeStyleTable.getAddres(lttypename);
   for i:=1 to SpinEdit1.Value do
   begin
     pobj := GDBObjArc.CreateInstance;
@@ -491,6 +536,8 @@ begin
     pobj^.EndAngle:=CreateRandomDouble(2*pi);
     GetCurrentDrawing^.GetCurrentRoot^.AddMi(@pobj);
     SetEntityLayer(pobj,GetCurrentDrawing);
+    if plt<>nil then
+      pobj^.vp.LineType:=plt;
     pobj^.BuildGeometry(GetCurrentDrawing^);
     pobj^.formatEntity(GetCurrentDrawing^,dc);
   end;
@@ -553,7 +600,7 @@ begin
   begin
        tp.size:=2.5;
        tp.oblique:=0;
-       GetCurrentDrawing^.TextStyleTable.addstyle('standart','txt.shx',tp,false);
+       GetCurrentDrawing^.TextStyleTable.addstyle('standart','txt.shx','',tp,false);
   end;
   ts:= GetCurrentDrawing^.TextStyleTable.getAddres('standart');
   _StartLongProcess(0,'Add texts');

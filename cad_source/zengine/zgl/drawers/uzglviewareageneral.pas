@@ -149,6 +149,7 @@ var
    sysvarRDMaxRenderTime:integer=0;
    sysvarDISPZoomFactor:double=1.624;
    sysvarDISPSystmGeometryDraw:boolean=false;
+   sysvarDISPShowCSAxis:boolean=true;
    sysvarDISPSystmGeometryColor:TGDBPaletteColor=1;
    sysvarDISPHotGripColor:TGDBPaletteColor=2;
    sysvarDISPSelGripColor:TGDBPaletteColor=3;
@@ -778,7 +779,8 @@ begin
     end;
     PDWG.GetCurrentROOT.DrawBB(dc);
 
-    DrawCSAxis(dc);
+    if sysvarDISPShowCSAxis then
+      DrawCSAxis(dc);
 
     dc.drawer.ClearStatesMachine;
 

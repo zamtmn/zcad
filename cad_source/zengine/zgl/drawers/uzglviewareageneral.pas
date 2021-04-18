@@ -243,7 +243,7 @@ begin
 end;
 procedure drawfrustustum(frustum:ClipArray;var DC:TDrawContext);
 var
-tv1,tv2,tv3,tv4{,sv1,sv2,sv3,sv4,d1PProjPoint{,d2,d3,d4}:gdbvertex;
+tv1,tv2,tv3,tv4{,sv1,sv2,sv3,sv4,d1PProjPoint,d2,d3,d4}:gdbvertex;
 Tempplane:DVector4D;
 
 begin

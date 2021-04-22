@@ -24,14 +24,16 @@ unit uzeparser;
 interface
 uses Generics.Collections,
      {$IFDEF FPC}gvector,gmap,gutil,gdeque,{$ENDIF}
-     sysutils;
+     sysutils,uzehandles;
 resourcestring
   rsRunTimeError='uzeparser: Execution error by offset %d';
 const MaxCashedValues={4}5;
       MaxIncludedChars=3;
       OnlyGetLength=-1;
       InitialStartPos=1;
+
 type
+  TTokenOptions=GTSetWithGlobalEnums<Longword,Longword{byte,byte}>;
   TSubStr=record
     StartPos,Length:integer;
   end;
@@ -142,6 +144,8 @@ type
     TFakeStrProcessor=TGFakeStrProcessor<GTokenizerString,GTokenizerSymbol,GTokenizerDataType>;
     TStringProcessor=TStaticStrProcessorString<GTokenizerString,GTokenizerSymbol,GTokenizerDataType>;
     TStrProcessorClass=class of TProcessor;
+
+
 
     TTokenOption=(TOIncludeBrackeOpen,//открывающая скобка входит в имя
                   TONestedBracke,//возможны вложенные скобки
@@ -310,6 +314,8 @@ type
       function GetResult(data:pointer):TTokenizerString;override;
       destructor Destroy;override;
     end;}
+var
+  test:TTokenOptions;
 procedure IncludeOptChar(var OptChars:TChars;const OptChar:TOptChar);
 function OptCharIncluded(const OptChars:TChars;const OptChar:TOptChar):boolean;
 
@@ -1143,7 +1149,48 @@ begin
   end;
 end;
 
-//initialization
+initialization
+{e1:=TTokenOptions.GetGlobalEnum;//1
+e1:=TTokenOptions.GetGlobalEnum;//2
+e1:=TTokenOptions.GetGlobalEnum;//4
+e1:=TTokenOptions.GetGlobalEnum;//8
+e1:=TTokenOptions.GetGlobalEnum;//16
+e1:=TTokenOptions.GetGlobalEnum;//32
+e1:=TTokenOptions.GetGlobalEnum;//64
+e1:=TTokenOptions.GetGlobalEnum;//128
+
+e1:=TTokenOptions.GetGlobalEnum;//1
+e1:=TTokenOptions.GetGlobalEnum;//2
+e1:=TTokenOptions.GetGlobalEnum;//4
+e1:=TTokenOptions.GetGlobalEnum;//8
+e1:=TTokenOptions.GetGlobalEnum;//16
+e1:=TTokenOptions.GetGlobalEnum;//32
+e1:=TTokenOptions.GetGlobalEnum;//64
+e1:=TTokenOptions.GetGlobalEnum;//128
+
+e1:=TTokenOptions.GetGlobalEnum;//1
+e1:=TTokenOptions.GetGlobalEnum;//2
+e1:=TTokenOptions.GetGlobalEnum;//4
+e1:=TTokenOptions.GetGlobalEnum;//8
+e1:=TTokenOptions.GetGlobalEnum;//16
+e1:=TTokenOptions.GetGlobalEnum;//32
+e1:=TTokenOptions.GetGlobalEnum;//64
+e1:=TTokenOptions.GetGlobalEnum;//128
+
+e1:=TTokenOptions.GetGlobalEnum;//1
+e1:=TTokenOptions.GetGlobalEnum;//2
+e1:=TTokenOptions.GetGlobalEnum;//4
+e1:=TTokenOptions.GetGlobalEnum;//8
+e1:=TTokenOptions.GetGlobalEnum;//16
+e1:=TTokenOptions.GetGlobalEnum;//32
+e1:=TTokenOptions.GetGlobalEnum;//64
+//e1:=TTokenOptions.GetGlobalEnum;//128}
+
+{test.init;
+e1:=test.GetEnum;
+e1:=test.GetEnum;}
+
+
   //debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
 //finalization
   //debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');

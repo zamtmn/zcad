@@ -1906,7 +1906,9 @@ begin
     ZCMsgCallBackInterface.Do_SetNormalFocus;
   pdwg:=drawings.GetCurrentDWG;
   if pdwg<>nil then
-  if pdwg.wa<>nil then begin
+  if pdwg.wa<>nil then
+  if pdwg.wa.getviewcontrol<>nil then
+  begin
   bb:=pdwg.GetCurrentROOT.vp.BoundingBox;
   size:=round(pdwg.wa.getviewcontrol.ClientWidth*pdwg.GetPcamera^.prop.zoom);
   position:=round(-pdwg.GetPcamera^.prop.point.x);

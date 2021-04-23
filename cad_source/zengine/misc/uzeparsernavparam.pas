@@ -170,15 +170,15 @@ end;
 
 initialization
   ParserNavParam:=TParserNavParam.create;
-  BracketTockenId:=ParserNavParam.RegisterToken('(','(',')',nil,ParserNavParam,[TONestedBracke,TOIncludeBrackeOpen,TOSeparator]);
-  ParserNavParam.RegisterToken('SetColumnsCount',#0,#0,TSetColumnsCount,ParserNavParam,[TOWholeWordOnly],BracketTockenId);
-  ParserNavParam.RegisterToken('SetColumnParams',#0,#0,TSetColumnParams,ParserNavParam,[TOWholeWordOnly],BracketTockenId);
-  ParserNavParam.RegisterToken('''','''','''',ParserNavParam.TParserTokenizer.TStringProcessor,nil,[TOIncludeBrackeOpen]);
-  ParserNavParam.RegisterToken(',',#0,#0,nil,nil,[TOSeparator,TOCanBeOmitted]);
-  ParserNavParam.RegisterToken(';',#0,#0,nil,nil,[TOSeparator]);
-  ParserNavParam.RegisterToken(' ',#0,#0,nil,nil,[TOSeparator,TOCanBeOmitted]);
-  ParserNavParam.RegisterToken(#10,#0,#0,nil,nil,[TOSeparator,TOCanBeOmitted]);
-  ParserNavParam.RegisterToken(#13,#0,#0,nil,nil,[TOSeparator,TOCanBeOmitted]);
+  BracketTockenId:=ParserNavParam.RegisterToken('(','(',')',nil,ParserNavParam,__TONestedBracke or __TOIncludeBrackeOpen or __TOSeparator);
+  ParserNavParam.RegisterToken('SetColumnsCount',#0,#0,TSetColumnsCount,ParserNavParam,__TOWholeWordOnly,BracketTockenId);
+  ParserNavParam.RegisterToken('SetColumnParams',#0,#0,TSetColumnParams,ParserNavParam,__TOWholeWordOnly,BracketTockenId);
+  ParserNavParam.RegisterToken('''','''','''',ParserNavParam.TParserTokenizer.TStringProcessor,nil,__TOIncludeBrackeOpen);
+  ParserNavParam.RegisterToken(',',#0,#0,nil,nil,__TOSeparator or __TOCanBeOmitted);
+  ParserNavParam.RegisterToken(';',#0,#0,nil,nil,__TOSeparator);
+  ParserNavParam.RegisterToken(' ',#0,#0,nil,nil,__TOSeparator or __TOCanBeOmitted);
+  ParserNavParam.RegisterToken(#10,#0,#0,nil,nil,__TOSeparator or __TOCanBeOmitted);
+  ParserNavParam.RegisterToken(#13,#0,#0,nil,nil,__TOSeparator or __TOCanBeOmitted);
 finalization;
   ParserNavParam.Free;
 end.

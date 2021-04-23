@@ -196,9 +196,9 @@ initialization
   Prefix2ProcessFunc.RegisterProcessor('\',#0,#0,@EscapeSeq);
   Prefix2ProcessFunc.RegisterProcessor('%%DATE',#0,#0,@date2value,true);
 
-  Parser.RegisterToken('@@[','[',']',{@var2value}TStr2VarProcessor,nil,[TOIncludeBrackeOpen{,TOVariable}]);
-  Parser.RegisterToken('NUM',#0,#0,TNum2StrProcessor,nil,[]);
-  Parser.RegisterToken('PTR',#0,#0,TPointer2StrProcessor,nil,[{TOVariable}]);
+  Parser.RegisterToken('@@[','[',']',{@var2value}TStr2VarProcessor,nil,__TOIncludeBrackeOpen{,TOVariable});
+  Parser.RegisterToken('NUM',#0,#0,TNum2StrProcessor,nil,0);
+  Parser.RegisterToken('PTR',#0,#0,TPointer2StrProcessor,nil,0);
   //Parser.RegisterToken('%%[','[',']',@prop2value,[TOIncludeBrackeOpen,TOVariable]);
   //Parser.RegisterToken('\',#0,#0,@EscapeSeq);
   //Parser.RegisterToken('%%DATE',#0,#0,@date2value,[TOVariable]);

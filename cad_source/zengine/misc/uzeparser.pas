@@ -34,6 +34,15 @@ const MaxCashedValues={4}5;
 
 type
   TTokenOptions=GTSetWithGlobalEnums<Longword,Longword{byte,byte}>;
+var
+  __TOIncludeBrackeOpen:TTokenOptions.TEnumItemType;//открывающая скобка входит в имя
+  __TONestedBracke:TTokenOptions.TEnumItemType;//возможны вложенные скобки
+  //__TOVariable:TTokenOptions.TEnumItemType;//переменный, значение всегда нужно пересчитывать
+  __TOCanBeOmitted:TTokenOptions.TEnumItemType;//не включаем в вывод парсера
+  __TOWholeWordOnly:TTokenOptions.TEnumItemType;//должно быть целое слово, за ним сепаратор
+  __TOSeparator:TTokenOptions.TEnumItemType;//разделитель
+  __TOFake:TTokenOptions.TEnumItemType;
+type
   TSubStr=record
     StartPos,Length:integer;
   end;
@@ -147,20 +156,20 @@ type
 
 
 
-    TTokenOption=(TOIncludeBrackeOpen,//открывающая скобка входит в имя
+    {TTokenOption=(TOIncludeBrackeOpen,//открывающая скобка входит в имя
                   TONestedBracke,//возможны вложенные скобки
                   //TOVariable,//переменный, значение всегда нужно пересчитывать
                   TOCanBeOmitted,//не включаем в вывод парсера
                   TOWholeWordOnly,//должно быть целое слово, за ним сепаратор
                   TOSeparator,//разделитель
-                  TOFake);//не является токеном
-    TTokenOptions=set of TTokenOption;
+                  TOFake);//не является токеном}
+    {TTokenOptions=set of TTokenOption;}
     TTokenId=integer;
 
     TTokenData=record
       Token:GTokenizerString;
       BrackeOpen,BrackeClose:GTokenizerSymbol;
-      Options:TTokenOptions;
+      Options:TTokenOptions.TSetType;
       FollowOperandsId:TTokenId;
       ProcessorClass:TStrProcessorClass;
       InsideBracketParser:TObject;//пиздец тупость
@@ -274,7 +283,7 @@ type
                            const BrackeOpen,BrackeClose:char;
                            const ProcessorClass:TParserTokenizer.TStrProcessorClass;
                            InsideBracketParser:TGZParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>;
-                           Options:TParserTokenizer.TTokenOptions=[];
+                           Options:{TParserTokenizer.}TTokenOptions.TSetType=0{[]};
                            const FollowOperands:TParserTokenizer.TTokenId=0
                            ):TParserTokenizer.TTokenId;
     procedure OptimizeTokens;
@@ -546,7 +555,7 @@ var
 begin
   for i:=0 to Parts.size-1 do begin
     prt:=parts[i];
-    if (parts[i].TokenInfo.ProcessorClass<>nil)and(not(TOFake in parts[i].TokenInfo.Options)) then begin
+    if (parts[i].TokenInfo.ProcessorClass<>nil)and(not(TTokenOptions.IsAllPresent(parts[i].TokenInfo.Options,__TOFake))) then begin
       if parts[i].TokenInfo.ProcessorClass.GetProcessorType=PTStatic then begin
         parts[i].TokenInfo.ProcessorClass.StaticDoit(Source,parts[i].TextInfo.TokenPos,parts[i].TextInfo.OperandsPos,parts[i].Operands,data);
       end else begin
@@ -555,7 +564,7 @@ begin
         parts[i].Processor.StaticDoit(Source,parts[i].TextInfo.TokenPos,parts[i].TextInfo.OperandsPos,parts[i].Operands,data);
       end
     end else begin
-      if not (TOSeparator in parts[i].TokenInfo.Options) then
+      if not TTokenOptions.IsAllPresent(parts[i].TokenInfo.Options,__TOSeparator) then
         Raise Exception.CreateFmt(rsRunTimeError,[parts[i].TextInfo.TokenPos.StartPos]);
     end;
   end;
@@ -628,7 +637,7 @@ var
   SubStrLastsym:integer;
 begin
   SubStrLastsym:=SubStr.StartPos+SubStr.Length-1;
-  if TOWholeWordOnly in TokenDataVector.GetMutable(TokenId)^.Options then begin
+  if TTokenOptions.IsAllPresent(TokenDataVector.GetMutable(TokenId)^.Options,__TOWholeWordOnly) then begin
     if NextPos>{length(text)}SubStrLastsym then exit(true);
     OptChar:=GTokenizerSymbolToOptChar.convert(Text[NextPos]);
     if OptCharIncluded(FirstSymbol.includedChars,OptChar) then
@@ -637,7 +646,7 @@ begin
       PTokenizerSymbolData:=nil;
     if PTokenizerSymbolData<>nil then begin
       if PTokenizerSymbolData^.TokenId<>0 then
-        if TOSeparator in TokenDataVector.GetMutable(PTokenizerSymbolData^.TokenId)^.Options then
+        if TTokenOptions.IsAllPresent(TokenDataVector.GetMutable(PTokenizerSymbolData^.TokenId)^.Options,__TOSeparator) then
           exit(true);
     end;
     exit(false);
@@ -895,7 +904,7 @@ begin
   repeat
     GetTokenFromSubStr(Text,substr,TokenTextInfo.NextPos,PrevTokenTextInfo);
     TokenTextInfo:=PrevTokenTextInfo;
-  until  not (TOCanBeOmitted in TokenDataVector.getmutable(TokenTextInfo.TokenId).Options);
+  until  not TTokenOptions.IsAllPresent(TokenDataVector.getmutable(TokenTextInfo.TokenId).Options,__TOCanBeOmitted);
   PrevParesdOperands:=ParseOperands(TokenTextInfo);
 
   while TokenTextInfo.TokenId<>tkEOF do begin
@@ -903,7 +912,7 @@ begin
     //GetTokenFromSubStr(Text,TokenTextInfo.NextPos,TokenTextInfo);
     repeat
       GetTokenFromSubStr(Text,Substr,TokenTextInfo.NextPos,TokenTextInfo);
-    until  not (TOCanBeOmitted in TokenDataVector.getmutable(TokenTextInfo.TokenId).Options);
+    until  not TTokenOptions.IsAllPresent(TokenDataVector.getmutable(TokenTextInfo.TokenId).Options,__TOCanBeOmitted);
     ParesdOperands:=ParseOperands(TokenTextInfo);
 
     if (TokenTextInfo.TokenId=TokenDataVector.getmutable(PrevTokenTextInfo.TokenId)^.FollowOperandsId)and(PrevParesdOperands=nil) then begin
@@ -934,12 +943,12 @@ var
   currpos:integer;
   openedbrcount,brcount:integer;
 begin
-    if (not(TOFake in TokenDataVector[TokenId].Options))
+    if (not TTokenOptions.IsAllPresent(TokenDataVector[TokenId].Options,__TOFake))
       and (TokenDataVector[TokenId].BrackeOpen<>#0)
       and (TokenDataVector[TokenId].BrackeClose<>#0) then
       begin
         currpos:=TokenTextInfo.TokenPos.StartPos+TokenTextInfo.TokenPos.Length;
-        if TOIncludeBrackeOpen in TokenDataVector[TokenId].Options then begin
+        if TTokenOptions.IsAllPresent(TokenDataVector[TokenId].Options,__TOIncludeBrackeOpen) then begin
          openedbrcount:=1;
          TokenTextInfo.OperandsPos.StartPos:=TokenTextInfo.TokenPos.StartPos+TokenTextInfo.TokenPos.Length;
         end else begin
@@ -952,7 +961,7 @@ begin
           if Text[currpos]=TokenDataVector[TokenId].BrackeOpen then begin
             if TokenTextInfo.OperandsPos.StartPos=-1 then
               TokenTextInfo.OperandsPos.StartPos:=currpos+1;
-            if TONestedBracke in TokenDataVector[TokenId].Options then
+            if TTokenOptions.IsAllPresent(TokenDataVector[TokenId].Options,__TONestedBracke) then
               inc(openedbrcount);
             inc(brcount);
           end;
@@ -985,9 +994,9 @@ begin
 
  clearStoredToken;
 
- tkEmpty:=RegisterToken('Empty',#0,#0,nil,nil,[TOFake]);
- tkEOF:=RegisterToken('EOF',#0,#0,nil,nil,[TOFake]);
- tkRawText:=RegisterToken('RawText',#0,#0,TParserTokenizer.TFakeStrProcessor,nil,[TOFake]);
+ tkEmpty:=RegisterToken('Empty',#0,#0,nil,nil,__TOFake);
+ tkEOF:=RegisterToken('EOF',#0,#0,nil,nil,__TOFake);
+ tkRawText:=RegisterToken('RawText',#0,#0,TParserTokenizer.TFakeStrProcessor,nil,__TOFake);
  tkLastPredefToken:=tkRawText;
 end;
 Destructor TGZParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.Destroy;
@@ -1010,7 +1019,7 @@ function TGZParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.Regis
                                                                                        const BrackeOpen,BrackeClose:char;
                                                                                        const ProcessorClass:TParserTokenizer.TStrProcessorClass;
                                                                                        InsideBracketParser:TGZParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>;
-                                                                                       Options:TParserTokenizer.TTokenOptions=[];
+                                                                                       Options:{TParserTokenizer.}TTokenOptions.TSetType=0{[]};
                                                                                        const FollowOperands:TParserTokenizer.TTokenId=0):TParserTokenizer.TTokenId;
 var
   sym:integer;
@@ -1029,7 +1038,7 @@ begin
 
   TokenDataVector.PushBack(td);
 
-  if not(TOFake in Options) then begin
+  if not TTokenOptions.IsAllPresent(Options,__TOFake) then begin
     sym:=1;
     Tokenizer.SubRegisterToken({uppercase}(Token),sym,result,IncludedCharsPos);
   end;
@@ -1150,6 +1159,13 @@ begin
 end;
 
 initialization
+  __TOIncludeBrackeOpen:=TTokenOptions.GetGlobalEnum;//открывающая скобка входит в имя
+  __TONestedBracke:=TTokenOptions.GetGlobalEnum;//возможны вложенные скобки
+  //__TOVariable:=TTokenOptions.GetGlobalEnum;//переменный, значение всегда нужно пересчитывать
+  __TOCanBeOmitted:=TTokenOptions.GetGlobalEnum;//не включаем в вывод парсера
+  __TOWholeWordOnly:=TTokenOptions.GetGlobalEnum;//должно быть целое слово, за ним сепаратор
+  __TOSeparator:=TTokenOptions.GetGlobalEnum;//разделитель
+  __TOFake:=TTokenOptions.GetGlobalEnum;
 {e1:=TTokenOptions.GetGlobalEnum;//1
 e1:=TTokenOptions.GetGlobalEnum;//2
 e1:=TTokenOptions.GetGlobalEnum;//4

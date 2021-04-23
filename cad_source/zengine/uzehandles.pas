@@ -57,8 +57,10 @@ GTSet<GSetType,GEnumType>=object
   function GetFull:GSetType;virtual;
   //function GetByte(Enum:GEnumType):GSetType;
 
-  procedure Include(var ASet:GSetType;const AEnum:GEnumType);
-  procedure Exclude(var ASet:GSetType;const AEnum:GEnumType);
+  class procedure Include(var ASet:GSetType;const AEnum:GEnumType);static;
+  class procedure Exclude(var ASet:GSetType;const AEnum:GEnumType);static;
+  class function IsAllPresent(const ASet:GSetType;const AEnum:GEnumType):boolean;static;
+  class function IsOnePresent(const ASet:GSetType;const AEnum:GEnumType):boolean;static;
   private
   var
     Enums:TEnumType;
@@ -133,16 +135,22 @@ function GTSet<GSetType,GEnumType>.GetFull:GSetType;
 begin
   result:=Full;
 end;
-procedure GTSet<GSetType,GEnumType>.Include(var ASet:GSetType;const AEnum:GEnumType);
+class procedure GTSet<GSetType,GEnumType>.Include(var ASet:GSetType;const AEnum:GEnumType);
 begin
   ASet:=ASet or AEnum;
 end;
-procedure GTSet<GSetType,GEnumType>.Exclude(var ASet:GSetType;const AEnum:GEnumType);
+class procedure GTSet<GSetType,GEnumType>.Exclude(var ASet:GSetType;const AEnum:GEnumType);
 begin
   ASet:=ASet and (not AEnum);
 end;
-
-
+class function GTSet<GSetType,GEnumType>.IsAllPresent(const ASet:GSetType;const AEnum:GEnumType):boolean;
+begin
+  Result:=(ASet and AEnum)=AEnum;
+end;
+class function GTSet<GSetType,GEnumType>.IsOnePresent(const ASet:GSetType;const AEnum:GEnumType):boolean;
+begin
+  Result:=(ASet and AEnum)<>0;
+end;
 {function GTSet<GSetType,GEnumType>.GetByte(Enum:GEnumType):GSetType;
 begin
   result:=1 shl (enum-1);

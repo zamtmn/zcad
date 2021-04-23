@@ -138,6 +138,9 @@ type
                            procedure ZoomIn;override;
                            procedure ZoomOut;override;
                            procedure GDBActivateContext; override;
+                           procedure Notification(AComponent: TComponent;
+                                                  Operation: TOperation); override;
+
                       end;
 function MouseButton2ZKey(Shift: TShiftState):GDBByte;
 procedure RemoveCursorIfNeed(acontrol:TControl;RemoveCursor:boolean);
@@ -189,6 +192,12 @@ procedure TGeneralViewArea.GDBActivateContext;
 begin
   //drawer.delmyscrbuf;
 end;
+procedure TGeneralViewArea.Notification(AComponent: TComponent;Operation: TOperation);
+begin
+  inherited;
+  if (Operation=opRemove)and(AComponent=WorkArea) then
+    WorkArea:=nil;
+end;
 
 procedure RemoveCursorIfNeed(acontrol:TControl;RemoveCursor:boolean);
 begin
@@ -236,11 +245,15 @@ begin
      getviewcontrol.DoMouseWheel([],-1,point(0,0));
 end;
 procedure TGeneralViewArea.GDBActivate;
+var
+  wc:TCADControl;
 begin
     pdwg.SetCurrentDWG;
     param.firstdraw:=true;
     GDBActivateContext;
-    getviewcontrol.invalidate;
+    wc:=getviewcontrol;
+    if wc<>nil then
+      wc.invalidate;
     if assigned(OnActivateProc) then OnActivateProc;
 end;
 procedure drawfrustustum(frustum:ClipArray;var DC:TDrawContext);

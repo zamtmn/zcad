@@ -36,7 +36,7 @@ program zcad;
 uses
   {$IFDEF REPORTMMEMORYLEAKS}heaptrc,{$ENDIF}
   uzcexceptions,
-  Interfaces,forms, classes,
+  Interfaces,forms, classes,LCLVersion,
   uzcfsplash,
   uzcsysvars,
 
@@ -276,9 +276,10 @@ begin
   FontManager.EnumerateFontFiles;
   uzcdrawings.startup('*rtl/dwg/DrawingVars.pas','');
   uzcdevicebase.startup;
-
-  Application.Scaled:=False;
-  Application.MainFormOnTaskBar:=true;
+  {$IF lcl_fullversion>2001200}
+  {$ELSE}
+    Application.MainFormOnTaskBar:=true;
+  {$ENDIF}
   //создание окна программы
   Application.CreateForm(TZCADMainWindow,ZCADMainWindow);
   ZCADMainWindow.show;

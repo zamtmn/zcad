@@ -26,7 +26,7 @@ uses
   ActnList,LCLType,LCLProc,uzctranslations,LMessages,LCLIntf,
   Forms, stdctrls, ExtCtrls, ComCtrls,Controls,Classes,SysUtils,LazUTF8,
   menus,graphics,Themes,
-  Types,UniqueInstanceBase,simpleipc,Laz2_XMLCfg,
+  Types,UniqueInstanceBase,simpleipc,Laz2_XMLCfg,LCLVersion,
  {ZCAD BASE}
        uzcsysparams,gzctnrvectortypes,uzemathutils,uzelongprocesssupport,
        uzgldrawergdi,uzcdrawing,UGDBOpenArrayOfPV,uzedrawingabstract,
@@ -788,6 +788,10 @@ begin
 
 
   {Наcтраиваем докинг}
+  {$IF lcl_fullversion>2001200}
+    DockMaster.FloatingWindowsOnTop:=true;
+    DockMaster.MainDockForm:=Self;
+  {$ENDIF}
   DockMaster.SplitterClass:=TmyAnchorDockSplitter;
   DockMaster.ManagerClass:=TAnchorDockManager;
   DockMaster.OnCreateControl:=DockMasterCreateControl;

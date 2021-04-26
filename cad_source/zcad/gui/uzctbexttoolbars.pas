@@ -658,7 +658,7 @@ begin
   //ColorBox:=CreateCBox('ColorComboBox',tb,TSupportColorCombo.ColorBoxDrawItem,ChangeCColor,DropDownColor,DropUpColor,FillColorCombo,_Width,_hint);
   {  if assigned(LayoutBox) then
     ZCMsgCallBackInterface.TextMessage(format(rsReCreating,['LAYOUTBOX']),TMWOShowError);}
-  CreateLayoutbox(TB);
+  LayoutBox:=CreateLayoutbox(TB);
   LayoutBox.Parent:=TB;
   LayoutBox.AutoSize:=false;
   if _Width>0 then

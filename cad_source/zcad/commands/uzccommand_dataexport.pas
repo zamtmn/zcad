@@ -225,7 +225,7 @@ begin
       r:=Data.FDoc.RowCount;
     end else
       for i:=0 to (ParsedOperands as TExporterParser.TParsedText).Parts.size-1 do
-        if not(TTokenOptions.IsAllPresent((ParsedOperands as TExporterParser.TParsedText).Parts.Mutable[i]^.tokeninfo.Options,__TOSeparator))then
+        if not(TTokenOptions.IsAllPresent((ParsedOperands as TExporterParser.TParsedText).Parts.Mutable[i]^.tokeninfo.Options,TGOSeparator))then
         begin
           ResultParam.StartPos:=OnlyGetLength;
           ResultParam.Length:=0;
@@ -443,18 +443,18 @@ initialization
 
 
   ExporterParser:=TExporterParser.create;
-  BracketTockenId:=ExporterParser.RegisterToken('(','(',')',nil,ExporterParser,__TONestedBracke or __TOIncludeBrackeOpen or __TOSeparator);
-  ExporterParser.RegisterToken('Export',#0,#0,TExport,nil,__TOWholeWordOnly,BracketTockenId);
-  ExporterParser.RegisterToken('DoIf',#0,#0,TDoIf,ExporterParser,__TOWholeWordOnly,BracketTockenId);
-  ExporterParser.RegisterToken('SameMask',#0,#0,TSameMask,ExporterParser,__TOWholeWordOnly,BracketTockenId);
-  ExporterParser.RegisterToken('%%',#0,#0,TGetEntParam,ExporterParser,__TOWholeWordOnly,BracketTockenId);
-  ExporterParser.RegisterToken('@@',#0,#0,TGetEntVariable,ExporterParser,__TOWholeWordOnly,BracketTockenId);
-  ExporterParser.RegisterToken('''','''','''',ExporterParser.TParserTokenizer.TStringProcessor,nil,__TOIncludeBrackeOpen);
-  ExporterParser.RegisterToken(',',#0,#0,nil,nil,__TOSeparator);
-  ExporterParser.RegisterToken(';',#0,#0,nil,nil,__TOSeparator);
-  ExporterParser.RegisterToken(' ',#0,#0,nil,nil,__TOSeparator or __TOCanBeOmitted);
-  ExporterParser.RegisterToken(#10,#0,#0,nil,nil,__TOSeparator or __TOCanBeOmitted);
-  ExporterParser.RegisterToken(#13,#0,#0,nil,nil,__TOSeparator or __TOCanBeOmitted);
+  BracketTockenId:=ExporterParser.RegisterToken('(','(',')',nil,ExporterParser,TGONestedBracke or TGOIncludeBrackeOpen or TGOSeparator);
+  ExporterParser.RegisterToken('Export',#0,#0,TExport,nil,TGOWholeWordOnly,BracketTockenId);
+  ExporterParser.RegisterToken('DoIf',#0,#0,TDoIf,ExporterParser,TGOWholeWordOnly,BracketTockenId);
+  ExporterParser.RegisterToken('SameMask',#0,#0,TSameMask,ExporterParser,TGOWholeWordOnly,BracketTockenId);
+  ExporterParser.RegisterToken('%%',#0,#0,TGetEntParam,ExporterParser,TGOWholeWordOnly,BracketTockenId);
+  ExporterParser.RegisterToken('@@',#0,#0,TGetEntVariable,ExporterParser,TGOWholeWordOnly,BracketTockenId);
+  ExporterParser.RegisterToken('''','''','''',ExporterParser.TParserTokenizer.TStringProcessor,nil,TGOIncludeBrackeOpen);
+  ExporterParser.RegisterToken(',',#0,#0,nil,nil,TGOSeparator);
+  ExporterParser.RegisterToken(';',#0,#0,nil,nil,TGOSeparator);
+  ExporterParser.RegisterToken(' ',#0,#0,nil,nil,TGOSeparator or TGOCanBeOmitted);
+  ExporterParser.RegisterToken(#10,#0,#0,nil,nil,TGOSeparator or TGOCanBeOmitted);
+  ExporterParser.RegisterToken(#13,#0,#0,nil,nil,TGOSeparator or TGOCanBeOmitted);
 
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');

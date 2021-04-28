@@ -15,7 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
-unit uzehandles;
+unit uzbhandles;
 {$INCLUDE def.inc}
 
 interface

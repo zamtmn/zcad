@@ -24,7 +24,7 @@ unit uzeparser;
 interface
 uses Generics.Collections,
      {$IFDEF FPC}gvector,gmap,gutil,gdeque,{$ENDIF}
-     sysutils,uzehandles;
+     sysutils,uzbhandles;
 resourcestring
   rsRunTimeError='uzeparser: Execution error by offset %d';
 const MaxCashedValues={4}5;

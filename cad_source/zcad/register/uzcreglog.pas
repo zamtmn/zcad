@@ -32,7 +32,7 @@ const
   LPSTIMINGModuleName='LPSTIMING';
 
 var
-  LPSTIMINGModuleDeskIndex:TLogModuleDeskIndex;
+  LPSTIMINGModuleDeskIndex:TModuleDesk;
 
 class procedure TLogHelper.EndLongProcessHandler(LPHandle:TLPSHandle;TotalLPTime:TDateTime);
 var

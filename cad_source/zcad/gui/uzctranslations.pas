@@ -66,7 +66,7 @@ const
   identpref='zcadexternal.';
 implementation
 var
-   TranslateLogModuleId:TLogModuleDeskIndex;
+   TranslateLogModuleId:TModuleDesk;
 procedure DisableTranslate;
 begin
      inc(DisableTranslateCount);

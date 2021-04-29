@@ -20,8 +20,9 @@ unit uzclog;
 {$INCLUDE def.inc}
 {$mode objfpc}{$H+}
 interface
-uses UGDBOpenArrayOfByte,gzctnrvectordata,gzctnrstl,LazLoggerBase,
-     LazLogger,strutils,sysutils{$IFNDEF DELPHI},LazUTF8{$ENDIF},uzbhandles;
+uses UGDBOpenArrayOfByte,gzctnrvectordata,LazLoggerBase,
+     LazLogger,strutils,sysutils{$IFNDEF DELPHI},LazUTF8{$ENDIF},
+     uzbnamedhandles,uzbnamedhandleswithdata;
 const {$IFDEF DELPHI}filelog='log/zcad_delphi.log';{$ENDIF}
       {$IFDEF FPC}
                   {$IFDEF LINUX}filelog='../../log/zcad_linux.log';{$ENDIF}
@@ -35,23 +36,27 @@ const {$IFDEF DELPHI}filelog='log/zcad_delphi.log';{$ENDIF}
 const
       MaxLatestLogStrings=99;
 type
-TLogModuleDeskIndex=integer;
-TLogModuleDesk=record
-                enabled:boolean;
-                name:string;
+TModuleDeskData=record
+  enabled:boolean;
 end;
-TModulesDeskDictionary=specialize TMyGDBAnsiStringDictionary<TLogModuleDeskIndex>;
-TModulesDeskArray=specialize TMyVector<TLogModuleDesk>;
-TLogMode=(
+TModuleDesk=LongInt;
+TModuleDeskNameType=AnsiString;
+TModulesDeskHandles=specialize GTNamedHandlesWithData<TModuleDesk,specialize GTLinearIncHandleManipulator<TModuleDesk>,TModuleDeskNameType,specialize GTStringNamesUPPERCASE<TModuleDeskNameType>,TModuleDeskData>;
+
+
+TLogLevelFakeData=record end;
+TLogLevel=LongInt;
+TLogLevelHandleNameType=AnsiString;
+TLogLevelsHandles=specialize GTNamedHandlesWithData<TLogLevel,specialize GTLinearIncHandleManipulator<TLogLevel>,TLogLevelHandleNameType,specialize GTStringNamesUPPERCASE<TLogLevelHandleNameType>,TLogLevelFakeData>;
+var
           LM_Trace,     // — вывод всего подряд. На тот случай, если Debug не позволяет локализовать ошибку.
           LM_Debug,     // — журналирование моментов вызова «крупных» операций.
           LM_Info,      // — разовые операции, которые повторяются крайне редко, но не регулярно. (загрузка конфига, плагина, запуск бэкапа)
           LM_Warning,   // — неожиданные параметры вызова, странный формат запроса, использование дефолтных значений в замен не корректных. Вообще все, что может свидетельствовать о не штатном использовании.
           LM_Error,     // — повод для внимания разработчиков. Тут интересно окружение конкретного места ошибки.
           LM_Fatal,     // — тут и так понятно. Выводим все до чего дотянуться можем, так как дальше приложение работать не будет.
-          LM_Necessarily// — Вывод в любом случае
-          );
-//SplashWnd
+          LM_Necessarily:TLogLevel;// — Вывод в любом случае
+type
 TSplashTextOutProc=procedure (s:string;pm:boolean);
 THistoryTextOutMethod=procedure (s:string) of object;
 THistoryTextOutProc=procedure (s:string);
@@ -72,20 +77,25 @@ tlog= object
            Indent:integer;
            LatestLogStrings:TLatestLogStrings;
            LatestLogStringsCount,TotalLogStringsCount:integer;
-           CurrentLogMode:TLogMode;
 
-           ModulesDeskDictionary:TModulesDeskDictionary;
-           ModulesDeskArray:TModulesDeskArray;
-           DefaultModuleDeskIndex:TLogModuleDeskIndex;
-           NewModuleDesk:TLogModuleDesk;
+           LogLevels:TLogLevelsHandles;
+           CurrentLogLevel:TLogLevel;
 
-           constructor init(fn:AnsiString;LogMode:TLogMode);
-           function registermodule(modulename:AnsiString):TLogModuleDeskIndex;
-           procedure enablemodule(modulename:AnsiString);
-           procedure disablemodule(modulename:AnsiString);
+
+           ModulesDesks:TModulesDeskHandles;
+
+           NewModuleDesk:TModuleDeskData;
+           DefaultModuleDeskIndex:TModuleDesk;
+
+           constructor init(fn:AnsiString;TraceModeName:TLogLevelHandleNameType);
+           procedure WriteLogHeader;
+           function registermodule(modulename:TModuleDeskNameType):TModuleDesk;
+
+           procedure enablemodule(modulename:TModuleDeskNameType);
+           procedure disablemodule(modulename:TModuleDeskNameType);
            procedure enableallmodules;
-           procedure SetLogMode(LogMode:TLogMode);
-           destructor done;
+           procedure SetLogLevel(LogLevel:TLogLevel);
+           destructor done;virtual;
            procedure AddStrToLatest(str:AnsiString);
            procedure WriteLatestToFile(var f:system.text);
            procedure LogOutStrFast(str:AnsiString;IncIndent:integer);virtual;
@@ -94,18 +104,18 @@ tlog= object
            procedure CloseLog;
            procedure CreateLog;
 
-           function IsNeedToLog(LogMode:TLogMode;LMDI:TLogModuleDeskIndex):boolean;
+           function IsNeedToLog(LogMode:TLogLevel;LMDI:TModuleDesk):boolean;
 
-           procedure LogOutStr(str:AnsiString;IncIndent:integer;LogMode:TLogMode;LMDI:TLogModuleDeskIndex=0);virtual;
-           procedure LogOutFormatStr(Const Fmt:AnsiString;const Args :Array of const;IncIndent:integer;LogMode:TLogMode;LMDI:TLogModuleDeskIndex=0);virtual;
+           procedure LogOutStr(str:AnsiString;IncIndent:integer;LogMode:TLogLevel;LMDI:TModuleDesk=1);virtual;
+           procedure LogOutFormatStr(Const Fmt:AnsiString;const Args :Array of const;IncIndent:integer;LogMode:TLogLevel;LMDI:TModuleDesk=1);virtual;
            procedure ZOnDebugLN(Sender: TObject; S: string; var Handled: Boolean);
            private
            procedure ProcessStr(str:AnsiString;IncIndent:integer);virtual;
            procedure ProcessStrToLog(str:AnsiString;IncIndent:integer;todisk:boolean);virtual;
+
+           function LogMode2string(LogMode:TLogLevel):TLogLevelHandleNameType;
     end;
 {EXPORT-}
-function getprogramlog:pointer;export;
-//procedure startup(s:GDBString);
 procedure LogOut(s:AnsiString);
 var programlog:tlog;
    VerboseLog:boolean;
@@ -116,19 +126,11 @@ implementation
 var
     PerfomaneBuf:GDBOpenArrayOfByte;
     TimeBuf:specialize GZVectorData<TMyTimeStamp>;
-    function LogMode2string(LogMode:TLogMode):AnsiString;
-    begin
-      case LogMode of
-                     LM_Trace:result:='LM_Trace';
-                     LM_Debug:result:='LM_Debug';
-                     LM_Info:result:='LM_Info';
-                     LM_Warning:result:='LM_Warning';
-                     LM_Error:result:='LM_Error';
-                     LM_Fatal:result:='LM_Fatal';
-                     else
-                         result:='LM_Unknown';
-      end;
-    end;
+function tlog.LogMode2string(LogMode:TLogLevel):AnsiString;
+begin
+  result:=LogLevels.GetHandleName(LogMode);
+  if result='' then result:='LM_Unknown';
+end;
 procedure LogOut(s:AnsiString);
 var
    FileHandle:cardinal;
@@ -149,10 +151,6 @@ begin
 
      fileclose(FileHandle);
      FileHandle:=0;
-end;
-function getprogramlog:pointer;
-begin
-     result:=@programlog;
 end;
 function MyTimeToStr(MyTime:TDateTime):string;
 var
@@ -323,16 +321,16 @@ begin
      inc(TotalLogStringsCount);
      inc(LatestLogStringsCount);
 end;
-function tlog.IsNeedToLog(LogMode:TLogMode;LMDI:TLogModuleDeskIndex):boolean;
+function tlog.IsNeedToLog(LogMode:TLogLevel;LMDI:TModuleDesk):boolean;
 begin
-     result:=ModulesDeskArray[LMDI].enabled;
+     result:=ModulesDesks.GetPLincedData(LMDI)^.enabled;
      if result then
-     if LogMode<CurrentLogMode then
+     if LogMode<CurrentLogLevel then
                                    result:=false
                                else
                                    result:=true;
 end;
-procedure tlog.LogOutFormatStr(Const Fmt:AnsiString;const Args :Array of const;IncIndent:integer;LogMode:TLogMode;LMDI:TLogModuleDeskIndex);
+procedure tlog.LogOutFormatStr(Const Fmt:AnsiString;const Args :Array of const;IncIndent:integer;LogMode:TLogLevel;LMDI:TModuleDesk);
 begin
      if IsNeedToLog(LogMode,lmdi) then
                                  ProcessStr(format(fmt,args),IncIndent);
@@ -345,7 +343,7 @@ begin
      ProcessStrToLog(str,IncIndent,true);
      AddStrToLatest('  '+str);
 end;
-procedure tlog.logoutstr(str:AnsiString;IncIndent:integer;LogMode:TLogMode;LMDI:TLogModuleDeskIndex);
+procedure tlog.logoutstr(str:AnsiString;IncIndent:integer;LogMode:TLogLevel;LMDI:TModuleDesk);
 begin
      if IsNeedToLog(LogMode,lmdi) then
                                  ProcessStr(str,IncIndent);
@@ -359,60 +357,60 @@ begin
                                 else
                                     ProcessStrToLog(str,IncIndent,true);
 end;
-procedure tlog.SetLogMode(LogMode:TLogMode);
+procedure tlog.SetLogLevel(LogLevel:TLogLevel);
 var
    CurrentTime:TMyTimeStamp;
 begin
-     if CurrentLogMode<>LogMode then
+     if CurrentLogLevel<>LogLevel then
                                     begin
                                          CurrentTime:=mynow();
-                                         CurrentLogMode:=LogMode;
-                                         WriteToLog('Log mode changed to: '+LogMode2string(LogMode),true,CurrentTime.time,0,CurrentTime.rdtsc,0,0);
-                                         if LogMode=LM_Trace then
+                                         CurrentLogLevel:=LogLevel;
+                                         WriteToLog('Log mode changed to: '+LogMode2string(LogLevel),true,CurrentTime.time,0,CurrentTime.rdtsc,0,0);
+                                         if LogLevel=LM_Trace then
                                                                  VerboseLog:=true;
                                     end;
 end;
-function tlog.registermodule(modulename:AnsiString):TLogModuleDeskIndex;
+function tlog.registermodule(modulename:AnsiString):TModuleDesk;
 begin
-  if not ModulesDeskDictionary.MyGetValue(modulename,result) then
+  if not ModulesDesks.TryGetHandle(modulename,result) then
   begin
-    result:=ModulesDeskArray.Size;
-    NewModuleDesk.name:=modulename;
-    ModulesDeskArray.PushBack(NewModuleDesk);
-    ModulesDeskDictionary.insert(uppercase(modulename),result);
-    LogOutStr(format('Register log module "%s"',[modulename]),0,LM_Info);
+    result:=ModulesDesks.CreateOrGetHandle(modulename);
+    ModulesDesks.GetPLincedData(result)^.enabled:=NewModuleDesk.enabled;
+    //LogOutStr(format('Register log module "%s"',[modulename]),0,LM_Info);
   end;
 end;
 procedure tlog.enablemodule(modulename:AnsiString);
 begin
-  ModulesDeskArray.mutable[registermodule(modulename)]^.enabled:=true;
+  ModulesDesks.GetPLincedData(ModulesDesks.CreateOrGetHandle(modulename))^.enabled:=true;
 end;
 procedure tlog.disablemodule(modulename:AnsiString);
 begin
-  ModulesDeskArray.mutable[registermodule(modulename)]^.enabled:=false;
+  ModulesDesks.GetPLincedData(ModulesDesks.CreateOrGetHandle(modulename))^.enabled:=false;
 end;
 procedure tlog.enableallmodules;
 var
    i:integer;
 begin
-  for i:=0 to ModulesDeskArray.Size-1 do
-    ModulesDeskArray.mutable[i]^.enabled:=true;
+  for i:=0 to ModulesDesks.HandleDataVector.Size-1 do
+    ModulesDesks.HandleDataVector.mutable[i]^.D.enabled:=true;
   NewModuleDesk.enabled:=true;
 end;
-constructor tlog.init(fn:AnsiString;LogMode:TLogMode);
+constructor tlog.init(fn:AnsiString;TraceModeName:TLogLevelHandleNameType);
 var
    CurrentTime:TMyTimeStamp;
    lz:TLazLogger;
 begin
-     CurrentLogMode:=LogMode;
+  LogLevels.init;
+  ModulesDesks.init;
+  LM_Trace:=programlog.LogLevels.CreateHandle;     // — вывод всего подряд. На тот случай, если Debug не позволяет локализовать ошибку.
+  programlog.LogLevels.RegisterHandleName(LM_Trace,TraceModeName);
+     CurrentLogLevel:=LM_Trace;
      CurrentTime:=mynow();
      logfilename:=fn;
      PerfomaneBuf.init({$IFDEF DEBUGBUILD}'{39063C66-9D18-4707-8AD3-97DFBCB23185}',{$ENDIF}5*1024);
      TimeBuf.init({$IFDEF DEBUGBUILD}'{6EE1BC6B-1177-40B0-B4A5-793D66BF8BC8}',{$ENDIF}50{,sizeof(TMyTimeStamp)});
      Indent:=1;
      CreateLog;
-     WriteToLog('------------------------Log started------------------------',true,CurrentTime.time,0,CurrentTime.rdtsc,0,0);
-     WriteToLog('Log mode: '+LogMode2string(CurrentLogMode),true,CurrentTime.time,0,CurrentTime.rdtsc,0,0);
      timebuf.PushBackData(CurrentTime);
      setlength(LatestLogStrings,MaxLatestLogStrings);
      LatestLogStringsCount:=0;
@@ -424,20 +422,27 @@ begin
               TLazLoggerFile(lz).OnDebugLn:=@ZOnDebugLN;
               TLazLoggerFile(lz).OnDbgOut:=@ZOnDebugLN;
          end;
-     ModulesDeskDictionary:=TModulesDeskDictionary.create;
-     ModulesDeskArray:=TModulesDeskArray.create;
      NewModuleDesk.enabled:=true;
      DefaultModuleDeskIndex:=registermodule('DEFAULT');
      NewModuleDesk.enabled:=false;
 end;
+procedure tlog.WriteLogHeader;
+var
+  CurrentTime:TMyTimeStamp;
+begin
+  CurrentTime:=mynow();
+  WriteToLog('------------------------Log started------------------------',true,CurrentTime.time,0,CurrentTime.rdtsc,0,0);
+  WriteToLog('Log mode: '+LogMode2string(CurrentLogLevel),true,CurrentTime.time,0,CurrentTime.rdtsc,0,0);
+end;
+
 procedure tlog.ZOnDebugLN(Sender: TObject; S: string; var Handled: Boolean);
 var
-   dbgmode:TLogMode;
+   dbgmode:TLogLevel;
    _indent:integer;
    prefixlength,prefixstart:integer;
    NeedToHistory,NeedMessageBox:boolean;
    modulename:string;
-   lmdi:TLogModuleDeskIndex;
+   lmdi:TModuleDesk;
 begin
      dbgmode:=LM_Info;
      _indent:=lp_OldPos;
@@ -488,11 +493,11 @@ begin
        if assigned(HistoryTextOut) then
          HistoryTextOut(s);
      if NeedMessageBox then
-       case dbgmode of
-         LM_Warning:if assigned(WarningBoxTextOut) then
-                      WarningBoxTextOut(s);
-  LM_Error,LM_Fatal:if assigned(ErrorBoxTextOut) then
-                      ErrorBoxTextOut(s);
+       begin//case dbgmode of
+         if dbgmode=LM_Warning then if assigned(WarningBoxTextOut) then
+                      WarningBoxTextOut(s)
+  else if (dbgmode=LM_Error)or(dbgmode=LM_Fatal) then if assigned(ErrorBoxTextOut) then
+                      ErrorBoxTextOut(s)
                else if assigned(MessageBoxTextOut) then
                       MessageBoxTextOut(s);
        end;
@@ -506,22 +511,31 @@ var
    i:integer;
 begin
      CurrentTime:=mynow();
-     for i:=0 to ModulesDeskArray.Size-1 do
-      if ModulesDeskArray[i].enabled then
-                                         WriteToLog(format('Log module name "%s" state: Enabled',[ModulesDeskArray[i].name]),true,CurrentTime.time,0,CurrentTime.rdtsc,0,0)
+     for i:=0 to ModulesDesks.HandleDataVector.Size-1 do
+      if ModulesDesks.HandleDataVector[i].D.enabled then
+                                         WriteToLog(format('Log module name "%s" state: Enabled',[ModulesDesks.HandleDataVector[I].N]),true,CurrentTime.time,0,CurrentTime.rdtsc,0,0)
                                      else
-                                         WriteToLog(format('Log module name "%s" state: Disabled',[ModulesDeskArray[i].name]),true,CurrentTime.time,0,CurrentTime.rdtsc,0,0);
+                                         WriteToLog(format('Log module name "%s" state: Disabled',[ModulesDesks.HandleDataVector[I].N]),true,CurrentTime.time,0,CurrentTime.rdtsc,0,0);
      CurrentTime:=mynow();
      WriteToLog('-------------------------Log ended-------------------------',true,CurrentTime.time,0,CurrentTime.rdtsc,0,0);
      TimeBuf.done;
      PerfomaneBuf.done;
      setlength(LatestLogStrings,0);
-     ModulesDeskDictionary.destroy;
-     ModulesDeskArray.destroy;
+     LogLevels.done;
+     ModulesDesks.done;
 end;
 initialization
 begin
-    programlog.init({$IFNDEF DELPHI}SysToUTF8{$ENDIF}(ExtractFilePath(paramstr(0)))+filelog,LM_Warning);
+    programlog.init({$IFNDEF DELPHI}SysToUTF8{$ENDIF}(ExtractFilePath(paramstr(0)))+filelog,'LM_Trace');
+    //LM_Trace:=programlog.LogLevels.CreateHandle;     // — вывод всего подряд. На тот случай, если Debug не позволяет локализовать ошибку.
+    //programlog.LogLevels.RegisterHandleName(LM_Trace,'LM_Trace');
+    LM_Debug:=programlog.LogLevels.CreateOrGetHandle('LM_Debug');     // — журналирование моментов вызова «крупных» операций.
+    LM_Info:=programlog.LogLevels.CreateOrGetHandle('LM_Info');      // — разовые операции, которые повторяются крайне редко, но не регулярно. (загрузка конфига, плагина, запуск бэкапа)
+    LM_Warning:=programlog.LogLevels.CreateOrGetHandle('LM_Warning');   // — неожиданные параметры вызова, странный формат запроса, использование дефолтных значений в замен не корректных. Вообще все, что может свидетельствовать о не штатном использовании.
+    LM_Error:=programlog.LogLevels.CreateOrGetHandle('LM_Error');     // — повод для внимания разработчиков. Тут интересно окружение конкретного места ошибки.
+    LM_Fatal:=programlog.LogLevels.CreateOrGetHandle('LM_Fatal');     // — тут и так понятно. Выводим все до чего дотянуться можем, так как дальше приложение работать не будет.
+    LM_Necessarily:=programlog.LogLevels.CreateOrGetHandle('LM_Necessarily');// — Вывод в любом случае
+    programlog.WriteLogHeader;
 end;
 finalization
     debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');

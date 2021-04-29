@@ -105,6 +105,7 @@ procedure ProcessParamStr;
 var
    i:integer;
    param,paramUC:GDBString;
+   ll:TLogLevel;
 const
   LogEnableModulePrefix='LEM_';
   LogDisableModulePrefix='LDM_';
@@ -138,18 +139,6 @@ begin
                                                                SysParam.saved.NoLoadLayout:=true
        else if (paramUC='UPDATEPO')then
                                                                SysParam.saved.UpdatePO:=true
-       else if (paramUC='LM_TRACE')then
-                                       programlog.SetLogMode(LM_Trace)
-       else if (paramUC='LM_DEBUG')then
-                                       programlog.SetLogMode(LM_Debug)
-       else if (paramUC='LM_INFO')then
-                                       programlog.SetLogMode(LM_Info)
-       else if (paramUC='LM_WARNING')then
-                                       programlog.SetLogMode(LM_Warning)
-       else if (paramUC='LM_ERROR')then
-                                       programlog.SetLogMode(LM_Error)
-       else if (paramUC='LM_FATAL')then
-                                       programlog.SetLogMode(LM_Fatal)
        else if (paramUC='LEAM')then
                                    programlog.enableallmodules
        else if pos(LogEnableModulePrefix,paramUC)=1 then
@@ -168,7 +157,9 @@ begin
                                            programlog.disablemodule(paramUC)
                                          else
                                            disabledefaultmodule:=true;
-                                       end;
+                                       end
+       else if programlog.LogLevels.TryGetHandle(param,ll)then
+                                       programlog.SetLogLevel(ll);
        end;
      debugln('{N-}end;{ProcessParamStr}');
      //programlog.LogOutStr('end;{ProcessParamStr}',lp_DecPos,LM_Necessarily);

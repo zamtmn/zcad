@@ -23,7 +23,7 @@ unit uzblog;
 interface
 uses UGDBOpenArrayOfByte,gvector,
      LazLoggerBase,LazLogger,
-     strutils,sysutils{$IFNDEF DELPHI},LazUTF8{$ENDIF},
+     strutils,sysutils{$IFNDEF DELPHI},LazUTF8{$ENDIF},Classes,
      Generics.Collections,
      uzbnamedhandles,uzbnamedhandleswithdata;
 const
@@ -141,7 +141,7 @@ var
    VerboseLog:boolean;
 implementation
 var
-  PerfomaneBuf: GDBOpenArrayOfByte;
+  PerfomaneBuf:TMemoryStream;// GDBOpenArrayOfByte;
 function TDoEnteredHelper.IfEntered:TEntered;
 begin
   result.Entered:=Entered;
@@ -181,18 +181,18 @@ var ts:AnsiString;
 begin
   ts:=TimeToStr(Time)+{'|'+}DupeString(' ',Indent*2);
   if todisk then ts :='!!!! '+ts +s
-            else ts :=IntToHex(PerfomaneBuf.Count,4)+' '+ts +s;
+            else ts :=IntToHex(PerfomaneBuf.{Count}size,4)+' '+ts +s;
   ts:=ts+DupeString('-',80-length(ts));
   //decodetime(t,Hour,Minute,Second,MilliSecond);
   ts := ts +' t:=' + {inttostr(round(t*10e7))}MyTimeToStr(t) + ', dt:=' + {inttostr(round(dt*10e7))}MyTimeToStr(dt) {+#13+#10};
   ts := ts +' tick:=' + inttostr(tick div tsc2ms) + ', dtick:=' + inttostr(dtick div tsc2ms)+#13+#10;
   if (Indent=1)and(IncIndent<0) then ts:=ts+#13+#10;
-  PerfomaneBuf.TXTAddGDBString(ts);
+  PerfomaneBuf.Write(ts[1],SizeOf(ts[1])*length(ts));
   //FileWrite(FileHandle,ts[1],length(ts));
   if todisk then
   begin
         OpenLog;
-        FileWrite(FileHandle,PerfomaneBuf.parray^,PerfomaneBuf.count);
+        FileWrite(FileHandle,PerfomaneBuf.Memory^,PerfomaneBuf.Size);
         PerfomaneBuf.Clear;
         CloseLog;
   end;
@@ -375,7 +375,7 @@ procedure tlog.LogOutStrFast(str:AnsiString;IncIndent:integer);
 begin
      //if (str='TOGLWnd.Pre_MouseMove----{end}')and(Indent=3) then
      //               indent:=3;
-     if PerfomaneBuf.Count<1024 then
+     if PerfomaneBuf.size<1024 then
                                     ProcessStrToLog(str,IncIndent,false)
                                 else
                                     ProcessStrToLog(str,IncIndent,true);
@@ -449,7 +449,7 @@ begin
   LM_Trace:=RegisterLogLevel(TraceModeName,TraceModeAlias,LLD(LLTInfo));// — вывод всего подряд. На тот случай, если Debug не позволяет локализовать ошибку.
      CurrentTime:=mynow();
      logfilename:=fn;
-     PerfomaneBuf.init({$IFDEF DEBUGBUILD}'{39063C66-9D18-4707-8AD3-97DFBCB23185}',{$ENDIF}5*1024);
+     PerfomaneBuf:=TMemoryStream.Create;// ({$IFDEF DEBUGBUILD}'{39063C66-9D18-4707-8AD3-97DFBCB23185}',{$ENDIF}5*1024);
      TimeBuf:=TTimeBuf.Create;//init({$IFDEF DEBUGBUILD}'{6EE1BC6B-1177-40B0-B4A5-793D66BF8BC8}',{$ENDIF}50{,sizeof(TMyTimeStamp)});
      Indent:=1;
      CreateLog;
@@ -572,7 +572,7 @@ begin
      CurrentTime:=mynow();
      WriteToLog('-------------------------Log ended-------------------------',true,CurrentTime.time,0,CurrentTime.rdtsc,0,0);
      TimeBuf.Front;
-     PerfomaneBuf.done;
+     PerfomaneBuf.Free;
      setlength(LatestLogStrings,0);
      LogLevels.done;
      ModulesDesks.done;

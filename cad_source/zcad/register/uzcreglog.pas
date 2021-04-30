@@ -67,10 +67,10 @@ initialization
   LPSTIMINGModuleDeskIndex:=programlog.RegisterModule(LPSTIMINGModuleName);
 
   lps.AddOnLPEndHandler(TLogHelper.EndLongProcessHandler);
-  uzblog.HistoryTextOut:=ZCMsgCallBackInterface.Do_HistoryOut();
-  uzblog.MessageBoxTextOut:=@ShowMessageForLog;
-  uzblog.WarningBoxTextOut:=@ShowWarningForLog;
-  uzblog.ErrorBoxTextOut:=@ShowErrorForLog;
+  programlog.HistoryTextOut:=ZCMsgCallBackInterface.Do_HistoryOut();
+  programlog.MessageBoxTextOut:=@ShowMessageForLog;
+  programlog.WarningBoxTextOut:=@ShowWarningForLog;
+  programlog.ErrorBoxTextOut:=@ShowErrorForLog;
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

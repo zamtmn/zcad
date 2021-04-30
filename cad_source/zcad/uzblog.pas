@@ -21,132 +21,127 @@ unit uzblog;
 {$mode objfpc}{$H+}
 {$modeswitch TypeHelpers}
 interface
-uses UGDBOpenArrayOfByte,gzctnrvectordata,LazLoggerBase,
-     LazLogger,strutils,sysutils{$IFNDEF DELPHI},LazUTF8{$ENDIF},Generics.Collections,
+uses UGDBOpenArrayOfByte,gvector,
+     LazLoggerBase,LazLogger,
+     strutils,sysutils{$IFNDEF DELPHI},LazUTF8{$ENDIF},
+     Generics.Collections,
      uzbnamedhandles,uzbnamedhandleswithdata;
-const {$IFDEF DELPHI}filelog='log/zcad_delphi.log';{$ENDIF}
-      {$IFDEF FPC}
-                  {$IFDEF LINUX}filelog='../../log/zcad_linux.log';{$ENDIF}
-                  {$IFDEF WINDOWS}filelog='../../log/zcad_windows.log';{$ENDIF}
-      {$ENDIF}
-      lp_IncPos=1;
-      lp_DecPos=-lp_IncPos;
-      lp_OldPos=0;
-
-      tsc2ms=2000;
 const
-      MaxLatestLogStrings=99;
+  lp_IncPos=1;
+  lp_DecPos=-lp_IncPos;
+  lp_OldPos=0;
+
+  tsc2ms=2000;
+const
+  MaxLatestLogStrings=99;
 type
   TEntered=record
     Entered:boolean;
     EnteredTo:AnsiString;
   end;
-TDoEnteredHelper = type helper for TEntered
-  function IfEntered:TEntered;
-end;
+  TDoEnteredHelper = type helper for TEntered
+    function IfEntered:TEntered;
+  end;
 
-TModuleDeskData=record
-  enabled:boolean;
-end;
-TModuleDesk=LongInt;
-TModuleDeskNameType=AnsiString;
-TModulesDeskHandles=specialize GTNamedHandlesWithData<TModuleDesk,specialize GTLinearIncHandleManipulator<TModuleDesk>,TModuleDeskNameType,specialize GTStringNamesUPPERCASE<TModuleDeskNameType>,TModuleDeskData>;
+  TModuleDeskData=record
+    enabled:boolean;
+  end;
+  TModuleDesk=LongInt;
+  TModuleDeskNameType=AnsiString;
+  TModulesDeskHandles=specialize GTNamedHandlesWithData<TModuleDesk,specialize GTLinearIncHandleManipulator<TModuleDesk>,TModuleDeskNameType,specialize GTStringNamesUPPERCASE<TModuleDeskNameType>,TModuleDeskData>;
 
-TLogLevelType=(LLTInfo,LLTWarning,LLTError);
-TLogLevelData=record
-  LogLevelType:TLogLevelType;
-end;
-TLogLevel=Byte;
-TLogLevelHandleNameType=AnsiString;
-TLogLevelsHandles=specialize GTNamedHandlesWithData<TLogLevel,specialize GTLinearIncHandleManipulator<TLogLevel>,TLogLevelHandleNameType,specialize GTStringNamesUPPERCASE<TLogLevelHandleNameType>,TLogLevelData>;
+  TLogLevelType=(LLTInfo,LLTWarning,LLTError);
+  TLogLevelData=record
+    LogLevelType:TLogLevelType;
+  end;
+  TLogLevel=Byte;
+  TLogLevelHandleNameType=AnsiString;
+  TLogLevelsHandles=specialize GTNamedHandlesWithData<TLogLevel,specialize GTLinearIncHandleManipulator<TLogLevel>,TLogLevelHandleNameType,specialize GTStringNamesUPPERCASE<TLogLevelHandleNameType>,TLogLevelData>;
+
+  TSplashTextOutProc=procedure (s:string;pm:boolean);
+  THistoryTextOutMethod=procedure (s:string) of object;
+  THistoryTextOutProc=procedure (s:string);
+  PTMyTimeStamp=^TMyTimeStamp;
+  TMyTimeStamp=record
+                     time:TDateTime;
+                     rdtsc:int64;
+  end;
+  TLatestLogStrings=array of AnsiString;
+  TLogLevelAliasDic=specialize TDictionary<AnsiChar,TLogLevel>;
+  TTimeBuf=specialize TVector<TMyTimeStamp>;
+  tlog=object
+             LogFileName:AnsiString;
+             FileHandle:cardinal;
+             Indent:integer;
+             LatestLogStrings:TLatestLogStrings;
+             LatestLogStringsCount,TotalLogStringsCount:integer;
+
+             LogLevels:TLogLevelsHandles;
+             LogLevelAliasDic:TLogLevelAliasDic;
+             CurrentLogLevel:TLogLevel;
+             DefaultLogLevel:TLogLevel;
+
+
+             ModulesDesks:TModulesDeskHandles;
+
+             NewModuleDesk:TModuleDeskData;
+             DefaultModuleDeskIndex:TModuleDesk;
+             TimeBuf:TTimeBuf;
+
+             LM_Trace:TLogLevel;     // — вывод всего подряд. На тот случай, если Debug не позволяет локализовать ошибку.
+
+             SplashTextOut:TSplashTextOutProc;
+             HistoryTextOut:THistoryTextOutMethod;
+             MessageBoxTextOut,WarningBoxTextOut,ErrorBoxTextOut:THistoryTextOutProc;
+
+
+             constructor init(fn:AnsiString;TraceModeName:TLogLevelHandleNameType;TraceModeAlias:AnsiChar);
+             destructor done;virtual;
+
+             procedure WriteLogHeader;
+
+             function RegisterLogLevel(LogLevelName:TLogLevelHandleNameType;LLAlias:AnsiChar;data:TLogLevelData):TLogLevel;
+
+             function RegisterModule(ModuleName:TModuleDeskNameType):TModuleDesk;
+             procedure EnableModule(ModuleName:TModuleDeskNameType);
+             procedure DisableModule(ModuleName:TModuleDeskNameType);
+             procedure EnableAllModules;
+
+             procedure SetCurrentLogLevel(LogLevel:TLogLevel;silent:boolean=false);
+             procedure SetDefaultLogLevel(LogLevel:TLogLevel;silent:boolean=false);
+
+
+
+             procedure AddStrToLatest(str:AnsiString);
+             procedure WriteLatestToFile(var f:system.text);
+             procedure LogOutStrFast(str:AnsiString;IncIndent:integer);virtual;
+             procedure WriteToLog(s:AnsiString;todisk:boolean;t,dt:TDateTime;tick,dtick:int64;IncIndent:integer);virtual;
+             procedure OpenLog;
+             procedure CloseLog;
+             procedure CreateLog;
+
+             function IsNeedToLog(LogMode:TLogLevel;LMDI:TModuleDesk):boolean;
+
+             function Enter(EnterTo:AnsiString;LogMode:TLogLevel=1;LMDI:TModuleDesk=1):TEntered;
+             procedure Leave(AEntered:TEntered);
+
+             procedure LogOutStr(str:AnsiString;IncIndent:integer;LogMode:TLogLevel=1;LMDI:TModuleDesk=1);virtual;
+             procedure LogOutFormatStr(Const Fmt:AnsiString;const Args :Array of const;IncIndent:integer;LogMode:TLogLevel;LMDI:TModuleDesk=1);virtual;
+             procedure ZOnDebugLN(Sender: TObject; S: string; var Handled: Boolean);
+             private
+             procedure ProcessStr(str:AnsiString;IncIndent:integer);virtual;
+             procedure ProcessStrToLog(str:AnsiString;IncIndent:integer;todisk:boolean);virtual;
+
+             function LogMode2string(LogMode:TLogLevel):TLogLevelHandleNameType;
+
+      end;
+
+  function LLD(_LLD:TLogLevelType):TLogLevelData;
 var
-          LM_Trace:TLogLevel;     // — вывод всего подряд. На тот случай, если Debug не позволяет локализовать ошибку.
-type
-TSplashTextOutProc=procedure (s:string;pm:boolean);
-THistoryTextOutMethod=procedure (s:string) of object;
-THistoryTextOutProc=procedure (s:string);
-PTMyTimeStamp=^TMyTimeStamp;
-TMyTimeStamp=record
-                   time:TDateTime;
-                   rdtsc:int64;
-end;
-TLatestLogStrings=array of AnsiString;
-TLogLevelAliasDic=specialize TDictionary<AnsiChar,TLogLevel>;
-
-//PTDateTime=^TDateTime;
-{EXPORT+}
-ptlog=^tlog;
-{REGISTEROBJECTTYPE tlog}
-tlog= object
-           LogFileName:AnsiString;
-           FileHandle:cardinal;
-           Indent:integer;
-           LatestLogStrings:TLatestLogStrings;
-           LatestLogStringsCount,TotalLogStringsCount:integer;
-
-           LogLevels:TLogLevelsHandles;
-           LogLevelAliasDic:TLogLevelAliasDic;
-           CurrentLogLevel:TLogLevel;
-           DefaultLogLevel:TLogLevel;
-
-
-           ModulesDesks:TModulesDeskHandles;
-
-           NewModuleDesk:TModuleDeskData;
-           DefaultModuleDeskIndex:TModuleDesk;
-
-           constructor init(fn:AnsiString;TraceModeName:TLogLevelHandleNameType;TraceModeAlias:AnsiChar);
-           destructor done;virtual;
-
-           procedure WriteLogHeader;
-
-           function RegisterLogLevel(LogLevelName:TLogLevelHandleNameType;LLAlias:AnsiChar;data:TLogLevelData):TLogLevel;
-
-           function RegisterModule(ModuleName:TModuleDeskNameType):TModuleDesk;
-           procedure EnableModule(ModuleName:TModuleDeskNameType);
-           procedure DisableModule(ModuleName:TModuleDeskNameType);
-           procedure EnableAllModules;
-
-           procedure SetCurrentLogLevel(LogLevel:TLogLevel;silent:boolean=false);
-           procedure SetDefaultLogLevel(LogLevel:TLogLevel;silent:boolean=false);
-
-
-
-           procedure AddStrToLatest(str:AnsiString);
-           procedure WriteLatestToFile(var f:system.text);
-           procedure LogOutStrFast(str:AnsiString;IncIndent:integer);virtual;
-           procedure WriteToLog(s:AnsiString;todisk:boolean;t,dt:TDateTime;tick,dtick:int64;IncIndent:integer);virtual;
-           procedure OpenLog;
-           procedure CloseLog;
-           procedure CreateLog;
-
-           function IsNeedToLog(LogMode:TLogLevel;LMDI:TModuleDesk):boolean;
-
-           function Enter(EnterTo:AnsiString;LogMode:TLogLevel=1;LMDI:TModuleDesk=1):TEntered;
-           procedure Leave(AEntered:TEntered);
-
-           procedure LogOutStr(str:AnsiString;IncIndent:integer;LogMode:TLogLevel=1;LMDI:TModuleDesk=1);virtual;
-           procedure LogOutFormatStr(Const Fmt:AnsiString;const Args :Array of const;IncIndent:integer;LogMode:TLogLevel;LMDI:TModuleDesk=1);virtual;
-           procedure ZOnDebugLN(Sender: TObject; S: string; var Handled: Boolean);
-           private
-           procedure ProcessStr(str:AnsiString;IncIndent:integer);virtual;
-           procedure ProcessStrToLog(str:AnsiString;IncIndent:integer;todisk:boolean);virtual;
-
-           function LogMode2string(LogMode:TLogLevel):TLogLevelHandleNameType;
-
-    end;
-{EXPORT-}
-procedure LogOut(s:AnsiString);
-function LLD(_LLD:TLogLevelType):TLogLevelData;
-var //programlog:tlog;
    VerboseLog:boolean;
-   SplashTextOut:TSplashTextOutProc;
-   HistoryTextOut:THistoryTextOutMethod;
-   MessageBoxTextOut,WarningBoxTextOut,ErrorBoxTextOut:THistoryTextOutProc;
 implementation
 var
-    PerfomaneBuf:GDBOpenArrayOfByte;
-    TimeBuf:specialize GZVectorData<TMyTimeStamp>;
+  PerfomaneBuf: GDBOpenArrayOfByte;
 function TDoEnteredHelper.IfEntered:TEntered;
 begin
   result.Entered:=Entered;
@@ -160,27 +155,6 @@ function tlog.LogMode2string(LogMode:TLogLevel):AnsiString;
 begin
   result:=LogLevels.GetHandleName(LogMode);
   if result='' then result:='LM_Unknown';
-end;
-procedure LogOut(s:AnsiString);
-var
-   FileHandle:cardinal;
-   logname:string;
-begin
-     if assigned(SplashTextOut) then
-                                   SplashTextOut(s,true);
-     logname:={$IFNDEF DELPHI}SysToUTF8{$ENDIF}(ExtractFilePath(paramstr(0)))+filelog+'hard';
-     FileHandle:=0;
-     if not fileexists({$IFNDEF DELPHI}UTF8ToSys{$ENDIF}(logname)) then
-                                   FileHandle:=FileCreate({$IFNDEF DELPHI}UTF8ToSys{$ENDIF}(logname))
-                                else
-                                    FileHandle := FileOpen({$IFNDEF DELPHI}UTF8ToSys{$ENDIF}(logname), fmOpenWrite);
-     FileSeek(FileHandle, 0, 2);
-
-        s:=s+#13#10;
-        FileWrite(FileHandle,s[1],length(s));
-
-     fileclose(FileHandle);
-     FileHandle:=0;
 end;
 function MyTimeToStr(MyTime:TDateTime):string;
 var
@@ -287,12 +261,12 @@ var
 begin
      CurrentTime:=mynow();
 
-     if timebuf.Count>0 then
+     if timebuf.size>0 then
                             begin
-                                 FromStartTime:=CurrentTime.time-PTMyTimeStamp(TimeBuf.getDataMutable(0))^.time;
-                                 DeltaTime:=CurrentTime.time-PTMyTimeStamp(TimeBuf.getDataMutable(timebuf.Count-1))^.time;
-                                 tick:=CurrentTime.rdtsc-PTMyTimeStamp(TimeBuf.getDataMutable(0))^.rdtsc;
-                                 dtick:=CurrentTime.rdtsc-PTMyTimeStamp(TimeBuf.getDataMutable(timebuf.Count-1))^.rdtsc;
+                                 FromStartTime:=CurrentTime.time-PTMyTimeStamp(TimeBuf.Mutable[0])^.time;
+                                 DeltaTime:=CurrentTime.time-PTMyTimeStamp(TimeBuf.Mutable[timebuf.Size-1])^.time;
+                                 tick:=CurrentTime.rdtsc-PTMyTimeStamp(TimeBuf.Mutable[0])^.rdtsc;
+                                 dtick:=CurrentTime.rdtsc-PTMyTimeStamp(TimeBuf.Mutable[timebuf.Size-1])^.rdtsc;
                             end
                         else
                             begin
@@ -310,14 +284,15 @@ else if IncIndent>0 then
                            WriteToLog(str,todisk,FromStartTime,DeltaTime,tick,dtick,IncIndent);
                            inc(Indent,IncIndent);
 
-                           timebuf.PushBackData(CurrentTime);
+                           timebuf.PushBack(CurrentTime);
                       end
                   else
                       begin
                            inc(Indent,IncIndent);
                            WriteToLog(str,todisk,FromStartTime,DeltaTime,tick,dtick,IncIndent);
 
-                           dec(timebuf.Count);
+                           timebuf.PopBack;
+                           //dec(timebuf.Count);
                       end;
 end;
 procedure tlog.WriteLatestToFile(var f:system.text);
@@ -475,10 +450,10 @@ begin
      CurrentTime:=mynow();
      logfilename:=fn;
      PerfomaneBuf.init({$IFDEF DEBUGBUILD}'{39063C66-9D18-4707-8AD3-97DFBCB23185}',{$ENDIF}5*1024);
-     TimeBuf.init({$IFDEF DEBUGBUILD}'{6EE1BC6B-1177-40B0-B4A5-793D66BF8BC8}',{$ENDIF}50{,sizeof(TMyTimeStamp)});
+     TimeBuf:=TTimeBuf.Create;//init({$IFDEF DEBUGBUILD}'{6EE1BC6B-1177-40B0-B4A5-793D66BF8BC8}',{$ENDIF}50{,sizeof(TMyTimeStamp)});
      Indent:=1;
      CreateLog;
-     timebuf.PushBackData(CurrentTime);
+     timebuf.PushBack(CurrentTime);
      setlength(LatestLogStrings,MaxLatestLogStrings);
      LatestLogStringsCount:=0;
      TotalLogStringsCount:=0;
@@ -596,7 +571,7 @@ begin
                                          WriteToLog(format('Log module name "%s" state: Disabled',[ModulesDesks.HandleDataVector[I].N]),true,CurrentTime.time,0,CurrentTime.rdtsc,0,0);
      CurrentTime:=mynow();
      WriteToLog('-------------------------Log ended-------------------------',true,CurrentTime.time,0,CurrentTime.rdtsc,0,0);
-     TimeBuf.done;
+     TimeBuf.Front;
      PerfomaneBuf.done;
      setlength(LatestLogStrings,0);
      LogLevels.done;

@@ -1,61 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <CONFIG>
   <MainConfig>
-    <Nodes ChildCount="1">
-      <Item1 Name="AnchorDockPanel1" Type="CustomSite" ChildCount="1">
-        <Bounds Top="4" Left="7" Width="1332" Height="923"/>
+    <Nodes ChildCount="1" PixelsPerInch="0">
+      <Item1 Name="AnchorDockPanel1" Type="CustomSite" ChildCount="1" PixelsPerInch="0">
+        <Bounds Top="5" Width="1332" Height="923"/>
         <Anchors Align="Client"/>
-        <Item1 Name="AnchorDockSite9" Type="Layout" ChildCount="7">
+        <Item1 Name="AnchorDockSite9" Type="Layout" ChildCount="7" PixelsPerInch="144">
           <Bounds Width="1286" Height="782"/>
           <Anchors Align="Client"/>
-          <Item1 Name="AnchorDockSite10" Type="Pages" ChildCount="2">
+          <Item1 Name="AnchorDockSite10" Type="Pages" ChildCount="2" PixelsPerInch="144">
             <Bounds Top="637" Left="305" Width="981" Height="145"/>
             <Anchors Top="AnchorDockSplitter1" Left="AnchorDockSplitter2"/>
-            <Item1 Name="CommandLine" Type="Control">
+            <Item1 Name="CommandLine" Type="Control" PixelsPerInch="144">
               <Bounds Width="960" Height="107"/>
               <Anchors Align="Client"/>
             </Item1>
-            <Item2 Name="TOOLPALETTE_PSDat" Type="Control">
+            <Item2 Name="TOOLPALETTE_PSDat" Type="Control" PixelsPerInch="144">
               <Bounds Width="964" Height="129"/>
               <Anchors Align="Client"/>
             </Item2>
           </Item1>
-          <Item2 Name="AnchorDockSplitter1" Type="SplitterHorizontal">
+          <Item2 Name="AnchorDockSplitter1" Type="SplitterHorizontal" PixelsPerInch="144">
             <Bounds Top="633" Left="305" Width="981" Height="4"/>
             <Anchors Left="AnchorDockSplitter2"/>
           </Item2>
-          <Item3 Name="PageControl" Type="Control">
+          <Item3 Name="PageControl" Type="Control" PixelsPerInch="144">
             <Bounds Left="305" Width="707" Height="633"/>
             <Anchors Left="AnchorDockSplitter2" Right="AnchorDockSplitter3" Bottom="AnchorDockSplitter1"/>
           </Item3>
-          <Item4 Name="AnchorDockSplitter2" Type="SplitterVertical">
+          <Item4 Name="AnchorDockSplitter2" Type="SplitterVertical" PixelsPerInch="144">
             <Bounds Left="301" Width="4" Height="782"/>
           </Item4>
-          <Item5 Name="ObjectInspector" Type="Control">
+          <Item5 Name="ObjectInspector" Type="Control" PixelsPerInch="144">
             <Bounds Width="301" Height="782"/>
             <Anchors Right="AnchorDockSplitter2"/>
           </Item5>
-          <Item6 Name="AnchorDockSplitter3" Type="SplitterVertical">
+          <Item6 Name="AnchorDockSplitter3" Type="SplitterVertical" PixelsPerInch="144">
             <Bounds Left="1012" Width="4" Height="633"/>
             <Anchors Bottom="AnchorDockSplitter1"/>
           </Item6>
-          <Item7 Name="AnchorDockSite11" Type="Pages" ChildCount="4">
+          <Item7 Name="AnchorDockSite11" Type="Pages" ChildCount="4" PixelsPerInch="144">
             <Bounds Left="1016" Width="270" Height="633"/>
             <Anchors Left="AnchorDockSplitter3" Bottom="AnchorDockSplitter1"/>
             <Header PageIndex="3"/>
-            <Item1 Name="NavigatorDevices" Type="Control">
+            <Item1 Name="NavigatorDevices" Type="Control" PixelsPerInch="144">
               <Bounds Width="223" Height="537"/>
               <Anchors Align="Client"/>
             </Item1>
-            <Item2 Name="NavigatorCables" Type="Control">
+            <Item2 Name="NavigatorCables" Type="Control" PixelsPerInch="144">
               <Bounds Width="369" Height="474"/>
               <Anchors Align="Client"/>
             </Item2>
-            <Item3 Name="NavigatorRisers" Type="Control">
+            <Item3 Name="NavigatorRisers" Type="Control" PixelsPerInch="144">
               <Bounds Width="196" Height="474"/>
               <Anchors Align="Client"/>
             </Item3>
-            <Item4 Name="TOOLPALETTE_BlockLib" Type="Control">
+            <Item4 Name="TOOLPALETTE_BlockLib" Type="Control" PixelsPerInch="144">
               <Bounds Width="262" Height="573"/>
               <Anchors Align="Client"/>
             </Item4>
@@ -64,7 +64,7 @@
       </Item1>
     </Nodes>
   </MainConfig>
-  <Settings HeaderStyle="Lines"/>
+  <Settings HeaderStyle="Lines" FloatingWindowsOnTop="True" DockSitesCanBeMinimized="True"/>
   <ToolBarsConfig ItemCount="4">
     <Item0 Name="CoolBarU" Type="CoolBar" ItemCount="1">
       <Item0 Name="Standard" Type="ToolBar" Width="1318"/>

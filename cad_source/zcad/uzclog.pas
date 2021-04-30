@@ -45,14 +45,15 @@ implementation
 
 initialization
 begin
-    programlog.init({$IFNDEF DELPHI}SysToUTF8{$ENDIF}(ExtractFilePath(paramstr(0)))+filelog,'LM_Trace');
-    LM_Debug:=programlog.LogLevels.CreateOrGetHandle('LM_Debug');
-    LM_Info:=programlog.LogLevels.CreateOrGetHandle('LM_Info');
-    LM_Warning:=programlog.LogLevels.CreateOrGetHandle('LM_Warning');
-    LM_Error:=programlog.LogLevels.CreateOrGetHandle('LM_Error');
-    LM_Fatal:=programlog.LogLevels.CreateOrGetHandle('LM_Fatal');
-    LM_Necessarily:=programlog.LogLevels.CreateOrGetHandle('LM_Necessarily');
-    programlog.WriteLogHeader;
+    programlog.init({$IFNDEF DELPHI}SysToUTF8{$ENDIF}(ExtractFilePath(paramstr(0)))+filelog,'LM_Trace','T');
+    LM_Debug:=programlog.RegisterLogLevel('LM_Debug','D',LLD(LLTInfo));
+    LM_Info:=programlog.RegisterLogLevel('LM_Info','I',LLD(LLTInfo));
+    LM_Warning:=programlog.RegisterLogLevel('LM_Warning','W',LLD(LLTWarning));
+    LM_Error:=programlog.RegisterLogLevel('LM_Error','E',LLD(LLTError));
+    LM_Fatal:=programlog.RegisterLogLevel('LM_Fatal','F',LLD(LLTError));
+    LM_Necessarily:=programlog.RegisterLogLevel('LM_Necessarily','N',LLD(LLTInfo));
+    programlog.SetDefaultLogLevel(LM_Debug);
+    programlog.SetCurrentLogLevel(LM_Info);
 end;
 finalization
     debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');

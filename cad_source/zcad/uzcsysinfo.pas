@@ -159,7 +159,7 @@ begin
                                            disabledefaultmodule:=true;
                                        end
        else if programlog.LogLevels.TryGetHandle(param,ll)then
-                                       programlog.SetLogLevel(ll);
+                                       programlog.SetCurrentLogLevel(ll);
        end;
      debugln('{N-}end;{ProcessParamStr}');
      //programlog.LogOutStr('end;{ProcessParamStr}',lp_DecPos,LM_Necessarily);

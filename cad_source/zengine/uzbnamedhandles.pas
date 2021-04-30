@@ -46,7 +46,7 @@ type
      HandleNameRegister:THandleNameRegister;
    constructor init;
    destructor done;virtual;
-   procedure RegisterHandleName(Handle:GHandleType;HandleName:GNameType);
+   procedure RegisterHandleName(Handle:GHandleType;HandleName:GNameType);virtual;
    function GetHandleByName(HandleName:GNameType):GHandleType;
    function CreateOrGetHandle(HandleName:GNameType):GHandleType;
    function TryGetHandle(HandleName:GNameType;out Handle:GHandleType):boolean;

@@ -20,7 +20,7 @@ unit uzcfsplash;
 {$INCLUDE def.inc}
 interface
 uses
- uzcsysparams,uzbpaths,uzclog,uniqueinstanceraw,uzcstrconsts,uzbstrproc,Forms,
+ uzcsysparams,uzbpaths,uzblog,uniqueinstanceraw,uzcstrconsts,uzbstrproc,Forms,
  stdctrls, Controls, Graphics,ExtCtrls,uzbtypesbase,uzcsysinfo,LazUTF8,sysutils,
  LazLogger;
 type

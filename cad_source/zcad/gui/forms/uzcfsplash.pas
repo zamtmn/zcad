@@ -20,7 +20,7 @@ unit uzcfsplash;
 {$INCLUDE def.inc}
 interface
 uses
- uzcsysparams,uzbpaths,uzblog,uniqueinstanceraw,uzcstrconsts,uzbstrproc,Forms,
+ uzcsysparams,uzbpaths,uzclog,uniqueinstanceraw,uzcstrconsts,uzbstrproc,Forms,
  stdctrls, Controls, Graphics,ExtCtrls,uzbtypesbase,uzcsysinfo,LazUTF8,sysutils,
  LazLogger;
 type
@@ -107,7 +107,7 @@ initialization
   Application.Initialize;
   //RequireDerivedFormResource:=false;
   createsplash(SysParam.saved.UniqueInstance);
-  SplashTextOut:=SplashTextOutProc;
+  programlog.SplashTextOut:=SplashTextOutProc;
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   removesplash;

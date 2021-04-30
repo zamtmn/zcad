@@ -19,7 +19,7 @@
 unit uzcreglog;
 {$INCLUDE def.inc}
 interface
-uses uzclog,uzcinterface,uzcuidialogs,uzcuitypes,uzelongprocesssupport,
+uses uzblog,uzclog,uzcinterface,uzcuidialogs,uzcuitypes,uzelongprocesssupport,
      {$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}LCLProc,Forms;
 implementation
 
@@ -64,13 +64,13 @@ end;
 
 initialization
 
-  LPSTIMINGModuleDeskIndex:=programlog.registermodule(LPSTIMINGModuleName);
+  LPSTIMINGModuleDeskIndex:=programlog.RegisterModule(LPSTIMINGModuleName);
 
   lps.AddOnLPEndHandler(TLogHelper.EndLongProcessHandler);
-  uzclog.HistoryTextOut:=ZCMsgCallBackInterface.Do_HistoryOut();
-  uzclog.MessageBoxTextOut:=@ShowMessageForLog;
-  uzclog.WarningBoxTextOut:=@ShowWarningForLog;
-  uzclog.ErrorBoxTextOut:=@ShowErrorForLog;
+  uzblog.HistoryTextOut:=ZCMsgCallBackInterface.Do_HistoryOut();
+  uzblog.MessageBoxTextOut:=@ShowMessageForLog;
+  uzblog.WarningBoxTextOut:=@ShowWarningForLog;
+  uzblog.ErrorBoxTextOut:=@ShowErrorForLog;
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

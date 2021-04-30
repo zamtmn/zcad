@@ -20,7 +20,7 @@ unit uzcsysinfo;
 {$INCLUDE def.inc}
 interface
 uses
-  MacroDefIntf,uzmacros,uzcsysparams,LCLProc,uzclog,uzbpaths,uzbtypesbase,Forms,uzbtypes,
+  MacroDefIntf,uzmacros,uzcsysparams,LCLProc,uzclog,uzblog,uzbpaths,uzbtypesbase,Forms,uzbtypes,
   {$IFDEF WINDOWS}ShlObj,{$ENDIF}{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils;
 {$INCLUDE zcadrev.inc}
 const
@@ -140,13 +140,13 @@ begin
        else if (paramUC='UPDATEPO')then
                                                                SysParam.saved.UpdatePO:=true
        else if (paramUC='LEAM')then
-                                   programlog.enableallmodules
+                                   programlog.EnableAllModules
        else if pos(LogEnableModulePrefix,paramUC)=1 then
                                        begin
                                          paramUC:=copy(paramUC,
                                                       length(LogEnableModulePrefix)+1,
                                                       length(paramUC)-length(LogEnableModulePrefix)+1);
-                                         programlog.enablemodule(paramUC);
+                                         programlog.EnableModule(paramUC);
                                        end
        else if pos(LogDisableModulePrefix,paramUC)=1 then
                                        begin
@@ -154,7 +154,7 @@ begin
                                                       length(LogEnableModulePrefix)+1,
                                                       length(paramUC)-length(LogEnableModulePrefix)+1);
                                          if paramUC<>'DEFAULT'then
-                                           programlog.disablemodule(paramUC)
+                                           programlog.DisableModule(paramUC)
                                          else
                                            disabledefaultmodule:=true;
                                        end
@@ -217,7 +217,7 @@ begin
 
      debugln('{N-}end;{GetSysInfo}');
      //programlog.LogOutStr('end;{GetSysInfo}',lp_DecPos,LM_Necessarily);
-     if disabledefaultmodule then programlog.disablemodule('DEFAULT');
+     if disabledefaultmodule then programlog.DisableModule('DEFAULT');
 end;
 class function TZCADPathsMacroMethods.MacroFuncZCADPath(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
 begin

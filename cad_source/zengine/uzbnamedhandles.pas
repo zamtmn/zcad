@@ -98,7 +98,7 @@ begin
 end;
 class function GTStringNamesUPPERCASE<GNameType>.Standartize(name:GNameType):GNameType;
 begin
-  result:=UpperCase(name);
+  result:=UpperCase(string{без string не компилится в 3.2}(name));
 end;
 
 constructor GTNamedHandles<GHandleType,GHandleManipulator,GNameType,GNameManipulator>.init;

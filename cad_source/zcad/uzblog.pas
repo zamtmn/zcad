@@ -19,6 +19,7 @@
 unit uzblog;
 {$INCLUDE def.inc}
 {$mode objfpc}{$H+}
+{$modeswitch TypeHelpers}
 interface
 uses UGDBOpenArrayOfByte,gzctnrvectordata,LazLoggerBase,
      LazLogger,strutils,sysutils{$IFNDEF DELPHI},LazUTF8{$ENDIF},Generics.Collections,
@@ -36,6 +37,14 @@ const {$IFDEF DELPHI}filelog='log/zcad_delphi.log';{$ENDIF}
 const
       MaxLatestLogStrings=99;
 type
+  TEntered=record
+    Entered:boolean;
+    EnteredTo:AnsiString;
+  end;
+TDoEnteredHelper = type helper for TEntered
+  function IfEntered:TEntered;
+end;
+
 TModuleDeskData=record
   enabled:boolean;
 end;
@@ -113,6 +122,9 @@ tlog= object
 
            function IsNeedToLog(LogMode:TLogLevel;LMDI:TModuleDesk):boolean;
 
+           function Enter(EnterTo:AnsiString;LogMode:TLogLevel=1;LMDI:TModuleDesk=1):TEntered;
+           procedure Leave(AEntered:TEntered);
+
            procedure LogOutStr(str:AnsiString;IncIndent:integer;LogMode:TLogLevel=1;LMDI:TModuleDesk=1);virtual;
            procedure LogOutFormatStr(Const Fmt:AnsiString;const Args :Array of const;IncIndent:integer;LogMode:TLogLevel;LMDI:TModuleDesk=1);virtual;
            procedure ZOnDebugLN(Sender: TObject; S: string; var Handled: Boolean);
@@ -135,6 +147,11 @@ implementation
 var
     PerfomaneBuf:GDBOpenArrayOfByte;
     TimeBuf:specialize GZVectorData<TMyTimeStamp>;
+function TDoEnteredHelper.IfEntered:TEntered;
+begin
+  result.Entered:=Entered;
+  Result.EnteredTo:=EnteredTo;
+end;
 function LLD(_LLD:TLogLevelType):TLogLevelData;
 begin
   result.LogLevelType:=_LLD;
@@ -356,6 +373,24 @@ begin
      ProcessStrToLog(str,IncIndent,true);
      AddStrToLatest('  '+str);
 end;
+function tlog.Enter(EnterTo:AnsiString;LogMode:TLogLevel=1;LMDI:TModuleDesk=1):TEntered;
+begin
+  if IsNeedToLog(LogMode,lmdi) then begin
+    result.Entered:=true;
+    result.EnteredTo:=EnterTo;
+    ProcessStr(EnterTo,lp_IncPos);
+  end else begin
+    result.Entered:=false;
+    result.EnteredTo:='';
+  end;
+end;
+
+procedure tlog.Leave(AEntered:TEntered);
+begin
+  if AEntered.Entered then
+    ProcessStr(format('end; {%s}',[AEntered.EnteredTo]),lp_DecPos);
+end;
+
 procedure tlog.logoutstr(str:AnsiString;IncIndent:integer;LogMode:TLogLevel;LMDI:TModuleDesk);
 begin
      if IsNeedToLog(LogMode,lmdi) then
@@ -398,7 +433,7 @@ begin
 end;
 function tlog.RegisterLogLevel(LogLevelName:TLogLevelHandleNameType;LLAlias:AnsiChar;data:TLogLevelData):TLogLevel;
 begin
-  result:=LogLevels.CreateOrGetHandleAndSetData('LM_Debug',LLD(LLTInfo));
+  result:=LogLevels.CreateOrGetHandleAndSetData(LogLevelName,data);
   if LLAlias<>#0 then
     LogLevelAliasDic.Add(LLAlias,result);
 end;

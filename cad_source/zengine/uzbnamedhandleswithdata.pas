@@ -43,9 +43,10 @@ type
    constructor init;
    function CreateHandle:GHandleType;virtual;
    destructor done;virtual;
-   procedure RegisterHandleName(Handle:GHandleType;HandleName:GNameType);
+   procedure RegisterHandleName(Handle:GHandleType;HandleName:GNameType);virtual;
    function GetPLincedData(Handle:GHandleType):PGLincedData;
    function GetHandleName(Handle:GHandleType):GNameType;
+   function CreateOrGetHandleAndSetData(HandleName:GNameType;data:GLincedData):GHandleType;
  end;
 
 implementation
@@ -96,6 +97,11 @@ end;
 function GTNamedHandlesWithData<GHandleType,GHandleManipulator,GNameType,GNameManipulator,GLincedData>.GetHandleName(Handle:GHandleType):GNameType;
 begin
   result:=HandleDataVector.Mutable[GHandleManipulator.GetIndex(Handle)]^.N;
+end;
+function GTNamedHandlesWithData<GHandleType,GHandleManipulator,GNameType,GNameManipulator,GLincedData>.CreateOrGetHandleAndSetData(HandleName:GNameType;data:GLincedData):GHandleType;
+begin
+  result:=CreateOrGetHandle(HandleName);
+  HandleDataVector.Mutable[GHandleManipulator.GetIndex(result)]^.D:=data;
 end;
 begin
 end.

@@ -5,5 +5,5 @@ var
    EL_Cab_AddLength:GDBDouble;(*'Добавлять к длине кабеля'*)
 implementation
 begin
-   EL_Cab_AddLength:=1.0;
+   EL_Cab_AddLength:=0.0;
 end.

@@ -24,8 +24,8 @@ begin
    CABLE_Type:=TCT_Control;
    Amount:=0.0;
    LENGTH_RoundTo:=0;
-   LENGTH_Add:=4.0;
-   LENGTH_KReserve:=1.3;
+   LENGTH_Add:=0.0;
+   LENGTH_KReserve:=1.2;
    Segment:=0;
    LENGTH_Scale:=0.1;
    CABLE_Material:='не задан ??;

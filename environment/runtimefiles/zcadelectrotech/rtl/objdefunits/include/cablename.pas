@@ -14,6 +14,6 @@ begin
    NMO_Name:='??';
    NMO_Prefix:='';
    NMO_Suffix:='';
-   NMO_BaseName:='ШС';
-   NMO_Template:='@@[NMO_Prefix]@@[NMO_BaseName]@@[NMO_Suffix]';
+   NMO_BaseName:='Н';
+   NMO_Template:='@@[GC_HDShortName]@@[GC_HDGroup]';
 end.

@@ -45,8 +45,9 @@ GTSimpleHandles<GHandleType,GHandleManipulator>=object
   var
     Seed:GHandleType;
   constructor init;
-  function GetHandle:GHandleType;
-  procedure SetSeed(const Value:GHandleType);
+  destructor done;virtual;
+  function CreateHandle:GHandleType;virtual;
+  //procedure SetSeed(const Value:GHandleType);
 end;
 
 implementation
@@ -97,17 +98,22 @@ constructor GTSimpleHandles<GHandleType,GHandleManipulator>.init;
 begin
   Seed:=GHandleManipulator.GetStartValue;
 end;
-function GTSimpleHandles<GHandleType,GHandleManipulator>.GetHandle:GHandleType;
+
+destructor GTSimpleHandles<GHandleType,GHandleManipulator>.done;
+begin
+end;
+
+function GTSimpleHandles<GHandleType,GHandleManipulator>.CreateHandle:GHandleType;
 begin
   GHandleManipulator.NextValue(Seed);
   if seed=0 then
     Raise Exception.CreateFmt('GTSimpleHandles<GHandleType,GHandleManipulator>.GetHandle overflow',[]);
   result:=Seed;
 end;
-procedure GTSimpleHandles<GHandleType,GHandleManipulator>.SetSeed(const Value:GHandleType);
+{procedure GTSimpleHandles<GHandleType,GHandleManipulator>.SetSeed(const Value:GHandleType);
 begin
   Seed:=Value;
-end;
+end;}
 
 begin
 end.

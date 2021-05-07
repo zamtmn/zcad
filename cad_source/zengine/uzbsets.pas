@@ -29,6 +29,7 @@ GTSet<GSetType,GEnumType>=object
     TEnumItemType=GEnumType;
     TEnumType=GTSimpleHandles<GEnumType,GTHandleByteManipulator<GEnumType>>;
   constructor init;
+  destructor done;virtual;
   function GetEnum:GEnumType;virtual;
   function GetEmpty:GSetType;virtual;
   function GetFull:GSetType;virtual;
@@ -60,7 +61,7 @@ type
 implementation
 class function GTSetWithGlobalEnums<GSetType,GEnumType>.GetGlobalEnum:GEnumType;
 begin
-  Result:=GlobalEnums.getHandle;
+  Result:=GlobalEnums.CreateHandle;
   GlobalFull:=GlobalFull or Result;// GetByte(Result)
   //t:=GlobalFull;
 end;
@@ -68,7 +69,7 @@ function GTSetWithGlobalEnums<GSetType,GEnumType>.GetEnum:GEnumType;
 begin
   result:=inherited;
   if ((Full)and(GlobalFull))<>0 then
-    Raise Exception.CreateFmt('GTSetWithGlobalEnums<GSetType,GEnumType>.GetHandle overflow',[]);
+    Raise Exception.CreateFmt('GTSetWithGlobalEnums<GSetType,GEnumType>.CreateHandle overflow',[]);
 end;
 function GTSetWithGlobalEnums<GSetType,GEnumType>.GetEmpty:GSetType;
 begin
@@ -95,9 +96,14 @@ begin
   Empty:=0;
   Full:=0;
 end;
+destructor GTSet<GSetType,GEnumType>.done;
+begin
+  Enums.done;
+end;
+
 function GTSet<GSetType,GEnumType>.GetEnum:GEnumType;
 begin
-  Result:=Enums.getHandle;
+  Result:=Enums.CreateHandle;
   Full:=Full or Result;// GetByte(Result)
 end;
 function GTSet<GSetType,GEnumType>.GetEmpty:GSetType;

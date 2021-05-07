@@ -23,20 +23,21 @@ uses uzbpaths,UUnitManager,uzcsysvars,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
      uzbstrproc,Varman,languade,SysUtils,
      UBaseTypeDescriptor,uzbtypes,UGDBOpenArrayOfByte, strmy, varmandef,
      uzcsysparams,uzcsysinfo,TypeDescriptors,URecordDescriptor,
-     uzclog,uzbmemman,LazLogger;
+     uzblog,uzclog,uzbmemman,LazLogger;
 implementation
 {$IFNDEF WINDOWS}
 var
   ptd:PUserTypeDescriptor;
 {$ENDIF}
 initialization;
-     programlog.logoutstr('uzcregsystempas.initialization',lp_IncPos,LM_Debug);
+     with programlog.Enter('uzcregsystempas.initialization',LM_Debug) do begin
      if SysUnit=nil then
        begin
          units.loadunit(SupportPath,InterfaceTranslate,expandpath('*rtl/system.pas'),nil);
          SysUnit:=units.findunit(SupportPath,InterfaceTranslate,'System');
        end;
-     programlog.logoutstr('end; {uzcregsystempas.initialization}',lp_DecPos,LM_Debug);
+     programlog.leave(IfEntered);
+     end;
 finalization;
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization')
 end.

@@ -153,7 +153,7 @@ end;
 function CommandRTEdObjectDef.MouseMoveCallback(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger;
 begin
   //result:=0;
-  programlog.logoutstr('CommandRTEdObjectDef.MouseMoveCallback',0,LM_Trace);
+  programlog.logoutstr('CommandRTEdObjectDef.MouseMoveCallback',0);
      { if button =1  then
                         begin
                             button:=-button;

@@ -21,7 +21,7 @@ unit uzctranslations;
 
 interface
 uses uzbpaths,LCLVersion,uzbstrproc{$IFNDEF DELPHI},LazUTF8,gettext,translations,
-     fileutil,LResources{$ENDIF},uzcsysinfo,sysutils,uzclog,forms,Classes, typinfo,
+     fileutil,LResources{$ENDIF},uzcsysinfo,sysutils,uzclog,uzblog,forms,Classes, typinfo,
      uzcsysparams,LazLogger;
 
 const
@@ -66,7 +66,7 @@ const
   identpref='zcadexternal.';
 implementation
 var
-   TranslateLogModuleId:TLogModuleDeskIndex;
+   TranslateLogModuleId:TModuleDesk;
 procedure DisableTranslate;
 begin
      inc(DisableTranslateCount);
@@ -281,7 +281,7 @@ procedure initialize;
     end;
 
 initialization
-  TranslateLogModuleId:=programlog.registermodule('TRANSLATOR');
+  TranslateLogModuleId:=programlog.RegisterModule('TRANSLATOR');
   initialize;
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');

@@ -107,7 +107,7 @@ initialization
   Application.Initialize;
   //RequireDerivedFormResource:=false;
   createsplash(SysParam.saved.UniqueInstance);
-  SplashTextOut:=SplashTextOutProc;
+  programlog.SplashTextOut:=SplashTextOutProc;
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   removesplash;

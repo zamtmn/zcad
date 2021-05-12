@@ -495,15 +495,18 @@ begin
                                                         result:=result or CACanUndo;
                                if pdrawing^.GetChangeStampt then
                                                                 result:=result or CADWGChanged;
+                               if pdrawing^.GetConstructEntsCount>0 then
+                                 result:=result or CAConstructRootNotEmpty;
                           end;
      if POGLWnd<>nil then
                          begin
                               if POGLWnd^.SelDesc.Selectedobjcount=1 then
                                                                          result:=result or CASelEnt;
-                              //else
                               if POGLWnd^.SelDesc.Selectedobjcount>0 then
                                                                          result:=result or CASelEnts;
                          end;
+     if commandmanager.pcommandrunning<>nil then
+       result:=result or CAOtherCommandRun;
 end;
 procedure ParseCommand(comm:string; out command,operands:GDBString);
 var

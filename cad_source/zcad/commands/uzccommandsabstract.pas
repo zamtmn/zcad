@@ -21,12 +21,15 @@ unit uzccommandsabstract;
 interface
 uses uzbgeomtypes,uzbtypesbase,uzbtypes,uzglviewareadata,uzclog,gzctnrvectortypes;
 const
-     CADWG=1;
-     CASelEnt=2;
-     CASelEnts=4;
-     CACanUndo=8;
-     CACanRedo=16;
-     CADWGChanged=32;
+     //нужна динамическая регистация
+     CADWG=1;                    //есть открытый чертеж
+     CASelEnt=2;                 //есть выбранный примитив
+     CASelEnts=4;                //есть выбранные примитивы
+     CACanUndo=8;                //можно сделать undo
+     CACanRedo=16;               //можно сделать redo
+     CADWGChanged=32;            //в чертеже есть изменения
+     CAOtherCommandRun=64;       //есть работяющая сейчас команда
+     CAConstructRootNotEmpty=128;//область конструирования не пустая
 
      cmd_ok=-1;
      cmd_error=1;

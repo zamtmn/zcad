@@ -60,6 +60,7 @@ TSimpleDrawing= object(TAbstractDrawing)
                        function GetCurrentRootObjArraySimple:GDBPointer;virtual;
                        function GetBlockDefArraySimple:GDBPointer;virtual;
                        function GetConstructObjRoot:PGDBObjRoot;virtual;
+                       function GetConstructEntsCount:Integer;virtual;
                        function GetSelObjArray:PGDBSelectedObjArray;virtual;
                        function GetLayerTable:PGDBLayerArray;virtual;
                        function GetLTypeTable:PGDBLtypeArray;virtual;
@@ -600,6 +601,16 @@ end;
 function TSimpleDrawing.GetConstructObjRoot:PGDBObjRoot;
 begin
      result:=@ConstructObjRoot;
+end;
+function TSimpleDrawing.GetConstructEntsCount:Integer;
+var
+  pr:PGDBObjRoot;
+begin
+  pr:=GetConstructObjRoot;
+  if pr<>nil then
+    result:=pr^.ObjArray.Count
+  else
+    result:=0;
 end;
 function TSimpleDrawing.GetCurrentRootSimple:GDBPointer;
 begin

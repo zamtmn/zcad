@@ -104,6 +104,8 @@
       <Action Name="ACN_COPY"/>
       <Action Name="ACN_MOVE"/>
       <Action Name="ACN_ROTATE"/>"/>
+      <Action Name="ACN_ROTATEENTS_R"/>"/>
+      <Action Name="ACN_ROTATEENTS_L"/>"/>
       <Action Name="ACN_SCALE"/>
       <Action Name="ACN_STRETCH"/>
       <Action Name="ACN_MIRROR"/>

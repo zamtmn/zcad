@@ -33,6 +33,31 @@ uses
 
 implementation
 
+function IsIt(PType,PChecedType:Pointer):Boolean;
+type
+  vmtRecPtr=^vmtRec;
+  vmtRecPtrPtr=^vmtRecPtr;
+  vmtRec=packed record
+    size,negSize : sizeint;
+    parent: {$ifdef VER3_0}vmtRecPtr{$else}vmtRecPtrPtr{$endif};
+  end;
+var
+  CurrParent:{$ifdef VER3_0}vmtRecPtr{$else}vmtRecPtrPtr{$endif};
+begin
+
+  if PType=PChecedType then
+    exit(true);
+  CurrParent:=vmtRecPtr(PType)^.parent;
+  if CurrParent=nil then
+    exit(false);
+  {$ifndef VER3_0}
+  if CurrParent^=nil then
+    exit(false);
+  {$endif}
+  result:=IsIt({$ifdef VER3_0}CurrParent{$else}CurrParent^{$endif},PChecedType);
+end;
+
+
 function RotateEnts_com(operands:TCommandOperands):TCommandResult;
 var
   pv:pGDBObjEntity;
@@ -65,7 +90,7 @@ begin
     if pv<>nil then
     repeat
       if pv^.Selected then begin
-        if typeof(pv^)=typeof(GDBObjWithLocalCS) then
+        if IsIt(typeof(pv^),typeof(GDBObjWithLocalCS)) then
           pc:=PGDBObjWithLocalCS(pv)^.P_insert_in_WCS
         else
           pc:=Vertexmorph(pv^.vp.BoundingBox.LBN,pv^.vp.BoundingBox.RTF,0.5);

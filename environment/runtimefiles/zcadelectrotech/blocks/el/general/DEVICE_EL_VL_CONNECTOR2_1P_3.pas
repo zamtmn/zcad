@@ -1,4 +1,4 @@
-unit DEVICE_EL_VL_CONNECTOR3_1P_3;
+unit DEVICE_EL_VL_CONNECTOR2_1P_3;
 
 interface
 

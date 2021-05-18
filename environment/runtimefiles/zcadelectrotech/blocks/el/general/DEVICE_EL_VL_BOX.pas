@@ -1,4 +1,4 @@
-unit DEVICE_EL_VL_CONNECTOR3_1P_3;
+unit DEVICE_EL_VL_BOX;
 
 interface
 
@@ -6,27 +6,21 @@ uses system,devices;
 usescopy blocktype;
 usescopy objname;
 usescopy objgroup;
-usescopy addtocable;
-
-var
-
-Power:GDBDouble;(*'Мощность, кВт'*)
 
 implementation
 
 begin
 
-BTY_TreeCoord:='PLAN_EM_Розетка';
+BTY_TreeCoord:='PLAN_EM_Коробка';
 Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 
-NMO_Name:='Т0';
-NMO_BaseName:='Т';
+NMO_Name:='Гр0';
+NMO_BaseName:='Гр';
 NMO_Suffix:='??';
-Power:=0.0;
 
 SerialConnection:=1;
-GC_HeadDevice:='ШР??';
+GC_HeadDevice:='ШО??';
 GC_HDShortName:='??';
 GC_HDGroup:=0;
 

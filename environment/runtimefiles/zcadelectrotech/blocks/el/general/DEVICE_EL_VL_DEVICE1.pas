@@ -16,14 +16,14 @@ implementation
 
 begin
 
-BTY_TreeCoord:='PLAN_EM_Тэн';
+BTY_TreeCoord:='PLAN_EM_Устройство';
 Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 
 NMO_Name:='Т0';
 NMO_BaseName:='Т';
 NMO_Suffix:='??';
-Power:=1.0;
+Power:=0.0;
 
 SerialConnection:=1;
 GC_HeadDevice:='ШР??';

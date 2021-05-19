@@ -23,7 +23,8 @@ uses uzcinterface,uzeffdxf,uzbpaths,uzcsysvars,uzctranslations,sysutils,
      uzcenitiesvariablesextender,uzcstrconsts,uzeconsts,devices,uzccomdb,uzcentcable,uzcentnet,uzeentdevice,TypeDescriptors,uzeffdxfsupport,
      uzetextpreprocessor,UGDBOpenArrayOfByte,uzbtypesbase,uzbtypes,uzeobjectextender,
      uzeentsubordinated,uzeentity,uzeenttext,uzeblockdef,varmandef,Varman,UUnitManager,
-     gzctnrvectortypes,URecordDescriptor,UBaseTypeDescriptor,uzedrawingdef,uzbmemman,uzeentitiesprop;
+     gzctnrvectortypes,URecordDescriptor,UBaseTypeDescriptor,uzedrawingdef,uzbmemman,
+     uzbstrproc,uzeentitiesprop;
 var
    PFCTTD:GDBPointer=nil;
    extvarunit:TUnit;
@@ -249,7 +250,10 @@ end;
 
 function TextIOLoad_TMPL1(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:PGDBObjText):boolean;
 begin
-     pent^.template:=_value;
+  if isNotUtf8(_value)then
+    pent^.template:=Tria_AnsiToUtf8(_value)
+  else
+    pent^.template:=_value;
      result:=true;
 end;
 procedure TextIOSave_TMPL1(var outhandle:GDBOpenArrayOfByte;PEnt:PGDBObjText);

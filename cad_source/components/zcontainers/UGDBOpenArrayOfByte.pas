@@ -41,7 +41,7 @@ GDBOpenArrayOfByte=object(GZVector{-}<byte>{//})
                       procedure TXTAddGDBString(s:AnsiString);virtual;
                       function ReadData(PData:Pointer;SData:Word):Integer;virtual;
                       //function PopData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;
-                      function ReadString(break, ignore: AnsiString): shortString;inline;
+                      function ReadString(break, ignore: AnsiString): AnsiString;inline;
                       function ReadGDBString: AnsiString;inline;
                       function ReadString2:AnsiString;inline;
                       function GetCurrentReadAddres:Pointer;virtual;

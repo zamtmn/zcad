@@ -46,6 +46,7 @@ function MakeHash(const s: GDBString):SizeUInt;//TODO в gzctnrstl есть ко
 procedure KillString(var str:GDBString);inline;
 
 Function PosWithBracket(c : AnsiChar; Const s : {RawByteString}GDBString) : SizeInt;
+function isNotUtf8(const s:RawByteString):boolean;
 
 type
   TCodePage=(CP_utf8,CP_win);
@@ -671,6 +672,116 @@ begin
 
 SetLength(Result,j-1);
 end;
+function isNotUtf8(const s:RawByteString):boolean;
+var i,n,j:integer;
+begin
+  i:=1;
+  While i<=Length(s) do begin
+    Case s[i] of
+    #1..#127://One byte and latin symbols
+      begin
+        //Result[j]:=s[i];
+      end;
+    #194: begin
+        Inc(i);
+        //Result[j]:=s[i];
+      end;
+    #208: begin
+        Inc(i); //n:=ord(s[i]);
+        (*Case s[i] of
+        #129: Result[j]:=#168; //¨
+        #130: Result[j]:=#128; //€
+        #131: Result[j]:=#129; //
+        #132: Result[j]:=#170; //ª
+        #133: Result[j]:=#189; //½
+        #134: Result[j]:=#178; //²
+        #135: Result[j]:=#175; //¯
+        #136: Result[j]:=#163; //£
+        #137: Result[j]:=#138; //Š
+        #138: Result[j]:=#140; //Œ
+        #139: Result[j]:=#142; //Ž
+        #140: Result[j]:=#141; //
+        #142: Result[j]:=#161; //¡
+        #143: Result[j]:=#143; //
+        #144{$IFNDEF DELPHI}..#191{$ENDIF}:begin
+          n:=ord(s[i]);
+          Result[j]:=Char(n+48);//'À'..'ï'
+                   end;
+        end;*)
+      end;
+    #209: begin
+        Inc(i);
+        (*Case s[i] of
+        #128..#143:begin
+           n:=ord(s[i]);
+           Result[j]:=Char(n+112);//'ð'..'ÿ'
+                 end;
+        #145: Result[j]:=#184;  //¸
+        #146: Result[j]:=#144;  //
+        #147: Result[j]:=#131;  //ƒ
+        #148: Result[j]:=#186;  //º
+        #149: Result[j]:=#190;  //¾
+        #150: Result[j]:=#179;  //³
+        #151: Result[j]:=#191;  //¿
+        #152: Result[j]:=#188;  //¼
+        #153: Result[j]:=#154;  //š
+        #154: Result[j]:=#156;  //œ
+        #155: Result[j]:=#158;  //ž
+        #156: Result[j]:=#157;  //
+        #158: Result[j]:=#162;  //¢
+        #159: Result[j]:=#159;  //Ÿ
+        end;*)
+      end;
+    #210: begin
+        Inc(i);
+        (*Case s[i] of
+        #144: Result[j]:=#165;  //¥
+        #145: Result[j]:=#180;  //´
+        end;*)
+      end;
+    #226: begin
+        Inc(i);
+        Case s[i] of
+        #128:begin
+          Inc(i);
+          (*Case s[i] of
+          #147: Result[j]:=#150; //–
+          #148: Result[j]:=#151; //—
+          #152: Result[j]:=#145; //‘
+          #153: Result[j]:=#146; //’
+          #154: Result[j]:=#130; //‚
+          #156: Result[j]:=#147; //“
+          #157: Result[j]:=#148; //”
+          #158: Result[j]:=#132; //„
+          #160: Result[j]:=#134; //†
+          #161: Result[j]:=#135; //‡
+          #162: Result[j]:=#149; //•
+          #166: Result[j]:=#133; //…
+          #176: Result[j]:=#137; //‰
+          #185: Result[j]:=#139; //‹
+          #186: Result[j]:=#155; //›
+          end;*)
+            end;
+        #130:begin
+          Inc(i);
+          //Result[j]:=#136;//#172;  //ˆ
+            end;
+        #132:begin
+          Inc(i);
+          (*Case s[i] of
+          #150: Result[j]:=#185; //¹
+          #162: Result[j]:=#153; //™
+          end;*)
+            end;
+         end;//Case
+      end;
+      else exit(true);
+    end;
+    Inc(j); Inc(i);
+  end;//While
+  result:=false;
+end;
+
 (*function sys2interf(s:GDBString):GDBString;
 begin
      result:=s//{systoutf8}{WinToK8R}Tria_AnsiToUtf8(s);

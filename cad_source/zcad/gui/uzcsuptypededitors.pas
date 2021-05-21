@@ -110,6 +110,7 @@ begin
           PEditor:=typemanager^.CreateEditor(TheOwner,r,@variable,nil,true,'',preferedHeight).Editor;
      end;
      if assigned(peditor) then
+     if assigned(PEditor.geteditor) then
      begin
        if PEditor.geteditor is TComboBox then
                                              begin
@@ -118,6 +119,9 @@ begin
                                              end;
        PEditor.geteditor.BoundsRect:=r;
        PEditor.geteditor.Parent:=TheOwner;
+       //тут педитор может быть асинхронно пришиблен
+       if not assigned(peditor) then
+         exit(false);
        PEditor.geteditor.SetFocus;
        if needdropdown then
         TComboBox(PEditor.geteditor).DroppedDown:=true;

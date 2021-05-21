@@ -41,6 +41,10 @@
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CONNECTOR3_1P_3)" Img='DEVICE_EL_VL_CONNECTOR3_1P_3_300' Caption='Розетка ОП54 1P'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CONNECTOR3_2P_3)" Img='DEVICE_EL_VL_CONNECTOR3_2P_3_300' Caption='Розетка ОП54 2P'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CONNECTOR3_3P_3)" Img='DEVICE_EL_VL_CONNECTOR3_3P_3_300' Caption='Розетка ОП54 3P'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_LIGHT1_1_EM)" Img='DEVICE_EL_VL_LIGHT1_1_EM_300' Caption='Светильник 2х36 1:100'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_LIGHT1_2_EM)" Img='DEVICE_EL_VL_LIGHT1_2_EM_300' Caption='Светильник 2х36 1:200'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_LIGHT3_1_EM)" Img='DEVICE_EL_VL_LIGHT3_1_EM_300' Caption='Светильник 1х18 1:100'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_LIGHT3_2_EM)" Img='DEVICE_EL_VL_LIGHT3_2_EM_300' Caption='Светильник 1х18 1:200'/>
       	</ZTreeNode>
       	<ZTreeNode Caption='Освещение 1:100'>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_LIGHT1_1)" Img='DEVICE_EL_VL_LIGHT1_1_300' Caption='Светильник 2х36'/>

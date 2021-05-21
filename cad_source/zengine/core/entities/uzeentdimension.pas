@@ -151,6 +151,7 @@ begin
                                                       p1,PDimStyle.Arrows.DIMASZ,ZAngle{*180/pi},@tbp0.name[1]);
   //pv^.vp.LineWeight:=PDimStyle.Lines.DIMLWD;
   //pv^.vp.Color:=PDimStyle.Lines.DIMCLRD;
+  pv^.BuildGeometry(drawing);
   pv^.formatentity(drawing,dc);
   end;
   if not supress2 then
@@ -165,8 +166,9 @@ begin
                                                       p2,PDimStyle.Arrows.DIMASZ,ZAngle{*180/pi}-pi,@tbp1.name[1]);
   //pv^.vp.LineWeight:=PDimStyle.Lines.DIMLWD;
   //pv^.vp.Color:=PDimStyle.Lines.DIMCLRD;
-  end;
+  pv^.BuildGeometry(drawing);
   pv^.formatentity(drawing,dc);
+  end;
   if tbp0.width=0 then
                       pp1:=Vertexmorphabs(p2,p1,PDimStyle.Lines.DIMDLE)
                   else

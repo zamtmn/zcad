@@ -16,8 +16,8 @@ BTY_TreeCoord:='PLAN_EM_Коробка';
 Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 
-NMO_Name:='КР0';
-NMO_BaseName:='КР';
+NMO_Name:='СК0';
+NMO_BaseName:='СК';
 NMO_Suffix:='??';
 
 SerialConnection:=1;

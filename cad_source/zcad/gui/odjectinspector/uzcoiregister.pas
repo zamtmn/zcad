@@ -25,6 +25,8 @@ uses Laz2_DOM,Toolwin,Clipbrd,sysutils,uzccommandsabstract,uzcfcommandline,uzcut
      gzctnrvectortypes,Types,Controls,uzcdrawings,Varman,UUnitManager,uzcsysvars,
      uzcsysparams,zcobjectinspectorui,uzcoimultiobjects,uzccommandsimpl,uzbtypesbase,
      uzmenusmanager,uzcsysinfo,LazLogger,menus,ComCtrls,uztoolbarsmanager,uzcimagesmanager;
+const
+    PEditorFocusPriority=550;
 type
   tdummyclass=class
     procedure UpdateObjInsp(sender:TObject;GUIMode:TZMessageID);
@@ -34,6 +36,7 @@ type
     procedure StoreAndFreeEditor(sender:TObject;GUIMode:TZMessageID);
     procedure ReturnToDefault(sender:TObject;GUIMode:TZMessageID);
     procedure ContextPopup(Sender: TObject; MousePos: TPoint;var Handled: Boolean);
+    function GetPeditorFocusPriority:TControlWithPriority;
   end;
 var
   INTFObjInspRowHeight:TGDBIntegerOverrider;
@@ -279,6 +282,20 @@ else
   end;
   end;
 end;
+function tdummyclass.GetPeditorFocusPriority:TControlWithPriority;
+begin
+  result.priority:=UnPriority;
+  result.control:=nil;
+
+  if assigned(GDBobjinsp) then
+  if GDBobjinsp.PEditor<>nil then
+  if GDBobjinsp.PEditor.geteditor<>nil then
+  if GDBobjinsp.PEditor.geteditor.IsVisible then
+  if GDBobjinsp.PEditor.geteditor.CanFocus then begin
+    result.priority:=PEditorFocusPriority;
+    result.control:=GDBobjinsp.PEditor.geteditor;
+  end;
+end;
 
 initialization
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'INTF_ObjInsp_WhiteBackground','GDBBoolean',@INTFObjInspWhiteBackground);
@@ -329,6 +346,7 @@ GetOIWidthProc:=GetOIWidth;
 ZCMsgCallBackInterface.RegisterHandler_GUIAction(dummyclass.FreEditor);
 //FreEditorProc:=FreEditor;
 ZCMsgCallBackInterface.RegisterHandler_GUIAction(dummyclass.StoreAndFreeEditor);
+ZCMsgCallBackInterface.RegisterHandler_GetFocusedControl(dummyclass.GetPeditorFocusPriority);
 //StoreAndFreeEditorProc:=StoreAndFreeEditor;
 CreateCommandFastObjectPlugin(@ObjInspCopyToClip_com,'ObjInspCopyToClip',0,0).overlay:=true;
 

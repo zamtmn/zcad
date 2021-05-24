@@ -14,7 +14,8 @@ uses uzcenitiesvariablesextender,uzeentityfactory,Varman,uzgldrawcontext,
      uzeenttext,uzeentdevice,uzcentcable,uzeenttable,uzegeometry,
      uzeentline,uzbtypesbase,uzeentcomplex,sysutils,uzctnrvectorgdbstring,
      gzctnrvectortypes,uzeentity,varmandef,uzbtypes,uzeconsts,uzeffdxfsupport,
-     uzbgeomtypes,uzbmemman,uzeentsubordinated,uzestylestables,uzclog,UGDBOpenArrayOfPV,uzeentcurve;
+     uzbgeomtypes,uzbmemman,uzeentsubordinated,uzestylestables,uzclog,
+     UGDBOpenArrayOfPV,uzeentcurve,uzeobjectextender,uzetextpreprocessor;
 type
 {EXPORT+}
 PGDBObjElLeader=^GDBObjElLeader;
@@ -62,9 +63,22 @@ GDBObjElLeader= object(GDBObjComplex)
             procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;
             function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
             function GetObjType:TObjID;virtual;
+            class function GetDXFIOFeatures:TDXFEntIODataManager;static;
+            procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var IODXFContext:TIODXFContext);virtual;
             end;
 {EXPORT-}
 implementation
+var
+  GDBObjElLeaderDXFFeatures:TDXFEntIODataManager;
+procedure GDBObjElLeader.SaveToDXFObjXData;
+begin
+     GetDXFIOFeatures.RunSaveFeatures(outhandle,@self,IODXFContext);
+     inherited;
+end;
+class function GDBObjElLeader.GetDXFIOFeatures:TDXFEntIODataManager;
+begin
+  result:=GDBObjElLeaderDXFFeatures;
+end;
 function GDBObjElLeader.calcvisible;
 //var i:GDBInteger;
 //    tv,tv1:gdbvertex4d;
@@ -164,13 +178,14 @@ procedure GDBObjElLeader.SaveToDXF;
 begin
   MainLine.bp.ListPos.Owner:={gdb.GetCurrentROOT}self.GetMainOwner;
   MainLine.SaveToDXF(outhandle,drawing,IODXFContext);
-  dxfGDBStringout(outhandle,1001,ZCADAppNameInDXF);
+  (*dxfGDBStringout(outhandle,1001,ZCADAppNameInDXF);
   dxfGDBStringout(outhandle,1002,'{');
   dxfGDBStringout(outhandle,1000,'_UPGRADE='+inttostr(UD_LineToLeader));
   dxfGDBStringout(outhandle,1000,'%1=size|GDBInteger|'+inttostr(size)+'|');
   dxfGDBStringout(outhandle,1000,'%2=scale|GDBDouble|'+floattostr(scale)+'|');
   dxfGDBStringout(outhandle,1000,'%3=twidth|GDBDouble|'+floattostr(twidth)+'|');
-  dxfGDBStringout(outhandle,1002,'}');
+  dxfGDBStringout(outhandle,1002,'}');*)
+  SaveToDXFPostProcess(outhandle,IODXFContext);
   MainLine.bp.ListPos.Owner:=@self;
 
   MarkLine.bp.ListPos.Owner:=@gdbtrash;
@@ -252,7 +267,7 @@ var
    ir,ir2:itrec;
    s:gdbstring;
    psl:PTZctnrVectorGDBString;
-   pvn:pvardesk;
+   pvn,pvNote,pvNoteFormat:pvardesk;
    sta:TZctnrVectorGDBString;
    ps:pgdbstring;
    bb:TBoundingBox;
@@ -472,20 +487,34 @@ begin
      ConstObjArray.free;
      if pdev<>nil then
      begin
-          s:='';
-          pentvarext:=pdev^.GetExtension(typeof(TVariablesExtender));
-          //pvn:=PTObjectUnit(pdev^.ou.Instance)^.FindVariable('NMO_Name');
-          pvn:=pentvarext^.entityunit.FindVariable('NMO_Name');
-          if pvn<>nil then
-          begin
-               s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Instance);
-               //s:=pstring(pvn^.data.Instance)^;
+          pentvarext:=GetExtension(typeof(TVariablesExtender));
+          if pentvarext<>nil then begin
+            pvNote:=pentvarext^.entityunit.FindVariable('NOTE_Note');
+            pvNoteFormat:=pentvarext^.entityunit.FindVariable('NOTE_NoteFormat');
+          end else begin
+            pvNote:=nil;
+            pvNoteFormat:=nil;
           end;
-          //pvn:=PTObjectUnit(pdev^.ou.Instance)^.FindVariable('Text');
-          pvn:=pentvarext^.entityunit.FindVariable('Text');
-          if pvn<>nil then
-          begin
-               s:=s+{pstring(pvn^.data.Instance)^}pvn^.data.PTD.GetValueAsString(pvn^.data.Instance);;
+          if (pvNote<>nil)and(pvNoteFormat<>nil) then
+            pstring(pvNote^.data.Instance)^:=textformat(pstring(pvNoteFormat^.data.Instance)^,pdev);
+          if (pvNote<>nil)and(pstring(pvNote^.data.Instance)^<>'') then
+            s:=pstring(pvNote^.data.Instance)^
+          else begin
+            s:='';
+            pentvarext:=pdev^.GetExtension(typeof(TVariablesExtender));
+            //pvn:=PTObjectUnit(pdev^.ou.Instance)^.FindVariable('NMO_Name');
+            pvn:=pentvarext^.entityunit.FindVariable('NMO_Name');
+            if pvn<>nil then
+            begin
+                 s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Instance);
+                 //s:=pstring(pvn^.data.Instance)^;
+            end;
+            //pvn:=PTObjectUnit(pdev^.ou.Instance)^.FindVariable('Text');
+            pvn:=pentvarext^.entityunit.FindVariable('Text');
+            if pvn<>nil then
+            begin
+                 s:=s+{pstring(pvn^.data.Instance)^}pvn^.data.PTD.GetValueAsString(pvn^.data.Instance);;
+            end;
           end;
           if s<>'' then
           begin
@@ -726,6 +755,7 @@ var
    //a:TGDBTableCellStyle;
 begin
      inherited;
+     GetDXFIOFeatures.AddExtendersToEntity(@self);
      size:=0;
      scale:=1;
      twidth:=0;
@@ -798,7 +828,10 @@ begin
                    end;
    end;
 end;
-begin
+initialization
   RegisterEntity(GDBElLeaderID,'Leader',@AllocElLeader,@AllocAndInitElLeader);
   RegisterEntityUpgradeInfo(GDBLineID,UD_LineToLeader,@UpgradeLine2Leader);
+  GDBObjElLeaderDXFFeatures:=TDXFEntIODataManager.Create;
+finalization
+  GDBObjElLeaderDXFFeatures.Destroy;
 end.

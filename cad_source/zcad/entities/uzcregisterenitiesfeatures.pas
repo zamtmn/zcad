@@ -24,7 +24,7 @@ uses uzcinterface,uzeffdxf,uzbpaths,uzcsysvars,uzctranslations,sysutils,
      uzetextpreprocessor,UGDBOpenArrayOfByte,uzbtypesbase,uzbtypes,uzeobjectextender,
      uzeentsubordinated,uzeentity,uzeenttext,uzeblockdef,varmandef,Varman,UUnitManager,
      gzctnrvectortypes,URecordDescriptor,UBaseTypeDescriptor,uzedrawingdef,uzbmemman,
-     uzbstrproc,uzeentitiesprop;
+     uzbstrproc,uzeentitiesprop,uzcentelleader;
 var
    PFCTTD:GDBPointer=nil;
    extvarunit:TUnit;
@@ -167,6 +167,14 @@ begin
      //PTObjectUnit(PEnt^.ou.Instance)^.InterfaceVariables.createvariable(vd.name,vd);
      PBaseTypeDescriptor(vd.data.PTD)^.SetValueFromString(vd.data.Instance,vv);
      result:=true;
+end;
+
+procedure ElLeaderSave(var outhandle:GDBOpenArrayOfByte;PEnt:PGDBObjEntity;var IODXFContext:TIODXFContext);
+begin
+  dxfGDBStringout(outhandle,1000,'_UPGRADE='+inttostr(UD_LineToLeader));
+  dxfGDBStringout(outhandle,1000,'%1=size|GDBInteger|'+inttostr(PGDBObjElLeader(PEnt)^.size)+'|');
+  dxfGDBStringout(outhandle,1000,'%2=scale|GDBDouble|'+floattostr(PGDBObjElLeader(PEnt)^.scale)+'|');
+  dxfGDBStringout(outhandle,1000,'%3=twidth|GDBDouble|'+floattostr(PGDBObjElLeader(PEnt)^.twidth)+'|');
 end;
 
 procedure EntityIOSave_all(var outhandle:GDBOpenArrayOfByte;PEnt:PGDBObjEntity;var IODXFContext:TIODXFContext);
@@ -572,6 +580,9 @@ begin
 
   {from GDBObjCable}
   GDBObjCable.GetDXFIOFeatures.RegisterFormatFeature(@CableNameProcess);
+
+  {from GDBObjElLeader}
+  GDBObjElLeader.GetDXFIOFeatures.RegisterSaveFeature(@ElLeaderSave);
 
 
   {test}

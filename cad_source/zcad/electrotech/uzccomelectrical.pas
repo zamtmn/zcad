@@ -2756,6 +2756,7 @@ var //po:PGDBObjSubordinated;
     pleader:PGDBObjElLeader;
     domethod,undomethod:tmethod;
     DC:TDrawContext;
+    pcablevarext:PTVariablesExtender;
 begin
   //result:=Line_com_AfterClick(wc,mc,button,osp,mclick);
   result:=mclick;
@@ -2789,6 +2790,11 @@ begin
   pleader^.scale:=ELLeaderComParam.Scale;
   pleader^.size:=ELLeaderComParam.Size;
   pleader^.twidth:=ELLeaderComParam.twidth;
+
+  pcablevarext:=pleader^.GetExtension(typeof(TVariablesExtender));
+  if pcablevarext<>nil then
+    pcablevarext^.entityunit.copyfrom(units.findunit(SupportPath,InterfaceTranslate,'elleader'));
+
   zcSetEntPropFromCurrentDrawingProp(pleader);
   drawings.standardization(pleader,GDBELleaderID);
   pleader.MainLine.CoordInOCS.lBegin:=PCreatedGDBLine^.CoordInOCS.lBegin;

@@ -23,7 +23,8 @@ uses sysutils,
      uzcenitiesvariablesextender,uzccomdb,uzcentcable,uzcentnet,uzeentdevice,TypeDescriptors,
      uzetextpreprocessor,UGDBOpenArrayOfByte,uzbtypes,uzeobjectextender,
      uzeentity,uzeenttext,uzeblockdef,varmandef,Varman,UUnitManager,
-     uzventsuperline,URecordDescriptor,UBaseTypeDescriptor,uzbmemman;
+     uzventsuperline,uzcentelleader,
+     URecordDescriptor,UBaseTypeDescriptor,uzbmemman;
 implementation
 begin
   {from GDBObjBlockDef}
@@ -41,5 +42,7 @@ begin
   {from GDBObjSuperLine}
   GDBObjSuperLine.GetDXFIOFeatures.RegisterEntityExtenderObject(@TVariablesExtender.CreateEntVariablesExtender);
 
+  {from GDBObjElLeader}
+  GDBObjElLeader.GetDXFIOFeatures.RegisterEntityExtenderObject(@TVariablesExtender.CreateEntVariablesExtender);
 end.
 

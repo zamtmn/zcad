@@ -22,7 +22,7 @@ unit uzcoimultiproperties;
 interface
 uses
   uzcuidialogs,uzctranslations,uzbtypesbase,uzbtypes,uzclog,
-  uzedimensionaltypes,usimplegenerics,varmandef,Varman,garrayutils,gzctnrstl;
+  uzedimensionaltypes,usimplegenerics,varmandef,Varman,garrayutils,gzctnrstl,contnrs;
 type
   TMultiPropertyUseMode=(MPUM_AllEntsMatched,MPUM_AtLeastOneEntMatched);
 
@@ -64,6 +64,7 @@ type
                        PIiterateData:GDBPointer;
                        UseMode:TMultiPropertyUseMode;
                        constructor create(_name:GDBString;_sortedid:integer;ptm:PUserTypeDescriptor;_Category:TMultiPropertyCategory;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc;_UseMode:TMultiPropertyUseMode);
+                       constructor CreateAndCloneFrom(mp:TMultiProperty);
                        destructor destroy;override;
                  end;
   TMyGDBString2TMultiPropertyDictionary=TMyGDBStringDictionary<TMultiProperty>;
@@ -78,6 +79,7 @@ type
   TMultiPropertiesManager=class
                                MultiPropertyDictionary:TMyGDBString2TMultiPropertyDictionary;
                                MultiPropertyVector:TMultiPropertyVector;
+                               MPObjectsDataList:TObjectList;
                                constructor create;
                                destructor destroy;override;
                                procedure reorder(oldsortedid,sortedid:integer;id:TObjID);
@@ -165,6 +167,7 @@ begin
                                                     else
                                                         begin
                                                              mp:=TMultiProperty.create(name,sortedid,ptm,category,bip,aip,eip,UseMode);
+                                                             MPObjectsDataList.Add(mp.MPObjectsData);
                                                              mpdfo.EntIterateProc:=eip;
                                                              mpdfo.EntBeforeIterateProc:=ebip;
                                                              mpdfo.EntChangeProc:=ecp;
@@ -182,7 +185,7 @@ end;
 destructor TMultiProperty.destroy;
 begin
      MPName:='';
-     MPObjectsData.destroy;
+     //MPObjectsData.destroy; будет убито в TMultiPropertiesManager
 end;
 constructor TMultiProperty.create;
 begin
@@ -195,10 +198,26 @@ begin
      MPObjectsData:=TObjID2MultiPropertyProcs.create;
      UseMode:=_UseMode;
 end;
+constructor TMultiProperty.CreateAndCloneFrom(mp:TMultiProperty);
+begin
+     MPName:=mp.MPName;
+     MPUserName:=mp.MPUserName;
+     MPType:=mp.MPType;
+     MPCategory:=mp.MPCategory;
+     MPObjectsData:=mp.MPObjectsData;
+     usecounter:=mp.usecounter;
+     sortedid:=mp.sortedid;
+     BeforeIterateProc:=mp.BeforeIterateProc;
+     AfterIterateProc:=mp.AfterIterateProc;
+     PIiterateData:=nil;
+     UseMode:=mp.UseMode;
+end;
+
 constructor TMultiPropertiesManager.create;
 begin
      MultiPropertyDictionary:=TMyGDBString2TMultiPropertyDictionary.create;
      MultiPropertyVector:=TMultiPropertyVector.Create;
+     MPObjectsDataList:=TObjectList.Create;
 end;
 destructor TMultiPropertiesManager.destroy;
 var
@@ -208,6 +227,7 @@ begin
        MultiPropertiesManager.MultiPropertyVector[i].destroy;
      MultiPropertyDictionary.destroy;
      MultiPropertyVector.destroy;
+     MPObjectsDataList.Destroy;
      inherited;
 end;
 initialization

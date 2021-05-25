@@ -284,11 +284,13 @@ constructor TGetEntParam.vcreate(const Source:TParserEntityPropFilterString;
                         var Data:TPropFilterData);
 var
   propertyname:string;
+  tmp:TMultiProperty;
 begin
   propertyname:=ParsedOperands.GetResult(Data);
-  if MultiPropertiesManager.MultiPropertyDictionary.MyGetValue(propertyname,mp) then begin
+  if MultiPropertiesManager.MultiPropertyDictionary.MyGetValue(propertyname,tmp) then begin
+    mp:=TMultiProperty.CreateAndCloneFrom(tmp);
     {bip}mp.PIiterateData:=mp.BeforeIterateProc(mp,@VU);
-    //mp.Free;{ #todo : нужно делать копию mp, но пока пусть так }
+    //mp.Free;{ #todo : теперь сделал копию //нужно делать копию mp, но пока пусть так }
   end else
     mp:=nil;
 end;
@@ -298,7 +300,7 @@ begin
   if mp<>nil then begin
     if @mp.AfterIterateProc<>nil then
       mp.AfterIterateProc({bip}mp.PIiterateData,mp);
-    //mp.Free;{ #todo : нужно делать копию mp, но пока пусть так }
+    mp.Free;{ #todo : теперь сделал копию //нужно делать копию mp, но пока пусть так }
   end;
 end;
 

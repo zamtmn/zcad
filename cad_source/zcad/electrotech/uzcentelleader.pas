@@ -279,7 +279,6 @@ var
 
    Objects:GDBObjOpenArrayOfPV;
    pentvarext:PTVariablesExtender;
-
 begin
      tbl.ptablestyle:=drawing.GetTableStyleTable^.getAddres('Temp');
      TCP:=CodePage;
@@ -498,7 +497,7 @@ begin
           if (pvNote<>nil)and(pvNoteFormat<>nil) then
             pstring(pvNote^.data.Instance)^:=textformat(pstring(pvNoteFormat^.data.Instance)^,pdev);
           if (pvNote<>nil)and(pstring(pvNote^.data.Instance)^<>'') then
-            s:=pstring(pvNote^.data.Instance)^
+            s:={pstring(pvNote^.data.Instance)^}pvNote^.data.PTD.GetValueAsString(pvNote^.data.Instance)
           else begin
             s:='';
             pentvarext:=pdev^.GetExtension(typeof(TVariablesExtender));

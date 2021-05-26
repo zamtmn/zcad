@@ -154,10 +154,12 @@ end;
 procedure TTextStylesForm.UpdateItem2(Item:TObject);
 var
    newfont:PGDBfont;
+   ts:PGDBTextStyle;
 begin
+  ts:=PGDBTextStyle(TListItem(Item).Data);
      if FontChange then
      begin
-          newfont:=FontManager.addFont('',pstring(FontsSelector.Enums.getDataMutable(FontsSelector.Selected))^);
+          newfont:=FontManager.addFont(pstring(FontsSelector.Enums.getDataMutable(FontsSelector.Selected))^,'');
           if  newfont<>PGDBTextStyle(TListItem(Item).Data)^.pfont then
           begin
                CreateUndoStartMarkerNeeded;

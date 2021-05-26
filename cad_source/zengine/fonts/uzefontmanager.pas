@@ -115,15 +115,17 @@ end;
 procedure GDBFontManager.EnumerateTTFFontFile(filename:String;pdata:pointer);
 var
   ttfparams:TTTFFileParams;
+  ffg:^TGeneralFontFileDesc;
   //gfd:TGeneralFontFileDesc;
 begin
   if AddFontResourceFile(filename)>0 then begin
     ttfparams:=getTTFFileParams(filename);
     if ttfparams.ValidTTFFile then begin
-      if ((ttfparams.FontSubfamily='')or(LowerCase(ttfparams.FontSubfamily)='regular')){and(ttffontfiles.IndexOf(ttfparams.FontFamily)<0)} then begin
-        FontFiles.registerkey(uppercase(ttfparams.FontFamily),TGeneralFontFileDesc.Create(ttfparams.FontFamily,filename,TGeneralFontParam.Create(0)));
-      end;
-      //ttfinternalnames.Add(ttfparams.FullName);
+      if not FontFiles.MyGetMutableValue(uppercase(ttfparams.FontFamily),ffg)then
+        FontFiles.registerkey(uppercase(ttfparams.FontFamily),TGeneralFontFileDesc.Create(ttfparams.FontFamily,filename,TGeneralFontParam.Create(0)))
+      else
+        if ((ttfparams.FontSubfamily='')or(LowerCase(ttfparams.FontSubfamily)='regular')) then
+          ffg^.FontFile:=filename;
     end;
   end;
 end;
@@ -267,24 +269,24 @@ end;
 function GDBFontManager.addFont(FontFile,FontFamily:String):PGDBfont;
 var
   ffd:TGeneralFontFileDesc;
+  FF:String;
 begin
-  if (FontFamily<>'')and(FontFiles.MyGetValue(uppercase(FontFamily),ffd)) then begin
-    result:=addFonfByFile(ffd.FontFile);
-    exit;
-  end;
-  if (FontFile<>'')and(FontFiles.MyGetValue(uppercase(FontFile),ffd)) then begin
-    result:=addFonfByFile(ffd.FontFile);
-    exit;
-  end;
+  FF:=FontFile;
   FontFile:=FindInPaths(sysvarPATHFontsPath,FontFile);
   if FontFile='' then
-    FontFile:=FindInPaths(sysvarPATHFontsPath,FontFile+'.shx');
+    FontFile:=FindInPaths(sysvarPATHFontsPath,FF+'.shx');
   if FontFile='' then
-    FontFile:=FindInPaths(sysvarPATHFontsPath,FontFile+'.ttf');
+    FontFile:=FindInPaths(sysvarPATHFontsPath,FF+'.ttf');
   if FontFile<>'' then
     result:=FontManager.addFonfByFile(FontFile)
   else
     result:=nil;
+  if result=nil then
+    if (FF<>'')and(FontFiles.MyGetValue(uppercase(FF),ffd)) then
+      result:=addFonfByFile(ffd.FontFile);
+  if result=nil then
+    if (FontFamily<>'')and(FontFiles.MyGetValue(uppercase(FontFamily),ffd)) then
+      result:=addFonfByFile(ffd.FontFile);
 end;
 
 {function GDBFontManager.FindFonf;

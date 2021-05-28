@@ -113,6 +113,8 @@
 	   <ZTreeCommand Command="Insert(A0A+)" Img='A0A+_300' Caption='Рамка А0+ альбом'/>
 	   <ZTreeCommand Command="Insert(A0K)" Img='A0K_300' Caption='Рамка А0 книга'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_STAMP1)" Img='DEVICE_EL_VL_STAMP1_300' Caption='Штамп1'/>
+	   <ZTreeCommand Command="Insert(EL_VL_REFERENCE1_1)" Img='EL_VL_REFERENCE1_1_300' Caption='Условные обозначения1'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_REFERENCE1_2)" Img='DEVICE_EL_VL_REFERENCE1_2_300' Caption='Условные обозначения2'/>
       	</ZTreeNode>
       </ZTreeNode>
       <ZTreeNode Caption='Слаботочка'>

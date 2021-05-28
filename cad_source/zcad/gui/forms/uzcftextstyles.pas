@@ -160,7 +160,7 @@ begin
      if FontChange then
      begin
           newfont:=FontManager.addFont(pstring(FontsSelector.Enums.getDataMutable(FontsSelector.Selected))^,'');
-          if  newfont<>PGDBTextStyle(TListItem(Item).Data)^.pfont then
+          if  (newfont<>PGDBTextStyle(TListItem(Item).Data)^.pfont)and(newfont<>nil) then
           begin
                CreateUndoStartMarkerNeeded;
                with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pointer(PGDBTextStyle(TListItem(Item).Data)^.pfont))^ do
@@ -250,7 +250,7 @@ begin
           S:=iter.Value.FontFile;
           if S=currentitem then
             CurrentFontIndex:=FontsSelector.Enums.Count;
-          S:=iter.Value.Name;//extractfilename(S);
+          S:={iter.Value.Name;//}extractfilename(S);
           FontsSelector.Enums.PushBackData(S);
        until (not iter.Next);
        if iter<>nil then

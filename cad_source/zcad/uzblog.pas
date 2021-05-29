@@ -70,17 +70,19 @@ type
   TLogLevelAliasDic=specialize TDictionary<AnsiChar,TLogLevel>;
   TTimeBuf=specialize TVector<TMyTimeStamp>;
   tlog=object
-             LogFileName:AnsiString;
-             FileHandle:cardinal;
-             Indent:integer;
-             LatestLogStrings:TLatestLogStrings;
-             LatestLogStringsCount,TotalLogStringsCount:integer;
+    private
+      LogFileName:AnsiString;
+      FileHandle:cardinal;
+      Indent:integer;
+      LogLevels:TLogLevelsHandles;
+      LogLevelAliasDic:TLogLevelAliasDic;
+      CurrentLogLevel:TLogLevel;
+      DefaultLogLevel:TLogLevel;
 
-             LogLevels:TLogLevelsHandles;
-             LogLevelAliasDic:TLogLevelAliasDic;
-             CurrentLogLevel:TLogLevel;
-             DefaultLogLevel:TLogLevel;
+      LatestLogStrings:TLatestLogStrings;
+      LatestLogStringsCount,TotalLogStringsCount:integer;
 
+    public
 
              ModulesDesks:TModulesDeskHandles;
 
@@ -98,6 +100,7 @@ type
              constructor init(fn:AnsiString;TraceModeName:TLogLevelHandleNameType;TraceModeAlias:AnsiChar);
              destructor done;virtual;
 
+             function TryGetLogLevelHandle(LogLevelName:TLogLevelHandleNameType;out LogLevel:TLogLevel):Boolean;
              procedure WriteLogHeader;
 
              function RegisterLogLevel(LogLevelName:TLogLevelHandleNameType;LLAlias:AnsiChar;data:TLogLevelData):TLogLevel;
@@ -133,7 +136,6 @@ type
              procedure ProcessStrToLog(str:AnsiString;IncIndent:integer;todisk:boolean);virtual;
 
              function LogMode2string(LogMode:TLogLevel):TLogLevelHandleNameType;
-
       end;
 
   function LLD(_LLD:TLogLevelType):TLogLevelData;
@@ -151,6 +153,11 @@ function LLD(_LLD:TLogLevelType):TLogLevelData;
 begin
   result.LogLevelType:=_LLD;
 end;
+function tlog.TryGetLogLevelHandle(LogLevelName:TLogLevelHandleNameType;out LogLevel:TLogLevel):Boolean;
+begin
+  result:=LogLevels.TryGetHandle(LogLevelName,LogLevel);
+end;
+
 function tlog.LogMode2string(LogMode:TLogLevel):AnsiString;
 begin
   result:=LogLevels.GetHandleName(LogMode);

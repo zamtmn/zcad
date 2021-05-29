@@ -34,6 +34,7 @@ const MaxCashedValues={4}5;
 
 type
   TTokenOptions=GTSetWithGlobalEnums<Longword,Longword{byte,byte}>;
+  TTokenDescription=GTSetWithGlobalEnums<Longword,Longword{byte,byte}>;
 var
   //Token Global Options values
   TGOIncludeBrackeOpen:TTokenOptions.TEnumItemType;//открывающая скобка входит в имя
@@ -42,6 +43,9 @@ var
   TGOWholeWordOnly:TTokenOptions.TEnumItemType;//должно быть целое слово, за ним сепаратор
   TGOSeparator:TTokenOptions.TEnumItemType;//разделитель
   TGOFake:TTokenOptions.TEnumItemType;
+
+  //Token Global Options values
+  TGDRawText:TTokenDescription.TEnumItemType;
 type
   TSubStr=record
     StartPos,Length:integer;
@@ -170,6 +174,7 @@ type
       Token:GTokenizerString;
       BrackeOpen,BrackeClose:GTokenizerSymbol;
       Options:TTokenOptions.TSetType;
+      Description:TTokenDescription.TSetType;
       FollowOperandsId:TTokenId;
       ProcessorClass:TStrProcessorClass;
       InsideBracketParser:TObject;//пиздец тупость
@@ -204,6 +209,8 @@ type
     isOnlyOneToken:GTokenizerString;
     isOnlyOneTokenId:TTokenId;
     includedChars:TChars;
+    Options:TTokenOptions;
+    Description:TTokenDescription;
     constructor create;
     destructor Destroy;override;
     procedure SubRegisterToken(Token:GTokenizerString;var sym:integer;_TokenId:TTokenId;var IncludedCharsPos:TIncludedChars);
@@ -224,7 +231,7 @@ type
           TParserTokenizer=TGZTokenizer<GParserString,GParserSymbol,GSymbolToOptChar,GDataType>;
           TTokenTextInfoQueue=TDeque<TParserTokenizer.TTokenTextInfo>;
 
-          TGeneralParsedText=class;
+          //TGeneralParsedText=class;
 
           TTextPart=record
             TextInfo:TParserTokenizer.TTokenTextInfo;
@@ -241,8 +248,8 @@ type
             procedure SetOperands;virtual;abstract;
             constructor Create(_Source:GParserString;_Parser:TGZParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>);
             destructor Destroy;override;
-            class procedure DoItWithPart(const  Src:GParserString;var APart:TTextPart;var data:GDataType);
-            class procedure GetResultWithPart(const  Src:GParserString;var APart:TTextPart;data:GDataType;var Res:GParserString;var ResultParam:TSubStr);
+            class procedure DoItWithPart(const Src:GParserString;var APart:TTextPart;var data:GDataType);
+            class procedure GetResultWithPart(const Src:GParserString;var APart:TTextPart;data:GDataType;var Res:GParserString;var ResultParam:TSubStr);
           end;
 
           TParsedTextWithoutTokens=class(TGeneralParsedText)
@@ -284,7 +291,8 @@ type
                            const ProcessorClass:TParserTokenizer.TStrProcessorClass;
                            InsideBracketParser:TGZParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>;
                            Options:{TParserTokenizer.}TTokenOptions.TSetType=0{[]};
-                           const FollowOperands:TParserTokenizer.TTokenId=0
+                           const FollowOperands:TParserTokenizer.TTokenId=0;
+                           Description:TTokenDescription.TSetType=0
                            ):TParserTokenizer.TTokenId;
     procedure OptimizeTokens;
     function GetTokenFromSubStr(Text:GParserString;const SubStr:TSubStr;CurrentPos:integer;out TokenTextInfo:TParserTokenizer.TTokenTextInfo):TParserTokenizer.TTokenId;
@@ -1020,7 +1028,8 @@ function TGZParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>.Regis
                                                                                        const ProcessorClass:TParserTokenizer.TStrProcessorClass;
                                                                                        InsideBracketParser:TGZParser<GParserString,GParserSymbol,GDataType,GSymbolToOptChar>;
                                                                                        Options:{TParserTokenizer.}TTokenOptions.TSetType=0{[]};
-                                                                                       const FollowOperands:TParserTokenizer.TTokenId=0):TParserTokenizer.TTokenId;
+                                                                                       const FollowOperands:TParserTokenizer.TTokenId=0;
+                                                                                       Description:TTokenDescription.TSetType=0):TParserTokenizer.TTokenId;
 var
   sym:integer;
   td:TParserTokenizer.TTokenData;
@@ -1031,6 +1040,7 @@ begin
   td.BrackeClose:=BrackeClose;
   td.BrackeOpen:=BrackeOpen;
   td.Options:=Options;
+  td.Description:=Description;
   td.FollowOperandsId:=FollowOperands;
   //td.Func:=Func;
   td.ProcessorClass:=ProcessorClass;
@@ -1060,6 +1070,8 @@ constructor TGZTokenizer<GTokenizerString,GTokenizerSymbol,GTokenizerSymbolToOpt
 begin
   inherited;
   Map:=TTokenizerMap.Create;
+  Options.Init;
+  Description.Init;
   includedChars:=[];
   isOnlyOneToken:='';
   isOnlyOneTokenId:=0;
@@ -1079,6 +1091,8 @@ begin
       Cashe[i].SymbolData.NextSymbol.Free;}
 
   FreeAndNil(Map);
+  Options.Done;
+  Description.Done;
   includedChars:=[];
   isOnlyOneToken:='';
   isOnlyOneTokenId:=0;
@@ -1165,6 +1179,7 @@ initialization
   TGOWholeWordOnly:=TTokenOptions.GetGlobalEnum;//должно быть целое слово, за ним сепаратор
   TGOSeparator:=TTokenOptions.GetGlobalEnum;//разделитель
   TGOFake:=TTokenOptions.GetGlobalEnum;
+  TGDRawText:=TTokenDescription.GetGlobalEnum;
 {e1:=TTokenOptions.GetGlobalEnum;//1
 e1:=TTokenOptions.GetGlobalEnum;//2
 e1:=TTokenOptions.GetGlobalEnum;//4

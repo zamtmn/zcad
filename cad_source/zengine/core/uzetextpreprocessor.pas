@@ -41,6 +41,8 @@ type
 var
     Prefix2ProcessFunc:TPrefix2ProcessFunc;
     Parser:TMyParser;
+
+    ZCADToken:TTokenDescription.TEnumItemType;
 function textformat(s:TDXFEntsInternalStringType;pobj:GDBPointer):TDXFEntsInternalStringType;
 function convertfromunicode(s:GDBString):GDBString;
 implementation
@@ -175,6 +177,7 @@ end;
 initialization
   Prefix2ProcessFunc:=TPrefix2ProcessFunc.Create;
   Parser:=TMyParser.create;
+  ZCADToken:=Parser.Tokenizer.Description.GetEnum;
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   FreeAndNil(Prefix2ProcessFunc);

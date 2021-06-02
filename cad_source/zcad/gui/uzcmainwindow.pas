@@ -32,7 +32,7 @@ uses
        uzgldrawergdi,uzcdrawing,UGDBOpenArrayOfPV,uzedrawingabstract,
        uzepalette,uzbpaths,uzglviewareadata,uzeentitiesprop,uzcinterface,
        UGDBOpenArrayOfByte,uzbmemman,uzbtypesbase,uzbtypes,
-       uzegeometry,uzcsysvars,uzcstrconsts,uzbstrproc,UGDBNamedObjectsArray,uzclog,
+       uzegeometry,uzcsysvars,uzcstrconsts,uzbstrproc,UGDBNamedObjectsArray,uzclog,uzblog,
        uzedimensionaltypes,varmandef, varman,UUnitManager,uzcsysinfo,strmy,uzestylestexts,uzestylesdim,
   uzcexceptions,
   {ZCAD SIMPLE PASCAL SCRIPT}
@@ -86,7 +86,7 @@ type
     SystemTimer: TTimer;
     toolbars:tstringlist;
     procedure ZcadException(Sender: TObject; E: Exception);
-    procedure CreateHTPB(tb:TToolBar);
+    procedure CreateHTPB(tb:TToolBar);//надо убрать
     procedure ActionUpdate(AAction: TBasicAction; var Handled: Boolean);
     procedure ChangedDWGTabByClick(Sender: TObject);
     procedure ChangedDWGTab(Sender: TObject);
@@ -126,7 +126,6 @@ type
     procedure myKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 
     procedure idle(Sender: TObject; var Done: Boolean);virtual;
-    procedure ReloadLayer(plt:PTGenericNamedObjectsArray);
     procedure GeneralTick(Sender: TObject);
     procedure ShowFastMenu(Sender: TObject);
     procedure asynccloseapp(Data: PtrInt);
@@ -173,6 +172,8 @@ var
 
 implementation
 {$R *.lfm}
+var
+  LMD:TModuleDesk;
 
 constructor TmyAnchorDockSplitter.Create(TheOwner: TComponent);
 begin
@@ -756,6 +757,7 @@ procedure TZCADMainWindow.CreateAnchorDockingInterface;
 var
   action: tmyaction;
 begin
+  with programlog.Enter('TZCADMainWindow.CreateAnchorDockingInterface',LM_Debug,LMD) do begin try
   {Настройка DragManager чтоб срабатывал попозже}
   DragManager.DragImmediate:=false;
   DragManager.DragThreshold:=32;
@@ -808,6 +810,7 @@ begin
        DockMaster.ShowControl('ObjectInspector', true);
        DockMaster.ShowControl('PageControl', true);
   end;
+  finally programlog.leave(IfEntered);end;end;
 end;
 
 procedure TZCADMainWindow.ZcadException(Sender: TObject; E: Exception);
@@ -970,6 +973,7 @@ begin
 end;
 procedure TZCADMainWindow._onCreate(Sender: TObject);
 begin
+  with programlog.Enter('TZCADMainWindow._onCreate',LM_Debug,LMD) do begin try
   ZCADGUIManager.RegisterZCADFormInfo('PageControl',rsDrawingWindowWndName,Tform,types.rect(200,200,600,500),ZCADMainPanelSetupProc,nil,@ZCADMainWindow.MainPanel);
 
   FAppProps := TApplicationProperties.Create(Self);
@@ -1024,6 +1028,7 @@ begin
 
   CreateAnchorDockingInterface;
   ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
+  finally programlog.leave(IfEntered);end;end;
 end;
 
 procedure TZCADMainWindow.UpdateControls;
@@ -1070,159 +1075,150 @@ end;
 
 destructor TZCADMainWindow.Destroy;
 begin
-  if DockMaster<>nil then
-    DockMaster.CloseAll;
-  freeandnil(toolbars);
-  freeandnil(updatesbytton);
-  freeandnil(updatescontrols);
-  freeandnil(enabledcontrols);
-  freeandnil(SuppressedShortcuts);
-  inherited;
+  with programlog.Enter('TZCADMainWindow.Destroy',LM_Debug,LMD) do begin
+    if DockMaster<>nil then
+      DockMaster.CloseAll;
+    freeandnil(toolbars);
+    freeandnil(updatesbytton);
+    freeandnil(updatescontrols);
+    freeandnil(enabledcontrols);
+    freeandnil(SuppressedShortcuts);
+    inherited;
+  programlog.leave(IfEntered);end;
 end;
 procedure TZCADMainWindow.ActionUpdate(AAction: TBasicAction; var Handled: Boolean);
 var
-   _disabled:boolean;
-   ctrl:TControl;
-   ti:integer;
-   POGLWndParam:POGLWndtype;
-   PSimpleDrawing:PTSimpleDrawing;
+  _disabled:boolean;
+  ctrl:TControl;
+  ti:integer;
+  POGLWndParam:POGLWndtype;
+  PSimpleDrawing:PTSimpleDrawing;
 begin
-     if AAction is TmyAction then
-     begin
-     Handled:=true;
+  with programlog.Enter('TZCADMainWindow.ActionUpdate',LM_Debug,LMD) do begin try
+    if AAction is TmyAction then begin
+      Handled:=true;
+      if uppercase(TmyAction(AAction).command)='SHOWPAGE' then
+        if uppercase(TmyAction(AAction).options)<>'' then begin
+          if assigned(ZCADMainWindow)then
+            if assigned(ZCADMainWindow.PageControl)then
+              if ZCADMainWindow.PageControl.ActivePageIndex=strtoint(TmyAction(AAction).options) then
+                TmyAction(AAction).Checked:=true
+              else
+                TmyAction(AAction).Checked:=false;
+              //programlog.leave(IfEntered);
+              exit;
+        end;
 
-
-          if uppercase(TmyAction(AAction).command)='SHOWPAGE' then
-          if uppercase(TmyAction(AAction).options)<>'' then
-          begin
-               if assigned(ZCADMainWindow)then
-               if assigned(ZCADMainWindow.PageControl)then
-               if ZCADMainWindow.PageControl.ActivePageIndex=strtoint(TmyAction(AAction).options) then
-                                                                               TmyAction(AAction).Checked:=true
-                                                                           else
-                                                                               TmyAction(AAction).Checked:=false;
-               exit;
+      if uppercase(TmyAction(AAction).command)='SHOW' then
+        if uppercase(TmyAction(AAction).options)<>'' then begin
+          ctrl:=DockMaster.FindControl(TmyAction(AAction).options);
+          if ctrl=nil then begin
+            if toolbars.Find(TmyAction(AAction).options,ti) then
+            TmyAction(AAction).Enabled:=false
+          end else begin
+            TmyAction(AAction).Enabled:=true;
+            TmyAction(AAction).Checked:=ctrl.IsVisible;
           end;
+          //programlog.leave(IfEntered);
+          exit;
+        end;
 
-          if uppercase(TmyAction(AAction).command)='SHOW' then
-          if uppercase(TmyAction(AAction).options)<>'' then
-          begin
-               ctrl:=DockMaster.FindControl(TmyAction(AAction).options);
-               if ctrl=nil then
-                               begin
-                                    if toolbars.Find(TmyAction(AAction).options,ti) then
-                                    TmyAction(AAction).Enabled:=false
-                               end
-                           else
-                               begin
-                                    TmyAction(AAction).Enabled:=true;
-                                    TmyAction(AAction).Checked:=ctrl.IsVisible;
-                               end;
-               exit;
-          end;
-
-
-     _disabled:=false;
-     PSimpleDrawing:=drawings.GetCurrentDWG;
-     POGLWndParam:=nil;
-     if PSimpleDrawing<>nil then
-     if PSimpleDrawing.wa<>nil then
-                                POGLWndParam:=@PSimpleDrawing.wa.param;
-     if assigned(TmyAction(AAction).pfoundcommand) then
-     begin
-     if ((GetCommandContext(PSimpleDrawing,POGLWndParam) xor TmyAction(AAction).pfoundcommand^.CStartAttrEnableAttr)and TmyAction(AAction).pfoundcommand^.CStartAttrEnableAttr)<>0
-          then
-              _disabled:=true;
-
-
-     TmyAction(AAction).Enabled:=not _disabled;
-     end;
-
-     end
-else if AAction is TmyVariableAction then
-     begin
-          Handled:=true;
-          TmyVariableAction(AAction).AssignToVar(TmyVariableAction(AAction).FVariable,TmyVariableAction(AAction).FMask);
-     end;
+      _disabled:=false;
+      PSimpleDrawing:=drawings.GetCurrentDWG;
+      POGLWndParam:=nil;
+      if PSimpleDrawing<>nil then
+        if PSimpleDrawing.wa<>nil then
+          POGLWndParam:=@PSimpleDrawing.wa.param;
+      if assigned(TmyAction(AAction).pfoundcommand) then begin
+        if ((GetCommandContext(PSimpleDrawing,POGLWndParam) xor TmyAction(AAction).pfoundcommand^.CStartAttrEnableAttr)
+             and TmyAction(AAction).pfoundcommand^.CStartAttrEnableAttr)<>0
+        then
+          _disabled:=true;
+        TmyAction(AAction).Enabled:=not _disabled;
+      end;
+    end else
+      if AAction is TmyVariableAction then begin
+        Handled:=true;
+        TmyVariableAction(AAction).AssignToVar(TmyVariableAction(AAction).FVariable,TmyVariableAction(AAction).FMask);
+      end;
+  finally programlog.leave(IfEntered);end;end;
 end;
 
 function TZCADMainWindow.IsShortcut(var Message: TLMKey): boolean;
 var
-   OldFunction:TIsShortcutFunc;
+  OldFunction:TIsShortcutFunc;
 begin
-   TMethod(OldFunction).code:=@TForm.IsShortcut;
-   TMethod(OldFunction).Data:=self;
-   result:=IsZShortcut(Message,Screen.ActiveControl,ZCMsgCallBackInterface.GetPriorityFocus,OldFunction,SuppressedShortcuts);
+  with programlog.Enter('TZCADMainWindow.IsShortcut',LM_Debug,LMD) do begin
+    TMethod(OldFunction).code:=@TForm.IsShortcut;
+    TMethod(OldFunction).Data:=self;
+    result:=IsZShortcut(Message,Screen.ActiveControl,ZCMsgCallBackInterface.GetPriorityFocus,OldFunction,SuppressedShortcuts);
+  programlog.leave(IfEntered);end;
 end;
 
 procedure TZCADMainWindow.myKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 var
-   tempkey:word;
-   comtext:string;
+  tempkey:word;
+  comtext:string;
 begin
-     ZCMsgCallBackInterface.Do_KeyDown(Sender,Key,Shift);
-     if key=0 then exit;
+  with programlog.Enter('TZCADMainWindow.myKeyDown',LM_Debug,LMD) do begin try
+    ZCMsgCallBackInterface.Do_KeyDown(Sender,Key,Shift);
+    if key=0 then begin
+      //programlog.leave(IfEntered);
+      exit;
+    end;
 
-     if ((ActiveControl<>cmdedit)and(ActiveControl<>HistoryLine){and(ActiveControl<>LayerBox)and(ActiveControl<>LineWBox)})then
-     begin
-     if (ActiveControl is tedit)or (ActiveControl is tmemo)or (ActiveControl is TComboBox)then
-                                                                                              exit;
+    if ((ActiveControl<>cmdedit)and(ActiveControl<>HistoryLine){and(ActiveControl<>LayerBox)and(ActiveControl<>LineWBox)})then begin
+      if (ActiveControl is tedit)or (ActiveControl is tmemo)or (ActiveControl is TComboBox)then begin
+        //programlog.leave(IfEntered);
+        exit;
+      end;
      {if assigned(GetPeditorProc) then
      if (GetPeditorProc)<>nil then
      if (ActiveControl=TPropEditor(GetPeditorProc).geteditor) then
                                                             exit;}
-     end;
+    end;
     { if ((ActiveControl=LayerBox)or(ActiveControl=LineWBox))then
                                                                  begin
                                                                  ZCMsgCallBackInterface.Do_SetNormalFocus;
                                                                  end;}
-     tempkey:=key;
+    tempkey:=key;
 
-     comtext:='';
-     if assigned(cmdedit) then
-                              comtext:=cmdedit.text;
-     if comtext='' then
-     begin
-     if assigned(drawings.GetCurrentDWG) then
-     if assigned(drawings.GetCurrentDWG.wa) then
-     if assigned(drawings.GetCurrentDWG.wa.getviewcontrol)then
-                    drawings.GetCurrentDWG.wa.myKeyPress(tempkey,shift);
-     end
-     else
-         if key=VK_ESCAPE then
-                              cmdedit.text:='';
-     if tempkey<>0 then
-     begin
-        if (tempkey=VK_TAB)and(shift=[ssctrl,ssShift]) then
-                                 begin
-                                      if assigned(PageControl)then
-                                         if PageControl.PageCount>1 then
-                                         begin
-                                              commandmanager.executecommandsilent('PrevDrawing',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
-                                              tempkey:=00;
-                                         end;
-                                 end
-        else if (tempkey=VK_TAB)and(shift=[ssctrl]) then
-                                 begin
-                                      if assigned(PageControl)then
-                                         if PageControl.PageCount>1 then
-                                         begin
-                                              commandmanager.executecommandsilent('NextDrawing',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
-                                              tempkey:=00;
-                                         end;
-                                 end
-     end;
-     if assigned(cmdedit) then
-     if tempkey<>0 then
-     begin
-         tempkey:=key;
-         if cmdedit.text='' then
-         begin
-
-         end;
-     end;
-     if tempkey=0 then
-                      key:=0;
+    comtext:='';
+    if assigned(cmdedit) then
+      comtext:=cmdedit.text;
+    if comtext='' then begin
+      if assigned(drawings.GetCurrentDWG) then
+        if assigned(drawings.GetCurrentDWG.wa) then
+          if assigned(drawings.GetCurrentDWG.wa.getviewcontrol)then
+            drawings.GetCurrentDWG.wa.myKeyPress(tempkey,shift);
+    end else
+      if key=VK_ESCAPE then
+        cmdedit.text:='';
+    if tempkey<>0 then begin
+      if (tempkey=VK_TAB)and(shift=[ssctrl,ssShift]) then begin
+        if assigned(PageControl)then
+          if PageControl.PageCount>1 then begin
+            commandmanager.executecommandsilent('PrevDrawing',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
+            tempkey:=00;
+          end;
+      end else
+        if (tempkey=VK_TAB)and(shift=[ssctrl]) then begin
+          if assigned(PageControl)then
+            if PageControl.PageCount>1 then begin
+              commandmanager.executecommandsilent('NextDrawing',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
+              tempkey:=0;
+            end;
+        end
+    end;
+    if assigned(cmdedit) then
+      if tempkey<>0 then begin
+        tempkey:=key;
+        if cmdedit.text='' then begin
+        end;
+      end;
+    if tempkey=0 then
+      key:=0;
+  finally programlog.leave(IfEntered);end;end;
 end;
 
 procedure TZCADMainWindow.CreateHTPB(tb:TToolBar);
@@ -1253,61 +1249,54 @@ var
    pdwg:PTSimpleDrawing;
    rc:TDrawContext;
 begin
-     {IFDEF linux}
-     if assigned(UniqueInstanceBase.FIPCServer)then
-     if UniqueInstanceBase.FIPCServer.active then
-       UniqueInstanceBase.FIPCServer.PeekMessage(0,true);
-     {endif}
-     done:=true;
-     sysvar.debug.languadedeb.UpdatePO:=_UpdatePO;
-     sysvar.debug.languadedeb.NotEnlishWord:=_NotEnlishWord;
-     sysvar.debug.languadedeb.DebugWord:=_DebugWord;
-     pdwg:=drawings.GetCurrentDWG;
-     if (pdwg<>nil)and(pdwg.wa<>nil) then
-     begin
-     if pdwg.wa.getviewcontrol<>nil then
-     begin
-              if  pdwg.pcamera.DRAWNOTEND then
-                                              begin
-                                                   rc:=pdwg.CreateDrawingRC;
-                                              pdwg.wa.finishdraw(rc);
-                                              done:=false;
-                                              end
-                                          else
-                                              begin
-                                                   pdwg.wa.idle(Sender,Done);
-                                              end
-     end
-     end
-     else
-         SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;
-     if pdwg<>nil then
-     if not pdwg^.GetChangeStampt then
-                                      SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;
-     if (SysVar.SAVE.SAVE_Auto_Current_Interval^<1)and(commandmanager.pcommandrunning=nil) then
-     if (pdwg)<>nil then
-     if (pdwg.wa.param.SelDesc.Selectedobjcount=0) then
-     begin
+  with programlog.Enter('TZCADMainWindow.idle',LM_Debug,LMD) do begin try
+    {IFDEF linux}
+    if assigned(UniqueInstanceBase.FIPCServer)then
+      if UniqueInstanceBase.FIPCServer.active then
+        UniqueInstanceBase.FIPCServer.PeekMessage(0,true);
+    {endif}
+    done:=true;
+    sysvar.debug.languadedeb.UpdatePO:=_UpdatePO;
+    sysvar.debug.languadedeb.NotEnlishWord:=_NotEnlishWord;
+    sysvar.debug.languadedeb.DebugWord:=_DebugWord;
+    pdwg:=drawings.GetCurrentDWG;
+    if (pdwg<>nil)and(pdwg.wa<>nil) then begin
+      if pdwg.wa.getviewcontrol<>nil then begin
+        if pdwg.pcamera.DRAWNOTEND then begin
+          rc:=pdwg.CreateDrawingRC;
+          pdwg.wa.finishdraw(rc);
+          done:=false;
+        end else begin
+          pdwg.wa.idle(Sender,Done);
+        end
+      end
+    end else
+      SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;
+    if pdwg<>nil then
+      if not pdwg^.GetChangeStampt then
+        SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;
+    if (SysVar.SAVE.SAVE_Auto_Current_Interval^<1)and(commandmanager.pcommandrunning=nil) then
+      if (pdwg)<>nil then
+        if (pdwg.wa.param.SelDesc.Selectedobjcount=0) then begin
           commandmanager.executecommandsilent('QSave(QS)',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
           SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;
-     end;
-     date:=sysutils.date;
-     if rt<>SysVar.SYS.SYS_RunTime^ then
-                                        begin
-                                         ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUITimerTick);
-                                         {if assigned(UpdateObjInspProc)then
-                                                                               UpdateObjInspProc;}
-                                        end;
-     rt:=SysVar.SYS.SYS_RunTime^;
-     if ZCStatekInterface.CheckAndResetState(ZCSGUIChanged) then
-       ZCMsgCallBackInterface.Do_SetNormalFocus;
-     {if historychanged then
-                           begin
-                                historychanged:=false;
-                                HistoryLine.SelStart:=utflen;
-                                HistoryLine.SelLength:=2;
-                                HistoryLine.ClearSelection;
-                           end;}
+        end;
+    date:=sysutils.date;
+    if rt<>SysVar.SYS.SYS_RunTime^ then begin
+      ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUITimerTick);
+      {if assigned(UpdateObjInspProc)then
+         UpdateObjInspProc;}
+    end;
+    rt:=SysVar.SYS.SYS_RunTime^;
+    if ZCStatekInterface.CheckAndResetState(ZCSGUIChanged) then
+      ZCMsgCallBackInterface.Do_SetNormalFocus;
+    {if historychanged then begin
+      historychanged:=false;
+      HistoryLine.SelStart:=utflen;
+      HistoryLine.SelLength:=2;
+      HistoryLine.ClearSelection;
+    end;}
+  finally programlog.leave(IfEntered);end;end;
 end;
 procedure AddToComboIfNeed(cb:tcombobox;name:string;obj:TObject);
 var
@@ -1411,30 +1400,6 @@ begin
                      ZCMsgCallBackInterface.TextMessage(format(rsprocesstimemsg,[pname,ts]),TMWOHistoryOut);
     pname:='';
 end;
-procedure TZCADMainWindow.ReloadLayer(plt:PTGenericNamedObjectsArray);
-begin
-  (*
-  {layerbox.ClearText;}
-  //layerbox.ItemsClear;
-  //layerbox.Sorted:=true;
-  plp:=plt^.beginiterate(ir);
-  if plp<>nil then
-  repeat
-       s:=plp^.GetFullName;
-       //(OnOff,Freze,Lock:boolean;ItemName:utf8string;lo:pointer)
-       //layerbox.AddItem(plp^._on,false,plp^._lock,s,pointer(plp));//      sdfg
-       //layerbox.Items.Add(s);
-       plp:=plt^.iterate(ir);
-  until plp=nil;
-  //layerbox.Items.;
-  //layerbox.Sorted:=false;
-  //layerbox.Items.Add(S_Different);
-  //layerbox.Additem(false,false,false,rsDifferent,nil);
-  //layerbox.ItemIndex:=(SysVar.dwg.DWG_CLayer^);
-  //layerbox.Sorted:=true;
-  *)
-end;
-
 procedure TZCADMainWindow.MainMouseMove;
 begin
      cxmenumgr.reset;
@@ -2212,6 +2177,7 @@ begin
 end;
 initialization
 begin
+  LMD:=programlog.RegisterModule('zcad\gui\uzcmainwindow-gui');
   CreateCommandFastObjectPlugin(pointer($100),'GetAV',0,0);
   CreateCommandFastObjectPlugin(@RaiseException_com,'RaiseException',0,0);
   CreateCommandFastObjectPlugin(@DockingOptions_com,'DockingOptions',0,0);

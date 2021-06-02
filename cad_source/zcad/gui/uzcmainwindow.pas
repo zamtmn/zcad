@@ -1626,6 +1626,7 @@ begin
 end;
 
 begin
+  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIStoreAndFreeEditorProc);
   FreeClick:=true;
   key := MouseButton2ZKey(shift);
  if ssDouble in shift then

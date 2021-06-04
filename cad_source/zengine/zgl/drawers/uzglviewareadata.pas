@@ -119,6 +119,10 @@ type
                CSX, CSY, CSZ: GDBvertex2DI;
                AxisLen:GDBDouble;
          end;
+  TForceRedrawVolume=record
+   ForceRedraw:GDBBoolean;
+   Volume:TBoundingBox;
+  end;
 
   POGLWndtype = ^OGLWndtype;
   OGLWndtype = object(GDBaseObject)
@@ -149,6 +153,7 @@ type
     ShowDebugBoundingBbox:GDBBoolean;
     DebugBoundingBbox:TBoundingBox;
     processObjConstruct:GDBBoolean;
+    ForceRedrawVolume:TForceRedrawVolume;
     constructor init;
     destructor done;virtual;
   end;
@@ -207,6 +212,7 @@ begin
 
        ospoint.arraydispaxis.init({$IFDEF DEBUGBUILD}'{722A886F-5616-4E8F-B94D-3A1C3D7ADBD4}',{$ENDIF}10);
        ospoint.arrayworldaxis.init({$IFDEF DEBUGBUILD}'{722A886F-5616-4E8F-B94D-3A1C3D7ADBD4}',{$ENDIF}10);
+  ForceRedrawVolume.ForceRedraw:=false;
 end;
 
 destructor OGLWndtype.done;

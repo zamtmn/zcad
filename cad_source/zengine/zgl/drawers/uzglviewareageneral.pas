@@ -98,6 +98,7 @@ type
                            procedure hidemousecursor;override;
                            Procedure Paint; override;
                            function treerender(var Node:TEntTreeNode;StartTime:TDateTime;var DC:TDrawContext):GDBBoolean; override;
+                           procedure partailtreerender(var Node:TEntTreeNode;const part:TBoundingBox; var DC:TDrawContext); override;
                            procedure render(const Root:GDBObjGenericSubEntry;var DC:TDrawContext); override;
                            procedure finishdraw(var RC:TDrawContext); override;
                            procedure draw;override;
@@ -605,59 +606,61 @@ procedure TGeneralViewArea.SwapBuffers(var DC:TDrawContext);
 begin
      drawer.SwapBuffers;
 end;
+procedure TGeneralViewArea.partailtreerender(var Node:TEntTreeNode;const part:TBoundingBox; var DC:TDrawContext);
+//копипаста из treerender
+begin
+  if (Node.NodeData.infrustum=PDWG.Getpcamera.POSCOUNT)and(boundingintersect(Node.BoundingBox,part)) then begin
+    if (Node.NodeData.FulDraw=TDTFulDraw)or(Node.nul.count=0) then begin
+      if assigned(node.pminusnode)then
+        partailtreerender(PTEntTreeNode(node.pminusnode)^,part,dc);
+      if assigned(node.pplusnode)then
+        partailtreerender(PTEntTreeNode(node.pplusnode)^,part,dc);
+    end;
+    TEntTreeNode(Node).DrawWithAttribExternalArray(dc);
+  end;
+end;
+
+
 function TGeneralViewArea.treerender;
 var
-   currtime:TDateTime;
-   Hour,Minute,Second,MilliSecond:word;
-   q1,q2:gdbboolean;
-   //currd:PTDrawing;
-begin //currd:=gdb.GetCurrentDWG;
+  currtime:TDateTime;
+  Hour,Minute,Second,MilliSecond:word;
+  q1,q2:gdbboolean;
+begin
+  if (sysvarRDMaxRenderTime<>0) then begin
+    currtime:=now;
+    decodetime(currtime-StartTime,Hour,Minute,Second,MilliSecond);
     if (sysvarRDMaxRenderTime<>0) then
-    begin
-     currtime:=now;
-     decodetime(currtime-StartTime,Hour,Minute,Second,MilliSecond);
-     if (sysvarRDMaxRenderTime<>0) then
-     if (sysvarRDMaxRenderTime-MilliSecond)<0 then
-                            begin
-                                  result:=true;
-                                  exit;
-                            end;
-     end;
-     q1:=false;
-     q2:=false;
-
-  if Node.NodeData.infrustum={gdb.GetCurrentDWG}PDWG.Getpcamera.POSCOUNT then
-  begin
-       if (Node.NodeData.FulDraw=TDTFulDraw)or(Node.nul.count=0) then
-       begin
-       if assigned(node.pminusnode)then
-                                       if node.NodeData.minusdrawpos<>PDWG.Getpcamera.DRAWCOUNT then
-                                       begin
-                                       if not treerender(PTEntTreeNode(node.pminusnode)^,StartTime,dc) then
-                                           node.NodeData.minusdrawpos:=PDWG.Getpcamera.DRAWCOUNT
-                                                                                     else
-                                                                                         q1:=true;
-                                       end;
-       if assigned(node.pplusnode)then
-                                      if node.NodeData.plusdrawpos<>PDWG.Getpcamera.DRAWCOUNT then
-                                      begin
-                                       if not treerender(PTEntTreeNode(node.pplusnode)^,StartTime,dc) then
-                                           node.NodeData.plusdrawpos:=PDWG.Getpcamera.DRAWCOUNT
-                                                                                    else
-                                                                                        q2:=true;
-                                      end;
-       end;
-       if node.NodeData.nuldrawpos<>PDWG.Getpcamera.DRAWCOUNT then
-       begin
-        TEntTreeNode(Node).DrawWithAttribExternalArray(dc);
-        //GDBObjEntityOpenArray(Node.nul).DrawWithattrib(dc{gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender});
-        node.NodeData.nuldrawpos:=PDWG.Getpcamera.DRAWCOUNT;
-       end;
+      if (sysvarRDMaxRenderTime-MilliSecond)<0 then
+        exit(true);
   end;
-  result:=(q1) or (q2);
-  //Node.drawpos:=gdb.GetCurrentDWG.pcamera.DRAWCOUNT;
+  q1:=false;
+  q2:=false;
 
-  //root.DrawWithattrib(gdb.GetCurrentDWG.pcamera.POSCOUNT);
+  if Node.NodeData.infrustum=PDWG.Getpcamera.POSCOUNT then begin
+    if (Node.NodeData.FulDraw=TDTFulDraw)or(Node.nul.count=0) then begin
+      if assigned(node.pminusnode)then
+        if node.NodeData.minusdrawpos<>PDWG.Getpcamera.DRAWCOUNT then begin
+          if not treerender(PTEntTreeNode(node.pminusnode)^,StartTime,dc) then
+            node.NodeData.minusdrawpos:=PDWG.Getpcamera.DRAWCOUNT
+          else
+            q1:=true;
+        end;
+      if assigned(node.pplusnode)then
+        if node.NodeData.plusdrawpos<>PDWG.Getpcamera.DRAWCOUNT then begin
+          if not treerender(PTEntTreeNode(node.pplusnode)^,StartTime,dc) then
+            node.NodeData.plusdrawpos:=PDWG.Getpcamera.DRAWCOUNT
+          else
+            q2:=true;
+        end;
+    end;
+    if node.NodeData.nuldrawpos<>PDWG.Getpcamera.DRAWCOUNT then begin
+      TEntTreeNode(Node).DrawWithAttribExternalArray(dc);
+      //GDBObjEntityOpenArray(Node.nul).DrawWithattrib(dc{gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender});
+      node.NodeData.nuldrawpos:=PDWG.Getpcamera.DRAWCOUNT;
+    end;
+  end;
+  result:=q1 or q2;
 end;
 procedure TGeneralViewArea.render;
 begin
@@ -754,6 +757,7 @@ begin
   begin
   if needredraw then
   begin
+    param.ForceRedrawVolume.ForceRedraw:=false;
     inc(PDWG.Getpcamera^.DRAWCOUNT);
     dc.drawer.ClearStatesMachine;
 
@@ -828,8 +832,14 @@ begin
     LightOff(dc);
     drawer.RestoreBuffers;
     CalcOptimalMatrix;
-    inc(dc.subrender);
     dc.drawer.startrender(TRM_ModelSpace,dc.DrawingContext.matrixs);
+    if param.ForceRedrawVolume.ForceRedraw then begin
+      partailtreerender(PDWG.GetCurrentROOT^.ObjArray.ObjTree,param.ForceRedrawVolume.Volume,dc);
+      param.ForceRedrawVolume.ForceRedraw:=false;
+      dc.drawer.ClearStatesMachine;
+      drawer.SaveBuffers;
+    end;
+    inc(dc.subrender);
     if PDWG.GetConstructObjRoot.ObjArray.Count>0 then
                                                     PDWG.GetConstructObjRoot.ObjArray.Count:=PDWG.GetConstructObjRoot.ObjArray.Count;
     if assigned(dc.DrawingContext.DrawHeplGeometryProc) then

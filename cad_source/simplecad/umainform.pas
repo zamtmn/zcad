@@ -45,6 +45,7 @@ type
     BtnEraseSel1: TButton;
     BtnProcessObjects1: TButton;
     BtnProcessObjects2: TButton;
+    BtnRandomObjectRedraw: TButton;
     BtnSelectAll: TButton;
     BtnRebuild: TButton;
     BtnEraseSel: TButton;
@@ -76,6 +77,7 @@ type
     procedure BtnAddSplines1Click(Sender: TObject);
     procedure BtnCreateAndUseLT(Sender: TObject);
     procedure BtnProcessObjectsClick(Sender: TObject); //Move lines and circles in current drawing
+    procedure BtnRandomEntityRedrawClick(Sender: TObject);
     procedure BtnRebuildClick(Sender: TObject);        //Rebuild spatial tree in current drawing
     procedure BtnEraseSelClick(Sender: TObject);       //Erase selected ents in current drawing
     procedure BtnAddTextsClick(Sender: TObject);       //Add texts to current drawing
@@ -451,6 +453,21 @@ begin
   _EndLongProcess;
 
   GetCurrentDrawing^.HardReDraw;
+end;
+
+procedure TForm1.BtnRandomEntityRedrawClick(Sender: TObject);
+var
+  pv:pGDBObjEntity;
+  ir:itrec;
+  l,hl:double;
+begin
+  pv:=pointer(GetCurrentDrawing^.GetCurrentROOT^.ObjArray.getData(random(GetCurrentDrawing^.GetCurrentROOT^.ObjArray.GetCount)));
+  if pv<>nil then begin
+    pv^.vp.Color:=0;
+    GetCurrentDrawing^.wa.param.ForceRedrawVolume.ForceRedraw:=true;
+    GetCurrentDrawing^.wa.param.ForceRedrawVolume.Volume:=pv^.vp.BoundingBox;
+    GetCurrentDrawing^.wa.draworinvalidate;
+  end;
 end;
 
 procedure TForm1.BtnAddCirclesClick(Sender: TObject);

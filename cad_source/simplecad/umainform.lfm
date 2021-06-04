@@ -124,7 +124,7 @@ object Form1: TForm1
     AnchorSideRight.Side = asrBottom
     Left = 1360
     Height = 34
-    Top = 918
+    Top = 1041
     Width = 299
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Rebuild tree'
@@ -138,7 +138,7 @@ object Form1: TForm1
     AnchorSideRight.Side = asrBottom
     Left = 1251
     Height = 29
-    Top = 921
+    Top = 1044
     Width = 109
     Caption = 'Show tree'
     OnChange = TreeChange
@@ -198,7 +198,7 @@ object Form1: TForm1
     AnchorSideRight.Side = asrBottom
     Left = 1251
     Height = 42
-    Top = 794
+    Top = 920
     Width = 408
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Open DXF'
@@ -213,7 +213,7 @@ object Form1: TForm1
     AnchorSideRight.Side = asrBottom
     Left = 1251
     Height = 39
-    Top = 842
+    Top = 976
     Width = 408
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Save DXF'
@@ -286,7 +286,7 @@ object Form1: TForm1
     AnchorSideLeft.Side = asrBottom
     Left = 1251
     Height = 29
-    Top = 892
+    Top = 1016
     Width = 157
     Caption = '3D(ZCoord<>0)'
     ParentFont = False
@@ -347,8 +347,8 @@ object Form1: TForm1
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
     Left = 1251
-    Height = 386
-    Top = 952
+    Height = 263
+    Top = 1075
     Width = 408
     Anchors = [akTop, akLeft, akRight, akBottom]
     ParentFont = False
@@ -391,7 +391,7 @@ object Form1: TForm1
     AnchorSideRight.Side = asrBottom
     Left = 1251
     Height = 33
-    Top = 728
+    Top = 784
     Width = 408
     Anchors = [akTop, akLeft, akRight]
     ItemHeight = 25
@@ -435,15 +435,30 @@ object Form1: TForm1
     ParentFont = False
     TabOrder = 23
   end
+  object BtnRandomObjectRedraw: TButton
+    AnchorSideLeft.Control = Splitter1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 1251
+    Height = 48
+    Top = 720
+    Width = 408
+    Anchors = [akTop, akLeft, akRight]
+    Caption = 'Random entity redraw'
+    OnClick = BtnRandomEntityRedrawClick
+    ParentFont = False
+    TabOrder = 24
+  end
   object OpenDialog1: TOpenDialog
     DefaultExt = '.dxf'
     Filter = 'DXF File|*.dxf'
-    Left = 1317
-    Top = 732
+    Left = 1320
+    Top = 1080
   end
   object SaveDialog1: TSaveDialog
     Filter = 'DXF file|*.dxf'
-    Left = 1401
-    Top = 732
+    Left = 1408
+    Top = 1080
   end
 end

@@ -137,7 +137,8 @@ type
                            procedure DrawGrid(var DC:TDrawContext); virtual;abstract;
                            procedure showcursor(var DC:TDrawContext); virtual;abstract;
                            procedure render(const Root:GDBObjGenericSubEntry;var DC:TDrawContext); virtual;abstract;
-                           function treerender(var Node:TEntTreeNode;StartTime:TDateTime;var DC:TDrawContext):GDBBoolean; virtual;abstract;
+                           function treerender(var Node:TEntTreeNode;StartTime:TDateTime;var DC:TDrawContext):GDBBoolean;virtual;abstract;
+                           procedure partailtreerender(var Node:TEntTreeNode;const part:TBoundingBox; var DC:TDrawContext);virtual;abstract;
                            function startpaint:boolean;virtual;abstract;
                            procedure endpaint;virtual;abstract;
                            procedure asyncupdatemouse(Data: PtrInt);virtual;abstract;

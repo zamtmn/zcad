@@ -5,33 +5,33 @@
       <ZTreeNode Caption='Сила'>
       	<ZTreeNode Caption='Кабельные стояки'>
       	   <ZTreeCommand Command="Insert(DEVICE_EL_CABLE_BREAK)" Img='DEVICE_EL_CABLE_BREAK_300' Caption='Обрыв'/>
-      	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CABLE_UP1)" Img='DEVICE_EL_VL_CABLE_UP1_300' Caption='Кабель в верх 1'/>
-      	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CABLE_UP2)" Img='DEVICE_EL_VL_CABLE_UP2_300' Caption='Кабель в верх 2'/>
-      	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CABLE_DOWN1)" Img='DEVICE_EL_VL_CABLE_DOWN1_300' Caption='Кабель вниз 1'/>
-      	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CABLE_DOWN2)" Img='DEVICE_EL_VL_CABLE_DOWN2_300' Caption='Кабель вниз 2'/>
-      	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CABLE_FROMDOWN1)" Img='DEVICE_EL_VL_CABLE_FROMDOWN1_300' Caption='Кабель c низу 1'/>
-           <ZTreeCommand Command="Insert(DEVICE_EL_VL_CABLE_FROMDOWN2)" Img='DEVICE_EL_VL_CABLE_FROMDOWN2_300' Caption='Кабель c низу 2'/>
-      	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CABLE_FROMUP1)" Img='DEVICE_EL_VL_CABLE_FROMUP1_300' Caption='Кабель c верху 1'/>
-      	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CABLE_FROMUP2)" Img='DEVICE_EL_VL_CABLE_FROMUP2_300' Caption='Кабель c верху 2'/>
+      	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CABLE_UP1)" Img='DEVICE_EL_VL_CABLE_UP1_300' Caption='Кабель в верх, тип 1'/>
+      	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CABLE_UP2)" Img='DEVICE_EL_VL_CABLE_UP2_300' Caption='Кабель в верх, тип 2'/>
+      	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CABLE_DOWN1)" Img='DEVICE_EL_VL_CABLE_DOWN1_300' Caption='Кабель вниз, тип 1'/>
+      	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CABLE_DOWN2)" Img='DEVICE_EL_VL_CABLE_DOWN2_300' Caption='Кабель вниз, тип 2'/>
+      	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CABLE_FROMDOWN1)" Img='DEVICE_EL_VL_CABLE_FROMDOWN1_300' Caption='Кабель c низу, тип 1'/>
+           <ZTreeCommand Command="Insert(DEVICE_EL_VL_CABLE_FROMDOWN2)" Img='DEVICE_EL_VL_CABLE_FROMDOWN2_300' Caption='Кабель c низу, тип 2'/>
+      	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CABLE_FROMUP1)" Img='DEVICE_EL_VL_CABLE_FROMUP1_300' Caption='Кабель c верху, тип 1'/>
+      	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CABLE_FROMUP2)" Img='DEVICE_EL_VL_CABLE_FROMUP2_300' Caption='Кабель c верху, тип 2'/>
       	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CABLE_FROMDOWN_UP1)" Img='DEVICE_EL_VL_CABLE_FROMDOWN_UP1_300' Caption='Кабель c низу вверх'/>
       	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CABLE_FROMUP_DOWN1)" Img='DEVICE_EL_VL_CABLE_FROMUP_DOWN1_300' Caption='Кабель c верху в низ'/>
       	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CABLE_DOWN_UP1)" Img='DEVICE_EL_VL_CABLE_DOWN_UP1_300' Caption='Кабель в низ в верх'/>
       	</ZTreeNode>
       	<ZTreeNode Caption='Эл.оборудование'>
-      	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SHR1)" Img='DEVICE_EL_VL_SHR1_300' Caption='Распред.щит1'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SHR2)" Img='DEVICE_EL_VL_SHR2_300' Caption='Распред.щит2'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SHO1)" Img='DEVICE_EL_VL_SHO1_300' Caption='Щит освещения1'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SHO2)" Img='DEVICE_EL_VL_SHO2_300' Caption='Щит освещения2'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SHAO1)" Img='DEVICE_EL_VL_SHAO1_300' Caption='Щит авар.осв1'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SHAO2)" Img='DEVICE_EL_VL_SHAO2_300' Caption='Щит авар.осв2'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_FIRE1)" Img='DEVICE_EL_VL_FIRE1_300' Caption='Пож.сигнал1'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_FIRE2)" Img='DEVICE_EL_VL_FIRE2_300' Caption='Пож.сигнал2'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_MOTOR1)" Img='DEVICE_EL_VL_MOTOR1_300' Caption='Двигатель1'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_MOTOR2)" Img='DEVICE_EL_VL_MOTOR2_300' Caption='Двигатель2'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_HEATER1)" Img='DEVICE_EL_VL_HEATER1_300' Caption='Обогреватель1'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_HEATER2)" Img='DEVICE_EL_VL_HEATER2_300' Caption='Обогреватель2'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_DEVICE1)" Img='DEVICE_EL_VL_DEVICE1_300' Caption='Устройство1'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_DEVICE2)" Img='DEVICE_EL_VL_DEVICE2_300' Caption='Устройство2'/>
+      	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SHR1)" Img='DEVICE_EL_VL_SHR1_300' Caption='Распред.щит, тип 1'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SHR2)" Img='DEVICE_EL_VL_SHR2_300' Caption='Распред.щит, тип 2'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SHO1)" Img='DEVICE_EL_VL_SHO1_300' Caption='Щит освещения, тип 1'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SHO2)" Img='DEVICE_EL_VL_SHO2_300' Caption='Щит освещения, тип 2'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SHAO1)" Img='DEVICE_EL_VL_SHAO1_300' Caption='Щит авар.осв, тип 1'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SHAO2)" Img='DEVICE_EL_VL_SHAO2_300' Caption='Щит авар.осв, тип 2'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_FIRE1)" Img='DEVICE_EL_VL_FIRE1_300' Caption='Пож.сигнал, тип 1'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_FIRE2)" Img='DEVICE_EL_VL_FIRE2_300' Caption='Пож.сигнал, тип 2'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_MOTOR1)" Img='DEVICE_EL_VL_MOTOR1_300' Caption='Двигатель, тип 1'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_MOTOR2)" Img='DEVICE_EL_VL_MOTOR2_300' Caption='Двигатель, тип 2'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_HEATER1)" Img='DEVICE_EL_VL_HEATER1_300' Caption='Обогреватель, тип 1'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_HEATER2)" Img='DEVICE_EL_VL_HEATER2_300' Caption='Обогреватель, тип 2'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_DEVICE1)" Img='DEVICE_EL_VL_DEVICE1_300' Caption='Устройство, тип 1'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_DEVICE2)" Img='DEVICE_EL_VL_DEVICE2_300' Caption='Устройство, тип 2'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CONNECTOR1_1P_3)" Img='DEVICE_EL_VL_CONNECTOR1_1P_3_300' Caption='Розетка СП31 1P'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CONNECTOR1_2P_3)" Img='DEVICE_EL_VL_CONNECTOR1_2P_3_300' Caption='Розетка СП31 2P'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CONNECTOR1_3P_3)" Img='DEVICE_EL_VL_CONNECTOR1_3P_3_300' Caption='Розетка СП31 3P'/>
@@ -92,7 +92,7 @@
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_YTR2)" Img='DEVICE_EL_VL_YTR2_300' Caption='Ящик с трансформатором'/>
       	</ZTreeNode>
       	<ZTreeNode Caption='Наружные сети'>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_TRANSFORM1)" Img='DEVICE_EL_VL_TRANSFORM1_300' Caption='Подстанция1'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_TRANSFORM1)" Img='DEVICE_EL_VL_TRANSFORM1_300' Caption='Подстанция киоск'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SUPPORT1_1)" Img='DEVICE_EL_VL_SUPPORT1_1_300' Caption='Опора промежуточная'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SUPPORT1_2)" Img='DEVICE_EL_VL_SUPPORT1_2_300' Caption='Опора промежуточная угловая'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SUPPORT2_1)" Img='DEVICE_EL_VL_SUPPORT2_1_300' Caption='Опора анкерная'/>
@@ -112,9 +112,9 @@
 	   <ZTreeCommand Command="Insert(A0A)" Img='A0A_300' Caption='Рамка А0 альбом'/>
 	   <ZTreeCommand Command="Insert(A0A+)" Img='A0A+_300' Caption='Рамка А0+ альбом'/>
 	   <ZTreeCommand Command="Insert(A0K)" Img='A0K_300' Caption='Рамка А0 книга'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_STAMP1)" Img='DEVICE_EL_VL_STAMP1_300' Caption='Штамп1'/>
-	   <ZTreeCommand Command="Insert(EL_VL_REFERENCE1_1)" Img='EL_VL_REFERENCE1_1_300' Caption='Условные обозначения1'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_REFERENCE1_2)" Img='DEVICE_EL_VL_REFERENCE1_2_300' Caption='Условные обозначения2'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_STAMP1)" Img='DEVICE_EL_VL_STAMP1_300' Caption='Штамп'/>
+	   <ZTreeCommand Command="Insert(EL_VL_REFERENCE1_1)" Img='EL_VL_REFERENCE1_1_300' Caption='Условные обозначения, шапка'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_REFERENCE1_2)" Img='DEVICE_EL_VL_REFERENCE1_2_300' Caption='Условные обозначения, строка'/>
       	</ZTreeNode>
       </ZTreeNode>
       <ZTreeNode Caption='Слаботочка'>

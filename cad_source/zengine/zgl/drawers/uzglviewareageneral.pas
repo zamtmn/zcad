@@ -185,6 +185,7 @@ var
    ForeGroundColorIndex:GDBInteger;
 
    sysvarDISPLWDisplayScale:GDBInteger=10;
+   sysvarDISPmaxLWDisplayScale:GDBInteger=20;
    sysvarDISPDefaultLW:TGDBLineWeight=LnWt025;
 
 implementation
@@ -1836,7 +1837,7 @@ begin
                    PDWG^.FillDrawingPartRC(result);
 
   if sysvarDISPLWDisplayScale<2 then sysvarDISPLWDisplayScale:=2;
-  if sysvarDISPLWDisplayScale>20 then sysvarDISPLWDisplayScale:=20;
+  if sysvarDISPLWDisplayScale>sysvarDISPmaxLWDisplayScale then sysvarDISPLWDisplayScale:=sysvarDISPmaxLWDisplayScale;
   result.LWDisplayScale:=sysvarDISPLWDisplayScale;
   result.DefaultLW:=sysvarDISPDefaultLW;
 

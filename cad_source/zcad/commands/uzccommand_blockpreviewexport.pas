@@ -21,58 +21,64 @@ unit uzccommand_blockpreviewexport;
 
 interface
 uses
-  uzgldrawercanvas,uzgldrawergdi,uzgldrawergeneral2d,
-  uzcoimultiobjects,uzepalette,
+  SysUtils,
+  LCLType,LCLIntf,LazLogger,Graphics,
+
+  uzgldrawercanvas,uzerasterizer,uzglviewareageneral,
   uzgldrawcontext,
-  uzeentpoint,uzeentityfactory,
-  uzedrawingsimple,uzcsysvars,
-  printers,graphics,uzeentdevice,
-  LazUTF8,Clipbrd,LCLType,classes,uzeenttext,
-  uzccommandsabstract,uzbstrproc,
-  uzbtypesbase,uzccommandsmanager,
+  uzedrawingsimple,uzcdrawings,
+  uzcsysvars,
+  uzccommandsabstract,
   uzccommandsimpl,
   uzbtypes,
-  uzcdrawings,
   uzeutils,uzcutils,
-  sysutils,
-  varmandef,
-  uzeffdxf,
   uzcinterface,
-  uzegeometry,
+  uzbgeomtypes,uzegeometry,
   uzbmemman,uzbpaths,
-  uzbgeomtypes,uzeentity,uzeentcircle,uzeentline,uzeentgenericsubentry,
-  uzeentmtext,uzeentblockinsert,uzeentpolyline,uzclog,
-  uzeentsubordinated,uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,
-  URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray,uzelongprocesssupport,
-  LazLogger,uzeiopalette,uzeconsts,uzerasterizer;
+  uzeentblockinsert,uzeblockdef,uzeentsubordinated,
+  uzeconsts;
 function BlockPreViewExport_com(operands:TCommandOperands):TCommandResult;
 implementation
 function BlockPreViewExport_com(operands:TCommandOperands):TCommandResult;
-//const
-  //BlockName='DEVICE_PS_DAT_HAND';
-  //sx=64;
+const
+  scl=3;
 var
    cdwg:PTSimpleDrawing;
    pb:PGDBObjBlockInsert;
    tb:PGDBObjSubordinated;
-   domethod,undomethod:tmethod;
    DC:TDrawContext;
-   BMP:{TBitmap}TPortableNetworkGraphic;
-   PrinterDrawer:TZGLGeneral2DDrawer;
+   BMP:TBitmap;
+   PNG:TPortableNetworkGraphic;
+   PrinterDrawer:TZGLCanvasDrawer;
    PrintParam:TRasterizeParams;
    BlockName,imgsize:AnsiString;
-   sx:integer;
+   sx,bmpw:integer;
    tv:GDBvertex;
-begin //BlockPreViewExport(128|DEVICE_PS_DAT_HAND|*images\palettes)
-      //ExecuteFile(*components\blockpreviewexport.cmd)
+   SAVEsysvarDISPLWDisplayScale,
+   SAVEsysvarDISPmaxLWDisplayScale:integer;
+   SAVELWDisplay:boolean;
+begin
+  //пример вызова(РазмерИзображекния|ИмяБлока|Путь)
+  //BlockPreViewExport(128|DEVICE_PS_DAT_HAND|*images\palettes)
+  //ExecuteFile(*components\blockpreviewexport.cmd)
+
+
   GetPartOfPath(imgsize,operands,'|');
-  TryStrToInt(imgsize,sx);
+  if not TryStrToInt(imgsize,sx) then
+    sx:=24;
+  bmpw:=scl*sx;
   GetPartOfPath(BlockName,operands,'|');
   cdwg:=drawings.GetCurrentDWG;
   if cdwg<>nil then begin
+    SAVEsysvarDISPLWDisplayScale:=sysvarDISPLWDisplayScale;
+    SAVEsysvarDISPmaxLWDisplayScale:=sysvarDISPmaxLWDisplayScale;
+    SAVELWDisplay:=cdwg^.LWDisplay;
+    sysvarDISPmaxLWDisplayScale:=10*scl;
+    sysvarDISPLWDisplayScale:=10*scl;
+    cdwg^.LWDisplay:=true;
     dc:=cdwg^.CreateDrawingRC;
     drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,BlockName);
-    pb := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID));
+    pb := Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID));
     pb^.init(drawings.GetCurrentROOT,drawings.GetCurrentDWG^.GetCurrentLayer,0);
     pb^.Name:=BlockName;
     zcSetEntPropFromCurrentDrawingProp(pb);
@@ -80,7 +86,7 @@ begin //BlockPreViewExport(128|DEVICE_PS_DAT_HAND|*images\palettes)
     pb^.scale:=ScaleOne;
     pb^.CalcObjMatrix;
     pb^.setrot(0);
-    tb:=pb^.FromDXFPostProcessBeforeAdd(nil,drawings.GetCurrentDWG^);
+    tb:=pb^.FromDXFPostProcessBeforeAdd(nil,cdwg^);
     if tb<>nil then begin
       tb^.bp:=pb^.bp;
       pb^.done;
@@ -90,23 +96,14 @@ begin //BlockPreViewExport(128|DEVICE_PS_DAT_HAND|*images\palettes)
 
     cdwg^.GetCurrentROOT^.GoodAddObjectToObjArray(pb^);
 
-    {SetObjCreateManipulator(domethod,undomethod);
-    with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),1)^ do
-    begin
-         AddObject(pb);
-         comit;
-    end;}
-
-    //drawings.GetCurrentROOT^.AddObjectToObjArray{ObjArray.add}(addr(pb));
-    PGDBObjEntity(pb)^.FromDXFPostProcessAfterAdd;
+    pb^.FromDXFPostProcessAfterAdd;
     pb^.CalcObjMatrix;
-    pb^.BuildGeometry(drawings.GetCurrentDWG^);
-    pb^.BuildVarGeometry(drawings.GetCurrentDWG^);
-    pb^.FormatEntity(drawings.GetCurrentDWG^,dc);
+    pb^.BuildGeometry(cdwg^);
+    pb^.BuildVarGeometry(cdwg^);
+    pb^.FormatEntity(cdwg^,dc);
     drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeBoundingBox(pb^);
-    //pb^.Visible:=0;
-    drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count := 0;
-    pb^.RenderFeedback(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,@drawings.GetCurrentDWG^.myGluProject2,dc);
+    cdwg^.ConstructObjRoot.ObjArray.Count := 0;
+    pb^.RenderFeedback(cdwg^.pcamera^.POSCOUNT,cdwg^.pcamera^,@cdwg^.myGluProject2,dc);
 
 
     PrintParam.FitToPage:=true;
@@ -115,68 +112,52 @@ begin //BlockPreViewExport(128|DEVICE_PS_DAT_HAND|*images\palettes)
     PrintParam.Palette:=PC_Color;
 
 
-    BMP:=TPortableNetworkGraphic.Create;
-    BMP.SetSize(sx,sx);
+    PNG:=TPortableNetworkGraphic.Create;
+    PNG.SetSize(sx,sx);
+    PNG.Canvas.Brush.Color:=graphics.clWhite;
+    PNG.Canvas.Brush.Style:=bsSolid;
+    PNG.Canvas.FillRect(0,0,sx,sx);
+
+    BMP:=TBitmap.Create;
+    BMP.SetSize(bmpw,bmpw);
     BMP.Canvas.Brush.Color:=graphics.clWhite;
     BMP.Canvas.Brush.Style:=bsSolid;
-    BMP.Canvas.FillRect(0,0,sx,sx);
-    PrinterDrawer:=TZGLCanvasDrawer.create;
-    tv:=VertexSub(pb^.vp.BoundingBox.RTF,pb^.vp.BoundingBox.LBN);
-    tv:=VertexMulOnSc(tv,0.15);
-    rasterize(cdwg,sx,sx,VertexSub(pb^.vp.BoundingBox.LBN,tv),VertexAdd(pb^.vp.BoundingBox.RTF,tv),PrintParam,BMP.Canvas,PrinterDrawer);
-    cdwg^.GetCurrentROOT^.GoodRemoveMiFromArray(pb^);
-    ForceDirectories(ExtractFileDir(ExpandPath(operands)));
-    BMP.SaveToFile(ExpandPath(operands));
-    BMP.Free;
-    PrinterDrawer.Free;
+    BMP.Canvas.FillRect(0,0,bmpw,bmpw);
 
-    zcRedrawCurrentDrawing;
-    result:=cmd_ok;
+    PrinterDrawer:=TZGLCanvasDrawer.create;
+    try
+      tv:=VertexSub(pb^.vp.BoundingBox.RTF,pb^.vp.BoundingBox.LBN);
+      tv:=VertexMulOnSc(tv,0.15);
+      rasterize(cdwg,bmpw,bmpw,VertexSub(pb^.vp.BoundingBox.LBN,tv),VertexAdd(pb^.vp.BoundingBox.RTF,tv),PrintParam,bmp.Canvas,PrinterDrawer);
+
+      //PNG.Canvas.StretchDraw(Rect(0,0,bmpw,bmpw),bmp);
+
+      SetStretchBltMode(PNG.Canvas.Handle, HALFTONE);
+      StretchBlt(PNG.Canvas.Handle, 0, 0, PNG.Width, PNG.Height,
+                 bmp.Canvas.Handle, 0, 0, bmp.Width, bmp.Height, SRCCOPY);
+
+      cdwg^.GetCurrentROOT^.GoodRemoveMiFromArray(pb^);
+      ForceDirectories(ExtractFileDir(ExpandPath(operands)));
+      PNG.SaveToFile(ExpandPath(operands));
+
+    finally
+      sysvarDISPLWDisplayScale:=SAVEsysvarDISPLWDisplayScale;
+      sysvarDISPmaxLWDisplayScale:=SAVEsysvarDISPmaxLWDisplayScale;
+      cdwg^.LWDisplay:=SAVELWDisplay;
+      PNG.Free;
+      BMP.Free;
+      PrinterDrawer.Free;
+      zcRedrawCurrentDrawing;
+      result:=cmd_ok;
+    end;
   end else begin
     ZCMsgCallBackInterface.TextMessage('No current drawing???',TMWOSilentShowError);
     result:=cmd_error;
   end;
 end;
-
-{procedure Print_com.Print(pdata:GDBPlatformint);
- var
-  cdwg:PTSimpleDrawing;
-  PrinterDrawer:TZGLGeneral2DDrawer;
-begin
-  cdwg:=drawings.GetCurrentDWG;
-  try
-
-    Printer.Title := 'zcadprint';
-    Printer.BeginDoc;
-
-    PrinterDrawer:=TZGLCanvasDrawer.create;
-    rasterize(cdwg,Printer.PageWidth,Printer.PageHeight,p1,p2,PrintParam,Printer.Canvas,PrinterDrawer);
-    PrinterDrawer.Free;
-
-    Printer.EndDoc;
-
-  except
-    on E:Exception do
-    begin
-      Printer.Abort;
-      ZCMsgCallBackInterface.TextMessage(e.message,TMWOShowError);
-    end;
-  end;
-  zcRedrawCurrentDrawing;
-end;}
-
-procedure startup;
-begin
-  CreateCommandFastObjectPlugin(@BlockPreViewExport_com,'BlockPreViewExport',0,0);
-end;
-
-procedure Finalize;
-begin
-end;
 initialization
   debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
-  startup;
+  CreateCommandFastObjectPlugin(@BlockPreViewExport_com,'BlockPreViewExport',0,0);
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
-  finalize;
 end.

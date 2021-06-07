@@ -101,16 +101,16 @@
       	<ZTreeNode Caption='Таблицы'>
 	   <ZTreeCommand Command="Insert(A4K)" Img='A4K_300' Caption='Рамка А4 книга'/>
 	   <ZTreeCommand Command="Insert(A3A)" Img='A3A_300' Caption='Рамка А3 альбом'/>
-	   <ZTreeCommand Command="Insert(A3A+)" Img='A3A+_300' Caption='Рамка А3+ альбом'/>
+	   <ZTreeCommand Command="Insert(A3A+)" Img='A3A+_300' Caption='Рамка А4х3 альбом'/>
 	   <ZTreeCommand Command="Insert(A3K)" Img='A3K_300' Caption='Рамка А3 книга'/>
 	   <ZTreeCommand Command="Insert(A2A)" Img='A2A_300' Caption='Рамка А2 альбом'/>
-	   <ZTreeCommand Command="Insert(A2A+)" Img='A2A+_300' Caption='Рамка А2+ альбом'/>
+	   <ZTreeCommand Command="Insert(A2A+)" Img='A2A+_300' Caption='Рамка А3х3 альбом'/>
 	   <ZTreeCommand Command="Insert(A2K)" Img='A2K_300' Caption='Рамка А2 книга'/>
 	   <ZTreeCommand Command="Insert(A1A)" Img='A1A_300' Caption='Рамка А1 альбом'/>
-	   <ZTreeCommand Command="Insert(A1A+)" Img='A1A+_300' Caption='Рамка А1+ альбом'/>
+	   <ZTreeCommand Command="Insert(A1A+)" Img='A1A+_300' Caption='Рамка А2х3 альбом'/>
 	   <ZTreeCommand Command="Insert(A1K)" Img='A1K_300' Caption='Рамка А1 книга'/>
 	   <ZTreeCommand Command="Insert(A0A)" Img='A0A_300' Caption='Рамка А0 альбом'/>
-	   <ZTreeCommand Command="Insert(A0A+)" Img='A0A+_300' Caption='Рамка А0+ альбом'/>
+	   <ZTreeCommand Command="Insert(A0A+)" Img='A0A+_300' Caption='Рамка А1х3 альбом'/>
 	   <ZTreeCommand Command="Insert(A0K)" Img='A0K_300' Caption='Рамка А0 книга'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_STAMP1)" Img='DEVICE_EL_VL_STAMP1_300' Caption='Штамп'/>
 	   <ZTreeCommand Command="Insert(EL_VL_REFERENCE1_1)" Img='EL_VL_REFERENCE1_1_300' Caption='Усл.обозначения, шапка'/>

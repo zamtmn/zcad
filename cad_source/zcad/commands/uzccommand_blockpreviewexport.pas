@@ -35,7 +35,8 @@ uses
   uzcinterface,
   uzbgeomtypes,uzegeometry,
   uzbmemman,uzbpaths,
-  uzeentblockinsert,uzeblockdef,uzeentsubordinated,
+  uzeentdevice,uzeentblockinsert,uzeblockdef,uzeentsubordinated,
+  uzestyleslayers,
   uzeconsts;
 function BlockPreViewExport_com(operands:TCommandOperands):TCommandResult;
 implementation
@@ -57,6 +58,8 @@ var
    SAVEsysvarDISPLWDisplayScale,
    SAVEsysvarDISPmaxLWDisplayScale:integer;
    SAVELWDisplay:boolean;
+   plp:PGDBLayerProp;
+   bb:TBoundingBox;
 begin
   //пример вызова(РазмерИзображекния|ИмяБлока|Путь)
   //BlockPreViewExport(128|DEVICE_PS_DAT_HAND|*images\palettes)
@@ -75,6 +78,12 @@ begin
     SAVELWDisplay:=cdwg^.LWDisplay;
     sysvarDISPmaxLWDisplayScale:=10*scl;
     sysvarDISPLWDisplayScale:=10*scl;
+    plp:=cdwg^.LayerTable.getAddres('SYS_PIN');
+    if plp<>nil then
+      plp^._on:=false;
+    plp:=cdwg^.LayerTable.getAddres('EL_DEVICE_NAME');
+    if plp<>nil then
+      plp^._on:=false;
     cdwg^.LWDisplay:=true;
     dc:=cdwg^.CreateDrawingRC;
     drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,BlockName);
@@ -126,9 +135,13 @@ begin
 
     PrinterDrawer:=TZGLCanvasDrawer.create;
     try
-      tv:=VertexSub(pb^.vp.BoundingBox.RTF,pb^.vp.BoundingBox.LBN);
+      //bb:=pb^.vp.BoundingBox;
+      bb:=pb^.ConstObjArray.getonlyvisibleoutbound(dc);
+      if IsIt(typeof(pb^),typeof(GDBObjDevice)) then
+        ConcatBB(bb,PGDBObjDevice(pb)^.VarObjArray.getonlyvisibleoutbound(dc));
+      tv:=VertexSub(bb.RTF,bb.LBN);
       tv:=VertexMulOnSc(tv,0.15);
-      rasterize(cdwg,bmpw,bmpw,VertexSub(pb^.vp.BoundingBox.LBN,tv),VertexAdd(pb^.vp.BoundingBox.RTF,tv),PrintParam,bmp.Canvas,PrinterDrawer);
+      rasterize(cdwg,bmpw,bmpw,VertexSub(bb.LBN,tv),VertexAdd(bb.RTF,tv),PrintParam,bmp.Canvas,PrinterDrawer);
 
       //PNG.Canvas.StretchDraw(Rect(0,0,bmpw,bmpw),bmp);
 

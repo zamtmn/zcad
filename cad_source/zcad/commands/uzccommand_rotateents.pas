@@ -29,34 +29,10 @@ uses
   uzccommandsabstract,
   uzegeometry,zcmultiobjectchangeundocommand,
   uzbgeomtypes,uzeentity,LazLogger,
+  uzbtypes,
   uzccommandsimpl;
 
 implementation
-
-function IsIt(PType,PChecedType:Pointer):Boolean;
-type
-  vmtRecPtr=^vmtRec;
-  vmtRecPtrPtr=^vmtRecPtr;
-  vmtRec=packed record
-    size,negSize : sizeint;
-    parent: {$ifdef VER3_0}vmtRecPtr{$else}vmtRecPtrPtr{$endif};
-  end;
-var
-  CurrParent:{$ifdef VER3_0}vmtRecPtr{$else}vmtRecPtrPtr{$endif};
-begin
-
-  if PType=PChecedType then
-    exit(true);
-  CurrParent:=vmtRecPtr(PType)^.parent;
-  if CurrParent=nil then
-    exit(false);
-  {$ifndef VER3_0}
-  if CurrParent^=nil then
-    exit(false);
-  {$endif}
-  result:=IsIt({$ifdef VER3_0}CurrParent{$else}CurrParent^{$endif},PChecedType);
-end;
-
 
 function RotateEnts_com(operands:TCommandOperands):TCommandResult;
 var

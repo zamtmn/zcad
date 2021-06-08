@@ -43,6 +43,7 @@ GDBObjOpenArrayOfPV= object(TZctnrVectorPGDBaseObjects)
                       function calcvisbb(infrustumactualy:TActulity):TBoundingBox;
                       function getoutbound(var DC:TDrawContext):TBoundingBox;
                       function getonlyoutbound(var DC:TDrawContext):TBoundingBox;
+                      function getonlyvisibleoutbound(var DC:TDrawContext):TBoundingBox;
                       procedure Format;virtual;abstract;
                       procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                       procedure FormatAfterEdit(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
@@ -174,6 +175,32 @@ begin
                              concatbb(result,pobj^.vp.BoundingBox);
                              //pobj^.correctbb;
                              pobj:=iterate(ir);
+                       until pobj=nil;
+                  end;
+end;
+function GDBObjOpenArrayOfPV.getonlyvisibleoutbound(var DC:TDrawContext):TBoundingBox;
+var pobj:pGDBObjEntity;
+    ir:itrec;
+begin
+  pobj:=beginiterate(ir);
+  if pobj=nil then
+                  begin
+                       result.LBN:=NulVertex;
+                       result.RTF:=NulVertex;
+                  end
+              else
+                  begin
+                       pobj^.getonlyoutbound(DC);
+                       result:=pobj.vp.BoundingBox;
+                       //pobj^.correctbb;
+                       pobj:=iterate(ir);
+                       if pobj<>nil then
+                       repeat
+                         if (pobj.vp.Layer<>nil)and(pobj.vp.Layer^._on) then begin
+                           pobj^.getonlyoutbound(dc);
+                           concatbb(result,pobj^.vp.BoundingBox);
+                         end;
+                           pobj:=iterate(ir);
                        until pobj=nil;
                   end;
 end;

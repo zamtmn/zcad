@@ -40,6 +40,7 @@ GDBObjDevice= object(GDBObjBlockInsert)
                    constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                    destructor done;virtual;
                    function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
+                   function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                    procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                    procedure FormatFeatures(var drawing:TDrawingDef);virtual;
                    procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
@@ -264,6 +265,21 @@ begin
      a:=VarObjArray.calcvisible(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
      result:=result or a;
 end;
+function GDBObjDevice.CalcTrueInFrustum;
+var
+  inhresult:TInBoundingVolume;
+begin
+  inhresult:=inherited;
+  result:=VarObjArray.CalcTrueInFrustum(frustum,visibleactualy);
+  if result<>inhresult then begin
+    if result=IRNotAplicable then
+      exit(inhresult);
+    if inhresult=IRNotAplicable then
+      exit(result);
+    result:=IRPartially;
+  end;
+end;
+
 procedure GDBObjDevice.getoutbound;
 var tbb:TBoundingBox;
 begin

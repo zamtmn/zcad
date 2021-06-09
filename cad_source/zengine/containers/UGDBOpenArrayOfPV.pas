@@ -361,12 +361,14 @@ var
 begin
   emptycount:=0;
   objcount:=0;
-  result:=IREmpty;
+  result:={IREmpty}IRNotAplicable;
+  q:=IRNotAplicable;
   p:=beginiterate(ir);
   if p<>nil then
   begin
   repeat
         //if p^.Visible=visibleactualy then
+    if p^.vp.Layer^._on then
         begin
              inc(objcount);
              q:=p^.CalcTrueInFrustum(frustum,visibleactualy);
@@ -388,10 +390,12 @@ begin
         end;
         p:=iterate(ir);
   until p=nil;
+  if (q<>IRNotAplicable) then begin
      if (emptycount=0)and(objcount>0) then
                        result:=IRFully
                      else
                        result:=IREmpty;
+  end;
   end;
 end;
 begin

@@ -145,11 +145,13 @@ TLLSymbolLine= object(TLLPrimitive)
               FirstOutBoundIndex,LastOutBoundIndex:TLLVertexIndex;
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData):GDBInteger;virtual;
               constructor init;
+              function CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):GDBInteger;virtual;
         end;
 PTLLSymbolEnd=^TLLSymbolEnd;
 {---REGISTEROBJECTTYPE TLLSymbolEnd}
 TLLSymbolEnd= object(TLLPrimitive)
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData):GDBInteger;virtual;
+              function CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):GDBInteger;virtual;
                    end;
 PTLLPolyLine=^TLLPolyLine;
 {---REGISTEROBJECTTYPE TLLPolyLine}
@@ -444,6 +446,12 @@ begin
      OptData.symplify:=false;
      result:=inherited;
 end;
+function TLLSymbolEnd.CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):GDBInteger;
+begin
+  result:=getPrimitiveSize;
+  InRect:=IRNotAplicable;
+end;
+
 constructor TLLSymbolLine.init;
 begin
      MaxSqrSymH:=0;
@@ -467,6 +475,12 @@ begin
                                                 self.SimplyDrawed:=false;
   result:=inherited;
 end;
+function TLLSymbolLine.CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):GDBInteger;
+begin
+  result:=getPrimitiveSize;
+  InRect:=IRNotAplicable;
+end;
+
 constructor TLLSymbol.init;
 begin
   SymSize:=-1;

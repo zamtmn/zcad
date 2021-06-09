@@ -146,7 +146,7 @@ TBoundingRect=record
                       LB:GDBvertex2D;(*'Near'*)
                       RT:GDBvertex2D;(*'Far'*)
                 end;
-TInBoundingVolume=(IRFully,IRPartially,IREmpty);
+TInBoundingVolume=(IRFully,IRPartially,IREmpty,IRNotAplicable);
 
 PGDBvertex2DI=^GDBvertex2DI;
 GDBvertex2DIArray=packed array [0..0] of GDBvertex2DI;

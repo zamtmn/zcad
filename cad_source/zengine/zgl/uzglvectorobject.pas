@@ -348,15 +348,17 @@ var
   ProcessedSize:TArrayIndex;
   CurrentSize:TArrayIndex;
   InRect:TInBoundingVolume;
+
 begin
   if LLprimitives.count=0 then
                               begin
                                 result:=IREmpty;
                                 exit;
                               end;
+  result:=IRNotAplicable;
   ProcessedSize:=0;
   PPrimitive:=LLprimitives.GetParrayAsPointer;
-  if ProcessedSize<LLprimitives.count then
+  while (ProcessedSize<LLprimitives.count)and(result=IRNotAplicable) do
   begin
        CurrentSize:=LLprimitives.Align(PPrimitive.CalcTrueInFrustum(frustum,GeomData,result));
        if not FullCheck then
@@ -389,6 +391,8 @@ begin
        ProcessedSize:=ProcessedSize+CurrentSize;
        inc(pbyte(PPrimitive),CurrentSize);
   end;
+  if result=IRNotAplicable then
+    result:=IREmpty;
 end;
 
 constructor ZGLVectorObject.init;

@@ -366,7 +366,7 @@ begin
   if p<>nil then
   begin
   repeat
-        if p^.Visible=visibleactualy then
+        //if p^.Visible=visibleactualy then
         begin
              inc(objcount);
              q:=p^.CalcTrueInFrustum(frustum,visibleactualy);

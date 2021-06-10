@@ -623,7 +623,7 @@ begin
           end
      else
          begin
-              ZCMsgCallBackInterface.TextMessage(rsCommandNRInC,TMWOHistoryOut);
+              ZCMsgCallBackInterface.TextMessage(format(rsCommandNRInC,[comm]),TMWOHistoryOut);
          end;
     end;
   end
@@ -639,7 +639,7 @@ begin
      if not busy then
                      execute(comm,false,pdrawing,POGLWndParam)
                  else
-                     ZCMsgCallBackInterface.TextMessage(rsCommandNRInC,TMWOShowError);
+                     ZCMsgCallBackInterface.TextMessage(format(rsCommandNRInC,[comm]),TMWOShowError);
 end;
 procedure GDBcommandmanager.executecommandsilent{(const comm:pansichar): GDBInteger};
 begin

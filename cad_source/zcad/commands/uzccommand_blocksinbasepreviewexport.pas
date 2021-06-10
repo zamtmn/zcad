@@ -34,20 +34,23 @@ implementation
 function BlocksInBasePreViewExport_com(operands:TCommandOperands):TCommandResult;
 var
   pb:PGDBObjBlockdef;
-  param,BlockNameMask,BlockPattarn:AnsiString;
+  param,BlockNameIncludeMask,BlockNameExcludeMask,BlockPattern:AnsiString;
+  include:boolean;
   ir:itrec;
 begin
-  //BlocksInBasePreViewExport(DEVICE_*|48|<>|*images\palettes\<>_300.png);
-  GetPartOfPath(BlockNameMask,operands,'|');
-  BlockPattarn:=operands;
+  //BlocksInBasePreViewExport(IncludeMask*|ExcludeMask*|48|<>|*images\palettes\<>_300.png);
+  GetPartOfPath(BlockNameIncludeMask,operands,'|');
+  GetPartOfPath(BlockNameExcludeMask,operands,'|');
+  BlockPattern:=operands;
 
   pb:=BlockBaseDWG^.BlockDefArray.beginiterate(ir);
   if pb<>nil then
   repeat
-    if MatchesMask(pb^.name,BlockNameMask,false) then begin
-      param:=StringReplace(BlockPattarn,'<>',pb^.name,[rfReplaceAll, rfIgnoreCase]);
-      BlockPreViewExport_com(param);
-    end;
+    if MatchesMask(pb^.name,BlockNameIncludeMask,false) then
+      if (BlockNameExcludeMask='')or(not MatchesMask(pb^.name,BlockNameExcludeMask,false)) then begin
+        param:=StringReplace(BlockPattern,'<>',pb^.name,[rfReplaceAll, rfIgnoreCase]);
+        BlockPreViewExport_com(param);
+      end;
     pb:=BlockBaseDWG^.BlockDefArray.iterate(ir);
   until pb=nil;
 end;

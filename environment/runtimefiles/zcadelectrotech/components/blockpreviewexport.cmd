@@ -1,9 +1,9 @@
 ;run thisfile in zcad by command: ExecuteFile(*components\blockpreviewexport.cmd)
 NewDwg
 
-BlocksInBasePreViewExport(DEVICE_*|48|<>|*images\palettes\<>_300.png)
-BlocksInBasePreViewExport(DEVICE_*|24|<>|*images\palettes\<>_150.png)
-BlocksInBasePreViewExport(DEVICE_*|24|<>|*images\palettes\<>.png)
+BlocksInBasePreViewExport(DEVICE_*||48|<>|*images\palettes\<>_300.png)
+BlocksInBasePreViewExport(DEVICE_*||24|<>|*images\palettes\<>_150.png)
+BlocksInBasePreViewExport(DEVICE_*||24|<>|*images\palettes\<>.png)
 
 BlockPreViewExport(24|A4K|*images\palettes\A4K.png)
 BlockPreViewExport(24|A4K|*images\palettes\A4K_150.png)

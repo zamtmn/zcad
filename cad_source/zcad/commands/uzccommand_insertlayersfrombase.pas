@@ -16,47 +16,47 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 {$MODE OBJFPC}
-unit uzccommand_blocksinbasepreviewexport;
+unit uzccommand_insertlayersfrombase;
 {$INCLUDE def.inc}
 
 interface
 uses
   uzccommandsabstract,uzccommandsimpl,
   uzbpaths,gzctnrvectortypes,
-  uzcdrawings,
-  uzeblockdef,
+  uzcdrawings,uzedrawingsimple,
+  uzestyleslayers,
   uzccommand_blockpreviewexport,
   LazLogger,Masks,
   StrUtils,SysUtils;
 implementation
 
 
-function BlocksInBasePreViewExport_com(operands:TCommandOperands):TCommandResult;
+function InsertLayersFromBase_com(operands:TCommandOperands):TCommandResult;
 var
-  pb:PGDBObjBlockdef;
-  param,BlockNameIncludeMask,BlockNameExcludeMask,BlockPattern:AnsiString;
+  pl:PGDBLayerProp;
+  cdwg:PTSimpleDrawing;
+  LayerNameIncludeMask,LayerNameExcludeMask:AnsiString;
   ir:itrec;
 begin
-  //BlocksInBasePreViewExport(IncludeMask*|ExcludeMask*|48|<>|*images\palettes\<>_300.png);
-  GetPartOfPath(BlockNameIncludeMask,operands,'|');
-  GetPartOfPath(BlockNameExcludeMask,operands,'|');
-  BlockPattern:=operands;
-
-  pb:=BlockBaseDWG^.BlockDefArray.beginiterate(ir);
-  if pb<>nil then
-  repeat
-    if MatchesMaskList(pb^.name,BlockNameIncludeMask,';',false) then
-      if (BlockNameExcludeMask='')or(not MatchesMaskList(pb^.name,BlockNameExcludeMask,';',false)) then begin
-        param:=StringReplace(BlockPattern,'<>',pb^.name,[rfReplaceAll, rfIgnoreCase]);
-        BlockPreViewExport_com(param);
-      end;
-    pb:=BlockBaseDWG^.BlockDefArray.iterate(ir);
-  until pb=nil;
+  //InsertLayersFromBase(IncludeMask*|ExcludeMask*);
+  GetPartOfPath(LayerNameIncludeMask,operands,'|');
+  LayerNameExcludeMask:=operands;
+  cdwg:=drawings.GetCurrentDWG;
+  if (cdwg<>nil)and(BlockBaseDWG<>nil) then begin
+    pl:=BlockBaseDWG^.LayerTable.beginiterate(ir);
+    if pl<>nil then
+    repeat
+      if MatchesMask(pl^.name,LayerNameIncludeMask,false) then
+        if (LayerNameExcludeMask='')or(not MatchesMask(pl^.name,LayerNameExcludeMask,false)) then
+          cdwg^.LayerTable.createlayerifneed(pl);
+      pl:=BlockBaseDWG^.LayerTable.iterate(ir);
+    until pl=nil;
+  end;
 end;
 
 initialization
   debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
-  CreateCommandFastObjectPlugin(@BlocksInBasePreViewExport_com,'BlocksInBasePreViewExport',0,0);
+  CreateCommandFastObjectPlugin(@InsertLayersFromBase_com,'InsertLayersFromBase',CADWG,0);
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

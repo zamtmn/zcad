@@ -133,6 +133,7 @@ uses
   uzccommand_blockpreviewexport,
   uzccommand_blocksinbasepreviewexport,
   uzccommand_layoff,
+  uzccommand_insertlayersfrombase,
   uzccommand_cllayeron,uzccommand_cllayeroff,
   uzccommand_loadmenus,
   uzccommand_loadpalettes,

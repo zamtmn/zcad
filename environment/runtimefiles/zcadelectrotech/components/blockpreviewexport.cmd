@@ -1,6 +1,9 @@
 ;run thisfile in zcad by command: ExecuteFile(*components\blockpreviewexport.cmd)
 NewDwg
 
+ClLayerOff(SYS_PIN)
+ClLayerOff(EL_DEVICE_NAME)
+
 BlocksInBasePreViewExport(DEVICE_*||48|<>|*images\palettes\<>_300.png)
 BlocksInBasePreViewExport(DEVICE_*||24|<>|*images\palettes\<>_150.png)
 BlocksInBasePreViewExport(DEVICE_*||24|<>|*images\palettes\<>.png)

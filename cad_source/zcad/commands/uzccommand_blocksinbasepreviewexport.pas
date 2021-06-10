@@ -55,18 +55,9 @@ begin
   until pb=nil;
 end;
 
-procedure startup;
-begin
-  CreateCommandFastObjectPlugin(@BlocksInBasePreViewExport_com,'BlocksInBasePreViewExport',0,0);
-end;
-
-procedure Finalize;
-begin
-end;
 initialization
   debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
-  startup;
+  CreateCommandFastObjectPlugin(@BlocksInBasePreViewExport_com,'BlocksInBasePreViewExport',0,0);
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
-  finalize;
 end.

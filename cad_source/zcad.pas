@@ -131,7 +131,7 @@ uses
   uzccommand_3dpoly,
   uzccommand_print,
   uzccommand_blockpreviewexport,
-  uzccommand_allblocksinbasepreviewexport,
+  uzccommand_blocksinbasepreviewexport,
   uzccommand_layoff,
   uzccommand_loadmenus,
   uzccommand_loadpalettes,

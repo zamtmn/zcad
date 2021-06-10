@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 {$MODE OBJFPC}
-unit uzccommand_allblocksinbasepreviewexport;
+unit uzccommand_blocksinbasepreviewexport;
 {$INCLUDE def.inc}
 
 interface
@@ -31,13 +31,13 @@ uses
 implementation
 
 
-function AllBlocksInBasePreViewExport_com(operands:TCommandOperands):TCommandResult;
+function BlocksInBasePreViewExport_com(operands:TCommandOperands):TCommandResult;
 var
   pb:PGDBObjBlockdef;
   param,BlockNameMask,BlockPattarn:AnsiString;
   ir:itrec;
 begin
-  //AllBlocksInBasePreViewExport(DEVICE_*|48|<>|*images\palettes\<>_300.png);
+  //BlocksInBasePreViewExport(DEVICE_*|48|<>|*images\palettes\<>_300.png);
   GetPartOfPath(BlockNameMask,operands,'|');
   BlockPattarn:=operands;
 
@@ -54,7 +54,7 @@ end;
 
 procedure startup;
 begin
-  CreateCommandFastObjectPlugin(@AllBlocksInBasePreViewExport_com,'AllBlocksInBasePreViewExport',0,0);
+  CreateCommandFastObjectPlugin(@BlocksInBasePreViewExport_com,'BlocksInBasePreViewExport',0,0);
 end;
 
 procedure Finalize;

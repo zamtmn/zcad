@@ -58,7 +58,7 @@ resourcestring
   rsAuthor='Writeln by Andrey M. Zubarev';
   rsRunCommand='Running command';
   rsUnknownCommand='Unknown command';
-  rsCommandNRInC='Command can not run';
+  rsCommandNRInC='Command "%s" can not run';
   rsRunScript='Running script "%s";';
   rsUnassigned='Unassigned';
   rsProperty='Property';

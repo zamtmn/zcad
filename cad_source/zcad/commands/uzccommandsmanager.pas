@@ -24,7 +24,7 @@ uses uzctnrvectorgdbpointer,gzctnrvectorpobjects,uzcsysvars,uzegeometry,uzglview
      gzctnrvectortypes,uzbgeomtypes,uzbstrproc,gzctnrvectorp,
      uzbtypesbase,uzccommandsabstract, sysutils,uzbtypes,uzglviewareadata,
      uzbmemman,uzclog,varmandef,varman,uzedrawingdef,uzcinterface,
-     uzcsysparams,uzedrawingsimple,uzctnrvectorgdbstring,forms,LazLogger;
+     uzcsysparams,uzedrawingsimple,uzcdrawings,uzctnrvectorgdbstring,forms,LazLogger;
 const
      tm:tmethod=(Code:nil;Data:nil);
      nullmethod:{tmethod}TButtonMethod=nil;
@@ -413,7 +413,7 @@ begin
   if p<>nil then
   repeat
         if (uppercase(pGDBString(p)^)<>'ABOUT')then
-                                                    execute(p^,false,pdrawing,POGLWndParam)
+                                                    execute(p^,false,{pdrawing}drawings.GetCurrentDWG,POGLWndParam)
                                                 else
                                                     begin
                                                          if not sysparam.saved.nosplash then

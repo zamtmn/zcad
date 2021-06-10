@@ -163,6 +163,9 @@ resourcestring
   rsClipboardIsEmpty='Clipboard is empty, there is nothing to paste';
   rsNotYetImplemented='Not yet implemented';
   rsLayerDefpaontsCanNotBePrinted='Layer DEFPOINTS can not be printed';
+  rsLayerNotFound='Layer "%s" not found';
+  rsLayerAlreadyOn='Layer "%s" already on';
+  rsLayerAlreadyOff='Layer "%s" already off';
   rsLayerUsedIn='Layer "%s" used in: %d-model, %d-blockdef table';
   rsTextStyleUsedIn='Text style "%s" used in: %d-model, %d-blockdef table, %d-dimstyle table';
   rsDimStyleUsedIn='Dimension style "%s" used in: %d-model, %d-blockdef table, %d-dimstyle table';

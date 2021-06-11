@@ -98,6 +98,8 @@
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SUPPORT2_1)" Img='DEVICE_EL_VL_SUPPORT2_1_300' Caption='Опора анкерная'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SUPPORT2_2)" Img='DEVICE_EL_VL_SUPPORT2_2_300' Caption='Опора анкерная угловая'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SUPPORT3_1)" Img='DEVICE_EL_VL_SUPPORT3_1_300' Caption='Опора освещения'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SUPPORT3_2)" Img='DEVICE_EL_VL_SUPPORT3_2_300' Caption='Опора освещения с одним свет.'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SUPPORT3_3)" Img='DEVICE_EL_VL_SUPPORT3_3_300' Caption='Опора освещения с двумя свет.'/>
       	</ZTreeNode>
       	<ZTreeNode Caption='Таблицы'>
 	   <ZTreeCommand Command="Insert(A4K)" Img='A4K_300' Caption='Рамка А4 книга'/>

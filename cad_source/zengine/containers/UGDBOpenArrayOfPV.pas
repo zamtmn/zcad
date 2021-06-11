@@ -181,24 +181,34 @@ end;
 function GDBObjOpenArrayOfPV.getonlyvisibleoutbound(var DC:TDrawContext):TBoundingBox;
 var pobj:pGDBObjEntity;
     ir:itrec;
+    bb:TBoundingBox;
 begin
   pobj:=beginiterate(ir);
+
+  result.LBN:=NulVertex;
+  result.RTF:=MinusOneVertex;
+
   if pobj=nil then
                   begin
-                       result.LBN:=NulVertex;
-                       result.RTF:=NulVertex;
+                       {result.LBN:=NulVertex;
+                       result.RTF:=MinusOneVertex;}
                   end
               else
                   begin
-                       pobj^.getonlyoutbound(DC);
-                       result:=pobj.vp.BoundingBox;
+                       //pobj^.getonlyoutbound(DC);
+                       //result:=pobj.vp.BoundingBox;
                        //pobj^.correctbb;
-                       pobj:=iterate(ir);
+                       //pobj:=iterate(ir);
                        if pobj<>nil then
                        repeat
                          if (pobj.vp.Layer<>nil)and(pobj.vp.Layer^._on) then begin
-                           pobj^.getonlyoutbound(dc);
-                           concatbb(result,pobj^.vp.BoundingBox);
+                           bb:=pobj^.getonlyvisibleoutbound(dc);
+                           if bb.RTF.x>=bb.LBN.x then begin
+                             if result.RTF.x>=result.LBN.x then
+                               concatbb(result,bb)
+                             else
+                               result:=bb;
+                           end;
                          end;
                            pobj:=iterate(ir);
                        until pobj=nil;

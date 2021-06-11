@@ -95,6 +95,7 @@ GDBObjEntity= object(GDBObjSubordinated)
                     procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;abstract;
                     procedure getoutbound(var DC:TDrawContext);virtual;
                     procedure getonlyoutbound(var DC:TDrawContext);virtual;
+                    function getonlyvisibleoutbound(var DC:TDrawContext):TBoundingBox;virtual;
                     procedure correctbb(var DC:TDrawContext);virtual;
                     function GetLTCorrectH(GlobalLTScale:GDBDouble):GDBDouble;virtual;
                     function GetLTCorrectL(GlobalLTScale:GDBDouble):GDBDouble;virtual;
@@ -819,6 +820,11 @@ end;
 procedure GDBObjEntity.getonlyoutbound;
 begin
      getoutbound(dc);
+end;
+function GDBObjEntity.getonlyvisibleoutbound(var DC:TDrawContext):TBoundingBox;
+begin
+  getonlyoutbound(dc);
+  result:=vp.BoundingBox;
 end;
 function GDBObjEntity.IsActualy:GDBBoolean;
 begin

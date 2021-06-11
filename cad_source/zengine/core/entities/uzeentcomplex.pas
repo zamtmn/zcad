@@ -34,6 +34,7 @@ GDBObjComplex= object(GDBObjWithLocalCS)
                     procedure DrawOnlyGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                     procedure getoutbound(var DC:TDrawContext);virtual;
                     procedure getonlyoutbound(var DC:TDrawContext);virtual;
+                    function getonlyvisibleoutbound(var DC:TDrawContext):TBoundingBox;virtual;
                     destructor done;virtual;
                     constructor initnul;
                     constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
@@ -192,6 +193,10 @@ end;
 procedure GDBObjComplex.getonlyoutbound;
 begin
      vp.BoundingBox:=ConstObjArray.{calcbb}getonlyoutbound(dc);
+end;
+function GDBObjComplex.getonlyvisibleoutbound(var DC:TDrawContext):TBoundingBox;
+begin
+     Result:=ConstObjArray.getonlyvisibleoutbound(dc);
 end;
 constructor GDBObjComplex.initnul;
 begin

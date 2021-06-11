@@ -52,6 +52,7 @@ GDBObjDevice= object(GDBObjBlockInsert)
                    procedure DeSelect(var SelectedObjCount:GDBInteger;ds2s:TDeSelect2Stage);virtual;
                    //function GetDeviceType:TDeviceType;virtual;
                    procedure getoutbound(var DC:TDrawContext);virtual;
+                   function getonlyvisibleoutbound(var DC:TDrawContext):TBoundingBox;virtual;
 
                    //function AssignToVariable(pv:pvardesk):GDBInteger;virtual;
                    function GetObjTypeName:GDBString;virtual;
@@ -290,6 +291,14 @@ begin
     and (tbb.LBN.z=tbb.RTF.z) then
                               else
                                   concatbb(vp.BoundingBox,{VarObjArray.calcbb}tbb);
+end;
+function GDBObjDevice.getonlyvisibleoutbound(var DC:TDrawContext):TBoundingBox;
+var tbb:TBoundingBox;
+begin
+  result:=inherited;
+  tbb:=VarObjArray.getonlyvisibleoutbound(dc);
+  if tbb.RTF.x>=tbb.LBN.x then
+    ConcatBB(result,tbb);
 end;
 function GDBObjDevice.Clone;
 var tvo: PGDBObjDevice;

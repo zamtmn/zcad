@@ -211,12 +211,14 @@ begin
   Task.VerifyChecked := false;
 
   ParentHWND:=0;
-  PriorityFocusCtrl:= ZCMsgCallBackInterface.GetPriorityFocus;
+  if Screen.ActiveForm<>nil then
+    ParentHWND:=Screen.ActiveForm.Handle;
+  {PriorityFocusCtrl:= ZCMsgCallBackInterface.GetPriorityFocus;
   if PriorityFocusCtrl<>nil then begin
     while PriorityFocusCtrl.Parent<>nil do
       PriorityFocusCtrl:=PriorityFocusCtrl.Parent;
     ParentHWND:=PriorityFocusCtrl.Handle;
-  end;
+  end;}
 
   Result.ModalResult:=TLCLModalResult2TZCMsgModalResult.Convert(Task.Execute(TZCMsgCommonButtons2TCommonButtons.Convert(buttons),0,[tdfPositionRelativeToWindow],TZCMsgDlgIcon2TTaskDialogIcon(aDialogIcon),tfiWarning,0,0,ParentHWND));//controls.mrOk
   Result.RadioRes:=Task.RadioRes;

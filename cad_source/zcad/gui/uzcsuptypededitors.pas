@@ -75,15 +75,14 @@ begin
 end;
 procedure TSupportTypedEditors.freeeditor;
 begin
-  if peditor<>nil then
-  begin
-       ClearEDContext;
-       Application.RemoveAsyncCalls(self);
-       peditor.geteditor.Hide;
-       freeandnil(peditor);
-       if assigned(OnUpdateEditedControl) then
-                                              OnUpdateEditedControl(EditedControl);
-       EditedControl:=nil;
+  if peditor<>nil then begin
+  ClearEDContext;
+  Application.RemoveAsyncCalls(self);
+  peditor.geteditor.Hide;
+  freeandnil(peditor);
+  if assigned(OnUpdateEditedControl) and assigned(EditedControl) then
+    OnUpdateEditedControl(EditedControl);
+  EditedControl:=nil;
   end;
 end;
 procedure TSupportTypedEditors.ClearEDContext;

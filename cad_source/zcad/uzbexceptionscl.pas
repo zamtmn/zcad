@@ -16,14 +16,12 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzcexceptions;
+unit uzbexceptionscl;
 {$INCLUDE def.inc}
 interface
 uses
-  SysUtils,lineinfo,gvector;
-
-const
-  InitialCrashReportFilename='crashreport.txt';
+  SysUtils,lineinfo,gvector,
+  uzbexceptionsparams;
 
 type
   TCrashInfoProvider=procedure(var f:system.text;Obj : TObject; Addr: CodePointer; _FrameCount: Longint; _Frames: PCodePointer);
@@ -40,7 +38,7 @@ implementation
 var
   OldExceptProc:TExceptProc=nil;
   CrashInfoProviders:TCrashInfoProviders=nil;
-  CrashReportFilename:ansistring;
+  CrashReportFile:ansistring;
 
 procedure RegisterCrashInfoProvider(provider:TCrashInfoProvider;atBegining:boolean=false);
 begin
@@ -118,8 +116,8 @@ begin
   if assigned(CrashInfoProviders) then
     for i:=0 to CrashInfoProviders.Size-1 do
       if @CrashInfoProviders[i]<>nil then begin
-        system.Assign(f,CrashReportFilename);
-        if FileExists(CrashReportFilename) then
+        system.Assign(f,CrashReportFile);
+        if FileExists(CrashReportFile) then
           system.Append(f)
         else
           system.Rewrite(f);
@@ -160,17 +158,17 @@ end;
 
 procedure SetCrashReportFilename(fn:ansistring);
 begin
-   CrashReportFilename:=fn;
+   CrashReportFile:=fn;
 end;
 
 function GetCrashReportFilename:ansistring;
 begin
-   result:=CrashReportFilename;
+   result:=CrashReportFile;
 end;
 
 
 initialization
-  SetCrashReportFilename(GetTempDir+InitialCrashReportFilename);
+  SetCrashReportFilename({GetTempDir+}CrashReportFileName);
   InstallHandler;
 finalization
   UnInstallHandler;

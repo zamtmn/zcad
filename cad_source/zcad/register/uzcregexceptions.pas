@@ -21,10 +21,7 @@ unit uzcregexceptions;
 interface
 
 uses
-  SysUtils,LazLogger,uzclog,uzcsysvars,uzbpaths,uzcexceptions,uzcstrconsts;
-
-const
-  CrashReportFilename='zcadcrashreport.txt';
+  SysUtils,LazLogger,uzclog,uzcsysvars,uzbpaths,uzbexceptionscl,uzcstrconsts;
 
 implementation
 
@@ -67,7 +64,7 @@ end;
 
 initialization
   debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
-  SetCrashReportFilename(GetTempDir+CrashReportFilename);
+  //SetCrashReportFilename(GetTempDir+CrashReportFilename);
   RegisterCrashInfoProvider(ProvideHeader,true);
   RegisterCrashInfoProvider(ProvideLog);
   RegisterCrashInfoProvider(ProvideBuildAndRunTimeInfo);

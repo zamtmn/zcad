@@ -35,12 +35,16 @@ program zcad;
 {$INCLUDE buildmode.inc}
 uses
   {$IFDEF REPORTMMEMORYLEAKS}heaptrc,{$ENDIF}
-  uzcexceptions,
+  //first, setup crash report file path (uzcregexceptionsfile) and instll exceptions handler for console and gui
+  uzcregexceptionsfile,uzbexceptionscl,//uzbexceptionsgui,
+  //second, install data providers for crash report
+  uzcregexceptions,
+
   Interfaces,forms, classes,LCLVersion,
   uzcfsplash,
   uzcsysvars,
 
-  uzbmemman,uzclog,uzcregexceptions,
+  uzbmemman,uzclog,
   uzcsysparams,uzcsysinfo,
   uzbpaths,
 

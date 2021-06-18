@@ -34,7 +34,7 @@ uses
        UGDBOpenArrayOfByte,uzbmemman,uzbtypesbase,uzbtypes,
        uzegeometry,uzcsysvars,uzcstrconsts,uzbstrproc,UGDBNamedObjectsArray,uzclog,uzblog,
        uzedimensionaltypes,varmandef, varman,UUnitManager,uzcsysinfo,strmy,uzestylestexts,uzestylesdim,
-  uzbexceptionscl,
+  uzbexceptionscl,uzbexceptionsgui,
   {ZCAD SIMPLE PASCAL SCRIPT}
        //languade,
   {ZCAD ENTITIES}
@@ -113,7 +113,6 @@ type
     procedure EndLongProcess(LPHandle:TLPSHandle;TotalLPTime:TDateTime);
 
     public
-    FAppProps:TApplicationProperties;
     SuppressedShortcuts:TXMLConfig;
     rt:GDBInteger;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -976,9 +975,7 @@ begin
   with programlog.Enter('TZCADMainWindow._onCreate',LM_Debug,LMD) do begin try
   ZCADGUIManager.RegisterZCADFormInfo('PageControl',rsDrawingWindowWndName,Tform,types.rect(200,200,600,500),ZCADMainPanelSetupProc,nil,@ZCADMainWindow.MainPanel);
 
-  FAppProps := TApplicationProperties.Create(Self);
-  FAppProps.OnException := ZcadException;
-  FAppProps.CaptureExceptions := True;
+  TZGuiExceptionsHandler.InstallHandler(ZcadException);
 
   SuppressedShortcuts:=TXMLConfig.Create(nil);
   SuppressedShortcuts.Filename:=ProgramPath+'components/suppressedshortcuts.xml';

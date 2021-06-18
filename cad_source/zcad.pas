@@ -36,7 +36,7 @@ program zcad;
 uses
   {$IFDEF REPORTMMEMORYLEAKS}heaptrc,{$ENDIF}
   //first, setup crash report file path (uzcregexceptionsfile) and instll exceptions handler for console and gui
-  uzcregexceptionsfile,uzbexceptionscl,//uzbexceptionsgui,
+  uzcregexceptionsfile,uzbexceptionscl,uzbexceptionsgui,
   //second, install data providers for crash report
   uzcregexceptions,
 
@@ -308,6 +308,7 @@ begin
   {MainFormN.show;
   CLine.Show;}
 
+  TZGuiExceptionsHandler.EnableLCLCaptureExceptions;
   Application.run;
 
   sysvar.SYS.SYS_RunTime:=nil;

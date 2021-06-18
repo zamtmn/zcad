@@ -49,7 +49,11 @@ procedure ProvideBuildAndRunTimeInfo(var f:system.text;Obj : TObject; Addr: Code
 begin
   WriteLn(f);
   WriteLn(f,'Build and runtime info:');
-  Write(f,  '  ZCAD ');WriteLn(f,sysvar.SYS.SYS_Version^);
+  Write(f,  '  ZCAD ');
+  if sysvar.SYS.SYS_Version<>nil then
+    WriteLn(f,sysvar.SYS.SYS_Version^)
+  else
+    WriteLn(f,'unknown version');
   Write(f,  '  Build with ');Write(f,sysvar.SYS.SSY_CompileInfo.SYS_Compiler);Write(f,' v');WriteLn(f,sysvar.SYS.SSY_CompileInfo.SYS_CompilerVer);
   Write(f,  '  Target CPU: ');WriteLn(f,sysvar.SYS.SSY_CompileInfo.SYS_CompilerTargetCPU);
   Write(f,  '  Target OS: ');WriteLn(f,sysvar.SYS.SSY_CompileInfo.SYS_CompilerTargetOS);

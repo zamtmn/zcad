@@ -36,7 +36,7 @@ uses
   uzbpaths,uzctnrvectorgdbstring,math,Masks,uzclog,uzbstrproc,
   uzeentmtext,uzeblockdef,UGDBPoint3DArray,uzcdevicebaseabstract,uzelongprocesssupport,LazLogger,
   generics.Collections,
-  uzccommand_treestat,uzccommand_line2,uzccmdfloatinsert;
+  uzccommand_treestat,uzccommand_line2,uzccmdfloatinsert,uzcregother;
 type
 {Export+}
   TFindType=(

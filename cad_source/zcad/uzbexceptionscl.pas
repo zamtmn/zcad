@@ -74,12 +74,16 @@ begin
   end;
 end;
 
-procedure MyDumpExceptionBackTrace(var f:system.text; _FrameCount: Longint; _Frames: PCodePointer);
+procedure MyDumpExceptionBackTrace(var f:system.text; Addr: CodePointer; _FrameCount: Longint; _Frames: PCodePointer);
 var
   FrameCount: integer;
   Frames: PPointer;
   FrameNumber:Integer;
 begin
+  WriteLn(f,'ExceptAddr:');
+  myDumpAddr(ExceptAddr,f);
+  WriteLn(f,'Addr:');
+  myDumpAddr(Addr,f);
   WriteLn(f,'Stack trace:');
   myDumpAddr(ExceptAddr,f);
   FrameCount:=_FrameCount;
@@ -104,7 +108,7 @@ begin
   WriteLn(f,'Date: ',errmsg);
   WriteLn(f,'');
 
-  myDumpExceptionBackTrace(f,_FrameCount,_Frames);
+  myDumpExceptionBackTrace(f,Addr,_FrameCount,_Frames);
 WriteLn(f,'');
 end;
 

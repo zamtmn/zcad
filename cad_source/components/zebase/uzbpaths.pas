@@ -143,8 +143,7 @@ begin
      until s='';
      end;
      result:='';
-     if VerboseLog^ then
-       DebugLn(sysutils.Format('[FILEOPS]FindInSupportPath: file not found:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]));
+     DebugLn(sysutils.Format('{E}FindInSupportPath: file not found:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]));
 end;
 function ExpandPath(path:GDBString):GDBString;
 begin

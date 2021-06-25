@@ -1,0 +1,1 @@
+ifdef::lang[include::locale/{lang}/attributes.adoc[]]

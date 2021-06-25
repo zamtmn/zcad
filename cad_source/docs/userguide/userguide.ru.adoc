@@ -1,0 +1,11 @@
+:lang: ru
+# ZCAD User Guide
+include::attributes.adoc[]
+:toc: left
+:toclevels: 4
+:sectnums:
+:source-highlighter: coderay
+:docinfo1:
+
+include::locale/{lang}/general_information.adoc[]
+include::locale/{lang}/installing_and_getting_started.adoc[]

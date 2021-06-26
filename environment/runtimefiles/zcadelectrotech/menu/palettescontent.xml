@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <PalettesContent>
-    <BlockLib Type="Tree" Caption='Блоки' ImagesWidth='24'>
+    <BlockLib Type="Tree" Caption='Blocks' ImagesWidth='24'>
       <ZTreeNode Caption='Сила'>
       	<ZTreeNode Caption='Кабельные стояки'>
       	   <ZTreeCommand Command="Insert(DEVICE_EL_CABLE_BREAK)" Img='DEVICE_EL_CABLE_BREAK_300' Caption='Обрыв'/>

@@ -8,4 +8,6 @@ include::attributes.adoc[]
 :docinfo1:
 
 include::locale/{lang}/general_information.adoc[]
-include::locale/{lang}/installing_and_getting_started.adoc[]
+include::locale/{lang}/getting_started.adoc[]
+include::locale/{lang}/user_interface.adoc[]
+include::locale/{lang}/customization.adoc[]

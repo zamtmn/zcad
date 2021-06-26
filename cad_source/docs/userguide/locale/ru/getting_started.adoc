@@ -1,4 +1,6 @@
 
-## Установка и запуск
+## Быстрый старт
 
-Устанавливаем и запускаем
+include::getting_started/system_requirements.adoc[]
+include::getting_started/instalation.adoc[]
+include::getting_started/launch.adoc[]

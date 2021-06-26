@@ -1,0 +1,4 @@
+
+## Настройка программы
+
+include::customization/directory_structure.adoc[]

@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls,
-  StdCtrls, ExtCtrls, Buttons, TypInfo;
+  StdCtrls, ExtCtrls, Buttons, RTTIGrids, TypInfo;
 
 { TAppExplorerForm is a form that presents a tree of all component
   instances recursively owned by the Application variable }
@@ -14,9 +14,14 @@ uses
 type
   TAppExplorerForm = class(TForm)
     ButtonImages: TImageList;
+    ComponentEdit: TEdit;
+    ComponentPanel: TPanel;
+    EditSheet: TTabSheet;
+    ComponentMemo: TMemo;
+    PageControl: TPageControl;
+    ComponentGrid: TTIPropertyGrid;
     SearchEdit: TEdit;
     SearchLabel: TLabel;
-    Memo: TMemo;
     Panel: TPanel;
     PriorButton: TSpeedButton;
     NextButton: TSpeedButton;
@@ -24,6 +29,7 @@ type
     SearchResults: TLabel;
     Splitter: TSplitter;
     FlashTimer: TTimer;
+    TextSheet: TTabSheet;
     TreeImages: TImageList;
     RefreshButton: TButton;
     CloseButton: TButton;
@@ -44,6 +50,8 @@ type
     procedure TreeViewDblClick(Sender: TObject);
     { Or when the spacebar is pressed }
     procedure TreeViewKeyPress(Sender: TObject; var Key: char);
+  protected
+    procedure Loaded; override;
   private
     FSearchList: TList;
     FFilterList: TList;
@@ -54,7 +62,7 @@ type
     procedure Flash(Instance: TControl);
     { The Pack method aligns the search controls at the bottom of the form }
     procedure Pack;
-    { The RefreshSelection method repopulates the memo text }
+    { The RefreshSelection method repopulates the ComponentMemo text }
     procedure RefreshView;
     { The RefreshView method repopulates the component tree view }
     procedure RefreshSelection(Node: TTreeNode);
@@ -82,45 +90,45 @@ end;
 { TClassImage is used to lookup the image index of a class }
 
 type
-	TClassImage = record
-  	ClassName: string;
+  TClassImage = record
+    ClassName: string;
     Image: Integer;
-	end;
+  end;
 
 var
-	ClassImages: array[0..31] of TClassImage = (
-  	(ClassName: 'TMENUITEM'; Image: 19),
-  	(ClassName: 'TMENU'; Image: 19),
-  	(ClassName: 'TBASICACTION'; Image: 0),
-  	(ClassName: 'TDATAMODULE'; Image: 1),
-  	(ClassName: 'TCUSTOMFORM'; Image: 1),
-  	(ClassName: 'TSCROLLINGWINCONTROL'; Image: 2),
-  	(ClassName: 'TCUSTOMFRAME'; Image: 2),
-  	(ClassName: 'TCONTROLSCROLLBAR'; Image: 3),
-  	(ClassName: 'TSCROLLBAR'; Image: 4),
-  	(ClassName: 'TCUSTOMSTATUSBAR'; Image: 5),
-  	(ClassName: 'TCUSTOMTABCONTROL'; Image: 6),
-  	(ClassName: 'TCUSTOMGROUPBOX'; Image: 7),
-  	(ClassName: 'TCUSTOMLISTBOX'; Image: 8),
-  	(ClassName: 'TCUSTOMCOMBOBOX'; Image: 8),
-  	(ClassName: 'TPROGRESSBAR'; Image: 9),
-  	(ClassName: 'TCUSTOMCHECKBOX'; Image: 10),
-  	(ClassName: 'TRADIOBUTTON'; Image: 11),
-  	(ClassName: 'TBUTTONCONTROL'; Image: 12),
-  	(ClassName: 'TCUSTOMRICHEDIT'; Image: 14),
-  	(ClassName: 'TCUSTOMMEMO'; Image: 15),
-  	(ClassName: 'TCUSTOMPANEL'; Image: 19),
-  	(ClassName: 'TCUSTOMEDIT'; Image: 16),
-  	(ClassName: 'TCUSTOMCONTROL'; Image: 18),
-  	(ClassName: 'TWINCONTROL'; Image: 17),
-  	(ClassName: 'TCUSTOMCONTROL'; Image: 17),
-  	(ClassName: 'TCUSTOMLABEL'; Image: 20),
-  	(ClassName: 'TIMAGE'; Image: 21),
-  	(ClassName: 'TGRAPHICCONTROL'; Image: 22),
-  	(ClassName: 'TCUSTOMIMAGELIST'; Image: 23),
-  	(ClassName: 'TCOMMONDIALOG'; Image: 24),
-  	(ClassName: 'TCONTROL'; Image: 25),
-  	(ClassName: 'TCOMPONENT'; Image: 26)
+  ClassImages: array[0..31] of TClassImage = (
+    (ClassName: 'TMENUITEM'; Image: 19),
+    (ClassName: 'TMENU'; Image: 19),
+    (ClassName: 'TBASICACTION'; Image: 0),
+    (ClassName: 'TDATAMODULE'; Image: 1),
+    (ClassName: 'TCUSTOMFORM'; Image: 1),
+    (ClassName: 'TSCROLLINGWINCONTROL'; Image: 2),
+    (ClassName: 'TCUSTOMFRAME'; Image: 2),
+    (ClassName: 'TCONTROLSCROLLBAR'; Image: 3),
+    (ClassName: 'TSCROLLBAR'; Image: 4),
+    (ClassName: 'TCUSTOMSTATUSBAR'; Image: 5),
+    (ClassName: 'TCUSTOMTABCONTROL'; Image: 6),
+    (ClassName: 'TCUSTOMGROUPBOX'; Image: 7),
+    (ClassName: 'TCUSTOMLISTBOX'; Image: 8),
+    (ClassName: 'TCUSTOMCOMBOBOX'; Image: 8),
+    (ClassName: 'TPROGRESSBAR'; Image: 9),
+    (ClassName: 'TCUSTOMCHECKBOX'; Image: 10),
+    (ClassName: 'TRADIOBUTTON'; Image: 11),
+    (ClassName: 'TBUTTONCONTROL'; Image: 12),
+    (ClassName: 'TCUSTOMRICHEDIT'; Image: 14),
+    (ClassName: 'TCUSTOMMEMO'; Image: 15),
+    (ClassName: 'TCUSTOMPANEL'; Image: 19),
+    (ClassName: 'TCUSTOMEDIT'; Image: 16),
+    (ClassName: 'TCUSTOMCONTROL'; Image: 18),
+    (ClassName: 'TWINCONTROL'; Image: 17),
+    (ClassName: 'TCUSTOMCONTROL'; Image: 17),
+    (ClassName: 'TCUSTOMLABEL'; Image: 20),
+    (ClassName: 'TIMAGE'; Image: 21),
+    (ClassName: 'TGRAPHICCONTROL'; Image: 22),
+    (ClassName: 'TCUSTOMIMAGELIST'; Image: 23),
+    (ClassName: 'TCOMMONDIALOG'; Image: 24),
+    (ClassName: 'TCONTROL'; Image: 25),
+    (ClassName: 'TCOMPONENT'; Image: 26)
   );
 
 function GetClassImageIndex(Instance: TObject): Integer;
@@ -344,6 +352,12 @@ begin
   end;
 end;
 
+procedure TAppExplorerForm.Loaded;
+begin
+  inherited Loaded;
+  ComponentGrid.SplitterX := ComponentGrid.Width div 2;
+end;
+
 procedure TAppExplorerForm.Pack;
 
   procedure PackControls(const Controls: array of TControl; Middle: Integer);
@@ -440,8 +454,8 @@ procedure TAppExplorerForm.RefreshSelection(Node: TTreeNode);
     TypeInfo := PTypeInfo(Instance.ClassInfo);
     TypeData := GetTypeData(TypeInfo);
     S := TypeData.ClassType.ClassName + ' declared in ' + TypeData.UnitName;
-    Memo.Lines.Add(S);
-    Memo.Lines.Add('');
+    ComponentMemo.Lines.Add(S);
+    ComponentMemo.Lines.Add('');
   end;
 
   procedure AddParentOwner(Instance: TComponent);
@@ -459,7 +473,7 @@ procedure TAppExplorerForm.RefreshSelection(Node: TTreeNode);
     Parent: TWinControl;
     S: string;
   begin
-    Memo.Lines.Add('Hierarchy:');
+    ComponentMemo.Lines.Add('Hierarchy:');
     S := Name;
     while Instance <> nil do
     begin
@@ -473,37 +487,30 @@ procedure TAppExplorerForm.RefreshSelection(Node: TTreeNode);
         Instance := Instance.Owner;
       if Instance = nil then
         Break;
-      Memo.Lines.Add(S);
+      ComponentMemo.Lines.Add(S);
       S := Name;
     end;
-    Memo.Lines.Add(S);
-    Memo.Lines.Add('');
+    ComponentMemo.Lines.Add(S);
+    ComponentMemo.Lines.Add('');
   end;
 
   procedure AddInheritance(Instance: TComponent);
   var
+    S: string;
     C: TClass;
   begin
-    Memo.Lines.Add('Inheritance:');
+    ComponentMemo.Lines.Add('ComponentState:');
+    S := SetToString(PTypeInfo(TypeInfo(TComponentState)), Integer(Instance.ComponentState), True);
+    ComponentMemo.Lines.Add(S);
+    ComponentMemo.Lines.Add('');
+    ComponentMemo.Lines.Add('Inheritance:');
     C := Instance.ClassType;
     while C <> nil do
     begin
-      Memo.Lines.Add('  ' + C.ClassName);
+      ComponentMemo.Lines.Add('  ' + C.ClassName);
       C := C.ClassParent;
     end;
-    Memo.Lines.Add('');
-  end;
-
-  procedure AddName(Instance: TComponent);
-  var
-    S: string;
-  begin
-    if Instance.Name <> '' then
-      S := Instance.Name
-    else
-      S := '(unnamed)';
-    Memo.Lines.Add(S);
-    Memo.Lines.Add('');
+    ComponentMemo.Lines.Add('');
   end;
 
   procedure AddPropertyList(Instance: TComponent);
@@ -519,7 +526,7 @@ procedure TAppExplorerForm.RefreshSelection(Node: TTreeNode);
     S: string;
     I: Integer;
   begin
-    Memo.Lines.Add('Properties:');
+    ComponentMemo.Lines.Add('Properties:');
     Info := PTypeInfo(Instance.ClassInfo);
     Data := GetTypeData(Info);
     if Data.PropCount < 1 then
@@ -599,9 +606,9 @@ procedure TAppExplorerForm.RefreshSelection(Node: TTreeNode);
           S := '';
         end;
         if S <> '' then
-          Memo.Lines.Add('  ' + S);
+          ComponentMemo.Lines.Add('  ' + S);
       end;
-      Memo.Lines.Add('');
+      ComponentMemo.Lines.Add('');
     finally
       FreeMem(List);
     end;
@@ -618,8 +625,8 @@ procedure TAppExplorerForm.RefreshSelection(Node: TTreeNode);
       Input.WriteComponent(Instance);
       Input.Seek(0, 0);
       ObjectBinaryToText(Input, Output);
-      Memo.Lines.Add(Output.DataString);
-      Memo.Lines.Add('');
+      ComponentMemo.Lines.Add(Output.DataString);
+      ComponentMemo.Lines.Add('');
     finally
       Output.Free;
       Input.Free;
@@ -628,22 +635,31 @@ procedure TAppExplorerForm.RefreshSelection(Node: TTreeNode);
 
 var
   Component: TComponent;
+  S: string;
 begin
-  Memo.Lines.BeginUpdate;
+  ComponentMemo.Lines.BeginUpdate;
   try
-    Memo.Lines.Clear;
+    ComponentMemo.Lines.Clear;
+    ComponentEdit.Text := '';
+    ComponentGrid.TIObject := nil;
     if Node = nil then
       Exit;
     Component := TComponent(Node.Data);
+    S := Component.Name;
+    if S = '' then
+      S := '(unnamed)';
+    ComponentEdit.Text := S + ': ' + Component.ClassName;
+    ComponentGrid.TIObject := nil;
+    ComponentGrid.TIObject := Component;
+    ComponentGrid.SplitterX := ComponentGrid.Width div 2;
     AddClassInfo(Component);
     AddParentOwner(Component);
     AddInheritance(Component);
     AddPropertyList(Component);
-    Memo.SelStart := 0;
+    ComponentMemo.SelStart := 0;
   finally
-    Memo.Lines.EndUpdate;
+    ComponentMemo.Lines.EndUpdate;
   end;
 end;
 
 end.
-

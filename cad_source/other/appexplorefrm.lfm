@@ -1,20 +1,19 @@
 object AppExplorerForm: TAppExplorerForm
-  Left = 0
-  Height = 592
-  Top = 0
-  Width = 867
+  Left = 360
+  Height = 530
+  Top = 116
+  Width = 777
   Caption = 'Application Explorer'
-  ClientHeight = 592
-  ClientWidth = 867
+  ClientHeight = 530
+  ClientWidth = 777
   OnClose = FormClose
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
   Position = poScreenCenter
-  LCLVersion = '1.7'
-  Visible = False
+  LCLVersion = '1.9.0.0'
   object RefreshButton: TButton
-    Left = 496
+    Left = 488
     Height = 25
     Top = 360
     Width = 75
@@ -46,7 +45,6 @@ object AppExplorerForm: TAppExplorerForm
       Top = 0
       Width = 288
       Align = alLeft
-      DefaultItemHeight = 22
       Images = TreeImages
       ReadOnly = True
       ScrollBars = ssAutoBoth
@@ -56,29 +54,81 @@ object AppExplorerForm: TAppExplorerForm
       OnKeyPress = TreeViewKeyPress
       Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
     end
-    object Memo: TMemo
-      Left = 293
-      Height = 344
-      Top = 0
-      Width = 347
-      Align = alClient
-      ReadOnly = True
-      ScrollBars = ssAutoBoth
-      TabOrder = 1
-      WordWrap = False
-    end
     object Splitter: TSplitter
       Left = 288
       Height = 344
       Top = 0
       Width = 5
     end
+    object ComponentPanel: TPanel
+      Left = 293
+      Height = 344
+      Top = 0
+      Width = 347
+      Align = alClient
+      ClientHeight = 344
+      ClientWidth = 347
+      TabOrder = 2
+      object ComponentEdit: TEdit
+        Left = 1
+        Height = 22
+        Top = 1
+        Width = 345
+        Align = alTop
+        ReadOnly = True
+        TabOrder = 0
+      end
+      object PageControl: TPageControl
+        Left = 1
+        Height = 320
+        Top = 23
+        Width = 345
+        ActivePage = EditSheet
+        Align = alClient
+        TabIndex = 0
+        TabOrder = 1
+        object EditSheet: TTabSheet
+          Caption = 'Edit'
+          ClientHeight = 281
+          ClientWidth = 339
+          object ComponentGrid: TTIPropertyGrid
+            Left = 0
+            Height = 281
+            Top = 0
+            Width = 339
+            Align = alClient
+            CheckboxForBoolean = False
+            DefaultValueFont.Color = clWindowText
+            Filter = [tkInteger, tkChar, tkEnumeration, tkFloat, tkSet, tkSString, tkLString, tkAString, tkWString, tkVariant, tkArray, tkRecord, tkInterface, tkClass, tkObject, tkWChar, tkBool, tkInt64, tkQWord, tkDynArray, tkInterfaceRaw, tkProcVar, tkUString, tkUChar, tkHelper, tkFile, tkClassRef, tkPointer]
+            Indent = 13
+            NameFont.Color = clWindowText
+            ValueFont.Color = clMaroon
+          end
+        end
+        object TextSheet: TTabSheet
+          Caption = 'Text'
+          ClientHeight = 281
+          ClientWidth = 339
+          object ComponentMemo: TMemo
+            Left = 0
+            Height = 281
+            Top = 0
+            Width = 339
+            Align = alClient
+            ReadOnly = True
+            ScrollBars = ssAutoBoth
+            TabOrder = 0
+            WordWrap = False
+          end
+        end
+      end
+    end
   end
   object SearchLabel: TLabel
     Left = 32
-    Height = 19
+    Height = 16
     Top = 360
-    Width = 35
+    Width = 31
     Alignment = taRightJustify
     Caption = 'Find:'
     Layout = tlCenter
@@ -86,7 +136,7 @@ object AppExplorerForm: TAppExplorerForm
   end
   object SearchEdit: TEdit
     Left = 104
-    Height = 29
+    Height = 22
     Top = 356
     Width = 208
     OnChange = SearchEditChange
@@ -134,8 +184,8 @@ object AppExplorerForm: TAppExplorerForm
     ParentColor = False
   end
   object TreeImages: TImageList
-    left = 88
-    top = 72
+    Left = 88
+    Top = 72
     Bitmap = {
       4C691B0000001000000010000000000000001A1A1A241A1A1A241A1A1A240000
       00001A1A1A241A1A1A241A1A1A24000000001A1A1A241A1A1A241A1A1A240000
@@ -1007,8 +1057,8 @@ object AppExplorerForm: TAppExplorerForm
   object ButtonImages: TImageList
     Height = 22
     Width = 22
-    left = 88
-    top = 151
+    Left = 88
+    Top = 151
     Bitmap = {
       4C69030000001600000016000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
@@ -1198,7 +1248,7 @@ object AppExplorerForm: TAppExplorerForm
     Enabled = False
     Interval = 500
     OnTimer = FlashTimerTimer
-    left = 89
-    top = 227
+    Left = 89
+    Top = 227
   end
 end

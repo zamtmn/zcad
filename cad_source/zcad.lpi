@@ -254,61 +254,64 @@
         </Mode0>
       </Modes>
     </RunParams>
-    <RequiredPackages Count="18">
+    <RequiredPackages Count="19">
       <Item1>
-        <PackageName Value="uniqueinstance_package"/>
+        <PackageName Value="runtimetypeinfocontrols"/>
       </Item1>
       <Item2>
-        <PackageName Value="zmacros"/>
+        <PackageName Value="uniqueinstance_package"/>
       </Item2>
       <Item3>
-        <PackageName Value="laz.virtualtreeview_package"/>
+        <PackageName Value="zmacros"/>
       </Item3>
       <Item4>
-        <PackageName Value="ztoolbars"/>
+        <PackageName Value="laz.virtualtreeview_package"/>
       </Item4>
       <Item5>
-        <PackageName Value="zmath"/>
+        <PackageName Value="ztoolbars"/>
       </Item5>
       <Item6>
-        <PackageName Value="zobjectinspector"/>
+        <PackageName Value="zmath"/>
       </Item6>
       <Item7>
-        <PackageName Value="zundostack"/>
+        <PackageName Value="zobjectinspector"/>
       </Item7>
       <Item8>
-        <PackageName Value="zscript"/>
+        <PackageName Value="zundostack"/>
       </Item8>
       <Item9>
-        <PackageName Value="zscriptbase"/>
+        <PackageName Value="zscript"/>
       </Item9>
       <Item10>
-        <PackageName Value="zcontainers"/>
+        <PackageName Value="zscriptbase"/>
       </Item10>
       <Item11>
-        <PackageName Value="zebase"/>
+        <PackageName Value="zcontainers"/>
       </Item11>
       <Item12>
-        <PackageName Value="zcontrols"/>
+        <PackageName Value="zebase"/>
       </Item12>
       <Item13>
-        <PackageName Value="FCL"/>
+        <PackageName Value="zcontrols"/>
       </Item13>
       <Item14>
-        <PackageName Value="fpvectorialpkg"/>
+        <PackageName Value="FCL"/>
       </Item14>
       <Item15>
-        <PackageName Value="Printer4Lazarus"/>
+        <PackageName Value="fpvectorialpkg"/>
       </Item15>
       <Item16>
-        <PackageName Value="AnchorDocking"/>
+        <PackageName Value="Printer4Lazarus"/>
       </Item16>
       <Item17>
-        <PackageName Value="LazOpenGLContext"/>
+        <PackageName Value="AnchorDocking"/>
       </Item17>
       <Item18>
-        <PackageName Value="LCL"/>
+        <PackageName Value="LazOpenGLContext"/>
       </Item18>
+      <Item19>
+        <PackageName Value="LCL"/>
+      </Item19>
     </RequiredPackages>
     <Units Count="204">
       <Unit0>
@@ -1199,6 +1202,11 @@
         <UseAnsiStrings Value="False"/>
       </SyntaxOptions>
     </Parsing>
+    <CodeGeneration>
+      <Optimizations>
+        <OptimizationLevel Value="0"/>
+      </Optimizations>
+    </CodeGeneration>
     <Other>
       <Verbosity>
         <ShowHintsForUnusedUnitsInMainSrc Value="True"/>

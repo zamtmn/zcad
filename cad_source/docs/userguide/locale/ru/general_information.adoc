@@ -3,3 +3,5 @@
 
 ZCAD - программа с открытым исходным кодом, разрабатывается на языке Pascal с использованием IDE Lazarus
 и компилятора Free Pascal
+
+include::general_information/license.adoc[]

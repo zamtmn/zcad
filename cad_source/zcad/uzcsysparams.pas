@@ -21,13 +21,13 @@ unit uzcsysparams;
 interface
 uses XMLConf,XMLPropStorage,LazConfigStorage,fileutil,
   LCLProc,uzclog,uzbpaths,uzbtypesbase,Forms,uzbtypes{$IFNDEF DELPHI},LazUTF8{$ENDIF},sysutils;
-{$INCLUDE zcadrev.inc}
 type
 {EXPORT+}
   {REGISTERRECORDTYPE TmyFileVersionInfo}
   TmyFileVersionInfo=record
-    major,minor,release,build,revision:GDBInteger;
-    versionstring:GDBstring;
+    Major,Minor,Micro,Release,CommitsAfter:GDBInteger;
+    AbbreviatedName:AnsiString;
+    VersionString:AnsiString;
   end;
   {REGISTERRECORDTYPE tsavedparams}
   tsavedparams=record

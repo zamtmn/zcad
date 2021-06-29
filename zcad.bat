@@ -1,4 +1,5 @@
 @echo off
+zcadversion
 set PathToLazBuild=%~1
 echo PathToLazBuild=%PathToLazBuild%
 if "%PathToLazBuild%" equ "" (

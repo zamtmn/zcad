@@ -22,9 +22,9 @@ interface
 uses
   MacroDefIntf,uzmacros,uzcsysparams,LCLProc,uzclog,uzblog,uzbpaths,uzbtypesbase,Forms,uzbtypes,
   {$IFDEF WINDOWS}ShlObj,{$ENDIF}{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils;
-{$INCLUDE zcadrev.inc}
 const
   zcaduniqueinstanceid='zcad unique instance';
+  zcadgitversion = {$include zcadversion.inc};
 type
   TZCADPathsMacroMethods=class
     class function MacroFuncZCADPath       (const {%H-}Param: string; const Data: PtrInt;
@@ -42,63 +42,33 @@ var
 
 Procedure GetSysInfo;
 implementation
-function GetVersion({_file:pchar}):TmyFileVersionInfo;
+function GetVersion:TmyFileVersionInfo;
 var
- (*VerInfoSize, Dummy: DWord;
- PVerBbuff, PFixed : GDBPointer;
- FixLength : UINT;*)
-
-  i: Integer;
-  //Version: TFileVersionInfo;
-  {MyFile,} MyVersion{,ts}: GDBString;
-
+  Major,Minor,Micro,Release:AnsiString;
+  CommitsAfter,AbbreviatedName:AnsiString;
 begin
-     result.build:=0;
-     result.major:=0;
-     result.minor:=0;
-     result.release:=0;
+  result.Major:=0;
+  result.Minor:=0;
+  result.Micro:=0;
+  result.Release:=0;
+  result.AbbreviatedName:='Unknown';
 
-     {Version:=TFileVersionInfo.create(Nil);
-     Version.fileName:=_file;
+  AbbreviatedName:=zcadgitversion;
+  GetPartOfPath(Major,AbbreviatedName,'.');
+  GetPartOfPath(Minor,AbbreviatedName,'.');
+  GetPartOfPath(Micro,AbbreviatedName,'.');
+  GetPartOfPath(Release,AbbreviatedName,'-');
+  GetPartOfPath(CommitsAfter,AbbreviatedName,'-');
 
-     With Version do begin
-       For i:=0 to VersionStrings.Count-1 do begin
-         If VersionCategories[I]='FileVersion' then
-         begin
-           MyVersion := VersionStrings[i];
-           break;
-         end;
-       end;
-     end;}
+  TryStrToInt(Major,result.major);
+  TryStrToInt(Minor,result.Minor);
+  TryStrToInt(Micro,result.Micro);
+  TryStrToInt(Release,result.Release);
+  TryStrToInt(CommitsAfter,result.CommitsAfter);
+  if AbbreviatedName<>'' then
+    result.AbbreviatedName:=AbbreviatedName;
 
-     result.major:=0;
-     result.minor:=9;
-     result.release:=8;
-
-     MyVersion:=inttostr(result.major)+'.'+inttostr(result.minor)+'.'+inttostr(result.release)+'.'+Revision;
-     result.versionstring:=MyVersion;
-
-     val(Revision,result.revision,i);
-
-
-(* fillchar(result,sizeof(result),0);
- VerInfoSize := GetFileVersionInfoSize(_file, Dummy);
- if VerInfoSize = 0 then Exit;
- GetMem(PVerBbuff, VerInfoSize);
- try
-   if GetFileVersionInfo(_file,0,VerInfoSize,PVerBbuff) then
-   begin
-     if VerQueryValue(PVerBbuff,'\',PFixed,FixLength) then
-     begin
-       result.major:=LongRec(PVSFixedFileInfo(PFixed)^.dwFileVersionMS).Hi;
-       result.minor:=LongRec(PVSFixedFileInfo(PFixed)^.dwFileVersionMS).Lo;
-       result.release:=LongRec(PVSFixedFileInfo(PFixed)^.dwFileVersionLS).Hi;
-       result.build:=LongRec(PVSFixedFileInfo(PFixed)^.dwFileVersionLS).Lo;
-     end;
-   end;
- finally
-   FreeMem(PVerBbuff);
- end;*)
+  result.versionstring:=inttostr(result.Major)+'.'+inttostr(result.Minor)+'.'+inttostr(result.Micro)+'.'+inttostr(result.Release)+'-'+inttostr(result.CommitsAfter)+'-'+result.AbbreviatedName;
 end;
 
 procedure ProcessParamStr;

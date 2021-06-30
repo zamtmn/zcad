@@ -220,7 +220,7 @@ uses
 
   uzccommand_text,
   uzccommand_exporttexttocsv,
-  uzccommand_dataexport,
+  uzccommand_dataexport,uzccommand_dataimport,
 
   {$IFDEF ELECTROTECH}
   //**for velec func**//

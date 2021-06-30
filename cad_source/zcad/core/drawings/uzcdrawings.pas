@@ -30,6 +30,7 @@ uses
     UGDBOpenArrayOfPV,uzefont,gzctnrvectorpobjects,UGDBVisibleOpenArray,
     gzctnrvectortypes,uzedimensionaltypes,uzetrash,UGDBOpenArrayOfByte,uzglviewareadata,
     uzccommandsabstract,
+    uzeentitiestypefilter,
     LCLProc;
 type
 {EXPORT+}
@@ -64,6 +65,7 @@ TZCADDrawingsManager= object(TZctnrVectorPGDBaseObjects)
                     //procedure rtmodify(obj:PGDBObjEntity;md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;
                     function FindOneInArray(const entities:GDBObjOpenArrayOfPV;objID:GDBWord; InOwner:GDBBoolean):PGDBObjEntity;
                     function FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjEntity;
+                    procedure FindMultiEntityByType(Filter:TEntsTypeFilter;var entarray:TZctnrVectorPGDBaseObjects);
                     procedure FindMultiEntityByVar(objID:GDBWord;vname,vvalue:GDBString;var entarray:TZctnrVectorPGDBaseObjects);
                     procedure FindMultiEntityByVar2(objID:GDBWord;vname:GDBString;var entarray:TZctnrVectorPGDBaseObjects);
                     procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
@@ -808,6 +810,25 @@ begin
         RemapAll(_from,_to,_source,tv);
     end;
     result:=tv;
+end;
+procedure TZCADDrawingsManager.FindMultiEntityByType(Filter:TEntsTypeFilter;var entarray:TZctnrVectorPGDBaseObjects);
+var
+   croot:PGDBObjGenericSubEntry;
+   pvisible:PGDBObjEntity;
+   ir:itrec;
+   pvd:pvardesk;
+   pentvarext:PTVariablesExtender;
+begin
+  croot:=self.GetCurrentROOT;
+  if croot<>nil then begin
+    pvisible:=croot.ObjArray.beginiterate(ir);
+    if pvisible<>nil then
+    repeat
+      if Filter.IsEntytyTypeAccepted(pvisible.GetObjType) then
+        entarray.PushBackData(pvisible);
+      pvisible:=croot.ObjArray.iterate(ir);
+    until pvisible=nil;
+  end;
 end;
 procedure TZCADDrawingsManager.FindMultiEntityByVar(objID:GDBWord;vname,vvalue:GDBString;var entarray:TZctnrVectorPGDBaseObjects);
 var

@@ -40,6 +40,7 @@ type
     procedure SetFilter;
     procedure ResetFilter;
     function IsEntytyTypeAccepted(EntType:TObjID):boolean;
+    function IsEmpty:boolean;
   end;
 implementation
 constructor TEntsTypeFilter.Create;
@@ -147,6 +148,11 @@ begin
     result:=true
   else
     result:=false;
+end;
+
+function TEntsTypeFilter.IsEmpty:boolean;
+begin
+    result:=Filter.Size=0;
 end;
 
 begin

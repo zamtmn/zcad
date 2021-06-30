@@ -74,14 +74,22 @@ begin
   until pvisible=nil;
 end;
 
+function GetFactColCount(FDoc:TCSVDocument;ARow: Integer):Integer;
+begin
+  Result:=FDoc.ColCount[ARow];
+  while (result>0)and(FDoc.Cells[result-1,ARow]='')do
+   dec(result);
+end;
+
 procedure ProcessCSVLine(FDoc:TCSVDocument;Row:Integer;var drawing:TSimpleDrawing;var DC:TDrawContext);
 var
   Filter:TEntsTypeFilter;
   entarray,filtredentarray:TZctnrVectorPGDBaseObjects;
-  fltcounter,fltcount:integer;
+  fltcounter,fltcount,FactColCount:integer;
   a1,a2,atemp:PGDBOpenArrayOfPObjects;
 begin
-  if (FDoc.ColCount[row]<3)or((FDoc.ColCount[row] mod 2)<>1) then begin
+  FactColCount:=GetFactColCount(FDoc,row);
+  if (FactColCount<3)or((FactColCount mod 2)<>1) then begin
     ZCMsgCallBackInterface.TextMessage(format('In row %d wrong number of parameters',[row+1]),TMWOHistoryOut);
     exit;
   end;
@@ -109,7 +117,7 @@ begin
   a2:=@filtredentarray;
 
   fltcounter:=1;
-  fltcount:=(FDoc.ColCount[row]-1) div 2;
+  fltcount:=(FactColCount-1) div 2;
   while fltcount>fltcounter do begin
     FilterArray(a1,a2,FDoc.Cells[fltcounter*2-1,Row],FDoc.Cells[fltcounter*2,Row]);
     a1.Clear;
@@ -119,7 +127,10 @@ begin
     inc(fltcounter);
   end;
 
-  SetArray(a1,FDoc.Cells[fltcounter*2-1,Row],FDoc.Cells[fltcounter*2,Row],drawing,DC);
+  if a1^.Count<>1 then
+    ZCMsgCallBackInterface.TextMessage(format('In row %d found %d candidats',[row+1,a1^.Count]),TMWOHistoryOut);
+  if a1^.Count<>0 then
+    SetArray(a1,FDoc.Cells[fltcounter*2-1,Row],FDoc.Cells[fltcounter*2,Row],drawing,DC);
 
   Filter.Destroy;
   entarray.Clear;
@@ -166,43 +177,6 @@ begin
       FDoc.Free;
     end;
   end;
-{
-  EntityIncluder:=ParserEntityPropFilter.GetTokens(DataExportParam.PropFilter^);
-  lpsh:=LPSHEmpty;
-
-   Data.FDoc:=TCSVDocument.Create;
-     if drawings.GetCurrentDWG<>nil then
-     begin
-       lpsh:=LPS.StartLongProcess('DataExport',@DataImport_com,drawings.GetCurrentROOT^.ObjArray.Count);
-       pv:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
-       if pv<>nil then
-       repeat
-         if EntsTypeFilter.IsEntytyTypeAccepted(pv^.GetObjType) then begin
-           if assigned(EntityIncluder) then begin
-             propdata.CurrentEntity:=pv;
-             propdata.IncludeEntity:=T3SB_Default;
-             EntityIncluder.Doit(PropData);
-           end else
-             propdata.IncludeEntity:=T3SB_True;
-
-           if propdata.IncludeEntity=T3SB_True then begin
-             Data.CurrentEntity:=pv;
-             if assigned(pet) then
-               pet.Doit(data);
-           end;
-         end;
-
-         pv:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
-         LPS.ProgressLongProcess(lpsh,ir.itc);
-       until pv=nil;
-     end;
-  if lpsh<>LPSHEmpty then
-    LPS.EndLongProcess(lpsh);
-  Data.FDoc.Delimiter:=';';
-  Data.FDoc.SaveToFile(DataExportParam.FileName^);
-  Data.FDoc.Free;
-  EntsTypeFilter.Free;
-  EntityIncluder.Free;}
 end;
 
 initialization

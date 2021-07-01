@@ -595,11 +595,22 @@ begin
    //result.vp.Layer:=pent^.vp.Layer;
    //result.vp.LineWeight:=pent^.vp.LineWeight;
 end;
+function AllocNet:PGDBObjNet;
+begin
+  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocElLeader}',{$ENDIF}result,sizeof(GDBObjNet));
+end;
+function AllocAndInitNet(owner:PGDBObjGenericWithSubordinated):PGDBObjNet;
+begin
+  result:=AllocNet;
+  result.initnul(owner);
+  result.bp.ListPos.Owner:=owner;
+end;
 class function GDBObjNet.GetDXFIOFeatures:TDXFEntIODataManager;
 begin
   result:=GDBObjNetDXFFeatures;
 end;
 initialization
+  RegisterEntity(GDBNetID,'Net',@AllocNet,@AllocAndInitNet);
   RegisterEntityUpgradeInfo(GDBLineID,UD_LineToNet,@UpgradeLine2Net);
   GDBObjNetDXFFeatures:=TDXFEntIODataManager.Create;
 finalization

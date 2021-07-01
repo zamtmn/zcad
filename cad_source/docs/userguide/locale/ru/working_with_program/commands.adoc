@@ -35,7 +35,12 @@
 #### DBaseAdd
 #### DBaseLink
 #### DBaseRename
-#### DataExport
+include::commands/dataexport.adoc[]
+
+
+include::commands/dataimport.adoc[]
+
+
 #### DbgAppExplorer
 #### DeSelectAll
 #### DebClip

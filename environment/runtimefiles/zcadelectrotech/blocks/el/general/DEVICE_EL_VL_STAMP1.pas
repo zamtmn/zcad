@@ -8,28 +8,26 @@ usescopy objname;
 
 var
 
-Organization:GDBString;(*'Организация'*)
-Code:GDBString;(*'Шифр'*)
-Project:GDBString;(*'Проект'*)
-Section:GDBString;(*'Раздел'*)
-Drawing:GDBString;(*'Чертеж'*)
-Stage:GDBString;(*'Стадия'*)
-Sheet:GDBString;(*'Страница'*)
-Sheets:GDBString;(*'Страниц'*)
-Date:GDBString;(*'Дата'*)
+T1:GDBString;(*'Организация'*)
+T2:GDBString;(*'Шифр'*)
+T3:GDBString;(*'Проект'*)
+T4:GDBString;(*'Раздел'*)
+T5:GDBString;(*'Чертеж'*)
+T6:GDBString;(*'Стадия'*)
+T7:GDBString;(*'Страница'*)
+T8:GDBString;(*'Страниц'*)
+T9:GDBString;(*'Дата'*)
 
-Specialist1:GDBString;(*'Специалист 1'*)
-Person1:GDBString;(*'Фамилия 1'*)
-Specialist2:GDBString;(*'Специалист 2'*)
-Person2:GDBString;(*'Фамилия 2'*)
-Specialist3:GDBString;(*'Специалист 3'*)
-Person3:GDBString;(*'Фамилия 3'*)
-Specialist4:GDBString;(*'Специалист 4'*)
-Person4:GDBString;(*'Фамилия 4'*)
-Specialist5:GDBString;(*'Специалист 5'*)
-Person5:GDBString;(*'Фамилия 5'*)
-Specialist6:GDBString;(*'Специалист 6'*)
-Person6:GDBString;(*'Фамилия 6'*)
+T11:GDBString;(*'Специалист 1'*)
+T12:GDBString;(*'Фамилия 1'*)
+T13:GDBString;(*'Специалист 2'*)
+T14:GDBString;(*'Фамилия 2'*)
+T15:GDBString;(*'Специалист 3'*)
+T16:GDBString;(*'Фамилия 3'*)
+T17:GDBString;(*'Специалист 4'*)
+T18:GDBString;(*'Фамилия 4'*)
+T19:GDBString;(*'Специалист 5'*)
+T20:GDBString;(*'Фамилия 5'*)
 
 implementation
 
@@ -43,27 +41,22 @@ NMO_Name:='ШТ0';
 NMO_BaseName:='ШТ';
 NMO_Suffix:='??';
 
-Organization:='??';
-Code:='??';
-Project:='??';
-Section:='??';
-Drawing:='??';
-Stage:='??';
-Sheet:='??';
-Sheets:='';
-Date:='??';
+T1:='??';
+T2:='??';
+T3:='??';
+T4:='??';
+T6:='??';
+T7:='??';
+T9:='??';
 
-Specialist1:='Разраб.';
-Person1:='';
-Specialist2:='Проверил';
-Person2:='';
-Specialist3:='ГИП';
-Person3:='';
-Specialist4:='';
-Person4:='';
-Specialist5:='Н.контр.';
-Person5:='';
-Specialist6:='Утв.';
-Person6:='';
+T11:='';
+T12:='';
+T13:='';
+T14:='';
+T15:='';
+T17:='';
+T18:='';
+T19:='';
+T20:='';
 
 end.

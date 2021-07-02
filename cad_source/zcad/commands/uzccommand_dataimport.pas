@@ -89,7 +89,9 @@ var
   a1,a2,atemp:PGDBOpenArrayOfPObjects;
 begin
   FactColCount:=GetFactColCount(FDoc,row);
-  if (FactColCount<3)or((FactColCount mod 2)<>1) then begin
+  if (FactColCount mod 2)=0 then
+    inc(FactColCount);
+  if (FactColCount<3){or((FactColCount mod 2)<>1)} then begin
     ZCMsgCallBackInterface.TextMessage(format('In row %d wrong number of parameters',[row+1]),TMWOHistoryOut);
     exit;
   end;

@@ -8,8 +8,8 @@ usescopy objname;
 
 var
 
-Code:GDBString;(*'Шифр'*)
-Sheet:GDBString;(*'Страница'*)
+T2:GDBString;(*'Шифр'*)
+T7:GDBString;(*'Страница'*)
 
 implementation
 
@@ -23,7 +23,7 @@ NMO_Name:='ШТ0';
 NMO_BaseName:='ШТ';
 NMO_Suffix:='??';
 
-Code:='??';
-Sheet:='??';
+T2:='??';
+T7:='??';
 
 end.

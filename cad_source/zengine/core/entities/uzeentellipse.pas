@@ -670,7 +670,7 @@ function GDBObjEllipse.Clone;
 var tvo: PGDBObjEllipse;
 begin
   GDBGetMem({$IFDEF DEBUGBUILD}'{368BA81A-219B-4DE9-A8E0-64EE16001126}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjEllipse));
-  tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight, Local.p_insert, {r,}startangle,endangle,majoraxis);
+  tvo^.init(CalcOwner(own),vp.Layer, vp.LineWeight, Local.p_insert, {r,}startangle,endangle,majoraxis);
   CopyVPto(tvo^);
   //tvo^.vp.ID:=GDBEllipseID;
   tvo^.Local:=local;

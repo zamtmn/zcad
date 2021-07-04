@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <PalettesContent>
-    <BlockLib Type="Tree" Caption='Blocks' ImagesWidth='24'>
+    <BlockLib Type="Tree" Caption='Блоки' ImagesWidth='24'>
       <ZTreeNode Caption='Сила'>
       	<ZTreeNode Caption='Кабельные стояки'>
       	   <ZTreeCommand Command="Insert(DEVICE_EL_CABLE_BREAK)" Img='DEVICE_EL_CABLE_BREAK_300' Caption='Обрыв'/>
@@ -119,6 +119,12 @@
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_STAMP2)" Img='DEVICE_EL_VL_STAMP2_300' Caption='Штамп, тип 2'/>
 	   <ZTreeCommand Command="Insert(EL_VL_REFERENCE1_1)" Img='EL_VL_REFERENCE1_1_300' Caption='Усл.обозначения, шапка'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_REFERENCE1_2)" Img='DEVICE_EL_VL_REFERENCE1_2_300' Caption='Усл.обозначения, строка'/>
+      	</ZTreeNode>
+      	<ZTreeNode Caption='Схемы'>
+	   <ZTreeCommand Command="Insert(SI1)" Img='SI1_300' Caption='Шапка источник'/>
+	   <ZTreeCommand Command="Insert(SK1)" Img='SK1_300' Caption='Шапка кабель'/>
+	   <ZTreeCommand Command="Insert(SH1)" Img='SH1_300' Caption='Шапка шины'/>
+	   <ZTreeCommand Command="Insert(SE1)" Img='SE1_300' Caption='Шапка эл.приемник'/>
       	</ZTreeNode>
       	<ZTreeNode Caption='Пожарка'>
               <ZTreeCommand Command="Insert(DEVICE_PS_VL_DAT_SMOKE)" Img='DEVICE_PS_VL_DAT_SMOKE_150' Caption='Дымовой'/>

@@ -211,7 +211,7 @@
         <Command Caption="BlocksList" Command="BlocksList"/>
         <Command Caption="Check clipboard" Command="DebClip"/>
         <Command Caption="Report on memory allocation(for debugbuild)" Command="MemSummary"/>
-        <Command Caption="BlockPreviewExport" Command="ExecuteFile(*components/blockpreviewexport.cmd)"/>
+        <Command Caption="BlockPreviewExport" Command="ExecuteFile(*components\blockpreviewexport.cmd)"/>
         <Action Name="ACN_TREESTAT"/>
         <Command Caption="AppExplorer" Command="DbgAppExplorer"/>
       </SubMenu>
@@ -346,7 +346,9 @@
       <InsertMenu Name="File"/>
       <IFONE Сonditions="ActiveDrawing">
         <InsertMenu Name="Edit"/>
+      </IFONE>
         <InsertMenu Name="View"/>
+      <IFONE Сonditions="ActiveDrawing">
         <InsertMenu Name="Format"/>
         <InsertMenu Name="Draw"/>
         <InsertMenu Name="Dimension"/>

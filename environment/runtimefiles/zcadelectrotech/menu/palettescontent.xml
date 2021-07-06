@@ -124,8 +124,8 @@
 	   <ZTreeCommand Command="Insert(SI1)" Img='SI1_300' Caption='Шапка источник'/>
 	   <ZTreeCommand Command="Insert(SK1)" Img='SK1_300' Caption='Шапка кабель'/>
 	   <ZTreeCommand Command="Insert(SH1)" Img='SH1_300' Caption='Шапка шины'/>
-	   <ZTreeCommand Command="Insert(SE1)" Img='SE1_300' Caption='Шапка эл.приемник 1'/>
-	   <ZTreeCommand Command="Insert(SE2)" Img='SE2_300' Caption='Шапка эл.приемник 2'/>
+	   <ZTreeCommand Command="Insert(SE1)" Img='SE1_300' Caption='Шапка фидер 1'/>
+	   <ZTreeCommand Command="Insert(SE2)" Img='SE2_300' Caption='Шапка фидер 2'/>
 	   <ZTreeCommand Command="Insert(SH2)" Img='SH2_300' Caption='Шины в верх'/>
 	   <ZTreeCommand Command="Insert(SH3)" Img='SH3_300' Caption='Шины в низ'/>
 	   <ZTreeCommand Command="Insert(SK2)" Img='SK2_300' Caption='Кабель в верх'/>

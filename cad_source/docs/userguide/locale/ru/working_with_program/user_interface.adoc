@@ -40,6 +40,23 @@ image::locale/{lang}/_images/zcad_ui_objectinspector.png[width=25%,pdfwidth=25%]
 При клике на значение свойства откроется строка редактирования и можно будет изменить значение свойства. Для некоторых свойств доступны специализированные редакторы, открывающиеся в отдельном окне по нажатию кнопки [...]
 
 Свойства примитивов структурированны следующим образом:
+
+[plantuml, format=svg, file="locale/{lang}/_images/object_inspector_strucrure.png"]
+----
+skinparam Legend {
+  BackgroundColor transparent
+  BorderColor transparent
+}
+legend
+Root
+|_ Element 1
+  |_ Element 1.1
+  |_ Element 1.2
+|_ Element 2
+  |_ Element 2.1
+end legend
+----
+
 [tree,file="locale/{lang}/_images/object_inspector_strucrure.png"]
 --
 #Инспектор

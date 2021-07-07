@@ -5,3 +5,4 @@ ZCAD - программа с открытым исходным кодом, ра�
 и компилятора Free Pascal
 
 include::general_information/license.adoc[]
+include::general_information/disclaimer.adoc[]

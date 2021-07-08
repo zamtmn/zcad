@@ -1,4 +1,4 @@
-unit DEVICE_EL_VL_KM1;
+unit DEVICE_EL_VL_DIAGRAM_WH1;
 
 interface
 
@@ -18,8 +18,8 @@ BTY_TreeCoord:='PLAN_EM_Аппаратура';
 Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 
-NMO_Name:='KM0';
-NMO_BaseName:='KM';
+NMO_Name:='WH0';
+NMO_BaseName:='WH';
 NMO_Suffix:='??';
 
 T1:='??';

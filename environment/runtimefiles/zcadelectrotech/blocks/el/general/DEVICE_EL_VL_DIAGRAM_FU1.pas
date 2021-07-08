@@ -1,4 +1,4 @@
-unit DEVICE_EL_VL_QS2;
+unit DEVICE_EL_VL_DIAGRAM_FU1;
 
 interface
 
@@ -18,8 +18,8 @@ BTY_TreeCoord:='PLAN_EM_Аппаратура';
 Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 
-NMO_Name:='QS0';
-NMO_BaseName:='QS';
+NMO_Name:='FU0';
+NMO_BaseName:='FU';
 NMO_Suffix:='??';
 
 T1:='??';

@@ -1,4 +1,4 @@
-unit DEVICE_EL_VL_DIAGRAM_DIAGRAM_KM1;
+unit DEVICE_EL_VL_DIAGRAM_H3;
 
 interface
 
@@ -8,20 +8,20 @@ usescopy objname;
 
 var
 
-T1:GDBString;(*'Тип'*)
+T3:GDBString;(*'Адрес'*)
 
 implementation
 
 begin
 
-BTY_TreeCoord:='PLAN_EM_Аппаратура';
+BTY_TreeCoord:='PLAN_EM_Кабель';
 Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 
-NMO_Name:='A0';
-NMO_BaseName:='A3.';
+NMO_Name:='H0';
+NMO_BaseName:='H1.';
 NMO_Suffix:='??';
 
-T1:='??';
+T3:='??';
 
 end.

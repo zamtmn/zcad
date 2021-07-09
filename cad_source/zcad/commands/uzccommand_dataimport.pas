@@ -81,6 +81,17 @@ begin
    dec(result);
 end;
 
+function RowValue(FDoc:TCSVDocument;ARow:Integer):string;
+var
+  i:integer;
+begin
+  for i:=0 to FDoc.ColCount[ARow] do
+    if i=0 then
+      result:=result+FDoc.Cells[i,ARow]
+    else
+      result:=result+';'+FDoc.Cells[i,ARow]
+end;
+
 procedure ProcessCSVLine(FDoc:TCSVDocument;Row:Integer;var drawing:TSimpleDrawing;var DC:TDrawContext);
 var
   Filter:TEntsTypeFilter;
@@ -130,7 +141,7 @@ begin
   end;
 
   if a1^.Count<>1 then
-    ZCMsgCallBackInterface.TextMessage(format('In row %d found %d candidats',[row+1,a1^.Count]),TMWOHistoryOut);
+    ZCMsgCallBackInterface.TextMessage(format('In row %d found %d candidats (%s)',[row+1,a1^.Count,RowValue(FDoc,row)]),TMWOHistoryOut);
   if a1^.Count<>0 then
     SetArray(a1,FDoc.Cells[fltcounter*2-1,Row],FDoc.Cells[fltcounter*2,Row],drawing,DC);
 

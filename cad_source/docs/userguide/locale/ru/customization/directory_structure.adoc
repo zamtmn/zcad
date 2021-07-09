@@ -2,3 +2,43 @@
 ### Структура директорий
 
 Устанавливаем и запускаем
+[plantuml, generated/directory_strucrure, svg]
+----
+!include styles/filesystem-tree-style.iuml
+legend
+cad
+|_ autosave
+|_ bin
+  |_ i386_win32
+  |_ x86_64_win64
+|_ blocks
+  |_ el
+    |_ general
+  |_ ops
+|_ components
+|_ fonts
+|_ images
+  |_ actions
+    |_ draw
+      |_ dim
+    |_ snap
+    |_ valec
+    |_ zelectro
+  |_ palettes
+|_ languages
+|_ log
+|_ menu
+  |_ BMP
+|_ plugins
+|_ programdb
+|_ rtl
+  |_ dwg
+  |_ objcalc
+  |_ objdefunits
+    |_ include
+  |_ styles
+  |_ velec
+|_ sample
+|_ trmplate
+end legend
+----

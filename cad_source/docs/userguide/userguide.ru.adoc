@@ -1,13 +1,20 @@
 :lang: ru
-# ZCAD Рукаводство пользователя
 include::attributes.adoc[]
+# ZCAD Рукаводство пользователя
 :toc: left
 :toclevels: 4
 :sectnums:
 :source-highlighter: coderay
 :docinfo1:
 
+<<<
 include::locale/{lang}/general_information.adoc[]
+
+<<<
 include::locale/{lang}/getting_started.adoc[]
+
+<<<
 include::locale/{lang}/working_with_program.adoc[]
+
+<<<
 include::locale/{lang}/customization.adoc[]

@@ -18,8 +18,8 @@ BTY_TreeCoord:='PLAN_EM_Аппаратура';
 Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 
-NMO_Name:='QS0';
-NMO_BaseName:='QS';
+NMO_Name:='A0';
+NMO_BaseName:='A1.';
 NMO_Suffix:='??';
 
 T1:='??';

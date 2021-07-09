@@ -23,8 +23,8 @@ BTY_TreeCoord:='PLAN_EM_Фидер';
 Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 
-NMO_Name:='SE0';
-NMO_BaseName:='SE';
+NMO_Name:='F0';
+NMO_BaseName:='F';
 NMO_Suffix:='??';
 
 T1:='??';

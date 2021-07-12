@@ -369,7 +369,7 @@ begin
      writestring(outhandle,'type');
 
      FileNames:=TStringList.create;
-     while GetPartOfPath(CurrentFile,ProcessFiles,';')<>'' do
+     while GetPartOfPath(CurrentFile,ProcessFiles,'+')<>'' do
      begin
        writeln(format('ProcessFile    =%s',[CurrentFile]));
        FileNames.loadfromfile({ExtractFilePath(paramstr(0))+'filelist.txt'}CurrentFile);

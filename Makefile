@@ -121,3 +121,22 @@ zcadelectrotech: checkvars version
 	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) cad_source/utils/typeexporter.lpi
 	environment/typeexporter/typeexporter pathprefix=cad_source/ outputfile=cad/rtl/system.pas processfiles=environment/typeexporter/zcad.files;environment/typeexporter/zcadelectrotech.files
 	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) cad_source/zcad.lpi
+
+installpkgstolaz: checkvars
+	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source\other\AGraphLaz\lazarus\ag_graph.lpk
+	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source\other\AGraphLaz\lazarus\ag_math.lpk
+	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source\other\AGraphLaz\lazarus\ag_vectors.lpk
+	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source\other\AGraphLaz\lazarus\ag_vectors.lpk
+	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source\other\uniqueinstance\uniqueinstance_package.lpk
+	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source\other\laz.virtualtreeview_package\laz.virtualtreeview_package.lpk
+	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source\components\zebase\zebase.lpk
+	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source\components\zcontainers\zcontainers.lpk
+	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source\components\zcontrols\zcontrols.lpk
+	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source\components\zmacros\zmacros.lpk
+	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source\components\zmath\zmath.lpk
+	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source\components\zobjectinspector\zobjectinspector.lpk
+	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source\components\zscriptbase\zscriptbase.lpk
+	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source\components\zscript\zscript.lpk
+	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source\components\ztoolbars\ztoolbars.lpk
+	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source\components\zundostack\zundostack.lpk
+	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) -B -r --build-ide=

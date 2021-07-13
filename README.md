@@ -47,7 +47,7 @@ Build ZCADELECTROTECH:
 * `make zcadelectrotechenv`
 * `make zcadelectrotech LP=/path/to/your/lazarus PCP=/path/to/your/lazarus/primary/config`
 
-`make installpkgstolaz` you need to do it only one time, this will rebuild your lazarus
+`make installpkgstolaz` you need to do it only one time, this will install packages from '**cad_sources/components**' and '**cad_sources/other**' to your lazarus and will rebuild it
 
 Build ZCAD (Old way):
 

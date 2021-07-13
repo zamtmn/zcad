@@ -10,7 +10,7 @@ usescopy addtocable;
 
 var
 
-Power:GDBDouble;(*'Мощность, кВт'*)
+T1:GDBString;(*'Мощность, кВт'*)
 
 implementation
 
@@ -23,7 +23,8 @@ Device_Class:=TDC_Shell;
 NMO_Name:='Т0';
 NMO_BaseName:='Т';
 NMO_Suffix:='??';
-Power:=1.0;
+
+T1:='0';
 
 SerialConnection:=1;
 GC_HeadDevice:='ШР??';

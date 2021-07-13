@@ -85,6 +85,18 @@ BlockPreViewExport(24|DIAGRAM_BUS3|*images/palettes/DIAGRAM_BUS3.png)
 BlockPreViewExport(24|DIAGRAM_BUS3|*images/palettes/DIAGRAM_BUS3_150.png)
 BlockPreViewExport(48|DIAGRAM_BUS3|*images/palettes/DIAGRAM_BUS3_300.png)
 
+BlockPreViewExport(24|DIAGRAM_BUS4|*images/palettes/DIAGRAM_BUS4.png)
+BlockPreViewExport(24|DIAGRAM_BUS4|*images/palettes/DIAGRAM_BUS4_150.png)
+BlockPreViewExport(48|DIAGRAM_BUS4|*images/palettes/DIAGRAM_BUS4_300.png)
+
+BlockPreViewExport(24|DIAGRAM_PEN|*images/palettes/DIAGRAM_PEN.png)
+BlockPreViewExport(24|DIAGRAM_PEN|*images/palettes/DIAGRAM_PEN_150.png)
+BlockPreViewExport(48|DIAGRAM_PEN|*images/palettes/DIAGRAM_PEN_300.png)
+
+BlockPreViewExport(24|DIAGRAM_PE|*images/palettes/DIAGRAM_PE.png)
+BlockPreViewExport(24|DIAGRAM_PE|*images/palettes/DIAGRAM_PE_150.png)
+BlockPreViewExport(48|DIAGRAM_PE|*images/palettes/DIAGRAM_PE_300.png)
+
 BlockPreViewExport(24|DIAGRAM_H0|*images/palettes/DIAGRAM_H0.png)
 BlockPreViewExport(24|DIAGRAM_H0|*images/palettes/DIAGRAM_H0_150.png)
 BlockPreViewExport(48|DIAGRAM_H0|*images/palettes/DIAGRAM_H0_300.png)

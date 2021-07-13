@@ -8,6 +8,8 @@ usescopy objname;
 
 var
 
+T1:GDBString;(*'Маркировка'*)
+T2:GDBString;(*'Тип'*)
 T3:GDBString;(*'Адрес'*)
 
 implementation
@@ -22,6 +24,8 @@ NMO_Name:='H0';
 NMO_BaseName:='H1.';
 NMO_Suffix:='??';
 
+T1:='??';
+T2:='??';
 T3:='??';
 
 end.

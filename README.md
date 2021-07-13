@@ -31,7 +31,25 @@ Requirements:
 * **Lazarus 2.0.10 (or trunk)**
 * **FPC 3.2 (or trunk)**
 
+You can build ZCAD or ZCADELECTROTECH
+
 Build ZCAD:
+
+* `make installpkgstolaz LP=/path/to/your/lazarus PCP=/path/to/your/lazarus/primary/config`
+* `make clean`
+* `make zcadenv`
+* `make zcad LP=/path/to/your/lazarus PCP=/path/to/your/lazarus/primary/config`
+
+Build ZCADELECTROTECH:
+
+* `make installpkgstolaz LP=/path/to/your/lazarus PCP=/path/to/your/lazarus/primary/config`
+* `make clean`
+* `make zcadelectrotechenv`
+* `make zcadelectrotech LP=/path/to/your/lazarus PCP=/path/to/your/lazarus/primary/config`
+
+`make installpkgstolaz` you need to do it only one time, this will rebuild your lazarus
+
+Build ZCAD (Old way):
 
 * install zcad packages from '**cad_sources/components**' to lazarus
 * install third party packages from '**cad_sources/other**' to lazarus:

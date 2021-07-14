@@ -115,7 +115,11 @@ endif
 
 version:
 	@echo ZCAD Version: $(ZCVERSION)
+ifeq ($(OSDETECT),WIN32)
+	@echo '$(ZCVERSION)' > cad_source/zcadversion.inc
+else
 	@echo \'$(ZCVERSION)\' > cad_source/zcadversion.inc
+endif
 	
 zcad: checkvars version
 	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) cad_source/utils/typeexporter.lpi

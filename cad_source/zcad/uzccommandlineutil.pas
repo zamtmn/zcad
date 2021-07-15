@@ -22,7 +22,7 @@ interface
 uses uzbgeomtypes,varmandef,uzbtypesbase,uzctnrvectorgdbstring,uzccommandsmanager,
      gzctnrvectortypes,sysutils,uzbstrproc,uzcdrawings,uzegeometry,math,
      UGDBTracePropArray,uzglviewareadata,languade,Varman,uzcinterface,uzcstrconsts,
-     strmy,LCLProc,uzbmemman;
+     strmy,LCLProc,uzbmemman,uzccommandsabstract;
 const
      commandsuffix='>';
      commandprefix=' ';
@@ -76,7 +76,7 @@ begin
 end;
 
 procedure processcommand(var input:string);
-var code: integer;
+var
   len: double;
   temp: gdbvertex;
   v:vardesk;
@@ -89,16 +89,21 @@ var code: integer;
   relativemarker:boolean;
   l,a:double;
 begin
+  try
+    if commandmanager.pcommandrunning<>nil then begin
+      if commandmanager.pcommandrunning.IData.GetPointMode=TGPWaitInput then begin
+        commandmanager.pcommandrunning.IData.GetPointMode:=TGPInput;
+        commandmanager.pcommandrunning.IData.Input:=input;
+        exit;
+      end;
+    end;
     if (length(input) > 0) then
     begin
       expr:=input;
       ParseCommand(expr,command,operands);
-      //if IsParsed('_realnumber'#0,expr,parseresult)then
-      // expr:=expr;
-      val(input, len, code);
-      //code:=1;
       cmd:=FindAlias(input,';','=');
-      if code = 0 then
+
+      if TryStrToFloat(input,len) then
       begin
       if assigned(drawings.GetCurrentDWG) then
       if assigned(drawings.GetCurrentDWG.wa.getviewcontrol) then
@@ -237,21 +242,17 @@ begin
           end;
       end;
     end;
+  finally
     input:='';
-    //CmdEdit.settext('');
     if assigned(drawings.GetCurrentDWG) then
-    if assigned(drawings.GetCurrentDWG.wa.getviewcontrol) then
-    begin
-    //drawings.GetCurrentDWG.OGLwindow1.setfocus;
-    drawings.GetCurrentDWG.wa.param.firstdraw := TRUE;
-    drawings.GetCurrentDWG.wa.reprojectaxis;
-    drawings.GetCurrentDWG.wa.{paint}draw;
-    drawings.GetCurrentDWG.wa.asyncupdatemouse(0);
-    //Application.QueueAsyncCall(drawings.GetCurrentDWG.wa.asyncupdatemouse,0);
-    end;
-    //redrawoglwnd;
-    {poglwnd.loadmatrix;
-    poglwnd.paint;}
+      if assigned(drawings.GetCurrentDWG.wa.getviewcontrol) then
+      begin
+        drawings.GetCurrentDWG.wa.param.firstdraw := TRUE;
+        drawings.GetCurrentDWG.wa.reprojectaxis;
+        drawings.GetCurrentDWG.wa.{paint}draw;
+        drawings.GetCurrentDWG.wa.asyncupdatemouse(0);
+      end;
+  end;
 end;
 
 end.

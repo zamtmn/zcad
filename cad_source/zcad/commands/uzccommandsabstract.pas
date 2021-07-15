@@ -43,7 +43,10 @@ const
 type
 TInteractiveProcObjBuild=procedure(const PInteractiveData:GDBPointer;Point:GDBVertex;Click:GDBBoolean);
 {Export+}
-    TGetPointMode=(TGPWait{point},TGPWaitEnt,TGPEnt,TGPPoint,TGPCancel,TGPOtherCommand, TGPCloseDWG,TGPCloseApp);
+    TGetPointMode=(TGPWait{point},TGPPoint,
+                   TGPWaitEnt,TGPEnt,
+                   TGPWaitInput,TGPInput,
+                   TGPCancel,TGPOtherCommand,TGPCloseDWG,TGPCloseApp);
     {REGISTERRECORDTYPE TInteractiveData}
     TInteractiveData=record
                        GetPointMode:TGetPointMode;(*hidden_in_objinsp*)
@@ -51,6 +54,7 @@ TInteractiveProcObjBuild=procedure(const PInteractiveData:GDBPointer;Point:GDBVe
                        DrawFromBasePoint:Boolean;(*hidden_in_objinsp*)
                        PInteractiveData:GDBPointer;
                        PInteractiveProc:{-}TInteractiveProcObjBuild{/GDBPointer/};
+                       Input:AnsiString;
                     end;
     TCommandOperands={-}GDBString{/GDBPointer/};
     TCommandResult=GDBInteger;

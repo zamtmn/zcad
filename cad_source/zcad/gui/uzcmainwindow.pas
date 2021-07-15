@@ -1478,7 +1478,7 @@ begin
                                                                     begin
                                                                          {if assigned(sysvarRDRemoveSystemCursorFromWorkArea)
                                                                          then}
-                                                                             RemoveCursorIfNeed(Sender.getviewcontrol,sysvarRDRemoveSystemCursorFromWorkArea)
+                                                                             RemoveCursorIfNeed(Sender.getviewcontrol,(sysvarRDRemoveSystemCursorFromWorkArea)and((Sender.param.md.mode and not(MNone or MMoveCamera or MRotateCamera))<>0))
                                                                          {else
                                                                              RemoveCursorIfNeed(getviewcontrol,true)}
                                                                     end;
@@ -1488,7 +1488,7 @@ begin
                                                                                      begin
                                                                                           {if assigned(sysvarRDRemoveSystemCursorFromWorkArea)
                                                                                           then}
-                                                                                              RemoveCursorIfNeed(Sender.getviewcontrol,sysvarRDRemoveSystemCursorFromWorkArea)
+                                                                                              RemoveCursorIfNeed(Sender.getviewcontrol,(sysvarRDRemoveSystemCursorFromWorkArea)and((Sender.param.md.mode and not(MNone or MMoveCamera or MRotateCamera))<>0))
                                                                                           {else
                                                                                               RemoveCursorIfNeed(getviewcontrol,true)}
                                                                                      end;

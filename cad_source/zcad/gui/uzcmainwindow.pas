@@ -1156,6 +1156,7 @@ procedure TZCADMainWindow.myKeyDown(Sender: TObject; var Key: Word; Shift: TShif
 var
   tempkey:word;
   comtext:string;
+  needinput:boolean;
 begin
   with programlog.Enter('TZCADMainWindow.myKeyDown',LM_Debug,LMD) do begin try
     ZCMsgCallBackInterface.Do_KeyDown(Sender,Key,Shift);
@@ -1181,9 +1182,13 @@ begin
     tempkey:=key;
 
     comtext:='';
+    needinput:=false;
+    if commandmanager.pcommandrunning<>nil then
+      if commandmanager.pcommandrunning.IData.GetPointMode=TGPWaitInput then
+        needinput:=true;
     if assigned(cmdedit) then
       comtext:=cmdedit.text;
-    if comtext='' then begin
+    if (comtext='') and (not needinput) then begin
       if assigned(drawings.GetCurrentDWG) then
         if assigned(drawings.GetCurrentDWG.wa) then
           if assigned(drawings.GetCurrentDWG.wa.getviewcontrol)then

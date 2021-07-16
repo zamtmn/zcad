@@ -21,7 +21,7 @@ unit uzcsysinfo;
 interface
 uses
   MacroDefIntf,uzmacros,uzcsysparams,LCLProc,uzclog,uzblog,uzbpaths,uzbtypesbase,Forms,uzbtypes,
-  {$IFDEF WINDOWS}ShlObj,{$ENDIF}{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils;
+  {$IFDEF WINDOWS}ShlObj,{$ENDIF}{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils,uzcsysvars;
 const
   zcaduniqueinstanceid='zcad unique instance';
   zcadgitversion = {$include zcadversion.inc};
@@ -29,6 +29,8 @@ type
   TZCADPathsMacroMethods=class
     class function MacroFuncZCADPath       (const {%H-}Param: string; const Data: PtrInt;
                                               var {%H-}Abort: boolean): string;
+    class function MacroFuncZCADAutoSaveFilePath(const {%H-}Param: string; const Data: PtrInt;
+                                                 var {%H-}Abort: boolean): string;
     class function MacroFuncTEMPPath       (const {%H-}Param: string; const Data: PtrInt;
                                               var {%H-}Abort: boolean): string;
     class function MacroFuncSystemFontsPath(const {%H-}Param: string; const Data: PtrInt;
@@ -193,6 +195,10 @@ class function TZCADPathsMacroMethods.MacroFuncZCADPath(const {%H-}Param: string
 begin
   result:=ProgramPath;
 end;
+class function TZCADPathsMacroMethods.MacroFuncZCADAutoSaveFilePath(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
+begin
+  result:=ExpandPath(sysvar.SAVE.SAVE_Auto_FileName^);
+end;
 class function TZCADPathsMacroMethods.MacroFuncTEMPPath(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
 begin
   result:=TempPath;
@@ -231,6 +237,8 @@ initialization
 GetSysInfo;
 DefaultMacros.AddMacro(TTransferMacro.Create('ZCADPath','',
                        'Path to ZCAD',TZCADPathsMacroMethods.MacroFuncZCADPath,[]));
+DefaultMacros.AddMacro(TTransferMacro.Create('ZCADAutoSaveFilePath','',
+                       'Path to auto save file',TZCADPathsMacroMethods.MacroFuncZCADAutoSaveFilePath,[]));
 DefaultMacros.AddMacro(TTransferMacro.Create('TEMP','',
                        'TEMP path',TZCADPathsMacroMethods.MacroFuncTEMPPath,[]));
 DefaultMacros.AddMacro(TTransferMacro.Create('SystemFontsPath','',

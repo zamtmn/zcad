@@ -1,4 +1,15 @@
 
 #### Load
 
-Устанавливаем и запускаем
+:cmdcommand: Load
+:cmdicon: ../../../../../../environment/runtimefiles/common/images/actions/open.png
+:cmdoperands: Не обязательный, путь и имя файла dxf
+:cmdexample: Load
+:cmdexample2: Load(E:\myfile.dxf)
+
+include::../../_elements/commandsummary.adoc[]
+
+Загрузка файла DXF. При вызове без параметров будет открыто окно выбора файла, после выбора будет открыт данный файл.
+Имя файла можно передать параметром, тогда файл будет открыт сразу, без окна выбора.
+
+include::commandsummaryfree.adoc[]

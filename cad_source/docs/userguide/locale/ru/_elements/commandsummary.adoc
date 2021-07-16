@@ -1,0 +1,15 @@
+Команда: {cmdcommand}
+
+Иконка: image:{cmdicon}[]
+
+Операнды: {cmdoperands}
+
+ifeval::["{cmdexample2}"==""]
+Пример: {cmdexample}
+endif::[]
+
+ifeval::["{cmdexample2}"!=""]
+Пример 1: {cmdexample}
+
+Пример 2: {cmdexample2}
+endif::[]

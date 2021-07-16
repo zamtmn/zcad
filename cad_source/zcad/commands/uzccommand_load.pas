@@ -49,16 +49,11 @@ begin
     if not isload then begin
       result:=cmd_cancel;
       exit;
-    end else begin
     end;
   end else begin
-    if operands='QS' then
-      s:=ExpandPath(sysvar.SAVE.SAVE_Auto_FileName^)
-    else begin
-      s:=FindInSupportPath(SupportPath,operands);
-      if s='' then
-      s:=ExpandPath(operands);
-    end;
+    s:=FindInSupportPath(SupportPath,operands);
+    if s='' then
+    s:=ExpandPath(operands);
   end;
   isload:=FileExists(utf8tosys(s));
   if isload then begin

@@ -3,7 +3,7 @@
   <ActionsContent>
     <Group Category="File">
       <ZAction Name="ACN_LOAD" Command="Load" Img="open" Caption="Open ..." Hint="Open drawing" ShortCut="CTRL+O"/>
-      <ZAction Name="ACN_LOADQS" Command="Load(QS)" Img="qload" Caption="Open (Autosave)" Hint="Open last autosave"/>
+      <ZAction Name="ACN_LOADQS" Command="Load($(ZCADAutoSaveFilePath))" Img="qload" Caption="Open (Autosave)" Hint="Open last autosave"/>
       <ZAction Name="ACN_IMPORT" Command="Import" Img="#Import" Caption="Import ..." Hint="Import drawing"/>
       <ZAction Name="ACN_NEW" Command="NewDWG" Img="new" Caption="New drawing" ShortCut="CTRL+N"/>
       <ZAction Name="ACN_QSAVE" Command="QSave" Img="save" Caption="Save" Hint="Save drawing" ShortCut="CTRL+S"/>

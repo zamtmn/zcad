@@ -1,15 +1,16 @@
-Команда: {cmdcommand}
-
-Иконка: image:{cmdicon}[]
-
-Операнды: {cmdoperands}
-
+[cols=">2,<5"]
+|==========================
+|*Команда*:          |{cmdcommand}
+|*Иконка*:           |image:{cmdicon}[]
+ifeval::["{cmdshortcuts}"!=""]
+|*Сочетания клавиш*: |{cmdshortcuts}
+endif::[]
+|*Операнды*:         |{cmdoperands}
 ifeval::["{cmdexample2}"==""]
-Пример: {cmdexample}
+  |*Пример*:         |`*{cmdexample}*`
 endif::[]
-
 ifeval::["{cmdexample2}"!=""]
-Пример 1: {cmdexample}
-
-Пример 2: {cmdexample2}
+  |*Пример 1*:       |`*{cmdexample}*`
+  |*Пример 2*:       |`*{cmdexample2}*`
 endif::[]
+|==========================

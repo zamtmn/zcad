@@ -1,5 +1,6 @@
 :cmdcommand:
 :cmdicon:
+:cmdshortcuts:
 :cmdoperands:
 :cmdexample:
 :cmdexample2:

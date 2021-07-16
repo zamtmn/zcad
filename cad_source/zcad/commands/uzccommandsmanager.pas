@@ -544,12 +544,13 @@ var
    {i,}p1,p2: GDBInteger;
 begin
   p1:=pos('(',comm);
-  p2:=pos(')',comm);
-  if  p1<1 then
-               begin
-                    p1:=length(comm)+1;
-                    p2:=p1;
-               end;
+  if  p1<1 then begin
+    p1:=length(comm)+1;
+    p2:=p1;
+  end else begin
+    p2:=PosWithBracket(')','(',')',comm,p1+1,1);
+    //p2:=PosWithBracket(')',comm);
+  end;
   command:=copy(comm,1,p1-1);
   operands:=copy(comm,p1+1,p2-p1-1);
   command:=uppercase(Command);

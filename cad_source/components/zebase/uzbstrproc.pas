@@ -45,7 +45,7 @@ function MakeHash(const s: GDBString):SizeUInt;//TODO в gzctnrstl есть ко
 
 procedure KillString(var str:GDBString);inline;
 
-Function PosWithBracket(c : AnsiChar; Const s : {RawByteString}GDBString) : SizeInt;
+Function PosWithBracket(c,OpenBracket,CloseBracket:AnsiChar;Const s:AnsiString;StartPos,InitCounterValue:SizeInt):SizeInt;
 function isNotUtf8(const s:RawByteString):boolean;
 
 type
@@ -59,7 +59,7 @@ var
 implementation
 //uses
 //    log;
-Function PosWithBracket(c : AnsiChar; Const s : {RawByteString}GDBString) : SizeInt;
+(*Function PosWithBracket(c : AnsiChar; Const s : {RawByteString}GDBString) : SizeInt;
 var
   i: SizeInt;
   pc : PAnsiChar;
@@ -81,6 +81,24 @@ else if bracketcounter=0 then
      inc(pc);
    end;
   exit(0)
+end;*)
+Function PosWithBracket(c,OpenBracket,CloseBracket:AnsiChar;Const s:AnsiString;StartPos,InitCounterValue:SizeInt):SizeInt;
+var
+  i: SizeInt;
+  pc : PAnsiChar;
+begin
+  pc:=@s[StartPos];
+  for i:=StartPos to length(s) do begin
+    if pc^='(' then
+      inc(InitCounterValue)
+    else if pc^=')' then
+      dec(InitCounterValue);
+    if InitCounterValue=0 then
+      if pc^=c then
+        exit(i);
+    inc(pc);
+  end;
+  result:=0;
 end;
 procedure KillString(var str:GDBString);inline;
 begin

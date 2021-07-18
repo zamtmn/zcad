@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 {$mode delphi}
-unit uzccommand_memsummary;
+unit uzccommand_dbgmemsummary;
 
 {$INCLUDE def.inc}
 
@@ -33,7 +33,7 @@ uses
 
 implementation
 
-function MemSummary_com(operands:TCommandOperands):TCommandResult;
+function dbgMemSummary_com(operands:TCommandOperands):TCommandResult;
 var
     memcount:GDBNumerator;
     pmemcounter:PGDBNumItem;
@@ -77,7 +77,7 @@ end;
 
 initialization
   debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
-  CreateCommandFastObjectPlugin(@MemSummary_com,'MeMSummary',0,0);
+  CreateCommandFastObjectPlugin(@dbgMemSummary_com,'dbgMemSummary',0,0);
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

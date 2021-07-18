@@ -188,7 +188,7 @@ uses
   uzccommand_show,uzccommand_showtoolbar,
 
   uzccommand_setobjinsp,
-  uzccommand_memsummary,
+  uzccommand_dbgmemsummary,
   uzccommand_executefile,
   uzccommand_debclip,
   uzccommand_import,

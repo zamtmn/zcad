@@ -210,7 +210,7 @@
         <Command Caption="PlaceAllBlocks" Command="PlaceAllBlocks"/>
         <Command Caption="BlocksList" Command="BlocksList"/>
         <Command Caption="Check clipboard" Command="DebClip"/>
-        <Command Caption="Report on memory allocation(for debugbuild)" Command="MemSummary"/>
+        <Command Caption="Report on memory allocation(for debugbuild)" Command="dbgMemSummary"/>
         <Command Caption="BlockPreviewExport" Command="ExecuteFile(*components\blockpreviewexport.cmd)"/>
         <Action Name="ACN_TREESTAT"/>
         <Command Caption="AppExplorer" Command="DbgAppExplorer"/>

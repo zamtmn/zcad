@@ -25,3 +25,5 @@ cad_source/docs/userguide/*.html
 *.res
 *.lps
 *.lrj
+cad_source/zcadversion.inc
+cad_source/utils/typeexporter.res

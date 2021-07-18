@@ -24,7 +24,7 @@ uses
  LazLogger,
  uzccommandsimpl,uzccommandsabstract,uzbtypes,AppExploreFrm;
 implementation
-function DbgAppExplorer_com(operands:TCommandOperands):TCommandResult;
+function dbgAppExplorer_com(operands:TCommandOperands):TCommandResult;
 begin
   ShowAppExplorer;
   result:=cmd_ok;
@@ -32,7 +32,7 @@ end;
 
 initialization
   debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
-  CreateCommandFastObjectPlugin(@DbgAppExplorer_com,'DbgAppExplorer',0,0);
+  CreateCommandFastObjectPlugin(@dbgAppExplorer_com,'dbgAppExplorer',0,0);
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

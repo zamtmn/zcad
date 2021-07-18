@@ -36,7 +36,8 @@ include::commands/dataexport.adoc[]
 include::commands/dataimport.adoc[]
 
 
-DbgAppExplorer
+dbgAppExplorer
+dbgMemSummary
 DeSelectAll
 DebClip
 DimAligned
@@ -102,7 +103,6 @@ include::commands/loadpalettes.adoc[]
 include::commands/loadtoolbars.adoc[]
 include::commands/matchprop.adoc[]
 
-MeMSummary
 Merge
 MergeBlocks
 Mirror

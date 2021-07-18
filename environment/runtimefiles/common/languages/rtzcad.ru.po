@@ -1716,7 +1716,7 @@ msgstr "Приходит сверху"
 msgid "Goes up"
 msgstr "Уходит вверх"
 
-#: zcadexternal.menucommand~memsummary
+#: zcadexternal.menucommand~dbgmemsummary
 msgid "Report on memory allocation(for debugbuild)"
 msgstr "Отчет о выделениях памяти (отладка)"
 

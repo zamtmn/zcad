@@ -1662,7 +1662,7 @@ msgstr ""
 msgid "Goes up"
 msgstr ""
 
-#: zcadexternal.menucommand~memsummary
+#: zcadexternal.menucommand~dbgmemsummary
 msgid "Report on memory allocation(for debugbuild)"
 msgstr ""
 

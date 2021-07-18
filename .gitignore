@@ -1,0 +1,27 @@
+# Output folder:
+cad
+
+# Output files:
+environment/typeexporter/typeexporter.exe
+environment/typeexporter/typeexporter
+
+# Backup files:
+**/*.bak
+
+# Backup folders:
+**/backup/
+
+# Lib folders:
+**/lib/
+
+# AsciiDoctor folders:
+cad_source/docs/userguide/.asciidoctor/
+cad_source/docs/userguide/locale/ru/_images/generated/
+
+# Docs:
+cad_source/docs/userguide/*.pdf
+cad_source/docs/userguide/*.html
+
+*.res
+*.lps
+*.lrj

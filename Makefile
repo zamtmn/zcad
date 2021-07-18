@@ -91,6 +91,8 @@ clean:
 	rm -rf  cad/*
 	rm -rf cad
 	rm -rf lib/*
+	rm -rf errors/*.bak
+	rm -rf errors/*.dbpas
 
 zcadenv: checkvars      
 	mkdir cad

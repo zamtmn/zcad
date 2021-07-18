@@ -95,14 +95,13 @@ Line
 LineOld
 LineTypes
 include::commands/load.adoc[]
+include::commands/loadactions.adoc[]
+include::commands/loadlayout.adoc[]
+include::commands/loadmenus.adoc[]
+include::commands/loadpalettes.adoc[]
+include::commands/loadtoolbars.adoc[]
+include::commands/matchprop.adoc[]
 
-
-LoadActions
-LoadLayout
-LoadMenus
-LoadPalettes
-LoadToolbars
-MatchProp
 MeMSummary
 Merge
 MergeBlocks

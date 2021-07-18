@@ -1,16 +1,20 @@
-[cols=">2,<5"]
+[cols=">3,<6"]
 |==========================
-|*Команда*:          |{cmdcommand}
-|*Иконка*:           |image:{cmdicon}[]
+ifeval::["{cmdcommand}"!=""]
+  |*Команда*:          |{cmdcommand}
+endif::[]
+ifeval::["{cmdicon}"!=""]
+  |*Иконка*:           |image:{cmdicon}[]
+endif::[]
 ifeval::["{cmdshortcuts}"!=""]
-|*Сочетания клавиш*: |{cmdshortcuts}
+  |*Сочетания клавиш*: |{cmdshortcuts}
 endif::[]
 |*Операнды*:         |{cmdoperands}
 ifeval::["{cmdexample2}"==""]
-  |*Пример*:         |`*{cmdexample}*`
+  |*Пример использования*:         |`*{cmdexample}*`
 endif::[]
 ifeval::["{cmdexample2}"!=""]
-  |*Пример 1*:       |`*{cmdexample}*`
-  |*Пример 2*:       |`*{cmdexample2}*`
+  |*Пример использования 1*:       |`*{cmdexample}*`
+  |*Пример использования 2*:       |`*{cmdexample2}*`
 endif::[]
 |==========================

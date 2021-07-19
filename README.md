@@ -28,7 +28,7 @@ ToDo:
 ## Build from source
 Requirements:
 
-* **Lazarus 2.0.10 (or trunk)**
+* **Lazarus RC2.2 (or trunk)**
 * **FPC 3.2 (or trunk)**
 
 You can build ZCAD or ZCADELECTROTECH

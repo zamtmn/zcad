@@ -48,7 +48,7 @@ type
   TLCLModalResult2TZCMsgModalResult=TGConverter<Integer,TZCMsgModalResult,TLCLModalResult2TZCMsgModalResult_Converter>;
 
 procedure FatalError(errstr:String);
-function zcMsgDlg(MsgStr:String;aDialogIcon:TZCMsgDlgIcon;buttons:TZCMsgCommonButtons;NeedAskDonShow:boolean=false;Context:TMessagesContext=nil;MsgTitle:string=''):TZCMsgDialogResult;
+function zcMsgDlg(MsgStr:TZCMsgStr;aDialogIcon:TZCMsgDlgIcon;buttons:TZCMsgCommonButtons;NeedAskDonShow:boolean=false;Context:TMessagesContext=nil;MsgTitle:TZCMsgStr=''):TZCMsgDialogResult;
 
 function CreateMessagesContext(TN:TLPName):TMessagesContext;
 procedure FreeMessagesContext(var Context:TMessagesContext);
@@ -151,7 +151,7 @@ zcdiInformation:result:=tiInformation;
   end;
 end;
 
-function zcMsgDlg(MsgStr:String;aDialogIcon:TZCMsgDlgIcon;buttons:TZCMsgCommonButtons;NeedAskDonShow:boolean=false;Context:TMessagesContext=nil;MsgTitle:string=''):TZCMsgDialogResult;
+function zcMsgDlg(MsgStr:TZCMsgStr;aDialogIcon:TZCMsgDlgIcon;buttons:TZCMsgCommonButtons;NeedAskDonShow:boolean=false;Context:TMessagesContext=nil;MsgTitle:TZCMsgStr=''):TZCMsgDialogResult;
   function isMsgSupressed(PC:PTMessagesContext;MsgID:String;var PrevResult:TZCMsgDialogResult):boolean;
   begin
     if assigned(PC^) then
@@ -235,9 +235,15 @@ begin
     PContext^.add(MsgID,Result);
   end;
 end;
+function zcQuestion(Caption,Question:TZCMsgStr):TZCMsgCommonButton;
+begin
+  result:=TZCMsgModalResult2TZCMsgCommonButton(zcMsgDlg(Question,zcdiQuestion,[zccbYes,zccbNo],False,nil,Caption).ModalResult);
+end;
+
 initialization
   lps.AddOnLPEndHandler(TLPSSupporthelper.EndLongProcessHandler);
   lps.AddOnLPStartHandler(TLPSSupporthelper.StartLongProcessHandler);
+  ZCMsgCallBackInterface.TextQuestionFunc:=@zcQuestion;
 finalization
   if assigned(SuppressedMessages)then
     freeandnil(SuppressedMessages);

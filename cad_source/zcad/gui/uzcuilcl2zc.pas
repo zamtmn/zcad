@@ -34,6 +34,9 @@ type
   TZCMsgCommonButtons2TCommonButtons=TGSetConverter<TZCMsgCommonButton,TZCMsgCommonButtons,TCommonButton,TCommonButtons,TZCMsgCommonButton2TCommonButton_Converter>;
   TLCLModalResult2TZCMsgModalResult=TGConverter<Integer,TZCMsgModalResult,TLCLModalResult2TZCMsgModalResult_Converter>;
 
+function ID2TZCMsgCommonButton(ID:Integer):TZCMsgCommonButton;
+function TZCMsgModalResult2TZCMsgCommonButton(MR:TZCMsgModalResult):TZCMsgCommonButton;
+
 implementation
 
 class function TZCMsgCommonButton2TCommonButton_Converter.Convert(valueIn:TZCMsgCommonButton;out valueOut:TCommonButton):boolean;
@@ -75,6 +78,51 @@ begin
   else
     valueOut:=valueIn;
 end;
+
+function ID2TZCMsgCommonButton(ID:Integer):TZCMsgCommonButton;
+begin
+  case ID of
+    IDOK:Result:=zccbOK;
+    IDCANCEL:Result:=zccbCancel;
+    //-IDABORT = 3;  ID_ABORT = IDABORT;
+    IDRETRY:Result:=zccbRetry;
+    //-IDIGNORE = 5; ID_IGNORE = IDIGNORE;
+    IDYES:Result:=zccbYes;
+    IDNO:Result:=zccbNo;
+    IDCLOSE:Result:=zccbClose;
+    //IDHELP = 9;   ID_HELP = IDHELP;
+  else
+    raise Exception.CreateFmt('Unknown button ID : "%d"', [ID]);
+  end;
+end;
+
+function TZCMsgModalResult2TZCMsgCommonButton(MR:TZCMsgModalResult):TZCMsgCommonButton;
+begin
+  case MR of
+    ZCmrOK:Result:=zccbOK;
+    ZCmrCancel:Result:=zccbCancel;
+    //ZCmrAbort = ZCmrNone + 3;
+    ZCmrRetry:Result:=zccbRetry;
+    //ZCmrIgnore = ZCmrNone + 5;
+    ZCmrYes:Result:=zccbYes;
+    ZCmrNo:Result:=zccbNo;
+    //ZCmrAll = ZCmrNone + 8;
+    //ZCmrNoToAll = ZCmrNone + 9;
+    //ZCmrYesToAll = ZCmrNone + 10;
+    ZCmrClose:Result:=zccbClose;
+    //ZCmrLast = ZCmrClose;
+  else
+    raise Exception.CreateFmt('Unknown modal result : "%d"', [MR]);
+  end;
+end;
+
+type
+TZCTaskStr=string;
+TZCMsgId=string;
+TZCMsgStr=string;
+TZCMsgCommonButton=(zccbOK,zccbYes,zccbNo,zccbCancel,zccbRetry,zccbClose);
+TZCMsgCommonButtons=set of TZCMsgCommonButton;
+
 initialization
 finalization
 end.

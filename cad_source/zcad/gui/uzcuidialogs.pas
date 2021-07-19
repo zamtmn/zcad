@@ -235,9 +235,11 @@ begin
     PContext^.add(MsgID,Result);
   end;
 end;
-function zcQuestion(Caption,Question:TZCMsgStr):TZCMsgCommonButton;
+function zcQuestion(Caption,Question:TZCMsgStr;buttons:TZCMsgCommonButtons;icon:TZCMsgDlgIcon):TZCMsgCommonButton;
 begin
-  result:=TZCMsgModalResult2TZCMsgCommonButton(zcMsgDlg(Question,zcdiQuestion,[zccbYes,zccbNo],False,nil,Caption).ModalResult);
+  ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
+  result:=TZCMsgModalResult2TZCMsgCommonButton(zcMsgDlg(Question,icon,buttons,False,nil,Caption).ModalResult);
+  ZCMsgCallBackInterface.Do_AfterShowModal(nil);
 end;
 
 initialization

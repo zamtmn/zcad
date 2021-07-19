@@ -2,5 +2,6 @@
 :cmdicon:
 :cmdshortcuts:
 :cmdoperands:
+:predselect:
 :cmdexample:
 :cmdexample2:

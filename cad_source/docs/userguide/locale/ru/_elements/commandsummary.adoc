@@ -9,7 +9,12 @@ endif::[]
 ifeval::["{cmdshortcuts}"!=""]
   |*Сочетания клавиш*: |{cmdshortcuts}
 endif::[]
+ifeval::["{predselect}"!=""]
+  |*Предвыбор примитивов*: |{predselect}
+endif::[]
+ifeval::["{cmdoperands}"!=""]
 |*Операнды*:         |{cmdoperands}
+endif::[]
 ifeval::["{cmdexample2}"==""]
   |*Пример использования*:         |`*{cmdexample}*`
 endif::[]

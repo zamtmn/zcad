@@ -3,7 +3,6 @@
 
 :cmdcommand: MatchProp
 :cmdicon: ../../../../../../environment/runtimefiles/common/images/actions/matchprop.png
-:cmdoperands: Отсутствует
 :cmdexample: MatchProp
 
 include::../../_elements/commandsummary.adoc[]

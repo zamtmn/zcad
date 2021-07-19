@@ -91,7 +91,7 @@ type
 
     TTextMessageWriteOptionsSet=set of TTextMessageWriteOptions;
 
-    TTextQuestionFunc=function(Caption,Question:TZCMsgStr):TZCMsgCommonButton;
+    TTextQuestionFunc=function(Caption,Question:TZCMsgStr;buttons:TZCMsgCommonButtons;icon:TZCMsgDlgIcon):TZCMsgCommonButton;
 
 const
     TMWOHistoryOut=[TMWOToConsole,TMWOToLog];
@@ -302,7 +302,7 @@ var
    ptext,pcaption:PChar;
 begin
   if assigned(FTextQuestionFunc)then
-    result:=FTextQuestionFunc(Caption,Question)
+    result:=FTextQuestionFunc(Caption,Question,[zccbYes,zccbNo],zcdiQuestion)
   else begin
     if Question<>'' then
       ptext:=@Question[1]
@@ -317,52 +317,59 @@ begin
     Do_AfterShowModal(nil);
   end;
 end;
-{ #todo : TextMessage need rewrite with zcMsgDlg instead MessageBox}
+
 procedure TZCMsgCallBackInterface.TextMessage(msg:String;opt:TTextMessageWriteOptionsSet);
 var
    Caption: string;
-   ps:PChar;
-   Flags: Longint;
+   MsgBoxPS:PChar;
+   MsgBoxFlags: Longint;
+   ZCIcon:TZCMsgDlgIcon;
 begin
-     if TMWOToModal in opt then begin
-       if TMWOWarning in opt then begin
-         Caption:=rsWarningCaption;
-         msg:=rsWarningPrefix+msg;
-         Flags:=MB_OK or MB_ICONWARNING;
-       end
-  else if TMWOError in opt then begin
+  if TMWOToModal in opt then begin
+    if TMWOWarning in opt then begin
+      Caption:=rsWarningCaption;
+      msg:=rsWarningPrefix+msg;
+      MsgBoxFlags:=MB_OK or MB_ICONWARNING;
+      ZCIcon:=zcdiWarning;
+    end else
+      if TMWOError in opt then begin
          Caption:=rsErrorCaption;
          msg:=rsErrorPrefix+msg;
-         Flags:=MB_ICONERROR;
-       end
-  else begin
+         MsgBoxFlags:=MB_ICONERROR;
+         ZCIcon:=zcdiError;
+      end else begin
           Caption:=rsMessageCaption;
-          Flags:=MB_OK;
-       end;
+          MsgBoxFlags:=MB_OK;
+          ZCIcon:=zcdiInformation;
+      end;
+    if msg<>'' then
+      MsgBoxPS:=@msg[1]
+    else
+      MsgBoxPS:=nil;
 
-       if msg<>'' then ps:=@msg[1]
-                  else ps:=nil;
-
-       Do_BeforeShowModal(nil);
-
-       application.MessageBox(ps,@Caption[1],Flags);
-
-       Do_AfterShowModal(nil);
-     end else begin
-       if TMWOWarning in opt then begin
-         msg:=rsWarningPrefix+msg;
-       end
-  else if TMWOError in opt then begin
+    if assigned(FTextQuestionFunc) then
+      FTextQuestionFunc(Caption,MsgBoxPS,[zccbOK],ZCIcon)
+    else begin
+      Do_BeforeShowModal(nil);
+      application.MessageBox(MsgBoxPS,@Caption[1],MsgBoxFlags);
+      Do_AfterShowModal(nil);
+    end;
+  end else begin
+    if TMWOWarning in opt then begin
+      msg:=rsWarningPrefix+msg;
+    end else
+      if TMWOError in opt then begin
          msg:=rsErrorPrefix+msg;
-       end
-     end;
+      end
+  end;
 
-     if TMWOToConsole in opt then
-       Do_HistoryOut(msg)
-else if TMWOToLog in opt then
-       Do_LogError(msg)
-else if TMWOToQuicklyReplaceable in opt then
-       Do_StatusLineTextOut(msg)
+  if TMWOToConsole in opt then
+    Do_HistoryOut(msg)
+  else if TMWOToLog in opt then
+    Do_LogError(msg)
+  else if TMWOToQuicklyReplaceable in opt then
+    Do_StatusLineTextOut(msg)
+
 end;
 
 procedure TZCMsgCallBackInterface.RegisterTProcedure_String_HandlersVector(var PSHV:TProcedure_String_HandlersVector;Handler:TProcedure_String_);

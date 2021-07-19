@@ -22,7 +22,7 @@ unit uzccmdload;
 interface
 uses
   LCLProc,LCLType,LazUTF8,
-  uzbpaths,uzbtypes,
+  uzbpaths,uzbtypes,uzcuitypes,
 
   uzeffmanager,uzctranslations,
   uzccommandsimpl,uzccommandsabstract,
@@ -83,11 +83,10 @@ var
    DC:TDrawContext;
 begin
      if drawings.currentdwg<>PTSimpleDrawing(BlockBaseDWG) then
-     if drawings.GetCurrentROOT.ObjArray.Count>0 then
-                                                     begin
-                                                          if ZCMsgCallBackInterface.TextQuestion(rsDWGAlreadyContainsData,'QLOAD',MB_YESNO)=IDNO then
-                                                          exit;
-                                                     end;
+       if drawings.GetCurrentROOT.ObjArray.Count>0 then begin
+         if ZCMsgCallBackInterface.TextQuestion(rsDWGAlreadyContainsData,'QLOAD')=zccbNo then
+           exit;
+       end;
      s:=operands;
      loadproc:=Ext2LoadProcMap.GetLoadProc(extractfileext(s));
      isload:=(assigned(loadproc))and(FileExists(utf8tosys(s)));

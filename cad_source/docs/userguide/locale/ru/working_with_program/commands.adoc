@@ -102,11 +102,11 @@ include::commands/loadmenus.adoc[]
 include::commands/loadpalettes.adoc[]
 include::commands/loadtoolbars.adoc[]
 include::commands/matchprop.adoc[]
+include::commands/merge.adoc[]
+include::commands/mergeblocks.adoc[]
+include::commands/mirror.adoc[]
+include::commands/move.adoc[]
 
-Merge
-MergeBlocks
-Mirror
-Move
 MultiObjVarMan
 MultiSelect2ObjIbsp
 NavSelectSubNodes

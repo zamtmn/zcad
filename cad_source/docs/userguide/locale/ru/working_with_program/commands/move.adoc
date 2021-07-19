@@ -1,0 +1,15 @@
+
+#### Move
+
+:cmdcommand: Move
+:cmdicon: ../../../../../../environment/runtimefiles/common/images/actions/move.png
+:cmdshortcuts: kbd:[Ctrl+ALT+M]; kbd:[M]
+:predselect: Требуется
+:cmdexample: Move
+
+include::../../_elements/commandsummary.adoc[]
+
+Перенос выбраных примитивов. Исходные примитивы нужно выбрать до запуска команды.
+После запуска требуется указать 2 точки вектора на который будет произветен перенос.
+
+include::commandsummaryfree.adoc[]

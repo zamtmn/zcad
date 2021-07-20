@@ -173,6 +173,9 @@ var
   TaskName:TLPName;
   PriorityFocusCtrl:TWinControl;
   ParentHWND:THandle;
+  TDF:TTaskDialogFlags;
+  FirstMainParent,MainParent:TWinControl;
+  i:integer;
 begin
   FillChar(Task,SizeOf(Task),0);
   if assigned(Context) then begin
@@ -211,16 +214,34 @@ begin
   Task.VerifyChecked := false;
 
   ParentHWND:=0;
-  if Screen.ActiveForm<>nil then
-    ParentHWND:=Screen.ActiveForm.Handle;
-  {PriorityFocusCtrl:= ZCMsgCallBackInterface.GetPriorityFocus;
-  if PriorityFocusCtrl<>nil then begin
-    while PriorityFocusCtrl.Parent<>nil do
-      PriorityFocusCtrl:=PriorityFocusCtrl.Parent;
-    ParentHWND:=PriorityFocusCtrl.Handle;
+  FirstMainParent:=nil;
+  MainParent:=nil;
+  for i:=0 to Screen.CustomFormCount-1 do begin
+    MainParent:=Screen.CustomForms[i];
+    if MainParent.IsVisible then begin
+      while MainParent.Parent<>nil do
+        MainParent:=MainParent.Parent;
+      if FirstMainParent=nil then
+        FirstMainParent:=MainParent
+      else
+        if FirstMainParent<>MainParent then
+          Break;
+    end else
+      MainParent:=FirstMainParent;
+  end;
+
+  if (FirstMainParent=MainParent)and(FirstMainParent<>nil) then
+    TDF:=[tdfPositionRelativeToWindow]
+  else
+    TDF:=[];
+  {if Screen.ActiveForm<>nil then begin
+    if Screen.FormCount=1 then
+      ParentHWND:=Screen.ActiveForm.Handle
+    else
+      ParentHWND:=Screen.ActiveForm.Monitor.Handle;
   end;}
 
-  Result.ModalResult:=TLCLModalResult2TZCMsgModalResult.Convert(Task.Execute(TZCMsgCommonButtons2TCommonButtons.Convert(buttons),0,[tdfPositionRelativeToWindow],TZCMsgDlgIcon2TTaskDialogIcon(aDialogIcon),tfiWarning,0,0,ParentHWND));//controls.mrOk
+  Result.ModalResult:=TLCLModalResult2TZCMsgModalResult.Convert(Task.Execute(TZCMsgCommonButtons2TCommonButtons.Convert(buttons),0,TDF,TZCMsgDlgIcon2TTaskDialogIcon(aDialogIcon),tfiWarning,0,0,ParentHWND));//controls.mrOk
   Result.RadioRes:=Task.RadioRes;
   Result.SelectionRes:=Task.SelectionRes;
   Result.VerifyChecked:=Task.VerifyChecked;

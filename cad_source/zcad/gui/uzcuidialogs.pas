@@ -224,6 +224,10 @@ begin
     if MainParent.IsVisible then begin
       while MainParent.Parent<>nil do
         MainParent:=MainParent.Parent;
+      if MainParent is TCustomForm then
+        //сплэшскрин за отдельнцю форму не считаем
+        if (MainParent as TCustomForm).FormStyle=fsSplash then
+          continue;
       if FirstMainParent=nil then
         FirstMainParent:=MainParent
       else

@@ -113,10 +113,11 @@ end;
 
 class procedure TLPSSupporthelper.EndLongProcessHandler(LPHandle:TLPSHandle;TotalLPTime:TDateTime);
 begin
-  if lps.isProcessed then
+  if lps.{isProcessed}isFirstProcess then begin
     if assigned(SuppressedMessages)then
       SuppressedMessages.clear;
-  TaskNameSave:='';
+    TaskNameSave:='';
+  end;
 end;
 class procedure TLPSSupporthelper.StartLongProcessHandler(LPHandle:TLPSHandle;Total:TLPSCounter;LPName:TLPName);
 begin

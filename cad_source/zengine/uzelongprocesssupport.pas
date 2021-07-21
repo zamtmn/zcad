@@ -165,6 +165,7 @@ begin
   DoEndLongProcess(PLPI,LPHandle);
 
   PLPI^.LPName:='';
+  PLPI^.LPContext:=nil;
   dec(ActiveProcessCount);
   if ActiveProcessCount=0 then
                               LPInfoVector.clear;

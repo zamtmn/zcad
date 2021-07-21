@@ -20,3 +20,4 @@ ifdef::preface-title[:preface-title: Предисловие]
 :untitled-label: Без названия
 :version-label: Версия
 :warning-caption: Предупреждение
+:icons: font

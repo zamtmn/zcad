@@ -8,7 +8,9 @@ usescopy objname;
 
 var
 
-T1:GDBString;(*'Тип'*)
+T1:GDBString;(*'Обозначение'*)
+T2:GDBString;(*'Марка'*)
+T3:GDBString;(*'Параметры'*)
 
 implementation
 
@@ -23,5 +25,7 @@ NMO_BaseName:='A4.';
 NMO_Suffix:='??';
 
 T1:='??';
+T2:='??';
+T3:='??';
 
 end.

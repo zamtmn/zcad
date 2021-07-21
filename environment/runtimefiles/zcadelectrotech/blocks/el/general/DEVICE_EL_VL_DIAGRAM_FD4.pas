@@ -1,4 +1,4 @@
-unit DEVICE_EL_VL_DIAGRAM_FD2;
+unit DEVICE_EL_VL_DIAGRAM_FD4;
 
 interface
 
@@ -9,11 +9,8 @@ usescopy objname;
 var
 
 T1:GDBString;(*'Обозначение'*)
-T2:GDBString;(*'P активная'*)
-T3:GDBString;(*'Q реактивная'*)
-T4:GDBString;(*'I расчетный'*)
-T5:GDBString;(*'Cos Ф'*)
-T6:GDBString;(*'Наименование'*)
+T13:GDBString;(*'P установленная'*)
+T14:GDBString;(*'U падение напряжения'*)
 
 implementation
 
@@ -28,10 +25,7 @@ NMO_BaseName:='F';
 NMO_Suffix:='??';
 
 T1:='??';
-T2:='??';
-T3:='??';
-T4:='??';
-T5:='??';
-T6:='??';
+T13:='??';
+T14:='??';
 
 end.

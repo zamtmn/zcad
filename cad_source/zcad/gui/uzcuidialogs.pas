@@ -214,6 +214,8 @@ begin
   Task.VerifyChecked := false;
 
   ParentHWND:=0;
+
+  //считаем сколько фактически форм зкада показано на экране
   FirstMainParent:=nil;
   MainParent:=nil;
   for i:=0 to Screen.CustomFormCount-1 do begin
@@ -230,16 +232,11 @@ begin
       MainParent:=FirstMainParent;
   end;
 
+  //если одна, Task в центре формы, если несколько или нет вообще - в центре экрана
   if (FirstMainParent=MainParent)and(FirstMainParent<>nil) then
     TDF:=[tdfPositionRelativeToWindow]
   else
     TDF:=[];
-  {if Screen.ActiveForm<>nil then begin
-    if Screen.FormCount=1 then
-      ParentHWND:=Screen.ActiveForm.Handle
-    else
-      ParentHWND:=Screen.ActiveForm.Monitor.Handle;
-  end;}
 
   Result.ModalResult:=TLCLModalResult2TZCMsgModalResult.Convert(Task.Execute(TZCMsgCommonButtons2TCommonButtons.Convert(buttons),0,TDF,TZCMsgDlgIcon2TTaskDialogIcon(aDialogIcon),tfiWarning,0,0,ParentHWND));//controls.mrOk
   Result.RadioRes:=Task.RadioRes;

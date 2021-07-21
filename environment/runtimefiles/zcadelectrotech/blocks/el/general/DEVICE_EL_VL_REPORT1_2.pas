@@ -1,4 +1,4 @@
-unit DEVICE_EL_VL_STATEMENT1_2;
+unit DEVICE_EL_VL_REPORT1_2;
 
 interface
 

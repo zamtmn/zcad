@@ -11,7 +11,7 @@ var
 T1:GDBString;(*'Обозначение'*)
 T2:GDBString;(*'P активная'*)
 T3:GDBString;(*'Q реактивная'*)
-T4:GDBString;(*'I hасчетный'*)
+T4:GDBString;(*'I расчетный'*)
 T5:GDBString;(*'Cos Ф'*)
 T6:GDBString;(*'Наименование'*)
 

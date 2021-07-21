@@ -1,4 +1,4 @@
-unit DEVICE_EL_VL_DIAGRAM_QS1;
+unit DEVICE_EL_VL_DIAGRAM_WH2;
 
 interface
 
@@ -21,7 +21,7 @@ Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 
 NMO_Name:='A0';
-NMO_BaseName:='A1.';
+NMO_BaseName:='A5.';
 NMO_Suffix:='??';
 
 T1:='??';

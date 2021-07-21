@@ -259,10 +259,14 @@ uses
   uzctbexttoolbars, uzctbextmenus, uzctbextpalettes,
 
   uzcinterface,
-  uzccommand_dbgappexplorer;
+  uzccommand_dbgappexplorer,
+  uzelongprocesssupport;
 
 resourcestring
  rsStartAutorun='Execute *components\autorun.cmd';
+
+var
+  lpsh:TLPSHandle;
 
 
 {$R *.res}
@@ -271,6 +275,7 @@ begin
   programlog.logoutstr('<<<<<<<<<<<<<<<End units initialization',0,LM_Debug);
      if sysparam.notsaved.otherinstancerun then
                                       exit;
+  lpsh:=LPS.StartLongProcess('Start program',@lpsh,0);
 {$IFDEF REPORTMMEMORYLEAKS}printleakedblock:=true;{$ENDIF}
 {$IFDEF REPORTMMEMORYLEAKS}
        SetHeapTraceOutput(sysvar.PATH.Program_Run^+'log/memory-heaptrace.txt');
@@ -309,6 +314,7 @@ begin
   CLine.Show;}
 
   TZGuiExceptionsHandler.EnableLCLCaptureExceptions;
+  LPS.EndLongProcess(lpsh);
   Application.run;
 
   sysvar.SYS.SYS_RunTime:=nil;

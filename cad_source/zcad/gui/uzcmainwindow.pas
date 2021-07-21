@@ -160,8 +160,8 @@ var
   //LayerBox:TZCADLayerComboBox;
   //LineWBox:TComboBox;
   //LayoutBox:TComboBox;
-  LPTime:Tdatetime;
-  pname:GDBString;
+  //LPTime:Tdatetime;
+  //pname:GDBString;
   oldlongprocess:integer;
   //OLDColor:integer;
   ProcessBar:TProgressBar;
@@ -1320,40 +1320,29 @@ begin
 end;
 procedure TZCADMainWindow.StartLongProcess(LPHandle:TLPSHandle;Total:TLPSCounter;processname:TLPName);
 begin
-     LPTime:=now;
-     pname:=processname;
-     if (assigned(ProcessBar)and assigned(HintText)) then
-     begin
-  ProcessBar.max:=total;
-  ProcessBar.min:=0;
-  ProcessBar.position:=0;
-  HintText.Hide;
-  ProcessBar.Show;
-  oldlongprocess:=0;
-     end;
+  if (assigned(ProcessBar)and assigned(HintText)) then begin
+    ProcessBar.max:=total;
+    ProcessBar.min:=0;
+    ProcessBar.position:=0;
+    HintText.Hide;
+    ProcessBar.Show;
+    oldlongprocess:=0;
+  end;
 end;
+
 procedure TZCADMainWindow.ProcessLongProcess(LPHandle:TLPSHandle;Current:TLPSCounter);
 var
     pos:integer;
 begin
-     if (assigned(ProcessBar)and assigned(HintText)) then
-     begin
-          pos:=round(clientwidth*(single(current)/single(ProcessBar.max)));
-          if pos>oldlongprocess then
-          begin
-               ProcessBar.position:=current;
-               oldlongprocess:=pos+20;
-               ProcessBar.repaint;
-          end;
-     end;
+  if (assigned(ProcessBar)and assigned(HintText)) then begin
+    pos:=round(clientwidth*(single(current)/single(ProcessBar.max)));
+    if pos>oldlongprocess then begin
+      ProcessBar.position:=current;
+      oldlongprocess:=pos+20;
+      ProcessBar.repaint;
+    end;
+  end;
 end;
-
-{function TZCADMainWindow.MessageBox(Text, Caption: PChar; Flags: Longint): Integer;
-begin
-     ShowAllCursors(nil);
-     result:=application.MessageBox(Text, Caption,Flags);
-     RestoreCursors(nil);
-end;}
 
 procedure TZCADMainWindow.ShowAllCursors;
 begin
@@ -1364,43 +1353,30 @@ end;
 
 procedure TZCADMainWindow.RestoreCursors;
 begin
-     if drawings.GetCurrentDWG<>nil then
-     if drawings.GetCurrentDWG.wa<>nil then
-     drawings.GetCurrentDWG.wa.hidemousecursor;
+  if drawings.GetCurrentDWG<>nil then
+    if drawings.GetCurrentDWG.wa<>nil then
+      drawings.GetCurrentDWG.wa.hidemousecursor;
 end;
 
-{procedure TZCADMainWindow.Say(word:gdbstring);
-begin
-     //if sysvar.SYS.SYS_IsHistoryLineCreated^ then
-     begin
-          if assigned(HintText)then
-          begin
-          HintText.caption:=word;
-          HintText.repaint;
-          end;
-     end;
-end;}
 procedure TZCADMainWindow.EndLongProcess;
 var
-   Time:Tdatetime;
-   ts:GDBSTRING;
+   TimeStr,LPName:GDBSTRING;
 begin
-     if (assigned(ProcessBar)and assigned(HintText)) then
-     begin
-          ProcessBar.Hide;
-          HintText.Show;
-          ProcessBar.min:=0;
-          ProcessBar.max:=0;
-          ProcessBar.position:=0;
-     end;
-    //application.ProcessMessages;//halg zcad after Lazarus r63888
-    time:=(now-LPTime)*10e4;
-    str(time:3:2,ts);
-    if pname='' then
-                     ZCMsgCallBackInterface.TextMessage(format(rscompiledtimemsg,[ts]),TMWOHistoryOut)
-                 else
-                     ZCMsgCallBackInterface.TextMessage(format(rsprocesstimemsg,[pname,ts]),TMWOHistoryOut);
-    pname:='';
+  if (assigned(ProcessBar)and assigned(HintText)) then
+  begin
+    ProcessBar.Hide;
+    HintText.Show;
+    ProcessBar.min:=0;
+    ProcessBar.max:=0;
+    ProcessBar.position:=0;
+  end;
+  str(TotalLPTime*10e4:3:2,TimeStr);
+  LPName:=lps.getLPName(LPHandle);
+
+  if LPName='' then
+    ZCMsgCallBackInterface.TextMessage(format(rscompiledtimemsg,[TimeStr]),TMWOHistoryOut)
+  else
+    ZCMsgCallBackInterface.TextMessage(format(rsprocesstimemsg,[LPName,TimeStr]),TMWOHistoryOut);
 end;
 procedure TZCADMainWindow.MainMouseMove;
 begin

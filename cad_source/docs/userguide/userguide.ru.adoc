@@ -1,10 +1,11 @@
+= ZCAD Рукаводство пользователя
+Андрей Зубарев <zamtmn@yandex.ru>
+v0.01
 :lang: ru
 include::attributes.adoc[]
-# ZCAD Рукаводство пользователя
 :toc: left
 :toclevels: 4
 :sectnums:
-:source-highlighter: coderay
 :docinfo1:
 
 <<<

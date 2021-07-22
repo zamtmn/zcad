@@ -14,7 +14,7 @@ unit Common.Graphics;
 interface
 
 uses
-  {$ifdef fpc}LCLProc,LCLType,LCLIntf,Types,{$endif}
+  {$ifdef fpc}LCLProc,LCLType,LCLIntf,Types,lazutf8,{$endif}
   {$ifndef fpc}Windows,{$endif}
   SysUtils,
   Generics.Collections,
@@ -78,7 +78,7 @@ type
 
 type
   TCharInfo = record
-    AChar: Char;
+    AChar: string;
     X, Y, Width, Height, Line, HightLightIndex: Integer;
     Visible: Boolean;
     NotPresent: Boolean;
@@ -347,6 +347,8 @@ var
   var
     I, X, Y, W, A, LastSpaceIndex, Line, Len: Integer;
     C: Char;
+    ptmpChar:PChar;
+    tmpCodePointSize:integer;
     WordReplaced, FirstCharCRLF, PreviousSpace: Boolean;
     Kerning: array of Integer;
     ASize: TSize;
@@ -355,11 +357,11 @@ var
   begin
     X := 0;
     Y := 0;
-    Len := Length(AText);
+    Len := UTF8Length(AText);
     SetLength(Tmp, Len + 1);
     ASize.cx := 10;
     SetLength(Kerning, Len);
-    GetTextExtentExPoint(ACanvas.Handle, PChar(AText), Len,
+    GetTextExtentExPoint(ACanvas.Handle, PChar(AText), Length(AText),
       0, nil, PInteger(Kerning), ASize);
     for I := Len - 1 downto 1 do
       Dec(Kerning[I], Kerning[I - 1]);
@@ -370,10 +372,14 @@ var
     Line := 0;
     ResultList := TList<Integer>.Create;
     try
+      ptmpChar:=@AText[1];
+      tmpCodePointSize:=0;
       for I := 1 to Len do
       begin
         C := AText[I];
-        Tmp[I].AChar := C;
+        inc(ptmpChar,tmpCodePointSize);
+        tmpCodePointSize:=UTF8CodepointSize(ptmpChar);
+        Tmp[I].AChar := Copy(AText,(ptmpChar-@AText[1])+1,tmpCodePointSize);//C;
         Tmp[I].X := X;
         Tmp[I].Y := Y;
         Tmp[I].Line := Line;

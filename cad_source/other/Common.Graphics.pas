@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////////
 //
 //  ****************************************************************************
 //  * Unit Name : Common.Graphics
@@ -78,7 +78,11 @@ type
 
 type
   TCharInfo = record
+  {$ifdef fpc}
     AChar: string;
+  {$else}
+    AChar: char;
+  {$endif}
     X, Y, Width, Height, Line, HightLightIndex: Integer;
     Visible: Boolean;
     NotPresent: Boolean;
@@ -347,9 +351,13 @@ var
   var
     I, X, Y, W, A, LastSpaceIndex, Line, Len: Integer;
     C: Char;
+  {$ifdef fpc}
     ptmpChar:PChar;
-    tmpCodePointSize:integer;
+    tmpCurrPos:Integer;
+    tmpUTF8CodePointSize,tmpUTF16CodePointSize:Integer;
+  {$endif}
     WordReplaced, FirstCharCRLF, PreviousSpace: Boolean;
+    KerningUTF16Index:integer;
     Kerning: array of Integer;
     ASize: TSize;
     ResultList: TList<Integer>;
@@ -357,10 +365,14 @@ var
   begin
     X := 0;
     Y := 0;
+  {$ifdef fpc}
     Len := UTF8Length(AText);
+  {$else}
+    Len := Length(AText);
+  {$endif}
     SetLength(Tmp, Len + 1);
     ASize.cx := 10;
-    SetLength(Kerning, Len);
+    SetLength(Kerning, {Len}Length(AText));
     GetTextExtentExPoint(ACanvas.Handle, PChar(AText), Length(AText),
       0, nil, PInteger(Kerning), ASize);
     for I := Len - 1 downto 1 do
@@ -372,14 +384,39 @@ var
     Line := 0;
     ResultList := TList<Integer>.Create;
     try
-      ptmpChar:=@AText[1];
-      tmpCodePointSize:=0;
+    {$ifdef fpc}
+      ptmpChar:=@AText[1];//указатель на текущий символ utf8
+      tmpCurrPos:=1;//тоже что и ptmpChar, только индекс
+
+      tmpUTF8CodePointSize:=0;//размер кодовой точки в utf8
+      tmpUTF16CodePointSize:=0;//размер кодовой точки в utf16
+      KerningUTF16Index:=0;//индекс в массиве ширин символов, массив расчитывыается для UTF16 символов, покрайней мере в винде
+    {$endif}
       for I := 1 to Len do
       begin
+      {$ifdef fpc}
+        inc(ptmpChar,tmpUTF8CodePointSize);
+        inc(tmpCurrPos,tmpUTF8CodePointSize);
+        C := AText[tmpCurrPos];//только первый байт текущего символа
+      {$else}
         C := AText[I];
-        inc(ptmpChar,tmpCodePointSize);
-        tmpCodePointSize:=UTF8CodepointSize(ptmpChar);
-        Tmp[I].AChar := Copy(AText,(ptmpChar-@AText[1])+1,tmpCodePointSize);//C;
+      {$endif}
+
+      {$ifdef fpc}
+        tmpUTF8CodePointSize:=UTF8CodepointSize(ptmpChar);
+        Tmp[I].AChar := Copy(AText,tmpCurrPos,tmpUTF8CodePointSize);//текущий символ
+        tmpUTF16CodePointSize:=length(UTF8ToUTF16(Tmp[I].AChar));
+        Kerning[i-1]:=Kerning[KerningUTF16Index];
+        while tmpUTF16CodePointSize>1 do begin  //если символ в UTF16 составной, его ширина размазана, нужно ее просуммировать (в винде, в остальном хз)
+          dec(tmpUTF16CodePointSize);
+          inc(KerningUTF16Index);
+          Kerning[i-1]:=Kerning[i-1]+Kerning[KerningUTF16Index];
+        end;
+        inc(KerningUTF16Index);
+      {$else}
+        Tmp[I].AChar := C;
+      {$endif}
+
         Tmp[I].X := X;
         Tmp[I].Y := Y;
         Tmp[I].Line := Line;
@@ -411,6 +448,10 @@ var
         end;
 
         W := Kerning[I - 1];
+      {$ifdef fpc}
+        {if tmpUTF8CodePointSize>2 then    //это теперь ненадо, мы просуммировали размазанные ширины выше
+          W := W + Kerning[I];}
+      {$endif}
         Tmp[I].Width := W;
         Tmp[I].Height := Wg;
 
@@ -494,6 +535,8 @@ var
         ResultList.Add(I);
         Inc(X, W);
       end;
+
+      setlength(Kerning,len); //обрезаем остаток массива ширин
 
       // расставляем индекс цвета каждому символу
       if Highlight <> nil then

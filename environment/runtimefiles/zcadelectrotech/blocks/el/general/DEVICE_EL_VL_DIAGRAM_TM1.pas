@@ -18,8 +18,8 @@ BTY_TreeCoord:='PLAN_EM_Трансформатор';
 Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 
-NMO_Name:='T0';
-NMO_BaseName:='T.';
+NMO_Name:='ТМ0';
+NMO_BaseName:='ТМ';
 NMO_Suffix:='??';
 
 T1:='??';

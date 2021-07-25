@@ -65,6 +65,14 @@ BlockPreViewExport(24|EL_VL_REFERENCE1_1|*images/palettes/EL_VL_REFERENCE1_1+.pn
 BlockPreViewExport(24|EL_VL_REFERENCE1_1|*images/palettes/EL_VL_REFERENCE1_1_150.png)
 BlockPreViewExport(48|EL_VL_REFERENCE1_1|*images/palettes/EL_VL_REFERENCE1_1_300.png)
 
+BlockPreViewExport(24|EL_VL_REPORT1_1|*images/palettes/EL_VL_REPORT1_1+.png)
+BlockPreViewExport(24|EL_VL_REPORT1_1|*images/palettes/EL_VL_REPORT1_1_150.png)
+BlockPreViewExport(48|EL_VL_REPORT1_1|*images/palettes/EL_VL_REPORT1_1_300.png)
+
+BlockPreViewExport(24|EL_VL_REPORT2_1|*images/palettes/EL_VL_REPORT2_1+.png)
+BlockPreViewExport(24|EL_VL_REPORT2_1|*images/palettes/EL_VL_REPORT2_1_150.png)
+BlockPreViewExport(48|EL_VL_REPORT2_1|*images/palettes/EL_VL_REPORT2_1_300.png)
+
 BlockPreViewExport(24|DIAGRAM_SP0|*images/palettes/DIAGRAM_SP0.png)
 BlockPreViewExport(24|DIAGRAM_SP0|*images/palettes/DIAGRAM_SP0_150.png)
 BlockPreViewExport(48|DIAGRAM_SP0|*images/palettes/DIAGRAM_SP0_300.png)
@@ -89,25 +97,57 @@ BlockPreViewExport(24|DIAGRAM_BUS4|*images/palettes/DIAGRAM_BUS4.png)
 BlockPreViewExport(24|DIAGRAM_BUS4|*images/palettes/DIAGRAM_BUS4_150.png)
 BlockPreViewExport(48|DIAGRAM_BUS4|*images/palettes/DIAGRAM_BUS4_300.png)
 
-BlockPreViewExport(24|DIAGRAM_PEN|*images/palettes/DIAGRAM_PEN.png)
-BlockPreViewExport(24|DIAGRAM_PEN|*images/palettes/DIAGRAM_PEN_150.png)
-BlockPreViewExport(48|DIAGRAM_PEN|*images/palettes/DIAGRAM_PEN_300.png)
+BlockPreViewExport(24|DIAGRAM_BUS5|*images/palettes/DIAGRAM_BUS5.png)
+BlockPreViewExport(24|DIAGRAM_BUS5|*images/palettes/DIAGRAM_BUS5_150.png)
+BlockPreViewExport(48|DIAGRAM_BUS5|*images/palettes/DIAGRAM_BUS5_300.png)
 
-BlockPreViewExport(24|DIAGRAM_PE|*images/palettes/DIAGRAM_PE.png)
-BlockPreViewExport(24|DIAGRAM_PE|*images/palettes/DIAGRAM_PE_150.png)
-BlockPreViewExport(48|DIAGRAM_PE|*images/palettes/DIAGRAM_PE_300.png)
+BlockPreViewExport(24|DIAGRAM_BUS6|*images/palettes/DIAGRAM_BUS6.png)
+BlockPreViewExport(24|DIAGRAM_BUS6|*images/palettes/DIAGRAM_BUS6_150.png)
+BlockPreViewExport(48|DIAGRAM_BUS6|*images/palettes/DIAGRAM_BUS6_300.png)
+
+BlockPreViewExport(24|DIAGRAM_PEN1|*images/palettes/DIAGRAM_PEN1.png)
+BlockPreViewExport(24|DIAGRAM_PEN1|*images/palettes/DIAGRAM_PEN1_150.png)
+BlockPreViewExport(48|DIAGRAM_PEN1|*images/palettes/DIAGRAM_PEN1_300.png)
+
+BlockPreViewExport(24|DIAGRAM_PEN2|*images/palettes/DIAGRAM_PEN2.png)
+BlockPreViewExport(24|DIAGRAM_PEN2|*images/palettes/DIAGRAM_PEN2_150.png)
+BlockPreViewExport(48|DIAGRAM_PEN2|*images/palettes/DIAGRAM_PEN2_300.png)
 
 BlockPreViewExport(24|DIAGRAM_H0|*images/palettes/DIAGRAM_H0.png)
 BlockPreViewExport(24|DIAGRAM_H0|*images/palettes/DIAGRAM_H0_150.png)
 BlockPreViewExport(48|DIAGRAM_H0|*images/palettes/DIAGRAM_H0_300.png)
 
-BlockPreViewExport(24|DIAGRAM_H1|*images/palettes/DIAGRAM_H1.png)
-BlockPreViewExport(24|DIAGRAM_H1|*images/palettes/DIAGRAM_H1_150.png)
-BlockPreViewExport(48|DIAGRAM_H1|*images/palettes/DIAGRAM_H1_300.png)
+BlockPreViewExport(24|DIAGRAM_H1_1|*images/palettes/DIAGRAM_H1_1.png)
+BlockPreViewExport(24|DIAGRAM_H1_1|*images/palettes/DIAGRAM_H1_1_150.png)
+BlockPreViewExport(48|DIAGRAM_H1_1|*images/palettes/DIAGRAM_H1_1_300.png)
 
-BlockPreViewExport(24|DIAGRAM_H2|*images/palettes/DIAGRAM_H2.png)
-BlockPreViewExport(24|DIAGRAM_H2|*images/palettes/DIAGRAM_H2_150.png)
-BlockPreViewExport(48|DIAGRAM_H2|*images/palettes/DIAGRAM_H2_300.png)
+BlockPreViewExport(24|DIAGRAM_H1_2|*images/palettes/DIAGRAM_H1_2.png)
+BlockPreViewExport(24|DIAGRAM_H1_2|*images/palettes/DIAGRAM_H1_2_150.png)
+BlockPreViewExport(48|DIAGRAM_H1_2|*images/palettes/DIAGRAM_H1_2_300.png)
+
+BlockPreViewExport(24|DIAGRAM_H1_3|*images/palettes/DIAGRAM_H1_3.png)
+BlockPreViewExport(24|DIAGRAM_H1_3|*images/palettes/DIAGRAM_H1_3_150.png)
+BlockPreViewExport(48|DIAGRAM_H1_3|*images/palettes/DIAGRAM_H1_3_300.png)
+
+BlockPreViewExport(24|DIAGRAM_H2_1|*images/palettes/DIAGRAM_H2_1.png)
+BlockPreViewExport(24|DIAGRAM_H2_1|*images/palettes/DIAGRAM_H2_1_150.png)
+BlockPreViewExport(48|DIAGRAM_H2_1|*images/palettes/DIAGRAM_H2_1_300.png)
+
+BlockPreViewExport(24|DIAGRAM_H2_2|*images/palettes/DIAGRAM_H2_2.png)
+BlockPreViewExport(24|DIAGRAM_H2_2|*images/palettes/DIAGRAM_H2_2_150.png)
+BlockPreViewExport(48|DIAGRAM_H2_2|*images/palettes/DIAGRAM_H2_2_300.png)
+
+BlockPreViewExport(24|DIAGRAM_H3_1|*images/palettes/DIAGRAM_H3_1.png)
+BlockPreViewExport(24|DIAGRAM_H3_1|*images/palettes/DIAGRAM_H3_1_150.png)
+BlockPreViewExport(48|DIAGRAM_H3_1|*images/palettes/DIAGRAM_H3_1_300.png)
+
+BlockPreViewExport(24|DIAGRAM_H3_2|*images/palettes/DIAGRAM_H3_2.png)
+BlockPreViewExport(24|DIAGRAM_H3_2|*images/palettes/DIAGRAM_H3_2_150.png)
+BlockPreViewExport(48|DIAGRAM_H3_2|*images/palettes/DIAGRAM_H3_2_300.png)
+
+BlockPreViewExport(24|DIAGRAM_H3_3|*images/palettes/DIAGRAM_H3_3.png)
+BlockPreViewExport(24|DIAGRAM_H3_3|*images/palettes/DIAGRAM_H3_3_150.png)
+BlockPreViewExport(48|DIAGRAM_H3_3|*images/palettes/DIAGRAM_H3_3_300.png)
 
 BlockPreViewExport(24|DIAGRAM_FD0|*images/palettes/DIAGRAM_FD0.png)
 BlockPreViewExport(24|DIAGRAM_FD0|*images/palettes/DIAGRAM_FD0_150.png)
@@ -117,6 +157,17 @@ BlockPreViewExport(24|DIAGRAM_FD1|*images/palettes/DIAGRAM_FD1.png)
 BlockPreViewExport(24|DIAGRAM_FD1|*images/palettes/DIAGRAM_FD1_150.png)
 BlockPreViewExport(48|DIAGRAM_FD1|*images/palettes/DIAGRAM_FD1_300.png)
 
+BlockPreViewExport(24|DIAGRAM_FD2|*images/palettes/DIAGRAM_FD2.png)
+BlockPreViewExport(24|DIAGRAM_FD2|*images/palettes/DIAGRAM_FD2_150.png)
+BlockPreViewExport(48|DIAGRAM_FD2|*images/palettes/DIAGRAM_FD2_300.png)
+
+BlockPreViewExport(24|EL_VL_SUPPORT4_1|*images/palettes/EL_VL_SUPPORT4_1.png)
+BlockPreViewExport(24|EL_VL_SUPPORT4_1|*images/palettes/EL_VL_SUPPORT4_1_150.png)
+BlockPreViewExport(48|EL_VL_SUPPORT4_1|*images/palettes/EL_VL_SUPPORT4_1_300.png)
+
+BlockPreViewExport(24|EL_VL_SUPPORT4_2|*images/palettes/EL_VL_SUPPORT4_2.png)
+BlockPreViewExport(24|EL_VL_SUPPORT4_2|*images/palettes/EL_VL_SUPPORT4_2_150.png)
+BlockPreViewExport(48|EL_VL_SUPPORT4_2|*images/palettes/EL_VL_SUPPORT4_2_300.png)
 
 ClLayerOff(TEXT)
 

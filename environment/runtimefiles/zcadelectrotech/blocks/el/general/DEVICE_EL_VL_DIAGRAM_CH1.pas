@@ -1,4 +1,4 @@
-unit DEVICE_EL_VL_DIAGRAM_WH1;
+unit DEVICE_EL_VL_DIAGRAM_CH1;
 
 interface
 
@@ -16,14 +16,14 @@ implementation
 
 begin
 
-BTY_TreeCoord:='PLAN_EM_Аппаратура';
+BTY_TreeCoord:='PLAN_EM_Щиты';
 Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 
 NMO_Name:='А0';
 NMO_BaseName:='А';
 NMO_Suffix:='??';
-NMO_Affix:='.6';
+NMO_Affix:='.11';
 
 T1:='??';
 T2:='??';

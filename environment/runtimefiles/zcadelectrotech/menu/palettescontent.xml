@@ -98,8 +98,9 @@
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SUPPORT2_1)" Img='DEVICE_EL_VL_SUPPORT2_1_300' Caption='Опора анкерная'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SUPPORT2_2)" Img='DEVICE_EL_VL_SUPPORT2_2_300' Caption='Опора анкерная угловая'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SUPPORT3_1)" Img='DEVICE_EL_VL_SUPPORT3_1_300' Caption='Опора освещения'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SUPPORT3_2)" Img='DEVICE_EL_VL_SUPPORT3_2_300' Caption='Опора освещения с одним свет.'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SUPPORT3_3)" Img='DEVICE_EL_VL_SUPPORT3_3_300' Caption='Опора освещения с двумя свет.'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SUPPORT3_2)" Img='DEVICE_EL_VL_SUPPORT3_2_300' Caption='Опора освещения 0гр.'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SUPPORT3_3)" Img='DEVICE_EL_VL_SUPPORT3_3_300' Caption='Опора освещения 180гр.'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SUPPORT3_4)" Img='DEVICE_EL_VL_SUPPORT3_4_300' Caption='Опора освещения 90гр.'/>
 	   <ZTreeCommand Command="Insert(EL_VL_SUPPORT4_1)" Img='EL_VL_SUPPORT4_1' Caption='Заземление опоры'/>
 	   <ZTreeCommand Command="Insert(EL_VL_SUPPORT4_2)" Img='EL_VL_SUPPORT4_2' Caption='Ограничитель перенапряжения'/>
       	</ZTreeNode>
@@ -119,10 +120,17 @@
 	   <ZTreeCommand Command="Insert(A0K)" Img='A0K_300' Caption='Рамка А0 книга'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_STAMP1)" Img='DEVICE_EL_VL_STAMP1_300' Caption='Штамп 1'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_STAMP2)" Img='DEVICE_EL_VL_STAMP2_300' Caption='Штамп 2'/>
+	   <ZTreeCommand Command="Insert(EL_VL_STAMP3_1)" Img='EL_VL_STAMP3_1_300' Caption='Ведомость чертежей 1'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_STAMP3_2)" Img='DEVICE_EL_VL_STAMP3_2_300' Caption='Ведомость чертежей 2'/>
+	   <ZTreeCommand Command="Insert(EL_VL_REPORT3_1)" Img='EL_VL_REPORT3_1_300' Caption='Прилагаемые документы 1'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_REPORT3_2)" Img='DEVICE_EL_VL_REPORT3_2_300' Caption='Прилагаемые документы 2'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_STAMP4)" Img='DEVICE_EL_VL_STAMP4_300' Caption='Записка ГИПа'/>
 	   <ZTreeCommand Command="Insert(EL_VL_REPORT1_1)" Img='EL_VL_REPORT1_1_300' Caption='Кабельный журнал 1'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_REPORT1_2)" Img='DEVICE_EL_VL_REPORT1_2_300' Caption='Кабельный журнал 2'/>
 	   <ZTreeCommand Command="Insert(EL_VL_REPORT2_1)" Img='EL_VL_REPORT2_1_300' Caption='Спецификация 1'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_REPORT2_2)" Img='DEVICE_EL_VL_REPORT2_2_300' Caption='Спецификация 2'/>
+	   <ZTreeCommand Command="Insert(EL_VL_REPORT4_1)" Img='EL_VL_REPORT4_1_300' Caption='Ведомость узлов 1'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_REPORT4_2)" Img='DEVICE_EL_VL_REPORT4_2_300' Caption='Ведомость узлов 2'/>
 	   <ZTreeCommand Command="Insert(EL_VL_REFERENCE1_1)" Img='EL_VL_REFERENCE1_1_300' Caption='Усл.обозначения 1'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_REFERENCE1_2)" Img='DEVICE_EL_VL_REFERENCE1_2_300' Caption='Усл.обозначения 2'/>
       	</ZTreeNode>

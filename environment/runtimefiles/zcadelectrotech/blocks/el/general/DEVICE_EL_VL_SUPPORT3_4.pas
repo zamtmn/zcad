@@ -10,8 +10,7 @@ usescopy addtocable;
 
 var
 
-Power:GDBDouble;(*'Мощность, кВт'*)
-Code:GDBString;(*'Код'*)
+T1:GDBString;(*'Питающая фаза'*)
 
 implementation
 
@@ -21,10 +20,9 @@ BTY_TreeCoord:='PLAN_EM_светильник';
 Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 
-NMO_Name:='С0';
-NMO_BaseName:='С';
+NMO_Name:='ОП0';
+NMO_BaseName:='ОП';
 NMO_Suffix:='??';
-Power:=0.0;
 
 SerialConnection:=1;
 GC_HeadDevice:='ШР??';

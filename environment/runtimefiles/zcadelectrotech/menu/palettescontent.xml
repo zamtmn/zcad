@@ -131,6 +131,8 @@
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_REPORT2_2)" Img='DEVICE_EL_VL_REPORT2_2_300' Caption='Спецификация 2'/>
 	   <ZTreeCommand Command="Insert(EL_VL_REPORT4_1)" Img='EL_VL_REPORT4_1_300' Caption='Ведомость узлов 1'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_REPORT4_2)" Img='DEVICE_EL_VL_REPORT4_2_300' Caption='Ведомость узлов 2'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_REPORT5_1)" Img='DEVICE_EL_VL_REPORT5_1_300' Caption='Ведомость арматуры 1'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_REPORT5_2)" Img='DEVICE_EL_VL_REPORT5_2_300' Caption='Ведомость арматуры 2'/>
 	   <ZTreeCommand Command="Insert(EL_VL_REFERENCE1_1)" Img='EL_VL_REFERENCE1_1_300' Caption='Усл.обозначения 1'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_REFERENCE1_2)" Img='DEVICE_EL_VL_REFERENCE1_2_300' Caption='Усл.обозначения 2'/>
       	</ZTreeNode>
@@ -178,6 +180,9 @@
            <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_FD3)" Img='DEVICE_EL_VL_DIAGRAM_FD3_300' Caption='Фидер сноска 1'/>
            <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_FD4)" Img='DEVICE_EL_VL_DIAGRAM_FD4_300' Caption='Фидер сноска 2'/>
            <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_CH1)" Img='DEVICE_EL_VL_DIAGRAM_CH1_300' Caption='Щит сноска 1'/>
+      	</ZTreeNode>
+      	<ZTreeNode Caption='Узлы'>
+	   <ZTreeCommand Command="Insert(UNIT_GRID1)" Img='UNIT_GRID1_300' Caption='Сетка 1'/>
       	</ZTreeNode>
       	<ZTreeNode Caption='Пожарка'>
               <ZTreeCommand Command="Insert(DEVICE_PS_VL_DAT_SMOKE)" Img='DEVICE_PS_VL_DAT_SMOKE_300' Caption='Дымовой'/>

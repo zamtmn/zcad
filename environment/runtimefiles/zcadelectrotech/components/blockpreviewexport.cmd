@@ -181,6 +181,10 @@ BlockPreViewExport(24|EL_VL_SUPPORT4_2|*images/palettes/EL_VL_SUPPORT4_2.png)
 BlockPreViewExport(24|EL_VL_SUPPORT4_2|*images/palettes/EL_VL_SUPPORT4_2_150.png)
 BlockPreViewExport(48|EL_VL_SUPPORT4_2|*images/palettes/EL_VL_SUPPORT4_2_300.png)
 
+BlockPreViewExport(24|UNIT_GRID1|*images/palettes/UNIT_GRID1.png)
+BlockPreViewExport(24|UNIT_GRID1|*images/palettes/UNIT_GRID1_150.png)
+BlockPreViewExport(48|UNIT_GRID1|*images/palettes/UNIT_GRID1_300.png)
+
 ClLayerOff(TEXT)
 
 BlocksInBasePreViewExport(DEVICE_EL_VL_MOTOR1;DEVICE_EL_VL_HEATER1;DEVICE_EL_VL_DEVICE1||48|<>|*images/palettes/<>_300.png)

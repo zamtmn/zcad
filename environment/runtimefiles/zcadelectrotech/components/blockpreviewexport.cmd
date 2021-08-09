@@ -73,13 +73,17 @@ BlockPreViewExport(24|EL_VL_REPORT2_1|*images/palettes/EL_VL_REPORT2_1+.png)
 BlockPreViewExport(24|EL_VL_REPORT2_1|*images/palettes/EL_VL_REPORT2_1_150.png)
 BlockPreViewExport(48|EL_VL_REPORT2_1|*images/palettes/EL_VL_REPORT2_1_300.png)
 
+BlockPreViewExport(24|EL_VL_REPORT3_1|*images/palettes/EL_VL_REPORT3_1.png)
+BlockPreViewExport(24|EL_VL_REPORT3_1|*images/palettes/EL_VL_REPORT3_1_150.png)
+BlockPreViewExport(48|EL_VL_REPORT3_1|*images/palettes/EL_VL_REPORT3_1_300.png)
+
 BlockPreViewExport(24|EL_VL_REPORT4_1|*images/palettes/EL_VL_REPORT4_1.png)
 BlockPreViewExport(24|EL_VL_REPORT4_1|*images/palettes/EL_VL_REPORT4_1_150.png)
 BlockPreViewExport(48|EL_VL_REPORT4_1|*images/palettes/EL_VL_REPORT4_1_300.png)
 
-BlockPreViewExport(24|EL_VL_REPORT3_1|*images/palettes/EL_VL_REPORT3_1.png)
-BlockPreViewExport(24|EL_VL_REPORT3_1|*images/palettes/EL_VL_REPORT3_1_150.png)
-BlockPreViewExport(48|EL_VL_REPORT3_1|*images/palettes/EL_VL_REPORT3_1_300.png)
+BlockPreViewExport(24|EL_VL_REPORT6_1|*images/palettes/EL_VL_REPORT6_1.png)
+BlockPreViewExport(24|EL_VL_REPORT6_1|*images/palettes/EL_VL_REPORT6_1_150.png)
+BlockPreViewExport(48|EL_VL_REPORT6_1|*images/palettes/EL_VL_REPORT6_1_300.png)
 
 BlockPreViewExport(24|EL_VL_STAMP3_1|*images/palettes/EL_VL_STAMP3_1.png)
 BlockPreViewExport(24|EL_VL_STAMP3_1|*images/palettes/EL_VL_STAMP3_1_150.png)

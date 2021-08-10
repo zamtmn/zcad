@@ -596,12 +596,10 @@ end;
 
 procedure TForm1.BtnSaveDXFClick(Sender: TObject);
 begin
-     {$ifdef dxfio}
-     if SaveDialog1.Execute then
-     begin
-          savedxf2000(SaveDialog1.FileName, GetCurrentDrawing^);
-     end;
-     {$endif}
+  {$ifdef dxfio}
+  if SaveDialog1.Execute then
+    savedxf2000(SaveDialog1.FileName,extractfilepath(paramstr(0))+'components/empty.dxf',GetCurrentDrawing^);
+  {$endif}
 end;
 
 procedure TForm1.BtnSelectAllClick(Sender: TObject);

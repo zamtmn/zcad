@@ -36,7 +36,7 @@ type
   TPrefix2ProcessFunc=class (GKey2DataMap<TInternalStringType,TStrProcessorData{$IFNDEF DELPHI},LessUnicodeString{$ENDIF}>)
     procedure RegisterProcessor(const Id:TInternalStringType;const OBracket,CBracket:TInternalCharType;const Func:TStrProcessFunc;IsVariable:Boolean=false);
   end;
-  TMyParser=TGZParser<TTokenizerString,TTokenizerSymbol,pointer,TCharToOptChar<TTokenizerSymbol>>;
+  TMyParser=TGZParser<TUnicodeStringManipulator,TTokenizerString,TTokenizerSymbol,TUnicodeStringManipulator.TCharIndex,TUnicodeStringManipulator.TCharLength,TUnicodeStringManipulator.TCharRange,pointer,TCharToOptChar<TTokenizerSymbol>>;
 
 var
     Prefix2ProcessFunc:TPrefix2ProcessFunc;

@@ -190,7 +190,7 @@ end;
     pu:ptunit;
     allok:boolean;
  begin
-      allok:=savedxf2000(s,dwg^);
+      allok:=savedxf2000(s,ProgramPath + 'components/empty.dxf',dwg^);
       pu:=PTZCADDrawing(dwg).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
       mem.init({$IFDEF DEBUGBUILD}'{A1891083-67C6-4C21-8012-6D215935F6A6}',{$ENDIF}1024);
       pu^.SavePasToMem(mem);

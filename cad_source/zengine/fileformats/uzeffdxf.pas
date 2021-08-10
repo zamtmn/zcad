@@ -68,7 +68,7 @@ var FOC:GDBInteger;
     ClearExtLoadData:TProcessExtLoadData=nil;
     FreeExtLoadData:TProcessExtLoadData=nil;
 procedure addfromdxf(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
-function savedxf2000(name: GDBString; {PDrawing:PTSimpleDrawing}var drawing:TSimpleDrawing):boolean;
+function savedxf2000(SavedFileName,TemplateFileName:String;var drawing:TSimpleDrawing):boolean;
 procedure saveZCP(name: GDBString; {gdb: PGDBDescriptor}var drawing:TSimpleDrawing);
 procedure LoadZCP(name: GDBString; {gdb: PGDBDescriptor}var drawing:TSimpleDrawing);
 implementation
@@ -1638,7 +1638,7 @@ begin
                                            VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$TEXTSIZE',floattostr({sysvar.DWG.DWG_TextSize^}drawing.TextSize));
 end;
 
-function savedxf2000(name: GDBString; var drawing:TSimpleDrawing):boolean;
+function savedxf2000(SavedFileName,TemplateFileName:String;var drawing:TSimpleDrawing):boolean;
 var
   templatefile: GDBOpenArrayOfByte;
   outstream: {GDBInteger}GDBOpenArrayOfByte;
@@ -1693,7 +1693,7 @@ begin
   OldHandele2NewHandle.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}(0,0);
   //phandlea := dxfhandlearraycreate(10000);
   //pushhandle(phandlea,0,0);
-  templatefile.InitFromFile(ProgramPath + 'components/empty.dxf');
+  templatefile.InitFromFile(TemplateFileName);
   IODXFContext.handle := $2;
   inlayertable := false;
   inblocksec := false;
@@ -2734,19 +2734,19 @@ ENDTAB}
   OldHandele2NewHandle.Destroy;
   templatefile.done;
 
-  if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(name)) then
+  if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(SavedFileName)) then
                            begin
-                                if (not(deletefile(name+'.bak')) or (not renamefile(name,name+'.bak'))) then
+                                if (not(deletefile(SavedFileName+'.bak')) or (not renamefile(SavedFileName,SavedFileName+'.bak'))) then
                                 begin
-                                   DebugLn('{WH}'+rsUnableRenameFileToBak,[name]);
-                                   //HistoryOutStr(format(rsUnableRenameFileToBak,[name]));
+                                   DebugLn('{WH}'+rsUnableRenameFileToBak,[SavedFileName]);
+                                   //HistoryOutStr(format(rsUnableRenameFileToBak,[SavedFileName]));
                                 end;
                            end;
 
-  if outstream.SaveToFile({expandpath}(name))<=0 then
+  if outstream.SaveToFile({expandpath}(SavedFileName))<=0 then
                                        begin
-                                       //ShowError(format(rsUnableToWriteFile,[name]));
-                                       DebugLn('{EM}'+rsUnableToWriteFile,[name]);
+                                       //ShowError(format(rsUnableToWriteFile,[SavedFileName]));
+                                       DebugLn('{EM}'+rsUnableToWriteFile,[SavedFileName]);
                                        result:=false;
                                        end
                                    else

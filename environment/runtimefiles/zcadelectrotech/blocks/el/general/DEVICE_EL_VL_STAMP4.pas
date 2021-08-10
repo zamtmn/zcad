@@ -1,4 +1,4 @@
-unit DEVICE_EL_VL_DIAGRAM_TM1;
+unit DEVICE_EL_VL_STAMP4;
 
 interface
 
@@ -8,20 +8,20 @@ usescopy objname;
 
 var
 
-T1:GDBString;(*'Тип'*)
+T16:GDBString;(*'Гип'*)
 
 implementation
 
 begin
 
-BTY_TreeCoord:='PLAN_EM_Трансформатор';
+BTY_TreeCoord:='PLAN_EM_Штамп';
 Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 
-NMO_Name:='ТМ0';
-NMO_BaseName:='ТМ';
+NMO_Name:='ШТ0';
+NMO_BaseName:='ШТ';
 NMO_Suffix:='??';
 
-T1:='??';
+T16:='??';
 
 end.

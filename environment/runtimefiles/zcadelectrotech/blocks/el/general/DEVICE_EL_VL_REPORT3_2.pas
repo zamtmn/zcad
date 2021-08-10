@@ -1,4 +1,4 @@
-unit DEVICE_EL_VL_DIAGRAM_WH1;
+unit DEVICE_EL_VL_REPORT3_2;
 
 interface
 
@@ -9,24 +9,23 @@ usescopy objname;
 var
 
 T1:GDBString;(*'Обозначение'*)
-T2:GDBString;(*'Марка'*)
-T3:GDBString;(*'Параметры'*)
+T2:GDBString;(*'Наименование'*)
+T3:GDBString;(*'Примечание'*)
 
 implementation
 
 begin
 
-BTY_TreeCoord:='PLAN_EM_Аппаратура';
+BTY_TreeCoord:='PLAN_EM_Ведомость';
 Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 
-NMO_Name:='А0';
-NMO_BaseName:='А';
+NMO_Name:='ПД0';
+NMO_BaseName:='ПД';
 NMO_Suffix:='??';
-NMO_Affix:='.6';
 
 T1:='??';
 T2:='??';
-T3:='??';
+T3:='';
 
 end.

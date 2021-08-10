@@ -21,6 +21,7 @@ MergeBlocks(_spds.dxf)
 MergeBlocks(_vl_el.dxf)
 MergeBlocks(_vl_table.dxf)
 MergeBlocks(_vl_diagram.dxf)
+MergeBlocks(_vl_unit.dxf)
 MergeBlocks(_vl_ops.dxf)
 
 ;------------------------

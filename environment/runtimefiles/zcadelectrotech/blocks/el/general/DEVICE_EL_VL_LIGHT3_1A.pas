@@ -8,6 +8,10 @@ usescopy objname_eo;
 usescopy objgroup;
 usescopy _addtocable;
 
+var
+
+T1:GDBString;(*'Код'*)
+
 implementation
 
 begin

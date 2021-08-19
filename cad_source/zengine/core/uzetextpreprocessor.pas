@@ -30,14 +30,22 @@ type
     IsVariable:Boolean;
     Func:TStrProcessFunc;
   end;
-  TTokenizerString=ansistring;
-  TTokenizerSymbol=char;
+  //TTokenizerString=ansistring;
+  //TTokenizerSymbol=char;
 
   TPrefix2ProcessFunc=class (GKey2DataMap<TInternalStringType,TStrProcessorData{$IFNDEF DELPHI},LessUnicodeString{$ENDIF}>)
     procedure RegisterProcessor(const Id:TInternalStringType;const OBracket,CBracket:TInternalCharType;const Func:TStrProcessFunc;IsVariable:Boolean=false);
   end;
-  TMyParser=TGZParser<TUnicodeStringManipulator,TTokenizerString,TTokenizerSymbol,TUnicodeStringManipulator.TCharIndex,TUnicodeStringManipulator.TCharLength,TUnicodeStringManipulator.TCharRange,pointer,TCharToOptChar<TTokenizerSymbol>>;
-
+  TMyParser=TGZParser<TUnicodeStringManipulator,
+                      TUnicodeStringManipulator.TStringType,
+                      TUnicodeStringManipulator.TCharType,
+                      TCodeUnitPosition,
+                      TUnicodeStringManipulator.TCharPosition,
+                      TUnicodeStringManipulator.TCharLength,
+                      TUnicodeStringManipulator.TCharInterval,
+                      TUnicodeStringManipulator.TCharRange,
+                      pointer,
+                      TCharToOptChar<TUnicodeStringManipulator.TCharType>>;
 var
     Prefix2ProcessFunc:TPrefix2ProcessFunc;
     Parser:TMyParser;

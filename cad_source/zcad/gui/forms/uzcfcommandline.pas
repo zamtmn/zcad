@@ -25,7 +25,8 @@ uses
  menus,Forms,fileutil,graphics, uzbtypes, uzbmemman,uzcdrawings,uzccommandsmanager,
  varman,languade,varmandef,
  uzegeometry,uzctnrvectorgdbstring,uzcinterface,uzctreenode,uzclog,strmy,
- uzccommandlineutil,uztoolbarsmanager,uzmenusmanager,uzccommandsabstract,gzctnrvectortypes;
+ uzccommandlineutil,uztoolbarsmanager,uzmenusmanager,uzccommandsabstract,gzctnrvectortypes,
+ uzcctrlcommandlineprompt;
 
 const
      cheight=48;
@@ -37,6 +38,7 @@ type
     utflen:integer;
     procedure keypressmy(Sender: TObject; var Key: char);
     procedure SetMode(m:TCLineMode);virtual;
+    procedure SetPrompt(APrompt:String;ATPromptResults:TCommandLinePrompt.TPromptResults);virtual;
     procedure DoOnResize; override;
     procedure MyResize;
     procedure mypaint(sender:tobject);
@@ -49,7 +51,7 @@ type
 var
   CLine: TCLine;
   cmdedit:TComboBox;
-  prompt:TLabel;
+  prompt:TCommandLinePrompt;
   panel:tpanel;
   HistoryLine:TMemo;
 
@@ -66,6 +68,11 @@ begin
      canvas.Line(0,0,100,100);
 end;
 
+procedure TCLine.SetPrompt(APrompt:String;ATPromptResults:TCommandLinePrompt.TPromptResults);
+begin
+  prompt.SetPrompt(APrompt,ATPromptResults);
+end;
+
 procedure TCLine.SetMode(m:TCLineMode);
 begin
      {if m=mode then
@@ -73,13 +80,13 @@ begin
      case m of
      CLCOMMANDREDY:
      begin
-           prompt.Caption:=commandprefix+rsdefaultpromot+commandsuffix;
+           SetPrompt(commandprefix+rsdefaultpromot+commandsuffix,[1,2,3]);
            cmdedit.AutoComplete:=true;
            //cmdedit.AutoDropDown:=true;
      end;
      CLCOMMANDRUN:
      begin
-          prompt.Caption:=commandsuffix;
+          SetPrompt(commandsuffix,[1,2,3]);
           cmdedit.AutoComplete:=false;
           //cmdedit.AutoDropDown:=false;
      end;
@@ -216,9 +223,9 @@ begin
 
     panel.Color:=HistoryLine.Brush.Color;
 
-    prompt:=TLabel.create(panel);
+    prompt:=TCommandLinePrompt.create(panel);
     prompt.Align:=alLeft;
-    prompt.Layout:=tlCenter;
+    //prompt.Layout:=tlCenter;
     //prompt.Width:=1;
     //prompt.BorderStyle:=sbsSingle;
     prompt.AutoSize:=true;

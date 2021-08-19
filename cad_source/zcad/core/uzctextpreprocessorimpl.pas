@@ -29,27 +29,27 @@ type
   end;
 
   TNum2StrProcessor=class(TMyParser.TParserTokenizer.TStaticProcessor)
-    class procedure StaticGetResult(const Source:TTokenizerString;
-                                    const Token :TSubStr;
-                                    const Operands :TSubStr;
-                                    const ParsedOperands :specialize TAbstractParsedText<TTokenizerString,pointer>;
-                                    var Result:TTokenizerString;
-                                    var ResultParam:TSubStr;
+    class procedure StaticGetResult(const Source:TUnicodeStringManipulator.TStringType;
+                                    const Token :TUnicodeStringManipulator.TCharRange;
+                                    const Operands :TUnicodeStringManipulator.TCharRange;
+                                    const ParsedOperands :specialize TAbstractParsedText<TUnicodeStringManipulator.TStringType,pointer>;
+                                    var Result:TUnicodeStringManipulator.TStringType;
+                                    var ResultParam:TUnicodeStringManipulator.TCharRange;
                                     var data:pointer);override;
   end;
 
   TPointer2StrProcessor=class(TMyParser.TParserTokenizer.TDynamicProcessor)
-    constructor vcreate(const Source:TTokenizerString;
-                        const Token :TSubStr;
-                        const Operands :TSubStr;
-                        const ParsedOperands :specialize TAbstractParsedText<TTokenizerString,pointer>;
+    constructor vcreate(const Source:TUnicodeStringManipulator.TStringType;
+                        const Token :TUnicodeStringManipulator.TCharRange;
+                        const Operands :TUnicodeStringManipulator.TCharRange;
+                        const ParsedOperands :specialize TAbstractParsedText<TUnicodeStringManipulator.TStringType,pointer>;
                         var Data:{TEntsTypeFilter}pointer);override;
-    procedure GetResult(const Source:TTokenizerString;
-                        const Token :TSubStr;
-                        const Operands :TSubStr;
-                        const ParsedOperands :specialize TAbstractParsedText<TTokenizerString,pointer>;
-                        var Result:TTokenizerString;
-                        var ResultParam:TSubStr;
+    procedure GetResult(const Source:TUnicodeStringManipulator.TStringType;
+                        const Token :TUnicodeStringManipulator.TCharRange;
+                        const Operands :TUnicodeStringManipulator.TCharRange;
+                        const ParsedOperands :specialize TAbstractParsedText<TUnicodeStringManipulator.TStringType,pointer>;
+                        var Result:TUnicodeStringManipulator.TStringType;
+                        var ResultParam:TUnicodeStringManipulator.TCharRange;
                         var data:pointer);override;
   end;
 
@@ -72,42 +72,42 @@ begin
   else
     result:='!!ERR('+varname+')!!';
 end;
-class procedure TNum2StrProcessor.StaticGetResult(const Source:TTokenizerString;
-                                                  const Token :TSubStr;
-                                const Operands :TSubStr;
-                                const ParsedOperands :specialize TAbstractParsedText<TTokenizerString,pointer>;
-                                var Result:TTokenizerString;
-                                var ResultParam:TSubStr;
+class procedure TNum2StrProcessor.StaticGetResult(const Source:TUnicodeStringManipulator.TStringType;
+                                                  const Token :TUnicodeStringManipulator.TCharRange;
+                                const Operands :TUnicodeStringManipulator.TCharRange;
+                                const ParsedOperands :specialize TAbstractParsedText<TUnicodeStringManipulator.TStringType,pointer>;
+                                var Result:TUnicodeStringManipulator.TStringType;
+                                var ResultParam:TUnicodeStringManipulator.TCharRange;
                                 var data:pointer);
 begin
-  ResultParam.Length:=2;
-  if ResultParam.StartPos<>OnlyGetLength then begin
-    Result[ResultParam.StartPos]:='9';
-    Result[ResultParam.StartPos+1]:='9';
+  ResultParam.L.CodeUnits:=2;
+  if ResultParam.P.CodeUnitPos<>OnlyGetLength then begin
+    Result[ResultParam.P.CodeUnitPos]:='9';
+    Result[ResultParam.P.CodeUnitPos+1]:='9';
   end;
 end;
 
-constructor TPointer2StrProcessor.vcreate(const Source:TTokenizerString;
-                                          const Token :TSubStr;
-                                          const Operands :TSubStr;
-                                          const ParsedOperands :specialize TAbstractParsedText<TTokenizerString,pointer>;
+constructor TPointer2StrProcessor.vcreate(const Source:TUnicodeStringManipulator.TStringType;
+                                          const Token :TUnicodeStringManipulator.TCharRange;
+                                          const Operands :TUnicodeStringManipulator.TCharRange;
+                                          const ParsedOperands :specialize TAbstractParsedText<TUnicodeStringManipulator.TStringType,pointer>;
                                           var Data:{TEntsTypeFilter}pointer);
 begin
 
 end;
 
-procedure TPointer2StrProcessor.GetResult(const Source:TTokenizerString;
-                                          const Token :TSubStr;
-                                          const Operands :TSubStr;
-                                          const ParsedOperands :specialize TAbstractParsedText<TTokenizerString,pointer>;
-                                          var Result:TTokenizerString;
-                                          var ResultParam:TSubStr;
+procedure TPointer2StrProcessor.GetResult(const Source:TUnicodeStringManipulator.TStringType;
+                                          const Token :TUnicodeStringManipulator.TCharRange;
+                                          const Operands :TUnicodeStringManipulator.TCharRange;
+                                          const ParsedOperands :specialize TAbstractParsedText<TUnicodeStringManipulator.TStringType,pointer>;
+                                          var Result:TUnicodeStringManipulator.TStringType;
+                                          var ResultParam:TUnicodeStringManipulator.TCharRange;
                                           var data:pointer);
 begin
-  ResultParam.Length:=2;
-  if ResultParam.StartPos<>OnlyGetLength then begin
-    Result[ResultParam.StartPos]:='0';
-    Result[ResultParam.StartPos+1]:='0';
+  ResultParam.L.CodeUnits:=2;
+  if ResultParam.P.CodeUnitPos<>OnlyGetLength then begin
+    Result[ResultParam.P.CodeUnitPos]:='0';
+    Result[ResultParam.P.CodeUnitPos+1]:='0';
   end;
 end;
 

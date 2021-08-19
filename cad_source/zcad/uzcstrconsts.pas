@@ -31,6 +31,7 @@ resourcestring
   rsNameAbsent='Absent Name';
   rsPrefixAbsent='Absent Prefix';
   rsBaseNameAbsent='Absent BaseName';
+  rseGeneralEroror='Error in '#13'"%s"'#13'with msg'#13'"%s"';
 
   rsNotSpecified='Not specified';
   rsInvalidInput='Invalid input';
@@ -217,7 +218,8 @@ resourcestring
   rsMTextEditor='MText editor';
 
 
-  rsdefaultpromot='Command';
+  //rsdefaultpromot='𤭢';
+  rsdefaultpromot='<Команда1/Команда2/Команда3> [Молча𤭢123]';
   rsexprouttext='Expression %s return %s';
 
   rsGDBObjinspWndName='Object inspector';

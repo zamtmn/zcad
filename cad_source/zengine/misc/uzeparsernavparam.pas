@@ -21,22 +21,32 @@ type
     ColumnCount:integer;
     PExtTreeParam:PTExtTreeParam;
   end;
-  TParserNavParamString=AnsiString;
-  TParserNavParamChar=AnsiChar;
-  TParserNavParam=TGZParser<TParserNavParamString,TParserNavParamChar,TNavParamData,TCharToOptChar<AnsiChar>>;
+  //TParserNavParamString=AnsiString;
+  //TParserNavParamChar=AnsiChar;
+  //TParserNavParam=TGZParser<TRawByteStringManipulator,TParserNavParamString,TParserNavParamChar,TRawByteStringManipulator.TCharIndex,TRawByteStringManipulator.TCharLength,TRawByteStringManipulator.TCharRange,TNavParamData,TCharToOptChar<AnsiChar>>;
+  TParserNavParam=TGZParser<TRawByteStringManipulator,
+                                    TRawByteStringManipulator.TStringType,
+                                    TRawByteStringManipulator.TCharType,
+                                    TCodeUnitPosition,
+                                    TRawByteStringManipulator.TCharPosition,
+                                    TRawByteStringManipulator.TCharLength,
+                                    TRawByteStringManipulator.TCharInterval,
+                                    TRawByteStringManipulator.TCharRange,
+                                    TNavParamData,
+                                    TCharToOptChar<TRawByteStringManipulator.TCharType>>;
 
   TSetColumnParams=class(TParserNavParam.TParserTokenizer.TStaticProcessor)
-    class procedure StaticDoit(const Source:TParserNavParamString;
-                               const Token :TSubStr;
-                               const Operands :TSubStr;
-                               const ParsedOperands :TAbstractParsedText<TParserNavParamString,TNavParamData>;
+    class procedure StaticDoit(const Source:TRawByteStringManipulator.TStringType;
+                               const Token :TRawByteStringManipulator.TCharRange;
+                               const Operands :TRawByteStringManipulator.TCharRange;
+                               const ParsedOperands :TAbstractParsedText<TRawByteStringManipulator.TStringType,TNavParamData>;
                                var Data:TNavParamData);override;
   end;
   TSetColumnsCount=class(TParserNavParam.TParserTokenizer.TStaticProcessor)
-    class procedure StaticDoit(const Source:TParserNavParamString;
-                               const Token :TSubStr;
-                               const Operands :TSubStr;
-                               const ParsedOperands :TAbstractParsedText<TParserNavParamString,TNavParamData>;
+    class procedure StaticDoit(const Source:TRawByteStringManipulator.TStringType;
+                               const Token :TRawByteStringManipulator.TCharRange;
+                               const Operands :TRawByteStringManipulator.TCharRange;
+                               const ParsedOperands :TAbstractParsedText<TRawByteStringManipulator.TStringType,TNavParamData>;
                                var Data:TNavParamData);override;
   end;
 
@@ -49,39 +59,39 @@ implementation
 var
   BracketTockenId:ParserNavParam.TParserTokenizer.TTokenId;
 
-class procedure TSetColumnsCount.StaticDoit(const Source:TParserNavParamString;
-                                            const Token :TSubStr;
-                                            const Operands :TSubStr;
-                                            const ParsedOperands :TAbstractParsedText<TParserNavParamString,TNavParamData>;
+class procedure TSetColumnsCount.StaticDoit(const Source:TRawByteStringManipulator.TStringType;
+                                            const Token :TRawByteStringManipulator.TCharRange;
+                                            const Operands :TRawByteStringManipulator.TCharRange;
+                                            const ParsedOperands :TAbstractParsedText<TRawByteStringManipulator.TStringType,TNavParamData>;
                                             var Data:TNavParamData);
 var
-  op1s,op2s:TParserNavParamString;
+  op1s,op2s:TRawByteStringManipulator.TStringType;
   op1i,op2i,i:integer;
-  ResultParam:TSubStr;
+  ResultParam:TRawByteStringManipulator.TCharRange;
 begin
   if (ParsedOperands<>nil)
   and(ParsedOperands is TParserNavParam.TParsedText)
   and((ParsedOperands as TParserNavParam.TParsedText).Parts.size=2)then begin
 
-    ResultParam.StartPos:=OnlyGetLength;
-    ResultParam.Length:=0;
+    ResultParam.P.CodeUnitPos:=OnlyGetLength;
+    ResultParam.L.CodeUnits:=0;
     TParserNavParam.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserNavParam.TParsedText).Parts.Mutable[0]^,data,op1s,ResultParam);
-    SetLength(op1s,ResultParam.Length);
-    ResultParam.StartPos:=InitialStartPos;
+    SetLength(op1s,ResultParam.L.CodeUnits);
+    ResultParam.P.CodeUnitPos:=InitialStartPos;
     TParserNavParam.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserNavParam.TParsedText).Parts.Mutable[0]^,data,op1s,ResultParam);
     if not TryStrToInt(op1s,op1i) then
-      Raise Exception.CreateFmt(rsRunTimeError,[(ParsedOperands as TParserNavParam.TParsedText).Parts.Mutable[0]^.TextInfo.TokenPos.StartPos]);
+      Raise Exception.CreateFmt(rsRunTimeError,[(ParsedOperands as TParserNavParam.TParsedText).Parts.Mutable[0]^.TextInfo.TokenPos.P.CodeUnitPos]);
     if (op1i<1)and(op1i>5) then
       Raise Exception.CreateFmt(rsWrongColCount,[op1i]);
 
-    ResultParam.StartPos:=OnlyGetLength;
-    ResultParam.Length:=0;
+    ResultParam.P.CodeUnitPos:=OnlyGetLength;
+    ResultParam.L.CodeUnits:=0;
     TParserNavParam.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserNavParam.TParsedText).Parts.Mutable[1]^,data,op2s,ResultParam);
-    SetLength(op2s,ResultParam.Length);
-    ResultParam.StartPos:=InitialStartPos;
+    SetLength(op2s,ResultParam.L.CodeUnits);
+    ResultParam.P.CodeUnitPos:=InitialStartPos;
     TParserNavParam.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserNavParam.TParsedText).Parts.Mutable[1]^,data,op2s,ResultParam);
     if not TryStrToInt(op2s,op2i) then
-      Raise Exception.CreateFmt(rsRunTimeError,[(ParsedOperands as TParserNavParam.TParsedText).Parts.Mutable[1]^.TextInfo.TokenPos.StartPos]);
+      Raise Exception.CreateFmt(rsRunTimeError,[(ParsedOperands as TParserNavParam.TParsedText).Parts.Mutable[1]^.TextInfo.TokenPos.P.CodeUnitPos]);
     if (op2i<0)and(op2i>=op1i) then
       Raise Exception.CreateFmt(rsWrongAutosizeColumn,[op2i]);
 
@@ -96,65 +106,65 @@ begin
       data.NavTree.Header.AutoSizeIndex:=0;
 
   end else
-    Raise Exception.CreateFmt(rsRunTimeError,[Operands.StartPos]);
+    Raise Exception.CreateFmt(rsRunTimeError,[Operands.P.CodeUnitPos]);
 end;
 
 
-class procedure TSetColumnParams.StaticDoit(const Source:TParserNavParamString;
-                           const Token :TSubStr;
-                           const Operands :TSubStr;
-                           const ParsedOperands :TAbstractParsedText<TParserNavParamString,TNavParamData>;
+class procedure TSetColumnParams.StaticDoit(const Source:TRawByteStringManipulator.TStringType;
+                           const Token :TRawByteStringManipulator.TCharRange;
+                           const Operands :TRawByteStringManipulator.TCharRange;
+                           const ParsedOperands :TAbstractParsedText<TRawByteStringManipulator.TStringType,TNavParamData>;
                            var Data:TNavParamData);
 var
-  op1,op2,op3,op4,op5:TParserNavParamString;
+  op1,op2,op3,op4,op5:TRawByteStringManipulator.TStringType;
   op1i,op5i:integer;
-  ResultParam:TSubStr;
+  ResultParam:TRawByteStringManipulator.TCharRange;
   clmn:TVirtualTreeColumn;
 begin
   if (ParsedOperands<>nil)
   and(ParsedOperands is TParserNavParam.TParsedText)
   and((ParsedOperands as TParserNavParam.TParsedText).Parts.size=5)then begin
 
-    ResultParam.StartPos:=OnlyGetLength;
-    ResultParam.Length:=0;
+    ResultParam.P.CodeUnitPos:=OnlyGetLength;
+    ResultParam.L.CodeUnits:=0;
     TParserNavParam.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserNavParam.TParsedText).Parts.Mutable[0]^,data,op1,ResultParam);
-    SetLength(op1,ResultParam.Length);
-    ResultParam.StartPos:=InitialStartPos;
+    SetLength(op1,ResultParam.L.CodeUnits);
+    ResultParam.P.CodeUnitPos:=InitialStartPos;
     TParserNavParam.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserNavParam.TParsedText).Parts.Mutable[0]^,data,op1,ResultParam);
     if not TryStrToInt(op1,op1i) then
-      Raise Exception.CreateFmt(rsRunTimeError,[(ParsedOperands as TParserNavParam.TParsedText).Parts.Mutable[0]^.TextInfo.TokenPos.StartPos]);
+      Raise Exception.CreateFmt(rsRunTimeError,[(ParsedOperands as TParserNavParam.TParsedText).Parts.Mutable[0]^.TextInfo.TokenPos.P.CodeUnitPos]);
     if (op1i<0)or(op1i>=data.ColumnCount) then
       Raise Exception.CreateFmt(rsWrongColIndex,[op1i,data.ColumnCount]);
 
-    ResultParam.StartPos:=OnlyGetLength;
-    ResultParam.Length:=0;
+    ResultParam.P.CodeUnitPos:=OnlyGetLength;
+    ResultParam.L.CodeUnits:=0;
     TParserNavParam.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserNavParam.TParsedText).Parts.Mutable[1]^,data,op2,ResultParam);
-    SetLength(op2,ResultParam.Length);
-    ResultParam.StartPos:=InitialStartPos;
+    SetLength(op2,ResultParam.L.CodeUnits);
+    ResultParam.P.CodeUnitPos:=InitialStartPos;
     TParserNavParam.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserNavParam.TParsedText).Parts.Mutable[1]^,data,op2,ResultParam);
 
-    ResultParam.StartPos:=OnlyGetLength;
-    ResultParam.Length:=0;
+    ResultParam.P.CodeUnitPos:=OnlyGetLength;
+    ResultParam.L.CodeUnits:=0;
     TParserNavParam.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserNavParam.TParsedText).Parts.Mutable[2]^,data,op3,ResultParam);
-    SetLength(op3,ResultParam.Length);
-    ResultParam.StartPos:=InitialStartPos;
+    SetLength(op3,ResultParam.L.CodeUnits);
+    ResultParam.P.CodeUnitPos:=InitialStartPos;
     TParserNavParam.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserNavParam.TParsedText).Parts.Mutable[2]^,data,op3,ResultParam);
 
-    ResultParam.StartPos:=OnlyGetLength;
-    ResultParam.Length:=0;
+    ResultParam.P.CodeUnitPos:=OnlyGetLength;
+    ResultParam.L.CodeUnits:=0;
     TParserNavParam.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserNavParam.TParsedText).Parts.Mutable[3]^,data,op4,ResultParam);
-    SetLength(op4,ResultParam.Length);
-    ResultParam.StartPos:=InitialStartPos;
+    SetLength(op4,ResultParam.L.CodeUnits);
+    ResultParam.P.CodeUnitPos:=InitialStartPos;
     TParserNavParam.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserNavParam.TParsedText).Parts.Mutable[3]^,data,op4,ResultParam);
 
-    ResultParam.StartPos:=OnlyGetLength;
-    ResultParam.Length:=0;
+    ResultParam.P.CodeUnitPos:=OnlyGetLength;
+    ResultParam.L.CodeUnits:=0;
     TParserNavParam.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserNavParam.TParsedText).Parts.Mutable[4]^,data,op5,ResultParam);
-    SetLength(op5,ResultParam.Length);
-    ResultParam.StartPos:=InitialStartPos;
+    SetLength(op5,ResultParam.L.CodeUnits);
+    ResultParam.P.CodeUnitPos:=InitialStartPos;
     TParserNavParam.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserNavParam.TParsedText).Parts.Mutable[4]^,data,op5,ResultParam);
     if not TryStrToInt(op5,op5i) then
-      Raise Exception.CreateFmt(rsRunTimeError,[(ParsedOperands as TParserNavParam.TParsedText).Parts.Mutable[4]^.TextInfo.TokenPos.StartPos]);
+      Raise Exception.CreateFmt(rsRunTimeError,[(ParsedOperands as TParserNavParam.TParsedText).Parts.Mutable[4]^.TextInfo.TokenPos.P.CodeUnitPos]);
 
     data.NavTree.Header.Columns[op1i].Width:=50;
     data.NavTree.Header.Columns[op1i].Text:=op2;
@@ -163,7 +173,7 @@ begin
     data.PExtTreeParam^.ExtColumnsParams[op1i].SaveWidthVar:=op4;
 
   end else
-    Raise Exception.CreateFmt(rsRunTimeError,[Operands.StartPos]);
+    Raise Exception.CreateFmt(rsRunTimeError,[Operands.P.CodeUnitPos]);
 end;
 
 

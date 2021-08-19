@@ -24,8 +24,8 @@ uses uzbgeomtypes,varmandef,uzbtypesbase,uzctnrvectorgdbstring,uzccommandsmanage
      UGDBTracePropArray,uzglviewareadata,languade,Varman,uzcinterface,uzcstrconsts,
      strmy,LCLProc,uzbmemman,uzccommandsabstract;
 const
-     commandsuffix='>';
-     commandprefix=' ';
+     commandsuffix='1';
+     commandprefix='2';
 type
   TCLineMode=(CLCOMMANDREDY,CLCOMMANDRUN);
 var

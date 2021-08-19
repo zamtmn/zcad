@@ -326,15 +326,23 @@ var
 begin
   NavTree.BeginUpdate;
   params:=ParserNavParam.GetTokens(bp.TreeProperties);
-  data.NavTree:=NavTree;
-  data.ColumnCount:=0;
-  data.PExtTreeParam:=@ExtTreeParam;
-  NavTree.Header.Columns.Clear;
-  NavTree.Header.AutoSizeIndex:=0;
-  if assigned(params) then
-    params.Doit(data);
-  params.free;
-  NavTree.EndUpdate;
+  try
+    data.NavTree:=NavTree;
+    data.ColumnCount:=0;
+    data.PExtTreeParam:=@ExtTreeParam;
+    NavTree.Header.Columns.Clear;
+    NavTree.Header.AutoSizeIndex:=0;
+    try
+      if assigned(params) then
+        params.Doit(data);
+    except
+      on E: Exception do
+        ZCMsgCallBackInterface.TextMessage(format(rseGeneralEroror,['TNavigatorDevices.SetTreeProp',E.Message]),TMWOShowError);
+    end;
+  finally
+    params.free;
+    NavTree.EndUpdate;
+  end;
 end;
 
 procedure TNavigatorDevices.VTFocuschanged(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex);

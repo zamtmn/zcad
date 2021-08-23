@@ -121,6 +121,8 @@
 	   <ZTreeCommand Command="Insert(EL_VL_REPORT3_1)" Img='EL_VL_REPORT3_1_300' Caption='Прилагаемые документы 1'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_REPORT3_2)" Img='DEVICE_EL_VL_REPORT3_2_300' Caption='Прилагаемые документы 2'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_STAMP4)" Img='DEVICE_EL_VL_STAMP4_300' Caption='Записка ГИПа'/>
+	   <ZTreeCommand Command="Insert(EL_VL_REPORT7_1)" Img='EL_VL_REPORT7_1_300' Caption='Ведомость нагрузок 1'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_REPORT7_2)" Img='DEVICE_EL_VL_REPORT7_2_300' Caption='Ведомость нагрузок 2'/>
 	   <ZTreeCommand Command="Insert(EL_VL_REPORT1_1)" Img='EL_VL_REPORT1_1_300' Caption='Кабельный журнал 1'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_REPORT1_2)" Img='DEVICE_EL_VL_REPORT1_2_300' Caption='Кабельный журнал 2'/>
 	   <ZTreeCommand Command="Insert(EL_VL_REPORT2_1)" Img='EL_VL_REPORT2_1_300' Caption='Спецификация 1'/>

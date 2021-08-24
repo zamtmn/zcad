@@ -26,6 +26,8 @@ uses Generics.Collections,
      sysutils,uzbhandles,uzbsets;
 resourcestring
   rsRunTimeError='uzeparser: Execution error (%s)';
+  rsProcessorClassNilError='uzeparser: ProcessorClass=nil (%s)';
+  rsWrongParametersCount='uzeparser: Wrong parameters count (%s)';
   rsStringManipulatorAddrByOffset='Offset %d';
 const MaxCashedValues={4}5;
       MaxIncludedChars=3;
@@ -139,6 +141,7 @@ type
 
   end;
   TRawByteStringManipulator=TStringManipulator<UTF8String,AnsiChar,GTAdditionalDataManipulator<UTF8String,AnsiChar>,GTAdditionalDataManipulator<UTF8String,AnsiChar>.TADDPosition,GTAdditionalDataManipulator<UTF8String,AnsiChar>.TAddLength>;
+  TUTF8StringManipulator=TStringManipulator<UTF8String,AnsiChar,GTAdditionalDataManipulator<UTF8String,AnsiChar>,GTAdditionalDataManipulator<UTF8String,AnsiChar>.TADDPosition,GTAdditionalDataManipulator<UTF8String,AnsiChar>.TAddLength>;
   TUnicodeStringManipulator=TStringManipulator<UnicodeString,UnicodeChar,GTAdditionalDataManipulator<UnicodeString,UnicodeChar>,GTAdditionalDataManipulator<UnicodeString,UnicodeChar>.TADDPosition,GTAdditionalDataManipulator<UnicodeString,UnicodeChar>.TAddLength>;
   //TtestStringManipulator=TStringManipulator<Integer,AnsiChar,TZPIndex>;
 
@@ -178,23 +181,27 @@ type
     end;
 
     TStrProcessor<GManipulator,GString,GSymbol,GManipulatorCharRange,GDataType>=class
+      type
+        TManipulator=GManipulator;
       class procedure StaticDoit(const Source:GString;
                                  const Token :GManipulatorCharRange;
                                  const Operands :GManipulatorCharRange;
                                  const ParsedOperands:TAbstractParsedText<GString,GDataType>;
+                                 InsideBracketParser:TObject;
                                  var Data:GDataType);virtual;abstract;
       class procedure StaticGetResult(const Source:GString;
                                       const Token :GManipulatorCharRange;
                                       const Operands :GManipulatorCharRange;
                                       const ParsedOperands:TAbstractParsedText<GString,GDataType>;
+                                      InsideBracketParser:TObject;
                                       var Result:GString;
                                       var ResultParam:GManipulatorCharRange;
-                                      //var NextSymbolPos:integer;
                                       var data:GDataType);virtual;abstract;
       procedure GetResult(const Source:GString;
                           const Token :GManipulatorCharRange;
                           const Operands :GManipulatorCharRange;
                           const ParsedOperands:TAbstractParsedText<GString,GDataType>;
+                          InsideBracketParser:TObject;
                           var Result:GString;
                           var ResultParam:GManipulatorCharRange;
                           var data:GDataType);virtual;abstract;
@@ -202,6 +209,7 @@ type
                           const Token :GManipulatorCharRange;
                           const Operands :GManipulatorCharRange;
                           const ParsedOperands:TAbstractParsedText<GString,GDataType>;
+                          InsideBracketParser:TObject;
                           var Data:GDataType);virtual;abstract;
       class function GetProcessorType:TProcessorType;virtual;abstract;
     end;
@@ -211,6 +219,7 @@ type
     TStaticStrProcessorString<GManipulator,GString,GSymbol,GManipulatorCharRange,GDataType>=class(TStaticStrProcessor<GManipulator,GString,GSymbol,GManipulatorCharRange,GDataType>)
       class procedure StaticGetResult(const Source:GString;const Token :GManipulatorCharRange;const Operands :GManipulatorCharRange;
                                       const ParsedOperands:TAbstractParsedText<GString,GDataType>;
+                                      InsideBracketParser:TObject;
                                       var Result:GString;
                                       var ResultParam:GManipulatorCharRange;
                                       var data:GDataType);override;
@@ -220,6 +229,7 @@ type
                                       const Token :GManipulatorCharRange;
                                       const Operands :GManipulatorCharRange;
                                       const ParsedOperands:TAbstractParsedText<GString,GDataType>;
+                                      InsideBracketParser:TObject;
                                       var Result:GString;
                                       var ResultParam:GManipulatorCharRange;
                                       var data:GDataType);override;
@@ -231,14 +241,21 @@ type
 
   TGZTokenizer<GManipulator,GTokenizerString,GTokenizerSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GTokenizerSymbolToOptChar,GTokenizerDataType>=class
   type
+    TTokenId=integer;
+    TIncludedChars=array [1..MaxIncludedChars+1] of TChars;
+    TTokenTextInfo=record
+      TokenId:TTokenId;
+      TokenPos:GManipulatorCharRange;
+      OperandsPos:GManipulatorCharRange;
+      NextPos:GManipulatorCharIndex;
+    end;
+
     TProcessor=TStrProcessor<GManipulator,GTokenizerString,GTokenizerSymbol,GManipulatorCharRange,GTokenizerDataType>;
     TStaticProcessor=TStaticStrProcessor<GManipulator,GTokenizerString,GTokenizerSymbol,GManipulatorCharRange,GTokenizerDataType>;
     TDynamicProcessor=TDynamicStrProcessor<GManipulator,GTokenizerString,GTokenizerSymbol,GManipulatorCharRange,GTokenizerDataType>;
     TFakeStrProcessor=TGFakeStrProcessor<GManipulator,GTokenizerString,GTokenizerSymbol,GManipulatorCharRange,GTokenizerDataType>;
     TStringProcessor=TStaticStrProcessorString<GManipulator,GTokenizerString,GTokenizerSymbol,GManipulatorCharRange,GTokenizerDataType>;
     TStrProcessorClass=class of TProcessor;
-
-    TTokenId=integer;
 
     TTokenData=record
       Token:GTokenizerString;
@@ -251,13 +268,11 @@ type
     end;
     TTokenDataVector=TVector<TTokenData>;
 
-    TIncludedChars=array [1..MaxIncludedChars+1] of TChars;
-
-    TTokenTextInfo=record
-      TokenId:TTokenId;
-      TokenPos:GManipulatorCharRange;
-      OperandsPos:GManipulatorCharRange;
-      NextPos:GManipulatorCharIndex;
+    TTextPart=record
+            TextInfo:TTokenTextInfo;
+            TokenInfo:TTokenData;
+            Processor:TProcessor;
+            Operands:TAbstractParsedText<GTokenizerString,GTokenizerDataType>;
     end;
 
     TTokenizerSymbolData=record
@@ -304,14 +319,9 @@ type
 
           //TGeneralParsedText=class;
 
-          TTextPart=record
-            TextInfo:TParserTokenizer.TTokenTextInfo;
-            TokenInfo:TParserTokenizer.TTokenData;
-            Processor:TParserTokenizer.TProcessor;
-            Operands:TAbstractParsedText<GParserString,GDataType>;
-          end;
+          //TGetResultWithPart=procedure (const Src:GParserString;var APart:TTextPart;data:GDataType;var Res:GParserString;var ResultParam:GManipulatorCharRange);
 
-          TTextPartsVector=TVector<TTextPart>;
+          TTextPartsVector=TVector<TParserTokenizer.TTextPart>;
 
           TGeneralParsedText=class(TAbstractParsedText<GParserString,GDataType>)
             Source:GParserString;
@@ -319,8 +329,8 @@ type
             procedure SetOperands;virtual;abstract;
             constructor Create(_Source:GParserString;_Parser:TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>);
             destructor Destroy;override;
-            class procedure DoItWithPart(const Src:GParserString;var APart:TTextPart;var data:GDataType);
-            class procedure GetResultWithPart(const Src:GParserString;var APart:TTextPart;data:GDataType;var Res:GParserString;var ResultParam:GManipulatorCharRange);
+            class procedure DoItWithPart(const Src:GParserString;var APart:TParserTokenizer.TTextPart;var data:GDataType);
+            class procedure GetResultWithPart(const Src:GParserString;var APart:TParserTokenizer.TTextPart;data:GDataType;var Res:GParserString;var ResultParam:GManipulatorCharRange);
           end;
 
           TParsedTextWithoutTokens=class(TGeneralParsedText)
@@ -329,7 +339,7 @@ type
           end;
 
           TParsedTextWithOneToken=class(TGeneralParsedText)
-            Part:TTextPart;
+            Part:TParserTokenizer.TTextPart;
             function GetResult(var data:GDataType):GParserString;override;
             procedure Doit(var data:GDataType);override;
             constructor CreateWithToken(_Source:GParserString;_TokenTextInfo:TParserTokenizer.TTokenTextInfo;Operands:TGeneralParsedText;_Parser:TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>);
@@ -752,6 +762,7 @@ end;
 
 class procedure TStaticStrProcessorString<GManipulator,GString,GSymbol,GManipulatorCharRange,GDataType>.StaticGetResult(const Source:GString;const Token :GManipulatorCharRange;const Operands :GManipulatorCharRange;
                                   const ParsedOperands:TAbstractParsedText<GString,GDataType>;
+                                  InsideBracketParser:TObject;
                                   var Result:GString;
                                   var ResultParam:GManipulatorCharRange;
                                   var data:GDataType);
@@ -769,6 +780,7 @@ class procedure TGFakeStrProcessor<GManipulator,GString,GSymbol,GManipulatorChar
                                                   const Token :GManipulatorCharRange;
                                                   const Operands :GManipulatorCharRange;
                                                   const ParsedOperands:TAbstractParsedText<GString,GDataType>;
+                                                  InsideBracketParser:TObject;
                                                   var Result:GString;
                                                   var ResultParam:GManipulatorCharRange;
                                                   var data:GDataType);
@@ -818,19 +830,21 @@ begin
     part.Processor.getResult(Source,part.TextInfo.TokenPos,part.TextInfo.OperandsPos,Part.Operands,result,ResultParam,data);
   end;}
 end;
-class procedure TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>.TGeneralParsedText.DoItWithPart(const  Src:GParserString;var APart:TTextPart;var data:GDataType);
+class procedure TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>.TGeneralParsedText.DoItWithPart(const  Src:GParserString;var APart:TParserTokenizer.TTextPart;var data:GDataType);
 begin
-  APart.TokenInfo.ProcessorClass.StaticDoit(Src,APart.TextInfo.TokenPos,APart.TextInfo.OperandsPos,APart.Operands,data);
+  APart.TokenInfo.ProcessorClass.StaticDoit(Src,APart.TextInfo.TokenPos,APart.TextInfo.OperandsPos,APart.Operands,APart.TokenInfo.InsideBracketParser,data);
 end;
 class procedure TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>.
-                TGeneralParsedText.GetResultWithPart(const  Src:GParserString;var APart:TTextPart;data:GDataType;var Res:GParserString;var ResultParam:GManipulatorCharRange);
+                TGeneralParsedText.GetResultWithPart(const  Src:GParserString;var APart:TParserTokenizer.TTextPart;data:GDataType;var Res:GParserString;var ResultParam:GManipulatorCharRange);
 begin
+  if APart.TokenInfo.ProcessorClass=nil then
+    Raise Exception.CreateFmt(rsProcessorClassNilError,[GManipulator.GetHumanReadableAdress(APart.TextInfo.TokenPos.P)]);
   if APart.TokenInfo.ProcessorClass.GetProcessorType=PTStatic then begin
-    APart.TokenInfo.ProcessorClass.staticGetResult(Src,APart.TextInfo.TokenPos,APart.TextInfo.OperandsPos,APart.Operands,Res,ResultParam,data);
+    APart.TokenInfo.ProcessorClass.staticGetResult(Src,APart.TextInfo.TokenPos,APart.TextInfo.OperandsPos,APart.Operands,APart.TokenInfo.InsideBracketParser,Res,ResultParam,data);
   end else begin
     if not Assigned(APart.Processor) then
-      APart.Processor:=APart.TokenInfo.ProcessorClass.vcreate(Src,APart.TextInfo.TokenPos,APart.TextInfo.OperandsPos,APart.Operands,data);
-    APart.Processor.getResult(Src,APart.TextInfo.TokenPos,APart.TextInfo.OperandsPos,APart.Operands,Res,ResultParam,data);
+      APart.Processor:=APart.TokenInfo.ProcessorClass.vcreate(Src,APart.TextInfo.TokenPos,APart.TextInfo.OperandsPos,APart.Operands,APart.TokenInfo.InsideBracketParser,data);
+    APart.Processor.getResult(Src,APart.TextInfo.TokenPos,APart.TextInfo.OperandsPos,APart.Operands,APart.TokenInfo.InsideBracketParser,Res,ResultParam,data);
   end;
   GManipulator.passrange(ResultParam);
 end;
@@ -885,17 +899,17 @@ end;
 procedure TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>.TParsedText.Doit(var data:GDataType);
 var
   i:integer;
-  prt:TTextPart;
+  prt:TParserTokenizer.TTextPart;
 begin
   for i:=0 to Parts.size-1 do begin
     prt:=parts[i];
     if (parts[i].TokenInfo.ProcessorClass<>nil)and(not(TTokenOptions.IsAllPresent(parts[i].TokenInfo.Options,TGOFake))) then begin
       if parts[i].TokenInfo.ProcessorClass.GetProcessorType=PTStatic then begin
-        parts[i].TokenInfo.ProcessorClass.StaticDoit(Source,parts[i].TextInfo.TokenPos,parts[i].TextInfo.OperandsPos,parts[i].Operands,data);
+        parts[i].TokenInfo.ProcessorClass.StaticDoit(Source,parts[i].TextInfo.TokenPos,parts[i].TextInfo.OperandsPos,parts[i].Operands,parts[i].TokenInfo.InsideBracketParser,data);
       end else begin
         if not Assigned(parts[i].Processor) then
-          parts.Mutable[i]^.Processor:=parts[i].TokenInfo.ProcessorClass.vcreate(Source,parts[i].TextInfo.TokenPos,parts[i].TextInfo.OperandsPos,parts[i].Operands,data);
-        parts[i].Processor.StaticDoit(Source,parts[i].TextInfo.TokenPos,parts[i].TextInfo.OperandsPos,parts[i].Operands,data);
+          parts.Mutable[i]^.Processor:=parts[i].TokenInfo.ProcessorClass.vcreate(Source,parts[i].TextInfo.TokenPos,parts[i].TextInfo.OperandsPos,parts[i].Operands,parts[i].TokenInfo.InsideBracketParser,data);
+        parts[i].Processor.StaticDoit(Source,parts[i].TextInfo.TokenPos,parts[i].TextInfo.OperandsPos,parts[i].Operands,parts[i].TokenInfo.InsideBracketParser,data);
       end
     end else begin
       if not TTokenOptions.IsAllPresent(parts[i].TokenInfo.Options,TGOSeparator) then
@@ -942,7 +956,7 @@ end;
 
 procedure TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>.TParsedText.AddToken(_TokenTextInfo:TParserTokenizer.TTokenTextInfo;Operands:TGeneralParsedText);
 var
-  Part:TTextPart;
+  Part:TParserTokenizer.TTextPart;
 begin
   Part.TextInfo:=_TokenTextInfo;
   Part.TokenInfo:=Parser.TokenDataVector[_TokenTextInfo.TokenId] ;

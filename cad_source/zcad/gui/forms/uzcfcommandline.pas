@@ -23,7 +23,7 @@ uses
  uzcguimanager,uzbpaths,Themes,buttons,uzcsysvars,uzcstrconsts,uzbstrproc,
  uzcsysinfo,lclproc,LazUTF8,sysutils, StdCtrls,ExtCtrls,Controls,Classes,
  menus,Forms,fileutil,graphics, uzbtypes, uzbmemman,uzcdrawings,uzccommandsmanager,
- varman,languade,varmandef,
+ varman,varmandef,
  uzegeometry,uzctnrvectorgdbstring,uzcinterface,uzctreenode,uzclog,strmy,
  uzccommandlineutil,uztoolbarsmanager,uzmenusmanager,uzccommandsabstract,gzctnrvectortypes,
  uzcctrlcommandlineprompt;

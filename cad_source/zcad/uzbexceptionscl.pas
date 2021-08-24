@@ -79,17 +79,24 @@ var
   FrameCount: integer;
   Frames: PPointer;
   FrameNumber:Integer;
+  Buf : ShortString;
 begin
-  WriteLn(f,'ExceptAddr:');
+  WriteLn(f,'Stack:');
+  WriteLn(f,'  ExceptAddr:');
   myDumpAddr(ExceptAddr,f);
-  WriteLn(f,'Addr:');
+  WriteLn(f,'  Addr:');
   myDumpAddr(Addr,f);
-  WriteLn(f,'Stack trace:');
+  WriteLn(f,'  Stack trace:');
   myDumpAddr(ExceptAddr,f);
   FrameCount:=_FrameCount;
   Frames:=_Frames;
   for FrameNumber := 0 to FrameCount-1 do
     myDumpAddr(Frames[FrameNumber],f);
+
+  writeln(f,'  ExceptionErrorMessage:');
+  SetLength(Buf,ExceptionErrorMessage(ExceptObject,ExceptAddr,@Buf[1],255));
+  writeln(f,Buf);
+  WriteLn(f,'Stack end!');
 end;
 
 procedure WriteStack(var f:system.text;Obj : TObject; Addr: CodePointer; _FrameCount: Longint; _Frames: PCodePointer);

@@ -33,6 +33,7 @@ type
                                     const Token :TUnicodeStringManipulator.TCharRange;
                                     const Operands :TUnicodeStringManipulator.TCharRange;
                                     const ParsedOperands :specialize TAbstractParsedText<TUnicodeStringManipulator.TStringType,pointer>;
+                                    InsideBracketParser:TObject;
                                     var Result:TUnicodeStringManipulator.TStringType;
                                     var ResultParam:TUnicodeStringManipulator.TCharRange;
                                     var data:pointer);override;
@@ -43,11 +44,13 @@ type
                         const Token :TUnicodeStringManipulator.TCharRange;
                         const Operands :TUnicodeStringManipulator.TCharRange;
                         const ParsedOperands :specialize TAbstractParsedText<TUnicodeStringManipulator.TStringType,pointer>;
+                        InsideBracketParser:TObject;
                         var Data:{TEntsTypeFilter}pointer);override;
     procedure GetResult(const Source:TUnicodeStringManipulator.TStringType;
                         const Token :TUnicodeStringManipulator.TCharRange;
                         const Operands :TUnicodeStringManipulator.TCharRange;
                         const ParsedOperands :specialize TAbstractParsedText<TUnicodeStringManipulator.TStringType,pointer>;
+                        InsideBracketParser:TObject;
                         var Result:TUnicodeStringManipulator.TStringType;
                         var ResultParam:TUnicodeStringManipulator.TCharRange;
                         var data:pointer);override;
@@ -76,6 +79,7 @@ class procedure TNum2StrProcessor.StaticGetResult(const Source:TUnicodeStringMan
                                                   const Token :TUnicodeStringManipulator.TCharRange;
                                 const Operands :TUnicodeStringManipulator.TCharRange;
                                 const ParsedOperands :specialize TAbstractParsedText<TUnicodeStringManipulator.TStringType,pointer>;
+                                InsideBracketParser:TObject;
                                 var Result:TUnicodeStringManipulator.TStringType;
                                 var ResultParam:TUnicodeStringManipulator.TCharRange;
                                 var data:pointer);
@@ -91,6 +95,7 @@ constructor TPointer2StrProcessor.vcreate(const Source:TUnicodeStringManipulator
                                           const Token :TUnicodeStringManipulator.TCharRange;
                                           const Operands :TUnicodeStringManipulator.TCharRange;
                                           const ParsedOperands :specialize TAbstractParsedText<TUnicodeStringManipulator.TStringType,pointer>;
+                                          InsideBracketParser:TObject;
                                           var Data:{TEntsTypeFilter}pointer);
 begin
 
@@ -100,6 +105,7 @@ procedure TPointer2StrProcessor.GetResult(const Source:TUnicodeStringManipulator
                                           const Token :TUnicodeStringManipulator.TCharRange;
                                           const Operands :TUnicodeStringManipulator.TCharRange;
                                           const ParsedOperands :specialize TAbstractParsedText<TUnicodeStringManipulator.TStringType,pointer>;
+                                          InsideBracketParser:TObject;
                                           var Result:TUnicodeStringManipulator.TStringType;
                                           var ResultParam:TUnicodeStringManipulator.TCharRange;
                                           var data:pointer);

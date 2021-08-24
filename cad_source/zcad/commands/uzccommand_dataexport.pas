@@ -76,6 +76,7 @@ type
                                const Token :TRawByteStringManipulator.TCharRange;
                                const Operands :TRawByteStringManipulator.TCharRange;
                                const ParsedOperands :TAbstractParsedText<TRawByteStringManipulator.TStringType,TDataExport>;
+                               InsideBracketParser:TObject;
                                var Data:TDataExport);override;
   end;
   TGetEntParam=class(TExporterParser.TParserTokenizer.TDynamicProcessor)
@@ -85,12 +86,14 @@ type
                             const Token :TRawByteStringManipulator.TCharRange;
                             const Operands :TRawByteStringManipulator.TCharRange;
                             const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TDataExport>;
+                            InsideBracketParser:TObject;
                             var Data:TDataExport);override;
     destructor Destroy;override;
     procedure GetResult(const Source:TRawByteStringManipulator.TStringType;
                         const Token :TRawByteStringManipulator.TCharRange;
                         const Operands :TRawByteStringManipulator.TCharRange;
                         const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TDataExport>;
+                        InsideBracketParser:TObject;
                         var Result:TRawByteStringManipulator.TStringType;
                         var ResultParam:TRawByteStringManipulator.TCharRange;
                         var data:TDataExport);override;
@@ -102,12 +105,14 @@ type
                             const Token :TRawByteStringManipulator.TCharRange;
                             const Operands :TRawByteStringManipulator.TCharRange;
                             const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TDataExport>;
+                            InsideBracketParser:TObject;
                             var Data:TDataExport);override;
     destructor Destroy;override;
     procedure GetResult(const Source:TRawByteStringManipulator.TStringType;
                         const Token :TRawByteStringManipulator.TCharRange;
                         const Operands :TRawByteStringManipulator.TCharRange;
                         const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TDataExport>;
+                        InsideBracketParser:TObject;
                         var Result:TRawByteStringManipulator.TStringType;
                         var ResultParam:TRawByteStringManipulator.TCharRange;
                         var data:TDataExport);override;
@@ -117,6 +122,7 @@ type
                                     const Token :TRawByteStringManipulator.TCharRange;
                                     const Operands :TRawByteStringManipulator.TCharRange;
                                     const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TDataExport>;
+                                    InsideBracketParser:TObject;
                                     var Result:TRawByteStringManipulator.TStringType;
                                     var ResultParam:TRawByteStringManipulator.TCharRange;
                                     //var NextSymbolPos:integer;
@@ -128,6 +134,7 @@ type
                                const Token :TRawByteStringManipulator.TCharRange;
                                const Operands :TRawByteStringManipulator.TCharRange;
                                const ParsedOperands :TAbstractParsedText<TRawByteStringManipulator.TStringType,TDataExport>;
+                               InsideBracketParser:TObject;
                                var Data:TDataExport);override;
   end;
 
@@ -142,6 +149,7 @@ class procedure TDoIf.StaticDoit(const Source:TRawByteStringManipulator.TStringT
                              const Token :TRawByteStringManipulator.TCharRange;
                              const Operands :TRawByteStringManipulator.TCharRange;
                              const ParsedOperands :TAbstractParsedText<TRawByteStringManipulator.TStringType,TDataExport>;
+                             InsideBracketParser:TObject;
                              var Data:TDataExport);
 var
   op1:TRawByteStringManipulator.TStringType;
@@ -170,6 +178,7 @@ class procedure TSameMask.StaticGetResult(const Source:TRawByteStringManipulator
                                           const Token :TRawByteStringManipulator.TCharRange;
                                           const Operands :TRawByteStringManipulator.TCharRange;
                                           const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TDataExport>;
+                                          InsideBracketParser:TObject;
                                           var Result:TRawByteStringManipulator.TStringType;
                                           var ResultParam:TRawByteStringManipulator.TCharRange;
                                           //var NextSymbolPos:integer;
@@ -215,6 +224,7 @@ class procedure TExport.StaticDoit(const Source:TRawByteStringManipulator.TStrin
                                const Token :TRawByteStringManipulator.TCharRange;
                                const Operands :TRawByteStringManipulator.TCharRange;
                                const ParsedOperands :TAbstractParsedText<TRawByteStringManipulator.TStringType,TDataExport>;
+                               InsideBracketParser:TObject;
                                var Data:TDataExport);
 var
   op1,op2:TRawByteStringManipulator.TStringType;
@@ -260,6 +270,7 @@ procedure TGetEntParam.GetResult(const Source:TRawByteStringManipulator.TStringT
                     const Token :TRawByteStringManipulator.TCharRange;
                     const Operands :TRawByteStringManipulator.TCharRange;
                     const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TDataExport>;
+                    InsideBracketParser:TObject;
                     var Result:TRawByteStringManipulator.TStringType;
                     var ResultParam:TRawByteStringManipulator.TCharRange;
                     var data:TDataExport);
@@ -298,6 +309,7 @@ constructor TGetEntParam.vcreate(const Source:TRawByteStringManipulator.TStringT
                         const Token :TRawByteStringManipulator.TCharRange;
                         const Operands :TRawByteStringManipulator.TCharRange;
                         const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TDataExport>;
+                        InsideBracketParser:TObject;
                         var Data:TDataExport);
 var
   propertyname:string;
@@ -324,6 +336,7 @@ procedure TGetEntVariable.GetResult(const Source:TRawByteStringManipulator.TStri
                     const Token :TRawByteStringManipulator.TCharRange;
                     const Operands :TRawByteStringManipulator.TCharRange;
                     const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TDataExport>;
+                    InsideBracketParser:TObject;
                     var Result:TRawByteStringManipulator.TStringType;
                     var ResultParam:TRawByteStringManipulator.TCharRange;
                     var data:TDataExport);
@@ -348,6 +361,7 @@ constructor TGetEntVariable.vcreate(const Source:TRawByteStringManipulator.TStri
                         const Token :TRawByteStringManipulator.TCharRange;
                         const Operands :TRawByteStringManipulator.TCharRange;
                         const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TDataExport>;
+                        InsideBracketParser:TObject;
                         var Data:TDataExport);
 begin
   variablename:=ParsedOperands.GetResult(Data);

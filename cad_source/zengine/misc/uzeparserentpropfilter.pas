@@ -34,6 +34,7 @@ type
                                const Token :TRawByteStringManipulator.TCharRange;
                                const Operands :TRawByteStringManipulator.TCharRange;
                                const ParsedOperands :TAbstractParsedText<TRawByteStringManipulator.TStringType,TPropFilterData>;
+                               InsideBracketParser:TObject;
                                var Data:TPropFilterData);override;
   end;
 
@@ -42,6 +43,7 @@ type
                                const Token :TRawByteStringManipulator.TCharRange;
                                const Operands :TRawByteStringManipulator.TCharRange;
                                const ParsedOperands :TAbstractParsedText<TRawByteStringManipulator.TStringType,TPropFilterData>;
+                               InsideBracketParser:TObject;
                                var Data:TPropFilterData);override;
   end;
 
@@ -51,6 +53,7 @@ type
                                     const Token :TRawByteStringManipulator.TCharRange;
                                     const Operands :TRawByteStringManipulator.TCharRange;
                                     const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TPropFilterData>;
+                                    InsideBracketParser:TObject;
                                     var Result:TRawByteStringManipulator.TStringType;
                                     var ResultParam:TRawByteStringManipulator.TCharRange;
                                     //var NextSymbolPos:integer;
@@ -62,6 +65,7 @@ type
                                     const Token :TRawByteStringManipulator.TCharRange;
                                     const Operands :TRawByteStringManipulator.TCharRange;
                                     const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TPropFilterData>;
+                                    InsideBracketParser:TObject;
                                     var Result:TRawByteStringManipulator.TStringType;
                                     var ResultParam:TRawByteStringManipulator.TCharRange;
                                     //var NextSymbolPos:integer;
@@ -77,12 +81,14 @@ type
                             const Token :TRawByteStringManipulator.TCharRange;
                             const Operands :TRawByteStringManipulator.TCharRange;
                             const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TPropFilterData>;
+                            InsideBracketParser:TObject;
                             var Data:TPropFilterData);override;
     destructor Destroy;override;
     procedure GetResult(const Source:TRawByteStringManipulator.TStringType;
                         const Token :TRawByteStringManipulator.TCharRange;
                         const Operands :TRawByteStringManipulator.TCharRange;
                         const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TPropFilterData>;
+                        InsideBracketParser:TObject;
                         var Result:TRawByteStringManipulator.TStringType;
                         var ResultParam:TRawByteStringManipulator.TCharRange;
                         var data:TPropFilterData);override;
@@ -100,6 +106,7 @@ class procedure TIncludeIfMask.StaticDoit(const Source:TRawByteStringManipulator
                            const Token :TRawByteStringManipulator.TCharRange;
                            const Operands :TRawByteStringManipulator.TCharRange;
                            const ParsedOperands :TAbstractParsedText<TRawByteStringManipulator.TStringType,TPropFilterData>;
+                           InsideBracketParser:TObject;
                            var Data:TPropFilterData);
 var
   op1,op2:TRawByteStringManipulator.TStringType;
@@ -138,6 +145,7 @@ class procedure TIncludeIf.StaticDoit(const Source:TRawByteStringManipulator.TSt
                                       const Token :TRawByteStringManipulator.TCharRange;
                                       const Operands :TRawByteStringManipulator.TCharRange;
                                       const ParsedOperands :TAbstractParsedText<TRawByteStringManipulator.TStringType,TPropFilterData>;
+                                      InsideBracketParser:TObject;
                                       var Data:TPropFilterData);
 var
   op1:TRawByteStringManipulator.TStringType;
@@ -160,6 +168,7 @@ class procedure TSameMask.StaticGetResult(const Source:TRawByteStringManipulator
                                           const Token :TRawByteStringManipulator.TCharRange;
                                           const Operands :TRawByteStringManipulator.TCharRange;
                                           const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TPropFilterData>;
+                                          InsideBracketParser:TObject;
                                           var Result:TRawByteStringManipulator.TStringType;
                                           var ResultParam:TRawByteStringManipulator.TCharRange;
                                           //var NextSymbolPos:integer;
@@ -206,6 +215,7 @@ class procedure TOr.StaticGetResult(const Source:TRawByteStringManipulator.TStri
                                   const Token :TRawByteStringManipulator.TCharRange;
                                   const Operands :TRawByteStringManipulator.TCharRange;
                                   const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TPropFilterData>;
+                                  InsideBracketParser:TObject;
                                   var Result:TRawByteStringManipulator.TStringType;
                                   var ResultParam:TRawByteStringManipulator.TCharRange;
                                   //var NextSymbolPos:integer;
@@ -252,6 +262,7 @@ procedure TGetEntParam.GetResult(const Source:TRawByteStringManipulator.TStringT
                     const Token :TRawByteStringManipulator.TCharRange;
                     const Operands :TRawByteStringManipulator.TCharRange;
                     const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TPropFilterData>;
+                    InsideBracketParser:TObject;
                     var Result:TRawByteStringManipulator.TStringType;
                     var ResultParam:TRawByteStringManipulator.TCharRange;
                     var data:TPropFilterData);
@@ -290,6 +301,7 @@ constructor TGetEntParam.vcreate(const Source:TRawByteStringManipulator.TStringT
                         const Token :TRawByteStringManipulator.TCharRange;
                         const Operands :TRawByteStringManipulator.TCharRange;
                         const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TPropFilterData>;
+                        InsideBracketParser:TObject;
                         var Data:TPropFilterData);
 var
   propertyname:string;

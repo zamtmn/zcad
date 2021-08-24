@@ -31,6 +31,7 @@ type
                         const Token :TRawByteStringManipulator.TCharRange;
                         const Operands :TRawByteStringManipulator.TCharRange;
                         const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TEntsTypeFilter>;
+                        InsideBracketParser:TObject;
                           var Data:TEntsTypeFilter);override;
 
     destructor Destroy;override;
@@ -38,6 +39,7 @@ type
                         const Token :TRawByteStringManipulator.TCharRange;
                         const Operands :TRawByteStringManipulator.TCharRange;
                         const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TEntsTypeFilter>;
+                        InsideBracketParser:TObject;
                         var Result:TRawByteStringManipulator.TStringType;
                         var ResultParam:TRawByteStringManipulator.TCharRange;
                         var data:TEntsTypeFilter);override;
@@ -49,6 +51,7 @@ type
                                const Token :TRawByteStringManipulator.TCharRange;
                                const Operands :TRawByteStringManipulator.TCharRange;
                                const ParsedOperands :TAbstractParsedText<TRawByteStringManipulator.TStringType,TEntsTypeFilter>;
+                               InsideBracketParser:TObject;
                                var Data:TEntsTypeFilter);override;
   end;
   TIncludeEntityName=class(TParserEntityTypeFilter.TParserTokenizer.TStaticProcessor)
@@ -56,6 +59,7 @@ type
                                const Token :TRawByteStringManipulator.TCharRange;
                                const Operands :TRawByteStringManipulator.TCharRange;
                                const ParsedOperands :TAbstractParsedText<TRawByteStringManipulator.TStringType,TEntsTypeFilter>;
+                               InsideBracketParser:TObject;
                                var Data:TEntsTypeFilter);override;
   end;
   TExcludeEntityNameMask=class(TParserEntityTypeFilter.TParserTokenizer.TStaticProcessor)
@@ -63,6 +67,7 @@ type
                                const Token :TRawByteStringManipulator.TCharRange;
                                const Operands :TRawByteStringManipulator.TCharRange;
                                const ParsedOperands :TAbstractParsedText<TRawByteStringManipulator.TStringType,TEntsTypeFilter>;
+                               InsideBracketParser:TObject;
                                var Data:TEntsTypeFilter);override;
   end;
   TExcludeEntityName=class(TParserEntityTypeFilter.TParserTokenizer.TStaticProcessor)
@@ -70,6 +75,7 @@ type
                                const Token :TRawByteStringManipulator.TCharRange;
                                const Operands :TRawByteStringManipulator.TCharRange;
                                const ParsedOperands :TAbstractParsedText<TRawByteStringManipulator.TStringType,TEntsTypeFilter>;
+                               InsideBracketParser:TObject;
                                var Data:TEntsTypeFilter);override;
   end;
 
@@ -78,6 +84,7 @@ type
                                const Token :TRawByteStringManipulator.TCharRange;
                                const Operands :TRawByteStringManipulator.TCharRange;
                                const ParsedOperands :TAbstractParsedText<TRawByteStringManipulator.TStringType,TEntsTypeFilter>;
+                               InsideBracketParser:TObject;
                                var Data:TEntsTypeFilter);override;
   end;
 
@@ -93,6 +100,7 @@ procedure TGetEntParam.GetResult(const Source:TRawByteStringManipulator.TStringT
                     const Token :TRawByteStringManipulator.TCharRange;
                     const Operands :TRawByteStringManipulator.TCharRange;
                     const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TEntsTypeFilter>;
+                    InsideBracketParser:TObject;
                     var Result:TRawByteStringManipulator.TStringType;
                     var ResultParam:TRawByteStringManipulator.TCharRange;
                     var data:TEntsTypeFilter);
@@ -122,6 +130,7 @@ constructor TGetEntParam.vcreate(const Source:TRawByteStringManipulator.TStringT
                         const Token :TRawByteStringManipulator.TCharRange;
                         const Operands :TRawByteStringManipulator.TCharRange;
                         const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TEntsTypeFilter>;
+                        InsideBracketParser:TObject;
                         var Data:TEntsTypeFilter);
 var
   propertyname:string;
@@ -144,6 +153,7 @@ class procedure TIncludeEntityNameMask.StaticDoit(const Source:TRawByteStringMan
                            const Token :TRawByteStringManipulator.TCharRange;
                            const Operands :TRawByteStringManipulator.TCharRange;
                            const ParsedOperands :TAbstractParsedText<TRawByteStringManipulator.TStringType,TEntsTypeFilter>;
+                           InsideBracketParser:TObject;
                            var Data:TEntsTypeFilter);
 var
   s:TRawByteStringManipulator.TStringType;
@@ -162,6 +172,7 @@ class procedure TIncludeEntityName.StaticDoit(const Source:TRawByteStringManipul
                            const Token :TRawByteStringManipulator.TCharRange;
                            const Operands :TRawByteStringManipulator.TCharRange;
                            const ParsedOperands :TAbstractParsedText<TRawByteStringManipulator.TStringType,TEntsTypeFilter>;
+                           InsideBracketParser:TObject;
                            var Data:TEntsTypeFilter);
 var
   s:TRawByteStringManipulator.TStringType;
@@ -180,6 +191,7 @@ class procedure TExcludeEntityNameMask.StaticDoit(const Source:TRawByteStringMan
                            const Token :TRawByteStringManipulator.TCharRange;
                            const Operands :TRawByteStringManipulator.TCharRange;
                            const ParsedOperands :TAbstractParsedText<TRawByteStringManipulator.TStringType,TEntsTypeFilter>;
+                           InsideBracketParser:TObject;
                            var Data:TEntsTypeFilter);
 var
   s:TRawByteStringManipulator.TStringType;
@@ -198,6 +210,7 @@ class procedure TExcludeEntityName.StaticDoit(const Source:TRawByteStringManipul
                            const Token :TRawByteStringManipulator.TCharRange;
                            const Operands :TRawByteStringManipulator.TCharRange;
                            const ParsedOperands :TAbstractParsedText<TRawByteStringManipulator.TStringType,TEntsTypeFilter>;
+                           InsideBracketParser:TObject;
                            var Data:TEntsTypeFilter);
 var
   s:TRawByteStringManipulator.TStringType;
@@ -217,6 +230,7 @@ class procedure TEntityFilterExcluder.StaticDoit(const Source:TRawByteStringMani
                            const Token :TRawByteStringManipulator.TCharRange;
                            const Operands :TRawByteStringManipulator.TCharRange;
                            const ParsedOperands :TAbstractParsedText<TRawByteStringManipulator.TStringType,TEntsTypeFilter>;
+                           InsideBracketParser:TObject;
                            var Data:TEntsTypeFilter);
 begin
 end;

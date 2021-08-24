@@ -40,6 +40,7 @@ type
                                const Token :TRawByteStringManipulator.TCharRange;
                                const Operands :TRawByteStringManipulator.TCharRange;
                                const ParsedOperands :TAbstractParsedText<TRawByteStringManipulator.TStringType,TNavParamData>;
+                               InsideBracketParser:TObject;
                                var Data:TNavParamData);override;
   end;
   TSetColumnsCount=class(TParserNavParam.TParserTokenizer.TStaticProcessor)
@@ -47,6 +48,7 @@ type
                                const Token :TRawByteStringManipulator.TCharRange;
                                const Operands :TRawByteStringManipulator.TCharRange;
                                const ParsedOperands :TAbstractParsedText<TRawByteStringManipulator.TStringType,TNavParamData>;
+                               InsideBracketParser:TObject;
                                var Data:TNavParamData);override;
   end;
 
@@ -63,6 +65,7 @@ class procedure TSetColumnsCount.StaticDoit(const Source:TRawByteStringManipulat
                                             const Token :TRawByteStringManipulator.TCharRange;
                                             const Operands :TRawByteStringManipulator.TCharRange;
                                             const ParsedOperands :TAbstractParsedText<TRawByteStringManipulator.TStringType,TNavParamData>;
+                                            InsideBracketParser:TObject;
                                             var Data:TNavParamData);
 var
   op1s,op2s:TRawByteStringManipulator.TStringType;
@@ -114,6 +117,7 @@ class procedure TSetColumnParams.StaticDoit(const Source:TRawByteStringManipulat
                            const Token :TRawByteStringManipulator.TCharRange;
                            const Operands :TRawByteStringManipulator.TCharRange;
                            const ParsedOperands :TAbstractParsedText<TRawByteStringManipulator.TStringType,TNavParamData>;
+                           InsideBracketParser:TObject;
                            var Data:TNavParamData);
 var
   op1,op2,op3,op4,op5:TRawByteStringManipulator.TStringType;

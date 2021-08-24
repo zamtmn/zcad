@@ -24,7 +24,7 @@ interface
 uses
   Classes,StdCtrls,Graphics,Controls,
   LCLType,LCLProc,LCLIntf,Themes,Types,//System.Uitypes,
-  Common.Graphics;
+  Common.Graphics,uzeparsercmdprompt;
 
 type
   TCommandLinePrompt=class(TCustomLabel)

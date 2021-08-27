@@ -23,121 +23,210 @@ interface
 
 uses
   Classes,StdCtrls,Graphics,Controls,
-  LCLType,LCLProc,LCLIntf,Themes,Types,//System.Uitypes,
-  Common.Graphics,uzeparsercmdprompt;
+  LCLIntf,LCLType,
+  Common.Graphics;
+
+const
+  HLOptionFontColor = clBtnText;
+  HLOptionBrushColor = clBtnFace;
+  HLOptionUseBrush = True;
+  HLOptionFontUnderLine=False;
+
+  HLHLOptionFontColor = clRed;
+  HLHLOptionBrushColor = clBtnFace;
+  HLHLOptionUseBrush = True;
+  HLHLOptionFontUnderLine=True;
+
+  HotOptionFontColor = clBtnText;
+  HotOptionBrushColor = clActiveBorder;
+  HotOptionUseBrush = True;
+  HotOptionFontUnderLine=False;
 
 type
+  TCommandLineTextType=(CLTT_Option,   //опция (подсвечивается под мышкой)
+                        CLTT_HLOption);//выделенная часть опции (например шорткат или подобное)
+  TTag=Integer;                        //Тип тэга(доп инфа привязаная к подсвеченному участку)
+  TCLTagType=record                    //Доп инфа привязаная к подсвеченному участку
+    &Type:TCommandLineTextType;        //Тип участка
+    Tag:TTag;                          //Доп инфа
+  end;
+  TSubString=record                    //определяет подстроку
+    P:Integer;                         //начало в кодепоинтах
+    L:Integer;                         //длина в кодепоинтах
+    &Type:TCommandLineTextType;        //тип
+    Tag:TTag;                          //тэг
+  end;
+  TSubStrings=array of TSubString;
+  TRectWithTag=record
+    R:TRect;
+    Tag:TTag;
+  end;
+  TRectsWithTags=array of TRectWithTag;
+
   TCommandLinePrompt=class(TCustomLabel)
     type
-      TPromptResult=Integer;
-      TPromptResults=array of TPromptResult;
+      TCLHighlight=THighlight<TCLTagType>;
     protected
       property Layout default tlCenter;
     public
+      Highlight: TCLHighlight;
+      HotTag: Integer;
+      Rects:TRectsWithTags;
+      procedure UpdateHighLightTagsData;
+      function UpdateRects(Words:TWords;FillRect:boolean):integer;
+      procedure  SetHighLightedText(const Value: TCaption;Parts:TSubStrings);
+      procedure MouseMove(Shift: TShiftState; X, Y: Integer); override;
+      procedure MouseLeave; override;
       constructor Create(TheOwner: TComponent); override;
-      procedure SetPrompt(const APrompt: String;ATPromptResults:TPromptResults);
-      //procedure DoDrawText(var Rect: TRect; Flags: Longint);override;
       procedure Paint; override;
   end;
 
+function SubString(p,l:integer;t:TCommandLineTextType;tag:integer):TSubString;
+
 implementation
+
+function SubString(p,l:integer;t:TCommandLineTextType;tag:integer):TSubString;
+begin
+  result.p:=p;
+  result.l:=l;
+  result.&type:=t;
+  result.tag:=tag;
+end;
+procedure TCommandLinePrompt.UpdateHighLightTagsData;
+var
+  i:Integer;
+begin
+  for i := 0 to Highlight.Items.Count - 1 do begin
+    if Highlight.Items[i].Tag.Tag=HotTag then begin
+      Highlight.Items[i].FontColor := HotOptionFontColor;
+      Highlight.Items[i].BrushColor := HotOptionBrushColor;
+      Highlight.Items[i].UseBrush := HotOptionUseBrush;
+      Highlight.Items[i].FontUnderLine:=HotOptionFontUnderLine;
+    end else case Highlight.Items[i].Tag.&Type of
+                                     CLTT_Option:begin
+                                                   Highlight.Items[i].FontColor := HLOptionFontColor;
+                                                   Highlight.Items[i].BrushColor := HLOptionBrushColor;
+                                                   Highlight.Items[i].UseBrush := HLOptionUseBrush;
+                                                   Highlight.Items[i].FontUnderLine:=HLOptionFontUnderLine;
+                                                 end;
+                                   CLTT_HLOption:begin
+                                                   Highlight.Items[i].FontColor := HLHLOptionFontColor;
+                                                   Highlight.Items[i].BrushColor := HLHLOptionBrushColor;
+                                                   Highlight.Items[i].UseBrush := HLHLOptionUseBrush;
+                                                   Highlight.Items[i].FontUnderLine:=HLHLOptionFontUnderLine;
+                                                 end;
+             end;
+  end;
+end;
+procedure  TCommandLinePrompt.SetHighLightedText(const Value: TCaption;Parts:TSubStrings);
+var
+  i:Integer;
+  HLItem: TCLHighlight.THighlightItem;
+begin
+  Highlight.Clear;
+  for i:=Low(Parts) to High(Parts) do begin
+    HLItem := Highlight.AddHighlight;
+    HLItem.Tag.&Type:=Parts[i].&Type;
+    HLItem.Tag.Tag:=Parts[i].Tag;
+    HLItem.Start := Parts[i].P;
+    HLItem.Len := Parts[i].L;
+  end;
+  UpdateHighLightTagsData;
+  Caption:=Value;
+end;
+
+procedure TCommandLinePrompt.MouseMove(Shift: TShiftState; X, Y: Integer);
+var
+  i:Integer;
+begin
+  inherited;
+  for i:=Low(Rects) to High(Rects) do begin
+    if PtInRect(Rects[i].R,Point(X,Y)) then
+      begin
+        if HotTag<>Rects[i].Tag then begin
+          HotTag:=Rects[i].Tag;
+          UpdateHighLightTagsData;
+          Invalidate;
+        end;
+        exit;
+      end;
+  end;
+  if HotTag<>-1 then begin
+    HotTag:=-1;
+    UpdateHighLightTagsData;
+    Invalidate;
+  end;
+end;
+procedure TCommandLinePrompt.MouseLeave;
+begin
+  inherited;
+  if HotTag<>-1 then begin
+    HotTag:=-1;
+    UpdateHighLightTagsData;
+    Invalidate;
+  end;
+end;
+
+function TCommandLinePrompt.UpdateRects(Words:TWords;FillRect:boolean):integer;
+var
+  i:Integer;
+  LastR:TRect;
+  LastTag:TTag;
+begin
+  result:=0;
+  for i:=Low(Words) to High(Words) do begin
+    if Words[i].HightLightIndex>=0 then begin
+      if result=0 then begin
+        inc(result);
+        lastR:=Words[i].ARect;
+        lastTag:=Highlight.Items[Words[i].HightLightIndex].Tag.Tag;
+      end else begin
+        if (lastTag<>Highlight.Items[Words[i].HightLightIndex].Tag.Tag)or(abs(Words[i].ARect.Left-lastR.Right)>2) then begin
+          if FillRect then begin
+            Rects[Result-1].R:=lastR;
+            Rects[Result-1].Tag:=lastTag;
+          end;
+          lastR:=Words[i].ARect;
+          lastTag:=Highlight.Items[Words[i].HightLightIndex].Tag.Tag;
+          inc(result);
+        end else begin
+          lastR.Right:=Words[i].ARect.Right
+        end;
+      end;
+    end;
+  end;
+  if FillRect then begin
+    if result>0 then begin
+      Rects[Result-1].R:=lastR;
+      Rects[Result-1].Tag:=lastTag;
+    end;
+  end;
+end;
 
 procedure TCommandLinePrompt.Paint;
 
 var
   R: TRect;
-  Highlight: THighlight;
-  Item: THighlightItem;
   TestString:string;
+  Words:TWords;
+  RectsSize:integer;
 begin
-  //inherited;
-  //exit;
   TestString:=GetLabelText;
-
   R := Rect(0,0,Width,Height);
-  Canvas.Font.Color := clWindowText;
-  //Canvas.Font.Size := 13;
-  //DrawText(Canvas.Handle, PChar(TestString), Length(TestString), R, DT_SINGLELINE);
-
-  //OffsetRect(R, 0, R.Height);
-  //Canvas.Brush.Color := clBlack;
-  //Canvas.FillRect(R);
- //Canvas.Font.Color := clWhite;
-  Highlight := THighlight.Create;
   try
-    // первая буква К
-    Item := Highlight.AddHighlight;
-    Item.FontColor := clRed;
-    Item.Start := 3;
-    Item.Len := 1;
-    Item.BrushColor := clBtnFace;//RGB(112, 120, 129);
-    Item.UseBrush := True;
-    Item.FontUnderLine:=true;
-    // оставшееся слово "оманда1"
-    Item := Highlight.AddHighlight;
-    Item.Start := 4;
-    Item.Len := 7;
-    Item.BrushColor := clBtnFace;//RGB(112, 120, 129);
-    Item.UseBrush := True;
-
-    // первая буква К
-    Item := Highlight.AddHighlight;
-    Item.FontColor := clRed;
-    Item.Start := 12;
-    Item.Len := 1;
-    Item.BrushColor := clActiveCaption;//RGB(112, 120, 129);
-    Item.UseBrush := True;
-    Item.FontUnderLine:=true;
-    // оставшееся слово "оманда2"
-    Item := Highlight.AddHighlight;
-    Item.Start := 13;
-    Item.Len := 7;
-    Item.BrushColor := clActiveCaption;//RGB(112, 120, 129);
-    Item.UseBrush := True;
-
-    // первая буква К
-    Item := Highlight.AddHighlight;
-    Item.FontColor := clRed;
-    Item.Start := 21;
-    Item.Len := 1;
-    Item.BrushColor := clBtnFace;//RGB(112, 120, 129);
-    Item.UseBrush := True;
-    Item.FontUnderLine:=true;
-    // оставшееся слово "оманда3"
-    Item := Highlight.AddHighlight;
-    Item.Start := 22;
-    Item.Len := 7;
-    Item.BrushColor := clBtnFace;//RGB(112, 120, 129);
-    Item.UseBrush := True;
-
-    // первая буква
-    Item := Highlight.AddHighlight;
-    Item.FontColor := clRed;
-    Item.Start := 32;
-    Item.Len := 1;
-    Item.BrushColor := clBtnFace;//RGB(112, 120, 129);
-    Item.UseBrush := True;
-    // оставшееся слово
-    Item := Highlight.AddHighlight;
-    Item.Start := 33;
-    Item.Len := 8;
-    Item.BrushColor := clBtnFace;//RGB(112, 120, 129);
-    Item.UseBrush := True;
-
-    DrawHighlitedText(Canvas, TestString, R, DT_SINGLELINE, Highlight);
+     Words:=DrawHighlitedText<TCLTagType>(Canvas, TestString, R, DT_SINGLELINE, Highlight, False);
+     RectsSize:=UpdateRects(Words,false);
+     SetLength(Rects,RectsSize);
+     UpdateRects(Words,true);
   finally
-    Highlight.Free;
   end;
 end;
 
 constructor TCommandLinePrompt.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
+  HotTag:=-1;
+  Highlight:=TCLHighlight.Create;
   Layout:=tlCenter;
 end;
-procedure TCommandLinePrompt.SetPrompt(const APrompt: String;ATPromptResults:TPromptResults);
-begin
-  caption:=APrompt;
-end;
-
 end.

@@ -38,7 +38,7 @@ type
     utflen:integer;
     procedure keypressmy(Sender: TObject; var Key: char);
     procedure SetMode(m:TCLineMode);virtual;
-    procedure SetPrompt(APrompt:String;ATPromptResults:TCommandLinePrompt.TPromptResults);virtual;
+    procedure SetPrompt(APrompt:String{;ATPromptResults:TCommandLinePrompt.TPromptResults});virtual;
     procedure DoOnResize; override;
     procedure MyResize;
     procedure mypaint(sender:tobject);
@@ -68,9 +68,9 @@ begin
      canvas.Line(0,0,100,100);
 end;
 
-procedure TCLine.SetPrompt(APrompt:String;ATPromptResults:TCommandLinePrompt.TPromptResults);
+procedure TCLine.SetPrompt(APrompt:String{;ATPromptResults:TCommandLinePrompt.TPromptResults});
 begin
-  prompt.SetPrompt(APrompt,ATPromptResults);
+  prompt.SetHighLightedText(APrompt,[SubString(3,1,CLTT_HLOption,1),SubString(4,1,CLTT_Option,1),SubString(6,1,CLTT_HLOption,2),SubString(7,1,CLTT_Option,2)]);
 end;
 
 procedure TCLine.SetMode(m:TCLineMode);
@@ -80,13 +80,13 @@ begin
      case m of
      CLCOMMANDREDY:
      begin
-           SetPrompt(commandprefix+rsdefaultpromot+commandsuffix,[1,2,3]);
+           SetPrompt(commandprefix+rsdefaultpromot+commandsuffix);
            cmdedit.AutoComplete:=true;
            //cmdedit.AutoDropDown:=true;
      end;
      CLCOMMANDRUN:
      begin
-          SetPrompt(commandsuffix,[1,2,3]);
+          SetPrompt(commandsuffix);
           cmdedit.AutoComplete:=false;
           //cmdedit.AutoDropDown:=false;
      end;

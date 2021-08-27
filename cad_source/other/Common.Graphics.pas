@@ -37,7 +37,7 @@ uses
   {$endif}
 
 type
-  THighlightItem = class
+  GHighlightItem<GTagType> = class
   private
     Active: Boolean;
     procedure Reset;
@@ -52,12 +52,14 @@ type
     BrushStyle: TBrushStyle;         // стиль
     UseBrush: Boolean;               // и флаг, что мы меняем бэкграунд
     // пользовательские данные
-    Tag: Integer;
+    Tag: GTagType;
   end;
 
   TSetToCanvasStyle = (scAll, scBrush, scFont);
 
-  THighlight = class
+  THighlight<GTagType> = class
+  type
+    THighlightItem=GHighlightItem<GTagType>;
   strict private
     FItems: TObjectList<THighlightItem>;
     FEmpty: Boolean;
@@ -97,18 +99,18 @@ type
   end;
   TWords = array of TWord;
 
-  function CalcCharPos(ACanvas: TCanvas; const AText: string;
-    R: TRect; Flags: DWORD; Highlight: THighlight): TCharInfos;
+  function CalcCharPos<GTagType>(ACanvas: TCanvas; const AText: string;
+    R: TRect; Flags: DWORD; Highlight: THighlight<GTagType>): TCharInfos;
   function CreateWordsData(CharInfos: TCharInfos): TWords;
-  function DrawHighlitedText(ACanvas: TCanvas; Words: TWords;
-    R: TRect; Flags: DWORD; Highlight: THighlight;
+  function DrawHighlitedText<GTagType>(ACanvas: TCanvas; Words: TWords;
+    R: TRect; Flags: DWORD; Highlight: THighlight<GTagType>;
     ClearHighliteData: Boolean = True): TWords; overload;
-  function DrawHighlitedText(ACanvas: TCanvas; const AText: string;
-    R: TRect; Flags: DWORD; Highlight: THighlight;
+  function DrawHighlitedText<GTagType>(ACanvas: TCanvas; const AText: string;
+    R: TRect; Flags: DWORD; Highlight: THighlight<GTagType>;
     ClearHighliteData: Boolean = True): TWords; overload;
-  function CalcTextHeight(ACanvas: TCanvas; const AText: string;
+  function CalcTextHeight<GTagType>(ACanvas: TCanvas; const AText: string;
     RectWidth: Integer; Flags: DWORD): Integer;
-  function CalcTextHeightWithLimitLinesCount(ACanvas: TCanvas; const AText: string;
+  function CalcTextHeightWithLimitLinesCount<GTagType>(ACanvas: TCanvas; const AText: string;
     RectWidth: Integer; Flags: DWORD; LinesCount: Integer): Integer;
   function WordsToHeight(const Value: TWords): Integer;
 
@@ -239,7 +241,7 @@ end;
 
 { THighlightItem }
 
-procedure THighlightItem.Reset;
+procedure GHighlightItem<GTagType>.Reset;
 begin
   Active := False;
   Start := 0;
@@ -249,12 +251,12 @@ begin
   BrushColor := 0;
   BrushStyle := bsSolid;
   UseBrush := False;
-  Tag := 0;
+  Tag:=Default(GTagType);
 end;
 
 { THighlight }
 
-function THighlight.AddHighlight: THighlightItem;
+function THighlight<GTagType>.AddHighlight: THighlightItem;
 var
   I: Integer;
 begin
@@ -274,7 +276,7 @@ begin
   FEmpty := False;
 end;
 
-procedure THighlight.Clear;
+procedure THighlight<GTagType>.Clear;
 var
   I: Integer;
 begin
@@ -285,26 +287,26 @@ begin
   FEmpty := True;
 end;
 
-function THighlight.Count: Integer;
+function THighlight<GTagType>.Count: Integer;
 begin
   Result := FItems.Count;
 end;
 
-constructor THighlight.Create;
+constructor THighlight<GTagType>.Create;
 begin
   FItems := TObjectList<THighlightItem>.Create;
   FTempHighlightItem := THighlightItem.Create;
   FEmpty := True;
 end;
 
-destructor THighlight.Destroy;
+destructor THighlight<GTagType>.Destroy;
 begin
   FTempHighlightItem.Free;
   FItems.Free;
   inherited;
 end;
 
-class procedure THighlight.GetFromCanvas(ACanvas: TCanvas;
+class procedure THighlight<GTagType>.GetFromCanvas(ACanvas: TCanvas;
   Item: THighlightItem);
 begin
   Item.FontColor := ACanvas.Font.Color;
@@ -312,7 +314,7 @@ begin
   Item.BrushStyle := ACanvas.Brush.Style;
 end;
 
-class procedure THighlight.SetToCanvas(ACanvas: TCanvas;
+class procedure THighlight<GTagType>.SetToCanvas(ACanvas: TCanvas;
   Item: THighlightItem; Style: TSetToCanvasStyle);
 begin
   case Style of
@@ -342,8 +344,8 @@ begin
   end;
 end;
 
-function CalcCharPos(ACanvas: TCanvas; const AText: string;
-  R: TRect; Flags: DWORD; Highlight: THighlight): TCharInfos;
+function CalcCharPos<GTagType>(ACanvas: TCanvas; const AText: string;
+  R: TRect; Flags: DWORD; Highlight: THighlight<GTagType>): TCharInfos;
 var
   Wg: Integer;
 
@@ -698,14 +700,14 @@ begin
   Result := ProcessVAlign(R, Result);
 end;
 
-function CalcTextHeight(ACanvas: TCanvas; const AText: string;
+function CalcTextHeight<GTagType>(ACanvas: TCanvas; const AText: string;
   RectWidth: Integer; Flags: DWORD): Integer;
 begin
-  Result := CalcTextHeightWithLimitLinesCount(
+  Result := CalcTextHeightWithLimitLinesCount<GTagType>(
     ACanvas, AText, RectWidth, Flags, 0);
 end;
 
-function CalcTextHeightWithLimitLinesCount(ACanvas: TCanvas; const AText: string;
+function CalcTextHeightWithLimitLinesCount<GTagType>(ACanvas: TCanvas; const AText: string;
   RectWidth: Integer; Flags: DWORD; LinesCount: Integer): Integer;
 var
   CharInfos: TCharInfos;
@@ -716,7 +718,7 @@ begin
   Wg := ACanvas.TextHeight('Wg');
   R := Rect(0, 0, RectWidth, 0);
   Flags := Flags and not (DT_BOTTOM or DT_VCENTER or DT_RIGHT or DT_CENTER);
-  CharInfos := CalcCharPos(ACanvas, AText, R, Flags, nil);
+  CharInfos := CalcCharPos<GTagType>(ACanvas, AText, R, Flags, nil);
   TmpLinesCount := CharInfos[Length(CharInfos) - 1].Line + 1;
   if LinesCount <> 0 then
   begin
@@ -793,8 +795,8 @@ begin
   end;
 end;
 
-function DrawHighlitedText(ACanvas: TCanvas; Words: TWords;
-  R: TRect; Flags: DWORD; Highlight: THighlight;
+function DrawHighlitedText<GTagType>(ACanvas: TCanvas; Words: TWords;
+  R: TRect; Flags: DWORD; Highlight: THighlight<GTagType>;
   ClearHighliteData: Boolean): TWords;
 
   {$IFDEF WINE}
@@ -862,14 +864,14 @@ function DrawHighlitedText(ACanvas: TCanvas; Words: TWords;
         {$ENDIF}
       end;
     if Highlight = nil then Exit;
-    THighlight.GetFromCanvas(ACanvas, Highlight.TempHighlightItem);
+    THighlight<GTagType>.GetFromCanvas(ACanvas, Highlight.TempHighlightItem);
     try
       for A := 0 to Highlight.Items.Count - 1 do
       begin
         if Highlight.Items[A].UseBrush then
-          THighlight.SetToCanvas(ACanvas, Highlight.Items[A], scAll)
+          THighlight<GTagType>.SetToCanvas(ACanvas, Highlight.Items[A], scAll)
         else
-          THighlight.SetToCanvas(ACanvas, Highlight.Items[A], scFont);
+          THighlight<GTagType>.SetToCanvas(ACanvas, Highlight.Items[A], scFont);
         Len := Length(Data) - 1;
         LastLine := Data[Len].Line;
         for I := 0 to Len do
@@ -896,7 +898,7 @@ function DrawHighlitedText(ACanvas: TCanvas; Words: TWords;
           end;
       end;
     finally
-      THighlight.SetToCanvas(ACanvas, Highlight.TempHighlightItem, scAll);
+      THighlight<GTagType>.SetToCanvas(ACanvas, Highlight.TempHighlightItem, scAll);
     end;
   end;
 
@@ -948,14 +950,14 @@ begin
   end;
 end;
 
-function DrawHighlitedText(ACanvas: TCanvas; const AText: string;
-  R: TRect; Flags: DWORD; Highlight: THighlight;
+function DrawHighlitedText<GTagType>(ACanvas: TCanvas; const AText: string;
+  R: TRect; Flags: DWORD; Highlight: THighlight<GTagType>;
   ClearHighliteData: Boolean): TWords;
 begin
   if AText = '' then Exit;
   if Flags and DT_CALCRECT <> 0 then Exit;
-  Result := DrawHighlitedText(ACanvas,
-    CreateWordsData(CalcCharPos(ACanvas, AText, R, Flags, Highlight)),
+  Result := DrawHighlitedText<GTagType>(ACanvas,
+    CreateWordsData(CalcCharPos<GTagType>(ACanvas, AText, R, Flags, Highlight)),
     R, Flags, Highlight, ClearHighliteData);
 end;
 

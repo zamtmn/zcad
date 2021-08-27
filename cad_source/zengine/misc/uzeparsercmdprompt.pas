@@ -150,8 +150,10 @@ class procedure TTextProcessor.StaticGetResult(
 var
   i:integer;
   DoOnlyGetLength:Boolean;
+  SummLength:integer;
 begin
   DoOnlyGetLength:=ResultParam.P.CodeUnitPos=OnlyGetLength;
+  SummLength:=0;
   if (ParsedOperands is TParserCommandLinePrompt.TParsedTextWithoutTokens) then begin
     TManipulator.CopyStr(Operands,Source,ResultParam,Result)
   end else if (ParsedOperands is TParserCommandLinePrompt.TParsedTextWithOneToken) then begin
@@ -161,7 +163,10 @@ begin
       if DoOnlyGetLength then
         TManipulator.OnlyGetLengthValue(ResultParam);
       TParserCommandLinePrompt(InsideBracketParser).TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserCommandLinePrompt.TParsedText).Parts.Mutable[i]^,data,Result,ResultParam);
+      if DoOnlyGetLength then
+        SummLength:=SummLength+ResultParam.L.CodeUnits;
     end;
+    ResultParam.L.CodeUnits:=SummLength;
   end else
     Raise Exception.CreateFmt(rsWrongParametersCount,[TManipulator.GetHumanReadableAdress(Operands.P)]);
 end;
@@ -183,8 +188,10 @@ initialization
   CMDLinePromptParser:=TParserCommandLinePrompt.create;
   CMDLinePromptParser.RegisterToken('$<','<','>',TOptionProcessor,InternalPromptParser,TGONestedBracke or TGOIncludeBrackeOpen or TGOSeparator);
   //pet:=CMDLinePromptParser.GetTokens('Предлагаю както так $<"&[С]охранить (&[S])",Keys[С,S],Id[100]> или $<"&[В]ыйти",Keys[Q,X],Id[101]>');
-  pet:=CMDLinePromptParser.GetTokens('Let $<"&[S]ave (&[Q])",Keys[С,S],Id[100]>');
+  //pet:=CMDLinePromptParser.GetTokens('$<"q&[S]q&[S]",Keys[С,S],Id[100]>');
   //pet:=CMDLinePromptParser.GetTokens('$<"&[С]охранить (&[S])",Keys[С,S]>');
+  pet:=CMDLinePromptParser.GetTokens('Let $<"&[S]ave (&[v])",Keys[S,V],Id[100]> or $<"&[Q]uit",Keys[Q],Id[101]>');
+  //rsdefaultpromot='<Команда1/Команда2/Команда3> [Молча𤭢123]';
   pt:=TCommandLinePromptOption.Create;
   t:=pet.GetResult(pt);
   pt.Free;

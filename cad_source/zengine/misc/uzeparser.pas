@@ -1013,7 +1013,7 @@ var
 begin
   //SubStrLastsym:=SubStr.StartPos+SubStr.L-1;
   if isOnlyOneToken<>'' then begin
-  while {GManipulator.PosToIndex(CurrentPos)<=SubStrLastsym}GManipulator.PosInInterval(CurrentPos,SubStr.P,SubStr.CUL)=0 do begin
+  while {GManipulator.PosToIndex(CurrentPos)<=SubStrLastsym}(GManipulator.PosInInterval(CurrentPos,SubStr.P,SubStr.CUL)=0)and(SubStr.CUL.CodeUnits>0) do begin
     if (GManipulator.CodeUnitAtPos(Text,CurrentPos)=isOnlyOneToken[level]) then begin
     len:=length(isOnlyOneToken)-level+1;
     case len of
@@ -1069,7 +1069,7 @@ begin
   end;
   end else begin
 
-  while {GManipulator.PosToIndex(CurrentPos)<=SubStrLastsym}GManipulator.PosInInterval(CurrentPos,SubStr.P,SubStr.CUL)=0 do begin
+  while {GManipulator.PosToIndex(CurrentPos)<=SubStrLastsym}(GManipulator.PosInInterval(CurrentPos,SubStr.P,SubStr.CUL)=0)and(SubStr.CUL.CodeUnits>0) do begin
     //maxlevel:=1;
     OptChar:=GTokenizerSymbolToOptChar.convert(GManipulator.CodeUnitAtPos(Text,CurrentPos));
     if OptCharIncluded(includedChars,OptChar) then

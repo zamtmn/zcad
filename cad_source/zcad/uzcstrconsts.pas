@@ -218,8 +218,7 @@ resourcestring
   rsMTextEditor='MText editor';
 
 
-  //rsdefaultpromot='𤭢';
-  rsdefaultpromot='<Команда1/Команда2/Команда3> [Молча𤭢123]';
+  rsdefaultpromot='Command';
   rsexprouttext='Expression %s return %s';
 
   rsGDBObjinspWndName='Object inspector';

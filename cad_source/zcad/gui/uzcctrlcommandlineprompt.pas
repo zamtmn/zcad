@@ -88,6 +88,7 @@ type
       procedure Paint; override;
       property OnClickNotify: TNotifyProc read FOnClickNotify write FOnClickNotify;
       constructor Create(TheOwner: TComponent); override;
+      destructor Destroy; override;
       procedure SetHighLightedText(const Value: TCaption;Parts:TSubStrings);
   end;
 
@@ -246,4 +247,11 @@ begin
   Highlight:=TCLHighlight.Create;
   Layout:=tlCenter;
 end;
+
+destructor TCommandLinePrompt.Destroy;
+begin
+  Highlight.Free;
+  inherited;
+end;
+
 end.

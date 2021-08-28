@@ -17,7 +17,9 @@
 }
 
 unit uzcctrlcommandlineprompt;
-{$ifdef fpc}{$mode delphi}{$H+}{$endif}
+{$ifdef fpc}
+  {$mode delphi}{$H+}
+{$endif}
 
 interface
 
@@ -27,58 +29,66 @@ uses
   Common.Graphics;
 
 const
+  //раскраска опции
   HLOptionFontColor = clBtnText;
   HLOptionBrushColor = clBtnFace;
   HLOptionUseBrush = True;
   HLOptionFontUnderLine=False;
 
+  //раскраска выделенной части опции
   HLHLOptionFontColor = clRed;
   HLHLOptionBrushColor = clBtnFace;
   HLHLOptionUseBrush = True;
   HLHLOptionFontUnderLine=True;
 
+  //раскраска опции под мышкой
   HotOptionFontColor = clBtnText;
   HotOptionBrushColor = clActiveBorder;
   HotOptionUseBrush = True;
   HotOptionFontUnderLine=False;
 
 type
-  TCommandLineTextType=(CLTT_Option,   //опция (подсвечивается под мышкой)
-                        CLTT_HLOption);//выделенная часть опции (например шорткат или подобное)
-  TTag=Integer;                        //Тип тэга(доп инфа привязаная к подсвеченному участку)
-  TCLTagType=record                    //Доп инфа привязаная к подсвеченному участку
-    &Type:TCommandLineTextType;        //Тип участка
-    Tag:TTag;                          //Доп инфа
+  TCommandLineTextType=(CLTT_Option,       //опция (подсвечивается под мышкой)
+                        CLTT_HLOption);    //выделенная часть опции (например шорткат или подобное)
+  TTag=Integer;                            //Тип тэга(доп инфа привязаная к подсвеченному участку)
+  TNotifyProc=procedure(Tag:TTag)of object;//Процедура нотификации о клике по выделенной части
+  TCLTagType=record                        //Доп инфа привязаная к подсвеченному участку
+    &Type:TCommandLineTextType;            //Тип участка
+    Tag:TTag;                              //Доп инфа
   end;
-  TSubString=record                    //определяет подстроку
-    P:Integer;                         //начало в кодепоинтах
-    L:Integer;                         //длина в кодепоинтах
-    &Type:TCommandLineTextType;        //тип
-    Tag:TTag;                          //тэг
+  TSubString=record                        //определяет подстроку
+    P:Integer;                             //начало в кодепоинтах
+    L:Integer;                             //длина в кодепоинтах
+    &Type:TCommandLineTextType;            //тип
+    Tag:TTag;                              //тэг
   end;
-  TSubStrings=array of TSubString;
-  TRectWithTag=record
+  TSubStrings=array of TSubString;         //массив подстрок
+  TRectWithTag=record                      //рект для контроля положения мышки
     R:TRect;
     Tag:TTag;
   end;
-  TRectsWithTags=array of TRectWithTag;
+  TRectsWithTags=array of TRectWithTag;    //массив ректов для мышки
 
   TCommandLinePrompt=class(TCustomLabel)
     type
       TCLHighlight=THighlight<TCLTagType>;
+    private
+      FOnClickNotify:TNotifyProc;
     protected
       property Layout default tlCenter;
+      procedure MouseLeave; override;
+      procedure MouseMove(Shift: TShiftState; X, Y: Integer); override;
+      procedure Click; override;
+      procedure UpdateHighLightTagsData;
+      function UpdateRects(Words:TWords;FillRect:boolean):integer;
     public
       Highlight: TCLHighlight;
       HotTag: Integer;
       Rects:TRectsWithTags;
-      procedure UpdateHighLightTagsData;
-      function UpdateRects(Words:TWords;FillRect:boolean):integer;
-      procedure  SetHighLightedText(const Value: TCaption;Parts:TSubStrings);
-      procedure MouseMove(Shift: TShiftState; X, Y: Integer); override;
-      procedure MouseLeave; override;
-      constructor Create(TheOwner: TComponent); override;
       procedure Paint; override;
+      property OnClickNotify: TNotifyProc read FOnClickNotify write FOnClickNotify;
+      constructor Create(TheOwner: TComponent); override;
+      procedure SetHighLightedText(const Value: TCaption;Parts:TSubStrings);
   end;
 
 function SubString(p,l:integer;t:TCommandLineTextType;tag:integer):TSubString;
@@ -165,6 +175,13 @@ begin
     UpdateHighLightTagsData;
     Invalidate;
   end;
+end;
+
+procedure TCommandLinePrompt.Click;
+begin
+  inherited;
+  if (HotTag<>-1)and(assigned(FOnClickNotify)) then
+    FOnClickNotify(HotTag);
 end;
 
 function TCommandLinePrompt.UpdateRects(Words:TWords;FillRect:boolean):integer;

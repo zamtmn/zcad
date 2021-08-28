@@ -75,7 +75,6 @@ type
     private
       FOnClickNotify:TNotifyProc;
     protected
-      property Layout default tlCenter;
       procedure MouseLeave; override;
       procedure MouseMove(Shift: TShiftState; X, Y: Integer); override;
       procedure Click; override;
@@ -245,7 +244,6 @@ begin
   inherited Create(TheOwner);
   HotTag:=-1;
   Highlight:=TCLHighlight.Create;
-  Layout:=tlCenter;
 end;
 
 destructor TCommandLinePrompt.Destroy;

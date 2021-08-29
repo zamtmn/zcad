@@ -36,7 +36,7 @@ uses
   uzbpaths,uzctnrvectorgdbstring,math,Masks,uzclog,uzbstrproc,
   uzeentmtext,uzeblockdef,UGDBPoint3DArray,uzcdevicebaseabstract,uzelongprocesssupport,LazLogger,
   generics.Collections,
-  uzccommand_treestat,uzccommand_line2,uzccmdfloatinsert,uzcregother;
+  uzccommand_treestat,uzccommand_line2,uzccmdfloatinsert,uzcregother,uzcfcommandline,uzeparsercmdprompt;
 type
 {Export+}
   TFindType=(
@@ -3292,9 +3292,17 @@ begin
 end;
 
 function _test_com(operands:TCommandOperands):TCommandResult;
+var
+    p:GDBVertex;
+    pet:CMDLinePromptParser.TGeneralParsedText;
 begin
      ZCMsgCallBackInterface.TextMessage('Тест производительности. запасаемя терпением',TMWOHistoryOut);
      {$IFDEF PERFOMANCELOG}programlog.LogOutStrFast('тест производительности - getonmouseobject*10000',lp_IncPos);{$ENDIF}
+     pet:=CMDLinePromptParser.GetTokens('$<"123",Keys[1],Id[1]> Let $<"&[S]ave (&[v])",Keys[S,V],Id[100]> or $<"&[Q]uit",Keys[Q],Id[101]>');
+     //pet:=CMDLinePromptParser.GetTokens('$<"12&[3]",Keys[1],Id[1]>');
+     CLine.SetPrompt(pet);
+     pet.Free;
+     commandmanager.Get3DPoint('ага',p);
      //for i:=0 to 10000 do
      //       drawings.GetCurrentDWG.wa.getonmouseobject(@drawings.GetCurrentROOT.ObjArray);
      {$IFDEF PERFOMANCELOG}programlog.LogOutStrFast('тест производительности',lp_DecPos);{$ENDIF}

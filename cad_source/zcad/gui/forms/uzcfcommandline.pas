@@ -26,7 +26,7 @@ uses
  varman,varmandef,
  uzegeometry,uzctnrvectorgdbstring,uzcinterface,uzctreenode,uzclog,strmy,
  uzccommandlineutil,uztoolbarsmanager,uzmenusmanager,uzccommandsabstract,gzctnrvectortypes,
- uzcctrlcommandlineprompt;
+ uzcctrlcommandlineprompt,uzeparsercmdprompt;
 
 const
      cheight=48;
@@ -38,7 +38,8 @@ type
     utflen:integer;
     procedure keypressmy(Sender: TObject; var Key: char);
     procedure SetMode(m:TCLineMode);virtual;
-    procedure SetPrompt(APrompt:String{;ATPromptResults:TCommandLinePrompt.TPromptResults});virtual;
+    procedure SetPrompt(APrompt:String);virtual;overload;
+    procedure SetPrompt(APrompt:TParserCommandLinePrompt.TGeneralParsedText);virtual;overload;
     procedure DoOnResize; override;
     procedure MyResize;
     procedure mypaint(sender:tobject);
@@ -70,7 +71,17 @@ end;
 
 procedure TCLine.SetPrompt(APrompt:String{;ATPromptResults:TCommandLinePrompt.TPromptResults});
 begin
-  prompt.SetHighLightedText(APrompt,[SubString(3,1,CLTT_HLOption,1),SubString(4,1,CLTT_Option,1),SubString(6,1,CLTT_HLOption,2),SubString(7,1,CLTT_Option,2)]);
+  prompt.SetHighLightedText(APrompt,[],-1);
+end;
+procedure TCLine.SetPrompt(APrompt:TParserCommandLinePrompt.TGeneralParsedText);
+var
+  pt:TCommandLinePromptOption;
+  ts:string;
+begin
+    pt:=TCommandLinePromptOption.Create;
+    ts:=APrompt.GetResult(pt);
+    prompt.SetHighLightedText(ts,pt.Parts.arr,pt.Parts.Size-1);
+    pt.Free;
 end;
 
 procedure TCLine.SetMode(m:TCLineMode);

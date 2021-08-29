@@ -28,6 +28,7 @@ resourcestring
   rsRunTimeError='uzeparser: Execution error (%s)';
   rsProcessorClassNilError='uzeparser: ProcessorClass=nil (%s)';
   rsWrongParametersCount='uzeparser: Wrong parameters count (%s)';
+  rsNeedInteger='uzeparser: Need integer (%s)';
   rsStringManipulatorAddrByOffset='Offset %d';
 const MaxCashedValues={4}5;
       MaxIncludedChars=3;
@@ -624,9 +625,12 @@ var
   i:integer;
 begin
   DestTange.L:=SourceRange.L;
-  if DestTange.P.CodeUnitPos<>OnlyGetLength then
+  if DestTange.P.CodeUnitPos<>OnlyGetLength then begin
     for i:=0 to SourceRange.L.CodeUnits-1 do
       Result[DestTange.P.CodeUnitPos+i]:=Source[SourceRange.P.CodeUnitPos+i];
+    passrange(DestTange);
+    GAdditionalDataManipulator.passrange(DestTange.P.AdditionalPosData,SourceRange.L.AdditionalLenData);
+  end;
 end;
 class procedure TStringManipulator<GStingType,GCharType,GAdditionalDataManipulator,GAdditionalPositionData,GAdditionalLengthData>.OnlyGetLengthValue(var ARange:TCharRange);
 begin
@@ -846,7 +850,7 @@ begin
       APart.Processor:=APart.TokenInfo.ProcessorClass.vcreate(Src,APart.TextInfo.TokenPos,APart.TextInfo.OperandsPos,APart.Operands,APart.TokenInfo.InsideBracketParser,data);
     APart.Processor.getResult(Src,APart.TextInfo.TokenPos,APart.TextInfo.OperandsPos,APart.Operands,APart.TokenInfo.InsideBracketParser,Res,ResultParam,data);
   end;
-  GManipulator.passrange(ResultParam);
+  //GManipulator.passrange(ResultParam);
 end;
 
 procedure TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>.TParsedTextWithOneToken.Doit(var data:GDataType);

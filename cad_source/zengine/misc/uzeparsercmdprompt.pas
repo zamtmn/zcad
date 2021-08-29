@@ -5,14 +5,24 @@ unit uzeparsercmdprompt;
 interface
 
 uses
-  SysUtils,
-  uzeparser;
+  SysUtils,StrUtils,
+  gvector,
+  uzeparser,uzcctrlcommandlineprompt;
 
 type
   TOptStrMan=TUTF8StringManipulator;
+  TSubStringsVector=TVector<TSubString>;
+
+  TSubStringsVectorHelper = class helper for TSubStringsVector
+    function Arr:TSubStringsVector.TArr;
+  end;
+
 
   TCommandLinePromptOption=class
-
+    Parts:TSubStringsVector;
+    CurrentTag,PartsCount:integer;
+    constructor create;
+    destructor destroy;override;
   end;
 
   TParserCommandLinePrompt=TGZParser<TOptStrMan,
@@ -27,6 +37,7 @@ type
                                      TCharToOptChar<TOptStrMan.TCharType>>;
 
   TOptionProcessor=class(TParserCommandLinePrompt.TParserTokenizer.TDynamicProcessor)
+    tag:integer;
     procedure CheckOperands(
                             const Operands      :TOptStrMan.TCharRange;
                             const ParsedOperands:TAbstractParsedText<TOptStrMan.TStringType,TCommandLinePromptOption>
@@ -88,6 +99,25 @@ var
 
 implementation
 
+
+function TSubStringsVectorHelper.Arr:TSubStringsVector.TArr;
+begin
+  result:=FData;
+end;
+
+
+constructor TCommandLinePromptOption.create;
+begin
+  PartsCount:=0;
+  Parts:=TSubStringsVector.Create;
+  CurrentTag:=-1;
+end;
+destructor TCommandLinePromptOption.destroy;
+begin
+  Parts.Free;
+end;
+
+
 procedure TOptionProcessor.CheckOperands(
                                          const Operands      :TOptStrMan.TCharRange;
                                          const ParsedOperands:TAbstractParsedText<TOptStrMan.TStringType,TCommandLinePromptOption>
@@ -107,8 +137,19 @@ constructor TOptionProcessor.vcreate(
                                      InsideBracketParser:TObject;
                                      var   data          :TCommandLinePromptOption
                                      );
+var
+  op2:TOptStrMan.TStringType;
+  ResultParam:TOptStrMan.TCharRange;
 begin
   CheckOperands(Operands,ParsedOperands);
+  ResultParam.P.CodeUnitPos:=OnlyGetLength;
+  ResultParam.L.CodeUnits:=0;
+  TParserCommandLinePrompt.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserCommandLinePrompt.TParsedText).Parts.Mutable[2]^,data,op2,ResultParam);
+  SetLength(op2,ResultParam.L.CodeUnits);
+  ResultParam.P.CodeUnitPos:=InitialStartPos;
+  TParserCommandLinePrompt.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserCommandLinePrompt.TParsedText).Parts.Mutable[2]^,data,op2,ResultParam);
+  if not TryStrToInt(op2,tag) then
+    //Raise Exception.CreateFmt(rsNeedInteger,[TManipulator.GetHumanReadableAdress((ParsedOperands as TParserCommandLinePrompt.TParsedText).Parts.Mutable[2]^.Operands.)]);
 end;
 procedure TOptionProcessor.GetResult(
                                      const Source        :TOptStrMan.TStringType;
@@ -120,8 +161,13 @@ procedure TOptionProcessor.GetResult(
                                        var ResultParam   :TOptStrMan.TCharRange;
                                        var data          :TCommandLinePromptOption
                                      );
+var
+  op3:TParserCommandLinePrompt.TParsedTextWithOneToken;
+  s:string;
 begin
+  data.CurrentTag:=tag;
   TParserCommandLinePrompt(InsideBracketParser).TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserCommandLinePrompt.TParsedText).Parts.Mutable[0]^,data,Result,ResultParam);
+  data.CurrentTag:=-1;
 end;
 
 class procedure TAmpersandProcessor.StaticGetResult(
@@ -134,8 +180,18 @@ class procedure TAmpersandProcessor.StaticGetResult(
                                                       var ResultParam   :TOptStrMan.TCharRange;
                                                       var data          :TCommandLinePromptOption
                                                    );
+var
+  ss:TSubString;
 begin
+  if ResultParam.P.CodeUnitPos<>OnlyGetLength then begin
+    ss.P:=ResultParam.p.codeunitpos;//AdditionalLenData.CodePoints;
+    ss.L:=Operands.L.codeunits;//AdditionalLenData.CodePoints;
+    ss.Tag:=data.CurrentTag;
+    ss.&Type:=CLTT_HLOption;
+    data.Parts.PushBack(ss);
+  end;
   TManipulator.CopyStr(Operands,Source,ResultParam,Result);
+  inc(data.PartsCount);
 end;
 class procedure TTextProcessor.StaticGetResult(
                                                 const Source        :TOptStrMan.TStringType;
@@ -151,20 +207,44 @@ var
   i:integer;
   DoOnlyGetLength:Boolean;
   SummLength:integer;
+  ss:TSubString;
 begin
   DoOnlyGetLength:=ResultParam.P.CodeUnitPos=OnlyGetLength;
   SummLength:=0;
   if (ParsedOperands is TParserCommandLinePrompt.TParsedTextWithoutTokens) then begin
-    TManipulator.CopyStr(Operands,Source,ResultParam,Result)
+    if not DoOnlyGetLength then begin
+      ss.P:=ResultParam.p.codeunitpos;
+      ss.L:=Operands.L.codeunits;
+      ss.Tag:=data.CurrentTag;
+      ss.&Type:=CLTT_Option;
+      data.Parts.PushBack(ss);
+    end;
+    TManipulator.CopyStr(Operands,Source,ResultParam,Result);
+    inc(data.PartsCount);
   end else if (ParsedOperands is TParserCommandLinePrompt.TParsedTextWithOneToken) then begin
+    if not DoOnlyGetLength then begin
+      ss.P:=ResultParam.p.codeunitpos;
+      ss.L:=Operands.L.codeunits;
+      ss.Tag:=data.CurrentTag;
+      ss.&Type:=CLTT_Option;
+      data.Parts.PushBack(ss);
+    end;
     TParserCommandLinePrompt(InsideBracketParser).TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserCommandLinePrompt.TParsedTextWithOneToken).Part,data,Result,ResultParam);
   end else if (ParsedOperands is TParserCommandLinePrompt.TParsedText) then begin
     for i:=0 to (ParsedOperands as TParserCommandLinePrompt.TParsedText).Parts.Size-1 do begin
       if DoOnlyGetLength then
-        TManipulator.OnlyGetLengthValue(ResultParam);
+        TManipulator.OnlyGetLengthValue(ResultParam)
+      else if (ParsedOperands as TParserCommandLinePrompt.TParsedText).Parts.Mutable[i]^.TextInfo.TokenId=TParserCommandLinePrompt(InsideBracketParser).tkRawText then begin
+        ss.P:=ResultParam.p.codeunitpos;
+        ss.L:=(ParsedOperands as TParserCommandLinePrompt.TParsedText).Parts.Mutable[i]^.TextInfo.TokenPos.L.codeunits;
+        ss.Tag:=data.CurrentTag;
+        ss.&Type:=CLTT_Option;
+        data.Parts.PushBack(ss);
+      end;
       TParserCommandLinePrompt(InsideBracketParser).TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserCommandLinePrompt.TParsedText).Parts.Mutable[i]^,data,Result,ResultParam);
       if DoOnlyGetLength then
         SummLength:=SummLength+ResultParam.L.CodeUnits;
+      inc(data.PartsCount);
     end;
     ResultParam.L.CodeUnits:=SummLength;
   end else
@@ -190,11 +270,12 @@ initialization
   //pet:=CMDLinePromptParser.GetTokens('Предлагаю както так $<"&[С]охранить (&[S])",Keys[С,S],Id[100]> или $<"&[В]ыйти",Keys[Q,X],Id[101]>');
   //pet:=CMDLinePromptParser.GetTokens('$<"q&[S]q&[S]",Keys[С,S],Id[100]>');
   //pet:=CMDLinePromptParser.GetTokens('$<"&[С]охранить (&[S])",Keys[С,S]>');
-  pet:=CMDLinePromptParser.GetTokens('Let $<"&[S]ave (&[v])",Keys[S,V],Id[100]> or $<"&[Q]uit",Keys[Q],Id[101]>');
   //rsdefaultpromot='<Команда1/Команда2/Команда3> [Молча𤭢123]';
-  pt:=TCommandLinePromptOption.Create;
-  t:=pet.GetResult(pt);
-  pt.Free;
+
+  //pet:=CMDLinePromptParser.GetTokens('Let $<"&[S]ave (&[v])",Keys[S,V],Id[100]> or $<"&[Q]uit",Keys[Q],Id[101]>');
+  //pt:=TCommandLinePromptOption.Create;
+  //t:=pet.GetResult(pt);
+  //pt.Free;
 
 finalization;
   CMDLinePromptParser.Free;

@@ -6,6 +6,9 @@
 }
 
 unit uzccomelectrical;
+{$IFDEF FPC}
+  {$CODEPAGE UTF8}
+{$endif}
 {$INCLUDE def.inc}
 
 interface
@@ -3295,11 +3298,15 @@ function _test_com(operands:TCommandOperands):TCommandResult;
 var
     p:GDBVertex;
     pet:CMDLinePromptParser.TGeneralParsedText;
+    ts:utf8string;
 begin
      ZCMsgCallBackInterface.TextMessage('Тест производительности. запасаемя терпением',TMWOHistoryOut);
      {$IFDEF PERFOMANCELOG}programlog.LogOutStrFast('тест производительности - getonmouseobject*10000',lp_IncPos);{$ENDIF}
-     pet:=CMDLinePromptParser.GetTokens('$<"123",Keys[1],Id[1]> Let $<"&[S]ave (&[v])",Keys[S,V],Id[100]> or $<"&[Q]uit",Keys[Q],Id[101]>');
+     //ts:='$<"йцу",Keys[1],Id[1]> Let $<"&[S]ave (&[v])",Keys[S,V],Id[100]> or $<"&[Q]uit",Keys[Q],Id[101]>';
+     //ts:='$<"123",Keys[1],Id[1]>';
+     pet:=CMDLinePromptParser.GetTokens('<$<"Команда&[1]",Keys[1],Id[1]>/$<"Команда&[2]",Keys[2],Id[2]>/$<"Команда&[3]",Keys[3],Id[3]>> [$<"&[М]олча𤭢123",Keys[М],Id[4]>]');
      //pet:=CMDLinePromptParser.GetTokens('$<"12&[3]",Keys[1],Id[1]>');
+     //pet:=CMDLinePromptParser.GetTokens('фs "ёба" йs "2ёба2" йцу12');
      CLine.SetPrompt(pet);
      pet.Free;
      commandmanager.Get3DPoint('ага',p);

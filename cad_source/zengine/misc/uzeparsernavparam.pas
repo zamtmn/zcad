@@ -94,7 +94,7 @@ begin
     ResultParam.P.CodeUnitPos:=InitialStartPos;
     TParserNavParam.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserNavParam.TParsedText).Parts.Mutable[1]^,data,op2s,ResultParam);
     if not TryStrToInt(op2s,op2i) then
-      Raise Exception.CreateFmt(rsRunTimeError,[(ParsedOperands as TParserNavParam.TParsedText).Parts.Mutable[1]^.TextInfo.TokenPos.P.CodeUnitPos]);
+      Raise Exception.CreateFmt(rsRunTimeError,[TManipulator.GetHumanReadableAdress((ParsedOperands as TParserNavParam.TParsedText).Parts.Mutable[1]^.TextInfo.TokenPos.P)]);
     if (op2i<0)and(op2i>=op1i) then
       Raise Exception.CreateFmt(rsWrongAutosizeColumn,[op2i]);
 
@@ -109,7 +109,7 @@ begin
       data.NavTree.Header.AutoSizeIndex:=0;
 
   end else
-    Raise Exception.CreateFmt(rsRunTimeError,[Operands.P.CodeUnitPos]);
+    Raise Exception.CreateFmt(rsRunTimeError,[TManipulator.GetHumanReadableAdress(Operands.P)]);
 end;
 
 

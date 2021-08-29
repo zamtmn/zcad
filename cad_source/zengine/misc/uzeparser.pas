@@ -17,13 +17,17 @@
 } 
 unit uzeparser;
 {INCLUDE def.inc}
-{$IFDEF FPC}{$mode delphi}{$ENDIF}
+{$IFDEF FPC}
+  {$mode delphi}
+  {$CODEPAGE UTF8}
+{$ENDIF}
+
 {$DEFINE USETDICTIONARY}
 
 interface
 uses Generics.Collections,
      {$IFDEF FPC}gvector,gmap,gutil,gdeque,{$ENDIF}
-     sysutils,uzbhandles,uzbsets;
+     sysutils,uzbhandles,uzbsets,StrUtils;
 resourcestring
   rsRunTimeError='uzeparser: Execution error (%s)';
   rsProcessorClassNilError='uzeparser: ProcessorClass=nil (%s)';
@@ -435,9 +439,9 @@ end;
 class procedure GTAdditionalDataManipulator<GString,GSymbol>.LengthBetweenPos(const APos1:TADDPosition;const APos2:TADDPosition; out ALen:TAddLength;const ExcludePos2:boolean=False);
 begin
   if ExcludePos2 then begin
-    //result.CodeUnitLen:=APos2.CodeUnitPos-APos1.CodeUnitPos
+    ALen.CodePoints:=APos2.CodePointPos-APos1.CodePointPos;
   end else begin
-    //result.CodeUnitLen:=APos2.CodeUnitPos-APos1.CodeUnitPos+1;
+    ALen.CodePoints:=APos2.CodePointPos-APos1.CodePointPos+1;
   end;
 end;
 class procedure GTAdditionalDataManipulator<GString,GSymbol>.PassRange(var APos:TADDPosition;const ALen:TAddLength);//inline;
@@ -862,6 +866,7 @@ function TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,
 var
   totallength,i:integer;
   ResultParam:GManipulatorCharRange;
+  cp:TSystemCodePage;
 begin
   result:=default(GParserString);
   totallength:=0;
@@ -885,7 +890,9 @@ begin
       totallength:=totallength+ResultParam.Length;
     end;}
   end;
-  SetLength(result,totallength);
+  result:=dupestring('+',totallength);
+  //SetLength(result,totallength);
+  cp:=StringCodePage(result);
   //GManipulator.InitStartPos(ResultParam);
   ResultParam:=GManipulator.StartCharRange('');
   //ResultParam.StartPos:=InitialStartPos;
@@ -1343,6 +1350,7 @@ begin
               //GManipulator.SetLen(TokenTextInfo.OperandsPos,GManipulator.PosToIndex(currpos)-GManipulator.PosToIndex(TokenTextInfo.OperandsPos.P));
               //TokenTextInfo.OperandsPos.L:=GManipulator.PosToIndex(currpos)-TokenTextInfo.OperandsPos.StartPos;
           end;
+          //TokenTextInfo.OperandsPos.L:=GManipulator.LengthBetweenPos(TokenTextInfo.OperandsPos.P,currpos,false);
           GManipulator.IncPosition(Text,currpos);
           //inc(currpos);
         end;

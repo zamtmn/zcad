@@ -1,6 +1,8 @@
 unit uzeparsercmdprompt;
-
-{$mode delphi}
+{$IFDEF FPC}
+  {$MODE DELPHI}
+  {$CODEPAGE UTF8}
+{$endif}
 
 interface
 
@@ -15,6 +17,12 @@ type
 
   TSubStringsVectorHelper = class helper for TSubStringsVector
     function Arr:TSubStringsVector.TArr;
+  end;
+
+  TmyVector<T> = class (TVector<T>)
+  public
+  type
+    TT = TArr;
   end;
 
 
@@ -184,8 +192,8 @@ var
   ss:TSubString;
 begin
   if ResultParam.P.CodeUnitPos<>OnlyGetLength then begin
-    ss.P:=ResultParam.p.codeunitpos;//AdditionalLenData.CodePoints;
-    ss.L:=Operands.L.codeunits;//AdditionalLenData.CodePoints;
+    ss.P:=ResultParam.P.AdditionalPosData.CodePointPos;
+    ss.L:=Operands.L.AdditionalLenData.CodePoints;
     ss.Tag:=data.CurrentTag;
     ss.&Type:=CLTT_HLOption;
     data.Parts.PushBack(ss);
@@ -213,8 +221,8 @@ begin
   SummLength:=0;
   if (ParsedOperands is TParserCommandLinePrompt.TParsedTextWithoutTokens) then begin
     if not DoOnlyGetLength then begin
-      ss.P:=ResultParam.p.codeunitpos;
-      ss.L:=Operands.L.codeunits;
+      ss.P:=ResultParam.P.AdditionalPosData.CodePointPos;
+      ss.L:=Operands.L.AdditionalLenData.CodePoints;
       ss.Tag:=data.CurrentTag;
       ss.&Type:=CLTT_Option;
       data.Parts.PushBack(ss);
@@ -223,8 +231,8 @@ begin
     inc(data.PartsCount);
   end else if (ParsedOperands is TParserCommandLinePrompt.TParsedTextWithOneToken) then begin
     if not DoOnlyGetLength then begin
-      ss.P:=ResultParam.p.codeunitpos;
-      ss.L:=Operands.L.codeunits;
+      ss.P:=ResultParam.P.AdditionalPosData.CodePointPos;
+      ss.L:=Operands.L.AdditionalLenData.CodePoints;
       ss.Tag:=data.CurrentTag;
       ss.&Type:=CLTT_Option;
       data.Parts.PushBack(ss);
@@ -235,8 +243,8 @@ begin
       if DoOnlyGetLength then
         TManipulator.OnlyGetLengthValue(ResultParam)
       else if (ParsedOperands as TParserCommandLinePrompt.TParsedText).Parts.Mutable[i]^.TextInfo.TokenId=TParserCommandLinePrompt(InsideBracketParser).tkRawText then begin
-        ss.P:=ResultParam.p.codeunitpos;
-        ss.L:=(ParsedOperands as TParserCommandLinePrompt.TParsedText).Parts.Mutable[i]^.TextInfo.TokenPos.L.codeunits;
+        ss.P:=ResultParam.P.AdditionalPosData.CodePointPos;
+        ss.L:=(ParsedOperands as TParserCommandLinePrompt.TParsedText).Parts.Mutable[i]^.TextInfo.TokenPos.L.AdditionalLenData.CodePoints;
         ss.Tag:=data.CurrentTag;
         ss.&Type:=CLTT_Option;
         data.Parts.PushBack(ss);
@@ -266,10 +274,11 @@ initialization
   InternalPromptParser.RegisterToken('"','"','"',TTextProcessor,InternalPromptParser3,TGOIncludeBrackeOpen or TGOSeparator);
 
   CMDLinePromptParser:=TParserCommandLinePrompt.create;
+  //CMDLinePromptParser.RegisterToken('"','"','"',TTextProcessor,InternalPromptParser3,TGOIncludeBrackeOpen or TGOSeparator);
   CMDLinePromptParser.RegisterToken('$<','<','>',TOptionProcessor,InternalPromptParser,TGONestedBracke or TGOIncludeBrackeOpen or TGOSeparator);
   //pet:=CMDLinePromptParser.GetTokens('Предлагаю както так $<"&[С]охранить (&[S])",Keys[С,S],Id[100]> или $<"&[В]ыйти",Keys[Q,X],Id[101]>');
   //pet:=CMDLinePromptParser.GetTokens('$<"q&[S]q&[S]",Keys[С,S],Id[100]>');
-  //pet:=CMDLinePromptParser.GetTokens('$<"&[С]охранить (&[S])",Keys[С,S]>');
+  pet:=CMDLinePromptParser.GetTokens('"123"');
   //rsdefaultpromot='<Команда1/Команда2/Команда3> [Молча𤭢123]';
 
   //pet:=CMDLinePromptParser.GetTokens('Let $<"&[S]ave (&[v])",Keys[S,V],Id[100]> or $<"&[Q]uit",Keys[Q],Id[101]>');

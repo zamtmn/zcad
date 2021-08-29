@@ -76,7 +76,7 @@ end;
 procedure TCLine.SetPrompt(APrompt:TParserCommandLinePrompt.TGeneralParsedText);
 var
   pt:TCommandLinePromptOption;
-  ts:string;
+  ts:TParserCommandLinePrompt.TParserString;
 begin
     pt:=TCommandLinePromptOption.Create;
     ts:=APrompt.GetResult(pt);

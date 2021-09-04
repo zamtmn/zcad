@@ -32,6 +32,8 @@
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_HEATER2)" Img='DEVICE_EL_VL_HEATER2_300' Caption='Обогреватель, тип 2'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_DEVICE1)" Img='DEVICE_EL_VL_DEVICE1_300' Caption='Устройство, тип 1'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_DEVICE2)" Img='DEVICE_EL_VL_DEVICE2_300' Caption='Устройство, тип 2'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_YTR1)" Img='DEVICE_EL_VL_YTR1_300' Caption='ЯТП, тип 1'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_YTR2)" Img='DEVICE_EL_VL_YTR2_300' Caption='ЯТП, тип 2'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CONNECTOR1_1P_3)" Img='DEVICE_EL_VL_CONNECTOR1_1P_3_300' Caption='Розетка СП31 1P'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CONNECTOR1_2P_3)" Img='DEVICE_EL_VL_CONNECTOR1_2P_3_300' Caption='Розетка СП31 2P'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CONNECTOR1_3P_3)" Img='DEVICE_EL_VL_CONNECTOR1_3P_3_300' Caption='Розетка СП31 3P'/>
@@ -158,6 +160,7 @@
            <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_TT1)" Img='DEVICE_EL_VL_DIAGRAM_TT1_300' Caption='Трансформатор тока'/>
            <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_WH1)" Img='DEVICE_EL_VL_DIAGRAM_WH1_300' Caption='Эл.счетчик 1'/>
            <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_WH2)" Img='DEVICE_EL_VL_DIAGRAM_WH2_300' Caption='Эл.счетчик 2'/>
+           <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_BU1)" Img='DEVICE_EL_VL_DIAGRAM_BU1_300' Caption='Блок управления 1'/>
 	   <ZTreeCommand Command="Insert(DIAGRAM_H0)" Img='DIAGRAM_H0_300' Caption='Кабель шапка'/>
 	   <ZTreeCommand Command="Insert(DIAGRAM_H1_1)" Img='DIAGRAM_H1_1_300' Caption='Кабель фидер 1'/>
 	   <ZTreeCommand Command="Insert(DIAGRAM_H1_2)" Img='DIAGRAM_H1_2_300' Caption='Кабель фидер 2'/>
@@ -178,6 +181,7 @@
            <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_FD3)" Img='DEVICE_EL_VL_DIAGRAM_FD3_300' Caption='Фидер сноска 1'/>
            <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_FD4)" Img='DEVICE_EL_VL_DIAGRAM_FD4_300' Caption='Фидер сноска 2'/>
            <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_CH1)" Img='DEVICE_EL_VL_DIAGRAM_CH1_300' Caption='Щит сноска 1'/>
+           <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_CH2)" Img='DEVICE_EL_VL_DIAGRAM_CH2_300' Caption='Щит сноска 2'/>
 	   <ZTreeCommand Command="Insert(EL_VL_REPORT6_1)" Img='EL_VL_REPORT6_1_300' Caption='Распред.схема шапка'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_REPORT6_0)" Img='DEVICE_EL_VL_REPORT6_0_300' Caption='Распред.схема устройство'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_REPORT6_2_1)" Img='DEVICE_EL_VL_REPORT6_2_1_300' Caption='Распред.схема фидер'/>

@@ -1,4 +1,4 @@
-unit DEVICE_EL_VL_DIAGRAM_CH1;
+unit DEVICE_EL_VL_DIAGRAM_CH2;
 
 interface
 

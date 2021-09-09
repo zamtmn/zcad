@@ -23,10 +23,10 @@ type
     NameSeparator,TreeRootName:string;
     constructor Create(_NameSeparator,_TreeRootName:string);
     destructor Destroy;
-    procedure LoadTree(FileName:string;TranslateFunc:TTranslateFunction);
+    procedure LoadTree(FileName:ansistring;TranslateFunc:TTranslateFunction);
     function FindOrCreateChildrenNode(var CurrentBlobNode:TBlobTree.TTreeNodeType;SubXMLNode:TDomNode;TranslateFunc:TTranslateFunction):TBlobTree.TTreeNodeType;
     procedure ProcessNode(CurrentXmlNode:TDomNode;var CurrentBlobNode:TBlobTree.TTreeNodeType;TranslateFunc:TTranslateFunction);
-    function FindChildrenNode(var CurrentBlobNode:TBlobTree.TTreeNodeType;NodeName:string):TBlobTree.TTreeNodeType;
+    function FindChildrenNode(var CurrentBlobNode:TBlobTree.TTreeNodeType;NodeName:ansistring):TBlobTree.TTreeNodeType;
   end;
 
 var
@@ -53,7 +53,7 @@ begin
   BlobTree.Destroy;
 end;
 
-function TTreePropManager.FindChildrenNode(var CurrentBlobNode:TBlobTree.TTreeNodeType;NodeName:string):TBlobTree.TTreeNodeType;
+function TTreePropManager.FindChildrenNode(var CurrentBlobNode:TBlobTree.TTreeNodeType;NodeName:ansistring):TBlobTree.TTreeNodeType;
 var
   i:integer;
 begin
@@ -136,7 +136,7 @@ begin
     SubXMLNode:=SubXMLNode.NextSibling;
   end;
 end;
-procedure TTreePropManager.LoadTree(FileName:string;TranslateFunc:TTranslateFunction);
+procedure TTreePropManager.LoadTree(FileName:ansistring;TranslateFunc:TTranslateFunction);
 var
   XMLFile:TXMLConfig;
   RootXMLNode,SubXMLNode:TDomNode;

@@ -25,8 +25,9 @@ uses strutils,uzgldrawcontext,uzeentityextender,uzetextpreprocessor,uzedrawingde
      gzctnrvectortypes,uzbtypesbase,sysutils,uzestyleslayers,usimplegenerics,uzeffdxfsupport;
 type
 {EXPORT+}
+PGDBObjExtendable=^GDBObjExtendable;
 {REGISTEROBJECTTYPE GDBObjExtendable}
-GDBObjExtendable= object(GDBaseObject)
+GDBObjExtendable=object(GDBaseObject)
                                  EntExtensions:{-}TEntityExtensions{/GDBPointer/};
                                  procedure AddExtension(ExtObj:PTBaseEntityExtender;ObjSize:GDBInteger);
                                  function GetExtension(_ExtType:pointer):{PTBaseEntityExtender}pointer;

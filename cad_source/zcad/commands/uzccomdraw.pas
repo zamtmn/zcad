@@ -422,7 +422,7 @@ begin
                 end;
                 pb:=poa^.iterate(ir);
           until pb=nil;
-          Prompt(sysutils.format(rscmNEntitiesProcessed,[inttostr(result)]));
+          Prompt(sysutils.format(rscmNEntitiesProcessed,[result]));
           Regen_com(EmptyCommandOperands);
           commandmanager.executecommandend;
      end;
@@ -495,7 +495,7 @@ begin
                 end;
                 pb:=poa^.iterate(ir);
           until pb=nil;
-          Prompt(sysutils.format(rscmNEntitiesProcessed,[inttostr(result)]));
+          Prompt(sysutils.format(rscmNEntitiesProcessed,[result]));
           Regen_com(EmptyCommandOperands);
           commandmanager.executecommandend;
      end;
@@ -667,7 +667,7 @@ begin
                 end;
                 psdesc:=drawings.GetCurrentDWG^.SelObjArray.iterate(ir);
           until psdesc=nil;
-          Prompt(sysutils.format(rscmNEntitiesProcessed,[inttostr(result)]));
+          Prompt(sysutils.format(rscmNEntitiesProcessed,[result]));
           Regen_com(EmptyCommandOperands);
           commandmanager.executecommandend;
      end;
@@ -1125,7 +1125,7 @@ begin
             else
                 ZCMsgCallBackInterface.TextMessage('Device with basename "'+pvd^.data.PTD^.GetUserValueAsString(pvd^.data.Instance)+'" filtred out',TMWOHistoryOut);
        end;
-     ZCMsgCallBackInterface.TextMessage(sysutils.format(rscmNEntitiesProcessed,[inttostr(count)]),TMWOHistoryOut);
+     ZCMsgCallBackInterface.TextMessage(sysutils.format(rscmNEntitiesProcessed,[count]),TMWOHistoryOut);
      if NumberingParams.SaveStart then
                                       NumberingParams.StartNumber:=index;
      mpd.Destroy;

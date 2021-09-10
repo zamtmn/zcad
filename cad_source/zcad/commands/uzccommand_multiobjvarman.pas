@@ -80,7 +80,7 @@ begin
   end;
 
   mem.done;
-  ZCMsgCallBackInterface.TextMessage(format(rscmNEntitiesProcessed,[inttostr(counter)]),TMWOHistoryOut);
+  ZCMsgCallBackInterface.TextMessage(format(rscmNEntitiesProcessed,[counter]),TMWOHistoryOut);
   result:=cmd_ok;
 end;
 

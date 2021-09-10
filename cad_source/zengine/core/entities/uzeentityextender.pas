@@ -25,7 +25,7 @@ uses uzbmemman,uzedrawingdef,uzbtypesbase,uzbtypes,usimplegenerics,
 
 type
 TBaseObjExtender= object(GDBaseObject)
-
+  class function getExtenderName:string;virtual;abstract;
 end;
 PTBaseEntityExtender=^TBaseEntityExtender;
 TCreateThisExtender=function (pEntity:Pointer; out ObjSize:Integer):PTBaseEntityExtender;
@@ -51,8 +51,11 @@ TEntityExtensions=class
                        constructor create;
                        destructor destroy;override;
                        function AddExtension(ExtObj:PTBaseEntityExtender;ObjSize:GDBInteger):{PTBaseEntityExtender}pointer;
-                       function GetExtension(_ExtType:pointer):{PTBaseEntityExtender}pointer;
+                       function GetExtension(_ExtType:pointer):PTBaseEntityExtender;overload;
+                       function GetExtension(n:Integer):PTBaseEntityExtender;overload;
+                       function GetExtensionsCount:Integer;
                        procedure CopyAllExtToEnt(pSourceEntity,pDestEntity:pointer);
+
 
                        procedure RunOnCloneProcedures(source,dest:pointer);
                        procedure RunOnBuildVarGeometryProcedures(pEntity:pointer;const drawing:TDrawingDef);
@@ -78,7 +81,7 @@ begin
      else
         result:=fEntityExtensions[nevindex];
 end;
-function TEntityExtensions.GetExtension(_ExtType:pointer):{PTBaseEntityExtender}pointer;
+function TEntityExtensions.GetExtension(_ExtType:pointer):PTBaseEntityExtender;
 var
   index:SizeUInt;
 begin
@@ -91,6 +94,17 @@ begin
      end
      else
        result:=nil;
+end;
+function TEntityExtensions.GetExtensionsCount:Integer;
+begin
+  if Assigned(fEntityExtensions) then
+    result:=fEntityExtensions.Size
+  else
+    result:=0;
+end;
+function TEntityExtensions.GetExtension(n:Integer):PTBaseEntityExtender;
+begin
+  result:=fEntityExtensions[n];
 end;
 constructor TEntityExtensions.create;
 begin

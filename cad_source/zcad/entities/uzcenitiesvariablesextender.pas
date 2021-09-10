@@ -24,7 +24,8 @@ uses sysutils,UGDBObjBlockdefArray,uzedrawingdef,uzeentityextender,
      uzbtypesbase,uzbtypes,uzeentsubordinated,uzeentity,uzeenttext,uzeblockdef,
      varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,uzbmemman,
      uzeentitiestree,usimplegenerics,uzeffdxfsupport;
-
+const
+  VariablesExtenderName='extdrVariables';
 type
 {REGISTEROBJECTTYPE TBaseVariablesExtender}
 TBaseVariablesExtender= object(TBaseEntityExtender)
@@ -36,6 +37,7 @@ TVariablesExtender= object(TBaseVariablesExtender)
     pMainFuncEntity:PGDBObjEntity;
     DelegatesArray:TEntityArray;
     pThisEntity:PGDBObjEntity;
+    class function getExtenderName:string;virtual;
     class function CreateEntVariablesExtender(pEntity:Pointer; out ObjSize:Integer):PTVariablesExtender;static;
     constructor init(pEntity:Pointer);
     destructor Done;virtual;
@@ -182,12 +184,12 @@ procedure TVariablesExtender.onEntityClone(pSourceEntity,pDestEntity:pointer);
 var
     pDestVariablesExtender,pbdunit:PTVariablesExtender;
 begin
-     pDestVariablesExtender:=PGDBObjEntity(pDestEntity)^.EntExtensions.GetExtension(typeof(TVariablesExtender));
+     pDestVariablesExtender:=pointer(PGDBObjEntity(pDestEntity)^.EntExtensions.GetExtension(typeof(TVariablesExtender)));
      if pDestVariablesExtender=nil then
                        pDestVariablesExtender:=AddVariablesToEntity(pDestEntity);
      entityunit.CopyTo(@pDestVariablesExtender^.entityunit);
      if pMainFuncEntity<>nil then begin
-       pbdunit:=pMainFuncEntity^.EntExtensions.GetExtension(typeof(TVariablesExtender));
+       pbdunit:=pointer(pMainFuncEntity^.EntExtensions.GetExtension(typeof(TVariablesExtender)));
        if pbdunit<>nil then
          pbdunit^.addDelegate(pDestEntity,pDestVariablesExtender);
      end;
@@ -200,7 +202,7 @@ begin
      pblockdef:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getDataMutable(PGDBObjDevice(pEntity)^.index);
      pbdunit:=nil;
      if assigned(pblockdef^.EntExtensions)then
-     pbdunit:=pblockdef^.EntExtensions.GetExtension(typeof(TVariablesExtender));
+     pbdunit:=pointer(pblockdef^.EntExtensions.GetExtension(typeof(TVariablesExtender)));
      if pbdunit<>nil then
        pbdunit^.entityunit.CopyTo(@self.entityunit);
      //PTObjectUnit(pblockdef^.ou.Instance)^.copyto(PTObjectUnit(ou.Instance));
@@ -216,10 +218,10 @@ begin
   if pMainFuncEntity<>nil then begin
     if OldEnts2NewEntsMap.TryGetValue(pMainFuncEntity,CopiedMainfunction)then
       if CopiedMainfunction<>nil then begin
-        pbdunit:=pMainFuncEntity^.EntExtensions.GetExtension(typeof(TVariablesExtender));
+        pbdunit:=pointer(pMainFuncEntity^.EntExtensions.GetExtension(typeof(TVariablesExtender)));
         if pbdunit<>nil then
           pbdunit^.removeDelegate(pThisEntity,@self);
-        pbdunit:=CopiedMainfunction^.EntExtensions.GetExtension(typeof(TVariablesExtender));
+        pbdunit:=pointer(CopiedMainfunction^.EntExtensions.GetExtension(typeof(TVariablesExtender)));
         if pbdunit<>nil then
           pbdunit^.addDelegate(pThisEntity,@self);
       end;
@@ -235,11 +237,16 @@ begin
     if pThisEntity.PExtAttrib<>nil then
       if pThisEntity.PExtAttrib^.MainFunctionHandle<>0 then begin
         if context.h2p.TryGetValue(pThisEntity.PExtAttrib^.MainFunctionHandle,pmf)then begin
-          pbdunit:=pmf^.EntExtensions.GetExtension(typeof(TVariablesExtender));
+          pbdunit:=pointer(pmf^.EntExtensions.GetExtension(typeof(TVariablesExtender)));
           if pbdunit<>nil then
             pbdunit^.addDelegate(pThisEntity,@self);
         end;
       end;
+end;
+
+class function TVariablesExtender.getExtenderName:string;
+begin
+  result:=VariablesExtenderName;
 end;
 
 class function TVariablesExtender.CreateEntVariablesExtender(pEntity:Pointer; out ObjSize:Integer):PTVariablesExtender;

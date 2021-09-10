@@ -183,7 +183,7 @@ begin
                                           end;
                  pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
                  until pv=nil;
-                 ZCMsgCallBackInterface.TextMessage(format(rscmNEntitiesProcessed,[inttostr(c)]),TMWOHistoryOut);
+                 ZCMsgCallBackInterface.TextMessage(format(rscmNEntitiesProcessed,[c]),TMWOHistoryOut);
            end;
      end
         else

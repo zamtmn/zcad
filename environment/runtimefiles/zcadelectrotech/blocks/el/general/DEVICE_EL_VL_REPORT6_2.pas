@@ -1,4 +1,4 @@
-unit DEVICE_EL_VL_REPORT6_2_6;
+﻿unit DEVICE_EL_VL_REPORT6_2;
 
 interface
 
@@ -26,6 +26,18 @@ T15:GDBString;(*'Эл.применик обозначение'*)
 T16:GDBString;(*'Эл.применик мощность кВт'*)
 T17:GDBString;(*'Эл.применик ток, А'*)
 T18:GDBString;(*'Эл.применик наименование'*)
+
+T20:GDBString;(*'Схема шина'*)
+T21:GDBString;(*'Схема аппарат 1'*)
+T22:GDBString;(*'Схема кабель 1'*)
+T23:GDBString;(*'Схема аппарат 2'*)
+T24:GDBString;(*'Схема кабель 2'*)
+T25:GDBString;(*'Схема кабель 3'*)
+T26:GDBString;(*'Схема переход 1'*)
+T27:GDBString;(*'Схема переход 2'*)
+T28:GDBString;(*'Схема переход 3'*)
+T29:GDBString;(*'Схема номер 1'*)
+T30:GDBString;(*'Схема номер 2'*)
 
 implementation
 

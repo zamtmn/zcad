@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <PalettesContent>
     <BlockLib Type="Tree" Caption='Блоки' ImagesWidth='24'>
@@ -183,13 +183,8 @@
            <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_CH1)" Img='DEVICE_EL_VL_DIAGRAM_CH1_300' Caption='Щит сноска 1'/>
            <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_CH2)" Img='DEVICE_EL_VL_DIAGRAM_CH2_300' Caption='Щит сноска 2'/>
 	   <ZTreeCommand Command="Insert(EL_VL_REPORT6_1)" Img='EL_VL_REPORT6_1_300' Caption='Распред.схема шапка'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_REPORT6_0)" Img='DEVICE_EL_VL_REPORT6_0_300' Caption='Распред.схема устройство'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_REPORT6_2_1)" Img='DEVICE_EL_VL_REPORT6_2_1_300' Caption='Распред.схема фидер'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_REPORT6_2_2)" Img='DEVICE_EL_VL_REPORT6_2_2_300' Caption='Распред.схема перемычка'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_REPORT6_2_3)" Img='DEVICE_EL_VL_REPORT6_2_3_300' Caption='Распред.схема блок управления'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_REPORT6_2_4)" Img='DEVICE_EL_VL_REPORT6_2_4_300' Caption='Распред.схема эл.приемник 1'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_REPORT6_2_5)" Img='DEVICE_EL_VL_REPORT6_2_5_300' Caption='Распред.схема эл.приемник 2'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_REPORT6_2_6)" Img='DEVICE_EL_VL_REPORT6_2_6_300' Caption='Распред.схема фидер вентиляции'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_REPORT6_2)" Img='DEVICE_EL_VL_REPORT6_2_300' Caption='Распред.схема фидер'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_REPORT6_0)" Img='DEVICE_EL_VL_REPORT6_0_300' Caption='Распред.схема щит'/>
       	</ZTreeNode>
       	<ZTreeNode Caption='Узлы'>
 	   <ZTreeCommand Command="Insert(UNIT_GRID1)" Img='UNIT_GRID1_300' Caption='Сетка 1'/>

@@ -46,6 +46,7 @@ TInteractiveProcObjBuild=procedure(const PInteractiveData:GDBPointer;Point:GDBVe
     TGetPointMode=(TGPWait{point},TGPPoint,
                    TGPWaitEnt,TGPEnt,
                    TGPWaitInput,TGPInput,
+                   TGPId,
                    TGPCancel,TGPOtherCommand,TGPCloseDWG,TGPCloseApp);
     {REGISTERRECORDTYPE TInteractiveData}
     TInteractiveData=record
@@ -55,6 +56,7 @@ TInteractiveProcObjBuild=procedure(const PInteractiveData:GDBPointer;Point:GDBVe
                        PInteractiveData:GDBPointer;
                        PInteractiveProc:{-}TInteractiveProcObjBuild{/GDBPointer/};
                        Input:AnsiString;
+                       Id:Integer;
                     end;
     TCommandOperands={-}GDBString{/GDBPointer/};
     TCommandResult=GDBInteger;
@@ -106,6 +108,10 @@ TInteractiveProcObjBuild=procedure(const PInteractiveData:GDBPointer;Point:GDBVe
     function IsRTECommand:GDBBoolean;virtual;
   end;
 {Export-}
+const
+  SomethingWait=[TGPWait,
+                 TGPWaitEnt,
+                 TGPWaitInput];
 implementation
 function CommandObjectDef.IsRTECommand:GDBBoolean;
 begin

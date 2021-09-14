@@ -40,12 +40,12 @@ var
     pline:PGDBObjLine;
 begin
     result:=false;
-    if commandmanager.get3dpoint(prompt1,p1) then
+    if commandmanager.get3dpoint(prompt1,p1)=GRNormal then
     begin
          pline := Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,drawings.GetCurrentROOT));
          pline^.CoordInOCS.lBegin:=p1;
          InteractiveLineEndManipulator(pline,p1,false);
-      if commandmanager.Get3DPointInteractive(prompt2,p2,@InteractiveLineEndManipulator,pline) then
+      if commandmanager.Get3DPointInteractive(prompt2,p2,@InteractiveLineEndManipulator,pline)=GRNormal then
       begin
            result:=true;
       end;
@@ -69,7 +69,7 @@ begin
          if commandmanager.Get3DPointInteractive( rscmSpecifyThirdPoint,
                                                   p3,
                                                   @InteractiveRDimManipulator,
-                                                  pd)
+                                                  pd)=GRNormal
          then
          begin
               vd:=pd^.vectorD;

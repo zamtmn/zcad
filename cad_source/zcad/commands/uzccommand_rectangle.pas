@@ -72,7 +72,7 @@ var
      //pf^.base.Attributes:=pf^.base.Attributes and (not FA_READONLY);//сбрасываем ему флаг ридонли
      zcShowCommandParams(PInternalRTTITypeDesk,@RectangParam);
 
-     if commandmanager.get3dpoint(rscmSpecifyFirstPoint,pe.p1) then
+     if commandmanager.get3dpoint(rscmSpecifyFirstPoint,pe.p1)=GRNormal then
      begin
         pf:=PInternalRTTITypeDesk^.FindField('ET');//находим описание поля ET
         pf^.base.Attributes:=pf^.base.Attributes or FA_READONLY;//устанавливаем ему флаг ридонли
@@ -103,7 +103,7 @@ var
                polyLWObj^.Width2D_in_OCS_Array.PushBackData(widthObj);
 
                InteractiveLWRectangleManipulator(polyLWObj,pe.p1,false);
-               if commandmanager.Get3DPointInteractive(rscmSpecifySecondPoint,pe.p2,@InteractiveLWRectangleManipulator,polyLWObj) then
+               if commandmanager.Get3DPointInteractive(rscmSpecifySecondPoint,pe.p2,@InteractiveLWRectangleManipulator,polyLWObj)=GRNormal then
                begin
                   zcAddEntToCurrentDrawingWithUndo(polyLWObj); //Добавить объект из конструкторской области в чертеж через ундо//
                   {так как сейчас у нас объект находится и в чертеже и в конструируемой области,
@@ -123,7 +123,7 @@ var
                polyObj^.VertexArrayInOCS.PushBackData(vertexObj);
                polyObj^.VertexArrayInOCS.PushBackData(vertexObj);
                InteractiveRectangleManipulator(polyObj,pe.p1,false);
-               if commandmanager.Get3DPointInteractive(rscmSpecifySecondPoint,pe.p2,@InteractiveRectangleManipulator,polyObj) then
+               if commandmanager.Get3DPointInteractive(rscmSpecifySecondPoint,pe.p2,@InteractiveRectangleManipulator,polyObj)=GRNormal then
                begin
                   zcAddEntToCurrentDrawingWithUndo(polyObj); //Добавить объект из конструкторской области в чертеж через ундо//
                   {так как сейчас у нас объект находится и в чертеже и в конструируемой области,

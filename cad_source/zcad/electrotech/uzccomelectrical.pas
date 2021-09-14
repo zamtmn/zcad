@@ -3299,6 +3299,7 @@ var
     p:GDBVertex;
     pet:CMDLinePromptParser.TGeneralParsedText;
     ts:utf8string;
+    gr:TGetResult;
 begin
      ZCMsgCallBackInterface.TextMessage('Тест производительности. запасаемя терпением',TMWOHistoryOut);
      {$IFDEF PERFOMANCELOG}programlog.LogOutStrFast('тест производительности - getonmouseobject*10000',lp_IncPos);{$ENDIF}
@@ -3309,7 +3310,14 @@ begin
      //pet:=CMDLinePromptParser.GetTokens('фs "ёба" йs "2ёба2" йцу12');
      CLine.SetPrompt(pet);
      pet.Free;
-     commandmanager.Get3DPoint('ага',p);
+     repeat
+       gr:=commandmanager.Get3DPoint('ага',p);
+       case gr of
+             GRId:ZCMsgCallBackInterface.TextMessage('Id:'+inttostr(commandmanager.GetLastId),TMWOHistoryOut);
+         GRNormal:ZCMsgCallBackInterface.TextMessage('Normal',TMWOHistoryOut);
+          GRInput:ZCMsgCallBackInterface.TextMessage('Input',TMWOHistoryOut);
+       end;
+     until gr=GRCancel;
      //for i:=0 to 10000 do
      //       drawings.GetCurrentDWG.wa.getonmouseobject(@drawings.GetCurrentROOT.ObjArray);
      {$IFDEF PERFOMANCELOG}programlog.LogOutStrFast('тест производительности',lp_DecPos);{$ENDIF}

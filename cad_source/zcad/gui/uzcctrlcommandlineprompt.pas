@@ -47,6 +47,8 @@ const
   HotOptionUseBrush = True;
   HotOptionFontUnderLine=False;
 
+  WrongId=-2;
+
 type
   TCommandLineTextType=(CLTT_Option,       //опция (подсвечивается под мышкой)
                         CLTT_HLOption);    //выделенная часть опции (например шорткат или подобное)

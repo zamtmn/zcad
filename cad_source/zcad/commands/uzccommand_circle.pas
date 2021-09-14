@@ -57,7 +57,7 @@ else if s='3P' then pe.cdm:=TCDM_3P
 else pe.cdm:=TCDM_CR;
 
     pe.npoint:=0;
-    if commandmanager.get3dpoint(rscmSpecifyFirstPoint,pe.p1) then
+    if commandmanager.get3dpoint(rscmSpecifyFirstPoint,pe.p1)=GRNormal then
     begin
          inc(pe.npoint);
          pe.pentity := Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBCircleID,drawings.GetCurrentROOT));
@@ -65,12 +65,12 @@ else pe.cdm:=TCDM_CR;
       if commandmanager.Get3DPointInteractive( rscmSpecifySecondPoint,
                                                pe.p2,
                                                @InteractiveSmartCircleManipulator,
-                                               @pe) then
+                                               @pe)=GRNormal then
       begin
            if pe.cdm=TCDM_3P then
            begin
                 inc(pe.npoint);
-                if commandmanager.Get3DPointInteractive(rscmSpecifySecondPoint,pe.p3,@InteractiveSmartCircleManipulator,@pe) then
+                if commandmanager.Get3DPointInteractive(rscmSpecifySecondPoint,pe.p3,@InteractiveSmartCircleManipulator,@pe)=GRNormal then
                 begin
                      drawings.GetCurrentDWG^.FreeConstructionObjects;
                      pcircle := AllocEnt(GDBCircleID);

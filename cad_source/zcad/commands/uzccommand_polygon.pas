@@ -86,7 +86,7 @@ begin
    //pf^.base.Attributes:=pf^.base.Attributes or FA_HIDDEN_IN_OBJ_INSP;//устанавливаем ему флаг cкрытности
    zcShowCommandParams(PInternalRTTITypeDesk,@PolygonParam);
 
-   if commandmanager.get3dpoint(rscmSpecifyFirstPoint,pe.p1) then
+   if commandmanager.get3dpoint(rscmSpecifyFirstPoint,pe.p1)=GRNormal then
    begin
       pf:=PInternalRTTITypeDesk^.FindField('ET');//находим описание поля ET
       pf^.base.Attributes:=pf^.base.Attributes or FA_READONLY;//устанавливаем ему флаг ридонли
@@ -118,7 +118,7 @@ begin
              end;
 
              InteractivePolygonManipulator(polygonDrawModePentity,pe.p1,false);
-             if commandmanager.Get3DPointInteractive(rscmSpecifySecondPoint,pe.p2,@InteractivePolygonManipulator,@polygonDrawModePentity) then
+             if commandmanager.Get3DPointInteractive(rscmSpecifySecondPoint,pe.p2,@InteractivePolygonManipulator,@polygonDrawModePentity)=GRNormal then
              begin
                 zcAddEntToCurrentDrawingWithUndo(polygonDrawModePentity.plwentity); //Добавить объект из конструкторской области в чертеж через ундо//
                 {так как сейчас у нас объект находится и в чертеже и в конструируемой области,
@@ -140,7 +140,7 @@ begin
 
              //ZCMsgCallBackInterface.TextMessage('---' + inttostr(polygonDrawModePentity.pentity^.VertexArrayInOCS.GetRealCount) + ' - ошибка: ',TMWOHistoryOut);
              InteractivePolygonManipulator(polygonDrawModePentity,pe.p1,false);
-             if commandmanager.Get3DPointInteractive(rscmSpecifySecondPoint,pe.p2,@InteractivePolygonManipulator,@polygonDrawModePentity) then
+             if commandmanager.Get3DPointInteractive(rscmSpecifySecondPoint,pe.p2,@InteractivePolygonManipulator,@polygonDrawModePentity)=GRNormal then
              begin
                 zcAddEntToCurrentDrawingWithUndo(polygonDrawModePentity.pentity); //Добавить объект из конструкторской области в чертеж через ундо//
                 {так как сейчас у нас объект находится и в чертеже и в конструируемой области,

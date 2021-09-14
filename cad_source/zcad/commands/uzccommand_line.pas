@@ -38,11 +38,11 @@ var
   p1,p2:gdbvertex;
 begin
  {запрос первой координаты}
- if commandmanager.get3dpoint(rscmSpecifyFirstPoint,p1) then
+ if commandmanager.get3dpoint(rscmSpecifyFirstPoint,p1)=GRNormal then
    while true do
      {запрос следующей координаты
       с рисованием резиновой линии от базовой точки p1}
-     if commandmanager.Get3DPointWithLineFromBase(rscmSpecifyNextPoint,p1,p2) then begin
+     if commandmanager.Get3DPointWithLineFromBase(rscmSpecifyNextPoint,p1,p2)=GRNormal then begin
 
        //создаем и инициализируем примитив
        pline:=AllocEnt(GDBLineID);

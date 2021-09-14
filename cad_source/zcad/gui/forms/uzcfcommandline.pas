@@ -36,6 +36,7 @@ type
   public
     //utfpresent:boolean;
     utflen:integer;
+    CurrentPrompt:TParserCommandLinePrompt.TGeneralParsedText;
     procedure keypressmy(Sender: TObject; var Key: char);
     procedure SetMode(m:TCLineMode);virtual;
     procedure SetPrompt(APrompt:String);virtual;overload;
@@ -71,17 +72,20 @@ end;
 
 procedure TCLine.SetPrompt(APrompt:String{;ATPromptResults:TCommandLinePrompt.TPromptResults});
 begin
+  CurrentPrompt:=nil;
   prompt.SetHighLightedText(APrompt,[],-1);
 end;
+
 procedure TCLine.SetPrompt(APrompt:TParserCommandLinePrompt.TGeneralParsedText);
 var
   pt:TCommandLinePromptOption;
   ts:TParserCommandLinePrompt.TParserString;
 begin
-    pt:=TCommandLinePromptOption.Create;
-    ts:=APrompt.GetResult(pt);
-    prompt.SetHighLightedText(ts,pt.Parts.arr,pt.Parts.Size-1);
-    pt.Free;
+  CurrentPrompt:=APrompt;
+  pt:=TCommandLinePromptOption.Create;
+  ts:=APrompt.GetResult(pt);
+  prompt.SetHighLightedText(ts,pt.Parts.arr,pt.Parts.Size-1);
+  pt.Free;
 end;
 
 procedure TCLine.SetMode(m:TCLineMode);
@@ -235,6 +239,7 @@ begin
     panel.Color:=HistoryLine.Brush.Color;
 
     prompt:=TCommandLinePrompt.create(panel);
+    prompt.OnClickNotify:=commandmanager.PromptTagNotufy;
     prompt.Align:=alLeft;
     //prompt.Layout:=tlCenter;
     //prompt.Width:=1;

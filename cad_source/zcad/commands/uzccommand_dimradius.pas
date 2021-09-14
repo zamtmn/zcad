@@ -45,7 +45,7 @@ var
          pd^.DimData.P10InWCS:=p1;
          pd^.DimData.P15InWCS:=p2;
          InteractiveDDimManipulator(pd,p2,false);
-    if commandmanager.Get3DPointInteractive(rscmSpecifyThirdPoint,p3,@InteractiveDDimManipulator,pd) then
+    if commandmanager.Get3DPointInteractive(rscmSpecifyThirdPoint,p3,@InteractiveDDimManipulator,pd)=GRNormal then
     begin
          drawings.GetCurrentDWG^.FreeConstructionObjects;
          pd := AllocEnt(GDBRadialDimensionID);

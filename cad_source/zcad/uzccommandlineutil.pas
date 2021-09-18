@@ -91,11 +91,16 @@ var
 begin
   try
     if commandmanager.pcommandrunning<>nil then begin
-      if commandmanager.pcommandrunning.IData.GetPointMode=TGPWaitInput then begin
-        commandmanager.pcommandrunning.IData.GetPointMode:=TGPInput;
+      if commandmanager.pcommandrunning.IData.GetPointMode=TGPMWaitInput then begin
+        commandmanager.pcommandrunning.IData.GetPointMode:=TGPMInput;
+        commandmanager.pcommandrunning.IData.Input:=input;
+        exit;
+      end else if (commandmanager.pcommandrunning.IData.GetPointMode in SomethingWait)and(GPInput in commandmanager.pcommandrunning.IData.PossibleResult) then begin
+        commandmanager.pcommandrunning.IData.GetPointMode:=TGPMInput;
         commandmanager.pcommandrunning.IData.Input:=input;
         exit;
       end;
+
     end;
     if (length(input) > 0) then
     begin

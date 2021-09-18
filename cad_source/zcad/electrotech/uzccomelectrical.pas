@@ -3309,13 +3309,14 @@ begin
      //pet:=CMDLinePromptParser.GetTokens('$<"12&[3]",Keys[1],Id[1]>');
      //pet:=CMDLinePromptParser.GetTokens('фs "ёба" йs "2ёба2" йцу12');
      CLine.SetPrompt(pet);
+     commandmanager.ChangeInputMode([GPIempty],[]);
      pet.Free;
      repeat
        gr:=commandmanager.Get3DPoint('ага',p);
        case gr of
              GRId:ZCMsgCallBackInterface.TextMessage('Id:'+inttostr(commandmanager.GetLastId),TMWOHistoryOut);
          GRNormal:ZCMsgCallBackInterface.TextMessage('Normal',TMWOHistoryOut);
-          GRInput:ZCMsgCallBackInterface.TextMessage('Input',TMWOHistoryOut);
+          GRInput:ZCMsgCallBackInterface.TextMessage('Input:'+commandmanager.GetLastInput,TMWOHistoryOut);
        end;
      until gr=GRCancel;
      //for i:=0 to 10000 do

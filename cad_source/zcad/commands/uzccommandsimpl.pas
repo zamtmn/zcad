@@ -212,7 +212,9 @@ begin
          CommandName:=name;
          onCommandStart:=func;
          overlay:=false;
-         IData.GetPointMode:=TGPCancel;
+         IData.GetPointMode:=TGPMCancel;
+         IData.PossibleResult:=[Low(TGetPossibleResult)..High(TGetPossibleResult)];
+         IData.InputMode:=[];
 end;
 procedure CommandFastObjectPlugin.CommandStart;
 var
@@ -332,7 +334,9 @@ begin
      CommandName:=name;
      overlay:=false;
      NotUseCommandLine:=true;
-     IData.GetPointMode:=TGPCancel;
+     IData.GetPointMode:=TGPMCancel;
+     IData.PossibleResult:=[Low(TGetPossibleResult)..High(TGetPossibleResult)];
+     IData.InputMode:=[];
 end;
 
 function CommandRTEdObjectPlugin.AfterClick;

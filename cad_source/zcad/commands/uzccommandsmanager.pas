@@ -340,6 +340,9 @@ begin
   if (pcommandrunning^.IData.GetPointMode=TGPMInput)and(not Application.Terminated) then begin
     Input:=pcommandrunning^.IData.Input;
     result:=GRNormal;
+  end else if (pcommandrunning^.IData.GetPointMode=TGPMId)and(not Application.Terminated) then begin
+    Input:='';
+    result:=GRId;
   end else begin
     Input:='';
     result:=GRCancel;

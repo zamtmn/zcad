@@ -15,7 +15,10 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-{$MODE DELPHI}
+{$IFDEF FPC}
+  {$CODEPAGE UTF8}
+  {$MODE DELPHI}
+{$ENDIF}
 unit uzccommand_dataexport;
 {$INCLUDE def.inc}
 
@@ -35,7 +38,8 @@ uses
   URecordDescriptor,typedescriptors,Varman,gzctnrvectortypes,
   uzeparserenttypefilter,uzeparserentpropfilter,uzeentitiestypefilter,
   uzelongprocesssupport,uzeparser,uzcoimultiproperties,uzedimensionaltypes,
-  uzcoimultipropertiesutil,varmandef,uzcvariablesutils,Masks,uzcregother,uzbtypesbase;
+  uzcoimultipropertiesutil,varmandef,uzcvariablesutils,Masks,uzcregother,
+  uzbtypesbase,uzeparsercmdprompt,uzcfcommandline,uzcinterface,uzcdialogsfiles;
 
 type
   //** Тип данных для отображения в инспекторе опций
@@ -144,6 +148,11 @@ var
   BracketTockenId:TParserEntityPropFilter.TParserTokenizer.TTokenId;
   ExporterParser:TExporterParser;
   VU:TObjectUnit;
+  clFilePrompt:CMDLinePromptParser.TGeneralParsedText=nil;
+  clOptionsPrompt:CMDLinePromptParser.TGeneralParsedText=nil;
+  clOptionsPrompt1:CMDLinePromptParser.TGeneralParsedText=nil;
+  clOptionsPrompt2:CMDLinePromptParser.TGeneralParsedText=nil;
+  clOptionsPrompt3:CMDLinePromptParser.TGeneralParsedText=nil;
 
 class procedure TDoIf.StaticDoit(const Source:TRawByteStringManipulator.TStringType;
                              const Token :TRawByteStringManipulator.TCharRange;
@@ -375,6 +384,8 @@ end;
 
 
 function DataExport_com(operands:TCommandOperands):TCommandResult;
+type
+  TCmdMode=(CMEmpty,CMWaitFile,CMOptions,CMOptions1,CMOptions2,CMOptions3,CMExport);
 var
   EntsTypeFilter:TEntsTypeFilter;
   EntityIncluder:ParserEntityPropFilter.TGeneralParsedText;
@@ -387,55 +398,152 @@ var
   ir:itrec;
   lpsh:TLPSHandle;
   Data:TDataExport;
-
+  inpt:gdbstring;
+  gr:TGetResult;
+  CmdMode:TCmdMode;
+  filename:string;
+  procedure SetCmdMode(Mode:TCmdMode);
+  begin
+    if CmdMode=Mode then
+      exit;
+    case Mode of
+      CMWaitFile:begin
+                   if clFilePrompt=nil then
+                     clFilePrompt:=CMDLinePromptParser.GetTokens('Configure export ${"&[p]arams",Keys[p],StrId[CLPIdOptions]}, run ${"&[f]ile dialog",Keys[f],StrId[CLPIdFileDialog]} or enter file name (empty for default):');
+                   CLine.SetPrompt(clFilePrompt);
+                   commandmanager.ChangeInputMode([GPIempty],[]);
+                 end;
+       CMOptions:begin
+                   if clOptionsPrompt=nil then
+                     clOptionsPrompt:=CMDLinePromptParser.GetTokens('${"&[<]<<",Keys[<],StrId[CLPIdBack]} Set ${"&[e]ntities",Keys[o],StrId[CLPIdUser1]}/${"&[p]roperties",Keys[o],StrId[CLPIdUser2]} filter or export ${"&[s]cript",Keys[o],StrId[CLPIdUser3]}');
+                   CLine.SetPrompt(clOptionsPrompt);
+                   commandmanager.ChangeInputMode([GPIempty],[]);
+                 end;
+      CMOptions1:begin
+                   ZCMsgCallBackInterface.TextMessage('Entities filter current value:',TMWOHistoryOut);
+                   ZCMsgCallBackInterface.TextMessage(DataExportParam.EntFilter^,TMWOHistoryOut);
+                   if clOptionsPrompt1=nil then
+                     clOptionsPrompt1:=CMDLinePromptParser.GetTokens('${"&[<]<<",Keys[<],StrId[CLPIdBack]} Enter new entities filter:');
+                   CLine.SetPrompt(clOptionsPrompt1);
+                   commandmanager.ChangeInputMode([GPIempty],[]);
+                 end;
+      CMOptions2:begin
+                   ZCMsgCallBackInterface.TextMessage('Properties filter current value:',TMWOHistoryOut);
+                   ZCMsgCallBackInterface.TextMessage(DataExportParam.PropFilter^,TMWOHistoryOut);
+                   if clOptionsPrompt2=nil then
+                     clOptionsPrompt2:=CMDLinePromptParser.GetTokens('${"&[<]<<",Keys[<],StrId[CLPIdBack]} Enter new properties filter:');
+                   CLine.SetPrompt(clOptionsPrompt2);
+                   commandmanager.ChangeInputMode([GPIempty],[]);
+                 end;
+      CMOptions3:begin
+                   ZCMsgCallBackInterface.TextMessage('Properties export script current value:',TMWOHistoryOut);
+                   ZCMsgCallBackInterface.TextMessage(DataExportParam.Exporter^,TMWOHistoryOut);
+                   if clOptionsPrompt3=nil then
+                     clOptionsPrompt3:=CMDLinePromptParser.GetTokens('${"&[<]<<",Keys[<],StrId[CLPIdBack]} Enter new export script:');
+                   CLine.SetPrompt(clOptionsPrompt3);
+                   commandmanager.ChangeInputMode([GPIempty],[]);
+                 end;
+    end;
+    CmdMode:=Mode;
+  end;
 begin
   zcShowCommandParams(SysUnit^.TypeName2PTD('TDataExportParam'),@DataExportParam);
+  CmdMode:=CMEmpty;
+  SetCmdMode(CMWaitFile);
+  repeat
+    gr:=commandmanager.GetInput('',inpt);
+       case gr of
+             GRId:case commandmanager.GetLastId of
+                                      CLPIdOptions:SetCmdMode(CMOptions);
+                                         CLPIdBack:if CmdMode=CMOptions then
+                                                     SetCmdMode(CMWaitFile)
+                                                   else
+                                                     SetCmdMode(CMOptions);
+                                        CLPIdUser1:SetCmdMode(CMOptions1);
+                                        CLPIdUser2:SetCmdMode(CMOptions2);
+                                        CLPIdUser3:SetCmdMode(CMOptions3);
+                                   CLPIdFileDialog:begin
+                                                     filename:='';
+                                                     if SaveFileDialog(filename,'CSV',CSVFileFilter,'','Export data...') then begin
+                                                       DataExportParam.FileName^:=filename;
+                                                       CmdMode:=CMExport;
+                                                       system.break;
+                                                     end;
 
+                                                   end;
+                  end;
+         GRNormal:case CmdMode of
+                       CMWaitFile:begin
+                                    if inpt<>'' then
+                                      DataExportParam.FileName^:=inpt;
+                                    CmdMode:=CMExport;
+                                    system.break;
+                                  end;
+                       CMOptions1:begin
+                                    if inpt<>'' then
+                                      DataExportParam.EntFilter^:=inpt;
+                                    SetCmdMode(CMOptions);
+                                  end;
+                       CMOptions2:begin
+                                    if inpt<>'' then
+                                      DataExportParam.PropFilter^:=inpt;
+                                    SetCmdMode(CMOptions);
+                                  end;
+                       CMOptions3:begin
+                                    if inpt<>'' then
+                                      DataExportParam.Exporter^:=inpt;
+                                    SetCmdMode(CMOptions);
+                                  end;
+                  end;
+       end;
+  until gr=GRCancel;
 
-  EntsTypeFilter:=TEntsTypeFilter.Create;
-  pt:=ParserEntityTypeFilter.GetTokens(DataExportParam.EntFilter^);
-  pt.Doit(EntsTypeFilter);
-  EntsTypeFilter.SetFilter;
-  pt.Free;
+  if CmdMode=CMExport then begin
+    EntsTypeFilter:=TEntsTypeFilter.Create;
+    pt:=ParserEntityTypeFilter.GetTokens(DataExportParam.EntFilter^);
+    pt.Doit(EntsTypeFilter);
+    EntsTypeFilter.SetFilter;
+    pt.Free;
 
-  pet:=ExporterParser.GetTokens(DataExportParam.Exporter^);
+    pet:=ExporterParser.GetTokens(DataExportParam.Exporter^);
 
-  EntityIncluder:=ParserEntityPropFilter.GetTokens(DataExportParam.PropFilter^);
-  lpsh:=LPSHEmpty;
+    EntityIncluder:=ParserEntityPropFilter.GetTokens(DataExportParam.PropFilter^);
+    lpsh:=LPSHEmpty;
 
-   Data.FDoc:=TCSVDocument.Create;
-     if drawings.GetCurrentDWG<>nil then
-     begin
-       lpsh:=LPS.StartLongProcess('DataExport',@DataExport_com,drawings.GetCurrentROOT^.ObjArray.Count);
-       pv:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
-       if pv<>nil then
-       repeat
-         if EntsTypeFilter.IsEntytyTypeAccepted(pv^.GetObjType) then begin
-           if assigned(EntityIncluder) then begin
-             propdata.CurrentEntity:=pv;
-             propdata.IncludeEntity:=T3SB_Default;
-             EntityIncluder.Doit(PropData);
-           end else
-             propdata.IncludeEntity:=T3SB_True;
+     Data.FDoc:=TCSVDocument.Create;
+       if drawings.GetCurrentDWG<>nil then
+       begin
+         lpsh:=LPS.StartLongProcess('DataExport',@DataExport_com,drawings.GetCurrentROOT^.ObjArray.Count);
+         pv:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
+         if pv<>nil then
+         repeat
+           if EntsTypeFilter.IsEntytyTypeAccepted(pv^.GetObjType) then begin
+             if assigned(EntityIncluder) then begin
+               propdata.CurrentEntity:=pv;
+               propdata.IncludeEntity:=T3SB_Default;
+               EntityIncluder.Doit(PropData);
+             end else
+               propdata.IncludeEntity:=T3SB_True;
 
-           if propdata.IncludeEntity=T3SB_True then begin
-             Data.CurrentEntity:=pv;
-             if assigned(pet) then
-               pet.Doit(data);
+             if propdata.IncludeEntity=T3SB_True then begin
+               Data.CurrentEntity:=pv;
+               if assigned(pet) then
+                 pet.Doit(data);
+             end;
            end;
-         end;
 
-         pv:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
-         LPS.ProgressLongProcess(lpsh,ir.itc);
-       until pv=nil;
-     end;
-  if lpsh<>LPSHEmpty then
-    LPS.EndLongProcess(lpsh);
-  Data.FDoc.Delimiter:=';';
-  Data.FDoc.SaveToFile(DataExportParam.FileName^);
-  Data.FDoc.Free;
-  EntsTypeFilter.Free;
-  EntityIncluder.Free;
+           pv:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
+           LPS.ProgressLongProcess(lpsh,ir.itc);
+         until pv=nil;
+       end;
+    if lpsh<>LPSHEmpty then
+      LPS.EndLongProcess(lpsh);
+    Data.FDoc.Delimiter:=';';
+    Data.FDoc.SaveToFile(DataExportParam.FileName^);
+    Data.FDoc.Free;
+    EntsTypeFilter.Free;
+    EntityIncluder.Free;
+  end;
 end;
 
 initialization
@@ -484,4 +592,8 @@ finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   ExporterParser.Free;
   VU.done;
+  if clFilePrompt<>nil then
+    clFilePrompt.Free;
+  if clOptionsPrompt<>nil then
+    clOptionsPrompt.Free;
 end.

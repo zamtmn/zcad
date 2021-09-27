@@ -258,7 +258,8 @@ begin
                                                                                                      //устанавливаем режим указания точек мышью
                                                                       MGetControlpoint or MGetSelectionFrame or MGetSelectObject);//reset selection entities  mode
                                                                                                               //сбрасываем режим выбора примитивов мышью
-  ZCMsgCallBackInterface.TextMessage(prompt,TMWOHistoryOut);
+  if prompt<>'' then
+    ZCMsgCallBackInterface.TextMessage(prompt,TMWOHistoryOut);
   pcommandrunning^.IData.GetPointMode:=TGPMWait;
   pcommandrunning^.IData.PInteractiveData:=PInteractiveData;
   pcommandrunning^.IData.PInteractiveProc:=InteractiveProc;
@@ -328,7 +329,8 @@ begin
                                                                                                      //устанавливаем режим указания точек мышью
                                                                       MGetControlpoint or MGetSelectionFrame or MGetSelectObject);//reset selection entities  mode
                                                                                                               //сбрасываем режим выбора примитивов мышью
-  ZCMsgCallBackInterface.TextMessage(prompt,TMWOHistoryOut);
+  if prompt<>'' then
+    ZCMsgCallBackInterface.TextMessage(prompt,TMWOHistoryOut);
   pcommandrunning^.IData.GetPointMode:=TGPMWaitInput;
   pcommandrunning^.IData.PInteractiveData:=nil;
   pcommandrunning^.IData.PInteractiveProc:=nil;

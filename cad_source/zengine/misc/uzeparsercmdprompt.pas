@@ -8,8 +8,17 @@ interface
 
 uses
   SysUtils,StrUtils,
-  gvector,
+  gvector,Generics.Collections,
   uzeparser,uzcctrlcommandlineprompt;
+
+const
+  CLPIdOptions=1001;
+  CLPIdBack=1002;
+  CLPIdFileDialog=1003;
+  CLPIdUser=10000;
+  CLPIdUser1=10001;
+  CLPIdUser2=10002;
+  CLPIdUser3=10003;
 
 type
   TOptStrMan=TUTF8StringManipulator;
@@ -98,15 +107,24 @@ type
                                     );override;
   end;
 
+  TStrIdsDictionary=class (TDictionary<TOptStrMan.TStringType,Integer>)
+    procedure Add(constref AKey: TOptStrMan.TStringType; constref AValue: Integer); overload; inline;
+  end;
 
 var
   CMDLinePromptParser,InternalPromptParser,InternalPromptParser2,InternalPromptParser3:TParserCommandLinePrompt;
   pet:CMDLinePromptParser.TGeneralParsedText;
   t:UTF8String;
   pt:TCommandLinePromptOption;
+  StrIds:TStrIdsDictionary;
+  DigId,StrId:integer;
 
 implementation
 
+procedure TStrIdsDictionary.Add(constref AKey: TOptStrMan.TStringType; constref AValue: Integer); overload; inline;
+begin
+  inherited add(uppercase(AKey),Avalue);
+end;
 
 function TSubStringsVectorHelper.Arr:TSubStringsVector.TArr;
 begin
@@ -156,7 +174,10 @@ begin
   SetLength(op2,ResultParam.L.CodeUnits);
   ResultParam.P.CodeUnitPos:=InitialStartPos;
   TParserCommandLinePrompt.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserCommandLinePrompt.TParsedText).Parts.Mutable[2]^,data,op2,ResultParam);
-  if not TryStrToInt(op2,tag) then
+  if (ParsedOperands as TParserCommandLinePrompt.TParsedText).Parts.Mutable[2]^.TextInfo.TokenId=StrId then begin
+    if not StrIds.trygetvalue(uppercase(op2),tag) then
+      //Raise Exception.CreateFmt(rsNeedInteger,[TManipulator.GetHumanReadableAdress((ParsedOperands as TParserCommandLinePrompt.TParsedText).Parts.Mutable[2]^.Operands.)]);
+  end else if not TryStrToInt(op2,tag) then
     //Raise Exception.CreateFmt(rsNeedInteger,[TManipulator.GetHumanReadableAdress((ParsedOperands as TParserCommandLinePrompt.TParsedText).Parts.Mutable[2]^.Operands.)]);
 end;
 procedure TOptionProcessor.GetResult(
@@ -260,6 +281,15 @@ begin
 end;
 
 initialization
+  StrIds:=TStrIdsDictionary.Create;
+  StrIds.add('CLPIdOptions',CLPIdOptions);
+  StrIds.add('CLPIdBack',CLPIdBack);
+  StrIds.add('CLPIdFileDialog',CLPIdFileDialog);
+  StrIds.add('CLPIdUser',CLPIdUser);
+  StrIds.add('CLPIdUser1',CLPIdUser1);
+  StrIds.add('CLPIdUser2',CLPIdUser2);
+  StrIds.add('CLPIdUser3',CLPIdUser3);
+
   InternalPromptParser3:=TParserCommandLinePrompt.create;
   //InternalPromptParser3.RegisterToken(',',#0,#0,nil,nil,TGOSeparator or TGOCanBeOmitted);
   InternalPromptParser3.RegisterToken('&[','[',']',TAmpersandProcessor,nil,TGOIncludeBrackeOpen);
@@ -270,12 +300,13 @@ initialization
   InternalPromptParser:=TParserCommandLinePrompt.create;
   InternalPromptParser.RegisterToken(',',#0,#0,nil,nil,TGOSeparator or TGOCanBeOmitted);
   InternalPromptParser.RegisterToken('Keys[','[',']',nil,InternalPromptParser2,TGONestedBracke or TGOIncludeBrackeOpen or TGOSeparator);
-  InternalPromptParser.RegisterToken('Id[','[',']',InternalPromptParser.TParserTokenizer.TStringProcessor,nil,TGOIncludeBrackeOpen);
+  DigId:=InternalPromptParser.RegisterToken('Id[','[',']',InternalPromptParser.TParserTokenizer.TStringProcessor,nil,TGOIncludeBrackeOpen);
+  StrId:=InternalPromptParser.RegisterToken('StrId[','[',']',InternalPromptParser.TParserTokenizer.TStringProcessor,nil,TGOIncludeBrackeOpen);
   InternalPromptParser.RegisterToken('"','"','"',TTextProcessor,InternalPromptParser3,TGOIncludeBrackeOpen or TGOSeparator);
 
   CMDLinePromptParser:=TParserCommandLinePrompt.create;
   //CMDLinePromptParser.RegisterToken('"','"','"',TTextProcessor,InternalPromptParser3,TGOIncludeBrackeOpen or TGOSeparator);
-  CMDLinePromptParser.RegisterToken('$<','<','>',TOptionProcessor,InternalPromptParser,TGONestedBracke or TGOIncludeBrackeOpen or TGOSeparator);
+  CMDLinePromptParser.RegisterToken('${','{','}',TOptionProcessor,InternalPromptParser,TGONestedBracke or TGOIncludeBrackeOpen or TGOSeparator);
   //pet:=CMDLinePromptParser.GetTokens('Предлагаю както так $<"&[С]охранить (&[S])",Keys[С,S],Id[100]> или $<"&[В]ыйти",Keys[Q,X],Id[101]>');
   //pet:=CMDLinePromptParser.GetTokens('$<"q&[S]q&[S]",Keys[С,S],Id[100]>');
   pet:=CMDLinePromptParser.GetTokens('"123"');
@@ -290,5 +321,6 @@ finalization;
   CMDLinePromptParser.Free;
   InternalPromptParser.Free;
   InternalPromptParser2.Free;
+  StrIds.Free;
 end.
 

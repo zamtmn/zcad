@@ -41,6 +41,16 @@ uses
   uzcoimultipropertiesutil,varmandef,uzcvariablesutils,Masks,uzcregother,
   uzbtypesbase,uzeparsercmdprompt,uzcfcommandline,uzcinterface,uzcdialogsfiles;
 
+resourcestring
+  RSCLPDataExportWaitFile                ='Configure export ${"&[p]arams",Keys[p],StrId[CLPIdOptions]}, run ${"&[f]ile dialog",Keys[f],StrId[CLPIdFileDialog]} or enter file name (empty for default):';
+  RSCLPDataExportOptions                 ='${"&[<]<<",Keys[<],StrId[CLPIdBack]} Set ${"&[e]ntities",Keys[o],StrId[CLPIdUser1]}/${"&[p]roperties",Keys[o],StrId[CLPIdUser2]} filter or export ${"&[s]cript",Keys[o],StrId[CLPIdUser3]}';
+  RSCLPDataExportEntsFilterCurrentValue  ='Entities filter current value:';
+  RSCLPDataExportEntsFilterNewValue      ='${"&[<]<<",Keys[<],StrId[CLPIdBack]} Enter new entities filter:';
+  RSCLPDataExportPropsFilterCurrentValue ='Properties filter current value:';
+  RSCLPDataExportPropsFilterNewValue     ='${"&[<]<<",Keys[<],StrId[CLPIdBack]} Enter new properties filter:';
+  RSCLPDataExportExportScriptCurrentValue='Properties export script current value:';
+  RSCLPDataExportExportScriptNewValue    ='${"&[<]<<",Keys[<],StrId[CLPIdBack]} Enter new export script:';
+
 type
   //** Тип данных для отображения в инспекторе опций
   TDataExportParam=record
@@ -409,43 +419,44 @@ var
     case Mode of
       CMWaitFile:begin
                    if clFilePrompt=nil then
-                     clFilePrompt:=CMDLinePromptParser.GetTokens('Configure export ${"&[p]arams",Keys[p],StrId[CLPIdOptions]}, run ${"&[f]ile dialog",Keys[f],StrId[CLPIdFileDialog]} or enter file name (empty for default):');
+                     clFilePrompt:=CMDLinePromptParser.GetTokens(RSCLPDataExportWaitFile);
                    CLine.SetPrompt(clFilePrompt);
                    commandmanager.ChangeInputMode([GPIempty],[]);
                  end;
        CMOptions:begin
                    if clOptionsPrompt=nil then
-                     clOptionsPrompt:=CMDLinePromptParser.GetTokens('${"&[<]<<",Keys[<],StrId[CLPIdBack]} Set ${"&[e]ntities",Keys[o],StrId[CLPIdUser1]}/${"&[p]roperties",Keys[o],StrId[CLPIdUser2]} filter or export ${"&[s]cript",Keys[o],StrId[CLPIdUser3]}');
+                     clOptionsPrompt:=CMDLinePromptParser.GetTokens(RSCLPDataExportOptions);
                    CLine.SetPrompt(clOptionsPrompt);
                    commandmanager.ChangeInputMode([GPIempty],[]);
                  end;
       CMOptions1:begin
-                   ZCMsgCallBackInterface.TextMessage('Entities filter current value:',TMWOHistoryOut);
+                   ZCMsgCallBackInterface.TextMessage(RSCLPDataExportEntsFilterCurrentValue,TMWOHistoryOut);
                    ZCMsgCallBackInterface.TextMessage(DataExportParam.EntFilter^,TMWOHistoryOut);
                    if clOptionsPrompt1=nil then
-                     clOptionsPrompt1:=CMDLinePromptParser.GetTokens('${"&[<]<<",Keys[<],StrId[CLPIdBack]} Enter new entities filter:');
+                     clOptionsPrompt1:=CMDLinePromptParser.GetTokens(RSCLPDataExportEntsFilterNewValue);
                    CLine.SetPrompt(clOptionsPrompt1);
                    commandmanager.ChangeInputMode([GPIempty],[]);
                  end;
       CMOptions2:begin
-                   ZCMsgCallBackInterface.TextMessage('Properties filter current value:',TMWOHistoryOut);
+                   ZCMsgCallBackInterface.TextMessage(RSCLPDataExportPropsFilterCurrentValue,TMWOHistoryOut);
                    ZCMsgCallBackInterface.TextMessage(DataExportParam.PropFilter^,TMWOHistoryOut);
                    if clOptionsPrompt2=nil then
-                     clOptionsPrompt2:=CMDLinePromptParser.GetTokens('${"&[<]<<",Keys[<],StrId[CLPIdBack]} Enter new properties filter:');
+                     clOptionsPrompt2:=CMDLinePromptParser.GetTokens(RSCLPDataExportPropsFilterNewValue);
                    CLine.SetPrompt(clOptionsPrompt2);
                    commandmanager.ChangeInputMode([GPIempty],[]);
                  end;
       CMOptions3:begin
-                   ZCMsgCallBackInterface.TextMessage('Properties export script current value:',TMWOHistoryOut);
+                   ZCMsgCallBackInterface.TextMessage(RSCLPDataExportExportScriptCurrentValue,TMWOHistoryOut);
                    ZCMsgCallBackInterface.TextMessage(DataExportParam.Exporter^,TMWOHistoryOut);
                    if clOptionsPrompt3=nil then
-                     clOptionsPrompt3:=CMDLinePromptParser.GetTokens('${"&[<]<<",Keys[<],StrId[CLPIdBack]} Enter new export script:');
+                     clOptionsPrompt3:=CMDLinePromptParser.GetTokens(RSCLPDataExportExportScriptNewValue);
                    CLine.SetPrompt(clOptionsPrompt3);
                    commandmanager.ChangeInputMode([GPIempty],[]);
                  end;
     end;
     CmdMode:=Mode;
   end;
+
 begin
   zcShowCommandParams(SysUnit^.TypeName2PTD('TDataExportParam'),@DataExportParam);
   CmdMode:=CMEmpty;

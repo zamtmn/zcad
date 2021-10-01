@@ -1184,7 +1184,7 @@ begin
     comtext:='';
     needinput:=false;
     if commandmanager.pcommandrunning<>nil then
-      if commandmanager.pcommandrunning.IData.GetPointMode=TGPMWaitInput then
+      if (commandmanager.pcommandrunning.IData.GetPointMode=TGPMWaitInput)and(key<>VK_ESCAPE) then
         needinput:=true;
     if assigned(cmdedit) then
       comtext:=cmdedit.text;

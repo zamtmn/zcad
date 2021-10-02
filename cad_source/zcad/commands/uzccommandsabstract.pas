@@ -42,7 +42,6 @@ const
      EmptyCommandOperands='';
 type
 TInteractiveProcObjBuild=procedure(const PInteractiveData:GDBPointer;Point:GDBVertex;Click:GDBBoolean);
-{Export+}
     TGetInputPossible=(GPIempty//возможность пустого ввода
                       );
     TGetInputMode=set of TGetInputPossible;//возможности ввода
@@ -51,6 +50,7 @@ TInteractiveProcObjBuild=procedure(const PInteractiveData:GDBPointer;Point:GDBVe
                   GPID//идентификатор из подсказки как результат запроса
                  );
     TGetPossibleResult=set of TGetPossible;
+{Export+}
     TGetPointMode=(
                    TGPMWait{point},//ожидание указания точки
                    TGPMPoint,      //точка указана

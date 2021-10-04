@@ -39,7 +39,7 @@ uses
   uzeparserenttypefilter,uzeparserentpropfilter,uzeentitiestypefilter,
   uzelongprocesssupport,uzeparser,uzcoimultiproperties,uzedimensionaltypes,
   uzcoimultipropertiesutil,varmandef,uzcvariablesutils,Masks,uzcregother,
-  uzbtypesbase,uzeparsercmdprompt,uzcfcommandline,uzcinterface,uzcdialogsfiles;
+  uzbtypesbase,uzeparsercmdprompt,uzcinterface,uzcdialogsfiles;
 
 resourcestring
   RSCLPDataExportWaitFile                ='Configure export ${"&[p]arams",Keys[p],StrId[CLPIdOptions]}, run ${"&[f]ile dialog",Keys[f],StrId[CLPIdFileDialog]} or enter file name (empty for default):';
@@ -420,13 +420,13 @@ var
       CMWaitFile:begin
                    if clFilePrompt=nil then
                      clFilePrompt:=CMDLinePromptParser.GetTokens(RSCLPDataExportWaitFile);
-                   CLine.SetPrompt(clFilePrompt);
+                   commandmanager.SetPrompt(clFilePrompt);
                    commandmanager.ChangeInputMode([GPIempty],[]);
                  end;
        CMOptions:begin
                    if clOptionsPrompt=nil then
                      clOptionsPrompt:=CMDLinePromptParser.GetTokens(RSCLPDataExportOptions);
-                   CLine.SetPrompt(clOptionsPrompt);
+                   commandmanager.SetPrompt(clOptionsPrompt);
                    commandmanager.ChangeInputMode([GPIempty],[]);
                  end;
       CMOptions1:begin
@@ -434,7 +434,7 @@ var
                    ZCMsgCallBackInterface.TextMessage(DataExportParam.EntFilter^,TMWOHistoryOut);
                    if clOptionsPrompt1=nil then
                      clOptionsPrompt1:=CMDLinePromptParser.GetTokens(RSCLPDataExportEntsFilterNewValue);
-                   CLine.SetPrompt(clOptionsPrompt1);
+                   commandmanager.SetPrompt(clOptionsPrompt1);
                    commandmanager.ChangeInputMode([GPIempty],[]);
                  end;
       CMOptions2:begin
@@ -442,7 +442,7 @@ var
                    ZCMsgCallBackInterface.TextMessage(DataExportParam.PropFilter^,TMWOHistoryOut);
                    if clOptionsPrompt2=nil then
                      clOptionsPrompt2:=CMDLinePromptParser.GetTokens(RSCLPDataExportPropsFilterNewValue);
-                   CLine.SetPrompt(clOptionsPrompt2);
+                   commandmanager.SetPrompt(clOptionsPrompt2);
                    commandmanager.ChangeInputMode([GPIempty],[]);
                  end;
       CMOptions3:begin
@@ -450,7 +450,7 @@ var
                    ZCMsgCallBackInterface.TextMessage(DataExportParam.Exporter^,TMWOHistoryOut);
                    if clOptionsPrompt3=nil then
                      clOptionsPrompt3:=CMDLinePromptParser.GetTokens(RSCLPDataExportExportScriptNewValue);
-                   CLine.SetPrompt(clOptionsPrompt3);
+                   commandmanager.SetPrompt(clOptionsPrompt3);
                    commandmanager.ChangeInputMode([GPIempty],[]);
                  end;
     end;

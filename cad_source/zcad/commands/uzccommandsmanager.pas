@@ -18,6 +18,7 @@
 
 unit uzccommandsmanager;
 {$INCLUDE def.inc}
+{$interfaces corba}
 interface
 uses uzctnrvectorgdbpointer,gzctnrvectorpobjects,uzcsysvars,uzegeometry,uzglviewareaabstract,uzbpaths,
      uzeconsts,uzcctrldynamiccommandmenu,uzcinfoform,uzcstrconsts,uzcsysinfo,
@@ -25,11 +26,16 @@ uses uzctnrvectorgdbpointer,gzctnrvectorpobjects,uzcsysvars,uzegeometry,uzglview
      uzbtypesbase,uzccommandsabstract, sysutils,uzbtypes,uzglviewareadata,
      uzbmemman,uzclog,varmandef,varman,uzedrawingdef,uzcinterface,
      uzcsysparams,uzedrawingsimple,uzcdrawings,uzctnrvectorgdbstring,forms,LazLogger,
-     uzcctrlcommandlineprompt,uzeparsercmdprompt;
+     uzcctrlcommandlineprompt,uzeparsercmdprompt,gzctnrstl;
 const
      tm:tmethod=(Code:nil;Data:nil);
      nullmethod:{tmethod}TButtonMethod=nil;
 type
+  ICommandLinePrompt=interface
+    procedure SetPrompt(APrompt:String);overload;
+    procedure SetPrompt(APrompt:TParserCommandLinePrompt.TGeneralParsedText);overload;
+  end;
+  TICommandLinePromptVector=TMyVector<ICommandLinePrompt>;
   TGetResult=(GRCancel,GRNormal,GRId,GRInput);
   tvarstack=object({varmanagerdef}varmanager)
             end;
@@ -53,6 +59,8 @@ type
                           DisableExecuteCommandEndCounter:integer;
                           DisabledExecuteCommandEndCounter:integer;
                           SilentCounter:Integer;
+                          CommandLinePrompts:TICommandLinePromptVector;
+                          CurrentPrompt:TParserCommandLinePrompt.TGeneralParsedText;
                           constructor init(m:GDBInteger);
                           procedure execute(const comm:string;silent:GDBBoolean;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
                           procedure executecommand(const comm:string;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
@@ -106,6 +114,13 @@ type
                           procedure sendcoordtocommandTraceOn(Sender:TAbstractViewArea;coord:GDBVertex;key: GDBByte;pos:pos_record);
 
                           procedure PromptTagNotufy(Tag:TTag);
+
+
+                          procedure AddClPrompt(CLP:ICommandLinePrompt);
+                          procedure RemoveClPrompt(CLP:ICommandLinePrompt);
+                          procedure SetPrompt(APrompt:String);overload;
+                          procedure SetPrompt(APrompt:TParserCommandLinePrompt.TGeneralParsedText);overload;
+
                     end;
 var commandmanager:GDBcommandmanager;
 function getcommandmanager:GDBPointer;export;
@@ -114,6 +129,42 @@ procedure ParseCommand(comm:string; out command,operands:GDBString);
 {procedure startup;
 procedure finalize;}
 implementation
+procedure GDBcommandmanager.AddClPrompt(CLP:ICommandLinePrompt);
+begin
+  if CommandLinePrompts=nil then
+    CommandLinePrompts:=TICommandLinePromptVector.Create;
+  CommandLinePrompts.PushBack(CLP);
+end;
+
+procedure GDBcommandmanager.RemoveClPrompt(CLP:ICommandLinePrompt);
+var
+   i:integer;
+begin
+  if CommandLinePrompts<>nil then
+    for i:=CommandLinePrompts.Size-1 downto 0 do
+       if CommandLinePrompts[i]=CLP then
+         CommandLinePrompts.Erase(i);
+end;
+
+procedure GDBcommandmanager.SetPrompt(APrompt:String);
+var
+   i:integer;
+begin
+  CurrentPrompt:=nil;
+  if CommandLinePrompts<>nil then
+    for i:=0 to CommandLinePrompts.Size-1 do
+       CommandLinePrompts[i].SetPrompt(APrompt);
+end;
+
+procedure GDBcommandmanager.SetPrompt(APrompt:TParserCommandLinePrompt.TGeneralParsedText);
+var
+   i:integer;
+begin
+  CurrentPrompt:=APrompt;
+  if CommandLinePrompts<>nil then
+    for i:=0 to CommandLinePrompts.Size-1 do
+       CommandLinePrompts[i].SetPrompt(APrompt);
+end;
 
 procedure GDBcommandmanager.PromptTagNotufy(Tag:TTag);
 begin
@@ -881,6 +932,7 @@ begin
                        DMenu.Top:=pint^;
   end;
   SilentCounter:=0;
+  CommandLinePrompts:=nil;
 end;
 procedure GDBcommandmanager.CommandRegister(pc:PCommandObjectDef);
 begin

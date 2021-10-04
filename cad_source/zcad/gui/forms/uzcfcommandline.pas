@@ -31,16 +31,13 @@ uses
 const
      cheight=48;
 type
-  TCLine = class(TForm)
+  TCLine = class(TForm,ICommandLinePrompt)
     procedure AfterConstruction; override;
   public
     //utfpresent:boolean;
     utflen:integer;
-    CurrentPrompt:TParserCommandLinePrompt.TGeneralParsedText;
     procedure keypressmy(Sender: TObject; var Key: char);
     procedure SetMode(m:TCLineMode);virtual;
-    procedure SetPrompt(APrompt:String);virtual;overload;
-    procedure SetPrompt(APrompt:TParserCommandLinePrompt.TGeneralParsedText);virtual;overload;
     procedure DoOnResize; override;
     procedure MyResize;
     procedure mypaint(sender:tobject);
@@ -49,6 +46,9 @@ type
     function GetCLineFocusPriority:TControlWithPriority;
 
     destructor Destroy;override;
+  private
+    procedure SetPrompt(APrompt:String);virtual;overload;
+    procedure SetPrompt(APrompt:TParserCommandLinePrompt.TGeneralParsedText);virtual;overload;
   end;
 var
   CLine: TCLine;
@@ -72,7 +72,6 @@ end;
 
 procedure TCLine.SetPrompt(APrompt:String{;ATPromptResults:TCommandLinePrompt.TPromptResults});
 begin
-  CurrentPrompt:=nil;
   prompt.SetHighLightedText(APrompt,[],-1);
 end;
 
@@ -81,7 +80,6 @@ var
   pt:TCommandLinePromptOption;
   ts:TParserCommandLinePrompt.TParserString;
 begin
-  CurrentPrompt:=APrompt;
   pt:=TCommandLinePromptOption.Create;
   ts:=APrompt.GetResult(pt);
   prompt.SetHighLightedText(ts,pt.Parts.arr,pt.Parts.Size-1);
@@ -316,12 +314,13 @@ begin
     //CWindow.Show;
     ZCMsgCallBackInterface.RegisterHandler_GUIMode(HandleCommandLineMode);
     HandleCmdLine(ZMsgID_GUICMDLineCheck);
-   // SetCommandLineMode:=self.SetMode;
+    commandmanager.AddClPrompt(self);
 end;
 destructor TCLine.Destroy;
 begin
-     aliases.Done;
-     inherited;
+  commandmanager.RemoveClPrompt(self);
+  aliases.Done;
+  inherited;
 end;
 
 procedure TCLine.AfterConstruction;

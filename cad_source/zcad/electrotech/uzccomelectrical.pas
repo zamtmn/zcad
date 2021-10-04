@@ -3308,7 +3308,7 @@ begin
      pet:=CMDLinePromptParser.GetTokens('<$<"Команда&[1]",Keys[1],Id[1]>/$<"Команда&[2]",Keys[2],Id[2]>/$<"Команда&[3]",Keys[3],Id[3]>> [$<"&[М]олча𤭢123",Keys[М],Id[4]>]');
      //pet:=CMDLinePromptParser.GetTokens('$<"12&[3]",Keys[1],Id[1]>');
      //pet:=CMDLinePromptParser.GetTokens('фs "ёба" йs "2ёба2" йцу12');
-     CLine.SetPrompt(pet);
+     commandmanager.SetPrompt(pet);
      commandmanager.ChangeInputMode([GPIempty],[]);
      pet.Free;
      repeat

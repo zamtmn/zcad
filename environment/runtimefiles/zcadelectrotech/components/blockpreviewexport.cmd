@@ -181,6 +181,10 @@ BlockPreViewExport(24|DIAGRAM_FD2|*images/palettes/DIAGRAM_FD2.png)
 BlockPreViewExport(24|DIAGRAM_FD2|*images/palettes/DIAGRAM_FD2_150.png)
 BlockPreViewExport(48|DIAGRAM_FD2|*images/palettes/DIAGRAM_FD2_300.png)
 
+BlockPreViewExport(24|DIAGRAM_FD3|*images/palettes/DIAGRAM_FD3.png)
+BlockPreViewExport(24|DIAGRAM_FD3|*images/palettes/DIAGRAM_FD3_150.png)
+BlockPreViewExport(48|DIAGRAM_FD3|*images/palettes/DIAGRAM_FD3_300.png)
+
 BlockPreViewExport(24|EL_VL_SUPPORT4_1|*images/palettes/EL_VL_SUPPORT4_1.png)
 BlockPreViewExport(24|EL_VL_SUPPORT4_1|*images/palettes/EL_VL_SUPPORT4_1_150.png)
 BlockPreViewExport(48|EL_VL_SUPPORT4_1|*images/palettes/EL_VL_SUPPORT4_1_300.png)
@@ -192,6 +196,10 @@ BlockPreViewExport(48|EL_VL_SUPPORT4_2|*images/palettes/EL_VL_SUPPORT4_2_300.png
 BlockPreViewExport(24|UNIT_GRID1|*images/palettes/UNIT_GRID1.png)
 BlockPreViewExport(24|UNIT_GRID1|*images/palettes/UNIT_GRID1_150.png)
 BlockPreViewExport(48|UNIT_GRID1|*images/palettes/UNIT_GRID1_300.png)
+
+BlockPreViewExport(24|UNIT_GRID2|*images/palettes/UNIT_GRID2.png)
+BlockPreViewExport(24|UNIT_GRID2|*images/palettes/UNIT_GRID2_150.png)
+BlockPreViewExport(48|UNIT_GRID2|*images/palettes/UNIT_GRID2_300.png)
 
 ClLayerOff(TEXT)
 

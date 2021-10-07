@@ -20,8 +20,8 @@ BTY_TreeCoord:='PLAN_EM_Двигатель';
 Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 
-NMO_Name:='M0';
-NMO_BaseName:='M';
+NMO_Name:='М0';
+NMO_BaseName:='М';
 NMO_Suffix:='??';
 
 T1:='0';

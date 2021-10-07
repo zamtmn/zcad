@@ -18,17 +18,25 @@
 
 unit uzccommandsmanager;
 {$INCLUDE def.inc}
+{$interfaces corba}
 interface
 uses uzctnrvectorgdbpointer,gzctnrvectorpobjects,uzcsysvars,uzegeometry,uzglviewareaabstract,uzbpaths,
      uzeconsts,uzcctrldynamiccommandmenu,uzcinfoform,uzcstrconsts,uzcsysinfo,
      gzctnrvectortypes,uzbgeomtypes,uzbstrproc,gzctnrvectorp,
      uzbtypesbase,uzccommandsabstract, sysutils,uzbtypes,uzglviewareadata,
      uzbmemman,uzclog,varmandef,varman,uzedrawingdef,uzcinterface,
-     uzcsysparams,uzedrawingsimple,uzcdrawings,uzctnrvectorgdbstring,forms,LazLogger;
+     uzcsysparams,uzedrawingsimple,uzcdrawings,uzctnrvectorgdbstring,forms,LazLogger,
+     uzcctrlcommandlineprompt,uzeparsercmdprompt,gzctnrstl;
 const
      tm:tmethod=(Code:nil;Data:nil);
      nullmethod:{tmethod}TButtonMethod=nil;
 type
+  ICommandLinePrompt=interface
+    procedure SetPrompt(APrompt:String);overload;
+    procedure SetPrompt(APrompt:TParserCommandLinePrompt.TGeneralParsedText);overload;
+  end;
+  TICommandLinePromptVector=TMyVector<ICommandLinePrompt>;
+  TGetResult=(GRCancel,GRNormal,GRId,GRInput);
   tvarstack=object({varmanagerdef}varmanager)
             end;
   TOnCommandRun=procedure(command:string) of object;
@@ -51,6 +59,8 @@ type
                           DisableExecuteCommandEndCounter:integer;
                           DisabledExecuteCommandEndCounter:integer;
                           SilentCounter:Integer;
+                          CommandLinePrompts:TICommandLinePromptVector;
+                          CurrentPrompt:TParserCommandLinePrompt.TGeneralParsedText;
                           constructor init(m:GDBInteger);
                           procedure execute(const comm:string;silent:GDBBoolean;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
                           procedure executecommand(const comm:string;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
@@ -83,11 +93,18 @@ type
                           function GetValueHeap:GDBInteger;
                           function CurrentCommandNotUseCommandLine:GDBBoolean;
                           procedure PrepairVarStack;
-                          function Get3DPoint(prompt:GDBString;out p:GDBVertex):GDBBoolean;
-                          function Get3DPointWithLineFromBase(prompt:GDBString;const base:GDBVertex;out p:GDBVertex):GDBBoolean;
+
+                          function Get3DPoint(prompt:GDBString;out p:GDBVertex):TGetResult;
+                          function Get3DPointWithLineFromBase(prompt:GDBString;const base:GDBVertex;out p:GDBVertex):TGetResult;
                           function GetEntity(prompt:GDBString;out p:GDBPointer):GDBBoolean;
-                          function Get3DPointInteractive(prompt:GDBString;out p:GDBVertex;const InteractiveProc:TInteractiveProcObjBuild;const PInteractiveData:GDBPointer):GDBBoolean;
-                          function GetInput(Prompt:GDBString;out Input:GDBString):GDBBoolean;
+                          function Get3DPointInteractive(prompt:GDBString;out p:GDBVertex;const InteractiveProc:TInteractiveProcObjBuild;const PInteractiveData:GDBPointer):TGetResult;
+                          function GetInput(Prompt:GDBString;out Input:GDBString):TGetResult;
+
+                          function GetLastId:TTag;
+                          function GetLastInput:AnsiString;
+
+                          function ChangeInputMode(incl,excl:TGetInputMode):TGetInputMode;
+                          function SetInputMode(NewMode:TGetInputMode):TGetInputMode;
 
                           function EndGetPoint(newmode:TGetPointMode):GDBBoolean;
 
@@ -95,6 +112,15 @@ type
                           procedure sendmousecoordwop(Sender:TAbstractViewArea;key: GDBByte);
                           procedure sendcoordtocommand(Sender:TAbstractViewArea;coord:GDBVertex;key: GDBByte);
                           procedure sendcoordtocommandTraceOn(Sender:TAbstractViewArea;coord:GDBVertex;key: GDBByte;pos:pos_record);
+
+                          procedure PromptTagNotufy(Tag:TTag);
+
+
+                          procedure AddClPrompt(CLP:ICommandLinePrompt);
+                          procedure RemoveClPrompt(CLP:ICommandLinePrompt);
+                          procedure SetPrompt(APrompt:String);overload;
+                          procedure SetPrompt(APrompt:TParserCommandLinePrompt.TGeneralParsedText);overload;
+
                     end;
 var commandmanager:GDBcommandmanager;
 function getcommandmanager:GDBPointer;export;
@@ -103,6 +129,52 @@ procedure ParseCommand(comm:string; out command,operands:GDBString);
 {procedure startup;
 procedure finalize;}
 implementation
+procedure GDBcommandmanager.AddClPrompt(CLP:ICommandLinePrompt);
+begin
+  if CommandLinePrompts=nil then
+    CommandLinePrompts:=TICommandLinePromptVector.Create;
+  CommandLinePrompts.PushBack(CLP);
+end;
+
+procedure GDBcommandmanager.RemoveClPrompt(CLP:ICommandLinePrompt);
+var
+   i:integer;
+begin
+  if CommandLinePrompts<>nil then
+    for i:=CommandLinePrompts.Size-1 downto 0 do
+       if CommandLinePrompts[i]=CLP then
+         CommandLinePrompts.Erase(i);
+end;
+
+procedure GDBcommandmanager.SetPrompt(APrompt:String);
+var
+   i:integer;
+begin
+  CurrentPrompt:=nil;
+  if CommandLinePrompts<>nil then
+    for i:=0 to CommandLinePrompts.Size-1 do
+       CommandLinePrompts[i].SetPrompt(APrompt);
+end;
+
+procedure GDBcommandmanager.SetPrompt(APrompt:TParserCommandLinePrompt.TGeneralParsedText);
+var
+   i:integer;
+begin
+  CurrentPrompt:=APrompt;
+  if CommandLinePrompts<>nil then
+    for i:=0 to CommandLinePrompts.Size-1 do
+       CommandLinePrompts[i].SetPrompt(APrompt);
+end;
+
+procedure GDBcommandmanager.PromptTagNotufy(Tag:TTag);
+begin
+  if pcommandrunning<>nil then begin
+    if (pcommandrunning^.IData.GetPointMode in SomethingWait)and(GPID in pcommandrunning^.IData.PossibleResult) then begin
+      pcommandrunning^.IData.GetPointMode:=TGPMId;
+      pcommandrunning^.IData.Id:=Tag;
+    end;
+  end;
+end;
 
 procedure GDBcommandmanager.sendcoordtocommandTraceOn(Sender:TAbstractViewArea;coord:GDBVertex;key: GDBByte;pos:pos_record);
 var
@@ -215,7 +287,7 @@ function GDBcommandmanager.EndGetPoint(newmode:TGetPointMode):GDBBoolean;
 begin
   if pcommandrunning<>nil then
   begin
-  if (pcommandrunning^.IData.GetPointMode=TGPWait)or(pcommandrunning^.IData.GetPointMode=TGPWaitEnt)or(pcommandrunning^.IData.GetPointMode=TGPWaitInput) then
+  if (pcommandrunning^.IData.GetPointMode=TGPMWait)or(pcommandrunning^.IData.GetPointMode=TGPMWaitEnt)or(pcommandrunning^.IData.GetPointMode=TGPMWaitInput) then
                               begin
                                   pcommandrunning^.IData.GetPointMode:=newmode;
                                   result:=true;
@@ -226,7 +298,7 @@ begin
      else
                               result:=false;
 end;
-function GDBcommandmanager.Get3DPointInteractive(prompt:GDBString;out p:GDBVertex;const InteractiveProc:TInteractiveProcObjBuild;const PInteractiveData:GDBPointer):GDBBoolean;
+function GDBcommandmanager.Get3DPointInteractive(prompt:GDBString;out p:GDBVertex;const InteractiveProc:TInteractiveProcObjBuild;const PInteractiveData:GDBPointer):TGetResult;
 var
    savemode:GDBByte;//variable to store the current mode of the editor
                      //переменная для сохранения текущего режима редактора
@@ -237,30 +309,69 @@ begin
                                                                                                      //устанавливаем режим указания точек мышью
                                                                       MGetControlpoint or MGetSelectionFrame or MGetSelectObject);//reset selection entities  mode
                                                                                                               //сбрасываем режим выбора примитивов мышью
-  ZCMsgCallBackInterface.TextMessage(prompt,TMWOHistoryOut);
-  pcommandrunning^.IData.GetPointMode:=TGPWait;
+  if prompt<>'' then
+    ZCMsgCallBackInterface.TextMessage(prompt,TMWOHistoryOut);
+  pcommandrunning^.IData.GetPointMode:=TGPMWait;
   pcommandrunning^.IData.PInteractiveData:=PInteractiveData;
   pcommandrunning^.IData.PInteractiveProc:=InteractiveProc;
-  while (pcommandrunning^.IData.GetPointMode=TGPWait)and(not Application.Terminated) do
+
+  while (pcommandrunning^.IData.GetPointMode=TGPMWait)and(not Application.Terminated) do
   begin
        Application.HandleMessage;
        //Application.ProcessMessages;
   end;
-  if (pcommandrunning^.IData.GetPointMode=TGPPoint)and(not Application.Terminated) then
-                                                                                 begin
-                                                                                 p:=pcommandrunning^.IData.GetPointValue;
-                                                                                 result:=true;
-                                                                                 end
-                                                                             else
-                                                                                 begin
-                                                                                 result:=false;
-                                                                                 //HistoryOutStr('cancel');
-                                                                                 end;
-  if (pcommandrunning^.IData.GetPointMode<>TGPCloseDWG)then
+
+  if (pcommandrunning^.IData.GetPointMode=TGPMPoint)and(not Application.Terminated) then begin
+    p:=pcommandrunning^.IData.GetPointValue;
+    result:=GRNormal;
+  end else if (pcommandrunning^.IData.GetPointMode=TGPMId)and(not Application.Terminated) then begin
+    p:=InfinityVertex;
+    result:=GRId;
+  end else if (pcommandrunning^.IData.GetPointMode=TGPMInput)and(not Application.Terminated) then begin
+    p:=InfinityVertex;
+    result:=GRInput;
+  end else
+    result:=GRCancel;
+
+  if (pcommandrunning^.IData.GetPointMode<>TGPMCloseDWG)then
   PTSimpleDrawing(pcommandrunning.pdwg)^.SetMouseEditorMode(savemode);//restore editor mode
                                                                       //восстанавливаем сохраненный режим редактора
 end;
-function GDBcommandmanager.GetInput(Prompt:GDBString;out Input:GDBString):GDBBoolean;
+function GDBcommandmanager.GetLastId:TTag;
+begin
+  if pcommandrunning<>nil then
+    result:=pcommandrunning^.IData.Id
+  else
+    result:=WrongId;
+end;
+function GDBcommandmanager.GetLastInput:AnsiString;
+begin
+  if pcommandrunning<>nil then
+    result:=pcommandrunning^.IData.Input
+  else
+    result:='';
+end;
+function GDBcommandmanager.ChangeInputMode(incl,excl:TGetInputMode):TGetInputMode;
+begin
+  if pcommandrunning<>nil then begin
+    result:=pcommandrunning^.IData.InputMode;
+    pcommandrunning^.IData.InputMode:=pcommandrunning^.IData.InputMode+incl;
+    pcommandrunning^.IData.InputMode:=pcommandrunning^.IData.InputMode-excl;
+  end
+  else
+    result:=[];
+end;
+function GDBcommandmanager.SetInputMode(NewMode:TGetInputMode):TGetInputMode;
+begin
+  if pcommandrunning<>nil then begin
+    result:=pcommandrunning^.IData.InputMode;
+    pcommandrunning^.IData.InputMode:=NewMode;
+  end
+  else
+    result:=[];
+end;
+
+function GDBcommandmanager.GetInput(Prompt:GDBString;out Input:GDBString):TGetResult;
 var
    savemode:GDBByte;//variable to store the current mode of the editor
                      //переменная для сохранения текущего режима редактора
@@ -269,33 +380,37 @@ begin
                                                                                                      //устанавливаем режим указания точек мышью
                                                                       MGetControlpoint or MGetSelectionFrame or MGetSelectObject);//reset selection entities  mode
                                                                                                               //сбрасываем режим выбора примитивов мышью
-  ZCMsgCallBackInterface.TextMessage(prompt,TMWOHistoryOut);
-  pcommandrunning^.IData.GetPointMode:=TGPWaitInput;
+  if prompt<>'' then
+    ZCMsgCallBackInterface.TextMessage(prompt,TMWOHistoryOut);
+  pcommandrunning^.IData.GetPointMode:=TGPMWaitInput;
   pcommandrunning^.IData.PInteractiveData:=nil;
   pcommandrunning^.IData.PInteractiveProc:=nil;
-  while (pcommandrunning^.IData.GetPointMode=TGPWaitInput)and(not Application.Terminated) do
+  while (pcommandrunning^.IData.GetPointMode=TGPMWaitInput)and(not Application.Terminated) do
   begin
        Application.HandleMessage;
        //Application.ProcessMessages;
   end;
-  if (pcommandrunning^.IData.GetPointMode=TGPInput)and(not Application.Terminated) then begin
+  if (pcommandrunning^.IData.GetPointMode=TGPMInput)and(not Application.Terminated) then begin
     Input:=pcommandrunning^.IData.Input;
-    result:=true;
+    result:=GRNormal;
+  end else if (pcommandrunning^.IData.GetPointMode=TGPMId)and(not Application.Terminated) then begin
+    Input:='';
+    result:=GRId;
   end else begin
     Input:='';
-    result:=false;
+    result:=GRCancel;
   end;
-  if (pcommandrunning^.IData.GetPointMode<>TGPCloseDWG)then
+  if (pcommandrunning^.IData.GetPointMode<>TGPMCloseDWG)then
   PTSimpleDrawing(pcommandrunning.pdwg)^.SetMouseEditorMode(savemode);//restore editor mode
                                                                       //восстанавливаем сохраненный режим редактора
 end;
 
-function GDBcommandmanager.Get3DPoint(prompt:GDBString;out p:GDBVertex):GDBBoolean;
+function GDBcommandmanager.Get3DPoint(prompt:GDBString;out p:GDBVertex):TGetResult;
 begin
   result:=Get3DPointInteractive(prompt,p,nil,nil);
 end;
 
-function GDBcommandmanager.Get3DPointWithLineFromBase(prompt:GDBString;const base:GDBVertex;out p:GDBVertex):GDBBoolean;
+function GDBcommandmanager.Get3DPointWithLineFromBase(prompt:GDBString;const base:GDBVertex;out p:GDBVertex):TGetResult;
 begin
   pcommandrunning^.IData.BasePoint:=base;
   pcommandrunning^.IData.DrawFromBasePoint:=true;
@@ -309,15 +424,15 @@ begin
   savemode:=PTSimpleDrawing(pcommandrunning.pdwg)^.DefMouseEditorMode(MGetSelectObject,
                                                                       MGet3DPoint or MGet3DPointWoOP or MGetSelectionFrame or MGetControlpoint);
   ZCMsgCallBackInterface.TextMessage(prompt,TMWOHistoryOut);
-  pcommandrunning^.IData.GetPointMode:=TGPWaitEnt;
+  pcommandrunning^.IData.GetPointMode:=TGPMWaitEnt;
   pcommandrunning^.IData.PInteractiveData:=nil;
   pcommandrunning^.IData.PInteractiveProc:=nil;
-  while (pcommandrunning^.IData.GetPointMode=TGPWaitEnt)and(not Application.Terminated) do
+  while (pcommandrunning^.IData.GetPointMode=TGPMWaitEnt)and(not Application.Terminated) do
   begin
        Application.HandleMessage;
        //Application.ProcessMessages;
   end;
-  if (pcommandrunning^.IData.GetPointMode=TGPEnt)and(not Application.Terminated) then
+  if (pcommandrunning^.IData.GetPointMode=TGPMEnt)and(not Application.Terminated) then
                                                                                  begin
                                                                                  p:=PTSimpleDrawing(pcommandrunning.pdwg)^.wa.param.SelDesc.LastSelectedObject;
                                                                                  result:=true;
@@ -472,13 +587,13 @@ begin
      begin
           pcommandrunning^.MouseMoveCallback(p3d,p2d,mode,osp);
      end
-     else if pcommandrunning^.IData.GetPointMode=TGPWait then
+     else if pcommandrunning^.IData.GetPointMode=TGPMWait then
                                       begin
                                            if mode=MZW_LBUTTON then
                                            begin
                                                 if assigned(pcommandrunning^.IData.PInteractiveProc) then
                                                 pcommandrunning^.IData.PInteractiveProc(pcommandrunning^.IData.PInteractiveData,p3d,true);
-                                                pcommandrunning^.IData.GetPointMode:=TGPpoint;
+                                                pcommandrunning^.IData.GetPointMode:=TGPMpoint;
                                                 pcommandrunning^.IData.GetPointValue:=p3d;
                                            end
                                            else
@@ -595,7 +710,7 @@ begin
                                                               end
                                                           else
                                                               begin
-                                                                      if EndGetPoint(TGPOtherCommand) then
+                                                                      if EndGetPoint(TGPMOtherCommand) then
                                                                        begin
                                                                             LatestRunPC:=pc;
                                                                             LatestRunOperands:=operands;
@@ -733,7 +848,7 @@ begin
    exit;
   end;
   DisabledExecuteCommandEndCounter:=0;
-  if EndGetPoint(TGPCancel) then
+  if EndGetPoint(TGPMCancel) then
                       exit;
   temp:=pcommandrunning;
   pcommandrunning := nil;
@@ -764,7 +879,7 @@ begin
         LatestRunPC:=nil;
         GDBcommandmanager.run(temp2,LatestRunOperands,LatestRunPDrawing);
    end
-   else if pcommandrunning<>nil then if pcommandrunning^.IData.GetPointMode=TGPCloseApp then
+   else if pcommandrunning<>nil then if pcommandrunning^.IData.GetPointMode=TGPMCloseApp then
                                         Application.QueueAsyncCall(AppCloseProc, 0);
 end;
 procedure GDBcommandmanager.ChangeModeAndEnd(newmode:TGetPointMode);
@@ -790,7 +905,7 @@ end;
 
 procedure GDBcommandmanager.executecommandtotalend;
 begin
-  ChangeModeAndEnd(TGPCancel);
+  ChangeModeAndEnd(TGPMCancel);
 end;
 procedure GDBcommandmanager.executelastcommad(pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);
 begin
@@ -817,6 +932,7 @@ begin
                        DMenu.Top:=pint^;
   end;
   SilentCounter:=0;
+  CommandLinePrompts:=nil;
 end;
 procedure GDBcommandmanager.CommandRegister(pc:PCommandObjectDef);
 begin

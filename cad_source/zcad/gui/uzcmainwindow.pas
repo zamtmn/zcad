@@ -554,7 +554,7 @@ end;
 procedure TZCADMainWindow.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
      CloseAction:=caNone;
-     if not commandmanager.EndGetPoint(TGPCloseApp) then
+     if not commandmanager.EndGetPoint(TGPMCloseApp) then
                                            Application.QueueAsyncCall(asynccloseapp, 0);
 end;
 
@@ -609,7 +609,7 @@ begin
       until result<>cmd_error;
       result:=ZCmrYes;
     end;
-    commandmanager.ChangeModeAndEnd(TGPCloseDWG);
+    commandmanager.ChangeModeAndEnd(TGPMCloseDWG);
     viewcontrol:=ClosedDWG.wa.getviewcontrol;
     if drawings.GetCurrentDWG=pointer(ClosedDwg) then
                                                drawings.freedwgvars;
@@ -1184,7 +1184,7 @@ begin
     comtext:='';
     needinput:=false;
     if commandmanager.pcommandrunning<>nil then
-      if commandmanager.pcommandrunning.IData.GetPointMode=TGPWaitInput then
+      if (commandmanager.pcommandrunning.IData.GetPointMode=TGPMWaitInput)and(key<>VK_ESCAPE) then
         needinput:=true;
     if assigned(cmdedit) then
       comtext:=cmdedit.text;
@@ -1584,10 +1584,10 @@ begin
              end;
              //wa.param.SelDesc.LastSelectedObject := wa.param.SelDesc.OnMouseObject;
              if commandmanager.pcommandrunning<>nil then
-             if commandmanager.pcommandrunning.IData.GetPointMode=TGPWaitEnt then
+             if commandmanager.pcommandrunning.IData.GetPointMode=TGPMWaitEnt then
              if sender.param.SelDesc.LastSelectedObject<>nil then
              begin
-               commandmanager.pcommandrunning^.IData.GetPointMode:=TGPEnt;
+               commandmanager.pcommandrunning^.IData.GetPointMode:=TGPMEnt;
              end;
          NeedRedraw:=true;
     end
@@ -1694,7 +1694,15 @@ begin
      end;
 end;
 procedure TZCADMainWindow.wakp(Sender:TAbstractViewArea;var Key: Word; Shift: TShiftState);
+var
+  waitinput:boolean;
 begin
+  waitinput:=commandmanager.pcommandrunning<>nil;
+  if waitinput then
+    waitinput:=commandmanager.pcommandrunning.IData.GetPointMode in SomethingWait;
+  if waitinput then
+    waitinput:=GPIempty in commandmanager.pcommandrunning.IData.InputMode;
+
      if Key=VK_ESCAPE then
      begin
        //if assigned(ReStoreGDBObjInspProc)then
@@ -1726,7 +1734,7 @@ begin
        //end;
        Key:=0;
      end
-     else if (Key = VK_RETURN)or(Key = VK_SPACE) then
+     else if ((Key = VK_RETURN)or(Key = VK_SPACE))and(not waitinput) then
            begin
                 commandmanager.executelastcommad(Sender.pdwg,@Sender.param);
                 Key:=00;
@@ -1744,7 +1752,7 @@ begin
   RelSelectedObjects:=SelectRelatedObjects(Sender.PDWG,@Sender.param,Sender.param.SelDesc.LastSelectedObject);
   if RelSelectedObjects>0 then
                               ZCMsgCallBackInterface.TextMessage(format(rsAdditionalSelected,[RelSelectedObjects]),TMWOHistoryOut);
-  if (commandmanager.pcommandrunning=nil)or(commandmanager.pcommandrunning^.IData.GetPointMode<>TGPWaitEnt) then
+  if (commandmanager.pcommandrunning=nil)or(commandmanager.pcommandrunning^.IData.GetPointMode<>TGPMWaitEnt) then
   begin
   if PGDBObjEntity(Sender.param.SelDesc.OnMouseObject)^.select(Sender.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.selector) then
     begin

@@ -51,7 +51,7 @@ begin
   dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
   // try to get from the user first point
   // пытаемся получить от пользователя первую точку
-  if commandmanager.get3dpoint(rscmSpecifyFirstPoint,p1) then
+  if commandmanager.get3dpoint(rscmSpecifyFirstPoint,p1)=GRNormal then
     begin
       // Create a "temporary" line in the constructing entities list
       // Создаем "временную" линию в списке конструируемых примитивов
@@ -67,7 +67,7 @@ begin
 
       //try to get the second point from the user, using the interactive function to draw a line
       //пытаемся получить от пользователя вторую точку, используем интерактивную функцию для черчения линии
-      if commandmanager.Get3DPointInteractive(rscmSpecifySecondPoint,p2,@InteractiveLineEndManipulator,pline) then
+      if commandmanager.Get3DPointInteractive(rscmSpecifySecondPoint,p2,@InteractiveLineEndManipulator,pline)=GRNormal then
       begin
         // clear the constructed objects list (temporary line will be removed)
         // очищаем список конструируемых объектов (временная линия будет удалена)
@@ -91,7 +91,7 @@ begin
         if commandmanager.Get3DPointInteractive( rscmSpecifyThirdPoint,
                                                   p3,
                                                   @InteractiveADimManipulator,
-                                                  pd )
+                                                  pd)=GRNormal
         //try to get from the user the third point, use the interactive function for drawing dimensional primitive
         //пытаемся получить от пользователя третью точку, используем интерактивную функцию для черчения размерного примитива
         then

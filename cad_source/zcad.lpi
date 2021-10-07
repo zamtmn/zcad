@@ -313,7 +313,7 @@
         <PackageName Value="LCL"/>
       </Item19>
     </RequiredPackages>
-    <Units Count="204">
+    <Units Count="205">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -1181,6 +1181,10 @@
         <Filename Value="zcad/gui/uzctbextpalettes.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit203>
+      <Unit204>
+        <Filename Value="zcad/commands/uzccommand_dataexport.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit204>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

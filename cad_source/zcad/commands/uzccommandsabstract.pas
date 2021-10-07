@@ -42,11 +42,26 @@ const
      EmptyCommandOperands='';
 type
 TInteractiveProcObjBuild=procedure(const PInteractiveData:GDBPointer;Point:GDBVertex;Click:GDBBoolean);
+    TGetInputPossible=(GPIempty//возможность пустого ввода
+                      );
+    TGetInputMode=set of TGetInputPossible;//возможности ввода
+    TGetPossible=(//GPNormal,//результат запроса, но вроде это ненужно, нахрен запрашивать если результат запроса запрещен
+                  GPInput,//ввод в командную строку как результат запроса
+                  GPID//идентификатор из подсказки как результат запроса
+                 );
+    TGetPossibleResult=set of TGetPossible;
 {Export+}
-    TGetPointMode=(TGPWait{point},TGPPoint,
-                   TGPWaitEnt,TGPEnt,
-                   TGPWaitInput,TGPInput,
-                   TGPCancel,TGPOtherCommand,TGPCloseDWG,TGPCloseApp);
+    TGetPointMode=(
+                   TGPMWait{point},//ожидание указания точки
+                   TGPMPoint,      //точка указана
+                   TGPMWaitEnt,TGPMEnt,
+                   TGPMWaitInput,TGPMInput,
+                   TGPMId,
+                   TGPMCancel,
+                   TGPMOtherCommand,
+                   TGPMCloseDWG,
+                   TGPMCloseApp
+                  );
     {REGISTERRECORDTYPE TInteractiveData}
     TInteractiveData=record
                        GetPointMode:TGetPointMode;(*hidden_in_objinsp*)
@@ -55,6 +70,9 @@ TInteractiveProcObjBuild=procedure(const PInteractiveData:GDBPointer;Point:GDBVe
                        PInteractiveData:GDBPointer;
                        PInteractiveProc:{-}TInteractiveProcObjBuild{/GDBPointer/};
                        Input:AnsiString;
+                       Id:Integer;
+                       PossibleResult:TGetPossibleResult;
+                       InputMode:TGetInputMode;
                     end;
     TCommandOperands={-}GDBString{/GDBPointer/};
     TCommandResult=GDBInteger;
@@ -106,6 +124,10 @@ TInteractiveProcObjBuild=procedure(const PInteractiveData:GDBPointer;Point:GDBVe
     function IsRTECommand:GDBBoolean;virtual;
   end;
 {Export-}
+const
+  SomethingWait=[TGPMWait,
+                 TGPMWaitEnt,
+                 TGPMWaitInput];
 implementation
 function CommandObjectDef.IsRTECommand:GDBBoolean;
 begin
@@ -127,7 +149,7 @@ begin
   overlay:=false;
   CEndActionAttr:=CEDeSelect;
   NotUseCommandLine:=true;
-  IData.GetPointMode:=TGPCancel;
+  IData.GetPointMode:=TGPMCancel;
 end;
 
 destructor CommandObjectDef.done;

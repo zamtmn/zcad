@@ -104,7 +104,7 @@ var
 begin
     vdpobj:=commandmanager.PopValue;
     vdpvertex:=commandmanager.PopValue;
-    if commandmanager.get3dpoint(rscmSpecifyPoint,p) then
+    if commandmanager.get3dpoint(rscmSpecifyPoint,p)=GRNormal then
     begin
          pc:=PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pgdbvertex(ppointer(vdpvertex.data.Instance)^)^);
          pgdbvertex(ppointer(vdpvertex.data.Instance)^)^:=p;
@@ -121,7 +121,7 @@ var
 begin
     vdpobj:=commandmanager.PopValue;
     vdpvertex:=commandmanager.PopValue;
-    if commandmanager.get3dpoint(rscmSpecifyX,p) then
+    if commandmanager.get3dpoint(rscmSpecifyX,p)=GRNormal then
     begin
          pc:=PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBXCoordinate(ppointer(vdpvertex.data.Instance)^)^);
          pgdbdouble(ppointer(vdpvertex.data.Instance)^)^:=p.x;
@@ -138,7 +138,7 @@ var
 begin
     vdpobj:=commandmanager.PopValue;
     vdpvertex:=commandmanager.PopValue;
-    if commandmanager.get3dpoint(rscmSpecifyY,p) then
+    if commandmanager.get3dpoint(rscmSpecifyY,p)=GRNormal then
     begin
          pc:=PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBYCoordinate(ppointer(vdpvertex.data.Instance)^)^);
          pgdbdouble(ppointer(vdpvertex.data.Instance)^)^:=p.y;
@@ -155,7 +155,7 @@ var
 begin
     vdpobj:=commandmanager.PopValue;
     vdpvertex:=commandmanager.PopValue;
-    if commandmanager.get3dpoint(rscmSpecifyZ,p) then
+    if commandmanager.get3dpoint(rscmSpecifyZ,p)=GRNormal then
     begin
          pc:=PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBZCoordinate(ppointer(vdpvertex.data.Instance)^)^);
          pgdbdouble(ppointer(vdpvertex.data.Instance)^)^:=p.z;
@@ -172,9 +172,9 @@ var
 begin
   vdpobj:=commandmanager.PopValue;
   vdpvertex:=commandmanager.PopValue;
-    if commandmanager.get3dpoint(rscmSpecifyFirstPoint,p1) then
+    if commandmanager.get3dpoint(rscmSpecifyFirstPoint,p1)=GRNormal then
     begin
-      if commandmanager.get3dpoint(rscmSpecifySecondPoint,p2) then
+      if commandmanager.get3dpoint(rscmSpecifySecondPoint,p2)=GRNormal then
       begin
         pc:=PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pgdbdouble(ppointer(vdpvertex.data.Instance)^)^);
         pgdblength(ppointer(vdpvertex.data.Instance)^)^:=uzegeometry.Vertexlength(p1,p2);

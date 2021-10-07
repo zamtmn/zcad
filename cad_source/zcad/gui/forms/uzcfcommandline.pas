@@ -31,15 +31,13 @@ uses
 const
      cheight=48;
 type
-  TCLine = class(TForm)
+  TCLine = class(TForm,ICommandLinePrompt)
     procedure AfterConstruction; override;
   public
     //utfpresent:boolean;
     utflen:integer;
     procedure keypressmy(Sender: TObject; var Key: char);
     procedure SetMode(m:TCLineMode);virtual;
-    procedure SetPrompt(APrompt:String);virtual;overload;
-    procedure SetPrompt(APrompt:TParserCommandLinePrompt.TGeneralParsedText);virtual;overload;
     procedure DoOnResize; override;
     procedure MyResize;
     procedure mypaint(sender:tobject);
@@ -48,6 +46,9 @@ type
     function GetCLineFocusPriority:TControlWithPriority;
 
     destructor Destroy;override;
+  private
+    procedure SetPrompt(APrompt:String);virtual;overload;
+    procedure SetPrompt(APrompt:TParserCommandLinePrompt.TGeneralParsedText);virtual;overload;
   end;
 var
   CLine: TCLine;
@@ -73,15 +74,16 @@ procedure TCLine.SetPrompt(APrompt:String{;ATPromptResults:TCommandLinePrompt.TP
 begin
   prompt.SetHighLightedText(APrompt,[],-1);
 end;
+
 procedure TCLine.SetPrompt(APrompt:TParserCommandLinePrompt.TGeneralParsedText);
 var
   pt:TCommandLinePromptOption;
   ts:TParserCommandLinePrompt.TParserString;
 begin
-    pt:=TCommandLinePromptOption.Create;
-    ts:=APrompt.GetResult(pt);
-    prompt.SetHighLightedText(ts,pt.Parts.arr,pt.Parts.Size-1);
-    pt.Free;
+  pt:=TCommandLinePromptOption.Create;
+  ts:=APrompt.GetResult(pt);
+  prompt.SetHighLightedText(ts,pt.Parts.arr,pt.Parts.Size-1);
+  pt.Free;
 end;
 
 procedure TCLine.SetMode(m:TCLineMode);
@@ -235,6 +237,7 @@ begin
     panel.Color:=HistoryLine.Brush.Color;
 
     prompt:=TCommandLinePrompt.create(panel);
+    prompt.OnClickNotify:=commandmanager.PromptTagNotufy;
     prompt.Align:=alLeft;
     //prompt.Layout:=tlCenter;
     //prompt.Width:=1;
@@ -311,12 +314,13 @@ begin
     //CWindow.Show;
     ZCMsgCallBackInterface.RegisterHandler_GUIMode(HandleCommandLineMode);
     HandleCmdLine(ZMsgID_GUICMDLineCheck);
-   // SetCommandLineMode:=self.SetMode;
+    commandmanager.AddClPrompt(self);
 end;
 destructor TCLine.Destroy;
 begin
-     aliases.Done;
-     inherited;
+  commandmanager.RemoveClPrompt(self);
+  aliases.Done;
+  inherited;
 end;
 
 procedure TCLine.AfterConstruction;

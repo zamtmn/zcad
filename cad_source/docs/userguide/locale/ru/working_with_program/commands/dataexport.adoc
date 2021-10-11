@@ -104,13 +104,13 @@ node5 [label = "File select dialog (5)" shape=record];
 значения экспорт будет выполнен и команда завершится
 
 .2. Задать фильтр примитивов
-Ожидание ввода значения фильтра примитивов по типу. <<enttypefilter_lng>>
+Ожидание ввода значения фильтра примитивов по типу. см. <<enttypefilter_lng>>
 
 .3. Задать фильтр свойств примитивов
-Ожидание ввода значения фильтра примитивов по параметрам. <<entpropfilter_lng>>
+Ожидание ввода значения фильтра примитивов по параметрам. см. <<entpropfilter_lng>>
 
 .4. Задать скрипт экспорта
-Ожидание ввода скрипта выполняющего экспорт. <<exporter_lng>>
+Ожидание ввода скрипта выполняющего экспорт. см. <<exporter_lng>>
 
 .5. Задать имя файла в диалоговом режиме
 Откроет диалог выбора файла, можно выбрать любой файл csv. Выбор файла сделает его файлом
@@ -332,7 +332,9 @@ DoIf(
 [source]
 ----
 DoIf(SameMask(%%('EntityName'),'Cable'),
-     Export(%%('EntityName'),'NMO_Name',@@('NMO_Name'),'CABLE_Segment',@@('CABLE_Segment'))
+     Export(%%('EntityName'),
+            'NMO_Name',@@('NMO_Name'),
+            'CABLE_Segment',@@('CABLE_Segment'))
      )
 ----
 include::commandsummaryfree.adoc[]

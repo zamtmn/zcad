@@ -173,7 +173,7 @@ begin
     data.NavTree.Header.Columns[op1i].Width:=50;
     data.NavTree.Header.Columns[op1i].Text:=op2;
     data.PExtTreeParam^.ExtColumnsParams[op1i].Pattern:=op3;
-    data.NavTree.Header.Columns[op1i].Width:=GetIntegerFromSavedUnit(op4,SuffWidth,10,3,Screen.Width);
+    data.NavTree.Header.Columns[op1i].Width:=GetIntegerFromSavedUnit(op4,SuffWidth,50,3,Screen.Width);
     data.PExtTreeParam^.ExtColumnsParams[op1i].SaveWidthVar:=op4;
 
   end else

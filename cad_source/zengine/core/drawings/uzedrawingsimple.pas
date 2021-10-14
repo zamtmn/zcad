@@ -461,7 +461,7 @@ begin
                rtmod.point.dcoord:=VectorTransform3D(rtmod.point.dcoord,mt);
 
                    {учет своей СК  CalcObjMatrixWithoutOwner}
-                    if PSelectedObjDesc(md).objaddr^.IsHaveLCS then
+                    {if PSelectedObjDesc(md).objaddr^.IsHaveLCS then
                     begin
                     m2:=PGDBObjWithLocalCS(PSelectedObjDesc(md).objaddr)^.CalcObjMatrixWithoutOwner;
                     MatrixInvert(m2);
@@ -475,7 +475,7 @@ begin
                     rtmod.point.worldcoord:=VectorTransform3D(rtmod.point.worldcoord,m2);
 
                     rtmod.point.dcoord:=VectorTransform3D(rtmod.point.dcoord,m2);
-                    end;
+                    end;}
 
                     {учет своей СК}
                if save then

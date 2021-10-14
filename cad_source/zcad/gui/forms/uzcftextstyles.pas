@@ -173,6 +173,11 @@ begin
                PGDBTextStyle(TListItem(Item).Data)^.FontFile:=PGDBTextStyle(TListItem(Item).Data)^.pfont^.Name;
                ComitFromObj;
                end;
+               with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBTextStyle(TListItem(Item).Data)^.FontFile)^ do
+               begin
+               PGDBTextStyle(TListItem(Item).Data)^.FontFamily:='';
+               ComitFromObj;
+               end;
           end;
      end;
      ListView1.UpdateItem2(TListItem(Item));

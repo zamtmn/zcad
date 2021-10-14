@@ -67,7 +67,7 @@ uses
   uzegeometry,
   uzeentitiesmanager,
 
-  uzcmessagedialogs,
+  //uzcmessagedialogs,
   uzeentityfactory,    //unit describing a "factory" to create primitives
                       //модуль описывающий "фабрику" для создания примитивов
   uzcsysvars,        //system global variables
@@ -126,6 +126,8 @@ type
  procedure visualPtNameSL(GGraph:TGraphBuilder; height:double);
  procedure visualGraphTest(G: TGraph; height:double; var startPt:GDBVertex);
  procedure visualGraphPlan(G: TGraph; height:double);
+ procedure visualGraphTreeNew(G: TGraph; var startPt:GDBVertex;height:double);
+ procedure drawMText(pt:GDBVertex;mText:GDBString;color:integer;rotate,height:double);
  //procedure visualAllTreesLMD(listMasterDevice:TVectorOfMasterDevice;startPt:GDBVertex;height:double);
 
 implementation
@@ -359,6 +361,106 @@ begin
       //startPt.y:=0;
 
 end;
+
+//Визуализация графа
+procedure visualGraphTreeNew(G: TGraph; var startPt:GDBVertex;height:double);
+
+
+var
+  //ptext:PGDBObjText;
+  //indent,size:double;
+  x,y,i,tParent:integer;
+  listVertex:TListVertex;
+  infoVertex:TInfoVertex;
+  pt1,pt2,pt3,ptext:GDBVertex;
+  VertexPath: TClassList;
+
+
+
+
+begin
+    x:=0;
+    y:=0;
+
+    VertexPath:=TClassList.Create;
+    listVertex:=TListVertex.Create;
+
+
+    infoVertex.num:=G.Root.Index;
+    infoVertex.poz:=uzegeometry.CreateVertex2D(x,0);
+    infoVertex.kol:=0;
+    infoVertex.childs:=G.Root.ChildCount;
+    listVertex.PushBack(infoVertex);
+    pt1:=uzegeometry.CreateVertex(startPt.x + x*indent,startPt.y + y*indent,0) ;
+    drawVertex(pt1,3,height);
+    //drawText(pt1,inttostr(G.Root.index),4);
+    //ptext:=uzegeometry.CreateVertex(pt1.x,pt1.y + indent/10,0) ;
+    //pt1.y+=indent/10;
+     //G.Root.
+    drawMText(pt1,G.Root.AsString[vGInfoVertex],4,0,height);
+           //PGDBObjDevice(G.Root.AsPointer[vGPGDBObjDevice])^.P_insert_in_WCS;
+    drawMText(PTStructDeviceLine(G.Root.AsPointer[vGPGDBObjVertex])^.centerPoint,inttostr(G.Root.AsInt32[vGGIndex]),4,0,height);
+
+    //drawMText(GGraph.listVertex[G.Root.AsInt32[vGGIndex]].centerPoint,inttostr(G.Root.AsInt32[vGGIndex]),4,0,height);
+    //drawMText(GGraph.pt1,G.Root.AsString['infoVertex'],4,0,height);
+
+    G.TreeTraversal(G.Root, VertexPath); //получаем путь обхода графа
+    for i:=1 to VertexPath.Count - 1 do begin
+        //ZCMsgCallBackInterface.TextMessage('VertexPath i -'+ inttostr(TVertex(VertexPath[i]).Parent.Index),TMWOHistoryOut);
+        tParent:=howParent(listVertex,TVertex(VertexPath[i]).Parent.Index);
+        if tParent>=0 then
+        begin
+          inc(listVertex.Mutable[tparent]^.kol);
+          if listVertex[tparent].kol = 1 then
+             infoVertex.poz:=uzegeometry.CreateVertex2D(listVertex[tparent].poz.x,listVertex[tparent].poz.y + 1)
+          else  begin
+            inc(x);
+            infoVertex.poz:=uzegeometry.CreateVertex2D(x,listVertex[tparent].poz.y + 1);
+          end;
+
+          infoVertex.num:=TVertex(VertexPath[i]).Index;
+          infoVertex.kol:=0;
+          infoVertex.childs:=TVertex(VertexPath[i]).ChildCount;
+          listVertex.PushBack(infoVertex);
+
+
+        pt1:=uzegeometry.CreateVertex(startPt.x + listVertex.Back.poz.x*indent,startPt.y - listVertex.Back.poz.y*indent,0) ;
+        drawVertex(pt1,3,height);
+        //drawText(pt1,inttostr(listVertex.Back.num),4);
+
+        //if G.Vertices[listVertex.Back.num].AsBool[vGIsDevice] then
+           drawMText(PTStructDeviceLine(G.Vertices[listVertex.Back.num].AsPointer[vGPGDBObjVertex])^.centerPoint,inttostr(G.Vertices[listVertex.Back.num].AsInt32[vGGIndex]),4,0,height);
+
+        //drawMText(GGraph.listVertex[G.Vertices[listVertex.Back.num].AsInt32[vGGIndex]].centerPoint,inttostr(G.Vertices[listVertex.Back.num].AsInt32[vGGIndex]),4,0,height);
+
+        drawMText(pt1,G.Vertices[listVertex.Back.num].AsString[vGInfoVertex],4,0,height);
+        pt3:=uzegeometry.CreateVertex(pt1.x,(pt1.y + size)*height,0) ;
+        ptext:=uzegeometry.CreateVertex(pt3.x,pt3.y + indent/20,0) ;
+        drawMText(ptext,G.GetEdge(G.Vertices[listVertex.Back.num],G.Vertices[listVertex.Back.num].Parent).AsString[vGInfoEdge],4,90,height);
+
+        if listVertex[tparent].kol = 1 then begin
+        pt2.x:=startPt.x + listVertex[tparent].poz.x*indent;
+        pt2.y:=startPt.y - listVertex[tparent].poz.y*indent-size;
+        pt2.z:=0;
+        end
+        else begin
+        pt2.x:=startPt.x + listVertex[tparent].poz.x*indent + size;
+        pt2.y:=startPt.y - listVertex[tparent].poz.y*indent-size+(listVertex[tparent].kol-1)*((2*size)/listVertex[tparent].childs);
+        pt2.z:=0;
+        end;
+        pt1.x:=startPt.x + listVertex.Back.poz.x*indent;
+        pt1.y:=startPt.y - listVertex.Back.poz.y*indent+size;
+        pt1.z:=0;
+        //pt2:=uzegeometry.CreateVertex(startPt.x + listVertex[tparent].poz.x*indent,startPt.y - listVertex[tparent].poz.y*indent,0) ;
+        drawConnectLine(pt1,pt2,4);
+
+        end;
+     end;
+    startPt.x:=startPt.x + (infoVertex.poz.x+1)*indent;
+    //startPt.y:=0;
+
+end;
+
    //Визуализация графа
 procedure visualGraphTest(G: TGraph; height:double; var startPt:GDBVertex);
 
@@ -599,193 +701,193 @@ begin
 end;
 
 
-  function TestTREEUses_com2(operands:TCommandOperands):TCommandResult;
-  var
-    G: TGraph;
-    EdgePath, VertexPath: TClassList;
-    i: Integer;
-    gg:GDBVertex;
-    //user:TCompareEvent;
-  begin
-
-      ZCMsgCallBackInterface.TextMessage('*** tree Path ***',TMWOHistoryOut);
-    G:=TGraph.Create;
-    G.Features:=[Tree];
-    EdgePath:=TClassList.Create;
-    VertexPath:=TClassList.Create;
-    try
-      G.CreateVertexAttr('tt', AttrFloat32);
-      G.CreateEdgeAttr('length', AttrFloat32);
-
-      //G.AddVertices(14);
-      //G.Vertices[0].AsFloat32['tt']:=10;
-      //G.Vertices[1].AsFloat32['tt']:=20;
-      //G.Vertices[2].AsFloat32['tt']:=30;
-      //G.Vertices[3].AsFloat32['tt']:=40;
-      //G.Vertices[4].AsFloat32['tt']:=50;
-      //G.Vertices[5].AsFloat32['tt']:=60;
-      //G.Vertices[6].AsFloat32['tt']:=70;
-      //G.Vertices[7].AsFloat32['tt']:=80;
-      //G.Vertices[8].AsFloat32['tt']:=90;
-      //G.Vertices[9].AsFloat32['tt']:=100;
-      //G.Vertices[10].AsFloat32['tt']:=110;
-      //G.Vertices[11].AsFloat32['tt']:=120;
-      //G.Vertices[12].AsFloat32['tt']:=130;
-      //G.Vertices[13].AsFloat32['tt']:=140;
-
-      //G.AddEdgeI(2,1);
-      //G.Edges[0].AsFloat32['length']:=10;
-      //G.AddEdgeI(2,3);
-      //G.Edges[1].AsFloat32['length']:=2;
-      //G.AddEdgeI(2,4);
-      //G.Edges[2].AsFloat32['length']:=15;
-      //G.AddEdgeI(4,11);
-      //G.Edges[3].AsFloat32['length']:=3;
-      //G.AddEdgeI(4,12);
-      //G.Edges[4].AsFloat32['length']:=8;
-      //{G.AddEdgeI(2,3);
-      //G.Edges[5].AsFloat32['length']:=2;}
-      //G.AddEdgeI(3,0);
-      //G.Edges[5].AsFloat32['length']:=7;
-      //G.AddEdgeI(1,6);
-      //G.Edges[6].AsFloat32['length']:=61;
-      //G.AddEdgeI(1,5);
-      //G.Edges[7].AsFloat32['length']:=7;
-      //G.AddEdgeI(5,7);
-      //G.Edges[8].AsFloat32['length']:=17;
-      //G.AddEdgeI(7,8);
-      //G.Edges[9].AsFloat32['length']:=14;
-      //G.AddEdgeI(7,9);
-      //G.Edges[10].AsFloat32['length']:=80;
-      //G.AddEdgeI(2,13);
-      //G.Edges[11].AsFloat32['length']:=81;
-
-
-      G.AddVertices(10);
-      G.Vertices[0].AsFloat32['tt']:=0;
-      G.Vertices[1].AsFloat32['tt']:=1;
-      G.Vertices[2].AsFloat32['tt']:=2;
-      G.Vertices[3].AsFloat32['tt']:=3;
-      G.Vertices[4].AsFloat32['tt']:=4;
-      G.Vertices[5].AsFloat32['tt']:=5;
-      G.Vertices[6].AsFloat32['tt']:=6;
-      G.Vertices[7].AsFloat32['tt']:=7;
-      G.Vertices[8].AsFloat32['tt']:=8;
-      G.Vertices[9].AsFloat32['tt']:=9;
-
-      //G.Vertices[0].set:=0;
-      //G.Vertices[1].AsFloat32['tt']:=1;
-      //G.Vertices[2].AsFloat32['tt']:=2;
-      //G.Vertices[3].AsFloat32['tt']:=3;
-      //G.Vertices[4].AsFloat32['tt']:=4;
-      //G.Vertices[5].AsFloat32['tt']:=5;
-      //G.Vertices[6].AsFloat32['tt']:=6;
-      //G.Vertices[7].AsFloat32['tt']:=7;
-      //G.Vertices[8].AsFloat32['tt']:=8;
-      //G.Vertices[9].AsFloat32['tt']:=9;
-      //
-      //G.Vertices[10].AsFloat32['tt']:=110;
-      //G.Vertices[11].AsFloat32['tt']:=120;
-      //G.Vertices[12].AsFloat32['tt']:=130;
-      //G.Vertices[13].AsFloat32['tt']:=140;
-
-      G.AddEdge(G.Vertices[2],G.Vertices[1]);
-      G.Edges[0].AsFloat32['length']:=10;
-      G.AddEdge(G.Vertices[1],G.Vertices[0]);
-      G.Edges[1].AsFloat32['length']:=2;
-      G.AddEdge(G.Vertices[1],G.Vertices[4]);
-      G.Edges[2].AsFloat32['length']:=15;
-      G.AddEdge(G.Vertices[2],G.Vertices[3]);
-      G.Edges[3].AsFloat32['length']:=3;
-      G.AddEdge(G.Vertices[1],G.Vertices[5]);
-      G.Edges[4].AsFloat32['length']:=22;
-      G.AddEdge(G.Vertices[1],G.Vertices[6]);
-      G.Edges[5].AsFloat32['length']:=11;
-      G.AddEdge(G.Vertices[0],G.Vertices[7]);
-      G.Edges[6].AsFloat32['length']:=17;
-      G.AddEdge(G.Vertices[6],G.Vertices[8]);
-      G.Edges[7].AsFloat32['length']:=18;
-      G.AddEdge(G.Vertices[6],G.Vertices[9]);
-      G.Edges[8].AsFloat32['length']:=1;
-      //G.AddEdgeI(4,12);
-      //G.Edges[4].AsFloat32['length']:=8;
-      //{G.AddEdgeI(2,3);
-      //G.Edges[5].AsFloat32['length']:=2;}
-      //G.AddEdgeI(3,0);
-      //G.Edges[5].AsFloat32['length']:=7;
-      //G.AddEdgeI(1,6);
-      //G.Edges[6].AsFloat32['length']:=61;
-      //G.AddEdgeI(1,5);
-      //G.Edges[7].AsFloat32['length']:=7;
-      //G.AddEdgeI(5,7);
-      //G.Edges[8].AsFloat32['length']:=17;
-      //G.AddEdgeI(7,8);
-      //G.Edges[9].AsFloat32['length']:=14;
-      //G.AddEdgeI(7,9);
-      //G.Edges[10].AsFloat32['length']:=80;
-      //G.AddEdgeI(2,13);
-      //G.Edges[11].AsFloat32['length']:=81;
-
-
-      G.Root:=G.Vertices[2];
-
-      if G.IsTree then
-         ZCMsgCallBackInterface.TextMessage('граф дерево',TMWOHistoryOut)
-      else
-         ZCMsgCallBackInterface.TextMessage('граф не дерево',TMWOHistoryOut) ;
-
-      G.CorrectTree;
-
-      //for i:=0 to G.VertexCount - 1 do
-      //ZCMsgCallBackInterface.TextMessage('*кол потомков для ' + inttostr(i) + ' = ' + inttostr(G.Vertices[i].ChildCount),TMWOHistoryOut);
-
-      {
-      ZCMsgCallBackInterface.TextMessage('***',TMWOHistoryOut);
-
-      G.TreeTraversal(G.Root, VertexPath);
-      for i:=0 to VertexPath.Count - 1 do
-        ZCMsgCallBackInterface.TextMessage(inttostr(TVertex(VertexPath[i]).Index) + ' ',TMWOHistoryOut);
-      }
-
-      for i:=0 to VertexPath.Count - 1 do begin
-        ZCMsgCallBackInterface.TextMessage(inttostr(TVertex(VertexPath[i]).Index) + '+',TMWOHistoryOut);
-        //ZCMsgCallBackInterface.TextMessage('tt = ' + floattostr(TVertex(VertexPath[i]).AsFloat32['tt']) + ' ',TMWOHistoryOut);
-        end;
-
-      G.TreeTraversal(G.Root, VertexPath);
-      gg:=uzegeometry.CreateVertex(0,0,0) ;
-      //visualGraph(G,gg,1);
-
-      //G.SortTree(G.Root,@DummyComparer.Compare);
-
-
-
-      ZCMsgCallBackInterface.TextMessage('-кол верш lkz 2-q -' + inttostr(G.BFSFromVertex(G.Root) ),TMWOHistoryOut);
-
-      G.TreeTraversal(G.Root, VertexPath);
-
-      //gg:=uzegeometry.CreateVertex(0,-500,0) ;
-      //visualGraph(G,G.Root.index,gg,1);
-      //
-      G.SetTempToSubtreeSize(G.Root);
-
-      gg:=uzegeometry.CreateVertex(0,-300,0) ;
-      //visualGraph(G,gg,1);
-
-      for i:=1 to VertexPath.Count - 1 do begin
-        ZCMsgCallBackInterface.TextMessage(inttostr(TVertex(VertexPath[i]).Index) + '- батя ' + inttostr(TVertex(VertexPath[i]).Parent.Index),TMWOHistoryOut);
-
-        ZCMsgCallBackInterface.TextMessage('-кол верш-' + inttostr(TVertex(VertexPath[i]).temp.AsPtrInt),TMWOHistoryOut);
-        //ZCMsgCallBackInterface.TextMessage('tt = ' + floattostr(TVertex(VertexPath[i]).AsFloat32['tt']) + ' ',TMWOHistoryOut);
-        end;
-      //end;
-      ZCMsgCallBackInterface.TextMessage('All good ',TMWOHistoryOut);
-    finally
-      G.Free;
-      EdgePath.Free;
-      VertexPath.Free;
-    end;
-    result:=cmd_ok;
-  end;
+  //function TestTREEUses_com2(operands:TCommandOperands):TCommandResult;
+  //var
+  //  G: TGraph;
+  //  EdgePath, VertexPath: TClassList;
+  //  i: Integer;
+  //  gg:GDBVertex;
+  //  //user:TCompareEvent;
+  //begin
+  //
+  //    ZCMsgCallBackInterface.TextMessage('*** tree Path ***',TMWOHistoryOut);
+  //  G:=TGraph.Create;
+  //  G.Features:=[Tree];
+  //  EdgePath:=TClassList.Create;
+  //  VertexPath:=TClassList.Create;
+  //  try
+  //    G.CreateVertexAttr('tt', AttrFloat32);
+  //    G.CreateEdgeAttr('length', AttrFloat32);
+  //
+  //    //G.AddVertices(14);
+  //    //G.Vertices[0].AsFloat32['tt']:=10;
+  //    //G.Vertices[1].AsFloat32['tt']:=20;
+  //    //G.Vertices[2].AsFloat32['tt']:=30;
+  //    //G.Vertices[3].AsFloat32['tt']:=40;
+  //    //G.Vertices[4].AsFloat32['tt']:=50;
+  //    //G.Vertices[5].AsFloat32['tt']:=60;
+  //    //G.Vertices[6].AsFloat32['tt']:=70;
+  //    //G.Vertices[7].AsFloat32['tt']:=80;
+  //    //G.Vertices[8].AsFloat32['tt']:=90;
+  //    //G.Vertices[9].AsFloat32['tt']:=100;
+  //    //G.Vertices[10].AsFloat32['tt']:=110;
+  //    //G.Vertices[11].AsFloat32['tt']:=120;
+  //    //G.Vertices[12].AsFloat32['tt']:=130;
+  //    //G.Vertices[13].AsFloat32['tt']:=140;
+  //
+  //    //G.AddEdgeI(2,1);
+  //    //G.Edges[0].AsFloat32['length']:=10;
+  //    //G.AddEdgeI(2,3);
+  //    //G.Edges[1].AsFloat32['length']:=2;
+  //    //G.AddEdgeI(2,4);
+  //    //G.Edges[2].AsFloat32['length']:=15;
+  //    //G.AddEdgeI(4,11);
+  //    //G.Edges[3].AsFloat32['length']:=3;
+  //    //G.AddEdgeI(4,12);
+  //    //G.Edges[4].AsFloat32['length']:=8;
+  //    //{G.AddEdgeI(2,3);
+  //    //G.Edges[5].AsFloat32['length']:=2;}
+  //    //G.AddEdgeI(3,0);
+  //    //G.Edges[5].AsFloat32['length']:=7;
+  //    //G.AddEdgeI(1,6);
+  //    //G.Edges[6].AsFloat32['length']:=61;
+  //    //G.AddEdgeI(1,5);
+  //    //G.Edges[7].AsFloat32['length']:=7;
+  //    //G.AddEdgeI(5,7);
+  //    //G.Edges[8].AsFloat32['length']:=17;
+  //    //G.AddEdgeI(7,8);
+  //    //G.Edges[9].AsFloat32['length']:=14;
+  //    //G.AddEdgeI(7,9);
+  //    //G.Edges[10].AsFloat32['length']:=80;
+  //    //G.AddEdgeI(2,13);
+  //    //G.Edges[11].AsFloat32['length']:=81;
+  //
+  //
+  //    G.AddVertices(10);
+  //    G.Vertices[0].AsFloat32['tt']:=0;
+  //    G.Vertices[1].AsFloat32['tt']:=1;
+  //    G.Vertices[2].AsFloat32['tt']:=2;
+  //    G.Vertices[3].AsFloat32['tt']:=3;
+  //    G.Vertices[4].AsFloat32['tt']:=4;
+  //    G.Vertices[5].AsFloat32['tt']:=5;
+  //    G.Vertices[6].AsFloat32['tt']:=6;
+  //    G.Vertices[7].AsFloat32['tt']:=7;
+  //    G.Vertices[8].AsFloat32['tt']:=8;
+  //    G.Vertices[9].AsFloat32['tt']:=9;
+  //
+  //    //G.Vertices[0].set:=0;
+  //    //G.Vertices[1].AsFloat32['tt']:=1;
+  //    //G.Vertices[2].AsFloat32['tt']:=2;
+  //    //G.Vertices[3].AsFloat32['tt']:=3;
+  //    //G.Vertices[4].AsFloat32['tt']:=4;
+  //    //G.Vertices[5].AsFloat32['tt']:=5;
+  //    //G.Vertices[6].AsFloat32['tt']:=6;
+  //    //G.Vertices[7].AsFloat32['tt']:=7;
+  //    //G.Vertices[8].AsFloat32['tt']:=8;
+  //    //G.Vertices[9].AsFloat32['tt']:=9;
+  //    //
+  //    //G.Vertices[10].AsFloat32['tt']:=110;
+  //    //G.Vertices[11].AsFloat32['tt']:=120;
+  //    //G.Vertices[12].AsFloat32['tt']:=130;
+  //    //G.Vertices[13].AsFloat32['tt']:=140;
+  //
+  //    G.AddEdge(G.Vertices[2],G.Vertices[1]);
+  //    G.Edges[0].AsFloat32['length']:=10;
+  //    G.AddEdge(G.Vertices[1],G.Vertices[0]);
+  //    G.Edges[1].AsFloat32['length']:=2;
+  //    G.AddEdge(G.Vertices[1],G.Vertices[4]);
+  //    G.Edges[2].AsFloat32['length']:=15;
+  //    G.AddEdge(G.Vertices[2],G.Vertices[3]);
+  //    G.Edges[3].AsFloat32['length']:=3;
+  //    G.AddEdge(G.Vertices[1],G.Vertices[5]);
+  //    G.Edges[4].AsFloat32['length']:=22;
+  //    G.AddEdge(G.Vertices[1],G.Vertices[6]);
+  //    G.Edges[5].AsFloat32['length']:=11;
+  //    G.AddEdge(G.Vertices[0],G.Vertices[7]);
+  //    G.Edges[6].AsFloat32['length']:=17;
+  //    G.AddEdge(G.Vertices[6],G.Vertices[8]);
+  //    G.Edges[7].AsFloat32['length']:=18;
+  //    G.AddEdge(G.Vertices[6],G.Vertices[9]);
+  //    G.Edges[8].AsFloat32['length']:=1;
+  //    //G.AddEdgeI(4,12);
+  //    //G.Edges[4].AsFloat32['length']:=8;
+  //    //{G.AddEdgeI(2,3);
+  //    //G.Edges[5].AsFloat32['length']:=2;}
+  //    //G.AddEdgeI(3,0);
+  //    //G.Edges[5].AsFloat32['length']:=7;
+  //    //G.AddEdgeI(1,6);
+  //    //G.Edges[6].AsFloat32['length']:=61;
+  //    //G.AddEdgeI(1,5);
+  //    //G.Edges[7].AsFloat32['length']:=7;
+  //    //G.AddEdgeI(5,7);
+  //    //G.Edges[8].AsFloat32['length']:=17;
+  //    //G.AddEdgeI(7,8);
+  //    //G.Edges[9].AsFloat32['length']:=14;
+  //    //G.AddEdgeI(7,9);
+  //    //G.Edges[10].AsFloat32['length']:=80;
+  //    //G.AddEdgeI(2,13);
+  //    //G.Edges[11].AsFloat32['length']:=81;
+  //
+  //
+  //    G.Root:=G.Vertices[2];
+  //
+  //    if G.IsTree then
+  //       ZCMsgCallBackInterface.TextMessage('граф дерево',TMWOHistoryOut)
+  //    else
+  //       ZCMsgCallBackInterface.TextMessage('граф не дерево',TMWOHistoryOut) ;
+  //
+  //    G.CorrectTree;
+  //
+  //    //for i:=0 to G.VertexCount - 1 do
+  //    //ZCMsgCallBackInterface.TextMessage('*кол потомков для ' + inttostr(i) + ' = ' + inttostr(G.Vertices[i].ChildCount),TMWOHistoryOut);
+  //
+  //    {
+  //    ZCMsgCallBackInterface.TextMessage('***',TMWOHistoryOut);
+  //
+  //    G.TreeTraversal(G.Root, VertexPath);
+  //    for i:=0 to VertexPath.Count - 1 do
+  //      ZCMsgCallBackInterface.TextMessage(inttostr(TVertex(VertexPath[i]).Index) + ' ',TMWOHistoryOut);
+  //    }
+  //
+  //    for i:=0 to VertexPath.Count - 1 do begin
+  //      ZCMsgCallBackInterface.TextMessage(inttostr(TVertex(VertexPath[i]).Index) + '+',TMWOHistoryOut);
+  //      //ZCMsgCallBackInterface.TextMessage('tt = ' + floattostr(TVertex(VertexPath[i]).AsFloat32['tt']) + ' ',TMWOHistoryOut);
+  //      end;
+  //
+  //    G.TreeTraversal(G.Root, VertexPath);
+  //    gg:=uzegeometry.CreateVertex(0,0,0) ;
+  //    //visualGraph(G,gg,1);
+  //
+  //    //G.SortTree(G.Root,@DummyComparer.Compare);
+  //
+  //
+  //
+  //    ZCMsgCallBackInterface.TextMessage('-кол верш lkz 2-q -' + inttostr(G.BFSFromVertex(G.Root) ),TMWOHistoryOut);
+  //
+  //    G.TreeTraversal(G.Root, VertexPath);
+  //
+  //    //gg:=uzegeometry.CreateVertex(0,-500,0) ;
+  //    //visualGraph(G,G.Root.index,gg,1);
+  //    //
+  //    G.SetTempToSubtreeSize(G.Root);
+  //
+  //    gg:=uzegeometry.CreateVertex(0,-300,0) ;
+  //    //visualGraph(G,gg,1);
+  //
+  //    for i:=1 to VertexPath.Count - 1 do begin
+  //      ZCMsgCallBackInterface.TextMessage(inttostr(TVertex(VertexPath[i]).Index) + '- батя ' + inttostr(TVertex(VertexPath[i]).Parent.Index),TMWOHistoryOut);
+  //
+  //      ZCMsgCallBackInterface.TextMessage('-кол верш-' + inttostr(TVertex(VertexPath[i]).temp.AsPtrInt),TMWOHistoryOut);
+  //      //ZCMsgCallBackInterface.TextMessage('tt = ' + floattostr(TVertex(VertexPath[i]).AsFloat32['tt']) + ' ',TMWOHistoryOut);
+  //      end;
+  //    //end;
+  //    ZCMsgCallBackInterface.TextMessage('All good ',TMWOHistoryOut);
+  //  finally
+  //    G.Free;
+  //    EdgePath.Free;
+  //    VertexPath.Free;
+  //  end;
+  //  result:=cmd_ok;
+  //end;
 end.
 

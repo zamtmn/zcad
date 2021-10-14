@@ -46,7 +46,7 @@ uses
      uzctnrvectorgdbstring,
      uzbgeomtypes,
      uzegeometry,
-
+     uzcuitypes,
      uzbtypes,
      typinfo,
      gzctnrvector,

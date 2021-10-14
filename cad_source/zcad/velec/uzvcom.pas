@@ -13,7 +13,7 @@
 *****************************************************************************
 }
 {
-@author(Andrey Zubarev <zamtmn@yandex.ru>)
+@author(Vladimir Bobrov)
 }
 {$mode objfpc}
 
@@ -80,7 +80,7 @@ uses
   uzegeometry,
   uzeentitiesmanager,
 
-  uzcmessagedialogs,
+  //uzcmessagedialogs,
   uzeentityfactory,    //unit describing a "factory" to create primitives
                       //модуль описывающий "фабрику" для создания примитивов
   uzcsysvars,        //system global variables
@@ -1780,6 +1780,12 @@ begin
 //*******скорее всего метод медленне, чем старый метод, но зато проще, время покажет его эффективность
   getListEdge(result,listCable,Epsilon);
 //*******
+
+////*******  Посмотреть что на выходе графа
+//  ZCMsgCallBackInterface.TextMessage('осмотр начат',TMWOHistoryOut);
+//  for i:=0 to result.listEdge.Size-1 do    //перебираем все узлы
+//      ZCMsgCallBackInterface.TextMessage('от ' + IntToStr(result.listEdge[i].VIndex1) + 'до ' + IntToStr(result.listEdge[i].VIndex2),TMWOHistoryOut);
+//  ZCMsgCallBackInterface.TextMessage('осмотр закончен',TMWOHistoryOut);
 
   end;
 

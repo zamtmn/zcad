@@ -18,6 +18,8 @@ var
    CABLE_AutoGen:GDBBoolean;(*'Автоматически сгенерирован'*)
 
    AmountD:GDBDouble;(*'Длина'*)
+   
+   Cable_Mounting_Method:TDCableMountingMethod;(*'Метод монтажа'*)
 
 implementation
 begin

@@ -167,6 +167,7 @@ tarcrtmodify=packed record
 (*varcategoryforoi DEVICE='Device params'*)
 (*varcategoryforoi OBJFUNC='Function:object'*)
 (*varcategoryforoi NMO='Name'*)
+(*varcategoryforoi SLCABAGEN='vELEC'*) 
 (*varcategoryforoi DB='Data base'*)
 (*varcategoryforoi GC='Group connection'*)
 (*varcategoryforoi LENGTH='Length params'*)

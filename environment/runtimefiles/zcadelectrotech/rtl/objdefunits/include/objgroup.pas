@@ -1,6 +1,7 @@
 unit objgroup;
 interface
 uses system;
+usescopy slcabagenmodul;
 var
    GC_HeadDevice:GDBString;(*'Головное устройство'*)
    GC_HeadDeviceTemplate:GDBString;(*'Шаблон головного устройства'*)

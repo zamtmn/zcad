@@ -65,7 +65,7 @@ uses
   uzegeometry,
   uzeentitiesmanager,
 
-  uzcmessagedialogs,
+  //uzcmessagedialogs,
   uzeentityfactory,    //unit describing a "factory" to create primitives
                       //модуль описывающий "фабрику" для создания примитивов
   uzcsysvars,        //system global variables
@@ -119,7 +119,7 @@ uses
    uzeroot,
    uzeentmtext,
    uzbstrproc,
-   uzccombase,
+   //uzccombase,
 
    uzctranslations,
    generics.Collections;
@@ -534,7 +534,7 @@ var
 begin
 
      //** Получаем точку вставки отработанной функции, в этот момент пользователь настраивает поведения алгоритма
-     if commandmanager.get3dpoint('Specify insert point:',insertPoint) then
+     if commandmanager.get3dpoint('Specify insert point:',insertPoint) = GRNormal then
        ZCMsgCallBackInterface.TextMessage('Coordinate received',TMWOHistoryOut)
      else begin
        ZCMsgCallBackInterface.TextMessage('Coordinate input canceled. Function canceled',TMWOHistoryOut);

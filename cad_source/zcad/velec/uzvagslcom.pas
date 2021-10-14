@@ -106,7 +106,7 @@ var
  contourRoomEmbedSL:TListVertex;
  stPoint:gdbvertex;
 begin
-  if commandmanager.get3dpoint('Specify insert point:',stPoint) then
+  if commandmanager.get3dpoint('Specify insert point:',stPoint)= GRNormal then
        ZCMsgCallBackInterface.TextMessage('координата введена',TMWOHistoryOut)
      else
        ZCMsgCallBackInterface.TextMessage('координаты НЕТ',TMWOHistoryOut);

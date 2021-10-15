@@ -252,7 +252,7 @@ begin
    end;
 
     if uzvslagcabComParams.settingVizCab.vizFullTreeCab then
-       if commandmanager.get3dpoint('Input tree visualization coordinates',fTreeVertex) then begin
+       if commandmanager.get3dpoint('Input tree visualization coordinates',fTreeVertex)= GRNormal then begin
          ZCMsgCallBackInterface.TextMessage('Ok',TMWOHistoryOut);
        end
        else
@@ -260,7 +260,7 @@ begin
 
 
    if uzvslagcabComParams.settingVizCab.vizEasyTreeCab then
-         if commandmanager.get3dpoint('Input easy tree visualization coordinates',eTreeVertex) then begin
+         if commandmanager.get3dpoint('Input easy tree visualization coordinates',eTreeVertex)= GRNormal then begin
            ZCMsgCallBackInterface.TextMessage('Ok',TMWOHistoryOut);
          end
          else
@@ -421,7 +421,11 @@ begin
 
        //uzvtreedevice.visualMasterGroupLine(graphBuilderInfo.graph,listMasterDevice,uzvslagcabComParams.metricDev,uzvslagcabComParams.accuracy*7,uzvslagcabComParams.settingVizCab.vizNumMetric);
 
-       //uzvtreedevice.cabelingMasterGroupLine(graphBuilderInfo.graph,listMasterDevice,uzvslagcabComParams.metricDev);
+       ZCMsgCallBackInterface.TextMessage('ПРОКЛАДЫВАЕМ КАБЕЛИ!',TMWOHistoryOut);
+
+       //Когда много суперлиний, это пропуск когда идет прокладка не той суперлинии, удобнее пропуск организвать не получилось(
+       if listMasterDevice.Size-1 <> -1 then
+          uzvtreedevice.cabelingMasterGroupLineNew(graphBuilderInfo.graph,listMasterDevice,uzvslagcabComParams.metricDev);
      end;
 
   zcPlaceUndoEndMarkerIfNeed(UndoMarcerIsPlazed);

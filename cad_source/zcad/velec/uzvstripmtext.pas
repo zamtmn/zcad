@@ -33,7 +33,8 @@ uses
   uzccommandsimpl, //Commands manager and related objects
                    //менеджер команд и объекты связанные с ним
   uzcdrawings,     //Drawings manager, all open drawings are processed him
-  uzccombase,
+  //uzccombase,
+  uzccommand_regen,
   gzctnrvectortypes,
   uzcinterface,
   RegExpr;

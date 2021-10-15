@@ -96,7 +96,7 @@ uses
   uzegeometry,
   uzeentitiesmanager,
 
-  uzcmessagedialogs,
+  //uzcmessagedialogs,
   uzeentityfactory,    //unit describing a "factory" to create primitives
                       //модуль описывающий "фабрику" для создания примитивов
   uzcsysvars,        //system global variables
@@ -130,7 +130,7 @@ uses
   ExtType,
   Pointerv,
   Graphs,
-   uzccomexample,
+   //uzccomexample,
 
    uzcenitiesvariablesextender,
    UUnitManager,
@@ -139,7 +139,7 @@ uses
 
    UGDBSelectedObjArray,
    uzcstrconsts,
-  uzccombase,
+  //uzccombase,
   uzvagslcom,
    uzvsgeom,
 
@@ -148,7 +148,7 @@ uses
 dialogs,uzcinfoform,
  uzelongprocesssupport,usimplegenerics,gzctnrstl,
 
-  uzvtestdraw,uzccomdrawsuperline;
+  uzvtestdraw, uzccommand_drawsuperline;
 
 
 type
@@ -487,7 +487,7 @@ implementation
       drawing:PTSimpleDrawing; //для работы с чертежом
     begin
       result:=false;
-      if commandmanager.get3dpoint('Start point automatic placement of super lines:',stPoint) then
+      if commandmanager.get3dpoint('Start point automatic placement of super lines:',stPoint)= GRNormal then
       begin
          contourRoomEmbedSL:=getcontourRoomEmbedSL(contour2dRoom,cableDistWall); // получаем контур прокладки кабеля
          if getVertexPerpendicularRoom(contour2dRoom,contourRoomEmbedSL,stPoint,perpendListVertex) then    //получаем список вершин перпендикуляра
@@ -1848,7 +1848,7 @@ begin
 
            ZCMsgCallBackInterface.TextMessage('Количество вершин графа= ' + inttostr(graphASL.listVertex.size),TMWOHistoryOut);
            for i:=0 to listSL.size-1 do
-           uzccomdrawsuperline.createSuperLine(listSL[i].p1,listSL[i].p2,autogenSuperLine.nameSL,autogenSuperLine.ProcessLayer,autogenSuperLine.LayerNamePrefix);
+           uzccommand_drawsuperline.createSuperLine(listSL[i].p1,listSL[i].p2,autogenSuperLine.nameSL,autogenSuperLine.ProcessLayer,autogenSuperLine.LayerNamePrefix);
               //uzvtestdraw.testTempDrawLineColor(listSL[i].p1,listSL[i].p2,5);
 
            //for i:=0 to graphASL.listEdge.size-1 do

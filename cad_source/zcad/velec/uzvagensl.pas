@@ -94,7 +94,7 @@ uses
   uzegeometry,
   uzeentitiesmanager,
 
-  uzcmessagedialogs,
+  //uzcmessagedialogs,
   uzeentityfactory,    //unit describing a "factory" to create primitives
                       //модуль описывающий "фабрику" для создания примитивов
   uzcsysvars,        //system global variables
@@ -447,7 +447,7 @@ var
 
 
        listVertexperpend:=TListVertexinLine.Create;
-        if commandmanager.get3dpoint('Specify insert point:',stPoint) then
+        if commandmanager.get3dpoint('Specify insert point:',stPoint)= GRNormal then
           begin
            //**получаем перпендикуляр к контурам помещения, от указаной точки до наиболее близко расположеной стене
 

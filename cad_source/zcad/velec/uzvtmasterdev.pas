@@ -33,7 +33,7 @@ uses
   uzccommandsimpl, //Commands manager and related objects
                    //менеджер команд и объекты связанные с ним
   uzcdrawings,     //Drawings manager, all open drawings are processed him
-  uzccombase,
+  //uzccombase,
   gzctnrvectortypes,
 
     gvector,garrayutils, // Подключение Generics и модуля для работы с ним
@@ -77,7 +77,8 @@ TMasterDevice=class
            //listVertexWayOnlyVertex:TListVertexWayOnlyVertex;
            //listVertexTerminalBox:TListVertexTerminalBox; // список распред коробки, в каких вершинах и сколько кабелей
            LNumSubDevice:TVectorOfSubDev;
-           LTreeDev:TVectorOfTreeDev;
+           LTreeDev:TVectorOfTreeDev; //список элементов одной группы ; (новый метод)
+           AllTreeDev:TGraph; //все разодранные элементы одной группы в одном дереве; (новый метод)
            groupTreeDev:TGraph; //дерево оформляемое по новому для каждой группы свое
            LEasyTreeDev:TVectorOfTreeDev;
            name:String;

@@ -22,7 +22,7 @@ interface
 uses uzbgeomtypes,varmandef,uzbtypesbase,uzctnrvectorgdbstring,uzccommandsmanager,
      gzctnrvectortypes,sysutils,uzbstrproc,uzcdrawings,uzegeometry,math,
      UGDBTracePropArray,uzglviewareadata,languade,Varman,uzcinterface,uzcstrconsts,
-     strmy,LCLProc,uzbmemman,uzccommandsabstract;
+     strmy,LCLProc,uzbmemman,uzccommandsabstract,LazUtilities;
 const
      commandsuffix='>';
      commandprefix=' ';

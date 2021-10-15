@@ -71,8 +71,8 @@ TInteractiveProcObjBuild=procedure(const PInteractiveData:GDBPointer;Point:GDBVe
                        PInteractiveProc:{-}TInteractiveProcObjBuild{/GDBPointer/};
                        Input:AnsiString;
                        Id:Integer;
-                       PossibleResult:TGetPossibleResult;
-                       InputMode:TGetInputMode;
+                       {-}PossibleResult:TGetPossibleResult;{//}
+                       {-}InputMode:TGetInputMode;{//}
                     end;
     TCommandOperands={-}GDBString{/GDBPointer/};
     TCommandResult=GDBInteger;

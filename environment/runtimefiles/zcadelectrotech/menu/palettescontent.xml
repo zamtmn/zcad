@@ -154,6 +154,8 @@
            <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_QF2)" Img='DEVICE_EL_VL_DIAGRAM_QF2_300' Caption='Диф.выключатель'/>
            <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_QS1)" Img='DEVICE_EL_VL_DIAGRAM_QS1_300' Caption='Разъединитель'/>
            <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_QS2)" Img='DEVICE_EL_VL_DIAGRAM_QS2_300' Caption='Устройство защ.откл.'/>
+           <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_QS3)" Img='DEVICE_EL_VL_DIAGRAM_QS3_300' Caption='Переключатель "крест" левый'/>
+           <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_QS4)" Img='DEVICE_EL_VL_DIAGRAM_QS4_300' Caption='Переключатель "крест" правый'/>
            <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_FU1)" Img='DEVICE_EL_VL_DIAGRAM_FU1_300' Caption='Предохранитель'/>
            <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_KM1)" Img='DEVICE_EL_VL_DIAGRAM_KM1_300' Caption='Пускатель 1'/>
            <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_KM2)" Img='DEVICE_EL_VL_DIAGRAM_KM2_300' Caption='Пускатель 2'/>

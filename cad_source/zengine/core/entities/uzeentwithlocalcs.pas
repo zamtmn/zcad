@@ -140,6 +140,7 @@ begin
   MatrixInvert(m);
   Local.p_insert:=VectorTransform3D(Local.p_insert,m);}
   PGDBObjWithLocalCS(refp)^.Local.p_insert := Local.p_insert;
+  PGDBObjWithLocalCS(refp)^.Local.Basis := Local.Basis;
   PGDBObjWithLocalCS(refp)^.calcobjmatrix;
   //PGDBObjWithLocalCS(refp)^.format;
   //pgdbobjtext(refp)^.getoutbound;

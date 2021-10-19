@@ -208,11 +208,7 @@ begin
      a1:=l0*180/pi;
      l1:=l1+L0;
      if l1>2*pi then l1:=l1-2*pi;
-     //if l1<0then l1:=2*pi+l1;
-     //a:=l1*180/pi;
      result:=l1;
-     {ChangedData.PGetDataInEtity:=@l1;
-     GeneralEntIterateProc(pdata,ChangedData,mp,fistrun,ecp,f);}
 end;
 procedure GDBObjAbstractText.remaponecontrolpoint(pdesc:pcontrolpointdesc);
 begin

@@ -4,7 +4,7 @@
     <BlockLib Type="Tree" Caption='Блоки' ImagesWidth='24'>
       <ZTreeNode Caption='Сила'>
       	<ZTreeNode Caption='Кабельные стояки'>
-      	   <ZTreeCommand Command="Insert(DEVICE_EL_CABLE_BREAK)" Img='DEVICE_EL_CABLE_BREAK_300' Caption='Обрыв'/>
+      	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CABLE_BREAK)" Img='DEVICE_EL_VL_CABLE_BREAK_300' Caption='Обрыв'/>
       	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CABLE_UP1)" Img='DEVICE_EL_VL_CABLE_UP1_300' Caption='Кабель в верх, тип 1'/>
       	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CABLE_UP2)" Img='DEVICE_EL_VL_CABLE_UP2_300' Caption='Кабель в верх, тип 2'/>
       	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CABLE_DOWN1)" Img='DEVICE_EL_VL_CABLE_DOWN1_300' Caption='Кабель вниз, тип 1'/>
@@ -79,6 +79,7 @@
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CONNECTOR3_1P_1)" Img='DEVICE_EL_VL_CONNECTOR3_1P_1_300' Caption='Розетка ОП54 1P'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CONNECTOR3_2P_1)" Img='DEVICE_EL_VL_CONNECTOR3_2P_1_300' Caption='Розетка ОП54 2P'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_YTR1)" Img='DEVICE_EL_VL_YTR1_300' Caption='Ящик с трансформатором'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_BU1)" Img='DEVICE_EL_VL_BU1_300' Caption='Блок управления'/>
       	</ZTreeNode>
       	<ZTreeNode Caption='Розетки 1:200'>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CONNECTOR1_1P_2)" Img='DEVICE_EL_VL_CONNECTOR1_1P_2_300' Caption='Розетка СП31 1P'/>
@@ -88,6 +89,7 @@
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CONNECTOR3_1P_2)" Img='DEVICE_EL_VL_CONNECTOR3_1P_2_300' Caption='Розетка ОП54 1P'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CONNECTOR3_2P_2)" Img='DEVICE_EL_VL_CONNECTOR3_2P_2_300' Caption='Розетка ОП54 2P'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_YTR2)" Img='DEVICE_EL_VL_YTR2_300' Caption='Ящик с трансформатором'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_BU2)" Img='DEVICE_EL_VL_BU2_300' Caption='Блок управления'/>
       	</ZTreeNode>
       	<ZTreeNode Caption='Наружные сети'>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_TRANSFORM1)" Img='DEVICE_EL_VL_TRANSFORM1_300' Caption='Подстанция киоск'/>

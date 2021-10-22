@@ -228,7 +228,7 @@ uses
   uzccommand_text,
   uzccommand_exporttexttocsv,
   uzccommand_dataexport,uzccommand_dataimport,
-  uzccommand_entextederslist,
+  uzccommand_extdrentslist,uzccommand_extdralllist,
 
   {$IFDEF ELECTROTECH}
   //**for velec func**//

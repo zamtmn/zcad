@@ -160,10 +160,9 @@ begin
 end;
 
 function GDBObjAbstractText.CalcRotate:GDBDouble;
-var
+(*var
     ox:gdbvertex;
 begin
-     inherited;
      Local.basis.ox:=PGDBVertex(@objmatrix[0])^;
      Local.basis.oy:=PGDBVertex(@objmatrix[1])^;
 
@@ -185,6 +184,31 @@ begin
      result:=scalardot(Local.basis.ox,ox);
      result:=arccos(result);
      if local.basis.OX.y<-eps then result:=2*pi-result;
+end;*)
+var
+    v1,v2:GDBVertex;
+    l1,l0:GDBDouble;
+    a0,a1,a:double;
+begin
+
+     if bp.ListPos.owner<>nil then begin
+       V1:=PGDBvertex(@bp.ListPos.owner^.GetMatrix^[0])^;
+       l0:=scalardot(NormalizeVertex(V1),_X_yzVertex);
+       l0:=arccos(l0);
+       if v1.y<-eps then l0:=2*pi-l0;
+       //a0:=l0*180/pi
+     end else
+       l0:=0;
+
+     V1:=Local.basis.ox;
+     V2:=GetXfFromZ(Local.basis.oz);
+     l1:=scalardot(v1,v2);
+     l1:=arccos(l1);
+     if v1.y<-eps then l1:=2*pi-l1;
+     a1:=l0*180/pi;
+     l1:=l1+L0;
+     if l1>2*pi then l1:=l1-2*pi;
+     result:=l1;
 end;
 procedure GDBObjAbstractText.remaponecontrolpoint(pdesc:pcontrolpointdesc);
 begin

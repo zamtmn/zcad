@@ -38,7 +38,7 @@ TVariablesExtender= object(TBaseVariablesExtender)
     DelegatesArray:TEntityArray;
     pThisEntity:PGDBObjEntity;
     class function getExtenderName:string;virtual;
-    class function CreateEntVariablesExtender(pEntity:Pointer; out ObjSize:Integer):PTVariablesExtender;static;
+    class function CreateEntExtender(pEntity:Pointer; out ObjSize:Integer):PTVariablesExtender;static;
     constructor init(pEntity:Pointer);
     destructor Done;virtual;
 
@@ -156,7 +156,7 @@ function AddVariablesToEntity(PEnt:PGDBObjEntity):PTVariablesExtender;
 var
     ObjSize:Integer;
 begin
-     result:=TVariablesExtender.CreateEntVariablesExtender(PEnt,ObjSize);
+     result:=TVariablesExtender.CreateEntExtender(PEnt,ObjSize);
      if ObjSize>0 then
        PEnt^.AddExtension(result,ObjSize);
 
@@ -249,7 +249,7 @@ begin
   result:=VariablesExtenderName;
 end;
 
-class function TVariablesExtender.CreateEntVariablesExtender(pEntity:Pointer; out ObjSize:Integer):PTVariablesExtender;
+class function TVariablesExtender.CreateEntExtender(pEntity:Pointer; out ObjSize:Integer):PTVariablesExtender;
 begin
      ObjSize:=sizeof(TVariablesExtender);
      GDBGetMem({$IFDEF DEBUGBUILD}'{30663E63-CA7B-43F7-90C6-5ACAD2061DB6}',{$ENDIF}result,ObjSize);

@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 {$mode delphi}
-unit uzccommand_entextederslist;
+unit uzccommand_extdralllist;
 
 {$INCLUDE def.inc}
 
@@ -27,11 +27,11 @@ uses
   uzeentity,gzctnrvectortypes,uzcdrawings,uzcdrawing,uzcstrconsts,
   uzcinterface,uzcutils,gzctnrstl,gutil;
 
-function EntExtedersList_com(operands:TCommandOperands):TCommandResult;
+function extdrAllList_com(operands:TCommandOperands):TCommandResult;
 
 implementation
 
-function EntExtedersList_com(operands:TCommandOperands):TCommandResult;
+function extdrAllList_com(operands:TCommandOperands):TCommandResult;
 type
   TExtCounter=TMyMapCounter<string,TLess<String>>;
 var
@@ -91,7 +91,7 @@ end;
 
 initialization
   debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
-  CreateCommandFastObjectPlugin(@EntExtedersList_com,'EntExtedersList',CADWG or CASelEnts,0);
+  CreateCommandFastObjectPlugin(@extdrAllList_com,'extdrAllList',CADWG or CASelEnts,0);
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

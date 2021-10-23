@@ -72,17 +72,17 @@ end;
 function EntIOLoadUSES(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
 var
     usedunit:PTObjectUnit;
-    vardata:PTVariablesExtender;
+    vardata:TVariablesExtender;
 begin
-     vardata:=PEnt^.GetExtension(typeof(TVariablesExtender));
+     vardata:=PEnt^.GetExtension<TVariablesExtender>;
      usedunit:=pointer(units.findunit(SupportPath,InterfaceTranslate,_Value));
      if vardata=nil then
      begin
           vardata:=addvariablestoentity(PEnt);
      end;
-     vardata^.entityunit.InterfaceUses.PushBackIfNotPresent(usedunit);
+     vardata.entityunit.InterfaceUses.PushBackIfNotPresent(usedunit);
      result:=true;
-     {vardata:=PEnt^.GetExtension(typeof(TVariablesExtender));
+     {vardata:=PEnt^.GetExtension(TVariablesExtender);
      test:=@vardata^.entityunit;
      usedunit:=pointer(units.findunit(_Value));
      if PEnt^.ou.Instance=nil then
@@ -109,11 +109,11 @@ var
     pvd:pvardesk;
     offset:GDBInteger;
     tc:PUserTypeDescriptor;
-    vardata:PTVariablesExtender;
+    vardata:TVariablesExtender;
 begin
      extractvarfromdxfstring2(_Value,vn,svn,vv);
-     vardata:=PEnt^.GetExtension(typeof(TVariablesExtender));
-     pvd:=vardata^.entityunit.InterfaceVariables.findvardesc(vn);
+     vardata:=PEnt^.GetExtension<TVariablesExtender>;
+     pvd:=vardata.entityunit.InterfaceVariables.findvardesc(vn);
      //pvd:=PTObjectUnit(PEnt^.ou.Instance)^.InterfaceVariables.findvardesc(vn);
      offset:=GDBPlatformint(pvd.data.Instance);
      if pvd<>nil then
@@ -127,12 +127,12 @@ function EntIOLoadAmpersand(_Name,_Value:GDBString;ptu:PExtensionData;const draw
 var
     vn,vt,vun:GDBString;
     vd: vardesk;
-    vardata:PTVariablesExtender;
+    vardata:TVariablesExtender;
 begin
      extractvarfromdxfstring2(_Value,vn,vt,vun);
-     vardata:=PEnt^.GetExtension(typeof(TVariablesExtender));
-     vardata^.entityunit.setvardesc(vd,vn,vun,vt);
-     vardata^.entityunit.InterfaceVariables.createvariable(vd.name,vd);
+     vardata:=PEnt^.GetExtension<TVariablesExtender>;
+     vardata.entityunit.setvardesc(vd,vn,vun,vt);
+     vardata.entityunit.InterfaceVariables.createvariable(vd.name,vd);
      //PTObjectUnit(PEnt^.ou.Instance)^.setvardesc(vd,vn,vun,vt);
      //PTObjectUnit(PEnt^.ou.Instance)^.InterfaceVariables.createvariable(vd.name,vd);
      result:=true;
@@ -152,17 +152,17 @@ function EntIOLoadHash(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:T
 var
     vn,vt,vv,vun:GDBString;
     vd: vardesk;
-    vardata:PTVariablesExtender;
+    vardata:TVariablesExtender;
 begin
      extractvarfromdxfstring(_Value,vn,vt,vv,vun);
      OldVersVarRename(vn,vt,vv,vun);
-     vardata:=PEnt^.GetExtension(typeof(TVariablesExtender));
+     vardata:=PEnt^.GetExtension<TVariablesExtender>;
      if {PEnt^.ou.Instance}vardata=nil then
      begin
           vardata:=addvariablestoentity(PEnt);
      end;
-     vardata^.entityunit.setvardesc(vd,vn,vun,vt);
-     vardata^.entityunit.InterfaceVariables.createvariable(vd.name,vd);
+     vardata.entityunit.setvardesc(vd,vn,vun,vt);
+     vardata.entityunit.InterfaceVariables.createvariable(vd.name,vd);
      //PTObjectUnit(PEnt^.ou.Instance)^.setvardesc(vd,vn,vun,vt);
      //PTObjectUnit(PEnt^.ou.Instance)^.InterfaceVariables.createvariable(vd.name,vd);
      PBaseTypeDescriptor(vd.data.PTD)^.SetValueFromString(vd.data.Instance,vv);
@@ -187,35 +187,35 @@ var
    str,sv:gdbstring;
    i:integer;
    tp:pointer;
-   vardata:PTVariablesExtender;
+   vardata:TVariablesExtender;
    th: TDWGHandle;
 begin
      ishavevars:=false;
-     vardata:=PEnt^.GetExtension(typeof(TVariablesExtender));
+     vardata:=PEnt^.GetExtension<TVariablesExtender>;
      if vardata<>nil then
-     if vardata^.entityunit.InterfaceVariables.vardescarray.Count>0 then
+     if vardata.entityunit.InterfaceVariables.vardescarray.Count>0 then
                                                        ishavevars:=true;
      begin
          if ishavevars then
          begin
-              pvu:=vardata^.entityunit.InterfaceUses.beginiterate(ir);
+              pvu:=vardata.entityunit.InterfaceUses.beginiterate(ir);
               if pvu<>nil then
               repeat
                     if typeof(pvu^)<>typeof(TObjectUnit) then begin
                       str:='USES='+pvu^.Name;
                       dxfGDBStringout(outhandle,1000,str);
                     end;
-              pvu:=vardata^.entityunit.InterfaceUses.iterate(ir);
+              pvu:=vardata.entityunit.InterfaceUses.iterate(ir);
               until pvu=nil;
 
-              if vardata^.pMainFuncEntity<>nil then begin
-                IODXFContext.p2h.MyGetOrCreateValue(vardata^.pMainFuncEntity,IODXFContext.handle,th);
+              if vardata.pMainFuncEntity<>nil then begin
+                IODXFContext.p2h.MyGetOrCreateValue(vardata.pMainFuncEntity,IODXFContext.handle,th);
                 str:='MAINFUNCTION='+inttohex(th,0);
                 dxfGDBStringout(outhandle,1000,str);
               end;
 
               i:=0;
-              pvd:=vardata^.entityunit.InterfaceVariables.vardescarray.beginiterate(ir);
+              pvd:=vardata.entityunit.InterfaceVariables.vardescarray.beginiterate(ir);
               if pvd<>nil then
               repeat
                     if (pvd^.data.PTD.GetTypeAttributes and TA_COMPOUND)=0 then
@@ -244,7 +244,7 @@ begin
                          inc(i);
                     end;
               inc(i);
-              pvd:=vardata^.entityunit.InterfaceVariables.vardescarray.iterate(ir);
+              pvd:=vardata.entityunit.InterfaceVariables.vardescarray.iterate(ir);
               until pvd=nil;
          end;
          dxfGDBStringout(outhandle,1000,'_OWNERHANDLE='+inttohex(PEnt^.bp.ListPos.owner.GetHandle,10));
@@ -334,11 +334,11 @@ end;
 procedure DeviceNameProcess(pEntity:PGDBObjEntity;const drawing:TDrawingDef);
 var
    pvn,pvnt:pvardesk;
-   pentvarext:PTVariablesExtender;
+   pentvarext:TVariablesExtender;
 begin
-     pentvarext:=pEntity^.GetExtension(typeof(TVariablesExtender));
-     pvn:=pentvarext^.entityunit.FindVariable('NMO_Name');
-     pvnt:=pentvarext^.entityunit.FindVariable('NMO_Template');
+     pentvarext:=pEntity^.GetExtension<TVariablesExtender>;
+     pvn:=pentvarext.entityunit.FindVariable('NMO_Name');
+     pvnt:=pentvarext.entityunit.FindVariable('NMO_Template');
 
      if (pvnt<>nil) then
      DeviceNameSubProcess(pvn,pstring(pvnt^.data.Instance)^,pEntity);
@@ -351,16 +351,16 @@ var
    volt:TVoltage;
    calcip:TCalcIP;
    u:gdbdouble;
-   pentvarext:PTVariablesExtender;
+   pentvarext:TVariablesExtender;
 begin
-     pentvarext:=pEntity^.GetExtension(typeof(TVariablesExtender));
-     pvn:=pentvarext^.entityunit.FindVariable('Device_Type');
+     pentvarext:=pEntity^.GetExtension<TVariablesExtender>;
+     pvn:=pentvarext.entityunit.FindVariable('Device_Type');
      if pvn<>nil then
      begin
           case PTDeviceType(pvn^.data.Instance)^ of
           TDT_SilaPotr:
           begin
-               pvn:=pentvarext^.entityunit.FindVariable('Voltage');
+               pvn:=pentvarext.entityunit.FindVariable('Voltage');
                if pvn<>nil then
                begin
                      volt:=PTVoltage(pvn^.data.Instance)^;
@@ -369,13 +369,13 @@ begin
                                  _AC_220V_50Hz:u:=0.22;
                                  _AC_380V_50Hz:u:=0.38;
                      end;{case}
-                     pvn:=pentvarext^.entityunit.FindVariable('CalcIP');
+                     pvn:=pentvarext.entityunit.FindVariable('CalcIP');
                      if pvn<>nil then
                                      calcip:=PTCalcIP(pvn^.data.Instance)^;
-                     pvp:=pentvarext^.entityunit.FindVariable('Power');
-                     pvi:=pentvarext^.entityunit.FindVariable('Current');
-                     pvcos:=pentvarext^.entityunit.FindVariable('CosPHI');
-                     pvphase:=pentvarext^.entityunit.FindVariable('Phase');
+                     pvp:=pentvarext.entityunit.FindVariable('Power');
+                     pvi:=pentvarext.entityunit.FindVariable('Current');
+                     pvcos:=pentvarext.entityunit.FindVariable('CosPHI');
+                     pvphase:=pentvarext.entityunit.FindVariable('Phase');
                      if pvn<>nil then
                                      calcip:=PTCalcIP(pvn^.data.Instance)^;
                      if (pvp<>nil)and(pvi<>nil)and(pvcos<>nil)and(pvphase<>nil) then
@@ -416,10 +416,10 @@ var
    s:GDBstring;
    //c:gdbinteger;
    pdev:PGDBObjDevice;
-   pentvarext:PTVariablesExtender;
+   pentvarext:TVariablesExtender;
 begin
-     pentvarext:=pCable^.GetExtension(typeof(TVariablesExtender));
-     pvn:=pentvarext^.entityunit.FindVariable('NMO_Name');
+     pentvarext:=pCable^.GetExtension<TVariablesExtender>;
+     pvn:=pentvarext.entityunit.FindVariable('NMO_Name');
      if pvn<>nil then
      if pstring(pvn^.data.Instance)^='@1' then
                                               pvn^.data.Instance:=pvn^.data.Instance;
@@ -430,8 +430,8 @@ begin
                                            end
                                       else
                                           pdev:=nil;
-     pvn:=pentvarext^.entityunit.FindVariable('NMO_Prefix');
-     pvnt:=pentvarext^.entityunit.FindVariable('NMO_PrefixTemplate');
+     pvn:=pentvarext.entityunit.FindVariable('NMO_Prefix');
+     pvnt:=pentvarext.entityunit.FindVariable('NMO_PrefixTemplate');
      if (pvnt<>nil) then
                         s:=pstring(pvnt^.data.Instance)^
                     else
@@ -445,29 +445,29 @@ begin
                                            end
                                       else
                                           pdev:=nil;
-     pvn:=pentvarext^.entityunit.FindVariable('NMO_Suffix');
-     pvnt:=pentvarext^.entityunit.FindVariable('NMO_SuffixTemplate');
+     pvn:=pentvarext.entityunit.FindVariable('NMO_Suffix');
+     pvnt:=pentvarext.entityunit.FindVariable('NMO_SuffixTemplate');
      if (pvnt<>nil) then
                         s:=pstring(pvnt^.data.Instance)^
                     else
                         s:='';
      DeviceNameSubProcess(pvn,s,pdev);
 
-     pvn:=pentvarext^.entityunit.FindVariable('NMO_Name');
-     pvnt:=pentvarext^.entityunit.FindVariable('NMO_Template');
+     pvn:=pentvarext.entityunit.FindVariable('NMO_Name');
+     pvnt:=pentvarext.entityunit.FindVariable('NMO_Template');
      if (pvnt<>nil) then
      DeviceNameSubProcess(pvn,pstring(pvnt^.data.Instance)^,pCable);
 
-     pvn:=pentvarext^.entityunit.FindVariable('GC_HDGroup');
-     pvnt:=pentvarext^.entityunit.FindVariable('GC_HDGroupTemplate');
+     pvn:=pentvarext.entityunit.FindVariable('GC_HDGroup');
+     pvnt:=pentvarext.entityunit.FindVariable('GC_HDGroupTemplate');
      if (pvnt<>nil) then
                         s:=pstring(pvnt^.data.Instance)^
                     else
                         s:='';
      DeviceNameSubProcess(pvn,s,pCable);
 
-     pvn:=pentvarext^.entityunit.FindVariable('GC_HeadDevice');
-     pvnt:=pentvarext^.entityunit.FindVariable('GC_HeadDeviceTemplate');
+     pvn:=pentvarext.entityunit.FindVariable('GC_HeadDevice');
+     pvnt:=pentvarext.entityunit.FindVariable('GC_HeadDeviceTemplate');
      if (pvnt<>nil) then
                         s:=pstring(pvnt^.data.Instance)^
                     else
@@ -475,8 +475,8 @@ begin
      DeviceNameSubProcess(pvn,s,pCable);
 
 
-     pvn:=pentvarext^.entityunit.FindVariable('GC_HDShortName');
-     pvnt:=pentvarext^.entityunit.FindVariable('GC_HDShortNameTemplate');
+     pvn:=pentvarext.entityunit.FindVariable('GC_HDShortName');
+     pvnt:=pentvarext.entityunit.FindVariable('GC_HDShortNameTemplate');
      if (pvnt<>nil) then
                         s:=pstring(pvnt^.data.Instance)^
                     else
@@ -505,15 +505,20 @@ end;
 procedure GDBObjBlockDefLoadVarsFromFile(pEntity:PGDBObjBlockDef);
 var
   uou:PTObjectUnit;
-  pentvarext:PTVariablesExtender;
+  pentvarext:TVariablesExtender;
+  p:PTUnitManager;
+  S:string;
 begin
      if pos(DevicePrefix,pEntity^.name)=1 then
      begin
+         p:=@units;
+         S:=pEntity^.name;
+         S:=SupportPath;
          uou:=pointer(units.findunit(SupportPath,InterfaceTranslate,pEntity^.name));
          if uou<>nil then
                          begin
-                              pentvarext:=pEntity^.GetExtension(typeof(TVariablesExtender));
-                              pentvarext^.entityunit.CopyFrom(uou);
+                              pentvarext:=pEntity^.GetExtension<TVariablesExtender>;
+                              pentvarext.entityunit.CopyFrom(uou);
                          end
                      else
                          begin

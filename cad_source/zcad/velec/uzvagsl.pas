@@ -910,7 +910,7 @@ implementation
         i,j,count:integer;
         process:boolean;
         DC:TDrawContext;
-        pdevvarext:PTVariablesExtender;
+        pdevvarext:TVariablesExtender;
         angle:double;
          infoVertexDevice:TVertexDevice;
          tempforinfo:string;
@@ -1013,7 +1013,7 @@ implementation
 //      i,j,count:integer;
 //      process:boolean;
 //      DC:TDrawContext;
-//      pdevvarext:PTVariablesExtender;
+//      pdevvarext:TVariablesExtender;
 //
 //       listColumnDev:TListColumnDev; //список устройст
 //       infoColumnDev:TInfoColumnDev; //информация одной строки
@@ -1115,7 +1115,7 @@ implementation
 //              //pdev:=dcoord.pdev;
 //              infoVertexDevice:=listColumnDev[i].listLineDev[j];
 //              pdev:=infoVertexDevice.pdev;
-//              pdevvarext:=pdev^.GetExtension(typeof(TVariablesExtender));
+//              pdevvarext:=pdev^.GetExtension(TVariablesExtender);
 //
 //              if comParams.BaseName<>'' then
 //              begin

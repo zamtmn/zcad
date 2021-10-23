@@ -152,7 +152,7 @@ end;
 
 procedure _onGetOtherValues(var vsa:TZctnrVectorGDBString;const valkey:string;const pcurcontext:pointer;const pcurrobj:pointer;const GDBobj:boolean);
 var
-  pentvarext:PTVariablesExtender;
+  pentvarext:TVariablesExtender;
   pobj:pGDBObjEntity;
   ir:itrec;
   pv:pvardesk;
@@ -165,10 +165,10 @@ begin
        repeat
              if GDBobj then
              begin
-             pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
+             pentvarext:=pobj^.GetExtension<TVariablesExtender>;
              if ((pobj^.GetObjType=pgdbobjentity(pcurrobj)^.GetObjType)or(pgdbobjentity(pcurrobj)^.GetObjType=0))and({pobj.ou.Instance}pentvarext<>nil) then
              begin
-                  pv:={PTObjectUnit(pobj.ou.Instance)}pentvarext^.entityunit.FindVariable(valkey);
+                  pv:={PTObjectUnit(pobj.ou.Instance)}pentvarext.entityunit.FindVariable(valkey);
                   if pv<>nil then
                   begin
                        vv:=pv.data.PTD.GetValueAsString(pv.data.Instance);

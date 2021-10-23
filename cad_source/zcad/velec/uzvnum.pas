@@ -964,7 +964,7 @@ var
     myTerminalBox:TListVertexTerminalBox;
     //listTraversedVert:TListVertexTerminalBox;
         psu:ptunit;
-        pvarext:PTVariablesExtender;
+        pvarext:TVariablesExtender;
 begin
 
      polyObj := AllocEnt(GDBCableID);
@@ -977,12 +977,12 @@ begin
      end;
 
      //**добавление кабельных свойств
-      pvarext:=polyObj^.GetExtension(typeof(TVariablesExtender)); //подклчаемся к инспектору
+      pvarext:=polyObj^.specialize GetExtension<TVariablesExtender>; //подклчаемся к инспектору
       if pvarext<>nil then
       begin
         psu:=units.findunit(SupportPath,@InterfaceTranslate,'cable'); //
         if psu<>nil then
-          pvarext^.entityunit.copyfrom(psu);
+          pvarext.entityunit.copyfrom(psu);
       end;
       zcSetEntPropFromCurrentDrawingProp(polyObj);
       //***//
@@ -1048,7 +1048,7 @@ var
     myTerminalBox:TListVertexTerminalBox;
     //listTraversedVert:TListVertexTerminalBox;
         psu:ptunit;
-        pvarext:PTVariablesExtender;
+        pvarext:TVariablesExtender;
 begin
      vertexAnalized:= TListVertexWayOnlyVertex.Create;
      wayCableLine:= TListVertexWayOnlyVertex.Create;

@@ -327,7 +327,7 @@ objid: GDBInteger;
   PExtLoadData:Pointer;
   EntInfoData:TEntInfoData;
   DC:TDrawContext;
-  //pentvarext,ppostentvarext:PTVariablesExtender;
+  //pentvarext,ppostentvarext:TVariablesExtender;
   bylayerlt:GDBPointer;
   lph:TLPSHandle;
 begin
@@ -460,10 +460,10 @@ begin
                                  newowner^.AddMi(@postobj);
                                  if assigned(pobj^.EntExtensions)then
                                                                      pobj^.EntExtensions.CopyAllExtToEnt(pobj,postobj);
-                                 {pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
-                                 ppostentvarext:=postobj^.GetExtension(typeof(TVariablesExtender));
+                                 {pentvarext:=pobj^.GetExtension(TVariablesExtender);
+                                 ppostentvarext:=postobj^.GetExtension(TVariablesExtender);
                                  if (pentvarext<>nil)and(ppostentvarext<>nil) then
-                                 pentvarext^.entityunit.CopyTo(@ppostentvarext^.entityunit);}
+                                 pentvarext.entityunit.CopyTo(@ppostentvarext^.entityunit);}
 
                                  if foc=0 then
                                               begin

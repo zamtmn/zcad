@@ -907,7 +907,7 @@ var
     i:integer;
     pvd:pvardesk; //для работы со свойствами устройств
     psu:ptunit;
-    pvarext:PTVariablesExtender;
+    pvarext:TVariablesExtender;
 
     begin
      cableLine := AllocEnt(GDBCableID);
@@ -918,12 +918,12 @@ var
          cableLine^.VertexArrayInOCS.PushBackData(listVertexEdge.listVertex[listInteger[i]].centerPoint);
 
      //**добавление кабельных свойств
-      pvarext:=cableLine^.GetExtension(typeof(TVariablesExtender)); //подклчаемся к инспектору
+      pvarext:=cableLine^.specialize GetExtension<TVariablesExtender>; //подклчаемся к инспектору
       if pvarext<>nil then
       begin
         psu:=units.findunit(SupportPath,@InterfaceTranslate,'cable'); //
         if psu<>nil then
-          pvarext^.entityunit.copyfrom(psu);
+          pvarext.entityunit.copyfrom(psu);
       end;
       zcSetEntPropFromCurrentDrawingProp(cableLine);
       //***//
@@ -1092,7 +1092,7 @@ var
     i:integer;
     pvd:pvardesk; //для работы со свойствами устройств
     psu:ptunit;
-    pvarext:PTVariablesExtender;
+    pvarext:TVariablesExtender;
 
     begin
      cableLine := AllocEnt(GDBCableID);
@@ -1103,12 +1103,12 @@ var
          cableLine^.VertexArrayInOCS.PushBackData(listVertexEdge.listVertex[listInteger[i]].centerPoint);
 
      //**добавление кабельных свойств
-      pvarext:=cableLine^.GetExtension(typeof(TVariablesExtender)); //подклчаемся к инспектору
+      pvarext:=cableLine^.specialize GetExtension<TVariablesExtender>; //подклчаемся к инспектору
       if pvarext<>nil then
       begin
         psu:=units.findunit(SupportPath,@InterfaceTranslate,'cable'); //
         if psu<>nil then
-          pvarext^.entityunit.copyfrom(psu);
+          pvarext.entityunit.copyfrom(psu);
       end;
       zcSetEntPropFromCurrentDrawingProp(cableLine);
       //***//

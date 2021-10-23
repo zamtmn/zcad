@@ -335,13 +335,13 @@ function GDBObjNet.CalcNewName(Net1,Net2:PGDBObjNet):GDBInteger;
 var
    pvd1,pvd2:pvardesk;
    n1,n2:gdbstring;
-   pentvarext1,pentvarext2:PTVariablesExtender;
+   pentvarext1,pentvarext2:TVariablesExtender;
 begin
      result:=0;
-     pentvarext1:=net1.GetExtension(typeof(TVariablesExtender));
-     pentvarext2:=net2.GetExtension(typeof(TVariablesExtender));
-     pvd1:=pentvarext1^.entityunit.FindVariable('NMO_Name');
-     pvd2:=pentvarext2^.entityunit.FindVariable('NMO_Name');
+     pentvarext1:=net1.GetExtension<TVariablesExtender>;
+     pentvarext2:=net2.GetExtension<TVariablesExtender>;
+     pvd1:=pentvarext1.entityunit.FindVariable('NMO_Name');
+     pvd2:=pentvarext2.entityunit.FindVariable('NMO_Name');
      n1:=pstring(pvd1^.data.Instance)^;
      n2:=pstring(pvd2^.data.Instance)^;
      if (n1='')and(n2='') then
@@ -365,15 +365,15 @@ var CurrentNet:PGDBObjNet;
     ir,ir2,ir3:itrec;
     //p:pointer;
     DC:TDrawContext;
-    pentvarext,pentvarextcurrentnet:PTVariablesExtender;
+    pentvarext,pentvarextcurrentnet:TVariablesExtender;
 begin
      dc:=drawing.createdrawingrc;
      formatentity(drawing,dc);
-     pentvarext:=GetExtension(typeof(TVariablesExtender));
+     pentvarext:=GetExtension<TVariablesExtender>;
      CurrentNet:=ConnectedArea.ObjArray.beginiterate(ir);
      if (currentnet<>nil) then
      repeat
-           pentvarextcurrentnet:=currentnet.GetExtension(typeof(TVariablesExtender));
+           pentvarextcurrentnet:=currentnet.GetExtension<TVariablesExtender>;
            //p:=@self;
            //p:=currentnet;
            if (currentnet<>@self) then
@@ -431,14 +431,14 @@ var pl,pl2:pgdbobjline;
     ti:GDBObjOpenArrayOfPV;
         ir:itrec;
     DC:TDrawContext;
-    pentvarext,pentvarexttempnet:PTVariablesExtender;
+    pentvarext,pentvarexttempnet:TVariablesExtender;
 begin
      dc:=drawing.createdrawingrc;
      //inherited format;
      if ObjArray.count=0 then
                              exit;
      i:=0;
-     pentvarext:=GetExtension(typeof(TVariablesExtender));
+     pentvarext:=GetExtension<TVariablesExtender>;
      repeat
            pl:=pgdbobjline(ObjArray.getDataMutable(i));
            if pl<>nil then
@@ -512,7 +512,7 @@ begin
           if GDBPlatformUInt(tempnet)=$229FEF0 then
                                   tempnet:=tempnet;
           TempNet^.initnul(nil);
-          pentvarexttempnet:=tempnet.GetExtension(typeof(TVariablesExtender));
+          pentvarexttempnet:=tempnet.GetExtension<TVariablesExtender>;
 
           pentvarext.entityunit.CopyTo(@pentvarexttempnet.entityunit);
           //TempNet^.name:=name;

@@ -46,17 +46,17 @@ var
   //inr:TINRect;
   line,saddr:ansiString;
   pvd:pvardesk;
-  pentvarext:PTVariablesExtender;
+  pentvarext:TVariablesExtender;
 begin
      result:=0;
      pp:=drawings.GetCurrentDWG.OnMouseObj.beginiterate(ir);
      if pp<>nil then
                     begin
                          repeat
-                         pentvarext:=pp^.GetExtension(typeof(TVariablesExtender));
+                         pentvarext:=pp^.GetExtension<TVariablesExtender>;
                          if pentvarext<>nil then
                          begin
-                         pvd:=pentvarext^.entityunit.FindVariable('NMO_Name');
+                         pvd:=pentvarext.entityunit.FindVariable('NMO_Name');
                          if pvd<>nil then
                                          begin
                                          if Result=20 then

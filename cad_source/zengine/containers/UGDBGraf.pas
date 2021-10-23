@@ -76,9 +76,9 @@ end;
 function getlinktype(pv:PGDBObjEntity):TLinktype;
 var
     pvd:pvardesk;
-    pentvarext:PTVariablesExtender;
+    pentvarext:TVariablesExtender;
 begin
-  pentvarext:=pv^.GetExtension(typeof(TVariablesExtender));
+  pentvarext:=pv^.GetExtension<TVariablesExtender>;
   if pentvarext<>nil then
   begin
      pvd:=pentvarext.entityunit.FindVariable('LinkType');
@@ -93,9 +93,9 @@ end;
 function getlinklength(pv:PGDBObjLine):GDBDouble;
 var
     pvd:pvardesk;
-    pentvarext:PTVariablesExtender;
+    pentvarext:TVariablesExtender;
 begin
-     pentvarext:=pv^.GetExtension(typeof(TVariablesExtender));
+     pentvarext:=pv^.GetExtension<TVariablesExtender>;
      if pentvarext<>nil then
      begin
      pvd:=pentvarext.entityunit.FindVariable('LengthOverrider');

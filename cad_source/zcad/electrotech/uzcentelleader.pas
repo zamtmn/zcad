@@ -278,7 +278,7 @@ var
    TCP:TCodePage;
 
    Objects:GDBObjOpenArrayOfPV;
-   pentvarext:PTVariablesExtender;
+   pentvarext:TVariablesExtender;
 begin
      tbl.ptablestyle:=drawing.GetTableStyleTable^.getAddres('Temp');
      TCP:=CodePage;
@@ -331,9 +331,9 @@ begin
                      if pobj^.VertexArrayInWCS.onpoint(mainline.CoordInWCS.lBegin,false) then
                      begin
                           pcable:=pobj;
-                          pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
+                          pentvarext:=pobj^.GetExtension<TVariablesExtender>;
                           //pvn:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('NMO_Name');
-                          pvn:=pentvarext^.entityunit.FindVariable('NMO_Name');
+                          pvn:=pentvarext.entityunit.FindVariable('NMO_Name');
                           if pvn<>nil then
                           begin
                                s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Instance);
@@ -378,9 +378,9 @@ begin
                             if ptn.DevLink<>nil then
                             if pdev=pointer(ptn.DevLink.bp.ListPos.owner) then
                             begin
-                                 pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
+                                 pentvarext:=pobj^.GetExtension<TVariablesExtender>;
                                  //pvn:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('NMO_Name');
-                                 pvn:=pentvarext^.entityunit.FindVariable('NMO_Name');
+                                 pvn:=pentvarext.entityunit.FindVariable('NMO_Name');
                                   if pvn<>nil then
                                   begin
                                        s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Instance);
@@ -486,10 +486,10 @@ begin
      ConstObjArray.free;
      if pdev<>nil then
      begin
-          pentvarext:=GetExtension(typeof(TVariablesExtender));
+          pentvarext:=GetExtension<TVariablesExtender>;
           if pentvarext<>nil then begin
-            pvNote:=pentvarext^.entityunit.FindVariable('NOTE_Note');
-            pvNoteFormat:=pentvarext^.entityunit.FindVariable('NOTE_NoteFormat');
+            pvNote:=pentvarext.entityunit.FindVariable('NOTE_Note');
+            pvNoteFormat:=pentvarext.entityunit.FindVariable('NOTE_NoteFormat');
           end else begin
             pvNote:=nil;
             pvNoteFormat:=nil;
@@ -500,16 +500,16 @@ begin
             s:={pstring(pvNote^.data.Instance)^}pvNote^.data.PTD.GetValueAsString(pvNote^.data.Instance)
           else begin
             s:='';
-            pentvarext:=pdev^.GetExtension(typeof(TVariablesExtender));
+            pentvarext:=pdev^.GetExtension<TVariablesExtender>;
             //pvn:=PTObjectUnit(pdev^.ou.Instance)^.FindVariable('NMO_Name');
-            pvn:=pentvarext^.entityunit.FindVariable('NMO_Name');
+            pvn:=pentvarext.entityunit.FindVariable('NMO_Name');
             if pvn<>nil then
             begin
                  s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Instance);
                  //s:=pstring(pvn^.data.Instance)^;
             end;
             //pvn:=PTObjectUnit(pdev^.ou.Instance)^.FindVariable('Text');
-            pvn:=pentvarext^.entityunit.FindVariable('Text');
+            pvn:=pentvarext.entityunit.FindVariable('Text');
             if pvn<>nil then
             begin
                  s:=s+{pstring(pvn^.data.Instance)^}pvn^.data.PTD.GetValueAsString(pvn^.data.Instance);;

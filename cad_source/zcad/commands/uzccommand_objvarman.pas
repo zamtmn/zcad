@@ -43,16 +43,16 @@ implementation
 function ObjVarMan_com(operands:TCommandOperands):TCommandResult;
 var
   pobj:PGDBObjEntity;
-  pentvarext:PTVariablesExtender;
+  pentvarext:TVariablesExtender;
 begin
   if drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount=1 then
     pobj:=PGDBObjEntity(drawings.GetCurrentDWG.GetLastSelected)
   else
     pobj:=nil;
   if pobj<>nil then begin
-    pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
+    pentvarext:=pobj^.GetExtension<TVariablesExtender>;
     if pentvarext<>nil then begin
-      if EditUnit(pentvarext^.entityunit) then
+      if EditUnit(pentvarext.entityunit) then
         ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIRePrepareObject);
     end;
    end else

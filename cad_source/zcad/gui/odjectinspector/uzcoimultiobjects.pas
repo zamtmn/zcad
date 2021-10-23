@@ -113,14 +113,14 @@ begin
      ObjID2Counter.Free;
      ObjIDVector.Free;
 end;
-function SetVariable(pentity: pGDBObjEntity;pentvarext: PTVariablesExtender;PSourceVD:pvardesk):boolean;
+function SetVariable(pentity: pGDBObjEntity;pentvarext: TVariablesExtender;PSourceVD:pvardesk):boolean;
 var
   PDestVD: pvardesk;
 begin
   result:=false;
     if pentvarext<>nil then
     begin
-         PDestVD:=pentvarext^.entityunit.InterfaceVariables.findvardesc(PSourceVD^.name);
+         PDestVD:=pentvarext.entityunit.InterfaceVariables.findvardesc(PSourceVD^.name);
          if PDestVD<>nil then
            if PSourceVD^.data.PTD=PDestVD^.data.PTD then
            begin
@@ -138,7 +138,7 @@ end;
 
 procedure TMSEditor.SetVariables(PSourceVD:pvardesk;NeededObjType:TObjID);
 var
-  pentvarext,pmainentvarext: PTVariablesExtender;
+  pentvarext,pmainentvarext: TVariablesExtender;
   EntIterator: itrec;
   //PDestVD: pvardesk;
   pentity,pmainentity: pGDBObjEntity;
@@ -151,11 +151,11 @@ begin
   repeat
     if (pentity^.Selected)and((pentity^.GetObjType=NeededObjType)or(NeededObjType=0)) then
     begin
-      pentvarext:=pentity^.GetExtension(typeof(TVariablesExtender));
+      pentvarext:=pentity^.GetExtension<TVariablesExtender>;
          if VariableProcessSelector<>VPS_OnlyThisEnts then begin
-           if pentvarext^.pMainFuncEntity<>nil then begin
-             pmainentity:=pentvarext^.pMainFuncEntity;
-             pmainentvarext:=pmainentity^.GetExtension(typeof(TVariablesExtender));
+           if pentvarext.pMainFuncEntity<>nil then begin
+             pmainentity:=pentvarext.pMainFuncEntity;
+             pmainentvarext:=pmainentity^.GetExtension<TVariablesExtender>;
              SetVariable(pmainentity,pmainentvarext,PSourceVD);
            end;
          end;
@@ -238,7 +238,7 @@ begin
 end;
 procedure TMSEditor.SetMultiProperty(pu:PTObjectUnit;PSourceVD:PVarDesk;NeededObjType:TObjID);
 var
-  //pentvarext: PTVariablesExtender;
+  //pentvarext: TVariablesExtender;
   EntIterator: itrec;
   //PDestVD: pvardesk;
   pentity: pGDBObjEntity;
@@ -575,7 +575,7 @@ var //i: GDBInteger;
     pvd,pvdmy:pvardesk;
     vd:vardesk;
     ir,ir2:itrec;
-    pentvarext:PTVariablesExtender;
+    pentvarext:TVariablesExtender;
 begin
      debugln('{D+}TMSEditor.createunit start');
      SavezeUnitsFormat:=f;
@@ -628,18 +628,18 @@ begin
        if pv^.Selected then
        begin
        {inc(self.SelCount);}
-       pentvarext:=pv^.GetExtension(typeof(TVariablesExtender));
+       pentvarext:=pv^.GetExtension<TVariablesExtender>;
        if ((pv^.GetObjType=GetObjType)or(GetObjType=0))and(pentvarext<>nil) then
        begin
          if VariableProcessSelector<>VPS_OnlyRelatedEnts then
-           processunit(pentvarext^.entityunit);
+           processunit(pentvarext.entityunit);
          if VariableProcessSelector<>VPS_OnlyThisEnts then begin
-           pu:=pentvarext^.entityunit.InterfaceUses.beginiterate(ir2);
+           pu:=pentvarext.entityunit.InterfaceUses.beginiterate(ir2);
            if pu<>nil then
            repeat
              if typeof(PTSimpleUnit(pu)^)=typeof(TObjectUnit) then
                processunit(PTObjectUnit(pu)^,true);
-             pu:=pentvarext^.entityunit.InterfaceUses.iterate(ir2)
+             pu:=pentvarext.entityunit.InterfaceUses.iterate(ir2)
            until pu=nil;
          end;
        end;

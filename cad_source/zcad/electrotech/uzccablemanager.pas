@@ -84,7 +84,7 @@ var pobj,pobj2:PGDBObjCable;
     pnp:PTNodeProp;
     sorted:boolean;
     lastadddevice:PGDBObjDevice;
-    pentvarext,pentvarext2:PTVariablesExtender;
+    pentvarext,pentvarext2:TVariablesExtender;
 begin
      //** Создание списка всех кабелей по их имени + дополнительно собирается длина кабеля
      pobj:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir); //выбрать первый элемент чертежа
@@ -92,9 +92,9 @@ begin
      repeat                                                   //перебор всех элементов чертежа
            if pobj^.GetObjType=GDBCableID then                //работа только с кабелями
            begin
-                pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));   //получаем доступ к РТТИ что бы можно было просматривать что на заполнял пользователь
+                pentvarext:=pobj^.GetExtension<TVariablesExtender>;   //получаем доступ к расширению с переменными
                 //pvn:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('NMO_Name');
-                pvn:=pentvarext^.entityunit.FindVariable('NMO_Name');      //находим обозначение кабеля (ШС2)
+                pvn:=pentvarext.entityunit.FindVariable('NMO_Name');      //находим обозначение кабеля (ШС2)
                 if pvn<>nil then
                                 sname:=pgdbstring(pvn^.data.Instance)^
                             else
@@ -104,7 +104,7 @@ begin
                 pcd:=FindOrCreate(sname);                                         //поиск или создание нового элемента в списки. Если такое имя в списке есть, то возвращает указатель на него, если нет то создает новый.
                 pcd^.Segments.PushBackData(pobj);                                 //добавляем к сегменту новый кабель
                 //pvn:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('AmountD');
-                pvn:=pentvarext^.entityunit.FindVariable('AmountD');              //получаем длину кабеля
+                pvn:=pentvarext.entityunit.FindVariable('AmountD');              //получаем длину кабеля
                 if pvn<>nil then
                                 pcd^.length:=pcd^.length+pgdbdouble(pvn^.data.Instance)^; //доюавляем к шлейфу общую длину
            end;
@@ -120,17 +120,17 @@ begin
                 repeat
                 itsok:=true;
                 pobj2:=pcd^.Segments.beginiterate(ir);
-                pentvarext2:=pobj2^.GetExtension(typeof(TVariablesExtender));
+                pentvarext2:=pobj2^.GetExtension<TVariablesExtender>;
                 p2:=pointer(ir.itp);
                 pobj:=pcd^.Segments.iterate(ir);
                 p1:=pointer(ir.itp);
                 if pobj<>nil then
                 repeat
-                      pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
+                      pentvarext:=pobj^.GetExtension<TVariablesExtender>;
                       //pvn :=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('CABLE_Segment');
                       //pvn2:=PTObjectUnit(pobj2^.ou.Instance)^.FindVariable('CABLE_Segment');
-                      pvn :=pentvarext^.entityunit.FindVariable('CABLE_Segment');
-                      pvn2:=pentvarext2^.entityunit.FindVariable('CABLE_Segment');
+                      pvn :=pentvarext.entityunit.FindVariable('CABLE_Segment');
+                      pvn2:=pentvarext2.entityunit.FindVariable('CABLE_Segment');
                       if pgdbinteger(pvn^.data.Instance)^<
                          pgdbinteger(pvn2^.data.Instance)^ then
                          begin

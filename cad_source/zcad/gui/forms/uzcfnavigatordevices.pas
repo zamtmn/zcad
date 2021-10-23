@@ -487,7 +487,7 @@ procedure TNavigatorDevices.AfterCellPaint(Sender: TBaseVirtualTree; TargetCanva
     Column: TColumnIndex; const CellRect: TRect);
 var
   pnd:PTNodeData;
-  pentvarext:PTVariablesExtender;
+  pentvarext:TVariablesExtender;
   myContentRect:TRect;
 begin
   if Column>0 then exit;
@@ -495,7 +495,7 @@ begin
   if pnd<>nil then
   if pnd^.pent<>nil then
   begin
-    pentvarext:=pnd^.pent^.GetExtension(typeof(TVariablesExtender));
+    pentvarext:=pnd^.pent^.GetExtension<TVariablesExtender>;
     if pentvarext<>nil then begin
 
     getImageIndex;
@@ -516,14 +516,14 @@ procedure TNavigatorDevices.DrawText(Sender: TBaseVirtualTree; TargetCanvas: TCa
     Column: TColumnIndex; const CellText: String; const CellRect: TRect; var DefaultDraw: Boolean);
 var
   pnd:PTNodeData;
-  pentvarext:PTVariablesExtender;
+  pentvarext:TVariablesExtender;
   myCellRect:TRect;
 begin
   pnd:=Sender.GetNodeData(Node);
   if pnd<>nil then
   if pnd^.pent<>nil then
   begin
-    pentvarext:=pnd^.pent^.GetExtension(typeof(TVariablesExtender));
+    pentvarext:=pnd^.pent^.GetExtension<TVariablesExtender>;
     if pentvarext<>nil then begin
       SaveCellRectLeft:=CellRect.Left;
       myCellRect:=CellRect;
@@ -541,13 +541,13 @@ procedure TNavigatorDevices.MeasureTextWidth(Sender: TBaseVirtualTree; TargetCan
 Column: TColumnIndex; const CellText: String; var Extent: Integer);
 var
   pnd:PTNodeData;
-  pentvarext:PTVariablesExtender;
+  pentvarext:TVariablesExtender;
 begin
   pnd:=Sender.GetNodeData(Node);
   if pnd<>nil then
   if pnd^.pent<>nil then
   begin
-    pentvarext:=pnd^.pent^.GetExtension(typeof(TVariablesExtender));
+    pentvarext:=pnd^.pent^.GetExtension<TVariablesExtender>;
     if pentvarext<>nil then
       Extent:=Extent+2*ImagesManager.IconList.Width;
   end;
@@ -556,15 +556,15 @@ end;
 function TNavigatorDevices.CreateEntityNode(Tree: TVirtualStringTree;basenode:PVirtualNode;pent:pGDBObjEntity;Name:string):PVirtualNode;
 var
   pnd:PTNodeData;
-  pentvarext:PTVariablesExtender;
+  pentvarext:TVariablesExtender;
 begin
-  pentvarext:=pent^.GetExtension(typeof(TVariablesExtender));
+  pentvarext:=pent^.GetExtension<TVariablesExtender>;
   if (BP.UseMainFunctions)and(pentvarext<>nil) then begin
     if not Ent2NodeMap.trygetvalue(pent,result) then begin
       result:=StandaloneNode.CreateEntityNode(Tree,basenode,pent,Name);
-      pentvarext:=pent^.GetExtension(typeof(TVariablesExtender));
+      pentvarext:=pent^.GetExtension<TVariablesExtender>;
       {if pentvarext<>nil then} begin
-        if pentvarext^.isMainFunction then begin
+        if pentvarext.isMainFunction then begin
           pnd:=Tree.GetNodeData(result);
           pnd^.NodeMode:=TNMHardGroup;
         end;
@@ -800,7 +800,7 @@ procedure TNavigatorDevices.NavGetImage(Sender: TBaseVirtualTree; Node: PVirtual
                                  var Ghosted: Boolean; var ImageIndex: Integer);
 var
   pnd:PTNodeData;
-  pentvarext:PTVariablesExtender;
+  pentvarext:TVariablesExtender;
 begin
   if Column>0 then begin
     ImageIndex:=-1;
@@ -823,10 +823,10 @@ else
           TNMData,TNMHardGroup:begin
                     if pnd^.pent<>nil then
                                           begin
-                                           pentvarext:=pnd^.pent^.GetExtension(typeof(TVariablesExtender));
+                                           pentvarext:=pnd^.pent^.GetExtension<TVariablesExtender>;
                                            if pentvarext<>nil then
                                            begin
-                                             if pentvarext^.isMainFunction then
+                                             if pentvarext.isMainFunction then
                                                ImageIndex:=MainFunctionIconIndex
                                              else
                                                ImageIndex:=-1;

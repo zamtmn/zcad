@@ -74,26 +74,26 @@ implementation
 
 function GetMainFunction(const pent:pGDBObjEntity):pGDBObjEntity;
 var
-  pentvarext:PTVariablesExtender;
+  pentvarext:TVariablesExtender;
   pvd:pvardesk;
 begin
-  pentvarext:=pent^.GetExtension(typeof(TVariablesExtender));
+  pentvarext:=pent^.GetExtension<TVariablesExtender>;
   if pentvarext<>nil then
-    result:=pentvarext^.pMainFuncEntity
+    result:=pentvarext.pMainFuncEntity
   else
     result:=nil;
 end;
 
 function GetEntityVariableValue(const pent:pGDBObjEntity;varname,defvalue:string):string;
 var
-  pentvarext:PTVariablesExtender;
+  pentvarext:TVariablesExtender;
   pvd:pvardesk;
 begin
   result:=defvalue;
-  pentvarext:=pent^.GetExtension(typeof(TVariablesExtender));
+  pentvarext:=pent^.GetExtension<TVariablesExtender>;
   if pentvarext<>nil then
   begin
-       pvd:=pentvarext^.entityunit.FindVariable(varname);
+       pvd:=pentvarext.entityunit.FindVariable(varname);
        if pvd<>nil then
                        result:=pvd.data.PTD^.GetValueAsString(pvd.data.Instance);
   end;

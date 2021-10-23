@@ -54,7 +54,7 @@ begin
         inc(count);
         if Assigned(pv^.EntExtensions) then begin
           for i:=0 to pv^.EntExtensions.GetExtensionsCount-1 do begin
-            extcounter.CountKey(pv^.EntExtensions.GetExtension(i)^.getExtenderName,1);
+            extcounter.CountKey(pv^.EntExtensions.GetExtension(i).getExtenderName,1);
           end;
         end;
       end;

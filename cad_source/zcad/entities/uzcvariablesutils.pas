@@ -28,12 +28,12 @@ function FindEntityByVar(arr:GDBObjOpenArrayOfPV;objID:GDBWord;vname,vvalue:GDBS
 implementation
 function FindVariableInEnt(PEnt:PGDBObjEntity;varname:gdbstring):pvardesk;
 var
-   pentvarext:PTVariablesExtender;
+   pentvarext:TVariablesExtender;
 begin
-     pentvarext:=PEnt^.GetExtension(typeof(TVariablesExtender));
+     pentvarext:=PEnt^.GetExtension<TVariablesExtender>;
      result:=nil;
      if pentvarext<>nil then
-     result:=pentvarext^.entityunit.FindVariable(varname);
+     result:=pentvarext.entityunit.FindVariable(varname);
      if result=nil then
      if PEnt^.bp.ListPos.Owner<>nil then
        result:=FindVariableInEnt(pointer(PEnt^.bp.ListPos.Owner),varname);
@@ -43,7 +43,7 @@ var
    pvisible:PGDBObjEntity;
    ir:itrec;
    pvd:pvardesk;
-   pentvarext:PTVariablesExtender;
+   pentvarext:TVariablesExtender;
 begin
      result:=nil;
      begin
@@ -52,8 +52,8 @@ begin
          repeat
                if pvisible.GetObjType=objID then
                begin
-                    pentvarext:=pvisible^.GetExtension(typeof(TVariablesExtender));
-                    pvd:=pentvarext^.entityunit.FindVariable(vname);
+                    pentvarext:=pvisible^.GetExtension<TVariablesExtender>;
+                    pvd:=pentvarext.entityunit.FindVariable(vname);
                     if pvd<>nil then
                     begin
                          if pvd.data.PTD.GetValueAsString(pvd.data.Instance)=vvalue then

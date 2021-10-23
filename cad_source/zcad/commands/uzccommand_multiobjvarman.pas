@@ -49,7 +49,7 @@ var
   astring:ansistring;
   counter:integer;
   ir:itrec;
-  pentvarext:PTVariablesExtender;
+  pentvarext:TVariablesExtender;
 begin
   mem.init({$IFDEF DEBUGBUILD}'{A1891083-67C6-4C21-8012-6D215935F6A6}',{$ENDIF}1024);
 
@@ -68,9 +68,9 @@ begin
     if pobj<>nil then
     repeat
     if pobj^.Selected then begin
-      pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
-      pentvarext^.entityunit.free;
-      units.parseunit(SupportPath,InterfaceTranslate,mem,@pentvarext^.entityunit);
+      pentvarext:=pobj^.GetExtension<TVariablesExtender>;
+      pentvarext.entityunit.free;
+      units.parseunit(SupportPath,InterfaceTranslate,mem,@pentvarext.entityunit);
       mem.Seek(0);
       inc(counter);
     end;

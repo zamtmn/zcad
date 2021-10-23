@@ -39,14 +39,14 @@ var
     pobj: pGDBObjEntity;
     pmainobj: pGDBObjEntity;
 
-    pCentralVarext,pVarext:PTVariablesExtender;
+    pCentralVarext,pVarext:TVariablesExtender;
 begin
   pmainobj:=nil;
   repeat
     if pmainobj=nil then
       if not commandmanager.getentity(rscmSelectEntityWithMainFunction,pmainobj) then
         exit(cmd_ok);
-    pCentralVarext:=pmainobj^.GetExtension(typeof(TVariablesExtender));
+    pCentralVarext:=pmainobj^.GetExtension<TVariablesExtender>;
     if pCentralVarext=nil then begin
       pmainobj:=nil;
       ZCMsgCallBackInterface.TextMessage('Please select device with variables',TMWOSilentShowError);
@@ -56,11 +56,11 @@ begin
   repeat
     if not commandmanager.getentity(rscmSelectLinkedEntity,pobj) then
       exit(cmd_ok);
-    pVarext:=pobj^.GetExtension(typeof(TVariablesExtender));
+    pVarext:=pobj^.GetExtension<TVariablesExtender>;
     if pVarext=nil then begin
       ZCMsgCallBackInterface.TextMessage('Please select device with variables',TMWOSilentShowError);
     end else begin
-      pCentralVarext^.addDelegate({pmainobj,}pobj,pVarext);
+      pCentralVarext.addDelegate({pmainobj,}pobj,pVarext);
     end;
   until false;
 

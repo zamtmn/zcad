@@ -182,7 +182,7 @@ var ir_inGDB,ir_inVertexArray,ir_inNodeArray,ir_inDevice,ir_inDevice2:itrec;
     pvd,{pvd2,}pvds,pvdal,pvdrt:pvardesk;
     {group,pribor,}count:gdbinteger;
     l:gdbdouble;
-    pentvarext,pentvarextcirrobj:PTVariablesExtender;
+    pentvarext,pentvarextcirrobj:TVariablesExtender;
 begin
   inherited;
   calcbb(dc);
@@ -327,7 +327,7 @@ begin
                     if ptn^.DevLink<>nil then
                     begin
                     CurrentObj:=pointer(ptn^.DevLink^.bp.ListPos.owner);
-                    pentvarextcirrobj:=CurrentObj^.GetExtension(typeof(TVariablesExtender));
+                    pentvarextcirrobj:=CurrentObj^.GetExtension<TVariablesExtender>;
                     {pvd:=CurrentObj.ou.FindVariable('OPS_Pribor');
                     if pvd<>nil then
                     pgdbinteger(pvd^.data.Instance)^:=group;
@@ -353,7 +353,7 @@ begin
 
                     ptn:=NodePropArray.iterate(ir_inNodeArray);
                 until ptn=nil;
-  pentvarext:=GetExtension(typeof(TVariablesExtender));
+  pentvarext:=GetExtension<TVariablesExtender>;
   pvd:=pentvarext.entityunit.FindVariable('CABLE_TotalCD');
   if pvd<>nil then
                                   pgdbinteger(pvd^.data.Instance)^:=count;

@@ -44,7 +44,7 @@ function BlockDefVarMan_com(operands:TCommandOperands):TCommandResult;
 var
   pobj:PGDBObjEntity;
   op:ansistring;
-  pentvarext:PTVariablesExtender;
+  pentvarext:TVariablesExtender;
 begin
   pobj:=nil;
   if drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount=1 then begin
@@ -57,9 +57,9 @@ begin
       pobj:=drawings.GetCurrentDWG.BlockDefArray.getblockdef(op)
     end;
   if pobj<>nil then begin
-    pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
+    pentvarext:=pobj^.GetExtension<TVariablesExtender>;
     if pentvarext<>nil then begin
-      if EditUnit(pentvarext^.entityunit) then
+      if EditUnit(pentvarext.entityunit) then
         ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIRePrepareObject);
     end;
   end else

@@ -26,10 +26,10 @@ begin
    CABLE_Type:=TCT_Control;
    Amount:=0.0;
    LENGTH_RoundTo:=0;
-   LENGTH_Add:=0.0;
-   LENGTH_KReserve:=1;
+   LENGTH_Add:=2.0;
+   LENGTH_KReserve:=1.2;
    Segment:=0;
-   LENGTH_Scale:=0.5;
+   LENGTH_Scale:=0.1;
    CABLE_Material:='не задан ??;
    CABLE_WireCount:=0;
    Cable_Mounting_Method:='-';

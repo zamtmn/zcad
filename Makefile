@@ -136,7 +136,11 @@ zcadelectrotech: checkvars version
 
 cleanzcad: clean zcadenv zcad
 
+cleanzcadenv: clean zcadenv
+
 cleanzcadelectrotech: clean zcadelectrotechenv zcadelectrotech
+
+cleanzcadelectrotechenv: clean zcadelectrotechenv
 
 installpkgstolaz: checkvars           
 	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)other$(PATHDELIM)AGraphLaz$(PATHDELIM)lazarus$(PATHDELIM)ag_graph.lpk

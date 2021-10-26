@@ -64,7 +64,7 @@ begin
     repeat
       pcd^.copyEnt:=pcd^.sourceEnt^.Clone(pcd^.sourceEnt^.bp.ListPos.Owner);
       pcd^.copyEnt^.TransformAt(pcd^.sourceEnt,@dispmatr);
-      OldEnts2NewEntsMap.Insert(pcd^.sourceEnt,pcd^.copyEnt);
+      OldEnts2NewEntsMap.Add(pcd^.sourceEnt,pcd^.copyEnt);
       pcd:=pcoa^.iterate(ir);
     until pcd=nil;
 

@@ -43,7 +43,7 @@ type
   TTreeLevelStatistik=record
                           NodesCount,EntCount,OverflowCount:Integer;
                     end;
-  TPopulationCounter=TMyMapCounter<integer,LessInteger>;
+  TPopulationCounter=TMyMapCounter<integer{,LessInteger}>;
   PTTreeLevelStatistikArray=^TTreeLevelStatistikArray;
   TTreeLevelStatistikArray=Array [0..0] of  TTreeLevelStatistik;
   TTreeStatistik=record
@@ -138,7 +138,8 @@ var i: Integer;
     depth:integer;
     tr:TTreeStatistik;
     rootnode:PTEntTreeNode;
-    iter:TPopulationCounter.TIterator;
+    pair:TPopulationCounter.TDictionaryPair;
+    //iter:TPopulationCounter.TIterator;
 begin
   depth:=0;
   tr:=MakeTreeStatisticRec({SysVar.RD.RD_SpatialNodesDepth^}64);
@@ -173,12 +174,14 @@ begin
        ZCMsgCallBackInterface.TextMessage('  Nodes: '+inttostr(tr.PLevelStat^[i].NodesCount),TMWOHistoryOut);
        ZCMsgCallBackInterface.TextMessage('  Overflow nodes: '+inttostr(tr.PLevelStat^[i].OverflowCount),TMWOHistoryOut);
   end;
-  iter:=tr.pc.min;
-  if assigned(iter)then
-  repeat
-    ZCMsgCallBackInterface.TextMessage('  Nodes with population '+inttostr(iter.Data.Key)+': '+inttostr(iter.Data.Value),TMWOHistoryOut);
-  until not iter.next;
-  if assigned(iter)then iter.destroy;
+  for pair in tr.pc do begin
+    //iter:=tr.pc.min;
+    //if assigned(iter)then
+    //repeat
+      ZCMsgCallBackInterface.TextMessage('  Nodes with population '+inttostr(pair.Key)+': '+inttostr(pair.Value),TMWOHistoryOut);
+    //until not iter.next;
+    //if assigned(iter)then iter.destroy;
+  end;
   WriteDot(rootnode,tr);
   KillTreeStatisticRec(tr);
   result:=cmd_ok;

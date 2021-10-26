@@ -37,7 +37,7 @@ type
     procedure Init(AName:string;AFontFile:string;AParam:TGeneralFontParam);
     constructor Create(AName:string;AFontFile:string;AParam:TGeneralFontParam);
   end;
-  TFontName2FontFileMap=GKey2DataMap<GDBString,TGeneralFontFileDesc{$IFNDEF DELPHI},LessGDBString{$ENDIF}>;
+  TFontName2FontFileMap=GKey2DataMap<GDBString,TGeneralFontFileDesc(*{$IFNDEF DELPHI},LessGDBString{$ENDIF}*)>;
 
   TFontLoadProcedure=function(name:GDBString;var pf:PGDBfont):GDBBoolean;
   TFontLoadProcedureData=record
@@ -45,7 +45,7 @@ type
     FontLoadProcedure:TFontLoadProcedure;
   end;
 
-  TFontExt2LoadProcMap=GKey2DataMap<GDBString,TFontLoadProcedureData{$IFNDEF DELPHI},LessGDBString{$ENDIF}>;
+  TFontExt2LoadProcMap=GKey2DataMap<GDBString,TFontLoadProcedureData(*{$IFNDEF DELPHI},LessGDBString{$ENDIF}*)>;
 {Export+}
   PGDBFontRecord=^GDBFontRecord;
   {REGISTERRECORDTYPE GDBFontRecord}

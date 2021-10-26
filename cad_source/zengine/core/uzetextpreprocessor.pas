@@ -33,7 +33,7 @@ type
   //TTokenizerString=ansistring;
   //TTokenizerSymbol=char;
 
-  TPrefix2ProcessFunc=class (GKey2DataMap<TInternalStringType,TStrProcessorData{$IFNDEF DELPHI},LessUnicodeString{$ENDIF}>)
+  TPrefix2ProcessFunc=class (GKey2DataMap<TInternalStringType,TStrProcessorData(*{$IFNDEF DELPHI},LessUnicodeString{$ENDIF}*)>)
     procedure RegisterProcessor(const Id:TInternalStringType;const OBracket,CBracket:TInternalCharType;const Func:TStrProcessFunc;IsVariable:Boolean=false);
   end;
   TMyParser=TGZParser<TUnicodeStringManipulator,
@@ -126,9 +126,10 @@ end;
 function textformat;
 var FindedIdPos,ContinuePos,EndBracketPos,i2,counter:GDBInteger;
     ps{,s2},res,operands:TDXFEntsInternalStringType;
-    {$IFNDEF DELPHI}
+    pair:Prefix2ProcessFunc.TDictionaryPair;
+    (*{$IFNDEF DELPHI}
     iterator:Prefix2ProcessFunc.TIterator;
-    {$ENDIF}
+    {$ENDIF}*)
     startsearhpos:integer;
     TCP:TCodePage;
 const
@@ -144,27 +145,28 @@ begin
      until FindedIdPos<=0;}
      {$IFNDEF DELPHI}
      counter:=0;
-     iterator:=Prefix2ProcessFunc.Min;
-     if assigned(iterator) then
+     {iterator:=Prefix2ProcessFunc.Min;
+     if assigned(iterator) then}
+     for pair in Prefix2ProcessFunc do
      begin
-     repeat
+     //repeat
        startsearhpos:=1;
-       if assigned(iterator.value.func)then
+       if assigned(pair.value.func)then
        begin
          repeat
-           FindedIdPos:={$if FPC_FULLVERSION<=30004}Pos_only_for_FPC304{$else}Pos{$endif}(iterator.key,ps,startsearhpos);
+           FindedIdPos:={$if FPC_FULLVERSION<=30004}Pos_only_for_FPC304{$else}Pos{$endif}(pair.key,ps,startsearhpos);
            if FindedIdPos>0 then
            begin
-             ContinuePos:=FindedIdPos+length(iterator.key);
-             if iterator.Value.CBracket<>#0 then begin
-               EndBracketPos:={$if FPC_FULLVERSION<=30004}Pos_only_for_FPC304{$else}Pos{$endif}(iterator.Value.CBracket,ps,ContinuePos)+1;
+             ContinuePos:=FindedIdPos+length(pair.key);
+             if pair.Value.CBracket<>#0 then begin
+               EndBracketPos:={$if FPC_FULLVERSION<=30004}Pos_only_for_FPC304{$else}Pos{$endif}(pair.Value.CBracket,ps,ContinuePos)+1;
                operands:=copy(ps,ContinuePos,EndBracketPos-ContinuePos-1);
              end else
                EndBracketPos:=ContinuePos;
              ContinuePos:=EndBracketPos;
              TCP:=CodePage;
              CodePage:=CP_utf8;
-             res:=UTF8Decode(iterator.value.func(ps,operands,ContinuePos,pobj));
+             res:=UTF8Decode(pair.value.func(ps,operands,ContinuePos,pobj));
              CodePage:=TCP;
              //if res<>'' then
                ps:=copy(ps,1,FindedIdPos-1)+res+copy(ps,{EndBracketPos}ContinuePos,length(ps)-{EndBracketPos}ContinuePos+1);
@@ -173,8 +175,8 @@ begin
            end;
          until (FindedIdPos<=0)or(counter>maxitertations);
        end;
-     until (not iterator.Next)or(counter>maxitertations);
-     iterator.destroy;
+     //until (not iterator.Next)or(counter>maxitertations);
+     //iterator.destroy;
      end;
      if counter>maxitertations then
                         result:='!!ERR(Loop detected)'

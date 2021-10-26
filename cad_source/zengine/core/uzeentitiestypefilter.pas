@@ -71,20 +71,23 @@ end;
 
 procedure TEntsTypeFilter.AddTypeNameMask(EntTypeNameMask:GDBString);
 var
-  iterator:ObjID2EntInfoData.TIterator;
+  //iterator:ObjID2EntInfoData.TIterator;
+  pair:ObjID2EntInfoData.TDictionaryPair;
   s:string;
 begin
-  iterator:=ObjID2EntInfoData.Min;
-  if assigned(iterator) then
-  repeat
-    s:=iterator.Data.Value.DXFName;
-    s:=iterator.Data.Value.UserName;
-    if (MatchesMask(iterator.Data.Value.UserName,EntTypeNameMask,false))
-    or (AnsiCompareText(iterator.Data.Value.UserName,EntTypeNameMask)=0) then
-      Include.CountKey(iterator.Data.Value.EntityID,1);
-  until not iterator.Next;
-  if assigned(iterator) then
-    iterator.destroy;
+  for pair in ObjID2EntInfoData do begin
+  //iterator:=ObjID2EntInfoData.Min;
+  //if assigned(iterator) then
+  //repeat
+    s:=pair.Value.DXFName;
+    s:=pair.Value.UserName;
+    if (MatchesMask(pair.Value.UserName,EntTypeNameMask,false))
+    or (AnsiCompareText(pair.Value.UserName,EntTypeNameMask)=0) then
+      Include.CountKey(pair.Value.EntityID,1);
+  end;
+  //until not iterator.Next;
+  //if assigned(iterator) then
+  //  iterator.destroy;
 end;
 
 procedure TEntsTypeFilter.SubType(EntType:TObjID);
@@ -101,32 +104,37 @@ end;
 
 procedure TEntsTypeFilter.SubTypeNameMask(EntTypeNameMask:GDBString);
 var
-  iterator:ObjID2EntInfoData.TIterator;
+  //iterator:ObjID2EntInfoData.TIterator;
+  pair:ObjID2EntInfoData.TDictionaryPair;
 begin
-  iterator:=ObjID2EntInfoData.Min;
-  if assigned(iterator) then
-  repeat
-    if MatchesMask(iterator.Data.Value.UserName,EntTypeNameMask,false)
-    or (AnsiCompareText(iterator.Data.Value.UserName,EntTypeNameMask)=0) then
-      Exclude.CountKey(iterator.Data.Value.EntityID,1);
-  until not iterator.Next;
-  if assigned(iterator) then
-    iterator.destroy;
+  for pair in ObjID2EntInfoData do begin
+  //iterator:=ObjID2EntInfoData.Min;
+  //if assigned(iterator) then
+  //repeat
+    if MatchesMask(pair.Value.UserName,EntTypeNameMask,false)
+    or (AnsiCompareText(pair.Value.UserName,EntTypeNameMask)=0) then
+      Exclude.CountKey(pair.Value.EntityID,1);
+  end;
+  //until not iterator.Next;
+  //if assigned(iterator) then
+  //  iterator.destroy;
 end;
 
 procedure TEntsTypeFilter.SetFilter;
 var
-  iterator:TObjID2Counter.TIterator;
+  //iterator:TObjID2Counter.TIterator;
+  pair:TObjID2Counter.TDictionaryPair;
   count:SizeUInt;
 begin
-  iterator:=Include.Min;
-  if assigned(iterator) then
-  repeat
-    if not Exclude.TryGetValue(iterator.GetKey,count) then
-      Filter.CountKey(iterator.GetKey,1);
-  until not iterator.Next;
-  if assigned(iterator) then
-    iterator.destroy;
+  for pair in Include do
+  //iterator:=Include.Min;
+  //if assigned(iterator) then
+  //repeat
+    if not Exclude.TryGetValue(pair.Key,count) then
+      Filter.CountKey(pair.Key,1);
+  //until not iterator.Next;
+  //if assigned(iterator) then
+  //  iterator.destroy;
 end;
 
 procedure TEntsTypeFilter.ResetFilter;
@@ -152,7 +160,7 @@ end;
 
 function TEntsTypeFilter.IsEmpty:boolean;
 begin
-    result:=Filter.Size=0;
+    result:=Filter.{Size}Count=0;
 end;
 
 begin

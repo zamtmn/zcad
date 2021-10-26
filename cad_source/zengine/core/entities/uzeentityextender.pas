@@ -43,7 +43,7 @@ TBaseEntityExtender=class(TBaseObjExtender)
 end;
 TMetaEntityExtender=class of TBaseEntityExtender;
 TEntityExtenderVector= TMyVector<TBaseEntityExtender>;
-TEntityExtenderMap= GKey2DataMap<TMetaEntityExtender,SizeUInt{$IFNDEF DELPHI},LessPointer{$ENDIF}>;
+TEntityExtenderMap= GKey2DataMap<TMetaEntityExtender,SizeUInt(*{$IFNDEF DELPHI},LessPointer{$ENDIF}*)>;
 TEntityExtensions=class
                        fEntityExtensions:TEntityExtenderVector;
                        fEntityExtenderToIndex:TEntityExtenderMap;

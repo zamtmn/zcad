@@ -33,7 +33,7 @@ implementation
 
 function extdrEntsList_com(operands:TCommandOperands):TCommandResult;
 type
-  TExtCounter=TMyMapCounter<string,TLess<String>>;
+  TExtCounter=TMyMapCounter<string{,TLess<String>}>;
 var
   pv:pGDBObjEntity;
   ir:itrec;
@@ -42,7 +42,8 @@ var
   //extendername:string;
   extcounter:TExtCounter;
   //tp:TExtCounter.TPair;
-  Iterator:TExtCounter.TIterator;
+  pair:TExtCounter.TDictionaryPair;
+  //Iterator:TExtCounter.TIterator;
 begin
   extcounter:=TExtCounter.create;
   try
@@ -73,14 +74,16 @@ begin
 
     //поэтому приходится делать через итератор
     count:=0;
-    iterator:=extcounter.Min;
-    if assigned(iterator) then
-    repeat
-      ZCMsgCallBackInterface.TextMessage(format('Extender "%s" found %d times',[iterator.GetKey,iterator.GetValue]),TMWOHistoryOut);
+    for pair in extcounter do begin
+    //iterator:=extcounter.Min;
+    //if assigned(iterator) then
+    //repeat
+      ZCMsgCallBackInterface.TextMessage(format('Extender "%s" found %d times',[pair.Key,pair.Value]),TMWOHistoryOut);
       inc(count);
-    until not iterator.Next;
-    if assigned(iterator) then
-      iterator.destroy;
+    //until not iterator.Next;
+    //if assigned(iterator) then
+    //  iterator.destroy;
+    end;
     if count=0 then
       ZCMsgCallBackInterface.TextMessage(format('No extenders found',[]),TMWOHistoryOut);
   finally

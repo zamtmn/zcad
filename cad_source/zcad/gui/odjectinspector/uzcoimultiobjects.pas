@@ -339,7 +339,8 @@ var
     ir:itrec;
     pv:pGDBObjEntity;
     psd:PSelectedObjDesc;
-    iterator:TObjID2Counter.TIterator;
+    pair:TObjID2Counter.TDictionaryPair;
+    //iterator:TObjID2Counter.TIterator;
     s:GDBString;
     entinfo:TEntInfoData;
     counter:integer;
@@ -364,7 +365,7 @@ begin
   until psd=nil;
 
   TxtEntType.Enums.free;
-  if ObjID2Counter.size>1 then
+  if ObjID2Counter.{size}count>1 then
                    TxtEntType.Selected:=0
                else
                    TxtEntType.Selected:=1;
@@ -372,19 +373,21 @@ begin
   TxtEntType.Enums.PushBackData(s);
   ObjIDVector.PushBack(0);
 
-  iterator:=ObjID2Counter.Min;
-  if assigned(iterator) then
-  repeat
-        if ObjID2EntInfoData.MyGetValue(iterator.GetKey,entinfo) then
+  for pair in ObjID2Counter do begin
+  //iterator:=ObjID2Counter.Min;
+  //if assigned(iterator) then
+  //repeat
+        if ObjID2EntInfoData.MyGetValue(pair.Key,entinfo) then
           s:=entinfo.UserName
         else
           s:=rsNotRegistred;
-        s:=sysutils.format(rsNameWithCounter,[s,iterator.getvalue]);
+        s:=sysutils.format(rsNameWithCounter,[s,pair.value]);
         TxtEntType.Enums.PushBackData(s);
-        ObjIDVector.PushBack(iterator.getkey);
-  until not iterator.Next;
-  if assigned(iterator) then
-    iterator.destroy;
+        ObjIDVector.PushBack(pair.key);
+  //until not iterator.Next;
+  //if assigned(iterator) then
+  //  iterator.destroy;
+  end;
 
 end;
 procedure TMSEditor.CreateMultiPropertys;

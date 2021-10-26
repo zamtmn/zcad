@@ -28,7 +28,7 @@ TFileFormatData=record
                 FormatDesk:GDBString;
                 FileLoadProcedure:TFileLoadProcedure;
                 end;
-TExt2LoadProcMapGen=GKey2DataMap<GDBString,TFileFormatData{$IFNDEF DELPHI},LessGDBString{$ENDIF}>;
+TExt2LoadProcMapGen=GKey2DataMap<GDBString,TFileFormatData(*{$IFNDEF DELPHI},LessGDBString{$ENDIF}*)>;
 TExt2LoadProcMap=class(TExt2LoadProcMapGen)
                       fDefaultFileExt:GDBString;
                       function GetCurrentFileFilter:GDBString;
@@ -73,16 +73,19 @@ end;
 function TExt2LoadProcMap.GetDefaultFileFilterIndex:integer;
 {$IFNDEF DELPHI}
 var
-   iterator:TExt2LoadProcMap.TIterator;
+   pair:TExt2LoadProcMap.TDictionaryPair;
+   //iterator:TExt2LoadProcMap.TIterator;
 begin
-     result:=1;
-     iterator:=Min;
-     if assigned(iterator) then
-     repeat
-         if fDefaultFileExt=iterator.key then
-                                             exit;
-         inc(result)
-     until not iterator.Next;
+  result:=1;
+  for pair in self do begin
+     //iterator:=Min;
+     //if assigned(iterator) then
+     //repeat
+    if fDefaultFileExt=pair.key then
+      exit;
+    inc(result)
+     //until not iterator.Next;
+  end;
 end;
 {$ENDIF}
 {$IFDEF DELPHI}
@@ -92,20 +95,22 @@ end;
 function TExt2LoadProcMap.GetCurrentFileFilter:GDBString;
 {$IFNDEF DELPHI}
 var
-   iterator:TExt2LoadProcMap.TIterator;
+  pair:TExt2LoadProcMap.TDictionaryPair;
+  //iterator:TExt2LoadProcMap.TIterator;
 begin
-     result:='';
-     iterator:=Min;
-     if assigned(iterator) then
-     repeat
+  result:='';
+  for pair in self do
+  //   iterator:=Min;
+  //   if assigned(iterator) then
+  //   repeat
          if result<>'' then
-                           result:=result+'|'+iterator.Value.FormatDesk+'|*.'+iterator.key
+                           result:=result+'|'+pair.Value.FormatDesk+'|*.'+pair.key
                        else
-                           result:=iterator.Value.FormatDesk+'|*.'+iterator.key
-     until not iterator.Next;
-     if result<>'' then
-                       result:=result+'|';
-     result:=result+'All files (*.*)|*.*'
+                           result:=pair.Value.FormatDesk+'|*.'+pair.key;
+  //   until not iterator.Next;
+  if result<>'' then
+    result:=result+'|';
+  result:=result+'All files (*.*)|*.*'
      //ProjectFileFilter: GDBString = 'DXF files (*.dxf)|*.dxf|AutoCAD DWG files (*.dwg)|*.dwg|ZCAD ZCP files (*.zcp)|*.zcp|All files (*.*)|*.*';
 end;
 {$ENDIF}

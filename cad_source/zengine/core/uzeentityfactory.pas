@@ -42,9 +42,9 @@ TEntUpgradeData=record
                       EntityUpgradeFunc:TEntityUpgradeFunc;
                 end;
 
-TDXFName2EntInfoDataMap=GKey2DataMap<GDBString,TEntInfoData{$IFNDEF DELPHI},LessGDBString{$ENDIF}>;
-TObjID2EntInfoDataMap=GKey2DataMap<TObjID,TEntInfoData{$IFNDEF DELPHI},LessObjID{$ENDIF}>;
-TEntUpgradeDataMap=GKey2DataMap<TEntUpgradeKey,TEntUpgradeData{$IFNDEF DELPHI},LessEntUpgradeKey{$ENDIF}>;
+TDXFName2EntInfoDataMap=GKey2DataMap<GDBString,TEntInfoData(*{$IFNDEF DELPHI},LessGDBString{$ENDIF}*)>;
+TObjID2EntInfoDataMap=GKey2DataMap<TObjID,TEntInfoData(*{$IFNDEF DELPHI},LessObjID{$ENDIF}*)>;
+TEntUpgradeDataMap=GKey2DataMap<TEntUpgradeKey,TEntUpgradeData(*{$IFNDEF DELPHI},LessEntUpgradeKey{$ENDIF}*)>;
 
 function CreateInitObjFree(t:TObjID;owner:{PGDBObjGenericSubEntry}pointer):PGDBObjEntity;
 function AllocEnt(t:TObjID): GDBPointer;

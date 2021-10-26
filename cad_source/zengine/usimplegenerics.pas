@@ -39,7 +39,7 @@ GDBStringHash=class
   class function hash(s:GDBstring; n:longint):SizeUInt;
 end;
 {$ENDIF}
-TObjID2Counter=TMyMapCounter<TObjID,LessObjID>;
+TObjID2Counter=TMyMapCounter<TObjID{,LessObjID}>;
 TObjIDVector=TMyVector<TObjID>;
 
 TMyGDBStringDictionary <TValue> = class(TMyHashMap<GDBString, TValue{$IFNDEF DELPHI},GDBStringHash{$ENDIF}>)
@@ -48,14 +48,14 @@ end;
 
 TGDBString2GDBStringDictionary=TMyGDBStringDictionary<GDBString>;
 
-TMapPointerToHandle=TMyMap<pointer,TDWGHandle{$IFNDEF DELPHI}, LessPointer{$ENDIF}>;
-TMapPointerToPointer=TMyMap<pointer,pointer{$IFNDEF DELPHI}, LessPointer{$ENDIF}>;
+TMapPointerToHandle=TMyMap<pointer,TDWGHandle(*{$IFNDEF DELPHI}, LessPointer{$ENDIF}*)>;
+TMapPointerToPointer=TMyMap<pointer,pointer(*{$IFNDEF DELPHI}, LessPointer{$ENDIF}*)>;
 
-TMapHandleToHandle=TMyMap<TDWGHandle,TDWGHandle{$IFNDEF DELPHI}, LessDWGHandle{$ENDIF}>;
-TMapHandleToPointer=TMyMap<TDWGHandle,pointer{$IFNDEF DELPHI}, LessDWGHandle{$ENDIF}>;
+TMapHandleToHandle=TMyMap<TDWGHandle,TDWGHandle(*{$IFNDEF DELPHI}, LessDWGHandle{$ENDIF}*)>;
+TMapHandleToPointer=TMyMap<TDWGHandle,pointer(*{$IFNDEF DELPHI}, LessDWGHandle{$ENDIF}*)>;
 
 TMapBlockHandle_BlockNames={$IFNDEF DELPHI}TMap{$ENDIF}{$IFDEF DELPHI}TMapForDelphi{$ENDIF}<TDWGHandle,string{$IFNDEF DELPHI},LessDWGHandle{$ENDIF}>;
-TEntUpgradeKey=record
+TEntUpgradeKey=packed record
                       EntityID:TObjID;
                       UprradeInfo:TEntUpgradeInfo;
                end;

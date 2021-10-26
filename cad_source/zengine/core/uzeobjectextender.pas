@@ -40,7 +40,7 @@ TDXFEntLoadData=record
 TDXFEntSaveData=record
                 DXFEntSaveFeature:TDXFEntSaveFeature;
               end;
-TDXFEntLoadDataMap=GKey2DataMap<GDBString,TDXFEntLoadData{$IFNDEF DELPHI},LessGDBString{$ENDIF}>;
+TDXFEntLoadDataMap=GKey2DataMap<GDBString,TDXFEntLoadData(*{$IFNDEF DELPHI},LessGDBString{$ENDIF}*)>;
 TDXFEntSaveDataVector=TmyVector<TDXFEntSaveData>;
 TDXFEntFormatProcsVector=TmyVector<TDXFEntFormatFeature>;
 TCreateEntFeatureVector=TmyVector<TCreateEntFeatureData>;

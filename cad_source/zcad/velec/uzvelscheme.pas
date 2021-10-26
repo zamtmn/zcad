@@ -65,7 +65,7 @@ uses
   uzegeometry,
   uzeentitiesmanager,
 
-  uzcmessagedialogs,
+  //uzcmessagedialogs,
   uzeentityfactory,    //unit describing a "factory" to create primitives
                       //модуль описывающий "фабрику" для создания примитивов
   uzcsysvars,        //system global variables
@@ -119,12 +119,61 @@ uses
    uzeroot,
    uzeentmtext,
    uzbstrproc,
-   uzccombase,
+   //uzccombase,
 
    uzctranslations,
    generics.Collections;
 
 type
+
+  //* Создания класса головного устройства
+  //TMasterDev=class
+  //   type
+  //      //**Список групп с рапрделенными по группам устройствами
+  //      TGroupInfo=class
+  //         type
+  //          //*** Список устройств, которые входят в определенную группу
+  //          PTInfoSubDev=^TInfoSubDev;
+  //          TInfoSubDev=class
+  //              var
+  //              TVectorOfBlockName=specialize TVector<string>; //список имен блоков которые характеризуют подключение устройтсва
+  //              dev:PGDBObjDevice; //ссылка на устройство
+  //              public
+  //              constructor Create;
+  //              destructor Destroy;override;
+  //
+  //          end;
+  //          TVectorOfSubDev=specialize TVector<TInfoSubDev>; //список устройств, которые входят в определенную группу
+  //
+  //        var
+  //
+  //           //список движения пути по вершинам и сбор информации по подключенным устройствам
+  //           LNumSubDevice:TVectorOfSubDev;
+  //           LTreeDev:TVectorOfTreeDev; //список элементов одной группы ; (новый метод)
+  //           //AllTreeDev:TGraph; //все разодранные элементы одной группы в одном дереве; (новый метод)
+  //           //groupTreeDev:TGraph; //дерево оформляемое по новому для каждой группы свое
+  //           //LEasyTreeDev:TVectorOfTreeDev;
+  //           name:String; //имя щита + группа
+  //
+  //           //function getIndexEdge(vt1,vt2:Tvertex):integer;
+  //           public
+  //           constructor Create;
+  //           destructor Destroy;override;
+  //      end;
+  //      TVectorOfGroup=specialize TVector<TGroupInfo>;
+  //
+  //     var
+  //     //LIndex:TVectorOfInteger; //номера устройства в глобальном графе
+  //     name:String;             //Имя как на плане
+  //     //shortName:String;        //короткое имя
+  //
+  //     LGroup:TVectorOfGroup;   //список отходящих групп
+  //
+  //     //function getNumbyName(name:string):integer;
+  //     public
+  //     constructor Create;
+  //     destructor Destroy;override;
+  //end;
 
 
     //** Характеристики ветки дерева
@@ -251,10 +300,10 @@ function TestModul_com(operands:TCommandOperands):TCommandResult;
         PCableSS:=pcabledesk^.StartSegment;
 
 
-        pCableSSvarext:=PCableSS^.GetExtension(TVariablesExtender);
+        pCableSSvarext:=PCableSS^.specialize GetExtension<TVariablesExtender>;
         //pvd:=PTObjectUnit(PCableSS.ou.Instance)^.FindVariable('CABLE_Type');     { TODO : Сделать поиск переменных caseнезависимым }
-        pvCab:=pCableSSvarext^.entityunit.FindVariable('CABLE_Type');
-        pvmc:=pCableSSvarext^.entityunit.FindVariable('NMO_Name');
+        pvCab:=pCableSSvarext.entityunit.FindVariable('CABLE_Type');
+        pvmc:=pCableSSvarext.entityunit.FindVariable('NMO_Name');
         ZCMsgCallBackInterface.TextMessage('Кабель имя группы --- ' + pstring(pvmc^.data.Instance)^,TMWOHistoryOut);
 
         if pvCab<>nil then
@@ -269,10 +318,10 @@ function TestModul_com(operands:TCommandOperands):TCommandResult;
                   if segmCable<>nil then
                   repeat
                                                 //смотрим характеристики сегмента
-                        pSegmCablevarext:=segmCable^.GetExtension(TVariablesExtender);
+                        pSegmCablevarext:=segmCable^.specialize GetExtension<TVariablesExtender>;
 
                         //определяем номер сегмента
-                        pvSegm:=pSegmCablevarext^.entityunit.FindVariable('CABLE_Segment');
+                        pvSegm:=pSegmCablevarext.entityunit.FindVariable('CABLE_Segment');
 
                         //Добавляем длину кабеля из сегмента
                         //pvSegmLength:=pSegmCablevarext^.entityunit.FindVariable('AmountD');
@@ -411,7 +460,7 @@ var
 begin
 
      //** Получаем точку вставки отработанной функции, в этот момент пользователь настраивает поведения алгоритма
-     if commandmanager.get3dpoint('Specify insert point:',insertPoint) then
+     if commandmanager.get3dpoint('Specify insert point:',insertPoint) = GRNormal then
        ZCMsgCallBackInterface.TextMessage('Coordinate received',TMWOHistoryOut)
      else begin
        ZCMsgCallBackInterface.TextMessage('Coordinate input canceled. Function canceled',TMWOHistoryOut);
@@ -475,8 +524,8 @@ var
    begin
         result:=0;
         for i := 0 to gGroup.EdgeCount-1 do begin
-            pvaredge:=TEdgeTree(gGroup.Edges[i].AsPointer[vpTEdgeTree]^).segm^.GetExtension(TVariablesExtender);
-            pvedge:=pvaredge^.entityunit.FindVariable('AmountD');
+            pvaredge:=TEdgeTree(gGroup.Edges[i].AsPointer[vpTEdgeTree]^).segm^.specialize GetExtension<TVariablesExtender>;
+            pvedge:=pvaredge.entityunit.FindVariable('AmountD');
             if pvedge<>nil then
                 result:=result+pdouble(pvedge^.data.Instance)^;
         end;
@@ -502,9 +551,9 @@ var
             if TEdgeTree(gGroup.Edges[i].AsPointer[vpTEdgeTree]^).isRiser = FALSE then begin
 
 
-            pvaredge:=TEdgeTree(gGroup.Edges[i].AsPointer[vpTEdgeTree]^).segm^.GetExtension(TVariablesExtender);
-            pvedge:=pvaredge^.entityunit.FindVariable('DB_link');
-            pvlength:=pvaredge^.entityunit.FindVariable('AmountD');
+            pvaredge:=TEdgeTree(gGroup.Edges[i].AsPointer[vpTEdgeTree]^).segm^.specialize GetExtension<TVariablesExtender>;
+            pvedge:=pvaredge.entityunit.FindVariable('DB_link');
+            pvlength:=pvaredge.entityunit.FindVariable('AmountD');
             if (pvedge<>nil) AND (pvlength<>nil) then
             begin
               line:=pstring(pvedge^.data.Instance)^;
@@ -589,7 +638,7 @@ var
             result:=listcab;
 
 
-            //pvaredge:=TEdgeTree(gGroup.Edges[0].AsPointer[vpTEdgeTree]^).segm^.GetExtension(TVariablesExtender);
+            //pvaredge:=TEdgeTree(gGroup.Edges[0].AsPointer[vpTEdgeTree]^).segm^.GetExtension(typeof(TVariablesExtender));
             //pvedge:=pvaredge^.entityunit.FindVariable('DB_link');
             //if pvedge<>nil then
             //begin
@@ -631,14 +680,14 @@ var
                                               drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
                                               insertPoint, 1, 0,'DEVICE_CABLE_MARK');
           zcSetEntPropFromCurrentDrawingProp(pv);
-          ppvvarext:=pv^.GetExtension(TVariablesExtender);
+          ppvvarext:=pv^.specialize GetExtension<TVariablesExtender>;
 
           //**Заполняем имя группы(шлейфа)
-          pvmc:=ppvvarext^.entityunit.FindVariable('CableName');
+          pvmc:=ppvvarext.entityunit.FindVariable('CableName');
           if pvmc<>nil then
           begin
-              pvaredge:=TEdgeTree(gGroup.Edges[0].AsPointer[vpTEdgeTree]^).segm^.GetExtension(TVariablesExtender);
-              pvedge:=pvaredge^.entityunit.FindVariable('NMO_Name');
+              pvaredge:=TEdgeTree(gGroup.Edges[0].AsPointer[vpTEdgeTree]^).segm^.specialize GetExtension<TVariablesExtender>;
+              pvedge:=pvaredge.entityunit.FindVariable('NMO_Name');
               pstring(pvmc^.data.Instance)^:=pstring(pvedge^.data.Instance)^;
           end;
 
@@ -663,12 +712,12 @@ var
           end;
 
 
-          pvmc:=ppvvarext^.entityunit.FindVariable('CableLength');
+          pvmc:=ppvvarext.entityunit.FindVariable('CableLength');
           if pvmc<>nil then
               pdouble(pvmc^.data.Instance)^:=lengthCab;
 
           //**Заполняем марку кабеля
-          pvmc:=ppvvarext^.entityunit.FindVariable('CableMaterial');
+          pvmc:=ppvvarext.entityunit.FindVariable('CableMaterial');
           if pvmc<>nil then
               pstring(pvmc^.data.Instance)^:=strNameCab;
 
@@ -713,30 +762,30 @@ var
            if TVertexTree(gGroup.Vertices[i].AsPointer[vpTVertexTree]^).dev <> nil then begin
               //ZCMsgCallBackInterface.TextMessage(TVertexTree(gGroup.Vertices[i].AsPointer[vpTVertexTree]^).dev^.Name,TMWOHistoryOut);
 
-              pvarv:=TVertexTree(gGroup.Vertices[i].AsPointer[vpTVertexTree]^).dev^.GetExtension(TVariablesExtender);
-              pvv:=pvarv^.entityunit.FindVariable('RiserName');
+              pvarv:=TVertexTree(gGroup.Vertices[i].AsPointer[vpTVertexTree]^).dev^.specialize GetExtension<TVariablesExtender>;
+              pvv:=pvarv.entityunit.FindVariable('RiserName');
               if pvv<>nil then
                  continue;
 
 
 
               idev.dev:=TVertexTree(gGroup.Vertices[i].AsPointer[vpTVertexTree]^).dev;
-              pvarv:=TVertexTree(gGroup.Vertices[i].AsPointer[vpTVertexTree]^).dev^.GetExtension(TVariablesExtender);
-              pvv:=pvarv^.entityunit.FindVariable('NMO_Name');
+              pvarv:=TVertexTree(gGroup.Vertices[i].AsPointer[vpTVertexTree]^).dev^.specialize GetExtension<TVariablesExtender>;
+              pvv:=pvarv.entityunit.FindVariable('NMO_Name');
               if pvv<>nil then
                  idev.fullname:=pstring(pvv^.data.Instance)^
               else
                  idev.fullname:='Ошибка fullname';
               pvv:=nil;
 
-              pvv:=pvarv^.entityunit.FindVariable('NMO_BaseName');
+              pvv:=pvarv.entityunit.FindVariable('NMO_BaseName');
               if pvv<>nil then
                  idev.shortname:=pstring(pvv^.data.Instance)^
               else
                  idev.shortname:='Ошибка shortname';
               pvv:=nil;
 
-              pvv:=pvarv^.entityunit.FindVariable('GC_NumberInGroup');
+              pvv:=pvarv.entityunit.FindVariable('GC_NumberInGroup');
               if pvv<>nil then
                  idev.numDev:=pinteger(pvv^.data.Instance)^
               else
@@ -789,11 +838,12 @@ begin
       insertPoint.x:=coord_x + 12*i;
       //ZCMsgCallBackInterface.TextMessage('last111',TMWOHistoryOut);
       //строим и заполняем кабельный маркер
+
       AddGroupCable(listGraph[i],insertPoint);
 
       //ZCMsgCallBackInterface.TextMessage('last122',TMWOHistoryOut);
 
-      //Строии и заполняем устройства
+      //Строим и заполняем устройства
       AddDeviceCable(listGraph[i],insertPoint);
 
       //дОБАВЛЕМ
@@ -893,18 +943,18 @@ var
          //result:=-1;
           count:=-1;
           sum:=-1;
-          pnodeendvarext:=PGDBObjDevice(node^.DevLink^.bp.ListPos.Owner)^.GetExtension(TVariablesExtender);
+          pnodeendvarext:=PGDBObjDevice(node^.DevLink^.bp.ListPos.Owner)^.specialize GetExtension<TVariablesExtender>;
           pvend:=nil;
-          pvend:=pnodeendvarext^.entityunit.FindVariable('RiserName');
-          pvendelevation:=pnodeendvarext^.entityunit.FindVariable('Elevation');
+          pvend:=pnodeendvarext.entityunit.FindVariable('RiserName');
+          pvendelevation:=pnodeendvarext.entityunit.FindVariable('Elevation');
 
             for i:= 0 to oGraph.VertexCount-1 do  begin
               if (TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).dev <> nil) then
                 begin
-                pnodestartvarext:=TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).dev^.GetExtension(TVariablesExtender);
+                pnodestartvarext:=TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).dev^.specialize GetExtension<TVariablesExtender>;
                 pvstart:=nil;
-                pvstart:=pnodestartvarext^.entityunit.FindVariable('RiserName');
-                pvstartelevation:=pnodestartvarext^.entityunit.FindVariable('Elevation');
+                pvstart:=pnodestartvarext.entityunit.FindVariable('RiserName');
+                pvstartelevation:=pnodestartvarext.entityunit.FindVariable('Elevation');
                 if (pvend <> nil) and (pvstart <> nil) then
                 begin
                    if (pstring(pvend^.data.Instance)^ = pstring(pvstart^.data.Instance)^) then
@@ -959,9 +1009,9 @@ var
               if (TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).dev <> nil) then
                 begin
                 IsExchange := true;
-                pnodestartvarext:=TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).dev^.GetExtension(TVariablesExtender);
+                pnodestartvarext:=TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).dev^.specialize GetExtension<TVariablesExtender>;
                 pvstart:=nil;
-                pvstart:=pnodestartvarext^.entityunit.FindVariable('RiserName');
+                pvstart:=pnodestartvarext.entityunit.FindVariable('RiserName');
 
                 //pvstartelevation:=pnodestartvarext^.entityunit.FindVariable('Elevation');
                 if (pvstart <> nil) then
@@ -988,9 +1038,9 @@ var
                  for j:= 0 to oGraph.VertexCount-1 do  begin
                     if (TVertexTree(oGraph.Vertices[j].AsPointer[vpTVertexTree]^).dev <> nil) then
                       begin
-                      pnodestartvarext:=TVertexTree(oGraph.Vertices[j].AsPointer[vpTVertexTree]^).dev^.GetExtension(TVariablesExtender);
+                      pnodestartvarext:=TVertexTree(oGraph.Vertices[j].AsPointer[vpTVertexTree]^).dev^.specialize GetExtension<TVariablesExtender>;
                       pvstart:=nil;
-                      pvstart:=pnodestartvarext^.entityunit.FindVariable('RiserName');
+                      pvstart:=pnodestartvarext.entityunit.FindVariable('RiserName');
                       //pvstartelevation:=pnodestartvarext^.entityunit.FindVariable('Elevation');
                       if (pvstart <> nil) and (pstring(pvstart^.data.Instance)^ = listRiserName[i]) then
                         begin
@@ -1005,11 +1055,11 @@ var
                repeat
                 IsExchange := False;
                 for j := 0 to listRiserNumber.Size-2 do begin
-                  pnodestartvarext:=TVertexTree(oGraph.Vertices[listRiserNumber[j]].AsPointer[vpTVertexTree]^).dev^.GetExtension(TVariablesExtender);
-                  pvstartelevation:=pnodestartvarext^.entityunit.FindVariable('Elevation');
+                  pnodestartvarext:=TVertexTree(oGraph.Vertices[listRiserNumber[j]].AsPointer[vpTVertexTree]^).dev^.specialize GetExtension<TVariablesExtender>;
+                  pvstartelevation:=pnodestartvarext.entityunit.FindVariable('Elevation');
 
-                  pnodeendvarext:=TVertexTree(oGraph.Vertices[listRiserNumber[j+1]].AsPointer[vpTVertexTree]^).dev^.GetExtension(TVariablesExtender);
-                  pvendelevation:=pnodeendvarext^.entityunit.FindVariable('Elevation');
+                  pnodeendvarext:=TVertexTree(oGraph.Vertices[listRiserNumber[j+1]].AsPointer[vpTVertexTree]^).dev^.specialize GetExtension<TVariablesExtender>;
+                  pvendelevation:=pnodeendvarext.entityunit.FindVariable('Elevation');
 
 
                   if (pdouble(pvstartelevation^.data.Instance)^ > pdouble(pvendelevation^.data.Instance)^) then begin
@@ -1025,11 +1075,11 @@ var
               // создаем ребра разрывов в графе. с Указанием длины между отметками
               for j := 1 to listRiserNumber.Size-1 do begin
 
-                  pnodestartvarext:=TVertexTree(oGraph.Vertices[listRiserNumber[j-1]].AsPointer[vpTVertexTree]^).dev^.GetExtension(TVariablesExtender);
-                  pvstartelevation:=pnodestartvarext^.entityunit.FindVariable('Elevation');
+                  pnodestartvarext:=TVertexTree(oGraph.Vertices[listRiserNumber[j-1]].AsPointer[vpTVertexTree]^).dev^.specialize GetExtension<TVariablesExtender>;
+                  pvstartelevation:=pnodestartvarext.entityunit.FindVariable('Elevation');
 
-                  pnodeendvarext:=TVertexTree(oGraph.Vertices[listRiserNumber[j]].AsPointer[vpTVertexTree]^).dev^.GetExtension(TVariablesExtender);
-                  pvendelevation:=pnodeendvarext^.entityunit.FindVariable('Elevation');
+                  pnodeendvarext:=TVertexTree(oGraph.Vertices[listRiserNumber[j]].AsPointer[vpTVertexTree]^).dev^.specialize GetExtension<TVariablesExtender>;
+                  pvendelevation:=pnodeendvarext.entityunit.FindVariable('Elevation');
 
                   new(edgeGraph);
                   edgeGraph^.segm:=nil;
@@ -1095,9 +1145,9 @@ begin
         PCableSS:=pcabledesk^.StartSegment;
 
 
-        pCableSSvarext:=PCableSS^.GetExtension(TVariablesExtender);
+        pCableSSvarext:=PCableSS^.specialize GetExtension<TVariablesExtender>;
         //pvd:=PTObjectUnit(PCableSS.ou.Instance)^.FindVariable('CABLE_Type');     { TODO : Сделать поиск переменных caseнезависимым }
-        pvCab:=pCableSSvarext^.entityunit.FindVariable('CABLE_Type');
+        pvCab:=pCableSSvarext.entityunit.FindVariable('CABLE_Type');
 
         if pvCab<>nil then
         begin
@@ -1117,13 +1167,13 @@ begin
 
 
                         //смотрим характеристики сегмента
-                        pSegmCablevarext:=segmCable^.GetExtension(TVariablesExtender);
+                        pSegmCablevarext:=segmCable^.specialize GetExtension<TVariablesExtender>;
 
                         //определяем номер сегмента
-                        pvSegm:=pSegmCablevarext^.entityunit.FindVariable('CABLE_Segment');
+                        pvSegm:=pSegmCablevarext.entityunit.FindVariable('CABLE_Segment');
 
                         //Добавляем длину кабеля из сегмента
-                        pvSegmLength:=pSegmCablevarext^.entityunit.FindVariable('AmountD');
+                        pvSegmLength:=pSegmCablevarext.entityunit.FindVariable('AmountD');
                         edgeGraph^.length:=pdouble(pvSegmLength^.data.Instance)^;
 
                         //ZCMsgCallBackInterface.TextMessage('Сегмент № ' + inttostr(pinteger(pvSegm^.data.Instance)^),TMWOHistoryOut);
@@ -1163,9 +1213,9 @@ begin
                           ///**** создания связи между разрывами
                           if node^.DevLink <> nil then
                           begin
-                            pnodeendvarext:=PGDBObjDevice(node^.DevLink^.bp.ListPos.Owner)^.GetExtension(TVariablesExtender);
+                            pnodeendvarext:=PGDBObjDevice(node^.DevLink^.bp.ListPos.Owner)^.specialize GetExtension<TVariablesExtender>;
                             pvd:=nil;
-                            pvd:=pnodeendvarext^.entityunit.FindVariable('RiserName');
+                            pvd:=pnodeendvarext.entityunit.FindVariable('RiserName');
                             if pvd <> nil then
                             begin
 
@@ -1211,9 +1261,9 @@ begin
                                   vertexGraph^.vertex:=node^.DevLink^.GetCenterPoint;
                                   vertexGraph^.isDev:=true;
                                   vertexGraph^.isRiser:=false;
-                                  pnodeendvarext:=vertexGraph^.dev^.GetExtension(TVariablesExtender);
+                                  pnodeendvarext:=vertexGraph^.dev^.specialize GetExtension<TVariablesExtender>;
                                   pvd:=nil;
-                                  pvd:=pnodeendvarext^.entityunit.FindVariable('RiserName');
+                                  pvd:=pnodeendvarext.entityunit.FindVariable('RiserName');
                                   if pvd <> nil then
                                   begin
                                      //ZCMsgCallBackInterface.TextMessage('Устройство --- РАЗРЫВ',TMWOHistoryOut);
@@ -1223,7 +1273,7 @@ begin
 
 
 
-                                  //pnodeendvarext:=node^.DevLink^.GetExtension(TVariablesExtender);
+                                  //pnodeendvarext:=node^.DevLink^.GetExtension(typeof(TVariablesExtender));
                                   //pvd:=PTObjectUnit(nodeend^.ou.Instance)^.FindVariable('NMO_Name');
                                   //pvd:=pnodeendvarext^.entityunit.FindVariable('NMO_Name');
                                   //pvd:=pnodeendvarext^.entityunit.FindVariable('Name');

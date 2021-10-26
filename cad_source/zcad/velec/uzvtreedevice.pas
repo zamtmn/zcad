@@ -1086,7 +1086,7 @@ var
                pgdbstring(pvd^.data.Instance)^:=name ;
     end;
 
-    procedure drawCableLine(listInteger:TVectorofInteger;numLMaster,numLGroup,counterSegment:Integer);
+    procedure drawCableLine(listInteger:TVectorofInteger;numLMaster,numLGroup,counterSegment:Integer;cabmount:string);
     var
     cableLine:PGDBObjCable;
     i:integer;
@@ -1121,6 +1121,11 @@ var
        pvd:=FindVariableInEnt(cableLine,'GC_HDShortName');
        if pvd<>nil then
              pgdbstring(pvd^.data.Instance)^:=listMasterDevice[numLMaster].name;
+
+       //** Добавление метода монтажа
+       pvd:=FindVariableInEnt(cableLine,velec_cableMounting);
+       if pvd<>nil then
+             pgdbstring(pvd^.data.Instance)^:=cabmount;
 
       //** обавляем суффикс
       pvd:=FindVariableInEnt(cableLine,'NMO_Suffix');
@@ -1181,7 +1186,7 @@ begin
 
                 listInteger:=TVectorofInteger.Create;
 
-                CabellingMountigName:='';
+                CabellingMountigName:='-';
                 superlinedev:=nil;
                 needParent:=false;
                 needVertex:=false;
@@ -1206,11 +1211,11 @@ begin
                     if superlinedev<>nil then
                        //ZCMsgCallBackInterface.TextMessage('2 - '+superlinedev^.GetObjName,TMWOHistoryOut);
                     if superlinedev<>nil then
-                       //CabellingMountigName:='УКАЗАН'
-                       CabellingMountigName:=pgdbstring(FindVariableInEnt(superlinedev,velec_cableMounting)^.data.Instance)^
-                    else
-                      CabellingMountigName:= 'не указан';
-                    ZCMsgCallBackInterface.TextMessage('метод прокладки - '+CabellingMountigName,TMWOHistoryOut);
+                       if FindVariableInEnt(superlinedev,velec_cableMounting)^.data.Instance <> nil then
+                         CabellingMountigName:=pgdbstring(FindVariableInEnt(superlinedev,velec_cableMounting)^.data.Instance)^;
+                    //else
+                    //  CabellingMountigName:= 'не указан';
+                    //ZCMsgCallBackInterface.TextMessage('метод прокладки - '+CabellingMountigName,TMWOHistoryOut);
                    end;
                      //ZCMsgCallBackInterface.TextMessage('111 - ',TMWOHistoryOut);
                      listInteger.PushBack(tvertex(VPath[l]).AsInt32[vGGIndex]);
@@ -1222,11 +1227,12 @@ begin
 
                    //ZCMsgCallBackInterface.TextMessage('длина списка - '+inttostr(listInteger.Size),TMWOHistoryOut);
                    if listInteger.Size > 1 then
-                   if (tvertex(VPath[l]).ChildCount > 1) or (tvertex(VPath[l]).ChildCount = 0) or tvertex(VPath[l]).AsBool[vGIsDevice] or (listVertexEdge.listVertex[tvertex(VPath[l]).AsInt32[vGGIndex]].break and listVertexEdge.listVertex[tvertex(VPath[l]).Parent.AsInt32[vGGIndex]].break) then
+ //                  if (tvertex(VPath[l]).ChildCount > 1) or (tvertex(VPath[l]).ChildCount = 0) or tvertex(VPath[l]).AsBool[vGIsDevice] or (listVertexEdge.listVertex[tvertex(VPath[l]).AsInt32[vGGIndex]].break and listVertexEdge.listVertex[tvertex(VPath[l]).Parent.AsInt32[vGGIndex]].break) then
+                   if (tvertex(VPath[l]).ChildCount > 1) or (tvertex(VPath[l]).ChildCount = 0) or (listVertexEdge.listVertex[tvertex(VPath[l]).AsInt32[vGGIndex]].break and listVertexEdge.listVertex[tvertex(VPath[l]).Parent.AsInt32[vGGIndex]].break) then
                    //if (tvertex(VPath[l]).ChildCount > 1) or (tvertex(VPath[l]).ChildCount = 0) or (listVertexEdge.listVertex[tvertex(VPath[l]).AsInt32[vGGIndex]].break and listVertexEdge.listVertex[tvertex(VPath[l]).Parent.AsInt32[vGGIndex]].break) then
                      begin
-                       ZCMsgCallBackInterface.TextMessage('Прокладываем кабель',TMWOHistoryOut);
-                        drawCableLine(listInteger,i,j,counterSegment);
+                       //ZCMsgCallBackInterface.TextMessage('Прокладываем кабель',TMWOHistoryOut);
+                        drawCableLine(listInteger,i,j,counterSegment,CabellingMountigName);
                         listInteger:=TVectorofInteger.Create;
                         inc(counterSegment);
                         needParent:=true;

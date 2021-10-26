@@ -50,7 +50,7 @@ const
   velec_NGControlUnit='SLCABAGEN_NGControlUnit';
   //velec_inerNodeWithoutConnection='SLCABAGEN_inerNodeWithoutConnection';
   velec_serialConnectDev='SLCABAGEN_DevConnectMethod';
-  velec_cableMounting='SLCABAGEN_CableMounting';
+  velec_cableMounting='Cable_Mounting_Method';
   velec_CableRoutNodes = '-';
   velec_separator='~';
   velec_onlyThisDev='!';

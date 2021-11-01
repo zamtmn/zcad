@@ -8,6 +8,10 @@ usescopy objname_eo;
 usescopy objgroup;
 usescopy addtocable;
 
+var
+
+T1:GDBString;(*'Группа'*)
+
 implementation
 
 begin

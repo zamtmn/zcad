@@ -8,6 +8,10 @@ usescopy objname_eo;
 usescopy objgroup;
 usescopy addtocable;
 
+var
+
+T1:GDBString;(*'Группа'*)
+
 implementation
 
 begin
@@ -21,7 +25,7 @@ NMO_BaseName:='Гр';
 NMO_Suffix:='??';
 
 SerialConnection:=1;
-GC_HeadDevice:='ШО??';
+GC_HeadDevice:='ЩО??';
 GC_HDShortName:='??';
 GC_HDGroup:=0;
 

@@ -26,7 +26,7 @@ NMO_Suffix:='??';
 Power:=0.0;
 
 SerialConnection:=1;
-GC_HeadDevice:='ШР??';
+GC_HeadDevice:='ЩР??';
 GC_HDShortName:='??';
 GC_HDGroup:=0;
 

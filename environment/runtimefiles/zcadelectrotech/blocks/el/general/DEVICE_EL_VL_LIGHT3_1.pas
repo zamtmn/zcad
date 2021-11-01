@@ -11,6 +11,7 @@ usescopy _addtocable;
 var
 
 T1:GDBString;(*'Код'*)
+T2:GDBString;(*'Группа'*)
 
 implementation
 
@@ -25,7 +26,7 @@ NMO_BaseName:='Гр';
 NMO_Suffix:='??';
 
 SerialConnection:=1;
-GC_HeadDevice:='ШО??';
+GC_HeadDevice:='ЩО??';
 GC_HDShortName:='??';
 GC_HDGroup:=0;
 

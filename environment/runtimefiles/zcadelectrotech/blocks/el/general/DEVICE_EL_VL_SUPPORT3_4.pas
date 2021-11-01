@@ -25,7 +25,7 @@ NMO_BaseName:='ОП';
 NMO_Suffix:='??';
 
 SerialConnection:=1;
-GC_HeadDevice:='ШР??';
+GC_HeadDevice:='ЩНО??';
 GC_HDShortName:='??';
 GC_HDGroup:=0;
 

@@ -30,7 +30,8 @@ PGDBObjExtendable=^GDBObjExtendable;
 GDBObjExtendable=object(GDBaseObject)
                                  EntExtensions:{-}TEntityExtensions{/GDBPointer/};
                                  procedure AddExtension(ExtObj:TBaseEntityExtender);
-                                 function GetExtension<GEntityExtenderType>:GEntityExtenderType;
+                                 function GetExtension<GEntityExtenderType>:GEntityExtenderType;overload;
+                                 function GetExtension(ExtType:TMetaEntityExtender):TBaseEntityExtender;overload;
                                  destructor done;virtual;
 end;
 
@@ -110,7 +111,13 @@ begin
                                 else
                                     result:=nil;
 end;
-
+function GDBObjExtendable.GetExtension(ExtType:TMetaEntityExtender):TBaseEntityExtender;
+begin
+     if assigned(EntExtensions) then
+                                    result:=EntExtensions.GetExtension<TBaseEntityExtender>(ExtType)
+                                else
+                                    result:=nil;
+end;
 destructor GDBObjExtendable.done;
 begin
      if assigned(EntExtensions)then

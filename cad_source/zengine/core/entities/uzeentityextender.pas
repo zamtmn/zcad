@@ -51,8 +51,9 @@ TEntityExtensions=class
                        constructor create;
                        destructor destroy;override;
                        function AddExtension(ExtObj:TBaseEntityExtender):TBaseEntityExtender;
-                       function GetExtension<GEntityExtenderType>(_ExtType:TMetaEntityExtender):GEntityExtenderType;
+                       function GetExtension<GEntityExtenderType>(_ExtType:TMetaEntityExtender):GEntityExtenderType;overload;
                        function GetExtension(n:Integer):TBaseEntityExtender;overload;
+                       //function GetExtension(ExtType:TMetaEntityExtender):TBaseEntityExtender;overload;
                        function GetExtensionsCount:Integer;
                        procedure CopyAllExtToEnt(pSourceEntity,pDestEntity:pointer);
 
@@ -95,6 +96,20 @@ begin
      else
        result:=nil;
 end;
+{function TEntityExtensions.GetExtension(ExtType:TMetaEntityExtender):TBaseEntityExtender;
+var
+  index:SizeUInt;
+begin
+     if assigned(fEntityExtensions)then
+     begin
+     if fEntityExtenderToIndex.MyGetValue(ExtType,index) then
+       result:=fEntityExtensions[index]
+     else
+       result:=nil;
+     end
+     else
+       result:=nil;
+end;}
 function TEntityExtensions.GetExtensionsCount:Integer;
 begin
   if Assigned(fEntityExtensions) then

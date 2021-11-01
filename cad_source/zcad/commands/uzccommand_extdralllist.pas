@@ -15,30 +15,28 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
-{$mode delphi}
 unit uzccommand_extdralllist;
-
-{$INCLUDE def.inc}
 
 interface
 uses
   LazLogger,SysUtils,
   uzccommandsabstract,uzccommandsimpl,
-  uzeentity,gzctnrvectortypes,uzcdrawings,uzcdrawing,uzcstrconsts,
-  uzcinterface,uzcutils,gzctnrstl,gutil;
-
-function extdrAllList_com(operands:TCommandOperands):TCommandResult;
+  uzcinterface,uzeentityextender;
 
 implementation
 
 function extdrAllList_com(operands:TCommandOperands):TCommandResult;
+var
+  pair:TEntityExtendersMap.TDictionaryPair;
 begin
-    result:=cmd_ok;
+  for pair in EntityExtenders do
+    ZCMsgCallBackInterface.TextMessage(pair.value.getExtenderName,TMWOHistoryOut);
+  result:=cmd_ok;
 end;
 
 initialization
   debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
-  CreateCommandFastObjectPlugin(@extdrAllList_com,'extdrAllList',CADWG or CASelEnts,0);
+  CreateCommandFastObjectPlugin(@extdrAllList_com,'extdrAllList',0,0);
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

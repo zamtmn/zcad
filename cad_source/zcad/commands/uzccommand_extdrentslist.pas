@@ -24,7 +24,7 @@ interface
 uses
   LazLogger,SysUtils,
   uzccommandsabstract,uzccommandsimpl,
-  uzeentity,gzctnrvectortypes,uzcdrawings,uzcdrawing,uzcstrconsts,
+  uzeentity,gzctnrvectortypes,uzcdrawings,uzcdrawing,uzcstrconsts,uzeentityextender,
   uzcinterface,uzcutils,gzctnrstl,gutil;
 
 function extdrEntsList_com(operands:TCommandOperands):TCommandResult;
@@ -33,17 +33,14 @@ implementation
 
 function extdrEntsList_com(operands:TCommandOperands):TCommandResult;
 type
-  TExtCounter=TMyMapCounter<string{,TLess<String>}>;
+  TExtCounter=TMyMapCounter<TMetaEntityExtender>;
 var
   pv:pGDBObjEntity;
   ir:itrec;
   i:integer;
   count:integer;
-  //extendername:string;
   extcounter:TExtCounter;
-  //tp:TExtCounter.TPair;
   pair:TExtCounter.TDictionaryPair;
-  //Iterator:TExtCounter.TIterator;
 begin
   extcounter:=TExtCounter.create;
   try
@@ -55,34 +52,17 @@ begin
         inc(count);
         if Assigned(pv^.EntExtensions) then begin
           for i:=0 to pv^.EntExtensions.GetExtensionsCount-1 do begin
-            extcounter.CountKey(pv^.EntExtensions.GetExtension(i).getExtenderName,1);
+            extcounter.CountKey(typeof(pv^.EntExtensions.GetExtension(i)),1);
           end;
         end;
       end;
       pv:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
     until pv=nil;
     ZCMsgCallBackInterface.TextMessage(format(rscmNEntitiesProcessed,[count]),TMWOHistoryOut);
-    //не работает for in для TMap((
-    //https://gitlab.com/freepascal.org/fpc/source/-/issues/39354
-    {count:=0;
-    for tp in extcounter do begin
-      ZCMsgCallBackInterface.TextMessage(format('Extender "%s" found %d times',[tp.key,tp.value]),TMWOHistoryOut);
-      inc(count);
-    end;
-    if count=0 then
-      ZCMsgCallBackInterface.TextMessage(format('No extenders found',[]),TMWOHistoryOut);}
-
-    //поэтому приходится делать через итератор
     count:=0;
     for pair in extcounter do begin
-    //iterator:=extcounter.Min;
-    //if assigned(iterator) then
-    //repeat
-      ZCMsgCallBackInterface.TextMessage(format('Extender "%s" found %d times',[pair.Key,pair.Value]),TMWOHistoryOut);
+      ZCMsgCallBackInterface.TextMessage(format('Extender "%s" found %d times',[pair.Key.getExtenderName,pair.Value]),TMWOHistoryOut);
       inc(count);
-    //until not iterator.Next;
-    //if assigned(iterator) then
-    //  iterator.destroy;
     end;
     if count=0 then
       ZCMsgCallBackInterface.TextMessage(format('No extenders found',[]),TMWOHistoryOut);

@@ -27,11 +27,8 @@ uses sysutils,UGDBObjBlockdefArray,uzedrawingdef,uzeentityextender,
 const
   VariablesExtenderName='extdrVariables';
 type
-{REGISTEROBJECTTYPE TBaseVariablesExtender}
 TBaseVariablesExtender=class(TBaseEntityExtender)
   end;
-//TVariablesExtender=^TVariablesExtender;
-{REGISTEROBJECTTYPE TVariablesExtender}
 TVariablesExtender=class(TBaseVariablesExtender)
     entityunit:TObjectUnit;
     pMainFuncEntity:PGDBObjEntity;
@@ -249,6 +246,8 @@ end;
 begin
      result:=TVariablesExtender.Create(pentity);
 end;}
-begin
+initialization
+  EntityExtenders.RegisterKey(uppercase(VariablesExtenderName),TVariablesExtender);
+finalization
 end.
 

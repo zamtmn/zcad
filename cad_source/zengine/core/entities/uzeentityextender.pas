@@ -63,6 +63,9 @@ TEntityExtensions=class
                        procedure RunReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);
                        procedure RunPostload(var context:TIODXFLoadContext);
                   end;
+  TEntityExtendersMap=GKey2DataMap<string,TMetaEntityExtender>;
+var
+  EntityExtenders:TEntityExtendersMap;
 implementation
 function TEntityExtensions.AddExtension(ExtObj:TBaseEntityExtender):TBaseEntityExtender;
 var
@@ -172,5 +175,9 @@ begin
        fEntityExtensions[i].PostLoad(context);
      end;
 end;
+initialization
+  EntityExtenders:=TEntityExtendersMap.Create;
+finalization
+  EntityExtenders.Free;
 end.
 

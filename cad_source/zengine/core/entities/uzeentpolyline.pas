@@ -101,6 +101,8 @@ begin
 end;
 procedure GDBObjPolyline.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 begin
+  if assigned(EntExtensions)then
+    EntExtensions.RunOnBeforeEntityFormat(@self,drawing);
   FormatWithoutSnapArray;
   calcbb(dc);
   //-------------BuildSnapArray(VertexArrayInWCS,snaparray,Closed);

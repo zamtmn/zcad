@@ -1659,7 +1659,7 @@ var
    pvname,pvname2:pvardesk;
    ir:itrec;
    pobj:PGDBObjEntity;
-   pentvarext:PTVariablesExtender;
+   pentvarext:TVariablesExtender;
 begin
      result:=0;
      if pent=nil then
@@ -1669,8 +1669,8 @@ begin
      begin
           if (pent^.GetObjType=GDBDeviceID)or(pent^.GetObjType=GDBCableID)or(pent^.GetObjType=GDBNetID)then
           begin
-               pentvarext:=pent^.GetExtension(typeof(TVariablesExtender));
-               pvname:=pentvarext^.entityunit.FindVariable('NMO_Name');
+               pentvarext:=pent^.GetExtension<TVariablesExtender>;
+               pvname:=pentvarext.entityunit.FindVariable('NMO_Name');
                if pvname<>nil then
                begin
                    pobj:=pdwg.GetCurrentROOT.ObjArray.beginiterate(ir);
@@ -1678,8 +1678,8 @@ begin
                    repeat
                          if (pobj<>pent)and((pobj^.GetObjType=GDBDeviceID)or(pobj^.GetObjType=GDBCableID)or(pobj^.GetObjType=GDBNetID)) then
                          begin
-                              pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
-                              pvname2:=pentvarext^.entityunit.FindVariable('NMO_Name');
+                              pentvarext:=pobj^.GetExtension<TVariablesExtender>;
+                              pvname2:=pentvarext.entityunit.FindVariable('NMO_Name');
                               if pvname2<>nil then
                               if pgdbstring(pvname2^.data.Instance)^=pgdbstring(pvname^.data.Instance)^ then
                               begin
@@ -1770,7 +1770,7 @@ var
   //inr:TINRect;
   line:GDBString;
   pvd:pvardesk;
-  pentvarext:PTVariablesExtender;
+  pentvarext:TVariablesExtender;
 begin
      result:='';
      i:=0;
@@ -1779,9 +1779,9 @@ begin
                     begin
                          repeat
                          pvd:=nil;
-                         pentvarext:=pp^.GetExtension(typeof(TVariablesExtender));
+                         pentvarext:=pp^.GetExtension<TVariablesExtender>;
                          if pentvarext<>nil then
-                         pvd:=pentvarext^.entityunit.FindVariable('NMO_Name');
+                         pvd:=pentvarext.entityunit.FindVariable('NMO_Name');
                          if pvd<>nil then
                                          begin
                                          if i=20 then

@@ -39,14 +39,14 @@ type
                     StrValue:GDBString;
                     PVarDesc:pvardesk;
               end;
-  TStringCounter=TMyMapCounter<string,LessString>;
+  TStringCounter=TMyMapCounter<string{,LessString}>;
   PTStringCounterData=^TStringCounterData;
   TStringCounterData=record
                     counter:TStringCounter;
                     totalcount:integer;
                     PVarDesc:pvardesk;
               end;
-  TPointerCounter=TMyMapCounter<pointer,LessPointer>;
+  TPointerCounter=TMyMapCounter<pointer{,LessPointer}>;
   PTPointerCounterData=^TPointerCounterData;
   TPointerCounterData=record
                     counter:TPointerCounter;
@@ -186,7 +186,8 @@ begin
 end;
 procedure FreeStringCounterData(piteratedata:GDBPointer;mp:TMultiProperty);
 var
-   iterator:TStringCounter.TIterator;
+ pair:TStringCounter.TDictionaryPair;
+ //iterator:TStringCounter.TIterator;
    s:string;
    c:integer;
 {уничтожает созданную GetStringCounterData структуру}
@@ -194,20 +195,23 @@ begin
     //PTStringCounterData(piteratedata)^.StrValue:='';
   PTEnumDataWithOtherData(PTStringCounterData(piteratedata)^.PVarDesc^.data.Instance)^.Enums.PushBackData(format('Total (%d)',[PTStringCounterData(piteratedata)^.totalcount]));
   PTZctnrVectorGDBString(PTEnumDataWithOtherData(PTStringCounterData(piteratedata)^.PVarDesc^.data.Instance)^.PData)^.PushBackData('*');
-  iterator:=PTStringCounterData(piteratedata)^.counter.Min;
-  if assigned(iterator) then
-  repeat
-        s:=iterator.GetKey;
-        c:=iterator.GetValue;
+  for pair in PTStringCounterData(piteratedata)^.counter do begin
+  //iterator:=PTStringCounterData(piteratedata)^.counter.Min;
+  //if assigned(iterator) then
+  //repeat
+        s:=pair.Key;
+        c:=pair.Value;
         PTEnumDataWithOtherData(PTStringCounterData(piteratedata)^.PVarDesc^.data.Instance)^.Enums.PushBackData(format('%s (%d)',[Tria_AnsiToUtf8(s),c]));
         PTZctnrVectorGDBString(PTEnumDataWithOtherData(PTStringCounterData(piteratedata)^.PVarDesc^.data.Instance)^.PData)^.PushBackData(s);
-  until not iterator.Next;
+  //until not iterator.Next;
+  end;
   PTStringCounterData(piteratedata)^.counter.Free;
   GDBFreeMem(piteratedata);
 end;
 procedure FreePNamedObjectCounterData(piteratedata:GDBPointer;mp:TMultiProperty);
 var
-   iterator:TPointerCounter.TIterator;
+  pair:TPointerCounter.TDictionaryPair;
+  //iterator:TPointerCounter.TIterator;
    s:PGDBNamedObject;
    c:integer;
    name:string;
@@ -215,38 +219,43 @@ var
 begin
   PTEnumDataWithOtherData(PTPointerCounterData(piteratedata)^.PVarDesc^.data.Instance)^.Enums.PushBackData(format('Total (%d)',[PTPointerCounterData(piteratedata)^.totalcount]));
   PTZctnrVectorGDBPointer(PTEnumDataWithOtherData(PTPointerCounterData(piteratedata)^.PVarDesc^.data.Instance)^.PData)^.PushBackData(nil);
-  iterator:=PTPointerCounterData(piteratedata)^.counter.Min;
-  if assigned(iterator) then
-  repeat
-        s:=iterator.GetKey;
-        c:=iterator.GetValue;
+  for pair in PTPointerCounterData(piteratedata)^.counter do begin
+  //iterator:=PTPointerCounterData(piteratedata)^.counter.Min;
+  //if assigned(iterator) then
+  //repeat
+        s:=pair.Key;
+        c:=pair.Value;
         if assigned(s) then
           name:=Tria_AnsiToUtf8(s.GetFullName)
         else
           name:='nil';
         PTEnumDataWithOtherData(PTPointerCounterData(piteratedata)^.PVarDesc^.data.Instance)^.Enums.PushBackData(format('%s (%d)',[name,c]));
         PTZctnrVectorGDBPointer(PTEnumDataWithOtherData(PTPointerCounterData(piteratedata)^.PVarDesc^.data.Instance)^.PData)^.PushBackData(s);
-  until not iterator.Next;
+  //until not iterator.Next;
+  end;
   PTPointerCounterData(piteratedata)^.counter.Free;
   GDBFreeMem(piteratedata);
 end;
 procedure FreePNamedObjectCounterDataUTF8(piteratedata:GDBPointer;mp:TMultiProperty);
 var
-   iterator:TPointerCounter.TIterator;
+  pair:TPointerCounter.TDictionaryPair;
+  //iterator:TPointerCounter.TIterator;
    s:PGDBNamedObject;
    c:integer;
 {уничтожает созданную GetPointerCounterData структуру}
 begin
   PTEnumDataWithOtherData(PTPointerCounterData(piteratedata)^.PVarDesc^.data.Instance)^.Enums.PushBackData(format('Total (%d)',[PTPointerCounterData(piteratedata)^.totalcount]));
   PTZctnrVectorGDBPointer(PTEnumDataWithOtherData(PTPointerCounterData(piteratedata)^.PVarDesc^.data.Instance)^.PData)^.PushBackData(nil);
-  iterator:=PTPointerCounterData(piteratedata)^.counter.Min;
-  if assigned(iterator) then
-  repeat
-        s:=iterator.GetKey;
-        c:=iterator.GetValue;
+  for pair in PTPointerCounterData(piteratedata)^.counter do begin
+  //iterator:=PTPointerCounterData(piteratedata)^.counter.Min;
+  //if assigned(iterator) then
+  //repeat
+        s:=pair.Key;
+        c:=pair.Value;
         PTEnumDataWithOtherData(PTPointerCounterData(piteratedata)^.PVarDesc^.data.Instance)^.Enums.PushBackData(format('%s (%d)',[(s.GetFullName),c]));
         PTZctnrVectorGDBPointer(PTEnumDataWithOtherData(PTPointerCounterData(piteratedata)^.PVarDesc^.data.Instance)^.PData)^.PushBackData(s);
-  until not iterator.Next;
+  //until not iterator.Next;
+  end;
   PTPointerCounterData(piteratedata)^.counter.Free;
   GDBFreeMem(piteratedata);
 end;

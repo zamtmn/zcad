@@ -50,7 +50,7 @@ begin
                        +rsVinfotext+#13#10+
                        rsReleaseNotes
                        +#13#10
-                       +format(rsCommEntEeport,[uzccommandsmanager.commandmanager.Count,ObjID2EntInfoData.Size,DXFName2EntInfoData.Size]));
+                       +format(rsCommEntEeport,[uzccommandsmanager.commandmanager.Count,ObjID2EntInfoData.Count,DXFName2EntInfoData.Count]));
   Memo.Parent := self;
 end;
 begin

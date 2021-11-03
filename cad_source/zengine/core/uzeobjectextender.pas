@@ -40,12 +40,12 @@ TDXFEntLoadData=record
 TDXFEntSaveData=record
                 DXFEntSaveFeature:TDXFEntSaveFeature;
               end;
-TDXFEntLoadDataMap=GKey2DataMap<GDBString,TDXFEntLoadData{$IFNDEF DELPHI},LessGDBString{$ENDIF}>;
+TDXFEntLoadDataMap=GKey2DataMap<GDBString,TDXFEntLoadData(*{$IFNDEF DELPHI},LessGDBString{$ENDIF}*)>;
 TDXFEntSaveDataVector=TmyVector<TDXFEntSaveData>;
 TDXFEntFormatProcsVector=TmyVector<TDXFEntFormatFeature>;
 TCreateEntFeatureVector=TmyVector<TCreateEntFeatureData>;
 TDXFEntAfterLoadFeatureVector=TmyVector<TDXFEntAfterLoadFeature>;
-TEntityCreateExtenderVector=TmyVector<TCreateThisExtender>;
+TEntityCreateExtenderVector=TmyVector<TMetaEntityExtender>;
 TDXFEntIODataManager=class
                       fDXFEntLoadDataMapByName:TDXFEntLoadDataMap;
                       fDXFEntLoadDataMapByPrefix:TDXFEntLoadDataMap;
@@ -68,7 +68,7 @@ TDXFEntIODataManager=class
                       procedure RunConstructorFeature(pEntity:Pointer);
                       procedure RunDestructorFeature(pEntity:Pointer);
 
-                      procedure RegisterEntityExtenderObject(CreateFunc:TCreateThisExtender);
+                      procedure RegisterEntityExtenderObject(ExtenderClass:TMetaEntityExtender);
                       procedure AddExtendersToEntity(pEntity:Pointer);
 
                       constructor create;
@@ -186,21 +186,19 @@ begin
       fCreateEntFeatureVector[i].destr(pEntity);
 end;
 
-procedure TDXFEntIODataManager.RegisterEntityExtenderObject(CreateFunc:TCreateThisExtender);
+procedure TDXFEntIODataManager.RegisterEntityExtenderObject(ExtenderClass:TMetaEntityExtender);
 begin
-     fTEntityExtenderVector.PushBack(CreateFunc);
+     fTEntityExtenderVector.PushBack(ExtenderClass);
 end;
 procedure TDXFEntIODataManager.AddExtendersToEntity(pEntity:Pointer);
 var
   i:integer;
-  size:integer;
-  pobj:pointer;
+  extension:TBaseEntityExtender;
 begin
      for i:=0 to fTEntityExtenderVector.Size-1 do
      begin
-      pobj:=fTEntityExtenderVector[i](pEntity,size);
-      if size>0 then
-        PGDBObjSubordinated(pEntity)^.AddExtension(pobj,size);
+      extension:=fTEntityExtenderVector[i].create(pEntity);
+      PGDBObjSubordinated(pEntity)^.AddExtension(extension);
      end;
 end;
 

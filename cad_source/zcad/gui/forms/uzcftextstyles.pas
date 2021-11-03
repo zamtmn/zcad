@@ -244,22 +244,25 @@ var i:integer;
     CurrentFontIndex:integer;
     //currTTFfont:TGeneralFontFileDesc;
     //currTTFfontPair:TFontName2FontFileMap.TPair;
-    iter:TFontName2FontFileMap.TIterator;
+    pair:TFontName2FontFileMap.TDictionaryPair;
+    //iter:TFontName2FontFileMap.TIterator;
 begin
      CurrentFontIndex:=-1;
      FontsSelector.Enums.Free;
      if FontsFilter<>TFTF_SHX then begin
-       iter:=FontManager.FontFiles.min;
-       if assigned(iter) then
-       repeat
-          S:=iter.Value.FontFile;
+       for pair in FontManager.FontFiles do begin
+       //iter:=FontManager.FontFiles.min;
+       //if assigned(iter) then
+       //repeat
+          S:=pair.Value.FontFile;
           if S=currentitem then
             CurrentFontIndex:=FontsSelector.Enums.Count;
           S:={iter.Value.Name;//}extractfilename(S);
           FontsSelector.Enums.PushBackData(S);
-       until (not iter.Next);
-       if iter<>nil then
-         iter.destroy;
+       //until (not iter.Next);
+       //if iter<>nil then
+       //  iter.destroy;
+       end;
 
        {for currTTFfontPair in FontManager.FontFiles do begin
          S:=currTTFfontPair.Value.FontFile;

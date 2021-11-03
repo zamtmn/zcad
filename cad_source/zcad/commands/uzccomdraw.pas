@@ -550,7 +550,7 @@ var
     nb,tb:PGDBObjBlockInsert;
     psubobj:PGDBObjEntity;
     ir:itrec;
-    pnbvarext,ppbvarext:PTVariablesExtender;
+    pnbvarext,ppbvarext:TVariablesExtender;
 begin
 
     nb := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID));
@@ -578,10 +578,10 @@ begin
       nb^.BuildVarGeometry(drawings.GetCurrentDWG^);
 
     if BlockReplaceParams.SaveVariables then begin
-         pnbvarext:=nb^.GetExtension(typeof(TVariablesExtender));
-         ppbvarext:=pb^.GetExtension(typeof(TVariablesExtender));
-         pnbvarext^.entityunit.free;
-         pnbvarext^.entityunit.CopyFrom(@ppbvarext^.entityunit);
+         pnbvarext:=nb^.specialize GetExtension<TVariablesExtender>;
+         ppbvarext:=pb^.specialize GetExtension<TVariablesExtender>;
+         pnbvarext.entityunit.free;
+         pnbvarext.entityunit.CopyFrom(@ppbvarext.entityunit);
     end;
 
     if pb^.GetObjType=GDBDeviceID then begin
@@ -849,7 +849,7 @@ var
    ir,ir2:itrec;
    axisdevname:GDBString;
    ALLayer:pointer;
-   pdevvarext:PTVariablesExtender;
+   pdevvarext:TVariablesExtender;
    pvd,pvdv:pvardesk;
    dv:gdbvertex;
    axisdesc:taxisdesc;
@@ -884,11 +884,11 @@ begin
 
              pvd:=nil;
              pvdv:=nil;
-             pdevvarext:=pdev^.GetExtension(typeof(TVariablesExtender));
+             pointer(pdevvarext):=pdev^.specialize GetExtension<TVariablesExtender>;
              if pdevvarext<>nil then
              begin
-               pvd:=pdevvarext^.entityunit.FindVariable('NMO_Name');
-               pvdv:=pdevvarext^.entityunit.FindVariable('MISC_Vertical');
+               pvd:=pdevvarext.entityunit.FindVariable('NMO_Name');
+               pvdv:=pdevvarext.entityunit.FindVariable('MISC_Vertical');
              end;
              if pvdv<>nil then
                               isAxisVerical:=PTGDB3StateBool(pvdv^.data.Instance)^
@@ -948,9 +948,9 @@ begin
           if uppercase(pdev^.Name)<>axisdevname then
           begin
              pvd:=nil;
-             pdevvarext:=pdev^.GetExtension(typeof(TVariablesExtender));
+             pointer(pdevvarext):=pdev^.specialize GetExtension<TVariablesExtender>;
              if pdevvarext<>nil then
-             pvd:=pdevvarext^.entityunit.FindVariable('NMO_Name');
+             pvd:=pdevvarext.entityunit.FindVariable('NMO_Name');
              if pvd<>nil then
              begin
                   GetNearestAxis(haxis,pdev^.P_insert_in_WCS,hi,hi2);
@@ -1035,7 +1035,7 @@ var
     i,count:integer;
     process:boolean;
     DC:TDrawContext;
-    pdevvarext:PTVariablesExtender;
+    pdevvarext:TVariablesExtender;
 begin
      mpd:=devcoordarray.Create;
      psd:=drawings.GetCurrentDWG^.SelObjArray.beginiterate(ir);
@@ -1086,12 +1086,12 @@ begin
        begin
             dcoord:=mpd[i];
             pdev:=dcoord.pdev;
-            pdevvarext:=pdev^.GetExtension(typeof(TVariablesExtender));
+            pointer(pdevvarext):=pdev^.specialize GetExtension<TVariablesExtender>;
 
             if NumberingParams.BaseName<>'' then
             begin
             //pvd:=PTObjectUnit(pdev^.ou.Instance)^.FindVariable('NMO_BaseName');
-            pvd:=pdevvarext^.entityunit.FindVariable('NMO_BaseName');
+            pvd:=pdevvarext.entityunit.FindVariable('NMO_BaseName');
             if pvd<>nil then
             begin
             if uppercase(pvd^.data.PTD^.GetUserValueAsString(pvd^.data.Instance))=
@@ -1111,7 +1111,7 @@ begin
             if process then
             begin
             //pvd:=PTObjectUnit(pdev^.ou.Instance)^.FindVariable(NumberingParams.NumberVar);
-            pvd:=pdevvarext^.entityunit.FindVariable(NumberingParams.NumberVar);
+            pvd:=pdevvarext.entityunit.FindVariable(NumberingParams.NumberVar);
             if pvd<>nil then
             begin
                  pvd^.data.PTD^.SetValueFromString(pvd^.data.Instance,inttostr(index));

@@ -302,6 +302,9 @@ end;
 
 procedure GDBObjBlockInsert.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 begin
+  if assigned(EntExtensions)then
+    EntExtensions.RunOnBeforeEntityFormat(@self,drawing);
+
   //inferited; //fix https://github.com/zamtmn/zcad/issues/17
   calcobjmatrix;
   ConstObjArray.FormatEntity(drawing,dc);

@@ -32,7 +32,7 @@ TBlockDefCreateData=record
                           BlockDeffinedIn:GDBString;
                           CreateProc:TBlockDefCreateFunc;
                      end;
-TBlockDefName2BlockDefCreateData=GKey2DataMap<GDBString,TBlockDefCreateData{$IFNDEF DELPHI},LessGDBString{$ENDIF}>;
+TBlockDefName2BlockDefCreateData=GKey2DataMap<GDBString,TBlockDefCreateData(*{$IFNDEF DELPHI},LessGDBString{$ENDIF}*)>;
 procedure RegisterBlockDefCreateFunc(const BlockName,BlockDependsOn,BlockDeffinedIn:GDBString; const BlockDefCreateFunc:TBlockDefCreateFunc);
 function CreateBlockDef(dwg:PTDrawingDef;name:GDBString):PGDBObjBlockdef;
 var

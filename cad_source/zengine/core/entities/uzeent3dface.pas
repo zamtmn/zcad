@@ -95,6 +95,9 @@ procedure GDBObj3DFace.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext)
 var i:GDBInteger;
     v:GDBVertex;
 begin
+    if assigned(EntExtensions)then
+      EntExtensions.RunOnBeforeEntityFormat(@self,drawing);
+
       for i:=0 to 3 do
       begin
            PInWCS[I]:=VectorTransform3D(PInOCS[I],{CurrentCS}bp.ListPos.owner^.GetMatrix^);

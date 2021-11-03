@@ -273,6 +273,9 @@ procedure GDBObjARC.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 var
   v:GDBvertex4D;
 begin
+  if assigned(EntExtensions)then
+    EntExtensions.RunOnBeforeEntityFormat(@self,drawing);
+
   calcObjMatrix;
   angle := endangle - startangle;
   if angle < 0 then angle := 2 * pi + angle;

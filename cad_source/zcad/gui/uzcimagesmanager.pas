@@ -32,7 +32,7 @@ type
     UppercaseName:string;
     Path:string;
   end;
-  TImageName2TImageDataMap=GKey2DataMap<GDBString,TImageData{$IFNDEF DELPHI},LessGDBString{$ENDIF}>;
+  TImageName2TImageDataMap=GKey2DataMap<GDBString,TImageData(*{$IFNDEF DELPHI},LessGDBString{$ENDIF}*)>;
   TImagesManager=class(TComponent)
     private
       FDefaultImageIndex:integer;
@@ -95,7 +95,7 @@ end;
 procedure {TImagesManager.}FoundImage(filename:String;pdata:pointer);
 var
    ID:TImageData;
-   PID:TImageName2TImageDataMap.PTValue;
+   PID:TImageName2TImageDataMap.PValue;
    internalname:string;
 begin
   id.Index:=-1;
@@ -120,7 +120,7 @@ begin
 end;
 function TImagesManager.GetImageIndex(ImageName:string;DefaultInd:integer):integer;
 var
-   PID:TImageName2TImageDataMap.PTValue;
+   PID:TImageName2TImageDataMap.PValue;
    internalname:string;
 begin
    internalname:=uppercase(ChangeFileExt(extractfilename(ImageName),''));
@@ -140,7 +140,7 @@ procedure TImagesManager.LoadAliasesDir(path:string);
 var
   line,sub,internalname:GDBString;
   f:GDBOpenArrayOfByte;
-  PID:TImageName2TImageDataMap.PTValue;
+  PID:TImageName2TImageDataMap.PValue;
   ID:TImageData;
 begin
   f.InitFromFile(path);

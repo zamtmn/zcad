@@ -826,6 +826,8 @@ end;
 
 procedure GDBObjLWpolyline.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 begin
+  if assigned(EntExtensions)then
+    EntExtensions.RunOnBeforeEntityFormat(@self,drawing);
      Vertex2D_in_OCS_Array.Shrink;
      Width2D_in_OCS_Array.Shrink;
      inherited FormatEntity(drawing,dc);

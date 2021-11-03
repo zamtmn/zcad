@@ -383,6 +383,9 @@ var
   tv:GDBVertex;
   l:double;
 begin
+     if assigned(EntExtensions)then
+       EntExtensions.RunOnBeforeEntityFormat(@self,drawing);
+
           ConstObjArray.free;
           CalcDNVectors;
 

@@ -39,13 +39,13 @@ var
    pvisible:PGDBObjEntity;
    ir:itrec;
    pvd:pvardesk;
-   pentvarext:PTVariablesExtender;
+   pentvarext:TVariablesExtender;
 begin
   pvisible:=source.beginiterate(ir);
   if pvisible<>nil then
   repeat
-    pentvarext:=pvisible^.GetExtension(typeof(TVariablesExtender));
-    pvd:=pentvarext^.entityunit.FindVariable(prop);
+    pentvarext:=pvisible^.GetExtension<TVariablesExtender>;
+    pvd:=pentvarext.entityunit.FindVariable(prop);
     if pvd<>nil then begin
       if pvd.data.PTD.GetValueAsString(pvd.data.Instance)=value then
         dest.PushBackData(pvisible);
@@ -59,13 +59,13 @@ var
   pvisible:PGDBObjEntity;
   ir:itrec;
   pvd:pvardesk;
-  pentvarext:PTVariablesExtender;
+  pentvarext:TVariablesExtender;
 begin
   pvisible:=source.beginiterate(ir);
   if pvisible<>nil then
   repeat
-    pentvarext:=pvisible^.GetExtension(typeof(TVariablesExtender));
-    pvd:=pentvarext^.entityunit.FindVariable(prop);
+    pentvarext:=pvisible^.GetExtension<TVariablesExtender>;
+    pvd:=pentvarext.entityunit.FindVariable(prop);
     if pvd<>nil then begin
       pvd.data.PTD.SetValueFromString(pvd.data.Instance,value);
       pvisible.FormatEntity(drawing,DC);

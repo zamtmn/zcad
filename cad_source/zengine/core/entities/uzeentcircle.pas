@@ -292,6 +292,9 @@ end;
 
 procedure GDBObjCircle.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 begin
+  if assigned(EntExtensions)then
+    EntExtensions.RunOnBeforeEntityFormat(@self,drawing);
+
   calcObjMatrix;
   createpoint(dc);
   q0:=VectorTransform3d(CreateVertex(1,0,0),objMatrix);

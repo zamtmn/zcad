@@ -29,8 +29,9 @@ PGDBObjExtendable=^GDBObjExtendable;
 {REGISTEROBJECTTYPE GDBObjExtendable}
 GDBObjExtendable=object(GDBaseObject)
                                  EntExtensions:{-}TEntityExtensions{/GDBPointer/};
-                                 procedure AddExtension(ExtObj:PTBaseEntityExtender;ObjSize:GDBInteger);
-                                 function GetExtension(_ExtType:pointer):{PTBaseEntityExtender}pointer;
+                                 procedure AddExtension(ExtObj:TBaseEntityExtender);
+                                 function GetExtension<GEntityExtenderType>:GEntityExtenderType;overload;
+                                 function GetExtension(ExtType:TMetaEntityExtender):TBaseEntityExtender;overload;
                                  destructor done;virtual;
 end;
 
@@ -97,20 +98,26 @@ procedure OldVersTextReplace(var vv:TDXFEntsInternalStringType);overload;
 
 implementation
 
-procedure GDBObjExtendable.AddExtension(ExtObj:PTBaseEntityExtender;ObjSize:GDBInteger);
+procedure GDBObjExtendable.AddExtension(ExtObj:TBaseEntityExtender);
 begin
      if not assigned(EntExtensions) then
                                         EntExtensions:=TEntityExtensions.create;
-     EntExtensions.AddExtension(ExtObj,ObjSize);
+     EntExtensions.AddExtension(ExtObj);
 end;
-function GDBObjExtendable.GetExtension(_ExtType:pointer):{PTBaseEntityExtender}pointer;
+function GDBObjExtendable.GetExtension<GEntityExtenderType>:GEntityExtenderType;
 begin
      if assigned(EntExtensions) then
-                                    result:=EntExtensions.GetExtension(_ExtType)
+                                    result:=EntExtensions.GetExtension<GEntityExtenderType>(GEntityExtenderType)
                                 else
                                     result:=nil;
 end;
-
+function GDBObjExtendable.GetExtension(ExtType:TMetaEntityExtender):TBaseEntityExtender;
+begin
+     if assigned(EntExtensions) then
+                                    result:=EntExtensions.GetExtension<TBaseEntityExtender>(ExtType)
+                                else
+                                    result:=nil;
+end;
 destructor GDBObjExtendable.done;
 begin
      if assigned(EntExtensions)then

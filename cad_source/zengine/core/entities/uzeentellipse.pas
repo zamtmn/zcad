@@ -250,6 +250,9 @@ procedure GDBObjEllipse.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext
 var
   v:GDBvertex4D;
 begin
+  if assigned(EntExtensions)then
+    EntExtensions.RunOnBeforeEntityFormat(@self,drawing);
+
   if self.Ratio<=1 then
                       rr:=uzegeometry.oneVertexlength(majoraxis)
                    else

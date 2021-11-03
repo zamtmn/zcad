@@ -36,16 +36,19 @@ var
    p:PCommandObjectDef;
    ir:itrec;
    clist:TZctnrVectorGDBString;
-   iterator:ObjID2EntInfoData.TIterator;
+   pair:ObjID2EntInfoData.TDictionaryPair;
+   //iterator:ObjID2EntInfoData.TIterator;
 begin
    clist.init(200);
-   iterator:=ObjID2EntInfoData.Min;
-   if assigned(iterator) then
-   repeat
-         clist.PushBackData(format('%s | %s',[iterator.Data.Value.UserName,iterator.Data.Value.DXFName]));
-   until not iterator.Next;
-   if assigned(iterator) then
-     iterator.destroy;
+   for pair in ObjID2EntInfoData do begin
+   //iterator:=ObjID2EntInfoData.Min;
+   //if assigned(iterator) then
+   //repeat
+         clist.PushBackData(format('%s | %s',[pair.Value.UserName,pair.Value.DXFName]));
+   //until not iterator.Next;
+   //if assigned(iterator) then
+   //  iterator.destroy;
+   end;
    clist.sort;
    ZCMsgCallBackInterface.TextMessage(clist.GetTextWithEOL,TMWOHistoryOut);
    clist.done;

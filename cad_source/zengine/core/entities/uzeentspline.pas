@@ -160,7 +160,8 @@ var //i,j: GDBInteger;
     m:DMatrix4D;
     fm,fp:DMatrix4F;
 begin
-
+     if assigned(EntExtensions)then
+       EntExtensions.RunOnBeforeEntityFormat(@self,drawing);
      FormatWithoutSnapArray;
      CP.init({$IFDEF DEBUGBUILD}'{4FCFE57E-4000-4535-A086-549DEC959CD4}',{$ENDIF}VertexArrayInOCS.count{,sizeof(GDBvertex4S)});
      ptv:=VertexArrayInOCS.beginiterate(ir);

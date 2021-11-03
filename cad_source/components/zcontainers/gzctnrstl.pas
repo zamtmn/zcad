@@ -19,7 +19,7 @@ unit gzctnrstl;
 {$INCLUDE def.inc}
 
 interface
-uses {$IFNDEF DELPHI}gutil,gmap,ghashmap,gvector,{$ENDIF}
+uses {$IFNDEF DELPHI}gutil,gmap,ghashmap,gvector,generics.collections,{$ENDIF}
      {$IFDEF DELPHI}generics.collections,{$ENDIF}
      sysutils;
 type
@@ -27,25 +27,33 @@ type
 TMapForDelphi <TKey, TValue> = class( TDictionary<TKey, TValue>)
 end;
 {$ENDIF}
-{$IFNDEF DELPHI}TMyMapGen <TKey, TValue, TCompare> = class( TMap<TKey, TValue, TCompare>){$ENDIF}
+{$IFNDEF DELPHI}TMyMapGenOld <TKey, TValue, TCompare> = class( TMap<TKey, TValue, TCompare>);{$ENDIF}
+{$IFNDEF DELPHI}TMyMapGen <TKey,TValue> = class( TDictionary<TKey,TValue>){TMyMapGen <TKey, TValue, TCompare> = class( TMap<TKey, TValue, TCompare>)}{$ENDIF}
  {$IFDEF DELPHI}TMyMapGen <TKey,TValue> = class( TDictionary<TKey,TValue>){$ENDIF}
   function MyGetValue(key:TKey):TValue;inline;
+  function MyGetMutableValue(key:TKey; out PAValue:{$IFNDEF DELPHI}PValue{$ENDIF}{$IFDEF DELPHI}pointer{$ENDIF}):boolean;
 end;
-{$IFNDEF DELPHI}TMyMap <TKey, TValue, TCompare> = class( TMyMapGen<TKey, TValue, TCompare>){$ENDIF}
+{$IFNDEF DELPHI}TMyMap <TKey, TValue> = class( TMyMapGen<TKey, TValue>){$ENDIF}
  {$IFDEF DELPHI}TMyMap <TKey,TValue> = class( TMyMapGen<TKey,TValue>){$ENDIF}
   procedure MyGetOrCreateValue(const key:TKey; var Value:TValue; out OutValue:TValue);inline;
 end;
-{$IFNDEF DELPHI}TMyMapCounter <TKey, TCompare> = class( TMyMap<TKey, SizeUInt, TCompare>){$ENDIF}
+{$IFNDEF DELPHI}TMyMapCounter <TKey> = class( TMyMap<TKey, SizeUInt>){$ENDIF}
  {$IFDEF DELPHI}TMyMapCounter <TKey, TCompare> = class( TMyMap<TKey, SizeUInt>){$ENDIF}
   procedure CountKey(const key:TKey; const InitialCounter:SizeUInt);inline;
 end;
-{$IFNDEF DELPHI}GKey2DataMap <TKey, TValue, TCompare> = class(TMap<TKey, TValue, TCompare>){$ENDIF}
+{$IFNDEF DELPHI}GKey2DataMap <TKey, TValue> = class(TMyMapGen<TKey, TValue>){$ENDIF}
  {$IFDEF DELPHI}GKey2DataMap <TKey, TValue> = class(TDictionary<TKey, TValue>){$ENDIF}
         {$IFDEF DELPHI}type PTValue=^TValue;{$ENDIF}
         procedure RegisterKey(const key:TKey; const Value:TValue);
         function MyGetValue(key:TKey; out Value:TValue):boolean;
-        function MyGetMutableValue(key:TKey; out PValue:{$IFNDEF DELPHI}PTValue{$ENDIF}{$IFDEF DELPHI}pointer{$ENDIF}):boolean;
+        //function MyGetMutableValue(key:TKey; out PValue:{$IFNDEF DELPHI}PTValue{$ENDIF}{$IFDEF DELPHI}pointer{$ENDIF}):boolean;
         function MyContans(key:TKey):boolean;
+end;
+  GKey2DataMapOld <TKey, TValue, TCompare> = class(TMap<TKey, TValue, TCompare>)
+    procedure RegisterKey(const key:TKey; const Value:TValue);
+    function MyGetValue(key:TKey; out Value:TValue):boolean;
+    function MyGetMutableValue(key:TKey; out PValue:{$IFNDEF DELPHI}PTValue{$ENDIF}{$IFDEF DELPHI}pointer{$ENDIF}):boolean;
+    function MyContans(key:TKey):boolean;
 end;
 {$IFNDEF DELPHI}TMyVector <T> = class(TVector<T>){$ENDIF}
  {$IFDEF DELPHI}TMyVector <T> = class(Generics.Collections.TList<T>)
@@ -154,7 +162,91 @@ begin
      result:=makehash(s) mod SizeUInt(n);
 end;
 {$ENDIF}
-procedure GKey2DataMap<TKey, TValue{$IFNDEF DELPHI},TCompare{$ENDIF}>.RegisterKey(const key:TKey; const Value:TValue);
+procedure GKey2DataMap<TKey, TValue>.RegisterKey(const key:TKey; const Value:TValue);
+begin
+  AddOrSetValue(Key,Value);
+end;
+function GKey2DataMap<TKey, TValue>.MyGetValue(key:TKey; out Value:TValue):boolean;
+begin
+  result:=TryGetValue(Key,Value);
+end;
+function GKey2DataMap<TKey, TValue>.MyContans(key:TKey):boolean;
+begin
+  result:=ContainsKey(Key);
+end;
+
+function TMyMapGen<TKey, TValue>.MyGetValue(key:TKey):TValue;
+begin
+  if not TryGetValue(Key,result) then
+    result:=default(TValue);
+end;
+function TMyMapGen<TKey, TValue>.MyGetMutableValue(key:TKey; out PAValue:PValue):Boolean;
+var
+  LIndex: SizeInt;
+  LHash: UInt32;
+begin
+  LIndex := FindBucketIndex(FItems, key, LHash);
+
+  if LIndex < 0 then begin
+    result:=false;
+    PAValue:=nil;
+  end
+  else
+    PAValue:=@FItems[LIndex].Pair.Value;
+end;
+
+procedure TMyMapCounter<TKey>.CountKey(const key:TKey; const InitialCounter:SizeUInt);
+var
+  PAValue:PValue;
+begin
+  if MyGetMutableValue(key,PAValue) then
+    inc(PAValue^)
+  else
+    add(key,InitialCounter);
+end;
+procedure TMyMap<TKey, TValue>.MyGetOrCreateValue(const key:TKey; var Value:TValue; out OutValue:TValue);
+{$IFNDEF DELPHI}
+begin
+  if not TryGetValue(key,OutValue) then begin
+    add(Key,Value);
+    OutValue:=Value;
+    value:=value+1;
+  end
+  {Iterator:=Find(key);
+  if  Iterator=nil then
+                       begin
+                            Insert(Key, Value);
+                            OutValue:=Value;
+                            value:=value+1;
+                            //inc(Value);
+                       end
+                   else
+                       begin
+                            OutValue:=Iterator.GetValue;
+                            Iterator.Destroy;
+                       end;}
+end;
+{$ENDIF}
+{$IFDEF DELPHI}
+var
+  hc: Integer;
+  index: Integer;
+begin
+  hc:=Hash(Key);
+  index := GetBucketIndex(Key, hc);
+  if index >= 0 then
+    begin
+      OutValue:=FItems[Index].Value;
+    end
+  else
+    begin
+      AddOrSetValue(Key,Value);
+      OutValue:=Value;
+      //value:=value+1;
+    end;
+end;
+{$ENDIF}
+procedure GKey2DataMapOld<TKey, TValue{$IFNDEF DELPHI},TCompare{$ENDIF}>.RegisterKey(const key:TKey; const Value:TValue);
 {$IFNDEF DELPHI}
 var
    (*
@@ -182,7 +274,7 @@ begin
   AddOrSetValue(Key,Value);
 {$ENDIF}
 end;
-function GKey2DataMap<TKey, TValue{$IFNDEF DELPHI},TCompare{$ENDIF}>.MyGetValue(key:TKey; out Value:TValue):boolean;
+function GKey2DataMapOld<TKey, TValue{$IFNDEF DELPHI},TCompare{$ENDIF}>.MyGetValue(key:TKey; out Value:TValue):boolean;
 {$IFNDEF DELPHI}
 var
    //Iterator:TIterator;
@@ -213,7 +305,7 @@ begin
   result:=TryGetValue(Key,Value);
 {$ENDIF}
 end;
-function GKey2DataMap<TKey, TValue{$IFNDEF DELPHI},TCompare{$ENDIF}>.MyGetMutableValue(key:TKey; out PValue:{$IFNDEF DELPHI}PTValue{$ENDIF}{$IFDEF DELPHI}pointer{$ENDIF}):boolean;
+function GKey2DataMapOld<TKey, TValue{$IFNDEF DELPHI},TCompare{$ENDIF}>.MyGetMutableValue(key:TKey; out PValue:{$IFNDEF DELPHI}PTValue{$ENDIF}{$IFDEF DELPHI}pointer{$ENDIF}):boolean;
 {$IFNDEF DELPHI}
 var
    (*
@@ -266,7 +358,7 @@ begin
     end;
 {$ENDIF}
 end;
-function GKey2DataMap<TKey, TValue{$IFNDEF DELPHI},TCompare{$ENDIF}>.MyContans(key:TKey):boolean;
+function GKey2DataMapOld<TKey, TValue{$IFNDEF DELPHI},TCompare{$ENDIF}>.MyContans(key:TKey):boolean;
 {$IFNDEF DELPHI}
 var
    Pair:TPair;
@@ -291,120 +383,6 @@ begin
   else
     begin
       result:=false;
-    end;
-end;
-{$ENDIF}
-
-function TMyMapGen<TKey, TValue{$IFNDEF DELPHI},TCompare{$ENDIF}>.MyGetValue(key:TKey):TValue;
-{$IFNDEF DELPHI}
-var
-   (*
-   {IFDEF OldIteratorDef}
-   TParent:specialize TMap<TKey, TValue, TCompare>;
-   Iterator:TParent.TIterator;
-   {ELSE}
-   *)
-   Iterator:TIterator;
-{$ENDIF}
-begin
-{$IFNDEF DELPHI}
-  Iterator:=Find(key);
-  if  Iterator=nil then
-                       //result:=TValue(0)
-                       result:=default(TValue)
-                   else
-                       begin
-                            result:=Iterator.GetValue;
-                            Iterator.Destroy;
-                       end;
-{$ENDIF}
-{$IFDEF DELPHI}
-  if not TryGetValue(Key,result) then
-                                     result:=default(TValue);
-{$ENDIF}
-end;
-procedure TMyMapCounter<TKey, TCompare>.CountKey(const key:TKey; const InitialCounter:SizeUInt);
-{$IFNDEF DELPHI}
-var
-   (*
-   {IFDEF OldIteratorDef}
-   TParent:specialize TMap<TKey, TValue, TCompare>;
-   Iterator:TParent.TIterator;
-   {ELSE}
-   *)
-   Iterator:TIterator;
-begin
-  Iterator:=Find(key);
-  if  Iterator=nil then
-                       begin
-                            Insert(Key, InitialCounter);
-                       end
-                   else
-                       begin
-                            Iterator.SetValue(Iterator.GetValue+1);
-                            Iterator.Destroy;
-                       end;
-end;
-{$ENDIF}
-{$IFDEF DELPHI}
-var
-  hc: Integer;
-  index: Integer;
-begin
-  hc:=Hash(Key);
-  index := GetBucketIndex(Key, hc);
-  if index >= 0 then
-    begin
-      inc(FItems[Index].Value);
-    end
-  else
-    begin
-      AddOrSetValue(Key,InitialCounter);
-    end;
-end;
-{$ENDIF}
-procedure TMyMap<TKey, TValue{$IFNDEF DELPHI},TCompare{$ENDIF}>.MyGetOrCreateValue(const key:TKey; var Value:TValue; out OutValue:TValue);
-{$IFNDEF DELPHI}
-var
-   (*
-   {IFDEF OldIteratorDef}
-   TParent:specialize TMap<TKey, TValue, TCompare>;
-   Iterator:TParent.TIterator;
-   {ELSE}
-   *)
-   Iterator:TIterator;
-begin
-  Iterator:=Find(key);
-  if  Iterator=nil then
-                       begin
-                            Insert(Key, Value);
-                            OutValue:=Value;
-                            value:=value+1;
-                            //inc(Value);
-                       end
-                   else
-                       begin
-                            OutValue:=Iterator.GetValue;
-                            Iterator.Destroy;
-                       end;
-end;
-{$ENDIF}
-{$IFDEF DELPHI}
-var
-  hc: Integer;
-  index: Integer;
-begin
-  hc:=Hash(Key);
-  index := GetBucketIndex(Key, hc);
-  if index >= 0 then
-    begin
-      OutValue:=FItems[Index].Value;
-    end
-  else
-    begin
-      AddOrSetValue(Key,Value);
-      OutValue:=Value;
-      //value:=value+1;
     end;
 end;
 {$ENDIF}

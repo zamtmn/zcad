@@ -485,6 +485,9 @@ begin
 end;
 procedure GDBObjMText.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 begin
+  if assigned(EntExtensions)then
+    EntExtensions.RunOnBeforeEntityFormat(@self,drawing);
+
   Representation.Clear;
 
   formatcontent(drawing);

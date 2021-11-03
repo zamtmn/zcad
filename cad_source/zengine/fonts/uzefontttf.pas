@@ -30,14 +30,14 @@ TTTFSymInfo=record
                       //-ttf-//TrianglesDataInfo:TTrianglesDataInfo;
                 end;
 
-TMapChar=TMyMapGen<integer,TTTFSymInfo{$IFNDEF DELPHI},LessInteger{$ENDIF}>;
+TMapChar=TMyMapGenOld<integer,TTTFSymInfo{$IFNDEF DELPHI},LessInteger{$ENDIF}>;
 {EXPORT+}
 PTTFFont=^TTFFont;
 {REGISTEROBJECTTYPE TTFFont}
 TTFFont= object({SHXFont}BASEFont)
               ftFont: TFreeTypeFont;
               MapChar:TMapChar;
-              MapCharIterator:TMapChar.TIterator;
+              //MapCharIterator:TMapChar.TIterator;
               //-ttf-//TriangleData:ZGLFontTriangle2DArray;
               function GetOrReplaceSymbolInfo(symbol:GDBInteger{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;virtual;
               //-ttf-//function GetTriangleDataAddr(offset:integer):PGDBFontVertex2D;virtual;
@@ -469,14 +469,14 @@ begin
      //-ttf-//TriangleData.init({$IFDEF DEBUGBUILD}'{4A97D8DA-8B55-41AA-9287-7F0C842AC2D0}',{$ENDIF}200);
      ftFont:=TFreeTypeFont.create;
      MapChar:=TMapChar.Create;
-     MapCharIterator:=TMapChar.TIterator.Create;
+     //MapCharIterator:=TMapChar.TIterator.Create;
 end;
 destructor TTFFont.done;
 begin
      inherited;
      //-ttf-//TriangleData.done;
      ftFont.Destroy;
-     MapCharIterator.Destroy;
+     //MapCharIterator.Destroy;
      MapChar.Destroy;
 end;
 //-ttf-//function TTFFont.GetTriangleDataAddr(offset:integer):PGDBFontVertex2D;

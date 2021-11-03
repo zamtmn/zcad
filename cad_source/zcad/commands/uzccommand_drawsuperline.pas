@@ -114,7 +114,7 @@ end;
 function createSuperLine(p1,p2:GDBVertex;nameSL:string;changeLayer:boolean;LayerNamePrefix:string):TCommandResult;
 var
     psuperline:PGDBObjSuperLine;
-    pvarext:PTVariablesExtender;
+    pvarext:TVariablesExtender;
     psu:ptunit;
     pvd:pvardesk;        //для нахождения имени суперлинии
     layername:gdbstring; //имя слоя куда будет помещена супелиния
@@ -122,12 +122,12 @@ var
 begin
     psuperline := AllocEnt(GDBSuperLineID);
     psuperline^.init(nil,nil,0,p1,p2);
-    pvarext:=psuperline^.GetExtension(typeof(TVariablesExtender));
+    pvarext:=psuperline^.GetExtension<TVariablesExtender>;
     if pvarext<>nil then
     begin
       psu:=units.findunit(SupportPath,InterfaceTranslate,'superline');
       if psu<>nil then
-        pvarext^.entityunit.copyfrom(psu);
+        pvarext.entityunit.copyfrom(psu);
     end;
     zcSetEntPropFromCurrentDrawingProp(psuperline);           //присваиваем умолчательные значения
 
@@ -163,7 +163,7 @@ function DrawSuperLine_com(operands:TCommandOperands):TCommandResult;
 var
     psuperline:PGDBObjSuperLine;
     p1,p2:gdbvertex;
-    pvarext:PTVariablesExtender;
+    pvarext:TVariablesExtender;
     psu:ptunit;
     UndoMarcerIsPlazed:boolean;
 
@@ -175,12 +175,12 @@ var
 begin
     psuperline := AllocEnt(GDBSuperLineID);
     psuperline^.init(nil,nil,0,p1,p2);
-    pvarext:=psuperline^.GetExtension(typeof(TVariablesExtender));
+    pvarext:=psuperline^.GetExtension<TVariablesExtender>;
     if pvarext<>nil then
     begin
       psu:=units.findunit(SupportPath,InterfaceTranslate,'superline');
       if psu<>nil then
-        pvarext^.entityunit.copyfrom(psu);
+        pvarext.entityunit.copyfrom(psu);
     end;
     zcSetEntPropFromCurrentDrawingProp(psuperline);           //присваиваем умолчательные значения
     //если манипуляции со слоем включены и ранее был найден "юнит" с параметрами

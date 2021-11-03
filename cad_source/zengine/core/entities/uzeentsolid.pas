@@ -85,6 +85,8 @@ end;
 procedure GDBObjSolid.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 //var i:GDBInteger;
 begin
+  if assigned(EntExtensions)then
+    EntExtensions.RunOnBeforeEntityFormat(@self,drawing);
   calcObjMatrix;
   createpoint;
   normal:=normalizevertex(

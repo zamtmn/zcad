@@ -28,21 +28,21 @@ uses sysutils,
 implementation
 begin
   {from GDBObjBlockDef}
-  GDBObjBlockdef.GetDXFIOFeatures.RegisterEntityExtenderObject(@TVariablesExtender.CreateEntExtender);
+  GDBObjBlockdef.GetDXFIOFeatures.RegisterEntityExtenderObject(TVariablesExtender);
 
   {from GDBObjDevice}
-  GDBObjDevice.GetDXFIOFeatures.RegisterEntityExtenderObject(@TVariablesExtender.CreateEntExtender);
+  GDBObjDevice.GetDXFIOFeatures.RegisterEntityExtenderObject(TVariablesExtender);
 
   {from GDBObjNet}
-  GDBObjNet.GetDXFIOFeatures.RegisterEntityExtenderObject(@TVariablesExtender.CreateEntExtender);
+  GDBObjNet.GetDXFIOFeatures.RegisterEntityExtenderObject(TVariablesExtender);
 
   {from GDBObjCable}
-  GDBObjCable.GetDXFIOFeatures.RegisterEntityExtenderObject(@TVariablesExtender.CreateEntExtender);
+  GDBObjCable.GetDXFIOFeatures.RegisterEntityExtenderObject(TVariablesExtender);
 
   {from GDBObjSuperLine}
-  GDBObjSuperLine.GetDXFIOFeatures.RegisterEntityExtenderObject(@TVariablesExtender.CreateEntExtender);
+  GDBObjSuperLine.GetDXFIOFeatures.RegisterEntityExtenderObject(TVariablesExtender);
 
   {from GDBObjElLeader}
-  GDBObjElLeader.GetDXFIOFeatures.RegisterEntityExtenderObject(@TVariablesExtender.CreateEntExtender);
+  GDBObjElLeader.GetDXFIOFeatures.RegisterEntityExtenderObject(TVariablesExtender);
 end.
 

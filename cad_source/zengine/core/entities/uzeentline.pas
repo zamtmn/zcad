@@ -234,6 +234,9 @@ end;
 
 procedure GDBObjLine.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 begin
+  if assigned(EntExtensions)then
+    EntExtensions.RunOnBeforeEntityFormat(@self,drawing);
+
   calcgeometry;
   calcbb(dc);
 

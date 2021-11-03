@@ -817,7 +817,7 @@ var
    pvisible:PGDBObjEntity;
    ir:itrec;
    pvd:pvardesk;
-   pentvarext:PTVariablesExtender;
+   pentvarext:TVariablesExtender;
 begin
   croot:=self.GetCurrentROOT;
   if croot<>nil then begin
@@ -836,7 +836,7 @@ var
    pvisible{,pvisible2,pv}:PGDBObjEntity;
    ir:itrec;
    pvd:pvardesk;
-   pentvarext:PTVariablesExtender;
+   pentvarext:TVariablesExtender;
 begin
      croot:=self.GetCurrentROOT;
      if croot<>nil then
@@ -846,8 +846,8 @@ begin
          repeat
                if pvisible.GetObjType=objID then
                begin
-                    pentvarext:=pvisible^.GetExtension(typeof(TVariablesExtender));
-                    pvd:=pentvarext^.entityunit.FindVariable(vname);
+                    pentvarext:=pvisible^.GetExtension<TVariablesExtender>;
+                    pvd:=pentvarext.entityunit.FindVariable(vname);
                     if pvd<>nil then
                     begin
                          if pvd.data.PTD.GetValueAsString(pvd.data.Instance)=vvalue then
@@ -866,7 +866,7 @@ var
    pvisible{,pvisible2,pv}:PGDBObjEntity;
    ir:itrec;
    pvd:pvardesk;
-   pentvarext:PTVariablesExtender;
+   pentvarext:TVariablesExtender;
 begin
      croot:=self.GetCurrentROOT;
      if croot<>nil then
@@ -876,8 +876,8 @@ begin
          repeat
                if pvisible.GetObjType=objID then
                begin
-                    pentvarext:=pvisible^.GetExtension(typeof(TVariablesExtender));
-                    pvd:=pentvarext^.entityunit.FindVariable(vname);
+                    pentvarext:=pvisible^.GetExtension<TVariablesExtender>;
+                    pvd:=pentvarext.entityunit.FindVariable(vname);
                     if pvd<>nil then
                     begin
                          entarray.PushBackData(pvisible);
@@ -894,7 +894,7 @@ var
    pvisible{,pvisible2,pv}:PGDBObjEntity;
    ir:itrec;
    pvd:pvardesk;
-   pentvarext:PTVariablesExtender;
+   pentvarext:TVariablesExtender;
 begin
      result:=nil;
      croot:=self.GetCurrentROOT;
@@ -905,8 +905,8 @@ begin
          repeat
                if pvisible.GetObjType=objID then
                begin
-                    pentvarext:=pvisible^.GetExtension(typeof(TVariablesExtender));
-                    pvd:=pentvarext^.entityunit.FindVariable(vname);
+                    pentvarext:=pvisible^.GetExtension<TVariablesExtender>;
+                    pvd:=pentvarext.entityunit.FindVariable(vname);
                     if pvd<>nil then
                     begin
                          if pvd.data.PTD.GetValueAsString(pvd.data.Instance)=vvalue then
@@ -927,7 +927,7 @@ var
    ir:itrec;
    pvisible,pvisible2:PGDBObjEntity;
    DC:TDrawContext;
-   psourcevarext,pdestvarext:PTVariablesExtender;
+   psourcevarext,pdestvarext:TVariablesExtender;
 begin
       if pos(DevicePrefix,_source.Name)=1 then
                                          CopyBlock(_from,_to,_from.BlockDefArray.getblockdef(copy(_source.Name,8,length(_source.Name)-7)));
@@ -937,10 +937,10 @@ begin
      _dest.Base:=_source.Base;
      _dest.BlockDesc:=_source.BlockDesc;
 
-     psourcevarext:=_source^.GetExtension(typeof(TVariablesExtender));
-     pdestvarext:=_dest^.GetExtension(typeof(TVariablesExtender));
+     psourcevarext:=_source^.GetExtension<TVariablesExtender>;
+     pdestvarext:=_dest^.GetExtension<TVariablesExtender>;
      if (psourcevarext<>nil)and(pdestvarext<>nil)then
-     psourcevarext^.entityunit.CopyTo(@pdestvarext^.entityunit);
+     psourcevarext.entityunit.CopyTo(@pdestvarext.entityunit);
 
      dc:=_to^.CreateDrawingRC;
 

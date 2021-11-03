@@ -50,7 +50,7 @@ type
                                      SetValueErrorRange:GDBBoolean;
                                      UseMode:TMultiPropertyUseMode;
                                end;
-  TObjID2MultiPropertyProcs=GKey2DataMap <TObjID,TMultiPropertyDataForObjects,LessObjID>;
+  TObjID2MultiPropertyProcs=GKey2DataMapOld<TObjID,TMultiPropertyDataForObjects,LessObjID>;
   TMultiProperty=class
                        MPName:GDBString;
                        MPUserName:GDBString;

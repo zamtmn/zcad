@@ -266,7 +266,7 @@ var
     //pmenuitem:pzmenuitem;
 
     BlockNode:TBlockTreeNode;
-    pentvarext:PTVariablesExtender;
+    pentvarext:TVariablesExtender;
 begin
   inherited;
   //self.Position:=poScreenCenter;
@@ -325,7 +325,7 @@ begin
                         CurrNode:=DeviceNodeN;
                    end;
         treepos:=uncat_+pb^.name;
-        pentvarext:=pb.GetExtension(typeof(TVariablesExtender));
+        pentvarext:=pb.GetExtension<TVariablesExtender>;
         pvd:=pentvarext.entityunit.FindVariable('BTY_TreeCoord');
         if pvd<>nil then
         if pvd^.data.Instance<>nil then

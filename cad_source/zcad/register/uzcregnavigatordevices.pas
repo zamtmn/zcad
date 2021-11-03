@@ -110,7 +110,7 @@ end;
 var
   pnd1,pnd2:PTNodeData;
   pvd1,pvd2:pvardesk;
-  pentvarext1,pentvarext2:PTVariablesExtender;
+  pentvarext1,pentvarext2:TVariablesExtender;
 begin
   //inherited VTCompareNodes(Sender,Node1,Node2,Column,Result);
   Result :=  AnsiNaturalCompare(NavGetOnlyText(sender,Node1, Column), NavGetOnlyText(sender,Node2, Column),False);
@@ -120,8 +120,8 @@ begin
      pnd2 := Sender.GetNodeData(Node2);
      if assigned(pnd1) and assigned(pnd2) then
      begin
-       pentvarext1:=pnd1^.pent^.GetExtension(typeof(TVariablesExtender));
-       pentvarext2:=pnd2^.pent^.GetExtension(typeof(TVariablesExtender));
+       pentvarext1:=pnd1^.pent^.GetExtension(TVariablesExtender);
+       pentvarext2:=pnd2^.pent^.GetExtension(TVariablesExtender);
        if assigned(pentvarext1) and assigned(pentvarext2) then
        begin
          pvd1:=pentvarext1^.entityunit.FindVariable('Elevation');

@@ -209,6 +209,9 @@ var
   center:GDBVertex;
   pl:pgdbobjline;
 begin
+     if assigned(EntExtensions)then
+       EntExtensions.RunOnBeforeEntityFormat(@self,drawing);
+
           ConstObjArray.free;
           CalcDNVectors;
           center:=GetCenterPoint;

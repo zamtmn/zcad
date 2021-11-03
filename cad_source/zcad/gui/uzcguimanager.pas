@@ -37,7 +37,7 @@ TFormInfoData=record
                           PInstanceVariable:Pointer;
                           DesignTimeForm:boolean;
                     end;
-TFormName2FormInfoDataMap=GKey2DataMap<GDBString,TFormInfoData,LessGDBString>;
+TFormName2FormInfoDataMap=GKey2DataMap<GDBString,TFormInfoData{,LessGDBString}>;
 TZCADGUIManager=class
                      FormsInfo:TFormName2FormInfoDataMap;
                      constructor Create;

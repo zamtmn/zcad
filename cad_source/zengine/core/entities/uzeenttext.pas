@@ -129,6 +129,9 @@ procedure GDBObjText.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 var
       TCP:TCodePage;
 begin
+  if assigned(EntExtensions)then
+    EntExtensions.RunOnBeforeEntityFormat(@self,drawing);
+
   Representation.Clear;
 
   TCP:=CodePage;

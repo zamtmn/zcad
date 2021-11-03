@@ -637,6 +637,9 @@ procedure GDBObjDevice.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext)
     calcip:TCalcIP;
     u:gdbdouble;*)
 begin
+  if assigned(EntExtensions)then
+    EntExtensions.RunOnBeforeEntityFormat(@self,drawing);
+
          //if PTObjectUnit(ou.Instance)^.InterfaceVariables.vardescarray.Count=0 then
                                                         begin
                                                              //GDB.BlockDefArray.getblockdef(name)^.OU.CopyTo(@ou);

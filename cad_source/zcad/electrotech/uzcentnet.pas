@@ -371,7 +371,7 @@ var CurrentNet:PGDBObjNet;
 begin
      dc:=drawing.createdrawingrc;
      formatentity(drawing,dc);
-     pentvarext:=GetExtension<TVariablesExtender>;
+     pentvarext:=self.GetExtension<TVariablesExtender>;
      CurrentNet:=ConnectedArea.ObjArray.beginiterate(ir);
      if (currentnet<>nil) then
      repeat
@@ -440,7 +440,7 @@ begin
      if ObjArray.count=0 then
                              exit;
      i:=0;
-     pentvarext:=GetExtension<TVariablesExtender>;
+     pentvarext:=self.GetExtension<TVariablesExtender>;
      repeat
            pl:=pgdbobjline(ObjArray.getDataMutable(i));
            if pl<>nil then

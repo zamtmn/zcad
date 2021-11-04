@@ -488,7 +488,7 @@ begin
      ConstObjArray.free;
      if pdev<>nil then
      begin
-          pentvarext:=GetExtension<TVariablesExtender>;
+          pentvarext:=self.GetExtension<TVariablesExtender>;
           if pentvarext<>nil then begin
             pvNote:=pentvarext.entityunit.FindVariable('NOTE_Note');
             pvNoteFormat:=pentvarext.entityunit.FindVariable('NOTE_NoteFormat');

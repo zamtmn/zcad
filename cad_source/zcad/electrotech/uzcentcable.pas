@@ -355,7 +355,7 @@ begin
 
                     ptn:=NodePropArray.iterate(ir_inNodeArray);
                 until ptn=nil;
-  pentvarext:=GetExtension<TVariablesExtender>;
+  pentvarext:=self.GetExtension<TVariablesExtender>;
   pvd:=pentvarext.entityunit.FindVariable('CABLE_TotalCD');
   if pvd<>nil then
                                   pgdbinteger(pvd^.data.Instance)^:=count;

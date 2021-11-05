@@ -19,7 +19,7 @@
       	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CABLE_OUTPUT1)" Img='DEVICE_EL_VL_CABLE_OUTPUT1_300' Caption='Кабель вывод 1'/>
       	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CABLE_OUTPUT2)" Img='DEVICE_EL_VL_CABLE_OUTPUT2_300' Caption='Кабель вывод 2'/>
       	</ZTreeNode>
-      	<ZTreeNode Caption='Эл.оборудование'>
+      	<ZTreeNode Caption='Эл.оборудование 1:100'>
       	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SHR1)" Img='DEVICE_EL_VL_SHR1_300' Caption='Распред.щит, тип 1'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SHR2)" Img='DEVICE_EL_VL_SHR2_300' Caption='Распред.щит, тип 2'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SHO1)" Img='DEVICE_EL_VL_SHO1_300' Caption='Щит освещения, тип 1'/>
@@ -34,8 +34,6 @@
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_HEATER2)" Img='DEVICE_EL_VL_HEATER2_300' Caption='Обогреватель, тип 2'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_DEVICE1)" Img='DEVICE_EL_VL_DEVICE1_300' Caption='Устройство, тип 1'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_DEVICE2)" Img='DEVICE_EL_VL_DEVICE2_300' Caption='Устройство, тип 2'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_YTR1)" Img='DEVICE_EL_VL_YTR1_300' Caption='ЯТП, тип 1'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_YTR2)" Img='DEVICE_EL_VL_YTR2_300' Caption='ЯТП, тип 2'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CONNECTOR1_1P_3)" Img='DEVICE_EL_VL_CONNECTOR1_1P_3_300' Caption='Розетка СП31 1P'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CONNECTOR1_2P_3)" Img='DEVICE_EL_VL_CONNECTOR1_2P_3_300' Caption='Розетка СП31 2P'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CONNECTOR1_3P_3)" Img='DEVICE_EL_VL_CONNECTOR1_3P_3_300' Caption='Розетка СП31 3P'/>
@@ -45,6 +43,19 @@
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CONNECTOR3_1P_3)" Img='DEVICE_EL_VL_CONNECTOR3_1P_3_300' Caption='Розетка ОП54 1P'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CONNECTOR3_2P_3)" Img='DEVICE_EL_VL_CONNECTOR3_2P_3_300' Caption='Розетка ОП54 2P'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CONNECTOR3_3P_3)" Img='DEVICE_EL_VL_CONNECTOR3_3P_3_300' Caption='Розетка ОП54 3P'/>
+      	</ZTreeNode>
+      	<ZTreeNode Caption='Эл.оборудование 2:100'>
+      	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SHR3)" Img='DEVICE_EL_VL_SHR3_300' Caption='Распред.щит, тип 1'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SHR4)" Img='DEVICE_EL_VL_SHR4_300' Caption='Распред.щит, тип 2'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SHO3)" Img='DEVICE_EL_VL_SHO3_300' Caption='Щит освещения, тип 1'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SHO4)" Img='DEVICE_EL_VL_SHO4_300' Caption='Щит освещения, тип 2'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SHAO3)" Img='DEVICE_EL_VL_SHAO3_300' Caption='Щит авар.осв, тип 1'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SHAO4)" Img='DEVICE_EL_VL_SHAO4_300' Caption='Щит авар.осв, тип 2'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_FIRE3)" Img='DEVICE_EL_VL_FIRE3_300' Caption='Пож.сигнал, тип 1'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_FIRE4)" Img='DEVICE_EL_VL_FIRE4_300' Caption='Пож.сигнал, тип 2'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_MOTOR4)" Img='DEVICE_EL_VL_MOTOR4_300' Caption='Двигатель, тип 2'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_HEATER4)" Img='DEVICE_EL_VL_HEATER4_300' Caption='Обогреватель, тип 2'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_DEVICE4)" Img='DEVICE_EL_VL_DEVICE4_300' Caption='Устройство, тип 2'/>
       	</ZTreeNode>
       	<ZTreeNode Caption='Освещение 1:100'>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_LIGHT1_1)" Img='DEVICE_EL_VL_LIGHT1_1_300' Caption='Светильник 2х36'/>

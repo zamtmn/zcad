@@ -23,7 +23,8 @@ uses sysutils,UGDBObjBlockdefArray,uzedrawingdef,uzeentityextender,
      uzeentdevice,TypeDescriptors,uzetextpreprocessor,UGDBOpenArrayOfByte,
      uzbtypesbase,uzbtypes,uzeentsubordinated,uzeentity,uzeenttext,uzeblockdef,
      varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,uzbmemman,
-     uzeentitiestree,usimplegenerics,uzeffdxfsupport;
+     uzeentitiestree,usimplegenerics,uzeffdxfsupport,uzbpaths,uzctranslations,
+     gzctnrvectortypes;
 const
   VariablesExtenderName='extdrVariables';
 type
@@ -50,6 +51,15 @@ TVariablesExtender=class(TBaseVariablesExtender)
     function isMainFunction:boolean;
     procedure addDelegate(pDelegateEntity:PGDBObjEntity;pDelegateEntityVarext:TVariablesExtender);
     procedure removeDelegate(pDelegateEntity:PGDBObjEntity;pDelegateEntityVarext:TVariablesExtender);
+
+
+    class function EntIOLoadDollar(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+    class function EntIOLoadAmpersand(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+    class function EntIOLoadHash(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+    class function EntIOLoadUSES(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+    class function EntIOLoadMainFunction(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+
+    procedure SaveToDxf(var outhandle:GDBOpenArrayOfByte;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
   end;
 
 var
@@ -246,12 +256,161 @@ begin
   result:=VariablesExtenderName;
 end;
 
-{class function TVariablesExtender.CreateEntExtender(pEntity:Pointer):TVariablesExtender;
+
+class function TVariablesExtender.EntIOLoadDollar(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+var
+    svn,vn,vv:GDBString;
+    pvd:pvardesk;
+    offset:GDBInteger;
+    tc:PUserTypeDescriptor;
+    vardata:TVariablesExtender;
 begin
-     result:=TVariablesExtender.Create(pentity);
-end;}
+     extractvarfromdxfstring2(_Value,vn,svn,vv);
+     vardata:=PGDBObjEntity(PEnt)^.GetExtension<TVariablesExtender>;
+     pvd:=vardata.entityunit.InterfaceVariables.findvardesc(vn);
+     offset:=GDBPlatformint(pvd.data.Instance);
+     if pvd<>nil then
+       PRecordDescriptor(pvd^.data.PTD)^.ApplyOperator('.',svn,offset,tc);
+     PBaseTypeDescriptor(tc)^.SetValueFromString(pointer(offset),vv);
+     result:=true;
+end;
+class function TVariablesExtender.EntIOLoadAmpersand(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+var
+    vn,vt,vun:GDBString;
+    vd: vardesk;
+    vardata:TVariablesExtender;
+begin
+     extractvarfromdxfstring2(_Value,vn,vt,vun);
+     vardata:=PGDBObjEntity(PEnt)^.GetExtension<TVariablesExtender>;
+     vardata.entityunit.setvardesc(vd,vn,vun,vt);
+     vardata.entityunit.InterfaceVariables.createvariable(vd.name,vd);
+     result:=true;
+end;
+class function TVariablesExtender.EntIOLoadHash(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+var
+    vn,vt,vv,vun:GDBString;
+    vd: vardesk;
+    vardata:TVariablesExtender;
+begin
+     extractvarfromdxfstring(_Value,vn,vt,vv,vun);
+     OldVersVarRename(vn,vt,vv,vun);
+     vardata:=PGDBObjEntity(PEnt)^.GetExtension<TVariablesExtender>;
+     if {PEnt^.ou.Instance}vardata=nil then
+     begin
+          vardata:=addvariablestoentity(PEnt);
+     end;
+     vardata.entityunit.setvardesc(vd,vn,vun,vt);
+     vardata.entityunit.InterfaceVariables.createvariable(vd.name,vd);
+     //PTObjectUnit(PEnt^.ou.Instance)^.setvardesc(vd,vn,vun,vt);
+     //PTObjectUnit(PEnt^.ou.Instance)^.InterfaceVariables.createvariable(vd.name,vd);
+     PBaseTypeDescriptor(vd.data.PTD)^.SetValueFromString(vd.data.Instance,vv);
+     result:=true;
+end;
+
+class function TVariablesExtender.EntIOLoadUSES(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+var
+    usedunit:PTObjectUnit;
+    vardata:TVariablesExtender;
+begin
+     vardata:=PGDBObjEntity(PEnt)^.GetExtension<TVariablesExtender>;
+     usedunit:=pointer(units.findunit(SupportPath,InterfaceTranslate,_Value));
+     if vardata=nil then
+     begin
+          vardata:=addvariablestoentity(PEnt);
+     end;
+     vardata.entityunit.InterfaceUses.PushBackIfNotPresent(usedunit);
+     result:=true;
+end;
+class function TVariablesExtender.EntIOLoadMainFunction(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+begin
+  {$IFNDEF DELPHI}
+  if not TryStrToQWord('$'+_value,PGDBObjEntity(PEnt)^.AddExtAttrib^.MainFunctionHandle)then
+  {$ENDIF}
+  begin
+       //нужно залупиться
+  end;
+  result:=true;
+end;
+
+procedure TVariablesExtender.SaveToDxf(var outhandle:GDBOpenArrayOfByte;PEnt:Pointer;var IODXFContext:TIODXFContext);
+var
+   ishavevars:boolean;
+   pvd:pvardesk;
+   pfd:PFieldDescriptor;
+   pvu:PTUnit;
+   ir,ir2:itrec;
+   str,sv:gdbstring;
+   i:integer;
+   tp:pointer;
+   vardata:TVariablesExtender;
+   th: TDWGHandle;
+begin
+     ishavevars:=false;
+     vardata:=PGDBObjEntity(PEnt)^.GetExtension<TVariablesExtender>;
+     if vardata<>nil then
+       if vardata.entityunit.InterfaceVariables.vardescarray.Count>0 then
+         ishavevars:=true;
+     if ishavevars then begin
+       pvu:=vardata.entityunit.InterfaceUses.beginiterate(ir);
+       if pvu<>nil then
+       repeat
+         if typeof(pvu^)<>typeof(TObjectUnit) then begin
+           str:='USES='+pvu^.Name;
+           dxfGDBStringout(outhandle,1000,str);
+         end;
+        pvu:=vardata.entityunit.InterfaceUses.iterate(ir);
+        until pvu=nil;
+
+       if vardata.pMainFuncEntity<>nil then begin
+         IODXFContext.p2h.MyGetOrCreateValue(vardata.pMainFuncEntity,IODXFContext.handle,th);
+         str:='MAINFUNCTION='+inttohex(th,0);
+         dxfGDBStringout(outhandle,1000,str);
+       end;
+
+       i:=0;
+       pvd:=vardata.entityunit.InterfaceVariables.vardescarray.beginiterate(ir);
+       if pvd<>nil then
+         repeat
+           if (pvd^.data.PTD.GetTypeAttributes and TA_COMPOUND)=0 then begin
+             sv:=PBaseTypeDescriptor(pvd^.data.ptd)^.GetValueAsString(pvd^.data.Instance);
+             str:='#'+inttostr(i)+'='+pvd^.name+'|'+pvd^.data.ptd.TypeName;
+             str:=str+'|'+sv+'|'+pvd^.username;
+             dxfGDBStringout(outhandle,1000,str);
+           end else begin
+             str:='&'+inttostr(i)+'='+pvd^.name+'|'+pvd^.data.ptd.TypeName+'|'+pvd^.username;
+             dxfGDBStringout(outhandle,1000,str);
+             inc(i);
+             tp:=pvd^.data.Instance;
+             pfd:=PRecordDescriptor(pvd^.data.ptd).Fields.beginiterate(ir2);
+             if pfd<>nil then
+             repeat
+               str:='$'+inttostr(i)+'='+pvd^.name+'|'+pfd^.base.ProgramName+'|'+pfd^.base.PFT^.GetValueAsString(tp);
+               dxfGDBStringout(outhandle,1000,str);
+               ptruint(tp):=ptruint(tp)+ptruint(pfd^.base.PFT^.SizeInGDBBytes); { TODO : сделать на оффсете }
+               inc(i);
+               pfd:=PRecordDescriptor(pvd^.data.ptd).Fields.iterate(ir2);
+             until pfd=nil;
+             str:='&'+inttostr(i)+'=END';
+             inc(i);
+           end;
+         inc(i);
+         pvd:=vardata.entityunit.InterfaceVariables.vardescarray.iterate(ir);
+         until pvd=nil;
+     end;
+end;
+
+
 initialization
   EntityExtenders.RegisterKey(uppercase(VariablesExtenderName),TVariablesExtender);
+
+  {from GDBObjGenericWithSubordinated}
+  GDBObjEntity.GetDXFIOFeatures.RegisterPrefixLoadFeature('$',TVariablesExtender.EntIOLoadDollar);
+  GDBObjEntity.GetDXFIOFeatures.RegisterPrefixLoadFeature('&',TVariablesExtender.EntIOLoadAmpersand);
+  GDBObjEntity.GetDXFIOFeatures.RegisterPrefixLoadFeature('#',TVariablesExtender.EntIOLoadHash);
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('USES',TVariablesExtender.EntIOLoadUSES);
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('MAINFUNCTION',TVariablesExtender.EntIOLoadMainFunction);
+
+
 finalization
 end.
 

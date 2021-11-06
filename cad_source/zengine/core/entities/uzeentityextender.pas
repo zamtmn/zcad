@@ -40,6 +40,7 @@ TBaseEntityExtender=class(TBaseObjExtender)
                   procedure CopyExt2Ent(pSourceEntity,pDestEntity:pointer);virtual;abstract;
                   procedure ReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);virtual;abstract;
                   procedure PostLoad(var context:TIODXFLoadContext);virtual;abstract;
+                  procedure SaveToDxf(var outhandle:GDBOpenArrayOfByte;PEnt:Pointer;var IODXFContext:TIODXFContext);virtual;abstract;
 end;
 TMetaEntityExtender=class of TBaseEntityExtender;
 TEntityExtenderVector= TMyVector<TBaseEntityExtender>;
@@ -64,6 +65,7 @@ TEntityExtensions=class
                        procedure RunSupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);
                        procedure RunReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);
                        procedure RunPostload(var context:TIODXFLoadContext);
+                       procedure RunSaveToDxf(var outhandle:GDBOpenArrayOfByte;PEnt:Pointer;var IODXFContext:TIODXFContext);
                   end;
   TEntityExtendersMap=GKey2DataMap<string,TMetaEntityExtender>;
 var
@@ -191,13 +193,19 @@ end;
 procedure TEntityExtensions.RunPostLoad(var context:TIODXFLoadContext);
 var
   i:integer;
+begin
+     if assigned(fEntityExtensions)then
+     for i:=0 to fEntityExtensions.Size-1 do
+       fEntityExtensions[i].PostLoad(context);
+end;
+procedure TEntityExtensions.RunSaveToDxf(var outhandle:GDBOpenArrayOfByte;PEnt:Pointer;var IODXFContext:TIODXFContext);
+var
+  i:integer;
   ExtObj:TBaseEntityExtender;
 begin
      if assigned(fEntityExtensions)then
-     for i:=0 to fEntityExtensions.Size-1 do begin
-       ExtObj:=fEntityExtensions[i];
-       fEntityExtensions[i].PostLoad(context);
-     end;
+     for i:=0 to fEntityExtensions.Size-1 do
+       fEntityExtensions[i].SaveToDxf(outhandle,PEnt,IODXFContext);
 end;
 initialization
   EntityExtenders:=TEntityExtendersMap.Create;

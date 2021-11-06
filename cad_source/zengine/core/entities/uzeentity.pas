@@ -691,6 +691,8 @@ end;
 procedure GDBObjEntity.SaveToDXFObjXData(var outhandle:GDBOpenArrayOfByte;var IODXFContext:TIODXFContext);
 begin
      GetDXFIOFeatures.RunSaveFeatures(outhandle,@self,IODXFContext);
+     if assigned(EntExtensions) then
+       EntExtensions.RunSaveToDxf(outhandle,@self,IODXFContext);
      inherited;
 end;
 

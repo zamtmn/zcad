@@ -31,7 +31,7 @@ TCreateEntFeatureData=record
                 destr:TDestructorFeature;
               end;
 TDXFEntSaveFeature=procedure(var outhandle:GDBOpenArrayOfByte;PEnt:Pointer;var IODXFContext:TIODXFContext);
-TDXFEntLoadFeature=function(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:Pointer):boolean;
+TDXFEntLoadFeature=function(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:Pointer):boolean of object;
 TDXFEntAfterLoadFeature=procedure(pEntity:Pointer);
 TDXFEntFormatFeature=procedure (pEntity:Pointer;const drawing:TDrawingDef);
 TDXFEntLoadData=record

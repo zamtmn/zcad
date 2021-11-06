@@ -30,114 +30,61 @@ var
    extvarunit:TUnit;
 
 implementation
-function EntIOLoad_OWNERHANDLE(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
+type
+  TDummy=class
+    class function EntIOLoad_OWNERHANDLE(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+    class function EntIOLoad_HANDLE(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+    class function EntIOLoad_UPGRADE(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+    class function EntIOLoad_LAYER(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+    class function EntIOLoad_OSnapMode(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+    class function EntIOLoadPercent(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+    class function TextIOLoad_TMPL1(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+    class function BlockDefIOLoad_TYPE(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+    class function BlockDefIOLoad_GROUP(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+    class function BlockDefIOLoad_BORDER(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+  end;
+
+class function TDummy.EntIOLoad_OWNERHANDLE(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 begin
      {$IFNDEF DELPHI}
-     if not TryStrToQWord('$'+_value,PEnt^.AddExtAttrib^.OwnerHandle)then
+     if not TryStrToQWord('$'+_value,PGDBObjEntity(PEnt)^.AddExtAttrib^.OwnerHandle)then
      {$ENDIF}
      begin
           //нужно залупиться
      end;
      result:=true;
 end;
-function EntIOLoad_HANDLE(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
+class function TDummy.EntIOLoad_HANDLE(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 begin
      {$IFNDEF DELPHI}
-     if not TryStrToQWord('$'+_value,PEnt^.AddExtAttrib^.Handle)then
+     if not TryStrToQWord('$'+_value,PGDBObjEntity(PEnt)^.AddExtAttrib^.Handle)then
      {$ENDIF}
      begin
           //нужно залупиться
      end;
      result:=true;
 end;
-function EntIOLoad_UPGRADE(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
+class function TDummy.EntIOLoad_UPGRADE(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 begin
-     PEnt^.AddExtAttrib^.Upgrade:=strtoint(_value);
+     PGDBObjEntity(PEnt)^.AddExtAttrib^.Upgrade:=strtoint(_value);
      result:=true;
 end;
-function EntIOLoad_LAYER(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
+class function TDummy.EntIOLoad_LAYER(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 begin
-     PEnt^.vp.Layer:=drawing.getlayertable.getAddres(_value);
+     PGDBObjEntity(PEnt)^.vp.Layer:=drawing.getlayertable.getAddres(_value);
      result:=true;
 end;
-function EntIOLoad_OSnapMode(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
+class function TDummy.EntIOLoad_OSnapMode(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 begin
      _value:=UpperCase(_value);
      if _value='OFF' then
-       PEnt^.OSnapModeControl:=off
+       PGDBObjEntity(PEnt)^.OSnapModeControl:=off
 else if _value='ON' then
-     PEnt^.OSnapModeControl:=on;
+     PGDBObjEntity(PEnt)^.OSnapModeControl:=on;
      result:=true;
-end;
-function EntIOLoadUSES(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
-var
-    usedunit:PTObjectUnit;
-    vardata:TVariablesExtender;
-begin
-     vardata:=PEnt^.GetExtension<TVariablesExtender>;
-     usedunit:=pointer(units.findunit(SupportPath,InterfaceTranslate,_Value));
-     if vardata=nil then
-     begin
-          vardata:=addvariablestoentity(PEnt);
-     end;
-     vardata.entityunit.InterfaceUses.PushBackIfNotPresent(usedunit);
-     result:=true;
-     {vardata:=PEnt^.GetExtension(TVariablesExtender);
-     test:=@vardata^.entityunit;
-     usedunit:=pointer(units.findunit(_Value));
-     if PEnt^.ou.Instance=nil then
-     begin
-          addvariablestoentity(PEnt);
-     end;
-     PTObjectUnit(PEnt^.ou.Instance)^.InterfaceUses.addnodouble(@usedunit);
-     result:=true;}
-end;
-function EntIOLoadMainFunction(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
-begin
-  {$IFNDEF DELPHI}
-  if not TryStrToQWord('$'+_value,PEnt^.AddExtAttrib^.MainFunctionHandle)then
-  {$ENDIF}
-  begin
-       //нужно залупиться
-  end;
-  result:=true;
 end;
 
-function EntIOLoadDollar(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
-var
-    svn,vn,vv:GDBString;
-    pvd:pvardesk;
-    offset:GDBInteger;
-    tc:PUserTypeDescriptor;
-    vardata:TVariablesExtender;
-begin
-     extractvarfromdxfstring2(_Value,vn,svn,vv);
-     vardata:=PEnt^.GetExtension<TVariablesExtender>;
-     pvd:=vardata.entityunit.InterfaceVariables.findvardesc(vn);
-     //pvd:=PTObjectUnit(PEnt^.ou.Instance)^.InterfaceVariables.findvardesc(vn);
-     offset:=GDBPlatformint(pvd.data.Instance);
-     if pvd<>nil then
-     begin
-          PRecordDescriptor(pvd^.data.PTD)^.ApplyOperator('.',svn,offset,tc);
-     end;
-     PBaseTypeDescriptor(tc)^.SetValueFromString(pointer(offset),vv);
-     result:=true;
-end;
-function EntIOLoadAmpersand(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
-var
-    vn,vt,vun:GDBString;
-    vd: vardesk;
-    vardata:TVariablesExtender;
-begin
-     extractvarfromdxfstring2(_Value,vn,vt,vun);
-     vardata:=PEnt^.GetExtension<TVariablesExtender>;
-     vardata.entityunit.setvardesc(vd,vn,vun,vt);
-     vardata.entityunit.InterfaceVariables.createvariable(vd.name,vd);
-     //PTObjectUnit(PEnt^.ou.Instance)^.setvardesc(vd,vn,vun,vt);
-     //PTObjectUnit(PEnt^.ou.Instance)^.InterfaceVariables.createvariable(vd.name,vd);
-     result:=true;
-end;
-function EntIOLoadPercent(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
+class function TDummy.EntIOLoadPercent(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 var
     vn,vt,vv,vun:GDBString;
     vd: vardesk;
@@ -145,26 +92,6 @@ begin
      extractvarfromdxfstring(_Value,vn,vt,vv,vun);
      PTUnit(ptu).setvardesc(vd,vn,vun,vt);
      PTUnit(ptu).InterfaceVariables.createvariable(vd.name,vd);
-     PBaseTypeDescriptor(vd.data.PTD)^.SetValueFromString(vd.data.Instance,vv);
-     result:=true;
-end;
-function EntIOLoadHash(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
-var
-    vn,vt,vv,vun:GDBString;
-    vd: vardesk;
-    vardata:TVariablesExtender;
-begin
-     extractvarfromdxfstring(_Value,vn,vt,vv,vun);
-     OldVersVarRename(vn,vt,vv,vun);
-     vardata:=PEnt^.GetExtension<TVariablesExtender>;
-     if {PEnt^.ou.Instance}vardata=nil then
-     begin
-          vardata:=addvariablestoentity(PEnt);
-     end;
-     vardata.entityunit.setvardesc(vd,vn,vun,vt);
-     vardata.entityunit.InterfaceVariables.createvariable(vd.name,vd);
-     //PTObjectUnit(PEnt^.ou.Instance)^.setvardesc(vd,vn,vun,vt);
-     //PTObjectUnit(PEnt^.ou.Instance)^.InterfaceVariables.createvariable(vd.name,vd);
      PBaseTypeDescriptor(vd.data.PTD)^.SetValueFromString(vd.data.Instance,vv);
      result:=true;
 end;
@@ -178,90 +105,21 @@ begin
 end;
 
 procedure EntityIOSave_all(var outhandle:GDBOpenArrayOfByte;PEnt:PGDBObjEntity;var IODXFContext:TIODXFContext);
-var
-   ishavevars:boolean;
-   pvd:pvardesk;
-   pfd:PFieldDescriptor;
-   pvu:PTUnit;
-   ir,ir2:itrec;
-   str,sv:gdbstring;
-   i:integer;
-   tp:pointer;
-   vardata:TVariablesExtender;
-   th: TDWGHandle;
 begin
-     ishavevars:=false;
-     vardata:=PEnt^.GetExtension<TVariablesExtender>;
-     if vardata<>nil then
-     if vardata.entityunit.InterfaceVariables.vardescarray.Count>0 then
-                                                       ishavevars:=true;
-     begin
-         if ishavevars then
-         begin
-              pvu:=vardata.entityunit.InterfaceUses.beginiterate(ir);
-              if pvu<>nil then
-              repeat
-                    if typeof(pvu^)<>typeof(TObjectUnit) then begin
-                      str:='USES='+pvu^.Name;
-                      dxfGDBStringout(outhandle,1000,str);
-                    end;
-              pvu:=vardata.entityunit.InterfaceUses.iterate(ir);
-              until pvu=nil;
-
-              if vardata.pMainFuncEntity<>nil then begin
-                IODXFContext.p2h.MyGetOrCreateValue(vardata.pMainFuncEntity,IODXFContext.handle,th);
-                str:='MAINFUNCTION='+inttohex(th,0);
-                dxfGDBStringout(outhandle,1000,str);
-              end;
-
-              i:=0;
-              pvd:=vardata.entityunit.InterfaceVariables.vardescarray.beginiterate(ir);
-              if pvd<>nil then
-              repeat
-                    if (pvd^.data.PTD.GetTypeAttributes and TA_COMPOUND)=0 then
-                    begin
-                         sv:=PBaseTypeDescriptor(pvd^.data.ptd)^.GetValueAsString(pvd^.data.Instance);
-                         str:='#'+inttostr(i)+'='+pvd^.name+'|'+pvd^.data.ptd.TypeName;
-                         str:=str+'|'+sv+'|'+pvd^.username;
-                         dxfGDBStringout(outhandle,1000,str);
-                    end
-                    else
-                    begin
-                         str:='&'+inttostr(i)+'='+pvd^.name+'|'+pvd^.data.ptd.TypeName+'|'+pvd^.username;
-                         dxfGDBStringout(outhandle,1000,str);
-                         inc(i);
-                         tp:=pvd^.data.Instance;
-                         pfd:=PRecordDescriptor(pvd^.data.ptd).Fields.beginiterate(ir2);
-                         if pfd<>nil then
-                         repeat
-                               str:='$'+inttostr(i)+'='+pvd^.name+'|'+pfd^.base.ProgramName+'|'+pfd^.base.PFT^.GetValueAsString(tp);
-                               dxfGDBStringout(outhandle,1000,str);
-                               ptruint(tp):=ptruint(tp)+ptruint(pfd^.base.PFT^.SizeInGDBBytes); { TODO : сделать на оффсете }
-                               inc(i);
-                               pfd:=PRecordDescriptor(pvd^.data.ptd).Fields.iterate(ir2);
-                         until pfd=nil;
-                         str:='&'+inttostr(i)+'=END';
-                         inc(i);
-                    end;
-              inc(i);
-              pvd:=vardata.entityunit.InterfaceVariables.vardescarray.iterate(ir);
-              until pvd=nil;
-         end;
-         dxfGDBStringout(outhandle,1000,'_OWNERHANDLE='+inttohex(PEnt^.bp.ListPos.owner.GetHandle,10));
-         case PEnt^.OSnapModeControl of
-              off: dxfGDBStringout(outhandle,1000,'_OSNAPMODECONTROL=OFF');
-              on: dxfGDBStringout(outhandle,1000,'_OSNAPMODECONTROL=ON');
-         end;
-    end;
+  dxfGDBStringout(outhandle,1000,'_OWNERHANDLE='+inttohex(PEnt^.bp.ListPos.owner.GetHandle,10));
+  case PEnt^.OSnapModeControl of
+    off: dxfGDBStringout(outhandle,1000,'_OSNAPMODECONTROL=OFF');
+    on: dxfGDBStringout(outhandle,1000,'_OSNAPMODECONTROL=ON');
+  end;
 end;
 
 
-function TextIOLoad_TMPL1(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:PGDBObjText):boolean;
+class function TDummy.TextIOLoad_TMPL1(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 begin
   if isNotUtf8(_value)then
-    pent^.template:=Tria_AnsiToUtf8(_value)
+    PGDBObjText(pent)^.template:=Tria_AnsiToUtf8(_value)
   else
-    pent^.template:=_value;
+    PGDBObjText(pent)^.template:=_value;
      result:=true;
 end;
 procedure TextIOSave_TMPL1(var outhandle:GDBOpenArrayOfByte;PEnt:PGDBObjText);
@@ -270,47 +128,47 @@ begin
        dxfGDBStringout(outhandle,1000,'_TMPL1='+pent^.template);
 end;
 
-function BlockDefIOLoad_TYPE(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:PGDBObjBlockDef):boolean;
+class function TDummy.BlockDefIOLoad_TYPE(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 begin
      if _Value='BT_CONNECTOR' then
                                begin
-                                pent^.BlockDesc.BType:=BT_Connector;
+                                PGDBObjBlockDef(pent)^.BlockDesc.BType:=BT_Connector;
                                 result:=true;
                            end
 else if _Value='BT_UNKNOWN' then
                                begin
-                                pent^.BlockDesc.BType:=BT_Unknown;
+                                PGDBObjBlockDef(pent)^.BlockDesc.BType:=BT_Unknown;
                                 result:=true;
                            end;
 end;
-function BlockDefIOLoad_GROUP(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:PGDBObjBlockDef):boolean;
+class function TDummy.BlockDefIOLoad_GROUP(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 begin
      if _Value='BG_EL_DEVICE' then
                                begin
-                                pent^.BlockDesc.BGroup:=BG_El_Device;
+                                PGDBObjBlockDef(pent)^.BlockDesc.BGroup:=BG_El_Device;
                                 result:=true;
                            end
 else if _Value='BG_UNKNOWN' then
                                begin
-                                pent^.BlockDesc.BGroup:=BG_Unknown;
+                                PGDBObjBlockDef(pent)^.BlockDesc.BGroup:=BG_Unknown;
                                 result:=true;
                            end;
 end;
-function BlockDefIOLoad_BORDER(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:PGDBObjBlockDef):boolean;
+class function TDummy.BlockDefIOLoad_BORDER(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 begin
      if _Value='BB_OWNER' then
                            begin
-                                pent^.BlockDesc.BBorder:=BB_Owner;
+                                PGDBObjBlockDef(pent)^.BlockDesc.BBorder:=BB_Owner;
                                 result:=true;
                            end
 else if _Value='BB_SELF' then
                           begin
-                                pent^.BlockDesc.BBorder:=BB_Self;
+                                PGDBObjBlockDef(pent)^.BlockDesc.BBorder:=BB_Self;
                                 result:=true;
                           end
 else if _Value='BB_EMPTY' then
                           begin
-                                pent^.BlockDesc.BBorder:=BB_Empty;
+                                PGDBObjBlockDef(pent)^.BlockDesc.BBorder:=BB_Empty;
                                 result:=true;
                           end;
 end;
@@ -549,31 +407,26 @@ end;
 
 begin
   {from GDBObjEntity}
-  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('_OWNERHANDLE',@EntIOLoad_OWNERHANDLE);
-  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('_HANDLE',@EntIOLoad_HANDLE);
-  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('_UPGRADE',@EntIOLoad_UPGRADE);
-  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('_LAYER',@EntIOLoad_LAYER);
-  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('_OSNAPMODECONTROL',@EntIOLoad_OSnapMode);
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('_OWNERHANDLE',TDummy.EntIOLoad_OWNERHANDLE);
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('_HANDLE',TDummy.EntIOLoad_HANDLE);
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('_UPGRADE',TDummy.EntIOLoad_UPGRADE);
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('_LAYER',TDummy.EntIOLoad_LAYER);
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('_OSNAPMODECONTROL',TDummy.EntIOLoad_OSnapMode);
   GDBObjEntity.GetDXFIOFeatures.RegisterSaveFeature(@EntityIOSave_all);
 
   GDBObjEntity.GetDXFIOFeatures.RegisterCreateEntFeature(@ConstructorFeature,@DestructorFeature);
 
   {from GDBObjGenericWithSubordinated}
-  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('USES',@EntIOLoadUSES);
-  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('MAINFUNCTION',@EntIOLoadMainFunction);
-  GDBObjEntity.GetDXFIOFeatures.RegisterPrefixLoadFeature('$',@EntIOLoadDollar);
-  GDBObjEntity.GetDXFIOFeatures.RegisterPrefixLoadFeature('&',@EntIOLoadAmpersand);
-  GDBObjEntity.GetDXFIOFeatures.RegisterPrefixLoadFeature('%',@EntIOLoadPercent);
-  GDBObjEntity.GetDXFIOFeatures.RegisterPrefixLoadFeature('#',@EntIOLoadHash);
+  GDBObjEntity.GetDXFIOFeatures.RegisterPrefixLoadFeature('%',TDummy.EntIOLoadPercent);
 
   {from GDBObjText}
-  GDBObjText.GetDXFIOFeatures.RegisterNamedLoadFeature('_TMPL1',@TextIOLoad_TMPL1);
+  GDBObjText.GetDXFIOFeatures.RegisterNamedLoadFeature('_TMPL1',TDummy.TextIOLoad_TMPL1);
   GDBObjText.GetDXFIOFeatures.RegisterSaveFeature(@TextIOSave_TMPL1);
 
   {from GDBObjBlockDef}
-  GDBObjBlockdef.GetDXFIOFeatures.RegisterNamedLoadFeature('_TYPE',@BlockDefIOLoad_TYPE);
-  GDBObjBlockdef.GetDXFIOFeatures.RegisterNamedLoadFeature('_GROUP',@BlockDefIOLoad_GROUP);
-  GDBObjBlockdef.GetDXFIOFeatures.RegisterNamedLoadFeature('_BORDER',@BlockDefIOLoad_BORDER);
+  GDBObjBlockdef.GetDXFIOFeatures.RegisterNamedLoadFeature('_TYPE',TDummy.BlockDefIOLoad_TYPE);
+  GDBObjBlockdef.GetDXFIOFeatures.RegisterNamedLoadFeature('_GROUP',TDummy.BlockDefIOLoad_GROUP);
+  GDBObjBlockdef.GetDXFIOFeatures.RegisterNamedLoadFeature('_BORDER',TDummy.BlockDefIOLoad_BORDER);
   GDBObjBlockdef.GetDXFIOFeatures.RegisterAfterLoadFeature(@GDBObjBlockDefLoadVarsFromFile);
 
   {from GDBObjDevice}

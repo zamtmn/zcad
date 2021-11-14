@@ -83,7 +83,7 @@ PGDBLtypePropObjInsp=GDBPointer;
 PGDBLtypeProp=^GDBLtypeProp;
 {REGISTEROBJECTTYPE GDBLtypeProp}
 GDBLtypeProp= object(GDBNamedObject)
-               len:GDBDouble;(*'Length'*)
+               LengthDXF,LengthFact:GDBDouble;(*'Length'*)
                h:GDBDouble;(*'Height'*)
                Mode:TLTMode;
                FirstStroke,LastStroke:TOuterDashInfo;
@@ -314,7 +314,8 @@ begin
      LastStroke:=TODIUnknown;
      WithoutLines:=true;
      Mode:=N2TLTMode(n);
-     len:=0;
+     LengthDXF:=0;
+     LengthFact:=0;
      pointer(desk):=nil;
      dasharray.init({$IFDEF DEBUGBUILD}'{9DA63ECC-B244-4EBD-A9AE-AB24F008B526}',{$ENDIF}10{,sizeof(TDashInfo)});
      strokesarray.init({$IFDEF DEBUGBUILD}'{70B68C69-C222-4BE5-BB48-B88F08BA7605}',{$ENDIF}10);
@@ -339,7 +340,8 @@ begin
   if AddItem('Continuous',pointer(plp))=IsCreated then
             begin
                  plp.init('Continuous');
-                 plp.len:=0;
+                 plp.LengthDXF:=0;
+                 plp.LengthFact:=0;
                  plp.Mode:=TLTContinous;
             end;
 end;
@@ -405,7 +407,8 @@ begin
                        if AddItem(_source.Name,pointer(result))=IsCreated then
                        begin
                        result.init(_source.Name);
-                       result.len:=_source.len;
+                       result.LengthFact:=_source.LengthFact;
+                       result.LengthDXF:=_source.LengthDXF;
                        _source.dasharray.copyto(result.dasharray);
                        _source.strokesarray.copyto(result.strokesarray);
                        //_source.shapearray.copyto(@result.shapearray);
@@ -553,14 +556,16 @@ begin
      shapearray.Clear;
      dasharray.Clear;
      element:=GetStr(LT,dinfo);
-     len:=0;
+     LengthFact:=0;
+     LengthDXF:=0;
      stroke:=1;
      while element<>'' do
      begin
           case dinfo of
                        TDIDash:begin
                                     trystrtofloat(element,stroke);
-                                    len:=len+abs(stroke);
+                                    LengthFact:=LengthFact+abs(stroke);
+                                    LengthDXF:=LengthDXF+abs(stroke);
                                     strokesarray.PushBackData(stroke);
                                     if stroke>eps then
                                                       begin

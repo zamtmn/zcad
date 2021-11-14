@@ -94,7 +94,7 @@ var
 const
       txtoffset=5;
 begin
-  if (plt<>nil)and(plt.len>0) then
+  if (plt<>nil)and(plt.LengthDXF>0) then
    begin
         if s<>'' then
                      ll:=canvas.TextExtent(s).cx+2*txtoffset
@@ -104,7 +104,7 @@ begin
         p1:=createvertex(ARect.Left+ll,(ARect.Top+ARect.Bottom)/2,0);
         p2:=createvertex(ARect.Right-txtoffset,p1.y,0);
         vp.LineType:=plt;
-        vp.LineTypeScale:=(p2.x-p1.x)*(1/plt.len/sysvar.DWG.DWG_LTScale^);
+        vp.LineTypeScale:=(p2.x-p1.x)*(1/plt.LengthDXF/sysvar.DWG.DWG_LTScale^);
         if (plt^.Textarray.Count=0) then
                         n:=4
                     else

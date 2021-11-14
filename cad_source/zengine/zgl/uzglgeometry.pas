@@ -651,7 +651,8 @@ begin
                                                             self.PGeom.DrawLineWithoutLT(rc,cp,pcurrsegment^.endpoint,dr);
                                                length:=tcdp-pcurrsegment^.naccumlength;
                                                self.nextsegment;
-                                               draw(rc,length,paint,dr);
+                                               if pcurrsegment<>nil then
+                                                 draw(rc,length,paint,dr);
                                                //tcdp:=cdp;
                                           end;
      end
@@ -711,7 +712,7 @@ begin
            Segmentator.InitFromPolyline(points,polylength,closed,@self);
            TangentScale:={SysVar.dwg.DWG_LTScale^}rc.DrawingContext.GlobalLTScale*vp.LineTypeScale;
            NormalScale:=TangentScale;
-           TrueNumberOfPatterns:=polylength/(TangentScale*LT.len);
+           TrueNumberOfPatterns:=polylength/(TangentScale*LT.LengthFact);
            if ltgen and closed then
                         begin
                         minPatternsCount:=2;
@@ -719,7 +720,7 @@ begin
                         if NumberOfPatterns=0 then
                                                   TangentScale:=NormalScale
                                               else
-                                                  TangentScale:=polyLength/(NumberOfPatterns*LT.len);
+                                                  TangentScale:=polyLength/(NumberOfPatterns*LT.LengthFact);
                         end
                     else
                         begin
@@ -731,7 +732,7 @@ begin
            else
                begin
                     Segmentator.startdraw;
-                    D:=(polyLength-(TangentScale*LT.len)*NumberOfPatterns)/2; //длинна добавки для выравнивания
+                    D:=(polyLength-(TangentScale*LT.LengthFact)*NumberOfPatterns)/2; //длинна добавки для выравнивания
                     normalizedD:=D/polyLength;
 
                     if (not closed)or(not ltgen) then
@@ -798,7 +799,7 @@ begin
           //LT:=getLTfromVP(vp);
           length := Vertexlength(startpoint,endpoint);//длина линии
           scale:={SysVar.dwg.DWG_LTScale^}rc.DrawingContext.GlobalLTScale*vp.LineTypeScale;//фактический масштаб линии
-          num:=Length/(scale*LT.len);//количество повторений шаблона
+          num:=Length/(scale*LT.LengthFact);//количество повторений шаблона
           if ((num<1)and(not LT^.WithoutLines))or(num>SysVarRDMaxLTPatternsInEntity) then
           begin
                DrawLineWithoutLT(rc,startpoint,endpoint,result); //не рисуем шаблон при большом количестве повторений
@@ -808,7 +809,7 @@ begin
           begin
                Segmentator.InitFromLine(startpoint,endpoint,length,@self);//длина линии
                Segmentator.startdraw;
-               D:=(Length-(scale*LT.len)*trunc(num))/2; //длинна добавки для выравнивания
+               D:=(Length-(scale*LT.LengthFact)*trunc(num))/2; //длинна добавки для выравнивания
                normalizedD:=D/Length;
 
                PStroke:=LT^.strokesarray.beginiterate(ir3);//первый штрих

@@ -215,7 +215,7 @@ begin
           countlt(pltp,inent,inblock);
           LTDescLabel.Caption:=Format(rsLineTypeUsedIn,[Tria_AnsiToUtf8(pltp^.Name),inent,inblock]);
           if pltp^.Mode=TLTLineType then
-                                        Memo1.Text:=Format(rsLineTypeDesk,[pltp^.len,Tria_AnsiToUtf8(pltp^.getastext)])
+                                        Memo1.Text:=Format(rsLineTypeDesk,[pltp^.LengthDXF,Tria_AnsiToUtf8(pltp^.getastext)])
                                     else
                                         Memo1.Text:=rsSysLineTypeWarning;
      end;

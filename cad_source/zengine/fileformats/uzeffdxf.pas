@@ -626,9 +626,11 @@ var
    TempDouble:GDBDouble;
    flags: GDBInteger;
    DWGHandle:TDWGHandle;
+   len:double;
 begin
   dashinfo:=TDIDash;
   txtstr:='';
+  len:=0;
   if GoToDXForENDTAB(f, 0, dxfName_LType) then
   while s = dxfName_LType do
   begin
@@ -678,7 +680,7 @@ begin
        40:
          begin
               if pltypeprop<>nil then
-              pltypeprop^.len:=strtofloat(s);
+              pltypeprop^.LengthDXF:=strtofloat(s);
          end;
        49:
           begin
@@ -712,6 +714,7 @@ begin
                     TempDouble:=strtofloat(s);
                     pltypeprop^.dasharray.PushBackData(dashinfo);
                     pltypeprop^.strokesarray.PushBackData(TempDouble);
+                    len:=len+abs(TempDouble);
                if TempDouble>eps then
                                      begin
                                           pltypeprop^.LastStroke:=TODILine;
@@ -761,6 +764,8 @@ begin
          end;
        end;
        end;
+      if assigned(pltypeprop) then
+        pltypeprop^.LengthFact:=len;
   end;
 end;
 procedure ReadLayers(var s:ansistring;clayer:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
@@ -2157,7 +2162,7 @@ begin
                          outstream.TXTAddGDBStringEOL(dxfGroupCode(73));
                          outstream.TXTAddGDBStringEOL(inttostr(i));
                          outstream.TXTAddGDBStringEOL(dxfGroupCode(40));
-                         outstream.TXTAddGDBStringEOL(floattostr(pltp^.len));
+                         outstream.TXTAddGDBStringEOL(floattostr(pltp^.LengthDXF));
                          if i>0 then
                          begin
                               TDI:=pltp^.dasharray.beginiterate(ir2);

@@ -177,7 +177,7 @@ begin
                                                              mpdfo.UseMode:=UseMode;
                                                              mp.MPUserName:=username;
                                                              mp.MPObjectsData.RegisterKey(id,mpdfo);
-                                                             MultiPropertiesManager.MultiPropertyDictionary.insert(name,mp);
+                                                             MultiPropertiesManager.MultiPropertyDictionary.Add(name,mp);
                                                              MultiPropertiesManager.MultiPropertyVector.PushBack(mp);
                                                         end;
    inc(sortedid);

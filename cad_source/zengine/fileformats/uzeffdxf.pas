@@ -205,9 +205,9 @@ var
 procedure storevariable;
 begin
      case currentindex of
-     0:DWGVarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}(varname,valuesarray[0]);
-     1:DWGVarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}(varname,valuesarray[0]+'|'+valuesarray[1]);
-     else DWGVarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}(varname,valuesarray[0]+'|'+valuesarray[1]+'|'+valuesarray[2]);
+     0:DWGVarsDict.Add(varname,valuesarray[0]);
+     1:DWGVarsDict.Add(varname,valuesarray[0]+'|'+valuesarray[1]);
+     else DWGVarsDict.Add(varname,valuesarray[0]+'|'+valuesarray[1]+'|'+valuesarray[2]);
      end;
      currentindex:=-1;
 end;
@@ -376,8 +376,8 @@ begin
                                 begin
                                      if PGDBObjEntity(pobj)^.PExtAttrib^.Handle>200 then
                                                                                       begin
-                                                                                      context.h2p.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}Add{$ENDIF}(PGDBObjEntity(pobj)^.PExtAttrib^.Handle,pobj);
-                                                                                      context.h2p.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}Add{$ENDIF}(PGDBObjEntity(pobj)^.PExtAttrib^.dwgHandle,pobj);
+                                                                                      context.h2p.Add(PGDBObjEntity(pobj)^.PExtAttrib^.Handle,pobj);
+                                                                                      context.h2p.Add(PGDBObjEntity(pobj)^.PExtAttrib^.dwgHandle,pobj);
                                                                                       end;
                                                                                       //pushhandle(phandlearray,PGDBObjEntity(pobj)^.PExtAttrib^.Handle,GDBPlatformint(pobj));
                                      if PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle>200 then
@@ -442,8 +442,8 @@ begin
                                 begin
                                      if PGDBObjEntity(pobj)^.PExtAttrib^.Handle>200 then
                                                                                       begin
-                                                                                      context.h2p.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}Add{$ENDIF}(PGDBObjEntity(pobj)^.PExtAttrib^.Handle,postobj);
-                                                                                      context.h2p.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}Add{$ENDIF}(PGDBObjEntity(pobj)^.PExtAttrib^.dwgHandle,postobj);
+                                                                                      context.h2p.Add(PGDBObjEntity(pobj)^.PExtAttrib^.Handle,postobj);
+                                                                                      context.h2p.Add(PGDBObjEntity(pobj)^.PExtAttrib^.dwgHandle,postobj);
                                                                                       end
                                                                                       //pushhandle(phandlearray,PGDBObjEntity(pobj)^.PExtAttrib^.Handle,GDBPlatformint(postobj));
                                 end;
@@ -647,7 +647,7 @@ begin
            case drawing.LTypeStyleTable.AddItem(s,pointer(pltypeprop)) of
                         IsFounded:
                                   begin
-                                       context.h2p.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}Add{$ENDIF}(DWGHandle,pltypeprop);
+                                       context.h2p.Add(DWGHandle,pltypeprop);
                                        if LoadMode=TLOLoad then
                                        begin
                                        end
@@ -658,7 +658,7 @@ begin
                                   begin
                                        pltypeprop^.init(s);
                                        dashinfo:=TDIDash;
-                                       context.h2p.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}Add{$ENDIF}(DWGHandle,pltypeprop);
+                                       context.h2p.Add(DWGHandle,pltypeprop);
                                   end;
                         IsError:
                                   begin
@@ -945,7 +945,7 @@ begin
         end;
     if ti<>nil then
     begin
-         context.h2p.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}Add{$ENDIF}(DWGHandle,ti);
+         context.h2p.Add(DWGHandle,ti);
          ptstyle:={drawing.TextStyleTable.getelement}(ti);
          pltypeprop:=drawing.LTypeStyleTable.beginiterate(ir);
          if pltypeprop<>nil then
@@ -1577,37 +1577,37 @@ var
    pcurrtextstyle:PGDBTextStyle;
    pcurrentdimstyle:PGDBDimStyle;
 begin
-    VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$CLAYER',drawing.GetCurrentLayer^.Name);
-    VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$CELTYPE',drawing.GetCurrentLType^.Name);
+    VarsDict.Add('$CLAYER',drawing.GetCurrentLayer^.Name);
+    VarsDict.Add('$CELTYPE',drawing.GetCurrentLType^.Name);
 
     pcurrtextstyle:=drawing.GetCurrentTextStyle;
     if pcurrtextstyle<>nil then
-                               VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$TEXTSTYLE',drawing.GetCurrentTextStyle^.Name)
+                               VarsDict.Add('$TEXTSTYLE',drawing.GetCurrentTextStyle^.Name)
                            else
-                               VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$TEXTSTYLE',TSNStandardStyleName);
+                               VarsDict.Add('$TEXTSTYLE',TSNStandardStyleName);
     pcurrentdimstyle:=drawing.GetCurrentDimStyle;
     if pcurrentdimstyle<>nil then
-                                 VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$DIMSTYLE',pcurrentdimstyle^.Name)
+                                 VarsDict.Add('$DIMSTYLE',pcurrentdimstyle^.Name)
                              else
-                                 VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$DIMSTYLE','Standatd');
+                                 VarsDict.Add('$DIMSTYLE','Standatd');
 
     //if assigned(sysvar.DWG.DWG_CLinew) then
-                                           VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$CELWEIGHT',inttostr({sysvar.DWG.DWG_CLinew^}drawing.CurrentLineW));
+                                           VarsDict.Add('$CELWEIGHT',inttostr({sysvar.DWG.DWG_CLinew^}drawing.CurrentLineW));
                                        //else
                                        //    VarsDict.insert('$CELWEIGHT',inttostr(-1));
 
     //if assigned(sysvar.DWG.DWG_LTScale) then
-                                            VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$LTSCALE',floattostr({sysvar.DWG.DWG_LTScale^}drawing.LTScale));
+                                            VarsDict.Add('$LTSCALE',floattostr({sysvar.DWG.DWG_LTScale^}drawing.LTScale));
                                         //else
                                         //    VarsDict.insert('$LTSCALE',floattostr(1.0));
 
     //if assigned(sysvar.DWG.DWG_CLTScale) then
-                                             VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$CELTSCALE',floattostr({sysvar.DWG.DWG_CLTScale^}drawing.CLTScale));
+                                             VarsDict.Add('$CELTSCALE',floattostr({sysvar.DWG.DWG_CLTScale^}drawing.CLTScale));
                                          //else
                                          //    VarsDict.insert('$CELTSCALE',floattostr(1.0));
 
     //if assigned(sysvar.DWG.DWG_CColor) then
-                                           VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$CECOLOR',inttostr({sysvar.DWG.DWG_CColor^}drawing.CColor));
+                                           VarsDict.Add('$CECOLOR',inttostr({sysvar.DWG.DWG_CColor^}drawing.CColor));
                                        //else
                                            //VarsDict.insert('$CECOLOR',inttostr(256));
 
@@ -1615,32 +1615,32 @@ begin
     //if assigned(sysvar.DWG.DWG_DrawMode) then
                                              begin
                                                   if {sysvar.DWG.DWG_DrawMode^}drawing.LWDisplay then
-                                                                                  VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$LWDISPLAY',inttostr(1))
+                                                                                  VarsDict.Add('$LWDISPLAY',inttostr(1))
                                                                               else
-                                                                                  VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$LWDISPLAY',inttostr(0));
+                                                                                  VarsDict.Add('$LWDISPLAY',inttostr(0));
                                              end;
                                          //else
                                          //    VarsDict.insert('$LWDISPLAY',inttostr(0));
-   VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$HANDSEED','FUCK OFF!');
+   VarsDict.Add('$HANDSEED','FUCK OFF!');
 
    //if assigned(sysvar.DWG.DWG_LUnits) then
-                                        VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$LUNITS',inttostr(ord({sysvar.DWG.DWG_LUnits^}drawing.LUnits)+1));
+                                        VarsDict.Add('$LUNITS',inttostr(ord({sysvar.DWG.DWG_LUnits^}drawing.LUnits)+1));
    //if assigned(sysvar.DWG.DWG_LUPrec) then
-                                        VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$LUPREC',inttostr(ord({sysvar.DWG.DWG_LUPrec^}drawing.LUPrec)));
+                                        VarsDict.Add('$LUPREC',inttostr(ord({sysvar.DWG.DWG_LUPrec^}drawing.LUPrec)));
    //if assigned(sysvar.DWG.DWG_AUnits) then
-                                        VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$AUNITS',inttostr(ord({sysvar.DWG.DWG_AUnits^}drawing.AUnits)));
+                                        VarsDict.Add('$AUNITS',inttostr(ord({sysvar.DWG.DWG_AUnits^}drawing.AUnits)));
    //if assigned(sysvar.DWG.DWG_AUPrec) then
-                                        VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$AUPREC',inttostr(ord({sysvar.DWG.DWG_AUPrec^}drawing.AUPrec)));
+                                        VarsDict.Add('$AUPREC',inttostr(ord({sysvar.DWG.DWG_AUPrec^}drawing.AUPrec)));
    //if assigned(sysvar.DWG.DWG_AngDir) then
-                                        VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$ANGDIR',inttostr(ord({sysvar.DWG.DWG_AngDir^}drawing.AngDir)));
+                                        VarsDict.Add('$ANGDIR',inttostr(ord({sysvar.DWG.DWG_AngDir^}drawing.AngDir)));
    //if assigned(sysvar.DWG.DWG_AngBase) then
-                                        VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$ANGBASE',floattostr({sysvar.DWG.DWG_AngBase^}drawing.AngBase));
+                                        VarsDict.Add('$ANGBASE',floattostr({sysvar.DWG.DWG_AngBase^}drawing.AngBase));
    //if assigned(sysvar.DWG.DWG_UnitMode) then
-                                        VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$UNITMODE',inttostr(ord({sysvar.DWG.DWG_UnitMode^}drawing.UnitMode)));
+                                        VarsDict.Add('$UNITMODE',inttostr(ord({sysvar.DWG.DWG_UnitMode^}drawing.UnitMode)));
    //if assigned(sysvar.DWG.DWG_InsUnits) then
-                                           VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$INSUNITS',inttostr(ord({sysvar.DWG.DWG_InsUnits^}drawing.InsUnits)));
+                                           VarsDict.Add('$INSUNITS',inttostr(ord({sysvar.DWG.DWG_InsUnits^}drawing.InsUnits)));
    //if assigned(sysvar.DWG.DWG_TextSize) then
-                                           VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$TEXTSIZE',floattostr({sysvar.DWG.DWG_TextSize^}drawing.TextSize));
+                                           VarsDict.Add('$TEXTSIZE',floattostr({sysvar.DWG.DWG_TextSize^}drawing.TextSize));
 end;
 
 function savedxf2000(SavedFileName,TemplateFileName:String;var drawing:TSimpleDrawing):boolean;
@@ -1710,7 +1710,7 @@ begin
   indimstyletable:=false;
   inappidtable:=false;
   MakeVariablesDict(IODXFContext.VarsDict,drawing);
-  processedvarscount:=IODXFContext.VarsDict.{$IFDEF DELPHI}count{$ENDIF}{$IFNDEF DELPHI}size{$ENDIF};
+  processedvarscount:=IODXFContext.VarsDict.count;
   while templatefile.notEOF do
   begin
     groups := templatefile.readGDBString;
@@ -1767,7 +1767,7 @@ begin
         end
         else
         begin
-          OldHandele2NewHandle.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}Add{$ENDIF}(valuei, IODXFContext.handle);
+          OldHandele2NewHandle.Add(valuei, IODXFContext.handle);
           //pushhandle(phandlea, valuei, handle);
           if not ignoredsource then
           begin

@@ -39,10 +39,11 @@ GDBStringHash=class
   class function hash(s:GDBstring; n:longint):SizeUInt;
 end;
 {$ENDIF}
-TObjID2Counter=TMyMapCounter<TObjID{,LessObjID}>;
+TObjID2Counter=TMyMapCounter<TObjID>;
 TObjIDVector=TMyVector<TObjID>;
 
-TMyGDBStringDictionary <TValue> = class(TMyHashMap<GDBString, TValue{$IFNDEF DELPHI},GDBStringHash{$ENDIF}>)
+//TMyGDBStringDictionary <TValue> = class(TMyHashMap<GDBString, TValue{$IFNDEF DELPHI},GDBStringHash{$ENDIF}>)
+TMyGDBStringDictionary <TValue> = class(GKey2DataMap<String,TValue>)
 end;
 
 

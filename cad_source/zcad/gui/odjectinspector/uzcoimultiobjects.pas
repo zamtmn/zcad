@@ -26,8 +26,15 @@ uses
   uzbmemman,uzedimensionaltypes,uzcstrconsts,sysutils,uzeentityfactory,
   uzcenitiesvariablesextender,uzgldrawcontext,usimplegenerics,gzctnrstl,
   gzctnrvectortypes,uzbtypes,uzcdrawings,varmandef,uzeentity,uzbtypesbase,
-  Varman,uzctnrvectorgdbstring,UGDBSelectedObjArray,uzcoimultipropertiesutil;
+  Varman,uzctnrvectorgdbstring,UGDBSelectedObjArray,uzcoimultipropertiesutil,
+  uzeentityextender;
 type
+  TObjIDWithExtender=packed record
+    ObjID:TObjID;
+    Extender:TMetaEntityExtender;
+  end;
+
+  TObjIDWithExtender2Counter=TMyMapCounter<TObjIDWithExtender>;
 {Export+}
   {TMSType=(
            TMST_All(*'All entities'*),
@@ -55,6 +62,7 @@ type
                 SummaryUnit:TObjectUnit;(*'Summary'*)
                 ObjIDVector:{-}TObjIDVector{/GDBPointer/};(*hidden_in_objinsp*)
                 ObjID2Counter:{-}TObjID2Counter{/GDBPointer/};(*hidden_in_objinsp*)
+                ObjIDWithExtenderCounter:{-}TObjIDWithExtender2Counter{/GDBPointer/};(*hidden_in_objinsp*)
                 SavezeUnitsFormat:TzeUnitsFormat;(*hidden_in_objinsp*)
                 procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;
                 procedure CreateUnit(const f:TzeUnitsFormat;_GetEntsTypes:boolean=true);virtual;
@@ -99,7 +107,8 @@ begin
      VariableProcessSelector:=VPS_OnlyThisEnts;
 
      ObjID2Counter:=TObjID2Counter.Create;
-     ObjIDVector:=TObjIDVector.create;
+     ObjIDVector:=TObjIDVector.Create;
+     ObjIDWithExtenderCounter:=TObjIDWithExtender2Counter.Create;
 end;
 destructor  TMSEditor.done;
 begin
@@ -112,6 +121,7 @@ begin
 
      ObjID2Counter.Free;
      ObjIDVector.Free;
+     ObjIDWithExtenderCounter.Free;
 end;
 function SetVariable(pentity: pGDBObjEntity;pentvarext: TVariablesExtender;PSourceVD:pvardesk):boolean;
 var
@@ -337,56 +347,69 @@ end;
 procedure TMSEditor.GetEntsTypes;
 var
     ir:itrec;
+    i:integer;
     pv:pGDBObjEntity;
     psd:PSelectedObjDesc;
     pair:TObjID2Counter.TDictionaryPair;
-    //iterator:TObjID2Counter.TIterator;
     s:GDBString;
     entinfo:TEntInfoData;
+    ObjIDWithExtender:TObjIDWithExtender;
     counter:integer;
 begin
+  //очистка-пересоздание структур данных
   ObjID2Counter.Free;
   ObjID2Counter:=TObjID2Counter.Create;
-  ObjIDVector.free;
+
+  ObjIDVector.Free;
   ObjIDVector:=TObjIDVector.create;
+
+  ObjIDWithExtenderCounter.Free;
+  ObjIDWithExtenderCounter:=TObjIDWithExtender2Counter.Create;
   counter:=0;
 
+  //пробегаем выбранные примитивы, считаем сколько примитивов разного типа выбрано
+  //и какие расширения к ним привязаны
   psd:=drawings.GetCurrentDWG.SelObjArray.beginiterate(ir);
   if psd<>nil then
   repeat
     pv:=psd^.objaddr;
     if pv<>nil then
-    if pv^.Selected then
-    begin
-         ObjID2Counter.CountKey(pv^.GetObjType,1);
-         inc(counter);
+    if pv^.Selected then begin
+      //считаем типы примитивов
+      ObjID2Counter.CountKey(pv^.GetObjType,1);
+
+      //считаем расширения
+      ObjIDWithExtender.ObjID:=pv^.GetObjType;
+      for i:=0 to pv^.GetExtensionsCount()-2 do begin
+        ObjIDWithExtender.Extender:=typeof(pv^.GetExtension(i));
+        ObjIDWithExtenderCounter.CountKey(ObjIDWithExtender,1);
+      end;
+
+      inc(counter);
     end;
   psd:=drawings.GetCurrentDWG.SelObjArray.iterate(ir);
   until psd=nil;
 
   TxtEntType.Enums.free;
-  if ObjID2Counter.{size}count>1 then
-                   TxtEntType.Selected:=0
-               else
-                   TxtEntType.Selected:=1;
+  if ObjID2Counter.count>1 then
+    TxtEntType.Selected:=0
+  else
+    TxtEntType.Selected:=1;
+
+  //добавляем в комбобокс "все(кол-во)"
   s:=sysutils.format(rsNameWithCounter,[rsNameAll,counter]);
   TxtEntType.Enums.PushBackData(s);
   ObjIDVector.PushBack(0);
 
+  //добавляем в комбобокс "тип(кол-во)"
   for pair in ObjID2Counter do begin
-  //iterator:=ObjID2Counter.Min;
-  //if assigned(iterator) then
-  //repeat
-        if ObjID2EntInfoData.MyGetValue(pair.Key,entinfo) then
-          s:=entinfo.UserName
-        else
-          s:=rsNotRegistred;
-        s:=sysutils.format(rsNameWithCounter,[s,pair.value]);
-        TxtEntType.Enums.PushBackData(s);
-        ObjIDVector.PushBack(pair.key);
-  //until not iterator.Next;
-  //if assigned(iterator) then
-  //  iterator.destroy;
+    if ObjID2EntInfoData.MyGetValue(pair.Key,entinfo) then
+      s:=entinfo.UserName
+    else
+      s:=rsNotRegistred;
+    s:=sysutils.format(rsNameWithCounter,[s,pair.value]);
+    TxtEntType.Enums.PushBackData(s);
+    ObjIDVector.PushBack(pair.key);
   end;
 
 end;

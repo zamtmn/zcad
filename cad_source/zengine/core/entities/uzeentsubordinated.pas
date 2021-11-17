@@ -32,6 +32,8 @@ GDBObjExtendable=object(GDBaseObject)
                                  procedure AddExtension(ExtObj:TBaseEntityExtender);
                                  function GetExtension<GEntityExtenderType>:GEntityExtenderType;overload;
                                  function GetExtension(ExtType:TMetaEntityExtender):TBaseEntityExtender;overload;
+                                 function GetExtension(n:Integer):TBaseEntityExtender;overload;
+                                 function GetExtensionsCount:Integer;
                                  destructor done;virtual;
 end;
 
@@ -117,6 +119,20 @@ begin
                                     result:=EntExtensions.GetExtension<TBaseEntityExtender>(ExtType)
                                 else
                                     result:=nil;
+end;
+function GDBObjExtendable.GetExtensionsCount:Integer;
+begin
+  if assigned(EntExtensions) then
+    result:=EntExtensions.GetExtensionsCount
+  else
+    result:=0;
+end;
+function GDBObjExtendable.GetExtension(n:Integer):TBaseEntityExtender;
+begin
+  if assigned(EntExtensions) then
+    result:=EntExtensions.GetExtension(n)
+  else
+    result:=nil;
 end;
 destructor GDBObjExtendable.done;
 begin

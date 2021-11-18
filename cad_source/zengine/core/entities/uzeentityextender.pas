@@ -21,14 +21,10 @@ unit uzeentityextender;
 
 interface
 uses uzbmemman,uzedrawingdef,uzbtypesbase,uzbtypes,usimplegenerics,
-     UGDBOpenArrayOfByte,gzctnrstl,uzeffdxfsupport;
+     UGDBOpenArrayOfByte,gzctnrstl,uzeffdxfsupport,uzeBaseExtender;
 
 type
-TBaseObjExtender=class
-  class function getExtenderName:string;virtual;abstract;
-end;
-//PTBaseEntityExtender=^TBaseEntityExtender;
-TBaseEntityExtender=class(TBaseObjExtender)
+TBaseEntityExtender=class(TBaseExtender)
                   //class function CreateThisExtender(pEntity:Pointer; out ObjSize:Integer):PTBaseEntityExtender;
                   constructor Create(pEntity:Pointer);virtual;abstract;
                   procedure onEntityDestruct(pEntity:Pointer);virtual;abstract;

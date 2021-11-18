@@ -274,13 +274,13 @@ var
 begin
   if ResultParam.P.CodeUnitPos=OnlyGetLength then begin
     if mp<>nil then begin
-      if mp.MPObjectsData.MyGetValue(0,mpd) then begin
+      if mp.MPObjectsData.MyGetValue(TObjIDWithExtender.Create(0,nil),mpd) then begin
         ChangedData:=CreateChangedData(data.CurrentEntity,mpd.GetValueOffset,mpd.SetValueOffset);
         if @mpd.EntBeforeIterateProc<>nil then
           mpd.EntBeforeIterateProc({bip}mp.PIiterateData,ChangedData);
         mpd.EntIterateProc({bip}mp.PIiterateData,ChangedData,mp,true,mpd.EntChangeProc,f);
         tempresult:=mp.MPType.GetDecoratedValueAsString(PTOneVarData({bip}mp.PIiterateData)^.PVarDesc.data.Instance,f);
-      end else if mp.MPObjectsData.MyGetValue(PGDBObjEntity(data.CurrentEntity)^.GetObjType,mpd) then begin
+      end else if mp.MPObjectsData.MyGetValue(TObjIDWithExtender.Create(PGDBObjEntity(data.CurrentEntity)^.GetObjType,nil),mpd) then begin
         ChangedData:=CreateChangedData(data.CurrentEntity,mpd.GetValueOffset,mpd.SetValueOffset);
         if @mpd.EntBeforeIterateProc<>nil then
           mpd.EntBeforeIterateProc({bip}mp.PIiterateData,ChangedData);

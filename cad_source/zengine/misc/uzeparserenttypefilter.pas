@@ -111,9 +111,9 @@ var
 begin
   if ResultParam.P.CodeUnitPos=OnlyGetLength then begin
     if mp<>nil then begin
-      if mp.MPObjectsData.MyGetValue(0,mpd) then begin
+      if mp.MPObjectsData.MyGetValue(TObjIDWithExtender.Create(0,nil),mpd) then begin
         tempresult:=mp.MPType.GetDecoratedValueAsString(Pointer(PtrUInt(data)+mpd.GetValueOffset),f);
-      end else if mp.MPObjectsData.MyGetValue(PGDBObjEntity(data)^.GetObjType,mpd) then begin
+      end else if mp.MPObjectsData.MyGetValue(TObjIDWithExtender.Create(PGDBObjEntity(data)^.GetObjType,nil),mpd) then begin
         tempresult:=mp.MPType.GetDecoratedValueAsString(Pointer(PtrUInt(data)+mpd.GetValueOffset),f);
       end else
         tempresult:='';

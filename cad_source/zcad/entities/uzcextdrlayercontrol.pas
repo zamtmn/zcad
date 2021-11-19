@@ -30,6 +30,7 @@ type
 TLayerControlExtender=class(TBaseEntityExtender)
     GoodLayer,BadLayer:GDBString;
     VariableName:GDBString;
+    Inverse:GDBBoolean;
     class function getExtenderName:string;override;
     constructor Create(pEntity:Pointer);override;
     procedure onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef);override;
@@ -37,6 +38,7 @@ TLayerControlExtender=class(TBaseEntityExtender)
     class function EntIOLoadGoodLayer(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
     class function EntIOLoadBadLayer(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
     class function EntIOLoadVariableName(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+    class function EntIOLoadInverse(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 
     procedure onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);override;
   end;
@@ -47,6 +49,7 @@ begin
   GoodLayer:='EL_DEVICE_NAME';
   BadLayer:='SYS_METRIC';
   VariableName:='Test';
+  Inverse:=False;
 end;
 
 procedure TLayerControlExtender.onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef);
@@ -57,8 +60,8 @@ begin
   pvd:=FindVariableInEnt(pEntity,VariableName);
   if pvd<>nil then
     if pvd^.data.Instance<>nil then
-      if pvd^.data.PTD=@FundamentalBooleanDescriptorOdj then begin
-        if pboolean(pvd^.data.Instance)^ then
+      if pvd^.data.PTD^.GetFactTypedef=@FundamentalBooleanDescriptorOdj then begin
+        if pboolean(pvd^.data.Instance)^ xor Inverse then
           pl:=drawing.GetLayerTable^.getAddres(GoodLayer)
         else
           pl:=drawing.GetLayerTable^.getAddres(BadLayer);
@@ -77,6 +80,8 @@ begin
   dxfGDBStringout(outhandle,1000,'LCGoodLayer='+GoodLayer);
   dxfGDBStringout(outhandle,1000,'LCBadLayer='+BadLayer);
   dxfGDBStringout(outhandle,1000,'LCVariableName='+VariableName);
+  if Inverse then
+    dxfGDBStringout(outhandle,1000,'LCInverse');
 end;
 
 function AddLayerControlExtenderToEntity(PEnt:PGDBObjEntity):TLayerControlExtender;
@@ -119,6 +124,18 @@ begin
   result:=true;
 end;
 
+class function TLayerControlExtender.EntIOLoadInverse(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+var
+  LCExtdr:TLayerControlExtender;
+begin
+  LCExtdr:=PGDBObjEntity(PEnt)^.GetExtension<TLayerControlExtender>;
+  if LCExtdr=nil then
+    LCExtdr:=AddLayerControlExtenderToEntity(PEnt);
+  LCExtdr.Inverse:=True;
+  result:=true;
+end;
+
+
 procedure TLayerControlExtender.onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);
 begin
 end;
@@ -128,5 +145,6 @@ initialization
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('LCGoodLayer',TLayerControlExtender.EntIOLoadGoodLayer);
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('LCBadLayer',TLayerControlExtender.EntIOLoadBadLayer);
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('LCVariableName',TLayerControlExtender.EntIOLoadVariableName);
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('LCInverse',TLayerControlExtender.EntIOLoadInverse);
 finalization
 end.

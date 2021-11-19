@@ -31,7 +31,7 @@ uses
   Varman,
   uzcoimultipropertiesutil,
   uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,uzeenttext,uzeentmtext,uzeentpolyline,uzcentelleader,uzeentdimension,uzeentellipse,
-  uzegeometry,uzcoimultiproperties,LazLogger,uzcenitiesvariablesextender;
+  uzegeometry,uzcoimultiproperties,LazLogger,uzcExtdrLayerControl;
 implementation
 procedure GDBDoubleDeltaEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var
@@ -401,9 +401,11 @@ const
      pelleader:PGDBObjElLeader=nil;
      pdim:PGDBObjDimension=nil;
      pellipse:PGDBObjEllipse=nil;
-     VariablesExtender:TVariablesExtender=nil;
+     LayerControlExtender:TLayerControlExtender=nil;
 begin
-  MultiPropertiesManager.RegisterFirstMultiproperty('TestExtenderParam','TestExtenderParam',sysunit^.TypeName2PTD('GDBPointer'),MPCExtenders,0,TVariablesExtender,integer(@VariablesExtender.pMainFuncEntity),0,@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,nil);
+  MultiPropertiesManager.RegisterFirstMultiproperty('LControl_GoodLayer','LC good layer',sysunit^.TypeName2PTD('GDBString'),MPCExtenders,0,TLayerControlExtender,integer(@LayerControlExtender.GoodLayer),integer(@LayerControlExtender.GoodLayer),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
+  MultiPropertiesManager.RegisterFirstMultiproperty('LControl_BadLayer','LC bad layer',sysunit^.TypeName2PTD('GDBString'),MPCExtenders,0,TLayerControlExtender,integer(@LayerControlExtender.BadLayer),integer(@LayerControlExtender.BadLayer),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
+  MultiPropertiesManager.RegisterFirstMultiproperty('LControl_VarName','LC variable name',sysunit^.TypeName2PTD('GDBString'),MPCExtenders,0,TLayerControlExtender,integer(@LayerControlExtender.VariableName),integer(@LayerControlExtender.VariableName),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
   {General section}
   MultiPropertiesManager.RegisterFirstMultiproperty('EntityName','Entity name',sysunit^.TypeName2PTD('GDBAnsiString'),MPCGeneral,0,nil,0,0,@GetOneVarData,@FreeOneVarData,nil,@EntityNameEntIterateProc,nil);
   MultiPropertiesManager.RegisterMultiproperty('Color','Color',sysunit^.TypeName2PTD('TGDBPaletteColor'),MPCGeneral,0,nil,integer(@pent^.vp.Color),integer(@pent^.vp.Color),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);

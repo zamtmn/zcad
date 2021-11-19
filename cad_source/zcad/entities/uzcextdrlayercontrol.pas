@@ -28,11 +28,17 @@ const
   LayerControlExtenderName='extdrLayerControl';
 type
 TLayerControlExtender=class(TBaseEntityExtender)
-    GoodLayer,BadLayer:string;
-    VariableName:string;
+    GoodLayer,BadLayer:GDBString;
+    VariableName:GDBString;
     class function getExtenderName:string;override;
     constructor Create(pEntity:Pointer);override;
     procedure onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef);override;
+    procedure SaveToDxf(var outhandle:GDBOpenArrayOfByte;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
+    class function EntIOLoadGoodLayer(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+    class function EntIOLoadBadLayer(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+    class function EntIOLoadVariableName(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+
+    procedure onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);override;
   end;
 
 implementation
@@ -66,7 +72,61 @@ begin
   result:=LayerControlExtenderName;
 end;
 
+procedure TLayerControlExtender.SaveToDxf(var outhandle:GDBOpenArrayOfByte;PEnt:Pointer;var IODXFContext:TIODXFContext);
+begin
+  dxfGDBStringout(outhandle,1000,'LCGoodLayer='+GoodLayer);
+  dxfGDBStringout(outhandle,1000,'LCBadLayer='+BadLayer);
+  dxfGDBStringout(outhandle,1000,'LCVariableName='+VariableName);
+end;
+
+function AddLayerControlExtenderToEntity(PEnt:PGDBObjEntity):TLayerControlExtender;
+begin
+  result:=TLayerControlExtender.Create(PEnt);
+  PEnt^.AddExtension(result);
+end;
+
+
+class function TLayerControlExtender.EntIOLoadGoodLayer(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+var
+  LCExtdr:TLayerControlExtender;
+begin
+  LCExtdr:=PGDBObjEntity(PEnt)^.GetExtension<TLayerControlExtender>;
+  if LCExtdr=nil then
+    LCExtdr:=AddLayerControlExtenderToEntity(PEnt);
+  LCExtdr.GoodLayer:=_Value;
+  result:=true;
+end;
+
+class function TLayerControlExtender.EntIOLoadBadLayer(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+var
+  LCExtdr:TLayerControlExtender;
+begin
+  LCExtdr:=PGDBObjEntity(PEnt)^.GetExtension<TLayerControlExtender>;
+  if LCExtdr=nil then
+    LCExtdr:=AddLayerControlExtenderToEntity(PEnt);
+  LCExtdr.BadLayer:=_Value;
+  result:=true;
+end;
+
+class function TLayerControlExtender.EntIOLoadVariableName(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+var
+  LCExtdr:TLayerControlExtender;
+begin
+  LCExtdr:=PGDBObjEntity(PEnt)^.GetExtension<TLayerControlExtender>;
+  if LCExtdr=nil then
+    LCExtdr:=AddLayerControlExtenderToEntity(PEnt);
+  LCExtdr.VariableName:=_Value;
+  result:=true;
+end;
+
+procedure TLayerControlExtender.onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);
+begin
+end;
+
 initialization
   EntityExtenders.RegisterKey(uppercase(LayerControlExtenderName),TLayerControlExtender);
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('LCGoodLayer',TLayerControlExtender.EntIOLoadGoodLayer);
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('LCBadLayer',TLayerControlExtender.EntIOLoadBadLayer);
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('LCVariableName',TLayerControlExtender.EntIOLoadVariableName);
 finalization
 end.

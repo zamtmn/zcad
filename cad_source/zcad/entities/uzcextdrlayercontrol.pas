@@ -35,6 +35,7 @@ TLayerControlExtender=class(TBaseEntityExtender)
     constructor Create(pEntity:Pointer);override;
     procedure onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef);override;
     procedure SaveToDxf(var outhandle:GDBOpenArrayOfByte;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
+    procedure PostLoad(var context:TIODXFLoadContext);override;
     class function EntIOLoadGoodLayer(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
     class function EntIOLoadBadLayer(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
     class function EntIOLoadVariableName(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
@@ -83,6 +84,11 @@ begin
   if Inverse then
     dxfGDBStringout(outhandle,1000,'LCInverse');
 end;
+
+procedure TLayerControlExtender.PostLoad(var context:TIODXFLoadContext);
+begin
+end;
+
 
 function AddLayerControlExtenderToEntity(PEnt:PGDBObjEntity):TLayerControlExtender;
 begin

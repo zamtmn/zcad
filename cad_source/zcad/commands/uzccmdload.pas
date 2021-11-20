@@ -97,11 +97,13 @@ begin
      if FileExists(utf8tosys(s+'.dbpas')) then
      begin
            pu:=PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
-           mem.InitFromFile(s+'.dbpas');
-           //pu^.free;
-           units.parseunit(SupportPath,InterfaceTranslate,mem,PTSimpleUnit(pu));
-           remapprjdb(pu);
-           mem.done;
+           if assigned(pu) then begin
+             mem.InitFromFile(s+'.dbpas');
+             //pu^.free;
+             units.parseunit(SupportPath,InterfaceTranslate,mem,PTSimpleUnit(pu));
+             remapprjdb(pu);
+             mem.done;
+           end;
      end;
      dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
      drawings.GetCurrentROOT.calcbb(dc);

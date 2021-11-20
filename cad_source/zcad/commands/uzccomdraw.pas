@@ -48,7 +48,8 @@ uses
   uzeentsubordinated,uzeentblockinsert,uzeentpolyline,uzclog,gzctnrvectordata,
   math,uzeenttable,uzctnrvectorgdbstring,
   uzeentcurve,uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray
-  ,uzelongprocesssupport,LazLogger,uzccommand_circle2,uzccommand_erase,uzccmdfloatinsert;
+  ,uzelongprocesssupport,LazLogger,uzccommand_circle2,uzccommand_erase,uzccmdfloatinsert,
+  uzccommand_rebuildtree;
 const
      modelspacename:GDBSTring='**Модель**';
 type
@@ -1598,6 +1599,8 @@ begin
                                       drawings.GetCurrentDWG^.pObjRoot:=drawings.GetCurrentDWG^.BlockDefArray.getblockdef(Tria_Utf8ToAnsi(nname))
                                   else
                                       drawings.GetCurrentDWG^.pObjRoot:=@drawings.GetCurrentDWG^.mainObjRoot;
+          Regen_com(EmptyCommandOperands);
+          RebuildTree_com(EmptyCommandOperands);
           ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
           //if assigned(UpdateVisibleProc) then UpdateVisibleProc(ZMsgID_GUIActionRedraw);
           zcRedrawCurrentDrawing;

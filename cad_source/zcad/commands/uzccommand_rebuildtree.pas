@@ -29,6 +29,8 @@ uses
   uzcinterface,
   uzcutils;
 
+function RebuildTree_com(operands:TCommandOperands):TCommandResult;
+
 implementation
 
 function RebuildTree_com(operands:TCommandOperands):TCommandResult;

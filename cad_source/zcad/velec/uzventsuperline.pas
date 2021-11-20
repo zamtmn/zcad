@@ -76,6 +76,7 @@ begin
   GDBGetMem({$IFDEF DEBUGBUILD}'GDBObjSuperLine.Clone',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjSuperLine));
   tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight, CoordInOCS.lBegin, CoordInOCS.lEnd);
   CopyVPto(tvo^);
+  CopyExtensionsTo(tvo^);
   tvo^.bp.ListPos.Owner:=own;
   EntExtensions.RunOnCloneProcedures(@self,tvo);
   result := tvo;

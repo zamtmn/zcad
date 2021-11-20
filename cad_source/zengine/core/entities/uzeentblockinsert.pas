@@ -420,6 +420,7 @@ begin
   //tvo^.vp.id := GDBBlockInsertID;
   //tvo^.vp.layer :=vp.layer;
   CopyVPto(tvo^);
+  CopyExtensionsTo(tvo^);
   GDBPointer(tvo^.name) := nil;
   tvo^.name := name;
   tvo^.pattrib := nil;

@@ -315,6 +315,7 @@ begin
   GDBGetMem({$IFDEF DEBUGBUILD}'GDBObjAlignedDimension.Clone',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjAlignedDimension));
   tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight);
   CopyVPto(tvo^);
+  CopyExtensionsTo(tvo^);
   tvo^.DimData := DimData;
   tvo^.bp.ListPos.Owner:=own;
   tvo^.PDimStyle:=PDimStyle;

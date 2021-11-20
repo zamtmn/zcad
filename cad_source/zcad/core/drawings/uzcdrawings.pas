@@ -937,10 +937,11 @@ begin
      _dest.Base:=_source.Base;
      _dest.BlockDesc:=_source.BlockDesc;
 
-     psourcevarext:=_source^.GetExtension<TVariablesExtender>;
+     _source^.CopyExtensionsTo(_dest^);
+     {psourcevarext:=_source^.GetExtension<TVariablesExtender>;
      pdestvarext:=_dest^.GetExtension<TVariablesExtender>;
      if (psourcevarext<>nil)and(pdestvarext<>nil)then
-     psourcevarext.entityunit.CopyTo(@pdestvarext.entityunit);
+     psourcevarext.entityunit.CopyTo(@pdestvarext.entityunit);}
 
      dc:=_to^.CreateDrawingRC;
 

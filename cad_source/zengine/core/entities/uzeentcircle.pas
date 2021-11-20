@@ -508,6 +508,7 @@ begin
   tvo^.init(CalcOwner(own),vp.Layer, vp.LineWeight, Local.p_insert, Radius);
   tvo^.local:=local;
   CopyVPto(tvo^);
+  CopyExtensionsTo(tvo^);
   //tvo^.format;
   result := tvo;
 end;

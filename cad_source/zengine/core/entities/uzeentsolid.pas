@@ -391,6 +391,7 @@ begin
   tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight, nulvertex);
   tvo^.Local:=local;
   CopyVPto(tvo^);
+  CopyExtensionsTo(tvo^);
   tvo^.bp.ListPos.Owner:=own;
   tvo^.PInOCS:=PInOCS;
   tvo^.PInWCS:=PInWCS;

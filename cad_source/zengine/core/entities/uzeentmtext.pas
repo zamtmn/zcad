@@ -884,6 +884,7 @@ begin
   tvo^.initnul(own);
   //tvo^.vp:=vp;
   CopyVPto(tvo^);
+  CopyExtensionsTo(tvo^);
   tvo^.Local:=local;
   tvo^.Textprop:=textprop;
   tvo^.template:=template;

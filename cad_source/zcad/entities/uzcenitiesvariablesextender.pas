@@ -24,7 +24,7 @@ uses sysutils,UGDBObjBlockdefArray,uzedrawingdef,uzeentityextender,
      uzbtypesbase,uzbtypes,uzeentsubordinated,uzeentity,uzeenttext,uzeblockdef,
      varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,uzbmemman,
      uzeentitiestree,usimplegenerics,uzeffdxfsupport,uzbpaths,uzctranslations,
-     gzctnrvectortypes;
+     gzctnrvectortypes,uzeBaseExtender;
 const
   VariablesExtenderName='extdrVariables';
 type
@@ -39,6 +39,8 @@ TVariablesExtender=class(TBaseVariablesExtender)
     //class function CreateEntExtender(pEntity:Pointer):TVariablesExtender;static;
     constructor Create(pEntity:Pointer);override;
     destructor Destroy;override;
+
+    procedure Assign(Source:TBaseExtender);override;
 
     procedure onEntityClone(pSourceEntity,pDestEntity:pointer);override;
     procedure onEntityBuildVarGeometry(pEntity:pointer;const drawing:TDrawingDef);override;
@@ -184,6 +186,11 @@ begin
      DelegatesArray.Clear;
      DelegatesArray.done;
 end;
+procedure TVariablesExtender.Assign(Source:TBaseExtender);
+begin
+  TVariablesExtender(Source).entityunit.CopyTo(@self.entityunit);
+end;
+
 procedure TVariablesExtender.onEntityClone(pSourceEntity,pDestEntity:pointer);
 var
     pDestVariablesExtender,pbdunit:TVariablesExtender;

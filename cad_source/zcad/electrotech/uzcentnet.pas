@@ -104,6 +104,7 @@ begin
   GDBGetMem({$IFDEF DEBUGBUILD}'{F9D41F4A-1E80-4D3A-9DD1-D0037EFCA988}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjNet));
   tvo^.initnul(bp.ListPos.owner);
   CopyVPto(tvo^);
+  CopyExtensionsTo(tvo^);
   //tvo^.vp.id :=GDBNetID;
   tvo.ObjArray.init({$IFDEF DEBUGBUILD}'{E9005274-601F-4A3F-BDB8-E311E59D558C}',{$ENDIF}ObjArray.Count);
   ObjArray.CloneEntityTo(@tvo.ObjArray,tvo);

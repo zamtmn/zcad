@@ -283,6 +283,7 @@ begin
   GDBGetMem({$IFDEF DEBUGBUILD}'{1C6F0445-7339-449A-BDEB-7D38A46FD910}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjPoint));
   tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight, P_insertInOCS);
   CopyVPto(tvo^);
+  CopyExtensionsTo(tvo^);
   result := tvo;
 end;
 procedure GDBObjPoint.rtsave;

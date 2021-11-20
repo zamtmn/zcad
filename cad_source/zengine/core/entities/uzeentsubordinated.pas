@@ -34,6 +34,7 @@ GDBObjExtendable=object(GDBaseObject)
                                  function GetExtension(ExtType:TMetaEntityExtender):TBaseEntityExtender;overload;
                                  function GetExtension(n:Integer):TBaseEntityExtender;overload;
                                  function GetExtensionsCount:Integer;
+                                 procedure CopyExtensionsTo(var Dest:GDBObjExtendable);
                                  destructor done;virtual;
 end;
 
@@ -139,6 +140,23 @@ begin
      if assigned(EntExtensions)then
        EntExtensions.destroy;
 end;
+procedure GDBObjExtendable.CopyExtensionsTo(var Dest:GDBObjExtendable);
+var
+  i:integer;
+  SourceExt,DestExt:TBaseEntityExtender;
+begin
+  for i:=0 to GetExtensionsCount-1 do begin
+    SourceExt:=GetExtension(i);
+    DestExt:=Dest.GetExtension(TypeOf(SourceExt));
+    if not Assigned(DestExt) then begin
+      DestExt:=TMetaEntityExtender(SourceExt.ClassType).Create(@Dest);
+      DestExt.Assign(SourceExt);
+      Dest.AddExtension(DestExt);
+    end else
+      DestExt.Assign(SourceExt);
+  end;
+end;
+
 destructor GDBObjSubordinated.done;
 begin
      inherited;

@@ -248,6 +248,7 @@ begin
   tvo^.bp.ListPos.Owner:=own;
   //tvo^.vp:=vp;
   CopyVPto(tvo^);
+  CopyExtensionsTo(tvo^);
   tvo^.Local:=local;
   tvo^.Textprop:=textprop;
   tvo^.content:=content;

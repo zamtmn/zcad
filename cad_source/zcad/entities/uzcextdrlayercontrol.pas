@@ -23,7 +23,8 @@ uses sysutils,UGDBObjBlockdefArray,uzedrawingdef,uzeentityextender,
      uzeentdevice,TypeDescriptors,uzetextpreprocessor,UGDBOpenArrayOfByte,
      uzbtypesbase,uzbtypes,uzeentsubordinated,uzeentity,uzeenttext,uzeblockdef,
      varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,uzbmemman,
-     uzeentitiestree,usimplegenerics,uzeffdxfsupport,uzcvariablesutils;
+     uzeentitiestree,usimplegenerics,uzeffdxfsupport,uzcvariablesutils,
+     uzeBaseExtender;
 const
   LayerControlExtenderName='extdrLayerControl';
 type
@@ -33,6 +34,7 @@ TLayerControlExtender=class(TBaseEntityExtender)
     Inverse:GDBBoolean;
     class function getExtenderName:string;override;
     constructor Create(pEntity:Pointer);override;
+    procedure Assign(Source:TBaseExtender);override;
     procedure onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef);override;
     procedure SaveToDxf(var outhandle:GDBOpenArrayOfByte;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
     procedure PostLoad(var context:TIODXFLoadContext);override;
@@ -45,6 +47,14 @@ TLayerControlExtender=class(TBaseEntityExtender)
   end;
 
 implementation
+procedure TLayerControlExtender.Assign(Source:TBaseExtender);
+begin
+  GoodLayer:=TLayerControlExtender(Source).GoodLayer;
+  BadLayer:=TLayerControlExtender(Source).BadLayer;
+  VariableName:=TLayerControlExtender(Source).VariableName;
+  Inverse:=TLayerControlExtender(Source).Inverse;
+end;
+
 constructor TLayerControlExtender.Create(pEntity:Pointer);
 begin
   GoodLayer:='EL_DEVICE_NAME';

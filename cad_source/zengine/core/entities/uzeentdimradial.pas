@@ -119,6 +119,7 @@ begin
   GDBGetMem({$IFDEF DEBUGBUILD}'GDBObjRadialDimension.Clone',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjRadialDimension));
   tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight);
   CopyVPto(tvo^);
+  CopyExtensionsTo(tvo^);
   tvo^.DimData := DimData;
   tvo^.bp.ListPos.Owner:=own;
   tvo^.PDimStyle:=PDimStyle;

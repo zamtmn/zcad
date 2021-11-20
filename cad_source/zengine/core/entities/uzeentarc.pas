@@ -820,6 +820,7 @@ begin
   tvo^.init(CalcOwner(own),vp.Layer, vp.LineWeight, Local.p_insert, r,startangle,endangle);
   tvo^.Local.basis.oz:=Local.basis.oz;
   CopyVPto(tvo^);
+  CopyExtensionsTo(tvo^);
   //tvo^.format;
   result := tvo;
 end;

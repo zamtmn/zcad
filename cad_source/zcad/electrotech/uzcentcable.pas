@@ -84,6 +84,7 @@ begin
   //tvo^.vp:=vp;
   //tvo^.GetObjType :=GDBCableID;
   CopyVPto(tvo^);
+  CopyExtensionsTo(tvo^);
   p:=vertexarrayinocs.GetParrayAsPointer;
   for i:=0 to VertexArrayInOCS.Count-1 do
   begin

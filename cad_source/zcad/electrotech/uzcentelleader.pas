@@ -736,6 +736,8 @@ var tvo: PGDBObjElLeader;
 begin
   GDBGetMem({$IFDEF DEBUGBUILD}'{F9D41F4A-1E80-4D3A-9DD1-D0037EFCA988}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjElLeader));
   tvo^.initnul;
+  CopyVPto(tvo^);
+  CopyExtensionsTo(tvo^);
   tvo^.MainLine.CoordInOCS:=mainline.CoordInOCS;
   //tvo^.MainLine:=mainline;
   tvo^.MainLine.bp.ListPos.Owner:=tvo;

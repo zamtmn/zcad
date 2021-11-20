@@ -22,6 +22,7 @@ interface
 type
   TBaseExtender=class
     class function getExtenderName:string;virtual;abstract;
+    procedure Assign(Source:TBaseExtender);virtual;abstract;
   end;
  TMetaExtender=class of TBaseExtender;
 

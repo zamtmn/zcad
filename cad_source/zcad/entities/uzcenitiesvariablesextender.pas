@@ -188,7 +188,7 @@ begin
 end;
 procedure TVariablesExtender.Assign(Source:TBaseExtender);
 begin
-  TVariablesExtender(Source).entityunit.CopyTo(@self.entityunit);
+  //TVariablesExtender(Source).entityunit.CopyTo(@self.entityunit);
 end;
 
 procedure TVariablesExtender.onEntityClone(pSourceEntity,pDestEntity:pointer);

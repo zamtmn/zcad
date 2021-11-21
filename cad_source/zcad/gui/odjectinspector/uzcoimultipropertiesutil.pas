@@ -450,12 +450,20 @@ begin
                     PTArrayIndex(PTOneVarData(pdata).PVarDesc.data.Instance)^:=PTArrayIndex(PTOneVarData(pdata).PVarDesc.data.Instance)^+PTArrayIndex(ChangedData.PGetDataInEtity)^;
 end;
 procedure Blockname2BlockNameCounterIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+var
+  ps:pansistring;
+  s:string;
 begin
+  s:=pansistring(ChangedData.PGetDataInEtity)^;
+  ps:=pansistring(ChangedData.PGetDataInEtity);
      PTStringCounterData(pdata)^.counter.CountKey(pansistring(ChangedData.PGetDataInEtity)^,1);
      inc(PTStringCounterData(pdata)^.totalcount);
 end;
 procedure PStyle2PStyleCounterIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+var
+  p:pointer;
 begin
+  p:=pointer(ppointer(ChangedData.PGetDataInEtity)^);
      PTPointerCounterData(pdata)^.counter.CountKey(pointer(ppointer(ChangedData.PGetDataInEtity)^),1);
      inc(PTPointerCounterData(pdata)^.totalcount);
 end;

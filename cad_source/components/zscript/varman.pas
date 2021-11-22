@@ -391,10 +391,12 @@ begin
      pv:=InterfaceVariables.vardescarray.beginiterate(ir);
       if pv<>nil then
         repeat
-              source^.setvardesc(vd,pv^.name,pv^.username,pv^.data.ptd^.TypeName);
-              source^.InterfaceVariables.createvariable(vd.name, vd);
-              pv^.data.ptd^.CopyInstanceTo(pv^.data.Instance,vd.data.Instance);
-              pv:=InterfaceVariables.vardescarray.iterate(ir);
+          if source^.FindVariable(pv^.name)=nil then begin
+            source^.setvardesc(vd,pv^.name,pv^.username,pv^.data.ptd^.TypeName);
+            source^.InterfaceVariables.createvariable(vd.name, vd);
+            pv^.data.ptd^.CopyInstanceTo(pv^.data.Instance,vd.data.Instance);
+          end;
+          pv:=InterfaceVariables.vardescarray.iterate(ir);
         until pv=nil;
 end;
 procedure TSimpleUnit.CopyFrom;
@@ -414,10 +416,12 @@ begin
      pv:=source.InterfaceVariables.vardescarray.beginiterate(ir);
       if pv<>nil then
         repeat
+          if FindVariable(pv^.name)=nil then begin
               setvardesc(vd,pv^.name,pv^.username,pv^.data.ptd^.TypeName);
               InterfaceVariables.createvariable(vd.name, vd);
               pv^.data.ptd^.CopyInstanceTo(pv^.data.Instance,vd.data.Instance);
-              pv:=source.InterfaceVariables.vardescarray.iterate(ir);
+          end;
+          pv:=source.InterfaceVariables.vardescarray.iterate(ir);
         until pv=nil;
 end;
 function TUnit.RegisterRecordType(ti:PTypeInfo):PUserTypeDescriptor;

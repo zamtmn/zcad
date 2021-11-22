@@ -442,7 +442,7 @@ begin
                                 begin
                                      if PGDBObjEntity(pobj)^.PExtAttrib^.Handle>200 then
                                                                                       begin
-                                                                                      context.h2p.Add(PGDBObjEntity(pobj)^.PExtAttrib^.Handle,postobj);
+                                                                                      context.h2p.AddOrSetValue(PGDBObjEntity(pobj)^.PExtAttrib^.Handle,postobj);
                                                                                       context.h2p.Add(PGDBObjEntity(pobj)^.PExtAttrib^.dwgHandle,postobj);
                                                                                       end
                                                                                       //pushhandle(phandlearray,PGDBObjEntity(pobj)^.PExtAttrib^.Handle,GDBPlatformint(postobj));

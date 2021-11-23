@@ -24,7 +24,7 @@ uses sysutils,UGDBObjBlockdefArray,uzedrawingdef,uzeentityextender,
      uzbtypesbase,uzbtypes,uzeentsubordinated,uzeentity,uzeenttext,uzeblockdef,
      varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,uzbmemman,
      uzeentitiestree,usimplegenerics,uzeffdxfsupport,uzcvariablesutils,
-     uzeBaseExtender;
+     uzeBaseExtender,uzgldrawcontext;
 const
   LayerControlExtenderName='extdrLayerControl';
 type
@@ -35,7 +35,8 @@ TLayerControlExtender=class(TBaseEntityExtender)
     class function getExtenderName:string;override;
     constructor Create(pEntity:Pointer);override;
     procedure Assign(Source:TBaseExtender);override;
-    procedure onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef);override;
+    procedure onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
+    procedure onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
     procedure SaveToDxf(var outhandle:GDBOpenArrayOfByte;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
     procedure PostLoad(var context:TIODXFLoadContext);override;
     class function EntIOLoadGoodLayer(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
@@ -63,7 +64,10 @@ begin
   Inverse:=False;
 end;
 
-procedure TLayerControlExtender.onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef);
+procedure TLayerControlExtender.onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+begin
+end;
+procedure TLayerControlExtender.onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
 var
   pvd:pvardesk;
   pl:pointer;

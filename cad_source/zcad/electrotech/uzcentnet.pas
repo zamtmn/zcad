@@ -162,7 +162,7 @@ procedure GDBObjNet.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 begin
      //CreateDeviceNameProcess(@self,drawing);
      if assigned(EntExtensions)then
-       EntExtensions.RunOnBeforeEntityFormat(@self,drawing);
+       EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
      GetDXFIOFeatures.RunFormatProcs(drawing,@self);
      inherited;
      if self.ObjArray.Count=0 then
@@ -170,6 +170,8 @@ begin
                                        self.ObjArray.Count:=0;
                                        self.YouDeleted(drawing);
                                   end;
+     if assigned(EntExtensions)then
+       EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
 end;
 procedure GDBObjNet.SaveToDXF;
 var pobj:PGDBObjEntity;

@@ -211,7 +211,7 @@ var
   pl:pgdbobjline;
 begin
      if assigned(EntExtensions)then
-       EntExtensions.RunOnBeforeEntityFormat(@self,drawing);
+       EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
 
           ConstObjArray.free;
           CalcDNVectors;
@@ -234,6 +234,8 @@ begin
                                       DrawDimensionLine{LinePart}(uzegeometry.VertexDmorph(DimData.P11InOCS,vectord, Self.dimtextw),DimData.P15InWCS,true,false,false,drawing,dc)
                                  end;
    inherited;
+          if assigned(EntExtensions)then
+            EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
 end;
 function GDBObjDiametricDimension.TextNeedOffset(dimdir:gdbvertex):GDBBoolean;
 begin

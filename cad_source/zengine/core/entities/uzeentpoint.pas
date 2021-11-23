@@ -81,10 +81,13 @@ end;
 procedure GDBObjPoint.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 begin
   if assigned(EntExtensions)then
-    EntExtensions.RunOnBeforeEntityFormat(@self,drawing);
+    EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
 
   P_insertInWCS:=VectorTransform3D(P_insertInOCS,{CurrentCS}bp.ListPos.owner^.GetMatrix^);
   calcbb(dc);
+
+  if assigned(EntExtensions)then
+    EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
 end;
 function GDBObjPoint.GetObjTypeName;
 begin

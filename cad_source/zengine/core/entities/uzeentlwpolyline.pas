@@ -828,7 +828,7 @@ end;
 procedure GDBObjLWpolyline.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 begin
   if assigned(EntExtensions)then
-    EntExtensions.RunOnBeforeEntityFormat(@self,drawing);
+    EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
      Vertex2D_in_OCS_Array.Shrink;
      Width2D_in_OCS_Array.Shrink;
      inherited FormatEntity(drawing,dc);
@@ -836,6 +836,8 @@ begin
      CalcWidthSegment;
      Square:=CalcSquare;
      calcbb(dc);
+  if assigned(EntExtensions)then
+    EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
 end;
 procedure GDBObjLWpolyline.createpoint;
 var

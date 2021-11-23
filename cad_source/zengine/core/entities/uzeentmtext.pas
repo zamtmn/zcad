@@ -486,7 +486,7 @@ end;
 procedure GDBObjMText.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 begin
   if assigned(EntExtensions)then
-    EntExtensions.RunOnBeforeEntityFormat(@self,drawing);
+    EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
 
   Representation.Clear;
 
@@ -496,6 +496,9 @@ begin
   //getoutbound;
   createpoint(drawing,dc);
   calcbb(dc);
+
+  if assigned(EntExtensions)then
+    EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
 end;
 
 procedure GDBObjMText.CalcGabarit;

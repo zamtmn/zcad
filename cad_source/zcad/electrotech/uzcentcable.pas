@@ -187,7 +187,7 @@ var ir_inGDB,ir_inVertexArray,ir_inNodeArray,ir_inDevice,ir_inDevice2:itrec;
 begin
   inherited;
   if assigned(EntExtensions)then
-    EntExtensions.RunOnBeforeEntityFormat(@self,drawing);
+    EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
   calcbb(dc);
   psldb:=drawing.GetLayerTable^.{gdb.GetCurrentDWG.LayerTable.}getAddres('SYS_DEVICE_BORDER');
 
@@ -423,6 +423,8 @@ begin
        end;
   end;
   NodePropArray.Shrink;
+  if assigned(EntExtensions)then
+    EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
 end;
 function GDBObjCable.GetObjTypeName;
 begin

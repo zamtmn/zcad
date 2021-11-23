@@ -293,7 +293,7 @@ end;
 procedure GDBObjCircle.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 begin
   if assigned(EntExtensions)then
-    EntExtensions.RunOnBeforeEntityFormat(@self,drawing);
+    EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
 
   calcObjMatrix;
   createpoint(dc);
@@ -305,6 +305,8 @@ begin
   calcbb(dc);
   Representation.Clear;
   Representation.DrawPolyLineWithLT(dc,Vertex3D_in_WCS_Array,vp,true,true);
+  if assigned(EntExtensions)then
+    EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
 end;
 procedure GDBObjCircle.getoutbound;
 var //tv,tv2:GDBVertex4D;

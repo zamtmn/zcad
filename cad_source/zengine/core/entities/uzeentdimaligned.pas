@@ -385,7 +385,7 @@ var
   l:double;
 begin
      if assigned(EntExtensions)then
-       EntExtensions.RunOnBeforeEntityFormat(@self,drawing);
+       EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
 
           ConstObjArray.free;
           CalcDNVectors;
@@ -410,6 +410,8 @@ begin
 
           DrawDimensionLine(tv,DimData.P10InWCS,false,false,true,drawing,dc);
    inherited;
+   if assigned(EntExtensions)then
+     EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
 end;
 {procedure GDBObjAlignedDimension.DrawGeometry;
 begin

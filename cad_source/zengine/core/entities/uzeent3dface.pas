@@ -96,7 +96,7 @@ var i:GDBInteger;
     v:GDBVertex;
 begin
     if assigned(EntExtensions)then
-      EntExtensions.RunOnBeforeEntityFormat(@self,drawing);
+      EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
 
       for i:=0 to 3 do
       begin
@@ -141,7 +141,8 @@ begin
      n.x:=normal.x;
      n.y:=normal.y;
      n.z:=normal.z;
-
+   if assigned(EntExtensions)then
+     EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
 end;
 function GDBObj3DFace.GetObjTypeName;
 begin

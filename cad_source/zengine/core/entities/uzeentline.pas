@@ -235,13 +235,15 @@ end;
 procedure GDBObjLine.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 begin
   if assigned(EntExtensions)then
-    EntExtensions.RunOnBeforeEntityFormat(@self,drawing);
+    EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
 
   calcgeometry;
   calcbb(dc);
 
   Representation.Clear;
   Representation.DrawLineWithLT(dc,CoordInWCS.lBegin,CoordInWCS.lEnd,vp);
+  if assigned(EntExtensions)then
+    EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
 end;
 function GDBObjLine.CalcInFrustum;
 var i:GDBInteger;

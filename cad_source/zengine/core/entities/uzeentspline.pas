@@ -161,7 +161,7 @@ var //i,j: GDBInteger;
     fm,fp:DMatrix4F;
 begin
      if assigned(EntExtensions)then
-       EntExtensions.RunOnBeforeEntityFormat(@self,drawing);
+       EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
      FormatWithoutSnapArray;
      CP.init({$IFDEF DEBUGBUILD}'{4FCFE57E-4000-4535-A086-549DEC959CD4}',{$ENDIF}VertexArrayInOCS.count{,sizeof(GDBvertex4S)});
      ptv:=VertexArrayInOCS.beginiterate(ir);
@@ -247,6 +247,8 @@ begin
   Representation.Clear;
   Representation.DrawPolyLineWithLT(dc,AproxPointInWCS,vp,false,false);
   calcbb(dc);
+  if assigned(EntExtensions)then
+    EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
 end;
 
 function GDBObjSpline.FromDXFPostProcessBeforeAdd;

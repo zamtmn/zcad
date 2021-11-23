@@ -281,7 +281,7 @@ var
    pentvarext:TVariablesExtender;
 begin
      if assigned(EntExtensions)then
-       EntExtensions.RunOnBeforeEntityFormat(@self,drawing);
+       EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
      tbl.ptablestyle:=drawing.GetTableStyleTable^.getAddres('Temp');
      TCP:=CodePage;
      CodePage:=CP_win;
@@ -559,6 +559,8 @@ begin
      objects.Clear;
      objects.Done;
      buildgeometry(drawing);
+     if assigned(EntExtensions)then
+       EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
 end;
 function GDBObjElLeader.select(var SelectedObjCount:GDBInteger;s2s:TSelect2Stage):GDBBoolean;
 //var tdesc:pselectedobjdesc;

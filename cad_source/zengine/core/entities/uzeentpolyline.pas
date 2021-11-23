@@ -102,7 +102,7 @@ end;
 procedure GDBObjPolyline.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 begin
   if assigned(EntExtensions)then
-    EntExtensions.RunOnBeforeEntityFormat(@self,drawing);
+    EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
   FormatWithoutSnapArray;
   calcbb(dc);
   //-------------BuildSnapArray(VertexArrayInWCS,snaparray,Closed);
@@ -123,6 +123,9 @@ begin
   end;}
   Representation.DrawPolyLineWithLT(dc,VertexArrayInWCS,vp,closed,false);
   end;
+
+  if assigned(EntExtensions)then
+    EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
 end;
 
 function GDBObjPolyline.GetObjTypeName;

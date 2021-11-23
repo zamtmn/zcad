@@ -274,7 +274,7 @@ var
   v:GDBvertex4D;
 begin
   if assigned(EntExtensions)then
-    EntExtensions.RunOnBeforeEntityFormat(@self,drawing);
+    EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
 
   calcObjMatrix;
   angle := endangle - startangle;
@@ -302,6 +302,8 @@ begin
   createpoints(dc);
   Representation.Clear;
   Representation.DrawPolyLineWithLT(dc,Vertex3D_in_WCS_Array,vp,false,false);
+  if assigned(EntExtensions)then
+    EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
 end;
 procedure GDBObjARC.getoutbound;
 function getQuadrant(a:GDBDouble):integer;

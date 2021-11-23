@@ -24,7 +24,7 @@ uses sysutils,UGDBObjBlockdefArray,uzedrawingdef,uzeentityextender,
      uzbtypesbase,uzbtypes,uzeentsubordinated,uzeentity,uzeenttext,uzeblockdef,
      varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,uzbmemman,
      uzeentitiestree,usimplegenerics,uzeffdxfsupport,uzbpaths,uzctranslations,
-     gzctnrvectortypes,uzeBaseExtender;
+     gzctnrvectortypes,uzeBaseExtender,uzgldrawcontext;
 const
   VariablesExtenderName='extdrVariables';
 type
@@ -44,7 +44,8 @@ TVariablesExtender=class(TBaseVariablesExtender)
 
     procedure onEntityClone(pSourceEntity,pDestEntity:pointer);override;
     procedure onEntityBuildVarGeometry(pEntity:pointer;const drawing:TDrawingDef);override;
-    procedure onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef);override;
+    procedure onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
+    procedure onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
     procedure onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);override;
     procedure CopyExt2Ent(pSourceEntity,pDestEntity:pointer);override;
     procedure ReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);override;
@@ -218,7 +219,10 @@ begin
        pbdunit.entityunit.CopyTo(@self.entityunit);
      //PTObjectUnit(pblockdef^.ou.Instance)^.copyto(PTObjectUnit(ou.Instance));
 end;
-procedure TVariablesExtender.onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef);
+procedure TVariablesExtender.onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+begin
+end;
+procedure TVariablesExtender.onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
 begin
 end;
 procedure TVariablesExtender.CopyExt2Ent(pSourceEntity,pDestEntity:pointer);

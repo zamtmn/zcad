@@ -21,14 +21,16 @@ unit uzeentityextender;
 
 interface
 uses uzbmemman,uzedrawingdef,uzbtypesbase,uzbtypes,usimplegenerics,
-     UGDBOpenArrayOfByte,gzctnrstl,uzeffdxfsupport,uzeBaseExtender;
+     UGDBOpenArrayOfByte,gzctnrstl,uzeffdxfsupport,uzeBaseExtender,
+     uzgldrawcontext;
 
 type
 TBaseEntityExtender=class(TBaseExtender)
                   //class function CreateThisExtender(pEntity:Pointer; out ObjSize:Integer):PTBaseEntityExtender;
                   constructor Create(pEntity:Pointer);virtual;abstract;
                   procedure onEntityDestruct(pEntity:Pointer);virtual;abstract;
-                  procedure onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef);virtual;abstract;
+                  procedure onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
+                  procedure onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
                   procedure onEntityClone(pSourceEntity,pDestEntity:Pointer);virtual;abstract;
                   procedure onEntityBuildVarGeometry(pEntity:pointer;const drawing:TDrawingDef);virtual;abstract;
                   procedure onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);virtual;abstract;
@@ -56,7 +58,8 @@ TEntityExtensions=class
 
 
                        procedure RunOnCloneProcedures(source,dest:pointer);
-                       procedure RunOnBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef);
+                       procedure RunOnBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+                       procedure RunOnAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
                        procedure RunOnBuildVarGeometryProcedures(pEntity:pointer;const drawing:TDrawingDef);
                        procedure RunSupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);
                        procedure RunReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);
@@ -154,14 +157,23 @@ begin
      for i:=0 to fEntityExtensions.Size-1 do
        fEntityExtensions[i].onEntityBuildVarGeometry(pEntity,drawing);
 end;
-procedure TEntityExtensions.RunOnBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef);
+procedure TEntityExtensions.RunOnBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
 var
   i:integer;
 begin
      if assigned(fEntityExtensions)then
      for i:=0 to fEntityExtensions.Size-1 do
-       fEntityExtensions[i].OnBeforeEntityFormat(pEntity,drawing);
+       fEntityExtensions[i].OnBeforeEntityFormat(pEntity,drawing,DC);
 end;
+procedure TEntityExtensions.RunOnAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+var
+  i:integer;
+begin
+     if assigned(fEntityExtensions)then
+     for i:=0 to fEntityExtensions.Size-1 do
+       fEntityExtensions[i].OnAfterEntityFormat(pEntity,drawing,DC);
+end;
+
 procedure TEntityExtensions.RunSupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);
 var
   i:integer;

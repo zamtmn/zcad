@@ -1,4 +1,4 @@
-unit DEVICE_EL_VL_LIGHT3_1A;
+unit DEVICE_EL_VL_LIGHT4_1;
 
 interface
 
@@ -29,5 +29,7 @@ SerialConnection:=1;
 GC_HeadDevice:='ЩАО??';
 GC_HDShortName:='??';
 GC_HDGroup:=0;
+
+T2:='А';
 
 end.

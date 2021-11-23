@@ -1,4 +1,4 @@
-unit DEVICE_EL_VL_LIGHT3_2A;
+unit DEVICE_EL_VL_LIGHT6_1;
 
 interface
 
@@ -26,8 +26,10 @@ NMO_BaseName:='Гр';
 NMO_Suffix:='??';
 
 SerialConnection:=1;
-GC_HeadDevice:='ЩАО??';
+GC_HeadDevice:='ЩО??';
 GC_HDShortName:='??';
 GC_HDGroup:=0;
+
+T2:='К';
 
 end.

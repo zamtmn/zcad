@@ -126,29 +126,224 @@ msgctxt "tdimstylesform.toolbar1.caption"
 msgid "ToolBar1"
 msgstr ""
 
+#: tlinetypesform.bitbtn1.caption
+msgid "Update"
+msgstr ""
+
+#: tlinetypesform.bitbtn2.caption
+msgid "Create"
+msgstr ""
+
+#: tlinetypesform.bitbtn3.caption
+msgid "Load"
+msgstr ""
+
+#: tlinetypesform.caption
+msgid "Line type manager"
+msgstr ""
+
+#: tlinetypesform.checkbox1.caption
+msgid "Auto rotate text"
+msgstr ""
+
+#: tlinetypesform.groupbox1.caption
+msgid "Line type description"
+msgstr ""
+
+#: tlinetypesform.groupbox2.caption
+msgid "Drawing settings"
+msgstr ""
+
+#: tlinetypesform.groupbox3.caption
+msgid "Global settings"
+msgstr ""
+
+#: tlinetypesform.label3.caption
+msgid "Global scale factor"
+msgstr ""
+
+#: tlinetypesform.label4.caption
+msgid "Current object scale factor"
+msgstr ""
+
+#: tlinetypesform.listview1.columns[0].caption
+#, fuzzy
+msgctxt "tlinetypesform.listview1.columns[0].caption"
+msgid "Status"
+msgstr "Статус"
+
+#: tlinetypesform.listview1.columns[1].caption
+#, fuzzy
+msgctxt "tlinetypesform.listview1.columns[1].caption"
+msgid "Line type"
+msgstr "Тип линии"
+
+#: tlinetypesform.listview1.columns[2].caption
+msgid "Apperance"
+msgstr ""
+
+#: tlinetypesform.listview1.columns[3].caption
+msgctxt "tlinetypesform.listview1.columns[3].caption"
+msgid "Description"
+msgstr ""
+
+#: ttextstylesform.addstyle.caption
+msgctxt "ttextstylesform.addstyle.caption"
+msgid "AddStyle"
+msgstr ""
+
+#: ttextstylesform.addstyle.hint
+#, fuzzy
+msgctxt "ttextstylesform.addstyle.hint"
+msgid "Add text style"
+msgstr "Добавить стиль текста"
+
+#: ttextstylesform.buttonapplyclose.caption
+#, fuzzy
+msgctxt "ttextstylesform.buttonapplyclose.caption"
+msgid "Apply and close"
+msgstr "Применить и закрыть"
+
+#: ttextstylesform.caption
+msgid "Text styles"
+msgstr ""
+
+#: ttextstylesform.delstyle.caption
+msgctxt "ttextstylesform.delstyle.caption"
+msgid "DelStyle"
+msgstr ""
+
+#: ttextstylesform.delstyle.hint
+#, fuzzy
+msgctxt "ttextstylesform.delstyle.hint"
+msgid "Delete text style"
+msgstr "Удалить стиль текста"
+
+#: ttextstylesform.fonttypefiltercombobox.text
+#, fuzzy
+msgctxt "ttextstylesform.fonttypefiltercombobox.text"
+msgid "All"
+msgstr "Все"
+
+#: ttextstylesform.fonttypefilterdesc.caption
+msgid "Fonts types filter:"
+msgstr ""
+
+#: ttextstylesform.listview1.columns[0].caption
+#, fuzzy
+msgctxt "ttextstylesform.listview1.columns[0].caption"
+msgid "Status"
+msgstr "Статус"
+
+#: ttextstylesform.listview1.columns[1].caption
+#, fuzzy
+msgctxt "ttextstylesform.listview1.columns[1].caption"
+msgid "Name"
+msgstr "Имя"
+
+#: ttextstylesform.listview1.columns[2].caption
+msgid "FontName"
+msgstr ""
+
+#: ttextstylesform.listview1.columns[3].caption
+msgid "FontPath"
+msgstr ""
+
+#: ttextstylesform.listview1.columns[4].caption
+msgid "Height"
+msgstr ""
+
+#: ttextstylesform.listview1.columns[5].caption
+msgid "Width factor"
+msgstr ""
+
+#: ttextstylesform.listview1.columns[6].caption
+msgid "Oblique"
+msgstr ""
+
+#: ttextstylesform.mkcurrentstyle.caption
+msgctxt "ttextstylesform.mkcurrentstyle.caption"
+msgid "MkCurrentStyle"
+msgstr ""
+
+#: ttextstylesform.mkcurrentstyle.hint
+msgctxt "ttextstylesform.mkcurrentstyle.hint"
+msgid "Make selected style curretn"
+msgstr ""
+
+#: ttextstylesform.purgestyles.caption
+msgctxt "ttextstylesform.purgestyles.caption"
+msgid "PurgeStyles"
+msgstr ""
+
+#: ttextstylesform.purgestyles.hint
+msgctxt "ttextstylesform.purgestyles.hint"
+msgid "Purge not used styles"
+msgstr ""
+
+#: ttextstylesform.refreshstyles.caption
+msgctxt "ttextstylesform.refreshstyles.caption"
+msgid "RefreshStyles"
+msgstr ""
+
+#: ttextstylesform.refreshstyles.hint
+msgctxt "ttextstylesform.refreshstyles.hint"
+msgid "Refresh styles list"
+msgstr ""
+
+#: ttextstylesform.separator1.caption
+msgctxt "ttextstylesform.separator1.caption"
+msgid "Separator1"
+msgstr ""
+
+#: ttextstylesform.toolbar1.caption
+msgctxt "ttextstylesform.toolbar1.caption"
+msgid "ToolBar1"
+msgstr ""
+
+#: tzcadmainwindow.toolbard.caption
+msgid "ToolBarD"
+msgstr ""
+
 #: uzccablemanager.defcablename
 msgid "Created. Not named"
 msgstr "Создано, не именовано"
 
-#: uzccombase.rsaboutclswithupdatepo
-msgid "Command line swith \"UpdatePO\" must be set. (or not the first time running this command)"
-msgstr "Переключатель командной строки \"UpdatePO\" должен быть установлен. (или не первый запуск команды)"
+#: uzccommand_dataexport.rsclpdataexportentsfiltercurrentvalue
+msgid "Entities filter current value:"
+msgstr ""
 
-#: uzccombase.rsbeforerunpoly
-msgid "Before starting you must select a 2DPolyLine"
+#: uzccommand_dataexport.rsclpdataexportentsfilternewvalue
+msgid "${\"&[<]<<\",Keys[<],StrId[CLPIdBack]} Enter new entities filter:"
+msgstr ""
+
+#: uzccommand_dataexport.rsclpdataexportexportscriptcurrentvalue
+msgid "Properties export script current value:"
+msgstr ""
+
+#: uzccommand_dataexport.rsclpdataexportexportscriptnewvalue
+msgid "${\"&[<]<<\",Keys[<],StrId[CLPIdBack]} Enter new export script:"
+msgstr ""
+
+#: uzccommand_dataexport.rsclpdataexportoptions
+msgid "${\"&[<]<<\",Keys[<],StrId[CLPIdBack]} Set ${\"&[e]ntities\",Keys[o],StrId[CLPIdUser1]}/${\"&[p]roperties\",Keys[o],StrId[CLPIdUser2]} filter or export ${\"&[s]cript\",Keys[o],StrId[CLPIdUser3]}"
+msgstr ""
+
+#: uzccommand_dataexport.rsclpdataexportpropsfiltercurrentvalue
+msgid "Properties filter current value:"
+msgstr ""
+
+#: uzccommand_dataexport.rsclpdataexportpropsfilternewvalue
+msgid "${\"&[<]<<\",Keys[<],StrId[CLPIdBack]} Enter new properties filter:"
+msgstr ""
+
+#: uzccommand_dataexport.rsclpdataexportwaitfile
+msgid "Configure export ${\"&[p]arams\",Keys[p],StrId[CLPIdOptions]}, run ${\"&[f]ile dialog\",Keys[f],StrId[CLPIdFileDialog]} or enter file name (empty for default):"
 msgstr ""
 
 #: uzcentnet.rscannotbeconnected
 msgid "Can not be connected"
 msgstr "Неможет быть соединено"
-
-#: uzcfnavigatordevices.rsbybase
-msgid "byBase"
-msgstr "по базе"
-
-#: uzcfnavigatordevices.rsbyprefix
-msgid "byPrefix"
-msgstr "по префиксу"
 
 #: uzcfnavigatordevices.rsstandalonedevices
 msgid "Standalone devices"
@@ -217,6 +412,10 @@ msgstr "ВНИМАНИЕ! проверки синтаксиса нет. При �
 msgid "Clipboard is empty, there is nothing to paste"
 msgstr "В клипбоарде пусто, нечего вставлять"
 
+#: uzcstrconsts.rsclosedrawings
+msgid "Close drawings"
+msgstr ""
+
 #: uzcstrconsts.rsclosedwgquery
 #, object-pascal-format
 msgid "Drawing \"%s\" not saved. Save?"
@@ -245,6 +444,10 @@ msgstr "Центр окружности:"
 #: uzcstrconsts.rscmchange
 msgid "Change"
 msgstr "Поменять"
+
+#: uzcstrconsts.rscmcmdmusthaveoperand
+msgid "Command must have operand(s)!"
+msgstr ""
 
 #: uzcstrconsts.rscmcommandonlyctxmenu
 msgid "The command works only from context menu"
@@ -293,8 +496,8 @@ msgstr "С %d примитивов выбор снят"
 
 #: uzcstrconsts.rscmnentitiesprocessed
 #, object-pascal-format
-msgid "%s entities processed"
-msgstr "Обработано %s примитивов"
+msgid "%d entities processed"
+msgstr "Обработано %d примитивов"
 
 #: uzcstrconsts.rscmnewbasepoint
 msgid "New base point:"
@@ -391,6 +594,10 @@ msgstr "Выбрать"
 msgid "Select destination entity:"
 msgstr "Выберете целевой примитив:"
 
+#: uzcstrconsts.rscmselectentity
+msgid "Select entity:"
+msgstr ""
+
 #: uzcstrconsts.rscmselectsourceentity
 msgid "Select source entity:"
 msgstr "Выберете исходный примитив:"
@@ -410,6 +617,10 @@ msgstr "Укажите первую точку:"
 #: uzcstrconsts.rscmspecifyinsertpoint
 msgid "Specify insert point:"
 msgstr "Укажите точку вставки:"
+
+#: uzcstrconsts.rscmspecifynextpoint
+msgid "Specify next point:"
+msgstr ""
 
 #: uzcstrconsts.rscmspecifypoint
 msgid "Specify point:"
@@ -468,7 +679,9 @@ msgid "Command line"
 msgstr "Командная строка"
 
 #: uzcstrconsts.rscommandnrinc
-msgid "Command can not run"
+#, object-pascal-format, fuzzy, badformat
+#| msgid "Command can not run"
+msgid "Command \"%s\" can not run"
 msgstr "Команда не может быть запущена"
 
 #: uzcstrconsts.rscommenteeport
@@ -554,6 +767,15 @@ msgstr "Окно чертежей"
 msgid "Drawing already contains data. Load anyway?"
 msgstr "Чертеж уже содержит данные. Загрузить всеравно?"
 
+#: uzcstrconsts.rsegeneraleroror
+#, object-pascal-format
+msgid ""
+"Error in \n"
+"\"%s\"\n"
+"with msg\n"
+"\"%s\""
+msgstr ""
+
 #: uzcstrconsts.rsempty
 msgid "Empty"
 msgstr "Пусто"
@@ -620,6 +842,16 @@ msgstr "Неверный ввод"
 msgid "Property \"%s\" for entity \"%s\": %s"
 msgstr "Свойство \"%s\" для примитива \"%s\": %s"
 
+#: uzcstrconsts.rslayeralreadyoff
+#, object-pascal-format
+msgid "Layer \"%s\" already off"
+msgstr ""
+
+#: uzcstrconsts.rslayeralreadyon
+#, object-pascal-format
+msgid "Layer \"%s\" already on"
+msgstr ""
+
 #: uzcstrconsts.rslayerdefpaontscannotbeprinted
 msgid "Layer DEFPOINTS can not be printed"
 msgstr "Слой DEFPOINTS не может быть печатным"
@@ -627,6 +859,11 @@ msgstr "Слой DEFPOINTS не может быть печатным"
 #: uzcstrconsts.rslayermustbeselected
 msgid "Layer must be selected"
 msgstr "Слой должен быть выбран"
+
+#: uzcstrconsts.rslayernotfound
+#, object-pascal-format
+msgid "Layer \"%s\" not found"
+msgstr ""
 
 #: uzcstrconsts.rslayerusedin
 #, object-pascal-format
@@ -757,7 +994,9 @@ msgid "Quit"
 msgstr "Выход"
 
 #: uzcstrconsts.rsquitquery
-msgid "Do yo want to quit ZCAD?"
+#, fuzzy
+#| msgid "Do yo want to quit ZCAD?"
+msgid "Do you want to quit ZCAD?"
 msgstr "Закрыть ZCAD?"
 
 #: uzcstrconsts.rsrecreating
@@ -919,13 +1158,48 @@ msgstr "ВНИМАНИЕ: "
 msgid "%s v%s started"
 msgstr "ZCAD v%s запущен"
 
+#: uzcuidialogs.rsdontshowthisnexttime
+#, object-pascal-format
+msgctxt "uzcuidialogs.rsdontshowthisnexttime"
+msgid "Don't show this next time (for task \"%s\")"
+msgstr ""
+
+#: uzcuidialogs.rsmsgkeepchoice
+#, object-pascal-format
+msgctxt "uzcuidialogs.rsmsgkeepchoice"
+msgid "Keep choice (for task \"%s\")"
+msgstr ""
+
+#: uzcuidialogs.rsmsgwndtitle
+msgctxt "uzcuidialogs.rsmsgwndtitle"
+msgid "ZCAD"
+msgstr ""
+
+#: uzcuitypes.rsdontshowthisnexttime
+#, object-pascal-format
+msgctxt "uzcuitypes.rsdontshowthisnexttime"
+msgid "Don't show this next time (for task \"%s\")"
+msgstr ""
+
+#: uzcuitypes.rsmsgkeepchoice
+#, object-pascal-format
+msgctxt "uzcuitypes.rsmsgkeepchoice"
+msgid "Keep choice (for task \"%s\")"
+msgstr ""
+
+#: uzcuitypes.rsmsgwndtitle
+msgctxt "uzcuitypes.rsmsgwndtitle"
+msgid "ZCAD"
+msgstr ""
+
 #: uzeffdxf.rsloaddxffile
 msgid "Load DXF file"
 msgstr "Файл DXF загружен"
 
 #: uzestrconsts.fontnotfoundandreplace
-#, object-pascal-format
-msgid "For text style \"%s\" not found font \"%s\", is replaced by an alternative"
+#, object-pascal-format, fuzzy, badformat
+#| msgid "For text style \"%s\" not found font \"%s\", is replaced by an alternative"
+msgid "For text style \"%s\" not found font \"%s\" (\"%s\" fontfamily), is replaced by an alternative"
 msgstr "Для стиля текста \"%s\" не найден фонт \"%s\", заменен на альтернативный"
 
 #: uzestrconsts.rsalternatefontnotfoundin

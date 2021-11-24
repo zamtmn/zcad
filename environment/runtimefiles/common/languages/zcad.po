@@ -116,154 +116,63 @@ msgctxt "tdimstylesform.toolbar1.caption"
 msgid "ToolBar1"
 msgstr ""
 
-#: tlayersform.addlayer.caption
-msgid "AddLayer"
+#: tlinetypesform.bitbtn1.caption
+msgid "Update"
 msgstr ""
 
-#: tlayersform.addlayer.hint
-msgid "Add layer"
+#: tlinetypesform.bitbtn2.caption
+msgid "Create"
 msgstr ""
 
-#: tlayersform.buttonapplyclose.caption
-msgctxt "tlayersform.buttonapplyclose.caption"
-msgid "Apply and close"
+#: tlinetypesform.bitbtn3.caption
+msgid "Load"
 msgstr ""
 
-#: tlayersform.button_apply.caption
-msgid "Apply"
+#: tlinetypesform.caption
+msgid "Line type manager"
 msgstr ""
 
-#: tlayersform.caption
-msgid "Layers"
+#: tlinetypesform.checkbox1.caption
+msgid "Auto rotate text"
 msgstr ""
 
-#: tlayersform.dellayer.caption
-msgid "DelLayer"
+#: tlinetypesform.groupbox1.caption
+msgid "Line type description"
 msgstr ""
 
-#: tlayersform.dellayer.hint
-msgid "Delete layer"
+#: tlinetypesform.groupbox2.caption
+msgid "Drawing settings"
 msgstr ""
 
-#: tlayersform.listview1.columns[0].caption
-msgctxt "tlayersform.listview1.columns[0].caption"
+#: tlinetypesform.groupbox3.caption
+msgid "Global settings"
+msgstr ""
+
+#: tlinetypesform.label3.caption
+msgid "Global scale factor"
+msgstr ""
+
+#: tlinetypesform.label4.caption
+msgid "Current object scale factor"
+msgstr ""
+
+#: tlinetypesform.listview1.columns[0].caption
+msgctxt "tlinetypesform.listview1.columns[0].caption"
 msgid "Status"
 msgstr ""
 
-#: tlayersform.listview1.columns[1].caption
-msgctxt "tlayersform.listview1.columns[1].caption"
-msgid "Name"
-msgstr ""
-
-#: tlayersform.listview1.columns[2].caption
-msgid "On"
-msgstr ""
-
-#: tlayersform.listview1.columns[3].caption
-msgid "Freze"
-msgstr ""
-
-#: tlayersform.listview1.columns[4].caption
-msgid "Lock"
-msgstr ""
-
-#: tlayersform.listview1.columns[5].caption
-msgctxt "tlayersform.listview1.columns[5].caption"
-msgid "Color"
-msgstr ""
-
-#: tlayersform.listview1.columns[6].caption
-msgctxt "tlayersform.listview1.columns[6].caption"
+#: tlinetypesform.listview1.columns[1].caption
+msgctxt "tlinetypesform.listview1.columns[1].caption"
 msgid "Line type"
 msgstr ""
 
-#: tlayersform.listview1.columns[7].caption
-msgid "Line weight"
+#: tlinetypesform.listview1.columns[2].caption
+msgid "Apperance"
 msgstr ""
 
-#: tlayersform.listview1.columns[8].caption
-msgid "Plot"
-msgstr ""
-
-#: tlayersform.listview1.columns[9].caption
+#: tlinetypesform.listview1.columns[3].caption
+msgctxt "tlinetypesform.listview1.columns[3].caption"
 msgid "Description"
-msgstr ""
-
-#: tlayersform.mkcurrentlayer.caption
-msgid "MkCurrentLayer"
-msgstr ""
-
-#: tlayersform.mkcurrentlayer.hint
-msgid "Make selected layer current"
-msgstr ""
-
-#: tlayersform.purgelayers.caption
-msgid "PurgeLayers"
-msgstr ""
-
-#: tlayersform.purgelayers.hint
-msgid "Purge layers"
-msgstr ""
-
-#: tlayersform.refreshlayers.caption
-msgid "RefreshLayers"
-msgstr ""
-
-#: tlayersform.refreshlayers.hint
-msgid "Refresh layers"
-msgstr ""
-
-#: tlayersform.toolbar1.caption
-msgctxt "tlayersform.toolbar1.caption"
-msgid "ToolBar1"
-msgstr ""
-
-#: tlayersform.toolbutton4.caption
-msgid "ToolButton4"
-msgstr ""
-
-#: tnavigatordevices.caption
-msgctxt "tnavigatordevices.caption"
-msgid "Devices"
-msgstr ""
-
-#: tnavigatordevices.maintoolbar.caption
-msgctxt "tnavigatordevices.maintoolbar.caption"
-msgid "MainToolBar"
-msgstr ""
-
-#: tnavigatordevices.toolbutton1.caption
-msgctxt "tnavigatordevices.toolbutton1.caption"
-msgid "ToolButton1"
-msgstr ""
-
-#: tnavigatordevices.toolbutton3.caption
-msgctxt "tnavigatordevices.toolbutton3.caption"
-msgid "ToolButton3"
-msgstr ""
-
-#: tnavigatorentities.caption
-msgctxt "tnavigatorentities.caption"
-msgid "Entities"
-msgstr ""
-
-#: tnavigatorentities.maintoolbar.caption
-msgctxt "tnavigatorentities.maintoolbar.caption"
-msgid "MainToolBar"
-msgstr ""
-
-#: tnavigatorentities.refresh.caption
-msgid "Refresh"
-msgstr ""
-
-#: tnavigatorentities.toolbutton1.caption
-msgctxt "tnavigatorentities.toolbutton1.caption"
-msgid "ToolButton1"
-msgstr ""
-
-#: tnavigatorentities.toolbutton3.caption
-msgctxt "tnavigatorentities.toolbutton3.caption"
-msgid "ToolButton3"
 msgstr ""
 
 #: ttextstylesform.addstyle.caption
@@ -382,24 +291,40 @@ msgstr ""
 msgid "Created. Not named"
 msgstr ""
 
-#: uzccombase.rsaboutclswithupdatepo
-msgid "Command line swith \"UpdatePO\" must be set. (or not the first time running this command)"
+#: uzccommand_dataexport.rsclpdataexportentsfiltercurrentvalue
+msgid "Entities filter current value:"
 msgstr ""
 
-#: uzccombase.rsbeforerunpoly
-msgid "Before starting you must select a 2DPolyLine"
+#: uzccommand_dataexport.rsclpdataexportentsfilternewvalue
+msgid "${\"&[<]<<\",Keys[<],StrId[CLPIdBack]} Enter new entities filter:"
+msgstr ""
+
+#: uzccommand_dataexport.rsclpdataexportexportscriptcurrentvalue
+msgid "Properties export script current value:"
+msgstr ""
+
+#: uzccommand_dataexport.rsclpdataexportexportscriptnewvalue
+msgid "${\"&[<]<<\",Keys[<],StrId[CLPIdBack]} Enter new export script:"
+msgstr ""
+
+#: uzccommand_dataexport.rsclpdataexportoptions
+msgid "${\"&[<]<<\",Keys[<],StrId[CLPIdBack]} Set ${\"&[e]ntities\",Keys[o],StrId[CLPIdUser1]}/${\"&[p]roperties\",Keys[o],StrId[CLPIdUser2]} filter or export ${\"&[s]cript\",Keys[o],StrId[CLPIdUser3]}"
+msgstr ""
+
+#: uzccommand_dataexport.rsclpdataexportpropsfiltercurrentvalue
+msgid "Properties filter current value:"
+msgstr ""
+
+#: uzccommand_dataexport.rsclpdataexportpropsfilternewvalue
+msgid "${\"&[<]<<\",Keys[<],StrId[CLPIdBack]} Enter new properties filter:"
+msgstr ""
+
+#: uzccommand_dataexport.rsclpdataexportwaitfile
+msgid "Configure export ${\"&[p]arams\",Keys[p],StrId[CLPIdOptions]}, run ${\"&[f]ile dialog\",Keys[f],StrId[CLPIdFileDialog]} or enter file name (empty for default):"
 msgstr ""
 
 #: uzcentnet.rscannotbeconnected
 msgid "Can not be connected"
-msgstr ""
-
-#: uzcfnavigatordevices.rsbybase
-msgid "byBase"
-msgstr ""
-
-#: uzcfnavigatordevices.rsbyprefix
-msgid "byPrefix"
 msgstr ""
 
 #: uzcfnavigatordevices.rsstandalonedevices
@@ -424,7 +349,6 @@ msgid "Risers"
 msgstr ""
 
 #: uzcregnavigatorentities.rsentities
-msgctxt "uzcregnavigatorentities.rsentities"
 msgid "Entities"
 msgstr ""
 
@@ -433,6 +357,7 @@ msgid "About ZCAD"
 msgstr ""
 
 #: uzcstrconsts.rsadditionalselected
+#, object-pascal-format
 msgid "Additional were selected %d primitives"
 msgstr ""
 
@@ -468,7 +393,12 @@ msgstr ""
 msgid "Clipboard is empty, there is nothing to paste"
 msgstr ""
 
+#: uzcstrconsts.rsclosedrawings
+msgid "Close drawings"
+msgstr ""
+
 #: uzcstrconsts.rsclosedwgquery
+#, object-pascal-format
 msgid "Drawing \"%s\" not saved. Save?"
 msgstr ""
 
@@ -494,6 +424,10 @@ msgstr ""
 
 #: uzcstrconsts.rscmchange
 msgid "Change"
+msgstr ""
+
+#: uzcstrconsts.rscmcmdmusthaveoperand
+msgid "Command must have operand(s)!"
 msgstr ""
 
 #: uzcstrconsts.rscmcommandonlyctxmenu
@@ -537,11 +471,13 @@ msgid "In stack found following data:"
 msgstr ""
 
 #: uzcstrconsts.rscmnentitiesdeselected
+#, object-pascal-format
 msgid "%d entities deselected"
 msgstr ""
 
 #: uzcstrconsts.rscmnentitiesprocessed
-msgid "%s entities processed"
+#, object-pascal-format
+msgid "%d entities processed"
 msgstr ""
 
 #: uzcstrconsts.rscmnewbasepoint
@@ -549,10 +485,12 @@ msgid "New base point:"
 msgstr ""
 
 #: uzcstrconsts.rscmnoblockdefindwg
+#, object-pascal-format
 msgid "No BlockDef \"%s\" in the drawing"
 msgstr ""
 
 #: uzcstrconsts.rscmnoblockdefindwgcxmenu
+#, object-pascal-format
 msgid "No BlockDef \"%s\" in the drawing. Use context menu"
 msgstr ""
 
@@ -617,6 +555,7 @@ msgid "Second point:"
 msgstr ""
 
 #: uzcstrconsts.rscmsegmentlengthtotallength
+#, object-pascal-format
 msgid "Segment length: %s summary length: %s"
 msgstr ""
 
@@ -634,6 +573,10 @@ msgstr ""
 
 #: uzcstrconsts.rscmselectdestinationentity
 msgid "Select destination entity:"
+msgstr ""
+
+#: uzcstrconsts.rscmselectentity
+msgid "Select entity:"
 msgstr ""
 
 #: uzcstrconsts.rscmselectsourceentity
@@ -654,6 +597,10 @@ msgstr ""
 
 #: uzcstrconsts.rscmspecifyinsertpoint
 msgid "Specify insert point:"
+msgstr ""
+
+#: uzcstrconsts.rscmspecifynextpoint
+msgid "Specify next point:"
 msgstr ""
 
 #: uzcstrconsts.rscmspecifypoint
@@ -693,12 +640,17 @@ msgid "Store"
 msgstr ""
 
 #: uzcstrconsts.rscolor
-msgctxt "uzcstrconsts.rscolor"
 msgid "Color"
 msgstr ""
 
 #: uzcstrconsts.rscolornum
+#, object-pascal-format
 msgid "Color %d"
+msgstr ""
+
+#: uzcstrconsts.rscommand
+msgctxt "uzcstrconsts.rscommand"
+msgid "Command"
 msgstr ""
 
 #: uzcstrconsts.rscommandlinewndname
@@ -706,30 +658,37 @@ msgid "Command line"
 msgstr ""
 
 #: uzcstrconsts.rscommandnrinc
-msgid "Command can not run"
+#, object-pascal-format
+msgid "Command \"%s\" can not run"
 msgstr ""
 
 #: uzcstrconsts.rscommenteeport
+#, object-pascal-format
 msgid "Registered commands - %d; registered entities - %d; registered DXF entities - %d"
 msgstr ""
 
 #: uzcstrconsts.rscompiledtimemsg
+#, object-pascal-format
 msgid "Done.  %s second"
 msgstr ""
 
 #: uzcstrconsts.rscountdimstylesfound
+#, object-pascal-format
 msgid "%d Dimension styles found"
 msgstr ""
 
 #: uzcstrconsts.rscountdimstylespurged
+#, object-pascal-format
 msgid "%d Dimension styles purged"
 msgstr ""
 
 #: uzcstrconsts.rscounttstylesfound
+#, object-pascal-format
 msgid "%d Text styles found"
 msgstr ""
 
 #: uzcstrconsts.rscounttstylespurged
+#, object-pascal-format
 msgid "%d Text styles purged"
 msgstr ""
 
@@ -750,7 +709,13 @@ msgid "Default"
 msgstr ""
 
 #: uzcstrconsts.rsdefaultpromot
+msgctxt "uzcstrconsts.rsdefaultpromot"
 msgid "Command"
+msgstr ""
+
+#: uzcstrconsts.rsdescription
+msgctxt "uzcstrconsts.rsdescription"
+msgid "Description"
 msgstr ""
 
 #: uzcstrconsts.rsdevices
@@ -763,6 +728,7 @@ msgid "Different"
 msgstr ""
 
 #: uzcstrconsts.rsdimstyleusedin
+#, object-pascal-format
 msgid "Dimension style \"%s\" used in: %d-model, %d-blockdef table, %d-dimstyle table"
 msgstr ""
 
@@ -778,11 +744,21 @@ msgstr ""
 msgid "Drawing already contains data. Load anyway?"
 msgstr ""
 
+#: uzcstrconsts.rsegeneraleroror
+#, object-pascal-format
+msgid ""
+"Error in \n"
+"\"%s\"\n"
+"with msg\n"
+"\"%s\""
+msgstr ""
+
 #: uzcstrconsts.rsempty
 msgid "Empty"
 msgstr ""
 
 #: uzcstrconsts.rsentryalreadyexist
+#, object-pascal-format
 msgid "Entry \"%s\" already exist"
 msgstr ""
 
@@ -799,14 +775,21 @@ msgid "ERROR: "
 msgstr ""
 
 #: uzcstrconsts.rsexprouttext
+#, object-pascal-format
 msgid "Expression %s return %s"
 msgstr ""
 
 #: uzcstrconsts.rsfardeffilenotfounf
+#, object-pascal-format
 msgid "File definition of the variables can not be found for the device \"%s\";"
 msgstr ""
 
+#: uzcstrconsts.rsfilterhint
+msgid "(filter)"
+msgstr ""
+
 #: uzcstrconsts.rsformnotfound
+#, object-pascal-format
 msgid "Form \"%s\" is not found!"
 msgstr ""
 
@@ -823,6 +806,7 @@ msgid "Initialization:"
 msgstr ""
 
 #: uzcstrconsts.rsinvalididentificator
+#, object-pascal-format
 msgid "\"%s\" not valid identificator"
 msgstr ""
 
@@ -831,7 +815,18 @@ msgid "Invalid input"
 msgstr ""
 
 #: uzcstrconsts.rsinvalidinputforpropery
+#, object-pascal-format
 msgid "Property \"%s\" for entity \"%s\": %s"
+msgstr ""
+
+#: uzcstrconsts.rslayeralreadyoff
+#, object-pascal-format
+msgid "Layer \"%s\" already off"
+msgstr ""
+
+#: uzcstrconsts.rslayeralreadyon
+#, object-pascal-format
+msgid "Layer \"%s\" already on"
 msgstr ""
 
 #: uzcstrconsts.rslayerdefpaontscannotbeprinted
@@ -842,7 +837,13 @@ msgstr ""
 msgid "Layer must be selected"
 msgstr ""
 
+#: uzcstrconsts.rslayernotfound
+#, object-pascal-format
+msgid "Layer \"%s\" not found"
+msgstr ""
+
 #: uzcstrconsts.rslayerusedin
+#, object-pascal-format
 msgid "Layer \"%s\" used in: %d-model, %d-blockdef table"
 msgstr ""
 
@@ -856,16 +857,19 @@ msgid "Line type"
 msgstr ""
 
 #: uzcstrconsts.rslinetypedesk
+#, object-pascal-format
 msgid ""
 ";;Pattern length %f\n"
-"%s\n"
+"%s"
 msgstr ""
 
 #: uzcstrconsts.rslinetypeusedin
+#, object-pascal-format
 msgid "Line type \"%s\" used in: %d-model, %d-blockdef table"
 msgstr ""
 
 #: uzcstrconsts.rsloadingfontfile
+#, object-pascal-format
 msgid "Loading font file \"%S\""
 msgstr ""
 
@@ -891,6 +895,7 @@ msgid "All"
 msgstr ""
 
 #: uzcstrconsts.rsnamewithcounter
+#, object-pascal-format
 msgid "%s (%d)"
 msgstr ""
 
@@ -899,15 +904,18 @@ msgid "OpenGL context is not created"
 msgstr ""
 
 #: uzcstrconsts.rsnewdimstylenameformat
+#, object-pascal-format
 msgctxt "uzcstrconsts.rsnewdimstylenameformat"
 msgid "Style%-3.3d"
 msgstr ""
 
 #: uzcstrconsts.rsnewlayernameformat
+#, object-pascal-format
 msgid "Layer%-3.3d"
 msgstr ""
 
 #: uzcstrconsts.rsnewtextstylenameformat
+#, object-pascal-format
 msgctxt "uzcstrconsts.rsnewtextstylenameformat"
 msgid "Style%-3.3d"
 msgstr ""
@@ -933,6 +941,7 @@ msgid "Absent Prefix"
 msgstr ""
 
 #: uzcstrconsts.rsprocesstimemsg
+#, object-pascal-format
 msgid "%s:  %s second"
 msgstr ""
 
@@ -957,10 +966,11 @@ msgid "Quit"
 msgstr ""
 
 #: uzcstrconsts.rsquitquery
-msgid "Do yo want to quit ZCAD?"
+msgid "Do you want to quit ZCAD?"
 msgstr ""
 
 #: uzcstrconsts.rsrecreating
+#, object-pascal-format
 msgid "Re-creating %s!"
 msgstr ""
 
@@ -974,11 +984,8 @@ msgid ""
 msgstr ""
 
 #: uzcstrconsts.rsrenamedto
+#, object-pascal-format
 msgid "%s \"%s\" renamed to \"%s\""
-msgstr ""
-
-#: uzcstrconsts.rsrevstr
-msgid "Revision SVN:"
 msgstr ""
 
 #: uzcstrconsts.rsruncommand
@@ -986,6 +993,7 @@ msgid "Running command"
 msgstr ""
 
 #: uzcstrconsts.rsrunscript
+#, object-pascal-format
 msgid "Running script \"%s\";"
 msgstr ""
 
@@ -1014,6 +1022,7 @@ msgid "This is system line type!"
 msgstr ""
 
 #: uzcstrconsts.rstemplatenotfound
+#, object-pascal-format
 msgid "Template file \"%s\" not found"
 msgstr ""
 
@@ -1026,14 +1035,17 @@ msgid "Text editor"
 msgstr ""
 
 #: uzcstrconsts.rstextstyleusedin
+#, object-pascal-format
 msgid "Text style \"%s\" used in: %d-model, %d-blockdef table, %d-dimstyle table"
 msgstr ""
 
 #: uzcstrconsts.rstoolbarnotfound
+#, object-pascal-format
 msgid "Toolbar \"%s\" is not found! Create a blank window"
 msgstr ""
 
 #: uzcstrconsts.rstypenotdefinedinmodule
+#, object-pascal-format
 msgid "Type \"%S\" not defined in unit \"%S\""
 msgstr ""
 
@@ -1058,10 +1070,12 @@ msgid "Unable select free text style name"
 msgstr ""
 
 #: uzcstrconsts.rsunabletofindfile
+#, object-pascal-format
 msgid "Unable to find file \"%s\""
 msgstr ""
 
 #: uzcstrconsts.rsunabletoopenfile
+#, object-pascal-format
 msgid "Unable to open file \"%s\""
 msgstr ""
 
@@ -1078,10 +1092,12 @@ msgid "Unknown command"
 msgstr ""
 
 #: uzcstrconsts.rsunknownfileext
+#, object-pascal-format
 msgid "Unknown file format \"%s\". Saving failed."
 msgstr ""
 
 #: uzcstrconsts.rsunnamedwindowtitle
+#, object-pascal-format
 msgid "Unnamed%-3.3d"
 msgstr ""
 
@@ -1101,12 +1117,43 @@ msgstr ""
 msgid "WARNING: "
 msgstr ""
 
-#: uzcstrconsts.rswrongblockdefindex
-msgid "Wrong blockdef index"
+#: uzcstrconsts.rszcadstarted
+#, object-pascal-format
+msgid "%s v%s started"
 msgstr ""
 
-#: uzcstrconsts.rszcadstarted
-msgid "ZCAD v%s started"
+#: uzcuidialogs.rsdontshowthisnexttime
+#, object-pascal-format
+msgctxt "uzcuidialogs.rsdontshowthisnexttime"
+msgid "Don't show this next time (for task \"%s\")"
+msgstr ""
+
+#: uzcuidialogs.rsmsgkeepchoice
+#, object-pascal-format
+msgctxt "uzcuidialogs.rsmsgkeepchoice"
+msgid "Keep choice (for task \"%s\")"
+msgstr ""
+
+#: uzcuidialogs.rsmsgwndtitle
+msgctxt "uzcuidialogs.rsmsgwndtitle"
+msgid "ZCAD"
+msgstr ""
+
+#: uzcuitypes.rsdontshowthisnexttime
+#, object-pascal-format
+msgctxt "uzcuitypes.rsdontshowthisnexttime"
+msgid "Don't show this next time (for task \"%s\")"
+msgstr ""
+
+#: uzcuitypes.rsmsgkeepchoice
+#, object-pascal-format
+msgctxt "uzcuitypes.rsmsgkeepchoice"
+msgid "Keep choice (for task \"%s\")"
+msgstr ""
+
+#: uzcuitypes.rsmsgwndtitle
+msgctxt "uzcuitypes.rsmsgwndtitle"
+msgid "ZCAD"
 msgstr ""
 
 #: uzeffdxf.rsloaddxffile
@@ -1114,22 +1161,27 @@ msgid "Load DXF file"
 msgstr ""
 
 #: uzestrconsts.fontnotfoundandreplace
-msgid "For text style \"%s\" not found font \"%s\", is replaced by an alternative"
+#, object-pascal-format
+msgid "For text style \"%s\" not found font \"%s\" (\"%s\" fontfamily), is replaced by an alternative"
 msgstr ""
 
 #: uzestrconsts.rsalternatefontnotfoundin
+#, object-pascal-format
 msgid "Alternate font \"%s\" is not found in \"%s\""
 msgstr ""
 
 #: uzestrconsts.rsblockignored
+#, object-pascal-format
 msgid "Ignored block \"%s\""
 msgstr ""
 
 #: uzestrconsts.rsdoubleblockignored
+#, object-pascal-format
 msgid "Ignored double definition block \"%s\""
 msgstr ""
 
 #: uzestrconsts.rsfileformat
+#, object-pascal-format
 msgid "%s file format"
 msgstr ""
 
@@ -1138,6 +1190,7 @@ msgid "Grid too density"
 msgstr ""
 
 #: uzestrconsts.rsloadingfile
+#, object-pascal-format
 msgid "Loading file \"%s\""
 msgstr ""
 
@@ -1150,15 +1203,21 @@ msgid "Can not load reserve font"
 msgstr ""
 
 #: uzestrconsts.rsunablerenamefiletobak
+#, object-pascal-format
 msgid "Could not rename file \"%s\" into \"*.bak\""
 msgstr ""
 
 #: uzestrconsts.rsunabletowritefile
+#, object-pascal-format
 msgid "Unable to write file \"%s\""
 msgstr ""
 
 #: uzestrconsts.rsunknownfileformat
 msgid "Unknown file format"
+msgstr ""
+
+#: uzestrconsts.rswrongblockdefindex
+msgid "Wrong blockdef index"
 msgstr ""
 
 #: uzglviewareageneral.rswonlyparalel

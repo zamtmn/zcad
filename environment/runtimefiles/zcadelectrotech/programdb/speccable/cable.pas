@@ -2,6 +2,61 @@ subunit devicebase;
 interface
 uses system;
 type
+     TSPECCABLE_KIPEVKG_NGA_LS_WCS=(_1_2_0_6(*'1х2х0.6'*),
+                                   _2_2_0_6(*'2х2х0.6'*),
+                                   _3_2_0_6(*'4х2х0.6'*),
+                                   _4_2_0_6(*'5х2х0.6'*),
+                                   _5_2_0_6(*'12х2х0.6'*),
+                                   _6_2_0_6(*'16х2х0.6'*),
+                                   _7_2_0_6(*'2х2х0.6'*),
+                                   _8_2_0_6(*'4х2х0.6'*),
+                                   _9_2_0_6(*'5х2х0.6'*),
+                                   _10_2_0_6(*'20х2х0.6'*));
+
+     TSPECCABLE_KSBK_NGA_FRLS_WCS=(_1_2_0_64(*'1х2х0.64'*),
+                                   _2_2_0_64(*'2х2х0.64'*),
+                                   _4_2_0_64(*'4х2х0.64'*),
+                                   _8_2_0_64(*'5х2х0.64'*),
+                                   _12_2_0_64(*'12х2х0.64'*),
+                                   _16_2_0_64(*'16х2х0.64'*),
+                                   _20_2_0_64(*'20х2х0.64'*),
+                                   _1_2_0_8(*'1х2х0.8'*),
+                                   _2_2_0_8(*'2х2х0.8'*),
+                                   _4_2_0_8(*'4х2х0.8'*),
+                                   _8_2_0_8(*'5х2х0.8'*),
+                                   _12_2_0_8(*'12х2х0.8'*),
+                                   _16_2_0_8(*'16х2х0.8'*),
+                                   _20_2_0_8(*'20х2х0.8'*),
+                                   _1_2_0_98(*'1х2х0.98'*),
+                                   _2_2_0_98(*'2х2х0.98'*),
+                                   _4_2_0_98(*'4х2х0.98'*),
+                                   _8_2_0_98(*'5х2х0.98'*),
+                                   _12_2_0_98(*'12х2х0.98'*),
+                                   _16_2_0_98(*'16х2х0.98'*),
+                                   _20_2_0_98(*'20х2х0.98'*),
+                                   _1_2_1_13(*'1х2х1.13'*),
+                                   _2_2_1_13(*'2х2х1.13'*),
+                                   _4_2_1_13(*'4х2х1.13'*),
+                                   _8_2_1_13(*'5х2х1.13'*),
+                                   _12_2_1_13(*'12х2х1.13'*),
+                                   _16_2_1_13(*'16х2х1.13'*),
+                                   _20_2_1_13(*'20х2х1.13'*),
+                                   _1_2_1_38(*'1х2х1.38'*),
+                                   _2_2_1_38(*'2х2х1.38'*),
+                                   _4_2_1_38(*'4х2х1.38'*),
+                                   _8_2_1_38(*'5х2х1.38'*),
+                                   _12_2_1_38(*'12х2х1.38'*),
+                                   _16_2_1_38(*'16х2х1.38'*),
+                                   _20_2_1_38(*'20х2х1.38'*),
+                                   _1_2_1_78(*'1х2х1.78'*),
+                                   _2_2_1_78(*'2х2х1.78'*),
+                                   _4_2_1_78(*'4х2х1.78'*),
+                                   _8_2_1_78(*'5х2х1.78'*),
+                                   _12_2_1_78(*'12х2х1.78'*),
+                                   _16_2_1_78(*'16х2х1.78'*),
+                                   _20_2_1_78(*'20х2х1.78'*));
+
+
      TSPECCABLE_KSBG_A_FRHF_WCS=(_1_2_0_78(*'1х2х0.78'*),
                                  _2_2_0_78(*'2х2х0.78'*),
                                  _1_2_0_90(*'1х2х0.90'*),
@@ -74,7 +129,14 @@ type
                                   _2_2_0_52(*'2х2х0.52'*),
                                   _4_2_0_52(*'4х2х0.52'*));
 
+    TSPECCABLE_KIPEVKG_NGA_LS=packed object(CableDeviceBaseObject)
+                Wire_Count_Section_DESC:TSPECCABLE_KIPEVKG_NGA_LS_WCS;
+           end;
 
+    TSPECCABLE_KSBK_NGA_FRLS=packed object(CableDeviceBaseObject)
+                Wire_Count_Section_DESC:TSPECCABLE_KSBK_NGA_FRLS_WCS;
+           end;
+    
     TSPECCABLE_KPSVV_ng_LS=packed object(CableDeviceBaseObject)
                 Wire_Count_Section_DESC:TSPECCABLE_KPSVV_WCS;
            end;
@@ -106,6 +168,8 @@ type
                 Wire_Count_Section_DESC:TSPECCABLE_KVPEFNGA_HF_WCS;
            end;
 var
+   _EQ_SPECCABLE_KIPEVKG_NGA_LS:TSPECCABLE_KIPEVKG_NGA_LS;
+   _EQ_SPECCABLE_KSBK_NGA_FRLS:TSPECCABLE_KSBK_NGA_FRLS;
    _EQ_SPECCABLE_KPSVV_ng_LS:TSPECCABLE_KPSVV_ng_LS;
    _EQ_SPECCABLE_KPSVV:TSPECCABLE_KPSVV;
    _EQ_SPECCABLE_KPSE_ng_FRLS:TSPECCABLE_KPSE_ng_FRLS;
@@ -120,6 +184,42 @@ var
 
 implementation
 begin
+     _EQ_SPECCABLE_KIPEVKG_NGA_LS.initnul;
+     _EQ_SPECCABLE_KIPEVKG_NGA_LS.Category:=_kables;
+     _EQ_SPECCABLE_KIPEVKG_NGA_LS.Group:=_cables_sv;
+     _EQ_SPECCABLE_KIPEVKG_NGA_LS.EdIzm:=_m;
+     _EQ_SPECCABLE_KIPEVKG_NGA_LS.ID:='SPECCABLE_KIPEVKG_NGA_LS';
+     _EQ_SPECCABLE_KIPEVKG_NGA_LS.Standard:='ТУ 16.К99-025-2005';
+     _EQ_SPECCABLE_KIPEVKG_NGA_LS.OKP:='35 7413 4100';
+     _EQ_SPECCABLE_KIPEVKG_NGA_LS.Manufacturer:='НПП "Спецкабель" г.Москва';
+     _EQ_SPECCABLE_KIPEVKG_NGA_LS.Description:='КИПЭВКГнг(А)-LS - кабели симметричные для промышленного интерфейса RS-485, групповой прокладки, с пониженным дымо- и газовыделением, бронированные';
+     _EQ_SPECCABLE_KIPEVKG_NGA_LS.NameShortTemplate:='КИПЭВКГнг(А)-LS %%[Wire_Count_Section_DESC]';
+     _EQ_SPECCABLE_KIPEVKG_NGA_LS.NameTemplate:='Кабель симметричный для промышленного интерфейса RS-485, групповой прокладки, с пониженным дымо- и газовыделением, бронированные КИПЭВКГнг(А)-LS %%[Wire_Count_Section_DESC]';
+     _EQ_SPECCABLE_KIPEVKG_NGA_LS.UIDTemplate:='%%[ID]-%%[Wire_Count_Section_DESC]';
+     _EQ_SPECCABLE_KIPEVKG_NGA_LS.NameFullTemplate:='Кабель симметричный для промышленного интерфейса RS-485, групповой прокладки, с пониженным дымо- и газовыделением, бронированные КИПЭВКГнг(А)-LS %%[Wire_Count_Section_DESC]';
+     _EQ_SPECCABLE_KIPEVKG_NGA_LS.Wire_Count_Section_DESC:=_2_2_0_64;
+     _EQ_SPECCABLE_KIPEVKG_NGA_LS.TreeCoord:='BP_СПЕЦКАБЕЛЬ_Для ОПС_КИПЭВКГнг(А)-LS|BC_Кабельная продукция_Связи_КИПЭВКГнг(А)-LS(СПЕЦКАБЕЛЬ)';
+     _EQ_SPECCABLE_KIPEVKG_NGA_LS.format;
+
+
+
+     _EQ_SPECCABLE_KSBK_NGA_FRLS.initnul;
+     _EQ_SPECCABLE_KSBK_NGA_FRLS.Category:=_kables;
+     _EQ_SPECCABLE_KSBK_NGA_FRLS.Group:=_cables_sv;
+     _EQ_SPECCABLE_KSBK_NGA_FRLS.EdIzm:=_m;
+     _EQ_SPECCABLE_KSBK_NGA_FRLS.ID:='SPECCABLE_KSBK_NGA_FRLS';
+     _EQ_SPECCABLE_KSBK_NGA_FRLS.Standard:='ТУ 16.К99-037-2009';
+     _EQ_SPECCABLE_KSBK_NGA_FRLS.OKP:='35 7400';
+     _EQ_SPECCABLE_KSBK_NGA_FRLS.Manufacturer:='НПП "Спецкабель" г.Москва';
+     _EQ_SPECCABLE_KSBK_NGA_FRLS.Description:='Кабель симметричный, огнестойкий, с пониженным дымо- и газовыделением, повышенной пожаростойкости, бронированный; однопроволочный; изоляция: кремнийорганическая керамообразующая резина; скрутка: парная, совместно с полиамидной пленкой; экран: общий из алюмолавсановой ленты с контактным проводником из медной луженой проволоки; оболочка: ПВХ пониженной пожароопасности с низким дымо- и газовыделением; броня: оплетка из стальных оцинкованных проволок; защитный шланг: аналогично оболочке. Цвет  оранжевый';
+     _EQ_SPECCABLE_KSBK_NGA_FRLS.NameShortTemplate:='КСБКнг(А)-FRLS %%[Wire_Count_Section_DESC]';
+     _EQ_SPECCABLE_KSBK_NGA_FRLS.NameTemplate:='Кабель для промышленного интерфейса, огнестойкий, с пониженным дымо- и газовыделением, бронированный КСБКнг(А)-FRLS %%[Wire_Count_Section_DESC]';
+     _EQ_SPECCABLE_KSBK_NGA_FRLS.UIDTemplate:='%%[ID]-%%[Wire_Count_Section_DESC]';
+     _EQ_SPECCABLE_KSBK_NGA_FRLS.NameFullTemplate:='Кабель для промышленного интерфейса, огнестойкий, с пониженным дымо- и газовыделением, повышенной пожаростойкости, бронированный КСБКнг(А)-FRLS %%[Wire_Count_Section_DESC]';
+     _EQ_SPECCABLE_KSBK_NGA_FRLS.Wire_Count_Section_DESC:=_2_2_0_64;
+     _EQ_SPECCABLE_KSBK_NGA_FRLS.TreeCoord:='BP_СПЕЦКАБЕЛЬ_Для ОПС_КСБКнг(А)-FRLS|BC_Кабельная продукция_Связи_КСБКнг(А)-FRLS(СПЕЦКАБЕЛЬ)';
+     _EQ_SPECCABLE_KSBK_NGA_FRLS.format;
+
 
      _EQ_SPECCABLE_KPSVV_ng_LS.initnul;
      _EQ_SPECCABLE_KPSVV_ng_LS.Category:=_kables;

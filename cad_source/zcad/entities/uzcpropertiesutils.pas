@@ -27,6 +27,7 @@ function GetProperty(PEnt:PGDBObjGenericWithSubordinated;propertyname:gdbstring;
 implementation
 var
   pu:TObjectUnit;
+  ChangedData:TChangedData;
 function GetProperty(PEnt:PGDBObjGenericWithSubordinated;propertyname:gdbstring; out propertyvalue:gdbstring):boolean;
 var
   mp:TMultiProperty;
@@ -41,7 +42,8 @@ var
     f:=drawings.GetUnitsFormat;
     //mp.PIiterateData:=mp.BeforeIterateProc(mp,@pu);
     //ChangedData:=CreateChangedData(PEnt,mpd.GetValueOffset,mpd.SetValueOffset);
-    propertyvalue:=mp.MPType.GetDecoratedValueAsString({ChangedData.PGetDataInEtity}Pointer(PtrUInt(PEnt)+mpd.GetValueOffset),f);
+    ChangedData:=CreateChangedData(PEnt,mpd.GSData);
+    propertyvalue:=mp.MPType.GetDecoratedValueAsString(ChangedData.PGetDataInEtity,f);
     //if @mpd.EntBeforeIterateProc<>nil then
     //  mpd.EntBeforeIterateProc(mp.PIiterateData,ChangedData);
     //mpd.EntIterateProc(mp.PIiterateData,ChangedData,mp,true,mpd.EntChangeProc,f);

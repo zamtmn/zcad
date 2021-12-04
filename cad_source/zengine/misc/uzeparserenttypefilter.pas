@@ -7,7 +7,8 @@ interface
 uses
   SysUtils,
   uzeentity,uzeparser,uzeentitiestypefilter,Masks,
-  uzcoimultiproperties,uzedimensionaltypes;
+  uzcoimultiproperties,uzedimensionaltypes,
+  uzcoimultipropertiesutil;
 
 type
   //TParserEntityTypeFilterString=AnsiString;
@@ -108,13 +109,15 @@ var
   i:integer;
   mpd:TMultiPropertyDataForObjects;
   f:TzeUnitsFormat;
+  ChangedData:TChangedData;
 begin
   if ResultParam.P.CodeUnitPos=OnlyGetLength then begin
     if mp<>nil then begin
+      ChangedData:=CreateChangedData(PGDBObjEntity(data),mpd.GSData);
       if mp.MPObjectsData.MyGetValue(TObjIDWithExtender.Create(0,nil),mpd) then begin
-        tempresult:=mp.MPType.GetDecoratedValueAsString(Pointer(PtrUInt(data)+mpd.GetValueOffset),f);
+        tempresult:=mp.MPType.GetDecoratedValueAsString(ChangedData.PGetDataInEtity,f);
       end else if mp.MPObjectsData.MyGetValue(TObjIDWithExtender.Create(PGDBObjEntity(data)^.GetObjType,nil),mpd) then begin
-        tempresult:=mp.MPType.GetDecoratedValueAsString(Pointer(PtrUInt(data)+mpd.GetValueOffset),f);
+        tempresult:=mp.MPType.GetDecoratedValueAsString(ChangedData.PGetDataInEtity,f);
       end else
         tempresult:='';
     end else
@@ -143,8 +146,8 @@ end;
 destructor TGetEntParam.Destroy;
 begin
   if mp<>nil then begin
-    if @mp.AfterIterateProc<>nil then
-      mp.AfterIterateProc({bip}mp.PIiterateData,mp);
+    if @mp.MIPD.AfterIterateProc<>nil then
+      mp.MIPD.AfterIterateProc({bip}mp.PIiterateData,mp);
     //mp.Free;{ #todo : нужно делать копию mp, но пока пусть так }
   end;
 end;

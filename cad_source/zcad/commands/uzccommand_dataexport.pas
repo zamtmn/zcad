@@ -302,13 +302,13 @@ begin
   if ResultParam.P.CodeUnitPos=OnlyGetLength then begin
     if mp<>nil then begin
       if mp.MPObjectsData.MyGetValue(TObjIDWithExtender.Create(0,nil),mpd) then begin
-        ChangedData:=CreateChangedData(data.CurrentEntity,mpd.GetValueOffset,mpd.SetValueOffset);
+        ChangedData:=CreateChangedData(data.CurrentEntity,mpd.GSData);
         if @mpd.EntBeforeIterateProc<>nil then
           mpd.EntBeforeIterateProc({bip}mp.PIiterateData,ChangedData);
         mpd.EntIterateProc({bip}mp.PIiterateData,ChangedData,mp,true,mpd.EntChangeProc,f);
         tempresult:=mp.MPType.GetDecoratedValueAsString(PTOneVarData({bip}mp.PIiterateData)^.PVarDesc.data.Instance,f);
       end else if mp.MPObjectsData.MyGetValue(TObjIDWithExtender.Create(PGDBObjEntity(data.CurrentEntity)^.GetObjType,nil),mpd) then begin
-        ChangedData:=CreateChangedData(data.CurrentEntity,mpd.GetValueOffset,mpd.SetValueOffset);
+        ChangedData:=CreateChangedData(data.CurrentEntity,mpd.GSData);
         if @mpd.EntBeforeIterateProc<>nil then
           mpd.EntBeforeIterateProc({bip}mp.PIiterateData,ChangedData);
         mpd.EntIterateProc({bip}mp.PIiterateData,ChangedData,mp,true,mpd.EntChangeProc,f);
@@ -335,7 +335,7 @@ var
 begin
   propertyname:=ParsedOperands.GetResult(Data);
   if MultiPropertiesManager.MultiPropertyDictionary.MyGetValue(propertyname,mp) then begin
-    {bip}mp.PIiterateData:=mp.BeforeIterateProc(mp,@VU);
+    {bip}mp.PIiterateData:=mp.MIPD.BeforeIterateProc(mp,@VU);
     { #todo : нужно делать копию mp, но пока пусть так }
   end else
     mp:=nil;
@@ -344,8 +344,8 @@ end;
 destructor TGetEntParam.Destroy;
 begin
   if mp<>nil then begin
-    if @mp.AfterIterateProc<>nil then
-      mp.AfterIterateProc({bip}mp.PIiterateData,mp);
+    if @mp.MIPD.AfterIterateProc<>nil then
+      mp.MIPD.AfterIterateProc({bip}mp.PIiterateData,mp);
     //mp.Free;{ #todo : нужно делать копию mp, но пока пусть так }
   end;
   inherited;

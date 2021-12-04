@@ -212,7 +212,7 @@ var
    entinfo:TEntInfoData;
 begin
      begin
-       ChangedData:=CreateChangedData(pdata,PMultiPropertyDataForObjects.GetValueOffset,PMultiPropertyDataForObjects.SetValueOffset);
+       ChangedData:=CreateChangedData(pdata,PMultiPropertyDataForObjects.GSData);
        CanChangeValue:=true;
        if @PMultiPropertyDataForObjects.CheckValue<>nil then
                                                           begin
@@ -457,7 +457,7 @@ begin
         MPCMisc     :pu:=@self.MiscUnit;
         MPCSummary  :pu:=@self.SummaryUnit;
       end;
-      MultiPropertiesManager.MultiPropertyVector[i].PIiterateData:=MultiPropertiesManager.MultiPropertyVector[i].BeforeIterateProc(MultiPropertiesManager.MultiPropertyVector[i],pu);
+      MultiPropertiesManager.MultiPropertyVector[i].PIiterateData:=MultiPropertiesManager.MultiPropertyVector[i].MIPD.BeforeIterateProc(MultiPropertiesManager.MultiPropertyVector[i],pu);
 
       psd:=drawings.GetCurrentDWG.SelObjArray.beginiterate(ir);
       if psd<>nil then
@@ -469,12 +469,12 @@ begin
               if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue(TObjIDWithExtender.Create(pv^.GetObjType,nil),MultiPropertyDataForObjects)then begin
                 if @MultiPropertyDataForObjects.EntBeforeIterateProc<>nil then
                 begin
-                  ChangedData:=CreateChangedData(pv,MultiPropertyDataForObjects.GetValueOffset,MultiPropertyDataForObjects.SetValueOffset);
+                  ChangedData:=CreateChangedData(pv,MultiPropertyDataForObjects.GSData);
                   MultiPropertyDataForObjects.EntBeforeIterateProc(MultiPropertiesManager.MultiPropertyVector[i].PIiterateData,ChangedData);
                 end;
               end else if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue(TObjIDWithExtender.Create(0,nil),MultiPropertyDataForObjects)then begin
                 if @MultiPropertyDataForObjects.EntBeforeIterateProc<>nil then begin
-                  ChangedData:=CreateChangedData(pv,MultiPropertyDataForObjects.GetValueOffset,MultiPropertyDataForObjects.SetValueOffset);
+                  ChangedData:=CreateChangedData(pv,MultiPropertyDataForObjects.GSData);
                   MultiPropertyDataForObjects.EntBeforeIterateProc(MultiPropertiesManager.MultiPropertyVector[i].PIiterateData,ChangedData)
                 end;
               end else begin
@@ -484,14 +484,14 @@ begin
                   ObjIDWithExtender.ExtenderClass:=typeof(Extender);
                   if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue(ObjIDWithExtender,MultiPropertyDataForObjects)then begin
                     if @MultiPropertyDataForObjects.EntBeforeIterateProc<>nil then begin
-                      ChangedData:=CreateChangedData(Extender,MultiPropertyDataForObjects.GetValueOffset,MultiPropertyDataForObjects.SetValueOffset);
+                      ChangedData:=CreateChangedData(Extender,MultiPropertyDataForObjects.GSData);
                       MultiPropertyDataForObjects.EntBeforeIterateProc(MultiPropertiesManager.MultiPropertyVector[i].PIiterateData,ChangedData)
                     end;
                   end else begin
                     ObjIDWithExtender.ObjID:=0;
                     if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue(ObjIDWithExtender,MultiPropertyDataForObjects)then begin
                       if @MultiPropertyDataForObjects.EntBeforeIterateProc<>nil then begin
-                        ChangedData:=CreateChangedData(Extender,MultiPropertyDataForObjects.GetValueOffset,MultiPropertyDataForObjects.SetValueOffset);
+                        ChangedData:=CreateChangedData(Extender,MultiPropertyDataForObjects.GSData);
                         MultiPropertyDataForObjects.EntBeforeIterateProc(MultiPropertiesManager.MultiPropertyVector[i].PIiterateData,ChangedData)
                       end;
                     end;
@@ -515,11 +515,11 @@ begin
           if (pv^.GetObjType=NeedObjID)or(NeedObjID=0) then
             if pv^.Selected then begin
               if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue(TObjIDWithExtender.Create(pv^.GetObjType,nil),MultiPropertyDataForObjects)then begin
-                ChangedData:=CreateChangedData(pv,MultiPropertyDataForObjects.GetValueOffset,MultiPropertyDataForObjects.SetValueOffset);
+                ChangedData:=CreateChangedData(pv,MultiPropertyDataForObjects.GSData);
                 MultiPropertyDataForObjects.EntIterateProc(MultiPropertiesManager.MultiPropertyVector[i].PIiterateData,ChangedData,MultiPropertiesManager.MultiPropertyVector[i],fistrun,MultiPropertyDataForObjects.EntChangeProc,f);
                 fistrun:=false;
               end else if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue(TObjIDWithExtender.Create(0,nil),MultiPropertyDataForObjects)then begin
-                ChangedData:=CreateChangedData(pv,MultiPropertyDataForObjects.GetValueOffset,MultiPropertyDataForObjects.SetValueOffset);
+                ChangedData:=CreateChangedData(pv,MultiPropertyDataForObjects.GSData);
                 MultiPropertyDataForObjects.EntIterateProc(MultiPropertiesManager.MultiPropertyVector[i].PIiterateData,ChangedData,MultiPropertiesManager.MultiPropertyVector[i],fistrun,MultiPropertyDataForObjects.EntChangeProc,f);
                 fistrun:=false;
               end else begin
@@ -529,7 +529,7 @@ begin
                   ObjIDWithExtender.ExtenderClass:=typeof(Extender);
                   if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue(ObjIDWithExtender,MultiPropertyDataForObjects)then begin
                     if @MultiPropertyDataForObjects.EntIterateProc<>nil then begin
-                      ChangedData:=CreateChangedData(Extender,MultiPropertyDataForObjects.GetValueOffset,MultiPropertyDataForObjects.SetValueOffset);
+                      ChangedData:=CreateChangedData(Extender,MultiPropertyDataForObjects.GSData);
                       MultiPropertyDataForObjects.EntIterateProc(MultiPropertiesManager.MultiPropertyVector[i].PIiterateData,ChangedData,MultiPropertiesManager.MultiPropertyVector[i],fistrun,MultiPropertyDataForObjects.EntChangeProc,f);
                       fistrun:=false;
                     end;
@@ -537,7 +537,7 @@ begin
                     ObjIDWithExtender.ObjID:=0;
                     if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue(ObjIDWithExtender,MultiPropertyDataForObjects)then begin
                       if @MultiPropertyDataForObjects.EntIterateProc<>nil then begin
-                        ChangedData:=CreateChangedData(Extender,MultiPropertyDataForObjects.GetValueOffset,MultiPropertyDataForObjects.SetValueOffset);
+                        ChangedData:=CreateChangedData(Extender,MultiPropertyDataForObjects.GSData);
                         MultiPropertyDataForObjects.EntIterateProc(MultiPropertiesManager.MultiPropertyVector[i].PIiterateData,ChangedData,MultiPropertiesManager.MultiPropertyVector[i],fistrun,MultiPropertyDataForObjects.EntChangeProc,f);
                         fistrun:=false;
                       end;
@@ -555,7 +555,7 @@ begin
   for i:=0 to MultiPropertiesManager.MultiPropertyVector.Size-1 do
     if MultiPropertiesManager.MultiPropertyVector[i].usecounter<>0 then
     begin
-      MultiPropertiesManager.MultiPropertyVector[i].AfterIterateProc(MultiPropertiesManager.MultiPropertyVector[i].PIiterateData,MultiPropertiesManager.MultiPropertyVector[i]);
+      MultiPropertiesManager.MultiPropertyVector[i].MIPD.AfterIterateProc(MultiPropertiesManager.MultiPropertyVector[i].PIiterateData,MultiPropertiesManager.MultiPropertyVector[i]);
       MultiPropertiesManager.MultiPropertyVector[i].PIiterateData:=nil;
     end;
 

@@ -84,10 +84,30 @@ procedure TArrayIndex2SumEntIterateProc(pdata:GDBPointer;ChangedData:TChangedDat
 procedure Blockname2BlockNameCounterIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure PStyle2PStyleCounterIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure PolylineVertex3DControlBeforeEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData);
-function CreateChangedData(pentity:pointer;GetVO,SetVO:GDBInteger):TChangedData;
+function CreateChangedData(pentity:pointer;GSData:TGetSetData):TChangedData;
+procedure GeneralFromVarEntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+const
+  OneVarDataMIPD:TMainIterateProcsData=(BeforeIterateProc:GetOneVarData;
+                                        AfterIterateProc:FreeOneVarData);
+  OneVarDataEIPD:TEntIterateProcsData=(ebip:nil;
+                                       eip:GeneralEntIterateProc;
+                                       ECP:GeneralFromVarEntChangeProc;
+                                       CV:nil);
+  OneVarRODataEIPD:TEntIterateProcsData=(ebip:nil;
+                                       eip:GeneralEntIterateProc;
+                                       ECP:nil;
+                                       CV:nil);
+
 implementation
 var
    Vertex3DControl:TArrayIndex=0;
+
+procedure GeneralFromVarEntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+begin
+     mp.MPType^.CopyInstanceTo(pvardesk(pdata)^.data.Instance,ChangedData.PSetDataInEtity);
+     ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
+end;
+
 function FindOrCreateVar(pu:PTObjectUnit;varname,username,typename:GDBString;out pvd:GDBPointer):GDBBoolean;
 var
    vd:vardesk;
@@ -467,11 +487,19 @@ begin
      PTPointerCounterData(pdata)^.counter.CountKey(pointer(ppointer(ChangedData.PGetDataInEtity)^),1);
      inc(PTPointerCounterData(pdata)^.totalcount);
 end;
-function CreateChangedData(pentity:pointer;GetVO,SetVO:GDBInteger):TChangedData;
+function CreateChangedData(pentity:pointer;GSData:TGetSetData):TChangedData;
 begin
-     result.pentity:=pentity;
-     result.PGetDataInEtity:=Pointer(PtrUInt(pentity)+GetVO);
-     result.PSetDataInEtity:=Pointer(PtrUInt(pentity)+SetVO);
+  result.pentity:=pentity;
+  case GSData.Mode of
+    GSMRel:begin
+             result.PGetDataInEtity:=Pointer(PtrUInt(pentity)+GSData.Value.GetValueOffset);
+             result.PSetDataInEtity:=Pointer(PtrUInt(pentity)+GSData.Value.SetValueOffset);
+           end;
+    GSMAbs:begin
+             result.PGetDataInEtity:=Pointer(GSData.Value.GetValueOffset);
+             result.PSetDataInEtity:=Pointer(GSData.Value.SetValueOffset);
+           end;
+  end;
 end;
 
 

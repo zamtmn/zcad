@@ -24,7 +24,7 @@ uses SysUtils,uzedrawingdef,uzeentityextender,
      uzeentdevice,TypeDescriptors,uzetextpreprocessor,UGDBOpenArrayOfByte,
      uzbtypesbase,uzbtypes,uzeentsubordinated,uzeentity,uzeenttext,uzeblockdef,
      varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,uzbmemman,
-     uzeffdxfsupport,uzcvariablesutils,
+     uzeffdxfsupport,uzcvariablesutils,usimplegenerics,
      uzeBaseExtender,uzgldrawcontext,fpexprpars,LCLProc;
 const
   LayerControlExtenderName='extdrLayerControl';
@@ -45,12 +45,15 @@ type
       class function getExtenderName:string;override;
       constructor Create(pEntity:Pointer);override;
       procedure Assign(Source:TBaseExtender);override;
+      procedure onEntityClone(pSourceEntity,pDestEntity:pointer);override;
+      procedure CopyExt2Ent(pSourceEntity,pDestEntity:pointer);override;
       procedure CreateParser(pEntity:Pointer);
       function SetVariableType(pEntity:Pointer;ID:TFPExprIdentifierDef):Boolean;
       procedure GetVariableValue(Var Result : TFPExpressionResult; ConstRef AName : ShortString);
       procedure onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
       procedure onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
       procedure SaveToDxf(var outhandle:GDBOpenArrayOfByte;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
+      procedure ReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);override;
       procedure PostLoad(var context:TIODXFLoadContext);override;
       class function EntIOLoadGoodLayer(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
       class function EntIOLoadBadLayer(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
@@ -62,6 +65,32 @@ type
     end;
 
 implementation
+
+procedure TLayerControlExtender.ReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);
+begin
+end;
+
+function AddLayerControlExtenderToEntity(PEnt:PGDBObjEntity):TLayerControlExtender;
+begin
+  result:=TLayerControlExtender.Create(PEnt);
+  PEnt^.AddExtension(result);
+end;
+
+procedure TLayerControlExtender.onEntityClone(pSourceEntity,pDestEntity:pointer);
+var
+    pDestLayerControlExtender:TLayerControlExtender;
+begin
+     pDestLayerControlExtender:=PGDBObjEntity(pDestEntity)^.EntExtensions.GetExtension<TLayerControlExtender>;
+     if pDestLayerControlExtender=nil then
+                       pDestLayerControlExtender:=AddLayerControlExtenderToEntity(pDestEntity);
+     pDestLayerControlExtender.Assign(self);
+end;
+
+procedure TLayerControlExtender.CopyExt2Ent(pSourceEntity,pDestEntity:pointer);
+begin
+     onEntityClone(pSourceEntity,pDestEntity);
+end;
+
 
 procedure TLayerControlExtender.SetExpression(const AExpression:String);
 begin
@@ -267,14 +296,6 @@ end;
 procedure TLayerControlExtender.PostLoad(var context:TIODXFLoadContext);
 begin
 end;
-
-
-function AddLayerControlExtenderToEntity(PEnt:PGDBObjEntity):TLayerControlExtender;
-begin
-  result:=TLayerControlExtender.Create(PEnt);
-  PEnt^.AddExtension(result);
-end;
-
 
 class function TLayerControlExtender.EntIOLoadGoodLayer(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 var

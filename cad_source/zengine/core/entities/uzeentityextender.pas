@@ -50,7 +50,8 @@ TEntityExtensions=class
                        constructor create;
                        destructor destroy;override;
                        function AddExtension(ExtObj:TBaseEntityExtender):TBaseEntityExtender;
-                       function GetExtension<GEntityExtenderType>(_ExtType:TMetaEntityExtender):GEntityExtenderType;overload;
+                       function GetExtension(ExtType:TMetaEntityExtender):TBaseEntityExtender;overload;
+                       function GetExtension<GEntityExtenderType>:GEntityExtenderType;overload;
                        function GetExtension(n:Integer):TBaseEntityExtender;overload;
                        //function GetExtension(ExtType:TMetaEntityExtender):TBaseEntityExtender;overload;
                        function GetExtensionsCount:Integer;
@@ -84,13 +85,13 @@ begin
      else
         result:=fEntityExtensions[nevindex];
 end;
-function TEntityExtensions.GetExtension<GEntityExtenderType>(_ExtType:TMetaEntityExtender):GEntityExtenderType;
+function TEntityExtensions.GetExtension<GEntityExtenderType>:GEntityExtenderType;
 var
   index:SizeUInt;
 begin
      if assigned(fEntityExtensions)then
      begin
-     if fEntityExtenderToIndex.MyGetValue(_ExtType,index) then
+     if fEntityExtenderToIndex.MyGetValue(GEntityExtenderType,index) then
        result:=GEntityExtenderType(fEntityExtensions[index])
      else
        result:=nil;
@@ -98,7 +99,7 @@ begin
      else
        result:=nil;
 end;
-{function TEntityExtensions.GetExtension(ExtType:TMetaEntityExtender):TBaseEntityExtender;
+function TEntityExtensions.GetExtension(ExtType:TMetaEntityExtender):TBaseEntityExtender;
 var
   index:SizeUInt;
 begin
@@ -111,7 +112,7 @@ begin
      end
      else
        result:=nil;
-end;}
+end;
 function TEntityExtensions.GetExtensionsCount:Integer;
 begin
   if Assigned(fEntityExtensions) then
@@ -185,10 +186,13 @@ end;
 procedure TEntityExtensions.CopyAllExtToEnt(pSourceEntity,pDestEntity:pointer);
 var
   i:integer;
+  s:string;
 begin
      if assigned(fEntityExtensions)then
-     for i:=0 to fEntityExtensions.Size-1 do
+     for i:=0 to fEntityExtensions.Size-1 do begin
+       s:=fEntityExtensions[i].getExtenderName;
        fEntityExtensions[i].CopyExt2Ent(pSourceEntity,pDestEntity);
+     end;
 end;
 procedure TEntityExtensions.RunReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);
 var

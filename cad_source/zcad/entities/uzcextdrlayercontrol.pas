@@ -20,45 +20,46 @@ unit uzcExtdrLayerControl;
 
 interface
 
-uses sysutils,uzedrawingdef,uzeentityextender,
+uses SysUtils,uzedrawingdef,uzeentityextender,
      uzeentdevice,TypeDescriptors,uzetextpreprocessor,UGDBOpenArrayOfByte,
      uzbtypesbase,uzbtypes,uzeentsubordinated,uzeentity,uzeenttext,uzeblockdef,
      varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,uzbmemman,
      uzeffdxfsupport,uzcvariablesutils,
-     uzeBaseExtender,uzgldrawcontext,fpexprpars;
+     uzeBaseExtender,uzgldrawcontext,fpexprpars,LCLProc;
 const
   LayerControlExtenderName='extdrLayerControl';
   //добавить это расширение к примитиву можно командой
   //extdrAdd(extdrLayerControl)
 type
-TLayerControlExtender=class(TBaseEntityExtender)
-  //private
-  public
-    FExpression:GDBString;
-    FParser:TFPExpressionParser;
-    pEnt:Pointer;
-  public
-    GoodLayer,BadLayer:GDBString;
-    procedure SetExpression(const AExpression:String);
-    function GetExpression:String;
-    class function getExtenderName:string;override;
-    constructor Create(pEntity:Pointer);override;
-    procedure Assign(Source:TBaseExtender);override;
-    procedure CreateParser(pEntity:Pointer);
-    function SetVariableType(pEntity:Pointer;ID:TFPExprIdentifierDef):Boolean;
-    procedure GetVariableValue(Var Result : TFPExpressionResult; ConstRef AName : ShortString);
-    procedure onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
-    procedure onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
-    procedure SaveToDxf(var outhandle:GDBOpenArrayOfByte;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
-    procedure PostLoad(var context:TIODXFLoadContext);override;
-    class function EntIOLoadGoodLayer(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
-    class function EntIOLoadBadLayer(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
-    class function EntIOLoadExpression(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+  ELayerControlExtender=class(Exception);
+  TLayerControlExtender=class(TBaseEntityExtender)
+    //private
+    public
+      FExpression:GDBString;
+      FParser:TFPExpressionParser;
+      pEnt:Pointer;
+    public
+      GoodLayer,BadLayer:GDBString;
+      procedure SetExpression(const AExpression:String);
+      function GetExpression:String;
+      class function getExtenderName:string;override;
+      constructor Create(pEntity:Pointer);override;
+      procedure Assign(Source:TBaseExtender);override;
+      procedure CreateParser(pEntity:Pointer);
+      function SetVariableType(pEntity:Pointer;ID:TFPExprIdentifierDef):Boolean;
+      procedure GetVariableValue(Var Result : TFPExpressionResult; ConstRef AName : ShortString);
+      procedure onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
+      procedure onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
+      procedure SaveToDxf(var outhandle:GDBOpenArrayOfByte;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
+      procedure PostLoad(var context:TIODXFLoadContext);override;
+      class function EntIOLoadGoodLayer(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+      class function EntIOLoadBadLayer(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+      class function EntIOLoadExpression(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 
-    procedure onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);override;
-    published
-      property Expr:String read GetExpression write SetExpression;
-  end;
+      procedure onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);override;
+      published
+        property Expr:String read GetExpression write SetExpression;
+    end;
 
 implementation
 
@@ -221,22 +222,32 @@ begin
   pEnt:=pEntity;
   if FParser<>nil then
     FreeAndNil(FParser);
-  if FParser=nil then
-    CreateParser(pEntity);
-  if FParser<>nil then begin
-    ExpressionResult:=FParser.Evaluate;
-    case ExpressionResult.ResultType of
-      rtBoolean:begin
-                  if ExpressionResult.ResBoolean then
-                    pl:=drawing.GetLayerTable^.getAddres(GoodLayer)
-                  else
-                    pl:=drawing.GetLayerTable^.getAddres(BadLayer);
-                  if pl<>nil then
-                    PGDBObjEntity(pEntity)^.vp.Layer:=pl;
-                end
-      else
-        PGDBObjEntity(pEntity)^.vp.Layer:=PGDBObjEntity(pEntity)^.vp.Layer;
+  try
+    try
+      if FParser=nil then
+        CreateParser(pEntity);
+      if FParser<>nil then begin
+        ExpressionResult:=FParser.Evaluate;
+        case ExpressionResult.ResultType of
+          rtBoolean:begin
+                      if ExpressionResult.ResBoolean then
+                        pl:=drawing.GetLayerTable^.getAddres(GoodLayer)
+                      else
+                        pl:=drawing.GetLayerTable^.getAddres(BadLayer);
+                      if pl<>nil then
+                        PGDBObjEntity(pEntity)^.vp.Layer:=pl;
+                    end
+          else
+            PGDBObjEntity(pEntity)^.vp.Layer:=PGDBObjEntity(pEntity)^.vp.Layer;
+        end;
+      end;
+    except
+       on E:Exception do
+            DbgOut('{EHM}Entity"%p".TLayerControlExtender.Expr="%s" raise "%s"',[pEntity,Expr,E.Message]);
+         //raise ELayerControlExtender.CreateFmt('TLayerControlExtender error for expression "%s": %s',[Expr,E.Message]);
     end;
+  finally
+    FreeAndNil(FParser);
   end;
   pEnt:=Nil;
 end;

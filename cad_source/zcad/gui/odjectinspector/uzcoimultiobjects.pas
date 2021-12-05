@@ -27,7 +27,7 @@ uses
   uzcenitiesvariablesextender,uzgldrawcontext,usimplegenerics,gzctnrstl,
   gzctnrvectortypes,uzbtypes,uzcdrawings,varmandef,uzeentity,uzbtypesbase,
   Varman,uzctnrvectorgdbstring,UGDBSelectedObjArray,uzcoimultipropertiesutil,
-  uzeentityextender;
+  uzeentityextender,uzelongprocesssupport;
 type
   TObjIDWithExtender2Counter=TMyMapCounter<TObjIDWithExtender>;
 {Export+}
@@ -256,10 +256,13 @@ var
   PMultiPropertyDataForObjects:PTMultiPropertyDataForObjects;
   ObjIDWithExtender:TObjIDWithExtender;
   Extender:TBaseEntityExtender;
+  lpsh:TLPSHandle;
 begin
   ClearErrorRange;
   PSourceVD.attrib:=PSourceVD.attrib and (not vda_different);
   dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+  if drawings.GetCurrentDWG.SelObjArray.Count>1 then
+    lpsh:=LPS.StartLongProcess('SetMultiProperty',@TMSEditor.SetMultiProperty,0);
   psd:=drawings.GetCurrentDWG.SelObjArray.beginiterate(EntIterator);
   if psd<>nil then
   repeat
@@ -297,6 +300,8 @@ begin
     end;
     psd:=drawings.GetCurrentDWG.SelObjArray.iterate(EntIterator);
   until psd=nil;
+  if drawings.GetCurrentDWG.SelObjArray.Count>1 then
+    LPS.EndLongProcess(lpsh);
 end;
 
 procedure  TMSEditor.FormatAfterFielfmod;

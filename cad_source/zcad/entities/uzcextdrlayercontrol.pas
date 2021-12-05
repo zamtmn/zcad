@@ -243,7 +243,7 @@ begin
       end;
     except
        on E:Exception do
-            DbgOut('{EHM}Entity"%p".TLayerControlExtender.Expr="%s" raise "%s"',[pEntity,Expr,E.Message]);
+            DbgOut('{EM}Entity"%p".TLayerControlExtender.Expr="%s" raise "%s"',[pEntity,Expr,E.Message]);
          //raise ELayerControlExtender.CreateFmt('TLayerControlExtender error for expression "%s": %s',[Expr,E.Message]);
     end;
   finally

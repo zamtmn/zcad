@@ -141,13 +141,13 @@ begin
                                            if assigned(EDContext.ppropcurrentedit) then
                                              PGDBaseObject(pcurrobj)^.FormatAfterFielfmod(EDContext.ppropcurrentedit^.valueAddres,currobjgdbtype);
                                         end;
-
                 end;
   ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIResetOGLWNDProc);
-  //if assigned(resetoglwndproc) then resetoglwndproc;
   zcRedrawCurrentDrawing;
   ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
-  //if assigned(UpdateVisibleProc) then UpdateVisibleProc(ZMsgID_GUIActionRedraw);
+  if GDBobj then
+    if typeof(PGDBaseObject(pcurrobj)^)=typeof(TMSEditor) then
+      PMSEditor(pcurrobj)^.CreateUnit(PMSEditor(pcurrobj)^.SavezeUnitsFormat);
 end;
 
 procedure _onGetOtherValues(var vsa:TZctnrVectorGDBString;const valkey:string;const pcurcontext:pointer;const pcurrobj:pointer;const GDBobj:boolean);

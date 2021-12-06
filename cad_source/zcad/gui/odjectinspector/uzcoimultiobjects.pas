@@ -27,7 +27,7 @@ uses
   uzcenitiesvariablesextender,uzgldrawcontext,usimplegenerics,gzctnrstl,
   gzctnrvectortypes,uzbtypes,uzcdrawings,varmandef,uzeentity,uzbtypesbase,
   Varman,uzctnrvectorgdbstring,UGDBSelectedObjArray,uzcoimultipropertiesutil,
-  uzeentityextender,uzelongprocesssupport;
+  uzeentityextender,uzelongprocesssupport,uzcutils;
 type
   TObjIDWithExtender2Counter=TMyMapCounter<TObjIDWithExtender>;
 {Export+}
@@ -76,6 +76,7 @@ type
                 procedure processProperty(const ID:TObjID; const pdata: pointer; const pentity: pGDBObjEntity; const PMultiPropertyDataForObjects:PTMultiPropertyDataForObjects; const pu:PTObjectUnit; const PSourceVD:PVarDesk;const mp:TMultiProperty; var DC:TDrawContext);
                 procedure ClearErrorRange;
             end;
+  PMSEditor=^TMSEditor;
 {Export-}
 procedure DeselectEnts(PInstance:GDBPointer);
 procedure SelectOnlyThisEnts(PInstance:GDBPointer);
@@ -223,7 +224,7 @@ begin
                              begin
                                PMultiPropertyDataForObjects.EntChangeProc(pu,PSourceVD,ChangedData,mp);
                                pentity^.YouChanged(drawings.GetCurrentDWG^);
-                               pentity.FormatEntity(drawings.GetCurrentDWG^,dc);
+                               //pentity.FormatEntity(drawings.GetCurrentDWG^,dc);
                              end
                          else
                              begin
@@ -330,7 +331,7 @@ begin
       if pvd<>nil then
       begin
          SetMultiProperty(@GeneralUnit,pvd,GetObjType);
-         CreateMultiPropertys(SavezeUnitsFormat);
+         //CreateMultiPropertys(SavezeUnitsFormat);
          exit;
       end;
 
@@ -338,7 +339,7 @@ begin
       if pvd<>nil then
       begin
          SetMultiProperty(@GeometryUnit,pvd,GetObjType);
-         CreateMultiPropertys(SavezeUnitsFormat);
+         //CreateMultiPropertys(SavezeUnitsFormat);
          exit;
       end;
 
@@ -346,7 +347,7 @@ begin
       if pvd<>nil then
       begin
          SetMultiProperty(@MiscUnit,pvd,GetObjType);
-         CreateMultiPropertys(SavezeUnitsFormat);
+         //CreateMultiPropertys(SavezeUnitsFormat);
          exit;
       end;
 
@@ -354,7 +355,7 @@ begin
       if pvd<>nil then
       begin
          SetMultiProperty(@ExtendersUnit,pvd,GetObjType);
-         CreateMultiPropertys(SavezeUnitsFormat);
+         //CreateMultiPropertys(SavezeUnitsFormat);
          exit;
       end;
 

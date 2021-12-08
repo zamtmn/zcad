@@ -881,6 +881,11 @@ msgstr ""
 msgid "mm"
 msgstr ""
 
+#: uzcstrconsts.rsmsgrepeatcountstr
+#, object-pascal-format
+msgid " [%d]"
+msgstr ""
+
 #: uzcstrconsts.rsmtexteditor
 msgid "MText editor"
 msgstr ""
@@ -1122,23 +1127,6 @@ msgstr ""
 msgid "%s v%s started"
 msgstr ""
 
-#: uzcuidialogs.rsdontshowthisnexttime
-#, object-pascal-format
-msgctxt "uzcuidialogs.rsdontshowthisnexttime"
-msgid "Don't show this next time (for task \"%s\")"
-msgstr ""
-
-#: uzcuidialogs.rsmsgkeepchoice
-#, object-pascal-format
-msgctxt "uzcuidialogs.rsmsgkeepchoice"
-msgid "Keep choice (for task \"%s\")"
-msgstr ""
-
-#: uzcuidialogs.rsmsgwndtitle
-msgctxt "uzcuidialogs.rsmsgwndtitle"
-msgid "ZCAD"
-msgstr ""
-
 #: uzcuitypes.rsdontshowthisnexttime
 #, object-pascal-format
 msgctxt "uzcuitypes.rsdontshowthisnexttime"
@@ -1186,7 +1174,7 @@ msgid "%s file format"
 msgstr ""
 
 #: uzestrconsts.rsgridtoodensity
-msgid "Grid too density"
+msgid "Grid too dense"
 msgstr ""
 
 #: uzestrconsts.rsloadingfile

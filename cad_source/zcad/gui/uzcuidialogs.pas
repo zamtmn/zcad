@@ -24,11 +24,6 @@ uses
     uzcinterface,uzclog,uzelongprocesssupport,
     uzcuitypes,uzcuiutils,uzcuilcl2zc;
 
-resourcestring
-  rsMsgWndTitle='ZCAD';
-  rsDontShowThisNextTime='Don''t show this next time (for task "%s")';
-  rsMsgKeepChoice='Keep choice (for task "%s")';
-
 type
 
   TLPSSupporthelper=class

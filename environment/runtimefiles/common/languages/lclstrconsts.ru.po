@@ -5,7 +5,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-02-06 02:48+0300\n"
+"PO-Revision-Date: 2020-06-01 01:26+0300\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Language: ru\n"
@@ -196,11 +196,6 @@ msgstr "Элемент управления класса '%s' не может и
 #, object-pascal-format
 msgid "Control '%s' has no parent form or frame"
 msgstr "Элемент управления '%s' не имеет родительской формы или фрейма"
-
-#: lclstrconsts.rscontrolhasnoparentwindow
-#, object-pascal-format
-msgid "Control '%s' has no parent window"
-msgstr "Элемент управления '%s' не имеет родительского окна"
 
 #: lclstrconsts.rscontrolisnotaparent
 #, object-pascal-format
@@ -731,6 +726,32 @@ msgstr "Зелёный"
 msgid "List index exceeds bounds (%d)"
 msgstr "Индекс списка вне диапазона (%d)"
 
+#: lclstrconsts.rsmacosfileformat
+msgid "File Format:"
+msgstr "Формат файла:"
+
+#: lclstrconsts.rsmacosmenuhide
+#, object-pascal-format
+msgid "Hide %s"
+msgstr "Скрыть %s"
+
+#: lclstrconsts.rsmacosmenuhideothers
+msgid "Hide Others"
+msgstr "Скрыть остальные"
+
+#: lclstrconsts.rsmacosmenuquit
+#, object-pascal-format
+msgid "Quit %s"
+msgstr "Завершить %s"
+
+#: lclstrconsts.rsmacosmenuservices
+msgid "Services"
+msgstr "Службы"
+
+#: lclstrconsts.rsmacosmenushowall
+msgid "Show All"
+msgstr "Показать все"
+
 #: lclstrconsts.rsmarooncolorcaption
 msgid "Maroon"
 msgstr "Малиновый"
@@ -925,6 +946,10 @@ msgstr "Свойство %s не существует"
 #: lclstrconsts.rspurplecolorcaption
 msgid "Purple"
 msgstr "Лиловый"
+
+#: lclstrconsts.rsqtoptiondisableaccurateframe
+msgid "-disableaccurateframe, disables fully accurate window frame under X11. This feature is implemented for Qt, Qt5 and Gtk2 interfaces and used mostly by GetWindowRect()."
+msgstr "-disableaccurateframe, отключает определение точных границ окна в X11. Эта возможность реализована для интерфейсов Qt, Qt5 и Gtk2 и используется преимущественно GetWindowRect()."
 
 #: lclstrconsts.rsqtoptiondograb
 msgid "-dograb (only under X11), running under a debugger can cause an implicit -nograb, use -dograb to override. Need QT_DEBUG."
@@ -1197,10 +1222,6 @@ msgstr "Жёлтый"
 msgid "Cannot focus a disabled or invisible window"
 msgstr "Невозможно перевести фокус в отключённое или невидимое окно"
 
-#: lclstrconsts.scannotsetdesigntimeppi
-msgid "Cannot set design time PPI."
-msgstr "Невозможно установить PPI времени разработки."
-
 #: lclstrconsts.sduplicatemenus
 msgid "Duplicate menus"
 msgstr "Дублирующиеся меню"
@@ -1220,11 +1241,6 @@ msgstr "Неверная регистрация действия"
 #: lclstrconsts.sinvalidactionunregistration
 msgid "Invalid action unregistration"
 msgstr "Неверная разрегистрация действия"
-
-#: lclstrconsts.sinvalidcharset
-#, object-pascal-format
-msgid "The char set in mask \"%s\" is not valid!"
-msgstr "Набор символов в маске \"%s\" неверен!"
 
 #: lclstrconsts.sinvalidimagesize
 msgid "Invalid image size"

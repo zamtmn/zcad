@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ru\n"
-"X-Generator: Poedit 1.7.7\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #: anchordockstr.adrsafreesideofasplittermustnotbeanchorednodetypeancho
 #, object-pascal-format
@@ -119,6 +119,14 @@ msgstr "Отображать заголовки плоскими"
 msgid "Flatten headers of docked controls"
 msgstr "Сделать заголовки пристыкованных объектов плоскими"
 
+#: anchordockstr.adrsfloatingwindowsontop
+msgid "Floating windows on top"
+msgstr "Непристыкованные окна поверх других"
+
+#: anchordockstr.adrsfloatingwindowsontophint
+msgid "Show floating windows on top of main form"
+msgstr "Показывать непристыкованные окна поверх главной формы"
+
 #: anchordockstr.adrsgeneraldockingoptions
 msgid "General docking options"
 msgstr "Общие параметры стыковки"
@@ -198,6 +206,14 @@ msgstr "Переместить вкладку вправо"
 #: anchordockstr.adrsmovepagerightmost
 msgid "Move page rightmost"
 msgstr "Поместить вкладку справа"
+
+#: anchordockstr.adrsmultilinepages
+msgid "Multiline Tabs"
+msgstr "Многострочный список вкладок"
+
+#: anchordockstr.adrsmultilinepageshint
+msgid "Tabs of pages can be shown in multiple lines"
+msgstr "Разрешить показывать заголовки вкладок в нескольких строках"
 
 #: anchordockstr.adrsnocaptionsforfloatingsites
 msgid "No captions for floating sites"

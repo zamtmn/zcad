@@ -3,13 +3,13 @@ msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
-"Last-Translator: Andrey M/ Zubarev <zamtmn@yandex.ru>\n"
+"Last-Translator: zamtmn <zamtmn@yandex.ru>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ru\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 1.5.7\n"
 
 #: tdimstylesform.addstyle.caption
 msgctxt "tdimstylesform.addstyle.caption"
@@ -167,13 +167,11 @@ msgid "Current object scale factor"
 msgstr ""
 
 #: tlinetypesform.listview1.columns[0].caption
-#, fuzzy
 msgctxt "tlinetypesform.listview1.columns[0].caption"
 msgid "Status"
 msgstr "Статус"
 
 #: tlinetypesform.listview1.columns[1].caption
-#, fuzzy
 msgctxt "tlinetypesform.listview1.columns[1].caption"
 msgid "Line type"
 msgstr "Тип линии"
@@ -185,7 +183,7 @@ msgstr ""
 #: tlinetypesform.listview1.columns[3].caption
 msgctxt "tlinetypesform.listview1.columns[3].caption"
 msgid "Description"
-msgstr ""
+msgstr "Описание"
 
 #: ttextstylesform.addstyle.caption
 msgctxt "ttextstylesform.addstyle.caption"
@@ -193,13 +191,11 @@ msgid "AddStyle"
 msgstr ""
 
 #: ttextstylesform.addstyle.hint
-#, fuzzy
 msgctxt "ttextstylesform.addstyle.hint"
 msgid "Add text style"
 msgstr "Добавить стиль текста"
 
 #: ttextstylesform.buttonapplyclose.caption
-#, fuzzy
 msgctxt "ttextstylesform.buttonapplyclose.caption"
 msgid "Apply and close"
 msgstr "Применить и закрыть"
@@ -214,13 +210,11 @@ msgid "DelStyle"
 msgstr ""
 
 #: ttextstylesform.delstyle.hint
-#, fuzzy
 msgctxt "ttextstylesform.delstyle.hint"
 msgid "Delete text style"
 msgstr "Удалить стиль текста"
 
 #: ttextstylesform.fonttypefiltercombobox.text
-#, fuzzy
 msgctxt "ttextstylesform.fonttypefiltercombobox.text"
 msgid "All"
 msgstr "Все"
@@ -230,13 +224,11 @@ msgid "Fonts types filter:"
 msgstr ""
 
 #: ttextstylesform.listview1.columns[0].caption
-#, fuzzy
 msgctxt "ttextstylesform.listview1.columns[0].caption"
 msgid "Status"
 msgstr "Статус"
 
 #: ttextstylesform.listview1.columns[1].caption
-#, fuzzy
 msgctxt "ttextstylesform.listview1.columns[1].caption"
 msgid "Name"
 msgstr "Имя"
@@ -326,7 +318,10 @@ msgid "${\"&[<]<<\",Keys[<],StrId[CLPIdBack]} Enter new export script:"
 msgstr ""
 
 #: uzccommand_dataexport.rsclpdataexportoptions
-msgid "${\"&[<]<<\",Keys[<],StrId[CLPIdBack]} Set ${\"&[e]ntities\",Keys[o],StrId[CLPIdUser1]}/${\"&[p]roperties\",Keys[o],StrId[CLPIdUser2]} filter or export ${\"&[s]cript\",Keys[o],StrId[CLPIdUser3]}"
+msgid ""
+"${\"&[<]<<\",Keys[<],StrId[CLPIdBack]} Set ${\"&[e]ntities\",Keys[o],StrId"
+"[CLPIdUser1]}/${\"&[p]roperties\",Keys[o],StrId[CLPIdUser2]} filter or "
+"export ${\"&[s]cript\",Keys[o],StrId[CLPIdUser3]}"
 msgstr ""
 
 #: uzccommand_dataexport.rsclpdataexportpropsfiltercurrentvalue
@@ -338,7 +333,10 @@ msgid "${\"&[<]<<\",Keys[<],StrId[CLPIdBack]} Enter new properties filter:"
 msgstr ""
 
 #: uzccommand_dataexport.rsclpdataexportwaitfile
-msgid "Configure export ${\"&[p]arams\",Keys[p],StrId[CLPIdOptions]}, run ${\"&[f]ile dialog\",Keys[f],StrId[CLPIdFileDialog]} or enter file name (empty for default):"
+msgid ""
+"Configure export ${\"&[p]arams\",Keys[p],StrId[CLPIdOptions]}, run ${\"&[f]"
+"ile dialog\",Keys[f],StrId[CLPIdFileDialog]} or enter file name (empty for "
+"default):"
 msgstr ""
 
 #: uzcentnet.rscannotbeconnected
@@ -405,8 +403,12 @@ msgid "ByLayer"
 msgstr "По Слою"
 
 #: uzcstrconsts.rscautionnosyntaxcheckyet
-msgid "CAUTION! There is no syntax check yet. Clicking \"OK\" the object will be updated. Error - CRASHES!!!"
-msgstr "ВНИМАНИЕ! проверки синтаксиса нет. При нажатии \"OK\" объекты будут обновлены. Ошибка=Вылет!"
+msgid ""
+"CAUTION! There is no syntax check yet. Clicking \"OK\" the object will be "
+"updated. Error - CRASHES!!!"
+msgstr ""
+"ВНИМАНИЕ! проверки синтаксиса нет. При нажатии \"OK\" объекты будут "
+"обновлены. Ошибка=Вылет!"
 
 #: uzcstrconsts.rsclipboardisempty
 msgid "Clipboard is empty, there is nothing to paste"
@@ -447,7 +449,7 @@ msgstr "Поменять"
 
 #: uzcstrconsts.rscmcmdmusthaveoperand
 msgid "Command must have operand(s)!"
-msgstr ""
+msgstr "Команда должна иметь операнд!"
 
 #: uzcstrconsts.rscmcommandonlyctxmenu
 msgid "The command works only from context menu"
@@ -596,7 +598,7 @@ msgstr "Выберете целевой примитив:"
 
 #: uzcstrconsts.rscmselectentity
 msgid "Select entity:"
-msgstr ""
+msgstr "Выберите примитив:"
 
 #: uzcstrconsts.rscmselectsourceentity
 msgid "Select source entity:"
@@ -620,7 +622,7 @@ msgstr "Укажите точку вставки:"
 
 #: uzcstrconsts.rscmspecifynextpoint
 msgid "Specify next point:"
-msgstr ""
+msgstr "Укажите следующую точку:"
 
 #: uzcstrconsts.rscmspecifypoint
 msgid "Specify point:"
@@ -669,7 +671,6 @@ msgid "Color %d"
 msgstr "Цвет %d"
 
 #: uzcstrconsts.rscommand
-#, fuzzy
 msgctxt "uzcstrconsts.rscommand"
 msgid "Command"
 msgstr "Команда"
@@ -679,15 +680,18 @@ msgid "Command line"
 msgstr "Командная строка"
 
 #: uzcstrconsts.rscommandnrinc
-#, object-pascal-format, fuzzy, badformat
-#| msgid "Command can not run"
+#, object-pascal-format
 msgid "Command \"%s\" can not run"
-msgstr "Команда не может быть запущена"
+msgstr "Команда \"%s\" не может быть запущена"
 
 #: uzcstrconsts.rscommenteeport
 #, object-pascal-format
-msgid "Registered commands - %d; registered entities - %d; registered DXF entities - %d"
-msgstr "Зарегистрированных команд - %d; зарегистрированных примитивов - %d; зарегистрированных DXF примитивов - %d"
+msgid ""
+"Registered commands - %d; registered entities - %d; registered DXF entities "
+"- %d"
+msgstr ""
+"Зарегистрированных команд - %d; зарегистрированных примитивов - %d; "
+"зарегистрированных DXF примитивов - %d"
 
 #: uzcstrconsts.rscompiledtimemsg
 #, object-pascal-format
@@ -736,7 +740,6 @@ msgid "Command"
 msgstr "Команда"
 
 #: uzcstrconsts.rsdescription
-#, fuzzy
 msgctxt "uzcstrconsts.rsdescription"
 msgid "Description"
 msgstr "Описание"
@@ -752,8 +755,12 @@ msgstr "Разный"
 
 #: uzcstrconsts.rsdimstyleusedin
 #, object-pascal-format
-msgid "Dimension style \"%s\" used in: %d-model, %d-blockdef table, %d-dimstyle table"
-msgstr "Стиль размеров \"%s\" используется в: %d-модели, %d-таблице определений блоков, %d-ьаблице стилей размеров"
+msgid ""
+"Dimension style \"%s\" used in: %d-model, %d-blockdef table, %d-dimstyle "
+"table"
+msgstr ""
+"Стиль размеров \"%s\" используется в: %d-модели, %d-таблице определений "
+"блоков, %d-ьаблице стилей размеров"
 
 #: uzcstrconsts.rsdivbyzero
 msgid "Divide by zero"
@@ -775,6 +782,10 @@ msgid ""
 "with msg\n"
 "\"%s\""
 msgstr ""
+"Ошибка в \n"
+"\"%s\"\n"
+"с сообщением\n"
+"\"%s\""
 
 #: uzcstrconsts.rsempty
 msgid "Empty"
@@ -804,12 +815,13 @@ msgstr "Выражение  %s возвращает %s"
 
 #: uzcstrconsts.rsfardeffilenotfounf
 #, object-pascal-format
-msgid "File definition of the variables can not be found for the device \"%s\";"
+msgid ""
+"File definition of the variables can not be found for the device \"%s\";"
 msgstr "Файл определения переменных не найден для устройства \"%s\";"
 
 #: uzcstrconsts.rsfilterhint
 msgid "(filter)"
-msgstr ""
+msgstr "(фильтр)"
 
 #: uzcstrconsts.rsformnotfound
 #, object-pascal-format
@@ -845,12 +857,12 @@ msgstr "Свойство \"%s\" для примитива \"%s\": %s"
 #: uzcstrconsts.rslayeralreadyoff
 #, object-pascal-format
 msgid "Layer \"%s\" already off"
-msgstr ""
+msgstr "Слой \"%s\" уже отключен"
 
 #: uzcstrconsts.rslayeralreadyon
 #, object-pascal-format
 msgid "Layer \"%s\" already on"
-msgstr ""
+msgstr "Слой \"%s\" уже включен"
 
 #: uzcstrconsts.rslayerdefpaontscannotbeprinted
 msgid "Layer DEFPOINTS can not be printed"
@@ -863,7 +875,7 @@ msgstr "Слой должен быть выбран"
 #: uzcstrconsts.rslayernotfound
 #, object-pascal-format
 msgid "Layer \"%s\" not found"
-msgstr ""
+msgstr "Слой \"%s\" не найден"
 
 #: uzcstrconsts.rslayerusedin
 #, object-pascal-format
@@ -880,16 +892,13 @@ msgid "Line type"
 msgstr "Тип линии"
 
 #: uzcstrconsts.rslinetypedesk
-#, object-pascal-format, fuzzy
-#| msgid ""
-#| ";;Pattern length %f\n"
-#| "%s\n"
+#, object-pascal-format
 msgid ""
 ";;Pattern length %f\n"
 "%s"
 msgstr ""
 ";;Длина шаблона %f\n"
-"%s\n"
+"%s"
 
 #: uzcstrconsts.rslinetypeusedin
 #, object-pascal-format
@@ -908,6 +917,11 @@ msgstr "Сообщение:"
 #: uzcstrconsts.rsmm
 msgid "mm"
 msgstr "мм"
+
+#: uzcstrconsts.rsmsgrepeatcountstr
+#, object-pascal-format
+msgid " [%d]"
+msgstr ""
 
 #: uzcstrconsts.rsmtexteditor
 msgid "MText editor"
@@ -994,8 +1008,6 @@ msgid "Quit"
 msgstr "Выход"
 
 #: uzcstrconsts.rsquitquery
-#, fuzzy
-#| msgid "Do yo want to quit ZCAD?"
 msgid "Do you want to quit ZCAD?"
 msgstr "Закрыть ZCAD?"
 
@@ -1008,15 +1020,20 @@ msgstr "Повторное создание %s!"
 msgid ""
 "-UNDO\\REDO - yet it is better not to use;\n"
 "\n"
-"-If you have problems with rendering or selecting entities, run \"Regen\" and \"RebuildTree\" in command line;\n"
+"-If you have problems with rendering or selecting entities, run \"Regen\" "
+"and \"RebuildTree\" in command line;\n"
 "\n"
-"-To disable the display of this window comment out line \"About\" in the file \"components\\autorun.cmd\". Encoding of all configuration files - UTF8;\n"
+"-To disable the display of this window comment out line \"About\" in the "
+"file \"components\\autorun.cmd\". Encoding of all configuration files - "
+"UTF8;\n"
 msgstr ""
 "-UNDO\\REDO - пока лучше не пользоваться;\n"
 "\n"
-"-При проблемах с отображением или выделением примитивов, запустите \"Regen\" и \"RebuildTree\" в командной строке;\n"
+"-При проблемах с отображением или выделением примитивов, запустите \"Regen\" "
+"и \"RebuildTree\" в командной строке;\n"
 "\n"
-"-Для отключения показа этого окна закоментируйте строку \"About\" в файле \"components\\autorun.cmd\". Кодировка всех конфигурационных файлов - UTF8;\n"
+"-Для отключения показа этого окна закоментируйте строку \"About\" в файле "
+"\"components\\autorun.cmd\". Кодировка всех конфигурационных файлов - UTF8;\n"
 
 #: uzcstrconsts.rsrenamedto
 #, object-pascal-format
@@ -1071,8 +1088,11 @@ msgstr "Редактор текста"
 
 #: uzcstrconsts.rstextstyleusedin
 #, object-pascal-format
-msgid "Text style \"%s\" used in: %d-model, %d-blockdef table, %d-dimstyle table"
-msgstr "Стиль текста \"%s\" используется: %d-в модели, %d-в таблице определений блоков, %d-в таблице стилей размеров"
+msgid ""
+"Text style \"%s\" used in: %d-model, %d-blockdef table, %d-dimstyle table"
+msgstr ""
+"Стиль текста \"%s\" используется: %d-в модели, %d-в таблице определений "
+"блоков, %d-в таблице стилей размеров"
 
 #: uzcstrconsts.rstoolbarnotfound
 #, object-pascal-format
@@ -1153,39 +1173,21 @@ msgid "WARNING: "
 msgstr "ВНИМАНИЕ: "
 
 #: uzcstrconsts.rszcadstarted
-#, object-pascal-format, fuzzy, badformat
-#| msgid "ZCAD v%s started"
+#, object-pascal-format
 msgid "%s v%s started"
-msgstr "ZCAD v%s запущен"
-
-#: uzcuidialogs.rsdontshowthisnexttime
-#, object-pascal-format
-msgctxt "uzcuidialogs.rsdontshowthisnexttime"
-msgid "Don't show this next time (for task \"%s\")"
-msgstr ""
-
-#: uzcuidialogs.rsmsgkeepchoice
-#, object-pascal-format
-msgctxt "uzcuidialogs.rsmsgkeepchoice"
-msgid "Keep choice (for task \"%s\")"
-msgstr ""
-
-#: uzcuidialogs.rsmsgwndtitle
-msgctxt "uzcuidialogs.rsmsgwndtitle"
-msgid "ZCAD"
-msgstr ""
+msgstr "%s v%s запущен"
 
 #: uzcuitypes.rsdontshowthisnexttime
 #, object-pascal-format
 msgctxt "uzcuitypes.rsdontshowthisnexttime"
 msgid "Don't show this next time (for task \"%s\")"
-msgstr ""
+msgstr "Не показывать больше (для задачи \"%s\")"
 
 #: uzcuitypes.rsmsgkeepchoice
 #, object-pascal-format
 msgctxt "uzcuitypes.rsmsgkeepchoice"
 msgid "Keep choice (for task \"%s\")"
-msgstr ""
+msgstr "Сохранить выбор (для задачи \"%s\")"
 
 #: uzcuitypes.rsmsgwndtitle
 msgctxt "uzcuitypes.rsmsgwndtitle"
@@ -1197,10 +1199,13 @@ msgid "Load DXF file"
 msgstr "Файл DXF загружен"
 
 #: uzestrconsts.fontnotfoundandreplace
-#, object-pascal-format, fuzzy, badformat
-#| msgid "For text style \"%s\" not found font \"%s\", is replaced by an alternative"
-msgid "For text style \"%s\" not found font \"%s\" (\"%s\" fontfamily), is replaced by an alternative"
-msgstr "Для стиля текста \"%s\" не найден фонт \"%s\", заменен на альтернативный"
+#, object-pascal-format
+msgid ""
+"For text style \"%s\" not found font \"%s\" (\"%s\" fontfamily), is replaced "
+"by an alternative"
+msgstr ""
+"Для стиля текста \"%s\" не найден фонт \"%s\" (\"%s\" семейство), заменен на "
+"альтернативный"
 
 #: uzestrconsts.rsalternatefontnotfoundin
 #, object-pascal-format
@@ -1223,7 +1228,7 @@ msgid "%s file format"
 msgstr "Формат файла %s"
 
 #: uzestrconsts.rsgridtoodensity
-msgid "Grid too density"
+msgid "Grid too dense"
 msgstr "Сетка слишком мелкая"
 
 #: uzestrconsts.rsloadingfile
@@ -1256,7 +1261,7 @@ msgstr "Неизвестный формат файла"
 #: uzestrconsts.rswrongblockdefindex
 msgctxt "uzestrconsts.rswrongblockdefindex"
 msgid "Wrong blockdef index"
-msgstr ""
+msgstr "Неверный индекс блока"
 
 #: uzglviewareageneral.rswonlyparalel
 msgid "Works only for parallel projection!"
@@ -1269,4 +1274,3 @@ msgstr "Работает только при виде сверху"
 #: zcad.rsstartautorun
 msgid "Execute *components\\autorun.cmd"
 msgstr "*componentsautorun.cmd выполняется"
-

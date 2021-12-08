@@ -328,7 +328,6 @@ msgid "SI"
 msgstr ""
 
 #: zcadexternal.acn_kipcdbuild~caption
-msgctxt "zcadexternal.acn_kipcdbuild~caption"
 msgid "Connection diagram"
 msgstr ""
 
@@ -346,6 +345,18 @@ msgstr ""
 
 #: zcadexternal.acn_layer~hint
 msgid "Layers properties manager"
+msgstr ""
+
+#: zcadexternal.acn_layoff~caption
+msgid "Layer off"
+msgstr ""
+
+#: zcadexternal.acn_layoff~hint
+msgid "Turns off the layer of selected object"
+msgstr ""
+
+#: zcadexternal.acn_layoff~textimage
+msgid "LO"
 msgstr ""
 
 #: zcadexternal.acn_leader~caption
@@ -651,6 +662,22 @@ msgstr ""
 msgid ""
 msgstr ""
 
+#: zcadexternal.acn_rotateents_l~caption
+msgid "Rotate ents left"
+msgstr ""
+
+#: zcadexternal.acn_rotateents_l~hint
+msgid "Turn ents left"
+msgstr ""
+
+#: zcadexternal.acn_rotateents_r~caption
+msgid "Rotate ents right"
+msgstr ""
+
+#: zcadexternal.acn_rotateents_r~hint
+msgid "Turn ents right"
+msgstr ""
+
 #: zcadexternal.acn_rotate~caption
 msgctxt "zcadexternal.acn_rotate~caption"
 msgid "Rotate"
@@ -918,6 +945,14 @@ msgctxt "zcadexternal.acn_units~textimage"
 msgid "0.0"
 msgstr ""
 
+#: zcadexternal.acn_vbuildelschema~caption
+msgid "Start building vEL Schema"
+msgstr ""
+
+#: zcadexternal.acn_vbuildelschema~textimage
+msgid "vEL"
+msgstr ""
+
 #: zcadexternal.acn_vbuildssschema~caption
 msgid "Start building vSS Schema"
 msgstr ""
@@ -1113,6 +1148,51 @@ msgstr ""
 msgid "Electrotechnics"
 msgstr ""
 
+#: zcadexternal.functionsroot~electrotechnics~alarm
+msgid "Alarm"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~alarm~fire
+msgid "Fire"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~alarm~fire~detectors
+msgid "Detectors"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~alarm~fire~detectors~smoke
+msgctxt "zcadexternal.functionsroot~electrotechnics~alarm~fire~detectors~smoke"
+msgid "Smoke"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~alarm~fire~detectors~smoke~linear
+msgctxt "zcadexternal.functionsroot~electrotechnics~alarm~fire~detectors~smoke~linear"
+msgid "Linear"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~alarm~fire~detectors~smoke~spot
+msgctxt "zcadexternal.functionsroot~electrotechnics~alarm~fire~detectors~smoke~spot"
+msgid "Spot"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~alarm~fire~detectors~thermal
+msgid "Thermal"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~alarm~fire~detectors~thermal~linear
+msgctxt "zcadexternal.functionsroot~electrotechnics~alarm~fire~detectors~thermal~linear"
+msgid "Linear"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~alarm~fire~detectors~thermal~spot
+msgctxt "zcadexternal.functionsroot~electrotechnics~alarm~fire~detectors~thermal~spot"
+msgid "Spot"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~alarm~security
+msgid "Security"
+msgstr ""
+
 #: zcadexternal.functionsroot~electrotechnics~measuring_equipment
 msgid "Measuring equipment"
 msgstr ""
@@ -1186,7 +1266,6 @@ msgid "Electric heater"
 msgstr ""
 
 #: zcadexternal.functionsroot~electrotechnics~power_consumer~lighting
-msgctxt "zcadexternal.functionsroot~electrotechnics~power_consumer~lighting"
 msgid "Lighting"
 msgstr ""
 
@@ -1267,8 +1346,8 @@ msgctxt "zcadexternal.gdbltypeprop~h"
 msgid "Height"
 msgstr ""
 
-#: zcadexternal.gdbltypeprop~len
-msgctxt "zcadexternal.gdbltypeprop~len"
+#: zcadexternal.gdbltypeprop~lengthfact
+msgctxt "zcadexternal.gdbltypeprop~lengthfact"
 msgid "Length"
 msgstr ""
 
@@ -1574,8 +1653,164 @@ msgstr ""
 msgid "BlocksList"
 msgstr ""
 
+#: zcadexternal.menucommand~blockslist
+msgid "BlocksList"
+msgstr ""
+
+#: zcadexternal.menucommand~blockslist
+msgid "BlocksList"
+msgstr ""
+
+#: zcadexternal.menucommand~blockslist
+msgid "BlocksList"
+msgstr ""
+
+#: zcadexternal.menucommand~blockslist
+msgid "BlocksList"
+msgstr ""
+
+#: zcadexternal.menucommand~blockslist
+msgid "BlocksList"
+msgstr ""
+
+#: zcadexternal.menucommand~blockslist
+msgid "BlocksList"
+msgstr ""
+
+#: zcadexternal.menucommand~blockslist
+msgid "BlocksList"
+msgstr ""
+
+#: zcadexternal.menucommand~blockslist
+msgid "BlocksList"
+msgstr ""
+
+#: zcadexternal.menucommand~blockslist
+msgid "BlocksList"
+msgstr ""
+
+#: zcadexternal.menucommand~blockslist
+msgid "BlocksList"
+msgstr ""
+
+#: zcadexternal.menucommand~blockslist
+msgid "BlocksList"
+msgstr ""
+
+#: zcadexternal.menucommand~blockslist
+msgid "BlocksList"
+msgstr ""
+
+#: zcadexternal.menucommand~blockslist
+msgid "BlocksList"
+msgstr ""
+
 #: zcadexternal.menucommand~cam_reset
 msgid "Reset camera"
+msgstr ""
+
+#: zcadexternal.menucommand~cam_reset
+msgid "Reset camera"
+msgstr ""
+
+#: zcadexternal.menucommand~cam_reset
+msgid "Reset camera"
+msgstr ""
+
+#: zcadexternal.menucommand~cam_reset
+msgid "Reset camera"
+msgstr ""
+
+#: zcadexternal.menucommand~cam_reset
+msgid "Reset camera"
+msgstr ""
+
+#: zcadexternal.menucommand~cam_reset
+msgid "Reset camera"
+msgstr ""
+
+#: zcadexternal.menucommand~cam_reset
+msgid "Reset camera"
+msgstr ""
+
+#: zcadexternal.menucommand~cam_reset
+msgid "Reset camera"
+msgstr ""
+
+#: zcadexternal.menucommand~cam_reset
+msgid "Reset camera"
+msgstr ""
+
+#: zcadexternal.menucommand~cam_reset
+msgid "Reset camera"
+msgstr ""
+
+#: zcadexternal.menucommand~cam_reset
+msgid "Reset camera"
+msgstr ""
+
+#: zcadexternal.menucommand~cam_reset
+msgid "Reset camera"
+msgstr ""
+
+#: zcadexternal.menucommand~cam_reset
+msgid "Reset camera"
+msgstr ""
+
+#: zcadexternal.menucommand~cam_reset
+msgid "Reset camera"
+msgstr ""
+
+#: zcadexternal.menucommand~clearfilehistory
+msgid "Clear File History"
+msgstr ""
+
+#: zcadexternal.menucommand~clearfilehistory
+msgid "Clear File History"
+msgstr ""
+
+#: zcadexternal.menucommand~clearfilehistory
+msgid "Clear File History"
+msgstr ""
+
+#: zcadexternal.menucommand~clearfilehistory
+msgid "Clear File History"
+msgstr ""
+
+#: zcadexternal.menucommand~clearfilehistory
+msgid "Clear File History"
+msgstr ""
+
+#: zcadexternal.menucommand~clearfilehistory
+msgid "Clear File History"
+msgstr ""
+
+#: zcadexternal.menucommand~clearfilehistory
+msgid "Clear File History"
+msgstr ""
+
+#: zcadexternal.menucommand~clearfilehistory
+msgid "Clear File History"
+msgstr ""
+
+#: zcadexternal.menucommand~clearfilehistory
+msgid "Clear File History"
+msgstr ""
+
+#: zcadexternal.menucommand~clearfilehistory
+msgid "Clear File History"
+msgstr ""
+
+#: zcadexternal.menucommand~clearfilehistory
+msgid "Clear File History"
+msgstr ""
+
+#: zcadexternal.menucommand~clearfilehistory
+msgid "Clear File History"
+msgstr ""
+
+#: zcadexternal.menucommand~clearfilehistory
+msgid "Clear File History"
 msgstr ""
 
 #: zcadexternal.menucommand~clearfilehistory
@@ -1586,93 +1821,388 @@ msgstr ""
 msgid "Command list"
 msgstr ""
 
-#: zcadexternal.menucommand~dbaseadd
-msgid "Add to the drawing database"
+#: zcadexternal.menucommand~commandlist
+msgid "Command list"
 msgstr ""
 
-#: zcadexternal.menucommand~dbaselink
-msgid "linked to entity"
+#: zcadexternal.menucommand~commandlist
+msgid "Command list"
+msgstr ""
+
+#: zcadexternal.menucommand~commandlist
+msgid "Command list"
+msgstr ""
+
+#: zcadexternal.menucommand~commandlist
+msgid "Command list"
+msgstr ""
+
+#: zcadexternal.menucommand~commandlist
+msgid "Command list"
+msgstr ""
+
+#: zcadexternal.menucommand~commandlist
+msgid "Command list"
+msgstr ""
+
+#: zcadexternal.menucommand~commandlist
+msgid "Command list"
+msgstr ""
+
+#: zcadexternal.menucommand~commandlist
+msgid "Command list"
+msgstr ""
+
+#: zcadexternal.menucommand~commandlist
+msgid "Command list"
+msgstr ""
+
+#: zcadexternal.menucommand~commandlist
+msgid "Command list"
+msgstr ""
+
+#: zcadexternal.menucommand~commandlist
+msgid "Command list"
+msgstr ""
+
+#: zcadexternal.menucommand~commandlist
+msgid "Command list"
+msgstr ""
+
+#: zcadexternal.menucommand~commandlist
+msgid "Command list"
 msgstr ""
 
 #: zcadexternal.menucommand~dbgappexplorer
 msgid "AppExplorer"
 msgstr ""
 
-#: zcadexternal.menucommand~debclip
-msgid "Check clipboard"
+#: zcadexternal.menucommand~dbgappexplorer
+msgid "AppExplorer"
 msgstr ""
 
-#: zcadexternal.menucommand~el_autogen_cable_remove
-msgid "Remove generated cables"
+#: zcadexternal.menucommand~dbgappexplorer
+msgid "AppExplorer"
 msgstr ""
 
-#: zcadexternal.menucommand~el_cableman
-msgid "Cable manager"
+#: zcadexternal.menucommand~dbgappexplorer
+msgid "AppExplorer"
 msgstr ""
 
-#: zcadexternal.menucommand~el_cable_legend
-msgid "Create cable report"
+#: zcadexternal.menucommand~dbgappexplorer
+msgid "AppExplorer"
 msgstr ""
 
-#: zcadexternal.menucommand~el_externalkz
-msgid "Process auto cables"
+#: zcadexternal.menucommand~dbgappexplorer
+msgid "AppExplorer"
 msgstr ""
 
-#: zcadexternal.menucommand~el_find
-msgid "Find device/cable"
+#: zcadexternal.menucommand~dbgappexplorer
+msgid "AppExplorer"
 msgstr ""
 
-#: zcadexternal.menucommand~el_material_legend
-msgid "Create material report"
+#: zcadexternal.menucommand~dbgappexplorer
+msgid "AppExplorer"
 msgstr ""
 
-#: zcadexternal.menucommand~executefile(*components\blockpreviewexport.cmd)
-msgid "BlockPreviewExport"
+#: zcadexternal.menucommand~dbgappexplorer
+msgid "AppExplorer"
 msgstr ""
 
-#: zcadexternal.menucommand~exportdevwithaxis
-msgid "Names of devices with axis"
+#: zcadexternal.menucommand~dbgappexplorer
+msgid "AppExplorer"
 msgstr ""
 
-#: zcadexternal.menucommand~findallintersections
-msgid "Find all intersections (lines only)"
+#: zcadexternal.menucommand~dbgappexplorer
+msgid "AppExplorer"
 msgstr ""
 
-#: zcadexternal.menucommand~fuckoff
-msgid "Layouts (not impl)"
+#: zcadexternal.menucommand~dbgappexplorer
+msgid "AppExplorer"
 msgstr ""
 
-#: zcadexternal.menucommand~insert(device_el_cable_break)
-msgid "Break"
+#: zcadexternal.menucommand~dbgappexplorer
+msgid "AppExplorer"
 msgstr ""
 
-#: zcadexternal.menucommand~insert(device_el_cable_down)
-msgid "Goes down"
-msgstr ""
-
-#: zcadexternal.menucommand~insert(device_el_cable_fromdown)
-msgid "Comes from below"
-msgstr ""
-
-#: zcadexternal.menucommand~insert(device_el_cable_fromup)
-msgid "Comes from above"
-msgstr ""
-
-#: zcadexternal.menucommand~insert(device_el_cable_up)
-msgid "Goes up"
+#: zcadexternal.menucommand~dbgappexplorer
+msgid "AppExplorer"
 msgstr ""
 
 #: zcadexternal.menucommand~dbgmemsummary
 msgid "Report on memory allocation(for debugbuild)"
 msgstr ""
 
-#: zcadexternal.menucommand~ops_spbuild
-msgctxt "zcadexternal.menucommand~ops_spbuild"
-msgid "Connection diagram"
+#: zcadexternal.menucommand~dbgmemsummary
+msgid "Report on memory allocation(for debugbuild)"
 msgstr ""
 
-#: zcadexternal.menucommand~ortodevplace
-msgid "Alignment blocks array"
+#: zcadexternal.menucommand~dbgmemsummary
+msgid "Report on memory allocation(for debugbuild)"
+msgstr ""
+
+#: zcadexternal.menucommand~dbgmemsummary
+msgid "Report on memory allocation(for debugbuild)"
+msgstr ""
+
+#: zcadexternal.menucommand~dbgmemsummary
+msgid "Report on memory allocation(for debugbuild)"
+msgstr ""
+
+#: zcadexternal.menucommand~dbgmemsummary
+msgid "Report on memory allocation(for debugbuild)"
+msgstr ""
+
+#: zcadexternal.menucommand~dbgmemsummary
+msgid "Report on memory allocation(for debugbuild)"
+msgstr ""
+
+#: zcadexternal.menucommand~dbgmemsummary
+msgid "Report on memory allocation(for debugbuild)"
+msgstr ""
+
+#: zcadexternal.menucommand~dbgmemsummary
+msgid "Report on memory allocation(for debugbuild)"
+msgstr ""
+
+#: zcadexternal.menucommand~dbgmemsummary
+msgid "Report on memory allocation(for debugbuild)"
+msgstr ""
+
+#: zcadexternal.menucommand~dbgmemsummary
+msgid "Report on memory allocation(for debugbuild)"
+msgstr ""
+
+#: zcadexternal.menucommand~dbgmemsummary
+msgid "Report on memory allocation(for debugbuild)"
+msgstr ""
+
+#: zcadexternal.menucommand~dbgmemsummary
+msgid "Report on memory allocation(for debugbuild)"
+msgstr ""
+
+#: zcadexternal.menucommand~dbgmemsummary
+msgid "Report on memory allocation(for debugbuild)"
+msgstr ""
+
+#: zcadexternal.menucommand~debclip
+msgid "Check clipboard"
+msgstr ""
+
+#: zcadexternal.menucommand~debclip
+msgid "Check clipboard"
+msgstr ""
+
+#: zcadexternal.menucommand~debclip
+msgid "Check clipboard"
+msgstr ""
+
+#: zcadexternal.menucommand~debclip
+msgid "Check clipboard"
+msgstr ""
+
+#: zcadexternal.menucommand~debclip
+msgid "Check clipboard"
+msgstr ""
+
+#: zcadexternal.menucommand~debclip
+msgid "Check clipboard"
+msgstr ""
+
+#: zcadexternal.menucommand~debclip
+msgid "Check clipboard"
+msgstr ""
+
+#: zcadexternal.menucommand~debclip
+msgid "Check clipboard"
+msgstr ""
+
+#: zcadexternal.menucommand~debclip
+msgid "Check clipboard"
+msgstr ""
+
+#: zcadexternal.menucommand~debclip
+msgid "Check clipboard"
+msgstr ""
+
+#: zcadexternal.menucommand~debclip
+msgid "Check clipboard"
+msgstr ""
+
+#: zcadexternal.menucommand~debclip
+msgid "Check clipboard"
+msgstr ""
+
+#: zcadexternal.menucommand~debclip
+msgid "Check clipboard"
+msgstr ""
+
+#: zcadexternal.menucommand~debclip
+msgid "Check clipboard"
+msgstr ""
+
+#: zcadexternal.menucommand~executefile(*components\blockpreviewexport.cmd)
+msgid "BlockPreviewExport"
+msgstr ""
+
+#: zcadexternal.menucommand~executefile(*components\blockpreviewexport.cmd)
+msgid "BlockPreviewExport"
+msgstr ""
+
+#: zcadexternal.menucommand~executefile(*components\blockpreviewexport.cmd)
+msgid "BlockPreviewExport"
+msgstr ""
+
+#: zcadexternal.menucommand~executefile(*components\blockpreviewexport.cmd)
+msgid "BlockPreviewExport"
+msgstr ""
+
+#: zcadexternal.menucommand~executefile(*components\blockpreviewexport.cmd)
+msgid "BlockPreviewExport"
+msgstr ""
+
+#: zcadexternal.menucommand~executefile(*components\blockpreviewexport.cmd)
+msgid "BlockPreviewExport"
+msgstr ""
+
+#: zcadexternal.menucommand~executefile(*components\blockpreviewexport.cmd)
+msgid "BlockPreviewExport"
+msgstr ""
+
+#: zcadexternal.menucommand~executefile(*components\blockpreviewexport.cmd)
+msgid "BlockPreviewExport"
+msgstr ""
+
+#: zcadexternal.menucommand~executefile(*components\blockpreviewexport.cmd)
+msgid "BlockPreviewExport"
+msgstr ""
+
+#: zcadexternal.menucommand~executefile(*components\blockpreviewexport.cmd)
+msgid "BlockPreviewExport"
+msgstr ""
+
+#: zcadexternal.menucommand~executefile(*components\blockpreviewexport.cmd)
+msgid "BlockPreviewExport"
+msgstr ""
+
+#: zcadexternal.menucommand~executefile(*components\blockpreviewexport.cmd)
+msgid "BlockPreviewExport"
+msgstr ""
+
+#: zcadexternal.menucommand~executefile(*components\blockpreviewexport.cmd)
+msgid "BlockPreviewExport"
+msgstr ""
+
+#: zcadexternal.menucommand~executefile(*components\blockpreviewexport.cmd)
+msgid "BlockPreviewExport"
+msgstr ""
+
+#: zcadexternal.menucommand~findallintersections
+msgid "Find all intersections (lines only)"
+msgstr ""
+
+#: zcadexternal.menucommand~findallintersections
+msgid "Find all intersections (lines only)"
+msgstr ""
+
+#: zcadexternal.menucommand~findallintersections
+msgid "Find all intersections (lines only)"
+msgstr ""
+
+#: zcadexternal.menucommand~findallintersections
+msgid "Find all intersections (lines only)"
+msgstr ""
+
+#: zcadexternal.menucommand~findallintersections
+msgid "Find all intersections (lines only)"
+msgstr ""
+
+#: zcadexternal.menucommand~findallintersections
+msgid "Find all intersections (lines only)"
+msgstr ""
+
+#: zcadexternal.menucommand~findallintersections
+msgid "Find all intersections (lines only)"
+msgstr ""
+
+#: zcadexternal.menucommand~findallintersections
+msgid "Find all intersections (lines only)"
+msgstr ""
+
+#: zcadexternal.menucommand~findallintersections
+msgid "Find all intersections (lines only)"
+msgstr ""
+
+#: zcadexternal.menucommand~findallintersections
+msgid "Find all intersections (lines only)"
+msgstr ""
+
+#: zcadexternal.menucommand~findallintersections
+msgid "Find all intersections (lines only)"
+msgstr ""
+
+#: zcadexternal.menucommand~findallintersections
+msgid "Find all intersections (lines only)"
+msgstr ""
+
+#: zcadexternal.menucommand~findallintersections
+msgid "Find all intersections (lines only)"
+msgstr ""
+
+#: zcadexternal.menucommand~findallintersections
+msgid "Find all intersections (lines only)"
+msgstr ""
+
+#: zcadexternal.menucommand~placeallblocks
+msgid "PlaceAllBlocks"
+msgstr ""
+
+#: zcadexternal.menucommand~placeallblocks
+msgid "PlaceAllBlocks"
+msgstr ""
+
+#: zcadexternal.menucommand~placeallblocks
+msgid "PlaceAllBlocks"
+msgstr ""
+
+#: zcadexternal.menucommand~placeallblocks
+msgid "PlaceAllBlocks"
+msgstr ""
+
+#: zcadexternal.menucommand~placeallblocks
+msgid "PlaceAllBlocks"
+msgstr ""
+
+#: zcadexternal.menucommand~placeallblocks
+msgid "PlaceAllBlocks"
+msgstr ""
+
+#: zcadexternal.menucommand~placeallblocks
+msgid "PlaceAllBlocks"
+msgstr ""
+
+#: zcadexternal.menucommand~placeallblocks
+msgid "PlaceAllBlocks"
+msgstr ""
+
+#: zcadexternal.menucommand~placeallblocks
+msgid "PlaceAllBlocks"
+msgstr ""
+
+#: zcadexternal.menucommand~placeallblocks
+msgid "PlaceAllBlocks"
+msgstr ""
+
+#: zcadexternal.menucommand~placeallblocks
+msgid "PlaceAllBlocks"
+msgstr ""
+
+#: zcadexternal.menucommand~placeallblocks
+msgid "PlaceAllBlocks"
+msgstr ""
+
+#: zcadexternal.menucommand~placeallblocks
+msgid "PlaceAllBlocks"
 msgstr ""
 
 #: zcadexternal.menucommand~placeallblocks
@@ -1683,24 +2213,56 @@ msgstr ""
 msgid "Camera"
 msgstr ""
 
-#: zcadexternal.menucommand~setobjinsp(dimstyles)
-msgid "Dim styles (objinsp)"
+#: zcadexternal.menucommand~setobjinsp(camera)
+msgid "Camera"
 msgstr ""
 
-#: zcadexternal.menucommand~setobjinsp(fonts)
-msgid "Fonts (objinsp)"
+#: zcadexternal.menucommand~setobjinsp(camera)
+msgid "Camera"
 msgstr ""
 
-#: zcadexternal.menucommand~setobjinsp(layers)
-msgid "Layers (objinsp)"
+#: zcadexternal.menucommand~setobjinsp(camera)
+msgid "Camera"
 msgstr ""
 
-#: zcadexternal.menucommand~setobjinsp(linetypestyles)
-msgid "Line type styles (objinsp)"
+#: zcadexternal.menucommand~setobjinsp(camera)
+msgid "Camera"
 msgstr ""
 
-#: zcadexternal.menucommand~setobjinsp(numerators)
-msgid "Numerators (objinsp)"
+#: zcadexternal.menucommand~setobjinsp(camera)
+msgid "Camera"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(camera)
+msgid "Camera"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(camera)
+msgid "Camera"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(camera)
+msgid "Camera"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(camera)
+msgid "Camera"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(camera)
+msgid "Camera"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(camera)
+msgid "Camera"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(camera)
+msgid "Camera"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(camera)
+msgid "Camera"
 msgstr ""
 
 #: zcadexternal.menucommand~setobjinsp(osmode)
@@ -1708,12 +2270,134 @@ msgctxt "zcadexternal.menucommand~setobjinsp(osmode)"
 msgid "Object snap"
 msgstr ""
 
-#: zcadexternal.menucommand~setobjinsp(tablestyles)
-msgid "Table styles (objinsp)"
+#: zcadexternal.menucommand~setobjinsp(osmode)
+msgctxt "zcadexternal.menucommand~setobjinsp(osmode)"
+msgid "Object snap"
 msgstr ""
 
-#: zcadexternal.menucommand~setobjinsp(tstyles)
-msgid "Styles (objinsp)"
+#: zcadexternal.menucommand~setobjinsp(osmode)
+msgctxt "zcadexternal.menucommand~setobjinsp(osmode)"
+msgid "Object snap"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(osmode)
+msgctxt "zcadexternal.menucommand~setobjinsp(osmode)"
+msgid "Object snap"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(osmode)
+msgctxt "zcadexternal.menucommand~setobjinsp(osmode)"
+msgid "Object snap"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(osmode)
+msgctxt "zcadexternal.menucommand~setobjinsp(osmode)"
+msgid "Object snap"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(osmode)
+msgctxt "zcadexternal.menucommand~setobjinsp(osmode)"
+msgid "Object snap"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(osmode)
+msgctxt "zcadexternal.menucommand~setobjinsp(osmode)"
+msgid "Object snap"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(osmode)
+msgctxt "zcadexternal.menucommand~setobjinsp(osmode)"
+msgid "Object snap"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(osmode)
+msgctxt "zcadexternal.menucommand~setobjinsp(osmode)"
+msgid "Object snap"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(osmode)
+msgctxt "zcadexternal.menucommand~setobjinsp(osmode)"
+msgid "Object snap"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(osmode)
+msgctxt "zcadexternal.menucommand~setobjinsp(osmode)"
+msgid "Object snap"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(osmode)
+msgctxt "zcadexternal.menucommand~setobjinsp(osmode)"
+msgid "Object snap"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(osmode)
+msgctxt "zcadexternal.menucommand~setobjinsp(osmode)"
+msgid "Object snap"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(vars)
+msgctxt "zcadexternal.menucommand~setobjinsp(vars)"
+msgid "Options"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(vars)
+msgctxt "zcadexternal.menucommand~setobjinsp(vars)"
+msgid "Options"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(vars)
+msgctxt "zcadexternal.menucommand~setobjinsp(vars)"
+msgid "Options"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(vars)
+msgctxt "zcadexternal.menucommand~setobjinsp(vars)"
+msgid "Options"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(vars)
+msgctxt "zcadexternal.menucommand~setobjinsp(vars)"
+msgid "Options"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(vars)
+msgctxt "zcadexternal.menucommand~setobjinsp(vars)"
+msgid "Options"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(vars)
+msgctxt "zcadexternal.menucommand~setobjinsp(vars)"
+msgid "Options"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(vars)
+msgctxt "zcadexternal.menucommand~setobjinsp(vars)"
+msgid "Options"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(vars)
+msgctxt "zcadexternal.menucommand~setobjinsp(vars)"
+msgid "Options"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(vars)
+msgctxt "zcadexternal.menucommand~setobjinsp(vars)"
+msgid "Options"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(vars)
+msgctxt "zcadexternal.menucommand~setobjinsp(vars)"
+msgid "Options"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(vars)
+msgctxt "zcadexternal.menucommand~setobjinsp(vars)"
+msgid "Options"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(vars)
+msgctxt "zcadexternal.menucommand~setobjinsp(vars)"
+msgid "Options"
 msgstr ""
 
 #: zcadexternal.menucommand~setobjinsp(vars)
@@ -1729,52 +2413,108 @@ msgstr ""
 msgid "TestInsert1"
 msgstr ""
 
-#: zcadexternal.menucommand~varreport(nmo_name)
-msgid "Names of entities"
+#: zcadexternal.menucommand~testinsert1
+msgid "TestInsert1"
 msgstr ""
 
-#: zcadexternal.menu~alarm system
-msgid "Alarm system"
+#: zcadexternal.menucommand~testinsert1
+msgid "TestInsert1"
 msgstr ""
 
-#: zcadexternal.menu~alarm system
-msgid "Alarm system"
+#: zcadexternal.menucommand~testinsert1
+msgid "TestInsert1"
 msgstr ""
 
-#: zcadexternal.menu~alarm system
-msgid "Alarm system"
+#: zcadexternal.menucommand~testinsert1
+msgid "TestInsert1"
 msgstr ""
 
-#: zcadexternal.menu~block/device
-msgid "Block/Device"
+#: zcadexternal.menucommand~testinsert1
+msgid "TestInsert1"
 msgstr ""
 
-#: zcadexternal.menu~cable legend
-msgid "Cable legend"
+#: zcadexternal.menucommand~testinsert1
+msgid "TestInsert1"
 msgstr ""
 
-#: zcadexternal.menu~cable/trace
-msgid "Cable/Trace"
+#: zcadexternal.menucommand~testinsert1
+msgid "TestInsert1"
 msgstr ""
 
-#: zcadexternal.menu~cctv
-msgid "CCTV"
+#: zcadexternal.menucommand~testinsert1
+msgid "TestInsert1"
 msgstr ""
 
-#: zcadexternal.menu~circle
-msgid "Circle"
+#: zcadexternal.menucommand~testinsert1
+msgid "TestInsert1"
 msgstr ""
 
-#: zcadexternal.menu~circuit diagram
-msgid "Circuit diagram"
+#: zcadexternal.menucommand~testinsert1
+msgid "TestInsert1"
 msgstr ""
 
-#: zcadexternal.menu~connections diagram
-msgid "Connections diagram"
+#: zcadexternal.menucommand~testinsert1
+msgid "TestInsert1"
 msgstr ""
 
-#: zcadexternal.menu~db
-msgid "DB"
+#: zcadexternal.menucommand~testinsert1
+msgid "TestInsert1"
+msgstr ""
+
+#: zcadexternal.menucommand~testinsert1
+msgid "TestInsert1"
+msgstr ""
+
+#: zcadexternal.menucommand~testinsert1
+msgid "TestInsert1"
+msgstr ""
+
+#: zcadexternal.menucommand~testinsert1
+msgid "TestInsert1"
+msgstr ""
+
+#: zcadexternal.menucommand~testinsert1
+msgid "TestInsert1"
+msgstr ""
+
+#: zcadexternal.menucommand~testinsert1
+msgid "TestInsert1"
+msgstr ""
+
+#: zcadexternal.menucommand~testinsert1
+msgid "TestInsert1"
+msgstr ""
+
+#: zcadexternal.menucommand~testinsert1
+msgid "TestInsert1"
+msgstr ""
+
+#: zcadexternal.menucommand~testinsert1
+msgid "TestInsert1"
+msgstr ""
+
+#: zcadexternal.menucommand~testinsert1
+msgid "TestInsert1"
+msgstr ""
+
+#: zcadexternal.menucommand~testinsert1
+msgid "TestInsert1"
+msgstr ""
+
+#: zcadexternal.menucommand~testinsert1
+msgid "TestInsert1"
+msgstr ""
+
+#: zcadexternal.menucommand~testinsert1
+msgid "TestInsert1"
+msgstr ""
+
+#: zcadexternal.menucommand~testinsert1
+msgid "TestInsert1"
+msgstr ""
+
+#: zcadexternal.menucommand~testinsert1
+msgid "TestInsert1"
 msgstr ""
 
 #: zcadexternal.menu~debug
@@ -1782,32 +2522,125 @@ msgctxt "zcadexternal.menu~debug"
 msgid "Debug"
 msgstr ""
 
-#: zcadexternal.menu~dimension
-msgid "Dimension"
+#: zcadexternal.menu~debug
+msgctxt "zcadexternal.menu~debug"
+msgid "Debug"
 msgstr ""
 
-#: zcadexternal.menu~draw
-msgid "Draw"
+#: zcadexternal.menu~debug
+msgctxt "zcadexternal.menu~debug"
+msgid "Debug"
 msgstr ""
 
-#: zcadexternal.menu~draw
-msgid "Draw"
+#: zcadexternal.menu~debug
+msgctxt "zcadexternal.menu~debug"
+msgid "Debug"
 msgstr ""
 
-#: zcadexternal.menu~edit
-msgid "Edit"
+#: zcadexternal.menu~debug
+msgctxt "zcadexternal.menu~debug"
+msgid "Debug"
+msgstr ""
+
+#: zcadexternal.menu~debug
+msgctxt "zcadexternal.menu~debug"
+msgid "Debug"
+msgstr ""
+
+#: zcadexternal.menu~debug
+msgctxt "zcadexternal.menu~debug"
+msgid "Debug"
+msgstr ""
+
+#: zcadexternal.menu~debug
+msgctxt "zcadexternal.menu~debug"
+msgid "Debug"
+msgstr ""
+
+#: zcadexternal.menu~debug
+msgctxt "zcadexternal.menu~debug"
+msgid "Debug"
+msgstr ""
+
+#: zcadexternal.menu~debug
+msgctxt "zcadexternal.menu~debug"
+msgid "Debug"
+msgstr ""
+
+#: zcadexternal.menu~debug
+msgctxt "zcadexternal.menu~debug"
+msgid "Debug"
+msgstr ""
+
+#: zcadexternal.menu~debug
+msgctxt "zcadexternal.menu~debug"
+msgid "Debug"
+msgstr ""
+
+#: zcadexternal.menu~debug
+msgctxt "zcadexternal.menu~debug"
+msgid "Debug"
+msgstr ""
+
+#: zcadexternal.menu~debug
+msgctxt "zcadexternal.menu~debug"
+msgid "Debug"
 msgstr ""
 
 #: zcadexternal.menu~file
 msgid "File"
 msgstr ""
 
-#: zcadexternal.menu~fire alarm
-msgid "Fire alarm"
+#: zcadexternal.menu~file
+msgid "File"
 msgstr ""
 
-#: zcadexternal.menu~format
-msgid "Format"
+#: zcadexternal.menu~file
+msgid "File"
+msgstr ""
+
+#: zcadexternal.menu~file
+msgid "File"
+msgstr ""
+
+#: zcadexternal.menu~file
+msgid "File"
+msgstr ""
+
+#: zcadexternal.menu~file
+msgid "File"
+msgstr ""
+
+#: zcadexternal.menu~file
+msgid "File"
+msgstr ""
+
+#: zcadexternal.menu~file
+msgid "File"
+msgstr ""
+
+#: zcadexternal.menu~file
+msgid "File"
+msgstr ""
+
+#: zcadexternal.menu~file
+msgid "File"
+msgstr ""
+
+#: zcadexternal.menu~file
+msgid "File"
+msgstr ""
+
+#: zcadexternal.menu~file
+msgid "File"
+msgstr ""
+
+#: zcadexternal.menu~file
+msgid "File"
+msgstr ""
+
+#: zcadexternal.menu~file
+msgid "File"
 msgstr ""
 
 #: zcadexternal.menu~help
@@ -1815,8 +2648,69 @@ msgctxt "zcadexternal.menu~help"
 msgid "Help"
 msgstr ""
 
-#: zcadexternal.menu~info
-msgid "Info"
+#: zcadexternal.menu~help
+msgctxt "zcadexternal.menu~help"
+msgid "Help"
+msgstr ""
+
+#: zcadexternal.menu~help
+msgctxt "zcadexternal.menu~help"
+msgid "Help"
+msgstr ""
+
+#: zcadexternal.menu~help
+msgctxt "zcadexternal.menu~help"
+msgid "Help"
+msgstr ""
+
+#: zcadexternal.menu~help
+msgctxt "zcadexternal.menu~help"
+msgid "Help"
+msgstr ""
+
+#: zcadexternal.menu~help
+msgctxt "zcadexternal.menu~help"
+msgid "Help"
+msgstr ""
+
+#: zcadexternal.menu~help
+msgctxt "zcadexternal.menu~help"
+msgid "Help"
+msgstr ""
+
+#: zcadexternal.menu~help
+msgctxt "zcadexternal.menu~help"
+msgid "Help"
+msgstr ""
+
+#: zcadexternal.menu~help
+msgctxt "zcadexternal.menu~help"
+msgid "Help"
+msgstr ""
+
+#: zcadexternal.menu~help
+msgctxt "zcadexternal.menu~help"
+msgid "Help"
+msgstr ""
+
+#: zcadexternal.menu~help
+msgctxt "zcadexternal.menu~help"
+msgid "Help"
+msgstr ""
+
+#: zcadexternal.menu~help
+msgctxt "zcadexternal.menu~help"
+msgid "Help"
+msgstr ""
+
+#: zcadexternal.menu~help
+msgctxt "zcadexternal.menu~help"
+msgid "Help"
+msgstr ""
+
+#: zcadexternal.menu~help
+msgctxt "zcadexternal.menu~help"
+msgid "Help"
 msgstr ""
 
 #: zcadexternal.menu~inspector
@@ -1827,99 +2721,276 @@ msgstr ""
 msgid "Inspector"
 msgstr ""
 
-#: zcadexternal.menu~instrumentation and control
-msgid "Instrumentation and Control"
+#: zcadexternal.menu~inspector
+msgid "Inspector"
 msgstr ""
 
-#: zcadexternal.menu~last commands
-msgid "Last commands"
+#: zcadexternal.menu~inspector
+msgid "Inspector"
 msgstr ""
 
-#: zcadexternal.menu~last commands
-msgid "Last commands"
+#: zcadexternal.menu~inspector
+msgid "Inspector"
 msgstr ""
 
-#: zcadexternal.menu~lighting
-msgctxt "zcadexternal.menu~lighting"
-msgid "Lighting"
+#: zcadexternal.menu~inspector
+msgid "Inspector"
 msgstr ""
 
-#: zcadexternal.menu~miscellaneous
-msgid "Miscellaneous"
+#: zcadexternal.menu~inspector
+msgid "Inspector"
 msgstr ""
 
-#: zcadexternal.menu~model
-msgid "Model"
+#: zcadexternal.menu~inspector
+msgid "Inspector"
 msgstr ""
 
-#: zcadexternal.menu~modify
-msgid "Modify"
+#: zcadexternal.menu~inspector
+msgid "Inspector"
 msgstr ""
 
-#: zcadexternal.menu~object snap
-msgctxt "zcadexternal.menu~object snap"
-msgid "Object snap"
+#: zcadexternal.menu~inspector
+msgid "Inspector"
 msgstr ""
 
-#: zcadexternal.menu~object snap
-msgctxt "zcadexternal.menu~object snap"
-msgid "Object snap"
+#: zcadexternal.menu~inspector
+msgid "Inspector"
+msgstr ""
+
+#: zcadexternal.menu~inspector
+msgid "Inspector"
+msgstr ""
+
+#: zcadexternal.menu~inspector
+msgid "Inspector"
+msgstr ""
+
+#: zcadexternal.menu~inspector
+msgid "Inspector"
+msgstr ""
+
+#: zcadexternal.menu~inspector
+msgid "Inspector"
+msgstr ""
+
+#: zcadexternal.menu~inspector
+msgid "Inspector"
+msgstr ""
+
+#: zcadexternal.menu~inspector
+msgid "Inspector"
+msgstr ""
+
+#: zcadexternal.menu~inspector
+msgid "Inspector"
+msgstr ""
+
+#: zcadexternal.menu~inspector
+msgid "Inspector"
+msgstr ""
+
+#: zcadexternal.menu~inspector
+msgid "Inspector"
+msgstr ""
+
+#: zcadexternal.menu~inspector
+msgid "Inspector"
+msgstr ""
+
+#: zcadexternal.menu~inspector
+msgid "Inspector"
+msgstr ""
+
+#: zcadexternal.menu~inspector
+msgid "Inspector"
+msgstr ""
+
+#: zcadexternal.menu~inspector
+msgid "Inspector"
+msgstr ""
+
+#: zcadexternal.menu~inspector
+msgid "Inspector"
+msgstr ""
+
+#: zcadexternal.menu~inspector
+msgid "Inspector"
+msgstr ""
+
+#: zcadexternal.menu~inspector
+msgid "Inspector"
+msgstr ""
+
+#: zcadexternal.menu~inspector
+msgid "Inspector"
+msgstr ""
+
+#: zcadexternal.menu~mainmenu
+msgid "MAINMENU"
+msgstr ""
+
+#: zcadexternal.menu~mainmenu
+msgid "MAINMENU"
+msgstr ""
+
+#: zcadexternal.menu~mainmenu
+msgid "MAINMENU"
+msgstr ""
+
+#: zcadexternal.menu~mainmenu
+msgid "MAINMENU"
+msgstr ""
+
+#: zcadexternal.menu~mainmenu
+msgid "MAINMENU"
+msgstr ""
+
+#: zcadexternal.menu~mainmenu
+msgid "MAINMENU"
+msgstr ""
+
+#: zcadexternal.menu~mainmenu
+msgid "MAINMENU"
+msgstr ""
+
+#: zcadexternal.menu~mainmenu
+msgid "MAINMENU"
+msgstr ""
+
+#: zcadexternal.menu~mainmenu
+msgid "MAINMENU"
+msgstr ""
+
+#: zcadexternal.menu~mainmenu
+msgid "MAINMENU"
+msgstr ""
+
+#: zcadexternal.menu~mainmenu
+msgid "MAINMENU"
+msgstr ""
+
+#: zcadexternal.menu~mainmenu
+msgid "MAINMENU"
+msgstr ""
+
+#: zcadexternal.menu~mainmenu
+msgid "MAINMENU"
+msgstr ""
+
+#: zcadexternal.menu~mainmenu
+msgid "MAINMENU"
 msgstr ""
 
 #: zcadexternal.menu~pan
 msgid "Pan"
 msgstr ""
 
-#: zcadexternal.menu~placement equipment
-msgid "Placement equipment"
+#: zcadexternal.menu~pan
+msgid "Pan"
 msgstr ""
 
-#: zcadexternal.menu~placement equipment
-msgid "Placement equipment"
+#: zcadexternal.menu~pan
+msgid "Pan"
 msgstr ""
 
-#: zcadexternal.menu~placement equipment
-msgid "Placement equipment"
+#: zcadexternal.menu~pan
+msgid "Pan"
 msgstr ""
 
-#: zcadexternal.menu~placement equipment
-msgid "Placement equipment"
+#: zcadexternal.menu~pan
+msgid "Pan"
 msgstr ""
 
-#: zcadexternal.menu~placement equipment
-msgid "Placement equipment"
+#: zcadexternal.menu~pan
+msgid "Pan"
 msgstr ""
 
-#: zcadexternal.menu~placement equipment
-msgid "Placement equipment"
+#: zcadexternal.menu~pan
+msgid "Pan"
 msgstr ""
 
-#: zcadexternal.menu~plan
-msgid "Plan"
+#: zcadexternal.menu~pan
+msgid "Pan"
 msgstr ""
 
-#: zcadexternal.menu~polygon
-msgid "Polygon"
+#: zcadexternal.menu~pan
+msgid "Pan"
 msgstr ""
 
-#: zcadexternal.menu~power supply
-msgid "Power supply"
+#: zcadexternal.menu~pan
+msgid "Pan"
+msgstr ""
+
+#: zcadexternal.menu~pan
+msgid "Pan"
+msgstr ""
+
+#: zcadexternal.menu~pan
+msgid "Pan"
+msgstr ""
+
+#: zcadexternal.menu~pan
+msgid "Pan"
+msgstr ""
+
+#: zcadexternal.menu~pan
+msgid "Pan"
 msgstr ""
 
 #: zcadexternal.menu~sample files
 msgid "Sample files"
 msgstr ""
 
-#: zcadexternal.menu~schematic
-msgid "Schematic"
+#: zcadexternal.menu~sample files
+msgid "Sample files"
 msgstr ""
 
-#: zcadexternal.menu~security alarm
-msgid "Security alarm"
+#: zcadexternal.menu~sample files
+msgid "Sample files"
 msgstr ""
 
-#: zcadexternal.menu~settings
-msgid "Settings"
+#: zcadexternal.menu~sample files
+msgid "Sample files"
+msgstr ""
+
+#: zcadexternal.menu~sample files
+msgid "Sample files"
+msgstr ""
+
+#: zcadexternal.menu~sample files
+msgid "Sample files"
+msgstr ""
+
+#: zcadexternal.menu~sample files
+msgid "Sample files"
+msgstr ""
+
+#: zcadexternal.menu~sample files
+msgid "Sample files"
+msgstr ""
+
+#: zcadexternal.menu~sample files
+msgid "Sample files"
+msgstr ""
+
+#: zcadexternal.menu~sample files
+msgid "Sample files"
+msgstr ""
+
+#: zcadexternal.menu~sample files
+msgid "Sample files"
+msgstr ""
+
+#: zcadexternal.menu~sample files
+msgid "Sample files"
+msgstr ""
+
+#: zcadexternal.menu~sample files
+msgid "Sample files"
+msgstr ""
+
+#: zcadexternal.menu~sample files
+msgid "Sample files"
 msgstr ""
 
 #: zcadexternal.menu~show window
@@ -1930,18 +3001,160 @@ msgstr ""
 msgid "Show window"
 msgstr ""
 
-#: zcadexternal.menu~text
-msgctxt "zcadexternal.menu~text"
-msgid "Text"
+#: zcadexternal.menu~show window
+msgid "Show window"
 msgstr ""
 
-#: zcadexternal.menu~text
-msgctxt "zcadexternal.menu~text"
-msgid "Text"
+#: zcadexternal.menu~show window
+msgid "Show window"
+msgstr ""
+
+#: zcadexternal.menu~show window
+msgid "Show window"
+msgstr ""
+
+#: zcadexternal.menu~show window
+msgid "Show window"
+msgstr ""
+
+#: zcadexternal.menu~show window
+msgid "Show window"
+msgstr ""
+
+#: zcadexternal.menu~show window
+msgid "Show window"
+msgstr ""
+
+#: zcadexternal.menu~show window
+msgid "Show window"
+msgstr ""
+
+#: zcadexternal.menu~show window
+msgid "Show window"
+msgstr ""
+
+#: zcadexternal.menu~show window
+msgid "Show window"
+msgstr ""
+
+#: zcadexternal.menu~show window
+msgid "Show window"
+msgstr ""
+
+#: zcadexternal.menu~show window
+msgid "Show window"
+msgstr ""
+
+#: zcadexternal.menu~show window
+msgid "Show window"
 msgstr ""
 
 #: zcadexternal.menu~toolbars
 msgid "ToolBars"
+msgstr ""
+
+#: zcadexternal.menu~toolbars
+msgid "ToolBars"
+msgstr ""
+
+#: zcadexternal.menu~toolbars
+msgid "ToolBars"
+msgstr ""
+
+#: zcadexternal.menu~toolbars
+msgid "ToolBars"
+msgstr ""
+
+#: zcadexternal.menu~toolbars
+msgid "ToolBars"
+msgstr ""
+
+#: zcadexternal.menu~toolbars
+msgid "ToolBars"
+msgstr ""
+
+#: zcadexternal.menu~toolbars
+msgid "ToolBars"
+msgstr ""
+
+#: zcadexternal.menu~toolbars
+msgid "ToolBars"
+msgstr ""
+
+#: zcadexternal.menu~toolbars
+msgid "ToolBars"
+msgstr ""
+
+#: zcadexternal.menu~toolbars
+msgid "ToolBars"
+msgstr ""
+
+#: zcadexternal.menu~toolbars
+msgid "ToolBars"
+msgstr ""
+
+#: zcadexternal.menu~toolbars
+msgid "ToolBars"
+msgstr ""
+
+#: zcadexternal.menu~toolbars
+msgid "ToolBars"
+msgstr ""
+
+#: zcadexternal.menu~toolbars
+msgid "ToolBars"
+msgstr ""
+
+#: zcadexternal.menu~toolpalettes
+msgid "ToolPalettes"
+msgstr ""
+
+#: zcadexternal.menu~toolpalettes
+msgid "ToolPalettes"
+msgstr ""
+
+#: zcadexternal.menu~toolpalettes
+msgid "ToolPalettes"
+msgstr ""
+
+#: zcadexternal.menu~toolpalettes
+msgid "ToolPalettes"
+msgstr ""
+
+#: zcadexternal.menu~toolpalettes
+msgid "ToolPalettes"
+msgstr ""
+
+#: zcadexternal.menu~toolpalettes
+msgid "ToolPalettes"
+msgstr ""
+
+#: zcadexternal.menu~toolpalettes
+msgid "ToolPalettes"
+msgstr ""
+
+#: zcadexternal.menu~toolpalettes
+msgid "ToolPalettes"
+msgstr ""
+
+#: zcadexternal.menu~toolpalettes
+msgid "ToolPalettes"
+msgstr ""
+
+#: zcadexternal.menu~toolpalettes
+msgid "ToolPalettes"
+msgstr ""
+
+#: zcadexternal.menu~toolpalettes
+msgid "ToolPalettes"
+msgstr ""
+
+#: zcadexternal.menu~toolpalettes
+msgid "ToolPalettes"
+msgstr ""
+
+#: zcadexternal.menu~toolpalettes
+msgid "ToolPalettes"
 msgstr ""
 
 #: zcadexternal.menu~toolpalettes
@@ -1960,8 +3173,156 @@ msgstr ""
 msgid "View"
 msgstr ""
 
-#: zcadexternal.menu~window
-msgid "Window"
+#: zcadexternal.menu~view
+msgid "View"
+msgstr ""
+
+#: zcadexternal.menu~view
+msgid "View"
+msgstr ""
+
+#: zcadexternal.menu~view
+msgid "View"
+msgstr ""
+
+#: zcadexternal.menu~view
+msgid "View"
+msgstr ""
+
+#: zcadexternal.menu~view
+msgid "View"
+msgstr ""
+
+#: zcadexternal.menu~view
+msgid "View"
+msgstr ""
+
+#: zcadexternal.menu~view
+msgid "View"
+msgstr ""
+
+#: zcadexternal.menu~view
+msgid "View"
+msgstr ""
+
+#: zcadexternal.menu~view
+msgid "View"
+msgstr ""
+
+#: zcadexternal.menu~view
+msgid "View"
+msgstr ""
+
+#: zcadexternal.menu~view
+msgid "View"
+msgstr ""
+
+#: zcadexternal.menu~view
+msgid "View"
+msgstr ""
+
+#: zcadexternal.menu~view
+msgid "View"
+msgstr ""
+
+#: zcadexternal.menu~view
+msgid "View"
+msgstr ""
+
+#: zcadexternal.menu~view
+msgid "View"
+msgstr ""
+
+#: zcadexternal.menu~view
+msgid "View"
+msgstr ""
+
+#: zcadexternal.menu~view
+msgid "View"
+msgstr ""
+
+#: zcadexternal.menu~view
+msgid "View"
+msgstr ""
+
+#: zcadexternal.menu~view
+msgid "View"
+msgstr ""
+
+#: zcadexternal.menu~view
+msgid "View"
+msgstr ""
+
+#: zcadexternal.menu~view
+msgid "View"
+msgstr ""
+
+#: zcadexternal.menu~view
+msgid "View"
+msgstr ""
+
+#: zcadexternal.menu~view
+msgid "View"
+msgstr ""
+
+#: zcadexternal.menu~view
+msgid "View"
+msgstr ""
+
+#: zcadexternal.menu~view
+msgid "View"
+msgstr ""
+
+#: zcadexternal.menu~zoom
+msgid "Zoom"
+msgstr ""
+
+#: zcadexternal.menu~zoom
+msgid "Zoom"
+msgstr ""
+
+#: zcadexternal.menu~zoom
+msgid "Zoom"
+msgstr ""
+
+#: zcadexternal.menu~zoom
+msgid "Zoom"
+msgstr ""
+
+#: zcadexternal.menu~zoom
+msgid "Zoom"
+msgstr ""
+
+#: zcadexternal.menu~zoom
+msgid "Zoom"
+msgstr ""
+
+#: zcadexternal.menu~zoom
+msgid "Zoom"
+msgstr ""
+
+#: zcadexternal.menu~zoom
+msgid "Zoom"
+msgstr ""
+
+#: zcadexternal.menu~zoom
+msgid "Zoom"
+msgstr ""
+
+#: zcadexternal.menu~zoom
+msgid "Zoom"
+msgstr ""
+
+#: zcadexternal.menu~zoom
+msgid "Zoom"
+msgstr ""
+
+#: zcadexternal.menu~zoom
+msgid "Zoom"
+msgstr ""
+
+#: zcadexternal.menu~zoom
+msgid "Zoom"
 msgstr ""
 
 #: zcadexternal.menu~zoom
@@ -2143,6 +3504,10 @@ msgstr ""
 msgid "End Z"
 msgstr ""
 
+#: zcadexternal.oimultiproperty_entityname~
+msgid "Entity name"
+msgstr ""
+
 #: zcadexternal.oimultiproperty_filter_blocksbynames~
 msgid "Blocks by names"
 msgstr ""
@@ -2228,6 +3593,18 @@ msgstr ""
 #: zcadexternal.oimultiproperty_layer~
 msgctxt "zcadexternal.oimultiproperty_layer~"
 msgid "Layer"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_lcontrol_badlayer~
+msgid "LC bad layer"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_lcontrol_expression~
+msgid "LC expression"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_lcontrol_goodlayer~
+msgid "LC good layer"
 msgstr ""
 
 #: zcadexternal.oimultiproperty_leaderscale~
@@ -2380,7 +3757,6 @@ msgid "Normal Z"
 msgstr ""
 
 #: zcadexternal.oimultiproperty_oblique~
-msgctxt "zcadexternal.oimultiproperty_oblique~"
 msgid "Oblique"
 msgstr ""
 
@@ -2403,6 +3779,14 @@ msgctxt "zcadexternal.oimultiproperty_radius~"
 msgid "Radius"
 msgstr ""
 
+#: zcadexternal.oimultiproperty_rotationwcs~
+msgid "RotationWCS"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_rotationwcs~
+msgid "RotationWCS"
+msgstr ""
+
 #: zcadexternal.oimultiproperty_rotation~
 msgctxt "zcadexternal.oimultiproperty_rotation~"
 msgid "Rotation"
@@ -2524,12 +3908,10 @@ msgid "Content"
 msgstr ""
 
 #: zcadexternal.oimultiproperty_txtjustify~
-msgctxt "zcadexternal.oimultiproperty_txtjustify~"
 msgid "Justify"
 msgstr ""
 
 #: zcadexternal.oimultiproperty_txtjustify~
-msgctxt "zcadexternal.oimultiproperty_txtjustify~"
 msgid "Justify"
 msgstr ""
 
@@ -2572,7 +3954,6 @@ msgid "Vertex count"
 msgstr ""
 
 #: zcadexternal.oimultiproperty_widthfactor~
-msgctxt "zcadexternal.oimultiproperty_widthfactor~"
 msgid "Width factor"
 msgstr ""
 
@@ -3203,15 +4584,6 @@ msgstr ""
 msgid "Prefered rendertime"
 msgstr ""
 
-#: zcadexternal.timode~tim_mtext
-msgid "MText"
-msgstr ""
-
-#: zcadexternal.timode~tim_text
-msgctxt "zcadexternal.timode~tim_text"
-msgid "Text"
-msgstr ""
-
 #: zcadexternal.tinserttype~tit_block
 msgctxt "zcadexternal.tinserttype~tit_block"
 msgid "Block"
@@ -3401,52 +4773,12 @@ msgctxt "zcadexternal.tlunits~luscientific"
 msgid "Scientific"
 msgstr ""
 
-#: zcadexternal.tmatchpropparam~processcolor
-msgid "Process color"
-msgstr ""
-
-#: zcadexternal.tmatchpropparam~processlayer
-msgid "Process layer"
-msgstr ""
-
-#: zcadexternal.tmatchpropparam~processlinetype
-msgid "Process line type"
-msgstr ""
-
-#: zcadexternal.tmatchpropparam~processlinetypescale
-msgid "Process line type scale"
-msgstr ""
-
-#: zcadexternal.tmatchpropparam~processlineweight
-msgid "Process line weight"
-msgstr ""
-
-#: zcadexternal.tmatchpropparam~textparams
-msgid "Text params"
-msgstr ""
-
-#: zcadexternal.tmatchproptextparam~processtextjustify
-msgid "Process justify"
-msgstr ""
-
-#: zcadexternal.tmatchproptextparam~processtextoblique
-msgid "Process oblique"
-msgstr ""
-
-#: zcadexternal.tmatchproptextparam~processtextsize
-msgid "Process size"
-msgstr ""
-
-#: zcadexternal.tmatchproptextparam~processtextstyle
-msgid "Process style"
-msgstr ""
-
-#: zcadexternal.tmatchproptextparam~processtextwfactor
-msgid "Process wfactor"
-msgstr ""
-
 #: zcadexternal.tmirrorparam~sourceents
 msgid "Source entities"
+msgstr ""
+
+#: zcadexternal.tmseditor~extendersunit
+msgid "Extenders"
 msgstr ""
 
 #: zcadexternal.tmseditor~generalunit
@@ -3594,6 +4926,19 @@ msgstr ""
 msgid "by width/height"
 msgstr ""
 
+#: zcadexternal.toolpalette_blocklib~caption
+msgid "PE"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib~caption
+msgctxt "zcadexternal.toolpalette_blocklib~caption"
+msgid "Unsorted"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib~caption
+msgid "PEN"
+msgstr ""
+
 #: zcadexternal.topengldata~rd_extensions
 msgid "Extensions"
 msgstr ""
@@ -3633,6 +4978,7 @@ msgid "VSync"
 msgstr ""
 
 #: zcadexternal.topsdattype~topsdt_smoke
+msgctxt "zcadexternal.topsdattype~topsdt_smoke"
 msgid "Smoke"
 msgstr ""
 
@@ -3901,36 +5247,6 @@ msgstr ""
 msgid "Proportional"
 msgstr ""
 
-#: zcadexternal.tpolyeditmode~tpem_nearest
-msgid "Paste in nearest segment"
-msgstr ""
-
-#: zcadexternal.tpolyeditmode~tpem_select
-msgid "Choose a segment"
-msgstr ""
-
-#: zcadexternal.tpolyedit~action
-msgid "Action"
-msgstr ""
-
-#: zcadexternal.tpolyedit~mode
-msgid "Mode"
-msgstr ""
-
-#: zcadexternal.tpolygonparam~et
-msgctxt "zcadexternal.tpolygonparam~et"
-msgid "Entity type"
-msgstr ""
-
-#: zcadexternal.tpolygonparam~polywidth
-msgctxt "zcadexternal.tpolygonparam~polywidth"
-msgid "Polyline width"
-msgstr ""
-
-#: zcadexternal.tpolygonparam~vnum
-msgid "Number of vertices"
-msgstr ""
-
 #: zcadexternal.trd~rd_drawinsidepaintmessage
 msgid "Draw inside paint message"
 msgstr ""
@@ -3997,24 +5313,6 @@ msgstr ""
 
 #: zcadexternal.trd~rd_usestencil
 msgid "Use STENCIL buffer"
-msgstr ""
-
-#: zcadexternal.trectangenttype~ret_3dpoly
-msgid "3DPoly"
-msgstr ""
-
-#: zcadexternal.trectangenttype~ret_lwpoly
-msgid "LWPoly"
-msgstr ""
-
-#: zcadexternal.trectangparam~et
-msgctxt "zcadexternal.trectangparam~et"
-msgid "Entity type"
-msgstr ""
-
-#: zcadexternal.trectangparam~polywidth
-msgctxt "zcadexternal.trectangparam~polywidth"
-msgid "Polyline width"
 msgstr ""
 
 #: zcadexternal.trestoremode~wnd_accumbuffer
@@ -4094,6 +5392,7 @@ msgid "Autosave"
 msgstr ""
 
 #: zcadexternal.tst~tst_unsorted
+msgctxt "zcadexternal.tst~tst_unsorted"
 msgid "Unsorted"
 msgstr ""
 
@@ -4103,18 +5402,6 @@ msgstr ""
 
 #: zcadexternal.tst~tst_yx
 msgid "Y-X"
-msgstr ""
-
-#: zcadexternal.tsubpolyedit~tspe_insert
-msgid "Insert vertex"
-msgstr ""
-
-#: zcadexternal.tsubpolyedit~tspe_remove
-msgid "Remove vertex"
-msgstr ""
-
-#: zcadexternal.tsubpolyedit~tspe_scissor
-msgid "Cut into two parts"
 msgstr ""
 
 #: zcadexternal.tsysparam~notsaved
@@ -4170,53 +5457,6 @@ msgstr ""
 #: zcadexternal.ttablecelljustify~jcr
 msgctxt "zcadexternal.ttablecelljustify~jcr"
 msgid "TopRight"
-msgstr ""
-
-#: zcadexternal.ttextinsertparams~h
-msgctxt "zcadexternal.ttextinsertparams~h"
-msgid "Height"
-msgstr ""
-
-#: zcadexternal.ttextinsertparams~justify
-msgctxt "zcadexternal.ttextinsertparams~justify"
-msgid "Justify"
-msgstr ""
-
-#: zcadexternal.ttextinsertparams~linespace
-msgid "Line space factor"
-msgstr ""
-
-#: zcadexternal.ttextinsertparams~mode
-msgid "Entity"
-msgstr ""
-
-#: zcadexternal.ttextinsertparams~oblique
-msgctxt "zcadexternal.ttextinsertparams~oblique"
-msgid "Oblique"
-msgstr ""
-
-#: zcadexternal.ttextinsertparams~runtexteditor
-msgid "Run text editor"
-msgstr ""
-
-#: zcadexternal.ttextinsertparams~style
-msgctxt "zcadexternal.ttextinsertparams~style"
-msgid "Style"
-msgstr ""
-
-#: zcadexternal.ttextinsertparams~text
-msgctxt "zcadexternal.ttextinsertparams~text"
-msgid "Text"
-msgstr ""
-
-#: zcadexternal.ttextinsertparams~width
-msgctxt "zcadexternal.ttextinsertparams~width"
-msgid "Width"
-msgstr ""
-
-#: zcadexternal.ttextinsertparams~widthfactor
-msgctxt "zcadexternal.ttextinsertparams~widthfactor"
-msgid "Width factor"
 msgstr ""
 
 #: zcadexternal.ttextjustify~jsbc
@@ -4427,6 +5667,10 @@ msgstr ""
 #: zcadexternal.variablecategory~scale
 msgctxt "zcadexternal.variablecategory~scale"
 msgid "Scale"
+msgstr ""
+
+#: zcadexternal.variablecategory~slcabagen
+msgid "vELEC"
 msgstr ""
 
 #: zcadexternal.variablecategory~start

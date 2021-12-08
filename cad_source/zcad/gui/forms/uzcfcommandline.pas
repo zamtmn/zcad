@@ -26,7 +26,7 @@ uses
  varman,varmandef,
  uzegeometry,uzctnrvectorgdbstring,uzcinterface,uzctreenode,uzclog,strmy,
  uzccommandlineutil,uztoolbarsmanager,uzmenusmanager,uzccommandsabstract,gzctnrvectortypes,
- uzcctrlcommandlineprompt,uzeparsercmdprompt;
+ uzcctrlcommandlineprompt,uzeparsercmdprompt,StrUtils;
 
 const
      cheight=48;
@@ -56,14 +56,14 @@ var
   prompt:TCommandLinePrompt;
   panel:tpanel;
   HistoryLine:TMemo;
+  LastHistoryMsg:string='';
+  LastSuffixMsg:string='';
+  LastHistoryMsgRepeatCounter:integer=0;
 
   HintText:TLabel;
   //historychanged:boolean;
 
 implementation
-
-//var
-//   historychanged:boolean;
 
 procedure TCLine.mypaint(sender:tobject);
 begin
@@ -356,22 +356,52 @@ end;
 procedure HistoryOut(s: pansichar); export;
 var
    a:string;
+   needclean:integer;
 begin
-  if assigned(HistoryLine) then
-  begin
-   a:=(s);
-   if HistoryLine.Lines.Count=0 then
-     CLine.utflen:=CLine.utflen+{$IFDEF WINDOWS}UTF8Length(a){$ELSE}Length(a){$ENDIF}
-   else
-     CLine.utflen:=2+CLine.utflen+{$IFDEF WINDOWS}UTF8Length(a){$ELSE}Length(a){$ENDIF};
-   {$IFNDEF DELPHI}
-   HistoryLine.Append(a);
-   {$ENDIF}
-   //{$IFDEF WINDOWS}
-   HistoryLine.SelStart:=CLine.utflen;
-   HistoryLine.SelLength:=2;
-   HistoryLine.ClearSelection;
-   //{$ENDIF}
+  if assigned(HistoryLine) then begin
+    a:=(s);
+    if (a<>LastHistoryMsg)or(rsMsgRepeatCountStr='') then begin
+      LastHistoryMsg:=a;
+      LastHistoryMsgRepeatCounter:=0;
+      LastSuffixMsg:='';
+      if HistoryLine.Lines.Count=0 then
+        CLine.utflen:=CLine.utflen+{$IFDEF WINDOWS}UTF8Length(a){$ELSE}Length(a){$ENDIF}
+      else
+       CLine.utflen:=2+CLine.utflen+{$IFDEF WINDOWS}UTF8Length(a){$ELSE}Length(a){$ENDIF};
+      {$IFNDEF DELPHI}
+      HistoryLine.Append(a);
+      {$ENDIF}
+      //{$IFDEF WINDOWS}
+      HistoryLine.SelStart:=CLine.utflen;
+      HistoryLine.SelLength:=2;
+      HistoryLine.ClearSelection;
+      //{$ENDIF}
+    end else begin
+      inc(LastHistoryMsgRepeatCounter);
+      needclean:={$IFDEF WINDOWS}UTF8Length(LastSuffixMsg){$ELSE}Length(LastSuffixMsg){$ENDIF};
+      LastSuffixMsg:=format(rsMsgRepeatCountStr,[LastHistoryMsgRepeatCounter+1]);
+
+      if LastHistoryMsgRepeatCounter=1 then begin
+        HistoryLine.Lines[HistoryLine.Lines.Count-1]:=HistoryLine.Lines[HistoryLine.Lines.Count-1]+LastSuffixMsg;
+        CLine.utflen:=CLine.utflen+{$IFDEF WINDOWS}UTF8Length(LastSuffixMsg){$ELSE}Length(LastSuffixMsg){$ENDIF};
+
+        HistoryLine.SelStart:=CLine.utflen;
+        HistoryLine.SelLength:=2;
+        HistoryLine.ClearSelection;
+      end else begin
+        HistoryLine.SelStart:=CLine.utflen-needclean;
+        HistoryLine.SelLength:=needclean;
+        HistoryLine.ClearSelection;
+        CLine.utflen:=CLine.utflen-needclean;
+
+        HistoryLine.Lines[HistoryLine.Lines.Count-1]:=HistoryLine.Lines[HistoryLine.Lines.Count-1]+LastSuffixMsg;
+        CLine.utflen:=CLine.utflen+{$IFDEF WINDOWS}UTF8Length(LastSuffixMsg){$ELSE}Length(LastSuffixMsg){$ENDIF};
+        HistoryLine.SelStart:=CLine.utflen;
+        HistoryLine.SelLength:=2;
+        HistoryLine.ClearSelection;
+      end;
+
+    end;
   end;
 end;
 procedure HistoryOutStr(s:String);

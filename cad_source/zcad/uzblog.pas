@@ -493,47 +493,44 @@ end;
 
 procedure tlog.ZOnDebugLN(Sender: TObject; S: string; var Handled: Boolean);
 var
-   dbgmode,tdbgmode:TLogLevel;
-   _indent:integer;
-   prefixlength,prefixstart:integer;
-   NeedToHistory,NeedMessageBox:boolean;
-   modulename:string;
-   lmdi:TModuleDesk;
+  dbgmode,tdbgmode:TLogLevel;
+  _indent:integer;
+  prefixlength,prefixstart:integer;
+  NeedToHistory,NeedMessageBox:boolean;
+  modulename:string;
+  lmdi:TModuleDesk;
 begin
-     dbgmode:=LM_Trace;
-     _indent:=lp_OldPos;
-     NeedToHistory:=false;
-     NeedMessageBox:=false;
-     if length(s)>1 then
-     if s[1]='{' then
-     begin
-        prefixlength:=2;
-        while (s[prefixlength]<>'}')and(prefixlength<=length(s)) do
-        begin
-             case s[prefixlength] of
-                {'T':dbgmode:=LM_Trace;
-                'D':dbgmode:=LM_Debug;
-                'I':dbgmode:=LM_Info;
-                'W':dbgmode:=LM_Warning;
-                'E':dbgmode:=LM_Error;
-                'F':dbgmode:=LM_Fatal;
-                'N':dbgmode:=LM_Necessarily;}
-                '+':_indent:=lp_IncPos;
-                '-':_indent:=lp_DecPos;
-                'H':NeedToHistory:=true;
-                'M':NeedMessageBox:=true;
-                else begin
-                  if LogLevelAliasDic.TryGetValue(s[prefixlength],tdbgmode) then
-                    dbgmode:=tdbgmode;
-                end;
-             end;
-          inc(prefixlength);
-        end;
-        s:=copy(s,prefixlength+1,length(s)-prefixlength);
+   dbgmode:=LM_Trace;
+   _indent:=lp_OldPos;
+   NeedToHistory:=false;
+   NeedMessageBox:=false;
+   if length(s)>1 then
+     if s[1]='{' then begin
+       prefixlength:=2;
+       while (s[prefixlength]<>'}')and(prefixlength<=length(s)) do begin
+         case s[prefixlength] of
+           {'T':dbgmode:=LM_Trace;
+           'D':dbgmode:=LM_Debug;
+           'I':dbgmode:=LM_Info;
+           'W':dbgmode:=LM_Warning;
+           'E':dbgmode:=LM_Error;
+           'F':dbgmode:=LM_Fatal;
+           'N':dbgmode:=LM_Necessarily;}
+           '+':_indent:=lp_IncPos;
+           '-':_indent:=lp_DecPos;
+           'H':NeedToHistory:=true;
+           'M':NeedMessageBox:=true;
+            else begin
+              if LogLevelAliasDic.TryGetValue(s[prefixlength],tdbgmode) then
+                dbgmode:=tdbgmode;
+            end;
+         end;
+         inc(prefixlength);
+       end;
+       s:=copy(s,prefixlength+1,length(s)-prefixlength);
      end;
-     if length(s)>1 then
-     if s[1]='[' then
-     begin
+   if length(s)>1 then
+     if s[1]='[' then begin
         prefixstart:=2;
         prefixlength:=2;
         while (s[prefixlength]<>']')and(prefixlength<=length(s)) do
@@ -543,13 +540,13 @@ begin
         modulename:=uppercase(copy(s,prefixstart,prefixlength-2));
         s:=copy(s,prefixlength+1,length(s)-prefixlength);
      end;
-     if modulename='' then
-                 lmdi:=DefaultModuleDeskIndex
-             else
-                 begin
-                  lmdi:=RegisterModule(modulename);
-                 end;
-     if NeedToHistory then
+
+   if modulename='' then
+     lmdi:=DefaultModuleDeskIndex
+   else
+     lmdi:=RegisterModule(modulename);
+
+   if NeedToHistory then
        if assigned(HistoryTextOut) then
          HistoryTextOut(s);
      if NeedMessageBox then

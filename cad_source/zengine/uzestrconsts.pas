@@ -30,7 +30,7 @@ resourcestring
   rsReserveFontNotFound='Reserve font is not found in the resources';
 
   {messages}
-  rsGridTooDensity='Grid too density';
+  rsGridTooDensity='Grid too dense';
   rsBlockIgnored='Ignored block "%s"';
   rsDoubleBlockIgnored='Ignored double definition block "%s"';
   rsWrongBlockDefIndex='Wrong blockdef index';

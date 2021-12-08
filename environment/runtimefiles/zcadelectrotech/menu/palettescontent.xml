@@ -202,9 +202,11 @@
            <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_FD4)" Img='DEVICE_EL_VL_DIAGRAM_FD4_300' Caption='Фидер сноска 2'/>
            <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_CH1)" Img='DEVICE_EL_VL_DIAGRAM_CH1_300' Caption='Щит сноска 1'/>
            <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_CH2)" Img='DEVICE_EL_VL_DIAGRAM_CH2_300' Caption='Щит сноска 2'/>
-	   <ZTreeCommand Command="Insert(EL_VL_REPORT6_1)" Img='EL_VL_REPORT6_1_300' Caption='Распред.схема шапка'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_REPORT6_2)" Img='DEVICE_EL_VL_REPORT6_2_300' Caption='Распред.схема фидер'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_REPORT6_0)" Img='DEVICE_EL_VL_REPORT6_0_300' Caption='Распред.схема щит'/>
+	   <ZTreeCommand Command="Insert(EL_VL_SCHEMA1_0)" Img='EL_VL_SCHEMA1_0_300' Caption='Распред.схема ЩР шапка'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SCHEMA1_1)" Img='DEVICE_EL_VL_SCHEMA1_1_300' Caption='Распред.схема ЩР боковик'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SCHEMA1_2)" Img='DEVICE_EL_VL_SCHEMA1_2_300' Caption='Распред.схема ЩР фидер'/>
+	   <ZTreeCommand Command="Insert(EL_VL_SCHEMA2_0)" Img='EL_VL_SCHEMA2_0_300' Caption='Распред.схема ЩО шапка'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SCHEMA2_2)" Img='DEVICE_EL_VL_SCHEMA2_2_300' Caption='Распред.схема ЩО фидер'/>
       	</ZTreeNode>
       	<ZTreeNode Caption='Узлы'>
 	   <ZTreeCommand Command="Insert(UNIT_GRID1)" Img='UNIT_GRID1_300' Caption='Сетка 1'/>
@@ -237,6 +239,7 @@
               <ZTreeCommand Command="Insert(DEVICE_PS_VL_DAT_SMOKE)" Img='DEVICE_PS_VL_DAT_SMOKE_300' Caption='Дымовой'/>
               <ZTreeCommand Command="Insert(DEVICE_PS_VL_DAT_TERMO)" Img='DEVICE_PS_VL_DAT_TERMO_300' Caption='Тепловой'/>
               <ZTreeCommand Command="Insert(DEVICE_PS_VL_DAT_HAND)" Img='DEVICE_PS_VL_DAT_HAND_300' Caption='Ручной'/>
+              <ZTreeCommand Command="Insert(DEVICE_PS_VL_DAT_RUPOR)" Img='DEVICE_PS_VL_DAT_RUPOR_300' Caption='Оповещатель'/>
       	</ZTreeNode>
       </ZTreeNode>
       <ZTreeNode Caption='Слаботочка'>

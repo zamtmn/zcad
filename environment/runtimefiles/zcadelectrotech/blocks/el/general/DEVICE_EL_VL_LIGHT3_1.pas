@@ -10,8 +10,8 @@ usescopy _addtocable;
 
 var
 
-T1:GDBString;(*'Код'*)
-T2:GDBString;(*'Группа'*)
+T1:GDBString;(*'Группа'*)
+T2:GDBString;(*'Код'*)
 
 implementation
 

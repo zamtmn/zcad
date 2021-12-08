@@ -30,6 +30,4 @@ GC_HeadDevice:='ЩО??';
 GC_HDShortName:='??';
 GC_HDGroup:=0;
 
-T2:='К';
-
 end.

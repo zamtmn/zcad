@@ -190,9 +190,10 @@ begin
   if LIndex < 0 then begin
     result:=false;
     PAValue:=nil;
-  end
-  else
+  end else begin
+    result:=true;
     PAValue:=@FItems[LIndex].Pair.Value;
+  end;
 end;
 
 procedure TMyMapCounter<TKey>.CountKey(const key:TKey; const InitialCounter:SizeUInt);

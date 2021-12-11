@@ -62,11 +62,11 @@ function mystrtoint(s:GDBString):GDBInteger;
 function readmystrtoint(var f:GDBOpenArrayOfByte):GDBInteger;
 function readmystrtodouble(var f:GDBOpenArrayOfByte):GDBDouble;
 function readmystr(var f:GDBOpenArrayOfByte):GDBString;
-function dxfvertexload(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBInteger; out v:gdbvertex):GDBBoolean;
-function dxfvertexload1(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBInteger; out v:gdbvertex):GDBBoolean;
-function dxfGDBDoubleload(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBInteger; out v:GDBDouble):GDBBoolean;
-function dxfGDBFloatload(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBInteger; out v:GDBFloat):GDBBoolean;
-function dxfGDBIntegerload(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBInteger; out v:GDBInteger):GDBBoolean;
+function dxfvertexload(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBInteger; var v:gdbvertex):GDBBoolean;
+function dxfvertexload1(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBInteger; var v:gdbvertex):GDBBoolean;
+function dxfGDBDoubleload(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBInteger; var v:GDBDouble):GDBBoolean;
+function dxfGDBFloatload(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBInteger; var v:GDBFloat):GDBBoolean;
+function dxfGDBIntegerload(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBInteger; var v:GDBInteger):GDBBoolean;
 function dxfGDBStringload(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBInteger; var v:GDBString):GDBBoolean;overload;
 function dxfGDBStringload(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBInteger; var v:TDXFEntsInternalStringType):GDBBoolean;overload;
 function dxfGroupCode(const dxfcod:GDBInteger):GDBString;
@@ -206,7 +206,7 @@ begin
      result := f.readGDBSTRING;
 end;
 
-function dxfvertexload(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBInteger; out v:gdbvertex):GDBBoolean;
+function dxfvertexload(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBInteger; var v:gdbvertex):GDBBoolean;
 //var s:GDBString;
 begin
      result:=false;
@@ -214,7 +214,7 @@ begin
 else if currentdxfcod=dxfcod+10 then begin v.y:=readmystrtodouble(f); result:=true end
 else if currentdxfcod=dxfcod+20 then begin v.z:=readmystrtodouble(f); result:=true end;
 end;
-function dxfvertexload1(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBInteger; out v:gdbvertex):GDBBoolean;
+function dxfvertexload1(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBInteger; var v:gdbvertex):GDBBoolean;
 //var s:GDBString;
 begin
      result:=false;
@@ -222,18 +222,18 @@ begin
 else if currentdxfcod=dxfcod+1 then begin v.y:=readmystrtodouble(f); result:=true end
 else if currentdxfcod=dxfcod+2 then begin v.z:=readmystrtodouble(f); result:=true end;
 end;
-function dxfGDBDoubleload(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBInteger; out v:GDBDouble):GDBBoolean;
+function dxfGDBDoubleload(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBInteger; var v:GDBDouble):GDBBoolean;
 //var s:GDBString;
 begin
      result:=false;
      if currentdxfcod=dxfcod then begin v:=readmystrtodouble(f); result:=true end
 end;
-function dxfGDBFloatload(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBInteger; out v:GDBFloat):GDBBoolean;
+function dxfGDBFloatload(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBInteger; var v:GDBFloat):GDBBoolean;
 begin
      result:=false;
      if currentdxfcod=dxfcod then begin v:=readmystrtodouble(f); result:=true end
 end;
-function dxfGDBIntegerload(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBInteger; out v:GDBInteger):GDBBoolean;
+function dxfGDBIntegerload(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBInteger; var v:GDBInteger):GDBBoolean;
 //var s:GDBString;
 begin
      result:=false;

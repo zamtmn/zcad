@@ -167,20 +167,15 @@ function MyTimeToStr(MyTime:TDateTime):string;
 var
     Hour,Minute,Second,MilliSecond:word;
 begin
-     decodetime(MyTime,Hour,Minute,Second,MilliSecond);
-     if hour<>0 then
-                    result:=Format('%.2d:', [hour]);
-                            // inttostr(hour)+':';
-     if Minute<>0 then
-                    result:=result+Format('%.2d:', [minute]);
-                                   //inttostr(minute,2)+':';
-     if Second<>0 then
-                    result:=result+Format('%.2d.', [Second]);
-                                  //inttostr(Second,2)+'.';
-     //if MilliSecond<>0 then
-                    result:=result+Format('%.3d', [MilliSecond]);
-                                   //inttostr(MilliSecond,3);
-
+  result:='';
+  decodetime(MyTime,Hour,Minute,Second,MilliSecond);
+  if hour<>0 then
+    result:=Format('%.2d:',[hour]);
+  if Minute<>0 then
+    result:=result+Format('%.2d:', [minute]);
+  if Second<>0 then
+    result:=result+Format('%.2d.', [Second]);
+  result:=result+Format('%.3d', [MilliSecond]);
 end;
 
 procedure tlog.WriteToLog(s:AnsiString;todisk:boolean;t,dt:TDateTime;tick,dtick:int64;IncIndent:integer);

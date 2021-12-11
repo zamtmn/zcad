@@ -27,7 +27,7 @@ unit uzeparser;
 interface
 uses Generics.Collections,
      {$IFDEF FPC}gvector,gmap,gutil,gdeque,{$ENDIF}
-     sysutils,uzbhandles,uzbsets,StrUtils;
+     sysutils,uzbhandles,uzbsets,StrUtils,LCLProc;
 resourcestring
   rsRunTimeError='uzeparser: Execution error (%s)';
   rsProcessorClassNilError='uzeparser: ProcessorClass=nil (%s)';
@@ -309,7 +309,7 @@ type
 
     function ConfirmToken(Text:GTokenizerString;const SubStr:GManipulatorInterval;CurrentPos:GManipulatorCUIndex;TokenId:TTokenId;NextPos:GManipulatorCUIndex;var TokenDataVector:TTokenDataVector;var FirstSymbol:TGZTokenizer<GManipulator,GTokenizerString,GTokenizerSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GTokenizerSymbolToOptChar,GTokenizerDataType>):boolean;//inline;
     function SubGetToken(Text:GTokenizerString;const SubStr:GManipulatorInterval;var CurrentPos:GManipulatorCharIndex;out TokenTextInfo:TTokenTextInfo;level:integer;var IncludedCharsPos:TIncludedChars;var AllChars:TChars;var TokenDataVector:TTokenDataVector;var FirstSymbol:TGZTokenizer<GManipulator,GTokenizerString,GTokenizerSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GTokenizerSymbolToOptChar,GTokenizerDataType>):TTokenId;//inline;
-    function Sub2GetToken(Text:GTokenizerString;const SubStr:GManipulatorInterval;constref CurrentPos:GManipulatorCharIndex;out TokenTextInfo:TTokenTextInfo;level:integer;var TokenDataVector:TTokenDataVector;var FirstSymbol:TGZTokenizer<GManipulator,GTokenizerString,GTokenizerSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GTokenizerSymbolToOptChar,GTokenizerDataType>):TTokenId;//inline;
+    function Sub2GetToken(Text:GTokenizerString;const SubStr:GManipulatorInterval;constref CurrentPos:GManipulatorCharIndex;var TokenTextInfo:TTokenTextInfo;level:integer;var TokenDataVector:TTokenDataVector;var FirstSymbol:TGZTokenizer<GManipulator,GTokenizerString,GTokenizerSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GTokenizerSymbolToOptChar,GTokenizerDataType>):TTokenId;//inline;
     function GetToken(Text:GTokenizerString;const SubStr:GManipulatorInterval;CurrentPos:GManipulatorCharIndex;out TokenTextInfo:TTokenTextInfo;var IncludedCharsPos:TIncludedChars;var AllChars:TChars;var TokenDataVector:TTokenDataVector;var FirstSymbol:TGZTokenizer<GManipulator,GTokenizerString,GTokenizerSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GTokenizerSymbolToOptChar,GTokenizerDataType>):TTokenId;//inline;
 
     function GetSymbolData(const Text:GTokenizerString;const CurrentPos:GManipulatorCUIndex):TTokenizerMap.PTValue;//inline;
@@ -892,7 +892,7 @@ begin
   end;
   result:=dupestring('+',totallength);
   //SetLength(result,totallength);
-  cp:=StringCodePage(result);
+  //cp:=StringCodePage(result);
   //GManipulator.InitStartPos(ResultParam);
   ResultParam:=GManipulator.StartCharRange('');
   //ResultParam.StartPos:=InitialStartPos;
@@ -1022,6 +1022,7 @@ var
   //SubStrLastsym:integer;
   TaddResult:GManipulatorCharIndex;
 begin
+  TokenTextInfo.TokenPos.P:=CurrentPos;
   //SubStrLastsym:=SubStr.StartPos+SubStr.L-1;
   if isOnlyOneToken<>'' then begin
   while {GManipulator.PosToIndex(CurrentPos)<=SubStrLastsym}(GManipulator.PosInInterval(CurrentPos,SubStr.P,SubStr.CUL)=0)and(SubStr.CUL.CodeUnits>0) do begin
@@ -1147,7 +1148,7 @@ begin
     {result:=}map.MyGetMutableValue({UpCase}(GManipulator.CodeUnitAtPos(Text,CurrentPos)),{PTokenizerSymbolData}result);
 end;
 
-function TGZTokenizer<GManipulator,GTokenizerString,GTokenizerSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GTokenizerSymbolToOptChar,GTokenizerDataType>.Sub2GetToken(Text:GTokenizerString;const SubStr:GManipulatorInterval;constref CurrentPos:GManipulatorCharIndex;out TokenTextInfo:TTokenTextInfo;level:integer;var TokenDataVector:TTokenDataVector;var FirstSymbol:TGZTokenizer<GManipulator,GTokenizerString,GTokenizerSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GTokenizerSymbolToOptChar,GTokenizerDataType>):TTokenId;
+function TGZTokenizer<GManipulator,GTokenizerString,GTokenizerSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GTokenizerSymbolToOptChar,GTokenizerDataType>.Sub2GetToken(Text:GTokenizerString;const SubStr:GManipulatorInterval;constref CurrentPos:GManipulatorCharIndex;var TokenTextInfo:TTokenTextInfo;level:integer;var TokenDataVector:TTokenDataVector;var FirstSymbol:TGZTokenizer<GManipulator,GTokenizerString,GTokenizerSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GTokenizerSymbolToOptChar,GTokenizerDataType>):TTokenId;
 var
   PTokenizerSymbolData:TTokenizerMap.PTValue;
   OptChar:TOptChar;

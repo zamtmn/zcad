@@ -92,7 +92,7 @@ TSimpleDrawing= object(TAbstractDrawing)
                        procedure FreeConstructionObjects;virtual;
                        function GetChangeStampt:GDBBoolean;virtual;
                        function CreateDrawingRC(_maxdetail:GDBBoolean=false):TDrawContext;virtual;
-                       procedure FillDrawingPartRC(out dc:TDrawContext);virtual;
+                       procedure FillDrawingPartRC(var dc:TDrawContext);virtual;
                        function GetUnitsFormat:TzeUnitsFormat;virtual;
                        function CreateBlockDef(name:GDBString):GDBPointer;virtual;
                        procedure HardReDraw;
@@ -223,7 +223,7 @@ begin
        FillDrawingPartRC(result);
   end;
 end;
-procedure TSimpleDrawing.FillDrawingPartRC(out dc:TDrawContext);
+procedure TSimpleDrawing.FillDrawingPartRC(var dc:TDrawContext);
 begin
   dc.DrawingContext.VisibleActualy:=Getpcamera.POSCOUNT;
   dc.DrawingContext.InfrustumActualy:=Getpcamera.POSCOUNT;

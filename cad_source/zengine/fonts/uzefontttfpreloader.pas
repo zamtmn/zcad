@@ -235,9 +235,10 @@ begin
     end;
 
     (*workaround https://bugs.freepascal.org/view.php?id=38351*)
-    ulong(TableDir.version):=TTCHeader.Tag;
     AStream.Seek({0}4,soBeginning);
     TableDir:=readTablreDir(AStream);
+    ulong(TableDir.version):=TTCHeader.Tag;
+
 
     if (TableDir.version <> $10000   )(* MS fonts  *) and
        (TableDir.version <> $74727565)(* Mac fonts *) then begin

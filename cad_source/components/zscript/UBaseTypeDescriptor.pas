@@ -604,7 +604,7 @@ begin
      AliasUInt64DescriptorOdj.init2(@FundamentalQWordDescriptorObj,'UInt64',nil);
 
      {$ifdef CPU64}
-       AliasPtrUIntDescriptorOdj.init2(@AliasDWordDescriptorOdj,'QWord',nil);
+       AliasPtrUIntDescriptorOdj.init2(@FundamentalQWordDescriptorObj,'PtrUInt',nil);
        AliasPtrIntDescriptorOdj.init2(@FundamentalInt64Descriptor,'PtrInt',nil);
      {$endif CPU64}
 

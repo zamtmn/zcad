@@ -229,6 +229,7 @@ uses
   uzccommand_exporttexttocsv,
   uzccommand_dataexport,uzccommand_dataimport,
   uzccommand_extdrentslist,uzccommand_extdralllist,uzccommand_extdradd,
+  uzccommand_DevDefSync,
 
   uzcenitiesvariablesextender,uzcExtdrLayerControl,uzcExtdrSmartTextEnt,
 

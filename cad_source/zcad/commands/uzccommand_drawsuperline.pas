@@ -137,13 +137,13 @@ begin
     begin
       //ищем переменную 'NMO_Name'
       pvd:=psu.FindVariable('NMO_Name');
-      pgdbstring(pvd^.data.Instance)^:=nameSL;
+      pgdbstring(pvd^.data.Addr.Instance)^:=nameSL;
       //если найдена
       if pvd<>nil then
       begin
         //получаем желаемое имя слоя
         layername:=LayerNamePrefix+nameSL;
-        //pvd.data.PTD^.GetValueAsString(pvd.data.Instance);
+        //pvd.data.PTD^.GetValueAsString(pvd.Instance);
         //ищем описание слоя по имени
 
         player:=drawings.GetCurrentDWG.LayerTable.getAddres(Tria_Utf8ToAnsi(layername));
@@ -192,7 +192,7 @@ begin
       if pvd<>nil then
       begin
         //получаем желаемое имя слоя
-        layername:=DrawSuperlineParams.LayerNamePrefix+pvd.data.PTD^.GetValueAsString(pvd.data.Instance);
+        layername:=DrawSuperlineParams.LayerNamePrefix+pvd.data.PTD^.GetValueAsString(pvd.data.Addr.Instance);
         //ищем описание слоя по имени
 
         player:=drawings.GetCurrentDWG.LayerTable.getAddres(Tria_Utf8ToAnsi(layername));

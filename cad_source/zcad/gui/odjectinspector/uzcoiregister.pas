@@ -73,10 +73,10 @@ begin
   SetCurrentObjDefault;
   //pint:=SavedUnit.FindValue('VIEW_ObjInspV');
   SetNameColWidth(Form.Width div 2);
-  pint:=SavedUnit.FindValue('VIEW_ObjInspSubV');
+  pint:=SavedUnit.FindValue('VIEW_ObjInspSubV').data.Addr.Instance;
   if assigned(pint)then
                        SetNameColWidth(pint^);
-  pint:=SavedUnit.FindValue('VIEW_ObjInspV');
+  pint:=SavedUnit.FindValue('VIEW_ObjInspV').data.Addr.Instance;
   if assigned(pint)then
                        SetLastClientWidth(pint^);
   TBNode:=nil;
@@ -171,7 +171,7 @@ begin
                   pv:={PTObjectUnit(pobj.ou.Instance)}pentvarext.entityunit.FindVariable(valkey);
                   if pv<>nil then
                   begin
-                       vv:=pv.data.PTD.GetValueAsString(pv.data.Instance);
+                       vv:=pv.data.PTD.GetValueAsString(pv.data.Addr.Instance);
                        if vv<>'' then
 
                        vsa.PushBackIfNotPresent(vv);

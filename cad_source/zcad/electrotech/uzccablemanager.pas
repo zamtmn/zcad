@@ -96,7 +96,7 @@ begin
                 //pvn:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('NMO_Name');
                 pvn:=pentvarext.entityunit.FindVariable('NMO_Name');      //находим обозначение кабеля (ШС2)
                 if pvn<>nil then
-                                sname:=pgdbstring(pvn^.data.Instance)^
+                                sname:=pgdbstring(pvn^.data.Addr.Instance)^
                             else
                                 sname:=rsNameAbsent;
                 if sname='RS' then
@@ -106,7 +106,7 @@ begin
                 //pvn:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('AmountD');
                 pvn:=pentvarext.entityunit.FindVariable('AmountD');              //получаем длину кабеля
                 if pvn<>nil then
-                                pcd^.length:=pcd^.length+pgdbdouble(pvn^.data.Instance)^; //доюавляем к шлейфу общую длину
+                                pcd^.length:=pcd^.length+pgdbdouble(pvn^.data.Addr.Instance)^; //доюавляем к шлейфу общую длину
            end;
            pobj:=drawings.GetCurrentROOT.ObjArray.iterate(ir);    //следующий элемент в списке чертежа
      until pobj=nil;
@@ -131,8 +131,8 @@ begin
                       //pvn2:=PTObjectUnit(pobj2^.ou.Instance)^.FindVariable('CABLE_Segment');
                       pvn :=pentvarext.entityunit.FindVariable('CABLE_Segment');
                       pvn2:=pentvarext2.entityunit.FindVariable('CABLE_Segment');
-                      if pgdbinteger(pvn^.data.Instance)^<
-                         pgdbinteger(pvn2^.data.Instance)^ then
+                      if pgdbinteger(pvn^.data.Addr.Instance)^<
+                         pgdbinteger(pvn2^.data.Addr.Instance)^ then
                          begin
                               tp:=p2^;
                               p2^:=p1^;
@@ -181,13 +181,13 @@ begin
                                       pvn2:=FindVariableInEnt(pcd^.EndDevice,'RiserName');
                                       if (pvn<>nil)and(pvn2<>nil)then
                                       begin
-                                           if pstring(pvn^.data.Instance)^=pstring(pvn2^.data.Instance)^ then
+                                           if pstring(pvn^.data.Addr.Instance)^=pstring(pvn2^.data.Addr.Instance)^ then
                                            begin
                                                 pvn :=FindVariableInEnt(pnp^.DevLink,'Elevation');
                                                 pvn2:=FindVariableInEnt(pcd^.EndDevice,'Elevation');
                                                 if (pvn<>nil)and(pvn2<>nil)then
                                                 begin
-                                                     pcd^.length:=pcd^.length+abs(pgdbdouble(pvn^.data.Instance)^-pgdbdouble(pvn2^.data.Instance)^);
+                                                     pcd^.length:=pcd^.length+abs(pgdbdouble(pvn^.data.Addr.Instance)^-pgdbdouble(pvn2^.data.Addr.Instance)^);
                                                 end;
                                            end;
                                       end;

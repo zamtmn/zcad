@@ -50,14 +50,14 @@ begin
      begin
            pu:=PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
            pvd:=pu^.FindVariable('DBCounter');
-           vn:=inttostr(GDBInteger(pvd.data.Instance^));
+           vn:=inttostr(GDBInteger(pvd.data.Addr.Instance^));
            vn:='_EQ'+dupestring('0',6-length(vn))+vn;
-           pu.createvariable(vn,PUserTypeDescriptor(PTTypedData(commandmanager.ContextCommandParams).ptd)^.TypeName);
-           p:=pu.FindVariable(vn).data.Instance;
+           pu.CreateVariable(vn,PUserTypeDescriptor(PTTypedData(commandmanager.ContextCommandParams).ptd)^.TypeName);
+           p:=pu.FindVariable(vn).data.Addr.Instance;
            PObjectDescriptor(PTTypedData(commandmanager.ContextCommandParams)^.ptd)^.RunMetod('initnul',p);
-           PUserTypeDescriptor(PTTypedData(commandmanager.ContextCommandParams)^.ptd)^.CopyInstanceTo(PTTypedData(commandmanager.ContextCommandParams)^.Instance,p);
+           PUserTypeDescriptor(PTTypedData(commandmanager.ContextCommandParams)^.ptd)^.CopyInstanceTo(PTHardTypedData(commandmanager.ContextCommandParams)^.Instance,p);
            //PObjectDescriptor(PTTypedData(commandmanager.ContextCommandParams)^.ptd)^.RunMetod('format',p);
-           inc(GDBInteger(pvd.data.Instance^));
+           inc(GDBInteger(pvd.data.Addr.Instance^));
      end
         else
             ZCMsgCallBackInterface.TextMessage(rscmCommandOnlyCTXMenu,TMWOHistoryOut);
@@ -75,7 +75,7 @@ begin
      if commandmanager.ContextCommandParams<>nil then
      begin
            pu:=PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
-           pdbv:=pu.InterfaceVariables.findvardescbyinst(PTTypedData(commandmanager.ContextCommandParams)^.Instance);
+           pdbv:=pu.InterfaceVariables.findvardescbyinst(PTHardTypedData(commandmanager.ContextCommandParams)^.Instance);
            if pdbv<>nil then
            begin
                  if SingleLineTextEditorForm=nil then
@@ -135,17 +135,17 @@ begin
             pdbu:=pum^.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
             if pdbu<>nil then
             begin
-              pdbv:=pdbu^.FindVariable(pstring(pvn.data.Instance)^);
+              pdbv:=pdbu^.FindVariable(pstring(pvn.data.Addr.Instance)^);
               if pdbv<>nil then
-                               pstring(pvnt.data.Instance)^:=PDbBaseObject(pdbv.data.Instance)^.Name
+                               pstring(pvnt.data.Addr.Instance)^:=PDbBaseObject(pdbv.data.Addr.Instance)^.Name
                            else
-                               pstring(pvnt.data.Instance)^:='Error!!!';
+                               pstring(pvnt.data.Addr.Instance)^:='Error!!!';
               exit;
             end;
           end;
      end;
      if pvnt<>nil then
-                      pstring(pvnt.data.Instance)^:='Error!!!'
+                      pstring(pvnt.data.Addr.Instance)^:='Error!!!'
 end;
 function DBaseLink_com(operands:TCommandOperands):TCommandResult;
 var //t:PUserTypeDescriptor;
@@ -163,7 +163,7 @@ begin
      if commandmanager.ContextCommandParams<>nil then
      begin
            pu:=PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
-           pdbv:=pu.InterfaceVariables.findvardescbyinst(PTTypedData(commandmanager.ContextCommandParams)^.Instance);
+           pdbv:=pu.InterfaceVariables.findvardescbyinst(PTHardTypedData(commandmanager.ContextCommandParams)^.Instance);
            if pdbv<>nil then
            begin
                  c:=0;
@@ -176,7 +176,7 @@ begin
                                                pvd:=pentvarext.entityunit.FindVariable('DB_link');
                                                if pvd<>nil then
                                                begin
-                                                    PGDBString(pvd^.data.Instance)^:=pdbv^.name;
+                                                    PGDBString(pvd^.data.Addr.Instance)^:=pdbv^.name;
                                                     DBLinkProcess(pv,drawings.GetCurrentDWG^);
                                                     inc(c);
                                                end;

@@ -60,7 +60,7 @@ var
    matrixs:tmatrixs;
 begin
      vd:=commandmanager.GetValue;
-     p1:=pgdbvertex(vd.data.Instance)^;
+     p1:=pgdbvertex(vd.data.Addr.Instance)^;
 
      p2:=createvertex(p1.x,point.y,p1.z);
      p4:=createvertex(point.x,p1.y,point.z);

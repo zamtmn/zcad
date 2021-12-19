@@ -85,7 +85,7 @@ begin
      if pvd=nil then
                     result:=LT_Normal
                 else
-                    result:=PTLinkType(pvd.data.Instance)^;
+                    result:=PTLinkType(pvd.data.Addr.Instance)^;
   end
   else
       result:=LT_Normal;
@@ -102,7 +102,7 @@ begin
      if pvd=nil then
                     result:=Vertexlength(pv^.CoordInWCS.lbegin,pv^.CoordInWCS.lend)
                 else
-                    result:=PGDBDouble(pvd.data.Instance)^;
+                    result:=PGDBDouble(pvd.data.Addr.Instance)^;
      end
         else
             result:=Vertexlength(pv^.CoordInWCS.lbegin,pv^.CoordInWCS.lend);

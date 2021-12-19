@@ -178,6 +178,7 @@ varmanager=object(varmanagerdef)
                  function findvardescbytype(pt:PUserTypeDescriptor):pvardesk;virtual;
                  function createvariable(varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0): pvardesk;virtual;
                  function findfieldcustom(var pdesc: pGDBByte; var offset: GDBInteger;var tc:PUserTypeDescriptor; nam: ShortString): GDBBoolean;virtual;
+                 function getDS:Pointer;virtual;
                  destructor done;virtual;
                  procedure free;virtual;
            end;
@@ -191,11 +192,12 @@ TSimpleUnit=object(TAbstractUnit)
                   InterfaceVariables: varmanager;
                   constructor init(nam:TInternalScriptString);
                   destructor done;virtual;
-                  function CreateVariable(varname,vartype:TInternalScriptString;_pinstance:pointer=nil):GDBPointer;virtual;
+                  function CreateFixedVariable(varname,vartype:TInternalScriptString;_pinstance:pointer):GDBPointer;virtual;
+                  function CreateVariable(varname,vartype:TInternalScriptString):vardesk;virtual;
                   function FindVariable(varname:TInternalScriptString):pvardesk;virtual;
                   function FindVariableByInstance(_Instance:GDBPointer):pvardesk;virtual;
-                  function FindValue(varname:TInternalScriptString):GDBPointer;virtual;
-                  function FindOrCreateValue(varname,vartype:TInternalScriptString):GDBPointer;virtual;
+                  function FindValue(varname:TInternalScriptString):pvardesk;virtual;
+                  function FindOrCreateValue(varname,vartype:TInternalScriptString):vardesk;virtual;
                   function TypeName2PTD(n: TInternalScriptString):PUserTypeDescriptor;virtual;
                   function SaveToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;
                   function SavePasToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;abstract;
@@ -252,7 +254,7 @@ function FindCategory(category:TInternalScriptString;var catname:TInternalScript
 procedure SetCategoryCollapsed(category:TInternalScriptString;value:GDBBoolean);
 function GetBoundsFromSavedUnit(name:string;w,h:integer):Trect;
 procedure StoreBoundsToSavedUnit(name:string;tr:Trect);
-procedure SetTypedDataVariable(out TypedTataVariable:TTypedData;pTypedTata:pointer;TypeName:string);
+procedure SetTypedDataVariable(out TypedTataVariable:THardTypedData;pTypedTata:pointer;TypeName:string);
 function GetIntegerFromSavedUnit(name,suffix:string;def,min,max:integer):integer;
 function GetAnsiStringFromSavedUnit(name,suffix:ansistring;def:ansistring):ansistring;
 procedure StoreIntegerToSavedUnit(name,suffix:string;value:integer);
@@ -260,7 +262,7 @@ procedure StoreAnsiStringToSavedUnit(name,suffix:string;value:string);
 implementation
 uses strmy;
 
-procedure SetTypedDataVariable(out TypedTataVariable:TTypedData;pTypedTata:pointer;TypeName:string);
+procedure SetTypedDataVariable(out TypedTataVariable:THardTypedData;pTypedTata:pointer;TypeName:string);
 var
   ptd:PUserTypeDescriptor;
 begin
@@ -287,45 +289,61 @@ begin
 end;
 function GetIntegerFromSavedUnit(name,suffix:string;def,min,max:integer):integer;
 var
-   pint:PGDBInteger;
+  pvd:pvardesk;
+  pint:PGDBInteger;
 begin
-  pint:=SavedUnit.FindValue(name+suffix);
-  if assigned(pint)then begin
-    result:=pint^;
-    result:=setfrominterval(result,min,max);
+  pvd:=SavedUnit.FindValue(name+suffix);
+  if assigned(pvd) then begin
+    pint:=pvd.data.Addr.Instance;
+    if assigned(pint)then begin
+      result:=pint^;
+      result:=setfrominterval(result,min,max);
+    end else
+      result:=def;
   end else
     result:=def;
 end;
 function GetAnsiStringFromSavedUnit(name,suffix:ansistring;def:ansistring):ansistring;
 var
-   pstr:PAnsiString;
+  pvd:pvardesk;
+  pstr:PAnsiString;
 begin
-  pstr:=SavedUnit.FindValue(name+suffix);
-  if assigned(pstr)then begin
-    result:=pstr^;
+  pvd:=SavedUnit.FindValue(name+suffix);
+  if assigned(pvd) then begin
+    pstr:=pvd.data.Addr.Instance;
+    if assigned(pstr)then begin
+      result:=pstr^;
+    end else
+      result:=def;
   end else
     result:=def;
 end;
 procedure StoreIntegerToSavedUnit(name,suffix:string;value:integer);
 var
    pint:PGDBInteger;
+   pvd:pvardesk;
    vn:TInternalScriptString;
 begin
      vn:=name+suffix;
-     pint:=SavedUnit.FindValue(vn);
-     if not assigned(pint)then
-       pint:=SavedUnit.CreateVariable(vn,'GDBInteger');
+     pvd:=SavedUnit.FindValue(vn);
+     if not assigned(pvd) then
+       pint:=SavedUnit.CreateVariable(vn,'GDBInteger').data.Addr.instance
+     else
+       pint:=pvd^.data.Addr.Instance;
      pint^:=value;
 end;
 procedure StoreAnsiStringToSavedUnit(name,suffix:string;value:string);
 var
    pas:PAnsiString;
+   pvd:pvardesk;
    vn:TInternalScriptString;
 begin
      vn:=name+suffix;
-     pas:=SavedUnit.FindValue(vn);
-     if not assigned(pas)then
-       pas:=SavedUnit.CreateVariable(vn,'GDBAnsiString');
+     pvd:=SavedUnit.FindValue(vn);
+     if not assigned(pvd) then
+       pas:=SavedUnit.CreateVariable(vn,'GDBAnsiString').data.Addr.instance
+     else
+       pas:=pvd^.data.Addr.Instance;
      pas^:=value;
 end;
 function GetBoundsFromSavedUnit(name:string;w,h:integer):Trect;
@@ -333,18 +351,18 @@ var
    pint:PGDBInteger;
 begin
      result:=rect(0,0,100,100);
-     pint:=SavedUnit.FindValue(name+SuffLeft);
+     pint:=SavedUnit.FindValue(name+SuffLeft).data.Addr.Instance;
      if assigned(pint)then
                           result.Left:=pint^;
      result.Left:=setfrominterval(result.Left,0,w);
-     pint:=SavedUnit.FindValue(name+SuffTop);
+     pint:=SavedUnit.FindValue(name+SuffTop).data.Addr.Instance;
      if assigned(pint)then
                           result.Top:=pint^;
      result.Top:=setfrominterval(result.Top,0,h);
-     pint:=SavedUnit.FindValue(name+SuffWidth);
+     pint:=SavedUnit.FindValue(name+SuffWidth).data.Addr.Instance;
      if assigned(pint)then
                           result.Right:=result.Left+pint^;
-     pint:=SavedUnit.FindValue(name+SuffHeight);
+     pint:=SavedUnit.FindValue(name+SuffHeight).data.Addr.Instance;
      if assigned(pint)then
                           result.Bottom:=result.Top+pint^;
 end;
@@ -354,24 +372,24 @@ var
    vn:TInternalScriptString;
 begin
      vn:=name+SuffLeft;
-     pint:=SavedUnit.FindValue(vn);
+     pint:=SavedUnit.FindValue(vn).data.Addr.Instance;
      if not assigned(pint)then
-                              pint:=SavedUnit.CreateVariable(vn,'GDBInteger');
+                              pint:=SavedUnit.CreateVariable(vn,'GDBInteger').data.Addr.instance;
      pint^:=tr.Left;
      vn:=name+SuffTop;
-     pint:=SavedUnit.FindValue(vn);
+     pint:=SavedUnit.FindValue(vn).data.Addr.Instance;
      if not assigned(pint)then
-                              pint:=SavedUnit.CreateVariable(vn,'GDBInteger');
+                              pint:=SavedUnit.CreateVariable(vn,'GDBInteger').data.Addr.instance;
      pint^:=tr.Top;
      vn:=name+SuffWidth;
-     pint:=SavedUnit.FindValue(vn);
+     pint:=SavedUnit.FindValue(vn).data.Addr.Instance;
      if not assigned(pint)then
-                              pint:=SavedUnit.CreateVariable(vn,'GDBInteger');
+                              pint:=SavedUnit.CreateVariable(vn,'GDBInteger').data.Addr.instance;
      pint^:=tr.Right-tr.Left;
      vn:=name+SuffHeight;
-     pint:=SavedUnit.FindValue(vn);
+     pint:=SavedUnit.FindValue(vn).data.Addr.Instance;
      if not assigned(pint)then
-                              pint:=SavedUnit.CreateVariable(vn,'GDBInteger');
+                              pint:=SavedUnit.CreateVariable(vn,'GDBInteger').data.Addr.instance;
      pint^:=tr.Bottom-tr.Top;
 end;
 procedure TSimpleUnit.CopyTo;
@@ -394,7 +412,7 @@ begin
           if source^.FindVariable(pv^.name)=nil then begin
             source^.setvardesc(vd,pv^.name,pv^.username,pv^.data.ptd^.TypeName);
             source^.InterfaceVariables.createvariable(vd.name, vd);
-            pv^.data.ptd^.CopyInstanceTo(pv^.data.Instance,vd.data.Instance);
+            pv^.data.ptd^.CopyInstanceTo(pv^.data.Addr.Instance,vd.data.Addr.Instance);
           end;
           pv:=InterfaceVariables.vardescarray.iterate(ir);
         until pv=nil;
@@ -419,7 +437,7 @@ begin
           if FindVariable(pv^.name)=nil then begin
               setvardesc(vd,pv^.name,pv^.username,pv^.data.ptd^.TypeName);
               InterfaceVariables.createvariable(vd.name, vd);
-              pv^.data.ptd^.CopyInstanceTo(pv^.data.Instance,vd.data.Instance);
+              pv^.data.ptd^.CopyInstanceTo(pv^.data.Addr.Instance,vd.data.Addr.Instance);
           end;
           pv:=source.InterfaceVariables.vardescarray.iterate(ir);
         until pv=nil;
@@ -620,8 +638,8 @@ begin
                           if pv<>nil then
                             repeat
                                  //membuf.TXTAddGDBString('  '+pv^.name+':=');
-                                 pv.data.PTD.SavePasToMem(membuf,pv.data.Instance,'  '+pv^.name);
-                                 {value:=pv.data.PTD.GetValueAsString(pv.data.Instance);
+                                 pv.data.PTD.SavePasToMem(membuf,pv.data.Addr.Instance,'  '+pv^.name);
+                                 {value:=pv.data.PTD.GetValueAsString(pv.Instance);
                                  if pv.data.PTD=@FundamentalStringDescriptorObj then
                                              value:=''''+value+'''';
 
@@ -655,10 +673,10 @@ begin
      pvardesk(p)^.name:='';
      pvardesk(p)^.username:='';
 
-     pvardesk(p)^.data.ptd^.MagicFreeInstance(pvardesk(p)^.data.Instance);
+     pvardesk(p)^.data.ptd^.MagicFreeInstance(pvardesk(p)^.data.Addr.Instance);
 
      //if pvardesk(p)^.data.ptd=@FundamentalStringDescriptorObj then
-       //                                                   pgdbstring(pvardesk(p)^.data.Instance)^:='';
+       //                                                   pgdbstring(pvardesk(p)^.Instance)^:='';
      pvardesk(p)^.data.ptd:=nil;
      //gdbfreemem(pvardesk(p)^.pvalue);
 end;
@@ -799,7 +817,8 @@ begin
   varname := readspace(varname);
   vd.name := varname;
   vd.username := username;
-  vd.data.Instance := _pinstance;
+  vd.SetInstance(_pinstance);
+  //vd.Instance := _pinstance;
   vd.data.ptd:={SysUnit.}TypeName2PTD(typename);
 
   if vd.data.ptd=nil then
@@ -812,8 +831,8 @@ begin
 end;
 constructor varmanager.init;
 begin
-  vardescarray.init({$IFDEF DEBUGBUILD}'{7216CFFF-47FA-4F4E-BE07-B12E967EEF91} - описания переменных',{$ENDIF}50{,sizeof(vardesk)});
-  vararray.init({$IFDEF DEBUGBUILD}'{834B86B5-4581-4C93-8446-8CEE664A66A2} - содержимое переменных',{$ENDIF}20024); { TODO: из описания переменной пужно относительную ссылку на значение. рушится при реаллокации }
+  vardescarray.init({$IFDEF DEBUGBUILD}'{7216CFFF-47FA-4F4E-BE07-B12E967EEF91} - описания переменных',{$ENDIF}128{,sizeof(vardesk)});
+  vararray.init({$IFDEF DEBUGBUILD}'{834B86B5-4581-4C93-8446-8CEE664A66A2} - содержимое переменных',{$ENDIF}1024); { TODO: из описания переменной пужно относительную ссылку на значение. рушится при реаллокации }
 end;
 destructor varmanager.done;
 begin
@@ -842,10 +861,11 @@ begin
                           begin
                                size:=1;
                           end;
-       if vd.data.Instance=nil then
+       if vd.data.Addr.Instance=nil then
        begin
-         vd.data.Instance:=vararray.getDataMutable(vararray.AllocData(size));
-         vd.data.PTD.InitInstance(vd.data.Instance);
+         vd.SetInstance(@vararray,vararray.AllocData(size));
+         //vd.Instance:=vararray.getDataMutable(vararray.AllocData(size));
+         vd.data.PTD.InitInstance(vd.data.Addr.Instance);
        end;
        vd.attrib:=attr;
        i:=vardescarray.PushBackData(vd);
@@ -1114,6 +1134,11 @@ begin
                                                              end;
      until typ=objend;
 end;
+function varmanager.getDS:Pointer;
+begin
+  result:=vararray.PArray;
+end;
+
 function varmanager.findfieldcustom;
 var
   path,{sp,} {typeGDBString,} sub, {field,} inds: TInternalScriptString;
@@ -1300,7 +1325,7 @@ begin
   pdesc:=self.vardescarray.beginiterate(ir);
   if pdesc<>nil then
   repeat
-        if pdesc.data.Instance=varinst then
+        if pdesc.data.Addr.Instance=varinst then
         begin
              result:=pdesc;
              exit;
@@ -1365,10 +1390,12 @@ begin
             gdbgetmem({$IFDEF DEBUGBUILD}'{9A28C83C-C227-41B1-A334-365942DC17CB}',{$ENDIF}GDBPointer(temp),sizeof(vardesk));
             fillchar(temp^,sizeof(vardesk),0);
             //new(temp);
-            temp^.data.Instance := pvardesk(pdesc)^.data.Instance;
+            temp^.data:=pvardesk(pdesc)^.data;
+            //temp^.Instance := pvardesk(pdesc)^.Instance;
             temp^.name := invar;
             temp^.data.ptd := bc;
-            inc(pGDBByte(temp^.data.Instance), offset);
+            temp^.data.Addr.Instt.offs:=temp^.data.Addr.Instt.offs+offset;
+            //inc(pGDBByte(temp^.Instance), offset);
             result := temp;
             exit;
           end;
@@ -1378,10 +1405,12 @@ begin
           gdbgetmem({$IFDEF DEBUGBUILD}'{8E7E4D67-1D25-4D95-BB32-04D2F00BC201}',{$ENDIF}GDBPointer(temp),sizeof(vardesk));
           fillchar(temp^,sizeof(vardesk),0);
           //new(temp);
-          temp^.data.Instance := pvardesk(pdesc)^.data.Instance;
+          temp^.data:=pvardesk(pdesc)^.data;
+          //temp^.Instance := pvardesk(pdesc)^.Instance;
           temp^.name := invar;
           temp^.data.ptd := bc;
-          inc(pGDBByte(temp^.data.Instance), offset);
+          temp^.data.Addr.Instt.offs:=temp^.data.Addr.Instt.offs+offset;
+          //inc(pGDBByte(temp^.Instance), offset);
           result := temp;
           exit;
         end
@@ -1461,21 +1490,28 @@ begin
      InterfaceUses.done;
      name:='';
 end;
-function tsimpleunit.FindValue(varname:TInternalScriptString):GDBPointer;
+function tsimpleunit.FindValue(varname:TInternalScriptString):pvardesk;
 var
   temp:pvardesk;
 begin
      temp:=findvariable(varname);
      if assigned(temp)then
-                          result:=temp^.data.Instance
+                          result:=temp{^.Instance}
                       else
                           result:=nil;
 end;
-function tsimpleunit.FindOrCreateValue(varname,vartype:TInternalScriptString):GDBPointer;
+function tsimpleunit.FindOrCreateValue(varname,vartype:TInternalScriptString):vardesk;
+var
+  temp:pvardesk;
 begin
-  result:=FindValue(varname);
+  temp:=FindValue(varname);
+  if temp=nil then
+    result:=CreateVariable(varname,vartype)
+  else
+    result:=temp^;
+  {result:=FindValue(varname);
   if result=nil then
-    result:=CreateVariable(varname,vartype);
+    result:=CreateVariable(varname,vartype);}
 end;
 
 function tsimpleunit.FindVariableByInstance(_Instance:GDBPointer):pvardesk;
@@ -1514,21 +1550,23 @@ begin
                             until p=nil;
      end;
 end;
-function tsimpleunit.createvariable(varname,vartype:TInternalScriptString;_pinstance:pointer=nil):GDBPointer;
-var //t:PUserTypeDescriptor;
-    //pvd:pvardesk;
-    vd:vardesk;
+function tsimpleunit.CreateFixedVariable(varname,vartype:TInternalScriptString;_pinstance:pointer):GDBPointer;
+var
+  vd:vardesk;
 begin
-     {t:=TypeName2PTD(vartype);
-     pvd:=findvariable(varname);
-
-     vd.name:=varname;
-     vd.pvalue:=nil;
-     vd.ptd:=t;}
-     setvardesc(vd, varname,'', vartype,_pinstance);
-     InterfaceVariables.createvariable(varname,vd);
-     result:=vd.data.Instance;
+  setvardesc(vd, varname,'', vartype,_pinstance);
+  InterfaceVariables.createvariable(varname,vd);
+  result:=vd.data.Addr.Instance;
 end;
+function tsimpleunit.CreateVariable(varname,vartype:TInternalScriptString):vardesk;
+var
+  vd:vardesk;
+begin
+  setvardesc(vd, varname,'', vartype);
+  InterfaceVariables.createvariable(varname,vd);
+  result:=vd;
+end;
+
 constructor tunit.init(nam: TInternalScriptString);
 begin
   inherited init(nam);
@@ -1587,9 +1625,9 @@ begin
               pv:=InterfaceVariables.vardescarray.beginiterate(ir);
                           if pv<>nil then
                             repeat
-                                 pv.data.PTD.SavePasToMem(membuf,pv.data.Instance,'  '+pv^.name);
+                                 pv.data.PTD.SavePasToMem(membuf,pv.data.Addr.Instance,'  '+pv^.name);
                                  {membuf.TXTAddGDBString('  '+pv^.name+':=');
-                                 value:=pv.data.PTD.GetValueAsString(pv.data.Instance);
+                                 value:=pv.data.PTD.GetValueAsString(pv.Instance);
                                  if pv.data.PTD=@FundamentalStringDescriptorObj then
                                              value:=''''+value+'''';
 
@@ -1682,7 +1720,7 @@ var
 begin
      vd:=InterfaceVariables.findvardesc(symbolname);
      if vd<>nil then
-     pointer(psymbol):=vd^.data.Instance;
+     pointer(psymbol):=vd^.data.Addr.Instance;
 end;
 function FindCategory(category:TInternalScriptString;var catname:TInternalScriptString):Pointer;
 var

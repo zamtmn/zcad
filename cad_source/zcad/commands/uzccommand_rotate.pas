@@ -52,7 +52,7 @@ begin
    if (commandmanager.GetValueHeap{-vs})>0 then
    begin
    v1:=commandmanager.PopValue;
-   td:=Pgdbdouble(v1.data.Instance)^*pi/180;
+   td:=Pgdbdouble(v1.data.Addr.Instance)^*pi/180;
    rot(td,MZW_LBUTTON);
    end;
 end;

@@ -56,7 +56,7 @@ begin
           exit;
      end;
      vd:=commandmanager.PopValue;
-     point:=pgdbvertex(vd.data.Instance)^;
+     point:=pgdbvertex(vd.data.Addr.Instance)^;
      //c1:=cs;
      c1:=commandmanager.GetValueHeap;
      if c2<>-1 then

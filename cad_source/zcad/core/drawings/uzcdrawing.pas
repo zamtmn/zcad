@@ -77,7 +77,7 @@ begin
   if DWGUnit<>nil then
     vd:=DWGUnit.InterfaceVariables.findvardesc('DWG_LTScale');
   if vd<>nil then
-                 dc.DrawingContext.GlobalLTScale:=dc.DrawingContext.GlobalLTScale*PGDBDouble(vd^.data.Instance)^;
+                 dc.DrawingContext.GlobalLTScale:=dc.DrawingContext.GlobalLTScale*PGDBDouble(vd^.data.Addr.Instance)^;
   if commandmanager.pcommandrunning<>nil then
                                                dc.DrawingContext.DrawHeplGeometryProc:=commandmanager.pcommandrunning^.DrawHeplGeometry;
 end;
@@ -232,29 +232,29 @@ begin
   pdwgwarsunit:=pointer(DWGUnits.CreateObject);
   pdwgwarsunit^.init('DrawingVars');
   pdwgwarsunit.InterfaceUses.PushBackIfNotPresent(SysUnit);
-  pdwgwarsunit^.CreateVariable('DWG_DrawMode','GDBBoolean',@LWDisplay);
-  pdwgwarsunit^.CreateVariable('DWG_SnapGrid','GDBBoolean',@SnapGrid);
-  pdwgwarsunit^.CreateVariable('DWG_DrawGrid','GDBBoolean',@DrawGrid);
-  pdwgwarsunit^.CreateVariable('DWG_GridSpacing','GDBvertex2D',@GridSpacing);
-  pdwgwarsunit^.CreateVariable('DWG_Snap','GDBSnap2D',@Snap);
-  pdwgwarsunit^.CreateVariable('DWG_CLayer','PGDBLayerProp',@CurrentLayer);
-  pdwgwarsunit^.CreateVariable('DWG_CLType','PGDBLtypeProp',@CurrentLType);
-  pdwgwarsunit^.CreateVariable('DWG_CTStyle','PGDBTextStyle',@CurrentTextStyle);
-  pdwgwarsunit^.CreateVariable('DWG_CDimStyle','PGDBDimStyle',@CurrentDimStyle);
-  pdwgwarsunit^.CreateVariable('DWG_CLinew','TGDBLineWeight',@CurrentLineW);
-  pdwgwarsunit^.CreateVariable('DWG_CLTScale','GDBDouble',@CLTScale);
-  pdwgwarsunit^.CreateVariable('DWG_CColor','GDBInteger',@CColor);
+  pdwgwarsunit^.CreateFixedVariable('DWG_DrawMode','GDBBoolean',@LWDisplay);
+  pdwgwarsunit^.CreateFixedVariable('DWG_SnapGrid','GDBBoolean',@SnapGrid);
+  pdwgwarsunit^.CreateFixedVariable('DWG_DrawGrid','GDBBoolean',@DrawGrid);
+  pdwgwarsunit^.CreateFixedVariable('DWG_GridSpacing','GDBvertex2D',@GridSpacing);
+  pdwgwarsunit^.CreateFixedVariable('DWG_Snap','GDBSnap2D',@Snap);
+  pdwgwarsunit^.CreateFixedVariable('DWG_CLayer','PGDBLayerProp',@CurrentLayer);
+  pdwgwarsunit^.CreateFixedVariable('DWG_CLType','PGDBLtypeProp',@CurrentLType);
+  pdwgwarsunit^.CreateFixedVariable('DWG_CTStyle','PGDBTextStyle',@CurrentTextStyle);
+  pdwgwarsunit^.CreateFixedVariable('DWG_CDimStyle','PGDBDimStyle',@CurrentDimStyle);
+  pdwgwarsunit^.CreateFixedVariable('DWG_CLinew','TGDBLineWeight',@CurrentLineW);
+  pdwgwarsunit^.CreateFixedVariable('DWG_CLTScale','GDBDouble',@CLTScale);
+  pdwgwarsunit^.CreateFixedVariable('DWG_CColor','GDBInteger',@CColor);
 
 
-  pdwgwarsunit^.CreateVariable('DWG_LUnits','TLUnits',@LUnits);
-  pdwgwarsunit^.CreateVariable('DWG_LUPrec','TUPrec',@LUPrec);
-  pdwgwarsunit^.CreateVariable('DWG_AUnits','TAUnits',@AUnits);
-  pdwgwarsunit^.CreateVariable('DWG_AUPrec','TUPrec',@AUPrec);
-  pdwgwarsunit^.CreateVariable('DWG_AngDir','TAngDir',@AngDir);
-  pdwgwarsunit^.CreateVariable('DWG_AngBase','GDBAngleDegDouble',@AngBase);
-  pdwgwarsunit^.CreateVariable('DWG_UnitMode','TUnitMode',@UnitMode);
-  pdwgwarsunit^.CreateVariable('DWG_InsUnits','TInsUnits',@InsUnits);
-  pdwgwarsunit^.CreateVariable('DWG_TextSize','GDBDouble',@TextSize);
+  pdwgwarsunit^.CreateFixedVariable('DWG_LUnits','TLUnits',@LUnits);
+  pdwgwarsunit^.CreateFixedVariable('DWG_LUPrec','TUPrec',@LUPrec);
+  pdwgwarsunit^.CreateFixedVariable('DWG_AUnits','TAUnits',@AUnits);
+  pdwgwarsunit^.CreateFixedVariable('DWG_AUPrec','TUPrec',@AUPrec);
+  pdwgwarsunit^.CreateFixedVariable('DWG_AngDir','TAngDir',@AngDir);
+  pdwgwarsunit^.CreateFixedVariable('DWG_AngBase','GDBAngleDegDouble',@AngBase);
+  pdwgwarsunit^.CreateFixedVariable('DWG_UnitMode','TUnitMode',@UnitMode);
+  pdwgwarsunit^.CreateFixedVariable('DWG_InsUnits','TInsUnits',@InsUnits);
+  pdwgwarsunit^.CreateFixedVariable('DWG_TextSize','GDBDouble',@TextSize);
 
   if preloadedfile1<>'' then
   DWGUnits.loadunit(SupportPath,InterfaceTranslate,expandpath({'*rtl/dwg/DrawingDeviceBase.pas')}preloadedfile1),nil);
@@ -268,7 +268,7 @@ begin
   if assigned(pdwgwarsunit) then
                                 pvd:=pdwgwarsunit.InterfaceVariables.findvardesc('camera');
   if pvd<>nil then
-                  pcam:=pvd^.data.Instance;
+                  pcam:=pvd^.data.Addr.Instance;
   inherited init(pcam);
 
 

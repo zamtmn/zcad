@@ -139,9 +139,9 @@ begin
                                               v:=evaluate(expr,SysUnit);
                                               if v.data.ptd<>nil  then
                                               begin
-                                                s:=v.data.ptd^.GetValueAsString(v.data.Instance);
-                                                v.data.ptd^.MagicFreeInstance(v.data.Instance);
-                                                v.data.Instance:=v.data.Instance;
+                                                s:=v.data.ptd^.GetValueAsString(v.data.Addr.Instance);
+                                                v.data.ptd^.MagicFreeInstance(v.data.Addr.Instance);
+                                                //v.Instance:=v.Instance;
                                                 ZCMsgCallBackInterface.TextMessage(Format(rsExprOutText,[expr,s]),TMWOHistoryOut);
                                               end;
                                          end
@@ -167,10 +167,10 @@ begin
            repeat
            subexpr:=GetPredStr(cmd,[',','<'],divider);
            v:=evaluate(subexpr,SysUnit);
-           parsed:=v.data.Instance<>nil;
+           parsed:=v.data.Addr.Instance<>nil;
            if parsed then
            begin
-           s:=v.data.ptd^.GetValueAsString(v.data.Instance);
+           s:=v.data.ptd^.GetValueAsString(v.data.Addr.Instance);
            if superexpr='' then
                                superexpr:=s
                            else

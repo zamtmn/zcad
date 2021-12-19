@@ -35,7 +35,7 @@ type
 {Export+}
 {**Генерик объекта-массива}
 {----REGISTEROBJECTTYPE GZVector}
-GZVector{-}<T>{//}=object(GDBaseObject)
+GZVector{-}<T>{//}=object(TZAbsVector)
     {-}type{//}
         {-}PT=^T;{//}                                     //**< Тип указатель на тип данных T
         {-}TArr=array[0..0] of T;{//}                     //**< Тип массив данных T
@@ -126,6 +126,8 @@ GZVector{-}<T>{//}=object(GDBaseObject)
         {**Возвращает размер элемента массива}
         function SizeOfData:TArrayIndex;
         {**Возвращает указатель на массив}
+        function GetParray:pointer;virtual;
+        {**Возвращает указатель на массив}
         function GetParrayAsPointer:pointer;
         {**Очищает массив не убивая элементы, просто count:=0}
         procedure Clear;virtual;
@@ -176,6 +178,10 @@ begin
        result:=count;
        inc(count);
   end;
+end;
+function GZVector<T>.GetParray:pointer;
+begin
+  result:=GetParrayAsPointer;
 end;
 function GZVector<T>.GetParrayAsPointer;
 begin

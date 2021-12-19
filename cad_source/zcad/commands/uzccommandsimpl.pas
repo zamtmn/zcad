@@ -50,7 +50,7 @@ type
   {REGISTEROBJECTTYPE CommandRTEdObject}
   CommandRTEdObject =  object(CommandRTEdObjectDef)
     saveosmode:GDBInteger;(*hidden_in_objinsp*)
-    commanddata:TTypedData;(*'Command options'*)
+    commanddata:THardTypedData;(*'Command options'*)
     procedure CommandStart(Operands:TCommandOperands); virtual;
     procedure CommandEnd; virtual;
     procedure CommandCancel; virtual;

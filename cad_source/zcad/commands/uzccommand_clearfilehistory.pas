@@ -36,7 +36,7 @@ var i:integer;
 begin
      for i:=0 to 9 do
      begin
-          pstr:=SavedUnit.FindValue('PATH_File'+inttostr(i));
+          pstr:=SavedUnit.FindValue('PATH_File'+inttostr(i)).data.Addr.Instance;
           if assigned(pstr) then
           pstr^:='';
           if assigned(FileHistory[i]) then

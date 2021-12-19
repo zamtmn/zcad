@@ -892,12 +892,12 @@ begin
                pvdv:=pdevvarext.entityunit.FindVariable('MISC_Vertical');
              end;
              if pvdv<>nil then
-                              isAxisVerical:=PTGDB3StateBool(pvdv^.data.Instance)^
+                              isAxisVerical:=PTGDB3StateBool(pvdv^.data.Addr.Instance)^
                           else
                               isAxisVerical:=T3SB_Default;
              if (paxisline<>nil)and(pvd<>nil) then
              begin
-                  axisdesc.Name:=pgdbstring(pvd^.data.Instance)^;
+                  axisdesc.Name:=pgdbstring(pvd^.data.Addr.Instance)^;
                   axisdesc.p1:=paxisline^.CoordInWCS.lBegin;
                   axisdesc.p2:=paxisline^.CoordInWCS.lEnd;
                   dit:=distance2ray(Vertex0,axisdesc.p1,axisdesc.p2);
@@ -912,12 +912,12 @@ begin
                   end;
                   if isVertical then
                                     begin
-                                      ZCMsgCallBackInterface.TextMessage(sysutils.format('  Found vertical axis "%s"',[pgdbstring(pvd^.data.Instance)^]),TMWOHistoryOut);
+                                      ZCMsgCallBackInterface.TextMessage(sysutils.format('  Found vertical axis "%s"',[pgdbstring(pvd^.data.Addr.Instance)^]),TMWOHistoryOut);
                                       vaxis.PushBack(axisdesc);
                                     end
                                 else
                                     begin
-                                      ZCMsgCallBackInterface.TextMessage(sysutils.format('  Found horisontal axis "%s"',[pgdbstring(pvd^.data.Instance)^]),TMWOHistoryOut);
+                                      ZCMsgCallBackInterface.TextMessage(sysutils.format('  Found horisontal axis "%s"',[pgdbstring(pvd^.data.Addr.Instance)^]),TMWOHistoryOut);
                                       haxis.PushBack(axisdesc);
                                     end
 
@@ -959,11 +959,11 @@ begin
                   GetNearestAxis(vaxis,pdev^.P_insert_in_WCS,vi,vi2);
                   vname:=GetAxisName(vaxis,vi,vi2);
                   if (hname<>'')and(vname<>'')then
-                                          ZCMsgCallBackInterface.TextMessage(sysutils.format('%s;%s/%s',[pgdbstring(pvd^.data.Instance)^,vname,hname]),TMWOHistoryOut)
+                                          ZCMsgCallBackInterface.TextMessage(sysutils.format('%s;%s/%s',[pgdbstring(pvd^.data.Addr.Instance)^,vname,hname]),TMWOHistoryOut)
              else if (hname<>'')then
-                                ZCMsgCallBackInterface.TextMessage(sysutils.format('%s;%s',[pgdbstring(pvd^.data.Instance)^,hname]),TMWOHistoryOut)
+                                ZCMsgCallBackInterface.TextMessage(sysutils.format('%s;%s',[pgdbstring(pvd^.data.Addr.Instance)^,hname]),TMWOHistoryOut)
              else if (vname<>'')then
-                                ZCMsgCallBackInterface.TextMessage(sysutils.format('%s;%s',[pgdbstring(pvd^.data.Instance)^,vname]),TMWOHistoryOut);
+                                ZCMsgCallBackInterface.TextMessage(sysutils.format('%s;%s',[pgdbstring(pvd^.data.Addr.Instance)^,vname]),TMWOHistoryOut);
 
              end;
 
@@ -1095,7 +1095,7 @@ begin
             pvd:=pdevvarext.entityunit.FindVariable('NMO_BaseName');
             if pvd<>nil then
             begin
-            if uppercase(pvd^.data.PTD^.GetUserValueAsString(pvd^.data.Instance))=
+            if uppercase(pvd^.data.PTD^.GetUserValueAsString(pvd^.data.Addr.Instance))=
                uppercase(NumberingParams.BaseName) then
                                                        process:=true
                                                    else
@@ -1115,7 +1115,7 @@ begin
             pvd:=pdevvarext.entityunit.FindVariable(NumberingParams.NumberVar);
             if pvd<>nil then
             begin
-                 pvd^.data.PTD^.SetValueFromString(pvd^.data.Instance,inttostr(index));
+                 pvd^.data.PTD^.SetValueFromString(pvd^.data.Addr.Instance,inttostr(index));
                  inc(index,NumberingParams.Increment);
                  inc(count);
                  pdev^.FormatEntity(drawings.GetCurrentDWG^,dc);
@@ -1124,7 +1124,7 @@ begin
                ZCMsgCallBackInterface.TextMessage('In device not found numbering variable',TMWOHistoryOut);
             end
             else
-                ZCMsgCallBackInterface.TextMessage('Device with basename "'+pvd^.data.PTD^.GetUserValueAsString(pvd^.data.Instance)+'" filtred out',TMWOHistoryOut);
+                ZCMsgCallBackInterface.TextMessage('Device with basename "'+pvd^.data.PTD^.GetUserValueAsString(pvd^.data.Addr.Instance)+'" filtred out',TMWOHistoryOut);
        end;
      ZCMsgCallBackInterface.TextMessage(sysutils.format(rscmNEntitiesProcessed,[count]),TMWOHistoryOut);
      if NumberingParams.SaveStart then

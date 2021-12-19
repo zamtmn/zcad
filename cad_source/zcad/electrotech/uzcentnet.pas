@@ -347,8 +347,8 @@ begin
      pentvarext2:=net2.GetExtension<TVariablesExtender>;
      pvd1:=pentvarext1.entityunit.FindVariable('NMO_Name');
      pvd2:=pentvarext2.entityunit.FindVariable('NMO_Name');
-     n1:=pstring(pvd1^.data.Instance)^;
-     n2:=pstring(pvd2^.data.Instance)^;
+     n1:=pstring(pvd1^.data.Addr.Instance)^;
+     n2:=pstring(pvd2^.data.Addr.Instance)^;
      if (n1='')and(n2='') then
                               result:={gdb.numerator.getnamenumber(el_unname_prefix)}0
 else if n1=n2 then

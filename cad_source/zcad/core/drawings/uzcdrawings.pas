@@ -568,7 +568,7 @@ begin
 end;
 (*function TZCADDrawingsManager.AfterDeSerialize;
 begin
-     CurrentDWG.pcamera:=SysUnit.InterfaceVariables.findvardesc('camera').data.Instance;
+     CurrentDWG.pcamera:=SysUnit.InterfaceVariables.findvardesc('camera').Instance;
      //CurrentDWG.ConstructObjRoot.init({$IFDEF DEBUGBUILD}'{B1036F20-56klhj2D-4B17-A33A-61CF3F5F2A90}',{$ENDIF}65535);
      CurrentDWG.ConstructObjRoot.initnul;
      CurrentDWG.SelObjArray.init({$IFDEF DEBUGBUILD}'{0CC3A9A3-B9C2-4FkjhB5-BFB1-8791C261C577}',{$ENDIF}65535);
@@ -850,7 +850,7 @@ begin
                     pvd:=pentvarext.entityunit.FindVariable(vname);
                     if pvd<>nil then
                     begin
-                         if pvd.data.PTD.GetValueAsString(pvd.data.Instance)=vvalue then
+                         if pvd.data.PTD.GetValueAsString(pvd.data.Addr.Instance)=vvalue then
                          begin
                               entarray.PushBackData(pvisible);
                          end;
@@ -909,7 +909,7 @@ begin
                     pvd:=pentvarext.entityunit.FindVariable(vname);
                     if pvd<>nil then
                     begin
-                         if pvd.data.PTD.GetValueAsString(pvd.data.Instance)=vvalue then
+                         if pvd.data.PTD.GetValueAsString(pvd.data.Addr.Instance)=vvalue then
                          begin
                               result:=pvisible;
                               exit;

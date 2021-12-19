@@ -18,12 +18,14 @@
 
 unit varmandef;
 {$INCLUDE def.inc}
+{$MODESWITCH ADVANCEDRECORDS}
 
 interface
 uses
   LCLProc,SysUtils,UGDBTree,gzctnrstl,uzctnrvectorgdbstring,strutils,uzbtypesbase,
   uzedimensionaltypes,UGDBOpenArrayOfByte,uzbtypes,
-  gzctnrvectortypes,Classes,Controls,StdCtrls,Graphics,types,TypInfo;
+  gzctnrvectortypes,Classes,Controls,StdCtrls,Graphics,types,TypInfo,uzbmemman,
+  gzctnrvector;
 const
   {Ttypenothing=-1;
   Ttypecustom=1;
@@ -165,7 +167,9 @@ UserTypeDescriptor=object(GDBaseObject)
                          procedure CopyInstanceTo(source,dest:pointer);virtual;
                          function Compare(pleft,pright:pointer):TCompareResult;virtual;
                          procedure SetValueFromString(PInstance:Pointer;_Value:TInternalScriptString);virtual;abstract;
-                         procedure InitInstance(PInstance:GDBPointer);virtual;
+                         procedure InitInstance(PInstance:Pointer);virtual;
+                         function AllocInstance:Pointer;virtual;
+                         function AllocAndInitInstance:Pointer;virtual;
                          destructor Done;virtual;
                          procedure MagicFreeInstance(PInstance:Pointer);virtual;
                          procedure MagicAfterCopyInstance(PInstance:Pointer);virtual;
@@ -237,10 +241,19 @@ TOSMode=record
   arrayindex =packed  array[1..2] of indexdesk;
   parrayindex = ^arrayindex;
   PTTypedData=^TTypedData;
-  {REGISTERRECORDTYPE TTypedData}
-  TTypedData=record
+  pvarmanagerdef=^varmanagerdef;
+  PTHardTypedData=^THardTypedData;
+  {REGISTERRECORDTYPE THardTypedData}
+  THardTypedData=record
                    Instance: GDBPointer;
                    PTD:{-}PUserTypeDescriptor{/GDBPointer/};
+             end;
+  {REGISTERRECORDTYPE TTypedData}
+  TTypedData=record
+                   PTD:{-}PUserTypeDescriptor{/GDBPointer/};
+                   Addr:TInVectorAddr;
+                   //{-}constructor Create(PTDesc:PUserTypeDescriptor;DS:pvarmanagerdef;Offset:PtrInt);{/ /}
+                   //{-}property Instance:GDBPointer read Inst write Inst;{/ /}
              end;
   TVariableAttributes=GDBInteger;
   {REGISTERRECORDTYPE vardesk}
@@ -249,6 +262,9 @@ TOSMode=record
     username: TInternalScriptString;
     data: TTypedData;
     attrib:TVariableAttributes;
+    {-}procedure SetInstance(DS:PZAbsVector;Offs:PtrUInt);overload;{/ /}
+    {-}procedure SetInstance(Ptr:Pointer);overload;{/ /}
+    {-}procedure FreeeInstance;{/ /}
   end;
 ptypemanagerdef=^typemanagerdef;
 {REGISTEROBJECTTYPE typemanagerdef}
@@ -264,7 +280,6 @@ typemanagerdef=object(GDBaseObject)
                   function AddTypeByPP(p:GDBPointer):TArrayIndex;virtual;abstract;
                   function AddTypeByRef(var _type:UserTypeDescriptor):TArrayIndex;virtual;abstract;
             end;
-pvarmanagerdef=^varmanagerdef;
 {REGISTEROBJECTTYPE varmanagerdef}
 varmanagerdef=object(GDBaseObject)
                  {vardescarray:GDBOpenArrayOfData;
@@ -274,6 +289,7 @@ varmanagerdef=object(GDBaseObject)
                  procedure createvariablebytype(varname,vartype:TInternalScriptString);virtual;abstract;
                  procedure createbasevaluefromGDBString(varname: TInternalScriptString; varvalue: TInternalScriptString; var vd: vardesk);virtual;abstract;
                  function findfieldcustom(var pdesc: pGDBByte; var offset: GDBInteger;var tc:PUserTypeDescriptor; nam: shortString): GDBBoolean;virtual;abstract;
+                 //function getDS:Pointer;virtual;abstract;
            end;
 {EXPORT-}
 procedure convertToRunTime(dt:TFastEditorsVector;var rt:TFastEditorsRunTimeVector);
@@ -285,6 +301,19 @@ procedure ProcessVariableAttributes(var attr:TVariableAttributes; const setattri
 implementation
 //uses log;
 {for hide exttype}
+procedure vardesk.SetInstance(DS:PZAbsVector;Offs:PtrUInt);
+begin
+  data.Addr.SetInstance(DS,Offs);
+end;
+procedure vardesk.SetInstance(Ptr:Pointer);
+begin
+  data.Addr.SetInstance(Ptr);
+end;
+procedure vardesk.FreeeInstance;
+begin
+  data.Addr.FreeeInstance
+end;
+
 procedure BasePropertyDeskriptor.free;
 begin
    inherited;
@@ -503,10 +532,20 @@ procedure UserTypeDescriptor.MagicAfterCopyInstance(PInstance:Pointer);
 begin
 
 end;
-procedure UserTypeDescriptor.InitInstance(PInstance:GDBPointer);
+procedure UserTypeDescriptor.InitInstance(PInstance:Pointer);
 begin
      fillchar(pinstance^,SizeInGDBBytes,0)
 end;
+function UserTypeDescriptor.AllocInstance:Pointer;
+begin
+  GDBGetMem({$IFDEF DEBUGBUILD}'{1736E7AF-8FA1-4FC2-B48D-EF04C537C983}',{$ENDIF}result,SizeInGDBBytes);
+end;
+function UserTypeDescriptor.AllocAndInitInstance:Pointer;
+begin
+  result:=AllocInstance;
+  InitInstance(result);
+end;
+
 procedure UserTypeDescriptor.CopyInstanceTo(source,dest:pointer);
 begin
      Move(source^, dest^,SizeInGDBBytes);

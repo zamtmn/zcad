@@ -351,7 +351,7 @@ begin
                                                   tname:=pvd^.username;
                                                   if tname='' then
                                                                   tname:=pvd^.name;
-                                                  taa:=pvd^.data.Instance;
+                                                  taa:=pvd^.data.Addr.Instance;
                                                   if (pvd^.attrib and vda_different)>0 then
                                                                                            tw:=FA_DIFFERENT
                                                                                        else
@@ -478,7 +478,7 @@ begin
                             ppd^.value:='Empty';
 
                             //pvd:=PTObjectUnit(startaddr)^.InterfaceVariables.vardescarray.beginiterate(ir2);
-                            //taa:=pvd^.data.Instance;
+                            //taa:=pvd^.Instance;
                             //PTUserTypeDescriptor(pvd^.data.PTD).CreateProperties(PPDA,{ppd^.Name}tname,@pfd^.collapsed,{ppd^.Attr}pfd^.Attributes or ownerattrib,bmode,taa);
                             inc(integer(startaddr),sizeof(TObjectUnit));
                        end
@@ -525,11 +525,11 @@ begin
                                            end
                    else
                    begin
-                   if (pfd^.base.PFT^.GetFactTypedef^.TypeName='TTypedData') or
+                   if (pfd^.base.PFT^.GetFactTypedef^.TypeName='THardTypedData') or
                       (pfd^.base.PFT^.TypeName='TFaceTypedData') then
                                                           Begin
                                                                tb:={PTTypedData(startaddr)^.Instance}startaddr;
-                                                               ta:=PTTypedData(startaddr)^.ptd;
+                                                               ta:=PTHardTypedData(startaddr)^.ptd;
                                                                if ta<>nil then
                                                                PTUserTypeDescriptor(ta)^.CreateProperties(f,PDM_Field,PPDA,{PTTypedData(startaddr)^.ptd^.TypeName}tname,@pfd^.collapsed,{ppd^.Attr}pfd^.base.Attributes or ownerattrib,bmode,tb,'','')
                                                                else
@@ -541,6 +541,8 @@ begin
                                                           end
                                                        else
                                                            begin
+                                                           if pfd^.base.UserName='Renderer' then
+                                                                pfd^.base.UserName:=pfd^.base.UserName+'1';
                                                                 PTUserTypeDescriptor(pfd^.base.PFT)^.CreateProperties(f,PDM_Field,PPDA,{ppd^.Name}tname,@pfd^.collapsed,{ppd^.Attr}pfd^.base.Attributes or ownerattrib,bmode,startaddr,'','')
                                                            end;
                    end;

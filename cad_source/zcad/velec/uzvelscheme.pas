@@ -255,11 +255,11 @@ function TestModul_com(operands:TCommandOperands):TCommandResult;
         //pvd:=PTObjectUnit(PCableSS.ou.Instance)^.FindVariable('CABLE_Type');     { TODO : Сделать поиск переменных caseнезависимым }
         pvCab:=pCableSSvarext^.entityunit.FindVariable('CABLE_Type');
         pvmc:=pCableSSvarext^.entityunit.FindVariable('NMO_Name');
-        ZCMsgCallBackInterface.TextMessage('Кабель имя группы --- ' + pstring(pvmc^.data.Instance)^,TMWOHistoryOut);
+        ZCMsgCallBackInterface.TextMessage('Кабель имя группы --- ' + pstring(pvmc^.Instance)^,TMWOHistoryOut);
 
         if pvCab<>nil then
         begin
-             //if PTCableType(pvd^.data.Instance)^=TCT_ShleifOPS then
+             //if PTCableType(pvd^.Instance)^=TCT_ShleifOPS then
              if (pcabledesk^.StartDevice<>nil){and(pcabledesk.EndDevice<>nil)} then
              begin
 
@@ -276,9 +276,9 @@ function TestModul_com(operands:TCommandOperands):TCommandResult;
 
                         //Добавляем длину кабеля из сегмента
                         //pvSegmLength:=pSegmCablevarext^.entityunit.FindVariable('AmountD');
-                        //edgeGraph^.length:=pdouble(pvSegmLength^.data.Instance)^;
+                        //edgeGraph^.length:=pdouble(pvSegmLength^.Instance)^;
 
-                        ZCMsgCallBackInterface.TextMessage('Сегмент № ' + inttostr(pinteger(pvSegm^.data.Instance)^),TMWOHistoryOut);
+                        ZCMsgCallBackInterface.TextMessage('Сегмент № ' + inttostr(pinteger(pvSegm^.Instance)^),TMWOHistoryOut);
 
 
 
@@ -478,7 +478,7 @@ var
             pvaredge:=TEdgeTree(gGroup.Edges[i].AsPointer[vpTEdgeTree]^).segm^.GetExtension(typeof(TVariablesExtender));
             pvedge:=pvaredge^.entityunit.FindVariable('AmountD');
             if pvedge<>nil then
-                result:=result+pdouble(pvedge^.data.Instance)^;
+                result:=result+pdouble(pvedge^.Instance)^;
         end;
    end;
    //**Получаем все имена кабелей кабельной группы
@@ -507,7 +507,7 @@ var
             pvlength:=pvaredge^.entityunit.FindVariable('AmountD');
             if (pvedge<>nil) AND (pvlength<>nil) then
             begin
-              line:=pstring(pvedge^.data.Instance)^;
+              line:=pstring(pvedge^.Instance)^;
               eq:=DWGDBUnit^.FindVariable(line);
               if eq=nil then  begin
                     //ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
@@ -515,7 +515,7 @@ var
                     if listCab.size=0 then
                     BEGIN
                       iCab.name:=linetemp;
-                      iCab.length:=pdouble(pvlength^.data.Instance)^;
+                      iCab.length:=pdouble(pvlength^.Instance)^;
                       listcab.PushBack(iCab);
                       //ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
                     END
@@ -528,13 +528,13 @@ var
                              istrue:=false;
                              last:=j;
                              //ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
-                             listcab.mutable[j]^.length:=listcab[j].length + pdouble(pvlength^.data.Instance)^;
+                             listcab.mutable[j]^.length:=listcab[j].length + pdouble(pvlength^.Instance)^;
                           end;
                        end;
                        if istrue then
                          begin
                           iCab.name:=linetemp;
-                          iCab.length:=pdouble(pvlength^.data.Instance)^;
+                          iCab.length:=pdouble(pvlength^.Instance)^;
                           listcab.PushBack(iCab);
                          end
 
@@ -542,13 +542,13 @@ var
                   end
               else
                   begin
-                      linetemp:=PDbBaseObject(eq^.data.Instance)^.NameShort;
+                      linetemp:=PDbBaseObject(eq^.Instance)^.NameShort;
                        //ZCMsgCallBackInterface.TextMessage('4',TMWOHistoryOut);
                       if listCab.size=0 then
                       BEGIN
                         //ZCMsgCallBackInterface.TextMessage('5',TMWOHistoryOut);
                         iCab.name:=linetemp;
-                        iCab.length:=pdouble(pvlength^.data.Instance)^;
+                        iCab.length:=pdouble(pvlength^.Instance)^;
                         listcab.PushBack(iCab);
                       END
                       else
@@ -560,13 +560,13 @@ var
                               istrue:=false;
                               last:=j;
                               //ZCMsgCallBackInterface.TextMessage('6',TMWOHistoryOut);
-                              listcab.mutable[j]^.length:=listcab[j].length + pdouble(pvlength^.data.Instance)^;
+                              listcab.mutable[j]^.length:=listcab[j].length + pdouble(pvlength^.Instance)^;
                             end;
                          end;
                          if istrue then
                          begin
                           iCab.name:=linetemp;
-                          iCab.length:=pdouble(pvlength^.data.Instance)^;
+                          iCab.length:=pdouble(pvlength^.Instance)^;
                           listcab.PushBack(iCab);
                          end;
 
@@ -577,7 +577,7 @@ var
             begin
                //ZCMsgCallBackInterface.TextMessage('7',TMWOHistoryOut);
                 iCab.name:=rsNotSpecified;
-                iCab.length:=pdouble(pvlength^.data.Instance)^;
+                iCab.length:=pdouble(pvlength^.Instance)^;
                 listcab.PushBack(iCab);
             end;
 
@@ -593,14 +593,14 @@ var
             //pvedge:=pvaredge^.entityunit.FindVariable('DB_link');
             //if pvedge<>nil then
             //begin
-            //  line:=pstring(pvedge^.data.Instance)^;
+            //  line:=pstring(pvedge^.Instance)^;
             //  eq:=DWGDBUnit^.FindVariable(line);
             //  if eq=nil then  begin
             //        result:='(!)'+line
             //        end
             //    else
             //        begin
-            //             result:=PDbBaseObject(eq^.data.Instance)^.NameShort;
+            //             result:=PDbBaseObject(eq^.Instance)^.NameShort;
             //        end;
             //end
             //else
@@ -608,7 +608,7 @@ var
 
 
 
-                //result:=result+pdouble(pvedge^.data.Instance)^;
+                //result:=result+pdouble(pvedge^.Instance)^;
         end;
    end;
 
@@ -639,7 +639,7 @@ var
           begin
               pvaredge:=TEdgeTree(gGroup.Edges[0].AsPointer[vpTEdgeTree]^).segm^.GetExtension(typeof(TVariablesExtender));
               pvedge:=pvaredge^.entityunit.FindVariable('NMO_Name');
-              pstring(pvmc^.data.Instance)^:=pstring(pvedge^.data.Instance)^;
+              pstring(pvmc^.Instance)^:=pstring(pvedge^.Instance)^;
           end;
 
           //ZCMsgCallBackInterface.TextMessage('CableLength',TMWOHistoryOut);
@@ -665,12 +665,12 @@ var
 
           pvmc:=ppvvarext^.entityunit.FindVariable('CableLength');
           if pvmc<>nil then
-              pdouble(pvmc^.data.Instance)^:=lengthCab;
+              pdouble(pvmc^.Instance)^:=lengthCab;
 
           //**Заполняем марку кабеля
           pvmc:=ppvvarext^.entityunit.FindVariable('CableMaterial');
           if pvmc<>nil then
-              pstring(pvmc^.data.Instance)^:=strNameCab;
+              pstring(pvmc^.Instance)^:=strNameCab;
 
           dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
           pv^.FormatEntity(drawings.GetCurrentDWG^,dc);
@@ -724,21 +724,21 @@ var
               pvarv:=TVertexTree(gGroup.Vertices[i].AsPointer[vpTVertexTree]^).dev^.GetExtension(typeof(TVariablesExtender));
               pvv:=pvarv^.entityunit.FindVariable('NMO_Name');
               if pvv<>nil then
-                 idev.fullname:=pstring(pvv^.data.Instance)^
+                 idev.fullname:=pstring(pvv^.Instance)^
               else
                  idev.fullname:='Ошибка fullname';
               pvv:=nil;
 
               pvv:=pvarv^.entityunit.FindVariable('NMO_BaseName');
               if pvv<>nil then
-                 idev.shortname:=pstring(pvv^.data.Instance)^
+                 idev.shortname:=pstring(pvv^.Instance)^
               else
                  idev.shortname:='Ошибка shortname';
               pvv:=nil;
 
               pvv:=pvarv^.entityunit.FindVariable('GC_NumberInGroup');
               if pvv<>nil then
-                 idev.numDev:=pinteger(pvv^.data.Instance)^
+                 idev.numDev:=pinteger(pvv^.Instance)^
               else
                  idev.numDev:=-1;
               pvv:=nil;
@@ -907,15 +907,15 @@ var
                 pvstartelevation:=pnodestartvarext^.entityunit.FindVariable('Elevation');
                 if (pvend <> nil) and (pvstart <> nil) then
                 begin
-                   if (pstring(pvend^.data.Instance)^ = pstring(pvstart^.data.Instance)^) then
+                   if (pstring(pvend^.Instance)^ = pstring(pvstart^.Instance)^) then
                    begin
-                     if ((sum >= abs(pdouble(pvend^.data.Instance)^ - pdouble(pvstart^.data.Instance)^)) or (sum < 0)) then
+                     if ((sum >= abs(pdouble(pvend^.Instance)^ - pdouble(pvstart^.Instance)^)) or (sum < 0)) then
                       begin
                         new(edgeGraph);
                         edgeGraph^.segm:=nil;
                         edgeGraph^.isSegm:=false;
                         edgeGraph^.isRiser:=true;
-                        sum:= abs(pdouble(pvend^.data.Instance)^ + pdouble(pvstart^.data.Instance)^);
+                        sum:= abs(pdouble(pvend^.Instance)^ + pdouble(pvstart^.Instance)^);
                         edgeGraph^.length:=sum;
 
                         count:=i;
@@ -966,15 +966,15 @@ var
                 //pvstartelevation:=pnodestartvarext^.entityunit.FindVariable('Elevation');
                 if (pvstart <> nil) then
                   begin
-                     //ZCMsgCallBackInterface.TextMessage(pstring(pvstart^.data.Instance)^,TMWOHistoryOut);
+                     //ZCMsgCallBackInterface.TextMessage(pstring(pvstart^.Instance)^,TMWOHistoryOut);
                      for j:=0 to listRiserName.Size-1 do
                        begin
-                          if pstring(pvstart^.data.Instance)^ = listRiserName[j] then
+                          if pstring(pvstart^.Instance)^ = listRiserName[j] then
                             IsExchange:=false;
                        end;
 
                      if IsExchange then
-                        listRiserName.PushBack(pstring(pvstart^.data.Instance)^);
+                        listRiserName.PushBack(pstring(pvstart^.Instance)^);
                   end;
 
                 end;
@@ -992,7 +992,7 @@ var
                       pvstart:=nil;
                       pvstart:=pnodestartvarext^.entityunit.FindVariable('RiserName');
                       //pvstartelevation:=pnodestartvarext^.entityunit.FindVariable('Elevation');
-                      if (pvstart <> nil) and (pstring(pvstart^.data.Instance)^ = listRiserName[i]) then
+                      if (pvstart <> nil) and (pstring(pvstart^.Instance)^ = listRiserName[i]) then
                         begin
                            listRiserNumber.PushBack(j);
                         end;
@@ -1012,7 +1012,7 @@ var
                   pvendelevation:=pnodeendvarext^.entityunit.FindVariable('Elevation');
 
 
-                  if (pdouble(pvstartelevation^.data.Instance)^ > pdouble(pvendelevation^.data.Instance)^) then begin
+                  if (pdouble(pvstartelevation^.Instance)^ > pdouble(pvendelevation^.Instance)^) then begin
                     tempNumVertex := listRiserNumber[j];
                     listRiserNumber.Mutable[j]^ := listRiserNumber[j+1];
                     listRiserNumber.Mutable[j+1]^ := tempNumVertex;
@@ -1035,7 +1035,7 @@ var
                   edgeGraph^.segm:=nil;
                   edgeGraph^.isSegm:=false;
                   edgeGraph^.isRiser:=true;
-                  sum:= abs(pdouble(pvendelevation^.data.Instance)^ - pdouble(pvstartelevation^.data.Instance)^);
+                  sum:= abs(pdouble(pvendelevation^.Instance)^ - pdouble(pvstartelevation^.Instance)^);
                   edgeGraph^.length:=sum;
                   //ZCMsgCallBackInterface.TextMessage('создали ребро в граф',TMWOHistoryOut);
                   oGraphEdge:=oGraph.AddEdge(oGraph.Vertices[listRiserNumber[j-1]],oGraph.Vertices[listRiserNumber[j]]);
@@ -1101,7 +1101,7 @@ begin
 
         if pvCab<>nil then
         begin
-             //if PTCableType(pvd^.data.Instance)^=TCT_ShleifOPS then
+             //if PTCableType(pvd^.Instance)^=TCT_ShleifOPS then
              if (pcabledesk^.StartDevice<>nil){and(pcabledesk.EndDevice<>nil)} then
              begin
 
@@ -1124,9 +1124,9 @@ begin
 
                         //Добавляем длину кабеля из сегмента
                         pvSegmLength:=pSegmCablevarext^.entityunit.FindVariable('AmountD');
-                        edgeGraph^.length:=pdouble(pvSegmLength^.data.Instance)^;
+                        edgeGraph^.length:=pdouble(pvSegmLength^.Instance)^;
 
-                        //ZCMsgCallBackInterface.TextMessage('Сегмент № ' + inttostr(pinteger(pvSegm^.data.Instance)^),TMWOHistoryOut);
+                        //ZCMsgCallBackInterface.TextMessage('Сегмент № ' + inttostr(pinteger(pvSegm^.Instance)^),TMWOHistoryOut);
 
                         //перебераем вершины сегмента
                         node:=segmCable^.NodePropArray.beginiterate(ir_inNodeArray);
@@ -1227,7 +1227,7 @@ begin
                                   //pvd:=PTObjectUnit(nodeend^.ou.Instance)^.FindVariable('NMO_Name');
                                   //pvd:=pnodeendvarext^.entityunit.FindVariable('NMO_Name');
                                   //pvd:=pnodeendvarext^.entityunit.FindVariable('Name');
-                                  //endname:=pvd^.data.PTD^.GetValueAsString(pvd^.data.Instance);
+                                  //endname:=pvd^.data.PTD^.GetValueAsString(pvd^.Instance);
                                   //ZCMsgCallBackInterface.TextMessage('Ус --- ' + endname,TMWOHistoryOut)
                               end
                               else begin

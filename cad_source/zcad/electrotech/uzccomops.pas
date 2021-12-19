@@ -592,9 +592,9 @@ begin
         if pcable^.GetObjType=GDBCableID then
         begin
              pvd:=currentunit.FindVariable('CDC_temp');
-             pgdbinteger(pvd.data.Instance)^:=0;
+             pgdbinteger(pvd.Instance)^:=0;
              pvd:=currentunit.FindVariable('CDSC_temp');
-             pgdbinteger(pvd.data.Instance)^:=0;
+             pgdbinteger(pvd.Instance)^:=0;
              p:=@pcable.ou;
              currentunit.InterfaceUses.addnodouble(@p);
              ucount:=currentunit.InterfaceUses.Count;
@@ -684,7 +684,7 @@ begin
             pvd:=pcablestartsegmentvarext.entityunit.FindVariable('GC_Metric');
             if pvd<>nil then
                             begin
-                                 cablemetric:=pvd.data.PTD.GetValueAsString(pvd.data.Instance);
+                                 cablemetric:=pvd.data.PTD.GetValueAsString(pvd.data.Addr.Instance);
                             end
                         else
                             begin
@@ -695,9 +695,9 @@ begin
              if currentunit<>nil then
              repeat
              pvd:=currentunit.FindVariable('CDC_temp');
-             pgdbinteger(pvd.data.Instance)^:=0;
+             pgdbinteger(pvd.data.Addr.Instance)^:=0;
              pvd:=currentunit.FindVariable('CDSC_temp');
-             pgdbinteger(pvd.data.Instance)^:=1;
+             pgdbinteger(pvd.data.Addr.Instance)^:=1;
              currentunit:=Umanager.iterate(ir2);
              until currentunit=nil;
              currentunit:=nil;
@@ -715,7 +715,7 @@ begin
                         pvd:=pptnownervarext.entityunit.FindVariable('GC_Metric');
                         if pvd<>nil then
                                         begin
-                                             devicemetric:=pvd.data.PTD.GetValueAsString(pvd.data.Instance);
+                                             devicemetric:=pvd.data.PTD.GetValueAsString(pvd.data.Addr.Instance);
                                         end
                                     else
                                         begin
@@ -725,7 +725,7 @@ begin
                         pvd:=pptnownervarext.entityunit.FindVariable('GC_InGroup_Metric');
                                         if pvd<>nil then
                                                         begin
-                                                             numingroupmetric:=pvd.data.PTD.GetValueAsString(pvd.data.Instance);
+                                                             numingroupmetric:=pvd.data.PTD.GetValueAsString(pvd.data.Addr.Instance);
                                                              if numingroupmetric='' then
                                                                                         numingroupmetric:=DefNumMetric;
 
@@ -767,7 +767,7 @@ begin
                             pvd:=pptnownervarext.entityunit.FindVariable('NMO_Name');
                             if pvd<>nil then
                                         begin
-                                             name:='"'+pvd.data.PTD.GetValueAsString(pvd.data.Instance)+'"';
+                                             name:='"'+pvd.data.PTD.GetValueAsString(pvd.data.Addr.Instance)+'"';
                                         end
                                     else
                                         begin
@@ -947,13 +947,13 @@ begin
 
         if pvd<>nil then
         begin
-             //if PTCableType(pvd^.data.Instance)^=TCT_ShleifOPS then
+             //if PTCableType(pvd^.Instance)^=TCT_ShleifOPS then
              if (pcabledesk.StartDevice<>nil){and(pcabledesk.EndDevice<>nil)} then
              begin
                   ZCMsgCallBackInterface.TextMessage(pcabledesk.Name,TMWOHistoryOut);
                   //programlog.logoutstr(pcabledesk.Name,0);
                   currentcoord:=coord;
-                  PTCableType(pvd^.data.Instance)^:=TCT_ShleifOPS;
+                  PTCableType(pvd^.data.Addr.Instance)^:=TCT_ShleifOPS;
                   lsave:=SysVar.dwg.DWG_CLayer^;
                   SysVar.dwg.DWG_CLayer^:=drawings.GetCurrentDWG.LayerTable.GetSystemLayer;
 
@@ -969,7 +969,7 @@ begin
                   pvmc:=ppvvarext.entityunit.FindVariable('CableName');
                   if pvmc<>nil then
                   begin
-                      pstring(pvmc^.data.Instance)^:=pcabledesk.Name;
+                      pstring(pvmc^.data.Addr.Instance)^:=pcabledesk.Name;
                   end;
                   Cable2CableMark(pcabledesk,pv);
                   pv^.formatentity(drawings.GetCurrentDWG^,dc);
@@ -999,16 +999,16 @@ begin
                         pvd:=pnodeendvarext.entityunit.FindVariable('NMO_Name');
                         if pvd<>nil then
                         begin
-                             //endname:=pstring(pvd^.data.Instance)^;
-                             endname:=pvd^.data.PTD.GetValueAsString(pvd^.data.Instance);
+                             //endname:=pstring(pvd^.Instance)^;
+                             endname:=pvd^.data.PTD.GetValueAsString(pvd^.data.Addr.Instance);
                         end
                            else endname:='';
                         //pvd:=PTObjectUnit(nodeend^.ou.Instance)^.FindVariable('DB_link');
                         pvd:=pnodeendvarext.entityunit.FindVariable('DB_link');
                         if pvd<>nil then
                         begin
-                            //endmat:=pstring(pvd^.data.Instance)^;
-                            endmat:=pvd^.data.PTD.GetValueAsString(pvd^.data.Instance);
+                            //endmat:=pstring(pvd^.Instance)^;
+                            endmat:=pvd^.data.PTD.GetValueAsString(pvd^.data.Addr.Instance);
                             if isfirst then
                                            begin
                                                 isfirst:=false;
@@ -1041,8 +1041,8 @@ begin
                                  coord.x:=coord.x+12
                              else
                                  begin
-                                      if pgdbinteger(pvd^.data.Instance)^<>0 then
-                                                                                  coord.x:=coord.x+6*pgdbinteger(pvd^.data.Instance)^
+                                      if pgdbinteger(pvd^.data.Addr.Instance)^<>0 then
+                                                                                  coord.x:=coord.x+6*pgdbinteger(pvd^.data.Addr.Instance)^
                                                                               else
                                                                                   coord.x:=coord.x+12;
                                  end;

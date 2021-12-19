@@ -176,10 +176,11 @@ function TEnum_let_TIdentificator(var rez, hrez: vardesk): vardesk;
 //var
 //  r: vardesk;
 begin
-  PEnumDescriptor(rez.data.PTD)^.SetValueFromString(rez.data.Instance,hrez.name);
+  PEnumDescriptor(rez.data.PTD)^.SetValueFromString(rez.data.Addr.Instance,hrez.name);
   result.name:='';
   result.username:='';
-  result.data.Instance:=nil;
+  result.SetInstance(nil);
+  //result.Instance:=nil;
   result.data.PTD:=nil;
 end;
 function funcstackequalGDBString(str: TTypesArray; opstack: operandstack): GDBBoolean;
@@ -218,7 +219,8 @@ end;
 
 procedure initvardesk(out vd: vardesk);
 begin
-  pGDBInteger(vd.data.Instance) := nil;
+  vd.SetInstance(nil);
+  //vd.Instance := nil;
   //vd.vartypecustom := 0;
   vd.data.ptd:=nil;
   vd.name := '';
@@ -237,45 +239,48 @@ function Cos_TGDBInteger(var stack: operandstack): vardesk;
 var
   r: vardesk;
 begin
-  pGDBDouble(r.data.Instance) := nil;
   r.data.ptd:=@FundamentalDoubleDescriptorObj;
   r.name := '';
-  GDBGetMem({$IFDEF DEBUGBUILD}'{EF01E8D1-A060-4C72-B5A1-894B5AD95E65}',{$ENDIF}r.data.Instance,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
-  pdouble(r.data.Instance)^ := cos(pGDBInteger(stack.stack[1].data.Instance)^);
+  r.SetInstance(FundamentalDoubleDescriptorObj.AllocAndInitInstance);
+  //r.Instance:=FundamentalDoubleDescriptorObj.AllocAndInitInstance;
+  //GDBGetMem({$IFDEF DEBUGBUILD}'{EF01E8D1-A060-4C72-B5A1-894B5AD95E65}',{$ENDIF}r.data.Inst,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
+  pdouble(r.data.Addr.Instance)^ := cos(pGDBInteger(stack.stack[1].data.Addr.Instance)^);
   result := r;
 end;
 (*function DecodeStringBase64_TAnsiString(var stack: operandstack): vardesk;
 var
   r: vardesk;
 begin
-  pGDBDouble(r.data.Instance) := nil;
+  pGDBDouble(r.Instance) := nil;
   r.data.ptd:=@FundamentalAnsiStringDescriptorObj;
   r.name := '';
-  GDBGetMem({$IFDEF DEBUGBUILD}'{EF01E8D1-A060-4C72-B5A1-894B5AD95E65}',{$ENDIF}r.data.Instance,FundamentalAnsiStringDescriptorObj.SizeInGDBBytes);
-  pAnsiString(r.data.Instance)^ := DecodeStringBase64(PGDBAnsiString(stack.stack[1].data.Instance)^);
+  GDBGetMem({$IFDEF DEBUGBUILD}'{EF01E8D1-A060-4C72-B5A1-894B5AD95E65}',{$ENDIF}r.Instance,FundamentalAnsiStringDescriptorObj.SizeInGDBBytes);
+  pAnsiString(r.Instance)^ := DecodeStringBase64(PGDBAnsiString(stack.stack[1].Instance)^);
   result := r;
 end;*)
 function DecodeStringBase64_TGBDString(var stack: operandstack): vardesk;
 var
   r: vardesk;
 begin
-  pGDBDouble(r.data.Instance) := nil;
   r.data.ptd:=@FundamentalStringDescriptorObj;
   r.name := '';
-  GDBGetMem({$IFDEF DEBUGBUILD}'{EF01E8D1-A060-4C72-B5A1-894B5AD95E65}',{$ENDIF}r.data.Instance,FundamentalStringDescriptorObj.SizeInGDBBytes);
-  ppointer(r.data.Instance)^:=nil;
-  PGDBString(r.data.Instance)^ := DecodeStringBase64(PGDBString(stack.stack[1].data.Instance)^);
+  r.SetInstance(FundamentalStringDescriptorObj.AllocAndInitInstance);
+  //r.Instance:=FundamentalStringDescriptorObj.AllocAndInitInstance;
+  //GDBGetMem({$IFDEF DEBUGBUILD}'{EF01E8D1-A060-4C72-B5A1-894B5AD95E65}',{$ENDIF}r.data.Inst,FundamentalStringDescriptorObj.SizeInGDBBytes);
+  ppointer(r.data.Addr.Instance)^:=nil;
+  PGDBString(r.data.Addr.Instance)^ := DecodeStringBase64(PGDBString(stack.stack[1].data.Addr.Instance)^);
   result := r;
 end;
 function Cos_TGDBDouble(var stack: operandstack): vardesk;
 var
   r: vardesk;
 begin
-  pGDBDouble(r.data.Instance) := nil;
   r.data.ptd:=@FundamentalDoubleDescriptorObj;
   r.name := '';
-  GDBGetMem({$IFDEF DEBUGBUILD}'{EF01E8D1-A060-4C72-B5A1-894B5AD95E65}',{$ENDIF}r.data.Instance,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
-  pdouble(r.data.Instance)^ := cos(pGDBDouble(stack.stack[1].data.Instance)^);
+  r.SetInstance(FundamentalDoubleDescriptorObj.AllocAndInitInstance);
+  //r.Instance:=FundamentalDoubleDescriptorObj.AllocAndInitInstance;
+  //GDBGetMem({$IFDEF DEBUGBUILD}'{EF01E8D1-A060-4C72-B5A1-894B5AD95E65}',{$ENDIF}r.data.Inst,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
+  pdouble(r.data.Addr.Instance)^ := cos(pGDBDouble(stack.stack[1].data.Addr.Instance)^);
   result := r;
 end;
 
@@ -284,12 +289,13 @@ function TGDBBoolean_let_TGDBBoolean(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
-  pGDBInteger(r.data.Instance) := nil;
   r.data.ptd:=@FundamentalBooleanDescriptorOdj;
   r.name := '';
-  GDBGetMem({$IFDEF DEBUGBUILD}'{3B765FB8-0899-4BE5-B0B2-303EFA6397DC}',{$ENDIF}r.data.Instance,FundamentalBooleanDescriptorOdj.SizeInGDBBytes);
-  PGDBBoolean(r.data.Instance)^ := PGDBBoolean(hrez.data.Instance)^;
-  PGDBBoolean(rez.data.Instance)^ := PGDBBoolean(hrez.data.Instance)^;
+  r.SetInstance(FundamentalBooleanDescriptorOdj.AllocAndInitInstance);
+  //r.Instance:=FundamentalBooleanDescriptorOdj.AllocAndInitInstance;
+  //GDBGetMem({$IFDEF DEBUGBUILD}'{3B765FB8-0899-4BE5-B0B2-303EFA6397DC}',{$ENDIF}r.data.Inst,FundamentalBooleanDescriptorOdj.SizeInGDBBytes);
+  PGDBBoolean(r.data.Addr.Instance)^ := PGDBBoolean(hrez.data.Addr.Instance)^;
+  PGDBBoolean(rez.data.Addr.Instance)^ := PGDBBoolean(hrez.data.Addr.Instance)^;
   result := r;
 end;
 
@@ -297,24 +303,27 @@ function TGDBDouble_let_TGDBDouble(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
-  pGDBInteger(r.data.Instance) := nil;
+  //r.Instance := nil;
   r.data.ptd:=@FundamentalDoubleDescriptorObj;
   r.name := '';
-  GDBGetMem({$IFDEF DEBUGBUILD}'{16787BA2-CB34-474C-8111-51332666044A}',{$ENDIF}r.data.Instance,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
-  pdouble(r.data.Instance)^ := pdouble(hrez.data.Instance)^;
-  pdouble(rez.data.Instance)^ := pdouble(hrez.data.Instance)^;
+  r.SetInstance(FundamentalDoubleDescriptorObj.AllocAndInitInstance);
+  //r.Instance:=FundamentalDoubleDescriptorObj.AllocAndInitInstance;
+  //GDBGetMem({$IFDEF DEBUGBUILD}'{16787BA2-CB34-474C-8111-51332666044A}',{$ENDIF}r.data.Inst,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
+  pdouble(r.data.Addr.Instance)^ := pdouble(hrez.data.Addr.Instance)^;
+  pdouble(rez.data.Addr.Instance)^ := pdouble(hrez.data.Addr.Instance)^;
   result := r;
 end;
 function TGDBDouble_let_TGDBInteger(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
-  pGDBInteger(r.data.Instance) := nil;
   r.data.ptd:=@FundamentalDoubleDescriptorObj;
   r.name := '';
-  GDBGetMem({$IFDEF DEBUGBUILD}'{16787BA2-CB34-474C-8111-51332666044A}',{$ENDIF}r.data.Instance,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
-  pdouble(r.data.Instance)^ := pgdbinteger(hrez.data.Instance)^;
-  pdouble(rez.data.Instance)^ := pgdbinteger(hrez.data.Instance)^;
+  r.SetInstance(FundamentalDoubleDescriptorObj.AllocAndInitInstance);
+  //r.Instance:=FundamentalDoubleDescriptorObj.AllocAndInitInstance;
+  //GDBGetMem({$IFDEF DEBUGBUILD}'{16787BA2-CB34-474C-8111-51332666044A}',{$ENDIF}r.data.Inst,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
+  pdouble(r.data.Addr.Instance)^ := pgdbinteger(hrez.data.Addr.Instance)^;
+  pdouble(rez.data.Addr.Instance)^ := pgdbinteger(hrez.data.Addr.Instance)^;
   result := r;
 end;
 
@@ -323,24 +332,26 @@ function TGDBInteger_let_TGDBInteger(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
-  pGDBInteger(r.data.Instance) := nil;
   r.data.ptd:=@FundamentalLongIntDescriptorObj;
   r.name := '';
-  GDBGetMem({$IFDEF DEBUGBUILD}'{246D7A0D-55E4-4343-9471-D8B200D6136D}',{$ENDIF}r.data.Instance,FundamentalLongIntDescriptorObj.SizeInGDBBytes);
-  pGDBInteger(r.data.Instance)^ := pGDBInteger(hrez.data.Instance)^;
-  pGDBInteger(rez.data.Instance)^ := pGDBInteger(hrez.data.Instance)^;
+  r.SetInstance(FundamentalLongIntDescriptorObj.AllocAndInitInstance);
+  //r.Instance:=FundamentalLongIntDescriptorObj.AllocAndInitInstance;
+  //GDBGetMem({$IFDEF DEBUGBUILD}'{246D7A0D-55E4-4343-9471-D8B200D6136D}',{$ENDIF}r.data.Inst,FundamentalLongIntDescriptorObj.SizeInGDBBytes);
+  pGDBInteger(r.data.Addr.Instance)^ := pGDBInteger(hrez.data.Addr.Instance)^;
+  pGDBInteger(rez.data.Addr.Instance)^ := pGDBInteger(hrez.data.Addr.Instance)^;
   result := r;
 end;
 function TGDBByte_let_TGDBInteger(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
-  pGDBInteger(r.data.Instance) := nil;
   r.data.ptd:=@FundamentalByteDescriptorObj;
   r.name := '';
-  GDBGetMem({$IFDEF DEBUGBUILD}'{ED860FE9-3A15-459D-B352-7FA4A3AE6F49}',{$ENDIF}r.data.Instance,FundamentalByteDescriptorObj.SizeInGDBBytes);
-  pGDBByte(r.data.Instance)^ := pGDBInteger(hrez.data.Instance)^;
-  pGDBByte(rez.data.Instance)^ := pGDBInteger(hrez.data.Instance)^;
+  r.SetInstance(FundamentalByteDescriptorObj.AllocAndInitInstance);
+  //r.Instance:=FundamentalByteDescriptorObj.AllocAndInitInstance;
+  //GDBGetMem({$IFDEF DEBUGBUILD}'{ED860FE9-3A15-459D-B352-7FA4A3AE6F49}',{$ENDIF}r.data.Inst,FundamentalByteDescriptorObj.SizeInGDBBytes);
+  pGDBByte(r.data.Addr.Instance)^ := pGDBInteger(hrez.data.Addr.Instance)^;
+  pGDBByte(rez.data.Addr.Instance)^ := pGDBInteger(hrez.data.Addr.Instance)^;
   result := r;
 end;
 
@@ -349,193 +360,212 @@ function TGDBString_let_TGDBString(var rez, hrez: vardesk): vardesk;
   //r: vardesk;
   //ts:string;
 begin
-  pGDBInteger(result.data.Instance) := nil;
   result.data.ptd:=@FundamentalStringDescriptorObj;
   result.name := '';
-  //data.Instance := nil;
-  // r.data.Instance=nil then
-                              GDBGetMem({$IFDEF DEBUGBUILD}'{ED860FE9-3A15-459D-B352-7FA4A3AE6F49}',{$ENDIF}result.data.Instance,FundamentalStringDescriptorObj.SizeInGDBBytes);
-                              ppointer(result.data.Instance)^:=nil;
-  if rez.data.Instance=nil then
-                               begin
-                               GDBGetMem({$IFDEF DEBUGBUILD}'{ED860FE9-3A15-459D-B352-7FA4A3AE6F49}',{$ENDIF}rez.data.Instance,FundamentalStringDescriptorObj.SizeInGDBBytes);
-                               ppointer(rez.data.Instance)^:=nil;
-                               end
-                          else
-                              GDBString(rez.data.Instance^):='';
+  //.Instance := nil;
+  // r.Instance=nil then
+  result.SetInstance(FundamentalStringDescriptorObj.AllocAndInitInstance);
+  //result.Instance:=FundamentalStringDescriptorObj.AllocAndInitInstance;
+  //GDBGetMem({$IFDEF DEBUGBUILD}'{ED860FE9-3A15-459D-B352-7FA4A3AE6F49}',{$ENDIF}result.data.Inst,FundamentalStringDescriptorObj.SizeInGDBBytes);
+  //ppointer(result.Instance)^:=nil;
+  if rez.data.Addr.Instance=nil then begin
+    rez.SetInstance(FundamentalStringDescriptorObj.AllocAndInitInstance);
+    //rez.Instance:=FundamentalStringDescriptorObj.AllocAndInitInstance;
+    //GDBGetMem({$IFDEF DEBUGBUILD}'{ED860FE9-3A15-459D-B352-7FA4A3AE6F49}',{$ENDIF}rez.data.Inst,FundamentalStringDescriptorObj.SizeInGDBBytes);
+    //ppointer(rez.Instance)^:=nil;
+  end else
+     GDBString(rez.data.Addr.Instance^):='';
   //GDBGetMem(r.pvalue, basetypearrayptr^.typearray[TGDBString].size);
-  //pointer(ts):=hrez.data.Instance;
-  //pointer(ts):=pointer(hrez.data.Instance^);
-  GDBString(result.data.Instance^) := GDBString(hrez.data.Instance^);
-  GDBString(rez.data.Instance^) := GDBString(hrez.data.Instance^);
+  //pointer(ts):=hrez.Instance;
+  //pointer(ts):=pointer(hrez.Instance^);
+  GDBString(result.data.Addr.Instance^) := GDBString(hrez.data.Addr.Instance^);
+  GDBString(rez.data.Addr.Instance^) := GDBString(hrez.data.Addr.Instance^);
   //r.pvalue := hrez.pvalue;
   //result := r;
-  //GDBPointer(r.data.Instance^):=nil;
+  //GDBPointer(r.Instance^):=nil;
 end;
 function TGDBAnsiString_let_TGDBString(var rez, hrez: vardesk): vardesk;
 begin
-  pGDBInteger(result.data.Instance) := nil;
   result.data.ptd:=@FundamentalAnsiStringDescriptorObj;
   result.name := '';
-  GDBGetMem({$IFDEF DEBUGBUILD}'{ED860FE9-3A15-459D-B352-7FA4A3AE6F49}',{$ENDIF}result.data.Instance,FundamentalStringDescriptorObj.SizeInGDBBytes);
-  ppointer(result.data.Instance)^:=nil;
-  if rez.data.Instance=nil then
-                               begin
-                               GDBGetMem({$IFDEF DEBUGBUILD}'{ED860FE9-3A15-459D-B352-7FA4A3AE6F49}',{$ENDIF}rez.data.Instance,FundamentalStringDescriptorObj.SizeInGDBBytes);
-                               ppointer(rez.data.Instance)^:=nil;
-                               end
-                          else
-                              GDBAnsiString(rez.data.Instance^):='';
-  GDBAnsiString(result.data.Instance^) := Tria_Utf8ToAnsi(GDBString(hrez.data.Instance^));
-  GDBAnsiString(rez.data.Instance^) := Tria_Utf8ToAnsi(GDBString(hrez.data.Instance^));
+  result.SetInstance(FundamentalStringDescriptorObj.AllocAndInitInstance);
+  //result.Instance:=FundamentalStringDescriptorObj.AllocAndInitInstance;
+  //GDBGetMem({$IFDEF DEBUGBUILD}'{ED860FE9-3A15-459D-B352-7FA4A3AE6F49}',{$ENDIF}result.data.Inst,FundamentalStringDescriptorObj.SizeInGDBBytes);
+  //ppointer(result.Instance)^:=nil;
+  if rez.data.Addr.Instance=nil then begin
+    rez.SetInstance(FundamentalStringDescriptorObj.AllocAndInitInstance);
+    //rez.Instance:=FundamentalStringDescriptorObj.AllocAndInitInstance;
+    //GDBGetMem({$IFDEF DEBUGBUILD}'{ED860FE9-3A15-459D-B352-7FA4A3AE6F49}',{$ENDIF}rez.data.Inst,FundamentalStringDescriptorObj.SizeInGDBBytes);
+    //ppointer(rez.Instance)^:=nil;
+  end else
+    GDBAnsiString(rez.data.Addr.Instance^):='';
+  GDBAnsiString(result.data.Addr.Instance^) := Tria_Utf8ToAnsi(GDBString(hrez.data.Addr.Instance^));
+  GDBAnsiString(rez.data.Addr.Instance^) := Tria_Utf8ToAnsi(GDBString(hrez.data.Addr.Instance^));
 end;
 function TGDBAnsiString_let_TGDBAnsiString(var rez, hrez: vardesk): vardesk;
 begin
-  pGDBInteger(result.data.Instance) := nil;
   result.data.ptd:=@FundamentalAnsiStringDescriptorObj;
   result.name := '';
-  GDBGetMem({$IFDEF DEBUGBUILD}'{ED860FE9-3A15-459D-B352-7FA4A3AE6F49}',{$ENDIF}result.data.Instance,FundamentalAnsiStringDescriptorObj.SizeInGDBBytes);
-  ppointer(result.data.Instance)^:=nil;
-  if rez.data.Instance=nil then
+  result.SetInstance(FundamentalAnsiStringDescriptorObj.AllocAndInitInstance);
+  //result.Instance:=FundamentalAnsiStringDescriptorObj.AllocAndInitInstance;
+  //GDBGetMem({$IFDEF DEBUGBUILD}'{ED860FE9-3A15-459D-B352-7FA4A3AE6F49}',{$ENDIF}result.data.Inst,FundamentalAnsiStringDescriptorObj.SizeInGDBBytes);
+  //ppointer(result.Instance)^:=nil;
+  if rez.data.Addr.Instance=nil then
                                begin
-                               GDBGetMem({$IFDEF DEBUGBUILD}'{ED860FE9-3A15-459D-B352-7FA4A3AE6F49}',{$ENDIF}rez.data.Instance,FundamentalAnsiStringDescriptorObj.SizeInGDBBytes);
-                               ppointer(rez.data.Instance)^:=nil;
+                                 rez.SetInstance(FundamentalAnsiStringDescriptorObj.AllocAndInitInstance);
+                                 //rez.Instance:=FundamentalAnsiStringDescriptorObj.AllocAndInitInstance;
+                               //GDBGetMem({$IFDEF DEBUGBUILD}'{ED860FE9-3A15-459D-B352-7FA4A3AE6F49}',{$ENDIF}rez.data.Inst,FundamentalAnsiStringDescriptorObj.SizeInGDBBytes);
+                               //ppointer(rez.Instance)^:=nil;
                                end
                           else
-                              GDBAnsiString(rez.data.Instance^):='';
-  GDBAnsiString(result.data.Instance^) := {Tria_Utf8ToAnsi}(GDBAnsiString(hrez.data.Instance^));
-  GDBAnsiString(rez.data.Instance^) := {Tria_Utf8ToAnsi}(GDBAnsiString(hrez.data.Instance^));
+                              GDBAnsiString(rez.data.Addr.Instance^):='';
+  GDBAnsiString(result.data.Addr.Instance^) := {Tria_Utf8ToAnsi}(GDBAnsiString(hrez.data.Addr.Instance^));
+  GDBAnsiString(rez.data.Addr.Instance^) := {Tria_Utf8ToAnsi}(GDBAnsiString(hrez.data.Addr.Instance^));
 end;
 function TGDBInteger_minus_TGDBInteger(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
-  pGDBInteger(r.data.Instance) := nil;
   r.data.ptd:=@FundamentalLongIntDescriptorObj;
   r.name := '';
-  GDBGetMem({$IFDEF DEBUGBUILD}'{9E62203B-EF07-4775-A646-1030CA029C38}',{$ENDIF}r.data.Instance,FundamentalLongIntDescriptorObj.SizeInGDBBytes);
-  pGDBInteger(r.data.Instance)^ := pGDBInteger(rez.data.Instance)^-pGDBInteger(hrez.data.Instance)^;
+  r.SetInstance(FundamentalLongIntDescriptorObj.AllocAndInitInstance);
+  //r.Instance:=FundamentalLongIntDescriptorObj.AllocAndInitInstance;
+  //GDBGetMem({$IFDEF DEBUGBUILD}'{9E62203B-EF07-4775-A646-1030CA029C38}',{$ENDIF}r.data.Inst,FundamentalLongIntDescriptorObj.SizeInGDBBytes);
+  pGDBInteger(r.data.Addr.Instance)^ := pGDBInteger(rez.data.Addr.Instance)^-pGDBInteger(hrez.data.Addr.Instance)^;
   result := r;
 end;
 function TGDBInteger_minus_TGDBDouble(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
-  pGDBInteger(r.data.Instance) := nil;
   r.data.ptd:=@FundamentalDoubleDescriptorObj;
   r.name := '';
-  GDBGetMem({$IFDEF DEBUGBUILD}'{9E62203B-EF07-4775-A646-1030CA029C38}',{$ENDIF}r.data.Instance,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
-  PGDBDouble(r.data.Instance)^ := PGDBInteger(rez.data.Instance)^-PGDBDouble(hrez.data.Instance)^;
+  r.SetInstance(FundamentalDoubleDescriptorObj.AllocAndInitInstance);
+  //r.Instance:=FundamentalDoubleDescriptorObj.AllocAndInitInstance;
+  //GDBGetMem({$IFDEF DEBUGBUILD}'{9E62203B-EF07-4775-A646-1030CA029C38}',{$ENDIF}r.data.Inst,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
+  PGDBDouble(r.data.Addr.Instance)^ := PGDBInteger(rez.data.Addr.Instance)^-PGDBDouble(hrez.data.Addr.Instance)^;
   result := r;
 end;
 function TGDBDouble_minus_TGDBDouble(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
-  pGDBInteger(r.data.Instance) := nil;
   r.data.ptd:=@FundamentalDoubleDescriptorObj;
   r.name := '';
-  GDBGetMem({$IFDEF DEBUGBUILD}'{9E62203B-EF07-4775-A646-1030CA029C38}',{$ENDIF}r.data.Instance,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
-  PGDBDouble(r.data.Instance)^ := PGDBDouble(rez.data.Instance)^-PGDBDouble(hrez.data.Instance)^;
+  r.SetInstance(FundamentalDoubleDescriptorObj.AllocAndInitInstance);
+  //r.Instance:=FundamentalDoubleDescriptorObj.AllocAndInitInstance;
+  //GDBGetMem({$IFDEF DEBUGBUILD}'{9E62203B-EF07-4775-A646-1030CA029C38}',{$ENDIF}r.data.Inst,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
+  PGDBDouble(r.data.Addr.Instance)^ := PGDBDouble(rez.data.Addr.Instance)^-PGDBDouble(hrez.data.Addr.Instance)^;
   result := r;
 end;
 function TGDBDouble_minus_TGDBInteger(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
-  pGDBInteger(r.data.Instance) := nil;
   r.data.ptd:=@FundamentalDoubleDescriptorObj;
   r.name := '';
-  GDBGetMem({$IFDEF DEBUGBUILD}'{9E62203B-EF07-4775-A646-1030CA029C38}',{$ENDIF}r.data.Instance,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
-  PGDBDouble(r.data.Instance)^ := PGDBDouble(rez.data.Instance)^-PGDBInteger(hrez.data.Instance)^;
+  r.SetInstance(FundamentalDoubleDescriptorObj.AllocAndInitInstance);
+  //r.Instance:=FundamentalDoubleDescriptorObj.AllocAndInitInstance;
+  //GDBGetMem({$IFDEF DEBUGBUILD}'{9E62203B-EF07-4775-A646-1030CA029C38}',{$ENDIF}r.data.Inst,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
+  PGDBDouble(r.data.Addr.Instance)^ := PGDBDouble(rez.data.Addr.Instance)^-PGDBInteger(hrez.data.Addr.Instance)^;
   result := r;
 end;
 function TGDBDouble_mul_TGDBInteger(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
-  pGDBInteger(r.data.Instance) := nil;
   r.data.ptd:=@FundamentalDoubleDescriptorObj;
   r.name := '';
-  GDBGetMem({$IFDEF DEBUGBUILD}'{9E62203B-EF07-4775-A646-1030CA029C38}',{$ENDIF}r.data.Instance,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
-  pGDBDouble(r.data.Instance)^ := pGDBDouble(rez.data.Instance)^*pGDBInteger(hrez.data.Instance)^;
+  r.SetInstance(FundamentalDoubleDescriptorObj.AllocAndInitInstance);
+  //r.Instance:=FundamentalDoubleDescriptorObj.AllocAndInitInstance;
+  //GDBGetMem({$IFDEF DEBUGBUILD}'{9E62203B-EF07-4775-A646-1030CA029C38}',{$ENDIF}r.data.Inst,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
+  pGDBDouble(r.data.Addr.Instance)^ := pGDBDouble(rez.data.Addr.Instance)^*pGDBInteger(hrez.data.Addr.Instance)^;
   result := r;
 end;
 function TGDBInteger_mul_TGDBDouble(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
-  pGDBDouble(r.data.Instance) := nil;
+  //r.Instance := nil;
   r.data.ptd:=@FundamentalDoubleDescriptorObj;
   r.name := '';
-  GDBGetMem({$IFDEF DEBUGBUILD}'{7A416715-3850-4B76-B2E6-F5FE45C775F8}',{$ENDIF}r.data.Instance,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
-  pGDBDouble(r.data.Instance)^ := pGDBInteger(rez.data.Instance)^ * pGDBDouble(hrez.data.Instance)^;
+  r.SetInstance(FundamentalDoubleDescriptorObj.AllocAndInitInstance);
+  //r.Instance:=FundamentalDoubleDescriptorObj.AllocAndInitInstance;
+  //GDBGetMem({$IFDEF DEBUGBUILD}'{7A416715-3850-4B76-B2E6-F5FE45C775F8}',{$ENDIF}r.data.Inst,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
+  pGDBDouble(r.data.Addr.Instance)^ := pGDBInteger(rez.data.Addr.Instance)^ * pGDBDouble(hrez.data.Addr.Instance)^;
   result := r;
 end;
 function TGDBDouble_mul_TGDBDouble(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
-  pGDBDouble(r.data.Instance) := nil;
+  //r.Instance := nil;
   r.data.ptd:=@FundamentalDoubleDescriptorObj;
   r.name := '';
-  GDBGetMem({$IFDEF DEBUGBUILD}'{7A416715-3850-4B76-B2E6-F5FE45C775F8}',{$ENDIF}r.data.Instance,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
-  pGDBDouble(r.data.Instance)^ := pGDBDouble(rez.data.Instance)^ * pGDBDouble(hrez.data.Instance)^;
+  r.SetInstance(FundamentalDoubleDescriptorObj.AllocAndInitInstance);
+  //r.Instance:=FundamentalDoubleDescriptorObj.AllocAndInitInstance;
+  //GDBGetMem({$IFDEF DEBUGBUILD}'{7A416715-3850-4B76-B2E6-F5FE45C775F8}',{$ENDIF}r.data.Inst,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
+  pGDBDouble(r.data.Addr.Instance)^ := pGDBDouble(rez.data.Addr.Instance)^ * pGDBDouble(hrez.data.Addr.Instance)^;
   result := r;
 end;
 function TGDBInteger_plus_TGDBInteger(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
-  pGDBInteger(r.data.Instance) := nil;
   r.data.ptd:=@FundamentalLongIntDescriptorObj;
   r.name := '';
-  GDBGetMem({$IFDEF DEBUGBUILD}'{9E62203B-EF07-4775-A646-1030CA029C38}',{$ENDIF}r.data.Instance,FundamentalLongIntDescriptorObj.SizeInGDBBytes);
-  pGDBInteger(r.data.Instance)^ := pGDBInteger(rez.data.Instance)^+pGDBInteger(hrez.data.Instance)^;
+  r.SetInstance(FundamentalLongIntDescriptorObj.AllocAndInitInstance);
+  //r.Instance:=FundamentalLongIntDescriptorObj.AllocAndInitInstance;
+  //GDBGetMem({$IFDEF DEBUGBUILD}'{9E62203B-EF07-4775-A646-1030CA029C38}',{$ENDIF}r.data.Inst,FundamentalLongIntDescriptorObj.SizeInGDBBytes);
+  pGDBInteger(r.data.Addr.Instance)^ := pGDBInteger(rez.data.Addr.Instance)^+pGDBInteger(hrez.data.Addr.Instance)^;
   result := r;
 end;
 function TGDBDouble_plus_TGDBInteger(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
-  pGDBInteger(r.data.Instance) := nil;
   r.data.ptd:=@FundamentalDoubleDescriptorObj;
   r.name := '';
-  GDBGetMem({$IFDEF DEBUGBUILD}'{9E62203B-EF07-4775-A646-1030CA029C38}',{$ENDIF}r.data.Instance,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
-  PGDBDouble(r.data.Instance)^ := PGDBDouble(rez.data.Instance)^+PGDBInteger(hrez.data.Instance)^;
+  r.SetInstance(FundamentalDoubleDescriptorObj.AllocAndInitInstance);
+  //r.Instance:=FundamentalDoubleDescriptorObj.AllocAndInitInstance;
+  //GDBGetMem({$IFDEF DEBUGBUILD}'{9E62203B-EF07-4775-A646-1030CA029C38}',{$ENDIF}r.data.Inst,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
+  PGDBDouble(r.data.Addr.Instance)^ := PGDBDouble(rez.data.Addr.Instance)^+PGDBInteger(hrez.data.Addr.Instance)^;
   result := r;
 end;
 function TGDBInteger_plus_TGDBDouble(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
-  pGDBInteger(r.data.Instance) := nil;
   r.data.ptd:=@FundamentalDoubleDescriptorObj;
   r.name := '';
-  GDBGetMem({$IFDEF DEBUGBUILD}'{9E62203B-EF07-4775-A646-1030CA029C38}',{$ENDIF}r.data.Instance,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
-  PGDBDouble(r.data.Instance)^ := PGDBInteger(rez.data.Instance)^+PGDBDouble(hrez.data.Instance)^;
+  r.SetInstance(FundamentalDoubleDescriptorObj.AllocAndInitInstance);
+  //r.Instance:=FundamentalDoubleDescriptorObj.AllocAndInitInstance;
+  //GDBGetMem({$IFDEF DEBUGBUILD}'{9E62203B-EF07-4775-A646-1030CA029C38}',{$ENDIF}r.data.Inst,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
+  PGDBDouble(r.data.Addr.Instance)^ := PGDBInteger(rez.data.Addr.Instance)^+PGDBDouble(hrez.data.Addr.Instance)^;
   result := r;
 end;
 function TGDBDouble_plus_TGDBDouble(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
-  pGDBInteger(r.data.Instance) := nil;
   r.data.ptd:=@FundamentalDoubleDescriptorObj;
   r.name := '';
-  GDBGetMem({$IFDEF DEBUGBUILD}'{9E62203B-EF07-4775-A646-1030CA029C38}',{$ENDIF}r.data.Instance,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
-  PGDBDouble(r.data.Instance)^ := PGDBDouble(rez.data.Instance)^+PGDBDouble(hrez.data.Instance)^;
+  r.SetInstance(FundamentalDoubleDescriptorObj.AllocAndInitInstance);
+  //r.Instance:=FundamentalDoubleDescriptorObj.AllocAndInitInstance;
+  //GDBGetMem({$IFDEF DEBUGBUILD}'{9E62203B-EF07-4775-A646-1030CA029C38}',{$ENDIF}r.data.Inst,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
+  PGDBDouble(r.data.Addr.Instance)^ := PGDBDouble(rez.data.Addr.Instance)^+PGDBDouble(hrez.data.Addr.Instance)^;
   result := r;
 end;
 function Tnothing_plus_TGDBInteger(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
-  pGDBInteger(r.data.Instance) := nil;
   r.data.ptd:=@FundamentalLongIntDescriptorObj;
   r.name := '';
-  GDBGetMem({$IFDEF DEBUGBUILD}'{9E62203B-EF07-4775-A646-1030CA029C38}',{$ENDIF}r.data.Instance,FundamentalLongIntDescriptorObj.SizeInGDBBytes);
-  pGDBInteger(r.data.Instance)^ := pGDBInteger(hrez.data.Instance)^;
+  r.SetInstance(FundamentalLongIntDescriptorObj.AllocAndInitInstance);
+  //r.Instance:=FundamentalLongIntDescriptorObj.AllocAndInitInstance;
+  //GDBGetMem({$IFDEF DEBUGBUILD}'{9E62203B-EF07-4775-A646-1030CA029C38}',{$ENDIF}r.data.Inst,FundamentalLongIntDescriptorObj.SizeInGDBBytes);
+  pGDBInteger(r.data.Addr.Instance)^ := pGDBInteger(hrez.data.Addr.Instance)^;
   result := r;
 end;
 
@@ -543,11 +573,12 @@ function Tnothing_minus_TGDBDouble(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
-  pdouble(r.data.Instance) := nil;
   r.data.ptd:=@FundamentalDoubleDescriptorObj;
   r.name := '';
-  GDBGetMem({$IFDEF DEBUGBUILD}'{31E6BE51-DA49-4ECC-9B63-43F3CCA367AD}',{$ENDIF}r.data.Instance,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
-  PGDBDouble(r.data.Instance)^ := -(pdouble(hrez.data.Instance)^);
+  r.SetInstance(FundamentalDoubleDescriptorObj.AllocAndInitInstance);
+  //r.Instance:=FundamentalDoubleDescriptorObj.AllocAndInitInstance;
+  //GDBGetMem({$IFDEF DEBUGBUILD}'{31E6BE51-DA49-4ECC-9B63-43F3CCA367AD}',{$ENDIF}r.data.Inst,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
+  PGDBDouble(r.data.Addr.Instance)^ := -(pdouble(hrez.data.Addr.Instance)^);
   result := r;
 end;
 
@@ -555,11 +586,12 @@ function Tnothing_minus_TGDBInteger(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
-  pGDBInteger(r.data.Instance) := nil;
   r.data.ptd:=@FundamentalLongIntDescriptorObj;
   r.name := '';
-  GDBGetMem({$IFDEF DEBUGBUILD}'{BE0FF755-7D8B-4CDC-8717-7D28E970D1D9}',{$ENDIF}r.data.Instance,FundamentalLongIntDescriptorObj.SizeInGDBBytes);
-  pGDBInteger(r.data.Instance)^ := -(pGDBInteger(hrez.data.Instance)^);
+  r.SetInstance(FundamentalLongIntDescriptorObj.AllocAndInitInstance);
+  //r.Instance:=FundamentalLongIntDescriptorObj.AllocAndInitInstance;
+  //GDBGetMem({$IFDEF DEBUGBUILD}'{BE0FF755-7D8B-4CDC-8717-7D28E970D1D9}',{$ENDIF}r.data.Inst,FundamentalLongIntDescriptorObj.SizeInGDBBytes);
+  pGDBInteger(r.data.Addr.Instance)^ := -(pGDBInteger(hrez.data.Addr.Instance)^);
   result := r;
 end;
 
@@ -567,55 +599,60 @@ function TGDBInteger_mul_TGDBInteger(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
-  pGDBInteger(r.data.Instance) := nil;
   r.data.ptd:=@FundamentalLongIntDescriptorObj;
   r.name := '';
-  GDBGetMem({$IFDEF DEBUGBUILD}'{7A416715-3850-4B76-B2E6-F5FE45C775F8}',{$ENDIF}r.data.Instance,FundamentalLongIntDescriptorObj.SizeInGDBBytes);
-  pGDBInteger(r.data.Instance)^ := pGDBInteger(rez.data.Instance)^ * pGDBInteger(hrez.data.Instance)^;
+  r.SetInstance(FundamentalLongIntDescriptorObj.AllocAndInitInstance);
+  //r.Instance:=FundamentalLongIntDescriptorObj.AllocAndInitInstance;
+  //GDBGetMem({$IFDEF DEBUGBUILD}'{7A416715-3850-4B76-B2E6-F5FE45C775F8}',{$ENDIF}r.data.Inst,FundamentalLongIntDescriptorObj.SizeInGDBBytes);
+  pGDBInteger(r.data.Addr.Instance)^ := pGDBInteger(rez.data.Addr.Instance)^ * pGDBInteger(hrez.data.Addr.Instance)^;
   result := r;
 end;
 function TGDBInteger_div_TGDBInteger(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
-  pGDBDouble(r.data.Instance) := nil;
   r.data.ptd:=@FundamentalDoubleDescriptorObj;
   r.name := '';
-  GDBGetMem({$IFDEF DEBUGBUILD}'{7A416715-3850-4B76-B2E6-F5FE45C775F8}',{$ENDIF}r.data.Instance,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
-  pGDBDouble(r.data.Instance)^ := pGDBInteger(rez.data.Instance)^ / pGDBInteger(hrez.data.Instance)^;
+  r.SetInstance(FundamentalDoubleDescriptorObj.AllocAndInitInstance);
+  //r.Instance:=FundamentalDoubleDescriptorObj.AllocAndInitInstance;
+  //GDBGetMem({$IFDEF DEBUGBUILD}'{7A416715-3850-4B76-B2E6-F5FE45C775F8}',{$ENDIF}r.data.Inst,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
+  pGDBDouble(r.data.Addr.Instance)^ := pGDBInteger(rez.data.Addr.Instance)^ / pGDBInteger(hrez.data.Addr.Instance)^;
   result := r;
 end;
 function TGDBInteger_div_TGDBDouble(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
-  pGDBDouble(r.data.Instance) := nil;
   r.data.ptd:=@FundamentalDoubleDescriptorObj;
   r.name := '';
-  GDBGetMem({$IFDEF DEBUGBUILD}'{7A416715-3850-4B76-B2E6-F5FE45C775F8}',{$ENDIF}r.data.Instance,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
-  pGDBDouble(r.data.Instance)^ := pGDBInteger(rez.data.Instance)^ / pGDBDouble(hrez.data.Instance)^;
+  r.SetInstance(FundamentalDoubleDescriptorObj.AllocAndInitInstance);
+  //r.Instance:=FundamentalDoubleDescriptorObj.AllocAndInitInstance;
+  //GDBGetMem({$IFDEF DEBUGBUILD}'{7A416715-3850-4B76-B2E6-F5FE45C775F8}',{$ENDIF}r.data.Inst,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
+  pGDBDouble(r.data.Addr.Instance)^ := pGDBInteger(rez.data.Addr.Instance)^ / pGDBDouble(hrez.data.Addr.Instance)^;
   result := r;
 end;
 function TGDBDouble_div_TGDBDouble(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
-  pGDBDouble(r.data.Instance) := nil;
   r.data.ptd:=@FundamentalDoubleDescriptorObj;
   r.name := '';
-  GDBGetMem({$IFDEF DEBUGBUILD}'{7A416715-3850-4B76-B2E6-F5FE45C775F8}',{$ENDIF}r.data.Instance,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
-  pGDBDouble(r.data.Instance)^ := pGDBDouble(rez.data.Instance)^ / pGDBDouble(hrez.data.Instance)^;
+  r.SetInstance(FundamentalDoubleDescriptorObj.AllocAndInitInstance);
+  //r.Instance:=FundamentalDoubleDescriptorObj.AllocAndInitInstance;
+  //GDBGetMem({$IFDEF DEBUGBUILD}'{7A416715-3850-4B76-B2E6-F5FE45C775F8}',{$ENDIF}r.data.Inst,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
+  pGDBDouble(r.data.Addr.Instance)^ := pGDBDouble(rez.data.Addr.Instance)^ / pGDBDouble(hrez.data.Addr.Instance)^;
   result := r;
 end;
 function TGDBDouble_div_TGDBInteger(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
-  pGDBDouble(r.data.Instance) := nil;
   r.data.ptd:=@FundamentalDoubleDescriptorObj;
   r.name := '';
-  GDBGetMem({$IFDEF DEBUGBUILD}'{7A416715-3850-4B76-B2E6-F5FE45C775F8}',{$ENDIF}r.data.Instance,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
-  pGDBDouble(r.data.Instance)^ := pGDBDouble(rez.data.Instance)^ / pGDBInteger(hrez.data.Instance)^;
+  r.SetInstance(FundamentalDoubleDescriptorObj.AllocAndInitInstance);
+  //r.Instance:=FundamentalDoubleDescriptorObj.AllocAndInitInstance;
+  //GDBGetMem({$IFDEF DEBUGBUILD}'{7A416715-3850-4B76-B2E6-F5FE45C775F8}',{$ENDIF}r.data.Inst,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
+  pGDBDouble(r.data.Addr.Instance)^ := pGDBDouble(rez.data.Addr.Instance)^ / pGDBInteger(hrez.data.Addr.Instance)^;
   result := r;
 end;
 

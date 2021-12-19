@@ -61,8 +61,8 @@ begin
                         pfd:=PRecordDescriptor(pvindb^.data.PTD)^.FindField('Variants');
                         if pfd<>nil then
                         begin
-                        pf:=pv.data.Instance+pfd.Offset;
-                        pfindb:=pvindb.data.Instance+pfd.Offset;
+                        pf:=pv.data.Addr.Instance+pfd.Offset;
+                        pfindb:=pvindb.data.Addr.Instance+pfd.Offset;
                         pf^:=pfindb^;
                         end;
                    end;

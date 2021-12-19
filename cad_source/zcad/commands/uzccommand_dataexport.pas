@@ -306,13 +306,13 @@ begin
         if @mpd.EntBeforeIterateProc<>nil then
           mpd.EntBeforeIterateProc({bip}mp.PIiterateData,ChangedData);
         mpd.EntIterateProc({bip}mp.PIiterateData,ChangedData,mp,true,mpd.EntChangeProc,f);
-        tempresult:=mp.MPType.GetDecoratedValueAsString(PTOneVarData({bip}mp.PIiterateData)^.PVarDesc.data.Instance,f);
+        tempresult:=mp.MPType.GetDecoratedValueAsString(PVarDesk(PTOneVarData(mp.PIiterateData)^.VDAddr.Instance).data.Addr.Instance,f);
       end else if mp.MPObjectsData.MyGetValue(TObjIDWithExtender.Create(PGDBObjEntity(data.CurrentEntity)^.GetObjType,nil),mpd) then begin
         ChangedData:=CreateChangedData(data.CurrentEntity,mpd.GSData);
         if @mpd.EntBeforeIterateProc<>nil then
           mpd.EntBeforeIterateProc({bip}mp.PIiterateData,ChangedData);
         mpd.EntIterateProc({bip}mp.PIiterateData,ChangedData,mp,true,mpd.EntChangeProc,f);
-        tempresult:=mp.MPType.GetDecoratedValueAsString(PTOneVarData({bip}mp.PIiterateData)^.PVarDesc.data.Instance,f);
+        tempresult:=mp.MPType.GetDecoratedValueAsString(PVarDesk(PTOneVarData(mp.PIiterateData)^.VDAddr.Instance).data.Addr.Instance,f);
       end else
         tempresult:='';
     end else
@@ -367,7 +367,7 @@ begin
   if data.CurrentEntity<>nil then
     pv:=FindVariableInEnt(data.CurrentEntity,variablename);
   if pv<>nil then
-    tempresult:=pv^.data.ptd^.GetValueAsString(pv^.data.Instance)
+    tempresult:=pv^.data.ptd^.GetValueAsString(pv^.data.Addr.Instance)
   else
     tempresult:='!!ERR('+variablename+')!!';
   ResultParam.L.CodeUnits:=Length(tempresult);
@@ -563,19 +563,19 @@ initialization
   VU.init('test');
   VU.InterfaceUses.PushBackIfNotPresent(sysunit);
 
-  DataExportParam.EntFilter:=savedunit.FindOrCreateValue('tmpCmdParamSave_DataExportParam_EntFilter','GDBAnsiString');
+  DataExportParam.EntFilter:=savedunit.FindOrCreateValue('tmpCmdParamSave_DataExportParam_EntFilter','GDBAnsiString').data.Addr.Instance;
   if DataExportParam.EntFilter^='' then
     DataExportParam.EntFilter^:='IncludeEntityName(''Cable'');'#13#10'IncludeEntityName(''Device'')';
-  DataExportParam.PropFilter:=savedunit.FindOrCreateValue('tmpCmdParamSave_DataExportParam_PropFilter','GDBAnsiString');
+  DataExportParam.PropFilter:=savedunit.FindOrCreateValue('tmpCmdParamSave_DataExportParam_PropFilter','GDBAnsiString').data.Addr.Instance;
   //if DataExportParam.PropFilter^='' then
   //  DataExportParam.PropFilter:='';
-  DataExportParam.Exporter:=savedunit.FindOrCreateValue('tmpCmdParamSave_DataExportParam_Exporter','GDBAnsiString');
+  DataExportParam.Exporter:=savedunit.FindOrCreateValue('tmpCmdParamSave_DataExportParam_Exporter','GDBAnsiString').data.Addr.Instance;
   if DataExportParam.Exporter^='' then
     DataExportParam.Exporter^:='DoIf(SameMask(%%(''EntityName''),''Device''),Export(%%(''EntityName''),''NMO_Name'',@@(''NMO_Name''),''Position'',@@(''Position'')))'+
                            #10+'DoIf(SameMask(%%(''EntityName''),''Device''),Export(%%(''EntityName''),''NMO_Name'',@@(''NMO_Name''),''Power'',@@(''Power'')))'+
                            #10+'DoIf(SameMask(%%(''EntityName''),''Cable''),Export(%%(''EntityName''),''NMO_Name'',@@(''NMO_Name''),''AmountD'',@@(''AmountD'')))'+
                            #10+'DoIf(SameMask(%%(''EntityName''),''Cable''),Export(%%(''EntityName''),''NMO_Name'',@@(''NMO_Name''),''CABLE_Segment'',@@(''CABLE_Segment'')))';
-  DataExportParam.FileName:=savedunit.FindOrCreateValue('tmpCmdParamSave_DataExportParam_FileName','GDBAnsiString');
+  DataExportParam.FileName:=savedunit.FindOrCreateValue('tmpCmdParamSave_DataExportParam_FileName','GDBAnsiString').data.Addr.Instance;
   if DataExportParam.FileName^='' then
     DataExportParam.FileName^:='d:\test.csv';
 

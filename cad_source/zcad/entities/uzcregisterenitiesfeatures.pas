@@ -92,7 +92,7 @@ begin
      extractvarfromdxfstring(_Value,vn,vt,vv,vun);
      PTUnit(ptu).setvardesc(vd,vn,vun,vt);
      PTUnit(ptu).InterfaceVariables.createvariable(vd.name,vd);
-     PBaseTypeDescriptor(vd.data.PTD)^.SetValueFromString(vd.data.Instance,vv);
+     PBaseTypeDescriptor(vd.data.PTD)^.SetValueFromString(vd.data.Addr.Instance,vv);
      result:=true;
 end;
 
@@ -179,9 +179,9 @@ begin
      if (formatstr<>'') then
                                       begin
                                            if pEntity<>nil then
-                                                               pstring(pvn^.data.Instance)^:=textformat(formatstr,pEntity)
+                                                               pstring(pvn^.data.Addr.Instance)^:=textformat(formatstr,pEntity)
                                                             else
-                                                               pstring(pvn^.data.Instance)^:='!!ERR(pEnttity=nil)';
+                                                               pstring(pvn^.data.Addr.Instance)^:='!!ERR(pEnttity=nil)';
                                            pvn^.attrib:=pvn^.attrib or vda_RO;
                                       end
                                          else
@@ -199,7 +199,7 @@ begin
      pvnt:=pentvarext.entityunit.FindVariable('NMO_Template');
 
      if (pvnt<>nil) then
-     DeviceNameSubProcess(pvn,pstring(pvnt^.data.Instance)^,pEntity);
+     DeviceNameSubProcess(pvn,pstring(pvnt^.data.Addr.Instance)^,pEntity);
 
      DBLinkProcess(pentity,drawing);
 end;
@@ -215,13 +215,13 @@ begin
      pvn:=pentvarext.entityunit.FindVariable('Device_Type');
      if pvn<>nil then
      begin
-          case PTDeviceType(pvn^.data.Instance)^ of
+          case PTDeviceType(pvn^.data.Addr.Instance)^ of
           TDT_SilaPotr:
           begin
                pvn:=pentvarext.entityunit.FindVariable('Voltage');
                if pvn<>nil then
                begin
-                     volt:=PTVoltage(pvn^.data.Instance)^;
+                     volt:=PTVoltage(pvn^.data.Addr.Instance)^;
                      u:=0;
                      case volt of
                                  _AC_220V_50Hz:u:=0.22;
@@ -229,34 +229,34 @@ begin
                      end;{case}
                      pvn:=pentvarext.entityunit.FindVariable('CalcIP');
                      if pvn<>nil then
-                                     calcip:=PTCalcIP(pvn^.data.Instance)^;
+                                     calcip:=PTCalcIP(pvn^.data.Addr.Instance)^;
                      pvp:=pentvarext.entityunit.FindVariable('Power');
                      pvi:=pentvarext.entityunit.FindVariable('Current');
                      pvcos:=pentvarext.entityunit.FindVariable('CosPHI');
                      pvphase:=pentvarext.entityunit.FindVariable('Phase');
                      if pvn<>nil then
-                                     calcip:=PTCalcIP(pvn^.data.Instance)^;
+                                     calcip:=PTCalcIP(pvn^.data.Addr.Instance)^;
                      if (pvp<>nil)and(pvi<>nil)and(pvcos<>nil)and(pvphase<>nil) then
                      begin
                      if calcip=_ICOS_from_P then
                      begin
-                          if pgdbdouble(pvp^.data.Instance)^<1 then pgdbdouble(pvcos^.data.Instance)^:=0.65
-                     else if pgdbdouble(pvp^.data.Instance)^<=4 then pgdbdouble(pvcos^.data.Instance)^:=0.75
-                     else pgdbdouble(pvcos^.data.Instance)^:=0.85;
+                          if pgdbdouble(pvp^.data.Addr.Instance)^<1 then pgdbdouble(pvcos^.data.Addr.Instance)^:=0.65
+                     else if pgdbdouble(pvp^.data.Addr.Instance)^<=4 then pgdbdouble(pvcos^.data.Addr.Instance)^:=0.75
+                     else pgdbdouble(pvcos^.data.Addr.Instance)^:=0.85;
 
                           calcip:=_I_from_p;
                      end;
 
                      case calcip of
                           _I_from_P:begin
-                                         if PTPhase(pvphase^.data.Instance)^=_ABC
-                                         then pgdbdouble(pvi^.data.Instance)^:=pgdbdouble(pvp^.data.Instance)^/u/1.73/pgdbdouble(pvcos^.data.Instance)^
-                                         else pgdbdouble(pvi^.data.Instance)^:=pgdbdouble(pvp^.data.Instance)^/u/pgdbdouble(pvcos^.data.Instance)^
+                                         if PTPhase(pvphase^.data.Addr.Instance)^=_ABC
+                                         then pgdbdouble(pvi^.data.Addr.Instance)^:=pgdbdouble(pvp^.data.Addr.Instance)^/u/1.73/pgdbdouble(pvcos^.data.Addr.Instance)^
+                                         else pgdbdouble(pvi^.data.Addr.Instance)^:=pgdbdouble(pvp^.data.Addr.Instance)^/u/pgdbdouble(pvcos^.data.Addr.Instance)^
                                     end;
                           _P_from_I:begin
-                                         if PTPhase(pvphase^.data.Instance)^=_ABC
-                                         then pgdbdouble(pvp^.data.Instance)^:=pgdbdouble(pvi^.data.Instance)^*u*1.73*pgdbdouble(pvcos^.data.Instance)^
-                                         else pgdbdouble(pvp^.data.Instance)^:=pgdbdouble(pvi^.data.Instance)^*u*pgdbdouble(pvcos^.data.Instance)^
+                                         if PTPhase(pvphase^.data.Addr.Instance)^=_ABC
+                                         then pgdbdouble(pvp^.data.Addr.Instance)^:=pgdbdouble(pvi^.data.Addr.Instance)^*u*1.73*pgdbdouble(pvcos^.data.Addr.Instance)^
+                                         else pgdbdouble(pvp^.data.Addr.Instance)^:=pgdbdouble(pvi^.data.Addr.Instance)^*u*pgdbdouble(pvcos^.data.Addr.Instance)^
                                     end
 
 
@@ -279,8 +279,8 @@ begin
      pentvarext:=pCable^.GetExtension<TVariablesExtender>;
      pvn:=pentvarext.entityunit.FindVariable('NMO_Name');
      if pvn<>nil then
-     if pstring(pvn^.data.Instance)^='@1' then
-                                              pvn^.data.Instance:=pvn^.data.Instance;
+     //if pstring(pvn^.Instance)^='@1' then
+     //                                         pvn^.Instance:=pvn^.Instance;
      if pCable^.NodePropArray.Count>0 then
                                            begin
                                                 ptn:=pCable^.NodePropArray.getDataMutable(0);
@@ -291,7 +291,7 @@ begin
      pvn:=pentvarext.entityunit.FindVariable('NMO_Prefix');
      pvnt:=pentvarext.entityunit.FindVariable('NMO_PrefixTemplate');
      if (pvnt<>nil) then
-                        s:=pstring(pvnt^.data.Instance)^
+                        s:=pstring(pvnt^.data.Addr.Instance)^
                     else
                         s:='';
      DeviceNameSubProcess(pvn,s,pdev);
@@ -306,7 +306,7 @@ begin
      pvn:=pentvarext.entityunit.FindVariable('NMO_Suffix');
      pvnt:=pentvarext.entityunit.FindVariable('NMO_SuffixTemplate');
      if (pvnt<>nil) then
-                        s:=pstring(pvnt^.data.Instance)^
+                        s:=pstring(pvnt^.data.Addr.Instance)^
                     else
                         s:='';
      DeviceNameSubProcess(pvn,s,pdev);
@@ -314,12 +314,12 @@ begin
      pvn:=pentvarext.entityunit.FindVariable('NMO_Name');
      pvnt:=pentvarext.entityunit.FindVariable('NMO_Template');
      if (pvnt<>nil) then
-     DeviceNameSubProcess(pvn,pstring(pvnt^.data.Instance)^,pCable);
+     DeviceNameSubProcess(pvn,pstring(pvnt^.data.Addr.Instance)^,pCable);
 
      pvn:=pentvarext.entityunit.FindVariable('GC_HDGroup');
      pvnt:=pentvarext.entityunit.FindVariable('GC_HDGroupTemplate');
      if (pvnt<>nil) then
-                        s:=pstring(pvnt^.data.Instance)^
+                        s:=pstring(pvnt^.data.Addr.Instance)^
                     else
                         s:='';
      DeviceNameSubProcess(pvn,s,pCable);
@@ -327,7 +327,7 @@ begin
      pvn:=pentvarext.entityunit.FindVariable('GC_HeadDevice');
      pvnt:=pentvarext.entityunit.FindVariable('GC_HeadDeviceTemplate');
      if (pvnt<>nil) then
-                        s:=pstring(pvnt^.data.Instance)^
+                        s:=pstring(pvnt^.data.Addr.Instance)^
                     else
                         s:='';
      DeviceNameSubProcess(pvn,s,pCable);
@@ -336,7 +336,7 @@ begin
      pvn:=pentvarext.entityunit.FindVariable('GC_HDShortName');
      pvnt:=pentvarext.entityunit.FindVariable('GC_HDShortNameTemplate');
      if (pvnt<>nil) then
-                        s:=pstring(pvnt^.data.Instance)^
+                        s:=pstring(pvnt^.data.Addr.Instance)^
                     else
                         s:='';
      DeviceNameSubProcess(pvn,s,pCable);

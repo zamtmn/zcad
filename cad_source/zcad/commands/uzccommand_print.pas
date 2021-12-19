@@ -79,8 +79,8 @@ begin
      v2:=commandmanager.PopValue;
      v1:=commandmanager.PopValue;
      vs:=commandmanager.GetValueHeap;
-     tp1:=Pgdbvertex(v1.data.Instance)^;
-     tp2:=Pgdbvertex(v2.data.Instance)^;
+     tp1:=Pgdbvertex(v1.data.Addr.Instance)^;
+     tp2:=Pgdbvertex(v2.data.Addr.Instance)^;
 
      p1.x:=min(tp1.x,tp2.x);
      p1.y:=min(tp1.y,tp2.y);

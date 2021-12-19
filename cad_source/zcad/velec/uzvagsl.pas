@@ -1123,7 +1123,7 @@ implementation
 //                pvd:=pdevvarext^.entityunit.FindVariable('NMO_BaseName');
 //                if pvd<>nil then
 //                begin
-//                  if uppercase(pvd^.data.PTD^.GetUserValueAsString(pvd^.data.Instance))=
+//                  if uppercase(pvd^.data.PTD^.GetUserValueAsString(pvd^.Instance))=
 //                     uppercase(comParams.BaseName) then
 //                                                             process:=true
 //                                                         else
@@ -1143,7 +1143,7 @@ implementation
 //                pvd:=pdevvarext^.entityunit.FindVariable(comParams.NumberVar);
 //                if pvd<>nil then
 //                begin
-//                     pvd^.data.PTD^.SetValueFromString(pvd^.data.Instance,inttostr(index));
+//                     pvd^.data.PTD^.SetValueFromString(pvd^.Instance,inttostr(index));
 //                     ZCMsgCallBackInterface.TextMessage('device'+inttostr(index)+'==='+inttostr(i)+'##'+inttostr(j));
 //                     //inc(index,NumberingParams.Increment);
 //                     inc(index);
@@ -1154,7 +1154,7 @@ implementation
 //                   ZCMsgCallBackInterface.TextMessage('In device not found numbering variable');
 //              end
 //              else
-//                  ZCMsgCallBackInterface.TextMessage('Device with basename "'+pvd^.data.PTD^.GetUserValueAsString(pvd^.data.Instance)+'" filtred out');
+//                  ZCMsgCallBackInterface.TextMessage('Device with basename "'+pvd^.data.PTD^.GetUserValueAsString(pvd^.Instance)+'" filtred out');
 //         end;
 //       ZCMsgCallBackInterface.TextMessage(sysutils.format(rscmNEntitiesProcessed,[inttostr(count)]));
 //       //if NumberingParams.SaveStart then

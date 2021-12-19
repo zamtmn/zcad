@@ -98,7 +98,7 @@ begin
       SysVarUnit:=units.FindOrCreateEmptyUnit('sysvar');
       SysVarUnit.InterfaceUses.PushBackIfNotPresent(SysUnit);
     end;
-  SysVarUnit.CreateVariable(varname,vartype,pinstance);
+  SysVarUnit.CreateFixedVariable(varname,vartype,pinstance);
 end;
 {procedure TUnitManager.AfterObjectDone;
 begin
@@ -806,7 +806,7 @@ if addtype then
                                                                  then
                                                                      line:=line;
                                                         vd:=evaluate(line,currentunit);
-                                                        deletetempvar(vd);
+                                                        ClearTempVariable(vd);
                                                    end;
                                 if (parseresult<>nil)and parseerror then
                                 begin
@@ -865,7 +865,7 @@ finalization;
                 PVariantsField:=PTUserTypeDescriptor(PVardeskInDBUnit.data.PTD)^.FindField('Variants');
                 if PVariantsField<>nil then
                 begin
-                     PTObj:=pointer(GDBPlatformUInt(PVardeskInDBUnit.data.Instance)+GDBPlatformUInt(PVariantsField.Offset));
+                     PTObj:=pointer(GDBPlatformUInt(PVardeskInDBUnit.data.Addr.Instance)+GDBPlatformUInt(PVariantsField.Offset));
                      (tobject(PTObj^).Free);
                 end;
                 PVardeskInDBUnit:=DBUnit.InterfaceVariables.vardescarray.iterate(IrInDBUnit);

@@ -207,7 +207,7 @@ begin
                           pfd:=PRecordDescriptor(pvd^.data.PTD)^.FindField('Variants');
                           if pfd<>nil then
                           begin
-                               pf:=pvd.data.Instance+pfd.Offset;
+                               pf:=pvd.data.Addr.Instance+pfd.Offset;
                                pf^:=TCSVDocument.Create;
                                TCSVDocument(pf^).Delimiter:=';';
                                TCSVDocument(pf^).LoadFromFile(utf8tosys(fn));

@@ -463,11 +463,12 @@ var
    vd: vardesk;
 begin
      vd.name:=varname;
-     //vd.data.Instance:=instance;
+     //vd.Instance:=instance;
      vd.data.PTD:=SysUnit.TypeName2PTD(vartype);
-     vd.data.Instance:=nil;
+     vd.SetInstance(nil);
+     //vd.Instance:=nil;
      varstack.createvariable(varname,vd);
-     vd.data.PTD.CopyInstanceTo(instance,vd.data.Instance);
+     vd.data.PTD.CopyInstanceTo(instance,vd.data.Addr.Instance);
 end;
 function GDBcommandmanager.GetValue:vardesk;
 var
@@ -487,7 +488,8 @@ begin
      lastelement.name:='';
      lastelement.username:='';
      lastelement.data.PTD:=nil;
-     lastelement.data.Instance:=nil;
+     lastelement.SetInstance(nil);
+     //lastelement.Instance:=nil;
 end;
 
 function getcommandmanager:GDBPointer;
@@ -805,7 +807,7 @@ begin
      pvd:=self.varstack.vardescarray.beginiterate(ir);
      if pvd<>nil then
      repeat
-           value:=pvd.data.PTD.GetValueAsString(pvd.data.Instance);
+           value:=pvd.data.PTD.GetValueAsString(pvd.data.Addr.Instance);
            ZCMsgCallBackInterface.TextMessage(pvd.data.PTD.TypeName+':'+value,TMWOHistoryOut);
 
      pvd:=self.varstack.vardescarray.iterate(ir);
@@ -924,10 +926,10 @@ begin
   DMenu:=TDMenuWnd.CreateNew(application);
   if SavedUnit<>nil then
   begin
-  pint:=SavedUnit.FindValue('DMenuX');
+  pint:=SavedUnit.FindValue('DMenuX').data.Addr.Instance;
   if assigned(pint)then
                        DMenu.Left:=pint^;
-  pint:=SavedUnit.FindValue('DMenuY');
+  pint:=SavedUnit.FindValue('DMenuY').data.Addr.Instance;
   if assigned(pint)then
                        DMenu.Top:=pint^;
   end;

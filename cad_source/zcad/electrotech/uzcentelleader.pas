@@ -338,8 +338,8 @@ begin
                           pvn:=pentvarext.entityunit.FindVariable('NMO_Name');
                           if pvn<>nil then
                           begin
-                               s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Instance);
-                               //s:=pstring(pvn^.data.Instance)^;
+                               s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Addr.Instance);
+                               //s:=pstring(pvn^.Instance)^;
                                sta.PushBackData(s);
                                S:='';
                           end;
@@ -385,8 +385,8 @@ begin
                                  pvn:=pentvarext.entityunit.FindVariable('NMO_Name');
                                   if pvn<>nil then
                                   begin
-                                       s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Instance);
-                                       //s:=pstring(pvn^.data.Instance)^;
+                                       s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Addr.Instance);
+                                       //s:=pstring(pvn^.Instance)^;
                                        sta.PushBackData(s);
                                   end;
                                   system.break;
@@ -497,9 +497,9 @@ begin
             pvNoteFormat:=nil;
           end;
           if (pvNote<>nil)and(pvNoteFormat<>nil) then
-            pstring(pvNote^.data.Instance)^:=textformat(pstring(pvNoteFormat^.data.Instance)^,pdev);
-          if (pvNote<>nil)and(pstring(pvNote^.data.Instance)^<>'') then
-            s:={pstring(pvNote^.data.Instance)^}pvNote^.data.PTD.GetValueAsString(pvNote^.data.Instance)
+            pstring(pvNote^.data.Addr.Instance)^:=textformat(pstring(pvNoteFormat^.data.Addr.Instance)^,pdev);
+          if (pvNote<>nil)and(pstring(pvNote^.data.Addr.Instance)^<>'') then
+            s:={pstring(pvNote^.Instance)^}pvNote^.data.PTD.GetValueAsString(pvNote^.data.Addr.Instance)
           else begin
             s:='';
             pentvarext:=pdev^.GetExtension<TVariablesExtender>;
@@ -507,14 +507,14 @@ begin
             pvn:=pentvarext.entityunit.FindVariable('NMO_Name');
             if pvn<>nil then
             begin
-                 s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Instance);
-                 //s:=pstring(pvn^.data.Instance)^;
+                 s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Addr.Instance);
+                 //s:=pstring(pvn^.Instance)^;
             end;
             //pvn:=PTObjectUnit(pdev^.ou.Instance)^.FindVariable('Text');
             pvn:=pentvarext.entityunit.FindVariable('Text');
             if pvn<>nil then
             begin
-                 s:=s+{pstring(pvn^.data.Instance)^}pvn^.data.PTD.GetValueAsString(pvn^.data.Instance);;
+                 s:=s+{pstring(pvn^.Instance)^}pvn^.data.PTD.GetValueAsString(pvn^.data.Addr.Instance);;
             end;
           end;
           if s<>'' then
@@ -819,17 +819,17 @@ begin
    pvi:=PTUnit(ptu).FindVariable('size');
    if pvi<>nil then
                    begin
-                        result^.size:=pgdbinteger(pvi^.data.Instance)^;
+                        result^.size:=pgdbinteger(pvi^.data.Addr.Instance)^;
                    end;
    pvi:=PTUnit(ptu).FindVariable('scale');
    if pvi<>nil then
                    begin
-                        result^.scale:=pgdbdouble(pvi^.data.Instance)^;
+                        result^.scale:=pgdbdouble(pvi^.data.Addr.Instance)^;
                    end;
    pvi:=PTUnit(ptu).FindVariable('twidth');
    if pvi<>nil then
                    begin
-                        result^.twidth:=pgdbdouble(pvi^.data.Instance)^;
+                        result^.twidth:=pgdbdouble(pvi^.data.Addr.Instance)^;
                    end;
    end;
 end;

@@ -37,21 +37,24 @@ type
   PTOneVarData=^TOneVarData;
   TOneVarData=record
                     StrValue:GDBString;
-                    PVarDesc:pvardesk;
+                    //PVarDesc:pvardesk;
+                    VDAddr:TInVectorAddr
               end;
-  TStringCounter=TMyMapCounter<string{,LessString}>;
+  TStringCounter=TMyMapCounter<string>;
   PTStringCounterData=^TStringCounterData;
   TStringCounterData=record
                     counter:TStringCounter;
                     totalcount:integer;
-                    PVarDesc:pvardesk;
+                    //PVarDesc:pvardesk;
+                    VDAddr:TInVectorAddr;
               end;
-  TPointerCounter=TMyMapCounter<pointer{,LessPointer}>;
+  TPointerCounter=TMyMapCounter<pointer>;
   PTPointerCounterData=^TPointerCounterData;
   TPointerCounterData=record
                     counter:TPointerCounter;
                     totalcount:integer;
-                    PVarDesc:pvardesk;
+                    //PVarDesc:pvardesk;
+                    VDAddr:TInVectorAddr;
               end;
   PTVertex3DControlVarData=^TVertex3DControlVarData;
   TVertex3DControlVarData=record
@@ -104,7 +107,7 @@ var
 
 procedure GeneralFromVarEntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 begin
-     mp.MPType^.CopyInstanceTo(pvardesk(pdata)^.data.Instance,ChangedData.PSetDataInEtity);
+     mp.MPType^.CopyInstanceTo(pvardesk(pdata)^.data.Addr.Instance,ChangedData.PSetDataInEtity);
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
 end;
 
@@ -131,10 +134,13 @@ pu - модуль в котором будет создана переменна
 }
 {var
    vd:vardesk;}
+var
+  PVD:pvardesk;
 begin
     GDBGetMem({$IFDEF DEBUGBUILD}'{831CDE55-8FC6-4ACD-8A4C-FEB861D44294}',{$ENDIF}result,sizeof(TOneVarData));
     pointer(PTOneVarData(result)^.StrValue):=nil;
-    FindOrCreateVar(pu,mp.MPName,mp.MPUserName,mp.MPType^.TypeName,PTOneVarData(result).PVarDesc);
+    FindOrCreateVar(pu,mp.MPName,mp.MPUserName,mp.MPType^.TypeName,PVD);
+    PTOneVarData(result).VDAddr:=PVD^.data.Addr;
 end;
 
 function GetStringCounterData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
@@ -144,16 +150,19 @@ mp - описание мультипроперти
 pu - модуль в котором будет создана переменная для мультипроперти
 возвращает указатель на созданную структуру
 }
+var
+  PVD:pvardesk;
 begin
     GDBGetMem({$IFDEF DEBUGBUILD}'{831CDE55-8FC6-4ACD-8A4C-FEB861D44294}',{$ENDIF}result,sizeof(TStringCounterData));
     PTStringCounterData(result)^.counter:=TStringCounter.Create;
-    if FindOrCreateVar(pu,mp.MPName,mp.MPUserName,mp.MPType^.TypeName,PTStringCounterData(result).PVarDesc) then begin
-      PTEnumDataWithOtherData(PTStringCounterData(result).PVarDesc^.data.Instance)^.Enums.init(10);
+    if FindOrCreateVar(pu,mp.MPName,mp.MPUserName,mp.MPType^.TypeName,PVD) then begin
+      PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.Enums.init(10);
       PTStringCounterData(result)^.totalcount:=0;
-      PTEnumDataWithOtherData(PTStringCounterData(result).PVarDesc^.data.Instance)^.Selected:=0;
-      GDBGetMem({$IFDEF DEBUGBUILD}'{831CDE55-8FC6-4ACD-8A4C-FEB861D44294}',{$ENDIF}PTEnumDataWithOtherData(PTStringCounterData(result).PVarDesc^.data.Instance)^.PData,sizeof(TZctnrVectorGDBString));
-      PTZctnrVectorGDBString(PTEnumDataWithOtherData(PTStringCounterData(result).PVarDesc^.data.Instance)^.PData)^.init(10);
+      PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.Selected:=0;
+      GDBGetMem({$IFDEF DEBUGBUILD}'{831CDE55-8FC6-4ACD-8A4C-FEB861D44294}',{$ENDIF}PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData,sizeof(TZctnrVectorGDBString));
+      PTZctnrVectorGDBString(PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData)^.init(10);
     end;
+    PTStringCounterData(result).VDAddr:=PVD^.data.Addr;
 end;
 
 function GetPointerCounterData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
@@ -163,16 +172,19 @@ mp - описание мультипроперти
 pu - модуль в котором будет создана переменная для мультипроперти
 возвращает указатель на созданную структуру
 }
+var
+  PVD:pvardesk;
 begin
     GDBGetMem({$IFDEF DEBUGBUILD}'{831CDE55-8FC6-4ACD-8A4C-FEB861D44294}',{$ENDIF}result,sizeof(TPointerCounterData));
     PTPointerCounterData(result)^.counter:=TPointerCounter.Create;
-    if FindOrCreateVar(pu,mp.MPName,mp.MPUserName,mp.MPType^.TypeName,PTPointerCounterData(result).PVarDesc) then begin
-      PTEnumDataWithOtherData(PTPointerCounterData(result).PVarDesc^.data.Instance)^.Enums.init(10);
+    if FindOrCreateVar(pu,mp.MPName,mp.MPUserName,mp.MPType^.TypeName,PVD) then begin
+      PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.Enums.init(10);
       PTPointerCounterData(result)^.totalcount:=0;
-      PTEnumDataWithOtherData(PTPointerCounterData(result).PVarDesc^.data.Instance)^.Selected:=0;
-      GDBGetMem({$IFDEF DEBUGBUILD}'{831CDE55-8FC6-4ACD-8A4C-FEB861D44294}',{$ENDIF}PTEnumDataWithOtherData(PTPointerCounterData(result).PVarDesc^.data.Instance)^.PData,sizeof(TZctnrVectorGDBPointer));
-      PTZctnrVectorGDBPointer(PTEnumDataWithOtherData(PTPointerCounterData(result).PVarDesc^.data.Instance)^.PData)^.init(10);
+      PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.Selected:=0;
+      GDBGetMem({$IFDEF DEBUGBUILD}'{831CDE55-8FC6-4ACD-8A4C-FEB861D44294}',{$ENDIF}PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData,sizeof(TZctnrVectorGDBPointer));
+      PTZctnrVectorGDBPointer(PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData)^.init(10);
     end;
+    PTPointerCounterData(result).VDAddr:=PVD^.data.Addr;
 end;
 
 
@@ -191,7 +203,7 @@ begin
     pointer(PTVertex3DControlVarData(result)^.StrValueY):=nil;
     pointer(PTVertex3DControlVarData(result)^.StrValueZ):=nil;
     if FindOrCreateVar(pu,mp.MPName,mp.MPUserName,mp.MPType^.TypeName,PTVertex3DControlVarData(result).PArrayIndexVarDesc) then
-       mp.MPType.CopyInstanceTo(@Vertex3DControl,PTVertex3DControlVarData(result).PArrayIndexVarDesc.data.Instance);
+       mp.MPType.CopyInstanceTo(@Vertex3DControl,PTVertex3DControlVarData(result).PArrayIndexVarDesc.data.Addr.Instance);
     FindOrCreateVar(pu,mp.MPName+'x','x','GDBDouble',PTVertex3DControlVarData(result).PXVarDesc);
     FindOrCreateVar(pu,mp.MPName+'y','y','GDBDouble',PTVertex3DControlVarData(result).PYVarDesc);
     FindOrCreateVar(pu,mp.MPName+'z','z','GDBDouble',PTVertex3DControlVarData(result).PZVarDesc);
@@ -206,23 +218,25 @@ begin
 end;
 procedure FreeStringCounterData(piteratedata:GDBPointer;mp:TMultiProperty);
 var
- pair:TStringCounter.TDictionaryPair;
- //iterator:TStringCounter.TIterator;
-   s:string;
-   c:integer;
+  pair:TStringCounter.TDictionaryPair;
+  //iterator:TStringCounter.TIterator;
+  s:string;
+  c:integer;
+  PVD:pvardesk;
 {уничтожает созданную GetStringCounterData структуру}
 begin
     //PTStringCounterData(piteratedata)^.StrValue:='';
-  PTEnumDataWithOtherData(PTStringCounterData(piteratedata)^.PVarDesc^.data.Instance)^.Enums.PushBackData(format('Total (%d)',[PTStringCounterData(piteratedata)^.totalcount]));
-  PTZctnrVectorGDBString(PTEnumDataWithOtherData(PTStringCounterData(piteratedata)^.PVarDesc^.data.Instance)^.PData)^.PushBackData('*');
+  PVD:=PTStringCounterData(piteratedata)^.VDAddr.Instance;
+  PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.Enums.PushBackData(format('Total (%d)',[PTStringCounterData(piteratedata)^.totalcount]));
+  PTZctnrVectorGDBString(PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData)^.PushBackData('*');
   for pair in PTStringCounterData(piteratedata)^.counter do begin
   //iterator:=PTStringCounterData(piteratedata)^.counter.Min;
   //if assigned(iterator) then
   //repeat
         s:=pair.Key;
         c:=pair.Value;
-        PTEnumDataWithOtherData(PTStringCounterData(piteratedata)^.PVarDesc^.data.Instance)^.Enums.PushBackData(format('%s (%d)',[Tria_AnsiToUtf8(s),c]));
-        PTZctnrVectorGDBString(PTEnumDataWithOtherData(PTStringCounterData(piteratedata)^.PVarDesc^.data.Instance)^.PData)^.PushBackData(s);
+        PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.Enums.PushBackData(format('%s (%d)',[Tria_AnsiToUtf8(s),c]));
+        PTZctnrVectorGDBString(PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData)^.PushBackData(s);
   //until not iterator.Next;
   end;
   PTStringCounterData(piteratedata)^.counter.Free;
@@ -235,10 +249,12 @@ var
    s:PGDBNamedObject;
    c:integer;
    name:string;
+   PVD:pvardesk;
 {уничтожает созданную GetPointerCounterData структуру}
 begin
-  PTEnumDataWithOtherData(PTPointerCounterData(piteratedata)^.PVarDesc^.data.Instance)^.Enums.PushBackData(format('Total (%d)',[PTPointerCounterData(piteratedata)^.totalcount]));
-  PTZctnrVectorGDBPointer(PTEnumDataWithOtherData(PTPointerCounterData(piteratedata)^.PVarDesc^.data.Instance)^.PData)^.PushBackData(nil);
+  PVD:=PTPointerCounterData(piteratedata)^.VDAddr.Instance;
+  PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.Enums.PushBackData(format('Total (%d)',[PTPointerCounterData(piteratedata)^.totalcount]));
+  PTZctnrVectorGDBPointer(PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData)^.PushBackData(nil);
   for pair in PTPointerCounterData(piteratedata)^.counter do begin
   //iterator:=PTPointerCounterData(piteratedata)^.counter.Min;
   //if assigned(iterator) then
@@ -249,8 +265,8 @@ begin
           name:=Tria_AnsiToUtf8(s.GetFullName)
         else
           name:='nil';
-        PTEnumDataWithOtherData(PTPointerCounterData(piteratedata)^.PVarDesc^.data.Instance)^.Enums.PushBackData(format('%s (%d)',[name,c]));
-        PTZctnrVectorGDBPointer(PTEnumDataWithOtherData(PTPointerCounterData(piteratedata)^.PVarDesc^.data.Instance)^.PData)^.PushBackData(s);
+        PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.Enums.PushBackData(format('%s (%d)',[name,c]));
+        PTZctnrVectorGDBPointer(PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData)^.PushBackData(s);
   //until not iterator.Next;
   end;
   PTPointerCounterData(piteratedata)^.counter.Free;
@@ -262,18 +278,20 @@ var
   //iterator:TPointerCounter.TIterator;
    s:PGDBNamedObject;
    c:integer;
+   PVD:pvardesk;
 {уничтожает созданную GetPointerCounterData структуру}
 begin
-  PTEnumDataWithOtherData(PTPointerCounterData(piteratedata)^.PVarDesc^.data.Instance)^.Enums.PushBackData(format('Total (%d)',[PTPointerCounterData(piteratedata)^.totalcount]));
-  PTZctnrVectorGDBPointer(PTEnumDataWithOtherData(PTPointerCounterData(piteratedata)^.PVarDesc^.data.Instance)^.PData)^.PushBackData(nil);
+  PVD:=PTPointerCounterData(piteratedata)^.VDAddr.Instance;
+  PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.Enums.PushBackData(format('Total (%d)',[PTPointerCounterData(piteratedata)^.totalcount]));
+  PTZctnrVectorGDBPointer(PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData)^.PushBackData(nil);
   for pair in PTPointerCounterData(piteratedata)^.counter do begin
   //iterator:=PTPointerCounterData(piteratedata)^.counter.Min;
   //if assigned(iterator) then
   //repeat
         s:=pair.Key;
         c:=pair.Value;
-        PTEnumDataWithOtherData(PTPointerCounterData(piteratedata)^.PVarDesc^.data.Instance)^.Enums.PushBackData(format('%s (%d)',[(s.GetFullName),c]));
-        PTZctnrVectorGDBPointer(PTEnumDataWithOtherData(PTPointerCounterData(piteratedata)^.PVarDesc^.data.Instance)^.PData)^.PushBackData(s);
+        PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.Enums.PushBackData(format('%s (%d)',[(s.GetFullName),c]));
+        PTZctnrVectorGDBPointer(PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData)^.PushBackData(s);
   //until not iterator.Next;
   end;
   PTPointerCounterData(piteratedata)^.counter.Free;
@@ -293,10 +311,10 @@ var
    cc:TArrayIndex;
 begin
      cc:=PGDBPoint3dArray(ChangedData.PGetDataInEtity).Count-1;
-     if cc<PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Instance)^ then
-                                                                                               PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Instance)^:=cc;
-     if PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Instance)^<0 then
-                                                                                              PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Instance)^:=0;
+     if cc<PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Addr.Instance)^ then
+                                                                                               PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Addr.Instance)^:=cc;
+     if PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Addr.Instance)^<0 then
+                                                                                              PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Addr.Instance)^:=0;
 end;
 procedure PolylineVertex3DControlEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var
@@ -312,35 +330,35 @@ begin
                           ProcessVariableAttributes(PTVertex3DControlVarData(pdata).PZVarDesc.attrib,vda_RO,0);
                      end;
      cc:=PGDBPoint3dArray(ChangedData.PGetDataInEtity).Count-1;
-     if cc<PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Instance)^ then
-                                                                                               PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Instance)^:=cc;
-     tv:=PGDBPoint3dArray(ChangedData.PGetDataInEtity).getDataMutable(PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Instance)^);
+     if cc<PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Addr.Instance)^ then
+                                                                                               PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Addr.Instance)^:=cc;
+     tv:=PGDBPoint3dArray(ChangedData.PGetDataInEtity).getDataMutable(PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Addr.Instance)^);
      if fistrun then
                     begin
                          ProcessVariableAttributes(PTVertex3DControlVarData(pdata).PXVarDesc.attrib,0,vda_different);
                          ProcessVariableAttributes(PTVertex3DControlVarData(pdata).PYVarDesc.attrib,0,vda_different);
                          ProcessVariableAttributes(PTVertex3DControlVarData(pdata).PZVarDesc.attrib,0,vda_different);
 
-                         PTVertex3DControlVarData(pdata).PGDBDTypeDesc.CopyInstanceTo(@tv^.x,PTVertex3DControlVarData(pdata).PXVarDesc.data.Instance);
+                         PTVertex3DControlVarData(pdata).PGDBDTypeDesc.CopyInstanceTo(@tv^.x,PTVertex3DControlVarData(pdata).PXVarDesc.data.Addr.Instance);
                          PTVertex3DControlVarData(pdata).StrValueX:=PTVertex3DControlVarData(pdata).PGDBDTypeDesc.GetDecoratedValueAsString(@tv^.x,f);
-                         PTVertex3DControlVarData(pdata).PGDBDTypeDesc.CopyInstanceTo(@tv^.y,PTVertex3DControlVarData(pdata).PYVarDesc.data.Instance);
+                         PTVertex3DControlVarData(pdata).PGDBDTypeDesc.CopyInstanceTo(@tv^.y,PTVertex3DControlVarData(pdata).PYVarDesc.data.Addr.Instance);
                          PTVertex3DControlVarData(pdata).StrValueY:=PTVertex3DControlVarData(pdata).PGDBDTypeDesc.GetDecoratedValueAsString(@tv^.y,f);
-                         PTVertex3DControlVarData(pdata).PGDBDTypeDesc.CopyInstanceTo(@tv^.z,PTVertex3DControlVarData(pdata).PZVarDesc.data.Instance);
+                         PTVertex3DControlVarData(pdata).PGDBDTypeDesc.CopyInstanceTo(@tv^.z,PTVertex3DControlVarData(pdata).PZVarDesc.data.Addr.Instance);
                          PTVertex3DControlVarData(pdata).StrValueZ:=PTVertex3DControlVarData(pdata).PGDBDTypeDesc.GetDecoratedValueAsString(@tv^.z,f);
                     end
                 else
                     begin
-                         if PTVertex3DControlVarData(pdata).PGDBDTypeDesc.Compare(@tv^.x,PTVertex3DControlVarData(pdata).PXVarDesc.data.Instance)<>CREqual then
+                         if PTVertex3DControlVarData(pdata).PGDBDTypeDesc.Compare(@tv^.x,PTVertex3DControlVarData(pdata).PXVarDesc.data.Addr.Instance)<>CREqual then
                             ProcessVariableAttributes(PTVertex3DControlVarData(pdata).PXVarDesc.attrib,vda_approximately,0);
                          if PTVertex3DControlVarData(pdata).StrValueX<>PTVertex3DControlVarData(pdata).PGDBDTypeDesc.GetDecoratedValueAsString(@tv^.x,f) then
                             ProcessVariableAttributes(PTVertex3DControlVarData(pdata).PXVarDesc.attrib,vda_different,vda_approximately);
 
-                         if PTVertex3DControlVarData(pdata).PGDBDTypeDesc.Compare(@tv^.y,PTVertex3DControlVarData(pdata).PYVarDesc.data.Instance)<>CREqual then
+                         if PTVertex3DControlVarData(pdata).PGDBDTypeDesc.Compare(@tv^.y,PTVertex3DControlVarData(pdata).PYVarDesc.data.Addr.Instance)<>CREqual then
                             ProcessVariableAttributes(PTVertex3DControlVarData(pdata).PYVarDesc.attrib,vda_approximately,0);
                          if PTVertex3DControlVarData(pdata).StrValueY<>PTVertex3DControlVarData(pdata).PGDBDTypeDesc.GetDecoratedValueAsString(@tv^.y,f) then
                             ProcessVariableAttributes(PTVertex3DControlVarData(pdata).PYVarDesc.attrib,vda_different,vda_approximately);
 
-                         if PTVertex3DControlVarData(pdata).PGDBDTypeDesc.Compare(@tv^.z,PTVertex3DControlVarData(pdata).PZVarDesc.data.Instance)<>CREqual then
+                         if PTVertex3DControlVarData(pdata).PGDBDTypeDesc.Compare(@tv^.z,PTVertex3DControlVarData(pdata).PZVarDesc.data.Addr.Instance)<>CREqual then
                             ProcessVariableAttributes(PTVertex3DControlVarData(pdata).PZVarDesc.attrib,vda_approximately,0);
                          if PTVertex3DControlVarData(pdata).StrValueZ<>PTVertex3DControlVarData(pdata).PGDBDTypeDesc.GetDecoratedValueAsString(@tv^.z,f) then
                             ProcessVariableAttributes(PTVertex3DControlVarData(pdata).PZVarDesc.attrib,vda_different,vda_approximately);
@@ -354,18 +372,18 @@ var
    PGDBDTypeDesc:PUserTypeDescriptor;
 begin
      if pvardesk(pdata).name=mp.MPName then
-                                           mp.MPType.CopyInstanceTo(pvardesk(pdata).data.Instance,@Vertex3DControl)
+                                           mp.MPType.CopyInstanceTo(pvardesk(pdata).data.Addr.Instance,@Vertex3DControl)
      else begin
        PGDBDTypeDesc:=SysUnit.TypeName2PTD('GDBDouble');
-       pindex:=pu^.FindValue(mp.MPName);
+       pindex:=pu^.FindValue(mp.MPName).data.Addr.Instance;
        tv:=PGDBObjPolyline(ChangedData.pentity).VertexArrayInWCS.getDataMutable(pindex^);
        v:=tv^;
        if pvardesk(pdata).name=mp.MPName+'x' then
-                                                 PGDBDTypeDesc.CopyInstanceTo(pvardesk(pdata).data.Instance,@v.x);
+                                                 PGDBDTypeDesc.CopyInstanceTo(pvardesk(pdata).data.Addr.Instance,@v.x);
        if pvardesk(pdata).name=mp.MPName+'y' then
-                                                 PGDBDTypeDesc.CopyInstanceTo(pvardesk(pdata).data.Instance,@v.y);
+                                                 PGDBDTypeDesc.CopyInstanceTo(pvardesk(pdata).data.Addr.Instance,@v.y);
        if pvardesk(pdata).name=mp.MPName+'z' then
-                                                 PGDBDTypeDesc.CopyInstanceTo(pvardesk(pdata).data.Instance,@v.z);
+                                                 PGDBDTypeDesc.CopyInstanceTo(pvardesk(pdata).data.Addr.Instance,@v.z);
        tv:=PGDBPoint3dArray(ChangedData.PSetDataInEtity).getDataMutable(pindex^);
        tv^:=v;
      end;
@@ -375,6 +393,7 @@ procedure EntityNameEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:
 var
  ts:GDBAnsiString;
  entinfo:TEntInfoData;
+ PVD:pvardesk;
 {
 общая процедура копирования имени примитива в мультипроперти
 pdata - указатель на структуру созданную GetOneVarData
@@ -384,22 +403,23 @@ fistrun - флаг установлен при первой итерации (т
 ecp - указатель на процедуру копирования значения из мультипроперти в примитив, если nil то делаем readonly
 }
 begin
-     if @ecp=nil then ProcessVariableAttributes(PTOneVarData(pdata).PVarDesc.attrib,vda_RO,0);
+  PVD:=PTOneVarData(pdata).VDAddr.Instance;
+     if @ecp=nil then ProcessVariableAttributes(PVD.attrib,vda_RO,0);
      if fistrun then
                     begin
-                      ProcessVariableAttributes(PTOneVarData(pdata).PVarDesc.attrib,0,vda_different);
+                      ProcessVariableAttributes(PVD.attrib,0,vda_different);
 
                       if ObjID2EntInfoData.MyGetValue(PGDBObjEntity(ChangedData.PEntity)^.GetObjType,entinfo) then
                         ts:=entinfo.UserName
                       else
                         ts:=rsNotRegistred;
 
-                      mp.MPType.CopyInstanceTo(@ts,PTOneVarData(pdata).PVarDesc.data.Instance);
+                      mp.MPType.CopyInstanceTo(@ts,PVD.data.Addr.Instance);
                       PTOneVarData(pdata).StrValue:=mp.MPType.GetDecoratedValueAsString(@ts,f);
                     end
                 else
                     begin
-                      if (PTOneVarData(pdata).PVarDesc.attrib and vda_different)=0 then begin
+                      if (PVD.attrib and vda_different)=0 then begin
 
                         if ObjID2EntInfoData.MyGetValue(PGDBObjEntity(ChangedData.PEntity)^.GetObjType,entinfo) then
                           ts:=entinfo.UserName
@@ -407,7 +427,7 @@ begin
                           ts:=rsNotRegistred;
 
                         if PTOneVarData(pdata).StrValue<>ts then
-                          ProcessVariableAttributes(PTOneVarData(pdata).PVarDesc.attrib,vda_different,vda_approximately);
+                          ProcessVariableAttributes(PVD.attrib,vda_different,vda_approximately);
                       end;
                     end;
 end;
@@ -420,20 +440,23 @@ mp - описание мультипроперти
 fistrun - флаг установлен при первой итерации (только копировать, не сравнивать)
 ecp - указатель на процедуру копирования значения из мультипроперти в примитив, если nil то делаем readonly
 }
+var
+  PVD:pvardesk;
 begin
-     if @ecp=nil then ProcessVariableAttributes(PTOneVarData(pdata).PVarDesc.attrib,vda_RO,0);
+  PVD:=PTOneVarData(pdata).VDAddr.Instance;
+     if @ecp=nil then ProcessVariableAttributes(PVD.attrib,vda_RO,0);
      if fistrun then
                     begin
-                      ProcessVariableAttributes(PTOneVarData(pdata).PVarDesc.attrib,0,vda_different);
-                      mp.MPType.CopyInstanceTo(ChangedData.PGetDataInEtity,PTOneVarData(pdata).PVarDesc.data.Instance);
+                      ProcessVariableAttributes(PVD.attrib,0,vda_different);
+                      mp.MPType.CopyInstanceTo(ChangedData.PGetDataInEtity,PVD.data.Addr.Instance);
                       PTOneVarData(pdata).StrValue:=mp.MPType.GetDecoratedValueAsString(ChangedData.PGetDataInEtity,f);
                     end
                 else
                     begin
-                         if mp.MPType.Compare(ChangedData.PGetDataInEtity,PTOneVarData(pdata).PVarDesc.data.Instance)<>CREqual then
-                            ProcessVariableAttributes(PTOneVarData(pdata).PVarDesc.attrib,vda_approximately,0);
+                         if mp.MPType.Compare(ChangedData.PGetDataInEtity,PVD.data.Addr.Instance)<>CREqual then
+                            ProcessVariableAttributes(PVD.attrib,vda_approximately,0);
                          if PTOneVarData(pdata).StrValue<>mp.MPType.GetDecoratedValueAsString(ChangedData.PGetDataInEtity,f) then
-                            ProcessVariableAttributes(PTOneVarData(pdata).PVarDesc.attrib,vda_different,vda_approximately);
+                            ProcessVariableAttributes(PVD.attrib,vda_different,vda_approximately);
                     end;
 end;
 
@@ -446,12 +469,15 @@ mp - описание мультипроперти
 fistrun - флаг установлен при первой итерации (только копировать, не суммировать)
 ecp - указатель на процедуру копирования значения из мультипроперти в примитив, если nil то делаем readonly
 }
+var
+  PVD:pvardesk;
 begin
-     if @ecp=nil then ProcessVariableAttributes(PTOneVarData(pdata).PVarDesc.attrib,vda_RO,0);
+  PVD:=PTOneVarData(pdata).VDAddr.Instance;
+     if @ecp=nil then ProcessVariableAttributes(PVD.attrib,vda_RO,0);
      if fistrun then
-                    mp.MPType.CopyInstanceTo(ChangedData.PGetDataInEtity,PTOneVarData(pdata).PVarDesc.data.Instance)
+                    mp.MPType.CopyInstanceTo(ChangedData.PGetDataInEtity,PVD.data.Addr.Instance)
                 else
-                    PGDBDouble(PTOneVarData(pdata).PVarDesc.data.Instance)^:=PGDBDouble(PTOneVarData(pdata).PVarDesc.data.Instance)^+PGDBDouble(ChangedData.PGetDataInEtity)^;
+                    PGDBDouble(PVD.data.Addr.Instance)^:=PGDBDouble(PVD.data.Addr.Instance)^+PGDBDouble(ChangedData.PGetDataInEtity)^;
 end;
 procedure TArrayIndex2SumEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 {
@@ -462,12 +488,15 @@ mp - описание мультипроперти
 fistrun - флаг установлен при первой итерации (только копировать, не суммировать)
 ecp - указатель на процедуру копирования значения из мультипроперти в примитив, если nil то делаем readonly
 }
+var
+  PVD:pvardesk;
 begin
-     if @ecp=nil then ProcessVariableAttributes(PTOneVarData(pdata).PVarDesc.attrib,vda_RO,0);
+  PVD:=PTOneVarData(pdata).VDAddr.Instance;
+     if @ecp=nil then ProcessVariableAttributes(PVD.attrib,vda_RO,0);
      if fistrun then
-                    mp.MPType.CopyInstanceTo(ChangedData.PGetDataInEtity,PTOneVarData(pdata).PVarDesc.data.Instance)
+                    mp.MPType.CopyInstanceTo(ChangedData.PGetDataInEtity,PVD.data.Addr.Instance)
                 else
-                    PTArrayIndex(PTOneVarData(pdata).PVarDesc.data.Instance)^:=PTArrayIndex(PTOneVarData(pdata).PVarDesc.data.Instance)^+PTArrayIndex(ChangedData.PGetDataInEtity)^;
+                    PTArrayIndex(PVD.data.Addr.Instance)^:=PTArrayIndex(PVD.data.Addr.Instance)^+PTArrayIndex(ChangedData.PGetDataInEtity)^;
 end;
 procedure Blockname2BlockNameCounterIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var

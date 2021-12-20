@@ -145,9 +145,11 @@ begin
   ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIResetOGLWNDProc);
   zcRedrawCurrentDrawing;
   ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
-  if GDBobj then
-    if typeof(PGDBaseObject(pcurrobj)^)=typeof(TMSEditor) then
-      PMSEditor(pcurrobj)^.CreateUnit(PMSEditor(pcurrobj)^.SavezeUnitsFormat);
+
+  // убрано, потому что с этим не работают фильтры в инспекторе
+  //if GDBobj then
+  //  if typeof(PGDBaseObject(pcurrobj)^)=typeof(TMSEditor) then
+  //    PMSEditor(pcurrobj)^.CreateUnit(PMSEditor(pcurrobj)^.SavezeUnitsFormat);
 end;
 
 procedure _onGetOtherValues(var vsa:TZctnrVectorGDBString;const valkey:string;const pcurcontext:pointer;const pcurrobj:pointer;const GDBobj:boolean);

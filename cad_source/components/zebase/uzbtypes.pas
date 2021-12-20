@@ -76,9 +76,12 @@ GDBaseObject=object
     function IsEntity:GDBBoolean;virtual;
 
   end;
+PTArrayIndex=^TArrayIndex;
+TArrayIndex=Integer;
 {REGISTEROBJECTTYPE TZAbsVector}
 TZAbsVector=object(GDBaseObject)
   function GetParray:pointer;virtual;abstract;
+  function getPData(index:TArrayIndex):Pointer;virtual;abstract;
 end;
 PZAbsVector=^TZAbsVector;
 
@@ -87,6 +90,7 @@ TInVectorAddr=record
                 Instt:{-}TPtrOffs{/GDBPointer/};
                 DataSegment:PZAbsVector;
                 {-}function GetInstance:GDBPointer;{/ /}
+                {-}function IsNil:Boolean;{/ /}
                 {-}property Instance:GDBPointer read GetInstance;{/ /}
                 {-}procedure SetInstance(DS:PZAbsVector;Offs:PtrUInt);overload;{/ /}
                 {-}procedure SetInstance(Ptr:Pointer);overload;{/ /}
@@ -299,8 +303,14 @@ begin
   if DataSegment=nil then
     result:=Instt.ptr
   else
-    result:=Pointer(PtrUInt(DataSegment^.GetParray)+Instt.offs);
+    result:=DataSegment^.getPData(Instt.offs);
+    //result:=Pointer(PtrUInt(DataSegment^.GetParray)+Instt.offs);
 end;
+function TInVectorAddr.IsNil:Boolean;
+begin
+  result:=(DataSegment=nil)and(Instt.ptr=nil);
+end;
+
 procedure TInVectorAddr.SetInstance(DS:PZAbsVector;Offs:PtrUInt);
 begin
   {if not assigned(pointer(ds))then begin

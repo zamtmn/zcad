@@ -286,6 +286,7 @@ varmanagerdef=object(GDBaseObject)
                  vararray:GDBOpenArrayOfByte;}
                  function findvardesc(varname:TInternalScriptString): pvardesk;virtual;abstract;
                  function createvariable(varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0): pvardesk;virtual;abstract;
+                 function createvariable2(varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0):TInVectorAddr;virtual;abstract;
                  procedure createvariablebytype(varname,vartype:TInternalScriptString);virtual;abstract;
                  procedure createbasevaluefromGDBString(varname: TInternalScriptString; varvalue: TInternalScriptString; var vd: vardesk);virtual;abstract;
                  function findfieldcustom(var pdesc: pGDBByte; var offset: GDBInteger;var tc:PUserTypeDescriptor; nam: shortString): GDBBoolean;virtual;abstract;

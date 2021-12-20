@@ -173,10 +173,12 @@ varmanager=object(varmanagerdef)
             vardescarray:{GDBOpenArrayOfData}Tvardescarray;
             vararray:{GDBOpenArrayOfByte}TObjectsChunk;
                  constructor init;
-                 function findvardesc(varname:TInternalScriptString): pvardesk;virtual;
+                 function findvardesc(varname:TInternalScriptString):pvardesk;virtual;
                  function findvardescbyinst(varinst:GDBPointer):pvardesk;virtual;
                  function findvardescbytype(pt:PUserTypeDescriptor):pvardesk;virtual;
-                 function createvariable(varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0): pvardesk;virtual;
+                 function createvariable(varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0):pvardesk;virtual;
+                 function createvariable2(varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0):TInVectorAddr;virtual;
+                 function findvardesc2(varname:TInternalScriptString):TInVectorAddr;virtual;
                  function findfieldcustom(var pdesc: pGDBByte; var offset: GDBInteger;var tc:PUserTypeDescriptor; nam: ShortString): GDBBoolean;virtual;
                  function getDS:Pointer;virtual;
                  destructor done;virtual;
@@ -195,6 +197,7 @@ TSimpleUnit=object(TAbstractUnit)
                   function CreateFixedVariable(varname,vartype:TInternalScriptString;_pinstance:pointer):GDBPointer;virtual;
                   function CreateVariable(varname,vartype:TInternalScriptString):vardesk;virtual;
                   function FindVariable(varname:TInternalScriptString):pvardesk;virtual;
+                  function FindVarDesc(varname:TInternalScriptString):TInVectorAddr;virtual;
                   function FindVariableByInstance(_Instance:GDBPointer):pvardesk;virtual;
                   function FindValue(varname:TInternalScriptString):pvardesk;virtual;
                   function FindOrCreateValue(varname,vartype:TInternalScriptString):vardesk;virtual;
@@ -873,6 +876,46 @@ begin
        //KillString(vd.name);
        //KillString(vd.username);
 end;
+function varmanager.createvariable2(varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0):TInVectorAddr;
+var
+  size: GDBLongword;
+  i:TArrayIndex;
+begin
+       if vd.data.ptd<>nil then
+                          size:=vd.data.ptd^.SizeInGDBBytes
+                      else
+                          begin
+                               size:=1;
+                          end;
+       if vd.data.Addr.Instance=nil then
+       begin
+         vd.SetInstance(@vararray,vararray.AllocData(size));
+         vd.data.PTD.InitInstance(vd.data.Addr.Instance);
+       end;
+       vd.attrib:=attr;
+       Result.SetInstance(@vardescarray,vardescarray.PushBackData(vd));
+end;
+function varmanager.findvardesc2(varname: TInternalScriptString):TInVectorAddr;
+var
+  //pblock: pdblock;
+  pdesc: pvardesk;
+  offset: GDBInteger;
+  temp: pvardesk;
+  bc:PUserTypeDescriptor;
+      ir:itrec;
+begin
+   pdesc:=self.vardescarray.beginiterate(ir);
+   if pdesc<>nil then
+     repeat
+       if pdesc^.name=varname then begin
+         result.SetInstance(@vardescarray,ir.itc);
+         exit;
+       end;
+    pdesc:=self.vardescarray.iterate(ir);
+    until pdesc=nil;
+   result.SetInstance(nil,0);
+end;
+
 function getpattern(ptd:ptdarray; max:GDBInteger;var line:TInternalScriptString; out typ:GDBInteger):PTZctnrVectorGDBString;
 var i:GDBInteger;
     parseresult:PTZctnrVectorGDBString;
@@ -1550,6 +1593,25 @@ begin
                             until p=nil;
      end;
 end;
+
+function tsimpleunit.FindVarDesc(varname:TInternalScriptString):TInVectorAddr;
+var p:ptunit;
+    ir:itrec;
+    i:integer;
+begin
+     result:=self.InterfaceVariables.findvardesc2(varname);
+     if result.IsNil then begin
+       p:=InterfaceUses.beginiterate(ir);
+       if p<>nil then
+         repeat
+           result:=p^.FindVarDesc(varname);
+           if not result.IsNil then
+             exit;
+           p:=InterfaceUses.iterate(ir);
+         until p=nil;
+     end;
+end;
+
 function tsimpleunit.CreateFixedVariable(varname,vartype:TInternalScriptString;_pinstance:pointer):GDBPointer;
 var
   vd:vardesk;

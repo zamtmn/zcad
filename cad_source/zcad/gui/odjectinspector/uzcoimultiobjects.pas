@@ -41,10 +41,15 @@ type
            VPS_OnlyRelatedEnts(*'Only related ents'*),
            VPS_AllEnts(*'All ents'*)
           );
+  {REGISTERRECORDTYPE TMSPrimitiveDetector}
   TMSPrimitiveDetector=TEnumData;
+  {REGISTERRECORDTYPE TMSBlockNamesDetector}
   TMSBlockNamesDetector=TEnumDataWithOtherData;
+  {REGISTERRECORDTYPE TMSTextsStylesDetector}
   TMSTextsStylesDetector=TEnumDataWithOtherData;
+  {REGISTERRECORDTYPE TMSEntsLayersDetector}
   TMSEntsLayersDetector=TEnumDataWithOtherData;
+  {REGISTERRECORDTYPE TMSEntsLinetypesDetector}
   TMSEntsLinetypesDetector=TEnumDataWithOtherData;
   {REGISTEROBJECTTYPE TMSEditor}
   TMSEditor= object(TWrapper2ObjInsp)

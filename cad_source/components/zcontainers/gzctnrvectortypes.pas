@@ -27,8 +27,6 @@ type
               itp:{-}PPointer{/Pointer/};
               itc:Integer;
         end;
-  PTArrayIndex=^TArrayIndex;
-  TArrayIndex=Integer;
 {Export-}
 implementation
 begin

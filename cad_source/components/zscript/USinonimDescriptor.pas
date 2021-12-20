@@ -21,7 +21,7 @@ unit USinonimDescriptor;
 {$MODE DELPHI}
 interface
 uses TypeDescriptors,UGDBOpenArrayOfByte,uzbtypesbase,
-     uzedimensionaltypes,varmandef,uzbtypes{,UGDBOpenArrayOfData,UGDBStringArray},uzbmemman;
+     uzedimensionaltypes,varmandef,uzbtypes,uzbmemman,TypInfo;
 type
 PGDBSinonimDescriptor=^GDBSinonimDescriptor;
 GDBSinonimDescriptor=object(TUserTypeDescriptor)
@@ -43,9 +43,16 @@ GDBSinonimDescriptor=object(TUserTypeDescriptor)
                      procedure MagicFreeInstance(PInstance:Pointer);virtual;
                      procedure MagicAfterCopyInstance(PInstance:Pointer);virtual;
                      procedure InitInstance(PInstance:Pointer);virtual;
+                     procedure RegisterTypeinfo(ti:PTypeInfo);virtual;
                end;
 implementation
 uses UUnitManager;
+procedure GDBSinonimDescriptor.RegisterTypeinfo(ti:PTypeInfo);
+begin
+  GetFactTypedef^.RegisterTypeinfo(ti);
+  SizeInGDBBytes:=GetFactTypedef^.SizeInGDBBytes;
+end;
+
 procedure GDBSinonimDescriptor.InitInstance(PInstance:Pointer);
 begin
    GetFactTypedef^.InitInstance(PInstance);

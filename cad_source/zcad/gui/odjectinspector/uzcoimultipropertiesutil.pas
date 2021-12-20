@@ -59,10 +59,14 @@ type
   PTVertex3DControlVarData=^TVertex3DControlVarData;
   TVertex3DControlVarData=record
                             StrValueX,StrValueY,StrValueZ:GDBString;
-                            PArrayIndexVarDesc,
+                            {PArrayIndexVarDesc,
                             PXVarDesc,
                             PYVarDesc,
-                            PZVarDesc:pvardesk;
+                            PZVarDesc:pvardesk;}
+                            ArrayIndexVarDescAddr,
+                            XVarDescAddr,
+                            YVarDescAddr,
+                            ZVarDescAddr:TInVectorAddr;
                             PGDBDTypeDesc:PUserTypeDescriptor;
                           end;
 
@@ -111,19 +115,17 @@ begin
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
 end;
 
-function FindOrCreateVar(pu:PTObjectUnit;varname,username,typename:GDBString;out pvd:GDBPointer):GDBBoolean;
+function FindOrCreateVar(pu:PTObjectUnit;varname,username,typename:GDBString;out IVA:TInVectorAddr):GDBBoolean;
 var
    vd:vardesk;
 begin
-    pvd:=pu^.FindVariable(varname);
-    if pvd=nil then
-    begin
-         pu^.setvardesc(vd, varname,username,typename);
-         pvd:=pu^.InterfaceVariables.createvariable(varname,vd);
-         result:=true;
-    end
-    else
-        result:=false;
+  IVA:=pu^.FindVarDesc(varname);
+  if IVA.IsNil then begin
+    pu^.setvardesc(vd, varname,username,typename);
+    IVA:=pu^.InterfaceVariables.createvariable2(varname,vd);
+    result:=true;
+  end else
+    result:=false;
 end;
 function GetOneVarData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
 {
@@ -134,13 +136,13 @@ pu - модуль в котором будет создана переменна
 }
 {var
    vd:vardesk;}
-var
-  PVD:pvardesk;
+//var
+  //PVD:pvardesk;
 begin
     GDBGetMem({$IFDEF DEBUGBUILD}'{831CDE55-8FC6-4ACD-8A4C-FEB861D44294}',{$ENDIF}result,sizeof(TOneVarData));
     pointer(PTOneVarData(result)^.StrValue):=nil;
-    FindOrCreateVar(pu,mp.MPName,mp.MPUserName,mp.MPType^.TypeName,PVD);
-    PTOneVarData(result).VDAddr:=PVD^.data.Addr;
+    FindOrCreateVar(pu,mp.MPName,mp.MPUserName,mp.MPType^.TypeName,PTOneVarData(result).VDAddr);
+    //PTOneVarData(result).VDAddr:=PVD^.data.Addr;
 end;
 
 function GetStringCounterData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
@@ -155,14 +157,15 @@ var
 begin
     GDBGetMem({$IFDEF DEBUGBUILD}'{831CDE55-8FC6-4ACD-8A4C-FEB861D44294}',{$ENDIF}result,sizeof(TStringCounterData));
     PTStringCounterData(result)^.counter:=TStringCounter.Create;
-    if FindOrCreateVar(pu,mp.MPName,mp.MPUserName,mp.MPType^.TypeName,PVD) then begin
+    if FindOrCreateVar(pu,mp.MPName,mp.MPUserName,mp.MPType^.TypeName,PTStringCounterData(result).VDAddr) then begin
+      PVD:=PTStringCounterData(result).VDAddr.Instance;
       PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.Enums.init(10);
       PTStringCounterData(result)^.totalcount:=0;
       PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.Selected:=0;
       GDBGetMem({$IFDEF DEBUGBUILD}'{831CDE55-8FC6-4ACD-8A4C-FEB861D44294}',{$ENDIF}PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData,sizeof(TZctnrVectorGDBString));
       PTZctnrVectorGDBString(PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData)^.init(10);
     end;
-    PTStringCounterData(result).VDAddr:=PVD^.data.Addr;
+    //PTStringCounterData(result).VDAddr:=PVD^.data.Addr;
 end;
 
 function GetPointerCounterData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
@@ -174,17 +177,20 @@ pu - модуль в котором будет создана переменна
 }
 var
   PVD:pvardesk;
+  t:PTEnumDataWithOtherData;
 begin
     GDBGetMem({$IFDEF DEBUGBUILD}'{831CDE55-8FC6-4ACD-8A4C-FEB861D44294}',{$ENDIF}result,sizeof(TPointerCounterData));
     PTPointerCounterData(result)^.counter:=TPointerCounter.Create;
-    if FindOrCreateVar(pu,mp.MPName,mp.MPUserName,mp.MPType^.TypeName,PVD) then begin
+    if FindOrCreateVar(pu,mp.MPName,mp.MPUserName,mp.MPType^.TypeName,PTPointerCounterData(result).VDAddr) then begin
+      PVD:=PTPointerCounterData(result).VDAddr.Instance;
+      t:=PVD^.data.Addr.Instance;
       PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.Enums.init(10);
       PTPointerCounterData(result)^.totalcount:=0;
       PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.Selected:=0;
       GDBGetMem({$IFDEF DEBUGBUILD}'{831CDE55-8FC6-4ACD-8A4C-FEB861D44294}',{$ENDIF}PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData,sizeof(TZctnrVectorGDBPointer));
       PTZctnrVectorGDBPointer(PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData)^.init(10);
     end;
-    PTPointerCounterData(result).VDAddr:=PVD^.data.Addr;
+    //PTPointerCounterData(result).VDAddr:=PVD^.data.Addr;
 end;
 
 
@@ -202,11 +208,11 @@ begin
     pointer(PTVertex3DControlVarData(result)^.StrValueX):=nil;
     pointer(PTVertex3DControlVarData(result)^.StrValueY):=nil;
     pointer(PTVertex3DControlVarData(result)^.StrValueZ):=nil;
-    if FindOrCreateVar(pu,mp.MPName,mp.MPUserName,mp.MPType^.TypeName,PTVertex3DControlVarData(result).PArrayIndexVarDesc) then
-       mp.MPType.CopyInstanceTo(@Vertex3DControl,PTVertex3DControlVarData(result).PArrayIndexVarDesc.data.Addr.Instance);
-    FindOrCreateVar(pu,mp.MPName+'x','x','GDBDouble',PTVertex3DControlVarData(result).PXVarDesc);
-    FindOrCreateVar(pu,mp.MPName+'y','y','GDBDouble',PTVertex3DControlVarData(result).PYVarDesc);
-    FindOrCreateVar(pu,mp.MPName+'z','z','GDBDouble',PTVertex3DControlVarData(result).PZVarDesc);
+    if FindOrCreateVar(pu,mp.MPName,mp.MPUserName,mp.MPType^.TypeName,PTVertex3DControlVarData(result).ArrayIndexVarDescAddr) then
+       mp.MPType.CopyInstanceTo(@Vertex3DControl,pvardesk(PTVertex3DControlVarData(result).ArrayIndexVarDescAddr.Instance)^.data.Addr.Instance);
+    FindOrCreateVar(pu,mp.MPName+'x','x','GDBDouble',PTVertex3DControlVarData(result).XVarDescAddr);
+    FindOrCreateVar(pu,mp.MPName+'y','y','GDBDouble',PTVertex3DControlVarData(result).YVarDescAddr);
+    FindOrCreateVar(pu,mp.MPName+'z','z','GDBDouble',PTVertex3DControlVarData(result).ZVarDescAddr);
     PTVertex3DControlVarData(result).PGDBDTypeDesc:=SysUnit.TypeName2PTD('GDBDouble');
 end;
 
@@ -250,9 +256,11 @@ var
    c:integer;
    name:string;
    PVD:pvardesk;
+   t:PTEnumDataWithOtherData;
 {уничтожает созданную GetPointerCounterData структуру}
 begin
   PVD:=PTPointerCounterData(piteratedata)^.VDAddr.Instance;
+  t:=PVD^.data.Addr.Instance;
   PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.Enums.PushBackData(format('Total (%d)',[PTPointerCounterData(piteratedata)^.totalcount]));
   PTZctnrVectorGDBPointer(PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData)^.PushBackData(nil);
   for pair in PTPointerCounterData(piteratedata)^.counter do begin
@@ -311,10 +319,10 @@ var
    cc:TArrayIndex;
 begin
      cc:=PGDBPoint3dArray(ChangedData.PGetDataInEtity).Count-1;
-     if cc<PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Addr.Instance)^ then
-                                                                                               PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Addr.Instance)^:=cc;
-     if PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Addr.Instance)^<0 then
-                                                                                              PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Addr.Instance)^:=0;
+     if cc<PTArrayIndex(pvardesk(PTVertex3DControlVarData(pdata).ArrayIndexVarDescAddr.Instance)^.data.Addr.Instance)^ then
+                                                                                               PTArrayIndex(pvardesk(PTVertex3DControlVarData(pdata).ArrayIndexVarDescAddr.Instance)^.data.Addr.Instance)^:=cc;
+     if PTArrayIndex(pvardesk(PTVertex3DControlVarData(pdata).ArrayIndexVarDescAddr.Instance)^.data.Addr.Instance)^<0 then
+                                                                                              PTArrayIndex(pvardesk(PTVertex3DControlVarData(pdata).ArrayIndexVarDescAddr.Instance)^.data.Addr.Instance)^:=0;
 end;
 procedure PolylineVertex3DControlEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var
@@ -325,43 +333,43 @@ begin
                     fistrun:=fistrun;
      if @ecp=nil then
                      begin
-                          ProcessVariableAttributes(PTVertex3DControlVarData(pdata).PXVarDesc.attrib,vda_RO,0);
-                          ProcessVariableAttributes(PTVertex3DControlVarData(pdata).PYVarDesc.attrib,vda_RO,0);
-                          ProcessVariableAttributes(PTVertex3DControlVarData(pdata).PZVarDesc.attrib,vda_RO,0);
+                          ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).XVarDescAddr.Instance).attrib,vda_RO,0);
+                          ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).YVarDescAddr.Instance).attrib,vda_RO,0);
+                          ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).ZVarDescAddr.Instance).attrib,vda_RO,0);
                      end;
      cc:=PGDBPoint3dArray(ChangedData.PGetDataInEtity).Count-1;
-     if cc<PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Addr.Instance)^ then
-                                                                                               PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Addr.Instance)^:=cc;
-     tv:=PGDBPoint3dArray(ChangedData.PGetDataInEtity).getDataMutable(PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Addr.Instance)^);
+     if cc<PTArrayIndex(pvardesk(PTVertex3DControlVarData(pdata).ArrayIndexVarDescAddr.Instance).data.Addr.Instance)^ then
+                                                                                               PTArrayIndex(pvardesk(PTVertex3DControlVarData(pdata).ArrayIndexVarDescAddr.Instance).data.Addr.Instance)^:=cc;
+     tv:=PGDBPoint3dArray(ChangedData.PGetDataInEtity).getDataMutable(PTArrayIndex(pvardesk(PTVertex3DControlVarData(pdata).ArrayIndexVarDescAddr.Instance)^.data.Addr.Instance)^);
      if fistrun then
                     begin
-                         ProcessVariableAttributes(PTVertex3DControlVarData(pdata).PXVarDesc.attrib,0,vda_different);
-                         ProcessVariableAttributes(PTVertex3DControlVarData(pdata).PYVarDesc.attrib,0,vda_different);
-                         ProcessVariableAttributes(PTVertex3DControlVarData(pdata).PZVarDesc.attrib,0,vda_different);
+                         ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).XVarDescAddr.Instance)^.attrib,0,vda_different);
+                         ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).YVarDescAddr.Instance)^.attrib,0,vda_different);
+                         ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).ZVarDescAddr.Instance)^.attrib,0,vda_different);
 
-                         PTVertex3DControlVarData(pdata).PGDBDTypeDesc.CopyInstanceTo(@tv^.x,PTVertex3DControlVarData(pdata).PXVarDesc.data.Addr.Instance);
+                         PTVertex3DControlVarData(pdata).PGDBDTypeDesc.CopyInstanceTo(@tv^.x,pvardesk(PTVertex3DControlVarData(pdata).XVarDescAddr.Instance)^.data.Addr.Instance);
                          PTVertex3DControlVarData(pdata).StrValueX:=PTVertex3DControlVarData(pdata).PGDBDTypeDesc.GetDecoratedValueAsString(@tv^.x,f);
-                         PTVertex3DControlVarData(pdata).PGDBDTypeDesc.CopyInstanceTo(@tv^.y,PTVertex3DControlVarData(pdata).PYVarDesc.data.Addr.Instance);
+                         PTVertex3DControlVarData(pdata).PGDBDTypeDesc.CopyInstanceTo(@tv^.y,pvardesk(PTVertex3DControlVarData(pdata).YVarDescAddr.Instance)^.data.Addr.Instance);
                          PTVertex3DControlVarData(pdata).StrValueY:=PTVertex3DControlVarData(pdata).PGDBDTypeDesc.GetDecoratedValueAsString(@tv^.y,f);
-                         PTVertex3DControlVarData(pdata).PGDBDTypeDesc.CopyInstanceTo(@tv^.z,PTVertex3DControlVarData(pdata).PZVarDesc.data.Addr.Instance);
+                         PTVertex3DControlVarData(pdata).PGDBDTypeDesc.CopyInstanceTo(@tv^.z,pvardesk(PTVertex3DControlVarData(pdata).ZVarDescAddr.Instance)^.data.Addr.Instance);
                          PTVertex3DControlVarData(pdata).StrValueZ:=PTVertex3DControlVarData(pdata).PGDBDTypeDesc.GetDecoratedValueAsString(@tv^.z,f);
                     end
                 else
                     begin
-                         if PTVertex3DControlVarData(pdata).PGDBDTypeDesc.Compare(@tv^.x,PTVertex3DControlVarData(pdata).PXVarDesc.data.Addr.Instance)<>CREqual then
-                            ProcessVariableAttributes(PTVertex3DControlVarData(pdata).PXVarDesc.attrib,vda_approximately,0);
+                         if PTVertex3DControlVarData(pdata).PGDBDTypeDesc.Compare(@tv^.x,pvardesk(PTVertex3DControlVarData(pdata).XVarDescAddr.Instance).data.Addr.Instance)<>CREqual then
+                            ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).XVarDescAddr.Instance).attrib,vda_approximately,0);
                          if PTVertex3DControlVarData(pdata).StrValueX<>PTVertex3DControlVarData(pdata).PGDBDTypeDesc.GetDecoratedValueAsString(@tv^.x,f) then
-                            ProcessVariableAttributes(PTVertex3DControlVarData(pdata).PXVarDesc.attrib,vda_different,vda_approximately);
+                            ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).XVarDescAddr.Instance)^.attrib,vda_different,vda_approximately);
 
-                         if PTVertex3DControlVarData(pdata).PGDBDTypeDesc.Compare(@tv^.y,PTVertex3DControlVarData(pdata).PYVarDesc.data.Addr.Instance)<>CREqual then
-                            ProcessVariableAttributes(PTVertex3DControlVarData(pdata).PYVarDesc.attrib,vda_approximately,0);
+                         if PTVertex3DControlVarData(pdata).PGDBDTypeDesc.Compare(@tv^.y,pvardesk(PTVertex3DControlVarData(pdata).YVarDescAddr.Instance)^.data.Addr.Instance)<>CREqual then
+                            ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).YVarDescAddr.Instance).attrib,vda_approximately,0);
                          if PTVertex3DControlVarData(pdata).StrValueY<>PTVertex3DControlVarData(pdata).PGDBDTypeDesc.GetDecoratedValueAsString(@tv^.y,f) then
-                            ProcessVariableAttributes(PTVertex3DControlVarData(pdata).PYVarDesc.attrib,vda_different,vda_approximately);
+                            ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).YVarDescAddr.Instance).attrib,vda_different,vda_approximately);
 
-                         if PTVertex3DControlVarData(pdata).PGDBDTypeDesc.Compare(@tv^.z,PTVertex3DControlVarData(pdata).PZVarDesc.data.Addr.Instance)<>CREqual then
-                            ProcessVariableAttributes(PTVertex3DControlVarData(pdata).PZVarDesc.attrib,vda_approximately,0);
+                         if PTVertex3DControlVarData(pdata).PGDBDTypeDesc.Compare(@tv^.z,pvardesk(PTVertex3DControlVarData(pdata).ZVarDescAddr.Instance)^.data.Addr.Instance)<>CREqual then
+                            ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).ZVarDescAddr.Instance)^.attrib,vda_approximately,0);
                          if PTVertex3DControlVarData(pdata).StrValueZ<>PTVertex3DControlVarData(pdata).PGDBDTypeDesc.GetDecoratedValueAsString(@tv^.z,f) then
-                            ProcessVariableAttributes(PTVertex3DControlVarData(pdata).PZVarDesc.attrib,vda_different,vda_approximately);
+                            ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).ZVarDescAddr.Instance)^.attrib,vda_different,vda_approximately);
                     end;
 end;
 procedure PolylineVertex3DControlFromVarEntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);

@@ -107,6 +107,8 @@ GZVector{-}<T>{//}=object(TZAbsVector)
         {**Устанавливает длину массива}
         procedure SetSize(nsize:TArrayIndex);
         {**Возвращает указатель на значение по индексу}
+        function getPData(index:TArrayIndex):Pointer;virtual;
+        {**Возвращает указатель на значение по индексу}
         function getDataMutable(index:TArrayIndex):PT;
         {**Возвращает значение по индексу}
         function getData(index:TArrayIndex):T;
@@ -144,7 +146,10 @@ function GZVector<T>.GetSpecializedTypeInfo:PTypeInfo;
 begin
   result:=TypeInfo(T);
 end;
-
+function GZVector<T>.getPData(index:TArrayIndex):Pointer;
+begin
+  result:=getDataMutable(index);
+end;
 function GZVector<T>.getDataMutable;
 begin
      if (index>=max)

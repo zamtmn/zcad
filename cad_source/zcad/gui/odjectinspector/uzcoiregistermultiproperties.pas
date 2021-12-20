@@ -62,16 +62,20 @@ procedure GDBDoubleSumLengthEntIterateProc(pdata:GDBPointer;ChangedData:TChanged
 var
     v1,v2:GDBVertex;
     l1:GDBDouble;
+    pvd:pvardesk;
+    pvdata:PDouble;
 begin
+  pvd:=PTOneVarData(mp.PIiterateData)^.VDAddr.Instance;
+  pvdata:=pvd^.data.Addr.Instance;
      V1:=PGDBVertex(ChangedData.PGetDataInEtity)^;
      inc(ChangedData.PGetDataInEtity,sizeof(GDBVertex));
      V2:=PGDBVertex(ChangedData.PGetDataInEtity)^;
      l1:=Vertexlength(v1,v2);
-     if @ecp=nil then PVarDesk(PTOneVarData(mp.PIiterateData)^.VDAddr.Instance)^.attrib:=PVarDesk(PTOneVarData(mp.PIiterateData)^.VDAddr.Instance)^.attrib or vda_RO;
+     if @ecp=nil then pvd^.attrib:=pvd^.attrib or vda_RO;
      if fistrun then
-                    mp.MPType^.CopyInstanceTo(@l1,PVarDesk(PTOneVarData(mp.PIiterateData)^.VDAddr.Instance)^.data.Addr.Instance)
+                    mp.MPType^.CopyInstanceTo(@l1,pvdata)
                 else
-                    PGDBDouble(PVarDesk(PTOneVarData(mp.PIiterateData)^.VDAddr.Instance)^.data.Addr.Instance)^:=PGDBDouble(PVarDesk(PTOneVarData(mp.PIiterateData)^.VDAddr.Instance)^.data.Addr.Instance)^+l1
+                    pvdata^:=pvdata^+l1
 end;
 
 procedure GDBDoubleAngleEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
@@ -398,13 +402,6 @@ const
      pellipse:PGDBObjEllipse=nil;
      LayerControlExtender:TLayerControlExtender=nil;
 begin
-  MultiPropertiesManager.RestartMultipropertySortID;
-  //MultiPropertiesManager.RegisterPhysMultiproperty('FILTER_EntsByLayers','Ents by layers',sysunit^.TypeName2PTD('TMSEntsLayersDetector'),MPCSummary,0,nil,integer(@pent^.vp.Layer),integer(@pent^.vp.Layer),TMainIterateProcsData.Create(@GetPointerCounterData,@FreePNamedObjectCounterDataUTF8),TEntIterateProcsData.Create(nil,@PStyle2PStyleCounterIterateProc,nil),MPUM_AtLeastOneEntMatched);
-  //MultiPropertiesManager.RegisterPhysMultiproperty('FILTER_EntsByLinesTypes','Ents by linetypes',sysunit^.TypeName2PTD('TMSEntsLinetypesDetector'),MPCSummary,0,nil,integer(@pent^.vp.LineType),integer(@pent^.vp.LineType),TMainIterateProcsData.Create(@GetPointerCounterData,@FreePNamedObjectCounterData),TEntIterateProcsData.Create(nil,@PStyle2PStyleCounterIterateProc,nil),MPUM_AtLeastOneEntMatched);
-  MultiPropertiesManager.RegisterPhysMultiproperty('EntityName','Entity name',sysunit^.TypeName2PTD('GDBAnsiString'),MPCGeneral,0,nil,0,0,OneVarDataMIPD,TEntIterateProcsData.Create(nil,@EntityNameEntIterateProc,nil));
-  MultiPropertiesManager.sort;
-  exit;
-
   MultiPropertiesManager.RestartMultipropertySortID;
   MultiPropertiesManager.RegisterPhysMultiproperty('LControl_GoodLayer','LC good layer',sysunit^.TypeName2PTD('GDBString'),MPCExtenders,0,TLayerControlExtender,integer(@LayerControlExtender.GoodLayer),integer(@LayerControlExtender.GoodLayer),OneVarDataMIPD,OneVarDataEIPD);
   MultiPropertiesManager.RegisterPhysMultiproperty('LControl_BadLayer','LC bad layer',sysunit^.TypeName2PTD('GDBString'),MPCExtenders,0,TLayerControlExtender,integer(@LayerControlExtender.BadLayer),integer(@LayerControlExtender.BadLayer),OneVarDataMIPD,OneVarDataEIPD);

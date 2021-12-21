@@ -57,12 +57,12 @@ begin
      inherited;
      name:=defcablename;
      length:=0;
-     Segments.init({$IFDEF DEBUGBUILD}'{FE431793-97FF-48AE-9B55-22D186BD5471}',{$ENDIF}10);
-     Devices.init({$IFDEF DEBUGBUILD}'{7C4DC8CC-F0C0-402A-84F6-6FEA2C06F0C8}',{$ENDIF}10);
+     Segments.init(10);
+     Devices.init(10);
 end;
 constructor TCableManager.init;
 begin
-     inherited init({$IFDEF DEBUGBUILD}'{D8494E55-1296-45ED-A5ED-175D6C0671F5}',{$ENDIF}100{,sizeof(TCableDesctiptor)});
+     inherited init(100);
 end;
 destructor TCableDesctiptor.done;
 begin

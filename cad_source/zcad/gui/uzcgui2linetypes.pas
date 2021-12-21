@@ -100,7 +100,7 @@ begin
                      ll:=canvas.TextExtent(s).cx+2*txtoffset
                  else
                      ll:=0;
-        geom.init({$IFDEF DEBUGBUILD}'mainwindow.drawLT'{$ENDIF});
+        geom.init();
         p1:=createvertex(ARect.Left+ll,(ARect.Top+ARect.Bottom)/2,0);
         p2:=createvertex(ARect.Right-txtoffset,p1.y,0);
         vp.LineType:=plt;

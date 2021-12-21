@@ -26,7 +26,7 @@ type
 PZGLIndexsArray=^ZGLIndexsArray;
 {REGISTEROBJECTTYPE ZGLIndexsArray}
 ZGLIndexsArray= object(GZVectorData{-}<TArrayIndex>{//})(*OpenArrayOfData=TArrayIndex*)
-                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+                constructor init(m:GDBInteger);
                 constructor initnul;
              end;
 {Export-}
@@ -34,7 +34,7 @@ implementation
 //uses {glstatemanager,}log;
 constructor ZGLIndexsArray.init;
 begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,sizeof(TArrayIndex)});
+  inherited init(m);
 end;
 constructor ZGLIndexsArray.initnul;
 begin

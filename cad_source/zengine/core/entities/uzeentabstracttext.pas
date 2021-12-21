@@ -223,7 +223,7 @@ end;
 procedure GDBObjAbstractText.addcontrolpoints(tdesc:GDBPointer);
 var pdesc:controlpointdesc;
 begin
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.init({$IFDEF DEBUGBUILD}'{5A458E80-F735-432A-8E6D-85B580F5F0DC}',{$ENDIF}1);
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(1);
           pdesc.selected:=false;
           pdesc.pobject:=nil;
           pdesc.pointtype:=os_point;

@@ -57,7 +57,7 @@ constructor TGMultiObjectChangeCommand.Assign(const _dodata,_undodata:_T;const o
 begin
      DoData:=_DoData;
      UnDoData:=_UnDoData;
-     self.ObjArray.init({$IFDEF DEBUGBUILD}'{108FD060-E408-4161-9548-64EEAFC3BEB2}',{$ENDIF}objcount{,sizeof(tmethod)});
+     self.ObjArray.init(objcount{,sizeof(tmethod)});
 end;
 procedure TGMultiObjectChangeCommand.AddMethod(method:tmethod);
 begin
@@ -113,7 +113,7 @@ end;
 
 function {TZctnrVectorUndoCommands.}CreateTGMultiObjectChangeCommand(var data,undodata:DMatrix4D;const objcount:Integer):PTGDBTransformChangeCommand;overload;
 begin
-     gdbgetmem({$IFDEF DEBUGBUILD}'{2FFA68C4-3209-4CB4-8DD1-28A818A795D1}',{$ENDIF}result,sizeof(TGDBTransformChangeCommand));
+     Getmem(result,sizeof(TGDBTransformChangeCommand));
      result^.Assign(data,undodata,objcount);
 end;
 function {TZctnrVectorUndoCommands.}PushCreateTGMultiObjectChangeCommand(var us:TZctnrVectorUndoCommands; var data,undodata:DMatrix4D;const objcount:Integer):PTGDBTransformChangeCommand;overload;

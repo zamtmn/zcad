@@ -348,7 +348,7 @@ procedure ConstructorFeature(pEntity:PGDBObjEntity);
 begin
      //if PFCTTD=nil then
      //                  PFCTTD:=sysunit.TypeName2PTD('PTObjectUnit');
-     //memman.GDBGetMem(PGDBObjEntity(pEntity).OU.Instance,sizeof(TObjectUnit));
+     //memman.Getmem(PGDBObjEntity(pEntity).OU.Instance,sizeof(TObjectUnit));
      //PTObjectUnit(PGDBObjEntity(pEntity).OU.Instance).init('Entity');
      //PTObjectUnit(PGDBObjEntity(pEntity).OU.Instance).InterfaceUses.add(@SysUnit);
      //PGDBObjEntity(pEntity).OU.PTD:=PFCTTD;
@@ -357,7 +357,7 @@ end;
 procedure DestructorFeature(pEntity:PGDBObjEntity);
 begin
      //PTObjectUnit(PGDBObjEntity(pEntity).OU.Instance).done;
-     //memman.GDBFreeMem(PGDBObjEntity(pEntity).OU.Instance);
+     //memman.Freemem(PGDBObjEntity(pEntity).OU.Instance);
 end;
 
 procedure GDBObjBlockDefLoadVarsFromFile(pEntity:PGDBObjBlockDef);
@@ -386,7 +386,7 @@ begin
 end;
 function CreateExtDxfLoadData:pointer;
 begin
-  //gdbgetmem(result,sizeof(TUnit));
+  //Getmem(result,sizeof(TUnit));
   //PTUnit(result)^.init('temparraryunit');
   //PTUnit(result)^.InterfaceUses.addnodouble(@SysUnit);
      extvarunit.init('temparraryunit');
@@ -401,7 +401,7 @@ end;
 procedure FreeExtLoadData(peld:pointer);
 begin
   //PTUnit(peld)^.done;
-  //gdbfreemem(peld);
+  //Freemem(peld);
   extvarunit.done;
 end;
 

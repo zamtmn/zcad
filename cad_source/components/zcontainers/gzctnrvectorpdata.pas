@@ -45,7 +45,7 @@ begin
   if p<>nil then
   repeat
        p.done;
-       GDBFreeMem(Pointer(p));
+       Freemem(Pointer(p));
        p:=iterate(ir);
   until p=nil;
   count:=0;
@@ -60,7 +60,7 @@ begin
   if p<>nil then
   repeat
        p^.done;
-       GDBFreeMem(Pointer(p));
+       Freemem(Pointer(p));
        p:=iterate(ir);
   until p=nil;
   count:=0;
@@ -78,7 +78,7 @@ begin
                          begin
                               p.done;
                               pointer(ir.itp^):=nil;
-                              GDBFreeMem(Pointer(p));
+                              Freemem(Pointer(p));
                               exit;
                          end;
        p:=iterate(ir);
@@ -133,7 +133,7 @@ begin
   repeat
        p^.done;
        if ir.itc>n then
-                       GDBFreeMem(Pointer(p));
+                       Freemem(Pointer(p));
        p:=iterate(ir);
   until p=nil;
   count:=0;
@@ -149,7 +149,7 @@ begin
        if ir.itc>=n then
                        begin
                        p^.done;
-                       GDBFreeMem(Pointer(p));
+                       Freemem(Pointer(p));
                        end;
        p:=iterate(ir);
   until p=nil;

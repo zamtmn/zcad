@@ -46,7 +46,7 @@ PZGLVectorObject=^ZGLVectorObject;
 ZGLVectorObject= object(GDBaseObject)
                                  LLprimitives:TLLPrimitivesArray;
                                  GeomData:ZGLGeomData;
-                                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar{$ENDIF});
+                                 constructor init();
                                  destructor done;virtual;
                                  procedure Clear;virtual;
                                  procedure Shrink;virtual;
@@ -397,8 +397,8 @@ end;
 
 constructor ZGLVectorObject.init;
 begin
-  GeomData.init({$IFDEF DEBUGBUILD}pchar({$IFDEF SEPARATEMEMUSAGE}ErrGuid+{$ENDIF}'{ZGLVectorObject.GeomData}'),{$ENDIF}100);
-  LLprimitives.init({$IFDEF DEBUGBUILD}pchar({$IFDEF SEPARATEMEMUSAGE}ErrGuid+{$ENDIF}'{ZGLVectorObject.LLprimitives}'),{$ENDIF}100);
+  GeomData.init(100);
+  LLprimitives.init(100);
 end;
 destructor ZGLVectorObject.done;
 begin

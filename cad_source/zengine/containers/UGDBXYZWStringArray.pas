@@ -44,7 +44,7 @@ begin
 end;
 constructor XYZWGDBGDBStringArray.init(m:GDBInteger);
 begin
-     inherited init({$IFDEF DEBUGBUILD}'{5F615BF3-34BD-4C3E-9019-CE7CB9D2C2E7}',{$ENDIF}m{,sizeof(GDBStrWithPoint)});
+     inherited init(m);
 end;
 begin
 end.

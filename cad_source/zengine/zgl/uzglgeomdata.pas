@@ -27,7 +27,7 @@ type
 ZGLGeomData=object(GDBaseObject)
                                                 Vertex3S:ZGLVertex3Sarray;
                                                 Indexes:ZGLIndexsArray;
-                                                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+                                                constructor init(m:GDBInteger);
                                                 destructor done;virtual;
                                                 procedure Clear;virtual;
                                                 procedure Shrink;virtual;
@@ -47,8 +47,8 @@ begin
 end;
 constructor ZGLGeomData.init;
 begin
-  Vertex3S.init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m);
-  Indexes.init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m);
+  Vertex3S.init(m);
+  Indexes.init(m);
 end;
 destructor ZGLGeomData.done;
 begin

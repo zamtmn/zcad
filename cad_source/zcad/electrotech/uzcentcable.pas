@@ -79,7 +79,7 @@ var tvo: PGDBObjCable;
 begin
   //result:=inherited Clone(own);
   //exit;
-  GDBGetMem({$IFDEF DEBUGBUILD}'{F9D41F4A-1E80-4D3A-9DD1-D0037EFCA988}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjCable));
+  Getmem(GDBPointer(tvo), sizeof(GDBObjCable));
   tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight);
   //tvo^.vp:=vp;
   //tvo^.GetObjType :=GDBCableID;
@@ -435,7 +435,7 @@ constructor GDBObjCable.init;
    //pvd:pvardesk;
 begin
   inherited init(own,layeraddres, lw);
-  NodePropArray.init({$IFDEF DEBUGBUILD}'{28ED5BF5-7598-4903-A715-C525BC68C116}',{$ENDIF}1000{,sizeof(TNodeProp)});
+  NodePropArray.init(1000);
   //vp.ID := GDBCableID;
   //PTObjectUnit(self.ou.Instance)^.init('cable');
   GetDXFIOFeatures.AddExtendersToEntity(@self);
@@ -443,7 +443,7 @@ end;
 constructor GDBObjCable.initnul;
 begin
   inherited initnul(owner);
-  NodePropArray.init({$IFDEF DEBUGBUILD}'{28ED5BF5-7598-4903-A715-C525BC68C116}',{$ENDIF}1000{,sizeof(TNodeProp)});
+  NodePropArray.init(1000);
   //vp.id := GDBCableID;
   GetDXFIOFeatures.AddExtendersToEntity(@self);
   //OU.done;
@@ -524,7 +524,7 @@ begin
 end;
 function AllocCable:PGDBObjCable;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocCable}',{$ENDIF}result,sizeof(GDBObjCable));
+  Getmem(result,sizeof(GDBObjCable));
 end;
 function AllocAndInitCable(owner:PGDBObjGenericWithSubordinated):PGDBObjCable;
 begin

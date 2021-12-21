@@ -453,7 +453,7 @@ var
    etd:PRecordDescriptor;
    fd:FieldDescriptor;
 begin
-     gdbgetmem({$IFDEF DEBUGBUILD}'{874DEDEF-E023-4558-A3C6-392D9C3B23C9}',{$ENDIF}GDBPointer(etd),sizeof(RecordDescriptor));
+     Getmem(GDBPointer(etd),sizeof(RecordDescriptor));
      PRecordDescriptor(etd)^.init(ti^.Name,@self);
      td:=GetTypeData(ti);
      mf:=@td.ManagedFldCount;
@@ -490,7 +490,7 @@ var
    fd:FieldDescriptor;
 begin
      td:=GetTypeData(ti);
-     gdbgetmem({$IFDEF DEBUGBUILD}'{EB691608-9520-4E6F-9042-960EFE61FA89}',{$ENDIF}GDBPointer(etd),sizeof(GDBPointerDescriptor));
+     Getmem(GDBPointer(etd),sizeof(GDBPointerDescriptor));
      etd^.init(td.RefType^.Name,ti^.Name,@self);
      etd^.TypeOf:=RegisterType(td.RefType);
      InterfaceTypes.AddTypeByPP(@etd);
@@ -523,7 +523,7 @@ var
 
 begin
      td:=GetTypeData(ti);
-     gdbgetmem({$IFDEF DEBUGBUILD}'{EB691608-9520-4E6F-9042-960EFE61FA89}',{$ENDIF}GDBPointer(etd),sizeof(EnumDescriptor));
+     Getmem(GDBPointer(etd),sizeof(EnumDescriptor));
      case td.OrdType of
         otSByte:bytessize:=1;
         otUByte:bytessize:=1;
@@ -681,7 +681,7 @@ begin
      //if pvardesk(p)^.data.ptd=@FundamentalStringDescriptorObj then
        //                                                   pgdbstring(pvardesk(p)^.Instance)^:='';
      pvardesk(p)^.data.ptd:=nil;
-     //gdbfreemem(pvardesk(p)^.pvalue);
+     //Freemem(pvardesk(p)^.pvalue);
 end;
 procedure varmanager.free;
 begin
@@ -780,7 +780,7 @@ begin
 end;
 constructor typemanager.init;
 begin
-     exttype.init({$IFDEF DEBUGBUILD}'{5C8C5991-F908-4A85-B47E-56EA0ED03084}',{$ENDIF}1000{,sizeof(typedesk)});
+     exttype.init(1000);
      n2i:=TNameToIndex.create;
      //CreateBaseTypes;
 end;
@@ -834,8 +834,8 @@ begin
 end;
 constructor varmanager.init;
 begin
-  vardescarray.init({$IFDEF DEBUGBUILD}'{7216CFFF-47FA-4F4E-BE07-B12E967EEF91} - описания переменных',{$ENDIF}64);
-  vararray.init({$IFDEF DEBUGBUILD}'{834B86B5-4581-4C93-8446-8CEE664A66A2} - содержимое переменных',{$ENDIF}1024);
+  vardescarray.init(64);
+  vararray.init(1024);
 end;
 destructor varmanager.done;
 begin
@@ -938,7 +938,7 @@ begin
                         if parseresult<>nil then
                                                 begin
                                                 parseresult.Done;
-                                                GDBFreeMem(Gdbpointer(parseresult));
+                                                Freemem(Gdbpointer(parseresult));
                                                 end;
                    end;
 end;
@@ -1026,7 +1026,7 @@ begin
                                if uppercase(functionname)='FORMAT' then
                                                                    functionname:=functionname;
 
-                               if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
+                               if parseresult<>nil then begin parseresult^.Done;Freemem(gdbpointer(parseresult));end;
                                repeat
                                line := f.readtoparser(';');
                                parseresult:=getpattern(@parsefuncmodss,maxmod,line,typ); // длдл
@@ -1038,7 +1038,7 @@ begin
                                                  mattr:=mattr;
                                             end;
                                end;
-                               if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
+                               if parseresult<>nil then begin parseresult^.Done;Freemem(gdbpointer(parseresult));end;
                                until typ=0;
                                PObjectDescriptor(ptd)^.addmetod(ptd^.TypeName,functionname,functionoperands,nil,mattr);
                                //line:=oldline;
@@ -1109,7 +1109,7 @@ begin
                                          Raise Exception.Create('Something wrong');
                                       {$ENDIF}
                                   end;
-              //if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
+              //if parseresult<>nil then begin parseresult^.FreeAndDone;Freemem(gdbpointer(parseresult));end;
           end;
                     field:
                           begin
@@ -1165,7 +1165,7 @@ begin
                                                    end;
                           end;
            end;{case}
-           if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
+           if parseresult<>nil then begin parseresult^.Done;Freemem(gdbpointer(parseresult));end;
            if (line='')or(count=300) then
                                          begin
                                               line := f.readtoparser(';');
@@ -1430,7 +1430,7 @@ begin
           end
           else
           begin
-            gdbgetmem({$IFDEF DEBUGBUILD}'{9A28C83C-C227-41B1-A334-365942DC17CB}',{$ENDIF}GDBPointer(temp),sizeof(vardesk));
+            Getmem(GDBPointer(temp),sizeof(vardesk));
             fillchar(temp^,sizeof(vardesk),0);
             //new(temp);
             temp^.data:=pvardesk(pdesc)^.data;
@@ -1445,7 +1445,7 @@ begin
         end
         else
         begin
-          gdbgetmem({$IFDEF DEBUGBUILD}'{8E7E4D67-1D25-4D95-BB32-04D2F00BC201}',{$ENDIF}GDBPointer(temp),sizeof(vardesk));
+          Getmem(GDBPointer(temp),sizeof(vardesk));
           fillchar(temp^,sizeof(vardesk),0);
           //new(temp);
           temp^.data:=pvardesk(pdesc)^.data;
@@ -1525,7 +1525,7 @@ begin
   name := nam;
 
   InterfaceVariables.init;
-  InterfaceUses.init({$IFDEF DEBUGBUILD}'{BDC39F0D-79B7-4F89-89D7-C530D3542F36} - tsimpleunit (uses секция)',{$ENDIF}10);
+  InterfaceUses.init(10);
 end;
 destructor tsimpleunit.done;
 begin
@@ -1826,7 +1826,7 @@ begin
   ShortDateFormat:='MM.yy';
   VarCategory.init(100);
   //VarCategory.loadfromfile(expandpath('*rtl/VarCategory.cat'));
-  CategoryCollapsed.init({$IFDEF DEBUGBUILD}'{716C3EDB-32A3-416D-A599-B04B1B45D6E4}',{$ENDIF}VarCategory.Max);
+  CategoryCollapsed.init(VarCategory.Max);
   CategoryCollapsed.CreateArray;
   fillchar(CategoryCollapsed.parray^,CategoryCollapsed.max,byte(true));
   CategoryUnknownCOllapsed:=true;

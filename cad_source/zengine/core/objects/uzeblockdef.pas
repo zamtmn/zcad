@@ -123,7 +123,7 @@ begin
      GDBPointer(Name):=nil;
      GDBPointer(VarFromFile):=nil;
      Formated:=false;
-     //ObjArray.init({$IFDEF DEBUGBUILD}'{E5C5FEFE-BF2A-48FA-8E54-D1F406DA9462}',{$ENDIF}10000);
+     //ObjArray.init(10000);
      Name:=_name;
      Base:=nulvertex;
      GetDXFIOFeatures.AddExtendersToEntity(@self);
@@ -152,7 +152,7 @@ begin
 end;
 function AllocBlockDef:PGDBObjBlockDef;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocBlockDef}',{$ENDIF}pointer(result),sizeof(GDBObjBlockdef));
+  Getmem(pointer(result),sizeof(GDBObjBlockdef));
 end;
 function AllocAndInitBlockDef(owner:PGDBObjGenericWithSubordinated):PGDBObjBlockDef;
 begin

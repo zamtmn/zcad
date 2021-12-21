@@ -24,7 +24,6 @@ uses
   uzedrawingsimple,uzcdrawings;
 function GMCCFTrue(const Context:TObject):boolean;
 function GMCCFFalse(const Context:TObject):boolean;
-function GMCCFDebugMode(const Context:TObject):boolean;
 
 function GMCCFCtrlPressed(const Context:TObject):boolean;
 function GMCCFShiftPressed(const Context:TObject):boolean;
@@ -38,10 +37,6 @@ end;
 function GMCCFFalse(const Context:TObject):boolean;
 begin
   result:=true;
-end;
-function GMCCFDebugMode(const Context:TObject):boolean;
-begin
-  {$IFDEF DEBUGBUILD}result:=true;{$ELSE}result:=false;{$ENDIF}
 end;
 function GMCCFCtrlPressed(const Context:TObject):boolean;
 begin

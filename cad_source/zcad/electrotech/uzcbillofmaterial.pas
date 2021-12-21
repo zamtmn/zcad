@@ -81,7 +81,7 @@ begin
 end;
 constructor GDBBbillOfMaterial.init(m:GDBInteger);
 begin
-     inherited init({$IFDEF DEBUGBUILD}'{4249FDF0-86E5-4D42-8538-1402D5B7C55B}',{$ENDIF}m{,sizeof(GDBBOMItem)});
+     inherited init(m);
 end;
 begin
 end.

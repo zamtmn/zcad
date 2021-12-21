@@ -28,7 +28,7 @@ PGDBObjBlockdefArray=^GDBObjBlockdefArray;
 PBlockdefArray=^BlockdefArray;
 BlockdefArray=packed array [0..0] of GDBObjBlockdef;
 GDBObjBlockdefArray= object(GZVectorObjects{-}<GDBObjBlockdef>{//})(*OpenArrayOfData=GDBObjBlockdef*)
-                      constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+                      constructor init(m:GDBInteger);
                       constructor initnul;
 
                       function getindex(name:GDBString):GDBInteger;virtual;
@@ -76,7 +76,7 @@ begin
 end;
 constructor GDBObjBlockdefArray.init;
 begin
-     inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,sizeof(GDBObjBlockdef)});
+     inherited init(m);
 end;
 constructor GDBObjBlockdefArray.initnul;
 begin

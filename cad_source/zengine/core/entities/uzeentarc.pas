@@ -219,7 +219,7 @@ begin
   startangle := 0;
   endangle := pi/2;
   PProjoutbound:=nil;
-  Vertex3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{7E7B2243-1D9C-43AD-BB6B-959FE9F49D5D}-GDBObjARC.Vertex3D_in_WCS_Array',{$ENDIF}100);
+  Vertex3D_in_WCS_Array.init(100);
 end;
 constructor GDBObjARC.init;
 begin
@@ -230,7 +230,7 @@ begin
   startangle := s;
   endangle := e;
   PProjoutbound:=nil;
-  Vertex3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{AEF4273C-4EE8-4520-B23A-04C3AD6DABE3}',{$ENDIF}100);
+  Vertex3D_in_WCS_Array.init(100);
   //format;
 end;
 function GDBObjArc.GetObjType;
@@ -410,8 +410,8 @@ begin
 
   if PProjoutbound=nil then
   begin
-       GDBGetMem({$IFDEF DEBUGBUILD}'{B9B13A5B-467C-4E8A-B4BD-6F54713EBC0D}',{$ENDIF}GDBPointer(PProjoutbound),sizeof(GDBOOutbound2DIArray));
-       PProjoutbound^.init({$IFDEF DEBUGBUILD}'{2D0D05D3-F10A-473F-88FC-D5FB9BD7B539}',{$ENDIF}4);
+       Getmem(GDBPointer(PProjoutbound),sizeof(GDBOOutbound2DIArray));
+       PProjoutbound^.init(4);
   end;
 end;
 procedure GDBObjARC.createpoints(var DC:TDrawContext);
@@ -627,7 +627,7 @@ end;
 procedure GDBObjARC.addcontrolpoints(tdesc:GDBPointer);
 var pdesc:controlpointdesc;
 begin
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.init({$IFDEF DEBUGBUILD}'{8E7285C9-05AD-4D34-9E9D-479D394B2AAF}',{$ENDIF}3);
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(3);
           pdesc.selected:=false;
           pdesc.pobject:=nil;
 
@@ -708,7 +708,7 @@ begin
 end;
 function GDBObjARC.beforertmodify;
 begin
-     GDBGetMem({$IFDEF DEBUGBUILD}'{77AF2FA4-2EDC-46CD-A813-6E34E2AC91A5}',{$ENDIF}result,sizeof(tarcrtmodify));
+     Getmem(result,sizeof(tarcrtmodify));
      tarcrtmodify(result^).p1.x:=q0.x;
      tarcrtmodify(result^).p1.y:=q0.y;
      tarcrtmodify(result^).p2.x:=q1.x;
@@ -818,7 +818,7 @@ end;
 function GDBObjARC.Clone;
 var tvo: PGDBObjArc;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{368BA81A-219B-4DE9-A8E0-64EE16001126}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjArc));
+  Getmem(GDBPointer(tvo), sizeof(GDBObjArc));
   tvo^.init(CalcOwner(own),vp.Layer, vp.LineWeight, Local.p_insert, r,startangle,endangle);
   tvo^.Local.basis.oz:=Local.basis.oz;
   CopyVPto(tvo^);
@@ -837,7 +837,7 @@ begin
 end;
 function AllocArc:PGDBObjArc;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocArc}',{$ENDIF}pointer(result),sizeof(GDBObjArc));
+  Getmem(pointer(result),sizeof(GDBObjArc));
 end;
 function AllocAndInitArc(owner:PGDBObjGenericWithSubordinated):PGDBObjArc;
 begin

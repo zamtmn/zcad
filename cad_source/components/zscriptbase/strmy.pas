@@ -213,7 +213,7 @@ var i:GDBInteger;
     GDBStringarray:PTZctnrVectorGDBString;
 begin
      i:=1;
-     gdbgetmem({$IFDEF DEBUGBUILD}'{A87D84AD-14A7-47F0-97B1-BF7CAAFB5886}',{$ENDIF}GDBPointer(GDBStringarray),sizeof(TZctnrVectorGDBString));
+     Getmem(GDBPointer(GDBStringarray),sizeof(TZctnrVectorGDBString));
      GDBStringarray^.init(20);
      parsed:=false;
      if str<>'' then
@@ -233,7 +233,7 @@ begin
                else
                    begin
                         {GDBStringarray^.FreeAndDone;
-                                      gdbfreemem(GDBPointer(GDBStringarray));
+                                      Freemem(GDBPointer(GDBStringarray));
                                       GDBStringarray:=nil;}
 
                    end;
@@ -241,7 +241,7 @@ begin
      if (GDBStringarray^.Count=0)or(not parsed) then
                                  begin
                                       GDBStringarray^.Done;
-                                      gdbfreemem(GDBPointer(GDBStringarray));
+                                      Freemem(GDBPointer(GDBStringarray));
                                       GDBStringarray:=nil;
                                  end;
      result:=GDBStringarray;

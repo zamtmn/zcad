@@ -91,7 +91,7 @@ begin
                                         drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count := 0;
                                         p3dpl:=nil;
                                       end;
-  //gdbfreemem(pointer(p3dpl));
+  //Freemem(pointer(p3dpl));
 end;
 
 

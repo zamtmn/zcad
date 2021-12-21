@@ -51,7 +51,7 @@ implementation
 procedure initfont(var pf:pgdbfont;name:gdbstring);
 //var i:integer;
 begin
-     //GDBGetMem({$IFDEF DEBUGBUILD}'{2D1F6D71-DF5C-46B1-9E3A-9975CC281FAC}',{$ENDIF}GDBPointer(pf),sizeof(gdbfont));
+     //Getmem(GDBPointer(pf),sizeof(gdbfont));
      pf^.init(name);
      //pf.ItSHX;
 end;
@@ -382,18 +382,18 @@ begin
      if font<>nil then
                       begin
                            font.done;
-                           GDBFreeMem(pointer(font));
+                           Freemem(pointer(font));
                       end;
      inherited;
 end;
 (*procedure GDBfont.ItSHX;
 begin
-     GDBGetMem({$IFDEF DEBUGBUILD}'{FB4B76DB-BD4E-449E-A505-9ABF79E7809A}',{$ENDIF}font,sizeof(SHXFont));
+     Getmem(font,sizeof(SHXFont));
      PSHXFont(font)^.init;
 end;*)
 (*procedure GDBfont.ItFFT;
 begin
-     GDBGetMem({$IFDEF DEBUGBUILD}'{638B5484-83D8-4FEA-AE47-918B8B0CBC08}',{$ENDIF}font,sizeof(TTFFont));
+     Getmem(font,sizeof(TTFFont));
      PTTFFont(font)^.init;
 end;*)
 constructor GDBfont.Init;
@@ -401,7 +401,7 @@ begin
      initnul;
      inherited;
      font:=nil;
-     {GDBGetMem(font,sizeof(SHXFont));
+     {Getmem(font,sizeof(SHXFont));
      font^.init;}
 end;
 function GDBfont.GetOrReplaceSymbolInfo(symbol:GDBInteger{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;

@@ -27,7 +27,7 @@ type
 PGDBPolyline2DArray=^GDBPolyline2DArray;
 GDBPolyline2DArray= object(GZVectorData{-}<GDBVertex2D>{//})(*OpenArrayOfData=GDBVertex2D*)
                       closed:GDBBoolean;(*saved_to_shd*)
-                      constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger;c:GDBBoolean);
+                      constructor init(m:GDBInteger;c:GDBBoolean);
 
                       //function onmouse(mc:GDBvertex2DI):GDBBoolean;virtual;
                       procedure optimize;virtual;
@@ -185,7 +185,7 @@ end;
 
 constructor GDBPolyline2DArray.init;
 begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,sizeof(GDBVertex2D)});
+  inherited init(m);
   closed:=c;
 end;
 function GDBPolyline2DArray.inrect;

@@ -381,7 +381,7 @@ begin
   inherited init(own,layeraddres,LW);
   POINTER(name):=nil;
   pblockdef:=nil;
-  //GDBGetMem(self.varman,sizeof(varmanager));
+  //Getmem(self.varman,sizeof(varmanager));
   bp.ListPos.Owner:=own;
   //vp.ID:=GDBBlockInsertID;
   scale:=ScaleOne;
@@ -395,7 +395,7 @@ begin
   inherited initnul;
   pblockdef:=nil;
   POINTER(name):=nil;
-  //GDBGetMem(self.varman,sizeof(varmanager));
+  //Getmem(self.varman,sizeof(varmanager));
   bp.ListPos.Owner:=nil;
   //vp.ID:=GDBBlockInsertID;
   scale:=ScaleOne;
@@ -403,7 +403,7 @@ begin
   index:=-1;
   GDBPointer(Name):=nil;
   pattrib:=nil;
-  //ConstObjArray.init({$IFDEF DEBUGBUILD}'{9DC0AF69-6DBD-479E-91FE-A61F4AC3BE56}',{$ENDIF}100);
+  //ConstObjArray.init(100);
   //varman.init('Block_Variable');
   //varman.mergefromfile(programpath+'components\defaultblockvar.ini');
   pprojoutbound:=nil;
@@ -415,7 +415,7 @@ end;
 function GDBObjBlockInsert.Clone;
 var tvo: PGDBObjBlockInsert;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{F9D41F4A-1E80-4D3A-9DD1-D0037EFCA988}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjBlockInsert));
+  Getmem(GDBPointer(tvo), sizeof(GDBObjBlockInsert));
   //tvo^.ObjMatrix:=objmatrix;;
   tvo^.init({bp.owner}own,vp.Layer, vp.LineWeight);
   tvo^.scale:=scale;
@@ -433,9 +433,9 @@ begin
   tvo.index := index;
   tvo^.bp.ListPos.Owner:=own;
   if ConstObjArray.count>0 then
-                               tvo.ConstObjArray.init({$IFDEF DEBUGBUILD}'{E9005274-601F-4A3F-BDB8-E311E59D558C}',{$ENDIF}ConstObjArray.count)
+                               tvo.ConstObjArray.init(ConstObjArray.count)
                            else
-                               tvo.ConstObjArray.init({$IFDEF DEBUGBUILD}'{E9005274-601F-4A3F-BDB8-E311E59D558C}',{$ENDIF}100);
+                               tvo.ConstObjArray.init(100);
   ConstObjArray.CloneEntityTo(@tvo.ConstObjArray,tvo);
   //tvo^.format;
   result := tvo;
@@ -540,7 +540,7 @@ else if not dxfGDBStringload(f,2,byt,name)then {s := }f.readgdbstring;
   end;
   if attrcont then ;
       {begin
-        GDBGetMem(PGDBBlockInsert(temp)^.pattrib, attrmemsize);
+        Getmem(PGDBBlockInsert(temp)^.pattrib, attrmemsize);
         PGDBBlockInsert(temp)^.pattrib^.count := 0;
         s := f.readworld(#10, #13);
         repeat
@@ -691,7 +691,7 @@ begin
 end;
 function AllocBlockInsert:PGDBObjBlockInsert;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocBlockInsert}',{$ENDIF}pointer(result),sizeof(GDBObjBlockInsert));
+  Getmem(pointer(result),sizeof(GDBObjBlockInsert));
 end;
 function AllocAndInitBlockInsert(owner:PGDBObjGenericWithSubordinated):PGDBObjBlockInsert;
 begin

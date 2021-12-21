@@ -48,7 +48,7 @@ begin
      if SubNode<>nil then
      begin
           SubNode^.Done;
-          gdbfreemem(pointer(subnode));
+          Freemem(pointer(subnode));
           SubNode:=nil;
      end;
 end;

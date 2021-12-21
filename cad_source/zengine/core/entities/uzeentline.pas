@@ -205,7 +205,7 @@ end;
 destructor GDBObjLine.done;
 begin
      if PProjPoint<>nil then
-                            GDBFreeMem(GDBPointer(PProjPoint));
+                            Freemem(GDBPointer(PProjPoint));
      inherited done;
 end;
 procedure GDBObjLine.CalcGeometry;
@@ -323,9 +323,9 @@ begin
   //if POGLWnd=nil then exit;
   {if PProjPoint<>nil then
   begin
-       GDBFreeMem(GDBPointer(PProjPoint));
+       Freemem(GDBPointer(PProjPoint));
   end;}
-  if PProjPoint=nil then GDBGetMem({$IFDEF DEBUGBUILD}'{BC97B497-84C4-4E1D-9A61-26CA379F29A7}',{$ENDIF}GDBPointer(pprojpoint),sizeof(GDBLineProj));
+  if PProjPoint=nil then Getmem(GDBPointer(pprojpoint),sizeof(GDBLineProj));
 
   ProjectProc(CoordInWCS.lbegin,tv);
   pprojpoint^[0]:=pGDBvertex2D(@tv)^;
@@ -588,7 +588,7 @@ end;
 function GDBObjLine.Clone;
 var tvo: PGDBObjLine;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{5A1B005F-39F1-431B-B65E-0C532AEFA5D0}-GDBObjLine.Clone',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjLine));
+  Getmem(GDBPointer(tvo), sizeof(GDBObjLine));
   tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight, CoordInOCS.lBegin, CoordInOCS.lEnd);
   CopyVPto(tvo^);
   CopyExtensionsTo(tvo^);
@@ -634,7 +634,7 @@ begin
 end;
 function GDBObjLine.beforertmodify;
 begin
-     GDBGetMem({$IFDEF DEBUGBUILD}'{D2E91E60-41CC-45FE-AC5E-CAEC5013C0ED}',{$ENDIF}result,sizeof(tlinertmodify));
+     Getmem(result,sizeof(tlinertmodify));
      clearrtmodify(result);
 end;
 procedure GDBObjLine.clearrtmodify(p:GDBPointer);
@@ -710,7 +710,7 @@ end;
 procedure GDBObjLine.addcontrolpoints(tdesc:GDBPointer);
 var pdesc:controlpointdesc;
 begin
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.init({$IFDEF DEBUGBUILD}'{4CBC9A73-A88D-443B-B925-2F0611D82AB0}',{$ENDIF}3);
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(3);
 
           pdesc.selected:=false;
           pdesc.pobject:=nil;
@@ -776,7 +776,7 @@ begin
 end;
 function AllocLine:PGDBObjLine;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocLine}',{$ENDIF}pointer(result),sizeof(GDBObjLine));
+  Getmem(pointer(result),sizeof(GDBObjLine));
 end;
 function AllocAndInitLine(owner:PGDBObjGenericWithSubordinated):PGDBObjLine;
 begin

@@ -539,7 +539,7 @@ begin
 end;
 function UserTypeDescriptor.AllocInstance:Pointer;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{1736E7AF-8FA1-4FC2-B48D-EF04C537C983}',{$ENDIF}result,SizeInGDBBytes);
+  Getmem(result,SizeInGDBBytes);
 end;
 function UserTypeDescriptor.AllocAndInitInstance:Pointer;
 begin

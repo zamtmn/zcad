@@ -58,7 +58,7 @@ type
   GDBFontManager=object({GDBOpenArrayOfData}GDBNamedObjectsArray{-}<PGDBfont,GDBfont>{//})(*OpenArrayOfData=GDBfont*)
     FontFiles:{-}TFontName2FontFileMap{/pointer/};
     shxfontfiles:TStringList;
-    constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+    constructor init(m:GDBInteger);
     destructor done;virtual;
     procedure CreateBaseFont;
 
@@ -159,7 +159,7 @@ end;
 constructor GDBFontManager.init;
 begin
   FontFiles:=TFontName2FontFileMap.Create;
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m);
+  inherited init(m);
 end;
 procedure GDBFontManager.CreateBaseFont;
 {NEEDFIXFORDELPHI}
@@ -182,7 +182,7 @@ begin
                       DebugLn('{F}'+rsReserveFontNotFound)
                   else
                       begin
-                           f.init({$IFDEF DEBUGBUILD}'{94091172-3DD7-4038-99B6-90CD8B8E971D}',{$ENDIF}length(r.Value));
+                           f.init(length(r.Value));
                            f.AddData(@r.Value[1],length(r.Value));
                            f.SaveToFile(expandpath(TempPath+filename));
                            pbasefont:=addFonfByFile(TempPath+filename);
@@ -355,7 +355,7 @@ initialization
 {$IFNDEF DELPHI}
   {$I gewind.lrs}
 {$ENDIF}
-  FontManager.init({$IFDEF DEBUGBUILD}'{9D0E081C-796F-4EB1-98A9-8B6EA9BD8640}',{$ENDIF}100);
+  FontManager.init(100);
   FontExt2LoadProc:=TFontExt2LoadProcMap.Create;
   sysvarPATHFontsPath:=ExtractFileDir(ParamStr(0));
 finalization

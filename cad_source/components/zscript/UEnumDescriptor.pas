@@ -62,27 +62,22 @@ begin
      SourceValue.Done;
      UserValue.Done;
      value.Done;
-     gdbfreemem(Value);
+     Freemem(Value);
 end;
 constructor EnumDescriptor.init;
 begin
-     //gdbgetmem({$IFDEF DEBUGBUILD}'{B8CB2886-0E46-4426-B99B-EA4A0948FAE7}',{$ENDIF}Pointer(PSourceValue),sizeof(PSourceValue^));
-     //gdbgetmem({$IFDEF DEBUGBUILD}'{28FC622D-1EAD-4CCA-801B-ECF3B7E3C9D5}',{$ENDIF}Pointer(PSourceValue),sizeof(PUserValue^));
      inherited init(size,tname,pu);
      SourceValue.init(20);
      UserValue.init(20);
-     gdbgetmem({$IFDEF DEBUGBUILD}'{B8CB2886-0E46-4426-B99B-EA4A0948FAE7}',{$ENDIF}Pointer(Value),sizeof(TByteVector));
+     Getmem(Pointer(Value),sizeof(TByteVector));
      case size of
-                 1:Value.init({$IFDEF DEBUGBUILD}'{EA29780F-2455-4BBF-9CB6-054B6A4D48C5}',{$ENDIF}20{,1});
-                 2:PTWordVector(Value).init({$IFDEF DEBUGBUILD}'{E17DB617-1782-4815-BA8B-12F53B06DAD8}',{$ENDIF}20{,2});
-                 4:PTCardinalVector(Value).init({$IFDEF DEBUGBUILD}'{21381F6A-26DC-43C3-B4F8-0BBB24722B75}',{$ENDIF}20{,4});
+                 1:Value.init(20);
+                 2:PTWordVector(Value).init(20);
+                 4:PTCardinalVector(Value).init(20);
      end;
 end;
 function EnumDescriptor.CreateProperties;
 var currval:GDBLongword;
-//    p:Pointer;
-//    found:GDBBoolean;
-//    i:GDBInteger;
     ppd:PPropertyDeskriptor;
 begin
      ppd:=GetPPD(ppda,bmode);

@@ -222,10 +222,10 @@ initialization;
   //units.loadunit(expandpath('*rtl\objdefunits\bglsensor.pas'),nil);
   //units.loadunit(expandpath('*rtl\objdefunits\bias.pas'),nil);
 
-  SysVar.debug.memdeb.GetMemCount:=@uzbmemman.GetMemCount;
-  SysVar.debug.memdeb.FreeMemCount:=@uzbmemman.FreeMemCount;
-  SysVar.debug.memdeb.TotalAllocMb:=@uzbmemman.TotalAllocMb;
-  SysVar.debug.memdeb.CurrentAllocMB:=@uzbmemman.CurrentAllocMB;
+  SysVar.debug.memdeb.GetMemCount:=nil;
+  SysVar.debug.memdeb.FreeMemCount:=nil;
+  SysVar.debug.memdeb.TotalAllocMb:=nil;
+  SysVar.debug.memdeb.CurrentAllocMB:=nil;
 
   if sysunit<>nil then
   begin
@@ -242,7 +242,7 @@ initialization;
 finalization;
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 
-  mem.init({$IFDEF DEBUGBUILD}'{71D987B4-8C57-4C62-8C12-CFC24A0A9C9A}',{$ENDIF}1024);
+  mem.init(1024);
   SavedUnit^.SavePasToMem(mem);
   mem.SaveToFile(expandpath(ProgramPath+'rtl'+PathDelim+'savedvar.pas'));
   mem.done;

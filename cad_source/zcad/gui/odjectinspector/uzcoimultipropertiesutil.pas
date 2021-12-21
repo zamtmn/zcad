@@ -139,7 +139,7 @@ pu - модуль в котором будет создана переменна
 //var
   //PVD:pvardesk;
 begin
-    GDBGetMem({$IFDEF DEBUGBUILD}'{831CDE55-8FC6-4ACD-8A4C-FEB861D44294}',{$ENDIF}result,sizeof(TOneVarData));
+    Getmem(result,sizeof(TOneVarData));
     pointer(PTOneVarData(result)^.StrValue):=nil;
     FindOrCreateVar(pu,mp.MPName,mp.MPUserName,mp.MPType^.TypeName,PTOneVarData(result).VDAddr);
     //PTOneVarData(result).VDAddr:=PVD^.data.Addr;
@@ -155,14 +155,14 @@ pu - модуль в котором будет создана переменна
 var
   PVD:pvardesk;
 begin
-    GDBGetMem({$IFDEF DEBUGBUILD}'{831CDE55-8FC6-4ACD-8A4C-FEB861D44294}',{$ENDIF}result,sizeof(TStringCounterData));
+    Getmem(result,sizeof(TStringCounterData));
     PTStringCounterData(result)^.counter:=TStringCounter.Create;
     if FindOrCreateVar(pu,mp.MPName,mp.MPUserName,mp.MPType^.TypeName,PTStringCounterData(result).VDAddr) then begin
       PVD:=PTStringCounterData(result).VDAddr.Instance;
       PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.Enums.init(10);
       PTStringCounterData(result)^.totalcount:=0;
       PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.Selected:=0;
-      GDBGetMem({$IFDEF DEBUGBUILD}'{831CDE55-8FC6-4ACD-8A4C-FEB861D44294}',{$ENDIF}PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData,sizeof(TZctnrVectorGDBString));
+      Getmem(PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData,sizeof(TZctnrVectorGDBString));
       PTZctnrVectorGDBString(PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData)^.init(10);
     end;
     //PTStringCounterData(result).VDAddr:=PVD^.data.Addr;
@@ -179,7 +179,7 @@ var
   PVD:pvardesk;
   t:PTEnumDataWithOtherData;
 begin
-    GDBGetMem({$IFDEF DEBUGBUILD}'{831CDE55-8FC6-4ACD-8A4C-FEB861D44294}',{$ENDIF}result,sizeof(TPointerCounterData));
+    Getmem(result,sizeof(TPointerCounterData));
     PTPointerCounterData(result)^.counter:=TPointerCounter.Create;
     if FindOrCreateVar(pu,mp.MPName,mp.MPUserName,mp.MPType^.TypeName,PTPointerCounterData(result).VDAddr) then begin
       PVD:=PTPointerCounterData(result).VDAddr.Instance;
@@ -187,7 +187,7 @@ begin
       PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.Enums.init(10);
       PTPointerCounterData(result)^.totalcount:=0;
       PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.Selected:=0;
-      GDBGetMem({$IFDEF DEBUGBUILD}'{831CDE55-8FC6-4ACD-8A4C-FEB861D44294}',{$ENDIF}PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData,sizeof(TZctnrVectorGDBPointer));
+      Getmem(PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData,sizeof(TZctnrVectorGDBPointer));
       PTZctnrVectorGDBPointer(PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData)^.init(10);
     end;
     //PTPointerCounterData(result).VDAddr:=PVD^.data.Addr;
@@ -204,7 +204,7 @@ pu - модуль в котором будет создана переменна
 {var
    vd:vardesk;}
 begin
-    GDBGetMem({$IFDEF DEBUGBUILD}'{15C8D138-5A5B-44F1-B725-FFFF20869CD9}',{$ENDIF}result,sizeof(TVertex3DControlVarData));
+    Getmem(result,sizeof(TVertex3DControlVarData));
     pointer(PTVertex3DControlVarData(result)^.StrValueX):=nil;
     pointer(PTVertex3DControlVarData(result)^.StrValueY):=nil;
     pointer(PTVertex3DControlVarData(result)^.StrValueZ):=nil;
@@ -220,7 +220,7 @@ procedure FreeOneVarData(piteratedata:GDBPointer;mp:TMultiProperty);
 {уничтожает созданную GetOneVarData структуру}
 begin
     PTOneVarData(piteratedata)^.StrValue:='';
-    GDBFreeMem(piteratedata);
+    Freemem(piteratedata);
 end;
 procedure FreeStringCounterData(piteratedata:GDBPointer;mp:TMultiProperty);
 var
@@ -246,7 +246,7 @@ begin
   //until not iterator.Next;
   end;
   PTStringCounterData(piteratedata)^.counter.Free;
-  GDBFreeMem(piteratedata);
+  Freemem(piteratedata);
 end;
 procedure FreePNamedObjectCounterData(piteratedata:GDBPointer;mp:TMultiProperty);
 var
@@ -278,7 +278,7 @@ begin
   //until not iterator.Next;
   end;
   PTPointerCounterData(piteratedata)^.counter.Free;
-  GDBFreeMem(piteratedata);
+  Freemem(piteratedata);
 end;
 procedure FreePNamedObjectCounterDataUTF8(piteratedata:GDBPointer;mp:TMultiProperty);
 var
@@ -303,7 +303,7 @@ begin
   //until not iterator.Next;
   end;
   PTPointerCounterData(piteratedata)^.counter.Free;
-  GDBFreeMem(piteratedata);
+  Freemem(piteratedata);
 end;
 
 procedure FreeVertex3DControlData(piteratedata:GDBPointer;mp:TMultiProperty);
@@ -312,7 +312,7 @@ begin
     PTVertex3DControlVarData(piteratedata)^.StrValueX:='';
     PTVertex3DControlVarData(piteratedata)^.StrValueY:='';
     PTVertex3DControlVarData(piteratedata)^.StrValueZ:='';
-    GDBFreeMem(piteratedata);
+    Freemem(piteratedata);
 end;
 procedure PolylineVertex3DControlBeforeEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData);
 var

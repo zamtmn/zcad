@@ -139,8 +139,8 @@ begin
                             BuildTreeByEQ(ProjectEquipmentN,PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName),MenusManager.GetPopupMenu('PROJECTDBCXMENU',nil));
                             (*
                             ProjectEquipmentNodeN.free;
-                            gdbgetmem({$IFDEF DEBUGBUILD}'{B941B71E-2BA6-4B5E-B436-633B6C8FC500}',{$ENDIF}pointer(ProjectEquipmentNode.SubNode),sizeof(TGDBTree));
-                            ProjectEquipmentNode.SubNode.init({$IFDEF DEBUGBUILD}'{CE1105DB-7CAD-4353-922A-5A31956421C4}',{$ENDIF}10);
+                            Getmem(pointer(ProjectEquipmentNode.SubNode),sizeof(TGDBTree));
+                            ProjectEquipmentNode.SubNode.init(10);
                             BuildTreeByEQ(ProjectEquipmentNode,drawings.GetCurrentDWG.DWGUnits.findunit(DrawingDeviceBaseUnitName),ProjectDBContextMenu);
                             ProjectDB.Sync;
                             *)
@@ -214,7 +214,7 @@ begin
 
          buildbranchn(CurrNode,treepos,EqCategory);
 
-         //gdbgetmem({$IFDEF DEBUGBUILD}'{3987F838-D729-4E08-813E-6818030B801C}',{$ENDIF}pointer(eqnode),sizeof(GDBEqNode));
+         //Getmem(pointer(eqnode),sizeof(GDBEqNode));
          if PDBUNIT<>DBUnit then
                                 s:=PDbBaseObject(pvdeq^.data.Addr.Instance)^.NameShort+' из '
                             else

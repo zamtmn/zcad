@@ -172,7 +172,7 @@ end;
 constructor RecordDescriptor.init;
 begin
      inherited init(0,tname,pu);
-     fields.init({$IFDEF DEBUGBUILD}'{693E7B49-A224-4778-9FD6-49E131AEBD54}',{$ENDIF}20{,sizeof(FieldDescriptor)});
+     fields.init(20);
      parent:=nil;
 end;
 procedure FREEFIELD(const p:PFieldDescriptor);
@@ -309,8 +309,8 @@ begin
            ppd^.PTypeManager:=@self;
            if bmode=property_build then
            begin
-                gdbgetmem({$IFDEF DEBUGBUILD}'{6F9EBE33-15A8-4FF5-87D7-BF01A40F6789}',{$ENDIF}Pointer(ppd^.SubNode),sizeof(TPropertyDeskriptorArray));
-                PTPropertyDeskriptorArray(ppd^.SubNode)^.init({$IFDEF DEBUGBUILD}'{EDA18239-9432-453B-BA54-0381DA1BB665}',{$ENDIF}100);;
+                Getmem(Pointer(ppd^.SubNode),sizeof(TPropertyDeskriptorArray));
+                PTPropertyDeskriptorArray(ppd^.SubNode)^.init(100);
                 ppda:=PTPropertyDeskriptorArray(ppd^.SubNode);
            end else
            begin
@@ -375,8 +375,8 @@ begin
                                                                            ppd^.Collapsed:=FindCategory(category,ppd^.Name);
                                                                            ppd^.category:=category;
                                                                            ppd^.Attr:=ownerattrib;
-                                                                           gdbgetmem({$IFDEF DEBUGBUILD}'{6F9EBE33-15A8-4FF5-87D7-BF01A40F6789}',{$ENDIF}Pointer(ppd^.SubNode),sizeof(TPropertyDeskriptorArray));
-                                                                           PTPropertyDeskriptorArray(ppd^.SubNode)^.init({$IFDEF DEBUGBUILD}'{EDA18239-9432-453B-BA54-0381DA1BB665}',{$ENDIF}100);;
+                                                                           Getmem(Pointer(ppd^.SubNode),sizeof(TPropertyDeskriptorArray));
+                                                                           PTPropertyDeskriptorArray(ppd^.SubNode)^.init(100);
                                                                       end;
                                                       ppda:=PTPropertyDeskriptorArray(ppd^.SubNode);
                                                   end;

@@ -567,7 +567,7 @@ begin
     if tb<>nil then begin
                          tb^.bp:=nb^.bp;
                          nb^.done;
-                         gdbfreemem(pointer(nb));
+                         Freemem(pointer(nb));
                          nb:=pointer(tb);
     end;
     drawings.GetCurrentROOT^.AddObjectToObjArray(addr(nb));
@@ -1393,7 +1393,7 @@ begin
   begin
     if pb<>nil then begin
                          //pb^.done;
-                         //gdbfreemem(pointer(pb));
+                         //Freemem(pointer(pb));
                          pb:=nil;
                          drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.free;
                          //drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count := 0;
@@ -1416,7 +1416,7 @@ begin
     if tb<>nil then begin
                          tb^.bp:=pb^.bp;
                          pb^.done;
-                         gdbfreemem(pointer(pb));
+                         Freemem(pointer(pb));
                          pb:=pointer(tb);
     end;
 
@@ -1448,7 +1448,7 @@ begin
   begin
     if pb<>nil then begin
                          //pb^.done;
-                         //gdbfreemem(pointer(pb));
+                         //Freemem(pointer(pb));
                          pb:=nil;
                          drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.free;
                          //drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count := 0;
@@ -1474,7 +1474,7 @@ begin
                          tb^.bp:=pb^.bp;
                          //drawings.GetCurrentDWG^.ConstructObjRoot.deliteminarray(pb^.bp.PSelfInOwnerArray);
                          pb^.done;
-                         gdbfreemem(pointer(pb));
+                         Freemem(pointer(pb));
                          pb:=pointer(tb);
     end;
     drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.AddPEntity(pb^);
@@ -1492,7 +1492,7 @@ begin
      if pb<>nil then
                     begin
                          //pb^.done;
-                         //gdbfreemem(pointer(pb));
+                         //Freemem(pointer(pb));
                          pb:=nil;
                     end;
 end;
@@ -1560,7 +1560,7 @@ var //pv:pGDBObjEntity;
 begin
   drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
 
-  GDBGetMem({$IFDEF DEBUGBUILD}'{743A21EB-4741-42A4-8CB2-D4E4A1E2EAF8}',{$ENDIF}pointer(pt),sizeof(GDBObjTable));
+  Getmem(pointer(pt),sizeof(GDBObjTable));
   pt^.initnul;
   pt^.bp.ListPos.Owner:=@drawings.CurrentDWG^.ConstructObjRoot;
   drawings.CurrentDWG^.ConstructObjRoot.ObjArray.AddPEntity(pt^);
@@ -1696,7 +1696,7 @@ begin
     if tb<>nil then begin
                          tb^.bp:=BLINSERT^.bp;
                          BLINSERT^.done;
-                         gdbfreemem(pointer(BLINSERT));
+                         Freemem(pointer(BLINSERT));
                          BLINSERT:=pointer(tb);
     end;
     drawings.GetCurrentROOT^.AddObjectToObjArray{ObjArray.add}(addr(BLINSERT));
@@ -1904,7 +1904,7 @@ begin
      lineAABBtests:=0;
      lm:=0;
      lc:=0;
-     parray.init({$IFDEF DEBUGBUILD}'{527C1C8F-E832-43F9-B8C4-2733AD9EAF67}',{$ENDIF}10000);
+     parray.init(10000);
      LinesMap:=MapPointOnCurve3DPropArray.Create;
      lph:=lps.StartLongProcess('Search intersections and storing data',nil);
      FindAllIntersectionsInNode(@drawings.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,lineAABBtests,linelinetests,intersectcount,@parray,LinesMap);

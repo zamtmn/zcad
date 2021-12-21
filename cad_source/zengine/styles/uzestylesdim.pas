@@ -118,7 +118,7 @@ GDBDimStyle = object(GDBNamedObject)
 PGDBDimStyleArray=^GDBDimStyleArray;
 {REGISTEROBJECTTYPE GDBDimStyleArray}
 GDBDimStyleArray= object(GDBNamedObjectsArray{-}<PGDBDimStyle,GDBDimStyle>{//})(*OpenArrayOfData=GDBDimStyle*)
-                    constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+                    constructor init(m:GDBInteger);
                     constructor initnul;
                     procedure ResolveDXFHandles(const Handle2BlockName:TMapBlockHandle_BlockNames);
                     procedure ResolveTextstyles(const tst:TGenericNamedObjectsArray);
@@ -211,7 +211,7 @@ procedure GDBDimStyle.CreateLDIfNeed;
 begin
      if PDXFLoadingData=nil then
      begin
-          GDBGetMem({$IFDEF DEBUGBUILD}'{29732718-D406-4A69-A37E-3F9A28E849EF}',{$ENDIF}pointer(PDXFLoadingData),SizeOf(PDXFLoadingData^));
+          Getmem(pointer(PDXFLoadingData),SizeOf(PDXFLoadingData^));
           pointer(PDXFLoadingData^.TextStyleName):=nil;
           PDXFLoadingData^.DIMBLK1handle:=0;
           PDXFLoadingData^.DIMBLK2handle:=0;
@@ -223,7 +223,7 @@ begin
      if PDXFLoadingData<>nil then
      begin
           PDXFLoadingData^.TextStyleName:='';
-          GDBFreeMem(pointer(PDXFLoadingData));
+          Freemem(pointer(PDXFLoadingData));
      end;
 end;
 function GDBDimStyle.GetDimBlockParam(nline:GDBInteger):TDimArrowBlockParam;
@@ -535,7 +535,7 @@ begin
 end;
 constructor GDBDimStyleArray.init;
 begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,sizeof(GDBDimStyle)});
+  inherited init(m);
 end;
 
 

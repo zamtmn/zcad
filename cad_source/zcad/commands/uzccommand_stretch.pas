@@ -21,7 +21,6 @@ unit uzccommand_stretch;
 
 interface
 uses
- {$IFDEF DEBUGBUILD}strutils,{$ENDIF}
  uzeconsts,zeundostack,uzcoimultiobjects,
  uzgldrawcontext,uzbpaths,uzeffmanager,
  uzestylesdim,uzeenttext,

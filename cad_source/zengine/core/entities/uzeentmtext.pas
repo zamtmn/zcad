@@ -640,8 +640,8 @@ begin
 
   if PProjoutbound=nil then
   begin
-       GDBGetMem({$IFDEF DEBUGBUILD}'{DD80536C-7685-4BEA-B8D8-C65B489D14C0}',{$ENDIF}GDBPointer(PProjoutbound),sizeof(GDBOOutbound2DIArray));
-       PProjoutbound^.init({$IFDEF DEBUGBUILD}'{D9B4BF93-80FB-45C8-8C6B-8AB440BB3F72}',{$ENDIF}4);
+       Getmem(GDBPointer(PProjoutbound),sizeof(GDBOOutbound2DIArray));
+       PProjoutbound^.init(4);
   end;
 end;
 *)
@@ -671,7 +671,7 @@ var
 begin
   ln:=0;
   pfont:=PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyleIndex))^.pfont;
-  pl.init({$IFDEF DEBUGBUILD}'{E44FB0DD-3556-4279-8845-5EA005F302DB}',{$ENDIF}10);
+  pl.init(10);
   ispl:=false;
   //Representation.SHX.clear;
   //Representation.Triangles.clear;
@@ -816,8 +816,8 @@ begin
   outbound[3]:=pgdbvertex(@v)^;
   if PProjoutbound=nil then
   begin
-       GDBGetMem({$IFDEF DEBUGBUILD}'{4EE8FCB2-6B54-4F16-83C4-BAD50539EF7E}',{$ENDIF}GDBPointer(PProjoutbound),sizeof(GDBOOutbound2DIArray));
-       PProjoutbound^.init({$IFDEF DEBUGBUILD}'{B510A218-FCAB-464A-B97F-F19DF29D0FB0}',{$ENDIF}4);
+       Getmem(GDBPointer(PProjoutbound),sizeof(GDBOOutbound2DIArray));
+       PProjoutbound^.init(4);
   end;
 
   {plp:=pl.beginiterate(ir);
@@ -883,7 +883,7 @@ end;}
 function GDBObjMText.Clone;
 var tvo: PGDBObjMtext;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{599A7E9B-3DA5-4715-8DFC-0957E8B6FCBF}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjMText));
+  Getmem(GDBPointer(tvo), sizeof(GDBObjMText));
   tvo^.initnul(own);
   //tvo^.vp:=vp;
   CopyVPto(tvo^);
@@ -957,7 +957,7 @@ begin
   Local.basis.ox:=ux;
   //ptext := nil;
   //text.init(10);
-  //Vertex2D_in_DCS_Array.init({$IFDEF DEBUGBUILD}'{60EB8545-4D59-48BF-9489-41979066A13F}',{$ENDIF}100);
+  //Vertex2D_in_DCS_Array.init(100);
   PProjoutbound:=nil;
   //format;
 end;
@@ -1021,7 +1021,7 @@ begin
 end;
 function AllocMText:PGDBObjMText;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocMText}',{$ENDIF}result,sizeof(GDBObjMText));
+  Getmem(result,sizeof(GDBObjMText));
 end;
 function AllocAndInitMText(owner:PGDBObjGenericWithSubordinated):PGDBObjMText;
 begin

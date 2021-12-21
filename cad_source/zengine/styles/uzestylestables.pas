@@ -48,7 +48,7 @@ TGDBTableStyle= object(GDBNamedObject)
 PGDBTableStyleArray=^GDBTableStyleArray;
 {REGISTEROBJECTTYPE GDBTableStyleArray}
 GDBTableStyleArray= object(GDBNamedObjectsArray{-}<PTGDBTableStyle,TGDBTableStyle>{//})(*OpenArrayOfData=TGDBTableStyle*)
-                    constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+                    constructor init(m:GDBInteger);
                     constructor initnul;
                     function AddStyle(name:GDBString):PTGDBTableStyle;
               end;
@@ -60,7 +60,7 @@ implementation
 //    log;
 constructor GDBTableStyleArray.init;
 begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,sizeof(TGDBTableStyle)});
+  inherited init(m);
   //addlayer(LNSysLayerName,CGDBWhile,lwgdbdefault,true,false,true);
 end;
 constructor GDBTableStyleArray.initnul;
@@ -72,7 +72,7 @@ end;
 constructor TGDBTableStyle.Init;
 begin
     inherited;
-    tblformat.init({$IFDEF DEBUGBUILD}'{3FD7CFC7-3885-4C97-9BEE-BA27E83862BB}',{$ENDIF}10{,sizeof(TGDBTableCellStyle)});
+    tblformat.init(10);
 end;
 destructor TGDBTableStyle.Done;
 begin

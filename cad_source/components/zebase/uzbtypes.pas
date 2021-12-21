@@ -330,7 +330,7 @@ end;
 procedure TInVectorAddr.FreeeInstance;
 begin
   if DataSegment=nil then
-    GDBFreeMem(Instt.ptr);
+    Freemem(Instt.ptr);
 end;
 function GDBaseObject.GetObjType:GDBWord;
 begin

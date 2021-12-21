@@ -492,7 +492,7 @@ begin
                     begin
                          if tree=nil then
                          begin
-                              gdbgetmem({$IFDEF DEBUGBUILD}'{E1158636-E1BD-49B8-BFB2-25723FC26625}',{$ENDIF}pointer(tree),sizeof(TGDBTree));
+                              Getmem(pointer(tree),sizeof(TGDBTree));
                               tree.init(10);
                               ptree:=@tree;
                               if oldtree=nil then
@@ -508,7 +508,7 @@ begin
                                shell:=pointer(dev^.FindShellByClass(TDC_Shell));
 
 
-                         gdbgetmem({$IFDEF DEBUGBUILD}'{E1158636-E1BD-49B8-BFB2-25723FC26625}',{$ENDIF}pointer(root2),sizeof(GDBEmSEPDeviceNode));
+                         Getmem(pointer(root2),sizeof(GDBEmSEPDeviceNode));
                          root2^.initnul;
                          pvd:=shell.ou.FindVariable('NMO_Name');
                          if pvd<>nil then
@@ -528,7 +528,7 @@ begin
 
                          if ptree^=nil then
                          begin
-                              gdbgetmem({$IFDEF DEBUGBUILD}'{E1158636-E1BD-49B8-BFB2-25723FC26625}',{$ENDIF}pointer(ptree^),sizeof(TGDBTree));
+                              Getmem(pointer(ptree^),sizeof(TGDBTree));
                               ptree^.init(10);
                          end;
 
@@ -613,7 +613,7 @@ commandmanager.DMShow;
               treecontrol.initxywh('asas',@zf,500,0,500,45,false);
               treecontrol.align:=al_client;
 
-              gdbgetmem({$IFDEF DEBUGBUILD}'{E1158636-E1BD-49B8-BFB2-25723FC26625}',{$ENDIF}pointer(root),sizeof(GDBEmSEPDeviceNode));
+              Getmem(pointer(root),sizeof(GDBEmSEPDeviceNode));
               root^.initnul;
               root^.NodeName:=name;
 
@@ -1000,7 +1000,7 @@ begin
               if (p<>nil)and(pust<>nil)and(i<>nil)and(iust<>nil) then
               begin
 
-                     GDBGetMem({$IFDEF DEBUGBUILD}'{76F46B7D-CAFA-4509-8B65-8759292D8709}',{$ENDIF}pointer(pt),sizeof(GDBObjTable));
+                     Getmem(pointer(pt),sizeof(GDBObjTable));
                      pt^.initnul;
                      pt^.ptablestyle:=drawings.GetCurrentDWG.TableStyleTable.getAddres('ShRaspr');
                      pt^.tbl.free;
@@ -1333,7 +1333,7 @@ var //po:PGDBObjSubordinated;
     DC:TDrawContext;
 begin
   result:=0;
-  Objects.init({$IFDEF DEBUGBUILD}'{8BE71BAA-507B-4D6B-BE2C-63693022090C}',{$ENDIF}10);
+  Objects.init(10);
   if drawings.GetCurrentROOT.FindObjectsInPoint(wc,Objects) then
   begin
        FirstOwner:=pointer(drawings.FindOneInArray(Objects,GDBNetID,true));
@@ -1383,7 +1383,7 @@ begin
   //po:=nil;
   if (button and MZW_LBUTTON)<>0 then
                                      button:=button;
-  Objects.init({$IFDEF DEBUGBUILD}'{8BE71BAA-507B-4D6B-BE2C-63693022090C}',{$ENDIF}10);
+  Objects.init(10);
   if drawings.GetCurrentROOT.FindObjectsInPoint(wc,Objects) then
   begin
        SecondOwner:=pointer(drawings.FindOneInArray(Objects,GDBNetID,true));
@@ -1423,7 +1423,7 @@ begin
     case mode of
           0:begin
                  TempNet:=nil;
-                 GDBGetMem({$IFDEF DEBUGBUILD}'{C92353C3-EA26-48A9-A47F-89F7723E3D16}',{$ENDIF}GDBPointer(TempNet),sizeof(GDBObjNet));
+                 Getmem(GDBPointer(TempNet),sizeof(GDBObjNet));
                  TempNet^.initnul(nil);
                  zcSetEntPropFromCurrentDrawingProp(TempNet);
                  drawings.standardization(TempNet,GDBNetID);
@@ -1596,7 +1596,7 @@ begin
   end;
   cabcomparam.PCable:=nil;
   cabcomparam.PTrace:=nil;
-  //gdbfreemem(pointer(p3dpl));
+  //Freemem(pointer(p3dpl));
 end;
 function _Cable_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 var
@@ -1714,7 +1714,7 @@ begin
                  begin
                       tw2:=NearestPointOnSegment(lastpoint,l2.CoordInWCS.lBegin,l2.CoordInWCS.lEnd);
                       PTrace.BuildGraf(drawings.GetCurrentDWG^);
-                      pa.init({$IFDEF DEBUGBUILD}'{FE5DE449-60C7-4D92-9BA5-FEB937820B96}',{$ENDIF}100);
+                      pa.init(100);
                       PTrace.graf.FindPath(tw1,tw2,l1,l2,pa);
                       if addfirstpoint then
                       cable^.AddVertex(firstpoint);
@@ -1755,7 +1755,7 @@ begin
   pointer(l1):=PTrace.GetNearestLine(firstpoint);
   pointer(l2):=PTrace.GetNearestLine(lastpoint);
   tw1:=NearestPointOnSegment(firstpoint,l1.CoordInWCS.lBegin,l1.CoordInWCS.lEnd);
-  result.init({$IFDEF DEBUGBUILD}'{C8C93C89-003D-407B-A6F3-2AAA5D12E01D}',{$ENDIF}100);
+  result.init(100);
   if l1=l2 then
                begin
                  if addfirstpoint then
@@ -1771,7 +1771,7 @@ begin
                begin
                     tw2:=NearestPointOnSegment(lastpoint,l2.CoordInWCS.lBegin,l2.CoordInWCS.lEnd);
                     PTrace.BuildGraf(drawings.GetCurrentDWG^);
-                    pa.init({$IFDEF DEBUGBUILD}'{FE5DE449-60C7-4D92-9BA5-FEB937820B96}',{$ENDIF}100);
+                    pa.init(100);
                     PTrace.graf.FindPath(tw1,tw2,l1,l2,pa);
                     if addfirstpoint then
                     cable^.AddVertex(firstpoint);
@@ -1875,7 +1875,7 @@ else begin
                        begin
                             tw2:=NearestPointOnSegment(wc,l2.CoordInWCS.lBegin,l2.CoordInWCS.lEnd);
                             cabcomparam.PTrace.BuildGraf;
-                            pa.init({$IFDEF DEBUGBUILD}'{FE5DE449-60C7-4D92-9BA5-FEB937820B96}',{$ENDIF}100);
+                            pa.init(100);
                             cabcomparam.PTrace.graf.FindPath(tw1,tw2,l1,l2,pa);
                             if not IsPointEqual(tw1,plastw^) then
                                                                 p3dpl^.AddVertex(tw1);
@@ -2017,7 +2017,7 @@ begin
   pv:=cman.beginiterate(ir);
   if pv<>nil then
   begin
-                     GDBGetMem({$IFDEF DEBUGBUILD}'{9F4AB2A7-1093-4FFB-8053-E8885D691B85}',{$ENDIF}pointer(pt),sizeof(GDBObjTable));
+                     Getmem(pointer(pt),sizeof(GDBObjTable));
                      pt^.initnul;
                      zcSetEntPropFromCurrentDrawingProp(pt);
                      pt^.ptablestyle:=drawings.GetCurrentDWG.TableStyleTable.getAddres('KZ');
@@ -2253,7 +2253,7 @@ begin
   FileClose(handle);
 
 
-                     GDBGetMem({$IFDEF DEBUGBUILD}'{76882CEC-39E7-459C-9CCB-F596DE17539A}',{$ENDIF}pointer(pt),sizeof(GDBObjTable));
+                     Getmem(pointer(pt),sizeof(GDBObjTable));
                      pt^.initnul;
                      zcSetEntPropFromCurrentDrawingProp(pt);
                      pt^.ptablestyle:=drawings.GetCurrentDWG.TableStyleTable.getAddres('Spec');
@@ -2787,7 +2787,7 @@ begin
     begin
     PCreatedGDBLine^.bp.ListPos.Owner:=drawings.GetCurrentROOT;
 
-  GDBGetMem({$IFDEF DEBUGBUILD}'{33202D9B-6197-4A09-8BC8-1D24AA3053DA}',{$ENDIF}pointer(pleader),sizeof(GDBObjElLeader));
+  Getmem(pointer(pleader),sizeof(GDBObjElLeader));
   pleader^.initnul;
   //pleader^.ou.copyfrom(units.findunit('_riser'));
   pleader^.scale:=ELLeaderComParam.Scale;
@@ -3027,7 +3027,7 @@ begin
 end;
 
 begin
-  linesarray.init({$IFDEF DEBUGBUILD}'{B2D2F2AE-360B-4755-8DE8-A950788B7533}',{$ENDIF}10);
+  linesarray.init(10);
   dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
   if length(operands)=0 then
                      begin
@@ -3053,13 +3053,13 @@ begin
   isload:=FileExists(utf8tosys(s));
   if isload then
   begin
-       processednets.init({$IFDEF DEBUGBUILD}'{01A8C9B3-E4A9-4A72-9697-A7049151B7B7}',{$ENDIF}100);
-       supernetsarray.init({$IFDEF DEBUGBUILD}'{B8FBA153-889E-4FC7-AF16-5DE56A14A72F}',{$ENDIF}100);
+       processednets.init(100);
+       supernetsarray.init(100);
        FDoc:=TCSVDocument.Create;
        FDoc.Delimiter:=';';
        FDoc.LoadFromFile(utf8tosys(s));
        lph:=lps.StartLongProcess('Create cables',nil,FDoc.RowCount);
-       netarray.init({$IFDEF DEBUGBUILD}'{6FC12C96-F62C-47A3-A5B4-35D9564DB25E}',{$ENDIF}100);
+       netarray.init(100);
        for row:=0 to FDoc.RowCount-1 do
        begin
             if FDoc.ColCount[row]>4 then
@@ -3095,7 +3095,7 @@ begin
 
                           if supernet=nil then
                           begin
-                          riserarray.init({$IFDEF DEBUGBUILD}'{FC1F0E75-3A1C-4144-A901-7DCE7B8BB0BB}',{$ENDIF}100);
+                          riserarray.init(100);
                           drawings.FindMultiEntityByVar2(GDBDeviceID,'RiserName',riserarray);
 
                           LinkRisersToNets;
@@ -3128,7 +3128,7 @@ begin
                                                        begin
                                                             if supernet=nil then
                                                             begin
-                                                                 gdbgetmem({$IFDEF DEBUGBUILD}'{79828350-69E9-418A-A023-BB8B187639A1}',{$ENDIF}supernet,sizeof(GDBObjNet));
+                                                                 Getmem(supernet,sizeof(GDBObjNet));
                                                                  supernet.initnul(nil);
                                                                  psupernetvarext:=supernet.GetExtension<TVariablesExtender>;
                                                                  psupernetvarext.entityunit.copyfrom(@pnetvarext.entityunit);

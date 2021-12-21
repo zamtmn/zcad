@@ -242,9 +242,9 @@ begin
 
 
          pvc^.done;
-         GDBFREEMEM(pointer(pvc));
+         Freemem(pointer(pvc));
          pvc2^.done;
-         GDBFREEMEM(pointer(pvc2));
+         Freemem(pointer(pvc2));
          pv:=ConstObjArray.iterate(ir);
      until pv=nil;
      objmatrix:=m4;
@@ -294,7 +294,7 @@ begin
 
      pcable:=nil;
 
-     objects.init({$IFDEF DEBUGBUILD}'{8BE71BAA-507B-4D6B-BE2C-63693022090C}',{$ENDIF}100);
+     objects.init(100);
 
      if PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.{gdb.GetCurrentROOT.}FindObjectsInPoint(mainline.CoordInWCS.lBegin,Objects) then
      begin
@@ -575,7 +575,7 @@ begin
           tdesc:=PGDBSelectedObjArray(SelObjArray)^.addobject(@self);
           if tdesc<>nil then
           begin
-          GDBGetMem({$IFDEF DEBUGBUILD}'{B50BE8C9-E00A-40C0-A051-230877BD3A56}',{$ENDIF}GDBPointer(tdesc^.pcontrolpoint),sizeof(GDBControlPointArray));
+          Getmem(GDBPointer(tdesc^.pcontrolpoint),sizeof(GDBControlPointArray));
           mainline.addcontrolpoints(tdesc);
           inc(Selectedobjcount);
           end;
@@ -736,7 +736,7 @@ end;
 function GDBObjElLeader.Clone;
 var tvo: PGDBObjElLeader;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{F9D41F4A-1E80-4D3A-9DD1-D0037EFCA988}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjElLeader));
+  Getmem(GDBPointer(tvo), sizeof(GDBObjElLeader));
   tvo^.initnul;
   CopyVPto(tvo^);
   CopyExtensionsTo(tvo^);
@@ -795,7 +795,7 @@ begin
 end;
 function AllocElLeader:PGDBObjElLeader;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocElLeader}',{$ENDIF}result,sizeof(GDBObjElLeader));
+  Getmem(result,sizeof(GDBObjElLeader));
 end;
 function AllocAndInitElLeader(owner:PGDBObjGenericWithSubordinated):PGDBObjElLeader;
 begin
@@ -807,7 +807,7 @@ function UpgradeLine2Leader(ptu:PExtensionData;pent:PGDBObjLine;const drawing:TD
 var
    pvi:pvardesk;
 begin
-     GDBGetMem({$IFDEF DEBUGBUILD}'{6E92EE79-96D1-45BB-94CF-5C4C2141D886}',{$ENDIF}pointer(result),sizeof(GDBObjElLeader));
+     Getmem(pointer(result),sizeof(GDBObjElLeader));
      result^.initnul;
      result^.MainLine.CoordInOCS:=pent^.CoordInOCS;
      pent.CopyVPto(result^);

@@ -626,7 +626,7 @@ begin
   if p<>nil then
   repeat
        p^.done;
-       if p^.dyn then GDBFreeMem(GDBPointer(p));
+       if p^.dyn then Freemem(GDBPointer(p));
        p:=iterate(ir);
   until p=nil;
   count:=0;
@@ -919,9 +919,9 @@ var
 begin
   DisableExecuteCommandEndCounter:=0;
   DisabledExecuteCommandEndCounter:=0;
-  inherited init({$IFDEF DEBUGBUILD}'{8B10F808-46AD-4EF1-BCDD-55B74D27187B}',{$ENDIF}m);
+  inherited init(m);
   //pcommandrunning^.GetPointMode:=TGPCancel;
-  CommandsStack.init({$IFDEF DEBUGBUILD}'{8B10F808-46AD-4EF1-BCDD-55B74D27187B}',{$ENDIF}10);
+  CommandsStack.init(10);
   varstack.init;
   DMenu:=TDMenuWnd.CreateNew(application);
   if SavedUnit<>nil then
@@ -946,7 +946,7 @@ begin
      {pvardesk(p)^.name:='';
      pvardesk(p)^.vartype:=0;
      pvardesk(p)^.vartypecustom:=0;
-     gdbfreemem(pvardesk(p)^.pvalue);}
+     Freemem(pvardesk(p)^.pvalue);}
 end;
 destructor GDBcommandmanager.done;
 begin

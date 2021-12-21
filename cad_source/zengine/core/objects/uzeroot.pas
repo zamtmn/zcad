@@ -152,7 +152,7 @@ begin
      //vp.ID:=GDBRootId;
      //bp.PSelfInOwnerArray:=nil;
      bp.ListPos.SelfIndex:=-1;
-     ObjToConnectedArray.init({$IFDEF DEBUGBUILD}'{0AD3CD18-E887-4038-BADA-7616D9F52963}',{$ENDIF}100);
+     ObjToConnectedArray.init(100);
      {prootonit:=units.findunit('objroot');
      if prootonit<>nil then
                            PTObjectUnit(ou.Instance)^.copyfrom(units.findunit('objroot'));}

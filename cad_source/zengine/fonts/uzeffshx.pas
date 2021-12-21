@@ -688,7 +688,7 @@ begin
           end;
 function CreateSHXFontInstance:PSHXFont;
 begin
-     GDBGetMem({$IFDEF DEBUGBUILD}'{FB4B76DB-BD4E-449E-A505-9ABF79E7809A}',{$ENDIF}result,sizeof(SHXFont));
+     Getmem(result,sizeof(SHXFont));
      result^.init;
 end;
 function createnewfontfromshx(name:GDBString;var pf:PGDBfont):GDBBoolean;

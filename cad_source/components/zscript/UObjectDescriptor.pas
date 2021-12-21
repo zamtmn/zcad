@@ -47,8 +47,6 @@ MetodDescriptor=object(GDBaseObject)
                       destructor Done;virtual;
                 end;
 simpleproc=procedure of object;
-//SimpleMenods.init({$IFDEF DEBUGBUILD}'{E4674594-B99F-4A72-8766-E2B49DF50FCE}',{$ENDIF}20,sizeof(MetodDescriptor));
-//Properties.init({$IFDEF DEBUGBUILD}'{CFC9264A-23FA-4FE4-AE71-30495AD54ECE}',{$ENDIF}20,sizeof(PropertyDescriptor));
 TSimpleMenodsVector=GZVectorObjects<MetodDescriptor>;
 TPropertiesVector=GZVectorData<PropertyDescriptor>;
 
@@ -123,7 +121,7 @@ begin
 
      MetodAddr:=ma;
      Attributes:=attr;
-     Operands.init({$IFDEF DEBUGBUILD}'{CC044792-AE73-48C9-B10A-346BFE9E46C9}',{$ENDIF}10{,sizeof(GDBOperandDesc)});
+     Operands.init(10);
      parseresult:=runparser('_softspace'#0'=(_softspace'#0,dt,parseerror);
      if parseerror then
                        begin
@@ -149,7 +147,7 @@ begin
                                                                                      Operands.PushBackData(od);
                                               end
                                  end;
-                            if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(Pointer(parseresult));end;
+                            if parseresult<>nil then begin parseresult^.Done;Freemem(Pointer(parseresult));end;
                             parseresult:=runparser('=;_softspace'#0,dt,parseerror);
                             until not parseerror;
                             parseresult:=runparser('=)_softspace'#0,dt,parseerror);
@@ -159,9 +157,9 @@ begin
                        begin
                             self.ResultPTD:=ptunit(punit).TypeName2PTD(parseresult^.getData(0));
                        end;
-     if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(Pointer(parseresult));end;
+     if parseresult<>nil then begin parseresult^.Done;Freemem(Pointer(parseresult));end;
      parseresult:=runparser('=:_softspace'#0'_identifier'#0'_softspace'#0,dt,parseerror);
-     if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(Pointer(parseresult));end;
+     if parseresult<>nil then begin parseresult^.Done;Freemem(Pointer(parseresult));end;
      //parseresult:=runparser('_softspace'#0'=(_softspace'#0'_identifier'#0'_softspace'#0'=)',line,parseerror);
 
 end;
@@ -317,7 +315,7 @@ begin
              begin
                   p:=PGDBOpenArrayOfData(PInstance)^.getDataMutable(i);
                   pld:=pointer(PUserTypeDescriptor(SysUnit.InterfaceTypes.{exttype.}getDataMutable(SysUnit.InterfaceTypes._TypeName2Index(objtypename))^));
-                  gdbgetmem({$IFDEF DEBUGBUILD}'{lsdfgqweqweqwe}',{$ENDIF}pointer(p^),pld^.SizeInGDBBytes);
+                  Getmem(pointer(p^),pld^.SizeInGDBBytes);
                   pld^.deSerialize(p^,saveflag,membuf,linkbuf);
 
                   objtypename:='';
@@ -333,7 +331,7 @@ begin
                    begin
                         if objtypename=ObjN_ArrayEnd then system.Break;
                         pld:=pointer(PUserTypeDescriptor(Types.exttype.getDataMutable(Types.TypeName2Index(objtypename))^));
-                        gdbgetmem({$IFDEF DEBUGBUILD}'{lsdfgqweqweqwe}',{$ENDIF}pointer(p^),pld^.SizeInGDBBytes);
+                        Getmem(pointer(p^),pld^.SizeInGDBBytes);
                         pld^.deSerialize(p^,saveflag,membuf);
                    end;
                    objtypename:='';
@@ -394,8 +392,8 @@ VMT=RECORD
 END;}
 begin
      inherited init(tname,pu);
-     SimpleMenods.init({$IFDEF DEBUGBUILD}'{E4674594-B99F-4A72-8766-E2B49DF50FCE}',{$ENDIF}20{,sizeof(MetodDescriptor)});
-     Properties.init({$IFDEF DEBUGBUILD}'{CFC9264A-23FA-4FE4-AE71-30495AD54ECE}',{$ENDIF}20{,sizeof(PropertyDescriptor)});
+     SimpleMenods.init(20);
+     Properties.init(20);
      pvmt:=nil;
      {$IFDEF FPC}VMTCurrentOffset:=12;{$ENDIF}
      {$IFDEF CPU64}VMTCurrentOffset:=24{sizeof(VMT)};{$ENDIF}
@@ -403,7 +401,7 @@ begin
      PDefaultConstructor:=nil;
      pointer(LincedData):=nil;
      LincedObjects:=false;
-     ColArray.init({$IFDEF DEBUGBUILD}'{83ABED34-4E72-42A7-BF3F-B697D75B3568}',{$ENDIF}200);
+     ColArray.init(200);
 end;
 procedure ObjectDescriptor.AddMetod;
 var pcmd:pMetodDescriptor;
@@ -463,7 +461,6 @@ begin
           end;
           {$ENDIF}
           SimpleProcOfObj(tm);
-          {$IFDEF DEBUGBUILD}{programlog.logoutstr('Run default constructor for '+self.TypeName)}{$ENDIF}
      end
      else ;//------------------------------------ShowError('Cant run default constructor for '+self.TypeName);
       //programlog.logoutstr('ERROR: cant run default constructor for '+self.TypeName,0)
@@ -684,7 +681,7 @@ begin
            pcmd.ResultPTD:=pmd^.ResultPTD;
            pcmd.MetodAddr:=pmd^.MetodAddr;
            pcmd.Attributes:=pmd^.Attributes;
-           pcmd.Operands.init({$IFDEF DEBUGBUILD}'{AD13B409-3869-418B-A314-DF70AB5C1601}',{$ENDIF}10{,sizeof(GDBOperandDesc)});
+           pcmd.Operands.init(10);
            //PObjectDescriptor(rd)^.SimpleMenods.AddByPointer(@pcmd);
            //pointer(pcmd.MetodName):=nil;
            //pointer(pcmd.OperandsName):=nil;
@@ -707,7 +704,7 @@ begin
      //ppd^.PTypeManager:=pp^.PFT;
      //if ppd^.valueAddres=nil then
                                  begin
-                                      GDBGetmem({$IFDEF DEBUGBUILD}'{4ADDC0E7-C264-4A97-A3E4-AA08E702E3AC}',{$ENDIF}{ppd^.valueAddres}result,pp^.base.PFT.SizeInGDBBytes);
+                                      Getmem(result,pp^.base.PFT.SizeInGDBBytes);
                                  end;
 end;
 function ObjectDescriptor.CreateProperties;
@@ -796,8 +793,8 @@ begin
            ppd^.Collapsed:=PCollapsed;
            if bmode=property_build then
            begin
-                gdbgetmem({$IFDEF DEBUGBUILD}'{6F9EBE33-15A8-4FF5-87D7-BF01A40F6789}',{$ENDIF}Pointer(pda),sizeof(TPropertyDeskriptorArray));
-                pda^.init({$IFDEF DEBUGBUILD}'{EDA18239-9432-453B-BA54-0381DA1BB665}',{$ENDIF}100);;
+                Getmem(Pointer(pda),sizeof(TPropertyDeskriptorArray));
+                pda^.init(100);;
                 ppd^.SubProperty:=Pointer(pda);
                 ppda:=pda;
            end else

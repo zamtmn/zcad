@@ -126,12 +126,12 @@ begin
   bnames.init(100);
   textcontents.init(100);
   textremplates.init(100);
-  layers.init({$IFDEF DEBUGBUILD}'{79828350-69E9-418A-A023-BB8B187639A1}',{$ENDIF}100);
-  weights.init({$IFDEF DEBUGBUILD}'{79828350-69E9-418A-A023-BB8B187639A1}',{$ENDIF}100);
-  objtypes.init({$IFDEF DEBUGBUILD}'{79828350-69E9-418A-A023-BB8B187639A1}',{$ENDIF}100);
-  linetypes.init({$IFDEF DEBUGBUILD}'{79828350-69E9-418A-A023-BB8B187639A1}',{$ENDIF}100);
-  linetypescales.init({$IFDEF DEBUGBUILD}'{79828350-69E9-418A-A023-BB8B187639A1}',{$ENDIF}100);
-  colors.init({$IFDEF DEBUGBUILD}'{79828350-69E9-418A-A023-BB8B187639A1}',{$ENDIF}100);
+  layers.init(100);
+  weights.init(100);
+  objtypes.init(100);
+  linetypes.init(100);
+  linetypescales.init(100);
+  colors.init(100);
 
   pobj:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
   if pobj<>nil then

@@ -35,7 +35,7 @@ PGDBOpenArrayOfPObjects=^TZctnrVectorPGDBaseObjects;
 implementation
 function GZVectorPObects<PTObj,TObj>.CreateObject;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{6F264155-0BCB-408F-BDA7-F3E8A4540F18}',{$ENDIF}result,sizeof(TObj));
+  Getmem(result,sizeof(TObj));
   if PTypeInfo(TypeInfo(TObj))^.kind in TypesNeedToInicialize
           then fillchar(pointer(result)^,sizeof(TObj),0);
   PushBackData(result);

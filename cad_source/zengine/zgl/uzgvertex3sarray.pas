@@ -26,7 +26,7 @@ type
 PZGLVertex3Sarray=^ZGLVertex3Sarray;
 {REGISTEROBJECTTYPE ZGLVertex3Sarray}
 ZGLVertex3Sarray= object(GZVectorData{-}<GDBvertex3S>{//})(*OpenArrayOfData=GDBvertex3S*)
-                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+                constructor init(m:GDBInteger);
                 constructor initnul;
                 function AddGDBVertex(const v:GDBvertex):TArrayIndex;virtual;
                 function GetLength(const i:TArrayIndex):GDBFloat;virtual;
@@ -59,7 +59,7 @@ end;
 
 constructor ZGLVertex3Sarray.init;
 begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,sizeof(GDBvertex3S)});
+  inherited init(m);
 end;
 constructor ZGLVertex3Sarray.initnul;
 begin

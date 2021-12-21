@@ -30,7 +30,7 @@ PGDBOpenArrayOfByte=^GDBOpenArrayOfByte;
 GDBOpenArrayOfByte=object(GZVector{-}<byte>{//})
                       ReadPos:Integer;
                       name:AnsiString;
-                      constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:Integer);
+                      constructor init(m:Integer);
                       constructor initnul;
                       constructor InitFromFile(FileName:Ansistring);
                       function AddByte(PData:Pointer):Integer;virtual;
@@ -328,7 +328,7 @@ begin
      pointer(name):=nil;
      name:=filename;
      filelength:=FileSeek(infile,0,2);
-     init({$IFDEF DEBUGBUILD}'{90D77E3A-2C96-44F8-BCE9-A981808F2486}',{$ENDIF}filelength);
+     init(filelength);
      FileSeek(infile,0,0);
      if parray=nil then
                        CreateArray;
@@ -353,7 +353,7 @@ end;
 constructor GDBOpenArrayOfByte.init;
 begin
   ReadPos:=0;
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,1});
+  inherited init(m);
 end;
 constructor GDBOpenArrayOfByte.initnul;
 begin

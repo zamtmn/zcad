@@ -756,9 +756,9 @@ end;
 procedure TForm1._DestroyApp(Sender: TObject);
 begin
  pdrawing1^.done;
- gdbfreemem(pdrawing1);
+ Freemem(pdrawing1);
  pdrawing2^.done;
- gdbfreemem(pdrawing2);
+ Freemem(pdrawing2);
 end;
 
 

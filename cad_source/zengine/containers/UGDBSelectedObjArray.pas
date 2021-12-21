@@ -81,12 +81,12 @@ begin
   if PSelectedObjDesc(PItem).pcontrolpoint<>nil then
                                                 begin
                                                      PSelectedObjDesc(PItem).pcontrolpoint^.Done;
-                                                     gdbfreemem(GDBPointer(PSelectedObjDesc(PItem).pcontrolpoint));
+                                                     Freemem(GDBPointer(PSelectedObjDesc(PItem).pcontrolpoint));
                                                 end;
   if PSelectedObjDesc(PItem).ptempobj<>nil then
                                            begin
                                                 PSelectedObjDesc(PItem).ptempobj^.done;
-                                                gdbfreemem(GDBPointer(PSelectedObjDesc(PItem).ptempobj));
+                                                Freemem(GDBPointer(PSelectedObjDesc(PItem).ptempobj));
                                            end;
   //PGDBObjBlockdef(p).Entities.ClearAndDone;
 end;
@@ -126,12 +126,12 @@ begin
             if tdesc^.pcontrolpoint<>nil then
             begin
                 tdesc^.pcontrolpoint^.done;
-                GDBFreeMem(GDBPointer(tdesc^.pcontrolpoint));
+                Freemem(GDBPointer(tdesc^.pcontrolpoint));
             end;
             if tdesc^.ptempobj<>nil then
             begin
                  tdesc^.ptempobj^.done;
-                 GDBFreeMem(GDBPointer(tdesc^.ptempobj));
+                 Freemem(GDBPointer(tdesc^.ptempobj));
             end;
             inc(tdesc);
        end;
@@ -476,7 +476,7 @@ begin
       if tdesc^.ptempobj<>nil then
         begin
           tdesc^.ptempobj^.done;
-          GDBFreeMem(GDBPointer(tdesc^.ptempobj));
+          Freemem(GDBPointer(tdesc^.ptempobj));
           tdesc^.ptempobj:=nil;
         end;
       inc(tdesc);
@@ -602,7 +602,7 @@ end;
 begin
   if pa then
 
-  GDBFreeMem(PArray);
+  Freemem(PArray);
 end;}
 begin
 end.

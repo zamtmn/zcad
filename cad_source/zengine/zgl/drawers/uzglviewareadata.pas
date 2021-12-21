@@ -197,21 +197,21 @@ begin
 
   CSIcon.CSIconZ:=nulvertex;
 
-  ontrackarray.otrackarray[0].arrayworldaxis.init({$IFDEF DEBUGBUILD}'{8BE71BAA-507B-4D6B-BE2C-63693022090C}',{$ENDIF}10);
-  ontrackarray.otrackarray[0].arraydispaxis.init({$IFDEF DEBUGBUILD}'{722A886F-5616-4E8F-B94D-3A1C3D7ADBD4}',{$ENDIF}10);
+  ontrackarray.otrackarray[0].arrayworldaxis.init(10);
+  ontrackarray.otrackarray[0].arraydispaxis.init(10);
 
 
        for i := 0 to 3 do
                        begin
-                       ontrackarray.otrackarray[i].arrayworldaxis.init({$IFDEF DEBUGBUILD}'{722A886F-5616-4E8F-B94D-3A1C3D7ADBD4}',{$ENDIF}10);
+                       ontrackarray.otrackarray[i].arrayworldaxis.init(10);
                        ontrackarray.otrackarray[i].arrayworldaxis.CreateArray;
-                       ontrackarray.otrackarray[i].arraydispaxis.init({$IFDEF DEBUGBUILD}'{722A886F-5616-4E8F-B94D-3A1C3D7ADBD4}',{$ENDIF}10);
+                       ontrackarray.otrackarray[i].arraydispaxis.init(10);
                        ontrackarray.otrackarray[i].arraydispaxis.CreateArray;
                        end;
 
 
-       ospoint.arraydispaxis.init({$IFDEF DEBUGBUILD}'{722A886F-5616-4E8F-B94D-3A1C3D7ADBD4}',{$ENDIF}10);
-       ospoint.arrayworldaxis.init({$IFDEF DEBUGBUILD}'{722A886F-5616-4E8F-B94D-3A1C3D7ADBD4}',{$ENDIF}10);
+       ospoint.arraydispaxis.init(10);
+       ospoint.arrayworldaxis.init(10);
   ForceRedrawVolume.ForceRedraw:=false;
 end;
 

@@ -490,7 +490,7 @@ begin
      if assigned(InfoForm) then
                          StoreBoundsToSavedUnit('TEdWND_',InfoForm.BoundsRect);
 
-          (*mem.init({$IFDEF DEBUGBUILD}'{71D987B4-8C57-4C62-8C12-CFC24A0A9C9A}',{$ENDIF}1024);
+          (*mem.init(1024);
           SavedUnit^.SavePasToMem(mem);
           mem.SaveToFile(expandpath(ProgramPath+'rtl'+PathDelim+'savedvar.pas'));
           mem.done;*)
@@ -1010,7 +1010,6 @@ begin
   MenusManager.setup(self,StandartActions);
   RegisterGeneralContextCheckFunc('True',@GMCCFTrue);
   RegisterGeneralContextCheckFunc('False',@GMCCFFalse);
-  RegisterGeneralContextCheckFunc('DebugMode',@GMCCFDebugMode);
   RegisterGeneralContextCheckFunc('CtrlPressed',@GMCCFCtrlPressed);
   RegisterGeneralContextCheckFunc('ShiftPressed',@GMCCFShiftPressed);
   RegisterGeneralContextCheckFunc('AltPressed',@GMCCFAltPressed);

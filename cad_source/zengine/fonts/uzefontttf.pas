@@ -466,7 +466,7 @@ end;
 constructor TTFFont.init;
 begin
      inherited;
-     //-ttf-//TriangleData.init({$IFDEF DEBUGBUILD}'{4A97D8DA-8B55-41AA-9287-7F0C842AC2D0}',{$ENDIF}200);
+     //-ttf-//TriangleData.init(200);
      ftFont:=TFreeTypeFont.create;
      MapChar:=TMapChar.Create;
      //MapCharIterator:=TMapChar.TIterator.Create;

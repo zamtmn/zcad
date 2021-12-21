@@ -160,7 +160,7 @@ end;
 procedure GDBObjDiametricDimension.addcontrolpoints(tdesc:GDBPointer);
 var pdesc:controlpointdesc;
 begin
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.init({$IFDEF DEBUGBUILD}'{4CBC9A73-A88D-443B-B925-2F0611D82AB0}',{$ENDIF}4);
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(4);
 
           pdesc.selected:=false;
           pdesc.pobject:=nil;
@@ -184,7 +184,7 @@ end;
 function GDBObjDiametricDimension.Clone;
 var tvo: PGDBObjDiametricDimension;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'GDBObjDiametricDimension.Clone',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjDiametricDimension));
+  Getmem(GDBPointer(tvo), sizeof(GDBObjDiametricDimension));
   tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight);
   CopyVPto(tvo^);
   CopyExtensionsTo(tvo^);
@@ -279,7 +279,7 @@ begin
 end;
 function AllocDiametricDimension:PGDBObjDiametricDimension;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocDiametricDimension}',{$ENDIF}result,sizeof(GDBObjDiametricDimension));
+  Getmem(result,sizeof(GDBObjDiametricDimension));
 end;
 function AllocAndInitDiametricDimension(owner:PGDBObjGenericWithSubordinated):PGDBObjDiametricDimension;
 begin

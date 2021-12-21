@@ -46,7 +46,7 @@ PGDBTextStyleProp=^GDBTextStyleProp;
 PGDBTextStyleArray=^GDBTextStyleArray;
 {REGISTEROBJECTTYPE GDBTextStyleArray}
 GDBTextStyleArray= object(GDBNamedObjectsArray{-}<PGDBTextStyle,GDBTextStyle>{//})(*OpenArrayOfData=GDBTextStyle*)
-                    constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+                    constructor init(m:GDBInteger);
                     constructor initnul;
 
                     function addstyle(StyleName,AFontFile,AFontFamily:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):PGDBTextStyle;
@@ -76,7 +76,7 @@ end;
 constructor GDBTextStyleArray.init;
 begin
   //Size := sizeof(GDBTextStyle);
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,sizeof(GDBTextStyle)});
+  inherited init(m);
   //addlayer('0',cgdbwhile,lwgdbdefault);
 end;
 
@@ -138,7 +138,7 @@ end;
 function GDBTextStyleArray.addstyle(StyleName,AFontFile,AFontFamily:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):{GDBInteger}PGDBTextStyle;
 var ts:PGDBTextStyle;
 begin
-  GDBGetmem({$IFDEF DEBUGBUILD}'{ED59B789-33EF-487E-9E1D-711F5988A194}',{$ENDIF}pointer(ts),sizeof(GDBTextStyle));
+  Getmem(pointer(ts),sizeof(GDBTextStyle));
   ts.init(stylename);
   internalsetstyle(ts^,AFontFile,AFontFamily,tp,USedInLT);
   result:=pointer(getDataMutable(PushBackData(ts)));

@@ -78,9 +78,9 @@ type
 implementation
 constructor GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>.TTestNode.initnul;
 begin
-     nul.init({$IFDEF DEBUGBUILD}'TTestTreeNode.nul',{$ENDIF}InNodeCount{*2});
-     plus.init({$IFDEF DEBUGBUILD}'TTestTreeNode.plus',{$ENDIF}InNodeCount{*2});
-     minus.init({$IFDEF DEBUGBUILD}'TTestTreeNode.minus',{$ENDIF}InNodeCount{*2});
+     nul.init(InNodeCount);
+     plus.init(InNodeCount);
+     minus.init(InNodeCount);
 end;
 destructor GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>.TTestNode.done;
 begin
@@ -162,7 +162,7 @@ begin
   begin
     if pplusnode=nil then
       begin
-        GDBGetMem({$IFDEF DEBUGBUILD}'TEntTreeNode',{$ENDIF}pointer(pplusnode),sizeof(GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>));
+        Getmem(pointer(pplusnode),sizeof(GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>));
         pplusnode.initnul;
       end;
       pplusnode.lock;
@@ -180,7 +180,7 @@ begin
   begin
     if pminusnode=nil then
       begin
-        GDBGetMem({$IFDEF DEBUGBUILD}'TEntTreeNode',{$ENDIF}pointer(pminusnode),sizeof(GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>));
+        Getmem(pointer(pminusnode),sizeof(GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>));
         pminusnode.initnul;
       end;
       pminusnode.lock;
@@ -301,7 +301,7 @@ begin
 end;
 constructor GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>.initnul;
 begin
-     nul.init({$IFDEF DEBUGBUILD}'TEntTreeNode.nul',{$ENDIF}50);
+     nul.init(50);
      NodeData:=default(TNodeData);
      LockCounter:=0;
      //NodeData.FulDraw:={True}TDTFulDraw;
@@ -325,12 +325,14 @@ begin
      if assigned(pplusnode) then
                                 begin
                                      pplusnode^.done;
-                                     gdbfreemem(pointer(pplusnode));
+                                     Freemem(pointer(pplusnode));
+                                     pplusnode:=nil;
                                 end;
      if assigned(pminusnode) then
                                 begin
                                      pminusnode^.done;
-                                     gdbfreemem(pointer(pminusnode));
+                                     Freemem(pointer(pminusnode));
+                                     pminusnode:=nil;
                                 end;
 end;
 procedure GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>.MoveSub(var node:GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>);
@@ -344,13 +346,15 @@ begin
                                 begin
                                      pplusnode^.MoveSub(node);
                                      pplusnode^.done;
-                                     gdbfreemem(pointer(pplusnode));
+                                     Freemem(pointer(pplusnode));
+                                     pplusnode:=nil;
                                 end;
      if assigned(pminusnode) then
                                 begin
                                      pminusnode^.MoveSub(node);
                                      pminusnode^.done;
-                                     gdbfreemem(pointer(pminusnode));
+                                     Freemem(pointer(pminusnode));
+                                     pminusnode:=nil;
                                 end;
 end;
 destructor GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>.done;

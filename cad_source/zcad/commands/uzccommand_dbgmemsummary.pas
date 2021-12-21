@@ -31,7 +31,7 @@ uses
   gmap,gvector,garrayutils, gzctnrstl,math,Generics.Collections;
 
 implementation
-
+{$IFDEF REPORTMMEMORYLEAKS}
 type
   TCodePointerArrayCompare=class
     class function c(a,b:tcodepointerarray):boolean;
@@ -86,13 +86,14 @@ class function TtmemallocinfoCompare.c(a,b:tmemallocinfo):boolean;
 begin
   result:=a.size>b.size;
 end;
-
+{$ENDIF}
 
 function dbgMemSummary_com(operands:TCommandOperands):TCommandResult;
 const
   DefaultArrSize=1000000;
 var
   InfoForm:TInfoForm;
+{$IFDEF REPORTMMEMORYLEAKS}
   MemAllocInfoArray:tmemallocinfoarray;
   Size,i,j,UniqueCount:Integer;
   StackCounter:TStackCounter;
@@ -102,6 +103,7 @@ var
   pmemallocinfo:^tmemallocinfo;
   s:string;
   BTDic:TBTDic;
+{$ENDIF}
 begin
   InfoForm:=TInfoForm.create(nil);
   InfoForm.DialogPanel.HelpButton.Hide;
@@ -146,7 +148,7 @@ begin
   InfoForm.Memo.lines.Add(format('Unique allocations %d',[UniqueCount]));
 
   TSizeSorterUtils.Sort(SizeSorter,SizeSorter.Size-1);
-  for i:=0 to min(SizeSorter.Size-1,10) do begin
+  for i:=0 to SizeSorter.Size{ min(SizeSorter.Size-1,10)} do begin
     InfoForm.Memo.lines.Add(format('Allocation %d, %d bytes total, %d count',[i,SizeSorter[i].Size,-1]));
     for j:=low(tcodepointerarray) to high(tcodepointerarray) do begin
       if not BTDic.TryGetValue(SizeSorter[i].stack[j],s) then begin

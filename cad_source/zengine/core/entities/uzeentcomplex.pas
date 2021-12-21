@@ -143,7 +143,7 @@ end;
 procedure GDBObjComplex.addcontrolpoints(tdesc:GDBPointer);
 var pdesc:controlpointdesc;
 begin
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.init({$IFDEF DEBUGBUILD}'{E8AC77BE-9C28-4A6E-BB1A-D5F8729BDDAD}',{$ENDIF}1);
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(1);
           pdesc.selected:=false;
           pdesc.pobject:=nil;
           pdesc.pointtype:=os_point;
@@ -201,12 +201,12 @@ end;
 constructor GDBObjComplex.initnul;
 begin
   inherited initnul(nil);
-  ConstObjArray.init({$IFDEF DEBUGBUILD}'{9DC0AF69-6DBD-479E-91FE-A61F4AC3BE56}',{$ENDIF}100);
+  ConstObjArray.init(100);
 end;
 constructor GDBObjComplex.init;
 begin
   inherited init(own,layeraddres,LW);
-  ConstObjArray.init({$IFDEF DEBUGBUILD}'{9DC0AF69-6DBD-479E-91FE-A61F4AC3BE56}',{$ENDIF}100);
+  ConstObjArray.init(100);
 end;
 destructor GDBObjComplex.done;
 begin

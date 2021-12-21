@@ -58,7 +58,7 @@ type
   PGDBPluginsArray=^GDBPluginsArray;
   {REGISTEROBJECTTYPE GDBPluginsArray}
   GDBPluginsArray= object(GZVectorData<moduledesc>)
-                        constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+                        constructor init(m:GDBInteger);
                         procedure loadplugins(path: GDBString);
                   end;
      {Export-}
@@ -73,7 +73,7 @@ procedure finalize;}
 implementation
 constructor GDBPluginsArray.init;
 begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,sizeof(moduledesc)});
+  inherited init(m);
 end;
 procedure GDBPluginsArray.loadplugins(path: GDBString);
 var
@@ -147,14 +147,14 @@ begin
 end;
 (*procedure startup;
 begin
-     gdbplugins.init({$IFDEF DEBUGBUILD}'{7893C445-EAE9-4361-B7AF-244513EE799F}',{$ENDIF}100);
+     gdbplugins.init(100);
 end;
 procedure finalize;
 begin
      gdbplugins.FreewithprocAndDone(@freeplugin);
 end;*)
 initialization
-gdbplugins.init({$IFDEF DEBUGBUILD}'{7893C445-EAE9-4361-B7AF-244513EE799F}',{$ENDIF}100);
+gdbplugins.init(100);
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   gdbplugins.Freewithproc(freeplugin);

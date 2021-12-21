@@ -46,7 +46,7 @@ GDBLayerPropArray=packed array [0..0] of PGDBLayerProp;
 PGDBLayerArray=^GDBLayerArray;
 {REGISTEROBJECTTYPE GDBLayerArray}
 GDBLayerArray= object(GDBNamedObjectsArray{-}<PGDBLayerProp,GDBLayerProp>{//})(*OpenArrayOfData=GDBLayerProp*)
-                    constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger;psyslt:GDBPointer);
+                    constructor init(m:GDBInteger;psyslt:GDBPointer);
                     constructor initnul;
 
                     function addlayer(name:GDBString;color:GDBInteger;lw:GDBInteger;oo,ll,pp:GDBBoolean;d:GDBString;lm:TLoadOpt):PGDBLayerProp;virtual;
@@ -104,7 +104,7 @@ begin
 end;
 constructor GDBLayerArray.init;
 begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m);
+  inherited init(m);
   addlayer(LNSysLayerName,CGDBWhile,lwgdbdefault,true,false,true,'',TLOLoad).LT:=psyslt;
   addlayer(LNMetricLayerName,CGDBWhile,lwgdbdefault,false,false,false,'',TLOLoad).LT:=psyslt;
 end;

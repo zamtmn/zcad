@@ -121,8 +121,8 @@ var
    OrtoDevPlaceParam:TOrtoDevPlaceParam;
 
    OPS_SPBuild_com:OPS_SPBuild;
-//procedure GDBGetMem({$IFDEF DEBUGBUILD}ErrGuid:pchar;{$ENDIF}var p:pointer; const size: longword); external 'cad.exe';
-//procedure GDBFreeMem(var p: pointer); external 'cad.exe';
+//procedure Getmem(var p:pointer; const size: longword); external 'cad.exe';
+//procedure Freemem(var p: pointer); external 'cad.exe';
 
 //procedure HistoryOut(s: pchar); external 'cad.exe';
 //function getprogramlog:pointer; external 'cad.exe';
@@ -668,7 +668,7 @@ end;
 begin
   dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
   if drawings.GetCurrentROOT.ObjArray.Count = 0 then exit;
-  ProcessedDevices.init({$IFDEF DEBUGBUILD}'{518968B6-90DE-4895-A27C-B28234A6DC17}',{$ENDIF}100);
+  ProcessedDevices.init(100);
   cman.init;
   cman.build;
   UManager.init;

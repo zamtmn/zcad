@@ -261,7 +261,7 @@ end;
 procedure GDBObjPoint.addcontrolpoints(tdesc:GDBPointer);
 var pdesc:controlpointdesc;
 begin
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.init({$IFDEF DEBUGBUILD}'{92DDADAD-909D-4938-A1F9-3BD78FBB2B70}',{$ENDIF}1);
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(1);
           pdesc.selected:=false;
           pdesc.pobject:=nil;
 
@@ -283,7 +283,7 @@ end;
 function GDBObjPoint.Clone;
 var tvo: PGDBObjPoint;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{1C6F0445-7339-449A-BDEB-7D38A46FD910}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjPoint));
+  Getmem(GDBPointer(tvo), sizeof(GDBObjPoint));
   tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight, P_insertInOCS);
   CopyVPto(tvo^);
   CopyExtensionsTo(tvo^);
@@ -295,7 +295,7 @@ begin
 end;
 function AllocPoint:PGDBObjPoint;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocPoint}',{$ENDIF}result,sizeof(GDBObjPoint));
+  Getmem(result,sizeof(GDBObjPoint));
 end;
 function AllocAndInitPoint(owner:PGDBObjGenericWithSubordinated):PGDBObjPoint;
 begin

@@ -70,7 +70,7 @@ begin
      inherited init(0,tname,pu);
      NumOfIndex:=0;
      typeof:=t;
-     Indexs.init({$IFDEF DEBUGBUILD}'{1A33FBB9-F27B-4CF2-8C08-852A22572791}',{$ENDIF}20{,sizeof(ArrayIndexDescriptor)});
+     Indexs.init(20);
 end;
 destructor ArrayDescriptor.done;
 begin

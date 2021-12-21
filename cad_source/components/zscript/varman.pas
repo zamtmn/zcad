@@ -834,8 +834,8 @@ begin
 end;
 constructor varmanager.init;
 begin
-  vardescarray.init({$IFDEF DEBUGBUILD}'{7216CFFF-47FA-4F4E-BE07-B12E967EEF91} - описания переменных',{$ENDIF}128{,sizeof(vardesk)});
-  vararray.init({$IFDEF DEBUGBUILD}'{834B86B5-4581-4C93-8446-8CEE664A66A2} - содержимое переменных',{$ENDIF}1024); { TODO: из описания переменной пужно относительную ссылку на значение. рушится при реаллокации }
+  vardescarray.init({$IFDEF DEBUGBUILD}'{7216CFFF-47FA-4F4E-BE07-B12E967EEF91} - описания переменных',{$ENDIF}64);
+  vararray.init({$IFDEF DEBUGBUILD}'{834B86B5-4581-4C93-8446-8CEE664A66A2} - содержимое переменных',{$ENDIF}1024);
 end;
 destructor varmanager.done;
 begin

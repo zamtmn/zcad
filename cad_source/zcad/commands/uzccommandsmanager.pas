@@ -463,11 +463,12 @@ var
    vd: vardesk;
 begin
      vd.name:=varname;
-     //vd.data.Instance:=instance;
+     //vd.Instance:=instance;
      vd.data.PTD:=SysUnit.TypeName2PTD(vartype);
-     vd.data.Instance:=nil;
+     vd.SetInstance(nil);
+     //vd.Instance:=nil;
      varstack.createvariable(varname,vd);
-     vd.data.PTD.CopyInstanceTo(instance,vd.data.Instance);
+     vd.data.PTD.CopyInstanceTo(instance,vd.data.Addr.Instance);
 end;
 function GDBcommandmanager.GetValue:vardesk;
 var
@@ -487,7 +488,8 @@ begin
      lastelement.name:='';
      lastelement.username:='';
      lastelement.data.PTD:=nil;
-     lastelement.data.Instance:=nil;
+     lastelement.SetInstance(nil);
+     //lastelement.Instance:=nil;
 end;
 
 function getcommandmanager:GDBPointer;
@@ -624,7 +626,7 @@ begin
   if p<>nil then
   repeat
        p^.done;
-       if p^.dyn then GDBFreeMem(GDBPointer(p));
+       if p^.dyn then Freemem(GDBPointer(p));
        p:=iterate(ir);
   until p=nil;
   count:=0;
@@ -805,7 +807,7 @@ begin
      pvd:=self.varstack.vardescarray.beginiterate(ir);
      if pvd<>nil then
      repeat
-           value:=pvd.data.PTD.GetValueAsString(pvd.data.Instance);
+           value:=pvd.data.PTD.GetValueAsString(pvd.data.Addr.Instance);
            ZCMsgCallBackInterface.TextMessage(pvd.data.PTD.TypeName+':'+value,TMWOHistoryOut);
 
      pvd:=self.varstack.vardescarray.iterate(ir);
@@ -917,17 +919,17 @@ var
 begin
   DisableExecuteCommandEndCounter:=0;
   DisabledExecuteCommandEndCounter:=0;
-  inherited init({$IFDEF DEBUGBUILD}'{8B10F808-46AD-4EF1-BCDD-55B74D27187B}',{$ENDIF}m);
+  inherited init(m);
   //pcommandrunning^.GetPointMode:=TGPCancel;
-  CommandsStack.init({$IFDEF DEBUGBUILD}'{8B10F808-46AD-4EF1-BCDD-55B74D27187B}',{$ENDIF}10);
+  CommandsStack.init(10);
   varstack.init;
   DMenu:=TDMenuWnd.CreateNew(application);
   if SavedUnit<>nil then
   begin
-  pint:=SavedUnit.FindValue('DMenuX');
+  pint:=SavedUnit.FindValue('DMenuX').data.Addr.Instance;
   if assigned(pint)then
                        DMenu.Left:=pint^;
-  pint:=SavedUnit.FindValue('DMenuY');
+  pint:=SavedUnit.FindValue('DMenuY').data.Addr.Instance;
   if assigned(pint)then
                        DMenu.Top:=pint^;
   end;
@@ -944,7 +946,7 @@ begin
      {pvardesk(p)^.name:='';
      pvardesk(p)^.vartype:=0;
      pvardesk(p)^.vartypecustom:=0;
-     gdbfreemem(pvardesk(p)^.pvalue);}
+     Freemem(pvardesk(p)^.pvalue);}
 end;
 destructor GDBcommandmanager.done;
 begin

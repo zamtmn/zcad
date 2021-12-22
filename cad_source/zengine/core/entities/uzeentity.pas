@@ -352,7 +352,7 @@ function GDBObjEntity.AddExtAttrib;
 begin
      if PExtAttrib=nil then
                            begin
-                                GDBGetMem({$IFDEF DEBUGBUILD}'{17FE0FF9-EF06-46F4-9E97-58D66E65233B}',{$ENDIF}GDBPointer(PExtAttrib),sizeof(TExtAttrib));
+                                Getmem(GDBPointer(PExtAttrib),sizeof(TExtAttrib));
                                 fillchar(PExtAttrib^,sizeof(TExtAttrib),0);
                                 PExtAttrib^.ExtAttrib2:=false;
                            end;
@@ -362,7 +362,7 @@ function GDBObjEntity.CopyExtAttrib;
 begin
      if PExtAttrib<>nil then
                            begin
-                                GDBGetMem({$IFDEF DEBUGBUILD}'{17FE0FF9-EF06-46F4-9E97-58D66E65233B}',{$ENDIF}GDBPointer(Result),sizeof(TExtAttrib));
+                                Getmem(GDBPointer(Result),sizeof(TExtAttrib));
                                 fillchar(result^,sizeof(TExtAttrib),0);
                                 result^:=PExtAttrib^;
                            end
@@ -499,7 +499,7 @@ begin
   vp.LineType:={''}nil;
   vp.LineTypeScale:=1;
   bp.ListPos.owner:=own;
-  Representation.init({$IFDEF DEBUGBUILD}'GDBObjEntity'{$ENDIF});
+  Representation.init();
   GetDXFIOFeatures.RunConstructorFeature(@self);
   GetDXFIOFeatures.AddExtendersToEntity(@self);
 end;
@@ -508,7 +508,7 @@ begin
      createfield;
      if owner<>nil then
                        bp.ListPos.owner:=owner;
-     Representation.init({$IFDEF DEBUGBUILD}{$IFNDEF SEPARATEMEMUSAGE}'GDBObjEntity'{$ELSE}pchar(GetObjTypeName){$ENDIF}{$ENDIF});
+     Representation.init();
      GetDXFIOFeatures.RunConstructorFeature(@self);
      GetDXFIOFeatures.AddExtendersToEntity(@self);
 end;
@@ -861,7 +861,7 @@ end;
 function GDBObjEntity.Clone;
 //var tvo: PGDBObjEntity;
 begin
-  //GDBGetMem({$IFDEF DEBUGBUILD}'{24859B41-865F-4F60-A06C-05E2127EDCDF}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjEntity));
+  //Getmem(GDBPointer(tvo), sizeof(GDBObjEntity));
   //tvo^.init(bp.owner,vp.Layer, vp.LineWeight);
   result := nil;
 end;
@@ -869,14 +869,14 @@ end;
 procedure GDBObjEntity.rtedit;
 begin
      if PExtAttrib<>nil then
-                            GDBFreeMem(pointer(PExtAttrib));
+                            Freemem(pointer(PExtAttrib));
 end;
 
 destructor GDBObjEntity.done;
 begin
      inherited;
      if PExtAttrib<>nil then
-                            gdbfreemem(pointer(PExtAttrib));
+                            Freemem(pointer(PExtAttrib));
      vp.LineType:={''}nil;
      Representation.done;
      GetDXFIOFeatures.RunDestructorFeature(@self);
@@ -921,7 +921,7 @@ begin
      if tdesc<>nil then
      if IsHaveGRIPS then
      begin
-     GDBGetMem({$IFDEF DEBUGBUILD}'{B50BE8C9-E00A-40C0-A051-230877BD3A56}',{$ENDIF}GDBPointer(tdesc^.pcontrolpoint),sizeof(GDBControlPointArray));
+     Getmem(GDBPointer(tdesc^.pcontrolpoint),sizeof(GDBControlPointArray));
      addcontrolpoints(tdesc);
      end;
      bp.ListPos.Owner.ImSelected(@self,bp.ListPos.SelfIndex);
@@ -1070,7 +1070,7 @@ begin
 
           PGDBObjGenericWithSubordinated(bp.owner)^.ImEdited(@self,bp.PSelfInOwnerArray);
           PSelectedObjDesc(md).ptempobj^.done;
-          GDBFreeMem(GDBPointer(PSelectedObjDesc(md).ptempobj));
+          Freemem(GDBPointer(PSelectedObjDesc(md).ptempobj));
           PSelectedObjDesc(md).ptempobj:=nil;
      end
      else
@@ -1088,7 +1088,7 @@ end;
 
 procedure GDBObjEntity.afterrtmodify;
 begin
-     if p<>nil then GDBFreeMem(p);
+     if p<>nil then Freemem(p);
 end;
 function GDBObjEntity.IsRTNeedModify(const Point:PControlPointDesc; p:GDBPointer):Boolean;
 begin

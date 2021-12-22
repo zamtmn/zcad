@@ -116,7 +116,7 @@ end;
 function GDBObjRadialDimension.Clone;
 var tvo: PGDBObjRadialDimension;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'GDBObjRadialDimension.Clone',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjRadialDimension));
+  Getmem(GDBPointer(tvo), sizeof(GDBObjRadialDimension));
   tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight);
   CopyVPto(tvo^);
   CopyExtensionsTo(tvo^);
@@ -155,7 +155,7 @@ begin
 end;
 function AllocRadialDimension:PGDBObjRadialDimension;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocRadialDimension}',{$ENDIF}result,sizeof(GDBObjRadialDimension));
+  Getmem(result,sizeof(GDBObjRadialDimension));
 end;
 function AllocAndInitRadialDimension(owner:PGDBObjGenericWithSubordinated):PGDBObjRadialDimension;
 begin

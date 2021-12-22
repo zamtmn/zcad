@@ -209,7 +209,7 @@ begin
   inherited initnul(nil);
   //vp.ID:=GDBEllipseID;
   //r := 1;
-  Vertex3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{B591E6C2-9BD5-4099-BE5A-5CB3911661B7}',{$ENDIF}100);
+  Vertex3D_in_WCS_Array.init(100);
 end;
 constructor GDBObjEllipse.init;
 begin
@@ -221,7 +221,7 @@ begin
   endangle := e;
   majoraxis:=majaxis;
   PProjoutbound:=nil;
-  Vertex3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{AEF4273C-4EE8-4520-B23A-04C3AD6DABE3}',{$ENDIF}100);
+  Vertex3D_in_WCS_Array.init(100);
   //format;
 end;
 function GDBObjEllipse.GetObjType;
@@ -332,8 +332,8 @@ begin
   vp.BoundingBox.RTF:=CreateVertex(rrr,T,f);
   if PProjoutbound=nil then
   begin
-       GDBGetMem({$IFDEF DEBUGBUILD}'{B9B13A5B-467C-4E8A-B4BD-6F54713EBC0D}',{$ENDIF}GDBPointer(PProjoutbound),sizeof(GDBOOutbound2DIArray));
-       PProjoutbound^.init({$IFDEF DEBUGBUILD}'{2D0D05D3-F10A-473F-88FC-D5FB9BD7B539}',{$ENDIF}4);
+       Getmem(GDBPointer(PProjoutbound),sizeof(GDBOOutbound2DIArray));
+       PProjoutbound^.init(4);
   end;
 end;
 procedure GDBObjEllipse.createpoint;
@@ -365,9 +365,9 @@ begin
   {if ppoint<>nil then
                      begin
                           ppoint^.done;
-                          GDBFreeMem(ppoint);
+                          Freemem(ppoint);
                      end;
-  GDBGetMem(PPoint,sizeof(GDBPoint2DArray));
+  Getmem(PPoint,sizeof(GDBPoint2DArray));
   PPoint^.init(lod+1);}
   //matr:=objMatrix;
   v.x:=cos(startangle);
@@ -519,7 +519,7 @@ end;
 procedure GDBObjEllipse.addcontrolpoints(tdesc:GDBPointer);
 var pdesc:controlpointdesc;
 begin
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.init({$IFDEF DEBUGBUILD}'{8E7285C9-05AD-4D34-9E9D-479D394B2AAF}',{$ENDIF}3);
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(3);
           pdesc.selected:=false;
           pdesc.pobject:=nil;
 
@@ -590,7 +590,7 @@ begin
 end;
 function GDBObjEllipse.beforertmodify;
 begin
-     GDBGetMem({$IFDEF DEBUGBUILD}'{77AF2FA4-2EDC-46CD-A813-6E34E2AC91A5}',{$ENDIF}result,sizeof(tellipsertmodify));
+     Getmem(result,sizeof(tellipsertmodify));
      tellipsertmodify(result^).p1.x:=q0.x;
      tellipsertmodify(result^).p1.y:=q0.y;
      tellipsertmodify(result^).p2.x:=q1.x;
@@ -674,7 +674,7 @@ end;
 function GDBObjEllipse.Clone;
 var tvo: PGDBObjEllipse;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{368BA81A-219B-4DE9-A8E0-64EE16001126}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjEllipse));
+  Getmem(GDBPointer(tvo), sizeof(GDBObjEllipse));
   tvo^.init(CalcOwner(own),vp.Layer, vp.LineWeight, Local.p_insert, {r,}startangle,endangle,majoraxis);
   CopyVPto(tvo^);
   CopyExtensionsTo(tvo^);
@@ -700,7 +700,7 @@ begin
 end;
 function AllocEllipse:PGDBObjEllipse;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocEllipse}',{$ENDIF}result,sizeof(GDBObjEllipse));
+  Getmem(result,sizeof(GDBObjEllipse));
 end;
 function AllocAndInitEllipse(owner:PGDBObjGenericWithSubordinated):PGDBObjEllipse;
 begin

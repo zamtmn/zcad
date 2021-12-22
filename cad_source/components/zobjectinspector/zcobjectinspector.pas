@@ -468,7 +468,7 @@ end;
 
 procedure TGDBobjinsp.createpda;
 begin
-  pda.init({$IFDEF DEBUGBUILD}'{ED044410-8C08-4113-B2FB-3259017CBF04}',{$ENDIF}100);
+  pda.init(100);
 end;
 
 destructor TGDBobjinsp.Destroy;
@@ -1529,7 +1529,7 @@ begin
       tp:=CurrPObj;
       GDBobjinsp.buildproplist(EDContext.UndoStack,CurrUnitsFormat,CurrObjGDBType,property_correct,tp);
       //peditor^.done;
-      //gdbfreemem(pointer(peditor));
+      //Freemem(pointer(peditor));
       EDContext.ppropcurrentedit:=pp;
     end;
     PEditor:=pp^.PTypeManager^.CreateEditor(@self,pp.rect,pp^.valueAddres,nil,false,'этого не должно тут быть',rowh).Editor;

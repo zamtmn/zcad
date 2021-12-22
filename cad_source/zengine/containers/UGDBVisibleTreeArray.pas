@@ -27,7 +27,7 @@ PGDBObjEntityTreeArray=^GDBObjEntityTreeArray;
 {REGISTEROBJECTTYPE GDBObjEntityTreeArray}
 GDBObjEntityTreeArray= object(GDBObjEntityOpenArray)(*OpenArrayOfPObj*)
                             ObjTree:TEntTreeNode;
-                            constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+                            constructor init(m:GDBInteger);
                             constructor initnul;
                             destructor done;virtual;
                             function AddPEntity(var entity:GDBObjEntity):TArrayIndex;virtual;
@@ -62,7 +62,7 @@ begin
 end;
 constructor GDBObjEntityTreeArray.init;
 begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m);
+  inherited init(m);
   ObjTree.initnul;
 end;
 constructor GDBObjEntityTreeArray.initnul;

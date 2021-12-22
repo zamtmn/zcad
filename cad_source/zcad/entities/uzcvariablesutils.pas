@@ -56,7 +56,7 @@ begin
                     pvd:=pentvarext.entityunit.FindVariable(vname);
                     if pvd<>nil then
                     begin
-                         if pvd.data.PTD.GetValueAsString(pvd.data.Instance)=vvalue then
+                         if pvd.data.PTD.GetValueAsString(pvd.data.Addr.Instance)=vvalue then
                          begin
                               result:=pvisible;
                               exit;

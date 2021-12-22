@@ -451,8 +451,8 @@ begin
   LM_Trace:=RegisterLogLevel(TraceModeName,TraceModeAlias,LLD(LLTInfo));// — вывод всего подряд. На тот случай, если Debug не позволяет локализовать ошибку.
      CurrentTime:=mynow();
      logfilename:=fn;
-     PerfomaneBuf:=TMemoryStream.Create;// ({$IFDEF DEBUGBUILD}'{39063C66-9D18-4707-8AD3-97DFBCB23185}',{$ENDIF}5*1024);
-     TimeBuf:=TTimeBuf.Create;//init({$IFDEF DEBUGBUILD}'{6EE1BC6B-1177-40B0-B4A5-793D66BF8BC8}',{$ENDIF}50{,sizeof(TMyTimeStamp)});
+     PerfomaneBuf:=TMemoryStream.Create;
+     TimeBuf:=TTimeBuf.Create;
      Indent:=1;
      CreateLog;
      timebuf.PushBack(CurrentTime);

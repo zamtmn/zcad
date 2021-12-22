@@ -79,7 +79,7 @@ var tvo: PGDBObjCable;
 begin
   //result:=inherited Clone(own);
   //exit;
-  GDBGetMem({$IFDEF DEBUGBUILD}'{F9D41F4A-1E80-4D3A-9DD1-D0037EFCA988}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjCable));
+  Getmem(GDBPointer(tvo), sizeof(GDBObjCable));
   tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight);
   //tvo^.vp:=vp;
   //tvo^.GetObjType :=GDBCableID;
@@ -194,15 +194,15 @@ begin
   //CreateDeviceNameProcess(@self);
 
   {pvd:=ou.FindVariable('GC_HeadDevice');
-  group:=pgdbinteger(pvd^.data.Instance)^;
+  group:=pgdbinteger(pvd^.Instance)^;
   pvd:=ou.FindVariable('GC_HDGroup');
-  pribor:=pgdbinteger(pvd^.data.Instance)^;}
+  pribor:=pgdbinteger(pvd^.Instance)^;}
 
 
   //pvd:=ou.FindVariable('Cable_Length');
   //pvds:=ou.FindVariable('LENGTH_Scale');
   //pvdal:=ou.FindVariable('LENGTH_Add');
-  //pgdbdouble(pvd^.data.Instance)^:=length*pgdbdouble(pvds^.data.Instance)^+pgdbdouble(pvdal^.data.Instance)^;
+  //pgdbdouble(pvd^.Instance)^:=length*pgdbdouble(pvds^.Instance)^+pgdbdouble(pvdal^.Instance)^;
   ptv:=vertexarrayInWCS.beginiterate(ir_inVertexArray);
   NodePropArray.clear;
   if ptv<>nil then
@@ -333,20 +333,20 @@ begin
                     pentvarextcirrobj:=CurrentObj^.GetExtension<TVariablesExtender>;
                     {pvd:=CurrentObj.ou.FindVariable('OPS_Pribor');
                     if pvd<>nil then
-                    pgdbinteger(pvd^.data.Instance)^:=group;
+                    pgdbinteger(pvd^.Instance)^:=group;
                     pvd:=CurrentObj.ou.FindVariable('OPS_GroupInPribor');
                     if pvd<>nil then
-                    pgdbinteger(pvd^.data.Instance)^:=pribor;
+                    pgdbinteger(pvd^.Instance)^:=pribor;
                     pvd:=CurrentObj.ou.FindVariable('OPS_NumberInSleif');
                     if pvd<>nil then
                     begin
                     inc(count);
-                    pgdbinteger(pvd^.data.Instance)^:=count;
+                    pgdbinteger(pvd^.Instance)^:=count;
                     end;}
                     pvd:=pentvarextcirrobj.entityunit.FindVariable('EL_Cab_AddLength');
                     if pvd<>nil then
                                     begin
-                                         l:=l+pgdbdouble(pvd^.data.Instance)^;
+                                         l:=l+pgdbdouble(pvd^.data.Addr.Instance)^;
                                     end;
                     inc(count);
                     CurrentObj^.FormatEntity(drawing,dc);
@@ -359,27 +359,27 @@ begin
   pentvarext:=self.GetExtension<TVariablesExtender>;
   pvd:=pentvarext.entityunit.FindVariable('CABLE_TotalCD');
   if pvd<>nil then
-                                  pgdbinteger(pvd^.data.Instance)^:=count;
+                                  pgdbinteger(pvd^.data.Addr.Instance)^:=count;
   pvd:=pentvarext.entityunit.FindVariable('AmountD');
   pvds:=pentvarext.entityunit.FindVariable('LENGTH_Scale');
   pvdal:=pentvarext.entityunit.FindVariable('LENGTH_Add');
   pvdrt:=pentvarext.entityunit.FindVariable('LENGTH_RoundTo');
   if pvds<>nil then
-  if pgdbdouble(pvds^.data.Instance)^>0 then
+  if pgdbdouble(pvds^.data.Addr.Instance)^>0 then
                                              begin
                                              if (pvd<>nil)and(pvds<>nil)and(pvdal<>nil){and(pvdrt<>nil)} then
-                                             pgdbdouble(pvd^.data.Instance)^:={roundto(}length*pgdbdouble(pvds^.data.Instance)^+pgdbdouble(pvdal^.data.Instance)^+l{,pgdbinteger(pvdrt^.data.Instance)^)};
+                                             pgdbdouble(pvd^.data.Addr.Instance)^:={roundto(}length*pgdbdouble(pvds^.data.Addr.Instance)^+pgdbdouble(pvdal^.data.Addr.Instance)^+l{,pgdbinteger(pvdrt^.Instance)^)};
                                              pvds:=pentvarext.entityunit.FindVariable('LENGTH_KReserve');
                                              if pvds<>nil then
-                                                              pgdbdouble(pvd^.data.Instance)^:=pgdbdouble(pvd^.data.Instance)^*pgdbdouble(pvds^.data.Instance)^;
+                                                              pgdbdouble(pvd^.data.Addr.Instance)^:=pgdbdouble(pvd^.data.Addr.Instance)^*pgdbdouble(pvds^.data.Addr.Instance)^;
                                              if (pvdrt<>nil) then
-                                                              pgdbdouble(pvd^.data.Instance)^:=roundto(pgdbdouble(pvd^.data.Instance)^,pgdbinteger(pvdrt^.data.Instance)^);
+                                                              pgdbdouble(pvd^.data.Addr.Instance)^:=roundto(pgdbdouble(pvd^.data.Addr.Instance)^,pgdbinteger(pvdrt^.data.Addr.Instance)^);
 
                                              end
                                          else
                                              begin
                                              if (pvd<>nil)and(pvds<>nil) then
-                                             pgdbdouble(pvd^.data.Instance)^:=-pgdbdouble(pvds^.data.Instance)^;
+                                             pgdbdouble(pvd^.data.Addr.Instance)^:=-pgdbdouble(pvds^.data.Addr.Instance)^;
                                              end;
 
 
@@ -435,7 +435,7 @@ constructor GDBObjCable.init;
    //pvd:pvardesk;
 begin
   inherited init(own,layeraddres, lw);
-  NodePropArray.init({$IFDEF DEBUGBUILD}'{28ED5BF5-7598-4903-A715-C525BC68C116}',{$ENDIF}1000{,sizeof(TNodeProp)});
+  NodePropArray.init(1000);
   //vp.ID := GDBCableID;
   //PTObjectUnit(self.ou.Instance)^.init('cable');
   GetDXFIOFeatures.AddExtendersToEntity(@self);
@@ -443,7 +443,7 @@ end;
 constructor GDBObjCable.initnul;
 begin
   inherited initnul(owner);
-  NodePropArray.init({$IFDEF DEBUGBUILD}'{28ED5BF5-7598-4903-A715-C525BC68C116}',{$ENDIF}1000{,sizeof(TNodeProp)});
+  NodePropArray.init(1000);
   //vp.id := GDBCableID;
   GetDXFIOFeatures.AddExtendersToEntity(@self);
   //OU.done;
@@ -524,7 +524,7 @@ begin
 end;
 function AllocCable:PGDBObjCable;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocCable}',{$ENDIF}result,sizeof(GDBObjCable));
+  Getmem(result,sizeof(GDBObjCable));
 end;
 function AllocAndInitCable(owner:PGDBObjGenericWithSubordinated):PGDBObjCable;
 begin

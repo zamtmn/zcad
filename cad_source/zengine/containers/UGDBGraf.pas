@@ -85,7 +85,7 @@ begin
      if pvd=nil then
                     result:=LT_Normal
                 else
-                    result:=PTLinkType(pvd.data.Instance)^;
+                    result:=PTLinkType(pvd.data.Addr.Instance)^;
   end
   else
       result:=LT_Normal;
@@ -102,7 +102,7 @@ begin
      if pvd=nil then
                     result:=Vertexlength(pv^.CoordInWCS.lbegin,pv^.CoordInWCS.lend)
                 else
-                    result:=PGDBDouble(pvd.data.Instance)^;
+                    result:=PGDBDouble(pvd.data.Addr.Instance)^;
      end
         else
             result:=Vertexlength(pv^.CoordInWCS.lbegin,pv^.CoordInWCS.lend);
@@ -249,14 +249,14 @@ end;
 constructor grafelement.initnul;
 begin
      point:=nulvertex;
-     link.init({$IFDEF DEBUGBUILD}'{9C4A4FB4-31B7-45A0-BDF4-52233F18BBF8}',{$ENDIF}100);
+     link.init(100);
      linkcount:=0;
      connected:=0;
 end;
 constructor grafelement.init(v:gdbvertex);
 begin
      point:=v;
-     link.init({$IFDEF DEBUGBUILD}'{4BCEE078-467B-4360-918C-A2E3D1D8860C}',{$ENDIF}100);
+     link.init(100);
      link.CreateArray;
      linkcount:=0;
      connected:=0;
@@ -266,11 +266,11 @@ begin
   pgrafelement(PItem).link.Clear;
   pgrafelement(PItem).link.done;
   //pgrafelement(p).
-  //GDBFreeMem(PGDBFontRecord(p).Pfont);
+  //Freemem(PGDBFontRecord(p).Pfont);
 end;
 constructor GDBGraf.init;
 begin
-  inherited init({$IFDEF DEBUGBUILD}'{C0D04628-FDC7-4EC4-A3F7-F03C05C15CCE}',{$ENDIF}m{,sizeof(grafelement)});
+  inherited init(m);
 end;
 function GDBGraf.minimalize;
 var

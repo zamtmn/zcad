@@ -405,12 +405,12 @@ begin
      for i:=k downto 0 do
      begin
           j:=i+1;
-          pstr:=SavedUnit.FindValue('PATH_File'+inttostr(i));
-          pstrnext:=SavedUnit.FindValue('PATH_File'+inttostr(j));
+          pstr:=SavedUnit.FindValue('PATH_File'+inttostr(i)).data.Addr.Instance;
+          pstrnext:=SavedUnit.FindValue('PATH_File'+inttostr(j)).data.Addr.Instance;
           if (assigned(pstr))and(assigned(pstrnext))then
                                                         pstrnext^:=pstr^;
      end;
-     pstr:=SavedUnit.FindValue('PATH_File0');
+     pstr:=SavedUnit.FindValue('PATH_File0').data.Addr.Instance;
      if (assigned(pstr))then
                              pstr^:=filename;
 
@@ -471,18 +471,18 @@ begin
           {if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
           if sysvar.SYS.SYS_IsHistoryLineCreated^ then}
           begin
-               pint:=SavedUnit.FindValue('DMenuX');
+               pint:=SavedUnit.FindValue('DMenuX').data.Addr.Instance;
                if assigned(pint)then
                                     pint^:=commandmanager.DMenu.Left;
-               pint:=SavedUnit.FindValue('DMenuY');
+               pint:=SavedUnit.FindValue('DMenuY').data.Addr.Instance;
                if assigned(pint)then
                                     pint^:=commandmanager.DMenu.Top;
 
-          pint:=SavedUnit.FindValue('VIEW_ObjInspSubV');
+          pint:=SavedUnit.FindValue('VIEW_ObjInspSubV').data.Addr.Instance;
           if assigned(pint)then
                                if assigned(GetNameColWidthProc)then
                                pint^:=GetNameColWidthProc;
-          pint:=SavedUnit.FindValue('VIEW_ObjInspV');
+          pint:=SavedUnit.FindValue('VIEW_ObjInspV').data.Addr.Instance;
           if assigned(pint)then
                                if assigned(GetOIWidthProc)then
                                pint^:=GetOIWidthProc;
@@ -490,7 +490,7 @@ begin
      if assigned(InfoForm) then
                          StoreBoundsToSavedUnit('TEdWND_',InfoForm.BoundsRect);
 
-          (*mem.init({$IFDEF DEBUGBUILD}'{71D987B4-8C57-4C62-8C12-CFC24A0A9C9A}',{$ENDIF}1024);
+          (*mem.init(1024);
           SavedUnit^.SavePasToMem(mem);
           mem.SaveToFile(expandpath(ProgramPath+'rtl'+PathDelim+'savedvar.pas'));
           mem.done;*)
@@ -1010,7 +1010,6 @@ begin
   MenusManager.setup(self,StandartActions);
   RegisterGeneralContextCheckFunc('True',@GMCCFTrue);
   RegisterGeneralContextCheckFunc('False',@GMCCFFalse);
-  RegisterGeneralContextCheckFunc('DebugMode',@GMCCFDebugMode);
   RegisterGeneralContextCheckFunc('CtrlPressed',@GMCCFCtrlPressed);
   RegisterGeneralContextCheckFunc('ShiftPressed',@GMCCFShiftPressed);
   RegisterGeneralContextCheckFunc('AltPressed',@GMCCFAltPressed);
@@ -1681,7 +1680,7 @@ begin
                               pentvarext:=pobj^.GetExtension<TVariablesExtender>;
                               pvname2:=pentvarext.entityunit.FindVariable('NMO_Name');
                               if pvname2<>nil then
-                              if pgdbstring(pvname2^.data.Instance)^=pgdbstring(pvname^.data.Instance)^ then
+                              if pgdbstring(pvname2^.data.Addr.Instance)^=pgdbstring(pvname^.data.Addr.Instance)^ then
                               begin
                                    if pobj^.select(param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.selector)then
                                                                                                           inc(result);
@@ -1790,7 +1789,7 @@ begin
                                               exit;
                                          end;
                                          line:=pp^.GetObjName+' Layer='+pp^.vp.Layer.GetFullName;
-                                         line:=line+' Name='+pvd.data.PTD.GetValueAsString(pvd.data.Instance);
+                                         line:=line+' Name='+pvd.data.PTD.GetValueAsString(pvd.data.Addr.Instance);
                                          if result='' then
                                                           result:=line
                                                       else

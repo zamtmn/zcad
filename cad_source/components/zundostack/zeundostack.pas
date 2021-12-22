@@ -68,7 +68,7 @@ begin
      inc(startmarkercount);
      if startmarkercount=1 then
      begin
-     GDBGetMem({$IFDEF DEBUGBUILD}'{30D8D2A8-1130-40FB-81BC-10C7D9A1FF38}',{$ENDIF}pointer(pmarker),sizeof(TMarkerCommand));
+     Getmem(pointer(pmarker),sizeof(TMarkerCommand));
      pmarker^.init(CommandName,-1);
      currentcommandstartmarker:=self.PushBackData(pmarker);
      inc(CurrentCommand);
@@ -81,7 +81,7 @@ begin
      //inc(startmarkercount);
      //if startmarkercount=1 then
      begin
-     GDBGetMem({$IFDEF DEBUGBUILD}'{30D8D2A8-1130-40FB-81BC-10C7D9A1FF38}',{$ENDIF}pointer(pmarker),sizeof(TMarkerCommand));
+     Getmem(pointer(pmarker),sizeof(TMarkerCommand));
      pmarker^.init('StoneMarker',-2);
      currentcommandstartmarker:=self.PushBackData(pmarker);
      inc(CurrentCommand);
@@ -94,7 +94,7 @@ begin
      dec(startmarkercount);
      if startmarkercount=0 then
      begin
-     GDBGetMem({$IFDEF DEBUGBUILD}'{F5F5F128-96B3-4AB9-81A1-2B86E0C95EF4}',{$ENDIF}pointer(pmarker),sizeof(TMarkerCommand));
+     Getmem(pointer(pmarker),sizeof(TMarkerCommand));
      pmarker^.init('EndMarker',currentcommandstartmarker);
      currentcommandstartmarker:=-1;
      self.PushBackData(pmarker);
@@ -115,7 +115,7 @@ begin
           and(pcc^.datasize=_fieldsize) then
                                              exit;
      end;
-     GDBGetMem({$IFDEF DEBUGBUILD}'{3A3AAA8F-40EB-415B-BDC2-798712E9F402}',{$ENDIF}pointer(pcc),sizeof(TChangeCommand));
+     Getmem(pointer(pcc),sizeof(TChangeCommand));
      pcc^.init(_obj,_fieldsize);
      inc(CurrentCommand);
      PushBackData(pcc);
@@ -238,7 +238,7 @@ end;
 
 constructor TZctnrVectorUndoCommands.init;
 begin
-     inherited init({$IFDEF DEBUGBUILD}'{EF79AD53-2ECF-4848-8EDA-C498803A4188}',{$ENDIF}1);
+     inherited init(1);
      CurrentCommand:=0;
      onUndoRedo:=nil;;
 end;
@@ -256,7 +256,7 @@ begin
 end;
 function TZctnrVectorUndoCommands.CreateTTypedChangeCommand(PDataInstance:GDBPointer;PType:PUserTypeDescriptor):PTTypedChangeCommand;overload;
 begin
-     gdbgetmem({$IFDEF DEBUGBUILD}'{6D631C2E-57FF-4553-991B-332464B7495E}',{$ENDIF}result,sizeof(TTypedChangeCommand));
+     Getmem(result,sizeof(TTypedChangeCommand));
      result^.Assign(PDataInstance,PType);
 end;
 function TZctnrVectorUndoCommands.PushCreateTTypedChangeCommand(PDataInstance:GDBPointer;PType:PUserTypeDescriptor):PTTypedChangeCommand;overload;

@@ -192,7 +192,7 @@ end;
  begin
       allok:=savedxf2000(s,ProgramPath + 'components/empty.dxf',dwg^);
       pu:=PTZCADDrawing(dwg).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
-      mem.init({$IFDEF DEBUGBUILD}'{A1891083-67C6-4C21-8012-6D215935F6A6}',{$ENDIF}1024);
+      mem.init(1024);
       pu^.SavePasToMem(mem);
       mem.SaveToFile(expandpath(s+'.dbpas'));
       mem.done;
@@ -508,7 +508,7 @@ function TZCADDrawingsManager.CreateDWG(preloadedfile1,preloadedfile2:GDBString)
 var
    ptd:PTsimpleDrawing;
 begin
-     gdBGetMem({$IFDEF DEBUGBUILD}'{2A28BFB9-661F-4331-955A-C6F18DE67A19}',{$ENDIF}GDBPointer(result),sizeof(TZCADDrawing));
+     Getmem(GDBPointer(result),sizeof(TZCADDrawing));
      ptd:=currentdwg;
      currentdwg:=result;
      result^.init(@units,preloadedfile1,preloadedfile2);
@@ -519,7 +519,7 @@ end;
 var
    ptd:PTSimpleDrawing;
 begin
-     gdBGetMem({$IFDEF DEBUGBUILD}'{2A28BFB9-661F-4331-955A-C6F18DE67A19}',{$ENDIF}GDBPointer(result),sizeof(TSimpleDrawing));
+     Getmem(GDBPointer(result),sizeof(TSimpleDrawing));
      ptd:=currentdwg;
      currentdwg:=pointer(result);
      result^.init(nil);//(@units);
@@ -531,13 +531,13 @@ constructor TZCADDrawingsManager.init;
 var
    DC:TDrawContext;
 begin
-  inherited init({$IFDEF DEBUGBUILD}'{F5A454F1-CB6B-43AA-AD8D-AF3B9D781ED0}',{$ENDIF}100);
+  inherited init(100);
   FileNameCounter:=0;
   ProjectUnits.init;
   ProjectUnits.SetNextManager(@units);
 
   CurrentDWG:=nil;
-  //gdBGetMem({$IFDEF DEBUGBUILD}'{E197C531-C543-4FAF-AF4A-37B8F278E8A2}',{$ENDIF}GDBPointer(CurrentDWG),sizeof(TZCADDrawing));
+  //Getmem(GDBPointer(CurrentDWG),sizeof(TZCADDrawing));
   if CurrentDWG<>nil then
   begin
        CurrentDWG.init(@ProjectUnits);
@@ -568,12 +568,12 @@ begin
 end;
 (*function TZCADDrawingsManager.AfterDeSerialize;
 begin
-     CurrentDWG.pcamera:=SysUnit.InterfaceVariables.findvardesc('camera').data.Instance;
-     //CurrentDWG.ConstructObjRoot.init({$IFDEF DEBUGBUILD}'{B1036F20-56klhj2D-4B17-A33A-61CF3F5F2A90}',{$ENDIF}65535);
+     CurrentDWG.pcamera:=SysUnit.InterfaceVariables.findvardesc('camera').Instance;
+     //CurrentDWG.ConstructObjRoot.init(65535);
      CurrentDWG.ConstructObjRoot.initnul;
-     CurrentDWG.SelObjArray.init({$IFDEF DEBUGBUILD}'{0CC3A9A3-B9C2-4FkjhB5-BFB1-8791C261C577}',{$ENDIF}65535);
-     CurrentDWG.OnMouseObj.init({$IFDEF DEBUGBUILD}'{85654C90-FF49-427длро2-B429-4D134913BC26}',{$ENDIF}100);
-     //BlockDefArray.init({$IFDEF DEBUGBUILD}'{E5CE9274-01D8-fgjhfgh9-AF2E-D1AB116B5737}',{$ENDIF}1000);
+     CurrentDWG.SelObjArray.init(65535);
+     CurrentDWG.OnMouseObj.init(100);
+     //BlockDefArray.init(1000);
 end;*)
 //procedure TZCADDrawing.SetEntFromOriginal(_dest,_source:PGDBObjEntity;PCD_dest,PCD_source:PTDrawingPreCalcData);
 //begin
@@ -582,7 +582,7 @@ destructor TZCADDrawingsManager.done;
 begin
     CurrentDWG:=nil;
     inherited;
-    // gdbfreemem(pointer(currentdwg));
+    // Freemem(pointer(currentdwg));
      ProjectUnits.done;
 end;
 procedure TZCADDrawingsManager.AddBlockFromDBIfNeed(_to:{PTSimpleDrawing}PTDrawingDef;name:GDBString);
@@ -850,7 +850,7 @@ begin
                     pvd:=pentvarext.entityunit.FindVariable(vname);
                     if pvd<>nil then
                     begin
-                         if pvd.data.PTD.GetValueAsString(pvd.data.Instance)=vvalue then
+                         if pvd.data.PTD.GetValueAsString(pvd.data.Addr.Instance)=vvalue then
                          begin
                               entarray.PushBackData(pvisible);
                          end;
@@ -909,7 +909,7 @@ begin
                     pvd:=pentvarext.entityunit.FindVariable(vname);
                     if pvd<>nil then
                     begin
-                         if pvd.data.PTD.GetValueAsString(pvd.data.Instance)=vvalue then
+                         if pvd.data.PTD.GetValueAsString(pvd.data.Addr.Instance)=vvalue then
                          begin
                               result:=pvisible;
                               exit;
@@ -983,7 +983,7 @@ begin
   //ResetOGLWNDProc:=ResetOGLWND;
 
 
-  LTypeManager.init({$IFDEF DEBUGBUILD}'{9D0E081C-796F-4EB1-98A9-8B6EA9BD8640}',{$ENDIF}100);
+  LTypeManager.init(100);
 
   LTypeManager.LoadFromFile(FindInPaths(SupportPath,'zcad.lin'),TLOLoad);
 
@@ -1017,12 +1017,12 @@ begin
   if BlockBaseDWG<>nil then
   begin
   BlockBaseDWG.done;
-  GDBFreemem(pointer(BlockBaseDWG));
+  Freemem(pointer(BlockBaseDWG));
   end;
   if ClipboardDWG<>nil then
   begin
   ClipboardDWG.done;
-  GDBFreemem(pointer(ClipboardDWG));
+  Freemem(pointer(ClipboardDWG));
   end;
   pbasefont:=nil;
   LTypeManager.Done;

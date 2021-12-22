@@ -40,7 +40,7 @@ begin
      inherited;
      u:=1;
      h:=1;
-     //SHXdata.init({$IFDEF DEBUGBUILD}'{700B6312-B792-4FFE-B514-2F2CD4B47CC2}',{$ENDIF}1024);
+     //SHXdata.init(1024);
 end;
 destructor SHXFont.done;
 begin

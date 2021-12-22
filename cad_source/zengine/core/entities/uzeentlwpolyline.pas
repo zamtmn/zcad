@@ -173,8 +173,8 @@ end;
 procedure GDBObjLWpolyline.startsnap(out osp:os_record; out pdata:GDBPointer);
 begin
      inherited;
-     gdbgetmem({$IFDEF DEBUGBUILD}'{C37BA022-4629-4E16-BEB6-E8AAB9AC6986}',{$ENDIF}pdata,sizeof(GDBVectorSnapArray));
-     PGDBVectorSnapArray(pdata).init({$IFDEF DEBUGBUILD}'{C37BA022-4629-4E16-BEB6-E8AAB9AC6986}',{$ENDIF}Vertex3D_in_WCS_Array.Max);
+     Getmem(pdata,sizeof(GDBVectorSnapArray));
+     PGDBVectorSnapArray(pdata).init(Vertex3D_in_WCS_Array.Max);
      BuildSnapArray(Vertex3D_in_WCS_Array,PGDBVectorSnapArray(pdata)^,closed);
 end;
 
@@ -183,7 +183,7 @@ begin
      if pdata<>nil then
                        begin
                             PGDBVectorSnapArray(pdata)^.{FreeAnd}Done;
-                            gdbfreemem(pdata);
+                            Freemem(pdata);
                        end;
      inherited;
 end;
@@ -403,7 +403,7 @@ var pdesc:controlpointdesc;
     pv:pGDBvertex;
 begin
           //renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,nil);
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.init({$IFDEF DEBUGBUILD}'{48F91543-AAA8-4CF7-A038-D3DDC248BE3E}',{$ENDIF}{pprojpoint}Vertex3D_in_WCS_Array.count);
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(Vertex3D_in_WCS_Array.count);
           //pv2d:=pprojpoint^.parray;
           pv:=Vertex3D_in_WCS_Array.GetParrayAsPointer;
           pdesc.selected:=false;
@@ -427,12 +427,12 @@ var tpo: PGDBObjLWPolyline;
     pw:PGLLWWidth;
     i:GDBInteger;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{8F88CAFB-14F3-4F33-96B5-F493DB8B28B7}',{$ENDIF}GDBPointer(tpo), sizeof(GDBObjLWPolyline));
+  Getmem(GDBPointer(tpo), sizeof(GDBObjLWPolyline));
   tpo^.init({bp.owner}own,vp.Layer, vp.LineWeight,closed);
   CopyVPto(tpo^);
   CopyExtensionsTo(tpo^);
   tpo^.Local:=local;
-  //tpo^.vertexarray.init({$IFDEF DEBUGBUILD}'{90423E18-2ABF-48A8-8E0E-5D08A9E54255}',{$ENDIF}1000);
+  //tpo^.vertexarray.init(1000);
   p:=Vertex2D_in_OCS_Array.GetParrayAsPointer;
   pw:=Width2D_in_OCS_Array.GetParrayAsPointer;
   for i:=0 to Vertex2D_in_OCS_Array.Count-1 do
@@ -454,7 +454,7 @@ begin
      if pprojpoint<>nil then
                             begin
                             pprojpoint^.done;
-                            gdbfreemem(pointer(pprojpoint));
+                            Freemem(pointer(pprojpoint));
                             end;
      Vertex2D_in_OCS_Array.done;
      Width2D_in_OCS_Array.done;
@@ -468,11 +468,11 @@ begin
   inherited init(own,layeraddres, lw);
   //vp.id:=GDBLWPolylineID;
   closed := c;
-  Vertex2D_in_OCS_Array.init({$IFDEF DEBUGBUILD}'{B8E62148-AC02-4BDF-9F48-B9D3307013A1}',{$ENDIF}1000,c);
-  Width2D_in_OCS_Array.init({$IFDEF DEBUGBUILD}'{EFDA3BB3-E3AD-4D5C-97D2-FECD92A7276E}',{$ENDIF}1000);
-  Vertex3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{C5FE7AEE-3EF6-4AF8-ADCE-4D30495CE3F1}',{$ENDIF}1000);
-  Width3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{C9BB8E1B-18AA-464D-8726-68F2F609FEE0}',{$ENDIF}1000{, sizeof(GDBQuad3d)});
-  //----------------snaparray.init({$IFDEF DEBUGBUILD}'{C37BA022-4629-4E16-BEB6-E8AAB9AC6986}',{$ENDIF}1000);
+  Vertex2D_in_OCS_Array.init(1000,c);
+  Width2D_in_OCS_Array.init(1000);
+  Vertex3D_in_WCS_Array.init(1000);
+  Width3D_in_WCS_Array.init(1000);
+  //----------------snaparray.init(1000);
   PProjPoint:=nil;
 end;
 constructor GDBObjLWpolyline.initnul;
@@ -480,11 +480,11 @@ begin
   inherited initnul(nil);
   //vp.id:=GDBLWPolylineID;
   {убрать в афтердесериализе}
-  Vertex2D_in_OCS_Array.init({$IFDEF DEBUGBUILD}'{E04F78DD-94C2-416D-A006-5050A8F52015}',{$ENDIF}1000,false);
-  Width2D_in_OCS_Array.init({$IFDEF DEBUGBUILD}'{BFB21020-CF58-474B-8E84-D510B269092B}',{$ENDIF}1000);
-  Vertex3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{1496DC9D-41EB-49A6-9593-E5EFD9FD1605}',{$ENDIF}1000);
-  Width3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{798E46E0-01F0-42BB-9426-0F018A9F1C74}',{$ENDIF}1000{, sizeof(GDBQuad3d)});
-  //----------------snaparray.init({$IFDEF DEBUGBUILD}'{556C3123-58FC-41AA-BA5C-C453F025ACF6}',{$ENDIF}1000);
+  Vertex2D_in_OCS_Array.init(1000,false);
+  Width2D_in_OCS_Array.init(1000);
+  Vertex3D_in_WCS_Array.init(1000);
+  Width3D_in_WCS_Array.init(1000{, sizeof(GDBQuad3d)});
+  //----------------snaparray.init(1000);
   PProjPoint:=nil;
 end;
 function GDBObjLWpolyline.GetObjType;
@@ -639,10 +639,10 @@ begin
                                local.P_insert:=nulvertex;;
   closed := false;
   Width2D_in_OCS_Array.createarray;
-  (*Vertex2D_in_OCS_Array.init({$IFDEF DEBUGBUILD}'{270E17CA-8FFF-43B8-A6FB-E553C47023F1}',{$ENDIF}1000,closed);
-  Width2D_in_OCS_Array.init({$IFDEF DEBUGBUILD}'{AFDB5BB1-6580-48A3-A57B-4B19E109D728}',{$ENDIF}1000);
-  Vertex3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{56952B93-D6AD-4377-872C-493129DE61C1}',{$ENDIF}1000);
-  Width3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{36C3CE89-2CA9-4E3A-BCE2-E9FE8B0A40CB}',{$ENDIF}1000, sizeof(GDBQuad3d));
+  (*Vertex2D_in_OCS_Array.init(1000,closed);
+  Width2D_in_OCS_Array.init(1000);
+  Vertex3D_in_WCS_Array.init(1000);
+  Width3D_in_WCS_Array.init(1000, sizeof(GDBQuad3d));
   *)
   s := f.readGDBstring;
   val(s, byt, code);
@@ -870,8 +870,8 @@ var tv:GDBvertex;
 begin
   if pprojpoint=nil then
   begin
-       GDBGetMem({$IFDEF DEBUGBUILD}'{59A49074-4B98-46F2-AE7E-27F1C520CEE2}',{$ENDIF}GDBPointer(pprojpoint),sizeof(GDBpolyline2DArray));
-       pprojpoint^.init({$IFDEF DEBUGBUILD}'{C2BA8485-D361-4FB7-9EA1-74CEE160AE8F}',{$ENDIF}Vertex3D_in_WCS_Array.count,closed);
+       Getmem(GDBPointer(pprojpoint),sizeof(GDBpolyline2DArray));
+       pprojpoint^.init(Vertex3D_in_WCS_Array.count,closed);
   end;
   pprojpoint^.clear;
                     ptpv:=Vertex3D_in_WCS_Array.GetParrayAsPointer;
@@ -993,7 +993,7 @@ begin
 end;
 function AllocLWpolyline:PGDBObjLWpolyline;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocLWpolyline}',{$ENDIF}pointer(result),sizeof(GDBObjLWpolyline));
+  Getmem(pointer(result),sizeof(GDBObjLWpolyline));
 end;
 function AllocAndInitLWpolyline(owner:PGDBObjGenericWithSubordinated):PGDBObjLWpolyline;
 begin

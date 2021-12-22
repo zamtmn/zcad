@@ -28,7 +28,7 @@ TForCResult=(IsFounded(*'IsFounded'*)=1,
 {------REGISTEROBJECTTYPE GDBNamedObjectsArray}
 GDBNamedObjectsArray{-}<PTObj,TObj>{//}
                      = object(GZVectorPObects{-}<PTObj,TObj>{//})
-                    constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+                    constructor init(m:GDBInteger);
                     function getIndex(name: GDBString):GDBInteger;
                     function getAddres(name: GDBString):GDBPointer;
                     function GetIndexByPointer(p:PGDBNamedObject):GDBInteger;
@@ -120,7 +120,7 @@ begin
 end;
 constructor GDBNamedObjectsArray<PTObj,TObj>.init;
 begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m);
+  inherited init(m);
 end;
 function GDBNamedObjectsArray<PTObj,TObj>.getIndex;
 var

@@ -169,7 +169,7 @@ begin
      result:=nil;
      pvd:=PTObjectUnit(ou.Instance)^.FindVariable('Device_Class');
      if pvd<>nil then
-     if PTDeviceClass(pvd^.data.Instance)^=_type then
+     if PTDeviceClass(pvd^.Instance)^=_type then
                                                       result:=@self;
      if result=nil then
                        if bp.ListPos.owner<>nil then

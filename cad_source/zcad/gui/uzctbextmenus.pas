@@ -229,7 +229,7 @@ var
 begin
   for i:=low(FileHistory) to high(FileHistory) do
   begin
-       pstr:=SavedUnit.FindValue('PATH_File'+inttostr(i));
+       pstr:=SavedUnit.FindValue('PATH_File'+inttostr(i)).data.Addr.Instance;
        if assigned(pstr)then
                             line:=pstr^
                         else

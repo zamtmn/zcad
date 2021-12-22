@@ -35,18 +35,9 @@ var
   ms2objinsp:PCommandObjectDef;
 
 function MultiSelect2ObjIbsp_com(operands:TCommandOperands):TCommandResult;
-{$IFDEF DEBUGBUILD}
-var
-   membuf:GDBOpenArrayOfByte;
-{$ENDIF}
 begin
   MSEditor.CreateUnit(drawings.GetUnitsFormat);
   if {MSEditor.SelCount>0}true then begin
-    {$IFDEF DEBUGBUILD}
-    membuf.init({$IFDEF DEBUGBUILD}'{6F6386AC-95B5-4B6D-AEC3-7EE5DD53F8A3}',{$ENDIF}10000);
-    MSEditor.VariablesUnit.SaveToMem(membuf);
-    membuf.SaveToFile(expandpath('*log\lms.pas'));
-    {$ENDIF}
     ZCMsgCallBackInterface.Do_PrepareObject(drawings.GetUndoStack,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('TMSEditor'),@MSEditor,drawings.GetCurrentDWG);
   end {else
     commandmanager.executecommandend};

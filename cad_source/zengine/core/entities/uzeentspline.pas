@@ -103,8 +103,8 @@ end;
 procedure GDBObjSpline.startsnap(out osp:os_record; out pdata:GDBPointer);
 begin
      GDBObjEntity.startsnap(osp,pdata);
-     gdbgetmem({$IFDEF DEBUGBUILD}'{C37BA022-4629-4E16-BEB6-E8AAB9AC6986}',{$ENDIF}pdata,sizeof(GDBVectorSnapArray));
-     PGDBVectorSnapArray(pdata).init({$IFDEF DEBUGBUILD}'{C37BA022-4629-4E16-BEB6-E8AAB9AC6986}',{$ENDIF}VertexArrayInWCS.Max);
+     Getmem(pdata,sizeof(GDBVectorSnapArray));
+     PGDBVectorSnapArray(pdata).init(VertexArrayInWCS.Max);
      BuildSnapArray(VertexArrayInWCS,PGDBVectorSnapArray(pdata)^,closed);
 end;
 function GDBObjSpline.getsnap;
@@ -163,7 +163,7 @@ begin
      if assigned(EntExtensions)then
        EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
      FormatWithoutSnapArray;
-     CP.init({$IFDEF DEBUGBUILD}'{4FCFE57E-4000-4535-A086-549DEC959CD4}',{$ENDIF}VertexArrayInOCS.count{,sizeof(GDBvertex4S)});
+     CP.init(VertexArrayInOCS.count{,sizeof(GDBvertex4S)});
      ptv:=VertexArrayInOCS.beginiterate(ir);
      tv0:=ptv^;
      if bp.ListPos.owner<>nil then
@@ -264,19 +264,19 @@ constructor GDBObjSpline.init;
 begin
   closed := c;
   inherited init(own,layeraddres, lw);
-  ControlArrayInWCS.init({$IFDEF DEBUGBUILD}'{4213E1EA-8FF1-4E99-AEF5-C1635CB49B5A}',{$ENDIF}1000);
-  ControlArrayInOCS.init({$IFDEF DEBUGBUILD}'{F4681C13-46C9-4831-A614-7039A7EB205B}',{$ENDIF}1000);
-  Knots.init({$IFDEF DEBUGBUILD}'{BF696899-F624-47EA-8E03-2086912119AE}',{$ENDIF}1000{,sizeof(GDBFloat)});
-  AproxPointInWCS.init({$IFDEF DEBUGBUILD}'{D9ECB710-37F2-414F-9CB2-7DE7DBDCD5AE}',{$ENDIF}1000);
+  ControlArrayInWCS.init(1000);
+  ControlArrayInOCS.init(1000);
+  Knots.init(1000{,sizeof(GDBFloat)});
+  AproxPointInWCS.init(1000);
   //vp.ID := GDBSplineID;
 end;
 constructor GDBObjSpline.initnul;
 begin
   inherited initnul(owner);
-  ControlArrayInWCS.init({$IFDEF DEBUGBUILD}'{4213E1EA-8FF1-4E99-AEF5-C1635CB49B5A}',{$ENDIF}1000);
-  ControlArrayInOCS.init({$IFDEF DEBUGBUILD}'{892EA1AE-FB34-47B5-A2D1-18FA6B51A163}',{$ENDIF}1000);
-  Knots.init({$IFDEF DEBUGBUILD}'{BF696899-F624-47EA-8E03-2086912119AE}',{$ENDIF}1000{,sizeof(GDBFloat)});
-  AproxPointInWCS.init({$IFDEF DEBUGBUILD}'{84E195AD-72EC-43D1-8C37-F6EDDC84E325}',{$ENDIF}1000);
+  ControlArrayInWCS.init(1000);
+  ControlArrayInOCS.init(1000);
+  Knots.init(1000{,sizeof(GDBFloat)});
+  AproxPointInWCS.init(1000);
   //vp.ID := GDBSplineID;
 end;
 function GDBObjSpline.GetObjType;
@@ -305,11 +305,11 @@ end;
 function GDBObjSpline.Clone;
 var tpo: PGDBObjSpline;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{8F88CAFB-14F3-4F33-96B5-F493DB8B28B7}',{$ENDIF}GDBPointer(tpo), sizeof(GDBObjSpline));
+  Getmem(GDBPointer(tpo), sizeof(GDBObjSpline));
   tpo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight,closed);
   CopyVPto(tpo^);
   CopyExtensionsTo(tpo^);
-  //tpo^.vertexarray.init({$IFDEF DEBUGBUILD}'{90423E18-2ABF-48A8-8E0E-5D08A9E54255}',{$ENDIF}1000);
+  //tpo^.vertexarray.init(1000);
   vertexarrayinocs.copyto(tpo^.vertexarrayinocs);
   Knots.copyto(tpo^.Knots);
   tpo^.degree:=degree;
@@ -469,7 +469,7 @@ begin
 end;}
 function AllocSpline:PGDBObjSpline;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocSpline}',{$ENDIF}result,sizeof(GDBObjSpline));
+  Getmem(result,sizeof(GDBObjSpline));
 end;
 function AllocAndInitSpline(owner:PGDBObjGenericWithSubordinated):PGDBObjSpline;
 begin

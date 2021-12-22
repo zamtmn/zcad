@@ -169,29 +169,29 @@ begin
     Err('TLayerControlExtender.GetVariableValue wrong TResultType for "'+AName+'" variable');
 
   if ptd=@FundamentalDoubleDescriptorObj then
-    result.ResFloat := PDouble(pvd^.data.Instance)^
+    result.ResFloat := PDouble(pvd^.data.Addr.Instance)^
   else if ptd=@FundamentalSingleDescriptorObj then
-    result.ResFloat := PSingle(pvd^.data.Instance)^
+    result.ResFloat := PSingle(pvd^.data.Addr.Instance)^
   else if (ptd=@FundamentalUnicodeStringDescriptorObj)or(ptd=@FundamentalStringDescriptorObj)or(ptd=@FundamentalAnsiStringDescriptorObj) then
-    result.ResString:=ptd.GetValueAsString(pvd^.data.Instance)
+    result.ResString:=ptd.GetValueAsString(pvd^.data.Addr.Instance)
   else if ptd=@FundamentalWordDescriptorObj then
-    result.ResInteger := PWord(pvd^.data.Instance)^
+    result.ResInteger := PWord(pvd^.data.Addr.Instance)^
   else if ptd=@FundamentalLongIntDescriptorObj then
-    result.ResInteger := PLongint(pvd^.data.Instance)^
+    result.ResInteger := PLongint(pvd^.data.Addr.Instance)^
   else if ptd=@FundamentalByteDescriptorObj then
-    result.ResInteger := PByte(pvd^.data.Instance)^
+    result.ResInteger := PByte(pvd^.data.Addr.Instance)^
   else if ptd=@FundamentalSmallIntDescriptorObj then
-    result.ResInteger := PSmallInt(pvd^.data.Instance)^
+    result.ResInteger := PSmallInt(pvd^.data.Addr.Instance)^
   else if ptd=@FundamentalLongWordDescriptorObj then
-    result.ResInteger := PLongWord(pvd^.data.Instance)^
+    result.ResInteger := PLongWord(pvd^.data.Addr.Instance)^
   else if ptd=@FundamentalQWordDescriptorObj then
-    result.ResInteger := PQWord(pvd^.data.Instance)^
+    result.ResInteger := PQWord(pvd^.data.Addr.Instance)^
   else if ptd=@FundamentalInt64Descriptor then
-    result.ResInteger := PInt64(pvd^.data.Instance)^
+    result.ResInteger := PInt64(pvd^.data.Addr.Instance)^
   else if ptd=@FundamentalShortIntDescriptorObj then
-    result.ResInteger := PShortInt(pvd^.data.Instance)^
+    result.ResInteger := PShortInt(pvd^.data.Addr.Instance)^
   else if ptd=@FundamentalBooleanDescriptorOdj then
-    result.ResBoolean := PBoolean(pvd^.data.Instance)^
+    result.ResBoolean := PBoolean(pvd^.data.Addr.Instance)^
   else
     Err('TLayerControlExtender.GetVariableValue wrong PTD for "'+AName+'" variable');
 

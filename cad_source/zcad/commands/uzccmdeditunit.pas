@@ -46,7 +46,7 @@ var
    u8s:UTF8String;
    astring:ansistring;
 begin
-     mem.init({$IFDEF DEBUGBUILD}'{A1891083-67C6-4C21-8012-6D215935F6A6}',{$ENDIF}1024);
+     mem.init(1024);
      entityunit.SaveToMem(mem);
      //mem.SaveToFile(expandpath(ProgramPath+'autosave\lastvariableset.pas'));
      setlength(astring,mem.Count);

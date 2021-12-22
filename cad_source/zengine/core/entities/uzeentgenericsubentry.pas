@@ -325,13 +325,13 @@ begin
 end;
 function GDBObjGenericSubEntry.CreatePreCalcData:PTDrawingPreCalcData;
 begin
-     GDBGetMem({$IFDEF DEBUGBUILD}'{1F00FCF0-E9C6-4A6B-8B98-FFCC5D163190}',{$ENDIF}GDBPointer(result),sizeof(TDrawingPreCalcData));
+     Getmem(GDBPointer(result),sizeof(TDrawingPreCalcData));
      result.InverseObjMatrix:=objmatrix;
      uzegeometry.MatrixInvert(result.InverseObjMatrix);
 end;
 procedure GDBObjGenericSubEntry.DestroyPreCalcData(PreCalcData:PTDrawingPreCalcData);
 begin
-     gdbfreemem(pointer(PreCalcData));
+     Freemem(pointer(PreCalcData));
 end;
 procedure GDBObjGenericSubEntry.DrawWithAttrib;
 var
@@ -430,10 +430,10 @@ begin
      ObjArray.deliteminarray(pobjinarray);
 
      //p^.done;
-     //memman.GDBFreeMem(GDBPointer(p))}
+     //memman.Freemem(GDBPointer(p))}
      RemoveMiFromArray(pobj,pobjinarray);
      pobj^.done;
-     uzbmemman.GDBFreeMem(GDBPointer(pobj));
+     Freemem(GDBPointer(pobj));
 end;
 procedure GDBObjGenericSubEntry.ImEdited;
 begin
@@ -490,8 +490,8 @@ end;
 constructor GDBObjGenericSubEntry.initnul;
 begin
      inherited initnul(owner);
-     ObjArray.init({$IFDEF DEBUGBUILD}'{3EB0D466-D2B3-4F03-802A-8C995283688A}',{$ENDIF}10);
-     ObjCasheArray.init({$IFDEF DEBUGBUILD}'{A6F0EFFD-8EBB-4DED-9051-D28BF8F9A93C}',{$ENDIF}10);
+     ObjArray.init(10);
+     ObjCasheArray.init(10);
      //self.ObjArray.ObjTree.initnul;
 end;
 procedure GDBObjGenericSubEntry.DrawGeometry;
@@ -605,7 +605,7 @@ begin
           selected:=true;
           inc(GDB.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
           {tdesc:=GDB.SelObjArray.addobject(@self);
-          GDBGetMem(tdesc^.pcontrolpoint,sizeof(GDBControlPointArray));
+          Getmem(tdesc^.pcontrolpoint,sizeof(GDBControlPointArray));
           addcontrolpoints(tdesc);
           inc(poglwnd^.SelDesc.Selectedobjcount);}
      end;

@@ -26,7 +26,7 @@ uses
   s, s1: GDBString;
   v: vardesk;}
 function evaluate(expr:GDBString;_unit:PTUnit): vardesk;
-procedure deletetempvar(var v: vardesk);
+procedure ClearTempVariable(var vd: vardesk);
 
 implementation
 uses UBaseTypeDescriptor;
@@ -204,49 +204,34 @@ begin
               end;
 end;
 
-procedure setvar(var vd: vardesk; value: GDBString);
-//var
-  //i: GDBInteger;
+procedure ClearVariable(var vd: vardesk);
 begin
-     {expr:=readspace(expr);
-     i:=1;
-     while expr[i]in ['a'..'z','A'..'Z','0'..'9'] do
-     begin
-          if i=length(expr) then system.break;
-          i:=i+1;
-     end;
-     result:copy(expr,1,i);
-     expr:=copy(expr,i,length(expr)-i+1);}
+  if vd.data.Addr.Instance <> nil then
+  begin
+    if assigned(vd.data.ptd) then
+      vd.data.ptd.MagicFreeInstance(vd.data.Addr.Instance);
+    if vd.data.Addr.Instance<>nil then
+      vd.FreeeInstance;
+      //Freemem(vd.data.Inst);
+  end;
 end;
+
+procedure ClearTempVariable(var vd: vardesk);
+begin
+  if vd.name='' then
+    ClearVariable(vd);
+end;
+
 
 procedure createGDBIntegervar(var vd: vardesk; s: GDBString);
 var
   rez: GDBInteger;
 begin
-  if vd.data.Instance <> nil then
-  begin
-    if vd.data.ptd=@FundamentalStringDescriptorObj then
-      GDBString(vd.data.Instance) := ''
-    else
-      GDBFreeMem(vd.data.Instance);
-  end;
+  ClearVariable(vd);
   rez := strtoint(s);
-          {if abs(rez)<255   then begin
-                                      GDBGetMem(vd.pvalue,sizeof(GDBByte));
-                                      pGDBByte(vd.pvalue)^:=GDBByte(rez);
-                                      vd.vartype:=TGDBByte;
-                                      vd.vartypecustom:=0;
-                                 end
-     else if abs(rez)<65535 then begin
-                                      GDBGetMem(vd.pvalue,sizeof(GDBWord));
-                                      pGDBWord(vd.pvalue)^:=GDBWord(rez);
-                                      vd.vartype:=TGDBWord;
-                                      vd.vartypecustom:=0;
-                                 end
-  else}
   begin
-    GDBGetMem({$IFDEF DEBUGBUILD}'{AC7AD5B3-B238-497B-BFAB-D44DDD7EA6CF}',{$ENDIF}vd.data.Instance, sizeof(GDBInteger));
-    pGDBInteger(vd.data.Instance)^ := rez;
+    vd.SetInstance(FundamentalLongIntDescriptorObj.AllocAndInitInstance);
+    pGDBInteger(vd.data.Addr.Instance)^ := rez;
     vd.data.ptd:=@FundamentalLongIntDescriptorObj;
   end;
 end;
@@ -255,17 +240,11 @@ procedure createrealvar(var vd: vardesk; s: GDBString);
 var
   rez:GDBDouble;
 begin
-  if vd.data.Instance<> nil then
-  begin
-    if vd.data.ptd=@FundamentalStringDescriptorObj then
-      GDBString(vd.data.Instance) := ''
-    else
-      GDBFreeMem(vd.data.Instance);
-  end;
+  ClearVariable(vd);
   rez := strtofloat(s);
   begin
-    GDBGetMem({$IFDEF DEBUGBUILD}'{12B7DD0B-AA54-42DA-845C-A285FB30C5D3}',{$ENDIF}vd.data.Instance,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
-    pGDBDouble(vd.data.Instance)^ := rez;
+    vd.SetInstance(FundamentalDoubleDescriptorObj.AllocAndInitInstance);
+    pGDBDouble(vd.data.Addr.Instance)^ := rez;
     vd.data.ptd:=@FundamentalDoubleDescriptorObj;
   end;
 end;
@@ -273,66 +252,20 @@ procedure createGDBBooleanvar(var vd: vardesk; s: GDBString);
 var
   rez: GDBBoolean;
 begin
-  if vd.data.Instance <> nil then
-  begin
-    if vd.data.ptd=@FundamentalStringDescriptorObj then
-      GDBString(vd.data.Instance) := ''
-    else
-      GDBFreeMem(vd.data.Instance);
-  end;
+  ClearVariable(vd);
   if uppercase(s)='TRUE' then rez := true
                          else rez := false;
   begin
-    GDBGetMem({$IFDEF DEBUGBUILD}'{C46669D6-42E7-48B7-9B1B-09314777A564}',{$ENDIF}vd.data.Instance,FundamentalBooleanDescriptorOdj.SizeInGDBBytes);
-    PGDBBoolean(vd.data.Instance)^ := rez;
+    vd.SetInstance(FundamentalBooleanDescriptorOdj.AllocAndInitInstance);
+    PGDBBoolean(vd.data.Addr.Instance)^ := rez;
     vd.data.ptd:=@FundamentalBooleanDescriptorOdj;
   end;
 end;
 
 
-procedure addvar(var v1: vardesk; v2: vardesk);
-begin
-  pGDBByte(v1.data.Instance)^ := pGDBByte(v1.data.Instance)^ + pGDBByte(v2.data.Instance)^;
-end;
-
-procedure mulvar(var v1: vardesk; v2: vardesk);
-begin
-  pGDBByte(v1.data.Instance)^ := pGDBByte(v1.data.Instance)^ * pGDBByte(v2.data.Instance)^;
-end;
-
-procedure deletetempvar(var v: vardesk);
-begin
-  if v.name = '' then
-  begin
-
-    if assigned(v.data.ptd) then
-                                begin
-                                     v.data.ptd.MagicFreeInstance(v.data.Instance);
-                                end;
-    {if v.data.Instance <> nil then
-      if (v.data.ptd =@FundamentalStringDescriptorObj) then
-                                                   GDBString(v.data.Instance^) := '';}
-      begin
-        if v.data.Instance<>nil then
-                                     GDBFreeMem(v.data.Instance)
-                                 else
-                                     v.data.Instance:=v.data.Instance;
-
-        //v.pvalue := nil;
-      end;
-      {else
-      begin
-        GDBString(v.data.Instance) := '';
-      end;}
-
-    v.data.ptd :=nil;
-  end;
-end;
-
 function evaluate(expr: GDBString;_unit:PTUnit): vardesk;
 var
   s,s1,s2: String;
-  //s3:string;
   rez, hrez, subrezult: vardesk;
   pvar: pvardesk;
   operatorname, functionname, functiontype, operatoptype: GDBInteger;
@@ -357,12 +290,9 @@ begin
           expr := copy(expr, 2, length(expr) - 2);
           if expr='34 2511' then
                                 expr:=expr;
-          
-          GDBGetMem({$IFDEF DEBUGBUILD}'{ED860FE9-3A15-459D-B352-7FA4A3AE6F49}',{$ENDIF}rez.data.Instance,FundamentalStringDescriptorObj.SizeInGDBBytes);
-          ppointer(rez.data.Instance)^:=nil;
-          pgdbstring(rez.data.Instance)^ := expr;
+          rez.SetInstance(FundamentalStringDescriptorObj.AllocAndInitInstance);
+          pgdbstring(rez.data.Addr.Instance)^ := expr;
           expr:='';
-          //GDBPointer(expr) := nil;
           rez.data.ptd := @FundamentalStringDescriptorObj;
         end;
     else
@@ -375,14 +305,11 @@ begin
         if pvar <> nil then
         begin
           rez.name := pvar^.name;
-          rez.data.Instance := pvar^.data.Instance;
-          rez.data.ptd := pvar^.data.ptd;
-          //pointer(s3):=pointer(rez.data.Instance^);
-          //pointer(s3):=nil;
+          rez.data:=pvar^.data;
           if pvar^.name = invar then
                                     begin
                                          pvar^.name:='';
-                                         gdbfreemem(GDBPointer(pvar));
+                                         Freemem(GDBPointer(pvar));
                                     end;
         end
         else
@@ -405,7 +332,8 @@ begin
              pvar:=_unit{.InterfaceVariables}.FindVariable(s1);
              if pvar<>nil then
              begin
-                  {PObjectDescriptor(PUserTypeDescriptor(Types.exttype.getDataMutable(pvar^.vartypecustom)^))}PObjectDescriptor(pvar^.data.ptd)^.RunMetod(s2,pvar^.data.Instance);
+                  {PObjectDescriptor(PUserTypeDescriptor(Types.exttype.getDataMutable(pvar^.vartypecustom)^))}
+                  PObjectDescriptor(pvar^.data.ptd)^.RunMetod(s2,pvar^.data.Addr.Instance);
                   s:=s;
              end
         end
@@ -422,14 +350,10 @@ begin
                   if operatoptype <> 0 then
                   begin
                     subrezult := basicoperatorparam[operatoptype].addr(rez, hrez);
-                    {if assigned(rez.data.PTD) then
-                                                   rez.data.PTD.MagicFreeInstance(rez.data.Instance);}
-                    deletetempvar(rez);
+                    ClearTempVariable(rez);
                     rez := subrezult;
-                    //deletetempvar(subrezult);
                   end;
-                    //deletetempvar(subrezult);
-                    deletetempvar(hrez);
+                    ClearTempVariable(hrez);
 
 
 
@@ -442,8 +366,7 @@ begin
                   if pvar <> nil then
                   begin
                     hrez.name := pvar^.name;
-                    hrez.data.Instance := pvar^.data.Instance;
-                    hrez.data.ptd := pvar^.data.ptd;
+                    hrez.data:=pvar^.data;
                     if pvar^.name = invar then
                                               begin
                                                    pvar^.name:='';
@@ -458,13 +381,12 @@ begin
                         createrealvar(hrez, s)
                       else
                           hrez:=evaluate(s,_unit);
-          //oiuoiu
                   operatoptype := findbasicoperator(basicoperatorname[operatorname].name, rez{.data.ptd}, hrez{.data.ptd});
                   if operatoptype <> 0 then
                   begin
                     subrezult := basicoperatorparam[operatoptype].addr(rez, hrez);
-                    deletetempvar(rez);
-                    deletetempvar(hrez);
+                    ClearTempVariable(rez);
+                    ClearTempVariable(hrez);
                     rez := subrezult;
                   end;
 
@@ -487,7 +409,7 @@ begin
                   functiontype := findbasicfunction(basicfunctionname[functionname].name, opstac);
                   rez := basicfunctionparam[functiontype].addr(opstac);
                   for i:=1 to opstac.count do
-                    deletetempvar(opstac.stack[i]);
+                    ClearTempVariable(opstac.stack[i]);
                 end
                 else
                 begin

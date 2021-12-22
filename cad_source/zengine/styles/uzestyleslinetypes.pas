@@ -68,15 +68,15 @@ GDBDashInfoArray= object(GZVectorData{-}<TDashInfo>{//})(*OpenArrayOfData=TDashI
                end;
 {REGISTEROBJECTTYPE GDBDoubleArray}
 GDBDoubleArray= object(GZVectorData{-}<GDBDouble>{//})(*OpenArrayOfData=GDBDouble*)
-                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+                constructor init(m:GDBInteger);
                end;
 {REGISTEROBJECTTYPE GDBShapePropArray}
 GDBShapePropArray= object(GZVectorObjects{-}<ShapeProp>{//})(*OpenArrayOfObject=ShapeProp*)
-                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+                constructor init(m:GDBInteger);
                end;
 {REGISTEROBJECTTYPE GDBTextPropArray}
 GDBTextPropArray= object(GZVectorObjects{-}<TextProp>{//})(*OpenArrayOfObject=TextProp*)
-                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+                constructor init(m:GDBInteger);
                end;
 PPGDBLtypePropObjInsp=^PGDBLtypePropObjInsp;
 PGDBLtypePropObjInsp=GDBPointer;
@@ -105,7 +105,7 @@ GDBLtypePropArray=packed array [0..0] of GDBLtypeProp;
 PGDBLtypeArray=^GDBLtypeArray;
 {REGISTEROBJECTTYPE GDBLtypeArray}
 GDBLtypeArray= object(GDBNamedObjectsArray{-}<PGDBLtypeProp,GDBLtypeProp>{//})(*OpenArrayOfData=GDBLtypeProp*)
-                    constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+                    constructor init(m:GDBInteger);
                     constructor initnul;
                     procedure LoadFromFile(fname:GDBString;lm:TLoadOpt);
                     procedure ParseStrings(const ltd:tstrings; var CurrentLine:integer;out LTName,LTDesk,LTImpl:GDBString);
@@ -317,10 +317,10 @@ begin
      LengthDXF:=0;
      LengthFact:=0;
      pointer(desk):=nil;
-     dasharray.init({$IFDEF DEBUGBUILD}'{9DA63ECC-B244-4EBD-A9AE-AB24F008B526}',{$ENDIF}10{,sizeof(TDashInfo)});
-     strokesarray.init({$IFDEF DEBUGBUILD}'{70B68C69-C222-4BE5-BB48-B88F08BA7605}',{$ENDIF}10);
-     shapearray.init({$IFDEF DEBUGBUILD}'{9174ED86-C17E-4683-9BD1-E1927A9F9B3E}',{$ENDIF}10);
-     Textarray.init({$IFDEF DEBUGBUILD}'{0A026EC4-B78B-4973-9016-A02E4919B1C8}',{$ENDIF}10);
+     dasharray.init(10);
+     strokesarray.init(10);
+     shapearray.init(10);
+     Textarray.init(10);
 end;
 destructor GDBLtypeProp.done;
 begin
@@ -336,7 +336,7 @@ constructor GDBLtypeArray.init;
 var
    plp:PGDBLtypeProp;
 begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m);
+  inherited init(m);
   if AddItem('Continuous',pointer(plp))=IsCreated then
             begin
                  plp.init('Continuous');
@@ -688,17 +688,17 @@ begin
      strings.Destroy;
 end;
 
-constructor GDBDoubleArray.init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+constructor GDBDoubleArray.init(m:GDBInteger);
 begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,sizeof(gdbdouble)});
+  inherited init(m);
 end;
-constructor GDBShapePropArray.init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+constructor GDBShapePropArray.init(m:GDBInteger);
 begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,sizeof(ShapeProp)});
+  inherited init(m);
 end;
-constructor GDBTextPropArray.init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+constructor GDBTextPropArray.init(m:GDBInteger);
 begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,sizeof(TextProp)});
+  inherited init(m);
 end;
 
 begin

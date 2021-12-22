@@ -288,8 +288,8 @@ begin
      CalcMouseFrustum;}
 
      //if param.pglscreen <> nil then
-     //GDBFreeMem(param.pglscreen);
-     //GDBGetMem({$IFDEF DEBUGBUILD}'ScreenBuf',{$ENDIF}param.pglscreen, getviewcontrol.clientwidth * getviewcontrol.clientheight * 4);
+     //Freemem(param.pglscreen);
+     //Getmem(param.pglscreen, getviewcontrol.clientwidth * getviewcontrol.clientheight * 4);
 
      param.firstdraw := true;
      //draw;

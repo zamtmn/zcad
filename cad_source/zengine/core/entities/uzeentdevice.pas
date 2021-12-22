@@ -112,9 +112,9 @@ begin
      VarObjArray.DeleteElement(pobjinarray);
 
      //p^.done;
-     //memman.GDBFreeMem(GDBPointer(p))
+     //memman.Freemem(GDBPointer(p))
      pobj^.done;
-     uzbmemman.GDBFreeMem(GDBPointer(pobj));
+     Freemem(GDBPointer(pobj));
 end;
 
 procedure GDBObjDevice.addcontrolpoints(tdesc:GDBPointer);
@@ -126,7 +126,7 @@ begin
           begin
           if SysVar.DWG.DWG_AdditionalGrips^ then
           begin
-               PSelectedObjDesc(tdesc)^.pcontrolpoint^.init({$IFDEF DEBUGBUILD}'{E8AC77BE-9C28-4A6E-BB1A-D5F8729BDDAD}',{$ENDIF}1);
+               PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(1);
           end
           else
           inherited addcontrolpoints(tdesc);
@@ -226,8 +226,8 @@ begin
          pvc^.done;
          pvc2.rtsave(pv);
          //pv^.FormatEntity(drawing,dc);
-         GDBFREEMEM(pointer(pvc));
-         GDBFREEMEM(pointer(pvc2));
+         Freemem(pointer(pvc));
+         Freemem(pointer(pvc2));
          pv:=VarObjArray.iterate(ir);
      until pv=nil;
      objmatrix:=m4;
@@ -305,7 +305,7 @@ var tvo: PGDBObjDevice;
 begin
   //result:=inherited Clone(own);
   //exit;
-  GDBGetMem({$IFDEF DEBUGBUILD}'{F9D41F4A-1E80-4D3A-9DD1-D0037EFCA988}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjDevice));
+  Getmem(GDBPointer(tvo), sizeof(GDBObjDevice));
   tvo^.init({bp.owner}own,vp.Layer, vp.LineWeight);
   //tvo^.vp.id :=GDBDeviceID;
   //tvo^.vp.layer :=vp.layer;
@@ -319,8 +319,8 @@ begin
   tvo^.scale := scale;
   tvo^.rotate := rotate;
   tvo.index := index;
-  //tvo.ConstObjArray.init({$IFDEF DEBUGBUILD}'{E9005274-601F-4A3F-BDB8-E311E59D558C}',{$ENDIF}ConstObjArray.Count);
-  tvo.VarObjArray.init({$IFDEF DEBUGBUILD}'{E9005274-601F-4A3F-BDB8-E311E59D558C}',{$ENDIF}varObjArray.Count+1);
+  //tvo.ConstObjArray.init(ConstObjArray.Count);
+  tvo.VarObjArray.init(varObjArray.Count+1);
   ConstObjArray.CloneEntityTo(@tvo.ConstObjArray,tvo);
   varObjArray.CloneEntityTo(@tvo.varObjArray,tvo);
   //tvo^.format;
@@ -608,7 +608,7 @@ constructor GDBObjDevice.init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSma
 begin
   inherited init(own,layeraddres,LW);
   //vp.ID:=GDBDeviceID;
-  VarObjArray.init({$IFDEF DEBUGBUILD}'{1C49F5F6-5AA4-493D-90FF-A86D9EA666CE}',{$ENDIF}100);
+  VarObjArray.init(100);
   GetDXFIOFeatures.AddExtendersToEntity(@self);
 end;
 function GDBObjDevice.GetObjType;
@@ -619,7 +619,7 @@ constructor GDBObjDevice.initnul;
 begin
   inherited initnul;
   //vp.ID:=GDBDeviceID;
-  VarObjArray.init({$IFDEF DEBUGBUILD}'{1C49F5F6-5AA4-493D-90FF-A86D9EA666CE}',{$ENDIF}100);
+  VarObjArray.init(100);
   //DType:=DT_Unknown;
   //DBorder:=DB_Empty;
   //DGroup:=DG_Unknown;
@@ -655,13 +655,13 @@ begin
           (*pvn:=ou.FindVariable('Device_Type');
           if pvn<>nil then
           begin
-               case PTDeviceType(pvn^.data.Instance)^ of
+               case PTDeviceType(pvn^.Instance)^ of
                TDT_SilaPotr:
                begin
                     pvn:=ou.FindVariable('Voltage');
                     if pvn<>nil then
                     begin
-                          volt:=PTVoltage(pvn^.data.Instance)^;
+                          volt:=PTVoltage(pvn^.Instance)^;
                           u:=0;
                           case volt of
                                       _AC_220V_50Hz:u:=0.22;
@@ -669,34 +669,34 @@ begin
                           end;{case}
                           pvn:=ou.FindVariable('CalcIP');
                           if pvn<>nil then
-                                          calcip:=PTCalcIP(pvn^.data.Instance)^;
+                                          calcip:=PTCalcIP(pvn^.Instance)^;
                           pvp:=ou.FindVariable('Power');
                           pvi:=ou.FindVariable('Current');
                           pvcos:=ou.FindVariable('CosPHI');
                           pvphase:=ou.FindVariable('Phase');
                           if pvn<>nil then
-                                          calcip:=PTCalcIP(pvn^.data.Instance)^;
+                                          calcip:=PTCalcIP(pvn^.Instance)^;
                           if (pvp<>nil)and(pvi<>nil)and(pvcos<>nil)and(pvphase<>nil) then
                           begin
                           if calcip=_ICOS_from_P then
                           begin
-                               if pgdbdouble(pvp^.data.Instance)^<1 then pgdbdouble(pvcos^.data.Instance)^:=0.65
-                          else if pgdbdouble(pvp^.data.Instance)^<=4 then pgdbdouble(pvcos^.data.Instance)^:=0.75
-                          else pgdbdouble(pvcos^.data.Instance)^:=0.85;
+                               if pgdbdouble(pvp^.Instance)^<1 then pgdbdouble(pvcos^.Instance)^:=0.65
+                          else if pgdbdouble(pvp^.Instance)^<=4 then pgdbdouble(pvcos^.Instance)^:=0.75
+                          else pgdbdouble(pvcos^.Instance)^:=0.85;
 
                                calcip:=_I_from_p;
                           end;
 
                           case calcip of
                                _I_from_P:begin
-                                              if PTPhase(pvphase^.data.Instance)^=_ABC
-                                              then pgdbdouble(pvi^.data.Instance)^:=pgdbdouble(pvp^.data.Instance)^/u/1.73/pgdbdouble(pvcos^.data.Instance)^
-                                              else pgdbdouble(pvi^.data.Instance)^:=pgdbdouble(pvp^.data.Instance)^/u/pgdbdouble(pvcos^.data.Instance)^
+                                              if PTPhase(pvphase^.Instance)^=_ABC
+                                              then pgdbdouble(pvi^.Instance)^:=pgdbdouble(pvp^.Instance)^/u/1.73/pgdbdouble(pvcos^.Instance)^
+                                              else pgdbdouble(pvi^.Instance)^:=pgdbdouble(pvp^.Instance)^/u/pgdbdouble(pvcos^.Instance)^
                                          end;
                                _P_from_I:begin
-                                              if PTPhase(pvphase^.data.Instance)^=_ABC
-                                              then pgdbdouble(pvp^.data.Instance)^:=pgdbdouble(pvi^.data.Instance)^*u*1.73*pgdbdouble(pvcos^.data.Instance)^
-                                              else pgdbdouble(pvp^.data.Instance)^:=pgdbdouble(pvi^.data.Instance)^*u*pgdbdouble(pvcos^.data.Instance)^
+                                              if PTPhase(pvphase^.Instance)^=_ABC
+                                              then pgdbdouble(pvp^.Instance)^:=pgdbdouble(pvi^.Instance)^*u*1.73*pgdbdouble(pvcos^.Instance)^
+                                              else pgdbdouble(pvp^.Instance)^:=pgdbdouble(pvi^.Instance)^*u*pgdbdouble(pvcos^.Instance)^
                                          end
 
 
@@ -721,7 +721,7 @@ begin
 end;
 function AllocDevice:PGDBObjDevice;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocDevice}',{$ENDIF}result,sizeof(GDBObjDevice));
+  Getmem(result,sizeof(GDBObjDevice));
 end;
 function AllocAndInitDevice(owner:PGDBObjGenericWithSubordinated):PGDBObjDevice;
 begin

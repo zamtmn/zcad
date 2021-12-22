@@ -242,9 +242,9 @@ begin
 
 
          pvc^.done;
-         GDBFREEMEM(pointer(pvc));
+         Freemem(pointer(pvc));
          pvc2^.done;
-         GDBFREEMEM(pointer(pvc2));
+         Freemem(pointer(pvc2));
          pv:=ConstObjArray.iterate(ir);
      until pv=nil;
      objmatrix:=m4;
@@ -294,7 +294,7 @@ begin
 
      pcable:=nil;
 
-     objects.init({$IFDEF DEBUGBUILD}'{8BE71BAA-507B-4D6B-BE2C-63693022090C}',{$ENDIF}100);
+     objects.init(100);
 
      if PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.{gdb.GetCurrentROOT.}FindObjectsInPoint(mainline.CoordInWCS.lBegin,Objects) then
      begin
@@ -338,8 +338,8 @@ begin
                           pvn:=pentvarext.entityunit.FindVariable('NMO_Name');
                           if pvn<>nil then
                           begin
-                               s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Instance);
-                               //s:=pstring(pvn^.data.Instance)^;
+                               s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Addr.Instance);
+                               //s:=pstring(pvn^.Instance)^;
                                sta.PushBackData(s);
                                S:='';
                           end;
@@ -385,8 +385,8 @@ begin
                                  pvn:=pentvarext.entityunit.FindVariable('NMO_Name');
                                   if pvn<>nil then
                                   begin
-                                       s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Instance);
-                                       //s:=pstring(pvn^.data.Instance)^;
+                                       s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Addr.Instance);
+                                       //s:=pstring(pvn^.Instance)^;
                                        sta.PushBackData(s);
                                   end;
                                   system.break;
@@ -497,9 +497,9 @@ begin
             pvNoteFormat:=nil;
           end;
           if (pvNote<>nil)and(pvNoteFormat<>nil) then
-            pstring(pvNote^.data.Instance)^:=textformat(pstring(pvNoteFormat^.data.Instance)^,pdev);
-          if (pvNote<>nil)and(pstring(pvNote^.data.Instance)^<>'') then
-            s:={pstring(pvNote^.data.Instance)^}pvNote^.data.PTD.GetValueAsString(pvNote^.data.Instance)
+            pstring(pvNote^.data.Addr.Instance)^:=textformat(pstring(pvNoteFormat^.data.Addr.Instance)^,pdev);
+          if (pvNote<>nil)and(pstring(pvNote^.data.Addr.Instance)^<>'') then
+            s:={pstring(pvNote^.Instance)^}pvNote^.data.PTD.GetValueAsString(pvNote^.data.Addr.Instance)
           else begin
             s:='';
             pentvarext:=pdev^.GetExtension<TVariablesExtender>;
@@ -507,14 +507,14 @@ begin
             pvn:=pentvarext.entityunit.FindVariable('NMO_Name');
             if pvn<>nil then
             begin
-                 s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Instance);
-                 //s:=pstring(pvn^.data.Instance)^;
+                 s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Addr.Instance);
+                 //s:=pstring(pvn^.Instance)^;
             end;
             //pvn:=PTObjectUnit(pdev^.ou.Instance)^.FindVariable('Text');
             pvn:=pentvarext.entityunit.FindVariable('Text');
             if pvn<>nil then
             begin
-                 s:=s+{pstring(pvn^.data.Instance)^}pvn^.data.PTD.GetValueAsString(pvn^.data.Instance);;
+                 s:=s+{pstring(pvn^.Instance)^}pvn^.data.PTD.GetValueAsString(pvn^.data.Addr.Instance);;
             end;
           end;
           if s<>'' then
@@ -575,7 +575,7 @@ begin
           tdesc:=PGDBSelectedObjArray(SelObjArray)^.addobject(@self);
           if tdesc<>nil then
           begin
-          GDBGetMem({$IFDEF DEBUGBUILD}'{B50BE8C9-E00A-40C0-A051-230877BD3A56}',{$ENDIF}GDBPointer(tdesc^.pcontrolpoint),sizeof(GDBControlPointArray));
+          Getmem(GDBPointer(tdesc^.pcontrolpoint),sizeof(GDBControlPointArray));
           mainline.addcontrolpoints(tdesc);
           inc(Selectedobjcount);
           end;
@@ -736,7 +736,7 @@ end;
 function GDBObjElLeader.Clone;
 var tvo: PGDBObjElLeader;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{F9D41F4A-1E80-4D3A-9DD1-D0037EFCA988}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjElLeader));
+  Getmem(GDBPointer(tvo), sizeof(GDBObjElLeader));
   tvo^.initnul;
   CopyVPto(tvo^);
   CopyExtensionsTo(tvo^);
@@ -795,7 +795,7 @@ begin
 end;
 function AllocElLeader:PGDBObjElLeader;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocElLeader}',{$ENDIF}result,sizeof(GDBObjElLeader));
+  Getmem(result,sizeof(GDBObjElLeader));
 end;
 function AllocAndInitElLeader(owner:PGDBObjGenericWithSubordinated):PGDBObjElLeader;
 begin
@@ -807,7 +807,7 @@ function UpgradeLine2Leader(ptu:PExtensionData;pent:PGDBObjLine;const drawing:TD
 var
    pvi:pvardesk;
 begin
-     GDBGetMem({$IFDEF DEBUGBUILD}'{6E92EE79-96D1-45BB-94CF-5C4C2141D886}',{$ENDIF}pointer(result),sizeof(GDBObjElLeader));
+     Getmem(pointer(result),sizeof(GDBObjElLeader));
      result^.initnul;
      result^.MainLine.CoordInOCS:=pent^.CoordInOCS;
      pent.CopyVPto(result^);
@@ -819,17 +819,17 @@ begin
    pvi:=PTUnit(ptu).FindVariable('size');
    if pvi<>nil then
                    begin
-                        result^.size:=pgdbinteger(pvi^.data.Instance)^;
+                        result^.size:=pgdbinteger(pvi^.data.Addr.Instance)^;
                    end;
    pvi:=PTUnit(ptu).FindVariable('scale');
    if pvi<>nil then
                    begin
-                        result^.scale:=pgdbdouble(pvi^.data.Instance)^;
+                        result^.scale:=pgdbdouble(pvi^.data.Addr.Instance)^;
                    end;
    pvi:=PTUnit(ptu).FindVariable('twidth');
    if pvi<>nil then
                    begin
-                        result^.twidth:=pgdbdouble(pvi^.data.Instance)^;
+                        result^.twidth:=pgdbdouble(pvi^.data.Addr.Instance)^;
                    end;
    end;
 end;

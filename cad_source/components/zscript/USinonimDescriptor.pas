@@ -21,7 +21,7 @@ unit USinonimDescriptor;
 {$MODE DELPHI}
 interface
 uses TypeDescriptors,UGDBOpenArrayOfByte,uzbtypesbase,
-     uzedimensionaltypes,varmandef,uzbtypes{,UGDBOpenArrayOfData,UGDBStringArray},uzbmemman;
+     uzedimensionaltypes,varmandef,uzbtypes,uzbmemman,TypInfo;
 type
 PGDBSinonimDescriptor=^GDBSinonimDescriptor;
 GDBSinonimDescriptor=object(TUserTypeDescriptor)
@@ -42,9 +42,22 @@ GDBSinonimDescriptor=object(TUserTypeDescriptor)
                      function GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;virtual;
                      procedure MagicFreeInstance(PInstance:Pointer);virtual;
                      procedure MagicAfterCopyInstance(PInstance:Pointer);virtual;
+                     procedure InitInstance(PInstance:Pointer);virtual;
+                     procedure RegisterTypeinfo(ti:PTypeInfo);virtual;
                end;
 implementation
-uses {ZBasicVisible,}UUnitManager{,log};
+uses UUnitManager;
+procedure GDBSinonimDescriptor.RegisterTypeinfo(ti:PTypeInfo);
+begin
+  GetFactTypedef^.RegisterTypeinfo(ti);
+  SizeInGDBBytes:=GetFactTypedef^.SizeInGDBBytes;
+end;
+
+procedure GDBSinonimDescriptor.InitInstance(PInstance:Pointer);
+begin
+   GetFactTypedef^.InitInstance(PInstance);
+end;
+
 function GDBSinonimDescriptor.GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;
 begin
      result:=GetFactTypedef^.GetFormattedValueAsString(pinstance,f);

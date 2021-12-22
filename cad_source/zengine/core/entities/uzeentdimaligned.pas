@@ -283,7 +283,7 @@ end;
 procedure GDBObjAlignedDimension.addcontrolpoints(tdesc:GDBPointer);
 var pdesc:controlpointdesc;
 begin
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.init({$IFDEF DEBUGBUILD}'{4CBC9A73-A88D-443B-B925-2F0611D82AB0}',{$ENDIF}4);
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(4);
 
           pdesc.selected:=false;
           pdesc.pobject:=nil;
@@ -312,7 +312,7 @@ end;
 function GDBObjAlignedDimension.Clone;
 var tvo: PGDBObjAlignedDimension;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'GDBObjAlignedDimension.Clone',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjAlignedDimension));
+  Getmem(GDBPointer(tvo), sizeof(GDBObjAlignedDimension));
   tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight);
   CopyVPto(tvo^);
   CopyExtensionsTo(tvo^);
@@ -419,7 +419,7 @@ begin
 end;}
 function AllocAlignedDimension:PGDBObjAlignedDimension;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocAlignedDimension}',{$ENDIF}result,sizeof(GDBObjAlignedDimension));
+  Getmem(result,sizeof(GDBObjAlignedDimension));
 end;
 function AllocAndInitAlignedDimension(owner:PGDBObjGenericWithSubordinated):PGDBObjAlignedDimension;
 begin

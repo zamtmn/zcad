@@ -101,12 +101,12 @@ end;
 function GDBObjNet.Clone;
 var tvo: PGDBObjNet;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{F9D41F4A-1E80-4D3A-9DD1-D0037EFCA988}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjNet));
+  Getmem(GDBPointer(tvo), sizeof(GDBObjNet));
   tvo^.initnul(bp.ListPos.owner);
   CopyVPto(tvo^);
   CopyExtensionsTo(tvo^);
   //tvo^.vp.id :=GDBNetID;
-  tvo.ObjArray.init({$IFDEF DEBUGBUILD}'{E9005274-601F-4A3F-BDB8-E311E59D558C}',{$ENDIF}ObjArray.Count);
+  tvo.ObjArray.init(ObjArray.Count);
   ObjArray.CloneEntityTo(@tvo.ObjArray,tvo);
   tvo^.bp.ListPos.Owner:=own;
   result := tvo;
@@ -347,8 +347,8 @@ begin
      pentvarext2:=net2.GetExtension<TVariablesExtender>;
      pvd1:=pentvarext1.entityunit.FindVariable('NMO_Name');
      pvd2:=pentvarext2.entityunit.FindVariable('NMO_Name');
-     n1:=pstring(pvd1^.data.Instance)^;
-     n2:=pstring(pvd2^.data.Instance)^;
+     n1:=pstring(pvd1^.data.Addr.Instance)^;
+     n2:=pstring(pvd2^.data.Addr.Instance)^;
      if (n1='')and(n2='') then
                               result:={gdb.numerator.getnamenumber(el_unname_prefix)}0
 else if n1=n2 then
@@ -471,7 +471,7 @@ begin
                                      pl^.Formatentity(drawing,dc);
                                      //tpl:=GDBPointer(CreateObjFree(GDBLineID));
                                      {выдрано из CreateObjFree для отвязки от GDBManager}
-                                     GDBGetMem({$IFDEF DEBUGBUILD}'{Net.CreateObjFree.line}',{$ENDIF}GDBPointer(tpl), sizeof(GDBObjLine));
+                                     Getmem(GDBPointer(tpl), sizeof(GDBObjLine));
                                      //GDBObjLineInit(@self,tpl,drawing.GetLayerTable^.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, tv,ip.interceptcoord);
                                      {выдрано из GDBObjLineInit для отвязки от GDBManager}
                                      tpl^.init(@self,{drawing.GetLayerTable^.GetCurrentLayer}self.vp.Layer,sysvar.dwg.DWG_CLinew^,tv,ip.interceptcoord);
@@ -489,7 +489,7 @@ begin
                                      pl2^.FormatEntity(drawing,dc);
                                      //tpl:=GDBPointer(CreateObjFree(GDBLineID));
                                      {выдрано из CreateObjFree для отвязки от GDBManager}
-                                     GDBGetMem({$IFDEF DEBUGBUILD}'{Net.CreateObjFree.line}',{$ENDIF}GDBPointer(tpl), sizeof(GDBObjLine));
+                                     Getmem(GDBPointer(tpl), sizeof(GDBObjLine));
                                      //GDBObjLineInit(@self,tpl,drawing.GetLayerTable^.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, tv,ip.interceptcoord);
                                      {выдрано из GDBObjLineInit для отвязки от GDBManager}
                                      tpl^.init(@self,{drawing.GetLayerTable^.GetCurrentLayer}self.vp.Layer,sysvar.dwg.DWG_CLinew^,tv,ip.interceptcoord);
@@ -513,7 +513,7 @@ begin
      //exit;
      if graf.divide then
      begin
-          GDBGetMem({$IFDEF DEBUGBUILD}'{4BB9158C-D16F-4310-9770-3BC2F2AF82C9}',{$ENDIF}GDBPointer(TempNet),sizeof(GDBObjNet));
+          Getmem(GDBPointer(TempNet),sizeof(GDBObjNet));
           if GDBPlatformUInt(tempnet)=$229FEF0 then
                                   tempnet:=tempnet;
           TempNet^.initnul(nil);
@@ -524,7 +524,7 @@ begin
           PGDBObjGenericSubEntry(GetMainOwner)^
           {gdb.GetCurrentROOT}.AddObjectToObjArray{ObjArray.add}(@TempNet);
           //gdb.GetCurrentDWG.ObjRoot.ObjCasheArray.addnodouble(@TempNet);
-          ti.init({$IFDEF DEBUGBUILD}'{B106F951-AEAB-43B9-B0B9-B18827EACFE5}',{$ENDIF}100){%H-};
+          ti.init(100){%H-};
           for i:=0 to self.graf.Count-1 do
           begin
                tgf:=pgrafelement(graf.getDataMutable(i));
@@ -576,7 +576,7 @@ begin
      self.vp.layer:=@DefaultErrorLayer;// gdb.GetCurrentDWG.LayerTable.GetCurrentLayer {getaddres('EL_WIRES')};
      //vp.ID := GDBNetID;
      graf.init(10000);
-     riserarray.init({$IFDEF DEBUGBUILD}'{6D2E18F8-2C19-45B8-A12A-025849ABCDC2}',{$ENDIF}100);
+     riserarray.init(100);
      GetDXFIOFeatures.AddExtendersToEntity(@self);
      //uunitmanager.units.loadunit(expandpath('*CAD\rtl\objdefunits\elwire.pas'),@ou);
 end;
@@ -594,7 +594,7 @@ begin
 end;
 function UpgradeLine2Net(ptu:PExtensionData;pent:PGDBObjLine;const drawing:TDrawingDef):PGDBObjNet;
 begin
-   GDBGetMem({$IFDEF DEBUGBUILD}'{2D9DEF3C-7BC8-43F0-AA83-37B5F9517A0D}',{$ENDIF}pointer(result),sizeof(GDBObjNet));
+   Getmem(pointer(result),sizeof(GDBObjNet));
    result^.initnul(pent^.bp.ListPos.Owner);
    pent.CopyVPto(result^);
    //result.vp.Layer:=pent^.vp.Layer;
@@ -602,7 +602,7 @@ begin
 end;
 function AllocNet:PGDBObjNet;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocElLeader}',{$ENDIF}result,sizeof(GDBObjNet));
+  Getmem(result,sizeof(GDBObjNet));
 end;
 function AllocAndInitNet(owner:PGDBObjGenericWithSubordinated):PGDBObjNet;
 begin

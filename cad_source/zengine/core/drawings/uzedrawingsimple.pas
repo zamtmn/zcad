@@ -115,7 +115,7 @@ begin
      if tdesc<>nil then
      if PEntity^.IsHaveGRIPS then
      begin
-       GDBGetMem({$IFDEF DEBUGBUILD}'{B50BE8C9-E00A-40C0-A051-230877BD3A56}',{$ENDIF}GDBPointer(tdesc^.pcontrolpoint),sizeof(GDBControlPointArray));
+       Getmem(GDBPointer(tdesc^.pcontrolpoint),sizeof(GDBControlPointArray));
        PGripsCreator^.addcontrolpoints(tdesc);
      end;
      PEntity^.bp.ListPos.Owner.ImSelected(@self,PEntity^.bp.ListPos.SelfIndex);
@@ -373,7 +373,7 @@ function CreateSimpleDWG:PTSimpleDrawing;
 //var
    //ptd:PTSimpleDrawing;
 begin
-     gdBGetMem({$IFDEF DEBUGBUILD}'{2A28BFB9-661F-4331-955A-C6F18DE67A19}',{$ENDIF}GDBPointer(result),sizeof(TSimpleDrawing));
+     Getmem(GDBPointer(result),sizeof(TSimpleDrawing));
      //ptd:=currentdwg;
      //currentdwg:=pointer(result);
      result^.init(nil);//(@units);
@@ -516,7 +516,7 @@ begin
 
           //PGDBObjGenericWithSubordinated(obj^.bp.owner)^.ImEdited({@self}obj,obj^.bp.PSelfInOwnerArray);
           PSelectedObjDesc(md).ptempobj^.done;
-          GDBFreeMem(GDBPointer(PSelectedObjDesc(md).ptempobj));
+          Freemem(GDBPointer(PSelectedObjDesc(md).ptempobj));
           PSelectedObjDesc(md).ptempobj:=nil;
      end
      else
@@ -665,7 +665,7 @@ begin
      if assigned(pcamera) then
                            begin
                                 pcamera^.done;
-                                GDBFreeMem(pointer(pcamera));
+                                Freemem(pointer(pcamera));
                            end;
 end;
 constructor TSimpleDrawing.init;
@@ -685,7 +685,7 @@ begin
   internalcamera:=false;
   if pcamera=nil then
                      begin
-                     GDBGetMem({$IFDEF DEBUGBUILD}'{4B7A0493-E8D6-4F24-BB70-C9C246A351BA}',{$ENDIF}pointer(pcamera), sizeof(GDBObjCamera));
+                     Getmem(pointer(pcamera), sizeof(GDBObjCamera));
                      pcamera^.initnul;
                      internalcamera:=true;
 
@@ -709,21 +709,21 @@ begin
                        pcamera.zmax:=100000.0;
                        pcamera.fovy:=35.0;
                      end;
-  LTypeStyleTable.init({$IFDEF DEBUGBUILD}'{2BF47561-AEBD-4159-BF98-FCBA81DAD595}',{$ENDIF}100);
-  LayerTable.init({$IFDEF DEBUGBUILD}'{6AFCB58D-9C9B-4325-A00A-C2E8BDCBE1DD}',{$ENDIF}200,LTypeStyleTable.GetSystemLT(TLTContinous));
-  DimStyleTable.init({$IFDEF DEBUGBUILD}'{C354FF9D-E581-4E5A-AFE0-09AE87DEC2F0}',{$ENDIF}100);
+  LTypeStyleTable.init(100);
+  LayerTable.init(200,LTypeStyleTable.GetSystemLT(TLTContinous));
+  DimStyleTable.init(100);
   mainobjroot.initnul;
   mainobjroot.vp.Layer:=LayerTable.GetSystemLayer;
   pObjRoot:=@mainobjroot;
   ConstructObjRoot.initnul;
   ConstructObjRoot.vp.Layer:=LayerTable.GetSystemLayer;
-  SelObjArray.init({$IFDEF DEBUGBUILD}'{0CC3A9A3-B9C2-4FB5-BFB1-8791C261C577} - SelObjArray',{$ENDIF}65535);
-  OnMouseObj.init({$IFDEF DEBUGBUILD}'{85654C90-FF49-4272-B429-4D134913BC26} - OnMouseObj',{$ENDIF}20);
+  SelObjArray.init(65535);
+  OnMouseObj.init(20);
 
   //pcamera^.initnul;
-  //ConstructObjRoot.init({$IFDEF DEBUGBUILD}'{B1036F20-562D-4B17-A33A-61CF3F5F2A90} - ConstructObjRoot',{$ENDIF}1);
+  //ConstructObjRoot.init(1);
 
-  TextStyleTable.init({$IFDEF DEBUGBUILD}'{146FC836-1490-4046-8B09-863722570C9F}',{$ENDIF}200);
+  TextStyleTable.init(200);
   //tp.size:=2.5;
   //tp.oblique:=0;
 
@@ -732,10 +732,10 @@ begin
   //TextStyleTable.addstyle('R2_5','romant.shx',tp);
   //TextStyleTable.addstyle('standart','txt.shx',tp);
 
-  BlockDefArray.init({$IFDEF DEBUGBUILD}'{D53DA395-A6A2-4FDD-842D-A52E6385E2DD}',{$ENDIF}100);
+  BlockDefArray.init(100);
   Numerator.init(10);
 
-  TableStyleTable.init({$IFDEF DEBUGBUILD}'{E5CE9274-01D8-4D19-AF2E-D1AB116B5737}',{$ENDIF}10);
+  TableStyleTable.init(10);
 
   PTempTableStyle:=TableStyleTable.AddStyle('Temp');
 

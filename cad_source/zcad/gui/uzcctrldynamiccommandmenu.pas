@@ -105,7 +105,7 @@ begin
 
 
 
-  GDBGetMem({$IFDEF DEBUGBUILD}'{2C132A7B-BFC1-4BA8-AF27-9F7DF19F69F7}',{$ENDIF}GDBPointer(result),sizeof(ZButtonGeneric));
+  Getmem(GDBPointer(result),sizeof(ZButtonGeneric));
   result^.initxywh(Text,hText,@self,0,yy,ww,statusbarclientheight,true);
   result^.align:=al_clientw;
 	SelectObject(_dc, hfntOld);

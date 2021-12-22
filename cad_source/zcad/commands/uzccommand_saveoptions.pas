@@ -35,7 +35,7 @@ function SaveOptions_com(operands:TCommandOperands):TCommandResult;
 var
    mem:GDBOpenArrayOfByte;
 begin
-  mem.init({$IFDEF DEBUGBUILD}'{A1891083-67C6-4C21-8012-6D215935F6A6}',{$ENDIF}1024);
+  mem.init(1024);
   SysVarUnit^.SavePasToMem(mem);
   mem.SaveToFile(expandpath(ProgramPath+'rtl/sysvar.pas'));
   mem.done;

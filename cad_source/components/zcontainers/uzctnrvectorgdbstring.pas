@@ -215,7 +215,7 @@ begin
 end;
 constructor TZctnrVectorGDBString.init(m:GDBInteger);
 begin
-     inherited init({$IFDEF DEBUGBUILD}'{C4288C8A-7E49-4F97-9F66-347B38494638}',{$ENDIF}m{,sizeof(GDBString)});
+     inherited init(m);
 end;
 procedure TZctnrVectorGDBString.loadfromfile(fname:GDBString);
 var f:GDBOpenArrayOfByte;

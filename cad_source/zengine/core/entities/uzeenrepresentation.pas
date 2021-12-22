@@ -33,7 +33,7 @@ TZEntityRepresentation= object(GDBaseObject)
                        Graphix:ZGLGraphix;
                        Geometry:TGeomEntTreeNode;
                        {-}public{//}
-                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar{$ENDIF});
+                       constructor init();
                        destructor done;virtual;
 
                        function CalcTrueInFrustum(frustum:ClipArray; FullCheck:boolean):TInBoundingVolume;
@@ -58,7 +58,7 @@ end;
 constructor TZEntityRepresentation.init;
 begin
   inherited;
-  Graphix.init({$IFDEF DEBUGBUILD}ErrGuid{$ENDIF});
+  Graphix.init();
   Geometry.initnul;
 end;
 destructor TZEntityRepresentation.done;

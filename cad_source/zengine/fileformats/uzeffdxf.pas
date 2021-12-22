@@ -60,9 +60,6 @@ const
      (entname:'SPLINE'),
      (entname:'DIMENSION')
      );}
-{$IFDEF DEBUGBUILD}
-var i2:GDBInteger;
-{$ENDIF}
 var FOC:GDBInteger;
     CreateExtLoadData:TCreateExtLoadData=nil;
     ClearExtLoadData:TProcessExtLoadData=nil;
@@ -356,8 +353,6 @@ begin
       begin
         if VerboseLog^ then
           debugln('{D+}[DXF_CONTENTS]AddEntitiesFromDXF.Found primitive ',s);
-        {$IFDEF DEBUGBUILD}inc(i2);if i2=4349 then
-                                                  i2:=i2;{$ENDIF}
         pobj := EntInfoData.AllocAndInitEntity(nil);
         //pobj := {po^.CreateInitObj(objid,owner)}CreateInitObjFree(objid,nil);
         PGDBObjEntity(pobj)^.LoadFromDXF(f,{@additionalunit}PExtLoadData,drawing);
@@ -422,7 +417,7 @@ begin
                                    else
                                        begin
                                  pobj^.done;
-                                 GDBFreeMem(pointer(pobj));
+                                 Freemem(pointer(pobj));
 
                                        end;
 
@@ -486,10 +481,10 @@ begin
                                                         end;}
                                        //вытираем потеряный примитив
                                        postobj^.done;
-                                       GDBFreeMem(pointer(postobj));
+                                       Freemem(pointer(postobj));
                                        end;
                                    pobj^.done;
-                                   GDBFreeMem(pointer(pobj));
+                                   Freemem(pointer(pobj));
                             end;
        if VerboseLog^ then
          debugln('{D-}[DXF_CONTENTS]End primitive ',s);
@@ -607,7 +602,7 @@ begin
          //programlog.LogOutStr('end {entities section}',lp_DecPos,LM_Debug);
     end;
   end;
-  //GDBFreeMem(GDBPointer(phandlearray));
+  //Freemem(GDBPointer(phandlearray));
   context.h2p.Destroy;
   lps.EndLongProcess(lph);
   debugln('{D-}end; {AddFromDXF12}');
@@ -1512,7 +1507,7 @@ begin
   owner^.calcbb(dc);
   context.h2p.Destroy;
   DWGVarsDict.destroy;
-  //GDBFreeMem(GDBPointer(phandlearray));
+  //Freemem(GDBPointer(phandlearray));
   end
      else
          DebugLn('{EM}'+'IODXF.ADDFromDXF: Не могу открыть файл: '+name);
@@ -1688,7 +1683,7 @@ begin
                             then olddwg:=SetCurrentDWGProc(@drawing);*)
   //gdb.SetCurrentDWG(pdrawing);
   //--------------------------outstream := FileCreate(name);
-  outstream.init({$IFDEF DEBUGBUILD}'{51453949-893A-49C2-9588-42B25346D071}',{$ENDIF}10*1024*1024);
+  outstream.init(10*1024*1024);
   //--------------------------if outstream>0 then
   begin
     lph:=lps.StartLongProcess('Save DXF file',@outstream,drawing.pObjRoot^.ObjArray.Count);
@@ -2735,7 +2730,7 @@ ENDTAB}
   //-------------fileclose(outstream);
 
 
-  //GDBFreeMem(GDBPointer(phandlea));
+  //Freemem(GDBPointer(phandlea));
   OldHandele2NewHandle.Destroy;
   templatefile.done;
 
@@ -2842,7 +2837,7 @@ begin
      HistoryOutStr('ZCad project file v'+inttostr(FileHeader.HiVersion)+'.'+inttostr(FileHeader.LoVersion));
      HistoryOutStr('File coment: '+FileHeader.Coment);
      memorybuf.Seek(FileHeader.OffsetTable.GDBRT);
-     GDBGetMem({$IFDEF DEBUGBUILD}'{E975EEDE-66A9-4391-8E28-17537B7A2C9C}',{$ENDIF}pointer(linkbyf),sizeof(GDBOpenArrayOfTObjLinkRecord));
+     Getmem(pointer(linkbyf),sizeof(GDBOpenArrayOfTObjLinkRecord));
      sysunit.TypeName2PTD('GDBOpenArrayOfTObjLinkRecord')^.DeSerialize(linkbyf,SA_SAVED_TO_SHD,memorybuf,nil);
      memorybuf.Seek(FileHeader.OffsetTable.GDB);
      fillchar(gdb^,sizeof(GDBDescriptor),0);
@@ -2861,11 +2856,11 @@ begin
                               shd_block_primitiv:begin
                                                       FileRead(infile,objcount,sizeof(objcount));
                                                       header.blocksize:=header.blocksize-sizeof(objcount);
-                                                      GDBGetMem({$IFDEF DEBUGBUILD}'{01399BB7-5744-4DFE-97C3-00F5E501275C}',{$ENDIF}pmem,header.blocksize);
+                                                      Getmem(pmem,header.blocksize);
                                                       FileRead(infile,pmem^,header.blocksize);
                                                       tmem:=pmem;
                                                       //gdb.ObjRoot.ObjArray.LoadCompactMemSize2(tmem,objcount);
-                                                      GDBFreeMem(pmem);
+                                                      Freemem(pmem);
                                                  end;
                                             else begin
                                                       FileSeek(infile,header.blocksize,1)
@@ -2876,7 +2871,7 @@ begin
      fileclose(infile);*)
 end;
 begin
-     i2:=0;
+     //i2:=0;
      FOC:=0;
      Ext2LoadProcMap.RegisterExt('dxf','AutoCAD DXF files (*.dxf)',@addfromdxf,true);
      DefaultFormatSettings.DecimalSeparator:='.';

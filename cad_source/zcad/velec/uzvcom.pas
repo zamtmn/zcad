@@ -1373,10 +1373,10 @@ begin
      begin
        haveName:=true;
        pvd:=FindVariableInEnt(graph.listVertex[i].deviceEnt,'RiserName');
-       nameBreak:=pgdbstring(pvd^.data.Instance)^;
+       nameBreak:=pgdbstring(pvd^.data.Addr.Instance)^;
        pvd:=FindVariableInEnt(graph.listVertex[i].deviceEnt,'Elevation');
        infoVertex.num:=i;
-       infoVertex.level:=PGDBDouble(pvd^.data.Instance)^;
+       infoVertex.level:=PGDBDouble(pvd^.data.Addr.Instance)^;
 
        graph.listVertex.Mutable[i]^.break:=true;
        graph.listVertex.Mutable[i]^.breakName:=nameBreak;
@@ -1538,11 +1538,11 @@ begin
            begin
              pSuperLine:=PGDBObjSuperLine(pobj);
              pvd:=FindVariableInEnt(pSuperLine,'NMO_Name');
-             tempName:=pgdbstring(pvd^.data.Instance)^;
+             tempName:=pgdbstring(pvd^.data.Addr.Instance)^;
              if nameCable=tempName then
                begin
                  infoCable.cableEnt:=pSuperLine;
-                 //infoCable.typeMount:=pgdbstring(FindVariableInEnt(pSuperLine,'Cable_Mounting_Method')^.data.Instance)^;
+                 //infoCable.typeMount:=pgdbstring(FindVariableInEnt(pSuperLine,'Cable_Mounting_Method')^.Instance)^;
                  infoCable.stPoint:=pSuperLine^.CoordInOCS.lBegin;
                  infoCable.stPoint.z:=0;
                  infoCable.edPoint:=pSuperLine^.CoordInOCS.lEnd;
@@ -1833,10 +1833,10 @@ begin
          pvd:=FindVariableInEnt(pSuperLine,'NMO_Name');
          isname:=true;
          for name in listSLname do
-           if name = pgdbstring(pvd^.data.Instance)^ then
+           if name = pgdbstring(pvd^.data.Addr.Instance)^ then
              isname:=false;
          if isname then
-            listSLname.PushBack(pgdbstring(pvd^.data.Instance)^);
+            listSLname.PushBack(pgdbstring(pvd^.data.Addr.Instance)^);
         end;
       pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir); //переход к следующем примитиву в списке выбраных примитивов
     until pobj=nil;
@@ -1872,7 +1872,7 @@ end;
          if ourGraph.listVertex[i].deviceEnt<>nil then
          begin
              pvd:=FindVariableInEnt(ourGraph.listVertex[i].deviceEnt,'DB_link');
-             ZCMsgCallBackInterface.TextMessage(pgdbstring(pvd^.data.Instance)^);
+             ZCMsgCallBackInterface.TextMessage(pgdbstring(pvd^.Instance)^);
          end;
          testTempDrawCircle(ourGraph.listVertex[i].centerPoint,Epsilon);
       end;

@@ -32,42 +32,38 @@ type
 TBaseTypeManipulator<T>=class
 type
  PT=^T;
+ class function Compare(const left,right:T):TCompareResult;
+ class procedure Initialize(var Instance:T);
 end;
 TOrdinalTypeManipulator<T>=class(TBaseTypeManipulator<T>)
   class function GetValueAsString(const data:T):TInternalScriptString;
   class function GetFormattedValueAsString(const data:T; const f:TzeUnitsFormat):TInternalScriptString;
   class procedure SetValueFromString(var data:T;Value:TInternalScriptString);
-  class function Compare(const left,right:T):TCompareResult;
 end;
 TBoolTypeManipulator<T>=class(TBaseTypeManipulator<T>)
   class function GetValueAsString(const data:T):TInternalScriptString;
   class function GetFormattedValueAsString(const data:T; const f:TzeUnitsFormat):TInternalScriptString;
   class procedure SetValueFromString(var data:T;Value:TInternalScriptString);
-  class function Compare(const left,right:T):TCompareResult;
 end;
 TFloatTypeManipulator<T>=class(TBaseTypeManipulator<T>)
   class function GetValueAsString(const data:T):TInternalScriptString;
   class function GetFormattedValueAsString(const data:T; const f:TzeUnitsFormat):TInternalScriptString;
   class procedure SetValueFromString(var data:T;Value:TInternalScriptString);
-  class function Compare(const left,right:T):TCompareResult;
 end;
 TStringTypeManipulator<T>=class(TBaseTypeManipulator<T>)
   class function GetValueAsString(const data:T):TInternalScriptString;
   class function GetFormattedValueAsString(const data:T; const f:TzeUnitsFormat):TInternalScriptString;
   class procedure SetValueFromString(var data:T;Value:TInternalScriptString);
-  class function Compare(const left,right:T):TCompareResult;
 end;
 TAnsiStringTypeManipulator<T>=class(TBaseTypeManipulator<T>)
   class function GetValueAsString(const data:T):TInternalScriptString;
   class function GetFormattedValueAsString(const data:T; const f:TzeUnitsFormat):TInternalScriptString;
   class procedure SetValueFromString(var data:T;Value:TInternalScriptString);
-  class function Compare(const left,right:T):TCompareResult;
 end;
 TPointerTypeManipulator<T>=class(TBaseTypeManipulator<T>)
   class function GetValueAsString(const data:T):TInternalScriptString;
   class function GetFormattedValueAsString(const data:T; const f:TzeUnitsFormat):TInternalScriptString;
   class procedure SetValueFromString(var data:T;Value:TInternalScriptString);
-  class function Compare(const left,right:T):TCompareResult;
 end;
 PBaseTypeDescriptor=^{BaseTypeDescriptor}TUserTypeDescriptor;
 BaseTypeDescriptor<T,TManipulator>=object(TUserTypeDescriptor)
@@ -79,6 +75,8 @@ BaseTypeDescriptor<T,TManipulator>=object(TUserTypeDescriptor)
                          function GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;virtual;
                          function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
                          procedure SetValueFromString(PInstance:Pointer;Value:TInternalScriptString);virtual;
+                         procedure InitInstance(PInstance:Pointer);virtual;
+                         function AllocInstance:Pointer;virtual;
                    end;
 TBTM_Boolean=TBoolTypeManipulator<Boolean>;
 GDBBooleanDescriptor=object(BaseTypeDescriptor<boolean,{TBoolTypeManipulator<boolean>}TBTM_Boolean>)
@@ -143,13 +141,6 @@ TEnumDataDescriptor=object(BaseTypeDescriptor<TEnumData,{TOrdinalTypeManipulator
                      function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
                      destructor Done;virtual;
                end;
-(*function MyDataToStr(data:LongInt):string;overload;
-function MyDataToStr(data:boolean):string;overload;
-function MyDataToStr(data:double):string;overload;
-function MyDataToStr(data:float):string;overload;
-function MyDataToStr(data:string):string;overload;
-function MyDataToStr(data:pointer):string;overload;
-function MyDataToStr(data:TEnumData):string;overload;*)
 
 var
 FundamentalDoubleDescriptorObj:GDBDoubleDescriptor;
@@ -176,6 +167,24 @@ AliasPtrUIntDescriptorOdj:GDBSinonimDescriptor;
 AliasPtrIntDescriptorOdj:GDBSinonimDescriptor;
 AliasUInt64DescriptorOdj:GDBSinonimDescriptor;
 implementation
+class function TBaseTypeManipulator<T>.Compare(const left,right:T):TCompareResult;
+begin
+     if left<>right
+     then
+       begin
+            if left<right then
+                              result:=CRLess
+                          else
+                              result:=CRGreater;
+       end
+     else
+         result:=CREqual;
+end;
+class procedure TBaseTypeManipulator<T>.Initialize(var Instance:T);
+begin
+   system.initialize(Instance);
+end;
+
 (*function MyDataToStr(data:LongInt):string;overload;
 begin
      result:=inttostr(data);
@@ -294,19 +303,6 @@ class function TOrdinalTypeManipulator<T>.GetFormattedValueAsString(const data:T
 begin
    result:=GetValueAsString(data);
 end;
-class function TOrdinalTypeManipulator<T>.Compare(const left,right:T):TCompareResult;
-begin
-     if left<>right
-     then
-       begin
-            if left<right then
-                              result:=CRLess
-                          else
-                              result:=CRGreater;
-       end
-     else
-         result:=CREqual;
-end;
 class function TFloatTypeManipulator<T>.GetValueAsString(const data:T):TInternalScriptString;
 begin
     //Str(data:10:10,result);
@@ -327,19 +323,6 @@ begin
      if error=0 then
                     data:=td;
 end;
-class function TFloatTypeManipulator<T>.Compare(const left,right:T):TCompareResult;
-begin
-     if left<>right
-     then
-       begin
-            if left<right then
-                              result:=CRLess
-                          else
-                              result:=CRGreater;
-       end
-     else
-         result:=CREqual;
-end;
 
 class function TStringTypeManipulator<T>.GetValueAsString(const data:T):TInternalScriptString;
 begin
@@ -352,19 +335,6 @@ end;
 class procedure TStringTypeManipulator<T>.SetValueFromString(var data:T;Value:TInternalScriptString);
 begin
      data:=cp2uni(Value);
-end;
-class function TStringTypeManipulator<T>.Compare(const left,right:T):TCompareResult;
-begin
-     if left<>right
-     then
-       begin
-            if left<right then
-                              result:=CRLess
-                          else
-                              result:=CRGreater;
-       end
-     else
-         result:=CREqual;
 end;
 
 
@@ -380,19 +350,6 @@ class procedure TAnsiStringTypeManipulator<T>.SetValueFromString(var data:T;Valu
 begin
      data:=cp2ansi(Value);
 end;
-class function TAnsiStringTypeManipulator<T>.Compare(const left,right:T):TCompareResult;
-begin
-     if left<>right
-     then
-       begin
-            if left<right then
-                              result:=CRLess
-                          else
-                              result:=CRGreater;
-       end
-     else
-         result:=CREqual;
-end;
 
 class function TBoolTypeManipulator<T>.GetValueAsString(const data:T):TInternalScriptString;
 begin
@@ -405,19 +362,6 @@ end;
 class function TBoolTypeManipulator<T>.GetFormattedValueAsString(const data:T; const f:TzeUnitsFormat):TInternalScriptString;
 begin
    result:=GetValueAsString(data);
-end;
-class function TBoolTypeManipulator<T>.Compare(const left,right:T):TCompareResult;
-begin
-     if left<>right
-     then
-       begin
-            if left<right then
-                              result:=CRLess
-                          else
-                              result:=CRGreater;
-       end
-     else
-         result:=CREqual;
 end;
 constructor BaseTypeDescriptor<T,TManipulator>.init(tname:string;pu:pointer);
 begin
@@ -483,6 +427,14 @@ procedure BaseTypeDescriptor<T,TManipulator>.SetValueFromString;
 begin
   TManipulator.SetValueFromString(TManipulator.pt(PInstance)^,Value);
 end;
+procedure BaseTypeDescriptor<T,TManipulator>.InitInstance(PInstance:Pointer);
+begin
+  TManipulator.Initialize(TManipulator.pt(PInstance)^);
+end;
+function BaseTypeDescriptor<T,TManipulator>.AllocInstance:Pointer;
+begin
+  Getmem(result,SizeOf(TManipulator.pt));
+end;
 procedure GDBStringGeneralDescriptor<T,TManipulator>.CopyInstanceTo;
 begin
      PT(dest)^:=PT(source)^;
@@ -515,19 +467,6 @@ end;
 class function TPointerTypeManipulator<T>.GetFormattedValueAsString(const data:T; const f:TzeUnitsFormat):TInternalScriptString;
 begin
    result:=GetValueAsString(data);
-end;
-class function TPointerTypeManipulator<T>.Compare(const left,right:T):TCompareResult;
-begin
-     if left<>right
-     then
-       begin
-            if left<right then
-                              result:=CRLess
-                          else
-                              result:=CRGreater;
-       end
-     else
-         result:=CREqual;
 end;
 procedure GDBStringDescriptor.SavePasToMem;
 begin

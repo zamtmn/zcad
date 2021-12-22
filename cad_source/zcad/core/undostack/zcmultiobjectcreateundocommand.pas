@@ -55,7 +55,7 @@ constructor TGMultiObjectProcessCommand.Assign(const _dodata,_undodata:tmethod;c
 begin
      DoData:=_DoData;
      UnDoData:=_UnDoData;
-     self.ObjArray.init({$IFDEF DEBUGBUILD}'{108FD060-E408-4161-9548-64EEAFC3BEB2}',{$ENDIF}objcount);
+     self.ObjArray.init(objcount);
      FreeArray:={false}true;
 end;
 procedure TGMultiObjectProcessCommand.AddObject(PObject:PGDBaseObject);
@@ -115,7 +115,7 @@ end;
 
 function {TZctnrVectorUndoCommands.}CreateMultiObjectCreateCommand(var dodata,undodata:tmethod;objcount:integer):PTGDBMultiCreateCommand;overload;
 begin
-     gdbgetmem({$IFDEF DEBUGBUILD}'{9FE25B12-DEE0-410A-BDCD-7E69A41E4389}',{$ENDIF}result,sizeof(TGDBMultiCreateCommand));
+     Getmem(result,sizeof(TGDBMultiCreateCommand));
      result^.Assign(dodata,undodata,objcount);
 end;
 function {TZctnrVectorUndoCommands.}PushMultiObjectCreateCommand(var us:TZctnrVectorUndoCommands; var dodata,undodata:tmethod;objcount:integer):PTGDBMultiCreateCommand;overload;

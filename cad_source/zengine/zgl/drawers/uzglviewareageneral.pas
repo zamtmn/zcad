@@ -1720,7 +1720,7 @@ begin
      param.init;
      SetMouseMode((MGetControlpoint) or (MGetSelectObject) or (MMoveCamera) or (MRotateCamera) or (MGetSelectionFrame));
 
-     PolarAxis.init({$IFDEF DEBUGBUILD}'{5AD9927A-0312-4844-8C2D-9498647CCECB}',{$ENDIF}10);
+     PolarAxis.init(10);
 
      for i := 0 to 4 - 1 do
      begin
@@ -2746,7 +2746,7 @@ begin
   PDWG.myGluProject2(param.ospoint.worldcoord,
              param.ospoint.dispcoord);
   if not sysvarDWGPolarMode then exit;
-  //param.ospoint.arrayworldaxis.init({$IFDEF DEBUGBUILD}'{8BE71BAA-507B-4D6B-BE2C-63693022090C}',{$ENDIF}4);
+  //param.ospoint.arrayworldaxis.init(4);
   param.ospoint.arrayworldaxis.clear;
   pv:=polaraxis.GetParrayAsPointer;
   for i:=0 to polaraxis.Count-1 do
@@ -2756,7 +2756,7 @@ begin
   end;
   //if param.ospoint.PGDBObject<>nil then
   begin
-  objects.init({$IFDEF DEBUGBUILD}'{8BE71BAA-507B-4D6B-BE2C-63693022090C}',{$ENDIF}100);
+  objects.init(100);
   if PDWG.GetCurrentROOT.FindObjectsInPoint(param.ospoint.worldcoord,Objects) then
   begin
                        pobj:=objects.beginiterate(ir);
@@ -2774,7 +2774,7 @@ begin
   objects.Done;
   if param.processObjConstruct then
   begin
-  objects.init({$IFDEF DEBUGBUILD}'{8BE71BAA-507B-4D6B-BE2C-63693022090C}',{$ENDIF}100);
+  objects.init(100);
   if PDWG.GetConstructObjRoot.FindObjectsInPointSlow(param.ospoint.worldcoord,Objects) then
   begin
                        pobj:=objects.beginiterate(ir);
@@ -2789,13 +2789,13 @@ begin
   end;
   end;
   project0axis;
-  {GDBGetMem(param.ospoint.arrayworldaxis, sizeof(GDBWord) + param.ppolaraxis^.count * sizeof(gdbvertex));
+  {Getmem(param.ospoint.arrayworldaxis, sizeof(GDBWord) + param.ppolaraxis^.count * sizeof(gdbvertex));
   Move(param.ppolaraxis^, param.ospoint.arrayworldaxis^, sizeof(GDBWord) + param.ppolaraxis^.count * sizeof(gdbvertex));}
   PDWG.myGluProject2(param.ospoint.worldcoord,
              param.ospoint.dispcoord);
-  //param.ospoint.arraydispaxis.init({$IFDEF DEBUGBUILD}'{722A886F-5616-4E8F-B94D-3A1C3D7ADBD4}',{$ENDIF}param.ospoint.arrayworldaxis.count);
+  //param.ospoint.arraydispaxis.init(param.ospoint.arrayworldaxis.count);
   param.ospoint.arraydispaxis.clear;
-  //GDBGetMem(param.ospoint.arraydispaxis, sizeof(GDBWord) + param.ospoint.arrayworldaxis.count * sizeof(traceprop));
+  //Getmem(param.ospoint.arraydispaxis, sizeof(GDBWord) + param.ospoint.arrayworldaxis.count * sizeof(traceprop));
   //param.ospoint.arraydispaxis.count := param.ospoint.arrayworldaxis.count;
   pv:=param.ospoint.arrayworldaxis.GetParrayAsPointer;
   for i := 0 to param.ospoint.arrayworldaxis.count - 1 do
@@ -2836,7 +2836,7 @@ begin
              param.ospoint.dispcoord);
   //if not assigned(sysvar.dwg.DWG_PolarMode) then exit;
   if not sysvarDWGPolarMode then exit;
-  //param.ontrackarray.otrackarray[0].arrayworldaxis.init({$IFDEF DEBUGBUILD}'{8BE71BAA-507B-4D6B-BE2C-63693022090C}',{$ENDIF}4);
+  //param.ontrackarray.otrackarray[0].arrayworldaxis.init(4);
   param.ontrackarray.otrackarray[0].arrayworldaxis.clear;
   pv:=polaraxis.GetParrayAsPointer;
   for i:=0 to polaraxis.Count-1 do
@@ -2847,7 +2847,7 @@ begin
 
   if tocommandmcliccount>0 then
   begin
-  objects.init({$IFDEF DEBUGBUILD}'{8BE71BAA-507B-4D6B-BE2C-63693022090C}',{$ENDIF}100);
+  objects.init(100);
   if PDWG.GetCurrentROOT.FindObjectsInPoint(param.ontrackarray.otrackarray[0].worldcoord,Objects) then
   begin
                        pobj:=objects.beginiterate(ir);
@@ -2861,7 +2861,7 @@ begin
   objects.Done;
                        if param.processObjConstruct then
                        begin
-  objects.init({$IFDEF DEBUGBUILD}'{8BE71BAA-507B-4D6B-BE2C-63693022090C}',{$ENDIF}100);
+  objects.init(100);
   if PDWG.GetConstructObjRoot.FindObjectsInPointSlow(param.ontrackarray.otrackarray[0].worldcoord,Objects) then
   begin
                        pobj:=objects.beginiterate(ir);
@@ -2887,16 +2887,16 @@ var
   pv: pgdbvertex;
   i: GDBInteger;
 begin
-  {GDBGetMem(param.ospoint.arrayworldaxis, sizeof(GDBWord) + param.ppolaraxis
+  {Getmem(param.ospoint.arrayworldaxis, sizeof(GDBWord) + param.ppolaraxis
     ^.count * sizeof(gdbvertex));
   Move(param.ppolaraxis^, param.ospoint.arrayworldaxis^, sizeof(GDBWord) +
     param.ppolaraxis^.count * sizeof(gdbvertex)); }
   {gdb.GetCurrentDWG^}pdwg.myGluProject2(param.ontrackarray.otrackarray[0
     ].worldcoord,
              param.ontrackarray.otrackarray[0].dispcoord);
-  //param.ontrackarray.otrackarray[0].arraydispaxis.init({$IFDEF DEBUGBUILD}'{722A886F-5616-4E8F-B94D-3A1C3D7ADBD4}', {$ENDIF}    param.ontrackarray.otrackarray[0].arrayworldaxis.count);
+  //param.ontrackarray.otrackarray[0].arraydispaxis.init(param.ontrackarray.otrackarray[0].arrayworldaxis.count);
   param.ontrackarray.otrackarray[0].arraydispaxis.clear;
-  //GDBGetMem(param.ospoint.arraydispaxis, sizeof(GDBWord) +param.ospoint.arrayworldaxis.count * sizeof(traceprop));
+  //Getmem(param.ospoint.arraydispaxis, sizeof(GDBWord) +param.ospoint.arrayworldaxis.count * sizeof(traceprop));
   //param.ospoint.arraydispaxis.count := param.ospoint.arrayworldaxis.count;
   pv:=param.ontrackarray.otrackarray[0].arrayworldaxis.GetParrayAsPointer;
   for i := 0 to param.ontrackarray.otrackarray[0].arrayworldaxis.count - 1 do

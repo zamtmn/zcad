@@ -262,7 +262,7 @@ begin
   //vp.ID := GDBCircleID;
   Radius := 1;
   PProjoutbound:=nil;
-  Vertex3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{A9E5DE52-33D2-4658-A53E-986711DFBD14}',{$ENDIF}100);
+  Vertex3D_in_WCS_Array.init(100);
 end;
 constructor GDBObjCircle.init;
 begin
@@ -275,7 +275,7 @@ begin
   Radius := rr;
   //ObjToGDBString('','');
   PProjoutbound:=nil;
-  Vertex3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{B3C847F9-E9DE-4B69-883A-B6D322142B0B}',{$ENDIF}100);
+  Vertex3D_in_WCS_Array.init(100);
   //format;
 end;
 function GDBObjCircle.GetObjType;
@@ -347,8 +347,8 @@ begin
 
   if PProjoutbound=nil then
   begin
-       GDBGetMem({$IFDEF DEBUGBUILD}'{692F5C82-E281-44D3-8156-ECC07AFB2FBC}',{$ENDIF}GDBPointer(PProjoutbound),sizeof(GDBOOutbound2DIArray));
-       PProjoutbound^.init({$IFDEF DEBUGBUILD}'{0793766F-F818-48DA-918B-D9326DB90240}',{$ENDIF}4);
+       Getmem(GDBPointer(PProjoutbound),sizeof(GDBOOutbound2DIArray));
+       PProjoutbound^.init(4);
   end;
 end;
 procedure GDBObjCircle.createpoint(var DC:TDrawContext);
@@ -506,7 +506,7 @@ end;
 function GDBObjCircle.Clone;
 var tvo: PGDBObjCircle;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{0238E343-798C-4E03-9518-0F251F8F4F80}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjCircle));
+  Getmem(GDBPointer(tvo), sizeof(GDBObjCircle));
   tvo^.init(CalcOwner(own),vp.Layer, vp.LineWeight, Local.p_insert, Radius);
   tvo^.local:=local;
   CopyVPto(tvo^);
@@ -730,7 +730,7 @@ end;
 procedure GDBObjCircle.addcontrolpoints(tdesc:GDBPointer);
 var pdesc:controlpointdesc;
 begin
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.init({$IFDEF DEBUGBUILD}'{8B6B9276-7E44-4F66-AE81-AAED0879173A}',{$ENDIF}5);
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(5);
           pdesc.selected:=false;
           pdesc.pobject:=nil;
           pdesc.pointtype:=os_center;
@@ -770,7 +770,7 @@ begin
 end;
 function GDBObjCircle.beforertmodify;
 begin
-     GDBGetMem({$IFDEF DEBUGBUILD}'{AC2C102F-944D-4CF8-A111-0DB5CCFB51C8}',{$ENDIF}result,sizeof(tcirclertmodify));
+     Getmem(result,sizeof(tcirclertmodify));
      fillchar(result^,sizeof(tcirclertmodify),0);
 end;
 function GDBObjCircle.IsRTNeedModify(const Point:PControlPointDesc; p:GDBPointer):Boolean;
@@ -805,7 +805,7 @@ begin
 end;
 function AllocCircle:PGDBObjCircle;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocCircle}',{$ENDIF}pointer(result),sizeof(GDBObjCircle));
+  Getmem(pointer(result),sizeof(GDBObjCircle));
 end;
 function AllocAndInitCircle(owner:PGDBObjGenericWithSubordinated):PGDBObjCircle;
 begin

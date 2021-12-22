@@ -125,9 +125,9 @@ begin
 
 
          pvc^.done;
-         GDBFREEMEM(pointer(pvc));
+         Freemem(pointer(pvc));
          pvc2^.done;
-         GDBFREEMEM(pointer(pvc2));
+         Freemem(pointer(pvc2));
          pv:=ConstObjArray.iterate(ir);
      until pv=nil;
      objmatrix:=m4;
@@ -137,7 +137,7 @@ end;
 function GDBObjTable.Clone;
 var tvo: PGDBObjTable;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{F9D41F4A-1E80-4D3A-9DD1-D0037EFCA988}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjTable));
+  Getmem(GDBPointer(tvo), sizeof(GDBObjTable));
   tvo^.initnul;
   //tbl.copyto(@tvo^.tbl);
 
@@ -327,14 +327,14 @@ begin
      inherited;
      //vp.ID:=GDBTableID;
 
-     tbl.init({$IFDEF DEBUGBUILD}'{C6EE9076-623F-4D7A-A355-122C6271B9ED}',{$ENDIF}9,20);
+     tbl.init(9,20);
      //ptablestyle:=gdb.GetCurrentDWG.TableStyleTable.getAddres('Standart');{проверить}
      scale:=1;
 
      //build();
 
 
-     //tblformat.init({$IFDEF DEBUGBUILD}'{9616C423-CF78-45A4-9244-62F2821332D2}',{$ENDIF}25,sizeof(TGDBTableItemFormat));
+     //tblformat.init(25,sizeof(TGDBTableItemFormat));
 
 end;
 function GDBObjTable.GetObjType;

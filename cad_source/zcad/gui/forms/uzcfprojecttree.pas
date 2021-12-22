@@ -43,7 +43,7 @@ type
       {**Modified TTreeNode}
       TEqTreeNode=class(TBlockTreeNode)
                public
-                    ptd:TTypedData;
+                    ptd:THardTypedData;
                     //FBlockName:String;{**<Block(Device) name}
                     procedure Select;override;
                     function GetParams:Pointer;override;
@@ -139,8 +139,8 @@ begin
                             BuildTreeByEQ(ProjectEquipmentN,PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName),MenusManager.GetPopupMenu('PROJECTDBCXMENU',nil));
                             (*
                             ProjectEquipmentNodeN.free;
-                            gdbgetmem({$IFDEF DEBUGBUILD}'{B941B71E-2BA6-4B5E-B436-633B6C8FC500}',{$ENDIF}pointer(ProjectEquipmentNode.SubNode),sizeof(TGDBTree));
-                            ProjectEquipmentNode.SubNode.init({$IFDEF DEBUGBUILD}'{CE1105DB-7CAD-4353-922A-5A31956421C4}',{$ENDIF}10);
+                            Getmem(pointer(ProjectEquipmentNode.SubNode),sizeof(TGDBTree));
+                            ProjectEquipmentNode.SubNode.init(10);
                             BuildTreeByEQ(ProjectEquipmentNode,drawings.GetCurrentDWG.DWGUnits.findunit(DrawingDeviceBaseUnitName),ProjectDBContextMenu);
                             ProjectDB.Sync;
                             *)
@@ -194,7 +194,7 @@ begin
          pvdeq^.data.PTD^.ApplyOperator('.','TreeCoord',offset,tc);
          if (offset<>0)and(tc^.GetFactTypedef=@FundamentalStringDescriptorObj) then
          begin
-              treesuperpos:=pgdbstring(ptruint(pvdeq^.data.Instance) + offset)^;
+              treesuperpos:=pgdbstring(ptruint(pvdeq^.data.Addr.Instance) + offset)^;
          end
          else
              treesuperpos:='';
@@ -214,9 +214,9 @@ begin
 
          buildbranchn(CurrNode,treepos,EqCategory);
 
-         //gdbgetmem({$IFDEF DEBUGBUILD}'{3987F838-D729-4E08-813E-6818030B801C}',{$ENDIF}pointer(eqnode),sizeof(GDBEqNode));
+         //Getmem(pointer(eqnode),sizeof(GDBEqNode));
          if PDBUNIT<>DBUnit then
-                                s:=PDbBaseObject(pvdeq^.data.Instance)^.NameShort+' из '
+                                s:=PDbBaseObject(pvdeq^.data.Addr.Instance)^.NameShort+' из '
                             else
                                 s:='';
          TmyTreeView(CurrNode.TreeView).NodeType:=TEqTreeNode;
@@ -225,20 +225,20 @@ begin
                                      eqnode:=TEqTreeNode({tree}TmyTreeView(BuildNode.TreeView).Items.addchild(CurrNode,(treepos)));
                                      eqnode.fBlockName:=pvdeq^.name;
                                      eqnode.FPopupMenu:=pcm;
-                                     eqnode.ptd.PTD:=pvdeq^.data.PTD;
-                                     eqnode.ptd.Instance:=pvdeq^.data.Instance;
+                                     //eqnode.ptd.PTD:=pvdeq^.data.PTD;
+                                     eqnode.ptd.Instance:=pvdeq^.data.Addr.Instance;
 
-                                     //eqnode.init(s+pvdeq^.name,pvdeq^.name,pvdeq^.data.PTD,pvdeq^.data.Instance,pcm)
+                                     //eqnode.init(s+pvdeq^.name,pvdeq^.name,pvdeq^.data.PTD,pvdeq^.Instance,pcm)
                                 end
                              else
                                  begin
-                                      eqnode:=TEqTreeNode({tree}TmyTreeView(BuildNode.TreeView).Items.addchild(CurrNode,(PDbBaseObject(pvdeq^.data.Instance)^.NameShort)+' ('+pvdeq^.name+') '+' из '+treepos));
+                                      eqnode:=TEqTreeNode({tree}TmyTreeView(BuildNode.TreeView).Items.addchild(CurrNode,(PDbBaseObject(pvdeq^.data.Addr.Instance)^.NameShort)+' ('+pvdeq^.name+') '+' из '+treepos));
                                       eqnode.fBlockName:=pvdeq^.name;
                                       eqnode.FPopupMenu:=pcm;
-                                      eqnode.ptd.PTD:=pvdeq^.data.PTD;
-                                      eqnode.ptd.Instance:=pvdeq^.data.Instance;
+                                      //eqnode.ptd.PTD:=pvdeq^.data.PTD;
+                                      eqnode.ptd.Instance:=pvdeq^.data.Addr.Instance;
 
-                                 //eqnode.init(s+treepos,pvdeq^.name,pvdeq^.data.PTD,pvdeq^.data.Instance,pcm);
+                                 //eqnode.init(s+treepos,pvdeq^.name,pvdeq^.data.PTD,pvdeq^.Instance,pcm);
                                  end;
          //CurrNode.SubNode.AddNode(eqnode);
          until treesuperpos='';
@@ -328,8 +328,8 @@ begin
         pentvarext:=pb.GetExtension<TVariablesExtender>;
         pvd:=pentvarext.entityunit.FindVariable('BTY_TreeCoord');
         if pvd<>nil then
-        if pvd^.data.Instance<>nil then
-                                        treepos:=pstring(pvd^.data.Instance)^;
+        if pvd^.data.Addr.Instance<>nil then
+                                        treepos:=pstring(pvd^.data.Addr.Instance)^;
         //log.programlog.LogOutStr(treepos,0);
 
 

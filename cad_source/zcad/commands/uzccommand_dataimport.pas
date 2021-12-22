@@ -47,7 +47,7 @@ begin
     pentvarext:=pvisible^.GetExtension<TVariablesExtender>;
     pvd:=pentvarext.entityunit.FindVariable(prop);
     if pvd<>nil then begin
-      if pvd.data.PTD.GetValueAsString(pvd.data.Instance)=value then
+      if pvd.data.PTD.GetValueAsString(pvd.data.Addr.Instance)=value then
         dest.PushBackData(pvisible);
     end;
   pvisible:=source.iterate(ir);
@@ -67,7 +67,7 @@ begin
     pentvarext:=pvisible^.GetExtension<TVariablesExtender>;
     pvd:=pentvarext.entityunit.FindVariable(prop);
     if pvd<>nil then begin
-      pvd.data.PTD.SetValueFromString(pvd.data.Instance,value);
+      pvd.data.PTD.SetValueFromString(pvd.data.Addr.Instance,value);
       pvisible.FormatEntity(drawing,DC);
     end;
   pvisible:=source.iterate(ir);

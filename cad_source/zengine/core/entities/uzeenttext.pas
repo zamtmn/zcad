@@ -100,8 +100,8 @@ begin
   textprop.oblique := 0;
   textprop.wfactor := 1;
   textprop.justify := jstl;
-  //Representation.SHX.init({$IFDEF DEBUGBUILD}'{08E35ED5-B4A7-4210-A3C9-0645E8F27ABA}-GDBText.Vertex3D_in_WCS_Array',{$ENDIF}100);
-  //Vertex2D_in_DCS_Array.init({$IFDEF DEBUGBUILD}'{116E3B21-8230-44E8-B7A5-9CEED4B886D2}',{$ENDIF}100);
+  //Representation.SHX.init(100);
+  //Vertex2D_in_DCS_Array.init({100);
   PProjoutbound:=nil;
 end;
 constructor GDBObjText.init;
@@ -116,8 +116,8 @@ begin
   textprop.oblique := o;
   textprop.wfactor := w;
   textprop.justify := j;
-  //Representation.SHX.init({$IFDEF DEBUGBUILD}'{8776360E-8115-4773-917D-83ED1843FF9C}',{$ENDIF}1000);
-  //Vertex2D_in_DCS_Array.init({$IFDEF DEBUGBUILD}'{EDC6D76B-DDFF-41A0-ACCC-48804795A3F5}',{$ENDIF}100);
+  //Representation.SHX.init(1000);
+  //Vertex2D_in_DCS_Array.init(100);
   PProjoutbound:=nil;
   //format;
 end;
@@ -245,7 +245,7 @@ end;
 function GDBObjText.Clone;
 var tvo: PGDBObjtext;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{4098811D-F8A9-4562-8803-38AAEA1A0D64}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjText));
+  Getmem(GDBPointer(tvo), sizeof(GDBObjText));
   tvo^.initnul(nil);
   tvo^.bp.ListPos.Owner:=own;
   //tvo^.vp:=vp;
@@ -380,8 +380,8 @@ begin
 
   if PProjoutbound=nil then
   begin
-       GDBGetMem({$IFDEF DEBUGBUILD}'{4C06C975-C569-4020-8DA7-27CD949B9298}',{$ENDIF}GDBPointer(PProjoutbound),sizeof(GDBOOutbound2DIArray));
-       PProjoutbound^.init({$IFDEF DEBUGBUILD}'{AB29B448-057C-4018-BC57-E8C67A3765AF}',{$ENDIF}4);
+       Getmem(GDBPointer(PProjoutbound),sizeof(GDBOOutbound2DIArray));
+       PProjoutbound^.init(4);
   end;
 end;
 (*procedure GDBObjText.CreateSymbol(_symbol:GDBInteger;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;pfont:pgdbfont;ln:GDBInteger);
@@ -729,7 +729,7 @@ else if not dxfGDBIntegerload(f,72,byt,gv)then
 end;
 function AllocText:PGDBObjText;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocText}',{$ENDIF}result,sizeof(GDBObjText));
+  Getmem(result,sizeof(GDBObjText));
 end;
 function AllocAndInitText(owner:PGDBObjGenericWithSubordinated):PGDBObjText;
 begin

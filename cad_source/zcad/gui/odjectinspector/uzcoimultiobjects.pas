@@ -41,10 +41,15 @@ type
            VPS_OnlyRelatedEnts(*'Only related ents'*),
            VPS_AllEnts(*'All ents'*)
           );
+  {REGISTERRECORDTYPE TMSPrimitiveDetector}
   TMSPrimitiveDetector=TEnumData;
+  {REGISTERRECORDTYPE TMSBlockNamesDetector}
   TMSBlockNamesDetector=TEnumDataWithOtherData;
+  {REGISTERRECORDTYPE TMSTextsStylesDetector}
   TMSTextsStylesDetector=TEnumDataWithOtherData;
+  {REGISTERRECORDTYPE TMSEntsLayersDetector}
   TMSEntsLayersDetector=TEnumDataWithOtherData;
+  {REGISTERRECORDTYPE TMSEntsLinetypesDetector}
   TMSEntsLinetypesDetector=TEnumDataWithOtherData;
   {REGISTEROBJECTTYPE TMSEditor}
   TMSEditor= object(TWrapper2ObjInsp)
@@ -133,12 +138,12 @@ begin
          if PDestVD<>nil then
            if PSourceVD^.data.PTD=PDestVD^.data.PTD then
            begin
-                PDestVD.data.PTD.CopyInstanceTo(PSourceVD.data.Instance,PDestVD.data.Instance);
+                PDestVD.data.PTD.CopyInstanceTo(PSourceVD.data.Addr.Instance,PDestVD.data.Addr.Instance);
 
                 pentity^.YouChanged(drawings.GetCurrentDWG^);
                 result:=true;
 
-                if PSourceVD^.data.PTD.GetValueAsString(PSourceVD^.data.Instance)<>PDestVD^.data.PTD.GetValueAsString(PDestVD^.data.Instance) then
+                if PSourceVD^.data.PTD.GetValueAsString(PSourceVD^.data.Addr.Instance)<>PDestVD^.data.PTD.GetValueAsString(PDestVD^.data.Addr.Instance) then
                 PSourceVD.attrib:=PSourceVD.attrib or vda_different;
            end;
     end;
@@ -653,11 +658,12 @@ begin
                               begin
                               vd:=pvd^;
                               //vd.attrib:=vda_different;
-                              vd.data.Instance:=nil;
+                              vd.SetInstance(nil);
+                              //vd.Instance:=nil;
                               if linkedunit then
                                 vd.attrib:=vd.attrib or vda_colored1;
                               VariablesUnit.InterfaceVariables.createvariable(pvd^.name,vd,vd.attrib);
-                              pvd^.data.PTD.CopyInstanceTo(pvd.data.Instance,vd.data.Instance);
+                              pvd^.data.PTD.CopyInstanceTo(pvd.data.Addr.Instance,vd.data.Addr.Instance);
                               end
                               {   else
                               begin
@@ -666,7 +672,7 @@ begin
                          end
                      else
                          begin
-                              if pvd^.data.PTD.GetValueAsString(pvd^.data.Instance)<>pvdmy^.data.PTD.GetValueAsString(pvdmy^.data.Instance) then
+                              if pvd^.data.PTD.GetValueAsString(pvd^.data.Addr.Instance)<>pvdmy^.data.PTD.GetValueAsString(pvdmy^.data.Addr.Instance) then
                                 pvdmy.attrib:=vda_different;
                               if linkedunit then
                                 pvdmy.attrib:=pvdmy.attrib or vda_colored1;

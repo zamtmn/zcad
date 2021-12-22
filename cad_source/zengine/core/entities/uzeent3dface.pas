@@ -445,7 +445,7 @@ procedure GDBObj3DFace.addcontrolpoints(tdesc:GDBPointer);
 var pdesc:controlpointdesc;
     i:GDBInteger;
 begin
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.init({$IFDEF DEBUGBUILD}'{92DDADAD-909D-4938-A1F9-3BD78FBB2B70}',{$ENDIF}1);
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(1);
           pdesc.pobject:=nil;
           for i := 0 to 3 do
           begin
@@ -467,7 +467,7 @@ end;
 function GDBObj3DFace.Clone;
 var tvo: PGDBObj3DFace;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{1C6F0445-7339-449A-BDEB-7D38A46FD910}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObj3DFace));
+  Getmem(GDBPointer(tvo), sizeof(GDBObj3DFace));
   tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight, nulvertex);
   CopyVPto(tvo^);
   CopyExtensionsTo(tvo^);
@@ -483,7 +483,7 @@ begin
 end;
 function Alloc3DFace:PGDBObj3DFace;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{Alloc3DFace}',{$ENDIF}pointer(result),sizeof(GDBObj3DFace));
+  Getmem(pointer(result),sizeof(GDBObj3DFace));
 end;
 function AllocAndInit3DFace(owner:PGDBObjGenericWithSubordinated):PGDBObj3DFace;
 begin

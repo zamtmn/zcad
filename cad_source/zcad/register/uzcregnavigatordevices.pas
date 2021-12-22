@@ -127,9 +127,9 @@ begin
          pvd1:=pentvarext1^.entityunit.FindVariable('Elevation');
          pvd2:=pentvarext2^.entityunit.FindVariable('Elevation');
          if assigned(pvd1) and assigned(pvd2) then
-           if pdouble(pvd1^.data.Instance)^ > pdouble(pvd2^.data.Instance)^ then
+           if pdouble(pvd1^.Instance)^ > pdouble(pvd2^.Instance)^ then
             result:=-1
-           else if pdouble(pvd1^.data.Instance)^ < pdouble(pvd2^.data.Instance)^ then
+           else if pdouble(pvd1^.Instance)^ < pdouble(pvd2^.Instance)^ then
             result:=1
        end;
      end;

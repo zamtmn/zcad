@@ -50,7 +50,7 @@ type
   {REGISTEROBJECTTYPE CommandRTEdObject}
   CommandRTEdObject =  object(CommandRTEdObjectDef)
     saveosmode:GDBInteger;(*hidden_in_objinsp*)
-    commanddata:TTypedData;(*'Command options'*)
+    commanddata:THardTypedData;(*'Command options'*)
     procedure CommandStart(Operands:TCommandOperands); virtual;
     procedure CommandEnd; virtual;
     procedure CommandCancel; virtual;
@@ -298,7 +298,7 @@ function CreateCommandFastObjectPlugin;
 var p:pCommandFastObjectPlugin;
 begin
      p:=nil;
-     GDBGetMem({$IFDEF DEBUGBUILD}'{8F72364A-04F8-46BA-A5DC-0178CF78FC27}',{$ENDIF}GDBPointer(p),sizeof(CommandFastObjectPlugin));
+     Getmem(GDBPointer(p),sizeof(CommandFastObjectPlugin));
      p^.init(name,ocs);
      p^.dyn:=true;
      p^.CStartAttrEnableAttr:=SA;
@@ -311,7 +311,7 @@ function CreateCommandRTEdObjectPlugin;
 var p:pCommandRTEdObjectPlugin;
 begin
      p:=nil;
-     GDBGetMem({$IFDEF DEBUGBUILD}'{8F72364A-04F8-46BA-A5DC-0178CF78FC27}',{$ENDIF}GDBPointer(p),sizeof(CommandRTEdObjectPlugin));
+     Getmem(GDBPointer(p),sizeof(CommandRTEdObjectPlugin));
      p^.init(ocs,oce,occ,ocf,obc,oac,occont,name);
      p^.onHelpGeometryDraw:=@ohgd;
      p^.dyn:=true;

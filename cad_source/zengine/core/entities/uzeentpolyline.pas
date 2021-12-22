@@ -91,8 +91,8 @@ end;
 procedure GDBObjPolyline.startsnap(out osp:os_record; out pdata:GDBPointer);
 begin
      GDBObjEntity.startsnap(osp,pdata);
-     gdbgetmem({$IFDEF DEBUGBUILD}'{C37BA022-4629-4E16-BEB6-E8AAB9AC6986}',{$ENDIF}pdata,sizeof(GDBVectorSnapArray));
-     PGDBVectorSnapArray(pdata).init({$IFDEF DEBUGBUILD}'{C37BA022-4629-4E16-BEB6-E8AAB9AC6986}',{$ENDIF}VertexArrayInWCS.Max);
+     Getmem(pdata,sizeof(GDBVectorSnapArray));
+     PGDBVectorSnapArray(pdata).init(VertexArrayInWCS.Max);
      BuildSnapArray(VertexArrayInWCS,PGDBVectorSnapArray(pdata)^,closed);
 end;
 function GDBObjPolyline.getsnap;
@@ -162,11 +162,11 @@ var tpo: PGDBObjPolyLine;
     p:pgdbvertex;
     i:GDBInteger;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{8F88CAFB-14F3-4F33-96B5-F493DB8B28B7}',{$ENDIF}GDBPointer(tpo), sizeof(GDBObjPolyline));
+  Getmem(GDBPointer(tpo), sizeof(GDBObjPolyline));
   tpo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight,closed);
   CopyVPto(tpo^);
   CopyExtensionsTo(tpo^);
-  //tpo^.vertexarray.init({$IFDEF DEBUGBUILD}'{90423E18-2ABF-48A8-8E0E-5D08A9E54255}',{$ENDIF}1000);
+  //tpo^.vertexarray.init(1000);
   p:=vertexarrayinocs.GetParrayAsPointer;
   for i:=0 to vertexarrayinocs.Count-1 do
   begin
@@ -292,7 +292,7 @@ begin
 end;}
 function AllocPolyline:PGDBObjPolyline;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocLine}',{$ENDIF}pointer(result),sizeof(GDBObjPolyline));
+  Getmem(pointer(result),sizeof(GDBObjPolyline));
 end;
 function AllocAndInitPolyline(owner:PGDBObjGenericWithSubordinated):PGDBObjPolyline;
 begin

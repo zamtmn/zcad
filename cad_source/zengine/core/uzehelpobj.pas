@@ -34,7 +34,7 @@ var
 begin
   for j:=0 to CircleLODCount do
   begin
-       circlepointoflod[j].init({$IFDEF DEBUGBUILD}'{9EFC07BB-AAD4-401E-AA83-9011670A1FF4}',{$ENDIF}j+1);
+       circlepointoflod[j].init(j+1);
        pv.coord.x:=1;
        pv.coord.y:=0;
        pv.count:=-j;

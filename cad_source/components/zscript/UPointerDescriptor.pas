@@ -117,7 +117,7 @@ begin
 
                                                                                                                                                                                                  PTPropertyDeskriptorArray(ppd^.SubNode)^.cleareraseobj;
                                                                                                                                                                                                  ppd^.SubNode^.Done;
-                                                                                                                                                                                                 gdbfreemem(ppd^.SubNode);
+                                                                                                                                                                                                 Freemem(ppd^.SubNode);
                                                                                                                                                                                                  ppd^.SubNode:=nil;
 
                                                                                                                                                                                             end;
@@ -140,7 +140,7 @@ begin
                                                           begin
                                                                PTPropertyDeskriptorArray(ppd^.SubNode)^.cleareraseobj;
                                                                ppd^.SubNode^.Done;
-                                                               gdbfreemem(ppd^.SubNode);
+                                                               Freemem(ppd^.SubNode);
                                                           end;
                              ppd^.Name:=name;
                              ppd^.PTypeManager:=PTUserTypeDescriptor(PUserTypeDescriptor((TypeOf)));

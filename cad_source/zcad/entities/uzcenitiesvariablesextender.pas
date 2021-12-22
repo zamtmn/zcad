@@ -126,7 +126,7 @@ begin
                        begin
                             entityunit.setvardesc(vd,'DESC_MountingPartsShortName','Имя закладной конструкции','GDBString');
                             pvd2:=entityunit.InterfaceVariables.createvariable(vd.name,vd);
-                            pvd2^.data.PTD^.SetValueFromString(pvd2^.data.Instance,pvd^.data.PTD^.GetValueAsString(pvd^.data.Instance));
+                            pvd2^.data.PTD^.SetValueFromString(pvd2^.data.Addr.Instance,pvd^.data.PTD^.GetValueAsString(pvd^.data.Addr.Instance));
                        end;
                   end;
 
@@ -279,7 +279,7 @@ begin
      extractvarfromdxfstring2(_Value,vn,svn,vv);
      vardata:=PGDBObjEntity(PEnt)^.GetExtension<TVariablesExtender>;
      pvd:=vardata.entityunit.InterfaceVariables.findvardesc(vn);
-     offset:=GDBPlatformint(pvd.data.Instance);
+     offset:=GDBPlatformint(pvd.data.Addr.Instance);
      if pvd<>nil then
        PRecordDescriptor(pvd^.data.PTD)^.ApplyOperator('.',svn,offset,tc);
      PBaseTypeDescriptor(tc)^.SetValueFromString(pointer(offset),vv);
@@ -314,7 +314,7 @@ begin
      vardata.entityunit.InterfaceVariables.createvariable(vd.name,vd);
      //PTObjectUnit(PEnt^.ou.Instance)^.setvardesc(vd,vn,vun,vt);
      //PTObjectUnit(PEnt^.ou.Instance)^.InterfaceVariables.createvariable(vd.name,vd);
-     PBaseTypeDescriptor(vd.data.PTD)^.SetValueFromString(vd.data.Instance,vv);
+     PBaseTypeDescriptor(vd.data.PTD)^.SetValueFromString(vd.data.Addr.Instance,vv);
      result:=true;
 end;
 
@@ -383,7 +383,7 @@ begin
        if pvd<>nil then
          repeat
            if (pvd^.data.PTD.GetTypeAttributes and TA_COMPOUND)=0 then begin
-             sv:=PBaseTypeDescriptor(pvd^.data.ptd)^.GetValueAsString(pvd^.data.Instance);
+             sv:=PBaseTypeDescriptor(pvd^.data.ptd)^.GetValueAsString(pvd^.data.Addr.Instance);
              str:='#'+inttostr(i)+'='+pvd^.name+'|'+pvd^.data.ptd.TypeName;
              str:=str+'|'+sv+'|'+pvd^.username;
              dxfGDBStringout(outhandle,1000,str);
@@ -391,7 +391,7 @@ begin
              str:='&'+inttostr(i)+'='+pvd^.name+'|'+pvd^.data.ptd.TypeName+'|'+pvd^.username;
              dxfGDBStringout(outhandle,1000,str);
              inc(i);
-             tp:=pvd^.data.Instance;
+             tp:=pvd^.data.Addr.Instance;
              pfd:=PRecordDescriptor(pvd^.data.ptd).Fields.beginiterate(ir2);
              if pfd<>nil then
              repeat

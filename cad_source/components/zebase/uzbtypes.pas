@@ -18,7 +18,7 @@
 unit uzbtypes;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,uzbgeomtypes,sysutils;
+uses uzbtypesbase,uzbmemman,uzbgeomtypes,sysutils;
      //gdbobjectsconstdef;
 const
      GDBBaseObjectID = 30000;
@@ -28,6 +28,11 @@ TZMessageID=type integer;
 TProcCounter=procedure(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
 TControlPointAttr=(CPA_Strech);
 TControlPointAttrs=set of TControlPointAttr;
+TPtrOffs=record
+           case byte of
+             1:(ptr:Pointer);
+             2:(offs:PtrUInt);
+         end;
 {EXPORT+}
 (*varcategoryforoi SUMMARY='Summary'*)
 (*varcategoryforoi CABLE='Cable params'*)
@@ -71,6 +76,27 @@ GDBaseObject=object
     function IsEntity:GDBBoolean;virtual;
 
   end;
+PTArrayIndex=^TArrayIndex;
+TArrayIndex=Integer;
+{REGISTEROBJECTTYPE TZAbsVector}
+TZAbsVector=object(GDBaseObject)
+  function GetParray:pointer;virtual;abstract;
+  function getPData(index:TArrayIndex):Pointer;virtual;abstract;
+end;
+PZAbsVector=^TZAbsVector;
+
+{REGISTERRECORDTYPE TInVectorAddr}
+TInVectorAddr=record
+                Instt:{-}TPtrOffs{/GDBPointer/};
+                DataSegment:PZAbsVector;
+                {-}function GetInstance:GDBPointer;{/ /}
+                {-}function IsNil:Boolean;{/ /}
+                {-}property Instance:GDBPointer read GetInstance;{/ /}
+                {-}procedure SetInstance(DS:PZAbsVector;Offs:PtrUInt);overload;{/ /}
+                {-}procedure SetInstance(Ptr:Pointer);overload;{/ /}
+                {-}procedure FreeeInstance;{/ /}
+              end;
+
 {REGISTERRECORDTYPE TArcData}
 TArcData=record
                r,startangle,endangle:gdbdouble;
@@ -272,6 +298,40 @@ function StrToQWord(sh:string):UInt64;
 implementation
 var
   DummyVerboseLog:boolean=true;
+function TInVectorAddr.GetInstance:GDBPointer;
+begin
+  if DataSegment=nil then
+    result:=Instt.ptr
+  else
+    result:=DataSegment^.getPData(Instt.offs);
+    //result:=Pointer(PtrUInt(DataSegment^.GetParray)+Instt.offs);
+end;
+function TInVectorAddr.IsNil:Boolean;
+begin
+  result:=(DataSegment=nil)and(Instt.ptr=nil);
+end;
+
+procedure TInVectorAddr.SetInstance(DS:PZAbsVector;Offs:PtrUInt);
+begin
+  {if not assigned(pointer(ds))then begin
+    Offs:=Offs+1;
+    Offs:=Offs-1;
+  end;}
+  DataSegment:=DS;
+  Instt.offs:=Offs;
+end;
+
+procedure TInVectorAddr.SetInstance(Ptr:Pointer);
+begin
+   DataSegment:=nil;
+   Instt.ptr:=Ptr;
+end;
+
+procedure TInVectorAddr.FreeeInstance;
+begin
+  if DataSegment=nil then
+    Freemem(Instt.ptr);
+end;
 function GDBaseObject.GetObjType:GDBWord;
 begin
      result:=GDBBaseObjectID;

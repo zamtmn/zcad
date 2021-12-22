@@ -62,16 +62,20 @@ procedure GDBDoubleSumLengthEntIterateProc(pdata:GDBPointer;ChangedData:TChanged
 var
     v1,v2:GDBVertex;
     l1:GDBDouble;
+    pvd:pvardesk;
+    pvdata:PDouble;
 begin
+  pvd:=PTOneVarData(mp.PIiterateData)^.VDAddr.Instance;
+  pvdata:=pvd^.data.Addr.Instance;
      V1:=PGDBVertex(ChangedData.PGetDataInEtity)^;
      inc(ChangedData.PGetDataInEtity,sizeof(GDBVertex));
      V2:=PGDBVertex(ChangedData.PGetDataInEtity)^;
      l1:=Vertexlength(v1,v2);
-     if @ecp=nil then PTOneVarData(pdata)^.PVarDesc^.attrib:=PTOneVarData(pdata)^.PVarDesc^.attrib or vda_RO;
+     if @ecp=nil then pvd^.attrib:=pvd^.attrib or vda_RO;
      if fistrun then
-                    mp.MPType^.CopyInstanceTo(@l1,PTOneVarData(pdata)^.PVarDesc^.data.Instance)
+                    mp.MPType^.CopyInstanceTo(@l1,pvdata)
                 else
-                    PGDBDouble(PTOneVarData(pdata)^.PVarDesc^.data.Instance)^:=PGDBDouble(PTOneVarData(pdata)^.PVarDesc^.data.Instance)^+l1
+                    pvdata^:=pvdata^+l1
 end;
 
 procedure GDBDoubleAngleEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
@@ -215,7 +219,7 @@ begin
 end;
 function GDBDoubleCheck0Exclude1Include(pdata:PVarDesk;var ErrorRange:GDBBoolean;out message:GDBString):GDBBoolean;
 begin
-     if (PGDBDouble(pvardesk(pdata)^.data.Instance)^>1)or(PGDBDouble(pvardesk(pdata)^.data.Instance)^<=0)then
+     if (PGDBDouble(pvardesk(pdata)^.data.Addr.Instance)^>1)or(PGDBDouble(pvardesk(pdata)^.data.Addr.Instance)^<=0)then
                                                                                                              begin
                                                                                                                result:=false;
                                                                                                                message:='Value must be in (0..1] interval';
@@ -226,7 +230,7 @@ begin
 end;
 function GDBDoubleCheckGreater0(pdata:PVarDesk;var ErrorRange:GDBBoolean;out message:GDBString):GDBBoolean;
 begin
-     if PGDBDouble(pvardesk(pdata)^.data.Instance)^>0then
+     if PGDBDouble(pvardesk(pdata)^.data.Addr.Instance)^>0then
                                                          result:=true
                                                      else
                                                          begin
@@ -237,7 +241,7 @@ begin
 end;
 function GDBDoubleCheckMinus85to85(pdata:PVarDesk;var ErrorRange:GDBBoolean;out message:GDBString):GDBBoolean;
 begin
-     if abs(PGDBDouble(pvardesk(pdata)^.data.Instance)^)<=1.483529864195 then
+     if abs(PGDBDouble(pvardesk(pdata)^.data.Addr.Instance)^)<=1.483529864195 then
                                                          result:=true
                                                      else
                                                          begin
@@ -255,7 +259,7 @@ procedure GDBDoubleDiv2EntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:
 var
     l1:GDBDouble;
 begin
-     l1:=PGDBDouble(pvardesk(pdata)^.data.Instance)^/2;
+     l1:=PGDBDouble(pvardesk(pdata)^.data.Addr.Instance)^/2;
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
      GeneralFromPtrEntChangeProc(pu,@l1,ChangedData,mp);
 end;
@@ -263,7 +267,7 @@ procedure GDBDoubleCircumference2REntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;C
 var
     l1:GDBDouble;
 begin
-     l1:=PGDBDouble(pvardesk(pdata)^.data.Instance)^/(2*PI);
+     l1:=PGDBDouble(pvardesk(pdata)^.data.Addr.Instance)^/(2*PI);
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
      GeneralFromPtrEntChangeProc(pu,@l1,ChangedData,mp);
 end;
@@ -271,7 +275,7 @@ procedure GDBDoubleArcCircumferenceEntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;
 var
     l1:GDBDouble;
 begin
-     l1:=PGDBDouble(pvardesk(pdata)^.data.Instance)^/PGDBObjArc(ChangedData.pentity)^.angle;
+     l1:=PGDBDouble(pvardesk(pdata)^.data.Addr.Instance)^/PGDBObjArc(ChangedData.pentity)^.angle;
      ChangedData.PSetDataInEtity:=@PGDBObjArc(ChangedData.pentity)^.R;
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
      GeneralFromPtrEntChangeProc(pu,@l1,ChangedData,mp);
@@ -281,7 +285,7 @@ procedure GDBDoubleArea2REntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedDat
 var
     l1:GDBDouble;
 begin
-     l1:=sqrt(PGDBDouble(pvardesk(pdata)^.data.Instance)^/PI);
+     l1:=sqrt(PGDBDouble(pvardesk(pdata)^.data.Addr.Instance)^/PI);
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
      GeneralFromPtrEntChangeProc(pu,@l1,ChangedData,mp);
 end;
@@ -291,7 +295,7 @@ var
 begin
      l1:=PGDBDouble(ChangedData.PSetDataInEtity)^;
      inc(ChangedData.PSetDataInEtity,sizeof(GDBVertex));
-     l1:=l1+PGDBDouble(pvardesk(pdata)^.data.Instance)^;
+     l1:=l1+PGDBDouble(pvardesk(pdata)^.data.Addr.Instance)^;
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
      GeneralFromPtrEntChangeProc(pu,@l1,ChangedData,mp);
 end;
@@ -303,7 +307,7 @@ begin
      V1:=PGDBVertex(ChangedData.PSetDataInEtity)^;
      inc(ChangedData.PSetDataInEtity,sizeof(GDBVertex));
      V2:=PGDBVertex(ChangedData.PSetDataInEtity)^;
-     l1:=PGDBDouble(pvardesk(pdata)^.data.Instance)^;
+     l1:=PGDBDouble(pvardesk(pdata)^.data.Addr.Instance)^;
      V2:=VertexSub(V2,V1);
      V2:=normalizevertex(V2);
      V2:=VertexMulOnSc(V2,l1);
@@ -319,7 +323,7 @@ begin
   inc(ChangedData.PSetDataInEtity,sizeof(GDBVertex));
   V2:=PGDBVertex(ChangedData.PSetDataInEtity)^;
   d:=vertexlength(v2,v1);
-  l1:=PGDBDouble(pvardesk(pdata)^.data.Instance)^*pi/180;
+  l1:=PGDBDouble(pvardesk(pdata)^.data.Addr.Instance)^*pi/180;
   V2.x:=cos(l1);
   V2.y:=sin(l1);
   V2.z:=0;
@@ -331,7 +335,7 @@ procedure GDBDoubleDeg2RadEntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedDa
 var
     l1:GDBDouble;
 begin
-     l1:=PGDBDouble(pvardesk(pdata)^.data.Instance)^*pi/180;
+     l1:=PGDBDouble(pvardesk(pdata)^.data.Addr.Instance)^*pi/180;
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
      GeneralFromPtrEntChangeProc(pu,@l1,ChangedData,mp);
 end;
@@ -340,9 +344,9 @@ var
     l1:GDBDouble;
 begin
      if PGDBObjArc(ChangedData.pentity)^.angle<pi then
-        l1:=sqrt(PGDBDouble(pvardesk(pdata)^.data.Instance)^/(PGDBObjArc(ChangedData.pentity)^.angle/2-0.5*sin(PGDBObjArc(ChangedData.pentity)^.angle)))
+        l1:=sqrt(PGDBDouble(pvardesk(pdata)^.data.Addr.Instance)^/(PGDBObjArc(ChangedData.pentity)^.angle/2-0.5*sin(PGDBObjArc(ChangedData.pentity)^.angle)))
      else
-        l1:=sqrt(PGDBDouble(pvardesk(pdata)^.data.Instance)^/(PGDBObjArc(ChangedData.pentity)^.angle/2+0.5*sin(PGDBObjArc(ChangedData.pentity)^.angle)));
+        l1:=sqrt(PGDBDouble(pvardesk(pdata)^.data.Addr.Instance)^/(PGDBObjArc(ChangedData.pentity)^.angle/2+0.5*sin(PGDBObjArc(ChangedData.pentity)^.angle)));
      ChangedData.PSetDataInEtity:=@PGDBObjArc(ChangedData.pentity)^.R;
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
      GeneralFromPtrEntChangeProc(pu,@l1,ChangedData,mp);
@@ -352,7 +356,7 @@ var
     a:gdbdouble;
 begin
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
-     mp.MPType^.CopyInstanceTo(pvardesk(pdata)^.data.Instance,@a);
+     mp.MPType^.CopyInstanceTo(pvardesk(pdata)^.data.Addr.Instance,@a);
 
      PGDBObjText(ChangedData.PEntity)^.setrot(a);
 

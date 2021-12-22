@@ -49,7 +49,7 @@ var
 begin
          case DimType of
                                DTRotated:begin
-                                               GDBGetMem({$IFDEF DEBUGBUILD}'{4C837C43-E018-4307-ADC2-DEB5134AF6D8}',{$ENDIF}GDBPointer(ResultDim),sizeof(GDBObjRotatedDimension));
+                                               Getmem(GDBPointer(ResultDim),sizeof(GDBObjRotatedDimension));
                                                result:=ResultDim;
                                                PGDBObjRotatedDimension(ResultDim)^.initnul(bp.ListPos.Owner);
                                                PGDBObjRotatedDimension(ResultDim)^.vectorD:=CreateRotatedXVector(a50*pi/180);
@@ -63,7 +63,7 @@ begin
                                          end;
                                DTAligned:
                                    begin
-                                     GDBGetMem({$IFDEF DEBUGBUILD}'{4C837C43-E018-4307-ADC2-DEB5134AF6D8}',{$ENDIF}GDBPointer(ResultDim),sizeof(GDBObjAlignedDimension));
+                                     Getmem(GDBPointer(ResultDim),sizeof(GDBObjAlignedDimension));
                                      result:=ResultDim;
                                      PGDBObjAlignedDimension(ResultDim)^.initnul(bp.ListPos.Owner);
                                      //ResultDim.vp.Layer:=vp.Layer;
@@ -75,7 +75,7 @@ begin
                                    end;
                                DTDiameter:
                                  begin
-                                   GDBGetMem({$IFDEF DEBUGBUILD}'{4C837C43-E018-4307-ADC2-DEB5134AF6D8}',{$ENDIF}GDBPointer(ResultDim),sizeof(GDBObjDiametricDimension));
+                                   Getmem(GDBPointer(ResultDim),sizeof(GDBObjDiametricDimension));
                                    result:=ResultDim;
                                    PGDBObjDiametricDimension(ResultDim)^.initnul(bp.ListPos.Owner);
                                    //ResultDim.vp.Layer:=vp.Layer;
@@ -87,7 +87,7 @@ begin
                                  end;
                                  else
                                    begin
-                                     GDBGetMem({$IFDEF DEBUGBUILD}'{4C837C43-E018-4307-ADC2-DEB5134AF6D8}',{$ENDIF}GDBPointer(ResultDim),sizeof(GDBObjRadialDimension));
+                                     Getmem(GDBPointer(ResultDim),sizeof(GDBObjRadialDimension));
                                      result:=ResultDim;
                                      PGDBObjRadialDimension(ResultDim)^.initnul(bp.ListPos.Owner);
                                      //ResultDim.vp.Layer:=vp.Layer;
@@ -179,7 +179,7 @@ begin
 end;
 function AllocGenericDimension:PGDBObjGenericDimension;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocGenericDimension}',{$ENDIF}result,sizeof(GDBObjGenericDimension));
+  Getmem(result,sizeof(GDBObjGenericDimension));
 end;
 function AllocAndInitGenericDimension(owner:PGDBObjGenericWithSubordinated):PGDBObjGenericDimension;
 begin

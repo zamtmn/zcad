@@ -252,7 +252,7 @@ begin
   if tb<>nil then begin
                        tb^.bp:=result^.bp;
                        result^.done;
-                       gdbfreemem(pointer(result));
+                       Freemem(pointer(result));
                        result:=pointer(tb);
   end;
   if needundo then

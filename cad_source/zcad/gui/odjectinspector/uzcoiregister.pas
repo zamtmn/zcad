@@ -73,10 +73,10 @@ begin
   SetCurrentObjDefault;
   //pint:=SavedUnit.FindValue('VIEW_ObjInspV');
   SetNameColWidth(Form.Width div 2);
-  pint:=SavedUnit.FindValue('VIEW_ObjInspSubV');
+  pint:=SavedUnit.FindValue('VIEW_ObjInspSubV').data.Addr.Instance;
   if assigned(pint)then
                        SetNameColWidth(pint^);
-  pint:=SavedUnit.FindValue('VIEW_ObjInspV');
+  pint:=SavedUnit.FindValue('VIEW_ObjInspV').data.Addr.Instance;
   if assigned(pint)then
                        SetLastClientWidth(pint^);
   TBNode:=nil;
@@ -145,9 +145,11 @@ begin
   ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIResetOGLWNDProc);
   zcRedrawCurrentDrawing;
   ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
-  if GDBobj then
-    if typeof(PGDBaseObject(pcurrobj)^)=typeof(TMSEditor) then
-      PMSEditor(pcurrobj)^.CreateUnit(PMSEditor(pcurrobj)^.SavezeUnitsFormat);
+
+  // убрано, потому что с этим не работают фильтры в инспекторе
+  //if GDBobj then
+  //  if typeof(PGDBaseObject(pcurrobj)^)=typeof(TMSEditor) then
+  //    PMSEditor(pcurrobj)^.CreateUnit(PMSEditor(pcurrobj)^.SavezeUnitsFormat);
 end;
 
 procedure _onGetOtherValues(var vsa:TZctnrVectorGDBString;const valkey:string;const pcurcontext:pointer;const pcurrobj:pointer;const GDBobj:boolean);
@@ -171,7 +173,7 @@ begin
                   pv:={PTObjectUnit(pobj.ou.Instance)}pentvarext.entityunit.FindVariable(valkey);
                   if pv<>nil then
                   begin
-                       vv:=pv.data.PTD.GetValueAsString(pv.data.Instance);
+                       vv:=pv.data.PTD.GetValueAsString(pv.data.Addr.Instance);
                        if vv<>'' then
 
                        vsa.PushBackIfNotPresent(vv);

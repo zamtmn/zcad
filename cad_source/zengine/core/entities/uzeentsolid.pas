@@ -334,7 +334,7 @@ procedure GDBObjSolid.addcontrolpoints(tdesc:GDBPointer);
 var pdesc:controlpointdesc;
     i:GDBInteger;
 begin
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.init({$IFDEF DEBUGBUILD}'{92DDADAD-909D-4938-A1F9-3BD78FBB2B70}',{$ENDIF}1);
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(1);
           pdesc.selected:=false;
           pdesc.pobject:=nil;
 
@@ -389,7 +389,7 @@ end;
 function GDBObjSolid.Clone;
 var tvo: PGDBObjSolid;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{1C6F0445-7339-449A-BDEB-7D38A46FD910}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjSolid));
+  Getmem(GDBPointer(tvo), sizeof(GDBObjSolid));
   tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight, nulvertex);
   tvo^.Local:=local;
   CopyVPto(tvo^);
@@ -406,7 +406,7 @@ begin
 end;
 function AllocSolid:PGDBObjSolid;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocSolid}',{$ENDIF}result,sizeof(GDBObjSolid));
+  Getmem(result,sizeof(GDBObjSolid));
 end;
 function AllocAndInitSolid(owner:PGDBObjGenericWithSubordinated):PGDBObjSolid;
 begin

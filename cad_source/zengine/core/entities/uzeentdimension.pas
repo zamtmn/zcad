@@ -524,14 +524,14 @@ begin
 end;
 destructor GDBObjDimension.done;
 begin
-  if PProjPoint<>nil then GDBFreeMem(pprojpoint);
+  if PProjPoint<>nil then Freemem(pprojpoint);
   dimtext:='';
   inherited;
 end;
 procedure GDBObjDimension.RenderFeedback;
 var tv:GDBvertex;
 begin
-  if PProjPoint=nil then GDBGetMem({$IFDEF DEBUGBUILD}'{D5FC6893-3498-45B9-B2F4-732DF9DE81C3}',{$ENDIF}GDBPointer(pprojpoint),sizeof(TDXFDimData2D));
+  if PProjPoint=nil then Getmem(GDBPointer(pprojpoint),sizeof(TDXFDimData2D));
 
   ProjectProc(DimData.P10InWCS,tv);
   pprojpoint.P10:=pGDBvertex2D(@tv)^;

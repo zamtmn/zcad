@@ -1204,6 +1204,7 @@
       <UnitOutputDirectory Value="../lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Parsing>
+      <Style Value="1"/>
       <SyntaxOptions>
         <SyntaxMode Value="Delphi"/>
         <IncludeAssertionCode Value="True"/>
@@ -1217,6 +1218,12 @@
         <OptimizationLevel Value="0"/>
       </Optimizations>
     </CodeGeneration>
+    <Linking>
+      <Debugging>
+        <DebugInfoType Value="dsDwarf2Set"/>
+        <TrashVariables Value="True"/>
+      </Debugging>
+    </Linking>
     <Other>
       <Verbosity>
         <ShowHintsForUnusedUnitsInMainSrc Value="True"/>

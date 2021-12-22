@@ -19,7 +19,7 @@
 unit gzctnrvectorp;
 {$INCLUDE def.inc}
 interface
-uses gzctnrvectortypes,{uzbtypesbase,}sysutils,gzctnrvector,gzctnrvectorsimple;
+uses gzctnrvectortypes,uzbtypes,sysutils,gzctnrvector,gzctnrvectorsimple;
 type
 {Export+}
 {---------REGISTEROBJECTTYPE GZVectorP}
@@ -33,7 +33,7 @@ GZVectorP{-}<T>{//}=object
                                        function DeleteElement(index:Integer):Pointer;
                                        function GetRealCount:Integer;
 
-                                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:TArrayIndex);
+                                       constructor init(m:TArrayIndex);
                                        constructor initnul;
                                        procedure Clear;virtual;
                                        function GetCount:Integer;

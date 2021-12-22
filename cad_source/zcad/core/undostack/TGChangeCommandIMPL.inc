@@ -13,7 +13,7 @@ TCommand=specialize TGChangeCommand<TData>;
 {$IFDEF IMPLEMENTATION}
 function {GDBObjOpenArrayOfUCommands.}CreateTGChangeCommand(var data:TData):PTCommand;overload;
 begin
-     gdbgetmem({$IFDEF DEBUGBUILD}'{6D631C2E-57FF-4553-991B-332464B7495E}',{$ENDIF}result,sizeof(TCommand));
+     Getmem(result,sizeof(TCommand));
      result^.Assign(data);
 end;
 function {GDBObjOpenArrayOfUCommands.}PushCreateTGChangeCommand(var us:TZctnrVectorUndoCommands; var data:TData):PTCommand;overload;

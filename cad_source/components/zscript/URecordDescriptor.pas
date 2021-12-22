@@ -172,7 +172,7 @@ end;
 constructor RecordDescriptor.init;
 begin
      inherited init(0,tname,pu);
-     fields.init({$IFDEF DEBUGBUILD}'{693E7B49-A224-4778-9FD6-49E131AEBD54}',{$ENDIF}20{,sizeof(FieldDescriptor)});
+     fields.init(20);
      parent:=nil;
 end;
 procedure FREEFIELD(const p:PFieldDescriptor);
@@ -309,8 +309,8 @@ begin
            ppd^.PTypeManager:=@self;
            if bmode=property_build then
            begin
-                gdbgetmem({$IFDEF DEBUGBUILD}'{6F9EBE33-15A8-4FF5-87D7-BF01A40F6789}',{$ENDIF}Pointer(ppd^.SubNode),sizeof(TPropertyDeskriptorArray));
-                PTPropertyDeskriptorArray(ppd^.SubNode)^.init({$IFDEF DEBUGBUILD}'{EDA18239-9432-453B-BA54-0381DA1BB665}',{$ENDIF}100);;
+                Getmem(Pointer(ppd^.SubNode),sizeof(TPropertyDeskriptorArray));
+                PTPropertyDeskriptorArray(ppd^.SubNode)^.init(100);
                 ppda:=PTPropertyDeskriptorArray(ppd^.SubNode);
            end else
            begin
@@ -351,7 +351,7 @@ begin
                                                   tname:=pvd^.username;
                                                   if tname='' then
                                                                   tname:=pvd^.name;
-                                                  taa:=pvd^.data.Instance;
+                                                  taa:=pvd^.data.Addr.Instance;
                                                   if (pvd^.attrib and vda_different)>0 then
                                                                                            tw:=FA_DIFFERENT
                                                                                        else
@@ -375,8 +375,8 @@ begin
                                                                            ppd^.Collapsed:=FindCategory(category,ppd^.Name);
                                                                            ppd^.category:=category;
                                                                            ppd^.Attr:=ownerattrib;
-                                                                           gdbgetmem({$IFDEF DEBUGBUILD}'{6F9EBE33-15A8-4FF5-87D7-BF01A40F6789}',{$ENDIF}Pointer(ppd^.SubNode),sizeof(TPropertyDeskriptorArray));
-                                                                           PTPropertyDeskriptorArray(ppd^.SubNode)^.init({$IFDEF DEBUGBUILD}'{EDA18239-9432-453B-BA54-0381DA1BB665}',{$ENDIF}100);;
+                                                                           Getmem(Pointer(ppd^.SubNode),sizeof(TPropertyDeskriptorArray));
+                                                                           PTPropertyDeskriptorArray(ppd^.SubNode)^.init(100);
                                                                       end;
                                                       ppda:=PTPropertyDeskriptorArray(ppd^.SubNode);
                                                   end;
@@ -478,7 +478,7 @@ begin
                             ppd^.value:='Empty';
 
                             //pvd:=PTObjectUnit(startaddr)^.InterfaceVariables.vardescarray.beginiterate(ir2);
-                            //taa:=pvd^.data.Instance;
+                            //taa:=pvd^.Instance;
                             //PTUserTypeDescriptor(pvd^.data.PTD).CreateProperties(PPDA,{ppd^.Name}tname,@pfd^.collapsed,{ppd^.Attr}pfd^.Attributes or ownerattrib,bmode,taa);
                             inc(integer(startaddr),sizeof(TObjectUnit));
                        end
@@ -525,11 +525,11 @@ begin
                                            end
                    else
                    begin
-                   if (pfd^.base.PFT^.GetFactTypedef^.TypeName='TTypedData') or
+                   if (pfd^.base.PFT^.GetFactTypedef^.TypeName='THardTypedData') or
                       (pfd^.base.PFT^.TypeName='TFaceTypedData') then
                                                           Begin
                                                                tb:={PTTypedData(startaddr)^.Instance}startaddr;
-                                                               ta:=PTTypedData(startaddr)^.ptd;
+                                                               ta:=PTHardTypedData(startaddr)^.ptd;
                                                                if ta<>nil then
                                                                PTUserTypeDescriptor(ta)^.CreateProperties(f,PDM_Field,PPDA,{PTTypedData(startaddr)^.ptd^.TypeName}tname,@pfd^.collapsed,{ppd^.Attr}pfd^.base.Attributes or ownerattrib,bmode,tb,'','')
                                                                else
@@ -541,6 +541,8 @@ begin
                                                           end
                                                        else
                                                            begin
+                                                           if pfd^.base.UserName='Renderer' then
+                                                                pfd^.base.UserName:=pfd^.base.UserName+'1';
                                                                 PTUserTypeDescriptor(pfd^.base.PFT)^.CreateProperties(f,PDM_Field,PPDA,{ppd^.Name}tname,@pfd^.collapsed,{ppd^.Attr}pfd^.base.Attributes or ownerattrib,bmode,startaddr,'','')
                                                            end;
                    end;

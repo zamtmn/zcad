@@ -314,7 +314,7 @@ begin
           if assigned(PProjoutbound) then
                             begin
                             PProjoutbound^.{FreeAnd}Done;
-                            GDBFreeMem(GDBPointer(PProjoutbound));
+                            Freemem(GDBPointer(PProjoutbound));
                             end;
           inherited done;
 end;

@@ -133,7 +133,7 @@ end;
 function GDBObjRotatedDimension.Clone;
 var tvo: PGDBObjRotatedDimension;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'GDBObjRotatedDimension.Clone',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjRotatedDimension));
+  Getmem(GDBPointer(tvo), sizeof(GDBObjRotatedDimension));
   tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight);
   CopyVPto(tvo^);
   CopyExtensionsTo(tvo^);
@@ -151,7 +151,7 @@ begin
 end;
 function AllocRotatedDimension:PGDBObjRotatedDimension;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocRotatedDimension}',{$ENDIF}result,sizeof(GDBObjRotatedDimension));
+  Getmem(result,sizeof(GDBObjRotatedDimension));
 end;
 function AllocAndInitRotatedDimension(owner:PGDBObjGenericWithSubordinated):PGDBObjRotatedDimension;
 begin

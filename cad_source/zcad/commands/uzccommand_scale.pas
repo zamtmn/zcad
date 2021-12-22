@@ -51,7 +51,7 @@ begin
    if (commandmanager.GetValueHeap{-vs})>0 then
    begin
    v1:=commandmanager.PopValue;
-   td:=Pgdbdouble(v1.data.Instance)^;
+   td:=Pgdbdouble(v1.data.Addr.Instance)^;
    scale(td,MZW_LBUTTON);
    end;
 end;

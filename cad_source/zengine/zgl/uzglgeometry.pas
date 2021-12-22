@@ -50,7 +50,7 @@ ZSegmentator=object(GZVectorData{-}<ZPolySegmentData>{//})
 ZGLGraphix= object(ZGLVectorObject)
                 procedure DrawGeometry(var rc:TDrawContext);virtual;
                 procedure DrawNiceGeometry(var rc:TDrawContext);virtual;
-                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar{$ENDIF});
+                constructor init();
                 destructor done;virtual;
                 function DrawLineWithLT(var rc:TDrawContext;const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp):TLLDrawResult;virtual;
                 function DrawPolyLineWithLT(var rc:TDrawContext;const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed,ltgen:GDBBoolean):TLLDrawResult;virtual;
@@ -191,7 +191,7 @@ begin
   pfont:=_pfont;
 
   ispl:=false;
-  pl.init({$IFDEF DEBUGBUILD}'{AC324582-5E55-4290-8017-44B8C675198A}',{$ENDIF}10);
+  pl.init(10);
 
   Bound.LB.x:=+infinity;
   Bound.LB.y:=+infinity;
@@ -331,7 +331,7 @@ constructor ZSegmentator.InitFromLine(const startpoint,endpoint:GDBVertex;out le
 var
    segment:ZPolySegmentData;
 begin
-     inherited init({$IFDEF DEBUGBUILD}'{A3EC2434-0A87-474E-BDA3-4E6C661C78AF}',{$ENDIF}1{,sizeof(ZPolySegmentData)});
+     inherited init(1);
      length:=CalcSegment(startpoint,endpoint,segment,0);
      PushBackData(segment);
      normalize(length);
@@ -365,9 +365,9 @@ var
    _ir:itrec;
 begin
      if closed then
-                   inherited init({$IFDEF DEBUGBUILD}'{A3EC2434-0A87-474E-BDA3-4E6C661C78AF}',{$ENDIF}points.Count{,sizeof(ZPolySegmentData)})
+                   inherited init(points.Count)
                else
-                   inherited init({$IFDEF DEBUGBUILD}'{A3EC2434-0A87-474E-BDA3-4E6C661C78AF}',{$ENDIF}points.Count+1{,sizeof(ZPolySegmentData)});
+                   inherited init(points.Count+1);
     length:=0;
     ptvprev:=points.beginiterate(_ir);
     pfirstv:=ptvprev;

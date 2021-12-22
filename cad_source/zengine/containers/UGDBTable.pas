@@ -27,14 +27,14 @@ PGDBTableArray=^GDBTableArray;
 {REGISTEROBJECTTYPE GDBTableArray}
 GDBTableArray= object(GZVectorPObects{-}<PTZctnrVectorGDBString,TZctnrVectorGDBString>{//})(*OpenArrayOfData=TZctnrVectorGDBString*)
                     columns,rows:GDBInteger;
-                    constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}c,r:GDBInteger);
+                    constructor init(c,r:GDBInteger);
                     //function copyto(var source:GDBOpenArrayOfData{-}<TZctnrVectorGDBString>{//}):GDBInteger;virtual;
               end;
 {EXPORT-}
 implementation
 constructor GDBTableArray.init;
 begin
-   inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}r{,sizeof(TZctnrVectorGDBString)});
+   inherited init(r);
 end;
 begin
 end.

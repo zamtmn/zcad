@@ -73,7 +73,7 @@ end;
 function GDBObjSuperLine.Clone;
 var tvo: PGDBObjSuperLine;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'GDBObjSuperLine.Clone',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjSuperLine));
+  Getmem(GDBPointer(tvo), sizeof(GDBObjSuperLine));
   tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight, CoordInOCS.lBegin, CoordInOCS.lEnd);
   CopyVPto(tvo^);
   CopyExtensionsTo(tvo^);
@@ -83,7 +83,7 @@ begin
 end;
 function AllocSuperLine:PGDBObjLine;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocLine}',{$ENDIF}pointer(result),sizeof(GDBObjSuperLine));
+  Getmem(pointer(result),sizeof(GDBObjSuperLine));
 end;
 function AllocAndInitSuperLine(owner:PGDBObjGenericWithSubordinated):PGDBObjLine;
 begin
@@ -111,7 +111,7 @@ begin
 end;
 function UpgradeLine2SuperLine(ptu:PExtensionData;pent:PGDBObjLine;const drawing:TDrawingDef):PGDBObjSuperLine;
 begin
-     GDBGetMem({$IFDEF DEBUGBUILD}'{6E92EE79-96D1-45BB-94CF-5C4C2141D886}',{$ENDIF}pointer(result),sizeof(GDBObjSuperLine));
+     Getmem(pointer(result),sizeof(GDBObjSuperLine));
      result^.initnul(pent^.bp.ListPos.Owner);
      result^.CoordInOCS:=pent^.CoordInOCS;
      pent.CopyVPto(result^);

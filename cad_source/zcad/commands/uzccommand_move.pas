@@ -115,8 +115,8 @@ begin
   drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
   showprompt(0);
    dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-   GDBGetMem({$IFDEF DEBUGBUILD}'{7702D93A-064E-4935-BFB5-DFDDBAFF9A93}',{$ENDIF}GDBPointer(pcoa),sizeof(tpcoavector));
-   pcoa^.init({$IFDEF DEBUGBUILD}'{379DC609-F39E-42E5-8E79-6D15F8630061}',{$ENDIF}counter{,sizeof(TCopyObjectDesc)});
+   Getmem(GDBPointer(pcoa),sizeof(tpcoavector));
+   pcoa^.init(counter);
    pobj:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
    if pobj<>nil then
    repeat
@@ -151,7 +151,7 @@ begin
      begin
           pcoa^.done;
           drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.free;
-          GDBFreemem(pointer(pcoa));
+          Freemem(pointer(pcoa));
      end;
      inherited;
 end;

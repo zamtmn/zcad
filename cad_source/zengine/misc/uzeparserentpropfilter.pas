@@ -8,7 +8,7 @@ uses
   SysUtils,
   uzeentity,uzeparser,Masks,
   uzcoimultiproperties,uzedimensionaltypes,
-  uzbtypes,Varman,uzcoimultipropertiesutil;
+  uzbtypes,Varman,varmandef,uzcoimultipropertiesutil;
 
 type
   TPropFilterData=record
@@ -279,13 +279,13 @@ begin
         if @mpd.EntBeforeIterateProc<>nil then
           mpd.EntBeforeIterateProc({bip}mp.PIiterateData,ChangedData);
         mpd.EntIterateProc({bip}mp.PIiterateData,ChangedData,mp,true,mpd.EntChangeProc,f);
-        tempresult:=mp.MPType.GetDecoratedValueAsString(PTOneVarData({bip}mp.PIiterateData)^.PVarDesc.data.Instance,f);
+        tempresult:=mp.MPType.GetDecoratedValueAsString(PVarDesk(PTOneVarData(mp.PIiterateData)^.VDAddr.Instance).data.Addr.Instance,f);
       end else if mp.MPObjectsData.MyGetValue(TObjIDWithExtender.Create(PGDBObjEntity(data.CurrentEntity)^.GetObjType,nil),mpd) then begin
         ChangedData:=CreateChangedData(data.CurrentEntity,mpd.GSData);
         if @mpd.EntBeforeIterateProc<>nil then
           mpd.EntBeforeIterateProc({bip}mp.PIiterateData,ChangedData);
         mpd.EntIterateProc({bip}mp.PIiterateData,ChangedData,mp,true,mpd.EntChangeProc,f);
-        tempresult:=mp.MPType.GetDecoratedValueAsString(PTOneVarData({bip}mp.PIiterateData)^.PVarDesc.data.Instance,f);
+        tempresult:=mp.MPType.GetDecoratedValueAsString(PVarDesk(PTOneVarData(mp.PIiterateData)^.VDAddr.Instance).data.Addr.Instance,f);
       end else
         tempresult:='';
     end else

@@ -52,7 +52,7 @@ var
     //pdesc:=pu.InterfaceVariables.vardescarray.beginiterate(ir);
     //if pdesc<>nil then begin
       result:=true;
-    //  propertyvalue:=pdesc.data.PTD.GetDecoratedValueAsString(pdesc.data.Instance,f);
+    //  propertyvalue:=pdesc.data.PTD.GetDecoratedValueAsString(pdesc.Instance,f);
     //end else
     //  result:=false;
     //pu.InterfaceVariables.vardescarray.Freewithproc(vardeskclear);

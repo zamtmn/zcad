@@ -449,7 +449,7 @@ end;
 //           if listVertex[i].deviceEnt<>nil then
 //           begin
 //               pvd:=FindVariableInEnt(listVertex[i].deviceEnt,'NMO_Name');
-//               if pgdbstring(pvd^.data.Instance)^ = name then
+//               if pgdbstring(pvd^.Instance)^ = name then
 //                  result:= i;
 //           end;
 //
@@ -476,7 +476,7 @@ begin
            begin
                pvd:=FindVariableInEnt(listVertex[i].deviceEnt,'NMO_Name');
                if pvd <> nil then
-               if pgdbstring(pvd^.data.Instance)^ = name then begin
+               if pgdbstring(pvd^.data.Addr.Instance)^ = name then begin
                   //result:=-1;
                                          //работа с библиотекой Аграф
                   EdgePath:=TClassList.Create;     //Создаем реберный путь
@@ -515,7 +515,7 @@ begin
            begin
                pvd:=FindVariableInEnt(listVertex[i].deviceEnt,'NMO_Name');
                if pvd <> nil then
-               if pgdbstring(pvd^.data.Instance)^ = name then begin
+               if pgdbstring(pvd^.data.Addr.Instance)^ = name then begin
                   result:= false;
                end;
            end;
@@ -990,44 +990,44 @@ begin
       pvd:=FindVariableInEnt(polyObj,'NMO_Suffix');
        if pvd<>nil then
           begin
-             pgdbstring(pvd^.data.Instance)^:=listHeadDevice[numHead].listGroup[numGroup].name ;
+             pgdbstring(pvd^.data.Addr.Instance)^:=listHeadDevice[numHead].listGroup[numGroup].name ;
           end;
 
         pvd:=FindVariableInEnt(polyObj,'GC_HDShortName');
         if pvd<>nil then
            begin
-              pgdbstring(pvd^.data.Instance)^:=listHeadDevice[numHead].shortName;
+              pgdbstring(pvd^.data.Addr.Instance)^:=listHeadDevice[numHead].shortName;
            end;
 
 
        pvd:=FindVariableInEnt(polyObj,'GC_HeadDevice');
        if pvd<>nil then
           begin
-             pgdbstring(pvd^.data.Instance)^:=listHeadDevice[numHead].name ;
+             pgdbstring(pvd^.data.Addr.Instance)^:=listHeadDevice[numHead].name ;
           end;
 
        pvd:=FindVariableInEnt(polyObj,'CABLE_AutoGen');
               if pvd<>nil then
                  begin
-                    pgdbboolean(pvd^.data.Instance)^:=true;
+                    pgdbboolean(pvd^.data.Addr.Instance)^:=true;
                  end;
 
        pvd:=FindVariableInEnt(polyObj,'GC_HDGroup');
        if pvd<>nil then
           begin
-             pgdbstring(pvd^.data.Instance)^:=listHeadDevice[numHead].listGroup[numGroup].name ;
+             pgdbstring(pvd^.data.Addr.Instance)^:=listHeadDevice[numHead].listGroup[numGroup].name ;
           end;
 
 
       pvd:=FindVariableInEnt(polyObj,'NMO_BaseName');
        if pvd<>nil then
           begin
-             pgdbstring(pvd^.data.Instance)^:=listHeadDevice[numHead].name + '-';
+             pgdbstring(pvd^.data.Addr.Instance)^:=listHeadDevice[numHead].name + '-';
           end;
        pvd:=FindVariableInEnt(polyObj,'CABLE_Segment');
        if pvd<>nil then
           begin
-             pgdbinteger(pvd^.data.Instance)^:=numSegment;
+             pgdbinteger(pvd^.data.Addr.Instance)^:=numSegment;
           end;
 
 
@@ -1153,13 +1153,13 @@ begin
     if metric then begin
      pvd:=FindVariableInEnt(dev,'NMO_BaseName');
      if pvd<>nil then
-       name:=pgdbstring(pvd^.data.Instance)^;
+       name:=pgdbstring(pvd^.data.Addr.Instance)^;
      end;
 
      pvd:=FindVariableInEnt(dev,'GC_InGroup_Metric');
        if pvd<>nil then
         begin
-           pgdbstring(pvd^.data.Instance)^:=name ;
+           pgdbstring(pvd^.data.Addr.Instance)^:=name ;
         end;
 end;
 
@@ -1183,7 +1183,7 @@ begin
      pvd:=FindVariableInEnt(nowDev,'SLCABAGEN_HeadDeviceName');
      if pvd<>nil then
         BEGIN
-     tempName:=pgdbstring(pvd^.data.Instance)^;
+     tempName:=pgdbstring(pvd^.data.Addr.Instance)^;
      repeat
            GetPartOfPath(nameParam,tempName,';');
            listStr1.PushBack(nameParam);
@@ -1193,7 +1193,7 @@ begin
      pvd:=FindVariableInEnt(nowDev,'SLCABAGEN_NGHeadDevice');
                if pvd<>nil then
         BEGIN
-     tempName:=pgdbstring(pvd^.data.Instance)^;
+     tempName:=pgdbstring(pvd^.data.Addr.Instance)^;
      repeat
            GetPartOfPath(nameParam,tempName,';');
            listStr2.PushBack(nameParam);
@@ -1202,7 +1202,7 @@ begin
      pvd:=FindVariableInEnt(nowDev,'SLCABAGEN_SLTypeagen');
           if pvd<>nil then
         BEGIN
-     tempName:=pgdbstring(pvd^.data.Instance)^;
+     tempName:=pgdbstring(pvd^.data.Addr.Instance)^;
      repeat
            GetPartOfPath(nameParam,tempName,';');
            listStr3.PushBack(nameParam);
@@ -1325,7 +1325,7 @@ function getGroupDeviceInGraph(ourGraph:TGraphBuilder;Epsilon:double; var listEr
 
                  // Проверяем есть ли у устройсва хозяин
                  // pvd:=FindVariableInEnt(ourGraph.listVertex[i].deviceEnt,'GC_HeadDevice');
-                 //headDevName:=pgdbstring(pvd^.data.Instance)^;
+                 //headDevName:=pgdbstring(pvd^.Instance)^;
                  headDevName:=listCableLaying[m].headName;
                  numHeadDev:=getNumHeadDevice(ourGraph.listVertex,headDevName,G,i); // если минус значит нету хозяина
 
@@ -1347,7 +1347,7 @@ function getGroupDeviceInGraph(ourGraph:TGraphBuilder;Epsilon:double; var listEr
                              pvd:=FindVariableInEnt(ourGraph.listVertex[numHeadDev].deviceEnt,'NMO_Suffix');
                              if pvd<>nil then
                                 begin
-                                   shortNameHead:=pgdbstring(pvd^.data.Instance)^;
+                                   shortNameHead:=pgdbstring(pvd^.data.Addr.Instance)^;
                                 end;
                              headDeviceInfo:=THeadDeviceInfo.Create;
                              headDeviceInfo.name:=headDevName;
@@ -1721,7 +1721,7 @@ function getListMasterDev(listVertexEdge:TGraphBuilder;globalGraph: TGraph):TVec
          pvd:=FindVariableInEnt(nowDev,'SLCABAGEN_HeadDeviceName');
          if pvd<>nil then
             BEGIN
-         tempName:=pgdbstring(pvd^.data.Instance)^;
+         tempName:=pgdbstring(pvd^.data.Addr.Instance)^;
          repeat
                GetPartOfPath(nameParam,tempName,';');
                listStr1.PushBack(nameParam);
@@ -1731,7 +1731,7 @@ function getListMasterDev(listVertexEdge:TGraphBuilder;globalGraph: TGraph):TVec
          pvd:=FindVariableInEnt(nowDev,'SLCABAGEN_NGHeadDevice');
                    if pvd<>nil then
             BEGIN
-         tempName:=pgdbstring(pvd^.data.Instance)^;
+         tempName:=pgdbstring(pvd^.data.Addr.Instance)^;
          repeat
                GetPartOfPath(nameParam,tempName,';');
                listStr2.PushBack(nameParam);
@@ -1740,7 +1740,7 @@ function getListMasterDev(listVertexEdge:TGraphBuilder;globalGraph: TGraph):TVec
          pvd:=FindVariableInEnt(nowDev,'SLCABAGEN_SLTypeagen');
               if pvd<>nil then
             BEGIN
-         tempName:=pgdbstring(pvd^.data.Instance)^;
+         tempName:=pgdbstring(pvd^.data.Addr.Instance)^;
          repeat
                GetPartOfPath(nameParam,tempName,';');
                listStr3.PushBack(nameParam);
@@ -1810,7 +1810,7 @@ function getListMasterDev(listVertexEdge:TGraphBuilder;globalGraph: TGraph):TVec
                              masterDevInfo.shortName:='nil';
                              pvd:=FindVariableInEnt(listVertexEdge.listVertex[numHeadDev].deviceEnt,'NMO_Suffix');
                              if pvd<>nil then
-                                   masterDevInfo.shortName:=pgdbstring(pvd^.data.Instance)^;
+                                   masterDevInfo.shortName:=pgdbstring(pvd^.data.Addr.Instance)^;
                              result.PushBack(masterDevInfo);
                              numHead:=result.Size-1;
                              masterDevInfo:=nil;
@@ -2524,7 +2524,7 @@ function getListParamDev(nowDev:PGDBObjDevice;nameType:string):TListString;
         pvd:=FindVariableInEnt(nowDev,nameType);
          if pvd<>nil then
             BEGIN
-             tempName:=pgdbstring(pvd^.data.Instance)^;
+             tempName:=pgdbstring(pvd^.data.Addr.Instance)^;
              repeat
                    GetPartOfPath(nameParam,tempName,';');
                    result.PushBack(nameParam);

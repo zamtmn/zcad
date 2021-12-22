@@ -77,8 +77,8 @@ constructor TTypedChangeCommand.Assign(PDataInstance:GDBPointer;PType:PUserTypeD
 begin
      Addr:=PDataInstance;
      PTypeManager:=PType;
-     GDBGetMem({$IFDEF DEBUGBUILD}'{49289E94-F423-4497-B0B2-32215E6D5D40}',{$ENDIF}OldData,PTypeManager^.SizeInGDBBytes);
-     GDBGetMem({$IFDEF DEBUGBUILD}'{49289E94-F423-4497-B0B2-32215E6D5D40}',{$ENDIF}NewData,PTypeManager^.SizeInGDBBytes);
+     Getmem(OldData,PTypeManager^.SizeInGDBBytes);
+     Getmem(NewData,PTypeManager^.SizeInGDBBytes);
      PTypeManager^.CopyInstanceTo(Addr,OldData);
      PTypeManager^.CopyInstanceTo(Addr,NewData);
      PDataOwner:=nil;
@@ -145,8 +145,8 @@ begin
      inherited;
      PTypeManager^.MagicFreeInstance(NewData);
      PTypeManager^.MagicFreeInstance(OldData);
-     GDBFreeMem(NewData);
-     GDBFreeMem(OldData);
+     Freemem(NewData);
+     Freemem(OldData);
 end;
 function TElementaryCommand.GetCommandType:TTypeCommand;
 begin
@@ -160,7 +160,7 @@ constructor TChangeCommand.init(obj:GDBPointer;_datasize:PtrInt);
 begin
      Addr:=obj;
      datasize:=_datasize;
-     GDBGetMem({$IFDEF DEBUGBUILD}'{E438B065-CE41-4BB2-B1C9-1DC526190A85}',{$ENDIF}pointer(tempdata),datasize);
+     Getmem(pointer(tempdata),datasize);
      Move(Addr^,tempdata^,datasize);
 end;
 

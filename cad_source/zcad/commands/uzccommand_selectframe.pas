@@ -21,7 +21,6 @@ unit uzccommand_selectframe;
 
 interface
 uses
- {$IFDEF DEBUGBUILD}strutils,{$ENDIF}
  uzglviewareageneral,zeundostack,uzcoimultiobjects,
  uzgldrawcontext,uzbpaths,uzeffmanager,
  uzestylesdim,uzeenttext,

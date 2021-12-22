@@ -95,7 +95,7 @@ begin
   begin
        pvd:=pentvarext.entityunit.FindVariable(varname);
        if pvd<>nil then
-                       result:=pvd.data.PTD^.GetValueAsString(pvd.data.Instance);
+                       result:=pvd.data.PTD^.GetValueAsString(pvd.data.Addr.Instance);
   end;
 end;
 

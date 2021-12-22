@@ -99,7 +99,7 @@ begin
     if tb<>nil then begin
       tb^.bp:=pb^.bp;
       pb^.done;
-      gdbfreemem(pointer(pb));
+      Freemem(pointer(pb));
       pb:=pointer(tb);
     end;
 

@@ -106,9 +106,9 @@ begin
     vdpvertex:=commandmanager.PopValue;
     if commandmanager.get3dpoint(rscmSpecifyPoint,p)=GRNormal then
     begin
-         pc:=PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pgdbvertex(ppointer(vdpvertex.data.Instance)^)^);
-         pgdbvertex(ppointer(vdpvertex.data.Instance)^)^:=p;
-         PTGDBVertexChangeCommand(pc)^.PEntity:=ppointer(vdpobj.data.Instance)^;
+         pc:=PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pgdbvertex(ppointer(vdpvertex.data.Addr.Instance)^)^);
+         pgdbvertex(ppointer(vdpvertex.data.Addr.Instance)^)^:=p;
+         PTGDBVertexChangeCommand(pc)^.PEntity:=ppointer(vdpobj.data.Addr.Instance)^;
          PTGDBVertexChangeCommand(pc)^.ComitFromObj;
     end;
     result:=cmd_ok;
@@ -123,9 +123,9 @@ begin
     vdpvertex:=commandmanager.PopValue;
     if commandmanager.get3dpoint(rscmSpecifyX,p)=GRNormal then
     begin
-         pc:=PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBXCoordinate(ppointer(vdpvertex.data.Instance)^)^);
-         pgdbdouble(ppointer(vdpvertex.data.Instance)^)^:=p.x;
-         PTGDBDoubleChangeCommand(pc)^.PEntity:=ppointer(vdpobj.data.Instance)^;
+         pc:=PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBXCoordinate(ppointer(vdpvertex.data.Addr.Instance)^)^);
+         pgdbdouble(ppointer(vdpvertex.data.Addr.Instance)^)^:=p.x;
+         PTGDBDoubleChangeCommand(pc)^.PEntity:=ppointer(vdpobj.data.Addr.Instance)^;
          PTGDBDoubleChangeCommand(pc)^.ComitFromObj;
     end;
     result:=cmd_ok;
@@ -140,9 +140,9 @@ begin
     vdpvertex:=commandmanager.PopValue;
     if commandmanager.get3dpoint(rscmSpecifyY,p)=GRNormal then
     begin
-         pc:=PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBYCoordinate(ppointer(vdpvertex.data.Instance)^)^);
-         pgdbdouble(ppointer(vdpvertex.data.Instance)^)^:=p.y;
-         PTGDBDoubleChangeCommand(pc)^.PEntity:=ppointer(vdpobj.data.Instance)^;
+         pc:=PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBYCoordinate(ppointer(vdpvertex.data.Addr.Instance)^)^);
+         pgdbdouble(ppointer(vdpvertex.data.Addr.Instance)^)^:=p.y;
+         PTGDBDoubleChangeCommand(pc)^.PEntity:=ppointer(vdpobj.data.Addr.Instance)^;
          PTGDBDoubleChangeCommand(pc)^.ComitFromObj;
     end;
     result:=cmd_ok;
@@ -157,9 +157,9 @@ begin
     vdpvertex:=commandmanager.PopValue;
     if commandmanager.get3dpoint(rscmSpecifyZ,p)=GRNormal then
     begin
-         pc:=PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBZCoordinate(ppointer(vdpvertex.data.Instance)^)^);
-         pgdbdouble(ppointer(vdpvertex.data.Instance)^)^:=p.z;
-         PTGDBDoubleChangeCommand(pc)^.PEntity:=ppointer(vdpobj.data.Instance)^;
+         pc:=PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBZCoordinate(ppointer(vdpvertex.data.Addr.Instance)^)^);
+         pgdbdouble(ppointer(vdpvertex.data.Addr.Instance)^)^:=p.z;
+         PTGDBDoubleChangeCommand(pc)^.PEntity:=ppointer(vdpobj.data.Addr.Instance)^;
          PTGDBDoubleChangeCommand(pc)^.ComitFromObj;
     end;
     result:=cmd_ok;
@@ -176,9 +176,9 @@ begin
     begin
       if commandmanager.get3dpoint(rscmSpecifySecondPoint,p2)=GRNormal then
       begin
-        pc:=PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pgdbdouble(ppointer(vdpvertex.data.Instance)^)^);
-        pgdblength(ppointer(vdpvertex.data.Instance)^)^:=uzegeometry.Vertexlength(p1,p2);
-        PTGDBDoubleChangeCommand(pc)^.PEntity:=ppointer(vdpobj.data.Instance)^;
+        pc:=PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pgdbdouble(ppointer(vdpvertex.data.Addr.Instance)^)^);
+        pgdblength(ppointer(vdpvertex.data.Addr.Instance)^)^:=uzegeometry.Vertexlength(p1,p2);
+        PTGDBDoubleChangeCommand(pc)^.PEntity:=ppointer(vdpobj.data.Addr.Instance)^;
         PTGDBDoubleChangeCommand(pc)^.ComitFromObj;
       end;
     end;

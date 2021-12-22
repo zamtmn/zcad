@@ -161,18 +161,6 @@ BlockPreViewExport(24|DIAGRAM_H2_2|*images/palettes/DIAGRAM_H2_2.png)
 BlockPreViewExport(24|DIAGRAM_H2_2|*images/palettes/DIAGRAM_H2_2_150.png)
 BlockPreViewExport(48|DIAGRAM_H2_2|*images/palettes/DIAGRAM_H2_2_300.png)
 
-BlockPreViewExport(24|DIAGRAM_H3_1|*images/palettes/DIAGRAM_H3_1.png)
-BlockPreViewExport(24|DIAGRAM_H3_1|*images/palettes/DIAGRAM_H3_1_150.png)
-BlockPreViewExport(48|DIAGRAM_H3_1|*images/palettes/DIAGRAM_H3_1_300.png)
-
-BlockPreViewExport(24|DIAGRAM_H3_2|*images/palettes/DIAGRAM_H3_2.png)
-BlockPreViewExport(24|DIAGRAM_H3_2|*images/palettes/DIAGRAM_H3_2_150.png)
-BlockPreViewExport(48|DIAGRAM_H3_2|*images/palettes/DIAGRAM_H3_2_300.png)
-
-BlockPreViewExport(24|DIAGRAM_H3_3|*images/palettes/DIAGRAM_H3_3.png)
-BlockPreViewExport(24|DIAGRAM_H3_3|*images/palettes/DIAGRAM_H3_3_150.png)
-BlockPreViewExport(48|DIAGRAM_H3_3|*images/palettes/DIAGRAM_H3_3_300.png)
-
 BlockPreViewExport(24|DIAGRAM_FD0|*images/palettes/DIAGRAM_FD0.png)
 BlockPreViewExport(24|DIAGRAM_FD0|*images/palettes/DIAGRAM_FD0_150.png)
 BlockPreViewExport(48|DIAGRAM_FD0|*images/palettes/DIAGRAM_FD0_300.png)
@@ -181,13 +169,9 @@ BlockPreViewExport(24|DIAGRAM_FD1|*images/palettes/DIAGRAM_FD1.png)
 BlockPreViewExport(24|DIAGRAM_FD1|*images/palettes/DIAGRAM_FD1_150.png)
 BlockPreViewExport(48|DIAGRAM_FD1|*images/palettes/DIAGRAM_FD1_300.png)
 
-BlockPreViewExport(24|DIAGRAM_FD2|*images/palettes/DIAGRAM_FD2.png)
-BlockPreViewExport(24|DIAGRAM_FD2|*images/palettes/DIAGRAM_FD2_150.png)
-BlockPreViewExport(48|DIAGRAM_FD2|*images/palettes/DIAGRAM_FD2_300.png)
-
-BlockPreViewExport(24|DIAGRAM_FD3|*images/palettes/DIAGRAM_FD3.png)
-BlockPreViewExport(24|DIAGRAM_FD3|*images/palettes/DIAGRAM_FD3_150.png)
-BlockPreViewExport(48|DIAGRAM_FD3|*images/palettes/DIAGRAM_FD3_300.png)
+BlockPreViewExport(24|DIAGRAM_QF1|*images/palettes/DIAGRAM_QF1.png)
+BlockPreViewExport(24|DIAGRAM_QF1|*images/palettes/DIAGRAM_QF1_150.png)
+BlockPreViewExport(48|DIAGRAM_QF1|*images/palettes/DIAGRAM_QF1_300.png)
 
 BlockPreViewExport(24|EL_VL_SUPPORT4_1|*images/palettes/EL_VL_SUPPORT4_1.png)
 BlockPreViewExport(24|EL_VL_SUPPORT4_1|*images/palettes/EL_VL_SUPPORT4_1_150.png)
@@ -204,6 +188,14 @@ BlockPreViewExport(48|EL_VL_SCHEMA1_0|*images/palettes/EL_VL_SCHEMA1_0_300.png)
 BlockPreViewExport(24|EL_VL_SCHEMA2_0|*images/palettes/EL_VL_SCHEMA2_0.png)
 BlockPreViewExport(24|EL_VL_SCHEMA2_0|*images/palettes/EL_VL_SCHEMA2_0_150.png)
 BlockPreViewExport(48|EL_VL_SCHEMA2_0|*images/palettes/EL_VL_SCHEMA2_0_300.png)
+
+BlockPreViewExport(24|EL_VL_SCHEMA3_0|*images/palettes/EL_VL_SCHEMA3_0.png)
+BlockPreViewExport(24|EL_VL_SCHEMA3_0|*images/palettes/EL_VL_SCHEMA3_0_150.png)
+BlockPreViewExport(48|EL_VL_SCHEMA3_0|*images/palettes/EL_VL_SCHEMA3_0_300.png)
+
+BlockPreViewExport(24|EL_VL_SCHEMA4_0|*images/palettes/EL_VL_SCHEMA4_0.png)
+BlockPreViewExport(24|EL_VL_SCHEMA4_0|*images/palettes/EL_VL_SCHEMA4_0_150.png)
+BlockPreViewExport(48|EL_VL_SCHEMA4_0|*images/palettes/EL_VL_SCHEMA4_0_300.png)
 
 BlockPreViewExport(24|UNIT_GRID1|*images/palettes/UNIT_GRID1.png)
 BlockPreViewExport(24|UNIT_GRID1|*images/palettes/UNIT_GRID1_150.png)

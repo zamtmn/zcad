@@ -9,7 +9,6 @@ usescopy objname;
 var
 
 T2:GDBString;(*'Марка'*)
-T3:GDBString;(*'Параметры'*)
 
 implementation
 
@@ -25,6 +24,5 @@ NMO_Suffix:='??';
 NMO_Affix:='.11';
 
 T2:='??';
-T3:='??';
 
 end.

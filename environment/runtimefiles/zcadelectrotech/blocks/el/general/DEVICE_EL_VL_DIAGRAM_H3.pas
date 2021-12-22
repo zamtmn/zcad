@@ -10,7 +10,6 @@ var
 
 T1:GDBString;(*'Маркировка'*)
 T2:GDBString;(*'Тип'*)
-T3:GDBString;(*'Адрес'*)
 
 implementation
 
@@ -27,6 +26,5 @@ NMO_Affix:='.1';
 
 T1:='??';
 T2:='??';
-T3:='??';
 
 end.

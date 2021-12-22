@@ -8,12 +8,12 @@ usescopy objname;
 
 var
 
-T7:GDBString;(*'P установленная'*)
-T8:GDBString;(*'P расчетная'*)
-T9:GDBString;(*'I фаза А'*)
-T10:GDBString;(*'I фаза В'*)
-T11:GDBString;(*'I фаза С'*)
-T12:GDBString;(*'Cos Ф'*)
+T5:GDBString;(*'P установленная'*)
+T6:GDBString;(*'P расчетная'*)
+T7:GDBString;(*'I фаза А'*)
+T8:GDBString;(*'I фаза В'*)
+T9:GDBString;(*'I фаза С'*)
+T10:GDBString;(*'Cos Ф'*)
 
 implementation
 
@@ -27,11 +27,11 @@ NMO_Name:='ФД0';
 NMO_BaseName:='ФД';
 NMO_Suffix:='??';
 
+T5:='??';
+T6:='??';
 T7:='??';
 T8:='??';
 T9:='??';
 T10:='??';
-T11:='??';
-T12:='??';
 
 end.

@@ -592,8 +592,10 @@ begin
     tdesc:=GetParrayAsPointer;
     for i := 0 to count - 1 do
     begin
-      if tdesc^.pcontrolpoint<>nil then tdesc^.pcontrolpoint^.selectcurrentcontrolpoint(key,mx,my,h);
-      SelectedCount:=SelectedCount+tdesc^.pcontrolpoint^.SelectedCount;
+      if tdesc^.pcontrolpoint<>nil then begin
+        tdesc^.pcontrolpoint^.selectcurrentcontrolpoint(key,mx,my,h);
+        SelectedCount:=SelectedCount+tdesc^.pcontrolpoint^.SelectedCount;
+      end;
       inc(tdesc);
     end;
   end;

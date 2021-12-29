@@ -52,10 +52,10 @@ begin
            pvd:=pu^.FindVariable('DBCounter');
            vn:=inttostr(GDBInteger(pvd.data.Addr.Instance^));
            vn:='_EQ'+dupestring('0',6-length(vn))+vn;
-           pu.CreateVariable(vn,PUserTypeDescriptor(PTTypedData(commandmanager.ContextCommandParams).ptd)^.TypeName);
+           pu.CreateVariable(vn,PUserTypeDescriptor(PTHardTypedData(commandmanager.ContextCommandParams).ptd)^.TypeName);
            p:=pu.FindVariable(vn).data.Addr.Instance;
-           PObjectDescriptor(PTTypedData(commandmanager.ContextCommandParams)^.ptd)^.RunMetod('initnul',p);
-           PUserTypeDescriptor(PTTypedData(commandmanager.ContextCommandParams)^.ptd)^.CopyInstanceTo(PTHardTypedData(commandmanager.ContextCommandParams)^.Instance,p);
+           PObjectDescriptor(PTHardTypedData(commandmanager.ContextCommandParams)^.ptd)^.RunMetod('initnul',p);
+           PUserTypeDescriptor(PTHardTypedData(commandmanager.ContextCommandParams)^.ptd)^.CopyInstanceTo(PTHardTypedData(commandmanager.ContextCommandParams)^.Instance,p);
            //PObjectDescriptor(PTTypedData(commandmanager.ContextCommandParams)^.ptd)^.RunMetod('format',p);
            inc(GDBInteger(pvd.data.Addr.Instance^));
      end

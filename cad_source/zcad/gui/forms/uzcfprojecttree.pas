@@ -225,7 +225,7 @@ begin
                                      eqnode:=TEqTreeNode({tree}TmyTreeView(BuildNode.TreeView).Items.addchild(CurrNode,(treepos)));
                                      eqnode.fBlockName:=pvdeq^.name;
                                      eqnode.FPopupMenu:=pcm;
-                                     //eqnode.ptd.PTD:=pvdeq^.data.PTD;
+                                     eqnode.ptd.PTD:=pvdeq^.data.PTD;
                                      eqnode.ptd.Instance:=pvdeq^.data.Addr.Instance;
 
                                      //eqnode.init(s+pvdeq^.name,pvdeq^.name,pvdeq^.data.PTD,pvdeq^.Instance,pcm)
@@ -235,7 +235,7 @@ begin
                                       eqnode:=TEqTreeNode({tree}TmyTreeView(BuildNode.TreeView).Items.addchild(CurrNode,(PDbBaseObject(pvdeq^.data.Addr.Instance)^.NameShort)+' ('+pvdeq^.name+') '+' из '+treepos));
                                       eqnode.fBlockName:=pvdeq^.name;
                                       eqnode.FPopupMenu:=pcm;
-                                      //eqnode.ptd.PTD:=pvdeq^.data.PTD;
+                                      eqnode.ptd.PTD:=pvdeq^.data.PTD;
                                       eqnode.ptd.Instance:=pvdeq^.data.Addr.Instance;
 
                                  //eqnode.init(s+treepos,pvdeq^.name,pvdeq^.data.PTD,pvdeq^.Instance,pcm);

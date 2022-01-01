@@ -30,7 +30,6 @@ uses
   uzbgeomtypes,
   uzccommandsmanager,
   uzeentlwpolyline,uzeentpolyline,uzeentityfactory,
-  uzcdrawings,
   uzcutils,
   uzbtypes,
   uzegeometry,
@@ -61,8 +60,8 @@ var
     vertexLWObj:GDBvertex2D;               //переменная для добавления вершин в полилинию
     vertexObj:GDBvertex;
     widthObj:GLLWWidth;                    //переменная для добавления веса линии в начале и конце пути
-    polyLWObj:PGDBObjLWPolyline;
-    polyObj:PGDBObjPolyline;
+    //polyLWObj:PGDBObjLWPolyline;
+    //polyObj:PGDBObjPolyline;
     pe:T3PointPentity;
     polygonDrawModePentity:TPointPolygonDrawModePentity;
     i:integer;

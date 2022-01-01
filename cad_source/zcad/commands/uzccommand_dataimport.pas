@@ -26,7 +26,7 @@ uses
   uzeentity,
   uzccommandsabstract,uzccommandsimpl,
   uzcdialogsfiles,
-  uzbtypesbase,uzbpaths,uzcutils,uzcinterface,
+  uzbpaths,uzcinterface,
   uzeentitiestypefilter,
   uzcdrawings,uzedrawingsimple,uzgldrawcontext,
   gzctnrvectorpobjects,varmandef,uzcenitiesvariablesextender,
@@ -154,8 +154,8 @@ end;
 
 function DataImport_com(operands:TCommandOperands):TCommandResult;
 var
-  pv:pGDBObjEntity;
-  ir:itrec;
+  //pv:pGDBObjEntity;
+  //ir:itrec;
   lph:TLPSHandle;
   isload:boolean;
   FDoc:TCSVDocument;

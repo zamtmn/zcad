@@ -21,7 +21,7 @@ unit uzgprimitives;
 interface
 uses uzgprimitivessarray,math,uzglgeomdata,uzgldrawcontext,uzgvertex3sarray,uzgldrawerabstract,
      uzbtypesbase,sysutils,uzbtypes,
-     gzctnrvectortypes,uzbgeomtypes,uzegeometry;
+     uzbgeomtypes,uzegeometry;
 const
      LLAttrNothing=0;
      LLAttrNeedSolid=1;

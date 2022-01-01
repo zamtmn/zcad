@@ -24,7 +24,7 @@ uses sysutils,
      uzetextpreprocessor,UGDBOpenArrayOfByte,uzbtypes,uzeobjectextender,
      uzeentity,uzeenttext,uzeblockdef,varmandef,Varman,UUnitManager,
      uzventsuperline,uzcentelleader,
-     URecordDescriptor,UBaseTypeDescriptor,uzbmemman;
+     URecordDescriptor,UBaseTypeDescriptor;
 implementation
 begin
   {from GDBObjBlockDef}

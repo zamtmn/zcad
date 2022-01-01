@@ -22,7 +22,7 @@ unit uzccommand_text;
 interface
 uses
   SysUtils,
-  gzctnrvectortypes,zcmultiobjectcreateundocommand,
+  gzctnrvectortypes,
   uzgldrawcontext,
   uzbtypesbase,
   uzbtypes,

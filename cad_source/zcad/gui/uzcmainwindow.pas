@@ -32,7 +32,7 @@ uses
        uzgldrawergdi,uzcdrawing,UGDBOpenArrayOfPV,uzedrawingabstract,
        uzepalette,uzbpaths,uzglviewareadata,uzeentitiesprop,uzcinterface,
        UGDBOpenArrayOfByte,uzbtypesbase,uzbtypes,
-       uzegeometry,uzcsysvars,uzcstrconsts,uzbstrproc,UGDBNamedObjectsArray,uzclog,uzblog,
+       uzegeometry,uzcsysvars,uzcstrconsts,uzbstrproc,uzclog,uzblog,
        uzedimensionaltypes,varmandef, varman,UUnitManager,uzcsysinfo,strmy,uzestylestexts,uzestylesdim,
   uzbexceptionscl,uzbexceptionsgui,
   {ZCAD SIMPLE PASCAL SCRIPT}
@@ -45,7 +45,7 @@ uses
        uzccommand_loadlayout,
   {GUI}
        uzcuitypes,
-       uzcmenucontextcheckfuncs,uzctbextmenus,uzmenusdefaults,uzmenusmanager,uztoolbarsmanager,uzctextenteditor,uzcfcommandline,uzctreenode,uzcflineweights,uzcctrllayercombobox,uzcctrlcontextmenu,
+       uzcmenucontextcheckfuncs,uzctbextmenus,uzmenusdefaults,uzmenusmanager,uztoolbarsmanager,uzctextenteditor,uzcfcommandline,uzctreenode,uzcctrlcontextmenu,
        uzcimagesmanager,usupportgui,uzcuidialogs,
   {}
        uzgldrawcontext,uzglviewareaabstract,uzcguimanager,uzcinterfacedata,
@@ -1959,7 +1959,7 @@ var
    i,k:Integer;
    pdwg:PTSimpleDrawing;
    FIPCServerRunning:boolean;
-   otherinstancerunning:boolean;
+   //otherinstancerunning:boolean;
    oldmenu,newmenu:TMainMenu;
 begin
   if GUIMode<>ZMsgID_GUIActionRedraw then

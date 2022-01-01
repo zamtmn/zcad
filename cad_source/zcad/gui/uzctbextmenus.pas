@@ -24,17 +24,17 @@ uses
   {LCL}
     Laz2_DOM,
     ActnList,LCLType,LCLProc,uzctranslations,LCLIntf,
-    Forms, stdctrls, ExtCtrls, ComCtrls,Controls,Classes,SysUtils,LazUTF8,
+    Forms, ExtCtrls, ComCtrls,Controls,Classes,SysUtils,LazUTF8,
     menus,graphics,
   {ZCAD BASE}
     uzbpaths,
     uzegeometry,uzcsysvars,uzbstrproc,uzclog,
     varmandef, varman,UUnitManager,uzcsysinfo,strmy,uzestylesdim,
   {ZCAD SIMPLE PASCAL SCRIPT}
-       languade,
+       //languade,
   {ZCAD ENTITIES}
        uzeentity,uzestyleslayers,
-       uzeblockdef,uzcdrawings,uzeenttext,
+       uzeblockdef,{uzcdrawings,}uzeenttext,
   {ZCAD COMMANDS}
        uzccommandsmanager,
   {GUI}
@@ -205,8 +205,8 @@ begin
     cxmenumgr.RegisterLCLMenu(CreatedMenuItem);
 end;
 class procedure ZMenuExt.ZMenuExtMenuItemReader(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
-var
-  createdmenu:TMenu;
+//var
+//  createdmenu:TMenu;
 begin
     case MT of
       TMT_MainMenu:begin

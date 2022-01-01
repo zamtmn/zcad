@@ -19,7 +19,7 @@ unit uzetextpreprocessor;
 {$INCLUDE def.inc}
 
 interface
-uses uzbtypes,uzbstrproc,sysutils,uzbtypesbase,usimplegenerics,gzctnrstl,LazLogger,gutil,uzeparser;
+uses uzbtypes,uzbstrproc,sysutils,uzbtypesbase,gzctnrstl,LazLogger,uzeparser;
 type
   TInternalCharType=UnicodeChar;
   TInternalStringType=UnicodeString;
@@ -124,7 +124,7 @@ begin
 end;
 {$endif}
 function textformat;
-var FindedIdPos,ContinuePos,EndBracketPos,i2,counter:GDBInteger;
+var FindedIdPos,ContinuePos,EndBracketPos,{i2,}counter:GDBInteger;
     ps{,s2},res,operands:TDXFEntsInternalStringType;
     pair:Prefix2ProcessFunc.TDictionaryPair;
     (*{$IFNDEF DELPHI}

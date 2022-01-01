@@ -20,8 +20,8 @@ unit uzctextpreprocessorimpl;
 {$mode objfpc}
 
 interface
-uses uzeentity,uzcvariablesutils,uzetextpreprocessor,languade,uzbstrproc,sysutils,
-     uzbtypesbase,varmandef,uzbtypes,uzcenitiesvariablesextender,uzeentsubordinated,
+uses uzeentity,uzcvariablesutils,uzetextpreprocessor,uzbstrproc,sysutils,
+     uzbtypesbase,varmandef,uzbtypes,uzcenitiesvariablesextender,
      uzcpropertiesutils,uzeparser,LazUTF8;
 type
   TStr2VarProcessor=class(TMyParser.TParserTokenizer.TDynamicProcessor)
@@ -126,7 +126,6 @@ end;
 
 function var2value(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;pobj:Pointer):gdbstring;
 var
-  endpos:integer;
   varname:GDBString;
   pv:pvardesk;
 begin
@@ -166,7 +165,7 @@ end;}
 function EscapeSeq(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;pobj:Pointer):gdbstring;
 var
   sym:char;
-  value,s1,s2:string;
+  value:string;
   num,code:integer;
 begin
   result:='';

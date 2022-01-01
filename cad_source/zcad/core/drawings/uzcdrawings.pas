@@ -816,8 +816,8 @@ var
    croot:PGDBObjGenericSubEntry;
    pvisible:PGDBObjEntity;
    ir:itrec;
-   pvd:pvardesk;
-   pentvarext:TVariablesExtender;
+   //pvd:pvardesk;
+   //pentvarext:TVariablesExtender;
 begin
   croot:=self.GetCurrentROOT;
   if croot<>nil then begin
@@ -927,7 +927,7 @@ var
    ir:itrec;
    pvisible,pvisible2:PGDBObjEntity;
    DC:TDrawContext;
-   psourcevarext,pdestvarext:TVariablesExtender;
+   //psourcevarext,pdestvarext:TVariablesExtender;
 begin
       if pos(DevicePrefix,_source.Name)=1 then
                                          CopyBlock(_from,_to,_from.BlockDefArray.getblockdef(copy(_source.Name,8,length(_source.Name)-7)));

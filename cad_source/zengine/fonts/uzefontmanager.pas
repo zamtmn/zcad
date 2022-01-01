@@ -23,7 +23,7 @@ interface
 uses
   UGDBOpenArrayOfByte,{$IFNDEF DELPHI}LResources,{$ENDIF}LCLProc,uzbpaths,
   uzelclintfex,uzestrconsts,uzbstrproc,uzefont,uzbtypesbase,
-  sysutils,uzbtypes,uzegeometry,usimplegenerics,gzctnrstl,
+  sysutils,uzbtypes,uzegeometry,gzctnrstl,
   UGDBNamedObjectsArray,classes,uzefontttfpreloader,uzelongprocesssupport;
 type
   TGeneralFontParam=record

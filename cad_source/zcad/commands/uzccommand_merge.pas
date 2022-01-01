@@ -27,8 +27,7 @@ uses
   uzeffmanager,
   uzccommand_newdwg,
   uzccmdload,
-  uzccommandsimpl,uzccommandsabstract,
-  uzcdrawings;
+  uzccommandsimpl,uzccommandsabstract;
 
 function Merge_com(operands:TCommandOperands):TCommandResult;
 

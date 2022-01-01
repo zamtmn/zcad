@@ -8,7 +8,7 @@ unit uzccablemanager;
 {$INCLUDE def.inc}
 interface
 uses uzcenitiesvariablesextender,uzcvariablesutils,Varman,uzbstrproc,uzcentcable,
-     uzeentdevice,uzeconsts,gzctnrvectorpobjects,languade,gzctnrvectorobjects,
+     uzeentdevice,uzeconsts,gzctnrvectorpobjects,gzctnrvectorobjects,
      gzctnrvectortypes,SysUtils,uzbtypesbase,uzbtypes,varmandef,uzcdrawings,
      uzcstrconsts;
 resourcestring

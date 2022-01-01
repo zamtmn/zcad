@@ -242,7 +242,7 @@ begin
   Result := TimeStamp.Whole;
 end;*)
 function mynow:TMyTimeStamp;
-var a:int64;
+//var a:int64;
 begin
      result.time:=now();
      {asm

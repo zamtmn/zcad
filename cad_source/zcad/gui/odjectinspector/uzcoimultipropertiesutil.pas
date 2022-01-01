@@ -23,16 +23,15 @@ interface
 uses
   uzctnrvectorgdbpointer,uzbstrproc, uzctnrvectorgdbstring,uzepalette,sysutils,uzeentityfactory,
   uzbgeomtypes,uzbtypes,
-  uzcdrawings,
   varmandef,
   uzeentity,
   uzbtypesbase,
   Varman,UGDBPoint3DArray,
   uzedimensionaltypes,
-  gzctnrvectortypes,uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,
+  uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,
   uzeenttext,uzeentmtext,uzeentpolyline,uzegeometry,uzcoimultiproperties,LazLogger,
   uzcstrconsts,
-  gzctnrstl,usimplegenerics;
+  gzctnrstl;
 type
   PTOneVarData=^TOneVarData;
   TOneVarData=record

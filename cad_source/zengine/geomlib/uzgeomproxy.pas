@@ -19,7 +19,7 @@
 unit uzgeomproxy;
 {$INCLUDE def.inc}
 interface
-uses uzgeomentity,sysutils,uzbtypes,gzctnrvectortypes,uzbgeomtypes,uzegeometry;
+uses uzgeomentity,sysutils,uzbtypes,uzbgeomtypes,uzegeometry;
 type
 {Export+}
 PTGeomProxy=^TGeomProxy;

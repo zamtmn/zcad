@@ -27,8 +27,11 @@ uses
   LazLogger,
   uzccommandsabstract,uzccommandsimpl,
   uzcinfoform,
-  uzcinterface,
-  gmap,gvector,garrayutils, gzctnrstl,math,Generics.Collections;
+  uzcinterface
+  {$IFDEF REPORTMMEMORYLEAKS}
+  ,gmap,gvector,garrayutils, gzctnrstl,math,Generics.Collections
+  {$ENDIF}
+  ;
 
 implementation
 {$IFDEF REPORTMMEMORYLEAKS}
@@ -89,8 +92,10 @@ end;
 {$ENDIF}
 
 function dbgMemSummary_com(operands:TCommandOperands):TCommandResult;
+{$IFDEF REPORTMMEMORYLEAKS}
 const
   DefaultArrSize=1000000;
+{$ENDIF}
 var
   InfoForm:TInfoForm;
 {$IFDEF REPORTMMEMORYLEAKS}

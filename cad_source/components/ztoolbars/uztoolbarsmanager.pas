@@ -315,8 +315,8 @@ begin
 end;
 
 procedure TToolBarsManager.SetupDefaultToolBar(aName,atype: string; tb:TToolBar);
-var
-  ta:TAction;
+{var
+  ta:TAction;}
 begin
   SetActionChecked(ToolBarNameToActionName(aname),true);
   if fdefbuttonheight>0 then
@@ -339,8 +339,8 @@ begin
 end;
 
 function TToolBarsManager.CreateDefaultToolBar(aName,atype: string):TToolBar;
-var
-  ta:TAction;
+{var
+  ta:TAction;}
 begin
   result:=TToolBar.Create(fmainform);
   SetupDefaultToolBar(aName,atype,result);
@@ -624,8 +624,8 @@ begin
 end;
 
 procedure TToolBarsManager.FloatDockSiteClose(Sender: TObject; var CloseAction: TCloseAction);
-var
-  ta:TAction;
+{var
+  ta:TAction;}
 begin
   SetActionChecked(ToolBarNameToActionName((Sender as TCustomDockForm).caption),false);
 end;
@@ -727,7 +727,7 @@ end;
 
 procedure TToolBarsManager.EnumerateToolBars(rf:TTBRegisterInAPPFunc;Data:Pointer);
 var
-  TBNode,TBSubNode,TBNodeType:TDomNode;
+  TBNode,TBSubNode{,TBNodeType}:TDomNode;
 begin
   if assigned(rf) then
   begin
@@ -745,7 +745,7 @@ end;
 
 procedure TToolBarsManager.EnumerateToolPalettes(rf:TTBRegisterInAPPFunc;Data:Pointer);
 var
-  TBNode,TBSubNode,TBNodeType:TDomNode;
+  TBNode,TBSubNode{,TBNodeType}:TDomNode;
 begin
   if assigned(rf) then
   begin
@@ -788,7 +788,7 @@ end;
 function TToolBarsManager.CreateToolPalette(aControlName: string;DoDisableAlign:boolean=false):TPaletteControlBaseType;
 var
   aInternalName:string;
-  TBNode,TBSubNode:TDomNode;
+  TBNode{,TBSubNode}:TDomNode;
   PaletteControl:TPaletteControlBaseType;
 begin
   aInternalName:=copy(aControlName,length(ToolPaletteNamePrefix)+1,length(aControlName)-length(ToolPaletteNamePrefix));
@@ -805,7 +805,7 @@ begin
 end;
 function TToolBarsManager.CreateToolbar(aName:string):TToolBar;
 var
-  TBNode,TBSubNode:TDomNode;
+  TBNode{,TBSubNode}:TDomNode;
   TBType:string;
 begin
   TBNode:=FindBarsContent(aName);
@@ -826,7 +826,7 @@ end;
 
 function TToolBarsManager.AddContentToToolbar(tb:TToolBar;aName:string):TToolBar;
 var
-  TBNode,TBSubNode:TDomNode;
+  TBNode{,TBSubNode}:TDomNode;
   TBType:string;
 begin
   TBNode:=FindBarsContent(aName);
@@ -941,7 +941,7 @@ var
   cb:TCoolBar;
   tb:TToolBar;
   r:trect;
-  FloatHost: TWinControl;
+  //FloatHost: TWinControl;
 begin
   FreeAllToolBars(fmainform);
   Config.AppendBasePath('ToolBarsConfig/');

@@ -1691,7 +1691,7 @@ var //po:PGDBObjSubordinated;
     tw1,tw2:gdbvertex;
     l1,l2:pgdbobjline;
     pa:GDBPoint3dArray;
-    prevpoint:GDBVertex;
+    //prevpoint:GDBVertex;
     //polydata:tpolydata;
     //domethod,undomethod:tmethod;
 begin
@@ -3298,7 +3298,7 @@ function _test_com(operands:TCommandOperands):TCommandResult;
 var
     p:GDBVertex;
     pet:CMDLinePromptParser.TGeneralParsedText;
-    ts:utf8string;
+    //ts:utf8string;
     gr:TGetResult;
 begin
      ZCMsgCallBackInterface.TextMessage('Тест производительности. запасаемя терпением',TMWOHistoryOut);

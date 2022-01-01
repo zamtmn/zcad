@@ -130,7 +130,7 @@ end;
 class procedure TMenuDefaults.DefaultCreateMenu(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
 var
   MenuItem:TMenuItem;
-  ts:String;
+  //ts:String;
   createdmenu:TMenu;
   TBSubNode:TDomNode;
 begin
@@ -239,7 +239,7 @@ class procedure TMenuDefaults.DefaultMainMenuItemReader(MT:TMenuType;fmf:TForm;a
   CreatedMenuItem:TMenuItem;
   line:string;
   TBSubNode:TDomNode;
-  mcf:TMenuCreateFunc;
+  //mcf:TMenuCreateFunc;
 begin
     CreatedMenuItem:=TMenuItem.Create(application);
     line:=getAttrValue(aNode,'Name','');

@@ -26,7 +26,7 @@ unit uzeparser;
 
 interface
 uses Generics.Collections,
-     {$IFDEF FPC}gvector,gmap,gutil,gdeque,{$ENDIF}
+     {$IFDEF FPC}gvector,gdeque,{$ENDIF}
      sysutils,uzbhandles,uzbsets,StrUtils,LCLProc;
 resourcestring
   rsRunTimeError='uzeparser: Execution error (%s)';
@@ -774,8 +774,8 @@ class procedure TStaticStrProcessorString<GManipulator,GString,GSymbol,GManipula
                                   var Result:GString;
                                   var ResultParam:GManipulatorCharRange;
                                   var data:GDataType);
-var
-  i:integer;
+//var
+  //i:integer;
 begin
   GManipulator.CopyStr(Operands,Source,ResultParam,Result);
   {ResultParam.L:=Operands.L;
@@ -792,7 +792,7 @@ class procedure TGFakeStrProcessor<GManipulator,GString,GSymbol,GManipulatorChar
                                                   var Result:GString;
                                                   var ResultParam:GManipulatorCharRange;
                                                   var data:GDataType);
-var i:integer;
+//var i:integer;
 begin
   GManipulator.CopyStr(Token,Source,ResultParam,Result);
   {ResultParam.L:=Token.L;
@@ -866,7 +866,7 @@ function TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,
 var
   totallength,i:integer;
   ResultParam:GManipulatorCharRange;
-  cp:TSystemCodePage;
+  //cp:TSystemCodePage;
 begin
   result:=default(GParserString);
   totallength:=0;
@@ -1015,7 +1015,7 @@ end;
 function TGZTokenizer<GManipulator,GTokenizerString,GTokenizerSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GTokenizerSymbolToOptChar,GTokenizerDataType>.SubGetToken(Text:GTokenizerString;const SubStr:GManipulatorInterval;var CurrentPos:GManipulatorCharIndex;out TokenTextInfo:TTokenTextInfo;level:integer;var IncludedCharsPos:TIncludedChars;var AllChars:TChars;var TokenDataVector:TTokenDataVector;var FirstSymbol:TGZTokenizer<GManipulator,GTokenizerString,GTokenizerSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GTokenizerSymbolToOptChar,GTokenizerDataType>):TTokenId;
 var
   PTokenizerSymbolData:TTokenizerMap.PTValue;
-  i,step:integer;
+  {i,}step:integer;
   len:integer;
   match:boolean;
   OptChar:TOptChar;
@@ -1214,7 +1214,7 @@ end;
 
 function TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>.GetTokenFromSubStr(Text:GParserString;const SubStr:GManipulatorInterval;CurrentPos:GManipulatorCharIndex;out TokenTextInfo:TParserTokenizer.TTokenTextInfo):TParserTokenizer.TTokenId;
 var
-  PTokenizerSymbolData:TParserTokenizer.TTokenizerMap.PTValue;
+  //PTokenizerSymbolData:TParserTokenizer.TTokenizerMap.PTValue;
   startpos:GManipulatorCharIndex;
   TTI:TParserTokenizer.TTokenTextInfo;
 begin
@@ -1455,7 +1455,7 @@ end;
 destructor TGZTokenizer<GManipulator,GTokenizerString,GTokenizerSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GTokenizerSymbolToOptChar,GTokenizerDataType>.Destroy;
 var
   sd:TPair<GTokenizerSymbol,TTokenizerSymbolData>;
-  i:integer;
+  //i:integer;
 begin
   inherited;
   for sd in Map do begin

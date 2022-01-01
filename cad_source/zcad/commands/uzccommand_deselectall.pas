@@ -25,7 +25,6 @@ uses
   LazLogger,
   uzccommandsabstract,uzccommandsimpl,
   uzeentity,
-  uzcdrawings,
   uzcinterface;
 
 var

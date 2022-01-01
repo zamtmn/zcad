@@ -28,7 +28,7 @@ uses
   URecordDescriptor,TypeDescriptors,
 
   Forms, //uzcfblockinsert,
-   uzcfarrayinsert,
+  //uzcfarrayinsert,
 
   uzeentblockinsert,      //unit describes blockinsert entity
                        //модуль описывающий примитив вставка блока
@@ -57,21 +57,21 @@ uses
   uzbgeomtypes,
 
 
-  gvector,garrayutils, // Подключение Generics и модуля для работы с ним
-  uzcstrconsts,
+  gvector,//garrayutils, // Подключение Generics и модуля для работы с ним
+  //uzcstrconsts,
   uzcentcable,
   uzeentdevice,
-  UGDBOpenArrayOfPV,
+  //UGDBOpenArrayOfPV,
 
   uzegeometry,
-  uzeentitiesmanager,
+  //uzeentitiesmanager,
 
   //uzcmessagedialogs,
   uzeentityfactory,    //unit describing a "factory" to create primitives
                       //модуль описывающий "фабрику" для создания примитивов
   uzcsysvars,        //system global variables
                       //системные переменные
-  uzgldrawcontext,
+  //uzgldrawcontext,
   uzcinterface,
   uzbtypesbase,uzbtypes, //base types
                       //описания базовых типов
@@ -81,7 +81,7 @@ uses
   uzccommandsabstract,
   uzccommandsimpl, //Commands manager and related objects
                       //менеджер команд и объекты связанные с ним
-  uzcdrawing,
+  //uzcdrawing,
   uzedrawingsimple,
   uzcdrawings,     //Drawings manager, all open drawings are processed him
                       //"Менеджер" чертежей
@@ -89,13 +89,13 @@ uses
                       //разные функции упрощающие создание примитивов, пока их там очень мало
   varmandef,
   Varman,
-  {UGDBOpenArrayOfUCommands,}zcchangeundocommand,
+  {UGDBOpenArrayOfUCommands,}//zcchangeundocommand,
 
   uzclog,                //log system
                       //<**система логирования
   uzcvariablesutils, // для работы с ртти
 
-   gzctnrvectortypes,                  //itrec
+  //gzctnrvectortypes,                  //itrec
 
   //для работы графа
   ExtType,
@@ -1717,11 +1717,11 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph):T
   groupInfo:TMasterDevice.TGroupInfo;
   infoSubDev:TMasterDevice.TGroupInfo.TInfoSubDev;
   //deviceInfo:TMasterDevice.TGroupInfo.TDeviceInfo;
-  i,j,k,m,counter,tnum: Integer;
+  i,j,{k,}m,{counter,}tnum: Integer;
   numHead,numHeadGroup,numHeadDev : integer;
 
   isHeadnum:boolean;
-  shortNameHead, headDevName, groupName:string;
+  {shortNameHead, }headDevName, groupName:string;
   pvd:pvardesk; //для работы со свойствами устройств
 
     //** Получаем количество кабелей подключения данного устройства к головным устройствам, с последующим разбором
@@ -1890,17 +1890,17 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph):T
   //type
     //tempuseVertex:Tvectorofinteger;
   var
-     pvd:pvardesk; //для работы со свойствами устройств
-     polyObj:PGDBObjPolyLine;
-     i,j,k,m,n,counter1,counter2,counter3:integer;
+     //pvd:pvardesk; //для работы со свойствами устройств
+     //polyObj:PGDBObjPolyLine;
+     i,j,k,m,n{,counter1,counter2,counter3}:integer;
      tIndex,tIndexLocal,tIndexGlobal:integer;
      EdgePath, VertexPath: TClassList;
      infoGTree:TGraph;
 
      tempString:string;
-     sumWeightPath,tempFloat: Float;
+     sumWeightPath{,tempFloat}: Float;
      tempLVertex:TvectorOfInteger;
-     gg:GDBVertex;
+     //gg:GDBVertex;
 
      function isVertexAdded(tempLVertex:tvectorofinteger;index:integer):boolean;
      var
@@ -2178,9 +2178,9 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph):T
   //type
     //tempuseVertex:Tvectorofinteger;
   var
-     pvd:pvardesk; //для работы со свойствами устройств
-     polyObj:PGDBObjPolyLine;
-     i,j,k,m,n,counter1,counter2,counter3:integer;
+     //pvd:pvardesk; //для работы со свойствами устройств
+     //polyObj:PGDBObjPolyLine;
+     i,j,k,m,n{,counter1,counter2,counter3}:integer;
      tIndex,tIndexLocal,tIndexGlobal:integer;
      EdgePath, VertexPath: TClassList;
      infoGTree:TGraph;
@@ -2188,9 +2188,9 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph):T
      isNewMasterDev:boolean;
 
      tempString:string;
-     sumWeightPath,tempFloat: Float;
+     sumWeightPath{,tempFloat}: Float;
      tempLVertex:TvectorOfInteger;
-     gg:GDBVertex;
+     //gg:GDBVertex;
 
      function isVertexAdded(tempLVertex:tvectorofinteger;index:integer):boolean;
      var
@@ -2518,9 +2518,9 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph):T
   type
       TVertexofString=specialize TVector<string>;
   var
-     pvd:pvardesk; //для работы со свойствами устройств
-     polyObj:PGDBObjPolyLine;
-     i,j,k,m,n,o,p,counter1,counter2,counter3:integer;
+     //pvd:pvardesk; //для работы со свойствами устройств
+     //polyObj:PGDBObjPolyLine;
+     i,j,k,m,n,o{,p,counter1,counter2,counter3}:integer;
      tIndex,tIndexLocal,tIndexGlobal:integer;
      EdgePath, VertexPath: TClassList;
      infoGTree:TGraph;
@@ -2531,9 +2531,9 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph):T
 
      tempString:string;
      specChar:string;
-     sumWeightPath,tempFloat: Float;
-     tempLVertex:TvectorOfInteger;
-     gg:GDBVertex;
+     sumWeightPath{,tempFloat}: Float;
+     //tempLVertex:TvectorOfInteger;
+     //gg:GDBVertex;
      listVertexSNCU, listVertexDevUnit:TVertexofString;
      subMasterDeviceSpecName,subCUDeviceSpecName,nodeCUSpecName,saveSpecNameNode:string;
 
@@ -2577,8 +2577,8 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph):T
      end;
 
      function isVertexLonely(graphNow:TGraph;index:integer):boolean;
-     var
-       i:integer;
+     //var
+       //i:integer;
      begin
        //result:=true;
        // for i:=0 to graphNow.VertexCount-1 do
@@ -2669,7 +2669,7 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph):T
     function getListSubDevVertex(strSub:gdbstring):TVertexofString;
     var
       nameParam:gdbstring;
-      i:integer;
+      //i:integer;
     begin
         result:=TVertexofString.Create;
         //ZCMsgCallBackInterface.TextMessage('исходная строка :' + strSub,TMWOHistoryOut);
@@ -2691,7 +2691,7 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph):T
     function getListNameSeparator(strSub:gdbstring):TVertexofString;
     var
       nameParam:gdbstring;
-      i:integer;
+      //i:integer;
     begin
         result:=TVertexofString.Create;
         //ZCMsgCallBackInterface.TextMessage('исходная строка :' + strSub,TMWOHistoryOut);
@@ -2723,8 +2723,8 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph):T
     //**Получаем список имен промежуточных узлов и узлов управления
     function getListVertexSNCU(listSubDev:TMasterDevice.TGroupInfo.TVectorOfSubDev):TVertexofString;
     var
-      i,j:integer;
-      listName:TVertexofString;
+      i{,j}:integer;
+      //listName:TVertexofString;
       nameCU:string;
     begin
         result:=TVertexofString.Create;
@@ -2771,7 +2771,7 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph):T
     //**Получаем список имен узлов прокладки кабеля от устройства до ГУ
     function getListVertexDevUnit(dev:PGDBObjDevice):TVertexofString;
     var
-      i,j:integer;
+      //i,j:integer;
       listName:TVertexofString;
       nameCU:string;
     begin
@@ -2827,8 +2827,8 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph):T
     //**Получаем список имен узлов прокладки кабеля от устройства до узла учета включительно + группа узле учета
     function getListVertexSubDevControlUnit(dev:PGDBObjDevice):string;
     var
-      i,j:integer;
-      listName:TVertexofString;
+      //i,j:integer;
+      //listName:TVertexofString;
       nameUnit:string;
     begin
         result:='';
@@ -2865,8 +2865,8 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph):T
      //**Получаем список имен узлов прокладки кабеля от узла управления до устройства мастер
     function getListVertexMasterDevControlUnit(dev:PGDBObjDevice):string;
     var
-      i,j:integer;
-      listName:TVertexofString;
+      //i,j:integer;
+      //listName:TVertexofString;
       nameUnit:string;
     begin
         result:='';
@@ -2940,7 +2940,7 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph):T
     function delNameTravelNode(specName,nameNode:string):string;
     var
       l,i:integer;
-      k:string;
+      //k:string;
     begin
         result:='';
         l:=length(nameNode);
@@ -3443,7 +3443,7 @@ var
     globalGraph: TGraph;
     listMasterDevice:TVectorOfMasterDevice;
 
-    i,j,k: Integer;
+    i,j{,k}: Integer;
 
     gg:GDBVertex;
 
@@ -3634,7 +3634,7 @@ var
     G: TGraph;
     headNum : integer;
 
-    counter,counter2,counter3,counterColor:integer; //счетчики
+    counter{,counter2,counter3,counterColor}:integer; //счетчики
     i,j,k: Integer;
     T: Float;
 
@@ -3662,7 +3662,7 @@ var
     end;
     procedure addErrorinList(nowDev:PGDBObjDevice;var listError:TListError;textError:string);
     var
-       pvd:pvardesk; //для работы со свойствами устройств
+       //pvd:pvardesk; //для работы со свойствами устройств
        //tempName,nameParam:gdbstring;
        errorInfo:TErrorInfo;
        //tempstring:string;
@@ -3806,13 +3806,13 @@ procedure errorList(allGraph:TListAllGraph;Epsilon:double;var listError:TListErr
 type
     TListString=specialize TVector<string>;
 var
-    EdgePath, VertexPath: TClassList;
+    //EdgePath,VertexPath: TClassList;
     G: TGraph;
     headNum : integer;
 
-    counter,counter2,counter3,counterColor:integer; //счетчики
+    counter{,counter2,counter3,counterColor}:integer; //счетчики
     i,j,k: Integer;
-    T: Float;
+    //T: Float;
 
     headName,GroupNum,typeSLine,nameSL:string;
 
@@ -3840,7 +3840,7 @@ var
     end;
     procedure addErrorinList(nowDev:PGDBObjDevice;var listError:TListError;textError:string);
     var
-       pvd:pvardesk; //для работы со свойствами устройств
+       //pvd:pvardesk; //для работы со свойствами устройств
        //tempName,nameParam:gdbstring;
        errorInfo:TErrorInfo;
        //tempstring:string;
@@ -4120,7 +4120,7 @@ var
   function TestTREEUses_com(operands:TCommandOperands):TCommandResult;
   var
     G: TGraph;
-    EdgePath, VertexPath: TClassList;
+    {EdgePath, }VertexPath: TClassList;
     //I: Integer;
     //T: Float;
     procedure ShowPath(const CorrectPath: array of Integer);
@@ -4255,8 +4255,8 @@ begin
    //в зависимости что чего меньше-больше
 end;
 function TDummyComparer.CompareEdges (Edge1, Edge2: Pointer): Integer;
-var
-  e1,e2:TAttrSet;
+{var
+  e1,e2:TAttrSet;}
 begin
    ////result:=1;
    //e1:=TAttrSet(Edge1);

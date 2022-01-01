@@ -188,7 +188,7 @@ end;*)
 var
     v1,v2:GDBVertex;
     l1,l0:GDBDouble;
-    a0,a1,a:double;
+    //a0,a1,a:double;
 begin
 
      if bp.ListPos.owner<>nil then begin
@@ -205,7 +205,7 @@ begin
      l1:=scalardot(v1,v2);
      l1:=arccos(l1);
      if v1.y<-eps then l1:=2*pi-l1;
-     a1:=l0*180/pi;
+     //a1:=l0*180/pi;
      l1:=l1+L0;
      if l1>2*pi then l1:=l1-2*pi;
      result:=l1;

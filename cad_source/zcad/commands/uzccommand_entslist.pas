@@ -24,7 +24,7 @@ interface
 uses
   LazLogger,SysUtils,
   uzccommandsabstract,uzccommandsimpl,
-  gzctnrvectortypes,uzctnrvectorgdbstring,
+  {gzctnrvectortypes,}uzctnrvectorgdbstring,
   //uzccommandsmanager,
   uzeentityfactory,
   uzcinterface;
@@ -33,8 +33,8 @@ implementation
 
 function EntsList_com(operands:TCommandOperands):TCommandResult;
 var
-   p:PCommandObjectDef;
-   ir:itrec;
+   //p:PCommandObjectDef;
+   //ir:itrec;
    clist:TZctnrVectorGDBString;
    pair:ObjID2EntInfoData.TDictionaryPair;
    //iterator:ObjID2EntInfoData.TIterator;

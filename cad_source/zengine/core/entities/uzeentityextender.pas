@@ -20,7 +20,7 @@ unit uzeentityextender;
 {$INCLUDE def.inc}
 
 interface
-uses uzedrawingdef,uzbtypesbase,uzbtypes,usimplegenerics,
+uses uzedrawingdef,uzbtypes,usimplegenerics,
      UGDBOpenArrayOfByte,gzctnrstl,uzeffdxfsupport,uzeBaseExtender,
      uzgldrawcontext;
 
@@ -213,7 +213,6 @@ end;
 procedure TEntityExtensions.RunSaveToDxf(var outhandle:GDBOpenArrayOfByte;PEnt:Pointer;var IODXFContext:TIODXFContext);
 var
   i:integer;
-  ExtObj:TBaseEntityExtender;
 begin
      if assigned(fEntityExtensions)then
      for i:=0 to fEntityExtensions.Size-1 do

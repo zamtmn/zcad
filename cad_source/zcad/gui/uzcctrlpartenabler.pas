@@ -22,7 +22,7 @@ unit uzcctrlpartenabler;
 interface
 
 uses
-  StdCtrls,GraphType,LCLIntf,LCLType,
+  GraphType,LCLIntf,LCLType,
   Controls,Classes,Graphics,Buttons,ExtCtrls,ComCtrls,Forms,Themes,ActnList,Menus,
   sysutils;
 
@@ -172,7 +172,7 @@ procedure TPartEnabler.DoButtonClick(Sender: TObject);
 var
   i:integer;
   st:boolean;
-  pts:T;
+  //pts:T;
 begin
   if sender is TToolButton then begin
     i:=ButtonIndex2PartIndex((sender as TToolButton).Index);

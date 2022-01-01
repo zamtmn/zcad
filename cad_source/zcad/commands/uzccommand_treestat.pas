@@ -33,7 +33,7 @@ uses
   uzcinterface,
   uzcdrawings,
   uzcsysvars,
-  gzctnrstl,usimplegenerics;
+  gzctnrstl;
 
 function PointerToNodeName(node:pointer):string;
 

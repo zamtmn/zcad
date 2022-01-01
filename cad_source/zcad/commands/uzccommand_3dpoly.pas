@@ -21,14 +21,14 @@ unit uzccommand_3dpoly;
 
 interface
 uses
-  gzctnrvector,uzglviewareageneral,zcobjectchangeundocommand2,zcmultiobjectchangeundocommand,
-  gzctnrvectortypes,zcmultiobjectcreateundocommand,uzeentitiesmanager,uzgldrawercanvas,
+  uzglviewareageneral,zcobjectchangeundocommand2,
+  zcmultiobjectcreateundocommand,uzgldrawercanvas,
   uzcoimultiobjects,uzcenitiesvariablesextender,uzcdrawing,uzepalette,
-  uzctextenteditor,uzgldrawcontext,usimplegenerics,UGDBPoint3DArray,
-  uzeentpoint,uzeentitiestree,gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,uzeentityfactory,
+  uzgldrawcontext,UGDBPoint3DArray,
+  uzeentpoint,uzeentityfactory,
   uzedrawingsimple,uzcsysvars,uzcstrconsts,
-  printers,graphics,uzeentdevice,uzeentwithlocalcs,
-  LazUTF8,Clipbrd,LCLType,classes,uzeenttext,uzeentabstracttext,uzestylestexts,
+  printers,graphics,uzeentdevice,
+  LazUTF8,Clipbrd,LCLType,classes,uzeenttext,
   uzccommandsabstract,uzbstrproc,
   uzbtypesbase,uzccommandsmanager,
   uzccommandsimpl,
@@ -44,10 +44,9 @@ uses
   
   uzeconsts,
   uzbgeomtypes,uzeentity,uzeentcircle,uzeentline,uzeentgenericsubentry,uzeentmtext,
-  uzeentsubordinated,uzeentblockinsert,uzeentpolyline,uzclog,gzctnrvectordata,
-  math,uzeenttable,uzctnrvectorgdbstring,
-  uzeentcurve,uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray
-  ,uzelongprocesssupport,LazLogger;
+  uzeentblockinsert,uzeentpolyline,uzclog,
+  uzeentcurve,uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,TypeDescriptors,
+  uzelongprocesssupport,LazLogger;
 
 implementation
 var

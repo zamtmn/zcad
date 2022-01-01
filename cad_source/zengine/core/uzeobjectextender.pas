@@ -21,7 +21,7 @@ unit uzeobjectextender;
 
 interface
 uses uzeentityextender,uzeentsubordinated,uzedrawingdef,uzbtypesbase,uzbtypes,
-     usimplegenerics,UGDBOpenArrayOfByte,gzctnrstl,uzeffdxfsupport;
+     UGDBOpenArrayOfByte,gzctnrstl,uzeffdxfsupport;
 
 type
 TConstructorFeature=procedure(pEntity:Pointer);

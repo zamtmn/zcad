@@ -23,7 +23,7 @@ interface
 uses uzeentityfactory,uzgldrawcontext,uzeffdxfsupport,uzedrawingdef,uzecamera,
      gzctnrvectorpobjects,uzestyleslayers,uzbtypesbase,UGDBSelectedObjArray,
      uzeentsubordinated,uzeent3d,uzeentity,sysutils,UGDBOpenArrayOfByte,
-     uzbgeomtypes,uzbtypes,uzeconsts,uzglviewareadata,uzegeometry,uzbmemman;
+     uzbgeomtypes,uzbtypes,uzeconsts,uzglviewareadata,uzegeometry;
 type
 {Export+}
 PGDBObjPoint=^GDBObjPoint;

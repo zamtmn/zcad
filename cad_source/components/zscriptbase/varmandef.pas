@@ -24,8 +24,7 @@ interface
 uses
   LCLProc,SysUtils,UGDBTree,gzctnrstl,uzctnrvectorgdbstring,strutils,uzbtypesbase,
   uzedimensionaltypes,UGDBOpenArrayOfByte,uzbtypes,
-  gzctnrvectortypes,Classes,Controls,StdCtrls,Graphics,types,TypInfo,uzbmemman,
-  gzctnrvector;
+  gzctnrvectortypes,Classes,Controls,StdCtrls,Graphics,types,TypInfo,gzctnrvector;
 const
   {Ttypenothing=-1;
   Ttypecustom=1;

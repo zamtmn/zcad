@@ -20,7 +20,7 @@ unit uzebeziersolver;
 {$INCLUDE def.inc}
 interface
 uses uzgprimitivescreator,uzgprimitives,uzglvectorobject,uzegluinterface,gvector,
-     uzbmemman,gzctnrvectortypes,uzbgeomtypes,UGDBOpenArrayOfByte,uzbtypesbase,
+     gzctnrvectortypes,uzbgeomtypes,UGDBOpenArrayOfByte,uzbtypesbase,
      sysutils,uzbtypes,uzegeometry,gzctnrstl,LazLogger;
 type
 TPointAttr=(TPA_OnCurve,TPA_NotOnCurve);

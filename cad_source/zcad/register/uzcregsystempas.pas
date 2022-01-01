@@ -23,7 +23,7 @@ uses uzbpaths,UUnitManager,uzcsysvars,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
      uzbstrproc,Varman,languade,SysUtils,
      UBaseTypeDescriptor,uzbtypes,UGDBOpenArrayOfByte, strmy, varmandef,
      uzcsysparams,uzcsysinfo,TypeDescriptors,URecordDescriptor,
-     uzblog,uzclog,uzbmemman,LazLogger;
+     uzblog,uzclog,LazLogger;
 implementation
 {$IFNDEF WINDOWS}
 var

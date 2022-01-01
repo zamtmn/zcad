@@ -19,7 +19,7 @@
 unit uzglgeomdata;
 {$INCLUDE def.inc}
 interface
-uses uzgindexsarray,uzgvertex3sarray,sysutils,uzbtypesbase,uzbtypes,uzbmemman,
+uses uzgindexsarray,uzgvertex3sarray,sysutils,uzbtypesbase,uzbtypes,
      gzctnrvectortypes,uzbgeomtypes,uzegeometry;
 type
 {Export+}

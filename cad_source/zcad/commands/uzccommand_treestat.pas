@@ -29,7 +29,7 @@ uses
   uzeentity,
   uzgldrawcontext,
   uzccommandsabstract,uzccommandsimpl,
-  uzbmemman,
+
   uzcinterface,
   uzcdrawings,
   uzcsysvars,

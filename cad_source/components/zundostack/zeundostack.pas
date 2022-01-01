@@ -21,7 +21,7 @@ unit zeundostack;
 {$INCLUDE def.inc}
 interface
 uses gzctnrvectortypes,zebaseundocommands,varmandef,uzbtypesbase,
-     gzctnrvectorpobjects,sysutils,uzbtypes,uzbmemman;
+     gzctnrvectorpobjects,sysutils,uzbtypes;
 const BeginUndo:GDBString='BeginUndo';
       EndUndo:GDBString='EndUndo';
 type

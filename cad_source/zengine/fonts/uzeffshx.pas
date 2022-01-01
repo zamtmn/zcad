@@ -21,7 +21,7 @@ unit uzeffshx;
 interface
 uses uzgprimitivescreator,uzglvectorobject,uzefontmanager,uzefontshx,uzegeometry,
      uzefont,uzbstrproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}math,{log,}sysutils,
-     gzctnrvectortypes,uzbgeomtypes,UGDBOpenArrayOfByte,uzbtypesbase,uzbtypes,uzbmemman,uzgprimitives;
+     gzctnrvectortypes,uzbgeomtypes,UGDBOpenArrayOfByte,uzbtypesbase,uzbtypes,uzgprimitives;
 const
   arccount=16;
   fontdirect:array[0..$F,0..1] of GDBDouble=

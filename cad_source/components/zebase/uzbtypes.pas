@@ -18,7 +18,7 @@
 unit uzbtypes;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,uzbmemman,uzbgeomtypes,sysutils;
+uses uzbtypesbase,uzbgeomtypes,sysutils;
      //gdbobjectsconstdef;
 const
      GDBBaseObjectID = 30000;

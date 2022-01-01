@@ -24,7 +24,7 @@ uses LCLProc,uzbpaths,uzbstrproc,uzgldrawcontext,usimplegenerics,uzestylesdim,uz
     UGDBNamedObjectsArray,uzestyleslinetypes,uzedrawingsimple,uzelongprocesssupport,
     gzctnrvectortypes,uzglviewareadata,uzeffdxfsupport,uzestrconsts,uzestylestexts,
     uzegeometry,uzeentsubordinated,uzbtypesbase,uzeentgenericsubentry,uzbtypes,
-    uzedimensionaltypes,uzbgeomtypes,sysutils,uzbmemman,uzeconsts,UGDBObjBlockdefArray,
+    uzedimensionaltypes,uzbgeomtypes,sysutils,uzeconsts,UGDBObjBlockdefArray,
     UGDBOpenArrayOfByte,UGDBVisibleOpenArray,uzeentity,uzeblockdef,uzestyleslayers,uzeffmanager;
 resourcestring
   rsLoadDXFFile='Load DXF file';

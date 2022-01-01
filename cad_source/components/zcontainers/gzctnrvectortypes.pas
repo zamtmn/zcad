@@ -19,7 +19,7 @@
 unit gzctnrvectortypes;
 {$INCLUDE def.inc}
 interface
-uses uzbmemman,{uzbtypesbase,}sysutils,{uzbtypes,}typinfo;
+uses {uzbtypesbase,}sysutils,{uzbtypes,}typinfo;
 type
 {Export+}
   {REGISTERRECORDTYPE itrec}

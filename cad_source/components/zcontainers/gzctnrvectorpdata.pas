@@ -19,8 +19,7 @@
 unit gzctnrvectorpdata;
 {$INCLUDE def.inc}
 interface
-uses {uzbtypesbase,}gzctnrvectorp,
-     gzctnrvectortypes,uzbtypes,uzbmemman;
+uses gzctnrvectorp,gzctnrvectortypes,uzbtypes;
 type
 {Export+}
 {--------REGISTEROBJECTTYPE GZVectorPData}

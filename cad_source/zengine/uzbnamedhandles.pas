@@ -21,7 +21,7 @@ unit uzbnamedhandles;
 interface
 
 uses
-  sysutils,Generics.Collections,GVector,
+  sysutils,Generics.Collections,//GVector,
   uzbhandles;
 
 type

@@ -51,7 +51,7 @@ uses
   uzcfsplash,
   uzcsysvars,
 
-  uzbmemman,uzclog,
+  uzclog,
   uzcsysparams,uzcsysinfo,
   uzbpaths,
 

@@ -55,9 +55,6 @@ var
    PVariantsField:PFieldDescriptor;
    PTObj:PPointer;
 implementation
-uses
-    uzbmemman;
-//var s:gdbstring;
 const
      {GDBGDBPointerType:gdbtypedesk=
                                 (

@@ -19,7 +19,7 @@
 unit zcchangeundocommand;
 {$INCLUDE def.inc}
 interface
-uses uzepalette,uzbmemman,zeundostack,zebaseundocommands,uzbtypesbase,uzbtypes,
+uses uzepalette,zeundostack,zebaseundocommands,uzbtypesbase,uzbtypes,
      uzbgeomtypes,uzeentity,uzestyleslayers;
 
 type

@@ -19,7 +19,7 @@
 unit uzcplugins;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,sysutils, dynlibs, uzclog,uzbmemman,gzctnrvectordata,uzeentity,
+uses uzbtypesbase,sysutils, dynlibs, uzclog,gzctnrvectordata,uzeentity,
      LazLogger;
 type
     {Export+}

@@ -23,7 +23,7 @@ interface
 uses LCLProc,gzctnrvectorobjects,URecordDescriptor,UGDBOpenArrayOfByte,sysutils,
      gzctnrvectortypes,uzedimensionaltypes,UBaseTypeDescriptor,TypeDescriptors,
      strmy,uzctnrvectorgdbstring,objects,gzctnrvectordata,uzbtypesbase,
-     varmandef,uzbtypes,uzbmemman,uzbstrproc,TypInfo;
+     varmandef,uzbtypes,uzbstrproc,TypInfo;
 type
 GDBTOperandStoreMode=GDBByte;
 GDBOperandDesc=record

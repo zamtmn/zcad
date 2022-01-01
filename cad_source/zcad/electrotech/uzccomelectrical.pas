@@ -30,7 +30,7 @@ uses
   uzglviewareadata,
   uzcinterface,
   uzegeometry,
-  uzbmemman,
+
   uzeconsts,
   uzeentity,uzeentline,
   uzcentnet,

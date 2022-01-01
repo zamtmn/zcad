@@ -19,8 +19,7 @@
 unit uzctnrobjectschunk;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,gzctnrvectordata,sysutils,uzbtypes,uzbmemman,
-     gzctnrvectortypes;
+uses uzbtypesbase,gzctnrvectordata,sysutils,uzbtypes,gzctnrvectortypes;
 const
   ObjAlign=4;
 type

@@ -41,7 +41,7 @@ uses
   uzeffdxf,
   uzcinterface,
   uzegeometry,
-  uzbmemman,
+
   uzeconsts,
   uzccommand_move,uzccommand_copy,uzccommand_regen,uzccommand_copyclip,
   uzbgeomtypes,uzeentity,uzeentcircle,uzeentline,uzeentgenericsubentry,uzeentmtext,

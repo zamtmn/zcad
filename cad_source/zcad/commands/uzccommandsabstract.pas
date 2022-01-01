@@ -19,7 +19,7 @@
 unit uzccommandsabstract;
 {$INCLUDE def.inc}
 interface
-uses uzbgeomtypes,uzbtypesbase,uzbtypes,uzglviewareadata,uzclog,gzctnrvectortypes;
+uses uzbgeomtypes,uzbtypesbase,uzbtypes,uzglviewareadata,uzclog{,gzctnrvectortypes};
 const
      //нужна динамическая регистация
      CADWG=1;                    //есть открытый чертеж

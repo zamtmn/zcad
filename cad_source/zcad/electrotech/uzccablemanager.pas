@@ -9,7 +9,7 @@ unit uzccablemanager;
 interface
 uses uzcenitiesvariablesextender,uzcvariablesutils,Varman,uzbstrproc,uzcentcable,
      uzeentdevice,uzeconsts,gzctnrvectorpobjects,languade,gzctnrvectorobjects,
-     gzctnrvectortypes,SysUtils,uzbtypesbase,uzbtypes,varmandef,uzbmemman,uzcdrawings,
+     gzctnrvectortypes,SysUtils,uzbtypesbase,uzbtypes,varmandef,uzcdrawings,
      uzcstrconsts;
 resourcestring
      DefCableName='Created. Not named';

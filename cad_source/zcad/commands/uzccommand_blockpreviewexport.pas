@@ -34,7 +34,7 @@ uses
   uzeutils,uzcutils,
   uzcinterface,
   uzbgeomtypes,uzegeometry,
-  uzbmemman,uzbpaths,
+  uzbpaths,
   uzeentdevice,uzeentblockinsert,uzeblockdef,uzeentsubordinated,
   //uzestyleslayers,
   uzeconsts;

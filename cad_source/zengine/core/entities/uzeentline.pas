@@ -23,7 +23,7 @@ interface
 uses LCLProc,uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,
      gzctnrvectorpobjects,uzestyleslayers,uzbtypesbase,uzeentsubordinated,
      UGDBSelectedObjArray,uzeent3d,uzeentity,UGDBOpenArrayOfByte,uzbtypes,uzeconsts,
-     uzbgeomtypes,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzbmemman;
+     uzbgeomtypes,uzglviewareadata,uzegeometry,uzeffdxfsupport;
 type
 {Export+}
 PGDBObjLine=^GDBObjLine;

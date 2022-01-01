@@ -143,7 +143,7 @@ uses
   uzvagslcom,
    uzvsgeom,
 
-    uzbmemman,uzcdialogsfiles,
+    uzcdialogsfiles,
 
 dialogs,uzcinfoform,
  uzelongprocesssupport,usimplegenerics,gzctnrstl,

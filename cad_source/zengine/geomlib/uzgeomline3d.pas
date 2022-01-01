@@ -20,8 +20,7 @@ unit uzgeomline3d;
 {$INCLUDE def.inc}
 interface
 uses
-     sysutils,uzbtypes,uzbtypesbase,uzbmemman,uzegeometry,
-     {uzgeomentity,}uzgeomentity3d,uzbgeomtypes;
+     sysutils,uzbtypes,uzbtypesbase,uzegeometry,uzgeomentity3d,uzbgeomtypes;
 type
 {Export+}
 {REGISTEROBJECTTYPE TGeomLine3D}

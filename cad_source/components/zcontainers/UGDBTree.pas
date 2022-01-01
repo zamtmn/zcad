@@ -41,7 +41,6 @@ GDBBaseNode=object(GDBaseObject)
             end;
 {EXPORT-}
 implementation
-uses uzbmemman;
 procedure GDBBaseNode.free;
 begin
      inherited;

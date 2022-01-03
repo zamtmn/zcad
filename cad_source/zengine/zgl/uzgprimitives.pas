@@ -58,7 +58,7 @@ TLLPrimitive= object(GDBaseObject)
                        procedure getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);virtual;
                        procedure CorrectIndexes(const offset:TEntIndexesOffsetData);virtual;
                        constructor init;
-                       destructor done;
+                       destructor done;virtual;
                        function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData):GDBInteger;virtual;
                        function CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):GDBInteger;virtual;
                    end;

@@ -124,7 +124,7 @@ begin
 end;
 procedure TextIOSave_TMPL1(var outhandle:GDBOpenArrayOfByte;PEnt:PGDBObjText);
 begin
-     if StringReplace(pent^.content,#10,'\P',[rfReplaceAll])<>convertfromunicode(pent^.template) then
+     if UnicodeStringReplace(pent^.content,#10,'\P',[rfReplaceAll])<>convertfromunicode(pent^.template) then
        dxfGDBStringout(outhandle,1000,'_TMPL1='+pent^.template);
 end;
 
@@ -364,14 +364,14 @@ procedure GDBObjBlockDefLoadVarsFromFile(pEntity:PGDBObjBlockDef);
 var
   uou:PTObjectUnit;
   pentvarext:TVariablesExtender;
-  p:PTUnitManager;
-  S:string;
+  //p:PTUnitManager;
+  //S:string;
 begin
      if pos(DevicePrefix,pEntity^.name)=1 then
      begin
-         p:=@units;
-         S:=pEntity^.name;
-         S:=SupportPath;
+         //p:=@units;
+         //S:=pEntity^.name;
+         //S:=SupportPath;
          uou:=pointer(units.findunit(SupportPath,InterfaceTranslate,pEntity^.name));
          if uou<>nil then
                          begin

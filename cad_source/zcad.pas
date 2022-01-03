@@ -232,7 +232,7 @@ uses
   uzccommand_DevDefSync,
 
   uzcenitiesvariablesextender,uzcExtdrLayerControl,uzcExtdrSmartTextEnt,
-
+  (*
   {$IFDEF ELECTROTECH}
   //**for velec func**//
   uzccommand_drawsuperline,
@@ -242,7 +242,7 @@ uses
   uzvcabmountmethod,
   //**//
   {$ENDIF}
-
+  *)
   //uzccomexample2,
   //uzventsuperline,
   uzccomobjectinspector,

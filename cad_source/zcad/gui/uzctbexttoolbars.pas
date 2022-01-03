@@ -181,26 +181,25 @@ var
    ir:itrec;
    counter:integer;
 begin
-     result:=false;
-     cdwg:=drawings.GetCurrentDWG;
-     if cdwg<>nil then
-     begin
-         if assigned(cdwg^.wa.getviewcontrol) then
-         begin
-              setlength(la,cdwg^.LayerTable.Count);
-              counter:=0;
-              pcl:=cdwg^.LayerTable.beginiterate(ir);
-              if pcl<>nil then
-              repeat
-                    setlayerstate(pcl,la[counter]);
-                    inc(counter);
-                    pcl:=cdwg^.LayerTable.iterate(ir);
-              until pcl=nil;
-              setlength(la,counter);
-              if counter>0 then
-                               result:=true;
-         end;
-     end;
+  result:=false;
+  cdwg:=drawings.GetCurrentDWG;
+  if cdwg<>nil then begin
+    if assigned(cdwg^.wa.getviewcontrol) then begin
+      la:=[];
+      setlength(la,cdwg^.LayerTable.Count);
+      counter:=0;
+      pcl:=cdwg^.LayerTable.beginiterate(ir);
+      if pcl<>nil then
+        repeat
+          setlayerstate(pcl,la[counter]);
+          inc(counter);
+          pcl:=cdwg^.LayerTable.iterate(ir);
+        until pcl=nil;
+      setlength(la,counter);
+      if counter>0 then
+        result:=true;
+    end;
+  end;
 end;
 class function TZTBZCADExtensions.GetLayerProp(PLayer:Pointer;out lp:TLayerPropRecord):boolean;
 var

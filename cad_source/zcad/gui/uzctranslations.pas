@@ -202,8 +202,8 @@ const nontranslatedword='InterfaceTranslate: found not translated word: identifi
 var
   Item: TPOFileItem;
 begin
-    if Identifier='TOSMode~kosm_paralel' then
-      Item:=Item;
+    //if Identifier='TOSMode~kosm_paralel' then
+    //  Item:=Item;
     if DisableTranslateCount>0 then
                               begin
                                    result:=OriginalValue;

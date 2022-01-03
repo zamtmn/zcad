@@ -126,7 +126,6 @@ end;
 
 function var2value(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;pobj:Pointer):gdbstring;
 var
-  varname:GDBString;
   pv:pvardesk;
 begin
   pv:=nil;
@@ -135,7 +134,7 @@ begin
   if pv<>nil then
     result:=pv^.data.ptd^.GetValueAsString(pv^.data.Addr.Instance)
   else
-    result:='!!ERR('+varname+')!!';
+    result:='!!ERR('+operands+')!!';
 end;
 {function evaluatesubstr(var str:gdbstring;var startpos:integer;pobj:PGDBObjGenericWithSubordinated):gdbstring;
 var

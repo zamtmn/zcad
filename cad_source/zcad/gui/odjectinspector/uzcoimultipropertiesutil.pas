@@ -31,7 +31,7 @@ uses
   uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,
   uzeenttext,uzeentmtext,uzeentpolyline,uzegeometry,uzcoimultiproperties,LazLogger,
   uzcstrconsts,
-  gzctnrstl;
+  gzctnrstl,gzctnrvectortypes;
 type
   PTOneVarData=^TOneVarData;
   TOneVarData=record

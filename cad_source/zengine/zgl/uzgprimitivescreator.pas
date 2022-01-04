@@ -21,7 +21,7 @@ unit uzgprimitivescreator;
 interface
 uses uzgprimitivescreatorabstract,uzgindexsarray,uzgprimitives,
      uzbtypesbase,sysutils,uzbtypes,uzgprimitivessarray,
-     uzegeometry,LazLogger;
+     uzegeometry,LazLogger,gzctnrvectortypes;
 type
 
 TLLPrimitivesCreator=class(TLLPrimitivesCreatorAbstract)

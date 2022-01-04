@@ -25,7 +25,7 @@ uses
     uzcdialogsfiles,LResources,uzcsysvars,uzcstrconsts,uzbstrproc,uzeblockdef,UUnitManager,
     uzbtypes,varmandef,varman,sysutils,uzegeometry, uzeconsts,
     uzbtypesbase,uzedrawingsimple,uzestyleslayers,uzeentity,uzefontmanager,
-    uzedimensionaltypes,uzbgeomtypes,UGDBOpenArrayOfByte;
+    uzedimensionaltypes,uzbgeomtypes,UGDBOpenArrayOfByte,gzctnrvectortypes;
 type
 {EXPORT+}
 PTZCADDrawing=^TZCADDrawing;

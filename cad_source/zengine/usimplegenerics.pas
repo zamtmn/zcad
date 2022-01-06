@@ -20,7 +20,7 @@ unit usimplegenerics;
 
 interface
 uses uzbstrproc,uzbtypesbase,uzbtypes,gzctnrstl,
-     {$IFNDEF DELPHI}gutil,gmap,ghashmap,gvector,{$ENDIF}
+     {$IFNDEF DELPHI}gutil,gmap,gvector,{$ENDIF}
      {$IFDEF DELPHI}generics.collections,{$ENDIF}
      sysutils;
 type

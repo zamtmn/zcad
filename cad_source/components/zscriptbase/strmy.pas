@@ -21,7 +21,7 @@ unit strmy;
 {$MODE DELPHI}
 
 interface
-uses uzbtypesbase,sysutils,uzctnrvectorgdbstring,uzbmemman;
+uses uzbtypesbase,sysutils,uzctnrvectorgdbstring;
 type
   TLexema=shortstring;
   PLexema=^TLexema;

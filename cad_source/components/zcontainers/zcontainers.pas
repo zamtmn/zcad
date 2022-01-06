@@ -9,10 +9,8 @@ interface
 
 uses
   gzctnrvector, gzctnrvectorsimple, gzctnrvectordata, gzctnrvectorobjects, 
-  gzctnrvectorp, gzctnrvectorpdata, gzctnrvectorpobjects, 
-  uzctnrvectorgdbstring, uzctnrvectorgdbpointer, UGDBTree, 
-  UGDBOpenArrayOfByte, gzctnrtree, gzctnrstl, uzctnrobjectschunk, 
-  LazarusPackageIntf;
+  gzctnrvectorp, gzctnrvectorpdata, gzctnrvectorpobjects, UGDBOpenArrayOfByte, 
+  gzctnrtree, gzctnrstl, gzctnrobjectschunk, UGDBTree, LazarusPackageIntf;
 
 implementation
 

@@ -21,9 +21,8 @@ unit uzcoiregistermultiproperties;
 
 interface
 uses
-  uzeentwithlocalcs,math,uzcoimultiobjects,uzepalette,uzbmemman,sysutils,uzeentityfactory,
+  uzeentwithlocalcs,math,uzcoimultiobjects,uzepalette,sysutils,uzeentityfactory,
   uzbgeomtypes,uzbtypes,
-  uzcdrawings,
   varmandef,
   uzeconsts,
   uzeentity,
@@ -113,7 +112,7 @@ procedure GDBDoubleWCSAngleTextIterateProc(pdata:GDBPointer;ChangedData:TChanged
 var
     v1,v2:GDBVertex;
     l1,l0:GDBDouble;
-    a0,a1,a:double;
+    //a0,a1,a:double;
 begin
 
      if PGDBObjEntity(ChangedData.PGetDataInEtity)^.bp.ListPos.owner<>nil then begin
@@ -121,7 +120,7 @@ begin
        l0:=scalardot(NormalizeVertex(V1),_X_yzVertex);
        l0:=arccos(l0);
        if v1.y<-eps then l0:=2*pi-l0;
-       a0:=l0*180/pi
+       //a0:=l0*180/pi
      end else
        l0:=0;
 
@@ -130,11 +129,11 @@ begin
      l1:=scalardot(v1,v2);
      l1:=arccos(l1);
      if v1.y<-eps then l1:=2*pi-l1;
-     a1:=l0*180/pi;
+     //a1:=l0*180/pi;
      l1:=l1+L0;
      if l1>2*pi then l1:=l1-2*pi;
-     //if l1<0then l1:=2*pi+l1;
-     a:=l1*180/pi;
+     {if l1<0then l1:=2*pi+l1;}
+     //a:=l1*180/pi;
      ChangedData.PGetDataInEtity:=@l1;
      GeneralEntIterateProc(pdata,ChangedData,mp,fistrun,ecp,f);
 end;

@@ -1,28 +1,29 @@
 object SelectorForm: TSelectorForm
   Left = 586
-  Height = 477
+  Height = 716
   Top = 251
-  Width = 354
+  Width = 531
   AutoSize = True
   Caption = 'Form1'
-  ClientHeight = 477
-  ClientWidth = 354
+  ClientHeight = 716
+  ClientWidth = 531
+  DesignTimePPI = 144
   OnCreate = _oncreate
   OnShow = _onShow
-  LCLVersion = '1.7'
-  Visible = False
+  LCLVersion = '2.3.0.0'
   object ButtonPanel1: TButtonPanel
     AnchorSideLeft.Control = ListView1
     AnchorSideTop.Control = ListView1
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 6
+    Left = 9
     Height = 37
-    Top = 447
+    Top = 670
     Width = 342
     Align = alNone
     Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Around = 9
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True
     HelpButton.Name = 'HelpButton'
@@ -36,7 +37,7 @@ object SelectorForm: TSelectorForm
   end
   object ListView1: TListView
     Left = 0
-    Height = 441
+    Height = 662
     Top = 0
     Width = 354
     Align = alTop
@@ -44,12 +45,12 @@ object SelectorForm: TSelectorForm
       item
         AutoSize = True
         Caption = 'Name'
-        Width = 350
+        Width = 525
       end    
       item
         AutoSize = True
         Caption = 'Description'
-        Width = 81
+        Width = 122
       end>
     ReadOnly = True
     RowSelect = True

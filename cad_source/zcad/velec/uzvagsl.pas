@@ -57,7 +57,7 @@ uses
 
   Forms, //gzctnrvectortypes,
   //  uzcfblockinsert, //старое временно
-   uzcfarrayinsert,
+   //uzcfarrayinsert,
 
   uzeentblockinsert,      //unit describes blockinsert entity
                        //модуль описывающий примитив вставка блока
@@ -94,7 +94,7 @@ uses
   UGDBOpenArrayOfPV,
 
   uzegeometry,
-  uzeentitiesmanager,
+  //uzeentitiesmanager,
 
   //uzcmessagedialogs,
   uzeentityfactory,    //unit describing a "factory" to create primitives
@@ -111,7 +111,7 @@ uses
   uzccommandsabstract,
   uzccommandsimpl, //Commands manager and related objects
                       //менеджер команд и объекты связанные с ним
-  uzcdrawing,
+  //uzcdrawing,
   uzedrawingsimple,
   uzcdrawings,     //Drawings manager, all open drawings are processed him
                       //"Менеджер" чертежей
@@ -119,11 +119,11 @@ uses
                       //разные функции упрощающие создание примитивов, пока их там очень мало
   varmandef,
   Varman,
-  {UGDBOpenArrayOfUCommands,}zcchangeundocommand,
+  {UGDBOpenArrayOfUCommands,}//zcchangeundocommand,
 
   uzclog,                //log system
                       //<**система логирования
-  uzcvariablesutils, // для работы с ртти
+  //uzcvariablesutils, // для работы с ртти
 
      gzctnrvectortypes,                  //itrec
   //для работы графа
@@ -137,16 +137,16 @@ uses
    uzbpaths,
    uzctranslations,
 
-   UGDBSelectedObjArray,
-   uzcstrconsts,
+   //UGDBSelectedObjArray,
+   //uzcstrconsts,
   //uzccombase,
-  uzvagslcom,
+  //uzvagslcom,
    uzvsgeom,
 
-    uzbmemman,uzcdialogsfiles,
+    uzcdialogsfiles,
 
 dialogs,uzcinfoform,
- uzelongprocesssupport,usimplegenerics,gzctnrstl,
+ uzelongprocesssupport,//usimplegenerics,gzctnrstl,
 
   uzvtestdraw, uzccommand_drawsuperline;
 
@@ -348,10 +348,10 @@ implementation
     //**поиск перпендикуляра к комнате и к внутреннему контуру прокладки
     function getVertexPerpendicularRoom(contour2dRoom:pgdbobjlwpolyline;contourRoomEmbedSL:TListVertex;stPoint:gdbvertex;out perpendListVertex:TListVertex):boolean;
     var
-       pt1,pta,ptb,tempVertex,tempVertex2:gdbvertex;
+       {pt1,pta,ptb,}tempVertex,tempVertex2:gdbvertex;
        vertb2d,verta2d:GDBVertex2d;
        vertb,verta:GDBVertex;
-       i, num:integer;
+       i{, num}:integer;
     begin
        result:=false;
        perpendListVertex:=TListVertex.Create;
@@ -479,12 +479,12 @@ implementation
     var
       stPoint,tempVertex:GDBVertex;
       //perpendListVertex:TListVertex;
-      i:integer;
-      xline,yline,xyline:double;
+      //i:integer;
+      xline,{yline,}xyline:double;
 
-      ir:itrec;
-      pobj: pGDBObjEntity;
-      drawing:PTSimpleDrawing; //для работы с чертежом
+      //ir:itrec;
+      //pobj: pGDBObjEntity;
+      //drawing:PTSimpleDrawing; //для работы с чертежом
     begin
       result:=false;
       if commandmanager.get3dpoint('Start point automatic placement of super lines:',stPoint)= GRNormal then
@@ -773,8 +773,8 @@ implementation
   //**-получение ориентированости стен относительно перпендикуляра, если больше паралельно то true, если больше перпендикулярно то false
   function getWallInfoOrient(contourRoomEmbedSL:TListVertex;perpendListVertex:TListVertex):TListWallOrient;
   var
-    angleper,anglewall,xlineper,xylineper,xlinewall,xylinewall:double;
-    tempVertex,perp1,perp2:gdbvertex;
+    angleper,{anglewall,}xlineper,xylineper{,xlinewall,xylinewall}:double;
+    tempVertex{,perp1,perp2}:gdbvertex;
     i:integer;
     iwall:Twallinfo;
   begin
@@ -899,20 +899,20 @@ implementation
   //**Получения матрицы(списка) устройств по строкам и колоннам, для правильной прокладки кабелей
   function get2DListDevice(listDeviceinRoom:TListVertexDevice;contourRoom:PGDBObjPolyLine;perpendListVertex:TListVertex;anglePerpendCos:double;out hor2DListDevice:TListColumnDev;out vert2DListDevice:TListColumnDev):TListColumnDev;
     var
-        psd:PSelectedObjDesc;
-        ir:itrec;
+        //psd:PSelectedObjDesc;
+        //ir:itrec;
         mpd:devcoordarray;
-        pdev:PGDBObjDevice;
+        //pdev:PGDBObjDevice;
         tempvert:GDBVertex;
         index:integer;
-        pvd:pvardesk;
+        //pvd:pvardesk;
         dcoord:tdevcoord;
-        i,j,count:integer;
-        process:boolean;
+        i,j{,count}:integer;
+        //process:boolean;
         DC:TDrawContext;
-        pdevvarext:TVariablesExtender;
+        //pdevvarext:TVariablesExtender;
         angle:double;
-         infoVertexDevice:TVertexDevice;
+         //infoVertexDevice:TVertexDevice;
          tempforinfo:string;
     begin
          //ZCMsgCallBackInterface.TextMessage('Заработалоssssss');
@@ -1492,11 +1492,11 @@ var
  mathGraph:TGraph;
  T: Float;
  EdgePath,VertexPath:TClassList;
- i,j,k,m,count:integer;
+ i,j,k,{m,}count:integer;
  isClone,isFirst:boolean;
- tempNum,beforeNum:integer;
+ tempNum{,beforeNum}:integer;
  tempLength,beforeLength:double;
- infoVertex:TGraphInfoVertex;
+ //infoVertex:TGraphInfoVertex;
  tempListDevice:TListVertexDevice;
 begin
     // Подключение созданного граффа к библиотеке Аграф
@@ -1628,15 +1628,15 @@ end;
 function getVertexSL(pt,stpt:GDBVertex;listDeviceinRoom:TListVertexDevice;accuracy:double):GDBVertex;
 var
  i:integer;
- pd,pObjDevice,pObjDevice2,currentSubObj,currentSubObj2:PGDBObjDevice;
+ {pd,}pObjDevice,{pObjDevice2,}currentSubObj{,currentSubObj2}:PGDBObjDevice;
 
- ir,ir_inDevice,ir_inDevice2:itrec;  // применяется для обработки списка выделений, но что это понятия не имею :)
+ ir,ir_inDevice{,ir_inDevice2}:itrec;  // применяется для обработки списка выделений, но что это понятия не имею :)
 
  NearObjects:GDBObjOpenArrayOfPV;//список примитивов рядом с точкой
  areaVertex:TBoundingBox;
  pobj: pGDBObjEntity;
  pcdev:PGDBObjLine;
- interceptVertex,firstPoint,pConnect,tempvert:GDBVertex;
+ interceptVertex,{firstPoint,}{pConnect,}tempvert:GDBVertex;
  psldb:Pointer;
 
  listVertex:TListVertex;

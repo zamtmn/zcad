@@ -25,7 +25,7 @@ uses
       gzctnrvectortypes,uzemathutils,uzegeometry,uzbstrproc,TypeDescriptors,
       sysutils,UGDBOpenArrayOfByte,uzbtypesbase,
       USinonimDescriptor,uzedimensionaltypes,varmandef,uzbtypes,
-      base64,uzctnrvectorgdbstring,uzbmemman,math;
+      base64,uzctnrvectorgdbstring,math;
 resourcestring
   rsDifferent='Different';
 type

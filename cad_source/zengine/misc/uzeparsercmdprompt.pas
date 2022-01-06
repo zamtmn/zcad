@@ -190,9 +190,9 @@ procedure TOptionProcessor.GetResult(
                                        var ResultParam   :TOptStrMan.TCharRange;
                                        var data          :TCommandLinePromptOption
                                      );
-var
+{var
   op3:TParserCommandLinePrompt.TParsedTextWithOneToken;
-  s:string;
+  s:string;}
 begin
   data.CurrentTag:=tag;
   TParserCommandLinePrompt(InsideBracketParser).TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserCommandLinePrompt.TParsedText).Parts.Mutable[0]^,data,Result,ResultParam);

@@ -28,7 +28,7 @@ uses
   URecordDescriptor,TypeDescriptors,
 
   Forms, //uzcfblockinsert,
-   uzcfarrayinsert,
+  //uzcfarrayinsert,
 
   uzeentblockinsert,      //unit describes blockinsert entity
                        //модуль описывающий примитив вставка блока
@@ -57,48 +57,48 @@ uses
   uzbgeomtypes,
 
 
-  gvector,garrayutils, // Подключение Generics и модуля для работы с ним
+  //gvector,garrayutils, // Подключение Generics и модуля для работы с ним
 
   uzcentcable,
   uzeentdevice,
-  UGDBOpenArrayOfPV,
+  //UGDBOpenArrayOfPV,
 
   uzegeometry,
-  uzeentitiesmanager,
+  //uzeentitiesmanager,
 
   //uzcmessagedialogs,
   uzeentityfactory,    //unit describing a "factory" to create primitives
                       //модуль описывающий "фабрику" для создания примитивов
   uzcsysvars,        //system global variables
                       //системные переменные
-  uzgldrawcontext,
+  //uzgldrawcontext,
   uzcinterface,
-  uzbtypesbase,uzbtypes, //base types
+  {uzbtypesbase,}uzbtypes, //base types
                       //описания базовых типов
-  uzeconsts, //base constants
+  //uzeconsts, //base constants
                       //описания базовых констант
   uzccommandsmanager,
-  uzccommandsabstract,
+  //uzccommandsabstract,
   uzccommandsimpl, //Commands manager and related objects
                       //менеджер команд и объекты связанные с ним
-  uzcdrawing,
-  uzedrawingsimple,
-  uzcdrawings,     //Drawings manager, all open drawings are processed him
+  //uzcdrawing,
+  //uzedrawingsimple,
+  //uzcdrawings,     //Drawings manager, all open drawings are processed him
                       //"Менеджер" чертежей
-  uzcutils,         //different functions simplify the creation entities, while there are very few
+  //uzcutils,         //different functions simplify the creation entities, while there are very few
                       //разные функции упрощающие создание примитивов, пока их там очень мало
   varmandef,
   Varman,
-  {UGDBOpenArrayOfUCommands,}zcchangeundocommand,
+  {UGDBOpenArrayOfUCommands,}//zcchangeundocommand,
 
   uzclog,                //log system
                       //<**система логирования
-  uzcvariablesutils, // для работы с ртти
+  //uzcvariablesutils, // для работы с ртти
 
   //для работы графа
-  ExtType,
-  Pointerv,
-  Graphs,
+  //ExtType,
+  //Pointerv,
+  //Graphs,
 
    uzcenitiesvariablesextender,
    UUnitManager,

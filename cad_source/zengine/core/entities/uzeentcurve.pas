@@ -23,8 +23,8 @@ interface
 uses uzgldrawcontext,uzedrawingdef,uzecamera,gzctnrvectorpobjects,
      UGDBOpenArrayOfByte,uzestyleslayers,uzbtypesbase,UGDBVectorSnapArray,
      UGDBSelectedObjArray,uzeent3d,uzeentity,UGDBPolyLine2DArray,UGDBPoint3DArray,
-     uzbtypes,uzegeometry,uzeconsts,uzglviewareadata,uzeffdxfsupport,sysutils,uzbmemman,
-     gzctnrvectortypes,uzbgeomtypes,uzeentsubordinated;
+     uzbtypes,uzegeometry,uzeconsts,uzglviewareadata,uzeffdxfsupport,sysutils,
+     gzctnrvectortypes,uzbgeomtypes,uzeentsubordinated,uzctnrvectorpgdbaseobjects;
 type
 //------------snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)
 {Export+}

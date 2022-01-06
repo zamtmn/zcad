@@ -4,11 +4,13 @@
 
 unit zebase;
 
+{$warn 5023 off : no warning about unused units}
 interface
 
 uses
-  uzbtypesbase, uzbtypes, uzbmemman, uzbstrproc, uzbpaths, uzbgeomtypes, 
-  LazarusPackageIntf;
+  uzbtypesbase, uzbtypes, uzbstrproc, uzbpaths, uzbgeomtypes, 
+  uzctnrvectorpgdbaseobjects, uzctnrvectorgdbstring, uzctnrvectorgdbpointer, 
+  uzctnrobjectschunk, LazarusPackageIntf;
 
 implementation
 

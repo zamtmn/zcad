@@ -23,7 +23,8 @@ uses
     uzeentwithlocalcs,gzctnrvectorpobjects,uzestyleslayers,uzbtypesbase,
     UGDBSelectedObjArray,uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,
     uzbgeomtypes,UGDBOpenArrayOfByte,varman,varmandef,uzbtypes,uzeconsts,
-    uzglviewareadata,uzegeometry,uzeffdxfsupport,uzbmemman,uzeentplain;
+    uzglviewareadata,uzegeometry,uzeffdxfsupport,uzeentplain,
+    uzctnrvectorpgdbaseobjects;
 type
 {Export+}
   ptEllipsertmodify=^tEllipsertmodify;

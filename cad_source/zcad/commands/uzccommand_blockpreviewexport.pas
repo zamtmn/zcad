@@ -34,7 +34,7 @@ uses
   uzeutils,uzcutils,
   uzcinterface,
   uzbgeomtypes,uzegeometry,
-  uzbmemman,uzbpaths,
+  uzbpaths,
   uzeentdevice,uzeentblockinsert,uzeblockdef,uzeentsubordinated,
   //uzestyleslayers,
   uzeconsts;
@@ -59,7 +59,7 @@ var
    SAVEsysvarDISPmaxLWDisplayScale:integer;
    SAVELWDisplay:boolean;
    //plp:PGDBLayerProp;
-   bb,bb2:TBoundingBox;
+   bb{,bb2}:TBoundingBox;
 begin
   //пример вызова(РазмерИзображекния|ИмяБлока|Путь)
   //BlockPreViewExport(128|DEVICE_PS_DAT_HAND|*images\palettes)

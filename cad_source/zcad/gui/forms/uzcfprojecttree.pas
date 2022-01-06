@@ -24,8 +24,8 @@ uses
  uzctnrvectorgdbstring,uzeconsts,uzcstrconsts,uzcctrlcontextmenu,uzbstrproc,
  uzctreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  Classes,FileUtil,Forms,stdctrls,Controls,ComCtrls,
- uzcdevicebaseabstract,uzclog,SysUtils,uzbtypes,uzcdrawings,varman,languade,
- varmandef,uzcsysinfo,uzbmemman,uzbtypesbase,uzccommandsimpl,uzccommandsabstract,
+ uzcdevicebaseabstract,uzclog,SysUtils,uzbtypes,uzcdrawings,varman,
+ varmandef,uzcsysinfo,uzbtypesbase,uzccommandsimpl,uzccommandsabstract,
  uztoolbarsmanager,
  gzctnrvectortypes,uzeblockdef,UBaseTypeDescriptor,uzcinterface,UUnitManager,LazLogger,uzmenusmanager;
 const

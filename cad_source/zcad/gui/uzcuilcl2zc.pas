@@ -116,13 +116,6 @@ begin
   end;
 end;
 
-type
-TZCTaskStr=string;
-TZCMsgId=string;
-TZCMsgStr=string;
-TZCMsgCommonButton=(zccbOK,zccbYes,zccbNo,zccbCancel,zccbRetry,zccbClose);
-TZCMsgCommonButtons=set of TZCMsgCommonButton;
-
 initialization
 finalization
 end.

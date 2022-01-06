@@ -23,7 +23,7 @@ uses uzgldrawcontext,uzeentityfactory,uzeentdimension,uzeentpoint,uzestylesdim,
      uzestyleslayers,uzedrawingdef,uzbstrproc,
      UGDBOpenArrayOfByte,UGDBControlPointArray,uzegeometry,uzeentline,uzbtypesbase,
      uzeentcomplex,sysutils,UGDBSelectedObjArray,uzeentity,uzbtypes,uzeconsts,
-     uzbgeomtypes,uzeffdxfsupport,uzbmemman,uzeentsubordinated,
+     uzbgeomtypes,uzeffdxfsupport,uzeentsubordinated,
      UGDBOpenArrayOfPV;
 (*
 Alligned dimension structure in DXF

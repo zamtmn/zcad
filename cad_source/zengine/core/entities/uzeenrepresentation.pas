@@ -20,7 +20,7 @@ unit uzeenrepresentation;
 {$INCLUDE def.inc}
 interface
 uses uzgldrawcontext,uzgldrawerabstract,uzglvectorobject,
-     uzbtypesbase,sysutils,uzbmemman,
+     uzbtypesbase,sysutils,
      uzbgeomtypes,uzegeometry,uzglgeometry,uzefont,uzeentitiesprop,UGDBPoint3DArray,
      uzegeomentitiestree,uzbtypes,
      gzctnrvectortypes,uzgeomline3d,uzgeomproxy;

@@ -19,7 +19,7 @@
 unit uzefontbase;
 {$INCLUDE def.inc}
 interface
-uses uzgprimitives,uzglvectorobject,uzbmemman,uzbstrproc,UGDBOpenArrayOfByte,
+uses uzgprimitives,uzglvectorobject,uzbstrproc,UGDBOpenArrayOfByte,
      gzctnrvectortypes,uzbtypesbase,gzctnrvectordata,sysutils,uzbtypes,uzbgeomtypes,uzegeometry;
 type
 {EXPORT+}

@@ -25,7 +25,6 @@ uses
   LazLogger,
   SysUtils,
   uzccommandsabstract,uzccommandsimpl,
-  uzccominteractivemanipulators,
   uzeconsts,uzcstrconsts,
   uzbgeomtypes,
   uzccommandsmanager,

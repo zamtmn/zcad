@@ -22,7 +22,7 @@ unit URecordDescriptor;
 interface
 uses LCLProc,UPointerDescriptor,uzbstrproc,{log,}UGDBOpenArrayOfByte,sysutils,UBaseTypeDescriptor,
   gzctnrvectortypes,uzedimensionaltypes,TypeDescriptors,gzctnrvectordata,uzbtypesbase,
-  TypInfo,varmandef,uzbtypes,uzbmemman;
+  TypInfo,varmandef,uzbtypes;
 type
 TFieldDescriptor=GZVectorData<FieldDescriptor>;
 PRecordDescriptor=^RecordDescriptor;

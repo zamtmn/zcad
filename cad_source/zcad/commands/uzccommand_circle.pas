@@ -27,7 +27,6 @@ uses
   uzccommandsabstract,uzccommandsimpl,
   uzccominteractivemanipulators,
   uzeconsts,uzcstrconsts,
-  uzbgeomtypes,
   uzccommandsmanager,
   uzeentcircle,uzeentityfactory,
   uzcdrawings,

@@ -23,11 +23,11 @@ interface
 uses
   uzeenttext,uzctnrvectorgdbpointer,uzeentblockinsert,uzeconsts,uzcinterface,
   LazLoggerBase,uzcoimultiproperties,uzcoiwrapper,uzctranslations,uzepalette,
-  uzbmemman,uzedimensionaltypes,uzcstrconsts,sysutils,uzeentityfactory,
+  uzedimensionaltypes,uzcstrconsts,sysutils,uzeentityfactory,
   uzcenitiesvariablesextender,uzgldrawcontext,usimplegenerics,gzctnrstl,
   gzctnrvectortypes,uzbtypes,uzcdrawings,varmandef,uzeentity,uzbtypesbase,
   Varman,uzctnrvectorgdbstring,UGDBSelectedObjArray,uzcoimultipropertiesutil,
-  uzeentityextender,uzelongprocesssupport,uzcutils;
+  uzeentityextender,uzelongprocesssupport;
 type
   TObjIDWithExtender2Counter=TMyMapCounter<TObjIDWithExtender>;
 {Export+}
@@ -687,8 +687,8 @@ var //i: GDBInteger;
     pv:pGDBObjEntity;
     psd:PSelectedObjDesc;
     pu:pointer;
-    pvd,pvdmy:pvardesk;
-    vd:vardesk;
+    //pvd,pvdmy:pvardesk;
+    //vd:vardesk;
     ir,ir2:itrec;
     pentvarext:TVariablesExtender;
 begin

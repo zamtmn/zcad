@@ -9,7 +9,7 @@ uses
   LCLType,Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
   ExtCtrls, StdCtrls, Spin,
   {From ZCAD}
-  uzbmemman,                                                                       //zcad memorymanager
+                                                                         //zcad memorymanager
   uzbtypes, uzbtypesbase,uzbgeomtypes,                                              //zcad basetypes
   uzegeometry,                                                                     //some mathematical and geometrical support
   uzefontmanager,uzeffshx,                                                        //fonts manager and SHX fileformat support

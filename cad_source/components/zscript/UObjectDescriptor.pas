@@ -23,7 +23,7 @@ interface
 uses LCLProc,gzctnrvectorobjects,URecordDescriptor,UGDBOpenArrayOfByte,sysutils,
      gzctnrvectortypes,uzedimensionaltypes,UBaseTypeDescriptor,TypeDescriptors,
      strmy,uzctnrvectorgdbstring,objects,gzctnrvectordata,uzbtypesbase,
-     varmandef,uzbtypes,uzbmemman,uzbstrproc,TypInfo;
+     varmandef,uzbtypes,uzbstrproc,TypInfo;
 type
 GDBTOperandStoreMode=GDBByte;
 GDBOperandDesc=record
@@ -47,7 +47,7 @@ MetodDescriptor=object(GDBaseObject)
                       destructor Done;virtual;
                 end;
 simpleproc=procedure of object;
-TSimpleMenodsVector=GZVectorObjects<MetodDescriptor>;
+TSimpleMenodsVector=GZVectorObjects<PMetodDescriptor,MetodDescriptor>;
 TPropertiesVector=GZVectorData<PropertyDescriptor>;
 
 PObjectDescriptor=^ObjectDescriptor;

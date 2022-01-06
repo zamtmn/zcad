@@ -21,7 +21,7 @@ unit uzctreenode;
 interface
 
 uses
-  {$IFDEF WINDOWS}win32proc,{$endif}
+  {$IFDEF LCLWIN32}win32proc,{$endif}
   uzcutils,uzbpaths,Themes,uzcinterface,uzccommandsabstract,ExtCtrls,lclproc,Graphics,ActnList,ComCtrls,
   Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,{$ENDIF}LazUTF8,Buttons,
   {$IFNDEF DELPHI}uzctranslations,{$ENDIF}sysutils,uzbstrproc,varmandef,

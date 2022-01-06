@@ -20,7 +20,7 @@ unit gzctnrtree;
 {$INCLUDE def.inc}
 interface
 uses
-    gzctnrvectortypes,gzctnrvectorpobjects,uzbmemman,gzctnrvectorsimple;
+    gzctnrvectortypes,gzctnrvectorpobjects,gzctnrvectorsimple;
 type
 {EXPORT+}
          TStageMode=(TSMStart,TSMAccumulation,TSMCalc,TSMEnd);

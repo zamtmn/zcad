@@ -30,7 +30,6 @@ uses
   uzbgeomtypes,
   uzccommandsmanager,
   uzeentlwpolyline,uzeentpolyline,uzeentityfactory,
-  uzcdrawings,
   uzcutils,
   uzbtypes,
   uzegeometry,

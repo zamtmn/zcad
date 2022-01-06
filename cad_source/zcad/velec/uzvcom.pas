@@ -42,7 +42,7 @@ uses
 
   Forms, //gzctnrvectortypes,
   //uzcfblockinsert,  //старое временно
-  uzcfarrayinsert,
+  //uzcfarrayinsert,
 
   uzeentblockinsert,      //unit describes blockinsert entity
                        //модуль описывающий примитив вставка блока
@@ -69,7 +69,7 @@ uses
   uzeentity,
 
 
-  gvector,garrayutils, // Подключение Generics и модуля для работы с ним
+  gvector,//garrayutils, // Подключение Generics и модуля для работы с ним
 
   uzcentcable,
   uzeentdevice,
@@ -78,14 +78,14 @@ uses
   uzccablemanager,
   /////////////////
   uzegeometry,
-  uzeentitiesmanager,
+  //uzeentitiesmanager,
 
   //uzcmessagedialogs,
   uzeentityfactory,    //unit describing a "factory" to create primitives
                       //модуль описывающий "фабрику" для создания примитивов
   uzcsysvars,        //system global variables
                       //системные переменные
-  uzgldrawcontext,
+  //uzgldrawcontext,
   uzcinterface,
   uzbtypesbase,uzbtypes, //base types
                       //описания базовых типов
@@ -95,7 +95,7 @@ uses
   uzccommandsabstract,
   uzccommandsimpl, //Commands manager and related objects
                       //менеджер команд и объекты связанные с ним
-  uzcdrawing,
+  //uzcdrawing,
   uzedrawingsimple,
   uzcdrawings,     //Drawings manager, all open drawings are processed him
                       //"Менеджер" чертежей
@@ -103,7 +103,7 @@ uses
                       //разные функции упрощающие создание примитивов, пока их там очень мало
   varmandef,
   Varman,
-  {UGDBOpenArrayOfUCommands,}zcchangeundocommand,
+  {UGDBOpenArrayOfUCommands,}//zcchangeundocommand,
 
   uzclog,                //log system
                       //<**система логирования
@@ -112,9 +112,9 @@ uses
   uzventsuperline,   //для работы  с суперлинией
   //uzvtestdraw,       //быстрая рисовалка разных примитивов
   //для работы графа
-  ExtType,
-  Pointerv,
-  Graphs,
+  //ExtType,
+  //Pointerv,
+  //Graphs,
 
   uzvsgeom,
     gzctnrvectortypes,                  //itrec

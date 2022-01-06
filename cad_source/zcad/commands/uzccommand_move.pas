@@ -22,7 +22,7 @@ unit uzccommand_move;
 interface
 uses
   gzctnrvector,zcmultiobjectchangeundocommand,
-  gzctnrvectortypes,zcmultiobjectcreateundocommand,uzgldrawercanvas,
+  gzctnrvectortypes,uzgldrawercanvas,
   uzcoimultiobjects,uzcdrawing,uzepalette,
   uzgldrawcontext,
   uzeentpoint,uzeentityfactory,
@@ -34,17 +34,17 @@ uses
   uzccommandsimpl,
   uzbtypes,
   uzcdrawings,
-  uzeutils,uzcutils,
+  uzeutils,
   sysutils,
   varmandef,
   uzglviewareadata,
   uzeffdxf,
   uzcinterface,
   uzegeometry,
-  uzbmemman,
+
   uzeconsts,
   uzbgeomtypes,uzeentity,uzeentcircle,uzeentline,uzeentgenericsubentry,uzeentmtext,
-  uzeentsubordinated,uzeentblockinsert,uzeentpolyline,uzclog,gzctnrvectordata,
+  uzeentblockinsert,uzeentpolyline,uzclog,gzctnrvectordata,
   uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray
   ,uzelongprocesssupport,LazLogger;
 type

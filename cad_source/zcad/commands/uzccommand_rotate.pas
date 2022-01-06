@@ -22,13 +22,12 @@ unit uzccommand_rotate;
 interface
 uses
   gzctnrvectortypes,
-  usimplegenerics,
   uzcdrawing,
   uzgldrawcontext,
   uzbtypesbase,
   uzbtypes,
   uzcdrawings,
-  uzeutils,uzcutils,
+  uzeutils,
   uzglviewareadata,
   uzccommand_move,
   uzccommandsabstract,varmandef,uzccommandsmanager,uzcinterface,uzcstrconsts,uzegeometry,zcmultiobjectchangeundocommand,

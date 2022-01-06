@@ -51,12 +51,12 @@ uses
   Pointerv,
   Graphs,
    *}
-   sysutils, math,
+   sysutils, //math,
 
   URecordDescriptor,TypeDescriptors,
 
   Forms, //uzcfblockinsert,
-   uzcfarrayinsert,
+  //uzcfarrayinsert,
 
   uzeentblockinsert,      //unit describes blockinsert entity
                        //модуль описывающий примитив вставка блока
@@ -85,14 +85,14 @@ uses
   uzbgeomtypes,
 
 
-  gvector,garrayutils, // Подключение Generics и модуля для работы с ним
+  gvector,//garrayutils, // Подключение Generics и модуля для работы с ним
 
   uzcentcable,
   uzeentdevice,
-  UGDBOpenArrayOfPV,
+  //UGDBOpenArrayOfPV,
 
   uzegeometry,
-  uzeentitiesmanager,
+  //uzeentitiesmanager,
 
   //uzcmessagedialogs,
   uzeentityfactory,    //unit describing a "factory" to create primitives
@@ -109,7 +109,7 @@ uses
   uzccommandsabstract,
   uzccommandsimpl, //Commands manager and related objects
                       //менеджер команд и объекты связанные с ним
-  uzcdrawing,
+  //uzcdrawing,
   uzedrawingsimple,
   uzcdrawings,     //Drawings manager, all open drawings are processed him
                       //"Менеджер" чертежей
@@ -117,16 +117,16 @@ uses
                       //разные функции упрощающие создание примитивов, пока их там очень мало
   varmandef,
   Varman,
-  {UGDBOpenArrayOfUCommands,}zcchangeundocommand,
+  {UGDBOpenArrayOfUCommands,}//zcchangeundocommand,
 
   uzclog,                //log system
                       //<**система логирования
-  uzcvariablesutils, // для работы с ртти
+  //uzcvariablesutils, // для работы с ртти
 
   //для работы графа
-  ExtType,
-  Pointerv,
-  Graphs,
+  //ExtType,
+  //Pointerv,
+  //Graphs,
 
    uzcenitiesvariablesextender,
    UUnitManager,
@@ -320,12 +320,12 @@ end;
 
   procedure getListEdge(var listVertexGraph:TListVertexGraph;var listEdgeGraph:TListEdgeGraph; stpoint,edpoint:GDBVertex;accuracy:double);
   var
-     i,j,k:integer;
+     {i,}j,k:integer;
      areaLine, areaVertex:TBoundingBox;
      vertexRectangleLine:TRectangleLine;
      infoEdge:TEdgeGraph;
      tempListNumVertex:TListNum;
-     tempNumVertex:TInfoTempNumVertex;
+     //tempNumVertex:TInfoTempNumVertex;
      inAddEdge:boolean;
   begin
          tempListNumVertex:=TListNum.Create;                                    //создаем временный список номеров вершин
@@ -384,10 +384,10 @@ var
  tempVertex,mainVertexPerpend,stPoint:GDBVertex;
  pointBuildLine:TInfoBuildLine;
 
- p1new,p2new,p3new,p4new:GDBVertex;
+ //p1new,p2new,p3new,p4new:GDBVertex;
  i,j,tNum,orient,counter:integer;
- tempLength,templen2:double;
- isLine:boolean;
+ tempLength{,templen2}:double;
+ //isLine:boolean;
 
   UndoMarcerIsPlazed:boolean;
 

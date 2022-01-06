@@ -19,10 +19,10 @@
 unit UGDBOpenArrayOfByte;
 {$INCLUDE def.inc}
 interface
-uses gzctnrvector,{uzbtypesbase,}uzbgeomtypes,sysutils,uzbtypes{$IFNDEF DELPHI},LazUTF8{$ENDIF};
+uses gzctnrvector,{uzbgeomtypes,}sysutils{$IFNDEF DELPHI},LazUTF8{$ENDIF};
 const
-     breacer=[#13,#10,' '];
-  eol: AnsiString=#13 + #10;
+    syn_breacer=[#13,#10,' '];
+    lineend:string=#13#10;
 type
 {Export+}
 PGDBOpenArrayOfByte=^GDBOpenArrayOfByte;
@@ -36,7 +36,7 @@ GDBOpenArrayOfByte=object(GZVector{-}<byte>{//})
                       function AddByte(PData:Pointer):Integer;virtual;
                       function AddByteByVal(Data:Byte):Integer;virtual;
                       function AddWord(PData:Pointer):Integer;virtual;
-                      function AddFontFloat(PData:Pointer):Integer;virtual;
+                      //function AddFontFloat(PData:Pointer):Integer;virtual;
                       procedure TXTAddGDBStringEOL(s:AnsiString);virtual;
                       procedure TXTAddGDBString(s:AnsiString);virtual;
                       function ReadData(PData:Pointer;SData:Word):Integer;virtual;
@@ -58,10 +58,10 @@ GDBOpenArrayOfByte=object(GZVector{-}<byte>{//})
 {Export-}
 procedure WriteString_EOL(h: Integer; s: AnsiString);
 implementation
-uses uzbstrproc;
+//uses uzbstrproc;
 procedure WriteString_EOL(h: Integer; s: AnsiString);
 begin
-  s := s + eol;
+  s := s + lineend;
      //writeln(s);
   FileWrite(h, s[1], length(s));
 end;
@@ -73,7 +73,7 @@ end;
 
 procedure GDBOpenArrayOfByte.TXTAddGDBStringEOL;
 begin
-     s:=s+eol;
+     s:=s+lineend;
      self.TXTAddGDBString(s);
 end;
 procedure GDBOpenArrayOfByte.TXTAddGDBString;
@@ -187,6 +187,23 @@ begin
   //setlength(s,i-1);
   result := s;
 end;
+function readspace(expr:String):String;
+var
+  i:Integer;
+begin
+  if expr='' then exit;
+  i := 1;
+  while not (expr[i] in ['@','{','}','a'..'z', 'A'..'Z', '0'..'9', '$', '(', ')', '+', '-', '*', '/', ':', '=','_', '''']) do
+  begin
+    if i = length(expr) then
+      system.break;
+    i := i + 1;
+  end;
+  if i>1 then
+    i:=i;
+  result := copy(expr, i, length(expr) - i + 1);
+end;
+
 function GDBOpenArrayOfByte.ReadString2;
 begin
      result:=readspace(readGDBString)
@@ -273,7 +290,7 @@ begin
           //inc(i);
           if ({s<>''}i<>0)or(addr[0]<>' ') then
 
-          if addr[0] in breacer then
+          if addr[0] in syn_breacer then
                                                  begin
                                                       if not lastbreak then
                                                                            begin
@@ -371,11 +388,11 @@ function GDBOpenArrayOfByte.AddByte(PData:Pointer):Integer;
 begin
      result:=adddata(pdata,sizeof(Byte));
 end;
-function GDBOpenArrayOfByte.AddFontFloat(PData:Pointer):Integer;
+{function GDBOpenArrayOfByte.AddFontFloat(PData:Pointer):Integer;
 //var addr:GDBPlatformint;
 begin
      result:=adddata(pdata,sizeof(fontfloat));
-end;
+end;}
 function GDBOpenArrayOfByte.AddWord(PData:Pointer):Integer;
 begin
      result:=adddata(pdata,sizeof(Word));

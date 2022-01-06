@@ -71,11 +71,11 @@ GDBDoubleArray= object(GZVectorData{-}<GDBDouble>{//})(*OpenArrayOfData=GDBDoubl
                 constructor init(m:GDBInteger);
                end;
 {REGISTEROBJECTTYPE GDBShapePropArray}
-GDBShapePropArray= object(GZVectorObjects{-}<ShapeProp>{//})(*OpenArrayOfObject=ShapeProp*)
+GDBShapePropArray= object(GZVectorObjects{-}<PShapeProp,ShapeProp>{//})(*OpenArrayOfObject=ShapeProp*)
                 constructor init(m:GDBInteger);
                end;
 {REGISTEROBJECTTYPE GDBTextPropArray}
-GDBTextPropArray= object(GZVectorObjects{-}<TextProp>{//})(*OpenArrayOfObject=TextProp*)
+GDBTextPropArray= object(GZVectorObjects{-}<PTextProp,TextProp>{//})(*OpenArrayOfObject=TextProp*)
                 constructor init(m:GDBInteger);
                end;
 PPGDBLtypePropObjInsp=^PGDBLtypePropObjInsp;

@@ -22,8 +22,8 @@ unit uzefontmanager;
 interface
 uses
   UGDBOpenArrayOfByte,{$IFNDEF DELPHI}LResources,{$ENDIF}LCLProc,uzbpaths,
-  uzelclintfex,uzestrconsts,uzbstrproc,uzefont,uzbtypesbase,uzbmemman,
-  sysutils,uzbtypes,uzegeometry,usimplegenerics,gzctnrstl,
+  uzelclintfex,uzestrconsts,uzbstrproc,uzefont,uzbtypesbase,
+  sysutils,uzbtypes,uzegeometry,gzctnrstl,
   UGDBNamedObjectsArray,classes,uzefontttfpreloader,uzelongprocesssupport;
 type
   TGeneralFontParam=record

@@ -41,7 +41,7 @@ uses
   uzcinterface,
   uzeconsts,
   uzeentity,
- uzbtypesbase,uzbmemman,uzcdialogsfiles,
+ uzbtypesbase,uzcdialogsfiles,
  UUnitManager,uzclog,Varman,
  uzbgeomtypes,dialogs,uzcinfoform,
  uzeentpolyline,uzeentlwpolyline,UGDBSelectedObjArray,

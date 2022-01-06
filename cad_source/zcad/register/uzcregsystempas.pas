@@ -20,10 +20,10 @@ unit uzcregsystempas;
 {$INCLUDE def.inc}
 interface
 uses uzbpaths,UUnitManager,uzcsysvars,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
-     uzbstrproc,Varman,languade,SysUtils,
+     uzbstrproc,Varman,SysUtils,
      UBaseTypeDescriptor,uzbtypes,UGDBOpenArrayOfByte, strmy, varmandef,
      uzcsysparams,uzcsysinfo,TypeDescriptors,URecordDescriptor,
-     uzblog,uzclog,uzbmemman,LazLogger;
+     uzblog,uzclog,LazLogger;
 implementation
 {$IFNDEF WINDOWS}
 var

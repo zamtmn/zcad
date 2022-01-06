@@ -15,13 +15,36 @@
 {**
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
-{**Модуль описания базового генерика обьекта-массива}
 unit gzctnrvectortypes;
 {$INCLUDE def.inc}
 interface
-uses uzbmemman,{uzbtypesbase,}sysutils,{uzbtypes,}typinfo;
+uses sysutils,typinfo;
 type
+  TPtrOffs=record
+             case byte of
+               1:(ptr:Pointer);
+               2:(offs:PtrUInt);
+           end;
 {Export+}
+  PTArrayIndex=^TArrayIndex;
+  TArrayIndex=Integer;
+  {REGISTEROBJECTWITHOUTCONSTRUCTORTYPE TZAbsVector}
+  TZAbsVector=object
+    function GetParray:pointer;virtual;abstract;
+    function getPData(index:TArrayIndex):Pointer;virtual;abstract;
+  end;
+  PZAbsVector=^TZAbsVector;
+  {REGISTERRECORDTYPE TInVectorAddr}
+  TInVectorAddr=record
+                  Instt:{-}TPtrOffs{/GDBPointer/};
+                  DataSegment:PZAbsVector;
+                  {-}function GetInstance:Pointer;{/ /}
+                  {-}function IsNil:Boolean;{/ /}
+                  {-}property Instance:Pointer read GetInstance;{/ /}
+                  {-}procedure SetInstance(DS:PZAbsVector;Offs:PtrUInt);overload;{/ /}
+                  {-}procedure SetInstance(Ptr:Pointer);overload;{/ /}
+                  {-}procedure FreeeInstance;{/ /}
+                end;
   {REGISTERRECORDTYPE itrec}
   itrec=record
               itp:{-}PPointer{/Pointer/};
@@ -29,5 +52,36 @@ type
         end;
 {Export-}
 implementation
+function TInVectorAddr.GetInstance:Pointer;
+begin
+  if DataSegment=nil then
+    result:=Instt.ptr
+  else
+    result:=DataSegment^.getPData(Instt.offs);
+    //result:=Pointer(PtrUInt(DataSegment^.GetParray)+Instt.offs);
+end;
+function TInVectorAddr.IsNil:Boolean;
+begin
+  result:=(DataSegment=nil)and(Instt.ptr=nil);
+end;
+
+procedure TInVectorAddr.SetInstance(DS:PZAbsVector;Offs:PtrUInt);
+begin
+  DataSegment:=DS;
+  Instt.offs:=Offs;
+end;
+
+procedure TInVectorAddr.SetInstance(Ptr:Pointer);
+begin
+   DataSegment:=nil;
+   Instt.ptr:=Ptr;
+end;
+
+procedure TInVectorAddr.FreeeInstance;
+begin
+  if DataSegment=nil then
+    Freemem(Instt.ptr);
+end;
+
 begin
 end.

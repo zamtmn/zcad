@@ -25,7 +25,7 @@ interface
 uses
   Classes,SysUtils,strutils,
   {$IFDEF LCLGTK2}gtk2,{$ENDIF}
-  {$IFDEF WINDOWS}win32proc,{$endif}
+  {$IFDEF LCLWIN32}win32proc,{$endif}
   Types,Graphics,Themes,LCLIntf,LCLType,
   ExtCtrls,Controls,Menus,Forms,
   StdCtrls,
@@ -231,7 +231,7 @@ end;
 
 function PlusMinusDetail(Collapsed,hot:boolean):TThemedTreeview;
 begin
-     {$IFDEF WINDOWS}
+     {$IFDEF LCLWIN32}
      if WindowsVersion < wvVista then
                                     hot:=false;
      {$endif}
@@ -688,14 +688,14 @@ begin
                      if onmouse then
                      begin
                      result := ThemeServices.GetElementDetails(ttItemHot);
-                     {$IFDEF WINDOWS}
+                     {$IFDEF LCLWIN32}
                      if ((WindowsVersion >= wvVista)and ThemeServices.ThemesEnabled) then
                                                                                          ThemeServices.DrawElement(cnvs.Handle, result, r, nil)
                                                                                      else
                                                                                          if isOldStyleDraw then
                                                                                          ThemeServices.DrawElement(cnvs.Handle, ThemeServices.GetElementDetails(ttItemNormal), r, nil)
                      {$ENDIF}
-                     {$IFNDEF WINDOWS}
+                     {$IFNDEF LCLWIN32}
                      ThemeServices.DrawElement(cnvs.Handle, result, r, nil);
                      {$ENDIF}
                      end
@@ -709,7 +709,7 @@ begin
                      ThemeServices.DrawElement(cnvs.Handle, result, r, nil);
                      end;
                      end;
-                     {$IFDEF WINDOWS}
+                     {$IFDEF LCLWIN32}
                      if (WindowsVersion < wvVista)or(not ThemeServices.ThemesEnabled) then
                      {$ENDIF}
                      if isOldStyleDraw then
@@ -1025,7 +1025,7 @@ ARect := GetClientRect;
 InflateRect(ARect, -BorderWidth, -BorderWidth);
 ARect.Top:=ARect.Top+VertScrollBar.ScrollPos;
 ARect.Bottom:=ARect.Bottom+VertScrollBar.ScrollPos;
-{$IFDEF WINDOWS}
+{$IFDEF LCLWIN32}
 if WindowsVersion < wvVista then
                                 DefaultDetails := ThemeServices.GetElementDetails(tbPushButtonNormal)
                             else
@@ -1054,7 +1054,7 @@ ts.Alignment:=taCenter;
 ts.Layout:=tlCenter;}
 
 hrect:=ARect;
-{$IFDEF WINDOWS}
+{$IFDEF LCLWIN32}
 if WindowsVersion>=wvVista then
 {$endif}
 InflateRect(hrect, -1, -1);
@@ -1092,8 +1092,8 @@ begin
                                       hrect.Bottom:=ARect.Bottom{height};
      if ThemeServices.ThemesEnabled then
      begin
-          {$IFNDEF WINDOWS}DefaultDetails := ThemeServices.GetElementDetails(ttbSeparatorNormal);{$ENDIF}
-          {$IFDEF WINDOWS}
+          {$IFNDEF LCLWIN32}DefaultDetails := ThemeServices.GetElementDetails(ttbSeparatorNormal);{$ENDIF}
+          {$IFDEF LCLWIN32}
           if WindowsVersion < wvVista then
                                           DefaultDetails := ThemeServices.GetElementDetails(ttbSeparatorNormal)
                                       else
@@ -1727,7 +1727,7 @@ begin
                                        //editorcontrol.SetBounds(tr.Left+2,tr.Top,tr.Right-tr.Left-2,tr.Bottom-tr.Top);
                                        if (editorcontrol is TCombobox) then
                                                                            begin
-                                                                                {$IFDEF LINUX}
+                                                                                {$IFNDEF LCLWIN32}
                                                                                 editorcontrol.Visible:=false;
                                                                                 {$ENDIF}
                                                                                 editorcontrol.Parent:=self;

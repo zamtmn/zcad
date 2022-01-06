@@ -24,8 +24,8 @@ interface
 uses
   LazLogger,SysUtils,
   uzccommandsabstract,uzccommandsimpl,
-  uzeentity,gzctnrvectortypes,uzcdrawings,uzcdrawing,uzcstrconsts,uzeentityextender,
-  uzcinterface,uzcutils,gzctnrstl,gutil;
+  uzeentity,gzctnrvectortypes,uzcdrawings,uzcstrconsts,uzeentityextender,
+  uzcinterface,gzctnrstl;
 
 function extdrEntsList_com(operands:TCommandOperands):TCommandResult;
 

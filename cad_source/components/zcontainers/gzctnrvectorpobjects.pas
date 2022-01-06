@@ -20,7 +20,7 @@ unit gzctnrvectorpobjects;
 {$INCLUDE def.inc}
 interface
 uses gzctnrvectorpdata,gzctnrvector,
-     typinfo,uzbtypes,uzbmemman;
+     typinfo;
 type
 {Export+}
 {------------REGISTEROBJECTTYPE GZVectorPObects}
@@ -28,9 +28,6 @@ GZVectorPObects{-}<PTObj,TObj>{//}
                              =object(GZVectorPData{-}<PTObj,TObj>{//})
                              function CreateObject:PTObj;
                 end;
-TZctnrVectorPGDBaseObjects=object(GZVectorPData{-}<PGDBaseObject,GDBaseObject>{//})
-                              end;
-PGDBOpenArrayOfPObjects=^TZctnrVectorPGDBaseObjects;
 {Export-}
 implementation
 function GZVectorPObects<PTObj,TObj>.CreateObject;

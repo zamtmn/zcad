@@ -6,8 +6,8 @@ interface
 
 uses
   SysUtils,
-  uzeentity,uzeparser,Masks,uzcnavigatorsnodedesk,
-  uzcoimultiproperties,uzedimensionaltypes,laz.VirtualTrees,Classes,
+  uzeentity,uzeparser,uzcnavigatorsnodedesk,
+  uzcoimultiproperties,laz.VirtualTrees,Classes,
   Varman,Forms;
 
 resourcestring
@@ -123,7 +123,7 @@ var
   op1,op2,op3,op4,op5:TRawByteStringManipulator.TStringType;
   op1i,op5i:integer;
   ResultParam:TRawByteStringManipulator.TCharRange;
-  clmn:TVirtualTreeColumn;
+  //clmn:TVirtualTreeColumn;
 begin
   if (ParsedOperands<>nil)
   and(ParsedOperands is TParserNavParam.TParsedText)

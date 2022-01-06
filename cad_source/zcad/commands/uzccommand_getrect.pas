@@ -24,9 +24,8 @@ interface
 uses
   LazLogger,
   uzccommandsabstract,uzccommandsimpl,
-  uzcdrawings,uzeconsts,uzcinterface,
-  uzcstrconsts,uzbgeomtypes,uzbtypesbase,
-  uzglviewareadata,uzccommandsmanager;
+  uzcdrawings,uzcinterface,
+  uzccommandsmanager;
 
 implementation
 

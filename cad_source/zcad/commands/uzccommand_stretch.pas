@@ -39,7 +39,7 @@ uses
   uzeffdxf,
   uzcinterface,
   uzeentity,
- uzbtypesbase,uzbmemman,uzcdialogsfiles,
+ uzbtypesbase,uzcdialogsfiles,
  UUnitManager,uzclog,Varman,
  uzbgeomtypes,uzcinfoform,
  uzeentpolyline,uzeentlwpolyline,UGDBSelectedObjArray,

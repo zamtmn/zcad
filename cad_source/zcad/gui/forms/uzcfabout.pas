@@ -22,7 +22,7 @@ interface
 uses
  uzcsysparams,uzcstrconsts,gettext,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
  uzbstrproc,uzctreenode,FileUtil,Forms, stdctrls, Controls,
- uzbtypes,languade,uzcsysinfo,sysutils,
+ uzbtypes,uzcsysinfo,sysutils,
  uzeentityfactory,uzclog,uzccommandsmanager;
 type
   TAboutForm = class(TFreedForm)

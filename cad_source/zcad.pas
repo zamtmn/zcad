@@ -51,7 +51,7 @@ uses
   uzcfsplash,
   uzcsysvars,
 
-  uzbmemman,uzclog,
+  uzclog,
   uzcsysparams,uzcsysinfo,
   uzbpaths,
 
@@ -232,7 +232,7 @@ uses
   uzccommand_DevDefSync,
 
   uzcenitiesvariablesextender,uzcExtdrLayerControl,uzcExtdrSmartTextEnt,
-
+  (*
   {$IFDEF ELECTROTECH}
   //**for velec func**//
   uzccommand_drawsuperline,
@@ -242,7 +242,7 @@ uses
   uzvcabmountmethod,
   //**//
   {$ENDIF}
-
+  *)
   //uzccomexample2,
   //uzventsuperline,
   uzccomobjectinspector,
@@ -272,6 +272,7 @@ uses
 
   uzcinterface,
   uzccommand_dbgappexplorer,
+  {$IFDEF WINDOWS}{$IFDEF LCLQT5}uDarkStyle,{$ENDIF}{$ENDIF}
   uzelongprocesssupport;
 
 resourcestring
@@ -305,6 +306,7 @@ begin
     Application.MainFormOnTaskBar:=true;
   {$ENDIF}
   //создание окна программы
+  {$IFDEF WINDOWS}{$IFDEF LCLQT5}uDarkStyle.ApplyDarkStyle;{$ENDIF}{$ENDIF}
   Application.CreateForm(TZCADMainWindow,ZCADMainWindow);
   ZCADMainWindow.show;
   {if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then

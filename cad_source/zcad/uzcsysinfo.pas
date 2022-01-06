@@ -205,12 +205,13 @@ end;
 class function TZCADPathsMacroMethods.MacroFuncSystemFontsPath(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
 {$IF defined(WINDOWS)}
 var
-  s: string;
+  s:string;
 begin
-   SetLength(s,MAX_PATH );
-   if not SHGetSpecialFolderPath(0,PChar(s),CSIDL_FONTS,false) then
-      s:='';
-   Result:=PChar(s);
+  s:='';
+  SetLength(s,MAX_PATH );
+  if not SHGetSpecialFolderPath(0,PChar(s),CSIDL_FONTS,false) then
+    s:='';
+  Result:=PChar(s);
 end;
 {$ELSEIF defined(LINUX)}
 begin
@@ -222,10 +223,11 @@ class function TZCADPathsMacroMethods.MacroFuncsUserFontsPath (const {%H-}Param:
 var
   s: string;
 begin
-   SetLength(s,MAX_PATH );
-   if not SHGetSpecialFolderPath(0,PChar(s),CSIDL_LOCAL_APPDATA,false) then
-      s:='';
-   Result:=PChar(s)+'\Microsoft\Windows\Fonts';
+  s:='';
+  SetLength(s,MAX_PATH );
+  if not SHGetSpecialFolderPath(0,PChar(s),CSIDL_LOCAL_APPDATA,false) then
+    s:='';
+  Result:=PChar(s)+'\Microsoft\Windows\Fonts';
 end;
 {$ELSEIF defined(LINUX)}
 begin

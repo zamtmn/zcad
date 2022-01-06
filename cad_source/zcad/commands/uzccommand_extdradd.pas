@@ -24,8 +24,8 @@ interface
 uses
   LazLogger,SysUtils,
   uzccommandsabstract,uzccommandsimpl,
-  uzeentity,gzctnrvectortypes,uzcdrawings,uzcdrawing,uzcstrconsts,uzeentityextender,
-  uzcinterface,uzcutils,gzctnrstl,gutil;
+  uzeentity,gzctnrvectortypes,uzcdrawings,uzcstrconsts,uzeentityextender,
+  uzcinterface;
 
 function extdrAdd_com(operands:TCommandOperands):TCommandResult;
 
@@ -36,7 +36,7 @@ var
   extdr:TMetaEntityExtender;
   pv,pls:pGDBObjEntity;
   ir:itrec;
-  i:integer;
+  //i:integer;
   count:integer;
 begin
   try

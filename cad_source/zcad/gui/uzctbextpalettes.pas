@@ -130,7 +130,6 @@ begin
 end;
 
 procedure TZPaletteListView.ProcessClick(ListItem:TListItem;DblClck:Boolean);
-var i:integer;
 begin
   if DblClck then
      ListItem:=ListItem;
@@ -227,9 +226,9 @@ end;
 
 class function TPaletteHelper.ZPaletteTreeCreator(aControlName,aInternalCaption,aType: string;TBNode:TDomNode;var PaletteControl:TPaletteControlBaseType;DoDisableAlign:boolean):TPaletteControlBaseType;
 var
-   pTND:PTPaletteTreeNodeData;
+   //pTND:PTPaletteTreeNodeData;
    po:TVTPaintOptions;
-   mo:TVTMiscOptions;
+   //mo:TVTMiscOptions;
    ho:TVTHeaderOptions;
    col1,col2:TVirtualTreeColumn;
    PaletteTreeViewFilter:TZPaletteTreeViewFilter;

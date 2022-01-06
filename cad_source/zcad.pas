@@ -272,6 +272,7 @@ uses
 
   uzcinterface,
   uzccommand_dbgappexplorer,
+  {$IFDEF WINDOWS}{$IFDEF LCLQT5}uDarkStyle,{$ENDIF}{$ENDIF}
   uzelongprocesssupport;
 
 resourcestring
@@ -305,6 +306,7 @@ begin
     Application.MainFormOnTaskBar:=true;
   {$ENDIF}
   //создание окна программы
+  {$IFDEF WINDOWS}{$IFDEF LCLQT5}uDarkStyle.ApplyDarkStyle;{$ENDIF}{$ENDIF}
   Application.CreateForm(TZCADMainWindow,ZCADMainWindow);
   ZCADMainWindow.show;
   {if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then

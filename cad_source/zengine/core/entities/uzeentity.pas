@@ -23,7 +23,7 @@ uses uzepalette,uzeobjectextender,uzgldrawerabstract,uzgldrawcontext,uzedrawingd
      uzecamera,uzeentitiesprop,uzestyleslinetypes,uzbtypesbase,
      uzbgeomtypes,UGDBControlPointArray,uzeentsubordinated,uzbtypes,uzeconsts,
      uzglviewareadata,uzegeometry,uzeffdxfsupport,sysutils,UGDBOpenArrayOfByte,
-     uzestyleslayers,gzctnrvectorpobjects,uzeenrepresentation,LazLogger;
+     uzestyleslayers,gzctnrvectorpobjects,uzeenrepresentation,LazLogger,uzctnrvectorpgdbaseobjects;
 type
 taddotrac=procedure (var posr:os_record;const axis:GDBVertex) of object;
 {Export+}

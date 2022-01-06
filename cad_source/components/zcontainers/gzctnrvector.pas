@@ -19,7 +19,7 @@
 unit gzctnrvector;
 {$INCLUDE def.inc}
 interface
-uses uzbtypes,gzctnrvectortypes,sysutils,typinfo;
+uses gzctnrvectortypes,sysutils,typinfo;
 const
   {**типы нуждающиеся в инициализации}
   TypesNeedToFinalize=[tkUnknown{$IFNDEF DELPHI},tkSString{$ENDIF},tkLString{$IFNDEF DELPHI},tkAString{$ENDIF},

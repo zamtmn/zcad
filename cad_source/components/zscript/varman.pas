@@ -26,7 +26,7 @@ uses
   SysUtils,UBaseTypeDescriptor,uzbtypesbase,uzbtypes,UGDBOpenArrayOfByte,
   gzctnrvectortypes,uzctnrvectorgdbstring,varmandef,gzctnrstl,
   TypeDescriptors,URecordDescriptor,UObjectDescriptor,uzbstrproc,classes,typinfo,UPointerDescriptor,
-  uzctnrobjectschunk;
+  uzctnrobjectschunk,uzctnrvectorpgdbaseobjects;
 type
     td=record
              template:GDBString;

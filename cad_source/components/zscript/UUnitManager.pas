@@ -28,7 +28,7 @@ type
 {EXPORT+}
     PTUnitManager=^TUnitManager;
     {REGISTEROBJECTTYPE TUnitManager}
-    TUnitManager=object(GZVectorObjects{-}<TUnit>{//})
+    TUnitManager=object(GZVectorObjects{-}<PTUnit,TUnit>{//})
                        currentunit:PTUnit;
                        NextUnitManager:PTUnitManager;
                        constructor init;
@@ -517,6 +517,9 @@ begin
                                                            end
                                                       else*)
                                                           begin
+                                                               fieldgdbtype := currentunit.TypeName2PTD(parseresult^.getData(0));
+                                                               if fieldgdbtype=nil then
+                                                                 fieldgdbtype:=nil;
                                                                fieldgdbtype := currentunit.TypeName2PTD(parseresult^.getData(0));
                                                                //programlog.logoutstr(parseresult^.getData(0),0);
                                                                //GDBStringtypearray :=ptypedesk(Types.exttype.getelement(fieldgdbtype.gdbtypecustom)^)^.tdesk;

@@ -24,7 +24,8 @@ uses LCLProc,uzegluinterface,uzeentityfactory,uzgldrawcontext,uzgloglstatemanage
      UGDBPoint3DArray,uzedrawingdef,uzecamera,UGDBVectorSnapArray,
      gzctnrvectorpobjects,uzestyleslayers,uzeentsubordinated,uzeentcurve,uzbtypesbase,
      uzeentity,UGDBOpenArrayOfByte,uzbtypes,uzeconsts,uzglviewareadata,
-     gzctnrvectortypes,uzbgeomtypes,uzegeometry,uzeffdxfsupport,sysutils;
+     gzctnrvectortypes,uzbgeomtypes,uzegeometry,uzeffdxfsupport,sysutils,
+     uzctnrvectorpgdbaseobjects;
 type
 {Export+}
 {REGISTEROBJECTTYPE TKnotsVector}

@@ -15,11 +15,10 @@
 {**
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
-{**Модуль описания базового генерика обьекта-массива}
 unit gzctnrvectortypes;
 {$INCLUDE def.inc}
 interface
-uses {uzbtypesbase,}sysutils,{uzbtypes,}typinfo;
+uses sysutils,typinfo;
 type
   TPtrOffs=record
              case byte of
@@ -29,7 +28,7 @@ type
 {Export+}
   PTArrayIndex=^TArrayIndex;
   TArrayIndex=Integer;
-  {REGISTEROBJECTTYPE TZAbsVector}
+  {REGISTEROBJECTWITHOUTCONSTRUCTORTYPE TZAbsVector}
   TZAbsVector=object
     function GetParray:pointer;virtual;abstract;
     function getPData(index:TArrayIndex):Pointer;virtual;abstract;
@@ -68,10 +67,6 @@ end;
 
 procedure TInVectorAddr.SetInstance(DS:PZAbsVector;Offs:PtrUInt);
 begin
-  {if not assigned(pointer(ds))then begin
-    Offs:=Offs+1;
-    Offs:=Offs-1;
-  end;}
   DataSegment:=DS;
   Instt.offs:=Offs;
 end;

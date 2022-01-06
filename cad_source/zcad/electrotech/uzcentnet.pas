@@ -13,7 +13,8 @@ uses uzcinterface,uzeobjectextender,uzeentityfactory,Varman,uzgldrawcontext,uzes
      uzbtypesbase,uzeentity,UGDBOpenArrayOfPV,uzeentconnected,uzeconsts,
      varmandef,uzegeometry,uzbtypes,UGDBGraf,uzeentsubordinated,uunitmanager,
      gzctnrvectortypes,uzbgeomtypes,sysutils,gzctnrvectorpobjects,
-     uzcenitiesvariablesextender,uzeentline,uzeffdxfsupport,math,uzclog,LazLogger;
+     uzcenitiesvariablesextender,uzeentline,uzeffdxfsupport,math,uzclog,LazLogger,
+     uzctnrvectorpgdbaseobjects;
 resourcestring
   rscannotbeconnected='Can not be connected';
 const

@@ -43,16 +43,32 @@
         <Filename Value="uzbgeomtypes.pas"/>
         <UnitName Value="uzbgeomtypes"/>
       </Item>
+      <Item>
+        <Filename Value="uzctnrvectorpgdbaseobjects.pas"/>
+        <UnitName Value="uzctnrvectorpgdbaseobjects"/>
+      </Item>
+      <Item>
+        <Filename Value="uzctnrvectorgdbstring.pas"/>
+        <UnitName Value="uzctnrvectorgdbstring"/>
+      </Item>
+      <Item>
+        <Filename Value="uzctnrvectorgdbpointer.pas"/>
+        <UnitName Value="uzctnrvectorgdbpointer"/>
+      </Item>
+      <Item>
+        <Filename Value="uzctnrobjectschunk.pas"/>
+        <UnitName Value="uzctnrobjectschunk"/>
+      </Item>
     </Files>
     <RequiredPkgs>
       <Item>
         <PackageName Value="zmacros"/>
       </Item>
       <Item>
-        <PackageName Value="LCLBase"/>
+        <PackageName Value="zcontainers"/>
       </Item>
       <Item>
-        <PackageName Value="FCL"/>
+        <PackageName Value="LazUtils"/>
       </Item>
     </RequiredPkgs>
     <UsageOptions>

@@ -19,7 +19,7 @@
 unit gzctnrvectorpdata;
 {$INCLUDE def.inc}
 interface
-uses gzctnrvectorp,gzctnrvectortypes,uzbtypes;
+uses gzctnrvectorp,gzctnrvectortypes;
 type
 {Export+}
 {--------REGISTEROBJECTTYPE GZVectorPData}
@@ -37,7 +37,7 @@ GZVectorPData{-}<PTData,TData>{//}=object
 implementation
 destructor GZVectorPData<PTData,TData>.done;
 var
-  p:PGDBaseObject;
+  p:PTData;
   ir:itrec;
 begin
   p:=beginiterate(ir);
@@ -52,7 +52,7 @@ begin
 end;
 procedure GZVectorPData<PTData,TData>.free;
 var
-  p:PGDBaseObject;
+  p:PTData;
   ir:itrec;
 begin
   p:=beginiterate(ir);
@@ -124,7 +124,7 @@ end;
 end;}
 procedure GZVectorPData<PTData,TData>.cleareraseobjfrom;
 var
-  p:PGDBaseObject;
+  p:PTData;
       ir:itrec;
 begin
   p:=beginiterate(ir);
@@ -139,7 +139,7 @@ begin
 end;
 procedure GZVectorPData<PTData,TData>.cleareraseobjfrom2(n:Integer);
 var
-  p:PGDBaseObject;
+  p:PTData;
       ir:itrec;
 begin
   p:=beginiterate(ir);

@@ -19,26 +19,26 @@
 unit UGDBTree;
 {$INCLUDE def.inc}
 interface
-uses gzctnrvectortypes,uzbtypesbase,uzbtypes,gzctnrvectorpobjects;
+uses gzctnrvectortypes,gzctnrvectorpobjects,gzctnrvectorpdata;
 type
 PGDBBaseNode=^GDBBaseNode;
 PIterateCmpareFunc=function(pnode:PGDBBaseNode;PExpr:Pointer):Boolean;
 IterateProc=procedure(pnode:PGDBBaseNode;PProcData:Pointer);
 {EXPORT+}
 PTGDBTree=^TGDBTree;
-{REGISTEROBJECTTYPE TGDBTree}
-TGDBTree=object(TZctnrVectorPGDBaseObjects)
-               procedure AddNode(pnode:PGDBBaseNode);
-               function IterateFind(CompareFunc:PIterateCmpareFunc;PExpr:Pointer;SubFind:Boolean):PGDBBaseNode;
-               procedure IterateProc(Proc:IterateProc;SubProc:Boolean;PProcData:Pointer);
-         end;
-GDBBaseNode=object(GDBaseObject)
+GDBBaseNode=object
                   SubNode:PTGDBTree;
                   constructor initnul;
                   function GetNodeName:String;virtual;
                   procedure free;virtual;
                   destructor done;virtual;
             end;
+{REGISTEROBJECTTYPE TGDBTree}
+TGDBTree=object({TZctnrVectorPGDBaseObjects}GZVectorPData{-}<PGDBBaseNode,GDBBaseNode>{//})
+               procedure AddNode(pnode:PGDBBaseNode);
+               function IterateFind(CompareFunc:PIterateCmpareFunc;PExpr:Pointer;SubFind:Boolean):PGDBBaseNode;
+               procedure IterateProc(Proc:IterateProc;SubProc:Boolean;PProcData:Pointer);
+         end;
 {EXPORT-}
 implementation
 procedure GDBBaseNode.free;

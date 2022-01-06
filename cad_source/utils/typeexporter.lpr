@@ -26,6 +26,7 @@ const IgnoreSHP=#13;
       starttoken='{EXPORT+}';
       endtoken='{EXPORT-}';
       objregtoken='{REGISTEROBJECTTYPE ';
+      objregwithoutconstructortoken='{REGISTEROBJECTWITHOUTCONSTRUCTORTYPE ';
       recregtoken='{REGISTERRECORDTYPE ';
       PathPrefixToket='pathprefix=';
       OutputFileToket='outputfile=';
@@ -151,6 +152,35 @@ closeoutfile(createdfilehandle);
 writestring(allgeneratedfiles,filename+',');
 end;
 
+procedure CreateRegistrationFileWithoutConstructor(filename,objname,unitname:string;allgeneratedfiles:cardinal);
+var
+    createdfilehandle:cardinal;
+begin
+createdfilehandle:=createoutfile(AutoRegisterPath+filename+'.pas');
+writestring(createdfilehandle,'unit '+filename+';');
+writestring(createdfilehandle,'{$INCLUDE def.inc}');
+writestring(createdfilehandle,'{Этот модуль создан автоматически. НЕ РЕДАКТИРОВАТЬ}');
+writestring(createdfilehandle,'interface');
+if uppercase(unitname)<>'VARMAN' then
+  writestring(createdfilehandle,'uses UObjectDescriptor,Varman,TypeDescriptors,'+unitname+';')
+else
+  writestring(createdfilehandle,'uses UObjectDescriptor,Varman,TypeDescriptors;');
+writestring(createdfilehandle,'implementation');
+writestring(createdfilehandle,'var');
+writestring(createdfilehandle,'pt:PObjectDescriptor;');
+writestring(createdfilehandle,'initialization');
+writestring(createdfilehandle,'if assigned(SysUnit) then');
+writestring(createdfilehandle,'begin');
+writestring(createdfilehandle,'     pt:=SysUnit.ObjectTypeName2PTD('''+objname+''');');
+writestring(createdfilehandle,'     pt^.RegisterTypeinfo(TypeInfo('+objname+'));');
+writestring(createdfilehandle,'     pt^.RegisterObject(TypeOf('+objname+'),nil);');
+writestring(createdfilehandle,'     //pt^.AddMetod('''',''initnul'','''',@'+objname+'.initnul,m_constructor);');
+writestring(createdfilehandle,'end;');
+writestring(createdfilehandle,'end.');
+closeoutfile(createdfilehandle);
+writestring(allgeneratedfiles,filename+',');
+end;
+
 procedure CreateRecRegistrationFile(filename,objname,unitname:string;allgeneratedfiles:cardinal);
 var
     createdfilehandle:cardinal;
@@ -178,7 +208,7 @@ end;
 
 procedure processfileabstract(name:string;handle:cardinal);
 var f:filestream;
-    line,lineend,fn:string;
+    line,uline,lineend,fn:string;
     expblock:integer;
     find,find2,find3:integer;
     inobj,alreadyinuses:boolean;
@@ -197,7 +227,8 @@ begin
   inobj:=false;
   while f.filesize<>f.currentpos do
     begin
-         find:=pos(objregtoken,uppercase(line));
+         uline:=uppercase(line);
+         find:=pos(objregtoken,uline);
          if find>0 then
                        begin
                             find:=find+length(objregtoken);
@@ -209,9 +240,25 @@ begin
                                                  end;
                             CreateRegistrationFile('areg'+line,line,fn,allgeneratedfiles);
                             alreadyinuses:=true;
+                            uline:='';
                             line:='';
                        end;
-         find:=pos(recregtoken,uppercase(line));
+         find:=pos(objregwithoutconstructortoken,uline);
+         if find>0 then
+                       begin
+                            find:=find+length(objregwithoutconstructortoken);
+                            line:=copy(line,find,length(line)-find);
+                            //if not alreadyinuses then
+                                                 begin
+                                                      fn:=ExtractFileName(name);
+                                                      fn:=copy(fn,1,pos('.',fn)-1);
+                                                 end;
+                            CreateRegistrationFileWithoutConstructor('areg'+line,line,fn,allgeneratedfiles);
+                            alreadyinuses:=true;
+                            uline:='';
+                            line:='';
+                       end;
+         find:=pos(recregtoken,uline);
          if find>0 then
                        begin
                             find:=find+length(objregtoken);
@@ -222,21 +269,23 @@ begin
                                                  end;
                             CreateRecRegistrationFile('areg'+line,line,fn,allgeneratedfiles);
                             alreadyinuses:=true;
+                            uline:='';
                             line:='';
                        end;
-         find:=pos('OBJECT',uppercase(line));
+         find:=pos('OBJECT',uline);
          if find>0 then inobj:=true;
-         find:=pos('END;',uppercase(line));
+         find:=pos('END;',uline);
          if inobj and (find>0) then inobj:=false;
          begin
-         find:=pos(starttoken,uppercase(line));
+         find:=pos(starttoken,uline);
          if find>0 then
                        begin
                             find:=find+length(starttoken);
                             inc(expblock);
                             line:=copy(line,find,length(line)-find+1);
+                            uline:=uppercase(line);
                        end;
-         find:=pos(endtoken,uppercase(line));
+         find:=pos(endtoken,uline);
          if find>0 then
                        begin
                             DEC(expblock);
@@ -255,12 +304,13 @@ begin
                    if (find2>find)and(find3>find2) then
                    begin
                         line:=copy(line,1,find-1)+copy(line,find2+2,find3-find2-2)+copy(line,find3+2,length(line)-find3+2);
+                        uline:=uppercase(line);
                    end;
 
               end;
-         if (pos('VIRTUAL',uppercase(line))>0) then
+         if (pos('VIRTUAL',uline)>0) then
          begin
-              if (pos('ABSTRACT',uppercase(line))<=0) then
+              if (pos('ABSTRACT',uline)<=0) then
                                                           line:=line+'abstract;';
               writestring(handle,line);
          end

@@ -22,7 +22,8 @@ interface
 uses {эти нужно убрать}{uzglviewareageneral,}UGDBSelectedObjArray,
      uzgldrawcontext,uzeentity,uzecamera,gzctnrvectorpobjects,
      uzbstrproc,sysutils,uzeentplainwithox,uzbtypesbase,
-     UGDBOutbound2DIArray,uzbgeomtypes,uzbtypes,uzeconsts,uzegeometry,math;
+     UGDBOutbound2DIArray,uzbgeomtypes,uzbtypes,uzeconsts,uzegeometry,math,
+     uzctnrvectorpgdbaseobjects;
 type
 //jstm(*'TopCenter'*)=2,
 {EXPORT+}

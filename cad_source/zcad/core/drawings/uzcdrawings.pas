@@ -30,7 +30,7 @@ uses
     UGDBOpenArrayOfPV,uzefont,gzctnrvectorpobjects,UGDBVisibleOpenArray,
     gzctnrvectortypes,uzedimensionaltypes,uzetrash,UGDBOpenArrayOfByte,uzglviewareadata,
     uzccommandsabstract,
-    uzeentitiestypefilter,
+    uzeentitiestypefilter,uzctnrvectorpgdbaseobjects,
     LCLProc;
 type
 {EXPORT+}

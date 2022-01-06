@@ -47,7 +47,7 @@ MetodDescriptor=object(GDBaseObject)
                       destructor Done;virtual;
                 end;
 simpleproc=procedure of object;
-TSimpleMenodsVector=GZVectorObjects<MetodDescriptor>;
+TSimpleMenodsVector=GZVectorObjects<PMetodDescriptor,MetodDescriptor>;
 TPropertiesVector=GZVectorData<PropertyDescriptor>;
 
 PObjectDescriptor=^ObjectDescriptor;

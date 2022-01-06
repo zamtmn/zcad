@@ -1868,13 +1868,13 @@ begin
   size:=round(pdwg.wa.getviewcontrol.ClientWidth*pdwg.GetPcamera^.prop.zoom);
   position:=round(-pdwg.GetPcamera^.prop.point.x);
   min:=round(bb.LBN.x+size/2);
-  max:=round(bb.RTF.x+{$IFDEF LINUX}-{$ENDIF}size/2);
+  max:=round(bb.RTF.x+{$IFNDEF LCLWIN32}-{$ENDIF}size/2);
   if max<min then max:=min;
   ZCADMainWindow.HScrollBar.SetParams(position,min,max,size);
 
   size:=round(pdwg.wa.getviewcontrol.ClientHeight*pdwg.GetPcamera^.prop.zoom);
   min:=round(bb.LBN.y+size/2);
-  max:=round(bb.RTF.y+{$IFDEF LINUX}-{$ENDIF}size/2);
+  max:=round(bb.RTF.y+{$IFNDEF LCLWIN32}-{$ENDIF}size/2);
   if max<min then max:=min;
   position:=round((bb.LBN.y+bb.RTF.y+pdwg.GetPcamera^.prop.point.y));
   ZCADMainWindow.VScrollBar.SetParams(position,min,max,size);

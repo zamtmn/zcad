@@ -20,7 +20,7 @@ unit uzeblockdef;
 interface
 uses gzctnrvectortypes,uzeentity,uzeentityfactory,uzgldrawcontext,uzeobjectextender,uzedrawingdef,
      uzeentsubordinated,uzeffdxfsupport,UGDBOpenArrayOfByte,uzbtypesbase,sysutils,uzbtypes,
-     uzbgeomtypes,uzegeometry,uzestyleslayers,uzeconsts,uzeentgenericsubentry,LazLogger;
+     uzegeometrytypes,uzegeometry,uzestyleslayers,uzeconsts,uzeentgenericsubentry,LazLogger;
 type
 {Export+}
 PGDBObjBlockdef=^GDBObjBlockdef;

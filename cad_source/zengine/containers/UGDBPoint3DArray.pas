@@ -19,7 +19,7 @@
 unit UGDBPoint3DArray;
 {$INCLUDE def.inc}
 interface
-uses uzbgeomtypes,uzbtypesbase,gzctnrvectordata,sysutils,uzbtypes,math,
+uses uzegeometrytypes,uzbtypesbase,gzctnrvectordata,sysutils,uzbtypes,math,
      gzctnrvectortypes,{uzgloglstatemanager,}uzegeometry;
 type
 {Export+}

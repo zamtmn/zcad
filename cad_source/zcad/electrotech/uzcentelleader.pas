@@ -14,7 +14,7 @@ uses uzcenitiesvariablesextender,uzeentityfactory,Varman,uzgldrawcontext,
      uzeenttext,uzeentdevice,uzcentcable,uzeenttable,uzegeometry,
      uzeentline,uzbtypesbase,uzeentcomplex,sysutils,uzctnrvectorgdbstring,
      gzctnrvectortypes,uzeentity,varmandef,uzbtypes,uzeconsts,uzeffdxfsupport,
-     uzbgeomtypes,uzeentsubordinated,uzestylestables,uzclog,
+     uzegeometrytypes,uzeentsubordinated,uzestylestables,uzclog,
      UGDBOpenArrayOfPV,uzeentcurve,uzeobjectextender,uzetextpreprocessor,
      uzctnrvectorpgdbaseobjects;
 type

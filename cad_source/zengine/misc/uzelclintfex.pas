@@ -26,7 +26,7 @@ uses
  {$IFDEF LCLQT5}qt5,qtobjects,{$ENDIF}
  {$IFNDEF DELPHI}LCLType,LCLIntf,{$ENDIF}
  {$IFDEF DELPHI}windows,types,{$ENDIF}
- uzbgeomtypes,uzbtypes;
+ uzegeometrytypes,uzbtypes;
 const
      GM_COMPATIBLE=1;
      GM_ADVANCED=2;

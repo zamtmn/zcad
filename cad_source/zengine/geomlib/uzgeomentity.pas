@@ -20,7 +20,7 @@ unit uzgeomentity;
 {$INCLUDE def.inc}
 interface
 uses
-  sysutils,uzbtypes,uzbgeomtypes,uzegeometry;
+  sysutils,uzbtypes,uzegeometrytypes,uzegeometry;
 type
 {Export+}
 PTGeomEntity=^TGeomEntity;

@@ -20,7 +20,7 @@ unit uzerasterizer;
 {$INCLUDE def.inc}
 interface
 uses
-  uzbtypesbase,uzbgeomtypes,
+  uzbtypesbase,uzegeometrytypes,
   uzedrawingsimple,uzgldrawcontext,uzgldrawergeneral2d,uzgldrawerabstract,
   uzegeometry,uzeconsts,
   uzeiopalette,uzepalette,uzcutils,

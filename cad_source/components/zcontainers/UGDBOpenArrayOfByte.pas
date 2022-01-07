@@ -19,7 +19,7 @@
 unit UGDBOpenArrayOfByte;
 {$INCLUDE def.inc}
 interface
-uses gzctnrvector,{uzbgeomtypes,}sysutils{$IFNDEF DELPHI},LazUTF8{$ENDIF};
+uses gzctnrvector,{uzegeometrytypes,}sysutils{$IFNDEF DELPHI},LazUTF8{$ENDIF};
 const
     syn_breacer=[#13,#10,' '];
     lineend:string=#13#10;

@@ -22,7 +22,7 @@ uses
     uzeentityfactory,uzeentsubordinated,uzgldrawcontext,uzedrawingdef,uzecamera,
     uzeentwithlocalcs,gzctnrvectorpobjects,uzestyleslayers,uzbtypesbase,
     UGDBSelectedObjArray,uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,
-    uzbgeomtypes,UGDBOpenArrayOfByte,varman,varmandef,uzbtypes,uzeconsts,
+    uzegeometrytypes,UGDBOpenArrayOfByte,varman,varmandef,uzbtypes,uzeconsts,
     uzglviewareadata,uzegeometry,uzeffdxfsupport,uzeentplain,
     uzctnrvectorpgdbaseobjects;
 type

@@ -27,7 +27,7 @@ uses
   uzccommandsabstract,uzccommandsimpl,
   uzccominteractivemanipulators,
   uzcstrconsts,
-  uzbgeomtypes,
+  uzegeometrytypes,
   uzccommandsmanager,
   uzeentlwpolyline,uzeentpolyline,uzeentityfactory,
   uzcutils,

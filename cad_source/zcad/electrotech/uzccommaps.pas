@@ -16,7 +16,7 @@ uses
   uzccommandsabstract,uzccommandsimpl,uzbtypes,uzcdrawings,uzeutils,uzcutils,sysutils,
   varmandef,UGDBOpenArrayOfByte,uzeffdxf,uzegeometry,uzeconsts,
   uzccomdraw,uzeentline,uzbpaths,uzeentblockinsert,
-  uzbgeomtypes,varman,uzeentdevice,uzeentmtext,math,
+  uzegeometrytypes,varman,uzeentdevice,uzeentmtext,math,
   uzcentcable,UUnitManager,
   gzctnrvectortypes,uzccomelectrical,URecordDescriptor,TypeDescriptors,LazLogger,
   gzctnrstl,gutil,uzccmdfloatinsert;

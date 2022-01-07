@@ -22,7 +22,7 @@ interface
 uses uzemathutils,uzgldrawcontext,uzeentabstracttext,uzestylestexts,UGDBXYZWStringArray,
      uzestylesdim,uzeentmtext,uzestyleslayers,uzedrawingdef,uzecamera,
      uzbstrproc,UGDBOpenArrayOfByte,uzeenttext,uzegeometry,uzeentline,uzbtypesbase,uzeentcomplex,
-     uzbgeomtypes,sysutils,uzeentity,uzbtypes,uzeconsts,
+     uzegeometrytypes,sysutils,uzeentity,uzbtypes,uzeconsts,
      uzedimensionaltypes,uzeentitiesmanager,UGDBOpenArrayOfPV,uzeentblockinsert;
 type
 {EXPORT+}

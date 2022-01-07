@@ -40,7 +40,7 @@ uses
   uzcinterface,
   uzegeometry,
 
-  uzbgeomtypes,uzeentity,uzeentcircle,uzeentline,uzeentmtext,
+  uzegeometrytypes,uzeentity,uzeentcircle,uzeentline,uzeentmtext,
   uzeentblockinsert,uzeentpolyline,uzclog,
   math,
   uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,

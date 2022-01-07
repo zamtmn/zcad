@@ -20,7 +20,7 @@ unit uzglgeomdata;
 {$INCLUDE def.inc}
 interface
 uses uzgindexsarray,uzgvertex3sarray,sysutils,uzbtypesbase,uzbtypes,
-     uzbgeomtypes,uzegeometry,gzctnrvectortypes;
+     uzegeometrytypes,uzegeometry,gzctnrvectortypes;
 type
 {Export+}
 {REGISTEROBJECTTYPE ZGLGeomData}

@@ -20,7 +20,7 @@ unit zcmultiobjectchangeundocommand;
 {$INCLUDE def.inc}
 interface
 uses gzctnrvectordata,zeundostack,zebaseundocommands,uzbtypesbase,uzbtypes,
-     gzctnrvectortypes,uzbgeomtypes,uzeentity,uzcdrawings;
+     gzctnrvectortypes,uzegeometrytypes,uzeentity,uzcdrawings;
 
 {DEFINE TCommand  := TGDBTransformChangeCommand}
 {DEFINE PTCommand := PTGDBTransformChangeCommand}

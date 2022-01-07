@@ -20,7 +20,7 @@ unit uzetrash;
 {$INCLUDE def.inc}
 interface
 uses
-    uzbgeomtypes,uzbtypesbase,uzbtypes,uzeentity,uzeconsts,uzegeometry;
+    uzegeometrytypes,uzbtypesbase,uzbtypes,uzeentity,uzeconsts,uzegeometry;
 type
 {EXPORT+}
 {REGISTEROBJECTTYPE GDBObjTrash}

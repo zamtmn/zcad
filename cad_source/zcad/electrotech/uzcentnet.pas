@@ -12,7 +12,7 @@ uses uzcinterface,uzeobjectextender,uzeentityfactory,Varman,uzgldrawcontext,uzes
      uzeentgenericsubentry,uzedrawingdef,uzeentitiesprop,uzcsysvars,UGDBOpenArrayOfByte,
      uzbtypesbase,uzeentity,UGDBOpenArrayOfPV,uzeentconnected,uzeconsts,
      varmandef,uzegeometry,uzbtypes,UGDBGraf,uzeentsubordinated,uunitmanager,
-     gzctnrvectortypes,uzbgeomtypes,sysutils,gzctnrvectorpobjects,
+     gzctnrvectortypes,uzegeometrytypes,sysutils,gzctnrvectorpobjects,
      uzcenitiesvariablesextender,uzeentline,uzeffdxfsupport,math,uzclog,LazLogger,
      uzctnrvectorpgdbaseobjects;
 resourcestring

@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, ComCtrls,
   ActnList, laz.VirtualTrees,
-  uzbtypes,gzctnrvectortypes,uzbgeomtypes ,uzegeometry, uzccommandsmanager,
+  uzbtypes,gzctnrvectortypes,uzegeometrytypes ,uzegeometry, uzccommandsmanager,
   uzcinterface,uzeentity,uzcimagesmanager,uzcdrawings,uzbtypesbase,
   varmandef,uzbstrproc,uzcnavigatorsnodedesk;
 

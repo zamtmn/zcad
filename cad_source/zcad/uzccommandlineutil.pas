@@ -19,7 +19,7 @@
 unit uzccommandlineutil;
 {$INCLUDE def.inc}
 interface
-uses uzbgeomtypes,varmandef,uzbtypesbase,uzctnrvectorgdbstring,uzccommandsmanager,
+uses uzegeometrytypes,varmandef,uzbtypesbase,uzctnrvectorgdbstring,uzccommandsmanager,
      gzctnrvectortypes,sysutils,uzbstrproc,uzcdrawings,uzegeometry,math,
      UGDBTracePropArray,uzglviewareadata,languade,Varman,uzcinterface,uzcstrconsts,
      strmy,LCLProc,uzccommandsabstract,LazUtilities;

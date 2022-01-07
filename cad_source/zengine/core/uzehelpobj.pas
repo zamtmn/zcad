@@ -19,7 +19,7 @@
 unit uzehelpobj;
 {$INCLUDE def.inc}
 interface
-uses uzbgeomtypes,UGDBPolyPoint2DArray,uzbtypes,LazLogger;
+uses uzegeometrytypes,UGDBPolyPoint2DArray,uzbtypes,LazLogger;
 const
    CircleLODCount=100;
 var

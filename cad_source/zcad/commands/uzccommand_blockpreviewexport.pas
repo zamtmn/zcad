@@ -33,7 +33,7 @@ uses
   uzbtypes,
   uzeutils,uzcutils,
   uzcinterface,
-  uzbgeomtypes,uzegeometry,
+  uzegeometrytypes,uzegeometry,
   uzbpaths,
   uzeentdevice,uzeentblockinsert,uzeblockdef,uzeentsubordinated,
   //uzestyleslayers,

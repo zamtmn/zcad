@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
-  <Package Version="4">
+  <Package Version="5">
     <PathDelim Value="\"/>
     <Name Value="zmath"/>
     <Type Value="RunAndDesignTime"/>
@@ -17,7 +17,7 @@
         </SyntaxOptions>
       </Parsing>
     </CompilerOptions>
-    <Files Count="3">
+    <Files Count="4">
       <Item1>
         <Filename Value="uzegeometry.pas"/>
         <UnitName Value="uzegeometry"/>
@@ -30,10 +30,15 @@
         <Filename Value="uzedimensionaltypes.pas"/>
         <UnitName Value="uzedimensionaltypes"/>
       </Item3>
+      <Item4>
+        <Filename Value="uzegeometrytypes.pas"/>
+        <UnitName Value="uzegeometrytypes"/>
+      </Item4>
     </Files>
+    <CompatibilityMode Value="True"/>
     <RequiredPkgs Count="2">
       <Item1>
-        <PackageName Value="zebase"/>
+        <PackageName Value="LCLBase"/>
       </Item1>
       <Item2>
         <PackageName Value="FCL"/>

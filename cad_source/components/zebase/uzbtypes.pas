@@ -18,7 +18,7 @@
 unit uzbtypes;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,uzbgeomtypes,sysutils;
+uses uzbtypesbase,uzegeometrytypes,sysutils;
      //gdbobjectsconstdef;
 const
      GDBBaseObjectID = 30000;
@@ -71,11 +71,6 @@ GDBaseObject=object
     function IsEntity:GDBBoolean;virtual;
 
   end;
-{REGISTERRECORDTYPE TArcData}
-TArcData=record
-               r,startangle,endangle:gdbdouble;
-               p:GDBvertex2D;
-end;
 {REGISTERRECORDTYPE GDBCameraBaseProp}
 GDBCameraBaseProp=record
                         point:GDBvertex;

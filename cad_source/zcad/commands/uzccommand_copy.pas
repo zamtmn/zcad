@@ -32,7 +32,7 @@ uses
   uzglviewareadata,
   uzccommand_move,
   uzccommandsabstract,
-  uzbgeomtypes,uzeentity,LazLogger;
+  uzegeometrytypes,uzeentity,LazLogger;
 type
 {EXPORT+}
   {REGISTEROBJECTTYPE copy_com}

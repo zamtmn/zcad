@@ -26,7 +26,7 @@ uses
   SysUtils,
   uzccommandsabstract,uzccommandsimpl,
   uzeconsts,uzcstrconsts,
-  uzbgeomtypes,
+  uzegeometrytypes,
   uzccommandsmanager,
   uzeentcircle,uzeentityfactory,
   uzcdrawings,uzcinterface,uzbtypesbase,uzglviewareadata,uzgldrawcontext,uzeentitiesmanager,uzegeometry,zcmultiobjectcreateundocommand,uzcdrawing,

@@ -82,7 +82,7 @@ uses
   uzeentarc,
   uzeentcircle,
   uzeentity,
-  uzbgeomtypes,
+  uzegeometrytypes,
 
 
   gvector,//garrayutils, // Подключение Generics и модуля для работы с ним

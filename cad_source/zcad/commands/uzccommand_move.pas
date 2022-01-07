@@ -43,7 +43,7 @@ uses
   uzegeometry,
 
   uzeconsts,
-  uzbgeomtypes,uzeentity,uzeentcircle,uzeentline,uzeentgenericsubentry,uzeentmtext,
+  uzegeometrytypes,uzeentity,uzeentcircle,uzeentline,uzeentgenericsubentry,uzeentmtext,
   uzeentblockinsert,uzeentpolyline,uzclog,gzctnrvectordata,
   uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray
   ,uzelongprocesssupport,LazLogger;

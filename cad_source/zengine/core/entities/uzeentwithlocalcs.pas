@@ -21,7 +21,7 @@ unit uzeentwithlocalcs;
 
 interface
 uses uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,uzbtypesbase,uzeentity,
-     uzbgeomtypes,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,uzeentwithmatrix,uzbtypes,
+     uzegeometrytypes,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,uzeentwithmatrix,uzbtypes,
      uzegeometry,uzeffdxfsupport,sysutils,uzeentsubordinated,uzestyleslayers;
 type
 //pprojoutbound:{-}PGDBOOutbound2DIArray{/GDBPointer/};

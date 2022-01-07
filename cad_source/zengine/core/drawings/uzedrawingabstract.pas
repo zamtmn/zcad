@@ -22,7 +22,7 @@ interface
 uses
     uzestylesdim,uzestylestexts,uzestyleslinetypes,uzgldrawcontext,uzedrawingdef,
     uzedimensionaltypes,uzbtypesbase,uzbtypes,uzecamera,uzeentity,uzeentgenericsubentry,uzeroot,
-    uzbgeomtypes,UGDBSelectedObjArray,uzestyleslayers,UGDBOpenArrayOfPV;
+    uzegeometrytypes,UGDBSelectedObjArray,uzestyleslayers,UGDBOpenArrayOfPV;
 type
 {EXPORT+}
 PTAbstractDrawing=^TAbstractDrawing;

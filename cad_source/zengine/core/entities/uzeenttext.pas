@@ -25,7 +25,7 @@ uses
     uzedrawingdef,uzecamera,uzbstrproc,sysutils,uzefont,uzestyleslayers,uzbtypesbase,
     uzeentabstracttext,uzeentity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,uzbtypes,
     uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzeentsubordinated,LazLogger,
-    uzbgeomtypes,uzestylestexts;
+    uzegeometrytypes,uzestylestexts;
 type
 {Export+}
 PGDBObjText=^GDBObjText;

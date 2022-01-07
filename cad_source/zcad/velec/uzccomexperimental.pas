@@ -35,7 +35,7 @@ uses
     and actions }
   { подключеные модули, список будет меняться в зависимости от требуемых
     примитивов и действий с ними }
-  uzbgeomtypes,
+  uzegeometrytypes,
   sysutils, math, uzccomexample,uzccominteractivemanipulators,
 
   URecordDescriptor,TypeDescriptors,

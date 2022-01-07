@@ -28,7 +28,7 @@ uses
 
      math,
      uzgldrawerdx,
-     uzglbackendmanager,uzbgeomtypes,uzbtypes,uzglviewareaabstract,uzglviewareageneral,uzgldrawcontext,uzbtypesbase;
+     uzglbackendmanager,uzegeometrytypes,uzbtypes,uzglviewareaabstract,uzglviewareageneral,uzgldrawcontext,uzbtypesbase;
 type
   TVertexData = record
     x: _FLOAT;

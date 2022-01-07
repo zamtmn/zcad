@@ -10,7 +10,7 @@ uses
   ExtCtrls, StdCtrls, Spin,
   {From ZCAD}
                                                                          //zcad memorymanager
-  uzbtypes, uzbtypesbase,uzbgeomtypes,                                              //zcad basetypes
+  uzbtypes, uzbtypesbase,uzegeometrytypes,                                              //zcad basetypes
   uzegeometry,                                                                     //some mathematical and geometrical support
   uzefontmanager,uzeffshx,                                                        //fonts manager and SHX fileformat support
   uzglviewareaabstract,uzglviewareageneral,uzgldrawcontext,                          //generic view areas support

@@ -41,7 +41,7 @@ uses
 
   uzccominteractivemanipulators,
 
-  uzbgeomtypes,
+  uzegeometrytypes,
 
   uzcinterface,
 

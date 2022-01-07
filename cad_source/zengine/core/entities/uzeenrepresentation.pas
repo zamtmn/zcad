@@ -21,7 +21,7 @@ unit uzeenrepresentation;
 interface
 uses uzgldrawcontext,uzgldrawerabstract,uzglvectorobject,
      uzbtypesbase,sysutils,
-     uzbgeomtypes,uzegeometry,uzglgeometry,uzefont,uzeentitiesprop,UGDBPoint3DArray,
+     uzegeometrytypes,uzegeometry,uzglgeometry,uzefont,uzeentitiesprop,UGDBPoint3DArray,
      uzegeomentitiestree,uzbtypes,
      gzctnrvectortypes,uzgeomline3d,uzgeomproxy;
 type

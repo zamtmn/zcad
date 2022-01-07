@@ -36,7 +36,7 @@ uses
   uzcinterface,
   uzegeometry,
   uzeconsts,
-  uzbgeomtypes,uzeentity,uzeentcircle,uzeentline,
+  uzegeometrytypes,uzeentity,uzeentcircle,uzeentline,
   uzeentpolyline,
   math,
   Varman,

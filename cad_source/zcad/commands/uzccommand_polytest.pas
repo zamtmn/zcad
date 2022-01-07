@@ -26,7 +26,7 @@ uses
   uzccommandsimpl,
   uzbtypesbase,
   uzglviewareadata,
-  uzbgeomtypes,
+  uzegeometrytypes,
   uzeentlwpolyline,
   uzcdrawings,
   uzeconsts,

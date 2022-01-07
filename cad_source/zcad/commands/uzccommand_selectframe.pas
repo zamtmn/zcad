@@ -43,7 +43,7 @@ uses
   uzeentity,
  uzbtypesbase,uzcdialogsfiles,
  UUnitManager,uzclog,Varman,
- uzbgeomtypes,dialogs,uzcinfoform,
+ uzegeometrytypes,dialogs,uzcinfoform,
  uzeentpolyline,uzeentlwpolyline,UGDBSelectedObjArray,
  gzctnrvectortypes,uzegeometry,uzelongprocesssupport;
 var

@@ -26,7 +26,7 @@ uses uzccommandsimpl,    //тут реализация объекта CommandRTE
        uzeentpolyline,
        uzcinterface,
        sysutils,
-     uzbgeomtypes,
+     uzegeometrytypes,
      //uzvcom,             //
      //uzvnum,
      //uzvagensl,

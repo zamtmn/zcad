@@ -19,7 +19,7 @@
 unit uzgldrawergeneral;
 {$INCLUDE def.inc}
 interface
-uses uzbgeomtypes,uzgvertex3sarray,uzgprimitivescreatorabstract,uzgprimitivescreator,
+uses uzegeometrytypes,uzgvertex3sarray,uzgprimitivescreatorabstract,uzgprimitivescreator,
      uzgldrawerabstract,uzepalette,types,Classes,Graphics,
      uzbtypesbase,uzbtypes,uzecamera,uzegeometry,UGDBPoint3DArray,LazLogger;
 type

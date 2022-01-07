@@ -20,7 +20,7 @@ unit uzeffdxfsupport;
 {$INCLUDE def.inc}
 
 interface
-uses uzbgeomtypes,uzbtypesbase,uzbtypes,sysutils,UGDBOpenArrayOfByte,usimplegenerics;
+uses uzegeometrytypes,uzbtypesbase,uzbtypes,sysutils,UGDBOpenArrayOfByte,usimplegenerics;
 
 const
   dxfName_AcDbEntity='AcDbEntity';

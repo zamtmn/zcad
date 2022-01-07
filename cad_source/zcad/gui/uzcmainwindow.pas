@@ -38,7 +38,7 @@ uses
   {ZCAD SIMPLE PASCAL SCRIPT}
        //languade,
   {ZCAD ENTITIES}
-       uzbgeomtypes,uzeentity,UGDBSelectedObjArray,uzestyleslayers,uzedrawingsimple,
+       uzegeometrytypes,uzeentity,UGDBSelectedObjArray,uzestyleslayers,uzedrawingsimple,
        uzeblockdef,uzcdrawings,uzestyleslinetypes,uzeconsts,uzeenttext,uzeentdimension,
   {ZCAD COMMANDS}
        uzccommandsabstract,uzccommandsimpl,uzccommandsmanager,

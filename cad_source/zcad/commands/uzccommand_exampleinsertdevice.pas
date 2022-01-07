@@ -24,7 +24,7 @@ interface
 uses
   LazLogger,
   uzccommandsabstract,uzccommandsimpl,
-  uzeentdevice,uzgldrawcontext,uzbgeomtypes,
+  uzeentdevice,uzgldrawcontext,uzegeometrytypes,
   uzccommandsmanager,uzcdrawings,uzeentityfactory,uzeconsts,uzcutils;
 
 implementation

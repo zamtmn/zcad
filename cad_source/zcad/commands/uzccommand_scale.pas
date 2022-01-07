@@ -31,7 +31,7 @@ uses
   uzglviewareadata,
   uzccommand_move,
   uzccommandsabstract,varmandef,uzccommandsmanager,uzcinterface,uzcstrconsts,uzegeometry,zcmultiobjectchangeundocommand,
-  uzbgeomtypes,uzeentity,LazLogger;
+  uzegeometrytypes,uzeentity,LazLogger;
 type
   {REGISTEROBJECTTYPE scale_com}
   scale_com =  object(move_com)

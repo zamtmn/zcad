@@ -24,7 +24,7 @@ interface
 uses
   uzcinterfacedata,uzgldrawergdi,uzegeometry,uzgldrawcontext,uzeentitiesprop,uzbtypes,uzglgeometry,
   uzestyleslinetypes,graphics,usupportgui,StdCtrls,uzcdrawings,
-  uzbgeomtypes,uzcstrconsts,Controls,Classes,uzbstrproc,uzcsysvars,uzccommandsmanager;
+  uzegeometrytypes,uzcstrconsts,Controls,Classes,uzbstrproc,uzcsysvars,uzccommandsmanager;
 
 type
   TSupportLineTypeCombo = class

@@ -44,7 +44,7 @@ uses
 
      uzcinterface,
      //uzctnrvectorgdbstring,
-     //uzbgeomtypes,
+     //uzegeometrytypes,
      uzegeometry,
      uzcuitypes,
      uzbtypes,

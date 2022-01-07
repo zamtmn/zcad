@@ -36,7 +36,7 @@ uses
 
      uzcinterface,
      uzctnrvectorgdbstring,
-     uzbgeomtypes,
+     uzegeometrytypes,
      uzegeometry,
 
      typinfo,

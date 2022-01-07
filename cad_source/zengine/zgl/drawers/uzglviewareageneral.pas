@@ -20,7 +20,7 @@ unit uzglviewareageneral;
 {$INCLUDE def.inc}
 interface
 uses
-     gzctnrvectortypes,uzbgeomtypes,LCLProc,uzemathutils,uzepalette,
+     gzctnrvectortypes,uzegeometrytypes,LCLProc,uzemathutils,uzepalette,
      uzeentsubordinated,uzegeometry,uzbtypesbase,uzbtypes,UGDBSelectedObjArray,
      uzglviewareadata,uzgldrawcontext,uzeentity,uzedrawingabstract,UGDBPoint3DArray,uzeentitiestree,
      uzeconsts,uzestrconsts,UGDBTracePropArray,math,sysutils,uzedrawingdef,uzbstrproc,

@@ -30,7 +30,7 @@ uses
      uzgloglstatemanager,uzbtypesbase,uzbtypes,
      uzglviewareadata,uzgldrawcontext,uzegeometry,LCLType,
      ExtCtrls,classes,Controls,Graphics,uzglviewareageneral,math,uzglbackendmanager,
-     uzbgeomtypes,{$IFNDEF DELPHI}OpenGLContext{$ENDIF};
+     uzegeometrytypes,{$IFNDEF DELPHI}OpenGLContext{$ENDIF};
 type
     PTOGLWnd = ^TOGLWnd;
     TOGLWnd = class({TPanel}TOpenGLControl)

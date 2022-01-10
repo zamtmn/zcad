@@ -19,7 +19,7 @@
 unit uzgindexsarray;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,gzctnrvectordata,sysutils,uzbtypes,
+uses uzbtypesbase,gzctnrvectordata,sysutils,
      gzctnrvectortypes,uzegeometry;
 type
 {Export+}

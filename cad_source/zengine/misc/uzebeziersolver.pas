@@ -21,7 +21,7 @@ unit uzebeziersolver;
 interface
 uses uzgprimitivescreator,uzgprimitives,uzglvectorobject,uzegluinterface,gvector,
      uzegeometrytypes,UGDBOpenArrayOfByte,uzbtypesbase,
-     sysutils,uzbtypes,uzegeometry,gzctnrstl,LazLogger,gzctnrvectortypes;
+     sysutils,uzegeometry,gzctnrstl,LazLogger,gzctnrvectortypes;
 type
 TPointAttr=(TPA_OnCurve,TPA_NotOnCurve);
 TSolverMode=(TSM_WaitStartCountur,TSM_WaitStartPoint,TSM_WaitPoint);

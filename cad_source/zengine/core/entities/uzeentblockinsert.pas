@@ -22,7 +22,8 @@ interface
 uses uzeentity,uzgldrawcontext,uzeentityfactory,uzedrawingdef,uzestyleslayers,math,
      uzbtypesbase,uzeentcomplex,sysutils,UGDBObjBlockdefArray,uzeblockdef,uzbtypes,
      uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzeentsubordinated,
-     gzctnrvectortypes,uzegeometrytypes,UGDBOpenArrayOfByte,uzestrconsts,LCLProc;
+     gzctnrvectortypes,uzegeometrytypes,UGDBOpenArrayOfByte,uzestrconsts,LCLProc,
+     uzbLogIntf;
 const zcadmetric='!!ZMODIFIER:';
 type
 {Export+}
@@ -662,8 +663,7 @@ else if not dxfGDBStringload(f,2,byt,name)then {s := }f.readgdbstring;
           s := f.readworld(#10, #13);
         until s = 'SEQEND'
       end;}
-  if VerboseLog^ then
-    debugln('{D-}[DXF_CONTENTS]Name=',name);
+  zTraceLn('{D-}[DXF_CONTENTS]Name='+name);
   if name='EL_LIGHT_SWIITH' then
     name:=name;
       //programlog.LogOutFormatStr('BlockInsert name="%s" loaded',[name],lp_OldPos,LM_Debug);

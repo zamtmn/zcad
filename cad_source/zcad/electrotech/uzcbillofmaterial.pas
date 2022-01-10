@@ -19,7 +19,7 @@
 unit uzcbillofmaterial;
 {$INCLUDE def.inc}
 interface
-uses gzctnrvectortypes,uzbtypesbase,uzbtypes,gzctnrvectordata,sysutils;
+uses gzctnrvectortypes,uzbtypesbase,gzctnrvectordata,sysutils;
 type
 {EXPORT+}
 PGDBBOMItem=^GDBBOMItem;

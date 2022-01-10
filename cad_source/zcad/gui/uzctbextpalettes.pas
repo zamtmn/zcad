@@ -20,7 +20,7 @@ unit uzctbextpalettes;
 {$INCLUDE def.inc}
 interface
 uses
-     uzcstrconsts,uzcsysparams,uzcsysvars,uzbtypes,uzcsysinfo,
+     uzcstrconsts,uzcsysparams,uzcsysvars,uzcsysinfo,
      uzcinfoform,Varman,uzcinterface,laz.VirtualTrees,
      uzbstrproc,uzeenttext,
      EditBtn,Masks,StdCtrls,Controls,Classes,Forms,uzccommandsmanager,Laz2_DOM,ComCtrls,uztoolbarsmanager,uzxmlnodesutils,uzcimagesmanager,uzctranslations,uzcdrawings;

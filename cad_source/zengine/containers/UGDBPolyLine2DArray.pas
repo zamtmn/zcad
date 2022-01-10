@@ -19,7 +19,7 @@
 unit UGDBPolyLine2DArray;
 {$INCLUDE def.inc}
 interface
-uses uzegeometrytypes,uzbtypesbase,gzctnrvectordata,sysutils,uzbtypes, uzegeometry,
+uses uzegeometrytypes,uzbtypesbase,gzctnrvectordata,sysutils,uzegeometry,
      gzctnrvectortypes,math;
 type
 {Export+}

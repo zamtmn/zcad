@@ -20,7 +20,7 @@ unit uzcregnavigatordevices;
 {$INCLUDE def.inc}
 interface
 uses uzcfnavigatordevices,uzcfcommandline,uzbpaths,TypeDescriptors,uzctranslations,Forms,
-     uzbtypes,varmandef,uzeentdevice,uzcnavigatorsnodedesk,
+     varmandef,uzeentdevice,uzcnavigatorsnodedesk,
      uzeentity,zcobjectinspector,uzcguimanager,uzcenitiesvariablesextender,uzbstrproc,
      Types,Controls,Varman,UUnitManager,uzcsysvars,uzcsysinfo,LazLogger,laz.VirtualTrees,
      uzcfnavigatordevicescxmenu,uzcmainwindow,MacroDefIntf,sysutils;

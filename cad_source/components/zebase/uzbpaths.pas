@@ -19,7 +19,8 @@
 unit uzbpaths;
 {$INCLUDE def.inc}
 interface
-uses uzbtypes,Masks,LCLProc,uzbtypesbase,{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils,uzmacros;
+uses uzbtypes,Masks,LCLProc,uzbtypesbase,{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils,
+     uzmacros,uzbLogIntf;
 type
   TFromDirIterator=procedure (filename:String;pdata:pointer);
   TFromDirIteratorObj=procedure (filename:String;pdata:pointer) of object;
@@ -111,17 +112,14 @@ const
 var
    s,ts:gdbstring;
 begin
-     if VerboseLog^ then
-       DebugLn(sysutils.Format('[FILEOPS]FindInSupportPath: searh file:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]));
+     zTraceLn(sysutils.Format('[FILEOPS]FindInSupportPath: searh file:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]));
      FileName:=ExpandPath(FileName);
-     if VerboseLog^ then
-       DebugLn(sysutils.Format('[FILEOPS]FindInSupportPath: file name expand to:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]));
+     zTraceLn(sysutils.Format('[FILEOPS]FindInSupportPath: file name expand to:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]));
      if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)) then
                                  begin
                                       result:=FileName;
                                       //programlog.LogOutStr(format(FindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)]),0,LM_Info);
-                                      if VerboseLog^ then
-                                        DebugLn(sysutils.Format(cFindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]));
+                                      zTraceLn(sysutils.Format(cFindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]));
                                       exit;
                                  end;
      //if PPaths<>nil then
@@ -130,14 +128,12 @@ begin
      repeat
            GetPartOfPath(ts,s,'|');
            ts:=ExpandPath(ts);
-           if VerboseLog^ then
-             DebugLn(sysutils.Format('[FILEOPS]FindInSupportPath: searh in "%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)]));
+           zTraceLn(sysutils.Format('[FILEOPS]FindInSupportPath: searh in "%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)]));
            ts:=ts+FileName;
            if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)) then
                                  begin
                                       result:=ts;
-                                      if VerboseLog^ then
-                                        DebugLn(sysutils.Format(cFindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(result)]));
+                                      zTraceLn(sysutils.Format(cFindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(result)]));
                                       exit;
                                  end;
      until s='';
@@ -196,8 +192,7 @@ begin
          fn:=path+systoutf8(s);{$ENDIF}
      //fn:=fn+systoutf8(s);
      *конец попытки*)
-     if VerboseLog^ then
-       DebugLn(sysutils.Format('{D}[FILEOPS]Process file %s',[fn]));
+     zTraceLn(sysutils.Format('{D}[FILEOPS]Process file %s',[fn]));
      //programlog.LogOutFormatStr('Process file %s',[fn],lp_OldPos,LM_Trace);
      if @method<>nil then
                          method(fn,pdata);
@@ -206,8 +201,7 @@ begin
 
 end;
 begin
-  if VerboseLog^ then
-    DebugLn('{D+}[FILEOPS]FromDirIterator start');
+  zTraceLn('{D+}[FILEOPS]FromDirIterator start');
   //programlog.LogOutStr('FromDirIterator start',lp_IncPos,LM_Debug);
   if firstloadfilename<>'' then
   if fileexists(path+firstloadfilename) then
@@ -231,8 +225,7 @@ begin
     until FindNext(sr) <> 0;
     FindClose(sr);
   end;
-  if VerboseLog^ then
-    DebugLn('{D-}[FILEOPS]end; {FromDirIterator}');
+  zTraceLn('{D-}[FILEOPS]end; {FromDirIterator}');
   //programlog.LogOutStr('FromDirIterator....{end}',lp_DecPos,LM_Debug);
 end;
 initialization

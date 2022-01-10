@@ -19,7 +19,7 @@
 unit UGDBVisibleTreeArray;
 {$INCLUDE def.inc}
 interface
-uses uzeentitiestree,UGDBVisibleOpenArray,uzbtypesbase,uzbtypes,sysutils,uzegeometry,
+uses uzeentitiestree,UGDBVisibleOpenArray,uzbtypesbase,sysutils,uzegeometry,
      uzeentity,gzctnrvectortypes;
 type
 {Export+}

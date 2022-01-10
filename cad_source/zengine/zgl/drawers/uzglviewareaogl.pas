@@ -30,7 +30,7 @@ uses
      uzgloglstatemanager,uzbtypesbase,uzbtypes,
      uzglviewareadata,uzgldrawcontext,uzegeometry,LCLType,
      ExtCtrls,classes,Controls,Graphics,uzglviewareageneral,math,uzglbackendmanager,
-     uzegeometrytypes,{$IFNDEF DELPHI}OpenGLContext{$ENDIF};
+     uzegeometrytypes,uzbLogIntf,{$IFNDEF DELPHI}OpenGLContext{$ENDIF};
 type
     PTOGLWnd = ^TOGLWnd;
     TOGLWnd = class({TPanel}TOpenGLControl)
@@ -145,8 +145,7 @@ var
    Widget:PGtkWidget;
 {$ENDIF}
 begin
-  if VerboseLog^ then
-    debugln('{D+}TOpenGLViewArea.getareacaps');
+  zTraceLn('{D+}TOpenGLViewArea.getareacaps');
   {$IFDEF LCLGTK2}
   Widget:=PGtkWidget(PtrUInt(OpenGLWindow.Handle));
   gtk_widget_add_events (Widget,GDK_POINTER_MOTION_HINT_MASK);
@@ -169,8 +168,7 @@ begin
     end;
   end;
   {$ENDIF}
-  if VerboseLog^ then
-    debugln('{D-}end;{TOGLWnd.InitOGL}');
+  zTraceLn('{D-}end;{TOGLWnd.InitOGL}');
   //programlog.logoutstr('end;{TOGLWnd.InitOGL}',lp_DecPos,LM_Debug);
 end;
 procedure TOpenGLViewArea.DrawGrid;

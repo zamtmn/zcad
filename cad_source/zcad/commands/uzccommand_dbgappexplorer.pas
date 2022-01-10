@@ -22,7 +22,7 @@ unit uzccommand_dbgappexplorer;
 interface
 uses
  LazLogger,
- uzccommandsimpl,uzccommandsabstract,uzbtypes,AppExploreFrm;
+ uzccommandsimpl,uzccommandsabstract,AppExploreFrm;
 implementation
 function dbgAppExplorer_com(operands:TCommandOperands):TCommandResult;
 begin

@@ -78,7 +78,7 @@ uses
                       //системные переменные
   uzgldrawcontext,
 
-  uzbtypesbase,uzbtypes, //base types
+  uzbtypesbase, //base types
                       //описания базовых типов
                       //описания базовых констант
   uzccommandsmanager,

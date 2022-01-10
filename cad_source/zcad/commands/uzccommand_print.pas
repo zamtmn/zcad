@@ -30,7 +30,6 @@ uses
   uzccommandsabstract,uzbstrproc,
   uzbtypesbase,uzccommandsmanager,
   uzccommandsimpl,
-  uzbtypes,
   uzcdrawings,
   uzeutils,uzcutils,
   sysutils,

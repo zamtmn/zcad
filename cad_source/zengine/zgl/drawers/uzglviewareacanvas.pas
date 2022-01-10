@@ -24,7 +24,7 @@ uses
      qt4,
      {$ENDIF}*)
      uzgldrawercanvas,uzglviewareaabstract,sysutils,
-     uzbtypesbase,uzbtypes,
+     uzbtypesbase,
      varmandef,uzccommandsmanager,uzcsysvars,uzegeometry,LCLType,
      ExtCtrls,classes,Controls,Graphics,uzglbackendmanager,
      uzglviewareacanvasgeneral;

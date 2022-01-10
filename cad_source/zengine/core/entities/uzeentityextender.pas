@@ -20,7 +20,7 @@ unit uzeentityextender;
 {$INCLUDE def.inc}
 
 interface
-uses uzedrawingdef,uzbtypes,usimplegenerics,
+uses uzedrawingdef,usimplegenerics,
      UGDBOpenArrayOfByte,gzctnrstl,uzeffdxfsupport,uzeBaseExtender,
      uzgldrawcontext;
 

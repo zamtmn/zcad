@@ -24,7 +24,6 @@ uses
   gzctnrvectortypes,uzbpaths,uzcsysvars,uzctranslations,uzcdrawing,uzeconsts,uzcstrconsts,
   uzccommandsabstract,
   uzccommandsimpl,
-  uzbtypes,
   uzcdrawings,
   sysutils,
   varmandef,

@@ -26,7 +26,7 @@ uses
      uzeconsts,uzestrconsts,UGDBTracePropArray,math,sysutils,uzedrawingdef,uzbstrproc,
      ExtCtrls,Controls,Classes,{$IFDEF DELPHI}Types,{$ENDIF}{$IFNDEF DELPHI}LCLType,{$ENDIF}Forms,
      UGDBOpenArrayOfPV,uzeentgenericsubentry,uzecamera,UGDBVisibleOpenArray,uzgldrawerabstract,
-     uzgldrawergeneral,uzglviewareaabstract,uzeentitiesprop,gzctnrstl;
+     uzgldrawergeneral,uzglviewareaabstract,uzeentitiesprop,gzctnrstl,uzbLogIntf;
 const
   ontracdist=10;
   ontracignoredist=25;
@@ -731,8 +731,7 @@ begin
   if (getviewcontrol.clientwidth=0)or(getviewcontrol.clientheight=0) then exit;
   LPTime:=now;
   needredraw:=param.firstdraw{ or true};
-  if VerboseLog^ then
-  debugln('{T}TOGLWnd.draw');
+  zTraceLn('{T}TOGLWnd.draw');
   //programlog.logoutstr('TOGLWnd.draw',0,LM_Trace);
   //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.draw',lp_IncPos);{$ENDIF}
 

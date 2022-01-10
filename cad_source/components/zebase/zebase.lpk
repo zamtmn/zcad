@@ -58,6 +58,9 @@
     </Files>
     <RequiredPkgs>
       <Item>
+        <PackageName Value="zbaseutils"/>
+      </Item>
+      <Item>
         <PackageName Value="zmath"/>
       </Item>
       <Item>

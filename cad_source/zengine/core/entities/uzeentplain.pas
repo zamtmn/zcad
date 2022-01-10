@@ -21,7 +21,7 @@ unit uzeentplain;
 
 interface
 uses
- uzegeometrytypes,uzgldrawcontext,uzegeometry,uzeentwithlocalcs,uzbtypesbase,uzbtypes;
+ uzegeometrytypes,uzgldrawcontext,uzegeometry,uzeentwithlocalcs,uzbtypesbase;
 type
 {EXPORT+}
 {REGISTEROBJECTTYPE GDBObjPlain}

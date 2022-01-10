@@ -26,7 +26,6 @@ uses
   uzcdrawing,
   uzgldrawcontext,
   uzbtypesbase,
-  uzbtypes,
   uzcdrawings,
   uzeutils,uzcutils,
   uzglviewareadata,

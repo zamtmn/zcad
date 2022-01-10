@@ -20,7 +20,7 @@ unit uzcctrldynamiccommandmenu;
 {$INCLUDE def.inc}
 interface
 uses
- uzcinfoform,ComCtrls,uzbtypes,Controls,Forms,uzbtypesbase,uzclog,uzcstrconsts;
+ uzcinfoform,ComCtrls,Controls,Forms,uzbtypesbase,uzclog,uzcstrconsts;
 type
   DMMethod=procedure(sender:GDBPointer) of object;
   //PTDMenuWnd=^TDMenuWnd;

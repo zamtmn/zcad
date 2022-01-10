@@ -20,7 +20,7 @@ unit uzcsysinfo;
 {$INCLUDE def.inc}
 interface
 uses
-  MacroDefIntf,uzmacros,uzcsysparams,LCLProc,uzclog,uzblog,uzbpaths,uzbtypesbase,Forms,uzbtypes,
+  MacroDefIntf,uzmacros,uzcsysparams,LCLProc,uzclog,uzblog,uzbpaths,uzbtypesbase,Forms,
   {$IFDEF WINDOWS}ShlObj,{$ENDIF}{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils,uzcsysvars;
 const
   zcaduniqueinstanceid='zcad unique instance';
@@ -88,7 +88,6 @@ begin
      SysParam.saved.UniqueInstance:=true;
      LoadParams(expandpath(ProgramPath+'rtl/config.xml'),SysParam.saved);
      SysParam.notsaved.PreloadedFile:='';
-     uzbtypes.VerboseLog:=@uzclog.VerboseLog;
      i:=paramcount;
      for i:=1 to paramcount do
        begin

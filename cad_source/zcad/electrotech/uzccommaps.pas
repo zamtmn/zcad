@@ -12,7 +12,7 @@ uses
 
   uzctranslations,uzeentity,uzglviewareaabstract,uzgldrawcontext,
   uzeenttext,uzeentityfactory,uzcsysvars,uzbstrproc,
-  uzcinterface,uzbtypesbase,uzccommandsmanager,uzclog,gzctnrvectorpobjects,
+  uzcinterface,uzbtypesbase,uzccommandsmanager,uzclog,
   uzccommandsabstract,uzccommandsimpl,uzbtypes,uzcdrawings,uzeutils,uzcutils,sysutils,
   varmandef,UGDBOpenArrayOfByte,uzeffdxf,uzegeometry,uzeconsts,
   uzccomdraw,uzeentline,uzbpaths,uzeentblockinsert,

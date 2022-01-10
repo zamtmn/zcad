@@ -21,7 +21,7 @@ unit uzeentpoint;
 
 interface
 uses uzeentityfactory,uzgldrawcontext,uzeffdxfsupport,uzedrawingdef,uzecamera,
-     gzctnrvectorpobjects,uzestyleslayers,uzbtypesbase,UGDBSelectedObjArray,
+     uzestyleslayers,uzbtypesbase,UGDBSelectedObjArray,
      uzeentsubordinated,uzeent3d,uzeentity,sysutils,UGDBOpenArrayOfByte,
      uzegeometrytypes,uzbtypes,uzeconsts,uzglviewareadata,uzegeometry,
      uzctnrvectorpgdbaseobjects;

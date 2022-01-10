@@ -21,7 +21,7 @@ unit uzeffttf;
 interface
 uses uzefontmanager,EasyLazFreeType,uzefontttf,uzegeometry,
     uzefont,uzbstrproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}sysutils,
-    UGDBOpenArrayOfByte,uzbtypesbase,uzbtypes;
+    UGDBOpenArrayOfByte,uzbtypesbase;
 type ptsyminfo=^tsyminfo;
      tsyminfo=record
                            number,size:word;

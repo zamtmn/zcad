@@ -74,7 +74,7 @@ uses
                       //модуль описывающий "фабрику" для создания примитивов
   uzcsysvars,        //system global variables
                       //системные переменные
-  uzbtypesbase,uzbtypes, //base types
+  uzbtypesbase, //base types
                       //описания базовых типов
                       //описания базовых констант
   uzccommandsmanager,

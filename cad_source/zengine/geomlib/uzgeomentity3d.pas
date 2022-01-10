@@ -20,7 +20,7 @@ unit uzgeomentity3d;
 {$INCLUDE def.inc}
 interface
 uses
-     sysutils,uzbtypes,uzgeomentity,uzegeometry;
+     sysutils,uzgeomentity,uzegeometry;
 type
 {Export+}
 {REGISTEROBJECTTYPE TGeomEntity3D}

@@ -27,7 +27,7 @@ uses
     uzbtypes,varmandef,varman,sysutils,uzegeometry,uzeconsts,
     uzbtypesbase,uzedrawingsimple,uzeentgenericsubentry,uzestyleslayers,uzeentity,
     UGDBSelectedObjArray,uzestylestexts,uzefontmanager,uzestyleslinetypes,
-    UGDBOpenArrayOfPV,uzefont,gzctnrvectorpobjects,UGDBVisibleOpenArray,
+    UGDBOpenArrayOfPV,uzefont,UGDBVisibleOpenArray,
     gzctnrvectortypes,uzedimensionaltypes,uzetrash,UGDBOpenArrayOfByte,uzglviewareadata,
     uzccommandsabstract,
     uzeentitiestypefilter,uzctnrvectorpgdbaseobjects,

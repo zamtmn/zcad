@@ -21,7 +21,8 @@ unit uzeffshx;
 interface
 uses uzgprimitivescreator,uzglvectorobject,uzefontmanager,uzefontshx,uzegeometry,
      uzefont,uzbstrproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}math,sysutils,
-     uzegeometrytypes,UGDBOpenArrayOfByte,uzbtypesbase,uzbtypes,uzgprimitives,gzctnrvectortypes;
+     uzegeometrytypes,UGDBOpenArrayOfByte,uzbtypesbase,uzbtypes,uzgprimitives,
+     gzctnrvectortypes,uzbLogIntf;
 const
   arccount=16;
   fontdirect:array[0..$F,0..1] of GDBDouble=
@@ -168,8 +169,7 @@ begin
             xmax:=NegInfinity;
             while pshxdata^<>0 do
               begin
-                if VerboseLog^ then
-                  debugln('{T}[SHX_CONTENTS]SHX command %x',[integer(pshxdata^)]);
+                zTraceLn('{T}[SHX_CONTENTS]SHX command %x',[integer(pshxdata^)]);
                 case pshxdata^ of
                   001:
                     begin
@@ -191,8 +191,7 @@ begin
                       if onlyver=0 then
                         begin
                           baselen:=baselen/pshxdata^;
-                          if VerboseLog^ then
-                            debugln('{T}[SHX_CONTENTS]%d',[integer(pshxdata^)]);
+                          zTraceLn('{T}[SHX_CONTENTS]%d',[integer(pshxdata^)]);
 
                           //programlog.LogOutFormatStr('%d',[integer(pshxdata^)],lp_OldPos,LM_Trace);
                         end;
@@ -204,8 +203,7 @@ begin
                         begin
                           baselen:=baselen*pshxdata^;
                         end;
-                        if VerboseLog^ then
-                          debugln('{T}[SHX_CONTENTS]%d',[integer(pshxdata^)]);
+                        zTraceLn('{T}[SHX_CONTENTS]%d',[integer(pshxdata^)]);
 
                         //programlog.LogOutFormatStr('%d',[integer(pshxdata^)],lp_OldPos,LM_Trace);
                     end;
@@ -240,8 +238,7 @@ begin
                                      begin
                                           subsymbol:=pshxdata^;
                                      end;
-                      if VerboseLog^ then
-                        debugln('{T}[SHX_CONTENTS](%d)',[integer(subsymbol)]);
+                      zTraceLn('{T}[SHX_CONTENTS](%d)',[integer(subsymbol)]);
 
                       //programlog.LogOutFormatStr('(%d)',[integer(subsymbol)],lp_OldPos,LM_Trace);
                       psubsyminfo:=pf^.GetOrCreateSymbolInfo(subsymbol);
@@ -367,8 +364,7 @@ begin
                       dx:=pShortint(pshxdata)^;
                       incpshxdata;
                       dy:=pShortint(pshxdata)^;
-                      if VerboseLog^ then
-                        debugln('{T}[SHX_CONTENTS](%d,%d)',[integer(dx),integer(dy)]);
+                      zTraceLn('{T}[SHX_CONTENTS](%d,%d)',[integer(dx),integer(dy)]);
 
                       //programlog.LogOutFormatStr('(%d,%d)',[integer(dx),integer(dy)],lp_OldPos,LM_Trace);
                       if onlyver=0 then
@@ -429,8 +425,7 @@ begin
                             end;
                       while (dx<>0)or(dy<>0) do
                         begin
-                          if VerboseLog^ then
-                            debugln('{T}[SHX_CONTENTS](%d,%d)',[integer(dx),integer(dy)]);
+                          zTraceLn('{T}[SHX_CONTENTS](%d,%d)',[integer(dx),integer(dy)]);
 
                           //programlog.LogOutFormatStr('(%d,%d)',[integer(dx),integer(dy)],lp_OldPos,LM_Trace);
                           if draw then
@@ -752,15 +747,13 @@ begin
                          end
                      else
                          begin
-                              if VerboseLog^ then
-                                debugln('{T+}[SHX]symbol %d',[integer(symnum)]);
+                              zTraceLn('{T+}[SHX]symbol %d',[integer(symnum)]);
                               if symnum=135 then
                                                 symnum:=symnum;
                               //programlog.LogOutFormatStr('symbol %d',[integer(symnum)],lp_IncPos,LM_Trace);
                               dataread:=createsymbol(pf,symnum,memorybuf.GetCurrentReadAddres,false,line);
                               memorybuf.jump({datalen}dataread);
-                              if VerboseLog^ then
-                                debugln('{T-}[SHX]end');
+                              zTraceLn('{T-}[SHX]end');
                               //programlog.LogOutStr('end',lp_DecPos,LM_Trace);
                          end;
 
@@ -837,14 +830,12 @@ else if line='AUTOCAD-86 UNIFONT 1.0' then
          if test=49 then
                          test:=test;
          //if (*pf^.GetOrCreateSymbolInfo(test)^.{ .symbo linfo[test].}addr=0*)symnum<2560000 then
-         if VerboseLog^ then
-           debugln('{T+}[SHX]symbol %d',[integer(symnum)]);
+         zTraceLn('{T+}[SHX]symbol %d',[integer(symnum)]);
          if symnum=135 then
                            symnum:=symnum;
          //programlog.LogOutFormatStr('symbol %d',[integer(symnum)],lp_IncPos,LM_Trace);
          {if symnum<256 then }dataread:=createsymbol(pf,test{symnum},memorybuf.GetCurrentReadAddres,true,line);
-         if VerboseLog^ then
-           debugln('{T-}[SHX]end');
+         zTraceLn('{T-}[SHX]end');
          //programlog.LogOutStr('end',lp_DecPos,LM_Trace);
          //                                                                 else
          //                                                                     pf:=pf;

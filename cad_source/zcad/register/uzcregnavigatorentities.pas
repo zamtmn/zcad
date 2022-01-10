@@ -20,7 +20,7 @@ unit uzcregnavigatorentities;
 {$INCLUDE def.inc}
 interface
 uses uzcfnavigatorentities,uzcfcommandline,uzbpaths,TypeDescriptors,uzctranslations,Forms,
-     uzbtypes,varmandef,
+     varmandef,
      uzeentity,zcobjectinspector,uzcguimanager,
      Types,Controls,Varman,UUnitManager,uzcsysvars,uzcsysinfo,LazLogger;
 resourcestring

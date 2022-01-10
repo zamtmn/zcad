@@ -16,13 +16,12 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzblog;
-{$INCLUDE def.inc}
+unit uzbLog;
 {$mode objfpc}{$H+}
 {$modeswitch TypeHelpers}
 interface
-uses UGDBOpenArrayOfByte,gvector,
-     LazLoggerBase,LazLogger,
+uses gvector,
+     //LazLoggerBase,LazLogger,
      strutils,sysutils{$IFNDEF DELPHI},LazUTF8{$ENDIF},Classes,
      Generics.Collections,
      uzbnamedhandles,uzbnamedhandleswithdata;
@@ -131,6 +130,8 @@ type
              procedure LogOutStr(str:AnsiString;IncIndent:integer;LogMode:TLogLevel=1;LMDI:TModuleDesk=1);virtual;
              procedure LogOutFormatStr(Const Fmt:AnsiString;const Args :Array of const;IncIndent:integer;LogMode:TLogLevel;LMDI:TModuleDesk=1);virtual;
              procedure ZOnDebugLN(Sender: TObject; S: string; var Handled: Boolean);
+             procedure ZDebugLN(const S: string);
+             function isTraceEnabled:boolean;
              private
              procedure ProcessStr(str:AnsiString;IncIndent:integer);virtual;
              procedure ProcessStrToLog(str:AnsiString;IncIndent:integer;todisk:boolean);virtual;
@@ -393,7 +394,9 @@ begin
                                          if not silent then
                                            WriteToLog('Current log level changed to: '+LogMode2string(LogLevel),true,CurrentTime.time,0,CurrentTime.rdtsc,0,0);
                                          if LogLevel=LM_Trace then
-                                                                 VerboseLog:=true;
+                                           VerboseLog:=true
+                                         else
+                                           VerboseLog:=false;
                                     end;
 end;
 procedure tlog.SetDefaultLogLevel(LogLevel:TLogLevel;silent:boolean=false);
@@ -443,7 +446,7 @@ end;
 constructor tlog.init(fn:AnsiString;TraceModeName:TLogLevelHandleNameType;TraceModeAlias:AnsiChar);
 var
    CurrentTime:TMyTimeStamp;
-   lz:TLazLogger;
+   //lz:TLazLogger;
 begin
   LogLevels.init;
   ModulesDesks.init;
@@ -459,13 +462,13 @@ begin
      setlength(LatestLogStrings,MaxLatestLogStrings);
      LatestLogStringsCount:=0;
      TotalLogStringsCount:=0;
-     lz:=GetDebugLogger;
+     {lz:=GetDebugLogger;
      if assigned(lz)then
        if lz is TLazLoggerFile then
          begin
               TLazLoggerFile(lz).OnDebugLn:=@ZOnDebugLN;
               TLazLoggerFile(lz).OnDbgOut:=@ZOnDebugLN;
-         end;
+         end;}
      NewModuleDesk.enabled:=true;
      DefaultModuleDeskIndex:=RegisterModule('DEFAULT');
      NewModuleDesk.enabled:=false;
@@ -486,7 +489,11 @@ begin
   //WriteToLog('Log mode: '+LogMode2string(CurrentLogLevel),true,CurrentTime.time,0,CurrentTime.rdtsc,0,0);
 end;
 
-procedure tlog.ZOnDebugLN(Sender: TObject; S: string; var Handled: Boolean);
+function tlog.isTraceEnabled:boolean;
+begin
+  result:=VerboseLog;
+end;
+procedure tlog.ZDebugLN(const S: string);
 var
   dbgmode,tdbgmode:TLogLevel;
   _indent:integer;
@@ -494,16 +501,18 @@ var
   NeedToHistory,NeedMessageBox:boolean;
   modulename:string;
   lmdi:TModuleDesk;
+  ss:string;
 begin
+   ss:=s;
    dbgmode:=LM_Trace;
    _indent:=lp_OldPos;
    NeedToHistory:=false;
    NeedMessageBox:=false;
-   if length(s)>1 then
-     if s[1]='{' then begin
+   if length(ss)>1 then
+     if ss[1]='{' then begin
        prefixlength:=2;
-       while (s[prefixlength]<>'}')and(prefixlength<=length(s)) do begin
-         case s[prefixlength] of
+       while (ss[prefixlength]<>'}')and(prefixlength<=length(ss)) do begin
+         case ss[prefixlength] of
            {'T':dbgmode:=LM_Trace;
            'D':dbgmode:=LM_Debug;
            'I':dbgmode:=LM_Info;
@@ -516,24 +525,24 @@ begin
            'H':NeedToHistory:=true;
            'M':NeedMessageBox:=true;
             else begin
-              if LogLevelAliasDic.TryGetValue(s[prefixlength],tdbgmode) then
+              if LogLevelAliasDic.TryGetValue(ss[prefixlength],tdbgmode) then
                 dbgmode:=tdbgmode;
             end;
          end;
          inc(prefixlength);
        end;
-       s:=copy(s,prefixlength+1,length(s)-prefixlength);
+       ss:=copy(ss,prefixlength+1,length(ss)-prefixlength);
      end;
-   if length(s)>1 then
-     if s[1]='[' then begin
+   if length(ss)>1 then
+     if ss[1]='[' then begin
         prefixstart:=2;
         prefixlength:=2;
-        while (s[prefixlength]<>']')and(prefixlength<=length(s)) do
+        while (ss[prefixlength]<>']')and(prefixlength<=length(ss)) do
         begin
           inc(prefixlength);
         end;
-        modulename:=uppercase(copy(s,prefixstart,prefixlength-2));
-        s:=copy(s,prefixlength+1,length(s)-prefixlength);
+        modulename:=uppercase(copy(ss,prefixstart,prefixlength-2));
+        ss:=copy(ss,prefixlength+1,length(ss)-prefixlength);
      end;
 
    if modulename='' then
@@ -543,20 +552,26 @@ begin
 
    if NeedToHistory then
        if assigned(HistoryTextOut) then
-         HistoryTextOut(s);
+         HistoryTextOut(ss);
      if NeedMessageBox then
        begin case LogLevels.GetPLincedData(dbgmode)^.LogLevelType of
          LLTWarning:if assigned(WarningBoxTextOut) then
-                      WarningBoxTextOut(s);
+                      WarningBoxTextOut(ss);
            LLTError:if assigned(ErrorBoxTextOut) then
-                      ErrorBoxTextOut(s);
+                      ErrorBoxTextOut(ss);
                else if assigned(MessageBoxTextOut) then
-                      MessageBoxTextOut(s);
+                      MessageBoxTextOut(ss);
        end;
        end;
      if IsNeedToLog(dbgmode,lmdi) then
-      LogOutStr(S,_indent,dbgmode,lmdi);
+      LogOutStr(ss,_indent,dbgmode,lmdi);
 end;
+
+procedure tlog.ZOnDebugLN(Sender: TObject; S: string; var Handled: Boolean);
+begin
+     ZDebugLN(S);
+end;
+
 destructor tlog.done;
 var
    CurrentTime:TMyTimeStamp;
@@ -579,5 +594,6 @@ begin
        FreeAndNil(LogLevelAliasDic);
 end;
 begin
+  VerboseLog:=False;
 end.
 

@@ -48,10 +48,10 @@ uses
   uzcregexceptions,
 
   Interfaces,forms, classes,LCLVersion,
+  uzclog,uzcreglog,
   uzcfsplash,
   uzcsysvars,
 
-  uzclog,
   uzcsysparams,uzcsysinfo,
   uzbpaths,
 
@@ -64,7 +64,6 @@ uses
   uzcreggeneralwiewarea,
   uzcregfontmanager,
   uzcregpaths,
-  uzcreglog,
   uzcregenginefeatures,
   uzcreginterface,
   uzcregnavigatorentities,

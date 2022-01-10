@@ -25,7 +25,8 @@ uses LCLProc,uzbpaths,uzbstrproc,uzgldrawcontext,usimplegenerics,uzestylesdim,uz
     gzctnrvectortypes,uzglviewareadata,uzeffdxfsupport,uzestrconsts,uzestylestexts,
     uzegeometry,uzeentsubordinated,uzbtypesbase,uzeentgenericsubentry,uzbtypes,
     uzedimensionaltypes,uzegeometrytypes,sysutils,uzeconsts,UGDBObjBlockdefArray,
-    UGDBOpenArrayOfByte,UGDBVisibleOpenArray,uzeentity,uzeblockdef,uzestyleslayers,uzeffmanager;
+    UGDBOpenArrayOfByte,UGDBVisibleOpenArray,uzeentity,uzeblockdef,uzestyleslayers,
+    uzeffmanager,uzbLogIntf;
 resourcestring
   rsLoadDXFFile='Load DXF file';
 type
@@ -351,8 +352,7 @@ begin
     begin
     if owner <> nil then
       begin
-        if VerboseLog^ then
-          debugln('{D+}[DXF_CONTENTS]AddEntitiesFromDXF.Found primitive ',s);
+        zTraceLn('{D+}[DXF_CONTENTS]AddEntitiesFromDXF.Found primitive '+s);
         pobj := EntInfoData.AllocAndInitEntity(nil);
         //pobj := {po^.CreateInitObj(objid,owner)}CreateInitObjFree(objid,nil);
         PGDBObjEntity(pobj)^.LoadFromDXF(f,{@additionalunit}PExtLoadData,drawing);
@@ -486,8 +486,7 @@ begin
                                    pobj^.done;
                                    Freemem(pointer(pobj));
                             end;
-       if VerboseLog^ then
-         debugln('{D-}[DXF_CONTENTS]End primitive ',s);
+        zTraceLn('{D-}[DXF_CONTENTS]End primitive '+s);
       end;
       //additionalunit.free;
         if Assigned(ClearExtLoadData) then

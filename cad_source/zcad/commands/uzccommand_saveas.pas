@@ -24,7 +24,7 @@ uses
   LazUTF8,LCLProc,
   uzcdialogsfiles,
   sysutils,
-  uzbtypes,uzbpaths,
+  uzbpaths,
 
   uzeffmanager,
   uzccommand_newdwg,

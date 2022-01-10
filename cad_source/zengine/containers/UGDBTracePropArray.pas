@@ -19,7 +19,7 @@
 unit UGDBTracePropArray;
 {$INCLUDE def.inc}
 interface
-uses uzegeometrytypes,gzctnrvectordata,sysutils,uzbtypesbase,uzbtypes;
+uses uzegeometrytypes,gzctnrvectordata,sysutils,uzbtypesbase;
 {Export+}
 type
   ptraceprop=^traceprop;

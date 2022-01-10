@@ -19,9 +19,10 @@
 unit uzefontttf;
 {$INCLUDE def.inc}
 interface
-uses LCLProc,uzgprimitivescreator,uzgprimitives,uzglvectorobject,uzefontbase,uzebeziersolver,math,uzgloglstatemanager,uzegluinterface,TTTypes,TTObjs,
+uses LCLProc,uzgprimitivescreator,uzgprimitives,uzglvectorobject,uzefontbase,
+     uzebeziersolver,math,uzgloglstatemanager,uzegluinterface,TTTypes,TTObjs,
   usimplegenerics,EasyLazFreeType,uzbstrproc,uzbtypesbase,sysutils,
-  uzegeometrytypes,uzbtypes,uzegeometry,gzctnrstl,gzctnrvectortypes;
+  uzegeometrytypes,uzbtypes,uzegeometry,gzctnrstl,gzctnrvectortypes,uzbLogIntf;
 type
 PTTTFSymInfo=^TTTFSymInfo;
 TTTFSymInfo=record
@@ -418,13 +419,11 @@ begin
   GLUIntrf.TessBeginPolygon(tesselator,nil);
   for i:=0 to bs.Conturs.VArray.Size-1 do
   begin
-       if VerboseLog^ then
-          DebugLn('{T+}[TTF_CONTENTS]Contur=%d',[i]);
+       zTraceLn('{T+}[TTF_CONTENTS]Contur=%d',[i]);
        GLUIntrf.TessBeginContour(tesselator);
        for j:=0 to bs.Conturs.VArray[i].Size-1 do
        begin
-            if VerboseLog^ then
-               DebugLn('[TTF_CONTENTS]x=%f;y=%f',[(bs.Conturs.VArray[i][j].v.x),(bs.Conturs.VArray[i][j].v.y)]);
+            zTraceLn('[TTF_CONTENTS]x=%f;y=%f',[(bs.Conturs.VArray[i][j].v.x),(bs.Conturs.VArray[i][j].v.y)]);
             tv.x:=bs.Conturs.VArray[i][j].v.x;
             tv.y:=bs.Conturs.VArray[i][j].v.y;
             tv.z:=0;
@@ -432,8 +431,7 @@ begin
             //VectorData.GeomData.Add2DPoint(Conturs.VArray[i][j].x,Conturs.VArray[i][j].y);
        end;
        GLUIntrf.TessEndContour(tesselator);
-       if VerboseLog^ then
-          DebugLn('{T-}[TTF_CONTENTS]End contur');
+       zTraceLn('{T-}[TTF_CONTENTS]End contur');
   end;
   GLUIntrf.TessEndPolygon(tesselator);
 

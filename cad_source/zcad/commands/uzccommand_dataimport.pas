@@ -29,7 +29,7 @@ uses
   uzbpaths,uzcinterface,
   uzeentitiestypefilter,
   uzcdrawings,uzedrawingsimple,uzgldrawcontext,
-  gzctnrvectorpobjects,varmandef,uzcenitiesvariablesextender,
+  varmandef,uzcenitiesvariablesextender,
   CsvDocument,uzctnrvectorpgdbaseobjects;
 
 implementation

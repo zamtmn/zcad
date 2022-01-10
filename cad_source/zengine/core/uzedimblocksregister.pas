@@ -23,7 +23,7 @@ unit uzedimblocksregister;
 interface
 uses uzeutils,uzestyleslayers,uzestyleslinetypes,uzeconsts,uzeentitiesmanager,
      UGDBObjBlockdefArray,uzeblockdefsfactory,uzeblockdef,uzedrawingdef,
-     uzcsysvars,uzbtypesbase,uzbtypes,uzeentgenericsubentry,uzeentity,LazLogger;
+     uzcsysvars,uzbtypesbase,uzeentgenericsubentry,uzeentity,LazLogger;
 implementation
 function CreateClosedFilledBlock(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:GDBString):PGDBObjBlockdef;
 var

@@ -25,7 +25,7 @@ interface
 type
 {Export+}
   PTAbstractUnit=^TAbstractUnit;
-  {REGISTEROBJECTTYPE TAbstractUnit}
+  {REGISTEROBJECTWITHOUTCONSTRUCTORTYPE TAbstractUnit}
   TAbstractUnit=object//(GDBaseobject)
     procedure dummy;virtual;abstract;
             end;

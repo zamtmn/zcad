@@ -266,7 +266,7 @@ TOSMode=record
     {-}procedure FreeeInstance;{/ /}
   end;
 ptypemanagerdef=^typemanagerdef;
-{REGISTEROBJECTTYPE typemanagerdef}
+{REGISTEROBJECTWITHOUTCONSTRUCTORTYPE typemanagerdef}
 typemanagerdef=object
                   procedure readbasetypes;virtual;abstract;
                   procedure readexttypes(fn: TInternalScriptString);virtual;abstract;
@@ -279,7 +279,7 @@ typemanagerdef=object
                   function AddTypeByPP(p:Pointer):TArrayIndex;virtual;abstract;
                   function AddTypeByRef(var _type:UserTypeDescriptor):TArrayIndex;virtual;abstract;
             end;
-{REGISTEROBJECTTYPE varmanagerdef}
+{REGISTEROBJECTWITHOUTCONSTRUCTORTYPE varmanagerdef}
 varmanagerdef=object
                  {vardescarray:GDBOpenArrayOfData;
                  vararray:GDBOpenArrayOfByte;}

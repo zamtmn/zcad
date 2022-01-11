@@ -151,11 +151,11 @@ TZctnrVectorPUserTypeDescriptors=object(GZVectorPData{-}<PUserTypeDescriptor,Use
                            end;
 PGDBOpenArrayOfPObjects=^TZctnrVectorPGDBaseObjects;
 ptypemanager=^typemanager;
-{REGISTEROBJECTTYPE typemanager}
+{REGISTEROBJECTWITHOUTCONSTRUCTORTYPE typemanager}
 typemanager=object(typemanagerdef)
-                  protected
-                  n2i:TNameToIndex;
-                  public
+                  {-}protected{/Pointer;/}
+                  n2i:{-}TNameToIndex;{/Pointer;/}
+                  {-}public{/Pointer;/}
                   exttype:TZctnrVectorPUserTypeDescriptors;
                   constructor init;
                   procedure CreateBaseTypes;virtual;
@@ -172,7 +172,7 @@ typemanager=object(typemanagerdef)
                   function AddTypeByRef(var _type:UserTypeDescriptor):TArrayIndex;virtual;
             end;
 Tvardescarray=GZVectorData{-}<vardesk>{//};
-{REGISTEROBJECTTYPE varmanager}
+{REGISTEROBJECTWITHOUTCONSTRUCTORTYPE varmanager}
 pvarmanager=^varmanager;
 varmanager=object(varmanagerdef)
             vardescarray:{GDBOpenArrayOfData}Tvardescarray;
@@ -192,7 +192,7 @@ varmanager=object(varmanagerdef)
 TunitPart=(TNothing,TInterf,TImpl,TProg);
 PTUnit=^TUnit;
 PTSimpleUnit=^TSimpleUnit;
-{REGISTEROBJECTTYPE TSimpleUnit}
+{REGISTEROBJECTWITHOUTCONSTRUCTORTYPE TSimpleUnit}
 TSimpleUnit=object(TAbstractUnit)
                   Name:TInternalScriptString;
                   InterfaceUses:TZctnrVectorGDBPointer;
@@ -215,12 +215,12 @@ TSimpleUnit=object(TAbstractUnit)
                   procedure CopyFrom(source:PTSimpleUnit);virtual;
             end;
 PTObjectUnit=^TObjectUnit;
-{REGISTEROBJECTTYPE TObjectUnit}
+{REGISTEROBJECTWITHOUTCONSTRUCTORTYPE TObjectUnit}
 TObjectUnit=object(TSimpleUnit)
                   //function SaveToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;
                   procedure free;virtual;
             end;
-{REGISTEROBJECTTYPE TUnit}
+{REGISTEROBJECTWITHOUTCONSTRUCTORTYPE TUnit}
 TUnit=object(TSimpleUnit)
             InterfaceTypes:typemanager;
             //ImplementationUses:GDBInteger;

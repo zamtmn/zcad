@@ -53,6 +53,7 @@ GDBObjText= object(GDBObjAbstractText)
                  function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
+                 procedure rtsave(refp:GDBPointer);virtual;
                  function IsHaveObjXData:GDBBoolean;virtual;
                  procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var IODXFContext:TIODXFContext);virtual;
                  function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef):GDBBoolean;virtual;
@@ -269,6 +270,12 @@ begin
     //format;
   end
 end;
+procedure GDBObjText.rtsave(refp:GDBPointer);
+begin
+  inherited;
+  PGDBObjText(refp)^.textprop := textprop;
+end;
+
 destructor GDBObjText.done;
 begin
   content:='';

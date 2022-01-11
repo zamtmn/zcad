@@ -92,11 +92,20 @@ GDBObjDimension= object(GDBObjComplex)
                 procedure CalcTextInside;virtual;
                 procedure DrawDimensionLine(p1,p2:GDBVertex;supress1,supress2,drawlinetotext:GDBBoolean;var drawing:TDrawingDef;var DC:TDrawContext);
                 function GetDIMTMOVE:TDimTextMove;virtual;
+                function GetDIMSCALE:double;virtual;
                 destructor done;virtual;
                 //function GetObjType:TObjID;virtual;
                 end;
 {EXPORT-}
 implementation
+function GDBObjDimension.GetDIMSCALE:double;
+begin
+  if PDimStyle.Units.DIMSCALE>0 then
+    result:=PDimStyle.Units.DIMSCALE
+  else
+    result:=1;
+end;
+
 procedure GDBObjDimension.DrawDimensionLine(p1,p2:GDBVertex;supress1,supress2,drawlinetotext:GDBBoolean;var drawing:TDrawingDef;var DC:TDrawContext);
 var
    l:GDBDouble;
@@ -113,18 +122,18 @@ begin
   if supress1 then
                   tbp0.width:=0
               else
-                  tbp0.width:=tbp0.width*PDimStyle.Arrows.DIMASZ;
+                  tbp0.width:=tbp0.width*PDimStyle.Arrows.DIMASZ*GetDIMSCALE;
   if supress2 then
                   tbp1.width:=0
               else
-                  tbp1.width:=tbp1.width*PDimStyle.Arrows.DIMASZ;
+                  tbp1.width:=tbp1.width*PDimStyle.Arrows.DIMASZ*GetDIMSCALE;
   drawing.CreateBlockDef(tbp0.name);
   drawing.CreateBlockDef(tbp1.name);
   if tbp0.width=0 then
                       p0inside:=true
                   else
                       begin
-                           if l-PDimStyle.Arrows.DIMASZ/2>(tbp0.width+tbp1.width) then
+                           if l-PDimStyle.Arrows.DIMASZ*GetDIMSCALE/2>(tbp0.width+tbp1.width) then
                                                             p0inside:=true
                                                         else
                                                             p0inside:=false;
@@ -133,7 +142,7 @@ begin
                       p1inside:=true
                   else
                       begin
-                           if l-PDimStyle.Arrows.DIMASZ/2>(tbp0.width+tbp1.width) then
+                           if l-PDimStyle.Arrows.DIMASZ*GetDIMSCALE/2>(tbp0.width+tbp1.width) then
                                                             p1inside:=true
                                                         else
                                                             p1inside:=false;
@@ -144,11 +153,11 @@ begin
   if p0inside then
                   pointer(pv):=ENTF_CreateBlockInsert(@self,@self.ConstObjArray,
                                                       vp.Layer,vp.LineType,PDimStyle.Lines.DIMCLRD,PDimStyle.Lines.DIMLWD,
-                                                      p1,PDimStyle.Arrows.DIMASZ,ZAngle{*180/pi}-pi,@tbp0.name[1])
+                                                      p1,PDimStyle.Arrows.DIMASZ*GetDIMSCALE,ZAngle{*180/pi}-pi,@tbp0.name[1])
               else
                   pointer(pv):=ENTF_CreateBlockInsert(@self,@self.ConstObjArray,
                                                       vp.Layer,vp.LineType,PDimStyle.Lines.DIMCLRD,PDimStyle.Lines.DIMLWD,
-                                                      p1,PDimStyle.Arrows.DIMASZ,ZAngle{*180/pi},@tbp0.name[1]);
+                                                      p1,PDimStyle.Arrows.DIMASZ*GetDIMSCALE,ZAngle{*180/pi},@tbp0.name[1]);
   //pv^.vp.LineWeight:=PDimStyle.Lines.DIMLWD;
   //pv^.vp.Color:=PDimStyle.Lines.DIMCLRD;
   pv^.BuildGeometry(drawing);
@@ -159,11 +168,11 @@ begin
   if p1inside then
                   pointer(pv):=ENTF_CreateBlockInsert(@self,@self.ConstObjArray,
                                                       vp.Layer,vp.LineType,PDimStyle.Lines.DIMCLRD,PDimStyle.Lines.DIMLWD,
-                                                      p2,PDimStyle.Arrows.DIMASZ,ZAngle{*180/pi},@tbp1.name[1])
+                                                      p2,PDimStyle.Arrows.DIMASZ*GetDIMSCALE,ZAngle{*180/pi},@tbp1.name[1])
               else
                   pointer(pv):=ENTF_CreateBlockInsert(@self,@self.ConstObjArray,
                                                       vp.Layer,vp.LineType,PDimStyle.Lines.DIMCLRD,PDimStyle.Lines.DIMLWD,
-                                                      p2,PDimStyle.Arrows.DIMASZ,ZAngle{*180/pi}-pi,@tbp1.name[1]);
+                                                      p2,PDimStyle.Arrows.DIMASZ*GetDIMSCALE,ZAngle{*180/pi}-pi,@tbp1.name[1]);
   //pv^.vp.LineWeight:=PDimStyle.Lines.DIMLWD;
   //pv^.vp.Color:=PDimStyle.Lines.DIMCLRD;
   pv^.BuildGeometry(drawing);
@@ -174,7 +183,7 @@ begin
                   else
                       begin
                       if p0inside then
-                                      pp1:=Vertexmorphabs(p2,p1,-PDimStyle.Arrows.DIMASZ)
+                                      pp1:=Vertexmorphabs(p2,p1,-PDimStyle.Arrows.DIMASZ*GetDIMSCALE)
                                   else
                                       pp1:=p1;
                       end;
@@ -183,7 +192,7 @@ begin
                   else
                       begin
                       if p0inside then
-                                      pp2:=Vertexmorphabs(p1,p2,-PDimStyle.Arrows.DIMASZ)
+                                      pp2:=Vertexmorphabs(p1,p2,-PDimStyle.Arrows.DIMASZ*GetDIMSCALE)
                                   else
                                       pp2:=p2;
                       end;
@@ -335,6 +344,7 @@ begin
      end
         else
             result:=nulvertex;
+     result:=uzegeometry.VertexMulOnSc(Result,GetDIMSCALE);
 end;
 function GDBObjDimension.GetDIMTMOVE:TDimTextMove;
 begin
@@ -381,7 +391,7 @@ begin
   ptext.Local.basis.ox.x:=cos(TextAngle);
   ptext.Local.basis.ox.y:=sin(TextAngle);
   ptext.TXTStyleIndex:=dimtxtstyle;
-  ptext.textprop.size:=PDimStyle.Text.DIMTXT;
+  ptext.textprop.size:=PDimStyle.Text.DIMTXT*GetDIMSCALE;
   ptext.vp.Color:=PDimStyle.Text.DIMCLRT;
   ptext.FormatEntity(drawing,dc);
 

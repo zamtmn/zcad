@@ -93,6 +93,7 @@ TGDBDimUnitsProp=record
                        DIMDSEP:TDimDSep;//Single-character decimal separator used when creating dimensions whose unit format is decimal//group278
                        DIMRND:GDBDouble;//Rounding value for dimension distances//group45
                        DIMPOST:GDBAnsiString; //Dimension prefix<>suffix //group3
+                       DIMSCALE:GDBDouble;//DIMSCALE//group40
                  end;
 PPGDBDimStyleObjInsp=^PGDBDimStyleObjInsp;
 PGDBDimStyleObjInsp=GDBPointer;
@@ -289,6 +290,10 @@ begin
                 3:
                   begin
                        units.DIMPOST:=value;
+                  end;
+                40:
+                  begin
+                       units.DIMSCALE:=strtofloat(value);
                   end;
                 41:
                   begin

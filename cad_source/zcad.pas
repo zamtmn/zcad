@@ -243,7 +243,7 @@ uses
   {$ENDIF}
   *)
   //uzccomexample2,
-  //uzventsuperline,
+  uzventsuperline,
   uzccomobjectinspector,
   //uzccomexperimental,
 

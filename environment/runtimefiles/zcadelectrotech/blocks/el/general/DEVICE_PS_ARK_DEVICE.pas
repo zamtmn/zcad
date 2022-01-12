@@ -3,7 +3,6 @@ interface
 uses system,devices;
 usescopy objname;
 usescopy blocktype;
-usescopy slcabagenmodul;
 var
    Device_Type:TDeviceType;(*'Тип устройства'*) 
 

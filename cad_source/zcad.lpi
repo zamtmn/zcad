@@ -254,70 +254,73 @@
         </Mode0>
       </Modes>
     </RunParams>
-    <RequiredPackages Count="21">
+    <RequiredPackages Count="22">
       <Item1>
-        <PackageName Value="zbaseutils"/>
+        <PackageName Value="lazopenglcontext"/>
       </Item1>
       <Item2>
-        <PackageName Value="ag_vectors"/>
+        <PackageName Value="zbaseutils"/>
       </Item2>
       <Item3>
-        <PackageName Value="ag_graph"/>
+        <PackageName Value="ag_vectors"/>
       </Item3>
       <Item4>
-        <PackageName Value="runtimetypeinfocontrols"/>
+        <PackageName Value="ag_graph"/>
       </Item4>
       <Item5>
-        <PackageName Value="uniqueinstance_package"/>
+        <PackageName Value="runtimetypeinfocontrols"/>
       </Item5>
       <Item6>
-        <PackageName Value="zmacros"/>
+        <PackageName Value="uniqueinstance_package"/>
       </Item6>
       <Item7>
-        <PackageName Value="laz.virtualtreeview_package"/>
+        <PackageName Value="zmacros"/>
       </Item7>
       <Item8>
-        <PackageName Value="ztoolbars"/>
+        <PackageName Value="laz.virtualtreeview_package"/>
       </Item8>
       <Item9>
-        <PackageName Value="zmath"/>
+        <PackageName Value="ztoolbars"/>
       </Item9>
       <Item10>
-        <PackageName Value="zobjectinspector"/>
+        <PackageName Value="zmath"/>
       </Item10>
       <Item11>
-        <PackageName Value="zundostack"/>
+        <PackageName Value="zobjectinspector"/>
       </Item11>
       <Item12>
-        <PackageName Value="zscript"/>
+        <PackageName Value="zundostack"/>
       </Item12>
       <Item13>
-        <PackageName Value="zscriptbase"/>
+        <PackageName Value="zscript"/>
       </Item13>
       <Item14>
-        <PackageName Value="zcontainers"/>
+        <PackageName Value="zscriptbase"/>
       </Item14>
       <Item15>
-        <PackageName Value="zebase"/>
+        <PackageName Value="zcontainers"/>
       </Item15>
       <Item16>
-        <PackageName Value="zcontrols"/>
+        <PackageName Value="zebase"/>
       </Item16>
       <Item17>
-        <PackageName Value="FCL"/>
+        <PackageName Value="zcontrols"/>
       </Item17>
       <Item18>
-        <PackageName Value="fpvectorialpkg"/>
+        <PackageName Value="FCL"/>
       </Item18>
       <Item19>
-        <PackageName Value="Printer4Lazarus"/>
+        <PackageName Value="fpvectorialpkg"/>
       </Item19>
       <Item20>
-        <PackageName Value="AnchorDocking"/>
+        <PackageName Value="Printer4Lazarus"/>
       </Item20>
       <Item21>
-        <PackageName Value="LCL"/>
+        <PackageName Value="AnchorDocking"/>
       </Item21>
+      <Item22>
+        <PackageName Value="LCL"/>
+      </Item22>
     </RequiredPackages>
     <Units Count="205">
       <Unit0>

@@ -1,7 +1,7 @@
 unit objname;
 interface
 uses system;
-usescopy slcabagenmodul;
+
 var
    NMO_Name:GDBString;(*'Обозначение'*)
    NMO_BaseName:GDBString;(*'Короткое Имя'*)

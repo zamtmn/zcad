@@ -254,7 +254,7 @@
         </Mode0>
       </Modes>
     </RunParams>
-    <RequiredPackages Count="22">
+    <RequiredPackages Count="21">
       <Item1>
         <PackageName Value="zbaseutils"/>
       </Item1>
@@ -316,11 +316,8 @@
         <PackageName Value="AnchorDocking"/>
       </Item20>
       <Item21>
-        <PackageName Value="LazOpenGLContext"/>
-      </Item21>
-      <Item22>
         <PackageName Value="LCL"/>
-      </Item22>
+      </Item21>
     </RequiredPackages>
     <Units Count="205">
       <Unit0>

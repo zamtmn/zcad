@@ -264,7 +264,7 @@ uses
   uzcregisterenitiesextenders,
   uzcoiregistermultiproperties,
   uzclibraryblocksregister,
-  uzglviewareaogl,uzglviewareagdi,uzglviewareacanvas,
+  {$IF not((DEFINED(WINDOWS))and(DEFINED(LCLQT5)))}uzglviewareaogl,{$ENDIF}uzglviewareagdi,uzglviewareacanvas,
   {$IFDEF WINDOWS}{uzglviewareadx,}{$ENDIF}
 
   uzctbexttoolbars, uzctbextmenus, uzctbextpalettes,

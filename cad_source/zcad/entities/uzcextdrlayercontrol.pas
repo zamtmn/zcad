@@ -126,26 +126,21 @@ begin
   Raise EExprScanner.Create(Msg);
 end;
 
-function tryCalcFPExpressionParserResultType(ptd:PUserTypeDescriptor; var RT:TResultType):boolean;
-var
-  tRT:TResultType;
+function tryCalcFPExpressionParserResultType(ptd:PUserTypeDescriptor; out RT:TResultType):boolean;
 begin
-  tRT:=rtAuto;
+  RT:=rtAuto;
   if (ptd=@FundamentalDoubleDescriptorObj)or(ptd=@FundamentalSingleDescriptorObj) then
-    tRT:=rtFloat
+    RT:=rtFloat
   else if (ptd=@FundamentalUnicodeStringDescriptorObj)or(ptd=@FundamentalStringDescriptorObj)or(ptd=@FundamentalAnsiStringDescriptorObj) then
-    tRT:=rtString
+    RT:=rtString
   else if (ptd=@FundamentalWordDescriptorObj)or(ptd=@FundamentalLongIntDescriptorObj)or(ptd=@FundamentalByteDescriptorObj)
         or(ptd=@FundamentalSmallIntDescriptorObj)or(ptd=@FundamentalLongWordDescriptorObj)
         or(ptd=@FundamentalQWordDescriptorObj)or(ptd=@FundamentalInt64Descriptor)or(ptd=@FundamentalShortIntDescriptorObj) then
-    tRT:=rtInteger
+    RT:=rtInteger
   else if (ptd=@FundamentalBooleanDescriptorOdj)then
-    tRT:=rtBoolean;
-  if tRT<>rtAuto then begin
-    result:=true;
-    RT:=tRT;
-  end else
-    Result:=False;
+    RT:=rtBoolean;
+
+  result:=RT<>rtAuto;
 end;
 
 procedure TLayerControlExtender.GetVariableValue(Var Result : TFPExpressionResult; ConstRef AName : ShortString);

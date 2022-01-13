@@ -638,6 +638,7 @@ begin
        case byt of
        2:
          begin
+           len:=0;
            case drawing.LTypeStyleTable.AddItem(s,pointer(pltypeprop)) of
                         IsFounded:
                                   begin

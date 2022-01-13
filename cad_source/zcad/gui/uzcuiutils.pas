@@ -31,7 +31,7 @@ type
 
   TGConverter<TGIn,TGOut,TGConverter>=class
     class function TryConvert(valueIn:TGIn; out valueOut:TGOut):boolean;
-    class function Convert(valueIn:TGIn;Converted:Boolean):TGOut;overload;
+    //class function Convert(valueIn:TGIn;Converted:Boolean):TGOut;overload;
     class function Convert(valueIn:TGIn):TGOut;overload;
   end;
 
@@ -51,6 +51,7 @@ var
   quoted:boolean;
   count,i,j:integer;
 begin
+  result:='';
   quoted:=false;
   count:=0;
   for i:=1 to length(MsgStr) do begin
@@ -92,10 +93,10 @@ begin
   result:=TGConverter.convert(valueIn,valueOut);
 end;
 
-class function TGConverter<TGIn,TGOut,TGConverter>.Convert(valueIn:TGIn;Converted:Boolean):TGOut;overload;
+{class function TGConverter<TGIn,TGOut,TGConverter>.Convert(valueIn:TGIn;Converted:Boolean):TGOut;overload;
 begin
   Converted:=TGConverter.convert(valueIn,result);
-end;
+end;}
 
 class function TGConverter<TGIn,TGOut,TGConverter>.Convert(valueIn:TGIn):TGOut;overload;
 begin

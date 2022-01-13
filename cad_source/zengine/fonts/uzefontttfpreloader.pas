@@ -198,8 +198,9 @@ begin
     else
       len:=NameRecord.length div 2;
     AStream.Seek(NameRecord.offset+StorageOffsetInFile,soBeginning);
+    ts:='';
     setlength(ts,len);
-    ts:=DupeString('-',len);
+    //ts:=DupeString('-',len);
     AStream.Read((@ts[1])^,len*2);
     for i:=1 to len do
       PWord(@ts[i])^:=BEtoN(PWord(@ts[i])^);

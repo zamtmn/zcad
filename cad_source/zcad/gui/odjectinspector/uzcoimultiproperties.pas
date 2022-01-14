@@ -50,7 +50,7 @@ type
   TEntBeforeIterateProc=procedure(pvd:GDBPointer;ChangedData:TChangedData);
   PTMultiPropertyDataForObjects=^TMultiPropertyDataForObjects;
   TGetSetValue=record
-    GetValueOffset,SetValueOffset:GDBInteger;
+    GetValueOffset,SetValueOffset:PtrInt;
   end;
   TGetSetMode=(GSMAbs,GSMRel);
   TGetSetData=record
@@ -133,7 +133,7 @@ type
                                                                    id:TObjID;                      //идентификатор примитивов с которыми будет данное проперти
                                                                    extdr:TMetaExtender;            //расширение примитива с которыми будет данное проперти
                                                                    GetVO,                          //смещение откуда берется пропертя (может неиспользоваться)
-                                                                   SetVO:GDBInteger;               //смещение куда задается пропертя (может неиспользоваться)
+                                                                   SetVO:PtrInt;                   //смещение куда задается пропертя (может неиспользоваться)
                                                                    MIPD:TMainIterateProcsData;
                                                                    //bip:TBeforeIterateProc;         //функция выполняемая перед итерациями
                                                                    //aip:TAfterIterateProc;          //функция выполняемая после итераций
@@ -251,7 +251,7 @@ begin
   if MultiPropertiesManager.MultiPropertyVector[i].sortedid>=oldsortedid then
     inc(MultiPropertiesManager.MultiPropertyVector[i].sortedid,addvalue);
 end;
-procedure TMultiPropertiesManager.RegisterPhysMultiproperty(Name:GDBString;UserName:GDBString;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;extdr:TMetaExtender;GetVO,SetVO:GDBInteger;MIPD:TMainIterateProcsData;EIPD:TEntIterateProcsData;{ebip:TEntBeforeIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc;CV:TCheckValueFunc=nil;}UseMode:TMultiPropertyUseMode=MPUM_AllEntsMatched);
+procedure TMultiPropertiesManager.RegisterPhysMultiproperty(Name:GDBString;UserName:GDBString;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;extdr:TMetaExtender;GetVO,SetVO:PtrInt;MIPD:TMainIterateProcsData;EIPD:TEntIterateProcsData;{ebip:TEntBeforeIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc;CV:TCheckValueFunc=nil;}UseMode:TMultiPropertyUseMode=MPUM_AllEntsMatched);
 var
   GSData:TGetSetData;
 begin

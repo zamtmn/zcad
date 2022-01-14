@@ -127,7 +127,7 @@ type
       class function LengthBetweenPos(const APos1:TCharPosition;const APos2:TCharPosition;const ExcludePos2:boolean=False):TCharLength;inline;
       class procedure IncPosition(const AStr:GStingType;var APos1:TCharPosition);inline;
       //class procedure ProcessPosition(const AStr:GStingType;var APos:TCharPosition;const SetupFromHere:Boolean=False);//inline;
-      class procedure AddToPosition(var Rslt:TCharPosition;const AStr:GStingType; constref  APos1:TCharPosition;Offset:integer);inline;
+      class procedure AddToPosition(out Rslt:TCharPosition;const AStr:GStingType; constref  APos1:TCharPosition;Offset:integer);inline;
       class procedure AddToPosition2(const AStr:GStingType; var  APos1:TCharPosition;Offset:integer);inline;
       class procedure NextPosition(var Rslt:TCharPosition;const AStr:GStingType; var R:TCharRange);inline;
 
@@ -593,7 +593,7 @@ begin
 
   end;
 end;}
-class procedure TStringManipulator<GStingType,GCharType,GAdditionalDataManipulator,GAdditionalPositionData,GAdditionalLengthData>.AddToPosition(var Rslt:TCharPosition;const AStr:GStingType; constref  APos1:TCharPosition;Offset:integer);
+class procedure TStringManipulator<GStingType,GCharType,GAdditionalDataManipulator,GAdditionalPositionData,GAdditionalLengthData>.AddToPosition(out Rslt:TCharPosition;const AStr:GStingType; constref  APos1:TCharPosition;Offset:integer);
 var
   i:integer;
 begin
@@ -812,6 +812,8 @@ function TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,
 var
   ResultParam:GManipulatorCharRange;
 begin
+  Result:=Default(GParserString);
+  ResultParam:=default(GManipulatorCharRange);
   GManipulator.OnlyGetLengthValue(ResultParam);
   {ResultParam.StartPos:=OnlyGetLength;
   ResultParam.L:=0;}
@@ -868,7 +870,8 @@ var
   ResultParam:GManipulatorCharRange;
   //cp:TSystemCodePage;
 begin
-  result:=default(GParserString);
+  result:=Default(GParserString);
+  ResultParam:=Default(GManipulatorCharRange);
   totallength:=0;
   for i:=0 to Parts.size-1 do begin
     GManipulator.OnlyGetLengthValue(ResultParam);
@@ -1022,6 +1025,7 @@ var
   //SubStrLastsym:integer;
   TaddResult:GManipulatorCharIndex;
 begin
+  TaddResult:=Default(GManipulatorCharIndex);
   TokenTextInfo.TokenPos.P:=CurrentPos;
   //SubStrLastsym:=SubStr.StartPos+SubStr.L-1;
   if isOnlyOneToken<>'' then begin
@@ -1156,6 +1160,7 @@ var
   match:boolean;
   TaddResult:GManipulatorCharIndex;
 begin
+  TaddResult:=Default(GManipulatorCharIndex);
   //inc(debTokenizerSub2GetToken);
   //maxlevel:=level;
   if isOnlyOneToken<>'' then begin
@@ -1320,6 +1325,7 @@ var
   currpos:GManipulatorCharIndex;
   openedbrcount,brcount:integer;
 begin
+    currpos:=Default(GManipulatorCharIndex);
     if (not TTokenOptions.IsAllPresent(TokenDataVector[TokenId].Options,TGOFake))
       and (TokenDataVector[TokenId].BrackeOpen<>#0)
       and (TokenDataVector[TokenId].BrackeClose<>#0) then

@@ -239,6 +239,7 @@ begin
     prompt:=TCommandLinePrompt.create(panel);
     prompt.OnClickNotify:=commandmanager.PromptTagNotufy;
     prompt.Align:=alLeft;
+    prompt.Layout:=tlCenter;
     //prompt.Layout:=tlCenter;
     //prompt.Width:=1;
     //prompt.BorderStyle:=sbsSingle;

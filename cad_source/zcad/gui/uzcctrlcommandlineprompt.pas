@@ -88,6 +88,7 @@ type
       Rects:TRectsWithTags;
       procedure Paint; override;
       property OnClickNotify: TNotifyProc read FOnClickNotify write FOnClickNotify;
+      property Layout;
       constructor Create(TheOwner: TComponent); override;
       destructor Destroy; override;
       procedure SetHighLightedText(const Value: TCaption;Parts:TSubStrings;PartsCount:SizeInt);
@@ -227,15 +228,50 @@ end;
 procedure TCommandLinePrompt.Paint;
 
 var
-  R: TRect;
+  R,CalcRect: TRect;
   TestString:string;
   Words:TWords;
   RectsSize:integer;
+  Flags: Longint;
 begin
   TestString:=GetLabelText;
   R := Rect(0,0,Width,Height);
+
+  Canvas.Brush.Color := Color;
+  if (Color<>clNone) and not Transparent then
+  begin
+    Canvas.Brush.Style:=bsSolid;
+    Canvas.FillRect(R);
+  end;
+  Canvas.Brush.Style:=bsClear;
+  Canvas.Font := Font;
+
+  Flags := DT_EXPANDTABS;
+  if WordWrap then
+    Flags := Flags or DT_WORDBREAK
+  else
+  if not HasMultiLine then
+    Flags := Flags or DT_SINGLELINE;
+  if not ShowAccelChar then
+    Flags := Flags or DT_NOPREFIX;
+  if UseRightToLeftReading then
+    Flags := Flags or DT_RTLREADING;
+
+  CalcRect := R;
+
+  DoDrawText(CalcRect, Flags or DT_CALCRECT);
+  if Layout<>tlTop then
+  begin
+    case Layout of
+      tlTop: ; // nothing
+      tlCenter: OffsetRect(R, 0, (R.Height-CalcRect.Height) div 2);
+      tlBottom: OffsetRect(R, 0, R.Height-CalcRect.Height)
+    end;
+    R.Height := CalcRect.Height;
+  end;
+
   try
-     Words:=DrawHighlitedText<TCLTagType>(Canvas, TestString, R, DT_SINGLELINE, Highlight, False);
+     Words:=DrawHighlitedText<TCLTagType>(Canvas, TestString, R, {DT_SINGLELINE}Flags, Highlight, False);
      RectsSize:=UpdateRects(Words,false);
      SetLength(Rects,RectsSize);
      UpdateRects(Words,true);

@@ -59,6 +59,7 @@ PShapeProp=^ShapeProp;
 {REGISTEROBJECTTYPE ShapeProp}
 ShapeProp= object(BasicSHXDashProp)
                 SymbolName,FontName:GDBString;
+                ShapeNum:Integer;
                 Psymbol:PGDBsymdolinfo;
                 constructor initnul;
                 destructor done;virtual;
@@ -316,6 +317,7 @@ begin
      Mode:=N2TLTMode(n);
      LengthDXF:=0;
      LengthFact:=0;
+     h:=0;
      pointer(desk):=nil;
      dasharray.init(10);
      strokesarray.init(10);

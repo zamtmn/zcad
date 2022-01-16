@@ -688,7 +688,8 @@ begin
                                  pointer(psp):=pltypeprop^.shapearray.CreateObject;
                                  psp^.initnul;
                                  psp^.param:=BShapeProp.param;
-                                 psp^.Psymbol:=pointer(shapenumber);
+                                 psp^.Psymbol:=nil;
+                                 psp^.ShapeNum:=shapenumber;
                                  psp^.param.PStyle:=pointer(stylehandle);
                                  psp^.param.PstyleIsHandle:=true;
                                  pltypeprop^.dasharray.PushBackData(dashinfo);
@@ -953,8 +954,10 @@ begin
                      begin
                         psp^.param.PStyle:=ptstyle;
                         psp^.FontName:=ptstyle^.FontFile;
-                        psp^.Psymbol:=ptstyle^.pfont^.GetOrReplaceSymbolInfo(integer(psp^.Psymbol){//-ttf-//,tdinfo});
-                        psp^.SymbolName:=psp^.Psymbol^.Name;
+                        if assigned(ptstyle^.pfont) then begin
+                          psp^.Psymbol:=ptstyle^.pfont^.GetOrReplaceSymbolInfo(integer(psp^.ShapeNum){//-ttf-//,tdinfo});
+                          psp^.SymbolName:=psp^.Psymbol^.Name;
+                        end;
                      end;
 
                      PSP:=pltypeprop^.shapearray.iterate(ir2);
@@ -2181,13 +2184,13 @@ begin
                                                              PStroke:=pltp^.strokesarray.iterate(ir3);
                                                              laststrokewrited:=true;
                                                         end;
-                                               TDIShape:if (PSP^.Psymbol<>nil)and(PSP^.param.PStyle<>nil) then
+                                               TDIShape:if PSP^.param.PStyle<>nil then
                                                         begin
                                                              laststrokewrited:=false;
                                                              outstream.TXTAddGDBStringEOL(dxfGroupCode(74));
                                                              outstream.TXTAddGDBStringEOL('4');
                                                              outstream.TXTAddGDBStringEOL(dxfGroupCode(75));
-                                                             outstream.TXTAddGDBStringEOL(inttostr(PSP^.Psymbol^.number));
+                                                             outstream.TXTAddGDBStringEOL(inttostr(PSP^.ShapeNum));
 
                                                              IODXFContext.p2h.MyGetOrCreateValue(PSP^.param.PStyle,IODXFContext.handle,temphandle);
                                                              //GetOrCreateHandle(PSP^.param.PStyle,handle,temphandle);

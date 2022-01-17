@@ -138,7 +138,20 @@ cleanzcad: clean zcadenv zcad
 
 cleanzcadelectrotech: clean zcadelectrotechenv zcadelectrotech
 
-installpkgstolaz: checkvars           
+rmpkgslibs:
+	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)zcontainers$(PATHDELIM)lib$(PATHDELIM)*
+	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)zbaseutils$(PATHDELIM)lib$(PATHDELIM)*
+	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)zebase$(PATHDELIM)lib$(PATHDELIM)*
+	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)zcontrols$(PATHDELIM)lib$(PATHDELIM)*
+	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)zmacros$(PATHDELIM)lib$(PATHDELIM)*
+	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)zmath$(PATHDELIM)lib$(PATHDELIM)*
+	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)zobjectinspector$(PATHDELIM)lib$(PATHDELIM)*
+	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)zscriptbase$(PATHDELIM)lib$(PATHDELIM)*
+	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)zscript$(PATHDELIM)lib$(PATHDELIM)*
+	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)ztoolbars$(PATHDELIM)lib$(PATHDELIM)*
+	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)zundostack$(PATHDELIM)lib$(PATHDELIM)*
+
+installpkgstolaz: checkvars rmpkgslibs
 	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)other$(PATHDELIM)AGraphLaz$(PATHDELIM)lazarus$(PATHDELIM)ag_graph.lpk
 	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)other$(PATHDELIM)AGraphLaz$(PATHDELIM)lazarus$(PATHDELIM)ag_math.lpk
 	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)other$(PATHDELIM)AGraphLaz$(PATHDELIM)lazarus$(PATHDELIM)ag_vectors.lpk

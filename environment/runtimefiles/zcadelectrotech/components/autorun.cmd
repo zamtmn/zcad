@@ -18,11 +18,12 @@ MergeBlocks(_OPS.dxf)
 MergeBlocks(_KIP.dxf)
 MergeBlocks(_ss.dxf)
 MergeBlocks(_spds.dxf)
-MergeBlocks(_vl_el.dxf)
-MergeBlocks(_vl_table.dxf)
 MergeBlocks(_vl_diagram.dxf)
-MergeBlocks(_vl_unit.dxf)
+MergeBlocks(_vl_el.dxf)
+MergeBlocks(_vl_line.dxf)
 MergeBlocks(_vl_ops.dxf)
+MergeBlocks(_vl_table.dxf)
+MergeBlocks(_vl_unit.dxf)
 
 ;------------------------
 ;Создание пустого чертежа

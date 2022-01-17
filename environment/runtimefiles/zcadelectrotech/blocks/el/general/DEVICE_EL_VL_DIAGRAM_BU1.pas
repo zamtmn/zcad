@@ -23,7 +23,7 @@ Device_Class:=TDC_Shell;
 NMO_Name:='А0';
 NMO_BaseName:='А';
 NMO_Suffix:='??';
-NMO_Affix:='.2';
+NMO_Affix:='.11';
 
 T1:='??';
 T2:='??';

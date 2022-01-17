@@ -1,4 +1,4 @@
-unit DEVICE_EL_VL_DIAGRAM_QS3;
+unit DEVICE_EL_VL_DIAGRAM_DIAGRAM_QS3;
 
 interface
 
@@ -23,7 +23,7 @@ Device_Class:=TDC_Shell;
 NMO_Name:='А0';
 NMO_BaseName:='А';
 NMO_Suffix:='??';
-NMO_Affix:='.1';
+NMO_Affix:='.2';
 
 T1:='??';
 T2:='??';

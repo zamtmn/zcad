@@ -153,21 +153,38 @@ begin
 end;
 procedure GDBObjCable.FormatFast;
 var
-   ptvnext:pgdbvertex;
+   ptvnext,ptvprev:pgdbvertex;
    ir_inVertexArray:itrec;
    np:TNodeProp;
 begin
      np.DevLink:=nil;
      inherited FormatEntity(drawing,dc);
+     Representation.Clear;
      NodePropArray.clear;
-     ptvnext:=vertexarrayInWCS.beginiterate(ir_inVertexArray);
-     if ptvnext<>nil then
+     ptvprev:=vertexarrayInWCS.beginiterate(ir_inVertexArray);
+     ptvnext:=vertexarrayInWCS.iterate(ir_inVertexArray);
+     if (ptvnext<>nil)and(ptvprev<>nil) then
      repeat
            np.NextP:=ptvnext^;
-           np.PrevP:=ptvnext^;
+           np.PrevP:=ptvprev^;
+           Representation.DrawLineWithLT(DC,np.NextP,np.PrevP,vp);
+           ptvprev:=ptvnext;
            ptvnext:=vertexarrayInWCS.iterate(ir_inVertexArray);
            NodePropArray.PushBackData(np);
      until ptvnext=nil;
+
+     {ptn2:=NodePropArray.beginiterate(ir_inNodeArray);
+     ptn1:=NodePropArray.iterate(ir_inNodeArray);
+     if ptn1<>nil then
+     begin
+     repeat
+       Representation.DrawLineWithLT(DC,ptn2^.Nextp,ptn1^.PrevP,vp);
+       //DC.Drawer.DrawLine3DInModelSpace(ptn2^.Nextp,ptn1^.PrevP,DC.DrawingContext.matrixs);
+       ptn2:=ptn1;
+       ptn1:=NodePropArray.iterate(ir_inNodeArray);
+     until ptn1=nil;
+     end;}
+
 end;
 
 procedure GDBObjCable.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
@@ -184,6 +201,8 @@ var ir_inGDB,ir_inVertexArray,ir_inNodeArray,ir_inDevice,ir_inDevice2:itrec;
     {group,pribor,}count:gdbinteger;
     l:gdbdouble;
     pentvarext,pentvarextcirrobj:TVariablesExtender;
+
+    ptn1,ptn2:PTNodeProp;
 begin
   inherited;
   if assigned(EntExtensions)then
@@ -423,6 +442,20 @@ begin
        end;
   end;
   NodePropArray.Shrink;
+
+  Representation.Clear;
+  ptn2:=NodePropArray.beginiterate(ir_inNodeArray);
+  ptn1:=NodePropArray.iterate(ir_inNodeArray);
+  if ptn1<>nil then
+  begin
+  repeat
+    Representation.DrawLineWithLT(DC,ptn2^.Nextp,ptn1^.PrevP,vp);
+    //DC.Drawer.DrawLine3DInModelSpace(ptn2^.Nextp,ptn1^.PrevP,DC.DrawingContext.matrixs);
+    ptn2:=ptn1;
+    ptn1:=NodePropArray.iterate(ir_inNodeArray);
+  until ptn1=nil;
+  end;
+
   if assigned(EntExtensions)then
     EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
 end;
@@ -465,60 +498,19 @@ var
    ptn1,ptn2:PTNodeProp;
    ir_inNodeArray:itrec;
 begin
-  ptn2:=NodePropArray.beginiterate(ir_inNodeArray);
-  ptn1:=NodePropArray.iterate(ir_inNodeArray);
-  if ptn1<>nil then
-  begin
-  repeat
-        DC.Drawer.DrawLine3DInModelSpace(ptn2^.Nextp,ptn1^.PrevP,DC.DrawingContext.matrixs);
-        ptn2:=ptn1;
-        ptn1:=NodePropArray.iterate(ir_inNodeArray);
-  until ptn1=nil;
-  end;
+
+  if (selected)or(dc.selected) then
+    Representation.DrawNiceGeometry(DC)
+  else
+    Representation.DrawGeometry(DC);
+
   if SysVar.DWG.DWG_HelpGeometryDraw^ then
-  if CanSimplyDrawInWCS(DC,SysVar.DSGN.DSGN_HelpScale^,1) then
-  begin
-  {notfirst:=false;
-  ptn2:=NodePropArray.beginiterate(ir_inNodeArray);
-  ptn1:=NodePropArray.iterate(ir_inNodeArray);
-  if ptn1<>nil then
-  begin
-  repeat
-        if ptn2^.DevLink<>nil then
-        begin
-        if ptn1<>nil then
-        begin
-        //oglsm.mytotalglend;
-        oglsm.myglpushmatrix;
-        oglsm.mygltranslated(ptn2^.Nextp.x+dc.pcamera^.CamCSOffset.x,ptn2^.Nextp.y+dc.pcamera^.CamCSOffset.y,ptn2^.Nextp.z+dc.pcamera^.CamCSOffset.z);
-        oglsm.myglScalef(SysVar.DSGN.DSGN_HelpScale^,SysVar.DSGN.DSGN_HelpScale^,SysVar.DSGN.DSGN_HelpScale^);
-        circlepointoflod[8].drawgeometry;
-        //oglsm.mytotalglend;
-        oglsm.myglpopmatrix;
-        end;
-        if notfirst then
-        begin
-        //oglsm.mytotalglend;
-        oglsm.myglpushmatrix;
-        oglsm.mygltranslated(ptn2^.Prevp.x+dc.pcamera^.CamCSOffset.x,ptn2^.Prevp.y+dc.pcamera^.CamCSOffset.y,ptn2^.Prevp.z+dc.pcamera^.CamCSOffset.z);
-        oglsm.myglScalef(SysVar.DSGN.DSGN_HelpScale^,SysVar.DSGN.DSGN_HelpScale^,SysVar.DSGN.DSGN_HelpScale^);
-        circlepointoflod[8].drawgeometry;
-        //oglsm.mytotalglend;
-        oglsm.myglpopmatrix;
-        end
-           else notfirst:=true;
-        end
-           else notfirst:=true;
-        ptn2:=ptn1;
-        ptn1:=NodePropArray.iterate(ir_inNodeArray);
-  until ptn2=nil;
-  end;}
-  if vertexarrayInWCS.Count>1 then
-  begin
-       dc.drawer.DrawLine3DInModelSpace(str21,str22,dc.DrawingContext.matrixs);
-       dc.drawer.DrawLine3DInModelSpace(str22,str23,dc.DrawingContext.matrixs);
-  end;
-  end;
+    if CanSimplyDrawInWCS(DC,SysVar.DSGN.DSGN_HelpScale^,1) then begin
+      if vertexarrayInWCS.Count>1 then begin
+        dc.drawer.DrawLine3DInModelSpace(str21,str22,dc.DrawingContext.matrixs);
+        dc.drawer.DrawLine3DInModelSpace(str22,str23,dc.DrawingContext.matrixs);
+      end;
+    end;
   //inherited;
   drawbb(dc);
 end;

@@ -28,7 +28,7 @@ uses
 
      math,
      uzgldrawerdx,
-     uzglbackendmanager,uzbgeomtypes,uzbtypes,uzglviewareaabstract,uzglviewareageneral,uzgldrawcontext,uzbtypesbase;
+     uzglbackendmanager,uzegeometrytypes,uzbtypes,uzglviewareaabstract,uzglviewareageneral,uzgldrawcontext,uzbtypesbase;
 type
   TVertexData = record
     x: _FLOAT;
@@ -781,11 +781,9 @@ end;
 
 procedure TDX11ViewArea.getareacaps;
 begin
-  if VerboseLog^ then
-    debugln('{D+}TDX11ViewArea.getareacaps');
+  zTraceLn('{D+}TDX11ViewArea.getareacaps');
   setdeicevariable;
-  if VerboseLog^ then
-    debugln('{D-}end;{TDX11ViewArea.getareacaps}');
+  zTraceLn('{D-}end;{TDX11ViewArea.getareacaps}');
 end;
 
 procedure TDX11ViewArea.SwapBuffers(var DC:TDrawContext);

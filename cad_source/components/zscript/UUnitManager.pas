@@ -21,14 +21,15 @@ unit UUnitManager;
 {$MODE DELPHI}
 interface
 uses LCLProc,uzbpaths,uzbstrproc,Varman,languade,gzctnrvectorobjects,SysUtils,
-     UBaseTypeDescriptor,uzbtypesbase, uzbtypes,UGDBOpenArrayOfByte, strmy, varmandef,
-     gzctnrvectortypes,gzctnrvectordata,uzctnrvectorgdbstring,TypeDescriptors,UEnumDescriptor,UArrayDescriptor,
-     UPointerDescriptor,URecordDescriptor,UObjectDescriptor,USinonimDescriptor;
+     UBaseTypeDescriptor,uzbtypesbase, uzbtypes,UGDBOpenArrayOfByte, strmy,
+     varmandef,gzctnrvectortypes,gzctnrvectordata,uzctnrvectorgdbstring,
+     TypeDescriptors,UEnumDescriptor,UArrayDescriptor,UPointerDescriptor,
+     URecordDescriptor,UObjectDescriptor,USinonimDescriptor,uzbLogIntf;
 type
 {EXPORT+}
     PTUnitManager=^TUnitManager;
     {REGISTEROBJECTTYPE TUnitManager}
-    TUnitManager=object(GZVectorObjects{-}<TUnit>{//})
+    TUnitManager=object(GZVectorObjects{-}<PTUnit,TUnit>{//})
                        currentunit:PTUnit;
                        NextUnitManager:PTUnitManager;
                        constructor init;
@@ -55,9 +56,6 @@ var
    PVariantsField:PFieldDescriptor;
    PTObj:PPointer;
 implementation
-uses
-    uzbmemman;
-//var s:gdbstring;
 const
      {GDBGDBPointerType:gdbtypedesk=
                                 (
@@ -108,7 +106,7 @@ procedure TUnitManager.free;
 var //p:GDBPointer;
     //ir:itrec;
     i:integer;
-    punit:pgdbaseobject;
+    punit:PTUnit;
 begin
   GDBPlatformUInt(punit):=GDBPlatformUInt(parray)+SizeOfData*(count-1);
   for i := count-1 downto 0 do
@@ -324,8 +322,7 @@ begin
     line:=readspace(line);
    if line='GDBObjLWPolyline=object(GDBObjWithLocalCS) Closed:GDBBoolean;' then
                   line:=line;
-   if VerboseLog^ then
-     DebugLn('{T}[ZSCRIPT]%s',[line]);
+   zTraceLn('{T}[ZSCRIPT]%s',[line]);
 
     //programlog.LogOutFormatStr('%s',[line],lp_OldPos,LM_Trace);
 
@@ -466,8 +463,7 @@ begin
                                                   if typ<>packedrecordtype then
                                                                                begin
                                                                                //ShowError('Record "'+typename+'" not packed');
-                                                                               if VerboseLog^ then
-                                                                                 debugln('{W}Record "'+typename+'" not packed');
+                                                                               zTraceLn('{W}Record "'+typename+'" not packed');
 
                                                                                end;
                                                   if (typename) = 'tmemdeb'
@@ -485,8 +481,7 @@ begin
                                                   if typ<>packedobjecttype then
                                                                                begin
                                                                                //ShowError('Object "'+typename+'" not packed');
-                                                                               if VerboseLog^ then
-                                                                                 debugln('{W}]Object "'+typename+'" not packed');
+                                                                               zTraceLn('{W}]Object "'+typename+'" not packed');
 
                                                                                end;
                                                   if (typename) = 'GDBObj3DFace'
@@ -521,6 +516,9 @@ begin
                                                       else*)
                                                           begin
                                                                fieldgdbtype := currentunit.TypeName2PTD(parseresult^.getData(0));
+                                                               if fieldgdbtype=nil then
+                                                                 fieldgdbtype:=nil;
+                                                               fieldgdbtype := currentunit.TypeName2PTD(parseresult^.getData(0));
                                                                //programlog.logoutstr(parseresult^.getData(0),0);
                                                                //GDBStringtypearray :=ptypedesk(Types.exttype.getelement(fieldgdbtype.gdbtypecustom)^)^.tdesk;
                                                                PObjectDescriptor(fieldgdbtype)^.CopyTo(PObjectDescriptor(etd));
@@ -549,8 +547,7 @@ begin
                                                   if typ<>packedarraytype then
                                                                               begin
                                                                                //ShowError('Array "'+typename+'" not packed');
-                                                                               if VerboseLog^ then
-                                                                                 debugln('{W}Array "'+typename+'" not packed');
+                                                                               zTraceLn('{W}Array "'+typename+'" not packed');
 
                                                                               end;
                                                   if typename='GDBPalette' then
@@ -596,7 +593,7 @@ begin
                                                   if parseerror then enumodj.source:=parseresult^.getData(0)
                                                                 else HaltOnFatalError('Syntax error in file '+f.name);
                                                   if parseresult<>nil then begin parseresult^.FreeAndDone;Freemem(gdbpointer(parseresult));end;
-                                                  parseresult:=runparser('_softspace'#0'=(=*_GDBString'#0'=*=)',line,parseerror);
+                                                  parseresult:=runparser('_softspace'#0'=(=*_String'#0'=*=)',line,parseerror);
                                                   if parseerror then enumodj.user:=parseresult^.getData(0)
                                                                 else enumodj.user:=enumodj.source;
                                                   if parseresult<>nil then begin parseresult^.FreeAndDone;Freemem(gdbpointer(parseresult));end;
@@ -649,7 +646,7 @@ begin
                                                                       halt(0);
                                                                     end;
                                                   if parseresult<>nil then begin parseresult^.Done;Freemem(gdbpointer(parseresult));parseresult:=nil;end;
-                                                  parseresult:=runparser('_softspace'#0'=(=*_GDBString'#0'=*=)',line,parseerror);
+                                                  parseresult:=runparser('_softspace'#0'=(=*_String'#0'=*=)',line,parseerror);
                                                   if parseerror then
                                                                     begin
                                                                          enumodj.user:=parseresult^.getData(0);
@@ -720,8 +717,7 @@ if addtype then
 
         //p:=@etd;
         currentunit.InterfaceTypes.{exttype.}AddTypeByPP(@etd);
-        if VerboseLog^ then
-          DebugLn('{T}[ZSCRIPT]Type "%s" added',[typename]);
+        zTraceLn('{T}[ZSCRIPT]Type "%s" added',[typename]);
 
         //programlog.LogOutFormatStr('Type "%s" added',[typename],lp_OldPos,LM_Trace);
         if typename='tdisp' then
@@ -732,15 +728,14 @@ if addtype then
         //addtype:=true;
                            end;
                 varmode:begin
-                                if VerboseLog^ then
-                                  DebugLn('{T}[ZSCRIPT]Varmode string: "%s"',[line]);
+                                zTraceLn('{T}[ZSCRIPT]Varmode string: "%s"',[line]);
 
                                 //programlog.LogOutFormatStr('Varmode string: "%s"',[line],lp_OldPos,LM_Trace);
                                 //parsepos:=1;
                                 parseresult:=runparser('_identifiers_cs'#0'=:_identifier'#0'_softend'#0,line,parseerror);
                                 if line<>'' then
                                                 line:=line;
-                                {(template:'_softspace'#0'=(=*_GDBString'#0'=*=)';id:username)}
+                                {(template:'_softspace'#0'=(=*_String'#0'=*=)';id:username)}
 
     if line='' then
                    begin
@@ -764,7 +759,7 @@ if addtype then
                    end;
     line:=readspace(line);
 
-                                subparseresult:=runparser('_softspace'#0'=(=*_GDBString'#0'=*=)'#0,line,subparseerror);
+                                subparseresult:=runparser('_softspace'#0'=(=*_String'#0'=*=)'#0,line,subparseerror);
                                 vuname:='';
                                 if (subparseresult<>nil)and subparseerror then
                                                                               vuname:=pGDBString(subparseresult^.getDataMutable(0))^;
@@ -794,8 +789,7 @@ if addtype then
                                                    system.break
                                                else
                                                    begin
-                                                        if VerboseLog^ then
-                                                          DebugLn('{D}[ZSCRIPT]'+line);
+                                                        zTraceLn('{D}[ZSCRIPT]'+line);
 
                                                         //programlog.logoutstr(line,0,LM_Debug);
                                                         if copy(line,1,10)='VIEW_ObjIn'
@@ -835,22 +829,19 @@ procedure TUnitManager.LoadFolder(PPaths:GDBString;TranslateFunc:TTranslateFunct
 var
   sr: TSearchRec;
 begin
-  if VerboseLog^ then
-    DebugLn('{T+}[ZSCRIPT]TUnitManager.LoadFolder(%s)',[path]);
+  zTraceLn('{T+}[ZSCRIPT]TUnitManager.LoadFolder(%s)',[path]);
 
   //programlog.LogOutFormatStr('TUnitManager.LoadFolder(%s)',[path],lp_IncPos,LM_Debug);
   if FindFirst(path + '*.pas', faAnyFile, sr) = 0 then
   begin
     repeat
-      if VerboseLog^ then
-        DebugLn('{T}[ZSCRIPT]Found file "%s"',[path+sr.Name]);
+      zTraceLn('{T}[ZSCRIPT]Found file "%s"',[path+sr.Name]);
       //programlog.LogOutFormatStr('Found file "%s"',[path+sr.Name],lp_OldPos,LM_Info);
       loadunit(PPaths,TranslateFunc,path+sr.Name,nil);
     until FindNext(sr) <> 0;
     sysutils.FindClose(sr);
   end;
-  if VerboseLog^ then
-    DebugLn('{T-}[ZSCRIPT]end;{TUnitManager.LoadFolder}');
+  zTraceLn('{T-}[ZSCRIPT]end;{TUnitManager.LoadFolder}');
   //programlog.logoutstr('end;{TUnitManager.LoadFolder}',lp_DecPos,LM_Debug);
 end;
 initialization;

@@ -24,7 +24,7 @@ interface
 uses
   LazLogger,SysUtils,
   uzccommandsabstract,uzeentity,uzcdrawing,uzcdrawings,uzccommandsmanager,
-  uzcstrconsts,uzcutils,zcchangeundocommand,uzbtypes,uzccommandsimpl,
+  uzcstrconsts,uzcutils,zcchangeundocommand,uzccommandsimpl,
   uzestyleslayers,uzcinterface;
 
 implementation

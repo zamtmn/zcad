@@ -17,7 +17,6 @@
 }
 
 unit uzedimensionaltypes;
-{$INCLUDE def.inc}
 interface
 type
 {EXPORT+}

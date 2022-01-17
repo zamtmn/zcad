@@ -33,8 +33,8 @@ uses
     {$ENDIF}
     {$IFNDEF DELPHI}LCLIntf,LCLType,{$ENDIF}
     Classes,Controls,
-    gzctnrvectortypes,uzbgeomtypes,uzegeometry,uzgldrawergeneral,uzgldrawerabstract,
-    Graphics,uzbtypes,LazLogger;
+    uzegeometrytypes,uzegeometry,uzgldrawergeneral,uzgldrawerabstract,
+    Graphics,LazLogger,gzctnrvectortypes;
 const
   NeedScreenInvalidrect=true;
 type

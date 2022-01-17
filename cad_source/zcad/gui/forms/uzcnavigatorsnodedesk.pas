@@ -6,13 +6,11 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
-  StdCtrls, ActnList, laz.VirtualTrees, gvector,
-  uzbtypes,uzegeometry, uzccommandsmanager,
-  uzcinterface,uzeentity,uzcimagesmanager,uzcdrawings,
+  ActnList, laz.VirtualTrees, gvector,
+  uzegeometry, uzccommandsmanager,
+  uzcinterface,uzeentity,uzcimagesmanager,
   uzcenitiesvariablesextender,varmandef,uzbstrproc,uzcmainwindow,uzctreenode,
-  Varman,
-  {uzeparser,uzeentitiestypefilter,}strutils,Masks,
-  uzcoimultiproperties,uzedimensionaltypes;
+  Varman,uzcoimultiproperties;
 type
   TExtColumnParams=record
     Pattern:string;
@@ -75,7 +73,7 @@ implementation
 function GetMainFunction(const pent:pGDBObjEntity):pGDBObjEntity;
 var
   pentvarext:TVariablesExtender;
-  pvd:pvardesk;
+  //pvd:pvardesk;
 begin
   pentvarext:=pent^.GetExtension<TVariablesExtender>;
   if pentvarext<>nil then
@@ -282,7 +280,7 @@ procedure TBaseRootNodeDesk.ProcessEntity(CreateEntityNode:TCreateEntityNodeFunc
 var
   Name:string;
   basenode2,namenode,pnode:PVirtualNode;
-  pnd:PTNodeData;
+  //pnd:PTNodeData;
   include:boolean;
 begin
   basenode2:=nil;

@@ -20,11 +20,11 @@ unit uzeentcurve;
 {$INCLUDE def.inc}
 
 interface
-uses uzgldrawcontext,uzedrawingdef,uzecamera,gzctnrvectorpobjects,
+uses uzgldrawcontext,uzedrawingdef,uzecamera,
      UGDBOpenArrayOfByte,uzestyleslayers,uzbtypesbase,UGDBVectorSnapArray,
      UGDBSelectedObjArray,uzeent3d,uzeentity,UGDBPolyLine2DArray,UGDBPoint3DArray,
-     uzbtypes,uzegeometry,uzeconsts,uzglviewareadata,uzeffdxfsupport,sysutils,uzbmemman,
-     gzctnrvectortypes,uzbgeomtypes,uzeentsubordinated;
+     uzbtypes,uzegeometry,uzeconsts,uzglviewareadata,uzeffdxfsupport,sysutils,
+     gzctnrvectortypes,uzegeometrytypes,uzeentsubordinated,uzctnrvectorpgdbaseobjects;
 type
 //------------snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)
 {Export+}

@@ -29,8 +29,8 @@ uses
      {$IFDEF LCLQT5}
      qt5,qtint,
      {$ENDIF}
-     uzgldrawergdi,uzglviewareaabstract,sysutils,uzbmemman,uzbtypesbase,uzbtypes,
-     uzbgeomtypes,uzegeometry,{$IFNDEF DELPHI}LCLType,{$ENDIF}{$IFDEF DELPHI}Types,{$ENDIF}
+     uzgldrawergdi,uzglviewareaabstract,sysutils,uzbtypesbase,
+     uzegeometrytypes,uzegeometry,{$IFNDEF DELPHI}LCLType,{$ENDIF}{$IFDEF DELPHI}Types,{$ENDIF}
      ExtCtrls,classes,Controls,Graphics,uzglviewareageneral,uzglbackendmanager,uzglviewareacanvasgeneral;
 type
     TGDIViewArea=class(TGeneralCanvasViewArea)

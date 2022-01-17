@@ -21,9 +21,9 @@ unit uzeentpolyline;
 
 interface
 uses uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,UGDBVectorSnapArray,
-     gzctnrvectorpobjects,uzestyleslayers,uzeentsubordinated,uzeentcurve,uzbtypesbase,
+     uzestyleslayers,uzeentsubordinated,uzeentcurve,uzbtypesbase,
      uzeentity,UGDBOpenArrayOfByte,uzbtypes,uzeconsts,uzglviewareadata,
-     uzbgeomtypes,uzegeometry,uzeffdxfsupport,sysutils,uzbmemman;
+     uzegeometrytypes,uzegeometry,uzeffdxfsupport,sysutils,uzctnrvectorpgdbaseobjects;
 type
 {Export+}
 PGDBObjPolyline=^GDBObjPolyline;

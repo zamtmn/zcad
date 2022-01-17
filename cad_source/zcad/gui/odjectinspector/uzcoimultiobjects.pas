@@ -23,11 +23,11 @@ interface
 uses
   uzeenttext,uzctnrvectorgdbpointer,uzeentblockinsert,uzeconsts,uzcinterface,
   LazLoggerBase,uzcoimultiproperties,uzcoiwrapper,uzctranslations,uzepalette,
-  uzbmemman,uzedimensionaltypes,uzcstrconsts,sysutils,uzeentityfactory,
+  uzedimensionaltypes,uzcstrconsts,sysutils,uzeentityfactory,
   uzcenitiesvariablesextender,uzgldrawcontext,usimplegenerics,gzctnrstl,
   gzctnrvectortypes,uzbtypes,uzcdrawings,varmandef,uzeentity,uzbtypesbase,
   Varman,uzctnrvectorgdbstring,UGDBSelectedObjArray,uzcoimultipropertiesutil,
-  uzeentityextender,uzelongprocesssupport,uzcutils;
+  uzeentityextender,uzelongprocesssupport,uzbLogIntf;
 type
   TObjIDWithExtender2Counter=TMyMapCounter<TObjIDWithExtender>;
 {Export+}
@@ -687,8 +687,8 @@ var //i: GDBInteger;
     pv:pGDBObjEntity;
     psd:PSelectedObjDesc;
     pu:pointer;
-    pvd,pvdmy:pvardesk;
-    vd:vardesk;
+    //pvd,pvdmy:pvardesk;
+    //vd:vardesk;
     ir,ir2:itrec;
     pentvarext:TVariablesExtender;
 begin
@@ -696,47 +696,35 @@ begin
      SavezeUnitsFormat:=f;
      if _GetEntsTypes then
                           GetEntsTypes;
-     if VerboseLog^ then
-                       debugln('{T+}VariablesUnit.free start');
+     zTraceLn('{T+}VariablesUnit.free start');
      VariablesUnit.free;
-     if VerboseLog^ then
-                       debugln('{T-}end');
+     zTraceLn('{T-}end');
 
-     if VerboseLog^ then
-                       debugln('{T+}ExtendersUnit.free start');
+     zTraceLn('{T+}ExtendersUnit.free start');
      ExtendersUnit.free;
      ExtendersUnit.InterfaceUses.PushBackIfNotPresent(sysunit);
-     if VerboseLog^ then
-                       debugln('{T-}end');
+     zTraceLn('{T-}end');
 
 
-     if VerboseLog^ then
-                       debugln('{T+}GeneralUnit.free start');
+     zTraceLn('{T+}GeneralUnit.free start');
      GeneralUnit.free;
      GeneralUnit.InterfaceUses.PushBackIfNotPresent(sysunit);
-     if VerboseLog^ then
-                       debugln('{T-}end');
+     zTraceLn('{T-}end');
 
-     if VerboseLog^ then
-                       debugln('{T+}GeometryUnit.free start');
+     zTraceLn('{T+}GeometryUnit.free start');
      GeometryUnit.free;
      GeometryUnit.InterfaceUses.PushBackIfNotPresent(sysunit);
-     if VerboseLog^ then
-                       debugln('{T-}end');
+     zTraceLn('{T-}end');
 
-     if VerboseLog^ then
-                  debugln('{T+}MiscUnit.free start');
+     zTraceLn('{T+}MiscUnit.free start');
      MiscUnit.free;
      MiscUnit.InterfaceUses.PushBackIfNotPresent(sysunit);
-     if VerboseLog^ then
-                       debugln('{T-}end');
+     zTraceLn('{T-}end');
 
-     if VerboseLog^ then
-                  debugln('{T+}SummaryUnit.free start');
+     zTraceLn('{T+}SummaryUnit.free start');
      SummaryUnit.free;
      SummaryUnit.InterfaceUses.PushBackIfNotPresent(sysunit);
-     if VerboseLog^ then
-                       debugln('{T-}end');
+     zTraceLn('{T-}end');
 
      CheckMultiPropertyUse;
      CreateMultiPropertys(f);

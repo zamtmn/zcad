@@ -22,12 +22,11 @@ interface
 uses sysutils,uzbtypesbase,uzbtypes,
      uzeentity,varmandef,uzeentsubordinated,
      uzcoimultiproperties,uzcoimultipropertiesutil,uzcdrawings,
-     Varman,gzctnrvectortypes,uzedimensionaltypes;
+     Varman,uzedimensionaltypes;
 function GetProperty(PEnt:PGDBObjGenericWithSubordinated;propertyname:gdbstring; out propertyvalue:gdbstring):boolean;
 implementation
 var
   pu:TObjectUnit;
-  ChangedData:TChangedData;
 function GetProperty(PEnt:PGDBObjGenericWithSubordinated;propertyname:gdbstring; out propertyvalue:gdbstring):boolean;
 var
   mp:TMultiProperty;

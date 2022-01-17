@@ -25,7 +25,7 @@ uses
      uzctranslations,//работа с локализацией
      uzcefstringstreeselector,//окно выбора в дереве
      uzcsysparams,
-     uzctypesdecorations,zcobjectinspectorui,uzcoidecorations,//для "быстрых" редакторов
+     uzctypesdecorations,zcobjectinspectorui,//uzcoidecorations,//для "быстрых" редакторов
      UUnitManager,
      sysutils,
      Forms,Controls,
@@ -38,20 +38,20 @@ uses
      uzvcom,             //
      uzvnum,
      uzvtreedevice,      //новая механизм кабеле прокладки на основе Дерева
-     uzvtmasterdev,
+     //uzvtmasterdev,
      uzvagensl,
      uzvtestdraw, // тестовые рисунки
 
      uzcinterface,
-     uzctnrvectorgdbstring,
-     uzbgeomtypes,
+     //uzctnrvectorgdbstring,
+     //uzegeometrytypes,
      uzegeometry,
      uzcuitypes,
      uzbtypes,
      typinfo,
-     gzctnrvector,
-     uzvconsts,
-     uzcutils,
+     //gzctnrvector,
+     //uzvconsts,
+     //uzcutils,
      Varman;             //Зкадовский RTTI
 
 var

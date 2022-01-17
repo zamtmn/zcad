@@ -17,13 +17,12 @@
 }
 
 unit uzemathutils;
-{$INCLUDE def.inc}
 interface
-uses uzedimensionaltypes,uzbtypesbase,uzbtypes,math,uzegeometry,sysutils;
-function zeDimensionToString(const value:Double; const f:TzeUnitsFormat):GDBString;
-function zeNonDimensionToString(const value:Double; const f:TzeUnitsFormat):GDBString;
-function zeAngleDegToString(const value:Double; const f:TzeUnitsFormat):GDBString;
-function zeAngleToString(const value:Double; const f:TzeUnitsFormat):GDBString;
+uses uzedimensionaltypes,math,uzegeometry,sysutils;
+function zeDimensionToString(const value:Double; const f:TzeUnitsFormat):String;
+function zeNonDimensionToString(const value:Double; const f:TzeUnitsFormat):String;
+function zeAngleDegToString(const value:Double; const f:TzeUnitsFormat):String;
+function zeAngleToString(const value:Double; const f:TzeUnitsFormat):String;
 function CreateDefaultUnitsFormat:TzeUnitsFormat;
 implementation
 const
@@ -49,11 +48,11 @@ begin
     result.DeciminalSeparator:=DDSDot;
     result.RemoveTrailingZeros:=false;
 end;
-function MyFloatToStr0(const value:Double):GDBString;
+function MyFloatToStr0(const value:Double):String;
 begin
      result:=FloatToStrF(value,ffFixed,0,0,WorkingFormatSettings);
 end;
-function MyFloatToStr(const value:Double;Prec:TUPrec;DS:TDimDSep;RTZ:boolean):GDBString;
+function MyFloatToStr(const value:Double;Prec:TUPrec;DS:TDimDSep;RTZ:boolean):String;
 var
   Q:Integer;
 begin
@@ -95,7 +94,7 @@ begin
   else
     SetLength(_value,Q);
 end;*)
-function zeNonDimensionToString(const value:Double; const f:TzeUnitsFormat):GDBString;
+function zeNonDimensionToString(const value:Double; const f:TzeUnitsFormat):String;
 var
    ff:TzeUnitsFormat;
 begin
@@ -108,7 +107,7 @@ begin
                                      result:=zeDimensionToString(value,ff);
                                 end;
 end;
-function zeAngleToString(const value:Double; const f:TzeUnitsFormat):GDBString;
+function zeAngleToString(const value:Double; const f:TzeUnitsFormat):String;
 type
     TSUDir=(TSUDirN,TSUDirS);
     TSUSubDir=(TSUDirE,TSUDirW);
@@ -118,11 +117,11 @@ var
    deg,min,sec,sec2:double;
    stemp:integer;
    _min,_sec:integer;
-   degs,mins,secs:gdbstring;
+   degs,mins,secs:string;
    subaprec:TUPrec;
    SUDir:TSUDir;
    SUSubDir:TSUSubDir;
-function GetAngleDegreesMinutesSeconds:GDBString;
+function GetAngleDegreesMinutesSeconds:String;
 var
    i:integer;
 begin
@@ -261,7 +260,7 @@ begin
                                 end;
                                 end;
 end;
-function zeAngleDegToString(const value:Double; const f:TzeUnitsFormat):GDBString;
+function zeAngleDegToString(const value:Double; const f:TzeUnitsFormat):String;
 var
    ff:TzeUnitsFormat;
    angle:Double;
@@ -283,11 +282,11 @@ begin
   ff.uprec:=f.aprec;
   result:=zeDimensionToString(angle,ff);
 end;
-function zeDimensionToString(const value:Double; const f:TzeUnitsFormat):GDBString;
+function zeDimensionToString(const value:Double; const f:TzeUnitsFormat):String;
 var
    _ft,_dft:double;{1}
    absvalue,_in:double;{12*_ft}
-   _fts,_ins,_dfts:GDBString;
+   _fts,_ins,_dfts:String;
    divide:integer;
    simplifieduprec:TUPrec;
 begin

@@ -16,7 +16,8 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 unit uzbnamedhandleswithdata;
-{$INCLUDE def.inc}
+{$mode delphi}
+
 
 interface
 
@@ -83,9 +84,6 @@ begin
 end;
 
 procedure GTNamedHandlesWithData<GHandleType,GHandleManipulator,GNameType,GNameManipulator,GLincedData>.RegisterHandleName(Handle:GHandleType;HandleName:GNameType);
-var
-  StandartizedHandleName:GNameType;
-  OldHN:THandleWithNamePair;
 begin
   inherited RegisterHandleName(Handle,HandleName);
   HandleDataVector.Mutable[GHandleManipulator.GetIndex(Handle)]^.N:=HandleName;

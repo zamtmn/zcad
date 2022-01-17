@@ -59,6 +59,7 @@ PShapeProp=^ShapeProp;
 {REGISTEROBJECTTYPE ShapeProp}
 ShapeProp= object(BasicSHXDashProp)
                 SymbolName,FontName:GDBString;
+                ShapeNum:Integer;
                 Psymbol:PGDBsymdolinfo;
                 constructor initnul;
                 destructor done;virtual;
@@ -71,11 +72,11 @@ GDBDoubleArray= object(GZVectorData{-}<GDBDouble>{//})(*OpenArrayOfData=GDBDoubl
                 constructor init(m:GDBInteger);
                end;
 {REGISTEROBJECTTYPE GDBShapePropArray}
-GDBShapePropArray= object(GZVectorObjects{-}<ShapeProp>{//})(*OpenArrayOfObject=ShapeProp*)
+GDBShapePropArray= object(GZVectorObjects{-}<PShapeProp,ShapeProp>{//})(*OpenArrayOfObject=ShapeProp*)
                 constructor init(m:GDBInteger);
                end;
 {REGISTEROBJECTTYPE GDBTextPropArray}
-GDBTextPropArray= object(GZVectorObjects{-}<TextProp>{//})(*OpenArrayOfObject=TextProp*)
+GDBTextPropArray= object(GZVectorObjects{-}<PTextProp,TextProp>{//})(*OpenArrayOfObject=TextProp*)
                 constructor init(m:GDBInteger);
                end;
 PPGDBLtypePropObjInsp=^PGDBLtypePropObjInsp;
@@ -316,6 +317,7 @@ begin
      Mode:=N2TLTMode(n);
      LengthDXF:=0;
      LengthFact:=0;
+     h:=0;
      pointer(desk):=nil;
      dasharray.init(10);
      strokesarray.init(10);

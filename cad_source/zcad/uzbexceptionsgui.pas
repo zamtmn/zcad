@@ -21,7 +21,7 @@ unit uzbexceptionsgui;
 interface
 
 uses
-  SysUtils,Forms,Dialogs,UITypes,
+  SysUtils,Forms,Dialogs,System.UITypes,
   uzbexceptionscl;
 
 type

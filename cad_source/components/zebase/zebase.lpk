@@ -18,46 +18,60 @@
         </SyntaxOptions>
       </Parsing>
     </CompilerOptions>
-    <Files Count="7">
-      <Item1>
+    <Files>
+      <Item>
         <Filename Value="def.inc"/>
         <Type Value="Include"/>
-      </Item1>
-      <Item2>
+      </Item>
+      <Item>
         <Filename Value="uzbtypesbase.pas"/>
         <UnitName Value="uzbtypesbase"/>
-      </Item2>
-      <Item3>
+      </Item>
+      <Item>
         <Filename Value="uzbtypes.pas"/>
         <UnitName Value="uzbtypes"/>
-      </Item3>
-      <Item4>
-        <Filename Value="uzbmemman.pas"/>
-        <UnitName Value="uzbmemman"/>
-      </Item4>
-      <Item5>
+      </Item>
+      <Item>
         <Filename Value="uzbstrproc.pas"/>
         <UnitName Value="uzbstrproc"/>
-      </Item5>
-      <Item6>
+      </Item>
+      <Item>
         <Filename Value="uzbpaths.pas"/>
         <UnitName Value="uzbpaths"/>
-      </Item6>
-      <Item7>
-        <Filename Value="uzbgeomtypes.pas"/>
-        <UnitName Value="uzbgeomtypes"/>
-      </Item7>
+      </Item>
+      <Item>
+        <Filename Value="uzctnrvectorpgdbaseobjects.pas"/>
+        <UnitName Value="uzctnrvectorpgdbaseobjects"/>
+      </Item>
+      <Item>
+        <Filename Value="uzctnrvectorgdbstring.pas"/>
+        <UnitName Value="uzctnrvectorgdbstring"/>
+      </Item>
+      <Item>
+        <Filename Value="uzctnrvectorgdbpointer.pas"/>
+        <UnitName Value="uzctnrvectorgdbpointer"/>
+      </Item>
+      <Item>
+        <Filename Value="uzctnrobjectschunk.pas"/>
+        <UnitName Value="uzctnrobjectschunk"/>
+      </Item>
     </Files>
-    <RequiredPkgs Count="3">
-      <Item1>
+    <RequiredPkgs>
+      <Item>
+        <PackageName Value="zbaseutils"/>
+      </Item>
+      <Item>
+        <PackageName Value="zmath"/>
+      </Item>
+      <Item>
         <PackageName Value="zmacros"/>
-      </Item1>
-      <Item2>
-        <PackageName Value="LCLBase"/>
-      </Item2>
-      <Item3>
-        <PackageName Value="FCL"/>
-      </Item3>
+      </Item>
+      <Item>
+        <PackageName Value="zcontainers"/>
+      </Item>
+      <Item>
+        <PackageName Value="LazUtils"/>
+      </Item>
     </RequiredPkgs>
     <UsageOptions>
       <IncludePath Value="$(PkgDir)"/>

@@ -1,24 +1,6 @@
 unit DEVICE_PS_ARK_DEVICE;
 interface
-uses system,devices;
-usescopy objname;
-usescopy blocktype;
-usescopy slcabagenmodul;
-var
-   Device_Type:TDeviceType;(*'Тип устройства'*) 
-
-   DB_link:GDBString;(*'Материал'*)
-   
-   GC_HeadDevice:GDBString;
-   GC_HDShortName:GDBString;
-   GC_HDGroup:GDBInteger;
-   GC_Metric:GDBString;
-   GC_NumberInGroup:GDBInteger;
-
-   SerialConnection:GDBInteger;
-
-
-   EL_Cab_AddLength:GDBDouble;(*'Добавлять к длине кабеля'*)
+usescopy firesensor;
 implementation
 begin
    DB_link:='Прибор ОПС';

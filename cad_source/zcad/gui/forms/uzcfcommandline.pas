@@ -22,11 +22,11 @@ interface
 uses
  uzcguimanager,uzbpaths,Themes,buttons,uzcsysvars,uzcstrconsts,uzbstrproc,
  uzcsysinfo,lclproc,LazUTF8,sysutils, StdCtrls,ExtCtrls,Controls,Classes,
- menus,Forms,fileutil,graphics, uzbtypes, uzbmemman,uzcdrawings,uzccommandsmanager,
+ menus,Forms,fileutil,graphics, uzbtypes,uzccommandsmanager,
  varman,varmandef,
  uzegeometry,uzctnrvectorgdbstring,uzcinterface,uzctreenode,uzclog,strmy,
  uzccommandlineutil,uztoolbarsmanager,uzmenusmanager,uzccommandsabstract,gzctnrvectortypes,
- uzcctrlcommandlineprompt,uzeparsercmdprompt,StrUtils;
+ uzcctrlcommandlineprompt,uzeparsercmdprompt;
 
 const
      cheight=48;
@@ -239,6 +239,7 @@ begin
     prompt:=TCommandLinePrompt.create(panel);
     prompt.OnClickNotify:=commandmanager.PromptTagNotufy;
     prompt.Align:=alLeft;
+    prompt.Layout:=tlCenter;
     //prompt.Layout:=tlCenter;
     //prompt.Width:=1;
     //prompt.BorderStyle:=sbsSingle;

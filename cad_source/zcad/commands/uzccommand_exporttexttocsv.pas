@@ -28,7 +28,7 @@ uses
   uzbpaths,
   math,
   uzccommandsabstract,uzccommandsimpl,
-  uzbgeomtypes,
+  uzegeometrytypes,
   uzccommandsmanager,
   uzeentlwpolyline,uzeentpolyline,uzeentityfactory,
   uzcdrawings,

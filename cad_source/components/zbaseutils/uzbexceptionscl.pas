@@ -17,7 +17,7 @@
 }
 
 unit uzbexceptionscl;
-{$INCLUDE def.inc}
+{$mode delphi}
 interface
 uses
   SysUtils,lineinfo,gvector,

@@ -21,10 +21,8 @@ unit uzccommand_print;
 
 interface
 uses
-  uzgldrawerabstract,
   uzgldrawercanvas,uzgldrawergdi,uzgldrawergeneral2d,
   uzcoimultiobjects,uzepalette,
-  uzgldrawcontext,
   uzeentpoint,uzeentityfactory,
   uzedrawingsimple,uzcsysvars,uzcstrconsts,
   PrintersDlgs,printers,graphics,uzeentdevice,
@@ -32,7 +30,6 @@ uses
   uzccommandsabstract,uzbstrproc,
   uzbtypesbase,uzccommandsmanager,
   uzccommandsimpl,
-  uzbtypes,
   uzcdrawings,
   uzeutils,uzcutils,
   sysutils,
@@ -41,12 +38,12 @@ uses
   uzeffdxf,
   uzcinterface,
   uzegeometry,
-  uzbmemman,
-  uzbgeomtypes,uzeentity,uzeentcircle,uzeentline,uzeentgenericsubentry,uzeentmtext,
+
+  uzegeometrytypes,uzeentity,uzeentcircle,uzeentline,uzeentmtext,
   uzeentblockinsert,uzeentpolyline,uzclog,
   math,
-  uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray
-  ,uzelongprocesssupport,LazLogger,uzeiopalette,uzeconsts,uzerasterizer;
+  uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,
+  TypeDescriptors,uzelongprocesssupport,LazLogger,uzeiopalette,uzerasterizer;
 const
      modelspacename:GDBSTring='**Модель**';
 type

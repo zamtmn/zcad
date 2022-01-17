@@ -25,7 +25,7 @@ uses
   LazLogger,
   uzccommandsabstract,uzccommandsimpl,
   uzeconsts,uzcstrconsts,
-  uzbgeomtypes,
+  uzegeometrytypes,
   uzccommandsmanager,
   uzeentcircle,uzeentarc,uzeentityfactory,uzegeometry,
   uzcutils,uzeentdimdiametric,uzgldrawcontext,uzcdrawings,uzcinterface,

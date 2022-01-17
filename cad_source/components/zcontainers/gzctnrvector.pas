@@ -19,7 +19,7 @@
 unit gzctnrvector;
 {$INCLUDE def.inc}
 interface
-uses uzbtypes,gzctnrvectortypes,uzbmemman,sysutils,typinfo;
+uses gzctnrvectortypes,sysutils,typinfo;
 const
   {**типы нуждающиеся в инициализации}
   TypesNeedToFinalize=[tkUnknown{$IFNDEF DELPHI},tkSString{$ENDIF},tkLString{$IFNDEF DELPHI},tkAString{$ENDIF},
@@ -140,7 +140,32 @@ GZVector{-}<T>{//}=object(TZAbsVector)
         procedure Shrink;virtual;
   end;
 {Export-}
+function remapmememblock(pblock:Pointer;sizeblock:Integer):Pointer;
+function enlargememblock(pblock:Pointer;oldsize,nevsize:Integer):Pointer;
+
 implementation
+
+function remapmememblock(pblock:Pointer;sizeblock:Integer):Pointer;
+var
+  newblock:Pointer;
+begin
+  newblock:=nil;
+  GetMem(newblock, sizeblock);
+  Move(pblock^, newblock^, sizeblock);
+  result := newblock;
+  FreeMem(pblock);
+end;
+function enlargememblock(pblock:Pointer;oldsize,nevsize:Integer):Pointer;
+var
+  newblock:Pointer;
+begin
+  newblock:=nil;
+  GetMem(newblock, nevsize);
+  Move(pblock^, newblock^, oldsize);
+  result := newblock;
+  FreeMem(pblock);
+end;
+
 function GZVector<T>.GetSpecializedTypeInfo:PTypeInfo;
 begin
   result:=TypeInfo(T);

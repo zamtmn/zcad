@@ -21,14 +21,14 @@ unit uzccomdraw;
 
 interface
 uses
-  gzctnrvector,uzglviewareageneral,zcobjectchangeundocommand2,zcmultiobjectchangeundocommand,
-  gzctnrvectortypes,zcmultiobjectcreateundocommand,uzeentitiesmanager,uzgldrawercanvas,
+  gzctnrvector,uzglviewareageneral,
+  gzctnrvectortypes,zcmultiobjectcreateundocommand,uzgldrawercanvas,
   uzcoimultiobjects,uzcenitiesvariablesextender,uzcdrawing,uzepalette,
-  uzctextenteditor,uzgldrawcontext,usimplegenerics,UGDBPoint3DArray,
+  uzgldrawcontext,usimplegenerics,UGDBPoint3DArray,
   uzeentpoint,uzeentitiestree,gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,uzeentityfactory,
   uzedrawingsimple,uzcsysvars,uzcstrconsts,
   printers,graphics,uzeentdevice,uzeentwithlocalcs,
-  LazUTF8,Clipbrd,LCLType,classes,uzeenttext,uzeentabstracttext,uzestylestexts,
+  LazUTF8,Clipbrd,LCLType,classes,uzeenttext,uzestylestexts,
   uzccommandsabstract,uzbstrproc,
   uzbtypesbase,uzccommandsmanager,
   uzccommandsimpl,
@@ -41,13 +41,13 @@ uses
   uzeffdxf,
   uzcinterface,
   uzegeometry,
-  uzbmemman,
+
   uzeconsts,
   uzccommand_move,uzccommand_copy,uzccommand_regen,uzccommand_copyclip,
-  uzbgeomtypes,uzeentity,uzeentcircle,uzeentline,uzeentgenericsubentry,uzeentmtext,
+  uzegeometrytypes,uzeentity,uzeentcircle,uzeentline,uzeentgenericsubentry,uzeentmtext,
   uzeentsubordinated,uzeentblockinsert,uzeentpolyline,uzclog,gzctnrvectordata,
   math,uzeenttable,uzctnrvectorgdbstring,
-  uzeentcurve,uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray
+  uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray
   ,uzelongprocesssupport,LazLogger,uzccommand_circle2,uzccommand_erase,uzccmdfloatinsert,
   uzccommand_rebuildtree;
 const
@@ -1203,48 +1203,31 @@ begin
 end;
 
 procedure pasteclip_com.Command(Operands:TCommandOperands);
-var //res:longbool;
-    //uFormat:longword;
-
-//    lpszFormatName:string[200];
-    //hData:THANDLE;
-    //pbuf:pchar;
-//    hgBuffer:HGLOBAL;
-
-    s:gdbstring;
-
-    zcformat:TClipboardFormat;
-    memsubstr:TMemoryStream;
-    size:longword;
-//    I:gdbinteger;
+var
+  zcformat:TClipboardFormat;
+  tmpStr:AnsiString;
+  tmpStream:TMemoryStream;
+  tmpSize:LongInt;
 begin
-     zcformat:=RegisterClipboardFormat(ZCAD_DXF_CLIPBOARD_NAME);
-     if clipboard.HasFormat(zcformat) then
-     begin
-           memsubstr:=TMemoryStream.create;
-           clipboard.GetFormat(zcformat,memsubstr);
-           setlength(s,{memsubstr.GetSize}memsubstr.Seek(0,soFromEnd));
-           size:=memsubstr.Seek(0,soFromEnd);
-           memsubstr.Seek(0,soFromBeginning);
-           memsubstr.ReadBuffer(s[1],{memsubstr.GetSize}size);
-           memsubstr.Seek(0,0);
-           //s:=memsubstr.ReadAnsiString;
-           memsubstr.free;
-                         if fileexists(utf8tosys(s)) then
-              begin
-                    addfromdxf(s,@drawings.GetCurrentDWG^.ConstructObjRoot,{tloload}TLOMerge,drawings.GetCurrentDWG^);
-                    {ReloadLayer;
-                    drawings.GetCurrentROOT^.calcbb;
-                    drawings.GetCurrentROOT^.format;
-                    drawings.GetCurrentROOT^.format;
-                    updatevisible;
-                    redrawoglwnd;}
-              end;
-           drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
-           ZCMsgCallBackInterface.TextMessage(rscmNewBasePoint,TMWOHistoryOut);
-     end
-       else
-         ZCMsgCallBackInterface.TextMessage(rsClipboardIsEmpty,TMWOHistoryOut);
+  zcformat:=RegisterClipboardFormat(ZCAD_DXF_CLIPBOARD_NAME);
+  if clipboard.HasFormat(zcformat) then begin
+    tmpStr:='';
+    tmpStream:=TMemoryStream.create;
+    try
+      clipboard.GetFormat(zcformat,tmpStream);
+      tmpSize:=tmpStream.Seek(0,soFromEnd);
+      setlength(tmpStr,tmpSize);
+      tmpStream.Seek(0,soFromBeginning);
+      tmpStream.ReadBuffer(tmpStr[1],tmpSize);
+    finally
+      tmpStream.free;
+    end;
+    if fileexists(utf8tosys(tmpStr)) then
+      addfromdxf(tmpStr,@drawings.GetCurrentDWG^.ConstructObjRoot,{tloload}TLOMerge,drawings.GetCurrentDWG^);
+    drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
+    ZCMsgCallBackInterface.TextMessage(rscmNewBasePoint,TMWOHistoryOut);
+  end else
+    ZCMsgCallBackInterface.TextMessage(rsClipboardIsEmpty,TMWOHistoryOut);
 end;
 procedure copybase_com.CommandStart(Operands:TCommandOperands);
 var //i: GDBInteger;

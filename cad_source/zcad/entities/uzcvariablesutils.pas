@@ -19,7 +19,7 @@ unit uzcvariablesutils;
 {$INCLUDE def.inc}
 
 interface
-uses uzcenitiesvariablesextender,sysutils,UGDBOpenArrayOfPV,uzbtypesbase,uzbtypes,
+uses uzcenitiesvariablesextender,sysutils,UGDBOpenArrayOfPV,uzbtypesbase,
      gzctnrvectortypes,uzeentity,varmandef,uzeentsubordinated;
 //**поиск значения свойства по имени varname:gdbstring которое было в ведено в инспекторе для данного устройства PEnt:PGDBObjEntity
 //**возвращает

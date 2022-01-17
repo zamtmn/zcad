@@ -87,7 +87,7 @@ end;
 
 function TGMenusManager.FindsubNodeWithAttrName(node: TDOMNode;attrname:DOMString): TDOMNode;
 var
-  TBSubNode,TBSubNode2:TDomNode;
+  {TBSubNode,}TBSubNode2:TDomNode;
   s:DOMString;
 begin
   if attrname='' then exit(nil);
@@ -123,13 +123,13 @@ end;
 
 procedure TGMenusManager.LoadMenus(filename:string;MMProcessor:TMenusMacros=nil);
 var
-  ActionsConfig:TXMLConfig;
-  TBNode,TBSubNode:TDomNode;
+  //ActionsConfig:TXMLConfig;
+  {TBNode,}TBSubNode:TDomNode;
 
   tempMenuConfig:TXMLConfig;
   tempTBContentNode,TBContentNode:TDomNode;
-  s: TFileStream;
-  ss:string;
+  //s: TFileStream;
+  //ss:string;
 begin
 
   if not assigned(MenuConfig) then begin
@@ -142,14 +142,14 @@ begin
     tempMenuConfig.Filename:=filename;
 
     tempTBContentNode:=tempMenuConfig.FindNode('MenusContent',false);
-    ss:=tempTBContentNode.NodeName;
+    //ss:=tempTBContentNode.NodeName;
     CheckMainMenu(tempTBContentNode);
     TBContentNode:=MenuConfig.FindNode('MenusContent',false);
-    ss:=TBContentNode.NodeName;
+    //ss:=TBContentNode.NodeName;
 
     if assigned(tempTBContentNode) and assigned(TBContentNode)then begin
       TBSubNode:=tempTBContentNode.FirstChild;
-      ss:=TBSubNode.NodeName;
+      //ss:=TBSubNode.NodeName;
       while assigned(TBSubNode)do
       begin
         ConcatNodes(TBContentNode,TBSubNode);
@@ -348,7 +348,7 @@ end;
 procedure TGMenusManager.CheckMainMenu(node:TDomNode;MMProcessor:TMenusMacros=nil);
 var
   TBSubNode:TDomNode;
-  menuname:string;
+  //menuname:string;
   MPF:TMacroProcessFunc;
 begin
     if assigned(node) then begin

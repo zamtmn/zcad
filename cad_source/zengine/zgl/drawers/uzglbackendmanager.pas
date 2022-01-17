@@ -20,7 +20,7 @@ unit uzglbackendmanager;
 {$INCLUDE def.inc}
 
 interface
-uses uzbtypesbase,uzbtypes,uzctnrvectorgdbstring,uzglviewareaabstract,uzctnrvectorgdbpointer,LazLogger;
+uses uzbtypesbase,uzctnrvectorgdbstring,uzglviewareaabstract,uzctnrvectorgdbpointer,LazLogger;
 const test:GDBSTRING='asdasd';
 type
     TVA=class of TAbstractViewArea;

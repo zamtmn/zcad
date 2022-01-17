@@ -29,11 +29,11 @@ uses
   uzeentity,
   uzgldrawcontext,
   uzccommandsabstract,uzccommandsimpl,
-  uzbmemman,
+
   uzcinterface,
   uzcdrawings,
   uzcsysvars,
-  gzctnrstl,usimplegenerics;
+  gzctnrstl;
 
 function PointerToNodeName(node:pointer):string;
 

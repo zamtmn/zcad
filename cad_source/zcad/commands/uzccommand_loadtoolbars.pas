@@ -22,7 +22,7 @@ unit uzccommand_loadtoolbars;
 interface
 uses
  LCLProc,
- uzbpaths,uzccommandsabstract,uzccommandsimpl,uzbtypes,uztoolbarsmanager;
+ uzbpaths,uzccommandsabstract,uzccommandsimpl,uztoolbarsmanager;
 
 implementation
 function LoadToolbars_com(operands:TCommandOperands):TCommandResult;

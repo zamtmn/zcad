@@ -25,7 +25,7 @@ uses
     Gtk2Def,
     {$ENDIF}
     LCLIntf,LCLType,Classes,Controls,
-    uzegeometry,uzgldrawergeneral,uzgldrawerabstract,Graphics,uzbtypes,LazLogger;
+    uzegeometry,uzgldrawergeneral,uzgldrawerabstract,Graphics,LazLogger;
 const
   NeedScreenInvalidrect=true;
 type

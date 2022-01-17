@@ -22,9 +22,10 @@ unit uzeentspline;
 interface
 uses LCLProc,uzegluinterface,uzeentityfactory,uzgldrawcontext,uzgloglstatemanager,gzctnrvectordata,
      UGDBPoint3DArray,uzedrawingdef,uzecamera,UGDBVectorSnapArray,
-     gzctnrvectorpobjects,uzestyleslayers,uzeentsubordinated,uzeentcurve,uzbtypesbase,
+     uzestyleslayers,uzeentsubordinated,uzeentcurve,uzbtypesbase,
      uzeentity,UGDBOpenArrayOfByte,uzbtypes,uzeconsts,uzglviewareadata,
-     gzctnrvectortypes,uzbgeomtypes,uzegeometry,uzeffdxfsupport,sysutils,uzbmemman;
+     gzctnrvectortypes,uzegeometrytypes,uzegeometry,uzeffdxfsupport,sysutils,
+     uzctnrvectorpgdbaseobjects;
 type
 {Export+}
 {REGISTEROBJECTTYPE TKnotsVector}
@@ -363,43 +364,36 @@ begin
 end;
 
 procedure GDBObjSpline.LoadFromDXF;
-var //s{, layername}: GDBString;
-  byt{, code}: GDBInteger;
-  //p: gdbvertex;
-  hlGDBWord: GDBinteger;
-  //vertexgo: GDBBoolean;
-  tv:gdbvertex;
-  tr:gdbfloat;
+var
+  GroupCode:Integer;
+  tmpFlag:Integer;
+  tmpVertex:GDBvertex;
+  tmpKnot:Single;
 begin
-  closed := false;
-  //vertexgo := false;
+  Closed:=false;
+  tmpVertex:=NulVertex;
+  tmpKnot:=0;
 
-  //initnul(@gdb.ObjRoot);
-  byt:=readmystrtoint(f);
-  while byt <> 0 do
-  begin
-    //s:='';
-    if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
-       if dxfvertexload(f,10,byt,tv) then
-                                         begin
-                                              if byt=30 then
-                                                            addvertex(tv);
-                                         end
-  else if dxfGDBFloatload(f,40,byt,tr) then
-                                      begin
-                                           Knots.PushBackData(tr);
-                                      end
-  else if dxfGDBIntegerload(f,70,byt,hlGDBWord) then
+  GroupCode:=readmystrtoint(f);
+  while GroupCode <> 0 do begin
+    if not LoadFromDXFObjShared(f,GroupCode,ptu,drawing) then
+       if dxfvertexload(f,10,GroupCode,tmpVertex) then begin
+         if GroupCode=30 then
+           addvertex(tmpVertex);
+       end
+    else if dxfGDBFloatload(f,40,GroupCode,tmpKnot) then
+      Knots.PushBackData(tmpKnot)
+    else if dxfGDBIntegerload(f,70,GroupCode,tmpFlag) then
                                                    begin
-                                                        if (hlGDBWord and 1) = 1 then closed := true;
+                                                        if (tmpFlag and 1) = 1 then closed := true;
                                                    end
-  else if dxfGDBIntegerload(f,71,byt,Degree) then
+  else if dxfGDBIntegerload(f,71,GroupCode,Degree) then
                                                    begin
                                                         Degree:=Degree;
                                                    end
 
                                       else {s:= }f.readGDBSTRING;
-    byt:=readmystrtoint(f);
+    GroupCode:=readmystrtoint(f);
   end;
 vertexarrayinocs.Shrink;
 Knots.Shrink;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
-  <Package Version="4">
+  <Package Version="5">
     <PathDelim Value="\"/>
     <Name Value="zundostack"/>
     <Type Value="RunAndDesignTime"/>
@@ -9,7 +9,7 @@
       <PathDelim Value="\"/>
       <SearchPaths>
         <OtherUnitFiles Value="."/>
-        <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)\"/>
+        <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
     </CompilerOptions>
     <Files Count="2">
@@ -22,7 +22,8 @@
         <UnitName Value="zeundostack"/>
       </Item2>
     </Files>
-    <RequiredPkgs Count="4">
+    <CompatibilityMode Value="True"/>
+    <RequiredPkgs Count="3">
       <Item1>
         <PackageName Value="zscriptbase"/>
       </Item1>
@@ -30,11 +31,8 @@
         <PackageName Value="zcontainers"/>
       </Item2>
       <Item3>
-        <PackageName Value="zebase"/>
-      </Item3>
-      <Item4>
         <PackageName Value="FCL"/>
-      </Item4>
+      </Item3>
     </RequiredPkgs>
     <UsageOptions>
       <UnitPath Value="$(PkgOutDir)"/>

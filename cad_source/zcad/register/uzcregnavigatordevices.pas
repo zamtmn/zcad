@@ -20,10 +20,10 @@ unit uzcregnavigatordevices;
 {$INCLUDE def.inc}
 interface
 uses uzcfnavigatordevices,uzcfcommandline,uzbpaths,TypeDescriptors,uzctranslations,Forms,
-     uzbtypes,varmandef,uzeconsts,uzeentdevice,uzcnavigatorsnodedesk,
+     varmandef,uzeentdevice,uzcnavigatorsnodedesk,
      uzeentity,zcobjectinspector,uzcguimanager,uzcenitiesvariablesextender,uzbstrproc,
-     Types,Controls,uzcdrawings,Varman,UUnitManager,uzcsysvars,uzcsysinfo,LazLogger,laz.VirtualTrees,
-     uzcstrconsts,uzcfnavigatordevicescxmenu,uzcmainwindow,MacroDefIntf,sysutils,fgl;
+     Types,Controls,Varman,UUnitManager,uzcsysvars,uzcsysinfo,LazLogger,laz.VirtualTrees,
+     uzcfnavigatordevicescxmenu,uzcmainwindow,MacroDefIntf,sysutils;
 resourcestring
   rsDevices='Devices';
   rsRisers='Risers';

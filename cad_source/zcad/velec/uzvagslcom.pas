@@ -26,15 +26,15 @@ uses uzccommandsimpl,    //тут реализация объекта CommandRTE
        uzeentpolyline,
        uzcinterface,
        sysutils,
-     uzbgeomtypes,
+     uzegeometrytypes,
      //uzvcom,             //
      //uzvnum,
      //uzvagensl,
 
 
-     UGDBSelectedObjArray,
+     //UGDBSelectedObjArray,
 
-     uzcutils,
+     //uzcutils,
      Varman;             //Зкадовский RTTI
 
 type
@@ -102,8 +102,8 @@ end;
 procedure Tuzvagsl_com.generatorSLinRooms(pdata:GDBPlatformint);
 var
  contourRoom:PGDBObjPolyLine;
- listDeviceinRoom:TListVertexDevice;
- contourRoomEmbedSL:TListVertex;
+ //listDeviceinRoom:TListVertexDevice;
+ //contourRoomEmbedSL:TListVertex;
  stPoint:gdbvertex;
 begin
   if commandmanager.get3dpoint('Specify insert point:',stPoint)= GRNormal then

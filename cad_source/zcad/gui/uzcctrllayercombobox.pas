@@ -22,7 +22,7 @@ unit uzcctrllayercombobox;
 interface
 
 uses
-  StdCtrls,GraphType,{types,}{$IFDEF WINDOWS}win32proc,windows,{$endif}LCLIntf,LCLType,
+  StdCtrls,GraphType,{types,}{$IFDEF LCLWIN32}win32proc,windows,{$endif}LCLIntf,LCLType,
   Controls,Classes,Graphics,Buttons,ExtCtrls,ComCtrls,Forms,Themes;
 const
   RightButtonWidth=20;// Ширина правой кнопки-стрелки при "темной" отрисовке
@@ -127,14 +127,14 @@ var
   ComboElem: TThemedComboBox;
   Details: TThemedElementDetails;
 begin
-  {$IFNDEF LINUX}inflaterect(ARect,-1,-1){$ENDIF};
+  {$IFDEF LCLWIN32}inflaterect(ARect,-1,-1){$ENDIF};
   if ADown then
     ComboElem := tcDropDownButtonPressed
   else if AMouseInControl then
     ComboElem := tcDropDownButtonHot
   else if ADisabled then
     begin
-         {$IFDEF LINUX}
+         {$IFNDEF LCLWIN32}
          ComboElem := tcDropDownButtonDisabled
          {$ELSE}
          if WindowsVersion >= wvVista then
@@ -147,7 +147,7 @@ begin
     end
   else
     begin
-      {$IFDEF LINUX}
+      {$IFNDEF LCLWIN32}
       ComboElem := tcDropDownButtonNormal;
       {$ELSE}
       if WindowsVersion >= wvVista then
@@ -164,15 +164,15 @@ end;
 
 procedure DrawComboBoxBox(ACanvas:TCanvas;ADown,AMouseInControl,ADisabled:Boolean; ARect:TRect);
   var
-    ComboElem: {$IFDEF LINUX}TThemedButton{$ELSE}TThemedEdit{$ENDIF};
+    ComboElem: {$IFNDEF LCLWIN32}TThemedButton{$ELSE}TThemedEdit{$ENDIF};
     Details: TThemedElementDetails;
     i,n,h,w,HalfRightButtonWidth:integer;
 begin
   if ThemeServices.ThemesEnabled then
   begin
-    if AMouseInControl then ComboElem:={$IFDEF LINUX}tbPushButtonHot{$ELSE}teEditTextHot{$ENDIF} else
+    if AMouseInControl then ComboElem:={$IFNDEF LCLWIN32}tbPushButtonHot{$ELSE}teEditTextHot{$ENDIF} else
     begin
-      if ADisabled then ComboElem:={$IFDEF LINUX}tbPushButtonDisabled{$ELSE}teEditTextReadOnly{teEditTextDisabled}{$ENDIF} else ComboElem:={$IFDEF LINUX}tbPushButtonNormal{$ELSE}teEditTextNormal{$ENDIF};
+      if ADisabled then ComboElem:={$IFNDEF LCLWIN32}tbPushButtonDisabled{$ELSE}teEditTextReadOnly{teEditTextDisabled}{$ENDIF} else ComboElem:={$IFNDEF LCLWIN32}tbPushButtonNormal{$ELSE}teEditTextNormal{$ENDIF};
     end;
     //ComboElem := {$IFDEF LINUX}tbPushButtonNormal{$ELSE}teEditTextNormal{$ENDIF};
     Details:=ThemeServices.GetElementDetails(ComboElem);
@@ -378,10 +378,10 @@ begin
     PoleLista.OnDeactivate:=@PLDeActivate;
     PoleLista.ShowInTaskBar:=stNever;
     sLV:=TmyListView.Create(PoleLista);
-    {$IFDEF WINDOWS}
+    {$IFDEF LCLWIN32}
     sLV.BorderStyle:={bsSingle}bsNone;
     {$endif}
-    {$IFNDEF WINDOWS}
+    {$IFNDEF LCLWIN32}
     sLV.BorderStyle:=bsSingle;
     {$endif}
     sLV.Parent:=PoleLista;
@@ -413,13 +413,13 @@ begin
                               sLV.DefaultItemHeight:=-1;
                               hh:=sLV.Height-sLV.ClientHeight;
                               hh:=screen.WorkAreaHeight-a.y-1;
-                              {$IFDEF LINUX}h:=sLV.Items.Count*(sLV.DefaultItemHeight+1)+10;
+                              {$IFNDEF LCLWIN32}h:=sLV.Items.Count*(sLV.DefaultItemHeight+1)+10;
                               {$ELSE}h:=sLV.Items.Count*(sLV.DefaultItemHeight-1)+4;{$ENDIF}
                               if h>hh then h:=hh;
                               PoleLista.ClientHeight:=h;
                          end;
 
-    {$IFDEF WINDOWS}
+    {$IFDEF LCLWIN32}
     SetWindowLong(PoleLista.Handle,GWL_STYLE,GetWindowLong(PoleLista.Handle,GWL_STYLE) or ws_border);
     SetClassLongPtr(PoleLista.Handle,GCL_STYLE,GetClassLongPtr(PoleLista.Handle,GCL_STYLE) or CS_DROPSHADOW);
     SetWindowPos(PoleLista.Handle,0, 0, 0, 0, 0, SWP_NOMOVE or SWP_NOSIZE or SWP_NOZORDER or SWP_FRAMECHANGED);

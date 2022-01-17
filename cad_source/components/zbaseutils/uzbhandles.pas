@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 unit uzbhandles;
-{$INCLUDE def.inc}
+{$mode delphi}
 
 interface
 

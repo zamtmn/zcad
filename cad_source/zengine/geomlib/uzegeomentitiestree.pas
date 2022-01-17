@@ -20,8 +20,8 @@ unit uzegeomentitiestree;
 {$INCLUDE def.inc}
 interface
 uses
-    graphics,{gzctnrvectorsimple,}uzgeomentity,{gzctnrvectordata,}uzctnrobjectschunk,
-    gzctnrvectortypes,uzbgeomtypes,gzctnrtree,{uzgldrawcontext,}uzegeometry,uzbtypesbase,uzbtypes,uzbmemman;
+    graphics,uzgeomentity,uzctnrobjectschunk,
+    gzctnrvectortypes,uzegeometrytypes,gzctnrtree,uzegeometry,uzbtypesbase;
 type
 TZEntsManipulator=class;
 TFirstStageData=record

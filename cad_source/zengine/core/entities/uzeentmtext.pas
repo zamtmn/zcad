@@ -24,8 +24,8 @@ uses
     uzglgeometry,uzgldrawcontext,uzetextpreprocessor,uzeentityfactory,uzedrawingdef,
     uzbstrproc,uzefont,uzeentabstracttext,UGDBPoint3DArray,uzestyleslayers,SysUtils,
     uzbtypesbase,uzeentity,UGDBXYZWStringArray,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,
-    uzbtypes,uzeenttext,uzeconsts,uzegeometry,uzeffdxfsupport,math,uzbmemman,uzeentsubordinated,
-    gzctnrvectortypes,uzbgeomtypes,uzestylestexts;
+    uzbtypes,uzeenttext,uzeconsts,uzegeometry,uzeffdxfsupport,math,uzeentsubordinated,
+    gzctnrvectortypes,uzegeometrytypes,uzestylestexts;
 const maxdxfmtextlen=250;
 type
 //procedure CalcObjMatrix;virtual;

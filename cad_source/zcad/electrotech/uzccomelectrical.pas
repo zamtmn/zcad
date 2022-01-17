@@ -18,11 +18,11 @@ uses
   uzcenitiesvariablesextender,uzgldrawcontext,uzcdrawing,uzcvariablesutils,
   uzcstrconsts,UGDBSelectedObjArray,uzeentityfactory,uzcsysvars,
   csvdocument,
-  UGDBOpenArrayOfPV,uzeentblockinsert,devices,UGDBTree,uzcdrawings,uzbtypesbase,
+  UGDBOpenArrayOfPV,uzeentblockinsert,devices,{UGDBTree,}uzcdrawings,uzbtypesbase,
   uzccommandsmanager,uzccomdraw,uzcentelleader,
   uzccommandsabstract,
   uzccommandsimpl,
-  uzbgeomtypes,uzbtypes,
+  uzegeometrytypes,uzbtypes,
   uzcutils,
   sysutils,
   {fileutil}LazUTF8,
@@ -30,16 +30,16 @@ uses
   uzglviewareadata,
   uzcinterface,
   uzegeometry,
-  uzbmemman,
+
   uzeconsts,
   uzeentity,uzeentline,
   uzcentnet,
   uzeentsubordinated,uzcentcable,varman,uzcdialogsfiles,uunitmanager,
-  gzctnrvectorpobjects,uzcbillofmaterial,uzccablemanager,uzeentdevice,uzeenttable,
+  uzcbillofmaterial,uzccablemanager,uzeentdevice,uzeenttable,
   uzbpaths,uzctnrvectorgdbstring,math,Masks,uzclog,uzbstrproc,
   uzeentmtext,uzeblockdef,UGDBPoint3DArray,uzcdevicebaseabstract,uzelongprocesssupport,LazLogger,
   generics.Collections,
-  uzccommand_treestat,uzccommand_line2,uzccmdfloatinsert,uzcregother,uzcfcommandline,uzeparsercmdprompt;
+  uzccommand_treestat,uzccommand_line2,uzccmdfloatinsert,uzcregother,uzcfcommandline,uzeparsercmdprompt,uzctnrvectorpgdbaseobjects;
 type
 {Export+}
   TFindType=(
@@ -199,18 +199,20 @@ end;
 begin
      result:=nodename;
 end;}
+(*
 procedure IP(pnode:PGDBBaseNode;PProcData:Pointer);
 //var
 //   pvd:pvardesk;
 begin
-(*     if PGDBEmSEPDeviceNode(pnode)^.upcable<>nil then
+     if PGDBEmSEPDeviceNode(pnode)^.upcable<>nil then
      begin
           pvd:=PGDBEmSEPDeviceNode(pnode)^.upcable^.StartSegment.OU.FindVariable('GC_HDGroup');
           if pvd<>nil then
           if PGDBInteger(pvd^.Instance)^>PGDBInteger(Pprocdata)^ then
              PGDBInteger(Pprocdata)^:=PGDBInteger(pvd^.Instance)^;
-     end; *)
+     end;
 end;
+*)
 (*function icf (pnode:PGDBBaseNode;PExpr:GDBPointer):GDBBoolean;
 //var
 //   pvd:pvardesk;
@@ -1691,7 +1693,7 @@ var //po:PGDBObjSubordinated;
     tw1,tw2:gdbvertex;
     l1,l2:pgdbobjline;
     pa:GDBPoint3dArray;
-    prevpoint:GDBVertex;
+    //prevpoint:GDBVertex;
     //polydata:tpolydata;
     //domethod,undomethod:tmethod;
 begin
@@ -3298,7 +3300,7 @@ function _test_com(operands:TCommandOperands):TCommandResult;
 var
     p:GDBVertex;
     pet:CMDLinePromptParser.TGeneralParsedText;
-    ts:utf8string;
+    //ts:utf8string;
     gr:TGetResult;
 begin
      ZCMsgCallBackInterface.TextMessage('Тест производительности. запасаемя терпением',TMWOHistoryOut);

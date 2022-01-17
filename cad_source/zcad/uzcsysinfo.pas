@@ -20,7 +20,7 @@ unit uzcsysinfo;
 {$INCLUDE def.inc}
 interface
 uses
-  MacroDefIntf,uzmacros,uzcsysparams,LCLProc,uzclog,uzblog,uzbpaths,uzbtypesbase,Forms,uzbtypes,
+  MacroDefIntf,uzmacros,uzcsysparams,LCLProc,uzclog,uzblog,uzbpaths,uzbtypesbase,Forms,
   {$IFDEF WINDOWS}ShlObj,{$ENDIF}{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils,uzcsysvars;
 const
   zcaduniqueinstanceid='zcad unique instance';
@@ -88,7 +88,6 @@ begin
      SysParam.saved.UniqueInstance:=true;
      LoadParams(expandpath(ProgramPath+'rtl/config.xml'),SysParam.saved);
      SysParam.notsaved.PreloadedFile:='';
-     uzbtypes.VerboseLog:=@uzclog.VerboseLog;
      i:=paramcount;
      for i:=1 to paramcount do
        begin
@@ -205,12 +204,13 @@ end;
 class function TZCADPathsMacroMethods.MacroFuncSystemFontsPath(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
 {$IF defined(WINDOWS)}
 var
-  s: string;
+  s:string;
 begin
-   SetLength(s,MAX_PATH );
-   if not SHGetSpecialFolderPath(0,PChar(s),CSIDL_FONTS,false) then
-      s:='';
-   Result:=PChar(s);
+  s:='';
+  SetLength(s,MAX_PATH );
+  if not SHGetSpecialFolderPath(0,PChar(s),CSIDL_FONTS,false) then
+    s:='';
+  Result:=PChar(s);
 end;
 {$ELSEIF defined(LINUX)}
 begin
@@ -222,10 +222,11 @@ class function TZCADPathsMacroMethods.MacroFuncsUserFontsPath (const {%H-}Param:
 var
   s: string;
 begin
-   SetLength(s,MAX_PATH );
-   if not SHGetSpecialFolderPath(0,PChar(s),CSIDL_LOCAL_APPDATA,false) then
-      s:='';
-   Result:=PChar(s)+'\Microsoft\Windows\Fonts';
+  s:='';
+  SetLength(s,MAX_PATH );
+  if not SHGetSpecialFolderPath(0,PChar(s),CSIDL_LOCAL_APPDATA,false) then
+    s:='';
+  Result:=PChar(s)+'\Microsoft\Windows\Fonts';
 end;
 {$ELSEIF defined(LINUX)}
 begin

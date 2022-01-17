@@ -22,7 +22,7 @@ interface
 uses
      UGDBOpenArrayOfPV,uzgldrawerabstract,uzeentgenericsubentry,uzbtypesbase,uzbtypes,
      uzglviewareadata,uzgldrawcontext,UGDBPoint3DArray,uzeentitiestree,uzegeometry,uzedrawingabstract,
-     uzbgeomtypes,sysutils,
+     uzegeometrytypes,sysutils,
      ExtCtrls,Controls,Classes,{$IFDEF DELPHI}Types,Messages,Graphics,{$ENDIF}{$IFNDEF DELPHI}LCLType,{$ENDIF}Forms,uzeentity;
 
 type
@@ -152,7 +152,7 @@ type
                       end;
 var
    otracktimer: GDBInteger;
-procedure copyospoint(out dest:os_record; source:os_record);
+procedure copyospoint(var dest:os_record; source:os_record);
 function correcttogrid(point:GDBVertex;const grid:GDBSnap2D):GDBVertex;
 function CreateFaceRC:TDrawContext;
 implementation
@@ -197,7 +197,7 @@ begin
   result.y:=round((point.y-grid.Base.y)/grid.Spacing.y)*grid.Spacing.y+grid.Base.y;
   result.z:=point.z;
 end;
-procedure copyospoint(out dest:os_record; source:os_record);
+procedure copyospoint(var dest:os_record; source:os_record);
 begin
        dest.worldcoord:=source.worldcoord;
        dest.dispcoord:=source.dispcoord;

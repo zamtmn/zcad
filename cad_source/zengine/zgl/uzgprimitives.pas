@@ -20,8 +20,8 @@ unit uzgprimitives;
 {$INCLUDE def.inc}
 interface
 uses uzgprimitivessarray,math,uzglgeomdata,uzgldrawcontext,uzgvertex3sarray,uzgldrawerabstract,
-     uzbtypesbase,sysutils,uzbtypes,uzbmemman,
-     gzctnrvectortypes,uzbgeomtypes,uzegeometry;
+     uzbtypesbase,sysutils,uzbtypes,gzctnrvectortypes,
+     uzegeometrytypes,uzegeometry;
 const
      LLAttrNothing=0;
      LLAttrNeedSolid=1;
@@ -58,7 +58,7 @@ TLLPrimitive= object(GDBaseObject)
                        procedure getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);virtual;
                        procedure CorrectIndexes(const offset:TEntIndexesOffsetData);virtual;
                        constructor init;
-                       destructor done;
+                       destructor done;virtual;
                        function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData):GDBInteger;virtual;
                        function CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):GDBInteger;virtual;
                    end;

@@ -22,9 +22,9 @@ unit uzccommandsmanager;
 interface
 uses uzctnrvectorgdbpointer,gzctnrvectorpobjects,uzcsysvars,uzegeometry,uzglviewareaabstract,uzbpaths,
      uzeconsts,uzcctrldynamiccommandmenu,uzcinfoform,uzcstrconsts,uzcsysinfo,
-     gzctnrvectortypes,uzbgeomtypes,uzbstrproc,gzctnrvectorp,
-     uzbtypesbase,uzccommandsabstract, sysutils,uzbtypes,uzglviewareadata,
-     uzbmemman,uzclog,varmandef,varman,uzedrawingdef,uzcinterface,
+     gzctnrvectortypes,uzegeometrytypes,uzbstrproc,gzctnrvectorp,
+     uzbtypesbase,uzccommandsabstract, sysutils,uzglviewareadata,
+     uzclog,varmandef,varman,uzedrawingdef,uzcinterface,
      uzcsysparams,uzedrawingsimple,uzcdrawings,uzctnrvectorgdbstring,forms,LazLogger,
      uzcctrlcommandlineprompt,uzeparsercmdprompt,gzctnrstl;
 const

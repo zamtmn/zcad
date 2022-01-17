@@ -20,7 +20,7 @@ unit uzeentityextender;
 {$INCLUDE def.inc}
 
 interface
-uses uzbmemman,uzedrawingdef,uzbtypesbase,uzbtypes,usimplegenerics,
+uses uzedrawingdef,usimplegenerics,
      UGDBOpenArrayOfByte,gzctnrstl,uzeffdxfsupport,uzeBaseExtender,
      uzgldrawcontext;
 
@@ -186,11 +186,11 @@ end;
 procedure TEntityExtensions.CopyAllExtToEnt(pSourceEntity,pDestEntity:pointer);
 var
   i:integer;
-  s:string;
+  //s:string;
 begin
      if assigned(fEntityExtensions)then
      for i:=0 to fEntityExtensions.Size-1 do begin
-       s:=fEntityExtensions[i].getExtenderName;
+       //s:=fEntityExtensions[i].getExtenderName;
        fEntityExtensions[i].CopyExt2Ent(pSourceEntity,pDestEntity);
      end;
 end;
@@ -213,7 +213,6 @@ end;
 procedure TEntityExtensions.RunSaveToDxf(var outhandle:GDBOpenArrayOfByte;PEnt:Pointer;var IODXFContext:TIODXFContext);
 var
   i:integer;
-  ExtObj:TBaseEntityExtender;
 begin
      if assigned(fEntityExtensions)then
      for i:=0 to fEntityExtensions.Size-1 do

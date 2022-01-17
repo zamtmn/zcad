@@ -23,7 +23,7 @@ interface
 uses LCLProc,gzctnrvectorobjects,URecordDescriptor,UGDBOpenArrayOfByte,sysutils,
      gzctnrvectortypes,uzedimensionaltypes,UBaseTypeDescriptor,TypeDescriptors,
      strmy,uzctnrvectorgdbstring,objects,gzctnrvectordata,uzbtypesbase,
-     varmandef,uzbtypes,uzbmemman,uzbstrproc,TypInfo;
+     varmandef,uzbtypes,uzbstrproc,TypInfo,uzbLogIntf;
 type
 GDBTOperandStoreMode=GDBByte;
 GDBOperandDesc=record
@@ -47,7 +47,7 @@ MetodDescriptor=object(GDBaseObject)
                       destructor Done;virtual;
                 end;
 simpleproc=procedure of object;
-TSimpleMenodsVector=GZVectorObjects<MetodDescriptor>;
+TSimpleMenodsVector=GZVectorObjects<PMetodDescriptor,MetodDescriptor>;
 TPropertiesVector=GZVectorData<PropertyDescriptor>;
 
 PObjectDescriptor=^ObjectDescriptor;
@@ -661,8 +661,7 @@ var pcmd:PMetodDescriptor;
     pmd:PMetodDescriptor;
         ir:itrec;
 begin
-     if VerboseLog^ then
-       DebugLn('{T+}[ZSCRIPT]ObjectDescriptor.CopyTo(@%s)',[RD.TypeName]);
+     zTraceLn('{T+}[ZSCRIPT]ObjectDescriptor.CopyTo(@%s)',[RD.TypeName]);
      //programlog.LogOutFormatStr('ObjectDescriptor.CopyTo(@%s)',[RD.TypeName],lp_IncPos,LM_Debug);
      if self.TypeName='DeviceDbBaseObject' then
                                                TypeName:=TypeName;
@@ -689,8 +688,7 @@ begin
      until pmd=nil;
      PObjectDescriptor(rd)^.VMTCurrentOffset:=self.VMTCurrentOffset;
      PObjectDescriptor(rd)^.PVMT:=pvmt;
-     if VerboseLog^ then
-       DebugLn('{T-}[ZSCRIPT]end;{ObjectDescriptor.CopyTo}');
+     zTraceLn('{T-}[ZSCRIPT]end;{ObjectDescriptor.CopyTo}');
      //programlog.logoutstr('end;{ObjectDescriptor.CopyTo}',lp_DecPos,LM_Debug);
 end;
 function ObjectDescriptor.GetTypeAttributes;

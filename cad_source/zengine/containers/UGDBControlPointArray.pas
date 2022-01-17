@@ -20,7 +20,7 @@ unit UGDBControlPointArray;
 {$INCLUDE def.inc}
 interface
 uses uzepalette,uzgldrawcontext,uzbtypesbase,gzctnrvectordata,sysutils,uzbtypes,uzegeometry,
-     uzbmemman,uzbgeomtypes;
+     uzegeometrytypes;
 type
 {Export+}
 PGDBControlPointArray=^GDBControlPointArray;

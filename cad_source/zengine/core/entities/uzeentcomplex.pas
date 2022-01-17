@@ -20,10 +20,10 @@ unit uzeentcomplex;
 {$INCLUDE def.inc}
 
 interface
-uses uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,gzctnrvectorpobjects,
+uses uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,
      uzestyleslayers,uzbtypesbase,sysutils,UGDBSelectedObjArray,UGDBVisibleOpenArray,
      uzeentity,UGDBVisibleTreeArray,uzeentitiestree,uzbtypes,uzeentwithlocalcs,
-     gzctnrvectortypes,uzbgeomtypes,uzeconsts,uzegeometry,uzbmemman;
+     gzctnrvectortypes,uzegeometrytypes,uzeconsts,uzegeometry,uzctnrvectorpgdbaseobjects;
 type
 {EXPORT+}
 PGDBObjComplex=^GDBObjComplex;

@@ -27,23 +27,23 @@ uses
 
   uzeentmtext,
   uzbtypes,
-  uzeconsts, //base constants
+  //uzeconsts, //base constants
              //описания базовых констант
-  uzccommandsabstract,
-  uzccommandsimpl, //Commands manager and related objects
+  //uzccommandsabstract,
+  //uzccommandsimpl, //Commands manager and related objects
                    //менеджер команд и объекты связанные с ним
-  uzcdrawings,     //Drawings manager, all open drawings are processed him
+  //uzcdrawings,     //Drawings manager, all open drawings are processed him
   //uzccombase,
-  gzctnrvectortypes,
+  //gzctnrvectortypes,
 
-    gvector,garrayutils, // Подключение Generics и модуля для работы с ним
+    gvector,//garrayutils, // Подключение Generics и модуля для работы с ним
 
     //для работы графа
-  ExtType,
-  Pointerv,
+  //ExtType,
+  //Pointerv,
   Graphs,
   AttrType,
-  AttrSet,
+  //AttrSet,
   //*
 
   RegExpr;

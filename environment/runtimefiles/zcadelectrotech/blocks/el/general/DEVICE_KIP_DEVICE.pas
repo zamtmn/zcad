@@ -5,7 +5,6 @@ usescopy objname;
 usescopy objmaterial;
 usescopy objconnect;
 usescopy blocktype;
-usescopy slcabagenmodul;
 var
   NMO_Type:GDBString;(*'Тип'*)
   DESC_MountingSite:GDBString;(*'Место установки'*)//полное название места установки

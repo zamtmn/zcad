@@ -18,12 +18,11 @@
 {$MODE OBJFPC}
 {$H+}
 unit zeundostack;
-{$INCLUDE def.inc}
 interface
-uses gzctnrvectortypes,zebaseundocommands,varmandef,uzbtypesbase,
-     gzctnrvectorpobjects,sysutils,uzbtypes,uzbmemman;
-const BeginUndo:GDBString='BeginUndo';
-      EndUndo:GDBString='EndUndo';
+uses gzctnrvectortypes,zebaseundocommands,varmandef,//uzbtypesbase,
+     gzctnrvectorpobjects,sysutils;
+const BeginUndo:String='BeginUndo';
+      EndUndo:String='EndUndo';
 type
 TUndoRedoResult=(URROk,
                  URRNoCommandsToUndoInOverlayMode,
@@ -35,22 +34,22 @@ TZctnrVectorUndoCommands=object(specialize GZVectorPObects{-}<PTElementaryComman
                                  public
                                  CurrentCommand:TArrayIndex;
                                  currentcommandstartmarker:TArrayIndex;
-                                 startmarkercount:GDBInteger;
+                                 startmarkercount:Integer;
                                  onUndoRedo:TOnUndoRedoProc;
-                                 procedure PushStartMarker(CommandName:GDBString);
+                                 procedure PushStartMarker(CommandName:String);
                                  procedure PushEndMarker;
                                  procedure PushStone;
-                                 procedure PushChangeCommand(_obj:GDBPointer;_fieldsize:PtrInt);overload;
-                                 function undo(out msg:string;prevheap:TArrayIndex;overlay:GDBBoolean):TUndoRedoResult;
+                                 procedure PushChangeCommand(_obj:Pointer;_fieldsize:PtrInt);overload;
+                                 function undo(out msg:string;prevheap:TArrayIndex;overlay:Boolean):TUndoRedoResult;
                                  procedure KillLastCommand;
                                  function redo(out msg:string):TUndoRedoResult;
                                  constructor init;
                                  procedure doOnUndoRedo;
-                                 function PushBackData(const data:GDBPointer):TArrayIndex;virtual;
+                                 function PushBackData(const data:Pointer):TArrayIndex;virtual;
                                  Procedure ClearFrom(cc:TArrayIndex);
 
-                                 function CreateTTypedChangeCommand(PDataInstance:GDBPointer;PType:PUserTypeDescriptor):PTTypedChangeCommand;overload;
-                                 function PushCreateTTypedChangeCommand(PDataInstance:GDBPointer;PType:PUserTypeDescriptor):PTTypedChangeCommand;overload;
+                                 function CreateTTypedChangeCommand(PDataInstance:Pointer;PType:PUserTypeDescriptor):PTTypedChangeCommand;overload;
+                                 function PushCreateTTypedChangeCommand(PDataInstance:Pointer;PType:PUserTypeDescriptor):PTTypedChangeCommand;overload;
 
                            end;
 implementation
@@ -61,7 +60,7 @@ begin
                              onUndoRedo;
 end;
 
-procedure TZctnrVectorUndoCommands.PushStartMarker(CommandName:GDBString);
+procedure TZctnrVectorUndoCommands.PushStartMarker(CommandName:String);
 var
    pmarker:PTMarkerCommand;
 begin
@@ -103,7 +102,7 @@ begin
      end;
 end;
 //procedure TZctnrVectorUndoCommands.PushTypedChangeCommand(_obj:GDBPointer;_PTypeManager:PUserTypeDescriptor);overload;
-procedure TZctnrVectorUndoCommands.PushChangeCommand(_obj:GDBPointer;_fieldsize:PtrInt);
+procedure TZctnrVectorUndoCommands.PushChangeCommand(_obj:Pointer;_fieldsize:PtrInt);
 var
    pcc:PTChangeCommand;
 begin
@@ -147,7 +146,7 @@ begin
      end;
      count:=self.CurrentCommand;
 end;
-function TZctnrVectorUndoCommands.undo(out msg:string;prevheap:TArrayIndex;overlay:GDBBoolean):TUndoRedoResult;
+function TZctnrVectorUndoCommands.undo(out msg:string;prevheap:TArrayIndex;overlay:Boolean):TUndoRedoResult;
 var
    pcc:PTElementaryCommand;
    mcounter:integer;
@@ -248,18 +247,18 @@ begin
      CurrentCommand:=Count;
 end;
 
-function TZctnrVectorUndoCommands.PushBackData(const data:GDBPointer):TArrayIndex;
+function TZctnrVectorUndoCommands.PushBackData(const data:Pointer):TArrayIndex;
 begin
      if self.CurrentCommand<count then
                                        self.cleareraseobjfrom2(self.CurrentCommand);
      result:=inherited PushBackData(data);
 end;
-function TZctnrVectorUndoCommands.CreateTTypedChangeCommand(PDataInstance:GDBPointer;PType:PUserTypeDescriptor):PTTypedChangeCommand;overload;
+function TZctnrVectorUndoCommands.CreateTTypedChangeCommand(PDataInstance:Pointer;PType:PUserTypeDescriptor):PTTypedChangeCommand;overload;
 begin
      Getmem(result,sizeof(TTypedChangeCommand));
      result^.Assign(PDataInstance,PType);
 end;
-function TZctnrVectorUndoCommands.PushCreateTTypedChangeCommand(PDataInstance:GDBPointer;PType:PUserTypeDescriptor):PTTypedChangeCommand;overload;
+function TZctnrVectorUndoCommands.PushCreateTTypedChangeCommand(PDataInstance:Pointer;PType:PUserTypeDescriptor):PTTypedChangeCommand;overload;
 begin
   if CurrentCommand>0 then
   begin

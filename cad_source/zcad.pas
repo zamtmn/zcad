@@ -48,10 +48,10 @@ uses
   uzcregexceptions,
 
   Interfaces,forms, classes,LCLVersion,
+  uzclog,uzcreglog,
   uzcfsplash,
   uzcsysvars,
 
-  uzbmemman,uzclog,
   uzcsysparams,uzcsysinfo,
   uzbpaths,
 
@@ -64,7 +64,6 @@ uses
   uzcreggeneralwiewarea,
   uzcregfontmanager,
   uzcregpaths,
-  uzcreglog,
   uzcregenginefeatures,
   uzcreginterface,
   uzcregnavigatorentities,
@@ -232,7 +231,7 @@ uses
   uzccommand_DevDefSync,
 
   uzcenitiesvariablesextender,uzcExtdrLayerControl,uzcExtdrSmartTextEnt,
-
+  (*
   {$IFDEF ELECTROTECH}
   //**for velec func**//
   uzccommand_drawsuperline,
@@ -242,9 +241,9 @@ uses
   uzvcabmountmethod,
   //**//
   {$ENDIF}
-
+  *)
   //uzccomexample2,
-  //uzventsuperline,
+  uzventsuperline,
   uzccomobjectinspector,
   //uzccomexperimental,
 
@@ -265,13 +264,14 @@ uses
   uzcregisterenitiesextenders,
   uzcoiregistermultiproperties,
   uzclibraryblocksregister,
-  uzglviewareaogl,uzglviewareagdi,uzglviewareacanvas,
+  {$IF not((DEFINED(WINDOWS))and(DEFINED(LCLQT5)))}uzglviewareaogl,{$ENDIF}uzglviewareagdi,uzglviewareacanvas,
   {$IFDEF WINDOWS}{uzglviewareadx,}{$ENDIF}
 
   uzctbexttoolbars, uzctbextmenus, uzctbextpalettes,
 
   uzcinterface,
   uzccommand_dbgappexplorer,
+  {$IFDEF WINDOWS}{$IFDEF LCLQT5}uDarkStyle,{$ENDIF}{$ENDIF}
   uzelongprocesssupport;
 
 resourcestring
@@ -305,6 +305,7 @@ begin
     Application.MainFormOnTaskBar:=true;
   {$ENDIF}
   //создание окна программы
+  {$IFDEF WINDOWS}{$IFDEF LCLQT5}uDarkStyle.ApplyDarkStyle;{$ENDIF}{$ENDIF}
   Application.CreateForm(TZCADMainWindow,ZCADMainWindow);
   ZCADMainWindow.show;
   {if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then

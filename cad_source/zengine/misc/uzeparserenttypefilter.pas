@@ -6,7 +6,7 @@ interface
 
 uses
   SysUtils,
-  uzeentity,uzeparser,uzeentitiestypefilter,Masks,
+  uzeentity,uzeparser,uzeentitiestypefilter,
   uzcoimultiproperties,uzedimensionaltypes,
   uzcoimultipropertiesutil;
 

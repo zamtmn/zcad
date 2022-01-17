@@ -20,13 +20,14 @@ unit uabstractunit;
 {$INCLUDE def.inc}
 {$MODE DELPHI}
 interface
-uses
-  uzbtypes;
+{uses
+  uzbtypes;}
 type
 {Export+}
   PTAbstractUnit=^TAbstractUnit;
-  {REGISTEROBJECTTYPE TAbstractUnit}
-  TAbstractUnit=object(GDBaseobject)
+  {REGISTEROBJECTWITHOUTCONSTRUCTORTYPE TAbstractUnit}
+  TAbstractUnit=object//(GDBaseobject)
+    procedure dummy;virtual;abstract;
             end;
 {Export-}
 implementation

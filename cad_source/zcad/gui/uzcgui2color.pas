@@ -23,7 +23,7 @@ interface
 
 uses
   uzcinterfacedata,uzepalette,uzeconsts,uzcflineweights,uzgldrawergdi,uzegeometry,
-  uzbtypes,graphics,  usupportgui,StdCtrls,uzcdrawings,Controls,Classes,
+  graphics,  usupportgui,StdCtrls,uzcdrawings,Controls,Classes,
   uzbstrproc,uzcsysvars,uzccommandsmanager;
 
 procedure DrawColor(Canvas:TCanvas; Index: Integer; ARect: TRect);

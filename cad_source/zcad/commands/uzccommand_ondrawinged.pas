@@ -33,7 +33,7 @@ uses
   uzbtypesbase,uzbtypes,
   uzcdrawings,
   uzglviewareadata,
-  uzbgeomtypes,uzegeometry,
+  uzegeometrytypes,uzegeometry,
   uzeconsts,
   LazLogger;
 type

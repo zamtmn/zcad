@@ -21,7 +21,7 @@ unit uzeentwithmatrix;
 
 interface
 uses uzgldrawcontext,uzedrawingdef,uzecamera,uzeentity,uzbtypesbase,uzbtypes,
-     gzctnrvectortypes,uzbgeomtypes,uzegeometry,uzeentsubordinated,uzeentitiestree;
+     gzctnrvectortypes,uzegeometrytypes,uzegeometry,uzeentsubordinated,uzeentitiestree;
 type
 {EXPORT+}
 PGDBObjWithMatrix=^GDBObjWithMatrix;

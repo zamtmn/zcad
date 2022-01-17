@@ -21,7 +21,7 @@ unit uzeffttf;
 interface
 uses uzefontmanager,EasyLazFreeType,uzefontttf,uzegeometry,
     uzefont,uzbstrproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}sysutils,
-    UGDBOpenArrayOfByte,uzbtypesbase,uzbtypes,uzbmemman;
+    UGDBOpenArrayOfByte,uzbtypesbase;
 type ptsyminfo=^tsyminfo;
      tsyminfo=record
                            number,size:word;
@@ -41,7 +41,7 @@ var
    chcode:integer;
    pttf:PTTFFont;
    si:TTTFSymInfo;
-   Iterator:TMapChar.TIterator;
+   //Iterator:TMapChar.TIterator;
 begin
     initfont(pf,extractfilename(name));
     pf^.fontfile:=name;

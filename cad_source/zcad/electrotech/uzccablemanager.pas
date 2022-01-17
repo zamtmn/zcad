@@ -8,9 +8,9 @@ unit uzccablemanager;
 {$INCLUDE def.inc}
 interface
 uses uzcenitiesvariablesextender,uzcvariablesutils,Varman,uzbstrproc,uzcentcable,
-     uzeentdevice,uzeconsts,gzctnrvectorpobjects,languade,gzctnrvectorobjects,
-     gzctnrvectortypes,SysUtils,uzbtypesbase,uzbtypes,varmandef,uzbmemman,uzcdrawings,
-     uzcstrconsts;
+     uzeentdevice,uzeconsts,gzctnrvectorobjects,
+     gzctnrvectortypes,SysUtils,uzbtypesbase,uzbtypes,varmandef,uzcdrawings,
+     uzcstrconsts,uzctnrvectorpgdbaseobjects;
 resourcestring
      DefCableName='Created. Not named';
 type
@@ -32,7 +32,7 @@ type
 
     PTCableManager=^TCableManager;
     {---REGISTEROBJECTTYPE TCableManager}
-    TCableManager= object(GZVectorObjects<TCableDesctiptor>)(*OpenArrayOfPObj*)
+    TCableManager= object(GZVectorObjects<PTCableDesctiptor,TCableDesctiptor>)(*OpenArrayOfPObj*)
                        constructor init;
                        destructor done;virtual;
                        procedure build;virtual;

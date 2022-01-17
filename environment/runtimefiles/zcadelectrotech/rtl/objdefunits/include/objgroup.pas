@@ -9,6 +9,7 @@ var
    GC_HDShortNameTemplate:GDBString;(*'Шаблон короткого имени головного устройства'*)
    GC_HDGroup:GDBString;(*'Группа в головном устройстве'*)
    GC_HDGroupTemplate:GDBString;(*'Шаблон группы'*)
+   GC_velecSubGroupControlUnit:GDBString;(*'Контрольный узел автопрокладки. ~, - и ! спецсимволы '*)
 
    SerialConnection:GDBInteger;
    GC_NumberInGroup:GDBInteger;(*'Номер устройства в группе'*)
@@ -21,5 +22,6 @@ begin
    GC_HeadDevice:='??';
    GC_HDShortName:='??';
    GC_Metric:='';
+   GC_velecSubGroupControlUnit:='-';
    GC_HDGroup:='0';
 end.

@@ -20,7 +20,7 @@ unit uzctbextpalettes;
 {$INCLUDE def.inc}
 interface
 uses
-     uzcstrconsts,uzcsysparams,uzcsysvars,uzbtypes,uzcsysinfo,
+     uzcstrconsts,uzcsysparams,uzcsysvars,uzcsysinfo,
      uzcinfoform,Varman,uzcinterface,laz.VirtualTrees,
      uzbstrproc,uzeenttext,
      EditBtn,Masks,StdCtrls,Controls,Classes,Forms,uzccommandsmanager,Laz2_DOM,ComCtrls,uztoolbarsmanager,uzxmlnodesutils,uzcimagesmanager,uzctranslations,uzcdrawings;
@@ -130,7 +130,6 @@ begin
 end;
 
 procedure TZPaletteListView.ProcessClick(ListItem:TListItem;DblClck:Boolean);
-var i:integer;
 begin
   if DblClck then
      ListItem:=ListItem;
@@ -227,9 +226,9 @@ end;
 
 class function TPaletteHelper.ZPaletteTreeCreator(aControlName,aInternalCaption,aType: string;TBNode:TDomNode;var PaletteControl:TPaletteControlBaseType;DoDisableAlign:boolean):TPaletteControlBaseType;
 var
-   pTND:PTPaletteTreeNodeData;
+   //pTND:PTPaletteTreeNodeData;
    po:TVTPaintOptions;
-   mo:TVTMiscOptions;
+   //mo:TVTMiscOptions;
    ho:TVTHeaderOptions;
    col1,col2:TVirtualTreeColumn;
    PaletteTreeViewFilter:TZPaletteTreeViewFilter;

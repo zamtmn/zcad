@@ -246,7 +246,7 @@ class procedure TExport.StaticDoit(const Source:TRawByteStringManipulator.TStrin
                                InsideBracketParser:TObject;
                                var Data:TDataExport);
 var
-  op1,op2:TRawByteStringManipulator.TStringType;
+  op1{,op2}:TRawByteStringManipulator.TStringType;
   ResultParam:TRawByteStringManipulator.TCharRange;
   i,r,c:integer;
 begin

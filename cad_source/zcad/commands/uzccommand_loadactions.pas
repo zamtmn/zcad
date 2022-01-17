@@ -22,7 +22,7 @@ unit uzccommand_loadactions;
 interface
 uses
  LCLProc,ComCtrls,Controls,
- uzctreenode,uzbpaths,uzccommandsabstract,uzccommandsimpl,uzbtypes,uztoolbarsmanager;
+ uzctreenode,uzbpaths,uzccommandsabstract,uzccommandsimpl,uztoolbarsmanager;
 
 implementation
 procedure FixButtonCaption(_tb:TToolBar;_control:tcontrol);

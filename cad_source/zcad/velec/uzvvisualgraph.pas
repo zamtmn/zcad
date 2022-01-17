@@ -24,12 +24,12 @@ interface
 uses
 
 
-   sysutils, math,
+   sysutils, //math,
 
   URecordDescriptor,TypeDescriptors,
 
   Forms, //uzcfblockinsert,
-   uzcfarrayinsert,
+   //uzcfarrayinsert,
 
   uzeentblockinsert,      //unit describes blockinsert entity
                        //модуль описывающий примитив вставка блока
@@ -55,34 +55,34 @@ uses
   uzeentarc,
   uzeentcircle,
   uzeentity,
-  uzbgeomtypes,
+  uzegeometrytypes,
 
 
-  gvector,garrayutils, // Подключение Generics и модуля для работы с ним
+  gvector,//garrayutils, // Подключение Generics и модуля для работы с ним
 
   uzcentcable,
   uzeentdevice,
-  UGDBOpenArrayOfPV,
+  //UGDBOpenArrayOfPV,
 
   uzegeometry,
-  uzeentitiesmanager,
+  //uzeentitiesmanager,
 
   //uzcmessagedialogs,
   uzeentityfactory,    //unit describing a "factory" to create primitives
                       //модуль описывающий "фабрику" для создания примитивов
   uzcsysvars,        //system global variables
                       //системные переменные
-  uzgldrawcontext,
+  //uzgldrawcontext,
   uzcinterface,
   uzbtypesbase,uzbtypes, //base types
                       //описания базовых типов
   uzeconsts, //base constants
                       //описания базовых констант
   uzccommandsmanager,
-  uzccommandsabstract,
+  //uzccommandsabstract,
   uzccommandsimpl, //Commands manager and related objects
                       //менеджер команд и объекты связанные с ним
-  uzcdrawing,
+  //uzcdrawing,
   uzedrawingsimple,
   uzcdrawings,     //Drawings manager, all open drawings are processed him
                       //"Менеджер" чертежей
@@ -90,16 +90,16 @@ uses
                       //разные функции упрощающие создание примитивов, пока их там очень мало
   varmandef,
   Varman,
-  {UGDBOpenArrayOfUCommands,}zcchangeundocommand,
+  {UGDBOpenArrayOfUCommands,}//zcchangeundocommand,
 
   uzclog,                //log system
                       //<**система логирования
-  uzcvariablesutils, // для работы с ртти
+  //uzcvariablesutils, // для работы с ртти
 
-   gzctnrvectortypes,                  //itrec
+  //gzctnrvectortypes,                  //itrec
 
   //для работы графа
-  ExtType,
+  //ExtType,
   Pointerv,
   Graphs,
   AttrType,

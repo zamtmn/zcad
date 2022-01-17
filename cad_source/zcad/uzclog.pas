@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzclog;
+unit uzcLog;
 {$INCLUDE def.inc}
 {$mode objfpc}{$H+}
 interface

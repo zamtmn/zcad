@@ -20,9 +20,9 @@ unit uzeent3dface;
 
 interface
 uses
-    uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,gzctnrvectorpobjects,
+    uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,
     uzegeometry,uzeffdxfsupport,uzestyleslayers,uzbtypesbase,UGDBSelectedObjArray,uzeentsubordinated,
-    uzbgeomtypes,uzeent3d,uzeentity,sysutils,UGDBOpenArrayOfByte,uzbtypes,uzeconsts,uzbmemman;
+    uzegeometrytypes,uzeent3d,uzeentity,sysutils,UGDBOpenArrayOfByte,uzbtypes,uzeconsts,uzctnrvectorpgdbaseobjects;
 type
 {Export+}
 {REGISTEROBJECTTYPE GDBObj3DFace}

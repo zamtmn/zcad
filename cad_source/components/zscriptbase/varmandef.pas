@@ -17,15 +17,14 @@
 }
 
 unit varmandef;
-{$INCLUDE def.inc}
 {$MODESWITCH ADVANCEDRECORDS}
 
 interface
 uses
-  LCLProc,SysUtils,UGDBTree,gzctnrstl,uzctnrvectorgdbstring,strutils,uzbtypesbase,
-  uzedimensionaltypes,UGDBOpenArrayOfByte,uzbtypes,
-  gzctnrvectortypes,Classes,Controls,StdCtrls,Graphics,types,TypInfo,uzbmemman,
-  gzctnrvector;
+  LCLProc,SysUtils,UGDBTree,gzctnrstl,uzctnrvectorgdbstring,strutils,//uzbtypesbase,
+  uzedimensionaltypes,UGDBOpenArrayOfByte,//uzbtypes,
+  gzctnrvectortypes,Classes,Controls,StdCtrls,Graphics,types,TypInfo,gzctnrvector,
+  uzbLogIntf;
 const
   {Ttypenothing=-1;
   Ttypecustom=1;
@@ -68,8 +67,8 @@ TEditorDesc=record
                   Mode:TEditorMode;
             end;
 TOnCreateEditor=function (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorGDBString;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
-TOnGetValueAsString=function(PInstance:GDBPointer):GDBString;
-TOnDrawProperty=procedure(canvas:TCanvas;ARect:TRect;PInstance:GDBPointer);
+TOnGetValueAsString=function(PInstance:Pointer):String;
+TOnDrawProperty=procedure(canvas:TCanvas;ARect:TRect;PInstance:Pointer);
 
 TFastEditorState=(TFES_Default,TFES_Hot,TFES_Pressed);
 
@@ -91,79 +90,79 @@ TFastEditorProcs=record
 TFastEditorRunTimeData=record
                       Procs:TFastEditorProcs;
                       FastEditorState:TFastEditorState;
-                      FastEditorDrawed:GDBBoolean;
+                      FastEditorDrawed:Boolean;
                       FastEditorRect:trect;
                       end;
 TFastEditorsVector=specialize TMyVector<TFastEditorProcs>;
 TFastEditorsRunTimeVector=specialize TMyVector<TFastEditorRunTimeData>;
   PBasePropertyDeskriptor=^BasePropertyDeskriptor;
   BasePropertyDeskriptor=object({GDBaseObject}GDBBaseNode)
-    Name: GDBString;
-    Value: GDBString;
-    ValKey: GDBString;
-    ValType: GDBString;
-    Category: GDBString;
+    Name: String;
+    Value: String;
+    ValKey: String;
+    ValType: String;
+    Category: String;
     PTypeManager:PUserTypeDescriptor;
-    Attr:GDBWord;
-    Collapsed:PGDBBoolean;
-    ValueOffsetInMem: GDBWord;
-    valueAddres:GDBPointer;
-    HelpPointer:GDBPointer;
+    Attr:Word;
+    Collapsed:PBoolean;
+    ValueOffsetInMem:Word;
+    valueAddres:Pointer;
+    HelpPointer:Pointer;
     rect:trect;
-    //x1,y1,x2,y2:GDBInteger;
-    _ppda:GDBPointer;
-    _bmode:GDBInteger;
+    //x1,y1,x2,y2:Integer;
+    _ppda:Pointer;
+    _bmode:Integer;
     mode:PDMode;
-    r,w:GDBString;
+    r,w:String;
     Decorators:TDecoratedProcs;
     FastEditors:{TFastEditorsVector}TFastEditorsRunTimeVector;
     procedure free;virtual;
   end;
   propdeskptr = ^propdesk;
   propdesk = record
-    name: GDBString;
-    value: GDBString;
+    name: String;
+    value: String;
     proptype:char;
-    drawsub:GDBBoolean;
-    valueoffsetinmem: GDBWord;
-    valueaddres: GDBPointer;
-    valuetype: GDBByte;
+    drawsub:Boolean;
+    valueoffsetinmem:Word;
+    valueaddres:Pointer;
+    valuetype:Byte;
     next, sub, help: propdeskptr;
     ptm:PUserTypeDescriptor;
   end;
 
-TTypeAttr=GDBWord;
+TTypeAttr=Word;
 
 TOIProps=record
-               ci,barpos:GDBInteger;
+               ci,barpos:Integer;
          end;
 pvardesk = ^vardesk;
 TMyNotifyCommand=(TMNC_EditingDoneEnterKey,TMNC_EditingDoneLostFocus,TMNC_EditingDoneESC,TMNC_EditingProcess,TMNC_RunFastEditor,TMNC_EditingDoneDoNothing);
 TMyNotifyProc=procedure (Sender: TObject;Command:TMyNotifyCommand) of object;
-TCreateEditorFunc=function (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorGDBString;FreeOnLostFocus:boolean;InitialValue:GDBString;ptdesc:PUserTypeDescriptor;preferedHeight:integer):TEditorDesc of object;
-UserTypeDescriptor=object(GDBaseObject)
-                         SizeInGDBBytes:GDBInteger;
+TCreateEditorFunc=function (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorGDBString;FreeOnLostFocus:boolean;InitialValue:String;ptdesc:PUserTypeDescriptor;preferedHeight:integer):TEditorDesc of object;
+UserTypeDescriptor=object
+                         SizeInGDBBytes:Integer;
                          TypeName:String;
-                         PUnit:GDBPointer;
+                         PUnit:Pointer;
                          OIP:TOIProps;
-                         Collapsed:GDBBoolean;
+                         Collapsed:Boolean;
                          Decorators:TDecoratedProcs;
                          //FastEditor:TFastEditorProcs;
                          FastEditors:TFastEditorsVector;
                          onCreateEditorFunc:TCreateEditorFunc;
-                         constructor init(size:GDBInteger;tname:string;pu:pointer);
-                         constructor baseinit(size:GDBInteger;tname:string;pu:pointer);
-                         procedure _init(size:GDBInteger;tname:string;pu:pointer);
+                         constructor init(size:Integer;tname:string;pu:pointer);
+                         constructor baseinit(size:Integer;tname:string;pu:pointer);
+                         procedure _init(size:Integer;tname:string;pu:pointer);
                          function CreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorGDBString;FreeOnLostFocus:boolean;InitialValue:TInternalScriptString;preferedHeight:integer):TEditorDesc;virtual;
-                         procedure ApplyOperator(oper,path:TInternalScriptString;var offset:GDBInteger;out tc:PUserTypeDescriptor);virtual;abstract;
-                         //function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;abstract;
+                         procedure ApplyOperator(oper,path:TInternalScriptString;var offset:Integer;out tc:PUserTypeDescriptor);virtual;abstract;
+                         //function Serialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;abstract;
                          function SerializePreProcess(Value:TInternalScriptString;sub:integer):TInternalScriptString;virtual;
                          //function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;abstract;
                          function GetTypeAttributes:TTypeAttr;virtual;
                          function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
                          function GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;virtual;
                          function GetUserValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
-                         function GetDecoratedValueAsString(pinstance:GDBPointer; const f:TzeUnitsFormat):TInternalScriptString;virtual;
+                         function GetDecoratedValueAsString(pinstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;virtual;
                          procedure CopyInstanceTo(source,dest:pointer);virtual;
                          function Compare(pleft,pright:pointer):TCompareResult;virtual;
                          procedure SetValueFromString(PInstance:Pointer;_Value:TInternalScriptString);virtual;abstract;
@@ -174,14 +173,14 @@ UserTypeDescriptor=object(GDBaseObject)
                          procedure MagicFreeInstance(PInstance:Pointer);virtual;
                          procedure MagicAfterCopyInstance(PInstance:Pointer);virtual;
                          procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:Pointer;prefix:TInternalScriptString);virtual;
-                         procedure IncAddr(var addr:GDBPointer);virtual;
+                         procedure IncAddr(var addr:Pointer);virtual;
                          function GetFactTypedef:PUserTypeDescriptor;virtual;
                          procedure Format;virtual;
                          procedure RegisterTypeinfo(ti:PTypeInfo);virtual;
                    end;
 TPropEditor=class(TComponent)
                  public
-                 PInstance:GDBPointer;
+                 PInstance:Pointer;
                  PTD:PUserTypeDescriptor;
                  OwnerNotify:TMyNotifyProc;
                  fFreeOnLostFocus:boolean;
@@ -189,7 +188,7 @@ TPropEditor=class(TComponent)
                  CanRunFastEditor:boolean;
                  RunFastEditorValue:tobject;
                  changed:boolean;
-                 constructor Create(AOwner:TComponent;_PInstance:GDBPointer;var _PTD:UserTypeDescriptor;FreeOnLostFocus:boolean);
+                 constructor Create(AOwner:TComponent;_PInstance:Pointer;var _PTD:UserTypeDescriptor;FreeOnLostFocus:boolean);
                  destructor Destroy;override;
                  procedure EditingDone(Sender: TObject);//Better name ..LostFocus..
                  procedure EditingDone2(Sender: TObject);
@@ -201,10 +200,10 @@ TPropEditor=class(TComponent)
                  procedure SetEditorBounds(pd:PBasePropertyDeskriptor;OnlyHotFasteditors:boolean);
             end;
   //pd=^GDBDouble;
-  {-}{/pGDBInteger=^GDBInteger;/}
+  {-}{/pGDBInteger=^Integer;/}
   //pstr=^TInternalScriptString;
-  {-}{/pGDBPointer=^GDBPointer;/}
-  //pbooleab=^GDBBoolean;
+  {-}{/pGDBPointer=^Pointer;/}
+  //pbooleab=^Boolean;
  {TODO:огнегне}
 TTranslateFunction=function (const Identifier, OriginalValue: String): String;
 {EXPORT+}
@@ -216,27 +215,27 @@ TTraceAngle=(
 {REGISTERRECORDTYPE TTraceMode}
 TTraceMode=record
                  Angle:TTraceAngle;(*'Angle'*)
-                 ZAxis:GDBBoolean;(*'Z Axis'*)
+                 ZAxis:Boolean;(*'Z Axis'*)
            end;
 {REGISTERRECORDTYPE TOSMode}
 TOSMode=record
-              kosm_inspoint:GDBBoolean;(*'Insertion'*)
-              kosm_endpoint:GDBBoolean;(*'Endpoint'*)
-              kosm_midpoint:GDBBoolean;(*'Midpoint'*)
-              kosm_3:GDBBoolean;(*'1/3'*)
-              kosm_4:GDBBoolean;(*'1/4'*)
-              kosm_center:GDBBoolean;(*'Center'*)
-              kosm_quadrant:GDBBoolean;(*'Quadrant'*)
-              kosm_point:GDBBoolean;(*'Point'*)
-              kosm_intersection:GDBBoolean;(*'Intersection'*)
-              kosm_perpendicular:GDBBoolean;(*'Perpendicular'*)
-              kosm_tangent:GDBBoolean;(*'Tangent'*)
-              kosm_nearest:GDBBoolean;(*'Nearest'*)
-              kosm_apparentintersection:GDBBoolean;(*'Apparent intersection'*)
-              kosm_paralel:GDBBoolean;(*'Paralel'*)
+              kosm_inspoint:Boolean;(*'Insertion'*)
+              kosm_endpoint:Boolean;(*'Endpoint'*)
+              kosm_midpoint:Boolean;(*'Midpoint'*)
+              kosm_3:Boolean;(*'1/3'*)
+              kosm_4:Boolean;(*'1/4'*)
+              kosm_center:Boolean;(*'Center'*)
+              kosm_quadrant:Boolean;(*'Quadrant'*)
+              kosm_point:Boolean;(*'Point'*)
+              kosm_intersection:Boolean;(*'Intersection'*)
+              kosm_perpendicular:Boolean;(*'Perpendicular'*)
+              kosm_tangent:Boolean;(*'Tangent'*)
+              kosm_nearest:Boolean;(*'Nearest'*)
+              kosm_apparentintersection:Boolean;(*'Apparent intersection'*)
+              kosm_paralel:Boolean;(*'Paralel'*)
         end;
   indexdesk=record
-    indexmin, count: GDBInteger;
+    indexmin, count: Integer;
   end;
   arrayindex =packed  array[1..2] of indexdesk;
   parrayindex = ^arrayindex;
@@ -245,17 +244,17 @@ TOSMode=record
   PTHardTypedData=^THardTypedData;
   {REGISTERRECORDTYPE THardTypedData}
   THardTypedData=record
-                   Instance: GDBPointer;
-                   PTD:{-}PUserTypeDescriptor{/GDBPointer/};
+                   Instance: Pointer;
+                   PTD:{-}PUserTypeDescriptor{/Pointer/};
              end;
   {REGISTERRECORDTYPE TTypedData}
   TTypedData=record
-                   PTD:{-}PUserTypeDescriptor{/GDBPointer/};
+                   PTD:{-}PUserTypeDescriptor{/Pointer/};
                    Addr:TInVectorAddr;
                    //{-}constructor Create(PTDesc:PUserTypeDescriptor;DS:pvarmanagerdef;Offset:PtrInt);{/ /}
-                   //{-}property Instance:GDBPointer read Inst write Inst;{/ /}
+                   //{-}property Instance:Pointer read Inst write Inst;{/ /}
              end;
-  TVariableAttributes=GDBInteger;
+  TVariableAttributes=Integer;
   {REGISTERRECORDTYPE vardesk}
   vardesk =record
     name: TInternalScriptString;
@@ -267,21 +266,21 @@ TOSMode=record
     {-}procedure FreeeInstance;{/ /}
   end;
 ptypemanagerdef=^typemanagerdef;
-{REGISTEROBJECTTYPE typemanagerdef}
-typemanagerdef=object(GDBaseObject)
+{REGISTEROBJECTWITHOUTCONSTRUCTORTYPE typemanagerdef}
+typemanagerdef=object
                   procedure readbasetypes;virtual;abstract;
                   procedure readexttypes(fn: TInternalScriptString);virtual;abstract;
-                  function _TypeName2Index(name: TInternalScriptString): GDBInteger;virtual;abstract;
+                  function _TypeName2Index(name: TInternalScriptString): Integer;virtual;abstract;
                   function _TypeName2PTD(name: TInternalScriptString):PUserTypeDescriptor;virtual;abstract;
                   function _TypeIndex2PTD(ind:integer):PUserTypeDescriptor;virtual;abstract;
 
-                  function getDataMutable(index:TArrayIndex):GDBPointer;virtual;abstract;
+                  function getDataMutable(index:TArrayIndex):Pointer;virtual;abstract;
                   function getcount:TArrayIndex;virtual;abstract;
-                  function AddTypeByPP(p:GDBPointer):TArrayIndex;virtual;abstract;
+                  function AddTypeByPP(p:Pointer):TArrayIndex;virtual;abstract;
                   function AddTypeByRef(var _type:UserTypeDescriptor):TArrayIndex;virtual;abstract;
             end;
-{REGISTEROBJECTTYPE varmanagerdef}
-varmanagerdef=object(GDBaseObject)
+{REGISTEROBJECTWITHOUTCONSTRUCTORTYPE varmanagerdef}
+varmanagerdef=object
                  {vardescarray:GDBOpenArrayOfData;
                  vararray:GDBOpenArrayOfByte;}
                  function findvardesc(varname:TInternalScriptString): pvardesk;virtual;abstract;
@@ -289,7 +288,7 @@ varmanagerdef=object(GDBaseObject)
                  function createvariable2(varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0):TInVectorAddr;virtual;abstract;
                  procedure createvariablebytype(varname,vartype:TInternalScriptString);virtual;abstract;
                  procedure createbasevaluefromGDBString(varname: TInternalScriptString; varvalue: TInternalScriptString; var vd: vardesk);virtual;abstract;
-                 function findfieldcustom(var pdesc: pGDBByte; var offset: GDBInteger;var tc:PUserTypeDescriptor; nam: shortString): GDBBoolean;virtual;abstract;
+                 function findfieldcustom(var pdesc: pByte; var offset: Integer;var tc:PUserTypeDescriptor; nam: shortString): Boolean;virtual;abstract;
                  //function getDS:Pointer;virtual;abstract;
            end;
 {EXPORT-}
@@ -379,7 +378,7 @@ begin
      attr:=(attr or setattrib)and(not resetattrib);
 end;
 
-constructor TPropEditor.Create(AOwner:TComponent;_PInstance:GDBPointer;var _PTD:UserTypeDescriptor;FreeOnLostFocus:boolean);
+constructor TPropEditor.Create(AOwner:TComponent;_PInstance:Pointer;var _PTD:UserTypeDescriptor;FreeOnLostFocus:boolean);
 begin
      inherited create(AOwner);
      PInstance:=_PInstance;
@@ -508,9 +507,9 @@ begin
                                                       EditingDone(peditor);
                              end;
 end;
-procedure UserTypeDescriptor.IncAddr(var addr:GDBPointer);
+procedure UserTypeDescriptor.IncAddr(var addr:Pointer);
 begin
-     inc(pGDBByte(addr),SizeInGDBBytes);
+     inc(pByte(addr),SizeInGDBBytes);
 end;
 function UserTypeDescriptor.GetFactTypedef:PUserTypeDescriptor;
 begin
@@ -564,7 +563,7 @@ function UserTypeDescriptor.SerializePreProcess(Value:TInternalScriptString;sub:
 begin
      result:=DupeString(' ',sub)+value;
 end;
-procedure UserTypeDescriptor._init(size:GDBInteger;tname:string;pu:pointer);
+procedure UserTypeDescriptor._init(size:Integer;tname:string;pu:pointer);
 begin
      SizeInGDBBytes:=size;
      pointer(typename):=nil;
@@ -576,11 +575,11 @@ begin
      onCreateEditorFunc:=nil;
 end;
 
-constructor UserTypeDescriptor.init(size:GDBInteger;tname:string;pu:pointer);
+constructor UserTypeDescriptor.init(size:Integer;tname:string;pu:pointer);
 begin
      baseinit(size,tname,pu);
 end;
-constructor UserTypeDescriptor.baseinit(size:GDBInteger;tname:string;pu:pointer);
+constructor UserTypeDescriptor.baseinit(size:Integer;tname:string;pu:pointer);
 begin
      _init(size,tname,pu);
      Decorators.OnGetValueAsString:=nil;
@@ -589,8 +588,7 @@ end;
 
 destructor UserTypeDescriptor.done;
 begin
-     if VerboseLog^ then
-       DebugLn('{T}[FINALIZATION_TYPES]'+self.TypeName);
+     zTraceLn('{T}[FINALIZATION_TYPES]'+self.TypeName);
      //programlog.LogOutStr(self.TypeName,lp_OldPos,LM_Trace);
      SizeInGDBBytes:=0;
      typename:='';
@@ -624,7 +622,7 @@ function UserTypeDescriptor.GetUserValueAsString(pinstance:Pointer):TInternalScr
 begin
      result:=GetValueAsString(pinstance);
 end;
-function UserTypeDescriptor.GetDecoratedValueAsString(pinstance:GDBPointer; const f:TzeUnitsFormat):TInternalScriptString;
+function UserTypeDescriptor.GetDecoratedValueAsString(pinstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;
 begin
      if assigned(Decorators.OnGetValueAsString) then
                                          result:=Decorators.OnGetValueAsString(pinstance)

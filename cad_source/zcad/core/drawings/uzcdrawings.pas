@@ -24,13 +24,13 @@ uses
     uzemathutils,uzgldrawcontext,uzcdrawing,uzedrawingdef,uzbpaths,uzestylesdim,
     uzedrawingabstract,uzcdialogsfiles,LResources,uzcsysvars,uzcinterface,
     uzcstrconsts,uzbstrproc,uzeblockdef,UGDBObjBlockdefArray,UUnitManager,
-    uzbtypes,varmandef,varman,sysutils,uzbmemman,uzegeometry,uzeconsts,
+    uzbtypes,varmandef,varman,sysutils,uzegeometry,uzeconsts,
     uzbtypesbase,uzedrawingsimple,uzeentgenericsubentry,uzestyleslayers,uzeentity,
     UGDBSelectedObjArray,uzestylestexts,uzefontmanager,uzestyleslinetypes,
-    UGDBOpenArrayOfPV,uzefont,gzctnrvectorpobjects,UGDBVisibleOpenArray,
+    UGDBOpenArrayOfPV,uzefont,UGDBVisibleOpenArray,
     gzctnrvectortypes,uzedimensionaltypes,uzetrash,UGDBOpenArrayOfByte,uzglviewareadata,
     uzccommandsabstract,
-    uzeentitiestypefilter,
+    uzeentitiestypefilter,uzctnrvectorpgdbaseobjects,
     LCLProc;
 type
 {EXPORT+}
@@ -816,8 +816,8 @@ var
    croot:PGDBObjGenericSubEntry;
    pvisible:PGDBObjEntity;
    ir:itrec;
-   pvd:pvardesk;
-   pentvarext:TVariablesExtender;
+   //pvd:pvardesk;
+   //pentvarext:TVariablesExtender;
 begin
   croot:=self.GetCurrentROOT;
   if croot<>nil then begin
@@ -927,7 +927,7 @@ var
    ir:itrec;
    pvisible,pvisible2:PGDBObjEntity;
    DC:TDrawContext;
-   psourcevarext,pdestvarext:TVariablesExtender;
+   //psourcevarext,pdestvarext:TVariablesExtender;
 begin
       if pos(DevicePrefix,_source.Name)=1 then
                                          CopyBlock(_from,_to,_from.BlockDefArray.getblockdef(copy(_source.Name,8,length(_source.Name)-7)));

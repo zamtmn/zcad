@@ -21,10 +21,10 @@ unit uzcregisterenitiesextenders;
 interface
 uses sysutils,
      uzcenitiesvariablesextender,uzccomdb,uzcentcable,uzcentnet,uzeentdevice,TypeDescriptors,
-     uzetextpreprocessor,UGDBOpenArrayOfByte,uzbtypes,uzeobjectextender,
+     uzetextpreprocessor,UGDBOpenArrayOfByte,uzeobjectextender,
      uzeentity,uzeenttext,uzeblockdef,varmandef,Varman,UUnitManager,
      uzventsuperline,uzcentelleader,
-     URecordDescriptor,UBaseTypeDescriptor,uzbmemman;
+     URecordDescriptor,UBaseTypeDescriptor;
 implementation
 begin
   {from GDBObjBlockDef}

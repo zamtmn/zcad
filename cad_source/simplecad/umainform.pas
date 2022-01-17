@@ -9,8 +9,8 @@ uses
   LCLType,Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
   ExtCtrls, StdCtrls, Spin,
   {From ZCAD}
-  uzbmemman,                                                                       //zcad memorymanager
-  uzbtypes, uzbtypesbase,uzbgeomtypes,                                              //zcad basetypes
+                                                                         //zcad memorymanager
+  uzbtypes, uzbtypesbase,uzegeometrytypes,                                              //zcad basetypes
   uzegeometry,                                                                     //some mathematical and geometrical support
   uzefontmanager,uzeffshx,                                                        //fonts manager and SHX fileformat support
   uzglviewareaabstract,uzglviewareageneral,uzgldrawcontext,                          //generic view areas support

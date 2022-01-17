@@ -23,9 +23,9 @@ uses
     uzctranslations,uzcinterface,uzgldrawcontext,zeundostack,zcchangeundocommand,
     zcobjectchangeundocommand,zebaseundocommands,uzbpaths,uzestylesdim,
     uzcdialogsfiles,LResources,uzcsysvars,uzcstrconsts,uzbstrproc,uzeblockdef,UUnitManager,
-    uzbtypes,varmandef,varman,sysutils, uzbmemman,uzegeometry, uzeconsts,
+    uzbtypes,varmandef,varman,sysutils,uzegeometry, uzeconsts,
     uzbtypesbase,uzedrawingsimple,uzestyleslayers,uzeentity,uzefontmanager,
-    gzctnrvectortypes,uzedimensionaltypes,uzbgeomtypes,UGDBOpenArrayOfByte;
+    uzedimensionaltypes,uzegeometrytypes,UGDBOpenArrayOfByte,gzctnrvectortypes;
 type
 {EXPORT+}
 PTZCADDrawing=^TZCADDrawing;

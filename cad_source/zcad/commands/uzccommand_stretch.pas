@@ -39,9 +39,9 @@ uses
   uzeffdxf,
   uzcinterface,
   uzeentity,
- uzbtypesbase,uzbmemman,uzcdialogsfiles,
+ uzbtypesbase,uzcdialogsfiles,
  UUnitManager,uzclog,Varman,
- uzbgeomtypes,uzcinfoform,
+ uzegeometrytypes,uzcinfoform,
  uzeentpolyline,uzeentlwpolyline,UGDBSelectedObjArray,
  uzegeometry,uzelongprocesssupport,uzccommand_selectframe,uzccommand_ondrawinged;
 

@@ -20,7 +20,7 @@ unit uzcsysparams;
 {$INCLUDE def.inc}
 interface
 uses XMLConf,XMLPropStorage,LazConfigStorage,fileutil,
-  LCLProc,uzclog,uzbpaths,uzbtypesbase,Forms,uzbtypes{$IFNDEF DELPHI},LazUTF8{$ENDIF},sysutils;
+  LCLProc,uzclog,uzbpaths,uzbtypesbase,Forms{$IFNDEF DELPHI},LazUTF8{$ENDIF},sysutils;
 type
 {EXPORT+}
   {REGISTERRECORDTYPE TmyFileVersionInfo}

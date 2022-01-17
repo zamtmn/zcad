@@ -17,31 +17,30 @@
 }
 
 unit strmy;
-{$INCLUDE def.inc}
 {$MODE DELPHI}
 
 interface
-uses uzbtypesbase,sysutils,uzctnrvectorgdbstring,uzbmemman;
+uses {uzbtypesbase,}sysutils,uzctnrvectorgdbstring;
 type
   TLexema=shortstring;
   PLexema=^TLexema;
-//function pac_lGDBWord_to_GDBString(lw: GDBLongword): GDBString;
-//function pac_GDBWord_to_GDBString(w: GDBWord): GDBString;
-//function unpac_GDBString_to_GDBWord(s: GDBString): GDBWord;
-//function unpac_GDBString_to_lGDBWord(s: GDBString): GDBLongword;
-function countchar(s: GDBString; ch: ansichar): GDBInteger;
-procedure replaceeqlen(var s: GDBString; substr,newstr: GDBString);
-function replacenull(s:GDBString): GDBString;
-function strtohex(s:GDBString): GDBString;
-function parse(template, str:GDBString; GDBStringarray:PTZctnrVectorGDBString;mode:GDBBoolean;lexema:PLexema; var position:GDBInteger):GDBBoolean;
-function runparser(template:GDBString;var str:GDBString; out parsed:GDBBoolean):PTZctnrVectorGDBString;
-function IsParsed(template:GDBString;var str:GDBString; out strins:PTZctnrVectorGDBString):boolean;
+//function pac_lGDBWord_to_GDBString(lw: GDBLongword): String;
+//function pac_GDBWord_to_GDBString(w: GDBWord): String;
+//function unpac_GDBString_to_GDBWord(s: String): GDBWord;
+//function unpac_GDBString_to_lGDBWord(s: String): GDBLongword;
+function countchar(s: String; ch: ansichar): Integer;
+procedure replaceeqlen(var s: String; substr,newstr: String);
+function replacenull(s:String): String;
+function strtohex(s:String): String;
+function parse(template, str:String; GDBStringarray:PTZctnrVectorGDBString;mode:Boolean;lexema:PLexema; var position:Integer):Boolean;
+function runparser(template:String;var str:String; out parsed:Boolean):PTZctnrVectorGDBString;
+function IsParsed(template:String;var str:String; out strins:PTZctnrVectorGDBString):boolean;
 const maxlexem=16;
 
 const
       sym_command=['_','?','|','-'];
       symend=#0;
-      lexemarray:array[0..maxlexem,0..1] of GDBString=(
+      lexemarray:array[0..maxlexem,0..1] of String=(
                                                     (('identifier'),('_softspace'#0'+I_sym'#0'[{_symordig'#0'}-I')),
                                                     (('identifiers_cs'),('_softspace'#0'_identifier'#0'[{_softspace'#0'=,_softspace'#0'_identifier'#0'}')),
                                                     (('sym'),('?_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'#208#209#0)),
@@ -57,15 +56,15 @@ const
                                                     (('intnumber'),('+I[{_sign'#0'}_decdig'#0'[{_decdig'#0'}-I')),
                                                     (('realnumber'),('+I[{_sign'#0'}[{_decdig'#0'}@{=._decdig'#0'[{_decdig'#0'}}-I_softspace'#0)),
                                                     (('intdiapazon'),('_intnumber'#0'_softspace'#0'=.=._softspace'#0'_intnumber'#0)),
-                                                    (('GDBString'),('+S`-S')),
+                                                    (('String'),('+S`-S')),
                                                     (('intdiapazons_cs'),('_intdiapazon'#0'[{_softspace'#0'=,_softspace'#0'_intdiapazon'#0'}'))
                                                    );
 
 implementation
 uses varmandef{,log,URecordDescriptor};
-function findlexem(s:GDBString):GDBString;
+function findlexem(s:String):String;
 var
-   i:GDBInteger;
+   i:Integer;
 begin
      result:='';
      for i:=0 to maxlexem do
@@ -76,9 +75,9 @@ begin
                               end;
 end;
 
-function replacenull(s:GDBString): GDBString;
-var si,ri:GDBInteger;
-    temp:gdbstring;
+function replacenull(s:String): String;
+var si,ri:Integer;
+    temp:String;
 begin
      pointer(result):=nil;
      setlength(result,3*length(s));
@@ -88,10 +87,10 @@ begin
      ri:=1;
      while si<=length(s) do
      begin
-          if GDBByte(s[si])<32 then
+          if Byte(s[si])<32 then
                                 begin
                                      result[ri]:='#';
-                                     temp:=IntToHex(GDBByte(s[si]),2);
+                                     temp:=IntToHex(Byte(s[si]),2);
                                      inc(ri);
                                      result[ri]:=temp[1];
                                      inc(ri);
@@ -106,9 +105,9 @@ begin
      end;
      setlength(result,ri-1);
 end;
-function strtohex(s:GDBString): GDBString;
-var si,ri:GDBInteger;
-    temp:gdbstring;
+function strtohex(s:String): String;
+var si,ri:Integer;
+    temp:String;
 begin
      pointer(result):=nil;
      setlength(result,3*length(s));
@@ -120,7 +119,7 @@ begin
      begin
           begin
                                      result[ri]:='#';
-                                     temp:=IntToHex(GDBByte(s[si]),2);
+                                     temp:=IntToHex(Byte(s[si]),2);
                                      inc(ri);
                                      result[ri]:=temp[1];
                                      inc(ri);
@@ -133,36 +132,36 @@ begin
      //result:='234';
 end;
 
-{function pac_GDBWord_to_GDBString(w: GDBWord): GDBString;
+{function pac_GDBWord_to_GDBString(w: GDBWord): String;
 begin
   result := chr(lo(w)) + chr(hi(w));
 end;
 
-function pac_lGDBWord_to_GDBString(lw: GDBLongword): GDBString;
+function pac_lGDBWord_to_GDBString(lw: GDBLongword): String;
 begin
   result := chr(lo(lo(lw))) + chr(hi(lo(lw))) + chr(lo(hi(lw))) + chr(hi(hi(lw)));
 end;
 
-function unpac_GDBString_to_GDBWord(s: GDBString): GDBWord;
+function unpac_GDBString_to_GDBWord(s: String): GDBWord;
 begin
   result := GDBWord(pGDBWord(s)^);
 end;
 
-function unpac_GDBString_to_lGDBWord(s: GDBString): GDBLongword;
+function unpac_GDBString_to_lGDBWord(s: String): GDBLongword;
 begin
   result := GDBLongword(pGDBLongword(s)^);
 end;}
 
-function countchar(s: GDBString; ch: ansichar): GDBInteger;
-var i, c: GDBInteger;
+function countchar(s: String; ch: ansichar): Integer;
+var i, c: Integer;
 begin
   c := 0;
   if length(s) > 0 then
     for i := 1 to length(s) do if s[i] = ch then inc(c);
   result := c;
 end;
-procedure replaceeqlen(var s: GDBString; substr,newstr: GDBString);
-var i, c,a: GDBInteger;
+procedure replaceeqlen(var s: String; substr,newstr: String);
+var i, c,a: Integer;
 begin
   i:=pos(substr,s);
   c := length(substr);
@@ -174,11 +173,11 @@ begin
   end;
 end;
 
-procedure readsubexpr(r1,r2:ansichar; expr: GDBString;var substart,subend:GDBInteger);
+procedure readsubexpr(r1,r2:ansichar; expr: String;var substart,subend:Integer);
 var
-  {i, }count: GDBInteger;
-  s,f:GDBInteger;
-  //s: GDBString;
+  {i, }count: Integer;
+  s,f:Integer;
+  //s: String;
 begin
   count := 1;
   s:=substart;
@@ -199,21 +198,21 @@ begin
   substart:=s;
   subend:=f;
 end;
-procedure foundsym(sym:ansichar; expr: GDBString;var subend:GDBInteger);
+procedure foundsym(sym:ansichar; expr: String;var subend:Integer);
 begin
   while (expr[subend]<>sym) and (subend < length(expr)) do
         inc(subend);
 end;
-function IsParsed(template:GDBString;var str:GDBString; out strins:PTZctnrVectorGDBString):boolean;
+function IsParsed(template:String;var str:String; out strins:PTZctnrVectorGDBString):boolean;
 begin
      strins:=runparser(template,str,result);
 end;
-function runparser(template:GDBString;var str:GDBString; out parsed:GDBBoolean):PTZctnrVectorGDBString;
-var i:GDBInteger;
+function runparser(template:String;var str:String; out parsed:Boolean):PTZctnrVectorGDBString;
+var i:Integer;
     GDBStringarray:PTZctnrVectorGDBString;
 begin
      i:=1;
-     Getmem(GDBPointer(GDBStringarray),sizeof(TZctnrVectorGDBString));
+     Getmem(Pointer(GDBStringarray),sizeof(TZctnrVectorGDBString));
      GDBStringarray^.init(20);
      parsed:=false;
      if str<>'' then
@@ -233,7 +232,7 @@ begin
                else
                    begin
                         {GDBStringarray^.FreeAndDone;
-                                      Freemem(GDBPointer(GDBStringarray));
+                                      Freemem(Pointer(GDBStringarray));
                                       GDBStringarray:=nil;}
 
                    end;
@@ -241,19 +240,19 @@ begin
      if (GDBStringarray^.Count=0)or(not parsed) then
                                  begin
                                       GDBStringarray^.Done;
-                                      Freemem(GDBPointer(GDBStringarray));
+                                      Freemem(Pointer(GDBStringarray));
                                       GDBStringarray:=nil;
                                  end;
      result:=GDBStringarray;
 end;
-function parse(template, str:GDBString; GDBStringarray:PTZctnrVectorGDBString;mode:GDBBoolean;lexema:PLexema; var position:GDBInteger):GDBBoolean;
-var i,iend{,subpos},subi:GDBInteger;
-    subexpr:GDBString;
-    {error,}subresult:GDBBoolean;
+function parse(template, str:String; GDBStringarray:PTZctnrVectorGDBString;mode:Boolean;lexema:PLexema; var position:Integer):Boolean;
+var i,iend{,subpos},subi:Integer;
+    subexpr:String;
+    {error,}subresult:Boolean;
     command:ansichar;
     l:TLexema;
     strarr:TZctnrVectorGDBString;
-    //mode:GDBBoolean;
+    //mode:Boolean;
 begin
      result:=false;
      i:=1;

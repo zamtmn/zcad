@@ -12,11 +12,11 @@ uses
 
   uzctranslations,uzeentity,uzglviewareaabstract,uzgldrawcontext,
   uzeenttext,uzeentityfactory,uzcsysvars,uzbstrproc,
-  uzcinterface,uzbtypesbase,uzccommandsmanager,uzclog,gzctnrvectorpobjects,
+  uzcinterface,uzbtypesbase,uzccommandsmanager,uzclog,
   uzccommandsabstract,uzccommandsimpl,uzbtypes,uzcdrawings,uzeutils,uzcutils,sysutils,
-  varmandef,UGDBOpenArrayOfByte,uzeffdxf,uzegeometry,uzbmemman,uzeconsts,
+  varmandef,UGDBOpenArrayOfByte,uzeffdxf,uzegeometry,uzeconsts,
   uzccomdraw,uzeentline,uzbpaths,uzeentblockinsert,
-  uzbgeomtypes,varman,uzeentdevice,uzeentmtext,math,
+  uzegeometrytypes,varman,uzeentdevice,uzeentmtext,math,
   uzcentcable,UUnitManager,
   gzctnrvectortypes,uzccomelectrical,URecordDescriptor,TypeDescriptors,LazLogger,
   gzctnrstl,gutil,uzccmdfloatinsert;
@@ -32,7 +32,8 @@ type
     h:double;
   end;
   TIntersectedCom=record
-    BlockName,TEXT:GDBAnsiString;
+    BlockName:GDBAnsiString;
+    TEXT:TDXFEntsInternalStringType;
     ground,h,t,t2:double;
   end;
 
@@ -78,7 +79,7 @@ var
    dh,h:double;
    pt:pGDBObjMText;
    pl:pgdbobjline;
-   ts:string;
+   ts:TDXFEntsInternalStringType;
    i:integer;
 begin
   h:=floor(p1.h);
@@ -130,7 +131,7 @@ end;
 procedure TProfileBuildCom.drawdist(var t1:double; t2, FactTraceLength,TraceLength:double;DC:TDrawContext);
 var
    temp,tx:double;
-   ts:string;
+   ts:TDXFEntsInternalStringType;
    pt:pGDBObjMText;
 begin
   tx:=(t2+t1)/2;
@@ -155,7 +156,7 @@ end;
 procedure TProfileBuildCom.drawlevels(t,l1,l2,l3,FactTraceLength:double;DC:TDrawContext);
 var
    pt:pGDBObjMText;
-   ts:string;
+   ts:TDXFEntsInternalStringType;
 begin
   str(l1:0:2,ts);
   pt:=pointer(AllocEnt(GDBMtextID));

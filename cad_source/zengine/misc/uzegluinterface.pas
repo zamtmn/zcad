@@ -20,10 +20,10 @@ unit uzegluinterface;
 {$INCLUDE def.inc}
 
 interface
-uses LCLProc,uzepalette,uzbtypes,{$IFNDEF DELPHI}LCLType,{$ENDIF}
+uses LCLProc,uzepalette,{$IFNDEF DELPHI}LCLType,{$ENDIF}
      {$IFNDEF DELPHI}glu,gl,{$ELSE}dglOpenGL,windows,{$ENDIF}
      {$IFDEF SLINUX}glx,{$ENDIF}
-     uzbgeomtypes,sysutils,uzegeometry;
+     uzegeometrytypes,sysutils,uzegeometry;
 const
       GLU_VERSION={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_VERSION;
       GLU_TESS_VERTEX={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_TESS_VERTEX;

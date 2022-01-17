@@ -27,7 +27,7 @@ uses
   uzeblockdef,
   uzccommand_blockpreviewexport,
   LazLogger,Masks,
-  StrUtils,SysUtils;
+  SysUtils;
 implementation
 
 

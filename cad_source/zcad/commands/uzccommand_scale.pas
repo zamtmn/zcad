@@ -22,17 +22,15 @@ unit uzccommand_scale;
 interface
 uses
   gzctnrvectortypes,
-  usimplegenerics,
   uzcdrawing,
   uzgldrawcontext,
   uzbtypesbase,
-  uzbtypes,
   uzcdrawings,
-  uzeutils,uzcutils,
+  uzeutils,
   uzglviewareadata,
   uzccommand_move,
   uzccommandsabstract,varmandef,uzccommandsmanager,uzcinterface,uzcstrconsts,uzegeometry,zcmultiobjectchangeundocommand,
-  uzbgeomtypes,uzeentity,LazLogger;
+  uzegeometrytypes,uzeentity,LazLogger;
 type
   {REGISTEROBJECTTYPE scale_com}
   scale_com =  object(move_com)

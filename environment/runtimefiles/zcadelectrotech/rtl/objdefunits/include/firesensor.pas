@@ -5,7 +5,6 @@ usescopy objname;
 usescopy objmaterial;
 usescopy objgroup;
 usescopy blocktype;
-usescopy slcabagenmodul;
 var
    Device_Type:TDeviceType;(*'Тип устройства'*) 
 

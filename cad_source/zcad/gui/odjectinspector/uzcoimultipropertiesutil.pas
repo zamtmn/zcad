@@ -21,18 +21,17 @@ unit uzcoimultipropertiesutil;
 
 interface
 uses
-  uzctnrvectorgdbpointer,uzbstrproc, uzctnrvectorgdbstring,{uzcoimultiobjects,}uzepalette,uzbmemman,sysutils,uzeentityfactory,
-  uzbgeomtypes,uzbtypes,
-  uzcdrawings,
+  uzctnrvectorgdbpointer,uzbstrproc, uzctnrvectorgdbstring,uzepalette,sysutils,uzeentityfactory,
+  uzegeometrytypes,uzbtypes,
   varmandef,
   uzeentity,
   uzbtypesbase,
   Varman,UGDBPoint3DArray,
   uzedimensionaltypes,
-  gzctnrvectortypes,uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,
+  uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,
   uzeenttext,uzeentmtext,uzeentpolyline,uzegeometry,uzcoimultiproperties,LazLogger,
   uzcstrconsts,
-  gzctnrstl,usimplegenerics;
+  gzctnrstl,gzctnrvectortypes;
 type
   PTOneVarData=^TOneVarData;
   TOneVarData=record

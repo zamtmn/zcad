@@ -36,11 +36,11 @@ uses
 
      uzcinterface,
      uzctnrvectorgdbstring,
-     uzbgeomtypes,
+     uzegeometrytypes,
      uzegeometry,
 
      typinfo,
-     gzctnrvector,
+     //gzctnrvector,
      uzvconsts,
      uzcutils,
      Varman;             //Зкадовский RTTI
@@ -191,7 +191,7 @@ end;
 
 procedure Tuzvslagcab_com.visualGraphDevice(pdata:GDBPlatformint);
 var
- i,j,counterColor:integer;
+ //i,j,counterColor:integer;
  UndoMarcerIsPlazed:boolean;
  nameSL:string;
  listError:TListError;
@@ -287,7 +287,7 @@ end;
 
 procedure Tuzvslagcab_com.cablingGraphDevice(pdata:GDBPlatformint);
 var
- i,j,counterColor:integer;
+ //i,j,counterColor:integer;
  UndoMarcerIsPlazed:boolean;
  nameSL:string;
  listError:TListError;
@@ -360,7 +360,7 @@ end;
 
 procedure Tuzvslagcab_com.cablingNewGraphDevice(pdata:GDBPlatformint);
 var
- i,j,counterColor:integer;
+ //i,j,counterColor:integer;
  UndoMarcerIsPlazed:boolean;
  nameSL:string;
  listError:TListError;

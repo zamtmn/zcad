@@ -167,7 +167,7 @@ var
   MsgID:String;
   PContext:PTMessagesContext;
   TaskName:TLPName;
-  PriorityFocusCtrl:TWinControl;
+  //PriorityFocusCtrl:TWinControl;
   ParentHWND:THandle;
   TDF:TTaskDialogFlags;
   FirstMainParent,MainParent:TWinControl;

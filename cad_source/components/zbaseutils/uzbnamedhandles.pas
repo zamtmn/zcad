@@ -16,12 +16,12 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 unit uzbnamedhandles;
-{$INCLUDE def.inc}
+{$mode delphi}
 
 interface
 
 uses
-  sysutils,Generics.Collections,GVector,
+  sysutils,Generics.Collections,//GVector,
   uzbhandles;
 
 type

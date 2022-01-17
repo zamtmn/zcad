@@ -28,7 +28,7 @@ uses
   uzeentwithlocalcs,
   uzccommandsabstract,
   uzegeometry,zcmultiobjectchangeundocommand,
-  uzbgeomtypes,uzeentity,LazLogger,
+  uzegeometrytypes,uzeentity,LazLogger,
   uzbtypes,
   uzccommandsimpl;
 

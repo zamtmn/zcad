@@ -25,7 +25,7 @@ uses
       gzctnrvectortypes,uzemathutils,uzegeometry,uzbstrproc,TypeDescriptors,
       sysutils,UGDBOpenArrayOfByte,uzbtypesbase,
       USinonimDescriptor,uzedimensionaltypes,varmandef,uzbtypes,
-      base64,uzctnrvectorgdbstring,uzbmemman,math;
+      base64,uzctnrvectorgdbstring,math,uzbLogIntf;
 resourcestring
   rsDifferent='Different';
 type
@@ -242,8 +242,7 @@ end;*)
 function TEnumDataDescriptor.CreateProperties;
 var ppd:PPropertyDeskriptor;
 begin
-     if VerboseLog^ then
-       DebugLn('{T}[ZSCRIPT]TEnumDataDescriptor.CreateProperties(%s,ppda=%p)',[name,ppda]);
+     zTraceLn('{T}[ZSCRIPT]TEnumDataDescriptor.CreateProperties(%s,ppda=%p)',[name,ppda]);
      //programlog.LogOutFormatStr('TEnumDataDescriptor.CreateProperties(%s,ppda=%p)',[name,ppda],lp_OldPos,LM_Trace);
      ppd:=GetPPD(ppda,bmode);
      if ppd^._bmode=property_build then
@@ -379,8 +378,7 @@ end;
 function BaseTypeDescriptor<T,TManipulator>.CreateProperties;
 var ppd:PPropertyDeskriptor;
 begin
-     if VerboseLog^ then
-       DebugLn('{T}[ZSCRIPT]BaseTypeDescriptor.CreateProperties(%s,ppda=%p)',[name,ppda]);
+     zTraceLn('{T}[ZSCRIPT]BaseTypeDescriptor.CreateProperties(%s,ppda=%p)',[name,ppda]);
      //programlog.LogOutFormatStr('BaseTypeDescriptor.CreateProperties(%s,ppda=%p)',[name,ppda],lp_OldPos,LM_Trace);
      ppd:=GetPPD(ppda,bmode);
      if ppd^._bmode=property_build then

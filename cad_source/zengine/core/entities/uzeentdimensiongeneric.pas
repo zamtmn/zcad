@@ -21,7 +21,7 @@ unit uzeentdimensiongeneric;
 interface
 uses uzeentityfactory,uzeentwithlocalcs,uzeentdimension,uzestylesdim,uzestyleslayers,
      uzedrawingdef,uzbstrproc,UGDBOpenArrayOfByte,uzegeometry,uzbtypesbase,
-     sysutils,uzeentity,uzbtypes,uzeconsts,uzeffdxfsupport,uzbmemman,uzeentsubordinated,
+     sysutils,uzeentity,uzbtypes,uzeconsts,uzeffdxfsupport,uzeentsubordinated,
      uzeentdimradial,uzeentdimdiametric,uzeentdimrotated,uzeentdimaligned;
 type
 {EXPORT+}

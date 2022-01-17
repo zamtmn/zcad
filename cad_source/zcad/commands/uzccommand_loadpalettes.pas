@@ -22,7 +22,7 @@ unit uzccommand_loadpalettes;
 interface
 uses
  LCLProc,
- uzbpaths,uzccommandsabstract,uzccommandsimpl,uzbtypes,uztoolbarsmanager;
+ uzbpaths,uzccommandsabstract,uzccommandsimpl,uztoolbarsmanager;
 
 implementation
 function LoadPalettes_com(operands:TCommandOperands):TCommandResult;

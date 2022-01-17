@@ -23,6 +23,7 @@ interface
 resourcestring
 
   fontnotfoundandreplace='For text style "%s" not found font "%s" ("%s" fontfamily), is replaced by an alternative';
+  fontnotfound='For text style "%s" not found font "%s" ("%s" fontfamily)';
 
   {files}
   rsAlternateFontNotFoundIn='Alternate font "%s" is not found in "%s"';

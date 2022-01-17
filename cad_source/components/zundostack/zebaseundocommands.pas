@@ -17,16 +17,14 @@
 }
 {$MODE OBJFPC}
 unit zebaseundocommands;
-{$INCLUDE def.inc}
 interface
-uses varmandef,uzbtypesbase,sysutils,
-     gzctnrvectortypes,uzbtypes,uzbmemman;
+uses varmandef,sysutils,gzctnrvectortypes;
 type
 TTypeCommand=(TTC_MBegin,TTC_MEnd,TTC_MNotUndableIfOverlay,TTC_Command,TTC_ChangeCommand);
 PTElementaryCommand=^TElementaryCommand;
-TElementaryCommand=object(GDBaseObject)
-                         AutoProcessGDB:GDBBoolean;
-                         AfterAction:GDBBoolean;
+TElementaryCommand=object
+                         AutoProcessGDB:Boolean;
+                         AfterAction:Boolean;
                          function GetCommandType:TTypeCommand;virtual;
                          procedure UnDo;virtual;abstract;
                          procedure Comit;virtual;abstract;
@@ -34,23 +32,23 @@ TElementaryCommand=object(GDBaseObject)
                    end;
 PTMarkerCommand=^TMarkerCommand;
 TMarkerCommand=object(TElementaryCommand)
-                     Name:GDBstring;
+                     Name:String;
                      PrevIndex:TArrayIndex;
-                     constructor init(_name:GDBString;_index:TArrayIndex);
+                     constructor init(_name:String;_index:TArrayIndex);
                      function GetCommandType:TTypeCommand;virtual;
                      procedure UnDo;virtual;
                      procedure Comit;virtual;
                end;
 PTCustomChangeCommand=^TCustomChangeCommand;
 TCustomChangeCommand=object(TElementaryCommand)
-                           Addr:GDBPointer;
+                           Addr:Pointer;
                            function GetCommandType:TTypeCommand;virtual;
                      end;
 PTChangeCommand=^TChangeCommand;
 TChangeCommand=object(TCustomChangeCommand)
                      datasize:PtrInt;
-                     tempdata:GDBPointer;
-                     constructor init(obj:GDBPointer;_datasize:PtrInt);
+                     tempdata:Pointer;
+                     constructor init(obj:Pointer;_datasize:PtrInt);
                      procedure undo;virtual;
                      function GetDataTypeSize:PtrInt;virtual;
 
@@ -58,10 +56,10 @@ TChangeCommand=object(TCustomChangeCommand)
 PTTypedChangeCommand=^TTypedChangeCommand;
 TTypedChangeCommand=object(TCustomChangeCommand)
                                       public
-                                      OldData,NewData:GDBPointer;
+                                      OldData,NewData:Pointer;
                                       PTypeManager:PUserTypeDescriptor;
                                       PDataOwner:{PGDBObjEntity}pointer;//PEntity
-                                      constructor Assign(PDataInstance:GDBPointer;PType:PUserTypeDescriptor);
+                                      constructor Assign(PDataInstance:Pointer;PType:PUserTypeDescriptor);
                                       procedure UnDo;virtual;
                                       procedure Comit;virtual;
                                       procedure ComitFromObj;virtual;
@@ -73,7 +71,7 @@ TOnUndoRedoDataOwner=procedure(PDataOwner:Pointer) of object;
 var
   onUndoRedoDataOwner:TOnUndoRedoDataOwner;
 implementation
-constructor TTypedChangeCommand.Assign(PDataInstance:GDBPointer;PType:PUserTypeDescriptor);
+constructor TTypedChangeCommand.Assign(PDataInstance:Pointer;PType:PUserTypeDescriptor);
 begin
      Addr:=PDataInstance;
      PTypeManager:=PType;
@@ -156,7 +154,7 @@ destructor TElementaryCommand.Done;
 begin
 end;
 
-constructor TChangeCommand.init(obj:GDBPointer;_datasize:PtrInt);
+constructor TChangeCommand.init(obj:Pointer;_datasize:PtrInt);
 begin
      Addr:=obj;
      datasize:=_datasize;
@@ -206,7 +204,7 @@ begin
 //     gdb.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^,dc);
 end;
 
-constructor TMarkerCommand.init(_name:GDBString;_index:TArrayIndex);
+constructor TMarkerCommand.init(_name:String;_index:TArrayIndex);
 begin
      name:=_name;
      PrevIndex:=_index;

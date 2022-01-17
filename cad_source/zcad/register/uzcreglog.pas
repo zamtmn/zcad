@@ -17,15 +17,18 @@
 }
 
 unit uzcreglog;
+{$mode odjfpc}
 {$INCLUDE def.inc}
 interface
-uses uzblog,uzclog,uzcinterface,uzcuidialogs,uzcuitypes,uzelongprocesssupport,
-     {$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}LCLProc,Forms;
+uses uzbLog,uzclog,uzcinterface,uzcuidialogs,uzcuitypes,uzelongprocesssupport,
+     {$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}LCLProc,Forms,
+     LazLoggerBase,LazLogger,uzbLogIntf;
 implementation
 
 type
   TLogHelper=class
     class procedure EndLongProcessHandler(LPHandle:TLPSHandle;TotalLPTime:TDateTime);
+    class procedure LCLOnDebugLN(Sender: TObject; S: string; var Handled: Boolean);
   end;
 
 const
@@ -42,6 +45,10 @@ begin
   programlog.LogOutFormatStr('LongProcess "%s" finished: %s second',[lps.getLPName(LPHandle),ts],lp_OldPos,LM_Necessarily,LPSTIMINGModuleDeskIndex)
 end;
 
+class procedure TLogHelper.LCLOnDebugLN(Sender: TObject; S: string; var Handled: Boolean);
+begin
+  programlog.ZOnDebugLN(Sender,S,Handled);
+end;
 
 procedure ShowMessageForLog(errstr:String);
 var
@@ -62,6 +69,9 @@ begin
   dr:=zcMsgDlg(ErrStr,zcdiError,[],true);
 end;
 
+var
+  lz:TLazLogger;
+
 initialization
 
   LPSTIMINGModuleDeskIndex:=programlog.RegisterModule(LPSTIMINGModuleName);
@@ -71,6 +81,16 @@ initialization
   programlog.MessageBoxTextOut:=@ShowMessageForLog;
   programlog.WarningBoxTextOut:=@ShowWarningForLog;
   programlog.ErrorBoxTextOut:=@ShowErrorForLog;
+
+  lz:=GetDebugLogger;
+  if assigned(lz)then
+    if lz is TLazLoggerFile then
+      begin
+           (lz as TLazLoggerFile).OnDebugLn:=TLogHelper.LCLOnDebugLN;
+           (lz as TLazLoggerFile).OnDbgOut:=TLogHelper.LCLOnDebugLN;
+      end;
+
+  InstallLoger(programlog.ZDebugLN,nil,programlog.isTraceEnabled);
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

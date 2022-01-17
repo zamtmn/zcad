@@ -31,21 +31,21 @@ uses
        uzcsysparams,gzctnrvectortypes,uzemathutils,uzelongprocesssupport,
        uzgldrawergdi,uzcdrawing,UGDBOpenArrayOfPV,uzedrawingabstract,
        uzepalette,uzbpaths,uzglviewareadata,uzeentitiesprop,uzcinterface,
-       UGDBOpenArrayOfByte,uzbmemman,uzbtypesbase,uzbtypes,
-       uzegeometry,uzcsysvars,uzcstrconsts,uzbstrproc,UGDBNamedObjectsArray,uzclog,uzblog,
+       UGDBOpenArrayOfByte,uzbtypesbase,uzbtypes,
+       uzegeometry,uzcsysvars,uzcstrconsts,uzbstrproc,uzclog,uzblog,
        uzedimensionaltypes,varmandef, varman,UUnitManager,uzcsysinfo,strmy,uzestylestexts,uzestylesdim,
   uzbexceptionscl,uzbexceptionsgui,
   {ZCAD SIMPLE PASCAL SCRIPT}
        //languade,
   {ZCAD ENTITIES}
-       uzbgeomtypes,uzeentity,UGDBSelectedObjArray,uzestyleslayers,uzedrawingsimple,
+       uzegeometrytypes,uzeentity,UGDBSelectedObjArray,uzestyleslayers,uzedrawingsimple,
        uzeblockdef,uzcdrawings,uzestyleslinetypes,uzeconsts,uzeenttext,uzeentdimension,
   {ZCAD COMMANDS}
        uzccommandsabstract,uzccommandsimpl,uzccommandsmanager,
        uzccommand_loadlayout,
   {GUI}
        uzcuitypes,
-       uzcmenucontextcheckfuncs,uzctbextmenus,uzmenusdefaults,uzmenusmanager,uztoolbarsmanager,uzctextenteditor,uzcfcommandline,uzctreenode,uzcflineweights,uzcctrllayercombobox,uzcctrlcontextmenu,
+       uzcmenucontextcheckfuncs,uzctbextmenus,uzmenusdefaults,uzmenusmanager,uztoolbarsmanager,uzctextenteditor,uzcfcommandline,uzctreenode,uzcctrlcontextmenu,
        uzcimagesmanager,usupportgui,uzcuidialogs,
   {}
        uzgldrawcontext,uzglviewareaabstract,uzcguimanager,uzcinterfacedata,
@@ -1868,13 +1868,13 @@ begin
   size:=round(pdwg.wa.getviewcontrol.ClientWidth*pdwg.GetPcamera^.prop.zoom);
   position:=round(-pdwg.GetPcamera^.prop.point.x);
   min:=round(bb.LBN.x+size/2);
-  max:=round(bb.RTF.x+{$IFDEF LINUX}-{$ENDIF}size/2);
+  max:=round(bb.RTF.x+{$IFNDEF LCLWIN32}-{$ENDIF}size/2);
   if max<min then max:=min;
   ZCADMainWindow.HScrollBar.SetParams(position,min,max,size);
 
   size:=round(pdwg.wa.getviewcontrol.ClientHeight*pdwg.GetPcamera^.prop.zoom);
   min:=round(bb.LBN.y+size/2);
-  max:=round(bb.RTF.y+{$IFDEF LINUX}-{$ENDIF}size/2);
+  max:=round(bb.RTF.y+{$IFNDEF LCLWIN32}-{$ENDIF}size/2);
   if max<min then max:=min;
   position:=round((bb.LBN.y+bb.RTF.y+pdwg.GetPcamera^.prop.point.y));
   ZCADMainWindow.VScrollBar.SetParams(position,min,max,size);
@@ -1959,7 +1959,7 @@ var
    i,k:Integer;
    pdwg:PTSimpleDrawing;
    FIPCServerRunning:boolean;
-   otherinstancerunning:boolean;
+   //otherinstancerunning:boolean;
    oldmenu,newmenu:TMainMenu;
 begin
   if GUIMode<>ZMsgID_GUIActionRedraw then

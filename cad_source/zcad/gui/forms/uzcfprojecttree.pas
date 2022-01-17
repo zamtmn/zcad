@@ -24,8 +24,8 @@ uses
  uzctnrvectorgdbstring,uzeconsts,uzcstrconsts,uzcctrlcontextmenu,uzbstrproc,
  uzctreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  Classes,FileUtil,Forms,stdctrls,Controls,ComCtrls,
- uzcdevicebaseabstract,uzclog,SysUtils,uzbtypes,uzcdrawings,varman,languade,
- varmandef,uzcsysinfo,uzbmemman,uzbtypesbase,uzccommandsimpl,uzccommandsabstract,
+ uzcdevicebaseabstract,uzclog,SysUtils,uzcdrawings,varman,
+ varmandef,uzcsysinfo,uzbtypesbase,uzccommandsimpl,uzccommandsabstract,
  uztoolbarsmanager,
  gzctnrvectortypes,uzeblockdef,UBaseTypeDescriptor,uzcinterface,UUnitManager,LazLogger,uzmenusmanager;
 const
@@ -225,7 +225,7 @@ begin
                                      eqnode:=TEqTreeNode({tree}TmyTreeView(BuildNode.TreeView).Items.addchild(CurrNode,(treepos)));
                                      eqnode.fBlockName:=pvdeq^.name;
                                      eqnode.FPopupMenu:=pcm;
-                                     //eqnode.ptd.PTD:=pvdeq^.data.PTD;
+                                     eqnode.ptd.PTD:=pvdeq^.data.PTD;
                                      eqnode.ptd.Instance:=pvdeq^.data.Addr.Instance;
 
                                      //eqnode.init(s+pvdeq^.name,pvdeq^.name,pvdeq^.data.PTD,pvdeq^.Instance,pcm)
@@ -235,7 +235,7 @@ begin
                                       eqnode:=TEqTreeNode({tree}TmyTreeView(BuildNode.TreeView).Items.addchild(CurrNode,(PDbBaseObject(pvdeq^.data.Addr.Instance)^.NameShort)+' ('+pvdeq^.name+') '+' из '+treepos));
                                       eqnode.fBlockName:=pvdeq^.name;
                                       eqnode.FPopupMenu:=pcm;
-                                      //eqnode.ptd.PTD:=pvdeq^.data.PTD;
+                                      eqnode.ptd.PTD:=pvdeq^.data.PTD;
                                       eqnode.ptd.Instance:=pvdeq^.data.Addr.Instance;
 
                                  //eqnode.init(s+treepos,pvdeq^.name,pvdeq^.data.PTD,pvdeq^.Instance,pcm);

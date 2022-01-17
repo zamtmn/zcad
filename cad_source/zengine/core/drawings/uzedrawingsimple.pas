@@ -19,11 +19,11 @@
 unit uzedrawingsimple;
 {$INCLUDE def.inc}
 interface
-uses uzedrawingdef,uzeblockdefsfactory,uzestylesdim,uzeentwithlocalcs,
+uses uzedrawingdef,uzeblockdefsfactory,uzestylesdim,
      gzctnrvectortypes,uzedrawingabstract,uzbstrproc,UGDBObjBlockdefArray,uzestylestables,
-     UGDBNumerator,uzbtypes,sysutils, uzbmemman,uzegeometry,uzbtypesbase,uzeentgenericsubentry,
+     UGDBNumerator,uzbtypes,sysutils,uzegeometry,uzbtypesbase,uzeentgenericsubentry,
      uzestyleslayers,uzestyleslinetypes,uzeentity,UGDBSelectedObjArray,uzestylestexts,
-     uzedimensionaltypes,uzbgeomtypes,uzecamera,UGDBOpenArrayOfPV,uzeroot,uzefont,
+     uzedimensionaltypes,uzegeometrytypes,uzecamera,UGDBOpenArrayOfPV,uzeroot,uzefont,
      uzglviewareaabstract,uzglviewareageneral,uzgldrawcontext,UGDBControlPointArray;
 type
 TMainBlockCreateProc=procedure (_to:PTDrawingDef;name:GDBString) of object;
@@ -399,7 +399,7 @@ procedure TSimpleDrawing.rtmodify(obj:PGDBObjEntity;md:GDBPointer;dist,wc:gdbver
 var i:GDBInteger;
     point:pcontrolpointdesc;
     p:GDBPointer;
-    m,m2,mt:DMatrix4D;
+    m,{m2,}mt:DMatrix4D;
     t:gdbvertex;
     //tt:dvector4d;
     rtmod:TRTModifyData;

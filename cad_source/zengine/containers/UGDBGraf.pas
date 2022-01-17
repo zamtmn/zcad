@@ -20,7 +20,7 @@ unit UGDBGraf;
 {$INCLUDE def.inc}
 interface
 uses varman,uzedrawingdef,varmandef,UGDBPoint3DArray,uzbtypesbase,gzctnrvectordata,
-     uzbgeomtypes,sysutils,uzbtypes,uzegeometry,uzeentity,UGDBOpenArrayOfPV,
+     uzegeometrytypes,sysutils,uzbtypes,uzegeometry,uzeentity,UGDBOpenArrayOfPV,
      gzctnrvectortypes,uzcenitiesvariablesextender,uzeentline,math;
 type
 {EXPORT+}

@@ -20,10 +20,10 @@ unit uzcregother;
 {$INCLUDE def.inc}
 interface
 uses uzbpaths,UUnitManager,uzcsysvars,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
-     uzbstrproc,Varman,languade,SysUtils,
-     UBaseTypeDescriptor,uzbtypes,UGDBOpenArrayOfByte, strmy, varmandef,
+     uzbstrproc,Varman,SysUtils,
+     UBaseTypeDescriptor,UGDBOpenArrayOfByte, strmy, varmandef,
      uzcsysparams,uzcsysinfo,TypeDescriptors,URecordDescriptor,
-     uzclog,uzbmemman,LazLogger;
+     uzclog,LazLogger;
 implementation
 {$IFNDEF WINDOWS}
 //var

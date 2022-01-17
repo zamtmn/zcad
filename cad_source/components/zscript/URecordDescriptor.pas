@@ -22,7 +22,7 @@ unit URecordDescriptor;
 interface
 uses LCLProc,UPointerDescriptor,uzbstrproc,{log,}UGDBOpenArrayOfByte,sysutils,UBaseTypeDescriptor,
   gzctnrvectortypes,uzedimensionaltypes,TypeDescriptors,gzctnrvectordata,uzbtypesbase,
-  TypInfo,varmandef,uzbtypes,uzbmemman;
+  TypInfo,varmandef,uzbtypes,uzbLogIntf;
 type
 TFieldDescriptor=GZVectorData<FieldDescriptor>;
 PRecordDescriptor=^RecordDescriptor;
@@ -34,7 +34,7 @@ RecordDescriptor=object(TUserTypeDescriptor)
                        procedure AddField(var fd:FieldDescriptor);
                        function FindField(fn:TInternalScriptString):PFieldDescriptor;virtual; //**< Найти требуемое поля. Пример : sampleRTTITypeDesk^.FindField('PolyWidth')
                        function SetAttrib(fn:TInternalScriptString;SetA,UnSetA:GDBWord):PFieldDescriptor;
-                       procedure ApplyOperator(oper,path:TInternalScriptString;var offset:GDBInteger;out tc:PUserTypeDescriptor);virtual;
+                       procedure ApplyOperator(oper,path:TInternalScriptString;var offset:Integer;out tc:PUserTypeDescriptor);virtual;
                        procedure AddConstField(const fd:FieldDescriptor);
                        procedure CopyTo(RD:PTUserTypeDescriptor);
                        //function Serialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
@@ -286,8 +286,7 @@ begin
              if TypeName='trenderdeb' then
                        TypeName:=TypeName;
         end;
-     if VerboseLog^ then
-       DebugLn('{T+}[ZSCRIPT]RecordDescriptor.CreateProperties "%s"',[name]);
+     zTraceLn('{T+}[ZSCRIPT]RecordDescriptor.CreateProperties "%s"',[name]);
      //programlog.LogOutFormatStr('RecordDescriptor.CreateProperties "%s"',[name],lp_IncPos,LM_Trace);
 
      pobj:=addr;
@@ -344,8 +343,7 @@ begin
                                              repeat
                                                   if pvd^.name='BTY_TreeCoord' then
                                                                                    pvd^.name:=pvd^.name;
-                                                  if VerboseLog^ then
-                                                    DebugLn('{T}[ZSCRIPT]process prop: "%s"',[pvd^.name]);
+                                                  zTraceLn('{T}[ZSCRIPT]process prop: "%s"',[pvd^.name]);
                                                   //programlog.LogOutFormatStr('process prop: "%s"',[pvd^.name],lp_OldPos,LM_Trace);
                                                   i:=pos('_',pvd^.name);
                                                   tname:=pvd^.username;
@@ -484,8 +482,7 @@ begin
                        end
                    else*)
            if pfd^.base.ProgramName='#' then begin
-                                                if VerboseLog^ then
-                                                  DebugLn('{T}[ZSCRIPT]Found ##PVMT');
+                                                zTraceLn('{T}[ZSCRIPT]Found ##PVMT');
                                                 //programlog.LogOutStr('Found ##PVMT',lp_OldPos,LM_Trace);
                                                 ppd:=GetPPD(ppda,bmode);
                                                 if ppd^._bmode=property_build then
@@ -514,8 +511,7 @@ begin
                                                                                 if assigned(pobj) then
                                                                                                       if assigned(ppointer(pobj)^) then
                                                                                                                                        begin
-                                                                                                                                       if VerboseLog^ then
-                                                                                                                                         DebugLn('{T}[ZSCRIPT]%p',[pobj]);
+                                                                                                                                       zTraceLn('{T}[ZSCRIPT]%p',[pobj]);
                                                                                                                                        //programlog.LogOutFormatStr('%p',[pobj],lp_OldPos,LM_Trace);
                                                                                                                                        ppd^.value:=pobj^.GetObjTypeName;
                                                                                                                                        //pobj^.whoisit;
@@ -555,8 +551,7 @@ begin
      end;
                if bmodesave<>property_build then
                                       bmode:=bmodesave;
-     if VerboseLog^ then
-       DebugLn('{T-}[ZSCRIPT]end;{RecordDescriptor.CreateProperties "%s"}',[name]);
+     zTraceLn('{T-}[ZSCRIPT]end;{RecordDescriptor.CreateProperties "%s"}',[name]);
      //programlog.LogOutFormatStr('end;{RecordDescriptor.CreateProperties "%s"}',[name],lp_DecPos,LM_Trace);
 end;
 

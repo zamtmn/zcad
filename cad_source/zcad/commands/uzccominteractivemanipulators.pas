@@ -43,7 +43,7 @@ uses
   Forms,
 
   uzeutils,
-  uzbgeomtypes,
+  uzegeometrytypes,
 
   uzeentblockinsert,      //unit describes blockinsert entity
                        //модуль описывающий примитив вставка блока
@@ -78,7 +78,7 @@ uses
                       //системные переменные
   uzgldrawcontext,
 
-  uzbtypesbase,uzbtypes, //base types
+  uzbtypesbase, //base types
                       //описания базовых типов
                       //описания базовых констант
   uzccommandsmanager,

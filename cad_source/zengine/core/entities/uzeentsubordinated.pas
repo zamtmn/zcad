@@ -21,8 +21,8 @@ unit uzeentsubordinated;
 
 interface
 uses strutils,uzgldrawcontext,uzeentityextender,uzetextpreprocessor,uzedrawingdef,
-     uzbstrproc{$IFNDEF DELPHI},LazUTF8{$ENDIF},UGDBOpenArrayOfByte,uzbgeomtypes,uzbtypes,
-     gzctnrvectortypes,uzbtypesbase,sysutils,uzestyleslayers,usimplegenerics,uzeffdxfsupport;
+     uzbstrproc{$IFNDEF DELPHI},LazUTF8{$ENDIF},UGDBOpenArrayOfByte,uzegeometrytypes,uzbtypes,
+     uzbtypesbase,sysutils,uzestyleslayers,uzeffdxfsupport,gzctnrvectortypes;
 type
 {EXPORT+}
 PGDBObjExtendable=^GDBObjExtendable;
@@ -254,20 +254,22 @@ begin
      vv:=AnsiReplaceStr(vv,'@@[Segment]','@@[CABLE_Segment]');
 end;
 procedure OldVersTextReplace(var vv:TDXFEntsInternalStringType);overload;
+const
+  ReplaceAllIgnoreCase=[rfReplaceAll, rfIgnoreCase];
 begin
-     vv:=AnsiReplaceStr(vv,'@@[Name]','@@[NMO_Name]');
-     vv:=AnsiReplaceStr(vv,'@@[ShortName]','@@[NMO_BaseName]');
-     vv:=AnsiReplaceStr(vv,'@@[Name_Template]','@@[NMO_Template]');
-     vv:=AnsiReplaceStr(vv,'@@[Material]','@@[DB_link]');
-     vv:=AnsiReplaceStr(vv,'@@[HeadDevice]','@@[GC_HeadDevice]');
-     vv:=AnsiReplaceStr(vv,'@@[HeadDShortName]','@@[GC_HDShortName]');
-     vv:=AnsiReplaceStr(vv,'@@[GroupInHDevice]','@@[GC_HDGroup]');
-     vv:=AnsiReplaceStr(vv,'@@[NumberInSleif]','@@[GC_NumberInGroup]');
-     vv:=AnsiReplaceStr(vv,'@@[RoundTo]','@@[LENGTH_RoundTo]');
-     vv:=AnsiReplaceStr(vv,'@@[Cable_AddLength]','@@[LENGTH_Add]');
-     vv:=AnsiReplaceStr(vv,'@@[Cable_Scale]','@@[LENGTH_Scale]');
-     vv:=AnsiReplaceStr(vv,'@@[TotalConnectedDevice]','@@[CABLE_TotalCD]');
-     vv:=AnsiReplaceStr(vv,'@@[Segment]','@@[CABLE_Segment]');
+     vv:=UnicodeStringReplace(vv,'@@[Name]','@@[NMO_Name]',ReplaceAllIgnoreCase);
+     vv:=UnicodeStringReplace(vv,'@@[ShortName]','@@[NMO_BaseName]',ReplaceAllIgnoreCase);
+     vv:=UnicodeStringReplace(vv,'@@[Name_Template]','@@[NMO_Template]',ReplaceAllIgnoreCase);
+     vv:=UnicodeStringReplace(vv,'@@[Material]','@@[DB_link]',ReplaceAllIgnoreCase);
+     vv:=UnicodeStringReplace(vv,'@@[HeadDevice]','@@[GC_HeadDevice]',ReplaceAllIgnoreCase);
+     vv:=UnicodeStringReplace(vv,'@@[HeadDShortName]','@@[GC_HDShortName]',ReplaceAllIgnoreCase);
+     vv:=UnicodeStringReplace(vv,'@@[GroupInHDevice]','@@[GC_HDGroup]',ReplaceAllIgnoreCase);
+     vv:=UnicodeStringReplace(vv,'@@[NumberInSleif]','@@[GC_NumberInGroup]',ReplaceAllIgnoreCase);
+     vv:=UnicodeStringReplace(vv,'@@[RoundTo]','@@[LENGTH_RoundTo]',ReplaceAllIgnoreCase);
+     vv:=UnicodeStringReplace(vv,'@@[Cable_AddLength]','@@[LENGTH_Add]',ReplaceAllIgnoreCase);
+     vv:=UnicodeStringReplace(vv,'@@[Cable_Scale]','@@[LENGTH_Scale]',ReplaceAllIgnoreCase);
+     vv:=UnicodeStringReplace(vv,'@@[TotalConnectedDevice]','@@[CABLE_TotalCD]',ReplaceAllIgnoreCase);
+     vv:=UnicodeStringReplace(vv,'@@[Segment]','@@[CABLE_Segment]',ReplaceAllIgnoreCase);
 end;
 procedure OldVersVarRename(var vn,vt,vv,vun:GDBString);
 var

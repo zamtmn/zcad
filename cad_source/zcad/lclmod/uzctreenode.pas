@@ -21,7 +21,7 @@ unit uzctreenode;
 interface
 
 uses
-  {$IFDEF WINDOWS}win32proc,{$endif}
+  {$IFDEF LCLWIN32}win32proc,{$endif}
   uzcutils,uzbpaths,Themes,uzcinterface,uzccommandsabstract,ExtCtrls,lclproc,Graphics,ActnList,ComCtrls,
   Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,{$ENDIF}LazUTF8,Buttons,
   {$IFNDEF DELPHI}uzctranslations,{$ENDIF}sysutils,uzbstrproc,varmandef,
@@ -161,6 +161,7 @@ begin
                                              {$IFDEF LCLQT}tsDownNormal{$ENDIF}
                                              {$IFDEF LCLQT5}tsDownNormal{$ENDIF}
                                              {$IFDEF LCLgtk2}ttbSplitButtonDropDownNormal{$ENDIF}
+                                             {$IFDEF LCLgtk3}ttbSplitButtonDropDownNormal{$ENDIF}
                                              );
     PaintRect:=ClientRect;
     {$IFDEF LCLWIN32}if WindowsVersion<wvVista then begin
@@ -171,6 +172,7 @@ begin
     {$IFDEF LCLQT}PaintRect.Top:=PaintRect.Bottom div 2;PaintRect.Left:=2*PaintRect.Right div 3;{$ENDIF}
     {$IFDEF LCLQT5}PaintRect.Top:=PaintRect.Bottom div 2;PaintRect.Left:=2*PaintRect.Right div 3;{$ENDIF}
     {$IFDEF LCLGTK2}PaintRect.Top:=2*PaintRect.Bottom div 3;PaintRect.Left:=PaintRect.Right div 2;{$ENDIF}
+    {$IFDEF LCLGTK3}PaintRect.Top:=2*PaintRect.Bottom div 3;PaintRect.Left:=PaintRect.Right div 2;{$ENDIF}
     ThemeServices.DrawElement(Canvas.Handle,Details,PaintRect)
   end;
 end;

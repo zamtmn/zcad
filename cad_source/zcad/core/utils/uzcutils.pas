@@ -26,7 +26,7 @@ uses uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzepalette,
      uzeentityfactory,uzgldrawcontext,uzcdrawing,uzestyleslinetypes,uzcsysvars,
      uzestyleslayers,sysutils,uzbtypesbase,uzbtypes,uzcdrawings,varmandef,
      uzeconsts,UGDBVisibleOpenArray,uzeentgenericsubentry,uzeentity,
-     uzbgeomtypes,uzeentblockinsert,uzbmemman,uzcinterface,gzctnrvectortypes;
+     uzegeometrytypes,uzeentblockinsert,uzcinterface,gzctnrvectortypes;
 
   {**Добавление в чертеж примитива с обвязкой undo
     @param(PEnt Указатель на добавляемый примитив)

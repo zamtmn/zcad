@@ -20,8 +20,8 @@ unit uzgprimitivescreator;
 {$INCLUDE def.inc}
 interface
 uses uzgprimitivescreatorabstract,uzgindexsarray,uzgprimitives,
-     gzctnrvectortypes,uzbtypesbase,sysutils,uzbtypes,uzbmemman,uzgprimitivessarray,
-     uzegeometry,LazLogger;
+     uzbtypesbase,sysutils,uzbtypes,uzgprimitivessarray,
+     uzegeometry,LazLogger,gzctnrvectortypes;
 type
 
 TLLPrimitivesCreator=class(TLLPrimitivesCreatorAbstract)

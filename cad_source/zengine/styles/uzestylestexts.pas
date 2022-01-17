@@ -20,7 +20,7 @@ unit uzestylestexts;
 {$INCLUDE def.inc}
 interface
 uses LCLProc,uzbpaths,uzefontmanager,uzbtypesbase,sysutils,uzbtypes,uzegeometry,
-     uzbstrproc,uzefont,uzestrconsts,UGDBNamedObjectsArray,uzbmemman;
+     uzbstrproc,uzefont,uzestrconsts,UGDBNamedObjectsArray;
 type
   //ptextstyle = ^textstyle;
 {EXPORT+}
@@ -118,11 +118,12 @@ begin
 
   style.pfont:=FontManager.addFont(AFontFile,AFontFamily);
   if not assigned(style.pfont) then
-                                begin
-                                     debugln('{WHM}'+fontnotfoundandreplace,[Tria_AnsiToUtf8(style.Name),AFontFile,AFontFamily]);
-                                     style.pfont:=pbasefont;
-                                end;
-
+    if USedInLT then
+      debugln('{WHM}'+fontnotfound,[Tria_AnsiToUtf8(style.Name),AFontFile,AFontFamily])
+    else begin
+      debugln('{WHM}'+fontnotfoundandreplace,[Tria_AnsiToUtf8(style.Name),AFontFile,AFontFamily]);
+      style.pfont:=pbasefont;
+    end;
   style.prop:=tp;
 end;
 

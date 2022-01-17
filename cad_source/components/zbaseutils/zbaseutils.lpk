@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Package Version="5">
+    <PathDelim Value="\"/>
+    <Name Value="zbaseutils"/>
+    <Type Value="RunAndDesignTime"/>
+    <CompilerOptions>
+      <Version Value="11"/>
+      <PathDelim Value="\"/>
+      <SearchPaths>
+        <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
+      </SearchPaths>
+    </CompilerOptions>
+    <Files>
+      <Item>
+        <Filename Value="uzblog.pas"/>
+        <UnitName Value="uzblog"/>
+      </Item>
+      <Item>
+        <Filename Value="uzbnamedhandles.pas"/>
+        <UnitName Value="uzbnamedhandles"/>
+      </Item>
+      <Item>
+        <Filename Value="uzbnamedhandleswithdata.pas"/>
+        <UnitName Value="uzbnamedhandleswithdata"/>
+      </Item>
+      <Item>
+        <Filename Value="uzbhandles.pas"/>
+        <UnitName Value="uzbhandles"/>
+      </Item>
+      <Item>
+        <Filename Value="uzbsets.pas"/>
+        <UnitName Value="uzbsets"/>
+      </Item>
+      <Item>
+        <Filename Value="uzbexceptionscl.pas"/>
+        <UnitName Value="uzbexceptionscl"/>
+      </Item>
+      <Item>
+        <Filename Value="uzbexceptionsparams.pas"/>
+        <UnitName Value="uzbexceptionsparams"/>
+      </Item>
+      <Item>
+        <Filename Value="uzblogintf.pas"/>
+        <UnitName Value="uzbLogIntf"/>
+      </Item>
+    </Files>
+    <RequiredPkgs>
+      <Item>
+        <PackageName Value="LazUtils"/>
+      </Item>
+      <Item>
+        <PackageName Value="FCL"/>
+      </Item>
+    </RequiredPkgs>
+    <UsageOptions>
+      <UnitPath Value="$(PkgOutDir)"/>
+    </UsageOptions>
+    <PublishOptions>
+      <Version Value="2"/>
+      <UseFileFilters Value="True"/>
+    </PublishOptions>
+  </Package>
+</CONFIG>

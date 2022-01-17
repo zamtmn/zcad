@@ -24,7 +24,7 @@ interface
 uses
   LazLogger,
   sysutils,
-  uzbgeomtypes,uzegeometry,
+  uzegeometrytypes,uzegeometry,
   uzccommandsabstract,uzccommandsimpl,
   uzcdrawings;
 

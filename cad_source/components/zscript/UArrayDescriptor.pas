@@ -20,7 +20,8 @@ unit UArrayDescriptor;
 {$INCLUDE def.inc}
 {$MODE DELPHI}
 interface
-uses gzctnrvectortypes,uzedimensionaltypes,sysutils,LCLProc,TypeDescriptors,uzbtypesbase,varmandef,uzbtypes,gzctnrvectordata,uzbmemman;
+uses gzctnrvectortypes,uzedimensionaltypes,sysutils,LCLProc,TypeDescriptors,
+     uzbtypesbase,varmandef,uzbtypes,gzctnrvectordata,uzbLogIntf;
 type
 PArrayIndexDescriptor=^ArrayIndexDescriptor;
 ArrayIndexDescriptor=record
@@ -86,8 +87,7 @@ end;
 function ArrayDescriptor.CreateProperties;
 var ppd:PPropertyDeskriptor;
 begin
-     if VerboseLog^ then
-       debugln(sysutils.Format('{T}[ZSCRIPT]ArrayDescriptor.CreateProperties(%s)',[name]));
+     zTraceLn(sysutils.Format('{T}[ZSCRIPT]ArrayDescriptor.CreateProperties(%s)',[name]));
      //programlog.LogOutFormatStr('ArrayDescriptor.CreateProperties(%s)',[name],lp_OldPos,LM_Trace);
      ppd:=GetPPD(ppda,bmode);
      ppd^.Name:=name;

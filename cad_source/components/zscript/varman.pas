@@ -22,23 +22,25 @@ unit Varman;
 
 interface
 uses
-  UEnumDescriptor,uzctnrvectorgdbpointer,gzctnrvectordata,gzctnrvectorpobjects,LCLProc,uabstractunit,
-  SysUtils,UBaseTypeDescriptor,uzbtypesbase,uzbtypes,UGDBOpenArrayOfByte,
-  gzctnrvectortypes,uzctnrvectorgdbstring,varmandef,gzctnrstl,uzbmemman,
-  TypeDescriptors,URecordDescriptor,UObjectDescriptor,uzbstrproc,classes,typinfo,UPointerDescriptor,
-  uzctnrobjectschunk;
+  UEnumDescriptor,uzctnrvectorgdbpointer,gzctnrvectorpobjects,LCLProc,uabstractunit,
+  SysUtils,UBaseTypeDescriptor,uzbtypesbase,{uzbtypes,}UGDBOpenArrayOfByte,
+  gzctnrvectortypes,uzctnrvectorgdbstring,varmandef,gzctnrstl,
+  TypeDescriptors,URecordDescriptor,UObjectDescriptor,uzbstrproc,classes,typinfo,
+  UPointerDescriptor,
+  uzctnrobjectschunk,uzctnrvectorpgdbaseobjects,gzctnrvectorpdata,gzctnrvectordata,
+  uzbLogIntf;
 type
     td=record
-             template:GDBString;
-             id:GDBInteger;
+             template:String;
+             id:Integer;
        end;
     ptdarray=^tdarray;
     tdarray=array [1..maxint div sizeof(td)] of td;
     pasparsemode=(modeOk,modeError,modeEnd);
     penumodj=^tenumodj;
     tenumodj=record
-                  source,user:GDBString;
-                  value:GDBLongword;
+                  source,user:String;
+                  value:Longword;
             end;
 const
      SuffLeft='_Left';
@@ -69,7 +71,7 @@ const
       (template:'_identifier'#0'_softspace'#0'==_softspace'#0'=p=a=c=k=e=d_hardspace'#0'=a=r=r=a=y_softspace'#0;id:packedarraytype),
       (template:'_identifier'#0'_softspace'#0'==_softspace'#0'=p=r=o=c=e=d=u=r=e_hardspace'#0;id:proceduraltype),
       (template:'_identifier'#0'_softspace'#0'==_softspace'#0'=(_softspace'#0;id:enumtype),
-      (template:'_softspace'#0'=(=*=v=a=r=c=a=t=e=g=o=r=y=f=o=r=o=i_softspace'#0'_identifier'#0'==_GDBString'#0'=*=)';id:variablecategory)
+      (template:'_softspace'#0'=(=*=v=a=r=c=a=t=e=g=o=r=y=f=o=r=o=i_softspace'#0'_identifier'#0'==_String'#0'=*=)';id:variablecategory)
       );
      functionmember=1;
      proceduremember=2;
@@ -101,7 +103,7 @@ const
       (template:'_softspace'#0'=(=*=h=i=d=d=e=n=_=i=n=_=o=b=j=i=n=s=p=*=)';id:oi_hidden),
       (template:'_identifiers_cs'#0'=:_identifier'#0'_softend'#0;id:field),
       (template:'_softspace'#0'=e=n=d_softspace'#0'=;';id:objend),
-      (template:'_softspace'#0'=(=*_GDBString'#0'=*=)';id:username),
+      (template:'_softspace'#0'=(=*_String'#0'=*=)';id:username),
       (template:'_softspace'#0'=p=r=o=p=e=r=t=y_hardspace'#0;id:propertymember)
       );
      varmode=1;
@@ -145,13 +147,16 @@ TNameToIndex=TMyGDBAnsiStringDictionary<TArrayIndex>;
 TFieldName=(FNUser,FNProgram);
 TFieldNames=set of TFieldName;
 {EXPORT+}
+TZctnrVectorPUserTypeDescriptors=object(GZVectorPData{-}<PUserTypeDescriptor,UserTypeDescriptor>{//})
+                           end;
+PGDBOpenArrayOfPObjects=^TZctnrVectorPGDBaseObjects;
 ptypemanager=^typemanager;
-{REGISTEROBJECTTYPE typemanager}
+{REGISTEROBJECTWITHOUTCONSTRUCTORTYPE typemanager}
 typemanager=object(typemanagerdef)
-                  protected
-                  n2i:TNameToIndex;
-                  public
-                  exttype:TZctnrVectorPGDBaseObjects;
+                  {-}protected{/Pointer;/}
+                  n2i:{-}TNameToIndex;{/Pointer;/}
+                  {-}public{/Pointer;/}
+                  exttype:TZctnrVectorPUserTypeDescriptors;
                   constructor init;
                   procedure CreateBaseTypes;virtual;
                   function _TypeName2PTD(name: TInternalScriptString):PUserTypeDescriptor;virtual;
@@ -163,11 +168,11 @@ typemanager=object(typemanagerdef)
                   {for hide exttype}
                   function getDataMutable(index:TArrayIndex):GDBPointer;virtual;
                   function getcount:TArrayIndex;virtual;
-                  function AddTypeByPP(p:GDBPointer):TArrayIndex;virtual;
+                  function AddTypeByPP(p:Pointer):TArrayIndex;virtual;
                   function AddTypeByRef(var _type:UserTypeDescriptor):TArrayIndex;virtual;
             end;
 Tvardescarray=GZVectorData{-}<vardesk>{//};
-{REGISTEROBJECTTYPE varmanager}
+{REGISTEROBJECTWITHOUTCONSTRUCTORTYPE varmanager}
 pvarmanager=^varmanager;
 varmanager=object(varmanagerdef)
             vardescarray:{GDBOpenArrayOfData}Tvardescarray;
@@ -179,7 +184,7 @@ varmanager=object(varmanagerdef)
                  function createvariable(varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0):pvardesk;virtual;
                  function createvariable2(varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0):TInVectorAddr;virtual;
                  function findvardesc2(varname:TInternalScriptString):TInVectorAddr;virtual;
-                 function findfieldcustom(var pdesc: pGDBByte; var offset: GDBInteger;var tc:PUserTypeDescriptor; nam: ShortString): GDBBoolean;virtual;
+                 function findfieldcustom(var pdesc: pByte; var offset: Integer;var tc:PUserTypeDescriptor; nam: ShortString): GDBBoolean;virtual;
                  function getDS:Pointer;virtual;
                  destructor done;virtual;
                  procedure free;virtual;
@@ -187,7 +192,7 @@ varmanager=object(varmanagerdef)
 TunitPart=(TNothing,TInterf,TImpl,TProg);
 PTUnit=^TUnit;
 PTSimpleUnit=^TSimpleUnit;
-{REGISTEROBJECTTYPE TSimpleUnit}
+{REGISTEROBJECTWITHOUTCONSTRUCTORTYPE TSimpleUnit}
 TSimpleUnit=object(TAbstractUnit)
                   Name:TInternalScriptString;
                   InterfaceUses:TZctnrVectorGDBPointer;
@@ -210,12 +215,12 @@ TSimpleUnit=object(TAbstractUnit)
                   procedure CopyFrom(source:PTSimpleUnit);virtual;
             end;
 PTObjectUnit=^TObjectUnit;
-{REGISTEROBJECTTYPE TObjectUnit}
+{REGISTEROBJECTWITHOUTCONSTRUCTORTYPE TObjectUnit}
 TObjectUnit=object(TSimpleUnit)
                   //function SaveToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;
                   procedure free;virtual;
             end;
-{REGISTEROBJECTTYPE TUnit}
+{REGISTEROBJECTWITHOUTCONSTRUCTORTYPE TUnit}
 TUnit=object(TSimpleUnit)
             InterfaceTypes:typemanager;
             //ImplementationUses:GDBInteger;
@@ -665,8 +670,7 @@ procedure vardeskclear(const p:pvardesk);
 //var
    //s:string;
 begin
-     if VerboseLog^ then
-       DebugLn(format('{T}[ZSCRIPT]vardeskclear: "%s"',[pvardesk(p)^.name]));
+     zTraceLn(format('{T}[ZSCRIPT]vardeskclear: "%s"',[pvardesk(p)^.name]));
      //programlog.LogOutFormatStr('vardeskclear: "%s"',[pvardesk(p)^.name],lp_OldPos,LM_Trace);
      if pvardesk(p)^.name='_EQ_C2000_KPB' then
      pvardesk(p)^.name:=pvardesk(p)^.name;
@@ -689,26 +693,22 @@ begin
 end;
 destructor typemanager.done;
 begin
-     if VerboseLog^ then
-       DebugLn('{T+}[ZSCRIPT]TypeManager.done');
+     zTraceLn('{T+}[ZSCRIPT]TypeManager.done');
      //programlog.LogOutStr('TypeManager.done',lp_IncPos,LM_Trace);
      exttype.free;
      exttype.done;
      n2i.destroy;
-     if VerboseLog^ then
-       DebugLn('{T-}[ZSCRIPT]TypeManager.done;//end');
+     zTraceLn('{T-}[ZSCRIPT]TypeManager.done;//end');
      //programlog.LogOutStr('end;',lp_DecPos,LM_Trace);
 end;
 destructor typemanager.systemdone;
 begin
-     if VerboseLog^ then
-       DebugLn('{T+}[ZSCRIPT]TypeManager.systemdone;');
+     zTraceLn('{T+}[ZSCRIPT]TypeManager.systemdone;');
      //programlog.LogOutStr('TypeManager.systemdone',lp_IncPos,LM_Trace);
      exttype.cleareraseobjfrom(BaseTypesEndIndex-1);
      exttype.done;
      n2i.destroy;
-     if VerboseLog^ then
-       DebugLn('{T-}[ZSCRIPT]TypeManager.systemdone;//end');
+     zTraceLn('{T-}[ZSCRIPT]TypeManager.systemdone;//end');
      //programlog.LogOutStr('end;',lp_DecPos,LM_Trace);
 end;
 
@@ -728,7 +728,7 @@ function typemanager.getcount:TArrayIndex;
 begin
      result:=exttype.count;
 end;
-function typemanager.AddTypeByPP(p:GDBPointer):TArrayIndex;
+function typemanager.AddTypeByPP(p:Pointer):TArrayIndex;
 var
   pt:PUserTypeDescriptor;
 begin
@@ -826,8 +826,7 @@ begin
 
   if vd.data.ptd=nil then
                          begin
-                              if VerboseLog^ then
-                                DebugLn(sysutils.format('{E}Type "%S" not defined in unit "%S"',[typename,self.Name]));
+                              zTraceLn(sysutils.format('{E}Type "%S" not defined in unit "%S"',[typename,self.Name]));
 
                               //programlog.LogOutStr(sysutils.format('Type "%S" not defined in unit "%S"',[typename,self.Name]),lp_OldPos,LM_Error);
                          end;
@@ -839,16 +838,14 @@ begin
 end;
 destructor varmanager.done;
 begin
-     if VerboseLog^ then
-       DebugLn('{T+}[ZSCRIPT]varmanager.done;');
+     zTraceLn('{T+}[ZSCRIPT]varmanager.done;');
 
      //programlog.LogOutStr('varmanager.done',lp_IncPos,LM_Trace);
      vardescarray.freewithproc(vardeskclear);
      vardescarray.done;
      vararray.done;//TODO:проверить чистятся ли стринги внутри
      //exttype.freewithproc(basetypedescclear);
-     if VerboseLog^ then
-       DebugLn('{T-}[ZSCRIPT]varmanager.done;//end');
+     zTraceLn('{T-}[ZSCRIPT]varmanager.done;//end');
 
 
      //programlog.LogOutStr('end;',lp_DecPos,LM_Trace);
@@ -1127,7 +1124,7 @@ begin
                                                              begin
                                                                   inc(count);
                                                              end;
-                                                        parsesubresult:=runparser('_softspace'#0'=(=*_GDBString'#0'=*=)',line,parsesuberror);}
+                                                        parsesubresult:=runparser('_softspace'#0'=(=*_String'#0'=*=)',line,parsesuberror);}
                                                         fieldtype:=parseresult^.getData(parseresult.Count-1);
                                                         //pGDBString(parseresult^.getDataMutable(parseresult.Count-1))^;
                                                         fieldgdbtype:=PTUnit(PRecordDescriptor(ptd)^.punit).TypeName2PTD(fieldtype);
@@ -1762,9 +1759,8 @@ begin
      if result<>nil then
                         exit;
      result:=InterfaceTypes._TypeName2PTD(n);
-     if VerboseLog^ then
-       if result=nil then
-         DebugLn('{W}In unit "%s" not found type "%s"',[name,n]);
+     if result=nil then
+       zTraceLn('{W}In unit "%s" not found type "%s"',[name,n]);
 
       //programlog.LogOutStr(sysutils.format('In unit "%s" not found type "%s"',[name,n]),0,LM_Warning);
 end;
@@ -1819,8 +1815,7 @@ end;
 
 initialization;
 begin
-  if VerboseLog^ then
-    DebugLn('{D+}[ZSCRIPT]Varman.startup');
+  zTraceLn('{D+}[ZSCRIPT]Varman.startup');
   //programlog.logoutstr('Varman.startup',lp_IncPos,LM_Debug);
   //DecimalSeparator := '.';
   ShortDateFormat:='MM.yy';
@@ -1830,8 +1825,7 @@ begin
   CategoryCollapsed.CreateArray;
   fillchar(CategoryCollapsed.parray^,CategoryCollapsed.max,byte(true));
   CategoryUnknownCOllapsed:=true;
-  if VerboseLog^ then
-    DebugLn('{D-}[ZSCRIPT]end; {Varman.startup}');
+  zTraceLn('{D-}[ZSCRIPT]end; {Varman.startup}');
   //programlog.logoutstr('end; {Varman.startup}',lp_DecPos,LM_Debug);
 end;
 finalization;

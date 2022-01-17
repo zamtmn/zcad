@@ -23,7 +23,7 @@ interface
 uses uzeobjectextender,LCLProc,uzeentityfactory,uzedrawingdef,
      uzestyleslayers,uzbtypesbase,uzeentsubordinated,
      uzeentline,uzeentity,UGDBOpenArrayOfByte,uzbtypes,uzeconsts,
-     uzbgeomtypes,uzegeometry,uzeffdxfsupport,uzbmemman;
+     uzegeometrytypes,uzegeometry,uzeffdxfsupport;
 type
 {Export+}
 {REGISTEROBJECTTYPE GDBObjSuperLine}

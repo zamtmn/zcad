@@ -23,7 +23,7 @@ interface
 Uses
    uzgldrawcontext,uzedrawingdef,uzecamera,uzeentitiestree,uzbtypesbase,uzbtypes,
    uzeconsts,uzeentity,uzeentgenericsubentry,uzeentconnected,uzeentsubordinated,
-   gzctnrvectortypes,uzbgeomtypes,uzegeometry;
+   gzctnrvectortypes,uzegeometrytypes,uzegeometry;
 type
 {Export+}
 PGDBObjRoot=^GDBObjRoot;

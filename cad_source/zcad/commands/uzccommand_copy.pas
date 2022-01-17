@@ -26,13 +26,12 @@ uses
   uzcdrawing,
   uzgldrawcontext,
   uzbtypesbase,
-  uzbtypes,
   uzcdrawings,
   uzeutils,uzcutils,
   uzglviewareadata,
   uzccommand_move,
   uzccommandsabstract,
-  uzbgeomtypes,uzeentity,LazLogger;
+  uzegeometrytypes,uzeentity,LazLogger;
 type
 {EXPORT+}
   {REGISTEROBJECTTYPE copy_com}

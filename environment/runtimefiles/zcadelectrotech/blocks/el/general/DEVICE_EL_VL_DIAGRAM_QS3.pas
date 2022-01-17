@@ -1,4 +1,4 @@
-unit DEVICE_EL_VL_DIAGRAM_QS3;
+unit DEVICE_EL_VL_DIAGRAM_DIAGRAM_QS3;
 
 interface
 

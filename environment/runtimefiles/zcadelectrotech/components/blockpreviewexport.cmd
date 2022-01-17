@@ -5,10 +5,6 @@ InsertLayersFromBase(*)
 ClLayerOff(SYS_PIN)
 ClLayerOff(EL_DEVICE_NAME)
 
-BlocksInBasePreViewExport(DEVICE_*|DEVICE_EL_VL_MOTOR1;DEVICE_EL_VL_HEATER1;DEVICE_EL_VL_DEVICE1|48|<>|*images/palettes/<>_300.png)
-BlocksInBasePreViewExport(DEVICE_*|DEVICE_EL_VL_MOTOR1;DEVICE_EL_VL_HEATER1;DEVICE_EL_VL_DEVICE1|24|<>|*images/palettes/<>_150.png)
-BlocksInBasePreViewExport(DEVICE_*|DEVICE_EL_VL_MOTOR1;DEVICE_EL_VL_HEATER1;DEVICE_EL_VL_DEVICE1|24|<>|*images/palettes/<>.png)
-
 BlockPreViewExport(24|A4K|*images/palettes/A4K.png)
 BlockPreViewExport(24|A4K|*images/palettes/A4K_150.png)
 BlockPreViewExport(48|A4K|*images/palettes/A4K_300.png)
@@ -173,6 +169,10 @@ BlockPreViewExport(24|DIAGRAM_QF1|*images/palettes/DIAGRAM_QF1.png)
 BlockPreViewExport(24|DIAGRAM_QF1|*images/palettes/DIAGRAM_QF1_150.png)
 BlockPreViewExport(48|DIAGRAM_QF1|*images/palettes/DIAGRAM_QF1_300.png)
 
+BlockPreViewExport(24|EL_VL_SUPPORT3_5|*images/palettes/EL_VL_SUPPORT3_5.png)
+BlockPreViewExport(24|EL_VL_SUPPORT3_5|*images/palettes/EL_VL_SUPPORT3_5_150.png)
+BlockPreViewExport(48|EL_VL_SUPPORT3_5|*images/palettes/EL_VL_SUPPORT3_5_300.png)
+
 BlockPreViewExport(24|EL_VL_SUPPORT4_1|*images/palettes/EL_VL_SUPPORT4_1.png)
 BlockPreViewExport(24|EL_VL_SUPPORT4_1|*images/palettes/EL_VL_SUPPORT4_1_150.png)
 BlockPreViewExport(48|EL_VL_SUPPORT4_1|*images/palettes/EL_VL_SUPPORT4_1_300.png)
@@ -207,6 +207,3 @@ BlockPreViewExport(48|UNIT_GRID2|*images/palettes/UNIT_GRID2_300.png)
 
 ClLayerOff(TEXT)
 
-BlocksInBasePreViewExport(DEVICE_EL_VL_MOTOR1;DEVICE_EL_VL_HEATER1;DEVICE_EL_VL_DEVICE1||48|<>|*images/palettes/<>_300.png)
-BlocksInBasePreViewExport(DEVICE_EL_VL_MOTOR1;DEVICE_EL_VL_HEATER1;DEVICE_EL_VL_DEVICE1||24|<>|*images/palettes/<>_150.png)
-BlocksInBasePreViewExport(DEVICE_EL_VL_MOTOR1;DEVICE_EL_VL_HEATER1;DEVICE_EL_VL_DEVICE1||24|<>|*images/palettes/<>.png)

@@ -301,7 +301,10 @@ begin
                                              if pts=nil then
                                                             createstyle;
                                              PSP^.param.PStyle:=pts;
-                                             PSP^.Psymbol:=pts^.pfont.font.findunisymbolinfos(psp.SymbolName);
+                                             if pts^.pfont<>nil then begin
+                                               PSP^.Psymbol:=pts^.pfont.font.findunisymbolinfos(psp.SymbolName);
+                                               PSP^.ShapeNum:=PSP^.Psymbol^.Number;
+                                             end;
                                              PSP:=pltp.shapearray.iterate(ir2);
                                        until PSP=nil;
    PTP:=pltp.textarray.beginiterate(ir2);

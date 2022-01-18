@@ -197,19 +197,27 @@ end;
 {Font name handle procedures}
 function TTextStylesForm.GetFontName(Item: TListItem):string;
 begin
-  result:=ExtractFileName(PGDBTextStyle(Item.Data)^.pfont^.fontfile);
+  if PGDBTextStyle(Item.Data)^.pfont<>nil then
+    result:=ExtractFileName(PGDBTextStyle(Item.Data)^.pfont^.fontfile)
+  else
+    result:='TextStyle.pfont=nil(('
 end;
 function TTextStylesForm.CreateFontNameEditor(Item: TListItem;r: TRect):boolean;
 begin
-  FillFontsSelector(PGDBTextStyle(Item.Data)^.pfont^.fontfile,PGDBTextStyle(Item.Data)^.pfont);
-  FontChange:=true;
-  FontTypeFilterComboBox.enabled:=false;
-  result:=SupportTypedEditors.createeditor(ListView1,Item,r,FontsSelector,'TEnumData',nil,r.Bottom-r.Top,false)
+  if PGDBTextStyle(Item.Data)^.pfont<>nil then begin
+    FillFontsSelector(PGDBTextStyle(Item.Data)^.pfont^.fontfile,PGDBTextStyle(Item.Data)^.pfont);
+    FontChange:=true;
+    FontTypeFilterComboBox.enabled:=false;
+    result:=SupportTypedEditors.createeditor(ListView1,Item,r,FontsSelector,'TEnumData',nil,r.Bottom-r.Top,false)
+  end;
 end;
 {Font path handle procedures}
 function TTextStylesForm.GetFontPath(Item: TListItem):string;
 begin
-  result:=ExtractFilePath(PGDBTextStyle(Item.Data)^.pfont^.fontfile);
+  if PGDBTextStyle(Item.Data)^.pfont<>nil then
+    result:=ExtractFilePath(PGDBTextStyle(Item.Data)^.pfont^.fontfile)
+  else
+    result:='TextStyle.pfont=nil(('
 end;
 {Height handle procedures}
 function TTextStylesForm.GetHeight(Item: TListItem):string;

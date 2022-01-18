@@ -9,7 +9,7 @@ A simple compilation of the sources will only give you a file `zcad.exe`, but in
 To automate the build process, a script was written based on the make build system.
 I will describe its use in relation to 32bit Lazarus2.2 and fpc3.2.2 on Windows
 
-###1 Installing Lazarus
+### 1 Installing Lazarus
 Installing the latest Lazarus release (2.2 at the time of writing). zcad is guaranteed to be compiled in trunk Lazarus by trunk fpc,
 there are nuances with releases, but they are solvable.
 
@@ -32,7 +32,7 @@ To do this, in the folder `C:\lazarus\` creating a file `runlazarus.bat` with th
 
 and then we always use it to launch Lazarus IDE, everything that is written below you should edit on the assumption that the path to the Lazarus settings will be `C:\lazarus\mylazcfg`
 
-###2 Getting ZCAD
+### 2 Getting ZCAD
 We clone the source code of zcad (or download it as an archive, but this is bad, it's better git clone). For the reasons described above, the path to the `zcad` folder should not contain non-Latin characters
 There will be a lot of files\folders, but the main ones:
 * `zcad\cad_source\` - zcad source folder
@@ -40,7 +40,7 @@ There will be a lot of files\folders, but the main ones:
 * `zcad\Makefile` - a file with installation scripts
 * `zcad\cad` - there is no such folder initially, it will be created in step 4 and contains a compiled zcad distribution with all the necessary files
 
-###3 Installing packages that ZCAD depends on
+### 3 Installing packages that ZCAD depends on
 To make it easier, I have attached the packages on which ZCAD depends to the source distribution (with the exception of those included in Lazarus). Open the command line in the zcad folder,
 where the `Makefile' file is located.
 
@@ -53,7 +53,7 @@ We perform:
 **installpkgstolaz** this will write the required packages from `zcad\cad_source\other\` and `zcad\cad_source\components \` to Lazarus configs and will rebuild Lazarus.
 For unclear reasons, builting at this point sometimes fails, but that's okay, just go ahead, Lazarus will compile everything you need in 4.
 
-###4 Compilation of ZCAD
+### 4 Compilation of ZCAD
 Actually, we run the compilation of the zcad by running the following:
 
 `C:\lazarus\fpc\3.2.2\bin\i386-win32\make cleanzcadelectrotech LP=C:\lazarus PCP=C:\Users\<USERNAME>\AppData\Local\lazarus\`

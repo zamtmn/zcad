@@ -53,7 +53,7 @@ We perform:
 **installpkgstolaz** this will write the required packages from `zcad\cad_source\other\` and `zcad\cad_source\components \` to Lazarus configs and will rebuild Lazarus.
 For unclear reasons, builting at this point sometimes fails, but that's okay, just go ahead, Lazarus will compile everything you need in 4.
 
-### 4 Compilation of ZCAD
+### 4 Compiling ZCAD
 Actually, we run the compilation of the zcad by running the following:
 
 `C:\lazarus\fpc\3.2.2\bin\i386-win32\make cleanzcadelectrotech LP=C:\lazarus PCP=C:\Users\<USERNAME>\AppData\Local\lazarus\`

@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, ExtCtrls,
   StdCtrls, Buttons, ButtonPanel,
-  uzedimensionaltypes,uzemathutils,uzcuitypes,uzcuidialogs;
+  uzedimensionaltypes,uzemathutils,uzcuitypes,uzcuidialogs,uzcuilcl2zc;
 
 const
      UPrecByLUnits:array[TLUnits,0..8]of string=(

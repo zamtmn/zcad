@@ -77,10 +77,11 @@ var
  tvalue:TGSetIn;
 begin
   result:=[];
+  CurrentEnumOut:=Default(TGEnumOut);
   for CurrentEnumIn:=low(TGEnumIn) to high(TGEnumIn) do begin
     tvalue:=value-[CurrentEnumIn];
     if tvalue<>value then begin
-      if TGEnumConverter.convert(CurrentEnumIn,CurrentEnumOut) then
+      if TGEnumConverter.TryConvert(CurrentEnumIn,CurrentEnumOut) then
         result:=result+[CurrentEnumOut];
       if tvalue=[] then exit;
       value:=tvalue;
@@ -90,7 +91,7 @@ end;
 
 class function TGConverter<TGIn,TGOut,TGConverter>.TryConvert(valueIn:TGIn; out valueOut:TGOut):boolean;
 begin
-  result:=TGConverter.convert(valueIn,valueOut);
+  result:=TGConverter.Tryconvert(valueIn,valueOut);
 end;
 
 {class function TGConverter<TGIn,TGOut,TGConverter>.Convert(valueIn:TGIn;Converted:Boolean):TGOut;overload;
@@ -100,7 +101,7 @@ end;}
 
 class function TGConverter<TGIn,TGOut,TGConverter>.Convert(valueIn:TGIn):TGOut;overload;
 begin
-  TGConverter.convert(valueIn,result);
+  TGConverter.Tryconvert(valueIn,result);
 end;
 
 begin

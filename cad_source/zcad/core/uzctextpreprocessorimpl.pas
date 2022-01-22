@@ -59,7 +59,7 @@ type
 var
   TokenTextInfo:TMyParser.TParserTokenizer.TTokenTextInfo;
   pt:TMyParser.TGeneralParsedText;
-  s:gdbstring;
+  s:UnicodeString;
   p:pointer;
 implementation
 function TStr2VarProcessor.GetResult(const str:gdbstring;const operands:gdbstring;var NextSymbolPos:integer;pobj:Pointer):gdbstring;
@@ -164,7 +164,7 @@ end;}
 function EscapeSeq(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;pobj:Pointer):gdbstring;
 var
   sym:char;
-  value:string;
+  value:TDXFEntsInternalStringType;
   num,code:integer;
 begin
   result:='';

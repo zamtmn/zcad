@@ -96,7 +96,7 @@ begin
      begin
           if headarray[j].cheked then
           begin
-               value:=headarray[j].TD.GetValueAsString(@self+headarray[j].offset);
+               value:=headarray[j].TD.GetValueAsString(PByte(@self)+headarray[j].offset);
                if variants.Cells[j,row]<>'*' then
                if variants.Cells[j,row]<>value then
                                                  begin
@@ -116,7 +116,7 @@ begin
      begin
           if not headarray[j].cheked then
           begin
-               headarray[j].TD.SetValueFromString(@self+headarray[j].offset,variants.Cells[j,i]);
+               headarray[j].TD.SetValueFromString(PByte(@self)+headarray[j].offset,variants.Cells[j,i]);
           end;
      end;
 end;

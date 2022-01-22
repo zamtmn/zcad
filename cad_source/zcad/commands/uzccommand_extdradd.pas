@@ -36,7 +36,6 @@ var
   extdr:TMetaEntityExtender;
   pv,pls:pGDBObjEntity;
   ir:itrec;
-  //i:integer;
   count:integer;
 begin
   try
@@ -46,7 +45,7 @@ begin
       pls:=drawings.GetCurrentOGLWParam.SelDesc.LastSelectedObject;
       if pls<>nil then begin
         if pls^.GetExtension(extdr)=nil then begin
-          pls^.AddExtension(extdr.Create(pv));
+          pls^.AddExtension(extdr.Create(pls));
           inc(count);
         end;
       end;

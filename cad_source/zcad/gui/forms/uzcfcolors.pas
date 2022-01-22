@@ -25,7 +25,7 @@ interface
 uses
   uzepalette,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics,
   StdCtrls, Buttons, {ColorBox,} ButtonPanel, Spin, ExtCtrls, ComCtrls,math,
-  uzeconsts,uzcstrconsts,uzcuidialogs;
+  uzeconsts,uzcstrconsts,uzcuidialogs,uzcuilcl2zc;
 
 type
   ColorGeometry=record

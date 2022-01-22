@@ -373,6 +373,7 @@ begin
   Closed:=false;
   tmpVertex:=NulVertex;
   tmpKnot:=0;
+  tmpFlag:=0;
 
   GroupCode:=readmystrtoint(f);
   while GroupCode <> 0 do begin

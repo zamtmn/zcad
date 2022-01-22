@@ -17,7 +17,7 @@
 }
 
 unit uzcreglog;
-{$mode odjfpc}
+{$mode delphi}
 {$INCLUDE def.inc}
 interface
 uses uzbLog,uzclog,uzcinterface,uzcuidialogs,uzcuitypes,uzelongprocesssupport,

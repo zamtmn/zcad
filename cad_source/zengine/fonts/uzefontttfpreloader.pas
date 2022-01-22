@@ -25,7 +25,7 @@ uses
   sysutils,classes,LCLProc,bufstream,StrUtils;
 
 const
-  maxNameID=25;
+  maxNameID=26;
 
 type
   TNameTableValueType=string;

@@ -372,10 +372,10 @@ begin
   if {nmax<>n}true then begin
     _enabled:=true;
     result:=parts[partstartposition]='+';
-  end else begin
+  end{ else begin
     _enabled:=false;
     result:=false;
-  end;
+  end};
   if nextpartstartposition<>0 then
     _name:=copy(parts,partstartposition+1,nextpartstartposition-partstartposition-2)
   else

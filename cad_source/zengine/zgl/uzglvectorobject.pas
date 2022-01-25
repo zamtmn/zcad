@@ -329,6 +329,7 @@ begin
                                         result:=IRPartially;
          IRPartially:
                      result:=IRPartially;
+         IRNotAplicable:;//заглушка на варнинг
        end;
        if result=IRPartially then
                                  exit;
@@ -382,6 +383,7 @@ begin
                                         result:=IRPartially;
          IRPartially:
                      result:=IRPartially;
+         IRNotAplicable:;//заглушка на варнинг
        end;
        if result=IRPartially then
                                  exit;

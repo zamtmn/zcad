@@ -59,7 +59,7 @@ TTextInsertParams=record
                    Oblique:GDBDouble;(*'Oblique'*)
                    Width:GDBDouble;(*'Width'*)
                    LineSpace:GDBDouble;(*'Line space factor'*)
-                   text:GDBAnsiString;(*'Text'*)
+                   text:TDXFEntsInternalStringType;(*'Text'*)
                    runtexteditor:GDBBoolean;(*'Run text editor'*)
              end;
 

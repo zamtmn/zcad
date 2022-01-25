@@ -555,6 +555,7 @@ begin
     EntsTypeFilter.Free;
     EntityIncluder.Free;
   end;
+  result:=cmd_ok;
 end;
 
 initialization

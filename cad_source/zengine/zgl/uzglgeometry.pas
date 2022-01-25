@@ -751,6 +751,7 @@ begin
                                                Segmentator.draw(rc,dend,false,result);
                                                supressfirstdash:=true;
                                           end;
+          TODIUnknown,TODIShape,TODIBlank:;//заглушка на варнинг
                     end;
                     end;
 
@@ -768,6 +769,7 @@ begin
                                                                Segmentator.draw(rc,dend,false,result);
                                                                DrawPointWithoutLT(rc,Segmentator.cp,result);
                                                           end;
+                          TODIUnknown,TODIShape,TODIBlank:;//заглушка на варнинг
                                     end;
                                     end;
                end;
@@ -825,6 +827,7 @@ begin
                                           Segmentator.draw(rc,dend,false,result);
                                           supressfirstdash:=true;
                                      end;
+     TODIUnknown,TODIShape,TODIBlank:;//заглушка на варнинг
                end;
                PlaceNPatterns(rc,Segmentator,trunc(num),LT,scale,scale,length,result,supressfirstdash);//рисуем num паттернов
                dend:=1-Segmentator.cdp;
@@ -839,6 +842,7 @@ begin
                                                                //Segmentator.draw(rc,dend,false);
                                                                DrawPointWithoutLT(rc,{Segmentator.cp}endpoint,result);
                                                           end;
+                          TODIUnknown,TODIShape,TODIBlank:;//заглушка на варнинг
                                     end;
                                end;
                Segmentator.done;

@@ -33,7 +33,7 @@ type
   end;
   TIntersectedCom=record
     BlockName:GDBAnsiString;
-    TEXT:TDXFEntsInternalStringType;
+    TEXT:GDBAnsiString;
     ground,h,t,t2:double;
   end;
 
@@ -269,7 +269,7 @@ begin
 
   pt:=pointer(AllocEnt(GDBMtextID));
   pt^.init(@drawings.GetCurrentDWG.ConstructObjRoot,sysvar.dwg.DWG_CLayer^,sysvar.dwg.DWG_CLinew^,
-  Tria_Utf8ToAnsi(sysutils.format('сумма бурения: %g',[summlength])),
+  TDXFEntsInternalStringType(Tria_Utf8ToAnsi(sysutils.format('сумма бурения: %g',[summlength]))),
   trans(0,0,x+120,-202.0388),2.5,0,0.65,0,jsmc,70,1);
   pt^.TXTStyleIndex:=pointer(drawings.GetCurrentDWG.GetTextStyleTable^.getDataMutable(0));
   drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.AddPEntity(pt^);
@@ -280,7 +280,7 @@ begin
 
   pt:=pointer(AllocEnt(GDBMtextID));
   pt^.init(@drawings.GetCurrentDWG.ConstructObjRoot,sysvar.dwg.DWG_CLayer^,sysvar.dwg.DWG_CLinew^,
-  Tria_Utf8ToAnsi(sysutils.format('Колодец %s - Колодец %s. Профиль скрытого перехода кабельной канализации',[p1.Name,p2.Name])),
+  TDXFEntsInternalStringType(Tria_Utf8ToAnsi(sysutils.format('Колодец %s - Колодец %s. Профиль скрытого перехода кабельной канализации',[p1.Name,p2.Name]))),
   trans(0,0,x,-202.0388),2.5,0,0.65,0,jsmc,70,1);
   pt^.TXTStyleIndex:=pointer(drawings.GetCurrentDWG.GetTextStyleTable^.getDataMutable(0));
   drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.AddPEntity(pt^);
@@ -291,7 +291,7 @@ begin
 
   pt:=pointer(AllocEnt(GDBMtextID));
   pt^.init(@drawings.GetCurrentDWG.ConstructObjRoot,sysvar.dwg.DWG_CLayer^,sysvar.dwg.DWG_CLinew^,
-  Tria_Utf8ToAnsi(sysutils.format('Колодец %s - Колодец %s.\PПрофиль скрытого перехода кабельной канализации\PLперех.=%G м, Lбур.=%G м',[p1.Name,p2.Name,TraceLength,TraceLength+3])),
+  TDXFEntsInternalStringType(Tria_Utf8ToAnsi(sysutils.format('Колодец %s - Колодец %s.\PПрофиль скрытого перехода кабельной канализации\PLперех.=%G м, Lбур.=%G м',[p1.Name,p2.Name,TraceLength,TraceLength+3]))),
   trans(FactTraceLength/2,0,0,30),2.5,0,0.65,0,jsbc,0,1);
   pt^.TXTStyleIndex:=pointer(drawings.GetCurrentDWG.GetTextStyleTable^.getDataMutable(0));
   drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.AddPEntity(pt^);
@@ -302,7 +302,7 @@ begin
 
   pt:=pointer(AllocEnt(GDBMtextID));
   pt^.init(@drawings.GetCurrentDWG.ConstructObjRoot,sysvar.dwg.DWG_CLayer^,sysvar.dwg.DWG_CLinew^,
-  Tria_Utf8ToAnsi('Горизонтально-направленное бурение'),
+  TDXFEntsInternalStringType(Tria_Utf8ToAnsi('Горизонтально-направленное бурение')),
   trans(FactTraceLength/2,0,0,tabledy+4.5*tablerowh),2.5,0,0.65,0,jsmc,0,1);
   pt^.TXTStyleIndex:=pointer(drawings.GetCurrentDWG.GetTextStyleTable^.getDataMutable(0));
   drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.AddPEntity(pt^);
@@ -313,7 +313,7 @@ begin
 
   pt:=pointer(AllocEnt(GDBMtextID));
   pt^.init(@drawings.GetCurrentDWG.ConstructObjRoot,sysvar.dwg.DWG_CLayer^,sysvar.dwg.DWG_CLinew^,
-  Tria_Utf8ToAnsi('Установка ГНБ "Навигатор"; 1ПЭ80 SDR17'),
+  TDXFEntsInternalStringType(Tria_Utf8ToAnsi('Установка ГНБ "Навигатор"; 1ПЭ80 SDR17')),
   trans(FactTraceLength/2,0,0,tabledy+5.5*tablerowh),2.5,0,0.65,0,jsmc,0,1);
   pt^.TXTStyleIndex:=pointer(drawings.GetCurrentDWG.GetTextStyleTable^.getDataMutable(0));
   drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.AddPEntity(pt^);
@@ -357,7 +357,7 @@ begin
 
      pt:=pointer(AllocEnt(GDBMtextID));
      pt^.init(@drawings.GetCurrentDWG.ConstructObjRoot,sysvar.dwg.DWG_CLayer^,sysvar.dwg.DWG_CLinew^,
-     com.text,
+     TDXFEntsInternalStringType(com.text),
      trans(com.t*FactTraceLength,com.h,4,0),2.5,0,0.65,0,jsbl,0,1);
      pt^.TXTStyleIndex:=pointer(drawings.GetCurrentDWG.GetTextStyleTable^.getDataMutable(0));
      drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.AddPEntity(pt^);
@@ -402,7 +402,7 @@ begin
 
         pt:=pointer(AllocEnt(GDBMtextID));
         pt^.init(@drawings.GetCurrentDWG.ConstructObjRoot,sysvar.dwg.DWG_CLayer^,sysvar.dwg.DWG_CLinew^,
-        Tria_Utf8ToAnsi('Дорога'),
+        TDXFEntsInternalStringType(Tria_Utf8ToAnsi('Дорога')),
         trans((com.t+com.t2)*FactTraceLength/2,com.h,0,3),2.5,0,0.65,0,jsbc,0,1);
         pt^.TXTStyleIndex:=pointer(drawings.GetCurrentDWG.GetTextStyleTable^.getDataMutable(0));
         drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.AddPEntity(pt^);
@@ -472,7 +472,7 @@ begin
                                           dt:=dt;
           dt:=distance2ray(ptextent^.P_insert_in_WCS,p1.coord,p2.coord);
           if confirmed(dt) then begin
-           if TryStrToFloat(ptextent^.Content,temp) then begin
+           if TryStrToFloat(string(ptextent^.Content),temp) then begin
              com.BlockName:='@@h';
              com.h:=temp;
              com.t2:=0;
@@ -482,7 +482,7 @@ begin
         else Intersections.RegisterKey(com.t,com);
            end
       else if ptextent^.Content[1]='^' then begin
-             comparamstr:=system.copy(ptextent^.Content,2,length(ptextent^.Content)-1);
+             comparamstr:=string(system.copy(ptextent^.Content,2,length(ptextent^.Content)-1));
              GetPartOfPath(blockname,comparamstr,';');
              GetPartOfPath(hstr,comparamstr,';');
              com.BlockName:=readspace(blockname);
@@ -545,7 +545,7 @@ procedure TProfileBuildCom.Command(Operands:TCommandOperands);
 var
    ptextent:PGDBObjText;
    ir:itrec;
-   commandtext,cmd,pointname:GDBAnsiString;
+   commandtext,cmd,pointname:String;
    p:TMAPPoint;
 begin
   count:=0;
@@ -557,11 +557,11 @@ begin
   repeat
     if (ptextent.GetObjType=GDBMTextID)or(ptextent.GetObjType=GDBTextID) then begin
       if ptextent^.selected then
-        commandtext:=commandtext+ptextent^.Content
+        commandtext:=commandtext+string(ptextent^.Content)
     else begin
       if length(ptextent^.Content)>1 then
         if ptextent^.Content[1]='*' then begin
-          pointname:=system.copy(ptextent^.Content,2,length(ptextent^.Content)-1);
+          pointname:=string(system.copy(ptextent^.Content,2,length(ptextent^.Content)-1));
           if PointMap.MyContans(pointname) then
             ZCMsgCallBackInterface.TextMessage(format('ProfileBuild: point "%s" already exists',[pointname]),TMWOHistoryOut)
           else begin

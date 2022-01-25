@@ -39,7 +39,7 @@ function ach2uch(ach:byte):word;
 function CompareNUMSTR(str1,str2:GDBString):GDBBoolean;
 function AnsiNaturalCompare(const str1, str2: string; vCaseSensitive: boolean = False): integer;
 
-function ConvertFromDxfString(str:TDXFEntsInternalStringType):GDBString;
+function ConvertFromDxfString(str:TDXFEntsInternalStringType):String;
 function ConvertToDxfString(str:GDBString):TDXFEntsInternalStringType;
 function MakeHash(const s: GDBString):SizeUInt;//TODO в gzctnrstl есть копия этой процедуры. надо убирать
 
@@ -113,7 +113,7 @@ begin
     Result := ((Result shl 7) or (Result shr 25)) + Ord(s[I]);
 end;
 
-function ConvertFromDxfString(str:TDXFEntsInternalStringType):GDBString;
+function ConvertFromDxfString(str:TDXFEntsInternalStringType):String;
 begin
      //result:=Tria_AnsiToUtf8(str);
      {$IFNDEF DELPHI}result:=UTF8Encode(StringsReplace(str, ['\P'],[LineEnding],[rfReplaceAll,rfIgnoreCase]));{$ENDIF}

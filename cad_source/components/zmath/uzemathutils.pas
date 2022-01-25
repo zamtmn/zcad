@@ -19,7 +19,8 @@
 unit uzemathutils;
 interface
 uses uzedimensionaltypes,math,uzegeometry,sysutils;
-function zeDimensionToString(const value:Double; const f:TzeUnitsFormat):String;
+function zeDimensionToString(const value:Double; const f:TzeUnitsFormat):String;overload;
+function zeDimensionToUnicodeString(const value:Double; const f:TzeUnitsFormat):UnicodeString;
 function zeNonDimensionToString(const value:Double; const f:TzeUnitsFormat):String;
 function zeAngleDegToString(const value:Double; const f:TzeUnitsFormat):String;
 function zeAngleToString(const value:Double; const f:TzeUnitsFormat):String;
@@ -282,6 +283,11 @@ begin
   ff.uprec:=f.aprec;
   result:=zeDimensionToString(angle,ff);
 end;
+function zeDimensionToUnicodeString(const value:Double; const f:TzeUnitsFormat):UnicodeString;
+begin
+  result:=UnicodeString(zeDimensionToString(value,f));
+end;
+
 function zeDimensionToString(const value:Double; const f:TzeUnitsFormat):String;
 var
    _ft,_dft:double;{1}

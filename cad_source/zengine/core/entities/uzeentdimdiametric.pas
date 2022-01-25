@@ -43,7 +43,7 @@ GDBObjDiametricDimension= object(GDBObjDimension)
                         function GetObjTypeName:GDBString;virtual;
 
                         procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                        function GetDimStr(var drawing:TDrawingDef):GDBString;virtual;
+                        function GetDimStr(var drawing:TDrawingDef):TDXFEntsInternalStringType;virtual;
                         function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                         procedure addcontrolpoints(tdesc:GDBPointer);virtual;
 
@@ -193,7 +193,7 @@ begin
   tvo^.PDimStyle:=PDimStyle;
   result := tvo;
 end;
-function GDBObjDiametricDimension.GetDimStr(var drawing:TDrawingDef):GDBString;
+function GDBObjDiametricDimension.GetDimStr(var drawing:TDrawingDef):TDXFEntsInternalStringType;
 begin
      result:='%%C'+GetLinearDimStr(Vertexlength(DimData.P10InWCS,DimData.P15InWCS),drawing);
 end;

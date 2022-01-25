@@ -616,6 +616,7 @@ begin
                                                     SP.done;
                                                end;
                                end;
+                       TDIShape:;//заглушка на варнинг
 
           end;
           dasharray.PushBackData(dinfo);

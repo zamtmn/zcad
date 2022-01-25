@@ -145,7 +145,7 @@ begin
         if (pv^.Selected)and isTextEnt(pv^.GetObjType) then begin
           x:=Getcolumn(pv^.P_insert_in_WCS.x-minx,Widths);//Floor((pv^.P_insert_in_WCS.x-minx)/ExportTextToCSVParam.W);
           y:=Floor((maxy-pv^.P_insert_in_WCS.y)/ExportTextToCSVParam.H);
-          FDoc.Cells[x,y]:=StringReplace(pv^.Content,#10#13,' ',[rfReplaceAll]);
+          FDoc.Cells[x,y]:=StringReplace(string(pv^.Content),#10#13,' ',[rfReplaceAll]);
           //FDoc.InsertCell(x,y,StringReplace(pv^.Content,#10#13,' ',[rfReplaceAll]));
         end;
       pv:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);

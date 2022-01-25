@@ -245,7 +245,7 @@ begin
               result:=-121.5;
      end;
 end;
-function insertblock(bname,obozn:GDBString;p:gdbVertex):TBoundingBox;
+function insertblock(bname:GDBString;obozn:TDXFEntsInternalStringType;p:gdbVertex):TBoundingBox;
 var
    pgdbins:pgdbobjblockinsert;
    pbdef:PGDBObjBlockdef;
@@ -3419,8 +3419,6 @@ begin
             if not alreadywrite.ContainsKey(nodeend) then begin
               ZCMsgCallBackInterface.TextMessage(format(' %s [label="%s"]',[endnodename,endnodelabel]),TMWOHistoryOut);
               alreadywrite.add(nodeend,1);
-              if endnodelabel='П1-ШУ' then
-                endnodelabel:=endnodelabel;
             end;
             ZCMsgCallBackInterface.TextMessage(format(' %s->%s [label="%s"]',[startnodename,endnodename,pv^.Name]),TMWOHistoryOut);
             nodestart:=nodeend;

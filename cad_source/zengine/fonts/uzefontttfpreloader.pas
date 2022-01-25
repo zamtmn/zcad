@@ -28,7 +28,7 @@ const
   maxNameID=26;
 
 type
-  TNameTableValueType=string;
+  TNameTableValueType=String;
   TTTFFileParams=record
     ValidTTFFile:boolean;
     //this from https://developer.apple.com/fonts/TrueType-Reference-Manual/RM06/Chap6name.html
@@ -204,7 +204,7 @@ begin
     AStream.Read((@ts[1])^,len*2);
     for i:=1 to len do
       PWord(@ts[i])^:=BEtoN(PWord(@ts[i])^);
-    result:=ts;
+    result:=TNameTableValueType(ts);
   end;
 end;
 

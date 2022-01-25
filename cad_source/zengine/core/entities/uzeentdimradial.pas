@@ -41,7 +41,7 @@ GDBObjRadialDimension= object(GDBObjDiametricDimension)
                         constructor initnul(owner:PGDBObjGenericWithSubordinated);
                         function GetObjTypeName:GDBString;virtual;
 
-                        function GetDimStr(var drawing:TDrawingDef):GDBString;virtual;
+                        function GetDimStr(var drawing:TDrawingDef):TDXFEntsInternalStringType;virtual;
                         function GetCenterPoint:GDBVertex;virtual;
                         function Clone(own:GDBPointer):PGDBObjEntity;virtual;
 
@@ -130,7 +130,7 @@ begin
      result:=DimData.P10InWCS;
 end;
 
-function GDBObjRadialDimension.GetDimStr(var drawing:TDrawingDef):GDBString;
+function GDBObjRadialDimension.GetDimStr(var drawing:TDrawingDef):TDXFEntsInternalStringType;
 begin
      result:='R'+GetLinearDimStr(Vertexlength(DimData.P10InWCS,DimData.P15InWCS),drawing);
 end;

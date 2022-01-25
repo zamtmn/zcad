@@ -357,11 +357,11 @@ begin
      if assigned(SysVar.INTF.INTF_DefaultEditorFontHeight) then
         InfoForm.memo.Font.Height:=SysVar.INTF.INTF_DefaultEditorFontHeight^;
 
-     InfoForm.memo.text:=ConvertFromDxfString(pgdbstring(PInstance)^);
+     InfoForm.memo.text:=ConvertFromDxfString(UnicodeString(pgdbstring(PInstance)^));
      modalresult:=ZCMsgCallBackInterface.DOShowModal(InfoForm);
      if modalresult=ZCMrOk then
                          begin
-                              pgdbstring(PInstance)^:=ConvertToDxfString(InfoForm.memo.text);
+                              pgdbstring(PInstance)^:=String(ConvertToDxfString(InfoForm.memo.text));
                               StoreBoundsToSavedUnit('TEdWND',InfoForm.BoundsRect);
                          end;
 end;

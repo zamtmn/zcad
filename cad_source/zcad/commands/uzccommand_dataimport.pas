@@ -85,6 +85,7 @@ function RowValue(FDoc:TCSVDocument;ARow:Integer):string;
 var
   i:integer;
 begin
+  result:='';
   for i:=0 to FDoc.ColCount[ARow] do
     if i=0 then
       result:=result+FDoc.Cells[i,ARow]

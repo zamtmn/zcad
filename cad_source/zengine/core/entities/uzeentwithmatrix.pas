@@ -155,9 +155,11 @@ begin
                                                                          ProcessTree(frustum,infrustumactualy,visibleactualy,PTEntTreeNode(enttree.pplusnode)^,IRPartially,enttree.NodeData.FulDraw,totalobj,infrustumobj,ProjectProc,zoom,currentdegradationfactor);
 
                               end;
+                  IRNotAplicable:;//заглушка на варнинг
                   end;
 
              end;
+     IRNotAplicable:;//заглушка на варнинг
      end;
 end;
 

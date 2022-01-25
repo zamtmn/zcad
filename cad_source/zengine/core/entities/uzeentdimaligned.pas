@@ -69,14 +69,14 @@ GDBObjAlignedDimension= object(GDBObjDimension)
                       //function P15ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                       //function P16ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                        procedure SaveToDXF(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                       function GetDimStr(var drawing:TDrawingDef):GDBString;virtual;
+                       function GetDimStr(var drawing:TDrawingDef):TDXFEntsInternalStringType;virtual;
                        function GetObjType:TObjID;virtual;
                    end;
 {EXPORT-}
 function CorrectPointLine(q:GDBvertex;p1,p2:GDBvertex;out d:GDBDouble):GDBVertex;
 function GetTFromDirNormalizedPoint(q:GDBvertex;var p1,dirNormalized:GDBvertex):double;
 implementation
-function GDBObjAlignedDimension.GetDimStr(var drawing:TDrawingDef):GDBString;
+function GDBObjAlignedDimension.GetDimStr(var drawing:TDrawingDef):TDXFEntsInternalStringType;
 begin
      result:=GetLinearDimStr(abs(scalardot(vertexsub(DimData.P14InWCS,DimData.P13InWCS),vectorD)),drawing);
 end;

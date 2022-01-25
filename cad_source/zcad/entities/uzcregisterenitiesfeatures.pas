@@ -117,15 +117,15 @@ end;
 class function TDummy.TextIOLoad_TMPL1(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 begin
   if isNotUtf8(_value)then
-    PGDBObjText(pent)^.template:=Tria_AnsiToUtf8(_value)
+    PGDBObjText(pent)^.template:=TDXFEntsInternalStringType(Tria_AnsiToUtf8(_value))
   else
-    PGDBObjText(pent)^.template:=_value;
+    PGDBObjText(pent)^.template:=TDXFEntsInternalStringType(_value);
      result:=true;
 end;
 procedure TextIOSave_TMPL1(var outhandle:GDBOpenArrayOfByte;PEnt:PGDBObjText);
 begin
      if UnicodeStringReplace(pent^.content,#10,'\P',[rfReplaceAll])<>convertfromunicode(pent^.template) then
-       dxfGDBStringout(outhandle,1000,'_TMPL1='+pent^.template);
+       dxfGDBStringout(outhandle,1000,'_TMPL1='+string(pent^.template));
 end;
 
 class function TDummy.BlockDefIOLoad_TYPE(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;

@@ -25,7 +25,7 @@ uses
     uzbstrproc,uzefont,uzeentabstracttext,UGDBPoint3DArray,uzestyleslayers,SysUtils,
     uzbtypesbase,uzeentity,UGDBXYZWStringArray,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,
     uzbtypes,uzeenttext,uzeconsts,uzegeometry,uzeffdxfsupport,math,uzeentsubordinated,
-    gzctnrvectortypes,uzegeometrytypes,uzestylestexts;
+    gzctnrvectortypes,uzegeometrytypes,uzestylestexts,StrUtils;
 const maxdxfmtextlen=250;
 type
 //procedure CalcObjMatrix;virtual;
@@ -948,7 +948,7 @@ begin
   OldVersTextReplace(ttemplate);
   OldVersTextReplace(Content);
   Content:=utf8tostring(Tria_AnsiToUtf8(ttemplate));
-  template:=utf8tostring({Tria_AnsiToUtf8}(template));
+  //template:=utf8tostring({Tria_AnsiToUtf8}(template));
   textprop.justify:=b2j[j];
   P_drawInOCS := Local.p_insert;
   linespace := textprop.size * linespacef * 5 / 3;
@@ -992,7 +992,7 @@ begin
   dxfGDBDoubleout(outhandle,40,textprop.size);
   dxfGDBDoubleout(outhandle,41,width);
   dxfGDBIntegerout(outhandle,71,j2b[textprop.justify]{ord(textprop.justify)+1});
-  quotedcontent:=StringReplace(content,#10,'\P',[rfReplaceAll]);
+  quotedcontent:=StringReplace(content,TDXFEntsInternalStringType(#10),TDXFEntsInternalStringType('\P'),[rfReplaceAll]);
   if  convertfromunicode(template)=quotedcontent then
                                                s := Tria_Utf8ToAnsi(UTF8Encode(template))
                                            else

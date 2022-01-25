@@ -60,16 +60,16 @@ GDBObjDimension= object(GDBObjComplex)
                       TextInside:GDBBoolean;
                       TextOffset:GDBVertex;
                       dimtextw,dimtexth:GDBDouble;
-                      dimtext:GDBString;
+                      dimtext:TDXFEntsInternalStringType;
 
 
                 function DrawDimensionLineLinePart(p1,p2:GDBVertex;var drawing:TDrawingDef):pgdbobjline;
                 function DrawExtensionLineLinePart(p1,p2:GDBVertex;var drawing:TDrawingDef; part:integer):pgdbobjline;
                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                 procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
-                function LinearFloatToStr(l:GDBDouble;var drawing:TDrawingDef):GDBString;
-                function GetLinearDimStr(l:GDBDouble;var drawing:TDrawingDef):GDBString;
-                function GetDimStr(var drawing:TDrawingDef):GDBString;virtual;
+                function LinearFloatToStr(l:GDBDouble;var drawing:TDrawingDef):TDXFEntsInternalStringType;
+                function GetLinearDimStr(l:GDBDouble;var drawing:TDrawingDef):TDXFEntsInternalStringType;
+                function GetDimStr(var drawing:TDrawingDef):TDXFEntsInternalStringType;virtual;
                 procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                 function P10ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                 function P11ChangeTo(tv:GDBVertex):GDBVertex;virtual;
@@ -227,6 +227,7 @@ begin
              pl.FormatEntity(drawing,dc);
              end;
         end;
+  DTMnothung:;//заглушка для варнинг
   end;{case}
 end;
 procedure GDBObjDimension.CalcTextInside;
@@ -268,7 +269,7 @@ begin
    TextAngle:=CorrectAngleIfNotReadable(DimAngle);
 end;
 
-function GDBObjDimension.GetDimStr(var drawing:TDrawingDef):GDBString;
+function GDBObjDimension.GetDimStr(var drawing:TDrawingDef):TDXFEntsInternalStringType;
 begin
      result:='need GDBObjDimension.GetDimStr override';
 end;
@@ -339,6 +340,7 @@ begin
                                                  if dimdir.y>eps then
                                                                       dimdir:=uzegeometry.VertexMulOnSc(dimdir,-1);
                                             end;
+                                  DTVPOutside:;//заглушка
      end;
      result:=uzegeometry.VertexMulOnSc(dimdir,l);
      end
@@ -491,7 +493,7 @@ begin
           end;
 
 end;
-function GDBObjDimension.LinearFloatToStr(l:GDBDouble;var drawing:TDrawingDef):GDBString;
+function GDBObjDimension.LinearFloatToStr(l:GDBDouble;var drawing:TDrawingDef):TDXFEntsInternalStringType;
 var
    ff:TzeUnitsFormat;
 begin
@@ -502,13 +504,13 @@ begin
                                                ff.uformat:=TLUnits(PDimStyle.Units.DIMLUNIT);
      ff.umode:=UMWithSpaces;
      ff.uprec:=TUPrec(PDimStyle.Units.DIMDEC);
-     result:={floattostr}zeDimensionToString(l,{WorkingFormatSettings}ff);
+     result:=zeDimensionToUnicodeString(l,ff);
 end;
-function GDBObjDimension.GetLinearDimStr(l:GDBDouble;var drawing:TDrawingDef):GDBString;
+function GDBObjDimension.GetLinearDimStr(l:GDBDouble;var drawing:TDrawingDef):TDXFEntsInternalStringType;
 var
    n:double;
    i:integer;
-   str:gdbstring;
+   str:TDXFEntsInternalStringType;
 begin
      l:=l*PDimStyle.Units.DIMLFAC;
      if PDimStyle.Units.DIMRND<>0 then
@@ -522,7 +524,7 @@ begin
                                        result:=str
                                    else
                                        begin
-                                            result:=PDimStyle.Units.DIMPOST;
+                                            result:=TDXFEntsInternalStringType(PDimStyle.Units.DIMPOST);
                                                  i:=pos('<>',uppercase(result));
                                                  if i>0 then
                                                             begin

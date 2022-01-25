@@ -139,7 +139,7 @@ begin
   CodePage:=CP_win;
      if template='' then
                       template:={UTF8Encode}(content);
-  content:=utf8tostring(textformat(template,@self));
+  content:={utf8tostring}(textformat(template,@self));
        CodePage:=TCP;
   if (content='')and(template='') then content:=str_empty;
   lod:=0;

@@ -433,6 +433,7 @@ begin
                                          InRect:=IRPartially;
           IRPartially:
                       InRect:=IRPartially;
+          IRNotAplicable:;//заглушка на варнинг
         end;
         if InRect=IRPartially then
                                   exit;

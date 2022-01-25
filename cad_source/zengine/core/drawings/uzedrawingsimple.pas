@@ -94,7 +94,7 @@ TSimpleDrawing= object(TAbstractDrawing)
                        function CreateDrawingRC(_maxdetail:GDBBoolean=false):TDrawContext;virtual;
                        procedure FillDrawingPartRC(var dc:TDrawContext);virtual;
                        function GetUnitsFormat:TzeUnitsFormat;virtual;
-                       function CreateBlockDef(name:GDBString):GDBPointer;virtual;
+                       procedure CreateBlockDef(name:GDBString);virtual;
                        procedure HardReDraw;
                        function GetCurrentLayer:PGDBLayerProp;
                        function GetCurrentLType:PGDBLtypeProp;
@@ -184,7 +184,7 @@ begin
   wa.calcgrid;
   wa.draworinvalidate;
 end;
-function TSimpleDrawing.CreateBlockDef(name:GDBString):GDBPointer;
+procedure TSimpleDrawing.CreateBlockDef(name:GDBString);
 var
    td:pointer;
 begin

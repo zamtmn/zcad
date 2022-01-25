@@ -27,7 +27,7 @@ unit uzeparser;
 interface
 uses Generics.Collections,
      {$IFDEF FPC}gvector,gdeque,{$ENDIF}
-     sysutils,uzbhandles,uzbsets,StrUtils,LCLProc;
+     sysutils,uzbhandles,uzbsets,StrUtils;
 resourcestring
   rsRunTimeError='uzeparser: Execution error (%s)';
   rsProcessorClassNilError='uzeparser: ProcessorClass=nil (%s)';
@@ -138,6 +138,7 @@ type
       class procedure InitStartPos(var ARange:TCharRange);inline;
       class function GetHumanReadableAdress(const APos:TCharPosition):String;inline;
       class function CharRange2CharInterval(const ARange:TCharRange):TCharInterval;inline;
+      class function CreateFullInterval(const AStr:GStingType):TCharInterval;inline;
       class function EmptyCharLength:TCharLength;inline;
       class function WrongCharPosition:TCharPosition;inline;
       class function StartCharPosition(const AStr:GStingType):TCharPosition;inline;
@@ -331,7 +332,7 @@ type
           TGeneralParsedText=class(TAbstractParsedText<GParserString,GDataType>)
             Source:GParserString;
             Parser:TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>;
-            procedure SetOperands;virtual;abstract;
+            //procedure SetOperands;virtual;abstract;
             constructor Create(_Source:GParserString;_Parser:TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>);
             destructor Destroy;override;
             class procedure DoItWithPart(const Src:GParserString;var APart:TParserTokenizer.TTextPart;var data:GDataType);
@@ -372,7 +373,7 @@ type
     destructor Destroy;override;
     procedure clearStoredToken;
     function RegisterToken(
-                           const Token:string;
+                           const Token:GParserString;
                            const BrackeOpen,BrackeClose:char;
                            const ProcessorClass:TParserTokenizer.TStrProcessorClass;
                            InsideBracketParser:TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>;
@@ -893,8 +894,8 @@ begin
       totallength:=totallength+ResultParam.Length;
     end;}
   end;
-  result:=dupestring('+',totallength);
-  //SetLength(result,totallength);
+  //result:=dupestring('+',totallength);
+  SetLength(result,totallength);
   //cp:=StringCodePage(result);
   //GManipulator.InitStartPos(ResultParam);
   ResultParam:=GManipulator.StartCharRange('');
@@ -1255,12 +1256,21 @@ begin
     exit(TokenTextInfo.TokenId);
   end;
 end;
+class function TStringManipulator<GStingType,GCharType,GAdditionalDataManipulator,GAdditionalPositionData,GAdditionalLengthData>.CreateFullInterval(const AStr:GStingType):TCharInterval;
+begin
+  result.P:=StartCharPosition(AStr);
+  result.CUL:=Len(AStr);
+  TAdditionalDataManipulator.SetStartPosition(AStr,result.P,result.P.AdditionalPosData);
+end;
+
 function TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>.GetTokens(Text:GParserString):TGeneralParsedText;
 var
   SubStr:GManipulatorInterval;
 begin
-  SubStr.P:=GManipulator.StartCharPosition(Text);
-  SubStr.CUL:=GManipulator.Len(Text);
+  SubStr:=GManipulator.CreateFullInterval(Text);
+  //SubStr.P:=GManipulator.StartCharPosition(Text);
+  //SubStr.CUL:=GManipulator.Len(Text);
+  //GManipulator.TAdditionalDataManipulator.SetStartPosition(Text,SubStr.P,SubStr.P.AdditionalPosData);
   result:=GetTokensFromSubStr(Text,SubStr);
 end;
 function TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>.GetTokensFromSubStr(Text:GParserString;const SubStr:GManipulatorInterval):TGeneralParsedText;
@@ -1404,7 +1414,7 @@ begin
   //StoredTokenTextInfo.TokenPos.StartPos:=0;
 end;
 
-function TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>.RegisterToken(const Token:string;
+function TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>.RegisterToken(const Token:GParserString;
                                                                                        const BrackeOpen,BrackeClose:char;
                                                                                        const ProcessorClass:TParserTokenizer.TStrProcessorClass;
                                                                                        InsideBracketParser:TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>;
@@ -1521,6 +1531,7 @@ var
   OptChar:TOptChar;
   savesym:GManipulatorCharIndex;
 begin
+  PTokenizerSymbolData:=nil;
   if map.MyGetMutableValue(GManipulator.CodeUnitAtPos(Token,sym),PTokenizerSymbolData)then begin
     if GManipulator.CompareI(sym,GManipulator.LenToSize(GManipulator.Len(Token)))<0 {GManipulator.PosToIndex(sym)<length(Token)} then begin   {сравнение}
       if not assigned(PTokenizerSymbolData^.NextSymbol) then

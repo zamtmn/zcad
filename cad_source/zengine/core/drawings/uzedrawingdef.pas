@@ -26,7 +26,7 @@ type
 PTDrawingDef=^TDrawingDef;
 {REGISTEROBJECTTYPE TDrawingDef}
 TDrawingDef= object(GDBaseobject)
-                       function CreateBlockDef(name:GDBString):GDBPointer;virtual;abstract;
+                       procedure CreateBlockDef(name:GDBString);virtual;abstract;
                        function GetLayerTable:PGDBLayerArray;virtual;abstract;
                        function GetLTypeTable:PGDBLtypeArray;virtual;abstract;
                        function GetTextStyleTable:PGDBTextStyleArray;virtual;abstract;

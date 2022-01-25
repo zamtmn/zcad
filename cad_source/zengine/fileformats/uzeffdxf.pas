@@ -625,6 +625,10 @@ begin
   dashinfo:=TDIDash;
   txtstr:='';
   len:=0;
+  stylehandle:=0;
+  BShapeProp.initnul;
+  shapenumber:=0;
+
   if GoToDXForENDTAB(f, 0, dxfName_LType) then
   while s = dxfName_LType do
   begin
@@ -705,6 +709,8 @@ begin
                              ptp^.param.PstyleIsHandle:=true;
                              pltypeprop^.dasharray.PushBackData(dashinfo);
                         end;
+               { #todo : сменить case на if }
+               TDIDash:;//заглушка на варнинг
                end;
                     dashinfo:=TDIDash;
                     TempDouble:=strtofloat(s);
@@ -763,6 +769,7 @@ begin
       if assigned(pltypeprop) then
         pltypeprop^.LengthFact:=len;
   end;
+  BShapeProp.Done;
 end;
 procedure ReadLayers(var s:ansistring;clayer:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 var
@@ -1204,6 +1211,7 @@ var
    bname:string;
    bhandle:TDWGHandle;
 begin
+  bhandle:=0;
 while s = dxfName_BLOCKRECORD do
 begin
      byt := 2;
@@ -1676,6 +1684,7 @@ var
   processedvarscount:integer;
   lph:TLPSHandle;
 begin
+  intable:=0;
   IODXFContext.p2h:=TMapPointerToHandle.Create;
   IODXFContext.currentEntAddrOverrider:=nil;
   IODXFContext.VarsDict:=TGDBString2GDBStringDictionary.create;

@@ -248,9 +248,10 @@ begin
 end;
 function dxfGDBStringload(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBInteger; var v:TDXFEntsInternalStringType):GDBBoolean;
 begin
+     { #todo : Нужно убрать уникодный вариант. читать утф8 потом за 1 раз присваивать }
      result:=false;
      if currentdxfcod=dxfcod then begin
-                                       v:=v+readmystr(f); result:=true end
+                                       v:=v+TDXFEntsInternalStringType(readmystr(f)); result:=true end
 end;
 begin
 end.

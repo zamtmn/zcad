@@ -154,13 +154,13 @@ end;
 
 function TNavigatorDevices.EntsFilter(pent:pGDBObjEntity):Boolean;
 var
-  cn,an{,entname}:string;
-  match:boolean;
-  alreadyinclude:boolean;
-  operation:char;
+  //cn,an{,entname}:string;
+  //match:boolean;
+  //alreadyinclude:boolean;
+  //operation:char;
   propdata:TPropFilterData;
 
-  function processproperty(cn:string):boolean;
+{  function processproperty(cn:string):boolean;
   var
     operpos:integer;
     s1,s2,n1,n2:string;
@@ -177,7 +177,7 @@ var
       exit;
     end;
     result:=false;
-  end;
+  end;}
 
 begin
   {an:=IncludeEntities;
@@ -214,7 +214,7 @@ begin
   end else
     exit(true);
 
-  an:=BP.IncludeProperties;
+  {an:=BP.IncludeProperties;
   if an<>'' then begin
     alreadyinclude:=false;
     repeat
@@ -233,7 +233,7 @@ begin
     until an='';
     exit(alreadyinclude);
   end;
-  exit(true);
+  exit(true);}
 end;
 
 function  TNavigatorDevices.TraceEntity(rootdesk:TBaseRootNodeDesk;pent:pGDBObjEntity;out name:string):PVirtualNode;

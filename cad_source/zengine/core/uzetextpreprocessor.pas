@@ -51,8 +51,9 @@ var
     Parser:TMyParser;
 
     ZCADToken:TTokenDescription.TEnumItemType;
-function textformat(s:TDXFEntsInternalStringType;pobj:GDBPointer):TDXFEntsInternalStringType;
-function convertfromunicode(s:GDBString):GDBString;
+function textformat(s:TDXFEntsInternalStringType;pobj:GDBPointer):TDXFEntsInternalStringType;overload;
+function textformat(s:string;pobj:GDBPointer):string;overload;
+function convertfromunicode(s:TDXFEntsInternalStringType):TDXFEntsInternalStringType;
 implementation
 
 
@@ -75,9 +76,9 @@ begin
   RegisterKey(key,data);
 end;
 
-function convertfromunicode(s:GDBString):GDBString;
+function convertfromunicode(s:TDXFEntsInternalStringType):TDXFEntsInternalStringType;
 var //i,i2:GDBInteger;
-    ps{,varname}:GDBString;
+    ps{,varname}:TDXFEntsInternalStringType;
     //pv:pvardesk;
     //num,code:integer;
 begin
@@ -123,7 +124,12 @@ begin
    end;
 end;
 {$endif}
-function textformat;
+function textformat(s:string;pobj:GDBPointer):string;overload;
+begin
+  result:=string(textformat(TDXFEntsInternalStringType(s),pobj));
+end;
+
+function textformat(s:TDXFEntsInternalStringType;pobj:GDBPointer):TDXFEntsInternalStringType;
 var FindedIdPos,ContinuePos,EndBracketPos,{i2,}counter:GDBInteger;
     ps{,s2},res,operands:TDXFEntsInternalStringType;
     pair:Prefix2ProcessFunc.TDictionaryPair;

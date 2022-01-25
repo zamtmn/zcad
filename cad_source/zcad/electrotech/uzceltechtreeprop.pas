@@ -22,7 +22,7 @@ type
     BlobTree:TBlobTree;
     NameSeparator,TreeRootName:string;
     constructor Create(_NameSeparator,_TreeRootName:string);
-    destructor Destroy;
+    destructor Destroy;override;
     procedure LoadTree(FileName:ansistring;TranslateFunc:TTranslateFunction);
     function FindOrCreateChildrenNode(var CurrentBlobNode:TBlobTree.TTreeNodeType;SubXMLNode:TDomNode;TranslateFunc:TTranslateFunction):TBlobTree.TTreeNodeType;
     procedure ProcessNode(CurrentXmlNode:TDomNode;var CurrentBlobNode:TBlobTree.TTreeNodeType;TranslateFunc:TTranslateFunction);

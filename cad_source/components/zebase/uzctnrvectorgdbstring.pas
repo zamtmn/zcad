@@ -25,7 +25,6 @@ type
     PTZctnrVectorGDBString=^TZctnrVectorGDBString;
     {REGISTEROBJECTTYPE TZctnrVectorGDBString}
     TZctnrVectorGDBString=object(GZVectorSimple{-}<GDBString>{//})(*OpenArrayOfData=GDBString*)
-                          constructor init(m:GDBInteger);
                           procedure loadfromfile(fname:GDBString);
                           function findstring(s:GDBString;ucase:gdbboolean):boolean;
                           procedure sort;virtual;
@@ -212,10 +211,6 @@ begin
                                 
                            until ps=nil;
                       end;
-end;
-constructor TZctnrVectorGDBString.init(m:GDBInteger);
-begin
-     inherited init(m);
 end;
 procedure TZctnrVectorGDBString.loadfromfile(fname:GDBString);
 var f:GDBOpenArrayOfByte;

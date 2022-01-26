@@ -59,7 +59,7 @@ end;
 
 function TZMacros.SubstituteMacrosWithCurrentContext(var s: string): boolean;
 begin
-  //Result:=MainMacroList.SubstituteStr(s,PtrInt(@CurrentContext));
+  Result:=MainMacroList.SubstituteStr(s,PtrInt(@CurrentContext));
 end;
 
 procedure TZMacros.AddMacro(NewMacro:TTransferMacro);

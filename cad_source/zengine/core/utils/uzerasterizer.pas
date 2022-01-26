@@ -120,10 +120,11 @@ begin
   if PrintParam.Palette<>PC_Color then
   case PrintParam.Palette of
     PC_Monochrome:PushAndSetNewPalette(MonochromePalette);
-    PC_Grayscale:begin
-                   DebugLn('{WH}Print: Grayscale palette not yet implemented, use monochrome palette');
-                   PushAndSetNewPalette(grayscalepalette);
+    PC_Grayscale: begin
+                    DebugLn('{WH}Print: Grayscale palette not yet implemented, use monochrome palette');
+                    PushAndSetNewPalette(grayscalepalette);
                   end;
+    PC_Color:     ;//заглушка
   end;
 
   //----Printer.Title := 'zcadprint';

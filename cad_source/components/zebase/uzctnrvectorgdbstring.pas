@@ -19,12 +19,12 @@
 unit uzctnrvectorgdbstring;
 {$INCLUDE def.inc}
 interface
-uses gzctnrvectortypes,uzbtypesbase,uzbtypes,gzctnrvectorsimple,uzbstrproc,sysutils;
+uses gzctnrvectortypes,uzbtypesbase,uzbtypes,gzctnrVectorStr,uzbstrproc,sysutils;
 type
 {EXPORT+}
     PTZctnrVectorGDBString=^TZctnrVectorGDBString;
     {REGISTEROBJECTTYPE TZctnrVectorGDBString}
-    TZctnrVectorGDBString=object(GZVectorSimple{-}<GDBString>{//})(*OpenArrayOfData=GDBString*)
+    TZctnrVectorGDBString=object(GZVectorStr{-}<GDBString>{//})(*OpenArrayOfData=GDBString*)
                           procedure loadfromfile(fname:GDBString);
                           function findstring(s:GDBString;ucase:gdbboolean):boolean;
                           procedure sort;virtual;

@@ -1,6 +1,7 @@
 components/zcontainers/gzctnrvectortypes.pas
 components/zcontainers/gzctnrvector.pas
 components/zcontainers/gzctnrvectorsimple.pas
+components/zcontainers/gzctnrvectorstr.pas
 components/zcontainers/gzctnrvectordata.pas
 components/zcontainers/gzctnrvectorp.pas
 components/zcontainers/gzctnrvectorpdata.pas

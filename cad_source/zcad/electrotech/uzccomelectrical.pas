@@ -91,13 +91,13 @@ TBasicFinter=record
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
   end;
 
-  EM_SRBUILD_com = object(FloatInsert_com)
+  {EM_SRBUILD_com = object(FloatInsert_com)
     procedure Command(Operands:TCommandOperands); virtual;
   end;
   EM_SEPBUILD_com = object(FloatInsertWithParams_com)
     procedure Command(Operands:TCommandOperands); virtual;
     procedure BuildDM(Operands:TCommandOperands); virtual;
-  end;
+  end;}
   KIP_CDBuild_com=object(FloatInsert_com)
     procedure Command(Operands:TCommandOperands); virtual;
   end;
@@ -129,8 +129,8 @@ var
    csel:pCommandFastObjectPlugin;
    MainSpecContentFormat:TZctnrVectorGDBString;
 
-   EM_SRBUILD:EM_SRBUILD_com;
-   EM_SEPBUILD:EM_SEPBUILD_com;
+   //EM_SRBUILD:EM_SRBUILD_com;
+   //EM_SEPBUILD:EM_SEPBUILD_com;
    em_sepbuild_params:TBasicFinter;
    KIP_CDBuild:KIP_CDBuild_com;
    KIP_LugTableBuild:KIP_LugTableBuild_com;
@@ -555,18 +555,18 @@ begin
               until pcabledesk=nil;
 end;
 *)
-procedure EM_SEPBUILD_com.BuildDM(Operands:TCommandOperands);
+{procedure EM_SEPBUILD_com.BuildDM(Operands:TCommandOperands);
 begin
     //commandmanager.DMAddProcedure('test1','подсказка1',nil);
     commandmanager.DMAddMethod('Разместить','подсказка3',run);
     commandmanager.DMAddMethod('Разместить','подсказка3',run);
     commandmanager.DMAddMethod('Разместить','подсказка3',run);
     commandmanager.DMShow;
-end;
-procedure EM_SEPBUILD_com.Command(Operands:TCommandOperands);
+end;}
+{procedure EM_SEPBUILD_com.Command(Operands:TCommandOperands);
 begin
 
-end;
+end;}
 
 (*procedure EM_SEPBUILD_com.Command(Operands:pansichar);
 var
@@ -924,7 +924,7 @@ begin
      end;
      dna.Destroy;
 end;
-
+(*
 procedure EM_SRBUILD_com.Command(Operands:TCommandOperands);
 var
       pobj: pGDBObjEntity;
@@ -1308,7 +1308,7 @@ begin
                    ZCMsgCallBackInterface.TextMessage('Выбери объект(ы) источник энергии!',TMWOHistoryOut);
   cman.done;
   CodePage:=TCP;
-end;
+end;*)
 constructor El_Wire_com.init;
 begin
   inherited init(cn,sa,da);
@@ -3474,12 +3474,12 @@ begin
   CreateCommandFastObjectPlugin(@_AutoGenCableRemove_com,'EL_AutoGen_Cable_Remove',CADWG,0);
   CreateCommandFastObjectPlugin(@Connection2Dot_com,'Connection2Dot',CADWG,0);
 
-  EM_SRBUILD.init('EM_SRBUILD',CADWG,0);
-  EM_SEPBUILD.init('EM_SEPBUILD',CADWG,0);
+  //EM_SRBUILD.init('EM_SRBUILD',CADWG,0);
+  //EM_SEPBUILD.init('EM_SEPBUILD',CADWG,0);
   KIP_CDBuild.init('KIP_CDBuild',CADWG,0);
   KIP_LugTableBuild.init('KIP_LugTableBuild',CADWG,0);
 
-  EM_SEPBUILD.SetCommandParam(@em_sepbuild_params,'PTBasicFinter');
+  //EM_SEPBUILD.SetCommandParam(@em_sepbuild_params,'PTBasicFinter');
 
   CreateCommandRTEdObjectPlugin(@ElLeaser_com_CommandStart,@Line_com_CommandEnd,nil,nil,@Line_com_BeforeClick,@El_Leader_com_AfterClick,nil,nil,'El_Leader',0,0);
   pfindcom:=CreateCommandRTEdObjectPlugin(@Find_com,nil,nil,@commformat,nil,nil,nil,nil,'El_Find',0,0);

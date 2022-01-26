@@ -1,20 +1,20 @@
 object TextStylesForm: TTextStylesForm
   Left = 542
-  Height = 590
+  Height = 885
   Top = 242
-  Width = 977
+  Width = 1466
   ActiveControl = ButtonApplyClose
   Caption = 'Text styles'
-  ClientHeight = 590
-  ClientWidth = 977
-  Constraints.MinHeight = 500
-  Constraints.MinWidth = 800
+  ClientHeight = 885
+  ClientWidth = 1466
+  Constraints.MinHeight = 750
+  Constraints.MinWidth = 1200
+  DesignTimePPI = 144
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '1.7'
-  Visible = False
+  LCLVersion = '2.3.0.0'
   object Bevel1: TBevel
     AnchorSideLeft.Control = ToolBar1
     AnchorSideLeft.Side = asrBottom
@@ -22,14 +22,14 @@ object TextStylesForm: TTextStylesForm
     AnchorSideRight.Control = FontTypeFilterDesc
     AnchorSideBottom.Control = FontTypeFilterComboBox
     AnchorSideBottom.Side = asrBottom
-    Left = 130
+    Left = 195
     Height = 27
-    Top = 1
+    Top = 2
     Width = 665
     Anchors = [akTop, akLeft, akRight, akBottom]
-    BorderSpacing.Left = 2
-    BorderSpacing.Top = 1
-    BorderSpacing.Right = 2
+    BorderSpacing.Left = 3
+    BorderSpacing.Top = 2
+    BorderSpacing.Right = 3
   end
   object DescLabel: TLabel
     AnchorSideLeft.Control = Bevel1
@@ -38,27 +38,26 @@ object TextStylesForm: TTextStylesForm
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Bevel1
     AnchorSideBottom.Side = asrBottom
-    Left = 131
+    Left = 196
     Height = 25
-    Top = 2
+    Top = 3
     Width = 663
     Anchors = [akTop, akLeft, akRight, akBottom]
-    BorderSpacing.Around = 1
+    BorderSpacing.Around = 2
     Layout = tlCenter
-    ParentColor = False
   end
   object ButtonApplyClose: TBitBtn
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
-    Left = 822
-    Height = 30
-    Top = 559
-    Width = 154
+    Left = 745
+    Height = 45
+    Top = 544
+    Width = 231
     Anchors = [akRight, akBottom]
-    BorderSpacing.Right = 1
-    BorderSpacing.Bottom = 1
+    BorderSpacing.Right = 2
+    BorderSpacing.Bottom = 2
     Caption = 'Apply and close'
     OnClick = AplyClose
     TabOrder = 0
@@ -70,42 +69,43 @@ object TextStylesForm: TTextStylesForm
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = ButtonApplyClose
-    Left = 1
+    Left = 2
     Height = 527
-    Top = 30
+    Top = 45
     Width = 975
     Anchors = [akTop, akLeft, akRight, akBottom]
-    BorderSpacing.Left = 1
-    BorderSpacing.Top = 2
-    BorderSpacing.Right = 1
-    BorderSpacing.Bottom = 2
+    BorderSpacing.Left = 2
+    BorderSpacing.Top = 3
+    BorderSpacing.Right = 2
+    BorderSpacing.Bottom = 3
     Columns = <    
       item
         Caption = 'Status'
+        Width = 75
       end    
       item
         Caption = 'Name'
-        Width = 415
+        Width = 622
       end    
       item
         Caption = 'FontName'
-        Width = 150
+        Width = 225
       end    
       item
         Caption = 'FontPath'
-        Width = 150
+        Width = 225
       end    
       item
         Caption = 'Height'
-        Width = 70
+        Width = 105
       end    
       item
         Caption = 'Width factor'
-        Width = 70
+        Width = 105
       end    
       item
         Caption = 'Oblique'
-        Width = 70
+        Width = 105
       end>
     HideSelection = False
     ReadOnly = True
@@ -123,14 +123,14 @@ object TextStylesForm: TTextStylesForm
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 904
+    Left = 868
     Height = 27
-    Top = 1
-    Width = 72
+    Top = 2
+    Width = 108
     Anchors = [akTop, akRight]
     AutoSelect = False
-    BorderSpacing.Top = 1
-    BorderSpacing.Right = 1
+    BorderSpacing.Top = 2
+    BorderSpacing.Right = 2
     ItemHeight = 19
     ItemIndex = 0
     Items.Strings = (
@@ -150,69 +150,67 @@ object TextStylesForm: TTextStylesForm
     AnchorSideBottom.Side = asrBottom
     Left = 797
     Height = 27
-    Top = 1
+    Top = 2
     Width = 105
     Anchors = [akTop, akRight, akBottom]
-    BorderSpacing.Right = 2
+    BorderSpacing.Right = 3
     Caption = 'Fonts types filter:'
     Layout = tlCenter
-    ParentColor = False
   end
   object ToolBar1: TToolBar
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
-    Left = 2
+    Left = 3
     Height = 22
-    Top = 1
+    Top = 2
     Width = 126
     Align = alNone
     AutoSize = True
-    BorderSpacing.Left = 2
-    BorderSpacing.Top = 1
+    BorderSpacing.Left = 3
+    BorderSpacing.Top = 2
     Caption = 'ToolBar1'
     EdgeBorders = []
     ParentShowHint = False
     ShowHint = True
     TabOrder = 3
     object ToolButton_Add: TToolButton
-      Left = 1
+      Left = 2
       Top = 0
       Action = AddStyle
       ParentShowHint = False
       ShowHint = True
     end
     object ToolButton_Delete: TToolButton
-      Left = 24
+      Left = 36
       Top = 0
       Action = DelStyle
     end
     object ToolButton_MkCurrent: TToolButton
-      Left = 47
+      Left = 70
       Top = 0
       Action = MkCurrentStyle
     end
     object Separator1: TToolButton
-      Left = 70
-      Height = 22
+      Left = 105
+      Height = 8
       Top = 0
-      Width = 10
       Caption = 'Separator1'
       Style = tbsDivider
     end
     object ToolButton_Purge: TToolButton
-      Left = 80
+      Left = 120
       Top = 0
       Action = PurgeStyles
     end
     object ToolButton_Refresh: TToolButton
-      Left = 103
+      Left = 154
       Top = 0
       Action = RefreshStyles
     end
   end
   object ActionList1: TActionList
-    left = 632
-    top = 312
+    Left = 948
+    Top = 468
     object AddStyle: TAction
       Caption = 'AddStyle'
       DisableIfNoHandler = False

@@ -494,9 +494,9 @@ begin
 end;
 
 procedure GDBObjCable.DrawGeometry;
-var
-   ptn1,ptn2:PTNodeProp;
-   ir_inNodeArray:itrec;
+//var
+   //ptn1,ptn2:PTNodeProp;
+   //ir_inNodeArray:itrec;
 begin
 
   if (selected)or(dc.selected) then

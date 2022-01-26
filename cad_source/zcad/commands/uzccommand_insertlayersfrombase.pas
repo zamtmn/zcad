@@ -52,6 +52,7 @@ begin
       pl:=BlockBaseDWG^.LayerTable.iterate(ir);
     until pl=nil;
   end;
+  result:=cmd_ok;
 end;
 
 initialization

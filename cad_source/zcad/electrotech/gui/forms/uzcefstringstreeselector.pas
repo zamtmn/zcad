@@ -107,13 +107,13 @@ procedure TStringsTreeSelector.FindNode(CurrentNode:PVirtualNode;value:TStringTr
 var
   PNodeData:PTStringsTreeNodeData;
   _MatchSize:integer;
-  v:TStringTreeType;
+  //dbg:TStringTreeType;
   NewNode:PVirtualNode;
 begin
   repeat
     PNodeData:=StringsTree.GetNodeData(CurrentNode);
     if PNodeData<>nil then begin
-      v:=PNodeData^.data.Data.FullName;
+      //dbg:=PNodeData^.data.Data.FullName;
       _MatchSize:=MyCompareStr(PNodeData^.data.Data.FullName,value);
       if _MatchSize>MatchSize then begin
         MatchSize:=_MatchSize;

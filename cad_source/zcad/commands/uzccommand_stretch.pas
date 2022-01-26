@@ -93,29 +93,24 @@ end;
 function Stretch_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 begin
   result:=0;
-  case StretchComMode of
-    SM_GetEnts:begin
-      commandmanager.DisableExecuteCommandEnd;
-        result:=FrameEdit_com_AfterClick(wc,mc,button,osp,mclick);
-      commandmanager.EnableExecuteCommandEnd;
-      //button:=0;
-      drawings.GetCurrentDWG.wa.Clear0Ontrackpoint;//убираем нулевую точку трассировки
-    end;
+  if StretchComMode=SM_GetEnts then begin
+    commandmanager.DisableExecuteCommandEnd;
+    result:=FrameEdit_com_AfterClick(wc,mc,button,osp,mclick);
+    commandmanager.EnableExecuteCommandEnd;
+    //button:=0;
+    drawings.GetCurrentDWG.wa.Clear0Ontrackpoint;//убираем нулевую точку трассировки
   end;
 
   if commandmanager.hasDisabledExecuteCommandEnd then begin
     commandmanager.resetDisabledExecuteCommandEnd;
     if (button and MZW_LBUTTON)<>0 then begin
-      case StretchComMode of
-        SM_GetEnts:begin
-                     drawings.GetCurrentDWG.wa.SetMouseMode(MGet3DPoint or {MGet3DPointWoOP or }MMoveCamera or MRotateCamera);
-                     StretchComMode:=SM_FirstPoint;
-                     selectpoints;
-                     ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedrawContent);
-                     //drawings.GetCurrentDWG.wa.Clear0Ontrackpoint;
-                     button:=0;//убираем нулевую точку трассировки, которая будет создана после выхода отсюда
-                   end;
-     SM_FirstPoint:begin end;
+      if StretchComMode=SM_GetEnts then begin
+        drawings.GetCurrentDWG.wa.SetMouseMode(MGet3DPoint or {MGet3DPointWoOP or }MMoveCamera or MRotateCamera);
+        StretchComMode:=SM_FirstPoint;
+        selectpoints;
+        ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedrawContent);
+        //drawings.GetCurrentDWG.wa.Clear0Ontrackpoint;
+        button:=0;//убираем нулевую точку трассировки, которая будет создана после выхода отсюда
       end;
       result:=0;
     end;

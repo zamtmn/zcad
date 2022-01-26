@@ -52,6 +52,7 @@ begin
       end;
     pb:=BlockBaseDWG^.BlockDefArray.iterate(ir);
   until pb=nil;
+  result:=cmd_ok;
 end;
 
 initialization

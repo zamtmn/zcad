@@ -108,8 +108,9 @@ procedure EntityIOSave_all(var outhandle:GDBOpenArrayOfByte;PEnt:PGDBObjEntity;v
 begin
   dxfGDBStringout(outhandle,1000,'_OWNERHANDLE='+inttohex(PEnt^.bp.ListPos.owner.GetHandle,10));
   case PEnt^.OSnapModeControl of
-    off: dxfGDBStringout(outhandle,1000,'_OSNAPMODECONTROL=OFF');
-    on: dxfGDBStringout(outhandle,1000,'_OSNAPMODECONTROL=ON');
+    off    :dxfGDBStringout(outhandle,1000,'_OSNAPMODECONTROL=OFF');
+    on     :dxfGDBStringout(outhandle,1000,'_OSNAPMODECONTROL=ON');
+    AsOwner:;//заглушка
   end;
 end;
 

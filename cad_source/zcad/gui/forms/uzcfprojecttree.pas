@@ -182,7 +182,7 @@ var
    i:integer;
    CurrNode{,CurrFindNode,tn}:TmyTreeNode;
    eqnode:TEqTreeNode;
-   s:AnsiString;
+   //s:AnsiString;
 begin
   pvdeq:=PDBUNIT^.InterfaceVariables.vardescarray.beginiterate(ir);
   if pvdeq<>nil then
@@ -215,10 +215,10 @@ begin
          buildbranchn(CurrNode,treepos,EqCategory);
 
          //Getmem(pointer(eqnode),sizeof(GDBEqNode));
-         if PDBUNIT<>DBUnit then
-                                s:=PDbBaseObject(pvdeq^.data.Addr.Instance)^.NameShort+' из '
-                            else
-                                s:='';
+         //if PDBUNIT<>DBUnit then
+         //                       s:=PDbBaseObject(pvdeq^.data.Addr.Instance)^.NameShort+' из '
+         //                   else
+         //                       s:='';
          TmyTreeView(CurrNode.TreeView).NodeType:=TEqTreeNode;
          if treepos=uncat then
                                 begin

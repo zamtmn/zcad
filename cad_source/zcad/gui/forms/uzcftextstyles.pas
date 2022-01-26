@@ -154,35 +154,30 @@ end;
 procedure TTextStylesForm.UpdateItem2(Item:TObject);
 var
    newfont:PGDBfont;
-   ts:PGDBTextStyle;
+   dbg:PGDBTextStyle;
 begin
-  ts:=PGDBTextStyle(TListItem(Item).Data);
-     if FontChange then
-     begin
-          newfont:=FontManager.addFont(pstring(FontsSelector.Enums.getDataMutable(FontsSelector.Selected))^,'');
-          if  (newfont<>PGDBTextStyle(TListItem(Item).Data)^.pfont)and(newfont<>nil) then
-          begin
-               CreateUndoStartMarkerNeeded;
-               with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pointer(PGDBTextStyle(TListItem(Item).Data)^.pfont))^ do
-               begin
-               PGDBTextStyle(TListItem(Item).Data)^.pfont:=newfont;
-               ComitFromObj;
-               end;
-               with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBTextStyle(TListItem(Item).Data)^.FontFile)^ do
-               begin
-               PGDBTextStyle(TListItem(Item).Data)^.FontFile:=PGDBTextStyle(TListItem(Item).Data)^.pfont^.Name;
-               ComitFromObj;
-               end;
-               with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBTextStyle(TListItem(Item).Data)^.FontFile)^ do
-               begin
-               PGDBTextStyle(TListItem(Item).Data)^.FontFamily:='';
-               ComitFromObj;
-               end;
-          end;
-     end;
-     ListView1.UpdateItem2(TListItem(Item));
-     FontChange:=false;
-     FontTypeFilterComboBox.enabled:=true;
+  dbg:=PGDBTextStyle(TListItem(Item).Data);
+  if FontChange then begin
+    newfont:=FontManager.addFont(pstring(FontsSelector.Enums.getDataMutable(FontsSelector.Selected))^,'');
+    if  (newfont<>PGDBTextStyle(TListItem(Item).Data)^.pfont)and(newfont<>nil) then begin
+      CreateUndoStartMarkerNeeded;
+      with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pointer(PGDBTextStyle(TListItem(Item).Data)^.pfont))^ do begin
+        PGDBTextStyle(TListItem(Item).Data)^.pfont:=newfont;
+        ComitFromObj;
+      end;
+      with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBTextStyle(TListItem(Item).Data)^.FontFile)^ do begin
+        PGDBTextStyle(TListItem(Item).Data)^.FontFile:=PGDBTextStyle(TListItem(Item).Data)^.pfont^.Name;
+        ComitFromObj;
+      end;
+      with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBTextStyle(TListItem(Item).Data)^.FontFile)^ do begin
+        PGDBTextStyle(TListItem(Item).Data)^.FontFamily:='';
+        ComitFromObj;
+      end;
+    end;
+  end;
+  ListView1.UpdateItem2(TListItem(Item));
+  FontChange:=false;
+  FontTypeFilterComboBox.enabled:=true;
 end;
 
 {Style name handle procedures}

@@ -2073,8 +2073,8 @@ begin
                                  begin
                                  line:='`'+cablename+';'+CableMaterial+';'+CableLength+';'+devstart+';'+devend+#13#10;
                                  s:='';
-                                 psl.addutoa((cablename));
-                                 psl.addutoa(devstart);
+                                 psl.PushBackData(Tria_Utf8ToAnsi(cablename));
+                                 psl.PushBackData(Tria_Utf8ToAnsi(devstart));
                                  {psl.add(@devend);
                                  psl.add(@s);
                                  psl.add(@s);
@@ -2104,17 +2104,17 @@ begin
                 nodeend:=pv^.Devices.iterate(ir_inNodeArray);
           until nodeend=nil;
                                  s:='';
-                                 psl.addutoa(devend);
-                                 psl.addutoa(s);
-                                 psl.addutoa(s);
-                                 psl.addutoa(s);
-                                 psl.addutoa(s);
-                                 psl.addutoa(CableMaterial);
-                                 psl.addutoa(CableLength);
-                                 psl.addutoa(s);
-                                 psl.addutoa(s);
+                                 psl.PushBackData(Tria_Utf8ToAnsi(devend));
+                                 psl.PushBackData(Tria_Utf8ToAnsi(s));
+                                 psl.PushBackData(Tria_Utf8ToAnsi(s));
+                                 psl.PushBackData(Tria_Utf8ToAnsi(s));
+                                 psl.PushBackData(Tria_Utf8ToAnsi(s));
+                                 psl.PushBackData(Tria_Utf8ToAnsi(CableMaterial));
+                                 psl.PushBackData(Tria_Utf8ToAnsi(CableLength));
+                                 psl.PushBackData(Tria_Utf8ToAnsi(s));
+                                 psl.PushBackData(Tria_Utf8ToAnsi(s));
                                  s:='';
-                                 psl.addutoa(s);
+                                 psl.PushBackData(Tria_Utf8ToAnsi(s));
 
          //ZCMsgCallBackInterface.TextMessage(cablename+' '+CableMaterial+' '+CableLength);
          ZCMsgCallBackInterface.TextMessage('Кабель "'+pv^.Name+'", сегментов '+inttostr(pv^.Segments.Count)+', материал "'+CableMaterial+'", начало: '+puredevstart+' конец: '+devend,TMWOHistoryOut);
@@ -2301,33 +2301,33 @@ begin
                    psl.init(9);
 
                    s:=pdbi^.Position;
-                   psl.addutoa(s);
+                   psl.PushBackData(Tria_Utf8ToAnsi(s));
 
                    s:=' '+pdbi^.NameFull;
-                   psl.addutoa(s);
+                   psl.PushBackData(Tria_Utf8ToAnsi(s));
 
                    s:=pdbi^.NameShort+' '+pdbi^.Standard;
-                   psl.addutoa(s);
+                   psl.PushBackData(Tria_Utf8ToAnsi(s));
 
                    s:=pdbi^.OKP;
-                   psl.addutoa(s);
+                   psl.PushBackData(Tria_Utf8ToAnsi(s));
 
                    s:=pdbi^.Manufacturer;
-                   psl.addutoa(s);
+                   psl.PushBackData(Tria_Utf8ToAnsi(s));
 
                    s:='??';
                    case pdbi^.EdIzm of
                                       _sht:s:='шт.';
                                       _m:s:='м';
                    end;
-                   psl.addutoa(s);
+                   psl.PushBackData(Tria_Utf8ToAnsi(s));
 
                    s:=floattostr(PBOMITEM^.Amount);
                    psl.PushBackData(s);
 
                    s:='';
-                   psl.addutoa(s);
-                   psl.addutoa(s);
+                   psl.PushBackData(Tria_Utf8ToAnsi(s));
+                   psl.PushBackData(Tria_Utf8ToAnsi(s));
                    end;
 
 

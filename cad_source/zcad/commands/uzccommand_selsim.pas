@@ -75,7 +75,8 @@ TSelSimParams=record
   {REGISTEROBJECTTYPE SelSim_com}
   SelSim_com= object(CommandRTEdObject)
                          created:boolean;
-                         bnames,textcontents,textremplates:TZctnrVectorGDBString;
+                         bnames:TZctnrVectorGDBString;
+                         textcontents,textremplates:TZctnrVectorUnicodeString;
                          layers,linetypes:TZctnrVectorGDBPointer;
                          colors:TZctnrVectorTGDBPaletteColor;
                          weights:TZctnrVectorGDBLineWeight;

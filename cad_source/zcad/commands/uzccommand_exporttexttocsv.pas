@@ -157,6 +157,7 @@ begin
   finally
     Widths.Free;
     LPS.EndLongProcess(lpsh);
+    result:=cmd_ok;
   end;
 end;
 

@@ -309,7 +309,7 @@ begin
                               a:=180+vertexangle(PGDBVertex2d(@p1)^,PGDBVertex2d(@p2)^)*180/pi;
 
           ptext:=pointer(AllocEnt(GDBMtextID));
-          ptext^.init(@drawings.CurrentDWG.ConstructObjRoot,drawings.GetCurrentDWG.LayerTable.getAddres('TEXT'),sysvar.dwg.DWG_CLinew^,TDXFEntsInternalStringType(GetCableMaterial(pcabledesk)+' L='+floattostr(pcabledesk^.length)+'м'),vertexadd(Vertexmorph(p1,p2,0.5),v),2.5,0,0.65,a,jsbc,vertexlength(p1,p2),1);
+          ptext^.init(@drawings.CurrentDWG.ConstructObjRoot,drawings.GetCurrentDWG.LayerTable.getAddres('TEXT'),sysvar.dwg.DWG_CLinew^,TDXFEntsInternalStringType(GetCableMaterial(pcabledesk)+' L='+floattostr(pcabledesk^.length)+'m'),vertexadd(Vertexmorph(p1,p2,0.5),v),2.5,0,0.65,a,jsbc,vertexlength(p1,p2),1);
           drawings.CurrentDWG.ConstructObjRoot.ObjArray.AddPEntity(ptext^);
           ptext^.Formatentity(drawings.GetCurrentDWG^,dc);
 

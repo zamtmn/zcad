@@ -360,24 +360,18 @@ begin
 
          end;
        end;
-     2:begin
-         case
-             PT3PointCircleModePentity(PInteractiveData)^.cdm of
-             TCDM_3P:begin
-                 PointData.p1.x:=PT3PointCircleModePentity(PInteractiveData)^.p1.x;
-                 PointData.p1.y:=PT3PointCircleModePentity(PInteractiveData)^.p1.y;
-                 PointData.p2.x:=PT3PointCircleModePentity(PInteractiveData)^.p2.x;
-                 PointData.p2.y:=PT3PointCircleModePentity(PInteractiveData)^.p2.y;
-                 PointData.p3.x:=Point.x;
-                 PointData.p3.y:=Point.y;
-                 if GetArcParamFrom3Point2D(PointData,ad) then
-                 begin
-                   PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Local.p_insert.x:=ad.p.x;
-                   PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Local.p_insert.y:=ad.p.y;
-                   PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Local.p_insert.z:=0;
-                   PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Radius:=ad.r;
-                 end;
-                     end;
+     2:if PT3PointCircleModePentity(PInteractiveData)^.cdm=TCDM_3P then begin
+         PointData.p1.x:=PT3PointCircleModePentity(PInteractiveData)^.p1.x;
+         PointData.p1.y:=PT3PointCircleModePentity(PInteractiveData)^.p1.y;
+         PointData.p2.x:=PT3PointCircleModePentity(PInteractiveData)^.p2.x;
+         PointData.p2.y:=PT3PointCircleModePentity(PInteractiveData)^.p2.y;
+         PointData.p3.x:=Point.x;
+         PointData.p3.y:=Point.y;
+         if GetArcParamFrom3Point2D(PointData,ad) then begin
+           PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Local.p_insert.x:=ad.p.x;
+           PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Local.p_insert.y:=ad.p.y;
+           PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Local.p_insert.z:=0;
+           PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Radius:=ad.r;
          end;
        end;
   end;
@@ -460,13 +454,10 @@ begin
    radius := Vertexlength(stPoint,Point);
    stalpha:=0;
 
-    case
-     obj.cdm of
-     TPDM_CC:begin
-               stalpha := pi/countVert;
-               radius := radius/(cos(pi/countVert));
-             end;
-    end;
+   if obj.cdm=TPDM_CC then begin
+     stalpha := pi/countVert;
+     radius := radius/(cos(pi/countVert));
+   end;
 
      alpha:=stalpha + arccos(xline/xyline)-pi;
 

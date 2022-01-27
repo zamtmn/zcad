@@ -180,12 +180,14 @@ begin
  TPSS_FixDW:
             if length<2*sd then
                              ps:=TPSS_Proportional;
+ TPSS_Proportional,TPSS_ByNum:;//заглушка на варнинг
      end;
      case count of
           1:begin
               case dmc of
                TOPSMDC_1_4:result.PlaceFirstOffset:=1/4;
                TOPSMDC_1_2:result.PlaceFirstOffset:=1/2;
+               TOPSMDC_2,TOPSMDC_3,TOPSMDC_4:;//заглушка на варнинг
               end;
               result.PlaceFirst:=true;
               result.PlaceLast:=false;
@@ -296,6 +298,7 @@ begin
                                                             LongDD:=LongDD/2;
                                                             ShortDD:=ShortDD/2;
                                                            end;
+                                             TARDM_Nothing:;//заглушка на варнинг
   end;
   case OPSPlaceSmokeDetectorOrtoParam.SensorWallDistance of
                                             TARDM_LongAxis:LongSD:=LongSD/2;
@@ -304,6 +307,7 @@ begin
                                                             LongSD:=LongSD/2;
                                                             ShortSD:=ShortSD/2;
                                                            end;
+                                             TARDM_Nothing:;//заглушка на варнинг
   end;
   end;
   if (Vertexlength(FirstLine.lbegin, FirstLine.lend) - 2 * ShortSD)>0 then FirstCount := round(abs(Vertexlength(FirstLine.lbegin, FirstLine.lend) - 2 * ShortSD) / ShortDD- eps + 1.5)
@@ -314,6 +318,7 @@ begin
   case OPSPlaceSmokeDetectorOrtoParam.DMC of
                                             TOPSMDC_1_4:mincount:=1;
                                             TOPSMDC_1_2:mincount:=1;
+                                            TOPSMDC_2:;//заглушка на варнинг
                                             TOPSMDC_3:mincount:=3;
                                             TOPSMDC_4:mincount:=4;
                                           end;
@@ -329,6 +334,7 @@ begin
                                               SecondCount:=2;
                                               FirstCount:=2;
                                          end;
+                               TOPSMDC_1_4,TOPSMDC_1_2:;//заглушка на варнинг
                              end;
                          end;
   SecondLineLength:=oneVertexlength(dir);

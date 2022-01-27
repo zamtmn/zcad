@@ -251,7 +251,7 @@ uses
   uzcregelectrotechfeatures,
   uzccomelectrical,
   uzccomops,
-  uzccommaps,
+  //uzccommaps,
   {$ENDIF}
   uzcplugins,
   //zcregisterobjectinspector,

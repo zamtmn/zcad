@@ -2116,8 +2116,8 @@ begin
                                  s:='';
                                  psl.PushBackData(Tria_Utf8ToAnsi(s));
 
-         //ZCMsgCallBackInterface.TextMessage(cablename+' '+CableMaterial+' '+CableLength);
-         ZCMsgCallBackInterface.TextMessage('Кабель "'+pv^.Name+'", сегментов '+inttostr(pv^.Segments.Count)+', материал "'+CableMaterial+'", начало: '+puredevstart+' конец: '+devend,TMWOHistoryOut);
+         //ZCMsgCallBackInterface.TextMessage('Cable "'+pv^.Name+'", segments '+inttostr(pv^.Segments.Count)+', материал "'+CableMaterial+'", начало: '+puredevstart+' конец: '+devend,TMWOHistoryOut);
+         ZCMsgCallBackInterface.TextMessage(format('Cable %s, %d segments, %s, from: %s to: %s',[pv^.Name,pv^.Segments.Count,CableMaterial,puredevstart,devend]),TMWOHistoryOut);
 
 
     end;
@@ -2597,7 +2597,7 @@ begin
   drawings.GetCurrentDWG.SelObjArray.Free;
   drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.deselector);
    case FindDeviceParam.FindType of
-      tft_obozn:begin
+      TFT_Obozn:begin
                      varname:=('NMO_Name');
                 end;
       TFT_DBLink:begin
@@ -2606,6 +2606,7 @@ begin
       TFT_DESC_MountingDrawing:begin
                      varname:=('DESC_MountingDrawing');
                 end;
+      TFT_variable:;//заглушка для warning
    end;
 
   sourcestr:=uppercase(FindDeviceParam.FindString);
@@ -2692,7 +2693,8 @@ begin
   //drawings.GetCurrentDWG.ConstructObjRoot.calcvisible;
   end;
   zcRedrawCurrentDrawing;
-  ZCMsgCallBackInterface.TextMessage('Найдено '+inttostr(count)+' объектов',TMWOHistoryOut);
+  //ZCMsgCallBackInterface.TextMessage('Найдено '+inttostr(count)+' объектов',TMWOHistoryOut);
+  ZCMsgCallBackInterface.TextMessage(format('Founded %d entities',[count]),TMWOHistoryOut);
 end;
 function _Cable_mark_com(operands:TCommandOperands):TCommandResult;
 var //i: GDBInteger;
@@ -2745,7 +2747,8 @@ begin
                        pv^.Formatentity(drawings.GetCurrentDWG^,dc);
                    end
                       else
-                          ZCMsgCallBackInterface.TextMessage('Кабель "'+pstring(pvn^.data.Addr.Instance)^+'" на плане не найден',TMWOHistoryOut);
+                          //ZCMsgCallBackInterface.TextMessage('Кабель "'+pstring(pvn^.data.Addr.Instance)^+'" на плане не найден',TMWOHistoryOut);
+                          ZCMsgCallBackInterface.TextMessage(format('Cable %s not found on plan',[pstring(pvn^.data.Addr.Instance)^]),TMWOHistoryOut);
               end;
          end;
     end;
@@ -2867,7 +2870,8 @@ begin
                               begin
                                    name:=system.copy(name,1,len-1)+'0'+system.copy(name,len,1);
                                    pgdbstring(pvd.data.Addr.Instance)^:=name;
-                                   ZCMsgCallBackInterface.TextMessage('Переименован кабель '+name,TMWOHistoryOut);
+                                   //ZCMsgCallBackInterface.TextMessage('Переименован кабель '+name,TMWOHistoryOut);
+                                   ZCMsgCallBackInterface.TextMessage(format('Cable %s renamed',[name]),TMWOHistoryOut);
                               end
                                  {else
                                      ZCMsgCallBackInterface.TextMessage(name);;}
@@ -2988,20 +2992,24 @@ begin
   PGDBObjEntity(startdev):=drawings.FindEntityByVar(GDBDeviceID,'NMO_Name',startdevname);
   PGDBObjEntity(enddev):=drawings.FindEntityByVar(GDBDeviceID,'NMO_Name',enddevname);
   if startdev=nil then
-                      ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+' не найдено стартовое устройство '+startdevname,TMWOHistoryOut)
+                      //ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+' не найдено стартовое устройство '+startdevname,TMWOHistoryOut)
+                      ZCMsgCallBackInterface.TextMessage(format('In row %d startdevice "%s" not found',[row,startdevname]),TMWOHistoryOut)
                   else
                       begin
                       startdev:=findconnector(startdev);
                       if startdev=nil then
-                                          ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+' не найден коннектор стартового устройства '+startdevname,TMWOHistoryOut);
+                                          //ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+' не найден коннектор стартового устройства '+startdevname,TMWOHistoryOut);
+                                          ZCMsgCallBackInterface.TextMessage(format('In row %d startdevice "%s" connector not found',[row,startdevname]),TMWOHistoryOut)
                       end;
   if enddev=nil then
-                      ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+' не найдено конечное устройство '+enddevname,TMWOHistoryOut)
+                    //ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+' не найдено конечное устройство '+enddevname,TMWOHistoryOut)
+                    ZCMsgCallBackInterface.TextMessage(format('In row %d enddevice "%s" not found',[row,enddevname]),TMWOHistoryOut)
                   else
                       begin
                       enddev:=findconnector(enddev);
                       if enddev=nil then
-                                          ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+' не найден коннектор конечного устройства '+enddevname,TMWOHistoryOut);
+                                        //ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+' не найден коннектор конечного устройства '+enddevname,TMWOHistoryOut);
+                                        ZCMsgCallBackInterface.TextMessage(format('In row %d enddevice "%s" connector not found',[row,enddevname]),TMWOHistoryOut);
 
                       end;
 end;
@@ -3075,7 +3083,8 @@ begin
                  begin
                   PGDBaseObject(net):=netarray.getDataMutable(0);
                  if net=nil then
-                                     ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+' не найдена трасса '+FDoc.Cells[3,row],TMWOHistoryOut);
+                                //ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+' не найдена трасса '+FDoc.Cells[3,row],TMWOHistoryOut);
+                                ZCMsgCallBackInterface.TextMessage(format('In row %d trace "%s" not found',[row,FDoc.Cells[3,row]]),TMWOHistoryOut);
                  if (net<>nil) then
                  begin
                  if (startdev<>nil)and(enddev<>nil) then
@@ -3216,7 +3225,8 @@ begin
                           segments.done;
                           end
                           else
-                              ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+' обнаружено несколько не связанных трасс "'+FDoc.Cells[3,row],TMWOShowError);
+                              //ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+' обнаружено несколько не связанных трасс "'+FDoc.Cells[3,row],TMWOShowError);
+                              ZCMsgCallBackInterface.TextMessage(format('In row %d several unlinced traces "%s" found',[row,FDoc.Cells[3,row]]),TMWOHistoryOut);
                           end
                           else begin
                             if uppercase(FDoc.Cells[3,row])='DIRECTLY' then begin
@@ -3226,14 +3236,16 @@ begin
                               Cable^.Formatentity(drawings.GetCurrentDWG^,dc);
                               Cable^.RenderFeedback(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
                             end else
-                              ZCMsgCallBackInterface.TextMessage('В строке "'+inttostr(row)+'" обнаружена трасса "'+FDoc.Cells[3,row]+'" отсутствующая в чертеже((',TMWOShowError);
+                              //ZCMsgCallBackInterface.TextMessage('В строке "'+inttostr(row)+'" обнаружена трасса "'+FDoc.Cells[3,row]+'" отсутствующая в чертеже((',TMWOShowError);
+                              ZCMsgCallBackInterface.TextMessage(format('In row %d trace "%s" not found in drawing',[row,FDoc.Cells[3,row]]),TMWOHistoryOut);
                             end;
                           end;
 
             end
             else
                 begin
-                ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+'мало параметров',TMWOHistoryOut);
+                //ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+'мало параметров',TMWOHistoryOut);
+                ZCMsgCallBackInterface.TextMessage(format('In row %d too few parameters',[row]),TMWOHistoryOut);
                 for col:=0 to FDoc.ColCount[row] do
                 ZCMsgCallBackInterface.TextMessage(FDoc.Cells[col,row],TMWOHistoryOut);
                 end;
@@ -3260,7 +3272,8 @@ begin
        lps.EndLongProcess(lph)
   end
             else
-     ZCMsgCallBackInterface.TextMessage('GDBCommandsElectrical.El_ExternalKZ: Не могу открыть файл: '+s+'('+Operands+')',TMWOShowError);
+     //ZCMsgCallBackInterface.TextMessage('GDBCommandsElectrical.El_ExternalKZ: Не могу открыть файл: '+s+'('+Operands+')',TMWOShowError);
+     ZCMsgCallBackInterface.TextMessage(format('GDBCommandsElectrical.El_ExternalKZ: can''t open file: "%s"("%s")',[s,Operands]),TMWOShowError);
 end;
 function _AutoGenCableRemove_com(operands:TCommandOperands):TCommandResult;
 var //i,len: GDBInteger;
@@ -3319,6 +3332,7 @@ begin
              GRId:ZCMsgCallBackInterface.TextMessage('Id:'+inttostr(commandmanager.GetLastId),TMWOHistoryOut);
          GRNormal:ZCMsgCallBackInterface.TextMessage('Normal',TMWOHistoryOut);
           GRInput:ZCMsgCallBackInterface.TextMessage('Input:'+commandmanager.GetLastInput,TMWOHistoryOut);
+          GRCancel:ZCMsgCallBackInterface.TextMessage('Cancel',TMWOHistoryOut);
        end;
      until gr=GRCancel;
      //for i:=0 to 10000 do

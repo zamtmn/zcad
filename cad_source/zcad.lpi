@@ -1240,6 +1240,10 @@
       <CompilerMessages>
         <IgnoredMessages idx5062="True" idx5024="True" idx4056="True" idx4055="True" idx4046="True" idx4035="True"/>
       </CompilerMessages>
+      <ExecuteBefore>
+        <Command Value="make crutch_bfore_compilation"/>
+        <ScanForMakeMsgs Value="True"/>
+      </ExecuteBefore>
     </Other>
   </CompilerOptions>
   <Debugging>

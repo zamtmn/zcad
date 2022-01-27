@@ -1242,7 +1242,7 @@
       </CompilerMessages>
       <ExecuteBefore>
         <Command Value="make crutch_bfore_compilation"/>
-        <ScanForMakeMsgs Value="True"/>
+        <ScanForFPCMsgs Value="True"/>
       </ExecuteBefore>
     </Other>
   </CompilerOptions>

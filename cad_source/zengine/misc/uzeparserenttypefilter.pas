@@ -11,9 +11,7 @@ uses
   uzcoimultipropertiesutil;
 
 type
-  //TParserEntityTypeFilterString=AnsiString;
-  //TParserEntityTypeFilterChar=AnsiChar;
-  //TParserEntityTypeFilter=TGZParser<TRawByteStringManipulator,TParserEntityTypeFilterString,TParserEntityTypeFilterChar,TRawByteStringManipulator.TCharIndex,TRawByteStringManipulator.TCharLength,TRawByteStringManipulator.TCharRange,TEntsTypeFilter,TCharToOptChar<AnsiChar>>;
+
   TParserEntityTypeFilter=TGZParser<TRawByteStringManipulator,
                                     TRawByteStringManipulator.TStringType,
                                     TRawByteStringManipulator.TCharType,
@@ -24,28 +22,6 @@ type
                                     TRawByteStringManipulator.TCharRange,
                                     TEntsTypeFilter,
                                     TCharToOptChar<TRawByteStringManipulator.TCharType>>;
-
-  TGetEntParam=class(TParserEntityTypeFilter.TParserTokenizer.TDynamicProcessor)
-    mp:TMultiProperty;
-    tempresult:TRawByteStringManipulator.TStringType;
-    constructor vcreate(const Source:TRawByteStringManipulator.TStringType;
-                        const Token :TRawByteStringManipulator.TCharRange;
-                        const Operands :TRawByteStringManipulator.TCharRange;
-                        const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TEntsTypeFilter>;
-                        InsideBracketParser:TObject;
-                          var Data:TEntsTypeFilter);override;
-
-    destructor Destroy;override;
-    procedure GetResult(const Source:TRawByteStringManipulator.TStringType;
-                        const Token :TRawByteStringManipulator.TCharRange;
-                        const Operands :TRawByteStringManipulator.TCharRange;
-                        const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TEntsTypeFilter>;
-                        InsideBracketParser:TObject;
-                        var Result:TRawByteStringManipulator.TStringType;
-                        var ResultParam:TRawByteStringManipulator.TCharRange;
-                        var data:TEntsTypeFilter);override;
-  end;
-
 
   TIncludeEntityNameMask=class(TParserEntityTypeFilter.TParserTokenizer.TStaticProcessor)
     class procedure StaticDoit(const Source:TRawByteStringManipulator.TStringType;
@@ -96,61 +72,6 @@ implementation
 
 var
   BracketTockenId:ParserEntityTypeFilter.TParserTokenizer.TTokenId;
-
-procedure TGetEntParam.GetResult(const Source:TRawByteStringManipulator.TStringType;
-                    const Token :TRawByteStringManipulator.TCharRange;
-                    const Operands :TRawByteStringManipulator.TCharRange;
-                    const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TEntsTypeFilter>;
-                    InsideBracketParser:TObject;
-                    var Result:TRawByteStringManipulator.TStringType;
-                    var ResultParam:TRawByteStringManipulator.TCharRange;
-                    var data:TEntsTypeFilter);
-var
-  i:integer;
-  mpd:TMultiPropertyDataForObjects;
-  f:TzeUnitsFormat;
-  ChangedData:TChangedData;
-begin
-  if ResultParam.P.CodeUnitPos=OnlyGetLength then begin
-    if mp<>nil then begin
-      ChangedData:=CreateChangedData(PGDBObjEntity(data),mpd.GSData);
-      if mp.MPObjectsData.MyGetValue(TObjIDWithExtender.Create(0,nil),mpd) then begin
-        tempresult:=mp.MPType.GetDecoratedValueAsString(ChangedData.PGetDataInEtity,f);
-      end else if mp.MPObjectsData.MyGetValue(TObjIDWithExtender.Create(PGDBObjEntity(data)^.GetObjType,nil),mpd) then begin
-        tempresult:=mp.MPType.GetDecoratedValueAsString(ChangedData.PGetDataInEtity,f);
-      end else
-        tempresult:='';
-    end else
-      tempresult:='';
-  end;
-  ResultParam.L.CodeUnits:=Length(tempresult);
-  if ResultParam.P.CodeUnitPos<>OnlyGetLength then
-    for i:=0 to Length(tempresult)-1 do
-      Result[ResultParam.P.CodeUnitPos+i]:=tempresult[i+1];
-end;
-
-constructor TGetEntParam.vcreate(const Source:TRawByteStringManipulator.TStringType;
-                        const Token :TRawByteStringManipulator.TCharRange;
-                        const Operands :TRawByteStringManipulator.TCharRange;
-                        const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TEntsTypeFilter>;
-                        InsideBracketParser:TObject;
-                        var Data:TEntsTypeFilter);
-var
-  propertyname:string;
-begin
-  propertyname:=ParsedOperands.GetResult(Data);
-  if not MultiPropertiesManager.MultiPropertyDictionary.MyGetValue(propertyname,mp) then
-    mp:=nil;
-end;
-
-destructor TGetEntParam.Destroy;
-begin
-  if mp<>nil then begin
-    if @mp.MIPD.AfterIterateProc<>nil then
-      mp.MIPD.AfterIterateProc({bip}mp.PIiterateData,mp);
-    //mp.Free;{ #todo : нужно делать копию mp, но пока пусть так }
-  end;
-end;
 
 class procedure TIncludeEntityNameMask.StaticDoit(const Source:TRawByteStringManipulator.TStringType;
                            const Token :TRawByteStringManipulator.TCharRange;

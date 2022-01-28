@@ -14,6 +14,7 @@ type
   TPropFilterData=record
     CurrentEntity:PGDBObjEntity;
     IncludeEntity:TGDB3StateBool;
+    f:TzeUnitsFormat;
   end;
 
   //TParserEntityPropFilterString=AnsiString;
@@ -269,7 +270,7 @@ procedure TGetEntParam.GetResult(const Source:TRawByteStringManipulator.TStringT
 var
   i:integer;
   mpd:TMultiPropertyDataForObjects;
-  f:TzeUnitsFormat;
+  //f:TzeUnitsFormat;
   ChangedData:TChangedData;
 begin
   if ResultParam.P.CodeUnitPos=OnlyGetLength then begin
@@ -278,14 +279,14 @@ begin
         ChangedData:=CreateChangedData(data.CurrentEntity,mpd.GSData);
         if @mpd.EntBeforeIterateProc<>nil then
           mpd.EntBeforeIterateProc({bip}mp.PIiterateData,ChangedData);
-        mpd.EntIterateProc({bip}mp.PIiterateData,ChangedData,mp,true,mpd.EntChangeProc,f);
-        tempresult:=mp.MPType.GetDecoratedValueAsString(PVarDesk(PTOneVarData(mp.PIiterateData)^.VDAddr.Instance).data.Addr.Instance,f);
+        mpd.EntIterateProc({bip}mp.PIiterateData,ChangedData,mp,true,mpd.EntChangeProc,data.f);
+        tempresult:=mp.MPType.GetDecoratedValueAsString(PVarDesk(PTOneVarData(mp.PIiterateData)^.VDAddr.Instance).data.Addr.Instance,data.f);
       end else if mp.MPObjectsData.MyGetValue(TObjIDWithExtender.Create(PGDBObjEntity(data.CurrentEntity)^.GetObjType,nil),mpd) then begin
         ChangedData:=CreateChangedData(data.CurrentEntity,mpd.GSData);
         if @mpd.EntBeforeIterateProc<>nil then
           mpd.EntBeforeIterateProc({bip}mp.PIiterateData,ChangedData);
-        mpd.EntIterateProc({bip}mp.PIiterateData,ChangedData,mp,true,mpd.EntChangeProc,f);
-        tempresult:=mp.MPType.GetDecoratedValueAsString(PVarDesk(PTOneVarData(mp.PIiterateData)^.VDAddr.Instance).data.Addr.Instance,f);
+        mpd.EntIterateProc({bip}mp.PIiterateData,ChangedData,mp,true,mpd.EntChangeProc,data.f);
+        tempresult:=mp.MPType.GetDecoratedValueAsString(PVarDesk(PTOneVarData(mp.PIiterateData)^.VDAddr.Instance).data.Addr.Instance,data.f);
       end else
         tempresult:='';
     end else

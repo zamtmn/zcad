@@ -60,6 +60,7 @@ var
    Ptrsize:PInteger;
    trmode:TTriangulationMode;
    CurrentLLentity:TArrayIndex;
+   triangle:array[0..2] of integer;
 {procedure adddcross(shx:PGDBOpenArrayOfByte;var size:GDBWord;x,y:fontfloat);
 const
      s=0.01;

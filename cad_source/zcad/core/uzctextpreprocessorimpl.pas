@@ -64,7 +64,6 @@ var
 implementation
 function TStr2VarProcessor.GetResult(const str:gdbstring;const operands:gdbstring;var NextSymbolPos:integer;pobj:Pointer):gdbstring;
 var
-  varname:GDBString;
   pv:pvardesk;
 begin
   pv:=nil;
@@ -73,7 +72,7 @@ begin
   if pv<>nil then
     result:=pv^.data.ptd^.GetValueAsString(pv^.data.Addr.Instance)
   else
-    result:='!!ERR('+varname+')!!';
+    result:='!!ERR('+operands+')!!';
 end;
 class procedure TNum2StrProcessor.StaticGetResult(const Source:TUnicodeStringManipulator.TStringType;
                                                   const Token :TUnicodeStringManipulator.TCharRange;

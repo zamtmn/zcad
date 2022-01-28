@@ -74,7 +74,7 @@ type
                        public
                        FCommand:String;{**<Command to manager commands}
                        FSilent:Boolean;
-                       constructor create(TheOwner: TComponent;_Caption,_Command:TTranslateString);
+                       constructor create(TheOwner: TComponent;_Caption,_Command:TTranslateString);overload;
                        procedure SetCommand(_Caption,_Command:TTranslateString);
                        procedure Click; override;
                   end;

@@ -57,7 +57,6 @@ TBezierSolver2D=class
                 end;
 var
    BS:TBezierSolver2D;
-   triangle:array[0..2] of integer;
 implementation
 //uses {math,}log;
 procedure TBezierSolver2D.AddPointToContur(x,y:fontfloat;attr:TPointAttr);

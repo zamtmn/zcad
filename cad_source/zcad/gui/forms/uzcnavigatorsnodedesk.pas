@@ -49,7 +49,7 @@ type
     ficonindex:integer;
     function FindById(pnd:Pointer; Criteria:string):boolean;
     function FindByName(pnd:Pointer; Criteria:string):boolean;
-    constructor Create(AOwner:TComponent; ATree: TVirtualStringTree; AName:string);virtual;
+    constructor Create(AOwner:TComponent; ATree: TVirtualStringTree; AName:string);overload;
     destructor Destroy;override;
     function find(BaseName:string;basenode:PVirtualNode):PVirtualNode;
     procedure ProcessEntity(CreateEntityNode:TCreateEntityNodeFunc;pent:pGDBObjEntity;filterproc:TFilterEntityProc;traceproc:TTraceEntityProc);

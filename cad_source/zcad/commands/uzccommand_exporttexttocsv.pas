@@ -55,12 +55,12 @@ var
 function Getcolumn(x:double;Widths:TWidths):integer;
 var
    i:integer;
-   l:double;
+   //l:double;
 begin
   //result:=Floor((x)/ExportTextToCSVParam.W);
   //l:=0;
   for i:=0 to Widths.Size-1 do begin
-    l:=Widths[i];
+    //l:=Widths[i];
     if x<Widths[i] then
        exit(i);
   end;

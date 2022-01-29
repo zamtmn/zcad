@@ -22,7 +22,7 @@ unit uzefontttfpreloader;
 interface
 
 uses
-  sysutils,classes,LCLProc,bufstream,StrUtils;
+  sysutils,classes,LCLProc,bufstream{,StrUtils};
 
 const
   maxNameID=26;

@@ -154,9 +154,9 @@ end;
 procedure TTextStylesForm.UpdateItem2(Item:TObject);
 var
    newfont:PGDBfont;
-   dbg:PGDBTextStyle;
+   //dbg:PGDBTextStyle;
 begin
-  dbg:=PGDBTextStyle(TListItem(Item).Data);
+  //dbg:=PGDBTextStyle(TListItem(Item).Data);
   if FontChange then begin
     newfont:=FontManager.addFont(pstring(FontsSelector.Enums.getDataMutable(FontsSelector.Selected))^,'');
     if  (newfont<>PGDBTextStyle(TListItem(Item).Data)^.pfont)and(newfont<>nil) then begin

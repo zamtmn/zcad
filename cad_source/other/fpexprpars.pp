@@ -15,7 +15,7 @@
  **********************************************************************}
 {$mode objfpc}
 {$h+}
-{$warnings off}
+{$warnings off}{$hints off}
 unit fpexprpars;
 
 interface
@@ -4532,6 +4532,6 @@ initialization
 
 finalization
   FreeBuiltins;
-{$warnings on}
+{$warnings on}{$hints on}
 end.
 

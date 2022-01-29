@@ -27,7 +27,7 @@ unit uzeparser;
 interface
 uses Generics.Collections,
      {$IFDEF FPC}gvector,gdeque,{$ENDIF}
-     sysutils,uzbhandles,uzbsets,StrUtils;
+     sysutils,uzbhandles,uzbsets{,StrUtils};
 resourcestring
   rsRunTimeError='uzeparser: Execution error (%s)';
   rsProcessorClassNilError='uzeparser: ProcessorClass=nil (%s)';

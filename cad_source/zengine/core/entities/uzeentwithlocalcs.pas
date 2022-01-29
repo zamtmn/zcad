@@ -87,7 +87,6 @@ procedure GDBObjWithLocalCS.ReCalcFromObjMatrix;
 //var
     //ox:gdbvertex;
 begin
-     inherited;
      Local.basis.ox:=PGDBVertex(@objmatrix[0])^;
      Local.basis.oy:=PGDBVertex(@objmatrix[1])^;
      Local.basis.oz:=PGDBVertex(@objmatrix[2])^;

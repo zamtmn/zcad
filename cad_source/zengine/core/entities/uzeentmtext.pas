@@ -911,10 +911,13 @@ var //s{, layername}: GDBString;
 begin
   //initnul;
   angleload := false;
+  angle:=0;
   ux.x := 1;
   ux.y := 0;
   ux.z := 0;
   style:='';
+  ttemplate:='';
+  j:=0;
   byt:=readmystrtoint(f);
   while byt <> 0 do
   begin

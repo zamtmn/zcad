@@ -178,7 +178,7 @@ begin
   if (ParsedOperands<>nil)
       and(ParsedOperands is TExporterParser.TParsedText)
       and((ParsedOperands as TExporterParser.TParsedText).Parts.size=3)then begin
-
+        op1:='';
         opResultParam.P.CodeUnitPos:=OnlyGetLength;
         opResultParam.L.CodeUnits:=0;
         TExporterParser.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TExporterParser.TParsedText).Parts.Mutable[0]^,data,op1,opResultParam);
@@ -212,6 +212,7 @@ begin
      and((ParsedOperands as TExporterParser.TParsedText).Parts.size=3)
      {and((ParsedOperands as TEntityFilterParser.TParsedTextWithOneToken).Part.TextInfo.TokenId=StringId)} then begin
          op1:=inttostr((ParsedOperands as TExporterParser.TParsedText).Parts.size);
+         op2:='';
          opResultParam.P.CodeUnitPos:=OnlyGetLength;
          opResultParam.L.CodeUnits:=0;
          TExporterParser.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TExporterParser.TParsedText).Parts.Mutable[0]^,data,op1,opResultParam);
@@ -255,6 +256,7 @@ begin
   c:=1;
   if (ParsedOperands<>nil)and(not(ParsedOperands is TExporterParser.TParsedTextWithoutTokens)) then begin
     if ParsedOperands is TExporterParser.TParsedTextWithOneToken then begin
+      op1:='';
       ResultParam.P.CodeUnitPos:=OnlyGetLength;
       ResultParam.L.CodeUnits:=0;
       TExporterParser.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TExporterParser.TParsedTextwithOnetoken).Part,data,op1,ResultParam);

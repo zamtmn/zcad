@@ -122,7 +122,9 @@ var
   FirstMainParent,MainParent:TWinControl;
   i:integer;
 begin
-  FillChar(Task,SizeOf(Task),0);
+  Task:=Default(TTaskDialog);
+  Result:=Default(TZCMsgDialogResult);
+  //FillChar(Task,SizeOf(Task),0);
   if assigned(Context) then begin
     PContext:=@Context;
     TaskName:=Context.TaskName;

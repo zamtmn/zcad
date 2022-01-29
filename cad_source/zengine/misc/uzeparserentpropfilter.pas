@@ -119,6 +119,7 @@ begin
      {and((ParsedOperands as TEntityFilterParser.TParsedTextWithOneToken).Part.TextInfo.TokenId=StringId)} then begin
        if Data.IncludeEntity<>T3SB_Fale then begin
          op1:=inttostr((ParsedOperands as TParserEntityPropFilter.TParsedText).Parts.size);
+         op2:='';
          ResultParam.P.CodeUnitPos:=OnlyGetLength;
          ResultParam.L.CodeUnits:=0;
          TParserEntityPropFilter.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserEntityPropFilter.TParsedText).Parts.Mutable[0]^,data,op1,ResultParam);
@@ -184,6 +185,7 @@ begin
      {and((ParsedOperands as TEntityFilterParser.TParsedTextWithOneToken).Part.TextInfo.TokenId=StringId)} then begin
        if Data.IncludeEntity<>T3SB_Fale then begin
          op1:=inttostr((ParsedOperands as TParserEntityPropFilter.TParsedText).Parts.size);
+         op2:='';
          opResultParam.P.CodeUnitPos:=OnlyGetLength;
          opResultParam.L.CodeUnits:=0;
          TParserEntityPropFilter.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserEntityPropFilter.TParsedText).Parts.Mutable[0]^,data,op1,opResultParam);
@@ -231,6 +233,7 @@ begin
      {and((ParsedOperands as TEntityFilterParser.TParsedTextWithOneToken).Part.TextInfo.TokenId=StringId)} then begin
        if Data.IncludeEntity<>T3SB_Fale then begin
          op1:=inttostr((ParsedOperands as TParserEntityPropFilter.TParsedText).Parts.size);
+         op2:='';
          opResultParam.P.CodeUnitPos:=OnlyGetLength;
          opResultParam.L.CodeUnits:=0;
          TParserEntityPropFilter.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserEntityPropFilter.TParsedText).Parts.Mutable[0]^,data,op1,opResultParam);

@@ -7,7 +7,7 @@ unit uzeparsercmdprompt;
 interface
 
 uses
-  SysUtils,StrUtils,
+  SysUtils,//StrUtils,
   gvector,Generics.Collections,
   uzeparser,uzcctrlcommandlineprompt;
 
@@ -167,6 +167,7 @@ var
   op2:TOptStrMan.TStringType;
   ResultParam:TOptStrMan.TCharRange;
 begin
+  op2:='';
   CheckOperands(Operands,ParsedOperands);
   ResultParam.P.CodeUnitPos:=OnlyGetLength;
   ResultParam.L.CodeUnits:=0;

@@ -200,6 +200,7 @@ var s{, layername}: GDBString;
 begin
   closed := false;
   vertexgo := false;
+  hlGDBWord:=0;
 
   //initnul(@gdb.ObjRoot);
   byt:=readmystrtoint(f);

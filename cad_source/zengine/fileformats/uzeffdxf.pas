@@ -622,6 +622,7 @@ var
    DWGHandle:TDWGHandle;
    len:double;
 begin
+  DWGHandle:=0;
   dashinfo:=TDIDash;
   txtstr:='';
   len:=0;

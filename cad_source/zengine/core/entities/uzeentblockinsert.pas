@@ -524,7 +524,7 @@ var
   hlGDBWord: GDBInteger;
   attrcont: GDBBoolean;
 begin
-  //initnul;
+  hlGDBWord:=0;
   attrcont := false;
   byt:=readmystrtoint(f);
   while byt <> 0 do

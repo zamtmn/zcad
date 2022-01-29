@@ -75,7 +75,8 @@ begin
   if (ParsedOperands<>nil)
   and(ParsedOperands is TParserNavParam.TParsedText)
   and((ParsedOperands as TParserNavParam.TParsedText).Parts.size=2)then begin
-
+    op1s:='';
+    op2s:='';
     ResultParam.P.CodeUnitPos:=OnlyGetLength;
     ResultParam.L.CodeUnits:=0;
     TParserNavParam.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserNavParam.TParsedText).Parts.Mutable[0]^,data,op1s,ResultParam);
@@ -128,7 +129,11 @@ begin
   if (ParsedOperands<>nil)
   and(ParsedOperands is TParserNavParam.TParsedText)
   and((ParsedOperands as TParserNavParam.TParsedText).Parts.size=5)then begin
-
+    op1:='';
+    op2:='';
+    op3:='';
+    op4:='';
+    op5:='';
     ResultParam.P.CodeUnitPos:=OnlyGetLength;
     ResultParam.L.CodeUnits:=0;
     TParserNavParam.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserNavParam.TParsedText).Parts.Mutable[0]^,data,op1,ResultParam);

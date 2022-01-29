@@ -170,7 +170,7 @@ begin
 end;
 constructor TVariablesExtender.Create;
 begin
-     inherited;
+     //inherited;
      pThisEntity:=pEntity;
      entityunit.init('entity');
      entityunit.InterfaceUses.PushBackData(SysUnit);

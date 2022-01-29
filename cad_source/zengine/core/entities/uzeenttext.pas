@@ -670,6 +670,7 @@ begin
   style:='';
   tcontent:='';
   textbackward:=0;
+  angle:=0;
   while byt <> 0 do
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then

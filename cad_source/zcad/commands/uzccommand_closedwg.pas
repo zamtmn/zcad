@@ -23,7 +23,7 @@ interface
 uses
   LCLProc,Forms,
   uzccommandsabstract,uzccommandsimpl,
-  uzcdrawing,uzcdrawings,
+  uzcdrawing,uzcdrawings,uzccommand_quit,
   uzcmainwindow;
 
 implementation

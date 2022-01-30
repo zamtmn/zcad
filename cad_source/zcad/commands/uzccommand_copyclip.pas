@@ -47,7 +47,8 @@ var
 
 procedure CopyToClipboard;
 var
-  s,suni:ansistring;
+  s:ansistring;
+  suni:unicodestring;
   I:integer;
   zcformat:TClipboardFormat;
 begin
@@ -57,21 +58,22 @@ begin
      +inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)+'.dxf';
   CopyClipFile:=s;
   savedxf2000(s,ProgramPath + 'components/empty.dxf',ClipboardDWG^);
-  setlength(suni,length(s)*2+2);
-  fillchar(suni[1],length(suni),0);
   s:=s+#0;
-  for I := 1 to length(s) do
-    suni[i*2-1]:=s[i];
+  suni:=s;
+  //setlength(suni,length(s)*2+2);
+  //fillchar(suni[1],length(suni),0);
+  //for I := 1 to length(s) do
+  //  suni[i*2-1]:=s[i];
   Clipboard.Open;
   Clipboard.Clear;
   zcformat:=RegisterClipboardFormat(ZCAD_DXF_CLIPBOARD_NAME);
   clipboard.AddFormat(zcformat,s[1],length(s));
 
   zcformat:=RegisterClipboardFormat('AutoCAD.r16');
-  clipboard.AddFormat(zcformat,s[1],length(s));
+  clipboard.AddFormat(zcformat,s[1],length(s)*sizeof(s[1]));
 
   zcformat:=RegisterClipboardFormat('AutoCAD.r18');
-  clipboard.AddFormat(zcformat,suni[1],length(suni));
+  clipboard.AddFormat(zcformat,suni[1],length(suni)*sizeof(suni[1]));
   Clipboard.Close;
 end;
 

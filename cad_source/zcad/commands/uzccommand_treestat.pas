@@ -16,6 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 {$mode delphi}
+{$modeswitch advancedrecords}
 unit uzccommand_treestat;
 
 {$INCLUDE def.inc}
@@ -50,6 +51,8 @@ type
     NodesCount,EntCount,OverflowCount,MaxDepth,MemCount:Integer;
     PLevelStat:PTTreeLevelStatistikArray;
     pc:TPopulationCounter;
+    constructor CreateRec(treedepth:integer);
+    procedure FreeRec;
   end;
 
 procedure GetTreeStat(pnode:PTEntTreeNode;depth:integer;var tr:TTreeStatistik);
@@ -73,19 +76,22 @@ begin
      if assigned(pnode.pminusnode) then
                        GetTreeStat(PTEntTreeNode(pnode.pminusnode),depth+1,tr);
 end;
-
-function MakeTreeStatisticRec(treedepth:integer):TTreeStatistik;
+constructor TTreeStatistik.CreateRec(treedepth:integer);
 begin
-     fillchar(result,sizeof(TTreeStatistik),0);
-     Getmem(pointer(result.PLevelStat),(treedepth+1)*sizeof(TTreeLevelStatistik));
-     fillchar(result.PLevelStat^,(treedepth+1)*sizeof(TTreeLevelStatistik),0);
-     result.pc:=TPopulationCounter.create;
+  NodesCount:=0;
+  EntCount:=0;
+  OverflowCount:=0;
+  MaxDepth:=0;
+  MemCount:=0;
+  Getmem(PLevelStat,(treedepth+1)*sizeof(TTreeLevelStatistik));
+  fillchar(PLevelStat^,(treedepth+1)*sizeof(TTreeLevelStatistik),0);
+  pc:=TPopulationCounter.create;
 end;
 
-procedure KillTreeStatisticRec(var tr:TTreeStatistik);
+procedure TTreeStatistik.FreeRec;
 begin
-     Freemem(pointer(tr.PLevelStat));
-     tr.pc.destroy;
+     Freemem(PLevelStat);
+     pc.destroy;
 end;
 
 function PointerToNodeName(node:pointer):string;
@@ -142,7 +148,7 @@ var i: Integer;
     //iter:TPopulationCounter.TIterator;
 begin
   depth:=0;
-  tr:=MakeTreeStatisticRec({SysVar.RD.RD_SpatialNodesDepth^}64);
+  tr:=TTreeStatistik.CreateRec({SysVar.RD.RD_SpatialNodesDepth^}64);
   if drawings.GetCurrentDWG.wa.param.seldesc.LastSelectedObject=nil then
     rootnode:=@drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree
   else
@@ -183,7 +189,7 @@ begin
     //if assigned(iter)then iter.destroy;
   end;
   WriteDot(rootnode,tr);
-  KillTreeStatisticRec(tr);
+  tr.FreeRec;
   result:=cmd_ok;
 end;
 

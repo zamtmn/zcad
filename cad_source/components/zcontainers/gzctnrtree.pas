@@ -213,6 +213,7 @@ begin
                                                                   end;
   MoveSub(self);
   TestNodesCount:=TEntsManipulator.GetTestNodesCount;
+  TNArray:=[];
   setlength(TNArray,TestNodesCount{-1});
 
      PFirstStageData:=nil;

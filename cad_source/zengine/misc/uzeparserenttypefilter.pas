@@ -7,7 +7,7 @@ interface
 uses
   SysUtils,
   uzeentity,uzeparser,uzeentitiestypefilter,
-  uzcoimultiproperties,uzedimensionaltypes,
+  uzcoimultiproperties,//uzedimensionaltypes,
   uzcoimultipropertiesutil;
 
 type

@@ -46,6 +46,7 @@ var
    u8s:UTF8String;
    astring:ansistring;
 begin
+  astring:='';
      mem.init(1024);
      entityunit.SaveToMem(mem);
      //mem.SaveToFile(expandpath(ProgramPath+'autosave\lastvariableset.pas'));

@@ -201,6 +201,7 @@ begin
   closed := false;
   vertexgo := false;
   hlGDBWord:=0;
+  tv:=NulVertex;
 
   //initnul(@gdb.ObjRoot);
   byt:=readmystrtoint(f);

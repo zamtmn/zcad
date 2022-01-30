@@ -18,7 +18,7 @@ uses
   uzcenitiesvariablesextender,uzgldrawcontext,uzcdrawing,uzcvariablesutils,
   uzcstrconsts,UGDBSelectedObjArray,uzeentityfactory,uzcsysvars,
   csvdocument,
-  UGDBOpenArrayOfPV,uzeentblockinsert,devices,{UGDBTree,}uzcdrawings,uzbtypesbase,
+  UGDBOpenArrayOfPV,uzeentblockinsert,{devices,}{UGDBTree,}uzcdrawings,uzbtypesbase,
   uzccommandsmanager,uzccomdraw,uzcentelleader,
   uzccommandsabstract,
   uzccommandsimpl,

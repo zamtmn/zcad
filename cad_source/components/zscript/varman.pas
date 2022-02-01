@@ -357,47 +357,72 @@ end;
 function GetBoundsFromSavedUnit(name:string;w,h:integer):Trect;
 var
    pint:PGDBInteger;
+   pvd:pvardesk;
 begin
      result:=rect(0,0,100,100);
-     pint:=SavedUnit.FindValue(name+SuffLeft).data.Addr.Instance;
-     if assigned(pint)then
-                          result.Left:=pint^;
-     result.Left:=setfrominterval(result.Left,0,w);
-     pint:=SavedUnit.FindValue(name+SuffTop).data.Addr.Instance;
-     if assigned(pint)then
-                          result.Top:=pint^;
-     result.Top:=setfrominterval(result.Top,0,h);
-     pint:=SavedUnit.FindValue(name+SuffWidth).data.Addr.Instance;
-     if assigned(pint)then
-                          result.Right:=result.Left+pint^;
-     pint:=SavedUnit.FindValue(name+SuffHeight).data.Addr.Instance;
-     if assigned(pint)then
-                          result.Bottom:=result.Top+pint^;
+     pvd:=SavedUnit.FindValue(name+SuffLeft);
+     if assigned(pvd) then begin
+       pint:=pvd.data.Addr.Instance;
+       if assigned(pint)then
+                            result.Left:=pint^;
+       result.Left:=setfrominterval(result.Left,0,w);
+     end;
+     pvd:=SavedUnit.FindValue(name+SuffTop);
+     if assigned(pvd) then begin
+       pint:=pvd.data.Addr.Instance;
+       if assigned(pint)then
+                            result.Top:=pint^;
+       result.Top:=setfrominterval(result.Top,0,h);
+     end;
+     pvd:=SavedUnit.FindValue(name+SuffWidth);
+     if assigned(pvd) then begin
+       pint:=pvd.data.Addr.Instance;
+       if assigned(pint)then
+                            result.Right:=result.Left+pint^;
+     end;
+     pvd:=SavedUnit.FindValue(name+SuffHeight);
+     if assigned(pvd) then begin
+       pint:=pvd.data.Addr.Instance;
+       if assigned(pint)then
+                            result.Bottom:=result.Top+pint^;
+     end;
 end;
 procedure StoreBoundsToSavedUnit(name:string;tr:Trect);
 var
    pint:PGDBInteger;
    vn:TInternalScriptString;
+   pvd:pvardesk;
 begin
      vn:=name+SuffLeft;
-     pint:=SavedUnit.FindValue(vn).data.Addr.Instance;
-     if not assigned(pint)then
-                              pint:=SavedUnit.CreateVariable(vn,'GDBInteger').data.Addr.instance;
+     pvd:=SavedUnit.FindValue(vn);
+     if assigned(pvd) then
+       pint:=SavedUnit.FindValue(vn).data.Addr.Instance
+     else
+       pint:=SavedUnit.CreateVariable(vn,'GDBInteger').data.Addr.instance;
      pint^:=tr.Left;
+
      vn:=name+SuffTop;
-     pint:=SavedUnit.FindValue(vn).data.Addr.Instance;
-     if not assigned(pint)then
-                              pint:=SavedUnit.CreateVariable(vn,'GDBInteger').data.Addr.instance;
+     pvd:=SavedUnit.FindValue(vn);
+     if assigned(pvd) then
+       pint:=SavedUnit.FindValue(vn).data.Addr.Instance
+     else
+       pint:=SavedUnit.CreateVariable(vn,'GDBInteger').data.Addr.instance;
      pint^:=tr.Top;
+
      vn:=name+SuffWidth;
-     pint:=SavedUnit.FindValue(vn).data.Addr.Instance;
-     if not assigned(pint)then
-                              pint:=SavedUnit.CreateVariable(vn,'GDBInteger').data.Addr.instance;
+     pvd:=SavedUnit.FindValue(vn);
+     if assigned(pvd) then
+       pint:=SavedUnit.FindValue(vn).data.Addr.Instance
+     else
+       pint:=SavedUnit.CreateVariable(vn,'GDBInteger').data.Addr.instance;
      pint^:=tr.Right-tr.Left;
+
      vn:=name+SuffHeight;
-     pint:=SavedUnit.FindValue(vn).data.Addr.Instance;
-     if not assigned(pint)then
-                              pint:=SavedUnit.CreateVariable(vn,'GDBInteger').data.Addr.instance;
+     pvd:=SavedUnit.FindValue(vn);
+     if assigned(pvd) then
+       pint:=SavedUnit.FindValue(vn).data.Addr.Instance
+     else
+       pint:=SavedUnit.CreateVariable(vn,'GDBInteger').data.Addr.instance;
      pint^:=tr.Bottom-tr.Top;
 end;
 procedure TSimpleUnit.CopyTo;

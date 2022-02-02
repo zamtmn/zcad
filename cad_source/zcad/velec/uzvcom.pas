@@ -115,7 +115,7 @@ uses
   //ExtType,
   //Pointerv,
   //Graphs,
-
+  uzcenitiesvariablesextender,
   uzvsgeom,
     gzctnrvectortypes,                  //itrec
   uzvtestdraw; // тестовые рисунки
@@ -197,7 +197,7 @@ type
                          nameSuperLine:string;
                          public
                          constructor Create;
-                         destructor Destroy;virtual;
+                         destructor Destroy;override;
       end;
 
       //TListGraphBuilder=specialize TVector<TGraphBuilder>;
@@ -245,7 +245,7 @@ type
                          listNumbers:TListNumVertex;
                          public
                          constructor Create;
-                         destructor Destroy;virtual;
+                         destructor Destroy;override;
       end;
       TListBreakInfo=specialize TVector<TBreakInfo>;
 
@@ -539,7 +539,7 @@ begin
       zcSetEntPropFromCurrentDrawingProp(ptext); //добавляем дефаултные свойства
       ptext^.TXTStyleIndex:=drawings.GetCurrentDWG^.GetCurrentTextStyle; //добавляет тип стиля текста, дефаултные свойства его не добавляют
       ptext^.Local.P_insert:=p1;  // координата
-      ptext^.Template:=mText;     // сам текст
+      ptext^.Template:=TDXFEntsInternalStringType(mText);     // сам текст
       zcAddEntToCurrentDrawingWithUndo(ptext);   //добавляем в чертеж
       result:=cmd_ok;
 end;
@@ -1362,6 +1362,8 @@ var
    nameBreak,nameDevice:string;
    pvd:pvardesk; //для работы со свойствами устройств
    haveName,IsExchange:boolean;
+   pnodestartvarext:TVariablesExtender;
+   pvstart:pvardesk;
 begin
     listBreak:=TListBreakInfo.Create;                                    //создаем список номеров вершин стойков/разрывов с одинаковыми именами
     for i:=0 to graph.listVertex.Size-1 do
@@ -1369,7 +1371,12 @@ begin
      nameDevice:=graph.listVertex[i].deviceEnt^.Name;
      //ZCMsgCallBackInterface.TextMessage('breakname= ' + nameDevice);
 
-     if (nameDevice='EL_CABLE_UP') or (nameDevice='EL_CABLE_DOWN') or (nameDevice='EL_CABLE_FROMDOWN') or (nameDevice='EL_CABLE_FROMUP') or (nameDevice='EL_CABLE_BREAK') then
+        pnodestartvarext:=graph.listVertex[i].deviceEnt^.specialize GetExtension<TVariablesExtender>;
+        pvstart:=nil;
+        pvstart:=pnodestartvarext.entityunit.FindVariable('RiserName');
+        //pvstartelevation:=pnodestartvarext^.entityunit.FindVariable('Elevation');
+        if (pvstart <> nil) then
+     //if (nameDevice='EL_CABLE_UP') or (nameDevice='EL_CABLE_DOWN') or (nameDevice='EL_CABLE_FROMDOWN') or (nameDevice='EL_CABLE_FROMUP') or (nameDevice='EL_CABLE_BREAK') then
      begin
        haveName:=true;
        pvd:=FindVariableInEnt(graph.listVertex[i].deviceEnt,'RiserName');
@@ -1715,13 +1722,13 @@ begin
                         begin
                           interceptVertex:=uzegeometry.intercept3d(extMainLine.stPoint,extMainLine.edPoint,extNextLine.stPoint,extNextLine.edPoint).interceptcoord;
                           //проверка есть ли уже такая вершина, если нет то добавляем вершину и сразу создаем ребро
-                           if dublicateVertex({listDevice}result.listVertex,interceptVertex,Epsilon) = false then begin
+                           if dublicateVertex(result.listVertex,interceptVertex,Epsilon) = false then begin
                             infoDevice.deviceEnt:=nil;
                             infoDevice.centerPoint:=interceptVertex;
-                            result.listVertex{listDevice}.PushBack(infoDevice);
+                            result.listVertex.PushBack(infoDevice);
 
-                            infoEdge.VIndex1:=result.listVertex{listDevice}.Size-1;
-                            infoEdge.VIndex2:=getNumDeviceInListDevice(result.listVertex{listDevice},pObjDevice);
+                            infoEdge.VIndex1:=result.listVertex.Size-1;
+                            infoEdge.VIndex2:=getNumDeviceInListDevice(result.listVertex,pObjDevice);
                             infoEdge.VPoint1:=interceptVertex;
                             infoEdge.VPoint2:=pObjDevice^.GetCenterPoint;
                             infoEdge.edgeLength:=uzegeometry.Vertexlength(interceptVertex,pObjDevice^.GetCenterPoint);
@@ -1752,9 +1759,9 @@ begin
   //**** поиск ребер между узлами за основу взяты вершины
   //**   возможно данный метод быстрее оставить на будущее****//
   {*
-  for i:=0 to result.listVertex{listDevice}.Size-1 do    //перебираем все узлы
+  for i:=0 to result.listVertex.Size-1 do    //перебираем все узлы
   begin
-      tempListEdge:=getListEdgeAreaVertexLine(i,Epsilon,result.listVertex{listDevice},listCable);
+      tempListEdge:=getListEdgeAreaVertexLine(i,Epsilon,result.listVertex,listCable);
       if tempListEdge.size <> 0 then
         for j:=0 to tempListEdge.Size-1 do
           if listHaveThisEdge(result.listEdge,tempListEdge[j]) = false then
@@ -1891,7 +1898,7 @@ end;
 
       ZCMsgCallBackInterface.TextMessage('В полученном графе вершин = ' + IntToStr(ourGraph.listVertex.Size));
       ZCMsgCallBackInterface.TextMessage('В полученном графе ребер = ' + IntToStr(ourGraph.listEdge.Size));
-    {
+
     ZCMsgCallBackInterface.TextMessage('*** Min Weight Path ***');
   //  writeln('*** Min Weight Path ***');
     G:=TGraph.Create;
@@ -1934,6 +1941,7 @@ end;
       VertexPath.Free;
     end;
     result:=cmd_ok; }
+    {
   end;
 
   function TestgraphUses_com(operands:TCommandOperands):TCommandResult;
@@ -1999,6 +2007,7 @@ function Testcablemanager_com(operands:TCommandOperands):TCommandResult;
   pnp:PTNodeProp;
   ir,ir2,ir3:itrec;
   begin
+
     cman.init;
     cman.build;
     pcabledesk:=cman.beginiterate(ir);
@@ -2025,7 +2034,7 @@ function Testcablemanager_com(operands:TCommandOperands):TCommandResult;
        until pcabledesk=nil;
       END;
 
-
+   result:=cmd_ok;
 
         //ZCMsgCallBackInterface.TextMessage(' гуд ' + pcabledesk.);
     // CableManager.build;

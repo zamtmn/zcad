@@ -157,6 +157,7 @@ begin
     //zcPlaceUndoStartMarkerIfNeed(UndoMarcerIsPlazed,'DrawSuperLine');
     zcAddEntToCurrentDrawingWithUndo(psuperline);
     zcRedrawCurrentDrawing;
+    result:=cmd_ok;
 end;
 
 function DrawSuperLine_com(operands:TCommandOperands):TCommandResult;

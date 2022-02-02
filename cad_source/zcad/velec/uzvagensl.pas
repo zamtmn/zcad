@@ -167,7 +167,7 @@ type
                          orient:integer; //0-слева,1-сверху,2-справа,3-снизу
                          public
                          constructor Create;
-                         destructor Destroy;virtual;
+                         destructor Destroy;override;
       end;
       TListColumnDev=specialize TVector<TInfoColumnDev>;
 
@@ -392,6 +392,7 @@ var
   UndoMarcerIsPlazed:boolean;
 
  begin
+
      //создаем точки помещения
      pointBuildLine.p1.x:=10;
      pointBuildLine.p1.y:=10;
@@ -646,6 +647,7 @@ var
           zcPlaceUndoEndMarkerIfNeed(UndoMarcerIsPlazed);
 
         ZCMsgCallBackInterface.TextMessage(' работает ' + test,TMWOHistoryOut);
+        result:=cmd_ok;
  end;
 
 function TestModul_com(operands:TCommandOperands):TCommandResult;
@@ -653,10 +655,12 @@ var
  test:string;
  r:integer;
  begin
+
         test:='УРА';
         r:=autoGenSLBetweenDevices(test);
 
         ZCMsgCallBackInterface.TextMessage(' работает ' + test,TMWOHistoryOut);
+        result:=cmd_ok;
  end;
 
 

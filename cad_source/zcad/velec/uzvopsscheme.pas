@@ -269,6 +269,7 @@ function TestModul_com(operands:TCommandOperands):TCommandResult;
 
 
  begin
+
    ZCMsgCallBackInterface.TextMessage('УРАААА!!!',TMWOHistoryOut);
 
 
@@ -338,7 +339,7 @@ function TestModul_com(operands:TCommandOperands):TCommandResult;
   cman.done;
 
   zcRedrawCurrentDrawing;
-
+  result:=cmd_ok;
  end;
   procedure InsertDat2(datname,name:GDBString;var currentcoord:GDBVertex; var root:GDBObjRoot);
 var
@@ -374,7 +375,7 @@ begin
      if name<>'' then
      begin
      pt:=pointer(AllocEnt(GDBMtextID));
-     pt^.init({drawings.GetCurrentROOT}@root,sysvar.dwg.DWG_CLayer^,sysvar.dwg.DWG_CLinew^,name,tv,2.5,0,0.65,RightAngle,jsbc,1,1);
+     pt^.init({drawings.GetCurrentROOT}@root,sysvar.dwg.DWG_CLayer^,sysvar.dwg.DWG_CLinew^,TDXFEntsInternalStringType(name),tv,2.5,0,0.65,RightAngle,jsbc,1,1);
      pt^.TXTStyleIndex:=pointer(drawings.GetCurrentDWG^.GetTextStyleTable^.getDataMutable(0));
      root.ObjArray.AddPEntity(pt^);
      zcSetEntPropFromCurrentDrawingProp(pt);
@@ -533,6 +534,7 @@ var
    a:GDBVertex;
 begin
 
+
      //** Получаем точку вставки отработанной функции, в этот момент пользователь настраивает поведения алгоритма
      if commandmanager.get3dpoint('Specify insert point:',insertPoint) = GRNormal then
        ZCMsgCallBackInterface.TextMessage('Coordinate received',TMWOHistoryOut)
@@ -556,7 +558,7 @@ begin
     buildSSScheme(listGraph,insertPoint);
 
     zcRedrawCurrentDrawing;
-
+    result:=cmd_ok;
 end;
 
 

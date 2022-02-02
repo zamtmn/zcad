@@ -199,7 +199,7 @@ type
                    orient:integer; //0-слева,1-сверху,2-справа,3-снизу
                    public
                    constructor Create;
-                   destructor Destroy;virtual;
+                   destructor Destroy;override;
       end;
   TListColumnDev=specialize TVector<TInfoColumnDev>;
 
@@ -235,7 +235,7 @@ type
                          numStart:integer;
                          public
                          constructor Create;
-                         destructor Destroy;virtual;
+                         destructor Destroy;override;
       end;
 
 
@@ -1800,6 +1800,7 @@ var
 
   UndoMarcerIsPlazed:boolean;
 begin
+
   //if commandmanager.get3dpoint('Specify insert point:',stPoint) then
 
      SysUnit^.RegisterType(TypeInfo(TAutogenSuperLine));//регистрируем тип данных в зкадном RTTI
@@ -1867,7 +1868,7 @@ begin
    zcRedrawCurrentDrawing;
 
    Commandmanager.executecommandend;
-
+   result:=cmd_ok;
 end;
 initialization
   autogenSuperLine.nameSL:='??';

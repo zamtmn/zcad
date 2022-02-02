@@ -170,7 +170,7 @@ implementation
         zcSetEntPropFromCurrentDrawingProp(ptext); //добавляем дефаултные свойства
         ptext^.TXTStyleIndex:=drawings.GetCurrentDWG^.GetCurrentTextStyle; //добавляет тип стиля текста, дефаултные свойства его не добавляют
         ptext^.Local.P_insert:=p1;  // координата
-        ptext^.Template:=mText;     // сам текст
+        ptext^.Template:=TDXFEntsInternalStringType(mText);     // сам текст
         ptext^.vp.Layer:=getTestLayer('systemTempuzvtestdraw');
         zcAddEntToCurrentDrawingWithUndo(ptext);   //добавляем в чертеж
         result:=cmd_ok;
@@ -348,6 +348,7 @@ function TestModul_com(operands:TCommandOperands):TCommandResult;
     i   : Integer;
     tempPoint:GDBVertex;
  begin
+
        tempPoint.x:=0;
        tempPoint.y:=0;
        tempPoint.z:=0;
@@ -355,7 +356,7 @@ function TestModul_com(operands:TCommandOperands):TCommandResult;
       DrawInOutPoly(tempPoint, 20, 8, 3, 1, 0);
       //DrawInOutPoly(tempPoint, 8, 8, 3, 0,5);
       //DrawInOutPoly(tempPoint, 10, 4, 2, 1,0);
-
+    result:=cmd_ok;
  end;
 
 initialization

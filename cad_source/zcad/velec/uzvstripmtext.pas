@@ -52,11 +52,11 @@ var
   newText:ansistring;
 
   UCoperands:string;
-  function clearText(a:ansistring):ansistring;
+  function clearText(a:TDXFEntsInternalStringType):ansistring;
     var
       re: TRegExpr;
     begin
-       clearText:=a;
+       clearText:=AnsiString(a);
        re := TRegExpr.Create;
 
        re.Expression := '(\\\\)';
@@ -111,8 +111,8 @@ begin
             //ZCMsgCallBackInterface.TextMessage('Do : ' + pmtext^.Template,TMWOHistoryOut);
             newText:=clearText(pmtext^.Template);
             //ZCMsgCallBackInterface.TextMessage('After : ' + newText,TMWOHistoryOut);
-            pmtext^.Template:=newText;
-            pmtext^.Content:=newText;
+            pmtext^.Template:=TDXFEntsInternalStringType(newText);
+            pmtext^.Content:=TDXFEntsInternalStringType(newText);
            end;
     pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir); //переход к следующем примитиву в списке выбраных примитивов
     until pobj=nil;
@@ -129,8 +129,8 @@ begin
               pmtext:=PGDBObjMText(pobj);
               newText:=clearText(pmtext^.Template);
 
-              pmtext^.Template:=newText;
-              pmtext^.Content:=newText;
+              pmtext^.Template:=TDXFEntsInternalStringType(newText);
+              pmtext^.Content:=TDXFEntsInternalStringType(newText);
            end;
     pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir); //переход к следующем примитиву в списке выбраных примитивов
     until pobj=nil;

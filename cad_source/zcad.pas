@@ -231,7 +231,7 @@ uses
   uzccommand_DevDefSync,
 
   uzcenitiesvariablesextender,uzcExtdrLayerControl,uzcExtdrSmartTextEnt,
-  (*
+
   {$IFDEF ELECTROTECH}
   //**for velec func**//
   uzccommand_drawsuperline,
@@ -239,9 +239,10 @@ uses
   uzvagslcom, //создания именных суперлиний в комнате между извещателями
   uzvstripmtext, //очистка мтекста, сделано плохо, в будущем надо переделывать мтекст и механизм.
   uzvcabmountmethod,
+  uzvelscheme, //создание электрической схемы
   //**//
   {$ENDIF}
-  *)
+
   //uzccomexample2,
   uzventsuperline,
   uzccomobjectinspector,

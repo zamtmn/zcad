@@ -238,7 +238,7 @@ PTDeviceInfoSubGraph=^TDeviceInfoSubGraph;
                          listNumVertexMinWeight:TListNumVertexMinWeight;
                          public
                          constructor Create;
-                         destructor Destroy;virtual;
+                         destructor Destroy;override;
       end;
       TListSubDevice=specialize TVector<TDeviceInfo>;
 
@@ -259,7 +259,7 @@ PTDeviceInfoSubGraph=^TDeviceInfoSubGraph;
                          name:String;
                          public
                          constructor Create;
-                         destructor Destroy;virtual;
+                         destructor Destroy;override;
       end;
       TListHeadGroup=specialize TVector<THeadGroupInfo>;
 
@@ -272,7 +272,7 @@ PTDeviceInfoSubGraph=^TDeviceInfoSubGraph;
                          listGroup:TListHeadGroup; //список подчиненных устройств
                          public
                          constructor Create;
-                         destructor Destroy;virtual;
+                         destructor Destroy;override;
       end;
       TListHeadDevice=specialize TVector<THeadDeviceInfo>;
 
@@ -864,7 +864,7 @@ begin
       zcSetEntPropFromCurrentDrawingProp(ptext); //добавляем дефаултные свойства
       ptext^.TXTStyleIndex:=drawings.GetCurrentDWG^.GetCurrentTextStyle; //добавляет тип стиля текста, дефаултные свойства его не добавляют
       ptext^.Local.P_insert:=p1;  // координата
-      ptext^.Template:=mText;     // сам текст
+      ptext^.Template:=TDXFEntsInternalStringType(mText);     // сам текст
       ptext^.vp.LineWeight:=LnWt100;
       ptext^.vp.Color:=color;
       ptext^.vp.Layer:=uzvtestdraw.getTestLayer('systemTempVisualLayer');
@@ -1138,7 +1138,7 @@ end;
 
 function NumPsIzvAndDlina_com(operands:TCommandOperands):TCommandResult;
   begin
-
+          result:=cmd_ok;
   end;
 
 
@@ -1597,12 +1597,14 @@ function getGroupDeviceInGraph(ourGraph:TGraphBuilder;Epsilon:double; var listEr
       {
       T:=G.FindMinWeightPath(G[0], G[6], EdgePath);
 
-      {if T <> 11 then begin
+      if T <> 11 then begin
            ZCMsgCallBackInterface.TextMessage('*** Error! ***');
        // write('Error!');
        // readln;
         Exit;
       end;  }
+
+      {
       ZCMsgCallBackInterface.TextMessage('Minimal Length: '+ FloatToStr(T));
       //writeln('Minimal Length: ', T :4:2);
       G.EdgePathToVertexPath(G[0], EdgePath, VertexPath);
@@ -1629,6 +1631,7 @@ function getGroupDeviceInGraph(ourGraph:TGraphBuilder;Epsilon:double; var listEr
 //
 //      ZCMsgCallBackInterface.TextMessage('В полученном грhfjhfjhfафе вершин = ' + IntToStr(ourGraph.listVertex.Size));
 //      ZCMsgCallBackInterface.TextMessage('В полученном графе ребер = ' + IntToStr(ourGraph.listEdge.Size));
+
 
 
 
@@ -2366,7 +2369,7 @@ function buildListAllConnectDevice(listVertexEdge:TGraphBuilder;Epsilon:double; 
 
     //listSubDevice := TListSubDevice.Create;
     //listHeadGroup :=  TListHeadGroup.Create;
-    //listHeadDevice := TListHeadDevice.Create;
+    listHeadDevice := TListHeadDevice.Create;
 
     //
     //Epsilon:=0.2;
@@ -3003,7 +3006,7 @@ var
           ptext^.TXTStyleIndex:=drawings.GetCurrentDWG^.GetCurrentTextStyle; //добавляет тип стиля текста, дефаултные свойства его не добавляют
           ptext^.Local.P_insert:=pt;  // координата
           ptext^.textprop.justify:=jsmc;
-          ptext^.Template:=mText;     // сам текст
+          ptext^.Template:=TDXFEntsInternalStringType(mText);     // сам текст
           ptext^.vp.LineWeight:=LnWt100;
           ptext^.vp.Color:=color;
           //ptext^.vp.Layer:=uzvtestdraw.getTestLayer('systemTempVisualLayer');
@@ -3026,8 +3029,8 @@ var
           pmtext^.Local.P_insert:=pt;  // координата
           pmtext^.textprop.justify:=jsml;
           //ptext^.Template:=mText;     // сам текст
-          pmtext^.Template:=mText;
-          pmtext^.Content:=mText;
+          pmtext^.Template:=TDXFEntsInternalStringType(mText);
+          pmtext^.Content:=TDXFEntsInternalStringType(mText);
           pmtext^.vp.LineWeight:=LnWt100;
           pmtext^.linespacef:=1;
           //pmtext^.textprop.aaaangle:=rotate;
@@ -3352,6 +3355,7 @@ function TDummyComparer.CompareEdges (Edge1, Edge2: Pointer): Integer;
 var
   e1,e2:TAttrSet;
 begin
+
    ////result:=1;
    //e1:=TAttrSet(Edge1);
    //e2:=TAttrSet(Edge2);
@@ -3378,6 +3382,7 @@ begin
 
    //тут e1 и e2 надо както сравнить по какомуто критерию и вернуть -1 0 1
    //в зависимости что чего меньше-больше
+   result:=cmd_ok;
 end;
 
 
@@ -3386,7 +3391,9 @@ initialization
   CreateCommandFastObjectPlugin(@TestTREEUses_com,'test222',CADWG,0);
   CreateCommandFastObjectPlugin(@TestTREEUses_com2,'test333',CADWG,0);
   DummyComparer:=TDummyComparer.Create;
+  SortTreeLengthComparer:=TSortTreeLengthComparer.Create;
 finalization
   DummyComparer.free;
+  SortTreeLengthComparer.free;
 end.
 

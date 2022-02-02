@@ -42,7 +42,8 @@ const
   vGPGDBObjEdge='vGPGDBObjEdge';
   vGPGDBObjVertex='vGPGDBObjVertex';
   //для работы автоукладчика
-  velec_nameDevice='NMO_BaseName';
+  velec_nameDevice='NMO_Name';
+//  velec_nameDevice='NMO_BaseName';
   velec_HeadDeviceName='SLCABAGEN_HeadDeviceName';
   //velec_CableRoutingNodes='SLCABAGEN_CableRoutingNodes';
   velec_ControlUnitName='SLCABAGEN_ControlUnitName';
@@ -50,7 +51,8 @@ const
   velec_NGControlUnit='SLCABAGEN_NGControlUnit';
   //velec_inerNodeWithoutConnection='SLCABAGEN_inerNodeWithoutConnection';
   velec_serialConnectDev='SLCABAGEN_DevConnectMethod';
-  velec_cableMounting='SLCABAGEN_CableMounting';
+  velec_cableMounting='Cable_Mounting_Method';
+//  velec_cableMounting='SLCABAGEN_CableMounting';
   velec_CableRoutNodes = '-';
   velec_separator='~';
   velec_onlyThisDev='!';

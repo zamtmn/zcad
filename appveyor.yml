@@ -29,7 +29,7 @@ platform:
 # Scripts that run after cloning repository
 install:
   - cmd: echo Download lazarus-2.2.0-fpc-3.2.2-win32
-  - cmd: curl -fsSL -o lazarus-2.2.0-fpc-3.2.2-win32.exe "https://sourceforge.net/projects/lazarus/files/Lazarus%20Windows%2032%20bits/Lazarus%202.2.0/lazarus-2.2.0-fpc-3.2.2-win32.exe/download"
+  - cmd: curl -fsSL -o lazarus-2.2.0-fpc-3.2.2-win32.exe "https://lazarus-rus.ru/wp-content/uploads/2022/01/lazarus-32-bit_2.2.0.exe"
   - cmd: echo Installing lazarus-2.2.0-fpc-3.2.2-win32
   - cmd: lazarus-2.2.0-fpc-3.2.2-win32.exe /verysilent /supressmesfboxes
   - cmd: rmdir /S /Q c:\lazarus\docs

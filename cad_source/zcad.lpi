@@ -73,7 +73,7 @@
               <IgnoredMessages idx5062="True" idx5024="True" idx4055="True"/>
             </CompilerMessages>
             <ExecuteBefore>
-              <Command Value="$(Make) crutch_before_compilation"/>
+              <Command Value="Make crutch_before_compilation"/>
               <ScanForFPCMsgs Value="True"/>
             </ExecuteBefore>
           </Other>
@@ -116,7 +116,7 @@
               <IgnoredMessages idx5062="True" idx5024="True" idx4055="True"/>
             </CompilerMessages>
             <ExecuteBefore>
-              <Command Value="$(Make) crutch_before_compilation"/>
+              <Command Value="Make crutch_before_compilation"/>
               <ScanForFPCMsgs Value="True"/>
             </ExecuteBefore>
           </Other>
@@ -159,7 +159,7 @@
               <IgnoredMessages idx5062="True" idx5024="True" idx4055="True"/>
             </CompilerMessages>
             <ExecuteBefore>
-              <Command Value="$(Make) crutch_before_compilation"/>
+              <Command Value="Make crutch_before_compilation"/>
               <ScanForFPCMsgs Value="True"/>
             </ExecuteBefore>
           </Other>
@@ -201,7 +201,7 @@
               <IgnoredMessages idx5062="True" idx5024="True" idx4055="True"/>
             </CompilerMessages>
             <ExecuteBefore>
-              <Command Value="$(Make) crutch_before_compilation"/>
+              <Command Value="Make crutch_before_compilation"/>
               <ScanForFPCMsgs Value="True"/>
             </ExecuteBefore>
           </Other>
@@ -243,7 +243,7 @@
               <IgnoredMessages idx5062="True" idx5024="True" idx4055="True"/>
             </CompilerMessages>
             <ExecuteBefore>
-              <Command Value="$(Make) crutch_before_compilation"/>
+              <Command Value="Make crutch_before_compilation"/>
               <ScanForFPCMsgs Value="True"/>
             </ExecuteBefore>
           </Other>
@@ -1262,7 +1262,7 @@
         <IgnoredMessages idx5062="True" idx5024="True" idx4056="True" idx4055="True" idx4046="True" idx4035="True"/>
       </CompilerMessages>
       <ExecuteBefore>
-        <Command Value="$(Make) crutch_before_compilation"/>
+        <Command Value="Make crutch_before_compilation"/>
         <ScanForFPCMsgs Value="True"/>
       </ExecuteBefore>
     </Other>

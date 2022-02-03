@@ -128,6 +128,7 @@ end;
 class procedure ZMenuExt.ZMenuExtMainMenuItemReader(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
  var
   CreatedMenuItem:TMenuItem;
+  RootMenu:TMenu;
   //createdmenu:TMenu;
   line,localizedcaption:string;
   TBSubNode:TDomNode;
@@ -137,9 +138,10 @@ begin
     localizedcaption:=InterfaceTranslate('menu~'+line,line);
 
     if RootMenuItem=nil then begin
-      TMenu(CreatedMenuItem):=TMainMenu.Create(application);
-      TMenu(CreatedMenuItem).Images:=actlist.Images;
-      TMenu(CreatedMenuItem).Name:=MenuNameModifier+getAttrValue(aNode,'Name','');
+      RootMenu:=TMainMenu.Create(application);
+      RootMenu.Images:=actlist.Images;
+      RootMenu.Name:=MenuNameModifier+getAttrValue(aNode,'Name','');
+      tobject(CreatedMenuItem):=RootMenu;
       //CreatedMenuItem:=RootMenuItem;
     end
     else
@@ -174,7 +176,7 @@ begin
       if RootMenuItem is TMenuItem then
         RootMenuItem.Add(CreatedMenuItem)
       else
-         TMenu(RootMenuItem).Items.Add(CreatedMenuItem);
+         TMenu(TObject(RootMenuItem)).Items.Add(CreatedMenuItem);
     end;
 end;
 class procedure ZMenuExt.ZMenuExtPopUpMenuReader(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
@@ -191,7 +193,7 @@ begin
       CreatedMenuItem.Name:=MenuNameModifier+line;
       CreatedMenuItem.Images := actlist.Images;
     end else begin
-      CreatedMenuItem:=TPopupMenu(RootMenuItem);
+      CreatedMenuItem:=TPopupMenu(TObject(RootMenuItem));
     end;
 
     if assigned(aNode) then
@@ -199,7 +201,7 @@ begin
     if assigned(TBSubNode) then
       while assigned(TBSubNode)do
       begin
-        TMenuDefaults.TryRunMenuCreateFunc(MT,fmf,TBSubNode.NodeName,TBSubNode,actlist,tmenuitem(CreatedMenuItem),mpf);
+        TMenuDefaults.TryRunMenuCreateFunc(MT,fmf,TBSubNode.NodeName,TBSubNode,actlist,tmenuitem(tobject(CreatedMenuItem)),mpf);
         TBSubNode:=TBSubNode.NextSibling;
       end;
     cxmenumgr.RegisterLCLMenu(CreatedMenuItem);
@@ -262,7 +264,7 @@ begin
        if RootMenuItem is TMenuItem then
                               RootMenuItem.Add(CreatedMenuItem)
                           else
-                              TPopUpMenu(RootMenuItem).Items.Add(CreatedMenuItem);
+                              TPopUpMenu(TObject(RootMenuItem)).Items.Add(CreatedMenuItem);
   end;
 end;
 
@@ -287,7 +289,7 @@ begin
   if RootMenuItem is TMenuItem then
     RootMenuItem.Add(CreatedMenuItem)
   else
-    TPopUpMenu(RootMenuItem).Items.Add(CreatedMenuItem);
+    TPopUpMenu(TObject(RootMenuItem)).Items.Add(CreatedMenuItem);
 end;
 
 class procedure ZMenuExt.ZMenuExtAction(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
@@ -310,7 +312,7 @@ begin
   if RootMenuItem is TMenuItem then
     RootMenuItem.Add(CreatedMenuItem)
   else
-    TPopUpMenu(RootMenuItem).Items.Add(CreatedMenuItem);
+    TPopUpMenu(TObject(RootMenuItem)).Items.Add(CreatedMenuItem);
 end;
 
 class procedure ZMenuExt.ZMenuExtToolBars(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);

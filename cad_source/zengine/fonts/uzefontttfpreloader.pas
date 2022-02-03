@@ -355,14 +355,17 @@ end;
 
 function TTTFFileStream.GET_ULong:ULong;
 begin
+  result:=0;
   read(result,SizeOf(Result));
 end;
 function TTTFFileStream.GET_Long:Long;
 begin
+  result:=0;
   read(result,SizeOf(Result));
 end;
 function TTTFFileStream.GET_UShort:UShort;
 begin
+  result:=0;
   read(result,SizeOf(Result));
 end;
 initialization

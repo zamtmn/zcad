@@ -39,8 +39,8 @@ install:
 build_script:
   - cmd: set PATH=C:\lazarus\fpc\3.2.2\bin\i386-win32;%PATH%
   - cmd: echo %PATH%
-  - cmd: SetX PATH "C:\lazarus\fpc\3.2.2\bin\i386-win32;%PATH%" & echo %PATH% & C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe installpkgstolaz
-  - cmd: SetX PATH "C:\lazarus\fpc\3.2.2\bin\i386-win32;%PATH%" & echo %PATH% & C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe cleanzcadelectrotech
+  - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe installpkgstolaz
+  - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe cleanzcadelectrotech
 
 # scripts to run after build
 after_build:

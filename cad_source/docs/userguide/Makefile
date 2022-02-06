@@ -7,7 +7,7 @@ clean:
 	rm -rf userguide.ru.html
 	rm -rf userguide.ru.pdf
 pdf:                      
-	asciidoctor-pdf -r asciidoctor-diagram userguide.ru.adoc
+	asciidoctor-pdf.bat -r asciidoctor-diagram userguide.ru.adoc
 
 html:                      
-	asciidoctor -r asciidoctor-diagram userguide.ru.adoc
+	asciidoctor.bat -r asciidoctor-diagram userguide.ru.adoc

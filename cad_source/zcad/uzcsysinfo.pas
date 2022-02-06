@@ -212,7 +212,7 @@ begin
     s:='';
   Result:=PChar(s);
 end;
-{$ELSEIF defined(LINUX)}
+{$ELSEIF (defined(LINUX))or(defined(DARWIN))}
 begin
    Result:='/todo/';
 end;
@@ -228,7 +228,7 @@ begin
     s:='';
   Result:=PChar(s)+'\Microsoft\Windows\Fonts';
 end;
-{$ELSEIF defined(LINUX)}
+{$ELSEIF (defined(LINUX))or(defined(DARWIN))}
 begin
    Result:='/todo/';
 end;

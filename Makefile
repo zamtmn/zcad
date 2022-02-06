@@ -134,6 +134,10 @@ zcadelectrotech: checkvars version
 	environment/typeexporter/typeexporter pathprefix=cad_source/ outputfile=cad/rtl/system.pas processfiles=environment/typeexporter/zcad.files+environment/typeexporter/zcadelectrotech.files
 	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) cad_source/zcad.lpi
 
+zcadelectrotechpdfuseguide: checkvars
+	$(MAKE) -C cad_source/docs/userguide clean pdf
+	cp -r cad_source/docs/userguide/*.pdf cad
+
 cleanzcad: clean zcadenv zcad
 
 cleanzcadelectrotech: clean zcadelectrotechenv zcadelectrotech

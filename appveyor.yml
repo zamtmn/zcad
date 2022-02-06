@@ -28,14 +28,16 @@ platform:
 
 # Scripts that run after cloning repository
 install:
-  - cmd: echo Download lazarus-2.2.0-fpc-3.2.2-win32
+  - cmd: @echo Download lazarus-2.2.0-fpc-3.2.2-win32
   - cmd: curl -fsSL -o lazarus-2.2.0-fpc-3.2.2-win32.exe "https://softslot.ru/d28bc0c/programming/file-editors/lazarus-2.2.0-fpc-3.2.2-win32.exe"
-  - cmd: echo Installing lazarus-2.2.0-fpc-3.2.2-win32
+  - cmd: @echo Installing lazarus-2.2.0-fpc-3.2.2-win32
   - cmd: lazarus-2.2.0-fpc-3.2.2-win32.exe /verysilent /supressmsgboxes
   - cmd: rmdir /S /Q c:\lazarus\docs
   - cmd: rmdir /S /Q c:\lazarus\examples
-  - cmd: echo Fix https://gitlab.com/freepascal.org/lazarus/lazarus/-/issues/39630
+  - cmd: @echo Fix https://gitlab.com/freepascal.org/lazarus/lazarus/-/issues/39630
   - ps: (Get-Content -Path 'C:\lazarus\environmentoptions.xml') -replace '\$Lazarusdir\\','$(Lazarusdir)' | Set-Content -Path 'C:\lazarus\environmentoptions.xml'
+  - cmd: @echo Installing Asciidoctor
+  - ps: gem install asciidoctor
 
 # Build scripts
 build_script:

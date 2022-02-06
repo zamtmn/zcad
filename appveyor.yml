@@ -30,8 +30,8 @@ platform:
 install:
   - cmd: echo Installing Asciidoctor
   - cmd: gem install asciidoctor
+  - cmd: C:\ruby193\bin\asciidoctor.bat
   - cmd: gem install asciidoctor-diagram
-  - cmd: C:\ruby193\bin\asciidoctor-diagram
 
   - cmd: echo Download lazarus-2.2.0-fpc-3.2.2-win32
   - cmd: curl -fsSL -o lazarus-2.2.0-fpc-3.2.2-win32.exe "https://softslot.ru/d28bc0c/programming/file-editors/lazarus-2.2.0-fpc-3.2.2-win32.exe"

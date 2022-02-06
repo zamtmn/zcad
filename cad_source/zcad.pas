@@ -232,6 +232,7 @@ uses
 
   uzcenitiesvariablesextender,uzcExtdrLayerControl,uzcExtdrSmartTextEnt,
 
+  {$IFNDEF DARWIN}
   {$IFDEF ELECTROTECH}
   //**for velec func**//
   uzccommand_drawsuperline,
@@ -241,6 +242,7 @@ uses
   uzvcabmountmethod,
   uzvelscheme, //создание электрической схемы
   //**//
+  {$ENDIF}
   {$ENDIF}
 
   //uzccomexample2,
@@ -343,5 +345,6 @@ begin
   programlog.logoutstr('END.',0,LM_Necessarily);
   programlog.logoutstr('<<<<<<<<<<<<<<<Start units finalization',0,LM_Debug);
 end.
+
 
 

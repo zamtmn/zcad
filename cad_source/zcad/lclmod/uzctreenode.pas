@@ -162,6 +162,7 @@ begin
                                              {$IFDEF LCLQT5}tsDownNormal{$ENDIF}
                                              {$IFDEF LCLgtk2}ttbSplitButtonDropDownNormal{$ENDIF}
                                              {$IFDEF LCLgtk3}ttbSplitButtonDropDownNormal{$ENDIF}
+                                             {$IFDEF LCLcocoa}ttbSplitButtonDropDownNormal{$ENDIF}
                                              );
     PaintRect:=ClientRect;
     {$IFDEF LCLWIN32}if WindowsVersion<wvVista then begin

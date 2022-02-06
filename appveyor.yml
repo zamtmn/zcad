@@ -39,6 +39,8 @@ install:
   - cmd: echo Installing Asciidoctor
   - cmd: gem install asciidoctor
   - cmd: gem install asciidoctor-diagram
+  - cmd: asciidoctor-pdf
+  - cmd: asciidoctor-pdf -r asciidoctor-diagram
 
 # Build scripts
 build_script:

@@ -37,7 +37,8 @@ install:
   - cmd: echo Fix https://gitlab.com/freepascal.org/lazarus/lazarus/-/issues/39630
   - ps: (Get-Content -Path 'C:\lazarus\environmentoptions.xml') -replace '\$Lazarusdir\\','$(Lazarusdir)' | Set-Content -Path 'C:\lazarus\environmentoptions.xml'
   - cmd: echo Installing Asciidoctor
-  - ps: gem install asciidoctor
+  - cmd: gem install asciidoctor
+  - cmd: gem install asciidoctor-diagram
 
 # Build scripts
 build_script:

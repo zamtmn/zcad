@@ -30,6 +30,7 @@ platform:
 install:
   - cmd: echo Installing Asciidoctor
   - cmd: gem install asciidoctor
+  - cmd: asciidoctor
   - cmd: C:\Ruby30\bin\asciidoctor.bat
   - cmd: gem install asciidoctor-diagram
 

@@ -346,6 +346,20 @@ begin
                  plp.LengthFact:=0;
                  plp.Mode:=TLTContinous;
             end;
+  if AddItem('ByLayer',pointer(plp))=IsCreated then
+            begin
+                 plp.init('ByLayer');
+                 plp.LengthDXF:=0;
+                 plp.LengthFact:=0;
+                 plp.Mode:=TLTByLayer;
+            end;
+  if AddItem('ByBlock',pointer(plp))=IsCreated then
+            begin
+                 plp.init('ByBlock');
+                 plp.LengthDXF:=0;
+                 plp.LengthFact:=0;
+                 plp.Mode:=TLTByBlock;
+            end;
 end;
 constructor GDBLtypeArray.initnul;
 begin

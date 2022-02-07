@@ -1,13 +1,14 @@
 program zvectorsimpletest;
 {$MODE DELPHI}
-uses sysutils,TypInfo,uzctnrvectorsimple,gvector,strutils;
+uses sysutils,TypInfo,gzctnrvectorsimple,gvector,strutils;
 
 const
   MaxVectorLength=10000000;
-  InitVectorLength={10000000}1;
- {define stringdata}
+  InitVectorLength=1;
 type
   TMyTime=TDateTime;
+
+  {define stringdata}
 
   datatype={$ifndef stringdata}{byte}integer{$else}ansistring{$endif};
 function StartTimer:TMyTime;
@@ -39,7 +40,7 @@ end;
 
 procedure TestIntegerVector;
 type
-  TZInegerVector=TZctnrVectorSimple<datatype>;
+  TZInegerVector=GZVectorSimple<datatype>;
 var
   InegerVector:TZInegerVector;
   i:integer;
@@ -183,6 +184,6 @@ begin
 
   TestIntegerVector;
   //TestIntegerVector;
-  readln;
+  //readln;
 end.
 

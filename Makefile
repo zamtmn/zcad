@@ -1,4 +1,4 @@
-.PHONY: checkallvars checkvars clean zcadenv zcadelectrotechenv version zcad zcadelectrotech cleanzcad cleanzcadelectrotech installpkgstolaz
+.PHONY: checkallvars checkvars clean zcadenv zcadelectrotechenv version zcad zcadelectrotech cleanzcad cleanzcadelectrotech installpkgstolaz zcadelectrotechpdfuseguide rmpkgslibs tests
 default: cleanzcad
 
 ZCVERSION:=$(shell git describe --tags)
@@ -137,6 +137,9 @@ zcadelectrotech: checkvars version
 zcadelectrotechpdfuseguide: checkvars
 	$(MAKE) -C cad_source/docs/userguide clean pdf
 	cp -r cad_source/docs/userguide/*.pdf cad
+
+tests: checkvars
+	$(MAKE) -C cad_source/components/zcontainers/tests LP=$(LP) PCP=$(PCP) clean all
 
 cleanzcad: clean zcadenv zcad
 

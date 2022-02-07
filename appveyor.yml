@@ -46,6 +46,7 @@ build_script:
   - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe installpkgstolaz
   - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe cleanzcadelectrotech
   - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe zcadelectrotechpdfuseguide
+  - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe tests
 
 # scripts to run after build
 after_build:
@@ -58,7 +59,10 @@ after_build:
 #---------------------------------#
 
 # to disable automatic tests
-test: off
+# test: off
+
+test_script:
+  - cmd: cad_source\components\zcontainers\tests\zvectorsimpletest
 
 #---------------------------------#
 #      artifacts configuration    #

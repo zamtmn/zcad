@@ -1,4 +1,4 @@
-unit DEVICE_EL_VL_DIAGRAM_CH1;
+unit DEVICE_EL_VL_DIAGRAM_CN1;
 
 interface
 
@@ -8,21 +8,21 @@ usescopy objname;
 
 var
 
-T2:GDBString;(*'Марка'*)
+T11:GDBInteger;(*'123'*)
 
 implementation
 
 begin
 
-BTY_TreeCoord:='PLAN_EM_Щиты';
+BTY_TreeCoord:='PLAN_EM_Шина';
 Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 
-NMO_Name:='А0';
-NMO_BaseName:='А';
+NMO_Name:='CN0';
+NMO_BaseName:='CN';
 NMO_Suffix:='??';
-NMO_Affix:='.11';
+NMO_Affix:='';
 
-T2:='??';
+T11:=3;
 
 end.

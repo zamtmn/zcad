@@ -97,17 +97,13 @@ BlockPreViewExport(24|EL_VL_STAMP3_1|*images/palettes/EL_VL_STAMP3_1.png)
 BlockPreViewExport(24|EL_VL_STAMP3_1|*images/palettes/EL_VL_STAMP3_1_150.png)
 BlockPreViewExport(48|EL_VL_STAMP3_1|*images/palettes/EL_VL_STAMP3_1_300.png)
 
-BlockPreViewExport(24|DIAGRAM_SP0|*images/palettes/DIAGRAM_SP0.png)
-BlockPreViewExport(24|DIAGRAM_SP0|*images/palettes/DIAGRAM_SP0_150.png)
-BlockPreViewExport(48|DIAGRAM_SP0|*images/palettes/DIAGRAM_SP0_300.png)
+BlockPreViewExport(24|DIAGRAM_CN0|*images/palettes/DIAGRAM_CN0.png)
+BlockPreViewExport(24|DIAGRAM_CN0|*images/palettes/DIAGRAM_CN0_150.png)
+BlockPreViewExport(48|DIAGRAM_CN0|*images/palettes/DIAGRAM_CN0_300.png)
 
-BlockPreViewExport(24|DIAGRAM_BS0|*images/palettes/DIAGRAM_BS0.png)
-BlockPreViewExport(24|DIAGRAM_BS0|*images/palettes/DIAGRAM_BS0_150.png)
-BlockPreViewExport(48|DIAGRAM_BS0|*images/palettes/DIAGRAM_BS0_300.png)
-
-BlockPreViewExport(24|DIAGRAM_BS1|*images/palettes/DIAGRAM_BS1.png)
-BlockPreViewExport(24|DIAGRAM_BS1|*images/palettes/DIAGRAM_BS1_150.png)
-BlockPreViewExport(48|DIAGRAM_BS1|*images/palettes/DIAGRAM_BS1_300.png)
+BlockPreViewExport(24|DIAGRAM_CN1|*images/palettes/DIAGRAM_CN1.png)
+BlockPreViewExport(24|DIAGRAM_CN1|*images/palettes/DIAGRAM_CN1_150.png)
+BlockPreViewExport(48|DIAGRAM_CN1|*images/palettes/DIAGRAM_CN1_300.png)
 
 BlockPreViewExport(24|DIAGRAM_PE1|*images/palettes/DIAGRAM_PE1.png)
 BlockPreViewExport(24|DIAGRAM_PE1|*images/palettes/DIAGRAM_PE1_150.png)

@@ -1,4 +1,4 @@
-unit DEVICE_EL_VL_DIAGRAM_SP1;
+unit DEVICE_EL_VL_DIAGRAM_TX1;
 
 interface
 
@@ -8,7 +8,7 @@ usescopy objname;
 
 var
 
-T1:GDBString;(*'Этаж'*)
+T1:GDBString;(*'Пометки'*)
 
 implementation
 
@@ -22,6 +22,6 @@ NMO_Name:='Э0';
 NMO_BaseName:='Э';
 NMO_Suffix:='??';
 
-T1:='??';
+T1:='Источник питания';
 
 end.

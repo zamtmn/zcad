@@ -354,37 +354,36 @@ begin
     end;
 end;
 
-procedure HistoryOut(s: pansichar); export;
+procedure HistoryOut(s:string);
 var
-   a:string;
-   needclean:integer;
+  needclean:integer;
 begin
   if assigned(HistoryLine) then begin
-    a:=(s);
-    if (a<>LastHistoryMsg)or(rsMsgRepeatCountStr='') then begin
-      LastHistoryMsg:=a;
+    if (s<>LastHistoryMsg)or(rsMsgRepeatCountStr='') then begin
+      LastHistoryMsg:=s;
       LastHistoryMsgRepeatCounter:=0;
       LastSuffixMsg:='';
       if HistoryLine.Lines.Count=0 then
-        CLine.utflen:=CLine.utflen+{$IFDEF WINDOWS}UTF8Length(a){$ELSE}Length(a){$ENDIF}
+        CLine.utflen:=CLine.utflen+UTF8Length(s)
       else
-       CLine.utflen:=2+CLine.utflen+{$IFDEF WINDOWS}UTF8Length(a){$ELSE}Length(a){$ENDIF};
+       CLine.utflen:=CLine.utflen+UTF8Length(s)+UTF8Length(HistoryLine.Lines.LineBreak);
       {$IFNDEF DELPHI}
-      HistoryLine.Append(a);
+      HistoryLine.Append(s);
       {$ENDIF}
-      //{$IFDEF WINDOWS}
+
+      {$IFDEF LCLWIN32}
       HistoryLine.SelStart:=CLine.utflen;
-      HistoryLine.SelLength:=2;
+      HistoryLine.SelLength:=length(HistoryLine.Lines.LineBreak);
       HistoryLine.ClearSelection;
-      //{$ENDIF}
+      {$ENDIF}
     end else begin
       inc(LastHistoryMsgRepeatCounter);
-      needclean:={$IFDEF WINDOWS}UTF8Length(LastSuffixMsg){$ELSE}Length(LastSuffixMsg){$ENDIF};
+      needclean:=UTF8Length(LastSuffixMsg);
       LastSuffixMsg:=format(rsMsgRepeatCountStr,[LastHistoryMsgRepeatCounter+1]);
 
       if LastHistoryMsgRepeatCounter=1 then begin
         HistoryLine.Lines[HistoryLine.Lines.Count-1]:=HistoryLine.Lines[HistoryLine.Lines.Count-1]+LastSuffixMsg;
-        CLine.utflen:=CLine.utflen+{$IFDEF WINDOWS}UTF8Length(LastSuffixMsg){$ELSE}Length(LastSuffixMsg){$ENDIF};
+        CLine.utflen:=CLine.utflen+UTF8Length(LastSuffixMsg);
 
         HistoryLine.SelStart:=CLine.utflen;
         HistoryLine.SelLength:=2;
@@ -396,12 +395,11 @@ begin
         CLine.utflen:=CLine.utflen-needclean;
 
         HistoryLine.Lines[HistoryLine.Lines.Count-1]:=HistoryLine.Lines[HistoryLine.Lines.Count-1]+LastSuffixMsg;
-        CLine.utflen:=CLine.utflen+{$IFDEF WINDOWS}UTF8Length(LastSuffixMsg){$ELSE}Length(LastSuffixMsg){$ENDIF};
+        CLine.utflen:=CLine.utflen+UTF8Length(LastSuffixMsg);
         HistoryLine.SelStart:=CLine.utflen;
         HistoryLine.SelLength:=2;
         HistoryLine.ClearSelection;
       end;
-
     end;
   end;
 end;

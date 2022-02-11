@@ -12,6 +12,8 @@ T1:GDBString;(*'Обозначение'*)
 T2:GDBString;(*'Марка'*)
 T3:GDBString;(*'Параметры'*)
 
+T11:GDBInteger;(*'123'*)
+
 implementation
 
 begin
@@ -28,5 +30,7 @@ NMO_Affix:='.2';
 T1:='??';
 T2:='??';
 T3:='??';
+
+T11:=3;
 
 end.

@@ -86,14 +86,16 @@ deploy: off
 
 # on successful build
 on_success:
-  - ECHO "BUILD VICTORY"
+  - ECHO "BUILD SUCCESSFUL"
 
 # on build failure
 on_failure:
-  - ECHO "TRY AND TRY AGAIN"
+  - ECHO "BUILD FAILURE(("
 
 # after build failure or success
 on_finish:
+  - sh: |
+      find "$APPVEYOR_BUILD_FOLDER" -type f -name 'test*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
 # Debug with blocked RDP Access
 #  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 # https://www.appveyor.com/docs/environment-variables/

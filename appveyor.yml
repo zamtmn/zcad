@@ -63,6 +63,8 @@ after_build:
 
 test_script:
   - cmd: cad_source\components\zcontainers\tests\testzcontainers > testzcontainers.xml
+# upload results to AppVeyor
+  - ps: $wc = New-Object 'System.Net.WebClient' | $wc.UploadFile("https://ci.appveyor.com/api/testresults/xunit/$($env:APPVEYOR_JOB_ID)", (cad_source\components\zcontainers\tests\testzcontainers.xml))
 
 #---------------------------------#
 #      artifacts configuration    #
@@ -94,8 +96,6 @@ on_failure:
 
 # after build failure or success
 on_finish:
-  - sh: |
-      find "$APPVEYOR_BUILD_FOLDER" -type f -name 'test*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
 # Debug with blocked RDP Access
 #  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 # https://www.appveyor.com/docs/environment-variables/

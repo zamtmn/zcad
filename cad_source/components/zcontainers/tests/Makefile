@@ -88,4 +88,4 @@ clean:
 	rm -rf lib
 
 all: checkvars
-	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) zvectorsimpletest.lpr
+	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) testzcontainers.lpr

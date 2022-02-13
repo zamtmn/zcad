@@ -62,7 +62,7 @@ after_build:
 # test: off
 
 test_script:
-  - cmd: cad_source\components\zcontainers\tests\zvectorsimpletest
+  - cmd: cad_source\components\zcontainers\tests\testzcontainers > testzcontainers.xml
 
 #---------------------------------#
 #      artifacts configuration    #

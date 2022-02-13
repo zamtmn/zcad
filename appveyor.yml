@@ -64,7 +64,7 @@ after_build:
 test_script:
   - cmd: cad_source\components\zcontainers\tests\testzcontainers > testzcontainers.xml
 # upload results to AppVeyor
-  - ps: $wc = New-Object 'System.Net.WebClient';$wc.UploadFile("https://ci.appveyor.com/api/testresults/xunit/$($env:APPVEYOR_JOB_ID)", (cad_source\components\zcontainers\tests\testzcontainers.xml))
+  - ps: $wc = New-Object 'System.Net.WebClient';$wc.UploadFile("https://ci.appveyor.com/api/testresults/xunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\cad_source\components\zcontainers\tests\testzcontainers.xml))
 
 #---------------------------------#
 #      artifacts configuration    #

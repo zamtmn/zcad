@@ -403,10 +403,6 @@ begin
     end;
   end;
 end;
-procedure HistoryOutStr(s:String);
-begin
-     HistoryOut(pansichar(s));
-end;
 procedure StatusLineTextOut(s:String);
 begin
      if assigned(HintText) then
@@ -426,7 +422,7 @@ begin
   //historychanged:=false;
   ZCADGUIManager.RegisterZCADFormInfo('CommandLine',rsCommandLineWndName,TCLine,rect(200,100,600,100),nil,nil,@CLine);
 
-  ZCMsgCallBackInterface.RegisterHandler_HistoryOut(HistoryOutStr);
+  ZCMsgCallBackInterface.RegisterHandler_HistoryOut(HistoryOut);
   //uzcinterface.HistoryOutStr:=HistoryOutStr;
 
   ZCMsgCallBackInterface.RegisterHandler_GUIMode(HandleCmdLine);

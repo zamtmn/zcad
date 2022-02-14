@@ -21,8 +21,8 @@ var
 
 begin
   Application := TMyTestRunner.Create(nil);
-  //DefaultFormat:={fplain}fXML;
-  //DefaultRunAllTests:=True;
+  DefaultFormat:={fplain}fXML;
+  DefaultRunAllTests:=True;
   Application.Initialize;
   Application.Run;
   Application.Free;

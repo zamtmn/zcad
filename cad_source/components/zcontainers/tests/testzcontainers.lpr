@@ -1,4 +1,4 @@
-program testpassrc;
+program testzcontainers;
 
 {$mode objfpc}{$H+}
 

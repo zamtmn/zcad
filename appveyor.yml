@@ -63,7 +63,7 @@ after_build:
 
 test_script:
   - cmd: echo Run tests
-  - cmd: cad_source\components\zcontainers\tests\testzcontainers >testzcontainers.xml
+  - cmd: cad_source\components\zcontainers\tests\testzcontainers.exe
   - cmd: echo Convert tests results
 # convert result from fpcunit to junit
   - ps: $XSLInputElement = New-Object System.Xml.Xsl.XslCompiledTransform;$XSLInputElement.Load("https://raw.githubusercontent.com/zamtmn/zcad/master/utils/tests/ctest2junit.xsl");$XSLInputElement.Transform((Resolve-Path .\testzcontainers.xml),(Resolve-Path .\junittestzcontainers.xml))

@@ -20,6 +20,8 @@ type
   Published
     Procedure TestGVector_Integer_BasicOperations;
     Procedure TestGZVectorSimple_Integer_BasicOperations;
+    Procedure doFailure;
+    Procedure doWriteln;
   end;
 
 
@@ -104,6 +106,18 @@ begin
 
   InegerVector.Destroy;
 end;
+
+Procedure TZVectorSimpleTest.doFailure;
+begin
+  raise(Exception.CreateFmt('Always failure',[]));
+end;
+
+Procedure TZVectorSimpleTest.doWriteln;
+begin
+  writeln('Test output')
+end;
+
+
 
 begin
   RegisterTests([TZVectorSimpleTest]);

@@ -62,9 +62,12 @@ after_build:
 # test: off
 
 test_script:
-  - cmd: cad_source\components\zcontainers\tests\testzcontainers > testzcontainers.xml
+  - cmd: cad_source\components\zcontainers\tests\testzcontainers --all --format=xml --file=testzcontainers.xml
+# convert result from fpcunit to junit
+  - ps: $XSLInputElement = New-Object System.Xml.Xsl.XslCompiledTransform;$XSLInputElement.Load("https://raw.githubusercontent.com/zamtmn/zcad/master/utils/tests/ctest2junit.xsl");$XSLInputElement.Transform((Resolve-Path .\testzcontainers.xml),(Resolve-Path .\junittestzcontainers.xml))
+
 # upload results to AppVeyor
-  - ps: $wc = New-Object 'System.Net.WebClient';$wc.UploadFile("https://ci.appveyor.com/api/testresults/xunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\testzcontainers.xml))
+  - ps: $wc = New-Object 'System.Net.WebClient';$wc.UploadFile("https://ci.appveyor.com/api/testresults/xunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\junittestzcontainers.xml))
 
 #---------------------------------#
 #      artifacts configuration    #

@@ -47,7 +47,6 @@
       <Unit0>
         <Filename Value="testzcontainers.lpr"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="testpassrc"/>
       </Unit0>
     </Units>
   </ProjectOptions>

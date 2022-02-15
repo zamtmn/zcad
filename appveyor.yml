@@ -69,7 +69,7 @@ test_script:
   - ps: $XSLInputElement = New-Object System.Xml.Xsl.XslCompiledTransform;$XSLInputElement.Load("https://raw.githubusercontent.com/zamtmn/zcad/master/utils/tests/ctest2junit.xsl");$XSLInputElement.Transform((Resolve-Path .\testzcontainers.xml),((Join-Path (Resolve-Path .) "junittestzcontainers.xml")))
 
 # upload results to AppVeyor
-  - ps: $wc = New-Object 'System.Net.WebClient';$wc.UploadFile("https://ci.appveyor.com/api/testresults/xunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\junittestzcontainers.xml))
+  - ps: $wc = New-Object 'System.Net.WebClient';$wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\junittestzcontainers.xml))
 
 #---------------------------------#
 #      artifacts configuration    #

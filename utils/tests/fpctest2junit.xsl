@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-	<xsl:output method="xml" indent="yes" />
+    <xsl:output method="xml" indent="yes" />
 	<xsl:template match="/">
 		<testsuites>
 			<xsl:variable name="buildName" select="//TestListing/TestSuite/TestSuite/@Name"/>
                         <xsl:variable name="numberOfTests" select="//TestListing/TestSuite/@NumberOfRunTests"/>
 			<xsl:variable name="numberOfFailures" select="//TestListing/TestSuite/@NumberOfFailures"/>
-			<xsl:variable name="elapsedTime" select="//TestListing/TestSuite/@ElapsedTime"/>
+            <xsl:variable name="elapsedHour" select="format-time(//TestListing/TestSuite/@ElapsedTime, '[H]')"/>
+            <xsl:variable name="elapsedMin" select="format-time(//TestListing/TestSuite/@ElapsedTime, '[m01]')"/>
+            <xsl:variable name="elapsedSecond" select="format-time(//TestListing/TestSuite/@ElapsedTime, '[s1].[f001]')"/>
+			<xsl:variable name="elapsedTime" select="$elapsedHour*3600+$elapsedMin*60+$elapsedSecond"/>
 			<xsl:variable name="numberOfErrors" select="//TestListing/TestSuite/@NumberOfErrors"/>
 			<xsl:variable name="numberOfIgnoredTests" select="//TestListing/TestSuite/@NumberOfIgnoredTests"/>
 			<testsuite name="{$buildName}" tests="{$numberOfTests}" time="{$elapsedTime}" failures="{$numberOfFailures}" errors="{$numberOfErrors}" skipped="{$numberOfIgnoredTests}">
 			<xsl:for-each select="//TestListing/TestSuite/TestSuite/Test">
 					<xsl:variable name="testName" select="@Name"/>
-					<xsl:variable name="duration" select="@ElapsedTime"/>
+                    <xsl:variable name="elapsedHour" select="format-time(@ElapsedTime, '[H]')"/>
+                    <xsl:variable name="elapsedMin" select="format-time(@ElapsedTime, '[m01]')"/>
+                    <xsl:variable name="elapsedSecond" select="format-time(@ElapsedTime, '[s1].[f001]')"/>
+    		        <xsl:variable name="duration" select="$elapsedHour*3600+$elapsedMin*60+$elapsedSecond"/>
 					<xsl:variable name="status" select="@Result"/>
 					<xsl:variable name="output" select="Results/Measurement/Value"/>
 					<xsl:variable name="className" select="translate(Path, '/.', '.')"/>

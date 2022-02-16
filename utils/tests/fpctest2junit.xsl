@@ -17,10 +17,10 @@
 			<xsl:for-each select="//TestListing/TestSuite/TestSuite/Test">
 					<xsl:variable name="testName" select="@Name"/>
                 			<xsl:variable name="elapsedT" select="@ElapsedTime"/>                    
-					<xsl:variable name="elapsedHour" select="substring($elapsedT,1,2)"/>
-					<xsl:variable name="elapsedMin" select="substring($elapsedT,4,2)"/>
-					<xsl:variable name="elapsedSecond" select="substring($elapsedT,7,string-length($elapsedT)-6)"/>
-					<xsl:variable name="duration" select="number($elapsedHour)*3600+number($elapsedMin)*60+number($elapsedSecond)"/>
+					<xsl:variable name="elapsedH" select="substring($elapsedT,1,2)"/>
+					<xsl:variable name="elapsedM" select="substring($elapsedT,4,2)"/>
+					<xsl:variable name="elapsedS" select="substring($elapsedT,7,string-length($elapsedT)-6)"/>
+					<xsl:variable name="duration" select="number($elapsedH)*3600+number($elapsedM)*60+number($elapsedS)"/>
 					<xsl:variable name="status" select="@Result"/>
 					<xsl:variable name="output" select="Results/Measurement/Value"/>
 					<xsl:variable name="className" select="translate(Path, '/.', '.')"/>

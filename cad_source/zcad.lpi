@@ -62,15 +62,14 @@
           </Parsing>
           <Other>
             <Verbosity>
-              <ShowWarn Value="False"/>
-              <ShowNotes Value="False"/>
+              <ShowHintsForUnusedUnitsInMainSrc Value="True"/>
             </Verbosity>
             <WriteFPCLogo Value="False"/>
             <ConfigFile>
               <StopAfterErrCount Value="5"/>
             </ConfigFile>
             <CompilerMessages>
-              <IgnoredMessages idx5062="True" idx5024="True" idx4055="True"/>
+              <IgnoredMessages idx6058="True" idx5062="True" idx5024="True" idx4055="True"/>
             </CompilerMessages>
             <ExecuteBefore>
               <Command Value="$(Make) crutch_before_compilation"/>
@@ -105,15 +104,14 @@
           </Parsing>
           <Other>
             <Verbosity>
-              <ShowWarn Value="False"/>
-              <ShowNotes Value="False"/>
+              <ShowHintsForUnusedUnitsInMainSrc Value="True"/>
             </Verbosity>
             <WriteFPCLogo Value="False"/>
             <ConfigFile>
               <StopAfterErrCount Value="5"/>
             </ConfigFile>
             <CompilerMessages>
-              <IgnoredMessages idx5062="True" idx5024="True" idx4055="True"/>
+              <IgnoredMessages idx6058="True" idx5062="True" idx5024="True" idx4055="True"/>
             </CompilerMessages>
             <ExecuteBefore>
               <Command Value="$(Make) crutch_before_compilation"/>
@@ -148,15 +146,14 @@
           </Parsing>
           <Other>
             <Verbosity>
-              <ShowWarn Value="False"/>
-              <ShowNotes Value="False"/>
+              <ShowHintsForUnusedUnitsInMainSrc Value="True"/>
             </Verbosity>
             <WriteFPCLogo Value="False"/>
             <ConfigFile>
               <StopAfterErrCount Value="5"/>
             </ConfigFile>
             <CompilerMessages>
-              <IgnoredMessages idx5062="True" idx5024="True" idx4055="True"/>
+              <IgnoredMessages idx6058="True" idx5062="True" idx5024="True" idx4055="True"/>
             </CompilerMessages>
             <ExecuteBefore>
               <Command Value="Make crutch_before_compilation"/>
@@ -191,14 +188,14 @@
           </Parsing>
           <Other>
             <Verbosity>
-              <ShowNotes Value="False"/>
+              <ShowHintsForUnusedUnitsInMainSrc Value="True"/>
             </Verbosity>
             <WriteFPCLogo Value="False"/>
             <ConfigFile>
               <StopAfterErrCount Value="5"/>
             </ConfigFile>
             <CompilerMessages>
-              <IgnoredMessages idx5062="True" idx5024="True" idx4055="True"/>
+              <IgnoredMessages idx6058="True" idx5062="True" idx5024="True" idx4055="True"/>
             </CompilerMessages>
             <ExecuteBefore>
               <Command Value="$(Make) crutch_before_compilation"/>
@@ -233,14 +230,14 @@
           </Parsing>
           <Other>
             <Verbosity>
-              <ShowNotes Value="False"/>
+              <ShowHintsForUnusedUnitsInMainSrc Value="True"/>
             </Verbosity>
             <WriteFPCLogo Value="False"/>
             <ConfigFile>
               <StopAfterErrCount Value="5"/>
             </ConfigFile>
             <CompilerMessages>
-              <IgnoredMessages idx5062="True" idx5024="True" idx4055="True"/>
+              <IgnoredMessages idx6058="True" idx5062="True" idx5024="True" idx4055="True"/>
             </CompilerMessages>
             <ExecuteBefore>
               <Command Value="$(Make) crutch_before_compilation"/>
@@ -1252,14 +1249,13 @@
     <Other>
       <Verbosity>
         <ShowHintsForUnusedUnitsInMainSrc Value="True"/>
-        <ShowHintsForSenderNotUsed Value="True"/>
       </Verbosity>
       <WriteFPCLogo Value="False"/>
       <ConfigFile>
         <StopAfterErrCount Value="5"/>
       </ConfigFile>
       <CompilerMessages>
-        <IgnoredMessages idx5062="True" idx5024="True" idx4056="True" idx4055="True" idx4046="True" idx4035="True"/>
+        <IgnoredMessages idx6058="True" idx5062="True" idx5024="True" idx4055="True"/>
       </CompilerMessages>
       <ExecuteBefore>
         <Command Value="$(Make) crutch_before_compilation"/>

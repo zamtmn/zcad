@@ -124,12 +124,3 @@ finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   GDBObjSuperLineDXFFeatures.destroy;
 end.
-{
-initialization
-  RegisterEntity(GDBDeviceID,'Device',@AllocDevice,@AllocAndInitDevice,@SetBlockInsertGeomProps,@AllocAndCreateDevice);
-  RegisterEntityUpgradeInfo(GDBBlockInsertID,1,@UpgradeBlockInsert2Device);
-  GDBObjDeviceDXFFeatures:=TDXFEntIODataManager.Create;
-finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
-  GDBObjDeviceDXFFeatures.Destroy;
-}

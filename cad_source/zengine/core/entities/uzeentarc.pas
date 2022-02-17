@@ -49,6 +49,7 @@ GDBObjArc= object(GDBObjPlain)
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                  procedure CalcObjMatrix;virtual;
+                 procedure precalc;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure createpoints(var DC:TDrawContext);virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
@@ -139,6 +140,7 @@ procedure GDBObjARC.transform;
 var
   sav,eav,pins:gdbvertex;
 begin
+  precalc;
   if t_matrix[0][0]*t_matrix[1][1]*t_matrix[2][2]<eps then begin
     sav:=q2;
     eav:=q0;
@@ -270,14 +272,10 @@ begin
   MatrixInvert(m1);
   v:=VectorTransform(v,m1);
 end;
-procedure GDBObjARC.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjARC.precalc;
 var
   v:GDBvertex4D;
 begin
-  if assigned(EntExtensions)then
-    EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
-
-  calcObjMatrix;
   angle := endangle - startangle;
   if angle < 0 then angle := 2 * pi + angle;
   v.x:=cos(startangle{*pi/180});
@@ -298,6 +296,15 @@ begin
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
   q2:=pgdbvertex(@v)^;
+end;
+
+procedure GDBObjARC.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
+begin
+  if assigned(EntExtensions)then
+    EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
+
+  calcObjMatrix;
+  precalc;
 
   calcbb(dc);
   createpoints(dc);

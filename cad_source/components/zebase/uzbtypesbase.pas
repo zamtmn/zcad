@@ -17,7 +17,7 @@
 }
 
 unit uzbtypesbase;
-{$INCLUDE def.inc}
+
 interface
 type
 {$IFDEF DELPHI}

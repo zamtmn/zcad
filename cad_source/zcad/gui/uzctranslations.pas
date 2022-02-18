@@ -17,7 +17,7 @@
 }
 
 unit uzctranslations;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 interface
 uses uzbpaths,LCLVersion,uzbstrproc{$IFNDEF DELPHI},LazUTF8,gettext,translations,

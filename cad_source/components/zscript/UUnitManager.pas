@@ -17,7 +17,7 @@
 }
 
 unit UUnitManager;
-{$INCLUDE def.inc}
+
 {$MODE DELPHI}
 interface
 uses LCLProc,uzbpaths,uzbstrproc,Varman,languade,gzctnrvectorobjects,SysUtils,

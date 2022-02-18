@@ -17,7 +17,7 @@
 }
 
 unit uzeenttable;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 interface
 uses uzgldrawcontext,uzeentabstracttext,uzetrash,uzedrawingdef,uzbstrproc,UGDBOpenArrayOfByte,

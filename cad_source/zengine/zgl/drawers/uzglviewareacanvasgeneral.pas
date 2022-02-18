@@ -17,7 +17,7 @@
 }
 
 unit uzglviewareacanvasgeneral;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses
      {$IFDEF LCLQT}

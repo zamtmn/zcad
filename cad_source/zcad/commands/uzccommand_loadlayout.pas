@@ -18,7 +18,7 @@
 {$mode delphi}
 unit uzccommand_loadlayout;
 
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 interface
 uses

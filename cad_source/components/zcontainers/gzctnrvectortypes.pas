@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 unit gzctnrvectortypes;
-{$INCLUDE def.inc}
+
 interface
 uses sysutils,typinfo;
 type

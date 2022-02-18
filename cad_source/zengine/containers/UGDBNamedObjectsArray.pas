@@ -17,7 +17,7 @@
 }
 
 unit UGDBNamedObjectsArray;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses gzctnrvectortypes,gzctnrvectorpobjects,sysutils,uzbtypes,uzegeometry,uzbtypesbase;
 type

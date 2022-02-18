@@ -17,7 +17,7 @@
 }
 
 unit uzcstrconsts;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 {$INCLUDE buildmode.inc}
 interface
 const

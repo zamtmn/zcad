@@ -17,7 +17,7 @@
 }
 {MODE OBJFPC}
 unit uzeffmanager;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 interface
 uses uzbtypesbase,uzbtypes,uzeentgenericsubentry,uzedrawingsimple,sysutils,gzctnrstl,LazLogger;

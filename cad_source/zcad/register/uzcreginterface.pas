@@ -17,7 +17,7 @@
 }
 
 unit uzcreginterface;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses uzcsysvars,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,
      Varman,uzcoidecorations,uzegluinterface,LazLogger,uzccommandlineutil,

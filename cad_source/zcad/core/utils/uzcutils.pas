@@ -18,7 +18,7 @@
 
 {**Модуль утилит зкада}
 unit uzcutils;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 
 interface

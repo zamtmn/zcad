@@ -18,7 +18,7 @@
 {$mode objfpc}
 
 unit uzvsetting;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses
 

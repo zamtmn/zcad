@@ -17,7 +17,7 @@
 }
 
 unit uzeentcurve;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 interface
 uses uzgldrawcontext,uzedrawingdef,uzecamera,

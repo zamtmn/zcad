@@ -17,7 +17,7 @@
 }
 
 unit uzccommand_nextdrawing;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 interface
 uses

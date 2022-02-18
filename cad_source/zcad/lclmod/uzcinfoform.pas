@@ -17,7 +17,7 @@
 }
 
 unit uzcinfoform;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 
 uses

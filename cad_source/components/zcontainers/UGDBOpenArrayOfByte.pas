@@ -17,7 +17,7 @@
 }
 
 unit UGDBOpenArrayOfByte;
-{$INCLUDE def.inc}
+
 interface
 uses gzctnrvector,{uzegeometrytypes,}sysutils{$IFNDEF DELPHI},LazUTF8{$ENDIF};
 const

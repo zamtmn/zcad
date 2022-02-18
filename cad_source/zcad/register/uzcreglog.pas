@@ -18,7 +18,7 @@
 
 unit uzcreglog;
 {$mode delphi}
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses uzbLog,uzclog,uzcinterface,uzcuidialogs,uzcuitypes,uzelongprocesssupport,
      {$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}LCLProc,Forms,

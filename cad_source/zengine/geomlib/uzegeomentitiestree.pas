@@ -17,7 +17,7 @@
 }
 
 unit uzegeomentitiestree;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses
     graphics,uzgeomentity,uzctnrobjectschunk,

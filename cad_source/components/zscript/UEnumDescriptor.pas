@@ -17,7 +17,7 @@
 }
 
 unit UEnumDescriptor;
-{$INCLUDE def.inc}
+
 {$MODE DELPHI}
 interface
 uses types,sysutils,UGDBOpenArrayOfByte,TypeDescriptors,

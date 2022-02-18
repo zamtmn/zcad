@@ -5,7 +5,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }  
 unit uzcentnet;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 interface
 uses uzcinterface,uzeobjectextender,uzeentityfactory,Varman,uzgldrawcontext,uzestyleslayers,

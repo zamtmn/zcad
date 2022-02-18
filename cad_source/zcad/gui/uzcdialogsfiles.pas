@@ -17,7 +17,7 @@
 }
 
 unit uzcdialogsfiles;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses uzbtypesbase,sysutils,uzbstrproc,
      {$IFNDEF DELPHI}LResources,{$ENDIF}Dialogs{$IFNDEF DELPHI},FileUtil{$ENDIF};

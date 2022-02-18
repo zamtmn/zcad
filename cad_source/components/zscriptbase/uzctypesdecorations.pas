@@ -17,7 +17,7 @@
 }
 
 unit uzctypesdecorations;
-{$INCLUDE def.inc}
+
 {$MODE DELPHI}
 
 interface

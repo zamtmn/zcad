@@ -17,7 +17,7 @@
 }
 
 unit Varman;
-{$INCLUDE def.inc}
+
 {$MODE DELPHI}
 
 interface
@@ -1041,9 +1041,9 @@ begin
                                                   end
                                               else
                                                   begin
-                                                    {$IFDEF LOUDERRORS}
+                                                    {IFDEF LOUDERRORS}
                                                        Raise Exception.Create('Something wrong');
-                                                    {$ENDIF}
+                                                    {ENDIF}
                                                   end;
                                if uppercase(functionname)='FORMAT' then
                                                                    functionname:=functionname;
@@ -1127,9 +1127,9 @@ begin
                                   end
                               else
                                   begin
-                                       {$IFDEF LOUDERRORS}
+                                       {IFDEF LOUDERRORS}
                                          Raise Exception.Create('Something wrong');
-                                      {$ENDIF}
+                                      {ENDIF}
                                   end;
               //if parseresult<>nil then begin parseresult^.FreeAndDone;Freemem(gdbpointer(parseresult));end;
           end;
@@ -1771,9 +1771,9 @@ begin
                                                      end;
                                   p:=InterfaceUses.iterate(ir);
                             until p=nil;
-  {$IFDEF LOUDERRORS}
+  {IFDEF LOUDERRORS}
     //Raise Exception.Create('Something wrong');
-  {$ENDIF}
+  {ENDIF}
                        end;
 
 end;

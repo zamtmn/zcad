@@ -17,7 +17,7 @@
 }
 
 unit uzcregenginefeatures;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses uzeutils,uzeentity,uzedrawingsimple,uzbtypes,uzeconsts,uzeenttext,uzeentdimension,LazLogger;
 implementation

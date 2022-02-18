@@ -17,7 +17,7 @@
 }
 {$MODE OBJFPC}
 unit uzcoiregistermultiproperties;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 interface
 uses

@@ -26,7 +26,7 @@ unit uzvcom;
 { файл def.inc необходимо включать в начале каждого модуля zcad
   он содержит в себе централизованные настройки параметров компиляции  }
   
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 interface
 uses

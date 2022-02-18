@@ -20,7 +20,7 @@
   {$MODE DELPHI}
 {$ENDIF}
 unit uzccommand_dataexport;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 interface
 uses

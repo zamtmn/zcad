@@ -17,7 +17,7 @@
 }
 
 unit uzcsysparams;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses XMLConf,XMLPropStorage,LazConfigStorage,fileutil,
   LCLProc,uzclog,uzbpaths,uzbtypesbase,Forms{$IFNDEF DELPHI},LazUTF8{$ENDIF},sysutils;

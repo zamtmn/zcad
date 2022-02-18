@@ -19,7 +19,7 @@
 {$mode objfpc}{$h+}
 
 unit uzvsgeom;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 interface
 uses

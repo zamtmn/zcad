@@ -17,7 +17,7 @@
 }
 
 unit uzgvertex3sarray;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses uzbtypesbase,gzctnrvectordata,sysutils,
      gzctnrvectortypes,uzegeometrytypes,uzegeometry;

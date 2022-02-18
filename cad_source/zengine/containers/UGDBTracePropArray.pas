@@ -17,7 +17,7 @@
 }
 
 unit UGDBTracePropArray;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses uzegeometrytypes,gzctnrvectordata,sysutils,uzbtypesbase;
 {Export+}

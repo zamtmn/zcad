@@ -17,7 +17,7 @@
 }
 
 unit uzeentitiesprop;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses uzedimensionaltypes,uzepalette,uzestyleslinetypes,uzegeometrytypes,uzbtypes,uzegeometry,sysutils,
      UGDBOpenArrayOfByte,uzestyleslayers;

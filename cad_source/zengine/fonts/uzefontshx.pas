@@ -17,7 +17,7 @@
 }
 
 unit uzefontshx;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses uzefontbase,UGDBOpenArrayOfByte,uzbtypesbase,sysutils,
      uzegeometry;

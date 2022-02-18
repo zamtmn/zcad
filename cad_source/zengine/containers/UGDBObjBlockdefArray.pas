@@ -17,7 +17,7 @@
 }
 
 unit UGDBObjBlockdefArray;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses LCLProc,uzgldrawcontext,uzedrawingdef,uzbstrproc,uzeblockdef,gzctnrvectorobjects,
      gzctnrvectortypes,sysutils,uzbtypes,uzegeometry,uzbtypesbase,uzbLogIntf;

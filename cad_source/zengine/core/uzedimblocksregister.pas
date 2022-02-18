@@ -17,7 +17,7 @@
 }
 
 unit uzedimblocksregister;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 
 interface

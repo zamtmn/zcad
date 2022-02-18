@@ -17,7 +17,7 @@
 }
 
 unit uzecamera;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 interface
 uses LCLProc,uzbtypesbase,uzegeometrytypes,uzbtypes,uzegeometry;

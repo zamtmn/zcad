@@ -17,7 +17,7 @@
 }
 
 unit uzcmenucontextcheckfuncs;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses
   LCLIntf,LCLType,

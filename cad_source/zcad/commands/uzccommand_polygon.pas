@@ -18,7 +18,7 @@
 {$mode delphi}
 unit uzccommand_polygon;
 
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 interface
 uses

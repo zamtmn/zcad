@@ -17,7 +17,7 @@
 }
 
 unit uzglgeometry;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses uzgldrawergeneral,math,uzgldrawcontext,uzgldrawerabstract,uzgvertex3sarray,
      uzegeometrytypes,gzctnrvectordata,UGDBPoint3DArray,uzegeometry,uzeentitiesprop,

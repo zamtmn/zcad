@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 } 
 unit uzeentabstracttext;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 interface
 uses {эти нужно убрать}{uzglviewareageneral,}UGDBSelectedObjArray,

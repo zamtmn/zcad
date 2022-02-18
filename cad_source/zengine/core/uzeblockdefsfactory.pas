@@ -17,7 +17,7 @@
 }
 
 unit uzeblockdefsfactory;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 
 interface

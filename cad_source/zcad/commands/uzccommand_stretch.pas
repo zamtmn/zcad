@@ -17,7 +17,7 @@
 }
 
 unit uzccommand_stretch;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 interface
 uses

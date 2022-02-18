@@ -17,7 +17,7 @@
 }
 
 unit uzglviewareadx;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses
      Windows, Messages, LCLType, LCLProc, SysUtils, Variants,

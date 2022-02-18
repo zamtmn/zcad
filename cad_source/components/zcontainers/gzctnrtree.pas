@@ -17,7 +17,7 @@
 }
 
 unit gzctnrtree;
-{$INCLUDE def.inc}
+
 interface
 uses
     gzctnrvectortypes,gzctnrvectorpobjects,gzctnrvectorsimple;

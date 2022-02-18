@@ -17,7 +17,7 @@
 }
 
 unit uzbpaths;
-{$INCLUDE def.inc}
+
 interface
 uses uzbtypes,Masks,LCLProc,uzbtypesbase,{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils,
      uzmacros,uzbLogIntf;

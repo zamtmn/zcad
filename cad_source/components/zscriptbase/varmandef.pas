@@ -23,7 +23,7 @@ interface
 uses
   LCLProc,SysUtils,UGDBTree,gzctnrstl,uzctnrvectorgdbstring,strutils,//uzbtypesbase,
   uzedimensionaltypes,UGDBOpenArrayOfByte,//uzbtypes,
-  gzctnrvectortypes,Classes,Controls,StdCtrls,Graphics,types,TypInfo,gzctnrvector,
+  gzctnrvectortypes,Classes,Controls,StdCtrls,Graphics,types,TypInfo,//gzctnrvector,
   uzbLogIntf;
 const
   {Ttypenothing=-1;

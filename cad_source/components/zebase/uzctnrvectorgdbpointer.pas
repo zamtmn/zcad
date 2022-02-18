@@ -17,7 +17,7 @@
 }
 
 unit uzctnrvectorgdbpointer;
-{$INCLUDE def.inc}
+
 interface
 uses uzbtypesbase,gzctnrvectorp;
 type

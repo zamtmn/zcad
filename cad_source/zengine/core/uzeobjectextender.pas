@@ -17,7 +17,7 @@
 }
 {MODE OBJFPC}
 unit uzeobjectextender;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 interface
 uses uzeentityextender,uzeentsubordinated,uzedrawingdef,uzbtypesbase,uzbtypes,

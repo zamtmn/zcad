@@ -17,7 +17,7 @@
 }
 
 unit uzelongprocesssupport;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 
 interface

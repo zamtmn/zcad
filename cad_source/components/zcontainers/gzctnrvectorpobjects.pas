@@ -17,7 +17,7 @@
 }
 
 unit gzctnrvectorpobjects;
-{$INCLUDE def.inc}
+
 interface
 uses gzctnrvectorpdata,gzctnrvector,
      typinfo;

@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 } 
 unit uzctextpreprocessorimpl;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 {$mode objfpc}
 
 interface

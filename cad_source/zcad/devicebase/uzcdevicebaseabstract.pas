@@ -1,5 +1,5 @@
 unit uzcdevicebaseabstract;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses uzcsysvars,{$IFNDEF DELPHI}fileutil,{$ENDIF}uzbstrproc,strmy,uzbtypesbase,
      uzbtypes,UUnitManager,varman,sysutils,typedescriptors,uzclog;

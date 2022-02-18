@@ -18,7 +18,7 @@
 {$mode delphi}
 unit uzccommand_view;
 
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 interface
 uses

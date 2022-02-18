@@ -17,7 +17,7 @@
 }
 
 unit uzcregpaths;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses uzcsysvars,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,LazLogger;
 implementation

@@ -17,7 +17,7 @@
 }
 
 unit uzeentitiesmanager;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 
 interface

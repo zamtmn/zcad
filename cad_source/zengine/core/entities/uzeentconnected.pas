@@ -17,7 +17,7 @@
 }
 
 unit uzeentconnected;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 Uses uzeentity,uzeentgenericsubentry,UGDBOpenArrayOfPV,uzedrawingdef;
 type

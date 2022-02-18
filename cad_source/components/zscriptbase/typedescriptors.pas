@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 unit typedescriptors;
-{$INCLUDE def.inc}
+
 {$MODE DELPHI}
 interface
 uses uzedimensionaltypes,uzctnrvectorgdbpointer,LCLProc,

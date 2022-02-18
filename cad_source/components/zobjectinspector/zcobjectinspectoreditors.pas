@@ -17,7 +17,7 @@
 }
 
 unit zcobjectinspectoreditors;
-{$INCLUDE def.inc}
+
 {$MODE DELPHI}
 
 interface

@@ -19,7 +19,7 @@
 {$modeswitch advancedrecords}
 unit uzccommand_treestat;
 
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 interface
 uses

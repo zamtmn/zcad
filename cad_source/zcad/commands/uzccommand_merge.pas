@@ -17,7 +17,7 @@
 }
 
 unit uzccommand_merge;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 interface
 uses

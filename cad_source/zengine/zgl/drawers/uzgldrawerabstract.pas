@@ -17,7 +17,7 @@
 }
 
 unit uzgldrawerabstract;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses uzgindexsarray,uzgvertex3sarray,UGDBPoint3DArray,{$IFDEF DELPHI}types,{$ENDIF}uzgprimitivescreatorabstract,
      uzepalette,Classes,Graphics,uzbtypes,uzecamera,uzegeometrytypes,uzegeometry;

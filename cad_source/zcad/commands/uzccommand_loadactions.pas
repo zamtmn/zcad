@@ -17,7 +17,7 @@
 }
 
 unit uzccommand_loadactions;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 interface
 uses

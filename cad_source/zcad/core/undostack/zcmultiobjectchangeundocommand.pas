@@ -17,7 +17,7 @@
 }
 {$MODE OBJFPC}
 unit zcmultiobjectchangeundocommand;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses gzctnrvectordata,zeundostack,zebaseundocommands,uzbtypesbase,
      gzctnrvectortypes,uzegeometrytypes,uzeentity,uzcdrawings;

@@ -18,7 +18,7 @@
 
 program zcad;
 //файл с объявлениями директив компилятора - должен быть подключен во все файлы проекта
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 {$IFDEF FPC}
   {$CODEPAGE UTF8}

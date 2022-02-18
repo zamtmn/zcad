@@ -17,7 +17,7 @@
 }
 
 unit uzestylestables;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses uzbtypesbase,sysutils,uzbtypes,uzegeometry,
      UGDBNamedObjectsArray,gzctnrvectordata;

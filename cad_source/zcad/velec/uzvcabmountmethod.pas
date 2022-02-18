@@ -17,7 +17,7 @@
 }
 
 unit uzvcabmountmethod;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses
      uzceltechtreeprop,//определение класса менеджера "стринговых деревьев"

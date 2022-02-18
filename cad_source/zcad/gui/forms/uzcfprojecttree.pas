@@ -17,7 +17,7 @@ Project tree form
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 unit uzcfprojecttree;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses
  uzcsysparams,uzcsysvars,uzctranslations,uzcenitiesvariablesextender,uzcdrawing,uzbpaths,

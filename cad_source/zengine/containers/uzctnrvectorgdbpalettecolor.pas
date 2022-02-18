@@ -17,7 +17,7 @@
 }
 
 unit uzctnrvectorgdbpalettecolor;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses uzepalette,gzctnrvectorsimple;
 type

@@ -17,7 +17,7 @@
 }
 
 unit uzgldrawerdx;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses
     uzgindexsarray,LCLProc,uzepalette,

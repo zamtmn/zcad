@@ -17,7 +17,7 @@
 }
 
 unit uzeffdxfsupport;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 interface
 uses uzegeometrytypes,uzbtypesbase,uzbtypes,sysutils,UGDBOpenArrayOfByte,usimplegenerics;

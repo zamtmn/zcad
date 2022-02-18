@@ -17,7 +17,7 @@
 }
 
 unit uzestylesdim;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses uzepalette,uzeconsts,uzestyleslinetypes,uzestylestexts,usimplegenerics,uzbtypesbase,
      uzedimensionaltypes,sysutils,uzbtypes,uzegeometry,

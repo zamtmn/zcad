@@ -17,7 +17,7 @@
 }
 
 unit uzglbackendmanager;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 interface
 uses uzbtypesbase,uzctnrvectorgdbstring,uzglviewareaabstract,uzctnrvectorgdbpointer,LazLogger;

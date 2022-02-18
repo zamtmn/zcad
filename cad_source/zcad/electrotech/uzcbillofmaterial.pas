@@ -17,7 +17,7 @@
 }
 
 unit uzcbillofmaterial;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses gzctnrvectortypes,uzbtypesbase,gzctnrvectordata,sysutils;
 type

@@ -17,7 +17,7 @@
 }
 {$MODE OBJFPC}
 unit uzccommand_text;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 interface
 uses

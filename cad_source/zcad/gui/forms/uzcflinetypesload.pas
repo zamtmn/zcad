@@ -1,5 +1,5 @@
 unit uzcflinetypesload;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 
 uses

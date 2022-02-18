@@ -17,7 +17,7 @@
 }
 
 unit uzctnrvectorgdbdouble;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses uzbtypesbase,sysutils,gzctnrvectorsimple;
 type

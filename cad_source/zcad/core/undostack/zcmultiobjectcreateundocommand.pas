@@ -17,7 +17,7 @@
 }
 {$MODE OBJFPC}
 unit zcmultiobjectcreateundocommand;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses UGDBOpenArrayOfPV,zeundostack,zebaseundocommands,uzbtypes,
      gzctnrvectortypes,uzeentity,uzcdrawings;

@@ -17,7 +17,7 @@
 }
 
 unit langsystem;
-{$INCLUDE def.inc}
+
 {$MODE DELPHI}
 interface
 uses uzbstrproc,uzbtypesbase,varmandef,UBaseTypeDescriptor,

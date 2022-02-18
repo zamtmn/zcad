@@ -17,7 +17,7 @@
 }
 
 unit USinonimDescriptor;
-{$INCLUDE def.inc}
+
 {$MODE DELPHI}
 interface
 uses TypeDescriptors,UGDBOpenArrayOfByte,uzbtypesbase,

@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 unit uzgldrawcontext;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses uzepalette,uzbtypesbase,uzbtypes,uzgldrawerabstract,uzeconsts,uzegeometry;
 type

@@ -18,7 +18,7 @@
 {$mode delphi}
 unit uzccommand_get3dpoint_drawrect;
 
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 interface
 uses

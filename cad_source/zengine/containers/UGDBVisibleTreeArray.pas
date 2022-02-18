@@ -17,7 +17,7 @@
 }
 
 unit UGDBVisibleTreeArray;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses uzeentitiestree,UGDBVisibleOpenArray,uzbtypesbase,sysutils,uzegeometry,
      uzeentity,gzctnrvectortypes;

@@ -17,7 +17,7 @@
 }
 
 unit languade;
-{$INCLUDE def.inc}
+
 {$MODE DELPHI}
 interface
 uses

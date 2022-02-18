@@ -17,7 +17,7 @@
 }
 
 unit uzctreenode;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 
 uses

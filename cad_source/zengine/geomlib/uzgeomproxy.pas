@@ -17,7 +17,7 @@
 }
 
 unit uzgeomproxy;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses uzgeomentity,sysutils,uzbtypes,uzegeometrytypes,uzegeometry,gzctnrvectortypes;
 type

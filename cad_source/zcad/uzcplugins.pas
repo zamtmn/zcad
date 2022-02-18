@@ -17,7 +17,7 @@
 }
 
 unit uzcplugins;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses uzbtypesbase,sysutils, dynlibs, uzclog,gzctnrvectordata,uzeentity,
      LazLogger;

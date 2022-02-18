@@ -20,10 +20,6 @@
     </CompilerOptions>
     <Files>
       <Item>
-        <Filename Value="def.inc"/>
-        <Type Value="Include"/>
-      </Item>
-      <Item>
         <Filename Value="uzbtypesbase.pas"/>
         <UnitName Value="uzbtypesbase"/>
       </Item>
@@ -74,7 +70,6 @@
       </Item>
     </RequiredPkgs>
     <UsageOptions>
-      <IncludePath Value="$(PkgDir)"/>
       <UnitPath Value="$(PkgOutDir)"/>
     </UsageOptions>
     <PublishOptions>

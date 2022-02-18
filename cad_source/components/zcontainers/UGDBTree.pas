@@ -17,7 +17,7 @@
 }
 
 unit UGDBTree;
-{$INCLUDE def.inc}
+
 interface
 uses gzctnrvectortypes,gzctnrvectorpobjects,gzctnrvectorpdata;
 type

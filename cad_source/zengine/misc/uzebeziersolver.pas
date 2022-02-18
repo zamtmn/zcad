@@ -17,7 +17,7 @@
 }
 
 unit uzebeziersolver;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses uzgprimitivescreator,uzgprimitives,uzglvectorobject,uzegluinterface,gvector,
      uzegeometrytypes,UGDBOpenArrayOfByte,uzbtypesbase,

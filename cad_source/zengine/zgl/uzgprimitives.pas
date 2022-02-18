@@ -17,7 +17,7 @@
 }
 
 unit uzgprimitives;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses uzgprimitivessarray,math,uzglgeomdata,uzgldrawcontext,uzgvertex3sarray,uzgldrawerabstract,
      uzbtypesbase,sysutils,uzbtypes,gzctnrvectortypes,

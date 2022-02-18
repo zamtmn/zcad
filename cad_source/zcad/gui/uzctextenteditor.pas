@@ -17,7 +17,7 @@
 }
 
 unit uzctextenteditor;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses
      uzcsysparams,uzcutils,uzcsysvars,uzbtypesbase,uzcsysinfo,

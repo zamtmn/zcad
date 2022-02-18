@@ -17,7 +17,7 @@
 }
 {$MODE OBJFPC}
 unit uzerasterizer;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses
   uzbtypesbase,uzegeometrytypes,

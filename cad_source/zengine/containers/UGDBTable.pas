@@ -17,7 +17,7 @@
 }
 
 unit UGDBTable;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses gzctnrvector,gzctnrvectorpobjects,uzbtypesbase,sysutils,
      uzctnrvectorgdbstring;

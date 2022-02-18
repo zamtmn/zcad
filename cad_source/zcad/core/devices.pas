@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 } 
 unit devices;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 {Повторное описание типа в GDBDevice}
 type

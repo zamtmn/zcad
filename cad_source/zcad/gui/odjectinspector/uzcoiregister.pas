@@ -17,7 +17,7 @@
 }
 
 unit uzcoiregister;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses Laz2_DOM,Toolwin,Clipbrd,sysutils,uzccommandsabstract,uzcfcommandline,uzcutils,uzbpaths,TypeDescriptors,uzctranslations,Forms,uzcinterface,uzeroot,
      uzbtypes,uzedrawingdef,uzgldrawcontext,uzctnrvectorgdbstring,varmandef,uzedrawingsimple,

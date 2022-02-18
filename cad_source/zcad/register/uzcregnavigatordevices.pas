@@ -17,7 +17,7 @@
 }
 
 unit uzcregnavigatordevices;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses uzcfnavigatordevices,uzcfcommandline,uzbpaths,TypeDescriptors,uzctranslations,Forms,
      varmandef,uzeentdevice,uzcnavigatorsnodedesk,

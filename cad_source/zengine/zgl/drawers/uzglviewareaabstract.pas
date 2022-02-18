@@ -17,7 +17,7 @@
 }
 
 unit uzglviewareaabstract;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses
      UGDBOpenArrayOfPV,uzgldrawerabstract,uzeentgenericsubentry,uzbtypesbase,uzbtypes,

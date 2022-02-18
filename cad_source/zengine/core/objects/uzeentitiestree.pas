@@ -17,7 +17,7 @@
 }
 
 unit uzeentitiestree;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses
     gzctnrvectortypes,graphics,gzctnrvectorsimple,gzctnrvectorpobjects,

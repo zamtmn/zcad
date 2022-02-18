@@ -17,7 +17,7 @@
 }
 {$MODE OBJFPC}
 unit uzccommand_rotateents;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 interface
 uses

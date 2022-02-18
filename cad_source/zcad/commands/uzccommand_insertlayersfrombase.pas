@@ -17,7 +17,7 @@
 }
 {$MODE OBJFPC}
 unit uzccommand_insertlayersfrombase;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 interface
 uses

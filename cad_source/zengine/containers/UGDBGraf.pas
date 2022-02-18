@@ -17,7 +17,7 @@
 }
 
 unit UGDBGraf;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses varman,uzedrawingdef,varmandef,UGDBPoint3DArray,uzbtypesbase,gzctnrvectordata,
      uzegeometrytypes,sysutils,uzbtypes,uzegeometry,uzeentity,UGDBOpenArrayOfPV,

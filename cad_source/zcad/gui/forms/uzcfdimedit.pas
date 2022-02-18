@@ -1,7 +1,7 @@
 unit uzcfdimedit;
 
 
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 {$mode objfpc}{$H+}
 
 interface

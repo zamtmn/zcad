@@ -17,7 +17,7 @@
 }
 
 unit uzestylestexts;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses LCLProc,uzbpaths,uzefontmanager,uzbtypesbase,sysutils,uzbtypes,uzegeometry,
      uzbstrproc,uzefont,uzestrconsts,UGDBNamedObjectsArray;

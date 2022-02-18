@@ -17,7 +17,7 @@
 }
 
 unit uzglviewareageneral;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses
      gzctnrvectortypes,uzegeometrytypes,LCLProc,uzemathutils,uzepalette,

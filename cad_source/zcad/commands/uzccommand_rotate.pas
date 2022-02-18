@@ -17,7 +17,7 @@
 }
 {$MODE OBJFPC}
 unit uzccommand_rotate;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 interface
 uses

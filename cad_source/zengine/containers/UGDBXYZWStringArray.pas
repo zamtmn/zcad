@@ -17,7 +17,7 @@
 }
 
 unit UGDBXYZWStringArray;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses uzbtypesbase,uzbtypes,gzctnrvectordata,sysutils;
 type

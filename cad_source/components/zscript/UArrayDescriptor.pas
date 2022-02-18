@@ -17,7 +17,7 @@
 }
 
 unit UArrayDescriptor;
-{$INCLUDE def.inc}
+
 {$MODE DELPHI}
 interface
 uses gzctnrvectortypes,uzedimensionaltypes,sysutils,LCLProc,TypeDescriptors,

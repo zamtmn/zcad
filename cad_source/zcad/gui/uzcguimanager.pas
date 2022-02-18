@@ -17,7 +17,7 @@
 }
 
 unit uzcguimanager;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 
 interface

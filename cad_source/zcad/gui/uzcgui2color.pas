@@ -17,7 +17,7 @@
 }
 
 unit uzcgui2color;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 interface
 

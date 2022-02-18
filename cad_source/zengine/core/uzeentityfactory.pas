@@ -17,7 +17,7 @@
 }
 
 unit uzeentityfactory;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 
 interface

@@ -17,7 +17,7 @@
 }
 
 unit uzccommandsabstract;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses uzegeometrytypes,uzbtypesbase,uzbtypes,uzglviewareadata,uzclog,gzctnrvectortypes;
 const

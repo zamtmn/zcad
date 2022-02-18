@@ -18,7 +18,7 @@
 
 unit uzcuitypes;
 
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 interface
 

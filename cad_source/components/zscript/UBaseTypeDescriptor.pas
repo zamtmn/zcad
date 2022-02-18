@@ -17,7 +17,7 @@
 }
 
 unit UBaseTypeDescriptor;
-{$INCLUDE def.inc}
+
 {$MODE DELPHI}
 interface
 uses
@@ -257,9 +257,9 @@ begin
                                       if (ppd^._ppda<>ppda)
                                       //or (ppd^._bmode<>bmode)
                                                              then
-                                                             {$IFDEF LOUDERRORS}
+                                                             {IFDEF LOUDERRORS}
                                                                //Raise Exception.Create('Something wrong');
-                                                             {$ENDIF}
+                                                             {ENDIF}
 
 
                                  end;

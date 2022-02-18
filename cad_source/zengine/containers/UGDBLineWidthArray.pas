@@ -17,7 +17,7 @@
 }
 
 unit UGDBLineWidthArray;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses gzctnrvectordata,sysutils,uzbtypes;
 type

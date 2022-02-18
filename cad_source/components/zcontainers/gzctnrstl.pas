@@ -16,7 +16,6 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 unit gzctnrstl;
-{$INCLUDE def.inc}
 
 interface
 uses {$IFNDEF DELPHI}gutil,gmap,ghashmap,gvector,generics.collections,{$ENDIF}

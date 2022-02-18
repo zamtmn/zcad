@@ -17,7 +17,7 @@
 }
 
 unit uzeroot;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 interface
 Uses

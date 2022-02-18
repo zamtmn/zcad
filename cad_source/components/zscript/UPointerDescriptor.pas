@@ -17,7 +17,7 @@
 }
 
 unit UPointerDescriptor;
-{$INCLUDE def.inc}
+
 {$MODE DELPHI}
 interface
 uses types,TypeDescriptors,UGDBOpenArrayOfByte,

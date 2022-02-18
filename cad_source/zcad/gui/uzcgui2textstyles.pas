@@ -17,7 +17,7 @@
 }
 
 unit uzcgui2textstyles;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 interface
 

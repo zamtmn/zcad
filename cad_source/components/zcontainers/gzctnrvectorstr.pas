@@ -17,7 +17,7 @@
 }
 
 unit gzctnrVectorStr;
-{$INCLUDE def.inc}
+
 interface
 uses
   SysUtils,StrUtils,

@@ -17,7 +17,7 @@
 }
 
 unit uzcgui2dimstyles;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 interface
 

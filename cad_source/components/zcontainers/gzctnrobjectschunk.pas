@@ -17,7 +17,6 @@
 }
 
 unit gzctnrobjectschunk;
-{$INCLUDE def.inc}
 interface
 uses gzctnrvectordata,sysutils,gzctnrvectortypes;
 const

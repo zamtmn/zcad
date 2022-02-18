@@ -17,7 +17,7 @@
 }
 
 unit uzbstrproc;
-{$INCLUDE def.inc}
+
 interface
 uses {$IFNDEF DELPHI}{fileutil,}{$ENDIF}uzbtypesbase,uzbtypes,sysutils,strutils{$IFNDEF DELPHI},{LCLProc}LazUTF8,lazutf16{$ENDIF};
 function GetPredStr(var s: GDBString; substr: GDBString): GDBString;overload;

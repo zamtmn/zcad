@@ -17,7 +17,7 @@
 }
 
 unit uzctnrobjectschunk;
-{$INCLUDE def.inc}
+
 interface
 uses gzctnrobjectschunk,uzbtypes;
 type

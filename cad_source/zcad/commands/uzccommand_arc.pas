@@ -18,7 +18,7 @@
 {$mode delphi}
 unit uzccommand_arc;
 
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 interface
 uses

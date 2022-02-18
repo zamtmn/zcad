@@ -17,7 +17,7 @@
 }
 
 unit UGDBNumerator;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses uzbtypesbase,uzbtypes,gzctnrvectortypes,sysutils,UGDBNamedObjectsArray;
 type

@@ -17,7 +17,7 @@
 }
 
 unit uzcsysinfo;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses
   MacroDefIntf,uzmacros,uzcsysparams,LCLProc,uzclog,uzblog,uzbpaths,uzbtypesbase,Forms,

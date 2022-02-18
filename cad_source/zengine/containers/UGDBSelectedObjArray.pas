@@ -17,7 +17,7 @@
 }
 
 unit UGDBSelectedObjArray;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses uzegeometrytypes,uzepalette,uzgldrawcontext,uzecamera,uzeentwithmatrix,uzeentity,
      UGDBControlPointArray,gzctnrvectordata,sysutils,uzbtypes,uzegeometry,

@@ -17,7 +17,7 @@
 }
 
 unit uzcregnavigatorentities;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses uzcfnavigatorentities,uzcfcommandline,uzbpaths,TypeDescriptors,uzctranslations,Forms,
      varmandef,

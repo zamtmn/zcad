@@ -17,7 +17,7 @@
 }
 
 unit uzestyleslinetypes;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses LCLProc,LazUTF8,Classes,gzctnrvectordata,uzbtypesbase,sysutils,uzbtypes,
      uzegeometry,uzestylestexts,gzctnrvectorobjects,UGDBNamedObjectsArray,

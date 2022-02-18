@@ -17,7 +17,7 @@
 }
 
 unit uzctnrvectorpgdbaseobjects;
-{$INCLUDE def.inc}
+
 interface
 uses gzctnrvectorpobjects,uzbtypes,gzctnrvectorpdata;
 type

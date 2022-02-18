@@ -17,7 +17,7 @@
 }
 
 unit uzccommandsimpl;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 
 interface

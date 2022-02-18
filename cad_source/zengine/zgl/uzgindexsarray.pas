@@ -17,7 +17,7 @@
 }
 
 unit uzgindexsarray;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses uzbtypesbase,gzctnrvectordata,sysutils,
      gzctnrvectortypes,uzegeometry;

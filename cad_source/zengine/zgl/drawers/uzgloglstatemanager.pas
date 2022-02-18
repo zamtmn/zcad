@@ -17,7 +17,7 @@
 }
 
 unit uzgloglstatemanager;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 interface
 uses uzegeometrytypes,uzepalette,uzbtypesbase,{$IFNDEF DELPHI}LCLType,{$ENDIF}

@@ -17,7 +17,7 @@
 }
 
 unit uzefontbase;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses uzgprimitives,uzglvectorobject,uzbstrproc,UGDBOpenArrayOfByte,
      gzctnrvectortypes,uzbtypesbase,gzctnrvectordata,sysutils,uzbtypes,uzegeometrytypes,uzegeometry;

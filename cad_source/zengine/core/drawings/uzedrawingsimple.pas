@@ -17,7 +17,7 @@
 }
 
 unit uzedrawingsimple;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses uzedrawingdef,uzeblockdefsfactory,uzestylesdim,
      gzctnrvectortypes,uzedrawingabstract,uzbstrproc,UGDBObjBlockdefArray,uzestylestables,

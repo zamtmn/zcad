@@ -17,7 +17,7 @@
 }
 
 unit uzcLog;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 {$mode objfpc}{$H+}
 interface
 uses UGDBOpenArrayOfByte,LazLoggerBase,

@@ -17,7 +17,7 @@
 }
 
 unit uzehelpobj;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses uzegeometrytypes,UGDBPolyPoint2DArray,LazLogger;
 const

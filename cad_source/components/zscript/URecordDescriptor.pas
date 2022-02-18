@@ -17,7 +17,7 @@
 }
 
 unit URecordDescriptor;
-{$INCLUDE def.inc}
+
 {$MODE DELPHI}
 interface
 uses LCLProc,UPointerDescriptor,uzbstrproc,{log,}UGDBOpenArrayOfByte,sysutils,UBaseTypeDescriptor,
@@ -496,9 +496,9 @@ begin
                                                                             begin
                                                                                  if (ppd^._ppda<>ppda)
                                                                                                       then
-                                                                                                      {$IFDEF LOUDERRORS}
+                                                                                                      {IFDEF LOUDERRORS}
                                                                                                         Raise Exception.Create('Something wrong');
-                                                                                                      {$ENDIF}
+                                                                                                      {ENDIF}
 
 
                                                                             end;

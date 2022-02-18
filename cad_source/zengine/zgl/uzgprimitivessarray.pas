@@ -17,7 +17,7 @@
 }
 
 unit uzgprimitivessarray;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses uzctnrobjectschunk;
 type

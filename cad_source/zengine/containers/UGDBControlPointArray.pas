@@ -17,7 +17,7 @@
 }
 
 unit UGDBControlPointArray;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses uzepalette,uzgldrawcontext,uzbtypesbase,gzctnrvectordata,sysutils,uzbtypes,uzegeometry,
      uzegeometrytypes;

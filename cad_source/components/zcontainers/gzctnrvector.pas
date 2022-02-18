@@ -17,7 +17,7 @@
 }
 {**Модуль описания базового генерика обьекта-массива}
 unit gzctnrvector;
-{$INCLUDE def.inc}
+
 {DEFINE FILL0ALLOCATEDMEMORY}
 interface
 uses gzctnrvectortypes,sysutils,typinfo;

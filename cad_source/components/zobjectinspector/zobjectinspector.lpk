@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
-  <Package Version="4">
+  <Package Version="5">
     <PathDelim Value="\"/>
     <Name Value="zobjectinspector"/>
     <Type Value="RunAndDesignTime"/>
@@ -27,7 +27,8 @@
         <UnitName Value="zcobjectinspectorui"/>
       </Item3>
     </Files>
-    <RequiredPkgs Count="5">
+    <CompatibilityMode Value="True"/>
+    <RequiredPkgs Count="4">
       <Item1>
         <PackageName Value="zscript"/>
       </Item1>
@@ -38,11 +39,8 @@
         <PackageName Value="zundostack"/>
       </Item3>
       <Item4>
-        <PackageName Value="zebase"/>
-      </Item4>
-      <Item5>
         <PackageName Value="FCL"/>
-      </Item5>
+      </Item4>
     </RequiredPkgs>
     <UsageOptions>
       <UnitPath Value="$(PkgOutDir)"/>

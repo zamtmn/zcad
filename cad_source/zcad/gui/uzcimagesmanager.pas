@@ -17,7 +17,7 @@
 }
 
 unit uzcimagesmanager;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 interface
 

@@ -17,7 +17,7 @@
 }
 
 unit zcobjectinspectorui;
-{$INCLUDE def.inc}
+
 {$MODE DELPHI}
 interface
 uses Classes,Types,Themes,Graphics,LCLIntf,LCLType,

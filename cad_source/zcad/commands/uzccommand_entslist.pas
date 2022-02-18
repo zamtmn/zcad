@@ -18,7 +18,7 @@
 {$mode delphi}
 unit uzccommand_entslist;
 
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 
 interface
 uses

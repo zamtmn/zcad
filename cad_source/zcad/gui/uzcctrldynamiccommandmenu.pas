@@ -17,7 +17,7 @@
 }
 
 unit uzcctrldynamiccommandmenu;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses
  uzcinfoform,ComCtrls,Controls,Forms,uzbtypesbase,uzclog,uzcstrconsts;

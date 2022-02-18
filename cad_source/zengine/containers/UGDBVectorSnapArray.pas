@@ -17,7 +17,7 @@
 }
 
 unit UGDBVectorSnapArray;
-{$INCLUDE def.inc}
+{$INCLUDE zcadconfig.inc}
 interface
 uses uzegeometrytypes,gzctnrvectordata,sysutils;
 type

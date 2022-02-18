@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 unit uzbtypes;
-{$INCLUDE def.inc}
+
 interface
 uses uzbtypesbase,uzegeometrytypes,sysutils;
      //gdbobjectsconstdef;

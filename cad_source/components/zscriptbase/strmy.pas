@@ -32,9 +32,9 @@ function countchar(s: String; ch: ansichar): Integer;
 procedure replaceeqlen(var s: String; substr,newstr: String);
 function replacenull(s:String): String;
 function strtohex(s:String): String;
-function parse(template, str:String; GDBStringarray:PTZctnrVectorGDBString;mode:Boolean;lexema:PLexema; var position:Integer):Boolean;
-function runparser(template:String;var str:String; out parsed:Boolean):PTZctnrVectorGDBString;
-function IsParsed(template:String;var str:String; out strins:PTZctnrVectorGDBString):boolean;
+function parse(template, str:String; GDBStringarray:PTZctnrVectorStrings;mode:Boolean;lexema:PLexema; var position:Integer):Boolean;
+function runparser(template:String;var str:String; out parsed:Boolean):PTZctnrVectorStrings;
+function IsParsed(template:String;var str:String; out strins:PTZctnrVectorStrings):boolean;
 const maxlexem=16;
 
 const
@@ -203,16 +203,16 @@ begin
   while (expr[subend]<>sym) and (subend < length(expr)) do
         inc(subend);
 end;
-function IsParsed(template:String;var str:String; out strins:PTZctnrVectorGDBString):boolean;
+function IsParsed(template:String;var str:String; out strins:PTZctnrVectorStrings):boolean;
 begin
      strins:=runparser(template,str,result);
 end;
-function runparser(template:String;var str:String; out parsed:Boolean):PTZctnrVectorGDBString;
+function runparser(template:String;var str:String; out parsed:Boolean):PTZctnrVectorStrings;
 var i:Integer;
-    GDBStringarray:PTZctnrVectorGDBString;
+    GDBStringarray:PTZctnrVectorStrings;
 begin
      i:=1;
-     Getmem(Pointer(GDBStringarray),sizeof(TZctnrVectorString));
+     Getmem(Pointer(GDBStringarray),sizeof(TZctnrVectorStrings));
      GDBStringarray^.init(20);
      parsed:=false;
      if str<>'' then
@@ -245,13 +245,13 @@ begin
                                  end;
      result:=GDBStringarray;
 end;
-function parse(template, str:String; GDBStringarray:PTZctnrVectorGDBString;mode:Boolean;lexema:PLexema; var position:Integer):Boolean;
+function parse(template, str:String; GDBStringarray:PTZctnrVectorStrings;mode:Boolean;lexema:PLexema; var position:Integer):Boolean;
 var i,iend{,subpos},subi:Integer;
     subexpr:String;
     {error,}subresult:Boolean;
     command:ansichar;
     l:TLexema;
-    strarr:TZctnrVectorString;
+    strarr:TZctnrVectorStrings;
     //mode:Boolean;
 begin
      result:=false;

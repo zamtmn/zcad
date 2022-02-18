@@ -66,7 +66,7 @@ TEditorDesc=record
                   Editor:TPropEditor;
                   Mode:TEditorMode;
             end;
-TOnCreateEditor=function (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorGDBString;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
+TOnCreateEditor=function (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
 TOnGetValueAsString=function(PInstance:Pointer):String;
 TOnDrawProperty=procedure(canvas:TCanvas;ARect:TRect;PInstance:Pointer);
 
@@ -139,7 +139,7 @@ TOIProps=record
 pvardesk = ^vardesk;
 TMyNotifyCommand=(TMNC_EditingDoneEnterKey,TMNC_EditingDoneLostFocus,TMNC_EditingDoneESC,TMNC_EditingProcess,TMNC_RunFastEditor,TMNC_EditingDoneDoNothing);
 TMyNotifyProc=procedure (Sender: TObject;Command:TMyNotifyCommand) of object;
-TCreateEditorFunc=function (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorGDBString;FreeOnLostFocus:boolean;InitialValue:String;ptdesc:PUserTypeDescriptor;preferedHeight:integer):TEditorDesc of object;
+TCreateEditorFunc=function (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:String;ptdesc:PUserTypeDescriptor;preferedHeight:integer):TEditorDesc of object;
 UserTypeDescriptor=object
                          SizeInGDBBytes:Integer;
                          TypeName:String;
@@ -153,7 +153,7 @@ UserTypeDescriptor=object
                          constructor init(size:Integer;tname:string;pu:pointer);
                          constructor baseinit(size:Integer;tname:string;pu:pointer);
                          procedure _init(size:Integer;tname:string;pu:pointer);
-                         function CreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorGDBString;FreeOnLostFocus:boolean;InitialValue:TInternalScriptString;preferedHeight:integer):TEditorDesc;virtual;
+                         function CreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:TInternalScriptString;preferedHeight:integer):TEditorDesc;virtual;
                          procedure ApplyOperator(oper,path:TInternalScriptString;var offset:Integer;out tc:PUserTypeDescriptor);virtual;abstract;
                          //function Serialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;abstract;
                          function SerializePreProcess(Value:TInternalScriptString;sub:integer):TInternalScriptString;virtual;
@@ -595,7 +595,7 @@ begin
      if FastEditors<>nil then
                              FastEditors.Destroy;
 end;
-function UserTypeDescriptor.CreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorGDBString;FreeOnLostFocus:boolean;InitialValue:TInternalScriptString;preferedHeight:integer):TEditorDesc;
+function UserTypeDescriptor.CreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:TInternalScriptString;preferedHeight:integer):TEditorDesc;
 begin
      if assigned(onCreateEditorFunc) then
                                          result:=onCreateEditorFunc(TheOwner,rect,pinstance,psa,FreeOnLostFocus,initialvalue,@self,preferedHeight)

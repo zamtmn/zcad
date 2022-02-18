@@ -69,7 +69,7 @@ type
   end;
 var
   ProjectTreeForm:TProjectTreeForm;{<Дерево проекта}
-  BlockCategory,EqCategory:TZctnrVectorString;
+  BlockCategory,EqCategory:TZctnrVectorStrings;
 
   //ProgramDBContextMenuN,ProjectDBContextMenuN,ProgramDEVContextMenuN:TmyPopupMenu;
 
@@ -107,7 +107,7 @@ end;
 begin
      result:=Name;
 end;}
-function Cat2UserNameCat(category:GDBString; const catalog:TZctnrVectorString):GDBString;
+function Cat2UserNameCat(category:GDBString; const catalog:TZctnrVectorStrings):GDBString;
 var
    ps{,pspred}:pgdbstring;
 //   s:gdbstring;
@@ -147,7 +147,7 @@ begin
                        end;
 
 end;
-procedure BuildBranchN(var CurrNode:TmyTreeNode;var TreePos:GDBString; const catalog:TZctnrVectorString);
+procedure BuildBranchN(var CurrNode:TmyTreeNode;var TreePos:GDBString; const catalog:TZctnrVectorStrings);
 var
     i:integer;
     CurrFindNode{,tn}:TmyTreeNode;

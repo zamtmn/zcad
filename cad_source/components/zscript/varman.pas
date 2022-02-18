@@ -251,11 +251,11 @@ var
   SavedUnit,DBUnit,DWGDBUnit,DWGUnit:PTUnit;
   BaseTypesEndIndex:GDBInteger;
   OldTypesCount:GDBInteger;
-  VarCategory:TZctnrVectorString;
+  VarCategory:TZctnrVectorStrings;
   CategoryCollapsed:GDBOpenArrayOfByte;
   CategoryUnknownCOllapsed:boolean;
 
-function getpattern(ptd:ptdarray; max:GDBInteger;var line:TInternalScriptString; out typ:GDBInteger):PTZctnrVectorGDBString;
+function getpattern(ptd:ptdarray; max:GDBInteger;var line:TInternalScriptString; out typ:GDBInteger):PTZctnrVectorStrings;
 function ObjOrRecordRead(TranslateFunc:TTranslateFunction;var f: GDBOpenArrayOfByte; var line,GDBStringtypearray:TInternalScriptString; var fieldoffset: GDBSmallint; ptd:PRecordDescriptor):GDBBoolean;
 function GetPVarMan: GDBPointer; export;
 function FindCategory(category:TInternalScriptString;var catname:TInternalScriptString):Pointer;
@@ -938,9 +938,9 @@ begin
    result.SetInstance(nil,0);
 end;
 
-function getpattern(ptd:ptdarray; max:GDBInteger;var line:TInternalScriptString; out typ:GDBInteger):PTZctnrVectorGDBString;
+function getpattern(ptd:ptdarray; max:GDBInteger;var line:TInternalScriptString; out typ:GDBInteger):PTZctnrVectorStrings;
 var i:GDBInteger;
-    parseresult:PTZctnrVectorGDBString;
+    parseresult:PTZctnrVectorStrings;
     parseerror:GDBBoolean;
 begin
      typ:=0;
@@ -968,7 +968,7 @@ function ObjOrRecordRead(TranslateFunc:TTranslateFunction;var f: GDBOpenArrayOfB
 type
     trrstate=(fields,metods);
 var parseerror{,parsesuberror}:GDBBoolean;
-    parseresult{,parsesubresult}:PTZctnrVectorGDBString;
+    parseresult{,parsesubresult}:PTZctnrVectorStrings;
     count,typ:GDBInteger;
     {typename,}oldline, fieldname, {fieldvalue,} fieldtype, {sub, indmins, indmaxs, arrind1,}rname,wname,functionname,functionoperands: TInternalScriptString;
     fieldgdbtype:PUserTypeDescriptor;

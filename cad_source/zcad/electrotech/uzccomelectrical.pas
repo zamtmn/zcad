@@ -127,7 +127,7 @@ var
    pcabcom,pfindcom:pCommandRTEdObjectPlugin;
    cabcomparam:TELCableComParam;
    csel:pCommandFastObjectPlugin;
-   MainSpecContentFormat:TZctnrVectorString;
+   MainSpecContentFormat:TZctnrVectorStrings;
 
    //EM_SRBUILD:EM_SRBUILD_com;
    //EM_SEPBUILD:EM_SEPBUILD_com;
@@ -940,7 +940,7 @@ var
       pcabledesk:PTCableDesctiptor;
       node:PGDBObjDevice;
       pt:PGDBObjTable;
-      psl,psfirstline:PTZctnrVectorGDBString;
+      psl,psfirstline:PTZctnrVectorStrings;
       //first:boolean;
       s:gdbstring;
       TCP:TCodePage;
@@ -2001,7 +2001,7 @@ var //i: GDBInteger;
     firstline:boolean;
     cman:TCableManager;
     pt:PGDBObjTable;
-    psl{,psfirstline}:PTZctnrVectorGDBString;
+    psl{,psfirstline}:PTZctnrVectorStrings;
 
     eq:pvardesk;
     DC:TDrawContext;
@@ -2153,7 +2153,7 @@ var //i: GDBInteger;
     PBOMITEM:PGDBBOMItem;
 
     pt:PGDBObjTable;
-    psl{,psfirstline}:PTZctnrVectorGDBString;
+    psl{,psfirstline}:PTZctnrVectorStrings;
 
     pdbu:ptunit;
     pdbv:pvardesk;
@@ -2421,7 +2421,7 @@ var pv:pGDBObjEntity;
     ir:itrec;
     pvd:pvardesk;
     name,content:gdbstring;
-    VarContents:TZctnrVectorString;
+    VarContents:TZctnrVectorStrings;
     ps{,pspred}:pgdbstring;
     pentvarext:TVariablesExtender;
 begin

@@ -815,7 +815,7 @@ var
     blockname:AnsiString;
 begin
     selected:=PTEnumDataWithOtherData(PInstance)^.Selected;
-    blockname:=PTZctnrVectorGDBString(PTEnumDataWithOtherData(PInstance)^.PData).getData(selected);
+    blockname:=PTZctnrVectorStrings(PTEnumDataWithOtherData(PInstance)^.PData).getData(selected);
     count:=0;
     pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
     if pv<>nil then
@@ -922,7 +922,7 @@ var
     blockname:AnsiString;
 begin
     selected:=PTEnumDataWithOtherData(PInstance)^.Selected;
-    blockname:=PTZctnrVectorGDBString(PTEnumDataWithOtherData(PInstance)^.PData).getData(selected);
+    blockname:=PTZctnrVectorStrings(PTEnumDataWithOtherData(PInstance)^.PData).getData(selected);
     //if NeededObjType<>0 then
     begin
       count:=0;

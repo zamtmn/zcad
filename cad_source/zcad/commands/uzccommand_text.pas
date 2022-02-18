@@ -117,7 +117,7 @@ begin
 
 end;
 
-function GetStyleNames(var BDefNames:TZctnrVectorString;selname:GDBString):GDBInteger;
+function GetStyleNames(var BDefNames:TZctnrVectorStrings;selname:GDBString):GDBInteger;
 var pb:PGDBTextStyle;
     ir:itrec;
     i:gdbinteger;

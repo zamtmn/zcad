@@ -35,7 +35,7 @@ function EntsList_com(operands:TCommandOperands):TCommandResult;
 var
    //p:PCommandObjectDef;
    //ir:itrec;
-   clist:TZctnrVectorString;
+   clist:TZctnrVectorStrings;
    pair:ObjID2EntInfoData.TDictionaryPair;
    //iterator:ObjID2EntInfoData.TIterator;
 begin

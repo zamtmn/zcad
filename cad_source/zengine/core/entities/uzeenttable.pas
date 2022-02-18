@@ -162,7 +162,7 @@ var
    pgdbins:pgdbobjblockinsert;
    i:integer;
    ir,ic,icf:itrec;
-   psa:PTZctnrVectorGDBString;
+   psa:PTZctnrVectorStrings;
    pstr:pGDBsTRiNG;
    //cf:TGDBTableItemFormat;
    pcf:PTGDBTableItemFormat;
@@ -317,7 +317,7 @@ constructor GDBObjTable.initnul;
    //pgdbmtext:pgdbobjmtext;
    //i:integer;
    //ir,ic,icf:itrec;
-   //psa:PTZctnrVectorGDBString;
+   //psa:PTZctnrVectorStrings;
    //pstr:pGDBsTRiNG;
    //cf:TGDBTableItemFormat;
    //pcf:PTGDBTableItemFormat;

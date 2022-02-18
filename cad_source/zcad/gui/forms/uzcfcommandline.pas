@@ -194,7 +194,7 @@ var
    sbutton:TmySpeedButton;
    p:PCommandObjectDef;
    ir:itrec;
-   clist:TZctnrVectorString;
+   clist:TZctnrVectorStrings;
 begin
     self.Constraints.MinHeight:=36;
     //utfpresent:=false;

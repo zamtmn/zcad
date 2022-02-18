@@ -73,7 +73,7 @@ begin
   {$ENDIF}
 end;
 
-function NamedObjectsDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorGDBString;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor;NO:PTGenericNamedObjectsArray):TEditorDesc;
+function NamedObjectsDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor;NO:PTGenericNamedObjectsArray):TEditorDesc;
 var
     cbedit:TComboBox;
     ir:itrec;
@@ -95,7 +95,7 @@ begin
 
      result.mode:=TEM_Integrate;
 end;
-function LineWeightDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorGDBString;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
+function LineWeightDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
 var
     cbedit:TComboBox;
     i,seli:integer;
@@ -126,11 +126,11 @@ begin
      cbedit.ItemIndex:=seli;
      result.mode:=TEM_Integrate;
 end;
-function LayersDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorGDBString;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
+function LayersDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
 begin
      result:=NamedObjectsDecoratorCreateEditor(TheOwner,rect,pinstance,psa,FreeOnLostFocus,PTD,@drawings.GetCurrentDWG.LayerTable);
 end;
-function LTypeDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorGDBString;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
+function LTypeDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
 var
     cbedit:TComboBox;
 begin
@@ -140,11 +140,11 @@ begin
      cbedit.Style:=csOwnerDrawFixed;
      cbedit.OnDrawItem:=TSupportLineTypeCombo.LTypeBoxDrawItem;
 end;
-function TextStyleDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorGDBString;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
+function TextStyleDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
 begin
      result:=NamedObjectsDecoratorCreateEditor(TheOwner,rect,pinstance,psa,FreeOnLostFocus,PTD,@drawings.GetCurrentDWG.TextStyleTable);
 end;
-function DimStyleDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorGDBString;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
+function DimStyleDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
 begin
      result:=NamedObjectsDecoratorCreateEditor(TheOwner,rect,pinstance,psa,FreeOnLostFocus,PTD,@drawings.GetCurrentDWG.DimStyleTable);
 end;
@@ -253,7 +253,7 @@ begin
      index:=PTGDBPaletteColor(PInstance)^;
      DrawColor(Canvas,Index,ARect);
 end;
-function CreateEmptyEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorGDBString;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
+function CreateEmptyEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
 begin
      result.mode:=TEM_Nothing;
      result.Editor:=nil;
@@ -265,7 +265,7 @@ begin
   ZCMsgCallBackInterface.DOShowModal(SnapEditorForm);
   Freeandnil(SnapEditorForm);
 end;
-function ColorDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorGDBString;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
+function ColorDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
 var
     cbedit:TComboBox;
     i,seli:integer;

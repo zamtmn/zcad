@@ -22,24 +22,24 @@ interface
 uses gzctnrvectortypes,{uzbtypesbase,uzbtypes,}gzctnrVectorStr,sysutils;
 type
 {EXPORT+}
-    PTZctnrVectorGDBString=^TZctnrVectorString;
-    {REGISTEROBJECTTYPE TZctnrVectorString}
-    TZctnrVectorString=object(GZVectorStr{-}<String>{//})(*OpenArrayOfData=GDBString*)
+    PTZctnrVectorStrings=^TZctnrVectorStrings;
+    {REGISTEROBJECTTYPE TZctnrVectorStrings}
+    TZctnrVectorStrings=object(GZVectorStr{-}<String>{//})(*OpenArrayOfData=GDBString*)
     end;
-    {REGISTEROBJECTTYPE TZctnrVectorUnicodeString}
-    TZctnrVectorUnicodeString=object(GZVectorStr{-}<UnicodeString>{//})(*OpenArrayOfData=TZctnrVectorUnicodeString*)
+    {REGISTEROBJECTTYPE TZctnrVectorUnicodeStrings}
+    TZctnrVectorUnicodeStrings=object(GZVectorStr{-}<UnicodeString>{//})(*OpenArrayOfData=TZctnrVectorUnicodeString*)
     end;
     PTEnumData=^TEnumData;
     {REGISTERRECORDTYPE TEnumData}
     TEnumData=record
                     Selected:Integer;
-                    Enums:TZctnrVectorString;
+                    Enums:TZctnrVectorStrings;
               end;
     PTEnumDataWithOtherData=^TEnumDataWithOtherData;
     {REGISTERRECORDTYPE TEnumDataWithOtherData}
     TEnumDataWithOtherData=record
                     Selected:Integer;
-                    Enums:TZctnrVectorString;
+                    Enums:TZctnrVectorStrings;
                     PData:Pointer;
               end;
 {EXPORT-}

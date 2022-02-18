@@ -60,7 +60,7 @@ type
                        UndoCommand:PTTypedChangeCommand;
                  end;
 
-  TOnGetOtherValues=procedure(var vsa:TZctnrVectorString;const valkey:string;const pcurcontext:pointer;const pcurrobj:pointer;const GDBobj:boolean);
+  TOnGetOtherValues=procedure(var vsa:TZctnrVectorStrings;const valkey:string;const pcurcontext:pointer;const pcurrobj:pointer;const GDBobj:boolean);
   TOnUpdateObjectInInsp=procedure(const EDContext:TEditorContext;const currobjgdbtype:PUserTypeDescriptor;const pcurcontext:pointer;const pcurrobj:pointer;const GDBobj:boolean);
   TOnNotify=procedure(const pcurcontext:pointer);
   TMyNotifyEvent=procedure(sender:tobject);
@@ -1678,7 +1678,7 @@ end;
 procedure TGDBobjinsp.createeditor(pp:PPropertyDeskriptor);
 var
   tp:pointer;
-  vsa:TZctnrVectorString;
+  vsa:TZctnrVectorStrings;
   TED:TEditorDesc;
   editorcontrol:TWinControl;
   tr:TRect;

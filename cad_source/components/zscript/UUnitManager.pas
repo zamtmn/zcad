@@ -266,7 +266,7 @@ var
   varname, vartype,vuname, line,oldline,unitname: GDBString;
   vd: vardesk;
   //parsepos:GDBInteger;
-  parseresult,subparseresult:PTZctnrVectorGDBString;
+  parseresult,subparseresult:PTZctnrVectorStrings;
   mode:GDBInteger;
   parseerror,subparseerror:GDBBoolean;
   i:GDBInteger;

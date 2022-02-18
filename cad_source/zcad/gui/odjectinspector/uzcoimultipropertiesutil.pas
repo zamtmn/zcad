@@ -161,8 +161,8 @@ begin
       PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.Enums.init(10);
       PTStringCounterData(result)^.totalcount:=0;
       PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.Selected:=0;
-      Getmem(PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData,sizeof(TZctnrVectorString));
-      PTZctnrVectorGDBString(PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData)^.init(10);
+      Getmem(PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData,sizeof(TZctnrVectorStrings));
+      PTZctnrVectorStrings(PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData)^.init(10);
     end;
     //PTStringCounterData(result).VDAddr:=PVD^.data.Addr;
 end;
@@ -233,7 +233,7 @@ begin
     //PTStringCounterData(piteratedata)^.StrValue:='';
   PVD:=PTStringCounterData(piteratedata)^.VDAddr.Instance;
   PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.Enums.PushBackData(format('Total (%d)',[PTStringCounterData(piteratedata)^.totalcount]));
-  PTZctnrVectorGDBString(PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData)^.PushBackData('*');
+  PTZctnrVectorStrings(PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData)^.PushBackData('*');
   for pair in PTStringCounterData(piteratedata)^.counter do begin
   //iterator:=PTStringCounterData(piteratedata)^.counter.Min;
   //if assigned(iterator) then
@@ -241,7 +241,7 @@ begin
         s:=pair.Key;
         c:=pair.Value;
         PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.Enums.PushBackData(format('%s (%d)',[Tria_AnsiToUtf8(s),c]));
-        PTZctnrVectorGDBString(PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData)^.PushBackData(s);
+        PTZctnrVectorStrings(PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData)^.PushBackData(s);
   //until not iterator.Next;
   end;
   PTStringCounterData(piteratedata)^.counter.Free;

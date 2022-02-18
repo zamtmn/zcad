@@ -25,10 +25,10 @@ type
 {EXPORT+}
 PGDBTableArray=^GDBTableArray;
 {REGISTEROBJECTTYPE GDBTableArray}
-GDBTableArray= object(GZVectorPObects{-}<PTZctnrVectorGDBString,TZctnrVectorString>{//})(*OpenArrayOfData=TZctnrVectorGDBString*)
+GDBTableArray= object(GZVectorPObects{-}<PTZctnrVectorStrings,TZctnrVectorStrings>{//})(*OpenArrayOfData=TZctnrVectorStrings*)
                     columns,rows:GDBInteger;
                     constructor init(c,r:GDBInteger);
-                    //function copyto(var source:GDBOpenArrayOfData{-}<TZctnrVectorGDBString>{//}):GDBInteger;virtual;
+                    //function copyto(var source:GDBOpenArrayOfData{-}<TZctnrVectorStrings>{//}):GDBInteger;virtual;
               end;
 {EXPORT-}
 implementation

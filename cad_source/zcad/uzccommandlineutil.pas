@@ -30,7 +30,7 @@ type
   TCLineMode=(CLCOMMANDREDY,CLCOMMANDRUN);
 var
   INTFCommandLineEnabled:Boolean=true;
-  aliases:TZctnrVectorString;
+  aliases:TZctnrVectorStrings;
   mode:TCLineMode;
 procedure processcommand(var input:string);
 
@@ -82,7 +82,7 @@ var
   v:vardesk;
   s,divider,preddivider,expr:GDBString;
   tv:gdbvertex;
-  parseresult:PTZctnrVectorGDBString;
+  parseresult:PTZctnrVectorStrings;
   cmd,subexpr,superexpr:string;
   parsed:gdbboolean;
   command,operands:GDBString;

@@ -540,7 +540,7 @@ end;
 
 procedure GDBcommandmanager.executefile;
 var
-   sa:TZctnrVectorString;
+   sa:TZctnrVectorStrings;
    p:pstring;
    ir:itrec;
    oldlastcomm:GDBString;

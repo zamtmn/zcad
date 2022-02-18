@@ -103,7 +103,7 @@ end;
 constructor MetodDescriptor.init;
 var
   parseerror:GDBBoolean;
-  parseresult{,subparseresult}:PTZctnrVectorGDBString;
+  parseresult{,subparseresult}:PTZctnrVectorStrings;
   od:GDBOperandDesc;
   i:integer;
 begin

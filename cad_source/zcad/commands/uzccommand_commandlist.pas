@@ -34,7 +34,7 @@ function CommandList_com(operands:TCommandOperands):TCommandResult;
 var
    p:PCommandObjectDef;
    ir:itrec;
-   clist:TZctnrVectorString;
+   clist:TZctnrVectorStrings;
 begin
    clist.init(200);
    p:=commandmanager.beginiterate(ir);

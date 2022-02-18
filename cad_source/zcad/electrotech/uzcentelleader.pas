@@ -267,9 +267,9 @@ var
    pobj,pcable:PGDBObjCable;
    ir,ir2:itrec;
    s:gdbstring;
-   psl:PTZctnrVectorGDBString;
+   psl:PTZctnrVectorStrings;
    pvn,pvNote,pvNoteFormat:pvardesk;
-   sta:TZctnrVectorString;
+   sta:TZctnrVectorStrings;
    ps:pgdbstring;
    bb:TBoundingBox;
    pdev:PGDBObjDevice;

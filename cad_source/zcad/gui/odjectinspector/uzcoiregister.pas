@@ -152,7 +152,7 @@ begin
   //    PMSEditor(pcurrobj)^.CreateUnit(PMSEditor(pcurrobj)^.SavezeUnitsFormat);
 end;
 
-procedure _onGetOtherValues(var vsa:TZctnrVectorString;const valkey:string;const pcurcontext:pointer;const pcurrobj:pointer;const GDBobj:boolean);
+procedure _onGetOtherValues(var vsa:TZctnrVectorStrings;const valkey:string;const pcurcontext:pointer;const pcurrobj:pointer;const GDBobj:boolean);
 var
   pentvarext:TVariablesExtender;
   pobj:pGDBObjEntity;

@@ -267,7 +267,7 @@ var
 //procedure Finalize;
 implementation
 
-function GetBlockDefNames(var BDefNames:TZctnrVectorString;selname:GDBString):GDBInteger;
+function GetBlockDefNames(var BDefNames:TZctnrVectorStrings;selname:GDBString):GDBInteger;
 var pb:PGDBObjBlockdef;
     ir:itrec;
     i:gdbinteger;
@@ -287,7 +287,7 @@ begin
            inc(i);
      until pb=nil;
 end;
-function GetSelectedBlockNames(var BDefNames:TZctnrVectorString;selname:GDBString;mode:BRMode):GDBInteger;
+function GetSelectedBlockNames(var BDefNames:TZctnrVectorStrings;selname:GDBString;mode:BRMode):GDBInteger;
 var pb:PGDBObjBlockInsert;
     ir:itrec;
     i:gdbinteger;
@@ -338,7 +338,7 @@ begin
            pb:=poa^.iterate(ir);
      until pb=nil;
 end;
-function GetStyleNames(var BDefNames:TZctnrVectorString;selname:GDBString):GDBInteger;
+function GetStyleNames(var BDefNames:TZctnrVectorStrings;selname:GDBString):GDBInteger;
 var pb:PGDBTextStyle;
     ir:itrec;
     i:gdbinteger;
@@ -1536,7 +1536,7 @@ var //pv:pGDBObjEntity;
     pt:PGDBObjTable;
     //pleader:PGDBObjElLeader;
     //ir:itrec;
-    //psl:PTZctnrVectorGDBString;
+    //psl:PTZctnrVectorStrings;
     //i,j:integer;
     //s:gdbstring;
     dc:TDrawContext;

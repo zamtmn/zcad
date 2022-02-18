@@ -12,7 +12,7 @@ uses uzcenitiesvariablesextender,uzeentityfactory,Varman,uzgldrawcontext,
      uzeentabstracttext,uzeentgenericsubentry,uzetrash,uzedrawingdef,uzecamera,
      uzcsysvars,uzbstrproc,UGDBOpenArrayOfByte,math,
      uzeenttext,uzeentdevice,uzcentcable,uzeenttable,uzegeometry,
-     uzeentline,uzbtypesbase,uzeentcomplex,sysutils,uzctnrvectorgdbstring,
+     uzeentline,uzbtypesbase,uzeentcomplex,sysutils,uzctnrvectorstrings,
      gzctnrvectortypes,uzeentity,varmandef,uzbtypes,uzeconsts,uzeffdxfsupport,
      uzegeometrytypes,uzeentsubordinated,uzestylestables,uzclog,
      UGDBOpenArrayOfPV,uzeentcurve,uzeobjectextender,uzetextpreprocessor,
@@ -269,7 +269,7 @@ var
    s:gdbstring;
    psl:PTZctnrVectorGDBString;
    pvn,pvNote,pvNoteFormat:pvardesk;
-   sta:TZctnrVectorGDBString;
+   sta:TZctnrVectorString;
    ps:pgdbstring;
    bb:TBoundingBox;
    pdev:PGDBObjDevice;

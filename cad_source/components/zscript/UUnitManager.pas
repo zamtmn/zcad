@@ -22,7 +22,7 @@ unit UUnitManager;
 interface
 uses LCLProc,uzbpaths,uzbstrproc,Varman,languade,gzctnrvectorobjects,SysUtils,
      UBaseTypeDescriptor,uzbtypesbase, uzbtypes,UGDBOpenArrayOfByte, strmy,
-     varmandef,gzctnrvectortypes,gzctnrvectordata,uzctnrvectorgdbstring,
+     varmandef,gzctnrvectortypes,gzctnrvectordata,uzctnrvectorstrings,
      TypeDescriptors,UEnumDescriptor,UArrayDescriptor,UPointerDescriptor,
      URecordDescriptor,UObjectDescriptor,USinonimDescriptor,uzbLogIntf;
 type

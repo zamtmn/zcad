@@ -26,7 +26,7 @@ uses
   uzedimensionaltypes,uzcstrconsts,sysutils,uzeentityfactory,
   uzcenitiesvariablesextender,uzgldrawcontext,usimplegenerics,gzctnrstl,
   gzctnrvectortypes,uzbtypes,uzcdrawings,varmandef,uzeentity,uzbtypesbase,
-  Varman,uzctnrvectorgdbstring,UGDBSelectedObjArray,uzcoimultipropertiesutil,
+  Varman,uzctnrvectorstrings,UGDBSelectedObjArray,uzcoimultipropertiesutil,
   uzeentityextender,uzelongprocesssupport,uzbLogIntf;
 type
   TObjIDWithExtender2Counter=TMyMapCounter<TObjIDWithExtender>;

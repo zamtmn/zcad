@@ -30,7 +30,7 @@ uses
   uzeutils,uzcutils,
   URecordDescriptor,typedescriptors,uzeentityfactory,uzegeometry,Varman,
   uzccommandsabstract,uzccmdfloatinsert,uzeenttext,uzeentmtext,uzcinterface,uzcstrconsts,uzccommandsmanager,
-  uzeentity,LazLogger,uzctnrvectorgdbstring,uzestylestexts,uzeconsts,uzcsysvars,uzctextenteditor;
+  uzeentity,LazLogger,uzctnrvectorstrings,uzestylestexts,uzeconsts,uzcsysvars,uzctextenteditor;
 type
 {EXPORT+}
   {REGISTEROBJECTTYPE TextInsert_com}
@@ -117,7 +117,7 @@ begin
 
 end;
 
-function GetStyleNames(var BDefNames:TZctnrVectorGDBString;selname:GDBString):GDBInteger;
+function GetStyleNames(var BDefNames:TZctnrVectorString;selname:GDBString):GDBInteger;
 var pb:PGDBTextStyle;
     ir:itrec;
     i:gdbinteger;

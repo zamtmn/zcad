@@ -41,7 +41,7 @@ uses
   uzeentity,
   uzeentmtext,
   uzeentblockinsert,
-  uzctnrvectorgdbstring,
+  uzctnrvectorstrings,
   Varman,
   LazLogger,uzctnrvectorgdbpalettecolor;
 type
@@ -75,7 +75,7 @@ TSelSimParams=record
   {REGISTEROBJECTTYPE SelSim_com}
   SelSim_com= object(CommandRTEdObject)
                          created:boolean;
-                         bnames:TZctnrVectorGDBString;
+                         bnames:TZctnrVectorString;
                          textcontents,textremplates:TZctnrVectorUnicodeString;
                          layers,linetypes:TZctnrVectorGDBPointer;
                          colors:TZctnrVectorTGDBPaletteColor;

@@ -21,7 +21,7 @@ unit UPointerDescriptor;
 {$MODE DELPHI}
 interface
 uses types,TypeDescriptors,UGDBOpenArrayOfByte,
-     uzedimensionaltypes,uzbtypesbase,varmandef,uzbtypes,uzctnrvectorgdbstring;
+     uzedimensionaltypes,uzbtypesbase,varmandef,uzbtypes,uzctnrvectorstrings;
 resourcestring
   rsUnassigned='Unassigned';
 type

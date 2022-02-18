@@ -9,8 +9,7 @@ interface
 
 uses
   uzbtypesbase, uzbtypes, uzbstrproc, uzbpaths, uzctnrvectorpgdbaseobjects, 
-  uzctnrvectorgdbstring, uzctnrvectorgdbpointer, uzctnrobjectschunk, 
-  LazarusPackageIntf;
+  uzctnrvectorgdbpointer, uzctnrobjectschunk, LazarusPackageIntf;
 
 implementation
 

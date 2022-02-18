@@ -20,12 +20,12 @@ unit UGDBTable;
 {$INCLUDE zcadconfig.inc}
 interface
 uses gzctnrvector,gzctnrvectorpobjects,uzbtypesbase,sysutils,
-     uzctnrvectorgdbstring;
+     uzctnrvectorstrings;
 type
 {EXPORT+}
 PGDBTableArray=^GDBTableArray;
 {REGISTEROBJECTTYPE GDBTableArray}
-GDBTableArray= object(GZVectorPObects{-}<PTZctnrVectorGDBString,TZctnrVectorGDBString>{//})(*OpenArrayOfData=TZctnrVectorGDBString*)
+GDBTableArray= object(GZVectorPObects{-}<PTZctnrVectorGDBString,TZctnrVectorString>{//})(*OpenArrayOfData=TZctnrVectorGDBString*)
                     columns,rows:GDBInteger;
                     constructor init(c,r:GDBInteger);
                     //function copyto(var source:GDBOpenArrayOfData{-}<TZctnrVectorGDBString>{//}):GDBInteger;virtual;

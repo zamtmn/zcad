@@ -21,7 +21,7 @@ unit uzcoimultipropertiesutil;
 
 interface
 uses
-  uzctnrvectorgdbpointer,uzbstrproc, uzctnrvectorgdbstring,uzepalette,sysutils,uzeentityfactory,
+  uzctnrvectorgdbpointer,uzbstrproc,uzctnrvectorstrings,uzepalette,sysutils,uzeentityfactory,
   uzegeometrytypes,uzbtypes,
   varmandef,
   uzeentity,
@@ -161,7 +161,7 @@ begin
       PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.Enums.init(10);
       PTStringCounterData(result)^.totalcount:=0;
       PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.Selected:=0;
-      Getmem(PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData,sizeof(TZctnrVectorGDBString));
+      Getmem(PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData,sizeof(TZctnrVectorString));
       PTZctnrVectorGDBString(PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData)^.init(10);
     end;
     //PTStringCounterData(result).VDAddr:=PVD^.data.Addr;

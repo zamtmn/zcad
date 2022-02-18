@@ -16,15 +16,15 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzctnrvectorgdbstring;
+unit uzctnrVectorStrings;
 
 interface
-uses gzctnrvectortypes,{uzbtypesbase,uzbtypes,}gzctnrVectorStr,uzbstrproc,sysutils;
+uses gzctnrvectortypes,{uzbtypesbase,uzbtypes,}gzctnrVectorStr,sysutils;
 type
 {EXPORT+}
-    PTZctnrVectorGDBString=^TZctnrVectorGDBString;
-    {REGISTEROBJECTTYPE TZctnrVectorGDBString}
-    TZctnrVectorGDBString=object(GZVectorStr{-}<String>{//})(*OpenArrayOfData=GDBString*)
+    PTZctnrVectorGDBString=^TZctnrVectorString;
+    {REGISTEROBJECTTYPE TZctnrVectorString}
+    TZctnrVectorString=object(GZVectorStr{-}<String>{//})(*OpenArrayOfData=GDBString*)
     end;
     {REGISTEROBJECTTYPE TZctnrVectorUnicodeString}
     TZctnrVectorUnicodeString=object(GZVectorStr{-}<UnicodeString>{//})(*OpenArrayOfData=TZctnrVectorUnicodeString*)
@@ -33,13 +33,13 @@ type
     {REGISTERRECORDTYPE TEnumData}
     TEnumData=record
                     Selected:Integer;
-                    Enums:TZctnrVectorGDBString;
+                    Enums:TZctnrVectorString;
               end;
     PTEnumDataWithOtherData=^TEnumDataWithOtherData;
     {REGISTERRECORDTYPE TEnumDataWithOtherData}
     TEnumDataWithOtherData=record
                     Selected:Integer;
-                    Enums:TZctnrVectorGDBString;
+                    Enums:TZctnrVectorString;
                     PData:Pointer;
               end;
 {EXPORT-}

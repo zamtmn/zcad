@@ -35,7 +35,7 @@ uses
      uzvtestdraw, // тестовые рисунки
 
      uzcinterface,
-     uzctnrvectorgdbstring,
+     uzctnrvectorstrings,
      uzegeometrytypes,
      uzegeometry,
 

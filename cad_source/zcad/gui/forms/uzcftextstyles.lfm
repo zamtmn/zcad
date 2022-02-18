@@ -5,8 +5,8 @@ object TextStylesForm: TTextStylesForm
   Width = 1466
   ActiveControl = ButtonApplyClose
   Caption = 'Text styles'
-  ClientHeight = 885
-  ClientWidth = 1466
+  ClientHeight = 375
+  ClientWidth = 586
   Constraints.MinHeight = 750
   Constraints.MinWidth = 1200
   DesignTimePPI = 144
@@ -192,7 +192,7 @@ object TextStylesForm: TTextStylesForm
     end
     object Separator1: TToolButton
       Left = 105
-      Height = 8
+      Height = 5
       Top = 0
       Caption = 'Separator1'
       Style = tbsDivider

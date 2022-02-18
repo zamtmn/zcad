@@ -36,7 +36,7 @@ uses
   uzcentnet,
   uzeentsubordinated,uzcentcable,varman,uzcdialogsfiles,uunitmanager,
   uzcbillofmaterial,uzccablemanager,uzeentdevice,uzeenttable,
-  uzbpaths,uzctnrvectorgdbstring,math,Masks,uzclog,uzbstrproc,
+  uzbpaths,uzctnrvectorstrings,math,Masks,uzclog,uzbstrproc,
   uzeentmtext,uzeblockdef,UGDBPoint3DArray,uzcdevicebaseabstract,uzelongprocesssupport,LazLogger,
   generics.Collections,
   uzccommand_treestat,uzccommand_line2,uzccmdfloatinsert,uzcregother,uzcfcommandline,uzeparsercmdprompt,uzctnrvectorpgdbaseobjects;
@@ -127,7 +127,7 @@ var
    pcabcom,pfindcom:pCommandRTEdObjectPlugin;
    cabcomparam:TELCableComParam;
    csel:pCommandFastObjectPlugin;
-   MainSpecContentFormat:TZctnrVectorGDBString;
+   MainSpecContentFormat:TZctnrVectorString;
 
    //EM_SRBUILD:EM_SRBUILD_com;
    //EM_SEPBUILD:EM_SEPBUILD_com;
@@ -2421,7 +2421,7 @@ var pv:pGDBObjEntity;
     ir:itrec;
     pvd:pvardesk;
     name,content:gdbstring;
-    VarContents:TZctnrVectorGDBString;
+    VarContents:TZctnrVectorString;
     ps{,pspred}:pgdbstring;
     pentvarext:TVariablesExtender;
 begin

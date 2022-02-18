@@ -10,13 +10,13 @@ components/zcontainers/gzctnrvectorobjects.pas
 components/zcontainers/UGDBOpenArrayOfByte.pas
 components/zcontainers/gzctnrobjectschunk.pas
 components/zcontainers/gzctnrtree.pas
+components/zcontainers/uzctnrvectorstrings.pas
 components/zmath/uzegeometrytypes.pas
 components/zmath/uzedimensionaltypes.pas
 components/zebase/uzbtypesbase.pas
 components/zebase/uzbtypes.pas
 components/zebase/uzctnrobjectschunk.pas
 components/zebase/uzctnrvectorgdbpointer.pas
-components/zebase/uzctnrvectorgdbstring.pas
 components/zebase/uzctnrvectorpgdbaseobjects.pas
 zengine/core/objects/uzepalette.pas
 zcad/uzcsysparams.pas

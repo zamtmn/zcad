@@ -20,7 +20,7 @@ unit strmy;
 {$MODE DELPHI}
 
 interface
-uses {uzbtypesbase,}sysutils,uzctnrvectorgdbstring;
+uses {uzbtypesbase,}sysutils,uzctnrvectorstrings;
 type
   TLexema=shortstring;
   PLexema=^TLexema;
@@ -212,7 +212,7 @@ var i:Integer;
     GDBStringarray:PTZctnrVectorGDBString;
 begin
      i:=1;
-     Getmem(Pointer(GDBStringarray),sizeof(TZctnrVectorGDBString));
+     Getmem(Pointer(GDBStringarray),sizeof(TZctnrVectorString));
      GDBStringarray^.init(20);
      parsed:=false;
      if str<>'' then
@@ -251,7 +251,7 @@ var i,iend{,subpos},subi:Integer;
     {error,}subresult:Boolean;
     command:ansichar;
     l:TLexema;
-    strarr:TZctnrVectorGDBString;
+    strarr:TZctnrVectorString;
     //mode:Boolean;
 begin
      result:=false;

@@ -21,7 +21,7 @@ unit uzcsysvars;
 
 interface
 uses uzcsysparams,uzbtypesbase,uzegeometrytypes,uzepalette,
-     uzedimensionaltypes,uzbtypes,uzctnrvectorgdbstring,
+     uzedimensionaltypes,uzbtypes,uzctnrvectorstrings,
 {$IFDEF LCLGTK2}
 gtk2,gdk2,
 {$ENDIF}

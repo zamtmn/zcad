@@ -22,7 +22,7 @@ unit UObjectDescriptor;
 interface
 uses LCLProc,gzctnrvectorobjects,URecordDescriptor,UGDBOpenArrayOfByte,sysutils,
      gzctnrvectortypes,uzedimensionaltypes,UBaseTypeDescriptor,TypeDescriptors,
-     strmy,uzctnrvectorgdbstring,objects,gzctnrvectordata,uzbtypesbase,
+     strmy,uzctnrvectorstrings,objects,gzctnrvectordata,uzbtypesbase,
      varmandef,uzbtypes,uzbstrproc,TypInfo,uzbLogIntf;
 type
 GDBTOperandStoreMode=GDBByte;

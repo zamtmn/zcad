@@ -33,7 +33,7 @@ uses
   uzestylesdim, uzeentdimension,
 
   uzbpaths,uzcinterface, uzcstrconsts, uzcsysinfo,uzbstrproc,UBaseTypeDescriptor,
-  uzcimagesmanager, usupportgui, ZListView,uzefontmanager,varman,uzctnrvectorgdbstring,
+  uzcimagesmanager, usupportgui, ZListView,uzefontmanager,varman,uzctnrvectorstrings,
   gzctnrvectortypes,uzeentity,uzeenttext;
 
 const

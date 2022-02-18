@@ -30,7 +30,7 @@ uses
   varman,
   UGDBOpenArrayOfByte,
   uzeentity,
-  uzcdevicebaseabstract,UUnitManager,uzbtypesbase,strutils,forms,Controls,uzcinterface,uzedrawingdef,uzctnrvectorgdbstring,strmy,
+  uzcdevicebaseabstract,UUnitManager,uzbtypesbase,strutils,forms,Controls,uzcinterface,uzedrawingdef,uzctnrvectorstrings,strmy,
   uzcenitiesvariablesextender,uzcfsinglelinetexteditor,UObjectDescriptor,uzcfprojecttree,uzccommandsmanager,uzclog,uzeentsubordinated,
   uzcuitypes;
 

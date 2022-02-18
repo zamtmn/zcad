@@ -21,7 +21,7 @@ unit uzcfprojecttree;
 interface
 uses
  uzcsysparams,uzcsysvars,uzctranslations,uzcenitiesvariablesextender,uzcdrawing,uzbpaths,
- uzctnrvectorgdbstring,uzeconsts,uzcstrconsts,uzcctrlcontextmenu,uzbstrproc,
+ uzctnrvectorstrings,uzeconsts,uzcstrconsts,uzcctrlcontextmenu,uzbstrproc,
  uzctreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  Classes,FileUtil,Forms,stdctrls,Controls,ComCtrls,
  uzcdevicebaseabstract,uzclog,SysUtils,uzcdrawings,varman,
@@ -69,7 +69,7 @@ type
   end;
 var
   ProjectTreeForm:TProjectTreeForm;{<Дерево проекта}
-  BlockCategory,EqCategory:TZctnrVectorGDBString;
+  BlockCategory,EqCategory:TZctnrVectorString;
 
   //ProgramDBContextMenuN,ProjectDBContextMenuN,ProgramDEVContextMenuN:TmyPopupMenu;
 
@@ -107,7 +107,7 @@ end;
 begin
      result:=Name;
 end;}
-function Cat2UserNameCat(category:GDBString; const catalog:TZctnrVectorGDBString):GDBString;
+function Cat2UserNameCat(category:GDBString; const catalog:TZctnrVectorString):GDBString;
 var
    ps{,pspred}:pgdbstring;
 //   s:gdbstring;
@@ -147,7 +147,7 @@ begin
                        end;
 
 end;
-procedure BuildBranchN(var CurrNode:TmyTreeNode;var TreePos:GDBString; const catalog:TZctnrVectorGDBString);
+procedure BuildBranchN(var CurrNode:TmyTreeNode;var TreePos:GDBString; const catalog:TZctnrVectorString);
 var
     i:integer;
     CurrFindNode{,tn}:TmyTreeNode;

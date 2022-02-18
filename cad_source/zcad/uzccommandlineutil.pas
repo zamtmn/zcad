@@ -19,7 +19,7 @@
 unit uzccommandlineutil;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzegeometrytypes,varmandef,uzbtypesbase,uzctnrvectorgdbstring,uzccommandsmanager,
+uses uzegeometrytypes,varmandef,uzbtypesbase,uzctnrvectorstrings,uzccommandsmanager,
      gzctnrvectortypes,sysutils,uzbstrproc,uzcdrawings,uzegeometry,math,
      UGDBTracePropArray,uzglviewareadata,languade,Varman,uzcinterface,uzcstrconsts,
      strmy,LCLProc,uzccommandsabstract,LazUtilities;
@@ -30,7 +30,7 @@ type
   TCLineMode=(CLCOMMANDREDY,CLCOMMANDRUN);
 var
   INTFCommandLineEnabled:Boolean=true;
-  aliases:TZctnrVectorGDBString;
+  aliases:TZctnrVectorString;
   mode:TCLineMode;
 procedure processcommand(var input:string);
 

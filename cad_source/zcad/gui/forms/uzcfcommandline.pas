@@ -24,7 +24,7 @@ uses
  uzcsysinfo,lclproc,LazUTF8,sysutils, StdCtrls,ExtCtrls,Controls,Classes,
  menus,Forms,fileutil,graphics, uzbtypes,uzccommandsmanager,
  varman,varmandef,
- uzegeometry,uzctnrvectorgdbstring,uzcinterface,uzctreenode,uzclog,strmy,
+ uzegeometry,uzctnrvectorstrings,uzcinterface,uzctreenode,uzclog,strmy,
  uzccommandlineutil,uztoolbarsmanager,uzmenusmanager,uzccommandsabstract,gzctnrvectortypes,
  uzcctrlcommandlineprompt,uzeparsercmdprompt;
 
@@ -194,7 +194,7 @@ var
    sbutton:TmySpeedButton;
    p:PCommandObjectDef;
    ir:itrec;
-   clist:TZctnrVectorGDBString;
+   clist:TZctnrVectorString;
 begin
     self.Constraints.MinHeight:=36;
     //utfpresent:=false;

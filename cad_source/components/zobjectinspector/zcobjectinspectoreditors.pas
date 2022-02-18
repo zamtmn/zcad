@@ -24,7 +24,7 @@ interface
 
 uses
   UEnumDescriptor,zcobjectinspector,Forms,sysutils,
-  Graphics,LCLType,Themes,uzctnrvectorgdbstring,
+  Graphics,LCLType,Themes,uzctnrvectorstrings,
   varmandef,Varman,uzbtypesbase,uzbtypes,usupportgui,
   gzctnrvectortypes,StdCtrls,Controls,Classes,uzbstrproc;
 type

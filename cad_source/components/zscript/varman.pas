@@ -24,7 +24,7 @@ interface
 uses
   UEnumDescriptor,uzctnrvectorgdbpointer,gzctnrvectorpobjects,LCLProc,uabstractunit,
   SysUtils,UBaseTypeDescriptor,uzbtypesbase,{uzbtypes,}UGDBOpenArrayOfByte,
-  gzctnrvectortypes,uzctnrvectorgdbstring,varmandef,gzctnrstl,
+  gzctnrvectortypes,uzctnrvectorstrings,varmandef,gzctnrstl,
   TypeDescriptors,URecordDescriptor,UObjectDescriptor,uzbstrproc,classes,typinfo,
   UPointerDescriptor,
   uzctnrobjectschunk,uzctnrvectorpgdbaseobjects,gzctnrvectorpdata,gzctnrvectordata,
@@ -251,7 +251,7 @@ var
   SavedUnit,DBUnit,DWGDBUnit,DWGUnit:PTUnit;
   BaseTypesEndIndex:GDBInteger;
   OldTypesCount:GDBInteger;
-  VarCategory:TZctnrVectorGDBString;
+  VarCategory:TZctnrVectorString;
   CategoryCollapsed:GDBOpenArrayOfByte;
   CategoryUnknownCOllapsed:boolean;
 

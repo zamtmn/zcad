@@ -24,7 +24,7 @@ interface
 uses
   LazLogger,
   uzccommandsabstract,uzccommandsimpl,
-  gzctnrvectortypes,uzctnrvectorgdbstring,
+  gzctnrvectortypes,uzctnrvectorstrings,
   uzccommandsmanager,
   uzcinterface;
 
@@ -34,7 +34,7 @@ function CommandList_com(operands:TCommandOperands):TCommandResult;
 var
    p:PCommandObjectDef;
    ir:itrec;
-   clist:TZctnrVectorGDBString;
+   clist:TZctnrVectorString;
 begin
    clist.init(200);
    p:=commandmanager.beginiterate(ir);

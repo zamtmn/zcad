@@ -46,7 +46,7 @@ uses
   uzccommand_move,uzccommand_copy,uzccommand_regen,uzccommand_copyclip,
   uzegeometrytypes,uzeentity,uzeentcircle,uzeentline,uzeentgenericsubentry,uzeentmtext,
   uzeentsubordinated,uzeentblockinsert,uzeentpolyline,uzclog,gzctnrvectordata,
-  math,uzeenttable,uzctnrvectorgdbstring,
+  math,uzeenttable,uzctnrvectorstrings,
   uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray
   ,uzelongprocesssupport,LazLogger,uzccommand_circle2,uzccommand_erase,uzccmdfloatinsert,
   uzccommand_rebuildtree;
@@ -267,7 +267,7 @@ var
 //procedure Finalize;
 implementation
 
-function GetBlockDefNames(var BDefNames:TZctnrVectorGDBString;selname:GDBString):GDBInteger;
+function GetBlockDefNames(var BDefNames:TZctnrVectorString;selname:GDBString):GDBInteger;
 var pb:PGDBObjBlockdef;
     ir:itrec;
     i:gdbinteger;
@@ -287,7 +287,7 @@ begin
            inc(i);
      until pb=nil;
 end;
-function GetSelectedBlockNames(var BDefNames:TZctnrVectorGDBString;selname:GDBString;mode:BRMode):GDBInteger;
+function GetSelectedBlockNames(var BDefNames:TZctnrVectorString;selname:GDBString;mode:BRMode):GDBInteger;
 var pb:PGDBObjBlockInsert;
     ir:itrec;
     i:gdbinteger;
@@ -338,7 +338,7 @@ begin
            pb:=poa^.iterate(ir);
      until pb=nil;
 end;
-function GetStyleNames(var BDefNames:TZctnrVectorGDBString;selname:GDBString):GDBInteger;
+function GetStyleNames(var BDefNames:TZctnrVectorString;selname:GDBString):GDBInteger;
 var pb:PGDBTextStyle;
     ir:itrec;
     i:gdbinteger;

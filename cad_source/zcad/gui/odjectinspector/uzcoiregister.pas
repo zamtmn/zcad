@@ -20,7 +20,7 @@ unit uzcoiregister;
 {$INCLUDE zcadconfig.inc}
 interface
 uses Laz2_DOM,Toolwin,Clipbrd,sysutils,uzccommandsabstract,uzcfcommandline,uzcutils,uzbpaths,TypeDescriptors,uzctranslations,Forms,uzcinterface,uzeroot,
-     uzbtypes,uzedrawingdef,uzgldrawcontext,uzctnrvectorgdbstring,varmandef,uzedrawingsimple,
+     uzbtypes,uzedrawingdef,uzgldrawcontext,uzctnrvectorstrings,varmandef,uzedrawingsimple,
      uzeentity,uzcenitiesvariablesextender,zcobjectinspector,uzcguimanager,uzcstrconsts,
      gzctnrvectortypes,Types,Controls,uzcdrawings,Varman,UUnitManager,uzcsysvars,
      uzcsysparams,zcobjectinspectorui,uzcoimultiobjects,uzccommandsimpl,uzbtypesbase,
@@ -152,7 +152,7 @@ begin
   //    PMSEditor(pcurrobj)^.CreateUnit(PMSEditor(pcurrobj)^.SavezeUnitsFormat);
 end;
 
-procedure _onGetOtherValues(var vsa:TZctnrVectorGDBString;const valkey:string;const pcurcontext:pointer;const pcurrobj:pointer;const GDBobj:boolean);
+procedure _onGetOtherValues(var vsa:TZctnrVectorString;const valkey:string;const pcurcontext:pointer;const pcurrobj:pointer;const GDBobj:boolean);
 var
   pentvarext:TVariablesExtender;
   pobj:pGDBObjEntity;

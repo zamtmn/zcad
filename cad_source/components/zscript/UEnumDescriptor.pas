@@ -21,7 +21,7 @@ unit UEnumDescriptor;
 {$MODE DELPHI}
 interface
 uses types,sysutils,UGDBOpenArrayOfByte,TypeDescriptors,
-     gzctnrvectortypes,uzedimensionaltypes,uzbtypesbase,varmandef,uzbtypes,gzctnrvectordata,uzctnrvectorgdbstring;
+     gzctnrvectortypes,uzedimensionaltypes,uzbtypesbase,varmandef,uzbtypes,gzctnrvectordata,uzctnrvectorstrings;
 resourcestring
   rsDifferent='Different';
 type
@@ -33,8 +33,8 @@ PTCardinalVector=^TCardinalVector;
 TCardinalVector=GZVectorData<Cardinal>;
 PEnumDescriptor=^EnumDescriptor;
 EnumDescriptor=object(TUserTypeDescriptor)
-                     SourceValue:TZctnrVectorGDBString;
-                     UserValue:TZctnrVectorGDBString;
+                     SourceValue:TZctnrVectorString;
+                     UserValue:TZctnrVectorString;
                      Value:PTByteVector;
                      constructor init(size:GDBInteger;tname:string;pu:pointer);
                      function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;

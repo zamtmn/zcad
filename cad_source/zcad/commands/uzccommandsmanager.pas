@@ -25,7 +25,7 @@ uses uzctnrvectorgdbpointer,gzctnrvectorpobjects,uzcsysvars,uzegeometry,uzglview
      gzctnrvectortypes,uzegeometrytypes,uzbstrproc,gzctnrvectorp,
      uzbtypesbase,uzccommandsabstract, sysutils,uzglviewareadata,
      uzclog,varmandef,varman,uzedrawingdef,uzcinterface,
-     uzcsysparams,uzedrawingsimple,uzcdrawings,uzctnrvectorgdbstring,forms,LazLogger,
+     uzcsysparams,uzedrawingsimple,uzcdrawings,uzctnrvectorstrings,forms,LazLogger,
      uzcctrlcommandlineprompt,uzeparsercmdprompt,gzctnrstl;
 const
      tm:tmethod=(Code:nil;Data:nil);
@@ -540,7 +540,7 @@ end;
 
 procedure GDBcommandmanager.executefile;
 var
-   sa:TZctnrVectorGDBString;
+   sa:TZctnrVectorString;
    p:pstring;
    ir:itrec;
    oldlastcomm:GDBString;

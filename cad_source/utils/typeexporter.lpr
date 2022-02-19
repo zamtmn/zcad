@@ -439,7 +439,8 @@ begin
      if error then
                   begin
                        writeln;
-                       writeln(format('Errors found. File "%s" not created!',[OutputFile]))
+                       writeln(format('Errors found. File "%s" not created!',[OutputFile]));
+                       ExitCode:=2;
                   end
               else
                   begin

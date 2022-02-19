@@ -22,7 +22,7 @@ unit Varman;
 
 interface
 uses
-  UEnumDescriptor,uzctnrvectorgdbpointer,gzctnrvectorpobjects,LCLProc,uabstractunit,
+  UEnumDescriptor,uzctnrVectorPointers,gzctnrvectorpobjects,LCLProc,uabstractunit,
   SysUtils,UBaseTypeDescriptor,uzbtypesbase,{uzbtypes,}UGDBOpenArrayOfByte,
   gzctnrvectortypes,uzctnrvectorstrings,varmandef,gzctnrstl,
   TypeDescriptors,URecordDescriptor,UObjectDescriptor,uzbstrproc,classes,typinfo,

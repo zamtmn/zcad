@@ -20,7 +20,7 @@ unit uzccommandsmanager;
 {$INCLUDE zcadconfig.inc}
 {$interfaces corba}
 interface
-uses uzctnrvectorgdbpointer,gzctnrvectorpobjects,uzcsysvars,uzegeometry,uzglviewareaabstract,uzbpaths,
+uses uzctnrVectorPointers,gzctnrvectorpobjects,uzcsysvars,uzegeometry,uzglviewareaabstract,uzbpaths,
      uzeconsts,uzcctrldynamiccommandmenu,uzcinfoform,uzcstrconsts,uzcsysinfo,
      gzctnrvectortypes,uzegeometrytypes,uzbstrproc,gzctnrvectorp,
      uzbtypesbase,uzccommandsabstract, sysutils,uzglviewareadata,

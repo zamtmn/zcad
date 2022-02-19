@@ -16,14 +16,14 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzctnrvectorgdbpointer;
+unit uzctnrVectorPointers;
 
 interface
-uses uzbtypesbase,gzctnrvectorp;
+uses gzctnrvectorp;
 type
 {Export+}
 PTZctnrVectorGDBPointer=^TZctnrVectorGDBPointer;
-TZctnrVectorGDBPointer=object(GZVectorP{-}<GDBPointer>{//}) //TODO:почемуто не работают синонимы с объектами, приходится наследовать
+TZctnrVectorGDBPointer=object(GZVectorP{-}<Pointer>{//}) //TODO:почемуто не работают синонимы с объектами, приходится наследовать
                                                             //TODO:надо тут поменять GZVectorP на GZVectorSimple
                     end;
 {Export-}

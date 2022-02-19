@@ -25,7 +25,7 @@ uses
   uzctnrvectorobjid,
   uzctnrvectorgdbdouble,
   uzctnrvectorgdblineweight,
-  uzctnrvectorgdbpointer,
+  uzctnrVectorPointers,
   uzcstrconsts,
   uzeenttext,
   uzccommandsabstract,

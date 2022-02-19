@@ -20,7 +20,7 @@ unit uzglbackendmanager;
 {$INCLUDE zcadconfig.inc}
 
 interface
-uses uzbtypesbase,uzctnrvectorstrings,uzglviewareaabstract,uzctnrvectorgdbpointer,LazLogger;
+uses uzbtypesbase,uzctnrvectorstrings,uzglviewareaabstract,uzctnrVectorPointers,LazLogger;
 const test:GDBSTRING='asdasd';
 type
     TVA=class of TAbstractViewArea;

@@ -40,10 +40,6 @@
         <UnitName Value="uzctnrvectorpgdbaseobjects"/>
       </Item>
       <Item>
-        <Filename Value="uzctnrvectorgdbpointer.pas"/>
-        <UnitName Value="uzctnrvectorgdbpointer"/>
-      </Item>
-      <Item>
         <Filename Value="uzctnrobjectschunk.pas"/>
         <UnitName Value="uzctnrobjectschunk"/>
       </Item>

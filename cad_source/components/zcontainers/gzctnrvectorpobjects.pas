@@ -16,10 +16,10 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit gzctnrvectorpobjects;
+unit gzctnrVectorPObjects;
 
 interface
-uses gzctnrvectorpdata,gzctnrVector,
+uses gzctnrVectorPData,gzctnrVector,
      typinfo;
 type
 {Export+}

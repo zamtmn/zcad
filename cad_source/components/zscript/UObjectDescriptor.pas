@@ -20,7 +20,7 @@ unit UObjectDescriptor;
 
 {$MODE DELPHI}
 interface
-uses LCLProc,gzctnrvectorobjects,URecordDescriptor,uzctnrVectorBytes,sysutils,
+uses LCLProc,gzctnrVectorObjects,URecordDescriptor,uzctnrVectorBytes,sysutils,
      gzctnrvectortypes,uzedimensionaltypes,UBaseTypeDescriptor,TypeDescriptors,
      strmy,uzctnrvectorstrings,objects,gzctnrVector,uzbtypesbase,
      varmandef,uzbtypes,uzbstrproc,TypInfo,uzbLogIntf;
@@ -47,7 +47,7 @@ MetodDescriptor=object(GDBaseObject)
                       destructor Done;virtual;
                 end;
 simpleproc=procedure of object;
-TSimpleMenodsVector=GZVectorObjects<PMetodDescriptor,MetodDescriptor>;
+TSimpleMenodsVector=GZVectorObjects<MetodDescriptor>;
 TPropertiesVector=GZVector<PropertyDescriptor>;
 
 PObjectDescriptor=^ObjectDescriptor;

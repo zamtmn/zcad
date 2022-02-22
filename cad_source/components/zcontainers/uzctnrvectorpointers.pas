@@ -19,7 +19,7 @@
 unit uzctnrVectorPointers;
 
 interface
-uses gzctnrvectorp;
+uses gzctnrVectorP;
 type
 {Export+}
 PTZctnrVectorGDBPointer=^TZctnrVectorGDBPointer;

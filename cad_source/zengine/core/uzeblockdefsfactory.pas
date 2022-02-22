@@ -21,7 +21,7 @@ unit uzeblockdefsfactory;
 
 
 interface
-uses uzbpaths,sysutils,uzeblockdef,uzedrawingdef,gzctnrstl,
+uses uzbpaths,sysutils,uzeblockdef,uzedrawingdef,gzctnrSTL,
      uzbtypesbase,uzeentity,LazLogger;
 type
 TBlockDefCreateFunc=function(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:GDBString):PGDBObjBlockdef;

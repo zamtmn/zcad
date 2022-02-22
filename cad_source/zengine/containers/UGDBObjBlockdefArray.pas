@@ -19,7 +19,7 @@
 unit UGDBObjBlockdefArray;
 {$INCLUDE zcadconfig.inc}
 interface
-uses LCLProc,uzgldrawcontext,uzedrawingdef,uzbstrproc,uzeblockdef,gzctnrvectorobjects,
+uses LCLProc,uzgldrawcontext,uzedrawingdef,uzbstrproc,uzeblockdef,gzctnrVectorObjects,
      gzctnrvectortypes,sysutils,uzbtypes,uzegeometry,uzbtypesbase,uzbLogIntf;
 type
 {Export+}
@@ -27,7 +27,7 @@ type
 PGDBObjBlockdefArray=^GDBObjBlockdefArray;
 PBlockdefArray=^BlockdefArray;
 BlockdefArray=packed array [0..0] of GDBObjBlockdef;
-GDBObjBlockdefArray= object(GZVectorObjects{-}<PGDBObjBlockdef,GDBObjBlockdef>{//})(*OpenArrayOfData=GDBObjBlockdef*)
+GDBObjBlockdefArray= object(GZVectorObjects{-}<GDBObjBlockdef>{//})(*OpenArrayOfData=GDBObjBlockdef*)
                       constructor init(m:GDBInteger);
                       constructor initnul;
 

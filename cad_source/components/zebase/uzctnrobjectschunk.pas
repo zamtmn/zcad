@@ -19,11 +19,11 @@
 unit uzctnrobjectschunk;
 
 interface
-uses gzctnrobjectschunk,uzbtypes;
+uses gzctnrAlignedVector,uzbtypes;
 type
 {Export+}
 PTObjectsChunk=^TObjectsChunk;
-TObjectsChunk=object(GObjectsChunk{-}<PGDBaseObject>{//})
+TObjectsChunk=object(GZAlignedVectorObjects{-}<PGDBaseObject>{//})
               end;
 {Export-}
 implementation

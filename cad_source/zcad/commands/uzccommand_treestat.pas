@@ -34,7 +34,7 @@ uses
   uzcinterface,
   uzcdrawings,
   uzcsysvars,
-  gzctnrstl;
+  gzctnrSTL;
 
 function PointerToNodeName(node:pointer):string;
 

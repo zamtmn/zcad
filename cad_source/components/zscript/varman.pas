@@ -22,12 +22,12 @@ unit Varman;
 
 interface
 uses
-  UEnumDescriptor,uzctnrVectorPointers,gzctnrvectorpobjects,LCLProc,uabstractunit,
+  UEnumDescriptor,uzctnrVectorPointers,gzctnrVectorPObjects,LCLProc,uabstractunit,
   SysUtils,UBaseTypeDescriptor,uzbtypesbase,uzctnrVectorBytes,
-  gzctnrvectortypes,uzctnrvectorstrings,varmandef,gzctnrstl,
+  gzctnrvectortypes,uzctnrvectorstrings,varmandef,gzctnrSTL,
   TypeDescriptors,URecordDescriptor,UObjectDescriptor,uzbstrproc,classes,typinfo,
   UPointerDescriptor,
-  uzctnrobjectschunk,uzctnrvectorpgdbaseobjects,gzctnrvectorpdata,gzctnrVector,
+  uzctnrobjectschunk,uzctnrvectorpgdbaseobjects,gzctnrVectorPData,gzctnrVector,
   uzbLogIntf;
 type
     td=record

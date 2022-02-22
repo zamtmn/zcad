@@ -21,7 +21,7 @@ unit varmandef;
 
 interface
 uses
-  LCLProc,SysUtils,UGDBTree,gzctnrstl,uzctnrvectorstrings,strutils,//uzbtypesbase,
+  LCLProc,SysUtils,UGDBTree,gzctnrSTL,uzctnrvectorstrings,strutils,//uzbtypesbase,
   uzedimensionaltypes,uzctnrVectorBytes,
   gzctnrvectortypes,Classes,Controls,StdCtrls,Graphics,types,TypInfo,//gzctnrVector,
   uzbLogIntf;

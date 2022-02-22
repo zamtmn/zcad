@@ -20,7 +20,7 @@ unit gzctnrBinarySeparatedTree;
 
 interface
 uses
-    gzctnrvectortypes,gzctnrvectorpobjects,gzctnrvectorsimple;
+    gzctnrvectortypes,gzctnrVectorPObjects,gzctnrVectorSimple;
 type
 {EXPORT+}
          TStageMode=(TSMStart,TSMAccumulation,TSMCalc,TSMEnd);

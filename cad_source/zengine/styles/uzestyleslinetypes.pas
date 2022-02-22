@@ -20,7 +20,7 @@ unit uzestyleslinetypes;
 {$INCLUDE zcadconfig.inc}
 interface
 uses LCLProc,LazUTF8,Classes,gzctnrVector,uzbtypesbase,sysutils,uzbtypes,
-     uzegeometry,uzestylestexts,gzctnrvectorobjects,UGDBNamedObjectsArray,
+     uzegeometry,uzestylestexts,gzctnrVectorObjects,UGDBNamedObjectsArray,
      gzctnrvectortypes,uzbstrproc;
 const
      DefaultSHXHeight=1;
@@ -72,11 +72,11 @@ GDBDoubleArray= object(GZVector{-}<GDBDouble>{//})(*OpenArrayOfData=GDBDouble*)
                 constructor init(m:GDBInteger);
                end;
 {REGISTEROBJECTTYPE GDBShapePropArray}
-GDBShapePropArray= object(GZVectorObjects{-}<PShapeProp,ShapeProp>{//})(*OpenArrayOfObject=ShapeProp*)
+GDBShapePropArray= object(GZVectorObjects{-}<ShapeProp>{//})(*OpenArrayOfObject=ShapeProp*)
                 constructor init(m:GDBInteger);
                end;
 {REGISTEROBJECTTYPE GDBTextPropArray}
-GDBTextPropArray= object(GZVectorObjects{-}<PTextProp,TextProp>{//})(*OpenArrayOfObject=TextProp*)
+GDBTextPropArray= object(GZVectorObjects{-}<TextProp>{//})(*OpenArrayOfObject=TextProp*)
                 constructor init(m:GDBInteger);
                end;
 PPGDBLtypePropObjInsp=^PGDBLtypePropObjInsp;

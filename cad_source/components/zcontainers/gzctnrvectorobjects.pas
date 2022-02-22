@@ -16,21 +16,21 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit gzctnrvectorobjects;
+unit gzctnrVectorObjects;
 
 interface
 uses gzctnrVector;
 type
 {Export+}
 {-----------REGISTEROBJECTTYPE GZVectorObjects}
-GZVectorObjects{-}<PTData,TData>{//}=object
+GZVectorObjects{-}<TData>{//}=object
                                 (GZVector{-}<TData>{//})
-                             function CreateObject:PTData;
+                             function CreateObject:PT;
                              procedure free;virtual;
                        end;
 {Export-}
 implementation
-function GZVectorObjects<PTData,TData>.CreateObject;
+function GZVectorObjects<TData>.CreateObject;
 {var addr: GDBPlatformint;}
 begin
      result:=getdatamutable(pushbackdata(default(TData)));
@@ -44,7 +44,7 @@ begin
        inc(count);
   end;}
 end;
-procedure GZVectorObjects<PTData,TData>.free;
+procedure GZVectorObjects<TData>.free;
 var i:integer;
 begin
      for i:=0 to count-1 do

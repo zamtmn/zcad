@@ -22,7 +22,7 @@ unit uzeutils;
 interface
 uses
   uzepalette,uzestyleslinetypes,uzestyleslayers,uzedrawingsimple,uzbtypesbase,
-  gzctnrvectortypes,uzbtypes,uzeentity,uzegeometry,uzeentgenericsubentry,gzctnrstl
+  gzctnrvectortypes,uzbtypes,uzeentity,uzegeometry,uzeentgenericsubentry,gzctnrSTL
   ,LazLogger;
 type
   TEntPropSetterFromDrawing=procedure(const PEnt: PGDBObjEntity; var Drawing:TSimpleDrawing);

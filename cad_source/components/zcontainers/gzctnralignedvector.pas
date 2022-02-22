@@ -16,15 +16,15 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit gzctnrobjectschunk;
+unit gzctnrAlignedVector;
 interface
 uses gzctnrVector,sysutils,gzctnrvectortypes;
 const
   ObjAlign=4;
 type
 {Export+}
-{----REGISTEROBJECTTYPE GDataChunk}
-GDataChunk=
+{----REGISTEROBJECTTYPE GZAlignedVector}
+GZAlignedVector=
   object(GZVector{-}<Byte>{//})(*OpenArrayOfData=GDBByte*)
                 function beginiterate(out ir:itrec):Pointer;virtual;
                 function iterate(var ir:itrec):Pointer;virtual;
@@ -34,14 +34,14 @@ GDataChunk=
 
                 function AllocData(SData:Word):Integer;virtual;
              end;
-{----REGISTEROBJECTTYPE GObjectsChunk}
-GObjectsChunk{-}<PBaseObj>{//}=
-  object(GDataChunk)(*OpenArrayOfData=GDBByte*)
+{----REGISTEROBJECTTYPE GZAlignedVectorObjects}
+GZAlignedVectorObjects{-}<PBaseObj>{//}=
+  object(GZAlignedVector)(*OpenArrayOfData=GDBByte*)
                 function iterate(var ir:itrec):Pointer;virtual;
              end;
 {Export-}
 implementation
-function GDataChunk.Align(SData:Integer):Integer;
+function GZAlignedVector.Align(SData:Integer):Integer;
 var
   m:integer;
 begin
@@ -52,7 +52,7 @@ begin
     result:=SData+ObjAlign-m;
 end;
 
-procedure GDataChunk.AlignDataSize;
+procedure GZAlignedVector.AlignDataSize;
 var
   m:integer;
 begin
@@ -64,7 +64,7 @@ begin
   end;
 end;
 
-function GDataChunk.AllocData(SData:Word):Integer;
+function GZAlignedVector.AllocData(SData:Word):Integer;
 var
   m:integer;
 begin
@@ -76,7 +76,7 @@ begin
   end;
   result:=inherited;
 end;
-function GDataChunk.beginiterate(out ir:itrec):Pointer;
+function GZAlignedVector.beginiterate(out ir:itrec):Pointer;
 begin
      if parray=nil then
                        result:=nil
@@ -87,7 +87,7 @@ begin
                              result:=pointer(parray);
                        end;
 end;
-function GDataChunk.iterate(var ir:itrec):Pointer;
+function GZAlignedVector.iterate(var ir:itrec):Pointer;
 var
   s:integer;
   m:integer;
@@ -110,7 +110,7 @@ begin
   end;
 end;
 
-function GObjectsChunk<PBaseObj>.iterate(var ir:itrec):Pointer;
+function GZAlignedVectorObjects<PBaseObj>.iterate(var ir:itrec):Pointer;
 var
   s:integer;
   m:integer;

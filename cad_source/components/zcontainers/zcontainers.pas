@@ -8,9 +8,9 @@ unit zcontainers;
 interface
 
 uses
-  gzctnrVector, gzctnrvectorsimple, gzctnrvectorobjects, gzctnrvectorp, 
-  gzctnrvectorpdata, gzctnrvectorpobjects, gzctnrBinarySeparatedTree, 
-  gzctnrstl, gzctnrobjectschunk, UGDBTree, gzctnrVectorStr, 
+  gzctnrVector, gzctnrVectorSimple, gzctnrVectorObjects, gzctnrVectorP, 
+  gzctnrVectorPData, gzctnrVectorPObjects, gzctnrBinarySeparatedTree, 
+  gzctnrSTL, gzctnrAlignedVector, UGDBTree, gzctnrVectorStr,
   uzctnrVectorStrings, uzctnrVectorPointers, uzctnrVectorBytes, 
   LazarusPackageIntf;
 

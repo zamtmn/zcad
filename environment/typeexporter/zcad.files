@@ -6,7 +6,7 @@ components/zcontainers/gzctnrvectorp.pas
 components/zcontainers/gzctnrvectorpdata.pas
 components/zcontainers/gzctnrvectorpobjects.pas
 components/zcontainers/gzctnrvectorobjects.pas
-components/zcontainers/gzctnrobjectschunk.pas
+components/zcontainers/gzctnralignedvector.pas
 components/zcontainers/gzctnrbinaryseparatedtree.pas
 components/zcontainers/uzctnrvectorbytes.pas
 components/zcontainers/uzctnrvectorstrings.pas

@@ -25,23 +25,23 @@
       </Item1>
       <Item2>
         <Filename Value="gzctnrvectorsimple.pas"/>
-        <UnitName Value="gzctnrvectorsimple"/>
+        <UnitName Value="gzctnrVectorSimple"/>
       </Item2>
       <Item3>
         <Filename Value="gzctnrvectorobjects.pas"/>
-        <UnitName Value="gzctnrvectorobjects"/>
+        <UnitName Value="gzctnrVectorObjects"/>
       </Item3>
       <Item4>
         <Filename Value="gzctnrvectorp.pas"/>
-        <UnitName Value="gzctnrvectorp"/>
+        <UnitName Value="gzctnrVectorP"/>
       </Item4>
       <Item5>
         <Filename Value="gzctnrvectorpdata.pas"/>
-        <UnitName Value="gzctnrvectorpdata"/>
+        <UnitName Value="gzctnrVectorPData"/>
       </Item5>
       <Item6>
         <Filename Value="gzctnrvectorpobjects.pas"/>
-        <UnitName Value="gzctnrvectorpobjects"/>
+        <UnitName Value="gzctnrVectorPObjects"/>
       </Item6>
       <Item7>
         <Filename Value="gzctnrbinaryseparatedtree.pas"/>
@@ -49,11 +49,11 @@
       </Item7>
       <Item8>
         <Filename Value="gzctnrstl.pas"/>
-        <UnitName Value="gzctnrstl"/>
+        <UnitName Value="gzctnrSTL"/>
       </Item8>
       <Item9>
-        <Filename Value="gzctnrobjectschunk.pas"/>
-        <UnitName Value="gzctnrobjectschunk"/>
+        <Filename Value="gzctnralignedvector.pas"/>
+        <UnitName Value="gzctnralignedvector"/>
       </Item9>
       <Item10>
         <Filename Value="UGDBTree.pas"/>

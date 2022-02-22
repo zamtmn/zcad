@@ -21,7 +21,7 @@ unit uzeentityfactory;
 
 
 interface
-uses uzeentsubordinated,usimplegenerics,uzedrawingdef,uzeconsts,gzctnrstl,
+uses uzeentsubordinated,usimplegenerics,uzedrawingdef,uzeconsts,gzctnrSTL,
      uzbtypesbase,uzbtypes,uzeentity,LazLogger,
      SysUtils;
 type

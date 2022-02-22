@@ -29,7 +29,7 @@ uses
   uzcinfoform,
   uzcinterface
   {$IFDEF REPORTMMEMORYLEAKS}
-  ,gmap,gvector,garrayutils, gzctnrstl,math,Generics.Collections
+  ,gmap,gvector,garrayutils, gzctnrSTL,math,Generics.Collections
   {$ENDIF}
   ;
 

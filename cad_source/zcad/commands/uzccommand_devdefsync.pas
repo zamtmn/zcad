@@ -25,7 +25,7 @@ uses
   LazLogger,SysUtils,
   uzccommandsabstract,uzccommandsimpl,
   uzeentity,gzctnrvectortypes,uzcdrawings,uzcstrconsts,
-  uzcinterface,gzctnrstl,uzeblockdef,uzeentblockinsert,uzeconsts,uzeentdevice;
+  uzcinterface,gzctnrSTL,uzeblockdef,uzeentblockinsert,uzeconsts,uzeentdevice;
 
 resourcestring
   rsDeviceSynhronized='Device "%s" synhronized';

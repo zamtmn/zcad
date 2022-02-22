@@ -24,7 +24,7 @@ uses
   uzeenttext,uzctnrVectorPointers,uzeentblockinsert,uzeconsts,uzcinterface,
   LazLoggerBase,uzcoimultiproperties,uzcoiwrapper,uzctranslations,uzepalette,
   uzedimensionaltypes,uzcstrconsts,sysutils,uzeentityfactory,
-  uzcenitiesvariablesextender,uzgldrawcontext,usimplegenerics,gzctnrstl,
+  uzcenitiesvariablesextender,uzgldrawcontext,usimplegenerics,gzctnrSTL,
   gzctnrvectortypes,uzbtypes,uzcdrawings,varmandef,uzeentity,uzbtypesbase,
   Varman,uzctnrvectorstrings,UGDBSelectedObjArray,uzcoimultipropertiesutil,
   uzeentityextender,uzelongprocesssupport,uzbLogIntf;

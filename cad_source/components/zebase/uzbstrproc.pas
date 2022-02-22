@@ -41,7 +41,7 @@ function AnsiNaturalCompare(const str1, str2: string; vCaseSensitive: boolean = 
 
 function ConvertFromDxfString(str:TDXFEntsInternalStringType):String;
 function ConvertToDxfString(str:GDBString):TDXFEntsInternalStringType;
-function MakeHash(const s: GDBString):SizeUInt;//TODO в gzctnrstl есть копия этой процедуры. надо убирать
+function MakeHash(const s: GDBString):SizeUInt;//TODO в gzctnrSTL есть копия этой процедуры. надо убирать
 
 procedure KillString(var str:GDBString);inline;
 

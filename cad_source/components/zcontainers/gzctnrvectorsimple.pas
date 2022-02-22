@@ -16,10 +16,10 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit gzctnrvectorsimple;
+unit gzctnrVectorSimple;
 
 interface
-uses {uzbtypesbase,uzbtypes,}gzctnrVector;
+uses gzctnrVector;
 type
 {Export+}
 {----REGISTEROBJECTTYPE GZVectorSimple}

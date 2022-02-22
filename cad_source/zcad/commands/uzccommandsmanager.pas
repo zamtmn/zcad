@@ -20,13 +20,13 @@ unit uzccommandsmanager;
 {$INCLUDE zcadconfig.inc}
 {$interfaces corba}
 interface
-uses uzctnrVectorPointers,gzctnrvectorpobjects,uzcsysvars,uzegeometry,uzglviewareaabstract,uzbpaths,
+uses uzctnrVectorPointers,gzctnrVectorPObjects,uzcsysvars,uzegeometry,uzglviewareaabstract,uzbpaths,
      uzeconsts,uzcctrldynamiccommandmenu,uzcinfoform,uzcstrconsts,uzcsysinfo,
-     gzctnrvectortypes,uzegeometrytypes,uzbstrproc,gzctnrvectorp,
+     gzctnrvectortypes,uzegeometrytypes,uzbstrproc,gzctnrVectorP,
      uzbtypesbase,uzccommandsabstract, sysutils,uzglviewareadata,
      uzclog,varmandef,varman,uzedrawingdef,uzcinterface,
      uzcsysparams,uzedrawingsimple,uzcdrawings,uzctnrvectorstrings,forms,LazLogger,
-     uzcctrlcommandlineprompt,uzeparsercmdprompt,gzctnrstl;
+     uzcctrlcommandlineprompt,uzeparsercmdprompt,gzctnrSTL;
 const
      tm:tmethod=(Code:nil;Data:nil);
      nullmethod:{tmethod}TButtonMethod=nil;

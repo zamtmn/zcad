@@ -19,7 +19,7 @@
 unit uzctnrvectorpgdbaseobjects;
 
 interface
-uses gzctnrvectorpobjects,uzbtypes,gzctnrvectorpdata;
+uses gzctnrVectorPObjects,uzbtypes,gzctnrVectorPData;
 type
 {Export+}
 TZctnrVectorPGDBaseObjects=object(GZVectorPData{-}<PGDBaseObject,GDBaseObject>{//})

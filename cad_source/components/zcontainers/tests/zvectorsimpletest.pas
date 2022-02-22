@@ -7,7 +7,7 @@ interface
 uses
   SysUtils,TypInfo,
   fpcunit,
-  gzctnrvectorsimple,gvector,strutils,
+  gzctnrVectorSimple,gvector,strutils,
   testregistry;
 
 const

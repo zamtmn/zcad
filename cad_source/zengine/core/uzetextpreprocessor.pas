@@ -19,7 +19,7 @@ unit uzetextpreprocessor;
 {$INCLUDE zcadconfig.inc}
 
 interface
-uses uzbtypes,uzbstrproc,sysutils,uzbtypesbase,gzctnrstl,LazLogger,uzeparser;
+uses uzbtypes,uzbstrproc,sysutils,uzbtypesbase,gzctnrSTL,LazLogger,uzeparser;
 type
   TInternalCharType=UnicodeChar;
   TInternalStringType=UnicodeString;

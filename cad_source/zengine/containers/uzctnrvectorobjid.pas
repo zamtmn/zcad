@@ -19,7 +19,7 @@
 unit uzctnrvectorobjid;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzbtypes,gzctnrvectorsimple;
+uses uzbtypes,gzctnrVectorSimple;
 type
 {Export+}
 PTZctnrVectorObjID=^TZctnrVectorObjID;

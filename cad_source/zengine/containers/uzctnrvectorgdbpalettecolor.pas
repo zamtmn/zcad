@@ -19,7 +19,7 @@
 unit uzctnrvectorgdbpalettecolor;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzepalette,gzctnrvectorsimple;
+uses uzepalette,gzctnrVectorSimple;
 type
 {Export+}
 PTZctnrVectorTGDBPaletteColor=^TZctnrVectorTGDBPaletteColor;

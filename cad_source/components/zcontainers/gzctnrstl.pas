@@ -15,7 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
-unit gzctnrstl;
+unit gzctnrSTL;
 
 interface
 uses {$IFNDEF DELPHI}gutil,gmap,ghashmap,gvector,generics.collections,{$ENDIF}

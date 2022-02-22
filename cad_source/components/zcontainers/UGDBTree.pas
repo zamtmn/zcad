@@ -19,7 +19,7 @@
 unit UGDBTree;
 
 interface
-uses gzctnrvectortypes,gzctnrvectorpobjects,gzctnrvectorpdata;
+uses gzctnrvectortypes,gzctnrVectorPObjects,gzctnrVectorPData;
 type
 PGDBBaseNode=^GDBBaseNode;
 PIterateCmpareFunc=function(pnode:PGDBBaseNode;PExpr:Pointer):Boolean;

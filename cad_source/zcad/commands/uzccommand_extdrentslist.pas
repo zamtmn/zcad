@@ -25,7 +25,7 @@ uses
   LazLogger,SysUtils,
   uzccommandsabstract,uzccommandsimpl,
   uzeentity,gzctnrvectortypes,uzcdrawings,uzcstrconsts,uzeentityextender,
-  uzcinterface,gzctnrstl;
+  uzcinterface,gzctnrSTL;
 
 function extdrEntsList_com(operands:TCommandOperands):TCommandResult;
 

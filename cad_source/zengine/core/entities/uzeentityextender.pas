@@ -21,7 +21,7 @@ unit uzeentityextender;
 
 interface
 uses uzedrawingdef,usimplegenerics,
-     uzctnrVectorBytes,gzctnrstl,uzeffdxfsupport,uzeBaseExtender,
+     uzctnrVectorBytes,gzctnrSTL,uzeffdxfsupport,uzeBaseExtender,
      uzgldrawcontext;
 
 type

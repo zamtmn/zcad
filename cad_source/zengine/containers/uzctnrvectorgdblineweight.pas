@@ -19,7 +19,7 @@
 unit uzctnrvectorgdblineweight;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzbtypes,gzctnrvectorsimple;
+uses uzbtypes,gzctnrVectorSimple;
 type
 {Export+}
 PTZctnrVectorGDBLineWeight=^TZctnrVectorGDBLineWeight;

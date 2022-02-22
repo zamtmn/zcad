@@ -22,7 +22,7 @@ unit uzcoimultiproperties;
 interface
 uses
   uzcuidialogs,uzctranslations,uzbtypesbase,uzbtypes,uzclog,
-  uzedimensionaltypes,usimplegenerics,varmandef,Varman,garrayutils,gzctnrstl,
+  uzedimensionaltypes,usimplegenerics,varmandef,Varman,garrayutils,gzctnrSTL,
   contnrs,uzeBaseExtender,Rtti;
 type
   TObjIDWithExtender=packed record

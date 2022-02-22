@@ -8,7 +8,7 @@ unit uzccablemanager;
 {$INCLUDE zcadconfig.inc}
 interface
 uses uzcenitiesvariablesextender,uzcvariablesutils,Varman,uzbstrproc,uzcentcable,
-     uzeentdevice,uzeconsts,gzctnrvectorobjects,
+     uzeentdevice,uzeconsts,gzctnrVectorObjects,
      gzctnrvectortypes,SysUtils,uzbtypesbase,uzbtypes,varmandef,uzcdrawings,
      uzcstrconsts,uzctnrvectorpgdbaseobjects;
 resourcestring
@@ -32,7 +32,7 @@ type
 
     PTCableManager=^TCableManager;
     {---REGISTEROBJECTTYPE TCableManager}
-    TCableManager= object(GZVectorObjects<PTCableDesctiptor,TCableDesctiptor>)(*OpenArrayOfPObj*)
+    TCableManager= object(GZVectorObjects<TCableDesctiptor>)(*OpenArrayOfPObj*)
                        constructor init;
                        destructor done;virtual;
                        procedure build;virtual;

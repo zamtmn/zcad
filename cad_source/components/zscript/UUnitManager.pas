@@ -20,7 +20,7 @@ unit UUnitManager;
 
 {$MODE DELPHI}
 interface
-uses LCLProc,uzbpaths,uzbstrproc,Varman,languade,gzctnrvectorobjects,SysUtils,
+uses LCLProc,uzbpaths,uzbstrproc,Varman,languade,gzctnrVectorObjects,SysUtils,
      UBaseTypeDescriptor,uzbtypesbase, uzbtypes,uzctnrVectorBytes, strmy,
      varmandef,gzctnrvectortypes,gzctnrVector,uzctnrvectorstrings,
      TypeDescriptors,UEnumDescriptor,UArrayDescriptor,UPointerDescriptor,
@@ -29,7 +29,7 @@ type
 {EXPORT+}
     PTUnitManager=^TUnitManager;
     {REGISTEROBJECTTYPE TUnitManager}
-    TUnitManager=object(GZVectorObjects{-}<PTUnit,TUnit>{//})
+    TUnitManager=object(GZVectorObjects{-}<TUnit>{//})
                        currentunit:PTUnit;
                        NextUnitManager:PTUnitManager;
                        constructor init;

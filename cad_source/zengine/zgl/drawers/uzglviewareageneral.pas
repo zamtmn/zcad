@@ -26,7 +26,7 @@ uses
      uzeconsts,uzestrconsts,UGDBTracePropArray,math,sysutils,uzedrawingdef,uzbstrproc,
      ExtCtrls,Controls,Classes,{$IFDEF DELPHI}Types,{$ENDIF}{$IFNDEF DELPHI}LCLType,{$ENDIF}Forms,
      UGDBOpenArrayOfPV,uzeentgenericsubentry,uzecamera,UGDBVisibleOpenArray,uzgldrawerabstract,
-     uzgldrawergeneral,uzglviewareaabstract,uzeentitiesprop,gzctnrstl,uzbLogIntf;
+     uzgldrawergeneral,uzglviewareaabstract,uzeentitiesprop,gzctnrSTL,uzbLogIntf;
 const
   ontracdist=10;
   ontracignoredist=25;

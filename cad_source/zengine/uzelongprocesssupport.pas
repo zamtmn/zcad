@@ -21,7 +21,7 @@ unit uzelongprocesssupport;
 
 
 interface
-uses sysutils,gzctnrstl,LazLogger;
+uses sysutils,gzctnrSTL,LazLogger;
 const
   LPSHEmpty=-1;
 type

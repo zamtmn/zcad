@@ -16,7 +16,7 @@ version: 0.9.8.5.{build}-{branch}
 image: Visual Studio 2019
 # Enable Windows RDP Client Access to Build Worker
 init:
-  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+  #- ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
 #---------------------------------#
 #       build configuration       #
@@ -51,7 +51,7 @@ build_script:
 # scripts to run after build
 after_build:
   # zip the build archive
-  - tree /F "cad"
+  #- tree /F "cad"
   - 7z a ZCADElectrotech-%APPVEYOR_REPO_COMMIT%.zip "cad"
 
 #---------------------------------#
@@ -78,7 +78,9 @@ test_script:
 #specify artifacts to upload
 artifacts:
   - path: ZCADElectrotech-%APPVEYOR_REPO_COMMIT%.zip
-    name: ZCADElectrotech-%APPVEYOR_REPO_COMMIT%  
+    name: ZCADElectrotech-%APPVEYOR_REPO_COMMIT%
+  - path: cad\userguide.ru.pdf
+    name: userguide.ru.pdf
 
 #---------------------------------#
 #     deployment configuration    #

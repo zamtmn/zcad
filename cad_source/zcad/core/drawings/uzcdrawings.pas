@@ -28,7 +28,7 @@ uses
     uzbtypesbase,uzedrawingsimple,uzeentgenericsubentry,uzestyleslayers,uzeentity,
     UGDBSelectedObjArray,uzestylestexts,uzefontmanager,uzestyleslinetypes,
     UGDBOpenArrayOfPV,uzefont,UGDBVisibleOpenArray,
-    gzctnrvectortypes,uzedimensionaltypes,uzetrash,UGDBOpenArrayOfByte,uzglviewareadata,
+    gzctnrvectortypes,uzedimensionaltypes,uzetrash,uzctnrVectorBytes,uzglviewareadata,
     uzccommandsabstract,
     uzeentitiestypefilter,uzctnrvectorpgdbaseobjects,
     LCLProc;
@@ -186,7 +186,7 @@ end;
 
  function dwgSaveDXFDPAS(s:gdbstring;dwg:PTSimpleDrawing):GDBInteger;
  var
-    mem:GDBOpenArrayOfByte;
+    mem:TZctnrVectorBytes;
     pu:ptunit;
     allok:boolean;
  begin
@@ -973,7 +973,7 @@ end;
 procedure startup(preloadedfile1,preloadedfile2:GDBString);
 var
    {r: TLResource;
-   f:GDBOpenArrayOfByte;}
+   f:TZctnrVectorBytes;}
    pds:PGDBDimStyle;
 {const
    resname='GEWIND';

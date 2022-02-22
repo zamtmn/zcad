@@ -21,8 +21,8 @@ unit UUnitManager;
 {$MODE DELPHI}
 interface
 uses LCLProc,uzbpaths,uzbstrproc,Varman,languade,gzctnrvectorobjects,SysUtils,
-     UBaseTypeDescriptor,uzbtypesbase, uzbtypes,UGDBOpenArrayOfByte, strmy,
-     varmandef,gzctnrvectortypes,gzctnrvectordata,uzctnrvectorstrings,
+     UBaseTypeDescriptor,uzbtypesbase, uzbtypes,uzctnrVectorBytes, strmy,
+     varmandef,gzctnrvectortypes,gzctnrVector,uzctnrvectorstrings,
      TypeDescriptors,UEnumDescriptor,UArrayDescriptor,UPointerDescriptor,
      URecordDescriptor,UObjectDescriptor,USinonimDescriptor,uzbLogIntf;
 type
@@ -35,7 +35,7 @@ type
                        constructor init;
                        function CreateUnit(PPaths:GDBString;TranslateFunc:TTranslateFunction;UName:GDBString):PTUnit;
                        function loadunit(PPaths:GDBString;TranslateFunc:TTranslateFunction;fname:GDBString; pcreatedunit:PTSimpleUnit):ptunit;virtual;
-                       function parseunit(PPaths:GDBString;TranslateFunc:TTranslateFunction;var f: GDBOpenArrayOfByte; pcreatedunit:PTSimpleUnit):ptunit;virtual;
+                       function parseunit(PPaths:GDBString;TranslateFunc:TTranslateFunction;var f: TZctnrVectorBytes; pcreatedunit:PTSimpleUnit):ptunit;virtual;
                        function changeparsemode(PPaths:GDBString;TranslateFunc:TTranslateFunction;newmode:GDBInteger;var mode:GDBInteger):pasparsemode;
                        function findunit(PPaths:GDBString;TranslateFunc:TTranslateFunction;uname:GDBString):ptunit;virtual;
                        function FindOrCreateEmptyUnit(uname:GDBString):ptunit;virtual;
@@ -231,7 +231,7 @@ begin
 end;
 function TUnitManager.loadunit;
 var
-  f: GDBOpenArrayOfByte;
+  f: TZctnrVectorBytes;
 begin
   f.InitFromFile(fname);
   result:=parseunit(ppaths,TranslateFunc,f,pcreatedunit);
@@ -281,7 +281,7 @@ var
   penu:penumodj;
   enumodj:tenumodj;
   currvalue,maxvalue:GDBLongword;
-  enumobjlist:GZVectorData<tenumodj>;
+  enumobjlist:GZVector<tenumodj>;
   indexx:ArrayIndexDescriptor;
   p,pfu:pointer;
   unitpart:TunitPart;

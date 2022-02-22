@@ -20,7 +20,7 @@ unit UGDBSelectedObjArray;
 {$INCLUDE zcadconfig.inc}
 interface
 uses uzegeometrytypes,uzepalette,uzgldrawcontext,uzecamera,uzeentwithmatrix,uzeentity,
-     UGDBControlPointArray,gzctnrvectordata,sysutils,uzbtypes,uzegeometry,
+     UGDBControlPointArray,gzctnrVector,sysutils,uzbtypes,uzegeometry,
      uzbtypesbase;
 type
 {Export+}
@@ -33,7 +33,7 @@ SelectedObjDesc=record
                 end;
 PGDBSelectedObjArray=^GDBSelectedObjArray;
 {REGISTEROBJECTTYPE GDBSelectedObjArray}
-GDBSelectedObjArray= object(GZVectorData{-}<selectedobjdesc>{//})
+GDBSelectedObjArray= object(GZVector{-}<selectedobjdesc>{//})
                           SelectedCount:GDBInteger;
 
                           function addobject(PEntity:PGDBObjEntity):pselectedobjdesc;virtual;

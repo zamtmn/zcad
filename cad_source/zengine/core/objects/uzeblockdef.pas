@@ -19,7 +19,7 @@ unit uzeblockdef;
 {$INCLUDE zcadconfig.inc}
 interface
 uses gzctnrvectortypes,uzeentity,uzeentityfactory,uzgldrawcontext,uzeobjectextender,uzedrawingdef,
-     uzeentsubordinated,uzeffdxfsupport,UGDBOpenArrayOfByte,uzbtypesbase,sysutils,uzbtypes,
+     uzeentsubordinated,uzeffdxfsupport,uzctnrVectorBytes,uzbtypesbase,sysutils,uzbtypes,
      uzegeometrytypes,uzegeometry,uzestyleslayers,uzeconsts,uzeentgenericsubentry,LazLogger;
 type
 {Export+}
@@ -35,7 +35,7 @@ GDBObjBlockdef= object(GDBObjGenericSubEntry)
                      constructor init(_name:GDBString);
                      procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                      //function FindVariable(varname:GDBString):pvardesk;virtual;
-                     procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                     procedure LoadFromDXF(var f: TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
                      function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef):GDBBoolean;virtual;
                      destructor done;virtual;
                      function GetMatrix:PDMatrix4D;virtual;

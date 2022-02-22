@@ -20,18 +20,18 @@ unit uzeentlwpolyline;
 {$INCLUDE zcadconfig.inc}
 
 interface
-uses gzctnrvectordata,uzeentityfactory,uzeentsubordinated,
+uses gzctnrVector,uzeentityfactory,uzeentsubordinated,
      uzgldrawcontext,uzedrawingdef,uzecamera,uzglviewareadata,
      uzeentcurve,UGDBVectorSnapArray,uzegeometry,uzestyleslayers,uzeentity,
      uzbtypesbase,UGDBPoint3DArray,UGDBPolyLine2DArray,
-     UGDBOpenArrayOfByte,uzbtypes,uzeentwithlocalcs,uzeconsts,math,
+     uzctnrVectorBytes,uzbtypes,uzeentwithlocalcs,uzeconsts,math,
      gzctnrvectortypes,uzegeometrytypes,uzeffdxfsupport,sysutils,UGDBLineWidthArray,
      UGDBSelectedObjArray,uzctnrvectorpgdbaseobjects;
 type
 //----------------snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)
 {Export+}
 {REGISTEROBJECTTYPE TWidth3D_in_WCS_Vector}
-TWidth3D_in_WCS_Vector= object(GZVectorData{-}<GDBQuad3d>{//})
+TWidth3D_in_WCS_Vector= object(GZVector{-}<GDBQuad3d>{//})
                 end;
 PGDBObjLWPolyline=^GDBObjLWpolyline;
 {REGISTEROBJECTTYPE GDBObjLWPolyline}
@@ -45,9 +45,9 @@ GDBObjLWPolyline= object(GDBObjWithLocalCS)
                  Square:GDBdouble;(*'Oriented area'*)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBBoolean);
                  constructor initnul;
-                 procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var f: TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
-                 procedure SaveToDXF(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  function CalcSquare:GDBDouble;virtual;

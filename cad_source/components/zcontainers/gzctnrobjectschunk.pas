@@ -18,26 +18,30 @@
 
 unit gzctnrobjectschunk;
 interface
-uses gzctnrvectordata,sysutils,gzctnrvectortypes;
+uses gzctnrVector,sysutils,gzctnrvectortypes;
 const
   ObjAlign=4;
 type
 {Export+}
-{----REGISTEROBJECTTYPE TObjectsChunk}
-GObjectsChunk{-}<PBaseObj>{//}=
-  object(GZVectorData{-}<Byte>{//})(*OpenArrayOfData=GDBByte*)
+{----REGISTEROBJECTTYPE GDataChunk}
+GDataChunk=
+  object(GZVector{-}<Byte>{//})(*OpenArrayOfData=GDBByte*)
                 function beginiterate(out ir:itrec):Pointer;virtual;
                 function iterate(var ir:itrec):Pointer;virtual;
 
                 function Align(SData:Integer):Integer;
                 procedure AlignDataSize;
 
-                function AddData(PData:Pointer;SData:Word):Integer;virtual;
                 function AllocData(SData:Word):Integer;virtual;
+             end;
+{----REGISTEROBJECTTYPE GObjectsChunk}
+GObjectsChunk{-}<PBaseObj>{//}=
+  object(GDataChunk)(*OpenArrayOfData=GDBByte*)
+                function iterate(var ir:itrec):Pointer;virtual;
              end;
 {Export-}
 implementation
-function GObjectsChunk<PBaseObj>.Align(SData:Integer):Integer;
+function GDataChunk.Align(SData:Integer):Integer;
 var
   m:integer;
 begin
@@ -48,7 +52,7 @@ begin
     result:=SData+ObjAlign-m;
 end;
 
-procedure GObjectsChunk<PBaseObj>.AlignDataSize;
+procedure GDataChunk.AlignDataSize;
 var
   m:integer;
 begin
@@ -60,11 +64,7 @@ begin
   end;
 end;
 
-function GObjectsChunk<PBaseObj>.AddData(PData:Pointer;SData:Word):Integer;
-begin
-  result:=inherited;
-end;
-function GObjectsChunk<PBaseObj>.AllocData(SData:Word):Integer;
+function GDataChunk.AllocData(SData:Word):Integer;
 var
   m:integer;
 begin
@@ -76,7 +76,7 @@ begin
   end;
   result:=inherited;
 end;
-function GObjectsChunk<PBaseObj>.beginiterate(out ir:itrec):Pointer;
+function GDataChunk.beginiterate(out ir:itrec):Pointer;
 begin
      if parray=nil then
                        result:=nil
@@ -87,6 +87,29 @@ begin
                              result:=pointer(parray);
                        end;
 end;
+function GDataChunk.iterate(var ir:itrec):Pointer;
+var
+  s:integer;
+  m:integer;
+begin
+  if count=0 then result:=nil
+  else
+  begin
+      s:=ObjAlign;
+      if ir.itc<(count-s) then
+                      begin
+                           m:=s mod ObjAlign;
+                           if m<>0 then
+                             s:=s+ObjAlign-m;
+                           inc(PByte(ir.itp),s);
+                           inc(ir.itc,s);
+
+                           result:=ir.itp;
+                      end
+                  else result:=nil;
+  end;
+end;
+
 function GObjectsChunk<PBaseObj>.iterate(var ir:itrec):Pointer;
 var
   s:integer;

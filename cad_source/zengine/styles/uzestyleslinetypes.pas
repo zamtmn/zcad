@@ -19,7 +19,7 @@
 unit uzestyleslinetypes;
 {$INCLUDE zcadconfig.inc}
 interface
-uses LCLProc,LazUTF8,Classes,gzctnrvectordata,uzbtypesbase,sysutils,uzbtypes,
+uses LCLProc,LazUTF8,Classes,gzctnrVector,uzbtypesbase,sysutils,uzbtypes,
      uzegeometry,uzestylestexts,gzctnrvectorobjects,UGDBNamedObjectsArray,
      gzctnrvectortypes,uzbstrproc;
 const
@@ -65,10 +65,10 @@ ShapeProp= object(BasicSHXDashProp)
                 destructor done;virtual;
           end;
 {REGISTEROBJECTTYPE GDBDashInfoArray}
-GDBDashInfoArray= object(GZVectorData{-}<TDashInfo>{//})(*OpenArrayOfData=TDashInfo*)
+GDBDashInfoArray= object(GZVector{-}<TDashInfo>{//})(*OpenArrayOfData=TDashInfo*)
                end;
 {REGISTEROBJECTTYPE GDBDoubleArray}
-GDBDoubleArray= object(GZVectorData{-}<GDBDouble>{//})(*OpenArrayOfData=GDBDouble*)
+GDBDoubleArray= object(GZVector{-}<GDBDouble>{//})(*OpenArrayOfData=GDBDouble*)
                 constructor init(m:GDBInteger);
                end;
 {REGISTEROBJECTTYPE GDBShapePropArray}

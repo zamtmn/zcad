@@ -20,7 +20,7 @@ unit uzeentdimrotated;
 
 interface
 uses uzeentityfactory,uzeentdimaligned,uzeentdimension,uzestylesdim,
-     uzestyleslayers,uzedrawingdef,uzbstrproc,UGDBOpenArrayOfByte,
+     uzestyleslayers,uzedrawingdef,uzbstrproc,uzctnrVectorBytes,
      uzegeometry,uzbtypesbase,sysutils,uzeentity,uzbtypes,uzeconsts,uzeffdxfsupport,
      uzegeometrytypes,uzeentsubordinated;
 type
@@ -35,7 +35,7 @@ GDBObjRotatedDimension= object(GDBObjAlignedDimension)
                         function P14ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                         procedure transform(const t_matrix:DMatrix4D);virtual;
                         procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
-                        procedure SaveToDXF(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                        procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                         constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                         constructor initnul(owner:PGDBObjGenericWithSubordinated);
                         function GetObjType:TObjID;virtual;

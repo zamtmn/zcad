@@ -22,7 +22,7 @@ unit uzeentline;
 interface
 uses LCLProc,uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,
      uzestyleslayers,uzbtypesbase,uzeentsubordinated,
-     UGDBSelectedObjArray,uzeent3d,uzeentity,UGDBOpenArrayOfByte,uzbtypes,uzeconsts,
+     UGDBSelectedObjArray,uzeent3d,uzeentity,uzctnrVectorBytes,uzbtypes,uzeconsts,
      uzegeometrytypes,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzctnrvectorpgdbaseobjects;
 type
 {Export+}
@@ -35,9 +35,9 @@ GDBObjLine= object(GDBObj3d)
 
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p1,p2:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var f: TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
-                 procedure SaveToDXF(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure CalcGeometry;virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;

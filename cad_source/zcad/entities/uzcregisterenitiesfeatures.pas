@@ -21,7 +21,7 @@ unit uzcregisterenitiesfeatures;
 interface
 uses uzcinterface,uzeffdxf,uzbpaths,uzcsysvars,uzctranslations,sysutils,
      uzcenitiesvariablesextender,uzcstrconsts,uzeconsts,devices,uzccomdb,uzcentcable,uzcentnet,uzeentdevice,TypeDescriptors,uzeffdxfsupport,
-     uzetextpreprocessor,UGDBOpenArrayOfByte,uzbtypesbase,uzbtypes,uzeobjectextender,
+     uzetextpreprocessor,uzctnrVectorBytes,uzbtypesbase,uzbtypes,uzeobjectextender,
      uzeentsubordinated,uzeentity,uzeenttext,uzeblockdef,varmandef,Varman,UUnitManager,
      URecordDescriptor,UBaseTypeDescriptor,uzedrawingdef,
      uzbstrproc,uzeentitiesprop,uzcentelleader;
@@ -96,7 +96,7 @@ begin
      result:=true;
 end;
 
-procedure ElLeaderSave(var outhandle:GDBOpenArrayOfByte;PEnt:PGDBObjEntity;var IODXFContext:TIODXFContext);
+procedure ElLeaderSave(var outhandle:TZctnrVectorBytes;PEnt:PGDBObjEntity;var IODXFContext:TIODXFContext);
 begin
   dxfGDBStringout(outhandle,1000,'_UPGRADE='+inttostr(UD_LineToLeader));
   dxfGDBStringout(outhandle,1000,'%1=size|GDBInteger|'+inttostr(PGDBObjElLeader(PEnt)^.size)+'|');
@@ -104,7 +104,7 @@ begin
   dxfGDBStringout(outhandle,1000,'%3=twidth|GDBDouble|'+floattostr(PGDBObjElLeader(PEnt)^.twidth)+'|');
 end;
 
-procedure EntityIOSave_all(var outhandle:GDBOpenArrayOfByte;PEnt:PGDBObjEntity;var IODXFContext:TIODXFContext);
+procedure EntityIOSave_all(var outhandle:TZctnrVectorBytes;PEnt:PGDBObjEntity;var IODXFContext:TIODXFContext);
 begin
   dxfGDBStringout(outhandle,1000,'_OWNERHANDLE='+inttohex(PEnt^.bp.ListPos.owner.GetHandle,10));
   case PEnt^.OSnapModeControl of
@@ -123,7 +123,7 @@ begin
     PGDBObjText(pent)^.template:=TDXFEntsInternalStringType(_value);
      result:=true;
 end;
-procedure TextIOSave_TMPL1(var outhandle:GDBOpenArrayOfByte;PEnt:PGDBObjText);
+procedure TextIOSave_TMPL1(var outhandle:TZctnrVectorBytes;PEnt:PGDBObjText);
 begin
      if UnicodeStringReplace(pent^.content,#10,'\P',[rfReplaceAll])<>convertfromunicode(pent^.template) then
        dxfGDBStringout(outhandle,1000,'_TMPL1='+string(pent^.template));

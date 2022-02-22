@@ -22,7 +22,7 @@ interface
 uses uzepalette,uzeobjectextender,uzgldrawerabstract,uzgldrawcontext,uzedrawingdef,
      uzecamera,uzeentitiesprop,uzestyleslinetypes,uzbtypesbase,
      uzegeometrytypes,UGDBControlPointArray,uzeentsubordinated,uzbtypes,uzeconsts,
-     uzglviewareadata,uzegeometry,uzeffdxfsupport,sysutils,UGDBOpenArrayOfByte,
+     uzglviewareadata,uzegeometry,uzeffdxfsupport,sysutils,uzctnrVectorBytes,
      uzestyleslayers,uzeenrepresentation,LazLogger,uzctnrvectorpgdbaseobjects;
 type
 taddotrac=procedure (var posr:os_record;const axis:GDBVertex) of object;
@@ -51,8 +51,8 @@ GDBObjEntity= object(GDBObjSubordinated)
                     destructor done;virtual;
                     constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                     constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                    procedure SaveToDXFObjPrefix(var  outhandle:{GDBInteger}GDBOpenArrayOfByte;entname,dbname:GDBString;var IODXFContext:TIODXFContext;notprocessHandle:boolean=false);
-                    function LoadFromDXFObjShared(var f:GDBOpenArrayOfByte;dxfcod:GDBInteger;ptu:PExtensionData;var drawing:TDrawingDef):GDBBoolean;
+                    procedure SaveToDXFObjPrefix(var  outhandle:{GDBInteger}TZctnrVectorBytes;entname,dbname:GDBString;var IODXFContext:TIODXFContext;notprocessHandle:boolean=false);
+                    function LoadFromDXFObjShared(var f:TZctnrVectorBytes;dxfcod:GDBInteger;ptu:PExtensionData;var drawing:TDrawingDef):GDBBoolean;
                     function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef):GDBBoolean;virtual;
                     function FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
                     procedure FromDXFPostProcessAfterAdd;virtual;
@@ -62,12 +62,12 @@ GDBObjEntity= object(GDBObjSubordinated)
                     procedure createfield;virtual;
                     function AddExtAttrib:PTExtAttrib;
                     function CopyExtAttrib:PTExtAttrib;
-                    procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;abstract;
-                    procedure SaveToDXF(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                    procedure DXFOut(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                    procedure SaveToDXFfollow(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                    procedure SaveToDXFPostProcess(var handle:GDBOpenArrayOfByte;var IODXFContext:TIODXFContext);
-                    procedure SaveToDXFObjXData(var outhandle:GDBOpenArrayOfByte;var IODXFContext:TIODXFContext);virtual;
+                    procedure LoadFromDXF(var f: TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;abstract;
+                    procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                    procedure DXFOut(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                    procedure SaveToDXFfollow(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                    procedure SaveToDXFPostProcess(var handle:TZctnrVectorBytes;var IODXFContext:TIODXFContext);
+                    procedure SaveToDXFObjXData(var outhandle:TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
                     procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                     procedure FormatFeatures(var drawing:TDrawingDef);virtual;
                     procedure FormatFast(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
@@ -688,7 +688,7 @@ end;
 procedure GDBObjEntity.SaveToDXFfollow;
 begin
 end;
-procedure GDBObjEntity.SaveToDXFObjXData(var outhandle:GDBOpenArrayOfByte;var IODXFContext:TIODXFContext);
+procedure GDBObjEntity.SaveToDXFObjXData(var outhandle:TZctnrVectorBytes;var IODXFContext:TIODXFContext);
 begin
      GetDXFIOFeatures.RunSaveFeatures(outhandle,@self,IODXFContext);
      if assigned(EntExtensions) then

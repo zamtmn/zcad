@@ -9,8 +9,8 @@ unit uzcentcable;
 
 interface
 uses uzeobjectextender,varman,uzgldrawcontext,uzeentgenericsubentry,uzedrawingdef,
-     uzcsysvars,UGDBOpenArrayOfByte,uzestyleslayers,UUnitManager,uzeentcurve,uzegeometry,
-     math,gzctnrvectordata,uzbtypesbase,uzeentity,varmandef,uzbtypes,
+     uzcsysvars,uzctnrVectorBytes,uzestyleslayers,UUnitManager,uzeentcurve,uzegeometry,
+     math,gzctnrVector,uzbtypesbase,uzeentity,varmandef,uzbtypes,
      uzegeometrytypes,uzeconsts,uzeffdxfsupport,sysutils,uzeentsubordinated,uzeentdevice,
      gzctnrvectortypes,uzcenitiesvariablesextender,uzeentityfactory,uzclog,LazLogger;
 type
@@ -33,7 +33,7 @@ TNodeProp=record
                 DevLink:PGDBObjDevice;
           end;
 {REGISTEROBJECTTYPE TNodePropArray}
-TNodePropArray= object(GZVectorData{-}<TNodeProp>{//})
+TNodePropArray= object(GZVector{-}<TNodeProp>{//})
 end;
 
 PGDBObjCable=^GDBObjCable;
@@ -55,9 +55,9 @@ GDBObjCable= object(GDBObjCurve)
                  function GetObjTypeName:GDBString;virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure FormatFast(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                 procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var IODXFContext:TIODXFContext);virtual;
-                 procedure SaveToDXF(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                 procedure SaveToDXFfollow(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXFObjXData(var outhandle:{GDBInteger}TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXFfollow(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
 
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
 
@@ -127,7 +127,7 @@ begin
   until ptn1=nil;
   end;
 end;
-procedure GDBObjCable.SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var IODXFContext:TIODXFContext);
+procedure GDBObjCable.SaveToDXFObjXData(var outhandle:{GDBInteger}TZctnrVectorBytes;var IODXFContext:TIODXFContext);
 //var
    //s:gdbstring;
 begin

@@ -23,7 +23,7 @@ interface
 uses LCLIntf,gdbentityfactory,zcadinterface,GDBLine,gdbobjectsconstdef,typinfo,
      zcadstrconsts,iodxf,fileutil,varman,uzegeometry,gdbasetypes,
      GDBGenericSubEntry,SysInfo,gdbase, GDBManager, sysutils, memman,UGDBDescriptor,
-     UGDBOpenArrayOfByte,GDBEntity,TypeDescriptors,ugdbsimpledrawing;
+     uzctnrVectorBytes,GDBEntity,TypeDescriptors,ugdbsimpledrawing;
 procedure addfromdwg(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 implementation
 uses {GDBBlockDef,}UGDBLayerArray,fileformatsmanager;
@@ -1085,7 +1085,7 @@ begin
      result:=nil;
 end;
 
-procedure addfromdwg2004(var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt);
+procedure addfromdwg2004(var f:TZctnrVectorBytes; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt);
 var fh:pdwg2004header;
     fdh:dwg2004headerdecrypteddata;
     syssec,SectionMap,SectionInfo:pdwg2004systemsection;
@@ -1397,7 +1397,7 @@ end;
 
 procedure addfromdwg(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 var
-  f: GDBOpenArrayOfByte;
+  f: TZctnrVectorBytes;
   s: GDBString;
 begin
   DebugLn('{D+}AddFromDWG');

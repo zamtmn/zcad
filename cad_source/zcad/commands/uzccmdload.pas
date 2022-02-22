@@ -27,7 +27,7 @@ uses
   uzeffmanager,uzctranslations,
   uzccommandsimpl,uzccommandsabstract,
   uzcdrawings,uzcdrawing,
-  UGDBOpenArrayOfByte,UUnitManager,URecordDescriptor,gzctnrvectortypes,
+  uzctnrVectorBytes,UUnitManager,URecordDescriptor,gzctnrvectortypes,
   Varman,varmandef,typedescriptors,
   uzgldrawcontext,
   uzedrawingsimple,uzeconsts,
@@ -77,7 +77,7 @@ var
    s: AnsiString;
    //fileext:GDBString;
    isload:boolean;
-   mem:GDBOpenArrayOfByte;
+   mem:TZctnrVectorBytes;
    pu:ptunit;
    loadproc:TFileLoadProcedure;
    DC:TDrawContext;

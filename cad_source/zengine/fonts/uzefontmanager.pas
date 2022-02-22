@@ -21,7 +21,7 @@ unit uzefontmanager;
 {$ModeSwitch advancedrecords}
 interface
 uses
-  UGDBOpenArrayOfByte,{$IFNDEF DELPHI}LResources,{$ENDIF}LCLProc,uzbpaths,
+  uzctnrVectorBytes,{$IFNDEF DELPHI}LResources,{$ENDIF}LCLProc,uzbpaths,
   uzelclintfex,uzestrconsts,uzbstrproc,uzefont,uzbtypesbase,
   sysutils,uzbtypes,uzegeometry,gzctnrstl,
   UGDBNamedObjectsArray,classes,uzefontttfpreloader,uzelongprocesssupport;
@@ -166,7 +166,7 @@ procedure GDBFontManager.CreateBaseFont;
 {$IFNDEF DELPHI}
 var
    r: TLResource;
-   f:GDBOpenArrayOfByte;
+   f:TZctnrVectorBytes;
 {$ENDIF}
 const
    resname='GEWIND';

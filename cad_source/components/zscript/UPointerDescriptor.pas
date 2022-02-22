@@ -20,7 +20,7 @@ unit UPointerDescriptor;
 
 {$MODE DELPHI}
 interface
-uses types,TypeDescriptors,UGDBOpenArrayOfByte,
+uses types,TypeDescriptors,uzctnrVectorBytes,
      uzedimensionaltypes,uzbtypesbase,varmandef,uzbtypes,uzctnrvectorstrings;
 resourcestring
   rsUnassigned='Unassigned';
@@ -32,12 +32,12 @@ GDBPointerDescriptor=object(TUserTypeDescriptor)
                      //constructor init(var t:gdbtypedesk);
                      constructor init(ptype:GDBString;tname:string;pu:pointer);
                      function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
-                     //function Serialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
-                     //function DeSerialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
+                     //function Serialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:PTZctnrVectorBytes;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
+                     //function DeSerialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:TZctnrVectorBytes;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
                      procedure Format;virtual;
                      function GetTypeAttributes:TTypeAttr;virtual;
                      function CreateEditor(TheOwner:TPropEditorOwner;rect:trect{x,y,w,h:GDBInteger};pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:TInternalScriptString;preferedHeight:integer):TEditorDesc{TPropEditor};virtual;
-                     procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:Pointer;prefix:TInternalScriptString);virtual;
+                     procedure SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;prefix:TInternalScriptString);virtual;
                      destructor Done;virtual;
                end;
 const PAssigned:Pointer=nil;
@@ -46,7 +46,7 @@ var
     defaultptypehandler:GDBPointerDescriptor;
 implementation
 uses varman{,log};
-procedure GDBPointerDescriptor.SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:Pointer;prefix:TInternalScriptString);
+procedure GDBPointerDescriptor.SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;prefix:TInternalScriptString);
 begin
 
 end;

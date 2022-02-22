@@ -23,7 +23,7 @@ interface
 uses
     uzglgeometry,uzgldrawcontext,uzeobjectextender,uzetextpreprocessor,uzeentityfactory,
     uzedrawingdef,uzecamera,uzbstrproc,sysutils,uzefont,uzestyleslayers,uzbtypesbase,
-    uzeentabstracttext,uzeentity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,uzbtypes,
+    uzeentabstracttext,uzeentity,UGDBOutbound2DIArray,uzctnrVectorBytes,uzbtypes,
     uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzeentsubordinated,LazLogger,
     uzegeometrytypes,uzestylestexts;
 type
@@ -39,8 +39,8 @@ GDBObjText= object(GDBObjAbstractText)
                  obj_y:GDBDouble;(*oi_readonly*)(*hidden_in_objinsp*)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:TDXFEntsInternalStringType;p:GDBvertex;s,o,w,a:GDBDouble;j:TTextJustify);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
-                 procedure SaveToDXF(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure LoadFromDXF(var f: TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                 procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure CalcGabarit(const drawing:TDrawingDef);virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
@@ -55,7 +55,7 @@ GDBObjText= object(GDBObjAbstractText)
                  procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
                  procedure rtsave(refp:GDBPointer);virtual;
                  function IsHaveObjXData:GDBBoolean;virtual;
-                 procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXFObjXData(var outhandle:{GDBInteger}TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
                  function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef):GDBBoolean;virtual;
                  class function GetDXFIOFeatures:TDXFEntIODataManager;static;
 
@@ -603,7 +603,7 @@ begin
                      end;
      until i<=0;
 end;
-procedure GDBObjText.SaveToDXF(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
+procedure GDBObjText.SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
 var
   hv, vv,bw: GDBByte;
   tv:gdbvertex;

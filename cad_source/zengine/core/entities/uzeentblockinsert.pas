@@ -22,7 +22,7 @@ interface
 uses uzeentity,uzgldrawcontext,uzeentityfactory,uzedrawingdef,uzestyleslayers,math,
      uzbtypesbase,uzeentcomplex,sysutils,UGDBObjBlockdefArray,uzeblockdef,uzbtypes,
      uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzeentsubordinated,
-     gzctnrvectortypes,uzegeometrytypes,UGDBOpenArrayOfByte,uzestrconsts,LCLProc,
+     gzctnrvectortypes,uzegeometrytypes,uzctnrVectorBytes,uzestrconsts,LCLProc,
      uzbLogIntf;
 const zcadmetric='!!ZMODIFIER:';
 type
@@ -39,9 +39,9 @@ GDBObjBlockInsert= object(GDBObjComplex)
                      BlockDesc:TBlockDesc;(*'Block params'*)(*saved_to_shd*)(*oi_readonly*)
                      constructor initnul;
                      constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
-                     procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                     procedure LoadFromDXF(var f: TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
-                     procedure SaveToDXF(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                     procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                      procedure CalcObjMatrix;virtual;
                      function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                      //procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
@@ -671,7 +671,7 @@ else if not dxfGDBStringload(f,2,byt,name)then {s := }f.readgdbstring;
       index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(name));
       //format;
 end;
-procedure GDBObjBlockInsert.SaveToDXF(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
+procedure GDBObjBlockInsert.SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
 //var
   //i, j: GDBInteger;
   //hv, vv: GDBByte;

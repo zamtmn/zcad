@@ -22,7 +22,7 @@ unit uzeentpoint;
 interface
 uses uzeentityfactory,uzgldrawcontext,uzeffdxfsupport,uzedrawingdef,uzecamera,
      uzestyleslayers,uzbtypesbase,UGDBSelectedObjArray,
-     uzeentsubordinated,uzeent3d,uzeentity,sysutils,UGDBOpenArrayOfByte,
+     uzeentsubordinated,uzeent3d,uzeentity,sysutils,uzctnrVectorBytes,
      uzegeometrytypes,uzbtypes,uzeconsts,uzglviewareadata,uzegeometry,
      uzctnrvectorpgdbaseobjects;
 type
@@ -35,8 +35,8 @@ GDBObjPoint= object(GDBObj3d)
                  ProjPoint:GDBvertex;
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
-                 procedure SaveToDXF(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure LoadFromDXF(var f:TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                 procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
 
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;

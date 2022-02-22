@@ -19,7 +19,7 @@
 unit UGDBTracePropArray;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzegeometrytypes,gzctnrvectordata,sysutils,uzbtypesbase;
+uses uzegeometrytypes,gzctnrVector,sysutils,uzbtypesbase;
 {Export+}
 type
   ptraceprop=^traceprop;
@@ -33,7 +33,7 @@ type
     worldraycoord: GDBVertex;
   end;
   {REGISTEROBJECTTYPE GDBtracepropArray}
-GDBtracepropArray= object(GZVectorData{-}<traceprop>{//})
+GDBtracepropArray= object(GZVector{-}<traceprop>{//})
              end;
 {Export-}
 implementation

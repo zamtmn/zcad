@@ -19,13 +19,13 @@
 unit uzgindexsarray;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzbtypesbase,gzctnrvectordata,sysutils,
+uses uzbtypesbase,gzctnrVector,sysutils,
      gzctnrvectortypes,uzegeometry;
 type
 {Export+}
 PZGLIndexsArray=^ZGLIndexsArray;
 {REGISTEROBJECTTYPE ZGLIndexsArray}
-ZGLIndexsArray= object(GZVectorData{-}<TArrayIndex>{//})(*OpenArrayOfData=TArrayIndex*)
+ZGLIndexsArray= object(GZVector{-}<TArrayIndex>{//})(*OpenArrayOfData=TArrayIndex*)
                 constructor init(m:GDBInteger);
                 constructor initnul;
              end;

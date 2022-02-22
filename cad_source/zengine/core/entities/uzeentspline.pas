@@ -20,19 +20,19 @@ unit uzeentspline;
 {$INCLUDE zcadconfig.inc}
 
 interface
-uses LCLProc,uzegluinterface,uzeentityfactory,uzgldrawcontext,uzgloglstatemanager,gzctnrvectordata,
+uses LCLProc,uzegluinterface,uzeentityfactory,uzgldrawcontext,uzgloglstatemanager,gzctnrVector,
      UGDBPoint3DArray,uzedrawingdef,uzecamera,UGDBVectorSnapArray,
      uzestyleslayers,uzeentsubordinated,uzeentcurve,uzbtypesbase,
-     uzeentity,UGDBOpenArrayOfByte,uzbtypes,uzeconsts,uzglviewareadata,
+     uzeentity,uzctnrVectorBytes,uzbtypes,uzeconsts,uzglviewareadata,
      gzctnrvectortypes,uzegeometrytypes,uzegeometry,uzeffdxfsupport,sysutils,
      uzctnrvectorpgdbaseobjects;
 type
 {Export+}
 {REGISTEROBJECTTYPE TKnotsVector}
-TKnotsVector= object(GZVectorData{-}<GDBFloat>{//})
+TKnotsVector= object(GZVector{-}<GDBFloat>{//})
                              end;
 {REGISTEROBJECTTYPE TCPVector}
-TCPVector= object(GZVectorData{-}<GDBvertex4S>{//})
+TCPVector= object(GZVector{-}<GDBvertex4S>{//})
                              end;
 PGDBObjSpline=^GDBObjSpline;
 {REGISTEROBJECTTYPE GDBObjSpline}
@@ -46,14 +46,14 @@ GDBObjSpline= object(GDBObjCurve)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBBoolean);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  destructor done;virtual;
-                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var f:TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure startsnap(out osp:os_record; out pdata:GDBPointer);virtual;
                  function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
 
-                 procedure SaveToDXF(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                 procedure SaveToDXFfollow(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXFfollow(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  function GetObjTypeName:GDBString;virtual;
@@ -359,7 +359,7 @@ begin
 
 end;
 
-procedure GDBObjSpline.SaveToDXFfollow(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
+procedure GDBObjSpline.SaveToDXFfollow(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
 begin
 end;
 

@@ -23,11 +23,11 @@ unit Varman;
 interface
 uses
   UEnumDescriptor,uzctnrVectorPointers,gzctnrvectorpobjects,LCLProc,uabstractunit,
-  SysUtils,UBaseTypeDescriptor,uzbtypesbase,{uzbtypes,}UGDBOpenArrayOfByte,
+  SysUtils,UBaseTypeDescriptor,uzbtypesbase,uzctnrVectorBytes,
   gzctnrvectortypes,uzctnrvectorstrings,varmandef,gzctnrstl,
   TypeDescriptors,URecordDescriptor,UObjectDescriptor,uzbstrproc,classes,typinfo,
   UPointerDescriptor,
-  uzctnrobjectschunk,uzctnrvectorpgdbaseobjects,gzctnrvectorpdata,gzctnrvectordata,
+  uzctnrobjectschunk,uzctnrvectorpgdbaseobjects,gzctnrvectorpdata,gzctnrVector,
   uzbLogIntf;
 type
     td=record
@@ -171,12 +171,12 @@ typemanager=object(typemanagerdef)
                   function AddTypeByPP(p:Pointer):TArrayIndex;virtual;
                   function AddTypeByRef(var _type:UserTypeDescriptor):TArrayIndex;virtual;
             end;
-Tvardescarray=GZVectorData{-}<vardesk>{//};
+Tvardescarray=GZVector{-}<vardesk>{//};
 {REGISTEROBJECTWITHOUTCONSTRUCTORTYPE varmanager}
 pvarmanager=^varmanager;
 varmanager=object(varmanagerdef)
             vardescarray:{GDBOpenArrayOfData}Tvardescarray;
-            vararray:{GDBOpenArrayOfByte}TObjectsChunk;
+            vararray:{TZctnrVectorBytes}TObjectsChunk;
                  constructor init;
                  function findvardesc(varname:TInternalScriptString):pvardesk;virtual;
                  function findvardescbyinst(varinst:GDBPointer):pvardesk;virtual;
@@ -207,8 +207,8 @@ TSimpleUnit=object(TAbstractUnit)
                   function FindValue(varname:TInternalScriptString):pvardesk;virtual;
                   function FindOrCreateValue(varname,vartype:TInternalScriptString):vardesk;virtual;
                   function TypeName2PTD(n: TInternalScriptString):PUserTypeDescriptor;virtual;
-                  function SaveToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;
-                  function SavePasToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;abstract;
+                  function SaveToMem(var membuf:TZctnrVectorBytes):PUserTypeDescriptor;virtual;
+                  function SavePasToMem(var membuf:TZctnrVectorBytes):PUserTypeDescriptor;virtual;abstract;
                   procedure setvardesc(out vd: vardesk; varname, username, typename: TInternalScriptString;_pinstance:pointer=nil);
                   procedure free;virtual;abstract;
                   procedure CopyTo(source:PTSimpleUnit);virtual;
@@ -217,7 +217,7 @@ TSimpleUnit=object(TAbstractUnit)
 PTObjectUnit=^TObjectUnit;
 {REGISTEROBJECTWITHOUTCONSTRUCTORTYPE TObjectUnit}
 TObjectUnit=object(TSimpleUnit)
-                  //function SaveToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;
+                  //function SaveToMem(var membuf:TZctnrVectorBytes):PUserTypeDescriptor;virtual;
                   procedure free;virtual;
             end;
 {REGISTEROBJECTWITHOUTCONSTRUCTORTYPE TUnit}
@@ -232,7 +232,7 @@ TUnit=object(TSimpleUnit)
             function TypeName2PTD(n: TInternalScriptString):PUserTypeDescriptor;virtual;
             function ObjectTypeName2PTD(n: TInternalScriptString):PObjectDescriptor;virtual;
             function AssignToSymbol(var psymbol;symbolname:TInternalScriptString):GDBInteger;
-            function SavePasToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;
+            function SavePasToMem(var membuf:TZctnrVectorBytes):PUserTypeDescriptor;virtual;
             destructor done;virtual;
             procedure free;virtual;
             function RegisterType(ti:PTypeInfo):PUserTypeDescriptor;
@@ -252,11 +252,11 @@ var
   BaseTypesEndIndex:GDBInteger;
   OldTypesCount:GDBInteger;
   VarCategory:TZctnrVectorStrings;
-  CategoryCollapsed:GDBOpenArrayOfByte;
+  CategoryCollapsed:TZctnrVectorBytes;
   CategoryUnknownCOllapsed:boolean;
 
 function getpattern(ptd:ptdarray; max:GDBInteger;var line:TInternalScriptString; out typ:GDBInteger):PTZctnrVectorStrings;
-function ObjOrRecordRead(TranslateFunc:TTranslateFunction;var f: GDBOpenArrayOfByte; var line,GDBStringtypearray:TInternalScriptString; var fieldoffset: GDBSmallint; ptd:PRecordDescriptor):GDBBoolean;
+function ObjOrRecordRead(TranslateFunc:TTranslateFunction;var f: TZctnrVectorBytes; var line,GDBStringtypearray:TInternalScriptString; var fieldoffset: GDBSmallint; ptd:PRecordDescriptor):GDBBoolean;
 function GetPVarMan: GDBPointer; export;
 function FindCategory(category:TInternalScriptString;var catname:TInternalScriptString):Pointer;
 procedure SetCategoryCollapsed(category:TInternalScriptString;value:GDBBoolean);
@@ -627,7 +627,7 @@ begin
      //self.InterfaceVariables.vardescarray.Clear;
      self.InterfaceVariables.vararray.Clear;
 end;
-function TSimpleUnit.SaveToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;
+function TSimpleUnit.SaveToMem(var membuf:TZctnrVectorBytes):PUserTypeDescriptor;
 var
    pu:PTUnit;
    pv:pvardesk;
@@ -964,7 +964,7 @@ begin
                                                 end;
                    end;
 end;
-function ObjOrRecordRead(TranslateFunc:TTranslateFunction;var f: GDBOpenArrayOfByte; var line,GDBStringtypearray:TInternalScriptString; var fieldoffset: GDBSmallint; ptd:PRecordDescriptor):GDBBoolean;
+function ObjOrRecordRead(TranslateFunc:TTranslateFunction;var f: TZctnrVectorBytes; var line,GDBStringtypearray:TInternalScriptString; var fieldoffset: GDBSmallint; ptd:PRecordDescriptor):GDBBoolean;
 type
     trrstate=(fields,metods);
 var parseerror{,parsesuberror}:GDBBoolean;
@@ -1665,7 +1665,7 @@ begin
                                         OnCreateSystemUnit(@self);
   end;
 end;
-function tunit.SavePasToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;
+function tunit.SavePasToMem(var membuf:TZctnrVectorBytes):PUserTypeDescriptor;
 var
    pu:PTUnit;
    pv:pvardesk;

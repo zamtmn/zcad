@@ -49,7 +49,7 @@ uses
      uzcuitypes,
      uzbtypes,
      typinfo,
-     //gzctnrvector,
+     //gzctnrVector,
      //uzvconsts,
      //uzcutils,
      Varman;             //Зкадовский RTTI

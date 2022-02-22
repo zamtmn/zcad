@@ -28,7 +28,7 @@ uses
   uzbpaths,
   uzccmdinfoform,
   uzccommandsabstract,uzccommandsimpl,
-  UGDBOpenArrayOfByte,
+  uzctnrVectorBytes,
   uzeentity,
   uzcenitiesvariablesextender,
   uzcinterface,

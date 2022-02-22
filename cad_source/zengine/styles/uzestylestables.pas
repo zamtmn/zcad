@@ -20,7 +20,7 @@ unit uzestylestables;
 {$INCLUDE zcadconfig.inc}
 interface
 uses uzbtypesbase,sysutils,uzbtypes,uzegeometry,
-     UGDBNamedObjectsArray,gzctnrvectordata;
+     UGDBNamedObjectsArray,gzctnrVector;
 type
 {EXPORT+}
 TTableCellJustify=(jcl(*'TopLeft'*),
@@ -33,7 +33,7 @@ TGDBTableCellStyle=record
                           CF:TTableCellJustify;
                     end;
 {REGISTEROBJECTTYPE GDBCellFormatArray}
-GDBCellFormatArray= object(GZVectorData{-}<TGDBTableCellStyle>{//})(*OpenArrayOfData=TGDBTableCellStyle*)
+GDBCellFormatArray= object(GZVector{-}<TGDBTableCellStyle>{//})(*OpenArrayOfData=TGDBTableCellStyle*)
                    end;
 PTGDBTableStyle=^TGDBTableStyle;
 {REGISTEROBJECTTYPE TGDBTableStyle}

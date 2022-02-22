@@ -21,7 +21,7 @@ unit uzccommand_move;
 
 interface
 uses
-  gzctnrvector,zcmultiobjectchangeundocommand,
+  gzctnrVector,zcmultiobjectchangeundocommand,
   gzctnrvectortypes,uzgldrawercanvas,
   uzcoimultiobjects,uzcdrawing,uzepalette,
   uzgldrawcontext,
@@ -43,7 +43,7 @@ uses
 
   uzeconsts,
   uzegeometrytypes,uzeentity,uzeentcircle,uzeentline,uzeentgenericsubentry,uzeentmtext,
-  uzeentblockinsert,uzeentpolyline,uzclog,gzctnrvectordata,
+  uzeentblockinsert,uzeentpolyline,uzclog,
   uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray
   ,uzelongprocesssupport,LazLogger;
 type
@@ -55,7 +55,7 @@ type
                  end;
   ptpcoavector=^tpcoavector;
   tpcoavector={-}specialize{//}
-              GZVectorData{-}<TCopyObjectDesc>{//};
+              GZVector{-}<TCopyObjectDesc>{//};
   {REGISTEROBJECTTYPE move_com}
   move_com =  object(CommandRTEdObject)
     t3dp: gdbvertex;

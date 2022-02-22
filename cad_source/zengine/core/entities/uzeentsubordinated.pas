@@ -21,7 +21,7 @@ unit uzeentsubordinated;
 
 interface
 uses strutils,uzgldrawcontext,uzeentityextender,uzetextpreprocessor,uzedrawingdef,
-     uzbstrproc{$IFNDEF DELPHI},LazUTF8{$ENDIF},UGDBOpenArrayOfByte,uzegeometrytypes,uzbtypes,
+     uzbstrproc{$IFNDEF DELPHI},LazUTF8{$ENDIF},uzctnrVectorBytes,uzegeometrytypes,uzbtypes,
      uzbtypesbase,sysutils,uzestyleslayers,uzeffdxfsupport,gzctnrvectortypes;
 type
 {EXPORT+}

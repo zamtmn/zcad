@@ -19,13 +19,13 @@
 unit uzgvertex3sarray;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzbtypesbase,gzctnrvectordata,sysutils,
+uses uzbtypesbase,gzctnrVector,sysutils,
      gzctnrvectortypes,uzegeometrytypes,uzegeometry;
 type
 {Export+}
 PZGLVertex3Sarray=^ZGLVertex3Sarray;
 {REGISTEROBJECTTYPE ZGLVertex3Sarray}
-ZGLVertex3Sarray= object(GZVectorData{-}<GDBvertex3S>{//})(*OpenArrayOfData=GDBvertex3S*)
+ZGLVertex3Sarray= object(GZVector{-}<GDBvertex3S>{//})(*OpenArrayOfData=GDBvertex3S*)
                 constructor init(m:GDBInteger);
                 constructor initnul;
                 function AddGDBVertex(const v:GDBvertex):TArrayIndex;virtual;

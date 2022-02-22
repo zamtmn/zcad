@@ -21,7 +21,7 @@ unit gzctnrVectorStr;
 interface
 uses
   SysUtils,StrUtils,
-  gzctnrvectorsimple,UGDBOpenArrayOfByte,gzctnrvectortypes;
+  uzctnrvectorbytes,gzctnrvectorsimple,gzctnrvectortypes;
 type
 {Export+}
 {----REGISTEROBJECTTYPE GZVectorSimple}
@@ -38,7 +38,7 @@ GZVectorStr{-}<T>{//}=object
 {Export-}
 implementation
 procedure GZVectorStr<T>.loadfromfile(fname:RawByteString);
-var f:GDBOpenArrayOfByte;
+var f:TZctnrVectorBytes;
     line:AnsiString;
 begin
   f.InitFromFile(fname);

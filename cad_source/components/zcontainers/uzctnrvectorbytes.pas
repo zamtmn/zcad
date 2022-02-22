@@ -16,18 +16,18 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit UGDBOpenArrayOfByte;
+unit uzctnrVectorBytes;
 
 interface
-uses gzctnrvector,{uzegeometrytypes,}sysutils{$IFNDEF DELPHI},LazUTF8{$ENDIF};
+uses gzctnrVector,sysutils{$IFNDEF DELPHI},LazUTF8{$ENDIF};
 const
     syn_breacer=[#13,#10,' '];
     lineend:string=#13#10;
 type
 {Export+}
-PGDBOpenArrayOfByte=^GDBOpenArrayOfByte;
-{REGISTEROBJECTTYPE GDBOpenArrayOfByte}
-GDBOpenArrayOfByte=object(GZVector{-}<byte>{//})
+PTZctnrVectorBytes=^TZctnrVectorBytes;
+{REGISTEROBJECTTYPE TZctnrVectorBytes}
+TZctnrVectorBytes=object(GZVector{-}<byte>{//})
                       ReadPos:Integer;
                       name:AnsiString;
                       constructor init(m:Integer);
@@ -65,22 +65,22 @@ begin
      //writeln(s);
   FileWrite(h, s[1], length(s));
 end;
-destructor GDBOpenArrayOfByte.done;
+destructor TZctnrVectorBytes.done;
 begin
      name:='';
      inherited;
 end;
 
-procedure GDBOpenArrayOfByte.TXTAddGDBStringEOL;
+procedure TZctnrVectorBytes.TXTAddGDBStringEOL;
 begin
      s:=s+lineend;
      self.TXTAddGDBString(s);
 end;
-procedure GDBOpenArrayOfByte.TXTAddGDBString;
+procedure TZctnrVectorBytes.TXTAddGDBString;
 begin
      self.AddData(@s[1],length(s));
 end;
-function GDBOpenArrayOfByte.GetChar;
+function TZctnrVectorBytes.GetChar;
 var
   p:PT;
 begin
@@ -89,7 +89,7 @@ begin
      result:=pansichar(p)^;
      //result:=pansichar(GDBPlatformUInt(parray)+rp)^;
 end;
-function GDBOpenArrayOfByte.readtoparser;
+function TZctnrVectorBytes.readtoparser;
 var
   s: String;
   //i:GDBInteger;
@@ -204,19 +204,19 @@ begin
   result := copy(expr, i, length(expr) - i + 1);
 end;
 
-function GDBOpenArrayOfByte.ReadString2;
+function TZctnrVectorBytes.ReadString2;
 begin
      result:=readspace(readGDBString)
 end;
-function GDBOpenArrayOfByte.ReadGDBString;
+function TZctnrVectorBytes.ReadGDBString;
 begin
      result:=ReadString(#10,#13);
 end;
-function GDBOpenArrayOfByte.notEOF:Boolean;
+function TZctnrVectorBytes.notEOF:Boolean;
 begin
      result:=(readpos<(count-1))and(parray<>nil)
 end;
-function GDBOpenArrayOfByte.Jump;
+function TZctnrVectorBytes.Jump;
 var
   p:PT;
 begin
@@ -226,7 +226,7 @@ begin
      result:=p;
      //result:=pointer(GDBPlatformUInt(parray)+readpos);
 end;
-function GDBOpenArrayOfByte.GetCurrentReadAddres;
+function TZctnrVectorBytes.GetCurrentReadAddres;
 var
   p:PT;
 begin
@@ -235,7 +235,7 @@ begin
      result:=p;
      //result:=pointer(GDBPlatformUInt(parray)+readpos);
 end;
-function GDBOpenArrayOfByte.readbyte;
+function TZctnrVectorBytes.readbyte;
 var
   p:PT;
 begin
@@ -245,12 +245,12 @@ begin
      //result:=pbyte(GDBPlatformUInt(parray)+readpos)^;
      inc(readpos);
 end;
-function GDBOpenArrayOfByte.readword;
+function TZctnrVectorBytes.readword;
 begin
      result:=readbyte;
      result:=result+256*readbyte;
 end;
-function GDBOpenArrayOfByte.readstring{(break, ignore: GDBString): shortString};
+function TZctnrVectorBytes.readstring{(break, ignore: GDBString): shortString};
 var
   //{s,}myresult: shortString;
   i:Integer;
@@ -327,12 +327,12 @@ begin
   //myresult := s;
   result := myresult;
 end;
-function GDBOpenArrayOfByte.Seek(pos:Integer):integer;
+function TZctnrVectorBytes.Seek(pos:Integer):integer;
 begin
      result:=self.ReadPos;
      readpos:=pos;
 end;
-constructor GDBOpenArrayOfByte.InitFromFile;
+constructor TZctnrVectorBytes.InitFromFile;
 var infile,filelength:Integer;
 begin
      //StringToWideChar(filename)
@@ -354,7 +354,7 @@ begin
      fileclose(infile)
      end;
 end;
-function GDBOpenArrayOfByte.SaveToFile;
+function TZctnrVectorBytes.SaveToFile;
 var infile:Integer;
 begin
      infile:=filecreate({$IFNDEF DELPHI}UTF8ToSys{$ENDIF}({ExpandPath}(FileName)));
@@ -367,37 +367,37 @@ begin
                  else
                      result:=infile;
 end;
-constructor GDBOpenArrayOfByte.init;
+constructor TZctnrVectorBytes.init;
 begin
   ReadPos:=0;
   inherited init(m);
 end;
-constructor GDBOpenArrayOfByte.initnul;
+constructor TZctnrVectorBytes.initnul;
 begin
   ReadPos:=0;
   //SizeOfData:=1;
   inherited initnul;
 end;
-function GDBOpenArrayOfByte.AddByteByVal(Data:Byte):Integer;
+function TZctnrVectorBytes.AddByteByVal(Data:Byte):Integer;
 begin
      result:=adddata(@data,sizeof(Byte));
 end;
 
-function GDBOpenArrayOfByte.AddByte(PData:Pointer):Integer;
+function TZctnrVectorBytes.AddByte(PData:Pointer):Integer;
 //var addr:GDBPlatformint;
 begin
      result:=adddata(pdata,sizeof(Byte));
 end;
-{function GDBOpenArrayOfByte.AddFontFloat(PData:Pointer):Integer;
+{function TZctnrVectorBytes.AddFontFloat(PData:Pointer):Integer;
 //var addr:GDBPlatformint;
 begin
      result:=adddata(pdata,sizeof(fontfloat));
 end;}
-function GDBOpenArrayOfByte.AddWord(PData:Pointer):Integer;
+function TZctnrVectorBytes.AddWord(PData:Pointer):Integer;
 begin
      result:=adddata(pdata,sizeof(Word));
 end;
-function GDBOpenArrayOfByte.ReadData;
+function TZctnrVectorBytes.ReadData;
 {var addr:GDBPlatformint;
     p:pt;}
 begin
@@ -414,7 +414,7 @@ begin
        inc(ReadPos,SData);
   end;
 end;
-{function GDBOpenArrayOfByte.PopData;
+{function TZctnrVectorBytes.PopData;
 var addr:GDBPlatformint;
 begin
   begin

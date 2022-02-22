@@ -19,12 +19,12 @@
 unit UGDBPolyPoint2DArray;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzegeometrytypes,uzbtypesbase,gzctnrvectordata,sysutils,uzegeometry;
+uses uzegeometrytypes,uzbtypesbase,gzctnrVector,sysutils,uzegeometry;
 type
 {Export+}
 PGDBPolyPoint2DArray=^GDBPolyPoint2DArray;
 {REGISTEROBJECTTYPE GDBPolyPoint2DArray}
-GDBPolyPoint2DArray= object(GZVectorData{-}<GDBPolyVertex2D>{//})
+GDBPolyPoint2DArray= object(GZVector{-}<GDBPolyVertex2D>{//})
                       //procedure DrawGeometry;virtual;
                       function InRect(Frame1, Frame2: GDBvertex2DI):TInBoundingVolume;virtual;
                       procedure freeelement(PItem:PT);virtual;

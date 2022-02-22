@@ -19,7 +19,7 @@
 unit uzefontshx;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzefontbase,UGDBOpenArrayOfByte,uzbtypesbase,sysutils,
+uses uzefontbase,uzctnrVectorBytes,uzbtypesbase,sysutils,
      uzegeometry;
 type
 {EXPORT+}
@@ -28,7 +28,7 @@ PSHXFont=^SHXFont;
 SHXFont= object(BASEFont)
               //compiledsize:GDBInteger;
               h,u:GDBByte;
-              //SHXdata:GDBOpenArrayOfByte;
+              //SHXdata:TZctnrVectorBytes;
               constructor init;
               destructor done;virtual;
         end;

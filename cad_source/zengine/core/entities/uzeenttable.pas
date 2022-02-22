@@ -20,7 +20,7 @@ unit uzeenttable;
 {$INCLUDE zcadconfig.inc}
 
 interface
-uses uzgldrawcontext,uzeentabstracttext,uzetrash,uzedrawingdef,uzbstrproc,UGDBOpenArrayOfByte,
+uses uzgldrawcontext,uzeentabstracttext,uzetrash,uzedrawingdef,uzbstrproc,uzctnrVectorBytes,
      uzestylestables,uzeentline,uzbtypesbase,uzeentcomplex,sysutils,UGDBTable,
      uzctnrvectorstrings,uzeentmtext,uzeentity,uzbtypes,uzeconsts,uzegeometry,
      gzctnrvectortypes,uzegeometrytypes,uzeentblockinsert,uzeffdxfsupport;
@@ -48,7 +48,7 @@ GDBObjTable= object(GDBObjComplex)
             destructor done;virtual;
             function Clone(own:GDBPointer):PGDBObjEntity;virtual;
             procedure Build(var drawing:TDrawingDef);virtual;
-            procedure SaveToDXFFollow(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+            procedure SaveToDXFFollow(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
             procedure ReCalcFromObjMatrix;virtual;
             function GetObjType:TObjID;virtual;
             end;

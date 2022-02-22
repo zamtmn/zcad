@@ -40,7 +40,7 @@ uses
      uzegeometry,
 
      typinfo,
-     //gzctnrvector,
+     //gzctnrVector,
      uzvconsts,
      uzcutils,
      Varman;             //Зкадовский RTTI

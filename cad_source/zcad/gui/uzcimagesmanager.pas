@@ -24,7 +24,7 @@ interface
 uses
   uzbpaths,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics,
   Buttons, ExtCtrls, LazUTF8,
-  uzcsysvars,uzcsysinfo,uzbtypesbase,gzctnrstl,UGDBOpenArrayOfByte,
+  uzcsysvars,uzcsysinfo,uzbtypesbase,gzctnrstl,uzctnrVectorBytes,
   uzbstrproc,LazLogger;
 type
   TImageData=record
@@ -139,7 +139,7 @@ end;
 procedure TImagesManager.LoadAliasesDir(path:string);
 var
   line,sub,internalname:GDBString;
-  f:GDBOpenArrayOfByte;
+  f:TZctnrVectorBytes;
   PID:TImageName2TImageDataMap.PValue;
   ID:TImageData;
 begin

@@ -19,13 +19,13 @@
 unit UGDBPoint3DArray;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzegeometrytypes,uzbtypesbase,gzctnrvectordata,sysutils,math,
+uses uzegeometrytypes,uzbtypesbase,gzctnrVector,sysutils,math,
      gzctnrvectortypes,{uzgloglstatemanager,}uzegeometry;
 type
 {Export+}
 {REGISTEROBJECTTYPE GDBPoint3dArray}
 PGDBPoint3dArray=^GDBPoint3dArray;
-GDBPoint3dArray= object(GZVectorData{-}<GDBVertex>{//})(*OpenArrayOfData=GDBVertex*)
+GDBPoint3dArray= object(GZVector{-}<GDBVertex>{//})(*OpenArrayOfData=GDBVertex*)
                 function onpoint(p:gdbvertex;closed:GDBBoolean):gdbboolean;
                 function onmouse(const mf:ClipArray;const closed:GDBBoolean):GDBBoolean;virtual;
                 function CalcTrueInFrustum(frustum:ClipArray):TInBoundingVolume;virtual;

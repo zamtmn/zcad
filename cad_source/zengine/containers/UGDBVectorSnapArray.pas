@@ -19,7 +19,7 @@
 unit UGDBVectorSnapArray;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzegeometrytypes,gzctnrvectordata,sysutils;
+uses uzegeometrytypes,gzctnrVector,sysutils;
 type
 {Export+}
 PVectotSnap=^VectorSnap;
@@ -29,7 +29,7 @@ VectorSnap=record
            end;
 PGDBVectorSnapArray=^GDBVectorSnapArray;
 {REGISTEROBJECTTYPE GDBVectorSnapArray}
-GDBVectorSnapArray= object(GZVectorData{-}<VectorSnap>{//})
+GDBVectorSnapArray= object(GZVector{-}<VectorSnap>{//})
              end;
 {Export-}
 implementation

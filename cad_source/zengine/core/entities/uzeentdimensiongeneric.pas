@@ -20,7 +20,7 @@ unit uzeentdimensiongeneric;
 
 interface
 uses uzeentityfactory,uzeentwithlocalcs,uzeentdimension,uzestylesdim,uzestyleslayers,
-     uzedrawingdef,uzbstrproc,UGDBOpenArrayOfByte,uzegeometry,uzbtypesbase,
+     uzedrawingdef,uzbstrproc,uzctnrVectorBytes,uzegeometry,uzbtypesbase,
      sysutils,uzeentity,uzbtypes,uzeconsts,uzeffdxfsupport,uzeentsubordinated,
      uzeentdimradial,uzeentdimdiametric,uzeentdimrotated,uzeentdimaligned;
 type
@@ -35,7 +35,7 @@ GDBObjGenericDimension= object(GDBObjWithLocalCS)
                       a50,a52:GDBDouble;
                       constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                       constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                      procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                      procedure LoadFromDXF(var f: TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
                       function FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
                       function GetObjType:TObjID;virtual;
                    end;

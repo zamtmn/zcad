@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 {**Модуль описания базового генерика обьекта-массива}
-unit gzctnrvector;
+unit gzctnrVector;
 
 {DEFINE FILL0ALLOCATEDMEMORY}
 interface
@@ -139,6 +139,8 @@ GZVector{-}<T>{//}=object(TZAbsVector)
         function GetCount:Integer;
         {**Подрезать выделенную память по count}
         procedure Shrink;virtual;
+
+        procedure freewithproc(freeproc:TProcessProc);virtual;
   end;
 {Export-}
 function remapmememblock(pblock:Pointer;sizeblock:Integer):Pointer;
@@ -550,6 +552,15 @@ begin
     deleteelement(s);
   end;
   result:=parray;}
+end;
+procedure GZVector<T>.freewithproc;
+var i:integer;
+begin
+     for i:=0 to self.count-1 do
+     begin
+       freeproc(@parray[i]);
+     end;
+     self.count:=0;
 end;
 begin
 end.

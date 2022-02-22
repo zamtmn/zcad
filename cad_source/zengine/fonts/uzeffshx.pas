@@ -21,7 +21,7 @@ unit uzeffshx;
 interface
 uses uzgprimitivescreator,uzglvectorobject,uzefontmanager,uzefontshx,uzegeometry,
      uzefont,uzbstrproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}math,sysutils,
-     uzegeometrytypes,UGDBOpenArrayOfByte,uzbtypesbase,uzbtypes,uzgprimitives,
+     uzegeometrytypes,uzctnrVectorBytes,uzbtypesbase,uzbtypes,uzgprimitives,
      gzctnrvectortypes,uzbLogIntf;
 const
   arccount=16;
@@ -691,7 +691,7 @@ var
    //f:filestream;
    line{,sub}:GDBANSIString;
    {symmin,}symcount,{symmax,}i,symnum,symlen,datalen,dataread,test:integer;
-   memorybuf:GDBOpenArrayOfByte;
+   memorybuf:TZctnrVectorBytes;
    psinfo:ptsyminfo;
    //pf:PGDBfont;
    pdata:pbyte;

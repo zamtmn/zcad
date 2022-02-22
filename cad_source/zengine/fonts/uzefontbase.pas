@@ -19,18 +19,18 @@
 unit uzefontbase;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzgprimitives,uzglvectorobject,uzbstrproc,UGDBOpenArrayOfByte,
-     gzctnrvectortypes,uzbtypesbase,gzctnrvectordata,sysutils,uzbtypes,uzegeometrytypes,uzegeometry;
+uses uzgprimitives,uzglvectorobject,uzbstrproc,uzctnrVectorBytes,
+     gzctnrvectortypes,uzbtypesbase,gzctnrVector,sysutils,uzbtypes,uzegeometrytypes,uzegeometry;
 type
 {EXPORT+}
-TGDBUNISymbolInfoVector=GZVectorData{-}<GDBUNISymbolInfo>{//};
+TGDBUNISymbolInfoVector=GZVector{-}<GDBUNISymbolInfo>{//};
 PBASEFont=^BASEFont;
 {REGISTEROBJECTTYPE BASEFont}
 BASEFont= object(GDBaseObject)
               unicode:GDBBoolean;
               symbolinfo:TSymbolInfoArray;
               unisymbolinfo:{GDBOpenArrayOfData}TGDBUNISymbolInfoVector;
-              //----//SHXdata:GDBOpenArrayOfByte;
+              //----//SHXdata:TZctnrVectorBytes;
               FontData:ZGLVectorObject;
               constructor init;
               destructor done;virtual;

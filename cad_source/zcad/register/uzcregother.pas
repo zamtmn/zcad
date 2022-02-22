@@ -21,7 +21,7 @@ unit uzcregother;
 interface
 uses uzbpaths,UUnitManager,uzcsysvars,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
      uzbstrproc,Varman,SysUtils,
-     UBaseTypeDescriptor,UGDBOpenArrayOfByte, strmy, varmandef,
+     UBaseTypeDescriptor,uzctnrVectorBytes, strmy, varmandef,
      uzcsysparams,uzcsysinfo,TypeDescriptors,URecordDescriptor,
      uzclog,LazLogger;
 implementation
@@ -30,7 +30,7 @@ implementation
 //  ptd:PUserTypeDescriptor;
 {$ENDIF}
 var
-  mem:GDBOpenArrayOfByte;
+  mem:TZctnrVectorBytes;
 initialization;
   units.loadunit(SupportPath,InterfaceTranslate,expandpath('*rtl/sysvar.pas'),nil);
   units.loadunit(SupportPath,InterfaceTranslate,expandpath('*rtl/savedvar.pas'),nil);

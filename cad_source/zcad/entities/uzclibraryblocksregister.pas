@@ -21,7 +21,7 @@ unit uzclibraryblocksregister;
 
 
 interface
-uses uzccommandsimpl,uzbstrproc,UGDBOpenArrayOfByte,uzccommandsabstract,uzbpaths,
+uses uzccommandsimpl,uzbstrproc,uzctnrVectorBytes,uzccommandsabstract,uzbpaths,
      uzccommand_mergeblocks,
      uzestyleslayers,UGDBObjBlockdefArray,uzeblockdefsfactory,uzeblockdef,uzedrawingdef,
      uzcsysvars,uzbtypesbase,uzeentity,uzcdrawings,uzclog,LazLogger;
@@ -45,7 +45,7 @@ end;
 function ReadBlockLibrary_com(operands:TCommandOperands):TCommandResult;
 var
   line,block,depends,s:GDBString;
-  f:GDBOpenArrayOfByte;
+  f:TZctnrVectorBytes;
 begin
   s:=FindInSupportPath(SupportPath,operands);
   f.InitFromFile(s);

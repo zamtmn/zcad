@@ -22,7 +22,7 @@ unit uzventsuperline;
 interface
 uses uzeobjectextender,LCLProc,uzeentityfactory,uzedrawingdef,
      uzestyleslayers,uzbtypesbase,uzeentsubordinated,
-     uzeentline,uzeentity,UGDBOpenArrayOfByte,uzbtypes,uzeconsts,
+     uzeentline,uzeentity,uzctnrVectorBytes,uzbtypes,uzeconsts,
      uzegeometrytypes,uzegeometry,uzeffdxfsupport;
 type
 {Export+}
@@ -35,7 +35,7 @@ GDBObjSuperLine= object(GDBObjLine)
                   class function CreateInstance:PGDBObjLine;static;
                   function GetObjType:TObjID;virtual;
                   function Clone(own:GDBPointer):PGDBObjEntity;virtual;
-                  procedure SaveToDXFObjXData(var outhandle:GDBOpenArrayOfByte;var IODXFContext:TIODXFContext);virtual;
+                  procedure SaveToDXFObjXData(var outhandle:TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
                   class function GetDXFIOFeatures:TDXFEntIODataManager;static;
            end;
 {Export-}
@@ -53,7 +53,7 @@ begin
      inherited;
      GetDXFIOFeatures.AddExtendersToEntity(@self);
 end;
-procedure GDBObjSuperLine.SaveToDXFObjXData(var outhandle:GDBOpenArrayOfByte;var IODXFContext:TIODXFContext);
+procedure GDBObjSuperLine.SaveToDXFObjXData(var outhandle:TZctnrVectorBytes;var IODXFContext:TIODXFContext);
 begin
      inherited;
      dxfGDBStringout(outhandle,1000,'_UPGRADE=10');

@@ -19,12 +19,12 @@
 unit gzctnrvectorobjects;
 
 interface
-uses gzctnrvectordata;
+uses gzctnrVector;
 type
 {Export+}
 {-----------REGISTEROBJECTTYPE GZVectorObjects}
 GZVectorObjects{-}<PTData,TData>{//}=object
-                                (GZVectorData{-}<TData>{//})
+                                (GZVector{-}<TData>{//})
                              function CreateObject:PTData;
                              procedure free;virtual;
                        end;

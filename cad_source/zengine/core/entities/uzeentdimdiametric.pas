@@ -20,7 +20,7 @@ unit uzeentdimdiametric;
 
 interface
 uses uzgldrawcontext,uzeentityfactory,uzeentdimension,uzestylesdim,uzestyleslayers,
-     uzegeometrytypes,uzedrawingdef,uzbstrproc,UGDBOpenArrayOfByte,
+     uzegeometrytypes,uzedrawingdef,uzbstrproc,uzctnrVectorBytes,
      UGDBControlPointArray,uzegeometry,uzeentline,uzbtypesbase,uzeentcomplex,sysutils,
      UGDBSelectedObjArray,uzeentity,uzbtypes,uzeconsts,uzeffdxfsupport,
      uzeentsubordinated;
@@ -60,7 +60,7 @@ GDBObjDiametricDimension= object(GDBObjDimension)
                         function GetRadius:GDBDouble;virtual;
                         function GetDIMTMOVE:TDimTextMove;virtual;
 
-                        procedure SaveToDXF(var outhandle:GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                        procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                         function GetObjType:TObjID;virtual;
                    end;
 {EXPORT-}

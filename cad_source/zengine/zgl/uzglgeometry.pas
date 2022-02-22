@@ -20,7 +20,7 @@ unit uzglgeometry;
 {$INCLUDE zcadconfig.inc}
 interface
 uses uzgldrawergeneral,math,uzgldrawcontext,uzgldrawerabstract,uzgvertex3sarray,
-     uzegeometrytypes,gzctnrvectordata,UGDBPoint3DArray,uzegeometry,uzeentitiesprop,
+     uzegeometrytypes,gzctnrVector,UGDBPoint3DArray,uzegeometry,uzeentitiesprop,
      gzctnrvectortypes,uzestyleslinetypes,sysutils,uzbtypes,
      uzbtypesbase,uzbstrproc,uzefont,uzglvectorobject,uzgprimitivessarray;
 type
@@ -33,7 +33,7 @@ ZPolySegmentData= record
                                                       length,nlength,naccumlength,accumlength:GDBDouble;
                                                 end;
 {REGISTEROBJECTTYPE ZSegmentator}
-ZSegmentator=object(GZVectorData{-}<ZPolySegmentData>{//})
+ZSegmentator=object(GZVector{-}<ZPolySegmentData>{//})
                                                  dir,cp:GDBvertex;
                                                  cdp,angle:GDBDouble;
                                                  pcurrsegment:PZPolySegmentData;

@@ -19,7 +19,7 @@
 unit UGDBGraf;
 {$INCLUDE zcadconfig.inc}
 interface
-uses varman,uzedrawingdef,varmandef,UGDBPoint3DArray,uzbtypesbase,gzctnrvectordata,
+uses varman,uzedrawingdef,varmandef,UGDBPoint3DArray,uzbtypesbase,gzctnrVector,
      uzegeometrytypes,sysutils,uzbtypes,uzegeometry,uzeentity,UGDBOpenArrayOfPV,
      gzctnrvectortypes,uzcenitiesvariablesextender,uzeentline,math;
 type
@@ -43,7 +43,7 @@ grafelement= object(GDBaseObject)
                   function IsConnectedTo(node:pgrafelement):pgdbobjEntity;
             end;
 {REGISTEROBJECTTYPE GDBGraf}
-GDBGraf= object(GZVectorData{-}<grafelement>{//})(*OpenArrayOfData=grafelement*)
+GDBGraf= object(GZVector{-}<grafelement>{//})(*OpenArrayOfData=grafelement*)
                 constructor init(m:GDBInteger);
                 function addge(v:gdbvertex):pgrafelement;
                 procedure clear;virtual;

@@ -19,12 +19,12 @@
 unit UGDBXYZWStringArray;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzbtypesbase,uzbtypes,gzctnrvectordata,sysutils;
+uses uzbtypesbase,uzbtypes,gzctnrVector,sysutils;
 type
 {EXPORT+}
 PGDBXYZWGDBStringArray=^XYZWGDBGDBStringArray;
 {REGISTEROBJECTTYPE XYZWGDBGDBStringArray}
-XYZWGDBGDBStringArray= object(GZVectorData{-}<GDBStrWithPoint>{//})
+XYZWGDBGDBStringArray= object(GZVector{-}<GDBStrWithPoint>{//})
                              constructor init(m:GDBInteger);
                              procedure freeelement(PItem:PT);virtual;
                              //function add(p:GDBPointer):TArrayIndex;virtual;

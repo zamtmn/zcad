@@ -20,7 +20,7 @@ unit uzeentdimradial;
 
 interface
 uses uzeentityfactory,uzeentdimdiametric,uzeentdimension,uzestylesdim,
-     uzestyleslayers,uzedrawingdef,uzbstrproc,UGDBOpenArrayOfByte,
+     uzestyleslayers,uzedrawingdef,uzbstrproc,uzctnrVectorBytes,
      uzegeometry,uzbtypesbase,sysutils,uzeentity,uzbtypes,uzeconsts,uzeffdxfsupport,
      uzegeometrytypes,uzeentsubordinated;
 (*
@@ -50,7 +50,7 @@ GDBObjRadialDimension= object(GDBObjDiametricDimension)
                         function P11ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                         function GetRadius:GDBDouble;virtual;
 
-                        procedure SaveToDXF(var outhandle:GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                        procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                         function GetObjType:TObjID;virtual;
                    end;
 {EXPORT-}

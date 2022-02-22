@@ -20,17 +20,17 @@ unit UEnumDescriptor;
 
 {$MODE DELPHI}
 interface
-uses types,sysutils,UGDBOpenArrayOfByte,TypeDescriptors,
-     gzctnrvectortypes,uzedimensionaltypes,uzbtypesbase,varmandef,uzbtypes,gzctnrvectordata,uzctnrvectorstrings;
+uses types,sysutils,uzctnrVectorBytes,TypeDescriptors,
+     gzctnrvectortypes,uzedimensionaltypes,uzbtypesbase,varmandef,uzbtypes,gzctnrVector,uzctnrvectorstrings;
 resourcestring
   rsDifferent='Different';
 type
 PTByteVector=^TByteVector;
-TByteVector=GZVectorData<Byte>;
+TByteVector=GZVector<Byte>;
 PTWordVector=^TWordVector;
-TWordVector=GZVectorData<Word>;
+TWordVector=GZVector<Word>;
 PTCardinalVector=^TCardinalVector;
-TCardinalVector=GZVectorData<Cardinal>;
+TCardinalVector=GZVector<Cardinal>;
 PEnumDescriptor=^EnumDescriptor;
 EnumDescriptor=object(TUserTypeDescriptor)
                      SourceValue:TZctnrVectorStrings;
@@ -40,8 +40,8 @@ EnumDescriptor=object(TUserTypeDescriptor)
                      function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
                      function CreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:TInternalScriptString;preferedHeight:integer):TEditorDesc;virtual;
                      function GetNumberInArrays(addr:Pointer;out number:GDBLongword):GDBBoolean;virtual;
-                     //function Serialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
-                     //function DeSerialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
+                     //function Serialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:PTZctnrVectorBytes;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
+                     //function DeSerialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:TZctnrVectorBytes;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
                      function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
                      function GetUserValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
                      destructor Done;virtual;

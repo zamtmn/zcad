@@ -21,7 +21,7 @@ unit uzeiopalette;
 interface
 uses uzbpaths,uzepalette,uzcstrconsts,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
      uzbstrproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}{log,}sysutils,
-     UGDBOpenArrayOfByte,uzbtypesbase,gstack;
+     uzctnrVectorBytes,uzbtypesbase,gstack;
 type
   TPaletteStack=TStack<TGDBPalette>;
 var
@@ -51,7 +51,7 @@ procedure readpalette;
 var
   i,code:GDBInteger;
   line,sub:GDBString;
-  f:GDBOpenArrayOfByte;
+  f:TZctnrVectorBytes;
 begin
   f.InitFromFile(ProgramPath+filename);
   while f.notEOF do

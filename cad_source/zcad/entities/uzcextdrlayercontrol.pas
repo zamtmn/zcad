@@ -21,7 +21,7 @@ unit uzcExtdrLayerControl;
 interface
 
 uses SysUtils,uzedrawingdef,uzeentityextender,
-     uzeentdevice,TypeDescriptors,uzetextpreprocessor,UGDBOpenArrayOfByte,
+     uzeentdevice,TypeDescriptors,uzetextpreprocessor,uzctnrVectorBytes,
      uzbtypesbase,uzbtypes,uzeentsubordinated,uzeentity,uzeenttext,uzeblockdef,
      varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
      uzeffdxfsupport,uzcvariablesutils,usimplegenerics,
@@ -52,7 +52,7 @@ type
       procedure GetVariableValue(Var Result : TFPExpressionResult; ConstRef AName : ShortString);
       procedure onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
       procedure onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
-      procedure SaveToDxf(var outhandle:GDBOpenArrayOfByte;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
+      procedure SaveToDxf(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
       procedure ReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);override;
       procedure PostLoad(var context:TIODXFLoadContext);override;
       class function EntIOLoadGoodLayer(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
@@ -281,7 +281,7 @@ begin
   result:=LayerControlExtenderName;
 end;
 
-procedure TLayerControlExtender.SaveToDxf(var outhandle:GDBOpenArrayOfByte;PEnt:Pointer;var IODXFContext:TIODXFContext);
+procedure TLayerControlExtender.SaveToDxf(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
 begin
   dxfGDBStringout(outhandle,1000,'LCGoodLayer='+GoodLayer);
   dxfGDBStringout(outhandle,1000,'LCBadLayer='+BadLayer);

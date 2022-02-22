@@ -20,7 +20,7 @@ unit uzcLog;
 {$INCLUDE zcadconfig.inc}
 {$mode objfpc}{$H+}
 interface
-uses UGDBOpenArrayOfByte,LazLoggerBase,
+uses uzctnrVectorBytes,LazLoggerBase,
      LazLogger,sysutils{$IFNDEF DELPHI},LazUTF8{$ENDIF},
      uzblog;
 const {$IFDEF DELPHI}filelog='log/zcad_delphi.log';{$ENDIF}

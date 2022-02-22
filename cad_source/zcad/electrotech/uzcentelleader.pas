@@ -10,7 +10,7 @@ unit uzcentelleader;
 interface
 uses uzcenitiesvariablesextender,uzeentityfactory,Varman,uzgldrawcontext,
      uzeentabstracttext,uzeentgenericsubentry,uzetrash,uzedrawingdef,uzecamera,
-     uzcsysvars,uzbstrproc,UGDBOpenArrayOfByte,math,
+     uzcsysvars,uzbstrproc,uzctnrVectorBytes,math,
      uzeenttext,uzeentdevice,uzcentcable,uzeenttable,uzegeometry,
      uzeentline,uzbtypesbase,uzeentcomplex,sysutils,uzctnrvectorstrings,
      gzctnrvectortypes,uzeentity,varmandef,uzbtypes,uzeconsts,uzeffdxfsupport,
@@ -48,13 +48,13 @@ GDBObjElLeader= object(GDBObjComplex)
 
             constructor initnul;
             function Clone(own:GDBPointer):PGDBObjEntity;virtual;
-            procedure SaveToDXF(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-            procedure DXFOut(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+            procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+            procedure DXFOut(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
             function GetObjTypeName:GDBString;virtual;
             function ReturnLastOnMouse(InSubEntry:GDBBoolean):PGDBObjEntity;virtual;
             procedure ImSelected(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger);virtual;
             procedure DeSelect(var SelectedObjCount:GDBInteger;ds2s:TDeSelect2Stage);virtual;
-            procedure SaveToDXFFollow(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+            procedure SaveToDXFFollow(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
             //function InRect:TInRect;virtual;
 
             destructor done;virtual;
@@ -65,7 +65,7 @@ GDBObjElLeader= object(GDBObjComplex)
             function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
             function GetObjType:TObjID;virtual;
             class function GetDXFIOFeatures:TDXFEntIODataManager;static;
-            procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var IODXFContext:TIODXFContext);virtual;
+            procedure SaveToDXFObjXData(var outhandle:{GDBInteger}TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
             end;
 {EXPORT-}
 implementation

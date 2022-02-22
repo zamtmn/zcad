@@ -20,11 +20,11 @@ unit URecordDescriptor;
 
 {$MODE DELPHI}
 interface
-uses LCLProc,UPointerDescriptor,uzbstrproc,{log,}UGDBOpenArrayOfByte,sysutils,UBaseTypeDescriptor,
-  gzctnrvectortypes,uzedimensionaltypes,TypeDescriptors,gzctnrvectordata,uzbtypesbase,
+uses LCLProc,UPointerDescriptor,uzbstrproc,uzctnrVectorBytes,sysutils,UBaseTypeDescriptor,
+  gzctnrvectortypes,uzedimensionaltypes,TypeDescriptors,gzctnrVector,uzbtypesbase,
   TypInfo,varmandef,uzbtypes,uzbLogIntf;
 type
-TFieldDescriptor=GZVectorData<FieldDescriptor>;
+TFieldDescriptor=GZVector<FieldDescriptor>;
 PRecordDescriptor=^RecordDescriptor;
 RecordDescriptor=object(TUserTypeDescriptor)
                        Fields:{GDBOpenArrayOfData}TFieldDescriptor;
@@ -37,12 +37,12 @@ RecordDescriptor=object(TUserTypeDescriptor)
                        procedure ApplyOperator(oper,path:TInternalScriptString;var offset:Integer;out tc:PUserTypeDescriptor);virtual;
                        procedure AddConstField(const fd:FieldDescriptor);
                        procedure CopyTo(RD:PTUserTypeDescriptor);
-                       //function Serialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
-                       //function DeSerialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
+                       //function Serialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:PTZctnrVectorBytes;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
+                       //function DeSerialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:TZctnrVectorBytes;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
                        function GetTypeAttributes:TTypeAttr;virtual;
                        procedure MagicFreeInstance(PInstance:Pointer);virtual;
                        destructor Done;virtual;
-                       procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:Pointer;prefix:TInternalScriptString);virtual;
+                       procedure SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;prefix:TInternalScriptString);virtual;
                        procedure MagicAfterCopyInstance(PInstance:Pointer);virtual;
                        function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
                        procedure RegisterTypeinfo(ti:PTypeInfo);virtual;
@@ -247,7 +247,7 @@ begin
               pd:=Fields.iterate(ir);
         until pd=nil;
 end;
-procedure RecordDescriptor.SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:Pointer;prefix:TInternalScriptString);
+procedure RecordDescriptor.SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;prefix:TInternalScriptString);
 var pd:PFieldDescriptor;
 //    d:FieldDescriptor;
     ir:itrec;

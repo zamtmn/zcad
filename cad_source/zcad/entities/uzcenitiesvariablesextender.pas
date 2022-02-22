@@ -20,7 +20,7 @@ unit uzcenitiesvariablesextender;
 
 interface
 uses sysutils,UGDBObjBlockdefArray,uzedrawingdef,uzeentityextender,
-     uzeentdevice,TypeDescriptors,uzetextpreprocessor,UGDBOpenArrayOfByte,
+     uzeentdevice,TypeDescriptors,uzetextpreprocessor,uzctnrVectorBytes,
      uzbtypesbase,uzbtypes,uzeentsubordinated,uzeentity,uzeenttext,uzeblockdef,
      varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
      uzeentitiestree,usimplegenerics,uzeffdxfsupport,uzbpaths,uzctranslations,
@@ -62,7 +62,7 @@ TVariablesExtender=class(TBaseVariablesExtender)
     class function EntIOLoadUSES(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
     class function EntIOLoadMainFunction(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 
-    procedure SaveToDxf(var outhandle:GDBOpenArrayOfByte;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
+    procedure SaveToDxf(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
   end;
 
 var
@@ -343,7 +343,7 @@ begin
   result:=true;
 end;
 
-procedure TVariablesExtender.SaveToDxf(var outhandle:GDBOpenArrayOfByte;PEnt:Pointer;var IODXFContext:TIODXFContext);
+procedure TVariablesExtender.SaveToDxf(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
 var
    ishavevars:boolean;
    pvd:pvardesk;

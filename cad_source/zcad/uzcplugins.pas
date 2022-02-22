@@ -19,7 +19,7 @@
 unit uzcplugins;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzbtypesbase,sysutils, dynlibs, uzclog,gzctnrvectordata,uzeentity,
+uses uzbtypesbase,sysutils, dynlibs, uzclog,gzctnrVector,uzeentity,
      LazLogger;
 type
     {Export+}
@@ -57,7 +57,7 @@ type
                     end;
   PGDBPluginsArray=^GDBPluginsArray;
   {REGISTEROBJECTTYPE GDBPluginsArray}
-  GDBPluginsArray= object(GZVectorData<moduledesc>)
+  GDBPluginsArray= object(GZVector<moduledesc>)
                         constructor init(m:GDBInteger);
                         procedure loadplugins(path: GDBString);
                   end;

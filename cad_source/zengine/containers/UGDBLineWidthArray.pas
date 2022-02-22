@@ -19,11 +19,11 @@
 unit UGDBLineWidthArray;
 {$INCLUDE zcadconfig.inc}
 interface
-uses gzctnrvectordata,sysutils,uzbtypes;
+uses gzctnrVector,sysutils,uzbtypes;
 type
 {Export+}
 {REGISTEROBJECTTYPE GDBLineWidthArray}
-GDBLineWidthArray= object(GZVectorData{-}<GLLWWidth>{//})(*OpenArrayOfData=GLLWWidth*)
+GDBLineWidthArray= object(GZVector{-}<GLLWWidth>{//})(*OpenArrayOfData=GLLWWidth*)
              end;
 {Export-}
 implementation

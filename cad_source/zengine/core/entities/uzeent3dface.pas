@@ -22,7 +22,7 @@ interface
 uses
     uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,
     uzegeometry,uzeffdxfsupport,uzestyleslayers,uzbtypesbase,UGDBSelectedObjArray,uzeentsubordinated,
-    uzegeometrytypes,uzeent3d,uzeentity,sysutils,UGDBOpenArrayOfByte,uzbtypes,uzeconsts,uzctnrvectorpgdbaseobjects;
+    uzegeometrytypes,uzeent3d,uzeentity,sysutils,uzctnrVectorBytes,uzbtypes,uzeconsts,uzctnrvectorpgdbaseobjects;
 type
 {Export+}
 {REGISTEROBJECTTYPE GDBObj3DFace}
@@ -37,8 +37,8 @@ GDBObj3DFace= object(GDBObj3d)
                  //ProjPoint:GDBvertex;
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
-                 procedure SaveToDXF(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure LoadFromDXF(var f:TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                 procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
 
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;

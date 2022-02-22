@@ -21,7 +21,7 @@ unit uzcregisterenitiesextenders;
 interface
 uses sysutils,
      uzcenitiesvariablesextender,uzccomdb,uzcentcable,uzcentnet,uzeentdevice,TypeDescriptors,
-     uzetextpreprocessor,UGDBOpenArrayOfByte,uzeobjectextender,
+     uzetextpreprocessor,uzctnrVectorBytes,uzeobjectextender,
      uzeentity,uzeenttext,uzeblockdef,varmandef,Varman,UUnitManager,
      uzventsuperline,uzcentelleader,
      URecordDescriptor,UBaseTypeDescriptor;

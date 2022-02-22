@@ -25,7 +25,7 @@ uses uzcinterface,uzgldrawcontext,uzeentityfactory,
      uzeentcircle,uzeentarc,uzeentline,
      uzegeometry,uzbtypesbase,uzclog,
      sysutils,uzeconsts,
-     UGDBOpenArrayOfByte,uzeentity;
+     uzctnrVectorBytes,uzeentity;
 {$IFNDEF DELPHI}
 procedure Import(name: GDBString;var drawing:TSimpleDrawing);
 {$ENDIF}

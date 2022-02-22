@@ -23,7 +23,7 @@ uses
   sysutils,
   uzbtypesbase,uzbtypes,
   math,uzegeometry,
-  UGDBOpenArrayOfByte,
+  uzctnrVectorBytes,
   uzedrawingdef,uzgldrawcontext,
   uzeffdxfsupport,
   uzeentdevice,uzeentsubordinated,uzeentity,uzeenttext,uzeblockdef,uzeentmtext,uzeentwithlocalcs,
@@ -40,7 +40,7 @@ type
     procedure Assign(Source:TBaseExtender);override;
     procedure onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
     procedure onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
-    procedure SaveToDxf(var outhandle:GDBOpenArrayOfByte;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
+    procedure SaveToDxf(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
     procedure PostLoad(var context:TIODXFLoadContext);override;
     procedure onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);override;
   end;
@@ -89,7 +89,7 @@ begin
   result:=SmartTextEntExtenderName;
 end;
 
-procedure TSmartTextEntExtender.SaveToDxf(var outhandle:GDBOpenArrayOfByte;PEnt:Pointer;var IODXFContext:TIODXFContext);
+procedure TSmartTextEntExtender.SaveToDxf(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
 begin
 end;
 

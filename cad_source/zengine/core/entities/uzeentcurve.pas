@@ -21,7 +21,7 @@ unit uzeentcurve;
 
 interface
 uses uzgldrawcontext,uzedrawingdef,uzecamera,
-     UGDBOpenArrayOfByte,uzestyleslayers,uzbtypesbase,UGDBVectorSnapArray,
+     uzctnrVectorBytes,uzestyleslayers,uzbtypesbase,UGDBVectorSnapArray,
      UGDBSelectedObjArray,uzeent3d,uzeentity,UGDBPolyLine2DArray,UGDBPoint3DArray,
      uzbtypes,uzegeometry,uzeconsts,uzglviewareadata,uzeffdxfsupport,sysutils,
      gzctnrvectortypes,uzegeometrytypes,uzeentsubordinated,uzctnrvectorpgdbaseobjects;
@@ -60,7 +60,7 @@ GDBObjCurve= object(GDBObj3d)
 
                  procedure AddVertex(Vertex:GDBVertex);virtual;
 
-                 procedure SaveToDXFfollow(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXFfollow(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
                  procedure transform(const t_matrix:DMatrix4D);virtual;
 

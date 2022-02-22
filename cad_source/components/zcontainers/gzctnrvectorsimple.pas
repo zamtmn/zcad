@@ -19,7 +19,7 @@
 unit gzctnrvectorsimple;
 
 interface
-uses {uzbtypesbase,uzbtypes,}gzctnrvector;
+uses {uzbtypesbase,uzbtypes,}gzctnrVector;
 type
 {Export+}
 {----REGISTEROBJECTTYPE GZVectorSimple}

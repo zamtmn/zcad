@@ -31,7 +31,7 @@ uses
        uzcsysparams,gzctnrvectortypes,uzemathutils,uzelongprocesssupport,
        uzgldrawergdi,uzcdrawing,UGDBOpenArrayOfPV,uzedrawingabstract,
        uzepalette,uzbpaths,uzglviewareadata,uzeentitiesprop,uzcinterface,
-       UGDBOpenArrayOfByte,uzbtypesbase,uzbtypes,
+       uzctnrVectorBytes,uzbtypesbase,uzbtypes,
        uzegeometry,uzcsysvars,uzcstrconsts,uzbstrproc,uzclog,uzblog,
        uzedimensionaltypes,varmandef, varman,UUnitManager,uzcsysinfo,strmy,uzestylestexts,uzestylesdim,
   uzbexceptionscl,uzbexceptionsgui,
@@ -428,7 +428,7 @@ end;
 function IsRealyQuit:GDBBoolean;
 var
    pint:PGDBInteger;
-   //mem:GDBOpenArrayOfByte;
+   //mem:TZctnrVectorBytes;
    i:integer;
    dr:TZCMsgDialogResult;
    GVA:TGeneralViewArea;

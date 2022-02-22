@@ -20,9 +20,9 @@ unit UObjectDescriptor;
 
 {$MODE DELPHI}
 interface
-uses LCLProc,gzctnrvectorobjects,URecordDescriptor,UGDBOpenArrayOfByte,sysutils,
+uses LCLProc,gzctnrvectorobjects,URecordDescriptor,uzctnrVectorBytes,sysutils,
      gzctnrvectortypes,uzedimensionaltypes,UBaseTypeDescriptor,TypeDescriptors,
-     strmy,uzctnrvectorstrings,objects,gzctnrvectordata,uzbtypesbase,
+     strmy,uzctnrvectorstrings,objects,gzctnrVector,uzbtypesbase,
      varmandef,uzbtypes,uzbstrproc,TypInfo,uzbLogIntf;
 type
 GDBTOperandStoreMode=GDBByte;
@@ -31,7 +31,7 @@ GDBOperandDesc=record
                      StoreMode:GDBTOperandStoreMode;
                end;
 GDBMetodModifier=GDBWord;
-TOperandsVector=GZVectorData<GDBOperandDesc>;
+TOperandsVector=GZVector<GDBOperandDesc>;
 PMetodDescriptor=^MetodDescriptor;
 MetodDescriptor=object(GDBaseObject)
                       objname:GDBString;
@@ -48,7 +48,7 @@ MetodDescriptor=object(GDBaseObject)
                 end;
 simpleproc=procedure of object;
 TSimpleMenodsVector=GZVectorObjects<PMetodDescriptor,MetodDescriptor>;
-TPropertiesVector=GZVectorData<PropertyDescriptor>;
+TPropertiesVector=GZVector<PropertyDescriptor>;
 
 PObjectDescriptor=^ObjectDescriptor;
 ObjectDescriptor=object(RecordDescriptor)
@@ -58,7 +58,7 @@ ObjectDescriptor=object(RecordDescriptor)
                        SimpleMenods:{GDBOpenArrayOfObjects}TSimpleMenodsVector;
                        LincedData:GDBString;
                        LincedObjects:GDBboolean;
-                       ColArray:GDBOpenArrayOfByte;
+                       ColArray:TZctnrVectorBytes;
                        Properties:TPropertiesVector;
 
 
@@ -75,18 +75,18 @@ ObjectDescriptor=object(RecordDescriptor)
                        procedure RunMetod(mn:TInternalScriptString;obj:Pointer);
                        procedure SimpleRunMetodWithArg(mn:TInternalScriptString;obj,arg:Pointer);
                        procedure RunDefaultConstructor(PInstance:Pointer);
-                       //function Serialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
-                       //function DeSerialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
+                       //function Serialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:PTZctnrVectorBytes;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
+                       //function DeSerialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:TZctnrVectorBytes;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
                        destructor Done;virtual;
                        function GetTypeAttributes:TTypeAttr;virtual;
-                       procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:Pointer;prefix:TInternalScriptString);virtual;
+                       procedure SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;prefix:TInternalScriptString);virtual;
                        procedure MagicFreeInstance(PInstance:Pointer);virtual;
                        procedure RegisterTypeinfo(ti:PTypeInfo);virtual;
                        procedure CorrectFieldsOffset(ti: PTypeInfo);
                        procedure CorrectCurrentFieldsOffset(td:PTypeData;var i:integer);
                  end;
 PTGenericVectorData=^TGenericVectorData;
-TGenericVectorData=GZVectorData<byte>;
+TGenericVectorData=GZVector<byte>;
 implementation
 uses varman;
 destructor MetodDescriptor.Done;
@@ -231,7 +231,7 @@ begin
      //Pointer(pd.w):=nil;
 end;
 
-procedure ObjectDescriptor.SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:Pointer;prefix:TInternalScriptString);
+procedure ObjectDescriptor.SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;prefix:TInternalScriptString);
 //var pd:PFieldDescriptor;
 //    d:FieldDescriptor;
 //    ir:itrec;

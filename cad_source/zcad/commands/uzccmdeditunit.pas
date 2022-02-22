@@ -27,7 +27,7 @@ uses
   uzbpaths,
   Varman,
   UUnitManager,
-  UGDBOpenArrayOfByte,
+  uzctnrVectorBytes,
   uzcinterface,
   uzctranslations,
   Controls,
@@ -39,7 +39,7 @@ implementation
 
 function EditUnit(var entityunit:TSimpleUnit):boolean;
 var
-   mem:GDBOpenArrayOfByte;
+   mem:TZctnrVectorBytes;
    //pobj:PGDBObjEntity;
    //op:gdbstring;
    modalresult:integer;

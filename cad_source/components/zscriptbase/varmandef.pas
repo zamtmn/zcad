@@ -22,8 +22,8 @@ unit varmandef;
 interface
 uses
   LCLProc,SysUtils,UGDBTree,gzctnrstl,uzctnrvectorstrings,strutils,//uzbtypesbase,
-  uzedimensionaltypes,UGDBOpenArrayOfByte,//uzbtypes,
-  gzctnrvectortypes,Classes,Controls,StdCtrls,Graphics,types,TypInfo,//gzctnrvector,
+  uzedimensionaltypes,uzctnrVectorBytes,
+  gzctnrvectortypes,Classes,Controls,StdCtrls,Graphics,types,TypInfo,//gzctnrVector,
   uzbLogIntf;
 const
   {Ttypenothing=-1;
@@ -155,9 +155,9 @@ UserTypeDescriptor=object
                          procedure _init(size:Integer;tname:string;pu:pointer);
                          function CreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:TInternalScriptString;preferedHeight:integer):TEditorDesc;virtual;
                          procedure ApplyOperator(oper,path:TInternalScriptString;var offset:Integer;out tc:PUserTypeDescriptor);virtual;abstract;
-                         //function Serialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;abstract;
+                         //function Serialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:PTZctnrVectorBytes;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;abstract;
                          function SerializePreProcess(Value:TInternalScriptString;sub:integer):TInternalScriptString;virtual;
-                         //function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;abstract;
+                         //function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:TZctnrVectorBytes;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;abstract;
                          function GetTypeAttributes:TTypeAttr;virtual;
                          function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
                          function GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;virtual;
@@ -172,7 +172,7 @@ UserTypeDescriptor=object
                          destructor Done;virtual;
                          procedure MagicFreeInstance(PInstance:Pointer);virtual;
                          procedure MagicAfterCopyInstance(PInstance:Pointer);virtual;
-                         procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:Pointer;prefix:TInternalScriptString);virtual;
+                         procedure SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;prefix:TInternalScriptString);virtual;
                          procedure IncAddr(var addr:Pointer);virtual;
                          function GetFactTypedef:PUserTypeDescriptor;virtual;
                          procedure Format;virtual;
@@ -282,7 +282,7 @@ typemanagerdef=object
 {REGISTEROBJECTWITHOUTCONSTRUCTORTYPE varmanagerdef}
 varmanagerdef=object
                  {vardescarray:GDBOpenArrayOfData;
-                 vararray:GDBOpenArrayOfByte;}
+                 vararray:TZctnrVectorBytes;}
                  function findvardesc(varname:TInternalScriptString): pvardesk;virtual;abstract;
                  function createvariable(varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0): pvardesk;virtual;abstract;
                  function createvariable2(varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0):TInVectorAddr;virtual;abstract;
@@ -521,7 +521,7 @@ end;
 procedure UserTypeDescriptor.RegisterTypeinfo(ti:PTypeInfo);
 begin
 end;
-procedure UserTypeDescriptor.SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:Pointer;prefix:TInternalScriptString);
+procedure UserTypeDescriptor.SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;prefix:TInternalScriptString);
 begin
      membuf.TXTAddGDBStringEOL(prefix+':='+{pvd.data.PTD.}GetValueAsString(PInstance)+';');
 end;

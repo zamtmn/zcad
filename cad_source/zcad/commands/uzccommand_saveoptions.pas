@@ -24,7 +24,7 @@ interface
 uses
   LazLogger,
   uzccommandsabstract,uzccommandsimpl,
-  UGDBOpenArrayOfByte,
+  uzctnrVectorBytes,
   uzbpaths,
   Varman,
   uzcsysparams;
@@ -33,7 +33,7 @@ implementation
 
 function SaveOptions_com(operands:TCommandOperands):TCommandResult;
 var
-   mem:GDBOpenArrayOfByte;
+   mem:TZctnrVectorBytes;
 begin
   mem.init(1024);
   SysVarUnit^.SavePasToMem(mem);

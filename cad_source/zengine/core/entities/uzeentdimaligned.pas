@@ -21,7 +21,7 @@ unit uzeentdimaligned;
 interface
 uses uzgldrawcontext,uzeentityfactory,uzeentdimension,uzeentpoint,uzestylesdim,
      uzestyleslayers,uzedrawingdef,uzbstrproc,
-     UGDBOpenArrayOfByte,UGDBControlPointArray,uzegeometry,uzeentline,uzbtypesbase,
+     uzctnrVectorBytes,UGDBControlPointArray,uzegeometry,uzeentline,uzbtypesbase,
      uzeentcomplex,sysutils,UGDBSelectedObjArray,uzeentity,uzbtypes,uzeconsts,
      uzegeometrytypes,uzeffdxfsupport,uzeentsubordinated,
      UGDBOpenArrayOfPV;
@@ -68,7 +68,7 @@ GDBObjAlignedDimension= object(GDBObjDimension)
                       function P14ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                       //function P15ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                       //function P16ChangeTo(tv:GDBVertex):GDBVertex;virtual;
-                       procedure SaveToDXF(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                       procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                        function GetDimStr(var drawing:TDrawingDef):TDXFEntsInternalStringType;virtual;
                        function GetObjType:TObjID;virtual;
                    end;

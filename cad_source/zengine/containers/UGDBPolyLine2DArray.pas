@@ -19,13 +19,13 @@
 unit UGDBPolyLine2DArray;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzegeometrytypes,uzbtypesbase,gzctnrvectordata,sysutils,uzegeometry,
+uses uzegeometrytypes,uzbtypesbase,gzctnrVector,sysutils,uzegeometry,
      gzctnrvectortypes,math;
 type
 {Export+}
 {REGISTEROBJECTTYPE GDBPolyline2DArray}
 PGDBPolyline2DArray=^GDBPolyline2DArray;
-GDBPolyline2DArray= object(GZVectorData{-}<GDBVertex2D>{//})(*OpenArrayOfData=GDBVertex2D*)
+GDBPolyline2DArray= object(GZVector{-}<GDBVertex2D>{//})(*OpenArrayOfData=GDBVertex2D*)
                       closed:GDBBoolean;(*saved_to_shd*)
                       constructor init(m:GDBInteger;c:GDBBoolean);
 

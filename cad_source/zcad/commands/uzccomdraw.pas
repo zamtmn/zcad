@@ -21,7 +21,7 @@ unit uzccomdraw;
 
 interface
 uses
-  gzctnrvector,uzglviewareageneral,
+  gzctnrVector,uzglviewareageneral,
   gzctnrvectortypes,zcmultiobjectcreateundocommand,uzgldrawercanvas,
   uzcoimultiobjects,uzcenitiesvariablesextender,uzcdrawing,uzepalette,
   uzgldrawcontext,usimplegenerics,UGDBPoint3DArray,
@@ -45,7 +45,7 @@ uses
   uzeconsts,
   uzccommand_move,uzccommand_copy,uzccommand_regen,uzccommand_copyclip,
   uzegeometrytypes,uzeentity,uzeentcircle,uzeentline,uzeentgenericsubentry,uzeentmtext,
-  uzeentsubordinated,uzeentblockinsert,uzeentpolyline,uzclog,gzctnrvectordata,
+  uzeentsubordinated,uzeentblockinsert,uzeentpolyline,uzclog,
   math,uzeenttable,uzctnrvectorstrings,
   uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray
   ,uzelongprocesssupport,LazLogger,uzccommand_circle2,uzccommand_erase,uzccmdfloatinsert,
@@ -136,7 +136,7 @@ type
               end;
   ptpcoavector=^tpcoavector;
   tpcoavector={-}specialize{//}
-              GZVectorData{-}<TCopyObjectDesc>{//};
+              GZVector{-}<TCopyObjectDesc>{//};
   {REGISTEROBJECTTYPE mirror_com}
   mirror_com =  object(copy_com)
     function CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D; virtual;

@@ -28,7 +28,7 @@ uses
   uzbpaths,
   uzccmdinfoform,
   uzccommandsabstract,uzccommandsimpl,
-  UGDBOpenArrayOfByte,
+  uzctnrVectorBytes,
   uzeentity,
   gzctnrvectortypes,
   uzcenitiesvariablesextender,
@@ -42,7 +42,7 @@ implementation
 
 function MultiObjVarMan_com(operands:TCommandOperands):TCommandResult;
 var
-  mem:GDBOpenArrayOfByte;
+  mem:TZctnrVectorBytes;
   pobj:PGDBObjEntity;
   modalresult:integer;
   u8s:UTF8String;

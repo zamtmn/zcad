@@ -35,7 +35,7 @@ uses
   sysutils,
   varmandef,
   uzglviewareadata,
-  UGDBOpenArrayOfByte,
+  uzctnrVectorBytes,
   uzeffdxf,
   uzcinterface,
   uzeentity,

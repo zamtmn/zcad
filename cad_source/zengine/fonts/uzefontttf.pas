@@ -61,7 +61,7 @@ var
    trmode:TTriangulationMode;
    CurrentLLentity:TArrayIndex;
    triangle:array[0..2] of integer;
-{procedure adddcross(shx:PGDBOpenArrayOfByte;var size:GDBWord;x,y:fontfloat);
+{procedure adddcross(shx:PTZctnrVectorBytes;var size:GDBWord;x,y:fontfloat);
 const
      s=0.01;
 begin
@@ -87,7 +87,7 @@ begin
     shx.AddFontFloat(@y);
     inc(size);
 end;
-procedure addgcross(shx:PGDBOpenArrayOfByte;var size:GDBWord;x,y:fontfloat);
+procedure addgcross(shx:PTZctnrVectorBytes;var size:GDBWord;x,y:fontfloat);
 const
      s=0.01;
 begin

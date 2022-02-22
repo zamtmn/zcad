@@ -19,12 +19,12 @@
 unit UGDBOutbound2DIArray;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzegeometrytypes,uzgldrawcontext,uzbtypesbase,gzctnrvectordata,sysutils,uzegeometry;
+uses uzegeometrytypes,uzgldrawcontext,uzbtypesbase,gzctnrVector,sysutils,uzegeometry;
 type
 {Export+}
 PGDBOOutbound2DIArray=^GDBOOutbound2DIArray;
 {REGISTEROBJECTTYPE GDBOOutbound2DIArray}
-GDBOOutbound2DIArray= object(GZVectorData{-}<GDBvertex2DI>{//})
+GDBOOutbound2DIArray= object(GZVector{-}<GDBvertex2DI>{//})
                       procedure DrawGeometry(var DC:TDrawContext);virtual;
                       function InRect(Frame1, Frame2: GDBvertex2DI):TInBoundingVolume;virtual;
                       function perimetr:GDBDouble;virtual;

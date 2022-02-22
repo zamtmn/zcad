@@ -144,7 +144,7 @@ var
    VerboseLog:boolean;
 implementation
 var
-  PerfomaneBuf:TMemoryStream;// GDBOpenArrayOfByte;
+  PerfomaneBuf:TMemoryStream;// TZctnrVectorBytes;
 function TDoEnteredHelper.IfEntered:TEntered;
 begin
   result.Entered:=Entered;

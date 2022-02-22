@@ -19,7 +19,7 @@
 unit gzctnrvectorpobjects;
 
 interface
-uses gzctnrvectorpdata,gzctnrvector,
+uses gzctnrvectorpdata,gzctnrVector,
      typinfo;
 type
 {Export+}

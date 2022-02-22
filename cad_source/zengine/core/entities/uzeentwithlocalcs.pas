@@ -21,7 +21,7 @@ unit uzeentwithlocalcs;
 
 interface
 uses uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,uzbtypesbase,uzeentity,
-     uzegeometrytypes,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,uzeentwithmatrix,uzbtypes,
+     uzegeometrytypes,UGDBOutbound2DIArray,uzctnrVectorBytes,uzeentwithmatrix,uzbtypes,
      uzegeometry,uzeffdxfsupport,sysutils,uzeentsubordinated,uzestyleslayers;
 type
 //pprojoutbound:{-}PGDBOOutbound2DIArray{/GDBPointer/};
@@ -45,8 +45,8 @@ GDBObjWithLocalCS= object(GDBObjWithMatrix)
                constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                constructor initnul(owner:PGDBObjGenericWithSubordinated);
                destructor done;virtual;
-               procedure SaveToDXFObjPostfix(var outhandle:{GDBInteger}GDBOpenArrayOfByte);
-               function LoadFromDXFObjShared(var f:GDBOpenArrayOfByte;dxfcod:GDBInteger;ptu:PExtensionData;var drawing:TDrawingDef):GDBBoolean;
+               procedure SaveToDXFObjPostfix(var outhandle:{GDBInteger}TZctnrVectorBytes);
+               function LoadFromDXFObjShared(var f:TZctnrVectorBytes;dxfcod:GDBInteger;ptu:PExtensionData;var drawing:TDrawingDef):GDBBoolean;
 
                procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                procedure CalcObjMatrix;virtual;

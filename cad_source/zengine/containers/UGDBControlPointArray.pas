@@ -19,13 +19,13 @@
 unit UGDBControlPointArray;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzepalette,uzgldrawcontext,uzbtypesbase,gzctnrvectordata,sysutils,uzbtypes,uzegeometry,
+uses uzepalette,uzgldrawcontext,uzbtypesbase,gzctnrVector,sysutils,uzbtypes,uzegeometry,
      uzegeometrytypes;
 type
 {Export+}
 PGDBControlPointArray=^GDBControlPointArray;
 {REGISTEROBJECTTYPE GDBControlPointArray}
-GDBControlPointArray= object(GZVectorData{-}<controlpointdesc>{//})
+GDBControlPointArray= object(GZVector{-}<controlpointdesc>{//})
                            SelectedCount:GDBInteger;
 
                            destructor done;virtual;

@@ -23,7 +23,7 @@ interface
 uses
       typinfo,LCLProc,Graphics,classes,Themes,
       gzctnrvectortypes,uzemathutils,uzegeometry,uzbstrproc,TypeDescriptors,
-      sysutils,UGDBOpenArrayOfByte,uzbtypesbase,
+      sysutils,uzctnrVectorBytes,uzbtypesbase,
       USinonimDescriptor,uzedimensionaltypes,varmandef,uzbtypes,
       base64,uzctnrvectorstrings,math,uzbLogIntf;
 resourcestring
@@ -124,11 +124,11 @@ GDBUnicodeStringDescriptor=object(GDBStringGeneralDescriptor<UnicodeString,TSTM_
                     end;
 TSTM_String=TStringTypeManipulator<String>;
 GDBStringDescriptor=object(GDBStringGeneralDescriptor<string,{TStringTypeManipulator<string>}TSTM_String>)
-                          procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:Pointer;prefix:TInternalScriptString);virtual;
+                          procedure SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;prefix:TInternalScriptString);virtual;
                     end;
 TASTM_String=TAnsiStringTypeManipulator<String>;
 GDBAnsiStringDescriptor=object(GDBStringGeneralDescriptor<string,{TAnsiStringTypeManipulator<string>}TASTM_String>)
-                          procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:Pointer;prefix:TInternalScriptString);virtual;
+                          procedure SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;prefix:TInternalScriptString);virtual;
                     end;
 TPTM_Pointer=TPointerTypeManipulator<Pointer>;
 PointerDescriptor=object(BaseTypeDescriptor<pointer,{TPointerTypeManipulator<Pointer>}TPTM_Pointer>)

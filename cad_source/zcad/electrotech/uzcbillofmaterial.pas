@@ -19,7 +19,7 @@
 unit uzcbillofmaterial;
 {$INCLUDE zcadconfig.inc}
 interface
-uses gzctnrvectortypes,uzbtypesbase,gzctnrvectordata,sysutils;
+uses gzctnrvectortypes,uzbtypesbase,gzctnrVector,sysutils;
 type
 {EXPORT+}
 PGDBBOMItem=^GDBBOMItem;
@@ -32,7 +32,7 @@ GDBBOMItem=record
                 end;
 PBbillOfMaterial=^GDBBbillOfMaterial;
 {REGISTEROBJECTTYPE GDBBbillOfMaterial}
-GDBBbillOfMaterial= object(GZVectorData{-}<GDBBOMItem>{//})(*OpenArrayOfData=GDBNumItem*)
+GDBBbillOfMaterial= object(GZVector{-}<GDBBOMItem>{//})(*OpenArrayOfData=GDBNumItem*)
                        constructor init(m:GDBInteger);
                        procedure freeelement(PItem:PT);virtual;
                        //function getnamenumber(_Name:GDBString):GDBstring;

@@ -21,7 +21,7 @@ unit uzeentitiestree;
 interface
 uses
     gzctnrvectortypes,graphics,gzctnrvectorsimple,gzctnrvectorpobjects,
-    uzegeometrytypes,gzctnrtree,uzgldrawcontext,uzegeometry,UGDBVisibleOpenArray,uzeentity,uzbtypesbase,uzbtypes;
+    uzegeometrytypes,gzctnrBinarySeparatedTree,uzgldrawcontext,uzegeometry,UGDBVisibleOpenArray,uzeentity,uzbtypesbase,uzbtypes;
 type
 TZEntsManipulator=class;
 TFirstStageData=record

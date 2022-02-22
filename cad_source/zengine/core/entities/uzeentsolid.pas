@@ -22,7 +22,7 @@ interface
 uses
     uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,uzeentwithlocalcs,
     uzegeometry,uzeffdxfsupport,uzestyleslayers,uzbtypesbase,
-    UGDBSelectedObjArray,uzeentsubordinated,uzeentity,sysutils,UGDBOpenArrayOfByte,
+    UGDBSelectedObjArray,uzeentsubordinated,uzeentity,sysutils,uzctnrVectorBytes,
     uzegeometrytypes,uzbtypes,uzeconsts,uzctnrvectorpgdbaseobjects;
 type
 {Export+}
@@ -38,8 +38,8 @@ GDBObjSolid= object(GDBObjWithLocalCS)
                  //ProjPoint:GDBvertex;
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
-                 procedure SaveToDXF(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure LoadFromDXF(var f:TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                 procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure createpoint;virtual;
 

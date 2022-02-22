@@ -22,7 +22,7 @@ unit uzeentdevice;
 interface
 uses uzestyleslayers,uzepalette,uzeobjectextender,uabstractunit,uzeentityfactory,
      uzgldrawcontext,uzedrawingdef,uzecamera,uzcsysvars,sysutils,
-     UGDBOpenArrayOfByte,uunitmanager,uzegeometry,
+     uzctnrVectorBytes,uunitmanager,uzegeometry,
      uzeconsts,uzeentity,uzeentsubordinated,varmandef,uzbtypesbase,
      uzegeometrytypes,uzeentblockinsert,uzbtypes,UGDBVisibleOpenArray,UGDBObjBlockdefArray,
      gzctnrvectortypes,uzeblockdef,uzeffdxfsupport,UGDBSelectedObjArray,uzeentitiestree,
@@ -60,8 +60,8 @@ GDBObjDevice= object(GDBObjBlockInsert)
                    procedure BuildGeometry(var drawing:TDrawingDef);virtual;
                    procedure BuildVarGeometry(var drawing:TDrawingDef);virtual;
 
-                   procedure SaveToDXFFollow(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                   procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var IODXFContext:TIODXFContext);virtual;
+                   procedure SaveToDXFFollow(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                   procedure SaveToDXFObjXData(var outhandle:{GDBInteger}TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
                    procedure AddMi(pobj:PGDBObjSubordinated);virtual;
                    //procedure select;virtual;
                    procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;
@@ -235,7 +235,7 @@ begin
      //historyout('Device DXFOut end');
      //self.CalcObjMatrix;
 end;
-procedure GDBObjDevice.SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte;var IODXFContext:TIODXFContext);
+procedure GDBObjDevice.SaveToDXFObjXData(var outhandle:{GDBInteger}TZctnrVectorBytes;var IODXFContext:TIODXFContext);
 //var
    //s:gdbstring;
 begin

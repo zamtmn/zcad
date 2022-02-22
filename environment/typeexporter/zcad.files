@@ -16,7 +16,6 @@ components/zmath/uzegeometrytypes.pas
 components/zmath/uzedimensionaltypes.pas
 components/zebase/uzbtypesbase.pas
 components/zebase/uzbtypes.pas
-components/zebase/uzctnrvectorpgdbaseobjects.pas
 zengine/core/objects/uzepalette.pas
 zcad/uzcsysparams.pas
 zengine/containers/UGDBOpenArrayOfPV.pas
@@ -27,6 +26,7 @@ zengine/containers/UGDBPoint3DArray.pas
 zengine/containers/UGDBPolyLine2DArray.pas
 zengine/containers/UGDBPolyPoint2DArray.pas
 zengine/containers/UGDBSelectedObjArray.pas
+zengine/containers/uzctnrvectorpgdbaseobjects.pas
 zengine/fonts/uzefontbase.pas
 zengine/fonts/uzefontshx.pas
 zengine/fonts/uzefont.pas

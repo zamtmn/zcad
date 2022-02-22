@@ -27,7 +27,7 @@ uses
   gzctnrvectortypes,uzctnrvectorstrings,varmandef,gzctnrSTL,
   TypeDescriptors,URecordDescriptor,UObjectDescriptor,uzbstrproc,classes,typinfo,
   UPointerDescriptor,
-  uzctnrvectorpgdbaseobjects,gzctnrVectorPData,gzctnrVector,
+  gzctnrVectorPData,gzctnrVector,
   uzbLogIntf,uzctnrAlignedVectorBytes;
 type
     td=record
@@ -149,7 +149,6 @@ TFieldNames=set of TFieldName;
 {EXPORT+}
 TZctnrVectorPUserTypeDescriptors=object(GZVectorPData{-}<PUserTypeDescriptor>{//})
                            end;
-PGDBOpenArrayOfPObjects=^TZctnrVectorPGDBaseObjects;
 ptypemanager=^typemanager;
 {REGISTEROBJECTWITHOUTCONSTRUCTORTYPE typemanager}
 typemanager=object(typemanagerdef)

@@ -35,10 +35,6 @@
         <Filename Value="uzbpaths.pas"/>
         <UnitName Value="uzbpaths"/>
       </Item>
-      <Item>
-        <Filename Value="uzctnrvectorpgdbaseobjects.pas"/>
-        <UnitName Value="uzctnrvectorpgdbaseobjects"/>
-      </Item>
     </Files>
     <RequiredPkgs>
       <Item>

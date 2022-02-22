@@ -19,14 +19,15 @@
 unit uzgprimitivessarray;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzctnrobjectschunk;
+uses gzctnrAlignedVectorObjects,uzbtypes;
 type
 {Export+}
 PTLLPrimitivesArray=^TLLPrimitivesArray;
 {REGISTEROBJECTTYPE TLLPrimitivesArray}
-TLLPrimitivesArray= object(TObjectsChunk)(*OpenArrayOfData=GDBByte*)
+TLLPrimitivesArray= object(GZAlignedVectorObjects{-}<PGDBaseObject>{//})(*OpenArrayOfData=GDBByte*)
              end;
 {Export-}
+{ #todo : Убрать PGDBaseObject, сделать абстрактный примитив }
 implementation
 begin
 end.

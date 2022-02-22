@@ -10,9 +10,9 @@ interface
 uses
   gzctnrVector, gzctnrVectorSimple, gzctnrVectorObjects, gzctnrVectorP, 
   gzctnrVectorPData, gzctnrVectorPObjects, gzctnrBinarySeparatedTree, 
-  gzctnrSTL, gzctnrAlignedVector, UGDBTree, gzctnrVectorStr,
+  gzctnrSTL, uzctnrAlignedVectorBytes, gzctnrVectorStr, uzctnrTree, 
   uzctnrVectorStrings, uzctnrVectorPointers, uzctnrVectorBytes, 
-  LazarusPackageIntf;
+  gzctnrAlignedVectorObjects, LazarusPackageIntf;
 
 implementation
 

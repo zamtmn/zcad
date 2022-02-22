@@ -6,7 +6,8 @@ components/zcontainers/gzctnrvectorp.pas
 components/zcontainers/gzctnrvectorpdata.pas
 components/zcontainers/gzctnrvectorpobjects.pas
 components/zcontainers/gzctnrvectorobjects.pas
-components/zcontainers/gzctnralignedvector.pas
+components/zcontainers/uzctnralignedvectorbytes.pas
+components/zcontainers/gzctnralignedvectorobjects.pas
 components/zcontainers/gzctnrbinaryseparatedtree.pas
 components/zcontainers/uzctnrvectorbytes.pas
 components/zcontainers/uzctnrvectorstrings.pas
@@ -15,7 +16,6 @@ components/zmath/uzegeometrytypes.pas
 components/zmath/uzedimensionaltypes.pas
 components/zebase/uzbtypesbase.pas
 components/zebase/uzbtypes.pas
-components/zebase/uzctnrobjectschunk.pas
 components/zebase/uzctnrvectorpgdbaseobjects.pas
 zengine/core/objects/uzepalette.pas
 zcad/uzcsysparams.pas

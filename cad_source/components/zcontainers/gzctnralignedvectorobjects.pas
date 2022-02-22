@@ -16,17 +16,44 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzctnrobjectschunk;
+unit gzctnrAlignedVectorObjects;
 
 interface
-uses gzctnrAlignedVector,uzbtypes;
+
+uses
+  uzctnrAlignedVectorBytes,gzctnrvectortypes;
+
 type
 {Export+}
-PTObjectsChunk=^TObjectsChunk;
-TObjectsChunk=object(GZAlignedVectorObjects{-}<PGDBaseObject>{//})
-              end;
+{----REGISTEROBJECTTYPE GZAlignedVectorObjects}
+GZAlignedVectorObjects{-}<PBaseObj>{//}=
+  object(TZctnrAlignedVectorBytes)(*OpenArrayOfData=GDBByte*)
+                function iterate(var ir:itrec):Pointer;virtual;
+             end;
 {Export-}
 implementation
+function GZAlignedVectorObjects<PBaseObj>.iterate(var ir:itrec):Pointer;
+var
+  s:integer;
+  m:integer;
+begin
+  if count=0 then result:=nil
+  else
+  begin
+      s:=sizeof(PBaseObj(ir.itp)^);
+      if ir.itc<(count-s) then
+                      begin
+                           m:=s mod ObjAlign;
+                           if m<>0 then
+                             s:=s+ObjAlign-m;
+                           inc(PByte(ir.itp),s);
+                           inc(ir.itc,s);
+
+                           result:=ir.itp;
+                      end
+                  else result:=nil;
+  end;
+end;
 begin
 end.
 

@@ -18,7 +18,7 @@
         </SyntaxOptions>
       </Parsing>
     </CompilerOptions>
-    <Files Count="14">
+    <Files Count="15">
       <Item1>
         <Filename Value="gzctnrvector.pas"/>
         <UnitName Value="gzctnrVector"/>
@@ -52,16 +52,16 @@
         <UnitName Value="gzctnrSTL"/>
       </Item8>
       <Item9>
-        <Filename Value="gzctnralignedvector.pas"/>
-        <UnitName Value="gzctnralignedvector"/>
+        <Filename Value="uzctnralignedvectorbytes.pas"/>
+        <UnitName Value="uzctnralignedvectorbytes"/>
       </Item9>
       <Item10>
-        <Filename Value="UGDBTree.pas"/>
-        <UnitName Value="UGDBTree"/>
-      </Item10>
-      <Item11>
         <Filename Value="gzctnrvectorstr.pas"/>
         <UnitName Value="gzctnrVectorStr"/>
+      </Item10>
+      <Item11>
+        <Filename Value="uzctnrtree.pas"/>
+        <UnitName Value="uzctnrTree"/>
       </Item11>
       <Item12>
         <Filename Value="uzctnrvectorstrings.pas"/>
@@ -75,6 +75,10 @@
         <Filename Value="uzctnrvectorbytes.pas"/>
         <UnitName Value="uzctnrVectorBytes"/>
       </Item14>
+      <Item15>
+        <Filename Value="gzctnralignedvectorobjects.pas"/>
+        <UnitName Value="gzctnrAlignedVectorObjects"/>
+      </Item15>
     </Files>
     <CompatibilityMode Value="True"/>
     <RequiredPkgs Count="2">

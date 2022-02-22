@@ -9,7 +9,7 @@ interface
 
 uses
   uzbtypesbase, uzbtypes, uzbstrproc, uzbpaths, uzctnrvectorpgdbaseobjects, 
-  uzctnrobjectschunk, LazarusPackageIntf;
+  LazarusPackageIntf;
 
 implementation
 

@@ -39,10 +39,6 @@
         <Filename Value="uzctnrvectorpgdbaseobjects.pas"/>
         <UnitName Value="uzctnrvectorpgdbaseobjects"/>
       </Item>
-      <Item>
-        <Filename Value="uzctnrobjectschunk.pas"/>
-        <UnitName Value="uzctnrobjectschunk"/>
-      </Item>
     </Files>
     <RequiredPkgs>
       <Item>

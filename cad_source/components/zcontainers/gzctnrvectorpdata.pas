@@ -23,7 +23,7 @@ uses gzctnrVectorP,gzctnrvectortypes;
 type
 {Export+}
 {--------REGISTEROBJECTTYPE GZVectorPData}
-GZVectorPData{-}<PTData,TData>{//}=object
+GZVectorPData{-}<PTData>{//}=object
                                          (GZVectorP{-}<PTData>{//})
                                        procedure cleareraseobjfrom(n:Integer);virtual;
                                        procedure cleareraseobjfrom2(n:Integer);virtual;
@@ -35,7 +35,7 @@ GZVectorPData{-}<PTData,TData>{//}=object
                                  end;
 {Export-}
 implementation
-destructor GZVectorPData<PTData,TData>.done;
+destructor GZVectorPData<PTData>.done;
 var
   p:PTData;
   ir:itrec;
@@ -50,7 +50,7 @@ begin
   count:=0;
   inherited;
 end;
-procedure GZVectorPData<PTData,TData>.free;
+procedure GZVectorPData<PTData>.free;
 var
   p:PTData;
   ir:itrec;
@@ -64,7 +64,7 @@ begin
   until p=nil;
   count:=0;
 end;
-procedure GZVectorPData<PTData,TData>.RemoveData(const data:PTData);
+procedure GZVectorPData<PTData>.RemoveData(const data:PTData);
 //procedure TZctnrVectorPObj<T,TObj>.eraseobj;
 var
   p:PTData;
@@ -83,7 +83,7 @@ begin
        p:=iterate(ir);
   until p=nil;
 end;
-procedure GZVectorPData<PTData,TData>.pack;
+procedure GZVectorPData<PTData>.pack;
 var
 pnew,pold:{ppointer}^PTData;
 nc,c:integer;
@@ -110,7 +110,7 @@ begin
      deleted:=0;
      end;
 end;
-function GZVectorPData<PTData,TData>.getDataMutable;
+function GZVectorPData<PTData>.getDataMutable;
 var pp:ppointer;
 begin
      pp:=pointer(inherited getDataMutable(index));
@@ -122,7 +122,7 @@ end;
 {begin
   result:=pointer(getDataMutable(index)^);
 end;}
-procedure GZVectorPData<PTData,TData>.cleareraseobjfrom;
+procedure GZVectorPData<PTData>.cleareraseobjfrom;
 var
   p:PTData;
       ir:itrec;
@@ -137,7 +137,7 @@ begin
   until p=nil;
   count:=0;
 end;
-procedure GZVectorPData<PTData,TData>.cleareraseobjfrom2(n:Integer);
+procedure GZVectorPData<PTData>.cleareraseobjfrom2(n:Integer);
 var
   p:PTData;
       ir:itrec;

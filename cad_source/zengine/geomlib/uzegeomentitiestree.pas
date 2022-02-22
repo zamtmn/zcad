@@ -20,8 +20,9 @@ unit uzegeomentitiestree;
 {$INCLUDE zcadconfig.inc}
 interface
 uses
-    graphics,uzgeomentity,uzctnrobjectschunk,
-    gzctnrvectortypes,uzegeometrytypes,gzctnrBinarySeparatedTree,uzegeometry,uzbtypesbase;
+    graphics,uzgeomentity,
+    gzctnrvectortypes,uzegeometrytypes,gzctnrBinarySeparatedTree,uzegeometry,
+    uzbtypesbase,gzctnrAlignedVectorObjects;
 type
 TZEntsManipulator=class;
 TFirstStageData=record
@@ -34,7 +35,7 @@ TFirstStageData=record
 TGeomTreeNodeData=record
                   end;
 {---REGISTEROBJECTTYPE TEntityArray}
-TEntityArray= object(TObjectsChunk)(*OpenArrayOfData=GDBByte*)
+TEntityArray= object(GZAlignedVectorObjects{-}<PTGeomEntity>{//})(*OpenArrayOfData=GDBByte*)
 end;
          PTEntTreeNode=^TGeomEntTreeNode;
          {---REGISTEROBJECTTYPE TGeomEntTreeNode}

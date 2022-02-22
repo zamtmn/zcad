@@ -22,13 +22,13 @@ unit Varman;
 
 interface
 uses
-  UEnumDescriptor,uzctnrVectorPointers,gzctnrVectorPObjects,LCLProc,uabstractunit,
+  UEnumDescriptor,uzctnrVectorPointers,LCLProc,uabstractunit,
   SysUtils,UBaseTypeDescriptor,uzbtypesbase,uzctnrVectorBytes,
   gzctnrvectortypes,uzctnrvectorstrings,varmandef,gzctnrSTL,
   TypeDescriptors,URecordDescriptor,UObjectDescriptor,uzbstrproc,classes,typinfo,
   UPointerDescriptor,
-  uzctnrobjectschunk,uzctnrvectorpgdbaseobjects,gzctnrVectorPData,gzctnrVector,
-  uzbLogIntf;
+  uzctnrvectorpgdbaseobjects,gzctnrVectorPData,gzctnrVector,
+  uzbLogIntf,uzctnrAlignedVectorBytes;
 type
     td=record
              template:String;
@@ -147,7 +147,7 @@ TNameToIndex=TMyGDBAnsiStringDictionary<TArrayIndex>;
 TFieldName=(FNUser,FNProgram);
 TFieldNames=set of TFieldName;
 {EXPORT+}
-TZctnrVectorPUserTypeDescriptors=object(GZVectorPData{-}<PUserTypeDescriptor,UserTypeDescriptor>{//})
+TZctnrVectorPUserTypeDescriptors=object(GZVectorPData{-}<PUserTypeDescriptor>{//})
                            end;
 PGDBOpenArrayOfPObjects=^TZctnrVectorPGDBaseObjects;
 ptypemanager=^typemanager;
@@ -175,8 +175,8 @@ Tvardescarray=GZVector{-}<vardesk>{//};
 {REGISTEROBJECTWITHOUTCONSTRUCTORTYPE varmanager}
 pvarmanager=^varmanager;
 varmanager=object(varmanagerdef)
-            vardescarray:{GDBOpenArrayOfData}Tvardescarray;
-            vararray:{TZctnrVectorBytes}TObjectsChunk;
+            vardescarray:Tvardescarray;
+            vararray:TZctnrAlignedVectorBytes;
                  constructor init;
                  function findvardesc(varname:TInternalScriptString):pvardesk;virtual;
                  function findvardescbyinst(varinst:GDBPointer):pvardesk;virtual;

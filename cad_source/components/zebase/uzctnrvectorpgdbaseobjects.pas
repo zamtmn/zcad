@@ -22,7 +22,7 @@ interface
 uses gzctnrVectorPObjects,uzbtypes,gzctnrVectorPData;
 type
 {Export+}
-TZctnrVectorPGDBaseObjects=object(GZVectorPData{-}<PGDBaseObject,GDBaseObject>{//})
+TZctnrVectorPGDBaseObjects=object(GZVectorPData{-}<PGDBaseObject>{//})
                               end;
 PGDBOpenArrayOfPObjects=^TZctnrVectorPGDBaseObjects;
 {Export-}

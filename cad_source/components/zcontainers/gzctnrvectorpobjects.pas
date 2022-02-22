@@ -25,7 +25,7 @@ type
 {Export+}
 {------------REGISTEROBJECTTYPE GZVectorPObects}
 GZVectorPObects{-}<PTObj,TObj>{//}
-                             =object(GZVectorPData{-}<PTObj,TObj>{//})
+                             =object(GZVectorPData{-}<PTObj>{//})
                              function CreateObject:PTObj;
                 end;
 {Export-}

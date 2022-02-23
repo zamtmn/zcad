@@ -50,9 +50,9 @@ type
                 end;
     TCameraChangedNotify=procedure of object;
     TAbstractViewArea=class;
-    TOnWaMouseDown=function (Sender:TAbstractViewArea;Button:TMouseButton;Shift:TShiftState;X,Y:Integer;OnMouseEntity:GDBPointer;var NeedRedraw:Boolean):boolean of object;
+    TOnWaMouseDown=function (Sender:TAbstractViewArea;Button:TMouseButton;Shift:TShiftState;X,Y:Integer;OnMouseEntity:Pointer;var NeedRedraw:Boolean):boolean of object;
     TOnWaMouseMove=procedure (Sender:TAbstractViewArea;Shift:TShiftState;X,Y:Integer) of object;
-    TOnWaMouseSelect=procedure (Sender:TAbstractViewArea;SelectedEntity:GDBPointer) of object;
+    TOnWaMouseSelect=procedure (Sender:TAbstractViewArea;SelectedEntity:Pointer) of object;
     TOnWaKeyPress=procedure (Sender:TAbstractViewArea;var Key: Word; Shift: TShiftState) of object;
     TOnGetEntsDesc=function (ents:PGDBObjOpenArrayOfPV):GDBString of object;
     TOnWaShowCursor=procedure (Sender:TAbstractViewArea;var DC:TDrawContext) of object;
@@ -88,8 +88,8 @@ type
                            procedure draw;virtual;abstract;
                            procedure DrawOrInvalidate;virtual;abstract;
                            procedure Clear0Ontrackpoint;virtual;abstract;
-                           procedure SetMouseMode(smode:GDBByte);virtual;abstract;
-                           //procedure sendcoordtocommandTraceOn(coord:GDBVertex;key: GDBByte;pos:pos_record);virtual;abstract;
+                           procedure SetMouseMode(smode:Byte);virtual;abstract;
+                           //procedure sendcoordtocommandTraceOn(coord:GDBVertex;key: Byte;pos:pos_record);virtual;abstract;
                            procedure reprojectaxis;virtual;abstract;
                            procedure Project0Axis;virtual;abstract;
                            procedure create0axis;virtual;abstract;
@@ -119,12 +119,12 @@ type
                            procedure KillOHintTimer(Sender: TObject);virtual;abstract;
                            procedure SetOHintTimer(Sender: TObject);virtual;abstract;
                            procedure getonmouseobjectbytree(var Node:TEntTreeNode;InSubEntry:GDBBoolean);virtual;abstract;
-                           procedure getosnappoint(radius: GDBFloat);virtual;abstract;
+                           procedure getosnappoint(radius: Single);virtual;abstract;
                            procedure projectaxis;virtual;abstract;
                            procedure AddOntrackpoint;virtual;abstract;
                            procedure CorrectMouseAfterOS;virtual;abstract;
-                           //procedure sendmousecoordwop(key: GDBByte);virtual;abstract;
-                           //procedure sendmousecoord(key: GDBByte);virtual;abstract;
+                           //procedure sendmousecoordwop(key: Byte);virtual;abstract;
+                           //procedure sendmousecoord(key: Byte);virtual;abstract;
                            function SelectRelatedObjects(pent:PGDBObjEntity):GDBInteger;virtual;abstract;
                            procedure doCameraChanged;virtual;abstract;
                            procedure set3dmouse;virtual;abstract;

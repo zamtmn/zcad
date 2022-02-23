@@ -35,9 +35,9 @@ PGDBObjDevice=^GDBObjDevice;
 GDBObjDevice= object(GDBObjBlockInsert)
                    VarObjArray:GDBObjEntityOpenArray;(*oi_readonly*)(*hidden_in_objinsp*)
                    lstonmouse:PGDBObjEntity;(*oi_readonly*)(*hidden_in_objinsp*)
-                   function Clone(own:GDBPointer):PGDBObjEntity;virtual;
+                   function Clone(own:Pointer):PGDBObjEntity;virtual;
                    constructor initnul;
-                   constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
+                   constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                    destructor done;virtual;
                    function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
                    function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
@@ -65,7 +65,7 @@ GDBObjDevice= object(GDBObjBlockInsert)
                    procedure AddMi(pobj:PGDBObjSubordinated);virtual;
                    //procedure select;virtual;
                    procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;
-                   procedure addcontrolpoints(tdesc:GDBPointer);virtual;
+                   procedure addcontrolpoints(tdesc:Pointer);virtual;
 
                    procedure EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;
                    procedure correctobjects(powner:PGDBObjEntity;pinownerarray:GDBInteger);virtual;
@@ -112,12 +112,12 @@ begin
      VarObjArray.DeleteElement(pobjinarray);
 
      //p^.done;
-     //memman.Freemem(GDBPointer(p))
+     //memman.Freemem(Pointer(p))
      pobj^.done;
-     Freemem(GDBPointer(pobj));
+     Freemem(Pointer(pobj));
 end;
 
-procedure GDBObjDevice.addcontrolpoints(tdesc:GDBPointer);
+procedure GDBObjDevice.addcontrolpoints(tdesc:Pointer);
 var pdesc:controlpointdesc;
     ir:itrec;
     pv{,pvc}:pgdbobjEntity;
@@ -183,7 +183,7 @@ var
   m4:DMatrix4D;
   DC:TDrawContext;
 begin
-     //historyoutstr('Device DXFOut self='+inttohex(longword(@self),10)+' owner'+inttohex(bp.owner.gethandle,10));
+     //historyoutstr('Device DXFOut self='+inttohex(LongWord(@self),10)+' owner'+inttohex(bp.owner.gethandle,10));
      inherited;
      m4:={self.ObjMatrix; //}getmatrix^;
      //MatrixInvert(m4);
@@ -305,13 +305,13 @@ var tvo: PGDBObjDevice;
 begin
   //result:=inherited Clone(own);
   //exit;
-  Getmem(GDBPointer(tvo), sizeof(GDBObjDevice));
+  Getmem(Pointer(tvo), sizeof(GDBObjDevice));
   tvo^.init({bp.owner}own,vp.Layer, vp.LineWeight);
   //tvo^.vp.id :=GDBDeviceID;
   //tvo^.vp.layer :=vp.layer;
   CopyVPto(tvo^);
   CopyExtensionsTo(tvo^);
-  GDBPointer(tvo^.name) := nil;
+  Pointer(tvo^.name) := nil;
   tvo^.name := name;
   tvo^.pattrib := nil;
   tvo^.Local.p_insert := Local.p_insert;
@@ -420,7 +420,7 @@ procedure GDBObjDevice.DrawGeometry;
 var p:pgdbobjEntity;
      v:gdbvertex;
          ir:itrec;
-   oldlw:gdbsmallint;
+   oldlw:SmallInt;
 begin
   oldlw:=dc.OwnerLineWeight;
   dc.OwnerLineWeight:=self.GetLineWeight;
@@ -466,7 +466,7 @@ begin
           pblockdef:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getDataMutable(index);
           for i:=0 to pblockdef.ObjArray.count-1 do
           begin
-               pvisible:=GDBPointer(pblockdef.ObjArray.getDataMutable(i));
+               pvisible:=Pointer(pblockdef.ObjArray.getDataMutable(i));
                pvisible:=pvisible^.Clone(@self);
                pvisible2:=PGDBObjEntity(pvisible^.FromDXFPostProcessBeforeAdd(nil,drawing));
                dc:=drawing.createdrawingrc;
@@ -528,7 +528,7 @@ begin
           pblockdef:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getDataMutable(index);
           for i:=0 to pblockdef.ObjArray.count-1 do
           begin
-               pvisible:=GDBPointer(pblockdef.ObjArray.getDataMutable(i)^);
+               pvisible:=Pointer(pblockdef.ObjArray.getDataMutable(i)^);
                pvisible:=pvisible^.Clone(@self);
                pvisible2:=PGDBObjEntity(pvisible^.FromDXFPostProcessBeforeAdd(nil,drawing));
                if pvisible2=nil then
@@ -554,7 +554,7 @@ begin
           pblockdef:=GDB.BlockDefArray.getDataMutable(index);
           for i:=0 to pblockdef.ObjArray.count-1 do
           begin
-               pvisible:=GDBPointer(pblockdef.ObjArray.getDataMutable(i)^);
+               pvisible:=Pointer(pblockdef.ObjArray.getDataMutable(i)^);
                pvisible:=pvisible^.Clone(@self);
                pvisible2:=PGDBObjEntity(pvisible^.FromDXFPostProcessBeforeAdd);
                if pvisible2=nil then
@@ -604,7 +604,7 @@ begin
   calcbb(dc);
   //format;
 end;
-constructor GDBObjDevice.init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
+constructor GDBObjDevice.init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
 begin
   inherited init(own,layeraddres,LW);
   //vp.ID:=GDBDeviceID;

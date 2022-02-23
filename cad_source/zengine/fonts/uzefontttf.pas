@@ -61,7 +61,7 @@ var
    trmode:TTriangulationMode;
    CurrentLLentity:TArrayIndex;
    triangle:array[0..2] of integer;
-{procedure adddcross(shx:PTZctnrVectorBytes;var size:GDBWord;x,y:fontfloat);
+{procedure adddcross(shx:PTZctnrVectorBytes;var size:Word;x,y:fontfloat);
 const
      s=0.01;
 begin
@@ -87,7 +87,7 @@ begin
     shx.AddFontFloat(@y);
     inc(size);
 end;
-procedure addgcross(shx:PTZctnrVectorBytes;var size:GDBWord;x,y:fontfloat);
+procedure addgcross(shx:PTZctnrVectorBytes;var size:Word;x,y:fontfloat);
 const
      s=0.01;
 begin
@@ -262,10 +262,10 @@ begin//----//
            pendsymbol:=pttf.SHXdata.getDataMutable(pttf.SHXdata.Count);
            while psymbol<pendsymbol do
                begin
-                 case GDBByte(psymbol^) of
+                 case Byte(psymbol^) of
                    SHXLine:
                      begin
-                       inc(pGDBByte(psymbol), sizeof(SHXLine));
+                       inc(PByte(psymbol), sizeof(SHXLine));
                        v.x:=pfontfloat(psymbol)^;
                        inc(pfontfloat(psymbol));
                        v.y:=pfontfloat(psymbol)^;
@@ -282,9 +282,9 @@ begin//----//
                      end;
                    SHXPoly:
                      begin
-                       inc(pGDBByte(psymbol), sizeof(SHXPoly));
-                       len := GDBWord(psymbol^);
-                       inc(pGDBByte(psymbol), sizeof(GDBWord));
+                       inc(PByte(psymbol), sizeof(SHXPoly));
+                       len := Word(psymbol^);
+                       inc(PByte(psymbol), sizeof(Word));
                        v.x:=pfontfloat(psymbol)^;
                        inc(pfontfloat(psymbol));
                        v.y:=pfontfloat(psymbol)^;

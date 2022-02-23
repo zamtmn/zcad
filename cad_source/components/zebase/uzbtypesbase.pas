@@ -26,14 +26,11 @@ PtrInt={Pointer}Integer;
 PtrUInt={Pointer}Cardinal;
 SizeUInt=Cardinal;
 SizeInt=Integer;
-DWord=longword;
+DWord=LongWord;
 {$ENDIF}
 {EXPORT+}
 PGDBDouble=^GDBDouble;
 {-}GDBDouble=type Double;{/GDBDouble=Double;/}
-
-PGDBFloat=^GDBFloat;
-{-}GDBFloat=type single;{/GDBFloat=Single;/}
 
 PGDBString=^GDBString;
 {-}GDBString=type ansistring;{/GDBString=string;/}
@@ -46,35 +43,8 @@ PGDBBoolean=^GDBBoolean;
 
 PGDBInteger=^GDBInteger;
 {-}GDBInteger=type integer;{/GDBInteger=Integer;/}
-
-PGDBByte=^GDBByte;
-{-}GDBByte=type byte;{/GDBByte=Byte;/}
-
-PGDBLongword=^GDBLongword;
-{-}GDBLongword=type longword;{/GDBLongword=LongWord;/}
-
-PGDBQWord=^GDBQWord;
-{-}GDBQWord=type QWord;{/GDBQWord=QWord;/}
-
-PGDBWord=^GDBWord;
-{-}GDBWord=type word;{/GDBWord=word;/}
-
-PGDBSmallint=^GDBSmallint;
-{-}GDBSmallint=type smallint;{/GDBSmallint=SmallInt;/}
-
-PGDBShortint=^GDBShortint;
-{-}GDBShortint=type shortint;{/GDBShortint=ShortInt;/}
-
-PGDBPointer=^GDBPointer;
-{-}GDBPointer=type pointer;{/GDBPointer=Pointer;/}
-
-PGDBPtrUInt=^GDBPtrUInt;
-{-}GDBPtrUInt=type PtrUInt;{//}
-
 {EXPORT-}
-GDBPlatformInt=PtrInt;
-GDBPlatformUInt=PtrUInt;
-//GDBchar=Char;
+
 implementation
 end.
 

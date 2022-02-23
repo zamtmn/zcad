@@ -39,9 +39,9 @@ GDBObjBlockdef= object(GDBObjGenericSubEntry)
                      function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef):GDBBoolean;virtual;
                      destructor done;virtual;
                      function GetMatrix:PDMatrix4D;virtual;
-                     function GetHandle:GDBPlatformint;virtual;
+                     function GetHandle:PtrInt;virtual;
                      function GetMainOwner:PGDBObjSubordinated;virtual;
-                     function GetType:GDBPlatformint;virtual;
+                     function GetType:PtrInt;virtual;
                      class function GetDXFIOFeatures:TDXFEntIODataManager;static;
                end;
 {Export-}
@@ -50,7 +50,7 @@ var
 
 implementation
 
-function GDBObjBlockdef.GetType:GDBPlatformint;
+function GDBObjBlockdef.GetType:PtrInt;
 begin
      result:=1;
 end;
@@ -58,7 +58,7 @@ function GDBObjBlockdef.GetMainOwner:PGDBObjSubordinated;
 begin
      result:=@self;
 end;
-function GDBObjBlockdef.GetHandle:GDBPlatformint;
+function GDBObjBlockdef.GetHandle:PtrInt;
 begin
      result:=H_Root;
 end;
@@ -110,8 +110,8 @@ end;
 constructor GDBObjBlockdef.initnul;
 begin
      inherited;
-     GDBPointer(Name):=nil;
-     GDBPointer(VarFromFile):=nil;
+     Pointer(Name):=nil;
+     Pointer(VarFromFile):=nil;
      Formated:=false;
      ObjArray.initnul;
      Base:=nulvertex;
@@ -120,8 +120,8 @@ end;
 constructor GDBObjBlockdef.init;
 begin
      inherited initnul(nil);
-     GDBPointer(Name):=nil;
-     GDBPointer(VarFromFile):=nil;
+     Pointer(Name):=nil;
+     Pointer(VarFromFile):=nil;
      Formated:=false;
      //ObjArray.init(10000);
      Name:=_name;

@@ -37,14 +37,14 @@ GDBObjComplex= object(GDBObjWithLocalCS)
                     function getonlyvisibleoutbound(var DC:TDrawContext):TBoundingBox;virtual;
                     destructor done;virtual;
                     constructor initnul;
-                    constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
+                    constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                     function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
                     function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                     function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
                     procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
-                    procedure addcontrolpoints(tdesc:GDBPointer);virtual;
+                    procedure addcontrolpoints(tdesc:Pointer);virtual;
                     procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
-                    procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
+                    procedure rtedit(refp:Pointer;mode:Single;dist,wc:gdbvertex);virtual;
                     procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                     procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                     //procedure feedbackinrect;virtual;
@@ -140,7 +140,7 @@ begin
                              end;
                     end;
 end;
-procedure GDBObjComplex.addcontrolpoints(tdesc:GDBPointer);
+procedure GDBObjComplex.addcontrolpoints(tdesc:Pointer);
 var pdesc:controlpointdesc;
 begin
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(1);
@@ -162,7 +162,7 @@ begin
 end;
 procedure GDBObjComplex.DrawGeometry;
 var
-   oldlw:gdbsmallint;
+   oldlw:SmallInt;
    oldColor:TGDBPaletteColor;
 begin
   oldlw:=dc.OwnerLineWeight;

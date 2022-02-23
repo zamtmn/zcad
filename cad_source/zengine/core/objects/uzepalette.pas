@@ -25,10 +25,10 @@ type
   PTRGB=^TRGB;
   {REGISTERRECORDTYPE TRGB}
   TRGB=record
-            r:GDBByte;(*'Red'*)
-            g:GDBByte;(*'Green'*)
-            b:GDBByte;(*'Blue'*)
-            a:GDBByte;(*'Alpha'*)
+            r:Byte;(*'Red'*)
+            g:Byte;(*'Green'*)
+            b:Byte;(*'Blue'*)
+            a:Byte;(*'Alpha'*)
       end;
   PTDXFCOLOR=^TDXFCOLOR;
   {REGISTERRECORDTYPE TDXFCOLOR}

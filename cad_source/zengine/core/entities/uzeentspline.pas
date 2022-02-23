@@ -29,7 +29,7 @@ uses LCLProc,uzegluinterface,uzeentityfactory,uzgldrawcontext,uzgloglstatemanage
 type
 {Export+}
 {REGISTEROBJECTTYPE TKnotsVector}
-TKnotsVector= object(GZVector{-}<GDBFloat>{//})
+TKnotsVector= object(GZVector{-}<Single>{//})
                              end;
 {REGISTEROBJECTTYPE TCPVector}
 TCPVector= object(GZVector{-}<GDBvertex4S>{//})
@@ -43,19 +43,19 @@ GDBObjSpline= object(GDBObjCurve)
                  AproxPointInWCS:GDBPoint3dArray;(*saved_to_shd*)(*hidden_in_objinsp*)
                  Closed:GDBBoolean;(*saved_to_shd*)
                  Degree:GDBInteger;(*saved_to_shd*)
-                 constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBBoolean);
+                 constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:GDBBoolean);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  destructor done;virtual;
                  procedure LoadFromDXF(var f:TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                 procedure startsnap(out osp:os_record; out pdata:GDBPointer);virtual;
-                 function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
+                 procedure startsnap(out osp:os_record; out pdata:Pointer);virtual;
+                 function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
 
                  procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure SaveToDXFfollow(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
-                 function Clone(own:GDBPointer):PGDBObjEntity;virtual;
+                 function Clone(own:Pointer):PGDBObjEntity;virtual;
                  function GetObjTypeName:GDBString;virtual;
                  function FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
                  function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
@@ -101,7 +101,7 @@ begin
                                             else
                                                 result:=false;
 end;
-procedure GDBObjSpline.startsnap(out osp:os_record; out pdata:GDBPointer);
+procedure GDBObjSpline.startsnap(out osp:os_record; out pdata:Pointer);
 begin
      GDBObjEntity.startsnap(osp,pdata);
      Getmem(pdata,sizeof(GDBVectorSnapArray));
@@ -267,7 +267,7 @@ begin
   inherited init(own,layeraddres, lw);
   ControlArrayInWCS.init(1000);
   ControlArrayInOCS.init(1000);
-  Knots.init(1000{,sizeof(GDBFloat)});
+  Knots.init(1000{,sizeof(Single)});
   AproxPointInWCS.init(1000);
   //vp.ID := GDBSplineID;
 end;
@@ -276,7 +276,7 @@ begin
   inherited initnul(owner);
   ControlArrayInWCS.init(1000);
   ControlArrayInOCS.init(1000);
-  Knots.init(1000{,sizeof(GDBFloat)});
+  Knots.init(1000{,sizeof(Single)});
   AproxPointInWCS.init(1000);
   //vp.ID := GDBSplineID;
 end;
@@ -306,7 +306,7 @@ end;
 function GDBObjSpline.Clone;
 var tpo: PGDBObjSpline;
 begin
-  Getmem(GDBPointer(tpo), sizeof(GDBObjSpline));
+  Getmem(Pointer(tpo), sizeof(GDBObjSpline));
   tpo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight,closed);
   CopyVPto(tpo^);
   CopyExtensionsTo(tpo^);
@@ -328,7 +328,7 @@ procedure GDBObjSpline.SaveToDXF;
 var
 //    ptv:pgdbvertex;
     ir:itrec;
-    fl:PGDBFloat;
+    fl:PSingle;
     ptv:pgdbvertex;
 begin
   SaveToDXFObjPrefix(outhandle,'SPLINE','AcDbSpline',IODXFContext);
@@ -382,7 +382,7 @@ begin
          if GroupCode=30 then
            addvertex(tmpVertex);
        end
-    else if dxfGDBFloatload(f,40,GroupCode,tmpKnot) then
+    else if dxfFloatload(f,40,GroupCode,tmpKnot) then
       Knots.PushBackData(tmpKnot)
     else if dxfGDBIntegerload(f,70,GroupCode,tmpFlag) then
                                                    begin
@@ -404,7 +404,7 @@ end;
 var s, layername: GDBString;
   byt, code: GDBInteger;
   p: gdbvertex;
-  hlGDBWord: GDBLongword;
+  hlGDBWord: LongWord;
   vertexgo: GDBBoolean;
 begin
   closed := false;

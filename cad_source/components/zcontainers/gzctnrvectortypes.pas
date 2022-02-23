@@ -36,7 +36,7 @@ type
   PZAbsVector=^TZAbsVector;
   {REGISTERRECORDTYPE TInVectorAddr}
   TInVectorAddr=record
-                  Instt:{-}TPtrOffs{/GDBPointer/};
+                  Instt:{-}TPtrOffs{/Pointer/};
                   DataSegment:PZAbsVector;
                   {-}function GetInstance:Pointer;{/ /}
                   {-}function IsNil:Boolean;{/ /}

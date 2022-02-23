@@ -35,7 +35,7 @@ type
     procedure Build(Operands:TCommandOperands); virtual;
     procedure Command(Operands:TCommandOperands); virtual;abstract;
     function DoEnd(pdata:Pointer):Boolean;virtual;
-    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
+    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger; virtual;
   end;
   TFIWPMode=(FIWPCustomize,FIWPRun);
   {REGISTEROBJECTTYPE FloatInsertWithParams_com}
@@ -43,10 +43,10 @@ type
     CMode:TFIWPMode;
     procedure CommandStart(Operands:TCommandOperands); virtual;
     procedure BuildDM(Operands:TCommandOperands); virtual;
-    procedure Run(pdata:GDBPlatformint); virtual;
-    function MouseMoveCallback(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
+    procedure Run(pdata:PtrInt); virtual;
+    function MouseMoveCallback(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger; virtual;
     //procedure Command(Operands:pansichar); virtual;abstract;
-    //function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
+    //function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: Byte;osp:pos_record): GDBInteger; virtual;
   end;
 {EXPORT-}
 
@@ -72,7 +72,7 @@ begin
      result:=true;
 end;
 
-function FloatInsert_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger;
+function FloatInsert_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger;
 var
     dist:gdbvertex;
     dispmatr:DMatrix4D;
@@ -142,12 +142,12 @@ begin
      CMode:=FIWPCustomize;
      BuildDM(Operands);
 end;
-procedure FloatInsertWithParams_com.Run(pdata:GDBPlatformint);
+procedure FloatInsertWithParams_com.Run(pdata:PtrInt);
 begin
      cmode:=FIWPRun;
      self.Build('');
 end;
-function FloatInsertWithParams_com.MouseMoveCallback(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger;
+function FloatInsertWithParams_com.MouseMoveCallback(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger;
 begin
      if CMode=FIWPRun then
                           inherited MouseMoveCallback(wc,mc,button,osp);

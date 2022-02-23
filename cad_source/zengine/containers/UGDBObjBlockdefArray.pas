@@ -33,17 +33,17 @@ GDBObjBlockdefArray= object(GZVectorObjects{-}<GDBObjBlockdef>{//})(*OpenArrayOf
 
                       function getindex(name:GDBString):GDBInteger;virtual;
                       function getblockdef(name:GDBString):PGDBObjBlockdef;virtual;
-                      //function loadblock(filename,bname:pansichar;pdrawing:GDBPointer):GDBInteger;virtual;
+                      //function loadblock(filename,bname:pansichar;pdrawing:Pointer):GDBInteger;virtual;
                       function create(name:GDBString):PGDBObjBlockdef;virtual;
                       procedure freeelement(PItem:PT);virtual;
                       procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                       procedure Grow(newmax:Integer=0);virtual;
-                      procedure IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);virtual;
+                      procedure IterateCounter(PCounted:Pointer;var Counter:GDBInteger;proc:TProcCounter);virtual;
                     end;
 {Export-}
 implementation
 //uses log;
-procedure GDBObjBlockdefArray.IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);
+procedure GDBObjBlockdefArray.IterateCounter(PCounted:Pointer;var Counter:GDBInteger;proc:TProcCounter);
 var p:PGDBObjBlockdef;
     ir:itrec;
 begin

@@ -80,7 +80,7 @@ GDBTextPropArray= object(GZVectorObjects{-}<TextProp>{//})(*OpenArrayOfObject=Te
                 constructor init(m:GDBInteger);
                end;
 PPGDBLtypePropObjInsp=^PGDBLtypePropObjInsp;
-PGDBLtypePropObjInsp=GDBPointer;
+PGDBLtypePropObjInsp=Pointer;
 PGDBLtypeProp=^GDBLtypeProp;
 {REGISTEROBJECTTYPE GDBLtypeProp}
 GDBLtypeProp= object(GDBNamedObject)
@@ -405,7 +405,7 @@ begin
      Psymbol:=nil;
 end;
 function GDBLtypeArray.createltypeifneed(_source:PGDBLtypeProp;var _DestTextStyleTable:GDBTextStyleArray):PGDBLtypeProp;
-var //p:GDBPointer;
+var //p:Pointer;
     ir:itrec;
     psp:PShapeProp;
     sp:ShapeProp;

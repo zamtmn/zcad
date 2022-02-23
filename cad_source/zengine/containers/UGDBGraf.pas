@@ -315,7 +315,7 @@ function marknearelement(pgf:pgrafelement):GDBBoolean;
 var i,j,k: GDBInteger;
     tgf: pgrafelement;
     l1,l2:pgdbobjline;
-    l1addr,l2addr:GDBPointer;
+    l1addr,l2addr:Pointer;
 begin
   result:=false;
   for i := 0 to count - 1 do

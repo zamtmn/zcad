@@ -38,16 +38,16 @@ type
   TMultiPropertyCategory=(MPCGeneral,MPCGeometry,MPCMisc,MPCSummary,MPCExtenders);
   TChangedData=record
                      PEntity,
-                     PGetDataInEtity:GDBPointer;
-                     PSetDataInEtity:GDBPointer;
+                     PGetDataInEtity:Pointer;
+                     PSetDataInEtity:Pointer;
                end;
 
-  TBeforeIterateProc=function(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
-  TAfterIterateProc=procedure(piteratedata:GDBPointer;mp:TMultiProperty);
+  TBeforeIterateProc=function(mp:TMultiProperty;pu:PTObjectUnit):Pointer;
+  TAfterIterateProc=procedure(piteratedata:Pointer;mp:TMultiProperty);
   TEntChangeProc=procedure(pu:PTObjectUnit;PSourceVD:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
   TCheckValueFunc=function(PSourceVD:PVarDesk;var ErrorRange:GDBBoolean;out message:GDBString):GDBBoolean;
-  TEntIterateProc=procedure(pvd:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
-  TEntBeforeIterateProc=procedure(pvd:GDBPointer;ChangedData:TChangedData);
+  TEntIterateProc=procedure(pvd:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+  TEntBeforeIterateProc=procedure(pvd:Pointer;ChangedData:TChangedData);
   PTMultiPropertyDataForObjects=^TMultiPropertyDataForObjects;
   TGetSetValue=record
     GetValueOffset,SetValueOffset:PtrInt;
@@ -104,7 +104,7 @@ type
                        MIPD:TMainIterateProcsData;
                        {BeforeIterateProc:TBeforeIterateProc;
                        AfterIterateProc:TAfterIterateProc;}
-                       PIiterateData:GDBPointer;
+                       PIiterateData:Pointer;
                        UseMode:TMultiPropertyUseMode;
                        constructor create(_name:GDBString;_sortedid:integer;ptm:PUserTypeDescriptor;_Category:TMultiPropertyCategory;_MIPD:TMainIterateProcsData;eip:TEntIterateProc;_UseMode:TMultiPropertyUseMode);
                        constructor CreateAndCloneFrom(mp:TMultiProperty);

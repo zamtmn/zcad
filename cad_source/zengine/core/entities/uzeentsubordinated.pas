@@ -28,7 +28,7 @@ type
 PGDBObjExtendable=^GDBObjExtendable;
 {REGISTEROBJECTTYPE GDBObjExtendable}
 GDBObjExtendable=object(GDBaseObject)
-                                 EntExtensions:{-}TEntityExtensions{/GDBPointer/};
+                                 EntExtensions:{-}TEntityExtensions{/Pointer/};
                                  procedure AddExtension(ExtObj:TBaseEntityExtender);
                                  function GetExtension<GEntityExtenderType>:GEntityExtenderType;overload;
                                  function GetExtension(ExtType:TMetaEntityExtender):TBaseEntityExtender;overload;
@@ -52,10 +52,10 @@ GDBObjGenericWithSubordinated= object(GDBObjExtendable)
                                     //function FindVariable(varname:GDBString):pvardesk;virtual;
                                     destructor done;virtual;
                                     function GetMatrix:PDMatrix4D;virtual;abstract;
-                                    //function GetLineWeight:GDBSmallint;virtual;abstract;
+                                    //function GetLineWeight:SmallInt;virtual;abstract;
                                     function GetLayer:PGDBLayerProp;virtual;abstract;
-                                    function GetHandle:GDBPlatformint;virtual;
-                                    function GetType:GDBPlatformint;virtual;
+                                    function GetHandle:PtrInt;virtual;
+                                    function GetType:PtrInt;virtual;
                                     function IsSelected:GDBBoolean;virtual;abstract;
                                     procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                                     procedure CalcGeometry;virtual;
@@ -71,7 +71,7 @@ TEntityAdress=record
               end;
 {REGISTERRECORDTYPE TTreeAdress}
 TTreeAdress=record
-                          Owner:GDBPointer;(*'Adress'*)
+                          Owner:Pointer;(*'Adress'*)
                           SelfIndex:TArrayIndex;(*'Position'*)
               end;
 {REGISTERRECORDTYPE GDBObjBaseProp}
@@ -176,13 +176,13 @@ begin
                                              result:=PGDBObjSubordinated(bp.ListPos.owner).FindShellByClass(_type);
                                                                       
 end;}
-function GDBObjGenericWithSubordinated.GetType:GDBPlatformint;
+function GDBObjGenericWithSubordinated.GetType:PtrInt;
 begin
      result:=0;
 end;
-function GDBObjGenericWithSubordinated.GetHandle:GDBPlatformint;
+function GDBObjGenericWithSubordinated.GetHandle:PtrInt;
 begin
-     result:=GDBPlatformint(@self);
+     result:=PtrInt(@self);
 end;
 destructor GDBObjGenericWithSubordinated.done;
 begin

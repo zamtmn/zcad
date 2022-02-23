@@ -35,7 +35,7 @@ TFirstStageData=record
 TGeomTreeNodeData=record
                   end;
 {---REGISTEROBJECTTYPE TEntityArray}
-TEntityArray= object(GZAlignedVectorObjects{-}<PTGeomEntity>{//})(*OpenArrayOfData=GDBByte*)
+TEntityArray= object(GZAlignedVectorObjects{-}<PTGeomEntity>{//})(*OpenArrayOfData=Byte*)
 end;
          PTEntTreeNode=^TGeomEntTreeNode;
          {---REGISTEROBJECTTYPE TGeomEntTreeNode}
@@ -45,7 +45,7 @@ end;
             {-}{/Separator:DVector4D;/}
             {-}{/BoundingBox:TBoundingBox;/}
             {-}{/NodeDir:TNodeDir;/}
-            {-}{/Root:GDBPointer;/}
+            {-}{/Root:Pointer;/}
             {-}{/NodeData:TGeomTreeNodeData;/}
             {-}{/LockCounter:GDBInteger;/}
                       end;

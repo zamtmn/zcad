@@ -66,7 +66,7 @@ TAbstractDrawing= object(TDrawingDef)
                        function StoreOldCamerapPos:Pointer;virtual;abstract;
                        procedure StoreNewCamerapPos(command:Pointer);virtual;abstract;
                        procedure SetUnitsFormat(f:TzeUnitsFormat);virtual;abstract;
-                       procedure rtmodify(obj:PGDBObjEntity;md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;abstract;
+                       procedure rtmodify(obj:PGDBObjEntity;md:Pointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;abstract;
                        procedure FillDrawingPartRC(var dc:TDrawContext);virtual;abstract;
                  end;
 {EXPORT-}

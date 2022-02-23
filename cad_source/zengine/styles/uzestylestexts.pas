@@ -32,7 +32,7 @@ PGDBTextStyleProp=^GDBTextStyleProp;
                     wfactor:GDBDouble;(*saved_to_shd*)
               end;
   PPGDBTextStyleObjInsp=^PGDBTextStyleObjInsp;
-  PGDBTextStyleObjInsp=GDBPointer;
+  PGDBTextStyleObjInsp=Pointer;
   PGDBTextStyle=^GDBTextStyle;
   {REGISTEROBJECTTYPE GDBTextStyle}
   GDBTextStyle = object(GDBNamedObject)
@@ -176,7 +176,7 @@ begin
      tlp:=parray;
      for i:=0 to count-1 do
      begin
-          result:=result+sizeof(GDBByte)+sizeof(GDBSmallint)+sizeof(GDBWord)+length(tlp^.name);
+          result:=result+sizeof(Byte)+sizeof(SmallInt)+sizeof(Word)+length(tlp^.name);
           inc(tlp);
      end;
 end;
@@ -189,14 +189,14 @@ begin
      tlp:=parray;
      for i:=0 to count-1 do
      begin
-          PGDBByte(pmem)^:=tlp^.color;
-          inc(PGDBByte(pmem));
+          PByte(pmem)^:=tlp^.color;
+          inc(PByte(pmem));
           PGDBSmallint(pmem)^:=tlp^.lineweight;
           inc(PGDBSmallint(pmem));
           PGDBWord(pmem)^:=length(tlp^.name);
           inc(PGDBWord(pmem));
-          Move(GDBPointer(tlp.name)^, pmem^,length(tlp.name));
-          inc(PGDBByte(pmem),length(tlp.name));
+          Move(Pointer(tlp.name)^, pmem^,length(tlp.name));
+          inc(PByte(pmem),length(tlp.name));
           inc(tlp);
      end;
 end;

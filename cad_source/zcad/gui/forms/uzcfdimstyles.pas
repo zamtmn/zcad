@@ -447,13 +447,13 @@ begin
      DescLabel.Caption:=Format(rsCountDimStylesFound,[tscounter]);
 end;
 
-procedure DimStyleCounter(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
+procedure DimStyleCounter(const PInstance,PCounted:Pointer;var Counter:GDBInteger);
 begin
      if (PGDBObjEntity(PInstance)^.GetObjType=GDBAlignedDimensionID)or(PGDBObjEntity(PInstance)^.GetObjType=GDBRotatedDimensionID)or(PGDBObjEntity(PInstance)^.GetObjType=GDBDiametricDimensionID)or(PGDBObjEntity(PInstance)^.GetObjType=GDBRadialDimensionID) then
      if PCounted=PGDBObjDimension(PInstance)^.PDimStyle then
           inc(Counter);
 end;
-procedure TextStyleCounterInDimStyles(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
+procedure TextStyleCounterInDimStyles(const PInstance,PCounted:Pointer;var Counter:GDBInteger);
 begin
      //if PCounted=PGDBDimStyle(PInstance)^.Text.DIMTXSTY then
      //                                                      inc(Counter);

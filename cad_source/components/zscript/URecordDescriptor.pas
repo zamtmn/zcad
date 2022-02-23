@@ -33,12 +33,12 @@ RecordDescriptor=object(TUserTypeDescriptor)
                        function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
                        procedure AddField(var fd:FieldDescriptor);
                        function FindField(fn:TInternalScriptString):PFieldDescriptor;virtual; //**< Найти требуемое поля. Пример : sampleRTTITypeDesk^.FindField('PolyWidth')
-                       function SetAttrib(fn:TInternalScriptString;SetA,UnSetA:GDBWord):PFieldDescriptor;
+                       function SetAttrib(fn:TInternalScriptString;SetA,UnSetA:Word):PFieldDescriptor;
                        procedure ApplyOperator(oper,path:TInternalScriptString;var offset:Integer;out tc:PUserTypeDescriptor);virtual;
                        procedure AddConstField(const fd:FieldDescriptor);
                        procedure CopyTo(RD:PTUserTypeDescriptor);
-                       //function Serialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:PTZctnrVectorBytes;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
-                       //function DeSerialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:TZctnrVectorBytes;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
+                       //function Serialize(PInstance:Pointer;SaveFlag:Word;var membuf:PTZctnrVectorBytes;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
+                       //function DeSerialize(PInstance:Pointer;SaveFlag:Word;var membuf:TZctnrVectorBytes;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
                        function GetTypeAttributes:TTypeAttr;virtual;
                        procedure MagicFreeInstance(PInstance:Pointer);virtual;
                        destructor Done;virtual;
@@ -105,7 +105,7 @@ var
    pfd:pFieldDescriptor;
 begin
      td:=GetTypeData(ti);
-     self.SizeInGDBBytes:=td.RecSize;
+     self.SizeInBytes:=td.RecSize;
      mf:=@td.ManagedFldCount;
      inc(pointer(mf),sizeof(td.ManagedFldCount));
      for i:=0 to td.ManagedFldCount-1 do
@@ -136,7 +136,7 @@ begin
         if pd<>nil then
         repeat
               begin
-                   GDBPlatformUInt(p):=GDBPlatformUInt(PInstance)+pd^.Offset;
+                   PtrUInt(p):=PtrUInt(PInstance)+pd^.Offset;
                    if assigned(pd^.base.PFT) then
                                                  pd^.base.PFT^.MagicFreeInstance(p)
                                              else
@@ -190,7 +190,7 @@ end;
 procedure RecordDescriptor.AddConstField;
 begin
      fields.PushBackData(fd);
-     SizeInGDBBytes:=SizeInGDBBytes+fd.Size;
+     SizeInBytes:=SizeInBytes+fd.Size;
 end;
 procedure RecordDescriptor.AddField;
 begin
@@ -215,7 +215,7 @@ begin
         until pd=nil;
         result:=nil;
 end;
-function RecordDescriptor.SetAttrib(fn:TInternalScriptString;SetA,UnSetA:GDBWord):PFieldDescriptor;
+function RecordDescriptor.SetAttrib(fn:TInternalScriptString;SetA,UnSetA:Word):PFieldDescriptor;
 begin
      result:=FindField(fn);
      if result<>nil then
@@ -256,7 +256,7 @@ begin
         if pd<>nil then
         repeat
               if pd^.base.ProgramName<>'#' then
-                                        pd.base.PFT.SavePasToMem(membuf,pointer(GDBPlatformUInt(PInstance)+pd^.Offset),prefix+'.'+pd^.base.ProgramName);
+                                        pd.base.PFT.SavePasToMem(membuf,pointer(PtrUInt(PInstance)+pd^.Offset),prefix+'.'+pd^.base.ProgramName);
               pd:=Fields.iterate(ir);
         until pd=nil;
 end;
@@ -424,7 +424,7 @@ begin
                                         end;
                                         if recreateunitvars then
                                                                 bmode:=property_correct;
-                                        //inc(GDBPlatformint(addr),sizeof(TObjectUnit));
+                                        //inc(PtrInt(addr),sizeof(TObjectUnit));
                                         end
                                         else
 
@@ -461,7 +461,7 @@ begin
                             GDBEnumDataDescriptorObj.CreateProperties(f,PDM_Field,PPDA,tname,@pfd^.collapsed,pfd^.base.Attributes or ownerattrib,bmode,ta,'','');
                             GDBEnumDataDescriptorObj.Decorators:=SaveDecorators;
                             GDBEnumDataDescriptorObj.FastEditors:=SaveFastEditors;
-                            //Inc(GDBPlatformint(startaddr),sizeof(Pointer));
+                            //Inc(PtrInt(startaddr),sizeof(Pointer));
                        end
                    else
            (*if (pfd^.PFT^.TypeName='TObjectUnit') then
@@ -517,7 +517,7 @@ begin
                                                                                                                                        //pobj^.whoisit;
                                                                                                                                        //pobj^.GetObjTypeName;
                                                                                                                                        end;
-                                                                                //Inc(GDBPlatformint(startaddr),sizeof(Pointer));
+                                                                                //Inc(PtrInt(startaddr),sizeof(Pointer));
                                            end
                    else
                    begin
@@ -533,7 +533,7 @@ begin
                                                                     //tb:=@EmptyTypedData;
                                                                     defaultptypehandler.CreateProperties(f,PDM_Field,PPDA,{PTTypedData(startaddr)^.ptd^.TypeName}tname,@pfd^.collapsed,{ppd^.Attr}pfd^.base.Attributes or ownerattrib or FA_READONLY,bmode,tb,'','');
                                                                end;
-                                                               //inc(GDBPlatformint(startaddr),sizeof(TTypedData));
+                                                               //inc(PtrInt(startaddr),sizeof(TTypedData));
                                                           end
                                                        else
                                                            begin
@@ -570,7 +570,7 @@ begin
               begin
                    if notfirst then
                                    result:=result+'; ';
-                   result:=result+pd.base.ProgramName+'='+pd.base.PFT.GetValueAsString(pointer(GDBPlatformint(PInstance)+pd^.Offset));
+                   result:=result+pd.base.ProgramName+'='+pd.base.PFT.GetValueAsString(pointer(PtrInt(PInstance)+pd^.Offset));
                    notfirst:=true;
               end;
               pd:=Fields.iterate(ir);
@@ -586,7 +586,7 @@ begin
         if pd<>nil then
         repeat
               if pd^.base.ProgramName<>'#' then
-                                        pd.base.PFT.MagicAfterCopyInstance(pointer(GDBPlatformUInt(PInstance)+pd^.Offset));
+                                        pd.base.PFT.MagicAfterCopyInstance(pointer(PtrUInt(PInstance)+pd^.Offset));
               pd:=Fields.iterate(ir);
         until pd=nil;
 end;

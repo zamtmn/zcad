@@ -115,7 +115,7 @@ PTSymbolSParam=^TSymbolSParam;
 {REGISTERRECORDTYPE TSymbolSParam}
 TSymbolSParam=record
                    FirstSymMatr:DMatrix4D;
-                   sx,Rotate,Oblique,NeededFontHeight{,offsety}:GDBFloat;
+                   sx,Rotate,Oblique,NeededFontHeight{,offsety}:Single;
                    pfont:pointer;
                    IsCanSystemDraw:GDBBoolean;
              end;
@@ -140,7 +140,7 @@ PTLLSymbolLine=^TLLSymbolLine;
 {---REGISTEROBJECTTYPE TLLSymbolLine}
 TLLSymbolLine= object(TLLPrimitive)
               SimplyDrawed:GDBBoolean;
-              MaxSqrSymH:GDBFloat;
+              MaxSqrSymH:Single;
               SymbolsParam:TSymbolSParam;
               FirstOutBoundIndex,LastOutBoundIndex:TLLVertexIndex;
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData):GDBInteger;virtual;

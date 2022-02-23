@@ -24,10 +24,10 @@ uses {uzbtypesbase,}sysutils,uzctnrvectorstrings;
 type
   TLexema=shortstring;
   PLexema=^TLexema;
-//function pac_lGDBWord_to_GDBString(lw: GDBLongword): String;
-//function pac_GDBWord_to_GDBString(w: GDBWord): String;
-//function unpac_GDBString_to_GDBWord(s: String): GDBWord;
-//function unpac_GDBString_to_lGDBWord(s: String): GDBLongword;
+//function pac_lGDBWord_to_GDBString(lw: LongWord): String;
+//function pac_GDBWord_to_GDBString(w: Word): String;
+//function unpac_GDBString_to_GDBWord(s: String): Word;
+//function unpac_GDBString_to_lGDBWord(s: String): LongWord;
 function countchar(s: String; ch: ansichar): Integer;
 procedure replaceeqlen(var s: String; substr,newstr: String);
 function replacenull(s:String): String;
@@ -132,24 +132,24 @@ begin
      //result:='234';
 end;
 
-{function pac_GDBWord_to_GDBString(w: GDBWord): String;
+{function pac_GDBWord_to_GDBString(w: Word): String;
 begin
   result := chr(lo(w)) + chr(hi(w));
 end;
 
-function pac_lGDBWord_to_GDBString(lw: GDBLongword): String;
+function pac_lGDBWord_to_GDBString(lw: LongWord): String;
 begin
   result := chr(lo(lo(lw))) + chr(hi(lo(lw))) + chr(lo(hi(lw))) + chr(hi(hi(lw)));
 end;
 
-function unpac_GDBString_to_GDBWord(s: String): GDBWord;
+function unpac_GDBString_to_GDBWord(s: String): Word;
 begin
-  result := GDBWord(pGDBWord(s)^);
+  result := Word(pGDBWord(s)^);
 end;
 
-function unpac_GDBString_to_lGDBWord(s: String): GDBLongword;
+function unpac_GDBString_to_lGDBWord(s: String): LongWord;
 begin
-  result := GDBLongword(pGDBLongword(s)^);
+  result := LongWord(pGDBLongword(s)^);
 end;}
 
 function countchar(s: String; ch: ansichar): Integer;

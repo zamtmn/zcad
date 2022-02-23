@@ -354,7 +354,7 @@ begin
   if assigned(pnd) then
     if pnd^.pent<>nil then
   begin
-   s:='SelectObjectByAddres('+inttostr(GDBPlatformUInt(pnd^.pent))+')';
+   s:='SelectObjectByAddres('+inttostr(PtrUInt(pnd^.pent))+')';
    commandmanager.executecommandsilent(@s[1],drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
   end;
 end;

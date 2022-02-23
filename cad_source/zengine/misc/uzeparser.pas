@@ -40,8 +40,8 @@ const MaxCashedValues={4}5;
       InitialStartPos=1;
 
 type
-  TTokenOptions=GTSetWithGlobalEnums<Longword,Longword{byte,byte}>;
-  TTokenDescription=GTSetWithGlobalEnums<Longword,Longword{byte,byte}>;
+  TTokenOptions=GTSetWithGlobalEnums<LongWord,LongWord{byte,byte}>;
+  TTokenDescription=GTSetWithGlobalEnums<LongWord,LongWord{byte,byte}>;
   TZPIndex={$IFDEF FPC}SizeInt{$ELSE}Integer{$ENDIF};
   TZPSize={$IFDEF FPC}SizeInt{$ELSE}Integer{$ENDIF};
 var

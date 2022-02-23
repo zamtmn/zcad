@@ -33,7 +33,7 @@ GDBObjPoint= object(GDBObj3d)
                  P_insertInOCS:GDBvertex;(*'Coordinates OCS'*)(*saved_to_shd*)
                  P_insertInWCS:GDBvertex;(*'Coordinates WCS'*)(*hidden_in_objinsp*)
                  ProjPoint:GDBvertex;
-                 constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex);
+                 constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f:TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
                  procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
@@ -42,14 +42,14 @@ GDBObjPoint= object(GDBObj3d)
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                  function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
                  procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
-                 function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
+                 function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
                  function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
-                 procedure addcontrolpoints(tdesc:GDBPointer);virtual;
+                 procedure addcontrolpoints(tdesc:Pointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
-                 function Clone(own:GDBPointer):PGDBObjEntity;virtual;
-                 procedure rtsave(refp:GDBPointer);virtual;
+                 function Clone(own:Pointer):PGDBObjEntity;virtual;
+                 procedure rtsave(refp:Pointer);virtual;
                  function GetObjTypeName:GDBString;virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
 
@@ -132,7 +132,7 @@ begin
         begin
           layername := f.readgdbstring;
           vp.Layer := {gdb.GetCurrentDWG.LayerTable}drawing.GetLayerTable.getaddres(layername);
-              //layername:=GDBPointer(s);
+              //layername:=Pointer(s);
         end;
       10:
         begin
@@ -259,7 +259,7 @@ begin
                              end;
                     end;
 end;
-procedure GDBObjPoint.addcontrolpoints(tdesc:GDBPointer);
+procedure GDBObjPoint.addcontrolpoints(tdesc:Pointer);
 var pdesc:controlpointdesc;
 begin
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(1);
@@ -284,7 +284,7 @@ end;
 function GDBObjPoint.Clone;
 var tvo: PGDBObjPoint;
 begin
-  Getmem(GDBPointer(tvo), sizeof(GDBObjPoint));
+  Getmem(Pointer(tvo), sizeof(GDBObjPoint));
   tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight, P_insertInOCS);
   CopyVPto(tvo^);
   CopyExtensionsTo(tvo^);

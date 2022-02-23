@@ -86,8 +86,8 @@ TSelSimParams=record
                          procedure createbufs;
                          //procedure BuildDM(Operands:pansichar); virtual;
                          //procedure Format;virtual;
-                         procedure Run(pdata:GDBPlatformint); virtual;
-                         procedure Sel(pdata:{pointer}GDBPlatformint); virtual;
+                         procedure Run(pdata:PtrInt); virtual;
+                         procedure Sel(pdata:{pointer}PtrInt); virtual;
                    end;
 var
    SelSim:SelSim_com;
@@ -111,7 +111,7 @@ begin
     Commandmanager.executecommandend;
   end;
 end;
-procedure SelSim_com.Sel(pdata:GDBPlatformint);
+procedure SelSim_com.Sel(pdata:PtrInt);
 begin
   createbufs;
   //commandmanager.ExecuteCommandSilent('SelectFrame');
@@ -171,7 +171,7 @@ begin
 
 end;
 
-procedure SelSim_com.Run(pdata:GDBPlatformint);
+procedure SelSim_com.Run(pdata:PtrInt);
 var
    pobj: pGDBObjEntity;
    ir:itrec;

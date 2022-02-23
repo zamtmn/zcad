@@ -299,7 +299,7 @@ begin
                                     pv:=pvd^.data.Addr.Instance;
                                     pm:=@Fmask;
                                     accum:=0;
-                                    for i:=1 to pvd^.data.PTD^.SizeInGDBBytes do
+                                    for i:=1 to pvd^.data.PTD^.SizeInBytes do
                                      begin
                                           pv^:=pv^ xor pm^;
                                           accum:=accum or(pv^ and pm^);
@@ -311,13 +311,13 @@ begin
                                                 else
                                                     Checked:=false;
                                end
-     else if sizeof(FBufer)>=pvd^.data.PTD^.SizeInGDBBytes then
+     else if sizeof(FBufer)>=pvd^.data.PTD^.SizeInBytes then
                                                                begin
                                                                     if not Checked then
                                                                     begin
                                                                     fbufer:=0;
-                                                                    Move(pvd^.data.Addr.Instance^, FBufer,pvd^.data.PTD^.SizeInGDBBytes);
-                                                                    fillchar(pvd^.data.Addr.Instance^,pvd^.data.PTD^.SizeInGDBBytes,0);
+                                                                    Move(pvd^.data.Addr.Instance^, FBufer,pvd^.data.PTD^.SizeInBytes);
+                                                                    fillchar(pvd^.data.Addr.Instance^,pvd^.data.PTD^.SizeInBytes,0);
                                                                     if fbufer<>0 then
                                                                                     Checked:=false;
                                                                     end
@@ -326,9 +326,9 @@ begin
                                                                       if fbufer=0 then
                                                                                       fbufer:=1;
                                                                       begin
-                                                                      Move( FBufer,pvd^.data.Addr.Instance^,pvd^.data.PTD^.SizeInGDBBytes);
+                                                                      Move( FBufer,pvd^.data.Addr.Instance^,pvd^.data.PTD^.SizeInBytes);
                                                                       fbufer:=0;
-                                                                      Move(pvd^.data.Addr.Instance^, FBufer,pvd^.data.PTD^.SizeInGDBBytes);
+                                                                      Move(pvd^.data.Addr.Instance^, FBufer,pvd^.data.PTD^.SizeInBytes);
 
                                                                       if fbufer<>0 then
                                                                                       Checked:=true;
@@ -370,7 +370,7 @@ begin
                                     pv:=pvd^.data.Addr.Instance;
                                     pm:=@Fmask;
                                     accum:=0;
-                                    for i:=1 to pvd^.data.PTD^.SizeInGDBBytes do
+                                    for i:=1 to pvd^.data.PTD^.SizeInBytes do
                                      begin
                                           accum:=accum or(pv^ and pm^);
                                           inc(pv);
@@ -381,10 +381,10 @@ begin
                                                 else
                                                     self.Checked:=false;
                                end
-          else if sizeof(FBufer)>=pvd^.data.PTD^.SizeInGDBBytes then
+          else if sizeof(FBufer)>=pvd^.data.PTD^.SizeInBytes then
                                                                     begin
                                                                          TBufer:=0;
-                                                                         Move(pvd^.data.Addr.Instance^, TBufer,pvd^.data.PTD^.SizeInGDBBytes);
+                                                                         Move(pvd^.data.Addr.Instance^, TBufer,pvd^.data.PTD^.SizeInBytes);
                                                                          if TBufer<>0 then
                                                                                          self.Checked:=true
                                                                                       else
@@ -596,7 +596,7 @@ begin
                                     pv:=pvd^.data.Addr.Instance;
                                     pm:=@Fmask;
                                     accum:=0;
-                                    for i:=1 to pvd^.data.PTD^.SizeInGDBBytes do
+                                    for i:=1 to pvd^.data.PTD^.SizeInBytes do
                                      begin
                                           accum:=accum or(pv^ and pm^);
                                           inc(pv);
@@ -607,10 +607,10 @@ begin
                                                 else
                                                     self.Down:=false;
                                end
-          else if sizeof(FBufer)>=pvd^.data.PTD^.SizeInGDBBytes then
+          else if sizeof(FBufer)>=pvd^.data.PTD^.SizeInBytes then
                                                                     begin
                                                                          TBufer:=0;
-                                                                         Move(pvd^.data.Addr.Instance^, TBufer,pvd^.data.PTD^.SizeInGDBBytes);
+                                                                         Move(pvd^.data.Addr.Instance^, TBufer,pvd^.data.PTD^.SizeInBytes);
                                                                          if TBufer<>0 then
                                                                                          self.Down:=true
                                                                                       else
@@ -644,7 +644,7 @@ begin
                                     pv:=pvd^.data.Addr.Instance;
                                     pm:=@Fmask;
                                     accum:=0;
-                                    for i:=1 to pvd^.data.PTD^.SizeInGDBBytes do
+                                    for i:=1 to pvd^.data.PTD^.SizeInBytes do
                                      begin
                                           pv^:=pv^ xor pm^;
                                           accum:=accum or(pv^ and pm^);
@@ -656,13 +656,13 @@ begin
                                                 else
                                                     self.Down:=false;
                                end
-     else if sizeof(FBufer)>=pvd^.data.PTD^.SizeInGDBBytes then
+     else if sizeof(FBufer)>=pvd^.data.PTD^.SizeInBytes then
                                                                begin
                                                                     if not self.Down then
                                                                     begin
                                                                     fbufer:=0;
-                                                                    Move(pvd^.data.Addr.Instance^, FBufer,pvd^.data.PTD^.SizeInGDBBytes);
-                                                                    fillchar(pvd^.data.Addr.Instance^,pvd^.data.PTD^.SizeInGDBBytes,0);
+                                                                    Move(pvd^.data.Addr.Instance^, FBufer,pvd^.data.PTD^.SizeInBytes);
+                                                                    fillchar(pvd^.data.Addr.Instance^,pvd^.data.PTD^.SizeInBytes,0);
                                                                     if fbufer<>0 then
                                                                                     self.Down:=false;
                                                                     end
@@ -671,9 +671,9 @@ begin
                                                                       if fbufer=0 then
                                                                                       fbufer:=1;
                                                                       begin
-                                                                      Move( FBufer,pvd^.data.Addr.Instance^,pvd^.data.PTD^.SizeInGDBBytes);
+                                                                      Move( FBufer,pvd^.data.Addr.Instance^,pvd^.data.PTD^.SizeInBytes);
                                                                       fbufer:=0;
-                                                                      Move(pvd^.data.Addr.Instance^, FBufer,pvd^.data.PTD^.SizeInGDBBytes);
+                                                                      Move(pvd^.data.Addr.Instance^, FBufer,pvd^.data.PTD^.SizeInBytes);
 
                                                                       if fbufer<>0 then
                                                                                       self.Down:=true;

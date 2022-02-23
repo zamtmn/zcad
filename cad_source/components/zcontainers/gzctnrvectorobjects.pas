@@ -31,15 +31,15 @@ GZVectorObjects{-}<TData>{//}=object
 {Export-}
 implementation
 function GZVectorObjects<TData>.CreateObject;
-{var addr: GDBPlatformint;}
+{var addr: PtrInt;}
 begin
      result:=getdatamutable(pushbackdata(default(TData)));
   {if parray=nil then
                     createarray;
   if count = max then grow;
   begin
-       GDBPointer(addr) := parray;
-       addr := addr + GDBPlatformint(count*SizeOfData);
+       Pointer(addr) := parray;
+       addr := addr + PtrInt(count*SizeOfData);
        result:=pointer(addr);
        inc(count);
   end;}

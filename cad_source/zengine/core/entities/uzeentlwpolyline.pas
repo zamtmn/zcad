@@ -43,7 +43,7 @@ GDBObjLWPolyline= object(GDBObjWithLocalCS)
                  Width3D_in_WCS_Array:{GDBOpenArray}TWidth3D_in_WCS_Vector;
                  PProjPoint:PGDBpolyline2DArray;(*hidden_in_objinsp*)
                  Square:GDBdouble;(*'Oriented area'*)
-                 constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBBoolean);
+                 constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:GDBBoolean);
                  constructor initnul;
                  procedure LoadFromDXF(var f: TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
@@ -57,20 +57,20 @@ GDBObjLWPolyline= object(GDBObjWithLocalCS)
                  procedure CalcWidthSegment;virtual;
                  destructor done;virtual;
                  function GetObjTypeName:GDBString;virtual;
-                 function Clone(own:GDBPointer):PGDBObjEntity;virtual;
+                 function Clone(own:Pointer):PGDBObjEntity;virtual;
                  procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
-                 procedure addcontrolpoints(tdesc:GDBPointer);virtual;
+                 procedure addcontrolpoints(tdesc:Pointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
-                 procedure rtsave(refp:GDBPointer);virtual;
+                 procedure rtsave(refp:Pointer);virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                  //function InRect:TInRect;virtual;
                  function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
                  function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;virtual;
-                 function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
-                 procedure startsnap(out osp:os_record; out pdata:GDBPointer);virtual;
-                 procedure endsnap(out osp:os_record; var pdata:GDBPointer);virtual;
+                 function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
+                 procedure startsnap(out osp:os_record; out pdata:Pointer);virtual;
+                 procedure endsnap(out osp:os_record; var pdata:Pointer);virtual;
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
                  procedure transform(const t_matrix:DMatrix4D);virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
@@ -171,7 +171,7 @@ procedure GDBObjLWpolyline.AddOnTrackAxis(var posr:os_record;const processaxis:t
 begin
   GDBPoint3dArrayAddOnTrackAxis(Vertex3D_in_WCS_Array,posr,processaxis,closed);
 end;
-procedure GDBObjLWpolyline.startsnap(out osp:os_record; out pdata:GDBPointer);
+procedure GDBObjLWpolyline.startsnap(out osp:os_record; out pdata:Pointer);
 begin
      inherited;
      Getmem(pdata,sizeof(GDBVectorSnapArray));
@@ -179,7 +179,7 @@ begin
      BuildSnapArray(Vertex3D_in_WCS_Array,PGDBVectorSnapArray(pdata)^,closed);
 end;
 
-procedure GDBObjLWpolyline.endsnap(out osp:os_record; var pdata:GDBPointer);
+procedure GDBObjLWpolyline.endsnap(out osp:os_record; var pdata:Pointer);
 begin
      if pdata<>nil then
                        begin
@@ -428,7 +428,7 @@ var tpo: PGDBObjLWPolyline;
     pw:PGLLWWidth;
     i:GDBInteger;
 begin
-  Getmem(GDBPointer(tpo), sizeof(GDBObjLWPolyline));
+  Getmem(Pointer(tpo), sizeof(GDBObjLWPolyline));
   tpo^.init({bp.owner}own,vp.Layer, vp.LineWeight,closed);
   CopyVPto(tpo^);
   CopyExtensionsTo(tpo^);
@@ -625,7 +625,7 @@ procedure GDBObjLWpolyline.LoadFromDXF;
 var p: gdbvertex2d;
   s: GDBString;
   byt, code, i: GDBInteger;
-  hlGDBWord: GDBLongword;
+  hlGDBWord: LongWord;
   tGDBDouble: GDBDouble;
   numv: GDBInteger;
 begin
@@ -871,7 +871,7 @@ var tv:GDBvertex;
 begin
   if pprojpoint=nil then
   begin
-       Getmem(GDBPointer(pprojpoint),sizeof(GDBpolyline2DArray));
+       Getmem(Pointer(pprojpoint),sizeof(GDBpolyline2DArray));
        pprojpoint^.init(Vertex3D_in_WCS_Array.count,closed);
   end;
   pprojpoint^.clear;

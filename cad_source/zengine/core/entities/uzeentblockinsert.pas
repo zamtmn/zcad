@@ -35,17 +35,17 @@ GDBObjBlockInsert= object(GDBObjComplex)
                      index:GDBInteger;(*saved_to_shd*)(*oi_readonly*)(*hidden_in_objinsp*)
                      pblockdef:PGDBObjBlockdef;
                      Name:GDBAnsiString;(*saved_to_shd*)(*oi_readonly*)
-                     pattrib:GDBPointer;(*hidden_in_objinsp*)
+                     pattrib:Pointer;(*hidden_in_objinsp*)
                      BlockDesc:TBlockDesc;(*'Block params'*)(*saved_to_shd*)(*oi_readonly*)
                      constructor initnul;
-                     constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
+                     constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                      procedure LoadFromDXF(var f: TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
                      procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                      procedure CalcObjMatrix;virtual;
-                     function Clone(own:GDBPointer):PGDBObjEntity;virtual;
-                     //procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
-                     //procedure rtmodifyonepoint(point:pcontrolpointdesc;tobj:PGDBObjEntity;dist,wc:gdbvertex;ptdata:GDBPointer);virtual;
+                     function Clone(own:Pointer):PGDBObjEntity;virtual;
+                     //procedure rtedit(refp:Pointer;mode:Single;dist,wc:gdbvertex);virtual;
+                     //procedure rtmodifyonepoint(point:pcontrolpointdesc;tobj:PGDBObjEntity;dist,wc:gdbvertex;ptdata:Pointer);virtual;
                      destructor done;virtual;
                      function GetObjTypeName:GDBString;virtual;
                      procedure correctobjects(powner:PGDBObjEntity;pinownerarray:GDBInteger);virtual;
@@ -54,7 +54,7 @@ GDBObjBlockInsert= object(GDBObjComplex)
 
                      procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
                      procedure ReCalcFromObjMatrix;virtual;
-                     procedure rtsave(refp:GDBPointer);virtual;
+                     procedure rtsave(refp:Pointer);virtual;
 
                      procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
                      procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
@@ -402,7 +402,7 @@ begin
   scale:=ScaleOne;
   rotate:=0;
   index:=-1;
-  GDBPointer(Name):=nil;
+  Pointer(Name):=nil;
   pattrib:=nil;
   //ConstObjArray.init(100);
   //varman.init('Block_Variable');
@@ -416,7 +416,7 @@ end;
 function GDBObjBlockInsert.Clone;
 var tvo: PGDBObjBlockInsert;
 begin
-  Getmem(GDBPointer(tvo), sizeof(GDBObjBlockInsert));
+  Getmem(Pointer(tvo), sizeof(GDBObjBlockInsert));
   //tvo^.ObjMatrix:=objmatrix;;
   tvo^.init({bp.owner}own,vp.Layer, vp.LineWeight);
   tvo^.scale:=scale;
@@ -424,7 +424,7 @@ begin
   //tvo^.vp.layer :=vp.layer;
   CopyVPto(tvo^);
   CopyExtensionsTo(tvo^);
-  GDBPointer(tvo^.name) := nil;
+  Pointer(tvo^.name) := nil;
   tvo^.name := name;
   tvo^.pattrib := nil;
   tvo^.Local.p_insert := Local.p_insert;
@@ -551,7 +551,7 @@ else if not dxfGDBStringload(f,2,byt,name)then {s := }f.readgdbstring;
           GDBMtext(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].mt).size := 10;
           GDBMtext(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].mt).linespace := 10 * 1.66;
           GDBMtext(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].mt).ptext := nil;
-          GDBPointer(GDBMtext(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].mt).content) := nil;
+          Pointer(GDBMtext(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].mt).content) := nil;
           GDBMtext(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].mt).content := '';
           ux.x := 1;
           ux.y := 0;
@@ -559,9 +559,9 @@ else if not dxfGDBStringload(f,2,byt,name)then {s := }f.readgdbstring;
           vv := 0;
           gv := 0;
           doublepoint := false;
-          GDBPointer(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].tag) := nil;
-          GDBPointer(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].value) := nil;
-          GDBPointer(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].prompt) := nil;
+          Pointer(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].tag) := nil;
+          Pointer(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].value) := nil;
+          Pointer(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].prompt) := nil;
 
           s := f.readworld(#10, #13);
           val(s, byt, code);
@@ -674,7 +674,7 @@ end;
 procedure GDBObjBlockInsert.SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
 //var
   //i, j: GDBInteger;
-  //hv, vv: GDBByte;
+  //hv, vv: Byte;
   //s: GDBString;
 begin
   SaveToDXFObjPrefix(outhandle,'INSERT','AcDbBlockReference',IODXFContext);

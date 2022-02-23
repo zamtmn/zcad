@@ -97,7 +97,7 @@ begin
 end;}
 procedure gotodxf(var f: TZctnrVectorBytes; fcode: GDBInteger; fname: GDBString);
 var
-  byt: GDBByte;
+  byt: Byte;
   s: GDBString;
   error: GDBInteger;
 begin
@@ -130,7 +130,7 @@ begin
 end;
 procedure readvariables(var drawing:TSimpleDrawing;var f: TZctnrVectorBytes;var ctstyle:GDBstring; var clayer:GDBString;var cltype:GDBString;var cdimstyle:GDBString;LoadMode:TLoadOpt;DWGVarsDict:TGDBString2GDBStringDictionary);
 var
-  {byt: GDBByte;}
+  {byt: Byte;}
   s: GDBString;
   {error: GDBInteger;}
 begin
@@ -286,7 +286,7 @@ end;
 
 function GoToDXForENDTAB(var f: TZctnrVectorBytes; fcode: GDBInteger; fname: GDBString):boolean;
 var
-  byt: GDBByte;
+  byt: Byte;
   s: GDBString;
   error: GDBInteger;
 begin
@@ -326,7 +326,7 @@ objid: GDBInteger;
   EntInfoData:TEntInfoData;
   DC:TDrawContext;
   //pentvarext,ppostentvarext:TVariablesExtender;
-  bylayerlt:GDBPointer;
+  bylayerlt:Pointer;
   lph:TLPSHandle;
 begin
   s:='';
@@ -374,7 +374,7 @@ begin
                                                                                       context.h2p.Add(PGDBObjEntity(pobj)^.PExtAttrib^.Handle,pobj);
                                                                                       context.h2p.Add(PGDBObjEntity(pobj)^.PExtAttrib^.dwgHandle,pobj);
                                                                                       end;
-                                                                                      //pushhandle(phandlearray,PGDBObjEntity(pobj)^.PExtAttrib^.Handle,GDBPlatformint(pobj));
+                                                                                      //pushhandle(phandlearray,PGDBObjEntity(pobj)^.PExtAttrib^.Handle,PtrInt(pobj));
                                      if PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle>200 then
                                                                                       newowner:=context.h2p.MyGetValue(PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle);
                                                                                       //newowner:=pointer(getnevhandleWithNil(phandlearray,PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle));
@@ -440,7 +440,7 @@ begin
                                                                                       context.h2p.AddOrSetValue(PGDBObjEntity(pobj)^.PExtAttrib^.Handle,postobj);
                                                                                       context.h2p.Add(PGDBObjEntity(pobj)^.PExtAttrib^.dwgHandle,postobj);
                                                                                       end
-                                                                                      //pushhandle(phandlearray,PGDBObjEntity(pobj)^.PExtAttrib^.Handle,GDBPlatformint(postobj));
+                                                                                      //pushhandle(phandlearray,PGDBObjEntity(pobj)^.PExtAttrib^.Handle,PtrInt(postobj));
                                 end;
                                 if newowner=pointer($ffffffff) then
                                                            newowner:=newowner;
@@ -601,7 +601,7 @@ begin
          //programlog.LogOutStr('end {entities section}',lp_DecPos,LM_Debug);
     end;
   end;
-  //Freemem(GDBPointer(phandlearray));
+  //Freemem(Pointer(phandlearray));
   context.h2p.Destroy;
   lps.EndLongProcess(lph);
   debugln('{D-}end; {AddFromDXF12}');
@@ -1382,7 +1382,7 @@ begin
 
                 tp := drawing.BlockDefArray.create(s);
                 debugln('{D+}[DXF_CONTENTS]Found blockdef ',s);
-                   //addfromdxf12(f, GDBPointer(GDB.pgdbblock^.blockarray[GDB.pgdbblock^.count].ppa),@tp^.Entities, 'ENDBLK');
+                   //addfromdxf12(f, Pointer(GDB.pgdbblock^.blockarray[GDB.pgdbblock^.count].ppa),@tp^.Entities, 'ENDBLK');
                 while (s <> ' 30') and (s <> '30') do
                 begin
                   s := f.readGDBString;
@@ -1519,7 +1519,7 @@ begin
   owner^.calcbb(dc);
   context.h2p.Destroy;
   DWGVarsDict.destroy;
-  //Freemem(GDBPointer(phandlearray));
+  //Freemem(Pointer(phandlearray));
   end
      else
          DebugLn('{EM}'+'IODXF.ADDFromDXF: Не могу открыть файл: '+name);
@@ -2743,7 +2743,7 @@ ENDTAB}
   //-------------fileclose(outstream);
 
 
-  //Freemem(GDBPointer(phandlea));
+  //Freemem(Pointer(phandlea));
   OldHandele2NewHandle.Destroy;
   templatefile.done;
 
@@ -2784,7 +2784,7 @@ procedure SaveZCP(name: GDBString; {gdb: PGDBDescriptor}var drawing:TSimpleDrawi
 (*var
 //  memsize:longint;
 //  objcount:GDBInteger;
-//  pmem,tmem:GDBPointer;
+//  pmem,tmem:Pointer;
   outfile:GDBInteger;
   memorybuf:PTZctnrVectorBytes;
   //s:ZCPHeader;
@@ -2834,7 +2834,7 @@ end;
 procedure LoadZCP(name: GDBString; {gdb: PGDBDescriptor}var drawing:TSimpleDrawing);
 //var
 //  objcount:GDBInteger;
-//  pmem,tmem:GDBPointer;
+//  pmem,tmem:Pointer;
 //  infile:GDBInteger;
 //  head:ZCPheader;
   //memorybuf:TZctnrVectorBytes;

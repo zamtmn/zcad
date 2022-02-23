@@ -81,7 +81,7 @@ begin
              PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('Width',FA_READONLY,0);
              PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('LineSpace',FA_READONLY,0);
 
-                pt := GDBPointer(AllocEnt(GDBTextID));
+                pt := Pointer(AllocEnt(GDBTextID));
                 pt^.init(@drawings.GetCurrentDWG^.ConstructObjRoot,drawings.GetCurrentDWG^.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,'',nulvertex,2.5,0,1,0,jstl);
                 zcSetEntPropFromCurrentDrawingProp(pt);
            end;
@@ -93,7 +93,7 @@ begin
                 PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('Width',0,FA_READONLY);
                 PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('LineSpace',0,FA_READONLY);
 
-                pt := GDBPointer(AllocEnt(GDBMTextID));
+                pt := Pointer(AllocEnt(GDBMTextID));
                 pgdbobjmtext(pt)^.init(@drawings.GetCurrentDWG^.ConstructObjRoot,drawings.GetCurrentDWG^.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,
                                   '',nulvertex,2.5,0,1,0,jstl,10,1);
                 zcSetEntPropFromCurrentDrawingProp(pt);

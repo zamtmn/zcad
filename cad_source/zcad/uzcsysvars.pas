@@ -130,15 +130,15 @@ type
              DWG_DrawMode:PGDBBoolean;(*'Display line weights'*)
              DWG_OSMode:PTGDBOSMode;(*'Snap mode'*)
              DWG_PolarMode:PGDBBoolean;(*'Polar tracking mode'*)
-             DWG_CLayer:{-}PGDBPointer{/PPGDBLayerPropObjInsp/};(*'Current layer'*)
+             DWG_CLayer:{-}PPointer{/PPGDBLayerPropObjInsp/};(*'Current layer'*)
              DWG_CLinew:PTGDBLineWeight;(*'Current line weigwt'*)
              DWG_CColor:PTGDBPaletteColor;(*'Current color'*)
              DWG_LTScale:PGDBDouble;(*'Global line type scale'*)
              DWG_CLTScale:PGDBDouble;(*'Current line type scale'*)
-             DWG_CLType:{-}PGDBPointer{/PPGDBLtypePropObjInsp/};(*'Drawing line type'*)
-             DWG_CDimStyle:{-}PGDBPointer{/PPGDBDimStyleObjInsp/};(*'Dim style'*)
+             DWG_CLType:{-}PPointer{/PPGDBLtypePropObjInsp/};(*'Drawing line type'*)
+             DWG_CDimStyle:{-}PPointer{/PPGDBDimStyleObjInsp/};(*'Dim style'*)
              DWG_RotateTextInLT:PGDBBoolean;(*'Rotate text in line type'*)
-             DWG_CTStyle:{-}PGDBPointer{/PPGDBTextStyleObjInsp/};(*'Text style'*)
+             DWG_CTStyle:{-}PPointer{/PPGDBTextStyleObjInsp/};(*'Text style'*)
 
              DWG_LUnits:PTLUnits;
              DWG_LUPrec:PTUPrec;

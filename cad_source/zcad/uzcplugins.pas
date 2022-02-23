@@ -65,7 +65,7 @@ type
 
 var //pmodule: popenarraymoduledesc;
     gdbplugins:GDBPluginsArray;
-function getpmodule: GDBPointer;
+function getpmodule: Pointer;
 //procedure loadplugins(path: GDBString);
 {procedure startup;
 procedure finalize;}
@@ -135,7 +135,7 @@ begin
   programlog.logoutstr('end;',lp_DecPos,LM_Necessarily);
 end;
 
-function getpmodule: GDBPointer;
+function getpmodule: Pointer;
 begin
   result:=@gdbplugins;
 end;

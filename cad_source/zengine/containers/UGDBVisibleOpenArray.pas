@@ -26,7 +26,7 @@ PGDBObjEntityOpenArray=^GDBObjEntityOpenArray;
 {REGISTEROBJECTTYPE GDBObjEntityOpenArray}
 GDBObjEntityOpenArray= object(GDBObjOpenArrayOfPV)(*OpenArrayOfPObj*)
                       function AddPEntity(var entity:GDBObjEntity):TArrayIndex;virtual;
-                      procedure CloneEntityTo(PEA:PGDBObjEntityOpenArray;own:GDBPointer);virtual;
+                      procedure CloneEntityTo(PEA:PGDBObjEntityOpenArray;own:Pointer);virtual;
                       procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;
 
                 end;
@@ -45,7 +45,7 @@ begin
 end;
 
 
-procedure GDBObjEntityOpenArray.CloneEntityTo(PEA:PGDBObjEntityOpenArray;own:GDBPointer);
+procedure GDBObjEntityOpenArray.CloneEntityTo(PEA:PGDBObjEntityOpenArray;own:Pointer);
 var pobj,pcobj:PGDBObjEntity;
     ir:itrec;
 begin

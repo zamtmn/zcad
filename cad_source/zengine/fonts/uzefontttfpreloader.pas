@@ -73,7 +73,7 @@ type
   Short    = Smallint;    (* signed short integer,   must be on 16 bits *)
   Long        = Longint;
   ULong       = LongWord; (* unsigned long integer, must be on 32 bits *)
-  TT_Fixed    = LongInt;  (* Signed Fixed 16.16 Float *)
+  TT_Fixed    = LongInt;  (* Signed Fixed 16.16 Single *)
   TStorage    = array[0..16000] of Long;
   PStorage    = ^TStorage;
 

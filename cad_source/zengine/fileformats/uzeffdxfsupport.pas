@@ -65,7 +65,7 @@ function readmystr(var f:TZctnrVectorBytes):GDBString;
 function dxfvertexload(var f:TZctnrVectorBytes;dxfcod,currentdxfcod:GDBInteger; var v:gdbvertex):GDBBoolean;
 function dxfvertexload1(var f:TZctnrVectorBytes;dxfcod,currentdxfcod:GDBInteger; var v:gdbvertex):GDBBoolean;
 function dxfGDBDoubleload(var f:TZctnrVectorBytes;dxfcod,currentdxfcod:GDBInteger; var v:GDBDouble):GDBBoolean;
-function dxfGDBFloatload(var f:TZctnrVectorBytes;dxfcod,currentdxfcod:GDBInteger; var v:GDBFloat):GDBBoolean;
+function dxfFloatload(var f:TZctnrVectorBytes;dxfcod,currentdxfcod:GDBInteger; var v:Single):GDBBoolean;
 function dxfGDBIntegerload(var f:TZctnrVectorBytes;dxfcod,currentdxfcod:GDBInteger; var v:GDBInteger):GDBBoolean;
 function dxfGDBStringload(var f:TZctnrVectorBytes;dxfcod,currentdxfcod:GDBInteger; var v:GDBString):GDBBoolean;overload;
 function dxfGDBStringload(var f:TZctnrVectorBytes;dxfcod,currentdxfcod:GDBInteger; var v:TDXFEntsInternalStringType):GDBBoolean;overload;
@@ -228,7 +228,7 @@ begin
      result:=false;
      if currentdxfcod=dxfcod then begin v:=readmystrtodouble(f); result:=true end
 end;
-function dxfGDBFloatload(var f:TZctnrVectorBytes;dxfcod,currentdxfcod:GDBInteger; var v:GDBFloat):GDBBoolean;
+function dxfFloatload(var f:TZctnrVectorBytes;dxfcod,currentdxfcod:GDBInteger; var v:Single):GDBBoolean;
 begin
      result:=false;
      if currentdxfcod=dxfcod then begin v:=readmystrtodouble(f); result:=true end

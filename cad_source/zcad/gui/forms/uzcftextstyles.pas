@@ -420,13 +420,13 @@ begin
      DescLabel.Caption:=Format(rsCountTStylesFound,[tscounter]);
 end;
 
-procedure TextStyleCounter(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
+procedure TextStyleCounter(const PInstance,PCounted:Pointer;var Counter:GDBInteger);
 begin
      if (PGDBObjEntity(PInstance)^.GetObjType=GDBMTextID)or(PGDBObjEntity(PInstance)^.GetObjType=GDBTextID) then
      if PCounted=PGDBObjText(PInstance)^.TXTStyleIndex then
                                                            inc(Counter);
 end;
-procedure TextStyleCounterInDimStyles(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
+procedure TextStyleCounterInDimStyles(const PInstance,PCounted:Pointer;var Counter:GDBInteger);
 begin
      //if PCounted=PGDBDimStyle(PInstance)^.Text.DIMTXSTY then
      //                                                      inc(Counter);

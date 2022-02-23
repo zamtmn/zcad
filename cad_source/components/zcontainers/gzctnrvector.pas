@@ -44,7 +44,7 @@ GZVector{-}<T>{//}=object(TZAbsVector)
         {-}TEqualFunc=function(const a, b: T):Boolean;{//}//**< Тип функция идентичности T
         {-}TProcessProc=procedure(const p: PT);{//}       //**< Тип процедура принимающая указатель на T
     {-}var{//}
-        PArray:{-}PTArr{/GDBPointer/};(*hidden_in_objinsp*)   //**< Указатель на массив данных
+        PArray:{-}PTArr{/Pointer/};(*hidden_in_objinsp*)   //**< Указатель на массив данных
         Count:TArrayIndex;(*hidden_in_objinsp*)               //**< Количество занятых элементов массива
         Max:TArrayIndex;(*hidden_in_objinsp*)                 //**< Размер массива (под сколько элементов выделено памяти)
 
@@ -279,7 +279,7 @@ begin
   if count+sdata>max then
                          Grow((count+sdata)*2);
   result:={@parray^[}count{]};
-  //result:=pointer(GDBPlatformUInt(parray)+count*SizeOfData);
+  //result:=pointer(PtrUInt(parray)+count*SizeOfData);
   {$IFDEF FILL0ALLOCATEDMEMORY}
   fillchar(result^,sdata,0);
   {$ENDIF}
@@ -303,7 +303,7 @@ begin
                           max:=2*max;
                      end;}
   begin
-       //GDBPointer(addr) := parray;
+       //Pointer(addr) := parray;
        //addr := addr + count;
        { TODO : Надо копировать  с учетом compiler magic а не тупо мовить }
        addr:=@parray^[count];
@@ -313,7 +313,7 @@ begin
   end;
 end;
 function GZVector<T>.GetRealCount:Integer;
-{var p:GDBPointer;
+{var p:Pointer;
     ir:itrec;}
 begin
   result:=GetCount;
@@ -344,7 +344,7 @@ begin
   result:=count;
 end;}
 procedure GZVector<T>.Invert;
-(*var p,pl,tp:GDBPointer;
+(*var p,pl,tp:Pointer;
     ir:itrec;
 begin
   p:=beginiterate(ir);
@@ -353,13 +353,13 @@ begin
   Getmem(tp,SizeOfData);
   if p<>nil then
   repeat
-        if GDBPlatformUInt(pl)<=GDBPlatformUInt(p) then
+        if PtrUInt(pl)<=PtrUInt(p) then
                                          break;
         Move(p^,tp^,SizeOfData);
         Move(pl^,p^,SizeOfData);
         Move(tp^,pl^,SizeOfData);
-        dec(GDBPlatformUInt(pl),SizeOfData);
-        inc(GDBPlatformUInt(p),SizeOfData);
+        dec(PtrUInt(pl),SizeOfData);
+        inc(PtrUInt(p),SizeOfData);
   until false;
   Freemem(tp);
 end;*)
@@ -409,7 +409,7 @@ begin
                     result:=nil
                 else
                     begin
-                          {ir.itp:=pointer(GDBPlatformUInt(parray)-SizeOfData);}
+                          {ir.itp:=pointer(PtrUInt(parray)-SizeOfData);}
                           ir.itp:=pointer(parray);
                           dec(pt(ir.itp));
                           ir.itc:=-1;

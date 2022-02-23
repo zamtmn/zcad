@@ -69,7 +69,7 @@ begin
   result:=cmd_ok;//все окей
 end;
 
-procedure RunMountingMethodsFastEditor(PInstance:GDBPointer);
+procedure RunMountingMethodsFastEditor(PInstance:Pointer);
 var
    modalresult:integer;
 begin

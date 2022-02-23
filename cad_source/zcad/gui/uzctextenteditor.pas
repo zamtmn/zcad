@@ -26,9 +26,9 @@ uses
      Controls,Classes,Forms,uzccommandsmanager,uzcuitypes;
 var
     InfoForm:TInfoForm=nil;
-procedure RunTextEditor(Pobj:GDBPointer;var drawing:TDrawingDef);
+procedure RunTextEditor(Pobj:Pointer;var drawing:TDrawingDef);
 implementation
-procedure RunTextEditor(Pobj:GDBPointer;var drawing:TDrawingDef);
+procedure RunTextEditor(Pobj:Pointer;var drawing:TDrawingDef);
 var
    modalresult:integer;
    astring:ansistring;

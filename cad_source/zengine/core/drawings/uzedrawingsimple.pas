@@ -56,9 +56,9 @@ TSimpleDrawing= object(TAbstractDrawing)
                        procedure myGluUnProject(win:GDBVertex;out obj:GDBvertex);virtual;
                        function GetPcamera:PGDBObjCamera;virtual;
                        function GetCurrentROOT:PGDBObjGenericSubEntry;virtual;
-                       function GetCurrentRootSimple:GDBPointer;virtual;
-                       function GetCurrentRootObjArraySimple:GDBPointer;virtual;
-                       function GetBlockDefArraySimple:GDBPointer;virtual;
+                       function GetCurrentRootSimple:Pointer;virtual;
+                       function GetCurrentRootObjArraySimple:Pointer;virtual;
+                       function GetBlockDefArraySimple:Pointer;virtual;
                        function GetConstructObjRoot:PGDBObjRoot;virtual;
                        function GetConstructEntsCount:Integer;virtual;
                        function GetSelObjArray:PGDBSelectedObjArray;virtual;
@@ -73,7 +73,7 @@ TSimpleDrawing= object(TAbstractDrawing)
                        procedure SetCurrentDWG;virtual;
                        function StoreOldCamerapPos:Pointer;virtual;
                        procedure StoreNewCamerapPos(command:Pointer);virtual;
-                       procedure rtmodify(obj:PGDBObjEntity;md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;
+                       procedure rtmodify(obj:PGDBObjEntity;md:Pointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;
                        procedure rtmodifyonepoint(obj:PGDBObjEntity;rtmod:TRTModifyData;wc:gdbvertex);virtual;
                        procedure PushStartMarker(CommandName:GDBString);virtual;
                        procedure PushEndMarker;virtual;
@@ -83,12 +83,12 @@ TSimpleDrawing= object(TAbstractDrawing)
                        function GetUndoTop:TArrayIndex;virtual;
                        function CanUndo:boolean;virtual;
                        function CanRedo:boolean;virtual;
-                       function GetUndoStack:GDBPointer;virtual;
+                       function GetUndoStack:Pointer;virtual;
                        function GetDWGUnits:{PTUnitManager}pointer;virtual;
                        procedure AssignLTWithFonts(pltp:PGDBLtypeProp);virtual;
-                       function GetMouseEditorMode:GDBByte;virtual;
-                       function DefMouseEditorMode(SetMask,ReSetMask:GDBByte):GDBByte;virtual;
-                       function SetMouseEditorMode(mode:GDBByte):GDBByte;virtual;
+                       function GetMouseEditorMode:Byte;virtual;
+                       function DefMouseEditorMode(SetMask,ReSetMask:Byte):Byte;virtual;
+                       function SetMouseEditorMode(mode:Byte):Byte;virtual;
                        procedure FreeConstructionObjects;virtual;
                        function GetChangeStampt:GDBBoolean;virtual;
                        function CreateDrawingRC(_maxdetail:GDBBoolean=false):TDrawContext;virtual;
@@ -115,7 +115,7 @@ begin
      if tdesc<>nil then
      if PEntity^.IsHaveGRIPS then
      begin
-       Getmem(GDBPointer(tdesc^.pcontrolpoint),sizeof(GDBControlPointArray));
+       Getmem(Pointer(tdesc^.pcontrolpoint),sizeof(GDBControlPointArray));
        PGripsCreator^.addcontrolpoints(tdesc);
      end;
      PEntity^.bp.ListPos.Owner.ImSelected(@self,PEntity^.bp.ListPos.SelfIndex);
@@ -252,7 +252,7 @@ begin
   ConstructObjRoot.ObjMatrix:=onematrix;
 end;
 
-function TSimpleDrawing.GetMouseEditorMode:GDBByte;
+function TSimpleDrawing.GetMouseEditorMode:Byte;
 begin
      if wa.getviewcontrol<>nil then
                                  result:=wa.param.md.mode
@@ -260,13 +260,13 @@ begin
                                  result:=0;
 end;
 
-function TSimpleDrawing.DefMouseEditorMode(SetMask,ReSetMask:GDBByte):GDBByte;
+function TSimpleDrawing.DefMouseEditorMode(SetMask,ReSetMask:Byte):Byte;
 begin
      result:=GetMouseEditorMode;
      SetMouseEditorMode((result or setmask) and (not ReSetMask))
 end;
 
-function TSimpleDrawing.SetMouseEditorMode(mode:GDBByte):GDBByte;
+function TSimpleDrawing.SetMouseEditorMode(mode:Byte):Byte;
 begin
      if wa.getviewcontrol<>nil then
                                  begin
@@ -359,7 +359,7 @@ function TSimpleDrawing.GetUndoTop:TArrayIndex;
 begin
      result:=0;
 end;
-function TSimpleDrawing.GetUndoStack:GDBPointer;
+function TSimpleDrawing.GetUndoStack:Pointer;
 begin
      result:=nil;
 end;
@@ -376,7 +376,7 @@ function CreateSimpleDWG:PTSimpleDrawing;
 //var
    //ptd:PTSimpleDrawing;
 begin
-     Getmem(GDBPointer(result),sizeof(TSimpleDrawing));
+     Getmem(Pointer(result),sizeof(TSimpleDrawing));
      //ptd:=currentdwg;
      //currentdwg:=pointer(result);
      result^.init(nil);//(@units);
@@ -398,10 +398,10 @@ begin
      obj^.rtmodifyonepoint(rtmod);
      obj^.YouChanged(self);
 end;
-procedure TSimpleDrawing.rtmodify(obj:PGDBObjEntity;md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);
+procedure TSimpleDrawing.rtmodify(obj:PGDBObjEntity;md:Pointer;dist,wc:gdbvertex;save:GDBBoolean);
 var i:GDBInteger;
     point:pcontrolpointdesc;
-    p:GDBPointer;
+    p:Pointer;
     m,{m2,}mt:DMatrix4D;
     t:gdbvertex;
     //tt:dvector4d;
@@ -519,7 +519,7 @@ begin
 
           //PGDBObjGenericWithSubordinated(obj^.bp.owner)^.ImEdited({@self}obj,obj^.bp.PSelfInOwnerArray);
           PSelectedObjDesc(md).ptempobj^.done;
-          Freemem(GDBPointer(PSelectedObjDesc(md).ptempobj));
+          Freemem(Pointer(PSelectedObjDesc(md).ptempobj));
           PSelectedObjDesc(md).ptempobj:=nil;
      end
      else
@@ -615,16 +615,16 @@ begin
   else
     result:=0;
 end;
-function TSimpleDrawing.GetCurrentRootSimple:GDBPointer;
+function TSimpleDrawing.GetCurrentRootSimple:Pointer;
 begin
      result:=self.pObjRoot;
 end;
-function TSimpleDrawing.GetCurrentRootObjArraySimple:GDBPointer;
+function TSimpleDrawing.GetCurrentRootObjArraySimple:Pointer;
 begin
      result:=@pObjRoot.ObjArray;
 end;
 
-function TSimpleDrawing.GetBlockDefArraySimple:GDBPointer;
+function TSimpleDrawing.GetBlockDefArraySimple:Pointer;
 begin
      result:=@self.BlockDefArray;
 end;

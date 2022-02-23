@@ -25,7 +25,7 @@ TDrawingContext=record
                    VisibleActualy:TActulity;
                    InfrustumActualy:TActulity;
                    DRAWCOUNT:TActulity;
-                   SysLayer:GDBPointer;
+                   SysLayer:Pointer;
                    Zoom:GDBDouble;
                    matrixs:tmatrixs;
                    pcamera:PGDBBaseCamera;
@@ -41,7 +41,7 @@ TDrawContext=record
                    DrawMode:GDBBoolean;
                    LWDisplayScale:GDBInteger{=2};
                    DefaultLW:GDBInteger{=25};
-                   OwnerLineWeight:GDBSmallInt;
+                   OwnerLineWeight:SmallInt;
                    OwnerColor:GDBInteger;
                    MaxWidth:GDBInteger;
                    ScrollMode:GDBBoolean;

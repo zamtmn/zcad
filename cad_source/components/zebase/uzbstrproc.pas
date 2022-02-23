@@ -102,7 +102,7 @@ begin
 end;
 procedure KillString(var str:GDBString);inline;
 begin
-     GDBPointer(str):=nil;
+     Pointer(str):=nil;
 end;
 function MakeHash(const s: GDBString):SizeUInt;
 var

@@ -36,7 +36,7 @@ GDBBbillOfMaterial= object(GZVector{-}<GDBBOMItem>{//})(*OpenArrayOfData=GDBNumI
                        constructor init(m:GDBInteger);
                        procedure freeelement(PItem:PT);virtual;
                        //function getnamenumber(_Name:GDBString):GDBstring;
-                       //function AddByPointer(p:GDBPointer):TArrayIndex;virtual;
+                       //function AddByPointer(p:Pointer):TArrayIndex;virtual;
                        function findorcreate(_Name:GDBString):PGDBBOMItem;virtual;
                        end;
 {EXPORT-}

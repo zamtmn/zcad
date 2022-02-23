@@ -15,11 +15,11 @@ DeviceDbBaseObject= object(DbBaseObject)
                        NameTemplate:GDBString;(*'**Формат названия'*)(*oi_readonly*)
                        NameFullTemplate:GDBString;(*'**Формат полного названия'*)(*oi_readonly*)
                        UIDTemplate:GDBString;(*'**Формат уникального идентификатора'*)(*oi_readonly*)
-                       Variants:{-}TCSVDocument{/GDBPointer/};(*'Варианты'*)(*oi_readonly*)
+                       Variants:{-}TCSVDocument{/Pointer/};(*'Варианты'*)(*oi_readonly*)
                        constructor initnul;
-                       procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;
+                       procedure FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);virtual;
                        procedure Format;virtual;
-                       procedure SetOtherFields(PField,PTypeDescriptor:GDBPointer);virtual;
+                       procedure SetOtherFields(PField,PTypeDescriptor:Pointer);virtual;
                  end;
 {REGISTEROBJECTTYPE ElDeviceBaseObject}
 ElDeviceBaseObject= object(DeviceDbBaseObject)
@@ -60,21 +60,21 @@ end;
 constructor ElDeviceBaseObject.initnul;
 begin
      Inherited initnul;
-     GDBPointer(Pins):=nil;
+     Pointer(Pins):=nil;
      Pins:='ElDeviceBaseObject.initnul';
 end;
 constructor DeviceDbBaseObject.initnul;
 begin
      Inherited initnul;
      variants:=nil;
-     GDBPointer(NameTemplate):=nil;
+     Pointer(NameTemplate):=nil;
      //NameTemplate:='DeviceDbBaseObject.initnul';
-     GDBPointer(UIDTemplate):=nil;
+     Pointer(UIDTemplate):=nil;
      //UIDTemplate:='DeviceDbBaseObject.initnul';
-     GDBPointer(NameFullTemplate):=nil;
+     Pointer(NameFullTemplate):=nil;
      //NameFullTemplate:='DeviceDbBaseObject.initnul';
 end;
-procedure DeviceDbBaseObject.SetOtherFields(PField,PTypeDescriptor:GDBPointer);
+procedure DeviceDbBaseObject.SetOtherFields(PField,PTypeDescriptor:Pointer);
 var
     i:integer;
     FieldName:string;
@@ -82,7 +82,7 @@ var
 
     //offset:GDBInteger;
     //tc:PUserTypeDescriptor;
-    //pf:GDBPointer;
+    //pf:Pointer;
 
     headarray:theadarray;
     head:thead;
@@ -146,7 +146,7 @@ begin
      headarray.Destroy;
 end;
 
-procedure DeviceDbBaseObject.FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);
+procedure DeviceDbBaseObject.FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);
 begin
      SetOtherFields(PField,PTypeDescriptor);
      format;
@@ -247,7 +247,7 @@ begin
      pt^.RegisterVMT(TypeOf(CableDeviceBaseObject));
      pt^.AddMetod('','initnul','',@CableDeviceBaseObject.initnul,m_constructor);
 
-     //pt^.AddMetod('AfterDeSerialize','(SaveFlag:GDBWord; membuf:GDBPointer):GDBInteger;',nil,m_virtual);
+     //pt^.AddMetod('AfterDeSerialize','(SaveFlag:Word; membuf:Pointer):GDBInteger;',nil,m_virtual);
      //pt^.AddMetod('format','',@ElDeviceBaseObject.format,m_procedure);
      //t.initnul;
      //pt^.RunMetod('initnul',@t);

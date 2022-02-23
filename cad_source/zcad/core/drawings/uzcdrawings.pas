@@ -43,13 +43,13 @@ TZCADDrawingsManager= object(TZctnrVectorPGDBaseObjects)
                     constructor init;
                     constructor initnul;
                     destructor done;virtual;
-                    //function AfterDeSerialize(SaveFlag:GDBWord; membuf:GDBPointer):integer;virtual;
+                    //function AfterDeSerialize(SaveFlag:Word; membuf:Pointer):integer;virtual;
 
                     function GetCurrentROOT:PGDBObjGenericSubEntry;
 
                     function GetCurrentDWG:{PTZCADDrawing}PTSimpleDrawing;
                     function GetCurrentOGLWParam:POGLWndtype;
-                    function GetUndoStack:GDBPointer;
+                    function GetUndoStack:Pointer;
                     procedure asociatedwgvars;
                     procedure freedwgvars;
                     procedure SetCurrentDWG(PDWG:PTAbstractDrawing);
@@ -62,12 +62,12 @@ TZCADDrawingsManager= object(TZctnrVectorPGDBaseObjects)
                     procedure CopyBlock(_from,_to:PTSimpleDrawing;_source:PGDBObjBlockdef);
                     function CopyEnt(_from,_to:PTSimpleDrawing;_source:PGDBObjEntity):PGDBObjEntity;
                     procedure AddBlockFromDBIfNeed(_to:{PTSimpleDrawing}PTDrawingDef;name:GDBString);
-                    //procedure rtmodify(obj:PGDBObjEntity;md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;
-                    function FindOneInArray(const entities:GDBObjOpenArrayOfPV;objID:GDBWord; InOwner:GDBBoolean):PGDBObjEntity;
-                    function FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjEntity;
+                    //procedure rtmodify(obj:PGDBObjEntity;md:Pointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;
+                    function FindOneInArray(const entities:GDBObjOpenArrayOfPV;objID:Word; InOwner:GDBBoolean):PGDBObjEntity;
+                    function FindEntityByVar(objID:Word;vname,vvalue:GDBString):PGDBObjEntity;
                     procedure FindMultiEntityByType(Filter:TEntsTypeFilter;var entarray:TZctnrVectorPGDBaseObjects);
-                    procedure FindMultiEntityByVar(objID:GDBWord;vname,vvalue:GDBString;var entarray:TZctnrVectorPGDBaseObjects);
-                    procedure FindMultiEntityByVar2(objID:GDBWord;vname:GDBString;var entarray:TZctnrVectorPGDBaseObjects);
+                    procedure FindMultiEntityByVar(objID:Word;vname,vvalue:GDBString;var entarray:TZctnrVectorPGDBaseObjects);
+                    procedure FindMultiEntityByVar2(objID:Word;vname:GDBString;var entarray:TZctnrVectorPGDBaseObjects);
                     procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
                     //procedure AddEntToCurrentDrawingWithUndo(PEnt:PGDBObjEntity);
                     function GetDefaultDrawingName:GDBString;
@@ -323,7 +323,7 @@ end;
       undomethod.Code:=pointer(drawings.GetCurrentROOT^.GoodRemoveMiFromArray);
       undomethod.Data:=drawings.GetCurrentROOT;
  end;
-function TZCADDrawingsManager.FindOneInArray(const entities:GDBObjOpenArrayOfPV;objID:GDBWord; InOwner:GDBBoolean):PGDBObjEntity;
+function TZCADDrawingsManager.FindOneInArray(const entities:GDBObjOpenArrayOfPV;objID:Word; InOwner:GDBBoolean):PGDBObjEntity;
 var
    //pobj:pGDBObjEntity;
    ir:itrec;
@@ -371,7 +371,7 @@ function TZCADDrawingsManager.GetCurrentDWG;
 begin
  result:=CurrentDWG;
 end;
-function TZCADDrawingsManager.GetUndoStack:GDBPointer;
+function TZCADDrawingsManager.GetUndoStack:Pointer;
 var
    pdwg:PTSimpleDrawing;
 begin
@@ -508,7 +508,7 @@ function TZCADDrawingsManager.CreateDWG(preloadedfile1,preloadedfile2:GDBString)
 var
    ptd:PTsimpleDrawing;
 begin
-     Getmem(GDBPointer(result),sizeof(TZCADDrawing));
+     Getmem(Pointer(result),sizeof(TZCADDrawing));
      ptd:=currentdwg;
      currentdwg:=result;
      result^.init(@units,preloadedfile1,preloadedfile2);
@@ -519,7 +519,7 @@ end;
 var
    ptd:PTSimpleDrawing;
 begin
-     Getmem(GDBPointer(result),sizeof(TSimpleDrawing));
+     Getmem(Pointer(result),sizeof(TSimpleDrawing));
      ptd:=currentdwg;
      currentdwg:=pointer(result);
      result^.init(nil);//(@units);
@@ -537,7 +537,7 @@ begin
   ProjectUnits.SetNextManager(@units);
 
   CurrentDWG:=nil;
-  //Getmem(GDBPointer(CurrentDWG),sizeof(TZCADDrawing));
+  //Getmem(Pointer(CurrentDWG),sizeof(TZCADDrawing));
   if CurrentDWG<>nil then
   begin
        CurrentDWG.init(@ProjectUnits);
@@ -737,7 +737,7 @@ begin
      //_dest.vp.Layer:=createlayerifneed(_from,_to,_source.vp.Layer);
 end;
 procedure RemapLStyle(_from,_to:PTSimpleDrawing;_source,_dest:PGDBObjEntity);
-var //p:GDBPointer;
+var //p:Pointer;
     ir:itrec;
     psp:PShapeProp;
     ptp:PTextProp;
@@ -830,7 +830,7 @@ begin
     until pvisible=nil;
   end;
 end;
-procedure TZCADDrawingsManager.FindMultiEntityByVar(objID:GDBWord;vname,vvalue:GDBString;var entarray:TZctnrVectorPGDBaseObjects);
+procedure TZCADDrawingsManager.FindMultiEntityByVar(objID:Word;vname,vvalue:GDBString;var entarray:TZctnrVectorPGDBaseObjects);
 var
    croot:PGDBObjGenericSubEntry;
    pvisible{,pvisible2,pv}:PGDBObjEntity;
@@ -860,7 +860,7 @@ begin
          until pvisible=nil;
      end;
 end;
-procedure TZCADDrawingsManager.FindMultiEntityByVar2(objID:GDBWord;vname:GDBString;var entarray:TZctnrVectorPGDBaseObjects);
+procedure TZCADDrawingsManager.FindMultiEntityByVar2(objID:Word;vname:GDBString;var entarray:TZctnrVectorPGDBaseObjects);
 var
    croot:PGDBObjGenericSubEntry;
    pvisible{,pvisible2,pv}:PGDBObjEntity;
@@ -888,7 +888,7 @@ begin
      end;
 end;
 
-function TZCADDrawingsManager.FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjEntity;
+function TZCADDrawingsManager.FindEntityByVar(objID:Word;vname,vvalue:GDBString):PGDBObjEntity;
 var
    croot:PGDBObjGenericSubEntry;
    pvisible{,pvisible2,pv}:PGDBObjEntity;

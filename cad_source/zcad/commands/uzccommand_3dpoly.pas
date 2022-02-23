@@ -94,7 +94,7 @@ begin
 end;
 
 
-function _3DPoly_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function _3DPoly_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 var
     dc:TDrawContext;
 begin
@@ -104,7 +104,7 @@ begin
     if p3dpl=nil then
     begin
     dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-    p3dpl := GDBPointer({drawings.GetCurrentROOT^.ObjArray.CreateInitObj}drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBPolylineID,{drawings.GetCurrentROOT}drawings.GetCurrentDWG^.GetConstructObjRoot));
+    p3dpl := Pointer({drawings.GetCurrentROOT^.ObjArray.CreateInitObj}drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBPolylineID,{drawings.GetCurrentROOT}drawings.GetCurrentDWG^.GetConstructObjRoot));
     zcSetEntPropFromCurrentDrawingProp(p3dpl);
     p3dpl^.AddVertex(wc);
     p3dpl^.Formatentity(drawings.GetCurrentDWG^,dc);
@@ -119,7 +119,7 @@ begin
   end
 end;
 
-function _3DPoly_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function _3DPoly_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 var
   domethod,undomethod:tmethod;
   polydata:tpolydata;

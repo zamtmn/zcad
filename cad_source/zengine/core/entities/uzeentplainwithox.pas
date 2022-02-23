@@ -22,7 +22,7 @@ unit uzeentplainwithox;
 interface
 uses uzegeometrytypes,uzeentplain,uzegeometry,sysutils;
 type
-//pprojoutbound:{-}PGDBOOutbound2DIArray{/GDBPointer/};
+//pprojoutbound:{-}PGDBOOutbound2DIArray{/Pointer/};
 {EXPORT+}
 PGDBObjPlainWithOX=^GDBObjPlainWithOX;
 {REGISTEROBJECTTYPE GDBObjPlainWithOX}

@@ -71,8 +71,8 @@ TBasicFinter=record
   {REGISTERRECORDTYPE TELCableComParam}
   TELCableComParam=record
                         Traces:TEnumData;(*'Trace'*)
-                        PCable:{PGDBObjCable}GDBPointer;(*'Cabel'*)
-                        PTrace:{PGDBObjNet}GDBPointer;(*'Trace (pointer)'*)
+                        PCable:{PGDBObjCable}Pointer;(*'Cabel'*)
+                        PTrace:{PGDBObjNet}Pointer;(*'Trace (pointer)'*)
                    end;
   {REGISTERRECORDTYPE TELLeaderComParam}
   TELLeaderComParam=record
@@ -87,8 +87,8 @@ TBasicFinter=record
     constructor init(cn:GDBString;SA,DA:TCStartAttr);
     procedure CommandStart(Operands:TCommandOperands); virtual;
     procedure CommandCancel; virtual;
-    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
-    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
+    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger; virtual;
+    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger; virtual;
   end;
 
   {EM_SRBUILD_com = object(FloatInsert_com)
@@ -213,7 +213,7 @@ begin
      end;
 end;
 *)
-(*function icf (pnode:PGDBBaseNode;PExpr:GDBPointer):GDBBoolean;
+(*function icf (pnode:PGDBBaseNode;PExpr:Pointer):GDBBoolean;
 //var
 //   pvd:pvardesk;
 begin
@@ -1329,7 +1329,7 @@ procedure El_Wire_com.CommandCancel;
 begin
 end;
 
-function El_Wire_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger;
+function El_Wire_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger;
 var //po:PGDBObjSubordinated;
     Objects:GDBObjOpenArrayOfPV;
     DC:TDrawContext;
@@ -1348,9 +1348,9 @@ begin
        then
        begin
             PGDBObjEntity(osp^.PGDBObject)^.format;
-            TMWOHistoryOut(GDBPointer(PGDBObjline(osp^.PGDBObject)^.ObjToGDBString('Found: ','')));
+            TMWOHistoryOut(Pointer(PGDBObjline(osp^.PGDBObject)^.ObjToGDBString('Found: ','')));
             po:=PGDBObjEntity(osp^.PGDBObject)^.getowner;
-            //FirstOwner:=GDBPointer(po);
+            //FirstOwner:=Pointer(po);
        end
   end {else FirstOwner:=oldfirstowner};*)
   if (button and MZW_LBUTTON)<>0 then
@@ -1359,13 +1359,13 @@ begin
     Prompt('Вторая точка:');
     New_line := PGDBObjLine(ENTF_CreateLine(@drawings.GetCurrentDWG^.ConstructObjRoot,@drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray,[wc.x,wc.y,wc.z,wc.x,wc.y,wc.z]));
     zcSetEntPropFromCurrentDrawingProp(New_line);
-    //New_line := GDBPointer(drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID{,drawings.GetCurrentROOT}));
+    //New_line := Pointer(drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID{,drawings.GetCurrentROOT}));
     //GDBObjLineInit(drawings.GetCurrentROOT,New_line,drawings.GetCurrentDWG.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,wc,wc);
     New_line^.Formatentity(drawings.GetCurrentDWG^,dc);
   end
 end;
 
-function El_Wire_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger;
+function El_Wire_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger;
 var //po:PGDBObjSubordinated;
     mode:GDBInteger;
     TempNet:PGDBObjNet;
@@ -1401,7 +1401,7 @@ begin
             PGDBObjEntity(osp^.PGDBObject)^.formatentity(drawings.GetCurrentDWG^,dc);
             ZCMsgCallBackInterface.TextMessage(PGDBObjline(osp^.PGDBObject)^.ObjToGDBString('Found: ',''),TMWOHistoryOut);
             //po:=PGDBObjEntity(osp^.PGDBObject)^.getowner;
-            //SecondOwner:=GDBPointer(po);
+            //SecondOwner:=Pointer(po);
        end
   end {else SecondOwner:=nil};
   //pl^.RenderFeedback;
@@ -1425,7 +1425,7 @@ begin
     case mode of
           0:begin
                  TempNet:=nil;
-                 Getmem(GDBPointer(TempNet),sizeof(GDBObjNet));
+                 Getmem(Pointer(TempNet),sizeof(GDBObjNet));
                  TempNet^.initnul(nil);
                  zcSetEntPropFromCurrentDrawingProp(TempNet);
                  drawings.standardization(TempNet,GDBNetID);
@@ -1600,7 +1600,7 @@ begin
   cabcomparam.PTrace:=nil;
   //Freemem(pointer(p3dpl));
 end;
-function _Cable_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function _Cable_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 var
    pvd:pvardesk;
    domethod,undomethod:tmethod;
@@ -1613,8 +1613,8 @@ begin
     if p3dpl=nil then
     begin
       dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-    p3dpl := GDBPointer(drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateInitObj(GDBCableID,drawings.GetCurrentROOT));
-    //p3dpl := GDBPointer(drawings.GetCurrentROOT.ObjArray.CreateinitObj(GDBCableID,drawings.GetCurrentROOT));
+    p3dpl := Pointer(drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateInitObj(GDBCableID,drawings.GetCurrentROOT));
+    //p3dpl := Pointer(drawings.GetCurrentROOT.ObjArray.CreateinitObj(GDBCableID,drawings.GetCurrentROOT));
     zcSetEntPropFromCurrentDrawingProp(p3dpl);
     drawings.standardization(p3dpl,GDBCableID);
     //p3dpl^.init(@drawings.GetCurrentDWG.ObjRoot,drawings.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^);
@@ -1792,7 +1792,7 @@ begin
                                begin
                                     tcable := AllocCable;
                                     tcable.init(drawings.GetCurrentROOT,nil,0);
-                                    //tcable := GDBPointer(drawings.GetCurrentROOT.ObjArray.CreateinitObj(GDBCableID,drawings.GetCurrentROOT));
+                                    //tcable := Pointer(drawings.GetCurrentROOT.ObjArray.CreateinitObj(GDBCableID,drawings.GetCurrentROOT));
                                     ptcablevarext:=tcable^.GetExtension<TVariablesExtender>;
                                     pcablevarext:=cable^.GetExtension<TVariablesExtender>;
                                     ptcablevarext.entityunit.copyfrom(@pcablevarext.entityunit);
@@ -1817,7 +1817,7 @@ begin
 end;
 
 
-function _Cable_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function _Cable_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 var //po:PGDBObjSubordinated;
     plastw:pgdbvertex;
     //tw1,tw2:gdbvertex;
@@ -2759,7 +2759,7 @@ begin
   cman.done;
   result:=cmd_ok;
 end;
-function El_Leader_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function El_Leader_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 var //po:PGDBObjSubordinated;
     pleader:PGDBObjElLeader;
     domethod,undomethod:tmethod;
@@ -2942,7 +2942,7 @@ var
 begin
   result := AllocCable;
   result.init(drawings.GetCurrentROOT,nil,0);
-  //result := GDBPointer(drawings.GetCurrentROOT.ObjArray.CreateInitObj(GDBCableID,drawings.GetCurrentROOT));
+  //result := Pointer(drawings.GetCurrentROOT.ObjArray.CreateInitObj(GDBCableID,drawings.GetCurrentROOT));
   pentvarext:=result^.GetExtension<TVariablesExtender>;
   pentvarext.entityunit.copyfrom(units.findunit(SupportPath,InterfaceTranslate,'cable'));
   pvd:=pentvarext.entityunit.FindVariable('NMO_Suffix');

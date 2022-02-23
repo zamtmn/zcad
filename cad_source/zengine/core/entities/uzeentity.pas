@@ -33,10 +33,10 @@ PGDBObjEntity=^GDBObjEntity;
 PTExtAttrib=^TExtAttrib;
 {REGISTERRECORDTYPE TExtAttrib}
 TExtAttrib=record
-                 OwnerHandle:GDBQWord;
-                 MainFunctionHandle:GDBQWord;
-                 dwgHandle:GDBQWord;
-                 Handle:GDBQWord;
+                 OwnerHandle:QWord;
+                 MainFunctionHandle:QWord;
+                 dwgHandle:QWord;
+                 Handle:QWord;
                  Upgrade:TEntUpgradeInfo;
                  ExtAttrib2:GDBBoolean;
            end;
@@ -49,7 +49,7 @@ GDBObjEntity= object(GDBObjSubordinated)
                     PExtAttrib:PTExtAttrib;(*hidden_in_objinsp*)
                     Representation:TZEntityRepresentation;
                     destructor done;virtual;
-                    constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
+                    constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                     constructor initnul(owner:PGDBObjGenericWithSubordinated);
                     procedure SaveToDXFObjPrefix(var  outhandle:{GDBInteger}TZctnrVectorBytes;entname,dbname:GDBString;var IODXFContext:TIODXFContext;notprocessHandle:boolean=false);
                     function LoadFromDXFObjShared(var f:TZctnrVectorBytes;dxfcod:GDBInteger;ptu:PExtensionData;var drawing:TDrawingDef):GDBBoolean;
@@ -72,7 +72,7 @@ GDBObjEntity= object(GDBObjSubordinated)
                     procedure FormatFeatures(var drawing:TDrawingDef);virtual;
                     procedure FormatFast(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                     procedure FormatAfterEdit(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                    procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;
+                    procedure FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);virtual;
 
                     procedure DrawWithAttrib(var DC:TDrawContext{visibleactualy:TActulity;subrender:GDBInteger});virtual;
                     procedure DrawWithOutAttrib({visibleactualy:TActulity;}var DC:TDrawContext{subrender:GDBInteger});virtual;
@@ -87,11 +87,11 @@ GDBObjEntity= object(GDBObjSubordinated)
                     procedure RenderFeedbackIFNeed(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                     function CalculateLineWeight(const DC:TDrawContext):GDBInteger;//inline;
                     //function InRect:TInRect;virtual;
-                    function Clone(own:GDBPointer):PGDBObjEntity;virtual;
+                    function Clone(own:Pointer):PGDBObjEntity;virtual;
                     procedure SetFromClone(_clone:PGDBObjEntity);virtual;
-                    function CalcOwner(own:GDBPointer):GDBPointer;virtual;
-                    procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
-                    procedure rtsave(refp:GDBPointer);virtual;
+                    function CalcOwner(own:Pointer):Pointer;virtual;
+                    procedure rtedit(refp:Pointer;mode:Single;dist,wc:gdbvertex);virtual;
+                    procedure rtsave(refp:Pointer);virtual;
                     procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;abstract;
                     procedure getoutbound(var DC:TDrawContext);virtual;
                     procedure getonlyoutbound(var DC:TDrawContext);virtual;
@@ -107,26 +107,26 @@ GDBObjEntity= object(GDBObjSubordinated)
                     function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;virtual;
 
                     function isonmouse(var popa:TZctnrVectorPGDBaseObjects;mousefrustum:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
-                    procedure startsnap(out osp:os_record; out pdata:GDBPointer);virtual;
-                    function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
-                    procedure endsnap(out osp:os_record; var pdata:GDBPointer);virtual;
+                    procedure startsnap(out osp:os_record; out pdata:Pointer);virtual;
+                    function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
+                    procedure endsnap(out osp:os_record; var pdata:Pointer);virtual;
                     function getintersect(var osp:os_record;pobj:PGDBObjEntity; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
                     procedure higlight(var DC:TDrawContext);virtual;
-                    procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
+                    procedure addcontrolpoints(tdesc:Pointer);virtual;abstract;
                     function select(var SelectedObjCount:GDBInteger;s2s:TSelect2Stage):GDBBoolean;virtual;
-                    //procedure Selector(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger);virtual;
-                    //procedure DeSelector(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger);virtual;
+                    //procedure Selector(SelObjArray:Pointer;var SelectedObjCount:GDBInteger);virtual;
+                    //procedure DeSelector(SelObjArray:Pointer;var SelectedObjCount:GDBInteger);virtual;
                     procedure DeSelect(var SelectedObjCount:GDBInteger;ds2s:TDeSelect2Stage);virtual;
                     function SelectQuik:GDBBoolean;virtual;
                     procedure remapcontrolpoints(pp:PGDBControlPointArray;pcount:TActulity;ScrollMode:GDBBoolean;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
-                    //procedure rtmodify(md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;
+                    //procedure rtmodify(md:Pointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;
                     procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
                     procedure transform(const t_matrix:DMatrix4D);virtual;
                     procedure remaponecontrolpoint(pdesc:PControlPointDesc);virtual;abstract;
-                    function beforertmodify:GDBPointer;virtual;
-                    procedure afterrtmodify(p:GDBPointer);virtual;
-                    function IsRTNeedModify(const Point:PControlPointDesc; p:GDBPointer):Boolean;virtual;
-                    procedure clearrtmodify(p:GDBPointer);virtual;
+                    function beforertmodify:Pointer;virtual;
+                    procedure afterrtmodify(p:Pointer);virtual;
+                    function IsRTNeedModify(const Point:PControlPointDesc; p:Pointer):Boolean;virtual;
+                    procedure clearrtmodify(p:Pointer);virtual;
                     function getowner:PGDBObjSubordinated;virtual;
                     function GetMainOwner:PGDBObjSubordinated;virtual;
                     function getmatrix:PDMatrix4D;virtual;
@@ -138,7 +138,7 @@ GDBObjEntity= object(GDBObjSubordinated)
                     function GetObjTypeName:GDBString;virtual;
                     function GetObjType:TObjID;virtual;
                     procedure correctobjects(powner:PGDBObjEntity;pinownerarray:GDBInteger);virtual;
-                    function GetLineWeight:GDBSmallint;inline;
+                    function GetLineWeight:SmallInt;inline;
                     function IsSelected:GDBBoolean;virtual;
                     function IsActualy:GDBBoolean;virtual;
                     function IsHaveLCS:GDBBoolean;virtual;
@@ -165,7 +165,7 @@ GDBObjEntity= object(GDBObjSubordinated)
                     procedure CopyVPto(var toObj:GDBObjEntity);virtual;
                     function CanSimplyDrawInWCS(const DC:TDrawContext;const ParamSize,TargetSize:GDBDouble):GDBBoolean;inline;
                     procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                    procedure IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);virtual;
+                    procedure IterateCounter(PCounted:Pointer;var Counter:GDBInteger;proc:TProcCounter);virtual;
                     class function GetDXFIOFeatures:TDXFEntIODataManager;static;
                     function GetNameInBlockTable:GDBString;virtual;
               end;
@@ -174,7 +174,7 @@ var onlygetsnapcount:GDBInteger;
     GDBObjEntityDXFFeatures:TDXFEntIODataManager;
 implementation
 uses usimplegenerics,uzeentityfactory{,UGDBSelectedObjArray};
-procedure GDBObjEntity.IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);
+procedure GDBObjEntity.IterateCounter(PCounted:Pointer;var Counter:GDBInteger;proc:TProcCounter);
 begin
     proc(@self,PCounted,Counter);
 end;
@@ -309,7 +309,7 @@ begin
      vp.LastCameraPos:=-1;
      vp.color:=ClByLayer;
 end;
-function GDBObjEntity.CalcOwner(own:GDBPointer):GDBPointer;
+function GDBObjEntity.CalcOwner(own:Pointer):Pointer;
 begin
      if own=nil then
                     result:=bp.ListPos.owner
@@ -352,7 +352,7 @@ function GDBObjEntity.AddExtAttrib;
 begin
      if PExtAttrib=nil then
                            begin
-                                Getmem(GDBPointer(PExtAttrib),sizeof(TExtAttrib));
+                                Getmem(Pointer(PExtAttrib),sizeof(TExtAttrib));
                                 fillchar(PExtAttrib^,sizeof(TExtAttrib),0);
                                 PExtAttrib^.ExtAttrib2:=false;
                            end;
@@ -362,7 +362,7 @@ function GDBObjEntity.CopyExtAttrib;
 begin
      if PExtAttrib<>nil then
                            begin
-                                Getmem(GDBPointer(Result),sizeof(TExtAttrib));
+                                Getmem(Pointer(Result),sizeof(TExtAttrib));
                                 fillchar(result^,sizeof(TExtAttrib),0);
                                 result^:=PExtAttrib^;
                            end
@@ -418,7 +418,7 @@ begin
 end;
 function GDBObjEntity.ObjToGDBString(prefix,sufix:GDBString):GDBString;
 begin
-     result:=prefix+'#'+inttohex(GDBPlatformint(@self),10)+sufix;
+     result:=prefix+'#'+inttohex(PtrInt(@self),10)+sufix;
 end;
 function GDBObjEntity.GetMainOwner:PGDBObjSubordinated;
 begin
@@ -861,7 +861,7 @@ end;
 function GDBObjEntity.Clone;
 //var tvo: PGDBObjEntity;
 begin
-  //Getmem(GDBPointer(tvo), sizeof(GDBObjEntity));
+  //Getmem(Pointer(tvo), sizeof(GDBObjEntity));
   //tvo^.init(bp.owner,vp.Layer, vp.LineWeight);
   result := nil;
 end;
@@ -891,7 +891,7 @@ begin
      osp.PGDBObject:=@self;
      pdata:=nil;
 end;
-procedure GDBObjEntity.endsnap(out osp:os_record; var pdata:GDBPointer);
+procedure GDBObjEntity.endsnap(out osp:os_record; var pdata:Pointer);
 begin
 end;
 function GDBObjEntity.getsnap;
@@ -921,7 +921,7 @@ begin
      if tdesc<>nil then
      if IsHaveGRIPS then
      begin
-     Getmem(GDBPointer(tdesc^.pcontrolpoint),sizeof(GDBControlPointArray));
+     Getmem(Pointer(tdesc^.pcontrolpoint),sizeof(GDBControlPointArray));
      addcontrolpoints(tdesc);
      end;
      bp.ListPos.Owner.ImSelected(@self,bp.ListPos.SelfIndex);
@@ -991,7 +991,7 @@ end;
 (*procedure GDBObjEntity.rtmodify;
 var i:GDBInteger;
     point:pcontrolpointdesc;
-    p:GDBPointer;
+    p:Pointer;
     var m:DMatrix4D;
     t:gdbvertex;
     tt:dvector4d;
@@ -1070,7 +1070,7 @@ begin
 
           PGDBObjGenericWithSubordinated(bp.owner)^.ImEdited(@self,bp.PSelfInOwnerArray);
           PSelectedObjDesc(md).ptempobj^.done;
-          Freemem(GDBPointer(PSelectedObjDesc(md).ptempobj));
+          Freemem(Pointer(PSelectedObjDesc(md).ptempobj));
           PSelectedObjDesc(md).ptempobj:=nil;
      end
      else
@@ -1081,7 +1081,7 @@ begin
      afterrtmodify(p);
 end;
 *)
-procedure GDBObjEntity.clearrtmodify(p:GDBPointer);
+procedure GDBObjEntity.clearrtmodify(p:Pointer);
 begin
 
 end;
@@ -1090,7 +1090,7 @@ procedure GDBObjEntity.afterrtmodify;
 begin
      if p<>nil then Freemem(p);
 end;
-function GDBObjEntity.IsRTNeedModify(const Point:PControlPointDesc; p:GDBPointer):Boolean;
+function GDBObjEntity.IsRTNeedModify(const Point:PControlPointDesc; p:Pointer):Boolean;
 begin
      result:=true;
 end;

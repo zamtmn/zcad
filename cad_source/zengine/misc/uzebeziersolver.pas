@@ -37,7 +37,7 @@ TBezierSolver2D=class
                      FMode:TSolverMode;
                      BOrder:integer;
                      VectorData:PZGLVectorObject;
-                     shxsize:PGDBWord;
+                     shxsize:PWord;
                      scontur,truescontur:GDBvertex2D;
                      sconturpa:TPointAttr;
                      Conturs:TMyVectorArrayGDBFontVertex2D;

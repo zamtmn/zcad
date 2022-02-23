@@ -29,11 +29,11 @@ ZGLVertex3Sarray= object(GZVector{-}<GDBvertex3S>{//})(*OpenArrayOfData=GDBverte
                 constructor init(m:GDBInteger);
                 constructor initnul;
                 function AddGDBVertex(const v:GDBvertex):TArrayIndex;virtual;
-                function GetLength(const i:TArrayIndex):GDBFloat;virtual;
+                function GetLength(const i:TArrayIndex):Single;virtual;
              end;
 {Export-}
 implementation
-function ZGLVertex3Sarray.GetLength(const i:TArrayIndex):GDBFloat;
+function ZGLVertex3Sarray.GetLength(const i:TArrayIndex):Single;
 var
     pv1,pv2:PGDBvertex3S;
     v:GDBvertex3S;

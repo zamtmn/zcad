@@ -24,13 +24,13 @@ uses uzbtypesbase,sysutils,uzbtypes,uzegeometry,
 type
 {EXPORT+}
 PPGDBLayerPropObjInsp=^PGDBLayerPropObjInsp;
-PGDBLayerPropObjInsp={GDBPtrUInt}GDBPointer;
+PGDBLayerPropObjInsp={GDBPtrUInt}Pointer;
 PGDBLayerProp=^GDBLayerProp;
 {REGISTEROBJECTTYPE GDBLayerProp}
 GDBLayerProp= object(GDBNamedObject)
-               color:GDBByte;(*saved_to_shd*)(*'Color'*)
-               lineweight:GDBSmallint;(*saved_to_shd*)(*'Line weight'*)
-               LT:GDBPointer;(*saved_to_shd*)(*'Line type'*)
+               color:Byte;(*saved_to_shd*)(*'Color'*)
+               lineweight:SmallInt;(*saved_to_shd*)(*'Line weight'*)
+               LT:Pointer;(*saved_to_shd*)(*'Line type'*)
                _on:GDBBoolean;(*saved_to_shd*)(*'On'*)
                _lock:GDBBoolean;(*saved_to_shd*)(*'Lock'*)
                _print:GDBBoolean;(*saved_to_shd*)(*'Print'*)
@@ -46,7 +46,7 @@ GDBLayerPropArray=packed array [0..0] of PGDBLayerProp;
 PGDBLayerArray=^GDBLayerArray;
 {REGISTEROBJECTTYPE GDBLayerArray}
 GDBLayerArray= object(GDBNamedObjectsArray{-}<PGDBLayerProp,GDBLayerProp>{//})(*OpenArrayOfData=GDBLayerProp*)
-                    constructor init(m:GDBInteger;psyslt:GDBPointer);
+                    constructor init(m:GDBInteger;psyslt:Pointer);
                     constructor initnul;
 
                     function addlayer(name:GDBString;color:GDBInteger;lw:GDBInteger;oo,ll,pp:GDBBoolean;d:GDBString;lm:TLoadOpt):PGDBLayerProp;virtual;

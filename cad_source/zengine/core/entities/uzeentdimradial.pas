@@ -37,13 +37,13 @@ type
 PGDBObjRadialDimension=^GDBObjRadialDimension;
 {REGISTEROBJECTTYPE GDBObjRadialDimension}
 GDBObjRadialDimension= object(GDBObjDiametricDimension)
-                        constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
+                        constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                         constructor initnul(owner:PGDBObjGenericWithSubordinated);
                         function GetObjTypeName:GDBString;virtual;
 
                         function GetDimStr(var drawing:TDrawingDef):TDXFEntsInternalStringType;virtual;
                         function GetCenterPoint:GDBVertex;virtual;
-                        function Clone(own:GDBPointer):PGDBObjEntity;virtual;
+                        function Clone(own:Pointer):PGDBObjEntity;virtual;
 
                         function P10ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                         function P15ChangeTo(tv:GDBVertex):GDBVertex;virtual;
@@ -116,7 +116,7 @@ end;
 function GDBObjRadialDimension.Clone;
 var tvo: PGDBObjRadialDimension;
 begin
-  Getmem(GDBPointer(tvo), sizeof(GDBObjRadialDimension));
+  Getmem(Pointer(tvo), sizeof(GDBObjRadialDimension));
   tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight);
   CopyVPto(tvo^);
   CopyExtensionsTo(tvo^);

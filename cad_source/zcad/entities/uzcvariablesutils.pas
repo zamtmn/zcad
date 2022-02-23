@@ -24,7 +24,7 @@ uses uzcenitiesvariablesextender,sysutils,UGDBOpenArrayOfPV,uzbtypesbase,
 //**поиск значения свойства по имени varname:gdbstring которое было в ведено в инспекторе для данного устройства PEnt:PGDBObjEntity
 //**возвращает
 function FindVariableInEnt(PEnt:PGDBObjEntity;varname:gdbstring):pvardesk;
-function FindEntityByVar(arr:GDBObjOpenArrayOfPV;objID:GDBWord;vname,vvalue:GDBString):PGDBObjSubordinated;
+function FindEntityByVar(arr:GDBObjOpenArrayOfPV;objID:Word;vname,vvalue:GDBString):PGDBObjSubordinated;
 implementation
 function FindVariableInEnt(PEnt:PGDBObjEntity;varname:gdbstring):pvardesk;
 var
@@ -38,7 +38,7 @@ begin
      if PEnt^.bp.ListPos.Owner<>nil then
        result:=FindVariableInEnt(pointer(PEnt^.bp.ListPos.Owner),varname);
 end;
-function FindEntityByVar(arr:GDBObjOpenArrayOfPV;objID:GDBWord;vname,vvalue:GDBString):PGDBObjSubordinated;
+function FindEntityByVar(arr:GDBObjOpenArrayOfPV;objID:Word;vname,vvalue:GDBString):PGDBObjSubordinated;
 var
    pvisible:PGDBObjEntity;
    ir:itrec;

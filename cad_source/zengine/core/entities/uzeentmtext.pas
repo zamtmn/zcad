@@ -37,7 +37,7 @@ GDBObjMText= object(GDBObjText)
                  linespace:GDBDouble;(*saved_to_shd*)(*oi_readonly*)
                  linespacef:GDBDouble;(*saved_to_shd*)
                  text:XYZWGDBGDBStringArray;(*oi_readonly*)(*hidden_in_objinsp*)
-                 constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:TDXFEntsInternalStringType;p:GDBvertex;s,o,w,a:GDBDouble;j:TTextJustify;wi,l:GDBDouble);
+                 constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:TDXFEntsInternalStringType;p:GDBvertex;s,o,w,a:GDBDouble;j:TTextJustify;wi,l:GDBDouble);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f: TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
                  procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
@@ -46,7 +46,7 @@ GDBObjMText= object(GDBObjText)
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure FormatContent(var drawing:TDrawingDef);virtual;
                  procedure createpoint(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                 function Clone(own:GDBPointer):PGDBObjEntity;virtual;
+                 function Clone(own:Pointer):PGDBObjEntity;virtual;
                  function GetObjTypeName:GDBString;virtual;
                  destructor done;virtual;
 
@@ -210,7 +210,7 @@ begin
         psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch}({integer(content[currsymbol])}sym){//-ttf-//,tdinfo});
         canbreak := false;
 
-        {GDBPointer(ptext.GDBStringarray[ptext.count].str) := nil;
+        {Pointer(ptext.GDBStringarray[ptext.count].str) := nil;
         ptext.GDBStringarray[ptext.count].str := currline;
         ptext.GDBStringarray[ptext.count].w := linewidth;
         inc(ptext.count);}
@@ -219,7 +219,7 @@ begin
         if (length(swp.str)>0)and(swp.str[length(swp.str)]=' ') then
         begin
              swp.str:=copy(swp.str,1,length(swp.str)-1);
-             swp.w := swp.w - pgdbfont(pbasefont)^.GetOrReplaceSymbolInfo({ach2uch}(GDBByte(' ')){,tdinfo//-ttf-//}).NextSymX;
+             swp.w := swp.w - pgdbfont(pbasefont)^.GetOrReplaceSymbolInfo({ach2uch}(Byte(' ')){,tdinfo//-ttf-//}).NextSymX;
         end;
         text.PushBackData(swp);
         newline:=true;
@@ -246,7 +246,7 @@ begin
 
         canbreak := false;
 
-        {GDBPointer(ptext.GDBStringarray[ptext.count].str) := nil;
+        {Pointer(ptext.GDBStringarray[ptext.count].str) := nil;
         ptext.GDBStringarray[ptext.count].str := currline;
         ptext.GDBStringarray[ptext.count].w := lastlinewidth;
         inc(ptext.count);}
@@ -255,7 +255,7 @@ begin
         if (length(swp.str)>0)and(swp.str[length(swp.str)]=' ') then
         begin
              swp.str:=copy(swp.str,1,length(swp.str)-1);
-             swp.w := swp.w - pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(GDBByte(' '))}32{//-ttf-//,tdinfo}).NextSymX;//pgdbfont(pbasefont)^.symbo linfo[GDBByte(' ')].dx;
+             swp.w := swp.w - pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(Byte(' '))}32{//-ttf-//,tdinfo}).NextSymX;//pgdbfont(pbasefont)^.symbo linfo[Byte(' ')].dx;
         end;
         text.PushBackData(swp);
 
@@ -267,7 +267,7 @@ begin
   if linewidth=0 then
                      linewidth:=1;
   currline := copy(content, lastbreak, currsymbol - lastbreak);
-  {GDBPointer(ptext.GDBStringarray[ptext.count].str) := nil;
+  {Pointer(ptext.GDBStringarray[ptext.count].str) := nil;
   ptext.GDBStringarray[ptext.count].str := currline;
   ptext.GDBStringarray[ptext.count].w := linewidth;
   inc(ptext.count);}
@@ -276,7 +276,7 @@ begin
         if (length(swp.str)>0)and(swp.str[length(swp.str)]=' ') then
         begin
              swp.str:=copy(swp.str,1,length(swp.str)-1);
-             swp.w := swp.w - pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(GDBByte(' '))}32{//-ttf-//,tdinfo}).NextSymX;//pgdbfont(pbasefont)^.symbo linfo[GDBByte(' ')].dx;
+             swp.w := swp.w - pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(Byte(' '))}32{//-ttf-//,tdinfo}).NextSymX;//pgdbfont(pbasefont)^.symbo linfo[Byte(' ')].dx;
         end;
         text.PushBackData(swp);
   //w := width;
@@ -640,17 +640,17 @@ begin
 
   if PProjoutbound=nil then
   begin
-       Getmem(GDBPointer(PProjoutbound),sizeof(GDBOOutbound2DIArray));
+       Getmem(Pointer(PProjoutbound),sizeof(GDBOOutbound2DIArray));
        PProjoutbound^.init(4);
   end;
 end;
 *)
 procedure GDBObjMText.createpoint;
 var
-  //psymbol: PGDBByte;
+  //psymbol: PByte;
   {lin,}i{, j, k}{, l}: GDBInteger;
 
-  //len: GDBWord;
+  //len: Word;
   matr,m1: DMatrix4D;
   v:GDBvertex4D;
   //pv:GDBPolyVertex2D;
@@ -816,7 +816,7 @@ begin
   outbound[3]:=pgdbvertex(@v)^;
   if PProjoutbound=nil then
   begin
-       Getmem(GDBPointer(PProjoutbound),sizeof(GDBOOutbound2DIArray));
+       Getmem(Pointer(PProjoutbound),sizeof(GDBOOutbound2DIArray));
        PProjoutbound^.init(4);
   end;
 
@@ -883,7 +883,7 @@ end;}
 function GDBObjMText.Clone;
 var tvo: PGDBObjMtext;
 begin
-  Getmem(GDBPointer(tvo), sizeof(GDBObjMText));
+  Getmem(Pointer(tvo), sizeof(GDBObjMText));
   tvo^.initnul(own);
   //tvo^.vp:=vp;
   CopyVPto(tvo^);
@@ -984,7 +984,7 @@ end;
 procedure GDBObjMText.SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
 var
 //  i, j: GDBInteger;
-  //bw: GDBByte;
+  //bw: Byte;
   s: GDBString;
   ul:boolean;
   quotedcontent:TDXFEntsInternalStringType;

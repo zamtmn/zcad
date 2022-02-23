@@ -140,12 +140,12 @@ type
   {REGISTEROBJECTTYPE mirror_com}
   mirror_com =  object(copy_com)
     function CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D; virtual;
-    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
+    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger; virtual;
   end;
   {REGISTEROBJECTTYPE copybase_com}
   copybase_com =  object(CommandRTEdObject)
     procedure CommandStart(Operands:TCommandOperands); virtual;
-    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
+    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger; virtual;
   end;
   {REGISTEROBJECTTYPE PasteClip_com}
   PasteClip_com =  object(FloatInsert_com)
@@ -156,43 +156,43 @@ type
                          procedure CommandStart(Operands:TCommandOperands); virtual;
                          procedure BuildDM(Operands:TCommandOperands); virtual;
                          procedure Format;virtual;
-                         procedure Run(pdata:{pointer}GDBPlatformint); virtual;
+                         procedure Run(pdata:{pointer}PtrInt); virtual;
                    end;
   {REGISTEROBJECTTYPE BlockScale_com}
   BlockScale_com= object(CommandRTEdObject)
                          procedure CommandStart(Operands:TCommandOperands); virtual;
                          procedure BuildDM(Operands:TCommandOperands); virtual;
-                         procedure Run(pdata:{pointer}GDBPlatformint); virtual;
+                         procedure Run(pdata:{pointer}PtrInt); virtual;
                    end;
   {REGISTEROBJECTTYPE BlockRotate_com}
   BlockRotate_com= object(CommandRTEdObject)
                          procedure CommandStart(Operands:TCommandOperands); virtual;
                          procedure BuildDM(Operands:TCommandOperands); virtual;
-                         procedure Run(pdata:{pointer}GDBPlatformint); virtual;
+                         procedure Run(pdata:{pointer}PtrInt); virtual;
                    end;
   {REGISTEROBJECTTYPE ATO_com}
   ATO_com= object(CommandRTEdObject)
                          powner:PGDBObjDevice;
                          procedure CommandStart(Operands:TCommandOperands); virtual;
                          procedure ShowMenu;virtual;
-                         procedure Run(pdata:GDBPlatformint); virtual;
+                         procedure Run(pdata:PtrInt); virtual;
           end;
   {REGISTEROBJECTTYPE CFO_com}
   CFO_com= object(ATO_com)
                          procedure ShowMenu;virtual;
-                         procedure Run(pdata:GDBPlatformint); virtual;
+                         procedure Run(pdata:PtrInt); virtual;
           end;
   {REGISTEROBJECTTYPE Number_com}
   Number_com= object(CommandRTEdObject)
                          procedure CommandStart(Operands:TCommandOperands); virtual;
                          procedure ShowMenu;virtual;
-                         procedure Run(pdata:GDBPlatformint); virtual;
+                         procedure Run(pdata:PtrInt); virtual;
              end;
   {REGISTEROBJECTTYPE ExportDevWithAxis_com}
   ExportDevWithAxis_com= object(CommandRTEdObject)
                          procedure CommandStart(Operands:TCommandOperands); virtual;
                          procedure ShowMenu;virtual;
-                         procedure Run(pdata:GDBPlatformint); virtual;
+                         procedure Run(pdata:PtrInt); virtual;
              end;
   {REGISTEROBJECTTYPE ITT_com}
   ITT_com =  object(FloatInsert_com)
@@ -360,7 +360,7 @@ end;
 {BlockScale_com=object(CommandRTEdObject)
                        procedure CommandStart(Operands:pansichar); virtual;
                        procedure BuildDM(Operands:pansichar); virtual;
-                       procedure Run(pdata:GDBPlatformint); virtual;
+                       procedure Run(pdata:PtrInt); virtual;
                  end;}
 procedure BlockRotate_com.CommandStart(Operands:TCommandOperands);
 var //pb:PGDBObjBlockdef;
@@ -394,7 +394,7 @@ begin
   commandmanager.DMAddMethod(rscmChange,'Change rotate selected blocks',@run);
   commandmanager.DMShow;
 end;
-procedure BlockRotate_com.Run(pdata:{pointer}GDBPlatformint);
+procedure BlockRotate_com.Run(pdata:{pointer}PtrInt);
 var pb:PGDBObjBlockInsert;
     ir:itrec;
     {i,}result:gdbinteger;
@@ -464,7 +464,7 @@ begin
 end;
 
 
-procedure BlockScale_com.Run(pdata:{pointer}GDBPlatformint);
+procedure BlockScale_com.Run(pdata:{pointer}PtrInt);
 var pb:PGDBObjBlockInsert;
     ir:itrec;
     {i,}result:gdbinteger;
@@ -538,7 +538,7 @@ begin
   commandmanager.DMAddMethod(rscmReplace,'Replace blocks',@run);
   commandmanager.DMShow;
 end;
-procedure BlockReplace_com.Run(pdata:GDBPlatformint);
+procedure BlockReplace_com.Run(pdata:PtrInt);
 var pb:PGDBObjBlockInsert;
     ir:itrec;
     {i,}result:gdbinteger;
@@ -554,7 +554,7 @@ var
     pnbvarext,ppbvarext:TVariablesExtender;
 begin
 
-    nb := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID));
+    nb := Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID));
     PGDBObjBlockInsert(nb)^.init(drawings.GetCurrentROOT,drawings.GetCurrentDWG^.LayerTable.GetSystemLayer,0);
     nb^.Name:=newname;
     nb^.vp:=pb^.vp;
@@ -707,12 +707,12 @@ begin
   commandmanager.DMAddMethod(rscmCopy,'Copy entities to selected devices',@run);
   commandmanager.DMShow;
 end;
-procedure CFO_com.Run(pdata:GDBPlatformint);
+procedure CFO_com.Run(pdata:PtrInt);
 var
    pobj{,pvisible}: pGDBObjDevice;
    psubobj:PGDBObjEntity;
    ir,ir2:itrec;
-   //tp:gdbpointer;
+   //tp:Pointer;
    m,m2:DMatrix4D;
    DC:TDrawContext;
 begin
@@ -842,7 +842,7 @@ begin
       result:='';
 end;
 
-procedure ExportDevWithAxis_com.Run(pdata:GDBPlatformint);
+procedure ExportDevWithAxis_com.Run(pdata:PtrInt);
 var
    haxis,vaxis:taxisdescarray;
    pdev:PGDBObjDevice;
@@ -1023,7 +1023,7 @@ begin
                     result:=false;
                     end;
 end;
-procedure Number_com.Run(pdata:GDBPlatformint);
+procedure Number_com.Run(pdata:PtrInt);
 var
     psd:PSelectedObjDesc;
     ir:itrec;
@@ -1164,11 +1164,11 @@ begin
     Commandmanager.executecommandend;
   end;
 end;
-procedure ATO_com.Run(pdata:GDBPlatformint);
+procedure ATO_com.Run(pdata:PtrInt);
 var
    pobj,pvisible: pGDBObjEntity;
    ir:itrec;
-   //tp:gdbpointer;
+   //tp:Pointer;
    m,m2:DMatrix4D;
    DC:TDrawContext;
 begin
@@ -1260,7 +1260,7 @@ begin
     Commandmanager.executecommandend;
   end;
 end;
-function copybase_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger;
+function copybase_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger;
 var
     dist:gdbvertex;
     dispmatr:DMatrix4D;
@@ -1365,7 +1365,7 @@ begin
             end;
   result:=cmd_ok;
 end;
-function Insert_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function Insert_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 var tb:PGDBObjSubordinated;
     domethod,undomethod:tmethod;
     DC:TDrawContext;
@@ -1381,7 +1381,7 @@ begin
                          drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.free;
                          //drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count := 0;
                     end;
-    pb := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID{,drawings.GetCurrentROOT}));
+    pb := Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID{,drawings.GetCurrentROOT}));
     //PGDBObjBlockInsert(pb)^.initnul;//(@drawings.GetCurrentDWG^.ObjRoot,drawings.LayerTable.GetSystemLayer,0);
     PGDBObjBlockInsert(pb)^.init(drawings.GetCurrentROOT,drawings.GetCurrentDWG^.GetCurrentLayer,0);
     pb^.Name:=PGDBObjBlockdef(drawings.GetCurrentDWG^.BlockDefArray.getDataMutable(BIProp.Blocks.Selected))^.Name;//'DEVICE_NOC';
@@ -1438,7 +1438,7 @@ begin
                     end;
     pointer(pb) :=AllocEnt(GDBBlockInsertID);
     //pointer(pb) :=drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID,drawings.GetCurrentROOT);
-    //pb := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.CreateObj(GDBBlockInsertID,@drawings.GetCurrentDWG^.ObjRoot));
+    //pb := Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.CreateObj(GDBBlockInsertID,@drawings.GetCurrentDWG^.ObjRoot));
     //PGDBObjBlockInsert(pb)^.initnul;//(@drawings.GetCurrentDWG^.ObjRoot,drawings.LayerTable.GetSystemLayer,0);
     PGDBObjBlockInsert(pb)^.init(drawings.GetCurrentROOT,drawings.GetCurrentDWG^.GetCurrentLayer,0);
     pb^.Name:=PGDBObjBlockdef(drawings.GetCurrentDWG^.BlockDefArray.getDataMutable(BIProp.Blocks.Selected))^.Name;//'NOC';//'TESTBLOCK';
@@ -1494,7 +1494,7 @@ begin
         normalizeplane(plane);
         result:=CreateReflectionMatrix(plane);
 end;
-function Mirror_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger;
+function Mirror_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger;
 var
     dispmatr:DMatrix4D;
 begin
@@ -1670,7 +1670,7 @@ begin
            ZCMsgCallBackInterface.TextMessage(pb^.name,TMWOHistoryOut);
 
 
-    BLINSERT := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID{,drawings.GetCurrentROOT}));
+    BLINSERT := Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID{,drawings.GetCurrentROOT}));
     PGDBObjBlockInsert(BLINSERT)^.initnul;//(@drawings.GetCurrentDWG^.ObjRoot,drawings.LayerTable.GetSystemLayer,0);
     PGDBObjBlockInsert(BLINSERT)^.init(drawings.GetCurrentROOT,drawings.GetCurrentDWG^.GetCurrentLayer,0);
     BLinsert^.Name:=pb^.name;
@@ -1725,7 +1725,7 @@ var
     PCreatedGDBPoint:PGDBobjPoint;
     dc:TDrawContext;
 begin
-    PCreatedGDBPoint := GDBPointer(drawings.GetCurrentDWG^.mainObjRoot.ObjArray.CreateInitObj(GDBPointID,drawings.GetCurrentROOT));
+    PCreatedGDBPoint := Pointer(drawings.GetCurrentDWG^.mainObjRoot.ObjArray.CreateInitObj(GDBPointID,drawings.GetCurrentROOT));
     PCreatedGDBPoint^.P_insertInOCS:=point;
     PCreatedGDBPoint^.vp.layer:=drawings.GetCurrentDWG^.GetCurrentLayer;
     dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
@@ -1845,7 +1845,7 @@ begin
                       point2:=uzegeometry.Vertexmorph(lc.lBegin,lc.lEnd,arr[i]);
 
                       begin
-                          PCreatedGDBLine := GDBPointer(drawings.GetCurrentDWG^.mainObjRoot.ObjArray.CreateInitObj(GDBLineID,drawings.GetCurrentROOT));
+                          PCreatedGDBLine := Pointer(drawings.GetCurrentDWG^.mainObjRoot.ObjArray.CreateInitObj(GDBLineID,drawings.GetCurrentROOT));
                           PCreatedGDBLine^.vp:=pl^.vp;
                           PCreatedGDBLine^.CoordInOCS.lbegin:=point;
                           PCreatedGDBLine^.CoordInOCS.lend:=point2;
@@ -1856,7 +1856,7 @@ begin
                       point:=point2;
                  end;
 
-                 PCreatedGDBLine := GDBPointer(drawings.GetCurrentDWG^.mainObjRoot.ObjArray.CreateInitObj(GDBLineID,drawings.GetCurrentROOT));
+                 PCreatedGDBLine := Pointer(drawings.GetCurrentDWG^.mainObjRoot.ObjArray.CreateInitObj(GDBLineID,drawings.GetCurrentROOT));
                  PCreatedGDBLine^.vp:=pl^.vp;
                  PCreatedGDBLine^.CoordInOCS.lbegin:=point;
                  PCreatedGDBLine^.CoordInOCS.lend:=lc.lEnd;
@@ -1867,7 +1867,7 @@ begin
             end;
       until not lineiterator.next;
      //for i:=0 to LinesMap.
-    {PCreatedGDBPoint := GDBPointer(drawings.GetCurrentDWG^.mainObjRoot.ObjArray.CreateInitObj(GDBPointID,drawings.GetCurrentROOT));
+    {PCreatedGDBPoint := Pointer(drawings.GetCurrentDWG^.mainObjRoot.ObjArray.CreateInitObj(GDBPointID,drawings.GetCurrentROOT));
     PCreatedGDBPoint^.P_insertInOCS:=point;
     PCreatedGDBPoint^.FormatEntity(drawings.GetCurrentDWG^);}
 end;

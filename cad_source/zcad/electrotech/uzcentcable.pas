@@ -49,7 +49,7 @@ GDBObjCable= object(GDBObjCurve)
                  str21:GDBVertex;(*hidden_in_objinsp*)
                  str22:GDBVertex;(*hidden_in_objinsp*)
                  str23:GDBVertex;(*hidden_in_objinsp*)
-                 constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
+                 constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                  function GetObjTypeName:GDBString;virtual;
@@ -59,12 +59,12 @@ GDBObjCable= object(GDBObjCurve)
                  procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure SaveToDXFfollow(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
 
-                 function Clone(own:GDBPointer):PGDBObjEntity;virtual;
+                 function Clone(own:Pointer):PGDBObjEntity;virtual;
 
                  destructor done;virtual;
                  class function GetDXFIOFeatures:TDXFEntIODataManager;static;
 
-                 //function Clone(own:GDBPointer):PGDBObjEntity;virtual;
+                 //function Clone(own:Pointer):PGDBObjEntity;virtual;
                  function GetObjType:TObjID;virtual;
            end;
 {Export-}
@@ -79,7 +79,7 @@ var tvo: PGDBObjCable;
 begin
   //result:=inherited Clone(own);
   //exit;
-  Getmem(GDBPointer(tvo), sizeof(GDBObjCable));
+  Getmem(Pointer(tvo), sizeof(GDBObjCable));
   tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight);
   //tvo^.vp:=vp;
   //tvo^.GetObjType :=GDBCableID;

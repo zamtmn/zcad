@@ -53,7 +53,7 @@ type
                            procedure calcgrid;override;
                            procedure Clear0Ontrackpoint;override;
                            procedure ClearOntrackpoint;override;
-                           procedure SetMouseMode(smode:GDBByte);override;
+                           procedure SetMouseMode(smode:Byte);override;
                            procedure reprojectaxis;override;
                            procedure Project0Axis;override;
                            procedure create0axis;override;
@@ -76,7 +76,7 @@ type
                            procedure SetOTrackTimer(Sender: TObject);override;
                            procedure KillOHintTimer(Sender: TObject);override;
                            procedure SetOHintTimer(Sender: TObject);override;
-                           procedure getosnappoint(radius: GDBFloat);override;
+                           procedure getosnappoint(radius: Single);override;
                            procedure getonmouseobject(pva: PGDBObjEntityOpenArray;InSubEntry:GDBBoolean);virtual;
                            procedure findonmobj(pva: PGDBObjEntityOpenArray; var i: GDBInteger;InSubEntry:GDBBoolean);virtual;
                            procedure findonmobjTree(var Node:TEntTreeNode; var i: GDBInteger;InSubEntry:GDBBoolean);virtual;
@@ -85,9 +85,9 @@ type
                            procedure AddOntrackpoint;override;
                            procedure CorrectMouseAfterOS;override;
                            function CreateRC(_maxdetail:GDBBoolean=false):TDrawContext;override;
-                           //procedure sendcoordtocommand(coord:GDBVertex;key: GDBByte);virtual;
-                           //procedure sendmousecoordwop(key: GDBByte);override;
-                           //procedure sendmousecoord(key: GDBByte);override;
+                           //procedure sendcoordtocommand(coord:GDBVertex;key: Byte);virtual;
+                           //procedure sendmousecoordwop(key: Byte);override;
+                           //procedure sendmousecoord(key: Byte);override;
                            procedure asynczoomsel(Data: PtrInt);override;
                            procedure asynczoomall(Data: PtrInt);override;
                            procedure asyncupdatemouse(Data: PtrInt);override;
@@ -143,7 +143,7 @@ type
                                                   Operation: TOperation); override;
 
                       end;
-function MouseButton2ZKey(Shift: TShiftState):GDBByte;
+function MouseButton2ZKey(Shift: TShiftState):Byte;
 procedure RemoveCursorIfNeed(acontrol:TControl;RemoveCursor:boolean);
 var
    sysvarDISPOSSize:double=10;
@@ -1468,7 +1468,7 @@ var
   //glmcoord1: gdbpiece;
   ux,uy:GDBDouble;
   //htext,htext2:gdbstring;
-  key: GDBByte;
+  key: Byte;
   //f:TzeUnitsFormat;
 begin
   //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.Pre_MouseMove',lp_IncPos);{$ENDIF}
@@ -1753,7 +1753,7 @@ begin
      WorkArea.onmouseleave:=WaMouseLeave;
      WorkArea.onresize:=WaResize;
 end;
-function MouseButton2ZKey(Shift: TShiftState):GDBByte;
+function MouseButton2ZKey(Shift: TShiftState):Byte;
 begin
   result := 0;
   if (ssLeft in shift) then
@@ -1766,7 +1766,7 @@ begin
      result:=WorkArea;
 end;
 procedure TGeneralViewArea.WaMouseDown(Sender:TObject;Button: TMouseButton; Shift: TShiftState;X, Y: Integer);
-var //key: GDBByte;
+var //key: Byte;
     NeedRedraw:boolean;
     //menu:TmyPopupMenu;
     //FreeClick:boolean;
@@ -2092,14 +2092,14 @@ begin
       result:=on;
   end
 end;
-procedure TGeneralViewArea.getosnappoint({pva: PGDBObjEntityOpenArray; }radius: GDBFloat);
+procedure TGeneralViewArea.getosnappoint({pva: PGDBObjEntityOpenArray; }radius: Single);
 var
   pv,pv2:PGDBObjEntity;
   osp:os_record;
   dx,dy:GDBDouble;
 //  oldit:itrec;
       ir,ir2:itrec;
-  pdata:GDBPointer;
+  pdata:Pointer;
   DefaultRadius,DefaultTextRadius:GDBDouble;
 begin
   DefaultRadius:=sysvarDISPCursorSize*sysvarDISPCursorSize+1;
@@ -2696,7 +2696,7 @@ var
   ax:gdbvertex;
   //ux,uy:GDBDouble;
   //htext,htext2:gdbstring;
-  //key: GDBByte;
+  //key: Byte;
   lptime:ttime;
 begin
   mouseunproject(oldX, getviewcontrol.clientheight-oldY);
@@ -2788,13 +2788,13 @@ begin
   end;
   end;
   project0axis;
-  {Getmem(param.ospoint.arrayworldaxis, sizeof(GDBWord) + param.ppolaraxis^.count * sizeof(gdbvertex));
-  Move(param.ppolaraxis^, param.ospoint.arrayworldaxis^, sizeof(GDBWord) + param.ppolaraxis^.count * sizeof(gdbvertex));}
+  {Getmem(param.ospoint.arrayworldaxis, sizeof(Word) + param.ppolaraxis^.count * sizeof(gdbvertex));
+  Move(param.ppolaraxis^, param.ospoint.arrayworldaxis^, sizeof(Word) + param.ppolaraxis^.count * sizeof(gdbvertex));}
   PDWG.myGluProject2(param.ospoint.worldcoord,
              param.ospoint.dispcoord);
   //param.ospoint.arraydispaxis.init(param.ospoint.arrayworldaxis.count);
   param.ospoint.arraydispaxis.clear;
-  //Getmem(param.ospoint.arraydispaxis, sizeof(GDBWord) + param.ospoint.arrayworldaxis.count * sizeof(traceprop));
+  //Getmem(param.ospoint.arraydispaxis, sizeof(Word) + param.ospoint.arrayworldaxis.count * sizeof(traceprop));
   //param.ospoint.arraydispaxis.count := param.ospoint.arrayworldaxis.count;
   pv:=param.ospoint.arrayworldaxis.GetParrayAsPointer;
   for i := 0 to param.ospoint.arrayworldaxis.count - 1 do
@@ -2886,16 +2886,16 @@ var
   pv: pgdbvertex;
   i: GDBInteger;
 begin
-  {Getmem(param.ospoint.arrayworldaxis, sizeof(GDBWord) + param.ppolaraxis
+  {Getmem(param.ospoint.arrayworldaxis, sizeof(Word) + param.ppolaraxis
     ^.count * sizeof(gdbvertex));
-  Move(param.ppolaraxis^, param.ospoint.arrayworldaxis^, sizeof(GDBWord) +
+  Move(param.ppolaraxis^, param.ospoint.arrayworldaxis^, sizeof(Word) +
     param.ppolaraxis^.count * sizeof(gdbvertex)); }
   {gdb.GetCurrentDWG^}pdwg.myGluProject2(param.ontrackarray.otrackarray[0
     ].worldcoord,
              param.ontrackarray.otrackarray[0].dispcoord);
   //param.ontrackarray.otrackarray[0].arraydispaxis.init(param.ontrackarray.otrackarray[0].arrayworldaxis.count);
   param.ontrackarray.otrackarray[0].arraydispaxis.clear;
-  //Getmem(param.ospoint.arraydispaxis, sizeof(GDBWord) +param.ospoint.arrayworldaxis.count * sizeof(traceprop));
+  //Getmem(param.ospoint.arraydispaxis, sizeof(Word) +param.ospoint.arrayworldaxis.count * sizeof(traceprop));
   //param.ospoint.arraydispaxis.count := param.ospoint.arrayworldaxis.count;
   pv:=param.ontrackarray.otrackarray[0].arrayworldaxis.GetParrayAsPointer;
   for i := 0 to param.ontrackarray.otrackarray[0].arrayworldaxis.count - 1 do
@@ -3280,7 +3280,7 @@ begin
     str(ca,ds);
   end;
 end;
-procedure TGeneralViewArea.SetMouseMode(smode:GDBByte);
+procedure TGeneralViewArea.SetMouseMode(smode:Byte);
 begin
      param.md.mode := smode;
 end;

@@ -178,17 +178,17 @@ type
 #define BITCODE_4BITS BITCODE_RC
 #define FORMAT_4BITS "%1x"
 }
-    BITCODE_RL=Longword;
+    BITCODE_RL=LongWord;
     BITCODE_RS=word;
     BITCODE_RC=byte;
-    BITCODE_MS=Longword{word};
+    BITCODE_MS=LongWord{word};
     BITCODE_BS=word;
     BITCODE_H=DWGLong;
     BITCODE_B=Boolean;
     BITCODE_DD=double;
     BITCODE_RD=double;
     BITCODE_BD=double;
-    BITCODE_BL=Longword{word};
+    BITCODE_BL=LongWord{word};
 
     BITCODE_CMC=byte;//error--------------------------------------------
     BITCODE_TV=string;
@@ -553,13 +553,13 @@ begin
            w[i]:=BitRead_rs;
            if not((w[i] and $8000)>0) then
              begin
-               result :=result or (Longword(w[i]) shl j);
+               result :=result or (LongWord(w[i]) shl j);
                exit;
              end
            else
              begin
              w[i] := w[i] and $7fff;
-             result := result or (Longword(w[i]) shl j);
+             result := result or (LongWord(w[i]) shl j);
              end;
              j:=j+15;
          end;
@@ -1209,7 +1209,7 @@ begin
                PtrUInt(pi):=PtrUInt(pi)+{sizeof(dwg2004pageinfo)}16;
           end;
           sd:=pointer(pi);
-          //inc(longword(sd),sizeof({sd^}dwg2004sectiondesc));
+          //inc(LongWord(sd),sizeof({sd^}dwg2004sectiondesc));
      end;
      HistoryOutStr('Prepare AcDb:AcDbObjects section');
      objinfo:=FindInfoByType(siarray,SECTION_DBOBJECTS);

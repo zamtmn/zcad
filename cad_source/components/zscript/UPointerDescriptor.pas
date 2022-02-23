@@ -32,8 +32,8 @@ GDBPointerDescriptor=object(TUserTypeDescriptor)
                      //constructor init(var t:gdbtypedesk);
                      constructor init(ptype:GDBString;tname:string;pu:pointer);
                      function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
-                     //function Serialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:PTZctnrVectorBytes;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
-                     //function DeSerialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:TZctnrVectorBytes;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
+                     //function Serialize(PInstance:Pointer;SaveFlag:Word;var membuf:PTZctnrVectorBytes;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
+                     //function DeSerialize(PInstance:Pointer;SaveFlag:Word;var membuf:TZctnrVectorBytes;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
                      procedure Format;virtual;
                      function GetTypeAttributes:TTypeAttr;virtual;
                      function CreateEditor(TheOwner:TPropEditorOwner;rect:trect{x,y,w,h:GDBInteger};pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:TInternalScriptString;preferedHeight:integer):TEditorDesc{TPropEditor};virtual;
@@ -72,7 +72,7 @@ begin
     typename:=tname;
     ReferType:=ptype;
     TypeOf:=nil;
-    self.SizeInGDBBytes:={4 cpu64}sizeof(pointer);
+    self.SizeInBytes:={4 cpu64}sizeof(pointer);
     punit:=pu;
     format;
 end;
@@ -81,7 +81,7 @@ var ta,oldta{,tb}:Pointer;
     ppd:PPropertyDeskriptor;
     bm,bm2:integer;
 begin
-    ta:=pGDBPointer(addr)^;
+    ta:=PPointer(addr)^;
     oldta:=ta;
     bm:=bmode;
     bm2:=property_build;

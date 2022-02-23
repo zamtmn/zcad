@@ -309,7 +309,7 @@ begin
           if pvar^.name = invar then
                                     begin
                                          pvar^.name:='';
-                                         Freemem(GDBPointer(pvar));
+                                         Freemem(Pointer(pvar));
                                     end;
         end
         else

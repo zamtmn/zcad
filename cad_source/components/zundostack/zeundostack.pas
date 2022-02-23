@@ -101,7 +101,7 @@ begin
      startmarkercount:=0;
      end;
 end;
-//procedure TZctnrVectorUndoCommands.PushTypedChangeCommand(_obj:GDBPointer;_PTypeManager:PUserTypeDescriptor);overload;
+//procedure TZctnrVectorUndoCommands.PushTypedChangeCommand(_obj:Pointer;_PTypeManager:PUserTypeDescriptor);overload;
 procedure TZctnrVectorUndoCommands.PushChangeCommand(_obj:Pointer;_fieldsize:PtrInt);
 var
    pcc:PTChangeCommand;

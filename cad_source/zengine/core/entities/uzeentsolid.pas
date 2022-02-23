@@ -36,7 +36,7 @@ GDBObjSolid= object(GDBObjWithLocalCS)
                  triangle:GDBBoolean;
                  n,p1,p2,p3:GDBVertex3S;
                  //ProjPoint:GDBvertex;
-                 constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex);
+                 constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f:TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
                  procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
@@ -49,11 +49,11 @@ GDBObjSolid= object(GDBObjWithLocalCS)
                  //function getsnap(var osp:os_record):GDBBoolean;virtual;
                  function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
-                 procedure addcontrolpoints(tdesc:GDBPointer);virtual;
+                 procedure addcontrolpoints(tdesc:Pointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
-                 function Clone(own:GDBPointer):PGDBObjEntity;virtual;
-                 procedure rtsave(refp:GDBPointer);virtual;
+                 function Clone(own:Pointer):PGDBObjEntity;virtual;
+                 procedure rtsave(refp:Pointer);virtual;
                  function GetObjTypeName:GDBString;virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
 
@@ -330,7 +330,7 @@ begin
 
 end;
 
-procedure GDBObjSolid.addcontrolpoints(tdesc:GDBPointer);
+procedure GDBObjSolid.addcontrolpoints(tdesc:Pointer);
 var pdesc:controlpointdesc;
     i:GDBInteger;
 begin
@@ -389,7 +389,7 @@ end;
 function GDBObjSolid.Clone;
 var tvo: PGDBObjSolid;
 begin
-  Getmem(GDBPointer(tvo), sizeof(GDBObjSolid));
+  Getmem(Pointer(tvo), sizeof(GDBObjSolid));
   tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight, nulvertex);
   tvo^.Local:=local;
   CopyVPto(tvo^);

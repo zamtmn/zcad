@@ -121,7 +121,7 @@ var
    OrtoDevPlaceParam:TOrtoDevPlaceParam;
 
    OPS_SPBuild_com:OPS_SPBuild;
-//procedure Getmem(var p:pointer; const size: longword); external 'cad.exe';
+//procedure Getmem(var p:pointer; const size: LongWord); external 'cad.exe';
 //procedure Freemem(var p: pointer); external 'cad.exe';
 
 //procedure HistoryOut(s: pchar); external 'cad.exe';
@@ -395,7 +395,7 @@ begin
   zcShowCommandParams(SysUnit.TypeName2PTD('CommandRTEdObject'),pco);
   result:=cmd_ok;
 end;
-function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): integer;
+function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:GDBInteger): integer;
 begin
   result:=mclick;
   if (button and MZW_LBUTTON)<>0 then
@@ -405,7 +405,7 @@ begin
       t3dp:=wc;
     end;
 end;
-function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger):GDBInteger;
+function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:GDBInteger):GDBInteger;
 var
 pl:pgdbobjline;
 //debug:string;
@@ -928,7 +928,7 @@ var count: GDBInteger;
 
     //cmlx,cmrx,cmuy,cmdy:gdbdouble;
     {lx,rx,}uy,dy:gdbdouble;
-    lsave:{integer}PGDBPointer;
+    lsave:{integer}PPointer;
     DC:TDrawContext;
     pCableSSvarext,ppvvarext,pnodeendvarext:TVariablesExtender;
 begin
@@ -1129,7 +1129,7 @@ else if (sd.PFirstSelectedEnt^.GetObjType=GDBDeviceID) then
   zcShowCommandParams(SysUnit.TypeName2PTD('CommandRTEdObject'),pco2);
   OPSPlaceSmokeDetectorOrtoParam.DMC:=TOPSMDC_1_2;
 end;
-function PlBeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): integer;
+function PlBeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:GDBInteger): integer;
 begin
   result:=mclick;
   if (button and MZW_LBUTTON)<>0 then
@@ -1217,7 +1217,7 @@ begin
        end
   end;
 end;
-function PlAfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): integer;
+function PlAfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:GDBInteger): integer;
 var
 pl:pgdbobjline;
 //debug:string;

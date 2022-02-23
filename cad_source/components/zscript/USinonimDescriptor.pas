@@ -31,8 +31,8 @@ GDBSinonimDescriptor=object(TUserTypeDescriptor)
                      constructor init2(SinonimOf:PUserTypeDescriptor;Tname:TInternalScriptString;pu:pointer);
                      function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
                      procedure ApplyOperator(oper,path:TInternalScriptString;var offset:Integer;out tc:PUserTypeDescriptor);virtual;
-                     //function Serialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:PTZctnrVectorBytes;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
-                     //function DeSerialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:TZctnrVectorBytes;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
+                     //function Serialize(PInstance:Pointer;SaveFlag:Word;var membuf:PTZctnrVectorBytes;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
+                     //function DeSerialize(PInstance:Pointer;SaveFlag:Word;var membuf:TZctnrVectorBytes;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
                      destructor Done;virtual;
                      function GetFactTypedef:PUserTypeDescriptor;virtual;
                      function Compare(pleft,pright:pointer):TCompareResult;virtual;
@@ -50,7 +50,7 @@ uses UUnitManager;
 procedure GDBSinonimDescriptor.RegisterTypeinfo(ti:PTypeInfo);
 begin
   GetFactTypedef^.RegisterTypeinfo(ti);
-  SizeInGDBBytes:=GetFactTypedef^.SizeInGDBBytes;
+  SizeInBytes:=GetFactTypedef^.SizeInBytes;
 end;
 
 procedure GDBSinonimDescriptor.InitInstance(PInstance:Pointer);
@@ -101,14 +101,14 @@ begin
     Pointer(SinonimName):=nil;
     SinonimName:=SinonimTypeName;
     PSinonimOf:=units.currentunit{ SysUnit}.TypeName2PTD(SinonimName);
-    inherited init(PSinonimOf^.SizeInGDBBytes,Tname,pu);
+    inherited init(PSinonimOf^.SizeInBytes,Tname,pu);
 end;
 constructor GDBSinonimDescriptor.init2(SinonimOf:PUserTypeDescriptor;Tname:TInternalScriptString;pu:pointer);
 begin
     Pointer(SinonimName):=nil;
     SinonimName:=SinonimOf^.TypeName;
     PSinonimOf:=SinonimOf;
-    inherited init(PSinonimOf^.SizeInGDBBytes,Tname,pu);
+    inherited init(PSinonimOf^.SizeInBytes,Tname,pu);
 end;
 function GDBSinonimDescriptor.CreateProperties;
 var

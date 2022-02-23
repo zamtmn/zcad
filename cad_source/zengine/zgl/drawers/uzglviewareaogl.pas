@@ -108,23 +108,23 @@ begin
   oglsm.myglGetDoublev(GL_point_size_RANGE,@tarray[0]);
   //if assigned(sysvar.RD.RD_MaxPointSize) then
   OpenGLParam.RD_MaxPointSize:=tarray[1];
-  GDBPointer(p):=oglsm.myglGetString(GL_VENDOR);
+  Pointer(p):=oglsm.myglGetString(GL_VENDOR);
   debugln('{I}RD_Vendor:="%s"',[p]);
   //programlog.LogOutFormatStr('RD_Vendor:="%s"',[p],0,LM_Info);
   //if assigned(OpenglParam.RD_Vendor) then
   OpenglParam.RD_Vendor:=p;
-  GDBPointer(p):=oglsm.myglGetString(GL_RENDERER);
+  Pointer(p):=oglsm.myglGetString(GL_RENDERER);
   debugln('{I}RD_Renderer:="%s"',[p]);
   //programlog.LogOutFormatStr('RD_Renderer:="%s"',[p],0,LM_Info);
   //if assigned(OpenglParam.RD_Renderer) then
   OpenglParam.RD_Renderer:=p;
-  GDBPointer(p):=oglsm.myglGetString(GL_VERSION);
+  Pointer(p):=oglsm.myglGetString(GL_VERSION);
   debugln('{I}RD_Version:="%s"',[p]);
   //programlog.LogOutFormatStr('RD_Version:="%s"',[p],0,LM_Info);
   //if assigned(OpenglParam.RD_Version) then
   OpenglParam.RD_Version:=p;
 
-  GDBPointer(p):=oglsm.myglGetString(GL_EXTENSIONS);
+  Pointer(p):=oglsm.myglGetString(GL_EXTENSIONS);
   debugln('{I}RD_Extensions:="%s"',[p]);
   //programlog.LogOutFormatStr('RD_Extensions:="%s"',[p],0,LM_Info);
   //if assigned(OpenglParam.RD_Extensions) then

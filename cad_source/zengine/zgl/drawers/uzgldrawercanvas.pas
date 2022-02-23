@@ -36,10 +36,10 @@ TZGLCanvasDrawer=class(TZGLGeneral2DDrawer)
 
                         function startpaint(InPaintMessage:boolean;w,h:integer):boolean;override;
 
-                        procedure InternalDrawLine(const x1,y1,x2,y2:GDBFloat);override;
-                        procedure InternalDrawTriangle(const x1,y1,x2,y2,x3,y3:GDBFloat);override;
-                        procedure InternalDrawQuad(const x1,y1,x2,y2,x3,y3,x4,y4:GDBFloat);override;
-                        procedure InternalDrawPoint(const x,y:GDBFloat);override;
+                        procedure InternalDrawLine(const x1,y1,x2,y2:Single);override;
+                        procedure InternalDrawTriangle(const x1,y1,x2,y2,x3,y3:Single);override;
+                        procedure InternalDrawQuad(const x1,y1,x2,y2,x3,y3,x4,y4:Single);override;
+                        procedure InternalDrawPoint(const x,y:Single);override;
 
                         procedure SetDrawMode(const mode:TZGLDrawMode);override;
                         procedure ClearScreen(stencil:boolean);override;
@@ -75,7 +75,7 @@ begin
      result:=true;
      PState:=TPaintState.TPSBufferNotSaved;
 end;
-procedure TZGLCanvasDrawer.InternalDrawLine(const x1,y1,x2,y2:GDBFloat);
+procedure TZGLCanvasDrawer.InternalDrawLine(const x1,y1,x2,y2:Single);
 var
    _x1,_y1,_x2,_y2:integer;
 begin
@@ -85,7 +85,7 @@ begin
      _y2:=round(y2);
      canvas.Line(_x1,_y1,_x2,_y2);
 end;
-procedure TZGLCanvasDrawer.InternalDrawPoint(const x,y:GDBFloat);
+procedure TZGLCanvasDrawer.InternalDrawPoint(const x,y:Single);
 var
    _x,_y:integer;
 begin
@@ -97,7 +97,7 @@ begin
                                        ProcessScreenInvalidrect(_x,_y);
                                   end;
 end;
-procedure TZGLCanvasDrawer.InternalDrawTriangle(const x1,y1,x2,y2,x3,y3:GDBFloat);
+procedure TZGLCanvasDrawer.InternalDrawTriangle(const x1,y1,x2,y2,x3,y3:Single);
 var
     sp:array [1..3]of TPoint;
 begin
@@ -116,7 +116,7 @@ begin
                                       ProcessScreenInvalidrect(sp[3].x,sp[3].y);
                                  end;}
 end;
-procedure TZGLCanvasDrawer.InternalDrawQuad(const x1,y1,x2,y2,x3,y3,x4,y4:GDBFloat);
+procedure TZGLCanvasDrawer.InternalDrawQuad(const x1,y1,x2,y2,x3,y3,x4,y4:Single);
 var
     sp:array [1..4]of TPoint;
 begin

@@ -38,16 +38,16 @@ GDBObjElLeader= object(GDBObjComplex)
             function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
             function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
             procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
-            procedure addcontrolpoints(tdesc:GDBPointer);virtual;
+            procedure addcontrolpoints(tdesc:Pointer);virtual;
             procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
             procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
-            function beforertmodify:GDBPointer;virtual;
+            function beforertmodify:Pointer;virtual;
             function select(var SelectedObjCount:GDBInteger;s2s:TSelect2Stage):GDBBoolean;virtual;
             procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
             procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;
 
             constructor initnul;
-            function Clone(own:GDBPointer):PGDBObjEntity;virtual;
+            function Clone(own:Pointer):PGDBObjEntity;virtual;
             procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
             procedure DXFOut(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
             function GetObjTypeName:GDBString;virtual;
@@ -206,7 +206,7 @@ var
   m4:DMatrix4D;
   DC:TDrawContext;
 begin
-     //historyoutstr('ElLeader DXFOut self='+inttohex(longword(@self),10)+' owner'+inttohex(bp.owner.gethandle,10));
+     //historyoutstr('ElLeader DXFOut self='+inttohex(LongWord(@self),10)+' owner'+inttohex(bp.owner.gethandle,10));
      inherited;
      m4:={self.ObjMatrix; //}getmatrix^;
      //MatrixInvert(m4);
@@ -576,7 +576,7 @@ begin
           tdesc:=PGDBSelectedObjArray(SelObjArray)^.addobject(@self);
           if tdesc<>nil then
           begin
-          Getmem(GDBPointer(tdesc^.pcontrolpoint),sizeof(GDBControlPointArray));
+          Getmem(Pointer(tdesc^.pcontrolpoint),sizeof(GDBControlPointArray));
           mainline.addcontrolpoints(tdesc);
           inc(Selectedobjcount);
           end;
@@ -609,7 +609,7 @@ begin
      mainline.remaponecontrolpoint(pdesc);
 end;
 
-procedure GDBObjElLeader.addcontrolpoints(tdesc:GDBPointer);
+procedure GDBObjElLeader.addcontrolpoints(tdesc:Pointer);
 //var pdesc:controlpointdesc;
 begin
      MainLine.addcontrolpoints(tdesc);
@@ -737,7 +737,7 @@ end;
 function GDBObjElLeader.Clone;
 var tvo: PGDBObjElLeader;
 begin
-  Getmem(GDBPointer(tvo), sizeof(GDBObjElLeader));
+  Getmem(Pointer(tvo), sizeof(GDBObjElLeader));
   tvo^.initnul;
   CopyVPto(tvo^);
   CopyExtensionsTo(tvo^);

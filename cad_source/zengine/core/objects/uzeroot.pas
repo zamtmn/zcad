@@ -33,12 +33,12 @@ GDBObjRoot= object(GDBObjGenericSubEntry)
                  destructor done;virtual;
                  //function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;
                  procedure FormatAfterEdit(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                 procedure AfterDeSerialize(SaveFlag:GDBWord; membuf:GDBPointer);virtual;
+                 procedure AfterDeSerialize(SaveFlag:Word; membuf:Pointer);virtual;
                  function getowner:PGDBObjSubordinated;virtual;
                  function GetMainOwner:PGDBObjSubordinated;virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
                  //function FindVariable(varname:GDBString):pvardesk;virtual;
-                 function GetHandle:GDBPlatformint;virtual;
+                 function GetHandle:PtrInt;virtual;
                  procedure EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;
 
                  function GetMatrix:PDMatrix4D;virtual;
@@ -111,7 +111,7 @@ begin
            p:=self.ObjToConnectedArray.iterate(ir);
      until p=nil;
 end;
-function GDBObjRoot.GetHandle:GDBPlatformint;
+function GDBObjRoot.GetHandle:PtrInt;
 begin
      result:=H_Root;
 end;

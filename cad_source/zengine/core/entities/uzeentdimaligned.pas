@@ -41,17 +41,17 @@ type
 PGDBObjAlignedDimension=^GDBObjAlignedDimension;
 {REGISTEROBJECTTYPE GDBObjAlignedDimension}
 GDBObjAlignedDimension= object(GDBObjDimension)
-                      constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
+                      constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                       constructor initnul(owner:PGDBObjGenericWithSubordinated);
                       procedure DrawExtensionLine(p1,p2:GDBVertex;LineNumber:GDBInteger;var drawing:TDrawingDef;var DC:TDrawContext; part:integer);
 
 
 
                       procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                      function Clone(own:GDBPointer):PGDBObjEntity;virtual;
+                      function Clone(own:Pointer):PGDBObjEntity;virtual;
                       //procedure DrawGeometry;
 
-                      procedure addcontrolpoints(tdesc:GDBPointer);virtual;
+                      procedure addcontrolpoints(tdesc:Pointer);virtual;
 
 
 
@@ -280,7 +280,7 @@ function GDBObjAlignedDimension.GetObjTypeName;
 begin
      result:=ObjN_ObjAlignedDimension;
 end;
-procedure GDBObjAlignedDimension.addcontrolpoints(tdesc:GDBPointer);
+procedure GDBObjAlignedDimension.addcontrolpoints(tdesc:Pointer);
 var pdesc:controlpointdesc;
 begin
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(4);
@@ -312,7 +312,7 @@ end;
 function GDBObjAlignedDimension.Clone;
 var tvo: PGDBObjAlignedDimension;
 begin
-  Getmem(GDBPointer(tvo), sizeof(GDBObjAlignedDimension));
+  Getmem(Pointer(tvo), sizeof(GDBObjAlignedDimension));
   tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight);
   CopyVPto(tvo^);
   CopyExtensionsTo(tvo^);

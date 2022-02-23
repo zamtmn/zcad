@@ -40,7 +40,7 @@ TZctnrVectorBytes=object(GZVector{-}<byte>{//})
                       procedure TXTAddGDBStringEOL(s:AnsiString);virtual;
                       procedure TXTAddGDBString(s:AnsiString);virtual;
                       function ReadData(PData:Pointer;SData:Word):Integer;virtual;
-                      //function PopData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;
+                      //function PopData(PData:Pointer;SData:Word):GDBInteger;virtual;
                       function ReadString(break, ignore: AnsiString): AnsiString;inline;
                       function ReadGDBString: AnsiString;inline;
                       function ReadString2:AnsiString;inline;
@@ -87,7 +87,7 @@ begin
      p:=@parray[0];
      inc(p,rp);
      result:=pansichar(p)^;
-     //result:=pansichar(GDBPlatformUInt(parray)+rp)^;
+     //result:=pansichar(PtrUInt(parray)+rp)^;
 end;
 function TZctnrVectorBytes.readtoparser;
 var
@@ -224,7 +224,7 @@ begin
      p:=@parray[0];
      inc(p,readpos);
      result:=p;
-     //result:=pointer(GDBPlatformUInt(parray)+readpos);
+     //result:=pointer(PtrUInt(parray)+readpos);
 end;
 function TZctnrVectorBytes.GetCurrentReadAddres;
 var
@@ -233,7 +233,7 @@ begin
      p:=@parray[0];
      inc(p,readpos);
      result:=p;
-     //result:=pointer(GDBPlatformUInt(parray)+readpos);
+     //result:=pointer(PtrUInt(parray)+readpos);
 end;
 function TZctnrVectorBytes.readbyte;
 var
@@ -242,7 +242,7 @@ begin
      p:=@parray[0];
      inc(p,readpos);
      result:=pbyte(p)^;
-     //result:=pbyte(GDBPlatformUInt(parray)+readpos)^;
+     //result:=pbyte(PtrUInt(parray)+readpos)^;
      inc(readpos);
 end;
 function TZctnrVectorBytes.readword;
@@ -278,7 +278,7 @@ begin
   p:=@parray[0];
   inc(p,readpos);
   addr:=pointer(p);
-  //addr:=pointer(GDBPlatformUInt(parray)+readpos);
+  //addr:=pointer(PtrUInt(parray)+readpos);
     while ReadPos <> count do
     begin
       if (pos(addr[0], break) = 0)or(({s=''}i=0)and(addr[0]=' ')) then
@@ -384,12 +384,12 @@ begin
 end;
 
 function TZctnrVectorBytes.AddByte(PData:Pointer):Integer;
-//var addr:GDBPlatformint;
+//var addr:PtrInt;
 begin
      result:=adddata(pdata,sizeof(Byte));
 end;
 {function TZctnrVectorBytes.AddFontFloat(PData:Pointer):Integer;
-//var addr:GDBPlatformint;
+//var addr:PtrInt;
 begin
      result:=adddata(pdata,sizeof(fontfloat));
 end;}
@@ -398,7 +398,7 @@ begin
      result:=adddata(pdata,sizeof(Word));
 end;
 function TZctnrVectorBytes.ReadData;
-{var addr:GDBPlatformint;
+{var addr:PtrInt;
     p:pt;}
 begin
   {if count = max then
@@ -407,20 +407,20 @@ begin
                           max:=2*max;
                      end;}
   begin
-       {GDBPointer(addr) := parray;
+       {Pointer(addr) := parray;
        addr := addr + ReadPos;}
-       Move({GDBPointer(addr)^}parray^[ReadPos],PData^,SData);
+       Move({Pointer(addr)^}parray^[ReadPos],PData^,SData);
        result:=count;
        inc(ReadPos,SData);
   end;
 end;
 {function TZctnrVectorBytes.PopData;
-var addr:GDBPlatformint;
+var addr:PtrInt;
 begin
   begin
-       GDBPointer(addr) := parray;
+       Pointer(addr) := parray;
        addr := addr + count-SData;
-       Move(GDBPointer(addr)^,PData^,SData);
+       Move(Pointer(addr)^,PData^,SData);
        result:=count;
        dec(count,SData);
   end;

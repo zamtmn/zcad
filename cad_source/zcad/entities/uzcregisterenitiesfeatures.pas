@@ -26,7 +26,7 @@ uses uzcinterface,uzeffdxf,uzbpaths,uzcsysvars,uzctranslations,sysutils,
      URecordDescriptor,UBaseTypeDescriptor,uzedrawingdef,
      uzbstrproc,uzeentitiesprop,uzcentelleader;
 var
-   PFCTTD:GDBPointer=nil;
+   PFCTTD:Pointer=nil;
    extvarunit:TUnit;
 
 implementation

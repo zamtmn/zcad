@@ -22,7 +22,7 @@ interface
 uses
  uzcinfoform,ComCtrls,Controls,Forms,uzbtypesbase,uzclog,uzcstrconsts;
 type
-  DMMethod=procedure(sender:GDBPointer) of object;
+  DMMethod=procedure(sender:Pointer) of object;
   //PTDMenuWnd=^TDMenuWnd;
 
   { TDMenuWnd }
@@ -105,7 +105,7 @@ begin
 
 
 
-  Getmem(GDBPointer(result),sizeof(ZButtonGeneric));
+  Getmem(Pointer(result),sizeof(ZButtonGeneric));
   result^.initxywh(Text,hText,@self,0,yy,ww,statusbarclientheight,true);
   result^.align:=al_clientw;
 	SelectObject(_dc, hfntOld);

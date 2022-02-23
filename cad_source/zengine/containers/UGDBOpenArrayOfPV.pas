@@ -38,8 +38,8 @@ GDBObjOpenArrayOfPV= object(TZctnrVectorPGDBaseObjects)
                       function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
                       function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                       procedure DeSelect(var SelectedObjCount:GDBInteger;ds2s:TDeSelect2Stage);virtual;
-                      function CreateObj(t: GDBByte{;owner:GDBPointer}):GDBPointer;virtual;
-                      function CreateInitObj(t: GDBByte;owner:GDBPointer):PGDBObjSubordinated;virtual;
+                      function CreateObj(t: Byte{;owner:Pointer}):Pointer;virtual;
+                      function CreateInitObj(t: Byte;owner:Pointer):PGDBObjSubordinated;virtual;
                       function calcbb:TBoundingBox;
                       function calcvisbb(infrustumactualy:TActulity):TBoundingBox;
                       function getoutbound(var DC:TDrawContext):TBoundingBox;
@@ -50,7 +50,7 @@ GDBObjOpenArrayOfPV= object(TZctnrVectorPGDBaseObjects)
                       procedure FormatAfterEdit(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                       //function InRect:TInRect;virtual;
                       function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;virtual;
-                      //function FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjSubordinated;virtual;
+                      //function FindEntityByVar(objID:Word;vname,vvalue:GDBString):PGDBObjSubordinated;virtual;
                 end;
 {Export-}
 function EqualFuncPGDBaseObject(const a, b: PGDBaseObject):Boolean;
@@ -215,7 +215,7 @@ begin
                        until pobj=nil;
                   end;
 end;
-function GDBObjOpenArrayOfPV.CreateObj(t: GDBByte{;owner:GDBPointer}):GDBPointer;
+function GDBObjOpenArrayOfPV.CreateObj(t: Byte{;owner:Pointer}):Pointer;
 var temp: PGDBObjEntity;
 begin
   temp := nil;
@@ -229,7 +229,7 @@ begin
   end;
   result := temp;
 end;
-function GDBObjOpenArrayOfPV.CreateInitObj(t: GDBByte;owner:GDBPointer):PGDBObjSubordinated;
+function GDBObjOpenArrayOfPV.CreateInitObj(t: Byte;owner:Pointer):PGDBObjSubordinated;
 var temp: PGDBObjEntity;
 begin
   temp := nil;

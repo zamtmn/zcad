@@ -117,7 +117,7 @@ begin
 end;
 
 
-function _3DPolyEd_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function _3DPolyEd_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 var
     ptv,ptvprev:pgdbvertex;
     ir:itrec;
@@ -182,7 +182,7 @@ begin
 
                           pc := PGDBObjCircle(ENTF_CreateCircle(@drawings.GetCurrentDWG^.ConstructObjRoot,@drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray,[PEProp.vvertex.x,PEProp.vvertex.y,PEProp.vvertex.z,10*drawings.GetCurrentDWG^.pcamera^.prop.zoom]));
                           zcSetEntPropFromCurrentDrawingProp(pc);
-                          //pc := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBCircleID,drawings.GetCurrentROOT));
+                          //pc := Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBCircleID,drawings.GetCurrentROOT));
                           //GDBObjSetCircleProp(pc,drawings.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^,sysvar.dwg.DWG_CLinew^, PEProp.vvertex,10*drawings.GetCurrentDWG^.pcamera^.prop.zoom);
 
                           pc^.Formatentity(drawings.GetCurrentDWG^,dc);
@@ -194,14 +194,14 @@ begin
                                           begin
                                                PCreatedGDBLine := PGDBObjLine(ENTF_CreateLine(@drawings.GetCurrentDWG^.ConstructObjRoot,@drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray,[PEProp.lvertex1.x,PEProp.lvertex1.y,PEProp.lvertex1.z,wc.x,wc.y,wc.z]));
                                                zcSetEntPropFromCurrentDrawingProp(PCreatedGDBLine);
-                                               //PCreatedGDBLine := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,drawings.GetCurrentROOT));
+                                               //PCreatedGDBLine := Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,drawings.GetCurrentROOT));
                                                //GDBObjSetLineProp(PCreatedGDBLine,drawings.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^, sysvar.dwg.DWG_CLinew^, PEProp.lvertex1, wc);
 
                                                PCreatedGDBLine^.Formatentity(drawings.GetCurrentDWG^,dc);
 
                                                PCreatedGDBLine := PGDBObjLine(ENTF_CreateLine(@drawings.GetCurrentDWG^.ConstructObjRoot,@drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray,[PEProp.lvertex2.x,PEProp.lvertex2.y,PEProp.lvertex2.z,wc.x,wc.y,wc.z]));
                                                zcSetEntPropFromCurrentDrawingProp(PCreatedGDBLine);
-                                               //PCreatedGDBLine := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,drawings.GetCurrentROOT));
+                                               //PCreatedGDBLine := Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,drawings.GetCurrentROOT));
                                                //GDBObjSetLineProp(PCreatedGDBLine,drawings.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^,sysvar.dwg.DWG_CLinew^, PEProp.lvertex2, wc);
 
                                                PCreatedGDBLine^.Formatentity(drawings.GetCurrentDWG^,dc);
@@ -214,7 +214,7 @@ begin
                                                    PCreatedGDBLine := PGDBObjLine(ENTF_CreateLine(@drawings.GetCurrentDWG^.ConstructObjRoot,@drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray,[PEProp.lvertex1.x,PEProp.lvertex1.y,PEProp.lvertex1.z,wc.x,wc.y,wc.z]));
                                                    zcSetEntPropFromCurrentDrawingProp(PCreatedGDBLine);
 
-                                                   //PCreatedGDBLine := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,drawings.GetCurrentROOT));
+                                                   //PCreatedGDBLine := Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,drawings.GetCurrentROOT));
                                                    //GDBObjSetLineProp(PCreatedGDBLine,drawings.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^, sysvar.dwg.DWG_CLinew^, PEProp.lvertex1, wc);
                                                    PCreatedGDBLine^.Formatentity(drawings.GetCurrentDWG^,dc);
                                                    PEProp.nearestline:=PEProp.nearestvertex;
@@ -224,7 +224,7 @@ begin
                                               begin
                                                    PCreatedGDBLine := PGDBObjLine(ENTF_CreateLine(@drawings.GetCurrentDWG^.ConstructObjRoot,@drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray,[PEProp.lvertex2.x,PEProp.lvertex2.y,PEProp.lvertex2.z,wc.x,wc.y,wc.z]));
                                                    zcSetEntPropFromCurrentDrawingProp(PCreatedGDBLine);
-                                                   //PCreatedGDBLine := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,drawings.GetCurrentROOT));
+                                                   //PCreatedGDBLine := Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,drawings.GetCurrentROOT));
                                                    //GDBObjSetLineProp(PCreatedGDBLine,drawings.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^, sysvar.dwg.DWG_CLinew^, PEProp.lvertex2, wc);
                                                    PCreatedGDBLine^.Formatentity(drawings.GetCurrentDWG^,dc);
                                                    PEProp.nearestline:=PEProp.nearestvertex;
@@ -240,16 +240,16 @@ begin
                                         _tv:=NearestPointOnSegment(wc,PEProp.lvertex1,PEProp.lvertex2);
                                         pc := PGDBObjCircle(ENTF_CreateCircle(@drawings.GetCurrentDWG^.ConstructObjRoot,@drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray,[_tv.x,_tv.y,_tv.z,10*drawings.GetCurrentDWG^.pcamera^.prop.zoom]));
                                         zcSetEntPropFromCurrentDrawingProp(pc);
-                                        //pc := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBCircleID,drawings.GetCurrentROOT));
+                                        //pc := Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBCircleID,drawings.GetCurrentROOT));
                                         //GDBObjSetCircleProp(pc,drawings.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^, sysvar.dwg.DWG_CLinew^, _tv, 10*drawings.GetCurrentDWG^.pcamera^.prop.zoom);
                                         pc^.Formatentity(drawings.GetCurrentDWG^,dc);
 
                                         PCreatedGDBLine := PGDBObjLine(ENTF_CreateLine(@drawings.GetCurrentDWG^.ConstructObjRoot,@drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray,[_tv.x,_tv.y,_tv.z,wc.x,wc.y,wc.z]));
                                         zcSetEntPropFromCurrentDrawingProp(PCreatedGDBLine);
-                                        //PCreatedGDBLine := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,drawings.GetCurrentROOT));
+                                        //PCreatedGDBLine := Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,drawings.GetCurrentROOT));
                                         //GDBObjSetLineProp(PCreatedGDBLine,drawings.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^, sysvar.dwg.DWG_CLinew^, _tv, wc);
 
-                                        //PCreatedGDBLine := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBLineID,drawings.GetCurrentROOT));
+                                        //PCreatedGDBLine := Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBLineID,drawings.GetCurrentROOT));
                                         //GDBObjLineInit(drawings.GetCurrentROOT,PCreatedGDBLine,drawings.GetCurrentDWG^.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, _tv, wc);
                                         PCreatedGDBLine^.Formatentity(drawings.GetCurrentDWG^,dc);
                                    end
@@ -257,7 +257,7 @@ begin
                                begin
                                    pc := PGDBObjCircle(ENTF_CreateCircle(@drawings.GetCurrentDWG^.ConstructObjRoot,@drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray,[PEProp.vvertex.x,PEProp.vvertex.y,PEProp.vvertex.z,40*drawings.GetCurrentDWG^.pcamera^.prop.zoom]));
                                    zcSetEntPropFromCurrentDrawingProp(pc);
-                                   //pc := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBCircleID,drawings.GetCurrentROOT));
+                                   //pc := Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBCircleID,drawings.GetCurrentROOT));
                                    //GDBObjSetCircleProp(pc,drawings.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^, sysvar.dwg.DWG_CLinew^, PEProp.vvertex, 40*drawings.GetCurrentDWG^.pcamera^.prop.zoom);
                                    pc^.Formatentity(drawings.GetCurrentDWG^,dc);
                                end
@@ -394,7 +394,7 @@ begin
   end
 end;
 
-{function _3DPolyEd_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+{function _3DPolyEd_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: Byte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 var po:PGDBObjSubordinated;
 begin
   exit;

@@ -27,7 +27,7 @@ PSHXFont=^SHXFont;
 {REGISTEROBJECTTYPE SHXFont}
 SHXFont= object(BASEFont)
               //compiledsize:GDBInteger;
-              h,u:GDBByte;
+              h,u:Byte;
               //SHXdata:TZctnrVectorBytes;
               constructor init;
               destructor done;virtual;

@@ -33,7 +33,7 @@ GDBObjLine= object(GDBObj3d)
                  CoordInWCS:GDBLineProp;(*'Coordinates WCS'*)(*hidden_in_objinsp*)
                  PProjPoint:PGDBLineProj;(*'Coordinates DCS'*)(*hidden_in_objinsp*)
 
-                 constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p1,p2:GDBvertex);
+                 constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p1,p2:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f: TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
@@ -42,22 +42,22 @@ GDBObjLine= object(GDBObj3d)
                  procedure CalcGeometry;virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                  procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
-                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
-                 procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
-                 procedure rtsave(refp:GDBPointer);virtual;
+                  function Clone(own:Pointer):PGDBObjEntity;virtual;
+                 procedure rtedit(refp:Pointer;mode:Single;dist,wc:gdbvertex);virtual;
+                 procedure rtsave(refp:Pointer);virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
                   function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
                   function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;virtual;
                  //procedure feedbackinrect;virtual;
                  //function InRect:TInRect;virtual;
-                  function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
+                  function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
                   function getintersect(var osp:os_record;pobj:PGDBObjEntity; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
                 destructor done;virtual;
-                 procedure addcontrolpoints(tdesc:GDBPointer);virtual;
-                  function beforertmodify:GDBPointer;virtual;
-                  procedure clearrtmodify(p:GDBPointer);virtual;
+                 procedure addcontrolpoints(tdesc:Pointer);virtual;
+                  function beforertmodify:Pointer;virtual;
+                  procedure clearrtmodify(p:Pointer);virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
-                 function IsRTNeedModify(const Point:PControlPointDesc; p:GDBPointer):Boolean;virtual;
+                 function IsRTNeedModify(const Point:PControlPointDesc; p:Pointer):Boolean;virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                  procedure transform(const t_matrix:DMatrix4D);virtual;
                   function jointoline(pl:pgdbobjline;var drawing:TDrawingDef):GDBBoolean;virtual;
@@ -205,7 +205,7 @@ end;
 destructor GDBObjLine.done;
 begin
      if PProjPoint<>nil then
-                            Freemem(GDBPointer(PProjPoint));
+                            Freemem(Pointer(PProjPoint));
      inherited done;
 end;
 procedure GDBObjLine.CalcGeometry;
@@ -323,9 +323,9 @@ begin
   //if POGLWnd=nil then exit;
   {if PProjPoint<>nil then
   begin
-       Freemem(GDBPointer(PProjPoint));
+       Freemem(Pointer(PProjPoint));
   end;}
-  if PProjPoint=nil then Getmem(GDBPointer(pprojpoint),sizeof(GDBLineProj));
+  if PProjPoint=nil then Getmem(Pointer(pprojpoint),sizeof(GDBLineProj));
 
   ProjectProc(CoordInWCS.lbegin,tv);
   pprojpoint^[0]:=pGDBvertex2D(@tv)^;
@@ -588,7 +588,7 @@ end;
 function GDBObjLine.Clone;
 var tvo: PGDBObjLine;
 begin
-  Getmem(GDBPointer(tvo), sizeof(GDBObjLine));
+  Getmem(Pointer(tvo), sizeof(GDBObjLine));
   tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight, CoordInOCS.lBegin, CoordInOCS.lEnd);
   CopyVPto(tvo^);
   CopyExtensionsTo(tvo^);
@@ -637,11 +637,11 @@ begin
      Getmem(result,sizeof(tlinertmodify));
      clearrtmodify(result);
 end;
-procedure GDBObjLine.clearrtmodify(p:GDBPointer);
+procedure GDBObjLine.clearrtmodify(p:Pointer);
 begin
      fillchar(p^,sizeof(tlinertmodify),0);
 end;
-function GDBObjLine.IsRTNeedModify(const Point:PControlPointDesc; p:GDBPointer):Boolean;
+function GDBObjLine.IsRTNeedModify(const Point:PControlPointDesc; p:Pointer):Boolean;
 begin
      result:=false;
   case point.pointtype of
@@ -707,7 +707,7 @@ begin
                              end;
                     end;
 end;
-procedure GDBObjLine.addcontrolpoints(tdesc:GDBPointer);
+procedure GDBObjLine.addcontrolpoints(tdesc:Pointer);
 var pdesc:controlpointdesc;
 begin
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(3);

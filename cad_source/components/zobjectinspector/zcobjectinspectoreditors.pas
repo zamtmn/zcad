@@ -154,7 +154,7 @@ var
     cbedit:TComboBox;
     propeditor:TPropEditor;
     ir:itrec;
-    number:longword;
+    number:LongWord;
     p:pgdbstring;
 begin
      propeditor:=TPropEditor.Create(theowner,PInstance,ptdesc^,FreeOnLostFocus);

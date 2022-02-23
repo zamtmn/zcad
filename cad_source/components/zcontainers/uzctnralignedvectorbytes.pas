@@ -25,7 +25,7 @@ type
 {Export+}
 {----REGISTEROBJECTTYPE TZctnrAlignedVectorBytes}
 TZctnrAlignedVectorBytes=
-  object(GZVector{-}<Byte>{//})(*OpenArrayOfData=GDBByte*)
+  object(GZVector{-}<Byte>{//})(*OpenArrayOfData=Byte*)
                 function beginiterate(out ir:itrec):Pointer;virtual;
                 function iterate(var ir:itrec):Pointer;virtual;
 

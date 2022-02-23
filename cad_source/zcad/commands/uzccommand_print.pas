@@ -54,10 +54,10 @@ type
     procedure CommandContinue; virtual;
     procedure CommandStart(Operands:TCommandOperands); virtual;
     procedure ShowMenu;virtual;
-    procedure Print(pdata:GDBPlatformint); virtual;
-    procedure SetWindow(pdata:GDBPlatformint); virtual;
-    procedure SelectPrinter(pdata:GDBPlatformint); virtual;
-    procedure SelectPaper(pdata:GDBPlatformint); virtual;
+    procedure Print(pdata:PtrInt); virtual;
+    procedure SetWindow(pdata:PtrInt); virtual;
+    procedure SelectPrinter(pdata:PtrInt); virtual;
+    procedure SelectPaper(pdata:PtrInt); virtual;
   end;
 var
   PrintParam:TRasterizeParams;
@@ -108,19 +108,19 @@ begin
   commandmanager.DMAddMethod('Print','Print',@print);
   commandmanager.DMShow;
 end;
-procedure Print_com.SelectPrinter(pdata:GDBPlatformint);
+procedure Print_com.SelectPrinter(pdata:PtrInt);
 begin
   ZCMsgCallBackInterface.TextMessage(rsNotYetImplemented,TMWOHistoryOut);
   ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
   if PSD.Execute then;
   ZCMsgCallBackInterface.Do_AfterShowModal(nil);
 end;
-procedure Print_com.SetWindow(pdata:GDBPlatformint);
+procedure Print_com.SetWindow(pdata:PtrInt);
 begin
   commandmanager.executecommandsilent('GetRect',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
 end;
 
-procedure Print_com.SelectPaper(pdata:GDBPlatformint);
+procedure Print_com.SelectPaper(pdata:PtrInt);
 
 begin
   ZCMsgCallBackInterface.TextMessage(rsNotYetImplemented,TMWOHistoryOut);
@@ -135,7 +135,7 @@ begin
   else
     result := Round(AValue*Printer.XDPI);
 end;
-procedure Print_com.Print(pdata:GDBPlatformint);
+procedure Print_com.Print(pdata:PtrInt);
  var
   cdwg:PTSimpleDrawing;
   PrinterDrawer:TZGLGeneral2DDrawer;

@@ -39,9 +39,9 @@ EnumDescriptor=object(TUserTypeDescriptor)
                      constructor init(size:GDBInteger;tname:string;pu:pointer);
                      function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
                      function CreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:TInternalScriptString;preferedHeight:integer):TEditorDesc;virtual;
-                     function GetNumberInArrays(addr:Pointer;out number:GDBLongword):GDBBoolean;virtual;
-                     //function Serialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:PTZctnrVectorBytes;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
-                     //function DeSerialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:TZctnrVectorBytes;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
+                     function GetNumberInArrays(addr:Pointer;out number:LongWord):GDBBoolean;virtual;
+                     //function Serialize(PInstance:Pointer;SaveFlag:Word;var membuf:PTZctnrVectorBytes;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
+                     //function DeSerialize(PInstance:Pointer;SaveFlag:Word;var membuf:TZctnrVectorBytes;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
                      function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
                      function GetUserValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
                      destructor Done;virtual;
@@ -77,7 +77,7 @@ begin
      end;
 end;
 function EnumDescriptor.CreateProperties;
-var currval:GDBLongword;
+var currval:LongWord;
     ppd:PPropertyDeskriptor;
 begin
      ppd:=GetPPD(ppda,bmode);
@@ -101,20 +101,20 @@ begin
      //IncAddr(addr);
 end;
 function EnumDescriptor.GetNumberInArrays;
-var currval:GDBLongword;
+var currval:LongWord;
     p:Pointer;
     //found:GDBBoolean;
 //    i:GDBInteger;
         ir:itrec;
 begin
      result:=false;
-     case SizeInGDBBytes of
+     case SizeInBytes of
                       1:begin
-                             currval:=pGDBByte(addr)^;
+                             currval:=PByte(addr)^;
                              p:=Value.beginiterate(ir);
                              if p<>nil then
                              repeat
-                                   if pGDBByte(p)^=currval then
+                                   if PByte(p)^=currval then
                                                             begin
                                                                  //found:=true;
                                                                  number:=ir.itc;
@@ -127,14 +127,14 @@ begin
      end;
 end;
 procedure EnumDescriptor.SetValueFromString(PInstance:Pointer;_Value:TInternalScriptString);
-var //currval:GDBLongword;
+var //currval:LongWord;
     p,p2,pp:Pointer;
 //    found:GDBBoolean;
 //    i:GDBInteger;
         ir,ir2,irr:itrec;
 begin
      _value:=uppercase(_value);
-     case SizeInGDBBytes of
+     case SizeInBytes of
                       1:begin
                              p:=SourceValue.beginiterate(ir);
                              p2:=UserValue.beginiterate(ir2);
@@ -144,7 +144,7 @@ begin
                              if (_value=uppercase(pstring(p)^))
                              or (_value=uppercase(pstring(p2)^))then
                              begin
-                                  pGDBByte(pinstance)^:=pbyte(pp)^;
+                                  PByte(pinstance)^:=pbyte(pp)^;
                                   exit;
                              end;
                                    p:=SourceValue.iterate(ir);
@@ -155,7 +155,7 @@ begin
      end;
 end;
 function EnumDescriptor.GetValueAsString;
-var //currval:GDBLongword;
+var //currval:LongWord;
 //    p:Pointer;
 //    found:GDBBoolean;
 //    i:GDBInteger;
@@ -166,7 +166,7 @@ begin
      result:={UserValue}SourceValue.getData(num)
 end;
 function EnumDescriptor.GetUserValueAsString;
-var //currval:GDBLongword;
+var //currval:LongWord;
 //    p:Pointer;
 //    found:GDBBoolean;
 //    i:GDBInteger;

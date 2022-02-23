@@ -59,7 +59,7 @@ generic TGChangeCommand<_T> =object(TCustomChangeCommand)
 
 {$DEFINE TCommand  := TGDBPoinerChangeCommand}
 {$DEFINE PTCommand := PTGDBPoinerChangeCommand}
-{$DEFINE TData     := GDBPointer}
+{$DEFINE TData     := Pointer}
   {$I TGChangeCommandIMPL.inc}
 
 {$DEFINE TCommand  := TGDBBooleanChangeCommand}
@@ -67,9 +67,9 @@ generic TGChangeCommand<_T> =object(TCustomChangeCommand)
 {$DEFINE TData     := GDBBoolean}
   {$I TGChangeCommandIMPL.inc}
 
-{$DEFINE TCommand  := TGDBGDBByteChangeCommand}
-{$DEFINE PTCommand := PTGDBGDBByteChangeCommand}
-{$DEFINE TData     := GDBByte}
+{$DEFINE TCommand  := TGDBByteChangeCommand}
+{$DEFINE PTCommand := PTGDBByteChangeCommand}
+{$DEFINE TData     := Byte}
   {$I TGChangeCommandIMPL.inc}
 
 {$DEFINE TCommand  := TGDBTGDBLineWeightChangeCommand}
@@ -111,7 +111,7 @@ generic TGChangeCommand<_T> =object(TCustomChangeCommand)
 
 {$DEFINE TCommand  := TGDBPoinerChangeCommand}
 {$DEFINE PTCommand := PTGDBPoinerChangeCommand}
-{$DEFINE TData     := GDBPointer}
+{$DEFINE TData     := Pointer}
   {$I TGChangeCommandIMPL.inc}
 
 {$DEFINE TCommand  := TGDBBooleanChangeCommand}
@@ -119,9 +119,9 @@ generic TGChangeCommand<_T> =object(TCustomChangeCommand)
 {$DEFINE TData     := GDBBoolean}
   {$I TGChangeCommandIMPL.inc}
 
-{$DEFINE TCommand  := TGDBGDBByteChangeCommand}
-{$DEFINE PTCommand := PTGDBGDBByteChangeCommand}
-{$DEFINE TData     := GDBByte}
+{$DEFINE TCommand  := TGDBByteChangeCommand}
+{$DEFINE PTCommand := PTGDBByteChangeCommand}
+{$DEFINE TData     := Byte}
   {$I TGChangeCommandIMPL.inc}
 
 {$DEFINE TCommand  := TGDBTGDBLineWeightChangeCommand}
@@ -199,7 +199,7 @@ end;
 
 {$DEFINE TCommand  := TGDBPoinerChangeCommand}
 {$DEFINE PTCommand := PTGDBPoinerChangeCommand}
-{$DEFINE TData     := GDBPointer}
+{$DEFINE TData     := Pointer}
   {$I TGChangeCommandIMPL.inc}
 
 {$DEFINE TCommand  := TGDBBooleanChangeCommand}
@@ -207,9 +207,9 @@ end;
 {$DEFINE TData     := GDBBoolean}
   {$I TGChangeCommandIMPL.inc}
 
-{$DEFINE TCommand  := TGDBGDBByteChangeCommand}
-{$DEFINE PTCommand := PTGDBGDBByteChangeCommand}
-{$DEFINE TData     := GDBByte}
+{$DEFINE TCommand  := TGDBByteChangeCommand}
+{$DEFINE PTCommand := PTGDBByteChangeCommand}
+{$DEFINE TData     := Byte}
   {$I TGChangeCommandIMPL.inc}
 
 {$DEFINE TCommand  := TGDBTGDBLineWeightChangeCommand}

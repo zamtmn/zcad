@@ -75,8 +75,8 @@ constructor TTypedChangeCommand.Assign(PDataInstance:Pointer;PType:PUserTypeDesc
 begin
      Addr:=PDataInstance;
      PTypeManager:=PType;
-     Getmem(OldData,PTypeManager^.SizeInGDBBytes);
-     Getmem(NewData,PTypeManager^.SizeInGDBBytes);
+     Getmem(OldData,PTypeManager^.SizeInBytes);
+     Getmem(NewData,PTypeManager^.SizeInBytes);
      PTypeManager^.CopyInstanceTo(Addr,OldData);
      PTypeManager^.CopyInstanceTo(Addr,NewData);
      PDataOwner:=nil;
@@ -136,7 +136,7 @@ begin
 end;
 function TTypedChangeCommand.GetDataTypeSize:PtrInt;
 begin
-     result:=PTypeManager^.SizeInGDBBytes;
+     result:=PTypeManager^.SizeInBytes;
 end;
 destructor TTypedChangeCommand.Done;
 begin

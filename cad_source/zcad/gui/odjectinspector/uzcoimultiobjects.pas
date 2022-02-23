@@ -61,11 +61,11 @@ type
                 GeometryUnit:TObjectUnit;(*'Geometry'*)
                 MiscUnit:TObjectUnit;(*'Misc'*)
                 SummaryUnit:TObjectUnit;(*'Summary'*)
-                ObjIDVector:{-}TObjIDVector{/GDBPointer/};(*hidden_in_objinsp*)
-                ObjID2Counter:{-}TObjID2Counter{/GDBPointer/};(*hidden_in_objinsp*)
-                ObjIDWithExtenderCounter:{-}TObjIDWithExtender2Counter{/GDBPointer/};(*hidden_in_objinsp*)
+                ObjIDVector:{-}TObjIDVector{/Pointer/};(*hidden_in_objinsp*)
+                ObjID2Counter:{-}TObjID2Counter{/Pointer/};(*hidden_in_objinsp*)
+                ObjIDWithExtenderCounter:{-}TObjIDWithExtender2Counter{/Pointer/};(*hidden_in_objinsp*)
                 SavezeUnitsFormat:TzeUnitsFormat;(*hidden_in_objinsp*)
-                procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;
+                procedure FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);virtual;
                 procedure CreateUnit(const f:TzeUnitsFormat;_GetEntsTypes:boolean=true);virtual;
                 procedure GetEntsTypes;virtual;
                 function GetObjType:TObjID;virtual;
@@ -83,16 +83,16 @@ type
             end;
   PMSEditor=^TMSEditor;
 {Export-}
-procedure DeselectEnts(PInstance:GDBPointer);
-procedure SelectOnlyThisEnts(PInstance:GDBPointer);
-procedure DeselectBlocsByName(PInstance:GDBPointer);
-procedure DeselectTextsByStyle(PInstance:GDBPointer);
-procedure DeselectEntsByLayer(PInstance:GDBPointer);
-procedure DeselectEntsByLinetype(PInstance:GDBPointer);
-procedure SelectOnlyThisBlocsByName(PInstance:GDBPointer);
-procedure SelectOnlyThisTextsByStyle(PInstance:GDBPointer);
-procedure SelectOnlyThisEntsByLayer(PInstance:GDBPointer);
-procedure SelectOnlyThisEntsByLinetype(PInstance:GDBPointer);
+procedure DeselectEnts(PInstance:Pointer);
+procedure SelectOnlyThisEnts(PInstance:Pointer);
+procedure DeselectBlocsByName(PInstance:Pointer);
+procedure DeselectTextsByStyle(PInstance:Pointer);
+procedure DeselectEntsByLayer(PInstance:Pointer);
+procedure DeselectEntsByLinetype(PInstance:Pointer);
+procedure SelectOnlyThisBlocsByName(PInstance:Pointer);
+procedure SelectOnlyThisTextsByStyle(PInstance:Pointer);
+procedure SelectOnlyThisEntsByLayer(PInstance:Pointer);
+procedure SelectOnlyThisEntsByLinetype(PInstance:Pointer);
 var
    MSEditor:TMSEditor;
    i:integer;
@@ -760,7 +760,7 @@ begin
      until psd=nil;
      debugln('{D+}TMSEditor.createunit end');
 end;
-procedure DeselectEnts(PInstance:GDBPointer);
+procedure DeselectEnts(PInstance:Pointer);
 var
     NeededObjType:TObjID;
     pv:pGDBObjEntity;
@@ -807,7 +807,7 @@ begin
     pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
     until pv=nil;}
 end;
-procedure DeselectBlocsByName(PInstance:GDBPointer);
+procedure DeselectBlocsByName(PInstance:Pointer);
 var
     pv:pGDBObjEntity;
     ir:itrec;
@@ -833,7 +833,7 @@ begin
     if count>0 then
       ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,ZMsgID_GUIActionSelectionChanged);
 end;
-procedure DeselectTextsByStyle(PInstance:GDBPointer);
+procedure DeselectTextsByStyle(PInstance:Pointer);
 var
     pv:pGDBObjEntity;
     ir:itrec;
@@ -860,7 +860,7 @@ begin
       ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,ZMsgID_GUIActionSelectionChanged);
 end;
 
-procedure DeselectEntsByLayer(PInstance:GDBPointer);
+procedure DeselectEntsByLayer(PInstance:Pointer);
 var
     pv:pGDBObjEntity;
     ir:itrec;
@@ -886,7 +886,7 @@ begin
       ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,ZMsgID_GUIActionSelectionChanged);
 end;
 
-procedure DeselectEntsByLinetype(PInstance:GDBPointer);
+procedure DeselectEntsByLinetype(PInstance:Pointer);
 var
     pv:pGDBObjEntity;
     ir:itrec;
@@ -914,7 +914,7 @@ end;
 
 
 
-procedure SelectOnlyThisBlocsByName(PInstance:GDBPointer);
+procedure SelectOnlyThisBlocsByName(PInstance:Pointer);
 var
     pv:pGDBObjEntity;
     ir:itrec;
@@ -949,7 +949,7 @@ begin
     end;
 end;
 
-procedure SelectOnlyThisTextsByStyle(PInstance:GDBPointer);
+procedure SelectOnlyThisTextsByStyle(PInstance:Pointer);
 var
     pv:pGDBObjEntity;
     ir:itrec;
@@ -984,7 +984,7 @@ begin
     end;
 end;
 
-procedure SelectOnlyThisEntsByLayer(PInstance:GDBPointer);
+procedure SelectOnlyThisEntsByLayer(PInstance:Pointer);
 var
     pv:pGDBObjEntity;
     ir:itrec;
@@ -1019,7 +1019,7 @@ begin
     end;
 end;
 
-procedure SelectOnlyThisEntsByLinetype(PInstance:GDBPointer);
+procedure SelectOnlyThisEntsByLinetype(PInstance:Pointer);
 var
     pv:pGDBObjEntity;
     ir:itrec;
@@ -1057,7 +1057,7 @@ end;
 
 
 
-procedure SelectOnlyThisEnts(PInstance:GDBPointer);
+procedure SelectOnlyThisEnts(PInstance:Pointer);
 var
     NeededObjType:TObjID;
     pv:pGDBObjEntity;

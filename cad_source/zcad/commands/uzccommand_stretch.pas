@@ -59,7 +59,7 @@ begin
   FrameEdit_com_CommandStart(Operands);
 end;
 
-function Stretch_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function Stretch_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 begin
   case StretchComMode of
     SM_GetEnts:
@@ -90,7 +90,7 @@ begin
   drawings.GetCurrentDWG.GetSelObjArray.selectcontrolpointinframe(drawings.GetCurrentDWG.wa.param.seldesc.Frame1,drawings.GetCurrentDWG.wa.param.seldesc.Frame2);
 end;
 
-function Stretch_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function Stretch_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 begin
   result:=0;
   if StretchComMode=SM_GetEnts then begin

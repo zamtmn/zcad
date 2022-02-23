@@ -66,7 +66,7 @@ TVariablesExtender=class(TBaseVariablesExtender)
   end;
 
 var
-   PFCTTD:GDBPointer=nil;
+   PFCTTD:Pointer=nil;
 function AddVariablesToEntity(PEnt:PGDBObjEntity):TVariablesExtender;
 implementation
 function TVariablesExtender.isMainFunction:boolean;
@@ -279,7 +279,7 @@ begin
      extractvarfromdxfstring2(_Value,vn,svn,vv);
      vardata:=PGDBObjEntity(PEnt)^.GetExtension<TVariablesExtender>;
      pvd:=vardata.entityunit.InterfaceVariables.findvardesc(vn);
-     offset:=GDBPlatformint(pvd.data.Addr.Instance);
+     offset:=PtrInt(pvd.data.Addr.Instance);
      if pvd<>nil then
        PRecordDescriptor(pvd^.data.PTD)^.ApplyOperator('.',svn,offset,tc);
      PBaseTypeDescriptor(tc)^.SetValueFromString(pointer(offset),vv);
@@ -397,7 +397,7 @@ begin
              repeat
                str:='$'+inttostr(i)+'='+pvd^.name+'|'+pfd^.base.ProgramName+'|'+pfd^.base.PFT^.GetValueAsString(tp);
                dxfGDBStringout(outhandle,1000,str);
-               ptruint(tp):=ptruint(tp)+ptruint(pfd^.base.PFT^.SizeInGDBBytes); { TODO : сделать на оффсете }
+               ptruint(tp):=ptruint(tp)+ptruint(pfd^.base.PFT^.SizeInBytes); { TODO : сделать на оффсете }
                inc(i);
                pfd:=PRecordDescriptor(pvd^.data.ptd).Fields.iterate(ir2);
              until pfd=nil;

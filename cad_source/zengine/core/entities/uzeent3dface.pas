@@ -35,7 +35,7 @@ GDBObj3DFace= object(GDBObj3d)
                  triangle:GDBBoolean;
                  n,p1,p2,p3:GDBVertex3S;
                  //ProjPoint:GDBvertex;
-                 constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex);
+                 constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f:TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
                  procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
@@ -47,11 +47,11 @@ GDBObj3DFace= object(GDBObj3d)
                  //function getsnap(var osp:os_record):GDBBoolean;virtual;
                  function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
-                 procedure addcontrolpoints(tdesc:GDBPointer);virtual;
+                 procedure addcontrolpoints(tdesc:Pointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
-                 function Clone(own:GDBPointer):PGDBObjEntity;virtual;
-                 procedure rtsave(refp:GDBPointer);virtual;
+                 function Clone(own:Pointer):PGDBObjEntity;virtual;
+                 procedure rtsave(refp:Pointer);virtual;
                  function GetObjTypeName:GDBString;virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
 
@@ -441,7 +441,7 @@ begin
      pdesc.dispcoord.x:=round(PInDCS[vertexnumber].x);
      pdesc.dispcoord.y:=round(PInDCS[vertexnumber].y);
 end;
-procedure GDBObj3DFace.addcontrolpoints(tdesc:GDBPointer);
+procedure GDBObj3DFace.addcontrolpoints(tdesc:Pointer);
 var pdesc:controlpointdesc;
     i:GDBInteger;
 begin
@@ -467,7 +467,7 @@ end;
 function GDBObj3DFace.Clone;
 var tvo: PGDBObj3DFace;
 begin
-  Getmem(GDBPointer(tvo), sizeof(GDBObj3DFace));
+  Getmem(Pointer(tvo), sizeof(GDBObj3DFace));
   tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight, nulvertex);
   CopyVPto(tvo^);
   CopyExtensionsTo(tvo^);

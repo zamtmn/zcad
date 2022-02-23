@@ -25,12 +25,12 @@ uses LCLProc,gzctnrVectorObjects,URecordDescriptor,uzctnrVectorBytes,sysutils,
      strmy,uzctnrvectorstrings,objects,gzctnrVector,uzbtypesbase,
      varmandef,uzbtypes,uzbstrproc,TypInfo,uzbLogIntf;
 type
-GDBTOperandStoreMode=GDBByte;
+GDBTOperandStoreMode=Byte;
 GDBOperandDesc=record
                      PTD:PUserTypeDescriptor;
                      StoreMode:GDBTOperandStoreMode;
                end;
-GDBMetodModifier=GDBWord;
+GDBMetodModifier=Word;
 TOperandsVector=GZVector<GDBOperandDesc>;
 PMetodDescriptor=^MetodDescriptor;
 MetodDescriptor=object(GDBaseObject)
@@ -39,11 +39,11 @@ MetodDescriptor=object(GDBaseObject)
                       OperandsName:GDBString;
                       Operands:{GDBOpenArrayOfdata}TOperandsVector; {DATA}
                       ResultPTD:PUserTypeDescriptor;
-                      MetodAddr:GDBPointer;
+                      MetodAddr:Pointer;
                       Attributes:GDBMetodModifier;
                       punit:pointer;
-                      NameHash:GDBLongword;
-                      constructor init(objn,mn,dt:GDBString;ma:GDBPointer;attr:GDBMetodModifier;pu:pointer);
+                      NameHash:LongWord;
+                      constructor init(objn,mn,dt:GDBString;ma:Pointer;attr:GDBMetodModifier;pu:pointer);
                       destructor Done;virtual;
                 end;
 simpleproc=procedure of object;
@@ -52,9 +52,9 @@ TPropertiesVector=GZVector<PropertyDescriptor>;
 
 PObjectDescriptor=^ObjectDescriptor;
 ObjectDescriptor=object(RecordDescriptor)
-                       PVMT:GDBPointer;
+                       PVMT:Pointer;
                        VMTCurrentOffset:GDBInteger;
-                       PDefaultConstructor:GDBPointer;
+                       PDefaultConstructor:Pointer;
                        SimpleMenods:{GDBOpenArrayOfObjects}TSimpleMenodsVector;
                        LincedData:GDBString;
                        LincedObjects:GDBboolean;
@@ -75,8 +75,8 @@ ObjectDescriptor=object(RecordDescriptor)
                        procedure RunMetod(mn:TInternalScriptString;obj:Pointer);
                        procedure SimpleRunMetodWithArg(mn:TInternalScriptString;obj,arg:Pointer);
                        procedure RunDefaultConstructor(PInstance:Pointer);
-                       //function Serialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:PTZctnrVectorBytes;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
-                       //function DeSerialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:TZctnrVectorBytes;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
+                       //function Serialize(PInstance:Pointer;SaveFlag:Word;var membuf:PTZctnrVectorBytes;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
+                       //function DeSerialize(PInstance:Pointer;SaveFlag:Word;var membuf:TZctnrVectorBytes;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
                        destructor Done;virtual;
                        function GetTypeAttributes:TTypeAttr;virtual;
                        procedure SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;prefix:TInternalScriptString);virtual;
@@ -216,7 +216,7 @@ var
    pfd:pFieldDescriptor;
 begin
      td:=GetTypeData(ti);
-     self.SizeInGDBBytes:=td.RecSize;
+     self.SizeInBytes:=td.RecSize;
      //exit;
      i:=0;
      CorrectCurrentFieldsOffset(td,i);
@@ -315,7 +315,7 @@ begin
              begin
                   p:=PGDBOpenArrayOfData(PInstance)^.getDataMutable(i);
                   pld:=pointer(PUserTypeDescriptor(SysUnit.InterfaceTypes.{exttype.}getDataMutable(SysUnit.InterfaceTypes._TypeName2Index(objtypename))^));
-                  Getmem(pointer(p^),pld^.SizeInGDBBytes);
+                  Getmem(pointer(p^),pld^.SizeInBytes);
                   pld^.deSerialize(p^,saveflag,membuf,linkbuf);
 
                   objtypename:='';
@@ -331,7 +331,7 @@ begin
                    begin
                         if objtypename=ObjN_ArrayEnd then system.Break;
                         pld:=pointer(PUserTypeDescriptor(Types.exttype.getDataMutable(Types.TypeName2Index(objtypename))^));
-                        Getmem(pointer(p^),pld^.SizeInGDBBytes);
+                        Getmem(pointer(p^),pld^.SizeInBytes);
                         pld^.deSerialize(p^,saveflag,membuf);
                    end;
                    objtypename:='';
@@ -471,7 +471,7 @@ var pmd:pMetodDescriptor;
     //f,s:shortstring;
     //l:longint;
     //tm:tmethod;
-    h:gdblongword;
+    h:LongWord;
     umn:TInternalScriptString;
 begin
      result:=nil;
@@ -485,8 +485,8 @@ begin
                  if (pmd^.Attributes and m_virtual)<>0 then
                                              begin
                                                   tm.Code:=
-                                                  ppointer(GDBPlatformint(self.PVMT)+
-                                                  GDBPlatformint(pmd^.MetodAddr))^;
+                                                  ppointer(PtrInt(self.PVMT)+
+                                                  PtrInt(pmd^.MetodAddr))^;
                                              end
                                          else
                                              begin
@@ -515,8 +515,8 @@ begin
      if (pmd^.Attributes and m_virtual)<>0 then
                                             begin
                                                  result.Code:=
-                                                 ppointer(GDBPlatformUInt(self.PVMT)+
-                                                 GDBPlatformUInt(pmd^.MetodAddr){+12})^;
+                                                 ppointer(PtrUInt(self.PVMT)+
+                                                 PtrUInt(pmd^.MetodAddr){+12})^;
                                             end
                                         else
                                             begin
@@ -563,8 +563,8 @@ begin
       if (pmd^.Attributes and m_virtual)<>0 then
                                              begin
                                                   tm.Code:=
-                                                  ppointer(GDBPlatformint(self.PVMT)+
-                                                  GDBPlatformint(pmd^.MetodAddr))^;
+                                                  ppointer(PtrInt(self.PVMT)+
+                                                  PtrInt(pmd^.MetodAddr))^;
                                              end
                                          else
                                              begin
@@ -575,8 +575,8 @@ begin
       m_procedure,m_destructor:
                   begin
                        {$ifdef WIN64}
-                       //tm.Code:=ppointer(GDBPlatformint(self.PVMT)+
-                       //         GDBPlatformint(pmd^.MetodAddr)+12)^;
+                       //tm.Code:=ppointer(PtrInt(self.PVMT)+
+                       //         PtrInt(pmd^.MetodAddr)+12)^;
                        {$endif WIN64}
                   SimpleProcOfObj(tm);
                        //pgdbaseobject(obj)^.Format;
@@ -702,7 +702,7 @@ begin
      //ppd^.PTypeManager:=pp^.PFT;
      //if ppd^.valueAddres=nil then
                                  begin
-                                      Getmem(result,pp^.base.PFT.SizeInGDBBytes);
+                                      Getmem(result,pp^.base.PFT.SizeInBytes);
                                  end;
 end;
 function ObjectDescriptor.CreateProperties;
@@ -739,7 +739,7 @@ begin
                                    else
                                        begin
                                             ppd:=pointer(ppda^.getDataMutable(abs(bmode)-1));
-                                            ppd:=pGDBPointer(ppd)^;
+                                            ppd:=PPointer(ppd)^;
                                             ppd.r:=pp.r;
                                             ppd.w:=pp.w;
                                             p:=ppd^.valueAddres;

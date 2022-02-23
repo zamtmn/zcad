@@ -53,11 +53,11 @@ GDBObjAbstractText= object(GDBObjPlainWithOX)
                          function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                          function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
                          //function InRect:TInRect;virtual;
-                         procedure addcontrolpoints(tdesc:GDBPointer);virtual;
+                         procedure addcontrolpoints(tdesc:Pointer);virtual;
                          procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                          procedure ReCalcFromObjMatrix;virtual;
                          function CalcRotate:GDBDouble;virtual;
-                         procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;
+                         procedure FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);virtual;
                          procedure setrot(r:GDBDouble);
                          procedure transform(const t_matrix:DMatrix4D);virtual;
                    end;
@@ -96,7 +96,7 @@ m1[1,0]:=-sin(r);
 m1[0,1]:=sin(r);
 objMatrix:=MatrixMultiply(m1,objMatrix);
 end;
-procedure GDBObjAbstractText.FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);
+procedure GDBObjAbstractText.FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);
 (*var
    r:double;
    ox:gdbvertex;
@@ -221,7 +221,7 @@ begin
                              end;
                     end;
 end;
-procedure GDBObjAbstractText.addcontrolpoints(tdesc:GDBPointer);
+procedure GDBObjAbstractText.addcontrolpoints(tdesc:Pointer);
 var pdesc:controlpointdesc;
 begin
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(1);

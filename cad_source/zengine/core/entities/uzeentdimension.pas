@@ -543,7 +543,7 @@ end;
 procedure GDBObjDimension.RenderFeedback;
 var tv:GDBvertex;
 begin
-  if PProjPoint=nil then Getmem(GDBPointer(pprojpoint),sizeof(TDXFDimData2D));
+  if PProjPoint=nil then Getmem(Pointer(pprojpoint),sizeof(TDXFDimData2D));
 
   ProjectProc(DimData.P10InWCS,tv);
   pprojpoint.P10:=pGDBvertex2D(@tv)^;

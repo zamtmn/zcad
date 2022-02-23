@@ -66,10 +66,10 @@ TZGLGeneral2DDrawer=class(TZGLGeneralDrawer)
                           procedure CorrectScreenInvalidrect(w,h:integer);
                           procedure ProcessScreenInvalidrect(const x,y:integer);
 
-                          procedure InternalDrawLine(const x1,y1,x2,y2:GDBFloat);virtual;abstract;
-                          procedure InternalDrawTriangle(const x1,y1,x2,y2,x3,y3:GDBFloat);virtual;abstract;
-                          procedure InternalDrawQuad(const x1,y1,x2,y2,x3,y3,x4,y4:GDBFloat);virtual;abstract;
-                          procedure InternalDrawPoint(const x,y:GDBFloat);virtual;abstract;
+                          procedure InternalDrawLine(const x1,y1,x2,y2:Single);virtual;abstract;
+                          procedure InternalDrawTriangle(const x1,y1,x2,y2,x3,y3:Single);virtual;abstract;
+                          procedure InternalDrawQuad(const x1,y1,x2,y2,x3,y3,x4,y4:Single);virtual;abstract;
+                          procedure InternalDrawPoint(const x,y:Single);virtual;abstract;
 
                           procedure DrawLine(const PVertexBuffer:PZGLVertex3Sarray;const i1,i2:TLLVertexIndex);override;
                           procedure DrawTriangle(const PVertexBuffer:PZGLVertex3Sarray;const i1,i2,i3:TLLVertexIndex);override;
@@ -179,7 +179,7 @@ end;
 procedure TZGLGeneral2DDrawer.DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);
 var
    pp1,pp2:GDBVertex;
-   x1,y1,x2,y2:GDBFloat;
+   x1,y1,x2,y2:Single;
 begin
     _myGluProject2(p1,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp1);
     _myGluProject2(p2,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp2);

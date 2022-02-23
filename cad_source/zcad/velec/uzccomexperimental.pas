@@ -111,7 +111,7 @@ type
 
 implementation
 
-procedure InteractiveBlockInsertManipulator( const PInteractiveData:GDBPointer;
+procedure InteractiveBlockInsertManipulator( const PInteractiveData:Pointer;
                                                    Point:GDBVertex;
                                                    Click:GDBBoolean);
 var
@@ -127,7 +127,7 @@ begin
    end;
 end;
 
-procedure InteractiveBlockScaleManipulator( const PInteractiveData:GDBPointer;
+procedure InteractiveBlockScaleManipulator( const PInteractiveData:Pointer;
                                                   Point:GDBVertex;
                                                   Click:GDBBoolean);
 var
@@ -154,7 +154,7 @@ begin
    end;
 end;
 
-procedure InteractiveBlockRotateManipulator( const PInteractiveData:GDBPointer;
+procedure InteractiveBlockRotateManipulator( const PInteractiveData:Pointer;
                                                    Point:GDBVertex;
                                                    Click:GDBBoolean);
 var
@@ -261,7 +261,7 @@ begin
     result:=cmd_ok;
 end;
 //
-//procedure InteractivePolyLineManipulator( const PInteractiveData : GDBPointer {pointer to the line entity};
+//procedure InteractivePolyLineManipulator( const PInteractiveData : Pointer {pointer to the line entity};
 //                                                          Point : GDBVertex  {new end coord};
 //                                                          Click : GDBBoolean {true if lmb presseed});
 //var
@@ -309,7 +309,7 @@ end;
 //  ln2^.FormatEntity(drawings.GetCurrentDWG^,dc);
 //
 //end;
-//procedure InteractivePolyLineManipulator2( const PInteractiveData : GDBPointer;
+//procedure InteractivePolyLineManipulator2( const PInteractiveData : Pointer;
 //                                                      Point : GDBVertex;
 //                                                      Click : GDBBoolean);
 //var
@@ -362,7 +362,7 @@ end;
 //  //ln^.FormatEntity(drawings.GetCurrentDWG^,dc);
 //end;
 
-procedure InteractiveLWRectangleManipulator( const PInteractiveData : GDBPointer {pointer to the line entity};
+procedure InteractiveLWRectangleManipulator( const PInteractiveData : Pointer {pointer to the line entity};
                                                           Point : GDBVertex  {new end coord};
                                                           Click : GDBBoolean {true if lmb presseed});
 var
@@ -391,7 +391,7 @@ begin
 end;
 
 
-procedure InteractiveRectangleManipulator( const PInteractiveData : GDBPointer {pointer to the line entity};
+procedure InteractiveRectangleManipulator( const PInteractiveData : Pointer {pointer to the line entity};
                                                           Point : GDBVertex  {new end coord};
                                                           Click : GDBBoolean {true if lmb presseed});
 var
@@ -469,7 +469,7 @@ begin
       pf:=PInternalRTTITypeDesk^.FindField('ET');//находим описание поля ET
       pf^.base.Attributes:=pf^.base.Attributes or FA_READONLY;//устанавливаем ему флаг ридонли
 
-        // pline := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,drawings.GetCurrentROOT));
+        // pline := Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,drawings.GetCurrentROOT));
          //создаем только одну полилинию//GDBObjLWPolyline.CreateInstance;
          polyObj:=GDBObjLWPolyline.CreateInstance;
       //polyObj:=GDBObjPolyline.CreateInstance;

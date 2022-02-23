@@ -25,7 +25,7 @@ const
      ObjN_NotRecognized='NotRecognized';
 type
 TZMessageID=type integer;
-TProcCounter=procedure(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
+TProcCounter=procedure(const PInstance,PCounted:Pointer;var Counter:GDBInteger);
 TControlPointAttr=(CPA_Strech);
 TControlPointAttrs=set of TControlPointAttr;
 {EXPORT+}
@@ -53,17 +53,17 @@ TControlPointAttrs=set of TControlPointAttr;
 (*varcategoryforoi SCALE='Scale'*)
 {REGISTERRECORDTYPE GDBTypedPointer}
 GDBTypedPointer=record
-                      Instance:GDBPointer;
-                      PTD:GDBPointer;
+                      Instance:Pointer;
+                      PTD:Pointer;
                 end;
-TObjID=GDBWord;
+TObjID=Word;
 PGDBaseObject=^GDBaseObject;
 {----REGISTEROBJECTTYPE GDBaseObject----}
 GDBaseObject=object
     function ObjToGDBString(prefix,sufix:GDBString):GDBString; virtual;
     function GetObjType:TObjID;virtual;
     //procedure Format;virtual;
-    procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;
+    procedure FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);virtual;
     function GetObjTypeName:GDBString;virtual;
     function GetObjName:GDBString;virtual;
     constructor initnul;
@@ -86,7 +86,7 @@ tmatrixs=record
                    pviewport:PIMatrix4;
 end;
 TActulity=GDBInteger;
-TEntUpgradeInfo=GDBLongword;
+TEntUpgradeInfo=LongWord;
 PGDBBaseCamera=^GDBBaseCamera;
 {REGISTEROBJECTTYPE GDBBaseCamera}
 GDBBaseCamera=object(GDBaseObject)
@@ -119,7 +119,7 @@ GDBNamedObject=object(GDBaseObject)
                      function GetName:GDBString;
                      function GetFullName:GDBString;virtual;
                      procedure SetDefaultValues;virtual;
-                     procedure IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);virtual;
+                     procedure IterateCounter(PCounted:Pointer;var Counter:GDBInteger;proc:TProcCounter);virtual;
                end;
 PGLLWWidth=^GLLWWidth;
 {REGISTERRECORDTYPE GLLWWidth}
@@ -147,7 +147,7 @@ GDBArrayVertex=packed array[0..0] of GDBvertex;
   controlpointdesc=record
                          pointtype:GDBInteger;
                          attr:TControlPointAttrs;
-                         pobject:GDBPointer;
+                         pobject:Pointer;
                          worldcoord:GDBvertex;
                          dcoord:GDBvertex;
                          dispcoord:GDBvertex2DI;
@@ -227,9 +227,9 @@ TTextJustify=(jstl(*'TopLeft'*),
 TSymbolInfoArray=packed array [0..255] of GDBsymdolinfo;
 PTAlign=^TAlign;
 TAlign=(TATop,TABottom,TALeft,TARight);
-TDWGHandle=GDBQWord;
+TDWGHandle=QWord;
 PTGDBLineWeight=^TGDBLineWeight;
-TGDBLineWeight=GDBSmallint;
+TGDBLineWeight=SmallInt;
 PTGDBOSMode=^TGDBOSMode;
 TGDBOSMode=GDBInteger;
 TGDB3StateBool=(T3SB_Fale(*'False'*),T3SB_True(*'True'*),T3SB_Default(*'Default'*));
@@ -237,8 +237,8 @@ PTGDB3StateBool=^TGDB3StateBool;
 PTFaceTypedData=^TFaceTypedData;
 {REGISTERRECORDTYPE TFaceTypedData}
 TFaceTypedData=record
-                 Instance: GDBPointer;
-                 PTD: GDBPointer;
+                 Instance: Pointer;
+                 PTD: Pointer;
                 end;
 TLLPrimitiveAttrib=GDBInteger;
 PTLLVertexIndex=^TLLVertexIndex;
@@ -256,7 +256,7 @@ TImageDegradation=record
                         RD_ID_MaxDegradationFactor:PGDBDouble;(*'Max degradation factor'*)
                         RD_ID_PrefferedRenderTime:PGDBInteger;(*'Prefered rendertime'*)
                     end;
-PExtensionData=GDBPointer;
+PExtensionData=Pointer;
 {EXPORT-}
 function IsIt(PType,PChecedType:Pointer):Boolean;
 
@@ -265,7 +265,7 @@ function StrToQWord(sh:string):UInt64;
 {$ENDIF}
 implementation
 
-function GDBaseObject.GetObjType:GDBWord;
+function GDBaseObject.GetObjType:Word;
 begin
      result:=GDBBaseObjectID;
 end;
@@ -288,7 +288,7 @@ end;
 {procedure GDBaseObject.format;
 begin
 end;}
-procedure GDBaseObject.FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);
+procedure GDBaseObject.FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);
 begin
      //format;
 end;
@@ -333,7 +333,7 @@ end;
 procedure GDBNamedObject.SetDefaultValues;
 begin
 end;
-procedure GDBNamedObject.IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);
+procedure GDBNamedObject.IterateCounter(PCounted:Pointer;var Counter:GDBInteger;proc:TProcCounter);
 begin
     proc(@self,PCounted,Counter);
 end;

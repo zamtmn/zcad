@@ -97,7 +97,7 @@ TOTM_Integer=TOrdinalTypeManipulator<Integer>;
 GDBIntegerDescriptor=object(BaseTypeDescriptor<Integer,{TOrdinalTypeManipulator<Integer>}TOTM_Integer>)
                     end;
 TOTM_LongWord=TOrdinalTypeManipulator<LongWord>;
-TFundamentalLongWordDescriptor=object(BaseTypeDescriptor<Longword,{TOrdinalTypeManipulator<Longword>}TOTM_LongWord>)
+TFundamentalLongWordDescriptor=object(BaseTypeDescriptor<LongWord,{TOrdinalTypeManipulator<LongWord>}TOTM_LongWord>)
                     end;
 TOTM_LongInt=TOrdinalTypeManipulator<LongInt>;
 TFundamentalLongIntDescriptor=object(BaseTypeDescriptor<LongInt,{TOrdinalTypeManipulator<LongInt>}TOTM_LongInt>)
@@ -112,7 +112,7 @@ TFTM_Double=TOrdinalTypeManipulator<Double>;
 GDBDoubleDescriptor=object(BaseTypeDescriptor<double,{TFloatTypeManipulator<double>}TFTM_Double>)
                     end;
 TFTM_float=TOrdinalTypeManipulator<float>;
-GDBFloatDescriptor=object(BaseTypeDescriptor<float,{TFloatTypeManipulator<TFTM_float>}TFTM_float>)
+FloatDescriptor=object(BaseTypeDescriptor<float,{TFloatTypeManipulator<TFTM_float>}TFTM_float>)
                     end;
 GDBStringGeneralDescriptor<T,TManipulator>=object(BaseTypeDescriptor<T,TManipulator>)
                           procedure CopyInstanceTo(source,dest:pointer);virtual;
@@ -154,7 +154,7 @@ FundamentalSmallIntDescriptorObj:TFundamentalSmallIntDescriptor;
 FundamentalLongWordDescriptorObj:TFundamentalLongWordDescriptor;
 FundamentalQWordDescriptorObj:TFundamentalQWordDescriptor;
 FundamentalInt64Descriptor:TFundamentalInt64Descriptor;
-FundamentalSingleDescriptorObj:GDBFloatDescriptor;
+FundamentalSingleDescriptorObj:FloatDescriptor;
 FundamentalShortIntDescriptorObj:TFundamentalShortIntDescriptor;
 FundamentalBooleanDescriptorOdj:GDBBooleanDescriptor;
 FundamentalPointerDescriptorOdj:PointerDescriptor;
@@ -278,7 +278,7 @@ begin
            if ppd<>nil then
                            begin
                                 //IncAddr(addr);
-                                //inc(pGDBByte(addr),SizeInGDBBytes);
+                                //inc(PByte(addr),SizeInBytes);
                                 //if bmode=property_build then PPDA^.add(@ppd);
                            end;
      //IncAddr(addr);
@@ -416,7 +416,7 @@ begin
            if ppd<>nil then
                            begin
                                 //IncAddr(addr);
-                                //inc(pGDBByte(addr),SizeInGDBBytes);
+                                //inc(PByte(addr),SizeInBytes);
                                 //if bmode=property_build then PPDA^.add(@ppd);
                            end;
      //IncAddr(addr);
@@ -503,7 +503,7 @@ begin
                              until p=nil;
 end;
 function TEnumDataDescriptor.GetValueAsString;
-{var currval:GDBLongword;
+{var currval:LongWord;
     p:Pointer;
     found:GDBBoolean;
     i:GDBInteger;

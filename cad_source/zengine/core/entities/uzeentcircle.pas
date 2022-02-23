@@ -27,7 +27,7 @@ uses
     uzctnrvectorpgdbaseobjects;
 type
 //PProjPoint:PGDBPolyPoint2DArray;
-//PProjPoint:{-}PGDBPolyPoint2DArray{/GDBPointer/};
+//PProjPoint:{-}PGDBPolyPoint2DArray{/Pointer/};
 {Export+}
   ptcirclertmodify=^tcirclertmodify;
   {REGISTERRECORDTYPE tcirclertmodify}
@@ -48,7 +48,7 @@ GDBObjCircle= object(GDBObjWithLocalCS)
                  pq3:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
                  Outbound:OutBound4V;(*oi_readonly*)(*hidden_in_objinsp*)
                  Vertex3D_in_WCS_Array:GDBPoint3DArray;(*oi_readonly*)(*hidden_in_objinsp*)
-                 constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex;RR:GDBDouble);
+                 constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex;RR:GDBDouble);
                  constructor initnul;
                  procedure LoadFromDXF(var f:TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
@@ -60,20 +60,20 @@ GDBObjCircle= object(GDBObjWithLocalCS)
                  procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
-                 function Clone(own:GDBPointer):PGDBObjEntity;virtual;
-                 procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
-                 procedure rtsave(refp:GDBPointer);virtual;
+                 function Clone(own:Pointer):PGDBObjEntity;virtual;
+                 procedure rtedit(refp:Pointer;mode:Single;dist,wc:gdbvertex);virtual;
+                 procedure rtsave(refp:Pointer);virtual;
                  procedure createpoint(var DC:TDrawContext);virtual;
                  procedure projectpoint;virtual;
                  function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
                  //procedure higlight;virtual;
-                 function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
+                 function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
                  //function InRect:TInRect;virtual;
-                 procedure addcontrolpoints(tdesc:GDBPointer);virtual;
+                 procedure addcontrolpoints(tdesc:Pointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
-                 function beforertmodify:GDBPointer;virtual;
+                 function beforertmodify:Pointer;virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
-                 function IsRTNeedModify(const Point:PControlPointDesc; p:GDBPointer):Boolean;virtual;
+                 function IsRTNeedModify(const Point:PControlPointDesc; p:Pointer):Boolean;virtual;
 
                  function ObjToGDBString(prefix,sufix:GDBString):GDBString;virtual;
                  destructor done;virtual;
@@ -348,7 +348,7 @@ begin
 
   if PProjoutbound=nil then
   begin
-       Getmem(GDBPointer(PProjoutbound),sizeof(GDBOOutbound2DIArray));
+       Getmem(Pointer(PProjoutbound),sizeof(GDBOOutbound2DIArray));
        PProjoutbound^.init(4);
   end;
 end;
@@ -507,7 +507,7 @@ end;
 function GDBObjCircle.Clone;
 var tvo: PGDBObjCircle;
 begin
-  Getmem(GDBPointer(tvo), sizeof(GDBObjCircle));
+  Getmem(Pointer(tvo), sizeof(GDBObjCircle));
   tvo^.init(CalcOwner(own),vp.Layer, vp.LineWeight, Local.p_insert, Radius);
   tvo^.local:=local;
   CopyVPto(tvo^);
@@ -728,7 +728,7 @@ begin
                              end;
                     end;
 end;
-procedure GDBObjCircle.addcontrolpoints(tdesc:GDBPointer);
+procedure GDBObjCircle.addcontrolpoints(tdesc:Pointer);
 var pdesc:controlpointdesc;
 begin
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(5);
@@ -774,7 +774,7 @@ begin
      Getmem(result,sizeof(tcirclertmodify));
      fillchar(result^,sizeof(tcirclertmodify),0);
 end;
-function GDBObjCircle.IsRTNeedModify(const Point:PControlPointDesc; p:GDBPointer):Boolean;
+function GDBObjCircle.IsRTNeedModify(const Point:PControlPointDesc; p:Pointer):Boolean;
 begin
      result:=false;
   case point.pointtype of

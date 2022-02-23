@@ -51,13 +51,13 @@ Tuzvslagcab_com=object(CommandRTEdObject)//определяем тип - объ�
              //procedure CommandEnd; virtual;//переопределяем метод вызываемый при окончании команды
              //procedure CommandCancel; virtual;//переопределяем метод вызываемый при отмене команды
 
-             procedure visualGlobalGraph(pdata:GDBPlatformint); virtual;//построение графа и его визуализация
+             procedure visualGlobalGraph(pdata:PtrInt); virtual;//построение графа и его визуализация
 
-             procedure visualGraphDevice(pdata:GDBPlatformint); virtual;//построение всех графов и его визуализация
+             procedure visualGraphDevice(pdata:PtrInt); virtual;//построение всех графов и его визуализация
 
-             procedure cablingGraphDevice(pdata:GDBPlatformint); virtual;//построение всех графов и его визуализация
+             procedure cablingGraphDevice(pdata:PtrInt); virtual;//построение всех графов и его визуализация
 
-             procedure cablingNewGraphDevice(pdata:GDBPlatformint); virtual;//построение всех Новых графов и его визуализация
+             procedure cablingNewGraphDevice(pdata:PtrInt); virtual;//построение всех Новых графов и его визуализация
 
             end;
 PTuzvslagcabComParams=^TuzvslagcabComParams;//указатель на тип данных параметров команды. зкад работает с ними через указатель
@@ -126,7 +126,7 @@ begin
   inherited CommandStart('');
 end;
 
-procedure Tuzvslagcab_com.visualGlobalGraph(pdata:GDBPlatformint);
+procedure Tuzvslagcab_com.visualGlobalGraph(pdata:PtrInt);
 var
  i,m,counterColor:integer;
  UndoMarcerIsPlazed:boolean;
@@ -189,7 +189,7 @@ begin
 end;
 
 
-procedure Tuzvslagcab_com.visualGraphDevice(pdata:GDBPlatformint);
+procedure Tuzvslagcab_com.visualGraphDevice(pdata:PtrInt);
 var
  //i,j,counterColor:integer;
  UndoMarcerIsPlazed:boolean;
@@ -285,7 +285,7 @@ begin
   Commandmanager.executecommandend;
 end;
 
-procedure Tuzvslagcab_com.cablingGraphDevice(pdata:GDBPlatformint);
+procedure Tuzvslagcab_com.cablingGraphDevice(pdata:PtrInt);
 var
  //i,j,counterColor:integer;
  UndoMarcerIsPlazed:boolean;
@@ -358,7 +358,7 @@ begin
 end;
 
 
-procedure Tuzvslagcab_com.cablingNewGraphDevice(pdata:GDBPlatformint);
+procedure Tuzvslagcab_com.cablingNewGraphDevice(pdata:PtrInt);
 var
  //i,j,counterColor:integer;
  UndoMarcerIsPlazed:boolean;

@@ -27,7 +27,7 @@ uses uzcutils,uzgldrawcontext,uzglviewareageneral,uzeconsts,uzcsysvars,uzegeomet
      uzcinterface,varman,uzclog;
 type
   comproc=procedure(_self:pointer);
-  commousefunc=function(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger):GDBInteger;
+  commousefunc=function(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:GDBInteger):GDBInteger;
   comdrawfunc=function(mclick:GDBInteger):TCommandResult;
   comfunc=function:GDBInteger;
   comfuncwithoper=function(operands:TCommandOperands):TCommandResult;
@@ -59,8 +59,8 @@ type
     procedure Error(msg:GDBString);
     procedure SetCommandParam(PTypedTata:pointer;TypeName:string);
     constructor init(cn:GDBString;SA,DA:TCStartAttr);
-    //function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual; abstract;
-    //function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual; abstract;
+    //function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: Byte;osp:pos_record): GDBInteger; virtual; abstract;
+    //function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: Byte;osp:pos_record): GDBInteger; virtual; abstract;
   end;
   pCommandRTEdObjectPlugin=^CommandRTEdObjectPlugin;
   {REGISTEROBJECTTYPE CommandRTEdObjectPlugin}
@@ -75,10 +75,10 @@ type
     procedure CommandEnd; virtual;
     procedure CommandCancel; virtual;
     procedure Format;virtual;
-    procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;
+    procedure FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);virtual;
     procedure CommandContinue; virtual;
-    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
-    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
+    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger; virtual;
+    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger; virtual;
     procedure DrawHeplGeometry;virtual;
   end;
   {REGISTEROBJECTTYPE TOSModeEditor}
@@ -298,7 +298,7 @@ function CreateCommandFastObjectPlugin;
 var p:pCommandFastObjectPlugin;
 begin
      p:=nil;
-     Getmem(GDBPointer(p),sizeof(CommandFastObjectPlugin));
+     Getmem(Pointer(p),sizeof(CommandFastObjectPlugin));
      p^.init(name,ocs);
      p^.dyn:=true;
      p^.CStartAttrEnableAttr:=SA;
@@ -311,7 +311,7 @@ function CreateCommandRTEdObjectPlugin;
 var p:pCommandRTEdObjectPlugin;
 begin
      p:=nil;
-     Getmem(GDBPointer(p),sizeof(CommandRTEdObjectPlugin));
+     Getmem(Pointer(p),sizeof(CommandRTEdObjectPlugin));
      p^.init(ocs,oce,occ,ocf,obc,oac,occont,name);
      p^.onHelpGeometryDraw:=@ohgd;
      p^.dyn:=true;
@@ -365,7 +365,7 @@ begin
                                         onHelpGeometryDraw(mouseclic);
                                    end;
 end;
-procedure CommandRTEdObjectPlugin.FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);
+procedure CommandRTEdObjectPlugin.FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);
 begin
  Format;
 end;

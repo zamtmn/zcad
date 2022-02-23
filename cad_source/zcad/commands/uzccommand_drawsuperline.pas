@@ -91,7 +91,7 @@ begin
     result:=false;
     if commandmanager.get3dpoint(prompt1,p1)=GRNormal then
     begin
-         pline := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,drawings.GetCurrentROOT));
+         pline := Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,drawings.GetCurrentROOT));
          pline^.CoordInOCS.lBegin:=p1;
          InteractiveLineEndManipulator(pline,p1,false);
       if commandmanager.Get3DPointInteractive(prompt2,p2,@InteractiveLineEndManipulator,pline) = GRNormal then
@@ -105,7 +105,7 @@ function GetInteractiveLineFrom1to2(prompt2:GDBString;const p1:GDBVertex; out p2
 var
     pline:PGDBObjLine;
 begin
-    pline := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,drawings.GetCurrentROOT));
+    pline := Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,drawings.GetCurrentROOT));
     pline^.CoordInOCS.lBegin:=p1;
     InteractiveLineEndManipulator(pline,p1,false);
     result:=commandmanager.Get3DPointInteractive(prompt2,p2,@InteractiveLineEndManipulator,pline);

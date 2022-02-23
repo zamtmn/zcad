@@ -96,7 +96,7 @@ TGDBDimUnitsProp=record
                        DIMSCALE:GDBDouble;//DIMSCALE//group40
                  end;
 PPGDBDimStyleObjInsp=^PGDBDimStyleObjInsp;
-PGDBDimStyleObjInsp=GDBPointer;
+PGDBDimStyleObjInsp=Pointer;
 PGDBDimStyle=^GDBDimStyle;
 {REGISTEROBJECTTYPE GDBDimStyle}
 GDBDimStyle = object(GDBNamedObject)

@@ -51,8 +51,8 @@ var
 
 procedure FrameEdit_com_CommandStart(Operands:pansichar);
 procedure FrameEdit_com_Command_End;
-function FrameEdit_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
-function FrameEdit_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function FrameEdit_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function FrameEdit_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 
 implementation
 procedure FrameEdit_com_CommandStart(Operands:pansichar);
@@ -65,7 +65,7 @@ begin
   drawings.GetCurrentDWG.wa.param.seldesc.MouseFrameON := false;
 end;
 
-function FrameEdit_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function FrameEdit_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 begin
   result:=0;
   if (button and MZW_LBUTTON)<>0 then
@@ -78,7 +78,7 @@ begin
     drawings.GetCurrentDWG.wa.param.seldesc.Frame23d := wc;
   end
 end;
-function FrameEdit_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function FrameEdit_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 var
   ti: GDBInteger;
   x,y,w,h:gdbdouble;

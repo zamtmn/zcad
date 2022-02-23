@@ -29,12 +29,12 @@ type
 {REGISTEROBJECTTYPE GDBObjSuperLine}
 PGDBObjSuperLine=^GDBObjSuperLine;
 GDBObjSuperLine= object(GDBObjLine)
-                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p1,p2:GDBvertex);
+                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p1,p2:GDBvertex);
                   constructor initnul(owner:PGDBObjGenericWithSubordinated);
                   function GetObjTypeName:GDBString;virtual;
                   class function CreateInstance:PGDBObjLine;static;
                   function GetObjType:TObjID;virtual;
-                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
+                  function Clone(own:Pointer):PGDBObjEntity;virtual;
                   procedure SaveToDXFObjXData(var outhandle:TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
                   class function GetDXFIOFeatures:TDXFEntIODataManager;static;
            end;
@@ -43,7 +43,7 @@ function AllocAndInitSuperLine(owner:PGDBObjGenericWithSubordinated):PGDBObjLine
 var
     GDBObjSuperLineDXFFeatures:TDXFEntIODataManager;
 implementation
-constructor GDBObjSuperLine.init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p1,p2:GDBvertex);
+constructor GDBObjSuperLine.init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p1,p2:GDBvertex);
 begin
      inherited;
      GetDXFIOFeatures.AddExtendersToEntity(@self);
@@ -73,7 +73,7 @@ end;
 function GDBObjSuperLine.Clone;
 var tvo: PGDBObjSuperLine;
 begin
-  Getmem(GDBPointer(tvo), sizeof(GDBObjSuperLine));
+  Getmem(Pointer(tvo), sizeof(GDBObjSuperLine));
   tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight, CoordInOCS.lBegin, CoordInOCS.lEnd);
   CopyVPto(tvo^);
   CopyExtensionsTo(tvo^);

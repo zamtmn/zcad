@@ -32,7 +32,7 @@ uses
   uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,uzeenttext,uzeentmtext,uzeentpolyline,uzcentelleader,uzeentdimension,uzeentellipse,
   uzegeometry,uzcoimultiproperties,LazLogger,uzcExtdrLayerControl;
 implementation
-procedure GDBDoubleDeltaEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+procedure GDBDoubleDeltaEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var
     l1,l2:GDBDouble;
 begin
@@ -44,7 +44,7 @@ begin
      GeneralEntIterateProc(pdata,ChangedData,mp,fistrun,ecp,f);
 end;
 
-procedure GDBDoubleLengthEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+procedure GDBDoubleLengthEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var
     v1,v2:GDBVertex;
     l1:GDBDouble;
@@ -57,7 +57,7 @@ begin
      GeneralEntIterateProc(pdata,ChangedData,mp,fistrun,ecp,f);
 end;
 
-procedure GDBDoubleSumLengthEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+procedure GDBDoubleSumLengthEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var
     v1,v2:GDBVertex;
     l1:GDBDouble;
@@ -77,7 +77,7 @@ begin
                     pvdata^:=pvdata^+l1
 end;
 
-procedure GDBDoubleAngleEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+procedure GDBDoubleAngleEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var
     v1,v2:GDBVertex;
     l1:GDBDouble;
@@ -94,7 +94,7 @@ begin
      GeneralEntIterateProc(pdata,ChangedData,mp,fistrun,ecp,f);
 end;
 
-procedure GDBDoubleAngleTextIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+procedure GDBDoubleAngleTextIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var
     v1,v2:GDBVertex;
     l1:GDBDouble;
@@ -108,7 +108,7 @@ begin
      GeneralEntIterateProc(pdata,ChangedData,mp,fistrun,ecp,f);
 end;
 
-procedure GDBDoubleWCSAngleTextIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+procedure GDBDoubleWCSAngleTextIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var
     v1,v2:GDBVertex;
     l1,l0:GDBDouble;
@@ -138,7 +138,7 @@ begin
      GeneralEntIterateProc(pdata,ChangedData,mp,fistrun,ecp,f);
 end;
 
-procedure GDBDoubleMul2EntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+procedure GDBDoubleMul2EntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var
     l1:GDBDouble;
 begin
@@ -147,7 +147,7 @@ begin
      GeneralEntIterateProc(pdata,ChangedData,mp,fistrun,ecp,f);
 end;
 
-procedure GDBDoubleR2CircumferenceEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+procedure GDBDoubleR2CircumferenceEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var
     l1:double;
 begin
@@ -156,7 +156,7 @@ begin
      GeneralEntIterateProc(pdata,ChangedData,mp,fistrun,ecp,f);
 end;
 
-procedure GDBDoubleArcCircumferenceEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+procedure GDBDoubleArcCircumferenceEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var
     l1:double;
 begin
@@ -165,7 +165,7 @@ begin
      GeneralEntIterateProc(pdata,ChangedData,mp,fistrun,ecp,f);
 end;
 
-procedure GDBDoubleArcAreaEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+procedure GDBDoubleArcAreaEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var
     l1:double;
 begin
@@ -177,7 +177,7 @@ begin
      GeneralEntIterateProc(pdata,ChangedData,mp,fistrun,ecp,f);
 end;
 
-procedure GDBDoubleR2SumCircumferenceEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+procedure GDBDoubleR2SumCircumferenceEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var
     l1:double;
 begin
@@ -187,7 +187,7 @@ begin
 end;
 
 
-procedure GDBDoubleR2AreaEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+procedure GDBDoubleR2AreaEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var
     l1:double;
 begin
@@ -196,7 +196,7 @@ begin
      GeneralEntIterateProc(pdata,ChangedData,mp,fistrun,ecp,f);
 end;
 
-procedure GDBDoubleR2SumAreaEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+procedure GDBDoubleR2SumAreaEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var
     l1:double;
 begin
@@ -205,7 +205,7 @@ begin
      GDBDouble2SumEntIterateProc(pdata,ChangedData,mp,fistrun,ecp,f);
 end;
 
-{procedure GDBDoubleRad2DegEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
+{procedure GDBDoubleRad2DegEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
 var
     l1:double;
 begin
@@ -213,7 +213,7 @@ begin
      ChangedData.PGetDataInEtity:=@l1;
      GeneralEntIterateProc(pdata,ChangedData,mp,fistrun,ecp);
 end;}
-procedure DummyFromVarEntChangeProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty);
+procedure DummyFromVarEntChangeProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty);
 begin
 end;
 function GDBDoubleCheck0Exclude1Include(pdata:PVarDesk;var ErrorRange:GDBBoolean;out message:GDBString):GDBBoolean;
@@ -366,7 +366,7 @@ begin
      PGDBObjText(ChangedData.PEntity)^.local.basis.OX:=VectorTransform3D(PGDBObjText(ChangedData.PEntity)^.local.basis.OX,uzegeometry.CreateAffineRotationMatrix(PGDBObjText(ChangedData.PEntity)^.Local.basis.oz,-a*pi/180));
 end;
 
-procedure GDBPolyLineLengthEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+procedure GDBPolyLineLengthEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var
     l1:GDBDouble;
 begin
@@ -374,7 +374,7 @@ begin
      ChangedData.PGetDataInEtity:=@l1;
      GeneralEntIterateProc(pdata,ChangedData,mp,fistrun,ecp,f);
 end;
-procedure GDBPolyLineSumLengthEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+procedure GDBPolyLineSumLengthEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var
     l1:GDBDouble;
 begin

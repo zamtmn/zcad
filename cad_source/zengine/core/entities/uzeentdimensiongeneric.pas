@@ -33,7 +33,7 @@ GDBObjGenericDimension= object(GDBObjWithLocalCS)
                       PDimStyle:PGDBDimStyle;
                       DimType:TDimType;
                       a50,a52:GDBDouble;
-                      constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
+                      constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                       constructor initnul(owner:PGDBObjGenericWithSubordinated);
                       procedure LoadFromDXF(var f: TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
                       function FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
@@ -49,7 +49,7 @@ var
 begin
          case DimType of
                                DTRotated:begin
-                                               Getmem(GDBPointer(ResultDim),sizeof(GDBObjRotatedDimension));
+                                               Getmem(Pointer(ResultDim),sizeof(GDBObjRotatedDimension));
                                                result:=ResultDim;
                                                PGDBObjRotatedDimension(ResultDim)^.initnul(bp.ListPos.Owner);
                                                PGDBObjRotatedDimension(ResultDim)^.vectorD:=CreateRotatedXVector(a50*pi/180);
@@ -63,7 +63,7 @@ begin
                                          end;
                                DTAligned:
                                    begin
-                                     Getmem(GDBPointer(ResultDim),sizeof(GDBObjAlignedDimension));
+                                     Getmem(Pointer(ResultDim),sizeof(GDBObjAlignedDimension));
                                      result:=ResultDim;
                                      PGDBObjAlignedDimension(ResultDim)^.initnul(bp.ListPos.Owner);
                                      //ResultDim.vp.Layer:=vp.Layer;
@@ -75,7 +75,7 @@ begin
                                    end;
                                DTDiameter:
                                  begin
-                                   Getmem(GDBPointer(ResultDim),sizeof(GDBObjDiametricDimension));
+                                   Getmem(Pointer(ResultDim),sizeof(GDBObjDiametricDimension));
                                    result:=ResultDim;
                                    PGDBObjDiametricDimension(ResultDim)^.initnul(bp.ListPos.Owner);
                                    //ResultDim.vp.Layer:=vp.Layer;
@@ -87,7 +87,7 @@ begin
                                  end;
                                  else
                                    begin
-                                     Getmem(GDBPointer(ResultDim),sizeof(GDBObjRadialDimension));
+                                     Getmem(Pointer(ResultDim),sizeof(GDBObjRadialDimension));
                                      result:=ResultDim;
                                      PGDBObjRadialDimension(ResultDim)^.initnul(bp.ListPos.Owner);
                                      //ResultDim.vp.Layer:=vp.Layer;

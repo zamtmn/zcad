@@ -33,7 +33,7 @@ type
   pmousedesc = ^mousedesc;
   {REGISTERRECORDTYPE mousedesc}
   mousedesc = record
-    mode: GDBByte;
+    mode: Byte;
     mouse, mouseglue: GDBvertex2DI;
     glmouse:GDBvertex2DI;
     workplane: {GDBplane}DVector4D;
@@ -49,7 +49,7 @@ type
   PSelectiondesc = ^Selectiondesc;
   {REGISTERRECORDTYPE Selectiondesc}
   Selectiondesc = record
-    OnMouseObject,LastSelectedObject:GDBPointer;
+    OnMouseObject,LastSelectedObject:Pointer;
     Selectedobjcount:GDBInteger;
     MouseFrameON: GDBBoolean;
     MouseFrameInverse:GDBBoolean;
@@ -73,7 +73,7 @@ type
   arrtraceprop = packed array[0..0] of traceprop;
   {REGISTERRECORDTYPE GDBArraytraceprop_GDBWord}
   GDBArraytraceprop_GDBWord = record
-    count: GDBWord;
+    count: Word;
     arr: arrtraceprop;
   end;
   {REGISTERRECORDTYPE objcontrolpoint}
@@ -89,7 +89,7 @@ type
   popenarrayobjcontrolpoint_GDBWordwm = ^openarrayobjcontrolpoint_GDBWordwm;
   {REGISTERRECORDTYPE openarrayobjcontrolpoint_GDBWordwm}
   openarrayobjcontrolpoint_GDBWordwm = record
-    count, max: GDBWord;
+    count, max: Word;
     arraycp: arrayobjcontrolpoint;
   end;
 
@@ -103,9 +103,9 @@ type
     tmouse: GDBDouble;
     arrayworldaxis:GDBPoint3DArray;
     arraydispaxis:GDBtracepropArray;
-    ostype: GDBFloat;
-    radius: GDBFloat;
-    PGDBObject:GDBPointer;
+    ostype: Single;
+    radius: Single;
+    PGDBObject:Pointer;
   end;
   {REGISTERRECORDTYPE totrackarray}
   totrackarray = record
@@ -142,7 +142,7 @@ type
     otracktimerwork: GDBInteger;
     scrollmode:GDBBoolean;
     lastcp3dpoint,lastpoint: GDBVertex;
-    lastonmouseobject:GDBPointer;
+    lastonmouseobject:Pointer;
     nearesttcontrolpoint:tcontrolpointdist;
     startgluepoint:pcontrolpointdesc;
     ontrackarray: totrackarray;

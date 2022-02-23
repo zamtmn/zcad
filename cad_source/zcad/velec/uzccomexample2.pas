@@ -37,12 +37,12 @@ TExample_com=object(CommandRTEdObject)//определяем тип - объек
              //procedure CommandEnd; virtual;//переопределяем метод вызываемый при окончании команды
              //procedure CommandCancel; virtual;//переопределяем метод вызываемый при отмене команды
 
-             procedure visualInspectionGraph(pdata:GDBPlatformint); virtual;//построение графа и его визуализация
-             procedure visualInspectionGroupHeadGraph(pdata:GDBPlatformint); virtual;//построение графа и его визуализация
-             procedure cablingGroupHeadGraph(pdata:GDBPlatformint); virtual;//прокладка кабелей по трассе полученной в результате поисков пути и т.д.
+             procedure visualInspectionGraph(pdata:PtrInt); virtual;//построение графа и его визуализация
+             procedure visualInspectionGroupHeadGraph(pdata:PtrInt); virtual;//построение графа и его визуализация
+             procedure cablingGroupHeadGraph(pdata:PtrInt); virtual;//прокладка кабелей по трассе полученной в результате поисков пути и т.д.
 
-             procedure DoSomething(pdata:GDBPlatformint); virtual;//реализация какогото действия
-             procedure DoSomething2(pdata:GDBPlatformint); virtual;//реализация какогото другого действия
+             procedure DoSomething(pdata:PtrInt); virtual;//реализация какогото действия
+             procedure DoSomething2(pdata:PtrInt); virtual;//реализация какогото другого действия
             end;
 PTExampleComParams=^TExampleComParams;//указатель на тип данных параметров команды. зкад работает с ними через указатель
 TExampleComParams=record       //определяем параметры команды которые будут видны в инспекторе во время выполнения команды
@@ -80,7 +80,7 @@ begin
   inherited CommandStart('');
 end;
 
-procedure TExample_com.visualInspectionGraph(pdata:GDBPlatformint);
+procedure TExample_com.visualInspectionGraph(pdata:PtrInt);
 var
  i:integer;
  UndoMarcerIsPlazed:boolean;
@@ -110,7 +110,7 @@ begin
 end;
 
 
-procedure TExample_com.visualInspectionGroupHeadGraph(pdata:GDBPlatformint);
+procedure TExample_com.visualInspectionGroupHeadGraph(pdata:PtrInt);
 var
  i,j,counterColor:integer;
  UndoMarcerIsPlazed:boolean;
@@ -142,7 +142,7 @@ begin
   //Commandmanager.executecommandend;
 end;
 
-procedure TExample_com.cablingGroupHeadGraph(pdata:GDBPlatformint);
+procedure TExample_com.cablingGroupHeadGraph(pdata:PtrInt);
 var
  i,j,counterColor:integer;
  UndoMarcerIsPlazed:boolean;
@@ -168,7 +168,7 @@ begin
 end;
 
 
-procedure TExample_com.DoSomething(pdata:GDBPlatformint);
+procedure TExample_com.DoSomething(pdata:PtrInt);
 var
  k:integer;
 begin
@@ -184,7 +184,7 @@ begin
 
 end;
 
-procedure TExample_com.DoSomething2(pdata:GDBPlatformint);
+procedure TExample_com.DoSomething2(pdata:PtrInt);
 begin
   //тут делаем чтонибудь что будет усполнено по нажатию DoSomething2
   //выполним Commandmanager.executecommandend;

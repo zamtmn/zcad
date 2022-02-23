@@ -50,7 +50,7 @@ begin
   result:=cmd_ok;
 end;
 
-procedure RunEentityRepresentationEditor(PInstance:GDBPointer);
+procedure RunEentityRepresentationEditor(PInstance:Pointer);
 var
    modalresult:integer;
 begin
@@ -69,7 +69,7 @@ begin
        PStringTreeType(PInstance)^:=StringsTreeSelector.TreeResult;
 end;
 
-procedure RunEentityFunctionEditor(PInstance:GDBPointer);
+procedure RunEentityFunctionEditor(PInstance:Pointer);
 var
    modalresult:integer;
 begin

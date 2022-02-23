@@ -56,7 +56,7 @@ GTSetWithGlobalEnums<GSetType,GEnumType>=object(GTSet<GSetType,GEnumType>)
   function GetFull:GSetType;virtual;
 end;
 type
-  TMySet=GTSet<Longword,Longword>;
+  TMySet=GTSet<LongWord,LongWord>;
 
 implementation
 class function GTSetWithGlobalEnums<GSetType,GEnumType>.GetGlobalEnum:GEnumType;

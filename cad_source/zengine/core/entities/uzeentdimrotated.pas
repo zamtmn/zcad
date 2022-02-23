@@ -30,13 +30,13 @@ PGDBObjRotatedDimension=^GDBObjRotatedDimension;
 GDBObjRotatedDimension= object(GDBObjAlignedDimension)
                         function GetObjTypeName:GDBString;virtual;
                         procedure CalcDNVectors;virtual;
-                        function Clone(own:GDBPointer):PGDBObjEntity;virtual;
+                        function Clone(own:Pointer):PGDBObjEntity;virtual;
                         function P13ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                         function P14ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                         procedure transform(const t_matrix:DMatrix4D);virtual;
                         procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
                         procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                        constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
+                        constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                         constructor initnul(owner:PGDBObjGenericWithSubordinated);
                         function GetObjType:TObjID;virtual;
                    end;
@@ -133,7 +133,7 @@ end;
 function GDBObjRotatedDimension.Clone;
 var tvo: PGDBObjRotatedDimension;
 begin
-  Getmem(GDBPointer(tvo), sizeof(GDBObjRotatedDimension));
+  Getmem(Pointer(tvo), sizeof(GDBObjRotatedDimension));
   tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight);
   CopyVPto(tvo^);
   CopyExtensionsTo(tvo^);

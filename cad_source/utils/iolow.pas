@@ -16,7 +16,7 @@ type
 {REGISTEROBJECTTYPE filestream}
   filestream =  object
     name:TMyString;
-    bufer:{-}popenarrayc{/GDBPointer/};
+    bufer:{-}popenarrayc{/Pointer/};
     filesize,
       filepos,
       currentpos,
@@ -27,7 +27,7 @@ type
       buferpos: {GDB}Integer;
     constructor init(bsize: {GDB}Integer);
     constructor ReadFromFile(filename:TMyString);
-    procedure assign(const fname: TMyString; mode: {GDB}Longword);
+    procedure assign(const fname: TMyString; mode: {GDB}LongWord);
     procedure close;
     procedure readtobufer;
     procedure continuebufer(symbolcount:{GDB}Integer);
@@ -64,7 +64,7 @@ begin
   close;
   done;
 end;
-procedure filestream.assign(const fname: TMyString; mode: {GDB}Longword);
+procedure filestream.assign(const fname: TMyString; mode: {GDB}LongWord);
 begin
   filehandle := fileopen(fname, mode);
   if filehandle > 0 then

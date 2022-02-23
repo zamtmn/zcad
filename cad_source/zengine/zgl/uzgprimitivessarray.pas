@@ -24,7 +24,7 @@ type
 {Export+}
 PTLLPrimitivesArray=^TLLPrimitivesArray;
 {REGISTEROBJECTTYPE TLLPrimitivesArray}
-TLLPrimitivesArray= object(GZAlignedVectorObjects{-}<PGDBaseObject>{//})(*OpenArrayOfData=GDBByte*)
+TLLPrimitivesArray= object(GZAlignedVectorObjects{-}<PGDBaseObject>{//})(*OpenArrayOfData=Byte*)
              end;
 {Export-}
 { #todo : Убрать PGDBaseObject, сделать абстрактный примитив }

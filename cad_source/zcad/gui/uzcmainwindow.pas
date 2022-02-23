@@ -98,9 +98,9 @@ type
 
     procedure PageControlMouseDown(Sender: TObject;Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure correctscrollbars;
-    function wamd(Sender:TAbstractViewArea;Button:TMouseButton;Shift:TShiftState;X,Y:Integer;onmouseobject:GDBPointer;var NeedRedraw:Boolean):boolean;
+    function wamd(Sender:TAbstractViewArea;Button:TMouseButton;Shift:TShiftState;X,Y:Integer;onmouseobject:Pointer;var NeedRedraw:Boolean):boolean;
     procedure wamm(Sender:TAbstractViewArea;Shift:TShiftState;X,Y:Integer);
-    procedure wams(Sender:TAbstractViewArea;SelectedEntity:GDBPointer);
+    procedure wams(Sender:TAbstractViewArea;SelectedEntity:Pointer);
     procedure wakp(Sender:TAbstractViewArea;var Key: Word; Shift: TShiftState);
     function GetEntsDesc(ents:PGDBObjOpenArrayOfPV):GDBString;
     procedure waSetObjInsp(Sender:{TAbstractViewArea}tobject;GUIAction:TZMessageID);
@@ -1377,9 +1377,9 @@ begin
        ZCMsgCallBackInterface.TextMessage(htext,TMWOQuickly);
 end;
 
-function TZCADMainWindow.wamd(Sender:TAbstractViewArea;Button:TMouseButton;Shift:TShiftState;X,Y:Integer;onmouseobject:GDBPointer;var NeedRedraw:Boolean):boolean;
+function TZCADMainWindow.wamd(Sender:TAbstractViewArea;Button:TMouseButton;Shift:TShiftState;X,Y:Integer;onmouseobject:Pointer;var NeedRedraw:Boolean):boolean;
 var
-  key:GDBByte;
+  key:Byte;
   //needredraw:boolean;
   FreeClick:boolean;
 function ProcessControlpoint:boolean;
@@ -1632,7 +1632,7 @@ begin
                               key:=00;
                          end
 end;
-procedure TZCADMainWindow.wams(Sender:TAbstractViewArea;SelectedEntity:GDBPointer);
+procedure TZCADMainWindow.wams(Sender:TAbstractViewArea;SelectedEntity:Pointer);
 var
     RelSelectedObjects:Integer;
 begin

@@ -263,7 +263,7 @@ function TestModul_com(operands:TCommandOperands):TCommandResult;
 
     //cmlx,cmrx,cmuy,cmdy:gdbdouble;
     {lx,rx,}uy,dy:gdbdouble;
-    lsave:{integer}PGDBPointer;
+    lsave:{integer}PPointer;
     DC:TDrawContext;
     pCableSSvarext,pSegmCablevarext,pSegmCableLength,ppvvarext,pnodeendvarext:TVariablesExtender;
 
@@ -971,7 +971,7 @@ var
 
     //cmlx,cmrx,cmuy,cmdy:gdbdouble;
     {lx,rx,}uy,dy:gdbdouble;
-    lsave:{integer}PGDBPointer;
+    lsave:{integer}PPointer;
     DC:TDrawContext;
     pCableSSvarext,pSegmCablevarext,pSegmCableLength,ppvvarext,pnodeendvarext:TVariablesExtender;
 

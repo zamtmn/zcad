@@ -63,8 +63,8 @@ type
     //constructor init;
     procedure CommandStart(Operands:TCommandOperands); virtual;
     procedure CommandCancel; virtual;
-    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
-    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
+    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger; virtual;
+    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger; virtual;
     function CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D; virtual;
     function Move(dispmatr:DMatrix4D;UndoMaker:GDBString): GDBInteger;
     procedure showprompt(mklick:integer);virtual;
@@ -114,7 +114,7 @@ begin
   drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
   showprompt(0);
    dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-   Getmem(GDBPointer(pcoa),sizeof(tpcoavector));
+   Getmem(Pointer(pcoa),sizeof(tpcoavector));
    pcoa^.init(counter);
    pobj:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
    if pobj<>nil then
@@ -155,7 +155,7 @@ begin
      inherited;
 end;
 
-function Move_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger;
+function Move_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger;
 //var i: GDBInteger;
 //  tv,pobj: pGDBObjEntity;
  //     ir:itrec;
@@ -205,7 +205,7 @@ begin
    PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushEndMarker;
    result:=cmd_ok;
 end;
-function Move_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger;
+function Move_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger;
 var //i:GDBInteger;
     //dist:gdbvertex;
     dispmatr{,im}:DMatrix4D;

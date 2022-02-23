@@ -46,7 +46,7 @@ GDBObjTable= object(GDBObjComplex)
             scale:GDBDouble;
             constructor initnul;
             destructor done;virtual;
-            function Clone(own:GDBPointer):PGDBObjEntity;virtual;
+            function Clone(own:Pointer):PGDBObjEntity;virtual;
             procedure Build(var drawing:TDrawingDef);virtual;
             procedure SaveToDXFFollow(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
             procedure ReCalcFromObjMatrix;virtual;
@@ -82,7 +82,7 @@ var
   m4:DMatrix4D;
   DC:TDrawContext;
 begin
-     //historyoutstr('Table DXFOut self='+inttohex(longword(@self),10)+' owner'+inttohex(bp.owner.gethandle,10));
+     //historyoutstr('Table DXFOut self='+inttohex(LongWord(@self),10)+' owner'+inttohex(bp.owner.gethandle,10));
      inherited;
      m4:={self.ObjMatrix; //}getmatrix^;
      //MatrixInvert(m4);
@@ -137,7 +137,7 @@ end;
 function GDBObjTable.Clone;
 var tvo: PGDBObjTable;
 begin
-  Getmem(GDBPointer(tvo), sizeof(GDBObjTable));
+  Getmem(Pointer(tvo), sizeof(GDBObjTable));
   tvo^.initnul;
   //tbl.copyto(@tvo^.tbl);
 

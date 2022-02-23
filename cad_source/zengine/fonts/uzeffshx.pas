@@ -41,10 +41,10 @@ var
   baselen,ymin,ymax,xmin,xmax,x,y,x1,y1,xb,yb,r,startangle,angle,normal,hordlen,tgl:fontfloat;
   stack:array[0..4,0..1] of fontfloat;
   tr:tarcrtmodify;
-  hi,lo,byt,byt2,startoffset,endoffset:GDBByte;
+  hi,lo,byt,byt2,startoffset,endoffset:Byte;
   subsymbol:GDBInteger;
   int:GDBInteger;
-  dx,dy:GDBShortint;
+  dx,dy:Shortint;
   draw:GDBBoolean;
   onlyver:GDBInteger;
   psyminfo,psubsyminfo:PGDBsymdolinfo;
@@ -271,9 +271,9 @@ begin
                       if (psubsymbol<>nil){and(subsymbol<>111)} then
                         for i:=1 to {pf^.symbo linfo[subsymbol]}psubsyminfo.size do
                           begin
-                            PSHXFont(pf^.font).SHXdata.AddByteByVal(pGDBByte(psubsymbol)^);//--------------------- pGDBByte(pdata)^:=pGDBByte(psubsymbol)^;
+                            PSHXFont(pf^.font).SHXdata.AddByteByVal(PByte(psubsymbol)^);//--------------------- PByte(pdata)^:=PByte(psubsymbol)^;
                             //---------------------inc(pdata,sizeof(SHXLine));
-                            case pGDBByte(psubsymbol)^ of
+                            case PByte(psubsymbol)^ of
                               SHXLine:
                                 begin
                                   inc(psubsymbol,sizeof(SHXLine));
@@ -290,7 +290,7 @@ begin
                                          ProcessMinMax(x,y);
                                          ProcessMinMax(x1,y1);
                                     end;
-                                                                                                                                                                                                                //pGDBByte(pdata)^:=SHXLine;
+                                                                                                                                                                                                                //PByte(pdata)^:=SHXLine;
                                                                                                                                                                                                                 //inc(pdata,sizeof(SHXLine));
                                   PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);
                                   PSHXFont(pf^.font).SHXdata.AddFontFloat(@y1);
@@ -308,8 +308,8 @@ begin
                                   inc(psubsymbol,sizeof(SHXLine));
                                   sizeshp:=pGDBWord(psubsymbol)^;
                                   PSHXFont(pf^.font).SHXdata.AddWord(@sizeshp);//---------------------pGDBWord(pdata)^:=sizeshp;
-                                  inc(psubsymbol,sizeof(GDBWord));
-                                  //---------------------inc(pdata,sizeof(GDBWord));
+                                  inc(psubsymbol,sizeof(Word));
+                                  //---------------------inc(pdata,sizeof(Word));
 
                                   x1:=pfontfloat(psubsymbol)^*baselen*PSHXFont(pf^.font).h+xb;
                                   inc(psubsymbol,sizeof(fontfloat));

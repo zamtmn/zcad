@@ -36,7 +36,7 @@ type
 {EXPORT+}
   {REGISTEROBJECTTYPE copy_com}
   copy_com =  object(move_com)
-    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
+    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger; virtual;
     function Copy(dispmatr:DMatrix4D;UndoMaker:GDBString): GDBInteger;
   end;
 {EXPORT-}
@@ -91,7 +91,7 @@ begin
   PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushEndMarker;
   result:=cmd_ok;
 end;
-function Copy_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger;
+function Copy_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger;
 var
   dispmatr:DMatrix4D;
 begin

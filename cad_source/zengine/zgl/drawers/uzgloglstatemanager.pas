@@ -29,7 +29,7 @@ type
     GLenum={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GLenum;
     TViewPortArray = array [0..3] of GLint;//ВРЕМЕННО
 const ls = $AAAA;
-      ps:array [0..31] of LONGWORD=(
+      ps:array [0..31] of LongWord=(
                                    $33333333,$33333333,
                                    $CCCCCCCC,$CCCCCCCC,
                                    $33333333,$33333333,
@@ -186,8 +186,8 @@ type
                            procedure myglVertex3d(const V:GDBVertex);virtual;//inline;
                            procedure myglVertex2d(const x,y:GDBDouble);virtual;//inline;
                            procedure myglVertex2f(const x,y:GLFloat);virtual;//inline;
-                           procedure myglvertex2dv(const V:GDBPointer);virtual;//inline;
-                           procedure myglvertex2iv(const V:GDBPointer);virtual;//inline;
+                           procedure myglvertex2dv(const V:Pointer);virtual;//inline;
+                           procedure myglvertex2iv(const V:Pointer);virtual;//inline;
                            procedure myglVertex2i(x, y: GLint);virtual;//inline;
                            procedure myglVertex(const x,y,z:GDBDouble);virtual;//inline;
                            procedure myglVertex3dV(const V:PGDBVertex);virtual;//inline;
@@ -348,7 +348,7 @@ begin
      glVertex3fv(@t);
 end;
 {$ENDIF}
-procedure TOGLStateManager.myglvertex2iv(const V:GDBPointer);
+procedure TOGLStateManager.myglvertex2iv(const V:Pointer);
 var t:gdbvertex;
 begin
      {$IFDEF DEBUGCOUNTGEOMETRY}
@@ -378,7 +378,7 @@ begin
                            glVertex3dV(@t);
                       end;
 end;
-procedure TOGLStateManager.myglvertex2dv(const V:GDBPointer);
+procedure TOGLStateManager.myglvertex2dv(const V:Pointer);
 var t:gdbvertex;
 begin
      {$IFDEF DEBUGCOUNTGEOMETRY}

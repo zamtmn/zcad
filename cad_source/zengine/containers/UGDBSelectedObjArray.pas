@@ -43,7 +43,7 @@ GDBSelectedObjArray= object(GZVector{-}<selectedobjdesc>{//})
                           procedure drawobject(var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                           function getnearesttomouse(mx,my:integer):tcontrolpointdist;virtual;
                           function getonlyoutbound(var DC:TDrawContext):TBoundingBox;
-                          procedure selectcurrentcontrolpoint(key:GDBByte;mx,my,h:integer);virtual;
+                          procedure selectcurrentcontrolpoint(key:Byte;mx,my,h:integer);virtual;
                           procedure selectcontrolpointinframe(f1,f2: GDBvertex2DI);virtual;
                           procedure RenderFeedBack(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                           //destructor done;virtual;
@@ -81,12 +81,12 @@ begin
   if PSelectedObjDesc(PItem).pcontrolpoint<>nil then
                                                 begin
                                                      PSelectedObjDesc(PItem).pcontrolpoint^.Done;
-                                                     Freemem(GDBPointer(PSelectedObjDesc(PItem).pcontrolpoint));
+                                                     Freemem(Pointer(PSelectedObjDesc(PItem).pcontrolpoint));
                                                 end;
   if PSelectedObjDesc(PItem).ptempobj<>nil then
                                            begin
                                                 PSelectedObjDesc(PItem).ptempobj^.done;
-                                                Freemem(GDBPointer(PSelectedObjDesc(PItem).ptempobj));
+                                                Freemem(Pointer(PSelectedObjDesc(PItem).ptempobj));
                                            end;
   //PGDBObjBlockdef(p).Entities.ClearAndDone;
 end;
@@ -126,12 +126,12 @@ begin
             if tdesc^.pcontrolpoint<>nil then
             begin
                 tdesc^.pcontrolpoint^.done;
-                Freemem(GDBPointer(tdesc^.pcontrolpoint));
+                Freemem(Pointer(tdesc^.pcontrolpoint));
             end;
             if tdesc^.ptempobj<>nil then
             begin
                  tdesc^.ptempobj^.done;
-                 Freemem(GDBPointer(tdesc^.ptempobj));
+                 Freemem(Pointer(tdesc^.ptempobj));
             end;
             inc(tdesc);
        end;
@@ -476,7 +476,7 @@ begin
       if tdesc^.ptempobj<>nil then
         begin
           tdesc^.ptempobj^.done;
-          Freemem(GDBPointer(tdesc^.ptempobj));
+          Freemem(Pointer(tdesc^.ptempobj));
           tdesc^.ptempobj:=nil;
         end;
       inc(tdesc);

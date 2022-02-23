@@ -1379,7 +1379,7 @@ begin
 end;
 
 procedure TGDBobjinsp.MouseMove(Shift: TShiftState; X, Y: Integer);
-//procedure TGDBobjinsp.Pre_MouseMove(fwkeys:longint; x,y:GDBSmallInt; var r:HandledMsg);
+//procedure TGDBobjinsp.Pre_MouseMove(fwkeys:longint; x,y:SmallInt; var r:HandledMsg);
 var
   my:integer;
   pp:PPropertyDeskriptor;

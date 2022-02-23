@@ -26,8 +26,8 @@ uses
   Graphics,ActnList,ComCtrls,StdCtrls,Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,fileutil,ButtonPanel,{$ENDIF}Buttons,
   uzclog,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}sysutils,uzbstrproc,varmandef,Varman,UBaseTypeDescriptor,uzbtypesbase,uzcsysinfo,uzctnrVectorBytes;
 type
-  TButtonMethod=procedure({Sender:pointer;}pdata:{GDBPointer}GDBPlatformint)of object;
-  TButtonProc=procedure(pdata:GDBPointer);
+  TButtonMethod=procedure({Sender:pointer;}pdata:{Pointer}PtrInt)of object;
+  TButtonProc=procedure(pdata:Pointer);
   TDialogForm=class(tform)
                          {$IFNDEF DELPHI}
                          DialogPanel: TButtonPanel;
@@ -44,7 +44,7 @@ type
                 public
                 FProc:TButtonProc;
                 FMethod:TButtonMethod;
-                PPata:GDBPointer;
+                PPata:Pointer;
                 procedure Click; override;
                 end;
 implementation
@@ -78,7 +78,7 @@ begin
      if assigned(FProc) then
                             FProc(PPata);
      if assigned(FMethod) then
-                            Application.QueueAsyncCall(FMethod,GDBPlatformint(PPata));
+                            Application.QueueAsyncCall(FMethod,PtrInt(PPata));
      {$ENDIF}
 end;
 initialization

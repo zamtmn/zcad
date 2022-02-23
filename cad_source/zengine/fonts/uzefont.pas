@@ -51,7 +51,7 @@ implementation
 procedure initfont(var pf:pgdbfont;name:gdbstring);
 //var i:integer;
 begin
-     //Getmem(GDBPointer(pf),sizeof(gdbfont));
+     //Getmem(Pointer(pf),sizeof(gdbfont));
      pf^.init(name);
      //pf.ItSHX;
 end;
@@ -150,10 +150,10 @@ begin
     //PrimitivesCount:=0;
     {for j := 1 to psyminfo.size do
     begin
-      case GDBByte(psymbol^) of
+      case Byte(psymbol^) of
         SHXLine:
           begin
-            inc(pGDBByte(psymbol), sizeof(SHXLine));
+            inc(PByte(psymbol), sizeof(SHXLine));
             PGDBvertex2D(@v)^.x:=pfontfloat(psymbol)^;
             inc(pfontfloat(psymbol));
             PGDBvertex2D(@v)^.y:=pfontfloat(psymbol)^;
@@ -181,7 +181,7 @@ begin
             pv3.count:=0;
             //geom.SHX.add(@pv3);
 
-            //inc(pGDBByte(psymbol), 2 * sizeof(GDBDouble));
+            //inc(PByte(psymbol), 2 * sizeof(GDBDouble));
             PGDBvertex2D(@v)^.x:=pfontfloat(psymbol)^;
             inc(pfontfloat(psymbol));
             PGDBvertex2D(@v)^.y:=pfontfloat(psymbol)^;
@@ -211,13 +211,13 @@ begin
 
             //pv.coord:=PGDBvertex2D(@v)^;
             //pv.count:=0;
-            //inc(pGDBByte(psymbol), 2 * sizeof(GDBDouble));
+            //inc(PByte(psymbol), 2 * sizeof(GDBDouble));
           end;
         SHXPoly:
           begin
-            inc(pGDBByte(psymbol), sizeof(SHXPoly));
-            len := GDBWord(psymbol^);
-            inc(pGDBByte(psymbol), sizeof(GDBWord));
+            inc(PByte(psymbol), sizeof(SHXPoly));
+            len := Word(psymbol^);
+            inc(PByte(psymbol), sizeof(Word));
             PGDBvertex2D(@v)^.x:=pfontfloat(psymbol)^;
             inc(pfontfloat(psymbol));
             PGDBvertex2D(@v)^.y:=pfontfloat(psymbol)^;
@@ -246,7 +246,7 @@ begin
             //geom.SHX.add(@pv3);
 
 
-            //inc(pGDBByte(psymbol), 2 * sizeof(GDBDouble));
+            //inc(PByte(psymbol), 2 * sizeof(GDBDouble));
             k := 1;
             while k < len do //for k:=1 to len-1 do
             begin
@@ -280,7 +280,7 @@ begin
             geom.GeomData.Vertex3S.AddGDBVertex(v);
 
 
-            //inc(pGDBByte(psymbol), 2 * sizeof(GDBDouble));
+            //inc(PByte(psymbol), 2 * sizeof(GDBDouble));
             inc(k);
             inc(PrimitivesCount);
             end;

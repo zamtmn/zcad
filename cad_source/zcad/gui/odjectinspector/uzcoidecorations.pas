@@ -37,16 +37,16 @@ type
                          class procedure GetVertexZ(Pinstance:PtrInt);
     end;
 procedure DecorateSysTypes;
-procedure ButtonTxtDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState;boundr:trect);
-procedure RunAnsiStringEditor(PInstance:GDBPointer);
+procedure ButtonTxtDrawFastEditor(canvas:TCanvas;r:trect;PInstance:Pointer;state:TFastEditorState;boundr:trect);
+procedure RunAnsiStringEditor(PInstance:Pointer);
 implementation
 var
    count:integer;
-function LWDecorator(PInstance:GDBPointer):GDBString;
+function LWDecorator(PInstance:Pointer):GDBString;
 begin
      result:=GetLWNameFromLW(PTGDBLineWeight(PInstance)^);
 end;
-function NamedObjectsDecorator(PInstance:GDBPointer):GDBString;
+function NamedObjectsDecorator(PInstance:Pointer):GDBString;
 begin
      if PGDBLayerProp(PInstance^)<>nil then
                                            begin
@@ -55,7 +55,7 @@ begin
                                        else
                                            result:=rsUnassigned;
 end;
-function PaletteColorDecorator(PInstance:GDBPointer):GDBString;
+function PaletteColorDecorator(PInstance:Pointer):GDBString;
 begin
      result:=ColorIndex2Name(PTGDBPaletteColor(PInstance)^);
 end;
@@ -148,7 +148,7 @@ function DimStyleDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pins
 begin
      result:=NamedObjectsDecoratorCreateEditor(TheOwner,rect,pinstance,psa,FreeOnLostFocus,PTD,@drawings.GetCurrentDWG.DimStyleTable);
 end;
-procedure _3SBooleanDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState;boundr:trect);
+procedure _3SBooleanDrawFastEditor(canvas:TCanvas;r:trect;PInstance:Pointer;state:TFastEditorState;boundr:trect);
 var
   Details: TThemedElementDetails;
   ComboElem:TThemedButton;
@@ -185,23 +185,23 @@ begin
      Details:=ThemeServices.GetElementDetails(ComboElem);
      ThemeServices.DrawElement(Canvas.Handle,Details,r,@boundr);
 end;
-procedure ButtonXDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState;boundr:trect);
+procedure ButtonXDrawFastEditor(canvas:TCanvas;r:trect;PInstance:Pointer;state:TFastEditorState;boundr:trect);
 begin
      OIUI_ButtonDraw(canvas,r,state,'x',boundr);
 end;
-procedure ButtonYDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState;boundr:trect);
+procedure ButtonYDrawFastEditor(canvas:TCanvas;r:trect;PInstance:Pointer;state:TFastEditorState;boundr:trect);
 begin
      OIUI_ButtonDraw(canvas,r,state,'y',boundr);
 end;
-procedure ButtonZDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState;boundr:trect);
+procedure ButtonZDrawFastEditor(canvas:TCanvas;r:trect;PInstance:Pointer;state:TFastEditorState;boundr:trect);
 begin
      OIUI_ButtonDraw(canvas,r,state,'z',boundr);
 end;
-procedure ButtonTxtDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState;boundr:trect);
+procedure ButtonTxtDrawFastEditor(canvas:TCanvas;r:trect;PInstance:Pointer;state:TFastEditorState;boundr:trect);
 begin
      OIUI_ButtonDraw(canvas,r,state,'T',boundr);
 end;
-procedure _3SBooleanInverse(PInstance:GDBPointer);
+procedure _3SBooleanInverse(PInstance:Pointer);
 begin
      case PTGDB3StateBool(PInstance)^ of
          T3SB_Fale:PTGDB3StateBool(PInstance)^:=T3SB_True;
@@ -210,11 +210,11 @@ begin
      end;
 end;
 
-procedure runlayerswnd(PInstance:GDBPointer);
+procedure runlayerswnd(PInstance:Pointer);
 begin
      layer_cmd(EmptyCommandOperands);
 end;
-procedure runcolorswnd(PInstance:GDBPointer);
+procedure runcolorswnd(PInstance:Pointer);
 var
    mr:integer;
 begin
@@ -230,7 +230,7 @@ begin
      ZCMsgCallBackInterface.Do_AfterShowModal(ColorSelectForm);
      freeandnil(ColorSelectForm);
 end;
-procedure drawLWProp(canvas:TCanvas;ARect:TRect;PInstance:GDBPointer);
+procedure drawLWProp(canvas:TCanvas;ARect:TRect;PInstance:Pointer);
 var
    index:TGDBLineWeight;
    ll:integer;
@@ -246,7 +246,7 @@ begin
 
      DrawLW(canvas,ARect,ll,(index) div 10,s);
 end;
-procedure drawIndexColorProp(canvas:TCanvas;ARect:TRect;PInstance:GDBPointer);
+procedure drawIndexColorProp(canvas:TCanvas;ARect:TRect;PInstance:Pointer);
 var
    index:TGDBLineWeight;
 begin
@@ -258,7 +258,7 @@ begin
      result.mode:=TEM_Nothing;
      result.Editor:=nil;
 end;
-procedure runOSwnd(PInstance:GDBPointer);
+procedure runOSwnd(PInstance:Pointer);
 begin
   SnapEditorForm:=TSnapEditorForm.Create(nil);
   SetHeightControl(SnapEditorForm,sysvar.INTF.INTF_DefaultControlHeight^);
@@ -301,7 +301,7 @@ begin
      cbedit.ItemIndex:=seli;
      result.mode:=TEM_Integrate;
 end;
-procedure drawLTProp(canvas:TCanvas;ARect:TRect;PInstance:GDBPointer);
+procedure drawLTProp(canvas:TCanvas;ARect:TRect;PInstance:Pointer);
 var
    PLT:PGDBLtypeProp;
    s:gdbstring;
@@ -321,7 +321,7 @@ begin
          ARect.Left:=ARect.Left+2;
          drawLT(canvas,ARect,s,plt);
 end;
-procedure RunStringEditor(PInstance:GDBPointer);
+procedure RunStringEditor(PInstance:Pointer);
 var
    modalresult:integer;
    InfoForm:TInfoForm=nil;
@@ -343,7 +343,7 @@ begin
                               StoreBoundsToSavedUnit('TEdWND',InfoForm.BoundsRect);
                          end;
 end;
-procedure RunAnsiStringEditor(PInstance:GDBPointer);
+procedure RunAnsiStringEditor(PInstance:Pointer);
 var
    modalresult:integer;
    InfoForm:TInfoForm=nil;
@@ -532,9 +532,9 @@ begin
      AddEditorToType(SysUnit.TypeName2PTD('AnsiString'),TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType(SysUnit.TypeName2PTD('GDBAnsiString'),TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType(SysUnit.TypeName2PTD('UnicodeString'),TBaseTypesEditors.BaseCreateEditor);
-     AddEditorToType(SysUnit.TypeName2PTD('GDBFloat'),TBaseTypesEditors.BaseCreateEditor);
+     AddEditorToType(SysUnit.TypeName2PTD('Single'),TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType(SysUnit.TypeName2PTD('Pointer'),TBaseTypesEditors.BaseCreateEditor);
-     AddEditorToType(SysUnit.TypeName2PTD('GDBPtrUInt'),TBaseTypesEditors.BaseCreateEditor);
+     AddEditorToType(SysUnit.TypeName2PTD('PtrUInt'),TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType(SysUnit.TypeName2PTD('TEnumDataDescriptor'),TBaseTypesEditors.TEnumDataCreateEditor);
      EnumGlobalEditor:=TBaseTypesEditors.EnumDescriptorCreateEditor;
 

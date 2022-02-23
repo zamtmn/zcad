@@ -30,18 +30,18 @@ GDBNamedObjectsArray{-}<PTObj,TObj>{//}
                      = object(GZVectorPObects{-}<PTObj,TObj>{//})
                     constructor init(m:GDBInteger);
                     function getIndex(name: GDBString):GDBInteger;
-                    function getAddres(name: GDBString):GDBPointer;
+                    function getAddres(name: GDBString):Pointer;
                     function GetIndexByPointer(p:PGDBNamedObject):GDBInteger;
                     function AddItem(name:GDBSTRING; out PItem:Pointer):TForCResult;
-                    function MergeItem(name:GDBSTRING;LoadMode:TLoadOpt):GDBPointer;
+                    function MergeItem(name:GDBSTRING;LoadMode:TLoadOpt):Pointer;
                     function GetFreeName(NameFormat:GDBString;firstindex:integer):GDBString;
-                    procedure IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);virtual;
+                    procedure IterateCounter(PCounted:Pointer;var Counter:GDBInteger;proc:TProcCounter);virtual;
               end;
 {EXPORT-}
 PTGenericNamedObjectsArray=^TGenericNamedObjectsArray;
 TGenericNamedObjectsArray=GDBNamedObjectsArray{-}<PGDBNamedObject,GDBNamedObject>{//};
 implementation
-procedure GDBNamedObjectsArray<PTObj,TObj>.IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);
+procedure GDBNamedObjectsArray<PTObj,TObj>.IterateCounter(PCounted:Pointer;var Counter:GDBInteger;proc:TProcCounter);
 var p:PGDBNamedObject;
     ir:itrec;
 begin
@@ -82,7 +82,7 @@ begin
   OldName:=result;
   until getIndex(result)=-1;
 end;
-function GDBNamedObjectsArray<PTObj,TObj>.MergeItem(name:GDBSTRING;LoadMode:TLoadOpt):GDBPointer;
+function GDBNamedObjectsArray<PTObj,TObj>.MergeItem(name:GDBSTRING;LoadMode:TLoadOpt):Pointer;
 begin
      if AddItem(name,result)=IsFounded then
                        begin

@@ -40,7 +40,7 @@ GDBObjNet= object(GDBObjConnected)
                  function GetObjTypeName:GDBString;virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure DelSelectedSubitem(var drawing:TDrawingDef);virtual;
-                 function Clone(own:GDBPointer):PGDBObjEntity;virtual;
+                 function Clone(own:Pointer):PGDBObjEntity;virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
                  procedure transform(const t_matrix:DMatrix4D);virtual;
 
@@ -102,7 +102,7 @@ end;
 function GDBObjNet.Clone;
 var tvo: PGDBObjNet;
 begin
-  Getmem(GDBPointer(tvo), sizeof(GDBObjNet));
+  Getmem(Pointer(tvo), sizeof(GDBObjNet));
   tvo^.initnul(bp.ListPos.owner);
   CopyVPto(tvo^);
   CopyExtensionsTo(tvo^);
@@ -470,15 +470,15 @@ begin
                                      tv:=pl^.CoordInOCS.lbegin;
                                      pl^.CoordInOCS.lbegin:=ip.interceptcoord;
                                      pl^.Formatentity(drawing,dc);
-                                     //tpl:=GDBPointer(CreateObjFree(GDBLineID));
+                                     //tpl:=Pointer(CreateObjFree(GDBLineID));
                                      {выдрано из CreateObjFree для отвязки от GDBManager}
-                                     Getmem(GDBPointer(tpl), sizeof(GDBObjLine));
+                                     Getmem(Pointer(tpl), sizeof(GDBObjLine));
                                      //GDBObjLineInit(@self,tpl,drawing.GetLayerTable^.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, tv,ip.interceptcoord);
                                      {выдрано из GDBObjLineInit для отвязки от GDBManager}
                                      tpl^.init(@self,{drawing.GetLayerTable^.GetCurrentLayer}self.vp.Layer,sysvar.dwg.DWG_CLinew^,tv,ip.interceptcoord);
                                      CopyVPto(tpl^);
                                      objarray.AddPEntity(tpl^);
-                                     {tpl := GDBPointer(self.ObjArray.CreateObj(GDBLineID,@self));
+                                     {tpl := Pointer(self.ObjArray.CreateObj(GDBLineID,@self));
                                      GDBObjLineInit(@self,tpl, sysvar.DWG_CLayer^, sysvar.DWG_CLinew^, tv,ip.interceptcoord);}
                                      tpl.FormatEntity(drawing,dc);
                                 end;
@@ -488,15 +488,15 @@ begin
                                      tv:=pl2^.CoordInOCS.lbegin;
                                      pl2^.CoordInOCS.lbegin:=ip.interceptcoord;
                                      pl2^.FormatEntity(drawing,dc);
-                                     //tpl:=GDBPointer(CreateObjFree(GDBLineID));
+                                     //tpl:=Pointer(CreateObjFree(GDBLineID));
                                      {выдрано из CreateObjFree для отвязки от GDBManager}
-                                     Getmem(GDBPointer(tpl), sizeof(GDBObjLine));
+                                     Getmem(Pointer(tpl), sizeof(GDBObjLine));
                                      //GDBObjLineInit(@self,tpl,drawing.GetLayerTable^.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, tv,ip.interceptcoord);
                                      {выдрано из GDBObjLineInit для отвязки от GDBManager}
                                      tpl^.init(@self,{drawing.GetLayerTable^.GetCurrentLayer}self.vp.Layer,sysvar.dwg.DWG_CLinew^,tv,ip.interceptcoord);
                                      CopyVPto(tpl^);
                                      objarray.AddPEntity(tpl^);
-                                     {tpl := GDBPointer(self.ObjArray.CreateObj(GDBLineID,@self));
+                                     {tpl := Pointer(self.ObjArray.CreateObj(GDBLineID,@self));
                                      GDBObjLineInit(@self,tpl, sysvar.DWG_CLayer^, sysvar.DWG_CLinew^, tv,ip.interceptcoord);}
                                      tpl.FormatEntity(drawing,dc);
                                 end
@@ -514,8 +514,8 @@ begin
      //exit;
      if graf.divide then
      begin
-          Getmem(GDBPointer(TempNet),sizeof(GDBObjNet));
-          if GDBPlatformUInt(tempnet)=$229FEF0 then
+          Getmem(Pointer(TempNet),sizeof(GDBObjNet));
+          if PtrUInt(tempnet)=$229FEF0 then
                                   tempnet:=tempnet;
           TempNet^.initnul(nil);
           pentvarexttempnet:=tempnet.GetExtension<TVariablesExtender>;
@@ -531,16 +531,16 @@ begin
                tgf:=pgrafelement(graf.getDataMutable(i));
                if tgf^.connected=0 then
                begin
-                    pl:=GDBPointer(tgf^.link.beginiterate(ir));
+                    pl:=Pointer(tgf^.link.beginiterate(ir));
                     if pl<>nil then
                     repeat
                           ti.PushBackIfNotPresent(pl);
-                          pl:=GDBPointer(tgf^.link.iterate(ir));
+                          pl:=Pointer(tgf^.link.iterate(ir));
                     until pl=nil;
                end;
           end;
 
-          pl:=GDBPointer(ti.beginiterate(ir));
+          pl:=Pointer(ti.beginiterate(ir));
           if pl<>nil then
           repeat
                 self.ObjArray.DeleteElement(pl^.bp.ListPos.SelfIndex);
@@ -548,10 +548,10 @@ begin
                 //pl^.bp.Owner:=TempNet;
 
                 //pl^.bp.Owner^.RemoveInArray(pl^.bp.PSelfInOwnerArray);
-                //GDBPointer(pl^.bp.PSelfInOwnerArray^):=nil;
+                //Pointer(pl^.bp.PSelfInOwnerArray^):=nil;
                 tempnet.ObjArray.AddPEntity(pl^);
                 pl.bp.ListPos.Owner:=tempnet;
-                pl:=GDBPointer(ti.iterate(ir));
+                pl:=Pointer(ti.iterate(ir));
           until pl=nil;
           self.ObjArray.pack;
           //self.correctobjects(pointer(bp.Owner),bp.PSelfInOwnerArray);
@@ -573,7 +573,7 @@ end;
 constructor GDBObjNet.initnul;
 begin
      inherited initnul(owner);
-     //GDBPointer(name):=nil;
+     //Pointer(name):=nil;
      self.vp.layer:=@DefaultErrorLayer;// gdb.GetCurrentDWG.LayerTable.GetCurrentLayer {getaddres('EL_WIRES')};
      //vp.ID := GDBNetID;
      graf.init(10000);

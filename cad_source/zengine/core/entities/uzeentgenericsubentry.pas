@@ -43,7 +43,7 @@ GDBObjGenericSubEntry= object(GDBObjWithMatrix)
                             lstonmouse:PGDBObjEntity;
                             VisibleOBJBoundingBox:TBoundingBox;
                             //ObjTree:TEntTreeNode;
-                            function AddObjectToObjArray(p:GDBPointer):GDBInteger;virtual;
+                            function AddObjectToObjArray(p:Pointer):GDBInteger;virtual;
                             procedure GoodAddObjectToObjArray(const obj:GDBObjEntity);virtual;
                             //function AddObjectToNodeTree(pobj:PGDBObjEntity):GDBInteger;virtual;
                             //function CorrectNodeTreeBB(pobj:PGDBObjEntity):GDBInteger;virtual;
@@ -98,7 +98,7 @@ GDBObjGenericSubEntry= object(GDBObjWithMatrix)
                               procedure correctsublayers(var la:GDBLayerArray);virtual;
                               function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
 
-                              procedure IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);virtual;
+                              procedure IterateCounter(PCounted:Pointer;var Counter:GDBInteger;proc:TProcCounter);virtual;
 
                               procedure postload(var context:TIODXFLoadContext);virtual;
 
@@ -134,7 +134,7 @@ begin
     p:=objarray.iterate(ir);
     until p=nil;
 end;
-procedure GDBObjGenericSubEntry.IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);
+procedure GDBObjGenericSubEntry.IterateCounter(PCounted:Pointer;var Counter:GDBInteger;proc:TProcCounter);
 var p:pGDBObjEntity;
     ir:itrec;
 begin
@@ -285,7 +285,7 @@ begin
      AddObjectToObjArray(@p);
 end;
 
-function GDBObjGenericSubEntry.AddObjectToObjArray(p:GDBPointer):GDBInteger;
+function GDBObjGenericSubEntry.AddObjectToObjArray(p:Pointer):GDBInteger;
 begin
      result:=ObjArray.AddPEntity(PGDBObjEntity(p^)^);
      PGDBObjEntity(p^).bp.ListPos.Owner:=@self;
@@ -326,7 +326,7 @@ begin
 end;
 function GDBObjGenericSubEntry.CreatePreCalcData:PTDrawingPreCalcData;
 begin
-     Getmem(GDBPointer(result),sizeof(TDrawingPreCalcData));
+     Getmem(Pointer(result),sizeof(TDrawingPreCalcData));
      result.InverseObjMatrix:=objmatrix;
      uzegeometry.MatrixInvert(result.InverseObjMatrix);
 end;
@@ -431,10 +431,10 @@ begin
      ObjArray.deliteminarray(pobjinarray);
 
      //p^.done;
-     //memman.Freemem(GDBPointer(p))}
+     //memman.Freemem(Pointer(p))}
      RemoveMiFromArray(pobj,pobjinarray);
      pobj^.done;
-     Freemem(GDBPointer(pobj));
+     Freemem(Pointer(pobj));
 end;
 procedure GDBObjGenericSubEntry.ImEdited;
 begin
@@ -557,7 +557,7 @@ begin
   result:=false;
   for i:=0 to ObjArray.count-1 do
   begin
-       p:=GDBPointer(ObjArray.getDataMutable(i));
+       p:=Pointer(ObjArray.getDataMutable(i));
        if p<>nil then
        begin
        ot:=p^.onpoint(objects,point);
@@ -576,10 +576,10 @@ var //t,xx,yy:GDBDouble;
     ot:GDBBoolean;
 begin
   result:=false;
-  //p:=GDBPointer(ObjArray.parray^);
+  //p:=Pointer(ObjArray.parray^);
   for i:=0 to ObjArray.count-1 do
   begin
-       p:=GDBPointer(ObjArray.getDataMutable(i));
+       p:=Pointer(ObjArray.getDataMutable(i));
        if p<>nil then
        begin
        ot:=p^.onmouse(popa,mf,InSubEntry);
@@ -591,7 +591,7 @@ begin
        result:=result or ot;
        end;
        //if result then exit;
-       //inc(pGDBPointer(p));
+       //inc(PPointer(p));
   end;
 end;
 (*function GDBObjGenericSubEntry.select;

@@ -30,17 +30,17 @@ PGDBObjPolyline=^GDBObjPolyline;
 {REGISTEROBJECTTYPE GDBObjPolyline}
 GDBObjPolyline= object(GDBObjCurve)
                  Closed:GDBBoolean;(*saved_to_shd*)
-                 constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBBoolean);
+                 constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:GDBBoolean);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f:TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                 procedure startsnap(out osp:os_record; out pdata:GDBPointer);virtual;
-                 function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
+                 procedure startsnap(out osp:os_record; out pdata:Pointer);virtual;
+                 function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
 
                  procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
-                 function Clone(own:GDBPointer):PGDBObjEntity;virtual;
+                 function Clone(own:Pointer):PGDBObjEntity;virtual;
                  function GetObjTypeName:GDBString;virtual;
                  function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
                  function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;virtual;
@@ -88,7 +88,7 @@ begin
                                             else
                                                 result:=false;
 end;
-procedure GDBObjPolyline.startsnap(out osp:os_record; out pdata:GDBPointer);
+procedure GDBObjPolyline.startsnap(out osp:os_record; out pdata:Pointer);
 begin
      GDBObjEntity.startsnap(osp,pdata);
      Getmem(pdata,sizeof(GDBVectorSnapArray));
@@ -162,7 +162,7 @@ var tpo: PGDBObjPolyLine;
     p:pgdbvertex;
     i:GDBInteger;
 begin
-  Getmem(GDBPointer(tpo), sizeof(GDBObjPolyline));
+  Getmem(Pointer(tpo), sizeof(GDBObjPolyline));
   tpo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight,closed);
   CopyVPto(tpo^);
   CopyExtensionsTo(tpo^);
@@ -234,7 +234,7 @@ end;
 var s, layername: GDBString;
   byt, code: GDBInteger;
   p: gdbvertex;
-  hlGDBWord: GDBLongword;
+  hlGDBWord: LongWord;
   vertexgo: GDBBoolean;
 begin
   closed := false;

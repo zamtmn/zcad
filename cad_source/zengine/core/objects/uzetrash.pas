@@ -25,7 +25,7 @@ type
 {EXPORT+}
 {REGISTEROBJECTTYPE GDBObjTrash}
 GDBObjTrash= object(GDBObjEntity)
-                 function GetHandle:GDBPlatformint;virtual;
+                 function GetHandle:PtrInt;virtual;
                  function GetMatrix:PDMatrix4D;virtual;
                  constructor initnul;
                  destructor done;virtual;

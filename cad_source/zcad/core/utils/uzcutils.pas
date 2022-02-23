@@ -239,7 +239,7 @@ var
   domethod,undomethod:tmethod;
   DC:TDrawContext;
 begin
-  result := GDBPointer(own.ObjArray.CreateObj(GDBBlockInsertID));
+  result := Pointer(own.ObjArray.CreateObj(GDBBlockInsertID));
   result.init(drawings.GetCurrentROOT,drawings.GetCurrentDWG^.GetCurrentLayer,0);
   result^.Name:=BlockName;
   //result^.vp.ID:=GDBBlockInsertID;

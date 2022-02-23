@@ -51,7 +51,7 @@ begin
        commandmanager.executecommandend;
   end;
 end;
-function polytest_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function polytest_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 //var tb:PGDBObjSubordinated;
 begin
   result:=mclick+1;

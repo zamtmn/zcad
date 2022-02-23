@@ -25,7 +25,7 @@ uses uzeentsubordinated,usimplegenerics,uzedrawingdef,uzeconsts,gzctnrSTL,
      uzbtypesbase,uzbtypes,uzeentity,LazLogger,
      SysUtils;
 type
-TAllocEntFunc=function:GDBPointer;
+TAllocEntFunc=function:Pointer;
 TAllocAndInitEntFunc=function (owner:PGDBObjGenericWithSubordinated): PGDBObjEntity;
 TAllocAndInitAndSetGeomPropsFunc=function (owner:PGDBObjGenericWithSubordinated;args:array of const): PGDBObjEntity;
 TSetGeomPropsFunc=procedure (ent:PGDBObjEntity;args:array of const);
@@ -47,7 +47,7 @@ TObjID2EntInfoDataMap=GKey2DataMap<TObjID,TEntInfoData(*{$IFNDEF DELPHI},LessObj
 TEntUpgradeDataMap=GKey2DataMap<TEntUpgradeKey,TEntUpgradeData(*{$IFNDEF DELPHI},LessEntUpgradeKey{$ENDIF}*)>;
 
 function CreateInitObjFree(t:TObjID;owner:{PGDBObjGenericSubEntry}pointer):PGDBObjEntity;
-function AllocEnt(t:TObjID): GDBPointer;
+function AllocEnt(t:TObjID): Pointer;
 
 procedure RegisterDXFEntity(const _EntityID:TObjID;
                          const _DXFName,_UserName:GDBString;
@@ -182,7 +182,7 @@ begin
     result:=nil;
 
 end;
-function AllocEnt(t:TObjID): GDBPointer;export;
+function AllocEnt(t:TObjID): Pointer;export;
 var //temp: PGDBObjEntity;
    EntInfoData:TEntInfoData;
 begin

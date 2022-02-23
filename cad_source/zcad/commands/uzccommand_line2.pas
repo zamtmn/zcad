@@ -34,8 +34,8 @@ uses
 
 function Line_com_CommandStart(operands:TCommandOperands):TCommandResult;
 procedure Line_com_CommandEnd(_self:pointer);
-function Line_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
-function Line_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function Line_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function Line_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 
 var
   PCreatedGDBLine:pgdbobjline;
@@ -57,7 +57,7 @@ procedure Line_com_CommandEnd(_self:pointer);
 begin
 end;
 
-function Line_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function Line_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 var
     dc:TDrawContext;
 begin
@@ -71,7 +71,7 @@ begin
   end
 end;
 
-function Line_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function Line_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 var po:PGDBObjSubordinated;
     domethod,undomethod:tmethod;
     dc:TDrawContext;

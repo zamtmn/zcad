@@ -99,10 +99,10 @@ begin
            if pnew^<>nil then
                             begin
                                  inc(nc);
-                                 //inc(GDBPlatformint(pnew),SizeOfData);
+                                 //inc(PtrInt(pnew),SizeOfData);
                                  inc(pnew);
                             end;
-           //inc(GDBPlatformint(pold),SizeOfData);
+           //inc(PtrInt(pold),SizeOfData);
            inc(pold);
            inc(c);
      until c=count;

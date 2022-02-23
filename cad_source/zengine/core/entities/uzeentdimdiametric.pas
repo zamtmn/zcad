@@ -38,14 +38,14 @@ type
 PGDBObjDiametricDimension=^GDBObjDiametricDimension;
 {REGISTEROBJECTTYPE GDBObjDiametricDimension}
 GDBObjDiametricDimension= object(GDBObjDimension)
-                        constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
+                        constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                         constructor initnul(owner:PGDBObjGenericWithSubordinated);
                         function GetObjTypeName:GDBString;virtual;
 
                         procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                         function GetDimStr(var drawing:TDrawingDef):TDXFEntsInternalStringType;virtual;
-                        function Clone(own:GDBPointer):PGDBObjEntity;virtual;
-                        procedure addcontrolpoints(tdesc:GDBPointer);virtual;
+                        function Clone(own:Pointer):PGDBObjEntity;virtual;
+                        procedure addcontrolpoints(tdesc:Pointer);virtual;
 
                         function P10ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                         function P15ChangeTo(tv:GDBVertex):GDBVertex;virtual;
@@ -157,7 +157,7 @@ begin
      DimData.P15InWCS:=VertexDmorph(center,dirv,d);
      result:=tv;
 end;
-procedure GDBObjDiametricDimension.addcontrolpoints(tdesc:GDBPointer);
+procedure GDBObjDiametricDimension.addcontrolpoints(tdesc:Pointer);
 var pdesc:controlpointdesc;
 begin
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(4);
@@ -184,7 +184,7 @@ end;
 function GDBObjDiametricDimension.Clone;
 var tvo: PGDBObjDiametricDimension;
 begin
-  Getmem(GDBPointer(tvo), sizeof(GDBObjDiametricDimension));
+  Getmem(Pointer(tvo), sizeof(GDBObjDiametricDimension));
   tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight);
   CopyVPto(tvo^);
   CopyExtensionsTo(tvo^);

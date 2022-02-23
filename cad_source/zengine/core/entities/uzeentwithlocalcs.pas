@@ -24,7 +24,7 @@ uses uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,uzbtypesbase,uzeentity,
      uzegeometrytypes,UGDBOutbound2DIArray,uzctnrVectorBytes,uzeentwithmatrix,uzbtypes,
      uzegeometry,uzeffdxfsupport,sysutils,uzeentsubordinated,uzestyleslayers;
 type
-//pprojoutbound:{-}PGDBOOutbound2DIArray{/GDBPointer/};
+//pprojoutbound:{-}PGDBOOutbound2DIArray{/Pointer/};
 {EXPORT+}
 PGDBObj2dprop=^GDBObj2dprop;
 {REGISTERRECORDTYPE GDBObj2dprop}
@@ -41,8 +41,8 @@ GDBObjWithLocalCS= object(GDBObjWithMatrix)
                P_insert_in_WCS:GDBvertex;(*'Insertion point WCS'*)(*saved_to_shd*)(*oi_readonly*)(*hidden_in_objinsp*)
                ProjP_insert:GDBvertex;(*'Insertion point DCS'*)(*oi_readonly*)(*hidden_in_objinsp*)
                PProjOutBound:PGDBOOutbound2DIArray;(*'Bounding box DCS'*)(*oi_readonly*)(*hidden_in_objinsp*)
-               lod:GDBByte;(*'Level of detail'*)(*oi_readonly*)(*hidden_in_objinsp*)
-               constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
+               lod:Byte;(*'Level of detail'*)(*oi_readonly*)(*hidden_in_objinsp*)
+               constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                constructor initnul(owner:PGDBObjGenericWithSubordinated);
                destructor done;virtual;
                procedure SaveToDXFObjPostfix(var outhandle:{GDBInteger}TZctnrVectorBytes);
@@ -56,7 +56,7 @@ GDBObjWithLocalCS= object(GDBObjWithMatrix)
                function GetCenterPoint:GDBVertex;virtual;
                procedure createfield;virtual;
 
-               procedure rtsave(refp:GDBPointer);virtual;
+               procedure rtsave(refp:Pointer);virtual;
                procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
                procedure higlight(var DC:TDrawContext);virtual;
                procedure ReCalcFromObjMatrix;virtual;
@@ -313,7 +313,7 @@ begin
           if assigned(PProjoutbound) then
                             begin
                             PProjoutbound^.{FreeAnd}Done;
-                            Freemem(GDBPointer(PProjoutbound));
+                            Freemem(Pointer(PProjoutbound));
                             end;
           inherited done;
 end;

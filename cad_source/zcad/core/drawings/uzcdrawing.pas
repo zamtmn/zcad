@@ -34,7 +34,7 @@ TZCADDrawing= object(TSimpleDrawing)
 
            FileName:GDBString;
            Changed:GDBBoolean;
-           attrib:GDBLongword;
+           attrib:LongWord;
            UndoStack:TZctnrVectorUndoCommands;
            DWGUnits:TUnitManager;
 
@@ -55,7 +55,7 @@ TZCADDrawing= object(TSimpleDrawing)
            procedure ChangeStampt(st:GDBBoolean);virtual;
            function GetChangeStampt:GDBBoolean;virtual;
            function GetUndoTop:TArrayIndex;virtual;
-           function GetUndoStack:GDBPointer;virtual;
+           function GetUndoStack:Pointer;virtual;
            function CanUndo:boolean;virtual;
            function CanRedo:boolean;virtual;
            function GetDWGUnits:{PTUnitManager}pointer;virtual;
@@ -193,7 +193,7 @@ function TZCADDrawing.GetUndoTop:TArrayIndex;
 begin
      result:=UndoStack.CurrentCommand;
 end;
-function TZCADDrawing.GetUndoStack:GDBPointer;
+function TZCADDrawing.GetUndoStack:Pointer;
 begin
      result:=@UndoStack;
 end;

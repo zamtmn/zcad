@@ -45,13 +45,13 @@ GDBObjEllipse= object(GDBObjPlain)
                  length:GDBDouble;
                  q0,q1,q2:GDBvertex;
                  pq0,pq1,pq2:GDBvertex;
-                 constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex;{RR,}S,E:GDBDouble;majaxis:GDBVertex);
+                 constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex;{RR,}S,E:GDBDouble;majaxis:GDBVertex);
                  constructor initnul;
                  procedure LoadFromDXF(var f:TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
                  procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
-                 procedure addcontrolpoints(tdesc:GDBPointer);virtual;
+                 procedure addcontrolpoints(tdesc:Pointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                  procedure CalcObjMatrix;virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
@@ -60,12 +60,12 @@ GDBObjEllipse= object(GDBObjPlain)
                  procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                  procedure projectpoint;virtual;
                  function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
-                 function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
-                 function beforertmodify:GDBPointer;virtual;
+                 function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
+                 function beforertmodify:Pointer;virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
-                 function IsRTNeedModify(const Point:PControlPointDesc; p:GDBPointer):Boolean;virtual;
-                 function Clone(own:GDBPointer):PGDBObjEntity;virtual;
-                 procedure rtsave(refp:GDBPointer);virtual;
+                 function IsRTNeedModify(const Point:PControlPointDesc; p:Pointer):Boolean;virtual;
+                 function Clone(own:Pointer):PGDBObjEntity;virtual;
+                 procedure rtsave(refp:Pointer);virtual;
                  destructor done;virtual;
                  function GetObjTypeName:GDBString;virtual;
                  function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
@@ -333,15 +333,15 @@ begin
   vp.BoundingBox.RTF:=CreateVertex(rrr,T,f);
   if PProjoutbound=nil then
   begin
-       Getmem(GDBPointer(PProjoutbound),sizeof(GDBOOutbound2DIArray));
+       Getmem(Pointer(PProjoutbound),sizeof(GDBOOutbound2DIArray));
        PProjoutbound^.init(4);
   end;
 end;
 procedure GDBObjEllipse.createpoint;
 var
-  //psymbol: PGDBByte;
+  //psymbol: PByte;
   i{, j, k}: GDBInteger;
-  //len: GDBWord;
+  //len: Word;
   //matr{,m1}: DMatrix4D;
   v:GDBvertex;
   pv:GDBVertex;
@@ -517,7 +517,7 @@ begin
                              end;
                     end;
 end;
-procedure GDBObjEllipse.addcontrolpoints(tdesc:GDBPointer);
+procedure GDBObjEllipse.addcontrolpoints(tdesc:Pointer);
 var pdesc:controlpointdesc;
 begin
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(3);
@@ -599,7 +599,7 @@ begin
      tellipsertmodify(result^).p3.x:=q2.x;
      tellipsertmodify(result^).p3.y:=q2.y;
 end;
-function GDBObjEllipse.IsRTNeedModify(const Point:PControlPointDesc; p:GDBPointer):Boolean;
+function GDBObjEllipse.IsRTNeedModify(const Point:PControlPointDesc; p:Pointer):Boolean;
 begin
      result:=true;
 end;
@@ -675,7 +675,7 @@ end;
 function GDBObjEllipse.Clone;
 var tvo: PGDBObjEllipse;
 begin
-  Getmem(GDBPointer(tvo), sizeof(GDBObjEllipse));
+  Getmem(Pointer(tvo), sizeof(GDBObjEllipse));
   tvo^.init(CalcOwner(own),vp.Layer, vp.LineWeight, Local.p_insert, {r,}startangle,endangle,majoraxis);
   CopyVPto(tvo^);
   CopyExtensionsTo(tvo^);

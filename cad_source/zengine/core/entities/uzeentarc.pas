@@ -40,13 +40,13 @@ GDBObjArc= object(GDBObjPlain)
                  pq0:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
                  pq1:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
                  pq2:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
-                 constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex;RR,S,E:GDBDouble);
+                 constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex;RR,S,E:GDBDouble);
                  constructor initnul;
                  procedure LoadFromDXF(var f:TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
                  procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
-                 procedure addcontrolpoints(tdesc:GDBPointer);virtual;
+                 procedure addcontrolpoints(tdesc:Pointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                  procedure CalcObjMatrix;virtual;
                  procedure precalc;
@@ -56,13 +56,13 @@ GDBObjArc= object(GDBObjPlain)
                  procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                  procedure projectpoint;virtual;
                  function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
-                 function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
-                 function beforertmodify:GDBPointer;virtual;
+                 function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
+                 function beforertmodify:Pointer;virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
-                 function IsRTNeedModify(const Point:PControlPointDesc; p:GDBPointer):Boolean;virtual;
+                 function IsRTNeedModify(const Point:PControlPointDesc; p:Pointer):Boolean;virtual;
                  procedure SetFromClone(_clone:PGDBObjEntity);virtual;
-                 function Clone(own:GDBPointer):PGDBObjEntity;virtual;
-                 procedure rtsave(refp:GDBPointer);virtual;
+                 function Clone(own:Pointer):PGDBObjEntity;virtual;
+                 procedure rtsave(refp:Pointer);virtual;
                  destructor done;virtual;
                  function GetObjTypeName:GDBString;virtual;
                  function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
@@ -418,7 +418,7 @@ begin
 
   if PProjoutbound=nil then
   begin
-       Getmem(GDBPointer(PProjoutbound),sizeof(GDBOOutbound2DIArray));
+       Getmem(Pointer(PProjoutbound),sizeof(GDBOOutbound2DIArray));
        PProjoutbound^.init(4);
   end;
 end;
@@ -632,7 +632,7 @@ begin
                              end;
                     end;
 end;
-procedure GDBObjARC.addcontrolpoints(tdesc:GDBPointer);
+procedure GDBObjARC.addcontrolpoints(tdesc:Pointer);
 var pdesc:controlpointdesc;
 begin
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(3);
@@ -724,7 +724,7 @@ begin
      tarcrtmodify(result^).p3.x:=q2.x;
      tarcrtmodify(result^).p3.y:=q2.y;
 end;
-function GDBObjARC.IsRTNeedModify(const Point:PControlPointDesc; p:GDBPointer):Boolean;
+function GDBObjARC.IsRTNeedModify(const Point:PControlPointDesc; p:Pointer):Boolean;
 begin
      result:=true;
 end;
@@ -826,7 +826,7 @@ end;
 function GDBObjARC.Clone;
 var tvo: PGDBObjArc;
 begin
-  Getmem(GDBPointer(tvo), sizeof(GDBObjArc));
+  Getmem(Pointer(tvo), sizeof(GDBObjArc));
   tvo^.init(CalcOwner(own),vp.Layer, vp.LineWeight, Local.p_insert, r,startangle,endangle);
   tvo^.Local.basis.oz:=Local.basis.oz;
   CopyVPto(tvo^);

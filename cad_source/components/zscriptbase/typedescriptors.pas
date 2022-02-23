@@ -87,7 +87,7 @@ FieldDescriptor=record
                       //UserName:String;
                       //PFT:PUserTypeDescriptor;
                       Offset,Size:Integer;
-                      //Attributes:GDBWord;
+                      //Attributes:Word;
                       Collapsed:Boolean;
                 end;
 PPropertyDescriptor=^PropertyDescriptor;
@@ -97,13 +97,13 @@ PropertyDescriptor=record
                       //UserName:String;
                       r,w:String;
                       //PFT:PUserTypeDescriptor;
-                      //Attributes:GDBWord;
+                      //Attributes:Word;
                       Collapsed:Boolean;
                 end;
 PTUserTypeDescriptor=^TUserTypeDescriptor;
 TUserTypeDescriptor=object(UserTypeDescriptor)
                           function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;abstract;
-                          //procedure IncAddr(var addr:GDBPointer);virtual;
+                          //procedure IncAddr(var addr:Pointer);virtual;
                           function CreatePD:Pointer;
                           function GetPPD(PPDA:PTPropertyDeskriptorArray;var bmode:Integer):PPropertyDeskriptor;
                           function FindField(fn:TInternalScriptString):PFieldDescriptor;virtual;
@@ -141,7 +141,7 @@ end;
 
 {procedure TUserTypeDescriptor.IncAddr;
 begin
-     inc(pGDBByte(addr),SizeInGDBBytes);
+     inc(PByte(addr),SizeInBytes);
 end;}
 constructor PropertyDeskriptor.initnul;
 begin

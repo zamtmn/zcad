@@ -34,7 +34,7 @@ const
   Tenum=6;
   TGDBBoolean=7;
   TGDBShortint=8;
-  TGDBByte=9;
+  TByte=9;
   TGDBSmallint=10;
   TGDBWord=11;
   TGDBInteger=12;
@@ -141,7 +141,7 @@ TMyNotifyCommand=(TMNC_EditingDoneEnterKey,TMNC_EditingDoneLostFocus,TMNC_Editin
 TMyNotifyProc=procedure (Sender: TObject;Command:TMyNotifyCommand) of object;
 TCreateEditorFunc=function (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:String;ptdesc:PUserTypeDescriptor;preferedHeight:integer):TEditorDesc of object;
 UserTypeDescriptor=object
-                         SizeInGDBBytes:Integer;
+                         SizeInBytes:Integer;
                          TypeName:String;
                          PUnit:Pointer;
                          OIP:TOIProps;
@@ -155,9 +155,9 @@ UserTypeDescriptor=object
                          procedure _init(size:Integer;tname:string;pu:pointer);
                          function CreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:TInternalScriptString;preferedHeight:integer):TEditorDesc;virtual;
                          procedure ApplyOperator(oper,path:TInternalScriptString;var offset:Integer;out tc:PUserTypeDescriptor);virtual;abstract;
-                         //function Serialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:PTZctnrVectorBytes;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;abstract;
+                         //function Serialize(PInstance:Pointer;SaveFlag:Word;var membuf:PTZctnrVectorBytes;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;abstract;
                          function SerializePreProcess(Value:TInternalScriptString;sub:integer):TInternalScriptString;virtual;
-                         //function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:TZctnrVectorBytes;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;abstract;
+                         //function DeSerialize(PInstance:Pointer;SaveFlag:Word;var membuf:TZctnrVectorBytes;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;abstract;
                          function GetTypeAttributes:TTypeAttr;virtual;
                          function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
                          function GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;virtual;
@@ -202,7 +202,7 @@ TPropEditor=class(TComponent)
   //pd=^GDBDouble;
   {-}{/pGDBInteger=^Integer;/}
   //pstr=^TInternalScriptString;
-  {-}{/pGDBPointer=^Pointer;/}
+  {-}{/PPointer=^Pointer;/}
   //pbooleab=^Boolean;
  {TODO:огнегне}
 TTranslateFunction=function (const Identifier, OriginalValue: String): String;
@@ -509,7 +509,7 @@ begin
 end;
 procedure UserTypeDescriptor.IncAddr(var addr:Pointer);
 begin
-     inc(pByte(addr),SizeInGDBBytes);
+     inc(pByte(addr),SizeInBytes);
 end;
 function UserTypeDescriptor.GetFactTypedef:PUserTypeDescriptor;
 begin
@@ -534,11 +534,11 @@ begin
 end;
 procedure UserTypeDescriptor.InitInstance(PInstance:Pointer);
 begin
-     fillchar(pinstance^,SizeInGDBBytes,0)
+     fillchar(pinstance^,SizeInBytes,0)
 end;
 function UserTypeDescriptor.AllocInstance:Pointer;
 begin
-  Getmem(result,SizeInGDBBytes);
+  Getmem(result,SizeInBytes);
 end;
 function UserTypeDescriptor.AllocAndInitInstance:Pointer;
 begin
@@ -548,12 +548,12 @@ end;
 
 procedure UserTypeDescriptor.CopyInstanceTo(source,dest:pointer);
 begin
-     Move(source^, dest^,SizeInGDBBytes);
+     Move(source^, dest^,SizeInBytes);
      MagicAfterCopyInstance(dest);
 end;
 function UserTypeDescriptor.Compare(pleft,pright:pointer):TCompareResult;
 begin
-     if CompareByte(pleft^,pright^,SizeInGDBBytes)=0 then
+     if CompareByte(pleft^,pright^,SizeInBytes)=0 then
                                                          result:=CREqual
                                                      else
                                                          result:=CRNotEqual;
@@ -565,7 +565,7 @@ begin
 end;
 procedure UserTypeDescriptor._init(size:Integer;tname:string;pu:pointer);
 begin
-     SizeInGDBBytes:=size;
+     SizeInBytes:=size;
      pointer(typename):=nil;
      typename:=tname;
      PUnit:=pu;
@@ -590,7 +590,7 @@ destructor UserTypeDescriptor.done;
 begin
      zTraceLn('{T}[FINALIZATION_TYPES]'+self.TypeName);
      //programlog.LogOutStr(self.TypeName,lp_OldPos,LM_Trace);
-     SizeInGDBBytes:=0;
+     SizeInBytes:=0;
      typename:='';
      if FastEditors<>nil then
                              FastEditors.Destroy;

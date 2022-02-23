@@ -82,7 +82,7 @@ procedure ArrayDescriptor.AddIndex;
 begin
      indexs.PushBackData(Index);
      inc(NumOfIndex);
-     SizeInGDBBytes:=SizeInGDBBytes+typeof^.SizeInGDBBytes*Index.IndexCount
+     SizeInBytes:=SizeInBytes+typeof^.SizeInBytes*Index.IndexCount
 end;
 function ArrayDescriptor.CreateProperties;
 var ppd:PPropertyDeskriptor;
@@ -100,7 +100,7 @@ begin
            if ppd<>nil then
                            begin
                                 //IncAddr(addr);
-                                //inc(pGDBByte(addr),SizeInGDBBytes);
+                                //inc(PByte(addr),SizeInBytes);
                                 //if bmode=property_build then PPDA^.add(@ppd);
                            end;
      //IncAddr(addr);

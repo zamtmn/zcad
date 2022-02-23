@@ -34,9 +34,9 @@ uses
 type
   {REGISTEROBJECTTYPE rotate_com}
   rotate_com =  object(move_com)
-    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
+    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger; virtual;
     procedure CommandContinue; virtual;
-    procedure rot(a:GDBDouble; button: GDBByte);
+    procedure rot(a:GDBDouble; button: Byte);
     procedure showprompt(mklick:integer);virtual;
   end;
 var
@@ -61,7 +61,7 @@ begin
      1:ZCMsgCallBackInterface.TextMessage(rscmPickOrEnterAngle,TMWOHistoryOut);
      end;
 end;
-procedure rotate_com.rot(a:GDBDouble; button: GDBByte);
+procedure rotate_com.rot(a:GDBDouble; button: Byte);
 var
     dispmatr,im,rotmatr:DMatrix4D;
     ir:itrec;
@@ -123,7 +123,7 @@ end;
 
 end;
 
-function rotate_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger;
+function rotate_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger;
 var
     //dispmatr,im,rotmatr:DMatrix4D;
     //ir:itrec;

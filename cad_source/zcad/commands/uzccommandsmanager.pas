@@ -51,7 +51,7 @@ type
                           LatestRunPDrawing:PTDrawingDef;
 
                           CommandsStack:TZctnrVectorGDBPointer;
-                          ContextCommandParams:GDBPointer;
+                          ContextCommandParams:Pointer;
                           busy:GDBBoolean;
                           varstack:tvarstack;
                           DMenu:TDMenuWnd;
@@ -70,12 +70,12 @@ type
                           function hasDisabledExecuteCommandEnd:boolean;virtual;
                           procedure resetDisabledExecuteCommandEnd;virtual;
                           procedure executecommandend;virtual;
-                          function GetSavedMouseMode:GDBByte;
+                          function GetSavedMouseMode:Byte;
                           procedure executecommandtotalend;virtual;
                           procedure ChangeModeAndEnd(newmode:TGetPointMode);
                           procedure executefile(fn:GDBString;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
                           procedure executelastcommad(pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
-                          procedure sendpoint2command(p3d:gdbvertex; p2d:gdbvertex2di; var mode:GDBByte;osp:pos_record;const drawing:TDrawingDef);virtual;
+                          procedure sendpoint2command(p3d:gdbvertex; p2d:gdbvertex2di; var mode:Byte;osp:pos_record;const drawing:TDrawingDef);virtual;
                           procedure CommandRegister(pc:PCommandObjectDef);virtual;
                           procedure run(pc:PCommandObjectDef;operands:GDBString;pdrawing:PTDrawingDef);virtual;
                           destructor done;virtual;
@@ -87,7 +87,7 @@ type
                           procedure DMAddMethod(Text,HText:GDBString;FMethod:TButtonMethod);
                           procedure DMAddProcedure(Text,HText:GDBString;FProc:TButtonProc);
                           function FindCommand(command:GDBString):PCommandObjectDef;
-                          procedure PushValue(varname,vartype:GDBString;instance:GDBPointer);virtual;
+                          procedure PushValue(varname,vartype:GDBString;instance:Pointer);virtual;
                           function PopValue:vardesk;virtual;
                           function GetValue:vardesk;virtual;
                           function GetValueHeap:GDBInteger;
@@ -96,8 +96,8 @@ type
 
                           function Get3DPoint(prompt:GDBString;out p:GDBVertex):TGetResult;
                           function Get3DPointWithLineFromBase(prompt:GDBString;const base:GDBVertex;out p:GDBVertex):TGetResult;
-                          function GetEntity(prompt:GDBString;out p:GDBPointer):GDBBoolean;
-                          function Get3DPointInteractive(prompt:GDBString;out p:GDBVertex;const InteractiveProc:TInteractiveProcObjBuild;const PInteractiveData:GDBPointer):TGetResult;
+                          function GetEntity(prompt:GDBString;out p:Pointer):GDBBoolean;
+                          function Get3DPointInteractive(prompt:GDBString;out p:GDBVertex;const InteractiveProc:TInteractiveProcObjBuild;const PInteractiveData:Pointer):TGetResult;
                           function GetInput(Prompt:GDBString;out Input:GDBString):TGetResult;
 
                           function GetLastId:TTag;
@@ -108,10 +108,10 @@ type
 
                           function EndGetPoint(newmode:TGetPointMode):GDBBoolean;
 
-                          procedure sendmousecoord(Sender:TAbstractViewArea;key: GDBByte);
-                          procedure sendmousecoordwop(Sender:TAbstractViewArea;key: GDBByte);
-                          procedure sendcoordtocommand(Sender:TAbstractViewArea;coord:GDBVertex;key: GDBByte);
-                          procedure sendcoordtocommandTraceOn(Sender:TAbstractViewArea;coord:GDBVertex;key: GDBByte;pos:pos_record);
+                          procedure sendmousecoord(Sender:TAbstractViewArea;key: Byte);
+                          procedure sendmousecoordwop(Sender:TAbstractViewArea;key: Byte);
+                          procedure sendcoordtocommand(Sender:TAbstractViewArea;coord:GDBVertex;key: Byte);
+                          procedure sendcoordtocommandTraceOn(Sender:TAbstractViewArea;coord:GDBVertex;key: Byte;pos:pos_record);
 
                           procedure PromptTagNotufy(Tag:TTag);
 
@@ -123,7 +123,7 @@ type
 
                     end;
 var commandmanager:GDBcommandmanager;
-function getcommandmanager:GDBPointer;export;
+function getcommandmanager:Pointer;export;
 function GetCommandContext(pdrawing:PTDrawingDef;POGLWnd:POGLWndtype):TCStartAttr;
 procedure ParseCommand(comm:string; out command,operands:GDBString);
 {procedure startup;
@@ -176,7 +176,7 @@ begin
   end;
 end;
 
-procedure GDBcommandmanager.sendcoordtocommandTraceOn(Sender:TAbstractViewArea;coord:GDBVertex;key: GDBByte;pos:pos_record);
+procedure GDBcommandmanager.sendcoordtocommandTraceOn(Sender:TAbstractViewArea;coord:GDBVertex;key: Byte;pos:pos_record);
 var
    cs:integer;
 begin
@@ -197,12 +197,12 @@ begin
      //end;
 end;
 
-procedure GDBcommandmanager.sendcoordtocommand(Sender:TAbstractViewArea;coord:GDBVertex;key: GDBByte);
+procedure GDBcommandmanager.sendcoordtocommand(Sender:TAbstractViewArea;coord:GDBVertex;key: Byte);
 begin
      if key=MZW_LBUTTON then Sender.param.lastpoint:=coord;
      sendpoint2command(coord, sender.param.md.mouse, key,nil,sender.pdwg^);
 end;
-procedure GDBcommandmanager.sendmousecoord(Sender:TAbstractViewArea;key: GDBByte);
+procedure GDBcommandmanager.sendmousecoord(Sender:TAbstractViewArea;key: Byte);
 begin
   if pcommandrunning <> nil then
     if sender.param.md.mouseonworkplan
@@ -220,7 +220,7 @@ begin
         end;
     //if key=MZW_LBUTTON then wa.param.ontrackarray.otrackarray[0].worldcoord:=wa.param.md.mouseonworkplanecoord;
 end;
-procedure GDBcommandmanager.sendmousecoordwop(Sender:TAbstractViewArea;key: GDBByte);
+procedure GDBcommandmanager.sendmousecoordwop(Sender:TAbstractViewArea;key: Byte);
 var
    tv:gdbvertex;
 begin
@@ -298,9 +298,9 @@ begin
      else
                               result:=false;
 end;
-function GDBcommandmanager.Get3DPointInteractive(prompt:GDBString;out p:GDBVertex;const InteractiveProc:TInteractiveProcObjBuild;const PInteractiveData:GDBPointer):TGetResult;
+function GDBcommandmanager.Get3DPointInteractive(prompt:GDBString;out p:GDBVertex;const InteractiveProc:TInteractiveProcObjBuild;const PInteractiveData:Pointer):TGetResult;
 var
-   savemode:GDBByte;//variable to store the current mode of the editor
+   savemode:Byte;//variable to store the current mode of the editor
                      //переменная для сохранения текущего режима редактора
 begin
   //PTSimpleDrawing(pcommandrunning.pdwg)^.wa.asyncupdatemouse(0);
@@ -373,7 +373,7 @@ end;
 
 function GDBcommandmanager.GetInput(Prompt:GDBString;out Input:GDBString):TGetResult;
 var
-   savemode:GDBByte;//variable to store the current mode of the editor
+   savemode:Byte;//variable to store the current mode of the editor
                      //переменная для сохранения текущего режима редактора
 begin
   savemode:=PTSimpleDrawing(pcommandrunning.pdwg)^.DefMouseEditorMode({MGet3DPoint or MGet3DPointWoOP}0,//set mode point of the mouse
@@ -417,9 +417,9 @@ begin
   result:=Get3DPointInteractive(prompt,p,nil,nil);
   pcommandrunning^.IData.DrawFromBasePoint:=False;
 end;
-function GDBcommandmanager.GetEntity(prompt:GDBString;out p:GDBPointer):GDBBoolean;
+function GDBcommandmanager.GetEntity(prompt:GDBString;out p:Pointer):GDBBoolean;
 var
-   savemode:GDBByte;
+   savemode:Byte;
 begin
   savemode:=PTSimpleDrawing(pcommandrunning.pdwg)^.DefMouseEditorMode(MGetSelectObject,
                                                                       MGet3DPoint or MGet3DPointWoOP or MGetSelectionFrame or MGetControlpoint);
@@ -458,7 +458,7 @@ begin
                                  result:=true;
 end;
 
-procedure GDBcommandmanager.PushValue(varname,vartype:GDBString;instance:GDBPointer);
+procedure GDBcommandmanager.PushValue(varname,vartype:GDBString;instance:Pointer);
 var
    vd: vardesk;
 begin
@@ -492,7 +492,7 @@ begin
      //lastelement.Instance:=nil;
 end;
 
-function getcommandmanager:GDBPointer;
+function getcommandmanager:Pointer;
 begin
      result:=@commandmanager;
 end;
@@ -626,7 +626,7 @@ begin
   if p<>nil then
   repeat
        p^.done;
-       if p^.dyn then Freemem(GDBPointer(p));
+       if p^.dyn then Freemem(Pointer(p));
        p:=iterate(ir);
   until p=nil;
   count:=0;
@@ -832,7 +832,7 @@ procedure GDBcommandmanager.resetDisabledExecuteCommandEnd;
 begin
   DisabledExecuteCommandEndCounter:=0;
 end;
-function GDBcommandmanager.GetSavedMouseMode:GDBByte;
+function GDBcommandmanager.GetSavedMouseMode:Byte;
 begin
   if pcommandrunning<>nil then
     result:=pcommandrunning.savemousemode
@@ -941,7 +941,7 @@ begin
   if count=max then exit;
   PushBackData(pc);
 end;
-procedure comdeskclear(p:GDBPointer);
+procedure comdeskclear(p:Pointer);
 begin
      {pvardesk(p)^.name:='';
      pvardesk(p)^.vartype:=0;

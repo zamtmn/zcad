@@ -33,27 +33,27 @@ const
   basicoperatorparamcount = 28;
   basicfunctionparamcount = 1;
   {foneGDBBoolean = #7;
-  foneGDBByte = #8;
-  foneuGDBByte = #9;
+  foneByte = #8;
+  foneuByte = #9;
   foneGDBWord = #10;
   foneuGDBWord = #11;
   foneuGDBInteger = #13;
   foneGDBString = #15;}
 type
   operandstack = record
-    count: GDBByte;
+    count: Byte;
     stack: array[1..10] of vardesk;
   end;
   basicoperator = function(var rez, hrez: vardesk): vardesk;
   basicfunction = function(var stack: operandstack): vardesk;
   ptfunctionparamnype = ^tfunctionparamnype;
   tfunctionparamnype = record
-    count: GDBWord;
-    typearray: array[0..0] of GDBByte;
+    count: Word;
+    typearray: array[0..0] of Byte;
   end;
   operatornam = record
     name: GDBString;
-    prior: GDBByte;
+    prior: Byte;
   end;
   operatortype = record
     name: GDBString;
@@ -92,7 +92,7 @@ function TGDBInteger_let_TGDBInteger(var rez, hrez: vardesk): vardesk;
 function TGDBString_let_TGDBString(var rez, hrez: vardesk): vardesk;
 function TGDBAnsiString_let_TGDBString(var rez, hrez: vardesk): vardesk;
 function TGDBAnsiString_let_TGDBAnsiString(var rez, hrez: vardesk): vardesk;
-function TGDBByte_let_TGDBInteger(var rez, hrez: vardesk): vardesk;
+function TByte_let_TGDBInteger(var rez, hrez: vardesk): vardesk;
 function TGDBBoolean_let_TGDBBoolean(var rez, hrez: vardesk): vardesk;
 
 function TGDBInteger_minus_TGDBInteger(var rez, hrez: vardesk): vardesk;
@@ -143,7 +143,7 @@ const
     , (name: ':='; param: @FundamentalStringDescriptorObj; hparam: @FundamentalStringDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBString_let_TGDBString)
     , (name: ':='; param: @FundamentalAnsiStringDescriptorObj; hparam: @FundamentalStringDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBAnsiString_let_TGDBString)
     , (name: ':='; param: @FundamentalLongIntDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBInteger_let_TGDBInteger)
-    , (name: ':='; param: @FundamentalByteDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBByte_let_TGDBInteger)
+    , (name: ':='; param: @FundamentalByteDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TByte_let_TGDBInteger)
     , (name: '-'; param: nil; hparam: @FundamentalDoubleDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}Tnothing_minus_TGDBDouble)
     , (name: ':='; param: @FundamentalBooleanDescriptorOdj; hparam: @FundamentalBooleanDescriptorOdj; addr: {$IFDEF FPC}@{$ENDIF}TGDBBoolean_let_TGDBBoolean)
     , (name: ':='; param: @GDBEnumDataDescriptorObj; hparam: @GDBEnumDataDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TEnum_let_TIdentificator)//эта шняга захардкожена в findbasicoperator по номеру
@@ -252,7 +252,7 @@ begin
   pGDBDouble(r.Instance) := nil;
   r.data.ptd:=@FundamentalAnsiStringDescriptorObj;
   r.name := '';
-  Getmem(r.Instance,FundamentalAnsiStringDescriptorObj.SizeInGDBBytes);
+  Getmem(r.Instance,FundamentalAnsiStringDescriptorObj.SizeInBytes);
   pAnsiString(r.Instance)^ := DecodeStringBase64(PGDBAnsiString(stack.stack[1].Instance)^);
   result := r;
 end;*)
@@ -326,15 +326,15 @@ begin
   pGDBInteger(rez.data.Addr.Instance)^ := pGDBInteger(hrez.data.Addr.Instance)^;
   result := r;
 end;
-function TGDBByte_let_TGDBInteger(var rez, hrez: vardesk): vardesk;
+function TByte_let_TGDBInteger(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
   r.data.ptd:=@FundamentalByteDescriptorObj;
   r.name := '';
   r.SetInstance(FundamentalByteDescriptorObj.AllocAndInitInstance);
-  pGDBByte(r.data.Addr.Instance)^ := pGDBInteger(hrez.data.Addr.Instance)^;
-  pGDBByte(rez.data.Addr.Instance)^ := pGDBInteger(hrez.data.Addr.Instance)^;
+  PByte(r.data.Addr.Instance)^ := pGDBInteger(hrez.data.Addr.Instance)^;
+  PByte(rez.data.Addr.Instance)^ := pGDBInteger(hrez.data.Addr.Instance)^;
   result := r;
 end;
 

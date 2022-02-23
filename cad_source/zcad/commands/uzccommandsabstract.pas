@@ -41,7 +41,7 @@ const
      CEDWGNChanged=2;
      EmptyCommandOperands='';
 type
-TInteractiveProcObjBuild=procedure(const PInteractiveData:GDBPointer;Point:GDBVertex;Click:GDBBoolean);
+TInteractiveProcObjBuild=procedure(const PInteractiveData:Pointer;Point:GDBVertex;Click:GDBBoolean);
     TGetInputPossible=(GPIempty//возможность пустого ввода
                       );
     TGetInputMode=set of TGetInputPossible;//возможности ввода
@@ -67,14 +67,14 @@ TInteractiveProcObjBuild=procedure(const PInteractiveData:GDBPointer;Point:GDBVe
                        GetPointMode:TGetPointMode;(*hidden_in_objinsp*)
                        BasePoint,currentPointValue,GetPointValue:GDBVertex;(*hidden_in_objinsp*)
                        DrawFromBasePoint:Boolean;(*hidden_in_objinsp*)
-                       PInteractiveData:GDBPointer;
-                       PInteractiveProc:{-}TInteractiveProcObjBuild{/GDBPointer/};
+                       PInteractiveData:Pointer;
+                       PInteractiveProc:{-}TInteractiveProcObjBuild{/Pointer/};
                        Input:AnsiString;
                        Id:Integer;
                        {-}PossibleResult:TGetPossibleResult;{//}
                        {-}InputMode:TGetInputMode;{//}
                     end;
-    TCommandOperands={-}GDBString{/GDBPointer/};
+    TCommandOperands={-}GDBString{/Pointer/};
     TCommandResult=GDBInteger;
   TCStartAttr=GDBInteger;{атрибут разрешения\запрещения запуска команды}
     TCEndAttr=GDBInteger;{атрибут действия по завершению команды}
@@ -83,14 +83,14 @@ TInteractiveProcObjBuild=procedure(const PInteractiveData:GDBPointer;Point:GDBVe
   CommandObjectDef=object (GDBaseObject)
     CommandName:GDBString;(*hidden_in_objinsp*)
     CommandGDBString:GDBString;(*hidden_in_objinsp*)
-    savemousemode: GDBByte;(*hidden_in_objinsp*)
+    savemousemode: Byte;(*hidden_in_objinsp*)
     mouseclic: GDBInteger;(*hidden_in_objinsp*)
     dyn:GDBBoolean;(*hidden_in_objinsp*)
     overlay:GDBBoolean;(*hidden_in_objinsp*)
     CStartAttrEnableAttr:TCStartAttr;(*hidden_in_objinsp*)
     CStartAttrDisableAttr:TCStartAttr;(*hidden_in_objinsp*)
     CEndActionAttr:TCEndAttr;(*hidden_in_objinsp*)
-    pdwg:GDBPointer;(*hidden_in_objinsp*)
+    pdwg:Pointer;(*hidden_in_objinsp*)
     NotUseCommandLine:GDBBoolean;(*hidden_in_objinsp*)
     IData:TInteractiveData;(*hidden_in_objinsp*)
     procedure CommandStart(Operands:TCommandOperands); virtual; abstract;
@@ -118,9 +118,9 @@ TInteractiveProcObjBuild=procedure(const PInteractiveData:GDBPointer;Point:GDBVe
     procedure CommandCancel; virtual;abstract;
     procedure CommandInit; virtual;abstract;
     procedure CommandContinue; virtual;
-    function MouseMoveCallback(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
-    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
-    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger; virtual;
+    function MouseMoveCallback(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger; virtual;
+    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger; virtual;
+    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger; virtual;
     function IsRTECommand:GDBBoolean;virtual;
   end;
 {Export-}
@@ -161,11 +161,11 @@ end;
 procedure CommandObjectDef.DrawHeplGeometry;
 begin
 end;
-function CommandRTEdObjectDef.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record):GDBInteger;
+function CommandRTEdObjectDef.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record):GDBInteger;
 begin
      result:=0;
 end;
-function CommandRTEdObjectDef.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger;
+function CommandRTEdObjectDef.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger;
 begin
      if self.mouseclic=1 then
                              result:=0
@@ -179,7 +179,7 @@ end;
 procedure CommandRTEdObjectDef.CommandContinue;
 begin
 end;
-function CommandRTEdObjectDef.MouseMoveCallback(wc: GDBvertex; mc: GDBvertex2DI; var button: GDBByte;osp:pos_record): GDBInteger;
+function CommandRTEdObjectDef.MouseMoveCallback(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger;
 begin
   //result:=0;
   programlog.logoutstr('CommandRTEdObjectDef.MouseMoveCallback',0);

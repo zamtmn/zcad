@@ -63,10 +63,10 @@ type
     //constructor init;
     procedure CommandStart(Operands:TCommandOperands); virtual;
     procedure CommandCancel; virtual;
-    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger; virtual;
-    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger; virtual;
+    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
+    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
     function CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D; virtual;
-    function Move(dispmatr:DMatrix4D;UndoMaker:GDBString): GDBInteger;
+    function Move(dispmatr:DMatrix4D;UndoMaker:GDBString): Integer;
     procedure showprompt(mklick:integer);virtual;
   end;
 {EXPORT-}
@@ -88,7 +88,7 @@ begin
 end;
 
 procedure Move_com.CommandStart(Operands:TCommandOperands);
-var //i: GDBInteger;
+var //i: Integer;
   tv,pobj: pGDBObjEntity;
       ir:itrec;
       counter:integer;
@@ -155,8 +155,8 @@ begin
      inherited;
 end;
 
-function Move_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger;
-//var i: GDBInteger;
+function Move_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
+//var i: Integer;
 //  tv,pobj: pGDBObjEntity;
  //     ir:itrec;
 begin
@@ -172,7 +172,7 @@ begin
         dist:=uzegeometry.VertexSub(p2,p1);
         result:=uzegeometry.CreateTranslationMatrix(dist);
 end;
-function Move_com.Move(dispmatr:DMatrix4D;UndoMaker:GDBString): GDBInteger;
+function Move_com.Move(dispmatr:DMatrix4D;UndoMaker:GDBString): Integer;
 var
     //dist:gdbvertex;
     im:DMatrix4D;
@@ -205,8 +205,8 @@ begin
    PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushEndMarker;
    result:=cmd_ok;
 end;
-function Move_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger;
-var //i:GDBInteger;
+function Move_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
+var //i:Integer;
     //dist:gdbvertex;
     dispmatr{,im}:DMatrix4D;
     //ir:itrec;

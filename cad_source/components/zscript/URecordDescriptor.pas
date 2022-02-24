@@ -54,10 +54,10 @@ var
 implementation
 uses varman;
 function typeformat(s:TInternalScriptString;PInstance,PTypeDescriptor:Pointer):TInternalScriptString;
-var i,i2:GDBInteger;
+var i,i2:Integer;
     ps,fieldname:TInternalScriptString;
 //    pv:pvardesk;
-    offset:GDBInteger;
+    offset:Integer;
     tc:PUserTypeDescriptor;
     pf:Pointer;
 begin
@@ -267,7 +267,7 @@ end;
 function RecordDescriptor.CreateProperties;
 var PFD:PFieldDescriptor;
     ppd:PPropertyDeskriptor;
-    bmodesave,bmodesave2,bmodetemp:GDBInteger;
+    bmodesave,bmodesave2,bmodetemp:Integer;
     tname:TInternalScriptString;
     ta,tb,taa:Pointer;
     pobj:PGDBaseObject;

@@ -40,12 +40,12 @@ GDBObjText= object(GDBObjAbstractText)
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:TDXFEntsInternalStringType;p:GDBvertex;s,o,w,a:GDBDouble;j:TTextJustify);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f: TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
-                 procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure CalcGabarit(const drawing:TDrawingDef);virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  //procedure createpoint(const drawing:TDrawingDef);virtual;
-                 //procedure CreateSymbol(_symbol:GDBInteger;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;pfont:pgdbfont;ln:GDBInteger);
+                 //procedure CreateSymbol(_symbol:Integer;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;pfont:pgdbfont;ln:Integer);
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
                  function GetObjTypeName:GDBString;virtual;
                  destructor done;virtual;
@@ -55,7 +55,7 @@ GDBObjText= object(GDBObjAbstractText)
                  procedure rtedit(refp:Pointer;mode:Single;dist,wc:gdbvertex);virtual;
                  procedure rtsave(refp:Pointer);virtual;
                  function IsHaveObjXData:GDBBoolean;virtual;
-                 procedure SaveToDXFObjXData(var outhandle:{GDBInteger}TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXFObjXData(var outhandle:{Integer}TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
                  function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef):GDBBoolean;virtual;
                  class function GetDXFIOFeatures:TDXFEntIODataManager;static;
 
@@ -220,9 +220,9 @@ begin
 end;
 procedure GDBObjText.CalcGabarit;
 var
-  i: GDBInteger;
+  i: Integer;
   psyminfo:PGDBsymdolinfo;
-  l:GDBInteger;
+  l:Integer;
   sym:word;
   //-ttf-//TDInfo:TTrianglesDataInfo;
 begin
@@ -391,10 +391,10 @@ begin
        PProjoutbound^.init(4);
   end;
 end;
-(*procedure GDBObjText.CreateSymbol(_symbol:GDBInteger;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;pfont:pgdbfont;ln:GDBInteger);
+(*procedure GDBObjText.CreateSymbol(_symbol:Integer;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;pfont:pgdbfont;ln:Integer);
 var
   psymbol: Pointer;
-  i, j, k: GDBInteger;
+  i, j, k: Integer;
   len: Word;
   //matr,m1: DMatrix4D;
   v:GDBvertex4D;
@@ -592,7 +592,7 @@ begin
      inherited;
 end;
 function z2dxftext(s:gdbstring):gdbstring;
-var i:GDBInteger;
+var i:Integer;
 begin
      result:=s;
      repeat
@@ -603,7 +603,7 @@ begin
                      end;
      until i<=0;
 end;
-procedure GDBObjText.SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
+procedure GDBObjText.SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
 var
   hv, vv,bw: Byte;
   tv:gdbvertex;
@@ -655,10 +655,10 @@ begin
 end;
 procedure GDBObjText.LoadFromDXF;
 var //s{, layername}: GDBString;
-  byt{, code}: GDBInteger;
+  byt{, code}: Integer;
   doublepoint,angleload: GDBBoolean;
   angle:double;
-  vv, gv, textbackward: GDBInteger;
+  vv, gv, textbackward: Integer;
   style,tcontent:GDBString;
 begin
   //initnul;

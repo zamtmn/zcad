@@ -26,15 +26,15 @@ GDBObjElLeader= object(GDBObjComplex)
             MarkLine:GDBObjLine;
             Tbl:GDBObjTable;
 
-            size:GDBInteger;
+            size:Integer;
             scale:GDBDouble;
             twidth:GDBDouble;
 
 
-            procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
-            procedure DrawOnlyGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
+            procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
+            procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
             procedure getoutbound(var DC:TDrawContext);virtual;
-            function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
+            function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
             function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
             function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
             procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
@@ -42,30 +42,30 @@ GDBObjElLeader= object(GDBObjComplex)
             procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
             procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
             function beforertmodify:Pointer;virtual;
-            function select(var SelectedObjCount:GDBInteger;s2s:TSelect2Stage):GDBBoolean;virtual;
+            function select(var SelectedObjCount:Integer;s2s:TSelect2Stage):GDBBoolean;virtual;
             procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
-            procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;
+            procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
 
             constructor initnul;
             function Clone(own:Pointer):PGDBObjEntity;virtual;
-            procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-            procedure DXFOut(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+            procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+            procedure DXFOut(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
             function GetObjTypeName:GDBString;virtual;
             function ReturnLastOnMouse(InSubEntry:GDBBoolean):PGDBObjEntity;virtual;
-            procedure ImSelected(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger);virtual;
-            procedure DeSelect(var SelectedObjCount:GDBInteger;ds2s:TDeSelect2Stage);virtual;
-            procedure SaveToDXFFollow(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+            procedure ImSelected(pobj:PGDBObjSubordinated;pobjinarray:Integer);virtual;
+            procedure DeSelect(var SelectedObjCount:Integer;ds2s:TDeSelect2Stage);virtual;
+            procedure SaveToDXFFollow(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
             //function InRect:TInRect;virtual;
 
             destructor done;virtual;
 
             procedure transform(const t_matrix:DMatrix4D);virtual;
             procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
-            procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;
-            function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
+            procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;
+            function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
             function GetObjType:TObjID;virtual;
             class function GetDXFIOFeatures:TDXFEntIODataManager;static;
-            procedure SaveToDXFObjXData(var outhandle:{GDBInteger}TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
+            procedure SaveToDXFObjXData(var outhandle:{Integer}TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
             end;
 {EXPORT-}
 implementation
@@ -81,7 +81,7 @@ begin
   result:=GDBObjElLeaderDXFFeatures;
 end;
 function GDBObjElLeader.calcvisible;
-//var i:GDBInteger;
+//var i:Integer;
 //    tv,tv1:gdbvertex4d;
 //    m:DMatrix4D;
 begin
@@ -182,7 +182,7 @@ begin
   (*dxfGDBStringout(outhandle,1001,ZCADAppNameInDXF);
   dxfGDBStringout(outhandle,1002,'{');
   dxfGDBStringout(outhandle,1000,'_UPGRADE='+inttostr(UD_LineToLeader));
-  dxfGDBStringout(outhandle,1000,'%1=size|GDBInteger|'+inttostr(size)+'|');
+  dxfGDBStringout(outhandle,1000,'%1=size|Integer|'+inttostr(size)+'|');
   dxfGDBStringout(outhandle,1000,'%2=scale|GDBDouble|'+floattostr(scale)+'|');
   dxfGDBStringout(outhandle,1000,'%3=twidth|GDBDouble|'+floattostr(twidth)+'|');
   dxfGDBStringout(outhandle,1002,'}');*)
@@ -252,7 +252,7 @@ begin
      //historyout('ElLeader DXFOut end');
 end;
 procedure GDBObjElLeader.ImEdited;
-//var t:gdbinteger;
+//var t:Integer;
 begin
      //format;
      inherited imedited (pobj,pobjinarray,drawing);
@@ -275,7 +275,7 @@ var
    pdev:PGDBObjDevice;
    ptn:PTNodeProp;
    ptext:PGDBObjText;
-   width:gdbinteger;
+   width:Integer;
    TCP:TCodePage;
 
    Objects:GDBObjOpenArrayOfPV;
@@ -563,7 +563,7 @@ begin
      if assigned(EntExtensions)then
        EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
 end;
-function GDBObjElLeader.select(var SelectedObjCount:GDBInteger;s2s:TSelect2Stage):GDBBoolean;
+function GDBObjElLeader.select(var SelectedObjCount:Integer;s2s:TSelect2Stage):GDBBoolean;
 //var tdesc:pselectedobjdesc;
 begin
      (*result:=false;
@@ -617,7 +617,7 @@ end;
 procedure GDBObjElLeader.RenderFeedback;
 //var pblockdef:PGDBObjBlockdef;
 //    pvisible:PGDBObjEntity;
-//    i:GDBInteger;
+//    i:Integer;
 begin
      inherited;
      MainLine.RenderFeedback(pcount,camera,ProjectProc,dc);
@@ -626,7 +626,7 @@ begin
 end;
 function GDBObjElLeader.onmouse;
 var //t,xx,yy:GDBDouble;
-    //i:GDBInteger;
+    //i:Integer;
     //p:pgdbobjEntity;
     ot:GDBBoolean;
     //    ir:itrec;
@@ -820,7 +820,7 @@ begin
    pvi:=PTUnit(ptu).FindVariable('size');
    if pvi<>nil then
                    begin
-                        result^.size:=pgdbinteger(pvi^.data.Addr.Instance)^;
+                        result^.size:=PInteger(pvi^.data.Addr.Instance)^;
                    end;
    pvi:=PTUnit(ptu).FindVariable('scale');
    if pvi<>nil then

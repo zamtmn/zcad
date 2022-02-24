@@ -14,7 +14,7 @@ T3:GDBString;(*'Параметры'*)
 T4:GDBString;(*'Терм.уставка'*)
 T5:GDBString;(*'Эл.маг.уставка'*)
 
-T11:GDBInteger;(*'123'*)
+T11:Integer;(*'123'*)
 
 implementation
 

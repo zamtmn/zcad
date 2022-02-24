@@ -25,7 +25,7 @@ uses
        classes;
 type
   TInterfaceVars=record
-                       CColor,CLWeight:GDBInteger;
+                       CColor,CLWeight:Integer;
                        CLayer:PGDBLayerProp;
                        CLType:PGDBLTypeProp;
                        CTStyle:PGDBTextStyle;

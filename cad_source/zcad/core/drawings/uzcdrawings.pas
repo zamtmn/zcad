@@ -91,8 +91,8 @@ procedure SetObjCreateManipulator(out domethod,undomethod:tmethod);
 procedure clearotrack;
 procedure clearcp;
 //procedure redrawoglwnd(GUIAction:TZMessageID);
-function dwgSaveDXFDPAS(s:gdbstring;dwg:PTSimpleDrawing):GDBInteger;
-function dwgQSave_com(dwg:PTSimpleDrawing):GDBInteger;
+function dwgSaveDXFDPAS(s:gdbstring;dwg:PTSimpleDrawing):Integer;
+function dwgQSave_com(dwg:PTSimpleDrawing):Integer;
 function SetCurrentDWG(PDWG:pointer):pointer;
 //procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
 implementation
@@ -184,7 +184,7 @@ end;
       end;
  end;}
 
- function dwgSaveDXFDPAS(s:gdbstring;dwg:PTSimpleDrawing):GDBInteger;
+ function dwgSaveDXFDPAS(s:gdbstring;dwg:PTSimpleDrawing):Integer;
  var
     mem:TZctnrVectorBytes;
     pu:ptunit;
@@ -201,7 +201,7 @@ end;
                else
                    result:=cmd_error;
  end;
- function dwgQSave_com(dwg:PTSimpleDrawing):GDBInteger;
+ function dwgQSave_com(dwg:PTSimpleDrawing):Integer;
  var s1:GDBString;
  begin
       begin

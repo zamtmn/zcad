@@ -39,9 +39,9 @@ T26:GDBBoolean;(*'Переход 2'*)
 T27:GDBBoolean;(*'Кабель 1'*)
 T28:GDBBoolean;(*'Кабель 2'*)
 
-T31:GDBInteger;(*'Аппарат 1'*)
-T32:GDBInteger;(*'Аппарат 2'*)
-T33:GDBInteger;(*'Аппарат 3'*)
+T31:Integer;(*'Аппарат 1'*)
+T32:Integer;(*'Аппарат 2'*)
+T33:Integer;(*'Аппарат 3'*)
 
 implementation
 

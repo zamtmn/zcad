@@ -34,7 +34,7 @@ uses
 type
   {REGISTEROBJECTTYPE scale_com}
   scale_com =  object(move_com)
-    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger; virtual;
+    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
     procedure scale(a:GDBDouble; button: Byte);
     procedure showprompt(mklick:integer);virtual;
     procedure CommandContinue; virtual;
@@ -141,7 +141,7 @@ commandmanager.executecommandend;
 end;
 end;
 
-function scale_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger;
+function scale_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
 var
     //dispmatr,im,rotmatr:DMatrix4D;
     //ir:itrec;

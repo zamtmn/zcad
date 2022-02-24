@@ -32,7 +32,7 @@ PGDBObjBlockInsert=^GDBObjBlockInsert;
 GDBObjBlockInsert= object(GDBObjComplex)
                      scale:GDBvertex;(*saved_to_shd*)
                      rotate:GDBDouble;(*saved_to_shd*)
-                     index:GDBInteger;(*saved_to_shd*)(*oi_readonly*)(*hidden_in_objinsp*)
+                     index:Integer;(*saved_to_shd*)(*oi_readonly*)(*hidden_in_objinsp*)
                      pblockdef:PGDBObjBlockdef;
                      Name:GDBAnsiString;(*saved_to_shd*)(*oi_readonly*)
                      pattrib:Pointer;(*hidden_in_objinsp*)
@@ -41,14 +41,14 @@ GDBObjBlockInsert= object(GDBObjComplex)
                      constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                      procedure LoadFromDXF(var f: TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
-                     procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                     procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                      procedure CalcObjMatrix;virtual;
                      function Clone(own:Pointer):PGDBObjEntity;virtual;
                      //procedure rtedit(refp:Pointer;mode:Single;dist,wc:gdbvertex);virtual;
                      //procedure rtmodifyonepoint(point:pcontrolpointdesc;tobj:PGDBObjEntity;dist,wc:gdbvertex;ptdata:Pointer);virtual;
                      destructor done;virtual;
                      function GetObjTypeName:GDBString;virtual;
-                     procedure correctobjects(powner:PGDBObjEntity;pinownerarray:GDBInteger);virtual;
+                     procedure correctobjects(powner:PGDBObjEntity;pinownerarray:Integer);virtual;
                      procedure BuildGeometry(var drawing:TDrawingDef);virtual;
                      procedure BuildVarGeometry(var drawing:TDrawingDef);virtual;
 
@@ -445,7 +445,7 @@ procedure GDBObjBlockInsert.BuildVarGeometry;
 {var pblockdef:PGDBObjBlockdef;
     //pvisible,pvisible2:PGDBObjEntity;
     //freelayer:PGDBLayerProp;
-    //i:GDBInteger;
+    //i:Integer;
     //varobject:gdbboolean;}
 begin
 {
@@ -459,7 +459,7 @@ end;
 procedure GDBObjBlockInsert.BuildGeometry;
 var
     pvisible,pvisible2:PGDBObjEntity;
-    //i:GDBInteger;
+    //i:Integer;
     mainowner:PGDBObjSubordinated;
     dc:TDrawContext;
     ir:itrec;
@@ -520,8 +520,8 @@ end;
 procedure GDBObjBlockInsert.LoadFromDXF;
 var
   //s: GDBString;
-  byt{, code, i}: GDBInteger;
-  hlGDBWord: GDBInteger;
+  byt{, code, i}: Integer;
+  hlGDBWord: Integer;
   attrcont: GDBBoolean;
 begin
   hlGDBWord:=0;
@@ -671,9 +671,9 @@ else if not dxfGDBStringload(f,2,byt,name)then {s := }f.readgdbstring;
       index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(name));
       //format;
 end;
-procedure GDBObjBlockInsert.SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
+procedure GDBObjBlockInsert.SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
 //var
-  //i, j: GDBInteger;
+  //i, j: Integer;
   //hv, vv: Byte;
   //s: GDBString;
 begin

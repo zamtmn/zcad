@@ -47,8 +47,8 @@ GDBObjLWPolyline= object(GDBObjWithLocalCS)
                  constructor initnul;
                  procedure LoadFromDXF(var f: TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
-                 procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                 procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
+                 procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  function CalcSquare:GDBDouble;virtual;
                  //**попадаетли данная координата внутрь контура
@@ -137,7 +137,7 @@ begin
 end;
 
 {function GDBObjLWpolyline.InRect;
-var i:GDBInteger;
+var i:Integer;
     ptpv:PGDBPolyVertex2D;
 begin
      if pprojoutbound<>nil then if self.pprojoutbound^.inrect=IRFully then
@@ -206,7 +206,7 @@ end;
 
 function GDBObjLWpolyline.onmouse;
 var
-   ie,i:gdbinteger;
+   ie,i:Integer;
    q3d:PGDBQuad3d;
    p3d,p3dold:PGDBVertex;
    subresult:TInBoundingVolume;
@@ -341,7 +341,7 @@ begin
 end;
 procedure GDBObjLWpolyline.rtsave;
 var p,pold:pgdbvertex2d;
-    i:GDBInteger;
+    i:Integer;
 begin
   inherited;
   p:=Vertex2D_in_OCS_Array.GetParrayAsPointer;
@@ -355,7 +355,7 @@ begin
   //PGDBObjLWPolyline(refp)^.format;
 end;
 procedure GDBObjLWpolyline.rtmodifyonepoint(const rtmod:TRTModifyData);
-var vertexnumber:GDBInteger;
+var vertexnumber:Integer;
     tv,wwc:gdbvertex;
 
     M: DMatrix4D;
@@ -390,7 +390,7 @@ begin
      PGDBArrayVertex2D(Vertex2D_in_OCS_Array.parray)^[vertexnumber].y:=tv.y;}
 end;
 procedure GDBObjLWpolyline.remaponecontrolpoint(pdesc:pcontrolpointdesc);
-var vertexnumber:GDBInteger;
+var vertexnumber:Integer;
 begin
      vertexnumber:=abs(pdesc^.pointtype-os_polymin);
      pdesc.worldcoord:=PGDBArrayVertex(Vertex3D_in_WCS_Array.parray)^[vertexnumber];
@@ -399,7 +399,7 @@ begin
 end;
 procedure GDBObjLWpolyline.AddControlpoints;
 var pdesc:controlpointdesc;
-    i:GDBInteger;
+    i:Integer;
     //pv2d:pGDBvertex2d;
     pv:pGDBvertex;
 begin
@@ -426,7 +426,7 @@ function GDBObjLWpolyline.Clone;
 var tpo: PGDBObjLWPolyline;
     p:PGDBVertex2D;
     pw:PGLLWWidth;
-    i:GDBInteger;
+    i:Integer;
 begin
   Getmem(Pointer(tpo), sizeof(GDBObjLWPolyline));
   tpo^.init({bp.owner}own,vp.Layer, vp.LineWeight,closed);
@@ -493,7 +493,7 @@ begin
      result:=GDBLWPolylineID;
 end;
 procedure GDBObjLWpolyline.DrawGeometry;
-var i,ie: GDBInteger;
+var i,ie: Integer;
     q3d:PGDBQuad3d;
     plw:PGLlwwidth;
     v:gdbvertex;
@@ -624,10 +624,10 @@ end;
 procedure GDBObjLWpolyline.LoadFromDXF;
 var p: gdbvertex2d;
   s: GDBString;
-  byt, code, i: GDBInteger;
+  byt, code, i: Integer;
   hlGDBWord: LongWord;
   tGDBDouble: GDBDouble;
-  numv: GDBInteger;
+  numv: Integer;
 begin
   //inherited init(nil,0, -1);
   hlGDBWord:=0;
@@ -754,7 +754,7 @@ begin
 end;
 
 procedure GDBObjLWpolyline.SaveToDXF;
-var j: GDBInteger;
+var j: Integer;
     tv:gdbvertex;
     //m:DMatrix4D;
 begin
@@ -842,7 +842,7 @@ begin
 end;
 procedure GDBObjLWpolyline.createpoint;
 var
-  i: GDBInteger;
+  i: Integer;
   v:GDBvertex4D;
   v3d:GDBVertex;
   pv:PGDBVertex2D;
@@ -867,7 +867,7 @@ procedure GDBObjLWpolyline.Renderfeedback;
 var tv:GDBvertex;
     tpv:GDBVertex2D;
     ptpv:PGDBVertex;
-    i:GDBInteger;
+    i:Integer;
 begin
   if pprojpoint=nil then
   begin
@@ -888,7 +888,7 @@ begin
 end;
 procedure GDBObjLWpolyline.CalcWidthSegment;
 var
-  i, j, k: GDBInteger;
+  i, j, k: Integer;
   dx, dy, nx, ny, l: GDBDouble;
   v2di,v2dj:PGDBVertex2D;
   plw,plw2:PGLlwwidth;

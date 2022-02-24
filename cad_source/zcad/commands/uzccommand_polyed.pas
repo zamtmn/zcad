@@ -58,9 +58,9 @@ type
     Mode:TPolyEditMode;(*'Mode'*)
     vdist:gdbdouble;(*hidden_in_objinsp*)
     ldist:gdbdouble;(*hidden_in_objinsp*)
-    nearestvertex:GDBInteger;(*hidden_in_objinsp*)
-    nearestline:GDBInteger;(*hidden_in_objinsp*)
-    dir:gdbinteger;(*hidden_in_objinsp*)
+    nearestvertex:Integer;(*hidden_in_objinsp*)
+    nearestline:Integer;(*hidden_in_objinsp*)
+    dir:Integer;(*hidden_in_objinsp*)
     setpoint:gdbboolean;(*hidden_in_objinsp*)
     vvertex:gdbvertex;(*hidden_in_objinsp*)
     lvertex1:gdbvertex;(*hidden_in_objinsp*)
@@ -117,7 +117,7 @@ begin
 end;
 
 
-function _3DPolyEd_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function _3DPolyEd_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
 var
     ptv,ptvprev:pgdbvertex;
     ir:itrec;
@@ -394,7 +394,7 @@ begin
   end
 end;
 
-{function _3DPolyEd_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: Byte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+{function _3DPolyEd_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: Byte;osp:pos_record;mclick:Integer): Integer;
 var po:PGDBObjSubordinated;
 begin
   exit;

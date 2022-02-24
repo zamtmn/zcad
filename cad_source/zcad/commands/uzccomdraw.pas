@@ -117,8 +117,8 @@ type
                             InverseX:GDBBoolean;(*'Inverse X axis dir'*)
                             InverseY:GDBBoolean;(*'Inverse Y axis dir'*)
                             DeadDand:GDBDouble;(*'Deadband'*)
-                            StartNumber:GDBInteger;(*'Start'*)
-                            Increment:GDBInteger;(*'Increment'*)
+                            StartNumber:Integer;(*'Start'*)
+                            Increment:Integer;(*'Increment'*)
                             SaveStart:GDBBoolean;(*'Save start number'*)
                             BaseName:GDBString;(*'Base name sorting devices'*)
                             NumberVar:GDBString;(*'Number variable'*)
@@ -140,12 +140,12 @@ type
   {REGISTEROBJECTTYPE mirror_com}
   mirror_com =  object(copy_com)
     function CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D; virtual;
-    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger; virtual;
+    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
   end;
   {REGISTEROBJECTTYPE copybase_com}
   copybase_com =  object(CommandRTEdObject)
     procedure CommandStart(Operands:TCommandOperands); virtual;
-    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger; virtual;
+    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
   end;
   {REGISTEROBJECTTYPE PasteClip_com}
   PasteClip_com =  object(FloatInsert_com)
@@ -267,10 +267,10 @@ var
 //procedure Finalize;
 implementation
 
-function GetBlockDefNames(var BDefNames:TZctnrVectorStrings;selname:GDBString):GDBInteger;
+function GetBlockDefNames(var BDefNames:TZctnrVectorStrings;selname:GDBString):Integer;
 var pb:PGDBObjBlockdef;
     ir:itrec;
-    i:gdbinteger;
+    i:Integer;
     s:gdbstring;
 begin
      result:=-1;
@@ -287,10 +287,10 @@ begin
            inc(i);
      until pb=nil;
 end;
-function GetSelectedBlockNames(var BDefNames:TZctnrVectorStrings;selname:GDBString;mode:BRMode):GDBInteger;
+function GetSelectedBlockNames(var BDefNames:TZctnrVectorStrings;selname:GDBString;mode:BRMode):Integer;
 var pb:PGDBObjBlockInsert;
     ir:itrec;
-    i:gdbinteger;
+    i:Integer;
     poa:PGDBObjEntityTreeArray;
 begin
      poa:=@drawings.GetCurrentROOT^.ObjArray;
@@ -338,10 +338,10 @@ begin
            pb:=poa^.iterate(ir);
      until pb=nil;
 end;
-function GetStyleNames(var BDefNames:TZctnrVectorStrings;selname:GDBString):GDBInteger;
+function GetStyleNames(var BDefNames:TZctnrVectorStrings;selname:GDBString):Integer;
 var pb:PGDBTextStyle;
     ir:itrec;
-    i:gdbinteger;
+    i:Integer;
 begin
      result:=-1;
      i:=0;
@@ -397,7 +397,7 @@ end;
 procedure BlockRotate_com.Run(pdata:{pointer}PtrInt);
 var pb:PGDBObjBlockInsert;
     ir:itrec;
-    {i,}result:gdbinteger;
+    {i,}result:Integer;
     poa:PGDBObjEntityTreeArray;
     //selname,newname:GDBString;
 begin
@@ -467,7 +467,7 @@ end;
 procedure BlockScale_com.Run(pdata:{pointer}PtrInt);
 var pb:PGDBObjBlockInsert;
     ir:itrec;
-    {i,}result:gdbinteger;
+    {i,}result:Integer;
     poa:PGDBObjEntityTreeArray;
     //selname,newname:GDBString;
 begin
@@ -541,7 +541,7 @@ end;
 procedure BlockReplace_com.Run(pdata:PtrInt);
 var pb:PGDBObjBlockInsert;
     ir:itrec;
-    {i,}result:gdbinteger;
+    {i,}result:Integer;
     poa:PGDBObjEntityTreeArray;
     selname,newname:GDBString;
     DC:TDrawContext;
@@ -1230,7 +1230,7 @@ begin
     ZCMsgCallBackInterface.TextMessage(rsClipboardIsEmpty,TMWOHistoryOut);
 end;
 procedure copybase_com.CommandStart(Operands:TCommandOperands);
-var //i: GDBInteger;
+var //i: Integer;
   {tv,}pobj: pGDBObjEntity;
       ir:itrec;
       counter:integer;
@@ -1260,7 +1260,7 @@ begin
     Commandmanager.executecommandend;
   end;
 end;
-function copybase_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger;
+function copybase_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
 var
     dist:gdbvertex;
     dispmatr:DMatrix4D;
@@ -1271,7 +1271,7 @@ var
     //hgBuffer:HGLOBAL;
 
     //s,suni:gdbstring;
-    //I:gdbinteger;
+    //I:Integer;
       tv,pobj: pGDBObjEntity;
       DC:TDrawContext;
       NeedReCreateClipboardDWG:boolean;
@@ -1319,7 +1319,7 @@ begin
   end;
   result:=cmd_ok;
 end;
-function Insert_com_CommandStart(operands:TCommandOperands):GDBInteger;
+function Insert_com_CommandStart(operands:TCommandOperands):Integer;
 var pb:PGDBObjBlockdef;
     //ir:itrec;
     i:integer;
@@ -1365,7 +1365,7 @@ begin
             end;
   result:=cmd_ok;
 end;
-function Insert_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function Insert_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
 var tb:PGDBObjSubordinated;
     domethod,undomethod:tmethod;
     DC:TDrawContext;
@@ -1494,7 +1494,7 @@ begin
         normalizeplane(plane);
         result:=CreateReflectionMatrix(plane);
 end;
-function Mirror_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger;
+function Mirror_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
 var
     dispmatr:DMatrix4D;
 begin

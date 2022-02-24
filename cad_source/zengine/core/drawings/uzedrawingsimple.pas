@@ -100,8 +100,8 @@ TSimpleDrawing= object(TAbstractDrawing)
                        function GetCurrentLType:PGDBLtypeProp;
                        function GetCurrentTextStyle:PGDBTextStyle;
                        function GetCurrentDimStyle:PGDBDimStyle;
-                       procedure Selector(PEntity,PGripsCreator:PGDBObjEntity;var SelectedObjCount:GDBInteger);virtual;
-                       procedure DeSelector(PV:PGDBObjEntity;var SelectedObjCount:GDBInteger);virtual;
+                       procedure Selector(PEntity,PGripsCreator:PGDBObjEntity;var SelectedObjCount:Integer);virtual;
+                       procedure DeSelector(PV:PGDBObjEntity;var SelectedObjCount:Integer);virtual;
                  end;
 {EXPORT-}
 function CreateSimpleDWG:PTSimpleDrawing;
@@ -399,7 +399,7 @@ begin
      obj^.YouChanged(self);
 end;
 procedure TSimpleDrawing.rtmodify(obj:PGDBObjEntity;md:Pointer;dist,wc:gdbvertex;save:GDBBoolean);
-var i:GDBInteger;
+var i:Integer;
     point:pcontrolpointdesc;
     p:Pointer;
     m,{m2,}mt:DMatrix4D;

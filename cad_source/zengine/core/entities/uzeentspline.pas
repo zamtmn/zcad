@@ -42,7 +42,7 @@ GDBObjSpline= object(GDBObjCurve)
                  Knots:{GDBOpenArrayOfData}TKnotsVector;(*saved_to_shd*)(*hidden_in_objinsp*)
                  AproxPointInWCS:GDBPoint3dArray;(*saved_to_shd*)(*hidden_in_objinsp*)
                  Closed:GDBBoolean;(*saved_to_shd*)
-                 Degree:GDBInteger;(*saved_to_shd*)
+                 Degree:Integer;(*saved_to_shd*)
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:GDBBoolean);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  destructor done;virtual;
@@ -52,9 +52,9 @@ GDBObjSpline= object(GDBObjCurve)
                  procedure startsnap(out osp:os_record; out pdata:Pointer);virtual;
                  function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
 
-                 procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                 procedure SaveToDXFfollow(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                 procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
+                 procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXFfollow(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
                  function GetObjTypeName:GDBString;virtual;
                  function FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
@@ -149,7 +149,7 @@ begin
 end;
 
 procedure GDBObjSpline.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
-var //i,j: GDBInteger;
+var //i,j: Integer;
     ptv: pgdbvertex;
     //tv:gdbvertex;
     //vs:VectorSnap;
@@ -359,7 +359,7 @@ begin
 
 end;
 
-procedure GDBObjSpline.SaveToDXFfollow(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
+procedure GDBObjSpline.SaveToDXFfollow(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
 begin
 end;
 
@@ -402,7 +402,7 @@ Knots.Shrink;
 end;
 {procedure GDBObjPolyline.LoadFromDXF;
 var s, layername: GDBString;
-  byt, code: GDBInteger;
+  byt, code: Integer;
   p: gdbvertex;
   hlGDBWord: LongWord;
   vertexgo: GDBBoolean;

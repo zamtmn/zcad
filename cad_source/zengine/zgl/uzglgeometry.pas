@@ -171,7 +171,7 @@ end;
 
 procedure ZGLGraphix.DrawTextContent(drawer:TZGLAbstractDrawer;content:TDXFEntsInternalStringType;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:GDBDouble;var Outbound:OutBound4V);
 var
-  i: GDBInteger;
+  i: Integer;
   matr,m1: DMatrix4D;
 
   Bound:TBoundingRect;
@@ -183,7 +183,7 @@ var
   ir:itrec;
   pfont:pgdbfont;
   LLSymbolLineIndex:TArrayIndex;
-  symlen:GDBInteger;
+  symlen:Integer;
   sym:word;
   //-ttf-//TDInfo:TTrianglesDataInfo;
 begin

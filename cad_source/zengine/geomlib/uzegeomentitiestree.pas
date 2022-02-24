@@ -47,11 +47,11 @@ end;
             {-}{/NodeDir:TNodeDir;/}
             {-}{/Root:Pointer;/}
             {-}{/NodeData:TGeomTreeNodeData;/}
-            {-}{/LockCounter:GDBInteger;/}
+            {-}{/LockCounter:Integer;/}
                       end;
 {EXPORT-}
 TZEntsManipulator=class
-                   class procedure StoreTreeAdressInOnject(var Entity:TGeomEntity;var Node:GZBInarySeparatedGeometry<TBoundingBox,DVector4D,TGeomTreeNodeData,TZEntsManipulator,TGeomEntity,PTGeomEntity,TEntityArray>;const index:GDBInteger);
+                   class procedure StoreTreeAdressInOnject(var Entity:TGeomEntity;var Node:GZBInarySeparatedGeometry<TBoundingBox,DVector4D,TGeomTreeNodeData,TZEntsManipulator,TGeomEntity,PTGeomEntity,TEntityArray>;const index:Integer);
                    class procedure CorrectNodeBoundingBox(var NodeBB:TBoundingBox;var Entity:TGeomEntity);
                    class function GetEntityBoundingBox(var Entity:TGeomEntity):TBoundingBox;
                    class function GetBBPosition(const sep:DVector4D;const BB:TBoundingBox):TElemPosition;
@@ -66,7 +66,7 @@ var
    SysVarRDSpatialNodeCount:integer=2;
    SysVarRDSpatialNodesDepth:integer=20;
    FirstStageData:TFirstStageData;
-function GetInNodeCount(_InNodeCount:GDBInteger):GDBInteger;
+function GetInNodeCount(_InNodeCount:Integer):Integer;
 implementation
 class function TZEntsManipulator.StoreEntityToArray(var Entity:TGeomEntity;var arr:TEntityArray):TArrayIndex;
 begin
@@ -143,7 +143,7 @@ case axis of
                                           );
 end;
 end;
-class procedure TZEntsManipulator.StoreTreeAdressInOnject(var Entity:TGeomEntity;var Node:GZBInarySeparatedGeometry{-}<TBoundingBox,DVector4D,TgeomTreeNodeData,TZEntsManipulator,TGeomEntity,PTGeomEntity,TEntityArray>;const index:GDBInteger);
+class procedure TZEntsManipulator.StoreTreeAdressInOnject(var Entity:TGeomEntity;var Node:GZBInarySeparatedGeometry{-}<TBoundingBox,DVector4D,TgeomTreeNodeData,TZEntsManipulator,TGeomEntity,PTGeomEntity,TEntityArray>;const index:Integer);
 begin
   {Entity.bp.TreePos.Owner:=@Node;
   Entity.bp.TreePos.SelfIndex:=index;}
@@ -201,7 +201,7 @@ begin
   result:=IterateResult;
 end;
 
-function GetInNodeCount(_InNodeCount:GDBInteger):GDBInteger;
+function GetInNodeCount(_InNodeCount:Integer):Integer;
 begin
      if _InNodeCount>0 then
                            result:=_InNodeCount

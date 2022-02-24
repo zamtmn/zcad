@@ -222,15 +222,15 @@ TObjectUnit=object(TSimpleUnit)
 {REGISTEROBJECTWITHOUTCONSTRUCTORTYPE TUnit}
 TUnit=object(TSimpleUnit)
             InterfaceTypes:typemanager;
-            //ImplementationUses:GDBInteger;
+            //ImplementationUses:Integer;
             ImplementationTypes:typemanager;
             ImplementationVariables: varmanager;
 
             constructor init(nam:TInternalScriptString);
-            function TypeIndex2PTD(ind:GDBinteger):PUserTypeDescriptor;virtual;
+            function TypeIndex2PTD(ind:Integer):PUserTypeDescriptor;virtual;
             function TypeName2PTD(n: TInternalScriptString):PUserTypeDescriptor;virtual;
             function ObjectTypeName2PTD(n: TInternalScriptString):PObjectDescriptor;virtual;
-            function AssignToSymbol(var psymbol;symbolname:TInternalScriptString):GDBInteger;
+            function AssignToSymbol(var psymbol;symbolname:TInternalScriptString):Integer;
             function SavePasToMem(var membuf:TZctnrVectorBytes):PUserTypeDescriptor;virtual;
             destructor done;virtual;
             procedure free;virtual;
@@ -248,13 +248,13 @@ var
   SysUnit:PTUnit=nil;
   SysVarUnit:PTUnit=nil;
   SavedUnit,DBUnit,DWGDBUnit,DWGUnit:PTUnit;
-  BaseTypesEndIndex:GDBInteger;
-  OldTypesCount:GDBInteger;
+  BaseTypesEndIndex:Integer;
+  OldTypesCount:Integer;
   VarCategory:TZctnrVectorStrings;
   CategoryCollapsed:TZctnrVectorBytes;
   CategoryUnknownCOllapsed:boolean;
 
-function getpattern(ptd:ptdarray; max:GDBInteger;var line:TInternalScriptString; out typ:GDBInteger):PTZctnrVectorStrings;
+function getpattern(ptd:ptdarray; max:Integer;var line:TInternalScriptString; out typ:Integer):PTZctnrVectorStrings;
 function ObjOrRecordRead(TranslateFunc:TTranslateFunction;var f: TZctnrVectorBytes; var line,GDBStringtypearray:TInternalScriptString; var fieldoffset: SmallInt; ptd:PRecordDescriptor):GDBBoolean;
 function GetPVarMan: Pointer; export;
 function FindCategory(category:TInternalScriptString;var catname:TInternalScriptString):Pointer;
@@ -297,7 +297,7 @@ end;
 function GetIntegerFromSavedUnit(name,suffix:string;def,min,max:integer):integer;
 var
   pvd:pvardesk;
-  pint:PGDBInteger;
+  pint:PInteger;
 begin
   pvd:=SavedUnit.FindValue(name+suffix);
   if assigned(pvd) then begin
@@ -327,14 +327,14 @@ begin
 end;
 procedure StoreIntegerToSavedUnit(name,suffix:string;value:integer);
 var
-   pint:PGDBInteger;
+   pint:PInteger;
    pvd:pvardesk;
    vn:TInternalScriptString;
 begin
      vn:=name+suffix;
      pvd:=SavedUnit.FindValue(vn);
      if not assigned(pvd) then
-       pint:=SavedUnit.CreateVariable(vn,'GDBInteger').data.Addr.instance
+       pint:=SavedUnit.CreateVariable(vn,'Integer').data.Addr.instance
      else
        pint:=pvd^.data.Addr.Instance;
      pint^:=value;
@@ -355,7 +355,7 @@ begin
 end;
 function GetBoundsFromSavedUnit(name:string;w,h:integer):Trect;
 var
-   pint:PGDBInteger;
+   pint:PInteger;
    pvd:pvardesk;
 begin
      result:=rect(0,0,100,100);
@@ -388,7 +388,7 @@ begin
 end;
 procedure StoreBoundsToSavedUnit(name:string;tr:Trect);
 var
-   pint:PGDBInteger;
+   pint:PInteger;
    vn:TInternalScriptString;
    pvd:pvardesk;
 begin
@@ -397,7 +397,7 @@ begin
      if assigned(pvd) then
        pint:=SavedUnit.FindValue(vn).data.Addr.Instance
      else
-       pint:=SavedUnit.CreateVariable(vn,'GDBInteger').data.Addr.instance;
+       pint:=SavedUnit.CreateVariable(vn,'Integer').data.Addr.instance;
      pint^:=tr.Left;
 
      vn:=name+SuffTop;
@@ -405,7 +405,7 @@ begin
      if assigned(pvd) then
        pint:=SavedUnit.FindValue(vn).data.Addr.Instance
      else
-       pint:=SavedUnit.CreateVariable(vn,'GDBInteger').data.Addr.instance;
+       pint:=SavedUnit.CreateVariable(vn,'Integer').data.Addr.instance;
      pint^:=tr.Top;
 
      vn:=name+SuffWidth;
@@ -413,7 +413,7 @@ begin
      if assigned(pvd) then
        pint:=SavedUnit.FindValue(vn).data.Addr.Instance
      else
-       pint:=SavedUnit.CreateVariable(vn,'GDBInteger').data.Addr.instance;
+       pint:=SavedUnit.CreateVariable(vn,'Integer').data.Addr.instance;
      pint^:=tr.Right-tr.Left;
 
      vn:=name+SuffHeight;
@@ -421,7 +421,7 @@ begin
      if assigned(pvd) then
        pint:=SavedUnit.FindValue(vn).data.Addr.Instance
      else
-       pint:=SavedUnit.CreateVariable(vn,'GDBInteger').data.Addr.instance;
+       pint:=SavedUnit.CreateVariable(vn,'Integer').data.Addr.instance;
      pint^:=tr.Bottom-tr.Top;
 end;
 procedure TSimpleUnit.CopyTo;
@@ -920,7 +920,7 @@ function varmanager.findvardesc2(varname: TInternalScriptString):TInVectorAddr;
 var
   //pblock: pdblock;
   pdesc: pvardesk;
-  offset: GDBInteger;
+  offset: Integer;
   temp: pvardesk;
   bc:PUserTypeDescriptor;
       ir:itrec;
@@ -937,8 +937,8 @@ begin
    result.SetInstance(nil,0);
 end;
 
-function getpattern(ptd:ptdarray; max:GDBInteger;var line:TInternalScriptString; out typ:GDBInteger):PTZctnrVectorStrings;
-var i:GDBInteger;
+function getpattern(ptd:ptdarray; max:Integer;var line:TInternalScriptString; out typ:Integer):PTZctnrVectorStrings;
+var i:Integer;
     parseresult:PTZctnrVectorStrings;
     parseerror:GDBBoolean;
 begin
@@ -968,10 +968,10 @@ type
     trrstate=(fields,metods);
 var parseerror{,parsesuberror}:GDBBoolean;
     parseresult{,parsesubresult}:PTZctnrVectorStrings;
-    count,typ:GDBInteger;
+    count,typ:Integer;
     {typename,}oldline, fieldname, {fieldvalue,} fieldtype, {sub, indmins, indmaxs, arrind1,}rname,wname,functionname,functionoperands: TInternalScriptString;
     fieldgdbtype:PUserTypeDescriptor;
-    i: GDBInteger;
+    i: Integer;
 //  indmin, indcount, size: LongWord;
 //  etd:PUserTypeDescriptor;
 //  addtype:GDBBoolean;
@@ -1207,9 +1207,9 @@ function varmanager.findfieldcustom;
 var
   path,{sp,} {typeGDBString,} sub, {field,} inds: TInternalScriptString;
   oper: ansichar;
-  i, oldi, j, indexcount: GDBInteger;
+  i, oldi, j, indexcount: Integer;
   pind: parrayindex;
-  ind, sum: GDBInteger;
+  ind, sum: Integer;
   //sizeinmem: LongWord;
   //deb1,deb2:shortString;
   pt:PTUserTypeDescriptor;
@@ -1422,7 +1422,7 @@ function varmanager.findvardesc(varname: TInternalScriptString): pvardesk;
 var
   //pblock: pdblock;
   pdesc: pvardesk;
-  offset: GDBInteger;
+  offset: Integer;
   temp: pvardesk;
   bc:PUserTypeDescriptor;
       ir:itrec;

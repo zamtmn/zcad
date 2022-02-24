@@ -85,7 +85,7 @@ type
     procedure MaceItemCurrent(ListItem:TListItem);
     procedure FillFontsSelector(currentitem:string;currentitempfont:PGDBfont);
     procedure onrsz(Sender: TObject);
-    procedure countstyle(ptextstyle:PGDBTextStyle;out e,b,inDimStyles:GDBInteger);
+    procedure countstyle(ptextstyle:PGDBTextStyle;out e,b,inDimStyles:Integer);
   private
     changedstamp:boolean;
     //EditedItem:TListItem;
@@ -420,18 +420,18 @@ begin
      DescLabel.Caption:=Format(rsCountTStylesFound,[tscounter]);
 end;
 
-procedure TextStyleCounter(const PInstance,PCounted:Pointer;var Counter:GDBInteger);
+procedure TextStyleCounter(const PInstance,PCounted:Pointer;var Counter:Integer);
 begin
      if (PGDBObjEntity(PInstance)^.GetObjType=GDBMTextID)or(PGDBObjEntity(PInstance)^.GetObjType=GDBTextID) then
      if PCounted=PGDBObjText(PInstance)^.TXTStyleIndex then
                                                            inc(Counter);
 end;
-procedure TextStyleCounterInDimStyles(const PInstance,PCounted:Pointer;var Counter:GDBInteger);
+procedure TextStyleCounterInDimStyles(const PInstance,PCounted:Pointer;var Counter:Integer);
 begin
      //if PCounted=PGDBDimStyle(PInstance)^.Text.DIMTXSTY then
      //                                                      inc(Counter);
 end;
-procedure TTextStylesForm.countstyle(ptextstyle:PGDBTextStyle;out e,b,inDimStyles:GDBInteger);
+procedure TTextStylesForm.countstyle(ptextstyle:PGDBTextStyle;out e,b,inDimStyles:Integer);
 var
    pdwg:PTSimpleDrawing;
 begin
@@ -518,7 +518,7 @@ procedure TTextStylesForm.DeleteItem(Sender: TObject);
 var
    pstyle:PGDBTextStyle;
    pdwg:PTSimpleDrawing;
-   inEntities,inBlockTable,indimstyles:GDBInteger;
+   inEntities,inBlockTable,indimstyles:Integer;
    //domethod,undomethod:tmethod;
 begin
   pdwg:=drawings.GetCurrentDWG;
@@ -559,7 +559,7 @@ procedure TTextStylesForm.PurgeTStyles(Sender: TObject);
 var
    i,purgedcounter:integer;
    ProcessedItem:TListItem;
-   inEntities,inBlockTable,indimstyles:GDBInteger;
+   inEntities,inBlockTable,indimstyles:Integer;
    PCurrentStyle:PGDBTextStyle;
 begin
      i:=0;

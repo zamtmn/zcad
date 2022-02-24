@@ -7,7 +7,7 @@ var
 
    DWG_CLayer:PGDBLayerProp;
    DWG_CLinew:TGDBLineWeight;
-   DWG_CColor:GDBInteger;
+   DWG_CColor:Integer;
    DWG_CLType:PGDBLtypeProp;
    DWG_CTStyle:PGDBTextStyle;
    DWG_CLTScale:GDBDouble;

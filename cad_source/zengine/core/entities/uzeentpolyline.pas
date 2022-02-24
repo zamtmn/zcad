@@ -38,8 +38,8 @@ GDBObjPolyline= object(GDBObjCurve)
                  procedure startsnap(out osp:os_record; out pdata:Pointer);virtual;
                  function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
 
-                 procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                 procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
+                 procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
                  function GetObjTypeName:GDBString;virtual;
                  function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
@@ -160,7 +160,7 @@ end;
 function GDBObjPolyline.Clone;
 var tpo: PGDBObjPolyLine;
     p:pgdbvertex;
-    i:GDBInteger;
+    i:Integer;
 begin
   Getmem(Pointer(tpo), sizeof(GDBObjPolyline));
   tpo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight,closed);
@@ -192,9 +192,9 @@ begin
 end;
 procedure GDBObjPolyline.LoadFromDXF;
 var s{, layername}: GDBString;
-  byt{, code}: GDBInteger;
+  byt{, code}: Integer;
   //p: gdbvertex;
-  hlGDBWord: GDBinteger;
+  hlGDBWord: Integer;
   vertexgo: GDBBoolean;
   tv:gdbvertex;
 begin
@@ -232,7 +232,7 @@ vertexarrayinocs.Shrink;
 end;
 {procedure GDBObjPolyline.LoadFromDXF;
 var s, layername: GDBString;
-  byt, code: GDBInteger;
+  byt, code: Integer;
   p: gdbvertex;
   hlGDBWord: LongWord;
   vertexgo: GDBBoolean;

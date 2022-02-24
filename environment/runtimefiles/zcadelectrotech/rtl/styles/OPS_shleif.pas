@@ -17,17 +17,17 @@ var
   GC_HDShortNameTemplate:GDBString;(*'Шаблон короткого имени головного устройства'*)
   GC_HDGroup:GDBString;(*'Группа в головном устройстве'*)
   GC_HDGroupTemplate:GDBString;(*'Шаблон группы'*)
-  SerialConnection:GDBInteger;
-  GC_NumberInGroup:GDBInteger;(*'Номер устройства в группе'*)
+  SerialConnection:Integer;
+  GC_NumberInGroup:Integer;(*'Номер устройства в группе'*)
   GC_Metric:GDBString;
   DB_link:GDBString;(*'Материал'*)
-  LENGTH_RoundTo:GDBInteger;(*'Округлять до'*)
+  LENGTH_RoundTo:Integer;(*'Округлять до'*)
   LENGTH_Add:GDBDouble;(*'Добавить к длине'*)
   LENGTH_Scale:GDBDouble;(*'Масштаб'*)
   CABLE_Type:TCableType;(*'Тип'*)
-  CABLE_Segment:GDBInteger;(*'Сегмент'*)
-  CABLE_WireCount:GDBInteger;(*'Число жил'*)
-  CABLE_TotalCD:GDBInteger;(*'Подключено устройств'*)
+  CABLE_Segment:Integer;(*'Сегмент'*)
+  CABLE_WireCount:Integer;(*'Число жил'*)
+  CABLE_TotalCD:Integer;(*'Подключено устройств'*)
   AmountD:GDBDouble;(*'Длина'*)
 implementation
 begin

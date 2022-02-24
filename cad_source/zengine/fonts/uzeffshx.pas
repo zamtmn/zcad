@@ -35,18 +35,18 @@ function createnewfontfromshx(name:GDBString;var pf:PGDBfont):GDBBoolean;
 
 implementation
 
-function createsymbol(pf:PGDBfont;symbol:GDBInteger;pshxdata:system.pbyte;unicode:boolean;symname:gdbstring):GDBInteger;
+function createsymbol(pf:PGDBfont;symbol:Integer;pshxdata:system.pbyte;unicode:boolean;symname:gdbstring):Integer;
 var
-  i,sizeshp,sizeshx,stackheap:GDBInteger;
+  i,sizeshp,sizeshx,stackheap:Integer;
   baselen,ymin,ymax,xmin,xmax,x,y,x1,y1,xb,yb,r,startangle,angle,normal,hordlen,tgl:fontfloat;
   stack:array[0..4,0..1] of fontfloat;
   tr:tarcrtmodify;
   hi,lo,byt,byt2,startoffset,endoffset:Byte;
-  subsymbol:GDBInteger;
-  int:GDBInteger;
+  subsymbol:Integer;
+  int:Integer;
   dx,dy:Shortint;
   draw:GDBBoolean;
-  onlyver:GDBInteger;
+  onlyver:Integer;
   psyminfo,psubsyminfo:PGDBsymdolinfo;
   inccounter:integer;
   tbool:boolean;

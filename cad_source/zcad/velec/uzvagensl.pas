@@ -194,8 +194,8 @@ type
       //** Создания списка ребер графа
       PTEdgeGraph=^TEdgeGraph;
       TEdgeGraph=record
-                         VIndex1:GDBInteger; //номер 1-й вершниы по списку
-                         VIndex2:GDBInteger; //номер 2-й вершниы по списку
+                         VIndex1:Integer; //номер 1-й вершниы по списку
+                         VIndex2:Integer; //номер 2-й вершниы по списку
                          VPoint1:GDBVertex;  //координаты 1й вершниы
                          VPoint2:GDBVertex;  //координаты 2й вершниы
                          edgeLength:GDBDouble; // длина ребра

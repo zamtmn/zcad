@@ -18,7 +18,7 @@ T7:GDBBoolean;(*'6 этаж'*)
 T8:GDBBoolean;(*'7 этаж'*)
 T9:GDBBoolean;(*'8 этаж'*)
 
-T31:GDBInteger;(*'Щит'*)
+T31:Integer;(*'Щит'*)
 
 implementation
 

@@ -91,7 +91,7 @@ begin
 end;
 function GetPartOfPath(out part:GDBString;var path:GDBString;const separator:GDBString):GDBString;
 var
-   i:GDBInteger;
+   i:Integer;
 begin
            i:=pos(separator,path);
            if i<>0 then

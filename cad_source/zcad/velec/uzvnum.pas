@@ -266,7 +266,7 @@ PTDeviceInfoSubGraph=^TDeviceInfoSubGraph;
       //** Создания устройств к кому подключаются
       //PTHeadDeviceInfo=^THeadDeviceInfo;//с классами эта байда уже не нужна, т.к. класс сам по себе уже указатель
       THeadDeviceInfo=class
-                         num:GDBInteger;
+                         num:Integer;
                          name:String;
                          shortName:String;
                          listGroup:TListHeadGroup; //список подчиненных устройств
@@ -313,8 +313,8 @@ PTDeviceInfoSubGraph=^TDeviceInfoSubGraph;
       ////** Создания списка ребер графа для графа анализа групп устройств
       //PTInfoEdgeSubGraph=^TInfoEdgeSubGraph;
       //TInfoEdgeSubGraph=record
-      //                   VIndex1:GDBInteger; //номер 1-й вершниы по списку
-      //                   VIndex2:GDBInteger; //номер 2-й вершниы по списку
+      //                   VIndex1:Integer; //номер 1-й вершниы по списку
+      //                   VIndex2:Integer; //номер 2-й вершниы по списку
       //                   VPoint1:GDBVertex;  //координаты 1й вершниы
       //                   VPoint2:GDBVertex;  //координаты 2й вершниы
       //                   edgeLength:GDBDouble; // длина ребра
@@ -1027,7 +1027,7 @@ begin
        pvd:=FindVariableInEnt(polyObj,'CABLE_Segment');
        if pvd<>nil then
           begin
-             pgdbinteger(pvd^.data.Addr.Instance)^:=numSegment;
+             PInteger(pvd^.data.Addr.Instance)^:=numSegment;
           end;
 
 

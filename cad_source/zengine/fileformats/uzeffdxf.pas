@@ -61,7 +61,7 @@ const
      (entname:'SPLINE'),
      (entname:'DIMENSION')
      );}
-var FOC:GDBInteger;
+var FOC:Integer;
     CreateExtLoadData:TCreateExtLoadData=nil;
     ClearExtLoadData:TProcessExtLoadData=nil;
     FreeExtLoadData:TProcessExtLoadData=nil;
@@ -72,8 +72,8 @@ procedure LoadZCP(name: GDBString; {gdb: PGDBDescriptor}var drawing:TSimpleDrawi
 implementation
 //uses GDBBlockDef,UGDBLayerArray,fileformatsmanager;
 
-function IsIgnoredEntity(name:GDBString):GDBInteger;
-var i:GDBInteger;
+function IsIgnoredEntity(name:GDBString):Integer;
+var i:Integer;
 begin
      result:=-1;
      for i:=1 to acadentignoredcol do
@@ -84,8 +84,8 @@ begin
           end;
 end;
 
-{function entname2GDBID(name:GDBString):GDBInteger;
-var i:GDBInteger;
+{function entname2GDBID(name:GDBString):Integer;
+var i:Integer;
 begin
      result:=-1;
      for i:=1 to acadentsupportcol do
@@ -95,11 +95,11 @@ begin
                exit;
           end;
 end;}
-procedure gotodxf(var f: TZctnrVectorBytes; fcode: GDBInteger; fname: GDBString);
+procedure gotodxf(var f: TZctnrVectorBytes; fcode: Integer; fname: GDBString);
 var
   byt: Byte;
   s: GDBString;
-  error: GDBInteger;
+  error: Integer;
 begin
   if fname<>'' then
   begin
@@ -132,7 +132,7 @@ procedure readvariables(var drawing:TSimpleDrawing;var f: TZctnrVectorBytes;var 
 var
   {byt: Byte;}
   s: GDBString;
-  {error: GDBInteger;}
+  {error: Integer;}
 begin
      if LoadMode=TLOLoad then
      begin
@@ -195,7 +195,7 @@ const
 var
   group: integer;
   s,varname: GDBString;
-  error,varcount: GDBInteger;
+  error,varcount: Integer;
   ParseMode:TDXFHeaderMode;
   //grouppsarray:array[0..maxlines]of integer;
   valuesarray:array[0..maxlines]of string;
@@ -284,11 +284,11 @@ begin
   end;
 end;
 
-function GoToDXForENDTAB(var f: TZctnrVectorBytes; fcode: GDBInteger; fname: GDBString):boolean;
+function GoToDXForENDTAB(var f: TZctnrVectorBytes; fcode: Integer; fname: GDBString):boolean;
 var
   byt: Byte;
   s: GDBString;
-  error: GDBInteger;
+  error: Integer;
 begin
   result:=false;
   while f.notEOF do
@@ -311,11 +311,11 @@ begin
 end;
 procedure addentitiesfromdxf(var f: TZctnrVectorBytes;exitGDBString: GDBString;owner:PGDBObjSubordinated;var drawing:TSimpleDrawing;var context:TIODXFLoadContext);
 var
-//  byt,LayerColor: GDBInteger;
+//  byt,LayerColor: Integer;
   s{, sname, sx1, sy1, sz1,scode,LayerName}: GDBString;
-//  ErrorCode,GroupCode: GDBInteger;
+//  ErrorCode,GroupCode: Integer;
 group:integer;
-objid: GDBInteger;
+objid: Integer;
   pobj,postobj: PGDBObjEntity;
 //  tp: PGDBObjBlockdef;
   newowner:PGDBObjSubordinated;
@@ -514,11 +514,11 @@ begin
 end;
 procedure addfromdxf12(var f:TZctnrVectorBytes;exitGDBString: GDBString;owner:PGDBObjSubordinated;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 var
-  {byt,}LayerColor: GDBInteger;
+  {byt,}LayerColor: Integer;
   s, sname{, sx1, sy1, sz1},scode,LayerName: GDBString;
-  ErrorCode,GroupCode: GDBInteger;
+  ErrorCode,GroupCode: Integer;
 
-//objid: GDBInteger;
+//objid: Integer;
 //  pobj,postobj: PGDBObjEntity;
   tp: PGDBObjBlockdef;
   //phandlearray: pdxfhandlerecopenarray;
@@ -610,7 +610,7 @@ end;
 procedure ReadLTStyles(var s:ansiString;cltype:string;var f:TZctnrVectorBytes; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var context:TIODXFLoadContext);
 var
    pltypeprop:PGDBLtypeProp;
-   byt: GDBInteger;
+   byt: Integer;
    dashinfo:TDashInfo;
    shapenumber,stylehandle:TDWGHandle;
    PSP:PShapeProp;
@@ -618,7 +618,7 @@ var
    BShapeProp:BasicSHXDashProp;
    txtstr:string;
    TempDouble:GDBDouble;
-   flags: GDBInteger;
+   flags: Integer;
    DWGHandle:TDWGHandle;
    len:double;
 begin
@@ -774,7 +774,7 @@ begin
 end;
 procedure ReadLayers(var s:ansistring;clayer:string;var f:TZctnrVectorBytes; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 var
-byt: GDBInteger;
+byt: Integer;
 lname,desk: String;
 nulisread:boolean;
 player:PGDBLayerProp;
@@ -860,8 +860,8 @@ var
    tstyle:GDBTextStyle;
    ptstyle:PGDBTextStyle;
    DWGHandle:TDWGHandle;
-   byt: GDBInteger;
-   flags: GDBInteger;
+   byt: Integer;
+   flags: Integer;
    FontFile,FontFamily: String;
    ti:PGDBTextStyle;
    pltypeprop:PGDBLtypeProp;
@@ -998,9 +998,9 @@ begin
 end;
 procedure ReadVport(var s:ansistring;var f:TZctnrVectorBytes; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 var
-   byt: GDBInteger;
+   byt: Integer;
    active:boolean;
-   flags: GDBInteger;
+   flags: Integer;
 begin
      debugln('{D+}[DXF_CONTENTS]ReadVport');
      if GoToDXForENDTAB(f, 0, 'VPORT') then
@@ -1236,8 +1236,8 @@ end;
 
 procedure addfromdxf2000(var f:TZctnrVectorBytes; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var context:TIODXFLoadContext;DWGVarsDict:TGDBString2GDBStringDictionary);
 var
-  byt: GDBInteger;
-  error: GDBInteger;
+  byt: Integer;
+  error: Integer;
   US, sname: String;
   s:ansistring;
   tp: PGDBObjBlockdef;
@@ -1653,9 +1653,9 @@ end;
 function savedxf2000(SavedFileName,TemplateFileName:String;var drawing:TSimpleDrawing):boolean;
 var
   templatefile: TZctnrVectorBytes;
-  outstream: {GDBInteger}TZctnrVectorBytes;
+  outstream: {Integer}TZctnrVectorBytes;
   groups, values, {ucvalues,}ts: GDBString;
-  groupi, valuei, intable,attr: GDBInteger;
+  groupi, valuei, intable,attr: Integer;
   temphandle,temphandle2,{temphandle3,temphandle4,}{handle,}lasthandle,vporttablehandle,plottablefansdle,dimtablehandle: TDWGHandle;
   i: integer;
   OldHandele2NewHandle:TMapHandleToHandle;
@@ -2783,9 +2783,9 @@ end;
 procedure SaveZCP(name: GDBString; {gdb: PGDBDescriptor}var drawing:TSimpleDrawing);
 (*var
 //  memsize:longint;
-//  objcount:GDBInteger;
+//  objcount:Integer;
 //  pmem,tmem:Pointer;
-  outfile:GDBInteger;
+  outfile:Integer;
   memorybuf:PTZctnrVectorBytes;
   //s:ZCPHeader;
   //linkbyf:PGDBOpenArrayOfTObjLinkRecord;
@@ -2833,9 +2833,9 @@ begin
 end;
 procedure LoadZCP(name: GDBString; {gdb: PGDBDescriptor}var drawing:TSimpleDrawing);
 //var
-//  objcount:GDBInteger;
+//  objcount:Integer;
 //  pmem,tmem:Pointer;
-//  infile:GDBInteger;
+//  infile:Integer;
 //  head:ZCPheader;
   //memorybuf:TZctnrVectorBytes;
   //FileHeader:ZCPHeader;

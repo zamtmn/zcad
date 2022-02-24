@@ -241,13 +241,13 @@ function TestModul_com(operands:TCommandOperands):TCommandResult;
     stVertexIndex:integer;
 
 
-    count: GDBInteger;
+    count: Integer;
     pcabledesk:PTCableDesctiptor;
     PCableSS:PGDBObjCable;
     ir,ir_inNodeArray,irSegment,irCable:itrec;
     pvCab,pvmc:pvardesk;
 //    currentunit:TUnit;
-//    ucount:gdbinteger;
+//    ucount:Integer;
 //    ptn:PGDBObjDevice;
 //    p:pointer;
     cman:TCableManager;
@@ -389,7 +389,7 @@ begin
      currentcoord.y:=currentcoord.y+dy+uy;
 end;
 
-function InsertDat(datname,sname,ename:GDBString;datcount:GDBInteger;var currentcoord:GDBVertex; var root:GDBObjRoot):pgdbobjline;
+function InsertDat(datname,sname,ename:GDBString;datcount:Integer;var currentcoord:GDBVertex; var root:GDBObjRoot):pgdbobjline;
 var
 //   pv:pGDBObjDevice;
 //   lx,rx,uy,dy:GDBDouble;
@@ -944,7 +944,7 @@ begin
 end;
 
 function getListGroupGraph():TListGraph;
-//function OPS_SPBuild_com(Operands:pansichar):GDBInteger;
+//function OPS_SPBuild_com(Operands:pansichar):Integer;
 var
 
 
@@ -960,13 +960,13 @@ var
 
     graphVizPt:GDBVertex;
 
-    count: GDBInteger;
+    count: Integer;
     pcabledesk:PTCableDesctiptor;
     PCableSS:PGDBObjCable;
     ir,ir_inNodeArray,irSegment,irCable:itrec;
     pvCab:pvardesk;
 //    currentunit:TUnit;
-//    ucount:gdbinteger;
+//    ucount:Integer;
 //    ptn:PGDBObjDevice;
 //    p:pointer;
     cman:TCableManager;

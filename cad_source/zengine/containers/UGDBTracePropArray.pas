@@ -27,7 +27,7 @@ type
   traceprop=record
     trace:gdbboolean;
     tmouse: GDBDouble;
-    dmouse: GDBInteger;
+    dmouse: Integer;
     dir: GDBVertex;
     dispraycoord: GDBVertex;
     worldraycoord: GDBVertex;

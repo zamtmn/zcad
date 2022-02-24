@@ -8,7 +8,7 @@ usescopy objname;
 
 var
 
-T1:GDBInteger;(*'Длина'*)
+T1:Integer;(*'Длина'*)
 
 implementation
 

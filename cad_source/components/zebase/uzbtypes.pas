@@ -25,7 +25,7 @@ const
      ObjN_NotRecognized='NotRecognized';
 type
 TZMessageID=type integer;
-TProcCounter=procedure(const PInstance,PCounted:Pointer;var Counter:GDBInteger);
+TProcCounter=procedure(const PInstance,PCounted:Pointer;var Counter:Integer);
 TControlPointAttr=(CPA_Strech);
 TControlPointAttrs=set of TControlPointAttr;
 {EXPORT+}
@@ -85,21 +85,21 @@ tmatrixs=record
                    pprojMatrix:PDMatrix4D;
                    pviewport:PIMatrix4;
 end;
-TActulity=GDBInteger;
+TActulity=Integer;
 TEntUpgradeInfo=LongWord;
 PGDBBaseCamera=^GDBBaseCamera;
 {REGISTEROBJECTTYPE GDBBaseCamera}
 GDBBaseCamera=object(GDBaseObject)
                 modelMatrix:DMatrix4D;
                 fovy:GDBDouble;
-                totalobj:GDBInteger;
+                totalobj:Integer;
                 prop:GDBCameraBaseProp;
                 anglx,angly,zmin,zmax:GDBDouble;
                 projMatrix:DMatrix4D;
                 viewport:IMatrix4;
                 clip:DMatrix4D;
                 frustum:ClipArray;
-                infrustum:GDBInteger;
+                infrustum:Integer;
                 obj_zmax,obj_zmin:GDBDouble;
                 DRAWNOTEND:GDBBoolean;
                 DRAWCOUNT:TActulity;
@@ -119,7 +119,7 @@ GDBNamedObject=object(GDBaseObject)
                      function GetName:GDBString;
                      function GetFullName:GDBString;virtual;
                      procedure SetDefaultValues;virtual;
-                     procedure IterateCounter(PCounted:Pointer;var Counter:GDBInteger;proc:TProcCounter);virtual;
+                     procedure IterateCounter(PCounted:Pointer;var Counter:Integer;proc:TProcCounter);virtual;
                end;
 PGLLWWidth=^GLLWWidth;
 {REGISTERRECORDTYPE GLLWWidth}
@@ -145,7 +145,7 @@ GDBArrayVertex=packed array[0..0] of GDBvertex;
   pcontrolpointdesc=^controlpointdesc;
   {REGISTERRECORDTYPE controlpointdesc}
   controlpointdesc=record
-                         pointtype:GDBInteger;
+                         pointtype:Integer;
                          attr:TControlPointAttrs;
                          pobject:Pointer;
                          worldcoord:GDBvertex;
@@ -161,14 +161,14 @@ GDBArrayVertex=packed array[0..0] of GDBvertex;
   {REGISTERRECORDTYPE tcontrolpointdist}
   tcontrolpointdist=record
     pcontrolpoint:pcontrolpointdesc;
-    disttomouse:GDBInteger;
+    disttomouse:Integer;
   end;
   {REGISTERRECORDTYPE TPolyData}
   TPolyData=record
-                  //nearestvertex:gdbinteger;
-                  //nearestline:gdbinteger;
-                  //dir:gdbinteger;
-                  index:gdbinteger;
+                  //nearestvertex:integer;
+                  //nearestline:integer;
+                  //dir:integer;
+                  index:integer;
                   wc:GDBVertex;
             end;
   TLoadOpt=(TLOLoad,TLOMerge);
@@ -199,17 +199,17 @@ GDBArrayVertex=packed array[0..0] of GDBvertex;
 PGDBsymdolinfo=^GDBsymdolinfo;
 {REGISTERRECORDTYPE GDBsymdolinfo}
 GDBsymdolinfo=record
-    LLPrimitiveStartIndex: GDBInteger;
-    LLPrimitiveCount: GDBInteger;
+    LLPrimitiveStartIndex: Integer;
+    LLPrimitiveCount: Integer;
     NextSymX, SymMaxY,SymMinY, SymMaxX,SymMinX, w, h: GDBDouble;
     Name:GDBString;
-    Number:GDBInteger;
+    Number:Integer;
     LatestCreate:GDBBoolean;
   end;
 PGDBUNISymbolInfo=^GDBUNISymbolInfo;
 {REGISTERRECORDTYPE GDBUNISymbolInfo}
 GDBUNISymbolInfo=record
-    symbol:GDBInteger;
+    symbol:Integer;
     symbolinfo:GDBsymdolinfo;
   end;
 TTextJustify=(jstl(*'TopLeft'*),
@@ -231,7 +231,7 @@ TDWGHandle=QWord;
 PTGDBLineWeight=^TGDBLineWeight;
 TGDBLineWeight=SmallInt;
 PTGDBOSMode=^TGDBOSMode;
-TGDBOSMode=GDBInteger;
+TGDBOSMode=Integer;
 TGDB3StateBool=(T3SB_Fale(*'False'*),T3SB_True(*'True'*),T3SB_Default(*'Default'*));
 PTGDB3StateBool=^TGDB3StateBool;
 PTFaceTypedData=^TFaceTypedData;
@@ -240,21 +240,21 @@ TFaceTypedData=record
                  Instance: Pointer;
                  PTD: Pointer;
                 end;
-TLLPrimitiveAttrib=GDBInteger;
+TLLPrimitiveAttrib=Integer;
 PTLLVertexIndex=^TLLVertexIndex;
-TLLVertexIndex=GDBInteger;
+TLLVertexIndex=Integer;
 PTGDBIntegerOverrider=^TGDBIntegerOverrider;
 {REGISTERRECORDTYPE TGDBIntegerOverrider}
 TGDBIntegerOverrider=record
                       Enable:GDBBoolean;(*'Enable'*)
-                      Value:GDBInteger;(*'New value'*)
+                      Value:Integer;(*'New value'*)
                      end;
 {REGISTERRECORDTYPE TImageDegradation}
 TImageDegradation=record
                         RD_ID_Enabled:PGDBBoolean;(*'Enabled'*)
                         RD_ID_CurrentDegradationFactor:PGDBDouble;(*'Current degradation factor'*)(*oi_readonly*)
                         RD_ID_MaxDegradationFactor:PGDBDouble;(*'Max degradation factor'*)
-                        RD_ID_PrefferedRenderTime:PGDBInteger;(*'Prefered rendertime'*)
+                        RD_ID_PrefferedRenderTime:PInteger;(*'Prefered rendertime'*)
                     end;
 PExtensionData=Pointer;
 {EXPORT-}
@@ -333,7 +333,7 @@ end;
 procedure GDBNamedObject.SetDefaultValues;
 begin
 end;
-procedure GDBNamedObject.IterateCounter(PCounted:Pointer;var Counter:GDBInteger;proc:TProcCounter);
+procedure GDBNamedObject.IterateCounter(PCounted:Pointer;var Counter:Integer;proc:TProcCounter);
 begin
     proc(@self,PCounted,Counter);
 end;

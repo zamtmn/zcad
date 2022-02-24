@@ -40,7 +40,7 @@ GDBObjMText= object(GDBObjText)
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:TDXFEntsInternalStringType;p:GDBvertex;s,o,w,a:GDBDouble;j:TTextJustify;wi,l:GDBDouble);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f: TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
-                 procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure CalcGabarit(const drawing:TDrawingDef);virtual;
                  //procedure getoutbound;virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
@@ -153,12 +153,12 @@ end;
 procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:GDBDouble;content:TDXFEntsInternalStringType;var text:XYZWGDBGDBStringArray);
 var
   canbreak: GDBBoolean;
-  currsymbol, lastbreak, lastcanbreak: GDBInteger;
+  currsymbol, lastbreak, lastcanbreak: Integer;
   linewidth, lastlinewidth, maxlinewidth,lastsymspace: GDBDouble;
   currline:TDXFEntsInternalStringType;
   swp:GDBStrWithPoint;
   psyminfo:PGDBsymdolinfo;
-  l:GDBInteger;
+  l:Integer;
   sym:word;
   newline:boolean;
   //-ttf-//TDInfo:TTrianglesDataInfo;
@@ -284,7 +284,7 @@ end;
 
 procedure GDBObjMText.FormatContent(var drawing:TDrawingDef);
 var
-  i: GDBInteger;
+  i: Integer;
   h, angle: GDBDouble;
   pswp:pGDBStrWithPoint;
     ir:itrec;
@@ -292,7 +292,7 @@ var
   TCP:TCodePage;
   pfont:pgdbfont;
 
-  l:GDBInteger;
+  l:Integer;
   sym:word;
   //-ttf-//TDInfo:TTrianglesDataInfo;
 procedure setstartx;
@@ -503,8 +503,8 @@ end;
 
 procedure GDBObjMText.CalcGabarit;
 var
-//  i: GDBInteger;
-//  j: GDBInteger;
+//  i: Integer;
+//  j: Integer;
   pswp:pGDBStrWithPoint;
       ir:itrec;
 begin
@@ -648,7 +648,7 @@ end;
 procedure GDBObjMText.createpoint;
 var
   //psymbol: PByte;
-  {lin,}i{, j, k}{, l}: GDBInteger;
+  {lin,}i{, j, k}{, l}: Integer;
 
   //len: Word;
   matr,m1: DMatrix4D;
@@ -664,7 +664,7 @@ var
   pl:GDBPoint3DArray;
   ispl:gdbboolean;
   pfont:pgdbfont;
-  ln,l:GDBInteger;
+  ln,l:Integer;
 
   sym:word;
   //-ttf-//TDInfo:TTrianglesDataInfo;
@@ -902,11 +902,11 @@ begin
 end;
 procedure GDBObjMText.LoadFromDXF;
 var //s{, layername}: GDBString;
-  byt{, code}: GDBInteger;
+  byt{, code}: Integer;
   ux: gdbvertex;
   angleload: GDBBoolean;
   angle:double;
-  j:GDBInteger;
+  j:Integer;
   style,ttemplate:GDBString;
 begin
   //initnul;
@@ -965,7 +965,7 @@ begin
   //format;
 end;
 function z2dxfmtext(s:gdbstring;var ul:boolean):gdbstring;
-var i:GDBInteger;
+var i:Integer;
 begin
      result:=s;
      repeat
@@ -981,9 +981,9 @@ begin
                      end;
      until i<=0;
 end;
-procedure GDBObjMText.SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
+procedure GDBObjMText.SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
 var
-//  i, j: GDBInteger;
+//  i, j: Integer;
   //bw: Byte;
   s: GDBString;
   ul:boolean;

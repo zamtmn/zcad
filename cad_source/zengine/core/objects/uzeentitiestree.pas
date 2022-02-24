@@ -35,8 +35,8 @@ TEntTreeNodeData=record
                      infrustum:TActulity;
                      nuldrawpos,minusdrawpos,plusdrawpos:TActulity;
                      FulDraw:TDrawType;
-                     //nodedepth:GDBInteger;
-                     //pluscount,minuscount:GDBInteger;
+                     //nodedepth:Integer;
+                     //pluscount,minuscount:Integer;
                  end;
 TEntityArray=GZVectorPObects{GZVectorSimple}{-}<PGDBObjEntity,GDBObjEntity>{//}; {надо вынести куданить отдельно}
          PTEntTreeNode=^TEntTreeNode;
@@ -49,7 +49,7 @@ TEntityArray=GZVectorPObects{GZVectorSimple}{-}<PGDBObjEntity,GDBObjEntity>{//};
                       end;
 {EXPORT-}
 TZEntsManipulator=class
-                   class procedure StoreTreeAdressInOnject(var Entity:GDBObjEntity;var Node:GZBInarySeparatedGeometry<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>;const index:GDBInteger);
+                   class procedure StoreTreeAdressInOnject(var Entity:GDBObjEntity;var Node:GZBInarySeparatedGeometry<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>;const index:Integer);
                    class procedure CorrectNodeBoundingBox(var NodeBB:TBoundingBox;var Entity:GDBObjEntity);
                    class function GetEntityBoundingBox(var Entity:GDBObjEntity):TBoundingBox;
                    class function GetBBPosition(const sep:DVector4D;const BB:TBoundingBox):TElemPosition;
@@ -68,7 +68,7 @@ var
    SysVarRDSpatialNodeCount:integer=500;
    SysVarRDSpatialNodesDepth:integer=16;
    FirstStageData:TFirstStageData;
-function GetInNodeCount(_InNodeCount:GDBInteger):GDBInteger;
+function GetInNodeCount(_InNodeCount:Integer):Integer;
 implementation
 procedure TEntTreeNode.DrawWithAttribExternalArray(var DC:TDrawContext);
 var
@@ -183,7 +183,7 @@ case NodeNum of
                                           );
 end;
 end;
-class procedure TZEntsManipulator.StoreTreeAdressInOnject(var Entity:GDBObjEntity;var Node:GZBInarySeparatedGeometry{-}<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>;const index:GDBInteger);
+class procedure TZEntsManipulator.StoreTreeAdressInOnject(var Entity:GDBObjEntity;var Node:GZBInarySeparatedGeometry{-}<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>;const index:Integer);
 begin
   Entity.bp.TreePos.Owner:=@Node;
   Entity.bp.TreePos.SelfIndex:=index;
@@ -258,7 +258,7 @@ begin
      UnLock;
      //createtree(entitys,AABB,nil,@self,nodedepth,TND_Root);
 end;
-function GetInNodeCount(_InNodeCount:GDBInteger):GDBInteger;
+function GetInNodeCount(_InNodeCount:Integer):Integer;
 begin
      if _InNodeCount>0 then
                            result:=_InNodeCount

@@ -47,7 +47,7 @@ type
       SubItem: Integer; State: TCustomDrawState; var DefaultDraw: Boolean);
     procedure _onCreate(Sender: TObject);
     procedure UpdateItem(Item: TListItem);
-    procedure countlt(plt:PGDBLtypeProp;out e,b:GDBInteger);
+    procedure countlt(plt:PGDBLtypeProp;out e,b:Integer);
     procedure _UpdateLT(Sender: TObject);
     procedure _UpDateLV(LV:TListView;SLT:PGDBLtypeProp);
   private
@@ -152,7 +152,7 @@ procedure TLineTypesForm._LTChange(Sender: TObject; Item: TListItem;
 begin
 
 end;
-procedure TLineTypesForm.countlt(plt:PGDBLtypeProp;out e,b:GDBInteger);
+procedure TLineTypesForm.countlt(plt:PGDBLtypeProp;out e,b:Integer);
 var
    pdwg:PTSimpleDrawing;
 begin

@@ -30,7 +30,7 @@ T19:GDBBoolean;(*'18 этаж'*)
 T20:GDBBoolean;(*'19 этаж'*)
 T21:GDBBoolean;(*'20 этаж'*)
 
-T31:GDBInteger;(*'Щит'*)
+T31:Integer;(*'Щит'*)
 
 implementation
 

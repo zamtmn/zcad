@@ -37,7 +37,7 @@ type
             name:GDBString;(*'Name'*)
       end;
   PTGDBPaletteColor=^TGDBPaletteColor;
-  TGDBPaletteColor=GDBInteger;
+  TGDBPaletteColor=Integer;
   TGDBPalette={$IFNDEF DELPHI}packed {$ENDIF}array[0..255] of TDXFCOLOR;
 {EXPORT-}
 const

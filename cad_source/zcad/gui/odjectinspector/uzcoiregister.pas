@@ -59,7 +59,7 @@ begin
 end;
 procedure ZCADFormSetupProc(Form:TControl);
 var
-  pint:PGDBInteger;
+  pint:PInteger;
   TBNode:TDomNode;
   tb:TToolBar;
 begin
@@ -311,10 +311,10 @@ INTFObjInspRowHeight.Value:=LocalRowHeight;
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'INTF_ObjInsp_RowHeight_OverriderEnable','GDBBoolean',@INTFObjInspRowHeight.Enable);
 PRowHeight:=@INTFObjInspRowHeight.Value;
 PRowHeightOverride:=@INTFObjInspRowHeight.Enable;
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'INTF_ObjInsp_RowHeight_OverriderValue','GDBInteger',@INTFObjInspRowHeight.Value);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'INTF_ObjInsp_SpaceHeight','GDBInteger',@INTFObjInspSpaceHeight);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'INTF_ObjInsp_RowHeight_OverriderValue','Integer',@INTFObjInspRowHeight.Value);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'INTF_ObjInsp_SpaceHeight','Integer',@INTFObjInspSpaceHeight);
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'INTF_ObjInsp_ShowEmptySections','GDBBoolean',@INTFObjInspShowEmptySections);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'INTF_ObjInsp_ButtonSizeReducing','GDBInteger',@INTFObjInspButtonSizeReducing);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'INTF_ObjInsp_ButtonSizeReducing','Integer',@INTFObjInspButtonSizeReducing);
 SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_RowHeight:=@INTFObjInspRowHeight;
 zcobjectinspector.INTFDefaultControlHeight:=sysparam.notsaved.defaultheight;
 ZCADGUIManager.RegisterZCADFormInfo('ObjectInspector',rsGDBObjinspWndName,TGDBobjinsp,rect(0,100,200,600),ZCADFormSetupProc,CreateObjInspInstance,@GDBobjinsp);

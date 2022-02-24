@@ -49,7 +49,7 @@ end;
 
 procedure readpalette;
 var
-  i,code:GDBInteger;
+  i,code:Integer;
   line,sub:GDBString;
   f:TZctnrVectorBytes;
 begin

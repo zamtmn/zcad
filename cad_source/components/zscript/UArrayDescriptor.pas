@@ -25,12 +25,12 @@ uses gzctnrvectortypes,uzedimensionaltypes,sysutils,LCLProc,TypeDescriptors,
 type
 PArrayIndexDescriptor=^ArrayIndexDescriptor;
 ArrayIndexDescriptor=record
-                           IndexMin,IndexCount:GDBInteger;
+                           IndexMin,IndexCount:Integer;
                      end;
 TArrayIndexDescriptorVector=GZVector<ArrayIndexDescriptor>;
 PArrayDescriptor=^ArrayDescriptor;
 ArrayDescriptor=object(TUserTypeDescriptor)
-                     NumOfIndex:GDBInteger;
+                     NumOfIndex:Integer;
                      typeof:PUserTypeDescriptor;
                      Indexs:{GDBOpenArrayOfData}TArrayIndexDescriptorVector;
                      constructor init(var t:PUserTypeDescriptor;tname:string;pu:pointer);

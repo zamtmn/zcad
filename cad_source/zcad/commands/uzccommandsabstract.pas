@@ -75,16 +75,16 @@ TInteractiveProcObjBuild=procedure(const PInteractiveData:Pointer;Point:GDBVerte
                        {-}InputMode:TGetInputMode;{//}
                     end;
     TCommandOperands={-}GDBString{/Pointer/};
-    TCommandResult=GDBInteger;
-  TCStartAttr=GDBInteger;{атрибут разрешения\запрещения запуска команды}
-    TCEndAttr=GDBInteger;{атрибут действия по завершению команды}
+    TCommandResult=Integer;
+  TCStartAttr=Integer;{атрибут разрешения\запрещения запуска команды}
+    TCEndAttr=Integer;{атрибут действия по завершению команды}
   PCommandObjectDef = ^CommandObjectDef;
   {REGISTEROBJECTTYPE CommandObjectDef}
   CommandObjectDef=object (GDBaseObject)
     CommandName:GDBString;(*hidden_in_objinsp*)
     CommandGDBString:GDBString;(*hidden_in_objinsp*)
     savemousemode: Byte;(*hidden_in_objinsp*)
-    mouseclic: GDBInteger;(*hidden_in_objinsp*)
+    mouseclic: Integer;(*hidden_in_objinsp*)
     dyn:GDBBoolean;(*hidden_in_objinsp*)
     overlay:GDBBoolean;(*hidden_in_objinsp*)
     CStartAttrEnableAttr:TCStartAttr;(*hidden_in_objinsp*)
@@ -118,9 +118,9 @@ TInteractiveProcObjBuild=procedure(const PInteractiveData:Pointer;Point:GDBVerte
     procedure CommandCancel; virtual;abstract;
     procedure CommandInit; virtual;abstract;
     procedure CommandContinue; virtual;
-    function MouseMoveCallback(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger; virtual;
-    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger; virtual;
-    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger; virtual;
+    function MouseMoveCallback(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
+    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
+    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
     function IsRTECommand:GDBBoolean;virtual;
   end;
 {Export-}
@@ -161,11 +161,11 @@ end;
 procedure CommandObjectDef.DrawHeplGeometry;
 begin
 end;
-function CommandRTEdObjectDef.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record):GDBInteger;
+function CommandRTEdObjectDef.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record):Integer;
 begin
      result:=0;
 end;
-function CommandRTEdObjectDef.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger;
+function CommandRTEdObjectDef.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
 begin
      if self.mouseclic=1 then
                              result:=0
@@ -179,7 +179,7 @@ end;
 procedure CommandRTEdObjectDef.CommandContinue;
 begin
 end;
-function CommandRTEdObjectDef.MouseMoveCallback(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger;
+function CommandRTEdObjectDef.MouseMoveCallback(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
 begin
   //result:=0;
   programlog.logoutstr('CommandRTEdObjectDef.MouseMoveCallback',0);

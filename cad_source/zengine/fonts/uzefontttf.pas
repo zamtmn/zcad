@@ -40,7 +40,7 @@ TTFFont= object({SHXFont}BASEFont)
               MapChar:TMapChar;
               //MapCharIterator:TMapChar.TIterator;
               //-ttf-//TriangleData:ZGLFontTriangle2DArray;
-              function GetOrReplaceSymbolInfo(symbol:GDBInteger{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;virtual;
+              function GetOrReplaceSymbolInfo(symbol:Integer{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;virtual;
               //-ttf-//function GetTriangleDataAddr(offset:integer):PGDBFontVertex2D;virtual;
               procedure ProcessTriangleData(si:PGDBsymdolinfo);
               constructor init;
@@ -495,7 +495,7 @@ begin
        si.SymMinY:=symoutbound.LBN.y;
   end;
 end;
-function TTFFont.GetOrReplaceSymbolInfo(symbol:GDBInteger{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;
+function TTFFont.GetOrReplaceSymbolInfo(symbol:Integer{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;
 var
    CharIterator:TMapChar.TIterator;
    si:TTTFSymInfo;

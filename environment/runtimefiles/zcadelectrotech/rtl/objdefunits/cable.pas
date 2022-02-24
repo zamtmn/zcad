@@ -5,16 +5,16 @@ usescopy cablename;
 usescopy objgroup;
 usescopy objmaterial;
 var
-   LENGTH_RoundTo:GDBInteger;(*'Округлять до'*)
+   LENGTH_RoundTo:Integer;(*'Округлять до'*)
    LENGTH_Add:GDBDouble;(*'Добавить к длине'*)
    LENGTH_Scale:GDBDouble;(*'Масштаб'*)
    LENGTH_KReserve:GDBDouble;(*'Коэфф. запаса'*)
 
    CABLE_Type:TCableType;(*'Тип'*)
    Cable_Mounting_Method:TDCableMountingMethod;(*'Метод монтажа'*)
-   CABLE_Segment:GDBInteger;(*'Сегмент'*)
-   CABLE_WireCount:GDBInteger;(*'Число жил'*)
-   CABLE_TotalCD:GDBInteger;(*'Подключено устройств'*)
+   CABLE_Segment:Integer;(*'Сегмент'*)
+   CABLE_WireCount:Integer;(*'Число жил'*)
+   CABLE_TotalCD:Integer;(*'Подключено устройств'*)
    CABLE_AutoGen:GDBBoolean;(*'Автоматически сгенерирован'*)
 
    AmountD:GDBDouble;(*'Длина'*)

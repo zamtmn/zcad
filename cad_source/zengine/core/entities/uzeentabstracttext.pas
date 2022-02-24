@@ -46,10 +46,10 @@ GDBObjAbstractText= object(GDBObjPlainWithOX)
                          DrawMatrix:DMatrix4D;(*oi_readonly*)(*hidden_in_objinsp*)
                          //Vertex3D_in_WCS_Array:GDBPolyPoint3DArray;(*oi_readonly*)(*hidden_in_objinsp*)
                          procedure CalcObjMatrix;virtual;
-                         procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
+                         procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                          procedure SimpleDrawGeometry(var DC:TDrawContext);virtual;
                          procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
-                         function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
+                         function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
                          function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                          function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
                          //function InRect:TInRect;virtual;
@@ -235,7 +235,7 @@ begin
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
 end;
 (*function GDBObjAbstractText.InRect;
-//var i:GDBInteger;
+//var i:Integer;
 //    ptpv:PGDBPolyVertex2D;
 begin
      if pprojoutbound<>nil then
@@ -253,7 +253,7 @@ begin
      result:=IREmpty;
 end;*)
 function GDBObjAbstractText.onmouse;
-var //i,counter:GDBInteger;
+var //i,counter:Integer;
     //d:GDBDouble;
     //ptpv0,ptpv1:PGDBPolyVertex3D;
     subresult:TInBoundingVolume;
@@ -315,7 +315,7 @@ begin
    end;}
 end;
 function GDBObjAbstractText.CalcInFrustum;
-var i:GDBInteger;
+var i:Integer;
 begin
       result:=true;
       for i:=0 to 4 do
@@ -332,7 +332,7 @@ begin
       end;
 end;
 function GDBObjAbstractText.CalcTrueInFrustum;
-//var i,count:GDBInteger;
+//var i,count:Integer;
 //    d1,d2,d3,d4:gdbdouble;
 begin
       result:=CalcOutBound4VInFrustum(outbound,frustum);

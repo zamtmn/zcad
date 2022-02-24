@@ -8,7 +8,7 @@ usescopy blocktype;
 var
    Device_Type:TDeviceType;(*'Тип устройства'*) 
 
-   AmountI:GDBInteger;(*'Количество'*)
+   AmountI:Integer;(*'Количество'*)
    
    EL_Cab_AddLength:GDBDouble;(*'Добавлять к длине кабеля'*)
 implementation

@@ -8,7 +8,7 @@ usescopy objname;
 
 var
 
-T11:GDBInteger;(*'123'*)
+T11:Integer;(*'123'*)
 
 implementation
 

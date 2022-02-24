@@ -32,7 +32,7 @@ implementation
 uses UBaseTypeDescriptor;
 function readsubexpr(var expr: GDBString): GDBString;
 var
-  i, count: GDBInteger;
+  i, count: Integer;
   s: GDBString;
 begin
   i := 1;
@@ -72,7 +72,7 @@ end;
 
 function ithex(expr: GDBString): GDBBoolean;
 var
-  i: GDBInteger;
+  i: Integer;
 begin
   result := true;
   if expr[length(expr)] <> 'H' then
@@ -92,7 +92,7 @@ end;
 
 function itint(expr: GDBString): GDBBoolean;
 var
-  i: GDBInteger;
+  i: Integer;
 begin
   result := true;
   i := 1;
@@ -107,7 +107,7 @@ end;
 
 function itreal(expr: GDBString): GDBBoolean;
 var
-  i: GDBInteger;
+  i: Integer;
 begin
   result := true;
   i := 1;
@@ -143,7 +143,7 @@ begin
 end;
 function readGDBWord(var expr: GDBString): GDBString;
 var
-  i: GDBInteger;
+  i: Integer;
 begin
   expr := readspace(expr);
   if expr='' then exit;
@@ -225,13 +225,13 @@ end;
 
 procedure createGDBIntegervar(var vd: vardesk; s: GDBString);
 var
-  rez: GDBInteger;
+  rez: Integer;
 begin
   ClearVariable(vd);
   rez := strtoint(s);
   begin
     vd.SetInstance(FundamentalLongIntDescriptorObj.AllocAndInitInstance);
-    pGDBInteger(vd.data.Addr.Instance)^ := rez;
+    PInteger(vd.data.Addr.Instance)^ := rez;
     vd.data.ptd:=@FundamentalLongIntDescriptorObj;
   end;
 end;
@@ -268,9 +268,9 @@ var
   s,s1,s2: String;
   rez, hrez, subrezult: vardesk;
   pvar: pvardesk;
-  operatorname, functionname, functiontype, operatoptype: GDBInteger;
+  operatorname, functionname, functiontype, operatoptype: Integer;
   opstac: operandstack;
-  i: GDBInteger;
+  i: Integer;
 begin
   initvardesk(rez);
   initvardesk(hrez);

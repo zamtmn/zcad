@@ -36,7 +36,7 @@ type
                        function CreateUnit(PPaths:GDBString;TranslateFunc:TTranslateFunction;UName:GDBString):PTUnit;
                        function loadunit(PPaths:GDBString;TranslateFunc:TTranslateFunction;fname:GDBString; pcreatedunit:PTSimpleUnit):ptunit;virtual;
                        function parseunit(PPaths:GDBString;TranslateFunc:TTranslateFunction;var f: TZctnrVectorBytes; pcreatedunit:PTSimpleUnit):ptunit;virtual;
-                       function changeparsemode(PPaths:GDBString;TranslateFunc:TTranslateFunction;newmode:GDBInteger;var mode:GDBInteger):pasparsemode;
+                       function changeparsemode(PPaths:GDBString;TranslateFunc:TTranslateFunction;newmode:Integer;var mode:Integer):pasparsemode;
                        function findunit(PPaths:GDBString;TranslateFunc:TTranslateFunction;uname:GDBString):ptunit;virtual;
                        function FindOrCreateEmptyUnit(uname:GDBString):ptunit;virtual;
                        function internalfindunit(uname:GDBString):ptunit;virtual;
@@ -196,8 +196,8 @@ begin
                     end;                           
   
 end;
-function TUnitManager.changeparsemode(PPaths:GDBString;TranslateFunc:TTranslateFunction;newmode:GDBInteger;var mode:GDBInteger):pasparsemode;
-var i:GDBInteger;
+function TUnitManager.changeparsemode(PPaths:GDBString;TranslateFunc:TTranslateFunction;newmode:Integer;var mode:Integer):pasparsemode;
+var i:Integer;
     //line:GDBString;
     //fieldgdbtype: gdbtypedesk;
     pfu:pointer;
@@ -265,17 +265,17 @@ function TUnitManager.parseunit;
 var
   varname, vartype,vuname, line,oldline,unitname: GDBString;
   vd: vardesk;
-  //parsepos:GDBInteger;
+  //parsepos:Integer;
   parseresult,subparseresult:PTZctnrVectorStrings;
-  mode:GDBInteger;
+  mode:Integer;
   parseerror,subparseerror:GDBBoolean;
-  i:GDBInteger;
-  {kolvo,}typ:GDBInteger;
+  i:Integer;
+  {kolvo,}typ:Integer;
   typename, {fieldname, fieldvalue,} fieldtype, GDBStringtypearray {sub,} {indmins, indmaxs,} {,arrind1}: GDBString;
   fieldgdbtype:pUserTypeDescriptor;
   fieldoffset: SmallInt;
-  //handle,poz, kolvo, i,oldcount: GDBInteger;
-  indmin, indcount, razmer: GDBInteger;
+  //handle,poz, kolvo, i,oldcount: Integer;
+  indmin, indcount, razmer: Integer;
   etd:PUserTypeDescriptor;
   addtype:GDBBoolean;
   penu:penumodj;

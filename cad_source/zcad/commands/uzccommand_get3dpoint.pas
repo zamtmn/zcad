@@ -39,7 +39,7 @@ begin
                      ZCMsgCallBackInterface.TextMessage(operands,TMWOHistoryOut);
   result:=cmd_ok;
 end;
-function Line_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function Line_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
 begin
   if (button and MZW_LBUTTON)<>0 then
   begin

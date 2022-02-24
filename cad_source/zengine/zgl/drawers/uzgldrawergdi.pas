@@ -41,12 +41,12 @@ type
 {EXPORT+}
 {REGISTERRECORDTYPE TGDIPrimitivesCounter}
 TGDIPrimitivesCounter=record
-          Lines:GDBInteger;
-          Triangles:GDBInteger;
-          Quads:GDBInteger;
-          Points:GDBInteger;
-          ZGLSymbols:GDBInteger;
-          SystemSymbols:GDBInteger;
+          Lines:Integer;
+          Triangles:Integer;
+          Quads:Integer;
+          Points:Integer;
+          ZGLSymbols:Integer;
+          SystemSymbols:Integer;
     end;
 TTextRenderingType=(TRT_System,TRT_ZGL,TRT_Both);
 PTGDIData=^TGDIData;

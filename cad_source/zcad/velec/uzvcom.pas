@@ -159,8 +159,8 @@ type
       //** Создания списка ребер графа
       PTInfoEdgeGraph=^TInfoEdgeGraph;
       TInfoEdgeGraph=record
-                         VIndex1:GDBInteger; //номер 1-й вершниы по списку
-                         VIndex2:GDBInteger; //номер 2-й вершниы по списку
+                         VIndex1:Integer; //номер 1-й вершниы по списку
+                         VIndex2:Integer; //номер 2-й вершниы по списку
                          VPoint1:GDBVertex;  //координаты 1й вершниы
                          VPoint2:GDBVertex;  //координаты 2й вершниы
                          cableEnt:PGDBObjSuperLine;
@@ -185,7 +185,7 @@ type
       //** Создания списка номеров вершин для построение ребер (временный список  )
       PTInfoTempNumVertex=^TInfoTempNumVertex;
       TInfoTempNumVertex=record
-                         num:GDBInteger; //номер 1-й вершниы по списку
+                         num:Integer; //номер 1-й вершниы по списку
       end;
       TListTempNumVertex=specialize TVector<TInfoTempNumVertex>;
 
@@ -233,7 +233,7 @@ type
 
       //Список номеров
       TInfoListNumVertex=record
-                   num:GDBInteger; //номер 1-й вершниы по списку
+                   num:Integer; //номер 1-й вершниы по списку
                    level:GDBDouble;
       end;
       TListNumVertex=specialize TVector<TInfoListNumVertex>;

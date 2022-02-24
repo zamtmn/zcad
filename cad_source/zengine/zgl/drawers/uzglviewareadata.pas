@@ -50,7 +50,7 @@ type
   {REGISTERRECORDTYPE Selectiondesc}
   Selectiondesc = record
     OnMouseObject,LastSelectedObject:Pointer;
-    Selectedobjcount:GDBInteger;
+    Selectedobjcount:Integer;
     MouseFrameON: GDBBoolean;
     MouseFrameInverse:GDBBoolean;
     Frame1, Frame2: GDBvertex2DI;
@@ -59,13 +59,13 @@ type
   end;
   {REGISTERRECORDTYPE tcpdist}
   tcpdist = record
-    cpnum: GDBInteger;
-    cpdist: GDBInteger;
+    cpnum: Integer;
+    cpdist: Integer;
   end;
   {REGISTERRECORDTYPE traceprop2}
   traceprop2 = record
     tmouse: GDBDouble;
-    dmouse: GDBInteger;
+    dmouse: Integer;
     dir: GDBVertex;
     dispraycoord: GDBVertex;
     worldraycoord: GDBVertex;
@@ -78,8 +78,8 @@ type
   end;
   {REGISTERRECORDTYPE objcontrolpoint}
   objcontrolpoint = record
-    objnum: GDBInteger;
-    newobjnum: GDBInteger;
+    objnum: Integer;
+    newobjnum: Integer;
     ostype: real;
     worldcoord: gdbvertex;
     dispcoord: GDBvertex2DI;
@@ -110,7 +110,7 @@ type
   {REGISTERRECORDTYPE totrackarray}
   totrackarray = record
     otrackarray: packed array[0..3] of os_record;
-    total, current: GDBInteger;
+    total, current: Integer;
   end;
   {REGISTERRECORDTYPE TCSIcon}
   TCSIcon=record
@@ -126,20 +126,20 @@ type
 
   POGLWndtype = ^OGLWndtype;
   OGLWndtype = object(GDBaseObject)
-    polarlinetrace: GDBInteger;
-    pointnum, axisnum: GDBInteger;
+    polarlinetrace: Integer;
+    pointnum, axisnum: Integer;
     CSIcon:TCSIcon;
     BLPoint,CPoint,TRPoint:GDBvertex2D;
     ViewHeight:GDBDouble;
-    projtype: GDBInteger;
+    projtype: Integer;
     firstdraw: GDBBoolean;
     md: mousedesc;
     gluetocp: GDBBoolean;
     cpdist: tcpdist;
     ospoint, oldospoint: os_record;
-    height, width: GDBInteger;
+    height, width: Integer;
     SelDesc: Selectiondesc;
-    otracktimerwork: GDBInteger;
+    otracktimerwork: Integer;
     scrollmode:GDBBoolean;
     lastcp3dpoint,lastpoint: GDBVertex;
     lastonmouseobject:Pointer;

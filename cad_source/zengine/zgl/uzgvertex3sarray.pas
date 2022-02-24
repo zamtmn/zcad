@@ -26,7 +26,7 @@ type
 PZGLVertex3Sarray=^ZGLVertex3Sarray;
 {REGISTEROBJECTTYPE ZGLVertex3Sarray}
 ZGLVertex3Sarray= object(GZVector{-}<GDBvertex3S>{//})(*OpenArrayOfData=GDBvertex3S*)
-                constructor init(m:GDBInteger);
+                constructor init(m:Integer);
                 constructor initnul;
                 function AddGDBVertex(const v:GDBvertex):TArrayIndex;virtual;
                 function GetLength(const i:TArrayIndex):Single;virtual;
@@ -68,7 +68,7 @@ begin
 end;
 (*procedure ZGLVertex3Sarray.drawgeometry;
 var p:PGDBVertex3S;
-    i:GDBInteger;
+    i:Integer;
 begin
   //if count<2 then exit;
   p:=parray;

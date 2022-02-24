@@ -61,7 +61,7 @@ type
                           SilentCounter:Integer;
                           CommandLinePrompts:TICommandLinePromptVector;
                           CurrentPrompt:TParserCommandLinePrompt.TGeneralParsedText;
-                          constructor init(m:GDBInteger);
+                          constructor init(m:Integer);
                           procedure execute(const comm:string;silent:GDBBoolean;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
                           procedure executecommand(const comm:string;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
                           procedure executecommandsilent(const comm:pansichar;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
@@ -90,7 +90,7 @@ type
                           procedure PushValue(varname,vartype:GDBString;instance:Pointer);virtual;
                           function PopValue:vardesk;virtual;
                           function GetValue:vardesk;virtual;
-                          function GetValueHeap:GDBInteger;
+                          function GetValueHeap:Integer;
                           function CurrentCommandNotUseCommandLine:GDBBoolean;
                           procedure PrepairVarStack;
 
@@ -446,7 +446,7 @@ begin
                                                                       //восстанавливаем сохраненный режим редактора
 end;
 
-function GDBcommandmanager.GetValueHeap:GDBInteger;
+function GDBcommandmanager.GetValueHeap:Integer;
 begin
      result:=varstack.vardescarray.count;
 end;
@@ -658,7 +658,7 @@ begin
 end;
 procedure ParseCommand(comm:string; out command,operands:GDBString);
 var
-   {i,}p1,p2: GDBInteger;
+   {i,}p1,p2: Integer;
 begin
   p1:=pos('(',comm);
   if  p1<1 then begin
@@ -729,7 +729,7 @@ begin
           pcommandrunning^.CommandStart(pansichar(operands));
 end;
 procedure GDBcommandmanager.execute(const comm:string;silent:GDBBoolean;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);
-var //i,p1,p2: GDBInteger;
+var //i,p1,p2: Integer;
     command,operands:GDBString;
     cc:TCStartAttr;
     pfoundcommand:PCommandObjectDef;
@@ -790,7 +790,7 @@ begin
                  else
                      ZCMsgCallBackInterface.TextMessage(format(rsCommandNRInC,[comm]),TMWOShowError);
 end;
-procedure GDBcommandmanager.executecommandsilent{(const comm:pansichar): GDBInteger};
+procedure GDBcommandmanager.executecommandsilent{(const comm:pansichar): Integer};
 begin
      if not busy then
      execute(comm,true,pdrawing,POGLWndParam);
@@ -915,7 +915,7 @@ begin
 end;
 constructor GDBcommandmanager.init;
 var
-      pint:PGDBInteger;
+      pint:PInteger;
 begin
   DisableExecuteCommandEndCounter:=0;
   DisabledExecuteCommandEndCounter:=0;

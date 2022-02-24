@@ -197,7 +197,7 @@ type
                            {$IFDEF SINGLEPRECISIONGEOMETRY}
                            procedure glVertex3dv(const v: PGDBVertex);inline;
                            {$ENDIF}
-                           procedure myglViewport(const x,y,width,height:GDBInteger);inline;
+                           procedure myglViewport(const x,y,width,height:Integer);inline;
                            procedure myglGetIntegerv(pname: GLenum; params: PGLint);inline;
                            procedure myglLoadMatrixd(const m: PGLdouble);inline;
                            procedure myglLightfv(light, pname: GLenum; const params: PGLfloat);inline;
@@ -253,7 +253,7 @@ function wglGetProcAddress(ProcName:LPCSTR):PROC;stdcall; external 'opengl32' na
 Procedure DrawAABB(const BoundingBox:TBoundingBox);
 var
    bcount:integer;
-   primcount,pointcount,bathcount:GDBInteger;
+   primcount,pointcount,bathcount:Integer;
    middlepoint:GDBVertex;
 implementation
 procedure MywglCreateContext(var oglc:TOGLContextDesk);
@@ -678,7 +678,7 @@ procedure TOGLStateManager.myglMultMatrixF(const matrix:DMatrix4F);
 begin
      glmultmatrixf(@matrix);
 end;
-procedure TOGLStateManager.myglViewport(const x,y,width,height:GDBInteger);
+procedure TOGLStateManager.myglViewport(const x,y,width,height:Integer);
 begin
      glViewport(x,y,width,height);
 end;
@@ -844,7 +844,7 @@ end;
 
 procedure SetDCPixelFormat(oglc:TOGLContextDesk);
 {var
-  nPixelFormat: GDBInteger;
+  nPixelFormat: Integer;
   pfd: TPixelFormatDescriptor;
   rez: BOOL;}
 begin

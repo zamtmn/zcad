@@ -40,9 +40,7 @@ PGDBAnsiString=^GDBAnsiString;
 
 PGDBBoolean=^GDBBoolean;
 {-}GDBBoolean=type boolean;{/GDBBoolean=Boolean;/}
-
-PGDBInteger=^GDBInteger;
-{-}GDBInteger=type integer;{/GDBInteger=Integer;/}
+PInteger=^Integer;
 {EXPORT-}
 
 implementation

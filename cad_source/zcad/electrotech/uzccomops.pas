@@ -79,8 +79,8 @@ type
                                         FDW:GDBDouble;(*'Sensor-Wall(fact)'*)(*oi_readonly*)
                                         NormalizePoint:GDBBoolean;(*'Normalize to grid (if enabled)'*)
 
-                                        oldth:GDBInteger;(*hidden_in_objinsp*)
-                                        oldsh:GDBInteger;(*hidden_in_objinsp*)
+                                        oldth:Integer;(*hidden_in_objinsp*)
+                                        oldsh:Integer;(*hidden_in_objinsp*)
                                         olddt:TOPSDatType;(*hidden_in_objinsp*)
                                   end;
   PTOrtoDevPlaceParam=^TOrtoDevPlaceParam;
@@ -89,9 +89,9 @@ type
                                         Name:GDBString;(*'Block'*)(*oi_readonly*)
                                         ScaleBlock:GDBDouble;(*'Blocks scale'*)
                                         CountType:TODPCountType;(*'Type of placement'*)
-                                        Count:GDBInteger;(*'Total number'*)
-                                        NX:GDBInteger;(*'Number of length'*)
-                                        NY:GDBInteger;(*'Number of width'*)
+                                        Count:Integer;(*'Total number'*)
+                                        NX:Integer;(*'Number of length'*)
+                                        NY:Integer;(*'Number of width'*)
                                         Angle:GDBDouble;(*'Rotation'*)
                                         AutoAngle:GDBBoolean;(*'Auto rotation'*)
                                         NormalizePoint:GDBBoolean;(*'Normalize to grid (if enabled)'*)
@@ -386,7 +386,7 @@ begin
        end
   end;}
 end;
-function CommandStart(operands:pansichar):GDBInteger;
+function CommandStart(operands:pansichar):Integer;
 begin
   drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,'DEVICE_PS_DAT_SMOKE');
   drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,'DEVICE_PS_DAT_TERMO');
@@ -395,7 +395,7 @@ begin
   zcShowCommandParams(SysUnit.TypeName2PTD('CommandRTEdObject'),pco);
   result:=cmd_ok;
 end;
-function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:GDBInteger): integer;
+function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): integer;
 begin
   result:=mclick;
   if (button and MZW_LBUTTON)<>0 then
@@ -405,7 +405,7 @@ begin
       t3dp:=wc;
     end;
 end;
-function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:GDBInteger):GDBInteger;
+function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer):Integer;
 var
 pl:pgdbobjline;
 //debug:string;
@@ -574,13 +574,13 @@ begin
     if OPSPlaceSmokeDetectorOrtoParam.InsertType=TIT_Device then
                                                                 sdname:=DevicePrefix+sdname;
 end;
-{function OPS_Sensor_Mark_com(Operands:pansichar):GDBInteger;
-var i: GDBInteger;
+{function OPS_Sensor_Mark_com(Operands:pansichar):Integer;
+var i: Integer;
     pcable:pGDBObjCable;
     ir,ir_inNodeArray:itrec;
     pvd:pvardesk;
     currentunit:TUnit;
-    ucount:gdbinteger;
+    ucount:Integer;
     ptn:PTNodeProp;
     p:pointer;
     cman:TCableManager;
@@ -598,9 +598,9 @@ begin
         if pcable^.GetObjType=GDBCableID then
         begin
              pvd:=currentunit.FindVariable('CDC_temp');
-             pgdbinteger(pvd.Instance)^:=0;
+             PInteger(pvd.Instance)^:=0;
              pvd:=currentunit.FindVariable('CDSC_temp');
-             pgdbinteger(pvd.Instance)^:=0;
+             PInteger(pvd.Instance)^:=0;
              p:=@pcable.ou;
              currentunit.InterfaceUses.addnodouble(@p);
              ucount:=currentunit.InterfaceUses.Count;
@@ -640,14 +640,14 @@ begin
   result:=cmd_ok;
 end;}
 function OPS_Sensor_Mark_com(operands:TCommandOperands):TCommandResult;
-var //i: GDBInteger;
+var //i: Integer;
     pcabledesk:PTCableDesctiptor;
     ir,ir2,ir_inNodeArray:itrec;
     pvd:pvardesk;
     defaultunit:TUnit;
     currentunit:PTUnit;
     UManager:TUnitManager;
-    ucount:gdbinteger;
+    ucount:Integer;
     ptn:PGDBObjDevice;
     p:pointer;
     cman:TCableManager;
@@ -701,9 +701,9 @@ begin
              if currentunit<>nil then
              repeat
              pvd:=currentunit.FindVariable('CDC_temp');
-             pgdbinteger(pvd.data.Addr.Instance)^:=0;
+             PInteger(pvd.data.Addr.Instance)^:=0;
              pvd:=currentunit.FindVariable('CDSC_temp');
-             pgdbinteger(pvd.data.Addr.Instance)^:=1;
+             PInteger(pvd.data.Addr.Instance)^:=1;
              currentunit:=Umanager.iterate(ir2);
              until currentunit=nil;
              currentunit:=nil;
@@ -849,7 +849,7 @@ begin
 
      currentcoord.y:=currentcoord.y+dy+uy;
 end;
-function InsertDat(datname,sname,ename:GDBString;datcount:GDBInteger;var currentcoord:GDBVertex; var root:GDBObjRoot):pgdbobjline;
+function InsertDat(datname,sname,ename:GDBString;datcount:Integer;var currentcoord:GDBVertex; var root:GDBObjRoot):pgdbobjline;
 var
 //   pv:pGDBObjDevice;
 //   lx,rx,uy,dy:GDBDouble;
@@ -905,14 +905,14 @@ else if datcount>2 then
      result:=pl;
 end;
 procedure OPS_SPBuild.Command(Operands:TCommandOperands);
-//function OPS_SPBuild_com(Operands:pansichar):GDBInteger;
-var count: GDBInteger;
+//function OPS_SPBuild_com(Operands:pansichar):Integer;
+var count: Integer;
     pcabledesk:PTCableDesctiptor;
     PCableSS:PGDBObjCable;
     ir,ir_inNodeArray:itrec;
     pvd:pvardesk;
 //    currentunit:TUnit;
-//    ucount:gdbinteger;
+//    ucount:Integer;
 //    ptn:PGDBObjDevice;
 //    p:pointer;
     cman:TCableManager;
@@ -1047,8 +1047,8 @@ begin
                                  coord.x:=coord.x+12
                              else
                                  begin
-                                      if pgdbinteger(pvd^.data.Addr.Instance)^<>0 then
-                                                                                  coord.x:=coord.x+6*pgdbinteger(pvd^.data.Addr.Instance)^
+                                      if PInteger(pvd^.data.Addr.Instance)^<>0 then
+                                                                                  coord.x:=coord.x+6*PInteger(pvd^.data.Addr.Instance)^
                                                                               else
                                                                                   coord.x:=coord.x+12;
                                  end;
@@ -1099,8 +1099,8 @@ begin
                        end;
      end;
 end;
-function PlCommandStart(operands:pansichar):GDBInteger;
-var //i: GDBInteger;
+function PlCommandStart(operands:pansichar):Integer;
+var //i: Integer;
     sd:TSelEntsDesk;
 begin
   OrtoDevPlaceParam.Name:='';
@@ -1129,7 +1129,7 @@ else if (sd.PFirstSelectedEnt^.GetObjType=GDBDeviceID) then
   zcShowCommandParams(SysUnit.TypeName2PTD('CommandRTEdObject'),pco2);
   OPSPlaceSmokeDetectorOrtoParam.DMC:=TOPSMDC_1_2;
 end;
-function PlBeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:GDBInteger): integer;
+function PlBeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): integer;
 begin
   result:=mclick;
   if (button and MZW_LBUTTON)<>0 then
@@ -1138,7 +1138,7 @@ begin
       t3dp:=wc;
     end
 end;
-procedure placedev(pva:PGDBObjEntityOpenArray;p1, p2: gdbvertex; nmax, nmin: GDBInteger; name: pansichar;a:gdbdouble;aa:gdbboolean;Norm:GDBBoolean);
+procedure placedev(pva:PGDBObjEntityOpenArray;p1, p2: gdbvertex; nmax, nmin: Integer; name: pansichar;a:gdbdouble;aa:gdbboolean;Norm:GDBBoolean);
 var dx, dy: GDBDouble;
   line1, line2: GDBLineOps;
   l1, l2, i: integer;
@@ -1217,13 +1217,13 @@ begin
        end
   end;
 end;
-function PlAfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:GDBInteger): integer;
+function PlAfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): integer;
 var
 pl:pgdbobjline;
 //debug:string;
 //dw,dd:gdbdouble;
-nx,ny:GDBInteger;
-//t:GDBInteger;
+nx,ny:Integer;
+//t:Integer;
 tt,tx,ty,ttx,tty:gdbdouble;
 DC:TDrawContext;
 begin

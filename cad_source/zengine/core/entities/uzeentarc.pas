@@ -44,8 +44,8 @@ GDBObjArc= object(GDBObjPlain)
                  constructor initnul;
                  procedure LoadFromDXF(var f:TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
-                 procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                 procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
+                 procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                  procedure addcontrolpoints(tdesc:Pointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                  procedure CalcObjMatrix;virtual;
@@ -65,7 +65,7 @@ GDBObjArc= object(GDBObjPlain)
                  procedure rtsave(refp:Pointer);virtual;
                  destructor done;virtual;
                  function GetObjTypeName:GDBString;virtual;
-                 function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
+                 function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                  procedure ReCalcFromObjMatrix;virtual;
                  procedure transform(const t_matrix:DMatrix4D);virtual;
@@ -172,7 +172,7 @@ begin
      self.R:=PGDBVertex(@objmatrix[0])^.x/local.basis.OX.x;
 end;
 function GDBObjARC.CalcTrueInFrustum;
-var i{,count}:GDBInteger;
+var i{,count}:Integer;
     //d1,d2,d3,d4:gdbdouble;
 begin
       for i:=0 to 5 do
@@ -188,7 +188,7 @@ begin
       result:=Vertex3D_in_WCS_Array.CalcTrueInFrustum(frustum);
 end;
 function GDBObjARC.calcinfrustum;
-var i:GDBInteger;
+var i:Integer;
 begin
       result:=true;
       for i:=0 to 4 do
@@ -424,7 +424,7 @@ begin
 end;
 procedure GDBObjARC.createpoints(var DC:TDrawContext);
 var
-  i: GDBInteger;
+  i: Integer;
   l: GDBDouble;
   v:GDBvertex;
   pv:GDBVertex;
@@ -504,7 +504,7 @@ begin
 end;
 procedure GDBObjARC.DrawGeometry;
 var
-//  i: GDBInteger;
+//  i: Integer;
     simply:GDBBoolean;
 begin
   {oglsm.myglpushmatrix;
@@ -566,13 +566,13 @@ procedure GDBObjARC.projectpoint;
 //    tv:GDBvertex;
 //    tpv:GDBPolyVertex2D;
 //    ptpv:PGDBPolyVertex2D;
-//    i:GDBInteger;
+//    i:Integer;
 begin
 
 end;
 procedure GDBObjARC.LoadFromDXF;
 var //s: GDBString;
-  byt{, code}: GDBInteger;
+  byt{, code}: Integer;
   dc:TDrawContext;
 begin
   //initnul;
@@ -595,7 +595,7 @@ begin
   FormatEntity(drawing,dc);
 end;
 function GDBObjARC.onmouse;
-var i:GDBInteger;
+var i:Integer;
 begin
      for i:=0 to 5 do
      begin

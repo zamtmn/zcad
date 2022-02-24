@@ -33,7 +33,7 @@ GDBBOMItem=record
 PBbillOfMaterial=^GDBBbillOfMaterial;
 {REGISTEROBJECTTYPE GDBBbillOfMaterial}
 GDBBbillOfMaterial= object(GZVector{-}<GDBBOMItem>{//})(*OpenArrayOfData=GDBNumItem*)
-                       constructor init(m:GDBInteger);
+                       constructor init(m:Integer);
                        procedure freeelement(PItem:PT);virtual;
                        //function getnamenumber(_Name:GDBString):GDBstring;
                        //function AddByPointer(p:Pointer):TArrayIndex;virtual;
@@ -79,7 +79,7 @@ begin
      PGDBBOMItem(PItem)^.Names:='';
      PGDBBOMItem(PItem)^.Material:='';
 end;
-constructor GDBBbillOfMaterial.init(m:GDBInteger);
+constructor GDBBbillOfMaterial.init(m:Integer);
 begin
      inherited init(m);
 end;

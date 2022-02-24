@@ -32,7 +32,7 @@ TtmethodVector=specialize GZVector<tmethod>;
                                           DoData,UnDoData:_T;
                                           ObjArray:{GDBOpenArrayOfData}TtmethodVector;
                                           public
-                                          constructor Assign(const _dodata,_undodata:_T;const objcount:GDBInteger);
+                                          constructor Assign(const _dodata,_undodata:_T;const objcount:Integer);
                                           //procedure StoreUndoData(var _undodata:_T);virtual;
                                           procedure AddMethod(method:tmethod);virtual;
 
@@ -53,7 +53,7 @@ function PushCreateTGMultiObjectChangeCommand(var us:TZctnrVectorUndoCommands; v
 
 implementation
 
-constructor TGMultiObjectChangeCommand.Assign(const _dodata,_undodata:_T;const objcount:GDBInteger);
+constructor TGMultiObjectChangeCommand.Assign(const _dodata,_undodata:_T;const objcount:Integer);
 begin
      DoData:=_DoData;
      UnDoData:=_UnDoData;

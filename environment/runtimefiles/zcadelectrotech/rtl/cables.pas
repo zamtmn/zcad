@@ -21,7 +21,7 @@ type
               
   PTCableLength=^TCableLength;
   TCableLength=packed record
-                     RoundTo:GDBInteger;(*'Округлять до'*)
+                     RoundTo:Integer;(*'Округлять до'*)
                      Cable_AddLength:GDBDouble;(*'Добавить к длине'*)
                      Cable_KZap:GDBDouble;(*'Коэффициент запаса'*)
                      Cable_Scale:GDBDouble;(*'Масштаб'*)

@@ -31,19 +31,19 @@ TDrawingContext=record
                    pcamera:PGDBBaseCamera;
                    GlobalLTScale:GDBDouble;
                    DrawHeplGeometryProc:TDrawHeplGeometry;
-                   ForeGroundColorIndex:GDBInteger;
+                   ForeGroundColorIndex:Integer;
 end;
 TDrawContext=record
                    DrawingContext:TDrawingContext;
-                   Subrender:GDBInteger;
+                   Subrender:Integer;
                    Selected:GDBBoolean;
                    MaxDetail:GDBBoolean;
                    DrawMode:GDBBoolean;
-                   LWDisplayScale:GDBInteger{=2};
-                   DefaultLW:GDBInteger{=25};
+                   LWDisplayScale:Integer{=2};
+                   DefaultLW:Integer{=25};
                    OwnerLineWeight:SmallInt;
-                   OwnerColor:GDBInteger;
-                   MaxWidth:GDBInteger;
+                   OwnerColor:Integer;
+                   MaxWidth:Integer;
                    ScrollMode:GDBBoolean;
                    drawer:TZGLAbstractDrawer;
                    SystmGeometryDraw:boolean;

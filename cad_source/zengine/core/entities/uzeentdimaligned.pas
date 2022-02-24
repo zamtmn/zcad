@@ -43,7 +43,7 @@ PGDBObjAlignedDimension=^GDBObjAlignedDimension;
 GDBObjAlignedDimension= object(GDBObjDimension)
                       constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                       constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                      procedure DrawExtensionLine(p1,p2:GDBVertex;LineNumber:GDBInteger;var drawing:TDrawingDef;var DC:TDrawContext; part:integer);
+                      procedure DrawExtensionLine(p1,p2:GDBVertex;LineNumber:Integer;var drawing:TDrawingDef;var DC:TDrawContext; part:integer);
 
 
 
@@ -68,7 +68,7 @@ GDBObjAlignedDimension= object(GDBObjDimension)
                       function P14ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                       //function P15ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                       //function P16ChangeTo(tv:GDBVertex):GDBVertex;virtual;
-                       procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                       procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                        function GetDimStr(var drawing:TDrawingDef):TDXFEntsInternalStringType;virtual;
                        function GetObjType:TObjID;virtual;
                    end;
@@ -343,7 +343,7 @@ function GDBObjAlignedDimension.GetObjType;
 begin
      result:=GDBAlignedDimensionID;
 end;
-procedure GDBObjAlignedDimension.DrawExtensionLine(p1,p2:GDBVertex;LineNumber:GDBInteger;var drawing:TDrawingDef;var DC:TDrawContext; part:integer);
+procedure GDBObjAlignedDimension.DrawExtensionLine(p1,p2:GDBVertex;LineNumber:Integer;var drawing:TDrawingDef;var DC:TDrawContext; part:integer);
 var
    pl:pgdbobjline;
    pp:pgdbobjpoint;

@@ -43,7 +43,7 @@ begin
                      ZCMsgCallBackInterface.TextMessage(operands,TMWOHistoryOut);
   result:=cmd_ok;
 end;
-function Line_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function Line_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
 begin
   point:=wc;
   if (button and MZW_LBUTTON)<>0 then
@@ -53,7 +53,7 @@ begin
        result:=1;
   end
 end;
-function DrawRect(mclick:GDBInteger):GDBInteger;
+function DrawRect(mclick:Integer):Integer;
 var
    vd:vardesk;
    p1,p2,p4:gdbvertex;

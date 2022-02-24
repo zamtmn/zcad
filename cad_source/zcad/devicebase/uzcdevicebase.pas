@@ -80,7 +80,7 @@ var
     FieldName:string;
     //cheked:boolean;
 
-    //offset:GDBInteger;
+    //offset:Integer;
     //tc:PUserTypeDescriptor;
     //pf:Pointer;
 
@@ -247,7 +247,7 @@ begin
      pt^.RegisterVMT(TypeOf(CableDeviceBaseObject));
      pt^.AddMetod('','initnul','',@CableDeviceBaseObject.initnul,m_constructor);
 
-     //pt^.AddMetod('AfterDeSerialize','(SaveFlag:Word; membuf:Pointer):GDBInteger;',nil,m_virtual);
+     //pt^.AddMetod('AfterDeSerialize','(SaveFlag:Word; membuf:Pointer):Integer;',nil,m_virtual);
      //pt^.AddMetod('format','',@ElDeviceBaseObject.format,m_procedure);
      //t.initnul;
      //pt^.RunMetod('initnul',@t);

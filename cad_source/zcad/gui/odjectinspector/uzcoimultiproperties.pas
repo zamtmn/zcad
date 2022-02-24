@@ -80,7 +80,7 @@ type
   end;
   TMultiPropertyDataForObjects=record
                                      GSData:TGetSetData;
-                                     //GetValueOffset,SetValueOffset:GDBInteger;
+                                     //GetValueOffset,SetValueOffset:Integer;
                                      EntBeforeIterateProc:TEntBeforeIterateProc;
                                      EntIterateProc:TEntIterateProc;
                                      EntChangeProc:TEntChangeProc;
@@ -179,7 +179,7 @@ type
                                                                  GSMode:TGetSetMode;
                                                                  UseMode:TMultiPropertyUseMode);
 
-                               //procedure RegisterFirstMultiproperty(name:GDBString;username:GDBString;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;extdr:TMetaExtender;GetVO,SetVO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;ebip:TEntBeforeIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc;CV:TCheckValueFunc=nil;UseMode:TMultiPropertyUseMode=MPUM_AllEntsMatched);
+                               //procedure RegisterFirstMultiproperty(name:GDBString;username:GDBString;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;extdr:TMetaExtender;GetVO,SetVO:Integer;bip:TBeforeIterateProc;aip:TAfterIterateProc;ebip:TEntBeforeIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc;CV:TCheckValueFunc=nil;UseMode:TMultiPropertyUseMode=MPUM_AllEntsMatched);
                                procedure RestartMultipropertySortID;
                                procedure sort;
                           end;
@@ -293,7 +293,7 @@ begin
   s:=LType.Name;
 end;
 
-procedure TMultiPropertiesManager.DoRegisterMultiproperty(name:GDBString;username:GDBString;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;{id:TObjID;extdr:TMetaExtender;}IdWithExtdr:TObjIDWithExtender;GSData:TGetSetData;{GetVO,SetVO:GDBInteger;}{bip:TBeforeIterateProc;aip:TAfterIterateProc}MIPD:TMainIterateProcsData;EIPD:TEntIterateProcsData;{ebip:TEntBeforeIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc;CV:TCheckValueFunc;}GSMode:TGetSetMode;UseMode:TMultiPropertyUseMode);
+procedure TMultiPropertiesManager.DoRegisterMultiproperty(name:GDBString;username:GDBString;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;{id:TObjID;extdr:TMetaExtender;}IdWithExtdr:TObjIDWithExtender;GSData:TGetSetData;{GetVO,SetVO:Integer;}{bip:TBeforeIterateProc;aip:TAfterIterateProc}MIPD:TMainIterateProcsData;EIPD:TEntIterateProcsData;{ebip:TEntBeforeIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc;CV:TCheckValueFunc;}GSMode:TGetSetMode;UseMode:TMultiPropertyUseMode);
 var
    mp:TMultiProperty;
    mpdfo:TMultiPropertyDataForObjects;

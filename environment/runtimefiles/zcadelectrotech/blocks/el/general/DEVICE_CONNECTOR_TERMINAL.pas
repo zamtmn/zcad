@@ -6,7 +6,7 @@ var
    SYS_Class:TShapeClass;
    SYS_Group:TShapeGroup;
    TNAME_TERMName:GDBString;
-   TNAME_Number:GDBInteger;
+   TNAME_Number:Integer;
 implementation
 begin
    SYS_Border:=SB_Empty;

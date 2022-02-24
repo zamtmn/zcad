@@ -42,8 +42,8 @@ type
     constructor init(cn:GDBString;SA,DA:TCStartAttr);
     procedure CommandStart(Operands:TCommandOperands); virtual;
     procedure CommandCancel; virtual;
-    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger; virtual;
-    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger; virtual;
+    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
+    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
   end;
 var
    OnDrawingEd:OnDrawingEd_com;
@@ -55,8 +55,8 @@ begin
   dyn:=false;
 end;
 procedure OnDrawingEd_com.CommandStart(Operands:TCommandOperands);
-//var i: GDBInteger;
-//  lastremove: GDBInteger;
+//var i: Integer;
+//  lastremove: Integer;
 //  findselected:GDBBoolean;
 //  tv: pGDBObjEntity;
 begin
@@ -70,7 +70,7 @@ begin
     drawings.GetCurrentDWG^.wa.param.startgluepoint:=nil;
     fixentities:=false;
 end;
-function OnDrawingEd_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger;
+function OnDrawingEd_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
 begin
   if (button and MZW_LBUTTON)<>0 then
                     t3dp := wc;
@@ -78,7 +78,7 @@ begin
 end;
 
 procedure modifyobj(dist,wc:gdbvertex;save:GDBBoolean;pconobj:pgdbobjEntity;var drawing:TDrawingDef;psa:PGDBSelectedObjArray);
-var i: GDBInteger;
+var i: Integer;
 //  d: GDBDouble;
 //  td:tcontrolpointdist;
   tdesc:pselectedobjdesc;
@@ -106,8 +106,8 @@ begin
 
 end;
 
-function OnDrawingEd_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger;
-var //oldi, newi, i: GDBInteger;
+function OnDrawingEd_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
+var //oldi, newi, i: Integer;
   dist: gdbvertex;
   pobj: Pointer;
   xdir,ydir,tv:GDBVertex;

@@ -26,7 +26,7 @@ type
 PGDBControlPointArray=^GDBControlPointArray;
 {REGISTEROBJECTTYPE GDBControlPointArray}
 GDBControlPointArray= object(GZVector{-}<controlpointdesc>{//})
-                           SelectedCount:GDBInteger;
+                           SelectedCount:Integer;
 
                            destructor done;virtual;
                            procedure draw(var DC:TDrawContext;const SelColor,UnSelColor:TRGB);virtual;
@@ -42,7 +42,7 @@ begin
 end;
 procedure GDBControlPointArray.draw;
 var point:^controlpointdesc;
-    i:GDBInteger;
+    i:Integer;
 begin
   if count<>0 then
   begin
@@ -66,7 +66,7 @@ begin
 end;
 procedure GDBControlPointArray.selectcontrolpointinframe(f1,f2: GDBvertex2DI);
 var point:^controlpointdesc;
-    i:GDBInteger;
+    i:Integer;
 begin
   if count<>0 then
   begin
@@ -89,7 +89,7 @@ end;
 procedure GDBControlPointArray.getnearesttomouse;
 var point:pcontrolpointdesc;
     d:single;
-    i:GDBInteger;
+    i:Integer;
 begin
   if count<>0 then
   begin
@@ -110,7 +110,7 @@ end;
 procedure GDBControlPointArray.selectcurrentcontrolpoint;
 var point:pcontrolpointdesc;
 //    d:single;
-    i:GDBInteger;
+    i:Integer;
 begin
   SelectedCount:=0;
   if count<>0 then

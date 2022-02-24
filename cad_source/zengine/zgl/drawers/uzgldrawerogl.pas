@@ -49,7 +49,7 @@ TOpenglData=record
           RD_Vendor:GDBString;(*'Vendor'*)(*oi_readonly*)
           RD_Restore_Mode:trestoremode;(*'Restore mode'*)
           RD_VSync:TGDB3StateBool;(*'VSync'*)
-          RD_MaxWidth:GDBInteger;(*'Max width'*)(*oi_readonly*)
+          RD_MaxWidth:Integer;(*'Max width'*)(*oi_readonly*)
           RD_MaxLineWidth:GDBDouble;(*'Max line width'*)(*oi_readonly*)
           RD_MaxPointSize:GDBDouble;(*'Max point size'*)(*oi_readonly*)
     end;

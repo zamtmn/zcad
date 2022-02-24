@@ -49,8 +49,8 @@ GDBObjEllipse= object(GDBObjPlain)
                  constructor initnul;
                  procedure LoadFromDXF(var f:TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
-                 procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                 procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
+                 procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                  procedure addcontrolpoints(tdesc:Pointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                  procedure CalcObjMatrix;virtual;
@@ -68,7 +68,7 @@ GDBObjEllipse= object(GDBObjPlain)
                  procedure rtsave(refp:Pointer);virtual;
                  destructor done;virtual;
                  function GetObjTypeName:GDBString;virtual;
-                 function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
+                 function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                  function CalcObjMatrixWithoutOwner:DMatrix4D;virtual;
                  procedure transform(const t_matrix:DMatrix4D);virtual;
@@ -159,7 +159,7 @@ begin
      result:=MatrixMultiply({dispmatr,}rotmatr,dispmatr);
 end;
 function GDBObjEllipse.CalcTrueInFrustum;
-var i{,count}:GDBInteger;
+var i{,count}:Integer;
     //d1,d2,d3,d4:gdbdouble;
 begin
       for i:=0 to 5 do
@@ -175,7 +175,7 @@ begin
       result:=Vertex3D_in_WCS_Array.CalcTrueInFrustum(frustum);
 end;
 function GDBObjEllipse.calcinfrustum;
-var i:GDBInteger;
+var i:Integer;
 begin
       result:=true;
       for i:=0 to 4 do
@@ -340,7 +340,7 @@ end;
 procedure GDBObjEllipse.createpoint;
 var
   //psymbol: PByte;
-  i{, j, k}: GDBInteger;
+  i{, j, k}: Integer;
   //len: Word;
   //matr{,m1}: DMatrix4D;
   v:GDBvertex;
@@ -429,7 +429,7 @@ begin
 end;
 procedure GDBObjEllipse.DrawGeometry;
 //var
-//  i: GDBInteger;
+//  i: Integer;
 begin
 
   DC.drawer.DrawClosedContour3DInModelSpace(Vertex3D_in_WCS_Array,DC.DrawingContext.matrixs);
@@ -443,7 +443,7 @@ procedure GDBObjEllipse.projectpoint;
 //    tv:GDBvertex;
 //    tpv:GDBPolyVertex2D;
 //    ptpv:PGDBPolyVertex2D;
-//    i:GDBInteger;
+//    i:Integer;
 begin
 
 end;
@@ -463,7 +463,7 @@ begin
 end;
 procedure GDBObjEllipse.LoadFromDXF;
 var //s: GDBString;
-  byt{, code}: GDBInteger;
+  byt{, code}: Integer;
 begin
   //initnul;
   byt:=readmystrtoint(f);
@@ -483,7 +483,7 @@ begin
   //format;
 end;
 function GDBObjEllipse.onmouse;
-var i:GDBInteger;
+var i:Integer;
 begin
      for i:=0 to 5 do
      begin

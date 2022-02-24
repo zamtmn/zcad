@@ -506,7 +506,7 @@ function TEnumDataDescriptor.GetValueAsString;
 {var currval:LongWord;
     p:Pointer;
     found:GDBBoolean;
-    i:GDBInteger;
+    i:Integer;
     num:cardinal;}
 begin
      if PTEnumData(Pinstance)^.Selected>=PTEnumData(Pinstance)^.Enums.Count then

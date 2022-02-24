@@ -77,7 +77,7 @@ TBasicFinter=record
   {REGISTERRECORDTYPE TELLeaderComParam}
   TELLeaderComParam=record
                         Scale:GDBDouble;(*'Scale'*)
-                        Size:GDBInteger;(*'Size'*)
+                        Size:Integer;(*'Size'*)
                         twidth:GDBDouble;(*'Width'*)
                    end;
 {Export-}
@@ -87,8 +87,8 @@ TBasicFinter=record
     constructor init(cn:GDBString;SA,DA:TCStartAttr);
     procedure CommandStart(Operands:TCommandOperands); virtual;
     procedure CommandCancel; virtual;
-    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger; virtual;
-    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger; virtual;
+    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
+    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
   end;
 
   {EM_SRBUILD_com = object(FloatInsert_com)
@@ -208,8 +208,8 @@ begin
      begin
           pvd:=PGDBEmSEPDeviceNode(pnode)^.upcable^.StartSegment.OU.FindVariable('GC_HDGroup');
           if pvd<>nil then
-          if PGDBInteger(pvd^.Instance)^>PGDBInteger(Pprocdata)^ then
-             PGDBInteger(Pprocdata)^:=PGDBInteger(pvd^.Instance)^;
+          if PInteger(pvd^.Instance)^>PInteger(Pprocdata)^ then
+             PInteger(Pprocdata)^:=PInteger(pvd^.Instance)^;
      end;
 end;
 *)
@@ -222,11 +222,11 @@ begin
      begin
           pvd:=PGDBEmSEPDeviceNode(pnode)^.upcable^.StartSegment.OU.FindVariable('GC_HDGroup');
           if pvd<>nil then
-          if PGDBInteger(pvd^.Instance)^=PGDBInteger(PExpr)^ then
+          if PInteger(pvd^.Instance)^=PInteger(PExpr)^ then
              result:=true;
      end;
 end;*)
-function g2x(g:gdbinteger):GDBInteger;
+function g2x(g:Integer):Integer;
 begin
      result:=30*g;
 end;
@@ -353,13 +353,13 @@ else if bgm1<bgm2 then
 
 end;
 //TBGMode=(BGAvtomat,DG1J,BGComm,DG2J,BGNagr);
-(*procedure EM_SEP_build_group(const cman:TCableManager;const node:PGDBEmSEPDeviceNode;var group:GDBInteger;P1:GDBVertex;var BGM:TBGMode;oldgabarit:GDBBoundingBbox);
+(*procedure EM_SEP_build_group(const cman:TCableManager;const node:PGDBEmSEPDeviceNode;var group:Integer;P1:GDBVertex;var BGM:TBGMode;oldgabarit:GDBBoundingBbox);
 var
    pvd:pvardesk;
    tempbgm,newBGM,nextBGM,TnextBGM:TBGMode;
    ir:itrec;
    subnode:PGDBEmSEPDeviceNode;
-   tempgroup,maxgroup:gdbinteger;
+   tempgroup,maxgroup:Integer;
    pgdbins:pgdbobjblockinsert;
    name:GDBString;
    gabarit:GDBBoundingBbox;
@@ -449,7 +449,7 @@ begin
 
 procedure EM_SEP_build_graphix(const cman:TCableManager;const tree:PTGDBTree);
 var
-   group,groupmax,dg:GDBInteger;
+   group,groupmax,dg:Integer;
    pgroupnode:PGDBEmSEPDeviceNode;
    BGM:TBGMode;
    gabarit:GDBBoundingBbox;
@@ -1329,7 +1329,7 @@ procedure El_Wire_com.CommandCancel;
 begin
 end;
 
-function El_Wire_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger;
+function El_Wire_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
 var //po:PGDBObjSubordinated;
     Objects:GDBObjOpenArrayOfPV;
     DC:TDrawContext;
@@ -1365,13 +1365,13 @@ begin
   end
 end;
 
-function El_Wire_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger;
+function El_Wire_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
 var //po:PGDBObjSubordinated;
-    mode:GDBInteger;
+    mode:Integer;
     TempNet:PGDBObjNet;
     //nn:GDBString;
     pvd{,pvd2}:pvardesk;
-    nni:gdbinteger;
+    nni:Integer;
     Objects:GDBObjOpenArrayOfPV;
     DC:TDrawContext;
     ptempnetvarext,pfirstownervarext,psecondownervarext:TVariablesExtender;
@@ -1600,7 +1600,7 @@ begin
   cabcomparam.PTrace:=nil;
   //Freemem(pointer(p3dpl));
 end;
-function _Cable_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function _Cable_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
 var
    pvd:pvardesk;
    domethod,undomethod:tmethod;
@@ -1799,7 +1799,7 @@ begin
                                     drawings.standardization(tcable,GDBCableID);
                                     pvd:=ptcablevarext.entityunit.FindVariable('CABLE_Segment');
                                     if pvd<>nil then
-                                    PGDBInteger(pvd^.data.Addr.Instance)^:=PGDBInteger(pvd^.data.Addr.Instance)^+cablecount;
+                                    PInteger(pvd^.data.Addr.Instance)^:=PInteger(pvd^.data.Addr.Instance)^+cablecount;
                                     inc(cablecount);
                                     result.PushBackData(tcable);
                                end;
@@ -1817,7 +1817,7 @@ begin
 end;
 
 
-function _Cable_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function _Cable_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
 var //po:PGDBObjSubordinated;
     plastw:pgdbvertex;
     //tw1,tw2:gdbvertex;
@@ -1898,13 +1898,13 @@ else begin
     zcRedrawCurrentDrawing;
   end;
 end;
-function _Cable_com_Hd(mclick:GDBInteger):TCommandResult;
+function _Cable_com_Hd(mclick:Integer):TCommandResult;
 begin
      //mclick:=mclick;//        asdf
      result:=cmd_ok;
 end;
-//function _Cable_com_Legend(Operands:pansichar):GDBInteger;
-//var i: GDBInteger;
+//function _Cable_com_Legend(Operands:pansichar):Integer;
+//var i: Integer;
 //    pv:pGDBObjEntity;
 //    ir,irincable,ir_inNodeArray:itrec;
 //    filename,cablename,CableMaterial,CableLength,devstart,devend: GDBString;
@@ -1989,7 +1989,7 @@ end;
 //  result:=cmd_ok;
 //end;
 function _Cable_com_Legend(operands:TCommandOperands):TCommandResult;
-var //i: GDBInteger;
+var //i: Integer;
     pv:PTCableDesctiptor;
     ir,{irincable,}ir_inNodeArray:itrec;
     filename,cablename,CableMaterial,CableLength,devstart,devend,puredevstart: GDBString;
@@ -2137,7 +2137,7 @@ begin
   result:=cmd_ok;
 end;
 function _Material_com_Legend(operands:TCommandOperands):TCommandResult;
-var //i: GDBInteger;
+var //i: Integer;
     pv:pGDBObjEntity;
     ir,{irincable,ir_inNodeArray,}ir_inscf:itrec;
     s,filename{,cablename,CableMaterial,CableLength,devstart}: GDBString;
@@ -2192,7 +2192,7 @@ begin
                         if (pvad<>nil) then
                                            pbomitem.Amount:=pbomitem.Amount+pgdbdouble(pvad^.data.Addr.Instance)^
                    else if (pvai<>nil) then
-                                           pbomitem.Amount:=pbomitem.Amount+pgdbinteger(pvai^.data.Addr.Instance)^
+                                           pbomitem.Amount:=pbomitem.Amount+PInteger(pvai^.data.Addr.Instance)^
                    else
                        pbomitem.Amount:=pbomitem.Amount+1;
                         pvm:=pcablevarext.entityunit.FindVariable('NMO_Name');
@@ -2354,7 +2354,7 @@ begin
   result:=cmd_ok;
 end;
 function _Cable_com_Select(operands:TCommandOperands):TCommandResult;
-var //i: GDBInteger;
+var //i: Integer;
     pv:pGDBObjEntity;
     ir,irnpa:itrec;
     ptn{,ptnfirst,ptnfirst2,ptnlast,ptnlast2}:PTNodeProp;
@@ -2385,8 +2385,8 @@ begin
   result:=cmd_ok;
 end;
 {
-function _Ren_n_to_0n_com(Operands:pansichar):GDBInteger;
-var len: GDBInteger;
+function _Ren_n_to_0n_com(Operands:pansichar):Integer;
+var len: Integer;
     pv:pGDBObjEntity;
     ir:itrec;
     pvd:pvardesk;
@@ -2466,7 +2466,7 @@ begin
 end;
 
 function _Cable_com_Invert(operands:TCommandOperands):TCommandResult;
-var //i: GDBInteger;
+var //i: Integer;
     pv:pGDBObjEntity;
     ir:itrec;
     DC:TDrawContext;
@@ -2488,7 +2488,7 @@ begin
   result:=cmd_ok;
 end;
 function _Cable_com_Join(operands:TCommandOperands):TCommandResult;
-var //i: GDBInteger;
+var //i: Integer;
     pv:pGDBObjEntity;
     pc1,pc2:PGDBObjCable;
     pv11,pv12,pv21,pv22:Pgdbvertex;
@@ -2571,7 +2571,7 @@ else
   result:=cmd_ok;
 end;
 function Find_com(operands:TCommandOperands):TCommandResult;
-//var i: GDBInteger;
+//var i: Integer;
    // pv:pGDBObjEntity;
    // ir:itrec;
 begin
@@ -2697,7 +2697,7 @@ begin
   ZCMsgCallBackInterface.TextMessage(format('Founded %d entities',[count]),TMWOHistoryOut);
 end;
 function _Cable_mark_com(operands:TCommandOperands):TCommandResult;
-var //i: GDBInteger;
+var //i: Integer;
     pv:pGDBObjDevice;
     ir{,irincable,ir_inNodeArray}:itrec;
     //filename,cablename,CableMaterial,CableLength,devstart,devend: GDBString;
@@ -2759,7 +2759,7 @@ begin
   cman.done;
   result:=cmd_ok;
 end;
-function El_Leader_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+function El_Leader_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
 var //po:PGDBObjSubordinated;
     pleader:PGDBObjElLeader;
     domethod,undomethod:tmethod;
@@ -2836,7 +2836,7 @@ begin
   result:=cmd_ok;
 end;
 function _Cable_com_Manager(operands:TCommandOperands):TCommandResult;
-//var i: GDBInteger;
+//var i: Integer;
     //pv:pGDBObjEntity;
     //ir:itrec;
 begin
@@ -2846,7 +2846,7 @@ begin
         result:=cmd_ok;
 end;
 function _Ren_n_to_0n_com(operands:TCommandOperands):TCommandResult;
-var {i,}len: GDBInteger;
+var {i,}len: Integer;
     pv:pGDBObjEntity;
     ir:itrec;
     pvd{,pvn,pvm,pvmc,pvl}:pvardesk;
@@ -2882,7 +2882,7 @@ begin
   result:=cmd_ok;
 end;
 function _SelectMaterial_com(operands:TCommandOperands):TCommandResult;
-var //i,len: GDBInteger;
+var //i,len: Integer;
     pv:pGDBObjEntity;
     ir:itrec;
     pvd{,pvn,pvm,pvmc,pvl}:pvardesk;
@@ -3276,7 +3276,7 @@ begin
      ZCMsgCallBackInterface.TextMessage(format('GDBCommandsElectrical.El_ExternalKZ: can''t open file: "%s"("%s")',[s,Operands]),TMWOShowError);
 end;
 function _AutoGenCableRemove_com(operands:TCommandOperands):TCommandResult;
-var //i,len: GDBInteger;
+var //i,len: Integer;
     pv:pGDBObjEntity;
     ir:itrec;
     pvd{,pvn,pvm,pvmc,pvl}:pvardesk;

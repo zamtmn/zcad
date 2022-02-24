@@ -36,7 +36,7 @@ begin
 end;
 (*procedure GDBPolyPoint2DArray.drawgeometry;
 var p:PGDBPolyVertex2D;
-    i:GDBInteger;
+    i:Integer;
 begin
   if count<2 then exit;
 
@@ -60,8 +60,8 @@ begin
 end;*)
 function GDBPolyPoint2DArray.inrect;
 var p,pp:PGDBPolyVertex2D;
-    counter:GDBInteger;
-    i:GDBInteger;
+    counter:Integer;
+    i:Integer;
     //lines:GDBBoolean;
 begin
   if (count<2){or(not POGLWND^.seldesc.MouseFrameInverse)} then exit;

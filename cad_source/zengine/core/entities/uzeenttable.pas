@@ -48,7 +48,7 @@ GDBObjTable= object(GDBObjComplex)
             destructor done;virtual;
             function Clone(own:Pointer):PGDBObjEntity;virtual;
             procedure Build(var drawing:TDrawingDef);virtual;
-            procedure SaveToDXFFollow(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+            procedure SaveToDXFFollow(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
             procedure ReCalcFromObjMatrix;virtual;
             function GetObjType:TObjID;virtual;
             end;
@@ -75,7 +75,7 @@ begin
 end;
 procedure GDBObjTable.SaveToDXFFollow;
 var
-  //i:GDBInteger;
+  //i:Integer;
   p:pointer;
   pv,pvc,pvc2:pgdbobjEntity;
   ir:itrec;

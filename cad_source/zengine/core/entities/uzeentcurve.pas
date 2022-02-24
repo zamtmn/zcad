@@ -39,8 +39,8 @@ GDBObjCurve= object(GDBObj3d)
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure FormatWithoutSnapArray;virtual;
-                 procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
-                 procedure AddControlpoint(pcp:popenarrayobjcontrolpoint_GDBWordwm;objnum:GDBInteger);virtual;
+                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
+                 procedure AddControlpoint(pcp:popenarrayobjcontrolpoint_GDBWordwm;objnum:Integer);virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
                  procedure rtedit(refp:Pointer;mode:Single;dist,wc:gdbvertex);virtual;
                  procedure rtsave(refp:Pointer);virtual;
@@ -60,7 +60,7 @@ GDBObjCurve= object(GDBObj3d)
 
                  procedure AddVertex(Vertex:GDBVertex);virtual;
 
-                 procedure SaveToDXFfollow(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXFfollow(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
                  procedure transform(const t_matrix:DMatrix4D);virtual;
 
@@ -265,7 +265,7 @@ begin
   inherited;
 end;
 procedure GDBObjCurve.AddControlpoint;
-var i: GDBInteger;
+var i: Integer;
   p: pgdbvertex;
 begin
   if (pcp^.max - pcp^.count) >=VertexArrayInWCS.Count then
@@ -335,7 +335,7 @@ begin
 end;
 
 procedure GDBObjCurve.FormatWithoutSnapArray;
-var //i,j: GDBInteger;
+var //i,j: Integer;
     ptv{,ptvprev}: pgdbvertex;
     tv:gdbvertex;
     //vs:VectorSnap;
@@ -357,7 +357,7 @@ begin
 end;
 
 procedure GDBObjCurve.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
-//var //i,j: GDBInteger;
+//var //i,j: Integer;
     //ptv,ptvprev: pgdbvertex;
     //tv:gdbvertex;
     //vs:VectorSnap;
@@ -399,7 +399,7 @@ end;
 function GDBObjCurve.Clone;
 var tpo: PGDBObjCurve;
     p:pgdbvertex;
-    i:GDBInteger;
+    i:Integer;
 begin
   Getmem(Pointer(tpo), sizeof(GDBObjCurve));
   tpo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight);
@@ -417,7 +417,7 @@ begin
 end;
 procedure GDBObjCurve.rtedit;
 var p,pold:pgdbvertex;
-    i:GDBInteger;
+    i:Integer;
 begin
   if mode <= os_polymin then
   begin
@@ -432,7 +432,7 @@ begin
 end;
 procedure GDBObjCurve.rtsave;
 var p,pold:pgdbvertex;
-    i:GDBInteger;
+    i:Integer;
 begin
   p:=vertexarrayinocs.GetParrayAsPointer;
   pold:=pgdbobjcurve(refp)^.vertexarrayinocs.GetParrayAsPointer;
@@ -448,7 +448,7 @@ procedure GDBObjCurve.Renderfeedback;
 var tv:GDBvertex;
     tpv:GDBVertex2D;
     ptpv:PGDBVertex;
-    i:GDBInteger;
+    i:Integer;
 begin
   if pprojpoint=nil then
   begin
@@ -495,7 +495,7 @@ begin
 end;
 
 procedure GDBObjCurve.rtmodifyonepoint(const rtmod:TRTModifyData);
-var vertexnumber:GDBInteger;
+var vertexnumber:Integer;
 begin
      vertexnumber:=abs(rtmod.point.pointtype-os_polymin);
      //pdesc.worldcoord:=PGDBArrayVertex(vertexarray.parray)^[vertexnumber];
@@ -505,7 +505,7 @@ begin
      PGDBArrayVertex(vertexarrayinocs.parray)^[vertexnumber]:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
 end;
 procedure GDBObjCurve.remaponecontrolpoint(pdesc:pcontrolpointdesc);
-var vertexnumber:GDBInteger;
+var vertexnumber:Integer;
 begin
      vertexnumber:=abs(pdesc^.pointtype-os_polymin);
      pdesc.worldcoord:=PGDBArrayVertex(VertexArrayInWCS.parray)^[vertexnumber];
@@ -514,7 +514,7 @@ begin
 end;
 procedure GDBObjCurve.addcontrolpoints;
 var pdesc:controlpointdesc;
-    i:GDBInteger;
+    i:Integer;
     //pv2d:pGDBvertex2d;
     pv:pGDBvertex;
 begin
@@ -542,7 +542,7 @@ procedure GDBObjPolyline.Renderfeedback;
 var tv:GDBvertex;
     tpv:GDBVertex2D;
     ptpv:PGDBVertex;
-    i:GDBInteger;
+    i:Integer;
 begin
   if pprojpoint=nil then
   begin
@@ -573,7 +573,7 @@ function GDBPoint3dArraygetsnap(const VertexArrayInWCS:GDBPoint3dArray; const PP
 const pnum=8;
 var t,d,e:GDBDouble;
     tv,n,v,dir:gdbvertex;
-    mode,vertexnum,tc:GDBInteger;
+    mode,vertexnum,tc:Integer;
     pv1:PGDBVertex;
     pv2:PGDBVertex;
 
@@ -752,7 +752,7 @@ function GDBObjCurve.getsnap;
 //const pnum=8;
 //var //t,d,e:GDBDouble;
     //tv,n,v,dir:gdbvertex;
-    //mode,vertexnum:GDBInteger;
+    //mode,vertexnum:Integer;
     //pv1:PGDBVertex;
     //pv2:PGDBVertex;
 begin

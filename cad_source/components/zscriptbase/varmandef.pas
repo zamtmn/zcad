@@ -200,7 +200,7 @@ TPropEditor=class(TComponent)
                  procedure SetEditorBounds(pd:PBasePropertyDeskriptor;OnlyHotFasteditors:boolean);
             end;
   //pd=^GDBDouble;
-  {-}{/pGDBInteger=^Integer;/}
+  {-}{/PInteger=^Integer;/}
   //pstr=^TInternalScriptString;
   {-}{/PPointer=^Pointer;/}
   //pbooleab=^Boolean;

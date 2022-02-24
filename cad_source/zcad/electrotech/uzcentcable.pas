@@ -51,13 +51,13 @@ GDBObjCable= object(GDBObjCurve)
                  str23:GDBVertex;(*hidden_in_objinsp*)
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
+                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                  function GetObjTypeName:GDBString;virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure FormatFast(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                 procedure SaveToDXFObjXData(var outhandle:{GDBInteger}TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
-                 procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                 procedure SaveToDXFfollow(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXFObjXData(var outhandle:{Integer}TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXFfollow(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
 
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
 
@@ -74,7 +74,7 @@ var
 implementation
 function GDBObjCable.Clone;
 var tvo: PGDBObjCable;
-    i:GDBInteger;
+    i:Integer;
     p:pgdbvertex;
 begin
   //result:=inherited Clone(own);
@@ -127,7 +127,7 @@ begin
   until ptn1=nil;
   end;
 end;
-procedure GDBObjCable.SaveToDXFObjXData(var outhandle:{GDBInteger}TZctnrVectorBytes;var IODXFContext:TIODXFContext);
+procedure GDBObjCable.SaveToDXFObjXData(var outhandle:{Integer}TZctnrVectorBytes;var IODXFContext:TIODXFContext);
 //var
    //s:gdbstring;
 begin
@@ -198,7 +198,7 @@ var ir_inGDB,ir_inVertexArray,ir_inNodeArray,ir_inDevice,ir_inDevice2:itrec;
     I3DPPrev,I3DPNext,I3DP:Intercept3DProp;
     m,rotmatr:DMatrix4D;
     pvd,{pvd2,}pvds,pvdal,pvdrt:pvardesk;
-    {group,pribor,}count:gdbinteger;
+    {group,pribor,}count:Integer;
     l:gdbdouble;
     pentvarext,pentvarextcirrobj:TVariablesExtender;
 
@@ -213,9 +213,9 @@ begin
   //CreateDeviceNameProcess(@self);
 
   {pvd:=ou.FindVariable('GC_HeadDevice');
-  group:=pgdbinteger(pvd^.Instance)^;
+  group:=PInteger(pvd^.Instance)^;
   pvd:=ou.FindVariable('GC_HDGroup');
-  pribor:=pgdbinteger(pvd^.Instance)^;}
+  pribor:=PInteger(pvd^.Instance)^;}
 
 
   //pvd:=ou.FindVariable('Cable_Length');
@@ -352,15 +352,15 @@ begin
                     pentvarextcirrobj:=CurrentObj^.GetExtension<TVariablesExtender>;
                     {pvd:=CurrentObj.ou.FindVariable('OPS_Pribor');
                     if pvd<>nil then
-                    pgdbinteger(pvd^.Instance)^:=group;
+                    PInteger(pvd^.Instance)^:=group;
                     pvd:=CurrentObj.ou.FindVariable('OPS_GroupInPribor');
                     if pvd<>nil then
-                    pgdbinteger(pvd^.Instance)^:=pribor;
+                    PInteger(pvd^.Instance)^:=pribor;
                     pvd:=CurrentObj.ou.FindVariable('OPS_NumberInSleif');
                     if pvd<>nil then
                     begin
                     inc(count);
-                    pgdbinteger(pvd^.Instance)^:=count;
+                    PInteger(pvd^.Instance)^:=count;
                     end;}
                     pvd:=pentvarextcirrobj.entityunit.FindVariable('EL_Cab_AddLength');
                     if pvd<>nil then
@@ -378,7 +378,7 @@ begin
   pentvarext:=self.GetExtension<TVariablesExtender>;
   pvd:=pentvarext.entityunit.FindVariable('CABLE_TotalCD');
   if pvd<>nil then
-                                  pgdbinteger(pvd^.data.Addr.Instance)^:=count;
+                                  PInteger(pvd^.data.Addr.Instance)^:=count;
   pvd:=pentvarext.entityunit.FindVariable('AmountD');
   pvds:=pentvarext.entityunit.FindVariable('LENGTH_Scale');
   pvdal:=pentvarext.entityunit.FindVariable('LENGTH_Add');
@@ -387,12 +387,12 @@ begin
   if pgdbdouble(pvds^.data.Addr.Instance)^>0 then
                                              begin
                                              if (pvd<>nil)and(pvds<>nil)and(pvdal<>nil){and(pvdrt<>nil)} then
-                                             pgdbdouble(pvd^.data.Addr.Instance)^:={roundto(}length*pgdbdouble(pvds^.data.Addr.Instance)^+pgdbdouble(pvdal^.data.Addr.Instance)^+l{,pgdbinteger(pvdrt^.Instance)^)};
+                                             pgdbdouble(pvd^.data.Addr.Instance)^:={roundto(}length*pgdbdouble(pvds^.data.Addr.Instance)^+pgdbdouble(pvdal^.data.Addr.Instance)^+l{,PInteger(pvdrt^.Instance)^)};
                                              pvds:=pentvarext.entityunit.FindVariable('LENGTH_KReserve');
                                              if pvds<>nil then
                                                               pgdbdouble(pvd^.data.Addr.Instance)^:=pgdbdouble(pvd^.data.Addr.Instance)^*pgdbdouble(pvds^.data.Addr.Instance)^;
                                              if (pvdrt<>nil) then
-                                                              pgdbdouble(pvd^.data.Addr.Instance)^:=roundto(pgdbdouble(pvd^.data.Addr.Instance)^,pgdbinteger(pvdrt^.data.Addr.Instance)^);
+                                                              pgdbdouble(pvd^.data.Addr.Instance)^:=roundto(pgdbdouble(pvd^.data.Addr.Instance)^,PInteger(pvdrt^.data.Addr.Instance)^);
 
                                              end
                                          else

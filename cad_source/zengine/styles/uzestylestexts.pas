@@ -46,7 +46,7 @@ PGDBTextStyleProp=^GDBTextStyleProp;
 PGDBTextStyleArray=^GDBTextStyleArray;
 {REGISTEROBJECTTYPE GDBTextStyleArray}
 GDBTextStyleArray= object(GDBNamedObjectsArray{-}<PGDBTextStyle,GDBTextStyle>{//})(*OpenArrayOfData=GDBTextStyle*)
-                    constructor init(m:GDBInteger);
+                    constructor init(m:Integer);
                     constructor initnul;
 
                     function addstyle(StyleName,AFontFile,AFontFamily:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):PGDBTextStyle;
@@ -81,7 +81,7 @@ begin
 end;
 
 {procedure GDBLayerArray.clear;
-var i:GDBInteger;
+var i:Integer;
     tlp:PGDBLayerProp;
 begin
      if count>0 then
@@ -95,9 +95,9 @@ begin
      end;
   count:=0;
 end;}
-{function GDBLayerArray.getLayerIndex(name: GDBString): GDBInteger;
+{function GDBLayerArray.getLayerIndex(name: GDBString): Integer;
 var
-  i: GDBInteger;
+  i: Integer;
 begin
   result := 0;
   for i := 0 to count - 1 do
@@ -136,7 +136,7 @@ begin
   if ps<>nil then
     internalsetstyle(ps^,AFontFile,AFontFamily,tp,USedInLT);
 end;
-function GDBTextStyleArray.addstyle(StyleName,AFontFile,AFontFamily:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):{GDBInteger}PGDBTextStyle;
+function GDBTextStyleArray.addstyle(StyleName,AFontFile,AFontFamily:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):{Integer}PGDBTextStyle;
 var ts:PGDBTextStyle;
 begin
   Getmem(pointer(ts),sizeof(GDBTextStyle));
@@ -166,7 +166,7 @@ begin
 end;
 
 {function GDBLayerArray.CalcCopactMemSize2;
-var i:GDBInteger;
+var i:Integer;
     tlp:PGDBLayerProp;
 begin
      result:=0;
@@ -181,7 +181,7 @@ begin
      end;
 end;
 function GDBLayerArray.SaveToCompactMemSize2;
-var i:GDBInteger;
+var i:Integer;
     tlp:PGDBLayerProp;
 begin
      result:=0;

@@ -27,7 +27,7 @@ type
 ZGLGeomData=object(GDBaseObject)
                                                 Vertex3S:ZGLVertex3Sarray;
                                                 Indexes:ZGLIndexsArray;
-                                                constructor init(m:GDBInteger);
+                                                constructor init(m:Integer);
                                                 destructor done;virtual;
                                                 procedure Clear;virtual;
                                                 procedure Shrink;virtual;

@@ -69,7 +69,7 @@ type
                            MainMouseMove:procedure of object;
                            MainMouseDown:function(Sender:TAbstractViewArea):boolean of object;
                            MainMouseUp:procedure of object;
-                           tocommandmcliccount:GDBInteger;
+                           tocommandmcliccount:Integer;
                            currentmousemovesnaptogrid:GDBBoolean;
                            OnWaMouseDown:TOnWaMouseDown;
                            OnWaMouseSelect:TOnWaMouseSelect;
@@ -125,7 +125,7 @@ type
                            procedure CorrectMouseAfterOS;virtual;abstract;
                            //procedure sendmousecoordwop(key: Byte);virtual;abstract;
                            //procedure sendmousecoord(key: Byte);virtual;abstract;
-                           function SelectRelatedObjects(pent:PGDBObjEntity):GDBInteger;virtual;abstract;
+                           function SelectRelatedObjects(pent:PGDBObjEntity):Integer;virtual;abstract;
                            procedure doCameraChanged;virtual;abstract;
                            procedure set3dmouse;virtual;abstract;
                            procedure WaMouseMove(sender:tobject;Shift: TShiftState; X, Y: Integer);virtual;abstract;
@@ -151,7 +151,7 @@ type
                            procedure asynczoomall(Data: PtrInt); virtual;abstract;
                       end;
 var
-   otracktimer: GDBInteger;
+   otracktimer: Integer;
 procedure copyospoint(var dest:os_record; source:os_record);
 function correcttogrid(point:GDBVertex;const grid:GDBSnap2D):GDBVertex;
 function CreateFaceRC:TDrawContext;

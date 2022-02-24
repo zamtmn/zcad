@@ -29,12 +29,12 @@ TLinkType=(LT_Normal,LT_OnlyLink);
 pgrafelement=^grafelement;
 {REGISTEROBJECTTYPE grafelement}
 grafelement= object(GDBaseObject)
-                  linkcount:GDBInteger;
+                  linkcount:Integer;
                   point:gdbvertex;
                   link:GDBObjOpenArrayOfPV;
                   workedlink:PGDBObjEntity;
-                  connected:GDBInteger;
-                  step:GDBInteger;
+                  connected:Integer;
+                  step:Integer;
                   pathlength:GDBDouble;
 
                   constructor initnul;
@@ -44,7 +44,7 @@ grafelement= object(GDBaseObject)
             end;
 {REGISTEROBJECTTYPE GDBGraf}
 GDBGraf= object(GZVector{-}<grafelement>{//})(*OpenArrayOfData=grafelement*)
-                constructor init(m:GDBInteger);
+                constructor init(m:Integer);
                 function addge(v:gdbvertex):pgrafelement;
                 procedure clear;virtual;
                 function minimalize(var drawing:TDrawingDef):GDBBoolean;
@@ -111,7 +111,7 @@ procedure GDBGraf.FindPath;
 var
   pgfe,pgfe2,pgfe3: pgrafelement;
   ir,ir2,ir3:itrec;
-  step,oldstep:gdbinteger;
+  step,oldstep:Integer;
   isend:gdbboolean;
   pl:pgdbobjEntity;
   npath,npathmin,linklength:gdbdouble;
@@ -274,7 +274,7 @@ begin
 end;
 function GDBGraf.minimalize;
 var
-  i{,j}: GDBInteger;
+  i{,j}: Integer;
   tgf: pgrafelement;
   l1,l2:pgdbobjline;
 begin
@@ -312,7 +312,7 @@ begin
 end;
 function GDBGraf.divide;
 function marknearelement(pgf:pgrafelement):GDBBoolean;
-var i,j,k: GDBInteger;
+var i,j,k: Integer;
     tgf: pgrafelement;
     l1,l2:pgdbobjline;
     l1addr,l2addr:Pointer;
@@ -347,7 +347,7 @@ begin
   end;
 end;
 var
-  i{,j}: GDBInteger;
+  i{,j}: Integer;
   tgf: pgrafelement;
 //  l1,l2:pgdbobjline;
   q:GDBBoolean;
@@ -384,7 +384,7 @@ begin
 end;
 function GDBGraf.addge;
 var
-  i: GDBInteger;
+  i: Integer;
   tgf: pgrafelement;
 begin
   if count = 0 then
@@ -418,7 +418,7 @@ begin
 end;
 procedure GDBGraf.clear;
 //var
-//  i: GDBInteger;
+//  i: Integer;
 //  tgf: pgrafelement;
 begin
   {if count = 0 then exit;

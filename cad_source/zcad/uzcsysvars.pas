@@ -37,17 +37,17 @@ type
   {REGISTERRECORDTYPE tmemdeb}
   tmemdeb=record
                 test:integer;
-                GetMemCount,FreeMemCount:PGDBInteger;
-                TotalAllocMb,CurrentAllocMB:PGDBInteger;
+                GetMemCount,FreeMemCount:PInteger;
+                TotalAllocMb,CurrentAllocMB:PInteger;
           end;
   {REGISTERRECORDTYPE trenderdeb}
   trenderdeb=record
-                   primcount,pointcount,bathcount:GDBInteger;
+                   primcount,pointcount,bathcount:Integer;
                    middlepoint:GDBVertex;
              end;
   {REGISTERRECORDTYPE tlanguadedeb}
   tlanguadedeb=record
-                   UpdatePO,NotEnlishWord,DebugWord:GDBInteger;
+                   UpdatePO,NotEnlishWord,DebugWord:Integer;
              end;
   {REGISTERRECORDTYPE tdebug}
   tdebug=record
@@ -81,25 +81,25 @@ type
             RD_GLUVersion:PGDBString;(*'GLU Version'*)(*oi_readonly*)
             RD_GLUExtensions:PGDBString;(*'GLU Extensions'*)(*oi_readonly*)
             RD_UseStencil:PGDBBoolean;(*'Use STENCIL buffer'*)
-            RD_LastRenderTime:pGDBInteger;(*'Last render time'*)(*oi_readonly*)
-            RD_LastUpdateTime:pGDBInteger;(*'Last update time'*)(*oi_readonly*)
-            RD_LastCalcVisible:PGDBInteger;(*'Last visible calculation time'*)(*oi_readonly*)
-            RD_MaxRenderTime:pGDBInteger;(*'Maximum single pass time'*)
+            RD_LastRenderTime:PInteger;(*'Last render time'*)(*oi_readonly*)
+            RD_LastUpdateTime:PInteger;(*'Last update time'*)(*oi_readonly*)
+            RD_LastCalcVisible:PInteger;(*'Last visible calculation time'*)(*oi_readonly*)
+            RD_MaxRenderTime:PInteger;(*'Maximum single pass time'*)
             RD_DrawInsidePaintMessage:PTGDB3StateBool;(*'Draw inside paint message'*)
             RD_RemoveSystemCursorFromWorkArea:PGDBBoolean;(*'Remove system cursor from work area'*)
             RD_Light:PGDBBoolean;(*'Light'*)
             RD_LineSmooth:PGDBBoolean;(*'Line smoothing'*)
             RD_ImageDegradation:TImageDegradation;(*'Image degradation'*)
             RD_PanObjectDegradation:PGDBBoolean;(*'Degradation while pan'*)
-            RD_SpatialNodesDepth:PGDBInteger;(*'Spatial index nodes depth'*)(*hidden_in_objinsp*)
-            RD_SpatialNodeCount:PGDBInteger;(*'Spatial index ents in node'*)(*hidden_in_objinsp*)
-            RD_MaxLTPatternsInEntity:PGDBInteger;(*'Max LT patterns in entity'*)
+            RD_SpatialNodesDepth:PInteger;(*'Spatial index nodes depth'*)(*hidden_in_objinsp*)
+            RD_SpatialNodeCount:PInteger;(*'Spatial index ents in node'*)(*hidden_in_objinsp*)
+            RD_MaxLTPatternsInEntity:PInteger;(*'Max LT patterns in entity'*)
       end;
   {REGISTERRECORDTYPE tsave}
   tsave=record
               SAVE_Auto_On:PGDBBoolean;(*'Autosave'*)
-              SAVE_Auto_Current_Interval:pGDBInteger;(*'Time to autosave'*)(*oi_readonly*)
-              SAVE_Auto_Interval:PGDBInteger;(*'Time between autosaves'*)
+              SAVE_Auto_Current_Interval:PInteger;(*'Time to autosave'*)(*oi_readonly*)
+              SAVE_Auto_Interval:PInteger;(*'Time between autosaves'*)
               SAVE_Auto_FileName:PGDBString;(*'Autosave file name'*)
         end;
   {REGISTERRECORDTYPE tcompileinfo}
@@ -118,7 +118,7 @@ type
   tsys=record
              SYS_Version:PGDBString;(*'Program version'*)(*oi_readonly*)
              SSY_CompileInfo:tcompileinfo;(*'Build info'*)(*oi_readonly*)
-             SYS_RunTime:PGDBInteger;(*'Uptime'*)(*oi_readonly*)
+             SYS_RunTime:PInteger;(*'Uptime'*)(*oi_readonly*)
              SYS_UniqueInstance:PGDBBoolean;(*'Unique instance'*)
              SYS_NoSplash:PGDBBoolean;(*'No splash screen'*)
              SYS_NoLoadLayout:PGDBBoolean;(*'No load layout'*)
@@ -173,7 +173,7 @@ type
              DSGN_HelpScale:PGDBDouble;(*'Scale of auxiliary elements'*)
              DSGN_SelNew:PGDBBoolean;(*'New selection set'*)
              DSGN_SelSameName:PGDBBoolean;(*'Auto select devices with same name'*)
-             DSGN_OTrackTimerInterval:PGDBInteger;(*'Object track timer interval'*)
+             DSGN_OTrackTimerInterval:PInteger;(*'Object track timer interval'*)
        end;
   {REGISTERRECORDTYPE tobjinspinterface}
   tobjinspinterface=record
@@ -184,10 +184,10 @@ type
                 INTF_ObjInsp_ShowFastEditors:PGDBBoolean;(*'Show fast editors'*)
                 INTF_ObjInsp_ShowOnlyHotFastEditors:PGDBBoolean;(*'Show only hot fast editors'*)
                 INTF_ObjInsp_RowHeight:PTGDBIntegerOverrider;(*'Row height'*)
-                INTF_ObjInsp_SpaceHeight:PGDBInteger;(*'Space height'*)
+                INTF_ObjInsp_SpaceHeight:PInteger;(*'Space height'*)
                 INTF_ObjInsp_AlwaysUseMultiSelectWrapper:PGDBBoolean;(*'Always use multiselect wrapper'*)
                 INTF_ObjInsp_ShowEmptySections:PGDBBoolean;(*'Show empty sections'*)
-                INTF_ObjInsp_ButtonSizeReducing:PGDBInteger;(*'Button size reducing'*)
+                INTF_ObjInsp_ButtonSizeReducing:PInteger;(*'Button size reducing'*)
                end;
   {REGISTERRECORDTYPE tinterface}
   tinterface=record
@@ -200,8 +200,8 @@ type
               INTF_ThemedRightToolbars:PGDBBoolean;(*'Themed right toolbars'*)
               INTF_ThemedDownToolbars:PGDBBoolean;(*'Themed down toolbars'*)
               INTF_ThemedLeftToolbars:PGDBBoolean;(*'Themed left toolbars'*)
-              INTF_DefaultControlHeight:PGDBInteger;(*'Default control height'*)(*oi_readonly*)
-              INTF_DefaultEditorFontHeight:PGDBInteger;(*'Default editor font height'*)
+              INTF_DefaultControlHeight:PInteger;(*'Default control height'*)(*oi_readonly*)
+              INTF_DefaultEditorFontHeight:PInteger;(*'Default editor font height'*)
               INTF_OBJINSP_Properties:tobjinspinterface;(*'Object inspector properties'*)
              end;
   {REGISTERRECORDTYPE tdisp}
@@ -210,16 +210,16 @@ type
              DISP_SystmGeometryColor:PTGDBPaletteColor;(*'Help color'*)
              DISP_ZoomFactor:PGDBDouble;(*'Mouse wheel scale factor'*)
              DISP_OSSize:PGDBDouble;(*'Snap aperture size'*)
-             DISP_CursorSize:PGDBInteger;(*'Cursor size'*)
+             DISP_CursorSize:PInteger;(*'Cursor size'*)
              DISP_CrosshairSize:PGDBDouble;(*'Crosshair size'*)
              DISP_DrawZAxis:PGDBBoolean;(*'Show Z axis'*)
              DISP_ColorAxis:PGDBBoolean;(*'Colored cursor'*)
-             DISP_GripSize:PGDBInteger;(*'Grip size'*)
+             DISP_GripSize:PInteger;(*'Grip size'*)
              DISP_BackGroundColor:PTRGB;(*'Background color'*)
              DISP_UnSelectedGripColor:PTGDBPaletteColor;(*'Unselected grip color'*)
              DISP_SelectedGripColor:PTGDBPaletteColor;(*'Selected grip color'*)
              DISP_HotGripColor:PTGDBPaletteColor;(*'Hot grip color'*)
-             DISP_LWDisplayScale:PGDBInteger;(*'LWDisplayScale'*)
+             DISP_LWDisplayScale:PInteger;(*'LWDisplayScale'*)
              DISP_DefaultLW:PTGDBLineWeight;(*'DefaultLW'*)
         end;
   pgdbsysvariable=^gdbsysvariable;

@@ -40,7 +40,7 @@ TAbstractDrawing= object(TDrawingDef)
                        CurrentLineW:TGDBLineWeight;
                        LTScale:GDBDouble;
                        CLTScale:GDBDouble;
-                       CColor:GDBInteger;
+                       CColor:Integer;
 
                        LUnits:TLUnits;
                        LUPrec:TUPrec;

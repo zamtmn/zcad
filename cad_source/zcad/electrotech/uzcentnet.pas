@@ -28,14 +28,14 @@ GDBObjNet= object(GDBObjConnected)
                  riserarray:TZctnrVectorPGDBaseObjects;
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  function CanAddGDBObj(pobj:PGDBObjEntity):GDBBoolean;virtual;
-                 function EubEntryType:GDBInteger;virtual;
-                 procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;
+                 function EubEntryType:Integer;virtual;
+                 procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
                  procedure restructure(var drawing:TDrawingDef);virtual;
-                 procedure DeSelect(var SelectedObjCount:GDBInteger;ds2s:TDeSelect2Stage);virtual;
+                 procedure DeSelect(var SelectedObjCount:Integer;ds2s:TDeSelect2Stage);virtual;
                  procedure BuildGraf(var drawing:TDrawingDef);virtual;
-                 procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
-                 procedure EraseMi(pobj:pgdbobjEntity;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;
-                 function CalcNewName(Net1,Net2:PGDBObjNet):GDBInteger;
+                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
+                 procedure EraseMi(pobj:pgdbobjEntity;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
+                 function CalcNewName(Net1,Net2:PGDBObjNet):Integer;
                  procedure connectedtogdb(ConnectedArea:PGDBObjGenericSubEntry;var drawing:TDrawingDef);virtual;
                  function GetObjTypeName:GDBString;virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
@@ -46,9 +46,9 @@ GDBObjNet= object(GDBObjConnected)
 
                  function GetNearestLine(const point:GDBVertex):PGDBObjEntity;
 
-                 procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                 procedure SaveToDXFObjXData(var outhandle:{GDBInteger}TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
-                 procedure SaveToDXFfollow(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXFObjXData(var outhandle:{Integer}TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXFfollow(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
 
                  destructor done;virtual;
                  procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
@@ -136,7 +136,7 @@ end;
 function GDBObjNet.GetNearestLine;
 var pl:pgdbobjline;
     d,d0:gdbdouble;
-//    i:GDBInteger;
+//    i:Integer;
 //    tgf: pgrafelement;
     ir:itrec;
 begin
@@ -191,7 +191,7 @@ begin
           pobj^.vp:=tvp;
      end;
 end;
-procedure GDBObjNet.SaveToDXFObjXData(var outhandle:{GDBInteger}TZctnrVectorBytes;var IODXFContext:TIODXFContext);
+procedure GDBObjNet.SaveToDXFObjXData(var outhandle:{Integer}TZctnrVectorBytes;var IODXFContext:TIODXFContext);
 //var
    //s:gdbstring;
 begin
@@ -201,7 +201,7 @@ begin
      dxfGDBStringout(outhandle,1000,'_HANDLE='+inttohex(GetHandle,10));
      dxfGDBStringout(outhandle,1000,'_UPGRADE='+inttostr(UD_LineToNet));
 end;
-procedure GDBObjNet.SaveToDXFfollow(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
+procedure GDBObjNet.SaveToDXFfollow(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
 var pobj:PGDBObjEntity;
     ir:itrec;
 begin
@@ -239,7 +239,7 @@ begin
      //bp.ListPos.Owner^.ImEdited(@self,bp.ListPos.SelfIndex,drawing);
 end;
 procedure GDBObjNet.DrawGeometry;
-var i{,j}:GDBInteger;
+var i{,j}:Integer;
     tgf: pgrafelement;
     //wcoord:gdbvertex;
 begin
@@ -294,7 +294,7 @@ begin
 end;
 procedure GDBObjNet.BuildGraf(var drawing:TDrawingDef);
 var pl:pgdbobjline;
-    //i:GDBInteger;
+    //i:Integer;
     tgf: pgrafelement;
     ir:itrec;
 begin
@@ -337,7 +337,7 @@ end;
                 //pl^.CoordInOCS.lbegin:=tgf^.point;
                 //pl^.CoordInOCS.lend:=tgf^.point;
                 //pl^.Format
-function GDBObjNet.CalcNewName(Net1,Net2:PGDBObjNet):GDBInteger;
+function GDBObjNet.CalcNewName(Net1,Net2:PGDBObjNet):Integer;
 var
    pvd1,pvd2:pvardesk;
    n1,n2:gdbstring;
@@ -365,7 +365,7 @@ else if (n2[1]='@') then
 end;
 procedure GDBObjNet.connectedtogdb;
 var CurrentNet:PGDBObjNet;
-    nn:GDBInteger;
+    nn:Integer;
     pmyline,ptestline:pgdbobjline;
     inter:intercept3dprop;
     ir,ir2,ir3:itrec;
@@ -428,7 +428,7 @@ end;
 procedure GDBObjNet.restructure;
 var pl,pl2:pgdbobjline;
     tpl:pgdbobjline;
-    i,j:GDBInteger;
+    i,j:Integer;
     ip:intercept3dprop;
     tv:gdbvertex;
 //    q:GDBBoolean;

@@ -25,7 +25,7 @@ type
 PGDBXYZWGDBStringArray=^XYZWGDBGDBStringArray;
 {REGISTEROBJECTTYPE XYZWGDBGDBStringArray}
 XYZWGDBGDBStringArray= object(GZVector{-}<GDBStrWithPoint>{//})
-                             constructor init(m:GDBInteger);
+                             constructor init(m:Integer);
                              procedure freeelement(PItem:PT);virtual;
                              //function add(p:Pointer):TArrayIndex;virtual;
                        end;
@@ -42,7 +42,7 @@ procedure XYZWGDBGDBStringArray.freeelement(PItem:PT);
 begin
      PGDBStrWithPoint(PItem)^.str:='';
 end;
-constructor XYZWGDBGDBStringArray.init(m:GDBInteger);
+constructor XYZWGDBGDBStringArray.init(m:Integer);
 begin
      inherited init(m);
 end;

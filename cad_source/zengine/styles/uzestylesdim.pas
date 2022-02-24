@@ -89,7 +89,7 @@ TGDBDimPlacingProp=record
 TGDBDimUnitsProp=record
                        DIMLFAC:GDBDouble;//Linear measurements scale factor//group144
                        DIMLUNIT:TDimUnit;//Sets units for all dimension types except Angular://group277
-                       DIMDEC:GDBInteger;//Number of decimal places for the tolerance values of a primary units dimension//group271
+                       DIMDEC:Integer;//Number of decimal places for the tolerance values of a primary units dimension//group271
                        DIMDSEP:TDimDSep;//Single-character decimal separator used when creating dimensions whose unit format is decimal//group278
                        DIMRND:GDBDouble;//Rounding value for dimension distances//group45
                        DIMPOST:GDBAnsiString; //Dimension prefix<>suffix //group3
@@ -107,8 +107,8 @@ GDBDimStyle = object(GDBNamedObject)
                       Units:TGDBDimUnitsProp;
                       PDXFLoadingData:PTDimStyleDXFLoadingData;
                       procedure SetDefaultValues;virtual;
-                      procedure SetValueFromDxf(var mode:TDimStyleReadMode;group:GDBInteger;value:GDBString;var context:TIODXFLoadContext);virtual;
-                      function GetDimBlockParam(nline:GDBInteger):TDimArrowBlockParam;
+                      procedure SetValueFromDxf(var mode:TDimStyleReadMode;group:Integer;value:GDBString;var context:TIODXFLoadContext);virtual;
+                      function GetDimBlockParam(nline:Integer):TDimArrowBlockParam;
                       function GetDimBlockTypeByName(bname:String):TArrowStyle;
                       procedure CreateLDIfNeed;
                       procedure ReleaseLDIfNeed;
@@ -119,7 +119,7 @@ GDBDimStyle = object(GDBNamedObject)
 PGDBDimStyleArray=^GDBDimStyleArray;
 {REGISTEROBJECTTYPE GDBDimStyleArray}
 GDBDimStyleArray= object(GDBNamedObjectsArray{-}<PGDBDimStyle,GDBDimStyle>{//})(*OpenArrayOfData=GDBDimStyle*)
-                    constructor init(m:GDBInteger);
+                    constructor init(m:Integer);
                     constructor initnul;
                     procedure ResolveDXFHandles(const Handle2BlockName:TMapBlockHandle_BlockNames);
                     procedure ResolveTextstyles(const tst:TGenericNamedObjectsArray);
@@ -227,7 +227,7 @@ begin
           Freemem(pointer(PDXFLoadingData));
      end;
 end;
-function GDBDimStyle.GetDimBlockParam(nline:GDBInteger):TDimArrowBlockParam;
+function GDBDimStyle.GetDimBlockParam(nline:Integer):TDimArrowBlockParam;
 begin
      case nline of
                  0:result:=DimArrows[Arrows.DIMBLK1];
@@ -249,7 +249,7 @@ begin
      result:=high(TArrowStyle);
 end;
 
-procedure GDBDimStyle.SetValueFromDxf(var mode:TDimStyleReadMode; group:GDBInteger;value:GDBString;var context:TIODXFLoadContext);
+procedure GDBDimStyle.SetValueFromDxf(var mode:TDimStyleReadMode; group:Integer;value:GDBString;var context:TIODXFLoadContext);
 var
    temp:QWord;
 begin

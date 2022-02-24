@@ -37,10 +37,10 @@ GDBObjLine= object(GDBObj3d)
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f: TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
-                 procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure CalcGeometry;virtual;
-                 procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
+                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                  procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                   function Clone(own:Pointer):PGDBObjEntity;virtual;
                  procedure rtedit(refp:Pointer;mode:Single;dist,wc:gdbvertex);virtual;
@@ -66,7 +66,7 @@ GDBObjLine= object(GDBObj3d)
                   function GetObjTypeName:GDBString;virtual;
                   function GetCenterPoint:GDBVertex;virtual;
                   procedure getoutbound(var DC:TDrawContext);virtual;
-                  function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
+                  function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
                   function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
 
                   function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual;
@@ -191,7 +191,7 @@ begin
 end;
 procedure GDBObjLine.LoadFromDXF;
 var //s: GDBString;
-  byt: GDBInteger;
+  byt: Integer;
 begin
   byt:=readmystrtoint(f);
   while byt <> 0 do
@@ -246,7 +246,7 @@ begin
     EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
 end;
 function GDBObjLine.CalcInFrustum;
-var i:GDBInteger;
+var i:Integer;
 begin
       if CalcAABBInFrustum(vp.BoundingBox,frustum)<>IREmpty then
                                                                                   result:=true
@@ -318,7 +318,7 @@ procedure GDBObjLine.RenderFeedback;
 var tv:GDBvertex;
 //    ptv:PGDBvertex;
 //    ptv2d:PGDBvertex2D;
-//    i:GDBInteger;
+//    i:Integer;
 begin
   //if POGLWnd=nil then exit;
   {if PProjPoint<>nil then

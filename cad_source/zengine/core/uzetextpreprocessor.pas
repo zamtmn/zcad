@@ -77,7 +77,7 @@ begin
 end;
 
 function convertfromunicode(s:TDXFEntsInternalStringType):TDXFEntsInternalStringType;
-var //i,i2:GDBInteger;
+var //i,i2:Integer;
     ps{,varname}:TDXFEntsInternalStringType;
     //pv:pvardesk;
     //num,code:integer;
@@ -130,7 +130,7 @@ begin
 end;
 
 function textformat(s:TDXFEntsInternalStringType;pobj:Pointer):TDXFEntsInternalStringType;
-var FindedIdPos,ContinuePos,EndBracketPos,{i2,}counter:GDBInteger;
+var FindedIdPos,ContinuePos,EndBracketPos,{i2,}counter:Integer;
     ps{,s2},res,operands:TDXFEntsInternalStringType;
     pair:Prefix2ProcessFunc.TDictionaryPair;
     (*{$IFNDEF DELPHI}

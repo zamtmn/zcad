@@ -28,8 +28,8 @@ type
 taddotrac=procedure (var posr:os_record;const axis:GDBVertex) of object;
 {Export+}
 PGDBObjEntity=^GDBObjEntity;
-{-}TSelect2Stage=procedure(PEntity,PGripsCreator:PGDBObjEntity;var SelectedObjCount:GDBInteger)of object;{//}
-{-}TDeSelect2Stage=procedure(PV:PGDBObjEntity;var SelectedObjCount:GDBInteger)of object;{//}
+{-}TSelect2Stage=procedure(PEntity,PGripsCreator:PGDBObjEntity;var SelectedObjCount:Integer)of object;{//}
+{-}TDeSelect2Stage=procedure(PV:PGDBObjEntity;var SelectedObjCount:Integer)of object;{//}
 PTExtAttrib=^TExtAttrib;
 {REGISTERRECORDTYPE TExtAttrib}
 TExtAttrib=record
@@ -51,8 +51,8 @@ GDBObjEntity= object(GDBObjSubordinated)
                     destructor done;virtual;
                     constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                     constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                    procedure SaveToDXFObjPrefix(var  outhandle:{GDBInteger}TZctnrVectorBytes;entname,dbname:GDBString;var IODXFContext:TIODXFContext;notprocessHandle:boolean=false);
-                    function LoadFromDXFObjShared(var f:TZctnrVectorBytes;dxfcod:GDBInteger;ptu:PExtensionData;var drawing:TDrawingDef):GDBBoolean;
+                    procedure SaveToDXFObjPrefix(var  outhandle:{Integer}TZctnrVectorBytes;entname,dbname:GDBString;var IODXFContext:TIODXFContext;notprocessHandle:boolean=false);
+                    function LoadFromDXFObjShared(var f:TZctnrVectorBytes;dxfcod:Integer;ptu:PExtensionData;var drawing:TDrawingDef):GDBBoolean;
                     function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef):GDBBoolean;virtual;
                     function FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
                     procedure FromDXFPostProcessAfterAdd;virtual;
@@ -63,9 +63,9 @@ GDBObjEntity= object(GDBObjSubordinated)
                     function AddExtAttrib:PTExtAttrib;
                     function CopyExtAttrib:PTExtAttrib;
                     procedure LoadFromDXF(var f: TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;abstract;
-                    procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                    procedure DXFOut(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                    procedure SaveToDXFfollow(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                    procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                    procedure DXFOut(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                    procedure SaveToDXFfollow(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                     procedure SaveToDXFPostProcess(var handle:TZctnrVectorBytes;var IODXFContext:TIODXFContext);
                     procedure SaveToDXFObjXData(var outhandle:TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
                     procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
@@ -74,18 +74,18 @@ GDBObjEntity= object(GDBObjSubordinated)
                     procedure FormatAfterEdit(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                     procedure FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);virtual;
 
-                    procedure DrawWithAttrib(var DC:TDrawContext{visibleactualy:TActulity;subrender:GDBInteger});virtual;
-                    procedure DrawWithOutAttrib({visibleactualy:TActulity;}var DC:TDrawContext{subrender:GDBInteger});virtual;
+                    procedure DrawWithAttrib(var DC:TDrawContext{visibleactualy:TActulity;subrender:Integer});virtual;
+                    procedure DrawWithOutAttrib({visibleactualy:TActulity;}var DC:TDrawContext{subrender:Integer});virtual;
 
-                    procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{visibleactualy:TActulity;subrender:GDBInteger});virtual;
-                    procedure DrawOnlyGeometry(lw:GDBInteger;var DC:TDrawContext{visibleactualy:TActulity;subrender:GDBInteger});virtual;
+                    procedure DrawGeometry(lw:Integer;var DC:TDrawContext{visibleactualy:TActulity;subrender:Integer});virtual;
+                    procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext{visibleactualy:TActulity;subrender:Integer});virtual;
 
-                    procedure Draw(lw:GDBInteger;var DC:TDrawContext{visibleactualy:TActulity;subrender:GDBInteger});virtual;
-                    procedure DrawG(lw:GDBInteger;var DC:TDrawContext{visibleactualy:TActulity;subrender:GDBInteger});virtual;
+                    procedure Draw(lw:Integer;var DC:TDrawContext{visibleactualy:TActulity;subrender:Integer});virtual;
+                    procedure DrawG(lw:Integer;var DC:TDrawContext{visibleactualy:TActulity;subrender:Integer});virtual;
 
                     procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                     procedure RenderFeedbackIFNeed(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
-                    function CalculateLineWeight(const DC:TDrawContext):GDBInteger;//inline;
+                    function CalculateLineWeight(const DC:TDrawContext):Integer;//inline;
                     //function InRect:TInRect;virtual;
                     function Clone(own:Pointer):PGDBObjEntity;virtual;
                     procedure SetFromClone(_clone:PGDBObjEntity);virtual;
@@ -101,7 +101,7 @@ GDBObjEntity= object(GDBObjSubordinated)
                     function GetLTCorrectL(GlobalLTScale:GDBDouble):GDBDouble;virtual;
                     procedure calcbb(var DC:TDrawContext);virtual;
                     procedure DrawBB(var DC:TDrawContext);
-                    function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
+                    function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
 
                     function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
                     function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;virtual;
@@ -113,10 +113,10 @@ GDBObjEntity= object(GDBObjSubordinated)
                     function getintersect(var osp:os_record;pobj:PGDBObjEntity; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
                     procedure higlight(var DC:TDrawContext);virtual;
                     procedure addcontrolpoints(tdesc:Pointer);virtual;abstract;
-                    function select(var SelectedObjCount:GDBInteger;s2s:TSelect2Stage):GDBBoolean;virtual;
-                    //procedure Selector(SelObjArray:Pointer;var SelectedObjCount:GDBInteger);virtual;
-                    //procedure DeSelector(SelObjArray:Pointer;var SelectedObjCount:GDBInteger);virtual;
-                    procedure DeSelect(var SelectedObjCount:GDBInteger;ds2s:TDeSelect2Stage);virtual;
+                    function select(var SelectedObjCount:Integer;s2s:TSelect2Stage):GDBBoolean;virtual;
+                    //procedure Selector(SelObjArray:Pointer;var SelectedObjCount:Integer);virtual;
+                    //procedure DeSelector(SelObjArray:Pointer;var SelectedObjCount:Integer);virtual;
+                    procedure DeSelect(var SelectedObjCount:Integer;ds2s:TDeSelect2Stage);virtual;
                     function SelectQuik:GDBBoolean;virtual;
                     procedure remapcontrolpoints(pp:PGDBControlPointArray;pcount:TActulity;ScrollMode:GDBBoolean;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                     //procedure rtmodify(md:Pointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;
@@ -137,7 +137,7 @@ GDBObjEntity= object(GDBObjSubordinated)
                     procedure YouChanged(var drawing:TDrawingDef);virtual;
                     function GetObjTypeName:GDBString;virtual;
                     function GetObjType:TObjID;virtual;
-                    procedure correctobjects(powner:PGDBObjEntity;pinownerarray:GDBInteger);virtual;
+                    procedure correctobjects(powner:PGDBObjEntity;pinownerarray:Integer);virtual;
                     function GetLineWeight:SmallInt;inline;
                     function IsSelected:GDBBoolean;virtual;
                     function IsActualy:GDBBoolean;virtual;
@@ -146,10 +146,10 @@ GDBObjEntity= object(GDBObjSubordinated)
                     function IsEntity:GDBBoolean;virtual;
                     function GetLayer:PGDBLayerProp;virtual;
                     function GetCenterPoint:GDBVertex;virtual;
-                    procedure SetInFrustum(infrustumactualy:TActulity;var totalobj,infrustumobj:GDBInteger);virtual;
-                    procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;
-                    procedure SetNotInFrustum(infrustumactualy:TActulity;var totalobj,infrustumobj:GDBInteger);virtual;
-                    function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
+                    procedure SetInFrustum(infrustumactualy:TActulity;var totalobj,infrustumobj:Integer);virtual;
+                    procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;
+                    procedure SetNotInFrustum(infrustumactualy:TActulity;var totalobj,infrustumobj:Integer);virtual;
+                    function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
                     function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                     function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual;
                     procedure BuildGeometry(var drawing:TDrawingDef);virtual;
@@ -157,7 +157,7 @@ GDBObjEntity= object(GDBObjSubordinated)
 
                     function CalcObjMatrixWithoutOwner:DMatrix4D;virtual;
 
-                    procedure EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;
+                    procedure EraseMi(pobj:pGDBObjEntity;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
                     function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;
                     procedure CalcObjMatrix;virtual;
                     procedure ReCalcFromObjMatrix;virtual;
@@ -165,16 +165,16 @@ GDBObjEntity= object(GDBObjSubordinated)
                     procedure CopyVPto(var toObj:GDBObjEntity);virtual;
                     function CanSimplyDrawInWCS(const DC:TDrawContext;const ParamSize,TargetSize:GDBDouble):GDBBoolean;inline;
                     procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                    procedure IterateCounter(PCounted:Pointer;var Counter:GDBInteger;proc:TProcCounter);virtual;
+                    procedure IterateCounter(PCounted:Pointer;var Counter:Integer;proc:TProcCounter);virtual;
                     class function GetDXFIOFeatures:TDXFEntIODataManager;static;
                     function GetNameInBlockTable:GDBString;virtual;
               end;
 {Export-}
-var onlygetsnapcount:GDBInteger;
+var onlygetsnapcount:Integer;
     GDBObjEntityDXFFeatures:TDXFEntIODataManager;
 implementation
 uses usimplegenerics,uzeentityfactory{,UGDBSelectedObjArray};
-procedure GDBObjEntity.IterateCounter(PCounted:Pointer;var Counter:GDBInteger;proc:TProcCounter);
+procedure GDBObjEntity.IterateCounter(PCounted:Pointer;var Counter:Integer;proc:TProcCounter);
 begin
     proc(@self,PCounted,Counter);
 end;
@@ -234,7 +234,7 @@ procedure GDBObjEntity.CalcObjMatrix;
 begin
 
 end;
-procedure GDBObjEntity.EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;var drawing:TDrawingDef);
+procedure GDBObjEntity.EraseMi(pobj:pGDBObjEntity;pobjinarray:Integer;var drawing:TDrawingDef);
 begin
 
 end;
@@ -448,8 +448,8 @@ begin
      DrawGeometry(lw,dc{visibleactualy,0});
 end;
 function GDBObjEntity.CalculateLineWeight;
-var lw: GDBInteger;
-    minlw: GDBInteger;
+var lw: Integer;
+    minlw: Integer;
 begin
   if not dc.drawmode then
                        begin
@@ -513,7 +513,7 @@ begin
      GetDXFIOFeatures.AddExtendersToEntity(@self);
 end;
 procedure GDBObjEntity.DrawWithOutAttrib;
-var lw: GDBInteger;
+var lw: Integer;
 //  sel: GDBBoolean;
 begin
   lw := CalculateLineWeight(dc);
@@ -528,7 +528,7 @@ begin
   end;
 end;
 procedure GDBObjEntity.DrawWithAttrib;
-var lw: GDBInteger;
+var lw: Integer;
   sel,_selected: GDBBoolean;
 procedure SetEntColor(color:integer;var DC:TDrawContext);
 begin
@@ -717,7 +717,7 @@ begin
 end;}
 
 function GDBObjEntity.calcvisible;
-//var i:GDBInteger;
+//var i:Integer;
 //    tv,tv1:gdbvertex4d;
 //    m:DMatrix4D;
 begin
@@ -968,7 +968,7 @@ begin
 end;
 procedure GDBObjEntity.remapcontrolpoints;
 var pdesc:pcontrolpointdesc;
-    i:GDBInteger;
+    i:Integer;
 begin
           { TODO : В примитивах нахуй ненужна проекция точек, убрать это хозяйство }
           {if ScrollMode then }renderfeedback({gdb.GetCurrentDWG.pcamera^.POSCOUNT}pcount,camera,ProjectProc,dc);
@@ -989,7 +989,7 @@ begin
      result:=nil;
 end;
 (*procedure GDBObjEntity.rtmodify;
-var i:GDBInteger;
+var i:Integer;
     point:pcontrolpointdesc;
     p:Pointer;
     var m:DMatrix4D;
@@ -1138,7 +1138,7 @@ begin
 end;
 function GDBObjEntity.LoadFromDXFObjShared;
 var APP_NAME:GDBString;
-    XGroup:GDBInteger;
+    XGroup:Integer;
     XValue:GDBString;
     Name,Value{,vn,vt,vv,vun}:GDBString;
     i:integer;

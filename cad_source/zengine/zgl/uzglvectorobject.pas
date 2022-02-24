@@ -34,10 +34,10 @@ TLLDrawResult=record
 {REGISTERRECORDTYPE TZGLVectorDataCopyParam}
 TZGLVectorDataCopyParam=record
                              LLPrimitivesStartIndex:TArrayIndex;
-                             LLPrimitivesDataSize:GDBInteger;
+                             LLPrimitivesDataSize:Integer;
                              EID:TEntIndexesData;
                              //GeomIndexMin,GeomIndexMax:TArrayIndex;
-                             GeomDataSize:GDBInteger;
+                             GeomDataSize:Integer;
                              //IndexsDataIndexMax,IndexsDataIndexMin:TArrayIndex;
                        end;
 
@@ -51,15 +51,15 @@ ZGLVectorObject= object(GDBaseObject)
                                  procedure Clear;virtual;
                                  procedure Shrink;virtual;
                                  function CalcTrueInFrustum(frustum:ClipArray; FullCheck:boolean):TInBoundingVolume;virtual;
-                                 function CalcCountedTrueInFrustum(frustum:ClipArray; FullCheck:boolean;StartOffset,Count:GDBInteger):TInBoundingVolume;virtual;
-                                 function GetCopyParam(LLPStartIndex,LLPCount:GDBInteger):TZGLVectorDataCopyParam;virtual;
+                                 function CalcCountedTrueInFrustum(frustum:ClipArray; FullCheck:boolean;StartOffset,Count:Integer):TInBoundingVolume;virtual;
+                                 function GetCopyParam(LLPStartIndex,LLPCount:Integer):TZGLVectorDataCopyParam;virtual;
                                  function CopyTo(var dest:ZGLVectorObject;CopyParam:TZGLVectorDataCopyParam):TZGLVectorDataCopyParam;virtual;
-                                 procedure CorrectIndexes(LLPrimitivesStartIndex:GDBInteger;LLPCount:GDBInteger;IndexesStartIndex:GDBInteger;IndexesCount:GDBInteger;offset:TEntIndexesOffsetData);virtual;
-                                 procedure MulOnMatrix(GeomDataIndexMin,GeomDataIndexMax:GDBInteger;const matrix:DMatrix4D);virtual;
-                                 function GetBoundingBbox(GeomDataIndexMin,GeomDataIndexMax:GDBInteger):TBoundingBox;virtual;
-                                 function GetTransformedBoundingBbox(GeomDataIndexMin,GeomDataIndexMax:GDBInteger;const matrix:DMatrix4D):TBoundingBox;virtual;
+                                 procedure CorrectIndexes(LLPrimitivesStartIndex:Integer;LLPCount:Integer;IndexesStartIndex:Integer;IndexesCount:Integer;offset:TEntIndexesOffsetData);virtual;
+                                 procedure MulOnMatrix(GeomDataIndexMin,GeomDataIndexMax:Integer;const matrix:DMatrix4D);virtual;
+                                 function GetBoundingBbox(GeomDataIndexMin,GeomDataIndexMax:Integer):TBoundingBox;virtual;
+                                 function GetTransformedBoundingBbox(GeomDataIndexMin,GeomDataIndexMax:Integer;const matrix:DMatrix4D):TBoundingBox;virtual;
                                  procedure DrawLLPrimitives(var rc:TDrawContext;var drawer:TZGLAbstractDrawer);virtual;
-                                 procedure DrawCountedLLPrimitives(var rc:TDrawContext;var drawer:TZGLAbstractDrawer;var OptData:ZGLOptimizerData;StartOffset,Count:GDBInteger);virtual;
+                                 procedure DrawCountedLLPrimitives(var rc:TDrawContext;var drawer:TZGLAbstractDrawer;var OptData:ZGLOptimizerData;StartOffset,Count:Integer);virtual;
                                end;
 {Export-}
 implementation
@@ -83,7 +83,7 @@ begin
           inc(pbyte(PPrimitive),CurrentSize);
      end;
 end;
-procedure ZGLVectorObject.DrawCountedLLPrimitives(var rc:TDrawContext;var drawer:TZGLAbstractDrawer;var OptData:ZGLOptimizerData;StartOffset,Count:GDBInteger);
+procedure ZGLVectorObject.DrawCountedLLPrimitives(var rc:TDrawContext;var drawer:TZGLAbstractDrawer;var OptData:ZGLOptimizerData;StartOffset,Count:Integer);
 var
    PPrimitive:PTLLPrimitive;
    ProcessedSize:TArrayIndex;
@@ -101,11 +101,11 @@ begin
      end;
 end;
 
-procedure ZGLVectorObject.CorrectIndexes(LLPrimitivesStartIndex:GDBInteger;LLPCount:GDBInteger;IndexesStartIndex:GDBInteger;IndexesCount:GDBInteger;offset:TEntIndexesOffsetData);
+procedure ZGLVectorObject.CorrectIndexes(LLPrimitivesStartIndex:Integer;LLPCount:Integer;IndexesStartIndex:Integer;IndexesCount:Integer;offset:TEntIndexesOffsetData);
 var
    i:integer;
-   CurrLLPrimitiveSize:GDBInteger;
-   PIndex:PGDBInteger;
+   CurrLLPrimitiveSize:Integer;
+   PIndex:PInteger;
    PLLPrimitive:PTLLPrimitive;
 begin
      PLLPrimitive:=pointer(LLprimitives.getDataMutable(LLPrimitivesStartIndex));
@@ -126,11 +126,11 @@ begin
      end;
 end;
 
-function ZGLVectorObject.GetCopyParam(LLPStartIndex,LLPCount:GDBInteger):TZGLVectorDataCopyParam;
+function ZGLVectorObject.GetCopyParam(LLPStartIndex,LLPCount:Integer):TZGLVectorDataCopyParam;
 var
    i:integer;
    PLLPrimitive:PTLLPrimitive;
-   CurrLLPrimitiveSize:GDBInteger;
+   CurrLLPrimitiveSize:Integer;
    eid:TEntIndexesData;
 procedure ProcessIndexs;
 begin
@@ -228,7 +228,7 @@ begin
           result.EID.IndexsIndexMax:=-1;
        end;
 end;
-procedure ZGLVectorObject.MulOnMatrix(GeomDataIndexMin,GeomDataIndexMax:GDBInteger;const matrix:DMatrix4D);
+procedure ZGLVectorObject.MulOnMatrix(GeomDataIndexMin,GeomDataIndexMax:Integer;const matrix:DMatrix4D);
 var
    i:integer;
    p:PGDBvertex3S;
@@ -240,7 +240,7 @@ begin
        inc(p);
      end;
 end;
-function ZGLVectorObject.GetBoundingBbox(GeomDataIndexMin,GeomDataIndexMax:GDBInteger):TBoundingBox;
+function ZGLVectorObject.GetBoundingBbox(GeomDataIndexMin,GeomDataIndexMax:Integer):TBoundingBox;
 var
    i:integer;
    p:PGDBvertex3S;
@@ -265,7 +265,7 @@ begin
        inc(p);
      end;
 end;
-function ZGLVectorObject.GetTransformedBoundingBbox(GeomDataIndexMin,GeomDataIndexMax:GDBInteger;const matrix:DMatrix4D):TBoundingBox;
+function ZGLVectorObject.GetTransformedBoundingBbox(GeomDataIndexMin,GeomDataIndexMax:Integer;const matrix:DMatrix4D):TBoundingBox;
 var
    i:integer;
    p:PGDBvertex3S;
@@ -292,7 +292,7 @@ begin
        inc(p);
      end;
 end;
-function ZGLVectorObject.CalcCountedTrueInFrustum(frustum:ClipArray; FullCheck:boolean;StartOffset,Count:GDBInteger):TInBoundingVolume;
+function ZGLVectorObject.CalcCountedTrueInFrustum(frustum:ClipArray; FullCheck:boolean;StartOffset,Count:Integer):TInBoundingVolume;
 var
   //subresult:TInBoundingVolume;
   PPrimitive:PTLLPrimitive;

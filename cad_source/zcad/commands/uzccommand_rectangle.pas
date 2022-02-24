@@ -40,7 +40,7 @@ type
   //** Тип данных для отображения в инспекторе опций команды Rectangle
   TRectangParam=record
                      ET:TRectangEntType;(*'Entity type'*)      //**< Выбор типа примитива, которым будет создан прямоугольник - 3Dolyline или LWPolyline
-                     //VNum:GDBInteger;(*'Number of vertices'*)  //**< Определение количества вершин
+                     //VNum:Integer;(*'Number of vertices'*)  //**< Определение количества вершин
                      PolyWidth:Double;(*'Polyline width'*)  //**< Ширина полилинии (если в качестве примитива выбран RET_LWPoly)
                end;
 

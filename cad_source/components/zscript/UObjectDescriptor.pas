@@ -53,7 +53,7 @@ TPropertiesVector=GZVector<PropertyDescriptor>;
 PObjectDescriptor=^ObjectDescriptor;
 ObjectDescriptor=object(RecordDescriptor)
                        PVMT:Pointer;
-                       VMTCurrentOffset:GDBInteger;
+                       VMTCurrentOffset:Integer;
                        PDefaultConstructor:Pointer;
                        SimpleMenods:{GDBOpenArrayOfObjects}TSimpleMenodsVector;
                        LincedData:GDBString;
@@ -116,7 +116,7 @@ begin
      MetodName:=mn;
      NameHash:=makehash(uppercase(MetodName));
      OperandsName:=dt;
-     if dt='(var obj):GDBInteger;' then
+     if dt='(var obj):Integer;' then
                                         dt:=dt;
 
      MetodAddr:=ma;
@@ -715,9 +715,9 @@ var
    baddr{,b2addr,eaddr}:Pointer;
 //   ppd:PPropertyDeskriptor;
 //   PDA:PTPropertyDeskriptorArray;
-//   bmodesave:GDBInteger;
+//   bmodesave:Integer;
    ts:PTPropertyDeskriptorArray;
-   sca,sa:GDBINTEGER;
+   sca,sa:Integer;
    pcol:pboolean;
    ppd:PPropertyDeskriptor;
 begin

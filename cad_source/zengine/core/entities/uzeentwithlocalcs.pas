@@ -45,8 +45,8 @@ GDBObjWithLocalCS= object(GDBObjWithMatrix)
                constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                constructor initnul(owner:PGDBObjGenericWithSubordinated);
                destructor done;virtual;
-               procedure SaveToDXFObjPostfix(var outhandle:{GDBInteger}TZctnrVectorBytes);
-               function LoadFromDXFObjShared(var f:TZctnrVectorBytes;dxfcod:GDBInteger;ptu:PExtensionData;var drawing:TDrawingDef):GDBBoolean;
+               procedure SaveToDXFObjPostfix(var outhandle:{Integer}TZctnrVectorBytes);
+               function LoadFromDXFObjShared(var f:TZctnrVectorBytes;dxfcod:Integer;ptu:PExtensionData;var drawing:TDrawingDef):GDBBoolean;
 
                procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                procedure CalcObjMatrix;virtual;

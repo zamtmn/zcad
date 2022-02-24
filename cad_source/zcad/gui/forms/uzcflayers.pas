@@ -65,7 +65,7 @@ type
       Selected: Boolean);
     procedure MkCurrent(Sender: TObject);
     procedure MaceItemCurrent(ListItem:TListItem);
-    procedure countlayer(player:PGDBLayerProp;out e,b:GDBInteger);
+    procedure countlayer(player:PGDBLayerProp;out e,b:Integer);
 
     procedure CreateUndoStartMarkerNeeded;
     procedure CreateUndoEndMarkerNeeded;
@@ -512,7 +512,7 @@ begin
      ListView1.SetFocus;
      ListView1.EndUpdate;
 end;
-procedure TLayersForm.countlayer(player:PGDBLayerProp;out e,b:GDBInteger);
+procedure TLayersForm.countlayer(player:PGDBLayerProp;out e,b:Integer);
 var
    pdwg:PTSimpleDrawing;
 begin
@@ -595,7 +595,7 @@ procedure TLayersForm._PurgeLayers(Sender: TObject);
 var
    i,purgedcounter:integer;
    ProcessedItem:TListItem;
-   inEntities,inBlockTable{,indimstyles}:GDBInteger;
+   inEntities,inBlockTable{,indimstyles}:Integer;
    PCurrentLayer:PGDBLayerProp;
 begin
      i:=0;
@@ -622,7 +622,7 @@ procedure TLayersForm.LayerDelete(Sender: TObject); // Процедура уда
 var
    player:PGDBLayerProp;
    //pdwg:PTSimpleDrawing;
-   e,b:GDBInteger;
+   e,b:Integer;
    //domethod,undomethod:tmethod;
 begin
   //TMWOShowError(rsNotYetImplemented);

@@ -27,9 +27,9 @@ uses uzcutils,uzgldrawcontext,uzglviewareageneral,uzeconsts,uzcsysvars,uzegeomet
      uzcinterface,varman,uzclog;
 type
   comproc=procedure(_self:pointer);
-  commousefunc=function(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:GDBInteger):GDBInteger;
-  comdrawfunc=function(mclick:GDBInteger):TCommandResult;
-  comfunc=function:GDBInteger;
+  commousefunc=function(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer):Integer;
+  comdrawfunc=function(mclick:Integer):TCommandResult;
+  comfunc=function:Integer;
   comfuncwithoper=function(operands:TCommandOperands):TCommandResult;
 {Export+}
 {REGISTEROBJECTTYPE CommandFastObject}
@@ -49,7 +49,7 @@ type
   pCommandRTEdObject=^CommandRTEdObject;
   {REGISTEROBJECTTYPE CommandRTEdObject}
   CommandRTEdObject =  object(CommandRTEdObjectDef)
-    saveosmode:GDBInteger;(*hidden_in_objinsp*)
+    saveosmode:Integer;(*hidden_in_objinsp*)
     commanddata:THardTypedData;(*'Command options'*)
     procedure CommandStart(Operands:TCommandOperands); virtual;
     procedure CommandEnd; virtual;
@@ -59,8 +59,8 @@ type
     procedure Error(msg:GDBString);
     procedure SetCommandParam(PTypedTata:pointer;TypeName:string);
     constructor init(cn:GDBString;SA,DA:TCStartAttr);
-    //function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: Byte;osp:pos_record): GDBInteger; virtual; abstract;
-    //function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: Byte;osp:pos_record): GDBInteger; virtual; abstract;
+    //function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: Byte;osp:pos_record): Integer; virtual; abstract;
+    //function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: Byte;osp:pos_record): Integer; virtual; abstract;
   end;
   pCommandRTEdObjectPlugin=^CommandRTEdObjectPlugin;
   {REGISTEROBJECTTYPE CommandRTEdObjectPlugin}
@@ -77,8 +77,8 @@ type
     procedure Format;virtual;
     procedure FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);virtual;
     procedure CommandContinue; virtual;
-    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger; virtual;
-    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger; virtual;
+    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
+    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
     procedure DrawHeplGeometry;virtual;
   end;
   {REGISTEROBJECTTYPE TOSModeEditor}

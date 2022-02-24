@@ -58,7 +58,7 @@ type
   GDBFontManager=object({GDBOpenArrayOfData}GDBNamedObjectsArray{-}<PGDBfont,GDBfont>{//})(*OpenArrayOfData=GDBfont*)
     FontFiles:{-}TFontName2FontFileMap{/pointer/};
     shxfontfiles:TStringList;
-    constructor init(m:GDBInteger);
+    constructor init(m:Integer);
     destructor done;virtual;
     procedure CreateBaseFont;
 
@@ -292,7 +292,7 @@ end;
 {function GDBFontManager.FindFonf;
 var
   pfr:pGDBFontRecord;
-  i:GDBInteger;
+  i:Integer;
 begin
   result:=nil;
   if count=0 then exit;
@@ -308,7 +308,7 @@ begin
 end;}
 
 {function GDBLayerArray.CalcCopactMemSize2;
-var i:GDBInteger;
+var i:Integer;
     tlp:PGDBLayerProp;
 begin
      result:=0;
@@ -323,7 +323,7 @@ begin
      end;
 end;
 function GDBLayerArray.SaveToCompactMemSize2;
-var i:GDBInteger;
+var i:Integer;
     tlp:PGDBLayerProp;
 begin
      result:=0;

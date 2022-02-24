@@ -243,7 +243,7 @@ begin
   pdwgwarsunit^.CreateFixedVariable('DWG_CDimStyle','PGDBDimStyle',@CurrentDimStyle);
   pdwgwarsunit^.CreateFixedVariable('DWG_CLinew','TGDBLineWeight',@CurrentLineW);
   pdwgwarsunit^.CreateFixedVariable('DWG_CLTScale','GDBDouble',@CLTScale);
-  pdwgwarsunit^.CreateFixedVariable('DWG_CColor','GDBInteger',@CColor);
+  pdwgwarsunit^.CreateFixedVariable('DWG_CColor','Integer',@CColor);
 
 
   pdwgwarsunit^.CreateFixedVariable('DWG_LUnits','TLUnits',@LUnits);

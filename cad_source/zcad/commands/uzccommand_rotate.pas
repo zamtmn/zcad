@@ -34,7 +34,7 @@ uses
 type
   {REGISTEROBJECTTYPE rotate_com}
   rotate_com =  object(move_com)
-    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger; virtual;
+    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
     procedure CommandContinue; virtual;
     procedure rot(a:GDBDouble; button: Byte);
     procedure showprompt(mklick:integer);virtual;
@@ -123,7 +123,7 @@ end;
 
 end;
 
-function rotate_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): GDBInteger;
+function rotate_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
 var
     //dispmatr,im,rotmatr:DMatrix4D;
     //ir:itrec;

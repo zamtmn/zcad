@@ -174,7 +174,7 @@ end;
 procedure TOpenGLViewArea.DrawGrid;
 var
   pg:PGDBvertex2S;
-  i,j: GDBInteger;
+  i,j: Integer;
   v,v1:gdbvertex;
 begin
   //if sysvar.DWG.DWG_DrawGrid<>nil then

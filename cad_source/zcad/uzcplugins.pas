@@ -26,23 +26,23 @@ type
   {REGISTERRECORDTYPE PluginVersionInfo}
   PluginVersionInfo=record
     PluginName: pansichar;
-    PluginVersion: GDBInteger;
+    PluginVersion: Integer;
   end;
   GetVersFunc=function: PluginVersionInfo;
-  Initfunc=function: GDBInteger;
+  Initfunc=function: Integer;
   pmoduledesc=^moduledesc;
   {REGISTERRECORDTYPE moduledesc}
   moduledesc=record
     modulename:pansichar;
     modulehandle:thandle;
-    ininfunction:function(path:pansichar):GDBInteger;
-    donefunction:function:GDBInteger;
+    ininfunction:function(path:pansichar):Integer;
+    donefunction:function:Integer;
   end;
   arraymoduledesc=packed array[0..0] of moduledesc;
   popenarraymoduledesc=^openarraymoduledesc;
   {REGISTERRECORDTYPE openarraymoduledesc}
   openarraymoduledesc=record
-    count:GDBInteger;
+    count:Integer;
     modarr:arraymoduledesc;
   end;
   {REGISTERRECORDTYPE copyobjectdesc}
@@ -52,13 +52,13 @@ type
   copyobjectarray=packed array [0..0] of copyobjectdesc;
   pcopyobjectarraywm=^copyobjectarraywm;
   copyobjectarraywm=record
-                          max:GDBInteger;
+                          max:Integer;
                           copyobjectarray:copyobjectarray;
                     end;
   PGDBPluginsArray=^GDBPluginsArray;
   {REGISTEROBJECTTYPE GDBPluginsArray}
   GDBPluginsArray= object(GZVector<moduledesc>)
-                        constructor init(m:GDBInteger);
+                        constructor init(m:Integer);
                         procedure loadplugins(path: GDBString);
                   end;
      {Export-}

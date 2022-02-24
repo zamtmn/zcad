@@ -10,10 +10,10 @@ var
    
    GC_HeadDevice:GDBString;
    GC_HDShortName:GDBString;
-   GC_HDGroup:GDBInteger;
-   GC_NumberInGroup:GDBInteger;
+   GC_HDGroup:Integer;
+   GC_NumberInGroup:Integer;
 
-   SerialConnection:GDBInteger;
+   SerialConnection:Integer;
 
 
    EL_Cab_AddLength:GDBDouble;(*'Добавлять к длине кабеля'*)

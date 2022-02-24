@@ -40,7 +40,7 @@ TZctnrVectorBytes=object(GZVector{-}<byte>{//})
                       procedure TXTAddGDBStringEOL(s:AnsiString);virtual;
                       procedure TXTAddGDBString(s:AnsiString);virtual;
                       function ReadData(PData:Pointer;SData:Word):Integer;virtual;
-                      //function PopData(PData:Pointer;SData:Word):GDBInteger;virtual;
+                      //function PopData(PData:Pointer;SData:Word):Integer;virtual;
                       function ReadString(break, ignore: AnsiString): AnsiString;inline;
                       function ReadGDBString: AnsiString;inline;
                       function ReadString2:AnsiString;inline;
@@ -92,7 +92,7 @@ end;
 function TZctnrVectorBytes.readtoparser;
 var
   s: String;
-  //i:GDBInteger;
+  //i:Integer;
   scobcacount:Integer;
   mode:(parse,commenttoendline,commenttouncomment);
   lastbreak:Boolean;

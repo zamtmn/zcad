@@ -11,8 +11,8 @@ var
    GC_HDGroupTemplate:GDBString;(*'Шаблон группы'*)
    GC_velecSubGroupControlUnit:GDBString;(*'Контрольный узел автопрокладки. ~, - и ! спецсимволы '*)
 
-   SerialConnection:GDBInteger;
-   GC_NumberInGroup:GDBInteger;(*'Номер устройства в группе'*)
+   SerialConnection:Integer;
+   GC_NumberInGroup:Integer;(*'Номер устройства в группе'*)
    GC_InGroup_Metric:GDBString;(*'Метрика нумерации в группе'*)
    GC_Metric:GDBString;(*'Метрика нумерации'*)
 implementation

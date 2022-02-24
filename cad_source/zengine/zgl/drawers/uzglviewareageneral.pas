@@ -78,8 +78,8 @@ type
                            procedure SetOHintTimer(Sender: TObject);override;
                            procedure getosnappoint(radius: Single);override;
                            procedure getonmouseobject(pva: PGDBObjEntityOpenArray;InSubEntry:GDBBoolean);virtual;
-                           procedure findonmobj(pva: PGDBObjEntityOpenArray; var i: GDBInteger;InSubEntry:GDBBoolean);virtual;
-                           procedure findonmobjTree(var Node:TEntTreeNode; var i: GDBInteger;InSubEntry:GDBBoolean);virtual;
+                           procedure findonmobj(pva: PGDBObjEntityOpenArray; var i: Integer;InSubEntry:GDBBoolean);virtual;
+                           procedure findonmobjTree(var Node:TEntTreeNode; var i: Integer;InSubEntry:GDBBoolean);virtual;
                            procedure getonmouseobjectbytree(var Node:TEntTreeNode;InSubEntry:GDBBoolean);override;
                            procedure processmousenode(Node:TEntTreeNode;var i:integer;InSubEntry:GDBBoolean);virtual;
                            procedure AddOntrackpoint;override;
@@ -160,7 +160,7 @@ var
    sysvarDISPUnSelGripColor:TGDBPaletteColor=4;
    sysvarDWGOSMode:TGDBOSMode=0;
    sysvarDWGOSModeControl:Boolean=True;
-   sysvarDISPGripSize:GDBInteger=5;
+   sysvarDISPGripSize:Integer=5;
    sysvarDISPColorAxis:boolean=true;
    sysvarDISPDrawZAxis:boolean=true;
    sysvarDrawInsidePaintMessage:TGDB3StateBool=T3SB_Default;
@@ -177,15 +177,15 @@ var
    SysVarRDRemoveSystemCursorFromWorkArea:GDBBoolean=true;
    sysvarDSGNSelNew:GDBBoolean=false;
    sysvarDWGEditInSubEntry:gdbboolean=false;
-   sysvarDSGNOTrackTimerInterval:GDBInteger=500;
-   sysvarRDLastCalcVisible:GDBInteger=0;
+   sysvarDSGNOTrackTimerInterval:Integer=500;
+   sysvarRDLastCalcVisible:Integer=0;
    sysvarRDLight:boolean=false;
 
    OnActivateProc:TOnActivateProc=nil;
-   ForeGroundColorIndex:GDBInteger;
+   ForeGroundColorIndex:Integer;
 
-   sysvarDISPLWDisplayScale:GDBInteger=10;
-   sysvarDISPmaxLWDisplayScale:GDBInteger=20;
+   sysvarDISPLWDisplayScale:Integer=10;
+   sysvarDISPmaxLWDisplayScale:Integer=20;
    sysvarDISPDefaultLW:TGDBLineWeight=LnWt025;
 
 implementation
@@ -280,11 +280,11 @@ begin
 end;
 procedure TGeneralViewArea.showcursor(var DC:TDrawContext);
 var
-  i, j: GDBInteger;
+  i, j: Integer;
   pt:ptraceprop;
   mvertex,dvertex,tv1,tv2,sv1,d1:gdbvertex;
   Tempplane,plx,ply,plz:DVector4D;
-  a: GDBInteger;
+  a: Integer;
   i2d,i2dresult:intercept2dprop;
   _NotUseLCS:boolean;
 begin
@@ -1937,7 +1937,7 @@ end;
 
 procedure TGeneralViewArea.getonmouseobjectbytree(var Node:TEntTreeNode;InSubEntry:GDBBoolean);
 var
-  i: GDBInteger;
+  i: Integer;
   pp:PGDBObjEntity;
   ir:itrec;
   //inr:TINRect;
@@ -1974,7 +1974,7 @@ begin
   //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.getonmouseobjectbytree------{end}',lp_DecPos);{$ENDIF}
 end;
 
-procedure TGeneralViewArea.findonmobj(pva: PGDBObjEntityOpenArray; var i: GDBInteger;InSubEntry:GDBBoolean);
+procedure TGeneralViewArea.findonmobj(pva: PGDBObjEntityOpenArray; var i: Integer;InSubEntry:GDBBoolean);
 var
   pp:PGDBObjEntity;
   ir:itrec;
@@ -2010,7 +2010,7 @@ begin
   else ;//{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('wa.param.scrollmode=true. exit',0);{$ENDIF}
   //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.findonmobj-----{end}',lp_DecPos);{$ENDIF}
 end;
-procedure TGeneralViewArea.findonmobjTree(var Node:TEntTreeNode; var i: GDBInteger;InSubEntry:GDBBoolean);
+procedure TGeneralViewArea.findonmobjTree(var Node:TEntTreeNode; var i: Integer;InSubEntry:GDBBoolean);
 var
   pp:PGDBObjEntity;
   ir:itrec;
@@ -2048,7 +2048,7 @@ begin
 end;
 procedure TGeneralViewArea.getonmouseobject;
 var
-  i: GDBInteger;
+  i: Integer;
   pp:PGDBObjEntity;
   ir:itrec;
   DC:TDrawContext;
@@ -2733,7 +2733,7 @@ end;
 
 procedure TGeneralViewArea.projectaxis;
 var
-  i: GDBInteger;
+  i: Integer;
   temp: gdbvertex;
   pv:pgdbvertex;
   tp:traceprop;
@@ -2825,7 +2825,7 @@ end;
 
 procedure TGeneralViewArea.create0axis;
 var
-  i: GDBInteger;
+  i: Integer;
   pv:pgdbvertex;
   Objects:GDBObjOpenArrayOfPV;
   pobj:pGDBObjEntity;
@@ -2884,7 +2884,7 @@ var
   tp: traceprop;
   temp: gdbvertex;
   pv: pgdbvertex;
-  i: GDBInteger;
+  i: Integer;
 begin
   {Getmem(param.ospoint.arrayworldaxis, sizeof(Word) + param.ppolaraxis
     ^.count * sizeof(gdbvertex));
@@ -2920,7 +2920,7 @@ end;
 
 procedure TGeneralViewArea.reprojectaxis;
 var
-  i, j, a: GDBInteger;
+  i, j, a: Integer;
   temp: gdbvertex;
   pv:pgdbvertex;
   pt,pt2:ptraceprop;

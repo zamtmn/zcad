@@ -39,36 +39,36 @@ GDBObjDevice= object(GDBObjBlockInsert)
                    constructor initnul;
                    constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                    destructor done;virtual;
-                   function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
+                   function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
                    function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                    procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                    procedure FormatFeatures(var drawing:TDrawingDef);virtual;
-                   procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
-                   procedure DrawOnlyGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
+                   procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
+                   procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                    procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                    function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
                    function ReturnLastOnMouse(InSubEntry:GDBBoolean):PGDBObjEntity;virtual;
-                   procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;
-                   procedure DeSelect(var SelectedObjCount:GDBInteger;ds2s:TDeSelect2Stage);virtual;
+                   procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
+                   procedure DeSelect(var SelectedObjCount:Integer;ds2s:TDeSelect2Stage);virtual;
                    //function GetDeviceType:TDeviceType;virtual;
                    procedure getoutbound(var DC:TDrawContext);virtual;
                    function getonlyvisibleoutbound(var DC:TDrawContext):TBoundingBox;virtual;
 
-                   //function AssignToVariable(pv:pvardesk):GDBInteger;virtual;
+                   //function AssignToVariable(pv:pvardesk):Integer;virtual;
                    function GetObjTypeName:GDBString;virtual;
 
                    procedure BuildGeometry(var drawing:TDrawingDef);virtual;
                    procedure BuildVarGeometry(var drawing:TDrawingDef);virtual;
 
-                   procedure SaveToDXFFollow(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                   procedure SaveToDXFObjXData(var outhandle:{GDBInteger}TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
+                   procedure SaveToDXFFollow(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                   procedure SaveToDXFObjXData(var outhandle:{Integer}TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
                    procedure AddMi(pobj:PGDBObjSubordinated);virtual;
                    //procedure select;virtual;
-                   procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;
+                   procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;
                    procedure addcontrolpoints(tdesc:Pointer);virtual;
 
-                   procedure EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;
-                   procedure correctobjects(powner:PGDBObjEntity;pinownerarray:GDBInteger);virtual;
+                   procedure EraseMi(pobj:pGDBObjEntity;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
+                   procedure correctobjects(powner:PGDBObjEntity;pinownerarray:Integer);virtual;
                    procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                    class function GetDXFIOFeatures:TDXFEntIODataManager;static;
 
@@ -177,7 +177,7 @@ begin
 end;
 procedure GDBObjDevice.SaveToDXFFollow;
 var
-  //i:GDBInteger;
+  //i:Integer;
   pv,pvc,pvc2:pgdbobjEntity;
   ir:itrec;
   m4:DMatrix4D;
@@ -235,7 +235,7 @@ begin
      //historyout('Device DXFOut end');
      //self.CalcObjMatrix;
 end;
-procedure GDBObjDevice.SaveToDXFObjXData(var outhandle:{GDBInteger}TZctnrVectorBytes;var IODXFContext:TIODXFContext);
+procedure GDBObjDevice.SaveToDXFObjXData(var outhandle:{Integer}TZctnrVectorBytes;var IODXFContext:TIODXFContext);
 //var
    //s:gdbstring;
 begin
@@ -255,7 +255,7 @@ function GDBObjDevice.GetObjTypeName;
 begin
      result:=ObjN_GDBObjDevice;
 end;
-{function GDBObjDevice.AssignToVariable(pv:pvardesk):GDBInteger;
+{function GDBObjDevice.AssignToVariable(pv:pvardesk):Integer;
 begin
      PDevDesk:=pv;
 end;}
@@ -340,7 +340,7 @@ begin
      //lstonmouse:=nil;
 end;
 procedure GDBObjDevice.ImEdited;
-//var t:gdbinteger;
+//var t:Integer;
 begin
      inherited imedited (pobj,pobjinarray,drawing);
      //bp.owner^.ImEdited(@self,bp.PSelfInOwnerArray);
@@ -360,7 +360,7 @@ begin
 end;
 function GDBObjDevice.onmouse;
 var //t,xx,yy:GDBDouble;
-    //i:GDBInteger;
+    //i:Integer;
     p:pgdbobjEntity;
     ot:GDBBoolean;
     ir:itrec;
@@ -383,7 +383,7 @@ end;
 procedure GDBObjDevice.renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);
 //var pblockdef:PGDBObjBlockdef;
     //pvisible:PGDBObjEntity;
-    //i:GDBInteger;
+    //i:Integer;
 begin
   //if POGLWnd=nil then exit;
   inherited;
@@ -451,7 +451,7 @@ procedure GDBObjDevice.BuildVarGeometry;
 var //pblockdef:PGDBObjBlockdef;
     pvisible,pvisible2:PGDBObjEntity;
     //freelayer:PGDBLayerProp;
-    i:GDBInteger;
+    i:Integer;
     //varobject:gdbboolean;
     devnam:GDBString;
     DC:TDrawContext;
@@ -509,7 +509,7 @@ procedure GDBObjDevice.BuildGeometry;
 var //pblockdef:PGDBObjBlockdef;
     pvisible,pvisible2:PGDBObjEntity;
     //freelayer:PGDBLayerProp;
-    i:GDBInteger;
+    i:Integer;
     //varobject:gdbboolean;
     //devnam:GDBString;
     DC:TDrawContext;

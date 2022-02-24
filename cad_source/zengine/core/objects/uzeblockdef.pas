@@ -74,7 +74,7 @@ begin
 end;
 procedure GDBObjBlockdef.LoadFromDXF;
 var
-  byt: GDBInteger;
+  byt: Integer;
 begin
   //initnul(@gdb.ObjRoot);
   byt:=readmystrtoint(f);

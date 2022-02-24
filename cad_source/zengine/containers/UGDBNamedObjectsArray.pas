@@ -28,20 +28,20 @@ TForCResult=(IsFounded(*'IsFounded'*)=1,
 {------REGISTEROBJECTTYPE GDBNamedObjectsArray}
 GDBNamedObjectsArray{-}<PTObj,TObj>{//}
                      = object(GZVectorPObects{-}<PTObj,TObj>{//})
-                    constructor init(m:GDBInteger);
-                    function getIndex(name: GDBString):GDBInteger;
+                    constructor init(m:Integer);
+                    function getIndex(name: GDBString):Integer;
                     function getAddres(name: GDBString):Pointer;
-                    function GetIndexByPointer(p:PGDBNamedObject):GDBInteger;
+                    function GetIndexByPointer(p:PGDBNamedObject):Integer;
                     function AddItem(name:GDBSTRING; out PItem:Pointer):TForCResult;
                     function MergeItem(name:GDBSTRING;LoadMode:TLoadOpt):Pointer;
                     function GetFreeName(NameFormat:GDBString;firstindex:integer):GDBString;
-                    procedure IterateCounter(PCounted:Pointer;var Counter:GDBInteger;proc:TProcCounter);virtual;
+                    procedure IterateCounter(PCounted:Pointer;var Counter:Integer;proc:TProcCounter);virtual;
               end;
 {EXPORT-}
 PTGenericNamedObjectsArray=^TGenericNamedObjectsArray;
 TGenericNamedObjectsArray=GDBNamedObjectsArray{-}<PGDBNamedObject,GDBNamedObject>{//};
 implementation
-procedure GDBNamedObjectsArray<PTObj,TObj>.IterateCounter(PCounted:Pointer;var Counter:GDBInteger;proc:TProcCounter);
+procedure GDBNamedObjectsArray<PTObj,TObj>.IterateCounter(PCounted:Pointer;var Counter:Integer;proc:TProcCounter);
 var p:PGDBNamedObject;
     ir:itrec;
 begin
@@ -157,7 +157,7 @@ begin
     p:=iterate(ir);
   until p=nil;
 end;
-function GDBNamedObjectsArray<PTObj,TObj>.GetIndexByPointer(p:PGDBNamedObject):GDBInteger;
+function GDBNamedObjectsArray<PTObj,TObj>.GetIndexByPointer(p:PGDBNamedObject):Integer;
 var
   _pobj:PGDBNamedObject;
   ir:itrec;

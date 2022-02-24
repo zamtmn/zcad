@@ -28,22 +28,22 @@ PGDBObjBlockdefArray=^GDBObjBlockdefArray;
 PBlockdefArray=^BlockdefArray;
 BlockdefArray=packed array [0..0] of GDBObjBlockdef;
 GDBObjBlockdefArray= object(GZVectorObjects{-}<GDBObjBlockdef>{//})(*OpenArrayOfData=GDBObjBlockdef*)
-                      constructor init(m:GDBInteger);
+                      constructor init(m:Integer);
                       constructor initnul;
 
-                      function getindex(name:GDBString):GDBInteger;virtual;
+                      function getindex(name:GDBString):Integer;virtual;
                       function getblockdef(name:GDBString):PGDBObjBlockdef;virtual;
-                      //function loadblock(filename,bname:pansichar;pdrawing:Pointer):GDBInteger;virtual;
+                      //function loadblock(filename,bname:pansichar;pdrawing:Pointer):Integer;virtual;
                       function create(name:GDBString):PGDBObjBlockdef;virtual;
                       procedure freeelement(PItem:PT);virtual;
                       procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                       procedure Grow(newmax:Integer=0);virtual;
-                      procedure IterateCounter(PCounted:Pointer;var Counter:GDBInteger;proc:TProcCounter);virtual;
+                      procedure IterateCounter(PCounted:Pointer;var Counter:Integer;proc:TProcCounter);virtual;
                     end;
 {Export-}
 implementation
 //uses log;
-procedure GDBObjBlockdefArray.IterateCounter(PCounted:Pointer;var Counter:GDBInteger;proc:TProcCounter);
+procedure GDBObjBlockdefArray.IterateCounter(PCounted:Pointer;var Counter:Integer;proc:TProcCounter);
 var p:PGDBObjBlockdef;
     ir:itrec;
 begin
@@ -95,7 +95,7 @@ begin
 end;
 function GDBObjBlockdefArray.getindex;
 var
-   i:GDBInteger;
+   i:Integer;
    //debugs:string;
 begin
   result:=-1;
@@ -150,7 +150,7 @@ begin
   until p=nil;
 end;
 {function GDBObjBlockdefArray.loadblock;
-var bc:GDBInteger;
+var bc:Integer;
 begin
   bc := count;
   inc(count);

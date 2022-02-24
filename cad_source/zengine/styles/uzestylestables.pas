@@ -38,7 +38,7 @@ GDBCellFormatArray= object(GZVector{-}<TGDBTableCellStyle>{//})(*OpenArrayOfData
 PTGDBTableStyle=^TGDBTableStyle;
 {REGISTEROBJECTTYPE TGDBTableStyle}
 TGDBTableStyle= object(GDBNamedObject)
-                     rowheight:gdbinteger;
+                     rowheight:Integer;
                      textheight:gdbdouble;
                      tblformat:GDBCellFormatArray;
                      HeadBlockName:GDBString;
@@ -48,7 +48,7 @@ TGDBTableStyle= object(GDBNamedObject)
 PGDBTableStyleArray=^GDBTableStyleArray;
 {REGISTEROBJECTTYPE GDBTableStyleArray}
 GDBTableStyleArray= object(GDBNamedObjectsArray{-}<PTGDBTableStyle,TGDBTableStyle>{//})(*OpenArrayOfData=TGDBTableStyle*)
-                    constructor init(m:GDBInteger);
+                    constructor init(m:Integer);
                     constructor initnul;
                     function AddStyle(name:GDBString):PTGDBTableStyle;
               end;

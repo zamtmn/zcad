@@ -6,7 +6,7 @@ var
    NMO_Template:GDBString;(*'Шаблон Обозначения'*) 
    NMO_Name:GDBString;(*'Обозначение'*)
    NMO_BaseName:GDBString;(*'Короткое Имя'*)
-   NameNumber:GDBInteger;(*'Номер'*)
+   NameNumber:Integer;(*'Номер'*)
 
 
    Power:GDBDouble;(*'Мощность расчетная, кВт'*)
@@ -18,14 +18,14 @@ var
    Phase:TPhase;(*'Фаза'*)
 
    DB_link:GDBString;(*'Материал'*)
-   AmountI:GDBInteger;(*'Количество'*)
+   AmountI:Integer;(*'Количество'*)
    
    GC_HeadDevice:GDBString;
    GC_HDShortName:GDBString;
-   GC_HDGroup:GDBInteger;
+   GC_HDGroup:Integer;
 
-   SerialConnection:GDBInteger;
-   NumberInSleif:GDBInteger;
+   SerialConnection:Integer;
+   NumberInSleif:Integer;
 
 
    EL_Cab_AddLength:GDBDouble;(*'Добавлять к длине кабеля'*)

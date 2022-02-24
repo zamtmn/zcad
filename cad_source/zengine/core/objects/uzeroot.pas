@@ -31,7 +31,7 @@ PGDBObjRoot=^GDBObjRoot;
 GDBObjRoot= object(GDBObjGenericSubEntry)
                  constructor initnul;
                  destructor done;virtual;
-                 //function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;
+                 //function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:Integer):Integer;virtual;
                  procedure FormatAfterEdit(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure AfterDeSerialize(SaveFlag:Word; membuf:Pointer);virtual;
                  function getowner:PGDBObjSubordinated;virtual;
@@ -39,12 +39,12 @@ GDBObjRoot= object(GDBObjGenericSubEntry)
                  procedure getoutbound(var DC:TDrawContext);virtual;
                  //function FindVariable(varname:GDBString):pvardesk;virtual;
                  function GetHandle:PtrInt;virtual;
-                 procedure EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;
+                 procedure EraseMi(pobj:pGDBObjEntity;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
 
                  function GetMatrix:PDMatrix4D;virtual;
-                 procedure DrawWithAttrib(var DC:TDrawContext{visibleactualy:TActulity;subrender:GDBInteger});virtual;
-                 function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
-                 procedure CalcInFrustumByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;
+                 procedure DrawWithAttrib(var DC:TDrawContext{visibleactualy:TActulity;subrender:Integer});virtual;
+                 function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
+                 procedure CalcInFrustumByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;
                  procedure calcbb(var DC:TDrawContext);virtual;
                  //function FindShellByClass(_type:TDeviceClass):PGDBObjSubordinated;virtual;
                  function GetObjType:TObjID;virtual;
@@ -68,7 +68,7 @@ begin
      vp.BoundingBox.LBN:=VectorTransform3D(vp.BoundingBox.LBN,ObjMatrix);
      vp.BoundingBox.RTF:=VectorTransform3D(vp.BoundingBox.RTF,ObjMatrix);
 end;
-procedure GDBObjRoot.CalcInFrustumByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);
+procedure GDBObjRoot.CalcInFrustumByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);
 var
    myfrustum:ClipArray;
 begin
@@ -97,7 +97,7 @@ function GDBObjRoot.GetMatrix;
 begin
      result:=@self.ObjMatrix{ @OneMatrix};
 end;
-procedure GDBObjRoot.EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;var drawing:TDrawingDef);
+procedure GDBObjRoot.EraseMi(pobj:pGDBObjEntity;pobjinarray:Integer;var drawing:TDrawingDef);
 var p:PGDBObjConnected;
     ir:itrec;
 begin

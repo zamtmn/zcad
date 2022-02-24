@@ -35,9 +35,9 @@ GDBLayerProp= object(GDBNamedObject)
                _lock:GDBBoolean;(*saved_to_shd*)(*'Lock'*)
                _print:GDBBoolean;(*saved_to_shd*)(*'Print'*)
                desk:GDBAnsiString;(*saved_to_shd*)(*'Description'*)
-               constructor InitWithParam(N:GDBString; C: GDBInteger; LW: GDBInteger;oo,ll,pp:GDBBoolean;d:GDBString);
+               constructor InitWithParam(N:GDBString; C: Integer; LW: Integer;oo,ll,pp:GDBBoolean;d:GDBString);
                function GetFullName:GDBString;virtual;
-               procedure SetValueFromDxf(group:GDBInteger;value:GDBString);virtual;
+               procedure SetValueFromDxf(group:Integer;value:GDBString);virtual;
                procedure SetDefaultValues;virtual;
                destructor done;virtual;
          end;
@@ -46,10 +46,10 @@ GDBLayerPropArray=packed array [0..0] of PGDBLayerProp;
 PGDBLayerArray=^GDBLayerArray;
 {REGISTEROBJECTTYPE GDBLayerArray}
 GDBLayerArray= object(GDBNamedObjectsArray{-}<PGDBLayerProp,GDBLayerProp>{//})(*OpenArrayOfData=GDBLayerProp*)
-                    constructor init(m:GDBInteger;psyslt:Pointer);
+                    constructor init(m:Integer;psyslt:Pointer);
                     constructor initnul;
 
-                    function addlayer(name:GDBString;color:GDBInteger;lw:GDBInteger;oo,ll,pp:GDBBoolean;d:GDBString;lm:TLoadOpt):PGDBLayerProp;virtual;
+                    function addlayer(name:GDBString;color:Integer;lw:Integer;oo,ll,pp:GDBBoolean;d:GDBString;lm:TLoadOpt):PGDBLayerProp;virtual;
                     function GetSystemLayer:PGDBLayerProp;
                     function createlayerifneed(_source:PGDBLayerProp):PGDBLayerProp;
                     function createlayerifneedbyname(lname:GDBString;_source:PGDBLayerProp):PGDBLayerProp;
@@ -133,7 +133,7 @@ begin
                                            _print:=true;
      desk:='';
 end;
-procedure GDBLayerProp.SetValueFromDxf(group:GDBInteger;value:GDBString);
+procedure GDBLayerProp.SetValueFromDxf(group:Integer;value:GDBString);
 var
    _color:integer;
 begin
@@ -167,7 +167,7 @@ begin
         end;
 end;
 
-constructor GDBLayerProp.InitWithParam(N:GDBString; C: GDBInteger; LW: GDBInteger;oo,ll,pp:GDBBoolean;d:GDBString);
+constructor GDBLayerProp.InitWithParam(N:GDBString; C: Integer; LW: Integer;oo,ll,pp:GDBBoolean;d:GDBString);
 begin
     initnul;
     LT:=nil;

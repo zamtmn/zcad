@@ -26,7 +26,7 @@ type
 PZGLIndexsArray=^ZGLIndexsArray;
 {REGISTEROBJECTTYPE ZGLIndexsArray}
 ZGLIndexsArray= object(GZVector{-}<TArrayIndex>{//})(*OpenArrayOfData=TArrayIndex*)
-                constructor init(m:GDBInteger);
+                constructor init(m:Integer);
                 constructor initnul;
              end;
 {Export-}

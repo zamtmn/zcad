@@ -272,7 +272,7 @@ class function TVariablesExtender.EntIOLoadDollar(_Name,_Value:GDBString;ptu:PEx
 var
     svn,vn,vv:GDBString;
     pvd:pvardesk;
-    offset:GDBInteger;
+    offset:Integer;
     tc:PUserTypeDescriptor;
     vardata:TVariablesExtender;
 begin

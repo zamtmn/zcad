@@ -547,8 +547,6 @@ begin
      DecorateType(SysUnit.TypeName2PTD('TGDBPaletteColor'),@PaletteColorDecorator,@ColorDecoratorCreateEditor,@drawIndexColorProp);
      DecorateType(SysUnit.TypeName2PTD('TGDBOSMode'),nil,CreateEmptyEditor,nil);
 
-     AddFastEditorToType(SysUnit.TypeName2PTD('GDBInteger'),@OIUI_FE_HalfButtonGetPrefferedSize,@OIUI_FE_ButtonGreatThatDraw,@OIUI_FE_IntegerInc);
-     AddFastEditorToType(SysUnit.TypeName2PTD('GDBInteger'),@OIUI_FE_HalfButtonGetPrefferedSize,@OIUI_FE_ButtonLessThatDraw,@OIUI_FE_IntegerDec);
      AddFastEditorToType(SysUnit.TypeName2PTD('Integer'),@OIUI_FE_HalfButtonGetPrefferedSize,@OIUI_FE_ButtonGreatThatDraw,@OIUI_FE_IntegerInc);
      AddFastEditorToType(SysUnit.TypeName2PTD('Integer'),@OIUI_FE_HalfButtonGetPrefferedSize,@OIUI_FE_ButtonLessThatDraw,@OIUI_FE_IntegerDec);
 

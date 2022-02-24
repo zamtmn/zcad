@@ -37,9 +37,9 @@ BASEFont= object(GDBaseObject)
               //----//function GetSymbolDataAddr(offset:integer):pointer;virtual;
               //function GetTriangleDataAddr(offset:integer):PGDBFontVertex2D;virtual;
 
-              function GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;virtual;
-              function GetOrReplaceSymbolInfo(symbol:GDBInteger{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;virtual;
-              function findunisymbolinfo(symbol:GDBInteger):PGDBsymdolinfo;
+              function GetOrCreateSymbolInfo(symbol:Integer):PGDBsymdolinfo;virtual;
+              function GetOrReplaceSymbolInfo(symbol:Integer{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;virtual;
+              function findunisymbolinfo(symbol:Integer):PGDBsymdolinfo;
               function findunisymbolinfos(symbolname:GDBString):PGDBsymdolinfo;
               function IsCanSystemDraw:GDBBoolean;virtual;
               procedure SetupSymbolLineParams(const matr:DMatrix4D; var SymsParam:TSymbolSParam);virtual;
@@ -92,7 +92,7 @@ begin
      //----//SHXdata.done;
      FontData.done;
 end;
-function BASEFont.GetOrReplaceSymbolInfo(symbol:GDBInteger{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;
+function BASEFont.GetOrReplaceSymbolInfo(symbol:Integer{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;
 //var
    //usi:GDBUNISymbolInfo;
 begin
@@ -130,7 +130,7 @@ end;}
 //----//begin
 //----//     result:=SHXdata.getelement(offset);
 //----//end;
-function BASEFont.GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
+function BASEFont.GetOrCreateSymbolInfo(symbol:Integer):PGDBsymdolinfo;
 var
    usi:GDBUNISymbolInfo;
 begin
@@ -158,11 +158,11 @@ begin
                             end;
                        end;
 end;
-function BASEFont.findunisymbolinfo(symbol:GDBInteger):PGDBsymdolinfo;
+function BASEFont.findunisymbolinfo(symbol:Integer):PGDBsymdolinfo;
 var
    pobj:PGDBUNISymbolInfo;
    ir:itrec;
-   //debug:GDBInteger;
+   //debug:Integer;
 begin
      pobj:=unisymbolinfo.beginiterate(ir);
      if pobj<>nil then
@@ -183,7 +183,7 @@ var
    pobj:PGDBUNISymbolInfo;
    ir:itrec;
    i:integer;
-   //debug:GDBInteger;
+   //debug:Integer;
 begin
      symbolname:=uppercase(symbolname);
 

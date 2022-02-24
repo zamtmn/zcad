@@ -41,7 +41,7 @@ begin
 end;
 procedure GDBOOutbound2DIArray.drawgeometry;
 var oldp,p:PGDBvertex2DI;
-    i:GDBInteger;
+    i:Integer;
 begin
   case count of
                1:begin
@@ -69,7 +69,7 @@ begin
   end;
 end;
 function GDBOOutbound2DIArray.inrect;
-var i:GDBInteger;
+var i:Integer;
     p:PGDBVertex2DI;
 begin
      result:=IREmpty;
@@ -104,7 +104,7 @@ begin
      end;
 end;
 function GDBOOutbound2DIArray.perimetr;
-var i,j:GDBInteger;
+var i,j:Integer;
 begin
      result:=0;
      if count<2 then exit;

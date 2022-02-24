@@ -38,9 +38,9 @@ GDBfont= object(GDBNamedObject)
     //procedure ItSHX;
     //procedure ItFFT;
     destructor done;virtual;
-    function GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
-    function GetOrReplaceSymbolInfo(symbol:GDBInteger{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;
-    procedure CreateSymbol(drawer:TZGLAbstractDrawer;var geom:ZGLVectorObject;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var Bound:TBoundingRect;var LLSymbolLineIndex:TArrayIndex);
+    function GetOrCreateSymbolInfo(symbol:Integer):PGDBsymdolinfo;
+    function GetOrReplaceSymbolInfo(symbol:Integer{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;
+    procedure CreateSymbol(drawer:TZGLAbstractDrawer;var geom:ZGLVectorObject;_symbol:Integer;const objmatrix:DMatrix4D;matr:DMatrix4D;var Bound:TBoundingRect;var LLSymbolLineIndex:TArrayIndex);
   end;
 {EXPORT-}
 var
@@ -56,7 +56,7 @@ begin
      //pf.ItSHX;
 end;
 
-procedure GDBfont.CreateSymbol(drawer:TZGLAbstractDrawer;var geom:ZGLVectorObject;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var Bound:TBoundingRect;var LLSymbolLineIndex:TArrayIndex);
+procedure GDBfont.CreateSymbol(drawer:TZGLAbstractDrawer;var geom:ZGLVectorObject;_symbol:Integer;const objmatrix:DMatrix4D;matr:DMatrix4D;var Bound:TBoundingRect;var LLSymbolLineIndex:TArrayIndex);
 var
   v,v0,true0Y,fact0y:GDBvertex;
   sqrsymh{,CapHeight}:GDBDouble;
@@ -404,13 +404,13 @@ begin
      {Getmem(font,sizeof(SHXFont));
      font^.init;}
 end;
-function GDBfont.GetOrReplaceSymbolInfo(symbol:GDBInteger{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;
+function GDBfont.GetOrReplaceSymbolInfo(symbol:Integer{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;
 //var
    //usi:GDBUNISymbolInfo;
 begin
      result:=font.GetOrReplaceSymbolInfo(symbol{//-ttf-//,TrianglesDataInfo});
 end;
-function GDBfont.GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
+function GDBfont.GetOrCreateSymbolInfo(symbol:Integer):PGDBsymdolinfo;
 begin
      result:=font.GetOrCreateSymbolInfo(symbol);
 end;

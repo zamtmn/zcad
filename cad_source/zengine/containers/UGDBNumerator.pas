@@ -25,15 +25,15 @@ type
 PGDBNumItem=^GDBNumItem;
 {REGISTEROBJECTTYPE GDBNumItem}
 GDBNumItem= object(GDBNamedObject)
-                 Nymber:GDBInteger;
+                 Nymber:Integer;
                  constructor Init(N:GDBString);
                 end;
 PGDBNumerator=^GDBNumerator;
 {---REGISTEROBJECTTYPE GDBNumerator}
 GDBNumerator= object(GDBNamedObjectsArray<PGDBNumItem,GDBNumItem>)(*OpenArrayOfData=GDBNumItem*)
-                       constructor init(m:GDBInteger);
+                       constructor init(m:Integer);
                        function getnamenumber(_Name:GDBString;AutoInc:GDBBoolean):GDBstring;
-                       function getnumber(_Name:GDBString;AutoInc:GDBBoolean):GDBInteger;
+                       function getnumber(_Name:GDBString;AutoInc:GDBBoolean):Integer;
                        function AddNumerator(Name:GDBString):PGDBNumItem;virtual;
                        procedure sort;
                        end;
@@ -114,7 +114,7 @@ begin
      end;
      result:=p;
 end;
-constructor GDBNumerator.init(m:GDBInteger);
+constructor GDBNumerator.init(m:Integer);
 begin
      inherited init(m);
 end;

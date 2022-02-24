@@ -168,7 +168,7 @@ begin
      //                uch:=uch;
      {$ENDIF}
 end;
-function GetDigitCount(str1:GDBString):GDBInteger;
+function GetDigitCount(str1:GDBString):Integer;
 begin
 
      if str1='' then
@@ -343,7 +343,7 @@ begin
 end;
 function CompareNUMSTR(str1,str2:GDBString):GDBBoolean;
 var
-   i1,i2{,i}:GDBInteger;
+   i1,i2{,i}:Integer;
 begin
      if (str1='')or(str2='') then
                                  result:=str1>str2
@@ -365,7 +365,7 @@ else
 end;
 function readspace(expr: GDBString): GDBString;
 var
-  i: GDBInteger;
+  i: Integer;
 //  s:string;
 begin
   //pointer(result):=nil;
@@ -388,7 +388,7 @@ begin
   //expr:=expr;
 end;
 function GetPredStr(var s: GDBString; substr: GDBString): GDBString;
-var i{, c,a}: GDBInteger;
+var i{, c,a}: Integer;
 begin
   i:=pos(substr,s);
   if i<>0 then
@@ -404,10 +404,10 @@ begin
              end;
 end;
 function GetPredStr(var s: GDBString; substrs: array of const; out nearestsubstr:string): GDBString;
-var i,current: GDBInteger;
+var i,current: Integer;
     substr:GDBString;
     itstring:boolean;
-    nearest: GDBInteger;
+    nearest: Integer;
 procedure storecurrent;
 begin
   nearest:=current;

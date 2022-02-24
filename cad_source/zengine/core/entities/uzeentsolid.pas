@@ -39,12 +39,12 @@ GDBObjSolid= object(GDBObjWithLocalCS)
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f:TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
-                 procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure createpoint;virtual;
 
-                 procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
-                 function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
+                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
+                 function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
                  procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                  //function getsnap(var osp:os_record):GDBBoolean;virtual;
                  function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
@@ -65,7 +65,7 @@ GDBObjSolid= object(GDBObjWithLocalCS)
 implementation
 //uses log;
 {procedure GDBObjSolid.TransformAt;
-var i:GDBInteger;
+var i:Integer;
 begin
       for i:=0 to 3 do
       begin
@@ -73,7 +73,7 @@ begin
       end;
 end;}
 procedure GDBObjSolid.getoutbound;
-var i:GDBInteger;
+var i:Integer;
 begin
      vp.BoundingBox.LBN:=PInWCS[0];
      vp.BoundingBox.RTF:=PInWCS[0];
@@ -83,7 +83,7 @@ begin
       end;
 end;
 procedure GDBObjSolid.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
-//var i:GDBInteger;
+//var i:Integer;
 begin
   if assigned(EntExtensions)then
     EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
@@ -135,7 +135,7 @@ begin
 end;
 procedure GDBObjSolid.LoadFromDXF;
 var //s: GDBString;
-  byt: GDBInteger;
+  byt: Integer;
 begin
   byt:=readmystrtoint(f);
   while byt <> 0 do
@@ -247,7 +247,7 @@ oglsm.myglEnable(GL_COLOR_MATERIAL);
 
 end;
 function GDBObjSolid.CalcInFrustum;
-var i:GDBInteger;
+var i:Integer;
 begin
       result:=true;
       for i:=0 to 4 do
@@ -321,7 +321,7 @@ begin
       result:=CalcOutBound4VInFrustum(PInWCS,frustum);
 end;
 procedure GDBObjSolid.remaponecontrolpoint(pdesc:pcontrolpointdesc);
-var vertexnumber:GDBInteger;
+var vertexnumber:Integer;
 begin
      vertexnumber:=abs(pdesc^.pointtype-os_polymin);
      pdesc.worldcoord:=PInWCS[vertexnumber];
@@ -332,7 +332,7 @@ end;
 
 procedure GDBObjSolid.addcontrolpoints(tdesc:Pointer);
 var pdesc:controlpointdesc;
-    i:GDBInteger;
+    i:Integer;
 begin
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(1);
           pdesc.selected:=false;
@@ -350,7 +350,7 @@ begin
 end;
 
 procedure GDBObjSolid.rtmodifyonepoint(const rtmod:TRTModifyData);
-var vertexnumber:GDBInteger;
+var vertexnumber:Integer;
     tv,wwc:gdbvertex;
     M: DMatrix4D;
 begin

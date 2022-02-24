@@ -69,15 +69,15 @@ GDBDashInfoArray= object(GZVector{-}<TDashInfo>{//})(*OpenArrayOfData=TDashInfo*
                end;
 {REGISTEROBJECTTYPE GDBDoubleArray}
 GDBDoubleArray= object(GZVector{-}<GDBDouble>{//})(*OpenArrayOfData=GDBDouble*)
-                constructor init(m:GDBInteger);
+                constructor init(m:Integer);
                end;
 {REGISTEROBJECTTYPE GDBShapePropArray}
 GDBShapePropArray= object(GZVectorObjects{-}<ShapeProp>{//})(*OpenArrayOfObject=ShapeProp*)
-                constructor init(m:GDBInteger);
+                constructor init(m:Integer);
                end;
 {REGISTEROBJECTTYPE GDBTextPropArray}
 GDBTextPropArray= object(GZVectorObjects{-}<TextProp>{//})(*OpenArrayOfObject=TextProp*)
-                constructor init(m:GDBInteger);
+                constructor init(m:Integer);
                end;
 PPGDBLtypePropObjInsp=^PGDBLtypePropObjInsp;
 PGDBLtypePropObjInsp=Pointer;
@@ -106,14 +106,14 @@ GDBLtypePropArray=packed array [0..0] of GDBLtypeProp;
 PGDBLtypeArray=^GDBLtypeArray;
 {REGISTEROBJECTTYPE GDBLtypeArray}
 GDBLtypeArray= object(GDBNamedObjectsArray{-}<PGDBLtypeProp,GDBLtypeProp>{//})(*OpenArrayOfData=GDBLtypeProp*)
-                    constructor init(m:GDBInteger);
+                    constructor init(m:Integer);
                     constructor initnul;
                     procedure LoadFromFile(fname:GDBString;lm:TLoadOpt);
                     procedure ParseStrings(const ltd:tstrings; var CurrentLine:integer;out LTName,LTDesk,LTImpl:GDBString);
                     function createltypeifneed(_source:PGDBLtypeProp;var _DestTextStyleTable:GDBTextStyleArray):PGDBLtypeProp;
                     function GetSystemLT(neededtype:TLTMode):PGDBLtypeProp;
                     procedure format;virtual;
-                    {function addlayer(name:GDBString;color:GDBInteger;lw:GDBInteger;oo,ll,pp:GDBBoolean;d:GDBString;lm:TLoadOpt):PGDBLayerProp;virtual;
+                    {function addlayer(name:GDBString;color:Integer;lw:Integer;oo,ll,pp:GDBBoolean;d:GDBString;lm:TLoadOpt):PGDBLayerProp;virtual;
                     function GetSystemLayer:PGDBLayerProp;
                     function GetCurrentLayer:PGDBLayerProp;
                     function createlayerifneed(_source:PGDBLayerProp):PGDBLayerProp;
@@ -705,15 +705,15 @@ begin
      strings.Destroy;
 end;
 
-constructor GDBDoubleArray.init(m:GDBInteger);
+constructor GDBDoubleArray.init(m:Integer);
 begin
   inherited init(m);
 end;
-constructor GDBShapePropArray.init(m:GDBInteger);
+constructor GDBShapePropArray.init(m:Integer);
 begin
   inherited init(m);
 end;
-constructor GDBTextPropArray.init(m:GDBInteger);
+constructor GDBTextPropArray.init(m:Integer);
 begin
   inherited init(m);
 end;

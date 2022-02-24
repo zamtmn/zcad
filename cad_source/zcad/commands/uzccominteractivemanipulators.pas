@@ -105,7 +105,7 @@ type
     T3PointCircleModePEntity=record
                                    p1,p2,p3:gdbvertex;
                                    cdm:TCircleDrawMode;
-                                   npoint:GDBInteger;
+                                   npoint:Integer;
                                    pentity:PGDBObjEntity;
                              end;
     PTPointPolygonDrawModePentity=^TPointPolygonDrawModePentity;
@@ -113,7 +113,7 @@ type
                                    p1:gdbvertex;
                                    cdm:TPolygonDrawMode;
                                    typeLWPoly:gdbboolean;
-                                   npoint:GDBInteger;
+                                   npoint:Integer;
                                    pentity:PGDBObjPolyline;
                                    plwentity:PGDBObjLWPolyline;
                              end;

@@ -79,7 +79,7 @@ end;
 
 (*procedure GDBPoint3DArray.drawgeometry;
 var p:PGDBVertex;
-    i:GDBInteger;
+    i:Integer;
 begin
   if count<2 then exit;
   p:=GetParrayAsPointer;
@@ -98,7 +98,7 @@ begin
 end;
 procedure GDBPoint3DArray.drawgeometry2;
 var p:PGDBVertex;
-    i:GDBInteger;
+    i:Integer;
 begin
   if count<2 then exit;
   p:=GetParrayAsPointer;
@@ -117,7 +117,7 @@ begin
 end;
 procedure GDBPoint3DArray.DrawGeometryWClosed(closed:GDBBoolean);
 var p:PGDBVertex;
-    i:GDBInteger;
+    i:Integer;
 begin
   if closed then
   begin
@@ -142,7 +142,7 @@ begin
      else drawgeometry;
 end;*)
 function GDBPoint3DArray.CalcTrueInFrustum;
-var i,{counter,}emptycount:GDBInteger;
+var i,{counter,}emptycount:Integer;
 //    d:GDBDouble;
     ptpv0,ptpv1:PGDBVertex;
     subresult:TInBoundingVolume;
@@ -181,7 +181,7 @@ begin
                        result:=IREmpty;
 end;
 function GDBPoint3DArray.onmouse;
-var i{,counter}:GDBInteger;
+var i{,counter}:Integer;
 //    d:GDBDouble;
     ptpv0,ptpv1:PGDBVertex;
 begin
@@ -219,7 +219,7 @@ begin
 end;
 
 function GDBPoint3DArray.onpoint(p:gdbvertex;closed:GDBBoolean):gdbboolean;
-var i{,counter}:GDBInteger;
+var i{,counter}:Integer;
     d:GDBDouble;
     ptpv0,ptpv1:PGDBVertex;
     a,b:integer;

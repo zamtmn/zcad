@@ -30,15 +30,15 @@ PGDBObjComplex=^GDBObjComplex;
 {REGISTEROBJECTTYPE GDBObjComplex}
 GDBObjComplex= object(GDBObjWithLocalCS)
                     ConstObjArray:{GDBObjEntityOpenArray;}GDBObjEntityTreeArray;(*oi_readonly*)(*hidden_in_objinsp*)
-                    procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
-                    procedure DrawOnlyGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
+                    procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
+                    procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                     procedure getoutbound(var DC:TDrawContext);virtual;
                     procedure getonlyoutbound(var DC:TDrawContext);virtual;
                     function getonlyvisibleoutbound(var DC:TDrawContext):TBoundingBox;virtual;
                     destructor done;virtual;
                     constructor initnul;
                     constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
-                    function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
+                    function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
                     function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                     function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
                     procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
@@ -49,8 +49,8 @@ GDBObjComplex= object(GDBObjWithLocalCS)
                     procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                     //procedure feedbackinrect;virtual;
                     //function InRect:TInRect;virtual;
-                    //procedure Draw(lw:GDBInteger);virtual;
-                    procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;
+                    //procedure Draw(lw:Integer);virtual;
+                    procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;
                     function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;virtual;
                     procedure BuildGeometry(var drawing:TDrawingDef);virtual;
                     procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
@@ -214,7 +214,7 @@ begin
      ConstObjArray.done;
      inherited done;
 end;
-function GDBObjComplex.CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;
+function GDBObjComplex.CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;
 begin
      result:=ConstObjArray.calcvisible(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
      ProcessTree(frustum,infrustumactualy,visibleactualy,ConstObjArray.ObjTree,IRPartially,TDTFulDraw,totalobj,infrustumobj,ProjectProc,zoom,currentdegradationfactor);
@@ -240,7 +240,7 @@ end;
 
 function GDBObjComplex.onmouse;
 var //t,xx,yy:GDBDouble;
-    //i:GDBInteger;
+    //i:Integer;
     p:pgdbobjEntity;
     ot:GDBBoolean;
         ir:itrec;
@@ -297,7 +297,7 @@ end;}
 procedure GDBObjComplex.renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);
 //var pblockdef:PGDBObjBlockdef;
     //pvisible:PGDBObjEntity;
-    //i:GDBInteger;
+    //i:Integer;
 begin
   //if POGLWnd=nil then exit;
   {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(P_insert_in_WCS,ProjP_insert);
@@ -308,7 +308,7 @@ end;
 procedure GDBObjComplex.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 {var pblockdef:PGDBObjBlockdef;
     pvisible,pvisible2:PGDBObjEntity;
-    i:GDBInteger;
+    i:Integer;
     m4:DMatrix4D;
     TempNet:PGDBObjElWire;
     TempDevice:PGDBObjDevice;

@@ -190,7 +190,7 @@ end;
 procedure TCLine.FormCreate(Sender: TObject);
 var
    //bv:tbevel;
-   //pint:PGDBInteger;
+   //pint:PInteger;
    sbutton:TmySpeedButton;
    p:PCommandObjectDef;
    ir:itrec;

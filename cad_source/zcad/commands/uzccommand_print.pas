@@ -49,7 +49,7 @@ const
 type
   {REGISTEROBJECTTYPE Print_com}
   Print_com= object(CommandRTEdObject)
-    VS:GDBInteger;
+    VS:Integer;
     p1,p2:GDBVertex;
     procedure CommandContinue; virtual;
     procedure CommandStart(Operands:TCommandOperands); virtual;

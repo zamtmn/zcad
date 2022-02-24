@@ -113,10 +113,10 @@ function Cos_TGDBInteger(var stack: operandstack): vardesk;
 //function DecodeStringBase64_TAnsiString(var stack: operandstack): vardesk;
 function DecodeStringBase64_TGBDString(var stack: operandstack): vardesk;
 
-function itbasicoperator(expr: GDBString): GDBInteger;
-function itbasicfunction(expr: GDBString): GDBInteger;
-function findbasicoperator(expr: GDBString; rez, hrez: {PUserTypeDescriptor}vardesk): GDBInteger;
-function findbasicfunction(name: GDBString; opstack: operandstack): GDBInteger;
+function itbasicoperator(expr: GDBString): Integer;
+function itbasicfunction(expr: GDBString): Integer;
+function findbasicoperator(expr: GDBString; rez, hrez: {PUserTypeDescriptor}vardesk): Integer;
+function findbasicfunction(name: GDBString; opstack: operandstack): Integer;
 const
   basicoperatorname: array[1..basicoperatorcount] of operatornam =
   (
@@ -185,7 +185,7 @@ begin
 end;
 function funcstackequalGDBString(str: TTypesArray; opstack: operandstack): GDBBoolean;
 var
-  i: GDBInteger;
+  i: Integer;
 begin
   result := true;
   for i := 1 to opstack.count do
@@ -196,9 +196,9 @@ begin
                                              end;
 end;
 
-function findbasicfunction(name: GDBString; opstack: operandstack): GDBInteger;
+function findbasicfunction(name: GDBString; opstack: operandstack): Integer;
 var
-  i{, j}: GDBInteger;
+  i{, j}: Integer;
 begin
   result := 0;
   for i :=low(basicfunctionparam) to high(basicfunctionparam) do
@@ -228,7 +228,7 @@ end;
 
 procedure initoperandstack(out opstac: operandstack);
 var
-  i: GDBInteger;
+  i: Integer;
 begin
   for i := 1 to 10 do
     initvardesk(opstac.stack[i]);
@@ -242,7 +242,7 @@ begin
   r.data.ptd:=@FundamentalDoubleDescriptorObj;
   r.name := '';
   r.SetInstance(FundamentalDoubleDescriptorObj.AllocAndInitInstance);
-  pdouble(r.data.Addr.Instance)^ := cos(pGDBInteger(stack.stack[1].data.Addr.Instance)^);
+  pdouble(r.data.Addr.Instance)^ := cos(PInteger(stack.stack[1].data.Addr.Instance)^);
   result := r;
 end;
 (*function DecodeStringBase64_TAnsiString(var stack: operandstack): vardesk;
@@ -309,8 +309,8 @@ begin
   r.data.ptd:=@FundamentalDoubleDescriptorObj;
   r.name := '';
   r.SetInstance(FundamentalDoubleDescriptorObj.AllocAndInitInstance);
-  pdouble(r.data.Addr.Instance)^ := pgdbinteger(hrez.data.Addr.Instance)^;
-  pdouble(rez.data.Addr.Instance)^ := pgdbinteger(hrez.data.Addr.Instance)^;
+  pdouble(r.data.Addr.Instance)^ := PInteger(hrez.data.Addr.Instance)^;
+  pdouble(rez.data.Addr.Instance)^ := PInteger(hrez.data.Addr.Instance)^;
   result := r;
 end;
 
@@ -322,8 +322,8 @@ begin
   r.data.ptd:=@FundamentalLongIntDescriptorObj;
   r.name := '';
   r.SetInstance(FundamentalLongIntDescriptorObj.AllocAndInitInstance);
-  pGDBInteger(r.data.Addr.Instance)^ := pGDBInteger(hrez.data.Addr.Instance)^;
-  pGDBInteger(rez.data.Addr.Instance)^ := pGDBInteger(hrez.data.Addr.Instance)^;
+  PInteger(r.data.Addr.Instance)^ := PInteger(hrez.data.Addr.Instance)^;
+  PInteger(rez.data.Addr.Instance)^ := PInteger(hrez.data.Addr.Instance)^;
   result := r;
 end;
 function TByte_let_TGDBInteger(var rez, hrez: vardesk): vardesk;
@@ -333,8 +333,8 @@ begin
   r.data.ptd:=@FundamentalByteDescriptorObj;
   r.name := '';
   r.SetInstance(FundamentalByteDescriptorObj.AllocAndInitInstance);
-  PByte(r.data.Addr.Instance)^ := pGDBInteger(hrez.data.Addr.Instance)^;
-  PByte(rez.data.Addr.Instance)^ := pGDBInteger(hrez.data.Addr.Instance)^;
+  PByte(r.data.Addr.Instance)^ := PInteger(hrez.data.Addr.Instance)^;
+  PByte(rez.data.Addr.Instance)^ := PInteger(hrez.data.Addr.Instance)^;
   result := r;
 end;
 
@@ -383,7 +383,7 @@ begin
   r.data.ptd:=@FundamentalLongIntDescriptorObj;
   r.name := '';
   r.SetInstance(FundamentalLongIntDescriptorObj.AllocAndInitInstance);
-  pGDBInteger(r.data.Addr.Instance)^ := pGDBInteger(rez.data.Addr.Instance)^-pGDBInteger(hrez.data.Addr.Instance)^;
+  PInteger(r.data.Addr.Instance)^ := PInteger(rez.data.Addr.Instance)^-PInteger(hrez.data.Addr.Instance)^;
   result := r;
 end;
 function TGDBInteger_minus_TGDBDouble(var rez, hrez: vardesk): vardesk;
@@ -393,7 +393,7 @@ begin
   r.data.ptd:=@FundamentalDoubleDescriptorObj;
   r.name := '';
   r.SetInstance(FundamentalDoubleDescriptorObj.AllocAndInitInstance);
-  PGDBDouble(r.data.Addr.Instance)^ := PGDBInteger(rez.data.Addr.Instance)^-PGDBDouble(hrez.data.Addr.Instance)^;
+  PGDBDouble(r.data.Addr.Instance)^ := PInteger(rez.data.Addr.Instance)^-PGDBDouble(hrez.data.Addr.Instance)^;
   result := r;
 end;
 function TGDBDouble_minus_TGDBDouble(var rez, hrez: vardesk): vardesk;
@@ -413,7 +413,7 @@ begin
   r.data.ptd:=@FundamentalDoubleDescriptorObj;
   r.name := '';
   r.SetInstance(FundamentalDoubleDescriptorObj.AllocAndInitInstance);
-  PGDBDouble(r.data.Addr.Instance)^ := PGDBDouble(rez.data.Addr.Instance)^-PGDBInteger(hrez.data.Addr.Instance)^;
+  PGDBDouble(r.data.Addr.Instance)^ := PGDBDouble(rez.data.Addr.Instance)^-PInteger(hrez.data.Addr.Instance)^;
   result := r;
 end;
 function TGDBDouble_mul_TGDBInteger(var rez, hrez: vardesk): vardesk;
@@ -423,7 +423,7 @@ begin
   r.data.ptd:=@FundamentalDoubleDescriptorObj;
   r.name := '';
   r.SetInstance(FundamentalDoubleDescriptorObj.AllocAndInitInstance);
-  pGDBDouble(r.data.Addr.Instance)^ := pGDBDouble(rez.data.Addr.Instance)^*pGDBInteger(hrez.data.Addr.Instance)^;
+  pGDBDouble(r.data.Addr.Instance)^ := pGDBDouble(rez.data.Addr.Instance)^*PInteger(hrez.data.Addr.Instance)^;
   result := r;
 end;
 function TGDBInteger_mul_TGDBDouble(var rez, hrez: vardesk): vardesk;
@@ -433,7 +433,7 @@ begin
   r.data.ptd:=@FundamentalDoubleDescriptorObj;
   r.name := '';
   r.SetInstance(FundamentalDoubleDescriptorObj.AllocAndInitInstance);
-  pGDBDouble(r.data.Addr.Instance)^ := pGDBInteger(rez.data.Addr.Instance)^ * pGDBDouble(hrez.data.Addr.Instance)^;
+  pGDBDouble(r.data.Addr.Instance)^ := PInteger(rez.data.Addr.Instance)^ * pGDBDouble(hrez.data.Addr.Instance)^;
   result := r;
 end;
 function TGDBDouble_mul_TGDBDouble(var rez, hrez: vardesk): vardesk;
@@ -453,7 +453,7 @@ begin
   r.data.ptd:=@FundamentalLongIntDescriptorObj;
   r.name := '';
   r.SetInstance(FundamentalLongIntDescriptorObj.AllocAndInitInstance);
-  pGDBInteger(r.data.Addr.Instance)^ := pGDBInteger(rez.data.Addr.Instance)^+pGDBInteger(hrez.data.Addr.Instance)^;
+  PInteger(r.data.Addr.Instance)^ := PInteger(rez.data.Addr.Instance)^+PInteger(hrez.data.Addr.Instance)^;
   result := r;
 end;
 function TGDBDouble_plus_TGDBInteger(var rez, hrez: vardesk): vardesk;
@@ -463,7 +463,7 @@ begin
   r.data.ptd:=@FundamentalDoubleDescriptorObj;
   r.name := '';
   r.SetInstance(FundamentalDoubleDescriptorObj.AllocAndInitInstance);
-  PGDBDouble(r.data.Addr.Instance)^ := PGDBDouble(rez.data.Addr.Instance)^+PGDBInteger(hrez.data.Addr.Instance)^;
+  PGDBDouble(r.data.Addr.Instance)^ := PGDBDouble(rez.data.Addr.Instance)^+PInteger(hrez.data.Addr.Instance)^;
   result := r;
 end;
 function TGDBInteger_plus_TGDBDouble(var rez, hrez: vardesk): vardesk;
@@ -473,7 +473,7 @@ begin
   r.data.ptd:=@FundamentalDoubleDescriptorObj;
   r.name := '';
   r.SetInstance(FundamentalDoubleDescriptorObj.AllocAndInitInstance);
-  PGDBDouble(r.data.Addr.Instance)^ := PGDBInteger(rez.data.Addr.Instance)^+PGDBDouble(hrez.data.Addr.Instance)^;
+  PGDBDouble(r.data.Addr.Instance)^ := PInteger(rez.data.Addr.Instance)^+PGDBDouble(hrez.data.Addr.Instance)^;
   result := r;
 end;
 function TGDBDouble_plus_TGDBDouble(var rez, hrez: vardesk): vardesk;
@@ -493,7 +493,7 @@ begin
   r.data.ptd:=@FundamentalLongIntDescriptorObj;
   r.name := '';
   r.SetInstance(FundamentalLongIntDescriptorObj.AllocAndInitInstance);
-  pGDBInteger(r.data.Addr.Instance)^ := pGDBInteger(hrez.data.Addr.Instance)^;
+  PInteger(r.data.Addr.Instance)^ := PInteger(hrez.data.Addr.Instance)^;
   result := r;
 end;
 
@@ -515,7 +515,7 @@ begin
   r.data.ptd:=@FundamentalLongIntDescriptorObj;
   r.name := '';
   r.SetInstance(FundamentalLongIntDescriptorObj.AllocAndInitInstance);
-  pGDBInteger(r.data.Addr.Instance)^ := -(pGDBInteger(hrez.data.Addr.Instance)^);
+  PInteger(r.data.Addr.Instance)^ := -(PInteger(hrez.data.Addr.Instance)^);
   result := r;
 end;
 
@@ -526,7 +526,7 @@ begin
   r.data.ptd:=@FundamentalLongIntDescriptorObj;
   r.name := '';
   r.SetInstance(FundamentalLongIntDescriptorObj.AllocAndInitInstance);
-  pGDBInteger(r.data.Addr.Instance)^ := pGDBInteger(rez.data.Addr.Instance)^ * pGDBInteger(hrez.data.Addr.Instance)^;
+  PInteger(r.data.Addr.Instance)^ := PInteger(rez.data.Addr.Instance)^ * PInteger(hrez.data.Addr.Instance)^;
   result := r;
 end;
 function TGDBInteger_div_TGDBInteger(var rez, hrez: vardesk): vardesk;
@@ -536,7 +536,7 @@ begin
   r.data.ptd:=@FundamentalDoubleDescriptorObj;
   r.name := '';
   r.SetInstance(FundamentalDoubleDescriptorObj.AllocAndInitInstance);
-  pGDBDouble(r.data.Addr.Instance)^ := pGDBInteger(rez.data.Addr.Instance)^ / pGDBInteger(hrez.data.Addr.Instance)^;
+  pGDBDouble(r.data.Addr.Instance)^ := PInteger(rez.data.Addr.Instance)^ / PInteger(hrez.data.Addr.Instance)^;
   result := r;
 end;
 function TGDBInteger_div_TGDBDouble(var rez, hrez: vardesk): vardesk;
@@ -546,7 +546,7 @@ begin
   r.data.ptd:=@FundamentalDoubleDescriptorObj;
   r.name := '';
   r.SetInstance(FundamentalDoubleDescriptorObj.AllocAndInitInstance);
-  pGDBDouble(r.data.Addr.Instance)^ := pGDBInteger(rez.data.Addr.Instance)^ / pGDBDouble(hrez.data.Addr.Instance)^;
+  pGDBDouble(r.data.Addr.Instance)^ := PInteger(rez.data.Addr.Instance)^ / pGDBDouble(hrez.data.Addr.Instance)^;
   result := r;
 end;
 function TGDBDouble_div_TGDBDouble(var rez, hrez: vardesk): vardesk;
@@ -566,13 +566,13 @@ begin
   r.data.ptd:=@FundamentalDoubleDescriptorObj;
   r.name := '';
   r.SetInstance(FundamentalDoubleDescriptorObj.AllocAndInitInstance);
-  pGDBDouble(r.data.Addr.Instance)^ := pGDBDouble(rez.data.Addr.Instance)^ / pGDBInteger(hrez.data.Addr.Instance)^;
+  pGDBDouble(r.data.Addr.Instance)^ := pGDBDouble(rez.data.Addr.Instance)^ / PInteger(hrez.data.Addr.Instance)^;
   result := r;
 end;
 
-function itbasicoperator(expr: GDBString): GDBInteger;
+function itbasicoperator(expr: GDBString): Integer;
 var
-  i: GDBInteger;
+  i: Integer;
 begin
   result := 0;
   for i := 1 to basicoperatorcount do
@@ -583,9 +583,9 @@ begin
     end
 end;
 
-function itbasicfunction(expr: GDBString): GDBInteger;
+function itbasicfunction(expr: GDBString): Integer;
 var
-  i: GDBInteger;
+  i: Integer;
 begin
   result := 0;
   for i := 1 to basicfunctioncount do
@@ -596,9 +596,9 @@ begin
     end
 end;
 
-function findbasicoperator(expr: GDBString; rez, hrez: vardesk): GDBInteger;
+function findbasicoperator(expr: GDBString; rez, hrez: vardesk): Integer;
 var
-  i: GDBInteger;
+  i: Integer;
   rezptd,hrezptd:PUserTypeDescriptor;
 begin
   result := 0;

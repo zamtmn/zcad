@@ -958,7 +958,7 @@ var
        pvd:=FindVariableInEnt(cableLine,'CABLE_Segment');
        if pvd<>nil then
           begin
-             pgdbinteger(pvd^.data.Addr.Instance)^:=counterSegment;
+             PInteger(pvd^.data.Addr.Instance)^:=counterSegment;
           end;
 
 
@@ -1143,7 +1143,7 @@ var
        pvd:=FindVariableInEnt(cableLine,'CABLE_Segment');
        if pvd<>nil then
           begin
-             pgdbinteger(pvd^.data.Addr.Instance)^:=counterSegment;
+             PInteger(pvd^.data.Addr.Instance)^:=counterSegment;
           end;
 
        pvd:=FindVariableInEnt(cableLine,'Cable_Mounting_Method');

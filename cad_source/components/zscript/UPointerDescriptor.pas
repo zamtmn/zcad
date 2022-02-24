@@ -36,7 +36,7 @@ GDBPointerDescriptor=object(TUserTypeDescriptor)
                      //function DeSerialize(PInstance:Pointer;SaveFlag:Word;var membuf:TZctnrVectorBytes;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
                      procedure Format;virtual;
                      function GetTypeAttributes:TTypeAttr;virtual;
-                     function CreateEditor(TheOwner:TPropEditorOwner;rect:trect{x,y,w,h:GDBInteger};pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:TInternalScriptString;preferedHeight:integer):TEditorDesc{TPropEditor};virtual;
+                     function CreateEditor(TheOwner:TPropEditorOwner;rect:trect{x,y,w,h:Integer};pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:TInternalScriptString;preferedHeight:integer):TEditorDesc{TPropEditor};virtual;
                      procedure SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;prefix:TInternalScriptString);virtual;
                      destructor Done;virtual;
                end;

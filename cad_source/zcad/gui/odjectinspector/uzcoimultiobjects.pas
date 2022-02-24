@@ -311,7 +311,7 @@ begin
 end;
 
 procedure  TMSEditor.FormatAfterFielfmod;
-var //i: GDBInteger;
+var //i: Integer;
     //pu:pointer;
     pvd:pvardesk;
     //vd:vardesk;
@@ -683,7 +683,7 @@ begin
 end;
 
 procedure  TMSEditor.createunit;
-var //i: GDBInteger;
+var //i: Integer;
     pv:pGDBObjEntity;
     psd:PSelectedObjDesc;
     pu:pointer;

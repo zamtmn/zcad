@@ -222,7 +222,7 @@ begin
 end;
 procedure TZGLGeneralDrawer.DrawClosedContour3DInModelSpace(const pa:GDBPoint3dArray;var matrixs:tmatrixs);
 var p,pold,pstart:PGDBVertex;
-    i:GDBInteger;
+    i:Integer;
 begin
   if pa.count<2 then exit;
   p:=pa.GetParrayAsPointer;

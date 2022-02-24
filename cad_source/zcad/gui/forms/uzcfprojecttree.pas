@@ -176,7 +176,7 @@ procedure TProjectTreeForm.BuildTreeByEQ(var BuildNode:TmyTreeNode;PDBUNIT:PTUni
 var
    pvdeq:pvardesk;
    ir:itrec;
-   offset:GDBInteger;
+   offset:Integer;
    tc:PUserTypeDescriptor;
    treepos,treesuperpos{,category,s}:GDBString;
    i:integer;
@@ -349,7 +349,7 @@ begin
   BuildTreeByEQ(ProjectEquipmentN,PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName),MenusManager.GetPopupMenu('PROJECTDBCXMENU',nil));
 
 end;
-function ProjectTree_com(Operands:pansichar):GDBInteger;
+function ProjectTree_com(Operands:pansichar):Integer;
 begin
   if not assigned(ProjectTreeForm) then
                                   ProjectTreeForm:=TProjectTreeForm.mycreate(Application,@ProjectTreeForm);

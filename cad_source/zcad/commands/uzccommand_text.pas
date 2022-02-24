@@ -117,10 +117,10 @@ begin
 
 end;
 
-function GetStyleNames(var BDefNames:TZctnrVectorStrings;selname:GDBString):GDBInteger;
+function GetStyleNames(var BDefNames:TZctnrVectorStrings;selname:GDBString):Integer;
 var pb:PGDBTextStyle;
     ir:itrec;
-    i:gdbinteger;
+    i:Integer;
 begin
      result:=-1;
      i:=0;

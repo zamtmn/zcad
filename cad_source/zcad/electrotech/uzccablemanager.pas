@@ -131,8 +131,8 @@ begin
                       //pvn2:=PTObjectUnit(pobj2^.ou.Instance)^.FindVariable('CABLE_Segment');
                       pvn :=pentvarext.entityunit.FindVariable('CABLE_Segment');
                       pvn2:=pentvarext2.entityunit.FindVariable('CABLE_Segment');
-                      if pgdbinteger(pvn^.data.Addr.Instance)^<
-                         pgdbinteger(pvn2^.data.Addr.Instance)^ then
+                      if PInteger(pvn^.data.Addr.Instance)^<
+                         PInteger(pvn2^.data.Addr.Instance)^ then
                          begin
                               tp:=p2^;
                               p2^:=p1^;

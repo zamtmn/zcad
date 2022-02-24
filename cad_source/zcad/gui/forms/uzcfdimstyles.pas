@@ -90,7 +90,7 @@ type
     procedure MaceItemCurrent(ListItem:TListItem);
     procedure FillTextStyleSelector(currentitem:string;currentitempstyle:PGDBTextStyle);
     procedure onrsz(Sender: TObject);
-    procedure countstyle(pdimstyle:PGDBDimStyle;out e,b,inDimStyles:GDBInteger);
+    procedure countstyle(pdimstyle:PGDBDimStyle;out e,b,inDimStyles:Integer);
   private
     changedstamp:boolean;
     //EditedItem:TListItem;
@@ -447,18 +447,18 @@ begin
      DescLabel.Caption:=Format(rsCountDimStylesFound,[tscounter]);
 end;
 
-procedure DimStyleCounter(const PInstance,PCounted:Pointer;var Counter:GDBInteger);
+procedure DimStyleCounter(const PInstance,PCounted:Pointer;var Counter:Integer);
 begin
      if (PGDBObjEntity(PInstance)^.GetObjType=GDBAlignedDimensionID)or(PGDBObjEntity(PInstance)^.GetObjType=GDBRotatedDimensionID)or(PGDBObjEntity(PInstance)^.GetObjType=GDBDiametricDimensionID)or(PGDBObjEntity(PInstance)^.GetObjType=GDBRadialDimensionID) then
      if PCounted=PGDBObjDimension(PInstance)^.PDimStyle then
           inc(Counter);
 end;
-procedure TextStyleCounterInDimStyles(const PInstance,PCounted:Pointer;var Counter:GDBInteger);
+procedure TextStyleCounterInDimStyles(const PInstance,PCounted:Pointer;var Counter:Integer);
 begin
      //if PCounted=PGDBDimStyle(PInstance)^.Text.DIMTXSTY then
      //                                                      inc(Counter);
 end;
-procedure TDimStylesForm.countstyle(pdimstyle:PGDBDimStyle;out e,b,inDimStyles:GDBInteger);
+procedure TDimStylesForm.countstyle(pdimstyle:PGDBDimStyle;out e,b,inDimStyles:Integer);
 var
    pdwg:PTSimpleDrawing;
 begin
@@ -565,7 +565,7 @@ procedure TDimStylesForm.DeleteItem(Sender: TObject);
 var
    pstyle:PGDBDimStyle;
    pdwg:PTSimpleDrawing;
-   inEntities,inBlockTable,indimstyles:GDBInteger;
+   inEntities,inBlockTable,indimstyles:Integer;
    //domethod,undomethod:tmethod;
 begin
   pdwg:=drawings.GetCurrentDWG;
@@ -606,7 +606,7 @@ procedure TDimStylesForm.PurgeTStyles(Sender: TObject);
 var
    i,purgedcounter:integer;
    ProcessedItem:TListItem;
-   inEntities,inBlockTable,indimstyles:GDBInteger;
+   inEntities,inBlockTable,indimstyles:Integer;
    PCurrentStyle:PGDBDimStyle;
 begin
 

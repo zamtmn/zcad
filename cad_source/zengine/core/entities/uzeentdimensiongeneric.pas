@@ -104,7 +104,7 @@ end;
 
 procedure GDBObjGenericDimension.LoadFromDXF;
 var
-  byt,dtype:GDBInteger;
+  byt,dtype:Integer;
   style:GDBString;
 begin
   byt:=readmystrtoint(f);

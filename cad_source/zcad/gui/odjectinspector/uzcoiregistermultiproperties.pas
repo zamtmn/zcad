@@ -600,7 +600,7 @@ begin
   MultiPropertiesManager.RegisterPhysMultiproperty('Length','Length',sysunit^.TypeName2PTD('GDBDouble'),MPCGeometry,GDBElLeaderID,nil,PtrInt(@pelleader^.MainLine.CoordInWCS.lBegin),PtrInt(@pelleader^.MainLine.CoordInOCS.lBegin),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@GDBDoubleLengthEntIterateProc,@GDBDoubleLengthEntChangeProc));
   MultiPropertiesManager.RegisterPhysMultiproperty('Angle','Angle',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCGeometry,GDBElLeaderID,nil,PtrInt(@pelleader^.MainLine.CoordInWCS.lBegin),PtrInt(@pelleader^.MainLine.CoordInOCS.lBegin),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@GDBDoubleAngleEntIterateProc,@GDBDoubleAngleEntChangeProc));
   {ElLeader misc}
-  MultiPropertiesManager.RegisterPhysMultiproperty('LeaderSize','Size',sysunit^.TypeName2PTD('GDBInteger'),MPCMisc,GDBElLeaderID,nil,PtrInt(@pelleader^.size),PtrInt(@pelleader^.size),OneVarDataMIPD,OneVarDataEIPD);
+  MultiPropertiesManager.RegisterPhysMultiproperty('LeaderSize','Size',sysunit^.TypeName2PTD('Integer'),MPCMisc,GDBElLeaderID,nil,PtrInt(@pelleader^.size),PtrInt(@pelleader^.size),OneVarDataMIPD,OneVarDataEIPD);
   MultiPropertiesManager.RegisterPhysMultiproperty('Leaderscale','Scale',sysunit^.TypeName2PTD('GDBDouble'),MPCMisc,GDBElLeaderID,nil,PtrInt(@pelleader^.scale),PtrInt(@pelleader^.scale),OneVarDataMIPD,OneVarDataEIPD);
   MultiPropertiesManager.RegisterPhysMultiproperty('LeaderWidth','Width',sysunit^.TypeName2PTD('GDBDouble'),MPCMisc,GDBElLeaderID,nil,PtrInt(@pelleader^.twidth),PtrInt(@pelleader^.twidth),OneVarDataMIPD,OneVarDataEIPD);
 

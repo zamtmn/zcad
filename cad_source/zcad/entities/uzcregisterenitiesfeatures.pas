@@ -90,6 +90,7 @@ var
     vd: vardesk;
 begin
      extractvarfromdxfstring(_Value,vn,vt,vv,vun);
+     OldVersVarRename(vn,vt,vv,vun);
      PTUnit(ptu).setvardesc(vd,vn,vun,vt);
      PTUnit(ptu).InterfaceVariables.createvariable(vd.name,vd);
      PBaseTypeDescriptor(vd.data.PTD)^.SetValueFromString(vd.data.Addr.Instance,vv);
@@ -99,7 +100,7 @@ end;
 procedure ElLeaderSave(var outhandle:TZctnrVectorBytes;PEnt:PGDBObjEntity;var IODXFContext:TIODXFContext);
 begin
   dxfGDBStringout(outhandle,1000,'_UPGRADE='+inttostr(UD_LineToLeader));
-  dxfGDBStringout(outhandle,1000,'%1=size|GDBInteger|'+inttostr(PGDBObjElLeader(PEnt)^.size)+'|');
+  dxfGDBStringout(outhandle,1000,'%1=size|Integer|'+inttostr(PGDBObjElLeader(PEnt)^.size)+'|');
   dxfGDBStringout(outhandle,1000,'%2=scale|GDBDouble|'+floattostr(PGDBObjElLeader(PEnt)^.scale)+'|');
   dxfGDBStringout(outhandle,1000,'%3=twidth|GDBDouble|'+floattostr(PGDBObjElLeader(PEnt)^.twidth)+'|');
 end;
@@ -273,7 +274,7 @@ var
    pvn,pvnt:pvardesk;
    ptn:PTNodeProp;
    s:GDBstring;
-   //c:gdbinteger;
+   //c:Integer;
    pdev:PGDBObjDevice;
    pentvarext:TVariablesExtender;
 begin

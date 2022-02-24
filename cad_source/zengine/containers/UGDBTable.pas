@@ -26,9 +26,9 @@ type
 PGDBTableArray=^GDBTableArray;
 {REGISTEROBJECTTYPE GDBTableArray}
 GDBTableArray= object(GZVectorPObects{-}<PTZctnrVectorStrings,TZctnrVectorStrings>{//})(*OpenArrayOfData=TZctnrVectorStrings*)
-                    columns,rows:GDBInteger;
-                    constructor init(c,r:GDBInteger);
-                    //function copyto(var source:GDBOpenArrayOfData{-}<TZctnrVectorStrings>{//}):GDBInteger;virtual;
+                    columns,rows:Integer;
+                    constructor init(c,r:Integer);
+                    //function copyto(var source:GDBOpenArrayOfData{-}<TZctnrVectorStrings>{//}):Integer;virtual;
               end;
 {EXPORT-}
 implementation

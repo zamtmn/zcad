@@ -12,7 +12,7 @@ T1:GDBString;(*'Обозначение'*)
 T2:GDBString;(*'Марка'*)
 T3:GDBString;(*'Параметры'*)
 
-T11:GDBInteger;(*'123'*)
+T11:Integer;(*'123'*)
 
 implementation
 

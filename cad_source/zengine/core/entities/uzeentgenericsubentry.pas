@@ -43,13 +43,13 @@ GDBObjGenericSubEntry= object(GDBObjWithMatrix)
                             lstonmouse:PGDBObjEntity;
                             VisibleOBJBoundingBox:TBoundingBox;
                             //ObjTree:TEntTreeNode;
-                            function AddObjectToObjArray(p:Pointer):GDBInteger;virtual;
+                            function AddObjectToObjArray(p:Pointer):Integer;virtual;
                             procedure GoodAddObjectToObjArray(const obj:GDBObjEntity);virtual;
-                            //function AddObjectToNodeTree(pobj:PGDBObjEntity):GDBInteger;virtual;
-                            //function CorrectNodeTreeBB(pobj:PGDBObjEntity):GDBInteger;virtual;
+                            //function AddObjectToNodeTree(pobj:PGDBObjEntity):Integer;virtual;
+                            //function CorrectNodeTreeBB(pobj:PGDBObjEntity):Integer;virtual;
                             constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                            procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
-                            function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
+                            procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
+                            function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
                             function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
                             procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                             procedure FormatAfterEdit(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
@@ -58,34 +58,34 @@ GDBObjGenericSubEntry= object(GDBObjWithMatrix)
                             //function select:GDBBoolean;virtual;
                             function getowner:PGDBObjSubordinated;virtual;
                             function CanAddGDBObj(pobj:PGDBObjEntity):GDBBoolean;virtual;
-                            function EubEntryType:GDBInteger;virtual;
+                            function EubEntryType:Integer;virtual;
                             procedure MigrateTo(new_sub:PGDBObjGenericSubEntry);virtual;
-                            procedure EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;
-                            procedure RemoveMiFromArray(pobj:pGDBObjEntity;pobjinarray:GDBInteger);virtual;
+                            procedure EraseMi(pobj:pGDBObjEntity;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
+                            procedure RemoveMiFromArray(pobj:pGDBObjEntity;pobjinarray:Integer);virtual;
                             procedure GoodRemoveMiFromArray(const obj:GDBObjEntity);virtual;
-                            //function SubMi(pobj:pGDBObjEntity):GDBInteger;virtual;
+                            //function SubMi(pobj:pGDBObjEntity):Integer;virtual;
                             //** Добавляет объект в область ConstructObjRoot или mainObjRoot или итд. Пример добавления gdb.GetCurrentDWG^.ConstructObjRoot.AddMi(@sampleObj);
                             procedure AddMi(pobj:PGDBObjSubordinated);virtual;
-                            procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;
+                            procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
                             function ReturnLastOnMouse(InSubEntry:GDBBoolean):PGDBObjEntity;virtual;
-                            procedure correctobjects(powner:PGDBObjEntity;pinownerarray:GDBInteger);virtual;
+                            procedure correctobjects(powner:PGDBObjEntity;pinownerarray:Integer);virtual;
                             destructor done;virtual;
                             procedure getoutbound(var DC:TDrawContext);virtual;
                             procedure getonlyoutbound(var DC:TDrawContext);virtual;
 
                             procedure DrawBB(var DC:TDrawContext);
 
-                            procedure RemoveInArray(pobjinarray:GDBInteger);virtual;
-                            procedure DrawWithAttrib(var DC:TDrawContext{visibleactualy:TActulity;subrender:GDBInteger});virtual;
+                            procedure RemoveInArray(pobjinarray:Integer);virtual;
+                            procedure DrawWithAttrib(var DC:TDrawContext{visibleactualy:TActulity;subrender:Integer});virtual;
 
                             function CreatePreCalcData:PTDrawingPreCalcData;virtual;
                             procedure DestroyPreCalcData(PreCalcData:PTDrawingPreCalcData);virtual;
 
                             //procedure ProcessTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;OwnerInFrustum:TInRect);
                             //function CalcVisibleByTree(frustum:ClipArray;infrustumactualy:TActulity;const enttree:TEntTreeNode):GDBBoolean;virtual;
-                              function CalcVisibleByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
+                              function CalcVisibleByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
                               //function CalcInFrustumByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode):GDBBoolean;virtual;
-                              procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;
+                              procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;
 
                               //function FindObjectsInPointStart(const point:GDBVertex;out Objects:GDBObjOpenArrayOfPV):GDBBoolean;virtual;
                               function FindObjectsInVolume(const Volume:TBoundingBox;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;virtual;
@@ -98,7 +98,7 @@ GDBObjGenericSubEntry= object(GDBObjWithMatrix)
                               procedure correctsublayers(var la:GDBLayerArray);virtual;
                               function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
 
-                              procedure IterateCounter(PCounted:Pointer;var Counter:GDBInteger;proc:TProcCounter);virtual;
+                              procedure IterateCounter(PCounted:Pointer;var Counter:Integer;proc:TProcCounter);virtual;
 
                               procedure postload(var context:TIODXFLoadContext);virtual;
 
@@ -112,12 +112,12 @@ begin
      ObjArray.add(pobj);
      pGDBObjEntity(ppointer(pobj)^).bp.Owner:=@self;
 end;}
-{function GDBObjGenericSubEntry.CorrectNodeTreeBB(pobj:PGDBObjEntity):GDBInteger;
+{function GDBObjGenericSubEntry.CorrectNodeTreeBB(pobj:PGDBObjEntity):Integer;
 begin
      ConcatBB(ObjTree.BoundingBox,pobj^.vp.BoundingBox);
 end;
 
-function GDBObjGenericSubEntry.AddObjectToNodeTree(pobj:PGDBObjEntity):GDBInteger;
+function GDBObjGenericSubEntry.AddObjectToNodeTree(pobj:PGDBObjEntity):Integer;
 begin
     ObjTree.addtonul(pobj);
     CorrectNodeTreeBB(pobj);
@@ -134,7 +134,7 @@ begin
     p:=objarray.iterate(ir);
     until p=nil;
 end;
-procedure GDBObjGenericSubEntry.IterateCounter(PCounted:Pointer;var Counter:GDBInteger;proc:TProcCounter);
+procedure GDBObjGenericSubEntry.IterateCounter(PCounted:Pointer;var Counter:Integer;proc:TProcCounter);
 var p:pGDBObjEntity;
     ir:itrec;
 begin
@@ -153,7 +153,7 @@ end;
 
 procedure GDBObjGenericSubEntry.correctsublayers(var la:GDBLayerArray);
 var p:pGDBObjEntity;
-//    i:GDBInteger;
+//    i:Integer;
         ir:itrec;
 begin
      if objarray.Count=0 then exit;
@@ -285,7 +285,7 @@ begin
      AddObjectToObjArray(@p);
 end;
 
-function GDBObjGenericSubEntry.AddObjectToObjArray(p:Pointer):GDBInteger;
+function GDBObjGenericSubEntry.AddObjectToObjArray(p:Pointer):Integer;
 begin
      result:=ObjArray.AddPEntity(PGDBObjEntity(p^)^);
      PGDBObjEntity(p^).bp.ListPos.Owner:=@self;
@@ -300,7 +300,7 @@ end;
 begin
      ProcessTree(frustum,infrustumactualy,visibleactualy,enttree,IRPartially)
 end;*)
-function GDBObjGenericSubEntry.CalcVisibleByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;
+function GDBObjGenericSubEntry.CalcVisibleByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;
 begin
   //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('GDBObjGenericSubEntry.CalcVisibleByTree',lp_incPos);{$ENDIF}
   visible:=visibleactualy;
@@ -378,7 +378,7 @@ begin
   oglsm.myglend();}
   end;
 end;
-procedure GDBObjGenericSubEntry.RemoveInArray(pobjinarray:GDBInteger);
+procedure GDBObjGenericSubEntry.RemoveInArray(pobjinarray:Integer);
 begin
      ObjArray.DeleteElement(pobjinarray);
 end;
@@ -405,7 +405,7 @@ procedure GDBObjGenericSubEntry.GoodRemoveMiFromArray(const obj:GDBObjEntity);
 begin
      RemoveMiFromArray(@obj,obj.bp.ListPos.SelfIndex);
 end;
-procedure GDBObjGenericSubEntry.RemoveMiFromArray(pobj:pGDBObjEntity;pobjinarray:GDBInteger);
+procedure GDBObjGenericSubEntry.RemoveMiFromArray(pobj:pGDBObjEntity;pobjinarray:Integer);
 //var
 //p:PGDBObjEntity;
 begin
@@ -447,7 +447,7 @@ begin
 end;
 procedure GDBObjGenericSubEntry.MigrateTo;
 var p:pGDBObjEntity;
-//    i:GDBInteger;
+//    i:Integer;
         ir:itrec;
 begin
      if objarray.Count=0 then exit;
@@ -507,7 +507,7 @@ begin
      dec(dc.subrender);
   DrawBB(dc);
 end;
-function GDBObjGenericSubEntry.CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;
+function GDBObjGenericSubEntry.CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;
 begin
      result:=ObjArray.calcvisible(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
      self.VisibleOBJBoundingBox:=ObjArray.calcvisbb({gdb.GetCurrentDWG.pcamera^.POSCOUNT}{visibleactualy}infrustumactualy);
@@ -550,7 +550,7 @@ begin
 end;
 function GDBObjGenericSubEntry.onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;
 var //t,xx,yy:GDBDouble;
-    i:GDBInteger;
+    i:Integer;
     p:pGDBObjEntity;
     ot:GDBBoolean;
 begin
@@ -571,7 +571,7 @@ begin
 end;
 function GDBObjGenericSubEntry.onmouse;
 var //t,xx,yy:GDBDouble;
-    i:GDBInteger;
+    i:Integer;
     p:pGDBObjEntity;
     ot:GDBBoolean;
 begin

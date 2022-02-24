@@ -43,11 +43,11 @@ PGDBObjGenericWithSubordinated=^GDBObjGenericWithSubordinated;
 {REGISTEROBJECTTYPE GDBObjGenericWithSubordinated}
 GDBObjGenericWithSubordinated= object(GDBObjExtendable)
                                     {OU:TFaceTypedData;(*'Variables'*)}
-                                    procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;
-                                    procedure ImSelected(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger);virtual;
+                                    procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
+                                    procedure ImSelected(pobj:PGDBObjSubordinated;pobjinarray:Integer);virtual;
                                     procedure DelSelectedSubitem(var drawing:TDrawingDef);virtual;
                                     procedure AddMi(pobj:PGDBObjSubordinated);virtual;abstract;
-                                    procedure RemoveInArray(pobjinarray:GDBInteger);virtual;abstract;
+                                    procedure RemoveInArray(pobjinarray:Integer);virtual;abstract;
                                     procedure createfield;virtual;
                                     //function FindVariable(varname:GDBString):pvardesk;virtual;
                                     destructor done;virtual;
@@ -342,7 +342,11 @@ begin
                                 vt:='GDBString';
                                 //vv:=''''+vv+'''';
                            end;
-
+     if (vt='GDBInteger')  then
+                           begin
+                                vt:='Integer';
+                                //vv:=''''+vv+'''';
+                           end;
      OldVersTextReplace(vv);
      if nevname<>'' then
                         begin

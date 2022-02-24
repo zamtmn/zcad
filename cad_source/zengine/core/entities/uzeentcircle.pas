@@ -53,13 +53,13 @@ GDBObjCircle= object(GDBObjWithLocalCS)
                  procedure LoadFromDXF(var f:TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
                  procedure CalcObjMatrix;virtual;
-                 function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
+                 function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                  procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
-                 procedure SaveToDXF(var outhandle:{GDBInteger}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                 procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
+                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
                  procedure rtedit(refp:Pointer;mode:Single;dist,wc:gdbvertex);virtual;
                  procedure rtsave(refp:Pointer);virtual;
@@ -441,7 +441,7 @@ end;
 procedure GDBObjCircle.DrawGeometry;
 //var
   //angle: GDBDouble;
-  //i: GDBInteger;
+  //i: Integer;
 begin
            if dc.selected then
                               begin
@@ -484,12 +484,12 @@ procedure GDBObjCircle.projectpoint;
     tv:GDBvertex;
     tpv:GDBPolyVertex2D;
     ptpv:PGDBPolyVertex2D;
-    i:GDBInteger;}
+    i:Integer;}
 begin
 end;
 procedure GDBObjCircle.LoadFromDXF;
 var //s: GDBString;
-  byt{, code}: GDBInteger;
+  byt{, code}: Integer;
 begin
   //initnul;
   byt:=readmystrtoint(f);
@@ -540,7 +540,7 @@ begin
   inherited;
 end;}
 function GDBObjCircle.onmouse;
-var i:GDBInteger;
+var i:Integer;
 begin
      for i:=0 to 5 do
      begin
@@ -564,7 +564,7 @@ begin
   //pgdbobjcircle(refp)^.format;
 end;
 function GDBObjCircle.calcinfrustum;
-var i:GDBInteger;
+var i:Integer;
 begin
       result:=true;
       for i:=0 to 5 do
@@ -578,7 +578,7 @@ begin
       end;
 end;
 function GDBObjCircle.CalcTrueInFrustum;
-var i{,count}:GDBInteger;
+var i{,count}:Integer;
     //d1,d2,d3,d4:gdbdouble;
 begin
       for i:=0 to 5 do
@@ -682,7 +682,7 @@ begin
      inc(onlygetsnapcount);
 end;
 (*function GDBObjCircle.InRect;
-//var i:GDBInteger;
+//var i:Integer;
 //    ptpv:PGDBPolyVertex2D;
 begin
      if pprojoutbound<>nil then if self.pprojoutbound^.inrect=IRFully then

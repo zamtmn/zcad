@@ -113,7 +113,7 @@ type
 
     public
     SuppressedShortcuts:TXMLConfig;
-    rt:GDBInteger;
+    rt:Integer;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     destructor Destroy;override;
     procedure CreateAnchorDockingInterface;
@@ -228,8 +228,8 @@ const IntEmpty=-1000;
       IntDifferent=-10001;
       PEmpty=pointer(0);
       PDifferent=pointer(1);
-var lw:GDBInteger;
-    color:GDBInteger;
+var lw:Integer;
+    color:Integer;
     layer:pgdblayerprop;
     ltype:PGDBLtypeProp;
     tstyle:PGDBTextStyle;
@@ -427,7 +427,7 @@ begin
 end;
 function IsRealyQuit:GDBBoolean;
 var
-   pint:PGDBInteger;
+   pint:PInteger;
    //mem:TZctnrVectorBytes;
    i:integer;
    dr:TZCMsgDialogResult;
@@ -1541,7 +1541,7 @@ begin
 
   result:=false;
 end;
-function SelectRelatedObjects(PDWG:PTAbstractDrawing;param:POGLWndtype;pent:PGDBObjEntity):GDBInteger;
+function SelectRelatedObjects(PDWG:PTAbstractDrawing;param:POGLWndtype;pent:PGDBObjEntity):Integer;
 var
    pvname,pvname2:pvardesk;
    ir:itrec;
@@ -1651,7 +1651,7 @@ begin
 end;
 function TZCADMainWindow.GetEntsDesc(ents:PGDBObjOpenArrayOfPV):GDBString;
 var
-  i: GDBInteger;
+  i: Integer;
   pp:PGDBObjEntity;
   ir:itrec;
   //inr:TINRect;
@@ -2039,12 +2039,12 @@ begin
       end;
   end;
   end;
-function DockingOptions_com(Operands:pansichar):GDBInteger;
+function DockingOptions_com(Operands:pansichar):Integer;
 begin
      ShowAnchorDockOptions(DockMaster);
      result:=cmd_ok;
 end;
-function RaiseException_com(Operands:pansichar):GDBInteger;
+function RaiseException_com(Operands:pansichar):Integer;
 begin
      raise EExternal.Create('Exception test');
      result:=cmd_ok;

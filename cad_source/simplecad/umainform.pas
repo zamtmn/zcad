@@ -675,7 +675,7 @@ begin
 end;
 
 procedure TForm1.BtnSelectAllClick(Sender: TObject);
-var //i: GDBInteger;
+var //i: Integer;
     pv:pGDBObjEntity;
     ir:itrec;
     count:integer;

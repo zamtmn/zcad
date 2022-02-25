@@ -43,11 +43,11 @@ type
 
   GDBcommandmanager=object({TZctnrVectorPGDBaseObjects}GZVectorPObects{-}<PCommandObjectDef,CommandObjectDef>{//})
 
-                          lastcommand:GDBString;
+                          lastcommand:String;
                           pcommandrunning:PCommandRTEdObjectDef;
 
                           LatestRunPC:PCommandObjectDef;
-                          LatestRunOperands:GDBString;
+                          LatestRunOperands:String;
                           LatestRunPDrawing:PTDrawingDef;
 
                           CommandsStack:TZctnrVectorGDBPointer;
@@ -73,32 +73,32 @@ type
                           function GetSavedMouseMode:Byte;
                           procedure executecommandtotalend;virtual;
                           procedure ChangeModeAndEnd(newmode:TGetPointMode);
-                          procedure executefile(fn:GDBString;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
+                          procedure executefile(fn:String;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
                           procedure executelastcommad(pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
                           procedure sendpoint2command(p3d:gdbvertex; p2d:gdbvertex2di; var mode:Byte;osp:pos_record;const drawing:TDrawingDef);virtual;
                           procedure CommandRegister(pc:PCommandObjectDef);virtual;
-                          procedure run(pc:PCommandObjectDef;operands:GDBString;pdrawing:PTDrawingDef);virtual;
+                          procedure run(pc:PCommandObjectDef;operands:String;pdrawing:PTDrawingDef);virtual;
                           destructor done;virtual;
                           procedure cleareraseobj;virtual;
                           procedure DMShow;
                           procedure DMHide;
                           procedure DMClear;
-                          //-----------------------------------------------------------------procedure DMAddProcedure(Text,HText:GDBString;proc:TonClickProc);
-                          procedure DMAddMethod(Text,HText:GDBString;FMethod:TButtonMethod);
-                          procedure DMAddProcedure(Text,HText:GDBString;FProc:TButtonProc);
-                          function FindCommand(command:GDBString):PCommandObjectDef;
-                          procedure PushValue(varname,vartype:GDBString;instance:Pointer);virtual;
+                          //-----------------------------------------------------------------procedure DMAddProcedure(Text,HText:String;proc:TonClickProc);
+                          procedure DMAddMethod(Text,HText:String;FMethod:TButtonMethod);
+                          procedure DMAddProcedure(Text,HText:String;FProc:TButtonProc);
+                          function FindCommand(command:String):PCommandObjectDef;
+                          procedure PushValue(varname,vartype:String;instance:Pointer);virtual;
                           function PopValue:vardesk;virtual;
                           function GetValue:vardesk;virtual;
                           function GetValueHeap:Integer;
                           function CurrentCommandNotUseCommandLine:Boolean;
                           procedure PrepairVarStack;
 
-                          function Get3DPoint(prompt:GDBString;out p:GDBVertex):TGetResult;
-                          function Get3DPointWithLineFromBase(prompt:GDBString;const base:GDBVertex;out p:GDBVertex):TGetResult;
-                          function GetEntity(prompt:GDBString;out p:Pointer):Boolean;
-                          function Get3DPointInteractive(prompt:GDBString;out p:GDBVertex;const InteractiveProc:TInteractiveProcObjBuild;const PInteractiveData:Pointer):TGetResult;
-                          function GetInput(Prompt:GDBString;out Input:GDBString):TGetResult;
+                          function Get3DPoint(prompt:String;out p:GDBVertex):TGetResult;
+                          function Get3DPointWithLineFromBase(prompt:String;const base:GDBVertex;out p:GDBVertex):TGetResult;
+                          function GetEntity(prompt:String;out p:Pointer):Boolean;
+                          function Get3DPointInteractive(prompt:String;out p:GDBVertex;const InteractiveProc:TInteractiveProcObjBuild;const PInteractiveData:Pointer):TGetResult;
+                          function GetInput(Prompt:String;out Input:String):TGetResult;
 
                           function GetLastId:TTag;
                           function GetLastInput:AnsiString;
@@ -125,7 +125,7 @@ type
 var commandmanager:GDBcommandmanager;
 function getcommandmanager:Pointer;export;
 function GetCommandContext(pdrawing:PTDrawingDef;POGLWnd:POGLWndtype):TCStartAttr;
-procedure ParseCommand(comm:string; out command,operands:GDBString);
+procedure ParseCommand(comm:string; out command,operands:String);
 {procedure startup;
 procedure finalize;}
 implementation
@@ -298,7 +298,7 @@ begin
      else
                               result:=false;
 end;
-function GDBcommandmanager.Get3DPointInteractive(prompt:GDBString;out p:GDBVertex;const InteractiveProc:TInteractiveProcObjBuild;const PInteractiveData:Pointer):TGetResult;
+function GDBcommandmanager.Get3DPointInteractive(prompt:String;out p:GDBVertex;const InteractiveProc:TInteractiveProcObjBuild;const PInteractiveData:Pointer):TGetResult;
 var
    savemode:Byte;//variable to store the current mode of the editor
                      //переменная для сохранения текущего режима редактора
@@ -371,7 +371,7 @@ begin
     result:=[];
 end;
 
-function GDBcommandmanager.GetInput(Prompt:GDBString;out Input:GDBString):TGetResult;
+function GDBcommandmanager.GetInput(Prompt:String;out Input:String):TGetResult;
 var
    savemode:Byte;//variable to store the current mode of the editor
                      //переменная для сохранения текущего режима редактора
@@ -405,19 +405,19 @@ begin
                                                                       //восстанавливаем сохраненный режим редактора
 end;
 
-function GDBcommandmanager.Get3DPoint(prompt:GDBString;out p:GDBVertex):TGetResult;
+function GDBcommandmanager.Get3DPoint(prompt:String;out p:GDBVertex):TGetResult;
 begin
   result:=Get3DPointInteractive(prompt,p,nil,nil);
 end;
 
-function GDBcommandmanager.Get3DPointWithLineFromBase(prompt:GDBString;const base:GDBVertex;out p:GDBVertex):TGetResult;
+function GDBcommandmanager.Get3DPointWithLineFromBase(prompt:String;const base:GDBVertex;out p:GDBVertex):TGetResult;
 begin
   pcommandrunning^.IData.BasePoint:=base;
   pcommandrunning^.IData.DrawFromBasePoint:=true;
   result:=Get3DPointInteractive(prompt,p,nil,nil);
   pcommandrunning^.IData.DrawFromBasePoint:=False;
 end;
-function GDBcommandmanager.GetEntity(prompt:GDBString;out p:Pointer):Boolean;
+function GDBcommandmanager.GetEntity(prompt:String;out p:Pointer):Boolean;
 var
    savemode:Byte;
 begin
@@ -458,7 +458,7 @@ begin
                                  result:=true;
 end;
 
-procedure GDBcommandmanager.PushValue(varname,vartype:GDBString;instance:Pointer);
+procedure GDBcommandmanager.PushValue(varname,vartype:String;instance:Pointer);
 var
    vd: vardesk;
 begin
@@ -517,7 +517,7 @@ begin
      if assigned({CLine.}DMenu) then
      {CLine.}DMenu.clear;
 end;
-{procedure GDBcommandmanager.DMAddProcedure(Text,HText:GDBString;proc:TonClickProc);
+{procedure GDBcommandmanager.DMAddProcedure(Text,HText:String;proc:TonClickProc);
 begin
      if assigned(cline) then
      if assigned(CLine.DMenu) then
@@ -543,8 +543,8 @@ var
    sa:TZctnrVectorStrings;
    p:pstring;
    ir:itrec;
-   oldlastcomm:GDBString;
-   s:gdbstring;
+   oldlastcomm:String;
+   s:String;
 begin
      s:=(ExpandPath(fn));
      ZCMsgCallBackInterface.TextMessage(sysutils.format(rsRunScript,[s]),TMWOHistoryOut);
@@ -556,11 +556,11 @@ begin
      oldlastcomm:=lastcommand;
      sa.init(200);
      sa.loadfromfile(s);
-     //sa.getGDBString(1);
+     //sa.getString(1);
   p:=sa.beginiterate(ir);
   if p<>nil then
   repeat
-        if (uppercase(pGDBString(p)^)<>'ABOUT')then
+        if (uppercase(pString(p)^)<>'ABOUT')then
                                                     execute(p^,false,{pdrawing}drawings.GetCurrentDWG,POGLWndParam)
                                                 else
                                                     begin
@@ -656,7 +656,7 @@ begin
      if commandmanager.pcommandrunning<>nil then
        result:=result or CAOtherCommandRun;
 end;
-procedure ParseCommand(comm:string; out command,operands:GDBString);
+procedure ParseCommand(comm:string; out command,operands:String);
 var
    {i,}p1,p2: Integer;
 begin
@@ -672,7 +672,7 @@ begin
   operands:=copy(comm,p1+1,p2-p1-1);
   command:=uppercase(Command);
 end;
-function GDBcommandmanager.FindCommand(command:GDBString):PCommandObjectDef;
+function GDBcommandmanager.FindCommand(command:String):PCommandObjectDef;
 var
    p:PCommandObjectDef;
    ir:itrec;
@@ -690,7 +690,7 @@ begin
    until p=nil;
    result:=nil;
 end;
-procedure GDBcommandmanager.run(pc:PCommandObjectDef;operands:GDBString;pdrawing:PTDrawingDef);
+procedure GDBcommandmanager.run(pc:PCommandObjectDef;operands:String;pdrawing:PTDrawingDef);
 var
    pd:PTSimpleDrawing;
 begin
@@ -730,7 +730,7 @@ begin
 end;
 procedure GDBcommandmanager.execute(const comm:string;silent:Boolean;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);
 var //i,p1,p2: Integer;
-    command,operands:GDBString;
+    command,operands:String;
     cc:TCStartAttr;
     pfoundcommand:PCommandObjectDef;
     //p:pchar;
@@ -799,7 +799,7 @@ procedure GDBcommandmanager.PrepairVarStack;
 var
     ir:itrec;
     pvd:pvardesk;
-    value:GDBString;
+    value:String;
 begin
      if self.varstack.vardescarray.Count<>0 then
      begin

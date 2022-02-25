@@ -27,11 +27,11 @@ uses uzcinterface,uzgldrawcontext,uzeentityfactory,
      sysutils,uzeconsts,
      uzctnrVectorBytes,uzeentity;
 {$IFNDEF DELPHI}
-procedure Import(name: GDBString;var drawing:TSimpleDrawing);
+procedure Import(name: String;var drawing:TSimpleDrawing);
 {$ENDIF}
 implementation
 {$IFNDEF DELPHI}
-procedure Import(name: GDBString;var drawing:TSimpleDrawing);
+procedure Import(name: String;var drawing:TSimpleDrawing);
 var
   Vec: TvVectorialDocument;
   source:{TvVectorialPage}TvPage;

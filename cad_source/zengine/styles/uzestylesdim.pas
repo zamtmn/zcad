@@ -34,7 +34,7 @@ TDimStyleReadMode=(TDSRM_ACAD,
                    TDSRM_ACAD_DSTYLE_DIM_EXT1_LINETYPE,
                    TDSRM_ACAD_DSTYLE_DIM_EXT2_LINETYPE);
 TDimArrowBlockParam=record
-                     name:GDBString;
+                     name:String;
                      width:Double;
                end;
 {EXPORT+}
@@ -107,7 +107,7 @@ GDBDimStyle = object(GDBNamedObject)
                       Units:TGDBDimUnitsProp;
                       PDXFLoadingData:PTDimStyleDXFLoadingData;
                       procedure SetDefaultValues;virtual;
-                      procedure SetValueFromDxf(var mode:TDimStyleReadMode;group:Integer;value:GDBString;var context:TIODXFLoadContext);virtual;
+                      procedure SetValueFromDxf(var mode:TDimStyleReadMode;group:Integer;value:String;var context:TIODXFLoadContext);virtual;
                       function GetDimBlockParam(nline:Integer):TDimArrowBlockParam;
                       function GetDimBlockTypeByName(bname:String):TArrowStyle;
                       procedure CreateLDIfNeed;
@@ -249,7 +249,7 @@ begin
      result:=high(TArrowStyle);
 end;
 
-procedure GDBDimStyle.SetValueFromDxf(var mode:TDimStyleReadMode; group:Integer;value:GDBString;var context:TIODXFLoadContext);
+procedure GDBDimStyle.SetValueFromDxf(var mode:TDimStyleReadMode; group:Integer;value:String;var context:TIODXFLoadContext);
 var
    temp:QWord;
 begin

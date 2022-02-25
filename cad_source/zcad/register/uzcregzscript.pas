@@ -23,28 +23,28 @@ uses uzcsysvars,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,varman,
      UBaseTypeDescriptor,uzbtypesbase,uzedimensionaltypes,uzemathutils,LazLogger;
 type
   GDBNonDimensionDoubleDescriptor=object(DoubleDescriptor)
-                            function GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):GDBString;virtual;
+                            function GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):String;virtual;
                       end;
   GDBAngleDegDoubleDescriptor=object(DoubleDescriptor)
-                                         function GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):GDBString;virtual;
+                                         function GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):String;virtual;
                                    end;
   GDBAngleDoubleDescriptor=object(DoubleDescriptor)
-                                 function GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):GDBString;virtual;
+                                 function GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):String;virtual;
                            end;
 var
   GDBNonDimensionDoubleDescriptorObj:GDBNonDimensionDoubleDescriptor;
   GDBAngleDegDoubleDescriptorObj:GDBAngleDegDoubleDescriptor;
   GDBAngleDoubleDescriptorObj:GDBAngleDoubleDescriptor;
 implementation
-function GDBNonDimensionDoubleDescriptor.GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):GDBString;
+function GDBNonDimensionDoubleDescriptor.GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):String;
 begin
     result:=zeNonDimensionToString(PGDBNonDimensionDouble(PInstance)^,f);
 end;
-function GDBAngleDegDoubleDescriptor.GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):GDBString;
+function GDBAngleDegDoubleDescriptor.GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):String;
 begin
     result:=zeAngleDegToString(PGDBNonDimensionDouble(PInstance)^,f);
 end;
-function GDBAngleDoubleDescriptor.GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):GDBString;
+function GDBAngleDoubleDescriptor.GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):String;
 begin
     result:=zeAngleToString(PGDBNonDimensionDouble(PInstance)^,f);
 end;

@@ -8,9 +8,9 @@ usescopy objname;
 
 var
 
-T1:GDBString;(*'Обозначение'*)
-T11:GDBString;(*'P установленная'*)
-T12:GDBString;(*'U падение напряжения'*)
+T1:String;(*'Обозначение'*)
+T11:String;(*'P установленная'*)
+T12:String;(*'U падение напряжения'*)
 
 implementation
 

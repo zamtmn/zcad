@@ -8,12 +8,12 @@ usescopy objname;
 
 var
 
-T1:GDBString;(*'Помещение'*)
-T2:GDBString;(*'Освещенность'*)
-T3:GDBString;(*'Светильник'*)
-T4:GDBString;(*'Мощность'*)
-T5:GDBString;(*'Количество'*)
-T6:GDBString;(*'Высота'*)
+T1:String;(*'Помещение'*)
+T2:String;(*'Освещенность'*)
+T3:String;(*'Светильник'*)
+T4:String;(*'Мощность'*)
+T5:String;(*'Количество'*)
+T6:String;(*'Высота'*)
 
 implementation
 

@@ -109,7 +109,7 @@ uses
 
 
 
-  function testTempDrawText(p1:GDBVertex;mText:GDBString):TCommandResult;
+  function testTempDrawText(p1:GDBVertex;mText:String):TCommandResult;
   function testTempDrawLine(p1:GDBVertex;p2:GDBVertex):TCommandResult;
 
   function testTempDrawLineColor(p1:GDBVertex;p2:GDBVertex;color:integer):TCommandResult;
@@ -162,7 +162,7 @@ implementation
       result:=cmd_ok;
   end;
   //быстрое написание текста
-  function testTempDrawText(p1:GDBVertex;mText:GDBString):TCommandResult;
+  function testTempDrawText(p1:GDBVertex;mText:String):TCommandResult;
   var
       ptext:PGDBObjText;
   begin

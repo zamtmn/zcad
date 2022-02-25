@@ -107,10 +107,10 @@ end;
 begin
      result:=Name;
 end;}
-function Cat2UserNameCat(category:GDBString; const catalog:TZctnrVectorStrings):GDBString;
+function Cat2UserNameCat(category:String; const catalog:TZctnrVectorStrings):String;
 var
-   ps{,pspred}:pgdbstring;
-//   s:gdbstring;
+   ps{,pspred}:pString;
+//   s:String;
    ir:itrec;
 begin
      ps:=catalog.beginiterate(ir);
@@ -147,11 +147,11 @@ begin
                        end;
 
 end;
-procedure BuildBranchN(var CurrNode:TmyTreeNode;var TreePos:GDBString; const catalog:TZctnrVectorStrings);
+procedure BuildBranchN(var CurrNode:TmyTreeNode;var TreePos:String; const catalog:TZctnrVectorStrings);
 var
     i:integer;
     CurrFindNode{,tn}:TmyTreeNode;
-    category:GDBString;
+    category:String;
 begin
      TmyTreeView(CurrNode.TreeView).NodeType:=TmyTreeNode;
      i:=pos('_',treepos);
@@ -178,7 +178,7 @@ var
    ir:itrec;
    offset:Integer;
    tc:PUserTypeDescriptor;
-   treepos,treesuperpos{,category,s}:GDBString;
+   treepos,treesuperpos{,category,s}:String;
    i:integer;
    CurrNode{,CurrFindNode,tn}:TmyTreeNode;
    eqnode:TEqTreeNode;
@@ -194,7 +194,7 @@ begin
          pvdeq^.data.PTD^.ApplyOperator('.','TreeCoord',offset,tc);
          if (offset<>0)and(tc^.GetFactTypedef=@FundamentalStringDescriptorObj) then
          begin
-              treesuperpos:=pgdbstring(ptruint(pvdeq^.data.Addr.Instance) + offset)^;
+              treesuperpos:=pString(ptruint(pvdeq^.data.Addr.Instance) + offset)^;
          end
          else
              treesuperpos:='';
@@ -262,7 +262,7 @@ var
     i:integer;
     CurrNode:TTreeNode;
     pvd{,pvd2}:pvardesk;
-    treepos{,treesuperpos,category}:GDBString;
+    treepos{,treesuperpos,category}:String;
     //pmenuitem:pzmenuitem;
 
     BlockNode:TBlockTreeNode;

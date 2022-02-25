@@ -37,12 +37,12 @@ TZctnrVectorBytes=object(GZVector{-}<byte>{//})
                       function AddByteByVal(Data:Byte):Integer;virtual;
                       function AddWord(PData:Pointer):Integer;virtual;
                       //function AddFontFloat(PData:Pointer):Integer;virtual;
-                      procedure TXTAddGDBStringEOL(s:AnsiString);virtual;
-                      procedure TXTAddGDBString(s:AnsiString);virtual;
+                      procedure TXTAddStringEOL(s:AnsiString);virtual;
+                      procedure TXTAddString(s:AnsiString);virtual;
                       function ReadData(PData:Pointer;SData:Word):Integer;virtual;
                       //function PopData(PData:Pointer;SData:Word):Integer;virtual;
-                      function ReadString(break, ignore: AnsiString): AnsiString;inline;
-                      function ReadGDBString: AnsiString;inline;
+                      function ReadString3(break, ignore: AnsiString): AnsiString;inline;
+                      function ReadString: AnsiString;inline;
                       function ReadString2:AnsiString;inline;
                       function GetCurrentReadAddres:Pointer;virtual;
                       function Jump(offset:Integer):Pointer;virtual;
@@ -71,12 +71,12 @@ begin
      inherited;
 end;
 
-procedure TZctnrVectorBytes.TXTAddGDBStringEOL;
+procedure TZctnrVectorBytes.TXTAddStringEOL;
 begin
      s:=s+lineend;
-     self.TXTAddGDBString(s);
+     self.TXTAddString(s);
 end;
-procedure TZctnrVectorBytes.TXTAddGDBString;
+procedure TZctnrVectorBytes.TXTAddString;
 begin
      self.AddData(@s[1],length(s));
 end;
@@ -206,11 +206,11 @@ end;
 
 function TZctnrVectorBytes.ReadString2;
 begin
-     result:=readspace(readGDBString)
+     result:=readspace(readString)
 end;
-function TZctnrVectorBytes.ReadGDBString;
+function TZctnrVectorBytes.ReadString;
 begin
-     result:=ReadString(#10,#13);
+     result:=ReadString3(#10,#13);
 end;
 function TZctnrVectorBytes.notEOF:Boolean;
 begin
@@ -250,7 +250,7 @@ begin
      result:=readbyte;
      result:=result+256*readbyte;
 end;
-function TZctnrVectorBytes.readstring{(break, ignore: GDBString): shortString};
+function TZctnrVectorBytes.readstring3{(break, ignore: String): shortString};
 var
   //{s,}myresult: shortString;
   i:Integer;

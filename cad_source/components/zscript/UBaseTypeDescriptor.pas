@@ -114,20 +114,20 @@ DoubleDescriptor=object(BaseTypeDescriptor<double,{TFloatTypeManipulator<double>
 TFTM_float=TOrdinalTypeManipulator<float>;
 FloatDescriptor=object(BaseTypeDescriptor<float,{TFloatTypeManipulator<TFTM_float>}TFTM_float>)
                     end;
-GDBStringGeneralDescriptor<T,TManipulator>=object(BaseTypeDescriptor<T,TManipulator>)
+StringGeneralDescriptor<T,TManipulator>=object(BaseTypeDescriptor<T,TManipulator>)
                           procedure CopyInstanceTo(source,dest:pointer);virtual;
                           procedure MagicFreeInstance(PInstance:Pointer);virtual;
                           procedure MagicAfterCopyInstance(PInstance:Pointer);virtual;
                     end;
 TSTM_UnicodeString=TStringTypeManipulator<UnicodeString>;
-GDBUnicodeStringDescriptor=object(GDBStringGeneralDescriptor<UnicodeString,TSTM_UnicodeString>)
+GDBUnicodeStringDescriptor=object(StringGeneralDescriptor<UnicodeString,TSTM_UnicodeString>)
                     end;
 TSTM_String=TStringTypeManipulator<String>;
-GDBStringDescriptor=object(GDBStringGeneralDescriptor<string,{TStringTypeManipulator<string>}TSTM_String>)
+StringDescriptor=object(StringGeneralDescriptor<string,{TStringTypeManipulator<string>}TSTM_String>)
                           procedure SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;prefix:TInternalScriptString);virtual;
                     end;
 TASTM_String=TAnsiStringTypeManipulator<String>;
-AnsiStringDescriptor=object(GDBStringGeneralDescriptor<string,{TAnsiStringTypeManipulator<string>}TASTM_String>)
+AnsiStringDescriptor=object(StringGeneralDescriptor<string,{TAnsiStringTypeManipulator<string>}TASTM_String>)
                           procedure SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;prefix:TInternalScriptString);virtual;
                     end;
 TPTM_Pointer=TPointerTypeManipulator<Pointer>;
@@ -145,7 +145,7 @@ TEnumDataDescriptor=object(BaseTypeDescriptor<TEnumData,{TOrdinalTypeManipulator
 var
 FundamentalDoubleDescriptorObj:DoubleDescriptor;
 FundamentalUnicodeStringDescriptorObj:GDBUnicodeStringDescriptor;
-FundamentalStringDescriptorObj:GDBStringDescriptor;
+FundamentalStringDescriptorObj:StringDescriptor;
 FundamentalAnsiStringDescriptorObj:AnsiStringDescriptor;
 FundamentalWordDescriptorObj:TFundamentalWordDescriptor;
 FundamentalLongIntDescriptorObj:TFundamentalLongIntDescriptor;
@@ -433,15 +433,15 @@ function BaseTypeDescriptor<T,TManipulator>.AllocInstance:Pointer;
 begin
   Getmem(result,SizeOf(TManipulator.pt));
 end;
-procedure GDBStringGeneralDescriptor<T,TManipulator>.CopyInstanceTo;
+procedure StringGeneralDescriptor<T,TManipulator>.CopyInstanceTo;
 begin
      PT(dest)^:=PT(source)^;
 end;
-procedure GDBStringGeneralDescriptor<T,TManipulator>.MagicFreeInstance;
+procedure StringGeneralDescriptor<T,TManipulator>.MagicFreeInstance;
 begin
      {pstring}PT(Pinstance)^:='';
 end;
-procedure GDBStringGeneralDescriptor<T,TManipulator>.MagicAfterCopyInstance;
+procedure StringGeneralDescriptor<T,TManipulator>.MagicAfterCopyInstance;
 var
    s:{TInternalScriptString}T;
 begin
@@ -466,13 +466,13 @@ class function TPointerTypeManipulator<T>.GetFormattedValueAsString(const data:T
 begin
    result:=GetValueAsString(data);
 end;
-procedure GDBStringDescriptor.SavePasToMem;
+procedure StringDescriptor.SavePasToMem;
 begin
-     membuf.TXTAddGDBStringEOL(prefix+':=DecodeStringBase64('''+EncodeStringBase64(GetValueAsString(PInstance))+''');');
+     membuf.TXTAddStringEOL(prefix+':=DecodeStringBase64('''+EncodeStringBase64(GetValueAsString(PInstance))+''');');
 end;
 procedure AnsiStringDescriptor.SavePasToMem;
 begin
-     membuf.TXTAddGDBStringEOL(prefix+':=DecodeStringBase64('''+EncodeStringBase64(GetValueAsString(PInstance))+''');');
+     membuf.TXTAddStringEOL(prefix+':=DecodeStringBase64('''+EncodeStringBase64(GetValueAsString(PInstance))+''');');
 end;
 destructor TEnumDataDescriptor.done;
 begin
@@ -514,7 +514,7 @@ begin
                                                                            else
                                                                                result:=PTEnumData(Pinstance)^.Enums.getData(PTEnumData(Pinstance)^.Selected);
      {GetNumberInArrays(pinstance,num);
-     result:=UserValue.getGDBString(num)}
+     result:=UserValue.getString(num)}
 end;
 begin
      FundamentalLongIntDescriptorObj.init('LongInt',nil);

@@ -37,13 +37,13 @@ type
   {REGISTEROBJECTTYPE copy_com}
   copy_com =  object(move_com)
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
-    function Copy(dispmatr:DMatrix4D;UndoMaker:GDBString): Integer;
+    function Copy(dispmatr:DMatrix4D;UndoMaker:String): Integer;
   end;
 {EXPORT-}
 var
    Copy:copy_com;
 implementation
-function Copy_com.Copy(dispmatr:DMatrix4D;UndoMaker:GDBString): Integer;
+function Copy_com.Copy(dispmatr:DMatrix4D;UndoMaker:String): Integer;
 var
   ir:itrec;
   pcd:PTCopyObjectDesc;

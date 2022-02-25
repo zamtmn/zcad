@@ -90,8 +90,8 @@ begin
        then
        begin
             PGDBObjEntity(osp^.PGDBObject)^.formatentity(drawings.GetCurrentDWG^,dc);
-            //PGDBObjEntity(osp^.PGDBObject)^.ObjToGDBString('Found: ','');
-            ZCMsgCallBackInterface.TextMessage(PGDBObjline(osp^.PGDBObject)^.ObjToGDBString('Found: ',''),TMWOHistoryOut);
+            //PGDBObjEntity(osp^.PGDBObject)^.ObjToString('Found: ','');
+            ZCMsgCallBackInterface.TextMessage(PGDBObjline(osp^.PGDBObject)^.ObjToString('Found: ',''),TMWOHistoryOut);
             po:=PGDBObjEntity(osp^.PGDBObject)^.getowner;
             pold:=osp^.PGDBObject;
        end

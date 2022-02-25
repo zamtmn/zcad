@@ -43,10 +43,10 @@ TRestoreMode=(
 PTOpenglData=^TOpenglData;
 {REGISTERRECORDTYPE TOpenglData}
 TOpenglData=record
-          RD_Renderer:GDBString;(*'Device'*)(*oi_readonly*)
-          RD_Version:GDBString;(*'Version'*)(*oi_readonly*)
-          RD_Extensions:GDBString;(*'Extensions'*)(*oi_readonly*)
-          RD_Vendor:GDBString;(*'Vendor'*)(*oi_readonly*)
+          RD_Renderer:String;(*'Device'*)(*oi_readonly*)
+          RD_Version:String;(*'Version'*)(*oi_readonly*)
+          RD_Extensions:String;(*'Extensions'*)(*oi_readonly*)
+          RD_Vendor:String;(*'Vendor'*)(*oi_readonly*)
           RD_Restore_Mode:trestoremode;(*'Restore mode'*)
           RD_VSync:TGDB3StateBool;(*'VSync'*)
           RD_MaxWidth:Integer;(*'Max width'*)(*oi_readonly*)

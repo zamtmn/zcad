@@ -5,7 +5,7 @@ var
    SYS_Border:TShapeBorder;
    SYS_Class:TShapeClass;
    SYS_Group:TShapeGroup;
-   TNAME_TERMName:GDBString;
+   TNAME_TERMName:String;
    TNAME_Number:Integer;
 implementation
 begin

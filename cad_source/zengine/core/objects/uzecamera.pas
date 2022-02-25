@@ -37,7 +37,7 @@ GDBObjCamera= object(GDBBaseCamera)
                    procedure getfrustum(mm,pm:PDMatrix4D;var _clip:DMatrix4D;var _frustum:ClipArray);
                    procedure RotateInLocalCSXY(ux,uy:Double);
                    procedure MoveInLocalCSXY(oldx,oldy:Double;ax:gdbvertex);
-                   function GetObjTypeName:GDBString;virtual;
+                   function GetObjTypeName:String;virtual;
                    constructor initnul;
 
                    procedure NextPosition;virtual;

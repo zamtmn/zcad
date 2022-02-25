@@ -264,7 +264,7 @@ type
       function getPointConnector(pobj:pGDBObjEntity; out pConnect:GDBVertex):Boolean;
 
       function testTempDrawPolyLine(listVertex:GListVertexPoint;color:Integer):TCommandResult;
-      function testTempDrawText(p1:GDBVertex;mText:GDBString):TCommandResult;
+      function testTempDrawText(p1:GDBVertex;mText:String):TCommandResult;
       function convertLineInRectangleWithAccuracy(point1:GDBVertex;point2:GDBVertex;accuracy:double):TRectangleLine;
       procedure listSortVertexAtStPtLine(var listNumVertex:TListTempNumVertex;listDevice:TListDeviceLine;stVertLine:GDBVertex);
       function getAreaLine(point1:GDBVertex;point2:GDBVertex;accuracy:double):TBoundingBox;
@@ -531,7 +531,7 @@ begin
      result:=cmd_ok;
 end;
 //быстрое написание текста
-function testTempDrawText(p1:GDBVertex;mText:GDBString):TCommandResult;
+function testTempDrawText(p1:GDBVertex;mText:String):TCommandResult;
 var
     ptext:PGDBObjText;
 begin
@@ -1380,7 +1380,7 @@ begin
      begin
        haveName:=true;
        pvd:=FindVariableInEnt(graph.listVertex[i].deviceEnt,'RiserName');
-       nameBreak:=pgdbstring(pvd^.data.Addr.Instance)^;
+       nameBreak:=pString(pvd^.data.Addr.Instance)^;
        pvd:=FindVariableInEnt(graph.listVertex[i].deviceEnt,'Elevation');
        infoVertex.num:=i;
        infoVertex.level:=PDouble(pvd^.data.Addr.Instance)^;
@@ -1545,11 +1545,11 @@ begin
            begin
              pSuperLine:=PGDBObjSuperLine(pobj);
              pvd:=FindVariableInEnt(pSuperLine,'NMO_Name');
-             tempName:=pgdbstring(pvd^.data.Addr.Instance)^;
+             tempName:=pString(pvd^.data.Addr.Instance)^;
              if nameCable=tempName then
                begin
                  infoCable.cableEnt:=pSuperLine;
-                 //infoCable.typeMount:=pgdbstring(FindVariableInEnt(pSuperLine,'Cable_Mounting_Method')^.Instance)^;
+                 //infoCable.typeMount:=pString(FindVariableInEnt(pSuperLine,'Cable_Mounting_Method')^.Instance)^;
                  infoCable.stPoint:=pSuperLine^.CoordInOCS.lBegin;
                  infoCable.stPoint.z:=0;
                  infoCable.edPoint:=pSuperLine^.CoordInOCS.lEnd;
@@ -1840,10 +1840,10 @@ begin
          pvd:=FindVariableInEnt(pSuperLine,'NMO_Name');
          isname:=true;
          for name in listSLname do
-           if name = pgdbstring(pvd^.data.Addr.Instance)^ then
+           if name = pString(pvd^.data.Addr.Instance)^ then
              isname:=false;
          if isname then
-            listSLname.PushBack(pgdbstring(pvd^.data.Addr.Instance)^);
+            listSLname.PushBack(pString(pvd^.data.Addr.Instance)^);
         end;
       pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir); //переход к следующем примитиву в списке выбраных примитивов
     until pobj=nil;
@@ -1879,7 +1879,7 @@ end;
          if ourGraph.listVertex[i].deviceEnt<>nil then
          begin
              pvd:=FindVariableInEnt(ourGraph.listVertex[i].deviceEnt,'DB_link');
-             ZCMsgCallBackInterface.TextMessage(pgdbstring(pvd^.Instance)^);
+             ZCMsgCallBackInterface.TextMessage(pString(pvd^.Instance)^);
          end;
          testTempDrawCircle(ourGraph.listVertex[i].centerPoint,Epsilon);
       end;

@@ -102,7 +102,7 @@ type
     procedure wamm(Sender:TAbstractViewArea;Shift:TShiftState;X,Y:Integer);
     procedure wams(Sender:TAbstractViewArea;SelectedEntity:Pointer);
     procedure wakp(Sender:TAbstractViewArea;var Key: Word; Shift: TShiftState);
-    function GetEntsDesc(ents:PGDBObjOpenArrayOfPV):GDBString;
+    function GetEntsDesc(ents:PGDBObjOpenArrayOfPV):String;
     procedure waSetObjInsp(Sender:{TAbstractViewArea}tobject;GUIAction:TZMessageID);
     procedure WaShowCursor(Sender:TAbstractViewArea;var DC:TDrawContext);
 
@@ -159,7 +159,7 @@ var
   //LineWBox:TComboBox;
   //LayoutBox:TComboBox;
   //LPTime:Tdatetime;
-  //pname:GDBString;
+  //pname:String;
   oldlongprocess:integer;
   //OLDColor:integer;
   ProcessBar:TProgressBar;
@@ -392,7 +392,7 @@ begin
 end;
 procedure TZCADMainWindow.processfilehistory(filename:string);
 var i,j,k:integer;
-    pstr,pstrnext:PGDBString;
+    pstr,pstrnext:PString;
 begin
      k:=FindIndex(@FileHistory,low(filehistory),high(filehistory),filename);
      if k<0 then exit;
@@ -1247,7 +1247,7 @@ end;
 
 procedure TZCADMainWindow.EndLongProcess;
 var
-   TimeStr,LPName:GDBSTRING;
+   TimeStr,LPName:String;
 begin
   if (assigned(ProcessBar)and assigned(HintText)) then
   begin
@@ -1568,7 +1568,7 @@ begin
                               pentvarext:=pobj^.GetExtension<TVariablesExtender>;
                               pvname2:=pentvarext.entityunit.FindVariable('NMO_Name');
                               if pvname2<>nil then
-                              if pgdbstring(pvname2^.data.Addr.Instance)^=pgdbstring(pvname^.data.Addr.Instance)^ then
+                              if pString(pvname2^.data.Addr.Instance)^=pString(pvname^.data.Addr.Instance)^ then
                               begin
                                    if pobj^.select(param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.selector)then
                                                                                                           inc(result);
@@ -1649,13 +1649,13 @@ begin
     end;
   end;
 end;
-function TZCADMainWindow.GetEntsDesc(ents:PGDBObjOpenArrayOfPV):GDBString;
+function TZCADMainWindow.GetEntsDesc(ents:PGDBObjOpenArrayOfPV):String;
 var
   i: Integer;
   pp:PGDBObjEntity;
   ir:itrec;
   //inr:TINRect;
-  line:GDBString;
+  line:String;
   pvd:pvardesk;
   pentvarext:TVariablesExtender;
 begin
@@ -1699,7 +1699,7 @@ begin
 end;
 procedure TZCADMainWindow.waSetObjInsp;
 var
-    tn:GDBString;
+    tn:String;
     ptype:PUserTypeDescriptor;
     objcount:integer;
     sender_wa:TAbstractViewArea;
@@ -1843,7 +1843,7 @@ end;
 procedure TZCADMainWindow.updatevisible(sender:TObject;GUIMode:TZMessageID);
 var
    GVA:TGeneralViewArea;
-   name:gdbstring;
+   name:String;
    i,k:Integer;
    pdwg:PTSimpleDrawing;
    FIPCServerRunning:boolean;

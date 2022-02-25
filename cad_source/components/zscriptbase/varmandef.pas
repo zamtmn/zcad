@@ -40,7 +40,7 @@ const
   TGDBInteger=12;
   TGDBLongword=13;
   TDouble=14;
-  TGDBString=15;
+  TString=15;
   TGDBobject=16;}
   Ignore=#13;
   Break='=:,'#10;
@@ -287,7 +287,7 @@ varmanagerdef=object
                  function createvariable(varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0): pvardesk;virtual;abstract;
                  function createvariable2(varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0):TInVectorAddr;virtual;abstract;
                  procedure createvariablebytype(varname,vartype:TInternalScriptString);virtual;abstract;
-                 procedure createbasevaluefromGDBString(varname: TInternalScriptString; varvalue: TInternalScriptString; var vd: vardesk);virtual;abstract;
+                 procedure createbasevaluefromString(varname: TInternalScriptString; varvalue: TInternalScriptString; var vd: vardesk);virtual;abstract;
                  function findfieldcustom(var pdesc: pByte; var offset: Integer;var tc:PUserTypeDescriptor; nam: shortString): Boolean;virtual;abstract;
                  //function getDS:Pointer;virtual;abstract;
            end;
@@ -523,7 +523,7 @@ begin
 end;
 procedure UserTypeDescriptor.SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;prefix:TInternalScriptString);
 begin
-     membuf.TXTAddGDBStringEOL(prefix+':='+{pvd.data.PTD.}GetValueAsString(PInstance)+';');
+     membuf.TXTAddStringEOL(prefix+':='+{pvd.data.PTD.}GetValueAsString(PInstance)+';');
 end;
 procedure UserTypeDescriptor.MagicFreeInstance(PInstance:Pointer);
 begin

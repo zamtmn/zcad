@@ -55,7 +55,7 @@ GDBObjAlignedDimension= object(GDBObjDimension)
 
 
 
-                      function GetObjTypeName:GDBString;virtual;
+                      function GetObjTypeName:String;virtual;
 
 
 
@@ -139,8 +139,8 @@ begin
                            dxfGDBIntegerout(outhandle,70,1+128)
                        else
                            dxfGDBIntegerout(outhandle,70,1);
-  dxfGDBStringout(outhandle,3,PDimStyle^.Name);
-  dxfGDBStringout(outhandle,100,'AcDbAlignedDimension');
+  dxfStringout(outhandle,3,PDimStyle^.Name);
+  dxfStringout(outhandle,100,'AcDbAlignedDimension');
   dxfvertexout(outhandle,13,DimData.P13InWCS);
   dxfvertexout(outhandle,14,DimData.P14InWCS);
 end;

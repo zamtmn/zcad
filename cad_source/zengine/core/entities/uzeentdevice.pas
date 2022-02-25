@@ -55,7 +55,7 @@ GDBObjDevice= object(GDBObjBlockInsert)
                    function getonlyvisibleoutbound(var DC:TDrawContext):TBoundingBox;virtual;
 
                    //function AssignToVariable(pv:pvardesk):Integer;virtual;
-                   function GetObjTypeName:GDBString;virtual;
+                   function GetObjTypeName:String;virtual;
 
                    procedure BuildGeometry(var drawing:TDrawingDef);virtual;
                    procedure BuildVarGeometry(var drawing:TDrawingDef);virtual;
@@ -73,14 +73,14 @@ GDBObjDevice= object(GDBObjBlockInsert)
                    class function GetDXFIOFeatures:TDXFEntIODataManager;static;
 
                    function CreateInstance:PGDBObjDevice;static;
-                   function GetNameInBlockTable:GDBString;virtual;
+                   function GetNameInBlockTable:String;virtual;
                    function GetObjType:TObjID;virtual;
              end;
 {EXPORT-}
 var
     GDBObjDeviceDXFFeatures:TDXFEntIODataManager;
 implementation
-function GDBObjDevice.GetNameInBlockTable:GDBString;
+function GDBObjDevice.GetNameInBlockTable:String;
 begin
   result:=DevicePrefix+name;
 end;
@@ -193,7 +193,7 @@ begin
      repeat
          pvc:=pv^.Clone(@self{.bp.Owner});
          pvc2:=pv^.Clone(@self{.bp.Owner});
-         //historyoutstr(pv^.ObjToGDBString('','')+'  cloned obj='+pvc^.ObjToGDBString('',''));
+         //historyoutstr(pv^.ObjToString('','')+'  cloned obj='+pvc^.ObjToString('',''));
          if pvc^.GetObjType=GDBTextID then
             pvc:=pvc;
 
@@ -237,13 +237,13 @@ begin
 end;
 procedure GDBObjDevice.SaveToDXFObjXData(var outhandle:{Integer}TZctnrVectorBytes;var IODXFContext:TIODXFContext);
 //var
-   //s:gdbstring;
+   //s:String;
 begin
      inherited;
      //s:=inttohex(GetHandle,10);
      //historyout(@s[1]);
-     dxfGDBStringout(outhandle,1000,'_HANDLE='+inttohex(GetHandle,10));
-     dxfGDBStringout(outhandle,1000,'_UPGRADE=1');
+     dxfStringout(outhandle,1000,'_HANDLE='+inttohex(GetHandle,10));
+     dxfStringout(outhandle,1000,'_UPGRADE=1');
 end;
 (*function GDBObjDevice.GetDeviceType;
 begin
@@ -453,7 +453,7 @@ var //pblockdef:PGDBObjBlockdef;
     //freelayer:PGDBLayerProp;
     i:Integer;
     //varobject:Boolean;
-    devnam:GDBString;
+    devnam:String;
     DC:TDrawContext;
 begin
           //name:=copy(name,8,length(name)-7);
@@ -511,7 +511,7 @@ var //pblockdef:PGDBObjBlockdef;
     //freelayer:PGDBLayerProp;
     i:Integer;
     //varobject:Boolean;
-    //devnam:GDBString;
+    //devnam:String;
     DC:TDrawContext;
 begin
      inherited;

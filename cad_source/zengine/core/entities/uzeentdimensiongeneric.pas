@@ -105,7 +105,7 @@ end;
 procedure GDBObjGenericDimension.LoadFromDXF;
 var
   byt,dtype:Integer;
-  style:GDBString;
+  style:String;
 begin
   byt:=readmystrtoint(f);
   dtype:=-1;
@@ -123,14 +123,14 @@ begin
                             if not dxfGDBIntegerload(f,70,byt,dtype) then
                                if not dxfDoubleload(f,50,byt,a50) then
                                   if not dxfDoubleload(f,52,byt,a52) then
-                            if dxfGDBStringload(f,3,byt,style)then
+                            if dxfStringload(f,3,byt,style)then
                                                                   begin
                                                                        PDimStyle:=drawing.GetDimStyleTable^.getAddres(Style);
                                                                        if PDimStyle=nil then
                                                                                             PDimStyle:=pointer(drawing.GetDimStyleTable^.getDataMutable(0));
                                                                   end
                             else
-                                f.readGDBSTRING;
+                                f.readString;
     byt:=readmystrtoint(f);
   end;
   if dtype<>-1 then

@@ -28,7 +28,7 @@ type
     txt:tlabel;
     Logo: TImage;
     cb:TComboBox;
-    procedure TXTOut(s:GDBstring;pm:boolean);virtual;
+    procedure TXTOut(s:String;pm:boolean);virtual;
     public
     procedure AfterConstruction; override;
   end;

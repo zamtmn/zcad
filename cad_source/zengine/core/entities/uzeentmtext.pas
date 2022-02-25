@@ -36,7 +36,7 @@ GDBObjMText= object(GDBObjText)
                  width:Double;(*saved_to_shd*)
                  linespace:Double;(*saved_to_shd*)(*oi_readonly*)
                  linespacef:Double;(*saved_to_shd*)
-                 text:XYZWGDBGDBStringArray;(*oi_readonly*)(*hidden_in_objinsp*)
+                 text:XYZWGDBStringArray;(*oi_readonly*)(*hidden_in_objinsp*)
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:TDXFEntsInternalStringType;p:GDBvertex;s,o,w,a:Double;j:TTextJustify;wi,l:Double);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f: TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
@@ -47,7 +47,7 @@ GDBObjMText= object(GDBObjText)
                  procedure FormatContent(var drawing:TDrawingDef);virtual;
                  procedure createpoint(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
-                 function GetObjTypeName:GDBString;virtual;
+                 function GetObjTypeName:String;virtual;
                  destructor done;virtual;
 
                  procedure SimpleDrawGeometry(var DC:TDrawContext);virtual;
@@ -57,9 +57,9 @@ GDBObjMText= object(GDBObjText)
                  function GetObjType:TObjID;virtual;
             end;
 {Export-}
-procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:Double;content:TDXFEntsInternalStringType;var text:XYZWGDBGDBStringArray);
-function GetLinesH(linespace,size:Double;var lines:XYZWGDBGDBStringArray):Double;
-function GetLinesW(var lines:XYZWGDBGDBStringArray):Double;
+procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:Double;content:TDXFEntsInternalStringType;var text:XYZWGDBStringArray);
+function GetLinesH(linespace,size:Double;var lines:XYZWGDBStringArray):Double;
+function GetLinesW(var lines:XYZWGDBStringArray):Double;
 function GetLineSpaceFromLineSpaceF(linespacef,size:Double):Double;
 implementation
 procedure GDBObjMText.FormatAfterDXFLoad;
@@ -123,14 +123,14 @@ function GetLineSpaceFromLineSpaceF(linespacef,size:Double):Double;
 begin
     result:=size*linespacef*5/3;
 end;
-function GetLinesH(linespace,size:Double;var lines:XYZWGDBGDBStringArray):Double;
+function GetLinesH(linespace,size:Double;var lines:XYZWGDBStringArray):Double;
 begin
   if lines.count > 0 then
     result := (lines.count - 1) * linespace + size
   else
     result := 0;
 end;
-function GetLinesW(var lines:XYZWGDBGDBStringArray):Double;
+function GetLinesW(var lines:XYZWGDBStringArray):Double;
 var
   pswp:pGDBStrWithPoint;
   ir:itrec;
@@ -150,7 +150,7 @@ begin
                else
                    result:=0;
 end;
-procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:Double;content:TDXFEntsInternalStringType;var text:XYZWGDBGDBStringArray);
+procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:Double;content:TDXFEntsInternalStringType;var text:XYZWGDBStringArray);
 var
   canbreak: Boolean;
   currsymbol, lastbreak, lastcanbreak: Integer;
@@ -210,9 +210,9 @@ begin
         psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch}({integer(content[currsymbol])}sym){//-ttf-//,tdinfo});
         canbreak := false;
 
-        {Pointer(ptext.GDBStringarray[ptext.count].str) := nil;
-        ptext.GDBStringarray[ptext.count].str := currline;
-        ptext.GDBStringarray[ptext.count].w := linewidth;
+        {Pointer(ptext.Stringarray[ptext.count].str) := nil;
+        ptext.Stringarray[ptext.count].str := currline;
+        ptext.Stringarray[ptext.count].w := linewidth;
         inc(ptext.count);}
         swp.Str:=currline;
         swp.w:=linewidth;
@@ -246,9 +246,9 @@ begin
 
         canbreak := false;
 
-        {Pointer(ptext.GDBStringarray[ptext.count].str) := nil;
-        ptext.GDBStringarray[ptext.count].str := currline;
-        ptext.GDBStringarray[ptext.count].w := lastlinewidth;
+        {Pointer(ptext.Stringarray[ptext.count].str) := nil;
+        ptext.Stringarray[ptext.count].str := currline;
+        ptext.Stringarray[ptext.count].w := lastlinewidth;
         inc(ptext.count);}
         swp.Str:=currline;
         swp.w:=lastlinewidth;
@@ -267,9 +267,9 @@ begin
   if linewidth=0 then
                      linewidth:=1;
   currline := copy(content, lastbreak, currsymbol - lastbreak);
-  {Pointer(ptext.GDBStringarray[ptext.count].str) := nil;
-  ptext.GDBStringarray[ptext.count].str := currline;
-  ptext.GDBStringarray[ptext.count].w := linewidth;
+  {Pointer(ptext.Stringarray[ptext.count].str) := nil;
+  ptext.Stringarray[ptext.count].str := currline;
+  ptext.Stringarray[ptext.count].w := linewidth;
   inc(ptext.count);}
         swp.Str:=currline;
         swp.w:=linewidth;
@@ -901,13 +901,13 @@ begin
   result := tvo;
 end;
 procedure GDBObjMText.LoadFromDXF;
-var //s{, layername}: GDBString;
+var //s{, layername}: String;
   byt{, code}: Integer;
   ux: gdbvertex;
   angleload: Boolean;
   angle:double;
   j:Integer;
-  style,ttemplate:GDBString;
+  style,ttemplate:String;
 begin
   //initnul;
   angleload := false;
@@ -929,17 +929,17 @@ begin
     if not dxfDoubleload(f,44,byt,linespacef) then
     if not dxfDoubleload(f,51,byt,textprop.oblique) then
     if not dxfGDBIntegerload(f,71,byt,j)then
-    if not dxfGDBStringload(f,1,byt,ttemplate)then
-    if not dxfGDBStringload(f,3,byt,ttemplate)then
+    if not dxfStringload(f,1,byt,ttemplate)then
+    if not dxfStringload(f,3,byt,ttemplate)then
     if dxfDoubleload(f,50,byt,angle) then angleload := true
 
-    else if     dxfGDBStringload(f,7,byt,style)then
+    else if     dxfStringload(f,7,byt,style)then
                                                  begin
                                                  TXTStyleIndex :={drawing.GetTextStyleTable^.getDataMutable}(drawing.GetTextStyleTable^.FindStyle(Style,false));
                                                  if TXTStyleIndex=nil then
                                                                      TXTStyleIndex:=pointer(drawing.GetTextStyleTable^.getDataMutable(0));
                                                  end
-    else {s := }f.readgdbstring;
+    else {s := }f.readString;
     byt:=readmystrtoint(f);
   end;
   if TXTStyleIndex=nil then
@@ -964,7 +964,7 @@ begin
   PProjoutbound:=nil;
   //format;
 end;
-function z2dxfmtext(s:gdbstring;var ul:boolean):gdbstring;
+function z2dxfmtext(s:String;var ul:boolean):String;
 var i:Integer;
 begin
      result:=s;
@@ -985,7 +985,7 @@ procedure GDBObjMText.SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var dra
 var
 //  i, j: Integer;
   //bw: Byte;
-  s: GDBString;
+  s: String;
   ul:boolean;
   quotedcontent:TDXFEntsInternalStringType;
 begin
@@ -1003,20 +1003,20 @@ begin
   //s := content;
   if length(s) < maxdxfmtextlen then
   begin
-    dxfGDBStringout(outhandle,1,z2dxfmtext(s,ul));
+    dxfStringout(outhandle,1,z2dxfmtext(s,ul));
   end
   else
   begin
-    dxfGDBStringout(outhandle,1,z2dxfmtext(copy(s, 1, maxdxfmtextlen),ul));
+    dxfStringout(outhandle,1,z2dxfmtext(copy(s, 1, maxdxfmtextlen),ul));
     s := copy(s, maxdxfmtextlen+1, length(s) - maxdxfmtextlen);
     while length(s) > maxdxfmtextlen+1 do
     begin
-      dxfGDBStringout(outhandle,3,z2dxfmtext(copy(s, 1, maxdxfmtextlen),ul));
+      dxfStringout(outhandle,3,z2dxfmtext(copy(s, 1, maxdxfmtextlen),ul));
       s := copy(s, maxdxfmtextlen+1, length(s) - maxdxfmtextlen)
     end;
-    dxfGDBStringout(outhandle,3,z2dxfmtext(s,ul));
+    dxfStringout(outhandle,3,z2dxfmtext(s,ul));
   end;
-  dxfGDBStringout(outhandle,7,PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyleIndex))^.name);
+  dxfStringout(outhandle,7,PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyleIndex))^.name);
   SaveToDXFObjPostfix(outhandle);
   dxfvertexout(outhandle,11,Local.basis.ox);
   dxfGDBIntegerout(outhandle,73,2);

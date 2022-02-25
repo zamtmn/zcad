@@ -23,11 +23,11 @@ uses sysutils,uzbtypesbase,uzbtypes,
      uzeentity,varmandef,uzeentsubordinated,
      uzcoimultiproperties,uzcoimultipropertiesutil,uzcdrawings,
      Varman,uzedimensionaltypes;
-function GetProperty(PEnt:PGDBObjGenericWithSubordinated;propertyname:gdbstring; out propertyvalue:gdbstring):boolean;
+function GetProperty(PEnt:PGDBObjGenericWithSubordinated;propertyname:String; out propertyvalue:String):boolean;
 implementation
 var
   pu:TObjectUnit;
-function GetProperty(PEnt:PGDBObjGenericWithSubordinated;propertyname:gdbstring; out propertyvalue:gdbstring):boolean;
+function GetProperty(PEnt:PGDBObjGenericWithSubordinated;propertyname:String; out propertyvalue:String):boolean;
 var
   mp:TMultiProperty;
   mpd:TMultiPropertyDataForObjects;

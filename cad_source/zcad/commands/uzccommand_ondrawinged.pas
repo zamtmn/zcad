@@ -39,7 +39,7 @@ uses
 type
   OnDrawingEd_com =object(CommandRTEdObject)
     t3dp: gdbvertex;
-    constructor init(cn:GDBString;SA,DA:TCStartAttr);
+    constructor init(cn:String;SA,DA:TCStartAttr);
     procedure CommandStart(Operands:TCommandOperands); virtual;
     procedure CommandCancel; virtual;
     function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
@@ -49,7 +49,7 @@ var
    OnDrawingEd:OnDrawingEd_com;
    fixentities:boolean;
 implementation
-constructor OnDrawingEd_com.init(cn:GDBString;SA,DA:TCStartAttr);
+constructor OnDrawingEd_com.init(cn:String;SA,DA:TCStartAttr);
 begin
   inherited init(cn,sa,da);
   dyn:=false;

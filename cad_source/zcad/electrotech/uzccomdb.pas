@@ -43,7 +43,7 @@ var //t:PUserTypeDescriptor;
     p:pointer;
     pu:ptunit;
     pvd:pvardesk;
-    vn:GDBString;
+    vn:String;
 begin
      if commandmanager.ContextCommandParams<>nil then
      begin
@@ -66,7 +66,7 @@ function DBaseRename_com(operands:TCommandOperands):TCommandResult;
 var
     pdbv:pvardesk;
     pu:ptunit;
-    s,s1:gdbstring;
+    s,s1:String;
     parseresult:PTZctnrVectorStrings;
     parseerror:boolean;
     renamed:boolean;
@@ -156,7 +156,7 @@ var //t:PUserTypeDescriptor;
 
     //p:pointer;
     pu:ptunit;
-    //vn:GDBString;
+    //vn:String;
     pentvarext:TVariablesExtender;
 begin
      if commandmanager.ContextCommandParams<>nil then
@@ -175,7 +175,7 @@ begin
                                                pvd:=pentvarext.entityunit.FindVariable('DB_link');
                                                if pvd<>nil then
                                                begin
-                                                    PGDBString(pvd^.data.Addr.Instance)^:=pdbv^.name;
+                                                    PString(pvd^.data.Addr.Instance)^:=pdbv^.name;
                                                     DBLinkProcess(pv,drawings.GetCurrentDWG^);
                                                     inc(c);
                                                end;

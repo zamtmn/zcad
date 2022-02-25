@@ -31,7 +31,7 @@ PGDBObjSuperLine=^GDBObjSuperLine;
 GDBObjSuperLine= object(GDBObjLine)
                   constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p1,p2:GDBvertex);
                   constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                  function GetObjTypeName:GDBString;virtual;
+                  function GetObjTypeName:String;virtual;
                   class function CreateInstance:PGDBObjLine;static;
                   function GetObjType:TObjID;virtual;
                   function Clone(own:Pointer):PGDBObjEntity;virtual;
@@ -56,7 +56,7 @@ end;
 procedure GDBObjSuperLine.SaveToDXFObjXData(var outhandle:TZctnrVectorBytes;var IODXFContext:TIODXFContext);
 begin
      inherited;
-     dxfGDBStringout(outhandle,1000,'_UPGRADE=10');
+     dxfStringout(outhandle,1000,'_UPGRADE=10');
 end;
 class function GDBObjSuperLine.GetDXFIOFeatures:TDXFEntIODataManager;
 begin

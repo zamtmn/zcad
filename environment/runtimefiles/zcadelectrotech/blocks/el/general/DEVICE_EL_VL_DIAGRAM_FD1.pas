@@ -8,10 +8,10 @@ usescopy objname;
 
 var
 
-T1:GDBString;(*'Обозначение'*)
-T2:GDBString;(*'P активная'*)
-T3:GDBString;(*'I расчетный'*)
-T4:GDBString;(*'Наименование'*)
+T1:String;(*'Обозначение'*)
+T2:String;(*'P активная'*)
+T3:String;(*'I расчетный'*)
+T4:String;(*'Наименование'*)
 
 implementation
 

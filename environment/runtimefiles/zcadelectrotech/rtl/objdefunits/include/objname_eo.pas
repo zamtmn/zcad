@@ -2,11 +2,11 @@ unit objname_eo;
 interface
 uses system;
 var
-   NMO_Name:GDBString;(*'Обозначение'*)
-   NMO_BaseName:GDBString;(*'Короткое Имя'*)
-   NMO_Prefix:GDBString;(*'Префикс'*)
-   NMO_Suffix:GDBString;(*'Суффикс'*)
-   NMO_Template:GDBString;(*'Шаблон Обозначения'*) 
+   NMO_Name:String;(*'Обозначение'*)
+   NMO_BaseName:String;(*'Короткое Имя'*)
+   NMO_Prefix:String;(*'Префикс'*)
+   NMO_Suffix:String;(*'Суффикс'*)
+   NMO_Template:String;(*'Шаблон Обозначения'*) 
 implementation
 begin
    NMO_Name:='??';

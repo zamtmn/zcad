@@ -75,7 +75,7 @@ begin
   f.assign(name,fmShareDenyNone);
   line:='';
   lineend:='';
-  line:=f.readgdbstring;
+  line:=f.readstring;
   while f.filesize<>f.currentpos do
     begin
          if (pos('PROCEDURE',uppercase(line))<=0)and
@@ -115,7 +115,7 @@ begin
               writestring(handle,line);
          end;
          end;
-         line:=f.readgdbstring;
+         line:=f.readstring;
          {fileclose(handle);
          handle:=FileOpen('C:\CAD\components\type\GDBObjectsdef.pas', fmOpenWrite);
          FileSeek(handle,0,2);}
@@ -223,7 +223,7 @@ begin
   begin
   line:='';
   lineend:='';
-  line:=f.readgdbstring;
+  line:=f.readstring;
   inobj:=false;
   while f.filesize<>f.currentpos do
     begin
@@ -321,7 +321,7 @@ begin
             else  if not inobj then writestring(handle,line);
          end;
          end;
-         line:=f.readgdbstring;
+         line:=f.readstring;
 
 
          {fileclose(handle);

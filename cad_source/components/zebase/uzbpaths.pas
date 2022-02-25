@@ -24,24 +24,24 @@ uses uzbtypes,Masks,LCLProc,uzbtypesbase,{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutil
 type
   TFromDirIterator=procedure (filename:String;pdata:pointer);
   TFromDirIteratorObj=procedure (filename:String;pdata:pointer) of object;
-function ExpandPath(path:GDBString):GDBString;
-function FindInSupportPath(PPaths:GDBString;FileName:GDBString):GDBString;
-function FindInPaths(Paths,FileName:GDBString):GDBString;
+function ExpandPath(path:String):String;
+function FindInSupportPath(PPaths:String;FileName:String):String;
+function FindInPaths(Paths,FileName:String):String;
 
 //**Получает части текста разделеные разделителем.
 //**path - текст в котором идет поиск.
 //**separator - разделитель.
 //**part - переменная которая возвращает куски текста
-function GetPartOfPath(out part:GDBString;var path:GDBString;const separator:GDBString):GDBString;
+function GetPartOfPath(out part:String;var path:String;const separator:String):String;
 
-procedure FromDirIterator(const path,mask,firstloadfilename:GDBSTring;proc:TFromDirIterator;method:TFromDirIteratorObj;pdata:pointer=nil);
-procedure FromDirsIterator(const path,mask,firstloadfilename:GDBString;proc:TFromDirIterator;method:TFromDirIteratorObj;pdata:pointer=nil);
-var ProgramPath,SupportPath,TempPath:gdbstring;
+procedure FromDirIterator(const path,mask,firstloadfilename:String;proc:TFromDirIterator;method:TFromDirIteratorObj;pdata:pointer=nil);
+procedure FromDirsIterator(const path,mask,firstloadfilename:String;proc:TFromDirIterator;method:TFromDirIteratorObj;pdata:pointer=nil);
+var ProgramPath,SupportPath,TempPath:String;
 implementation
 //uses log;
-function FindInPaths(Paths,FileName:GDBString):GDBString;
+function FindInPaths(Paths,FileName:String):String;
 var
-   s,ts,ts2:gdbstring;
+   s,ts,ts2:String;
 begin
      FileName:=ExpandPath(FileName);
      ts:={$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName);
@@ -89,7 +89,7 @@ begin
      until s='';
      result:='';
 end;
-function GetPartOfPath(out part:GDBString;var path:GDBString;const separator:GDBString):GDBString;
+function GetPartOfPath(out part:String;var path:String;const separator:String):String;
 var
    i:Integer;
 begin
@@ -106,11 +106,11 @@ begin
                        end;
      result:=part;
 end;
-function FindInSupportPath(PPaths:GDBString;FileName:GDBString):GDBString;
+function FindInSupportPath(PPaths:String;FileName:String):String;
 const
      cFindInSupportPath='[FILEOPS]FindInSupportPath: found file:"%s"';
 var
-   s,ts:gdbstring;
+   s,ts:String;
 begin
      zTraceLn(sysutils.Format('[FILEOPS]FindInSupportPath: searh file:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]));
      FileName:=ExpandPath(FileName);
@@ -141,7 +141,7 @@ begin
      result:='';
      DebugLn(sysutils.Format('{E}FindInSupportPath: file not found:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]));
 end;
-function ExpandPath(path:GDBString):GDBString;
+function ExpandPath(path:String):String;
 begin
   DefaultMacros.SubstituteMacros(path);
      if path='' then
@@ -156,9 +156,9 @@ if DirectoryExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(result)) then
   then
                                      result:=result+PathDelim;
 end;
-procedure FromDirsIterator(const path,mask,firstloadfilename:GDBString;proc:TFromDirIterator;method:TFromDirIteratorObj;pdata:pointer);
+procedure FromDirsIterator(const path,mask,firstloadfilename:String;proc:TFromDirIterator;method:TFromDirIteratorObj;pdata:pointer);
 var
-   s,ts:gdbstring;
+   s,ts:String;
 begin
      s:=path;
      repeat
@@ -168,12 +168,12 @@ begin
      until s='';
 end;
 
-procedure FromDirIterator(const path,mask,firstloadfilename:GDBSTring;proc:TFromDirIterator;method:TFromDirIteratorObj;pdata:pointer);
+procedure FromDirIterator(const path,mask,firstloadfilename:String;proc:TFromDirIterator;method:TFromDirIteratorObj;pdata:pointer);
 var sr: TSearchRec;
-    s:gdbstring;
-procedure processfile(s:gdbstring);
+    s:String;
+procedure processfile(s:String);
 var
-   fn:gdbstring;
+   fn:String;
 function IsASCII(const s: string): boolean; inline;
    var
      i: Integer;

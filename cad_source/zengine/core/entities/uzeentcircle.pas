@@ -75,10 +75,10 @@ GDBObjCircle= object(GDBObjWithLocalCS)
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  function IsRTNeedModify(const Point:PControlPointDesc; p:Pointer):Boolean;virtual;
 
-                 function ObjToGDBString(prefix,sufix:GDBString):GDBString;virtual;
+                 function ObjToString(prefix,sufix:String):String;virtual;
                  destructor done;virtual;
 
-                 function GetObjTypeName:GDBString;virtual;
+                 function GetObjTypeName:String;virtual;
 
                  procedure createfield;virtual;
                  function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual; //<**Пересечение с линией описанной 2-я точками
@@ -253,9 +253,9 @@ begin
      Vertex3D_in_WCS_Array.Done;
      inherited done;
 end;
-function GDBObjCircle.ObjToGDBString(prefix,sufix:GDBString):GDBString;
+function GDBObjCircle.ObjToString(prefix,sufix:String):String;
 begin
-     result:=prefix+inherited ObjToGDBString('GDBObjCircle (addr:',')')+sufix;
+     result:=prefix+inherited ObjToString('GDBObjCircle (addr:',')')+sufix;
 end;
 constructor GDBObjCircle.initnul;
 begin
@@ -274,7 +274,7 @@ begin
   Local.basis.oy:=YWCS;
   Local.basis.oz:=ZWCS;
   Radius := rr;
-  //ObjToGDBString('','');
+  //ObjToString('','');
   PProjoutbound:=nil;
   Vertex3D_in_WCS_Array.init(100);
   //format;
@@ -488,7 +488,7 @@ procedure GDBObjCircle.projectpoint;
 begin
 end;
 procedure GDBObjCircle.LoadFromDXF;
-var //s: GDBString;
+var //s: String;
   byt{, code}: Integer;
 begin
   //initnul;
@@ -497,7 +497,7 @@ begin
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
     if not dxfvertexload(f,10,byt,Local.P_insert) then
-    if not dxfDoubleload(f,40,byt,Radius) then {s := }f.readgdbstring;
+    if not dxfDoubleload(f,40,byt,Radius) then {s := }f.readString;
     byt:=readmystrtoint(f);
   end;
   //PProjoutbound:=nil;

@@ -6,22 +6,22 @@ usescopy objmaterial;
 usescopy objconnect;
 usescopy blocktype;
 var
-  NMO_Type:GDBString;(*'Тип'*)
-  DESC_MountingSite:GDBString;(*'Место установки'*)//полное название места установки
-  DESC_MountingParts:GDBString;(*'Закладная конструкция'*)
-  DESC_MountingDrawing:GDBString;(*'Чертеж установки'*)
+  NMO_Type:String;(*'Тип'*)
+  DESC_MountingSite:String;(*'Место установки'*)//полное название места установки
+  DESC_MountingParts:String;(*'Закладная конструкция'*)
+  DESC_MountingDrawing:String;(*'Чертеж установки'*)
 
-  DESC_MountingPartsType:GDBString;(*'Тип закладной конструкции'*)
-  DESC_MountingPartsShortName:GDBString;(*'Имя закладной конструкции'*)
+  DESC_MountingPartsType:String;(*'Тип закладной конструкции'*)
+  DESC_MountingPartsShortName:String;(*'Имя закладной конструкции'*)
 
-  DESC_Function:GDBString;(*'Функция'*)
-  DESC_OutSignal:GDBString;(*'Выходной сигнал'*)
+  DESC_Function:String;(*'Функция'*)
+  DESC_OutSignal:String;(*'Выходной сигнал'*)
 
-  UNITPARAM_Environment:GDBString;(*'Среда'*)
+  UNITPARAM_Environment:String;(*'Среда'*)
   UNITPARAM_ParameterMax:Double;(*'max Параметр'*)
   UNITPARAM_Parameter:Double;(*'Параметр'*)
   UNITPARAM_ParameterMin:Double;(*'min Параметр'*)
-  UNITPARAM_Unit:GDBString;(*'Еденицы измерения'*)
+  UNITPARAM_Unit:String;(*'Еденицы измерения'*)
   
 implementation
 begin

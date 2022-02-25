@@ -128,7 +128,7 @@ type
  procedure visualGraphPlan(G: TGraph; height:double);
  procedure visualGraphTreeNew(G: TGraph; var startPt:GDBVertex;height:double);
  procedure visualCabelTree(G: TGraph; var startPt:GDBVertex;height:double);
- procedure drawMText(pt:GDBVertex;mText:GDBString;color:integer;rotate,height:double);
+ procedure drawMText(pt:GDBVertex;mText:String;color:integer;rotate,height:double);
  //procedure visualAllTreesLMD(listMasterDevice:TVectorOfMasterDevice;startPt:GDBVertex;height:double);
 
 implementation
@@ -182,7 +182,7 @@ type
            zcAddEntToCurrentDrawingWithUndo(polyObj);
       end;
       //Визуализация текста
-      procedure drawText(pt:GDBVertex;mText:GDBString;color:integer;height:double);
+      procedure drawText(pt:GDBVertex;mText:String;color:integer;height:double);
       var
           ptext:PGDBObjText;
       begin
@@ -202,7 +202,7 @@ type
 
       ////
       //Визуализация многострочный текст
-      procedure drawMText(pt:GDBVertex;mText:GDBString;color:integer;rotate,height:double);
+      procedure drawMText(pt:GDBVertex;mText:String;color:integer;rotate,height:double);
       var
           pmtext:PGDBObjMText;
       begin

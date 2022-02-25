@@ -303,7 +303,7 @@ begin
   end;
 end;
 function GDBObjWithLocalCS.LoadFromDXFObjShared;
-//var s:GDBString;
+//var s:String;
 begin
      result:=inherited LoadFromDXFObjShared(f,dxfcod,ptu,drawing);
      if not result then result:=dxfvertexload(f,210,dxfcod,Local.basis.oz);

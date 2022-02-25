@@ -57,7 +57,7 @@ uses uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzepalette,
      конца должно совпадать
     @param(CommandName Имя команды. Будет показано в окне истории при отмене\повторе)
     @param(PushStone Поместить в стек ундо "камень". Ундо не сможет пройти через него пока не завершена текущая команда)}
-  procedure zcStartUndoCommand(CommandName:GDBString;PushStone:boolean=false);
+  procedure zcStartUndoCommand(CommandName:String;PushStone:boolean=false);
 
   {**Помещение в стек undo маркера конца команды. Используется для группировки
      операций отмены. Допускаются вложеные команды. Количество маркеров начала и
@@ -68,7 +68,7 @@ uses uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzepalette,
     @param(UndoStartMarkerPlaced Флаг установки маркера: false - маркер еще не поставлен, ставим маркер, поднимаем флаг. true - ничего не делаем)
     @param(CommandName Имя команды. Будет показано в окне истории при отмене\повторе)
     @param(PushStone Поместить в стек ундо "камень". Ундо не сможет пройти через него пока не завершена текущая команда)}
-  procedure zcPlaceUndoStartMarkerIfNeed(var UndoStartMarkerPlaced:boolean;const CommandName:GDBString;PushStone:boolean=false);
+  procedure zcPlaceUndoStartMarkerIfNeed(var UndoStartMarkerPlaced:boolean;const CommandName:String;PushStone:boolean=false);
 
   {**Добавление в стек undo маркера конца команды при необходимости
     @param(UndoStartMarkerPlaced Флаг установки маркера начала: true - маркер начала поставлен, ставим маркер конца, сбрасываем флаг. false - ничего не делаем)}
@@ -89,7 +89,7 @@ uses uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzepalette,
   {**Выбрать примитив}
   procedure zcSelectEntity(pp:PGDBObjEntity);
 
-function GDBInsertBlock(own:PGDBObjGenericSubEntry;BlockName:GDBString;p_insert:GDBVertex;
+function GDBInsertBlock(own:PGDBObjGenericSubEntry;BlockName:String;p_insert:GDBVertex;
                         scale:GDBVertex;rotate:Double;needundo:Boolean=false
                         ):PGDBObjBlockInsert;
 
@@ -103,7 +103,7 @@ function old_ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGD
                                 point: gdbvertex; scale, angle: Double; s: pansichar):PGDBObjBlockInsert;
 var
   pb:pgdbobjblockinsert;
-  nam:gdbstring;
+  nam:String;
   DC:TDrawContext;
   CreateProc:TAllocAndInitAndSetGeomPropsFunc;
 begin
@@ -171,7 +171,7 @@ procedure zcAddEntToCurrentDrawingWithUndo(const PEnt:PGDBObjEntity);
 begin
      zcAddEntToDrawingWithUndo(PEnt,PTZCADDrawing(drawings.GetCurrentDWG)^);
 end;
-procedure zcStartUndoCommand(CommandName:GDBString;PushStone:boolean=false);
+procedure zcStartUndoCommand(CommandName:String;PushStone:boolean=false);
 begin
      PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushStartMarker(CommandName);
      if PushStone then
@@ -194,7 +194,7 @@ procedure zcEndUndoCommand;
 begin
      PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushEndMarker;
 end;
-procedure zcPlaceUndoStartMarkerIfNeed(var UndoStartMarkerPlaced:boolean;const CommandName:GDBString;PushStone:boolean=false);
+procedure zcPlaceUndoStartMarkerIfNeed(var UndoStartMarkerPlaced:boolean;const CommandName:String;PushStone:boolean=false);
 begin
     if UndoStartMarkerPlaced then exit;
     zcStartUndoCommand(CommandName,PushStone);
@@ -228,7 +228,7 @@ begin
   drawings.CurrentDWG.wa.param.SelDesc.LastSelectedObject:=pp;
 end;
 function GDBInsertBlock(own:PGDBObjGenericSubEntry;//владелец
-                        BlockName:GDBString;       //имя блока
+                        BlockName:String;       //имя блока
                         p_insert:GDBVertex;        //точка вставки
                         scale:GDBVertex;           //масштаб
                         rotate:Double;          //поворот

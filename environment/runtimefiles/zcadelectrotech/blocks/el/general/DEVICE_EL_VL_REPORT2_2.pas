@@ -8,16 +8,16 @@ usescopy objname;
 
 var
 
-T1:GDBString;(*'Позиция'*)
-T2:GDBString;(*'Наименование'*)
-T3:GDBString;(*'Марка'*)
-T4:GDBString;(*'Код'*)
-T5:GDBString;(*'Изготовитель'*)
-T6:GDBString;(*'Ед. измерения'*)
-T7:GDBString;(*'Количество'*)
-T8:GDBString;(*'Масса'*)
-T9:GDBString;(*'Примечание'*)
-T10:GDBString;(*'Группировка'*)
+T1:String;(*'Позиция'*)
+T2:String;(*'Наименование'*)
+T3:String;(*'Марка'*)
+T4:String;(*'Код'*)
+T5:String;(*'Изготовитель'*)
+T6:String;(*'Ед. измерения'*)
+T7:String;(*'Количество'*)
+T8:String;(*'Масса'*)
+T9:String;(*'Примечание'*)
+T10:String;(*'Группировка'*)
 
 implementation
 

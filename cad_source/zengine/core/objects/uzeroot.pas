@@ -37,7 +37,7 @@ GDBObjRoot= object(GDBObjGenericSubEntry)
                  function getowner:PGDBObjSubordinated;virtual;
                  function GetMainOwner:PGDBObjSubordinated;virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
-                 //function FindVariable(varname:GDBString):pvardesk;virtual;
+                 //function FindVariable(varname:String):pvardesk;virtual;
                  function GetHandle:PtrInt;virtual;
                  procedure EraseMi(pobj:pGDBObjEntity;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
 

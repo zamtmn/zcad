@@ -56,7 +56,7 @@ GDBObjLWPolyline= object(GDBObjWithLocalCS)
                  procedure createpoint;virtual;
                  procedure CalcWidthSegment;virtual;
                  destructor done;virtual;
-                 function GetObjTypeName:GDBString;virtual;
+                 function GetObjTypeName:String;virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
                  procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                  procedure addcontrolpoints(tdesc:Pointer);virtual;
@@ -623,7 +623,7 @@ end;
 
 procedure GDBObjLWpolyline.LoadFromDXF;
 var p: gdbvertex2d;
-  s: GDBString;
+  s: String;
   byt, code, i: Integer;
   hlGDBWord: LongWord;
   tDouble: Double;
@@ -645,14 +645,14 @@ begin
   Vertex3D_in_WCS_Array.init(1000);
   Width3D_in_WCS_Array.init(1000, sizeof(GDBQuad3d));
   *)
-  s := f.readGDBstring;
+  s := f.readString;
   val(s, byt, code);
   while byt <> 0 do
   begin
     case byt of
       8:
         begin
-          s := f.readGDBString;
+          s := f.readString;
           vp.Layer :=drawing.getlayertable.getAddres(s);
         end;
       62:begin
@@ -660,7 +660,7 @@ begin
          end;
       90:
         begin
-          s := f.readGDBstring;
+          s := f.readString;
           hlGDBWord := strtoint(s);
           //vertexarray.init(hlGDBWord,closed);
           //vertexarray.init(hlGDBWord, sizeof(gdbvertex2d));
@@ -671,39 +671,39 @@ begin
         end;
       10:
         begin
-          s := f.readGDBstring;
+          s := f.readString;
           val(s, p.x, code);
         end;
       20:
         begin
-          s := f.readgdbstring;
+          s := f.readString;
           val(s, p.y, code);
           Vertex2D_in_OCS_Array.PushBackData(p);
           inc(hlGDBWord);
         end;
       38:
         begin
-          s := f.readgdbstring;
+          s := f.readString;
           val(s, local.p_insert.z, code);
           //local.p_insert.z:=-local.p_insert.z;
         end;
       40:
         begin
-          s := f.readgdbstring;
+          s := f.readString;
           //val(s, PGLLWWidth(Width2D_in_OCS_Array.getelement(hlGDBWord-1)).startw, code);
           Width2D_in_OCS_Array.SetCount(hlGDBWord);
           val(s, PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(hlGDBWord-1)).startw, code);
         end;
       41:
         begin
-          s := f.readgdbstring;
+          s := f.readString;
           Width2D_in_OCS_Array.SetCount(hlGDBWord);
           val(s, PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(hlGDBWord- 1)).endw, code);
           //Width2D_in_OCS_Array.SetCount(hlGDBWord);
         end;
       43:
         begin
-          s := f.readgdbstring;
+          s := f.readString;
           val(s, tDouble, code);
           if Width2D_in_OCS_Array.Max<numv then
                                                Width2D_in_OCS_Array.setsize(numv);
@@ -717,33 +717,33 @@ begin
         end;
       70:
         begin
-          s := f.readgdbstring;
+          s := f.readString;
           if (strtoint(s) and 1) = 1 then closed := true;
         end;
       210:
         begin
-          s := f.readgdbstring;
+          s := f.readString;
           val(s, Local.basis.oz.x, code);
         end;
       220:
         begin
-          s := f.readgdbstring;
+          s := f.readString;
           val(s, Local.basis.oz.y, code);
         end;
       230:
         begin
-          s := f.readgdbstring;
+          s := f.readString;
           val(s, Local.basis.oz.z, code);
         end;
       370:
         begin
-          s := f.readgdbstring;
+          s := f.readString;
           vp.lineweight := strtoint(s);
         end;
     else
-      s := f.readgdbstring;
+      s := f.readString;
     end;
-    s := f.readgdbstring;
+    s := f.readString;
     val(s, byt, code);
   end;
   Vertex2D_in_OCS_Array.Shrink;
@@ -759,16 +759,16 @@ var j: Integer;
     //m:DMatrix4D;
 begin
   SaveToDXFObjPrefix(outhandle,'LWPOLYLINE','AcDbPolyline',IODXFContext);
-  dxfGDBStringout(outhandle,90,inttostr(Vertex2D_in_OCS_Array.Count));
+  dxfStringout(outhandle,90,inttostr(Vertex2D_in_OCS_Array.Count));
   //WriteString_EOL(outhandle, '90');
   //WriteString_EOL(outhandle, inttostr(Vertex2D_in_OCS_Array.Count));
 
 
   //WriteString_EOL(outhandle, '70');
   if closed then //WriteString_EOL(outhandle, '1')
-                 dxfGDBStringout(outhandle,70,'1')
+                 dxfStringout(outhandle,70,'1')
             else //WriteString_EOL(outhandle, '0');
-                 dxfGDBStringout(outhandle,70,'0');
+                 dxfStringout(outhandle,70,'0');
 
 
   dxfDoubleout(outhandle,38,local.p_insert.z);

@@ -56,11 +56,11 @@ TVariablesExtender=class(TBaseVariablesExtender)
     procedure removeDelegate(pDelegateEntity:PGDBObjEntity;pDelegateEntityVarext:TVariablesExtender);
 
 
-    class function EntIOLoadDollar(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
-    class function EntIOLoadAmpersand(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
-    class function EntIOLoadHash(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
-    class function EntIOLoadUSES(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
-    class function EntIOLoadMainFunction(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+    class function EntIOLoadDollar(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+    class function EntIOLoadAmpersand(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+    class function EntIOLoadHash(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+    class function EntIOLoadUSES(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+    class function EntIOLoadMainFunction(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 
     procedure SaveToDxf(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
   end;
@@ -100,7 +100,7 @@ begin
                        pvd:=entityunit.FindVariable('DESC_MountingDrawing');
                        if pvd=nil then
                        begin
-                            entityunit.setvardesc(vd,'DESC_MountingDrawing','Чертеж установки','GDBString');
+                            entityunit.setvardesc(vd,'DESC_MountingDrawing','Чертеж установки','String');
                             entityunit.InterfaceVariables.createvariable(vd.name,vd);
                        end;
                   end;
@@ -118,13 +118,13 @@ begin
                        pvd2:=entityunit.FindVariable('DESC_MountingPartsType');
                        if pvd2=nil then
                        begin
-                            entityunit.setvardesc(vd,'DESC_MountingPartsType','Тип закладной конструкции','GDBString');
+                            entityunit.setvardesc(vd,'DESC_MountingPartsType','Тип закладной конструкции','String');
                             entityunit.InterfaceVariables.createvariable(vd.name,vd);
                        end;
                        pvd2:=entityunit.FindVariable('DESC_MountingPartsShortName');
                        if pvd2=nil then
                        begin
-                            entityunit.setvardesc(vd,'DESC_MountingPartsShortName','Имя закладной конструкции','GDBString');
+                            entityunit.setvardesc(vd,'DESC_MountingPartsShortName','Имя закладной конструкции','String');
                             pvd2:=entityunit.InterfaceVariables.createvariable(vd.name,vd);
                             pvd2^.data.PTD^.SetValueFromString(pvd2^.data.Addr.Instance,pvd^.data.PTD^.GetValueAsString(pvd^.data.Addr.Instance));
                        end;
@@ -133,33 +133,33 @@ begin
                   if entityunit.FindVariable('GC_HeadDevice')<>nil then
                   if entityunit.FindVariable('GC_Metric')=nil then
                   begin
-                       entityunit.setvardesc(vd,'GC_Metric','','GDBString');
+                       entityunit.setvardesc(vd,'GC_Metric','','String');
                        entityunit.InterfaceVariables.createvariable(vd.name,vd);
                   end;
 
                   if entityunit.FindVariable('GC_HDGroup')<>nil then
                   if entityunit.FindVariable('GC_HDGroupTemplate')=nil then
                   begin
-                       entityunit.setvardesc(vd,'GC_HDGroupTemplate','Шаблон группы','GDBString');
+                       entityunit.setvardesc(vd,'GC_HDGroupTemplate','Шаблон группы','String');
                        entityunit.InterfaceVariables.createvariable(vd.name,vd);
                   end;
                   if entityunit.FindVariable('GC_HeadDevice')<>nil then
                   if entityunit.FindVariable('GC_HeadDeviceTemplate')=nil then
                   begin
-                       entityunit.setvardesc(vd,'GC_HeadDeviceTemplate','Шаблон головного устройства','GDBString');
+                       entityunit.setvardesc(vd,'GC_HeadDeviceTemplate','Шаблон головного устройства','String');
                        entityunit.InterfaceVariables.createvariable(vd.name,vd);
                   end;
 
                   if entityunit.FindVariable('GC_HDShortName')<>nil then
                   if entityunit.FindVariable('GC_HDShortNameTemplate')=nil then
                   begin
-                       entityunit.setvardesc(vd,'GC_HDShortNameTemplate','Шаблон короткого имени головного устройства','GDBString');
+                       entityunit.setvardesc(vd,'GC_HDShortNameTemplate','Шаблон короткого имени головного устройства','String');
                        entityunit.InterfaceVariables.createvariable(vd.name,vd);
                   end;
                   if entityunit.FindVariable('GC_Metric')<>nil then
                   if entityunit.FindVariable('GC_InGroup_Metric')=nil then
                   begin
-                       entityunit.setvardesc(vd,'GC_InGroup_Metric','Метрика нумерации в группе','GDBString');
+                       entityunit.setvardesc(vd,'GC_InGroup_Metric','Метрика нумерации в группе','String');
                        entityunit.InterfaceVariables.createvariable(vd.name,vd);
                   end;
 end;
@@ -268,9 +268,9 @@ begin
 end;
 
 
-class function TVariablesExtender.EntIOLoadDollar(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+class function TVariablesExtender.EntIOLoadDollar(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 var
-    svn,vn,vv:GDBString;
+    svn,vn,vv:String;
     pvd:pvardesk;
     offset:Integer;
     tc:PUserTypeDescriptor;
@@ -285,9 +285,9 @@ begin
      PBaseTypeDescriptor(tc)^.SetValueFromString(pointer(offset),vv);
      result:=true;
 end;
-class function TVariablesExtender.EntIOLoadAmpersand(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+class function TVariablesExtender.EntIOLoadAmpersand(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 var
-    vn,vt,vun:GDBString;
+    vn,vt,vun:String;
     vd: vardesk;
     vardata:TVariablesExtender;
 begin
@@ -297,9 +297,9 @@ begin
      vardata.entityunit.InterfaceVariables.createvariable(vd.name,vd);
      result:=true;
 end;
-class function TVariablesExtender.EntIOLoadHash(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+class function TVariablesExtender.EntIOLoadHash(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 var
-    vn,vt,vv,vun:GDBString;
+    vn,vt,vv,vun:String;
     vd: vardesk;
     vardata:TVariablesExtender;
 begin
@@ -318,7 +318,7 @@ begin
      result:=true;
 end;
 
-class function TVariablesExtender.EntIOLoadUSES(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+class function TVariablesExtender.EntIOLoadUSES(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 var
     usedunit:PTObjectUnit;
     vardata:TVariablesExtender;
@@ -332,7 +332,7 @@ begin
      vardata.entityunit.InterfaceUses.PushBackIfNotPresent(usedunit);
      result:=true;
 end;
-class function TVariablesExtender.EntIOLoadMainFunction(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+class function TVariablesExtender.EntIOLoadMainFunction(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 begin
   {$IFNDEF DELPHI}
   if not TryStrToQWord('$'+_value,PGDBObjEntity(PEnt)^.AddExtAttrib^.MainFunctionHandle)then
@@ -350,7 +350,7 @@ var
    pfd:PFieldDescriptor;
    pvu:PTUnit;
    ir,ir2:itrec;
-   str,sv:gdbstring;
+   str,sv:String;
    i:integer;
    tp:pointer;
    vardata:TVariablesExtender;
@@ -367,7 +367,7 @@ begin
        repeat
          if typeof(pvu^)<>typeof(TObjectUnit) then begin
            str:='USES='+pvu^.Name;
-           dxfGDBStringout(outhandle,1000,str);
+           dxfStringout(outhandle,1000,str);
          end;
         pvu:=vardata.entityunit.InterfaceUses.iterate(ir);
         until pvu=nil;
@@ -375,7 +375,7 @@ begin
        if vardata.pMainFuncEntity<>nil then begin
          IODXFContext.p2h.MyGetOrCreateValue(vardata.pMainFuncEntity,IODXFContext.handle,th);
          str:='MAINFUNCTION='+inttohex(th,0);
-         dxfGDBStringout(outhandle,1000,str);
+         dxfStringout(outhandle,1000,str);
        end;
 
        i:=0;
@@ -386,17 +386,17 @@ begin
              sv:=PBaseTypeDescriptor(pvd^.data.ptd)^.GetValueAsString(pvd^.data.Addr.Instance);
              str:='#'+inttostr(i)+'='+pvd^.name+'|'+pvd^.data.ptd.TypeName;
              str:=str+'|'+sv+'|'+pvd^.username;
-             dxfGDBStringout(outhandle,1000,str);
+             dxfStringout(outhandle,1000,str);
            end else begin
              str:='&'+inttostr(i)+'='+pvd^.name+'|'+pvd^.data.ptd.TypeName+'|'+pvd^.username;
-             dxfGDBStringout(outhandle,1000,str);
+             dxfStringout(outhandle,1000,str);
              inc(i);
              tp:=pvd^.data.Addr.Instance;
              pfd:=PRecordDescriptor(pvd^.data.ptd).Fields.beginiterate(ir2);
              if pfd<>nil then
              repeat
                str:='$'+inttostr(i)+'='+pvd^.name+'|'+pfd^.base.ProgramName+'|'+pfd^.base.PFT^.GetValueAsString(tp);
-               dxfGDBStringout(outhandle,1000,str);
+               dxfStringout(outhandle,1000,str);
                ptruint(tp):=ptruint(tp)+ptruint(pfd^.base.PFT^.SizeInBytes); { TODO : сделать на оффсете }
                inc(i);
                pfd:=PRecordDescriptor(pvd^.data.ptd).Fields.iterate(ir2);

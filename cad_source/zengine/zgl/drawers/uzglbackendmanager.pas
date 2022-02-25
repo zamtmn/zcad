@@ -21,7 +21,7 @@ unit uzglbackendmanager;
 
 interface
 uses uzbtypesbase,uzctnrvectorstrings,uzglviewareaabstract,uzctnrVectorPointers,LazLogger;
-const test:GDBSTRING='asdasd';
+const test:String='asdasd';
 type
     TVA=class of TAbstractViewArea;
 var

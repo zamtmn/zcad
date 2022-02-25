@@ -32,19 +32,19 @@ var
 implementation
 type
   TDummy=class
-    class function EntIOLoad_OWNERHANDLE(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
-    class function EntIOLoad_HANDLE(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
-    class function EntIOLoad_UPGRADE(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
-    class function EntIOLoad_LAYER(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
-    class function EntIOLoad_OSnapMode(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
-    class function EntIOLoadPercent(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
-    class function TextIOLoad_TMPL1(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
-    class function BlockDefIOLoad_TYPE(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
-    class function BlockDefIOLoad_GROUP(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
-    class function BlockDefIOLoad_BORDER(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+    class function EntIOLoad_OWNERHANDLE(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+    class function EntIOLoad_HANDLE(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+    class function EntIOLoad_UPGRADE(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+    class function EntIOLoad_LAYER(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+    class function EntIOLoad_OSnapMode(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+    class function EntIOLoadPercent(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+    class function TextIOLoad_TMPL1(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+    class function BlockDefIOLoad_TYPE(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+    class function BlockDefIOLoad_GROUP(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+    class function BlockDefIOLoad_BORDER(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
   end;
 
-class function TDummy.EntIOLoad_OWNERHANDLE(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+class function TDummy.EntIOLoad_OWNERHANDLE(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 begin
      {$IFNDEF DELPHI}
      if not TryStrToQWord('$'+_value,PGDBObjEntity(PEnt)^.AddExtAttrib^.OwnerHandle)then
@@ -54,7 +54,7 @@ begin
      end;
      result:=true;
 end;
-class function TDummy.EntIOLoad_HANDLE(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+class function TDummy.EntIOLoad_HANDLE(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 begin
      {$IFNDEF DELPHI}
      if not TryStrToQWord('$'+_value,PGDBObjEntity(PEnt)^.AddExtAttrib^.Handle)then
@@ -64,17 +64,17 @@ begin
      end;
      result:=true;
 end;
-class function TDummy.EntIOLoad_UPGRADE(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+class function TDummy.EntIOLoad_UPGRADE(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 begin
      PGDBObjEntity(PEnt)^.AddExtAttrib^.Upgrade:=strtoint(_value);
      result:=true;
 end;
-class function TDummy.EntIOLoad_LAYER(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+class function TDummy.EntIOLoad_LAYER(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 begin
      PGDBObjEntity(PEnt)^.vp.Layer:=drawing.getlayertable.getAddres(_value);
      result:=true;
 end;
-class function TDummy.EntIOLoad_OSnapMode(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+class function TDummy.EntIOLoad_OSnapMode(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 begin
      _value:=UpperCase(_value);
      if _value='OFF' then
@@ -84,9 +84,9 @@ else if _value='ON' then
      result:=true;
 end;
 
-class function TDummy.EntIOLoadPercent(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+class function TDummy.EntIOLoadPercent(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 var
-    vn,vt,vv,vun:GDBString;
+    vn,vt,vv,vun:String;
     vd: vardesk;
 begin
      extractvarfromdxfstring(_Value,vn,vt,vv,vun);
@@ -99,24 +99,24 @@ end;
 
 procedure ElLeaderSave(var outhandle:TZctnrVectorBytes;PEnt:PGDBObjEntity;var IODXFContext:TIODXFContext);
 begin
-  dxfGDBStringout(outhandle,1000,'_UPGRADE='+inttostr(UD_LineToLeader));
-  dxfGDBStringout(outhandle,1000,'%1=size|Integer|'+inttostr(PGDBObjElLeader(PEnt)^.size)+'|');
-  dxfGDBStringout(outhandle,1000,'%2=scale|Double|'+floattostr(PGDBObjElLeader(PEnt)^.scale)+'|');
-  dxfGDBStringout(outhandle,1000,'%3=twidth|Double|'+floattostr(PGDBObjElLeader(PEnt)^.twidth)+'|');
+  dxfStringout(outhandle,1000,'_UPGRADE='+inttostr(UD_LineToLeader));
+  dxfStringout(outhandle,1000,'%1=size|Integer|'+inttostr(PGDBObjElLeader(PEnt)^.size)+'|');
+  dxfStringout(outhandle,1000,'%2=scale|Double|'+floattostr(PGDBObjElLeader(PEnt)^.scale)+'|');
+  dxfStringout(outhandle,1000,'%3=twidth|Double|'+floattostr(PGDBObjElLeader(PEnt)^.twidth)+'|');
 end;
 
 procedure EntityIOSave_all(var outhandle:TZctnrVectorBytes;PEnt:PGDBObjEntity;var IODXFContext:TIODXFContext);
 begin
-  dxfGDBStringout(outhandle,1000,'_OWNERHANDLE='+inttohex(PEnt^.bp.ListPos.owner.GetHandle,10));
+  dxfStringout(outhandle,1000,'_OWNERHANDLE='+inttohex(PEnt^.bp.ListPos.owner.GetHandle,10));
   case PEnt^.OSnapModeControl of
-    off    :dxfGDBStringout(outhandle,1000,'_OSNAPMODECONTROL=OFF');
-    on     :dxfGDBStringout(outhandle,1000,'_OSNAPMODECONTROL=ON');
+    off    :dxfStringout(outhandle,1000,'_OSNAPMODECONTROL=OFF');
+    on     :dxfStringout(outhandle,1000,'_OSNAPMODECONTROL=ON');
     AsOwner:;//заглушка
   end;
 end;
 
 
-class function TDummy.TextIOLoad_TMPL1(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+class function TDummy.TextIOLoad_TMPL1(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 begin
   if isNotUtf8(_value)then
     PGDBObjText(pent)^.template:=TDXFEntsInternalStringType(Tria_AnsiToUtf8(_value))
@@ -127,10 +127,10 @@ end;
 procedure TextIOSave_TMPL1(var outhandle:TZctnrVectorBytes;PEnt:PGDBObjText);
 begin
      if UnicodeStringReplace(pent^.content,#10,'\P',[rfReplaceAll])<>convertfromunicode(pent^.template) then
-       dxfGDBStringout(outhandle,1000,'_TMPL1='+string(pent^.template));
+       dxfStringout(outhandle,1000,'_TMPL1='+string(pent^.template));
 end;
 
-class function TDummy.BlockDefIOLoad_TYPE(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+class function TDummy.BlockDefIOLoad_TYPE(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 begin
      if _Value='BT_CONNECTOR' then
                                begin
@@ -143,7 +143,7 @@ else if _Value='BT_UNKNOWN' then
                                 result:=true;
                            end;
 end;
-class function TDummy.BlockDefIOLoad_GROUP(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+class function TDummy.BlockDefIOLoad_GROUP(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 begin
      if _Value='BG_EL_DEVICE' then
                                begin
@@ -156,7 +156,7 @@ else if _Value='BG_UNKNOWN' then
                                 result:=true;
                            end;
 end;
-class function TDummy.BlockDefIOLoad_BORDER(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+class function TDummy.BlockDefIOLoad_BORDER(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 begin
      if _Value='BB_OWNER' then
                            begin
@@ -174,7 +174,7 @@ else if _Value='BB_EMPTY' then
                                 result:=true;
                           end;
 end;
-procedure DeviceNameSubProcess(pvn:pvardesk; const formatstr:GDBString; pEntity:PGDBObjGenericWithSubordinated);
+procedure DeviceNameSubProcess(pvn:pvardesk; const formatstr:String; pEntity:PGDBObjGenericWithSubordinated);
 begin
      if (pvn<>nil) then
      begin
@@ -273,7 +273,7 @@ procedure CableNameProcess(pCable:PGDBObjCable;const drawing:TDrawingDef);
 var
    pvn,pvnt:pvardesk;
    ptn:PTNodeProp;
-   s:GDBstring;
+   s:String;
    //c:Integer;
    pdev:PGDBObjDevice;
    pentvarext:TVariablesExtender;

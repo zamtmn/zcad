@@ -41,8 +41,8 @@ TGDBTableStyle= object(GDBNamedObject)
                      rowheight:Integer;
                      textheight:Double;
                      tblformat:GDBCellFormatArray;
-                     HeadBlockName:GDBString;
-                     constructor Init(n:GDBString);
+                     HeadBlockName:String;
+                     constructor Init(n:String);
                      destructor Done;virtual;
                end;
 PGDBTableStyleArray=^GDBTableStyleArray;
@@ -50,7 +50,7 @@ PGDBTableStyleArray=^GDBTableStyleArray;
 GDBTableStyleArray= object(GDBNamedObjectsArray{-}<PTGDBTableStyle,TGDBTableStyle>{//})(*OpenArrayOfData=TGDBTableStyle*)
                     constructor init(m:Integer);
                     constructor initnul;
-                    function AddStyle(name:GDBString):PTGDBTableStyle;
+                    function AddStyle(name:String):PTGDBTableStyle;
               end;
 {EXPORT-}
 var

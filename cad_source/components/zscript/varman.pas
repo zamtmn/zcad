@@ -255,7 +255,7 @@ var
   CategoryUnknownCOllapsed:boolean;
 
 function getpattern(ptd:ptdarray; max:Integer;var line:TInternalScriptString; out typ:Integer):PTZctnrVectorStrings;
-function ObjOrRecordRead(TranslateFunc:TTranslateFunction;var f: TZctnrVectorBytes; var line,GDBStringtypearray:TInternalScriptString; var fieldoffset: SmallInt; ptd:PRecordDescriptor):Boolean;
+function ObjOrRecordRead(TranslateFunc:TTranslateFunction;var f: TZctnrVectorBytes; var line,Stringtypearray:TInternalScriptString; var fieldoffset: SmallInt; ptd:PRecordDescriptor):Boolean;
 function GetPVarMan: Pointer; export;
 function FindCategory(category:TInternalScriptString;var catname:TInternalScriptString):Pointer;
 procedure SetCategoryCollapsed(category:TInternalScriptString;value:Boolean);
@@ -633,53 +633,53 @@ var
    ir:itrec;
    value:TInternalScriptString;
 begin
-     membuf.TXTAddGDBStringEOL('unit '+Name+';');
-     membuf.TXTAddGDBStringEOL('interface');
+     membuf.TXTAddStringEOL('unit '+Name+';');
+     membuf.TXTAddStringEOL('interface');
      if InterfaceUses.Count<>0 then
         begin
              pu:=InterfaceUses.beginiterate(ir);
              if pu<>nil then
                             begin
-                                 membuf.TXTAddGDBString('uses '+pu^.Name);
+                                 membuf.TXTAddString('uses '+pu^.Name);
                             end;
              pu:=InterfaceUses.iterate(ir);
                           if pu<>nil then
                             repeat
-                                 membuf.TXTAddGDBString(','+pu^.Name);
+                                 membuf.TXTAddString(','+pu^.Name);
                                  pu:=InterfaceUses.iterate(ir);
                             until pu=nil;
-            membuf.TXTAddGDBStringEOL(';');
+            membuf.TXTAddStringEOL(';');
         end;
      if InterfaceVariables.vardescarray.Count<>0 then
         begin
-              membuf.TXTAddGDBStringEOL('var');
+              membuf.TXTAddStringEOL('var');
               pv:=InterfaceVariables.vardescarray.beginiterate(ir);
                           if pv<>nil then
                             repeat
-                                 membuf.TXTAddGDBString('  '+pv^.name+':');
-                                 membuf.TXTAddGDBString(pv.data.PTD.TypeName+';');
-                                 if pv^.username<>'' then membuf.TXTAddGDBString('(*'''+pv^.username+'''*)');
-                                 membuf.TXTAddGDBStringEOL('');
+                                 membuf.TXTAddString('  '+pv^.name+':');
+                                 membuf.TXTAddString(pv.data.PTD.TypeName+';');
+                                 if pv^.username<>'' then membuf.TXTAddString('(*'''+pv^.username+'''*)');
+                                 membuf.TXTAddStringEOL('');
                                  pv:=InterfaceVariables.vardescarray.iterate(ir);
                             until pv=nil;
         end;
         begin
-              membuf.TXTAddGDBStringEOL('implementation');
-              membuf.TXTAddGDBStringEOL('begin');
+              membuf.TXTAddStringEOL('implementation');
+              membuf.TXTAddStringEOL('begin');
               pv:=InterfaceVariables.vardescarray.beginiterate(ir);
                           if pv<>nil then
                             repeat
-                                 //membuf.TXTAddGDBString('  '+pv^.name+':=');
+                                 //membuf.TXTAddString('  '+pv^.name+':=');
                                  pv.data.PTD.SavePasToMem(membuf,pv.data.Addr.Instance,'  '+pv^.name);
                                  {value:=pv.data.PTD.GetValueAsString(pv.Instance);
                                  if pv.data.PTD=@FundamentalStringDescriptorObj then
                                              value:=''''+value+'''';
 
-                                 membuf.TXTAddGDBString(value+';');}
-                                 //membuf.TXTAddGDBStringEOL('');
+                                 membuf.TXTAddString(value+';');}
+                                 //membuf.TXTAddStringEOL('');
                                  pv:=InterfaceVariables.vardescarray.iterate(ir);
                             until pv=nil;
-            membuf.TXTAddGDBString('end.');
+            membuf.TXTAddString('end.');
         end;
 end;
 {function getpsysvar: Pointer; export;
@@ -707,7 +707,7 @@ begin
      pvardesk(p)^.data.ptd^.MagicFreeInstance(pvardesk(p)^.data.Addr.Instance);
 
      //if pvardesk(p)^.data.ptd=@FundamentalStringDescriptorObj then
-       //                                                   pgdbstring(pvardesk(p)^.Instance)^:='';
+       //                                                   pString(pvardesk(p)^.Instance)^:='';
      pvardesk(p)^.data.ptd:=nil;
      //Freemem(pvardesk(p)^.pvalue);
 end;
@@ -963,7 +963,7 @@ begin
                                                 end;
                    end;
 end;
-function ObjOrRecordRead(TranslateFunc:TTranslateFunction;var f: TZctnrVectorBytes; var line,GDBStringtypearray:TInternalScriptString; var fieldoffset: SmallInt; ptd:PRecordDescriptor):Boolean;
+function ObjOrRecordRead(TranslateFunc:TTranslateFunction;var f: TZctnrVectorBytes; var line,Stringtypearray:TInternalScriptString; var fieldoffset: SmallInt; ptd:PRecordDescriptor):Boolean;
 type
     trrstate=(fields,metods);
 var parseerror{,parsesuberror}:Boolean;
@@ -1090,8 +1090,8 @@ begin
                       if assigned(TranslateFunc)then
                         fieldtype:=TranslateFunc(ptd.TypeName+'~'+getlastfirld.ProgramName,fieldtype);
                       {$ENDIF}
-                      getlastfirld.username:={parseresult^.getGDBString(0)}fieldtype;
-                      //fieldtype:=parseresult^.getGDBString(0);
+                      getlastfirld.username:={parseresult^.getString(0)}fieldtype;
+                      //fieldtype:=parseresult^.getString(0);
                     end;
            membermodifier:
                           begin
@@ -1150,18 +1150,18 @@ begin
                                                              end;
                                                         parsesubresult:=runparser('_softspace'#0'=(=*_String'#0'=*=)',line,parsesuberror);}
                                                         fieldtype:=parseresult^.getData(parseresult.Count-1);
-                                                        //pGDBString(parseresult^.getDataMutable(parseresult.Count-1))^;
+                                                        //pString(parseresult^.getDataMutable(parseresult.Count-1))^;
                                                         fieldgdbtype:=PTUnit(PRecordDescriptor(ptd)^.punit).TypeName2PTD(fieldtype);
                                                         for i:=0 to parseresult.Count-2 do
                                                         begin
                                                              fieldname:=parseresult^.getData(i);
                                                              if fieldname='PInOCS' then
                                                                                            fieldname:=fieldname;
-                                                             GDBStringtypearray := GDBStringtypearray + fieldname + #0;
-                                                             if fieldsmode=primary then GDBStringtypearray := GDBStringtypearray+'P'
-                                                                                   else GDBStringtypearray := GDBStringtypearray+'C';
-                                                             //GDBStringtypearray := GDBStringtypearray + char(fieldsmode);
-                                                             //GDBStringtypearray := GDBStringtypearray + pac_GDBWord_to_GDBString(fieldgdbtype.gdbtypecustom) + pac_lGDBWord_to_GDBString(fieldgdbtype.sizeinmem);
+                                                             Stringtypearray := Stringtypearray + fieldname + #0;
+                                                             if fieldsmode=primary then Stringtypearray := Stringtypearray+'P'
+                                                                                   else Stringtypearray := Stringtypearray+'C';
+                                                             //Stringtypearray := Stringtypearray + char(fieldsmode);
+                                                             //Stringtypearray := Stringtypearray + pac_GDBWord_to_String(fieldgdbtype.gdbtypecustom) + pac_lGDBWord_to_String(fieldgdbtype.sizeinmem);
                                                              fd.base.ProgramName:=fieldname;
                                                              fd.base.PFT:=fieldgdbtype;
                                                              //Pointer(fd.base.UserName):=nil;
@@ -1205,7 +1205,7 @@ end;
 
 function varmanager.findfieldcustom;
 var
-  path,{sp,} {typeGDBString,} sub, {field,} inds: TInternalScriptString;
+  path,{sp,} {typeString,} sub, {field,} inds: TInternalScriptString;
   oper: ansichar;
   i, oldi, j, indexcount: Integer;
   pind: parrayindex;
@@ -1243,15 +1243,15 @@ begin
   begin
     path := '';
   end;
-  //typeGDBString := ptypedesk(Types.exttype.getDataMutable(pvardesk(pdesc)^.vartypecustom))^.tdesk;
+  //typeString := ptypedesk(Types.exttype.getDataMutable(pvardesk(pdesc)^.vartypecustom))^.tdesk;
   pt:=pointer(pvardesk(pdesc)^.data.ptd);// pointer(PUserTypeDescriptor(Types.exttype.getDataMutable(pvardesk(pdesc)^.vartypecustom)^));
      {result:=true;}
   repeat
     case oper of
       '.':
         begin
-          //typeGDBString := exttypearrayptr^.typearray[pvardesk(pdesc)^.vartypecustom].tdesk;
-          //typeGDBString := copy(typeGDBString, 2, length(typeGDBString));
+          //typeString := exttypearrayptr^.typearray[pvardesk(pdesc)^.vartypecustom].tdesk;
+          //typeString := copy(typeString, 2, length(typeString));
           i := 1;
           while not (path[i] in ['.', '[', '^']) do
           begin
@@ -1279,7 +1279,7 @@ begin
           if tc<>nil then
                                   begin
                                        result := true;
-                                       //typeGDBString := ptypedesk(Types.exttype.getDataMutable(tc))^.tdesk;
+                                       //typeString := ptypedesk(Types.exttype.getDataMutable(tc))^.tdesk;
                                        //pt:=pointer(PUserTypeDescriptor(Types.exttype.getDataMutable(tc)^));
                                        pt:=pointer(tc);
                                   end
@@ -1291,7 +1291,7 @@ begin
         end;
       '[':
         begin
-          //typeGDBString := copy(typeGDBString, 2, length(typeGDBString));
+          //typeString := copy(typeString, 2, length(typeString));
           i := 1;
           while not (path[i] in [']']) do
           begin
@@ -1312,16 +1312,16 @@ begin
           end;
           i := 1;
           sum:=0;
-          {bt := Byte(typeGDBString[i]);
+          {bt := Byte(typeString[i]);
           inc(i);}
-//----------------------------------          tc := unpac_GDBString_to_GDBWord(copy(typeGDBString, i, 2));
+//----------------------------------          tc := unpac_String_to_GDBWord(copy(typeString, i, 2));
           inc(i, 2);
-          {sizeinmem :=} //unpac_GDBString_to_lGDBWord(copy(typeGDBString, i, 4));
+          {sizeinmem :=} //unpac_String_to_lGDBWord(copy(typeString, i, 4));
              //offset:=offset+sizeinmem;
           inc(i, 4);
-          indexcount :=-100;// unpac_GDBString_to_GDBWord(copy(typeGDBString, i, 2));
+          indexcount :=-100;// unpac_String_to_GDBWord(copy(typeString, i, 2));
           inc(i, 2);
-          //pind := @typeGDBString[i];
+          //pind := @typeString[i];
           i := 1;
              //offset:=0;
           for oldi := 1 to indexcount - 1 do
@@ -1671,54 +1671,54 @@ var
    ir:itrec;
 //   value:TInternalScriptString;
 begin
-     membuf.TXTAddGDBString('unit ');
-     membuf.TXTAddGDBStringEOL(self.Name+';');
-     membuf.TXTAddGDBStringEOL('interface');
+     membuf.TXTAddString('unit ');
+     membuf.TXTAddStringEOL(self.Name+';');
+     membuf.TXTAddStringEOL('interface');
      if InterfaceUses.Count<>0 then
         begin
              pu:=InterfaceUses.beginiterate(ir);
              if pu<>nil then
                             begin
-                                 membuf.TXTAddGDBString('uses '+pu^.Name);
+                                 membuf.TXTAddString('uses '+pu^.Name);
                             end;
              pu:=InterfaceUses.iterate(ir);
                           if pu<>nil then
                             repeat
-                                 membuf.TXTAddGDBString(','+pu^.Name);
+                                 membuf.TXTAddString(','+pu^.Name);
                                  pu:=InterfaceUses.iterate(ir);
                             until pu=nil;
-            membuf.TXTAddGDBStringEOL(';');
+            membuf.TXTAddStringEOL(';');
         end;
      if InterfaceVariables.vardescarray.Count<>0 then
         begin
-              membuf.TXTAddGDBStringEOL('var');
+              membuf.TXTAddStringEOL('var');
               pv:=InterfaceVariables.vardescarray.beginiterate(ir);
                           if pv<>nil then
                             repeat
-                                 membuf.TXTAddGDBString('  '+pv^.name+':');
-                                 membuf.TXTAddGDBString(pv.data.PTD.TypeName+';');
-                                 if pv^.username<>'' then membuf.TXTAddGDBString('(*'''+pv^.username+'''*)');
-                                 membuf.TXTAddGDBStringEOL('');
+                                 membuf.TXTAddString('  '+pv^.name+':');
+                                 membuf.TXTAddString(pv.data.PTD.TypeName+';');
+                                 if pv^.username<>'' then membuf.TXTAddString('(*'''+pv^.username+'''*)');
+                                 membuf.TXTAddStringEOL('');
                                  pv:=InterfaceVariables.vardescarray.iterate(ir);
                             until pv=nil;
         end;
         begin
-              membuf.TXTAddGDBStringEOL('implementation');
-              membuf.TXTAddGDBStringEOL('begin');
+              membuf.TXTAddStringEOL('implementation');
+              membuf.TXTAddStringEOL('begin');
               pv:=InterfaceVariables.vardescarray.beginiterate(ir);
                           if pv<>nil then
                             repeat
                                  pv.data.PTD.SavePasToMem(membuf,pv.data.Addr.Instance,'  '+pv^.name);
-                                 {membuf.TXTAddGDBString('  '+pv^.name+':=');
+                                 {membuf.TXTAddString('  '+pv^.name+':=');
                                  value:=pv.data.PTD.GetValueAsString(pv.Instance);
                                  if pv.data.PTD=@FundamentalStringDescriptorObj then
                                              value:=''''+value+'''';
 
-                                 membuf.TXTAddGDBString(value+';');
-                                 membuf.TXTAddGDBStringEOL('');}
+                                 membuf.TXTAddString(value+';');
+                                 membuf.TXTAddStringEOL('');}
                                  pv:=InterfaceVariables.vardescarray.iterate(ir);
                             until pv=nil;
-            membuf.TXTAddGDBString('end.');
+            membuf.TXTAddString('end.');
         end;
 end;
 destructor tunit.done;
@@ -1806,7 +1806,7 @@ begin
 end;
 function FindCategory(category:TInternalScriptString;var catname:TInternalScriptString):Pointer;
 var
-   ps:pgdbstring;
+   ps:pString;
    ir:itrec;
 begin
      result:=CategoryCollapsed.parray;

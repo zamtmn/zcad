@@ -41,7 +41,7 @@ type
     ScreenX:Integer;(*'Screen X'*)(*oi_readonly*)
     ScreenY:Integer;(*'Screen Y'*)(*oi_readonly*)
     otherinstancerun:Boolean;(*'Other instance run'*)(*oi_readonly*)
-    PreloadedFile:GDBString;(*'Preloaded file'*)(*oi_readonly*)
+    PreloadedFile:String;(*'Preloaded file'*)(*oi_readonly*)
     Ver:TmyFileVersionInfo;(*'Version'*)(*oi_readonly*)
     DefaultHeight:Integer;(*'Default controls height'*)(*oi_readonly*)
   end;

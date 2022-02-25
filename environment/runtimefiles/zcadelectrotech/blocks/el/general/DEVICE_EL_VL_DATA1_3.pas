@@ -8,7 +8,7 @@ usescopy objname;
 
 var
 
-T3:GDBString;(*'Значение'*)
+T3:String;(*'Значение'*)
 
 implementation
 

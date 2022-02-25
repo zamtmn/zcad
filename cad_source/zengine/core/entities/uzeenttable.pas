@@ -92,7 +92,7 @@ begin
      repeat
          pvc:=pv^.Clone(@self{.bp.Owner});
          pvc2:=pv^.Clone(@self{.bp.Owner});
-         //historyoutstr(pv^.ObjToGDBString('','')+'  cloned obj='+pvc^.ObjToGDBString('',''));
+         //historyoutstr(pv^.ObjToString('','')+'  cloned obj='+pvc^.ObjToString('',''));
          if pvc^.GetObjType=GDBDeviceID then
             pvc:=pvc;
 
@@ -163,7 +163,7 @@ var
    i:integer;
    ir,ic,icf:itrec;
    psa:PTZctnrVectorStrings;
-   pstr:pGDBsTRiNG;
+   pstr:pString;
    //cf:TGDBTableItemFormat;
    pcf:PTGDBTableItemFormat;
    x{,y},xw:Double;
@@ -318,7 +318,7 @@ constructor GDBObjTable.initnul;
    //i:integer;
    //ir,ic,icf:itrec;
    //psa:PTZctnrVectorStrings;
-   //pstr:pGDBsTRiNG;
+   //pstr:pString;
    //cf:TGDBTableItemFormat;
    //pcf:PTGDBTableItemFormat;
    //x,y:Double;

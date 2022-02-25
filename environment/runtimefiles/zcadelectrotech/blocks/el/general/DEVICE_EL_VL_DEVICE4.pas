@@ -10,7 +10,7 @@ usescopy addtocable;
 
 var
 
-T1:GDBString;(*'Мощность, кВт'*)
+T1:String;(*'Мощность, кВт'*)
 
 implementation
 

@@ -26,9 +26,9 @@ uses uzccommandsimpl,uzbstrproc,uzctnrVectorBytes,uzccommandsabstract,uzbpaths,
      uzestyleslayers,UGDBObjBlockdefArray,uzeblockdefsfactory,uzeblockdef,uzedrawingdef,
      uzcsysvars,uzbtypesbase,uzeentity,uzcdrawings,uzclog,LazLogger;
 implementation
-function LoadLibraryBlock(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:GDBString):PGDBObjBlockdef;
+function LoadLibraryBlock(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:String):PGDBObjBlockdef;
 var
-  DependOnBlock,tdp:gdbstring;
+  DependOnBlock,tdp:String;
   BlockDefArray:PGDBObjBlockdefArray;
 begin
     tdp:=BlockDependsOn;
@@ -44,14 +44,14 @@ begin
 end;
 function ReadBlockLibrary_com(operands:TCommandOperands):TCommandResult;
 var
-  line,block,depends,s:GDBString;
+  line,block,depends,s:String;
   f:TZctnrVectorBytes;
 begin
   s:=FindInSupportPath(SupportPath,operands);
   f.InitFromFile(s);
   while f.notEOF do
     begin
-      line:=f.readGDBString;
+      line:=f.readString;
       if line<>'' then
       if line[1]<>';' then
         begin

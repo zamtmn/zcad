@@ -35,11 +35,11 @@ type
   TLayerControlExtender=class(TBaseEntityExtender)
     //private
     public
-      FExpression:GDBString;
+      FExpression:String;
       FParser:TFPExpressionParser;
       pEnt:Pointer;
     public
-      GoodLayer,BadLayer:GDBString;
+      GoodLayer,BadLayer:String;
       procedure SetExpression(const AExpression:String);
       function GetExpression:String;
       class function getExtenderName:string;override;
@@ -55,9 +55,9 @@ type
       procedure SaveToDxf(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
       procedure ReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);override;
       procedure PostLoad(var context:TIODXFLoadContext);override;
-      class function EntIOLoadGoodLayer(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
-      class function EntIOLoadBadLayer(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
-      class function EntIOLoadExpression(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+      class function EntIOLoadGoodLayer(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+      class function EntIOLoadBadLayer(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+      class function EntIOLoadExpression(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 
       procedure onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);override;
       published
@@ -283,16 +283,16 @@ end;
 
 procedure TLayerControlExtender.SaveToDxf(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
 begin
-  dxfGDBStringout(outhandle,1000,'LCGoodLayer='+GoodLayer);
-  dxfGDBStringout(outhandle,1000,'LCBadLayer='+BadLayer);
-  dxfGDBStringout(outhandle,1000,'LCExpression='+FExpression);
+  dxfStringout(outhandle,1000,'LCGoodLayer='+GoodLayer);
+  dxfStringout(outhandle,1000,'LCBadLayer='+BadLayer);
+  dxfStringout(outhandle,1000,'LCExpression='+FExpression);
 end;
 
 procedure TLayerControlExtender.PostLoad(var context:TIODXFLoadContext);
 begin
 end;
 
-class function TLayerControlExtender.EntIOLoadGoodLayer(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+class function TLayerControlExtender.EntIOLoadGoodLayer(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 var
   LCExtdr:TLayerControlExtender;
 begin
@@ -303,7 +303,7 @@ begin
   result:=true;
 end;
 
-class function TLayerControlExtender.EntIOLoadBadLayer(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+class function TLayerControlExtender.EntIOLoadBadLayer(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 var
   LCExtdr:TLayerControlExtender;
 begin
@@ -314,7 +314,7 @@ begin
   result:=true;
 end;
 
-class function TLayerControlExtender.EntIOLoadExpression(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+class function TLayerControlExtender.EntIOLoadExpression(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 var
   LCExtdr:TLayerControlExtender;
 begin

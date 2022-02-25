@@ -54,10 +54,10 @@ resourcestring
 type
   //** Тип данных для отображения в инспекторе опций
   TDataExportParam=record
-    EntFilter:PGDBString;
-    PropFilter:PGDBString;
-    Exporter:PGDBString;
-    FileName:PGDBString;
+    EntFilter:PString;
+    PropFilter:PString;
+    Exporter:PString;
+    FileName:PString;
   end;
 
 var
@@ -411,7 +411,7 @@ var
   ir:itrec;
   lpsh:TLPSHandle;
   Data:TDataExport;
-  inpt:gdbstring;
+  inpt:String;
   gr:TGetResult;
   CmdMode:TCmdMode;
   filename:string;

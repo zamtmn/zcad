@@ -37,7 +37,7 @@ type
 implementation
 class function TBaseTypesEditors.BaseCreateEditor;
    var
-      ps:pgdbstring;
+      ps:pString;
       ir:itrec;
       propeditor:TPropEditor;
       edit:TEdit;
@@ -125,7 +125,7 @@ var
     cbedit:TComboBox;
     propeditor:TPropEditor;
     ir:itrec;
-    p:pgdbstring;
+    p:pString;
 begin
      propeditor:=TPropEditor.Create(theowner,PInstance,ptdesc^,FreeOnLostFocus);
      cbedit:=TComboBox.Create(propeditor);
@@ -155,7 +155,7 @@ var
     propeditor:TPropEditor;
     ir:itrec;
     number:LongWord;
-    p:pgdbstring;
+    p:pString;
 begin
      propeditor:=TPropEditor.Create(theowner,PInstance,ptdesc^,FreeOnLostFocus);
      cbedit:=TComboBox.Create(propeditor);

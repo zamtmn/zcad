@@ -53,7 +53,7 @@ type
               end;
     TMyActionListHelper = class helper for TActionList
       procedure AddMyAction(Action:TZAction);
-      function LoadImage(imgfile:GDBString):Integer;
+      function LoadImage(imgfile:String):Integer;
       procedure SetImage(img,identifer:string;var action:TZAction);
     end;
     TmyCommandToolButton=class({Tmy}TToolButton)
@@ -412,7 +412,7 @@ begin
      AddAction(action);
 end;
 
-function TMyActionListHelper.LoadImage(imgfile:GDBString):Integer;
+function TMyActionListHelper.LoadImage(imgfile:String):Integer;
 var
     bmp:TBitmap;
 begin

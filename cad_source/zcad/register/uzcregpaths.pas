@@ -23,8 +23,8 @@ uses uzcsysvars,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,LazLogger;
 implementation
 
 initialization
-  //units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'PATH_Program_Run','GDBString',@ProgramPath);
-  units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'PATH_Support_Path','GDBString',@SupportPath);
+  //units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'PATH_Program_Run','String',@ProgramPath);
+  units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'PATH_Support_Path','String',@SupportPath);
   sysvar.PATH.Program_Run:=@ProgramPath;
   sysvar.PATH.Support_Path:=@SupportPath;
   sysvar.PATH.Temp_files:=@TempPath;

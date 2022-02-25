@@ -39,7 +39,7 @@ PGDBObjRadialDimension=^GDBObjRadialDimension;
 GDBObjRadialDimension= object(GDBObjDiametricDimension)
                         constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                         constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                        function GetObjTypeName:GDBString;virtual;
+                        function GetObjTypeName:String;virtual;
 
                         function GetDimStr(var drawing:TDrawingDef):TDXFEntsInternalStringType;virtual;
                         function GetCenterPoint:GDBVertex;virtual;
@@ -65,8 +65,8 @@ begin
                            dxfGDBIntegerout(outhandle,70,4+128)
                        {else
                            dxfGDBIntegerout(outhandle,70,4);};
-  dxfGDBStringout(outhandle,3,PDimStyle^.Name);
-  dxfGDBStringout(outhandle,100,'AcDbRadialDimension');
+  dxfStringout(outhandle,3,PDimStyle^.Name);
+  dxfStringout(outhandle,100,'AcDbRadialDimension');
   dxfvertexout(outhandle,15,DimData.P15InWCS)
 end;
 

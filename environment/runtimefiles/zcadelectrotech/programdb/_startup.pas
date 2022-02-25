@@ -2,18 +2,18 @@ subunit devicebase;
 uses system;
 interface
 var
-   _cables:GDBString;
-   _cables_sv:GDBString;
-   _detsmokesl:GDBString;
-   _dethandsl:GDBString;
-   _ppkop:GDBString;
-   _puop:GDBString;
-   _ibpops:GDBString;
-   _am:GDBString;
-   _thermoresistance:GDBString;
-   _pressureswitches:GDBString;
-   _pressuremanometer:GDBString;
-   _thermometer:GDBString;
+   _cables:String;
+   _cables_sv:String;
+   _detsmokesl:String;
+   _dethandsl:String;
+   _ppkop:String;
+   _puop:String;
+   _ibpops:String;
+   _am:String;
+   _thermoresistance:String;
+   _pressureswitches:String;
+   _pressuremanometer:String;
+   _thermometer:String;
 implementation
 begin
      _thermoresistance:='Датчикитемпературы_термосопротивления_';

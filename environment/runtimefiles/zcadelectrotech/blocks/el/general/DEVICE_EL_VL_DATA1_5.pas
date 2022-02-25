@@ -8,7 +8,7 @@ usescopy objname;
 
 var
 
-T2:GDBString;(*'Расшифровка'*)
+T2:String;(*'Расшифровка'*)
 
 implementation
 

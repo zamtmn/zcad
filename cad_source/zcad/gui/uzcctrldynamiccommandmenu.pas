@@ -30,10 +30,10 @@ type
   TDMenuWnd = class(tform)
     ToolBar1: TToolBar;
     procedure AfterConstruction; override;
-    //procedure AddProcedure(Text,HText:GDBString;proc:TonClickProc);
-    procedure AddMethod(Text,HText:GDBString;FMethod:TButtonMethod);
-    procedure AddProcedure(Text,HText:GDBString;FProc:TButtonProc);
-    function AddButton(Text,HText:GDBString):TmyProcToolButton;
+    //procedure AddProcedure(Text,HText:String;proc:TonClickProc);
+    procedure AddMethod(Text,HText:String;FMethod:TButtonMethod);
+    procedure AddProcedure(Text,HText:String;FProc:TButtonProc);
+    function AddButton(Text,HText:String):TmyProcToolButton;
     public
       procedure CreateToolBar;
       procedure clear;
@@ -49,17 +49,17 @@ begin
      inherited;
 end;
 
-{procedure TDMenuWnd.AddMethod(Text, HText: GDBString; FMethod: TButtonMethod);
+{procedure TDMenuWnd.AddMethod(Text, HText: String; FMethod: TButtonMethod);
 begin
 
 end;
 
-procedure TDMenuWnd.AddProcedure(Text, HText: GDBString; FProc: TButtonProc);
+procedure TDMenuWnd.AddProcedure(Text, HText: String; FProc: TButtonProc);
 begin
 
 end;
 
-function TDMenuWnd.AddButton(Text, HText: GDBString): TmyProcToolButton;
+function TDMenuWnd.AddButton(Text, HText: String): TmyProcToolButton;
 begin
 
 end;}
@@ -113,7 +113,7 @@ begin
   self.setxywh(wndx,wndy,nw,nh+(height-clientheight));
 *)
 end;
-(*procedure TDMenuWnd.AddProcedure(Text,HText:GDBString;proc:TonClickProc);
+(*procedure TDMenuWnd.AddProcedure(Text,HText:String;proc:TonClickProc);
 begin
      AddButton(Text,HText).onclickproc:=proc;
 end;*)

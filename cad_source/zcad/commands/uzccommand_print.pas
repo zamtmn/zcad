@@ -45,7 +45,7 @@ uses
   uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,
   TypeDescriptors,uzelongprocesssupport,LazLogger,uzeiopalette,uzerasterizer;
 const
-     modelspacename:GDBSTring='**Модель**';
+     modelspacename:String='**Модель**';
 type
   {REGISTEROBJECTTYPE Print_com}
   Print_com= object(CommandRTEdObject)

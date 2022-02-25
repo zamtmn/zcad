@@ -51,9 +51,9 @@ GDBObjEntity= object(GDBObjSubordinated)
                     destructor done;virtual;
                     constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                     constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                    procedure SaveToDXFObjPrefix(var  outhandle:{Integer}TZctnrVectorBytes;entname,dbname:GDBString;var IODXFContext:TIODXFContext;notprocessHandle:boolean=false);
+                    procedure SaveToDXFObjPrefix(var  outhandle:{Integer}TZctnrVectorBytes;entname,dbname:String;var IODXFContext:TIODXFContext;notprocessHandle:boolean=false);
                     function LoadFromDXFObjShared(var f:TZctnrVectorBytes;dxfcod:Integer;ptu:PExtensionData;var drawing:TDrawingDef):Boolean;
-                    function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;virtual;
+                    function ProcessFromDXFObjXData(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;virtual;
                     function FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
                     procedure FromDXFPostProcessAfterAdd;virtual;
                     function IsHaveObjXData:Boolean;virtual;
@@ -131,11 +131,11 @@ GDBObjEntity= object(GDBObjSubordinated)
                     function GetMainOwner:PGDBObjSubordinated;virtual;
                     function getmatrix:PDMatrix4D;virtual;
                     function getownermatrix:PDMatrix4D;virtual;
-                    function ObjToGDBString(prefix,sufix:GDBString):GDBString;virtual;
+                    function ObjToString(prefix,sufix:String):String;virtual;
                     function ReturnLastOnMouse(InSubEntry:Boolean):PGDBObjEntity;virtual;
                     procedure YouDeleted(var drawing:TDrawingDef);virtual;
                     procedure YouChanged(var drawing:TDrawingDef);virtual;
-                    function GetObjTypeName:GDBString;virtual;
+                    function GetObjTypeName:String;virtual;
                     function GetObjType:TObjID;virtual;
                     procedure correctobjects(powner:PGDBObjEntity;pinownerarray:Integer);virtual;
                     function GetLineWeight:SmallInt;inline;
@@ -167,7 +167,7 @@ GDBObjEntity= object(GDBObjSubordinated)
                     procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                     procedure IterateCounter(PCounted:Pointer;var Counter:Integer;proc:TProcCounter);virtual;
                     class function GetDXFIOFeatures:TDXFEntIODataManager;static;
-                    function GetNameInBlockTable:GDBString;virtual;
+                    function GetNameInBlockTable:String;virtual;
               end;
 {Export-}
 var onlygetsnapcount:Integer;
@@ -178,7 +178,7 @@ procedure GDBObjEntity.IterateCounter(PCounted:Pointer;var Counter:Integer;proc:
 begin
     proc(@self,PCounted,Counter);
 end;
-function GDBObjEntity.GetNameInBlockTable:GDBString;
+function GDBObjEntity.GetNameInBlockTable:String;
 begin
     result:='';
 end;
@@ -416,7 +416,7 @@ function GDBObjEntity.ReturnLastOnMouse;
 begin
      result:=@self;
 end;
-function GDBObjEntity.ObjToGDBString(prefix,sufix:GDBString):GDBString;
+function GDBObjEntity.ObjToString(prefix,sufix:String):String;
 begin
      result:=prefix+'#'+inttohex(PtrInt(@self),10)+sufix;
 end;
@@ -698,10 +698,10 @@ end;
 
 procedure GDBObjEntity.SaveToDXFPostProcess;
 begin
-  dxfGDBStringout(handle,1001,ZCADAppNameInDXF);
-  dxfGDBStringout(handle,1002,'{');
+  dxfStringout(handle,1001,ZCADAppNameInDXF);
+  dxfStringout(handle,1002,'{');
   self.SaveToDXFObjXData(handle,IODXFContext);
-  dxfGDBStringout(handle,1002,'}');
+  dxfStringout(handle,1002,'}');
 end;
 function GDBObjEntity.CalcInFrustum;
 begin
@@ -1102,7 +1102,7 @@ procedure GDBObjEntity.SaveToDXFObjPrefix;
 var
   tmpHandle:TDWGHandle;
 begin
-  dxfGDBStringout(outhandle,0,entname);
+  dxfStringout(outhandle,0,entname);
   //TODO: MyGetOrCreateValue можно желать не для всех примитивов, а только для главных функций
   //TODO: это чуток ускорит сохранение с ним 0.35сек, без 0.34~0.33 в тесте
   if notprocessHandle then begin
@@ -1121,15 +1121,15 @@ begin
   if $3d=tmpHandle then
     tmpHandle:=tmpHandle;
 
-  dxfGDBStringout(outhandle,5,inttohex(tmpHandle{IODXFContext.handle}, 0));
-  dxfGDBStringout(outhandle,100,dxfName_AcDbEntity);
-  dxfGDBStringout(outhandle,8,vp.layer^.name);
+  dxfStringout(outhandle,5,inttohex(tmpHandle{IODXFContext.handle}, 0));
+  dxfStringout(outhandle,100,dxfName_AcDbEntity);
+  dxfStringout(outhandle,8,vp.layer^.name);
   if vp.color<>ClByLayer then
-                             dxfGDBStringout(outhandle,62,inttostr(vp.color));
+                             dxfStringout(outhandle,62,inttostr(vp.color));
   if vp.lineweight<>-1 then dxfGDBIntegerout(outhandle,370,vp.lineweight);
   if dbname<>'' then
-                    dxfGDBStringout(outhandle,100,dbname);
-  if vp.LineType<>{''}nil then dxfGDBStringout(outhandle,6,vp.LineType^.Name);
+                    dxfStringout(outhandle,100,dbname);
+  if vp.LineType<>{''}nil then dxfStringout(outhandle,6,vp.LineType^.Name);
   if vp.LineTypeScale<>1 then dxfDoubleout(outhandle,48,vp.LineTypeScale);
 end;
 function GDBObjEntity.IsHaveObjXData:Boolean;
@@ -1137,10 +1137,10 @@ begin
      result:=false;
 end;
 function GDBObjEntity.LoadFromDXFObjShared;
-var APP_NAME:GDBString;
+var APP_NAME:String;
     XGroup:Integer;
-    XValue:GDBString;
-    Name,Value{,vn,vt,vv,vun}:GDBString;
+    XValue:String;
+    Name,Value{,vn,vt,vv,vun}:String;
     i:integer;
 //    vd: vardesk;
 begin
@@ -1243,7 +1243,7 @@ class function GDBObjEntity.GetDXFIOFeatures:TDXFEntIODataManager;
 begin
   result:=GDBObjEntityDXFFeatures;
 end;
-function GDBObjEntity.ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;
+function GDBObjEntity.ProcessFromDXFObjXData(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;
 var
    features:TDXFEntIODataManager;
    FeatureLoadProc:TDXFEntLoadFeature;

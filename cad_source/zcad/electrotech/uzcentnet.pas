@@ -37,7 +37,7 @@ GDBObjNet= object(GDBObjConnected)
                  procedure EraseMi(pobj:pgdbobjEntity;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
                  function CalcNewName(Net1,Net2:PGDBObjNet):Integer;
                  procedure connectedtogdb(ConnectedArea:PGDBObjGenericSubEntry;var drawing:TDrawingDef);virtual;
-                 function GetObjTypeName:GDBString;virtual;
+                 function GetObjTypeName:String;virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure DelSelectedSubitem(var drawing:TDrawingDef);virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
@@ -193,13 +193,13 @@ begin
 end;
 procedure GDBObjNet.SaveToDXFObjXData(var outhandle:{Integer}TZctnrVectorBytes;var IODXFContext:TIODXFContext);
 //var
-   //s:gdbstring;
+   //s:String;
 begin
      inherited;
      //s:=inttohex(GetHandle,10);
      //TMWOHistoryOut(@s[1]);
-     dxfGDBStringout(outhandle,1000,'_HANDLE='+inttohex(GetHandle,10));
-     dxfGDBStringout(outhandle,1000,'_UPGRADE='+inttostr(UD_LineToNet));
+     dxfStringout(outhandle,1000,'_HANDLE='+inttohex(GetHandle,10));
+     dxfStringout(outhandle,1000,'_UPGRADE='+inttostr(UD_LineToNet));
 end;
 procedure GDBObjNet.SaveToDXFfollow(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
 var pobj:PGDBObjEntity;
@@ -340,7 +340,7 @@ end;
 function GDBObjNet.CalcNewName(Net1,Net2:PGDBObjNet):Integer;
 var
    pvd1,pvd2:pvardesk;
-   n1,n2:gdbstring;
+   n1,n2:String;
    pentvarext1,pentvarext2:TVariablesExtender;
 begin
      result:=0;

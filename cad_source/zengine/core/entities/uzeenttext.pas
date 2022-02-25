@@ -47,7 +47,7 @@ GDBObjText= object(GDBObjAbstractText)
                  //procedure createpoint(const drawing:TDrawingDef);virtual;
                  //procedure CreateSymbol(_symbol:Integer;matr:DMatrix4D;var minx,miny,maxx,maxy:Double;pfont:pgdbfont;ln:Integer);
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
-                 function GetObjTypeName:GDBString;virtual;
+                 function GetObjTypeName:String;virtual;
                  destructor done;virtual;
 
                  function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
@@ -56,7 +56,7 @@ GDBObjText= object(GDBObjAbstractText)
                  procedure rtsave(refp:Pointer);virtual;
                  function IsHaveObjXData:Boolean;virtual;
                  procedure SaveToDXFObjXData(var outhandle:{Integer}TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
-                 function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;virtual;
+                 function ProcessFromDXFObjXData(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;virtual;
                  class function GetDXFIOFeatures:TDXFEntIODataManager;static;
 
                  function CreateInstance:PGDBObjText;static;
@@ -68,7 +68,7 @@ jt: array[0..3, 0..4] of TTextJustify = ((jsbl, jsbc, jsbr, jsbl, jsmc), (jsbtl,
 j2b: array[TTextJustify] of byte=(1,2,3,4,5,6,7,8,9,10,11,12);
 b2j: array[1..12] of TTextJustify=(jstl,jstc,jstr,jsml,jsmc,jsmr,jsbl,jsbc,jsbr,jsbtl,jsbtc,jsbtr);
 GDBObjTextDXFFeatures:TDXFEntIODataManager;
-//function getsymbol(s:gdbstring; i:integer;out l:integer;const fontunicode:Boolean):word;
+//function getsymbol(s:String; i:integer;out l:integer;const fontunicode:Boolean):word;
 implementation
 function acadvjustify(j:TTextJustify): Byte;
 var
@@ -591,7 +591,7 @@ begin
      GetDXFIOFeatures.RunSaveFeatures(outhandle,@self,IODXFContext);
      inherited;
 end;
-function z2dxftext(s:gdbstring):gdbstring;
+function z2dxftext(s:String):String;
 var i:Integer;
 begin
      result:=s;
@@ -607,7 +607,7 @@ procedure GDBObjText.SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var draw
 var
   hv, vv,bw: Byte;
   tv:gdbvertex;
-  s:GDBString;
+  s:String;
 begin
   vv := acadvjustify(textprop.justify);
   hv := (j2b[textprop.justify]{ord(textprop.justify)} - 1) mod 3;
@@ -638,7 +638,7 @@ begin
                              bw:=bw+2;
   if bw<>0 then
                dxfGDBIntegerout(outhandle,71,bw);
-  dxfGDBStringout(outhandle,7,PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyleIndex))^.name);
+  dxfStringout(outhandle,7,PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyleIndex))^.name);
 
   SaveToDXFObjPostfix(outhandle);
 
@@ -649,17 +649,17 @@ begin
                                                s := Tria_Utf8ToAnsi(UTF8Encode(content));
 
 
-  dxfGDBStringout(outhandle,1,z2dxftext({content}s));
-  dxfGDBStringout(outhandle,100,'AcDbText');
+  dxfStringout(outhandle,1,z2dxftext({content}s));
+  dxfStringout(outhandle,100,'AcDbText');
   dxfGDBIntegerout(outhandle,73,vv);
 end;
 procedure GDBObjText.LoadFromDXF;
-var //s{, layername}: GDBString;
+var //s{, layername}: String;
   byt{, code}: Integer;
   doublepoint,angleload: Boolean;
   angle:double;
   vv, gv, textbackward: Integer;
-  style,tcontent:GDBString;
+  style,tcontent:String;
 begin
   //initnul;
   vv := 0;
@@ -686,7 +686,7 @@ else if not dxfDoubleload(f,40,byt,textprop.size) then
                                              end
 else if dxfDoubleload(f,51,byt,textprop.oblique) then
                                                         textprop.oblique:=textprop.oblique*pi/180
-else if     dxfGDBStringload(f,7,byt,style)then
+else if     dxfStringload(f,7,byt,style)then
                                              begin
                                                   TXTStyleIndex :={drawing.GetTextStyleTable^.getDataMutable}(drawing.GetTextStyleTable^.FindStyle(Style,false));
                                                   if TXTStyleIndex=nil then
@@ -695,8 +695,8 @@ else if     dxfGDBStringload(f,7,byt,style)then
 else if not dxfGDBIntegerload(f,72,byt,gv)then
      if not dxfGDBIntegerload(f,73,byt,vv)then
      if not dxfGDBIntegerload(f,71,byt,textbackward)then
-     if not dxfGDBStringload(f,1,byt,tcontent)then
-                                               {s := }f.readgdbstring;
+     if not dxfStringload(f,1,byt,tcontent)then
+                                               {s := }f.readString;
     byt:=readmystrtoint(f);
   end;
   if (textbackward and 4)<>0 then

@@ -52,7 +52,7 @@ GDBObjCable= object(GDBObjCurve)
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
-                 function GetObjTypeName:GDBString;virtual;
+                 function GetObjTypeName:String;virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure FormatFast(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure SaveToDXFObjXData(var outhandle:{Integer}TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
@@ -115,11 +115,11 @@ begin
         dxfvertexout(outhandle,10,ptn2^.Nextp);
         dxfvertexout(outhandle,11,ptn1^.PrevP);
 
-         dxfGDBStringout(outhandle,1001,ZCADAppNameInDXF);
-         dxfGDBStringout(outhandle,1002,'{');
-         dxfGDBStringout(outhandle,1000,'_OWNERHANDLE=6E');
+         dxfStringout(outhandle,1001,ZCADAppNameInDXF);
+         dxfStringout(outhandle,1002,'{');
+         dxfStringout(outhandle,1000,'_OWNERHANDLE=6E');
          //self.SaveToDXFObjXData(handle);
-         dxfGDBStringout(outhandle,1002,'}');
+         dxfStringout(outhandle,1002,'}');
 
 
         ptn2:=ptn1;
@@ -129,11 +129,11 @@ begin
 end;
 procedure GDBObjCable.SaveToDXFObjXData(var outhandle:{Integer}TZctnrVectorBytes;var IODXFContext:TIODXFContext);
 //var
-   //s:gdbstring;
+   //s:String;
 begin
      inherited;
-     dxfGDBStringout(outhandle,1000,'_UPGRADE=1');
-     dxfGDBStringout(outhandle,1000,'_LAYER='+vp.Layer.name);
+     dxfStringout(outhandle,1000,'_UPGRADE=1');
+     dxfStringout(outhandle,1000,'_LAYER='+vp.Layer.name);
 end;
 procedure GDBObjCable.SaveToDXF;
 var

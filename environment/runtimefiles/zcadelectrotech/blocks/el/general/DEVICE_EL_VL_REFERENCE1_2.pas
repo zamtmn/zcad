@@ -8,7 +8,7 @@ usescopy objname;
 
 var
 
-Reference:GDBString;(*'Наименование'*)
+Reference:String;(*'Наименование'*)
 
 implementation
 

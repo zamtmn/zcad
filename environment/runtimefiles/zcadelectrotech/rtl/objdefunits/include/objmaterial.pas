@@ -2,8 +2,8 @@ unit objmaterial;
 interface
 uses system;
 var
-   DB_link:GDBString;(*'Материал'*)
-   DB_MatName:GDBString;(*'Расшифровка'*)
+   DB_link:String;(*'Материал'*)
+   DB_MatName:String;(*'Расшифровка'*)
 implementation
 begin
      DB_link:='??';

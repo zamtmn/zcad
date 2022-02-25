@@ -41,7 +41,7 @@ GDBObjPolyline= object(GDBObjCurve)
                  procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
-                 function GetObjTypeName:GDBString;virtual;
+                 function GetObjTypeName:String;virtual;
                  function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                  function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;virtual;
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
@@ -191,7 +191,7 @@ begin
                 dxfGDBIntegerout(outhandle,70,8);
 end;
 procedure GDBObjPolyline.LoadFromDXF;
-var s{, layername}: GDBString;
+var s{, layername}: String;
   byt{, code}: Integer;
   //p: gdbvertex;
   hlGDBWord: Integer;
@@ -219,19 +219,19 @@ begin
                                                    begin
                                                         if (hlGDBWord and 1) = 1 then closed := true;
                                                    end
-   else if dxfGDBStringload(f,0,byt,s)then
+   else if dxfStringload(f,0,byt,s)then
                                              begin
                                                   if s='VERTEX' then vertexgo := true;
                                                   if s='SEQEND' then system.Break;
                                              end
-                                      else s:= f.readGDBSTRING;
+                                      else s:= f.readString;
     byt:=readmystrtoint(f);
   end;
 vertexarrayinocs.Shrink;
   //format;
 end;
 {procedure GDBObjPolyline.LoadFromDXF;
-var s, layername: GDBString;
+var s, layername: String;
   byt, code: Integer;
   p: gdbvertex;
   hlGDBWord: LongWord;
@@ -239,55 +239,55 @@ var s, layername: GDBString;
 begin
   closed := false;
   vertexgo := false;
-  s := f.readgdbstring;
+  s := f.readString;
   val(s, byt, code);
   while true do
   begin
     case byt of
       0:
         begin
-          s := f.readgdbstring;
+          s := f.readString;
           if s = 'SEQEND' then
             system.break;
           if s = 'VERTEX' then vertexgo := true;
         end;
       8:
         begin
-          layername := f.readgdbstring;
+          layername := f.readString;
           vp.Layer := gdb.LayerTable.getLayeraddres(layername);
         end;
       10:
         begin
-          s := f.readgdbstring;
+          s := f.readString;
           val(s, p.x, code);
         end;
       20:
         begin
-          s := f.readgdbstring;
+          s := f.readString;
           val(s, p.y, code);
         end;
       30:
         begin
-          s := f.readgdbstring;
+          s := f.readString;
           val(s, p.z, code);
           if vertexgo then addvertex(p);
         end;
       70:
         begin
-          s := f.readgdbstring;
+          s := f.readString;
           val(s, hlGDBWord, code);
           hlGDBWord := strtoint(s);
           if (hlGDBWord and 1) = 1 then closed := true;
         end;
       370:
         begin
-          s := f.readgdbstring;
+          s := f.readString;
           vp.lineweight := strtoint(s);
         end;
     else
-      s := f.readgdbstring;
+      s := f.readString;
     end;
-    s := f.readgdbstring;
+    s := f.readString;
     val(s, byt, code);
   end;
   vertexarrayinocs.Shrink;

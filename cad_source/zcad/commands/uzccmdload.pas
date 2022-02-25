@@ -75,7 +75,7 @@ end;
 function Load_Merge(Operands:TCommandOperands;LoadMode:TLoadOpt):TCommandResult;
 var
    s: AnsiString;
-   //fileext:GDBString;
+   //fileext:String;
    isload:boolean;
    mem:TZctnrVectorBytes;
    pu:ptunit;

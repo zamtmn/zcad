@@ -35,9 +35,9 @@ GDBLayerProp= object(GDBNamedObject)
                _lock:Boolean;(*saved_to_shd*)(*'Lock'*)
                _print:Boolean;(*saved_to_shd*)(*'Print'*)
                desk:AnsiString;(*saved_to_shd*)(*'Description'*)
-               constructor InitWithParam(N:GDBString; C: Integer; LW: Integer;oo,ll,pp:Boolean;d:GDBString);
-               function GetFullName:GDBString;virtual;
-               procedure SetValueFromDxf(group:Integer;value:GDBString);virtual;
+               constructor InitWithParam(N:String; C: Integer; LW: Integer;oo,ll,pp:Boolean;d:String);
+               function GetFullName:String;virtual;
+               procedure SetValueFromDxf(group:Integer;value:String);virtual;
                procedure SetDefaultValues;virtual;
                destructor done;virtual;
          end;
@@ -49,19 +49,19 @@ GDBLayerArray= object(GDBNamedObjectsArray{-}<PGDBLayerProp,GDBLayerProp>{//})(*
                     constructor init(m:Integer;psyslt:Pointer);
                     constructor initnul;
 
-                    function addlayer(name:GDBString;color:Integer;lw:Integer;oo,ll,pp:Boolean;d:GDBString;lm:TLoadOpt):PGDBLayerProp;virtual;
+                    function addlayer(name:String;color:Integer;lw:Integer;oo,ll,pp:Boolean;d:String;lm:TLoadOpt):PGDBLayerProp;virtual;
                     function GetSystemLayer:PGDBLayerProp;
                     function createlayerifneed(_source:PGDBLayerProp):PGDBLayerProp;
-                    function createlayerifneedbyname(lname:GDBString;_source:PGDBLayerProp):PGDBLayerProp;
+                    function createlayerifneedbyname(lname:String;_source:PGDBLayerProp):PGDBLayerProp;
               end;
 {EXPORT-}
 var
    DefaultErrorLayer:GDBLayerProp;
-function GetLTName(LT:PGDBLayerProp):GDBString;
+function GetLTName(LT:PGDBLayerProp):String;
 implementation
 //uses
 //    log;
-function GetLTName(LT:PGDBLayerProp):GDBString;
+function GetLTName(LT:PGDBLayerProp):String;
 begin
      if assigned(LT) then
                          result:=LT^.Name
@@ -69,7 +69,7 @@ begin
                          result:='Continuous';
 end;
 
-function  GDBLayerArray.createlayerifneedbyname(lname:GDBString;_source:PGDBLayerProp):PGDBLayerProp;
+function  GDBLayerArray.createlayerifneedbyname(lname:String;_source:PGDBLayerProp):PGDBLayerProp;
 begin
            result:=getAddres(lname);
            if result=nil then
@@ -133,7 +133,7 @@ begin
                                            _print:=true;
      desk:='';
 end;
-procedure GDBLayerProp.SetValueFromDxf(group:Integer;value:GDBString);
+procedure GDBLayerProp.SetValueFromDxf(group:Integer;value:String);
 var
    _color:integer;
 begin
@@ -167,7 +167,7 @@ begin
         end;
 end;
 
-constructor GDBLayerProp.InitWithParam(N:GDBString; C: Integer; LW: Integer;oo,ll,pp:Boolean;d:GDBString);
+constructor GDBLayerProp.InitWithParam(N:String; C: Integer; LW: Integer;oo,ll,pp:Boolean;d:String);
 begin
     initnul;
     LT:=nil;
@@ -182,7 +182,7 @@ end;
 function GDBLayerProp.GetFullName;
 {const
      ls=24;}
-//var ss:gdbstring;
+//var ss:String;
 begin
      result:=ansi2cp(getname);
      {  if _on then

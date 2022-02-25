@@ -36,10 +36,10 @@ procedure processcommand(var input:string);
 
 implementation
 
-function FindAlias(prefix:GDBString;comment,breacer:GDBString):GDBString;
+function FindAlias(prefix:String;comment,breacer:String):String;
 var
-   ps:pgdbstring;
-   s:gdbstring;
+   ps:pString;
+   s:String;
    ir:itrec;
    c:boolean;
 begin
@@ -80,12 +80,12 @@ var
   len: double;
   temp: gdbvertex;
   v:vardesk;
-  s,divider,preddivider,expr:GDBString;
+  s,divider,preddivider,expr:String;
   tv:gdbvertex;
   parseresult:PTZctnrVectorStrings;
   cmd,subexpr,superexpr:string;
   parsed:Boolean;
-  command,operands:GDBString;
+  command,operands:String;
   relativemarker:boolean;
   l,a:double;
 begin

@@ -8,7 +8,7 @@ usescopy objname;
 
 var
 
-T19:GDBString;(*'Распределительное устройство'*)
+T19:String;(*'Распределительное устройство'*)
 
 implementation
 

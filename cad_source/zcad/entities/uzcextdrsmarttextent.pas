@@ -32,8 +32,8 @@ const
   SmartTextEntExtenderName='extdrSmartTextEnt';
 type
   TSmartTextEntExtender=class(TBaseEntityExtender)
-    GoodLayer,BadLayer:GDBString;
-    VariableName:GDBString;
+    GoodLayer,BadLayer:String;
+    VariableName:String;
     Inverse:Boolean;
     class function getExtenderName:string;override;
     constructor Create(pEntity:Pointer);override;

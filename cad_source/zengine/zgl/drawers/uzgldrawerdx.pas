@@ -35,7 +35,7 @@ type
 PTDXData=^TDXData;
 {//REGISTERRECORDTYPE TDXData}
 TDXData=record
-          RD_Renderer:GDBString;(*'Device'*)(*oi_readonly*)
+          RD_Renderer:String;(*'Device'*)(*oi_readonly*)
     end;
 {EXPORT-}
 TZGLDXDrawer=class(TZGLGeneralDrawer)

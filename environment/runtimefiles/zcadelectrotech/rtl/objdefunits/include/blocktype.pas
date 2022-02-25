@@ -5,7 +5,7 @@ var
    Device_Type:TDeviceType;(*'Тип устройства'*) 
    Device_Class:TDeviceClass;(*'Класс устройства'*)
    Device_Group:TDeviceGroup;(*'Группа устройства'*) 
-   BTY_TreeCoord:GDBString;(*'Позиция в дереве'*)
+   BTY_TreeCoord:String;(*'Позиция в дереве'*)
    ENTID_Type:TENTID;(*'Object type'*)
    ENTID_Representation:TEentityRepresentation;(*'Representation'*)
    ENTID_Function:TEentityFunction;(*'Function'*)

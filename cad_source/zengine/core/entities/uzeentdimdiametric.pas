@@ -40,7 +40,7 @@ PGDBObjDiametricDimension=^GDBObjDiametricDimension;
 GDBObjDiametricDimension= object(GDBObjDimension)
                         constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                         constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                        function GetObjTypeName:GDBString;virtual;
+                        function GetObjTypeName:String;virtual;
 
                         procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                         function GetDimStr(var drawing:TDrawingDef):TDXFEntsInternalStringType;virtual;
@@ -75,8 +75,8 @@ begin
                            dxfGDBIntegerout(outhandle,70,3+128)
                        {else
                            dxfGDBIntegerout(outhandle,70,3);};
-  dxfGDBStringout(outhandle,3,PDimStyle^.Name);
-  dxfGDBStringout(outhandle,100,'AcDbDiametricDimension');
+  dxfStringout(outhandle,3,PDimStyle^.Name);
+  dxfStringout(outhandle,100,'AcDbDiametricDimension');
   dxfvertexout(outhandle,15,DimData.P15InWCS)
 end;
 function GDBObjDiametricDimension.GetDIMTMOVE:TDimTextMove;

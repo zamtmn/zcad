@@ -15,7 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-{$MODE OBJFPC}
+{$MODE OBJFPC}{$H+}
 unit uzcoiregistermultiproperties;
 {$INCLUDE zcadconfig.inc}
 
@@ -216,7 +216,7 @@ end;}
 procedure DummyFromVarEntChangeProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty);
 begin
 end;
-function DoubleCheck0Exclude1Include(pdata:PVarDesk;var ErrorRange:Boolean;out message:GDBString):Boolean;
+function DoubleCheck0Exclude1Include(pdata:PVarDesk;var ErrorRange:Boolean;out message:String):Boolean;
 begin
      if (PDouble(pvardesk(pdata)^.data.Addr.Instance)^>1)or(PDouble(pvardesk(pdata)^.data.Addr.Instance)^<=0)then
                                                                                                              begin
@@ -227,7 +227,7 @@ begin
                                                                                                          else
                                                                                                              result:=true;
 end;
-function DoubleCheckGreater0(pdata:PVarDesk;var ErrorRange:Boolean;out message:GDBString):Boolean;
+function DoubleCheckGreater0(pdata:PVarDesk;var ErrorRange:Boolean;out message:String):Boolean;
 begin
      if PDouble(pvardesk(pdata)^.data.Addr.Instance)^>0then
                                                          result:=true
@@ -238,7 +238,7 @@ begin
                                                            ErrorRange:=true;
                                                          end;
 end;
-function DoubleCheckMinus85to85(pdata:PVarDesk;var ErrorRange:Boolean;out message:GDBString):Boolean;
+function DoubleCheckMinus85to85(pdata:PVarDesk;var ErrorRange:Boolean;out message:String):Boolean;
 begin
      if abs(PDouble(pvardesk(pdata)^.data.Addr.Instance)^)<=1.483529864195 then
                                                          result:=true
@@ -402,9 +402,9 @@ const
      LayerControlExtender:TLayerControlExtender=nil;
 begin
   MultiPropertiesManager.RestartMultipropertySortID;
-  MultiPropertiesManager.RegisterPhysMultiproperty('LControl_GoodLayer','LC good layer',sysunit^.TypeName2PTD('GDBString'),MPCExtenders,0,TLayerControlExtender,PtrInt(@LayerControlExtender.GoodLayer),PtrInt(@LayerControlExtender.GoodLayer),OneVarDataMIPD,OneVarDataEIPD);
-  MultiPropertiesManager.RegisterPhysMultiproperty('LControl_BadLayer','LC bad layer',sysunit^.TypeName2PTD('GDBString'),MPCExtenders,0,TLayerControlExtender,PtrInt(@LayerControlExtender.BadLayer),PtrInt(@LayerControlExtender.BadLayer),OneVarDataMIPD,OneVarDataEIPD);
-  MultiPropertiesManager.RegisterPhysMultiproperty('LControl_Expression','LC expression',sysunit^.TypeName2PTD('GDBString'),MPCExtenders,0,TLayerControlExtender,PtrInt(@LayerControlExtender.FExpression),PtrInt(@LayerControlExtender.FExpression),OneVarDataMIPD,OneVarDataEIPD);
+  MultiPropertiesManager.RegisterPhysMultiproperty('LControl_GoodLayer','LC good layer',sysunit^.TypeName2PTD('String'),MPCExtenders,0,TLayerControlExtender,PtrInt(@LayerControlExtender.GoodLayer),PtrInt(@LayerControlExtender.GoodLayer),OneVarDataMIPD,OneVarDataEIPD);
+  MultiPropertiesManager.RegisterPhysMultiproperty('LControl_BadLayer','LC bad layer',sysunit^.TypeName2PTD('String'),MPCExtenders,0,TLayerControlExtender,PtrInt(@LayerControlExtender.BadLayer),PtrInt(@LayerControlExtender.BadLayer),OneVarDataMIPD,OneVarDataEIPD);
+  MultiPropertiesManager.RegisterPhysMultiproperty('LControl_Expression','LC expression',sysunit^.TypeName2PTD('String'),MPCExtenders,0,TLayerControlExtender,PtrInt(@LayerControlExtender.FExpression),PtrInt(@LayerControlExtender.FExpression),OneVarDataMIPD,OneVarDataEIPD);
   MultiPropertiesManager.RegisterPropertyMultiproperty('LControl_T','LControl_T',MPCExtenders,0,TLayerControlExtender,TLayerControlExtender,'Expr',OneVarDataMIPD,OneVarDataEIPD);
   {General section}
   MultiPropertiesManager.RestartMultipropertySortID;

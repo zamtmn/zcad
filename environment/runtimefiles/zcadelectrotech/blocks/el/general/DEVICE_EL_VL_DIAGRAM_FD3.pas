@@ -8,12 +8,12 @@ usescopy objname;
 
 var
 
-T5:GDBString;(*'P установленная'*)
-T6:GDBString;(*'P расчетная'*)
-T7:GDBString;(*'I фаза А'*)
-T8:GDBString;(*'I фаза В'*)
-T9:GDBString;(*'I фаза С'*)
-T10:GDBString;(*'Cos Ф'*)
+T5:String;(*'P установленная'*)
+T6:String;(*'P расчетная'*)
+T7:String;(*'I фаза А'*)
+T8:String;(*'I фаза В'*)
+T9:String;(*'I фаза С'*)
+T10:String;(*'Cos Ф'*)
 
 implementation
 

@@ -34,7 +34,7 @@ type
                       CanvasData:TCanvasData;
                       procedure CreateDrawer; override;
                       function getParam:pointer; override;
-                      function getParamTypeName:GDBString; override;
+                      function getParamTypeName:String; override;
                       procedure setdeicevariable; override;
                       function NeedDrawInsidePaintEvent:boolean; override;
                   end;
@@ -58,7 +58,7 @@ function TCanvasViewArea.getParam:pointer;
 begin
      result:=@CanvasData;
 end;
-function TCanvasViewArea.getParamTypeName:GDBString;
+function TCanvasViewArea.getParamTypeName:String;
 begin
      result:='PTCanvasData';
 end;

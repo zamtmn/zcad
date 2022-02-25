@@ -10,7 +10,7 @@ usescopy addtocable;
 
 var
 
-T1:GDBString;(*'Питающая фаза'*)
+T1:String;(*'Питающая фаза'*)
 
 implementation
 

@@ -74,7 +74,7 @@ type
 PTDrawSuperlineParams=^TDrawSuperlineParams;
 TDrawSuperlineParams=record
                          pu:PTUnit;                //рантайм юнит с параметрами суперлинии
-                         LayerNamePrefix:GDBString;//префикс
+                         LayerNamePrefix:String;//префикс
                          ProcessLayer:Boolean;  //выключатель
                      end;
 var
@@ -84,7 +84,7 @@ var
 
 implementation
 
-function GetInteractiveLine(prompt1,prompt2:GDBString;out p1,p2:GDBVertex):Boolean;
+function GetInteractiveLine(prompt1,prompt2:String;out p1,p2:GDBVertex):Boolean;
 var
     pline:PGDBObjLine;
 begin
@@ -101,7 +101,7 @@ begin
     end;
     drawings.GetCurrentDWG^.FreeConstructionObjects;
 end;
-function GetInteractiveLineFrom1to2(prompt2:GDBString;const p1:GDBVertex; out p2:GDBVertex):tgetresult;
+function GetInteractiveLineFrom1to2(prompt2:String;const p1:GDBVertex; out p2:GDBVertex):tgetresult;
 var
     pline:PGDBObjLine;
 begin
@@ -117,7 +117,7 @@ var
     pvarext:TVariablesExtender;
     psu:ptunit;
     pvd:pvardesk;        //для нахождения имени суперлинии
-    layername:gdbstring; //имя слоя куда будет помещена супелиния
+    layername:String; //имя слоя куда будет помещена супелиния
     player:PGDBLayerProp;//указатель на слой куда будет помещена супелиния
 begin
     psuperline := AllocEnt(GDBSuperLineID);
@@ -137,7 +137,7 @@ begin
     begin
       //ищем переменную 'NMO_Name'
       pvd:=psu.FindVariable('NMO_Name');
-      pgdbstring(pvd^.data.Addr.Instance)^:=nameSL;
+      pString(pvd^.data.Addr.Instance)^:=nameSL;
       //если найдена
       if pvd<>nil then
       begin
@@ -171,7 +171,7 @@ var
 procedure createline;
 var
     pvd:pvardesk;        //для нахождения имени суперлинии
-    layername:gdbstring; //имя слоя куда будет помещена супелиния
+    layername:String; //имя слоя куда будет помещена супелиния
     player:PGDBLayerProp;//указатель на слой куда будет помещена супелиния
 begin
     psuperline := AllocEnt(GDBSuperLineID);

@@ -2,8 +2,8 @@ unit DEVICE_CABLE_MARK;
 interface
 uses system;
 var
-   CableName:GDBString;(*'Обозначение'*)
-   CableMaterial:GDBString;(*'Материал'*)
+   CableName:String;(*'Обозначение'*)
+   CableMaterial:String;(*'Материал'*)
    CableLength:Double;(*'Длинна'*)
 implementation
 begin

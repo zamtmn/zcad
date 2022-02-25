@@ -55,10 +55,10 @@ type
     procedure CommandEnd; virtual;
     procedure CommandCancel; virtual;
     procedure CommandInit; virtual;
-    procedure Prompt(msg:GDBString);
-    procedure Error(msg:GDBString);
+    procedure Prompt(msg:String);
+    procedure Error(msg:String);
     procedure SetCommandParam(PTypedTata:pointer;TypeName:string);
-    constructor init(cn:GDBString;SA,DA:TCStartAttr);
+    constructor init(cn:String;SA,DA:TCStartAttr);
     //function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: Byte;osp:pos_record): Integer; virtual; abstract;
     //function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: Byte;osp:pos_record): Integer; virtual; abstract;
   end;
@@ -204,7 +204,7 @@ begin
   inherited;
   CommandInit;
   CommandName := cn;
-  CommandGDBString := '';
+  CommandString := '';
   commandmanager.CommandRegister(@self);
 end;
 constructor CommandFastObjectPlugin.Init;
@@ -444,11 +444,11 @@ begin
   savemousemode := 0;
   mouseclic := 0;
 end;
-procedure CommandRTEdObject.Prompt(msg:GDBString);
+procedure CommandRTEdObject.Prompt(msg:String);
 begin
      ZCMsgCallBackInterface.TextMessage(self.CommandName+':'+msg,TMWOHistoryOut);
 end;
-procedure CommandRTEdObject.Error(msg:GDBString);
+procedure CommandRTEdObject.Error(msg:String);
 begin
      ZCMsgCallBackInterface.TextMessage(self.CommandName+':'+msg,TMWOShowError);
 end;

@@ -86,7 +86,7 @@ type
   PTOrtoDevPlaceParam=^TOrtoDevPlaceParam;
   {REGISTERRECORDTYPE TOrtoDevPlaceParam}
   TOrtoDevPlaceParam=record
-                                        Name:GDBString;(*'Block'*)(*oi_readonly*)
+                                        Name:String;(*'Block'*)(*oi_readonly*)
                                         ScaleBlock:Double;(*'Blocks scale'*)
                                         CountType:TODPCountType;(*'Type of placement'*)
                                         Count:Integer;(*'Total number'*)
@@ -115,7 +115,7 @@ var
    pvarman:pvarmanagerdef;
    pdw,pdd,pdtw,pdtd:PDouble;
    pdt:pinteger;
-   sdname:GDBstring;
+   sdname:String;
 
    OPSPlaceSmokeDetectorOrtoParam:TOPSPlaceSmokeDetectorOrtoParam;
    OrtoDevPlaceParam:TOrtoDevPlaceParam;
@@ -463,7 +463,7 @@ begin
 //  end;
 end;
 procedure commformat;
-var s:GDBString;
+var s:String;
     pcfd:PRecordDescriptor;
     pf:PfieldDescriptor;
 begin
@@ -651,15 +651,15 @@ var //i: Integer;
     ptn:PGDBObjDevice;
     p:pointer;
     cman:TCableManager;
-    SaveEntUName,SaveCabUName:gdbstring;
-    cablemetric,devicemetric,numingroupmetric:GDBString;
+    SaveEntUName,SaveCabUName:String;
+    cablemetric,devicemetric,numingroupmetric:String;
     ProcessedDevices:TZctnrVectorPGDBaseObjects;
-    name:gdbstring;
+    name:String;
     DC:TDrawContext;
     pcablestartsegmentvarext,pptnownervarext:TVariablesExtender;
 const
       DefNumMetric='default_num_in_group';
-function GetNumUnit(uname:gdbstring):PTUnit;
+function GetNumUnit(uname:String):PTUnit;
 begin
      //result:=nil;
      result:=UManager.internalfindunit(uname);
@@ -805,7 +805,7 @@ begin
   zcRedrawCurrentDrawing;
   result:=cmd_ok;
 end;
-procedure InsertDat2(datname,name:GDBString;var currentcoord:GDBVertex; var root:GDBObjRoot);
+procedure InsertDat2(datname,name:String;var currentcoord:GDBVertex; var root:GDBObjRoot);
 var
    pv:pGDBObjDevice;
    pt:pGDBObjMText;
@@ -849,7 +849,7 @@ begin
 
      currentcoord.y:=currentcoord.y+dy+uy;
 end;
-function InsertDat(datname,sname,ename:GDBString;datcount:Integer;var currentcoord:GDBVertex; var root:GDBObjRoot):pgdbobjline;
+function InsertDat(datname,sname,ename:String;datcount:Integer;var currentcoord:GDBVertex; var root:GDBObjRoot):pgdbobjline;
 var
 //   pv:pGDBObjDevice;
 //   lx,rx,uy,dy:Double;
@@ -924,7 +924,7 @@ var count: Integer;
 
     nodeend,nodestart:PGDBObjDevice;
     isfirst:boolean;
-    startmat,endmat,startname,endname,prevname:gdbstring;
+    startmat,endmat,startname,endname,prevname:String;
 
     //cmlx,cmrx,cmuy,cmdy:Double;
     {lx,rx,}uy,dy:Double;

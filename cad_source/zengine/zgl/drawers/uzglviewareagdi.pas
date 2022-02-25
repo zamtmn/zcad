@@ -38,7 +38,7 @@ type
                       GDIData:TGDIData;
                       procedure CreateDrawer; override;
                       function getParam:pointer; override;
-                      function getParamTypeName:GDBString; override;
+                      function getParamTypeName:String; override;
                       procedure setdeicevariable; override;
                   end;
 const
@@ -79,7 +79,7 @@ function TGDIViewArea.getParam:pointer;
 begin
      result:=@GDIData;
 end;
-function TGDIViewArea.getParamTypeName:GDBString;
+function TGDIViewArea.getParamTypeName:String;
 begin
      result:='PTGDIData';
 end;

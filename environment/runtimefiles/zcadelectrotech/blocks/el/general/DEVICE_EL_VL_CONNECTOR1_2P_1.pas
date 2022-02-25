@@ -10,7 +10,7 @@ usescopy addtocable;
 
 var
 
-T1:GDBString;(*'Группа'*)
+T1:String;(*'Группа'*)
 
 implementation
 

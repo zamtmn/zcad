@@ -2,7 +2,7 @@ unit superline;
 interface
 uses system,cables;
 var
-   NMO_Name:GDBString;(*'Обозначение'*)
+   NMO_Name:String;(*'Обозначение'*)
    Cable_Mounting_Method:TDCableMountingMethod;(*'Метод монтажа'*)
 implementation
 begin

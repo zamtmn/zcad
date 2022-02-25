@@ -8,9 +8,9 @@ usescopy objname;
 
 var
 
-T1:GDBString;(*'Обозначение'*)
-T2:GDBString;(*'Наименование'*)
-T3:GDBString;(*'Примечание'*)
+T1:String;(*'Обозначение'*)
+T2:String;(*'Наименование'*)
+T3:String;(*'Примечание'*)
 
 implementation
 

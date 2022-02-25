@@ -15,7 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
-{$MODE OBJFPC}
+{$MODE OBJFPC}{$H+}
 unit zcchangeundocommand;
 {$INCLUDE zcadconfig.inc}
 interface
@@ -54,7 +54,7 @@ generic TGChangeCommand<_T> =object(TCustomChangeCommand)
 
 {$DEFINE TCommand  := TGDBStringChangeCommand}
 {$DEFINE PTCommand := PTGDBStringChangeCommand}
-{$DEFINE TData     := GDBString}
+{$DEFINE TData     := String}
   {$I TGChangeCommandIMPL.inc}
 
 {$DEFINE TCommand  := TGDBPoinerChangeCommand}
@@ -106,7 +106,7 @@ generic TGChangeCommand<_T> =object(TCustomChangeCommand)
 
 {$DEFINE TCommand  := TGDBStringChangeCommand}
 {$DEFINE PTCommand := PTGDBStringChangeCommand}
-{$DEFINE TData     := GDBString}
+{$DEFINE TData     := String}
   {$I TGChangeCommandIMPL.inc}
 
 {$DEFINE TCommand  := TGDBPoinerChangeCommand}
@@ -194,7 +194,7 @@ end;
 
 {$DEFINE TCommand  := TGDBStringChangeCommand}
 {$DEFINE PTCommand := PTGDBStringChangeCommand}
-{$DEFINE TData     := GDBString}
+{$DEFINE TData     := String}
   {$I TGChangeCommandIMPL.inc}
 
 {$DEFINE TCommand  := TGDBPoinerChangeCommand}

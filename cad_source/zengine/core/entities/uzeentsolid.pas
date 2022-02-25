@@ -54,7 +54,7 @@ GDBObjSolid= object(GDBObjWithLocalCS)
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
                  procedure rtsave(refp:Pointer);virtual;
-                 function GetObjTypeName:GDBString;virtual;
+                 function GetObjTypeName:String;virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
 
                  function CreateInstance:PGDBObjSolid;static;
@@ -134,7 +134,7 @@ begin
      result:=GDBSolidID;
 end;
 procedure GDBObjSolid.LoadFromDXF;
-var //s: GDBString;
+var //s: String;
   byt: Integer;
 begin
   byt:=readmystrtoint(f);
@@ -145,7 +145,7 @@ begin
           if not dxfvertexload(f,11,byt,PInOCS[1]) then
           if not dxfvertexload(f,12,byt,PInOCS[2]) then
           if not dxfvertexload(f,13,byt,PInOCS[3]) then
-          {s := }f.readGDBSTRING;
+          {s := }f.readString;
     byt:=readmystrtoint(f);
   end;
 end;

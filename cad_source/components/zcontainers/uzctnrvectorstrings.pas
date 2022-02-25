@@ -24,7 +24,7 @@ type
 {EXPORT+}
     PTZctnrVectorStrings=^TZctnrVectorStrings;
     {REGISTEROBJECTTYPE TZctnrVectorStrings}
-    TZctnrVectorStrings=object(GZVectorStr{-}<String>{//})(*OpenArrayOfData=GDBString*)
+    TZctnrVectorStrings=object(GZVectorStr{-}<String>{//})(*OpenArrayOfData=String*)
     end;
     {REGISTEROBJECTTYPE TZctnrVectorUnicodeStrings}
     TZctnrVectorUnicodeStrings=object(GZVectorStr{-}<UnicodeString>{//})(*OpenArrayOfData=TZctnrVectorUnicodeString*)

@@ -3,18 +3,18 @@ interface
 uses system;
 usescopy slcabagenmodul;
 var
-   GC_HeadDevice:GDBString;(*'Головное устройство'*)
-   GC_HeadDeviceTemplate:GDBString;(*'Шаблон головного устройства'*)
-   GC_HDShortName:GDBString;(*'Короткое имя головного устройства'*)
-   GC_HDShortNameTemplate:GDBString;(*'Шаблон короткого имени головного устройства'*)
-   GC_HDGroup:GDBString;(*'Группа в головном устройстве'*)
-   GC_HDGroupTemplate:GDBString;(*'Шаблон группы'*)
-   GC_velecSubGroupControlUnit:GDBString;(*'Контрольный узел автопрокладки. ~, - и ! спецсимволы '*)
+   GC_HeadDevice:String;(*'Головное устройство'*)
+   GC_HeadDeviceTemplate:String;(*'Шаблон головного устройства'*)
+   GC_HDShortName:String;(*'Короткое имя головного устройства'*)
+   GC_HDShortNameTemplate:String;(*'Шаблон короткого имени головного устройства'*)
+   GC_HDGroup:String;(*'Группа в головном устройстве'*)
+   GC_HDGroupTemplate:String;(*'Шаблон группы'*)
+   GC_velecSubGroupControlUnit:String;(*'Контрольный узел автопрокладки. ~, - и ! спецсимволы '*)
 
    SerialConnection:Integer;
    GC_NumberInGroup:Integer;(*'Номер устройства в группе'*)
-   GC_InGroup_Metric:GDBString;(*'Метрика нумерации в группе'*)
-   GC_Metric:GDBString;(*'Метрика нумерации'*)
+   GC_InGroup_Metric:String;(*'Метрика нумерации в группе'*)
+   GC_Metric:String;(*'Метрика нумерации'*)
 implementation
 begin
    SerialConnection:=1;

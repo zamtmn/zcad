@@ -82,11 +82,11 @@ end;
   function MyGetValue(key:TKey; out Value:TValue):boolean;
 end;
 {$IFNDEF DELPHI}
-GDBStringHash=class
+StringHash=class
   class function hash(s:AnsiString; n:longint):SizeUInt;
 end;
 {$ENDIF}
-TMyAnsiStringDictionary <TValue> = class(TMyHashMap<AnsiString, TValue{$IFNDEF DELPHI},GDBStringHash{$ENDIF}>)
+TMyAnsiStringDictionary <TValue> = class(TMyHashMap<AnsiString, TValue{$IFNDEF DELPHI},StringHash{$ENDIF}>)
 end;
 implementation
 {$IFDEF DELPHI}
@@ -156,7 +156,7 @@ begin
   for I := 1 to Length(s) do
     Result := ((Result shl 7) or (Result shr 25)) + Ord(s[I]);
 end;
-class function GDBStringHash.hash(s:AnsiString; n:longint):SizeUInt;
+class function StringHash.hash(s:AnsiString; n:longint):SizeUInt;
 begin
      result:=makehash(s) mod SizeUInt(n);
 end;

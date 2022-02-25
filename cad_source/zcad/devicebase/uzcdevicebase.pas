@@ -9,12 +9,12 @@ type
 PDeviceDbBaseObject=^DeviceDbBaseObject;
 {REGISTEROBJECTTYPE DeviceDbBaseObject}
 DeviceDbBaseObject= object(DbBaseObject)
-                       UID:GDBString;(*'**Уникальный идентификатор'*)(*oi_readonly*)
+                       UID:String;(*'**Уникальный идентификатор'*)(*oi_readonly*)
 
-                       NameShortTemplate:GDBString;(*'**Формат короткого названия'*)(*oi_readonly*)
-                       NameTemplate:GDBString;(*'**Формат названия'*)(*oi_readonly*)
-                       NameFullTemplate:GDBString;(*'**Формат полного названия'*)(*oi_readonly*)
-                       UIDTemplate:GDBString;(*'**Формат уникального идентификатора'*)(*oi_readonly*)
+                       NameShortTemplate:String;(*'**Формат короткого названия'*)(*oi_readonly*)
+                       NameTemplate:String;(*'**Формат названия'*)(*oi_readonly*)
+                       NameFullTemplate:String;(*'**Формат полного названия'*)(*oi_readonly*)
+                       UIDTemplate:String;(*'**Формат уникального идентификатора'*)(*oi_readonly*)
                        Variants:{-}TCSVDocument{/Pointer/};(*'Варианты'*)(*oi_readonly*)
                        constructor initnul;
                        procedure FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);virtual;
@@ -23,7 +23,7 @@ DeviceDbBaseObject= object(DbBaseObject)
                  end;
 {REGISTEROBJECTTYPE ElDeviceBaseObject}
 ElDeviceBaseObject= object(DeviceDbBaseObject)
-                                   Pins:GDBString;(*'**Клеммы'*)
+                                   Pins:String;(*'**Клеммы'*)
                                    constructor initnul;
                                    procedure Format;virtual;
                              end;
@@ -37,7 +37,7 @@ CableDeviceBaseObject= object(DeviceDbBaseObject)
 {EXPORT-}
 DeviceManager=object(GDBaseObject)
                     constructor init;
-                    procedure loadfromdir(path: GDBString);
+                    procedure loadfromdir(path: String);
               end;
 thead=record
             offset:integer;
@@ -175,7 +175,7 @@ begin
 end;
 constructor DeviceManager.init;
 var
-   s,ts:gdbstring;
+   s,ts:String;
 begin
      DisableTranslate;
      s:=sysvar.PATH.device_library^;
@@ -217,9 +217,9 @@ begin
                  else
                      ZCMsgCallBackInterface.TextMessage('',TMWOShowError);
 end;
-procedure DeviceManager.loadfromdir(path: GDBString);
+procedure DeviceManager.loadfromdir(path: String);
 //var sr: TSearchRec;
-    //s:gdbstring;
+    //s:String;
 begin
 
   FromDirIterator(utf8tosys(path),'*.pas',firstfilename,loaddev,nil);

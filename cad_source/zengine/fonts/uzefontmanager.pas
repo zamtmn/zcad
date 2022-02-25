@@ -37,20 +37,20 @@ type
     procedure Init(AName:string;AFontFile:string;AParam:TGeneralFontParam);
     constructor Create(AName:string;AFontFile:string;AParam:TGeneralFontParam);
   end;
-  TFontName2FontFileMap=GKey2DataMap<GDBString,TGeneralFontFileDesc(*{$IFNDEF DELPHI},LessGDBString{$ENDIF}*)>;
+  TFontName2FontFileMap=GKey2DataMap<String,TGeneralFontFileDesc(*{$IFNDEF DELPHI},LessString{$ENDIF}*)>;
 
-  TFontLoadProcedure=function(name:GDBString;var pf:PGDBfont):Boolean;
+  TFontLoadProcedure=function(name:String;var pf:PGDBfont):Boolean;
   TFontLoadProcedureData=record
-    FontDesk:GDBString;
+    FontDesk:String;
     FontLoadProcedure:TFontLoadProcedure;
   end;
 
-  TFontExt2LoadProcMap=GKey2DataMap<GDBString,TFontLoadProcedureData(*{$IFNDEF DELPHI},LessGDBString{$ENDIF}*)>;
+  TFontExt2LoadProcMap=GKey2DataMap<String,TFontLoadProcedureData(*{$IFNDEF DELPHI},LessString{$ENDIF}*)>;
 {Export+}
   PGDBFontRecord=^GDBFontRecord;
   {REGISTERRECORDTYPE GDBFontRecord}
   GDBFontRecord = record
-    Name: GDBString;
+    Name: String;
     Pfont: Pointer;
   end;
   PGDBFontManager=^GDBFontManager;
@@ -67,16 +67,16 @@ type
     procedure EnumerateFontFiles;
     procedure EnumerateTTFFontFile(filename:String;pdata:pointer);
     procedure EnumerateSHXFontFile(filename:String;pdata:pointer);
-    //function FindFonf(FontName:GDBString):Pointer;
+    //function FindFonf(FontName:String):Pointer;
     {procedure freeelement(p:Pointer);virtual;}
   end;
 {Export-}
 var
    FontManager:GDBFontManager;
    FontExt2LoadProc:TFontExt2LoadProcMap;
-   sysvarPATHFontsPath:GDBString;
-   sysvarAlternateFont:GDBString='GEWIND.SHX';
-procedure RegisterFontLoadProcedure(const _FontExt,_FontDesk:GDBString;
+   sysvarPATHFontsPath:String;
+   sysvarAlternateFont:String='GEWIND.SHX';
+procedure RegisterFontLoadProcedure(const _FontExt,_FontDesk:String;
                                     const _FontLoadProcedure:TFontLoadProcedure);
 implementation
 
@@ -103,7 +103,7 @@ begin
   Param:=AParam;
 end;
 
-procedure RegisterFontLoadProcedure(const _FontExt,_FontDesk:GDBString;
+procedure RegisterFontLoadProcedure(const _FontExt,_FontDesk:String;
                                     const _FontLoadProcedure:TFontLoadProcedure);
 var
    EntInfoData:TFontLoadProcedureData;
@@ -198,9 +198,9 @@ end;
 function GDBFontManager.addFonfByFile(FontPathName:String):PGDBfont;
 var
   p:PGDBfont;
-  FontName,FontExt:GDBString;
+  FontName,FontExt:String;
   FontLoaded:Boolean;
-  _key:gdbstring;
+  _key:String;
   data:TFontLoadProcedureData;
       //ir:itrec;
 begin

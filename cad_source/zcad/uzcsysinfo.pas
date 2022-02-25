@@ -76,7 +76,7 @@ end;
 procedure ProcessParamStr;
 var
    i:integer;
-   param,paramUC:GDBString;
+   param,paramUC:String;
    ll:TLogLevel;
 const
   LogEnableModulePrefix='LEM_';

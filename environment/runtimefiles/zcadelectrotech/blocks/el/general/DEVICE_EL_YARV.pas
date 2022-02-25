@@ -3,9 +3,9 @@ interface
 uses system,devices;
 usescopy blocktype;
 var
-   NMO_Template:GDBString;(*'Шаблон Обозначения'*) 
-   NMO_Name:GDBString;(*'Обозначение'*)
-   NMO_BaseName:GDBString;(*'Короткое Имя'*)
+   NMO_Template:String;(*'Шаблон Обозначения'*) 
+   NMO_Name:String;(*'Обозначение'*)
+   NMO_BaseName:String;(*'Короткое Имя'*)
    NameNumber:Integer;(*'Номер'*)
 
 
@@ -17,11 +17,11 @@ var
    Voltage:TVoltage;(*'Напряжение питания'*)
    Phase:TPhase;(*'Фаза'*)
 
-   DB_link:GDBString;(*'Материал'*)
+   DB_link:String;(*'Материал'*)
    AmountI:Integer;(*'Количество'*)
    
-   GC_HeadDevice:GDBString;
-   GC_HDShortName:GDBString;
+   GC_HeadDevice:String;
+   GC_HDShortName:String;
    GC_HDGroup:Integer;
 
    SerialConnection:Integer;

@@ -28,7 +28,7 @@ type
 PGDBObjRotatedDimension=^GDBObjRotatedDimension;
 {REGISTEROBJECTTYPE GDBObjRotatedDimension}
 GDBObjRotatedDimension= object(GDBObjAlignedDimension)
-                        function GetObjTypeName:GDBString;virtual;
+                        function GetObjTypeName:String;virtual;
                         procedure CalcDNVectors;virtual;
                         function Clone(own:Pointer):PGDBObjEntity;virtual;
                         function P13ChangeTo(tv:GDBVertex):GDBVertex;virtual;
@@ -70,12 +70,12 @@ begin
                            dxfGDBIntegerout(outhandle,70,0+128)
                        else
                            dxfGDBIntegerout(outhandle,70,0);
-  dxfGDBStringout(outhandle,3,PDimStyle^.Name);
-  dxfGDBStringout(outhandle,100,'AcDbAlignedDimension');
+  dxfStringout(outhandle,3,PDimStyle^.Name);
+  dxfStringout(outhandle,100,'AcDbAlignedDimension');
   dxfvertexout(outhandle,13,DimData.P13InWCS);
   dxfvertexout(outhandle,14,DimData.P14InWCS);
   dxfDoubleout(outhandle,50,vertexangle(createvertex2d(0,0),createvertex2d(vectorD.x,vectorD.y))*180/pi);
-  dxfGDBStringout(outhandle,100,'AcDbRotatedDimension');
+  dxfStringout(outhandle,100,'AcDbRotatedDimension');
 end;
 procedure GDBObjRotatedDimension.transform;
 var

@@ -158,7 +158,7 @@ var
   pobj:pGDBObjEntity;
   ir:itrec;
   pv:pvardesk;
-  vv:gdbstring;
+  vv:String;
 begin
   if (valkey<>'')and(pcurcontext<>nil) then
   begin

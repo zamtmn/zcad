@@ -49,10 +49,10 @@ GDBTextStyleArray= object(GDBNamedObjectsArray{-}<PGDBTextStyle,GDBTextStyle>{//
                     constructor init(m:Integer);
                     constructor initnul;
 
-                    function addstyle(StyleName,AFontFile,AFontFamily:GDBString;tp:GDBTextStyleProp;USedInLT:Boolean):PGDBTextStyle;
-                    function setstyle(StyleName,AFontFile,AFontFamily:GDBString;tp:GDBTextStyleProp;USedInLT:Boolean):PGDBTextStyle;
-                    procedure internalsetstyle(var style:GDBTextStyle;AFontFile,AFontFamily:GDBString;tp:GDBTextStyleProp;USedInLT:Boolean);
-                    function FindStyle(StyleName:GDBString;ult:Boolean):PGDBTextStyle;
+                    function addstyle(StyleName,AFontFile,AFontFamily:String;tp:GDBTextStyleProp;USedInLT:Boolean):PGDBTextStyle;
+                    function setstyle(StyleName,AFontFile,AFontFamily:String;tp:GDBTextStyleProp;USedInLT:Boolean):PGDBTextStyle;
+                    procedure internalsetstyle(var style:GDBTextStyle;AFontFile,AFontFamily:String;tp:GDBTextStyleProp;USedInLT:Boolean);
+                    function FindStyle(StyleName:String;ult:Boolean):PGDBTextStyle;
                     procedure freeelement(PItem:PT);virtual;
               end;
 {EXPORT-}
@@ -95,7 +95,7 @@ begin
      end;
   count:=0;
 end;}
-{function GDBLayerArray.getLayerIndex(name: GDBString): Integer;
+{function GDBLayerArray.getLayerIndex(name: String): Integer;
 var
   i: Integer;
 begin
@@ -107,7 +107,7 @@ begin
       exit;
     end;
 end;}
-procedure GDBTextStyleArray.internalsetstyle(var style:GDBTextStyle;AFontFile,AFontFamily:GDBString;tp:GDBTextStyleProp;USedInLT:Boolean);
+procedure GDBTextStyleArray.internalsetstyle(var style:GDBTextStyle;AFontFile,AFontFamily:String;tp:GDBTextStyleProp;USedInLT:Boolean);
 begin
   style.FontFile:=AFontFile;
   style.FontFamily:=AFontFamily;
@@ -127,7 +127,7 @@ begin
   style.prop:=tp;
 end;
 
-function GDBTextStyleArray.setstyle(StyleName,AFontFile,AFontFamily:GDBString;tp:GDBTextStyleProp;USedInLT:Boolean):PGDBTextStyle;
+function GDBTextStyleArray.setstyle(StyleName,AFontFile,AFontFamily:String;tp:GDBTextStyleProp;USedInLT:Boolean):PGDBTextStyle;
 var
    ps:PGDBTextStyle;
 begin
@@ -136,7 +136,7 @@ begin
   if ps<>nil then
     internalsetstyle(ps^,AFontFile,AFontFamily,tp,USedInLT);
 end;
-function GDBTextStyleArray.addstyle(StyleName,AFontFile,AFontFamily:GDBString;tp:GDBTextStyleProp;USedInLT:Boolean):{Integer}PGDBTextStyle;
+function GDBTextStyleArray.addstyle(StyleName,AFontFile,AFontFamily:String;tp:GDBTextStyleProp;USedInLT:Boolean):{Integer}PGDBTextStyle;
 var ts:PGDBTextStyle;
 begin
   Getmem(pointer(ts),sizeof(GDBTextStyle));

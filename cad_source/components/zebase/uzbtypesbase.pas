@@ -29,10 +29,7 @@ SizeInt=Integer;
 DWord=LongWord;
 {$ENDIF}
 {EXPORT+}
-PGDBString=^GDBString;
-{-}GDBString=type ansistring;{/GDBString=string;/}
-
-
+PString=^String;
 PAnsiString=^AnsiString;
 PBoolean=^Boolean;
 PInteger=^Integer;

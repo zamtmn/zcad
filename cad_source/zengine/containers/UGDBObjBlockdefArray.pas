@@ -31,10 +31,10 @@ GDBObjBlockdefArray= object(GZVectorObjects{-}<GDBObjBlockdef>{//})(*OpenArrayOf
                       constructor init(m:Integer);
                       constructor initnul;
 
-                      function getindex(name:GDBString):Integer;virtual;
-                      function getblockdef(name:GDBString):PGDBObjBlockdef;virtual;
+                      function getindex(name:String):Integer;virtual;
+                      function getblockdef(name:String):PGDBObjBlockdef;virtual;
                       //function loadblock(filename,bname:pansichar;pdrawing:Pointer):Integer;virtual;
-                      function create(name:GDBString):PGDBObjBlockdef;virtual;
+                      function create(name:String):PGDBObjBlockdef;virtual;
                       procedure freeelement(PItem:PT);virtual;
                       procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                       procedure Grow(newmax:Integer=0);virtual;

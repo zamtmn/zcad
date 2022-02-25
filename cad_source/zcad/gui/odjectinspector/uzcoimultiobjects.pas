@@ -180,7 +180,7 @@ begin
     pentity:=drawings.GetCurrentROOT.ObjArray.iterate(EntIterator);
   until pentity=nil;
 end;
-function ComparePropAndVarNames(pname,vname:GDBString):boolean;
+function ComparePropAndVarNames(pname,vname:String):boolean;
 begin
      if pname=vname then
                         result:=true
@@ -214,7 +214,7 @@ procedure TMSEditor.processProperty(const ID:TObjID; const pdata: pointer; const
 var
    ChangedData:TChangedData;
    CanChangeValue:Boolean;
-   msg,entname:gdbstring;
+   msg,entname:String;
    entinfo:TEntInfoData;
 begin
      begin
@@ -381,7 +381,7 @@ var
     pv:pGDBObjEntity;
     psd:PSelectedObjDesc;
     pair:TObjID2Counter.TDictionaryPair;
-    s:GDBString;
+    s:String;
     entinfo:TEntInfoData;
     ObjIDWithExtender:TObjIDWithExtender;
     counter:integer;

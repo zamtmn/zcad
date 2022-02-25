@@ -33,20 +33,20 @@ type
                        currentunit:PTUnit;
                        NextUnitManager:PTUnitManager;
                        constructor init;
-                       function CreateUnit(PPaths:GDBString;TranslateFunc:TTranslateFunction;UName:GDBString):PTUnit;
-                       function loadunit(PPaths:GDBString;TranslateFunc:TTranslateFunction;fname:GDBString; pcreatedunit:PTSimpleUnit):ptunit;virtual;
-                       function parseunit(PPaths:GDBString;TranslateFunc:TTranslateFunction;var f: TZctnrVectorBytes; pcreatedunit:PTSimpleUnit):ptunit;virtual;
-                       function changeparsemode(PPaths:GDBString;TranslateFunc:TTranslateFunction;newmode:Integer;var mode:Integer):pasparsemode;
-                       function findunit(PPaths:GDBString;TranslateFunc:TTranslateFunction;uname:GDBString):ptunit;virtual;
-                       function FindOrCreateEmptyUnit(uname:GDBString):ptunit;virtual;
-                       function internalfindunit(uname:GDBString):ptunit;virtual;
+                       function CreateUnit(PPaths:String;TranslateFunc:TTranslateFunction;UName:String):PTUnit;
+                       function loadunit(PPaths:String;TranslateFunc:TTranslateFunction;fname:String; pcreatedunit:PTSimpleUnit):ptunit;virtual;
+                       function parseunit(PPaths:String;TranslateFunc:TTranslateFunction;var f: TZctnrVectorBytes; pcreatedunit:PTSimpleUnit):ptunit;virtual;
+                       function changeparsemode(PPaths:String;TranslateFunc:TTranslateFunction;newmode:Integer;var mode:Integer):pasparsemode;
+                       function findunit(PPaths:String;TranslateFunc:TTranslateFunction;uname:String):ptunit;virtual;
+                       function FindOrCreateEmptyUnit(uname:String):ptunit;virtual;
+                       function internalfindunit(uname:String):ptunit;virtual;
                        procedure SetNextManager(PNM:PTUnitManager);
-                       procedure LoadFolder(PPaths:GDBString;TranslateFunc:TTranslateFunction;path: GDBString);
+                       procedure LoadFolder(PPaths:String;TranslateFunc:TTranslateFunction;path: String);
 
                        //procedure AfterObjectDone(p:PGDBaseObject);virtual;
                        procedure free;virtual;
 
-                       procedure CreateExtenalSystemVariable(PPaths:GDBString;sysunitname:GDBString;TranslateFunc:TTranslateFunction;varname,vartype:GDBString;pinstance:Pointer);
+                       procedure CreateExtenalSystemVariable(PPaths:String;sysunitname:String;TranslateFunc:TTranslateFunction;varname,vartype:String;pinstance:Pointer);
                  end;
 {EXPORT-}
 var
@@ -83,7 +83,7 @@ const
                             Size:sizeof(Pointer);
                             //Attributes:{FA_HIDDEN_IN_OBJ_INSP or }FA_READONLY
                             );
-procedure TUnitManager.CreateExtenalSystemVariable(PPaths:GDBString;sysunitname:GDBString;TranslateFunc:TTranslateFunction;varname,vartype:GDBString;pinstance:Pointer);
+procedure TUnitManager.CreateExtenalSystemVariable(PPaths:String;sysunitname:String;TranslateFunc:TTranslateFunction;varname,vartype:String;pinstance:Pointer);
 begin
   //TODO: убрать такуюже шнягу из urtl, сделать создание SysUnit в одном месте
   if SysUnit=nil then
@@ -134,7 +134,7 @@ function TUnitManager.internalfindunit;
 var
   p:PTUnit;
   ir:itrec;
-  //nfn:gdbstring;
+  //nfn:String;
   //tcurrentunit:PTUnit;
 begin
   p:=beginiterate(ir);
@@ -152,7 +152,7 @@ begin
   if NextUnitManager<>NIL then
                               result:=NextUnitManager^.internalfindunit(uname);
 end;
-function TUnitManager.FindOrCreateEmptyUnit(uname:GDBString):ptunit;
+function TUnitManager.FindOrCreateEmptyUnit(uname:String):ptunit;
 begin
    result:=internalfindunit(uname);
    if result=nil then
@@ -166,7 +166,7 @@ function TUnitManager.findunit;
 var
   //p:PTUnit;
   //ir:itrec;
-  nfn:gdbstring;
+  nfn:String;
   tcurrentunit:PTUnit;
 begin
   {p:=beginiterate(ir);
@@ -196,9 +196,9 @@ begin
                     end;                           
   
 end;
-function TUnitManager.changeparsemode(PPaths:GDBString;TranslateFunc:TTranslateFunction;newmode:Integer;var mode:Integer):pasparsemode;
+function TUnitManager.changeparsemode(PPaths:String;TranslateFunc:TTranslateFunction;newmode:Integer;var mode:Integer):pasparsemode;
 var i:Integer;
-    //line:GDBString;
+    //line:String;
     //fieldgdbtype: gdbtypedesk;
     pfu:pointer;
 begin
@@ -238,7 +238,7 @@ begin
   f.done;
   //result:=pointer(pcreatedunit);
 end;
-function TUnitManager.CreateUnit(PPaths:GDBString;TranslateFunc:TTranslateFunction;UName:GDBString):PTUnit;
+function TUnitManager.CreateUnit(PPaths:String;TranslateFunc:TTranslateFunction;UName:String):PTUnit;
 var
   pfu:PTUnit;
 begin
@@ -263,7 +263,7 @@ end;
 
 function TUnitManager.parseunit;
 var
-  varname, vartype,vuname, line,oldline,unitname: GDBString;
+  varname, vartype,vuname, line,oldline,unitname: String;
   vd: vardesk;
   //parsepos:Integer;
   parseresult,subparseresult:PTZctnrVectorStrings;
@@ -271,7 +271,7 @@ var
   parseerror,subparseerror:Boolean;
   i:Integer;
   {kolvo,}typ:Integer;
-  typename, {fieldname, fieldvalue,} fieldtype, GDBStringtypearray {sub,} {indmins, indmaxs,} {,arrind1}: GDBString;
+  typename, {fieldname, fieldvalue,} fieldtype, Stringtypearray {sub,} {indmins, indmaxs,} {,arrind1}: String;
   fieldgdbtype:pUserTypeDescriptor;
   fieldoffset: SmallInt;
   //handle,poz, kolvo, i,oldcount: Integer;
@@ -286,7 +286,7 @@ var
   p,pfu:pointer;
   unitpart:TunitPart;
     ir:itrec;
-  //tempstring:gdbstring;
+  //tempstring:String;
   doexit:Boolean;
 begin
   unitpart:=tnothing;
@@ -453,9 +453,9 @@ begin
                                                   if typename='PTUnitManager' then
                                                                                   typename:=typename;
                                                   Getmem(Pointer(etd),sizeof(GDBPointerDescriptor));
-                                                  PGDBPointerDescriptor(etd)^.init(pGDBString(parseresult^.getDataMutable(1))^,typename,currentunit);
-                                                  //GDBStringtypearray := chr(TGDBPointer)+pGDBString(parseresult^.getelement(1))^;
-                                                  GDBStringtypearray:='';
+                                                  PGDBPointerDescriptor(etd)^.init(pString(parseresult^.getDataMutable(1))^,typename,currentunit);
+                                                  //Stringtypearray := chr(TGDBPointer)+pString(parseresult^.getelement(1))^;
+                                                  Stringtypearray:='';
                                                   fieldoffset := sizeof(pointer);
                                              end;
                                  recordtype,packedrecordtype:begin
@@ -469,11 +469,11 @@ begin
                                                   if (typename) = 'tmemdeb'
                                                   then
                                                        typename:=typename;
-                                                  //GDBStringtypearray := chr(Trecord);
+                                                  //Stringtypearray := chr(Trecord);
                                                   fieldoffset:=0;
                                                   Getmem(Pointer(etd),sizeof(RecordDescriptor));
                                                   PRecordDescriptor(etd)^.init(typename,currentunit);
-                                                  ObjOrRecordRead(TranslateFunc,f,line,GDBStringtypearray,fieldoffset,Pointer(etd));
+                                                  ObjOrRecordRead(TranslateFunc,f,line,Stringtypearray,fieldoffset,Pointer(etd));
                                              end;
                                  objecttype,packedobjecttype:begin
                                                   {FPVMT}
@@ -489,8 +489,8 @@ begin
                                                        typename:=typename;
                                                   Getmem(Pointer(etd),sizeof(ObjectDescriptor));
                                                   PObjectDescriptor(etd)^.init(typename,currentunit);
-                                                  //GDBStringtypearray := chr(TGDBobject);
-                                                  GDBStringtypearray:='';
+                                                  //Stringtypearray := chr(TGDBobject);
+                                                  Stringtypearray:='';
                                                   if parseresult<>nil then begin parseresult^.Done;Freemem(Pointer(parseresult));parseresult:=nil;end;
                                                   if (typename) = 'GDBaseObject'
                                                   then
@@ -510,7 +510,7 @@ begin
                                                                 PObjectDescriptor(etd)^.AddConstField(FPVMT);
 
                                                                 fieldgdbtype := Types.TypeName2TypeDesc('Pointer');
-                                                                //GDBStringtypearray := GDBStringtypearray + 'PVMT'+ #0+ 'C' + pac_GDBWord_to_GDBString(fieldgdbtype.gdbtypecustom) + pac_lGDBWord_to_GDBString(fieldgdbtype.sizeinmem);
+                                                                //Stringtypearray := Stringtypearray + 'PVMT'+ #0+ 'C' + pac_GDBWord_to_String(fieldgdbtype.gdbtypecustom) + pac_lGDBWord_to_String(fieldgdbtype.sizeinmem);
                                                                 fieldoffset := {fieldoffset + }fieldgdbtype.sizeinmem
                                                            end
                                                       else*)
@@ -520,7 +520,7 @@ begin
                                                                  fieldgdbtype:=nil;
                                                                fieldgdbtype := currentunit.TypeName2PTD(parseresult^.getData(0));
                                                                //programlog.logoutstr(parseresult^.getData(0),0);
-                                                               //GDBStringtypearray :=ptypedesk(Types.exttype.getelement(fieldgdbtype.gdbtypecustom)^)^.tdesk;
+                                                               //Stringtypearray :=ptypedesk(Types.exttype.getelement(fieldgdbtype.gdbtypecustom)^)^.tdesk;
                                                                PObjectDescriptor(fieldgdbtype)^.CopyTo(PObjectDescriptor(etd));
                                                                PObjectDescriptor(etd)^.Parent:=PObjectDescriptor(fieldgdbtype);
                                                                fieldoffset:=PUserTypeDescriptor(fieldgdbtype)^.SizeInBytes;
@@ -535,7 +535,7 @@ begin
                                                   end;
                                                   if parseresult<>nil then begin parseresult^.Done;Freemem(Pointer(parseresult));parseresult:=nil;end;
                                                   //etd.typeobj:=nil;
-                                                  ObjOrRecordRead(TranslateFunc,f,line,GDBStringtypearray,fieldoffset,Pointer(etd));
+                                                  ObjOrRecordRead(TranslateFunc,f,line,Stringtypearray,fieldoffset,Pointer(etd));
                                                   PObjectDescriptor(etd)^.SimpleMenods.Shrink;
                                              end;
                               proceduraltype:begin
@@ -543,7 +543,7 @@ begin
                                                   addtype:=false;
                                              end;
                                   arraytype,packedarraytype:begin
-                                                  typename:=pGDBString(parseresult^.getDataMutable(0))^;
+                                                  typename:=pString(parseresult^.getDataMutable(0))^;
                                                   if typ<>packedarraytype then
                                                                               begin
                                                                                //ShowError('Array "'+typename+'" not packed');
@@ -555,13 +555,13 @@ begin
                                                   if parseresult<>nil then begin parseresult^.Done;Freemem(Pointer(parseresult));parseresult:=nil;end;
                                                   parseresult:=runparser('_softspace'#0'=[_intdiapazons_cs'#0'_softspace'#0'=]',line,parseerror);
                                                   subparseresult:=runparser('_softspace'#0'=o=f_softspace'#0'_identifier'#0'_softend'#0,line,parseerror);
-                                                  //GDBStringtypearray := chr(Tarray);
-                                                  GDBStringtypearray:='';
+                                                  //Stringtypearray := chr(Tarray);
+                                                  Stringtypearray:='';
                                                   fieldtype:=subparseresult^.getData(0);
                                                   fieldgdbtype := currentunit.TypeName2PTD(fieldtype);
                                                   Getmem(Pointer(etd),sizeof(ArrayDescriptor));
                                                   PArrayDescriptor(etd)^.init(fieldgdbtype,typename,currentunit);
-                                                  //GDBStringtypearray := GDBStringtypearray + pac_GDBWord_to_GDBString(fieldgdbtype.TypeIndex) + pac_lGDBWord_to_GDBString(fieldgdbtype.sizeinmem);
+                                                  //Stringtypearray := Stringtypearray + pac_GDBWord_to_String(fieldgdbtype.TypeIndex) + pac_lGDBWord_to_String(fieldgdbtype.sizeinmem);
                                                   razmer := 1;
                                                   fieldoffset:=0;
                                                   //arrind1 := '';
@@ -571,13 +571,13 @@ begin
                                                        indmin := strtoint(parseresult^.getData(i*2));
                                                        indcount := indcount - indmin + 1;
                                                        razmer := razmer * indcount;
-                                                       //arrind1 := arrind1 + pac_lGDBWord_to_GDBString(indmin) + pac_lGDBWord_to_GDBString(indcount);
+                                                       //arrind1 := arrind1 + pac_lGDBWord_to_String(indmin) + pac_lGDBWord_to_String(indcount);
 
                                                        indexx.IndexMin:=indmin;
                                                        indexx.IndexCount:=indcount;
                                                        PArrayDescriptor(etd)^.AddIndex(indexx);
                                                   end;
-                                                  //GDBStringtypearray := GDBStringtypearray + pac_GDBWord_to_GDBString(parseresult^.Count div 2) + arrind1;
+                                                  //Stringtypearray := Stringtypearray + pac_GDBWord_to_String(parseresult^.Count div 2) + arrind1;
                                                   fieldoffset := razmer*fieldgdbtype.SizeInBytes;
                                                   if subparseresult<>nil then begin subparseresult^.Done;Freemem(Pointer(subparseresult));subparseresult:=nil;end;
                                                   if parseresult<>nil then begin parseresult^.Done;Freemem(Pointer(parseresult));parseresult:=nil;end;
@@ -586,7 +586,7 @@ begin
                                                   (*currvalue:=0;
                                                   maxvalue:=0;
 
-                                                  typename:=pGDBString(parseresult^.getelement(0))^;
+                                                  typename:=pString(parseresult^.getelement(0))^;
                                                   repeat
                                                   if parseresult<>nil then begin parseresult^.Done;Freemem(Pointer(parseresult));end;
                                                   parseresult:=runparser('_identifier'#0,line,parseerror);
@@ -628,11 +628,11 @@ begin
                                                      penu:=enumobjlist.iterate;
                                               until penu=nil;
                                              enumobjlist.clear;
-                                             GDBStringtypearray := chr(Tenum);
+                                             Stringtypearray := chr(Tenum);
                                              fieldoffset:=maxvalue;*)
                                                   currvalue:=0;
                                                   maxvalue:=0;
-                                                  typename:=pGDBString(parseresult^.getDataMutable(0))^;
+                                                  typename:=pString(parseresult^.getDataMutable(0))^;
                                                   if typename='TInsUnits' then
                                                                                 typename:=typename;
                                                   repeat
@@ -689,8 +689,8 @@ begin
                                                      penu:=enumobjlist.iterate(ir);
                                               until penu=nil;
                                              enumobjlist.clear;
-                                             //GDBStringtypearray := chr(Tenum);
-                                             GDBStringtypearray:='';
+                                             //Stringtypearray := chr(Tenum);
+                                             Stringtypearray:='';
                                              fieldoffset:=maxvalue;
 
                                              end;
@@ -712,7 +712,7 @@ if addtype then
         //Pointer(etd.tdesk):=nil;
         if fieldoffset <> dynamicoffset then etd^.SizeInBytes := fieldoffset
                                         else etd^.SizeInBytes := 0;
-        //etd.tdesk := GDBStringtypearray;
+        //etd.tdesk := Stringtypearray;
         //etd.name := typename;
 
         //p:=@etd;
@@ -762,13 +762,13 @@ if addtype then
                                 subparseresult:=runparser('_softspace'#0'=(=*_String'#0'=*=)'#0,line,subparseerror);
                                 vuname:='';
                                 if (subparseresult<>nil)and subparseerror then
-                                                                              vuname:=pGDBString(subparseresult^.getDataMutable(0))^;
+                                                                              vuname:=pString(subparseresult^.getDataMutable(0))^;
                                 if (parseresult<>nil)and parseerror then
                                 begin
-                                     vartype:=pGDBString(parseresult^.getDataMutable(parseresult.Count-1))^;
+                                     vartype:=pString(parseresult^.getDataMutable(parseresult.Count-1))^;
                                      for i:=0 to parseresult.Count-2 do
                                      begin
-                                     varname:=pGDBString(parseresult^.getDataMutable(i))^;
+                                     varname:=pString(parseresult^.getDataMutable(i))^;
                                      if varname='INTF_ObjInsp_WhiteBackground' then
                                                             varname:=varname;
                                      if currentunit^.FindVariable(varname)=nil then
@@ -804,10 +804,10 @@ if addtype then
                                                    end;
                                 if (parseresult<>nil)and parseerror then
                                 begin
-                                     vartype:=pGDBString(parseresult^.getDataMutable(parseresult.Count-1))^;
+                                     vartype:=pString(parseresult^.getDataMutable(parseresult.Count-1))^;
                                      for i:=0 to parseresult.Count-2 do
                                      begin
-                                     varname:=pGDBString(parseresult^.getDataMutable(i))^;
+                                     varname:=pString(parseresult^.getDataMutable(i))^;
                                      currentunit^.setvardesc(vd, varname,'', vartype);
                                      currentunit^.InterfaceVariables.createvariable(vd.name, vd);
                                      end;
@@ -825,7 +825,7 @@ begin
      inherited init(500);
      NextUnitManager:=nil;
 end;
-procedure TUnitManager.LoadFolder(PPaths:GDBString;TranslateFunc:TTranslateFunction;path: GDBString);
+procedure TUnitManager.LoadFolder(PPaths:String;TranslateFunc:TTranslateFunction;path: String);
 var
   sr: TSearchRec;
 begin

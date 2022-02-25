@@ -54,24 +54,24 @@ TZCADDrawingsManager= object(TZctnrVectorPGDBaseObjects)
                     procedure freedwgvars;
                     procedure SetCurrentDWG(PDWG:PTAbstractDrawing);
 
-                    function CreateDWG(preloadedfile1,preloadedfile2:GDBString):PTZCADDrawing;
+                    function CreateDWG(preloadedfile1,preloadedfile2:String):PTZCADDrawing;
                     //function CreateSimpleDWG:PTSimpleDrawing;virtual;
                     //procedure eraseobj(ObjAddr:PGDBaseObject);virtual;
                     procedure RemoveData(const data:PGDBaseObject);virtual;
 
                     procedure CopyBlock(_from,_to:PTSimpleDrawing;_source:PGDBObjBlockdef);
                     function CopyEnt(_from,_to:PTSimpleDrawing;_source:PGDBObjEntity):PGDBObjEntity;
-                    procedure AddBlockFromDBIfNeed(_to:{PTSimpleDrawing}PTDrawingDef;name:GDBString);
+                    procedure AddBlockFromDBIfNeed(_to:{PTSimpleDrawing}PTDrawingDef;name:String);
                     //procedure rtmodify(obj:PGDBObjEntity;md:Pointer;dist,wc:gdbvertex;save:Boolean);virtual;
                     function FindOneInArray(const entities:GDBObjOpenArrayOfPV;objID:Word; InOwner:Boolean):PGDBObjEntity;
-                    function FindEntityByVar(objID:Word;vname,vvalue:GDBString):PGDBObjEntity;
+                    function FindEntityByVar(objID:Word;vname,vvalue:String):PGDBObjEntity;
                     procedure FindMultiEntityByType(Filter:TEntsTypeFilter;var entarray:TZctnrVectorPGDBaseObjects);
-                    procedure FindMultiEntityByVar(objID:Word;vname,vvalue:GDBString;var entarray:TZctnrVectorPGDBaseObjects);
-                    procedure FindMultiEntityByVar2(objID:Word;vname:GDBString;var entarray:TZctnrVectorPGDBaseObjects);
+                    procedure FindMultiEntityByVar(objID:Word;vname,vvalue:String;var entarray:TZctnrVectorPGDBaseObjects);
+                    procedure FindMultiEntityByVar2(objID:Word;vname:String;var entarray:TZctnrVectorPGDBaseObjects);
                     procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
                     //procedure AddEntToCurrentDrawingWithUndo(PEnt:PGDBObjEntity);
-                    function GetDefaultDrawingName:GDBString;
-                    function FindDrawingByName(DWGName:GDBString):PTSimpleDrawing;
+                    function GetDefaultDrawingName:String;
+                    function FindDrawingByName(DWGName:String):PTSimpleDrawing;
                     function GetUnitsFormat:TzeUnitsFormat;
                     procedure SetUnitsFormat(f:TzeUnitsFormat);
                     procedure redrawoglwnd(Sender:TObject;GUIAction:TZMessageID);
@@ -85,13 +85,13 @@ var drawings: TZCADDrawingsManager;
     LtypeManager:GDBLtypeArray;
 procedure CalcZ(z:Double);
 procedure RemapAll(_from,_to:PTSimpleDrawing;_source,_dest:PGDBObjEntity);
-procedure startup(preloadedfile1,preloadedfile2:GDBString);
+procedure startup(preloadedfile1,preloadedfile2:String);
 procedure finalize;
 procedure SetObjCreateManipulator(out domethod,undomethod:tmethod);
 procedure clearotrack;
 procedure clearcp;
 //procedure redrawoglwnd(GUIAction:TZMessageID);
-function dwgSaveDXFDPAS(s:gdbstring;dwg:PTSimpleDrawing):Integer;
+function dwgSaveDXFDPAS(s:String;dwg:PTSimpleDrawing):Integer;
 function dwgQSave_com(dwg:PTSimpleDrawing):Integer;
 function SetCurrentDWG(PDWG:pointer):pointer;
 //procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
@@ -119,9 +119,9 @@ begin
     end;
   end;
 end;
-function TZCADDrawingsManager.GetDefaultDrawingName:GDBString;
+function TZCADDrawingsManager.GetDefaultDrawingName:String;
 var
-    OldName:GDBString;
+    OldName:String;
     LoopCounter:Integer;
 begin
   OldName:='';
@@ -157,7 +157,7 @@ begin
      if CurrentDWG<>nil then
                             CurrentDWG.SetUnitsFormat(f);
 end;
-function TZCADDrawingsManager.FindDrawingByName(DWGName:GDBString):PTSimpleDrawing;
+function TZCADDrawingsManager.FindDrawingByName(DWGName:String):PTSimpleDrawing;
 var
   ir:itrec;
 begin
@@ -184,7 +184,7 @@ end;
       end;
  end;}
 
- function dwgSaveDXFDPAS(s:gdbstring;dwg:PTSimpleDrawing):Integer;
+ function dwgSaveDXFDPAS(s:String;dwg:PTSimpleDrawing):Integer;
  var
     mem:TZctnrVectorBytes;
     pu:ptunit;
@@ -202,7 +202,7 @@ end;
                    result:=cmd_error;
  end;
  function dwgQSave_com(dwg:PTSimpleDrawing):Integer;
- var s1:GDBString;
+ var s1:String;
  begin
       begin
            if dwg.GetFileName=rsUnnamedWindowTitle then
@@ -504,7 +504,7 @@ begin
                                         end;
 
 end;
-function TZCADDrawingsManager.CreateDWG(preloadedfile1,preloadedfile2:GDBString):PTZCADDrawing;
+function TZCADDrawingsManager.CreateDWG(preloadedfile1,preloadedfile2:String):PTZCADDrawing;
 var
    ptd:PTsimpleDrawing;
 begin
@@ -585,10 +585,10 @@ begin
     // Freemem(pointer(currentdwg));
      ProjectUnits.done;
 end;
-procedure TZCADDrawingsManager.AddBlockFromDBIfNeed(_to:{PTSimpleDrawing}PTDrawingDef;name:GDBString);
+procedure TZCADDrawingsManager.AddBlockFromDBIfNeed(_to:{PTSimpleDrawing}PTDrawingDef;name:String);
 var
    {_dest,}td:PGDBObjBlockdef;
-   //tn:gdbstring;
+   //tn:String;
    //ir:itrec;
    //pvisible,pvisible2:PGDBObjEntity;
   // pl:PGDBLayerProp;
@@ -614,7 +614,7 @@ function createtstylebyindex(_from,_to:PTSimpleDrawing;oldti:{TArrayIndex}PGDBTe
 var
    //{_dest,}td:PGDBObjBlockdef;
    newti:{TArrayIndex}PGDBTextStyle;
-   tsname:gdbstring;
+   tsname:String;
    poldstyle,pnevstyle:PGDBTextStyle;
    //ir:itrec;
    //{pvisible,}pvisible2:PGDBObjEntity;
@@ -635,7 +635,7 @@ procedure createtstyleifneed(_from,_to:PTSimpleDrawing;_source,_dest:PGDBObjEnti
 //var
    //{_dest,}td:PGDBObjBlockdef;
    //oldti,newti:TArrayIndex;
-   //tsname:gdbstring;
+   //tsname:String;
    //poldstyle,pnevstyle:PGDBTextStyle;
    //ir:itrec;
    //{pvisible,}pvisible2:PGDBObjEntity;
@@ -663,7 +663,7 @@ end;
 procedure createblockifneed(_from,_to:PTSimpleDrawing;_source:PGDBObjEntity);
 var
    {_dest,}td:PGDBObjBlockdef;
-   tn:gdbstring;
+   tn:String;
    ir:itrec;
    {pvisible,}pvisible2:PGDBObjEntity;
    //pl:PGDBLayerProp;
@@ -830,7 +830,7 @@ begin
     until pvisible=nil;
   end;
 end;
-procedure TZCADDrawingsManager.FindMultiEntityByVar(objID:Word;vname,vvalue:GDBString;var entarray:TZctnrVectorPGDBaseObjects);
+procedure TZCADDrawingsManager.FindMultiEntityByVar(objID:Word;vname,vvalue:String;var entarray:TZctnrVectorPGDBaseObjects);
 var
    croot:PGDBObjGenericSubEntry;
    pvisible{,pvisible2,pv}:PGDBObjEntity;
@@ -860,7 +860,7 @@ begin
          until pvisible=nil;
      end;
 end;
-procedure TZCADDrawingsManager.FindMultiEntityByVar2(objID:Word;vname:GDBString;var entarray:TZctnrVectorPGDBaseObjects);
+procedure TZCADDrawingsManager.FindMultiEntityByVar2(objID:Word;vname:String;var entarray:TZctnrVectorPGDBaseObjects);
 var
    croot:PGDBObjGenericSubEntry;
    pvisible{,pvisible2,pv}:PGDBObjEntity;
@@ -888,7 +888,7 @@ begin
      end;
 end;
 
-function TZCADDrawingsManager.FindEntityByVar(objID:Word;vname,vvalue:GDBString):PGDBObjEntity;
+function TZCADDrawingsManager.FindEntityByVar(objID:Word;vname,vvalue:String):PGDBObjEntity;
 var
    croot:PGDBObjGenericSubEntry;
    pvisible{,pvisible2,pv}:PGDBObjEntity;
@@ -970,7 +970,7 @@ begin
      _dest.formatentity(_to^,dc);
 end;
 
-procedure startup(preloadedfile1,preloadedfile2:GDBString);
+procedure startup(preloadedfile1,preloadedfile2:String);
 var
    {r: TLResource;
    f:TZctnrVectorBytes;}

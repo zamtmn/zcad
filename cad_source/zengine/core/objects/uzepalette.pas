@@ -34,7 +34,7 @@ type
   {REGISTERRECORDTYPE TDXFCOLOR}
   TDXFCOLOR=record
             RGB:TRGB;(*'Color'*)
-            name:GDBString;(*'Name'*)
+            name:String;(*'Name'*)
       end;
   PTGDBPaletteColor=^TGDBPaletteColor;
   TGDBPaletteColor=Integer;

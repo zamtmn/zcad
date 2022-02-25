@@ -17,7 +17,7 @@
 } 
 unit uzctextpreprocessorimpl;
 {$INCLUDE zcadconfig.inc}
-{$mode objfpc}
+{$mode objfpc}{$H+}
 
 interface
 uses uzeentity,uzcvariablesutils,uzetextpreprocessor,uzbstrproc,sysutils,
@@ -25,7 +25,7 @@ uses uzeentity,uzcvariablesutils,uzetextpreprocessor,uzbstrproc,sysutils,
      uzcpropertiesutils,uzeparser,LazUTF8;
 type
   TStr2VarProcessor=class(TMyParser.TParserTokenizer.TDynamicProcessor)
-    function GetResult(const str:gdbstring;const operands:gdbstring;var NextSymbolPos:integer;pobj:Pointer):gdbstring;
+    function GetResult(const str:String;const operands:String;var NextSymbolPos:integer;pobj:Pointer):String;
   end;
 
   TNum2StrProcessor=class(TMyParser.TParserTokenizer.TStaticProcessor)
@@ -62,7 +62,7 @@ var
   s:UnicodeString;
   p:pointer;
 implementation
-function TStr2VarProcessor.GetResult(const str:gdbstring;const operands:gdbstring;var NextSymbolPos:integer;pobj:Pointer):gdbstring;
+function TStr2VarProcessor.GetResult(const str:String;const operands:String;var NextSymbolPos:integer;pobj:Pointer):String;
 var
   pv:pvardesk;
 begin
@@ -116,14 +116,14 @@ begin
   end;
 end;
 
-function prop2value(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;pobj:Pointer):gdbstring;
+function prop2value(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;pobj:Pointer):String;
 begin
   if GetProperty(pobj,operands,result) then
     else
       result:='!!ERRprop('+operands+')!!';
 end;
 
-function var2value(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;pobj:Pointer):gdbstring;
+function var2value(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;pobj:Pointer):String;
 var
   pv:pvardesk;
 begin
@@ -135,10 +135,10 @@ begin
   else
     result:='!!ERR('+operands+')!!';
 end;
-{function evaluatesubstr(var str:gdbstring;var startpos:integer;pobj:PGDBObjGenericWithSubordinated):gdbstring;
+{function evaluatesubstr(var str:String;var startpos:integer;pobj:PGDBObjGenericWithSubordinated):String;
 var
   endpos:integer;
-  varname:GDBString;
+  varname:String;
   //pv:pvardesk;
   vd:vardesk;
   pentvarext:TVariablesExtender;
@@ -160,7 +160,7 @@ begin
   startpos:=NextSymbolPos-1;
 end;}
 
-function EscapeSeq(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;pobj:Pointer):gdbstring;
+function EscapeSeq(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;pobj:Pointer):String;
 var
   sym:char;
   value:TDXFEntsInternalStringType;
@@ -187,7 +187,7 @@ begin
   end;
 end;
 
-function date2value(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;pobj:Pointer):gdbstring;
+function date2value(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;pobj:Pointer):String;
 begin
   result:=datetostr(date);
 end;

@@ -170,7 +170,7 @@ var
    li:TListItem;
    ltd:tstrings;
    CurrentLine:integer;
-   LTName,LTDesk,LTImpl:GDBString;
+   LTName,LTDesk,LTImpl:String;
 begin
      li:=ListView1.Selected;
      ltd:=tstringlist.Create;
@@ -227,7 +227,7 @@ var
    pdwg:PTSimpleDrawing;
    ltd:tstrings;
    CurrentLine:integer;
-   LTName,LTDesk,LTImpl:GDBString;
+   LTName,LTDesk,LTImpl:String;
 begin
      pdwg:=drawings.GetCurrentDWG;
      CurrentLine:=1;

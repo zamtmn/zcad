@@ -117,7 +117,7 @@ begin
 
 end;
 
-function GetStyleNames(var BDefNames:TZctnrVectorStrings;selname:GDBString):Integer;
+function GetStyleNames(var BDefNames:TZctnrVectorStrings;selname:String):Integer;
 var pb:PGDBTextStyle;
     ir:itrec;
     i:Integer;
@@ -184,7 +184,7 @@ begin
      pt^.vp.Layer:=drawings.GetCurrentDWG^.GetCurrentLayer;
      pt^.vp.LineWeight:=sysvar.dwg.DWG_CLinew^;
      //pt^.TXTStyleIndex:=drawings.GetCurrentDWG^.TextStyleTable.getMutableData(TextInsertParams.Style.Selected);
-     pt^.TXTStyleIndex:=drawings.GetCurrentDWG^.TextStyleTable.FindStyle(pgdbstring(TextInsertParams.Style.Enums.getDataMutable(TextInsertParams.Style.Selected))^,false);
+     pt^.TXTStyleIndex:=drawings.GetCurrentDWG^.TextStyleTable.FindStyle(pString(TextInsertParams.Style.Enums.getDataMutable(TextInsertParams.Style.Selected))^,false);
      pt^.textprop.size:=TextInsertParams.h;
      pt^.Content:='';
      pt^.Template:=(TextInsertParams.text);

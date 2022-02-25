@@ -1467,7 +1467,7 @@ procedure TGeneralViewArea.WaMouseMove(sender:tobject;Shift: TShiftState; X, Y: 
 var
   //glmcoord1: gdbpiece;
   ux,uy:Double;
-  //htext,htext2:gdbstring;
+  //htext,htext2:String;
   key: Byte;
   //f:TzeUnitsFormat;
 begin
@@ -2695,7 +2695,7 @@ var
   tv2:gdbvertex4d;
   ax:gdbvertex;
   //ux,uy:Double;
-  //htext,htext2:gdbstring;
+  //htext,htext2:String;
   //key: Byte;
   lptime:ttime;
 begin
@@ -3242,7 +3242,7 @@ begin
                               end;
 end;
 procedure TGeneralViewArea.mouseunproject(X, Y: integer);
-var ca, cv: extended; ds:GDBString;
+var ca, cv: extended; ds:String;
 begin
   if pdwg=NIL then exit;
 

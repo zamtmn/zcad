@@ -26,7 +26,7 @@ uses uzedrawingdef,uzeblockdefsfactory,uzestylesdim,
      uzedimensionaltypes,uzegeometrytypes,uzecamera,UGDBOpenArrayOfPV,uzeroot,uzefont,
      uzglviewareaabstract,uzglviewareageneral,uzgldrawcontext,UGDBControlPointArray;
 type
-TMainBlockCreateProc=procedure (_to:PTDrawingDef;name:GDBString) of object;
+TMainBlockCreateProc=procedure (_to:PTDrawingDef;name:String) of object;
 {EXPORT+}
 PTSimpleDrawing=^TSimpleDrawing;
 {REGISTEROBJECTTYPE TSimpleDrawing}
@@ -75,10 +75,10 @@ TSimpleDrawing= object(TAbstractDrawing)
                        procedure StoreNewCamerapPos(command:Pointer);virtual;
                        procedure rtmodify(obj:PGDBObjEntity;md:Pointer;dist,wc:gdbvertex;save:Boolean);virtual;
                        procedure rtmodifyonepoint(obj:PGDBObjEntity;rtmod:TRTModifyData;wc:gdbvertex);virtual;
-                       procedure PushStartMarker(CommandName:GDBString);virtual;
+                       procedure PushStartMarker(CommandName:String);virtual;
                        procedure PushEndMarker;virtual;
-                       procedure SetFileName(NewName:GDBString);virtual;
-                       function GetFileName:GDBString;virtual;
+                       procedure SetFileName(NewName:String);virtual;
+                       function GetFileName:String;virtual;
                        procedure ChangeStampt(st:Boolean);virtual;
                        function GetUndoTop:TArrayIndex;virtual;
                        function CanUndo:boolean;virtual;
@@ -94,7 +94,7 @@ TSimpleDrawing= object(TAbstractDrawing)
                        function CreateDrawingRC(_maxdetail:Boolean=false):TDrawContext;virtual;
                        procedure FillDrawingPartRC(var dc:TDrawContext);virtual;
                        function GetUnitsFormat:TzeUnitsFormat;virtual;
-                       procedure CreateBlockDef(name:GDBString);virtual;
+                       procedure CreateBlockDef(name:String);virtual;
                        procedure HardReDraw;
                        function GetCurrentLayer:PGDBLayerProp;
                        function GetCurrentLType:PGDBLtypeProp;
@@ -184,7 +184,7 @@ begin
   wa.calcgrid;
   wa.draworinvalidate;
 end;
-procedure TSimpleDrawing.CreateBlockDef(name:GDBString);
+procedure TSimpleDrawing.CreateBlockDef(name:String);
 var
    td:pointer;
 begin
@@ -342,11 +342,11 @@ function TSimpleDrawing.GetLastSelected:PGDBObjEntity;
 begin
      result:=wa.param.SelDesc.LastSelectedObject;
 end;
-procedure TSimpleDrawing.SetFileName(NewName:GDBString);
+procedure TSimpleDrawing.SetFileName(NewName:String);
 begin
 
 end;
-function TSimpleDrawing.GetFileName:GDBString;
+function TSimpleDrawing.GetFileName:String;
 begin
      result:=''
 end;
@@ -383,7 +383,7 @@ begin
      //self.AddByRef(result^);
      //currentdwg:=pointer(ptd);
 end;
-procedure TSimpleDrawing.PushStartMarker(CommandName:GDBString);
+procedure TSimpleDrawing.PushStartMarker(CommandName:String);
 begin
 
 end;

@@ -32,11 +32,11 @@ type
     constructor Create;
     destructor Destroy;override;
     procedure AddType(EntType:TObjID);
-    procedure AddTypeName(EntTypeName:GDBString);
-    procedure AddTypeNameMask(EntTypeNameMask:GDBString);
+    procedure AddTypeName(EntTypeName:String);
+    procedure AddTypeNameMask(EntTypeNameMask:String);
     procedure SubType(EntType:TObjID);
-    procedure SubTypeName(EntTypeName:GDBString);
-    procedure SubTypeNameMask(EntTypeNameMask:GDBString);
+    procedure SubTypeName(EntTypeName:String);
+    procedure SubTypeNameMask(EntTypeNameMask:String);
     procedure SetFilter;
     procedure ResetFilter;
     function IsEntytyTypeAccepted(EntType:TObjID):boolean;
@@ -62,14 +62,14 @@ begin
   Include.CountKey(EntType,1);
 end;
 
-procedure TEntsTypeFilter.AddTypeName(EntTypeName:GDBString);
+procedure TEntsTypeFilter.AddTypeName(EntTypeName:String);
 var EntInfoData:TEntInfoData;
 begin
   if ENTName2EntInfoData.TryGetValue(UpperCase(EntTypeName),EntInfoData) then
     Include.CountKey(EntInfoData.EntityID,1);
 end;
 
-procedure TEntsTypeFilter.AddTypeNameMask(EntTypeNameMask:GDBString);
+procedure TEntsTypeFilter.AddTypeNameMask(EntTypeNameMask:String);
 var
   //iterator:ObjID2EntInfoData.TIterator;
   pair:ObjID2EntInfoData.TDictionaryPair;
@@ -95,14 +95,14 @@ begin
   Exclude.CountKey(EntType,1);
 end;
 
-procedure TEntsTypeFilter.SubTypeName(EntTypeName:GDBString);
+procedure TEntsTypeFilter.SubTypeName(EntTypeName:String);
 var EntInfoData:TEntInfoData;
 begin
   if ENTName2EntInfoData.TryGetValue(UpperCase(EntTypeName),EntInfoData) then
     Exclude.CountKey(EntInfoData.EntityID,1);
 end;
 
-procedure TEntsTypeFilter.SubTypeNameMask(EntTypeNameMask:GDBString);
+procedure TEntsTypeFilter.SubTypeNameMask(EntTypeNameMask:String);
 var
   //iterator:ObjID2EntInfoData.TIterator;
   pair:ObjID2EntInfoData.TDictionaryPair;

@@ -80,7 +80,7 @@ begin
        end;
 end;
 
-(*procedure rtz(var _value:GDBString);
+(*procedure rtz(var _value:String);
 var
   Q:Integer;
 begin

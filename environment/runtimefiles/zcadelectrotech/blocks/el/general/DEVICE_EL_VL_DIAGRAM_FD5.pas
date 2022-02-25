@@ -8,7 +8,7 @@ usescopy objname;
 
 var
 
-T2:GDBString;(*'Марка'*)
+T2:String;(*'Марка'*)
 
 implementation
 

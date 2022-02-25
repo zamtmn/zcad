@@ -24,15 +24,15 @@ uses {uzbtypesbase,}sysutils,uzctnrvectorstrings;
 type
   TLexema=shortstring;
   PLexema=^TLexema;
-//function pac_lGDBWord_to_GDBString(lw: LongWord): String;
-//function pac_GDBWord_to_GDBString(w: Word): String;
-//function unpac_GDBString_to_GDBWord(s: String): Word;
-//function unpac_GDBString_to_lGDBWord(s: String): LongWord;
+//function pac_lGDBWord_to_String(lw: LongWord): String;
+//function pac_GDBWord_to_String(w: Word): String;
+//function unpac_String_to_GDBWord(s: String): Word;
+//function unpac_String_to_lGDBWord(s: String): LongWord;
 function countchar(s: String; ch: ansichar): Integer;
 procedure replaceeqlen(var s: String; substr,newstr: String);
 function replacenull(s:String): String;
 function strtohex(s:String): String;
-function parse(template, str:String; GDBStringarray:PTZctnrVectorStrings;mode:Boolean;lexema:PLexema; var position:Integer):Boolean;
+function parse(template, str:String; Stringarray:PTZctnrVectorStrings;mode:Boolean;lexema:PLexema; var position:Integer):Boolean;
 function runparser(template:String;var str:String; out parsed:Boolean):PTZctnrVectorStrings;
 function IsParsed(template:String;var str:String; out strins:PTZctnrVectorStrings):boolean;
 const maxlexem=16;
@@ -132,22 +132,22 @@ begin
      //result:='234';
 end;
 
-{function pac_GDBWord_to_GDBString(w: Word): String;
+{function pac_GDBWord_to_String(w: Word): String;
 begin
   result := chr(lo(w)) + chr(hi(w));
 end;
 
-function pac_lGDBWord_to_GDBString(lw: LongWord): String;
+function pac_lGDBWord_to_String(lw: LongWord): String;
 begin
   result := chr(lo(lo(lw))) + chr(hi(lo(lw))) + chr(lo(hi(lw))) + chr(hi(hi(lw)));
 end;
 
-function unpac_GDBString_to_GDBWord(s: String): Word;
+function unpac_String_to_GDBWord(s: String): Word;
 begin
   result := Word(pGDBWord(s)^);
 end;
 
-function unpac_GDBString_to_lGDBWord(s: String): LongWord;
+function unpac_String_to_lGDBWord(s: String): LongWord;
 begin
   result := LongWord(pGDBLongword(s)^);
 end;}
@@ -209,15 +209,15 @@ begin
 end;
 function runparser(template:String;var str:String; out parsed:Boolean):PTZctnrVectorStrings;
 var i:Integer;
-    GDBStringarray:PTZctnrVectorStrings;
+    Stringarray:PTZctnrVectorStrings;
 begin
      i:=1;
-     Getmem(Pointer(GDBStringarray),sizeof(TZctnrVectorStrings));
-     GDBStringarray^.init(20);
+     Getmem(Pointer(Stringarray),sizeof(TZctnrVectorStrings));
+     Stringarray^.init(20);
      parsed:=false;
      if str<>'' then
      begin
-     parsed:=parse(template,str,GDBStringarray,false,nil,i);
+     parsed:=parse(template,str,Stringarray,false,nil,i);
      if parsed then
                    begin
                         if i>length(str) then {i>=length(str)}
@@ -231,21 +231,21 @@ begin
                    end
                else
                    begin
-                        {GDBStringarray^.FreeAndDone;
-                                      Freemem(Pointer(GDBStringarray));
-                                      GDBStringarray:=nil;}
+                        {Stringarray^.FreeAndDone;
+                                      Freemem(Pointer(Stringarray));
+                                      Stringarray:=nil;}
 
                    end;
      end;
-     if (GDBStringarray^.Count=0)or(not parsed) then
+     if (Stringarray^.Count=0)or(not parsed) then
                                  begin
-                                      GDBStringarray^.Done;
-                                      Freemem(Pointer(GDBStringarray));
-                                      GDBStringarray:=nil;
+                                      Stringarray^.Done;
+                                      Freemem(Pointer(Stringarray));
+                                      Stringarray:=nil;
                                  end;
-     result:=GDBStringarray;
+     result:=Stringarray;
 end;
-function parse(template, str:String; GDBStringarray:PTZctnrVectorStrings;mode:Boolean;lexema:PLexema; var position:Integer):Boolean;
+function parse(template, str:String; Stringarray:PTZctnrVectorStrings;mode:Boolean;lexema:PLexema; var position:Integer):Boolean;
 var i,iend{,subpos},subi:Integer;
     subexpr:String;
     {error,}subresult:Boolean;
@@ -280,7 +280,7 @@ begin
                                             else result:=parse(subexpr,str,@strarr,mode,@l,position);
                              if (result)and(strarr.count<>0) then
                              begin
-                                  strarr.copyto(GDBStringarray^);
+                                  strarr.copyto(Stringarray^);
                                   l:=l;
                              end;
                              strarr.Done;
@@ -348,7 +348,7 @@ begin
                         if lexema<>nil then
                                            begin
                                                 subexpr:=lexema^;
-                                                GDBStringarray.PushBackData(subexpr);
+                                                Stringarray.PushBackData(subexpr);
                                                 subexpr:='';
                                                 lexema^:='';
                                            end;
@@ -368,7 +368,7 @@ begin
                         foundsym(#0,template,subi);
                         subexpr:=copy(template,i,subi-i);}
                         repeat
-                              subresult:=parse(subexpr,str,GDBStringarray,mode,lexema,position);
+                              subresult:=parse(subexpr,str,Stringarray,mode,lexema,position);
                         until not subresult;
                         i:=iend{+1};
                         result:=true
@@ -378,7 +378,7 @@ begin
                         iend:=i;
                         readsubexpr('{','}',template,i,iend);
                         subexpr:=copy(template,i,iend-i);
-                              subresult:=parse(subexpr,str,GDBStringarray,mode,lexema,position);
+                              subresult:=parse(subexpr,str,Stringarray,mode,lexema,position);
                         i:=iend{+1};
                         result:=true
                    end;
@@ -389,7 +389,7 @@ begin
                         subexpr:=findlexem(subexpr);
                         if subexpr<>'' then
                         begin
-                             {error:=}parse(template,str,GDBStringarray,mode,nil,position);
+                             {error:=}parse(template,str,Stringarray,mode,nil,position);
                         end
                    end;
           end;

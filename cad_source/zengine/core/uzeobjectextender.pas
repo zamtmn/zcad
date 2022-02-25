@@ -31,7 +31,7 @@ TCreateEntFeatureData=record
                 destr:TDestructorFeature;
               end;
 TDXFEntSaveFeature=procedure(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
-TDXFEntLoadFeature=function(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:Pointer):boolean of object;
+TDXFEntLoadFeature=function(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:Pointer):boolean of object;
 TDXFEntAfterLoadFeature=procedure(pEntity:Pointer);
 TDXFEntFormatFeature=procedure (pEntity:Pointer;const drawing:TDrawingDef);
 TDXFEntLoadData=record
@@ -40,7 +40,7 @@ TDXFEntLoadData=record
 TDXFEntSaveData=record
                 DXFEntSaveFeature:TDXFEntSaveFeature;
               end;
-TDXFEntLoadDataMap=GKey2DataMap<GDBString,TDXFEntLoadData(*{$IFNDEF DELPHI},LessGDBString{$ENDIF}*)>;
+TDXFEntLoadDataMap=GKey2DataMap<String,TDXFEntLoadData(*{$IFNDEF DELPHI},LessString{$ENDIF}*)>;
 TDXFEntSaveDataVector=TmyVector<TDXFEntSaveData>;
 TDXFEntFormatProcsVector=TmyVector<TDXFEntFormatFeature>;
 TCreateEntFeatureVector=TmyVector<TCreateEntFeatureData>;
@@ -54,15 +54,15 @@ TDXFEntIODataManager=class
                       fCreateEntFeatureVector:TCreateEntFeatureVector;
                       fDXFEntAfterLoadFeatureVector:TDXFEntAfterLoadFeatureVector;
                       fTEntityExtenderVector:TEntityCreateExtenderVector;
-                      procedure RegisterNamedLoadFeature(name:GDBString;PLoadProc:TDXFEntLoadFeature);
+                      procedure RegisterNamedLoadFeature(name:String;PLoadProc:TDXFEntLoadFeature);
                       procedure RegisterAfterLoadFeature(PAfterLoadProc:TDXFEntAfterLoadFeature);
-                      procedure RegisterPrefixLoadFeature(prefix:GDBString;PLoadProc:TDXFEntLoadFeature);
+                      procedure RegisterPrefixLoadFeature(prefix:String;PLoadProc:TDXFEntLoadFeature);
                       procedure RegisterSaveFeature(PSaveProc:TDXFEntSaveFeature);
                       procedure RegisterFormatFeature(PFormatProc:TDXFEntFormatFeature);
                       procedure RunSaveFeatures(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
                       procedure RunFormatProcs(const drawing:TDrawingDef;pEntity:Pointer);
                       procedure RunAfterLoadFeature(pEntity:Pointer);
-                      function GetLoadFeature(name:GDBString):TDXFEntLoadFeature;
+                      function GetLoadFeature(name:String):TDXFEntLoadFeature;
 
                       procedure RegisterCreateEntFeature(_constr:TConstructorFeature;_destr:TDestructorFeature);
                       procedure RunConstructorFeature(pEntity:Pointer);
@@ -95,7 +95,7 @@ begin
      fDXFEntAfterLoadFeatureVector.Destroy;
      fTEntityExtenderVector.Destroy;
 end;
-function TDXFEntIODataManager.GetLoadFeature(name:GDBString):TDXFEntLoadFeature;
+function TDXFEntIODataManager.GetLoadFeature(name:String):TDXFEntLoadFeature;
 var
   data:TDXFEntLoadData;
 begin
@@ -112,7 +112,7 @@ begin
                                                         end;
      result:=nil;
 end;
-procedure TDXFEntIODataManager.RegisterNamedLoadFeature(name:GDBString;PLoadProc:TDXFEntLoadFeature);
+procedure TDXFEntIODataManager.RegisterNamedLoadFeature(name:String;PLoadProc:TDXFEntLoadFeature);
 var
   data:TDXFEntLoadData;
 begin
@@ -124,7 +124,7 @@ begin
      fDXFEntAfterLoadFeatureVector.PushBack(PAfterLoadProc);
 end;
 
-procedure TDXFEntIODataManager.RegisterPrefixLoadFeature(prefix:GDBString;PLoadProc:TDXFEntLoadFeature);
+procedure TDXFEntIODataManager.RegisterPrefixLoadFeature(prefix:String;PLoadProc:TDXFEntLoadFeature);
 var
   data:TDXFEntLoadData;
 begin

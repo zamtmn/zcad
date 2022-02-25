@@ -59,27 +59,27 @@ type
         end;
   {REGISTERRECORDTYPE tpath}
   tpath=record
-             Device_Library:PGDBString;(*'Device base'*)
-             Support_Path:PGDBString;(*'Support files'*)
-             Fonts_Path:PGDBString;(*'Fonts'*)
-             Alternate_Font:PGDBString;(*'Alternate font file'*)
-             Template_Path:PGDBString;(*'Templates'*)
-             Template_File:PGDBString;(*'Default template'*)
-             LayoutFile:PGDBString;(*'Current layout'*)
-             Program_Run:PGDBString;(*'Program'*)(*oi_readonly*)
-             Temp_files:PGDBString;(*'Temporary files'*)(*oi_readonly*)
+             Device_Library:PString;(*'Device base'*)
+             Support_Path:PString;(*'Support files'*)
+             Fonts_Path:PString;(*'Fonts'*)
+             Alternate_Font:PString;(*'Alternate font file'*)
+             Template_Path:PString;(*'Templates'*)
+             Template_File:PString;(*'Default template'*)
+             LayoutFile:PString;(*'Current layout'*)
+             Program_Run:PString;(*'Program'*)(*oi_readonly*)
+             Temp_files:PString;(*'Temporary files'*)(*oi_readonly*)
         end;
   PTCanvasData=^TCanvasData;
   {REGISTERRECORDTYPE TCanvasData}
   TCanvasData=record
-            RD_Renderer:GDBString;(*'Device'*)(*oi_readonly*)
+            RD_Renderer:String;(*'Device'*)(*oi_readonly*)
       end;
   {REGISTERRECORDTYPE trd}
   trd=record
             RD_RendererBackEnd:PTEnumData;(*'Render backend'*)
             RD_CurrentWAParam:TFaceTypedData;
-            RD_GLUVersion:PGDBString;(*'GLU Version'*)(*oi_readonly*)
-            RD_GLUExtensions:PGDBString;(*'GLU Extensions'*)(*oi_readonly*)
+            RD_GLUVersion:PString;(*'GLU Version'*)(*oi_readonly*)
+            RD_GLUExtensions:PString;(*'GLU Extensions'*)(*oi_readonly*)
             RD_UseStencil:PBoolean;(*'Use STENCIL buffer'*)
             RD_LastRenderTime:PInteger;(*'Last render time'*)(*oi_readonly*)
             RD_LastUpdateTime:PInteger;(*'Last update time'*)(*oi_readonly*)
@@ -100,23 +100,23 @@ type
               SAVE_Auto_On:PBoolean;(*'Autosave'*)
               SAVE_Auto_Current_Interval:PInteger;(*'Time to autosave'*)(*oi_readonly*)
               SAVE_Auto_Interval:PInteger;(*'Time between autosaves'*)
-              SAVE_Auto_FileName:PGDBString;(*'Autosave file name'*)
+              SAVE_Auto_FileName:PString;(*'Autosave file name'*)
         end;
   {REGISTERRECORDTYPE tcompileinfo}
   tcompileinfo=record
-                     SYS_Compiler:GDBString;(*'Compiler'*)(*oi_readonly*)
-                     SYS_CompilerVer:GDBString;(*'Compiler version'*)(*oi_readonly*)
-                     SYS_CompilerTargetCPU:GDBString;(*'Target CPU'*)(*oi_readonly*)
-                     SYS_CompilerTargetOS:GDBString;(*'Target OS'*)(*oi_readonly*)
-                     SYS_CompileDate:GDBString;(*'Compile date'*)(*oi_readonly*)
-                     SYS_CompileTime:GDBString;(*'Compile time'*)(*oi_readonly*)
-                     SYS_LCLVersion:GDBString;(*'LCL version'*)(*oi_readonly*)
-                     SYS_LCLFullVersion:GDBString;(*'LCL full version'*)(*oi_readonly*)
-                     SYS_EnvironmentVersion:GDBString;(*'Environment version'*)(*oi_readonly*)
+                     SYS_Compiler:String;(*'Compiler'*)(*oi_readonly*)
+                     SYS_CompilerVer:String;(*'Compiler version'*)(*oi_readonly*)
+                     SYS_CompilerTargetCPU:String;(*'Target CPU'*)(*oi_readonly*)
+                     SYS_CompilerTargetOS:String;(*'Target OS'*)(*oi_readonly*)
+                     SYS_CompileDate:String;(*'Compile date'*)(*oi_readonly*)
+                     SYS_CompileTime:String;(*'Compile time'*)(*oi_readonly*)
+                     SYS_LCLVersion:String;(*'LCL version'*)(*oi_readonly*)
+                     SYS_LCLFullVersion:String;(*'LCL full version'*)(*oi_readonly*)
+                     SYS_EnvironmentVersion:String;(*'Environment version'*)(*oi_readonly*)
                end;
   {REGISTERRECORDTYPE tsys}
   tsys=record
-             SYS_Version:PGDBString;(*'Program version'*)(*oi_readonly*)
+             SYS_Version:PString;(*'Program version'*)(*oi_readonly*)
              SSY_CompileInfo:tcompileinfo;(*'Build info'*)(*oi_readonly*)
              SYS_RunTime:PInteger;(*'Uptime'*)(*oi_readonly*)
              SYS_UniqueInstance:PBoolean;(*'Unique instance'*)

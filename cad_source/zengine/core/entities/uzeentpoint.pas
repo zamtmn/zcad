@@ -50,7 +50,7 @@ GDBObjPoint= object(GDBObj3d)
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
                  procedure rtsave(refp:Pointer);virtual;
-                 function GetObjTypeName:GDBString;virtual;
+                 function GetObjTypeName:String;virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
 
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
@@ -117,47 +117,47 @@ begin
   dxfvertexout(outhandle,10,P_insertInOCS);
 end;
 procedure GDBObjPoint.LoadFromDXF;
-var s, layername: GDBString;
+var s, layername: String;
   byt, code: Integer;
 begin
   //inherited init(nil,0, 10);
   //vp.ID := GDBPointID;
   P_insertInOCS:=NulVertex;
-  s := f.readgdbstring;
+  s := f.readString;
   val(s, byt, code);
   while byt <> 0 do
   begin
     case byt of
       8:
         begin
-          layername := f.readgdbstring;
+          layername := f.readString;
           vp.Layer := {gdb.GetCurrentDWG.LayerTable}drawing.GetLayerTable.getaddres(layername);
               //layername:=Pointer(s);
         end;
       10:
         begin
-          s := f.readgdbstring;
+          s := f.readString;
           val(s, P_insertInOCS.x, code);
         end;
       20:
         begin
-          s := f.readgdbstring;
+          s := f.readString;
           val(s, P_insertInOCS.y, code);
         end;
       30:
         begin
-          s := f.readgdbstring;
+          s := f.readString;
           val(s, P_insertInOCS.z, code);
         end;
       370:
         begin
-          s := f.readgdbstring;
+          s := f.readString;
           vp.lineweight := strtoint(s);
         end;
     else
-      s := f.readgdbstring;
+      s := f.readString;
     end;
-    s := f.readgdbstring;
+    s := f.readString;
     val(s, byt, code);
   end;
 

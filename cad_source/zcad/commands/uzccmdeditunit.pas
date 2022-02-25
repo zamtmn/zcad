@@ -41,7 +41,7 @@ function EditUnit(var entityunit:TSimpleUnit):boolean;
 var
    mem:TZctnrVectorBytes;
    //pobj:PGDBObjEntity;
-   //op:gdbstring;
+   //op:String;
    modalresult:integer;
    u8s:UTF8String;
    astring:ansistring;

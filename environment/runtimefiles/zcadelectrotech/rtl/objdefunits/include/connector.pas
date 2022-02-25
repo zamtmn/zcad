@@ -6,7 +6,7 @@ var
    Connector_Type:TConnectorType;(*'Тип соединения'*)
    Border_Type:TConnectorBorderType;(*'Граница подрезки'*)
 
-   Connector_Name:GDBString;(*'Имя соединения'*)
+   Connector_Name:String;(*'Имя соединения'*)
    Connector_Junction:Boolean;(*'Возможность ответвления'*)
 
    Cable_AddLength:Double;(*'Добавить к длине'*)

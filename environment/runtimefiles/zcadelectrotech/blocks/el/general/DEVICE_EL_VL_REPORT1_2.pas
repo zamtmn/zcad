@@ -8,13 +8,13 @@ usescopy objname;
 
 var
 
-T1:GDBString;(*'Обозначение'*)
-T2:GDBString;(*'Начало'*)
-T3:GDBString;(*'Конец'*)
-T4:GDBString;(*'Тип прокладки'*)
-T5:GDBString;(*'Марка'*)
-T6:GDBString;(*'Кол. и сечение жил'*)
-T7:GDBString;(*'Длина'*)
+T1:String;(*'Обозначение'*)
+T2:String;(*'Начало'*)
+T3:String;(*'Конец'*)
+T4:String;(*'Тип прокладки'*)
+T5:String;(*'Марка'*)
+T6:String;(*'Кол. и сечение жил'*)
+T7:String;(*'Длина'*)
 
 implementation
 

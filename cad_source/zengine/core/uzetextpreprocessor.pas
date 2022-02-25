@@ -23,7 +23,7 @@ uses uzbtypes,uzbstrproc,sysutils,uzbtypesbase,gzctnrSTL,LazLogger,uzeparser;
 type
   TInternalCharType=UnicodeChar;
   TInternalStringType=UnicodeString;
-  TStrProcessFunc=function(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var startpos:integer;pobj:pointer):gdbstring;
+  TStrProcessFunc=function(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var startpos:integer;pobj:pointer):String;
   TStrProcessorData=record
     Id:TInternalStringType;
     OBracket,CBracket:TInternalCharType;

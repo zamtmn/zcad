@@ -23,17 +23,17 @@ interface
 uses
   uzbstrproc,uzbtypesbase,varman, langsystem, sysutils,varmandef,UObjectDescriptor;
 {var
-  s, s1: GDBString;
+  s, s1: String;
   v: vardesk;}
-function evaluate(expr:GDBString;_unit:PTUnit): vardesk;
+function evaluate(expr:String;_unit:PTUnit): vardesk;
 procedure ClearTempVariable(var vd: vardesk);
 
 implementation
 uses UBaseTypeDescriptor;
-function readsubexpr(var expr: GDBString): GDBString;
+function readsubexpr(var expr: String): String;
 var
   i, count: Integer;
-  s: GDBString;
+  s: String;
 begin
   i := 1;
   count := 0;
@@ -62,7 +62,7 @@ begin
   result := s;
 end;
 
-function itGDBString(expr: GDBString): Boolean;
+function itString(expr: String): Boolean;
 begin
   if (expr[1] = '"') and (expr[length(expr)] = '"') then
     result := true
@@ -70,7 +70,7 @@ begin
     result := false;
 end;
 
-function ithex(expr: GDBString): Boolean;
+function ithex(expr: String): Boolean;
 var
   i: Integer;
 begin
@@ -90,7 +90,7 @@ begin
   end;
 end;
 
-function itint(expr: GDBString): Boolean;
+function itint(expr: String): Boolean;
 var
   i: Integer;
 begin
@@ -105,7 +105,7 @@ begin
   result := false;
 end;
 
-function itreal(expr: GDBString): Boolean;
+function itreal(expr: String): Boolean;
 var
   i: Integer;
 begin
@@ -131,17 +131,17 @@ begin
   end;
   result := false;
 end;
-function itBoolean(expr: GDBString): Boolean;
+function itBoolean(expr: String): Boolean;
 begin
   if (uppercase(expr)='TRUE')or(uppercase(expr)='FALSE') then result := true
                                                          else result := false;
 end;
 
-function itconst(expr: GDBString): Boolean;
+function itconst(expr: String): Boolean;
 begin
-  result := itGDBString(expr) or ithex(expr) or itint(expr) or itreal(expr) or itBoolean(expr);
+  result := itString(expr) or ithex(expr) or itint(expr) or itreal(expr) or itBoolean(expr);
 end;
-function readGDBWord(var expr: GDBString): GDBString;
+function readGDBWord(var expr: String): String;
 var
   i: Integer;
 begin
@@ -223,7 +223,7 @@ begin
 end;
 
 
-procedure createGDBIntegervar(var vd: vardesk; s: GDBString);
+procedure createGDBIntegervar(var vd: vardesk; s: String);
 var
   rez: Integer;
 begin
@@ -236,7 +236,7 @@ begin
   end;
 end;
 
-procedure createrealvar(var vd: vardesk; s: GDBString);
+procedure createrealvar(var vd: vardesk; s: String);
 var
   rez:Double;
 begin
@@ -248,7 +248,7 @@ begin
     vd.data.ptd:=@FundamentalDoubleDescriptorObj;
   end;
 end;
-procedure createBooleanvar(var vd: vardesk; s: GDBString);
+procedure createBooleanvar(var vd: vardesk; s: String);
 var
   rez: Boolean;
 begin
@@ -263,7 +263,7 @@ begin
 end;
 
 
-function evaluate(expr: GDBString;_unit:PTUnit): vardesk;
+function evaluate(expr: String;_unit:PTUnit): vardesk;
 var
   s,s1,s2: String;
   rez, hrez, subrezult: vardesk;
@@ -291,7 +291,7 @@ begin
           if expr='34 2511' then
                                 expr:=expr;
           rez.SetInstance(FundamentalStringDescriptorObj.AllocAndInitInstance);
-          pgdbstring(rez.data.Addr.Instance)^ := expr;
+          pString(rez.data.Addr.Instance)^ := expr;
           expr:='';
           rez.data.ptd := @FundamentalStringDescriptorObj;
         end;

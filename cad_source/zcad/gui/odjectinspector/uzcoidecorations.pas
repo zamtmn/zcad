@@ -42,11 +42,11 @@ procedure RunAnsiStringEditor(PInstance:Pointer);
 implementation
 var
    count:integer;
-function LWDecorator(PInstance:Pointer):GDBString;
+function LWDecorator(PInstance:Pointer):String;
 begin
      result:=GetLWNameFromLW(PTGDBLineWeight(PInstance)^);
 end;
-function NamedObjectsDecorator(PInstance:Pointer):GDBString;
+function NamedObjectsDecorator(PInstance:Pointer):String;
 begin
      if PGDBLayerProp(PInstance^)<>nil then
                                            begin
@@ -55,7 +55,7 @@ begin
                                        else
                                            result:=rsUnassigned;
 end;
-function PaletteColorDecorator(PInstance:Pointer):GDBString;
+function PaletteColorDecorator(PInstance:Pointer):String;
 begin
      result:=ColorIndex2Name(PTGDBPaletteColor(PInstance)^);
 end;
@@ -234,7 +234,7 @@ procedure drawLWProp(canvas:TCanvas;ARect:TRect;PInstance:Pointer);
 var
    index:TGDBLineWeight;
    ll:integer;
-   s:gdbstring;
+   s:String;
 begin
      index:=PTGDBLineWeight(PInstance)^;
      s:=GetLWNameFromLW(index);
@@ -304,7 +304,7 @@ end;
 procedure drawLTProp(canvas:TCanvas;ARect:TRect;PInstance:Pointer);
 var
    PLT:PGDBLtypeProp;
-   s:gdbstring;
+   s:String;
 begin
      PLT:=ppointer(PInstance)^;
      if plt<>nil then
@@ -335,11 +335,11 @@ begin
      if assigned(SysVar.INTF.INTF_DefaultEditorFontHeight) then
         InfoForm.memo.Font.Height:=SysVar.INTF.INTF_DefaultEditorFontHeight^;
 
-     InfoForm.memo.text:=pgdbstring(PInstance)^;
+     InfoForm.memo.text:=pString(PInstance)^;
      modalresult:=ZCMsgCallBackInterface.DOShowModal(InfoForm);
      if modalresult=ZCMrOk then
                          begin
-                              pgdbstring(PInstance)^:=InfoForm.memo.text;
+                              pString(PInstance)^:=InfoForm.memo.text;
                               StoreBoundsToSavedUnit('TEdWND',InfoForm.BoundsRect);
                          end;
 end;
@@ -357,11 +357,11 @@ begin
      if assigned(SysVar.INTF.INTF_DefaultEditorFontHeight) then
         InfoForm.memo.Font.Height:=SysVar.INTF.INTF_DefaultEditorFontHeight^;
 
-     InfoForm.memo.text:=ConvertFromDxfString(UnicodeString(pgdbstring(PInstance)^));
+     InfoForm.memo.text:=ConvertFromDxfString(UnicodeString(pString(PInstance)^));
      modalresult:=ZCMsgCallBackInterface.DOShowModal(InfoForm);
      if modalresult=ZCMrOk then
                          begin
-                              pgdbstring(PInstance)^:=String(ConvertToDxfString(InfoForm.memo.text));
+                              pString(PInstance)^:=String(ConvertToDxfString(InfoForm.memo.text));
                               StoreBoundsToSavedUnit('TEdWND',InfoForm.BoundsRect);
                          end;
 end;
@@ -513,7 +513,7 @@ end;
 procedure DecorateSysTypes;
 begin
      AddEditorToType(SysUnit.TypeName2PTD('Boolean'),TBaseTypesEditors.BooleanCreateEditor);
-     AddEditorToType(SysUnit.TypeName2PTD('Boolean'),TBaseTypesEditors.BooleanCreateEditor);
+     //AddEditorToType(SysUnit.TypeName2PTD('Boolean'),TBaseTypesEditors.BooleanCreateEditor);
 
 
      AddEditorToType(SysUnit.TypeName2PTD('ShortInt'),TBaseTypesEditors.BaseCreateEditor);
@@ -529,7 +529,6 @@ begin
      AddEditorToType(SysUnit.TypeName2PTD('GDBAngleDouble'),TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType(SysUnit.TypeName2PTD('GDBAngleDegDouble'),TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType(SysUnit.TypeName2PTD('String'),TBaseTypesEditors.BaseCreateEditor);
-     AddEditorToType(SysUnit.TypeName2PTD('AnsiString'),TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType(SysUnit.TypeName2PTD('AnsiString'),TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType(SysUnit.TypeName2PTD('UnicodeString'),TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType(SysUnit.TypeName2PTD('Single'),TBaseTypesEditors.BaseCreateEditor);
@@ -558,8 +557,7 @@ begin
      AddFastEditorToType(SysUnit.TypeName2PTD('Boolean'),@OIUI_FE_BooleanGetPrefferedSize,@OIUI_FE_BooleanDraw,@OIUI_FE_BooleanInverse);
      AddFastEditorToType(SysUnit.TypeName2PTD('TGDB3StateBool'),@OIUI_FE_BooleanGetPrefferedSize,@_3SBooleanDrawFastEditor,@_3SBooleanInverse);
      AddFastEditorToType(SysUnit.TypeName2PTD('PGDBLayerPropObjInsp'),@OIUI_FE_ButtonGetPrefferedSize,@OIUI_FE_ButtonDraw,@runlayerswnd);
-     AddFastEditorToType(SysUnit.TypeName2PTD('GDBString'),@OIUI_FE_ButtonGetPrefferedSize,@ButtonTxtDrawFastEditor,@RunStringEditor);
-     AddFastEditorToType(SysUnit.TypeName2PTD('AnsiString'),@OIUI_FE_ButtonGetPrefferedSize,@ButtonTxtDrawFastEditor,@RunAnsiStringEditor);
+     AddFastEditorToType(SysUnit.TypeName2PTD('String'),@OIUI_FE_ButtonGetPrefferedSize,@ButtonTxtDrawFastEditor,@RunStringEditor);
      AddFastEditorToType(SysUnit.TypeName2PTD('AnsiString'),@OIUI_FE_ButtonGetPrefferedSize,@ButtonTxtDrawFastEditor,@RunAnsiStringEditor);
      AddFastEditorToType(SysUnit.TypeName2PTD('GDBCoordinates3D'),@OIUI_FE_ButtonGetPrefferedSize,@OIUI_FE_ButtonCrossDraw,@GetVertexFromDrawing,true);
      AddFastEditorToType(SysUnit.TypeName2PTD('GDBLength'),@OIUI_FE_ButtonGetPrefferedSize,@OIUI_FE_ButtonHLineDraw,@GetLengthFromDrawing,true);

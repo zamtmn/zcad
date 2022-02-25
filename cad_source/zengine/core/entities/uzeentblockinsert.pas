@@ -47,7 +47,7 @@ GDBObjBlockInsert= object(GDBObjComplex)
                      //procedure rtedit(refp:Pointer;mode:Single;dist,wc:gdbvertex);virtual;
                      //procedure rtmodifyonepoint(point:pcontrolpointdesc;tobj:PGDBObjEntity;dist,wc:gdbvertex;ptdata:Pointer);virtual;
                      destructor done;virtual;
-                     function GetObjTypeName:GDBString;virtual;
+                     function GetObjTypeName:String;virtual;
                      procedure correctobjects(powner:PGDBObjEntity;pinownerarray:Integer);virtual;
                      procedure BuildGeometry(var drawing:TDrawingDef);virtual;
                      procedure BuildVarGeometry(var drawing:TDrawingDef);virtual;
@@ -66,7 +66,7 @@ GDBObjBlockInsert= object(GDBObjComplex)
                      function FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
 
                      class function CreateInstance:PGDBObjBlockInsert;static;
-                     function GetNameInBlockTable:GDBString;virtual;
+                     function GetNameInBlockTable:String;virtual;
                      function GetObjType:TObjID;virtual;
                   end;
 {Export-}
@@ -182,7 +182,7 @@ begin
         kU[1] := kR[0][2]*fInvD0;
         kU[2] := kR[1][2]/kD[1];
 end;*)
-function GDBObjBlockInsert.GetNameInBlockTable:GDBString;
+function GDBObjBlockInsert.GetNameInBlockTable:String;
 begin
   result:=name;
 end;
@@ -519,7 +519,7 @@ begin
 end;
 procedure GDBObjBlockInsert.LoadFromDXF;
 var
-  //s: GDBString;
+  //s: String;
   byt{, code, i}: Integer;
   hlGDBWord: Integer;
   attrcont: Boolean;
@@ -536,7 +536,7 @@ begin
                                                     rotate:=rotate*pi/180;
                                                end
 else if dxfGDBIntegerload(f,71,byt,hlGDBWord)then begin if hlGDBWord = 1 then attrcont := true; end
-else if not dxfGDBStringload(f,2,byt,name)then {s := }f.readgdbstring;
+else if not dxfStringload(f,2,byt,name)then {s := }f.readString;
     byt:=readmystrtoint(f);
   end;
   if attrcont then ;
@@ -675,10 +675,10 @@ procedure GDBObjBlockInsert.SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;v
 //var
   //i, j: Integer;
   //hv, vv: Byte;
-  //s: GDBString;
+  //s: String;
 begin
   SaveToDXFObjPrefix(outhandle,'INSERT','AcDbBlockReference',IODXFContext);
-  dxfGDBStringout(outhandle,2,name);
+  dxfStringout(outhandle,2,name);
   dxfvertexout(outhandle,10,Local.p_insert);
   dxfvertexout1(outhandle,41,scale);
   dxfDoubleout(outhandle,50,rotate*180/pi);
@@ -710,7 +710,7 @@ begin
   PBlockInsert^.scale.y:=PBlockInsert^.scale.x;
   PBlockInsert^.scale.z:=PBlockInsert^.scale.x;
   r:=CreateDoubleFromArray(counter,args);
-  PBlockInsert^.name:=CreateGDBStringFromArray(counter,args);
+  PBlockInsert^.name:=CreateStringFromArray(counter,args);
   PBlockInsert^.index:=-1;
 
   PBlockInsert^.CalcObjMatrix;

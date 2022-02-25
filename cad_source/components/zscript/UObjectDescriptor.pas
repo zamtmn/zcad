@@ -34,16 +34,16 @@ GDBMetodModifier=Word;
 TOperandsVector=GZVector<GDBOperandDesc>;
 PMetodDescriptor=^MetodDescriptor;
 MetodDescriptor=object(GDBaseObject)
-                      objname:GDBString;
-                      MetodName:GDBString;
-                      OperandsName:GDBString;
+                      objname:String;
+                      MetodName:String;
+                      OperandsName:String;
                       Operands:{GDBOpenArrayOfdata}TOperandsVector; {DATA}
                       ResultPTD:PUserTypeDescriptor;
                       MetodAddr:Pointer;
                       Attributes:GDBMetodModifier;
                       punit:pointer;
                       NameHash:LongWord;
-                      constructor init(objn,mn,dt:GDBString;ma:Pointer;attr:GDBMetodModifier;pu:pointer);
+                      constructor init(objn,mn,dt:String;ma:Pointer;attr:GDBMetodModifier;pu:pointer);
                       destructor Done;virtual;
                 end;
 simpleproc=procedure of object;
@@ -56,7 +56,7 @@ ObjectDescriptor=object(RecordDescriptor)
                        VMTCurrentOffset:Integer;
                        PDefaultConstructor:Pointer;
                        SimpleMenods:{GDBOpenArrayOfObjects}TSimpleMenodsVector;
-                       LincedData:GDBString;
+                       LincedData:String;
                        LincedObjects:Boolean;
                        ColArray:TZctnrVectorBytes;
                        Properties:TPropertiesVector;
@@ -236,9 +236,9 @@ procedure ObjectDescriptor.SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:P
 //    d:FieldDescriptor;
 //    ir:itrec;
 begin
-        membuf.TXTAddGDBStringEOL(prefix+'.initnul;');
+        membuf.TXTAddStringEOL(prefix+'.initnul;');
         inherited;
-         membuf.TXTAddGDBStringEOL('');
+         membuf.TXTAddStringEOL('');
 end;
 (*function ObjectDescriptor.Serialize;
 var
@@ -832,7 +832,7 @@ begin
              pcol:=colarray.beginiterate(ir2);
              if p<>nil then
              repeat
-                   objtypename:=PGDBaseObject(P)^.GetObjName{ObjToGDBString('','')};
+                   objtypename:=PGDBaseObject(P)^.GetObjName{ObjToString('','')};
                    pld:=pointer(SysUnit.TypeName2PTD(PGDBaseObject(P)^.GetObjTypeName));
                    if bmode=property_build then
                                                pld^.CreateProperties(f,PDM_Field,{PPDA}ts,objtypename,pcol{PCollapsed}{field_no_attrib},ownerattrib,bmode,p,'','');

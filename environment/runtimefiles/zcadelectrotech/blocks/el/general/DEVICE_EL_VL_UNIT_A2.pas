@@ -8,8 +8,8 @@ usescopy objname;
 
 var
 
-T1:GDBString;(*'Клемник'*)
-T2:GDBString;(*'Расшифровка'*)
+T1:String;(*'Клемник'*)
+T2:String;(*'Расшифровка'*)
 
 implementation
 

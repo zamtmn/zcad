@@ -54,7 +54,7 @@ type
     TOnWaMouseMove=procedure (Sender:TAbstractViewArea;Shift:TShiftState;X,Y:Integer) of object;
     TOnWaMouseSelect=procedure (Sender:TAbstractViewArea;SelectedEntity:Pointer) of object;
     TOnWaKeyPress=procedure (Sender:TAbstractViewArea;var Key: Word; Shift: TShiftState) of object;
-    TOnGetEntsDesc=function (ents:PGDBObjOpenArrayOfPV):GDBString of object;
+    TOnGetEntsDesc=function (ents:PGDBObjOpenArrayOfPV):String of object;
     TOnWaShowCursor=procedure (Sender:TAbstractViewArea;var DC:TDrawContext) of object;
     TAbstractViewArea=class(tcomponent)
                            public
@@ -143,7 +143,7 @@ type
                            procedure endpaint;virtual;abstract;
                            procedure asyncupdatemouse(Data: PtrInt);virtual;abstract;
                            function getParam:pointer;virtual;abstract;
-                           function getParamTypeName:GDBString;virtual;abstract;
+                           function getParamTypeName:String;virtual;abstract;
                            procedure setdeicevariable;virtual;abstract;
                            procedure ZoomIn; virtual;abstract;
                            procedure ZoomOut; virtual;abstract;

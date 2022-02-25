@@ -22,9 +22,9 @@ interface
 uses uzbtypesbase,uzbtypes,gzctnrVector,sysutils;
 type
 {EXPORT+}
-PGDBXYZWGDBStringArray=^XYZWGDBGDBStringArray;
-{REGISTEROBJECTTYPE XYZWGDBGDBStringArray}
-XYZWGDBGDBStringArray= object(GZVector{-}<GDBStrWithPoint>{//})
+PGDBXYZWStringArray=^XYZWGDBStringArray;
+{REGISTEROBJECTTYPE XYZWGDBStringArray}
+XYZWGDBStringArray= object(GZVector{-}<GDBStrWithPoint>{//})
                              constructor init(m:Integer);
                              procedure freeelement(PItem:PT);virtual;
                              //function add(p:Pointer):TArrayIndex;virtual;
@@ -33,16 +33,16 @@ XYZWGDBGDBStringArray= object(GZVector{-}<GDBStrWithPoint>{//})
 implementation
 //uses
 //    log;
-{function XYZWGDBGDBStringArray.add(p:Pointer):TArrayIndex;
+{function XYZWGDBStringArray.add(p:Pointer):TArrayIndex;
 begin
      AddByPointer(p);
      Pointer(PGDBStrWithPoint(p)^.str):=nil;
 end;}
-procedure XYZWGDBGDBStringArray.freeelement(PItem:PT);
+procedure XYZWGDBStringArray.freeelement(PItem:PT);
 begin
      PGDBStrWithPoint(PItem)^.str:='';
 end;
-constructor XYZWGDBGDBStringArray.init(m:Integer);
+constructor XYZWGDBStringArray.init(m:Integer);
 begin
      inherited init(m);
 end;

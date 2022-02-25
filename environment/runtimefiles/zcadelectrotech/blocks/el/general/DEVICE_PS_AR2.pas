@@ -6,10 +6,10 @@ usescopy blocktype;
 var
    Device_Type:TDeviceType;(*'Тип устройства'*) 
 
-   DB_link:GDBString;(*'Материал'*)
+   DB_link:String;(*'Материал'*)
    
-   GC_HeadDevice:GDBString;
-   GC_HDShortName:GDBString;
+   GC_HeadDevice:String;
+   GC_HDShortName:String;
    GC_HDGroup:Integer;
    GC_NumberInGroup:Integer;
 

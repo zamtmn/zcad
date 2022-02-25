@@ -62,8 +62,8 @@ GDBObjLine= object(GDBObj3d)
                  procedure transform(const t_matrix:DMatrix4D);virtual;
                   function jointoline(pl:pgdbobjline;var drawing:TDrawingDef):Boolean;virtual;
 
-                  function ObjToGDBString(prefix,sufix:GDBString):GDBString;virtual;
-                  function GetObjTypeName:GDBString;virtual;
+                  function ObjToString(prefix,sufix:String):String;virtual;
+                  function GetObjTypeName:String;virtual;
                   function GetCenterPoint:GDBVertex;virtual;
                   procedure getoutbound(var DC:TDrawContext);virtual;
                   function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
@@ -163,9 +163,9 @@ begin
      pl^.YouDeleted(drawing);
      result:=true;
 end;
-function GDBObjLine.ObjToGDBString(prefix,sufix:GDBString):GDBString;
+function GDBObjLine.ObjToString(prefix,sufix:String):String;
 begin
-     result:=prefix+inherited ObjToGDBString('GDBObjLine (addr:',')')+sufix;
+     result:=prefix+inherited ObjToString('GDBObjLine (addr:',')')+sufix;
 end;
 constructor GDBObjLine.initnul;
 begin
@@ -190,7 +190,7 @@ begin
      result:=GDBlineID;
 end;
 procedure GDBObjLine.LoadFromDXF;
-var //s: GDBString;
+var //s: String;
   byt: Integer;
 begin
   byt:=readmystrtoint(f);
@@ -198,7 +198,7 @@ begin
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
        if not dxfvertexload(f,10,byt,CoordInOCS.lBegin) then
-          if not dxfvertexload(f,11,byt,CoordInOCS.lEnd) then {s := }f.readGDBSTRING;
+          if not dxfvertexload(f,11,byt,CoordInOCS.lEnd) then {s := }f.readString;
     byt:=readmystrtoint(f);
   end;
 end;

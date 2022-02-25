@@ -161,8 +161,8 @@ type
 //                                      //не через экспорт исходников и парсинг файла с определениями типов
 //  InverseX:Boolean;
 //  InverseY:Boolean;
-//  BaseName:gdbstring;
-//  NumberVar:gdbstring;
+//  BaseName:String;
+//  NumberVar:String;
 //  option2:Boolean;
 //
 //end;

@@ -24,7 +24,7 @@ uses LCLIntf,gdbentityfactory,zcadinterface,GDBLine,gdbobjectsconstdef,typinfo,
      zcadstrconsts,iodxf,fileutil,varman,uzegeometry,gdbasetypes,
      GDBGenericSubEntry,SysInfo,gdbase, GDBManager, sysutils, memman,UGDBDescriptor,
      uzctnrVectorBytes,GDBEntity,TypeDescriptors,ugdbsimpledrawing;
-procedure addfromdwg(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+procedure addfromdwg(name: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 implementation
 uses {GDBBlockDef,}UGDBLayerArray,fileformatsmanager;
 
@@ -1085,7 +1085,7 @@ begin
      result:=nil;
 end;
 
-procedure addfromdwg2004(var f:TZctnrVectorBytes; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt);
+procedure addfromdwg2004(var f:TZctnrVectorBytes; exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt);
 var fh:pdwg2004header;
     fdh:dwg2004headerdecrypteddata;
     syssec,SectionMap,SectionInfo:pdwg2004systemsection;
@@ -1395,10 +1395,10 @@ begin
          end;
 end;
 
-procedure addfromdwg(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+procedure addfromdwg(name: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 var
   f: TZctnrVectorBytes;
-  s: GDBString;
+  s: String;
 begin
   DebugLn('{D+}AddFromDWG');
   //programlog.logoutstr('AddFromDWG',lp_IncPos);

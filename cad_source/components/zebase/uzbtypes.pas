@@ -60,12 +60,12 @@ TObjID=Word;
 PGDBaseObject=^GDBaseObject;
 {----REGISTEROBJECTTYPE GDBaseObject----}
 GDBaseObject=object
-    function ObjToGDBString(prefix,sufix:GDBString):GDBString; virtual;
+    function ObjToString(prefix,sufix:String):String; virtual;
     function GetObjType:TObjID;virtual;
     //procedure Format;virtual;
     procedure FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);virtual;
-    function GetObjTypeName:GDBString;virtual;
-    function GetObjName:GDBString;virtual;
+    function GetObjTypeName:String;virtual;
+    function GetObjName:String;virtual;
     constructor initnul;
     destructor Done;virtual;{ abstract;}
     function IsEntity:Boolean;virtual;
@@ -113,11 +113,11 @@ PGDBNamedObject=^GDBNamedObject;
 GDBNamedObject=object(GDBaseObject)
                      Name:AnsiString;(*saved_to_shd*)(*'Name'*)
                      constructor initnul;
-                     constructor init(n:GDBString);
+                     constructor init(n:String);
                      destructor Done;virtual;
-                     procedure SetName(n:GDBString);
-                     function GetName:GDBString;
-                     function GetFullName:GDBString;virtual;
+                     procedure SetName(n:String);
+                     function GetName:String;
+                     function GetFullName:String;virtual;
                      procedure SetDefaultValues;virtual;
                      procedure IterateCounter(PCounted:Pointer;var Counter:Integer;proc:TProcCounter);virtual;
                end;
@@ -192,7 +192,7 @@ GDBArrayVertex=packed array[0..0] of GDBvertex;
                    BGroup:TBlockGroup;(*'Block group'*)
              end;
   PStringTreeType=^TStringTreeType;
-  TStringTreeType=GDBString;
+  TStringTreeType=String;
   TENTID=TStringTreeType;
   TEentityRepresentation=TStringTreeType;
   TEentityFunction=TStringTreeType;
@@ -202,7 +202,7 @@ GDBsymdolinfo=record
     LLPrimitiveStartIndex: Integer;
     LLPrimitiveCount: Integer;
     NextSymX, SymMaxY,SymMinY, SymMaxX,SymMinX, w, h: Double;
-    Name:GDBString;
+    Name:String;
     Number:Integer;
     LatestCreate:Boolean;
   end;
@@ -269,7 +269,7 @@ function GDBaseObject.GetObjType:Word;
 begin
      result:=GDBBaseObjectID;
 end;
-function GDBaseObject.ObjToGDBString(prefix,sufix:GDBString):GDBString;
+function GDBaseObject.ObjToString(prefix,sufix:String):String;
 begin
      result:=prefix+GetObjTypeName+sufix;
 end;
@@ -292,13 +292,13 @@ procedure GDBaseObject.FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);
 begin
      //format;
 end;
-function GDBaseObject.GetObjTypeName:GDBString;
+function GDBaseObject.GetObjTypeName:String;
 begin
      //pointer(result):=typeof(testobj);
      result:='GDBaseObject';
 
 end;
-function GDBaseObject.GetObjName:GDBString;
+function GDBaseObject.GetObjName:String;
 begin
      //pointer(result):=typeof(testobj);
      result:=GetObjTypeName;
@@ -309,7 +309,7 @@ begin
      pointer(name):=nil;
      SetDefaultValues;
 end;
-constructor GDBNamedObject.Init(n:GDBString);
+constructor GDBNamedObject.Init(n:String);
 begin
     initnul;
     SetName(n);
@@ -318,15 +318,15 @@ destructor GDBNamedObject.done;
 begin
      SetName('');
 end;
-procedure GDBNamedObject.SetName(n:GDBString);
+procedure GDBNamedObject.SetName(n:String);
 begin
      name:=n;
 end;
-function GDBNamedObject.GetName:GDBString;
+function GDBNamedObject.GetName:String;
 begin
      result:=name;
 end;
-function GDBNamedObject.GetFullName:GDBString;
+function GDBNamedObject.GetFullName:String;
 begin
      result:=name;
 end;

@@ -59,14 +59,14 @@ type
   {REGISTEROBJECTTYPE GDBPluginsArray}
   GDBPluginsArray= object(GZVector<moduledesc>)
                         constructor init(m:Integer);
-                        procedure loadplugins(path: GDBString);
+                        procedure loadplugins(path: String);
                   end;
      {Export-}
 
 var //pmodule: popenarraymoduledesc;
     gdbplugins:GDBPluginsArray;
 function getpmodule: Pointer;
-//procedure loadplugins(path: GDBString);
+//procedure loadplugins(path: String);
 {procedure startup;
 procedure finalize;}
 {$IFDEF DELPHI}exports getpmodule;{$ENDIF}
@@ -75,7 +75,7 @@ constructor GDBPluginsArray.init;
 begin
   inherited init(m);
 end;
-procedure GDBPluginsArray.loadplugins(path: GDBString);
+procedure GDBPluginsArray.loadplugins(path: String);
 var
   sr: TSearchRec;
   dllhandle: thandle;

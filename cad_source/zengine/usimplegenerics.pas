@@ -27,7 +27,6 @@ type
 {$IFNDEF DELPHI}
 LessPointer= TLess<pointer>;
 LessString= TLess<String>;
-LessGDBString= TLess<GDBString>;
 LessUnicodeString= TLess<UnicodeString>;
 LessDWGHandle= TLess<TDWGHandle>;
 LessObjID= TLess<TObjID>;
@@ -35,19 +34,19 @@ LessInteger= TLess<Integer>;
 {$ENDIF}
 
 {$IFNDEF DELPHI}
-GDBStringHash=class
-  class function hash(s:GDBstring; n:longint):SizeUInt;
+StringHash=class
+  class function hash(s:String; n:longint):SizeUInt;
 end;
 {$ENDIF}
 TObjID2Counter=TMyMapCounter<TObjID>;
 TObjIDVector=TMyVector<TObjID>;
 
-//TMyGDBStringDictionary <TValue> = class(TMyHashMap<GDBString, TValue{$IFNDEF DELPHI},GDBStringHash{$ENDIF}>)
-TMyGDBStringDictionary <TValue> = class(GKey2DataMap<String,TValue>)
+//TMyStringDictionary <TValue> = class(TMyHashMap<String, TValue{$IFNDEF DELPHI},StringHash{$ENDIF}>)
+TMyStringDictionary <TValue> = class(GKey2DataMap<String,TValue>)
 end;
 
 
-TGDBString2GDBStringDictionary=TMyGDBStringDictionary<GDBString>;
+TString2StringDictionary=TMyStringDictionary<String>;
 
 TMapPointerToHandle=TMyMap<pointer,TDWGHandle(*{$IFNDEF DELPHI}, LessPointer{$ENDIF}*)>;
 TMapPointerToPointer=TMyMap<pointer,pointer(*{$IFNDEF DELPHI}, LessPointer{$ENDIF}*)>;
@@ -68,7 +67,7 @@ end;
 implementation
 
 {$IFNDEF DELPHI}
-class function GDBStringHash.hash(s:GDBString; n:longint):SizeUInt;
+class function StringHash.hash(s:String; n:longint):SizeUInt;
 begin
      result:=makehash(s) mod SizeUInt(n);
 end;

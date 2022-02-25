@@ -40,7 +40,7 @@ BASEFont= object(GDBaseObject)
               function GetOrCreateSymbolInfo(symbol:Integer):PGDBsymdolinfo;virtual;
               function GetOrReplaceSymbolInfo(symbol:Integer{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;virtual;
               function findunisymbolinfo(symbol:Integer):PGDBsymdolinfo;
-              function findunisymbolinfos(symbolname:GDBString):PGDBsymdolinfo;
+              function findunisymbolinfos(symbolname:String):PGDBsymdolinfo;
               function IsCanSystemDraw:Boolean;virtual;
               procedure SetupSymbolLineParams(const matr:DMatrix4D; var SymsParam:TSymbolSParam);virtual;
         end;
@@ -178,7 +178,7 @@ begin
      until pobj=nil;
      result:=nil;
 end;
-function BASEFont.findunisymbolinfos(symbolname:GDBString):PGDBsymdolinfo;
+function BASEFont.findunisymbolinfos(symbolname:String):PGDBsymdolinfo;
 var
    pobj:PGDBUNISymbolInfo;
    ir:itrec;

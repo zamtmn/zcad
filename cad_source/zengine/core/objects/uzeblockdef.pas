@@ -26,17 +26,17 @@ type
 PGDBObjBlockdef=^GDBObjBlockdef;
 {REGISTEROBJECTTYPE GDBObjBlockdef}
 GDBObjBlockdef= object(GDBObjGenericSubEntry)
-                     Name:GDBString;(*saved_to_shd*)
-                     VarFromFile:GDBString;(*saved_to_shd*)
+                     Name:String;(*saved_to_shd*)
+                     VarFromFile:String;(*saved_to_shd*)
                      Base:GDBvertex;(*saved_to_shd*)
                      Formated:Boolean;
                      BlockDesc:TBlockDesc;(*'Block params'*)(*saved_to_shd*)(*oi_readonly*)
                      constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                     constructor init(_name:GDBString);
+                     constructor init(_name:String);
                      procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                     //function FindVariable(varname:GDBString):pvardesk;virtual;
+                     //function FindVariable(varname:String):pvardesk;virtual;
                      procedure LoadFromDXF(var f: TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
-                     function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;virtual;
+                     function ProcessFromDXFObjXData(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;virtual;
                      destructor done;virtual;
                      function GetMatrix:PDMatrix4D;virtual;
                      function GetHandle:PtrInt;virtual;
@@ -81,7 +81,7 @@ begin
   while byt <> 0 do
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
-                                           f.ReadGDBString;
+                                           f.ReadString;
     byt:=readmystrtoint(f);
   end;
   GetDXFIOFeatures.RunAfterLoadFeature(@self);
@@ -164,7 +164,7 @@ var
    counter:integer;
 begin
   counter:=low(args);
-  PBlockdef.Name:=CreateGDBStringFromArray(counter,args);
+  PBlockdef.Name:=CreateStringFromArray(counter,args);
   PBlockdef.Base:=CreateVertexFromArray(counter,args);
 end;
 function AllocAndCreateBlockDef(owner:PGDBObjGenericWithSubordinated;args:array of const):PGDBObjBlockDef;

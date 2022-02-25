@@ -55,8 +55,8 @@ TGDIData=record
           RD_TextRendering:TTextRenderingType;
           RD_DrawDebugGeometry:Boolean;
           DebugCounter:TGDIPrimitivesCounter;
-          RD_Renderer:GDBString;(*'Device'*)(*oi_readonly*)
-          RD_Version:GDBString;(*'Version'*)(*oi_readonly*)
+          RD_Renderer:String;(*'Device'*)(*oi_readonly*)
+          RD_Version:String;(*'Version'*)(*oi_readonly*)
     end;
 {EXPORT-}
 TGDIFontCacheKey=record
@@ -183,7 +183,7 @@ end;
 {$ENDIF}
 procedure TZGLGDIDrawer.PostRenderDraw;
 var
-   s:gdbstring;
+   s:String;
    //r:trect;
    TM: TTextMetric;
    x,y:integer;

@@ -18,7 +18,7 @@ type
     PTCableDesctiptor=^TCableDesctiptor;
     {REGISTEROBJECTTYPE TCableDesctiptor}
     TCableDesctiptor= object(GDBaseObject)
-                     Name:GDBString;
+                     Name:String;
                      Segments:TZctnrVectorPGDBaseObjects;   // сборщик всех кабелей с одинаковым именем (ШС..)
                      StartDevice,EndDevice:PGDBObjDevice;
                      StartSegment:PGDBObjCable;
@@ -26,8 +26,8 @@ type
                      length:Double;
                      constructor init;
                      destructor done;virtual;
-                     function GetObjTypeName:GDBString;virtual;
-                     function GetObjName:GDBString;virtual;
+                     function GetObjTypeName:String;virtual;
+                     function GetObjName:String;virtual;
                  end;
 
     PTCableManager=^TCableManager;
@@ -36,8 +36,8 @@ type
                        constructor init;
                        destructor done;virtual;
                        procedure build;virtual;
-                       function FindOrCreate(sname:gdbstring):PTCableDesctiptor;virtual;
-                       function Find(sname:gdbstring):PTCableDesctiptor;virtual;
+                       function FindOrCreate(sname:String):PTCableDesctiptor;virtual;
+                       function Find(sname:String):PTCableDesctiptor;virtual;
                  end;
 {EXPORT-}
 implementation
@@ -77,7 +77,7 @@ var pobj,pobj2:PGDBObjCable;
     p1,p2:ppointer;
     tp:pointer;
     pvn,pvn2:pvardesk;
-    sname:gdbstring;
+    sname:String;
     pcd,prevpcd:PTCableDesctiptor;
     tcd:TCableDesctiptor;
     itsok:boolean;
@@ -96,7 +96,7 @@ begin
                 //pvn:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('NMO_Name');
                 pvn:=pentvarext.entityunit.FindVariable('NMO_Name');      //находим обозначение кабеля (ШС2)
                 if pvn<>nil then
-                                sname:=pgdbstring(pvn^.data.Addr.Instance)^
+                                sname:=pString(pvn^.data.Addr.Instance)^
                             else
                                 sname:=rsNameAbsent;
                 if sname='RS' then
@@ -233,7 +233,7 @@ function TCableManager.FindOrCreate;
 var
     pcd:PTCableDesctiptor;
     ir:itrec;
-    sn:gdbstring;
+    sn:String;
 begin
      sn:=uppercase(sname);
      pcd:=beginiterate(ir);
@@ -270,7 +270,7 @@ function TCableManager.Find;
 var
     pcd:PTCableDesctiptor;
     ir:itrec;
-    sn:gdbstring;
+    sn:String;
 begin
      sn:=uppercase(sname);
      pcd:=beginiterate(ir);

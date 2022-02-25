@@ -27,14 +27,14 @@ type
 PGDBfont=^GDBfont;
 {REGISTEROBJECTTYPE GDBfont}
 GDBfont= object(GDBNamedObject)
-    fontfile:GDBString;
-    Internalname:GDBString; // Международное полное имя с описанием авора
-    family:GDBString;
-    fullname:GDBString;
+    fontfile:String;
+    Internalname:String; // Международное полное имя с описанием авора
+    family:String;
+    fullname:String;
     font:PBASEFont;
     DummyDrawerHandle:{THandle}ptruint;
     constructor initnul;
-    constructor init(n:GDBString);
+    constructor init(n:String);
     //procedure ItSHX;
     //procedure ItFFT;
     destructor done;virtual;
@@ -45,10 +45,10 @@ GDBfont= object(GDBNamedObject)
 {EXPORT-}
 var
    pbasefont: PGDBfont;
-procedure initfont(var pf:pgdbfont;name:gdbstring);
+procedure initfont(var pf:pgdbfont;name:String);
 implementation
 //uses {math,}log;
-procedure initfont(var pf:pgdbfont;name:gdbstring);
+procedure initfont(var pf:pgdbfont;name:String);
 //var i:integer;
 begin
      //Getmem(Pointer(pf),sizeof(gdbfont));

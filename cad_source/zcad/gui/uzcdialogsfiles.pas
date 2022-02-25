@@ -22,13 +22,13 @@ interface
 uses uzbtypesbase,sysutils,uzbstrproc,
      {$IFNDEF DELPHI}LResources,{$ENDIF}Dialogs{$IFNDEF DELPHI},FileUtil{$ENDIF};
 const
-    ImportFileFilter: GDBString = 'PDF files (*.pdf)|*.pdf|PostScript files (*.ps)|*.ps|SVG files (*.svg)|*.svg|DXF files (*.dxf)|*.dxf|EPS files (*.eps)|*.eps';
-    ProjectFileFilter: GDBString = 'DXF files (*.dxf)|*.dxf|AutoCAD DWG files (*.dwg)|*.dwg|ZCAD ZCP files (*.zcp)|*.zcp|All files (*.*)|*.*';
-    CSVFileFilter: GDBString ='CSV files (*.csv)|*.csv|All files (*.*)|*.*';
-    //ProjectFileFilter: GDBString = 'DXF files (*.dxf)'#0'*.dxf'#0'DWG files (*.dwg)'#0'*.dwg'#0'ZCP files (*.zcp)'#0'*.zcp'#0'All files (*.*)'#0'*.*'#0#0;
-    //CSVFileFilter: GDBString ='CSV files (*.csv)'#0'*.csv'#0'All files (*.*)'#0'*.*'#0#0;
-function OpenFileDialog(out FileName:GDBString;const DefFilterIndex:integer; const DefExt, Filter, InitialDir, Title: string):Boolean;
-function SaveFileDialog(var FileName:GDBString;const DefExt, Filter, InitialDir, Title: string):Boolean;
+    ImportFileFilter: String = 'PDF files (*.pdf)|*.pdf|PostScript files (*.ps)|*.ps|SVG files (*.svg)|*.svg|DXF files (*.dxf)|*.dxf|EPS files (*.eps)|*.eps';
+    ProjectFileFilter: String = 'DXF files (*.dxf)|*.dxf|AutoCAD DWG files (*.dwg)|*.dwg|ZCAD ZCP files (*.zcp)|*.zcp|All files (*.*)|*.*';
+    CSVFileFilter: String ='CSV files (*.csv)|*.csv|All files (*.*)|*.*';
+    //ProjectFileFilter: String = 'DXF files (*.dxf)'#0'*.dxf'#0'DWG files (*.dwg)'#0'*.dwg'#0'ZCP files (*.zcp)'#0'*.zcp'#0'All files (*.*)'#0'*.*'#0#0;
+    //CSVFileFilter: String ='CSV files (*.csv)'#0'*.csv'#0'All files (*.*)'#0'*.*'#0#0;
+function OpenFileDialog(out FileName:String;const DefFilterIndex:integer; const DefExt, Filter, InitialDir, Title: string):Boolean;
+function SaveFileDialog(var FileName:String;const DefExt, Filter, InitialDir, Title: string):Boolean;
 implementation
 //uses log;
 //var
@@ -40,7 +40,7 @@ implementation
 function SaveFileDialog;
 var
    SD:TSaveDialog;
-   //fileext:GDBString;
+   //fileext:String;
 begin
      sd:=TSaveDialog.Create(nil);
      sd.Title:=Title;

@@ -25,7 +25,7 @@ uses uzbstrproc,uzbtypesbase,varmandef,UBaseTypeDescriptor,
 type
     TTypesArray=array of pointer;
 var
-   foneGDBString,foneGDBInteger,foneDouble:TTypesArray;
+   foneString,foneGDBInteger,foneDouble:TTypesArray;
 const
 
   basicoperatorcount = 5;
@@ -38,7 +38,7 @@ const
   foneGDBWord = #10;
   foneuGDBWord = #11;
   foneuGDBInteger = #13;
-  foneGDBString = #15;}
+  foneString = #15;}
 type
   operandstack = record
     count: Byte;
@@ -52,23 +52,23 @@ type
     typearray: array[0..0] of Byte;
   end;
   operatornam = record
-    name: GDBString;
+    name: String;
     prior: Byte;
   end;
   operatortype = record
-    name: GDBString;
+    name: String;
     param: pointer;
     hparam: pointer;
     addr: basicoperator;
   end;
   functiontype = record
-    name: GDBString;
-    param: {GDBString}TTypesArray;
+    name: String;
+    param: {String}TTypesArray;
     addr: basicfunction;
   end;
 
   functionnam = record
-    name: GDBString;
+    name: String;
                        //param:ptfunctionparamnype;
   end;
 
@@ -89,8 +89,8 @@ function TDouble_div_TDouble(var rez, hrez: vardesk): vardesk;
 function TDouble_div_TGDBInteger(var rez, hrez: vardesk): vardesk;
 function TDouble_let_TDouble(var rez, hrez: vardesk): vardesk;
 function TGDBInteger_let_TGDBInteger(var rez, hrez: vardesk): vardesk;
-function TGDBString_let_TGDBString(var rez, hrez: vardesk): vardesk;
-function TAnsiString_let_TGDBString(var rez, hrez: vardesk): vardesk;
+function TString_let_TString(var rez, hrez: vardesk): vardesk;
+function TAnsiString_let_TString(var rez, hrez: vardesk): vardesk;
 function TAnsiString_let_TAnsiString(var rez, hrez: vardesk): vardesk;
 function TByte_let_TGDBInteger(var rez, hrez: vardesk): vardesk;
 function TBoolean_let_TBoolean(var rez, hrez: vardesk): vardesk;
@@ -113,10 +113,10 @@ function Cos_TGDBInteger(var stack: operandstack): vardesk;
 //function DecodeStringBase64_TAnsiString(var stack: operandstack): vardesk;
 function DecodeStringBase64_TGBDString(var stack: operandstack): vardesk;
 
-function itbasicoperator(expr: GDBString): Integer;
-function itbasicfunction(expr: GDBString): Integer;
-function findbasicoperator(expr: GDBString; rez, hrez: {PUserTypeDescriptor}vardesk): Integer;
-function findbasicfunction(name: GDBString; opstack: operandstack): Integer;
+function itbasicoperator(expr: String): Integer;
+function itbasicfunction(expr: String): Integer;
+function findbasicoperator(expr: String; rez, hrez: {PUserTypeDescriptor}vardesk): Integer;
+function findbasicfunction(name: String; opstack: operandstack): Integer;
 const
   basicoperatorname: array[1..basicoperatorcount] of operatornam =
   (
@@ -140,8 +140,8 @@ const
     , (name: '-'; param: nil; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}Tnothing_minus_TGDBInteger)
     , (name: '*'; param: @FundamentalLongIntDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBInteger_mul_TGDBInteger)
     , (name: ':='; param: @FundamentalDoubleDescriptorObj; hparam: @FundamentalDoubleDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TDouble_let_TDouble)
-    , (name: ':='; param: @FundamentalStringDescriptorObj; hparam: @FundamentalStringDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBString_let_TGDBString)
-    , (name: ':='; param: @FundamentalAnsiStringDescriptorObj; hparam: @FundamentalStringDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TAnsiString_let_TGDBString)
+    , (name: ':='; param: @FundamentalStringDescriptorObj; hparam: @FundamentalStringDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TString_let_TString)
+    , (name: ':='; param: @FundamentalAnsiStringDescriptorObj; hparam: @FundamentalStringDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TAnsiString_let_TString)
     , (name: ':='; param: @FundamentalLongIntDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBInteger_let_TGDBInteger)
     , (name: ':='; param: @FundamentalByteDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TByte_let_TGDBInteger)
     , (name: '-'; param: nil; hparam: @FundamentalDoubleDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}Tnothing_minus_TDouble)
@@ -183,7 +183,7 @@ begin
   //result.Instance:=nil;
   result.data.PTD:=nil;
 end;
-function funcstackequalGDBString(str: TTypesArray; opstack: operandstack): Boolean;
+function funcstackequalString(str: TTypesArray; opstack: operandstack): Boolean;
 var
   i: Integer;
 begin
@@ -196,7 +196,7 @@ begin
                                              end;
 end;
 
-function findbasicfunction(name: GDBString; opstack: operandstack): Integer;
+function findbasicfunction(name: String; opstack: operandstack): Integer;
 var
   i{, j}: Integer;
 begin
@@ -207,7 +207,7 @@ begin
     begin
       if length(basicfunctionparam[i].param) = opstack.count then
       begin
-        if funcstackequalGDBString(basicfunctionparam[i].param, opstack) then
+        if funcstackequalString(basicfunctionparam[i].param, opstack) then
         begin
           result := i;
           system.exit;
@@ -264,7 +264,7 @@ begin
   r.name := '';
   r.SetInstance(FundamentalStringDescriptorObj.AllocAndInitInstance);
   ppointer(r.data.Addr.Instance)^:=nil;
-  PGDBString(r.data.Addr.Instance)^ := DecodeStringBase64(PGDBString(stack.stack[1].data.Addr.Instance)^);
+  PString(r.data.Addr.Instance)^ := DecodeStringBase64(PString(stack.stack[1].data.Addr.Instance)^);
   result := r;
 end;
 function Cos_TDouble(var stack: operandstack): vardesk;
@@ -338,7 +338,7 @@ begin
   result := r;
 end;
 
-function TGDBString_let_TGDBString(var rez, hrez: vardesk): vardesk;
+function TString_let_TString(var rez, hrez: vardesk): vardesk;
 begin
   result.data.ptd:=@FundamentalStringDescriptorObj;
   result.name := '';
@@ -346,11 +346,11 @@ begin
   if rez.data.Addr.Instance=nil then begin
     rez.SetInstance(FundamentalStringDescriptorObj.AllocAndInitInstance);
   end else
-     GDBString(rez.data.Addr.Instance^):='';
-  GDBString(result.data.Addr.Instance^) := GDBString(hrez.data.Addr.Instance^);
-  GDBString(rez.data.Addr.Instance^) := GDBString(hrez.data.Addr.Instance^);
+     String(rez.data.Addr.Instance^):='';
+  String(result.data.Addr.Instance^) := String(hrez.data.Addr.Instance^);
+  String(rez.data.Addr.Instance^) := String(hrez.data.Addr.Instance^);
 end;
-function TAnsiString_let_TGDBString(var rez, hrez: vardesk): vardesk;
+function TAnsiString_let_TString(var rez, hrez: vardesk): vardesk;
 begin
   result.data.ptd:=@FundamentalAnsiStringDescriptorObj;
   result.name := '';
@@ -359,8 +359,8 @@ begin
     rez.SetInstance(FundamentalStringDescriptorObj.AllocAndInitInstance);
   end else
     AnsiString(rez.data.Addr.Instance^):='';
-  AnsiString(result.data.Addr.Instance^) := Tria_Utf8ToAnsi(GDBString(hrez.data.Addr.Instance^));
-  AnsiString(rez.data.Addr.Instance^) := Tria_Utf8ToAnsi(GDBString(hrez.data.Addr.Instance^));
+  AnsiString(result.data.Addr.Instance^) := Tria_Utf8ToAnsi(String(hrez.data.Addr.Instance^));
+  AnsiString(rez.data.Addr.Instance^) := Tria_Utf8ToAnsi(String(hrez.data.Addr.Instance^));
 end;
 function TAnsiString_let_TAnsiString(var rez, hrez: vardesk): vardesk;
 begin
@@ -570,7 +570,7 @@ begin
   result := r;
 end;
 
-function itbasicoperator(expr: GDBString): Integer;
+function itbasicoperator(expr: String): Integer;
 var
   i: Integer;
 begin
@@ -583,7 +583,7 @@ begin
     end
 end;
 
-function itbasicfunction(expr: GDBString): Integer;
+function itbasicfunction(expr: String): Integer;
 var
   i: Integer;
 begin
@@ -596,7 +596,7 @@ begin
     end
 end;
 
-function findbasicoperator(expr: GDBString; rez, hrez: vardesk): Integer;
+function findbasicoperator(expr: String; rez, hrez: vardesk): Integer;
 var
   i: Integer;
   rezptd,hrezptd:PUserTypeDescriptor;
@@ -638,10 +638,10 @@ var
 begin
      setlength(foneGDBInteger,1);foneGDBInteger[0]:=@FundamentalLongIntDescriptorObj;
      setlength(foneDouble,1);foneDouble[0]:=@FundamentalDoubleDescriptorObj;
-     setlength(foneGDBString,1);foneGDBString[0]:=@FundamentalStringDescriptorObj;
+     setlength(foneString,1);foneString[0]:=@FundamentalStringDescriptorObj;
      tv.name:='cos';tv.param:=foneGDBInteger;tv.addr:=Cos_TGDBInteger;
      tv1.name:='cos';tv1.param:=foneDouble;tv1.addr:=Cos_TDouble;
-     tv2.name:='DecodeStringBase64';tv2.param:=foneGDBString;tv2.addr:=DecodeStringBase64_TGBDString;
+     tv2.name:='DecodeStringBase64';tv2.param:=foneString;tv2.addr:=DecodeStringBase64_TGBDString;
      setlength(basicfunctionparam,3);
      basicfunctionparam[0]:=tv;
      basicfunctionparam[1]:=tv1;

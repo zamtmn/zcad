@@ -176,7 +176,7 @@ function CreateReflectionMatrix(plane:DVector4D): DMatrix4D;
 function CreateVertex(const x,y,z:Double):GDBVertex;inline;
 function CreateVertexFromArray(var counter:integer;const args:array of const):GDBVertex;
 function  CreateDoubleFromArray(var counter:integer;const args:array of const):Double;
-function  CreateGDBStringFromArray(var counter:integer;const args:array of const):String;
+function  CreateStringFromArray(var counter:integer;const args:array of const):String;
 //**Создать 2D вершину
 function CreateVertex2D(const x,y:Double):GDBVertex2D;inline;
 function IsPointInBB(const point:GDBvertex; var fistbb:TBoundingBox):Boolean;inline;
@@ -2087,7 +2087,7 @@ begin
      end;{case}
      inc(counter);
 end;
-function  CreateGDBStringFromArray(var counter:integer;const args:array of const):String;
+function  CreateStringFromArray(var counter:integer;const args:array of const):String;
 begin
      case args[counter].VType of
                        vtString:result:=args[counter].VString^;

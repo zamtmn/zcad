@@ -2,7 +2,7 @@ unit elwire;
 interface
 uses system;
 var
-   El_Wire:GDBString;
+   El_Wire:String;
 implementation
 begin
    El_Wire:='unnamed';

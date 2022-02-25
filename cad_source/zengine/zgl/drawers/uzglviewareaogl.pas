@@ -57,7 +57,7 @@ type
                       function NeedDrawInsidePaintEvent:boolean; override;
                       procedure setdeicevariable; override;
                       function getParam:pointer; override;
-                      function getParamTypeName:GDBString; override;
+                      function getParamTypeName:String; override;
                       function CreateRC(_maxdetail:Boolean=false):TDrawContext;override;
                   end;
 const

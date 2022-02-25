@@ -40,7 +40,7 @@ function ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObj
                                 point: gdbvertex; scale, angle: Double; s: pansichar):PGDBObjEntity;
 var
   pb:PGDBObjEntity;
-  nam:gdbstring;
+  nam:String;
   CreateProc:TAllocAndInitAndSetGeomPropsFunc;
 begin
   result:=nil;

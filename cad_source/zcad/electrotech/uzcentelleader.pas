@@ -50,7 +50,7 @@ GDBObjElLeader= object(GDBObjComplex)
             function Clone(own:Pointer):PGDBObjEntity;virtual;
             procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
             procedure DXFOut(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-            function GetObjTypeName:GDBString;virtual;
+            function GetObjTypeName:String;virtual;
             function ReturnLastOnMouse(InSubEntry:Boolean):PGDBObjEntity;virtual;
             procedure ImSelected(pobj:PGDBObjSubordinated;pobjinarray:Integer);virtual;
             procedure DeSelect(var SelectedObjCount:Integer;ds2s:TDeSelect2Stage);virtual;
@@ -179,13 +179,13 @@ procedure GDBObjElLeader.SaveToDXF;
 begin
   MainLine.bp.ListPos.Owner:={gdb.GetCurrentROOT}self.GetMainOwner;
   MainLine.SaveToDXF(outhandle,drawing,IODXFContext);
-  (*dxfGDBStringout(outhandle,1001,ZCADAppNameInDXF);
-  dxfGDBStringout(outhandle,1002,'{');
-  dxfGDBStringout(outhandle,1000,'_UPGRADE='+inttostr(UD_LineToLeader));
-  dxfGDBStringout(outhandle,1000,'%1=size|Integer|'+inttostr(size)+'|');
-  dxfGDBStringout(outhandle,1000,'%2=scale|Double|'+floattostr(scale)+'|');
-  dxfGDBStringout(outhandle,1000,'%3=twidth|Double|'+floattostr(twidth)+'|');
-  dxfGDBStringout(outhandle,1002,'}');*)
+  (*dxfStringout(outhandle,1001,ZCADAppNameInDXF);
+  dxfStringout(outhandle,1002,'{');
+  dxfStringout(outhandle,1000,'_UPGRADE='+inttostr(UD_LineToLeader));
+  dxfStringout(outhandle,1000,'%1=size|Integer|'+inttostr(size)+'|');
+  dxfStringout(outhandle,1000,'%2=scale|Double|'+floattostr(scale)+'|');
+  dxfStringout(outhandle,1000,'%3=twidth|Double|'+floattostr(twidth)+'|');
+  dxfStringout(outhandle,1002,'}');*)
   SaveToDXFPostProcess(outhandle,IODXFContext);
   MainLine.bp.ListPos.Owner:=@self;
 
@@ -216,7 +216,7 @@ begin
      repeat
          pvc:=pv^.Clone(@self{.bp.Owner});
          pvc2:=pv^.Clone(@self{.bp.Owner});
-         //historyoutstr(pv^.ObjToGDBString('','')+'  cloned obj='+pvc^.ObjToGDBString('',''));
+         //historyoutstr(pv^.ObjToString('','')+'  cloned obj='+pvc^.ObjToString('',''));
          if pvc^.GetObjType=GDBDeviceID then
             pvc:=pvc;
 
@@ -266,11 +266,11 @@ var
    tv,tv2{,tv3}:gdbvertex;
    pobj,pcable:PGDBObjCable;
    ir,ir2:itrec;
-   s:gdbstring;
+   s:String;
    psl:PTZctnrVectorStrings;
    pvn,pvNote,pvNoteFormat:pvardesk;
    sta:TZctnrVectorStrings;
-   ps:pgdbstring;
+   ps:pString;
    bb:TBoundingBox;
    pdev:PGDBObjDevice;
    ptn:PTNodeProp;

@@ -50,7 +50,7 @@ GDBObjOpenArrayOfPV= object(TZctnrVectorPGDBaseObjects)
                       procedure FormatAfterEdit(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                       //function InRect:TInRect;virtual;
                       function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;virtual;
-                      //function FindEntityByVar(objID:Word;vname,vvalue:GDBString):PGDBObjSubordinated;virtual;
+                      //function FindEntityByVar(objID:Word;vname,vvalue:String):PGDBObjSubordinated;virtual;
                 end;
 {Export-}
 function EqualFuncPGDBaseObject(const a, b: PGDBaseObject):Boolean;

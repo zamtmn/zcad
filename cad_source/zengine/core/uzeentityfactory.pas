@@ -31,7 +31,7 @@ TAllocAndInitAndSetGeomPropsFunc=function (owner:PGDBObjGenericWithSubordinated;
 TSetGeomPropsFunc=procedure (ent:PGDBObjEntity;args:array of const);
 TEntityUpgradeFunc=function (ptu:PExtensionData;ent:PGDBObjEntity;const drawing:TDrawingDef): PGDBObjEntity;
 TEntInfoData=record
-                          DXFName,UserName:GDBString;
+                          DXFName,UserName:String;
                           EntityID:TObjID;
                           AllocEntity:TAllocEntFunc;
                           AllocAndInitEntity:TAllocAndInitEntFunc;
@@ -42,7 +42,7 @@ TEntUpgradeData=record
                       EntityUpgradeFunc:TEntityUpgradeFunc;
                 end;
 
-TDXFName2EntInfoDataMap=GKey2DataMap<GDBString,TEntInfoData(*{$IFNDEF DELPHI},LessGDBString{$ENDIF}*)>;
+TDXFName2EntInfoDataMap=GKey2DataMap<String,TEntInfoData(*{$IFNDEF DELPHI},LessString{$ENDIF}*)>;
 TObjID2EntInfoDataMap=GKey2DataMap<TObjID,TEntInfoData(*{$IFNDEF DELPHI},LessObjID{$ENDIF}*)>;
 TEntUpgradeDataMap=GKey2DataMap<TEntUpgradeKey,TEntUpgradeData(*{$IFNDEF DELPHI},LessEntUpgradeKey{$ENDIF}*)>;
 
@@ -50,13 +50,13 @@ function CreateInitObjFree(t:TObjID;owner:{PGDBObjGenericSubEntry}pointer):PGDBO
 function AllocEnt(t:TObjID): Pointer;
 
 procedure RegisterDXFEntity(const _EntityID:TObjID;
-                         const _DXFName,_UserName:GDBString;
+                         const _DXFName,_UserName:String;
                          const _AllocEntity:TAllocEntFunc;
                          const _AllocAndInitEntity:TAllocAndInitEntFunc;
                          const _SetGeomPropsFunc:TSetGeomPropsFunc=nil;
                          const _AllocAndCreateEntFunc:TAllocAndInitAndSetGeomPropsFunc=nil);
 procedure RegisterEntity(const _EntityID:TObjID;
-                         const _UserName:GDBString;
+                         const _UserName:String;
                          const _AllocEntity:TAllocEntFunc;
                          const _AllocAndInitEntity:TAllocAndInitEntFunc;
                          const _SetGeomPropsFunc:TSetGeomPropsFunc=nil;
@@ -80,7 +80,7 @@ implementation
 //uses
 //    log;
 procedure _RegisterEntity(const _EntityID:TObjID;
-                         const _DXFName,_UserName:GDBString;
+                         const _DXFName,_UserName:String;
                          const _AllocEntity:TAllocEntFunc;
                          const _AllocAndInitEntity:TAllocAndInitEntFunc;
                          const _SetGeomPropsFunc:TSetGeomPropsFunc;
@@ -122,7 +122,7 @@ begin
 end;
 
 procedure RegisterDXFEntity(const _EntityID:TObjID;
-                         const _DXFName,_UserName:GDBString;
+                         const _DXFName,_UserName:String;
                          const _AllocEntity:TAllocEntFunc;
                          const _AllocAndInitEntity:TAllocAndInitEntFunc;
                          const _SetGeomPropsFunc:TSetGeomPropsFunc=nil;
@@ -133,7 +133,7 @@ begin
      _RegisterEntity(_EntityID,_DXFName,_UserName,_AllocEntity,_AllocAndInitEntity,_SetGeomPropsFunc,_AllocAndCreateEntFunc,true);
 end;
 procedure RegisterEntity(const _EntityID:TObjID;
-                         const _UserName:GDBString;
+                         const _UserName:String;
                          const _AllocEntity:TAllocEntFunc;
                          const _AllocAndInitEntity:TAllocAndInitEntFunc;
                          const _SetGeomPropsFunc:TSetGeomPropsFunc=nil;

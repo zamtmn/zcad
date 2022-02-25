@@ -28,9 +28,9 @@ type
 PGDBPointerDescriptor=^GDBPointerDescriptor;
 GDBPointerDescriptor=object(TUserTypeDescriptor)
                      TypeOf:PUserTypeDescriptor;
-                     ReferType:GDBString;
+                     ReferType:String;
                      //constructor init(var t:gdbtypedesk);
-                     constructor init(ptype:GDBString;tname:string;pu:pointer);
+                     constructor init(ptype:String;tname:string;pu:pointer);
                      function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
                      //function Serialize(PInstance:Pointer;SaveFlag:Word;var membuf:PTZctnrVectorBytes;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
                      //function DeSerialize(PInstance:Pointer;SaveFlag:Word;var membuf:TZctnrVectorBytes;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;

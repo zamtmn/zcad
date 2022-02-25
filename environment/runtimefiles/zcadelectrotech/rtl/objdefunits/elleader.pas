@@ -2,8 +2,8 @@ unit elleader;
 interface
 uses system;
 var
-   NOTE_NoteFormat:GDBString;(*'Comment format'*)
-   NOTE_Note:GDBString;(*'Comment'*)
+   NOTE_NoteFormat:String;(*'Comment format'*)
+   NOTE_Note:String;(*'Comment'*)
 implementation
 begin
    NOTE_NoteFormat:='';

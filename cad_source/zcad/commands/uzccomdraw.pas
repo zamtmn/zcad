@@ -51,7 +51,7 @@ uses
   ,uzelongprocesssupport,LazLogger,uzccommand_circle2,uzccommand_erase,uzccmdfloatinsert,
   uzccommand_rebuildtree;
 const
-     modelspacename:GDBSTring='**Модель**';
+     modelspacename:String='**Модель**';
 type
 {EXPORT+}
          TEntityProcess=(
@@ -78,9 +78,9 @@ type
          {REGISTERRECORDTYPE TBlockReplaceParams}
          TBlockReplaceParams=record
                             Process:BRMode;(*'Process'*)
-                            CurrentFindBlock:GDBString;(*'**CurrentFind'*)(*oi_readonly*)(*hidden_in_objinsp*)
+                            CurrentFindBlock:String;(*'**CurrentFind'*)(*oi_readonly*)(*hidden_in_objinsp*)
                             Find:TEnumData;(*'Find'*)
-                            CurrentReplaceBlock:GDBString;(*'**CurrentReplace'*)(*oi_readonly*)(*hidden_in_objinsp*)
+                            CurrentReplaceBlock:String;(*'**CurrentReplace'*)(*oi_readonly*)(*hidden_in_objinsp*)
                             Replace:TEnumData;(*'Replace'*)
                             SaveOrientation:Boolean;(*'Save orientation'*)
                             SaveVariables:Boolean;(*'Save variables'*)
@@ -101,7 +101,7 @@ type
                            end;
          {TSetVarStyle=packed record
                             ent:TMSType;(*'Entity'*)
-                            CurrentFindBlock:GDBString;(*'**CurrentFind'*)
+                            CurrentFindBlock:String;(*'**CurrentFind'*)
                              Scale:GDBVertex;(*'New scale'*)
                              Absolytly:Boolean;(*'Absolytly'*)
                            end;}
@@ -120,18 +120,18 @@ type
                             StartNumber:Integer;(*'Start'*)
                             Increment:Integer;(*'Increment'*)
                             SaveStart:Boolean;(*'Save start number'*)
-                            BaseName:GDBString;(*'Base name sorting devices'*)
-                            NumberVar:GDBString;(*'Number variable'*)
+                            BaseName:String;(*'Base name sorting devices'*)
+                            NumberVar:String;(*'Number variable'*)
                       end;
          PTExportDevWithAxisParams=^TExportDevWithAxisParams;
          {REGISTERRECORDTYPE TExportDevWithAxisParams}
          TExportDevWithAxisParams=record
-                            AxisDeviceName:GDBString;(*'AxisDeviceName'*)
+                            AxisDeviceName:String;(*'AxisDeviceName'*)
                       end;
   PTBEditParam=^TBEditParam;
   {REGISTERRECORDTYPE TBEditParam}
   TBEditParam=record
-                    CurrentEditBlock:GDBString;(*'Current block'*)(*oi_readonly*)
+                    CurrentEditBlock:String;(*'Current block'*)(*oi_readonly*)
                     Blocks:TEnumData;(*'Select block'*)
               end;
   ptpcoavector=^tpcoavector;
@@ -202,14 +202,14 @@ type
 taxisdesc=record
               p1,p2:GDBVertex;
               d0:double;
-              Name:GDBString;
+              Name:String;
         end;
 tdevcoord=record
               coord:GDBVertex;
               pdev:PGDBObjDevice;
         end;
 tdevname=record
-              name:GDBString;
+              name:String;
               pdev:PGDBObjDevice;
         end;
 TGDBVertexLess=class
@@ -267,11 +267,11 @@ var
 //procedure Finalize;
 implementation
 
-function GetBlockDefNames(var BDefNames:TZctnrVectorStrings;selname:GDBString):Integer;
+function GetBlockDefNames(var BDefNames:TZctnrVectorStrings;selname:String):Integer;
 var pb:PGDBObjBlockdef;
     ir:itrec;
     i:Integer;
-    s:gdbstring;
+    s:String;
 begin
      result:=-1;
      i:=0;
@@ -287,7 +287,7 @@ begin
            inc(i);
      until pb=nil;
 end;
-function GetSelectedBlockNames(var BDefNames:TZctnrVectorStrings;selname:GDBString;mode:BRMode):Integer;
+function GetSelectedBlockNames(var BDefNames:TZctnrVectorStrings;selname:String;mode:BRMode):Integer;
 var pb:PGDBObjBlockInsert;
     ir:itrec;
     i:Integer;
@@ -338,7 +338,7 @@ begin
            pb:=poa^.iterate(ir);
      until pb=nil;
 end;
-function GetStyleNames(var BDefNames:TZctnrVectorStrings;selname:GDBString):Integer;
+function GetStyleNames(var BDefNames:TZctnrVectorStrings;selname:String):Integer;
 var pb:PGDBTextStyle;
     ir:itrec;
     i:Integer;
@@ -399,7 +399,7 @@ var pb:PGDBObjBlockInsert;
     ir:itrec;
     {i,}result:Integer;
     poa:PGDBObjEntityTreeArray;
-    //selname,newname:GDBString;
+    //selname,newname:String;
 begin
      begin
           poa:=@drawings.GetCurrentROOT^.ObjArray;
@@ -469,7 +469,7 @@ var pb:PGDBObjBlockInsert;
     ir:itrec;
     {i,}result:Integer;
     poa:PGDBObjEntityTreeArray;
-    //selname,newname:GDBString;
+    //selname,newname:String;
 begin
      begin
           poa:=@drawings.GetCurrentROOT^.ObjArray;
@@ -543,7 +543,7 @@ var pb:PGDBObjBlockInsert;
     ir:itrec;
     {i,}result:Integer;
     poa:PGDBObjEntityTreeArray;
-    selname,newname:GDBString;
+    selname,newname:String;
     DC:TDrawContext;
     psdesc:pselectedobjdesc;
 procedure rb(pb:PGDBObjBlockInsert);
@@ -824,7 +824,7 @@ begin
        end;
   end;
 end;
-function GetAxisName(axisarray:taxisdescarray;hi,hi2:integer):gdbstring;
+function GetAxisName(axisarray:taxisdescarray;hi,hi2:integer):String;
 var
    ti:integer;
 begin
@@ -848,7 +848,7 @@ var
    pdev:PGDBObjDevice;
    paxisline:PGDBObjLine;
    ir,ir2:itrec;
-   axisdevname:GDBString;
+   axisdevname:String;
    ALLayer:pointer;
    pdevvarext:TVariablesExtender;
    pvd,pvdv:pvardesk;
@@ -856,7 +856,7 @@ var
    axisdesc:taxisdesc;
    psd:PSelectedObjDesc;
    hi,hi2,vi,vi2,{ti,}i:integer;
-   hname,vname:gdbstring;
+   hname,vname:String;
    dit:DistAndt;
    Vertex0:GDBVertex;
    isAxisVerical:TGDB3StateBool;
@@ -897,7 +897,7 @@ begin
                               isAxisVerical:=T3SB_Default;
              if (paxisline<>nil)and(pvd<>nil) then
              begin
-                  axisdesc.Name:=pgdbstring(pvd^.data.Addr.Instance)^;
+                  axisdesc.Name:=pString(pvd^.data.Addr.Instance)^;
                   axisdesc.p1:=paxisline^.CoordInWCS.lBegin;
                   axisdesc.p2:=paxisline^.CoordInWCS.lEnd;
                   dit:=distance2ray(Vertex0,axisdesc.p1,axisdesc.p2);
@@ -912,12 +912,12 @@ begin
                   end;
                   if isVertical then
                                     begin
-                                      ZCMsgCallBackInterface.TextMessage(sysutils.format('  Found vertical axis "%s"',[pgdbstring(pvd^.data.Addr.Instance)^]),TMWOHistoryOut);
+                                      ZCMsgCallBackInterface.TextMessage(sysutils.format('  Found vertical axis "%s"',[pString(pvd^.data.Addr.Instance)^]),TMWOHistoryOut);
                                       vaxis.PushBack(axisdesc);
                                     end
                                 else
                                     begin
-                                      ZCMsgCallBackInterface.TextMessage(sysutils.format('  Found horisontal axis "%s"',[pgdbstring(pvd^.data.Addr.Instance)^]),TMWOHistoryOut);
+                                      ZCMsgCallBackInterface.TextMessage(sysutils.format('  Found horisontal axis "%s"',[pString(pvd^.data.Addr.Instance)^]),TMWOHistoryOut);
                                       haxis.PushBack(axisdesc);
                                     end
 
@@ -959,11 +959,11 @@ begin
                   GetNearestAxis(vaxis,pdev^.P_insert_in_WCS,vi,vi2);
                   vname:=GetAxisName(vaxis,vi,vi2);
                   if (hname<>'')and(vname<>'')then
-                                          ZCMsgCallBackInterface.TextMessage(sysutils.format('%s;%s/%s',[pgdbstring(pvd^.data.Addr.Instance)^,vname,hname]),TMWOHistoryOut)
+                                          ZCMsgCallBackInterface.TextMessage(sysutils.format('%s;%s/%s',[pString(pvd^.data.Addr.Instance)^,vname,hname]),TMWOHistoryOut)
              else if (hname<>'')then
-                                ZCMsgCallBackInterface.TextMessage(sysutils.format('%s;%s',[pgdbstring(pvd^.data.Addr.Instance)^,hname]),TMWOHistoryOut)
+                                ZCMsgCallBackInterface.TextMessage(sysutils.format('%s;%s',[pString(pvd^.data.Addr.Instance)^,hname]),TMWOHistoryOut)
              else if (vname<>'')then
-                                ZCMsgCallBackInterface.TextMessage(sysutils.format('%s;%s',[pgdbstring(pvd^.data.Addr.Instance)^,vname]),TMWOHistoryOut);
+                                ZCMsgCallBackInterface.TextMessage(sysutils.format('%s;%s',[pString(pvd^.data.Addr.Instance)^,vname]),TMWOHistoryOut);
 
              end;
 
@@ -1270,7 +1270,7 @@ var
     //pbuf:pchar;
     //hgBuffer:HGLOBAL;
 
-    //s,suni:gdbstring;
+    //s,suni:String;
     //I:Integer;
       tv,pobj: pGDBObjEntity;
       DC:TDrawContext;
@@ -1515,13 +1515,13 @@ begin
 end;
 function Insert2_com(operands:TCommandOperands):TCommandResult;
 var
-    s:gdbstring;
+    s:String;
 begin
      if commandmanager.ContextCommandParams<>nil then
      begin
-     if PGDBString(commandmanager.ContextCommandParams)^<>'' then
+     if PString(commandmanager.ContextCommandParams)^<>'' then
      begin
-          s:=PGDBString(commandmanager.ContextCommandParams)^;
+          s:=PString(commandmanager.ContextCommandParams)^;
           commandmanager.executecommandend;
           s:='Insert('+s+')';
           commandmanager.executecommand(s,drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
@@ -1538,7 +1538,7 @@ var //pv:pGDBObjEntity;
     //ir:itrec;
     //psl:PTZctnrVectorStrings;
     //i,j:integer;
-    //s:gdbstring;
+    //s:String;
     dc:TDrawContext;
 begin
   drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
@@ -1572,7 +1572,7 @@ begin
 end;
 procedure bedit_format(_self:pointer);
 var
-   nname:gdbstring;
+   nname:String;
 begin
      nname:=(BEditParam.Blocks.Enums.getData(BEditParam.Blocks.Selected));
      if nname<>BEditParam.CurrentEditBlock then
@@ -1593,7 +1593,7 @@ function bedit_com(operands:TCommandOperands):TCommandResult;
 var
    i:integer;
    sd:TSelEntsDesk;
-   tn:gdbstring;
+   tn:String;
 begin
      tn:=operands;
      sd:=zcGetSelEntsDeskInCurrentRoot;

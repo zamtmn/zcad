@@ -24,17 +24,17 @@ interface
 uses uzbpaths,sysutils,uzeblockdef,uzedrawingdef,gzctnrSTL,
      uzbtypesbase,uzeentity,LazLogger;
 type
-TBlockDefCreateFunc=function(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:GDBString):PGDBObjBlockdef;
+TBlockDefCreateFunc=function(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:String):PGDBObjBlockdef;
 PTBlockDefCreateData=^TBlockDefCreateData;
 TBlockDefCreateData=record
-                          BlockName:GDBString;
-                          BlockDependsOn:GDBString;
-                          BlockDeffinedIn:GDBString;
+                          BlockName:String;
+                          BlockDependsOn:String;
+                          BlockDeffinedIn:String;
                           CreateProc:TBlockDefCreateFunc;
                      end;
-TBlockDefName2BlockDefCreateData=GKey2DataMap<GDBString,TBlockDefCreateData(*{$IFNDEF DELPHI},LessGDBString{$ENDIF}*)>;
-procedure RegisterBlockDefCreateFunc(const BlockName,BlockDependsOn,BlockDeffinedIn:GDBString; const BlockDefCreateFunc:TBlockDefCreateFunc);
-function CreateBlockDef(dwg:PTDrawingDef;name:GDBString):PGDBObjBlockdef;
+TBlockDefName2BlockDefCreateData=GKey2DataMap<String,TBlockDefCreateData(*{$IFNDEF DELPHI},LessString{$ENDIF}*)>;
+procedure RegisterBlockDefCreateFunc(const BlockName,BlockDependsOn,BlockDeffinedIn:String; const BlockDefCreateFunc:TBlockDefCreateFunc);
+function CreateBlockDef(dwg:PTDrawingDef;name:String):PGDBObjBlockdef;
 var
    BlockDefName2BlockDefCreateData:TBlockDefName2BlockDefCreateData=nil;
 implementation
@@ -45,9 +45,9 @@ begin
      BlockDefName2BlockDefCreateData:=TBlockDefName2BlockDefCreateData.create;
 end;
 
-procedure _BlockDefCreateData(const _BlockName:GDBString;
-                              const _BlockDependsOn:GDBString;
-                              const _BlockDeffinedIn:GDBString;
+procedure _BlockDefCreateData(const _BlockName:String;
+                              const _BlockDependsOn:String;
+                              const _BlockDeffinedIn:String;
                               const _CreateProc:TBlockDefCreateFunc);
 var
    BlockDefCreateData:TBlockDefCreateData;
@@ -60,15 +60,15 @@ begin
      BlockDefCreateData.CreateProc:=_CreateProc;
      BlockDefName2BlockDefCreateData.RegisterKey(uppercase(_BlockName),BlockDefCreateData);
 end;
-procedure RegisterBlockDefCreateFunc(const BlockName,BlockDependsOn,BlockDeffinedIn:GDBString; const BlockDefCreateFunc:TBlockDefCreateFunc);
+procedure RegisterBlockDefCreateFunc(const BlockName,BlockDependsOn,BlockDeffinedIn:String; const BlockDefCreateFunc:TBlockDefCreateFunc);
 begin
      _BlockDefCreateData(BlockName,BlockDependsOn,BlockDeffinedIn,BlockDefCreateFunc);
 end;
-procedure RegisterBlockDefLibrary(const BlockName,BlockDependsOn,BlockDeffinedIn:GDBString);
+procedure RegisterBlockDefLibrary(const BlockName,BlockDependsOn,BlockDeffinedIn:String);
 begin
      _BlockDefCreateData(BlockName,BlockDependsOn,BlockDeffinedIn,nil);
 end;
-function CreateBlockDef(dwg:PTDrawingDef;name:GDBString):PGDBObjBlockdef;
+function CreateBlockDef(dwg:PTDrawingDef;name:String):PGDBObjBlockdef;
 var
    PBlockDefCreateData:PTBlockDefCreateData;
 begin

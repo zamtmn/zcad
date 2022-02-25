@@ -25,9 +25,9 @@ type
 PGDBBOMItem=^GDBBOMItem;
 {REGISTERRECORDTYPE GDBBOMItem}
 GDBBOMItem=record
-                 Material:GDBString;
+                 Material:String;
                  Amount:Double;
-                 Names:GDBString;
+                 Names:String;
                  processed:Boolean;
                 end;
 PBbillOfMaterial=^GDBBbillOfMaterial;
@@ -35,9 +35,9 @@ PBbillOfMaterial=^GDBBbillOfMaterial;
 GDBBbillOfMaterial= object(GZVector{-}<GDBBOMItem>{//})(*OpenArrayOfData=GDBNumItem*)
                        constructor init(m:Integer);
                        procedure freeelement(PItem:PT);virtual;
-                       //function getnamenumber(_Name:GDBString):GDBstring;
+                       //function getnamenumber(_Name:String):String;
                        //function AddByPointer(p:Pointer):TArrayIndex;virtual;
-                       function findorcreate(_Name:GDBString):PGDBBOMItem;virtual;
+                       function findorcreate(_Name:String):PGDBBOMItem;virtual;
                        end;
 {EXPORT-}
 implementation
@@ -53,7 +53,7 @@ end;}
 function GDBBbillOfMaterial.findorcreate;
 var p:PGDBBOMItem;
     ir:itrec;
-    nn:GDBString;
+    nn:String;
     ni:GDBBOMItem;
 begin
   nn:=uppercase(_name);

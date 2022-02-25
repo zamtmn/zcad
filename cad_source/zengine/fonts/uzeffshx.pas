@@ -31,11 +31,11 @@ type ptsyminfo=^tsyminfo;
      tsyminfo=record
                            number,size:word;
                      end;
-function createnewfontfromshx(name:GDBString;var pf:PGDBfont):Boolean;
+function createnewfontfromshx(name:String;var pf:PGDBfont):Boolean;
 
 implementation
 
-function createsymbol(pf:PGDBfont;symbol:Integer;pshxdata:system.pbyte;unicode:boolean;symname:gdbstring):Integer;
+function createsymbol(pf:PGDBfont;symbol:Integer;pshxdata:system.pbyte;unicode:boolean;symname:String):Integer;
 var
   i,sizeshp,sizeshx,stackheap:Integer;
   baselen,ymin,ymax,xmin,xmax,x,y,x1,y1,xb,yb,r,startangle,angle,normal,hordlen,tgl:fontfloat;
@@ -686,7 +686,7 @@ begin
      Getmem(result,sizeof(SHXFont));
      result^.init;
 end;
-function createnewfontfromshx(name:GDBString;var pf:PGDBfont):Boolean;
+function createnewfontfromshx(name:String;var pf:PGDBfont):Boolean;
 var
    //f:filestream;
    line{,sub}:AnsiString;
@@ -700,7 +700,7 @@ begin
   result:=true;
   membufcreated:=true;
   memorybuf.InitFromFile(name);
-  line:=memorybuf.ReadString(#10,#13);
+  line:=memorybuf.ReadString3(#10,#13);
   line:=uppercase(line);
   if (line='AUTOCAD-86 SHAPES 1.0')or(line='AUTOCAD-86 SHAPES 1.1') then
   begin
@@ -734,7 +734,7 @@ begin
          if symnum=150 then
                         symnum:=symnum;
 
-         line:=memorybuf.readstring(#0,'');
+         line:=memorybuf.readstring3(#0,'');
          datalen:=symlen-length(line)-2;
 
          if symnum=0 then
@@ -766,7 +766,7 @@ begin
                                               programlog.logoutstr(line,0);}
          inc(psinfo);
     end;
-        line:=memorybuf.readstring('','');
+        line:=memorybuf.readstring3('','');
         if membufcreated then
                              begin
                                memorybuf.done;
@@ -792,7 +792,7 @@ else if line='AUTOCAD-86 UNIFONT 1.0' then
        {symmin:=}memorybuf.readword;
        {symmin:=}memorybuf.readword;
 
-       pf^.internalname:=memorybuf.readstring(#0,'');
+       pf^.internalname:=memorybuf.readstring3(#0,'');
        PSHXFont(pf^.font).h:=memorybuf.readbyte;
        PSHXFont(pf^.font).u:=memorybuf.readbyte;
        memorybuf.readbyte;
@@ -809,7 +809,7 @@ else if line='AUTOCAD-86 UNIFONT 1.0' then
          datalen:=memorybuf.readbyte;
          if datalen<>0 then
                            begin
-                           line:=memorybuf.readstring(#0,'');
+                           line:=memorybuf.readstring3(#0,'');
                            datalen:=symlen-length(line)-2;
                            end
                        else

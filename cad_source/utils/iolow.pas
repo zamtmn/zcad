@@ -31,8 +31,8 @@ type
     procedure close;
     procedure readtobufer;
     procedure continuebufer(symbolcount:{GDB}Integer);
-    function readGDBString: TMyString;
-    function ReadString: TMyString;
+    function readString: TMyString;
+    function ReadString2: TMyString;
     function ReadByte: {GDB}Byte;
     function ReadWord: {GDB}Word;
     function readworld(break, ignore: TMyString): shortString;
@@ -126,9 +126,9 @@ begin
   result := copy(expr, i, length(expr) - i + 1);
   expr:=expr;
 end;
-function filestream.ReadString: TMyString;
+function filestream.ReadString2: TMyString;
 begin
-     result:=readspace(readGDBString)
+     result:=readspace(readString)
 end;
 function filestream.readbyte: {GDB}Byte;
 begin
@@ -143,9 +143,9 @@ function filestream.readword: {GDB}Word;
 begin
      result:=readbyte+256*readbyte;
 end;
-function filestream.readGDBString: TMyString;
+function filestream.readString: TMyString;
 var
-  s: {shortGDBString}TMyString {[100]};
+  s: {shortString}TMyString {[100]};
   cr: {GDB}Boolean;
   var i:{GDB}Integer;
 begin
@@ -171,7 +171,7 @@ begin
           inc(buferpos);
           inc(currentpos);
           setlength(s,i-1);
-          readGDBString := s;
+          readString := s;
           exit;
         end
         else
@@ -186,7 +186,7 @@ begin
     readtobufer;
   end;
   setlength(s,i-1);
-  readGDBString := s;
+  readString := s;
 end;
 
 function filestream.readworld(break, ignore: TMyString): shortString;

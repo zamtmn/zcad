@@ -44,7 +44,7 @@ begin
   f.InitFromFile(fname);
   while f.notEOF do
     begin
-      line:=f.readGDBString;
+      line:=f.readString;
       if (line<>'')and(line[1]<>';') then
         begin
           PushBackData(line);

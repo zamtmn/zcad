@@ -55,7 +55,7 @@ GDBObjCurve= object(GDBObj3d)
                  procedure endsnap(out osp:os_record; var pdata:Pointer);virtual;
 
                  destructor done;virtual;
-                 function GetObjTypeName:GDBString;virtual;
+                 function GetObjTypeName:String;virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
 
                  procedure AddVertex(Vertex:GDBVertex);virtual;
@@ -203,7 +203,7 @@ begin
   if ptv<>nil then
   repeat
         SaveToDXFObjPrefix(outhandle,'VERTEX','AcDbVertex',IODXFContext,true);
-        dxfGDBStringout(outhandle,100,'AcDb3dPolylineVertex');
+        dxfStringout(outhandle,100,'AcDb3dPolylineVertex');
         dxfvertexout(outhandle,10,ptv^);
 
         ptv:=vertexarrayinocs.iterate(ir);

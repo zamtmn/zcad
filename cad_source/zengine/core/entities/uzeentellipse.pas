@@ -67,7 +67,7 @@ GDBObjEllipse= object(GDBObjPlain)
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
                  procedure rtsave(refp:Pointer);virtual;
                  destructor done;virtual;
-                 function GetObjTypeName:GDBString;virtual;
+                 function GetObjTypeName:String;virtual;
                  function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                  function CalcObjMatrixWithoutOwner:DMatrix4D;virtual;
@@ -454,7 +454,7 @@ begin
   dxfvertexout(outhandle,11,majoraxis);
     SaveToDXFObjPostfix(outhandle);
 
-  //dxfGDBStringout(outhandle,100,'AcDbEllipse');
+  //dxfStringout(outhandle,100,'AcDbEllipse');
   //WriteString_EOL(outhandle, '100');
   //WriteString_EOL(outhandle, 'AcDbArc');
   dxfDoubleout(outhandle,40,ratio{ * 180 / pi});
@@ -462,7 +462,7 @@ begin
   dxfDoubleout(outhandle,42,endangle{ * 180 / pi});
 end;
 procedure GDBObjEllipse.LoadFromDXF;
-var //s: GDBString;
+var //s: String;
   byt{, code}: Integer;
 begin
   //initnul;
@@ -474,7 +474,7 @@ begin
     if not dxfvertexload(f,11,byt,MajorAxis) then
     if not dxfDoubleload(f,40,byt,ratio) then
     if not dxfDoubleload(f,41,byt,startangle) then
-    if not dxfDoubleload(f,42,byt,endangle) then {s := }f.readgdbstring;
+    if not dxfDoubleload(f,42,byt,endangle) then {s := }f.readString;
     byt:=readmystrtoint(f);
   end;
   startangle := startangle{ * pi / 180};

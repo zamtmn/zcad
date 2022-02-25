@@ -64,7 +64,7 @@ GDBObjArc= object(GDBObjPlain)
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
                  procedure rtsave(refp:Pointer);virtual;
                  destructor done;virtual;
-                 function GetObjTypeName:GDBString;virtual;
+                 function GetObjTypeName:String;virtual;
                  function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                  procedure ReCalcFromObjMatrix;virtual;
@@ -247,7 +247,7 @@ begin
   dxfDoubleout(outhandle,40,r);
     SaveToDXFObjPostfix(outhandle);
 
-  dxfGDBStringout(outhandle,100,'AcDbArc');
+  dxfStringout(outhandle,100,'AcDbArc');
   //WriteString_EOL(outhandle, '100');
   //WriteString_EOL(outhandle, 'AcDbArc');
   dxfDoubleout(outhandle,50,startangle * 180 / pi);
@@ -571,7 +571,7 @@ begin
 
 end;
 procedure GDBObjARC.LoadFromDXF;
-var //s: GDBString;
+var //s: String;
   byt{, code}: Integer;
   dc:TDrawContext;
 begin
@@ -583,7 +583,7 @@ begin
     if not dxfvertexload(f,10,byt,Local.P_insert) then
     if not dxfDoubleload(f,40,byt,r) then
     if not dxfDoubleload(f,50,byt,startangle) then
-    if not dxfDoubleload(f,51,byt,endangle) then {s := }f.readgdbstring;
+    if not dxfDoubleload(f,51,byt,endangle) then {s := }f.readString;
     byt:=readmystrtoint(f);
   end;
   startangle := startangle * pi / 180;

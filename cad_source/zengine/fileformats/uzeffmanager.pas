@@ -23,20 +23,20 @@ interface
 uses uzbtypesbase,uzbtypes,uzeentgenericsubentry,uzedrawingsimple,sysutils,gzctnrSTL,LazLogger;
 
 type
-TFileLoadProcedure=procedure(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+TFileLoadProcedure=procedure(name: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 TFileFormatData=record
-                FormatDesk:GDBString;
+                FormatDesk:String;
                 FileLoadProcedure:TFileLoadProcedure;
                 end;
-TExt2LoadProcMapGen=GKey2DataMap<GDBString,TFileFormatData(*{$IFNDEF DELPHI},LessGDBString{$ENDIF}*)>;
+TExt2LoadProcMapGen=GKey2DataMap<String,TFileFormatData(*{$IFNDEF DELPHI},LessString{$ENDIF}*)>;
 TExt2LoadProcMap=class(TExt2LoadProcMapGen)
-                      fDefaultFileExt:GDBString;
-                      function GetCurrentFileFilter:GDBString;
-                      function GetDefaultFileExt:GDBString;
+                      fDefaultFileExt:String;
+                      function GetCurrentFileFilter:String;
+                      function GetDefaultFileExt:String;
                       function GetDefaultFileFilterIndex:integer;
-                      function GetLoadProc(const _Wxt:GDBString):TFileLoadProcedure;
+                      function GetLoadProc(const _Wxt:String):TFileLoadProcedure;
 
-                      procedure RegisterExt(const _Wxt:GDBString; const _FormatDesk:GDBString; _FileLoadProcedure:TFileLoadProcedure; const _default:boolean=false);
+                      procedure RegisterExt(const _Wxt:String; const _FormatDesk:String; _FileLoadProcedure:TFileLoadProcedure; const _default:boolean=false);
                  end;
 
 var
@@ -44,10 +44,10 @@ var
 
 implementation
 
-function TExt2LoadProcMap.GetLoadProc(const _Wxt:GDBString):TFileLoadProcedure;
+function TExt2LoadProcMap.GetLoadProc(const _Wxt:String):TFileLoadProcedure;
 var
    data:TFileFormatData;
-   _key:gdbstring;
+   _key:String;
 begin
      result:=nil;
      _key:=lowercase(_Wxt);
@@ -60,7 +60,7 @@ begin
      end;
 end;
 
-procedure TExt2LoadProcMap.RegisterExt(const _Wxt:GDBString; const _FormatDesk:GDBString; _FileLoadProcedure:TFileLoadProcedure; const _default:boolean=false);
+procedure TExt2LoadProcMap.RegisterExt(const _Wxt:String; const _FormatDesk:String; _FileLoadProcedure:TFileLoadProcedure; const _default:boolean=false);
 var
    FileFormatData:TFileFormatData;
 begin
@@ -92,7 +92,7 @@ end;
 begin
 end;
 {$ENDIF}
-function TExt2LoadProcMap.GetCurrentFileFilter:GDBString;
+function TExt2LoadProcMap.GetCurrentFileFilter:String;
 {$IFNDEF DELPHI}
 var
   pair:TExt2LoadProcMap.TDictionaryPair;
@@ -111,14 +111,14 @@ begin
   if result<>'' then
     result:=result+'|';
   result:=result+'All files (*.*)|*.*'
-     //ProjectFileFilter: GDBString = 'DXF files (*.dxf)|*.dxf|AutoCAD DWG files (*.dwg)|*.dwg|ZCAD ZCP files (*.zcp)|*.zcp|All files (*.*)|*.*';
+     //ProjectFileFilter: String = 'DXF files (*.dxf)|*.dxf|AutoCAD DWG files (*.dwg)|*.dwg|ZCAD ZCP files (*.zcp)|*.zcp|All files (*.*)|*.*';
 end;
 {$ENDIF}
 {$IFDEF DELPHI}
 begin
 end;
 {$ENDIF}
-function TExt2LoadProcMap.GetDefaultFileExt:GDBString;
+function TExt2LoadProcMap.GetDefaultFileExt:String;
 begin
      result:=fDefaultFileExt;
 end;

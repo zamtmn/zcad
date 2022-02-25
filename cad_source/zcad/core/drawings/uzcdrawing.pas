@@ -32,13 +32,13 @@ PTZCADDrawing=^TZCADDrawing;
 {REGISTEROBJECTTYPE TZCADDrawing}
 TZCADDrawing= object(TSimpleDrawing)
 
-           FileName:GDBString;
+           FileName:String;
            Changed:Boolean;
            attrib:LongWord;
            UndoStack:TZctnrVectorUndoCommands;
            DWGUnits:TUnitManager;
 
-           constructor init(num:PTUnitManager;preloadedfile1,preloadedfile2:GDBString);
+           constructor init(num:PTUnitManager;preloadedfile1,preloadedfile2:String);
            destructor done;virtual;
            procedure onUndoRedo;
            procedure onUndoRedoDataOwner(PDataOwner:Pointer);
@@ -48,10 +48,10 @@ TZCADDrawing= object(TSimpleDrawing)
            procedure StoreNewCamerapPos(command:Pointer);virtual;
            //procedure SetEntFromOriginal(_dest,_source:PGDBObjEntity;PCD_dest,PCD_source:PTDrawingPreCalcData);
            procedure rtmodifyonepoint(obj:PGDBObjEntity;rtmod:TRTModifyData;wc:gdbvertex);virtual;
-           procedure PushStartMarker(CommandName:GDBString);virtual;
+           procedure PushStartMarker(CommandName:String);virtual;
            procedure PushEndMarker;virtual;
-           procedure SetFileName(NewName:GDBString);virtual;
-           function GetFileName:GDBString;virtual;
+           procedure SetFileName(NewName:String);virtual;
+           function GetFileName:String;virtual;
            procedure ChangeStampt(st:Boolean);virtual;
            function GetChangeStampt:Boolean;virtual;
            function GetUndoTop:TArrayIndex;virtual;
@@ -59,7 +59,7 @@ TZCADDrawing= object(TSimpleDrawing)
            function CanUndo:boolean;virtual;
            function CanRedo:boolean;virtual;
            function GetDWGUnits:{PTUnitManager}pointer;virtual;
-           procedure AddBlockFromDBIfNeed(name:GDBString);virtual;
+           procedure AddBlockFromDBIfNeed(name:String);virtual;
            function GetUnitsFormat:TzeUnitsFormat;virtual;
            procedure SetUnitsFormat(f:TzeUnitsFormat);virtual;
            procedure FillDrawingPartRC(var dc:TDrawContext);virtual;
@@ -164,7 +164,7 @@ begin
      if command<>nil then
                          PTGDBCameraBasePropChangeCommand(command).ComitFromObj;
 end;
-procedure TZCADDrawing.PushStartMarker(CommandName:GDBString);
+procedure TZCADDrawing.PushStartMarker(CommandName:String);
 begin
      self.UndoStack.PushStartMarker(CommandName);
 end;
@@ -172,11 +172,11 @@ procedure TZCADDrawing.PushEndMarker;
 begin
       self.UndoStack.PushEndMarker;
 end;
-procedure TZCADDrawing.SetFileName(NewName:GDBString);
+procedure TZCADDrawing.SetFileName(NewName:String);
 begin
      self.FileName:=NewName;
 end;
-function TZCADDrawing.GetFileName:GDBString;
+function TZCADDrawing.GetFileName:String;
 begin
      result:=FileName;
 end;
@@ -215,7 +215,7 @@ function TZCADDrawing.GetDWGUnits:{PTUnitManager}pointer;
 begin
      result:=@DWGUnits;
 end;
-procedure TZCADDrawing.AddBlockFromDBIfNeed(name:GDBString);
+procedure TZCADDrawing.AddBlockFromDBIfNeed(name:String);
 begin
      drawings.AddBlockFromDBIfNeed(@self,name);
 end;

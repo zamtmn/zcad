@@ -74,15 +74,15 @@ TInteractiveProcObjBuild=procedure(const PInteractiveData:Pointer;Point:GDBVerte
                        {-}PossibleResult:TGetPossibleResult;{//}
                        {-}InputMode:TGetInputMode;{//}
                     end;
-    TCommandOperands={-}GDBString{/Pointer/};
+    TCommandOperands={-}String{/Pointer/};
     TCommandResult=Integer;
   TCStartAttr=Integer;{атрибут разрешения\запрещения запуска команды}
     TCEndAttr=Integer;{атрибут действия по завершению команды}
   PCommandObjectDef = ^CommandObjectDef;
   {REGISTEROBJECTTYPE CommandObjectDef}
   CommandObjectDef=object (GDBaseObject)
-    CommandName:GDBString;(*hidden_in_objinsp*)
-    CommandGDBString:GDBString;(*hidden_in_objinsp*)
+    CommandName:String;(*hidden_in_objinsp*)
+    CommandString:String;(*hidden_in_objinsp*)
     savemousemode: Byte;(*hidden_in_objinsp*)
     mouseclic: Integer;(*hidden_in_objinsp*)
     dyn:Boolean;(*hidden_in_objinsp*)
@@ -99,8 +99,8 @@ TInteractiveProcObjBuild=procedure(const PInteractiveData:Pointer;Point:GDBVerte
     procedure CommandInit; virtual; abstract;
     procedure DrawHeplGeometry;virtual;
     destructor done;virtual;
-    constructor init(cn:GDBString;SA,DA:TCStartAttr);
-    function GetObjTypeName:GDBString;virtual;
+    constructor init(cn:String;SA,DA:TCStartAttr);
+    function GetObjTypeName:String;virtual;
     function IsRTECommand:Boolean;virtual;
     procedure CommandContinue; virtual;
   end;
@@ -136,7 +136,7 @@ end;
 procedure CommandObjectDef.CommandContinue;
 begin
 end;
-function CommandObjectDef.GetObjTypeName:GDBString;
+function CommandObjectDef.GetObjTypeName:String;
 begin
      //pointer(result):=typeof(testobj);
      result:='CommandObjectDef';
@@ -156,7 +156,7 @@ destructor CommandObjectDef.done;
 begin
          //inherited;
          CommandName:='';
-         CommandGDBString:='';
+         CommandString:='';
 end;
 procedure CommandObjectDef.DrawHeplGeometry;
 begin

@@ -73,7 +73,7 @@ TuzvslagcabComParams=record       //определяем параметры ко
                                       //регистрировать их будем паскалевским RTTI
                                       //не через экспорт исходников и парсинг файла с определениями типов
   NamesList:TEnumData;//это тип для отображения списков в инспекторе
-  //nameSL:gdbstring;
+  //nameSL:String;
   accuracy:Double;
   metricDev:Boolean;
   settingVizCab:TsettingVizCab;

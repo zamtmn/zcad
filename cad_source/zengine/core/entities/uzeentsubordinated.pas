@@ -49,7 +49,7 @@ GDBObjGenericWithSubordinated= object(GDBObjExtendable)
                                     procedure AddMi(pobj:PGDBObjSubordinated);virtual;abstract;
                                     procedure RemoveInArray(pobjinarray:Integer);virtual;abstract;
                                     procedure createfield;virtual;
-                                    //function FindVariable(varname:GDBString):pvardesk;virtual;
+                                    //function FindVariable(varname:String):pvardesk;virtual;
                                     destructor done;virtual;
                                     function GetMatrix:PDMatrix4D;virtual;abstract;
                                     //function GetLineWeight:SmallInt;virtual;abstract;
@@ -86,17 +86,17 @@ GDBObjSubordinated= object(GDBObjGenericWithSubordinated)
                          OSnapModeControl:TOSnapModeControl;(*'OSnap mode control'*)
                          function GetOwner:PGDBObjSubordinated;virtual;abstract;
                          procedure createfield;virtual;
-                         //function FindVariable(varname:GDBString):pvardesk;virtual;
+                         //function FindVariable(varname:String):pvardesk;virtual;
                          //function FindShellByClass(_type:TDeviceClass):PGDBObjSubordinated;virtual;
                          destructor done;virtual;
                          procedure postload(var context:TIODXFLoadContext);virtual;abstract;
          end;
 {EXPORT-}
 
-procedure extractvarfromdxfstring2(_Value:GDBString;out vn,vt,vun:GDBString);
-procedure extractvarfromdxfstring(_Value:GDBString;out vn,vt,vv,vun:GDBString);
-procedure OldVersVarRename(var vn,vt,vv,vun:GDBString);
-procedure OldVersTextReplace(var vv:GDBString);overload;
+procedure extractvarfromdxfstring2(_Value:String;out vn,vt,vun:String);
+procedure extractvarfromdxfstring(_Value:String;out vn,vt,vv,vun:String);
+procedure OldVersVarRename(var vn,vt,vv,vun:String);
+procedure OldVersTextReplace(var vv:String);overload;
 procedure OldVersTextReplace(var vv:TDXFEntsInternalStringType);overload;
 
 implementation
@@ -200,7 +200,7 @@ begin
 
 end;
 
-procedure extractvarfromdxfstring(_Value:GDBString;out vn,vt,vv,vun:GDBString);
+procedure extractvarfromdxfstring(_Value:String;out vn,vt,vv,vun:String);
 var i:integer;
 begin
     i:=pos('|',_value);
@@ -213,7 +213,7 @@ begin
     vv:=copy(_value,1,i-1);
     vun:=copy(_value,i+1,length(_value)-i);
 end;
-procedure extractvarfromdxfstring2(_Value:GDBString;out vn,vt,vun:GDBString);
+procedure extractvarfromdxfstring2(_Value:String;out vn,vt,vun:String);
 var i:integer;
 begin
     i:=pos('|',_value);
@@ -223,7 +223,7 @@ begin
     vt:=copy(_value,1,i-1);
     vun:=copy(_value,i+1,length(_value)-i);
 end;
-function ansitoutf8ifneed(var s:GDBString):boolean;
+function ansitoutf8ifneed(var s:String):boolean;
 begin
      {$IFNDEF DELPHI}
      if FindInvalidUTF8Codepoint(@s[1],length(s),false)<>-1
@@ -237,7 +237,7 @@ begin
         {$ENDIF}
             result:=false;
 end;
-procedure OldVersTextReplace(var vv:GDBString);
+procedure OldVersTextReplace(var vv:String);
 begin
      vv:=AnsiReplaceStr(vv,'@@[Name]','@@[NMO_Name]');
      vv:=AnsiReplaceStr(vv,'@@[ShortName]','@@[NMO_BaseName]');
@@ -271,9 +271,9 @@ begin
      vv:=UnicodeStringReplace(vv,'@@[TotalConnectedDevice]','@@[CABLE_TotalCD]',ReplaceAllIgnoreCase);
      vv:=UnicodeStringReplace(vv,'@@[Segment]','@@[CABLE_Segment]',ReplaceAllIgnoreCase);
 end;
-procedure OldVersVarRename(var vn,vt,vv,vun:GDBString);
+procedure OldVersVarRename(var vn,vt,vv,vun:String);
 var
-   nevname{,nvv}:GDBString;
+   nevname{,nvv}:String;
    tt:string;
 begin
      {ansitoutf8ifneed(vn);
@@ -339,9 +339,9 @@ begin
                            nevname:='CABLE_Type';
                       end;
      if  (vn='GC_HDGroup')
-     and (vt<>'GDBString')  then
+     and (vt<>'String')  then
                            begin
-                                vt:='GDBString';
+                                vt:='String';
                            end;
      if (tt='GDBINTEGER')  then
                            begin
@@ -355,9 +355,13 @@ begin
                            begin
                                 vt:='Boolean';
                            end;
-     if (tt='AnsiString')  then
+     if (tt='GDBANSISTRING')  then
                            begin
                                 vt:='AnsiString';
+                           end;
+     if (tt='GDBSTRING')  then
+                           begin
+                                vt:='String';
                            end;
      OldVersTextReplace(vv);
      if nevname<>'' then

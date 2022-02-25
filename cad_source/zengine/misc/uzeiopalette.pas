@@ -50,13 +50,13 @@ end;
 procedure readpalette;
 var
   i,code:Integer;
-  line,sub:GDBString;
+  line,sub:String;
   f:TZctnrVectorBytes;
 begin
   f.InitFromFile(ProgramPath+filename);
   while f.notEOF do
     begin
-      line:=f.readGDBString;
+      line:=f.readString;
       if line<>'' then
       if line[1]<>';' then
         begin

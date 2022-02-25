@@ -26,15 +26,15 @@ PGDBNumItem=^GDBNumItem;
 {REGISTEROBJECTTYPE GDBNumItem}
 GDBNumItem= object(GDBNamedObject)
                  Nymber:Integer;
-                 constructor Init(N:GDBString);
+                 constructor Init(N:String);
                 end;
 PGDBNumerator=^GDBNumerator;
 {---REGISTEROBJECTTYPE GDBNumerator}
 GDBNumerator= object(GDBNamedObjectsArray<PGDBNumItem,GDBNumItem>)(*OpenArrayOfData=GDBNumItem*)
                        constructor init(m:Integer);
-                       function getnamenumber(_Name:GDBString;AutoInc:Boolean):GDBstring;
-                       function getnumber(_Name:GDBString;AutoInc:Boolean):Integer;
-                       function AddNumerator(Name:GDBString):PGDBNumItem;virtual;
+                       function getnamenumber(_Name:String;AutoInc:Boolean):String;
+                       function getnumber(_Name:String;AutoInc:Boolean):Integer;
+                       function AddNumerator(Name:String):PGDBNumItem;virtual;
                        procedure sort;
                        end;
 {EXPORT-}
@@ -95,7 +95,7 @@ begin
                     inc(p^.Nymber);
      result:=p^.Nymber;
 end;
-function GDBNumerator.AddNumerator(Name:GDBString):PGDBNumItem;
+function GDBNumerator.AddNumerator(Name:String):PGDBNumItem;
 var
   p:PGDBNumItem;
   //ir:itrec;

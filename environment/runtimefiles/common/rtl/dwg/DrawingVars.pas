@@ -34,7 +34,7 @@ var
    DWG_TextSize:Double;
 
 
-   Developer:GDBString;
+   Developer:String;
 
 implementation
 begin

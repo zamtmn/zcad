@@ -78,7 +78,7 @@ begin
                           if offset>0 then
                                          begin
                                               pf:=pointer(offset+ptruint(PInstance));
-                                              //ps:=copy(ps,1,i-1)+ varman.valuetoGDBString(pv^.pvalue,pv.ptd) +copy(ps,i2+1,length(ps)-i2)
+                                              //ps:=copy(ps,1,i-1)+ varman.valuetoString(pv^.pvalue,pv.ptd) +copy(ps,i2+1,length(ps)-i2)
                                               ps:=copy(ps,1,i-1)+tc^.GetUserValueAsString(pf)+copy(ps,i2+1,length(ps)-i2)
                                          end
                                      else

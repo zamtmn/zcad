@@ -8,7 +8,7 @@ usescopy objname;
 
 var
 
-T4:GDBString;(*'Ед.измерения'*)
+T4:String;(*'Ед.измерения'*)
 
 implementation
 

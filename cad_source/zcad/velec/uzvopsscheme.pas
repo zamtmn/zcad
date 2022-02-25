@@ -195,7 +195,7 @@ type
       //function getPointConnector(pobj:pGDBObjEntity; out pConnect:GDBVertex):Boolean;
       //
       //function testTempDrawPolyLine(listVertex:GListVertexPoint;color:Integer):TCommandResult;
-      //function testTempDrawText(p1:GDBVertex;mText:GDBString):TCommandResult;
+      //function testTempDrawText(p1:GDBVertex;mText:String):TCommandResult;
       //function convertLineInRectangleWithAccuracy(point1:GDBVertex;point2:GDBVertex;accuracy:double):TRectangleLine;
       //procedure listSortVertexAtStPtLine(var listNumVertex:TListTempNumVertex;listDevice:TListDeviceLine;stVertLine:GDBVertex);
       //function getAreaLine(point1:GDBVertex;point2:GDBVertex;accuracy:double):TBoundingBox;
@@ -259,7 +259,7 @@ function TestModul_com(operands:TCommandOperands):TCommandResult;
     nodeend,nodestart:PGDBObjDevice;
     segmCable:PGDBObjCable;
     isfirst:boolean;
-    startmat,endmat,startname,endname,prevname:gdbstring;
+    startmat,endmat,startname,endname,prevname:String;
 
     //cmlx,cmrx,cmuy,cmdy:Double;
     {lx,rx,}uy,dy:Double;
@@ -341,7 +341,7 @@ function TestModul_com(operands:TCommandOperands):TCommandResult;
   zcRedrawCurrentDrawing;
   result:=cmd_ok;
  end;
-  procedure InsertDat2(datname,name:GDBString;var currentcoord:GDBVertex; var root:GDBObjRoot);
+  procedure InsertDat2(datname,name:String;var currentcoord:GDBVertex; var root:GDBObjRoot);
 var
    pv:pGDBObjDevice;
    pt:pGDBObjMText;
@@ -386,7 +386,7 @@ begin
      currentcoord.y:=currentcoord.y+dy+uy;
 end;
 
-function InsertDat(datname,sname,ename:GDBString;datcount:Integer;var currentcoord:GDBVertex; var root:GDBObjRoot):pgdbobjline;
+function InsertDat(datname,sname,ename:String;datcount:Integer;var currentcoord:GDBVertex; var root:GDBObjRoot):pgdbobjline;
 var
 //   pv:pGDBObjDevice;
 //   lx,rx,uy,dy:Double;
@@ -613,7 +613,7 @@ var
        pvaredge:TVariablesExtender;
        pvedge,pvlength,eq:pvardesk;
        i,j,last:integer;
-       line,linetemp:gdbstring;
+       line,linetemp:String;
        listCab:TListiCable;
        iCab,nowCab:TiCable;
        istrue:boolean;
@@ -967,7 +967,7 @@ var
     nodeend,nodestart:PGDBObjDevice;
     segmCable:PGDBObjCable;
     isfirst:boolean;
-    startmat,endmat,startname,endname,prevname:gdbstring;
+    startmat,endmat,startname,endname,prevname:String;
 
     //cmlx,cmrx,cmuy,cmdy:Double;
     {lx,rx,}uy,dy:Double;

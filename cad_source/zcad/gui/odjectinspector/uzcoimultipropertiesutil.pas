@@ -35,7 +35,7 @@ uses
 type
   PTOneVarData=^TOneVarData;
   TOneVarData=record
-                    StrValue:GDBString;
+                    StrValue:String;
                     //PVarDesc:pvardesk;
                     VDAddr:TInVectorAddr
               end;
@@ -57,7 +57,7 @@ type
               end;
   PTVertex3DControlVarData=^TVertex3DControlVarData;
   TVertex3DControlVarData=record
-                            StrValueX,StrValueY,StrValueZ:GDBString;
+                            StrValueX,StrValueY,StrValueZ:String;
                             {PArrayIndexVarDesc,
                             PXVarDesc,
                             PYVarDesc,
@@ -114,7 +114,7 @@ begin
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
 end;
 
-function FindOrCreateVar(pu:PTObjectUnit;varname,username,typename:GDBString;out IVA:TInVectorAddr):Boolean;
+function FindOrCreateVar(pu:PTObjectUnit;varname,username,typename:String;out IVA:TInVectorAddr):Boolean;
 var
    vd:vardesk;
 begin

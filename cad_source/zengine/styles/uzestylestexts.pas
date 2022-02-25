@@ -27,9 +27,9 @@ type
 PGDBTextStyleProp=^GDBTextStyleProp;
 {REGISTERRECORDTYPE GDBTextStyleProp}
   GDBTextStyleProp=record
-                    size:GDBDouble;(*saved_to_shd*)
-                    oblique:GDBDouble;(*saved_to_shd*)
-                    wfactor:GDBDouble;(*saved_to_shd*)
+                    size:Double;(*saved_to_shd*)
+                    oblique:Double;(*saved_to_shd*)
+                    wfactor:Double;(*saved_to_shd*)
               end;
   PPGDBTextStyleObjInsp=^PGDBTextStyleObjInsp;
   PGDBTextStyleObjInsp=Pointer;
@@ -40,7 +40,7 @@ PGDBTextStyleProp=^GDBTextStyleProp;
     FontFamily:String;(*saved_to_shd*)
     pfont: PGDBfont;
     prop:GDBTextStyleProp;(*saved_to_shd*)
-    UsedInLTYPE:GDBBoolean;
+    UsedInLTYPE:Boolean;
     destructor Done;virtual;
   end;
 PGDBTextStyleArray=^GDBTextStyleArray;
@@ -49,10 +49,10 @@ GDBTextStyleArray= object(GDBNamedObjectsArray{-}<PGDBTextStyle,GDBTextStyle>{//
                     constructor init(m:Integer);
                     constructor initnul;
 
-                    function addstyle(StyleName,AFontFile,AFontFamily:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):PGDBTextStyle;
-                    function setstyle(StyleName,AFontFile,AFontFamily:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):PGDBTextStyle;
-                    procedure internalsetstyle(var style:GDBTextStyle;AFontFile,AFontFamily:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean);
-                    function FindStyle(StyleName:GDBString;ult:GDBBoolean):PGDBTextStyle;
+                    function addstyle(StyleName,AFontFile,AFontFamily:GDBString;tp:GDBTextStyleProp;USedInLT:Boolean):PGDBTextStyle;
+                    function setstyle(StyleName,AFontFile,AFontFamily:GDBString;tp:GDBTextStyleProp;USedInLT:Boolean):PGDBTextStyle;
+                    procedure internalsetstyle(var style:GDBTextStyle;AFontFile,AFontFamily:GDBString;tp:GDBTextStyleProp;USedInLT:Boolean);
+                    function FindStyle(StyleName:GDBString;ult:Boolean):PGDBTextStyle;
                     procedure freeelement(PItem:PT);virtual;
               end;
 {EXPORT-}
@@ -107,7 +107,7 @@ begin
       exit;
     end;
 end;}
-procedure GDBTextStyleArray.internalsetstyle(var style:GDBTextStyle;AFontFile,AFontFamily:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean);
+procedure GDBTextStyleArray.internalsetstyle(var style:GDBTextStyle;AFontFile,AFontFamily:GDBString;tp:GDBTextStyleProp;USedInLT:Boolean);
 begin
   style.FontFile:=AFontFile;
   style.FontFamily:=AFontFamily;
@@ -127,7 +127,7 @@ begin
   style.prop:=tp;
 end;
 
-function GDBTextStyleArray.setstyle(StyleName,AFontFile,AFontFamily:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):PGDBTextStyle;
+function GDBTextStyleArray.setstyle(StyleName,AFontFile,AFontFamily:GDBString;tp:GDBTextStyleProp;USedInLT:Boolean):PGDBTextStyle;
 var
    ps:PGDBTextStyle;
 begin
@@ -136,7 +136,7 @@ begin
   if ps<>nil then
     internalsetstyle(ps^,AFontFile,AFontFamily,tp,USedInLT);
 end;
-function GDBTextStyleArray.addstyle(StyleName,AFontFile,AFontFamily:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):{Integer}PGDBTextStyle;
+function GDBTextStyleArray.addstyle(StyleName,AFontFile,AFontFamily:GDBString;tp:GDBTextStyleProp;USedInLT:Boolean):{Integer}PGDBTextStyle;
 var ts:PGDBTextStyle;
 begin
   Getmem(pointer(ts),sizeof(GDBTextStyle));

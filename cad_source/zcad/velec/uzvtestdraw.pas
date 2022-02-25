@@ -116,7 +116,7 @@ uses
   function testTempDraw2dLineColor(pt1:GDBVertex2D;pt2:GDBVertex2D;color:integer):TCommandResult;
 
   function testTempDrawPLCross(point:GDBVertex;rr:double;color:Integer):TCommandResult;
-  function testDrawCircle(p1:GDBVertex;rr:GDBDouble;color:integer):TCommandResult;
+  function testDrawCircle(p1:GDBVertex;rr:Double;color:integer):TCommandResult;
 
   function getTestLayer(createdlayername:string):PGDBLayerProp;
 implementation
@@ -145,7 +145,7 @@ implementation
   end;
 
   //Визуализация круга его p1-координата, rr-радиус, color-цвет
-  function testDrawCircle(p1:GDBVertex;rr:GDBDouble;color:integer):TCommandResult;
+  function testDrawCircle(p1:GDBVertex;rr:Double;color:integer):TCommandResult;
   var
       pcircle:PGDBObjCircle;
   begin

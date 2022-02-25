@@ -27,7 +27,7 @@ TGDBUNISymbolInfoVector=GZVector{-}<GDBUNISymbolInfo>{//};
 PBASEFont=^BASEFont;
 {REGISTEROBJECTTYPE BASEFont}
 BASEFont= object(GDBaseObject)
-              unicode:GDBBoolean;
+              unicode:Boolean;
               symbolinfo:TSymbolInfoArray;
               unisymbolinfo:{GDBOpenArrayOfData}TGDBUNISymbolInfoVector;
               //----//SHXdata:TZctnrVectorBytes;
@@ -41,7 +41,7 @@ BASEFont= object(GDBaseObject)
               function GetOrReplaceSymbolInfo(symbol:Integer{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;virtual;
               function findunisymbolinfo(symbol:Integer):PGDBsymdolinfo;
               function findunisymbolinfos(symbolname:GDBString):PGDBsymdolinfo;
-              function IsCanSystemDraw:GDBBoolean;virtual;
+              function IsCanSystemDraw:Boolean;virtual;
               procedure SetupSymbolLineParams(const matr:DMatrix4D; var SymsParam:TSymbolSParam);virtual;
         end;
 {EXPORT-}
@@ -50,7 +50,7 @@ implementation
 procedure BASEFont.SetupSymbolLineParams(const matr:DMatrix4D; var SymsParam:TSymbolSParam);
 begin
 end;
-function BASEFont.IsCanSystemDraw:GDBBoolean;
+function BASEFont.IsCanSystemDraw:Boolean;
 begin
      result:=false;
 end;

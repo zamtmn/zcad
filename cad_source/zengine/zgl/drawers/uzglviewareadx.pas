@@ -131,7 +131,7 @@ type
                       procedure setdeicevariable; override;
                       function getParam:pointer; override;
                       function getParamTypeName:GDBString; override;
-                      function CreateRC(_maxdetail:GDBBoolean=false):TDrawContext;override;
+                      function CreateRC(_maxdetail:Boolean=false):TDrawContext;override;
                   end;
 implementation
 
@@ -710,7 +710,7 @@ end;
 
 
 
-function TDX11ViewArea.CreateRC(_maxdetail:GDBBoolean=false):TDrawContext;
+function TDX11ViewArea.CreateRC(_maxdetail:Boolean=false):TDrawContext;
 begin
   result:=inherited CreateRC(_maxdetail);
   result.MaxWidth:={OpenGLParam.RD_MaxWidth}100;

@@ -317,7 +317,7 @@ PTDeviceInfoSubGraph=^TDeviceInfoSubGraph;
       //                   VIndex2:Integer; //номер 2-й вершниы по списку
       //                   VPoint1:GDBVertex;  //координаты 1й вершниы
       //                   VPoint2:GDBVertex;  //координаты 2й вершниы
-      //                   edgeLength:GDBDouble; // длина ребра
+      //                   edgeLength:Double; // длина ребра
       //end;
       //TListEdgeSubGraph=specialize TVector<TInfoEdgeSubGraph>;
       ////*********************************************
@@ -874,7 +874,7 @@ begin
 end;
 
 //Визуализация круга его p1-координата, rr-радиус, color-цвет
-function visualDrawCircle(p1:GDBVertex;rr:GDBDouble;color:integer):TCommandResult;
+function visualDrawCircle(p1:GDBVertex;rr:Double;color:integer):TCommandResult;
 var
     pcircle:PGDBObjCircle;
 begin
@@ -1009,7 +1009,7 @@ begin
        pvd:=FindVariableInEnt(polyObj,'CABLE_AutoGen');
               if pvd<>nil then
                  begin
-                    pgdbboolean(pvd^.data.Addr.Instance)^:=true;
+                    pBoolean(pvd^.data.Addr.Instance)^:=true;
                  end;
 
        pvd:=FindVariableInEnt(polyObj,'GC_HDGroup');

@@ -30,16 +30,16 @@ type
   TRasterizeColor=(PC_Color,PC_Grayscale,PC_Monochrome);
   PTRasterizeParams=^TRasterizeParams;
   TRasterizeParams=record
-    FitToPage:GDBBoolean;
-    Center:GDBBoolean;
-    Scale:GDBDouble;
+    FitToPage:Boolean;
+    Center:Boolean;
+    Scale:Double;
     Palette:TRasterizeColor;
   end;
 procedure rasterize(cdwg:PTSimpleDrawing;pw,ph:integer;point1,point2:GDBVertex;PrintParam:TRasterizeParams;Canvas: TCanvas;PrinterDrawer:TZGLGeneral2DDrawer);
 implementation
 procedure rasterize(cdwg:PTSimpleDrawing;pw,ph:integer;point1,point2:GDBVertex;PrintParam:TRasterizeParams;Canvas: TCanvas;PrinterDrawer:TZGLGeneral2DDrawer);
  var
-  dx,dy,sx,sy,scale:gdbdouble;
+  dx,dy,sx,sy,scale:Double;
   tmatrix,_clip:DMatrix4D;
   _frustum:ClipArray;
   DC:TDrawContext;

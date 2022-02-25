@@ -3,7 +3,7 @@ interface
 uses system;
 var
    LinkType:TLinkType;
-   LengthOverrider:GDBDouble;
+   LengthOverrider:Double;
 implementation
 begin
      LinkType:=LT_OnlyLink;

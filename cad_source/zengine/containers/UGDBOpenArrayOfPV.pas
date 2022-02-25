@@ -35,7 +35,7 @@ GDBObjOpenArrayOfPV= object(TZctnrVectorPGDBaseObjects)
                       procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                       procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                       procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
-                      function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
+                      function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                       function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                       procedure DeSelect(var SelectedObjCount:Integer;ds2s:TDeSelect2Stage);virtual;
                       function CreateObj(t: Byte{;owner:Pointer}):Pointer;virtual;
@@ -49,7 +49,7 @@ GDBObjOpenArrayOfPV= object(TZctnrVectorPGDBaseObjects)
                       procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                       procedure FormatAfterEdit(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                       //function InRect:TInRect;virtual;
-                      function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;virtual;
+                      function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;virtual;
                       //function FindEntityByVar(objID:Word;vname,vvalue:GDBString):PGDBObjSubordinated;virtual;
                 end;
 {Export-}
@@ -59,7 +59,7 @@ function EqualFuncPGDBaseObject(const a, b: PGDBaseObject):Boolean;
 begin
   result:=(a=b);
 end;
-function GDBObjOpenArrayOfPV.onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;
+function GDBObjOpenArrayOfPV.onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;
 var pobj:pGDBObjEntity;
     ir:itrec;
     //fr:TInRect;
@@ -351,7 +351,7 @@ end;
 function GDBObjOpenArrayOfPV.calcvisible;
 var
   p:pGDBObjEntity;
-  q:GDBBoolean;
+  q:Boolean;
       ir:itrec;
 begin
   result:=false;

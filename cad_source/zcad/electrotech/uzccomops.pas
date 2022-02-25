@@ -63,21 +63,21 @@ type
   {REGISTERRECORDTYPE TOPSPlaceSmokeDetectorOrtoParam}
   TOPSPlaceSmokeDetectorOrtoParam=record
                                         InsertType:TInsertType;(*'Insert'*)
-                                        Scale:GDBDouble;(*'Plan scale'*)
-                                        ScaleBlock:GDBDouble;(*'Blocks scale'*)
-                                        StartAuto:GDBBoolean;(*'"Start" signal'*)
+                                        Scale:Double;(*'Plan scale'*)
+                                        ScaleBlock:Double;(*'Blocks scale'*)
+                                        StartAuto:Boolean;(*'"Start" signal'*)
                                         SensorSensorDistance:TAxisReduceDistanceMode;(*'Sensor-sensor distance reduction'*)
                                         SensorWallDistance:TAxisReduceDistanceMode;(*'Sensor-wall distance reduction'*)
                                         DatType:TOPSDatType;(*'Sensor type'*)
                                         DMC:TOPSMinDatCount;(*'Min. number of sensors'*)
                                         Height:TEnumData;(*'Height of installation'*)
-                                        ReductionFactor:GDBDouble;(*'Reduction factor'*)
-                                        NDD:GDBDouble;(*'Sensor-Sensor(standard)'*)
-                                        NDW:GDBDouble;(*'Sensor-Wall(standard)'*)
+                                        ReductionFactor:Double;(*'Reduction factor'*)
+                                        NDD:Double;(*'Sensor-Sensor(standard)'*)
+                                        NDW:Double;(*'Sensor-Wall(standard)'*)
                                         PlaceStrategy:TPlaceSensorsStrategy;
-                                        FDD:GDBDouble;(*'Sensor-Sensor(fact)'*)(*oi_readonly*)
-                                        FDW:GDBDouble;(*'Sensor-Wall(fact)'*)(*oi_readonly*)
-                                        NormalizePoint:GDBBoolean;(*'Normalize to grid (if enabled)'*)
+                                        FDD:Double;(*'Sensor-Sensor(fact)'*)(*oi_readonly*)
+                                        FDW:Double;(*'Sensor-Wall(fact)'*)(*oi_readonly*)
+                                        NormalizePoint:Boolean;(*'Normalize to grid (if enabled)'*)
 
                                         oldth:Integer;(*hidden_in_objinsp*)
                                         oldsh:Integer;(*hidden_in_objinsp*)
@@ -87,14 +87,14 @@ type
   {REGISTERRECORDTYPE TOrtoDevPlaceParam}
   TOrtoDevPlaceParam=record
                                         Name:GDBString;(*'Block'*)(*oi_readonly*)
-                                        ScaleBlock:GDBDouble;(*'Blocks scale'*)
+                                        ScaleBlock:Double;(*'Blocks scale'*)
                                         CountType:TODPCountType;(*'Type of placement'*)
                                         Count:Integer;(*'Total number'*)
                                         NX:Integer;(*'Number of length'*)
                                         NY:Integer;(*'Number of width'*)
-                                        Angle:GDBDouble;(*'Rotation'*)
-                                        AutoAngle:GDBBoolean;(*'Auto rotation'*)
-                                        NormalizePoint:GDBBoolean;(*'Normalize to grid (if enabled)'*)
+                                        Angle:Double;(*'Rotation'*)
+                                        AutoAngle:Boolean;(*'Auto rotation'*)
+                                        NormalizePoint:Boolean;(*'Normalize to grid (if enabled)'*)
 
                      end;
   {REGISTERRECORDTYPE GDBLineOps}
@@ -113,7 +113,7 @@ var
    //pgdbinplugin: PTZCADDrawingsManager;
    //psysvarinplugin: pgdbsysvariable;
    pvarman:pvarmanagerdef;
-   pdw,pdd,pdtw,pdtd:PGDBDouble;
+   pdw,pdd,pdtw,pdtd:PDouble;
    pdt:pinteger;
    sdname:GDBstring;
 
@@ -152,9 +152,9 @@ var
 procedure finalize;}
 
 implementation
-function docorrecttogrid(point:GDBVertex;need:GDBBoolean):GDBVertex;
+function docorrecttogrid(point:GDBVertex;need:Boolean):GDBVertex;
 var
-   gr:GDBBoolean;
+   gr:Boolean;
 begin
      gr:=false;
      if SysVar.DWG.DWG_SnapGrid<>nil then
@@ -170,7 +170,7 @@ begin
                       else
                           result:=point;
 end;
-function GetPlaceParam(count:integer;length,sd,dd:GDBDouble;DMC:TOPSMinDatCount;ps:TPlaceSensorsStrategy):TPlaceParam;
+function GetPlaceParam(count:integer;length,sd,dd:Double;DMC:TOPSMinDatCount;ps:TPlaceSensorsStrategy):TPlaceParam;
 begin
      if count=2 then
      case ps of
@@ -215,7 +215,7 @@ begin
             end;
      end;
 end;
-procedure place2(pva:PGDBObjEntityOpenArray;basepoint, dir: gdbvertex; count: integer; length,sd,dd: GDBDouble; name: pansichar;angle:GDBDouble;norm:GDBBoolean;scaleblock:GDBDouble;ps:TPlaceSensorsStrategy);
+procedure place2(pva:PGDBObjEntityOpenArray;basepoint, dir: gdbvertex; count: integer; length,sd,dd: Double; name: pansichar;angle:Double;norm:Boolean;scaleblock:Double;ps:TPlaceSensorsStrategy);
 var //line2: GDBLineOps;
     i: integer;
     d: TPlaceParam;
@@ -246,16 +246,16 @@ begin
          end;
      end;
 end;
-procedure placedatcic(pva:PGDBObjEntityOpenArray;p1, p2: gdbvertex; InitialSD, InitialDD: GDBDouble; name: pansichar;norm:GDBBoolean;scaleblock: GDBDouble;ps:TPlaceSensorsStrategy);
-var dx, dy: GDBDouble;
+procedure placedatcic(pva:PGDBObjEntityOpenArray;p1, p2: gdbvertex; InitialSD, InitialDD: Double; name: pansichar;norm:Boolean;scaleblock: Double;ps:TPlaceSensorsStrategy);
+var dx, dy: Double;
   FirstLine, SecondLine: GDBLineOps;
   FirstCount, SecondCount, i: integer;
   dir: gdbvertex;
   mincount:integer;
   FirstLineLength,SecondLineLength:double;
   d: TPlaceParam;
-  LongSD,LongDD: GDBDouble;
-  ShortSD,ShortDD: GDBDouble;
+  LongSD,LongDD: Double;
+  ShortSD,ShortDD: Double;
 begin
   dx := p2.x - p1.x;
   dy := p2.y - p1.y;
@@ -409,7 +409,7 @@ function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_re
 var
 pl:pgdbobjline;
 //debug:string;
-dw,dd:gdbdouble;
+dw,dd:Double;
 DC:TDrawContext;
 begin
 
@@ -809,7 +809,7 @@ procedure InsertDat2(datname,name:GDBString;var currentcoord:GDBVertex; var root
 var
    pv:pGDBObjDevice;
    pt:pGDBObjMText;
-   lx,{rx,}uy,dy:GDBDouble;
+   lx,{rx,}uy,dy:Double;
    tv:gdbvertex;
    DC:TDrawContext;
 begin
@@ -852,7 +852,7 @@ end;
 function InsertDat(datname,sname,ename:GDBString;datcount:Integer;var currentcoord:GDBVertex; var root:GDBObjRoot):pgdbobjline;
 var
 //   pv:pGDBObjDevice;
-//   lx,rx,uy,dy:GDBDouble;
+//   lx,rx,uy,dy:Double;
    pl:pgdbobjline;
    oldcoord,oldcoord2:gdbvertex;
    DC:TDrawContext;
@@ -926,8 +926,8 @@ var count: Integer;
     isfirst:boolean;
     startmat,endmat,startname,endname,prevname:gdbstring;
 
-    //cmlx,cmrx,cmuy,cmdy:gdbdouble;
-    {lx,rx,}uy,dy:gdbdouble;
+    //cmlx,cmrx,cmuy,cmdy:Double;
+    {lx,rx,}uy,dy:Double;
     lsave:{integer}PPointer;
     DC:TDrawContext;
     pCableSSvarext,ppvvarext,pnodeendvarext:TVariablesExtender;
@@ -1138,8 +1138,8 @@ begin
       t3dp:=wc;
     end
 end;
-procedure placedev(pva:PGDBObjEntityOpenArray;p1, p2: gdbvertex; nmax, nmin: Integer; name: pansichar;a:gdbdouble;aa:gdbboolean;Norm:GDBBoolean);
-var dx, dy: GDBDouble;
+procedure placedev(pva:PGDBObjEntityOpenArray;p1, p2: gdbvertex; nmax, nmin: Integer; name: pansichar;a:Double;aa:Boolean;Norm:Boolean);
+var dx, dy: Double;
   line1, line2: GDBLineOps;
   l1, l2, i: integer;
   dir: gdbvertex;
@@ -1221,10 +1221,10 @@ function PlAfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_
 var
 pl:pgdbobjline;
 //debug:string;
-//dw,dd:gdbdouble;
+//dw,dd:Double;
 nx,ny:Integer;
 //t:Integer;
-tt,tx,ty,ttx,tty:gdbdouble;
+tt,tx,ty,ttx,tty:Double;
 DC:TDrawContext;
 begin
   //nx:=OrtoDevPlaceParam.NX;

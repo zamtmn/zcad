@@ -112,7 +112,7 @@ type
     TPointPolygonDrawModePentity=record
                                    p1:gdbvertex;
                                    cdm:TPolygonDrawMode;
-                                   typeLWPoly:gdbboolean;
+                                   typeLWPoly:Boolean;
                                    npoint:Integer;
                                    pentity:PGDBObjPolyline;
                                    plwentity:PGDBObjLWPolyline;
@@ -120,31 +120,31 @@ type
 
 procedure InteractiveLineEndManipulator( const PInteractiveData : PGDBObjLine {pointer to the line entity};
                                                           Point : GDBVertex  {new end coord};
-                                                          Click : GDBBoolean {true if lmb presseed});
+                                                          Click : Boolean {true if lmb presseed});
 procedure InteractiveADimManipulator( const PInteractiveData : PGDBObjAlignedDimension;
                                                          Point : GDBVertex;
-                                                         Click : GDBBoolean );
+                                                         Click : Boolean );
 procedure InteractiveRDimManipulator( const PInteractiveData : PGDBObjRotatedDimension;
                                                        Point : GDBVertex;
-                                                       Click : GDBBoolean );
+                                                       Click : Boolean );
 procedure InteractiveDDimManipulator( const PInteractiveData:pgdbObjDiametricDimension;
                                                        Point:GDBVertex;
-                                                       Click:GDBBoolean);
+                                                       Click:Boolean);
 procedure InteractiveArcManipulator( const PInteractiveData : PT3PointPentity;
                                                       Point : GDBVertex;
-                                                      Click : GDBBoolean);
+                                                      Click : Boolean);
 procedure InteractiveSmartCircleManipulator( const PInteractiveData:PT3PointCircleModePentity;
                                              Point:GDBVertex;
-                                             Click:GDBBoolean );
+                                             Click:Boolean );
 procedure InteractiveLWRectangleManipulator( const PInteractiveData : PGDBObjLWPolyline {pointer to the line entity};
                                                           Point : GDBVertex  {new end coord};
-                                                          Click : GDBBoolean {true if lmb presseed});
+                                                          Click : Boolean {true if lmb presseed});
 procedure InteractiveRectangleManipulator( const PInteractiveData : PGDBObjPolyline {pointer to the line entity};
                                                           Point : GDBVertex  {new end coord};
-                                                          Click : GDBBoolean {true if lmb presseed});
+                                                          Click : Boolean {true if lmb presseed});
 procedure InteractivePolygonManipulator( const PInteractiveData : TPointPolygonDrawModePentity {pointer to the line entity};
                                                           Point : GDBVertex  {new end coord};
-                                                          Click : GDBBoolean {true if lmb presseed});
+                                                          Click : Boolean {true if lmb presseed});
 implementation
 { Интерактивные процедуры используются совместно с Get3DPointInteractive,
   впоследствии будут вынесены в отдельный модуль }
@@ -155,7 +155,7 @@ implementation
 {Процедура интерактивного изменения конца линии}
 procedure InteractiveLineEndManipulator( const PInteractiveData : PGDBObjLine {pointer to the line entity};
                                                           Point : GDBVertex  {new end coord};
-                                                          Click : GDBBoolean {true if lmb presseed});
+                                                          Click : Boolean {true if lmb presseed});
 var
   ln : PGDBObjLine absolute PInteractiveData;
   dc:TDrawContext;
@@ -179,7 +179,7 @@ end;
 {Процедура интерактивного изменения третьей точки выровненного размера}
 procedure InteractiveADimManipulator( const PInteractiveData : PGDBObjAlignedDimension;
                                                        Point : GDBVertex;
-                                                       Click : GDBBoolean );
+                                                       Click : Boolean );
 var
   ad : PGDBObjAlignedDimension absolute PInteractiveData;
   dc:TDrawContext;
@@ -220,7 +220,7 @@ end;
 
 function isRDIMHorisontal(p1,p2,p3,nevp3:gdbvertex):integer;
 var
-   minx,maxx,miny,maxy:GDBDouble;
+   minx,maxx,miny,maxy:Double;
 begin
   minx:=min(p1.x,p2.x);
   maxx:=max(p1.x,p2.x);
@@ -246,7 +246,7 @@ end;
 {Процедура}
 procedure InteractiveRDimManipulator( const PInteractiveData : PGDBObjRotatedDimension;
                                                        Point : GDBVertex;
-                                                       Click : GDBBoolean );
+                                                       Click : Boolean );
 var
   rd : PGDBObjRotatedDimension absolute PInteractiveData;
   dc:TDrawContext;
@@ -279,7 +279,7 @@ end;
 
 procedure InteractiveDDimManipulator( const PInteractiveData:pgdbObjDiametricDimension;
                                                        Point:GDBVertex;
-                                                       Click:GDBBoolean);
+                                                       Click:Boolean);
 var
     dd : pgdbObjDiametricDimension absolute PInteractiveData;
     dc:TDrawContext;
@@ -297,7 +297,7 @@ end;
 
 procedure InteractiveArcManipulator( const PInteractiveData : PT3PointPentity;
                                                       Point : GDBVertex;
-                                                      Click : GDBBoolean);
+                                                      Click : Boolean);
 var
     PointData:TArcrtModify;
     ad:TArcData;
@@ -330,7 +330,7 @@ end;
 
 procedure InteractiveSmartCircleManipulator( const PInteractiveData:PT3PointCircleModePentity;
                                              Point:GDBVertex;
-                                             Click:GDBBoolean );
+                                             Click:Boolean );
 var
     PointData:tarcrtmodify;
     ad:TArcData;
@@ -380,7 +380,7 @@ end;
 
 procedure InteractiveLWRectangleManipulator( const PInteractiveData : PGDBObjLWPolyline {pointer to the line entity};
                                                           Point : GDBVertex  {new end coord};
-                                                          Click : GDBBoolean {true if lmb presseed});
+                                                          Click : Boolean {true if lmb presseed});
 var
   polyLWObj : PGDBObjLWPolyline absolute PInteractiveData;
   stPoint: GDBvertex2D;
@@ -409,7 +409,7 @@ end;
 
 procedure InteractiveRectangleManipulator( const PInteractiveData : PGDBObjPolyline {pointer to the line entity};
                                                           Point : GDBVertex  {new end coord};
-                                                          Click : GDBBoolean {true if lmb presseed});
+                                                          Click : Boolean {true if lmb presseed});
 var
   polyObj : PGDBObjPolyline absolute PInteractiveData;
   stPoint: GDBvertex;
@@ -437,7 +437,7 @@ end;
 
 procedure InteractivePolygonManipulator( const PInteractiveData : TPointPolygonDrawModePentity {pointer to the line entity};
                                                           Point : GDBVertex  {new end coord};
-                                                          Click : GDBBoolean {true if lmb presseed});
+                                                          Click : Boolean {true if lmb presseed});
 var
   obj : TPointPolygonDrawModePentity absolute PInteractiveData;
   stPoint: GDBvertex;

@@ -62,7 +62,7 @@ type
          TBlockInsert=record
                             Blocks:TEnumData;(*'Block'*)
                             Scale:GDBvertex;(*'Scale'*)
-                            Rotation:GDBDouble;(*'Rotation'*)
+                            Rotation:Double;(*'Rotation'*)
                       end;
          PTMirrorParam=^TMirrorParam;
          {REGISTERRECORDTYPE TMirrorParam}
@@ -82,28 +82,28 @@ type
                             Find:TEnumData;(*'Find'*)
                             CurrentReplaceBlock:GDBString;(*'**CurrentReplace'*)(*oi_readonly*)(*hidden_in_objinsp*)
                             Replace:TEnumData;(*'Replace'*)
-                            SaveOrientation:GDBBoolean;(*'Save orientation'*)
-                            SaveVariables:GDBBoolean;(*'Save variables'*)
-                            SaveVariablePart:GDBBoolean;(*'Save variable part'*)
-                            SaveVariableText:GDBBoolean;(*'Save variable text'*)
+                            SaveOrientation:Boolean;(*'Save orientation'*)
+                            SaveVariables:Boolean;(*'Save variables'*)
+                            SaveVariablePart:Boolean;(*'Save variable part'*)
+                            SaveVariableText:Boolean;(*'Save variable text'*)
                       end;
          PTBlockScaleParams=^TBlockScaleParams;
          {REGISTERRECORDTYPE TBlockScaleParams}
          TBlockScaleParams=record
                              Scale:GDBVertex;(*'New scale'*)
-                             Absolytly:GDBBoolean;(*'Absolytly'*)
+                             Absolytly:Boolean;(*'Absolytly'*)
                            end;
          PTBlockRotateParams=^TBlockRotateParams;
          {REGISTERRECORDTYPE TBlockRotateParams}
          TBlockRotateParams=record
-                             Rotate:GDBDouble;(*'Rotation angle'*)
-                             Absolytly:GDBBoolean;(*'Absolytly'*)
+                             Rotate:Double;(*'Rotation angle'*)
+                             Absolytly:Boolean;(*'Absolytly'*)
                            end;
          {TSetVarStyle=packed record
                             ent:TMSType;(*'Entity'*)
                             CurrentFindBlock:GDBString;(*'**CurrentFind'*)
                              Scale:GDBVertex;(*'New scale'*)
-                             Absolytly:GDBBoolean;(*'Absolytly'*)
+                             Absolytly:Boolean;(*'Absolytly'*)
                            end;}
          TST=(
                  TST_YX(*'Y-X'*),
@@ -114,12 +114,12 @@ type
          {REGISTERRECORDTYPE TNumberingParams}
          TNumberingParams=record
                             SortMode:TST;(*''*)
-                            InverseX:GDBBoolean;(*'Inverse X axis dir'*)
-                            InverseY:GDBBoolean;(*'Inverse Y axis dir'*)
-                            DeadDand:GDBDouble;(*'Deadband'*)
+                            InverseX:Boolean;(*'Inverse X axis dir'*)
+                            InverseY:Boolean;(*'Inverse Y axis dir'*)
+                            DeadDand:Double;(*'Deadband'*)
                             StartNumber:Integer;(*'Start'*)
                             Increment:Integer;(*'Increment'*)
-                            SaveStart:GDBBoolean;(*'Save start number'*)
+                            SaveStart:Boolean;(*'Save start number'*)
                             BaseName:GDBString;(*'Base name sorting devices'*)
                             NumberVar:GDBString;(*'Number variable'*)
                       end;
@@ -225,9 +225,9 @@ taxisdescarray=specialize TVector<taxisdesc>;
 taxisdescdsort=specialize TOrderingArrayUtils<taxisdescarray, taxisdesc, TGDBtaxisdescLess>;
 devcoordarray=specialize TVector<tdevcoord>;
 devnamearray=specialize TVector<tdevname>;
-PointOnCurve3DPropArray=specialize TVector<GDBDouble>;
+PointOnCurve3DPropArray=specialize TVector<Double>;
 LessDouble=specialize TLess<double>;
-PointOnCurve3DPropArraySort=specialize TOrderingArrayUtils<PointOnCurve3DPropArray, GDBDouble,LessDouble>;
+PointOnCurve3DPropArraySort=specialize TOrderingArrayUtils<PointOnCurve3DPropArray, Double,LessDouble>;
 MapPointOnCurve3DPropArray=specialize TMap<PGDBObjLine,PointOnCurve3DPropArray, LessPointer>;
 devcoordsort=specialize TOrderingArrayUtils<devcoordarray, tdevcoord, TGDBVertexLess>;
 devnamesort=specialize TOrderingArrayUtils<devnamearray, tdevname, TGDBNameLess>;
@@ -1482,7 +1482,7 @@ end;
 function Mirror_com.CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D;
 var
     dist,p3:gdbvertex;
-    d:GDBDouble;
+    d:Double;
     plane:DVector4D;
 begin
         dist:=uzegeometry.VertexSub(p2,p1);
@@ -1659,7 +1659,7 @@ end;
 function PlaceAllBlocks_com(operands:TCommandOperands):TCommandResult;
 var pb:PGDBObjBlockdef;
     ir:itrec;
-    xcoord:GDBDouble;
+    xcoord:Double;
     BLinsert,tb:PGDBObjBlockInsert;
     dc:TDrawContext;
 begin

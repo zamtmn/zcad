@@ -62,8 +62,8 @@ TZCADDrawingsManager= object(TZctnrVectorPGDBaseObjects)
                     procedure CopyBlock(_from,_to:PTSimpleDrawing;_source:PGDBObjBlockdef);
                     function CopyEnt(_from,_to:PTSimpleDrawing;_source:PGDBObjEntity):PGDBObjEntity;
                     procedure AddBlockFromDBIfNeed(_to:{PTSimpleDrawing}PTDrawingDef;name:GDBString);
-                    //procedure rtmodify(obj:PGDBObjEntity;md:Pointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;
-                    function FindOneInArray(const entities:GDBObjOpenArrayOfPV;objID:Word; InOwner:GDBBoolean):PGDBObjEntity;
+                    //procedure rtmodify(obj:PGDBObjEntity;md:Pointer;dist,wc:gdbvertex;save:Boolean);virtual;
+                    function FindOneInArray(const entities:GDBObjOpenArrayOfPV;objID:Word; InOwner:Boolean):PGDBObjEntity;
                     function FindEntityByVar(objID:Word;vname,vvalue:GDBString):PGDBObjEntity;
                     procedure FindMultiEntityByType(Filter:TEntsTypeFilter;var entarray:TZctnrVectorPGDBaseObjects);
                     procedure FindMultiEntityByVar(objID:Word;vname,vvalue:GDBString;var entarray:TZctnrVectorPGDBaseObjects);
@@ -83,7 +83,7 @@ var drawings: TZCADDrawingsManager;
     ClipboardDWG:{PTZCADDrawing}PTSimpleDrawing=nil;
     //GDBTrash:GDBObjTrash;
     LtypeManager:GDBLtypeArray;
-procedure CalcZ(z:GDBDouble);
+procedure CalcZ(z:Double);
 procedure RemapAll(_from,_to:PTSimpleDrawing;_source,_dest:PGDBObjEntity);
 procedure startup(preloadedfile1,preloadedfile2:GDBString);
 procedure finalize;
@@ -323,7 +323,7 @@ end;
       undomethod.Code:=pointer(drawings.GetCurrentROOT^.GoodRemoveMiFromArray);
       undomethod.Data:=drawings.GetCurrentROOT;
  end;
-function TZCADDrawingsManager.FindOneInArray(const entities:GDBObjOpenArrayOfPV;objID:Word; InOwner:GDBBoolean):PGDBObjEntity;
+function TZCADDrawingsManager.FindOneInArray(const entities:GDBObjOpenArrayOfPV;objID:Word; InOwner:Boolean):PGDBObjEntity;
 var
    //pobj:pGDBObjEntity;
    ir:itrec;
@@ -486,7 +486,7 @@ begin
  CurrentDWG:=PTZCADDrawing(PDWG);
  asociatedwgvars;
 end;
-procedure CalcZ(z:GDBDouble);
+procedure CalcZ(z:Double);
 begin
      if z<drawings.GetCurrentDWG.pcamera^.obj_zmax then
      drawings.GetCurrentDWG.pcamera^.obj_zmax:=z;

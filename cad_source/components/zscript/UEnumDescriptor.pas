@@ -39,7 +39,7 @@ EnumDescriptor=object(TUserTypeDescriptor)
                      constructor init(size:Integer;tname:string;pu:pointer);
                      function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
                      function CreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:TInternalScriptString;preferedHeight:integer):TEditorDesc;virtual;
-                     function GetNumberInArrays(addr:Pointer;out number:LongWord):GDBBoolean;virtual;
+                     function GetNumberInArrays(addr:Pointer;out number:LongWord):Boolean;virtual;
                      //function Serialize(PInstance:Pointer;SaveFlag:Word;var membuf:PTZctnrVectorBytes;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
                      //function DeSerialize(PInstance:Pointer;SaveFlag:Word;var membuf:TZctnrVectorBytes;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
                      function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
@@ -103,7 +103,7 @@ end;
 function EnumDescriptor.GetNumberInArrays;
 var currval:LongWord;
     p:Pointer;
-    //found:GDBBoolean;
+    //found:Boolean;
 //    i:Integer;
         ir:itrec;
 begin
@@ -129,7 +129,7 @@ end;
 procedure EnumDescriptor.SetValueFromString(PInstance:Pointer;_Value:TInternalScriptString);
 var //currval:LongWord;
     p,p2,pp:Pointer;
-//    found:GDBBoolean;
+//    found:Boolean;
 //    i:Integer;
         ir,ir2,irr:itrec;
 begin
@@ -157,7 +157,7 @@ end;
 function EnumDescriptor.GetValueAsString;
 var //currval:LongWord;
 //    p:Pointer;
-//    found:GDBBoolean;
+//    found:Boolean;
 //    i:Integer;
     num:cardinal;
 begin
@@ -168,7 +168,7 @@ end;
 function EnumDescriptor.GetUserValueAsString;
 var //currval:LongWord;
 //    p:Pointer;
-//    found:GDBBoolean;
+//    found:Boolean;
 //    i:Integer;
     num:cardinal;
 begin

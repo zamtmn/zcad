@@ -184,12 +184,12 @@ type
                            procedure myglNormal3dV(const V:PGDBVertex);inline;
                            //procedure myglColor3ub(const red, green, blue: GLubyte);inline;
                            procedure myglVertex3d(const V:GDBVertex);virtual;//inline;
-                           procedure myglVertex2d(const x,y:GDBDouble);virtual;//inline;
+                           procedure myglVertex2d(const x,y:Double);virtual;//inline;
                            procedure myglVertex2f(const x,y:GLFloat);virtual;//inline;
                            procedure myglvertex2dv(const V:Pointer);virtual;//inline;
                            procedure myglvertex2iv(const V:Pointer);virtual;//inline;
                            procedure myglVertex2i(x, y: GLint);virtual;//inline;
-                           procedure myglVertex(const x,y,z:GDBDouble);virtual;//inline;
+                           procedure myglVertex(const x,y,z:Double);virtual;//inline;
                            procedure myglVertex3dV(const V:PGDBVertex);virtual;//inline;
                            procedure myglVertex3fV(const V:PGDBVertex3S);virtual;//inline;
                            procedure startrender;virtual;//inline;
@@ -443,7 +443,7 @@ begin
                       end;
 end;
 
-procedure TOGLStateManager.myglVertex2d(const x,y:GDBDouble);
+procedure TOGLStateManager.myglVertex2d(const x,y:Double);
 var t:gdbvertex;
 begin
      {$IFDEF DEBUGCOUNTGEOMETRY}

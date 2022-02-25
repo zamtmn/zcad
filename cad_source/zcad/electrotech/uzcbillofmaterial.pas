@@ -26,9 +26,9 @@ PGDBBOMItem=^GDBBOMItem;
 {REGISTERRECORDTYPE GDBBOMItem}
 GDBBOMItem=record
                  Material:GDBString;
-                 Amount:GDBDouble;
+                 Amount:Double;
                  Names:GDBString;
-                 processed:GDBBoolean;
+                 processed:Boolean;
                 end;
 PBbillOfMaterial=^GDBBbillOfMaterial;
 {REGISTEROBJECTTYPE GDBBbillOfMaterial}

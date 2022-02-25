@@ -38,9 +38,9 @@ GDBObjComplex= object(GDBObjWithLocalCS)
                     destructor done;virtual;
                     constructor initnul;
                     constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
-                    function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
+                    function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                     function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
-                    function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
+                    function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                     procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                     procedure addcontrolpoints(tdesc:Pointer);virtual;
                     procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
@@ -50,8 +50,8 @@ GDBObjComplex= object(GDBObjWithLocalCS)
                     //procedure feedbackinrect;virtual;
                     //function InRect:TInRect;virtual;
                     //procedure Draw(lw:Integer);virtual;
-                    procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;
-                    function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;virtual;
+                    procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
+                    function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;virtual;
                     procedure BuildGeometry(var drawing:TDrawingDef);virtual;
                     procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
               end;
@@ -74,7 +74,7 @@ begin
      //ConstObjArray.ObjTree:=createtree(ConstObjArray,vp.BoundingBox,@ConstObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
 end;
 
-function GDBObjComplex.onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;
+function GDBObjComplex.onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;
 begin
      result:=ConstObjArray.onpoint(objects,point);
 end;
@@ -214,7 +214,7 @@ begin
      ConstObjArray.done;
      inherited done;
 end;
-function GDBObjComplex.CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;
+function GDBObjComplex.CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;
 begin
      result:=ConstObjArray.calcvisible(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
      ProcessTree(frustum,infrustumactualy,visibleactualy,ConstObjArray.ObjTree,IRPartially,TDTFulDraw,totalobj,infrustumobj,ProjectProc,zoom,currentdegradationfactor);
@@ -239,10 +239,10 @@ begin
 end;
 
 function GDBObjComplex.onmouse;
-var //t,xx,yy:GDBDouble;
+var //t,xx,yy:Double;
     //i:Integer;
     p:pgdbobjEntity;
-    ot:GDBBoolean;
+    ot:Boolean;
         ir:itrec;
 begin
   result:=false;

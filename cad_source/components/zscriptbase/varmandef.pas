@@ -32,14 +32,14 @@ const
   Trecord=3;
   Tarray=4;
   Tenum=6;
-  TGDBBoolean=7;
+  TBoolean=7;
   TGDBShortint=8;
   TByte=9;
   TGDBSmallint=10;
   TGDBWord=11;
   TGDBInteger=12;
   TGDBLongword=13;
-  TGDBDouble=14;
+  TDouble=14;
   TGDBString=15;
   TGDBobject=16;}
   Ignore=#13;
@@ -199,7 +199,7 @@ TPropEditor=class(TComponent)
                  function geteditor:TWinControl;
                  procedure SetEditorBounds(pd:PBasePropertyDeskriptor;OnlyHotFasteditors:boolean);
             end;
-  //pd=^GDBDouble;
+  //pd=^Double;
   {-}{/PInteger=^Integer;/}
   //pstr=^TInternalScriptString;
   {-}{/PPointer=^Pointer;/}

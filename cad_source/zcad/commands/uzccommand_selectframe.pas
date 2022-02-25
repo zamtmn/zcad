@@ -81,7 +81,7 @@ end;
 function FrameEdit_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
 var
   ti: Integer;
-  x,y,w,h:gdbdouble;
+  x,y,w,h:Double;
   pv:PGDBObjEntity;
   ir:itrec;
   r:TInBoundingVolume;

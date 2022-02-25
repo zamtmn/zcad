@@ -38,11 +38,11 @@ TDrawingDef= object(GDBaseobject)
                        function GetCurrentRootObjArraySimple:Pointer;virtual;abstract;
                        function GetBlockDefArraySimple:Pointer;virtual;abstract;
                        function GetConstructEntsCount:Integer;virtual;abstract;
-                       procedure ChangeStampt(st:GDBBoolean);virtual;abstract;
-                       function GetChangeStampt:GDBBoolean;virtual;abstract;
+                       procedure ChangeStampt(st:Boolean);virtual;abstract;
+                       function GetChangeStampt:Boolean;virtual;abstract;
                        function CanUndo:boolean;virtual;abstract;
                        function CanRedo:boolean;virtual;abstract;
-                       function CreateDrawingRC(_maxdetail:GDBBoolean=false):TDrawContext;virtual;abstract;
+                       function CreateDrawingRC(_maxdetail:Boolean=false):TDrawContext;virtual;abstract;
                        function GetUnitsFormat:TzeUnitsFormat;virtual;abstract;
                  end;
 {EXPORT-}

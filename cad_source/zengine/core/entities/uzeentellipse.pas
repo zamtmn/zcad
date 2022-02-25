@@ -35,17 +35,17 @@ type
 PGDBObjEllipse=^GDBObjEllipse;
 {REGISTEROBJECTTYPE GDBObjEllipse}
 GDBObjEllipse= object(GDBObjPlain)
-                 RR:GDBDouble;(*saved_to_shd*)
+                 RR:Double;(*saved_to_shd*)
                  MajorAxis:GDBvertex;
-                 Ratio:GDBDouble;(*saved_to_shd*)
-                 StartAngle:GDBDouble;(*saved_to_shd*)
-                 EndAngle:GDBDouble;(*saved_to_shd*)
-                 angle:GDBDouble;
+                 Ratio:Double;(*saved_to_shd*)
+                 StartAngle:Double;(*saved_to_shd*)
+                 EndAngle:Double;(*saved_to_shd*)
+                 angle:Double;
                  Vertex3D_in_WCS_Array:GDBPoint3DArray;
-                 length:GDBDouble;
+                 length:Double;
                  q0,q1,q2:GDBvertex;
                  pq0,pq1,pq2:GDBvertex;
-                 constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex;{RR,}S,E:GDBDouble;majaxis:GDBVertex);
+                 constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex;{RR,}S,E:Double;majaxis:GDBVertex);
                  constructor initnul;
                  procedure LoadFromDXF(var f:TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
@@ -59,8 +59,8 @@ GDBObjEllipse= object(GDBObjPlain)
                  procedure getoutbound(var DC:TDrawContext);virtual;
                  procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                  procedure projectpoint;virtual;
-                 function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
-                 function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
+                 function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
+                 function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
                  function beforertmodify:Pointer;virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  function IsRTNeedModify(const Point:PControlPointDesc; p:Pointer):Boolean;virtual;
@@ -68,7 +68,7 @@ GDBObjEllipse= object(GDBObjPlain)
                  procedure rtsave(refp:Pointer);virtual;
                  destructor done;virtual;
                  function GetObjTypeName:GDBString;virtual;
-                 function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
+                 function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                  function CalcObjMatrixWithoutOwner:DMatrix4D;virtual;
                  procedure transform(const t_matrix:DMatrix4D);virtual;
@@ -160,7 +160,7 @@ begin
 end;
 function GDBObjEllipse.CalcTrueInFrustum;
 var i{,count}:Integer;
-    //d1,d2,d3,d4:gdbdouble;
+    //d1,d2,d3,d4:Double;
 begin
       for i:=0 to 5 do
       begin
@@ -289,7 +289,7 @@ begin
 end;
 procedure GDBObjEllipse.getoutbound;
 var //tv,tv2:GDBVertex;
-    t,b,l,rrr,n,f:GDBDouble;
+    t,b,l,rrr,n,f:Double;
     i:integer;
 begin
   outbound[0]:=VectorTransform3d(CreateVertex(-1,1,0),objMatrix);
@@ -392,7 +392,7 @@ end;
 procedure GDBObjEllipse.Renderfeedback;
 var //pm:DMatrix4D;
     tv:GDBvertex;
-    d:GDBDouble;
+    d:Double;
 begin
            {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(Local.p_insert,ProjP_insert);
            pprojoutbound^.clear;
@@ -457,9 +457,9 @@ begin
   //dxfGDBStringout(outhandle,100,'AcDbEllipse');
   //WriteString_EOL(outhandle, '100');
   //WriteString_EOL(outhandle, 'AcDbArc');
-  dxfGDBDoubleout(outhandle,40,ratio{ * 180 / pi});
-  dxfGDBDoubleout(outhandle,41,startangle{ * 180 / pi});
-  dxfGDBDoubleout(outhandle,42,endangle{ * 180 / pi});
+  dxfDoubleout(outhandle,40,ratio{ * 180 / pi});
+  dxfDoubleout(outhandle,41,startangle{ * 180 / pi});
+  dxfDoubleout(outhandle,42,endangle{ * 180 / pi});
 end;
 procedure GDBObjEllipse.LoadFromDXF;
 var //s: GDBString;
@@ -472,9 +472,9 @@ begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
     if not dxfvertexload(f,10,byt,Local.P_insert) then
     if not dxfvertexload(f,11,byt,MajorAxis) then
-    if not dxfGDBDoubleload(f,40,byt,ratio) then
-    if not dxfGDBDoubleload(f,41,byt,startangle) then
-    if not dxfGDBDoubleload(f,42,byt,endangle) then {s := }f.readgdbstring;
+    if not dxfDoubleload(f,40,byt,ratio) then
+    if not dxfDoubleload(f,41,byt,startangle) then
+    if not dxfDoubleload(f,42,byt,endangle) then {s := }f.readgdbstring;
     byt:=readmystrtoint(f);
   end;
   startangle := startangle{ * pi / 180};
@@ -546,7 +546,7 @@ begin
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
 end;
 function GDBObjEllipse.getsnap;
-//var t,d,e:GDBDouble;
+//var t,d,e:Double;
   //  tv,n,v:gdbvertex;
 begin
      if onlygetsnapcount=3 then
@@ -604,7 +604,7 @@ begin
      result:=true;
 end;
 procedure GDBObjEllipse.rtmodifyonepoint(const rtmod:TRTModifyData);
-var a,b,c,d,e,f,g,p_x,p_y,rrr:GDBDouble;
+var a,b,c,d,e,f,g,p_x,p_y,rrr:Double;
     tv:gdbvertex2d;
     ptdata:tellipsertmodify;
 begin

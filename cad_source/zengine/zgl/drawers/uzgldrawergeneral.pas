@@ -83,7 +83,7 @@ var
   testrender:TZGLAbstractDrawer;
   CurrentCamCSOffset:GDBvertex;
   CurrentCamCSOffsetS:GDBvertex3S;
-  notuseLCS:GDBBOOLEAN;
+  notuseLCS:Boolean;
 implementation
 //uses log;
 var

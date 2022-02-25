@@ -23,7 +23,7 @@ type
                      StartDevice,EndDevice:PGDBObjDevice;
                      StartSegment:PGDBObjCable;
                      Devices:TZctnrVectorPGDBaseObjects;
-                     length:GDBDouble;
+                     length:Double;
                      constructor init;
                      destructor done;virtual;
                      function GetObjTypeName:GDBString;virtual;
@@ -106,7 +106,7 @@ begin
                 //pvn:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('AmountD');
                 pvn:=pentvarext.entityunit.FindVariable('AmountD');              //получаем длину кабеля
                 if pvn<>nil then
-                                pcd^.length:=pcd^.length+pgdbdouble(pvn^.data.Addr.Instance)^; //доюавляем к шлейфу общую длину
+                                pcd^.length:=pcd^.length+pDouble(pvn^.data.Addr.Instance)^; //доюавляем к шлейфу общую длину
            end;
            pobj:=drawings.GetCurrentROOT.ObjArray.iterate(ir);    //следующий элемент в списке чертежа
      until pobj=nil;
@@ -187,7 +187,7 @@ begin
                                                 pvn2:=FindVariableInEnt(pcd^.EndDevice,'Elevation');
                                                 if (pvn<>nil)and(pvn2<>nil)then
                                                 begin
-                                                     pcd^.length:=pcd^.length+abs(pgdbdouble(pvn^.data.Addr.Instance)^-pgdbdouble(pvn2^.data.Addr.Instance)^);
+                                                     pcd^.length:=pcd^.length+abs(pDouble(pvn^.data.Addr.Instance)^-pDouble(pvn2^.data.Addr.Instance)^);
                                                 end;
                                            end;
                                       end;

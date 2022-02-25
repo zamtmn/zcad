@@ -193,8 +193,8 @@ type
 
       //function graphBulderFunc(Epsilon:double;nameCable:string):TGraphBuilder;
       //function visualGraphEdge(p1:GDBVertex;p2:GDBVertex;color:integer;nameLayer:string):TCommandResult;
-      //function visualGraphVertex(p1:GDBVertex;rr:GDBDouble;color:integer;nameLayer:string):TCommandResult;
-      //function visualGraphError(point:GDBVertex;rr:GDBDouble;color:integer;nameLayer:string):TCommandResult;
+      //function visualGraphVertex(p1:GDBVertex;rr:Double;color:integer;nameLayer:string):TCommandResult;
+      //function visualGraphError(point:GDBVertex;rr:Double;color:integer;nameLayer:string):TCommandResult;
       //function getPointConnector(pobj:pGDBObjEntity; out pConnect:GDBVertex):Boolean;
       //
       //function testTempDrawPolyLine(listVertex:GListVertexPoint;color:Integer):TCommandResult;
@@ -264,8 +264,8 @@ function TestModul_com(operands:TCommandOperands):TCommandResult;
     isfirst:boolean;
     startmat,endmat,startname,endname,prevname:gdbstring;
 
-    //cmlx,cmrx,cmuy,cmdy:gdbdouble;
-    {lx,rx,}uy,dy:gdbdouble;
+    //cmlx,cmrx,cmuy,cmdy:Double;
+    {lx,rx,}uy,dy:Double;
     lsave:{integer}PPointer;
     DC:TDrawContext;
     pCableSSvarext,pSegmCablevarext,pSegmCableLength,ppvvarext,pnodeendvarext:TVariablesExtender;
@@ -348,7 +348,7 @@ function TestModul_com(operands:TCommandOperands):TCommandResult;
 var
    pv:pGDBObjDevice;
    pt:pGDBObjMText;
-   lx,{rx,}uy,dy:GDBDouble;
+   lx,{rx,}uy,dy:Double;
    tv:gdbvertex;
    DC:TDrawContext;
 begin
@@ -392,7 +392,7 @@ end;
 function InsertDat(datname,sname,ename:GDBString;datcount:Integer;var currentcoord:GDBVertex; var root:GDBObjRoot):pgdbobjline;
 var
 //   pv:pGDBObjDevice;
-//   lx,rx,uy,dy:GDBDouble;
+//   lx,rx,uy,dy:Double;
    pl:pgdbobjline;
    oldcoord,oldcoord2:gdbvertex;
    DC:TDrawContext;
@@ -983,8 +983,8 @@ var
     isfirst:boolean;
     startmat,endmat,startname,endname,prevname:gdbstring;
 
-    //cmlx,cmrx,cmuy,cmdy:gdbdouble;
-    {lx,rx,}uy,dy:gdbdouble;
+    //cmlx,cmrx,cmuy,cmdy:Double;
+    {lx,rx,}uy,dy:Double;
     lsave:{integer}PPointer;
     DC:TDrawContext;
     pCableSSvarext,pSegmCablevarext,pSegmCableLength,ppvvarext,pnodeendvarext:TVariablesExtender;

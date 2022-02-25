@@ -79,7 +79,7 @@ BaseTypeDescriptor<T,TManipulator>=object(TUserTypeDescriptor)
                          function AllocInstance:Pointer;virtual;
                    end;
 TBTM_Boolean=TBoolTypeManipulator<Boolean>;
-GDBBooleanDescriptor=object(BaseTypeDescriptor<boolean,{TBoolTypeManipulator<boolean>}TBTM_Boolean>)
+BooleanDescriptor=object(BaseTypeDescriptor<boolean,{TBoolTypeManipulator<boolean>}TBTM_Boolean>)
                     end;
 TOTM_ShortInt=TOrdinalTypeManipulator<ShortInt>;
 TFundamentalShortIntDescriptor=object(BaseTypeDescriptor<shortint,{TOrdinalTypeManipulator<shortint>}TOTM_ShortInt>)
@@ -109,7 +109,7 @@ TOTM_Int64=TOrdinalTypeManipulator<Int64>;
 TFundamentalInt64Descriptor=object(BaseTypeDescriptor<Int64,{TOrdinalTypeManipulator<Int64>}TOTM_Int64>)
                     end;
 TFTM_Double=TOrdinalTypeManipulator<Double>;
-GDBDoubleDescriptor=object(BaseTypeDescriptor<double,{TFloatTypeManipulator<double>}TFTM_Double>)
+DoubleDescriptor=object(BaseTypeDescriptor<double,{TFloatTypeManipulator<double>}TFTM_Double>)
                     end;
 TFTM_float=TOrdinalTypeManipulator<float>;
 FloatDescriptor=object(BaseTypeDescriptor<float,{TFloatTypeManipulator<TFTM_float>}TFTM_float>)
@@ -143,7 +143,7 @@ TEnumDataDescriptor=object(BaseTypeDescriptor<TEnumData,{TOrdinalTypeManipulator
                end;
 
 var
-FundamentalDoubleDescriptorObj:GDBDoubleDescriptor;
+FundamentalDoubleDescriptorObj:DoubleDescriptor;
 FundamentalUnicodeStringDescriptorObj:GDBUnicodeStringDescriptor;
 FundamentalStringDescriptorObj:GDBStringDescriptor;
 FundamentalAnsiStringDescriptorObj:GDBAnsiStringDescriptor;
@@ -156,7 +156,7 @@ FundamentalQWordDescriptorObj:TFundamentalQWordDescriptor;
 FundamentalInt64Descriptor:TFundamentalInt64Descriptor;
 FundamentalSingleDescriptorObj:FloatDescriptor;
 FundamentalShortIntDescriptorObj:TFundamentalShortIntDescriptor;
-FundamentalBooleanDescriptorOdj:GDBBooleanDescriptor;
+FundamentalBooleanDescriptorOdj:BooleanDescriptor;
 FundamentalPointerDescriptorOdj:PointerDescriptor;
 GDBEnumDataDescriptorObj:TEnumDataDescriptor;
 
@@ -505,7 +505,7 @@ end;
 function TEnumDataDescriptor.GetValueAsString;
 {var currval:LongWord;
     p:Pointer;
-    found:GDBBoolean;
+    found:Boolean;
     i:Integer;
     num:cardinal;}
 begin

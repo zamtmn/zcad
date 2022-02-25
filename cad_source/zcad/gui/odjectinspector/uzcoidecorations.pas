@@ -512,8 +512,8 @@ begin
 end;
 procedure DecorateSysTypes;
 begin
-     AddEditorToType(SysUnit.TypeName2PTD('Boolean'),TBaseTypesEditors.GDBBooleanCreateEditor);
-     AddEditorToType(SysUnit.TypeName2PTD('GDBBoolean'),TBaseTypesEditors.GDBBooleanCreateEditor);
+     AddEditorToType(SysUnit.TypeName2PTD('Boolean'),TBaseTypesEditors.BooleanCreateEditor);
+     AddEditorToType(SysUnit.TypeName2PTD('Boolean'),TBaseTypesEditors.BooleanCreateEditor);
 
 
      AddEditorToType(SysUnit.TypeName2PTD('ShortInt'),TBaseTypesEditors.BaseCreateEditor);
@@ -524,7 +524,7 @@ begin
      AddEditorToType(SysUnit.TypeName2PTD('LongWord'),TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType(SysUnit.TypeName2PTD('QWord'),TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType(SysUnit.TypeName2PTD('Double'),TBaseTypesEditors.BaseCreateEditor);
-     AddEditorToType(SysUnit.TypeName2PTD('GDBDouble'),TBaseTypesEditors.BaseCreateEditor);
+     //AddEditorToType(SysUnit.TypeName2PTD('Double'),TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType(SysUnit.TypeName2PTD('GDBNonDimensionDouble'),TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType(SysUnit.TypeName2PTD('GDBAngleDouble'),TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType(SysUnit.TypeName2PTD('GDBAngleDegDouble'),TBaseTypesEditors.BaseCreateEditor);
@@ -555,7 +555,7 @@ begin
 
      AddFastEditorToType(SysUnit.TypeName2PTD('TGDBPaletteColor'),@OIUI_FE_ButtonGetPrefferedSize,@OIUI_FE_ButtonDraw,@runcolorswnd);
      AddFastEditorToType(SysUnit.TypeName2PTD('Boolean'),@OIUI_FE_BooleanGetPrefferedSize,@OIUI_FE_BooleanDraw,@OIUI_FE_BooleanInverse);
-     AddFastEditorToType(SysUnit.TypeName2PTD('GDBBoolean'),@OIUI_FE_BooleanGetPrefferedSize,@OIUI_FE_BooleanDraw,@OIUI_FE_BooleanInverse);
+     AddFastEditorToType(SysUnit.TypeName2PTD('Boolean'),@OIUI_FE_BooleanGetPrefferedSize,@OIUI_FE_BooleanDraw,@OIUI_FE_BooleanInverse);
      AddFastEditorToType(SysUnit.TypeName2PTD('TGDB3StateBool'),@OIUI_FE_BooleanGetPrefferedSize,@_3SBooleanDrawFastEditor,@_3SBooleanInverse);
      AddFastEditorToType(SysUnit.TypeName2PTD('PGDBLayerPropObjInsp'),@OIUI_FE_ButtonGetPrefferedSize,@OIUI_FE_ButtonDraw,@runlayerswnd);
      AddFastEditorToType(SysUnit.TypeName2PTD('GDBString'),@OIUI_FE_ButtonGetPrefferedSize,@ButtonTxtDrawFastEditor,@RunStringEditor);

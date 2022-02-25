@@ -56,12 +56,12 @@ type
   TPolyEdit=record
     Action:TSubPolyEdit;(*'Action'*)
     Mode:TPolyEditMode;(*'Mode'*)
-    vdist:gdbdouble;(*hidden_in_objinsp*)
-    ldist:gdbdouble;(*hidden_in_objinsp*)
+    vdist:Double;(*hidden_in_objinsp*)
+    ldist:Double;(*hidden_in_objinsp*)
     nearestvertex:Integer;(*hidden_in_objinsp*)
     nearestline:Integer;(*hidden_in_objinsp*)
     dir:Integer;(*hidden_in_objinsp*)
-    setpoint:gdbboolean;(*hidden_in_objinsp*)
+    setpoint:Boolean;(*hidden_in_objinsp*)
     vvertex:gdbvertex;(*hidden_in_objinsp*)
     lvertex1:gdbvertex;(*hidden_in_objinsp*)
     lvertex2:gdbvertex;(*hidden_in_objinsp*)
@@ -121,7 +121,7 @@ function _3DPolyEd_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: 
 var
     ptv,ptvprev:pgdbvertex;
     ir:itrec;
-    v,l:gdbdouble;
+    v,l:Double;
     domethod,undomethod:tmethod;
     polydata:tpolydata;
     _tv:gdbvertex;

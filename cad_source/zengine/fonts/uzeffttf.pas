@@ -26,7 +26,7 @@ type ptsyminfo=^tsyminfo;
      tsyminfo=record
                            number,size:word;
                      end;
-function createnewfontfromttf(name:GDBString;var pf:PGDBfont):GDBBoolean;
+function createnewfontfromttf(name:GDBString;var pf:PGDBfont):Boolean;
 
 implementation
 
@@ -35,7 +35,7 @@ begin
      Getmem(result,sizeof(TTFFont));
      result^.init;
 end;
-function createnewfontfromttf(name:GDBString;var pf:PGDBfont):GDBBoolean;
+function createnewfontfromttf(name:GDBString;var pf:PGDBfont):Boolean;
 var
    i:integer;
    chcode:integer;

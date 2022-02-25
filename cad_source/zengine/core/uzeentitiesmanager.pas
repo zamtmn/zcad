@@ -29,7 +29,7 @@ function ENTF_CreateCircle(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntity
 function ENTF_CreateSolid(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;args:array of const): PGDBObjEntity;
 function ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObjEntityOpenArray;
                                 layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:TGDBPaletteColor;LW:TGDBLineWeight;
-                                point: gdbvertex; scale, angle: GDBDouble; s: pansichar):PGDBObjEntity;
+                                point: gdbvertex; scale, angle: Double; s: pansichar):PGDBObjEntity;
 var
    p:gdbvertex;
 implementation
@@ -37,7 +37,7 @@ implementation
 //    log;
 function ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObjEntityOpenArray;
                                 layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:TGDBPaletteColor;LW:TGDBLineWeight;
-                                point: gdbvertex; scale, angle: GDBDouble; s: pansichar):PGDBObjEntity;
+                                point: gdbvertex; scale, angle: Double; s: pansichar):PGDBObjEntity;
 var
   pb:PGDBObjEntity;
   nam:gdbstring;

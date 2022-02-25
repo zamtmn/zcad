@@ -199,7 +199,7 @@ var ir_inGDB,ir_inVertexArray,ir_inNodeArray,ir_inDevice,ir_inDevice2:itrec;
     m,rotmatr:DMatrix4D;
     pvd,{pvd2,}pvds,pvdal,pvdrt:pvardesk;
     {group,pribor,}count:Integer;
-    l:gdbdouble;
+    l:Double;
     pentvarext,pentvarextcirrobj:TVariablesExtender;
 
     ptn1,ptn2:PTNodeProp;
@@ -221,7 +221,7 @@ begin
   //pvd:=ou.FindVariable('Cable_Length');
   //pvds:=ou.FindVariable('LENGTH_Scale');
   //pvdal:=ou.FindVariable('LENGTH_Add');
-  //pgdbdouble(pvd^.Instance)^:=length*pgdbdouble(pvds^.Instance)^+pgdbdouble(pvdal^.Instance)^;
+  //pDouble(pvd^.Instance)^:=length*pDouble(pvds^.Instance)^+pDouble(pvdal^.Instance)^;
   ptv:=vertexarrayInWCS.beginiterate(ir_inVertexArray);
   NodePropArray.clear;
   if ptv<>nil then
@@ -365,7 +365,7 @@ begin
                     pvd:=pentvarextcirrobj.entityunit.FindVariable('EL_Cab_AddLength');
                     if pvd<>nil then
                                     begin
-                                         l:=l+pgdbdouble(pvd^.data.Addr.Instance)^;
+                                         l:=l+pDouble(pvd^.data.Addr.Instance)^;
                                     end;
                     inc(count);
                     CurrentObj^.FormatEntity(drawing,dc);
@@ -384,21 +384,21 @@ begin
   pvdal:=pentvarext.entityunit.FindVariable('LENGTH_Add');
   pvdrt:=pentvarext.entityunit.FindVariable('LENGTH_RoundTo');
   if pvds<>nil then
-  if pgdbdouble(pvds^.data.Addr.Instance)^>0 then
+  if pDouble(pvds^.data.Addr.Instance)^>0 then
                                              begin
                                              if (pvd<>nil)and(pvds<>nil)and(pvdal<>nil){and(pvdrt<>nil)} then
-                                             pgdbdouble(pvd^.data.Addr.Instance)^:={roundto(}length*pgdbdouble(pvds^.data.Addr.Instance)^+pgdbdouble(pvdal^.data.Addr.Instance)^+l{,PInteger(pvdrt^.Instance)^)};
+                                             pDouble(pvd^.data.Addr.Instance)^:={roundto(}length*pDouble(pvds^.data.Addr.Instance)^+pDouble(pvdal^.data.Addr.Instance)^+l{,PInteger(pvdrt^.Instance)^)};
                                              pvds:=pentvarext.entityunit.FindVariable('LENGTH_KReserve');
                                              if pvds<>nil then
-                                                              pgdbdouble(pvd^.data.Addr.Instance)^:=pgdbdouble(pvd^.data.Addr.Instance)^*pgdbdouble(pvds^.data.Addr.Instance)^;
+                                                              pDouble(pvd^.data.Addr.Instance)^:=pDouble(pvd^.data.Addr.Instance)^*pDouble(pvds^.data.Addr.Instance)^;
                                              if (pvdrt<>nil) then
-                                                              pgdbdouble(pvd^.data.Addr.Instance)^:=roundto(pgdbdouble(pvd^.data.Addr.Instance)^,PInteger(pvdrt^.data.Addr.Instance)^);
+                                                              pDouble(pvd^.data.Addr.Instance)^:=roundto(pDouble(pvd^.data.Addr.Instance)^,PInteger(pvdrt^.data.Addr.Instance)^);
 
                                              end
                                          else
                                              begin
                                              if (pvd<>nil)and(pvds<>nil) then
-                                             pgdbdouble(pvd^.data.Addr.Instance)^:=-pgdbdouble(pvds^.data.Addr.Instance)^;
+                                             pDouble(pvd^.data.Addr.Instance)^:=-pDouble(pvds^.data.Addr.Instance)^;
                                              end;
 
 

@@ -41,16 +41,16 @@ GDBObjSpline= object(GDBObjCurve)
                  ControlArrayInWCS:GDBPoint3dArray;(*saved_to_shd*)(*hidden_in_objinsp*)
                  Knots:{GDBOpenArrayOfData}TKnotsVector;(*saved_to_shd*)(*hidden_in_objinsp*)
                  AproxPointInWCS:GDBPoint3dArray;(*saved_to_shd*)(*hidden_in_objinsp*)
-                 Closed:GDBBoolean;(*saved_to_shd*)
+                 Closed:Boolean;(*saved_to_shd*)
                  Degree:Integer;(*saved_to_shd*)
-                 constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:GDBBoolean);
+                 constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:Boolean);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  destructor done;virtual;
                  procedure LoadFromDXF(var f:TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure startsnap(out osp:os_record; out pdata:Pointer);virtual;
-                 function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
+                 function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
 
                  procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure SaveToDXFfollow(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
@@ -58,8 +58,8 @@ GDBObjSpline= object(GDBObjCurve)
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
                  function GetObjTypeName:GDBString;virtual;
                  function FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
-                 function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
-                 function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;virtual;
+                 function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
+                 function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;virtual;
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
 
@@ -91,7 +91,7 @@ begin
                                   end;
    result:={VertexArrayInWCS}AproxPointInWCS.onmouse(mf,closed);
 end;
-function GDBObjSpline.onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;
+function GDBObjSpline.onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;
 begin
      if VertexArrayInWCS.onpoint(point,closed) then
                                                 begin
@@ -340,13 +340,13 @@ begin
   dxfGDBIntegerout(outhandle,72,Knots.Count);
   dxfGDBIntegerout(outhandle,73,VertexArrayInOCS.Count);
 
-  dxfGDBDoubleout(outhandle,42,0.0000000001);
-  dxfGDBDoubleout(outhandle,43,0.0000000001);
+  dxfDoubleout(outhandle,42,0.0000000001);
+  dxfDoubleout(outhandle,43,0.0000000001);
 
   fl:=Knots.beginiterate(ir);
   if fl<>nil then
   repeat
-        dxfGDBDoubleout(outhandle,40,fl^);
+        dxfDoubleout(outhandle,40,fl^);
         fl:=Knots.iterate(ir);
   until fl=nil;
 
@@ -405,7 +405,7 @@ var s, layername: GDBString;
   byt, code: Integer;
   p: gdbvertex;
   hlGDBWord: LongWord;
-  vertexgo: GDBBoolean;
+  vertexgo: Boolean;
 begin
   closed := false;
   vertexgo := false;

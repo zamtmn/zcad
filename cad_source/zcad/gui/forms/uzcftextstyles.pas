@@ -221,7 +221,7 @@ begin
 end;
 function TTextStylesForm.CreateHeightEditor(Item: TListItem;r: TRect):boolean;
 begin
-  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.prop.size,'GDBDouble',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.prop.size,'Double',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
 end;
 {Wfactor handle procedures}
 function TTextStylesForm.GetWidthFactor(Item: TListItem):string;
@@ -230,7 +230,7 @@ begin
 end;
 function TTextStylesForm.CreateWidthFactorEditor(Item: TListItem;r: TRect):boolean;
 begin
-  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.prop.wfactor,'GDBDouble',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.prop.wfactor,'Double',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
 end;
 {Oblique handle procedures}
 function TTextStylesForm.GetOblique(Item: TListItem):string;
@@ -239,7 +239,7 @@ begin
 end;
 function TTextStylesForm.CreateObliqueEditor(Item: TListItem;r: TRect):boolean;
 begin
-  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.prop.oblique,'GDBDouble',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.prop.oblique,'Double',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
 end;
 procedure TTextStylesForm.FillFontsSelector(currentitem:string;currentitempfont:PGDBfont);
 var i:integer;

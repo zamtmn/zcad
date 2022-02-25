@@ -50,8 +50,8 @@ TOpenglData=record
           RD_Restore_Mode:trestoremode;(*'Restore mode'*)
           RD_VSync:TGDB3StateBool;(*'VSync'*)
           RD_MaxWidth:Integer;(*'Max width'*)(*oi_readonly*)
-          RD_MaxLineWidth:GDBDouble;(*'Max line width'*)(*oi_readonly*)
-          RD_MaxPointSize:GDBDouble;(*'Max point size'*)(*oi_readonly*)
+          RD_MaxLineWidth:Double;(*'Max line width'*)(*oi_readonly*)
+          RD_MaxPointSize:Double;(*'Max point size'*)(*oi_readonly*)
     end;
 {EXPORT-}
 TZGLOpenGLDrawer=class(TZGLGeneralDrawer)

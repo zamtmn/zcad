@@ -3,7 +3,7 @@ interface
 uses System,cables;
 var
   SUMMARY_StyleName:GDBString;(*'Стиль'*)
-  NC_StyleDef:GDBBoolean;(*'Метка определения стиля'*)
+  NC_StyleDef:Boolean;(*'Метка определения стиля'*)
   NMO_Name:GDBString;(*'Обозначение'*)
   NMO_BaseName:GDBString;(*'Короткое Имя'*)
   NMO_Prefix:GDBString;(*'Префикс'*)
@@ -22,13 +22,13 @@ var
   GC_Metric:GDBString;
   DB_link:GDBString;(*'Материал'*)
   LENGTH_RoundTo:Integer;(*'Округлять до'*)
-  LENGTH_Add:GDBDouble;(*'Добавить к длине'*)
-  LENGTH_Scale:GDBDouble;(*'Масштаб'*)
+  LENGTH_Add:Double;(*'Добавить к длине'*)
+  LENGTH_Scale:Double;(*'Масштаб'*)
   CABLE_Type:TCableType;(*'Тип'*)
   CABLE_Segment:Integer;(*'Сегмент'*)
   CABLE_WireCount:Integer;(*'Число жил'*)
   CABLE_TotalCD:Integer;(*'Подключено устройств'*)
-  AmountD:GDBDouble;(*'Длина'*)
+  AmountD:Double;(*'Длина'*)
 implementation
 begin
   SUMMARY_StyleName:='ОПС_Адресный шлейф';

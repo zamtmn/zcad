@@ -54,7 +54,7 @@ type
                memdeb:tmemdeb;
                renderdeb:trenderdeb;
                languadedeb:tlanguadedeb;
-               ShowHiddenFieldInObjInsp:PGDBBoolean;(*'Show hidden fields'*)
+               ShowHiddenFieldInObjInsp:PBoolean;(*'Show hidden fields'*)
                TestUnicodeString:UnicodeString;
         end;
   {REGISTERRECORDTYPE tpath}
@@ -80,24 +80,24 @@ type
             RD_CurrentWAParam:TFaceTypedData;
             RD_GLUVersion:PGDBString;(*'GLU Version'*)(*oi_readonly*)
             RD_GLUExtensions:PGDBString;(*'GLU Extensions'*)(*oi_readonly*)
-            RD_UseStencil:PGDBBoolean;(*'Use STENCIL buffer'*)
+            RD_UseStencil:PBoolean;(*'Use STENCIL buffer'*)
             RD_LastRenderTime:PInteger;(*'Last render time'*)(*oi_readonly*)
             RD_LastUpdateTime:PInteger;(*'Last update time'*)(*oi_readonly*)
             RD_LastCalcVisible:PInteger;(*'Last visible calculation time'*)(*oi_readonly*)
             RD_MaxRenderTime:PInteger;(*'Maximum single pass time'*)
             RD_DrawInsidePaintMessage:PTGDB3StateBool;(*'Draw inside paint message'*)
-            RD_RemoveSystemCursorFromWorkArea:PGDBBoolean;(*'Remove system cursor from work area'*)
-            RD_Light:PGDBBoolean;(*'Light'*)
-            RD_LineSmooth:PGDBBoolean;(*'Line smoothing'*)
+            RD_RemoveSystemCursorFromWorkArea:PBoolean;(*'Remove system cursor from work area'*)
+            RD_Light:PBoolean;(*'Light'*)
+            RD_LineSmooth:PBoolean;(*'Line smoothing'*)
             RD_ImageDegradation:TImageDegradation;(*'Image degradation'*)
-            RD_PanObjectDegradation:PGDBBoolean;(*'Degradation while pan'*)
+            RD_PanObjectDegradation:PBoolean;(*'Degradation while pan'*)
             RD_SpatialNodesDepth:PInteger;(*'Spatial index nodes depth'*)(*hidden_in_objinsp*)
             RD_SpatialNodeCount:PInteger;(*'Spatial index ents in node'*)(*hidden_in_objinsp*)
             RD_MaxLTPatternsInEntity:PInteger;(*'Max LT patterns in entity'*)
       end;
   {REGISTERRECORDTYPE tsave}
   tsave=record
-              SAVE_Auto_On:PGDBBoolean;(*'Autosave'*)
+              SAVE_Auto_On:PBoolean;(*'Autosave'*)
               SAVE_Auto_Current_Interval:PInteger;(*'Time to autosave'*)(*oi_readonly*)
               SAVE_Auto_Interval:PInteger;(*'Time between autosaves'*)
               SAVE_Auto_FileName:PGDBString;(*'Autosave file name'*)
@@ -119,25 +119,25 @@ type
              SYS_Version:PGDBString;(*'Program version'*)(*oi_readonly*)
              SSY_CompileInfo:tcompileinfo;(*'Build info'*)(*oi_readonly*)
              SYS_RunTime:PInteger;(*'Uptime'*)(*oi_readonly*)
-             SYS_UniqueInstance:PGDBBoolean;(*'Unique instance'*)
-             SYS_NoSplash:PGDBBoolean;(*'No splash screen'*)
-             SYS_NoLoadLayout:PGDBBoolean;(*'No load layout'*)
-             SYS_UpdatePO:PGDBBoolean;(*'Update PO file'*)
+             SYS_UniqueInstance:PBoolean;(*'Unique instance'*)
+             SYS_NoSplash:PBoolean;(*'No splash screen'*)
+             SYS_NoLoadLayout:PBoolean;(*'No load layout'*)
+             SYS_UpdatePO:PBoolean;(*'Update PO file'*)
 
        end;
   {REGISTERRECORDTYPE tdwg}
   tdwg=record
-             DWG_DrawMode:PGDBBoolean;(*'Display line weights'*)
+             DWG_DrawMode:PBoolean;(*'Display line weights'*)
              DWG_OSMode:PTGDBOSMode;(*'Snap mode'*)
-             DWG_PolarMode:PGDBBoolean;(*'Polar tracking mode'*)
+             DWG_PolarMode:PBoolean;(*'Polar tracking mode'*)
              DWG_CLayer:{-}PPointer{/PPGDBLayerPropObjInsp/};(*'Current layer'*)
              DWG_CLinew:PTGDBLineWeight;(*'Current line weigwt'*)
              DWG_CColor:PTGDBPaletteColor;(*'Current color'*)
-             DWG_LTScale:PGDBDouble;(*'Global line type scale'*)
-             DWG_CLTScale:PGDBDouble;(*'Current line type scale'*)
+             DWG_LTScale:PDouble;(*'Global line type scale'*)
+             DWG_CLTScale:PDouble;(*'Current line type scale'*)
              DWG_CLType:{-}PPointer{/PPGDBLtypePropObjInsp/};(*'Drawing line type'*)
              DWG_CDimStyle:{-}PPointer{/PPGDBDimStyleObjInsp/};(*'Dim style'*)
-             DWG_RotateTextInLT:PGDBBoolean;(*'Rotate text in line type'*)
+             DWG_RotateTextInLT:PBoolean;(*'Rotate text in line type'*)
              DWG_CTStyle:{-}PPointer{/PPGDBTextStyleObjInsp/};(*'Text style'*)
 
              DWG_LUnits:PTLUnits;
@@ -148,16 +148,16 @@ type
              DWG_AngBase:PGDBAngleDegDouble;
              DWG_UnitMode:PTUnitMode;
              DWG_InsUnits:PTInsUnits;
-             DWG_TextSize:PGDBDouble;
+             DWG_TextSize:PDouble;
 
-             DWG_EditInSubEntry:PGDBBoolean;(*'SubEntities edit'*)
-             DWG_AdditionalGrips:PGDBBoolean;(*'Additional grips'*)
-             DWG_HelpGeometryDraw:PGDBBoolean;(*'Help geometry'*)
+             DWG_EditInSubEntry:PBoolean;(*'SubEntities edit'*)
+             DWG_AdditionalGrips:PBoolean;(*'Additional grips'*)
+             DWG_HelpGeometryDraw:PBoolean;(*'Help geometry'*)
              DWG_Snap:PGDBSnap2D;(*'Snap settings'*)
              DWG_GridSpacing:PGDBvertex2D;(*'Grid spacing'*)
-             DWG_DrawGrid:PGDBBoolean;(*'Display grid'*)
-             DWG_SnapGrid:PGDBBoolean;(*'Snap'*)
-             DWG_SelectedObjToInsp:PGDBBoolean;(*'Selected object to inspector'*)
+             DWG_DrawGrid:PBoolean;(*'Display grid'*)
+             DWG_SnapGrid:PBoolean;(*'Snap'*)
+             DWG_SelectedObjToInsp:PBoolean;(*'Selected object to inspector'*)
        end;
   {REGISTERRECORDTYPE TLayerControls}
   TLayerControls=record
@@ -168,52 +168,52 @@ type
   {REGISTERRECORDTYPE tdesigning}
   tdesigning=record
              DSGN_LayerControls:TLayerControls;(*'Control layers'*)
-             DSGN_TraceAutoInc:PGDBBoolean;(*'Increment trace names'*)
-             DSGN_LeaderDefaultWidth:PGDBDouble;(*'Default leader width'*)
-             DSGN_HelpScale:PGDBDouble;(*'Scale of auxiliary elements'*)
-             DSGN_SelNew:PGDBBoolean;(*'New selection set'*)
-             DSGN_SelSameName:PGDBBoolean;(*'Auto select devices with same name'*)
+             DSGN_TraceAutoInc:PBoolean;(*'Increment trace names'*)
+             DSGN_LeaderDefaultWidth:PDouble;(*'Default leader width'*)
+             DSGN_HelpScale:PDouble;(*'Scale of auxiliary elements'*)
+             DSGN_SelNew:PBoolean;(*'New selection set'*)
+             DSGN_SelSameName:PBoolean;(*'Auto select devices with same name'*)
              DSGN_OTrackTimerInterval:PInteger;(*'Object track timer interval'*)
        end;
   {REGISTERRECORDTYPE tobjinspinterface}
   tobjinspinterface=record
-                INTF_ObjInsp_ShowHeaders:PGDBBoolean;(*'Show headers'*)
-                INTF_ObjInsp_OldStyleDraw:PGDBBoolean;(*'Old style'*)
-                INTF_ObjInsp_WhiteBackground:PGDBBoolean;(*'White background'*)
-                INTF_ObjInsp_ShowSeparator:PGDBBoolean;(*'Show separator'*)
-                INTF_ObjInsp_ShowFastEditors:PGDBBoolean;(*'Show fast editors'*)
-                INTF_ObjInsp_ShowOnlyHotFastEditors:PGDBBoolean;(*'Show only hot fast editors'*)
+                INTF_ObjInsp_ShowHeaders:PBoolean;(*'Show headers'*)
+                INTF_ObjInsp_OldStyleDraw:PBoolean;(*'Old style'*)
+                INTF_ObjInsp_WhiteBackground:PBoolean;(*'White background'*)
+                INTF_ObjInsp_ShowSeparator:PBoolean;(*'Show separator'*)
+                INTF_ObjInsp_ShowFastEditors:PBoolean;(*'Show fast editors'*)
+                INTF_ObjInsp_ShowOnlyHotFastEditors:PBoolean;(*'Show only hot fast editors'*)
                 INTF_ObjInsp_RowHeight:PTGDBIntegerOverrider;(*'Row height'*)
                 INTF_ObjInsp_SpaceHeight:PInteger;(*'Space height'*)
-                INTF_ObjInsp_AlwaysUseMultiSelectWrapper:PGDBBoolean;(*'Always use multiselect wrapper'*)
-                INTF_ObjInsp_ShowEmptySections:PGDBBoolean;(*'Show empty sections'*)
+                INTF_ObjInsp_AlwaysUseMultiSelectWrapper:PBoolean;(*'Always use multiselect wrapper'*)
+                INTF_ObjInsp_ShowEmptySections:PBoolean;(*'Show empty sections'*)
                 INTF_ObjInsp_ButtonSizeReducing:PInteger;(*'Button size reducing'*)
                end;
   {REGISTERRECORDTYPE tinterface}
   tinterface=record
-              INTF_CommandLineEnabled:PGDBBoolean;(*'Command line enabled'*)
-              INTF_ShowScrollBars:PGDBBoolean;(*'Show scroll bars'*)
-              INTF_ShowDwgTabs:PGDBBoolean;(*'Show drawing tabs'*)
+              INTF_CommandLineEnabled:PBoolean;(*'Command line enabled'*)
+              INTF_ShowScrollBars:PBoolean;(*'Show scroll bars'*)
+              INTF_ShowDwgTabs:PBoolean;(*'Show drawing tabs'*)
               INTF_DwgTabsPosition:PTAlign;(*'Drawing tabs position'*)
-              INTF_ShowDwgTabCloseBurron:PGDBBoolean;(*'Show drawing tab close button'*)
-              INTF_ThemedUpToolbars:PGDBBoolean;(*'Themed up toolbars'*)
-              INTF_ThemedRightToolbars:PGDBBoolean;(*'Themed right toolbars'*)
-              INTF_ThemedDownToolbars:PGDBBoolean;(*'Themed down toolbars'*)
-              INTF_ThemedLeftToolbars:PGDBBoolean;(*'Themed left toolbars'*)
+              INTF_ShowDwgTabCloseBurron:PBoolean;(*'Show drawing tab close button'*)
+              INTF_ThemedUpToolbars:PBoolean;(*'Themed up toolbars'*)
+              INTF_ThemedRightToolbars:PBoolean;(*'Themed right toolbars'*)
+              INTF_ThemedDownToolbars:PBoolean;(*'Themed down toolbars'*)
+              INTF_ThemedLeftToolbars:PBoolean;(*'Themed left toolbars'*)
               INTF_DefaultControlHeight:PInteger;(*'Default control height'*)(*oi_readonly*)
               INTF_DefaultEditorFontHeight:PInteger;(*'Default editor font height'*)
               INTF_OBJINSP_Properties:tobjinspinterface;(*'Object inspector properties'*)
              end;
   {REGISTERRECORDTYPE tdisp}
   tdisp=record
-             DISP_SystmGeometryDraw:PGDBBoolean;(*'System geometry'*)
+             DISP_SystmGeometryDraw:PBoolean;(*'System geometry'*)
              DISP_SystmGeometryColor:PTGDBPaletteColor;(*'Help color'*)
-             DISP_ZoomFactor:PGDBDouble;(*'Mouse wheel scale factor'*)
-             DISP_OSSize:PGDBDouble;(*'Snap aperture size'*)
+             DISP_ZoomFactor:PDouble;(*'Mouse wheel scale factor'*)
+             DISP_OSSize:PDouble;(*'Snap aperture size'*)
              DISP_CursorSize:PInteger;(*'Cursor size'*)
-             DISP_CrosshairSize:PGDBDouble;(*'Crosshair size'*)
-             DISP_DrawZAxis:PGDBBoolean;(*'Show Z axis'*)
-             DISP_ColorAxis:PGDBBoolean;(*'Colored cursor'*)
+             DISP_CrosshairSize:PDouble;(*'Crosshair size'*)
+             DISP_DrawZAxis:PBoolean;(*'Show Z axis'*)
+             DISP_ColorAxis:PBoolean;(*'Colored cursor'*)
              DISP_GripSize:PInteger;(*'Grip size'*)
              DISP_BackGroundColor:PTRGB;(*'Background color'*)
              DISP_UnSelectedGripColor:PTGDBPaletteColor;(*'Unselected grip color'*)

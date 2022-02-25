@@ -23,7 +23,7 @@ interface
 uses
   gzctnrvectortypes,
   uzctnrvectorobjid,
-  uzctnrvectorgdbdouble,
+  uzctnrVectorDouble,
   uzctnrvectorgdblineweight,
   uzctnrVectorPointers,
   uzcstrconsts,
@@ -46,24 +46,24 @@ uses
   LazLogger,uzctnrvectorgdbpalettecolor;
 type
 TSelGeneralParams=record
-                        SameLayer:GDBBoolean;(*'Same layer'*)
-                        SameLineWeight:GDBBoolean;(*'Same line weight'*)
-                        SameLineType:GDBBoolean;(*'Same line type'*)
-                        SameLineTypeScale:GDBBoolean;(*'Same line type scale'*)
-                        SameEntType:GDBBoolean;(*'Same entity type'*)
-                        SameColor:GDBBoolean;(*'Same color'*)
+                        SameLayer:Boolean;(*'Same layer'*)
+                        SameLineWeight:Boolean;(*'Same line weight'*)
+                        SameLineType:Boolean;(*'Same line type'*)
+                        SameLineTypeScale:Boolean;(*'Same line type scale'*)
+                        SameEntType:Boolean;(*'Same entity type'*)
+                        SameColor:Boolean;(*'Same color'*)
                   end;
 TDiff=(
         TD_Diff(*'Diff'*),
         TD_NotDiff(*'Not Diff'*)
        );
 TSelBlockParams=record
-                        SameName:GDBBoolean;(*'Same name'*)
+                        SameName:Boolean;(*'Same name'*)
                         DiffBlockDevice:TDiff;(*'Block and Device'*)
                   end;
 TSelTextParams=record
-                        SameContent:GDBBoolean;(*'Same content'*)
-                        SameTemplate:GDBBoolean;(*'Same template'*)
+                        SameContent:Boolean;(*'Same content'*)
+                        SameTemplate:Boolean;(*'Same template'*)
                         DiffTextMText:TDiff;(*'Text and Mtext'*)
                   end;
 PTSelSimParams=^TSelSimParams;
@@ -81,7 +81,7 @@ TSelSimParams=record
                          colors:TZctnrVectorTGDBPaletteColor;
                          weights:TZctnrVectorGDBLineWeight;
                          objtypes:TZctnrVectorObjID;
-                         linetypescales:TZctnrVectorGDBDouble;
+                         linetypescales:TZctnrVectorDouble;
                          procedure CommandStart(Operands:TCommandOperands); virtual;
                          procedure createbufs;
                          //procedure BuildDM(Operands:pansichar); virtual;

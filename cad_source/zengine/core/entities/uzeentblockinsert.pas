@@ -31,7 +31,7 @@ type
 PGDBObjBlockInsert=^GDBObjBlockInsert;
 GDBObjBlockInsert= object(GDBObjComplex)
                      scale:GDBvertex;(*saved_to_shd*)
-                     rotate:GDBDouble;(*saved_to_shd*)
+                     rotate:Double;(*saved_to_shd*)
                      index:Integer;(*saved_to_shd*)(*oi_readonly*)(*hidden_in_objinsp*)
                      pblockdef:PGDBObjBlockdef;
                      Name:GDBAnsiString;(*saved_to_shd*)(*oi_readonly*)
@@ -59,10 +59,10 @@ GDBObjBlockInsert= object(GDBObjComplex)
                      procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
                      procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
 
-                     function getrot:GDBDouble;virtual;
-                     procedure setrot(r:GDBDouble);virtual;
+                     function getrot:Double;virtual;
+                     procedure setrot(r:Double);virtual;
 
-                     property testrotate:GDBDouble read getrot write setrot;(*'Rotate'*)
+                     property testrotate:Double read getrot write setrot;(*'Rotate'*)
                      function FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
 
                      class function CreateInstance:PGDBObjBlockInsert;static;
@@ -75,7 +75,7 @@ implementation
 //uses log;
 (*Procedure QDUDecomposition (const m:DMatrix4D; out kQ:DMatrix3D;out kD,kU:DVector3D);
 var
-   fInvLength,fDot,fDet,fInvD0:GDBDouble;
+   fInvLength,fDot,fDet,fInvD0:Double;
    kR:DMatrix3D;
    iRow,iCol:integer;
         // Factor M = QR = QDU where Q is orthogonal, D is diagonal,
@@ -286,7 +286,7 @@ begin
      rotate:=arccos(rotate);
      if tv.y<-eps then rotate:=2*pi-rotate;
 end;
-procedure GDBObjBlockInsert.setrot(r:GDBDouble);
+procedure GDBObjBlockInsert.setrot(r:Double);
 var m1:DMatrix4D;
 begin
 m1:=onematrix;
@@ -296,7 +296,7 @@ m1[1,0]:=-sin(r);
 m1[0,1]:=sin(r);
 objMatrix:=MatrixMultiply(m1,objMatrix);
 end;
-function GDBObjBlockInsert.getrot:GDBDouble;
+function GDBObjBlockInsert.getrot:Double;
 begin
      result:=arccos((objmatrix[0,0])/oneVertexlength(PGDBVertex(@objmatrix[0])^))
 end;
@@ -446,7 +446,7 @@ procedure GDBObjBlockInsert.BuildVarGeometry;
     //pvisible,pvisible2:PGDBObjEntity;
     //freelayer:PGDBLayerProp;
     //i:Integer;
-    //varobject:gdbboolean;}
+    //varobject:Boolean;}
 begin
 {
      //index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
@@ -522,7 +522,7 @@ var
   //s: GDBString;
   byt{, code, i}: Integer;
   hlGDBWord: Integer;
-  attrcont: GDBBoolean;
+  attrcont: Boolean;
 begin
   hlGDBWord:=0;
   attrcont := false;
@@ -532,7 +532,7 @@ begin
      if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
      if not dxfvertexload(f,10,byt,Local.P_insert) then
      if not dxfvertexload1(f,41,byt,scale) then
-     if dxfGDBDoubleload(f,50,byt,rotate) then begin
+     if dxfDoubleload(f,50,byt,rotate) then begin
                                                     rotate:=rotate*pi/180;
                                                end
 else if dxfGDBIntegerload(f,71,byt,hlGDBWord)then begin if hlGDBWord = 1 then attrcont := true; end
@@ -681,7 +681,7 @@ begin
   dxfGDBStringout(outhandle,2,name);
   dxfvertexout(outhandle,10,Local.p_insert);
   dxfvertexout1(outhandle,41,scale);
-  dxfGDBDoubleout(outhandle,50,rotate*180/pi);
+  dxfDoubleout(outhandle,50,rotate*180/pi);
   SaveToDXFObjPostfix(outhandle);
 end;
 destructor GDBObjBlockInsert.done;
@@ -702,7 +702,7 @@ end;
 procedure SetBlockInsertGeomProps(PBlockInsert:PGDBObjBlockInsert;args:array of const);
 var
    counter:integer;
-   r:GDBDouble;
+   r:Double;
 begin
   counter:=low(args);
   PBlockInsert^.Local.P_insert:=CreateVertexFromArray(counter,args);

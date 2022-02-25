@@ -36,7 +36,7 @@ function CP2Uni(astr:GDBAnsiString):GDBString;
 function uch2ach(uch:word):byte;
 function ach2uch(ach:byte):word;
 
-function CompareNUMSTR(str1,str2:GDBString):GDBBoolean;
+function CompareNUMSTR(str1,str2:GDBString):Boolean;
 function AnsiNaturalCompare(const str1, str2: string; vCaseSensitive: boolean = False): integer;
 
 function ConvertFromDxfString(str:TDXFEntsInternalStringType):String;
@@ -341,7 +341,7 @@ begin
   else
     Result := {CorrectedResult}(sign*Result);
 end;
-function CompareNUMSTR(str1,str2:GDBString):GDBBoolean;
+function CompareNUMSTR(str1,str2:GDBString):Boolean;
 var
    i1,i2{,i}:Integer;
 begin

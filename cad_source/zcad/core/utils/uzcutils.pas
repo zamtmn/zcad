@@ -90,17 +90,17 @@ uses uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzepalette,
   procedure zcSelectEntity(pp:PGDBObjEntity);
 
 function GDBInsertBlock(own:PGDBObjGenericSubEntry;BlockName:GDBString;p_insert:GDBVertex;
-                        scale:GDBVertex;rotate:GDBDouble;needundo:GDBBoolean=false
+                        scale:GDBVertex;rotate:Double;needundo:Boolean=false
                         ):PGDBObjBlockInsert;
 
 function old_ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObjEntityOpenArray;
                                 layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:TGDBPaletteColor;LW:TGDBLineWeight;
-                                point: gdbvertex; scale, angle: GDBDouble; s: pansichar):PGDBObjBlockInsert;
+                                point: gdbvertex; scale, angle: Double; s: pansichar):PGDBObjBlockInsert;
 function zcGetRealSelEntsCount:integer;
 implementation
 function old_ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObjEntityOpenArray;
                                 layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:TGDBPaletteColor;LW:TGDBLineWeight;
-                                point: gdbvertex; scale, angle: GDBDouble; s: pansichar):PGDBObjBlockInsert;
+                                point: gdbvertex; scale, angle: Double; s: pansichar):PGDBObjBlockInsert;
 var
   pb:pgdbobjblockinsert;
   nam:gdbstring;
@@ -231,8 +231,8 @@ function GDBInsertBlock(own:PGDBObjGenericSubEntry;//владелец
                         BlockName:GDBString;       //имя блока
                         p_insert:GDBVertex;        //точка вставки
                         scale:GDBVertex;           //масштаб
-                        rotate:GDBDouble;          //поворот
-                        needundo:GDBBoolean=false  //завернуть в ундо
+                        rotate:Double;          //поворот
+                        needundo:Boolean=false  //завернуть в ундо
                         ):PGDBObjBlockInsert;
 var
   tb:PGDBObjBlockInsert;

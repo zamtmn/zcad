@@ -74,7 +74,7 @@ begin
   dxfGDBStringout(outhandle,100,'AcDbAlignedDimension');
   dxfvertexout(outhandle,13,DimData.P13InWCS);
   dxfvertexout(outhandle,14,DimData.P14InWCS);
-  dxfGDBDoubleout(outhandle,50,vertexangle(createvertex2d(0,0),createvertex2d(vectorD.x,vectorD.y))*180/pi);
+  dxfDoubleout(outhandle,50,vertexangle(createvertex2d(0,0),createvertex2d(vectorD.x,vectorD.y))*180/pi);
   dxfGDBStringout(outhandle,100,'AcDbRotatedDimension');
 end;
 procedure GDBObjRotatedDimension.transform;
@@ -107,7 +107,7 @@ begin
 end;
 function GDBObjRotatedDimension.P14ChangeTo(tv:GDBVertex):GDBVertex;
 var
-    tl:GDBDouble;
+    tl:Double;
 begin
      result:=tv;
      tl:=GetTFromDirNormalizedPoint(DimData.P10InWCS,tv,vectorN);
@@ -115,7 +115,7 @@ begin
 end;
 {
 var
-    t,tl:GDBDouble;
+    t,tl:Double;
     temp:GDBVertex;
 begin
      tl:=scalardot(vertexsub(DimData.P14InWCS,DimData.P13InWCS),vectorD);

@@ -30,7 +30,7 @@ uses
 type
     TBaseTypesEditors=class
                              class function BaseCreateEditor           (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:String;ptdesc:PUserTypeDescriptor;preferedHeight:integer):TEditorDesc;
-                             class function GDBBooleanCreateEditor     (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:String;ptdesc:PUserTypeDescriptor;preferedHeight:integer):TEditorDesc;
+                             class function BooleanCreateEditor     (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:String;ptdesc:PUserTypeDescriptor;preferedHeight:integer):TEditorDesc;
                              class function TEnumDataCreateEditor      (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:String;ptdesc:PUserTypeDescriptor;preferedHeight:integer):TEditorDesc;
                              class function EnumDescriptorCreateEditor (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:String;ptdesc:PUserTypeDescriptor;preferedHeight:integer):TEditorDesc;
     end;
@@ -96,7 +96,7 @@ class function TBaseTypesEditors.BaseCreateEditor;
                                   cbedit.AutoComplete:=true;
                             end;
    end;
-class function TBaseTypesEditors.GDBBooleanCreateEditor;
+class function TBaseTypesEditors.BooleanCreateEditor;
 var
     cbedit:TComboBox;
     propeditor:TPropEditor;
@@ -112,7 +112,7 @@ begin
 
      cbedit.Items.Add('True');
      cbedit.Items.Add('False');
-     if pgdbboolean(pinstance)^ then
+     if pBoolean(pinstance)^ then
                                     cbedit.ItemIndex:=0
                                 else
                                     cbedit.ItemIndex:=1;

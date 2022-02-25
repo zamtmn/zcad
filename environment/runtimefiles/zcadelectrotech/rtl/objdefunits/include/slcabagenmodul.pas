@@ -21,7 +21,7 @@ SLCABAGEN_TypeCableRouting:TTypeCableRouting;(*'НЕРАБОТАЕТ. НЕТ П�
 
 SLCABAGEN_DevConnectMethod:TDevConnectMethod;(*'Соединение устройств выполняется'*)
 
-//SLCABAGEN_inerNodeWithoutConnection:GDBBoolean;(*'Промежуточный узел. К головному стройству кабель не прокладывается'*)
+//SLCABAGEN_inerNodeWithoutConnection:Boolean;(*'Промежуточный узел. К головному стройству кабель не прокладывается'*)
 
 implementation
 begin

@@ -31,11 +31,11 @@ GDBLayerProp= object(GDBNamedObject)
                color:Byte;(*saved_to_shd*)(*'Color'*)
                lineweight:SmallInt;(*saved_to_shd*)(*'Line weight'*)
                LT:Pointer;(*saved_to_shd*)(*'Line type'*)
-               _on:GDBBoolean;(*saved_to_shd*)(*'On'*)
-               _lock:GDBBoolean;(*saved_to_shd*)(*'Lock'*)
-               _print:GDBBoolean;(*saved_to_shd*)(*'Print'*)
+               _on:Boolean;(*saved_to_shd*)(*'On'*)
+               _lock:Boolean;(*saved_to_shd*)(*'Lock'*)
+               _print:Boolean;(*saved_to_shd*)(*'Print'*)
                desk:GDBAnsiString;(*saved_to_shd*)(*'Description'*)
-               constructor InitWithParam(N:GDBString; C: Integer; LW: Integer;oo,ll,pp:GDBBoolean;d:GDBString);
+               constructor InitWithParam(N:GDBString; C: Integer; LW: Integer;oo,ll,pp:Boolean;d:GDBString);
                function GetFullName:GDBString;virtual;
                procedure SetValueFromDxf(group:Integer;value:GDBString);virtual;
                procedure SetDefaultValues;virtual;
@@ -49,7 +49,7 @@ GDBLayerArray= object(GDBNamedObjectsArray{-}<PGDBLayerProp,GDBLayerProp>{//})(*
                     constructor init(m:Integer;psyslt:Pointer);
                     constructor initnul;
 
-                    function addlayer(name:GDBString;color:Integer;lw:Integer;oo,ll,pp:GDBBoolean;d:GDBString;lm:TLoadOpt):PGDBLayerProp;virtual;
+                    function addlayer(name:GDBString;color:Integer;lw:Integer;oo,ll,pp:Boolean;d:GDBString;lm:TLoadOpt):PGDBLayerProp;virtual;
                     function GetSystemLayer:PGDBLayerProp;
                     function createlayerifneed(_source:PGDBLayerProp):PGDBLayerProp;
                     function createlayerifneedbyname(lname:GDBString;_source:PGDBLayerProp):PGDBLayerProp;
@@ -167,7 +167,7 @@ begin
         end;
 end;
 
-constructor GDBLayerProp.InitWithParam(N:GDBString; C: Integer; LW: Integer;oo,ll,pp:GDBBoolean;d:GDBString);
+constructor GDBLayerProp.InitWithParam(N:GDBString; C: Integer; LW: Integer;oo,ll,pp:Boolean;d:GDBString);
 begin
     initnul;
     LT:=nil;

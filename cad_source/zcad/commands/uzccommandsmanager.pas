@@ -52,7 +52,7 @@ type
 
                           CommandsStack:TZctnrVectorGDBPointer;
                           ContextCommandParams:Pointer;
-                          busy:GDBBoolean;
+                          busy:Boolean;
                           varstack:tvarstack;
                           DMenu:TDMenuWnd;
                           OnCommandRun:TOnCommandRun;
@@ -62,7 +62,7 @@ type
                           CommandLinePrompts:TICommandLinePromptVector;
                           CurrentPrompt:TParserCommandLinePrompt.TGeneralParsedText;
                           constructor init(m:Integer);
-                          procedure execute(const comm:string;silent:GDBBoolean;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
+                          procedure execute(const comm:string;silent:Boolean;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
                           procedure executecommand(const comm:string;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
                           procedure executecommandsilent(const comm:pansichar;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
                           procedure DisableExecuteCommandEnd;virtual;
@@ -91,12 +91,12 @@ type
                           function PopValue:vardesk;virtual;
                           function GetValue:vardesk;virtual;
                           function GetValueHeap:Integer;
-                          function CurrentCommandNotUseCommandLine:GDBBoolean;
+                          function CurrentCommandNotUseCommandLine:Boolean;
                           procedure PrepairVarStack;
 
                           function Get3DPoint(prompt:GDBString;out p:GDBVertex):TGetResult;
                           function Get3DPointWithLineFromBase(prompt:GDBString;const base:GDBVertex;out p:GDBVertex):TGetResult;
-                          function GetEntity(prompt:GDBString;out p:Pointer):GDBBoolean;
+                          function GetEntity(prompt:GDBString;out p:Pointer):Boolean;
                           function Get3DPointInteractive(prompt:GDBString;out p:GDBVertex;const InteractiveProc:TInteractiveProcObjBuild;const PInteractiveData:Pointer):TGetResult;
                           function GetInput(Prompt:GDBString;out Input:GDBString):TGetResult;
 
@@ -106,7 +106,7 @@ type
                           function ChangeInputMode(incl,excl:TGetInputMode):TGetInputMode;
                           function SetInputMode(NewMode:TGetInputMode):TGetInputMode;
 
-                          function EndGetPoint(newmode:TGetPointMode):GDBBoolean;
+                          function EndGetPoint(newmode:TGetPointMode):Boolean;
 
                           procedure sendmousecoord(Sender:TAbstractViewArea;key: Byte);
                           procedure sendmousecoordwop(Sender:TAbstractViewArea;key: Byte);
@@ -283,7 +283,7 @@ begin
             end;
     end;
 end;
-function GDBcommandmanager.EndGetPoint(newmode:TGetPointMode):GDBBoolean;
+function GDBcommandmanager.EndGetPoint(newmode:TGetPointMode):Boolean;
 begin
   if pcommandrunning<>nil then
   begin
@@ -417,7 +417,7 @@ begin
   result:=Get3DPointInteractive(prompt,p,nil,nil);
   pcommandrunning^.IData.DrawFromBasePoint:=False;
 end;
-function GDBcommandmanager.GetEntity(prompt:GDBString;out p:Pointer):GDBBoolean;
+function GDBcommandmanager.GetEntity(prompt:GDBString;out p:Pointer):Boolean;
 var
    savemode:Byte;
 begin
@@ -450,7 +450,7 @@ function GDBcommandmanager.GetValueHeap:Integer;
 begin
      result:=varstack.vardescarray.count;
 end;
-function GDBcommandmanager.CurrentCommandNotUseCommandLine:GDBBoolean;
+function GDBcommandmanager.CurrentCommandNotUseCommandLine:Boolean;
 begin
      if pcommandrunning<>nil then
                                  result:=pcommandrunning.NotUseCommandLine
@@ -728,7 +728,7 @@ begin
           pcommandrunning^.pdwg:=pd;
           pcommandrunning^.CommandStart(pansichar(operands));
 end;
-procedure GDBcommandmanager.execute(const comm:string;silent:GDBBoolean;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);
+procedure GDBcommandmanager.execute(const comm:string;silent:Boolean;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);
 var //i,p1,p2: Integer;
     command,operands:GDBString;
     cc:TCStartAttr;

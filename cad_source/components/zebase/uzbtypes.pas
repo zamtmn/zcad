@@ -68,7 +68,7 @@ GDBaseObject=object
     function GetObjName:GDBString;virtual;
     constructor initnul;
     destructor Done;virtual;{ abstract;}
-    function IsEntity:GDBBoolean;virtual;
+    function IsEntity:Boolean;virtual;
 
   end;
 {REGISTERRECORDTYPE GDBCameraBaseProp}
@@ -77,7 +77,7 @@ GDBCameraBaseProp=record
                         look:GDBvertex;
                         ydir:GDBvertex;
                         xdir:GDBvertex;
-                        zoom: GDBDouble;
+                        zoom: Double;
                   end;
 {REGISTERRECORDTYPE tmatrixs}
 tmatrixs=record
@@ -91,17 +91,17 @@ PGDBBaseCamera=^GDBBaseCamera;
 {REGISTEROBJECTTYPE GDBBaseCamera}
 GDBBaseCamera=object(GDBaseObject)
                 modelMatrix:DMatrix4D;
-                fovy:GDBDouble;
+                fovy:Double;
                 totalobj:Integer;
                 prop:GDBCameraBaseProp;
-                anglx,angly,zmin,zmax:GDBDouble;
+                anglx,angly,zmin,zmax:Double;
                 projMatrix:DMatrix4D;
                 viewport:IMatrix4;
                 clip:DMatrix4D;
                 frustum:ClipArray;
                 infrustum:Integer;
-                obj_zmax,obj_zmin:GDBDouble;
-                DRAWNOTEND:GDBBoolean;
+                obj_zmax,obj_zmin:Double;
+                DRAWNOTEND:Boolean;
                 DRAWCOUNT:TActulity;
                 POSCOUNT:TActulity;
                 VISCOUNT:TActulity;
@@ -124,9 +124,9 @@ GDBNamedObject=object(GDBaseObject)
 PGLLWWidth=^GLLWWidth;
 {REGISTERRECORDTYPE GLLWWidth}
 GLLWWidth=record
-                startw:GDBDouble;(*saved_to_shd*)
-                endw:GDBDouble;(*saved_to_shd*)
-                hw:GDBBoolean;(*saved_to_shd*)
+                startw:Double;(*saved_to_shd*)
+                endw:Double;(*saved_to_shd*)
+                hw:Boolean;(*saved_to_shd*)
                 quad:GDBQuad2d;
           end;
 TDXFEntsInternalStringType=UnicodeString;
@@ -134,7 +134,7 @@ PGDBStrWithPoint=^GDBStrWithPoint;
 {REGISTERRECORDTYPE GDBStrWithPoint}
 GDBStrWithPoint=record
                       str:TDXFEntsInternalStringType;
-                      x,y,z,w:GDBDouble;
+                      x,y,z,w:Double;
                 end;
 GDBArrayVertex2D=packed array[0..300] of GDBVertex2D;
 PGDBArrayVertex2D=^GDBArrayVertex2D;
@@ -151,7 +151,7 @@ GDBArrayVertex=packed array[0..0] of GDBvertex;
                          worldcoord:GDBvertex;
                          dcoord:GDBvertex;
                          dispcoord:GDBvertex2DI;
-                         selected:GDBBoolean;
+                         selected:Boolean;
                    end;
   {REGISTERRECORDTYPE TRTModifyData}
   TRTModifyData=record
@@ -175,7 +175,7 @@ GDBArrayVertex=packed array[0..0] of GDBvertex;
   PTLayerControl=^TLayerControl;
   {REGISTERRECORDTYPE TLayerControl}
   TLayerControl=record
-                      Enabled:GDBBoolean;(*'Enabled'*)
+                      Enabled:Boolean;(*'Enabled'*)
                       LayerName:GDBAnsiString;(*'Layer name'*)
                 end;
   TShapeBorder=(SB_Owner,SB_Self,SB_Empty);
@@ -201,10 +201,10 @@ PGDBsymdolinfo=^GDBsymdolinfo;
 GDBsymdolinfo=record
     LLPrimitiveStartIndex: Integer;
     LLPrimitiveCount: Integer;
-    NextSymX, SymMaxY,SymMinY, SymMaxX,SymMinX, w, h: GDBDouble;
+    NextSymX, SymMaxY,SymMinY, SymMaxX,SymMinX, w, h: Double;
     Name:GDBString;
     Number:Integer;
-    LatestCreate:GDBBoolean;
+    LatestCreate:Boolean;
   end;
 PGDBUNISymbolInfo=^GDBUNISymbolInfo;
 {REGISTERRECORDTYPE GDBUNISymbolInfo}
@@ -246,14 +246,14 @@ TLLVertexIndex=Integer;
 PTGDBIntegerOverrider=^TGDBIntegerOverrider;
 {REGISTERRECORDTYPE TGDBIntegerOverrider}
 TGDBIntegerOverrider=record
-                      Enable:GDBBoolean;(*'Enable'*)
+                      Enable:Boolean;(*'Enable'*)
                       Value:Integer;(*'New value'*)
                      end;
 {REGISTERRECORDTYPE TImageDegradation}
 TImageDegradation=record
-                        RD_ID_Enabled:PGDBBoolean;(*'Enabled'*)
-                        RD_ID_CurrentDegradationFactor:PGDBDouble;(*'Current degradation factor'*)(*oi_readonly*)
-                        RD_ID_MaxDegradationFactor:PGDBDouble;(*'Max degradation factor'*)
+                        RD_ID_Enabled:PBoolean;(*'Enabled'*)
+                        RD_ID_CurrentDegradationFactor:PDouble;(*'Current degradation factor'*)(*oi_readonly*)
+                        RD_ID_MaxDegradationFactor:PDouble;(*'Max degradation factor'*)
                         RD_ID_PrefferedRenderTime:PInteger;(*'Prefered rendertime'*)
                     end;
 PExtensionData=Pointer;
@@ -276,7 +276,7 @@ end;
 constructor GDBaseObject.initnul;
 begin
 end;
-function GDBaseObject.IsEntity:GDBBoolean;
+function GDBaseObject.IsEntity:Boolean;
 begin
      result:=false;
 end;

@@ -26,24 +26,24 @@ type
 {REGISTEROBJECTTYPE GDBPolyline2DArray}
 PGDBPolyline2DArray=^GDBPolyline2DArray;
 GDBPolyline2DArray= object(GZVector{-}<GDBVertex2D>{//})(*OpenArrayOfData=GDBVertex2D*)
-                      closed:GDBBoolean;(*saved_to_shd*)
-                      constructor init(m:Integer;c:GDBBoolean);
+                      closed:Boolean;(*saved_to_shd*)
+                      constructor init(m:Integer;c:Boolean);
 
-                      //function onmouse(mc:GDBvertex2DI):GDBBoolean;virtual;
+                      //function onmouse(mc:GDBvertex2DI):Boolean;virtual;
                       procedure optimize;virtual;
-                      function _optimize:GDBBoolean;virtual;
-                      function inrect(Frame1, Frame2: GDBvertex2DI;inv:GDBBoolean):GDBBoolean;virtual;
-                      function inrectd(Frame1, Frame2: GDBvertex2D;inv:GDBBoolean):GDBBoolean;virtual;
-                      function ispointinside(point:GDBVertex2D):GDBBoolean;virtual;
+                      function _optimize:Boolean;virtual;
+                      function inrect(Frame1, Frame2: GDBvertex2DI;inv:Boolean):Boolean;virtual;
+                      function inrectd(Frame1, Frame2: GDBvertex2D;inv:Boolean):Boolean;virtual;
+                      function ispointinside(point:GDBVertex2D):Boolean;virtual;
                       procedure transform(const t_matrix:DMatrix4D);virtual;
                       function getoutbound:TBoundingBox;virtual;
                 end;
 {Export-}
-function _intercept2d(const p1,p2,p:GDBVertex2D;const dirx, diry: GDBDouble): GDBBoolean;
+function _intercept2d(const p1,p2,p:GDBVertex2D;const dirx, diry: Double): Boolean;
 implementation
 function GDBPolyline2DArray.getoutbound;
 var
-    tt,b,l,r:GDBDouble;
+    tt,b,l,r:Double;
     ptv:pGDBVertex2D;
     ir:itrec;
 begin
@@ -95,9 +95,9 @@ begin
        inc(pv);
     end;
 end;
-function _intercept2d(const p1,p2,p:GDBVertex2D;const dirx, diry: GDBDouble): GDBBoolean;
+function _intercept2d(const p1,p2,p:GDBVertex2D;const dirx, diry: Double): Boolean;
 var
-   t1, t2, d, d1, d2: GDBDouble;
+   t1, t2, d, d1, d2: Double;
 begin
   result := false;
   D := (p2.y - p1.y) * (dirx) - (diry) * (p2.x - p1.x);
@@ -159,7 +159,7 @@ begin
     end;
 end;
 
-function GDBPolyline2DArray.ispointinside(point:GDBVertex2D):GDBBoolean;
+function GDBPolyline2DArray.ispointinside(point:GDBVertex2D):Boolean;
 var
     pv,pvnext:PGDBVertex2D;
     i,c:integer;
@@ -192,7 +192,7 @@ function GDBPolyline2DArray.inrect;
 var p,pp:PGDBVertex2D;
 //    counter:Integer;
     i:Integer;
-//    lines:GDBBoolean;
+//    lines:Boolean;
 begin
   result := false;
   if (count<2){or(not POGLWND^.seldesc.MouseFrameInverse)} then exit;
@@ -258,7 +258,7 @@ function GDBPolyline2DArray.inrectd;
 var p,pp:PGDBVertex2D;
 //    counter:Integer;
     i:Integer;
-//    lines:GDBBoolean;
+//    lines:Boolean;
 begin
   result := false;
   if (count<2){or(not POGLWND^.seldesc.MouseFrameInverse)} then exit;

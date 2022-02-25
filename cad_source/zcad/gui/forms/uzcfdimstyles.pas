@@ -222,7 +222,7 @@ begin
 end;
 function TDimStylesForm.CreateLinearScaleEditor(Item: TListItem;r: TRect):boolean;
 begin
-  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBDimStyle(Item.Data)^.Units.DIMLFAC,'GDBDouble',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBDimStyle(Item.Data)^.Units.DIMLFAC,'Double',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
 end;
 {Text Height handle procedures}
 function TDimStylesForm.GetTextHeight(Item: TListItem):string;
@@ -231,7 +231,7 @@ begin
 end;
 function TDimStylesForm.CreateTextHeightEditor(Item: TListItem;r: TRect):boolean;
 begin
-  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBDimStyle(Item.Data)^.Text.DIMTXT,'GDBDouble',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBDimStyle(Item.Data)^.Text.DIMTXT,'Double',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
 end;
 
 function TDimStylesForm.GetDIMBLK1(Item: TListItem):string;
@@ -285,7 +285,7 @@ begin
 end;
 function TDimStylesForm.CreateDIMASZEditor(Item: TListItem;r: TRect):boolean;
 begin
-  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBDimStyle(Item.Data)^.Arrows.DIMASZ,'GDBDouble',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBDimStyle(Item.Data)^.Arrows.DIMASZ,'Double',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
 end;
 
 procedure TDimStylesForm.FillTextStyleSelector(currentitem:string;currentitempstyle:PGDBTextStyle);

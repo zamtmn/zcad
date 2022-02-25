@@ -18,9 +18,9 @@ var
   DESC_OutSignal:GDBString;(*'Выходной сигнал'*)
 
   UNITPARAM_Environment:GDBString;(*'Среда'*)
-  UNITPARAM_ParameterMax:GDBDouble;(*'max Параметр'*)
-  UNITPARAM_Parameter:GDBDouble;(*'Параметр'*)
-  UNITPARAM_ParameterMin:GDBDouble;(*'min Параметр'*)
+  UNITPARAM_ParameterMax:Double;(*'max Параметр'*)
+  UNITPARAM_Parameter:Double;(*'Параметр'*)
+  UNITPARAM_ParameterMin:Double;(*'min Параметр'*)
   UNITPARAM_Unit:GDBString;(*'Еденицы измерения'*)
   
 implementation

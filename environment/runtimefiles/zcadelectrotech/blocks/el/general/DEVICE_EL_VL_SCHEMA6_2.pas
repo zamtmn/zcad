@@ -8,15 +8,15 @@ usescopy objname;
 
 var
 
-T1:GDBBoolean;(*'Подвал'*)
-T2:GDBBoolean;(*'1 этаж'*)
-T3:GDBBoolean;(*'2 этаж'*)
-T4:GDBBoolean;(*'3 этаж'*)
-T5:GDBBoolean;(*'4 этаж'*)
-T6:GDBBoolean;(*'5 этаж'*)
-T7:GDBBoolean;(*'6 этаж'*)
-T8:GDBBoolean;(*'7 этаж'*)
-T9:GDBBoolean;(*'8 этаж'*)
+T1:Boolean;(*'Подвал'*)
+T2:Boolean;(*'1 этаж'*)
+T3:Boolean;(*'2 этаж'*)
+T4:Boolean;(*'3 этаж'*)
+T5:Boolean;(*'4 этаж'*)
+T6:Boolean;(*'5 этаж'*)
+T7:Boolean;(*'6 этаж'*)
+T8:Boolean;(*'7 этаж'*)
+T9:Boolean;(*'8 этаж'*)
 
 T31:Integer;(*'Щит'*)
 

@@ -42,8 +42,8 @@ type
     mouseray: GDBPiece;
     mouseonworkplanecoord: GDBvertex;
     mouse3dcoord: GDBvertex;
-    mouseonworkplan: GDBBoolean;
-    mousein: GDBBoolean;
+    mouseonworkplan: Boolean;
+    mousein: Boolean;
   end;
 
   PSelectiondesc = ^Selectiondesc;
@@ -51,8 +51,8 @@ type
   Selectiondesc = record
     OnMouseObject,LastSelectedObject:Pointer;
     Selectedobjcount:Integer;
-    MouseFrameON: GDBBoolean;
-    MouseFrameInverse:GDBBoolean;
+    MouseFrameON: Boolean;
+    MouseFrameInverse:Boolean;
     Frame1, Frame2: GDBvertex2DI;
     Frame13d, Frame23d: GDBVertex;
     BigMouseFrustum:ClipArray;
@@ -64,7 +64,7 @@ type
   end;
   {REGISTERRECORDTYPE traceprop2}
   traceprop2 = record
-    tmouse: GDBDouble;
+    tmouse: Double;
     dmouse: Integer;
     dir: GDBVertex;
     dispraycoord: GDBVertex;
@@ -83,7 +83,7 @@ type
     ostype: real;
     worldcoord: gdbvertex;
     dispcoord: GDBvertex2DI;
-    selected: GDBBoolean;
+    selected: Boolean;
   end;
   arrayobjcontrolpoint = packed array[0..0] of objcontrolpoint;
   popenarrayobjcontrolpoint_GDBWordwm = ^openarrayobjcontrolpoint_GDBWordwm;
@@ -100,7 +100,7 @@ type
     worldcoord: GDBVertex;
     dispcoord: GDBVertex;
     dmousecoord: GDBVertex;
-    tmouse: GDBDouble;
+    tmouse: Double;
     arrayworldaxis:GDBPoint3DArray;
     arraydispaxis:GDBtracepropArray;
     ostype: Single;
@@ -117,10 +117,10 @@ type
                CSIconCoord: GDBvertex;
                CSIconX,CSIconY,CSIconZ: GDBvertex;
                CSX, CSY, CSZ: GDBvertex2DI;
-               AxisLen:GDBDouble;
+               AxisLen:Double;
          end;
   TForceRedrawVolume=record
-   ForceRedraw:GDBBoolean;
+   ForceRedraw:Boolean;
    Volume:TBoundingBox;
   end;
 
@@ -130,17 +130,17 @@ type
     pointnum, axisnum: Integer;
     CSIcon:TCSIcon;
     BLPoint,CPoint,TRPoint:GDBvertex2D;
-    ViewHeight:GDBDouble;
+    ViewHeight:Double;
     projtype: Integer;
-    firstdraw: GDBBoolean;
+    firstdraw: Boolean;
     md: mousedesc;
-    gluetocp: GDBBoolean;
+    gluetocp: Boolean;
     cpdist: tcpdist;
     ospoint, oldospoint: os_record;
     height, width: Integer;
     SelDesc: Selectiondesc;
     otracktimerwork: Integer;
-    scrollmode:GDBBoolean;
+    scrollmode:Boolean;
     lastcp3dpoint,lastpoint: GDBVertex;
     lastonmouseobject:Pointer;
     nearesttcontrolpoint:tcontrolpointdist;
@@ -148,11 +148,11 @@ type
     ontrackarray: totrackarray;
     mouseclipmatrix:Dmatrix4D;
     mousefrustum,mousefrustumLCS:ClipArray;
-    ShowDebugFrustum:GDBBoolean;
+    ShowDebugFrustum:Boolean;
     debugfrustum:ClipArray;
-    ShowDebugBoundingBbox:GDBBoolean;
+    ShowDebugBoundingBbox:Boolean;
     DebugBoundingBbox:TBoundingBox;
-    processObjConstruct:GDBBoolean;
+    processObjConstruct:Boolean;
     ForceRedrawVolume:TForceRedrawVolume;
     constructor init;
     destructor done;virtual;

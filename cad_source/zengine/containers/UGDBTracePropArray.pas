@@ -25,8 +25,8 @@ type
   ptraceprop=^traceprop;
   {REGISTERRECORDTYPE traceprop}
   traceprop=record
-    trace:gdbboolean;
-    tmouse: GDBDouble;
+    trace:Boolean;
+    tmouse: Double;
     dmouse: Integer;
     dir: GDBVertex;
     dispraycoord: GDBVertex;

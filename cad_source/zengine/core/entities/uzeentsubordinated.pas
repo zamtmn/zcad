@@ -56,7 +56,7 @@ GDBObjGenericWithSubordinated= object(GDBObjExtendable)
                                     function GetLayer:PGDBLayerProp;virtual;abstract;
                                     function GetHandle:PtrInt;virtual;
                                     function GetType:PtrInt;virtual;
-                                    function IsSelected:GDBBoolean;virtual;abstract;
+                                    function IsSelected:Boolean;virtual;abstract;
                                     procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                                     procedure CalcGeometry;virtual;
 
@@ -274,12 +274,14 @@ end;
 procedure OldVersVarRename(var vn,vt,vv,vun:GDBString);
 var
    nevname{,nvv}:GDBString;
+   tt:string;
 begin
      {ansitoutf8ifneed(vn);
      ansitoutf8ifneed(vt);}
      ansitoutf8ifneed(vv);
      ansitoutf8ifneed(vun);
      nevname:='';
+     tt:=uppercase(vt);
      if vn='Name' then
                       begin
                            nevname:='NMO_Name';
@@ -340,12 +342,18 @@ begin
      and (vt<>'GDBString')  then
                            begin
                                 vt:='GDBString';
-                                //vv:=''''+vv+'''';
                            end;
-     if (vt='GDBInteger')  then
+     if (tt='GDBINTEGER')  then
                            begin
                                 vt:='Integer';
-                                //vv:=''''+vv+'''';
+                           end;
+     if (tt='GDBDOUBLE')  then
+                           begin
+                                vt:='Double';
+                           end;
+     if (tt='GDBBOOLEAN')  then
+                           begin
+                                vt:='Boolean';
                            end;
      OldVersTextReplace(vv);
      if nevname<>'' then

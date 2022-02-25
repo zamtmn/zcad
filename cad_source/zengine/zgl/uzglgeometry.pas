@@ -30,21 +30,21 @@ PZPolySegmentData=^ZPolySegmentData;
 {REGISTERRECORDTYPE ZPolySegmentData}
 ZPolySegmentData= record
                                                       startpoint,endpoint,dir:GDBVertex;
-                                                      length,nlength,naccumlength,accumlength:GDBDouble;
+                                                      length,nlength,naccumlength,accumlength:Double;
                                                 end;
 {REGISTEROBJECTTYPE ZSegmentator}
 ZSegmentator=object(GZVector{-}<ZPolySegmentData>{//})
                                                  dir,cp:GDBvertex;
-                                                 cdp,angle:GDBDouble;
+                                                 cdp,angle:Double;
                                                  pcurrsegment:PZPolySegmentData;
                                                  ir:itrec;
                                                  PGeom:PZGLGraphix;
-                                                 constructor InitFromLine(const startpoint,endpoint:GDBVertex;out length:GDBDouble;PG:PZGLGraphix);
-                                                 constructor InitFromPolyline(const points:GDBPoint3dArray;out length:GDBDouble;const closed:GDBBoolean;PG:PZGLGraphix);
+                                                 constructor InitFromLine(const startpoint,endpoint:GDBVertex;out length:Double;PG:PZGLGraphix);
+                                                 constructor InitFromPolyline(const points:GDBPoint3dArray;out length:Double;const closed:Boolean;PG:PZGLGraphix);
                                                  procedure startdraw;
                                                  procedure nextsegment;
-                                                 procedure normalize(l:GDBDouble);
-                                                 procedure draw(var rc:TDrawContext;length:GDBDouble;paint:boolean;var dr:TLLDrawResult);
+                                                 procedure normalize(l:Double);
+                                                 procedure draw(var rc:TDrawContext;length:Double;paint:boolean;var dr:TLLDrawResult);
                                            end;
 {REGISTEROBJECTTYPE ZGLGraphix}
 ZGLGraphix= object(ZGLVectorObject)
@@ -53,28 +53,28 @@ ZGLGraphix= object(ZGLVectorObject)
                 constructor init();
                 destructor done;virtual;
                 function DrawLineWithLT(var rc:TDrawContext;const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp):TLLDrawResult;virtual;
-                function DrawPolyLineWithLT(var rc:TDrawContext;const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed,ltgen:GDBBoolean):TLLDrawResult;virtual;
+                function DrawPolyLineWithLT(var rc:TDrawContext;const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed,ltgen:Boolean):TLLDrawResult;virtual;
                 procedure DrawLineWithoutLT(var rc:TDrawContext;const p1,p2:GDBVertex;var dr:TLLDrawResult);virtual;
                 procedure DrawPointWithoutLT(var rc:TDrawContext;const p:GDBVertex;var dr:TLLDrawResult);virtual;
                 {}
                 procedure AddLine(var rc:TDrawContext;const p1,p2:GDBVertex);
                 procedure AddPoint(var rc:TDrawContext;const p:GDBVertex);
                 {Patterns func}
-                procedure PlaceNPatterns(var rc:TDrawContext;var Segmentator:ZSegmentator;num:integer; const vp:PGDBLtypeProp;TangentScale,NormalScale,length:GDBDouble;var dr:TLLDrawResult;SupressFirstDash:boolean=false);
-                procedure PlaceOnePattern(var rc:TDrawContext;var Segmentator:ZSegmentator;const vp:PGDBLtypeProp;TangentScale,NormalScale,length,scale_div_length:GDBDouble;var dr:TLLDrawResult;SupressFirstDash:boolean=false);
-                procedure PlaceShape(drawer:TZGLAbstractDrawer;const StartPatternPoint:GDBVertex; PSP:PShapeProp;scale,angle:GDBDouble);
-                procedure PlaceText(drawer:TZGLAbstractDrawer;const StartPatternPoint:GDBVertex;PTP:PTextProp;scale,angle:GDBDouble);
+                procedure PlaceNPatterns(var rc:TDrawContext;var Segmentator:ZSegmentator;num:integer; const vp:PGDBLtypeProp;TangentScale,NormalScale,length:Double;var dr:TLLDrawResult;SupressFirstDash:boolean=false);
+                procedure PlaceOnePattern(var rc:TDrawContext;var Segmentator:ZSegmentator;const vp:PGDBLtypeProp;TangentScale,NormalScale,length,scale_div_length:Double;var dr:TLLDrawResult;SupressFirstDash:boolean=false);
+                procedure PlaceShape(drawer:TZGLAbstractDrawer;const StartPatternPoint:GDBVertex; PSP:PShapeProp;scale,angle:Double);
+                procedure PlaceText(drawer:TZGLAbstractDrawer;const StartPatternPoint:GDBVertex;PTP:PTextProp;scale,angle:Double);
 
-                procedure DrawTextContent(drawer:TZGLAbstractDrawer;content:TDXFEntsInternalStringType;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:GDBDouble;var Outbound:OutBound4V);
-                //function CanSimplyDrawInOCS(const DC:TDrawContext;const SqrParamSize,TargetSize:GDBDouble):GDBBoolean;
+                procedure DrawTextContent(drawer:TZGLAbstractDrawer;content:TDXFEntsInternalStringType;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:Double;var Outbound:OutBound4V);
+                //function CanSimplyDrawInOCS(const DC:TDrawContext;const SqrParamSize,TargetSize:Double):Boolean;
              end;
 {Export-}
 var
     sysvarDWGRotateTextInLT:boolean=true;
     SysVarRDMaxLTPatternsInEntity:integer=1000;
-function getsymbol_fromGDBText(s:TDXFEntsInternalStringType; i:integer;out l:integer;const fontunicode:gdbboolean):word;
+function getsymbol_fromGDBText(s:TDXFEntsInternalStringType; i:integer;out l:integer;const fontunicode:Boolean):word;
 implementation
-{function ZGLGraphix.CanSimplyDrawInOCS(const DC:TDrawContext;const SqrParamSize,TargetSize:GDBDouble):GDBBoolean;
+{function ZGLGraphix.CanSimplyDrawInOCS(const DC:TDrawContext;const SqrParamSize,TargetSize:Double):Boolean;
 //false - не упрощать, true - упрощать. в GDBObjWithLocalCS.CanSimplyDrawInOCS наоборот
 begin
      if dc.maxdetail then
@@ -85,7 +85,7 @@ begin
                                result:=true;
 end;}
 
-function getsymbol_fromGDBText(s:TDXFEntsInternalStringType; i:integer;out l:integer;const fontunicode:gdbboolean):word;
+function getsymbol_fromGDBText(s:TDXFEntsInternalStringType; i:integer;out l:integer;const fontunicode:Boolean):word;
 var
    ts:TDXFEntsInternalStringType;
    code:integer;
@@ -169,7 +169,7 @@ begin
                         result:=uch2ach(ord(s[i]));
 end;
 
-procedure ZGLGraphix.DrawTextContent(drawer:TZGLAbstractDrawer;content:TDXFEntsInternalStringType;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:GDBDouble;var Outbound:OutBound4V);
+procedure ZGLGraphix.DrawTextContent(drawer:TZGLAbstractDrawer;content:TDXFEntsInternalStringType;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:Double;var Outbound:OutBound4V);
 var
   i: Integer;
   matr,m1: DMatrix4D;
@@ -179,7 +179,7 @@ var
   plp,plp2:pgdbvertex;
   lp:gdbvertex;
   pl:GDBPoint3DArray;
-  ispl:gdbboolean;
+  ispl:Boolean;
   ir:itrec;
   pfont:pgdbfont;
   LLSymbolLineIndex:TArrayIndex;
@@ -317,7 +317,7 @@ begin
           lines.Add(@tv);
      end;}
 end;
-function CalcSegment(const startpoint,endpoint:GDBVertex;out segment:ZPolySegmentData;prevlength:GDBDouble):GDBDouble;
+function CalcSegment(const startpoint,endpoint:GDBVertex;out segment:ZPolySegmentData;prevlength:Double):Double;
 begin
      segment.startpoint:=startpoint;
      segment.endpoint:=endpoint;
@@ -327,7 +327,7 @@ begin
      segment.naccumlength:=segment.accumlength;
      result:=segment.accumlength;
 end;
-constructor ZSegmentator.InitFromLine(const startpoint,endpoint:GDBVertex;out length:GDBDouble;PG:PZGLGraphix);
+constructor ZSegmentator.InitFromLine(const startpoint,endpoint:GDBVertex;out length:Double;PG:PZGLGraphix);
 var
    segment:ZPolySegmentData;
 begin
@@ -337,7 +337,7 @@ begin
      normalize(length);
      PGeom:=pg;
 end;
-{function getlength(const points:GDBPoint3dArray;var sd:GDBOpenArrayOfData; const closed:GDBBoolean):GDBDouble;
+{function getlength(const points:GDBPoint3dArray;var sd:GDBOpenArrayOfData; const closed:Boolean):Double;
 var
 begin
   result:=0;
@@ -358,7 +358,7 @@ begin
                      sd.add(@segment);
                 end;
 end;}
-constructor ZSegmentator.InitFromPolyline(const points:GDBPoint3dArray;out length:GDBDouble;const closed:GDBBoolean;PG:PZGLGraphix);
+constructor ZSegmentator.InitFromPolyline(const points:GDBPoint3dArray;out length:Double;const closed:Boolean;PG:PZGLGraphix);
 var
    segment:ZPolySegmentData;
    ptv,ptvprev,pfirstv: pgdbvertex;
@@ -389,7 +389,7 @@ begin
     PGeom:=pg;
 end;
 
-procedure ZSegmentator.normalize(l:GDBDouble);
+procedure ZSegmentator.normalize(l:Double);
 var
    psegment:PZPolySegmentData;
    _ir:itrec;
@@ -428,7 +428,7 @@ begin
 end;
 procedure ZGLGraphix.DrawLineWithoutLT(var rc:TDrawContext;const p1,p2:GDBVertex;var dr:TLLDrawResult);
 {var
-   d,a:GDBDouble;
+   d,a:Double;
    tv:GDBVertex;
    i:integer;}
 begin
@@ -455,7 +455,7 @@ end;
 function creatematrix(PInsert:GDBVertex; //Точка вставки
                       param:shxprop;     //Параметры текста
                       LineAngle,         //Угол линии
-                      Scale:GDBDouble)   //Масштаб линии
+                      Scale:Double)   //Масштаб линии
                       :dmatrix4d;        //Выходная матрица
 var
     mrot,mentrot,madd,mtrans,mscale:dmatrix4d;
@@ -483,8 +483,8 @@ end;
 function CreateReadableMatrix(PInsert:GDBVertex; //Точка вставки
                       param:shxprop;     //Параметры текста
                       LineAngle,         //Угол линии
-                      Scale:GDBDouble;
-                      dx,dy:GDBDouble)   //Масштаб линии
+                      Scale:Double;
+                      dx,dy:Double)   //Масштаб линии
                       :dmatrix4d;        //Выходная матрица
 var
     mrot,mrot2,mentrot,madd,madd2,madd3,mtrans,mscale:dmatrix4d;
@@ -518,7 +518,7 @@ begin
     result:=MatrixMultiply(result,mentrot);
     result:=MatrixMultiply(result,mtrans);
 end;
-procedure ZGLGraphix.PlaceShape(drawer:TZGLAbstractDrawer;const StartPatternPoint:GDBVertex;PSP:PShapeProp;scale,angle:GDBDouble);
+procedure ZGLGraphix.PlaceShape(drawer:TZGLAbstractDrawer;const StartPatternPoint:GDBVertex;PSP:PShapeProp;scale,angle:Double);
 var
     objmatrix,matr:dmatrix4d;
     Bound:TBoundingRect;
@@ -533,7 +533,7 @@ sli:=-1;
 if PSP.Psymbol<> nil then
                     PSP^.param.PStyle.pfont.CreateSymbol(drawer,self,PSP.Psymbol.Number,objmatrix,matr,Bound,sli);
 end;
-procedure ZGLGraphix.PlaceText(drawer:TZGLAbstractDrawer;const StartPatternPoint:GDBVertex;PTP:PTextProp;scale,angle:GDBDouble);
+procedure ZGLGraphix.PlaceText(drawer:TZGLAbstractDrawer;const StartPatternPoint:GDBVertex;PTP:PTextProp;scale,angle:Double);
 var
     objmatrix,matr:dmatrix4d;
     Bound:TBoundingRect;
@@ -559,12 +559,12 @@ end;
 end;
 procedure ZGLGraphix.PlaceOnePattern(var rc:TDrawContext;var Segmentator:ZSegmentator;//стартовая точка паттернов, стартовая точка линии (добавка в начало линии)
                                      const vp:PGDBLtypeProp;                 //стиль и прочая лабуда
-                                     TangentScale,NormalScale,length,scale_div_length:GDBDouble;//направление, масштаб, длинна
+                                     TangentScale,NormalScale,length,scale_div_length:Double;//направление, масштаб, длинна
                                      var dr:TLLDrawResult;
                                      SupressFirstDash:boolean=false);
 var
     TDI:PTDashInfo;
-    PStroke:PGDBDouble;
+    PStroke:PDouble;
     PSP:PShapeProp;
     PTP:PTextProp;
     ir2,ir3,ir4,ir5:itrec;
@@ -609,11 +609,11 @@ end;
 procedure ZGLGraphix.PlaceNPatterns(var rc:TDrawContext;var Segmentator:ZSegmentator;//стартовая точка паттернов, стартовая точка линии (добавка в начало линии)
                                      num:integer; //кол-во паттернов
                                      const vp:PGDBLtypeProp;                 //стиль и прочая лабуда
-                                     TangentScale,NormalScale,length:GDBDouble;//направление, масштаб, длинна
+                                     TangentScale,NormalScale,length:Double;//направление, масштаб, длинна
                                      var dr:TLLDrawResult;
                                      SupressFirstDash:boolean=false);          //подавить пкрвый штрих (пока используется в случае если он точка)
 var i:integer;
-    scale_div_length:GDBDouble;
+    scale_div_length:Double;
 begin
   if num<1 then exit;
   scale_div_length:=TangentScale/length;
@@ -621,9 +621,9 @@ begin
   for i:=1 to num-1 do
   PlaceOnePattern(rc,Segmentator,vp,TangentScale,NormalScale,length,scale_div_length,dr);//рисуем один паттерн
 end;
-procedure ZSegmentator.draw(var rc:TDrawContext;length:GDBDouble;paint:boolean;var dr:TLLDrawResult);
+procedure ZSegmentator.draw(var rc:TDrawContext;length:Double;paint:boolean;var dr:TLLDrawResult);
 var
-    tcdp:GDBDouble;
+    tcdp:Double;
     oldcp,tv:gdbvertex;
 begin
      if cdp<1then
@@ -671,14 +671,14 @@ procedure FinishLLDrawResult(var LLPS:TLLPrimitivesArray;var dr:TLLDrawResult);
 begin
  dr.LLPEndi:=LLPS.Count;
 end;
-function ZGLGraphix.DrawPolyLineWithLT(var rc:TDrawContext;const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed,ltgen:GDBBoolean):TLLDrawResult;
+function ZGLGraphix.DrawPolyLineWithLT(var rc:TDrawContext;const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed,ltgen:Boolean):TLLDrawResult;
 var
     ptv,ptvprev,ptvfisrt: pgdbvertex;
     ir:itrec;
-    TangentScale,NormalScale,polylength,TrueNumberOfPatterns,normalizedD,d,halfStroke,dend:GDBDouble;
+    TangentScale,NormalScale,polylength,TrueNumberOfPatterns,normalizedD,d,halfStroke,dend:Double;
     Segmentator:ZSegmentator;
     lt:PGDBLtypeProp;
-    PStroke:PGDBDouble;
+    PStroke:PDouble;
     ir3:itrec;
     minPatternsCount,NumberOfPatterns:integer;
     supressfirstdash:boolean;
@@ -781,10 +781,10 @@ begin
 end;
 function ZGLGraphix.DrawLineWithLT(var rc:TDrawContext;const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp):TLLDrawResult;
 var
-    scale,length:GDBDouble;
-    num,normalizedD,D,halfStroke,dend:GDBDouble;
+    scale,length:Double;
+    num,normalizedD,D,halfStroke,dend:Double;
     ir3:itrec;
-    PStroke:PGDBDouble;
+    PStroke:PDouble;
     lt:PGDBLtypeProp;
     Segmentator:ZSegmentator;
     supressfirstdash:boolean;

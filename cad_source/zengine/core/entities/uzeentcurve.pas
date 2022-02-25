@@ -33,7 +33,7 @@ PGDBObjCurve=^GDBObjCurve;
 GDBObjCurve= object(GDBObj3d)
                  VertexArrayInOCS:GDBPoint3dArray;(*saved_to_shd*)(*hidden_in_objinsp*)
                  VertexArrayInWCS:GDBPoint3dArray;(*saved_to_shd*)(*hidden_in_objinsp*)
-                 length:GDBDouble;
+                 length:Double;
                  PProjPoint:PGDBpolyline2DArray;(*hidden_in_objinsp*)
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
@@ -45,12 +45,12 @@ GDBObjCurve= object(GDBObj3d)
                  procedure rtedit(refp:Pointer;mode:Single;dist,wc:gdbvertex);virtual;
                  procedure rtsave(refp:Pointer);virtual;
                  procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
-                 function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
-                 function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;virtual;
+                 function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
+                 function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                  procedure addcontrolpoints(tdesc:Pointer);virtual;
-                 function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
+                 function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
                  procedure startsnap(out osp:os_record; out pdata:Pointer);virtual;
                  procedure endsnap(out osp:os_record; var pdata:Pointer);virtual;
 
@@ -69,13 +69,13 @@ GDBObjCurve= object(GDBObj3d)
                  procedure InsertVertex(const PolyData:TPolyData);
                  procedure DeleteVertex(const PolyData:TPolyData);
 
-                 function GetLength:GDBDouble;virtual;
+                 function GetLength:Double;virtual;
            end;
 {Export-}
-procedure BuildSnapArray(const VertexArrayInWCS:GDBPoint3dArray;var snaparray:GDBVectorSnapArray;const closed:GDBBoolean);
-function GDBPoint3dArraygetsnap(const VertexArrayInWCS:GDBPoint3dArray; const PProjPoint:PGDBpolyline2DArray; const snaparray:GDBVectorSnapArray; var osp:os_record;const closed:GDBBoolean; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;
-procedure GDBPoint3dArrayAddOnTrackAxis(const VertexArrayInWCS:GDBPoint3dArray;var posr:os_record;const processaxis:taddotrac;const closed:GDBBoolean);
-function GetDirInPoint(const VertexArrayInWCS:GDBPoint3dArray;point:GDBVertex;closed:GDBBoolean):GDBVertex;
+procedure BuildSnapArray(const VertexArrayInWCS:GDBPoint3dArray;var snaparray:GDBVectorSnapArray;const closed:Boolean);
+function GDBPoint3dArraygetsnap(const VertexArrayInWCS:GDBPoint3dArray; const PProjPoint:PGDBpolyline2DArray; const snaparray:GDBVectorSnapArray; var osp:os_record;const closed:Boolean; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;
+procedure GDBPoint3dArrayAddOnTrackAxis(const VertexArrayInWCS:GDBPoint3dArray;var posr:os_record;const processaxis:taddotrac;const closed:Boolean);
+function GetDirInPoint(const VertexArrayInWCS:GDBPoint3dArray;point:GDBVertex;closed:Boolean):GDBVertex;
 implementation
 //uses
 //    log;
@@ -88,7 +88,7 @@ procedure GDBObjCurve.DeleteVertex(const PolyData:TPolyData);
 begin
      vertexarrayinocs.deleteelement(PolyData.{nearestvertex}index);
 end;
-function GetDirInPoint(const VertexArrayInWCS:GDBPoint3dArray;point:GDBVertex;closed:GDBBoolean):GDBVertex;
+function GetDirInPoint(const VertexArrayInWCS:GDBPoint3dArray;point:GDBVertex;closed:Boolean):GDBVertex;
 var //tv:gdbvertex;
     ptv,ppredtv:pgdbvertex;
     ir:itrec;
@@ -136,7 +136,7 @@ begin
         ptv:=VertexArrayInWCS.iterate(ir);
   until ptv=nil;
 end;
-procedure GDBPoint3dArrayAddOnTrackAxis(const VertexArrayInWCS:GDBPoint3dArray;var posr:os_record;const processaxis:taddotrac;const closed:GDBBoolean);
+procedure GDBPoint3dArrayAddOnTrackAxis(const VertexArrayInWCS:GDBPoint3dArray;var posr:os_record;const processaxis:taddotrac;const closed:Boolean);
 var tv:gdbvertex;
     ptv,ppredtv:pgdbvertex;
     ir:itrec;
@@ -282,7 +282,7 @@ begin
     end;
   end
 end;
-procedure BuildSnapArray(const VertexArrayInWCS:GDBPoint3dArray;var snaparray:GDBVectorSnapArray;const closed:GDBBoolean);
+procedure BuildSnapArray(const VertexArrayInWCS:GDBPoint3dArray;var snaparray:GDBVectorSnapArray;const closed:Boolean);
 var
     ptv,ptvprev: pgdbvertex;
     //tv:gdbvertex;
@@ -319,7 +319,7 @@ begin
 
   snaparray.Shrink;
 end;
-function GDBObjCurve.GetLength:GDBDouble;
+function GDBObjCurve.GetLength:Double;
 var ptv,ptvprev: pgdbvertex;
     ir:itrec;
 begin
@@ -483,7 +483,7 @@ begin
                                   end;
    result:=VertexArrayInWCS.onmouse(mf,false);
 end;
-function GDBObjCurve.onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;
+function GDBObjCurve.onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;
 begin
      if VertexArrayInWCS.onpoint(point,false) then
                                                 begin
@@ -569,9 +569,9 @@ begin
 
 end;
 *)
-function GDBPoint3dArraygetsnap(const VertexArrayInWCS:GDBPoint3dArray; const PProjPoint:PGDBpolyline2DArray; const snaparray:GDBVectorSnapArray; var osp:os_record;const closed:GDBBoolean; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;
+function GDBPoint3dArraygetsnap(const VertexArrayInWCS:GDBPoint3dArray; const PProjPoint:PGDBpolyline2DArray; const snaparray:GDBVectorSnapArray; var osp:os_record;const closed:Boolean; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;
 const pnum=8;
-var t,d,e:GDBDouble;
+var t,d,e:Double;
     tv,n,v,dir:gdbvertex;
     mode,vertexnum,tc:Integer;
     pv1:PGDBVertex;
@@ -750,7 +750,7 @@ begin
 end;
 function GDBObjCurve.getsnap;
 //const pnum=8;
-//var //t,d,e:GDBDouble;
+//var //t,d,e:Double;
     //tv,n,v,dir:gdbvertex;
     //mode,vertexnum:Integer;
     //pv1:PGDBVertex;

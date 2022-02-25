@@ -27,22 +27,22 @@ GDBObjElLeader= object(GDBObjComplex)
             Tbl:GDBObjTable;
 
             size:Integer;
-            scale:GDBDouble;
-            twidth:GDBDouble;
+            scale:Double;
+            twidth:Double;
 
 
             procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
             procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
             procedure getoutbound(var DC:TDrawContext);virtual;
-            function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
+            function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
             function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
-            function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
+            function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
             procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
             procedure addcontrolpoints(tdesc:Pointer);virtual;
             procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
             procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
             function beforertmodify:Pointer;virtual;
-            function select(var SelectedObjCount:Integer;s2s:TSelect2Stage):GDBBoolean;virtual;
+            function select(var SelectedObjCount:Integer;s2s:TSelect2Stage):Boolean;virtual;
             procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
             procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
 
@@ -51,7 +51,7 @@ GDBObjElLeader= object(GDBObjComplex)
             procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
             procedure DXFOut(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
             function GetObjTypeName:GDBString;virtual;
-            function ReturnLastOnMouse(InSubEntry:GDBBoolean):PGDBObjEntity;virtual;
+            function ReturnLastOnMouse(InSubEntry:Boolean):PGDBObjEntity;virtual;
             procedure ImSelected(pobj:PGDBObjSubordinated;pobjinarray:Integer);virtual;
             procedure DeSelect(var SelectedObjCount:Integer;ds2s:TDeSelect2Stage);virtual;
             procedure SaveToDXFFollow(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
@@ -61,8 +61,8 @@ GDBObjElLeader= object(GDBObjComplex)
 
             procedure transform(const t_matrix:DMatrix4D);virtual;
             procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
-            procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;
-            function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
+            procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
+            function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
             function GetObjType:TObjID;virtual;
             class function GetDXFIOFeatures:TDXFEntIODataManager;static;
             procedure SaveToDXFObjXData(var outhandle:{Integer}TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
@@ -183,8 +183,8 @@ begin
   dxfGDBStringout(outhandle,1002,'{');
   dxfGDBStringout(outhandle,1000,'_UPGRADE='+inttostr(UD_LineToLeader));
   dxfGDBStringout(outhandle,1000,'%1=size|Integer|'+inttostr(size)+'|');
-  dxfGDBStringout(outhandle,1000,'%2=scale|GDBDouble|'+floattostr(scale)+'|');
-  dxfGDBStringout(outhandle,1000,'%3=twidth|GDBDouble|'+floattostr(twidth)+'|');
+  dxfGDBStringout(outhandle,1000,'%2=scale|Double|'+floattostr(scale)+'|');
+  dxfGDBStringout(outhandle,1000,'%3=twidth|Double|'+floattostr(twidth)+'|');
   dxfGDBStringout(outhandle,1002,'}');*)
   SaveToDXFPostProcess(outhandle,IODXFContext);
   MainLine.bp.ListPos.Owner:=@self;
@@ -563,7 +563,7 @@ begin
      if assigned(EntExtensions)then
        EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
 end;
-function GDBObjElLeader.select(var SelectedObjCount:Integer;s2s:TSelect2Stage):GDBBoolean;
+function GDBObjElLeader.select(var SelectedObjCount:Integer;s2s:TSelect2Stage):Boolean;
 //var tdesc:pselectedobjdesc;
 begin
      (*result:=false;
@@ -625,10 +625,10 @@ begin
      tbl.RenderFeedback(pcount,camera,ProjectProc,dc);
 end;
 function GDBObjElLeader.onmouse;
-var //t,xx,yy:GDBDouble;
+var //t,xx,yy:Double;
     //i:Integer;
     //p:pgdbobjEntity;
-    ot:GDBBoolean;
+    ot:Boolean;
     //    ir:itrec;
 begin
   result:=false;
@@ -825,12 +825,12 @@ begin
    pvi:=PTUnit(ptu).FindVariable('scale');
    if pvi<>nil then
                    begin
-                        result^.scale:=pgdbdouble(pvi^.data.Addr.Instance)^;
+                        result^.scale:=pDouble(pvi^.data.Addr.Instance)^;
                    end;
    pvi:=PTUnit(ptu).FindVariable('twidth');
    if pvi<>nil then
                    begin
-                        result^.twidth:=pgdbdouble(pvi^.data.Addr.Instance)^;
+                        result^.twidth:=pDouble(pvi^.data.Addr.Instance)^;
                    end;
    end;
 end;

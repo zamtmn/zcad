@@ -70,7 +70,7 @@ type
                            MainMouseDown:function(Sender:TAbstractViewArea):boolean of object;
                            MainMouseUp:procedure of object;
                            tocommandmcliccount:Integer;
-                           currentmousemovesnaptogrid:GDBBoolean;
+                           currentmousemovesnaptogrid:Boolean;
                            OnWaMouseDown:TOnWaMouseDown;
                            OnWaMouseSelect:TOnWaMouseSelect;
                            OnWaMouseMove:TOnWaMouseMove;
@@ -102,14 +102,14 @@ type
                            procedure RestoreMouse;virtual;abstract;
                            procedure myKeyPress(var Key: Word; Shift: TShiftState);virtual;abstract;
                            procedure finishdraw(var RC:TDrawContext);virtual;abstract;
-                            procedure SetCameraPosZoom(_pos:gdbvertex;_zoom:gdbdouble;finalcalk:gdbboolean);virtual;abstract;
+                            procedure SetCameraPosZoom(_pos:gdbvertex;_zoom:Double;finalcalk:Boolean);virtual;abstract;
 
                            procedure showmousecursor;virtual;abstract;
                            procedure hidemousecursor;virtual;abstract;
                            Procedure Paint; virtual;abstract;
-                           function CreateRC(_maxdetail:GDBBoolean=false):TDrawContext;virtual;abstract;
+                           function CreateRC(_maxdetail:Boolean=false):TDrawContext;virtual;abstract;
                            function CreateFaceRC:TDrawContext;virtual;abstract;
-                           function ProjectPoint(pntx,pnty,pntz:gdbdouble;var wcsLBN,wcsRTF,dcsLBN,dcsRTF: GDBVertex):gdbvertex;virtual;abstract;
+                           function ProjectPoint(pntx,pnty,pntz:Double;var wcsLBN,wcsRTF,dcsLBN,dcsRTF: GDBVertex):gdbvertex;virtual;abstract;
                            procedure mouseunproject(X, Y: integer);virtual;abstract;
                            procedure CalcMouseFrustum;virtual;abstract;
                            procedure ClearOntrackpoint;virtual;abstract;
@@ -118,7 +118,7 @@ type
                            procedure SetOTrackTimer(Sender: TObject);virtual;abstract;
                            procedure KillOHintTimer(Sender: TObject);virtual;abstract;
                            procedure SetOHintTimer(Sender: TObject);virtual;abstract;
-                           procedure getonmouseobjectbytree(var Node:TEntTreeNode;InSubEntry:GDBBoolean);virtual;abstract;
+                           procedure getonmouseobjectbytree(var Node:TEntTreeNode;InSubEntry:Boolean);virtual;abstract;
                            procedure getosnappoint(radius: Single);virtual;abstract;
                            procedure projectaxis;virtual;abstract;
                            procedure AddOntrackpoint;virtual;abstract;
@@ -137,7 +137,7 @@ type
                            procedure DrawGrid(var DC:TDrawContext); virtual;abstract;
                            procedure showcursor(var DC:TDrawContext); virtual;abstract;
                            procedure render(const Root:GDBObjGenericSubEntry;var DC:TDrawContext); virtual;abstract;
-                           function treerender(var Node:TEntTreeNode;StartTime:TDateTime;var DC:TDrawContext):GDBBoolean;virtual;abstract;
+                           function treerender(var Node:TEntTreeNode;StartTime:TDateTime;var DC:TDrawContext):Boolean;virtual;abstract;
                            procedure partailtreerender(var Node:TEntTreeNode;const part:TBoundingBox; var DC:TDrawContext);virtual;abstract;
                            function startpaint:boolean;virtual;abstract;
                            procedure endpaint;virtual;abstract;

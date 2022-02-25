@@ -43,7 +43,7 @@ implementation
 
 function isrect(const p1,p2,p3,p4:GDBVertex2D):boolean;
 //var
-   //p:gdbdouble;
+   //p:Double;
 begin
      //p:=SqrVertexlength(p1,p3)-sqrVertexlength(p2,p4);
      //p:=SqrVertexlength(p1,p2)-sqrVertexlength(p3,p4);

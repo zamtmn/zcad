@@ -10,7 +10,7 @@ usescopy addtocable;
 
 var
 
-Power:GDBDouble;(*'Мощность, кВт'*)
+Power:Double;(*'Мощность, кВт'*)
 
 implementation
 

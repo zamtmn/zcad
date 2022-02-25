@@ -34,10 +34,10 @@ GDBObjText= object(GDBObjAbstractText)
                  Content:TDXFEntsInternalStringType;
                  Template:TDXFEntsInternalStringType;(*saved_to_shd*)
                  TXTStyleIndex:{-}PGDBTextStyle{/PGDBTextStyleObjInsp/};(*saved_to_shd*)(*'Style'*)
-                 obj_height:GDBDouble;(*oi_readonly*)(*hidden_in_objinsp*)
-                 obj_width:GDBDouble;(*oi_readonly*)(*hidden_in_objinsp*)
-                 obj_y:GDBDouble;(*oi_readonly*)(*hidden_in_objinsp*)
-                 constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:TDXFEntsInternalStringType;p:GDBvertex;s,o,w,a:GDBDouble;j:TTextJustify);
+                 obj_height:Double;(*oi_readonly*)(*hidden_in_objinsp*)
+                 obj_width:Double;(*oi_readonly*)(*hidden_in_objinsp*)
+                 obj_y:Double;(*oi_readonly*)(*hidden_in_objinsp*)
+                 constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:TDXFEntsInternalStringType;p:GDBvertex;s,o,w,a:Double;j:TTextJustify);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f: TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
                  procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
@@ -45,18 +45,18 @@ GDBObjText= object(GDBObjAbstractText)
                  procedure getoutbound(var DC:TDrawContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  //procedure createpoint(const drawing:TDrawingDef);virtual;
-                 //procedure CreateSymbol(_symbol:Integer;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;pfont:pgdbfont;ln:Integer);
+                 //procedure CreateSymbol(_symbol:Integer;matr:DMatrix4D;var minx,miny,maxx,maxy:Double;pfont:pgdbfont;ln:Integer);
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
                  function GetObjTypeName:GDBString;virtual;
                  destructor done;virtual;
 
-                 function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
+                 function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  procedure rtedit(refp:Pointer;mode:Single;dist,wc:gdbvertex);virtual;
                  procedure rtsave(refp:Pointer);virtual;
-                 function IsHaveObjXData:GDBBoolean;virtual;
+                 function IsHaveObjXData:Boolean;virtual;
                  procedure SaveToDXFObjXData(var outhandle:{Integer}TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
-                 function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef):GDBBoolean;virtual;
+                 function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;virtual;
                  class function GetDXFIOFeatures:TDXFEntIODataManager;static;
 
                  function CreateInstance:PGDBObjText;static;
@@ -68,7 +68,7 @@ jt: array[0..3, 0..4] of TTextJustify = ((jsbl, jsbc, jsbr, jsbl, jsmc), (jsbtl,
 j2b: array[TTextJustify] of byte=(1,2,3,4,5,6,7,8,9,10,11,12);
 b2j: array[1..12] of TTextJustify=(jstl,jstc,jstr,jsml,jsmc,jsmr,jsbl,jsbc,jsbr,jsbtl,jsbtc,jsbtr);
 GDBObjTextDXFFeatures:TDXFEntIODataManager;
-//function getsymbol(s:gdbstring; i:integer;out l:integer;const fontunicode:gdbboolean):word;
+//function getsymbol(s:gdbstring; i:integer;out l:integer;const fontunicode:Boolean):word;
 implementation
 function acadvjustify(j:TTextJustify): Byte;
 var
@@ -80,7 +80,7 @@ begin
   else
     result := t;
 end;
-function GDBObjText.IsHaveObjXData:GDBBoolean;
+function GDBObjText.IsHaveObjXData:Boolean;
 begin
      if  convertfromunicode(template)<>content then
                               result:=true
@@ -287,7 +287,7 @@ end;
 procedure GDBObjText.getoutbound;
 var
 //  v:GDBvertex4D;
-    t,b,l,r,n,f:GDBDouble;
+    t,b,l,r,n,f:Double;
     i:integer;
 
 //pm:DMatrix4D;
@@ -391,7 +391,7 @@ begin
        PProjoutbound^.init(4);
   end;
 end;
-(*procedure GDBObjText.CreateSymbol(_symbol:Integer;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;pfont:pgdbfont;ln:Integer);
+(*procedure GDBObjText.CreateSymbol(_symbol:Integer;matr:DMatrix4D;var minx,miny,maxx,maxy:Double;pfont:pgdbfont;ln:Integer);
 var
   psymbol: Pointer;
   i, j, k: Integer;
@@ -404,7 +404,7 @@ var
   plp,plp2:pgdbvertex;
   lp,tv:gdbvertex;
   pl:GDBPoint3DArray;
-  ispl:gdbboolean;
+  ispl:Boolean;
   ir:itrec;
   psyminfo:PGDBsymdolinfo;
   deb:GDBsymdolinfo;
@@ -451,7 +451,7 @@ begin
             pv3.count:=0;
             Vertex3D_in_WCS_Array.add(@pv3);
 
-            //inc(PByte(psymbol), 2 * sizeof(GDBDouble));
+            //inc(PByte(psymbol), 2 * sizeof(Double));
             PGDBvertex2D(@v)^.x:=pfontfloat(psymbol)^;
             inc(pfontfloat(psymbol));
             PGDBvertex2D(@v)^.y:=pfontfloat(psymbol)^;
@@ -477,7 +477,7 @@ begin
 
             pv.coord:=PGDBvertex2D(@v)^;
             pv.count:=0;
-            //inc(PByte(psymbol), 2 * sizeof(GDBDouble));
+            //inc(PByte(psymbol), 2 * sizeof(Double));
           end;
         4:
           begin
@@ -510,7 +510,7 @@ begin
             Vertex3D_in_WCS_Array.add(@pv3);
 
 
-            //inc(PByte(psymbol), 2 * sizeof(GDBDouble));
+            //inc(PByte(psymbol), 2 * sizeof(Double));
             k := 1;
             while k < len do //for k:=1 to len-1 do
             begin
@@ -542,7 +542,7 @@ begin
             Vertex3D_in_WCS_Array.add(@pv3);
 
 
-            //inc(PByte(psymbol), 2 * sizeof(GDBDouble));
+            //inc(PByte(psymbol), 2 * sizeof(Double));
             inc(k);
             end;
           end;
@@ -626,10 +626,10 @@ begin
     dxfvertexout(outhandle,11,Local.p_insert);
     dxfvertexout(outhandle,10,tv);
   end;
-  dxfGDBDoubleout(outhandle,40,textprop.size);
-  dxfGDBDoubleout(outhandle,50,CalcRotate*180/pi);
-  dxfGDBDoubleout(outhandle,41,textprop.wfactor);
-  dxfGDBDoubleout(outhandle,51,textprop.oblique*180/pi);
+  dxfDoubleout(outhandle,40,textprop.size);
+  dxfDoubleout(outhandle,50,CalcRotate*180/pi);
+  dxfDoubleout(outhandle,41,textprop.wfactor);
+  dxfDoubleout(outhandle,51,textprop.oblique*180/pi);
   dxfGDBIntegerout(outhandle,72,hv);
   bw:=0;
   if textprop.upsidedown then
@@ -656,7 +656,7 @@ end;
 procedure GDBObjText.LoadFromDXF;
 var //s{, layername}: GDBString;
   byt{, code}: Integer;
-  doublepoint,angleload: GDBBoolean;
+  doublepoint,angleload: Boolean;
   angle:double;
   vv, gv, textbackward: Integer;
   style,tcontent:GDBString;
@@ -677,14 +677,14 @@ begin
        if not dxfvertexload(f,10,byt,Local.P_insert) then
           if dxfvertexload(f,11,byt,P_drawInOCS) then
                                                      doublepoint := true
-else if not dxfGDBDoubleload(f,40,byt,textprop.size) then
-     if not dxfGDBDoubleload(f,41,byt,textprop.wfactor) then
-     if dxfGDBDoubleload(f,50,byt,angle) then
+else if not dxfDoubleload(f,40,byt,textprop.size) then
+     if not dxfDoubleload(f,41,byt,textprop.wfactor) then
+     if dxfDoubleload(f,50,byt,angle) then
                                              begin
                                                angleload := true;
                                                angle:=angle*pi/180;
                                              end
-else if dxfGDBDoubleload(f,51,byt,textprop.oblique) then
+else if dxfDoubleload(f,51,byt,textprop.oblique) then
                                                         textprop.oblique:=textprop.oblique*pi/180
 else if     dxfGDBStringload(f,7,byt,style)then
                                              begin

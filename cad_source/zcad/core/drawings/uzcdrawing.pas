@@ -33,7 +33,7 @@ PTZCADDrawing=^TZCADDrawing;
 TZCADDrawing= object(TSimpleDrawing)
 
            FileName:GDBString;
-           Changed:GDBBoolean;
+           Changed:Boolean;
            attrib:LongWord;
            UndoStack:TZctnrVectorUndoCommands;
            DWGUnits:TUnitManager;
@@ -52,8 +52,8 @@ TZCADDrawing= object(TSimpleDrawing)
            procedure PushEndMarker;virtual;
            procedure SetFileName(NewName:GDBString);virtual;
            function GetFileName:GDBString;virtual;
-           procedure ChangeStampt(st:GDBBoolean);virtual;
-           function GetChangeStampt:GDBBoolean;virtual;
+           procedure ChangeStampt(st:Boolean);virtual;
+           function GetChangeStampt:Boolean;virtual;
            function GetUndoTop:TArrayIndex;virtual;
            function GetUndoStack:Pointer;virtual;
            function CanUndo:boolean;virtual;
@@ -77,7 +77,7 @@ begin
   if DWGUnit<>nil then
     vd:=DWGUnit.InterfaceVariables.findvardesc('DWG_LTScale');
   if vd<>nil then
-                 dc.DrawingContext.GlobalLTScale:=dc.DrawingContext.GlobalLTScale*PGDBDouble(vd^.data.Addr.Instance)^;
+                 dc.DrawingContext.GlobalLTScale:=dc.DrawingContext.GlobalLTScale*PDouble(vd^.data.Addr.Instance)^;
   if commandmanager.pcommandrunning<>nil then
                                                dc.DrawingContext.DrawHeplGeometryProc:=commandmanager.pcommandrunning^.DrawHeplGeometry;
 end;
@@ -185,7 +185,7 @@ begin
      self.Changed:={true}st;
      inherited;
 end;
-function TZCADDrawing.GetChangeStampt:GDBBoolean;
+function TZCADDrawing.GetChangeStampt:Boolean;
 begin
      result:=self.Changed;
 end;
@@ -232,9 +232,9 @@ begin
   pdwgwarsunit:=pointer(DWGUnits.CreateObject);
   pdwgwarsunit^.init('DrawingVars');
   pdwgwarsunit.InterfaceUses.PushBackIfNotPresent(SysUnit);
-  pdwgwarsunit^.CreateFixedVariable('DWG_DrawMode','GDBBoolean',@LWDisplay);
-  pdwgwarsunit^.CreateFixedVariable('DWG_SnapGrid','GDBBoolean',@SnapGrid);
-  pdwgwarsunit^.CreateFixedVariable('DWG_DrawGrid','GDBBoolean',@DrawGrid);
+  pdwgwarsunit^.CreateFixedVariable('DWG_DrawMode','Boolean',@LWDisplay);
+  pdwgwarsunit^.CreateFixedVariable('DWG_SnapGrid','Boolean',@SnapGrid);
+  pdwgwarsunit^.CreateFixedVariable('DWG_DrawGrid','Boolean',@DrawGrid);
   pdwgwarsunit^.CreateFixedVariable('DWG_GridSpacing','GDBvertex2D',@GridSpacing);
   pdwgwarsunit^.CreateFixedVariable('DWG_Snap','GDBSnap2D',@Snap);
   pdwgwarsunit^.CreateFixedVariable('DWG_CLayer','PGDBLayerProp',@CurrentLayer);
@@ -242,7 +242,7 @@ begin
   pdwgwarsunit^.CreateFixedVariable('DWG_CTStyle','PGDBTextStyle',@CurrentTextStyle);
   pdwgwarsunit^.CreateFixedVariable('DWG_CDimStyle','PGDBDimStyle',@CurrentDimStyle);
   pdwgwarsunit^.CreateFixedVariable('DWG_CLinew','TGDBLineWeight',@CurrentLineW);
-  pdwgwarsunit^.CreateFixedVariable('DWG_CLTScale','GDBDouble',@CLTScale);
+  pdwgwarsunit^.CreateFixedVariable('DWG_CLTScale','Double',@CLTScale);
   pdwgwarsunit^.CreateFixedVariable('DWG_CColor','Integer',@CColor);
 
 
@@ -254,7 +254,7 @@ begin
   pdwgwarsunit^.CreateFixedVariable('DWG_AngBase','GDBAngleDegDouble',@AngBase);
   pdwgwarsunit^.CreateFixedVariable('DWG_UnitMode','TUnitMode',@UnitMode);
   pdwgwarsunit^.CreateFixedVariable('DWG_InsUnits','TInsUnits',@InsUnits);
-  pdwgwarsunit^.CreateFixedVariable('DWG_TextSize','GDBDouble',@TextSize);
+  pdwgwarsunit^.CreateFixedVariable('DWG_TextSize','Double',@TextSize);
 
   if preloadedfile1<>'' then
   DWGUnits.loadunit(SupportPath,InterfaceTranslate,expandpath({'*rtl/dwg/DrawingDeviceBase.pas')}preloadedfile1),nil);

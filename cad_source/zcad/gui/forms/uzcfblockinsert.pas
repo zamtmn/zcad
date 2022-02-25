@@ -20,7 +20,7 @@ type
 
   TZEBlockInsertParams=record            //объявление записи для сбора данных из формы
       PInsert,Scale:GDBVertex;
-      Rotate:GDBDouble;
+      Rotate:Double;
       BlockName:GDBString;
   end;
 

@@ -46,7 +46,7 @@ GDBObjWithLocalCS= object(GDBObjWithMatrix)
                constructor initnul(owner:PGDBObjGenericWithSubordinated);
                destructor done;virtual;
                procedure SaveToDXFObjPostfix(var outhandle:{Integer}TZctnrVectorBytes);
-               function LoadFromDXFObjShared(var f:TZctnrVectorBytes;dxfcod:Integer;ptu:PExtensionData;var drawing:TDrawingDef):GDBBoolean;
+               function LoadFromDXFObjShared(var f:TZctnrVectorBytes;dxfcod:Integer;ptu:PExtensionData;var drawing:TDrawingDef):Boolean;
 
                procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                procedure CalcObjMatrix;virtual;
@@ -60,15 +60,15 @@ GDBObjWithLocalCS= object(GDBObjWithMatrix)
                procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
                procedure higlight(var DC:TDrawContext);virtual;
                procedure ReCalcFromObjMatrix;virtual;
-               function IsHaveLCS:GDBBoolean;virtual;
-               function CanSimplyDrawInOCS(const DC:TDrawContext;const ParamSize,TargetSize:GDBDouble):GDBBoolean;inline;
+               function IsHaveLCS:Boolean;virtual;
+               function CanSimplyDrawInOCS(const DC:TDrawContext;const ParamSize,TargetSize:Double):Boolean;inline;
          end;
 {EXPORT-}
 implementation
 //uses log;
-function GDBObjWithLocalCS.CanSimplyDrawInOCS(const DC:TDrawContext;const ParamSize,TargetSize:GDBDouble):GDBBoolean;
+function GDBObjWithLocalCS.CanSimplyDrawInOCS(const DC:TDrawContext;const ParamSize,TargetSize:Double):Boolean;
 var
-   templod:GDBDouble;
+   templod:Double;
 begin
      if dc.maxdetail then
                          exit(true);
@@ -79,7 +79,7 @@ begin
                         else
                             exit(false);
 end;
-function GDBObjWithLocalCS.IsHaveLCS:GDBBoolean;
+function GDBObjWithLocalCS.IsHaveLCS:Boolean;
 begin
      result:=true;
 end;

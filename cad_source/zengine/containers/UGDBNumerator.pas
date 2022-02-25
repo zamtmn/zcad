@@ -32,8 +32,8 @@ PGDBNumerator=^GDBNumerator;
 {---REGISTEROBJECTTYPE GDBNumerator}
 GDBNumerator= object(GDBNamedObjectsArray<PGDBNumItem,GDBNumItem>)(*OpenArrayOfData=GDBNumItem*)
                        constructor init(m:Integer);
-                       function getnamenumber(_Name:GDBString;AutoInc:GDBBoolean):GDBstring;
-                       function getnumber(_Name:GDBString;AutoInc:GDBBoolean):Integer;
+                       function getnamenumber(_Name:GDBString;AutoInc:Boolean):GDBstring;
+                       function getnumber(_Name:GDBString;AutoInc:Boolean):Integer;
                        function AddNumerator(Name:GDBString):PGDBNumItem;virtual;
                        procedure sort;
                        end;

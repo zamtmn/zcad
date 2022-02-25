@@ -54,13 +54,13 @@ TTextInsertParams=record
                    mode:TIMode;(*'Entity'*)
                    Style:TEnumData;(*'Style'*)
                    justify:TTextJustify;(*'Justify'*)
-                   h:GDBDouble;(*'Height'*)
-                   WidthFactor:GDBDouble;(*'Width factor'*)
-                   Oblique:GDBDouble;(*'Oblique'*)
-                   Width:GDBDouble;(*'Width'*)
-                   LineSpace:GDBDouble;(*'Line space factor'*)
+                   h:Double;(*'Height'*)
+                   WidthFactor:Double;(*'Width factor'*)
+                   Oblique:Double;(*'Oblique'*)
+                   Width:Double;(*'Width'*)
+                   LineSpace:Double;(*'Line space factor'*)
                    text:TDXFEntsInternalStringType;(*'Text'*)
-                   runtexteditor:GDBBoolean;(*'Run text editor'*)
+                   runtexteditor:Boolean;(*'Run text editor'*)
              end;
 
 implementation

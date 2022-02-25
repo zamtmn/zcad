@@ -740,7 +740,7 @@ var
     end;
 
     //Визуализация круга его p1-координата, rr-радиус, color-цвет
-    function visualDrawCircle(p1:GDBVertex;rr:GDBDouble;color:integer):TCommandResult;
+    function visualDrawCircle(p1:GDBVertex;rr:Double;color:integer):TCommandResult;
     var
         pcircle:PGDBObjCircle;
     begin
@@ -944,7 +944,7 @@ var
 
        pvd:=FindVariableInEnt(cableLine,'CABLE_AutoGen');
               if pvd<>nil then
-                    pgdbboolean(pvd^.data.Addr.Instance)^:=true;
+                    pBoolean(pvd^.data.Addr.Instance)^:=true;
 
        pvd:=FindVariableInEnt(cableLine,'GC_HDGroup');
        if pvd<>nil then
@@ -1129,7 +1129,7 @@ var
 
        pvd:=FindVariableInEnt(cableLine,'CABLE_AutoGen');
               if pvd<>nil then
-                    pgdbboolean(pvd^.data.Addr.Instance)^:=true;
+                    pBoolean(pvd^.data.Addr.Instance)^:=true;
 
        pvd:=FindVariableInEnt(cableLine,'GC_HDGroup');
        if pvd<>nil then
@@ -3129,7 +3129,7 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph):T
                   if isHaveLineMaster(listMasterDevice[i].LIndex[n],listMasterDevice[i].LGroup[j].LNumSubDevice[k].indexSub) then
                      continue;
                   //
-                  //if pgdbboolean(FindVariableInEnt(listVertexEdge.listVertex[listMasterDevice[i].LGroup[j].LNumSubDevice[k].indexSub].deviceEnt,velec_inerNodeWithoutConnection)^.Instance)^ then
+                  //if pBoolean(FindVariableInEnt(listVertexEdge.listVertex[listMasterDevice[i].LGroup[j].LNumSubDevice[k].indexSub].deviceEnt,velec_inerNodeWithoutConnection)^.Instance)^ then
                   //  continue;
 
                   //**Смотрим сколько промежуточных узлов должен посетить кабель

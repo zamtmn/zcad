@@ -268,7 +268,7 @@ var
   //parsepos:Integer;
   parseresult,subparseresult:PTZctnrVectorStrings;
   mode:Integer;
-  parseerror,subparseerror:GDBBoolean;
+  parseerror,subparseerror:Boolean;
   i:Integer;
   {kolvo,}typ:Integer;
   typename, {fieldname, fieldvalue,} fieldtype, GDBStringtypearray {sub,} {indmins, indmaxs,} {,arrind1}: GDBString;
@@ -277,7 +277,7 @@ var
   //handle,poz, kolvo, i,oldcount: Integer;
   indmin, indcount, razmer: Integer;
   etd:PUserTypeDescriptor;
-  addtype:GDBBoolean;
+  addtype:Boolean;
   penu:penumodj;
   enumodj:tenumodj;
   currvalue,maxvalue:LongWord;
@@ -287,7 +287,7 @@ var
   unitpart:TunitPart;
     ir:itrec;
   //tempstring:gdbstring;
-  doexit:gdbboolean;
+  doexit:Boolean;
 begin
   unitpart:=tnothing;
   currentunit:=pointer(pcreatedunit);
@@ -320,7 +320,7 @@ begin
                                        oldline:=line;
                    end;
     line:=readspace(line);
-   if line='GDBObjLWPolyline=object(GDBObjWithLocalCS) Closed:GDBBoolean;' then
+   if line='GDBObjLWPolyline=object(GDBObjWithLocalCS) Closed:Boolean;' then
                   line:=line;
    zTraceLn('{T}[ZSCRIPT]%s',[line]);
 

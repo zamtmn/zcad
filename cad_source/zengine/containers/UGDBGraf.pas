@@ -35,7 +35,7 @@ grafelement= object(GDBaseObject)
                   workedlink:PGDBObjEntity;
                   connected:Integer;
                   step:Integer;
-                  pathlength:GDBDouble;
+                  pathlength:Double;
 
                   constructor initnul;
                   constructor init(v:gdbvertex);
@@ -47,8 +47,8 @@ GDBGraf= object(GZVector{-}<grafelement>{//})(*OpenArrayOfData=grafelement*)
                 constructor init(m:Integer);
                 function addge(v:gdbvertex):pgrafelement;
                 procedure clear;virtual;
-                function minimalize(var drawing:TDrawingDef):GDBBoolean;
-                function divide:GDBBoolean;
+                function minimalize(var drawing:TDrawingDef):Boolean;
+                function divide:Boolean;
                 destructor done;virtual;
                 procedure freeelement(PItem:PT);virtual;
 
@@ -90,7 +90,7 @@ begin
   else
       result:=LT_Normal;
 end;
-function getlinklength(pv:PGDBObjLine):GDBDouble;
+function getlinklength(pv:PGDBObjLine):Double;
 var
     pvd:pvardesk;
     pentvarext:TVariablesExtender;
@@ -102,7 +102,7 @@ begin
      if pvd=nil then
                     result:=Vertexlength(pv^.CoordInWCS.lbegin,pv^.CoordInWCS.lend)
                 else
-                    result:=PGDBDouble(pvd.data.Addr.Instance)^;
+                    result:=PDouble(pvd.data.Addr.Instance)^;
      end
         else
             result:=Vertexlength(pv^.CoordInWCS.lbegin,pv^.CoordInWCS.lend);
@@ -112,9 +112,9 @@ var
   pgfe,pgfe2,pgfe3: pgrafelement;
   ir,ir2,ir3:itrec;
   step,oldstep:Integer;
-  isend:gdbboolean;
+  isend:Boolean;
   pl:pgdbobjEntity;
-  npath,npathmin,linklength:gdbdouble;
+  npath,npathmin,linklength:Double;
   linkline,mainlinkline:pgdbobjEntity;
 begin
 
@@ -311,7 +311,7 @@ begin
      inherited done;
 end;
 function GDBGraf.divide;
-function marknearelement(pgf:pgrafelement):GDBBoolean;
+function marknearelement(pgf:pgrafelement):Boolean;
 var i,j,k: Integer;
     tgf: pgrafelement;
     l1,l2:pgdbobjline;
@@ -350,7 +350,7 @@ var
   i{,j}: Integer;
   tgf: pgrafelement;
 //  l1,l2:pgdbobjline;
-  q:GDBBoolean;
+  q:Boolean;
   ir:itrec;
 begin
   result:=false;

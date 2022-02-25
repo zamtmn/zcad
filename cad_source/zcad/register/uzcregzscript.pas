@@ -22,13 +22,13 @@ interface
 uses uzcsysvars,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,varman,
      UBaseTypeDescriptor,uzbtypesbase,uzedimensionaltypes,uzemathutils,LazLogger;
 type
-  GDBNonDimensionDoubleDescriptor=object(GDBDoubleDescriptor)
+  GDBNonDimensionDoubleDescriptor=object(DoubleDescriptor)
                             function GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):GDBString;virtual;
                       end;
-  GDBAngleDegDoubleDescriptor=object(GDBDoubleDescriptor)
+  GDBAngleDegDoubleDescriptor=object(DoubleDescriptor)
                                          function GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):GDBString;virtual;
                                    end;
-  GDBAngleDoubleDescriptor=object(GDBDoubleDescriptor)
+  GDBAngleDoubleDescriptor=object(DoubleDescriptor)
                                  function GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):GDBString;virtual;
                            end;
 var
@@ -62,7 +62,7 @@ begin
 end;
 initialization
   OnCreateSystemUnit:=_OnCreateSystemUnit;
-  units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'ShowHiddenFieldInObjInsp','GDBBoolean',@debugShowHiddenFieldInObjInsp);
+  units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'ShowHiddenFieldInObjInsp','Boolean',@debugShowHiddenFieldInObjInsp);
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

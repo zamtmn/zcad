@@ -62,7 +62,7 @@ function GDBPolyPoint2DArray.inrect;
 var p,pp:PGDBPolyVertex2D;
     counter:Integer;
     i:Integer;
-    //lines:GDBBoolean;
+    //lines:Boolean;
 begin
   if (count<2){or(not POGLWND^.seldesc.MouseFrameInverse)} then exit;
   p:=GetParrayAsPointer;

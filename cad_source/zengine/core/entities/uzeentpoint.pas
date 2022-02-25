@@ -40,10 +40,10 @@ GDBObjPoint= object(GDBObj3d)
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
 
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
-                 function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
+                 function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                  procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
-                 function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
-                 function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
+                 function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
+                 function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                  procedure addcontrolpoints(tdesc:Pointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
@@ -196,7 +196,7 @@ begin
   ProjectProc(P_insertInWCS,ProjPoint);
 end;
 function GDBObjPoint.getsnap;
-//var t,d,e:GDBDouble;
+//var t,d,e:Double;
  //   tv,n,v:gdbvertex;
 begin
      if onlygetsnapcount=1 then
@@ -220,7 +220,7 @@ begin
      inc(onlygetsnapcount);
 end;
 function GDBObjPoint.onmouse;
-var {t,xx,yy,}d1:GDBDouble;
+var {t,xx,yy,}d1:Double;
     i:integer;
 begin
       for i:=0 to 5 do
@@ -235,7 +235,7 @@ begin
       result:=true;
 end;
 function GDBObjPoint.CalcTrueInFrustum;
-var {t,xx,yy,}d1:GDBDouble;
+var {t,xx,yy,}d1:Double;
     i:integer;
 begin
       for i:=0 to 5 do

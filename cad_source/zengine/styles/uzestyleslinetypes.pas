@@ -36,10 +36,10 @@ TOuterDashInfo=(TODIUnknown,TODIShape,TODIPoint,TODILine,TODIBlank);
 TAngleDir=(TACAbs,TACRel,TACUpRight);
 {REGISTERRECORDTYPE shxprop}
 shxprop=record
-                Height,Angle,X,Y:GDBDouble;
+                Height,Angle,X,Y:Double;
                 AD:TAngleDir;
                 PStyle:PGDBTextStyle;
-                PstyleIsHandle:GDBBoolean;
+                PstyleIsHandle:Boolean;
         end;
 {REGISTEROBJECTTYPE BasicSHXDashProp}
 BasicSHXDashProp= object(GDBaseObject)
@@ -50,7 +50,7 @@ PTextProp=^TextProp;
 {REGISTEROBJECTTYPE TextProp}
 TextProp= object(BasicSHXDashProp)
                 Text,Style:GDBString;
-                txtL,txtH:GDBDouble;
+                txtL,txtH:Double;
                 //PFont:PGDBfont;
                 constructor initnul;
                 destructor done;virtual;
@@ -67,8 +67,8 @@ ShapeProp= object(BasicSHXDashProp)
 {REGISTEROBJECTTYPE GDBDashInfoArray}
 GDBDashInfoArray= object(GZVector{-}<TDashInfo>{//})(*OpenArrayOfData=TDashInfo*)
                end;
-{REGISTEROBJECTTYPE GDBDoubleArray}
-GDBDoubleArray= object(GZVector{-}<GDBDouble>{//})(*OpenArrayOfData=GDBDouble*)
+{REGISTEROBJECTTYPE DoubleArray}
+DoubleArray= object(GZVector{-}<Double>{//})(*OpenArrayOfData=Double*)
                 constructor init(m:Integer);
                end;
 {REGISTEROBJECTTYPE GDBShapePropArray}
@@ -84,13 +84,13 @@ PGDBLtypePropObjInsp=Pointer;
 PGDBLtypeProp=^GDBLtypeProp;
 {REGISTEROBJECTTYPE GDBLtypeProp}
 GDBLtypeProp= object(GDBNamedObject)
-               LengthDXF,LengthFact:GDBDouble;(*'Length'*)
-               h:GDBDouble;(*'Height'*)
+               LengthDXF,LengthFact:Double;(*'Length'*)
+               h:Double;(*'Height'*)
                Mode:TLTMode;
                FirstStroke,LastStroke:TOuterDashInfo;
-               WithoutLines:GDBBoolean;
+               WithoutLines:Boolean;
                dasharray:GDBDashInfoArray;(*'DashInfo array'*)
-               strokesarray:GDBDoubleArray;(*'Strokes array'*)
+               strokesarray:DoubleArray;(*'Strokes array'*)
                shapearray:GDBShapePropArray;(*'Shape array'*)
                Textarray:GDBTextPropArray;(*'Text array'*)
                desk:GDBAnsiString;(*'Description'*)
@@ -113,7 +113,7 @@ GDBLtypeArray= object(GDBNamedObjectsArray{-}<PGDBLtypeProp,GDBLtypeProp>{//})(*
                     function createltypeifneed(_source:PGDBLtypeProp;var _DestTextStyleTable:GDBTextStyleArray):PGDBLtypeProp;
                     function GetSystemLT(neededtype:TLTMode):PGDBLtypeProp;
                     procedure format;virtual;
-                    {function addlayer(name:GDBString;color:Integer;lw:Integer;oo,ll,pp:GDBBoolean;d:GDBString;lm:TLoadOpt):PGDBLayerProp;virtual;
+                    {function addlayer(name:GDBString;color:Integer;lw:Integer;oo,ll,pp:Boolean;d:GDBString;lm:TLoadOpt):PGDBLayerProp;virtual;
                     function GetSystemLayer:PGDBLayerProp;
                     function GetCurrentLayer:PGDBLayerProp;
                     function createlayerifneed(_source:PGDBLayerProp):PGDBLayerProp;
@@ -180,7 +180,7 @@ end;
 function GDBLtypeProp.GetLTString:GDBString;
 var
     TDI:PTDashInfo;
-    PStroke:PGDBDouble;
+    PStroke:PDouble;
     PSP:PShapeProp;
     PTP:PTextProp;
     ir2,ir3,ir4,ir5:itrec;
@@ -504,7 +504,7 @@ procedure GDBLtypeProp.CreateLineTypeFrom(var LT:GDBString);
 var
    element,subelement,{text_shape,font_style,}paramname:GDBString;
    j:integer;
-   stroke:GDBDouble;
+   stroke:Double;
    dinfo:TDashInfo;
    SP:ShapeProp;
    TP:TextProp;
@@ -705,7 +705,7 @@ begin
      strings.Destroy;
 end;
 
-constructor GDBDoubleArray.init(m:Integer);
+constructor DoubleArray.init(m:Integer);
 begin
   inherited init(m);
 end;

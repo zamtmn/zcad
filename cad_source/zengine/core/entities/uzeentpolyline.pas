@@ -29,23 +29,23 @@ type
 PGDBObjPolyline=^GDBObjPolyline;
 {REGISTEROBJECTTYPE GDBObjPolyline}
 GDBObjPolyline= object(GDBObjCurve)
-                 Closed:GDBBoolean;(*saved_to_shd*)
-                 constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:GDBBoolean);
+                 Closed:Boolean;(*saved_to_shd*)
+                 constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:Boolean);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f:TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure startsnap(out osp:os_record; out pdata:Pointer);virtual;
-                 function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
+                 function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
 
                  procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
                  function GetObjTypeName:GDBString;virtual;
-                 function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
-                 function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;virtual;
+                 function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
+                 function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;virtual;
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
-                 function GetLength:GDBDouble;virtual;
+                 function GetLength:Double;virtual;
 
                  class function CreateInstance:PGDBObjPolyline;static;
                  function GetObjType:TObjID;virtual;
@@ -53,7 +53,7 @@ GDBObjPolyline= object(GDBObjCurve)
 {Export-}
 implementation
 //uses log;
-function GDBObjPolyline.GetLength:GDBDouble;
+function GDBObjPolyline.GetLength:Double;
 var
    ptpv0,ptpv1:PGDBVertex;
 begin
@@ -78,7 +78,7 @@ begin
                                   end;
    result:=VertexArrayInWCS.onmouse(mf,closed);
 end;
-function GDBObjPolyline.onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;
+function GDBObjPolyline.onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;
 begin
      if VertexArrayInWCS.onpoint(point,closed) then
                                                 begin
@@ -195,7 +195,7 @@ var s{, layername}: GDBString;
   byt{, code}: Integer;
   //p: gdbvertex;
   hlGDBWord: Integer;
-  vertexgo: GDBBoolean;
+  vertexgo: Boolean;
   tv:gdbvertex;
 begin
   closed := false;
@@ -235,7 +235,7 @@ var s, layername: GDBString;
   byt, code: Integer;
   p: gdbvertex;
   hlGDBWord: LongWord;
-  vertexgo: GDBBoolean;
+  vertexgo: Boolean;
 begin
   closed := false;
   vertexgo := false;

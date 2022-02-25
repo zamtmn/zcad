@@ -159,11 +159,11 @@ type
 //    TuzvagslComParams=packed record       //определяем параметры команды которые будут видны в инспекторе во время выполнения команды
 //                                      //регистрировать их будем паскалевским RTTI
 //                                      //не через экспорт исходников и парсинг файла с определениями типов
-//  InverseX:gdbboolean;
-//  InverseY:gdbboolean;
+//  InverseX:Boolean;
+//  InverseY:Boolean;
 //  BaseName:gdbstring;
 //  NumberVar:gdbstring;
-//  option2:gdbboolean;
+//  option2:Boolean;
 //
 //end;
 
@@ -223,7 +223,7 @@ type
                          VIndex2:Integer; //номер 2-й вершниы по списку
                          VPoint1:GDBVertex;  //координаты 1й вершниы
                          VPoint2:GDBVertex;  //координаты 2й вершниы
-                         edgeLength:GDBDouble; // длина ребра
+                         edgeLength:Double; // длина ребра
       end;
       TListEdgeGraph=specialize TVector<TInfoEdgeGraph>;
 
@@ -1241,7 +1241,7 @@ begin
 end;
 
 //Проверка списка на дубликаты, при добавлении новой вершины, с учетом погрешности
-function dublicateVertex(listVertex:TListGraphVertex;addVertex:GDBVertex;inaccuracy:GDBDouble):Boolean;
+function dublicateVertex(listVertex:TListGraphVertex;addVertex:GDBVertex;inaccuracy:Double):Boolean;
 var
     i:integer;
 begin

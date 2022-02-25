@@ -203,11 +203,11 @@ begin
      pdrawing2^.HardReDraw;//redraw drawing on view area
 end;
 
-function CreateRandomDouble(len:GDBDouble):GDBDouble;inline;//create random double in [0..len] interval
+function CreateRandomDouble(len:Double):Double;inline;//create random double in [0..len] interval
 begin
      result:=random*len;
 end;
-function CreateRandomVertex(len,hanflen:GDBDouble;_3d:boolean):GDBVertex;//create random 3DVertex in [-hanflen..hanflen] interval
+function CreateRandomVertex(len,hanflen:Double;_3d:boolean):GDBVertex;//create random 3DVertex in [-hanflen..hanflen] interval
 begin
      result.x:=CreateRandomDouble(len)-hanflen;
      result.y:=CreateRandomDouble(len)-hanflen;
@@ -220,7 +220,7 @@ procedure SetEntityLayer(pobj:PGDBObjEntity;CurrentDrawing:PTSimpleDrawing);//se
 begin
      pobj^.vp.Layer:=CurrentDrawing^.LayerTable.getDataMutable(random(CurrentDrawing^.LayerTable.Count));
 end;
-function CreateRandomVertex2D(len,hanflen:GDBDouble):GDBVertex2D;//create random 2DVertex in [-hanflen..hanflen] interval
+function CreateRandomVertex2D(len,hanflen:Double):GDBVertex2D;//create random 2DVertex in [-hanflen..hanflen] interval
 begin
      result.x:=CreateRandomDouble(len)-hanflen;
      result.y:=CreateRandomDouble(len)-hanflen;

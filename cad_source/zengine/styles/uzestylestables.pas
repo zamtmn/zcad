@@ -29,7 +29,7 @@ TTableCellJustify=(jcl(*'TopLeft'*),
 PTGDBTableCellStyle=^TGDBTableCellStyle;
 {REGISTERRECORDTYPE TGDBTableCellStyle}
 TGDBTableCellStyle=record
-                          Width,TextWidth:GDBDouble;
+                          Width,TextWidth:Double;
                           CF:TTableCellJustify;
                     end;
 {REGISTEROBJECTTYPE GDBCellFormatArray}
@@ -39,7 +39,7 @@ PTGDBTableStyle=^TGDBTableStyle;
 {REGISTEROBJECTTYPE TGDBTableStyle}
 TGDBTableStyle= object(GDBNamedObject)
                      rowheight:Integer;
-                     textheight:gdbdouble;
+                     textheight:Double;
                      tblformat:GDBCellFormatArray;
                      HeadBlockName:GDBString;
                      constructor Init(n:GDBString);

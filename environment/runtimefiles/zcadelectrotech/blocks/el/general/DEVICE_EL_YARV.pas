@@ -9,11 +9,11 @@ var
    NameNumber:Integer;(*'Номер'*)
 
 
-   Power:GDBDouble;(*'Мощность расчетная, кВт'*)
-   PowerUst:GDBDouble;(*'Мощность установленная, кВт'*)
-   Current:GDBDouble;(*'Ток расчетный, А'*)
-   CurrentUst:GDBDouble;(*'Ток установленный, А'*)
-   CosPHI:GDBDouble;(*'Cos(фи)'*)
+   Power:Double;(*'Мощность расчетная, кВт'*)
+   PowerUst:Double;(*'Мощность установленная, кВт'*)
+   Current:Double;(*'Ток расчетный, А'*)
+   CurrentUst:Double;(*'Ток установленный, А'*)
+   CosPHI:Double;(*'Cos(фи)'*)
    Voltage:TVoltage;(*'Напряжение питания'*)
    Phase:TPhase;(*'Фаза'*)
 
@@ -28,7 +28,7 @@ var
    NumberInSleif:Integer;
 
 
-   EL_Cab_AddLength:GDBDouble;(*'Добавлять к длине кабеля'*)
+   EL_Cab_AddLength:Double;(*'Добавлять к длине кабеля'*)
 implementation
 begin
    Device_Type:=TDT_SilaIst;

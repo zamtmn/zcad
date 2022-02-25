@@ -29,10 +29,10 @@ type
 {REGISTEROBJECTTYPE GDBObjArc}
 PGDBObjArc=^GDBObjARC;
 GDBObjArc= object(GDBObjPlain)
-                 R:GDBDouble;(*saved_to_shd*)
-                 StartAngle:GDBDouble;(*saved_to_shd*)
-                 EndAngle:GDBDouble;(*saved_to_shd*)
-                 angle:GDBDouble;(*oi_readonly*)
+                 R:Double;(*saved_to_shd*)
+                 StartAngle:Double;(*saved_to_shd*)
+                 EndAngle:Double;(*saved_to_shd*)
+                 angle:Double;(*oi_readonly*)
                  Vertex3D_in_WCS_Array:GDBPoint3DArray;(*oi_readonly*)(*hidden_in_objinsp*)
                  q0:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
                  q1:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
@@ -40,7 +40,7 @@ GDBObjArc= object(GDBObjPlain)
                  pq0:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
                  pq1:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
                  pq2:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
-                 constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex;RR,S,E:GDBDouble);
+                 constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex;RR,S,E:Double);
                  constructor initnul;
                  procedure LoadFromDXF(var f:TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
@@ -55,8 +55,8 @@ GDBObjArc= object(GDBObjPlain)
                  procedure getoutbound(var DC:TDrawContext);virtual;
                  procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                  procedure projectpoint;virtual;
-                 function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
-                 function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
+                 function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
+                 function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
                  function beforertmodify:Pointer;virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  function IsRTNeedModify(const Point:PControlPointDesc; p:Pointer):Boolean;virtual;
@@ -65,13 +65,13 @@ GDBObjArc= object(GDBObjPlain)
                  procedure rtsave(refp:Pointer);virtual;
                  destructor done;virtual;
                  function GetObjTypeName:GDBString;virtual;
-                 function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
+                 function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                  procedure ReCalcFromObjMatrix;virtual;
                  procedure transform(const t_matrix:DMatrix4D);virtual;
                  //function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
-                 function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;virtual;
+                 function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
 
                  class function CreateInstance:PGDBObjArc;static;
@@ -107,7 +107,7 @@ begin
 
      Local.p_insert:=PGDBVertex(@objmatrix[3])^;}ReCalcFromObjMatrix;
 end;
-function GDBObjARC.onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;
+function GDBObjARC.onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;
 begin
      if Vertex3D_in_WCS_Array.onpoint(point,false) then
                                                                                   begin
@@ -173,7 +173,7 @@ begin
 end;
 function GDBObjARC.CalcTrueInFrustum;
 var i{,count}:Integer;
-    //d1,d2,d3,d4:gdbdouble;
+    //d1,d2,d3,d4:Double;
 begin
       for i:=0 to 5 do
       begin
@@ -244,14 +244,14 @@ procedure GDBObjArc.SaveToDXF;
 begin
   SaveToDXFObjPrefix(outhandle,'ARC','AcDbCircle',IODXFContext);
   dxfvertexout(outhandle,10,Local.p_insert);
-  dxfGDBDoubleout(outhandle,40,r);
+  dxfDoubleout(outhandle,40,r);
     SaveToDXFObjPostfix(outhandle);
 
   dxfGDBStringout(outhandle,100,'AcDbArc');
   //WriteString_EOL(outhandle, '100');
   //WriteString_EOL(outhandle, 'AcDbArc');
-  dxfGDBDoubleout(outhandle,50,startangle * 180 / pi);
-  dxfGDBDoubleout(outhandle,51,endangle * 180 / pi);
+  dxfDoubleout(outhandle,50,startangle * 180 / pi);
+  dxfDoubleout(outhandle,51,endangle * 180 / pi);
 end;
 procedure GDBObjARC.CalcObjMatrix;
 var m1:DMatrix4D;
@@ -314,7 +314,7 @@ begin
     EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
 end;
 procedure GDBObjARC.getoutbound;
-function getQuadrant(a:GDBDouble):integer;
+function getQuadrant(a:Double):integer;
 {
 2|1
 ---
@@ -351,7 +351,7 @@ begin
      end;
 end;
 var
-    sx,sy,ex,ey,minx,miny,maxx,maxy:GDBDouble;
+    sx,sy,ex,ey,minx,miny,maxx,maxy:Double;
     {i,}sq,eq,q:integer;
 begin
   vp.BoundingBox:=CreateBBFrom2Point(q0,q2);
@@ -425,7 +425,7 @@ end;
 procedure GDBObjARC.createpoints(var DC:TDrawContext);
 var
   i: Integer;
-  l: GDBDouble;
+  l: Double;
   v:GDBvertex;
   pv:GDBVertex;
   maxlod:integer;
@@ -467,7 +467,7 @@ end;
 procedure GDBObjARC.Renderfeedback;
 var //pm:DMatrix4D;
     tv:GDBvertex;
-    //d:GDBDouble;
+    //d:Double;
 begin
            {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(Local.p_insert,ProjP_insert);
            pprojoutbound^.clear;
@@ -505,7 +505,7 @@ end;
 procedure GDBObjARC.DrawGeometry;
 var
 //  i: Integer;
-    simply:GDBBoolean;
+    simply:Boolean;
 begin
   {oglsm.myglpushmatrix;
   glscaledf(r, r, 1);
@@ -581,9 +581,9 @@ begin
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
     if not dxfvertexload(f,10,byt,Local.P_insert) then
-    if not dxfGDBDoubleload(f,40,byt,r) then
-    if not dxfGDBDoubleload(f,50,byt,startangle) then
-    if not dxfGDBDoubleload(f,51,byt,endangle) then {s := }f.readgdbstring;
+    if not dxfDoubleload(f,40,byt,r) then
+    if not dxfDoubleload(f,50,byt,startangle) then
+    if not dxfDoubleload(f,51,byt,endangle) then {s := }f.readgdbstring;
     byt:=readmystrtoint(f);
   end;
   startangle := startangle * pi / 180;
@@ -661,7 +661,7 @@ begin
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
 end;
 function GDBObjARC.getsnap;
-//var t,d,e:GDBDouble;
+//var t,d,e:Double;
   //  tv,n,v:gdbvertex;
 begin
      if onlygetsnapcount=4 then
@@ -736,7 +736,7 @@ begin
 end;
 
 procedure GDBObjARC.rtmodifyonepoint(const rtmod:TRTModifyData);
-var //a,b,c,d,e,f,g,p_x,p_y,rr:GDBDouble;
+var //a,b,c,d,e,f,g,p_x,p_y,rr:Double;
     //tv:gdbvertex2d;
     tv3d:gdbvertex;
     ptdata:tarcrtmodify;

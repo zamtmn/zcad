@@ -16,7 +16,7 @@ var
    SerialConnection:Integer;
 
 
-   EL_Cab_AddLength:GDBDouble;(*'Добавлять к длине кабеля'*)
+   EL_Cab_AddLength:Double;(*'Добавлять к длине кабеля'*)
 implementation
 begin
    DB_link:='С2000-БИ';

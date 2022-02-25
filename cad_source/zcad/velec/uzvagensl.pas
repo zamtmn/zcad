@@ -198,7 +198,7 @@ type
                          VIndex2:Integer; //номер 2-й вершниы по списку
                          VPoint1:GDBVertex;  //координаты 1й вершниы
                          VPoint2:GDBVertex;  //координаты 2й вершниы
-                         edgeLength:GDBDouble; // длина ребра
+                         edgeLength:Double; // длина ребра
       end;
       TListEdgeGraph=specialize TVector<TEdgeGraph>;
 

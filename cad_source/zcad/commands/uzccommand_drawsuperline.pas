@@ -75,7 +75,7 @@ PTDrawSuperlineParams=^TDrawSuperlineParams;
 TDrawSuperlineParams=record
                          pu:PTUnit;                //рантайм юнит с параметрами суперлинии
                          LayerNamePrefix:GDBString;//префикс
-                         ProcessLayer:GDBBoolean;  //выключатель
+                         ProcessLayer:Boolean;  //выключатель
                      end;
 var
    DrawSuperlineParams:TDrawSuperlineParams;
@@ -84,7 +84,7 @@ var
 
 implementation
 
-function GetInteractiveLine(prompt1,prompt2:GDBString;out p1,p2:GDBVertex):GDBBoolean;
+function GetInteractiveLine(prompt1,prompt2:GDBString;out p1,p2:GDBVertex):Boolean;
 var
     pline:PGDBObjLine;
 begin

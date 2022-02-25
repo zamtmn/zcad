@@ -32,7 +32,7 @@ GDBObjGenericDimension= object(GDBObjWithLocalCS)
                       DimData:TDXFDimData;
                       PDimStyle:PGDBDimStyle;
                       DimType:TDimType;
-                      a50,a52:GDBDouble;
+                      a50,a52:Double;
                       constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                       constructor initnul(owner:PGDBObjGenericWithSubordinated);
                       procedure LoadFromDXF(var f: TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
@@ -121,8 +121,8 @@ begin
                       if not dxfvertexload(f,15,byt,DimData.P15InWCS) then
                          if not dxfvertexload(f,16,byt,DimData.P16InOCS) then
                             if not dxfGDBIntegerload(f,70,byt,dtype) then
-                               if not dxfGDBDoubleload(f,50,byt,a50) then
-                                  if not dxfGDBDoubleload(f,52,byt,a52) then
+                               if not dxfDoubleload(f,50,byt,a50) then
+                                  if not dxfDoubleload(f,52,byt,a52) then
                             if dxfGDBStringload(f,3,byt,style)then
                                                                   begin
                                                                        PDimStyle:=drawing.GetDimStyleTable^.getAddres(Style);

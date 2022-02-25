@@ -48,7 +48,7 @@ GDBObjRadialDimension= object(GDBObjDiametricDimension)
                         function P10ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                         function P15ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                         function P11ChangeTo(tv:GDBVertex):GDBVertex;virtual;
-                        function GetRadius:GDBDouble;virtual;
+                        function GetRadius:Double;virtual;
 
                         procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                         function GetObjType:TObjID;virtual;
@@ -70,7 +70,7 @@ begin
   dxfvertexout(outhandle,15,DimData.P15InWCS)
 end;
 
-function GDBObjRadialDimension.GetRadius:GDBDouble;
+function GDBObjRadialDimension.GetRadius:Double;
 begin
      result:=Vertexlength(DimData.P15InWCS,DimData.P10InWCS);
 end;

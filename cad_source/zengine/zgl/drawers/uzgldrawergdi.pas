@@ -53,7 +53,7 @@ PTGDIData=^TGDIData;
 {REGISTERRECORDTYPE TGDIData}
 TGDIData=record
           RD_TextRendering:TTextRenderingType;
-          RD_DrawDebugGeometry:GDBBoolean;
+          RD_DrawDebugGeometry:Boolean;
           DebugCounter:TGDIPrimitivesCounter;
           RD_Renderer:GDBString;(*'Device'*)(*oi_readonly*)
           RD_Version:GDBString;(*'Version'*)(*oi_readonly*)

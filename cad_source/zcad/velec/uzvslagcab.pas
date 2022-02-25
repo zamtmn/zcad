@@ -63,10 +63,10 @@ Tuzvslagcab_com=object(CommandRTEdObject)//определяем тип - объ�
 PTuzvslagcabComParams=^TuzvslagcabComParams;//указатель на тип данных параметров команды. зкад работает с ними через указатель
 
 TsettingVizCab=record
-  sErrors:gdbboolean;
-  vizNumMetric:gdbboolean;
-  vizFullTreeCab:gdbboolean;
-  vizEasyTreeCab:gdbboolean;
+  sErrors:Boolean;
+  vizNumMetric:Boolean;
+  vizFullTreeCab:Boolean;
+  vizEasyTreeCab:Boolean;
 end;
 
 TuzvslagcabComParams=record       //определяем параметры команды которые будут видны в инспекторе во время выполнения команды
@@ -74,8 +74,8 @@ TuzvslagcabComParams=record       //определяем параметры ко
                                       //не через экспорт исходников и парсинг файла с определениями типов
   NamesList:TEnumData;//это тип для отображения списков в инспекторе
   //nameSL:gdbstring;
-  accuracy:gdbdouble;
-  metricDev:gdbboolean;
+  accuracy:Double;
+  metricDev:Boolean;
   settingVizCab:TsettingVizCab;
 
 end;

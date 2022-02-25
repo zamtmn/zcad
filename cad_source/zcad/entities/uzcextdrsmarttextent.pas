@@ -34,7 +34,7 @@ type
   TSmartTextEntExtender=class(TBaseEntityExtender)
     GoodLayer,BadLayer:GDBString;
     VariableName:GDBString;
-    Inverse:GDBBoolean;
+    Inverse:Boolean;
     class function getExtenderName:string;override;
     constructor Create(pEntity:Pointer);override;
     procedure Assign(Source:TBaseExtender);override;

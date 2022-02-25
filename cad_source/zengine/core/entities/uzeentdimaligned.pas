@@ -73,7 +73,7 @@ GDBObjAlignedDimension= object(GDBObjDimension)
                        function GetObjType:TObjID;virtual;
                    end;
 {EXPORT-}
-function CorrectPointLine(q:GDBvertex;p1,p2:GDBvertex;out d:GDBDouble):GDBVertex;
+function CorrectPointLine(q:GDBvertex;p1,p2:GDBvertex;out d:Double):GDBVertex;
 function GetTFromDirNormalizedPoint(q:GDBvertex;var p1,dirNormalized:GDBvertex):double;
 implementation
 function GDBObjAlignedDimension.GetDimStr(var drawing:TDrawingDef):TDXFEntsInternalStringType;
@@ -81,9 +81,9 @@ begin
      result:=GetLinearDimStr(abs(scalardot(vertexsub(DimData.P14InWCS,DimData.P13InWCS),vectorD)),drawing);
 end;
 
-function CorrectPointLine(q:GDBvertex;p1,p2:GDBvertex;out d:GDBDouble):GDBVertex;
+function CorrectPointLine(q:GDBvertex;p1,p2:GDBvertex;out d:Double):GDBVertex;
 var w,l:GDBVertex;
-    dist,llength:GDBDouble;
+    dist,llength:Double;
 begin
      //расстояние от точки до линии
      w:=VertexSub(q,p1);
@@ -106,9 +106,9 @@ begin
               else
                   result:=p2;
 end;
-function SetPointLine(d:GDBDouble;q:GDBvertex;p1,p2:GDBvertex):GDBVertex;
+function SetPointLine(d:Double;q:GDBvertex;p1,p2:GDBvertex):GDBVertex;
 var w,l:GDBVertex;
-    dist:GDBDouble;
+    dist:Double;
 begin
      w:=VertexSub(q,p1);
      l:=VertexSub(p2,p1);
@@ -154,7 +154,7 @@ begin
 end;
 function GDBObjAlignedDimension.P10ChangeTo(tv:GDBVertex):GDBVertex;
 var
-    t,tl:GDBDouble;
+    t,tl:Double;
     temp:GDBVertex;
 begin
      if uzegeometry.sqrVertexlength(tv,DimData.P14InWCS)>sqreps then
@@ -175,7 +175,7 @@ begin
 end;
 function GDBObjAlignedDimension.P11ChangeTo(tv:GDBVertex):GDBVertex;
 var
-    t,tl:GDBDouble;
+    t,tl:Double;
     tvertex,temp:GDBVERTEX;
 begin
      result:=tv;
@@ -204,7 +204,7 @@ X (13,23,33)     X (14,24,34)
 *)
 function GDBObjAlignedDimension.P13ChangeTo(tv:GDBVertex):GDBVertex;
 var
-    t,dir:GDBDouble;
+    t,dir:Double;
     tvertex:GDBVERTEX;
 begin
      result:=tv;
@@ -241,7 +241,7 @@ begin
 end;
 function GDBObjAlignedDimension.P14ChangeTo(tv:GDBVertex):GDBVertex;
 var
-    t,dir:GDBDouble;
+    t,dir:Double;
     tvertex:GDBVERTEX;
 begin
      result:=tv;

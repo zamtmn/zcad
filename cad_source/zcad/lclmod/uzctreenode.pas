@@ -291,8 +291,8 @@ begin
      begin
           if pvd^.data.PTD.getfacttypedef=@FundamentalBooleanDescriptorOdj then
                                                         begin
-                                                             PGDBBoolean(pvd^.data.Addr.Instance)^:=not PGDBBoolean(pvd^.data.Addr.Instance)^;
-                                                             Checked:=PGDBBoolean(pvd^.data.Addr.Instance)^;
+                                                             PBoolean(pvd^.data.Addr.Instance)^:=not PBoolean(pvd^.data.Addr.Instance)^;
+                                                             Checked:=PBoolean(pvd^.data.Addr.Instance)^;
                                                         end
           else if fmask<>0 then
                                begin
@@ -363,7 +363,7 @@ begin
           enabled:=true;
           if pvd^.data.PTD=@FundamentalBooleanDescriptorOdj then
                                                         begin
-                                                             Checked:=PGDBBoolean(pvd^.data.Addr.Instance)^;
+                                                             Checked:=PBoolean(pvd^.data.Addr.Instance)^;
                                                         end
           else if fmask<>0 then
                                begin
@@ -589,7 +589,7 @@ begin
           enabled:=true;
           if pvd^.data.PTD=@FundamentalBooleanDescriptorOdj then
                                                         begin
-                                                             self.Down:=PGDBBoolean(pvd^.data.Addr.Instance)^;
+                                                             self.Down:=PBoolean(pvd^.data.Addr.Instance)^;
                                                         end
           else if fmask<>0 then
                                begin
@@ -636,8 +636,8 @@ begin
      begin
           if pvd^.data.PTD=@FundamentalBooleanDescriptorOdj then
                                                         begin
-                                                             PGDBBoolean(pvd^.data.Addr.Instance)^:=not PGDBBoolean(pvd^.data.Addr.Instance)^;
-                                                             self.Down:=PGDBBoolean(pvd^.data.Addr.Instance)^;
+                                                             PBoolean(pvd^.data.Addr.Instance)^:=not PBoolean(pvd^.data.Addr.Instance)^;
+                                                             self.Down:=PBoolean(pvd^.data.Addr.Instance)^;
                                                         end
           else if fmask<>0 then
                                begin

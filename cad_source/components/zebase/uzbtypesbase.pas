@@ -29,18 +29,15 @@ SizeInt=Integer;
 DWord=LongWord;
 {$ENDIF}
 {EXPORT+}
-PGDBDouble=^GDBDouble;
-{-}GDBDouble=type Double;{/GDBDouble=Double;/}
-
 PGDBString=^GDBString;
 {-}GDBString=type ansistring;{/GDBString=string;/}
 
 PGDBAnsiString=^GDBAnsiString;
 {-}GDBAnsiString=type ansistring;{/GDBAnsiString=ansistring;/}
 
-PGDBBoolean=^GDBBoolean;
-{-}GDBBoolean=type boolean;{/GDBBoolean=Boolean;/}
+PBoolean=^Boolean;
 PInteger=^Integer;
+PDouble=^Double;
 {EXPORT-}
 
 implementation

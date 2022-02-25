@@ -33,7 +33,7 @@ uses
 implementation
 var
    c1,c2:integer;
-   distlen:gdbdouble;
+   distlen:Double;
    oldpoint,point:gdbvertex;
 function Dist_com_CommandStart(operands:TCommandOperands):TCommandResult;
 begin
@@ -47,7 +47,7 @@ procedure Dist_com_CommandCont;
 var
    cs:integer;
    vd:vardesk;
-   len:gdbdouble;
+   len:Double;
 begin
      cs:=commandmanager.GetValueHeap;
      if cs=c1 then

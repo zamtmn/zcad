@@ -33,7 +33,7 @@ GDBObjSolid= object(GDBObjWithLocalCS)
                  PInWCS:OutBound4V;(*'Coordinates WCS'*)(*hidden_in_objinsp*)
                  PInDCS:OutBound4V;(*'Coordinates DCS'*)(*hidden_in_objinsp*)
                  normal:GDBVertex;
-                 triangle:GDBBoolean;
+                 triangle:Boolean;
                  n,p1,p2,p3:GDBVertex3S;
                  //ProjPoint:GDBvertex;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex);
@@ -44,10 +44,10 @@ GDBObjSolid= object(GDBObjWithLocalCS)
                  procedure createpoint;virtual;
 
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
-                 function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
+                 function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                  procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
-                 //function getsnap(var osp:os_record):GDBBoolean;virtual;
-                 function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
+                 //function getsnap(var osp:os_record):Boolean;virtual;
+                 function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                  procedure addcontrolpoints(tdesc:Pointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
@@ -315,7 +315,7 @@ begin
     result:=true;
 end;
 function GDBObjSolid.CalcTrueInFrustum;
-//var //d1:GDBDouble;
+//var //d1:Double;
     //i:integer;
 begin
       result:=CalcOutBound4VInFrustum(PInWCS,frustum);

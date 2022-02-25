@@ -143,7 +143,7 @@ type
     procedure ShowCXMenu;
     procedure ShowFMenu;
     procedure MainMouseMove;
-    function MainMouseDown(Sender:TAbstractViewArea):GDBBoolean;
+    function MainMouseDown(Sender:TAbstractViewArea):Boolean;
     procedure MainMouseUp;
     procedure IPCMessage(Sender: TObject);
     {$ifdef windows}procedure SetTop;{$endif}
@@ -164,7 +164,7 @@ var
   //OLDColor:integer;
   ProcessBar:TProgressBar;
   //StoreBackTraceStrFunc:TBackTraceStrFunc;//this unneed after fpc rev 31026 see http://bugs.freepascal.org/view.php?id=13518
-  function IsRealyQuit:GDBBoolean;
+  function IsRealyQuit:Boolean;
 
 implementation
 {$R *.lfm}
@@ -425,7 +425,7 @@ begin
      SetArrayTop(@CommandsHistory,Command,Command,'');
      CheckArray(@CommandsHistory,low(Commandshistory),high(Commandshistory));
 end;
-function IsRealyQuit:GDBBoolean;
+function IsRealyQuit:Boolean;
 var
    pint:PInteger;
    //mem:TZctnrVectorBytes;
@@ -1269,7 +1269,7 @@ procedure TZCADMainWindow.MainMouseMove;
 begin
      cxmenumgr.reset;
 end;
-function TZCADMainWindow.MainMouseDown(Sender:TAbstractViewArea):GDBBoolean;
+function TZCADMainWindow.MainMouseDown(Sender:TAbstractViewArea):Boolean;
 begin
      ZCMsgCallBackInterface.Do_SetNormalFocus;
      //if @SetCurrentDWGProc<>nil then

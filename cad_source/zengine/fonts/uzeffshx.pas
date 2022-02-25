@@ -25,13 +25,13 @@ uses uzgprimitivescreator,uzglvectorobject,uzefontmanager,uzefontshx,uzegeometry
      gzctnrvectortypes,uzbLogIntf;
 const
   arccount=16;
-  fontdirect:array[0..$F,0..1] of GDBDouble=
+  fontdirect:array[0..$F,0..1] of Double=
   ((1,0),(1,0.5),(1,1),(0.5,1),(0,1),(-0.5,1),(-1,1),(-1,0.5),(-1,0),(-1,-0.5),(-1,-1),(-0.5,-1),(0,-1),(0.5,-1),(1,-1),(1,-0.5));
 type ptsyminfo=^tsyminfo;
      tsyminfo=record
                            number,size:word;
                      end;
-function createnewfontfromshx(name:GDBString;var pf:PGDBfont):GDBBoolean;
+function createnewfontfromshx(name:GDBString;var pf:PGDBfont):Boolean;
 
 implementation
 
@@ -45,7 +45,7 @@ var
   subsymbol:Integer;
   int:Integer;
   dx,dy:Shortint;
-  draw:GDBBoolean;
+  draw:Boolean;
   onlyver:Integer;
   psyminfo,psubsyminfo:PGDBsymdolinfo;
   inccounter:integer;
@@ -686,7 +686,7 @@ begin
      Getmem(result,sizeof(SHXFont));
      result^.init;
 end;
-function createnewfontfromshx(name:GDBString;var pf:PGDBfont):GDBBoolean;
+function createnewfontfromshx(name:GDBString;var pf:PGDBfont):Boolean;
 var
    //f:filestream;
    line{,sub}:GDBANSIString;

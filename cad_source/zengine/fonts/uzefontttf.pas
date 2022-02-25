@@ -45,7 +45,7 @@ TTFFont= object({SHXFont}BASEFont)
               procedure ProcessTriangleData(si:PGDBsymdolinfo);
               constructor init;
               destructor done;virtual;
-              function IsCanSystemDraw:GDBBoolean;virtual;
+              function IsCanSystemDraw:Boolean;virtual;
               procedure SetupSymbolLineParams(const matr:DMatrix4D; var SymsParam:TSymbolSParam);virtual;
         end;
 
@@ -231,7 +231,7 @@ var
    x1,y1:fontfloat;
    cends,lastoncurve:integer;
    startcountur:boolean;
-   k:gdbdouble;
+   k:Double;
    tesselator:TessObj;
    lastv:GDBFontVertex2D;
    tparrayindex:integer;
@@ -458,7 +458,7 @@ begin
                                            //SymsParam.pfont:=@self;
                                       end
 end;
-function TTFFont.IsCanSystemDraw:GDBBoolean;
+function TTFFont.IsCanSystemDraw:Boolean;
 begin
      result:=true;
 end;

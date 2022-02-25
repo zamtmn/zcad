@@ -117,7 +117,7 @@ TSymbolSParam=record
                    FirstSymMatr:DMatrix4D;
                    sx,Rotate,Oblique,NeededFontHeight{,offsety}:Single;
                    pfont:pointer;
-                   IsCanSystemDraw:GDBBoolean;
+                   IsCanSystemDraw:Boolean;
              end;
 PTLLSymbol=^TLLSymbol;
 {---REGISTEROBJECTTYPE TLLSymbol}
@@ -139,7 +139,7 @@ TLLSymbol= object(TLLPrimitive)
 PTLLSymbolLine=^TLLSymbolLine;
 {---REGISTEROBJECTTYPE TLLSymbolLine}
 TLLSymbolLine= object(TLLPrimitive)
-              SimplyDrawed:GDBBoolean;
+              SimplyDrawed:Boolean;
               MaxSqrSymH:Single;
               SymbolsParam:TSymbolSParam;
               FirstOutBoundIndex,LastOutBoundIndex:TLLVertexIndex;
@@ -157,7 +157,7 @@ PTLLPolyLine=^TLLPolyLine;
 {---REGISTEROBJECTTYPE TLLPolyLine}
 TLLPolyLine= object(TLLPrimitive)
               P1Index,Count,SimplifiedContourIndex,SimplifiedContourSize:TLLVertexIndex;
-              Closed:GDBBoolean;
+              Closed:Boolean;
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData):Integer;virtual;
               function CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;virtual;
               procedure getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);virtual;
@@ -531,7 +531,7 @@ function TLLSymbol.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomDa
 {TODO: this need rewrite}
 var
    {i,}index,minsymbolsize:integer;
-   sqrparamsize:gdbdouble;
+   sqrparamsize:Double;
    PLLSymbolLine:PTLLSymbolLine;
    PSymbolsParam:PTSymbolSParam;
 begin

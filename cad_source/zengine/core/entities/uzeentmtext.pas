@@ -33,11 +33,11 @@ type
 PGDBObjMText=^GDBObjMText;
 {REGISTEROBJECTTYPE GDBObjMText}
 GDBObjMText= object(GDBObjText)
-                 width:GDBDouble;(*saved_to_shd*)
-                 linespace:GDBDouble;(*saved_to_shd*)(*oi_readonly*)
-                 linespacef:GDBDouble;(*saved_to_shd*)
+                 width:Double;(*saved_to_shd*)
+                 linespace:Double;(*saved_to_shd*)(*oi_readonly*)
+                 linespacef:Double;(*saved_to_shd*)
                  text:XYZWGDBGDBStringArray;(*oi_readonly*)(*hidden_in_objinsp*)
-                 constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:TDXFEntsInternalStringType;p:GDBvertex;s,o,w,a:GDBDouble;j:TTextJustify;wi,l:GDBDouble);
+                 constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:TDXFEntsInternalStringType;p:GDBvertex;s,o,w,a:Double;j:TTextJustify;wi,l:Double);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f: TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
                  procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
@@ -57,10 +57,10 @@ GDBObjMText= object(GDBObjText)
                  function GetObjType:TObjID;virtual;
             end;
 {Export-}
-procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:GDBDouble;content:TDXFEntsInternalStringType;var text:XYZWGDBGDBStringArray);
-function GetLinesH(linespace,size:GDBDouble;var lines:XYZWGDBGDBStringArray):GDBDouble;
-function GetLinesW(var lines:XYZWGDBGDBStringArray):GDBDouble;
-function GetLineSpaceFromLineSpaceF(linespacef,size:GDBDouble):GDBDouble;
+procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:Double;content:TDXFEntsInternalStringType;var text:XYZWGDBGDBStringArray);
+function GetLinesH(linespace,size:Double;var lines:XYZWGDBGDBStringArray):Double;
+function GetLinesW(var lines:XYZWGDBGDBStringArray):Double;
+function GetLineSpaceFromLineSpaceF(linespacef,size:Double):Double;
 implementation
 procedure GDBObjMText.FormatAfterDXFLoad;
 begin
@@ -119,18 +119,18 @@ function GDBObjMText.GetObjType;
 begin
      result:=GDBMtextID;
 end;
-function GetLineSpaceFromLineSpaceF(linespacef,size:GDBDouble):GDBDouble;
+function GetLineSpaceFromLineSpaceF(linespacef,size:Double):Double;
 begin
     result:=size*linespacef*5/3;
 end;
-function GetLinesH(linespace,size:GDBDouble;var lines:XYZWGDBGDBStringArray):GDBDouble;
+function GetLinesH(linespace,size:Double;var lines:XYZWGDBGDBStringArray):Double;
 begin
   if lines.count > 0 then
     result := (lines.count - 1) * linespace + size
   else
     result := 0;
 end;
-function GetLinesW(var lines:XYZWGDBGDBStringArray):GDBDouble;
+function GetLinesW(var lines:XYZWGDBGDBStringArray):Double;
 var
   pswp:pGDBStrWithPoint;
   ir:itrec;
@@ -150,11 +150,11 @@ begin
                else
                    result:=0;
 end;
-procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:GDBDouble;content:TDXFEntsInternalStringType;var text:XYZWGDBGDBStringArray);
+procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:Double;content:TDXFEntsInternalStringType;var text:XYZWGDBGDBStringArray);
 var
-  canbreak: GDBBoolean;
+  canbreak: Boolean;
   currsymbol, lastbreak, lastcanbreak: Integer;
-  linewidth, lastlinewidth, maxlinewidth,lastsymspace: GDBDouble;
+  linewidth, lastlinewidth, maxlinewidth,lastsymspace: Double;
   currline:TDXFEntsInternalStringType;
   swp:GDBStrWithPoint;
   psyminfo:PGDBsymdolinfo;
@@ -285,7 +285,7 @@ end;
 procedure GDBObjMText.FormatContent(var drawing:TDrawingDef);
 var
   i: Integer;
-  h, angle: GDBDouble;
+  h, angle: Double;
   pswp:pGDBStrWithPoint;
     ir:itrec;
   psyminfo:PGDBsymdolinfo;
@@ -534,7 +534,7 @@ end;
 procedure GDBObjMText.getoutbound;
 var  v:GDBvertex4D;
      dm:dmatrix4d;
-    t,b,l,r,n,f,xstart,ystart:GDBDouble;
+    t,b,l,r,n,f,xstart,ystart:Double;
     i:integer;
 begin
   //exit;
@@ -662,7 +662,7 @@ var
   pswp:pGDBStrWithPoint;
       ir:itrec;
   pl:GDBPoint3DArray;
-  ispl:gdbboolean;
+  ispl:Boolean;
   pfont:pgdbfont;
   ln,l:Integer;
 
@@ -904,7 +904,7 @@ procedure GDBObjMText.LoadFromDXF;
 var //s{, layername}: GDBString;
   byt{, code}: Integer;
   ux: gdbvertex;
-  angleload: GDBBoolean;
+  angleload: Boolean;
   angle:double;
   j:Integer;
   style,ttemplate:GDBString;
@@ -924,14 +924,14 @@ begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
     if not dxfvertexload(f,10,byt,Local.P_insert) then
     if not dxfvertexload(f,11,byt,ux) then
-    if not dxfGDBDoubleload(f,40,byt,textprop.size) then
-    if not dxfGDBDoubleload(f,41,byt,width) then
-    if not dxfGDBDoubleload(f,44,byt,linespacef) then
-    if not dxfGDBDoubleload(f,51,byt,textprop.oblique) then
+    if not dxfDoubleload(f,40,byt,textprop.size) then
+    if not dxfDoubleload(f,41,byt,width) then
+    if not dxfDoubleload(f,44,byt,linespacef) then
+    if not dxfDoubleload(f,51,byt,textprop.oblique) then
     if not dxfGDBIntegerload(f,71,byt,j)then
     if not dxfGDBStringload(f,1,byt,ttemplate)then
     if not dxfGDBStringload(f,3,byt,ttemplate)then
-    if dxfGDBDoubleload(f,50,byt,angle) then angleload := true
+    if dxfDoubleload(f,50,byt,angle) then angleload := true
 
     else if     dxfGDBStringload(f,7,byt,style)then
                                                  begin
@@ -992,8 +992,8 @@ begin
   ul:=false;
   SaveToDXFObjPrefix(outhandle,'MTEXT','AcDbMText',IODXFContext);
   dxfvertexout(outhandle,10,Local.p_insert);
-  dxfGDBDoubleout(outhandle,40,textprop.size);
-  dxfGDBDoubleout(outhandle,41,width);
+  dxfDoubleout(outhandle,40,textprop.size);
+  dxfDoubleout(outhandle,41,width);
   dxfGDBIntegerout(outhandle,71,j2b[textprop.justify]{ord(textprop.justify)+1});
   quotedcontent:=StringReplace(content,TDXFEntsInternalStringType(#10),TDXFEntsInternalStringType('\P'),[rfReplaceAll]);
   if  convertfromunicode(template)=quotedcontent then
@@ -1020,7 +1020,7 @@ begin
   SaveToDXFObjPostfix(outhandle);
   dxfvertexout(outhandle,11,Local.basis.ox);
   dxfGDBIntegerout(outhandle,73,2);
-  dxfGDBDoubleout(outhandle,44,3 * linespace / (5 * textprop.size));
+  dxfDoubleout(outhandle,44,3 * linespace / (5 * textprop.size));
 end;
 function AllocMText:PGDBObjMText;
 begin

@@ -30,13 +30,13 @@ type
 PGDBTextProp=^GDBTextProp;
 {REGISTERRECORDTYPE GDBTextProp}
 GDBTextProp=record
-                  size:GDBDouble;(*saved_to_shd*)
-                  oblique:GDBDouble;(*saved_to_shd*)
-                  wfactor:GDBDouble;(*saved_to_shd*)
-                  aaaangle:GDBDouble;(*saved_to_shd*)
+                  size:Double;(*saved_to_shd*)
+                  oblique:Double;(*saved_to_shd*)
+                  wfactor:Double;(*saved_to_shd*)
+                  aaaangle:Double;(*saved_to_shd*)
                   justify:TTextJustify;(*saved_to_shd*)
-                  upsidedown:GDBBoolean;
-                  backward:GDBBoolean;
+                  upsidedown:Boolean;
+                  backward:Boolean;
             end;
 PGDBObjAbstractText=^GDBObjAbstractText;
 {REGISTEROBJECTTYPE GDBObjAbstractText}
@@ -49,21 +49,21 @@ GDBObjAbstractText= object(GDBObjPlainWithOX)
                          procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                          procedure SimpleDrawGeometry(var DC:TDrawContext);virtual;
                          procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
-                         function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
+                         function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                          function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
-                         function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
+                         function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                          //function InRect:TInRect;virtual;
                          procedure addcontrolpoints(tdesc:Pointer);virtual;
                          procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                          procedure ReCalcFromObjMatrix;virtual;
-                         function CalcRotate:GDBDouble;virtual;
+                         function CalcRotate:Double;virtual;
                          procedure FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);virtual;
-                         procedure setrot(r:GDBDouble);
+                         procedure setrot(r:Double);
                          procedure transform(const t_matrix:DMatrix4D);virtual;
                    end;
 {EXPORT-}
 var
-   SysVarRDPanObjectDegradation:GDBBoolean=false;
+   SysVarRDPanObjectDegradation:Boolean=false;
 implementation
 //uses
 //   log;
@@ -86,7 +86,7 @@ begin
 
   inherited;
 end;
-procedure GDBObjAbstractText.setrot(r:GDBDouble);
+procedure GDBObjAbstractText.setrot(r:Double);
 var m1:DMatrix4D;
 begin
 m1:=onematrix;
@@ -160,7 +160,7 @@ begin
      //Local.basis.ox:=ox;
 end;
 
-function GDBObjAbstractText.CalcRotate:GDBDouble;
+function GDBObjAbstractText.CalcRotate:Double;
 (*var
     ox:gdbvertex;
 begin
@@ -188,7 +188,7 @@ begin
 end;*)
 var
     v1,v2:GDBVertex;
-    l1,l0:GDBDouble;
+    l1,l0:Double;
     //a0,a1,a:double;
 begin
 
@@ -254,7 +254,7 @@ begin
 end;*)
 function GDBObjAbstractText.onmouse;
 var //i,counter:Integer;
-    //d:GDBDouble;
+    //d:Double;
     //ptpv0,ptpv1:PGDBPolyVertex3D;
     subresult:TInBoundingVolume;
 begin
@@ -333,7 +333,7 @@ begin
 end;
 function GDBObjAbstractText.CalcTrueInFrustum;
 //var i,count:Integer;
-//    d1,d2,d3,d4:gdbdouble;
+//    d1,d2,d3,d4:Double;
 begin
       result:=CalcOutBound4VInFrustum(outbound,frustum);
       if result<>IRPartially then
@@ -373,7 +373,7 @@ begin
 end;
 procedure GDBObjAbstractText.CalcObjMatrix;
 var m1,m2,m3:DMatrix4D;
-    angle:GDBDouble;
+    angle:Double;
 begin
   inherited CalcObjMatrix;
   if textprop.upsidedown then

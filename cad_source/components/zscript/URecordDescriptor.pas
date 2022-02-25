@@ -559,7 +559,7 @@ end;
 function RecordDescriptor.GetValueAsString(pinstance:Pointer):TInternalScriptString;
 var pd:PFieldDescriptor;
     ir:itrec;
-    notfirst:gdbboolean;
+    notfirst:Boolean;
 begin
      result:='(';
      notfirst:=false;

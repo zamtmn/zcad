@@ -41,7 +41,7 @@ const
      CEDWGNChanged=2;
      EmptyCommandOperands='';
 type
-TInteractiveProcObjBuild=procedure(const PInteractiveData:Pointer;Point:GDBVertex;Click:GDBBoolean);
+TInteractiveProcObjBuild=procedure(const PInteractiveData:Pointer;Point:GDBVertex;Click:Boolean);
     TGetInputPossible=(GPIempty//возможность пустого ввода
                       );
     TGetInputMode=set of TGetInputPossible;//возможности ввода
@@ -85,13 +85,13 @@ TInteractiveProcObjBuild=procedure(const PInteractiveData:Pointer;Point:GDBVerte
     CommandGDBString:GDBString;(*hidden_in_objinsp*)
     savemousemode: Byte;(*hidden_in_objinsp*)
     mouseclic: Integer;(*hidden_in_objinsp*)
-    dyn:GDBBoolean;(*hidden_in_objinsp*)
-    overlay:GDBBoolean;(*hidden_in_objinsp*)
+    dyn:Boolean;(*hidden_in_objinsp*)
+    overlay:Boolean;(*hidden_in_objinsp*)
     CStartAttrEnableAttr:TCStartAttr;(*hidden_in_objinsp*)
     CStartAttrDisableAttr:TCStartAttr;(*hidden_in_objinsp*)
     CEndActionAttr:TCEndAttr;(*hidden_in_objinsp*)
     pdwg:Pointer;(*hidden_in_objinsp*)
-    NotUseCommandLine:GDBBoolean;(*hidden_in_objinsp*)
+    NotUseCommandLine:Boolean;(*hidden_in_objinsp*)
     IData:TInteractiveData;(*hidden_in_objinsp*)
     procedure CommandStart(Operands:TCommandOperands); virtual; abstract;
     procedure CommandEnd; virtual; abstract;
@@ -101,7 +101,7 @@ TInteractiveProcObjBuild=procedure(const PInteractiveData:Pointer;Point:GDBVerte
     destructor done;virtual;
     constructor init(cn:GDBString;SA,DA:TCStartAttr);
     function GetObjTypeName:GDBString;virtual;
-    function IsRTECommand:GDBBoolean;virtual;
+    function IsRTECommand:Boolean;virtual;
     procedure CommandContinue; virtual;
   end;
   {REGISTEROBJECTTYPE CommandFastObjectDef}
@@ -121,7 +121,7 @@ TInteractiveProcObjBuild=procedure(const PInteractiveData:Pointer;Point:GDBVerte
     function MouseMoveCallback(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
     function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
-    function IsRTECommand:GDBBoolean;virtual;
+    function IsRTECommand:Boolean;virtual;
   end;
 {Export-}
 const
@@ -129,7 +129,7 @@ const
                  TGPMWaitEnt,
                  TGPMWaitInput];
 implementation
-function CommandObjectDef.IsRTECommand:GDBBoolean;
+function CommandObjectDef.IsRTECommand:Boolean;
 begin
      result:=false;
 end;
@@ -172,7 +172,7 @@ begin
                          else
                              result:=0;
 end;
-function CommandRTEdObjectDef.IsRTECommand:GDBBoolean;
+function CommandRTEdObjectDef.IsRTECommand:Boolean;
 begin
      result:=true;
 end;

@@ -84,7 +84,7 @@ var
   tv:gdbvertex;
   parseresult:PTZctnrVectorStrings;
   cmd,subexpr,superexpr:string;
-  parsed:gdbboolean;
+  parsed:Boolean;
   command,operands:GDBString;
   relativemarker:boolean;
   l,a:double;
@@ -128,7 +128,7 @@ begin
         begin
              if commandmanager.pcommandrunning<>nil then
              begin
-                  commandmanager.PushValue('','GDBDouble',@len);
+                  commandmanager.PushValue('','Double',@len);
                   commandmanager.pcommandrunning.CommandContinue;
              end;
         end;

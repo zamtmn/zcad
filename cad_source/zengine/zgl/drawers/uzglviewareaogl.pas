@@ -58,7 +58,7 @@ type
                       procedure setdeicevariable; override;
                       function getParam:pointer; override;
                       function getParamTypeName:GDBString; override;
-                      function CreateRC(_maxdetail:GDBBoolean=false):TDrawContext;override;
+                      function CreateRC(_maxdetail:Boolean=false):TDrawContext;override;
                   end;
 const
   maxgrid=100;
@@ -66,7 +66,7 @@ var
   gridarray:array [0..maxgrid,0..maxgrid] of GDBvertex2S;
 implementation
 //uses mainwindow;
-function TOpenGLViewArea.CreateRC(_maxdetail:GDBBoolean=false):TDrawContext;
+function TOpenGLViewArea.CreateRC(_maxdetail:Boolean=false):TDrawContext;
 begin
   result:=inherited CreateRC(_maxdetail);
   result.MaxWidth:=OpenGLParam.RD_MaxWidth;

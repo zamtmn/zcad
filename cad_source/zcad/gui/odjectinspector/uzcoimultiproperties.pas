@@ -45,7 +45,7 @@ type
   TBeforeIterateProc=function(mp:TMultiProperty;pu:PTObjectUnit):Pointer;
   TAfterIterateProc=procedure(piteratedata:Pointer;mp:TMultiProperty);
   TEntChangeProc=procedure(pu:PTObjectUnit;PSourceVD:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
-  TCheckValueFunc=function(PSourceVD:PVarDesk;var ErrorRange:GDBBoolean;out message:GDBString):GDBBoolean;
+  TCheckValueFunc=function(PSourceVD:PVarDesk;var ErrorRange:Boolean;out message:GDBString):Boolean;
   TEntIterateProc=procedure(pvd:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
   TEntBeforeIterateProc=procedure(pvd:Pointer;ChangedData:TChangedData);
   PTMultiPropertyDataForObjects=^TMultiPropertyDataForObjects;
@@ -85,7 +85,7 @@ type
                                      EntIterateProc:TEntIterateProc;
                                      EntChangeProc:TEntChangeProc;
                                      CheckValue:TCheckValueFunc;
-                                     SetValueErrorRange:GDBBoolean;
+                                     SetValueErrorRange:Boolean;
                                      UseMode:TMultiPropertyUseMode;
                                end;
   LessObjIDWithExtender=class

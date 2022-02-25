@@ -57,7 +57,7 @@ end;
 procedure OnDrawingEd_com.CommandStart(Operands:TCommandOperands);
 //var i: Integer;
 //  lastremove: Integer;
-//  findselected:GDBBoolean;
+//  findselected:Boolean;
 //  tv: pGDBObjEntity;
 begin
   inherited commandstart('');
@@ -77,9 +77,9 @@ begin
   result:=0;
 end;
 
-procedure modifyobj(dist,wc:gdbvertex;save:GDBBoolean;pconobj:pgdbobjEntity;var drawing:TDrawingDef;psa:PGDBSelectedObjArray);
+procedure modifyobj(dist,wc:gdbvertex;save:Boolean;pconobj:pgdbobjEntity;var drawing:TDrawingDef;psa:PGDBSelectedObjArray);
 var i: Integer;
-//  d: GDBDouble;
+//  d: Double;
 //  td:tcontrolpointdist;
   tdesc:pselectedobjdesc;
   dc:TDrawContext;

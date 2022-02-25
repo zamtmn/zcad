@@ -46,12 +46,12 @@ GDBObjLine= object(GDBObj3d)
                  procedure rtedit(refp:Pointer;mode:Single;dist,wc:gdbvertex);virtual;
                  procedure rtsave(refp:Pointer);virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
-                  function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
-                  function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;virtual;
+                  function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
+                  function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;virtual;
                  //procedure feedbackinrect;virtual;
                  //function InRect:TInRect;virtual;
-                  function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
-                  function getintersect(var osp:os_record;pobj:PGDBObjEntity; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
+                  function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
+                  function getintersect(var osp:os_record;pobj:PGDBObjEntity; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
                 destructor done;virtual;
                  procedure addcontrolpoints(tdesc:Pointer);virtual;
                   function beforertmodify:Pointer;virtual;
@@ -60,13 +60,13 @@ GDBObjLine= object(GDBObj3d)
                  function IsRTNeedModify(const Point:PControlPointDesc; p:Pointer):Boolean;virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                  procedure transform(const t_matrix:DMatrix4D);virtual;
-                  function jointoline(pl:pgdbobjline;var drawing:TDrawingDef):GDBBoolean;virtual;
+                  function jointoline(pl:pgdbobjline;var drawing:TDrawingDef):Boolean;virtual;
 
                   function ObjToGDBString(prefix,sufix:GDBString):GDBString;virtual;
                   function GetObjTypeName:GDBString;virtual;
                   function GetCenterPoint:GDBVertex;virtual;
                   procedure getoutbound(var DC:TDrawContext);virtual;
-                  function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
+                  function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                   function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
 
                   function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual;
@@ -79,7 +79,7 @@ GDBObjLine= object(GDBObj3d)
 {Export-}
 ptlinertmodify=^tlinertmodify;
 tlinertmodify=record
-                    lbegin,lmidle,lend:GDBBoolean;
+                    lbegin,lmidle,lend:Boolean;
                 end;
 function AllocAndInitLine(owner:PGDBObjGenericWithSubordinated):PGDBObjLine;
 implementation
@@ -104,7 +104,7 @@ begin
 end;
 procedure GDBObjLine.getoutbound;
 //var //tv,tv2:GDBVertex4D;
-    //t,b,l,r,n,f:GDBDouble;
+    //t,b,l,r,n,f:Double;
 begin
      vp.BoundingBox:=CreateBBFrom2Point(CoordInWCS.lBegin,CoordInWCS.lEnd);
 end;
@@ -116,10 +116,10 @@ function GDBObjLine.GetObjTypeName;
 begin
      result:=ObjN_GDBObjLine;
 end;
-function GDBObjLine.jointoline(pl:pgdbobjline;var drawing:TDrawingDef):GDBBoolean;
-function online(w,u:gdbvertex):GDBBoolean;
-var ww:GDBDouble;
-    l:GDBDouble;
+function GDBObjLine.jointoline(pl:pgdbobjline;var drawing:TDrawingDef):Boolean;
+function online(w,u:gdbvertex):Boolean;
+var ww:Double;
+    l:Double;
 begin
      ww:=scalardot(w,u);
      l:=SqrOneVertexlength(VertexSub(w,VertexMulOnSc(u,ww)));
@@ -128,8 +128,8 @@ begin
               else
                   result:=false;
 end;
-var t1,t2,a1,a2:GDBDouble;
-    q:GDBBoolean;
+var t1,t2,a1,a2:Double;
+    q:Boolean;
     w,u,dir:gdbvertex;
     dc:TDrawContext;
 begin
@@ -269,7 +269,7 @@ function GDBObjLine.CalcTrueInFrustum;
 begin
       result:=Representation.CalcTrueInFrustum(frustum,true);
 end;
-function GDBObjLine.onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;
+function GDBObjLine.onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;
 begin
      if {distance2piece}SQRdist_Point_to_Segment(point,self.CoordInWCS.lBegin,self.CoordInWCS.lEnd)<bigeps then
                                                                                   begin
@@ -290,7 +290,7 @@ begin
 end;
 procedure GDBObjLine.DrawGeometry;
 //var
-//  templod:gdbdouble;
+//  templod:Double;
 begin
   if (selected)or(dc.selected) then
                      Representation.DrawNiceGeometry(DC)
@@ -356,7 +356,7 @@ begin
 
 end;
 function GDBObjLine.getsnap;
-var t,d,e:GDBDouble;
+var t,d,e:Double;
     tv,n,v,dir:gdbvertex;
 begin
      if onlygetsnapcount=9 then
@@ -496,9 +496,9 @@ begin
      end;
      inc(onlygetsnapcount);
 end;
-function line2dintercep(var x11, y11, x12, y12, x21, y21, x22, y22: GDBDouble; out t1,t2: GDBDouble): GDBBoolean;
+function line2dintercep(var x11, y11, x12, y12, x21, y21, x22, y22: Double; out t1,t2: Double): Boolean;
 var
-  d, d1, d2, dx1,dy1,dx2,dy2: GDBDouble;
+  d, d1, d2, dx1,dy1,dx2,dy2: Double;
 begin
   t1 := 0;
   t2 := 0;
@@ -521,7 +521,7 @@ begin
   end;
 end;
 function GDBObjLine.getintersect;
-var t1,t2,dist:GDBDouble;
+var t1,t2,dist:Double;
     tv1,tv2,dir,dir2{,e}:gdbvertex;
 begin
      if (onlygetsnapcount=1)or(pobj^.{vp.id}getobjtype<>gdblineid) then

@@ -55,18 +55,18 @@ Tuzvagsl_com=object(CommandRTEdObject)//определяем тип - объек
 //TTypeNumbering=packed record
 //                         pu:PTUnit;                //рантайм юнит с параметрами суперлинии
 //                         LayerNamePrefix:GDBString;//префикс
-//                         ProcessLayer:GDBBoolean;  //выключатель
+//                         ProcessLayer:Boolean;  //выключатель
 //                     end;
 PTuzvagslComParams=^TuzvagslComParams;//указатель на тип данных параметров команды. зкад работает с ними через указатель
 TuzvagslComParams=record       //определяем параметры команды которые будут видны в инспекторе во время выполнения команды
                                       //регистрировать их будем паскалевским RTTI
                                       //не через экспорт исходников и парсинг файла с определениями типов
-  //InverseX:gdbboolean;
-  //InverseY:gdbboolean;
+  //InverseX:Boolean;
+  //InverseY:Boolean;
   BaseName:gdbstring;
-  DeadDand:GDBDouble;
+  DeadDand:Double;
   NumberVar:gdbstring;
-  option2:gdbboolean;
+  option2:Boolean;
 
 end;
 

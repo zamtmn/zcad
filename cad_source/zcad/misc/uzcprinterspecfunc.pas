@@ -30,9 +30,9 @@ type
                            model,project,RM:DMatrix4D;
                            prevpoint:gdbvertex;
                            w,h:Integer;
-                           wmm,hmm,scalex,scaley:GDBDouble;
+                           wmm,hmm,scalex,scaley:Double;
                            procedure myglVertex3d(const V:GDBVertex);virtual;//inline;
-                           procedure myglVertex(const x,y,z:GDBDouble);virtual;//inline;
+                           procedure myglVertex(const x,y,z:Double);virtual;//inline;
                            procedure myglVertex3dV(const V:PGDBVertex);virtual;//inline;
                            procedure startrender;virtual;//inline;
                            procedure myglPushMatrix;virtual;//inline;

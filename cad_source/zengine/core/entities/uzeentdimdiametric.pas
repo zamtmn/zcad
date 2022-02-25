@@ -50,14 +50,14 @@ GDBObjDiametricDimension= object(GDBObjDimension)
                         function P10ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                         function P15ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                         function P11ChangeTo(tv:GDBVertex):GDBVertex;virtual;
-                        procedure DrawCenterMarker(cp:GDBVertex;r:GDBDouble;var drawing:TDrawingDef;var DC:TDrawContext);
+                        procedure DrawCenterMarker(cp:GDBVertex;r:Double;var drawing:TDrawingDef;var DC:TDrawContext);
                         procedure CalcDNVectors;virtual;
 
-                        function TextNeedOffset(dimdir:gdbvertex):GDBBoolean;virtual;
-                        function TextAlwaysMoved:GDBBoolean;virtual;
+                        function TextNeedOffset(dimdir:gdbvertex):Boolean;virtual;
+                        function TextAlwaysMoved:Boolean;virtual;
                         function GetCenterPoint:GDBVertex;virtual;
                         procedure CalcTextInside;virtual;
-                        function GetRadius:GDBDouble;virtual;
+                        function GetRadius:Double;virtual;
                         function GetDIMTMOVE:TDimTextMove;virtual;
 
                         procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
@@ -93,9 +93,9 @@ begin
      vectorN:=normalizevertex(vectorN)
 end;
 
-procedure GDBObjDiametricDimension.DrawCenterMarker(cp:GDBVertex;r:GDBDouble;var drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjDiametricDimension.DrawCenterMarker(cp:GDBVertex;r:Double;var drawing:TDrawingDef;var DC:TDrawContext);
 var
-   ls:GDBDouble;
+   ls:Double;
 begin
      if PDimStyle.Lines.DIMCEN<>0 then
      begin
@@ -201,7 +201,7 @@ function GDBObjDiametricDimension.GetCenterPoint:GDBVertex;
 begin
      result:=VertexMulOnSc(vertexadd(DimData.P15InWCS,DimData.P10InWCS),0.5);
 end;
-function GDBObjDiametricDimension.GetRadius:GDBDouble;
+function GDBObjDiametricDimension.GetRadius:Double;
 begin
      result:=Vertexlength(DimData.P15InWCS,DimData.P10InWCS)/2;
 end;
@@ -237,7 +237,7 @@ begin
           if assigned(EntExtensions)then
             EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
 end;
-function GDBObjDiametricDimension.TextNeedOffset(dimdir:gdbvertex):GDBBoolean;
+function GDBObjDiametricDimension.TextNeedOffset(dimdir:gdbvertex):Boolean;
 begin
    result:=true;
 end;
@@ -248,7 +248,7 @@ begin
                                                                                                               else
                                                                                                                   TextInside:=false;
 end;
-function GDBObjDiametricDimension.TextAlwaysMoved:GDBBoolean;
+function GDBObjDiametricDimension.TextAlwaysMoved:Boolean;
 begin
    result:=true;
 end;

@@ -39,7 +39,7 @@ type
   end;
   TFontName2FontFileMap=GKey2DataMap<GDBString,TGeneralFontFileDesc(*{$IFNDEF DELPHI},LessGDBString{$ENDIF}*)>;
 
-  TFontLoadProcedure=function(name:GDBString;var pf:PGDBfont):GDBBoolean;
+  TFontLoadProcedure=function(name:GDBString;var pf:PGDBfont):Boolean;
   TFontLoadProcedureData=record
     FontDesk:GDBString;
     FontLoadProcedure:TFontLoadProcedure;
@@ -199,7 +199,7 @@ function GDBFontManager.addFonfByFile(FontPathName:String):PGDBfont;
 var
   p:PGDBfont;
   FontName,FontExt:GDBString;
-  FontLoaded:GDBBoolean;
+  FontLoaded:Boolean;
   _key:gdbstring;
   data:TFontLoadProcedureData;
       //ir:itrec;

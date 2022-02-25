@@ -26,19 +26,19 @@ type
 {REGISTEROBJECTTYPE GDBPoint3dArray}
 PGDBPoint3dArray=^GDBPoint3dArray;
 GDBPoint3dArray= object(GZVector{-}<GDBVertex>{//})(*OpenArrayOfData=GDBVertex*)
-                function onpoint(p:gdbvertex;closed:GDBBoolean):gdbboolean;
-                function onmouse(const mf:ClipArray;const closed:GDBBoolean):GDBBoolean;virtual;
+                function onpoint(p:gdbvertex;closed:Boolean):Boolean;
+                function onmouse(const mf:ClipArray;const closed:Boolean):Boolean;virtual;
                 function CalcTrueInFrustum(frustum:ClipArray):TInBoundingVolume;virtual;
                 {procedure DrawGeometry;virtual;
                 procedure DrawGeometry2;virtual;
-                procedure DrawGeometryWClosed(closed:GDBBoolean);virtual;}
+                procedure DrawGeometryWClosed(closed:Boolean);virtual;}
                 function getoutbound:TBoundingBox;virtual;
              end;
 {Export-}
 implementation
 function GDBPoint3DArray.getoutbound;
 var
-    tt,b,l,r,n,f:GDBDouble;
+    tt,b,l,r,n,f:Double;
     ptv:pgdbvertex;
     ir:itrec;
 begin
@@ -115,7 +115,7 @@ begin
   oglsm.myglVertex3dV(@p^);
   oglsm.myglend;
 end;
-procedure GDBPoint3DArray.DrawGeometryWClosed(closed:GDBBoolean);
+procedure GDBPoint3DArray.DrawGeometryWClosed(closed:Boolean);
 var p:PGDBVertex;
     i:Integer;
 begin
@@ -143,7 +143,7 @@ begin
 end;*)
 function GDBPoint3DArray.CalcTrueInFrustum;
 var i,{counter,}emptycount:Integer;
-//    d:GDBDouble;
+//    d:Double;
     ptpv0,ptpv1:PGDBVertex;
     subresult:TInBoundingVolume;
 begin
@@ -182,7 +182,7 @@ begin
 end;
 function GDBPoint3DArray.onmouse;
 var i{,counter}:Integer;
-//    d:GDBDouble;
+//    d:Double;
     ptpv0,ptpv1:PGDBVertex;
 begin
   result:=false;
@@ -218,9 +218,9 @@ begin
    end;
 end;
 
-function GDBPoint3DArray.onpoint(p:gdbvertex;closed:GDBBoolean):gdbboolean;
+function GDBPoint3DArray.onpoint(p:gdbvertex;closed:Boolean):Boolean;
 var i{,counter}:Integer;
-    d:GDBDouble;
+    d:Double;
     ptpv0,ptpv1:PGDBVertex;
     a,b:integer;
 begin

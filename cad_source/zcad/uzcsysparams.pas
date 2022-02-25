@@ -31,16 +31,16 @@ type
   end;
   {REGISTERRECORDTYPE tsavedparams}
   tsavedparams=record
-    UniqueInstance:GDBBoolean;(*'Unique instance'*)
-    NoSplash:GDBBoolean;(*'No splash screen'*)
-    NoLoadLayout:GDBBoolean;(*'No load layout'*)
-    UpdatePO:GDBBoolean;(*'Update PO file'*)
+    UniqueInstance:Boolean;(*'Unique instance'*)
+    NoSplash:Boolean;(*'No splash screen'*)
+    NoLoadLayout:Boolean;(*'No load layout'*)
+    UpdatePO:Boolean;(*'Update PO file'*)
   end;
   {REGISTERRECORDTYPE tnotsavedparams}
   tnotsavedparams=record
     ScreenX:Integer;(*'Screen X'*)(*oi_readonly*)
     ScreenY:Integer;(*'Screen Y'*)(*oi_readonly*)
-    otherinstancerun:GDBBoolean;(*'Other instance run'*)(*oi_readonly*)
+    otherinstancerun:Boolean;(*'Other instance run'*)(*oi_readonly*)
     PreloadedFile:GDBString;(*'Preloaded file'*)(*oi_readonly*)
     Ver:TmyFileVersionInfo;(*'Version'*)(*oi_readonly*)
     DefaultHeight:Integer;(*'Default controls height'*)(*oi_readonly*)

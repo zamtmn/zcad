@@ -34,7 +34,7 @@ TLLPrimitivesCreator=class(TLLPrimitivesCreatorAbstract)
                 function CreateLLSymbol(var pa:TLLPrimitivesArray):TArrayIndex;override;
                 function CreateLLSymbolLine(var pa:TLLPrimitivesArray):TArrayIndex;override;
                 function CreateLLSymbolEnd(var pa:TLLPrimitivesArray):TArrayIndex;override;
-                function CreateLLPolyLine(var pa:TLLPrimitivesArray;const P1Index,_Count:TLLVertexIndex;_closed:GDBBoolean=false):TArrayIndex;override;
+                function CreateLLPolyLine(var pa:TLLPrimitivesArray;const P1Index,_Count:TLLVertexIndex;_closed:Boolean=false):TArrayIndex;override;
              end;
 var
    DefaultLLPCreator:TLLPrimitivesCreator;
@@ -95,7 +95,7 @@ begin
      ptl.init;
      ptl.P1Index:=P1Index;
 end;
-function TLLPrimitivesCreator.CreateLLPolyLine(var pa:TLLPrimitivesArray;const P1Index,_Count:TLLVertexIndex;_closed:GDBBoolean=false):tarrayindex;
+function TLLPrimitivesCreator.CreateLLPolyLine(var pa:TLLPrimitivesArray;const P1Index,_Count:TLLVertexIndex;_closed:Boolean=false):tarrayindex;
 var
    ptpl:PTLLPolyLine;
 begin

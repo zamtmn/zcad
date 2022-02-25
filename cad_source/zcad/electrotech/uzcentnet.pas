@@ -27,7 +27,7 @@ GDBObjNet= object(GDBObjConnected)
                  graf:GDBGraf;
                  riserarray:TZctnrVectorPGDBaseObjects;
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 function CanAddGDBObj(pobj:PGDBObjEntity):GDBBoolean;virtual;
+                 function CanAddGDBObj(pobj:PGDBObjEntity):Boolean;virtual;
                  function EubEntryType:Integer;virtual;
                  procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
                  procedure restructure(var drawing:TDrawingDef);virtual;
@@ -52,7 +52,7 @@ GDBObjNet= object(GDBObjConnected)
 
                  destructor done;virtual;
                  procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                 function IsHaveGRIPS:GDBBoolean;virtual;
+                 function IsHaveGRIPS:Boolean;virtual;
                  class function GetDXFIOFeatures:TDXFEntIODataManager;static;
                  function GetObjType:TObjID;virtual;
            end;
@@ -60,7 +60,7 @@ GDBObjNet= object(GDBObjConnected)
 var
     GDBObjNetDXFFeatures:TDXFEntIODataManager;
 implementation
-function GDBObjNet.IsHaveGRIPS:GDBBoolean;
+function GDBObjNet.IsHaveGRIPS:Boolean;
 begin
      result:=false;
 end;
@@ -135,7 +135,7 @@ begin
 end;
 function GDBObjNet.GetNearestLine;
 var pl:pgdbobjline;
-    d,d0:gdbdouble;
+    d,d0:Double;
 //    i:Integer;
 //    tgf: pgrafelement;
     ir:itrec;
@@ -431,7 +431,7 @@ var pl,pl2:pgdbobjline;
     i,j:Integer;
     ip:intercept3dprop;
     tv:gdbvertex;
-//    q:GDBBoolean;
+//    q:Boolean;
     TempNet:PGDBObjNet;
     tgf: pgrafelement;
     ti:GDBObjOpenArrayOfPV;

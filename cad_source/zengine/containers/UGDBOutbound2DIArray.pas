@@ -27,7 +27,7 @@ PGDBOOutbound2DIArray=^GDBOOutbound2DIArray;
 GDBOOutbound2DIArray= object(GZVector{-}<GDBvertex2DI>{//})
                       procedure DrawGeometry(var DC:TDrawContext);virtual;
                       function InRect(Frame1, Frame2: GDBvertex2DI):TInBoundingVolume;virtual;
-                      function perimetr:GDBDouble;virtual;
+                      function perimetr:Double;virtual;
                 end;
 {Export-}
 function EqualVertex2DI(const a, b: GDBvertex2DI):Boolean;

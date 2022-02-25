@@ -68,18 +68,18 @@ TSimpleDrawing= object(TAbstractDrawing)
                        function GetTextStyleTable:PGDBTextStyleArray;virtual;
                        function GetDimStyleTable:PGDBDimStyleArray;virtual;
                        function GetOnMouseObj:PGDBObjOpenArrayOfPV;virtual;
-                       procedure RotateCameraInLocalCSXY(ux,uy:GDBDouble);virtual;
-                       procedure MoveCameraInLocalCSXY(oldx,oldy:GDBDouble;ax:gdbvertex);virtual;
+                       procedure RotateCameraInLocalCSXY(ux,uy:Double);virtual;
+                       procedure MoveCameraInLocalCSXY(oldx,oldy:Double;ax:gdbvertex);virtual;
                        procedure SetCurrentDWG;virtual;
                        function StoreOldCamerapPos:Pointer;virtual;
                        procedure StoreNewCamerapPos(command:Pointer);virtual;
-                       procedure rtmodify(obj:PGDBObjEntity;md:Pointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;
+                       procedure rtmodify(obj:PGDBObjEntity;md:Pointer;dist,wc:gdbvertex;save:Boolean);virtual;
                        procedure rtmodifyonepoint(obj:PGDBObjEntity;rtmod:TRTModifyData;wc:gdbvertex);virtual;
                        procedure PushStartMarker(CommandName:GDBString);virtual;
                        procedure PushEndMarker;virtual;
                        procedure SetFileName(NewName:GDBString);virtual;
                        function GetFileName:GDBString;virtual;
-                       procedure ChangeStampt(st:GDBBoolean);virtual;
+                       procedure ChangeStampt(st:Boolean);virtual;
                        function GetUndoTop:TArrayIndex;virtual;
                        function CanUndo:boolean;virtual;
                        function CanRedo:boolean;virtual;
@@ -90,8 +90,8 @@ TSimpleDrawing= object(TAbstractDrawing)
                        function DefMouseEditorMode(SetMask,ReSetMask:Byte):Byte;virtual;
                        function SetMouseEditorMode(mode:Byte):Byte;virtual;
                        procedure FreeConstructionObjects;virtual;
-                       function GetChangeStampt:GDBBoolean;virtual;
-                       function CreateDrawingRC(_maxdetail:GDBBoolean=false):TDrawContext;virtual;
+                       function GetChangeStampt:Boolean;virtual;
+                       function CreateDrawingRC(_maxdetail:Boolean=false):TDrawContext;virtual;
                        procedure FillDrawingPartRC(var dc:TDrawContext);virtual;
                        function GetUnitsFormat:TzeUnitsFormat;virtual;
                        procedure CreateBlockDef(name:GDBString);virtual;
@@ -213,7 +213,7 @@ begin
      result.RemoveTrailingZeros:=true;
 end;
 
-function TSimpleDrawing.CreateDrawingRC(_maxdetail:GDBBoolean=false):TDrawContext;
+function TSimpleDrawing.CreateDrawingRC(_maxdetail:Boolean=false):TDrawContext;
 begin
   if assigned(wa)then
                      result:=wa.CreateRC(_maxdetail)
@@ -239,7 +239,7 @@ begin
   dc.DrawingContext.GlobalLTScale:=LTScale;
 end;
 
-function TSimpleDrawing.GetChangeStampt:GDBBoolean;
+function TSimpleDrawing.GetChangeStampt:Boolean;
 begin
      result:=false;
 end;
@@ -398,7 +398,7 @@ begin
      obj^.rtmodifyonepoint(rtmod);
      obj^.YouChanged(self);
 end;
-procedure TSimpleDrawing.rtmodify(obj:PGDBObjEntity;md:Pointer;dist,wc:gdbvertex;save:GDBBoolean);
+procedure TSimpleDrawing.rtmodify(obj:PGDBObjEntity;md:Pointer;dist,wc:gdbvertex;save:Boolean);
 var i:Integer;
     point:pcontrolpointdesc;
     p:Pointer;
@@ -568,7 +568,7 @@ begin
 
 end;
 
-procedure TSimpleDrawing.MoveCameraInLocalCSXY(oldx,oldy:GDBDouble;ax:gdbvertex);
+procedure TSimpleDrawing.MoveCameraInLocalCSXY(oldx,oldy:Double;ax:gdbvertex);
 var
     uc:pointer;
 begin
@@ -582,7 +582,7 @@ begin
      StoreNewCamerapPos(uc);
 end;
 
-procedure TSimpleDrawing.RotateCameraInLocalCSXY(ux,uy:GDBDouble);
+procedure TSimpleDrawing.RotateCameraInLocalCSXY(ux,uy:Double);
 var
     uc:pointer;
 begin

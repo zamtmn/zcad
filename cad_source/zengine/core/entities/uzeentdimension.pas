@@ -47,7 +47,7 @@ TDXFDimData=record
   P14InWCS:GDBVertex;
   P15InWCS:GDBVertex;
   P16InOCS:GDBVertex;
-  TextMoved:GDBBoolean;
+  TextMoved:Boolean;
 end;
 PGDBObjDimension=^GDBObjDimension;
 {REGISTEROBJECTTYPE GDBObjDimension}
@@ -56,10 +56,10 @@ GDBObjDimension= object(GDBObjComplex)
                       PDimStyle:{-}PGDBDimStyle{/PGDBDimStyleObjInsp/};
                       PProjPoint:PTDXFDimData2D;
                       vectorD,vectorN,vectorT:GDBVertex;
-                      TextTParam,TextAngle,DimAngle:GDBDouble;
-                      TextInside:GDBBoolean;
+                      TextTParam,TextAngle,DimAngle:Double;
+                      TextInside:Boolean;
                       TextOffset:GDBVertex;
-                      dimtextw,dimtexth:GDBDouble;
+                      dimtextw,dimtexth:Double;
                       dimtext:TDXFEntsInternalStringType;
 
 
@@ -67,8 +67,8 @@ GDBObjDimension= object(GDBObjComplex)
                 function DrawExtensionLineLinePart(p1,p2:GDBVertex;var drawing:TDrawingDef; part:integer):pgdbobjline;
                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                 procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
-                function LinearFloatToStr(l:GDBDouble;var drawing:TDrawingDef):TDXFEntsInternalStringType;
-                function GetLinearDimStr(l:GDBDouble;var drawing:TDrawingDef):TDXFEntsInternalStringType;
+                function LinearFloatToStr(l:Double;var drawing:TDrawingDef):TDXFEntsInternalStringType;
+                function GetLinearDimStr(l:Double;var drawing:TDrawingDef):TDXFEntsInternalStringType;
                 function GetDimStr(var drawing:TDrawingDef):TDXFEntsInternalStringType;virtual;
                 procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                 function P10ChangeTo(tv:GDBVertex):GDBVertex;virtual;
@@ -83,14 +83,14 @@ GDBObjDimension= object(GDBObjComplex)
 
                 procedure DrawDimensionText(p:GDBVertex;var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                 function GetTextOffset(var drawing:TDrawingDef):GDBVertex;virtual;
-                function TextNeedOffset(dimdir:gdbvertex):GDBBoolean;virtual;
-                function TextAlwaysMoved:GDBBoolean;virtual;
-                function GetPSize:GDBDouble;virtual;
+                function TextNeedOffset(dimdir:gdbvertex):Boolean;virtual;
+                function TextAlwaysMoved:Boolean;virtual;
+                function GetPSize:Double;virtual;
 
                 procedure CalcTextAngle;virtual;
                 procedure CalcTextParam(dlStart,dlEnd:Gdbvertex);virtual;
                 procedure CalcTextInside;virtual;
-                procedure DrawDimensionLine(p1,p2:GDBVertex;supress1,supress2,drawlinetotext:GDBBoolean;var drawing:TDrawingDef;var DC:TDrawContext);
+                procedure DrawDimensionLine(p1,p2:GDBVertex;supress1,supress2,drawlinetotext:Boolean;var drawing:TDrawingDef;var DC:TDrawContext);
                 function GetDIMTMOVE:TDimTextMove;virtual;
                 function GetDIMSCALE:double;virtual;
                 destructor done;virtual;
@@ -106,15 +106,15 @@ begin
     result:=1;
 end;
 
-procedure GDBObjDimension.DrawDimensionLine(p1,p2:GDBVertex;supress1,supress2,drawlinetotext:GDBBoolean;var drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjDimension.DrawDimensionLine(p1,p2:GDBVertex;supress1,supress2,drawlinetotext:Boolean;var drawing:TDrawingDef;var DC:TDrawContext);
 var
-   l:GDBDouble;
+   l:Double;
    pl:pgdbobjline;
    tbp0,tbp1:TDimArrowBlockParam;
    pv:pGDBObjBlockInsert;
-   p0inside,p1inside:GDBBoolean;
+   p0inside,p1inside:Boolean;
    pp1,pp2:GDBVertex;
-   zangle:gdbdouble;
+   zangle:Double;
 begin
   l:=uzegeometry.Vertexlength(p1,p2);
   tbp0:=PDimStyle.GetDimBlockParam(0);
@@ -273,7 +273,7 @@ function GDBObjDimension.GetDimStr(var drawing:TDrawingDef):TDXFEntsInternalStri
 begin
      result:='need GDBObjDimension.GetDimStr override';
 end;
-function GDBObjDimension.GetPSize: GDBDouble;
+function GDBObjDimension.GetPSize: Double;
 begin
   if TextTParam>0.5 then
                         Result:=dimtextw
@@ -282,18 +282,18 @@ begin
   if vectorN.y<0 then
                      Result:=-Result;
 end;
-function GDBObjDimension.TextNeedOffset(dimdir:gdbvertex):GDBBoolean;
+function GDBObjDimension.TextNeedOffset(dimdir:gdbvertex):Boolean;
 begin
      result:=(((textangle<>0)or(PDimStyle.Text.DIMTAD=DTVPCenters))and(TextInside and not PDimStyle.Text.DIMTIH))or(abs(dimdir.x)<eps)or(DimData.TextMoved);
 end;
-function GDBObjDimension.TextAlwaysMoved:GDBBoolean;
+function GDBObjDimension.TextAlwaysMoved:Boolean;
 begin
      result:=false;
 end;
 
 function GDBObjDimension.GetTextOffset(var drawing:TDrawingDef):GDBVertex;
 var
-   l:GDBDouble;
+   l:Double;
    dimdir:gdbvertex;
    dimtxtstyle:PGDBTextStyle;
    txtlines:XYZWGDBGDBStringArray;
@@ -493,7 +493,7 @@ begin
           end;
 
 end;
-function GDBObjDimension.LinearFloatToStr(l:GDBDouble;var drawing:TDrawingDef):TDXFEntsInternalStringType;
+function GDBObjDimension.LinearFloatToStr(l:Double;var drawing:TDrawingDef):TDXFEntsInternalStringType;
 var
    ff:TzeUnitsFormat;
 begin
@@ -506,7 +506,7 @@ begin
      ff.uprec:=TUPrec(PDimStyle.Units.DIMDEC);
      result:=zeDimensionToUnicodeString(l,ff);
 end;
-function GDBObjDimension.GetLinearDimStr(l:GDBDouble;var drawing:TDrawingDef):TDXFEntsInternalStringType;
+function GDBObjDimension.GetLinearDimStr(l:Double;var drawing:TDrawingDef):TDXFEntsInternalStringType;
 var
    n:double;
    i:integer;

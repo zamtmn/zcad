@@ -85,7 +85,7 @@ procedure GeneralEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMulti
 procedure EntityNameEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure PolylineVertex3DControlEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure PolylineVertex3DControlFromVarEntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
-procedure GDBDouble2SumEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+procedure Double2SumEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure TArrayIndex2SumEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure Blockname2BlockNameCounterIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure PStyle2PStyleCounterIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
@@ -114,7 +114,7 @@ begin
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
 end;
 
-function FindOrCreateVar(pu:PTObjectUnit;varname,username,typename:GDBString;out IVA:TInVectorAddr):GDBBoolean;
+function FindOrCreateVar(pu:PTObjectUnit;varname,username,typename:GDBString;out IVA:TInVectorAddr):Boolean;
 var
    vd:vardesk;
 begin
@@ -209,10 +209,10 @@ begin
     pointer(PTVertex3DControlVarData(result)^.StrValueZ):=nil;
     if FindOrCreateVar(pu,mp.MPName,mp.MPUserName,mp.MPType^.TypeName,PTVertex3DControlVarData(result).ArrayIndexVarDescAddr) then
        mp.MPType.CopyInstanceTo(@Vertex3DControl,pvardesk(PTVertex3DControlVarData(result).ArrayIndexVarDescAddr.Instance)^.data.Addr.Instance);
-    FindOrCreateVar(pu,mp.MPName+'x','x','GDBDouble',PTVertex3DControlVarData(result).XVarDescAddr);
-    FindOrCreateVar(pu,mp.MPName+'y','y','GDBDouble',PTVertex3DControlVarData(result).YVarDescAddr);
-    FindOrCreateVar(pu,mp.MPName+'z','z','GDBDouble',PTVertex3DControlVarData(result).ZVarDescAddr);
-    PTVertex3DControlVarData(result).PGDBDTypeDesc:=SysUnit.TypeName2PTD('GDBDouble');
+    FindOrCreateVar(pu,mp.MPName+'x','x','Double',PTVertex3DControlVarData(result).XVarDescAddr);
+    FindOrCreateVar(pu,mp.MPName+'y','y','Double',PTVertex3DControlVarData(result).YVarDescAddr);
+    FindOrCreateVar(pu,mp.MPName+'z','z','Double',PTVertex3DControlVarData(result).ZVarDescAddr);
+    PTVertex3DControlVarData(result).PGDBDTypeDesc:=SysUnit.TypeName2PTD('Double');
 end;
 
 procedure FreeOneVarData(piteratedata:Pointer;mp:TMultiProperty);
@@ -381,7 +381,7 @@ begin
      if pvardesk(pdata).name=mp.MPName then
                                            mp.MPType.CopyInstanceTo(pvardesk(pdata).data.Addr.Instance,@Vertex3DControl)
      else begin
-       PGDBDTypeDesc:=SysUnit.TypeName2PTD('GDBDouble');
+       PGDBDTypeDesc:=SysUnit.TypeName2PTD('Double');
        pindex:=pu^.FindValue(mp.MPName).data.Addr.Instance;
        tv:=PGDBObjPolyline(ChangedData.pentity).VertexArrayInWCS.getDataMutable(pindex^);
        v:=tv^;
@@ -467,9 +467,9 @@ begin
                     end;
 end;
 
-procedure GDBDouble2SumEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+procedure Double2SumEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 {
-процедура суммирования GDBDouble значения в мультипроперти
+процедура суммирования Double значения в мультипроперти
 pdata - указатель на структуру созданную GetOneVarData или аналогичной прцедурой
 pentity - указатель на примитив или на копируемое поле, если смещение поля было задано при регистрации
 mp - описание мультипроперти
@@ -484,7 +484,7 @@ begin
      if fistrun then
                     mp.MPType.CopyInstanceTo(ChangedData.PGetDataInEtity,PVD.data.Addr.Instance)
                 else
-                    PGDBDouble(PVD.data.Addr.Instance)^:=PGDBDouble(PVD.data.Addr.Instance)^+PGDBDouble(ChangedData.PGetDataInEtity)^;
+                    PDouble(PVD.data.Addr.Instance)^:=PDouble(PVD.data.Addr.Instance)^+PDouble(ChangedData.PGetDataInEtity)^;
 end;
 procedure TArrayIndex2SumEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 {

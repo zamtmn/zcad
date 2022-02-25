@@ -29,14 +29,14 @@ GDBObjBlockdef= object(GDBObjGenericSubEntry)
                      Name:GDBString;(*saved_to_shd*)
                      VarFromFile:GDBString;(*saved_to_shd*)
                      Base:GDBvertex;(*saved_to_shd*)
-                     Formated:GDBBoolean;
+                     Formated:Boolean;
                      BlockDesc:TBlockDesc;(*'Block params'*)(*saved_to_shd*)(*oi_readonly*)
                      constructor initnul(owner:PGDBObjGenericWithSubordinated);
                      constructor init(_name:GDBString);
                      procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                      //function FindVariable(varname:GDBString):pvardesk;virtual;
                      procedure LoadFromDXF(var f: TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
-                     function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef):GDBBoolean;virtual;
+                     function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;virtual;
                      destructor done;virtual;
                      function GetMatrix:PDMatrix4D;virtual;
                      function GetHandle:PtrInt;virtual;

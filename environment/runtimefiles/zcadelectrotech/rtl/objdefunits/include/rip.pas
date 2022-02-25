@@ -5,7 +5,7 @@ usescopy objname;
 usescopy objmaterial;
 usescopy blocktype;
 var
-   EL_Cab_AddLength:GDBDouble;(*'Добавлять к длине кабеля'*)
+   EL_Cab_AddLength:Double;(*'Добавлять к длине кабеля'*)
 implementation
 begin
    BTY_TreeCoord:='PLAN_OPS_Блок питания 1';

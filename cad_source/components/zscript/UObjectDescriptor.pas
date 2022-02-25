@@ -57,7 +57,7 @@ ObjectDescriptor=object(RecordDescriptor)
                        PDefaultConstructor:Pointer;
                        SimpleMenods:{GDBOpenArrayOfObjects}TSimpleMenodsVector;
                        LincedData:GDBString;
-                       LincedObjects:GDBboolean;
+                       LincedObjects:Boolean;
                        ColArray:TZctnrVectorBytes;
                        Properties:TPropertiesVector;
 
@@ -102,7 +102,7 @@ begin
 end;
 constructor MetodDescriptor.init;
 var
-  parseerror:GDBBoolean;
+  parseerror:Boolean;
   parseresult{,subparseresult}:PTZctnrVectorStrings;
   od:GDBOperandDesc;
   i:integer;
@@ -538,9 +538,9 @@ begin
      case (pmd^.Attributes)and(not m_virtual) of
      m_procedure:
                  begin
-                      SimpleProcOfObjDouble(tm)(PGDBDouble(arg)^);
+                      SimpleProcOfObjDouble(tm)(PDouble(arg)^);
                  end;
-     m_function:PGDBDouble(arg)^:=SimpleFuncOfObjDouble(tm);
+     m_function:PDouble(arg)^:=SimpleFuncOfObjDouble(tm);
      end;
 end;
 

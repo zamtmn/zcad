@@ -52,7 +52,7 @@ TBezierSolver2D=class
                      procedure DrawCountur;
                      procedure ClearConturs;
                      procedure solve;
-                     function getpoint(t:gdbdouble):GDBvertex2D;
+                     function getpoint(t:Double):GDBvertex2D;
                      procedure AddPointToContur(x,y:fontfloat;attr:TPointAttr);
                 end;
 var
@@ -62,7 +62,7 @@ implementation
 procedure TBezierSolver2D.AddPointToContur(x,y:fontfloat;attr:TPointAttr);
 var
    {tff1,tff0,}tff:{GDBFontVertex2D}TDummyData;
-   //a: GDBDouble;
+   //a: Double;
 begin
     //if attr=TPA_NotOnCurve then exit;
     tff.v.x:=x;
@@ -199,7 +199,7 @@ begin
      end;
 end;
 
-function TBezierSolver2D.getpoint(t:gdbdouble):GDBvertex2D;
+function TBezierSolver2D.getpoint(t:Double):GDBvertex2D;
 var
    i,j,k,rindex:integer;
 begin

@@ -35,7 +35,7 @@ type
   {REGISTEROBJECTTYPE scale_com}
   scale_com =  object(move_com)
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
-    procedure scale(a:GDBDouble; button: Byte);
+    procedure scale(a:Double; button: Byte);
     procedure showprompt(mklick:integer);virtual;
     procedure CommandContinue; virtual;
   end;
@@ -44,12 +44,12 @@ var
 implementation
 procedure scale_com.CommandContinue;
 var v1:vardesk;
-    td:gdbdouble;
+    td:Double;
 begin
    if (commandmanager.GetValueHeap{-vs})>0 then
    begin
    v1:=commandmanager.PopValue;
-   td:=Pgdbdouble(v1.data.Addr.Instance)^;
+   td:=PDouble(v1.data.Addr.Instance)^;
    scale(td,MZW_LBUTTON);
    end;
 end;
@@ -61,7 +61,7 @@ begin
      1:ZCMsgCallBackInterface.TextMessage(rscmPickOrEnterScale,TMWOHistoryOut);
      end;
 end;
-procedure scale_com.scale(a:GDBDouble; button: Byte);
+procedure scale_com.scale(a:Double; button: Byte);
 var
     dispmatr,im,rotmatr:DMatrix4D;
     ir:itrec;

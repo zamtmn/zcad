@@ -36,23 +36,23 @@ TWidth3D_in_WCS_Vector= object(GZVector{-}<GDBQuad3d>{//})
 PGDBObjLWPolyline=^GDBObjLWpolyline;
 {REGISTEROBJECTTYPE GDBObjLWPolyline}
 GDBObjLWPolyline= object(GDBObjWithLocalCS)
-                 Closed:GDBBoolean;(*saved_to_shd*)
+                 Closed:Boolean;(*saved_to_shd*)
                  Vertex2D_in_OCS_Array:GDBpolyline2DArray;(*saved_to_shd*)
                  Vertex3D_in_WCS_Array:GDBPoint3dArray;
                  Width2D_in_OCS_Array:GDBLineWidthArray;(*saved_to_shd*)
                  Width3D_in_WCS_Array:{GDBOpenArray}TWidth3D_in_WCS_Vector;
                  PProjPoint:PGDBpolyline2DArray;(*hidden_in_objinsp*)
-                 Square:GDBdouble;(*'Oriented area'*)
-                 constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:GDBBoolean);
+                 Square:Double;(*'Oriented area'*)
+                 constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:Boolean);
                  constructor initnul;
                  procedure LoadFromDXF(var f: TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
                  procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                 function CalcSquare:GDBDouble;virtual;
+                 function CalcSquare:Double;virtual;
                  //**попадаетли данная координата внутрь контура
-                 function isPointInside(point:GDBVertex):GDBBoolean;virtual;
+                 function isPointInside(point:GDBVertex):Boolean;virtual;
                  procedure createpoint;virtual;
                  procedure CalcWidthSegment;virtual;
                  destructor done;virtual;
@@ -66,9 +66,9 @@ GDBObjLWPolyline= object(GDBObjWithLocalCS)
                  procedure getoutbound(var DC:TDrawContext);virtual;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                  //function InRect:TInRect;virtual;
-                 function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
-                 function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;virtual;
-                 function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
+                 function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
+                 function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;virtual;
+                 function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
                  procedure startsnap(out osp:os_record; out pdata:Pointer);virtual;
                  procedure endsnap(out osp:os_record; var pdata:Pointer);virtual;
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
@@ -193,7 +193,7 @@ function GDBObjLWpolyline.getsnap;
 begin
      result:=GDBPoint3dArraygetsnap(Vertex3D_in_WCS_Array,PProjPoint,{snaparray}PGDBVectorSnapArray(pdata)^,osp,closed,param,ProjectProc,snapmode);
 end;
-function GDBObjLWpolyline.onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;
+function GDBObjLWpolyline.onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;
 begin
      if Vertex3D_in_WCS_Array.onpoint(point,closed) then
                                                 begin
@@ -301,7 +301,7 @@ begin
 end;
 procedure GDBObjLWpolyline.getoutbound;
 var //tv,tv2:GDBVertex4D;
-    t,b,l,r,n,f:GDBDouble;
+    t,b,l,r,n,f:Double;
     ptv:pgdbvertex;
     ir:itrec;
 begin
@@ -626,7 +626,7 @@ var p: gdbvertex2d;
   s: GDBString;
   byt, code, i: Integer;
   hlGDBWord: LongWord;
-  tGDBDouble: GDBDouble;
+  tDouble: Double;
   numv: Integer;
 begin
   //inherited init(nil,0, -1);
@@ -704,14 +704,14 @@ begin
       43:
         begin
           s := f.readgdbstring;
-          val(s, tGDBDouble, code);
+          val(s, tDouble, code);
           if Width2D_in_OCS_Array.Max<numv then
                                                Width2D_in_OCS_Array.setsize(numv);
           Width2D_in_OCS_Array.Count := numv;
           for i := 0 to numv - 1 do
           begin
-            PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(i)).endw := tGDBDouble;
-            PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(i)).startw := tGDBDouble;
+            PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(i)).endw := tDouble;
+            PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(i)).startw := tDouble;
           end;
           Width2D_in_OCS_Array.Count := numv;
         end;
@@ -771,7 +771,7 @@ begin
                  dxfGDBStringout(outhandle,70,'0');
 
 
-  dxfGDBDoubleout(outhandle,38,local.p_insert.z);
+  dxfDoubleout(outhandle,38,local.p_insert.z);
   //WriteString_EOL(outhandle, '38');
   //WriteString_EOL(outhandle, floattostr(local.p_insert.z));
 
@@ -786,12 +786,12 @@ begin
        //tv:=uzegeometry.VectorTransform3D(tv,m);
     dxfvertex2dout(outhandle,10,PGDBVertex2D(@tv)^);
     //dxfvertex2dout(outhandle,10,PGDBArrayVertex2D(Vertex2D_in_OCS_Array.PArray)^[j]);
-    dxfGDBDoubleout(outhandle,40,PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(j)).startw);
-    dxfGDBDoubleout(outhandle,41,PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(j)).endw);
+    dxfDoubleout(outhandle,40,PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(j)).startw);
+    dxfDoubleout(outhandle,41,PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(j)).endw);
   end;
   SaveToDXFObjPostfix(outhandle);
 end;
-function GDBObjLWpolyline.isPointInside(point:GDBVertex):GDBBoolean;
+function GDBObjLWpolyline.isPointInside(point:GDBVertex):Boolean;
 var m: DMatrix4D;
     p:GDBVertex2D;
 begin
@@ -803,7 +803,7 @@ begin
      result:=Vertex2D_in_OCS_Array.ispointinside(p);
 end;
 
-function GDBObjLWpolyline.CalcSquare:GDBDouble;
+function GDBObjLWpolyline.CalcSquare:Double;
 var
     pv,pvnext:PGDBVertex2D;
     i:integer;
@@ -889,7 +889,7 @@ end;
 procedure GDBObjLWpolyline.CalcWidthSegment;
 var
   i, j, k: Integer;
-  dx, dy, nx, ny, l: GDBDouble;
+  dx, dy, nx, ny, l: Double;
   v2di,v2dj:PGDBVertex2D;
   plw,plw2:PGLlwwidth;
   //q2d:GDBQuad2d;

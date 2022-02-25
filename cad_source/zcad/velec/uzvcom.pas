@@ -164,7 +164,7 @@ type
                          VPoint1:GDBVertex;  //координаты 1й вершниы
                          VPoint2:GDBVertex;  //координаты 2й вершниы
                          cableEnt:PGDBObjSuperLine;
-                         edgeLength:GDBDouble; // длина ребра
+                         edgeLength:Double; // длина ребра
       end;
       TListEdgeGraph=specialize TVector<TInfoEdgeGraph>;
 
@@ -234,7 +234,7 @@ type
       //Список номеров
       TInfoListNumVertex=record
                    num:Integer; //номер 1-й вершниы по списку
-                   level:GDBDouble;
+                   level:Double;
       end;
       TListNumVertex=specialize TVector<TInfoListNumVertex>;
 
@@ -259,8 +259,8 @@ type
 
       function graphBulderFunc(Epsilon:double;nameCable:string):TGraphBuilder;
       function visualGraphEdge(p1:GDBVertex;p2:GDBVertex;color:integer;nameLayer:string):TCommandResult;
-      function visualGraphVertex(p1:GDBVertex;rr:GDBDouble;color:integer;nameLayer:string):TCommandResult;
-      function visualGraphError(point:GDBVertex;rr:GDBDouble;color:integer;nameLayer:string):TCommandResult;
+      function visualGraphVertex(p1:GDBVertex;rr:Double;color:integer;nameLayer:string):TCommandResult;
+      function visualGraphError(point:GDBVertex;rr:Double;color:integer;nameLayer:string):TCommandResult;
       function getPointConnector(pobj:pGDBObjEntity; out pConnect:GDBVertex):Boolean;
 
       function testTempDrawPolyLine(listVertex:GListVertexPoint;color:Integer):TCommandResult;
@@ -373,14 +373,14 @@ begin
   NearObjects.Done;//убиваем список
 end;
 //Сравнение 2-х вершин одинаковые они или нет, с учетом погрешности
-function compareVertex(p1:GDBVertex;p2:GDBVertex;inaccuracy:GDBDouble):Boolean;
+function compareVertex(p1:GDBVertex;p2:GDBVertex;inaccuracy:Double):Boolean;
 begin
     result:=false;
     if ((p1.x >= p2.x-inaccuracy) and (p1.x <= p2.x+inaccuracy) and (p2.y >= p2.y-inaccuracy) and (p2.y <= p2.y+inaccuracy)) then
        result:=true;
 end;
 //Проверка списка на дубликаты, при добавлении новой вершины, с учетом погрешности
-function dublicateVertex(listVertex:TListDeviceLine;addVertex:GDBVertex;inaccuracy:GDBDouble):Boolean;
+function dublicateVertex(listVertex:TListDeviceLine;addVertex:GDBVertex;inaccuracy:Double):Boolean;
 var
     i:integer;
 begin
@@ -452,7 +452,7 @@ begin
 end;
 
 //Визуализация круга его p1-координата, rr-радиус, color-цвет
-function visualGraphVertex(p1:GDBVertex;rr:GDBDouble;color:integer;nameLayer:string):TCommandResult;
+function visualGraphVertex(p1:GDBVertex;rr:Double;color:integer;nameLayer:string):TCommandResult;
 var
     pcircle:PGDBObjCircle;
 begin
@@ -470,7 +470,7 @@ begin
 end;
 
 //Визуализация ошибки его p1-координата, rr-радиус, color-цвет
-function visualGraphError(point:GDBVertex;rr:GDBDouble;color:integer;nameLayer:string):TCommandResult;
+function visualGraphError(point:GDBVertex;rr:Double;color:integer;nameLayer:string):TCommandResult;
 var
     polyObj:PGDBObjPolyLine;
     tempPoint:GDBVertex;
@@ -546,7 +546,7 @@ end;
 
 
 
-//function testTempDrawCircle(p1:GDBVertex;rr:GDBDouble):TCommandResult;
+//function testTempDrawCircle(p1:GDBVertex;rr:Double):TCommandResult;
 //var
 //    pcircle:PGDBObjCircle;
 //   // pe:T3PointCircleModePentity;
@@ -1383,7 +1383,7 @@ begin
        nameBreak:=pgdbstring(pvd^.data.Addr.Instance)^;
        pvd:=FindVariableInEnt(graph.listVertex[i].deviceEnt,'Elevation');
        infoVertex.num:=i;
-       infoVertex.level:=PGDBDouble(pvd^.data.Addr.Instance)^;
+       infoVertex.level:=PDouble(pvd^.data.Addr.Instance)^;
 
        graph.listVertex.Mutable[i]^.break:=true;
        graph.listVertex.Mutable[i]^.breakName:=nameBreak;

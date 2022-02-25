@@ -4,7 +4,7 @@ uses system;
 var
    CableName:GDBString;(*'Обозначение'*)
    CableMaterial:GDBString;(*'Материал'*)
-   CableLength:GDBDouble;(*'Длинна'*)
+   CableLength:Double;(*'Длинна'*)
 implementation
 begin
      CableName:='??';

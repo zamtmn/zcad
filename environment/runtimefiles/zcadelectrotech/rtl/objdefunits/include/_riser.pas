@@ -4,7 +4,7 @@ uses system;
 usescopy _addtocable;
 var
    Text:GDBString;(*'Текст'*)
-   Elevation:GDBDouble;(*'Отметка'*)
+   Elevation:Double;(*'Отметка'*)
    RiserName:GDBString;(*'Имя стояка'*)
 implementation
 begin

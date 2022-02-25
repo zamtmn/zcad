@@ -34,7 +34,7 @@ type
 PTGDBTableItemFormat=^TGDBTableItemFormat;
 {REGISTERRECORDTYPE TGDBTableItemFormat}
 TGDBTableItemFormat=record
-                 Width,TextWidth:GDBDouble;
+                 Width,TextWidth:Double;
                  CF:TTableCellJustify;
                 end;
 PGDBObjTable=^GDBObjTable;
@@ -42,8 +42,8 @@ PGDBObjTable=^GDBObjTable;
 GDBObjTable= object(GDBObjComplex)
             PTableStyle:PTGDBTableStyle;
             tbl:GDBTableArray;
-            w,h:GDBDouble;
-            scale:GDBDouble;
+            w,h:Double;
+            scale:Double;
             constructor initnul;
             destructor done;virtual;
             function Clone(own:Pointer):PGDBObjEntity;virtual;
@@ -166,7 +166,7 @@ var
    pstr:pGDBsTRiNG;
    //cf:TGDBTableItemFormat;
    pcf:PTGDBTableItemFormat;
-   x{,y},xw:gdbdouble;
+   x{,y},xw:Double;
    xcount,xcurrcount,ycount,ycurrcount,ccount:integer;
    DC:TDrawContext;
 begin
@@ -321,7 +321,7 @@ constructor GDBObjTable.initnul;
    //pstr:pGDBsTRiNG;
    //cf:TGDBTableItemFormat;
    //pcf:PTGDBTableItemFormat;
-   //x,y:gdbdouble;
+   //x,y:Double;
    //xcount,xcurrcount,ycount,ycurrcount,ccount:integer;
 begin
      inherited;

@@ -39,15 +39,15 @@ GDBObjDevice= object(GDBObjBlockInsert)
                    constructor initnul;
                    constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                    destructor done;virtual;
-                   function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
+                   function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                    function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                    procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                    procedure FormatFeatures(var drawing:TDrawingDef);virtual;
                    procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                    procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                    procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
-                   function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
-                   function ReturnLastOnMouse(InSubEntry:GDBBoolean):PGDBObjEntity;virtual;
+                   function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
+                   function ReturnLastOnMouse(InSubEntry:Boolean):PGDBObjEntity;virtual;
                    procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
                    procedure DeSelect(var SelectedObjCount:Integer;ds2s:TDeSelect2Stage);virtual;
                    //function GetDeviceType:TDeviceType;virtual;
@@ -64,7 +64,7 @@ GDBObjDevice= object(GDBObjBlockInsert)
                    procedure SaveToDXFObjXData(var outhandle:{Integer}TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
                    procedure AddMi(pobj:PGDBObjSubordinated);virtual;
                    //procedure select;virtual;
-                   procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;
+                   procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
                    procedure addcontrolpoints(tdesc:Pointer);virtual;
 
                    procedure EraseMi(pobj:pGDBObjEntity;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
@@ -359,10 +359,10 @@ begin
                                           else result:=@self;
 end;
 function GDBObjDevice.onmouse;
-var //t,xx,yy:GDBDouble;
+var //t,xx,yy:Double;
     //i:Integer;
     p:pgdbobjEntity;
-    ot:GDBBoolean;
+    ot:Boolean;
     ir:itrec;
 begin
   result:=inherited onmouse(popa,mf,InSubEntry);
@@ -452,7 +452,7 @@ var //pblockdef:PGDBObjBlockdef;
     pvisible,pvisible2:PGDBObjEntity;
     //freelayer:PGDBLayerProp;
     i:Integer;
-    //varobject:gdbboolean;
+    //varobject:Boolean;
     devnam:GDBString;
     DC:TDrawContext;
 begin
@@ -510,7 +510,7 @@ var //pblockdef:PGDBObjBlockdef;
     pvisible,pvisible2:PGDBObjEntity;
     //freelayer:PGDBLayerProp;
     i:Integer;
-    //varobject:gdbboolean;
+    //varobject:Boolean;
     //devnam:GDBString;
     DC:TDrawContext;
 begin
@@ -636,7 +636,7 @@ procedure GDBObjDevice.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext)
 (*var pvn,{pvnt,}pvp,pvphase,pvi,pvcos:pvardesk;
     volt:TVoltage;
     calcip:TCalcIP;
-    u:gdbdouble;*)
+    u:Double;*)
 begin
   if assigned(EntExtensions)then
     EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
@@ -680,9 +680,9 @@ begin
                           begin
                           if calcip=_ICOS_from_P then
                           begin
-                               if pgdbdouble(pvp^.Instance)^<1 then pgdbdouble(pvcos^.Instance)^:=0.65
-                          else if pgdbdouble(pvp^.Instance)^<=4 then pgdbdouble(pvcos^.Instance)^:=0.75
-                          else pgdbdouble(pvcos^.Instance)^:=0.85;
+                               if pDouble(pvp^.Instance)^<1 then pDouble(pvcos^.Instance)^:=0.65
+                          else if pDouble(pvp^.Instance)^<=4 then pDouble(pvcos^.Instance)^:=0.75
+                          else pDouble(pvcos^.Instance)^:=0.85;
 
                                calcip:=_I_from_p;
                           end;
@@ -690,13 +690,13 @@ begin
                           case calcip of
                                _I_from_P:begin
                                               if PTPhase(pvphase^.Instance)^=_ABC
-                                              then pgdbdouble(pvi^.Instance)^:=pgdbdouble(pvp^.Instance)^/u/1.73/pgdbdouble(pvcos^.Instance)^
-                                              else pgdbdouble(pvi^.Instance)^:=pgdbdouble(pvp^.Instance)^/u/pgdbdouble(pvcos^.Instance)^
+                                              then pDouble(pvi^.Instance)^:=pDouble(pvp^.Instance)^/u/1.73/pDouble(pvcos^.Instance)^
+                                              else pDouble(pvi^.Instance)^:=pDouble(pvp^.Instance)^/u/pDouble(pvcos^.Instance)^
                                          end;
                                _P_from_I:begin
                                               if PTPhase(pvphase^.Instance)^=_ABC
-                                              then pgdbdouble(pvp^.Instance)^:=pgdbdouble(pvi^.Instance)^*u*1.73*pgdbdouble(pvcos^.Instance)^
-                                              else pgdbdouble(pvp^.Instance)^:=pgdbdouble(pvi^.Instance)^*u*pgdbdouble(pvcos^.Instance)^
+                                              then pDouble(pvp^.Instance)^:=pDouble(pvi^.Instance)^*u*1.73*pDouble(pvcos^.Instance)^
+                                              else pDouble(pvp^.Instance)^:=pDouble(pvi^.Instance)^*u*pDouble(pvcos^.Instance)^
                                          end
 
 

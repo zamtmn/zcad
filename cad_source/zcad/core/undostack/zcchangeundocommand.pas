@@ -42,9 +42,9 @@ generic TGChangeCommand<_T> =object(TCustomChangeCommand)
 {$DEFINE TData     := GDBVertex}
   {$I TGChangeCommandIMPL.inc}
 
-{$DEFINE TCommand  := TGDBDoubleChangeCommand}
-{$DEFINE PTCommand := PTGDBDoubleChangeCommand}
-{$DEFINE TData     := GDBDouble}
+{$DEFINE TCommand  := TDoubleChangeCommand}
+{$DEFINE PTCommand := PTDoubleChangeCommand}
+{$DEFINE TData     := Double}
   {$I TGChangeCommandIMPL.inc}
 
 {$DEFINE TCommand  := TGDBCameraBasePropChangeCommand}
@@ -62,9 +62,9 @@ generic TGChangeCommand<_T> =object(TCustomChangeCommand)
 {$DEFINE TData     := Pointer}
   {$I TGChangeCommandIMPL.inc}
 
-{$DEFINE TCommand  := TGDBBooleanChangeCommand}
-{$DEFINE PTCommand := PTGDBBooleanChangeCommand}
-{$DEFINE TData     := GDBBoolean}
+{$DEFINE TCommand  := TBooleanChangeCommand}
+{$DEFINE PTCommand := PTBooleanChangeCommand}
+{$DEFINE TData     := Boolean}
   {$I TGChangeCommandIMPL.inc}
 
 {$DEFINE TCommand  := TGDBByteChangeCommand}
@@ -94,9 +94,9 @@ generic TGChangeCommand<_T> =object(TCustomChangeCommand)
 {$DEFINE TData     := GDBVertex}
   {$I TGChangeCommandIMPL.inc}
 
-{$DEFINE TCommand  := TGDBDoubleChangeCommand}
-{$DEFINE PTCommand := PTGDBDoubleChangeCommand}
-{$DEFINE TData     := GDBDouble}
+{$DEFINE TCommand  := TDoubleChangeCommand}
+{$DEFINE PTCommand := PTDoubleChangeCommand}
+{$DEFINE TData     := Double}
   {$I TGChangeCommandIMPL.inc}
 
 {$DEFINE TCommand  := TGDBCameraBasePropChangeCommand}
@@ -114,9 +114,9 @@ generic TGChangeCommand<_T> =object(TCustomChangeCommand)
 {$DEFINE TData     := Pointer}
   {$I TGChangeCommandIMPL.inc}
 
-{$DEFINE TCommand  := TGDBBooleanChangeCommand}
-{$DEFINE PTCommand := PTGDBBooleanChangeCommand}
-{$DEFINE TData     := GDBBoolean}
+{$DEFINE TCommand  := TBooleanChangeCommand}
+{$DEFINE PTCommand := PTBooleanChangeCommand}
+{$DEFINE TData     := Boolean}
   {$I TGChangeCommandIMPL.inc}
 
 {$DEFINE TCommand  := TGDBByteChangeCommand}
@@ -182,9 +182,9 @@ end;
 {$DEFINE TData     := GDBVertex}
   {$I TGChangeCommandIMPL.inc}
 
-{$DEFINE TCommand  := TGDBDoubleChangeCommand}
-{$DEFINE PTCommand := PTGDBDoubleChangeCommand}
-{$DEFINE TData     := GDBDouble}
+{$DEFINE TCommand  := TDoubleChangeCommand}
+{$DEFINE PTCommand := PTDoubleChangeCommand}
+{$DEFINE TData     := Double}
   {$I TGChangeCommandIMPL.inc}
 
 {$DEFINE TCommand  := TGDBCameraBasePropChangeCommand}
@@ -202,9 +202,9 @@ end;
 {$DEFINE TData     := Pointer}
   {$I TGChangeCommandIMPL.inc}
 
-{$DEFINE TCommand  := TGDBBooleanChangeCommand}
-{$DEFINE PTCommand := PTGDBBooleanChangeCommand}
-{$DEFINE TData     := GDBBoolean}
+{$DEFINE TCommand  := TBooleanChangeCommand}
+{$DEFINE PTCommand := PTBooleanChangeCommand}
+{$DEFINE TData     := Boolean}
   {$I TGChangeCommandIMPL.inc}
 
 {$DEFINE TCommand  := TGDBByteChangeCommand}

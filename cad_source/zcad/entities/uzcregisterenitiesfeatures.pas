@@ -101,8 +101,8 @@ procedure ElLeaderSave(var outhandle:TZctnrVectorBytes;PEnt:PGDBObjEntity;var IO
 begin
   dxfGDBStringout(outhandle,1000,'_UPGRADE='+inttostr(UD_LineToLeader));
   dxfGDBStringout(outhandle,1000,'%1=size|Integer|'+inttostr(PGDBObjElLeader(PEnt)^.size)+'|');
-  dxfGDBStringout(outhandle,1000,'%2=scale|GDBDouble|'+floattostr(PGDBObjElLeader(PEnt)^.scale)+'|');
-  dxfGDBStringout(outhandle,1000,'%3=twidth|GDBDouble|'+floattostr(PGDBObjElLeader(PEnt)^.twidth)+'|');
+  dxfGDBStringout(outhandle,1000,'%2=scale|Double|'+floattostr(PGDBObjElLeader(PEnt)^.scale)+'|');
+  dxfGDBStringout(outhandle,1000,'%3=twidth|Double|'+floattostr(PGDBObjElLeader(PEnt)^.twidth)+'|');
 end;
 
 procedure EntityIOSave_all(var outhandle:TZctnrVectorBytes;PEnt:PGDBObjEntity;var IODXFContext:TIODXFContext);
@@ -210,7 +210,7 @@ var
    pvn,pvp,pvphase,pvi,pvcos:pvardesk;
    volt:TVoltage;
    calcip:TCalcIP;
-   u:gdbdouble;
+   u:Double;
    pentvarext:TVariablesExtender;
 begin
      pentvarext:=pEntity^.GetExtension<TVariablesExtender>;
@@ -242,9 +242,9 @@ begin
                      begin
                      if calcip=_ICOS_from_P then
                      begin
-                          if pgdbdouble(pvp^.data.Addr.Instance)^<1 then pgdbdouble(pvcos^.data.Addr.Instance)^:=0.65
-                     else if pgdbdouble(pvp^.data.Addr.Instance)^<=4 then pgdbdouble(pvcos^.data.Addr.Instance)^:=0.75
-                     else pgdbdouble(pvcos^.data.Addr.Instance)^:=0.85;
+                          if pDouble(pvp^.data.Addr.Instance)^<1 then pDouble(pvcos^.data.Addr.Instance)^:=0.65
+                     else if pDouble(pvp^.data.Addr.Instance)^<=4 then pDouble(pvcos^.data.Addr.Instance)^:=0.75
+                     else pDouble(pvcos^.data.Addr.Instance)^:=0.85;
 
                           calcip:=_I_from_p;
                      end;
@@ -252,13 +252,13 @@ begin
                      case calcip of
                           _I_from_P:begin
                                          if PTPhase(pvphase^.data.Addr.Instance)^=_ABC
-                                         then pgdbdouble(pvi^.data.Addr.Instance)^:=pgdbdouble(pvp^.data.Addr.Instance)^/u/1.73/pgdbdouble(pvcos^.data.Addr.Instance)^
-                                         else pgdbdouble(pvi^.data.Addr.Instance)^:=pgdbdouble(pvp^.data.Addr.Instance)^/u/pgdbdouble(pvcos^.data.Addr.Instance)^
+                                         then pDouble(pvi^.data.Addr.Instance)^:=pDouble(pvp^.data.Addr.Instance)^/u/1.73/pDouble(pvcos^.data.Addr.Instance)^
+                                         else pDouble(pvi^.data.Addr.Instance)^:=pDouble(pvp^.data.Addr.Instance)^/u/pDouble(pvcos^.data.Addr.Instance)^
                                     end;
                           _P_from_I:begin
                                          if PTPhase(pvphase^.data.Addr.Instance)^=_ABC
-                                         then pgdbdouble(pvp^.data.Addr.Instance)^:=pgdbdouble(pvi^.data.Addr.Instance)^*u*1.73*pgdbdouble(pvcos^.data.Addr.Instance)^
-                                         else pgdbdouble(pvp^.data.Addr.Instance)^:=pgdbdouble(pvi^.data.Addr.Instance)^*u*pgdbdouble(pvcos^.data.Addr.Instance)^
+                                         then pDouble(pvp^.data.Addr.Instance)^:=pDouble(pvi^.data.Addr.Instance)^*u*1.73*pDouble(pvcos^.data.Addr.Instance)^
+                                         else pDouble(pvp^.data.Addr.Instance)^:=pDouble(pvi^.data.Addr.Instance)^*u*pDouble(pvcos^.data.Addr.Instance)^
                                     end
 
 

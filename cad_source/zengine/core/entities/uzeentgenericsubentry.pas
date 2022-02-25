@@ -49,15 +49,15 @@ GDBObjGenericSubEntry= object(GDBObjWithMatrix)
                             //function CorrectNodeTreeBB(pobj:PGDBObjEntity):Integer;virtual;
                             constructor initnul(owner:PGDBObjGenericWithSubordinated);
                             procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
-                            function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
-                            function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
+                            function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                            function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                             procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                             procedure FormatAfterEdit(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                             procedure restructure(var drawing:TDrawingDef);virtual;
                             procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
-                            //function select:GDBBoolean;virtual;
+                            //function select:Boolean;virtual;
                             function getowner:PGDBObjSubordinated;virtual;
-                            function CanAddGDBObj(pobj:PGDBObjEntity):GDBBoolean;virtual;
+                            function CanAddGDBObj(pobj:PGDBObjEntity):Boolean;virtual;
                             function EubEntryType:Integer;virtual;
                             procedure MigrateTo(new_sub:PGDBObjGenericSubEntry);virtual;
                             procedure EraseMi(pobj:pGDBObjEntity;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
@@ -67,7 +67,7 @@ GDBObjGenericSubEntry= object(GDBObjWithMatrix)
                             //** Добавляет объект в область ConstructObjRoot или mainObjRoot или итд. Пример добавления gdb.GetCurrentDWG^.ConstructObjRoot.AddMi(@sampleObj);
                             procedure AddMi(pobj:PGDBObjSubordinated);virtual;
                             procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
-                            function ReturnLastOnMouse(InSubEntry:GDBBoolean):PGDBObjEntity;virtual;
+                            function ReturnLastOnMouse(InSubEntry:Boolean):PGDBObjEntity;virtual;
                             procedure correctobjects(powner:PGDBObjEntity;pinownerarray:Integer);virtual;
                             destructor done;virtual;
                             procedure getoutbound(var DC:TDrawContext);virtual;
@@ -82,19 +82,19 @@ GDBObjGenericSubEntry= object(GDBObjWithMatrix)
                             procedure DestroyPreCalcData(PreCalcData:PTDrawingPreCalcData);virtual;
 
                             //procedure ProcessTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;OwnerInFrustum:TInRect);
-                            //function CalcVisibleByTree(frustum:ClipArray;infrustumactualy:TActulity;const enttree:TEntTreeNode):GDBBoolean;virtual;
-                              function CalcVisibleByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
-                              //function CalcInFrustumByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode):GDBBoolean;virtual;
-                              procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;
+                            //function CalcVisibleByTree(frustum:ClipArray;infrustumactualy:TActulity;const enttree:TEntTreeNode):Boolean;virtual;
+                              function CalcVisibleByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                              //function CalcInFrustumByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode):Boolean;virtual;
+                              procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
 
-                              //function FindObjectsInPointStart(const point:GDBVertex;out Objects:GDBObjOpenArrayOfPV):GDBBoolean;virtual;
-                              function FindObjectsInVolume(const Volume:TBoundingBox;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;virtual;
-                              function FindObjectsInPoint(const point:GDBVertex;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;virtual;
-                              function FindObjectsInPointSlow(const point:GDBVertex;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;
-                              function FindObjectsInPointInNode(const point:GDBVertex;const Node:TEntTreeNode;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;
-                              function FindObjectsInVolumeInNode(const Volume:TBoundingBox;const Node:TEntTreeNode;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;
-                              //function FindObjectsInPointDone(const point:GDBVertex):GDBBoolean;virtual;
-                              function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;virtual;
+                              //function FindObjectsInPointStart(const point:GDBVertex;out Objects:GDBObjOpenArrayOfPV):Boolean;virtual;
+                              function FindObjectsInVolume(const Volume:TBoundingBox;var Objects:GDBObjOpenArrayOfPV):Boolean;virtual;
+                              function FindObjectsInPoint(const point:GDBVertex;var Objects:GDBObjOpenArrayOfPV):Boolean;virtual;
+                              function FindObjectsInPointSlow(const point:GDBVertex;var Objects:GDBObjOpenArrayOfPV):Boolean;
+                              function FindObjectsInPointInNode(const point:GDBVertex;const Node:TEntTreeNode;var Objects:GDBObjOpenArrayOfPV):Boolean;
+                              function FindObjectsInVolumeInNode(const Volume:TBoundingBox;const Node:TEntTreeNode;var Objects:GDBObjOpenArrayOfPV):Boolean;
+                              //function FindObjectsInPointDone(const point:GDBVertex):Boolean;virtual;
+                              function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;virtual;
                               procedure correctsublayers(var la:GDBLayerArray);virtual;
                               function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
 
@@ -165,10 +165,10 @@ begin
      p:=objarray.iterate(ir);
      until p=nil;
 end;
-function GDBObjGenericSubEntry.FindObjectsInPointSlow(const point:GDBVertex;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;
+function GDBObjGenericSubEntry.FindObjectsInPointSlow(const point:GDBVertex;var Objects:GDBObjOpenArrayOfPV):Boolean;
 var
-    //minus:gdbboolean{$IFNDEF DELPHI}=false{$ENDIF};
-    //plus:gdbboolean{$IFNDEF DELPHI}=false{$ENDIF};
+    //minus:Boolean{$IFNDEF DELPHI}=false{$ENDIF};
+    //plus:Boolean{$IFNDEF DELPHI}=false{$ENDIF};
     pobj:PGDBObjEntity;
     ir:itrec;
 begin
@@ -188,10 +188,10 @@ begin
      //self.ObjArray.ObjTree.BoundingBox;
 end;
 
-function GDBObjGenericSubEntry.FindObjectsInPointInNode(const point:GDBVertex;const Node:TEntTreeNode;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;
+function GDBObjGenericSubEntry.FindObjectsInPointInNode(const point:GDBVertex;const Node:TEntTreeNode;var Objects:GDBObjOpenArrayOfPV):Boolean;
 var
-    minus:gdbboolean{$IFNDEF DELPHI}=false{$ENDIF};
-    plus:gdbboolean{$IFNDEF DELPHI}=false{$ENDIF};
+    minus:Boolean{$IFNDEF DELPHI}=false{$ENDIF};
+    plus:Boolean{$IFNDEF DELPHI}=false{$ENDIF};
     pobj:PGDBObjEntity;
     ir:itrec;
 begin
@@ -224,10 +224,10 @@ begin
      result:=result or (plus or minus);
      //self.ObjArray.ObjTree.BoundingBox;
 end;
-function GDBObjGenericSubEntry.FindObjectsInVolumeInNode(const Volume:TBoundingBox;const Node:TEntTreeNode;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;
+function GDBObjGenericSubEntry.FindObjectsInVolumeInNode(const Volume:TBoundingBox;const Node:TEntTreeNode;var Objects:GDBObjOpenArrayOfPV):Boolean;
 var
-    minus:gdbboolean{$IFNDEF DELPHI}=false{$ENDIF};
-    plus:gdbboolean{$IFNDEF DELPHI}=false{$ENDIF};
+    minus:Boolean{$IFNDEF DELPHI}=false{$ENDIF};
+    plus:Boolean{$IFNDEF DELPHI}=false{$ENDIF};
     pobj:PGDBObjEntity;
     ir:itrec;
 begin
@@ -259,7 +259,7 @@ begin
 
      result:=result or (plus or minus);
 end;
-function GDBObjGenericSubEntry.FindObjectsInPoint(const point:GDBVertex;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;
+function GDBObjGenericSubEntry.FindObjectsInPoint(const point:GDBVertex;var Objects:GDBObjOpenArrayOfPV):Boolean;
 begin
      if uzegeometry.IsPointInBB(point,self.ObjArray.ObjTree.BoundingBox) then
      begin
@@ -268,7 +268,7 @@ begin
      else
          result:=false;
 end;
-function GDBObjGenericSubEntry.FindObjectsInVolume(const Volume:TBoundingBox;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;
+function GDBObjGenericSubEntry.FindObjectsInVolume(const Volume:TBoundingBox;var Objects:GDBObjOpenArrayOfPV):Boolean;
 begin
      if uzegeometry.boundingintersect(Volume,self.ObjArray.ObjTree.BoundingBox) then
      begin
@@ -296,11 +296,11 @@ begin
      inherited;
      ObjArray.SetInFrustumFromTree(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
 end;
-(*function GDBObjGenericSubEntry.CalcInFrustumByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode):GDBBoolean;
+(*function GDBObjGenericSubEntry.CalcInFrustumByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode):Boolean;
 begin
      ProcessTree(frustum,infrustumactualy,visibleactualy,enttree,IRPartially)
 end;*)
-function GDBObjGenericSubEntry.CalcVisibleByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;
+function GDBObjGenericSubEntry.CalcVisibleByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;
 begin
   //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('GDBObjGenericSubEntry.CalcVisibleByTree',lp_incPos);{$ENDIF}
   visible:=visibleactualy;
@@ -336,7 +336,7 @@ begin
 end;
 procedure GDBObjGenericSubEntry.DrawWithAttrib;
 var
-   _selected: GDBBoolean;
+   _selected: Boolean;
 begin
      inc(dc.subrender);
      _selected:=dc.selected;
@@ -497,7 +497,7 @@ begin
 end;
 procedure GDBObjGenericSubEntry.DrawGeometry;
 var
-   _selected: GDBBoolean;
+   _selected: Boolean;
 begin
      inc(dc.subrender);
      _selected:=dc.selected;
@@ -507,7 +507,7 @@ begin
      dec(dc.subrender);
   DrawBB(dc);
 end;
-function GDBObjGenericSubEntry.CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;
+function GDBObjGenericSubEntry.CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;
 begin
      result:=ObjArray.calcvisible(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
      self.VisibleOBJBoundingBox:=ObjArray.calcvisbb({gdb.GetCurrentDWG.pcamera^.POSCOUNT}{visibleactualy}infrustumactualy);
@@ -548,11 +548,11 @@ procedure GDBObjGenericSubEntry.renderfeedbac(infrustumactualy:TActulity;pcount:
 begin
   ObjArray.renderfeedbac(infrustumactualy,pcount,camera,ProjectProc,dc);
 end;
-function GDBObjGenericSubEntry.onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;
-var //t,xx,yy:GDBDouble;
+function GDBObjGenericSubEntry.onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;
+var //t,xx,yy:Double;
     i:Integer;
     p:pGDBObjEntity;
-    ot:GDBBoolean;
+    ot:Boolean;
 begin
   result:=false;
   for i:=0 to ObjArray.count-1 do
@@ -570,10 +570,10 @@ begin
   end;
 end;
 function GDBObjGenericSubEntry.onmouse;
-var //t,xx,yy:GDBDouble;
+var //t,xx,yy:Double;
     i:Integer;
     p:pGDBObjEntity;
-    ot:GDBBoolean;
+    ot:Boolean;
 begin
   result:=false;
   //p:=Pointer(ObjArray.parray^);

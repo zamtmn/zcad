@@ -59,7 +59,7 @@ end;
 procedure GDBfont.CreateSymbol(drawer:TZGLAbstractDrawer;var geom:ZGLVectorObject;_symbol:Integer;const objmatrix:DMatrix4D;matr:DMatrix4D;var Bound:TBoundingRect;var LLSymbolLineIndex:TArrayIndex);
 var
   v,v0,true0Y,fact0y:GDBvertex;
-  sqrsymh{,CapHeight}:GDBDouble;
+  sqrsymh{,CapHeight}:Double;
   psyminfo:PGDBsymdolinfo;
 
   LLSymbolIndex:TArrayIndex;
@@ -181,7 +181,7 @@ begin
             pv3.count:=0;
             //geom.SHX.add(@pv3);
 
-            //inc(PByte(psymbol), 2 * sizeof(GDBDouble));
+            //inc(PByte(psymbol), 2 * sizeof(Double));
             PGDBvertex2D(@v)^.x:=pfontfloat(psymbol)^;
             inc(pfontfloat(psymbol));
             PGDBvertex2D(@v)^.y:=pfontfloat(psymbol)^;
@@ -211,7 +211,7 @@ begin
 
             //pv.coord:=PGDBvertex2D(@v)^;
             //pv.count:=0;
-            //inc(PByte(psymbol), 2 * sizeof(GDBDouble));
+            //inc(PByte(psymbol), 2 * sizeof(Double));
           end;
         SHXPoly:
           begin
@@ -246,7 +246,7 @@ begin
             //geom.SHX.add(@pv3);
 
 
-            //inc(PByte(psymbol), 2 * sizeof(GDBDouble));
+            //inc(PByte(psymbol), 2 * sizeof(Double));
             k := 1;
             while k < len do //for k:=1 to len-1 do
             begin
@@ -280,7 +280,7 @@ begin
             geom.GeomData.Vertex3S.AddGDBVertex(v);
 
 
-            //inc(PByte(psymbol), 2 * sizeof(GDBDouble));
+            //inc(PByte(psymbol), 2 * sizeof(Double));
             inc(k);
             inc(PrimitivesCount);
             end;

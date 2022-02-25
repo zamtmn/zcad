@@ -1085,8 +1085,9 @@
         <IsPartOfProject Value="True"/>
       </Unit174>
       <Unit175>
-        <Filename Value="zengine/containers/uzctnrvectorgdbdouble.pas"/>
+        <Filename Value="zengine/containers/uzctnrvectordouble.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="uzctnrVectorDouble"/>
       </Unit175>
       <Unit176>
         <Filename Value="zengine/containers/UGDBTable.pas"/>

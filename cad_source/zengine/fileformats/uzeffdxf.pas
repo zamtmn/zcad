@@ -617,7 +617,7 @@ var
    PTP:PTextProp;
    BShapeProp:BasicSHXDashProp;
    txtstr:string;
-   TempDouble:GDBDouble;
+   TempDouble:Double;
    flags: Integer;
    DWGHandle:TDWGHandle;
    len:double;
@@ -1660,7 +1660,7 @@ var
   i: integer;
   OldHandele2NewHandle:TMapHandleToHandle;
   //phandlea: pdxfhandlerecopenarray;
-  inlayertable, inblocksec, inblocktable, inlttypetable, indimstyletable, inappidtable: GDBBoolean;
+  inlayertable, inblocksec, inblocktable, inlttypetable, indimstyletable, inappidtable: Boolean;
   handlepos:integer;
   ignoredsource:boolean;
   instyletable:boolean;
@@ -1671,7 +1671,7 @@ var
   pdsp:PGDBDimStyle;
   ir,ir2,ir3,ir4,ir5:itrec;
   TDI:PTDashInfo;
-  PStroke:PGDBDouble;
+  PStroke:PDouble;
   PSP:PShapeProp;
   PTP:PTextProp;
   p:pointer;

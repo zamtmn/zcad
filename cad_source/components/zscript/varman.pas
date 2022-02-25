@@ -183,7 +183,7 @@ varmanager=object(varmanagerdef)
                  function createvariable(varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0):pvardesk;virtual;
                  function createvariable2(varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0):TInVectorAddr;virtual;
                  function findvardesc2(varname:TInternalScriptString):TInVectorAddr;virtual;
-                 function findfieldcustom(var pdesc: pByte; var offset: Integer;var tc:PUserTypeDescriptor; nam: ShortString): GDBBoolean;virtual;
+                 function findfieldcustom(var pdesc: pByte; var offset: Integer;var tc:PUserTypeDescriptor; nam: ShortString): Boolean;virtual;
                  function getDS:Pointer;virtual;
                  destructor done;virtual;
                  procedure free;virtual;
@@ -255,10 +255,10 @@ var
   CategoryUnknownCOllapsed:boolean;
 
 function getpattern(ptd:ptdarray; max:Integer;var line:TInternalScriptString; out typ:Integer):PTZctnrVectorStrings;
-function ObjOrRecordRead(TranslateFunc:TTranslateFunction;var f: TZctnrVectorBytes; var line,GDBStringtypearray:TInternalScriptString; var fieldoffset: SmallInt; ptd:PRecordDescriptor):GDBBoolean;
+function ObjOrRecordRead(TranslateFunc:TTranslateFunction;var f: TZctnrVectorBytes; var line,GDBStringtypearray:TInternalScriptString; var fieldoffset: SmallInt; ptd:PRecordDescriptor):Boolean;
 function GetPVarMan: Pointer; export;
 function FindCategory(category:TInternalScriptString;var catname:TInternalScriptString):Pointer;
-procedure SetCategoryCollapsed(category:TInternalScriptString;value:GDBBoolean);
+procedure SetCategoryCollapsed(category:TInternalScriptString;value:Boolean);
 function GetBoundsFromSavedUnit(name:string;w,h:integer):Trect;
 procedure StoreBoundsToSavedUnit(name:string;tr:Trect);
 procedure SetTypedDataVariable(out TypedTataVariable:THardTypedData;pTypedTata:pointer;TypeName:string);
@@ -940,7 +940,7 @@ end;
 function getpattern(ptd:ptdarray; max:Integer;var line:TInternalScriptString; out typ:Integer):PTZctnrVectorStrings;
 var i:Integer;
     parseresult:PTZctnrVectorStrings;
-    parseerror:GDBBoolean;
+    parseerror:Boolean;
 begin
      typ:=0;
      i:=1;
@@ -963,10 +963,10 @@ begin
                                                 end;
                    end;
 end;
-function ObjOrRecordRead(TranslateFunc:TTranslateFunction;var f: TZctnrVectorBytes; var line,GDBStringtypearray:TInternalScriptString; var fieldoffset: SmallInt; ptd:PRecordDescriptor):GDBBoolean;
+function ObjOrRecordRead(TranslateFunc:TTranslateFunction;var f: TZctnrVectorBytes; var line,GDBStringtypearray:TInternalScriptString; var fieldoffset: SmallInt; ptd:PRecordDescriptor):Boolean;
 type
     trrstate=(fields,metods);
-var parseerror{,parsesuberror}:GDBBoolean;
+var parseerror{,parsesuberror}:Boolean;
     parseresult{,parsesubresult}:PTZctnrVectorStrings;
     count,typ:Integer;
     {typename,}oldline, fieldname, {fieldvalue,} fieldtype, {sub, indmins, indmaxs, arrind1,}rname,wname,functionname,functionoperands: TInternalScriptString;
@@ -974,7 +974,7 @@ var parseerror{,parsesuberror}:GDBBoolean;
     i: Integer;
 //  indmin, indcount, size: LongWord;
 //  etd:PUserTypeDescriptor;
-//  addtype:GDBBoolean;
+//  addtype:Boolean;
   state:trrstate;
   fieldsmode:(primary,calced);
   fd:FieldDescriptor;
@@ -1827,10 +1827,10 @@ begin
      result:=@CategoryUnknownCOllapsed;
      catname:=category;
 end;
-procedure SetCategoryCollapsed(category:TInternalScriptString;value:GDBBoolean);
+procedure SetCategoryCollapsed(category:TInternalScriptString;value:Boolean);
 var
   cn:TInternalScriptString;
-  pc:PGDBBoolean;
+  pc:PBoolean;
 begin
      pc:=FindCategory(category,cn);
      if pc<>@CategoryUnknownCOllapsed then

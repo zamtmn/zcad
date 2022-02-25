@@ -28,9 +28,9 @@ type
 PTAbstractDrawing=^TAbstractDrawing;
 {REGISTEROBJECTTYPE TAbstractDrawing}
 TAbstractDrawing= object(TDrawingDef)
-                       LWDisplay:GDBBoolean;
-                       SnapGrid:GDBBoolean;
-                       DrawGrid:GDBBoolean;
+                       LWDisplay:Boolean;
+                       SnapGrid:Boolean;
+                       DrawGrid:Boolean;
                        GridSpacing:GDBvertex2D;
                        Snap:GDBSnap2D;
                        CurrentLayer:PGDBLayerProp;
@@ -38,8 +38,8 @@ TAbstractDrawing= object(TDrawingDef)
                        CurrentTextStyle:PGDBTextStyle;
                        CurrentDimStyle:PGDBDimStyle;
                        CurrentLineW:TGDBLineWeight;
-                       LTScale:GDBDouble;
-                       CLTScale:GDBDouble;
+                       LTScale:Double;
+                       CLTScale:Double;
                        CColor:Integer;
 
                        LUnits:TLUnits;
@@ -50,7 +50,7 @@ TAbstractDrawing= object(TDrawingDef)
                        AngBase:GDBAngleDegDouble;
                        UnitMode:TUnitMode;
                        InsUnits:TInsUnits;
-                       TextSize:GDBDouble;
+                       TextSize:Double;
 
                        procedure myGluProject2(objcoord:GDBVertex; out wincoord:GDBVertex);virtual;abstract;
                        procedure myGluUnProject(win:GDBVertex;out obj:GDBvertex);virtual;abstract;
@@ -59,14 +59,14 @@ TAbstractDrawing= object(TDrawingDef)
                        function GetConstructObjRoot:PGDBObjRoot;virtual;abstract;
                        function GetSelObjArray:PGDBSelectedObjArray;virtual;abstract;
                        function GetOnMouseObj:PGDBObjOpenArrayOfPV;virtual;abstract;
-                       procedure RotateCameraInLocalCSXY(ux,uy:GDBDouble);virtual;abstract;
-                       procedure MoveCameraInLocalCSXY(oldx,oldy:GDBDouble;ax:gdbvertex);virtual;abstract;
+                       procedure RotateCameraInLocalCSXY(ux,uy:Double);virtual;abstract;
+                       procedure MoveCameraInLocalCSXY(oldx,oldy:Double;ax:gdbvertex);virtual;abstract;
                        procedure SetCurrentDWG;virtual;abstract;
-                       function GetChangeStampt:GDBBoolean;virtual;abstract;
+                       function GetChangeStampt:Boolean;virtual;abstract;
                        function StoreOldCamerapPos:Pointer;virtual;abstract;
                        procedure StoreNewCamerapPos(command:Pointer);virtual;abstract;
                        procedure SetUnitsFormat(f:TzeUnitsFormat);virtual;abstract;
-                       procedure rtmodify(obj:PGDBObjEntity;md:Pointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;abstract;
+                       procedure rtmodify(obj:PGDBObjEntity;md:Pointer;dist,wc:gdbvertex;save:Boolean);virtual;abstract;
                        procedure FillDrawingPartRC(var dc:TDrawContext);virtual;abstract;
                  end;
 {EXPORT-}

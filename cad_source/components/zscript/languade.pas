@@ -62,7 +62,7 @@ begin
   result := s;
 end;
 
-function itGDBString(expr: GDBString): GDBBoolean;
+function itGDBString(expr: GDBString): Boolean;
 begin
   if (expr[1] = '"') and (expr[length(expr)] = '"') then
     result := true
@@ -70,7 +70,7 @@ begin
     result := false;
 end;
 
-function ithex(expr: GDBString): GDBBoolean;
+function ithex(expr: GDBString): Boolean;
 var
   i: Integer;
 begin
@@ -90,7 +90,7 @@ begin
   end;
 end;
 
-function itint(expr: GDBString): GDBBoolean;
+function itint(expr: GDBString): Boolean;
 var
   i: Integer;
 begin
@@ -105,7 +105,7 @@ begin
   result := false;
 end;
 
-function itreal(expr: GDBString): GDBBoolean;
+function itreal(expr: GDBString): Boolean;
 var
   i: Integer;
 begin
@@ -131,15 +131,15 @@ begin
   end;
   result := false;
 end;
-function itGDBBoolean(expr: GDBString): GDBBoolean;
+function itBoolean(expr: GDBString): Boolean;
 begin
   if (uppercase(expr)='TRUE')or(uppercase(expr)='FALSE') then result := true
                                                          else result := false;
 end;
 
-function itconst(expr: GDBString): GDBBoolean;
+function itconst(expr: GDBString): Boolean;
 begin
-  result := itGDBString(expr) or ithex(expr) or itint(expr) or itreal(expr) or itGDBBoolean(expr);
+  result := itGDBString(expr) or ithex(expr) or itint(expr) or itreal(expr) or itBoolean(expr);
 end;
 function readGDBWord(var expr: GDBString): GDBString;
 var
@@ -238,26 +238,26 @@ end;
 
 procedure createrealvar(var vd: vardesk; s: GDBString);
 var
-  rez:GDBDouble;
+  rez:Double;
 begin
   ClearVariable(vd);
   rez := strtofloat(s);
   begin
     vd.SetInstance(FundamentalDoubleDescriptorObj.AllocAndInitInstance);
-    pGDBDouble(vd.data.Addr.Instance)^ := rez;
+    pDouble(vd.data.Addr.Instance)^ := rez;
     vd.data.ptd:=@FundamentalDoubleDescriptorObj;
   end;
 end;
-procedure createGDBBooleanvar(var vd: vardesk; s: GDBString);
+procedure createBooleanvar(var vd: vardesk; s: GDBString);
 var
-  rez: GDBBoolean;
+  rez: Boolean;
 begin
   ClearVariable(vd);
   if uppercase(s)='TRUE' then rez := true
                          else rez := false;
   begin
     vd.SetInstance(FundamentalBooleanDescriptorOdj.AllocAndInitInstance);
-    PGDBBoolean(vd.data.Addr.Instance)^ := rez;
+    PBoolean(vd.data.Addr.Instance)^ := rez;
     vd.data.ptd:=@FundamentalBooleanDescriptorOdj;
   end;
 end;
@@ -322,8 +322,8 @@ begin
             if itreal(s) then
               createrealvar(rez, s)
             else
-            if itGDBBoolean(s) then
-              createGDBBooleanvar(rez, s)
+            if itBoolean(s) then
+              createBooleanvar(rez, s)
                     else if pos('.',s)>0 then
         begin
              s:=s;

@@ -29,9 +29,9 @@ ElDeviceBaseObject= object(DeviceDbBaseObject)
                              end;
 {REGISTEROBJECTTYPE CableDeviceBaseObject}
 CableDeviceBaseObject= object(DeviceDbBaseObject)
-                                   CoreCrossSection:GDBDouble;(*'**Сечение жилы'*)
-                                   NumberOfCores:GDBDouble;(*'**Количество жил'*)
-                                   OuterDiameter:GDBDouble;(*'**Наружный диаметр'*)
+                                   CoreCrossSection:Double;(*'**Сечение жилы'*)
+                                   NumberOfCores:Double;(*'**Количество жил'*)
+                                   OuterDiameter:Double;(*'**Наружный диаметр'*)
                                    constructor initnul;
                              end;
 {EXPORT-}

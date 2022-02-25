@@ -92,7 +92,7 @@ TGDBDimUnitsProp=record
                        DIMDEC:Integer;//Number of decimal places for the tolerance values of a primary units dimension//group271
                        DIMDSEP:TDimDSep;//Single-character decimal separator used when creating dimensions whose unit format is decimal//group278
                        DIMRND:Double;//Rounding value for dimension distances//group45
-                       DIMPOST:GDBAnsiString; //Dimension prefix<>suffix //group3
+                       DIMPOST:AnsiString; //Dimension prefix<>suffix //group3
                        DIMSCALE:Double;//DIMSCALE//group40
                  end;
 PPGDBDimStyleObjInsp=^PGDBDimStyleObjInsp;

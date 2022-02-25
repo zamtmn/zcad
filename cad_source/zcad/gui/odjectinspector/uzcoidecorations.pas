@@ -530,7 +530,7 @@ begin
      AddEditorToType(SysUnit.TypeName2PTD('GDBAngleDegDouble'),TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType(SysUnit.TypeName2PTD('String'),TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType(SysUnit.TypeName2PTD('AnsiString'),TBaseTypesEditors.BaseCreateEditor);
-     AddEditorToType(SysUnit.TypeName2PTD('GDBAnsiString'),TBaseTypesEditors.BaseCreateEditor);
+     AddEditorToType(SysUnit.TypeName2PTD('AnsiString'),TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType(SysUnit.TypeName2PTD('UnicodeString'),TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType(SysUnit.TypeName2PTD('Single'),TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType(SysUnit.TypeName2PTD('Pointer'),TBaseTypesEditors.BaseCreateEditor);
@@ -559,7 +559,7 @@ begin
      AddFastEditorToType(SysUnit.TypeName2PTD('TGDB3StateBool'),@OIUI_FE_BooleanGetPrefferedSize,@_3SBooleanDrawFastEditor,@_3SBooleanInverse);
      AddFastEditorToType(SysUnit.TypeName2PTD('PGDBLayerPropObjInsp'),@OIUI_FE_ButtonGetPrefferedSize,@OIUI_FE_ButtonDraw,@runlayerswnd);
      AddFastEditorToType(SysUnit.TypeName2PTD('GDBString'),@OIUI_FE_ButtonGetPrefferedSize,@ButtonTxtDrawFastEditor,@RunStringEditor);
-     AddFastEditorToType(SysUnit.TypeName2PTD('GDBAnsiString'),@OIUI_FE_ButtonGetPrefferedSize,@ButtonTxtDrawFastEditor,@RunAnsiStringEditor);
+     AddFastEditorToType(SysUnit.TypeName2PTD('AnsiString'),@OIUI_FE_ButtonGetPrefferedSize,@ButtonTxtDrawFastEditor,@RunAnsiStringEditor);
      AddFastEditorToType(SysUnit.TypeName2PTD('AnsiString'),@OIUI_FE_ButtonGetPrefferedSize,@ButtonTxtDrawFastEditor,@RunAnsiStringEditor);
      AddFastEditorToType(SysUnit.TypeName2PTD('GDBCoordinates3D'),@OIUI_FE_ButtonGetPrefferedSize,@OIUI_FE_ButtonCrossDraw,@GetVertexFromDrawing,true);
      AddFastEditorToType(SysUnit.TypeName2PTD('GDBLength'),@OIUI_FE_ButtonGetPrefferedSize,@OIUI_FE_ButtonHLineDraw,@GetLengthFromDrawing,true);

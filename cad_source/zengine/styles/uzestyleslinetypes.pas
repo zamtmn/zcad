@@ -93,7 +93,7 @@ GDBLtypeProp= object(GDBNamedObject)
                strokesarray:DoubleArray;(*'Strokes array'*)
                shapearray:GDBShapePropArray;(*'Shape array'*)
                Textarray:GDBTextPropArray;(*'Text array'*)
-               desk:GDBAnsiString;(*'Description'*)
+               desk:AnsiString;(*'Description'*)
                constructor init(n:GDBString);
                destructor done;virtual;
                procedure Format;virtual;

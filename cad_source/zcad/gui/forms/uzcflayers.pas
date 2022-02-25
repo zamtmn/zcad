@@ -138,7 +138,7 @@ end;
 function TLayersForm.createnameeditor(Item: TListItem;r: TRect):boolean;
 begin
   //createeditor(Item,r,@PGDBLayerProp(Item.Data)^.Name);
-  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBLayerProp(Item.Data)^.Name,'GDBAnsiString',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top);
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBLayerProp(Item.Data)^.Name,'AnsiString',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top);
 end;
 function TLayersForm.GetLayerName(Item: TListItem):string;
 begin
@@ -368,7 +368,7 @@ end;
 {layer description handle procedures}
 function TLayersForm.createdesceditor(Item: TListItem;r: TRect):boolean;
 begin
-  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBLayerProp(Item.Data)^.desk,'GDBAnsiString',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top);
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBLayerProp(Item.Data)^.desk,'AnsiString',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top);
 end;
 function TLayersForm.GetDescName(Item: TListItem):string;
 begin

@@ -27,20 +27,20 @@ const
 
 type
   TMAPPoint=record
-    Name:GDBAnsiString;
+    Name:AnsiString;
     coord:GDBvertex;
     h:double;
   end;
   TIntersectedCom=record
-    BlockName:GDBAnsiString;
-    TEXT:GDBAnsiString;
+    BlockName:AnsiString;
+    TEXT:AnsiString;
     ground,h,t,t2:double;
   end;
 
-  LessGDBAnsiString=TLess<GDBAnsiString>;
+  LessAnsiString=TLess<AnsiString>;
   LessDouble=TLess<double>;
   TIntersections=GKey2DataMapOld<double,TIntersectedCom,LessDouble>;
-  TPointMap=GKey2DataMap<GDBAnsiString,TMAPPoint{,LessGDBAnsiString}>;
+  TPointMap=GKey2DataMap<AnsiString,TMAPPoint{,LessAnsiString}>;
   {REGISTEROBJECTTYPE TProfileBuildCom}
   TProfileBuildCom= object(FloatInsert_com)
     PointMap:TPointMap;
@@ -49,7 +49,7 @@ type
     count:integer;
     summlength:double;
     procedure Command(Operands:TCommandOperands); virtual;
-    procedure ProcessCommand(cmd:GDBAnsiString);
+    procedure ProcessCommand(cmd:AnsiString);
     procedure BuildProfile(p1,p2:TMAPPoint);
     procedure DrawProfile(p1,p2:TMAPPoint;Intersections:TIntersections);
     function trans(tracex,tracey,dwgx,dwgy:double):GDBvertex;
@@ -504,10 +504,10 @@ begin
   Intersections.Free;
 end;
 
-procedure TProfileBuildCom.ProcessCommand(cmd:GDBAnsiString);
+procedure TProfileBuildCom.ProcessCommand(cmd:AnsiString);
 var
   i:integer;
-  operand:GDBAnsiString;
+  operand:AnsiString;
   p1,p2:TMAPPoint;
 procedure getoperand(position,len:integer);
 begin

@@ -689,7 +689,7 @@ end;
 function createnewfontfromshx(name:GDBString;var pf:PGDBfont):Boolean;
 var
    //f:filestream;
-   line{,sub}:GDBANSIString;
+   line{,sub}:AnsiString;
    {symmin,}symcount,{symmax,}i,symnum,symlen,datalen,dataread,test:integer;
    memorybuf:TZctnrVectorBytes;
    psinfo:ptsyminfo;

@@ -111,7 +111,7 @@ GDBBaseCamera=object(GDBaseObject)
 PGDBNamedObject=^GDBNamedObject;
 {REGISTEROBJECTTYPE GDBNamedObject}
 GDBNamedObject=object(GDBaseObject)
-                     Name:GDBAnsiString;(*saved_to_shd*)(*'Name'*)
+                     Name:AnsiString;(*saved_to_shd*)(*'Name'*)
                      constructor initnul;
                      constructor init(n:GDBString);
                      destructor Done;virtual;
@@ -176,7 +176,7 @@ GDBArrayVertex=packed array[0..0] of GDBvertex;
   {REGISTERRECORDTYPE TLayerControl}
   TLayerControl=record
                       Enabled:Boolean;(*'Enabled'*)
-                      LayerName:GDBAnsiString;(*'Layer name'*)
+                      LayerName:AnsiString;(*'Layer name'*)
                 end;
   TShapeBorder=(SB_Owner,SB_Self,SB_Empty);
   TShapeClass=(SC_Connector,SC_Terminal,SC_Graphix,SC_Unknown);

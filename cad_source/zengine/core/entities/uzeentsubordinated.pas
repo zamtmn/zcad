@@ -355,6 +355,10 @@ begin
                            begin
                                 vt:='Boolean';
                            end;
+     if (tt='AnsiString')  then
+                           begin
+                                vt:='AnsiString';
+                           end;
      OldVersTextReplace(vv);
      if nevname<>'' then
                         begin

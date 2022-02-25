@@ -86,7 +86,7 @@ GDBStringHash=class
   class function hash(s:AnsiString; n:longint):SizeUInt;
 end;
 {$ENDIF}
-TMyGDBAnsiStringDictionary <TValue> = class(TMyHashMap<AnsiString, TValue{$IFNDEF DELPHI},GDBStringHash{$ENDIF}>)
+TMyAnsiStringDictionary <TValue> = class(TMyHashMap<AnsiString, TValue{$IFNDEF DELPHI},GDBStringHash{$ENDIF}>)
 end;
 implementation
 {$IFDEF DELPHI}

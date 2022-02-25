@@ -408,7 +408,7 @@ begin
   MultiPropertiesManager.RegisterPropertyMultiproperty('LControl_T','LControl_T',MPCExtenders,0,TLayerControlExtender,TLayerControlExtender,'Expr',OneVarDataMIPD,OneVarDataEIPD);
   {General section}
   MultiPropertiesManager.RestartMultipropertySortID;
-  MultiPropertiesManager.RegisterPhysMultiproperty('EntityName','Entity name',sysunit^.TypeName2PTD('GDBAnsiString'),MPCGeneral,0,nil,0,0,OneVarDataMIPD,TEntIterateProcsData.Create(nil,@EntityNameEntIterateProc,nil));
+  MultiPropertiesManager.RegisterPhysMultiproperty('EntityName','Entity name',sysunit^.TypeName2PTD('AnsiString'),MPCGeneral,0,nil,0,0,OneVarDataMIPD,TEntIterateProcsData.Create(nil,@EntityNameEntIterateProc,nil));
   MultiPropertiesManager.RegisterPhysMultiproperty('Color','Color',sysunit^.TypeName2PTD('TGDBPaletteColor'),MPCGeneral,0,nil,PtrInt(@pent^.vp.Color),PtrInt(@pent^.vp.Color),OneVarDataMIPD,OneVarDataEIPD);
   MultiPropertiesManager.RegisterPhysMultiproperty('Layer','Layer',sysunit^.TypeName2PTD('PGDBLayerPropObjInsp'),MPCGeneral,0,nil,PtrInt(@pent^.vp.Layer),PtrInt(@pent^.vp.Layer),OneVarDataMIPD,OneVarDataEIPD);
   MultiPropertiesManager.RegisterPhysMultiproperty('LineType','Linetype',sysunit^.TypeName2PTD('PGDBLtypePropObjInsp'),MPCGeneral,0,nil,PtrInt(@pent^.vp.LineType),PtrInt(@pent^.vp.LineType),OneVarDataMIPD,OneVarDataEIPD);
@@ -501,7 +501,7 @@ begin
   MultiPropertiesManager.RegisterPhysMultiproperty('NORMAL_Y','Normal Y',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBBlockInsertID,nil,PtrInt(@pblockinsert^.Local.Basis.oz.y),0,OneVarDataMIPD,OneVarRODataEIPD);
   MultiPropertiesManager.RegisterPhysMultiproperty('NORMAL_Z','Normal Z',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBBlockInsertID,nil,PtrInt(@pblockinsert^.Local.Basis.oz.z),0,OneVarDataMIPD,OneVarRODataEIPD);
   {--Misc}
-  MultiPropertiesManager.RegisterPhysMultiproperty('Name','Name',sysunit^.TypeName2PTD('GDBAnsiString'),MPCMisc,GDBBlockInsertID,nil,PtrInt(@pblockinsert^.Name),PtrInt(@pblockinsert^.Name),OneVarDataMIPD,OneVarRODataEIPD);
+  MultiPropertiesManager.RegisterPhysMultiproperty('Name','Name',sysunit^.TypeName2PTD('AnsiString'),MPCMisc,GDBBlockInsertID,nil,PtrInt(@pblockinsert^.Name),PtrInt(@pblockinsert^.Name),OneVarDataMIPD,OneVarRODataEIPD);
   MultiPropertiesManager.RegisterPhysMultiproperty('Rotation','Rotation',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCMisc,GDBBlockInsertID,nil,PtrInt(@pblockinsert^.rotate),PtrInt(@pblockinsert^.rotate),OneVarDataMIPD,OneVarDataEIPD);
   MultiPropertiesManager.RegisterPhysMultiproperty('FILTER_BlocksByNames','Blocks by names',sysunit^.TypeName2PTD('TMSBlockNamesDetector'),MPCSummary,GDBBlockInsertID,nil,PtrInt(@pblockinsert^.Name),PtrInt(@pblockinsert^.Name),TMainIterateProcsData.Create(@GetStringCounterData,@FreeStringCounterData),TEntIterateProcsData.Create(nil,@Blockname2BlockNameCounterIterateProc,nil),MPUM_AtLeastOneEntMatched);
 
@@ -517,7 +517,7 @@ begin
   MultiPropertiesManager.RegisterPhysMultiproperty('NORMAL_Y','Normal Y',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBDeviceID,nil,PtrInt(@pblockinsert^.Local.Basis.oz.y),0,OneVarDataMIPD,OneVarRODataEIPD);
   MultiPropertiesManager.RegisterPhysMultiproperty('NORMAL_Z','Normal Z',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBDeviceID,nil,PtrInt(@pblockinsert^.Local.Basis.oz.z),0,OneVarDataMIPD,OneVarRODataEIPD);
   {--Misc}
-  MultiPropertiesManager.RegisterPhysMultiproperty('Name','Name',sysunit^.TypeName2PTD('GDBAnsiString'),MPCMisc,GDBDeviceID,nil,PtrInt(@pblockinsert^.Name),PtrInt(@pent^.vp.Color),OneVarDataMIPD,OneVarRODataEIPD);
+  MultiPropertiesManager.RegisterPhysMultiproperty('Name','Name',sysunit^.TypeName2PTD('AnsiString'),MPCMisc,GDBDeviceID,nil,PtrInt(@pblockinsert^.Name),PtrInt(@pent^.vp.Color),OneVarDataMIPD,OneVarRODataEIPD);
   MultiPropertiesManager.RegisterPhysMultiproperty('Rotation','Rotation',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCMisc,GDBDeviceID,nil,PtrInt(@pblockinsert^.rotate),PtrInt(@pblockinsert^.rotate),OneVarDataMIPD,OneVarDataEIPD);
   MultiPropertiesManager.RegisterPhysMultiproperty('FILTER_BlocksByNames','Blocks by names',sysunit^.TypeName2PTD('TMSBlockNamesDetector'),MPCSummary,GDBDeviceID,nil,PtrInt(@pblockinsert^.Name),PtrInt(@pblockinsert^.Name),TMainIterateProcsData.Create(@GetStringCounterData,@FreeStringCounterData),TEntIterateProcsData.Create(nil,@Blockname2BlockNameCounterIterateProc,nil),MPUM_AtLeastOneEntMatched);
   MultiPropertiesManager.sort;

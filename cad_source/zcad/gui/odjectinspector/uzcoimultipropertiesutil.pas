@@ -398,7 +398,7 @@ end;
 
 procedure EntityNameEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var
- ts:GDBAnsiString;
+ ts:AnsiString;
  entinfo:TEntInfoData;
  PVD:pvardesk;
 {

@@ -187,7 +187,7 @@ begin
 end;
 function TTextStylesForm.CreateNameEditor(Item: TListItem;r: TRect):boolean;
 begin
-  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.Name,'GDBAnsiString',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.Name,'AnsiString',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
 end;
 {Font name handle procedures}
 function TTextStylesForm.GetFontName(Item: TListItem):string;

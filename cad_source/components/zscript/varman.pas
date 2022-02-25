@@ -143,7 +143,7 @@ const
       (template:'_softspace'#0'=a=b=s=t=r=a=c=t'+'_softspace'#0+'=;';id:mod_abstract)
       );
 type
-TNameToIndex=TMyGDBAnsiStringDictionary<TArrayIndex>;
+TNameToIndex=TMyAnsiStringDictionary<TArrayIndex>;
 TFieldName=(FNUser,FNProgram);
 TFieldNames=set of TFieldName;
 {EXPORT+}
@@ -348,7 +348,7 @@ begin
      vn:=name+suffix;
      pvd:=SavedUnit.FindValue(vn);
      if not assigned(pvd) then
-       pas:=SavedUnit.CreateVariable(vn,'GDBAnsiString').data.Addr.instance
+       pas:=SavedUnit.CreateVariable(vn,'AnsiString').data.Addr.instance
      else
        pas:=pvd^.data.Addr.Instance;
      pas^:=value;

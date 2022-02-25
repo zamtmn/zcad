@@ -34,7 +34,7 @@ GDBLayerProp= object(GDBNamedObject)
                _on:Boolean;(*saved_to_shd*)(*'On'*)
                _lock:Boolean;(*saved_to_shd*)(*'Lock'*)
                _print:Boolean;(*saved_to_shd*)(*'Print'*)
-               desk:GDBAnsiString;(*saved_to_shd*)(*'Description'*)
+               desk:AnsiString;(*saved_to_shd*)(*'Description'*)
                constructor InitWithParam(N:GDBString; C: Integer; LW: Integer;oo,ll,pp:Boolean;d:GDBString);
                function GetFullName:GDBString;virtual;
                procedure SetValueFromDxf(group:Integer;value:GDBString);virtual;

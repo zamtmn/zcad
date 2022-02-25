@@ -90,8 +90,8 @@ function TDouble_div_TGDBInteger(var rez, hrez: vardesk): vardesk;
 function TDouble_let_TDouble(var rez, hrez: vardesk): vardesk;
 function TGDBInteger_let_TGDBInteger(var rez, hrez: vardesk): vardesk;
 function TGDBString_let_TGDBString(var rez, hrez: vardesk): vardesk;
-function TGDBAnsiString_let_TGDBString(var rez, hrez: vardesk): vardesk;
-function TGDBAnsiString_let_TGDBAnsiString(var rez, hrez: vardesk): vardesk;
+function TAnsiString_let_TGDBString(var rez, hrez: vardesk): vardesk;
+function TAnsiString_let_TAnsiString(var rez, hrez: vardesk): vardesk;
 function TByte_let_TGDBInteger(var rez, hrez: vardesk): vardesk;
 function TBoolean_let_TBoolean(var rez, hrez: vardesk): vardesk;
 
@@ -141,7 +141,7 @@ const
     , (name: '*'; param: @FundamentalLongIntDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBInteger_mul_TGDBInteger)
     , (name: ':='; param: @FundamentalDoubleDescriptorObj; hparam: @FundamentalDoubleDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TDouble_let_TDouble)
     , (name: ':='; param: @FundamentalStringDescriptorObj; hparam: @FundamentalStringDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBString_let_TGDBString)
-    , (name: ':='; param: @FundamentalAnsiStringDescriptorObj; hparam: @FundamentalStringDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBAnsiString_let_TGDBString)
+    , (name: ':='; param: @FundamentalAnsiStringDescriptorObj; hparam: @FundamentalStringDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TAnsiString_let_TGDBString)
     , (name: ':='; param: @FundamentalLongIntDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBInteger_let_TGDBInteger)
     , (name: ':='; param: @FundamentalByteDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TByte_let_TGDBInteger)
     , (name: '-'; param: nil; hparam: @FundamentalDoubleDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}Tnothing_minus_TDouble)
@@ -162,7 +162,7 @@ const
     , (name: '*'; param: @FundamentalDoubleDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TDouble_mul_TGDBInteger)
     , (name: '*'; param: @FundamentalLongIntDescriptorObj; hparam: @FundamentalDoubleDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBInteger_mul_TDouble)
     , (name: '*'; param: @FundamentalDoubleDescriptorObj; hparam: @FundamentalDoubleDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TDouble_mul_TDouble)
-    , (name: ':='; param: @FundamentalAnsiStringDescriptorObj; hparam: @FundamentalAnsiStringDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBAnsiString_let_TGDBAnsiString)
+    , (name: ':='; param: @FundamentalAnsiStringDescriptorObj; hparam: @FundamentalAnsiStringDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TAnsiString_let_TAnsiString)
     );
 type
 TFunctionTypeArray=array of functiontype;
@@ -253,7 +253,7 @@ begin
   r.data.ptd:=@FundamentalAnsiStringDescriptorObj;
   r.name := '';
   Getmem(r.Instance,FundamentalAnsiStringDescriptorObj.SizeInBytes);
-  pAnsiString(r.Instance)^ := DecodeStringBase64(PGDBAnsiString(stack.stack[1].Instance)^);
+  pAnsiString(r.Instance)^ := DecodeStringBase64(PAnsiString(stack.stack[1].Instance)^);
   result := r;
 end;*)
 function DecodeStringBase64_TGBDString(var stack: operandstack): vardesk;
@@ -350,7 +350,7 @@ begin
   GDBString(result.data.Addr.Instance^) := GDBString(hrez.data.Addr.Instance^);
   GDBString(rez.data.Addr.Instance^) := GDBString(hrez.data.Addr.Instance^);
 end;
-function TGDBAnsiString_let_TGDBString(var rez, hrez: vardesk): vardesk;
+function TAnsiString_let_TGDBString(var rez, hrez: vardesk): vardesk;
 begin
   result.data.ptd:=@FundamentalAnsiStringDescriptorObj;
   result.name := '';
@@ -358,11 +358,11 @@ begin
   if rez.data.Addr.Instance=nil then begin
     rez.SetInstance(FundamentalStringDescriptorObj.AllocAndInitInstance);
   end else
-    GDBAnsiString(rez.data.Addr.Instance^):='';
-  GDBAnsiString(result.data.Addr.Instance^) := Tria_Utf8ToAnsi(GDBString(hrez.data.Addr.Instance^));
-  GDBAnsiString(rez.data.Addr.Instance^) := Tria_Utf8ToAnsi(GDBString(hrez.data.Addr.Instance^));
+    AnsiString(rez.data.Addr.Instance^):='';
+  AnsiString(result.data.Addr.Instance^) := Tria_Utf8ToAnsi(GDBString(hrez.data.Addr.Instance^));
+  AnsiString(rez.data.Addr.Instance^) := Tria_Utf8ToAnsi(GDBString(hrez.data.Addr.Instance^));
 end;
-function TGDBAnsiString_let_TGDBAnsiString(var rez, hrez: vardesk): vardesk;
+function TAnsiString_let_TAnsiString(var rez, hrez: vardesk): vardesk;
 begin
   result.data.ptd:=@FundamentalAnsiStringDescriptorObj;
   result.name := '';
@@ -372,9 +372,9 @@ begin
                                  rez.SetInstance(FundamentalAnsiStringDescriptorObj.AllocAndInitInstance);
                                end
                           else
-                              GDBAnsiString(rez.data.Addr.Instance^):='';
-  GDBAnsiString(result.data.Addr.Instance^) := {Tria_Utf8ToAnsi}(GDBAnsiString(hrez.data.Addr.Instance^));
-  GDBAnsiString(rez.data.Addr.Instance^) := {Tria_Utf8ToAnsi}(GDBAnsiString(hrez.data.Addr.Instance^));
+                              AnsiString(rez.data.Addr.Instance^):='';
+  AnsiString(result.data.Addr.Instance^) := {Tria_Utf8ToAnsi}(AnsiString(hrez.data.Addr.Instance^));
+  AnsiString(rez.data.Addr.Instance^) := {Tria_Utf8ToAnsi}(AnsiString(hrez.data.Addr.Instance^));
 end;
 function TGDBInteger_minus_TGDBInteger(var rez, hrez: vardesk): vardesk;
 var

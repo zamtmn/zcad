@@ -127,7 +127,7 @@ GDBStringDescriptor=object(GDBStringGeneralDescriptor<string,{TStringTypeManipul
                           procedure SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;prefix:TInternalScriptString);virtual;
                     end;
 TASTM_String=TAnsiStringTypeManipulator<String>;
-GDBAnsiStringDescriptor=object(GDBStringGeneralDescriptor<string,{TAnsiStringTypeManipulator<string>}TASTM_String>)
+AnsiStringDescriptor=object(GDBStringGeneralDescriptor<string,{TAnsiStringTypeManipulator<string>}TASTM_String>)
                           procedure SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;prefix:TInternalScriptString);virtual;
                     end;
 TPTM_Pointer=TPointerTypeManipulator<Pointer>;
@@ -146,7 +146,7 @@ var
 FundamentalDoubleDescriptorObj:DoubleDescriptor;
 FundamentalUnicodeStringDescriptorObj:GDBUnicodeStringDescriptor;
 FundamentalStringDescriptorObj:GDBStringDescriptor;
-FundamentalAnsiStringDescriptorObj:GDBAnsiStringDescriptor;
+FundamentalAnsiStringDescriptorObj:AnsiStringDescriptor;
 FundamentalWordDescriptorObj:TFundamentalWordDescriptor;
 FundamentalLongIntDescriptorObj:TFundamentalLongIntDescriptor;
 FundamentalByteDescriptorObj:TFundamentalByteDescriptor;
@@ -470,7 +470,7 @@ procedure GDBStringDescriptor.SavePasToMem;
 begin
      membuf.TXTAddGDBStringEOL(prefix+':=DecodeStringBase64('''+EncodeStringBase64(GetValueAsString(PInstance))+''');');
 end;
-procedure GDBAnsiStringDescriptor.SavePasToMem;
+procedure AnsiStringDescriptor.SavePasToMem;
 begin
      membuf.TXTAddGDBStringEOL(prefix+':=DecodeStringBase64('''+EncodeStringBase64(GetValueAsString(PInstance))+''');');
 end;

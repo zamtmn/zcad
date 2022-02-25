@@ -195,7 +195,7 @@ begin
 end;
 function TDimStylesForm.CreateNameEditor(Item: TListItem;r: TRect):boolean;
 begin
-  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBDimStyle(Item.Data)^.Name,'GDBAnsiString',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBDimStyle(Item.Data)^.Name,'AnsiString',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
 end;
 {Font name handle procedures}
 function TDimStylesForm.GetTextStyleName(Item: TListItem):string;

@@ -28,10 +28,10 @@ function readspace(expr: GDBString): GDBString;
 function Tria_Utf8ToAnsi(const s:string):string;
 function Tria_AnsiToUtf8(const s:string):string;
 
-function Ansi2CP(astr:GDBAnsiString):GDBString;
-function Uni2CP(astr:GDBAnsiString):GDBString;
-function CP2Ansi(astr:GDBAnsiString):GDBString;
-function CP2Uni(astr:GDBAnsiString):GDBString;
+function Ansi2CP(astr:AnsiString):GDBString;
+function Uni2CP(astr:AnsiString):GDBString;
+function CP2Ansi(astr:AnsiString):GDBString;
+function CP2Uni(astr:AnsiString):GDBString;
 
 function uch2ach(uch:word):byte;
 function ach2uch(ach:byte):word;
@@ -455,7 +455,7 @@ begin
   //end;
 end;
 
-function Ansi2CP(astr:GDBAnsiString):GDBString;
+function Ansi2CP(astr:AnsiString):GDBString;
 begin
      case CodePage of
                      CP_utf8:result:=
@@ -463,14 +463,14 @@ begin
                      CP_win:result:=astr;
      end;
 end;
-function Uni2CP(astr:GDBAnsiString):GDBString;
+function Uni2CP(astr:AnsiString):GDBString;
 begin
      case CodePage of
                      CP_utf8:result:=astr;
                      CP_win:result:=Tria_Utf8ToAnsi(astr);
      end;
 end;
-function CP2Ansi(astr:GDBAnsiString):GDBString;
+function CP2Ansi(astr:AnsiString):GDBString;
 begin
 case CodePage of
                 CP_utf8:result:=
@@ -479,7 +479,7 @@ case CodePage of
 end;
 end;
 
-function CP2Uni(astr:GDBAnsiString):GDBString;
+function CP2Uni(astr:AnsiString):GDBString;
 begin
 case CodePage of
                 CP_utf8:result:=astr;

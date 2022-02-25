@@ -32,9 +32,8 @@ DWord=LongWord;
 PGDBString=^GDBString;
 {-}GDBString=type ansistring;{/GDBString=string;/}
 
-PGDBAnsiString=^GDBAnsiString;
-{-}GDBAnsiString=type ansistring;{/GDBAnsiString=ansistring;/}
 
+PAnsiString=^AnsiString;
 PBoolean=^Boolean;
 PInteger=^Integer;
 PDouble=^Double;

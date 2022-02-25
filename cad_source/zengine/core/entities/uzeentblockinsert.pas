@@ -34,7 +34,7 @@ GDBObjBlockInsert= object(GDBObjComplex)
                      rotate:Double;(*saved_to_shd*)
                      index:Integer;(*saved_to_shd*)(*oi_readonly*)(*hidden_in_objinsp*)
                      pblockdef:PGDBObjBlockdef;
-                     Name:GDBAnsiString;(*saved_to_shd*)(*oi_readonly*)
+                     Name:AnsiString;(*saved_to_shd*)(*oi_readonly*)
                      pattrib:Pointer;(*hidden_in_objinsp*)
                      BlockDesc:TBlockDesc;(*'Block params'*)(*saved_to_shd*)(*oi_readonly*)
                      constructor initnul;

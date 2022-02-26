@@ -19,7 +19,7 @@
 unit zcchangeundocommand;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzepalette,zeundostack,zebaseundocommands,uzbtypesbase,uzbtypes,
+uses uzepalette,zeundostack,zebaseundocommands,uzbtypes,
      uzegeometrytypes,uzeentity,uzestyleslayers;
 
 type

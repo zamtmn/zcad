@@ -25,7 +25,7 @@ uses
   uzegeometrytypes,uzbtypes,
   varmandef,
   uzeentity,
-  uzbtypesbase,
+  
   Varman,UGDBPoint3DArray,
   uzedimensionaltypes,
   uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,

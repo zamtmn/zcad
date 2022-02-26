@@ -27,7 +27,7 @@ uses
      qt4,
      {$ENDIF}*)
      LCLProc,uzglviewareaabstract,uzgldrawerogl,sysutils,
-     uzgloglstatemanager,uzbtypesbase,uzbtypes,
+     uzgloglstatemanager,uzbtypes,
      uzglviewareadata,uzgldrawcontext,uzegeometry,LCLType,
      ExtCtrls,classes,Controls,Graphics,uzglviewareageneral,math,uzglbackendmanager,
      uzegeometrytypes,uzbLogIntf,{$IFNDEF DELPHI}OpenGLContext{$ENDIF};

@@ -20,7 +20,7 @@ unit uzecamera;
 {$INCLUDE zcadconfig.inc}
 
 interface
-uses LCLProc,uzbtypesbase,uzegeometrytypes,uzbtypes,uzegeometry;
+uses LCLProc,uzegeometrytypes,uzbtypes,uzegeometry;
 
 type
 GDBProjectProc=procedure (objcoord:GDBVertex; out wincoord:GDBVertex) of object;

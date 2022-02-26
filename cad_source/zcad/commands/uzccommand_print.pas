@@ -28,7 +28,7 @@ uses
   PrintersDlgs,printers,graphics,uzeentdevice,
   LazUTF8,Clipbrd,LCLType,classes,uzeenttext,
   uzccommandsabstract,uzbstrproc,
-  uzbtypesbase,uzccommandsmanager,
+  uzccommandsmanager,
   uzccommandsimpl,
   uzcdrawings,
   uzeutils,uzcutils,

@@ -19,7 +19,7 @@
 unit uzestyleslayers;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzbtypesbase,sysutils,uzbtypes,uzegeometry,
+uses sysutils,uzbtypes,uzegeometry,
      uzeconsts,UGDBNamedObjectsArray,uzbstrproc;
 type
 {EXPORT+}

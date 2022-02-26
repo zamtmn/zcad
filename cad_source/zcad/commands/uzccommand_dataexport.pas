@@ -39,7 +39,7 @@ uses
   uzeparserenttypefilter,uzeparserentpropfilter,uzeentitiestypefilter,
   uzelongprocesssupport,uzeparser,uzcoimultiproperties,uzedimensionaltypes,
   uzcoimultipropertiesutil,varmandef,uzcvariablesutils,Masks,uzcregother,
-  uzbtypesbase,uzeparsercmdprompt,uzcinterface,uzcdialogsfiles;
+  uzeparsercmdprompt,uzcinterface,uzcdialogsfiles;
 
 resourcestring
   RSCLPDataExportWaitFile                ='Configure export ${"&[p]arams",Keys[p],StrId[CLPIdOptions]}, run ${"&[f]ile dialog",Keys[f],StrId[CLPIdFileDialog]} or enter file name (empty for default):';

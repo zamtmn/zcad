@@ -20,7 +20,7 @@ unit uzeffdxfsupport;
 {$INCLUDE zcadconfig.inc}
 
 interface
-uses uzegeometrytypes,uzbtypesbase,uzbtypes,sysutils,uzctnrVectorBytes,usimplegenerics;
+uses uzegeometrytypes,uzbtypes,sysutils,uzctnrVectorBytes,usimplegenerics;
 
 const
   dxfName_AcDbEntity='AcDbEntity';

@@ -24,7 +24,7 @@ uses
   gzctnrvectortypes,
   uzcdrawing,
   uzgldrawcontext,
-  uzbtypesbase,
+  
   uzcdrawings,
   uzeutils,
   uzglviewareadata,

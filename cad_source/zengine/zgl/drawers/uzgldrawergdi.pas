@@ -20,7 +20,7 @@ unit uzgldrawergdi;
 {$INCLUDE zcadconfig.inc}
 interface
 uses
-    uzgprimitivessarray,sysutils,uzbtypesbase,uzgldrawergeneral2d,uzelclintfex,
+    uzgprimitivessarray,sysutils,uzgldrawergeneral2d,uzelclintfex,
     fileutil,math,uzefontmanager,uzefont,uzglviewareaabstract,
     {$IFNDEF DELPHI}LazUTF8,{$ENDIF}uzglgeomdata,uzgldrawcontext,uzgprimitives,
     uzgprimitivescreatorabstract,uzgprimitivescreator,uzepalette,

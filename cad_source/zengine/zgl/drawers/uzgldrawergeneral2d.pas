@@ -21,7 +21,7 @@ unit uzgldrawergeneral2d;
 interface
 uses uzgindexsarray,{$IFNDEF DELPHI}LCLIntf,{$ENDIF}{$IFDEF DELPHI}windows,Types,{$ENDIF}Controls,
      uzegeometrytypes,uzglviewareaabstract,uzgldrawergeneral,uzgprimitivescreator,
-     uzgvertex3sarray,uzgldrawerabstract,uzepalette,Classes,Graphics,uzbtypesbase,uzbtypes,uzegeometry;
+     uzgvertex3sarray,uzgldrawerabstract,uzepalette,Classes,Graphics,uzbtypes,uzegeometry;
 type
 DMatrix4DStackArray=array[0..10] of DMatrix4D;
 

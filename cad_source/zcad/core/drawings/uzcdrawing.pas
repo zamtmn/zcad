@@ -24,7 +24,7 @@ uses
     zcobjectchangeundocommand,zebaseundocommands,uzbpaths,uzestylesdim,
     uzcdialogsfiles,LResources,uzcsysvars,uzcstrconsts,uzbstrproc,uzeblockdef,UUnitManager,
     uzbtypes,varmandef,varman,sysutils,uzegeometry, uzeconsts,
-    uzbtypesbase,uzedrawingsimple,uzestyleslayers,uzeentity,uzefontmanager,
+    uzedrawingsimple,uzestyleslayers,uzeentity,uzefontmanager,
     uzedimensionaltypes,uzegeometrytypes,uzctnrVectorBytes,gzctnrvectortypes;
 type
 {EXPORT+}

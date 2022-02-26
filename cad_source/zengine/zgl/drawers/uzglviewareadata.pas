@@ -21,7 +21,7 @@ unit uzglviewareadata;
 
 interface
 uses
-  uzegeometry,uzeconsts,uzegeometrytypes,uzbtypesbase,uzbtypes, UGDBPoint3DArray,
+  uzegeometry,uzeconsts,uzegeometrytypes,uzbtypes, UGDBPoint3DArray,
   UGDBTracePropArray,uzgldrawcontext;
 const
 MZW_LBUTTON=1;

@@ -21,7 +21,7 @@ unit uzeentabstracttext;
 interface
 uses {эти нужно убрать}{uzglviewareageneral,}UGDBSelectedObjArray,
      uzgldrawcontext,uzeentity,uzecamera,
-     uzbstrproc,sysutils,uzeentplainwithox,uzbtypesbase,
+     uzbstrproc,sysutils,uzeentplainwithox,
      UGDBOutbound2DIArray,uzegeometrytypes,uzbtypes,uzeconsts,uzegeometry,math,
      uzctnrvectorpgdbaseobjects;
 type

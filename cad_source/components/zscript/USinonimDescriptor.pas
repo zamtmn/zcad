@@ -20,7 +20,7 @@ unit USinonimDescriptor;
 
 {$MODE DELPHI}
 interface
-uses TypeDescriptors,uzctnrVectorBytes,uzbtypesbase,
+uses TypeDescriptors,uzctnrVectorBytes,
      uzedimensionaltypes,varmandef,uzbtypes,TypInfo;
 type
 PGDBSinonimDescriptor=^GDBSinonimDescriptor;

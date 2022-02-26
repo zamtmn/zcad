@@ -30,7 +30,7 @@ uses
   UGDBSelectedObjArray,
 
   uzeentwithlocalcs,uzeentity,uzeentgenericsubentry,
-  uzbtypesbase,uzbtypes,
+  uzbtypes,
   uzcdrawings,
   uzglviewareadata,
   uzegeometrytypes,uzegeometry,

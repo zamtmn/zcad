@@ -23,7 +23,7 @@ interface
 uses
       typinfo,LCLProc,Graphics,classes,Themes,
       gzctnrvectortypes,uzemathutils,uzegeometry,uzbstrproc,TypeDescriptors,
-      sysutils,uzctnrVectorBytes,uzbtypesbase,
+      sysutils,uzctnrVectorBytes,
       USinonimDescriptor,uzedimensionaltypes,varmandef,uzbtypes,
       base64,uzctnrvectorstrings,math,uzbLogIntf;
 resourcestring

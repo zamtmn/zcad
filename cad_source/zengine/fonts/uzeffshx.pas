@@ -21,7 +21,7 @@ unit uzeffshx;
 interface
 uses uzgprimitivescreator,uzglvectorobject,uzefontmanager,uzefontshx,uzegeometry,
      uzefont,uzbstrproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}math,sysutils,
-     uzegeometrytypes,uzctnrVectorBytes,uzbtypesbase,uzbtypes,uzgprimitives,
+     uzegeometrytypes,uzctnrVectorBytes,uzbtypes,uzgprimitives,
      gzctnrvectortypes,uzbLogIntf;
 const
   arccount=16;

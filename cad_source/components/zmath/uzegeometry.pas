@@ -19,7 +19,7 @@
 unit uzegeometry;
 
 interface
-uses LCLProc,{uzbtypesbase,}uzegeometrytypes,math;
+uses LCLProc,{}uzegeometrytypes,math;
 resourcestring
   rsDivByZero='Divide by zero';
 const

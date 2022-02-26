@@ -20,7 +20,7 @@ unit uzeentblockinsert;
 
 interface
 uses uzeentity,uzgldrawcontext,uzeentityfactory,uzedrawingdef,uzestyleslayers,math,
-     uzbtypesbase,uzeentcomplex,sysutils,UGDBObjBlockdefArray,uzeblockdef,uzbtypes,
+     uzeentcomplex,sysutils,UGDBObjBlockdefArray,uzeblockdef,uzbtypes,
      uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzeentsubordinated,
      gzctnrvectortypes,uzegeometrytypes,uzctnrVectorBytes,uzestrconsts,LCLProc,
      uzbLogIntf;

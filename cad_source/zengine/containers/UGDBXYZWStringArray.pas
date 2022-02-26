@@ -19,7 +19,7 @@
 unit UGDBXYZWStringArray;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzbtypesbase,uzbtypes,gzctnrVector,sysutils;
+uses uzbtypes,gzctnrVector,sysutils;
 type
 {EXPORT+}
 PGDBXYZWStringArray=^XYZWGDBStringArray;

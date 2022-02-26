@@ -31,7 +31,7 @@ uses
        uzcsysparams,gzctnrvectortypes,uzemathutils,uzelongprocesssupport,
        uzgldrawergdi,uzcdrawing,UGDBOpenArrayOfPV,uzedrawingabstract,
        uzepalette,uzbpaths,uzglviewareadata,uzeentitiesprop,uzcinterface,
-       uzctnrVectorBytes,uzbtypesbase,uzbtypes,
+       uzctnrVectorBytes,uzbtypes,
        uzegeometry,uzcsysvars,uzcstrconsts,uzbstrproc,uzclog,uzblog,
        uzedimensionaltypes,varmandef, varman,UUnitManager,uzcsysinfo,strmy,uzestylestexts,uzestylesdim,
   uzbexceptionscl,uzbexceptionsgui,

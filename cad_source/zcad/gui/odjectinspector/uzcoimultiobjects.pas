@@ -25,7 +25,7 @@ uses
   LazLoggerBase,uzcoimultiproperties,uzcoiwrapper,uzctranslations,uzepalette,
   uzedimensionaltypes,uzcstrconsts,sysutils,uzeentityfactory,
   uzcenitiesvariablesextender,uzgldrawcontext,usimplegenerics,gzctnrSTL,
-  gzctnrvectortypes,uzbtypes,uzcdrawings,varmandef,uzeentity,uzbtypesbase,
+  gzctnrvectortypes,uzbtypes,uzcdrawings,varmandef,uzeentity,
   Varman,uzctnrvectorstrings,UGDBSelectedObjArray,uzcoimultipropertiesutil,
   uzeentityextender,uzelongprocesssupport,uzbLogIntf;
 type

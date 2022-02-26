@@ -18,7 +18,7 @@
 unit uzbtypes;
 
 interface
-uses uzbtypesbase,uzegeometrytypes,sysutils;
+uses uzegeometrytypes,sysutils;
      //gdbobjectsconstdef;
 const
      GDBBaseObjectID = 30000;

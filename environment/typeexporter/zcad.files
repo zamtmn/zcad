@@ -14,7 +14,6 @@ components/zcontainers/uzctnrvectorstrings.pas
 components/zcontainers/uzctnrvectorpointers.pas
 components/zmath/uzegeometrytypes.pas
 components/zmath/uzedimensionaltypes.pas
-components/zebase/uzbtypesbase.pas
 components/zebase/uzbtypes.pas
 zengine/core/objects/uzepalette.pas
 zcad/uzcsysparams.pas

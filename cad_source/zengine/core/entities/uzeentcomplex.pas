@@ -21,7 +21,7 @@ unit uzeentcomplex;
 
 interface
 uses uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,
-     uzestyleslayers,uzbtypesbase,sysutils,UGDBSelectedObjArray,UGDBVisibleOpenArray,
+     uzestyleslayers,sysutils,UGDBSelectedObjArray,UGDBVisibleOpenArray,
      uzeentity,UGDBVisibleTreeArray,uzeentitiestree,uzbtypes,uzeentwithlocalcs,
      gzctnrvectortypes,uzegeometrytypes,uzeconsts,uzegeometry,uzctnrvectorpgdbaseobjects;
 type

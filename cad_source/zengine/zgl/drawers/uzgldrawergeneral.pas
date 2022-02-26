@@ -21,7 +21,7 @@ unit uzgldrawergeneral;
 interface
 uses uzegeometrytypes,uzgvertex3sarray,uzgprimitivescreatorabstract,uzgprimitivescreator,
      uzgldrawerabstract,uzepalette,types,Classes,Graphics,
-     uzbtypesbase,uzbtypes,uzecamera,uzegeometry,UGDBPoint3DArray,LazLogger;
+     uzbtypes,uzecamera,uzegeometry,UGDBPoint3DArray,LazLogger;
 type
 TPaintState=(TPSBufferNotSaved,TPSBufferSaved);
 TZGLGeneralDrawer=class(TZGLAbstractDrawer)

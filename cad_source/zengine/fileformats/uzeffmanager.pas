@@ -20,7 +20,7 @@ unit uzeffmanager;
 {$INCLUDE zcadconfig.inc}
 
 interface
-uses uzbtypesbase,uzbtypes,uzeentgenericsubentry,uzedrawingsimple,sysutils,gzctnrSTL,LazLogger;
+uses uzbtypes,uzeentgenericsubentry,uzedrawingsimple,sysutils,gzctnrSTL,LazLogger;
 
 type
 TFileLoadProcedure=procedure(name: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);

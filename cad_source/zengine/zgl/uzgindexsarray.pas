@@ -19,7 +19,7 @@
 unit uzgindexsarray;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzbtypesbase,gzctnrVector,sysutils,
+uses gzctnrVector,sysutils,
      gzctnrvectortypes,uzegeometry;
 type
 {Export+}

@@ -20,8 +20,7 @@ unit UGDBSelectedObjArray;
 {$INCLUDE zcadconfig.inc}
 interface
 uses uzegeometrytypes,uzepalette,uzgldrawcontext,uzecamera,uzeentwithmatrix,uzeentity,
-     UGDBControlPointArray,gzctnrVector,sysutils,uzbtypes,uzegeometry,
-     uzbtypesbase;
+     UGDBControlPointArray,gzctnrVector,sysutils,uzbtypes,uzegeometry;
 type
 {Export+}
 PSelectedObjDesc=^SelectedObjDesc;

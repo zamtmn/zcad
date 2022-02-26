@@ -20,7 +20,7 @@ unit uzeentellipse;
 interface
 uses
     uzeentityfactory,uzeentsubordinated,uzgldrawcontext,uzedrawingdef,uzecamera,
-    uzeentwithlocalcs,uzestyleslayers,uzbtypesbase,
+    uzeentwithlocalcs,uzestyleslayers,
     UGDBSelectedObjArray,uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,
     uzegeometrytypes,uzctnrVectorBytes,varman,varmandef,uzbtypes,uzeconsts,
     uzglviewareadata,uzegeometry,uzeffdxfsupport,uzeentplain,

@@ -19,7 +19,7 @@
 {$H+}
 unit zeundostack;
 interface
-uses gzctnrvectortypes,zebaseundocommands,varmandef,//uzbtypesbase,
+uses gzctnrvectortypes,zebaseundocommands,varmandef,//
      gzctnrVectorPObjects,sysutils;
 const BeginUndo:String='BeginUndo';
       EndUndo:String='EndUndo';

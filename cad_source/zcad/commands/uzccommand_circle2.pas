@@ -29,7 +29,7 @@ uses
   uzegeometrytypes,
   uzccommandsmanager,
   uzeentcircle,uzeentityfactory,
-  uzcdrawings,uzcinterface,uzbtypesbase,uzglviewareadata,uzgldrawcontext,uzeentitiesmanager,uzegeometry,zcmultiobjectcreateundocommand,uzcdrawing,
+  uzcdrawings,uzcinterface,uzglviewareadata,uzgldrawcontext,uzeentitiesmanager,uzegeometry,zcmultiobjectcreateundocommand,uzcdrawing,
   uzcutils;
 
 var

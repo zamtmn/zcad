@@ -26,7 +26,7 @@ uses
   sysutils,
   uzccommandsabstract,uzccommandsimpl,
   uzcdrawings,
-  uzegeometrytypes,uzbtypesbase,
+  uzegeometrytypes,
   uzegeometry,
   uzglviewareadata,
   uzccommandsmanager,

@@ -21,7 +21,7 @@ unit uzeenttable;
 
 interface
 uses uzgldrawcontext,uzeentabstracttext,uzetrash,uzedrawingdef,uzbstrproc,uzctnrVectorBytes,
-     uzestylestables,uzeentline,uzbtypesbase,uzeentcomplex,sysutils,UGDBTable,
+     uzestylestables,uzeentline,uzeentcomplex,sysutils,UGDBTable,
      uzctnrvectorstrings,uzeentmtext,uzeentity,uzbtypes,uzeconsts,uzegeometry,
      gzctnrvectortypes,uzegeometrytypes,uzeentblockinsert,uzeffdxfsupport;
 //jcm(*'TopMiddle'*),

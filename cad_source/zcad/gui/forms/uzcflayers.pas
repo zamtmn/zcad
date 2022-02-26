@@ -9,7 +9,7 @@ uses
   FileUtil, LResources, Forms, Controls, Graphics, GraphType,
   Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype, ActnList,
 
-  uzcgui2linetypes,uzeconsts,uzestyleslayers,uzcdrawings,uzbtypesbase,uzbtypes,varmandef,
+  uzcgui2linetypes,uzeconsts,uzestyleslayers,uzcdrawings,uzbtypes,varmandef,
 
   uzcinterface, uzcstrconsts, uzbstrproc,UBaseTypeDescriptor,
   gzctnrvectortypes,uzcimagesmanager, usupportgui, ZListView, uzcuitypes;

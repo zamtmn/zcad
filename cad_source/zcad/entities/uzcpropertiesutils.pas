@@ -19,7 +19,7 @@ unit uzcpropertiesutils;
 {$INCLUDE zcadconfig.inc}
 
 interface
-uses sysutils,uzbtypesbase,uzbtypes,
+uses sysutils,uzbtypes,
      uzeentity,varmandef,uzeentsubordinated,
      uzcoimultiproperties,uzcoimultipropertiesutil,uzcdrawings,
      Varman,uzedimensionaltypes;

@@ -19,7 +19,7 @@
 unit uzestylestexts;
 {$INCLUDE zcadconfig.inc}
 interface
-uses LCLProc,uzbpaths,uzefontmanager,uzbtypesbase,sysutils,uzbtypes,uzegeometry,
+uses LCLProc,uzbpaths,uzefontmanager,sysutils,uzbtypes,uzegeometry,
      uzbstrproc,uzefont,uzestrconsts,UGDBNamedObjectsArray;
 type
   //ptextstyle = ^textstyle;

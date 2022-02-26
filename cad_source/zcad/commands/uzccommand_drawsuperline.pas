@@ -51,7 +51,7 @@ uses
 
   uzeentityfactory,    //unit describing a "factory" to create primitives
                       //модуль описывающий "фабрику" для создания примитивов
-  uzbtypesbase,uzbtypes, //base types
+  uzbtypes, //base types
                       //описания базовых типов
   uzeconsts, //base constants
                       //описания базовых констант

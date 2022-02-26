@@ -19,7 +19,7 @@
 unit uzcdialogsfiles;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzbtypesbase,sysutils,uzbstrproc,
+uses sysutils,uzbstrproc,
      {$IFNDEF DELPHI}LResources,{$ENDIF}Dialogs{$IFNDEF DELPHI},FileUtil{$ENDIF};
 const
     ImportFileFilter: String = 'PDF files (*.pdf)|*.pdf|PostScript files (*.ps)|*.ps|SVG files (*.svg)|*.svg|DXF files (*.dxf)|*.dxf|EPS files (*.eps)|*.eps';

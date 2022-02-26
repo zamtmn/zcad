@@ -20,7 +20,7 @@ unit uzcsysinfo;
 {$INCLUDE zcadconfig.inc}
 interface
 uses
-  MacroDefIntf,uzmacros,uzcsysparams,LCLProc,uzclog,uzblog,uzbpaths,uzbtypesbase,Forms,
+  MacroDefIntf,uzmacros,uzcsysparams,LCLProc,uzclog,uzblog,uzbpaths,Forms,
   {$IFDEF WINDOWS}ShlObj,{$ENDIF}{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils,uzcsysvars;
 const
   zcaduniqueinstanceid='zcad unique instance';

@@ -19,7 +19,7 @@
 unit uzgvertex3sarray;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzbtypesbase,gzctnrVector,sysutils,
+uses gzctnrVector,sysutils,
      gzctnrvectortypes,uzegeometrytypes,uzegeometry;
 type
 {Export+}

@@ -27,7 +27,7 @@ uses
   uzgldrawcontext,
   uzcstrconsts,
   uzccommandsabstract,
-  uzbtypesbase,uzccommandsmanager,
+  uzccommandsmanager,
   uzccommandsimpl,
   uzbtypes,
   uzcdrawings,

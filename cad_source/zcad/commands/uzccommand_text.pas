@@ -24,7 +24,7 @@ uses
   SysUtils,
   gzctnrvectortypes,
   uzgldrawcontext,
-  uzbtypesbase,
+  
   uzbtypes,
   uzcdrawings,
   uzeutils,uzcutils,

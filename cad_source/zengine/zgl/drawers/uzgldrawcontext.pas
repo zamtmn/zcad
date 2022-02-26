@@ -18,7 +18,7 @@
 unit uzgldrawcontext;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzepalette,uzbtypesbase,uzbtypes,uzgldrawerabstract,uzeconsts,uzegeometry;
+uses uzepalette,uzbtypes,uzgldrawerabstract,uzeconsts,uzegeometry;
 type
 TDrawHeplGeometry=procedure  of object;
 TDrawingContext=record

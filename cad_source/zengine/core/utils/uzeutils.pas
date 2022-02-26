@@ -21,7 +21,7 @@ unit uzeutils;
 {$INCLUDE zcadconfig.inc}
 interface
 uses
-  uzepalette,uzestyleslinetypes,uzestyleslayers,uzedrawingsimple,uzbtypesbase,
+  uzepalette,uzestyleslinetypes,uzestyleslayers,uzedrawingsimple,
   gzctnrvectortypes,uzbtypes,uzeentity,uzegeometry,uzeentgenericsubentry,gzctnrSTL
   ,LazLogger;
 type

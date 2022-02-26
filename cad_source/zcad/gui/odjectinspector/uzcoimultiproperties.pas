@@ -21,7 +21,7 @@ unit uzcoimultiproperties;
 
 interface
 uses
-  uzcuidialogs,uzctranslations,uzbtypesbase,uzbtypes,uzclog,
+  uzcuidialogs,uzctranslations,uzbtypes,uzclog,
   uzedimensionaltypes,usimplegenerics,varmandef,Varman,garrayutils,gzctnrSTL,
   contnrs,uzeBaseExtender,Rtti;
 type

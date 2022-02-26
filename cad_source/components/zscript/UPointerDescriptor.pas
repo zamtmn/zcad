@@ -21,31 +21,40 @@ unit UPointerDescriptor;
 {$MODE DELPHI}
 interface
 uses types,TypeDescriptors,uzctnrVectorBytes,
-     uzedimensionaltypes,uzbtypesbase,varmandef,uzbtypes,uzctnrvectorstrings;
+     uzedimensionaltypes,varmandef,uzbtypes,uzctnrvectorstrings,
+     UBaseTypeDescriptor;
 resourcestring
   rsUnassigned='Unassigned';
 type
-PGDBPointerDescriptor=^GDBPointerDescriptor;
-GDBPointerDescriptor=object(TUserTypeDescriptor)
-                     TypeOf:PUserTypeDescriptor;
-                     ReferType:String;
-                     //constructor init(var t:gdbtypedesk);
-                     constructor init(ptype:String;tname:string;pu:pointer);
-                     function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
-                     //function Serialize(PInstance:Pointer;SaveFlag:Word;var membuf:PTZctnrVectorBytes;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
-                     //function DeSerialize(PInstance:Pointer;SaveFlag:Word;var membuf:TZctnrVectorBytes;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
-                     procedure Format;virtual;
-                     function GetTypeAttributes:TTypeAttr;virtual;
-                     function CreateEditor(TheOwner:TPropEditorOwner;rect:trect{x,y,w,h:Integer};pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:TInternalScriptString;preferedHeight:integer):TEditorDesc{TPropEditor};virtual;
-                     procedure SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;prefix:TInternalScriptString);virtual;
-                     destructor Done;virtual;
-               end;
-const PAssigned:Pointer=nil;
-      PNIL:byte=255;
+  PGDBPointerDescriptor=^GDBPointerDescriptor;
+  GDBPointerDescriptor=object(TUserTypeDescriptor)
+    TypeOf:PUserTypeDescriptor;
+    ReferType:String;
+    //constructor init(var t:gdbtypedesk);
+    constructor init(ptype:String;tname:string;pu:pointer);
+    function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
+    //function Serialize(PInstance:Pointer;SaveFlag:Word;var membuf:PTZctnrVectorBytes;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
+    //function DeSerialize(PInstance:Pointer;SaveFlag:Word;var membuf:TZctnrVectorBytes;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
+    procedure Format;virtual;
+    function GetTypeAttributes:TTypeAttr;virtual;
+    function CreateEditor(TheOwner:TPropEditorOwner;rect:trect{x,y,w,h:Integer};pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:TInternalScriptString;preferedHeight:integer):TEditorDesc{TPropEditor};virtual;
+    procedure SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;prefix:TInternalScriptString);virtual;
+    destructor Done;virtual;
+  end;
+
 var
-    defaultptypehandler:GDBPointerDescriptor;
+  defaultptypehandler:GDBPointerDescriptor;
+  FundamentalPStringDescriptorObj:GDBPointerDescriptor;
+  FundamentalPAnsiStringDescriptorObj:GDBPointerDescriptor;
+  FundamentalPBooleanDescriptorObj:GDBPointerDescriptor;
+  FundamentalPIntegerDescriptorObj:GDBPointerDescriptor;
+  FundamentalPDoubleDescriptorObj:GDBPointerDescriptor;
+
 implementation
-uses varman{,log};
+
+uses
+  varman;
+
 procedure GDBPointerDescriptor.SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;prefix:TInternalScriptString);
 begin
 
@@ -165,6 +174,7 @@ function GDBPointerDescriptor.GetTypeAttributes;
 begin
      result:=TA_COMPOUND;
 end;
+
 begin
   defaultptypehandler.init('','',nil);
 end.

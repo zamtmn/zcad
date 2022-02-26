@@ -21,7 +21,7 @@ unit uzeroot;
 
 interface
 Uses
-   uzgldrawcontext,uzedrawingdef,uzecamera,uzeentitiestree,uzbtypesbase,uzbtypes,
+   uzgldrawcontext,uzedrawingdef,uzecamera,uzeentitiestree,uzbtypes,
    uzeconsts,uzeentity,uzeentgenericsubentry,uzeentconnected,uzeentsubordinated,
    gzctnrvectortypes,uzegeometrytypes,uzegeometry;
 type

@@ -21,7 +21,7 @@ unit uzctextpreprocessorimpl;
 
 interface
 uses uzeentity,uzcvariablesutils,uzetextpreprocessor,uzbstrproc,sysutils,
-     uzbtypesbase,varmandef,uzbtypes,uzcenitiesvariablesextender,
+     varmandef,uzbtypes,uzcenitiesvariablesextender,
      uzcpropertiesutils,uzeparser,LazUTF8;
 type
   TStr2VarProcessor=class(TMyParser.TParserTokenizer.TDynamicProcessor)

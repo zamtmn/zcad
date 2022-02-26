@@ -21,7 +21,7 @@ unit uzcinterfacedata;
 
 interface
 uses
-       uzbtypesbase,uzestyleslayers,uzestyleslinetypes,uzestylestexts,uzestylesdim,
+       uzestyleslayers,uzestyleslinetypes,uzestylestexts,uzestylesdim,
        classes;
 type
   TInterfaceVars=record

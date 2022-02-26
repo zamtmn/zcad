@@ -20,7 +20,7 @@ unit uzcregzscript;
 {$INCLUDE zcadconfig.inc}
 interface
 uses uzcsysvars,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,varman,
-     UBaseTypeDescriptor,uzbtypesbase,uzedimensionaltypes,uzemathutils,LazLogger;
+     UBaseTypeDescriptor,uzedimensionaltypes,uzemathutils,LazLogger;
 type
   GDBNonDimensionDoubleDescriptor=object(DoubleDescriptor)
                             function GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):String;virtual;

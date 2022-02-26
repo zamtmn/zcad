@@ -19,7 +19,7 @@
 unit uzefontshx;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzefontbase,uzctnrVectorBytes,uzbtypesbase,sysutils,
+uses uzefontbase,uzctnrVectorBytes,sysutils,
      uzegeometry;
 type
 {EXPORT+}

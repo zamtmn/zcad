@@ -20,7 +20,7 @@ unit uzeentity;
 {$INCLUDE zcadconfig.inc}
 interface
 uses uzepalette,uzeobjectextender,uzgldrawerabstract,uzgldrawcontext,uzedrawingdef,
-     uzecamera,uzeentitiesprop,uzestyleslinetypes,uzbtypesbase,
+     uzecamera,uzeentitiesprop,uzestyleslinetypes,
      uzegeometrytypes,UGDBControlPointArray,uzeentsubordinated,uzbtypes,uzeconsts,
      uzglviewareadata,uzegeometry,uzeffdxfsupport,sysutils,uzctnrVectorBytes,
      uzestyleslayers,uzeenrepresentation,LazLogger,uzctnrvectorpgdbaseobjects;

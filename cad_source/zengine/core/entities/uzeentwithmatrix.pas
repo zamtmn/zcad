@@ -20,7 +20,7 @@ unit uzeentwithmatrix;
 {$INCLUDE zcadconfig.inc}
 
 interface
-uses uzgldrawcontext,uzedrawingdef,uzecamera,uzeentity,uzbtypesbase,uzbtypes,
+uses uzgldrawcontext,uzedrawingdef,uzecamera,uzeentity,uzbtypes,
      gzctnrvectortypes,uzegeometrytypes,uzegeometry,uzeentsubordinated,uzeentitiestree;
 type
 {EXPORT+}

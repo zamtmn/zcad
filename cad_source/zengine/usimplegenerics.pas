@@ -19,7 +19,7 @@ unit usimplegenerics;
 {$INCLUDE zcadconfig.inc}
 
 interface
-uses uzbstrproc,uzbtypesbase,uzbtypes,gzctnrSTL,
+uses uzbstrproc,uzbtypes,gzctnrSTL,
      {$IFNDEF DELPHI}gutil,gmap,gvector,{$ENDIF}
      {$IFDEF DELPHI}generics.collections,{$ENDIF}
      sysutils;

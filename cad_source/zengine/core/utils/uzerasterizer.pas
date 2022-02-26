@@ -20,7 +20,7 @@ unit uzerasterizer;
 {$INCLUDE zcadconfig.inc}
 interface
 uses
-  uzbtypesbase,uzegeometrytypes,
+  uzegeometrytypes,
   uzedrawingsimple,uzgldrawcontext,uzgldrawergeneral2d,uzgldrawerabstract,
   uzegeometry,uzeconsts,
   uzeiopalette,uzepalette,uzcutils,

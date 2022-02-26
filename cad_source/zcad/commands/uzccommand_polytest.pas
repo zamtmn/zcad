@@ -24,7 +24,7 @@ interface
 uses
   LazLogger,
   uzccommandsimpl,
-  uzbtypesbase,
+  
   uzglviewareadata,
   uzegeometrytypes,
   uzeentlwpolyline,

@@ -24,7 +24,7 @@ interface
 uses
   zcobjectinspectorui,uzctypesdecorations,uzccommandsabstract,zcobjectinspectoreditors,uzcsysinfo,uzepalette,UEnumDescriptor,zcobjectinspector,uzcinfoform,Forms,uzestyleslinetypes,sysutils,uzctreenode,uzcfsnapeditor,
   Graphics,LCLType,Themes,uzeconsts,UGDBNamedObjectsArray,uzctnrvectorstrings,
-  varmandef,Varman,uzcfcolors,uzestyleslayers,uzbtypes,uzcflineweights,uzbtypesbase,usupportgui,
+  varmandef,Varman,uzcfcolors,uzestyleslayers,uzbtypes,uzcflineweights,usupportgui,
   StdCtrls,uzcdrawings,uzcstrconsts,Controls,Classes,uzbstrproc,uzcsysvars,uzccommandsmanager,
   uzcsysparams,gzctnrvectortypes,uzegeometrytypes,uzcinterface,uzcoimultiobjects,uzcgui2color,uzcgui2linewidth,uzcgui2linetypes,
   uzccommand_layer,uzcuitypes;

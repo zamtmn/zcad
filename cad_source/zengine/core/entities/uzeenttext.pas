@@ -22,7 +22,7 @@ unit uzeenttext;
 interface
 uses
     uzglgeometry,uzgldrawcontext,uzeobjectextender,uzetextpreprocessor,uzeentityfactory,
-    uzedrawingdef,uzecamera,uzbstrproc,sysutils,uzefont,uzestyleslayers,uzbtypesbase,
+    uzedrawingdef,uzecamera,uzbstrproc,sysutils,uzefont,uzestyleslayers,
     uzeentabstracttext,uzeentity,UGDBOutbound2DIArray,uzctnrVectorBytes,uzbtypes,
     uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzeentsubordinated,LazLogger,
     uzegeometrytypes,uzestylestexts;

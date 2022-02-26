@@ -22,7 +22,7 @@ interface
 uses uzgldrawergeneral,math,uzgldrawcontext,uzgldrawerabstract,uzgvertex3sarray,
      uzegeometrytypes,gzctnrVector,UGDBPoint3DArray,uzegeometry,uzeentitiesprop,
      gzctnrvectortypes,uzestyleslinetypes,sysutils,uzbtypes,
-     uzbtypesbase,uzbstrproc,uzefont,uzglvectorobject,uzgprimitivessarray;
+     uzbstrproc,uzefont,uzglvectorobject,uzgprimitivessarray;
 type
 {Export+}
 PZGLGraphix=^ZGLGraphix;

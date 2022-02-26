@@ -19,7 +19,7 @@
 unit UGDBPolyPoint2DArray;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzegeometrytypes,uzbtypesbase,gzctnrVector,sysutils,uzegeometry;
+uses uzegeometrytypes,gzctnrVector,sysutils,uzegeometry;
 type
 {Export+}
 PGDBPolyPoint2DArray=^GDBPolyPoint2DArray;

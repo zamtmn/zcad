@@ -23,7 +23,7 @@ interface
 uses uzctnrVectorPointers,gzctnrVectorPObjects,uzcsysvars,uzegeometry,uzglviewareaabstract,uzbpaths,
      uzeconsts,uzcctrldynamiccommandmenu,uzcinfoform,uzcstrconsts,uzcsysinfo,
      gzctnrvectortypes,uzegeometrytypes,uzbstrproc,gzctnrVectorP,
-     uzbtypesbase,uzccommandsabstract, sysutils,uzglviewareadata,
+     uzccommandsabstract, sysutils,uzglviewareadata,
      uzclog,varmandef,varman,uzedrawingdef,uzcinterface,
      uzcsysparams,uzedrawingsimple,uzcdrawings,uzctnrvectorstrings,forms,LazLogger,
      uzcctrlcommandlineprompt,uzeparsercmdprompt,gzctnrSTL;

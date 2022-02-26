@@ -22,7 +22,7 @@ unit uzeentitiesmanager;
 
 interface
 uses LCLProc,uzeconsts,uzepalette,uzestyleslinetypes,uzeentityfactory,
-     uzeutils,uzestyleslayers,sysutils,uzbtypesbase,uzbtypes,UGDBVisibleOpenArray,
+     uzeutils,uzestyleslayers,sysutils,uzbtypes,UGDBVisibleOpenArray,
      uzegeometrytypes,uzeentgenericsubentry,uzeentity;
 function ENTF_CreateLine(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;args:array of const): PGDBObjEntity;
 function ENTF_CreateCircle(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;args:array of const): PGDBObjEntity;

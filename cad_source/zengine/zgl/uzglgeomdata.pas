@@ -19,7 +19,7 @@
 unit uzglgeomdata;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzgindexsarray,uzgvertex3sarray,sysutils,uzbtypesbase,uzbtypes,
+uses uzgindexsarray,uzgvertex3sarray,sysutils,uzbtypes,
      uzegeometrytypes,uzegeometry,gzctnrvectortypes;
 type
 {Export+}

@@ -21,7 +21,7 @@ unit uzvagslcom;
 interface
 uses uzccommandsimpl,    //тут реализация объекта CommandRTEdObject
      uzccommandsabstract,//базовые объявления для команд
-     uzbtypesbase,       //базовые типы
+            //базовые типы
      uzccommandsmanager, //менеджер команд
        uzeentpolyline,
        uzcinterface,

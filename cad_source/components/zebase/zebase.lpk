@@ -20,10 +20,6 @@
     </CompilerOptions>
     <Files>
       <Item>
-        <Filename Value="uzbtypesbase.pas"/>
-        <UnitName Value="uzbtypesbase"/>
-      </Item>
-      <Item>
         <Filename Value="uzbtypes.pas"/>
         <UnitName Value="uzbtypes"/>
       </Item>

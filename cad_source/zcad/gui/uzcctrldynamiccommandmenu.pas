@@ -20,7 +20,7 @@ unit uzcctrldynamiccommandmenu;
 {$INCLUDE zcadconfig.inc}
 interface
 uses
- uzcinfoform,ComCtrls,Controls,Forms,uzbtypesbase,uzclog,uzcstrconsts;
+ uzcinfoform,ComCtrls,Controls,Forms,uzclog,uzcstrconsts;
 type
   DMMethod=procedure(sender:Pointer) of object;
   //PTDMenuWnd=^TDMenuWnd;

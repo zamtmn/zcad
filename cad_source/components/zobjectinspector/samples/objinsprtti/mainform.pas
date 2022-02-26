@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   Buttons,
 
-  uzedimensionaltypes,zcobjectinspector,uzbtypesbase,UUnitManager,uzemathutils,uzbtypes,varmandef,Varman,zcobjectinspectoreditors,UEnumDescriptor;
+  uzedimensionaltypes,zcobjectinspector,UUnitManager,uzemathutils,uzbtypes,varmandef,Varman,zcobjectinspectoreditors,UEnumDescriptor;
 
 type
   {Z1}//[s]object inspector support only byte size enums[/s]

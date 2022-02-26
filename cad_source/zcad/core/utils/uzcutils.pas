@@ -24,7 +24,7 @@ unit uzcutils;
 interface
 uses uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzepalette,
      uzeentityfactory,uzgldrawcontext,uzcdrawing,uzestyleslinetypes,uzcsysvars,
-     uzestyleslayers,sysutils,uzbtypesbase,uzbtypes,uzcdrawings,varmandef,
+     uzestyleslayers,sysutils,uzbtypes,uzcdrawings,varmandef,
      uzeconsts,UGDBVisibleOpenArray,uzeentgenericsubentry,uzeentity,
      uzegeometrytypes,uzeentblockinsert,uzcinterface,gzctnrvectortypes;
 

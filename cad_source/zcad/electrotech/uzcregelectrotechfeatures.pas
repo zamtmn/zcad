@@ -25,7 +25,7 @@ uses uzbpaths,UUnitManager,uzcsysvars,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
      uzcsysparams,uzcsysinfo,TypeDescriptors,URecordDescriptor,
      uzclog,LazLogger,uzceltechtreeprop,uzcefstringstreeselector,
      uzccommandsimpl,uzccommandsabstract,uzctypesdecorations,zcobjectinspectorui,
-     uzcoidecorations,uzbtypesbase,
+     uzcoidecorations,
      Forms,Controls,
      uzcinterface,uzcuitypes;
 var

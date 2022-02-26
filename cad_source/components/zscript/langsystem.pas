@@ -20,7 +20,7 @@ unit langsystem;
 
 {$MODE DELPHI}
 interface
-uses uzbstrproc,uzbtypesbase,varmandef,UBaseTypeDescriptor,
+uses uzbstrproc,varmandef,UBaseTypeDescriptor,
      base64;
 type
     TTypesArray=array of pointer;

@@ -22,7 +22,7 @@ unit uzefontmanager;
 interface
 uses
   uzctnrVectorBytes,{$IFNDEF DELPHI}LResources,{$ENDIF}LCLProc,uzbpaths,
-  uzelclintfex,uzestrconsts,uzbstrproc,uzefont,uzbtypesbase,
+  uzelclintfex,uzestrconsts,uzbstrproc,uzefont,
   sysutils,uzbtypes,uzegeometry,gzctnrSTL,
   UGDBNamedObjectsArray,classes,uzefontttfpreloader,uzelongprocesssupport;
 type

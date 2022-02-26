@@ -22,7 +22,7 @@ unit uzccommandsimpl;
 
 interface
 uses uzcutils,uzgldrawcontext,uzglviewareageneral,uzeconsts,uzcsysvars,uzegeometry,
-     varmandef,uzbtypesbase,uzbtypes,uzccommandsabstract,uzccommandsmanager,
+     varmandef,uzbtypes,uzccommandsabstract,uzccommandsmanager,
      uzegeometrytypes,uzglviewareadata,uzcdrawings,
      uzcinterface,varman,uzclog;
 type

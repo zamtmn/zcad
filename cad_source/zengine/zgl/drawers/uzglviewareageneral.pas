@@ -21,7 +21,7 @@ unit uzglviewareageneral;
 interface
 uses
      gzctnrvectortypes,uzegeometrytypes,LCLProc,uzemathutils,uzepalette,
-     uzeentsubordinated,uzegeometry,uzbtypesbase,uzbtypes,UGDBSelectedObjArray,
+     uzeentsubordinated,uzegeometry,uzbtypes,UGDBSelectedObjArray,
      uzglviewareadata,uzgldrawcontext,uzeentity,uzedrawingabstract,UGDBPoint3DArray,uzeentitiestree,
      uzeconsts,uzestrconsts,UGDBTracePropArray,math,sysutils,uzedrawingdef,uzbstrproc,
      ExtCtrls,Controls,Classes,{$IFDEF DELPHI}Types,{$ENDIF}{$IFNDEF DELPHI}LCLType,{$ENDIF}Forms,

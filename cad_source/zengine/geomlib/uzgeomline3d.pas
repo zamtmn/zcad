@@ -20,7 +20,7 @@ unit uzgeomline3d;
 {$INCLUDE zcadconfig.inc}
 interface
 uses
-     sysutils,uzbtypes,uzbtypesbase,uzegeometry,uzgeomentity3d,uzegeometrytypes;
+     sysutils,uzbtypes,uzegeometry,uzgeomentity3d,uzegeometrytypes;
 type
 {Export+}
 {REGISTEROBJECTTYPE TGeomLine3D}

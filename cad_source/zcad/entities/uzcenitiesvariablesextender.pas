@@ -21,7 +21,7 @@ unit uzcenitiesvariablesextender;
 interface
 uses sysutils,UGDBObjBlockdefArray,uzedrawingdef,uzeentityextender,
      uzeentdevice,TypeDescriptors,uzetextpreprocessor,uzctnrVectorBytes,
-     uzbtypesbase,uzbtypes,uzeentsubordinated,uzeentity,uzeenttext,uzeblockdef,
+     uzbtypes,uzeentsubordinated,uzeentity,uzeenttext,uzeblockdef,
      varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
      uzeentitiestree,usimplegenerics,uzeffdxfsupport,uzbpaths,uzctranslations,
      gzctnrvectortypes,uzeBaseExtender,uzgldrawcontext;

@@ -19,7 +19,7 @@
 unit uzestylesdim;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzepalette,uzeconsts,uzestyleslinetypes,uzestylestexts,usimplegenerics,uzbtypesbase,
+uses uzepalette,uzeconsts,uzestyleslinetypes,uzestylestexts,usimplegenerics,
      uzedimensionaltypes,sysutils,uzbtypes,uzegeometry,
      gzctnrvectortypes,uzbstrproc,UGDBNamedObjectsArray,uzeffdxfsupport;
 const

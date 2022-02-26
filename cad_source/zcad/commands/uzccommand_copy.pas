@@ -25,7 +25,7 @@ uses
   usimplegenerics,
   uzcdrawing,
   uzgldrawcontext,
-  uzbtypesbase,
+  
   uzcdrawings,
   uzeutils,uzcutils,
   uzglviewareadata,

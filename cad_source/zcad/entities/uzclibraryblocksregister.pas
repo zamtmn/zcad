@@ -24,7 +24,7 @@ interface
 uses uzccommandsimpl,uzbstrproc,uzctnrVectorBytes,uzccommandsabstract,uzbpaths,
      uzccommand_mergeblocks,
      uzestyleslayers,UGDBObjBlockdefArray,uzeblockdefsfactory,uzeblockdef,uzedrawingdef,
-     uzcsysvars,uzbtypesbase,uzeentity,uzcdrawings,uzclog,LazLogger;
+     uzcsysvars,uzeentity,uzcdrawings,uzclog,LazLogger;
 implementation
 function LoadLibraryBlock(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:String):PGDBObjBlockdef;
 var

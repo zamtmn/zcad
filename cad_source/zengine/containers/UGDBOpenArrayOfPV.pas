@@ -19,7 +19,7 @@
 unit UGDBOpenArrayOfPV;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzegeometrytypes,uzgldrawcontext,uzedrawingdef,uzeentity,uzecamera,uzbtypesbase,
+uses uzegeometrytypes,uzgldrawcontext,uzedrawingdef,uzeentity,uzecamera,
      gzctnrvectortypes,sysutils,uzbtypes,uzegeometry,
      uzeentsubordinated,uzeentityfactory,uzctnrvectorpgdbaseobjects;
 type

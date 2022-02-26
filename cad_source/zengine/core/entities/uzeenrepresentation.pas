@@ -20,7 +20,7 @@ unit uzeenrepresentation;
 {$INCLUDE zcadconfig.inc}
 interface
 uses uzgldrawcontext,uzgldrawerabstract,uzglvectorobject,
-     uzbtypesbase,sysutils,
+     sysutils,
      uzegeometrytypes,uzegeometry,uzglgeometry,uzefont,uzeentitiesprop,UGDBPoint3DArray,
      uzegeomentitiestree,uzbtypes,
      gzctnrvectortypes,uzgeomline3d,uzgeomproxy;

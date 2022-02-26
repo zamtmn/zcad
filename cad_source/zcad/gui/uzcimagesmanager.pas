@@ -24,7 +24,7 @@ interface
 uses
   uzbpaths,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics,
   Buttons, ExtCtrls, LazUTF8,
-  uzcsysvars,uzcsysinfo,uzbtypesbase,gzctnrSTL,uzctnrVectorBytes,
+  uzcsysvars,uzcsysinfo,gzctnrSTL,uzctnrVectorBytes,
   uzbstrproc,LazLogger;
 type
   TImageData=record

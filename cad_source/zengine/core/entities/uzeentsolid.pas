@@ -21,7 +21,7 @@ unit uzeentsolid;
 interface
 uses
     uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,uzeentwithlocalcs,
-    uzegeometry,uzeffdxfsupport,uzestyleslayers,uzbtypesbase,
+    uzegeometry,uzeffdxfsupport,uzestyleslayers,
     UGDBSelectedObjArray,uzeentsubordinated,uzeentity,sysutils,uzctnrVectorBytes,
     uzegeometrytypes,uzbtypes,uzeconsts,uzctnrvectorpgdbaseobjects;
 type

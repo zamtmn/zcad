@@ -22,7 +22,7 @@ unit uzeentspline;
 interface
 uses LCLProc,uzegluinterface,uzeentityfactory,uzgldrawcontext,uzgloglstatemanager,gzctnrVector,
      UGDBPoint3DArray,uzedrawingdef,uzecamera,UGDBVectorSnapArray,
-     uzestyleslayers,uzeentsubordinated,uzeentcurve,uzbtypesbase,
+     uzestyleslayers,uzeentsubordinated,uzeentcurve,
      uzeentity,uzctnrVectorBytes,uzbtypes,uzeconsts,uzglviewareadata,
      gzctnrvectortypes,uzegeometrytypes,uzegeometry,uzeffdxfsupport,sysutils,
      uzctnrvectorpgdbaseobjects;

@@ -19,7 +19,7 @@
 unit UGDBOutbound2DIArray;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzegeometrytypes,uzgldrawcontext,uzbtypesbase,gzctnrVector,sysutils,uzegeometry;
+uses uzegeometrytypes,uzgldrawcontext,gzctnrVector,sysutils,uzegeometry;
 type
 {Export+}
 PGDBOOutbound2DIArray=^GDBOOutbound2DIArray;

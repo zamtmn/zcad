@@ -19,7 +19,7 @@
 unit uzcplugins;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzbtypesbase,sysutils, dynlibs, uzclog,gzctnrVector,uzeentity,
+uses sysutils, dynlibs, uzclog,gzctnrVector,uzeentity,
      LazLogger;
 type
     {Export+}

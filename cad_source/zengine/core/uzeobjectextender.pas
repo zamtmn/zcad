@@ -20,7 +20,7 @@ unit uzeobjectextender;
 {$INCLUDE zcadconfig.inc}
 
 interface
-uses uzeentityextender,uzeentsubordinated,uzedrawingdef,uzbtypesbase,uzbtypes,
+uses uzeentityextender,uzeentsubordinated,uzedrawingdef,uzbtypes,
      uzctnrVectorBytes,gzctnrSTL,uzeffdxfsupport;
 
 type

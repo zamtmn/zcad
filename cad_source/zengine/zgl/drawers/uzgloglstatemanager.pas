@@ -20,7 +20,7 @@ unit uzgloglstatemanager;
 {$INCLUDE zcadconfig.inc}
 
 interface
-uses uzegeometrytypes,uzepalette,uzbtypesbase,{$IFNDEF DELPHI}LCLType,{$ENDIF}
+uses uzegeometrytypes,uzepalette,{$IFNDEF DELPHI}LCLType,{$ENDIF}
      {$IFNDEF DELPHI}gl,{glu,}glext,{$ELSE}dglOpenGL,windows,{$ENDIF}
      {$IFDEF SLINUX}glx,{$ENDIF}
      {$IFDEF WINDOWS}windows,{$ENDIF}

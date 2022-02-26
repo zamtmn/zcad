@@ -2,7 +2,7 @@ unit uzcdevicebase;
 {$INCLUDE zcadconfig.inc}
 interface
 uses uzcinterface,uzbpaths,uzctranslations,gvector,varmandef,CsvDocument,uzcdevicebaseabstract,uzcsysvars,
-     LazUTF8,uzcsysinfo,strmy,uzbtypesbase,uzbtypes,UUnitManager,varman,sysutils,
+     LazUTF8,uzcsysinfo,strmy,uzbtypes,UUnitManager,varman,sysutils,
      typedescriptors,URecordDescriptor,UObjectDescriptor,uzclog;
 type
 {EXPORT+}

@@ -19,7 +19,7 @@
 unit UGDBTable;
 {$INCLUDE zcadconfig.inc}
 interface
-uses gzctnrVector,gzctnrVectorPObjects,uzbtypesbase,sysutils,
+uses gzctnrVector,gzctnrVectorPObjects,sysutils,
      uzctnrvectorstrings;
 type
 {EXPORT+}

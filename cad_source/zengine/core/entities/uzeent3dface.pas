@@ -21,7 +21,7 @@ unit uzeent3dface;
 interface
 uses
     uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,
-    uzegeometry,uzeffdxfsupport,uzestyleslayers,uzbtypesbase,UGDBSelectedObjArray,uzeentsubordinated,
+    uzegeometry,uzeffdxfsupport,uzestyleslayers,UGDBSelectedObjArray,uzeentsubordinated,
     uzegeometrytypes,uzeent3d,uzeentity,sysutils,uzctnrVectorBytes,uzbtypes,uzeconsts,uzctnrvectorpgdbaseobjects;
 type
 {Export+}

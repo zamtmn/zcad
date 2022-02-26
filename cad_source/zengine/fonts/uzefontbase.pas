@@ -20,7 +20,7 @@ unit uzefontbase;
 {$INCLUDE zcadconfig.inc}
 interface
 uses uzgprimitives,uzglvectorobject,uzbstrproc,uzctnrVectorBytes,
-     gzctnrvectortypes,uzbtypesbase,gzctnrVector,sysutils,uzbtypes,uzegeometrytypes,uzegeometry;
+     gzctnrvectortypes,gzctnrVector,sysutils,uzbtypes,uzegeometrytypes,uzegeometry;
 type
 {EXPORT+}
 TGDBUNISymbolInfoVector=GZVector{-}<GDBUNISymbolInfo>{//};

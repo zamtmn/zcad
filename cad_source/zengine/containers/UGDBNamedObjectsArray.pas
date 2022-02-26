@@ -19,7 +19,7 @@
 unit UGDBNamedObjectsArray;
 {$INCLUDE zcadconfig.inc}
 interface
-uses gzctnrvectortypes,gzctnrVectorPObjects,sysutils,uzbtypes,uzegeometry,uzbtypesbase;
+uses gzctnrvectortypes,gzctnrVectorPObjects,sysutils,uzbtypes,uzegeometry;
 type
 {EXPORT+}
 TForCResult=(IsFounded(*'IsFounded'*)=1,

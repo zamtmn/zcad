@@ -20,7 +20,7 @@ unit uzctextenteditor;
 {$INCLUDE zcadconfig.inc}
 interface
 uses
-     uzcsysparams,uzcutils,uzcsysvars,uzbtypesbase,uzcsysinfo,
+     uzcsysparams,uzcutils,uzcsysvars,uzcsysinfo,
      uzcinfoform,Varman,uzcinterface,
      uzedrawingdef,uzbstrproc,uzeenttext,uzeconsts,uzcstrconsts,uzcfsinglelinetexteditor,
      Controls,Classes,Forms,uzccommandsmanager,uzcuitypes;

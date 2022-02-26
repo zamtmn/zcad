@@ -19,7 +19,7 @@
 unit uzctnrVectorDouble;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzbtypesbase,sysutils,gzctnrVectorSimple;
+uses sysutils,gzctnrVectorSimple;
 type
 {Export+}
 PTZctnrVectorDouble=^TZctnrVectorDouble;

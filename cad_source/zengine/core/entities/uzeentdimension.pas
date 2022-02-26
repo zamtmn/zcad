@@ -21,7 +21,7 @@ unit uzeentdimension;
 interface
 uses uzemathutils,uzgldrawcontext,uzeentabstracttext,uzestylestexts,UGDBXYZWStringArray,
      uzestylesdim,uzeentmtext,uzestyleslayers,uzedrawingdef,uzecamera,
-     uzbstrproc,uzctnrVectorBytes,uzeenttext,uzegeometry,uzeentline,uzbtypesbase,uzeentcomplex,
+     uzbstrproc,uzctnrVectorBytes,uzeenttext,uzegeometry,uzeentline,uzeentcomplex,
      uzegeometrytypes,sysutils,uzeentity,uzbtypes,uzeconsts,
      uzedimensionaltypes,uzeentitiesmanager,UGDBOpenArrayOfPV,uzeentblockinsert;
 type

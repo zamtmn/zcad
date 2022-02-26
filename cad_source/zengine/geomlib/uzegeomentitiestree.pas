@@ -22,7 +22,7 @@ interface
 uses
     graphics,uzgeomentity,
     gzctnrvectortypes,uzegeometrytypes,gzctnrBinarySeparatedTree,uzegeometry,
-    uzbtypesbase,gzctnrAlignedVectorObjects;
+    gzctnrAlignedVectorObjects;
 type
 TZEntsManipulator=class;
 TFirstStageData=record

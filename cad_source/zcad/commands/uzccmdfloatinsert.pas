@@ -24,7 +24,7 @@ uses
   LCLProc,
   uzccommandsimpl,uzccommandsabstract,
   uzcdrawings,uzcdrawing,gzctnrvectortypes,uzgldrawcontext,uzegeometrytypes,
-  uzbtypesbase,uzglviewareadata,uzeentity,uzegeometry, uzeentwithlocalcs,
+  uzglviewareadata,uzeentity,uzegeometry, uzeentwithlocalcs,
   zcmultiobjectcreateundocommand,uzccommandsmanager;
 
 type

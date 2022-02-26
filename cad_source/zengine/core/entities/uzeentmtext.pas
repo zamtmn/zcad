@@ -23,7 +23,7 @@ interface
 uses
     uzglgeometry,uzgldrawcontext,uzetextpreprocessor,uzeentityfactory,uzedrawingdef,
     uzbstrproc,uzefont,uzeentabstracttext,UGDBPoint3DArray,uzestyleslayers,SysUtils,
-    uzbtypesbase,uzeentity,UGDBXYZWStringArray,UGDBOutbound2DIArray,uzctnrVectorBytes,
+    uzeentity,UGDBXYZWStringArray,UGDBOutbound2DIArray,uzctnrVectorBytes,
     uzbtypes,uzeenttext,uzeconsts,uzegeometry,uzeffdxfsupport,math,uzeentsubordinated,
     gzctnrvectortypes,uzegeometrytypes,uzestylestexts,StrUtils;
 const maxdxfmtextlen=250;

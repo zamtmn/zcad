@@ -20,7 +20,7 @@ unit uzetrash;
 {$INCLUDE zcadconfig.inc}
 interface
 uses
-    uzegeometrytypes,uzbtypesbase,uzeentity,uzeconsts,uzegeometry;
+    uzegeometrytypes,uzeentity,uzeconsts,uzegeometry;
 type
 {EXPORT+}
 {REGISTEROBJECTTYPE GDBObjTrash}

@@ -21,7 +21,7 @@ unit uzedrawingsimple;
 interface
 uses uzedrawingdef,uzeblockdefsfactory,uzestylesdim,
      gzctnrvectortypes,uzedrawingabstract,uzbstrproc,UGDBObjBlockdefArray,uzestylestables,
-     UGDBNumerator,uzbtypes,sysutils,uzegeometry,uzbtypesbase,uzeentgenericsubentry,
+     UGDBNumerator,uzbtypes,sysutils,uzegeometry,uzeentgenericsubentry,
      uzestyleslayers,uzestyleslinetypes,uzeentity,UGDBSelectedObjArray,uzestylestexts,
      uzedimensionaltypes,uzegeometrytypes,uzecamera,UGDBOpenArrayOfPV,uzeroot,uzefont,
      uzglviewareaabstract,uzglviewareageneral,uzgldrawcontext,UGDBControlPointArray;

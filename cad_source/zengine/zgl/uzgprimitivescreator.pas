@@ -20,7 +20,7 @@ unit uzgprimitivescreator;
 {$INCLUDE zcadconfig.inc}
 interface
 uses uzgprimitivescreatorabstract,uzgindexsarray,uzgprimitives,
-     uzbtypesbase,sysutils,uzbtypes,uzgprimitivessarray,
+     sysutils,uzbtypes,uzgprimitivessarray,
      uzegeometry,LazLogger,gzctnrvectortypes;
 type
 

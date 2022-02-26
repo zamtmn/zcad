@@ -19,7 +19,7 @@
 unit uzepalette;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzbtypesbase;
+
 type
 {EXPORT+}
   PTRGB=^TRGB;

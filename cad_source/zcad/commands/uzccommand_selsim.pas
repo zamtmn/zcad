@@ -29,7 +29,7 @@ uses
   uzcstrconsts,
   uzeenttext,
   uzccommandsabstract,
-  uzbtypesbase,
+  
   uzccommandsmanager,
   uzccommandsimpl,
   uzbtypes,

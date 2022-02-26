@@ -21,7 +21,7 @@ unit uzeentcircle;
 interface
 uses
     gzctnrvectortypes,uzeentityfactory,uzeentsubordinated,uzgldrawcontext,uzedrawingdef,uzecamera,
-    uzestyleslayers,uzbtypesbase,uzehelpobj,UGDBSelectedObjArray,
+    uzestyleslayers,uzehelpobj,UGDBSelectedObjArray,
     uzegeometrytypes,uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,uzctnrVectorBytes,
     uzbtypes,uzeentwithlocalcs,uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,
     uzctnrvectorpgdbaseobjects;

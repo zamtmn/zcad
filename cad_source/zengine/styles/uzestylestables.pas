@@ -19,7 +19,7 @@
 unit uzestylestables;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzbtypesbase,sysutils,uzbtypes,uzegeometry,
+uses sysutils,uzbtypes,uzegeometry,
      UGDBNamedObjectsArray,gzctnrVector;
 type
 {EXPORT+}

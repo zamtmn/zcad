@@ -20,7 +20,7 @@ unit uzeentwithlocalcs;
 {$INCLUDE zcadconfig.inc}
 
 interface
-uses uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,uzbtypesbase,uzeentity,
+uses uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,uzeentity,
      uzegeometrytypes,UGDBOutbound2DIArray,uzctnrVectorBytes,uzeentwithmatrix,uzbtypes,
      uzegeometry,uzeffdxfsupport,sysutils,uzeentsubordinated,uzestyleslayers;
 type

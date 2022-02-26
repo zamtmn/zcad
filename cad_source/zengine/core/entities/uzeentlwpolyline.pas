@@ -23,7 +23,7 @@ interface
 uses gzctnrVector,uzeentityfactory,uzeentsubordinated,
      uzgldrawcontext,uzedrawingdef,uzecamera,uzglviewareadata,
      uzeentcurve,UGDBVectorSnapArray,uzegeometry,uzestyleslayers,uzeentity,
-     uzbtypesbase,UGDBPoint3DArray,UGDBPolyLine2DArray,
+     UGDBPoint3DArray,UGDBPolyLine2DArray,
      uzctnrVectorBytes,uzbtypes,uzeentwithlocalcs,uzeconsts,math,
      gzctnrvectortypes,uzegeometrytypes,uzeffdxfsupport,sysutils,UGDBLineWidthArray,
      UGDBSelectedObjArray,uzctnrvectorpgdbaseobjects;

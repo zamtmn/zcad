@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, ComCtrls,
   ActnList, laz.VirtualTrees,
   uzbtypes,gzctnrvectortypes,uzegeometrytypes ,uzegeometry, uzccommandsmanager,
-  uzcinterface,uzeentity,uzcimagesmanager,uzcdrawings,uzbtypesbase,
+  uzcinterface,uzeentity,uzcimagesmanager,uzcdrawings,
   varmandef,uzbstrproc,uzcnavigatorsnodedesk;
 
 type

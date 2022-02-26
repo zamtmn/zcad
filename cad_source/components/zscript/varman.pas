@@ -23,7 +23,7 @@ unit Varman;
 interface
 uses
   UEnumDescriptor,uzctnrVectorPointers,LCLProc,uabstractunit,
-  SysUtils,UBaseTypeDescriptor,uzbtypesbase,uzctnrVectorBytes,
+  SysUtils,UBaseTypeDescriptor,uzctnrVectorBytes,
   gzctnrvectortypes,uzctnrvectorstrings,varmandef,gzctnrSTL,
   TypeDescriptors,URecordDescriptor,UObjectDescriptor,uzbstrproc,classes,typinfo,
   UPointerDescriptor,
@@ -830,6 +830,7 @@ begin
      AddTypeByRef(AliasDWordDescriptorOdj);
      AddTypeByRef(AliasPtrUIntDescriptorOdj);
      AddTypeByRef(AliasUInt64DescriptorOdj);
+
      BaseTypesEndIndex:=exttype.Count;
 end;
 
@@ -1660,6 +1661,26 @@ begin
   if uppercase(name)='SYSTEM' then
   begin
     InterfaceTypes.CreateBaseTypes;
+
+    FundamentalPStringDescriptorObj.init('String','PString',@self);
+
+    FundamentalPAnsiStringDescriptorObj.init('AnsiString','PAnsiString',@self);
+    FundamentalPAnsiStringDescriptorObj.Format;
+    FundamentalPBooleanDescriptorObj.init('Boolean','PBoolean',@self);
+    FundamentalPBooleanDescriptorObj.Format;
+    FundamentalPIntegerDescriptorObj.init('Integer','PInteger',@self);
+    FundamentalPIntegerDescriptorObj.Format;
+    FundamentalPDoubleDescriptorObj.init('Double','PDouble',@self);
+    FundamentalPDoubleDescriptorObj.Format;
+
+    InterfaceTypes.AddTypeByRef(FundamentalPStringDescriptorObj);
+    InterfaceTypes.AddTypeByRef(FundamentalPAnsiStringDescriptorObj);
+    InterfaceTypes.AddTypeByRef(FundamentalPBooleanDescriptorObj);
+    InterfaceTypes.AddTypeByRef(FundamentalPIntegerDescriptorObj);
+    InterfaceTypes.AddTypeByRef(FundamentalPDoubleDescriptorObj);
+
+    BaseTypesEndIndex:=InterfaceTypes.exttype.Count;
+
     if assigned(OnCreateSystemUnit) then
                                         OnCreateSystemUnit(@self);
   end;

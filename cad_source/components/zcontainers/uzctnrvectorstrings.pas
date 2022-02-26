@@ -19,7 +19,7 @@
 unit uzctnrVectorStrings;
 
 interface
-uses gzctnrvectortypes,{uzbtypesbase,uzbtypes,}gzctnrVectorStr,sysutils;
+uses gzctnrvectortypes,{uzbtypes,}gzctnrVectorStr,sysutils;
 type
 {EXPORT+}
     PTZctnrVectorStrings=^TZctnrVectorStrings;

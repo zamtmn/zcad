@@ -19,7 +19,7 @@
 unit UGDBTracePropArray;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzegeometrytypes,gzctnrVector,sysutils,uzbtypesbase;
+uses uzegeometrytypes,gzctnrVector,sysutils;
 {Export+}
 type
   ptraceprop=^traceprop;

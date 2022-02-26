@@ -22,7 +22,7 @@ unit uzeentitiestypefilter;
 
 interface
 uses LCLProc,uzeentityfactory,
-     sysutils,uzbtypesbase,uzbtypes,
+     sysutils,uzbtypes,
      usimplegenerics,Masks;
 type
   TEntsTypeFilter=class

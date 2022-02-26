@@ -21,7 +21,7 @@ unit uzcfsplash;
 interface
 uses
  uzcsysparams,uzbpaths,uzclog,uniqueinstanceraw,uzcstrconsts,uzbstrproc,Forms,
- stdctrls, Controls, Graphics,ExtCtrls,uzbtypesbase,uzcsysinfo,LazUTF8,sysutils,
+ stdctrls, Controls, Graphics,ExtCtrls,uzcsysinfo,LazUTF8,sysutils,
  LazLogger;
 type
   TSplashForm = class(TForm)

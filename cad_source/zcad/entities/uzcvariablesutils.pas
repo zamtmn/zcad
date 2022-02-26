@@ -19,7 +19,7 @@ unit uzcvariablesutils;
 {$INCLUDE zcadconfig.inc}
 
 interface
-uses uzcenitiesvariablesextender,sysutils,UGDBOpenArrayOfPV,uzbtypesbase,
+uses uzcenitiesvariablesextender,sysutils,UGDBOpenArrayOfPV,
      gzctnrvectortypes,uzeentity,varmandef,uzeentsubordinated;
 //**поиск значения свойства по имени varname:String которое было в ведено в инспекторе для данного устройства PEnt:PGDBObjEntity
 //**возвращает

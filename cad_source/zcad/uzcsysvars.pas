@@ -20,7 +20,7 @@ unit uzcsysvars;
 {$INCLUDE zcadconfig.inc}
 
 interface
-uses uzcsysparams,uzbtypesbase,uzegeometrytypes,uzepalette,
+uses uzcsysparams,uzegeometrytypes,uzepalette,
      uzedimensionaltypes,uzbtypes,uzctnrvectorstrings,
 {$IFDEF LCLGTK2}
 gtk2,gdk2,

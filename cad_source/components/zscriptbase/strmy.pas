@@ -20,7 +20,7 @@ unit strmy;
 {$MODE DELPHI}
 
 interface
-uses {uzbtypesbase,}sysutils,uzctnrvectorstrings;
+uses {}sysutils,uzctnrvectorstrings;
 type
   TLexema=shortstring;
   PLexema=^TLexema;

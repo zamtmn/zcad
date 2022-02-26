@@ -21,7 +21,7 @@ unit uzeentdimdiametric;
 interface
 uses uzgldrawcontext,uzeentityfactory,uzeentdimension,uzestylesdim,uzestyleslayers,
      uzegeometrytypes,uzedrawingdef,uzbstrproc,uzctnrVectorBytes,
-     UGDBControlPointArray,uzegeometry,uzeentline,uzbtypesbase,uzeentcomplex,sysutils,
+     UGDBControlPointArray,uzegeometry,uzeentline,uzeentcomplex,sysutils,
      UGDBSelectedObjArray,uzeentity,uzbtypes,uzeconsts,uzeffdxfsupport,
      uzeentsubordinated;
 (*

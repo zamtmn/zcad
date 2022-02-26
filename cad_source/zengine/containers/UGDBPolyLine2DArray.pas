@@ -19,7 +19,7 @@
 unit UGDBPolyLine2DArray;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzegeometrytypes,uzbtypesbase,gzctnrVector,sysutils,uzegeometry,
+uses uzegeometrytypes,gzctnrVector,sysutils,uzegeometry,
      gzctnrvectortypes,math;
 type
 {Export+}

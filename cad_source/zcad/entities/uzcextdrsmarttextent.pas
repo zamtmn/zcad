@@ -26,7 +26,8 @@ uses
   uzctnrVectorBytes,
   uzedrawingdef,uzgldrawcontext,
   uzeffdxfsupport,
-  uzeentdevice,uzeentsubordinated,uzeentity,uzeenttext,uzeblockdef,uzeentmtext,uzeentwithlocalcs,
+  uzeentdevice,uzeentsubordinated,uzeentity,uzeentabstracttext,uzeenttext,
+  uzeblockdef,uzeentmtext,uzeentwithlocalcs,
   uzeentityextender,uzeBaseExtender;
 const
   SmartTextEntExtenderName='extdrSmartTextEnt';

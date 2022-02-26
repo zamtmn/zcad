@@ -37,7 +37,8 @@ uses
   uzeentsubordinated,uzcentcable,varman,uzcdialogsfiles,uunitmanager,
   uzcbillofmaterial,uzccablemanager,uzeentdevice,uzeenttable,
   uzbpaths,uzctnrvectorstrings,math,Masks,uzclog,uzbstrproc,
-  uzeentmtext,uzeblockdef,UGDBPoint3DArray,uzcdevicebaseabstract,uzelongprocesssupport,LazLogger,
+  uzeentabstracttext,uzeentmtext,uzeblockdef,UGDBPoint3DArray,uzcdevicebaseabstract,
+  uzelongprocesssupport,LazLogger,
   generics.Collections,
   uzccommand_treestat,uzccommand_line2,uzccmdfloatinsert,uzcregother,uzcfcommandline,uzeparsercmdprompt,uzctnrvectorpgdbaseobjects;
 type

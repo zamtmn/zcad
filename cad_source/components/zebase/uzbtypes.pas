@@ -51,11 +51,6 @@ TControlPointAttrs=set of TControlPointAttr;
 (*varcategoryforoi INSERT='Insert'*)
 (*varcategoryforoi NORMAL='Normal'*)
 (*varcategoryforoi SCALE='Scale'*)
-{REGISTERRECORDTYPE GDBTypedPointer}
-GDBTypedPointer=record
-                      Instance:Pointer;
-                      PTD:Pointer;
-                end;
 TObjID=Word;
 PGDBaseObject=^GDBaseObject;
 {----REGISTEROBJECTTYPE GDBaseObject----}
@@ -212,18 +207,6 @@ GDBUNISymbolInfo=record
     symbol:Integer;
     symbolinfo:GDBsymdolinfo;
   end;
-TTextJustify=(jstl(*'TopLeft'*),
-              jstc(*'TopCenter'*),
-              jstr(*'TopRight'*),
-              jsml(*'MiddleLeft'*),
-              jsmc(*'MiddleCenter'*), //СерединаЦентр
-              jsmr(*'MiddleRight'*),
-              jsbl(*'BottomLeft'*),
-              jsbc(*'BottomCenter'*),
-              jsbr(*'BottomRight'*),
-              jsbtl(*'Left'*),
-              jsbtc(*'Center'*),
-              jsbtr(*'Right'*));
 TSymbolInfoArray=packed array [0..255] of GDBsymdolinfo;
 PTAlign=^TAlign;
 TAlign=(TATop,TABottom,TALeft,TARight);

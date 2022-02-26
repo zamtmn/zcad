@@ -69,7 +69,7 @@ uses
 
   uzeentpolyline,             //unit describes line entity
                        //модуль описывающий примитив трехмерная ПОЛИлиния
-  uzeenttext,             //unit describes line entity
+  uzeentabstracttext,uzeenttext,
                        //модуль описывающий примитив текст
 
   uzeentdimaligned, //unit describes aligned dimensional entity

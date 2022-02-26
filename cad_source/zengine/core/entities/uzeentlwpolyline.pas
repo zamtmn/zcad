@@ -391,8 +391,8 @@ begin
   wwc:=uzegeometry.VectorTransform3D(wwc,m);
 
 
-  PGDBArrayVertex2D(Vertex2D_in_OCS_Array.parray)^[vertexnumber].x:=wwc.x{VertexAdd(wwc,tv)};
-  PGDBArrayVertex2D(Vertex2D_in_OCS_Array.parray)^[vertexnumber].y:=wwc.y;
+  GDBPolyline2DArray.PTArr(Vertex2D_in_OCS_Array.parray)^[vertexnumber].x:=wwc.x{VertexAdd(wwc,tv)};
+  GDBPolyline2DArray.PTArr(Vertex2D_in_OCS_Array.parray)^[vertexnumber].y:=wwc.y;
   //PInOCS[vertexnumber].z:=0;
      {vertexnumber:=abs(rtmod.point.pointtype-os_polymin);
      tv:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
@@ -404,9 +404,9 @@ procedure GDBObjLWpolyline.remaponecontrolpoint(pdesc:pcontrolpointdesc);
 var vertexnumber:Integer;
 begin
      vertexnumber:=abs(pdesc^.pointtype-os_polymin);
-     pdesc.worldcoord:=PGDBArrayVertex(Vertex3D_in_WCS_Array.parray)^[vertexnumber];
-     pdesc.dispcoord.x:=round(PGDBArrayVertex2D(PProjPoint.parray)^[vertexnumber].x);
-     pdesc.dispcoord.y:=round(PGDBArrayVertex2D(PProjPoint.parray)^[vertexnumber].y);
+     pdesc.worldcoord:=GDBPoint3dArray.PTArr(Vertex3D_in_WCS_Array.parray)^[vertexnumber];
+     pdesc.dispcoord.x:=round(GDBPolyline2DArray.PTArr(PProjPoint.parray)^[vertexnumber].x);
+     pdesc.dispcoord.y:=round(GDBPolyline2DArray.PTArr(PProjPoint.parray)^[vertexnumber].y);
 end;
 procedure GDBObjLWpolyline.AddControlpoints;
 var pdesc:controlpointdesc;
@@ -791,8 +791,8 @@ begin
 
   for j := 0 to (Vertex2D_in_OCS_Array.Count - 1) do
   begin
-       tv.x:=PGDBArrayVertex2D(Vertex2D_in_OCS_Array.PArray)^[j].x;
-       tv.y:=PGDBArrayVertex2D(Vertex2D_in_OCS_Array.PArray)^[j].y;
+       tv.x:=GDBPolyline2DArray.PTArr(Vertex2D_in_OCS_Array.PArray)^[j].x;
+       tv.y:=GDBPolyline2DArray.PTArr(Vertex2D_in_OCS_Array.PArray)^[j].y;
        tv.z:=0;
        //tv:=uzegeometry.VectorTransform3D(tv,m);
     dxfvertex2dout(outhandle,10,PGDBVertex2D(@tv)^);

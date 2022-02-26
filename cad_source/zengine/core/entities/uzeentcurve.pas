@@ -502,15 +502,15 @@ begin
      //pdesc.dispcoord.x:=round(PGDBArrayVertex2D(PProjPoint.parray)^[vertexnumber].x);
      //pdesc.dispcoord.y:=round(poglwnd^.height-PGDBArrayVertex2D(PProjPoint.parray)^[vertexnumber].y);
 
-     PGDBArrayVertex(vertexarrayinocs.parray)^[vertexnumber]:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
+     GDBPoint3dArray.PTArr(vertexarrayinocs.parray)^[vertexnumber]:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
 end;
 procedure GDBObjCurve.remaponecontrolpoint(pdesc:pcontrolpointdesc);
 var vertexnumber:Integer;
 begin
      vertexnumber:=abs(pdesc^.pointtype-os_polymin);
-     pdesc.worldcoord:=PGDBArrayVertex(VertexArrayInWCS.parray)^[vertexnumber];
-     pdesc.dispcoord.x:=round(PGDBArrayVertex2D(PProjPoint.parray)^[vertexnumber].x);
-     pdesc.dispcoord.y:=round(PGDBArrayVertex2D(PProjPoint.parray)^[vertexnumber].y);
+     pdesc.worldcoord:=GDBPoint3dArray.PTArr(VertexArrayInWCS.parray)^[vertexnumber];
+     pdesc.dispcoord.x:=round(GDBPolyline2DArray.PTArr(PProjPoint.parray)^[vertexnumber].x);
+     pdesc.dispcoord.y:=round(GDBPolyline2DArray.PTArr(PProjPoint.parray)^[vertexnumber].y);
 end;
 procedure GDBObjCurve.addcontrolpoints;
 var pdesc:controlpointdesc;
@@ -596,8 +596,8 @@ begin
               0:if (SnapMode and osm_endpoint)<>0
                 then
                 begin
-                osp.worldcoord:=PGDBArrayVertex(VertexArrayInWCS.parray)^[vertexnum];
-                pgdbvertex2d(@osp.dispcoord)^:=PGDBArrayVertex2D(PProjPoint.parray)^[vertexnum];
+                osp.worldcoord:=GDBPoint3dArray.PTArr(VertexArrayInWCS.parray)^[vertexnum];
+                pgdbvertex2d(@osp.dispcoord)^:=GDBPolyline2DArray.PTArr(PProjPoint.parray)^[vertexnum];
                 osp.ostype:=os_begin;
                 end;
              1:begin

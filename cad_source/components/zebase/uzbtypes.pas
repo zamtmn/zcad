@@ -109,10 +109,6 @@ GDBStrWithPoint=record
                       str:TDXFEntsInternalStringType;
                       x,y,z,w:Double;
                 end;
-GDBArrayVertex2D=packed array[0..300] of GDBVertex2D;
-PGDBArrayVertex2D=^GDBArrayVertex2D;
-PGDBArrayVertex=^GDBArrayVertex;
-GDBArrayVertex=packed array[0..0] of GDBvertex;
   pcontrolpointdesc=^controlpointdesc;
   {REGISTERRECORDTYPE controlpointdesc}
   controlpointdesc=record

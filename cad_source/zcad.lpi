@@ -156,7 +156,7 @@
               <IgnoredMessages idx6058="True" idx5062="True" idx5024="True" idx4055="True"/>
             </CompilerMessages>
             <ExecuteBefore>
-              <Command Value="Make crutch_before_compilation"/>
+              <Command Value="$(Make) crutch_before_compilation"/>
               <ScanForFPCMsgs Value="True"/>
             </ExecuteBefore>
           </Other>

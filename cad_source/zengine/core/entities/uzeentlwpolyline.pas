@@ -25,11 +25,22 @@ uses gzctnrVector,uzeentityfactory,uzeentsubordinated,
      uzeentcurve,UGDBVectorSnapArray,uzegeometry,uzestyleslayers,uzeentity,
      UGDBPoint3DArray,UGDBPolyLine2DArray,
      uzctnrVectorBytes,uzbtypes,uzeentwithlocalcs,uzeconsts,math,
-     gzctnrvectortypes,uzegeometrytypes,uzeffdxfsupport,sysutils,UGDBLineWidthArray,
+     gzctnrvectortypes,uzegeometrytypes,uzeffdxfsupport,sysutils,
      UGDBSelectedObjArray,uzctnrvectorpgdbaseobjects;
 type
 //----------------snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)
 {Export+}
+PGLLWWidth=^GLLWWidth;
+{REGISTERRECORDTYPE GLLWWidth}
+GLLWWidth=record
+                startw:Double;(*saved_to_shd*)
+                endw:Double;(*saved_to_shd*)
+                hw:Boolean;(*saved_to_shd*)
+                quad:GDBQuad2d;
+          end;
+{REGISTEROBJECTTYPE GDBLineWidthArray}
+GDBLineWidthArray= object(GZVector{-}<GLLWWidth>{//})(*OpenArrayOfData=GLLWWidth*)
+             end;
 {REGISTEROBJECTTYPE TWidth3D_in_WCS_Vector}
 TWidth3D_in_WCS_Vector= object(GZVector{-}<GDBQuad3d>{//})
                 end;

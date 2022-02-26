@@ -134,6 +134,21 @@ type
                      x,y:Integer;
                end;
 
+  {REGISTERRECORDTYPE GDBCameraBaseProp}
+  GDBCameraBaseProp=record
+                          point:GDBvertex;
+                          look:GDBvertex;
+                          ydir:GDBvertex;
+                          xdir:GDBvertex;
+                          zoom: Double;
+                    end;
+  {REGISTERRECORDTYPE tmatrixs}
+  tmatrixs=record
+                     pmodelMatrix:PDMatrix4D;
+                     pprojMatrix:PDMatrix4D;
+                     pviewport:PIMatrix4;
+  end;
+
   {Bounding volume}
   {REGISTERRECORDTYPE TBoundingBox}
   TBoundingBox=record

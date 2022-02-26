@@ -32,7 +32,6 @@ zengine/fonts/uzefontshx.pas
 zengine/fonts/uzefont.pas
 zengine/containers/UGDBXYZWStringArray.pas
 zengine/containers/UGDBVectorSnapArray.pas
-zengine/containers/UGDBLineWidthArray.pas
 zengine/containers/UGDBNamedObjectsArray.pas
 zengine/styles/uzestylestexts.pas
 zengine/styles/uzestyleslayers.pas

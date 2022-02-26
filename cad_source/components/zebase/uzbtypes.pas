@@ -66,20 +66,6 @@ GDBaseObject=object
     function IsEntity:Boolean;virtual;
 
   end;
-{REGISTERRECORDTYPE GDBCameraBaseProp}
-GDBCameraBaseProp=record
-                        point:GDBvertex;
-                        look:GDBvertex;
-                        ydir:GDBvertex;
-                        xdir:GDBvertex;
-                        zoom: Double;
-                  end;
-{REGISTERRECORDTYPE tmatrixs}
-tmatrixs=record
-                   pmodelMatrix:PDMatrix4D;
-                   pprojMatrix:PDMatrix4D;
-                   pviewport:PIMatrix4;
-end;
 TActulity=Integer;
 TEntUpgradeInfo=LongWord;
 PGDBBaseCamera=^GDBBaseCamera;
@@ -116,14 +102,6 @@ GDBNamedObject=object(GDBaseObject)
                      procedure SetDefaultValues;virtual;
                      procedure IterateCounter(PCounted:Pointer;var Counter:Integer;proc:TProcCounter);virtual;
                end;
-PGLLWWidth=^GLLWWidth;
-{REGISTERRECORDTYPE GLLWWidth}
-GLLWWidth=record
-                startw:Double;(*saved_to_shd*)
-                endw:Double;(*saved_to_shd*)
-                hw:Boolean;(*saved_to_shd*)
-                quad:GDBQuad2d;
-          end;
 TDXFEntsInternalStringType=UnicodeString;
 PGDBStrWithPoint=^GDBStrWithPoint;
 {REGISTERRECORDTYPE GDBStrWithPoint}
@@ -133,8 +111,6 @@ GDBStrWithPoint=record
                 end;
 GDBArrayVertex2D=packed array[0..300] of GDBVertex2D;
 PGDBArrayVertex2D=^GDBArrayVertex2D;
-PGDBArrayGLlwwidth=^GDBArrayGLlwwidth;
-GDBArrayGLlwwidth=packed array[0..300] of GLLWWidth;
 PGDBArrayVertex=^GDBArrayVertex;
 GDBArrayVertex=packed array[0..0] of GDBvertex;
   pcontrolpointdesc=^controlpointdesc;

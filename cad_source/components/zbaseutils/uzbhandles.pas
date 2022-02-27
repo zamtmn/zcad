@@ -31,11 +31,11 @@ GTHandleInvManipulator<GHandleType>=object
   class function GetStartValue:GHandleType;inline;static;
   class procedure NextValue(var Value:GHandleType);inline;static;
 end;
-GTHandleByteManipulator<GHandleType>=object
+GTHandleBitManipulator<GHandleType>=object
   class function GetStartValue:GHandleType;inline;static;
   class procedure NextValue(var Value:GHandleType);inline;static;
 end;
-GTHandleInvByteManipulator<GHandleType>=object
+GTHandleInvBitManipulator<GHandleType>=object
   class function GetStartValue:GHandleType;inline;static;
   class procedure NextValue(var Value:GHandleType);inline;static;
 end;
@@ -70,11 +70,11 @@ begin
   dec(Value);
 end;
 
-class function GTHandleByteManipulator<GHandleType>.GetStartValue:GHandleType;
+class function GTHandleBitManipulator<GHandleType>.GetStartValue:GHandleType;
 begin
   result:=0;
 end;
-class procedure GTHandleByteManipulator<GHandleType>.NextValue(var Value:GHandleType);
+class procedure GTHandleBitManipulator<GHandleType>.NextValue(var Value:GHandleType);
 begin
   if Value=0 then
     Value:=1
@@ -82,11 +82,11 @@ begin
     value:=value shl 1;
 end;
 
-class function GTHandleInvByteManipulator<GHandleType>.GetStartValue:GHandleType;
+class function GTHandleInvBitManipulator<GHandleType>.GetStartValue:GHandleType;
 begin
   result:=0;
 end;
-class procedure GTHandleInvByteManipulator<GHandleType>.NextValue(var Value:GHandleType);
+class procedure GTHandleInvBitManipulator<GHandleType>.NextValue(var Value:GHandleType);
 begin
   if Value=0 then
     Value:=1 shl (sizeof(GHandleType)*8-1)

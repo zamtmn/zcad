@@ -27,7 +27,7 @@ GTSet<GSetType,GEnumType>=object
   type
     TSetType=GSetType;
     TEnumItemType=GEnumType;
-    TEnumType=GTSimpleHandles<GEnumType,GTHandleByteManipulator<GEnumType>>;
+    TEnumType=GTSimpleHandles<GEnumType,GTHandleBitManipulator<GEnumType>>;
   constructor init;
   destructor done;virtual;
   function GetEnum:GEnumType;virtual;
@@ -46,7 +46,7 @@ GTSet<GSetType,GEnumType>=object
 end;
 GTSetWithGlobalEnums<GSetType,GEnumType>=object(GTSet<GSetType,GEnumType>)
   type
-    TGlobalEnumType=GTSimpleHandles<GEnumType,GTHandleInvByteManipulator<GEnumType>>;
+    TGlobalEnumType=GTSimpleHandles<GEnumType,GTHandleInvBitManipulator<GEnumType>>;
   class var GlobalEnums:TGlobalEnumType;
   class var GlobalEmpty,GlobalFull:GSetType;
   class constructor ObjectInit;

@@ -179,7 +179,6 @@ GDBUNISymbolInfo=record
     symbol:Integer;
     symbolinfo:GDBsymdolinfo;
   end;
-TSymbolInfoArray=packed array [0..255] of GDBsymdolinfo;
 PTAlign=^TAlign;
 TAlign=(TATop,TABottom,TALeft,TARight);
 TDWGHandle=QWord;

@@ -223,7 +223,7 @@ begin
 end;
 
 
-procedure createGDBIntegervar(var vd: vardesk; s: String);
+procedure createIntegervar(var vd: vardesk; s: String);
 var
   rez: Integer;
 begin
@@ -315,7 +315,7 @@ begin
         else
           if ithex(s) or itint(s) then
           begin
-            createGDBIntegervar(rez, s);
+            createIntegervar(rez, s);
             s:=s;
           end
           else
@@ -375,7 +375,7 @@ begin
                   end
                   else
                     if ithex(s) or itint(s) then
-                      createGDBIntegervar(hrez, s)
+                      createIntegervar(hrez, s)
                     else
                       if itreal(s) then
                         createrealvar(hrez, s)

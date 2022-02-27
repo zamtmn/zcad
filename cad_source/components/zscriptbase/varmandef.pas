@@ -37,7 +37,7 @@ const
   TByte=9;
   TGDBSmallint=10;
   TGDBWord=11;
-  TGDBInteger=12;
+  TInteger=12;
   TGDBLongword=13;
   TDouble=14;
   TString=15;

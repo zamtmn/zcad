@@ -145,9 +145,9 @@ begin
   vp.Layer:=drawing.GetLayerTable^.{gdb.GetCurrentDWG.LayerTable.}getAddres('SYS_METRIC');
 
   SaveToDXFObjPrefix(outhandle,'POLYLINE','AcDb3dPolyline',IODXFContext);
-  dxfGDBIntegerout(outhandle,66,1);
+  dxfIntegerout(outhandle,66,1);
   dxfvertexout(outhandle,10,uzegeometry.NulVertex);
-  dxfGDBIntegerout(outhandle,70,8);
+  dxfIntegerout(outhandle,70,8);
 
   vp.Layer:=pl;
 end;

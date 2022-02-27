@@ -56,7 +56,7 @@ procedure dxfvertexout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:gdbvertex
 procedure dxfvertexout1(var f:TZctnrVectorBytes;dxfcode:Integer;const v:gdbvertex);
 procedure dxfvertex2dout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:gdbvertex2d);
 procedure dxfDoubleout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:Double);
-procedure dxfGDBIntegerout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:Integer);
+procedure dxfIntegerout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:Integer);
 procedure dxfStringout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:String);
 function mystrtoint(s:String):Integer;
 function readmystrtoint(var f:TZctnrVectorBytes):Integer;
@@ -66,7 +66,7 @@ function dxfvertexload(var f:TZctnrVectorBytes;dxfcod,currentdxfcod:Integer; var
 function dxfvertexload1(var f:TZctnrVectorBytes;dxfcod,currentdxfcod:Integer; var v:gdbvertex):Boolean;
 function dxfDoubleload(var f:TZctnrVectorBytes;dxfcod,currentdxfcod:Integer; var v:Double):Boolean;
 function dxfFloatload(var f:TZctnrVectorBytes;dxfcod,currentdxfcod:Integer; var v:Single):Boolean;
-function dxfGDBIntegerload(var f:TZctnrVectorBytes;dxfcod,currentdxfcod:Integer; var v:Integer):Boolean;
+function dxfIntegerload(var f:TZctnrVectorBytes;dxfcod,currentdxfcod:Integer; var v:Integer):Boolean;
 function dxfStringload(var f:TZctnrVectorBytes;dxfcod,currentdxfcod:Integer; var v:String):Boolean;overload;
 function dxfStringload(var f:TZctnrVectorBytes;dxfcod,currentdxfcod:Integer; var v:TDXFEntsInternalStringType):Boolean;overload;
 function dxfGroupCode(const dxfcod:Integer):String;
@@ -159,7 +159,7 @@ begin
      f.TXTAddStringEOL(s);
      //WriteString_EOL(outfile,s);
 end;
-procedure dxfGDBIntegerout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:Integer);
+procedure dxfIntegerout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:Integer);
 //var s:String;
 begin
      f.TXTAddStringEOL(inttostr(dxfcode));
@@ -233,7 +233,7 @@ begin
      result:=false;
      if currentdxfcod=dxfcod then begin v:=readmystrtodouble(f); result:=true end
 end;
-function dxfGDBIntegerload(var f:TZctnrVectorBytes;dxfcod,currentdxfcod:Integer; var v:Integer):Boolean;
+function dxfIntegerload(var f:TZctnrVectorBytes;dxfcod,currentdxfcod:Integer; var v:Integer):Boolean;
 //var s:String;
 begin
      result:=false;

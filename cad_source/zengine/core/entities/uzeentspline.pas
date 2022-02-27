@@ -333,12 +333,12 @@ var
 begin
   SaveToDXFObjPrefix(outhandle,'SPLINE','AcDbSpline',IODXFContext);
   if closed then
-                dxfGDBIntegerout(outhandle,70,9)
+                dxfIntegerout(outhandle,70,9)
             else
-                dxfGDBIntegerout(outhandle,70,8);
-  dxfGDBIntegerout(outhandle,71,degree);
-  dxfGDBIntegerout(outhandle,72,Knots.Count);
-  dxfGDBIntegerout(outhandle,73,VertexArrayInOCS.Count);
+                dxfIntegerout(outhandle,70,8);
+  dxfIntegerout(outhandle,71,degree);
+  dxfIntegerout(outhandle,72,Knots.Count);
+  dxfIntegerout(outhandle,73,VertexArrayInOCS.Count);
 
   dxfDoubleout(outhandle,42,0.0000000001);
   dxfDoubleout(outhandle,43,0.0000000001);
@@ -384,11 +384,11 @@ begin
        end
     else if dxfFloatload(f,40,GroupCode,tmpKnot) then
       Knots.PushBackData(tmpKnot)
-    else if dxfGDBIntegerload(f,70,GroupCode,tmpFlag) then
+    else if dxfIntegerload(f,70,GroupCode,tmpFlag) then
                                                    begin
                                                         if (tmpFlag and 1) = 1 then closed := true;
                                                    end
-  else if dxfGDBIntegerload(f,71,GroupCode,Degree) then
+  else if dxfIntegerload(f,71,GroupCode,Degree) then
                                                    begin
                                                         Degree:=Degree;
                                                    end

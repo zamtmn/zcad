@@ -183,12 +183,12 @@ procedure GDBObjPolyline.SaveToDXF;
 //    ir:itrec;
 begin
   SaveToDXFObjPrefix(outhandle,'POLYLINE','AcDb3dPolyline',IODXFContext);
-  dxfGDBIntegerout(outhandle,66,1);
+  dxfIntegerout(outhandle,66,1);
   dxfvertexout(outhandle,10,uzegeometry.NulVertex);
   if closed then
-                dxfGDBIntegerout(outhandle,70,9)
+                dxfIntegerout(outhandle,70,9)
             else
-                dxfGDBIntegerout(outhandle,70,8);
+                dxfIntegerout(outhandle,70,8);
 end;
 procedure GDBObjPolyline.LoadFromDXF;
 var s{, layername}: String;
@@ -215,7 +215,7 @@ begin
                                                             if vertexgo then
                                                                             addvertex(tv);
                                          end
-  else if dxfGDBIntegerload(f,70,byt,hlGDBWord) then
+  else if dxfIntegerload(f,70,byt,hlGDBWord) then
                                                    begin
                                                         if (hlGDBWord and 1) = 1 then closed := true;
                                                    end

@@ -72,9 +72,9 @@ begin
   dxfvertexout(outhandle,10,DimData.P10InWCS);
   dxfvertexout(outhandle,11,DimData.P11InOCS);
   {if DimData.TextMoved then}
-                           dxfGDBIntegerout(outhandle,70,3+128)
+                           dxfIntegerout(outhandle,70,3+128)
                        {else
-                           dxfGDBIntegerout(outhandle,70,3);};
+                           dxfIntegerout(outhandle,70,3);};
   dxfStringout(outhandle,3,PDimStyle^.Name);
   dxfStringout(outhandle,100,'AcDbDiametricDimension');
   dxfvertexout(outhandle,15,DimData.P15InWCS)

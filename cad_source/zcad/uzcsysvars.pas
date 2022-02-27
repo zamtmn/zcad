@@ -183,7 +183,7 @@ type
                 INTF_ObjInsp_ShowSeparator:PBoolean;(*'Show separator'*)
                 INTF_ObjInsp_ShowFastEditors:PBoolean;(*'Show fast editors'*)
                 INTF_ObjInsp_ShowOnlyHotFastEditors:PBoolean;(*'Show only hot fast editors'*)
-                INTF_ObjInsp_RowHeight:PTGDBIntegerOverrider;(*'Row height'*)
+                INTF_ObjInsp_RowHeight:PTIntegerOverrider;(*'Row height'*)
                 INTF_ObjInsp_SpaceHeight:PInteger;(*'Space height'*)
                 INTF_ObjInsp_AlwaysUseMultiSelectWrapper:PBoolean;(*'Always use multiselect wrapper'*)
                 INTF_ObjInsp_ShowEmptySections:PBoolean;(*'Show empty sections'*)

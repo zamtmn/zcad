@@ -197,9 +197,9 @@ TFaceTypedData=record
 TLLPrimitiveAttrib=Integer;
 PTLLVertexIndex=^TLLVertexIndex;
 TLLVertexIndex=Integer;
-PTGDBIntegerOverrider=^TGDBIntegerOverrider;
-{REGISTERRECORDTYPE TGDBIntegerOverrider}
-TGDBIntegerOverrider=record
+PTIntegerOverrider=^TIntegerOverrider;
+{REGISTERRECORDTYPE TIntegerOverrider}
+TIntegerOverrider=record
                       Enable:Boolean;(*'Enable'*)
                       Value:Integer;(*'New value'*)
                      end;

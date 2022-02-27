@@ -192,7 +192,7 @@ var
   LocalRowHeightOverride:boolean=false;
   PRowHeight:PInteger;
   PRowHeightOverride:PBoolean;
-  //INTFObjInspRowHeight:TGDBIntegerOverrider;
+  //INTFObjInspRowHeight:TIntegerOverrider;
   INTFObjInspSpaceHeight:integer=0;
   INTFObjInspShowEmptySections:boolean=false;
 

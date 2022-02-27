@@ -94,7 +94,7 @@ TOTM_Word=TOrdinalTypeManipulator<Word>;
 TFundamentalWordDescriptor=object(BaseTypeDescriptor<word,{TOrdinalTypeManipulator<word>}TOTM_Word>)
                     end;
 TOTM_Integer=TOrdinalTypeManipulator<Integer>;
-GDBIntegerDescriptor=object(BaseTypeDescriptor<Integer,{TOrdinalTypeManipulator<Integer>}TOTM_Integer>)
+IntegerDescriptor=object(BaseTypeDescriptor<Integer,{TOrdinalTypeManipulator<Integer>}TOTM_Integer>)
                     end;
 TOTM_LongWord=TOrdinalTypeManipulator<LongWord>;
 TFundamentalLongWordDescriptor=object(BaseTypeDescriptor<LongWord,{TOrdinalTypeManipulator<LongWord>}TOTM_LongWord>)

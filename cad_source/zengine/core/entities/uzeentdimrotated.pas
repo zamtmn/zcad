@@ -67,9 +67,9 @@ begin
   dxfvertexout(outhandle,10,DimData.P10InWCS);
   dxfvertexout(outhandle,11,DimData.P11InOCS);
   if DimData.TextMoved then
-                           dxfGDBIntegerout(outhandle,70,0+128)
+                           dxfIntegerout(outhandle,70,0+128)
                        else
-                           dxfGDBIntegerout(outhandle,70,0);
+                           dxfIntegerout(outhandle,70,0);
   dxfStringout(outhandle,3,PDimStyle^.Name);
   dxfStringout(outhandle,100,'AcDbAlignedDimension');
   dxfvertexout(outhandle,13,DimData.P13InWCS);

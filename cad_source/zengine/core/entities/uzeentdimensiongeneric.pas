@@ -120,7 +120,7 @@ begin
                    if not dxfvertexload(f,14,byt,DimData.P14InWCS) then
                       if not dxfvertexload(f,15,byt,DimData.P15InWCS) then
                          if not dxfvertexload(f,16,byt,DimData.P16InOCS) then
-                            if not dxfGDBIntegerload(f,70,byt,dtype) then
+                            if not dxfIntegerload(f,70,byt,dtype) then
                                if not dxfDoubleload(f,50,byt,a50) then
                                   if not dxfDoubleload(f,52,byt,a52) then
                             if dxfStringload(f,3,byt,style)then

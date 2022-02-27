@@ -535,7 +535,7 @@ begin
      if dxfDoubleload(f,50,byt,rotate) then begin
                                                     rotate:=rotate*pi/180;
                                                end
-else if dxfGDBIntegerload(f,71,byt,hlGDBWord)then begin if hlGDBWord = 1 then attrcont := true; end
+else if dxfIntegerload(f,71,byt,hlGDBWord)then begin if hlGDBWord = 1 then attrcont := true; end
 else if not dxfStringload(f,2,byt,name)then {s := }f.readString;
     byt:=readmystrtoint(f);
   end;

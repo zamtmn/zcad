@@ -25,7 +25,7 @@ uses uzbstrproc,varmandef,UBaseTypeDescriptor,
 type
     TTypesArray=array of pointer;
 var
-   foneString,foneGDBInteger,foneDouble:TTypesArray;
+   foneString,foneInteger,foneDouble:TTypesArray;
 const
 
   basicoperatorcount = 5;
@@ -37,7 +37,7 @@ const
   foneuByte = #9;
   foneGDBWord = #10;
   foneuGDBWord = #11;
-  foneuGDBInteger = #13;
+  foneuInteger = #13;
   foneString = #15;}
 type
   operandstack = record
@@ -75,41 +75,41 @@ type
 procedure initvardesk(out vd: vardesk);
 procedure initoperandstack(out opstac: operandstack);
 
-function Tnothing_plus_TGDBInteger(var rez, hrez: vardesk): vardesk;
-function TGDBInteger_plus_TGDBInteger(var rez, hrez: vardesk): vardesk;
-function TDouble_plus_TGDBInteger(var rez, hrez: vardesk): vardesk;
-function TGDBInteger_plus_TDouble(var rez, hrez: vardesk): vardesk;
+function Tnothing_plus_TInteger(var rez, hrez: vardesk): vardesk;
+function TInteger_plus_TInteger(var rez, hrez: vardesk): vardesk;
+function TDouble_plus_TInteger(var rez, hrez: vardesk): vardesk;
+function TInteger_plus_TDouble(var rez, hrez: vardesk): vardesk;
 function TDouble_plus_TDouble(var rez, hrez: vardesk): vardesk;
-function Tnothing_minus_TGDBInteger(var rez, hrez: vardesk): vardesk;
+function Tnothing_minus_TInteger(var rez, hrez: vardesk): vardesk;
 function Tnothing_minus_TDouble(var rez, hrez: vardesk): vardesk;
-function TGDBInteger_mul_TGDBInteger(var rez, hrez: vardesk): vardesk;
-function TGDBInteger_div_TGDBInteger(var rez, hrez: vardesk): vardesk;
-function TGDBInteger_div_TDouble(var rez, hrez: vardesk): vardesk;
+function TInteger_mul_TInteger(var rez, hrez: vardesk): vardesk;
+function TInteger_div_TInteger(var rez, hrez: vardesk): vardesk;
+function TInteger_div_TDouble(var rez, hrez: vardesk): vardesk;
 function TDouble_div_TDouble(var rez, hrez: vardesk): vardesk;
-function TDouble_div_TGDBInteger(var rez, hrez: vardesk): vardesk;
+function TDouble_div_TInteger(var rez, hrez: vardesk): vardesk;
 function TDouble_let_TDouble(var rez, hrez: vardesk): vardesk;
-function TGDBInteger_let_TGDBInteger(var rez, hrez: vardesk): vardesk;
+function TInteger_let_TInteger(var rez, hrez: vardesk): vardesk;
 function TString_let_TString(var rez, hrez: vardesk): vardesk;
 function TAnsiString_let_TString(var rez, hrez: vardesk): vardesk;
 function TAnsiString_let_TAnsiString(var rez, hrez: vardesk): vardesk;
-function TByte_let_TGDBInteger(var rez, hrez: vardesk): vardesk;
+function TByte_let_TInteger(var rez, hrez: vardesk): vardesk;
 function TBoolean_let_TBoolean(var rez, hrez: vardesk): vardesk;
 
-function TGDBInteger_minus_TGDBInteger(var rez, hrez: vardesk): vardesk;
-function TGDBInteger_minus_TDouble(var rez, hrez: vardesk): vardesk;
+function TInteger_minus_TInteger(var rez, hrez: vardesk): vardesk;
+function TInteger_minus_TDouble(var rez, hrez: vardesk): vardesk;
 function TDouble_minus_TDouble(var rez, hrez: vardesk): vardesk;
-function TDouble_minus_TGDBInteger(var rez, hrez: vardesk): vardesk;
+function TDouble_minus_TInteger(var rez, hrez: vardesk): vardesk;
 
-function TDouble_mul_TGDBInteger(var rez, hrez: vardesk): vardesk;
-function TGDBInteger_mul_TDouble(var rez, hrez: vardesk): vardesk;
+function TDouble_mul_TInteger(var rez, hrez: vardesk): vardesk;
+function TInteger_mul_TDouble(var rez, hrez: vardesk): vardesk;
 function TDouble_mul_TDouble(var rez, hrez: vardesk): vardesk;
 
-function TDouble_let_TGDBInteger(var rez, hrez: vardesk): vardesk;
+function TDouble_let_TInteger(var rez, hrez: vardesk): vardesk;
 
 function TEnum_let_TIdentificator(var rez, hrez: vardesk): vardesk;
 
 
-function Cos_TGDBInteger(var stack: operandstack): vardesk;
+function Cos_TInteger(var stack: operandstack): vardesk;
 //function DecodeStringBase64_TAnsiString(var stack: operandstack): vardesk;
 function DecodeStringBase64_TGBDString(var stack: operandstack): vardesk;
 
@@ -135,32 +135,32 @@ const
 
   basicoperatorparam: array[1..basicoperatorparamcount] of operatortype =
   (
-    (name: '+'; param: nil; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}Tnothing_plus_TGDBInteger)
-    , (name: '+'; param: @FundamentalLongIntDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBInteger_plus_TGDBInteger)
-    , (name: '-'; param: nil; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}Tnothing_minus_TGDBInteger)
-    , (name: '*'; param: @FundamentalLongIntDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBInteger_mul_TGDBInteger)
+    (name: '+'; param: nil; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}Tnothing_plus_TInteger)
+    , (name: '+'; param: @FundamentalLongIntDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TInteger_plus_TInteger)
+    , (name: '-'; param: nil; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}Tnothing_minus_TInteger)
+    , (name: '*'; param: @FundamentalLongIntDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TInteger_mul_TInteger)
     , (name: ':='; param: @FundamentalDoubleDescriptorObj; hparam: @FundamentalDoubleDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TDouble_let_TDouble)
     , (name: ':='; param: @FundamentalStringDescriptorObj; hparam: @FundamentalStringDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TString_let_TString)
     , (name: ':='; param: @FundamentalAnsiStringDescriptorObj; hparam: @FundamentalStringDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TAnsiString_let_TString)
-    , (name: ':='; param: @FundamentalLongIntDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBInteger_let_TGDBInteger)
-    , (name: ':='; param: @FundamentalByteDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TByte_let_TGDBInteger)
+    , (name: ':='; param: @FundamentalLongIntDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TInteger_let_TInteger)
+    , (name: ':='; param: @FundamentalByteDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TByte_let_TInteger)
     , (name: '-'; param: nil; hparam: @FundamentalDoubleDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}Tnothing_minus_TDouble)
     , (name: ':='; param: @FundamentalBooleanDescriptorOdj; hparam: @FundamentalBooleanDescriptorOdj; addr: {$IFDEF FPC}@{$ENDIF}TBoolean_let_TBoolean)
     , (name: ':='; param: @GDBEnumDataDescriptorObj; hparam: @GDBEnumDataDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TEnum_let_TIdentificator)//эта шняга захардкожена в findbasicoperator по номеру
-    , (name: ':='; param: @FundamentalDoubleDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TDouble_let_TGDBInteger)
-    , (name: '/'; param: @FundamentalLongIntDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBInteger_div_TGDBInteger)
-    , (name: '/'; param: @FundamentalDoubleDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TDouble_div_TGDBInteger)
-    , (name: '/'; param: @FundamentalLongIntDescriptorObj; hparam: @FundamentalDoubleDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBInteger_div_TDouble)
+    , (name: ':='; param: @FundamentalDoubleDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TDouble_let_TInteger)
+    , (name: '/'; param: @FundamentalLongIntDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TInteger_div_TInteger)
+    , (name: '/'; param: @FundamentalDoubleDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TDouble_div_TInteger)
+    , (name: '/'; param: @FundamentalLongIntDescriptorObj; hparam: @FundamentalDoubleDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TInteger_div_TDouble)
     , (name: '/'; param: @FundamentalDoubleDescriptorObj; hparam: @FundamentalDoubleDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TDouble_div_TDouble)
-    , (name: '+'; param: @FundamentalDoubleDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TDouble_plus_TGDBInteger)
-    , (name: '+'; param: @FundamentalLongIntDescriptorObj; hparam: @FundamentalDoubleDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBInteger_plus_TDouble)
+    , (name: '+'; param: @FundamentalDoubleDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TDouble_plus_TInteger)
+    , (name: '+'; param: @FundamentalLongIntDescriptorObj; hparam: @FundamentalDoubleDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TInteger_plus_TDouble)
     , (name: '+'; param: @FundamentalDoubleDescriptorObj; hparam: @FundamentalDoubleDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TDouble_plus_TDouble)
-    , (name: '-'; param: @FundamentalLongIntDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBInteger_minus_TGDBInteger)
-    , (name: '-'; param: @FundamentalLongIntDescriptorObj; hparam: @FundamentalDoubleDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBInteger_minus_TDouble)
+    , (name: '-'; param: @FundamentalLongIntDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TInteger_minus_TInteger)
+    , (name: '-'; param: @FundamentalLongIntDescriptorObj; hparam: @FundamentalDoubleDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TInteger_minus_TDouble)
     , (name: '-'; param: @FundamentalDoubleDescriptorObj; hparam: @FundamentalDoubleDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TDouble_minus_TDouble)
-    , (name: '-'; param: @FundamentalDoubleDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TDouble_minus_TGDBInteger)
-    , (name: '*'; param: @FundamentalDoubleDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TDouble_mul_TGDBInteger)
-    , (name: '*'; param: @FundamentalLongIntDescriptorObj; hparam: @FundamentalDoubleDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBInteger_mul_TDouble)
+    , (name: '-'; param: @FundamentalDoubleDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TDouble_minus_TInteger)
+    , (name: '*'; param: @FundamentalDoubleDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TDouble_mul_TInteger)
+    , (name: '*'; param: @FundamentalLongIntDescriptorObj; hparam: @FundamentalDoubleDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TInteger_mul_TDouble)
     , (name: '*'; param: @FundamentalDoubleDescriptorObj; hparam: @FundamentalDoubleDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TDouble_mul_TDouble)
     , (name: ':='; param: @FundamentalAnsiStringDescriptorObj; hparam: @FundamentalAnsiStringDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TAnsiString_let_TAnsiString)
     );
@@ -235,7 +235,7 @@ begin
   opstac.count := 0;
 end;
 
-function Cos_TGDBInteger(var stack: operandstack): vardesk;
+function Cos_TInteger(var stack: operandstack): vardesk;
 var
   r: vardesk;
 begin
@@ -302,7 +302,7 @@ begin
   pdouble(rez.data.Addr.Instance)^ := pdouble(hrez.data.Addr.Instance)^;
   result := r;
 end;
-function TDouble_let_TGDBInteger(var rez, hrez: vardesk): vardesk;
+function TDouble_let_TInteger(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
@@ -315,7 +315,7 @@ begin
 end;
 
 
-function TGDBInteger_let_TGDBInteger(var rez, hrez: vardesk): vardesk;
+function TInteger_let_TInteger(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
@@ -326,7 +326,7 @@ begin
   PInteger(rez.data.Addr.Instance)^ := PInteger(hrez.data.Addr.Instance)^;
   result := r;
 end;
-function TByte_let_TGDBInteger(var rez, hrez: vardesk): vardesk;
+function TByte_let_TInteger(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
@@ -376,7 +376,7 @@ begin
   AnsiString(result.data.Addr.Instance^) := {Tria_Utf8ToAnsi}(AnsiString(hrez.data.Addr.Instance^));
   AnsiString(rez.data.Addr.Instance^) := {Tria_Utf8ToAnsi}(AnsiString(hrez.data.Addr.Instance^));
 end;
-function TGDBInteger_minus_TGDBInteger(var rez, hrez: vardesk): vardesk;
+function TInteger_minus_TInteger(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
@@ -386,7 +386,7 @@ begin
   PInteger(r.data.Addr.Instance)^ := PInteger(rez.data.Addr.Instance)^-PInteger(hrez.data.Addr.Instance)^;
   result := r;
 end;
-function TGDBInteger_minus_TDouble(var rez, hrez: vardesk): vardesk;
+function TInteger_minus_TDouble(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
@@ -406,7 +406,7 @@ begin
   PDouble(r.data.Addr.Instance)^ := PDouble(rez.data.Addr.Instance)^-PDouble(hrez.data.Addr.Instance)^;
   result := r;
 end;
-function TDouble_minus_TGDBInteger(var rez, hrez: vardesk): vardesk;
+function TDouble_minus_TInteger(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
@@ -416,7 +416,7 @@ begin
   PDouble(r.data.Addr.Instance)^ := PDouble(rez.data.Addr.Instance)^-PInteger(hrez.data.Addr.Instance)^;
   result := r;
 end;
-function TDouble_mul_TGDBInteger(var rez, hrez: vardesk): vardesk;
+function TDouble_mul_TInteger(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
@@ -426,7 +426,7 @@ begin
   pDouble(r.data.Addr.Instance)^ := pDouble(rez.data.Addr.Instance)^*PInteger(hrez.data.Addr.Instance)^;
   result := r;
 end;
-function TGDBInteger_mul_TDouble(var rez, hrez: vardesk): vardesk;
+function TInteger_mul_TDouble(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
@@ -446,7 +446,7 @@ begin
   pDouble(r.data.Addr.Instance)^ := pDouble(rez.data.Addr.Instance)^ * pDouble(hrez.data.Addr.Instance)^;
   result := r;
 end;
-function TGDBInteger_plus_TGDBInteger(var rez, hrez: vardesk): vardesk;
+function TInteger_plus_TInteger(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
@@ -456,7 +456,7 @@ begin
   PInteger(r.data.Addr.Instance)^ := PInteger(rez.data.Addr.Instance)^+PInteger(hrez.data.Addr.Instance)^;
   result := r;
 end;
-function TDouble_plus_TGDBInteger(var rez, hrez: vardesk): vardesk;
+function TDouble_plus_TInteger(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
@@ -466,7 +466,7 @@ begin
   PDouble(r.data.Addr.Instance)^ := PDouble(rez.data.Addr.Instance)^+PInteger(hrez.data.Addr.Instance)^;
   result := r;
 end;
-function TGDBInteger_plus_TDouble(var rez, hrez: vardesk): vardesk;
+function TInteger_plus_TDouble(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
@@ -486,7 +486,7 @@ begin
   PDouble(r.data.Addr.Instance)^ := PDouble(rez.data.Addr.Instance)^+PDouble(hrez.data.Addr.Instance)^;
   result := r;
 end;
-function Tnothing_plus_TGDBInteger(var rez, hrez: vardesk): vardesk;
+function Tnothing_plus_TInteger(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
@@ -508,7 +508,7 @@ begin
   result := r;
 end;
 
-function Tnothing_minus_TGDBInteger(var rez, hrez: vardesk): vardesk;
+function Tnothing_minus_TInteger(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
@@ -519,7 +519,7 @@ begin
   result := r;
 end;
 
-function TGDBInteger_mul_TGDBInteger(var rez, hrez: vardesk): vardesk;
+function TInteger_mul_TInteger(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
@@ -529,7 +529,7 @@ begin
   PInteger(r.data.Addr.Instance)^ := PInteger(rez.data.Addr.Instance)^ * PInteger(hrez.data.Addr.Instance)^;
   result := r;
 end;
-function TGDBInteger_div_TGDBInteger(var rez, hrez: vardesk): vardesk;
+function TInteger_div_TInteger(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
@@ -539,7 +539,7 @@ begin
   pDouble(r.data.Addr.Instance)^ := PInteger(rez.data.Addr.Instance)^ / PInteger(hrez.data.Addr.Instance)^;
   result := r;
 end;
-function TGDBInteger_div_TDouble(var rez, hrez: vardesk): vardesk;
+function TInteger_div_TDouble(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
@@ -559,7 +559,7 @@ begin
   pDouble(r.data.Addr.Instance)^ := pDouble(rez.data.Addr.Instance)^ / pDouble(hrez.data.Addr.Instance)^;
   result := r;
 end;
-function TDouble_div_TGDBInteger(var rez, hrez: vardesk): vardesk;
+function TDouble_div_TInteger(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
 begin
@@ -636,10 +636,10 @@ end;
 var
   tv,tv1,tv2:functiontype;
 begin
-     setlength(foneGDBInteger,1);foneGDBInteger[0]:=@FundamentalLongIntDescriptorObj;
+     setlength(foneInteger,1);foneInteger[0]:=@FundamentalLongIntDescriptorObj;
      setlength(foneDouble,1);foneDouble[0]:=@FundamentalDoubleDescriptorObj;
      setlength(foneString,1);foneString[0]:=@FundamentalStringDescriptorObj;
-     tv.name:='cos';tv.param:=foneGDBInteger;tv.addr:=Cos_TGDBInteger;
+     tv.name:='cos';tv.param:=foneInteger;tv.addr:=Cos_TInteger;
      tv1.name:='cos';tv1.param:=foneDouble;tv1.addr:=Cos_TDouble;
      tv2.name:='DecodeStringBase64';tv2.param:=foneString;tv2.addr:=DecodeStringBase64_TGBDString;
      setlength(basicfunctionparam,3);

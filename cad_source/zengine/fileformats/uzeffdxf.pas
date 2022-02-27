@@ -2427,13 +2427,13 @@ begin
 
                        if pdsp^.Lines.DIMLWD<>LnWtByLayer then
                        begin
-                        //dxfGDBIntegerout(outhandle,371,pdsp^.Lines.DIMLWD);
+                        //dxfIntegerout(outhandle,371,pdsp^.Lines.DIMLWD);
                         outstream.TXTAddStringEOL(dxfGroupCode(371));
                         outstream.TXTAddStringEOL(inttostr(pdsp^.Lines.DIMLWD));
                        end;
                        if pdsp^.Lines.DIMLWE<>LnWtByLayer then
                        begin
-                        //dxfGDBIntegerout(outhandle,372,pdsp^.Lines.DIMLWE);
+                        //dxfIntegerout(outhandle,372,pdsp^.Lines.DIMLWE);
                         outstream.TXTAddStringEOL(dxfGroupCode(372));
                         outstream.TXTAddStringEOL(inttostr(pdsp^.Lines.DIMLWE));
                        end;

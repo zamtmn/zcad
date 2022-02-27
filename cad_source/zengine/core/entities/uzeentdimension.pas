@@ -296,7 +296,7 @@ var
    l:Double;
    dimdir:gdbvertex;
    dimtxtstyle:PGDBTextStyle;
-   txtlines:XYZWGDBStringArray;
+   txtlines:XYZWStringArray;
 begin
    dimtext:={GetLinearDimStr(abs(scalardot(vertexsub(DimData.P14InWCS,DimData.P13InWCS),vectorD)))}GetDimStr(drawing);
    dimtxtstyle:=PDimStyle.Text.DIMTXSTY;//drawing.GetTextStyleTable^.getDataMutable(0);

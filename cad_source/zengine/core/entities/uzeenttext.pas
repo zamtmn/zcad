@@ -630,14 +630,14 @@ begin
   dxfDoubleout(outhandle,50,CalcRotate*180/pi);
   dxfDoubleout(outhandle,41,textprop.wfactor);
   dxfDoubleout(outhandle,51,textprop.oblique*180/pi);
-  dxfGDBIntegerout(outhandle,72,hv);
+  dxfIntegerout(outhandle,72,hv);
   bw:=0;
   if textprop.upsidedown then
                              bw:=bw+4;
   if textprop.backward then
                              bw:=bw+2;
   if bw<>0 then
-               dxfGDBIntegerout(outhandle,71,bw);
+               dxfIntegerout(outhandle,71,bw);
   dxfStringout(outhandle,7,PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyleIndex))^.name);
 
   SaveToDXFObjPostfix(outhandle);
@@ -651,7 +651,7 @@ begin
 
   dxfStringout(outhandle,1,z2dxftext({content}s));
   dxfStringout(outhandle,100,'AcDbText');
-  dxfGDBIntegerout(outhandle,73,vv);
+  dxfIntegerout(outhandle,73,vv);
 end;
 procedure GDBObjText.LoadFromDXF;
 var //s{, layername}: String;
@@ -692,9 +692,9 @@ else if     dxfStringload(f,7,byt,style)then
                                                   if TXTStyleIndex=nil then
                                                                       TXTStyleIndex:=pointer(drawing.GetTextStyleTable^.getDataMutable(0));
                                              end
-else if not dxfGDBIntegerload(f,72,byt,gv)then
-     if not dxfGDBIntegerload(f,73,byt,vv)then
-     if not dxfGDBIntegerload(f,71,byt,textbackward)then
+else if not dxfIntegerload(f,72,byt,gv)then
+     if not dxfIntegerload(f,73,byt,vv)then
+     if not dxfIntegerload(f,71,byt,textbackward)then
      if not dxfStringload(f,1,byt,tcontent)then
                                                {s := }f.readString;
     byt:=readmystrtoint(f);

@@ -62,9 +62,9 @@ begin
   dxfvertexout(outhandle,10,DimData.P10InWCS);
   dxfvertexout(outhandle,11,DimData.P11InOCS);
   {if DimData.TextMoved then}
-                           dxfGDBIntegerout(outhandle,70,4+128)
+                           dxfIntegerout(outhandle,70,4+128)
                        {else
-                           dxfGDBIntegerout(outhandle,70,4);};
+                           dxfIntegerout(outhandle,70,4);};
   dxfStringout(outhandle,3,PDimStyle^.Name);
   dxfStringout(outhandle,100,'AcDbRadialDimension');
   dxfvertexout(outhandle,15,DimData.P15InWCS)

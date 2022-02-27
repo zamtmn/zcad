@@ -1126,7 +1126,7 @@ begin
   dxfStringout(outhandle,8,vp.layer^.name);
   if vp.color<>ClByLayer then
                              dxfStringout(outhandle,62,inttostr(vp.color));
-  if vp.lineweight<>-1 then dxfGDBIntegerout(outhandle,370,vp.lineweight);
+  if vp.lineweight<>-1 then dxfIntegerout(outhandle,370,vp.lineweight);
   if dbname<>'' then
                     dxfStringout(outhandle,100,dbname);
   if vp.LineType<>{''}nil then dxfStringout(outhandle,6,vp.LineType^.Name);

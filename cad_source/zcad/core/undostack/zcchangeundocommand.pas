@@ -52,8 +52,8 @@ generic TGChangeCommand<_T> =object(TCustomChangeCommand)
 {$DEFINE TData     := GDBCameraBaseProp}
   {$I TGChangeCommandIMPL.inc}
 
-{$DEFINE TCommand  := TGDBStringChangeCommand}
-{$DEFINE PTCommand := PTGDBStringChangeCommand}
+{$DEFINE TCommand  := TStringChangeCommand}
+{$DEFINE PTCommand := PTStringChangeCommand}
 {$DEFINE TData     := String}
   {$I TGChangeCommandIMPL.inc}
 
@@ -104,8 +104,8 @@ generic TGChangeCommand<_T> =object(TCustomChangeCommand)
 {$DEFINE TData     := GDBCameraBaseProp}
   {$I TGChangeCommandIMPL.inc}
 
-{$DEFINE TCommand  := TGDBStringChangeCommand}
-{$DEFINE PTCommand := PTGDBStringChangeCommand}
+{$DEFINE TCommand  := TStringChangeCommand}
+{$DEFINE PTCommand := PTStringChangeCommand}
 {$DEFINE TData     := String}
   {$I TGChangeCommandIMPL.inc}
 
@@ -192,8 +192,8 @@ end;
 {$DEFINE TData     := GDBCameraBaseProp}
   {$I TGChangeCommandIMPL.inc}
 
-{$DEFINE TCommand  := TGDBStringChangeCommand}
-{$DEFINE PTCommand := PTGDBStringChangeCommand}
+{$DEFINE TCommand  := TStringChangeCommand}
+{$DEFINE PTCommand := PTStringChangeCommand}
 {$DEFINE TData     := String}
   {$I TGChangeCommandIMPL.inc}
 

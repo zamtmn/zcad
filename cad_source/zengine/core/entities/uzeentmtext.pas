@@ -36,7 +36,7 @@ GDBObjMText= object(GDBObjText)
                  width:Double;(*saved_to_shd*)
                  linespace:Double;(*saved_to_shd*)(*oi_readonly*)
                  linespacef:Double;(*saved_to_shd*)
-                 text:XYZWGDBStringArray;(*oi_readonly*)(*hidden_in_objinsp*)
+                 text:XYZWStringArray;(*oi_readonly*)(*hidden_in_objinsp*)
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:TDXFEntsInternalStringType;p:GDBvertex;s,o,w,a:Double;j:TTextJustify;wi,l:Double);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f: TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
@@ -57,9 +57,9 @@ GDBObjMText= object(GDBObjText)
                  function GetObjType:TObjID;virtual;
             end;
 {Export-}
-procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:Double;content:TDXFEntsInternalStringType;var text:XYZWGDBStringArray);
-function GetLinesH(linespace,size:Double;var lines:XYZWGDBStringArray):Double;
-function GetLinesW(var lines:XYZWGDBStringArray):Double;
+procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:Double;content:TDXFEntsInternalStringType;var text:XYZWStringArray);
+function GetLinesH(linespace,size:Double;var lines:XYZWStringArray):Double;
+function GetLinesW(var lines:XYZWStringArray):Double;
 function GetLineSpaceFromLineSpaceF(linespacef,size:Double):Double;
 implementation
 procedure GDBObjMText.FormatAfterDXFLoad;
@@ -123,14 +123,14 @@ function GetLineSpaceFromLineSpaceF(linespacef,size:Double):Double;
 begin
     result:=size*linespacef*5/3;
 end;
-function GetLinesH(linespace,size:Double;var lines:XYZWGDBStringArray):Double;
+function GetLinesH(linespace,size:Double;var lines:XYZWStringArray):Double;
 begin
   if lines.count > 0 then
     result := (lines.count - 1) * linespace + size
   else
     result := 0;
 end;
-function GetLinesW(var lines:XYZWGDBStringArray):Double;
+function GetLinesW(var lines:XYZWStringArray):Double;
 var
   pswp:pGDBStrWithPoint;
   ir:itrec;
@@ -150,7 +150,7 @@ begin
                else
                    result:=0;
 end;
-procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:Double;content:TDXFEntsInternalStringType;var text:XYZWGDBStringArray);
+procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:Double;content:TDXFEntsInternalStringType;var text:XYZWStringArray);
 var
   canbreak: Boolean;
   currsymbol, lastbreak, lastcanbreak: Integer;
@@ -928,7 +928,7 @@ begin
     if not dxfDoubleload(f,41,byt,width) then
     if not dxfDoubleload(f,44,byt,linespacef) then
     if not dxfDoubleload(f,51,byt,textprop.oblique) then
-    if not dxfGDBIntegerload(f,71,byt,j)then
+    if not dxfIntegerload(f,71,byt,j)then
     if not dxfStringload(f,1,byt,ttemplate)then
     if not dxfStringload(f,3,byt,ttemplate)then
     if dxfDoubleload(f,50,byt,angle) then angleload := true
@@ -994,7 +994,7 @@ begin
   dxfvertexout(outhandle,10,Local.p_insert);
   dxfDoubleout(outhandle,40,textprop.size);
   dxfDoubleout(outhandle,41,width);
-  dxfGDBIntegerout(outhandle,71,j2b[textprop.justify]{ord(textprop.justify)+1});
+  dxfIntegerout(outhandle,71,j2b[textprop.justify]{ord(textprop.justify)+1});
   quotedcontent:=StringReplace(content,TDXFEntsInternalStringType(#10),TDXFEntsInternalStringType('\P'),[rfReplaceAll]);
   if  convertfromunicode(template)=quotedcontent then
                                                s := Tria_Utf8ToAnsi(UTF8Encode(template))
@@ -1019,7 +1019,7 @@ begin
   dxfStringout(outhandle,7,PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyleIndex))^.name);
   SaveToDXFObjPostfix(outhandle);
   dxfvertexout(outhandle,11,Local.basis.ox);
-  dxfGDBIntegerout(outhandle,73,2);
+  dxfIntegerout(outhandle,73,2);
   dxfDoubleout(outhandle,44,3 * linespace / (5 * textprop.size));
 end;
 function AllocMText:PGDBObjMText;

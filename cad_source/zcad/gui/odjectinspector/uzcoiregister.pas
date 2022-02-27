@@ -39,7 +39,7 @@ type
     function GetPeditorFocusPriority:TControlWithPriority;
   end;
 var
-  INTFObjInspRowHeight:TGDBIntegerOverrider;
+  INTFObjInspRowHeight:TIntegerOverrider;
   dummyclass:tdummyclass;
 implementation
 procedure SetCurrentObjDefault;

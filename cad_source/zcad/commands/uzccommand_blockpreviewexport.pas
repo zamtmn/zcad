@@ -15,7 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-{$MODE OBJFPC}
+{$MODE OBJFPC}{$H+}
 unit uzccommand_blockpreviewexport;
 {$INCLUDE zcadconfig.inc}
 

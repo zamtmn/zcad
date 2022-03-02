@@ -1,6 +1,6 @@
 unit uzcfblockinsert;
 
-{$mode objfpc}
+{$mode objfpc}{$H+}
 
 interface
 

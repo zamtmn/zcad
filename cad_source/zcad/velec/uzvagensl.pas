@@ -15,7 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-{$mode objfpc}
+{$mode objfpc}{$H+}
 
 unit uzvagensl;
 {$INCLUDE zcadconfig.inc}

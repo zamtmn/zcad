@@ -15,8 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-{$MODE OBJFPC}
-{$H+}
+{$MODE OBJFPC}{$H+}
 unit zeundostack;
 interface
 uses gzctnrvectortypes,zebaseundocommands,varmandef,//

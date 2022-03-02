@@ -15,7 +15,7 @@
 {
 @author(Vladimir Bobrov)
 }
-{$mode objfpc}
+{$mode objfpc}{$H+}
 
 unit uzvsetting;
 {$INCLUDE zcadconfig.inc}

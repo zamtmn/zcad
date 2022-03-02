@@ -18,7 +18,7 @@
 
 unit uzeffdwg;
 {$INCLUDE zcadconfig.inc}
-{$MODE OBJFPC}
+{$MODE OBJFPC}{$H+}
 interface
 uses LCLIntf,gdbentityfactory,zcadinterface,GDBLine,gdbobjectsconstdef,typinfo,
      zcadstrconsts,iodxf,fileutil,varman,uzegeometry,gdbasetypes,

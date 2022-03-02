@@ -15,7 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
-{$mode objfpc}
+{$mode objfpc}{$H+}
 
 {**Модуль реализации чертежных команд (линия, круг, размеры и т.д.)}
 unit uzccomexperimental;

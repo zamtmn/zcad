@@ -15,7 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
-{$MODE OBJFPC}
+{$MODE OBJFPC}{$H+}
 unit zcmultiobjectchangeundocommand;
 {$INCLUDE zcadconfig.inc}
 interface

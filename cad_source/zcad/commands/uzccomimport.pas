@@ -15,7 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-{$MODE OBJFPC}
+{$MODE OBJFPC}{$H+}
 unit uzccomimport;
 {$INCLUDE zcadconfig.inc}
 interface

@@ -59,19 +59,27 @@ GDBObjSolid= object(GDBObjWithLocalCS)
 
                  function CreateInstance:PGDBObjSolid;static;
                  function GetObjType:TObjID;virtual;
+                 procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
+                 procedure transform(const t_matrix:DMatrix4D);virtual;
            end;
 {Export-}
 
 implementation
 //uses log;
-{procedure GDBObjSolid.TransformAt;
-var i:Integer;
+procedure GDBObjSolid.TransformAt;
 begin
-      for i:=0 to 3 do
-      begin
-           PInOCS[I]:=uzegeometry.VectorTransform3D(PGDBObj3DFace(p)^.PInOCS[I],t_matrix^);
-      end;
-end;}
+  PInOCS[0]:=uzegeometry.VectorTransform3D(PGDBObjSolid(p)^.PInOCS[0],t_matrix^);
+  PInOCS[1]:=uzegeometry.VectorTransform3D(PGDBObjSolid(p)^.PInOCS[1],t_matrix^);
+  PInOCS[2]:=uzegeometry.VectorTransform3D(PGDBObjSolid(p)^.PInOCS[2],t_matrix^);
+  PInOCS[3]:=uzegeometry.VectorTransform3D(PGDBObjSolid(p)^.PInOCS[3],t_matrix^);
+end;
+procedure GDBObjSolid.transform;
+begin
+  PInOCS[0]:=uzegeometry.VectorTransform3D(PInOCS[0],t_matrix);
+  PInOCS[1]:=uzegeometry.VectorTransform3D(PInOCS[1],t_matrix);
+  PInOCS[2]:=uzegeometry.VectorTransform3D(PInOCS[2],t_matrix);
+  PInOCS[3]:=uzegeometry.VectorTransform3D(PInOCS[3],t_matrix);
+end;
 procedure GDBObjSolid.getoutbound;
 var i:Integer;
 begin

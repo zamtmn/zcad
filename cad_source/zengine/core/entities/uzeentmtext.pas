@@ -23,13 +23,17 @@ interface
 uses
     uzglgeometry,uzgldrawcontext,uzetextpreprocessor,uzeentityfactory,uzedrawingdef,
     uzbstrproc,uzefont,uzeentabstracttext,UGDBPoint3DArray,uzestyleslayers,SysUtils,
-    uzeentity,UGDBXYZWStringArray,UGDBOutbound2DIArray,uzctnrVectorBytes,
+    uzeentity,UGDBOutbound2DIArray,uzctnrVectorBytes,
     uzbtypes,uzeenttext,uzeconsts,uzegeometry,uzeffdxfsupport,math,uzeentsubordinated,
-    gzctnrvectortypes,uzegeometrytypes,uzestylestexts,StrUtils;
+    gzctnrvectortypes,uzegeometrytypes,uzestylestexts,StrUtils,gzctnrVector;
 const maxdxfmtextlen=250;
 type
 //procedure CalcObjMatrix;virtual;
 {Export+}
+PGDBXYZWStringArray=^XYZWStringArray;
+{REGISTEROBJECTTYPE XYZWStringArray}
+XYZWStringArray=object(GZVector{-}<GDBStrWithPoint>{//})
+                end;
 PGDBObjMText=^GDBObjMText;
 {REGISTEROBJECTTYPE GDBObjMText}
 GDBObjMText= object(GDBObjText)

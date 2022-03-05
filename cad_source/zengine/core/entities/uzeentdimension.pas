@@ -19,7 +19,7 @@ unit uzeentdimension;
 {$INCLUDE zcadconfig.inc}
 
 interface
-uses uzemathutils,uzgldrawcontext,uzeentabstracttext,uzestylestexts,UGDBXYZWStringArray,
+uses uzemathutils,uzgldrawcontext,uzeentabstracttext,uzestylestexts,
      uzestylesdim,uzeentmtext,uzestyleslayers,uzedrawingdef,uzecamera,
      uzbstrproc,uzctnrVectorBytes,uzeenttext,uzegeometry,uzeentline,uzeentcomplex,
      uzegeometrytypes,sysutils,uzeentity,uzbtypes,uzeconsts,

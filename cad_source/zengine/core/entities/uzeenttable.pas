@@ -21,7 +21,7 @@ unit uzeenttable;
 
 interface
 uses uzgldrawcontext,uzeentabstracttext,uzetrash,uzedrawingdef,uzbstrproc,uzctnrVectorBytes,
-     uzestylestables,uzeentline,uzeentcomplex,sysutils,UGDBTable,
+     uzestylestables,uzeentline,uzeentcomplex,sysutils,gzctnrVectorPObjects,
      uzctnrvectorstrings,uzeentmtext,uzeentity,uzbtypes,uzeconsts,uzegeometry,
      gzctnrvectortypes,uzegeometrytypes,uzeentblockinsert,uzeffdxfsupport;
 //jcm(*'TopMiddle'*),
@@ -37,6 +37,10 @@ TGDBTableItemFormat=record
                  Width,TextWidth:Double;
                  CF:TTableCellJustify;
                 end;
+PGDBTableArray=^GDBTableArray;
+{REGISTEROBJECTTYPE GDBTableArray}
+GDBTableArray= object(GZVectorPObects{-}<PTZctnrVectorStrings,TZctnrVectorStrings>{//})(*OpenArrayOfData=TZctnrVectorStrings*)
+              end;
 PGDBObjTable=^GDBObjTable;
 {REGISTEROBJECTTYPE GDBObjTable}
 GDBObjTable= object(GDBObjComplex)
@@ -327,7 +331,7 @@ begin
      inherited;
      //vp.ID:=GDBTableID;
 
-     tbl.init(9,20);
+     tbl.init(20);
      //ptablestyle:=gdb.GetCurrentDWG.TableStyleTable.getAddres('Standart');{проверить}
      scale:=1;
 

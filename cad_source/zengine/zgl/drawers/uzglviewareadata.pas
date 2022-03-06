@@ -62,14 +62,6 @@ type
     cpnum: Integer;
     cpdist: Integer;
   end;
-  {REGISTERRECORDTYPE traceprop2}
-  traceprop2 = record
-    tmouse: Double;
-    dmouse: Integer;
-    dir: GDBVertex;
-    dispraycoord: GDBVertex;
-    worldraycoord: GDBVertex;
-  end;
   {REGISTERRECORDTYPE objcontrolpoint}
   objcontrolpoint = record
     objnum: Integer;

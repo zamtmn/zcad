@@ -70,12 +70,6 @@ type
     dispraycoord: GDBVertex;
     worldraycoord: GDBVertex;
   end;
-  arrtraceprop = packed array[0..0] of traceprop;
-  {REGISTERRECORDTYPE GDBArraytraceprop_GDBWord}
-  GDBArraytraceprop_GDBWord = record
-    count: Word;
-    arr: arrtraceprop;
-  end;
   {REGISTERRECORDTYPE objcontrolpoint}
   objcontrolpoint = record
     objnum: Integer;
@@ -85,15 +79,6 @@ type
     dispcoord: GDBvertex2DI;
     selected: Boolean;
   end;
-  arrayobjcontrolpoint = packed array[0..0] of objcontrolpoint;
-  popenarrayobjcontrolpoint_GDBWordwm = ^openarrayobjcontrolpoint_GDBWordwm;
-  {REGISTERRECORDTYPE openarrayobjcontrolpoint_GDBWordwm}
-  openarrayobjcontrolpoint_GDBWordwm = record
-    count, max: Word;
-    arraycp: arrayobjcontrolpoint;
-  end;
-
-  PGDBOpenArraytraceprop_GDBWord = ^GDBArraytraceprop_GDBWord;
   pos_record=^os_record;
   {REGISTERRECORDTYPE os_record}
   os_record = record

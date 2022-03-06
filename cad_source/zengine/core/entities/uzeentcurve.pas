@@ -40,7 +40,6 @@ GDBObjCurve= object(GDBObj3d)
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure FormatWithoutSnapArray;virtual;
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
-                 procedure AddControlpoint(pcp:popenarrayobjcontrolpoint_GDBWordwm;objnum:Integer);virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
                  procedure rtedit(refp:Pointer;mode:Single;dist,wc:gdbvertex);virtual;
                  procedure rtsave(refp:Pointer);virtual;
@@ -263,24 +262,6 @@ begin
   VertexArrayInWCS.iterategl(@glVertex3dv);
   myglend;}
   inherited;
-end;
-procedure GDBObjCurve.AddControlpoint;
-var i: Integer;
-  p: pgdbvertex;
-begin
-  if (pcp^.max - pcp^.count) >=VertexArrayInWCS.Count then
-  begin
-    p := VertexArrayInWCS.GetParrayAsPointer;
-    for i := 0 to VertexArrayInWCS.Count - 1 do
-    begin
-        pcp^.arraycp[pcp^.count].objnum := objnum;
-        pcp^.arraycp[pcp^.count].ostype := os_polymin-i;
-        pcp^.arraycp[pcp^.count].worldcoord := p^;;
-        inc(p);
-        pcp^.arraycp[pcp^.count].selected := false;
-        inc(pcp^.count);
-    end;
-  end
 end;
 procedure BuildSnapArray(const VertexArrayInWCS:GDBPoint3dArray;var snaparray:GDBVectorSnapArray;const closed:Boolean);
 var

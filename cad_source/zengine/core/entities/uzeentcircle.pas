@@ -26,8 +26,6 @@ uses
     uzbtypes,uzeentwithlocalcs,uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,
     uzctnrvectorpgdbaseobjects;
 type
-//PProjPoint:PGDBPolyPoint2DArray;
-//PProjPoint:{-}PGDBPolyPoint2DArray{/Pointer/};
 {Export+}
   ptcirclertmodify=^tcirclertmodify;
   {REGISTERRECORDTYPE tcirclertmodify}

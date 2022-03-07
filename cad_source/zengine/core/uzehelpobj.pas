@@ -19,34 +19,34 @@
 unit uzehelpobj;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzegeometrytypes,UGDBPolyPoint2DArray,LazLogger;
+uses uzegeometrytypes,LazLogger,gzctnrVector;
 const
-   CircleLODCount=100;
+  CircleLODCount=100;
+type
+  PGDBPolyPoint2DArray=^GDBPolyPoint2DArray;
+  GDBPolyPoint2DArray=object(GZVector{-}<GDBPolyVertex2D>{//})
+  end;
 var
    circlepointoflod:array[0..CircleLODCount] of GDBpolyPoint2DArray;
 implementation
-//uses
-//    log;
 procedure createcircle;
 var
   i,j: longint;
   pv:GDBPolyVertex2D;
 begin
-  for j:=0 to CircleLODCount do
-  begin
-       circlepointoflod[j].init(j+1);
-       pv.coord.x:=1;
-       pv.coord.y:=0;
-       pv.count:=-j;
-       circlepointoflod[j].PushBackData(pv);
-       for i:=1 to j do
-       begin
-            pv.coord.x:=cos(i/j*2*pi);
-            pv.coord.y:=sin(i/j*2*pi);
-            pv.count:=i-j;
-            circlepointoflod[j].PushBackData(pv);
-        end;
+  for j:=0 to CircleLODCount do begin
+    circlepointoflod[j].init(j+1);
+    pv.coord.x:=1;
+    pv.coord.y:=0;
+    pv.count:=-j;
+    circlepointoflod[j].PushBackData(pv);
+    for i:=1 to j do begin
+      pv.coord.x:=cos(i/j*2*pi);
+      pv.coord.y:=sin(i/j*2*pi);
+      pv.count:=i-j;
+      circlepointoflod[j].PushBackData(pv);
     end;
+  end;
 end;
 procedure freecircle;
 var

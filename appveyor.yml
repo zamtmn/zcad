@@ -6,7 +6,7 @@
 #---------------------------------#
 
 # CI build version format
-version: 0.9.8.5.{build}-{branch}
+version: 0.9.8.6.{build}-{branch}
 
 #---------------------------------#
 #    environment configuration    #

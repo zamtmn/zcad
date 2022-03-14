@@ -257,7 +257,7 @@ begin
         if context.h2p.TryGetValue(pThisEntity.PExtAttrib^.MainFunctionHandle,pmf)then begin
           pbdunit:=pmf^.EntExtensions.GetExtension<TVariablesExtender>;
           if pbdunit<>nil then
-            pbdunit.addDelegate(pThisEntity,@self);
+            pbdunit.addDelegate(pThisEntity,self);
         end;
       end;
 end;
@@ -371,13 +371,15 @@ begin
          end;
         pvu:=vardata.entityunit.InterfaceUses.iterate(ir);
         until pvu=nil;
+     end;
 
-       if vardata.pMainFuncEntity<>nil then begin
-         IODXFContext.p2h.MyGetOrCreateValue(vardata.pMainFuncEntity,IODXFContext.handle,th);
-         str:='MAINFUNCTION='+inttohex(th,0);
-         dxfStringout(outhandle,1000,str);
-       end;
+     if vardata.pMainFuncEntity<>nil then begin
+       IODXFContext.p2h.MyGetOrCreateValue(vardata.pMainFuncEntity,IODXFContext.handle,th);
+       str:='MAINFUNCTION='+inttohex(th,0);
+       dxfStringout(outhandle,1000,str);
+     end;
 
+     if ishavevars then begin
        i:=0;
        pvd:=vardata.entityunit.InterfaceVariables.vardescarray.beginiterate(ir);
        if pvd<>nil then

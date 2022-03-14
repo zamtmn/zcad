@@ -238,10 +238,10 @@ begin
       if CopiedMainfunction<>nil then begin
         pbdunit:=pMainFuncEntity^.EntExtensions.GetExtension<TVariablesExtender>;
         if pbdunit<>nil then
-          pbdunit.removeDelegate(pThisEntity,@self);
+          pbdunit.removeDelegate(pThisEntity,self);
         pbdunit:=CopiedMainfunction^.EntExtensions.GetExtension<TVariablesExtender>;
         if pbdunit<>nil then
-          pbdunit.addDelegate(pThisEntity,@self);
+          pbdunit.addDelegate(pThisEntity,self);
       end;
   end;
 end;

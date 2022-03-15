@@ -13,11 +13,13 @@ type
   { TForm1 }
 
   TForm1 = class(TForm)
-    ButCrashApp: TButton;
+    CrashAppButton: TButton;
+    ShowDialogButton: TButton;
     Label1: TLabel;
     ListBox1: TListBox;
     UniqueInstance1: TUniqueInstance;
-    procedure ButCrashAppClick(Sender: TObject);
+    procedure CrashAppButtonClick(Sender: TObject);
+    procedure ShowDialogButtonClick(Sender: TObject);
     procedure UniqueInstance1OtherInstance(Sender: TObject; Count: Integer;
       Parameters: array of String);
   private
@@ -50,7 +52,7 @@ procedure TForm1.UniqueInstance1OtherInstance(Sender: TObject; Count: Integer;
 var
   i:Integer;
 begin
-  Label1.Caption:=Format('A new instance was created with %d parameter(s):', [Count]);
+  Label1.Caption:=Format('A new instance was created at %s with %d parameter(s):', [TimeToStr(Time), Count]);
   ListBox1.Clear;
   for i := 0 to Count - 1 do
     ListBox1.Items.Add(Parameters[i]);
@@ -60,7 +62,7 @@ begin
   FormStyle := fsNormal;
 end;
 
-procedure TForm1.ButCrashAppClick(Sender: TObject);
+procedure TForm1.CrashAppButtonClick(Sender: TObject);
 begin
   {$ifdef unix}
   FpKill(FpGetpid, 9);
@@ -68,6 +70,11 @@ begin
   {$ifdef windows}
   TerminateProcess(GetCurrentProcess, 0);
   {$endif}
+end;
+
+procedure TForm1.ShowDialogButtonClick(Sender: TObject);
+begin
+  Application.MessageBox('Hi! I am a modal Window!', 'Modal Window Check', MB_ICONINFORMATION);
 end;
 
 end.

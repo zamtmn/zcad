@@ -13,6 +13,7 @@ uses
 {$R *.res}
 
 begin
+  Application.Title := 'UniqueInstanceTest';
   Application.Initialize;
   Application.CreateForm(TForm1, Form1);
   Application.Run;

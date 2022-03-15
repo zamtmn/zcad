@@ -34,6 +34,9 @@ unit UniqueInstance;
 
 
 {$mode objfpc}{$H+}
+{$if not defined(Windows) or (FPC_FULLVERSION >= 30001)}
+{$define PollIPCMessage}
+{$endif}
 
 interface
 
@@ -42,7 +45,7 @@ uses
   
 type
 
-  TOnOtherInstance = procedure (Sender : TObject; ParamCount: Integer; Parameters: array of String) of object;
+  TOnOtherInstance = procedure (Sender : TObject; ParamCount: Integer; const Parameters: array of String) of object;
 
   { TUniqueInstance }
 
@@ -54,7 +57,7 @@ type
     FEnabled: Boolean;
     FPriorInstanceRunning: Boolean;
     procedure ReceiveMessage(Sender: TObject);
-    {$ifdef unix}
+    {$ifdef PollIPCMessage}
     procedure CheckMessage(Sender: TObject);
     {$endif}
   protected
@@ -79,37 +82,22 @@ uses
 procedure TUniqueInstance.ReceiveMessage(Sender: TObject);
 var
   ParamsArray: array of String;
-  Count: Integer;
-
-  procedure FillParamsArray(const ParamsStr: String);
-  var
-    pos1, pos2, i: Integer;
-  begin
-    SetLength(ParamsArray, Count);
-    //fill params
-    i := 0;
-    pos1 := 1;
-    pos2 := pos(ParamsSeparator, ParamsStr);
-    while pos1 < pos2 do
-    begin
-      ParamsArray[i] := Copy(ParamsStr, pos1, pos2 - pos1);
-      pos1 := pos2+1;
-      pos2 := posex(ParamsSeparator, ParamsStr, pos1);
-      inc(i);
-    end;
-  end;
-
+  Params: String;
+  Count, i: Integer;
 begin
   if Assigned(FOnOtherInstance) then
   begin
     //MsgType stores ParamCount
     Count := FIPCServer.MsgType;
-    FillParamsArray(FIPCServer.StringMessage);
+    SetLength(ParamsArray, Count);
+    Params := FIPCServer.StringMessage;
+    for i := 1 to Count do
+      ParamsArray[i - 1] := ExtractWord(i, Params, [ParamsSeparator]);
     FOnOtherInstance(Self, Count, ParamsArray);
   end;
 end;
 
-{$ifdef unix}
+{$ifdef PollIPCMessage}
 procedure TUniqueInstance.CheckMessage(Sender: TObject);
 begin
   FIPCServer.PeekMessage(1, True);
@@ -119,7 +107,7 @@ end;
 procedure TUniqueInstance.Loaded;
 var
   IPCClient: TSimpleIPCClient;
-  {$ifdef unix}
+  {$ifdef PollIPCMessage}
   Timer: TTimer;
   {$endif}
 begin
@@ -127,7 +115,7 @@ begin
   begin
     IPCClient := TSimpleIPCClient.Create(Self);
     IPCClient.ServerId := GetServerId(FIdentifier);
-    if IPCClient.ServerRunning then
+    if not Assigned(FIPCServer) and IPCClient.ServerRunning then
     begin
       //A older instance is running.
       FPriorInstanceRunning := True;
@@ -143,11 +131,12 @@ begin
     end
     else
     begin
-      InitializeUniqueServer(IPCClient.ServerID);
+      if not Assigned(FIPCServer) then
+        InitializeUniqueServer(IPCClient.ServerID);
       FIPCServer.OnMessage := @ReceiveMessage;
       //there's no more need for IPCClient
       IPCClient.Destroy;
-      {$ifdef unix}
+      {$ifdef PollIPCMessage}
       if Assigned(FOnOtherInstance) then
       begin
         Timer := TTimer.Create(Self);

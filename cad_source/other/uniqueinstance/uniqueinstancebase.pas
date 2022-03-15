@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, simpleipc;
 
 const
-  ParamsSeparator = '|';
+  ParamsSeparator = #13;
 
 var
   FIPCServer: TSimpleIPCServer;
@@ -20,6 +20,9 @@ function GetFormattedParams: String;
 function GetServerId(const Identifier: String): String;
 
 implementation
+
+uses
+  LazUTF8;
 
 const
   BaseServerId = 'tuniqueinstance_';
@@ -42,7 +45,7 @@ var
 begin
   Result := '';
   for i := 1 to ParamCount do
-    Result := Result + ParamStr(i) + ParamsSeparator;
+    Result := Result + ParamStrUTF8(i) + ParamsSeparator;
 end;
 
 function GetServerId(const Identifier: String): String;
@@ -50,7 +53,7 @@ begin
   if Identifier <> '' then
     Result := BaseServerId + Identifier
   else
-    Result := BaseServerId + ExtractFileName(ParamStr(0));
+    Result := BaseServerId + ExtractFileName(ParamStrUTF8(0));
 end;
 
 finalization

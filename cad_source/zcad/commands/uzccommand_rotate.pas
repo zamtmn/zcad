@@ -21,7 +21,7 @@ unit uzccommand_rotate;
 
 interface
 uses
-  gzctnrvectortypes,
+  gzctnrVectorTypes,
   uzcdrawing,
   uzgldrawcontext,
   

@@ -35,7 +35,7 @@ uses
   uzbtypes,
   uzegeometry,
   uzeentity,uzeenttext,
-  URecordDescriptor,typedescriptors,Varman,gzctnrvectortypes,
+  URecordDescriptor,typedescriptors,Varman,gzctnrVectorTypes,
   uzeparserenttypefilter,uzeparserentpropfilter,uzeentitiestypefilter,
   uzelongprocesssupport,uzeparser,uzcoimultiproperties,uzedimensionaltypes,
   uzcoimultipropertiesutil,varmandef,uzcvariablesutils,Masks,uzcregother,

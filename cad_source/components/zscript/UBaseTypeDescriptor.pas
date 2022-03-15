@@ -22,7 +22,7 @@ unit UBaseTypeDescriptor;
 interface
 uses
       typinfo,LCLProc,Graphics,classes,Themes,
-      gzctnrvectortypes,uzemathutils,uzegeometry,uzbstrproc,TypeDescriptors,
+      gzctnrVectorTypes,uzemathutils,uzegeometry,uzbstrproc,TypeDescriptors,
       sysutils,uzctnrVectorBytes,
       USinonimDescriptor,uzedimensionaltypes,varmandef,uzbtypes,
       base64,uzctnrvectorstrings,math,uzbLogIntf;

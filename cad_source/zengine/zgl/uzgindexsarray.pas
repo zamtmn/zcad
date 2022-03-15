@@ -20,7 +20,7 @@ unit uzgindexsarray;
 {$INCLUDE zcadconfig.inc}
 interface
 uses gzctnrVector,sysutils,
-     gzctnrvectortypes,uzegeometry;
+     gzctnrVectorTypes,uzegeometry;
 type
 {Export+}
 PZGLIndexsArray=^ZGLIndexsArray;

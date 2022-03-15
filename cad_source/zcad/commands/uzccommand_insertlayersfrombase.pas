@@ -22,7 +22,7 @@ unit uzccommand_insertlayersfrombase;
 interface
 uses
   uzccommandsabstract,uzccommandsimpl,
-  uzbpaths,gzctnrvectortypes,
+  uzbpaths,gzctnrVectorTypes,
   uzcdrawings,uzedrawingsimple,
   uzestyleslayers,
   uzccommand_blockpreviewexport,

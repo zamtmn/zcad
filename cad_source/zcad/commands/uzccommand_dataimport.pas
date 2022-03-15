@@ -22,7 +22,7 @@ unit uzccommand_dataimport;
 interface
 uses
   LazLogger,SysUtils,LazUTF8,
-  gzctnrvectortypes,uzelongprocesssupport,
+  gzctnrVectorTypes,uzelongprocesssupport,
   uzeentity,
   uzccommandsabstract,uzccommandsimpl,
   uzcdialogsfiles,

@@ -22,9 +22,9 @@ interface
 uses gzctnrVectorP;
 type
 {Export+}
-PTZctnrVectorGDBPointer=^TZctnrVectorGDBPointer;
-TZctnrVectorGDBPointer=object(GZVectorP{-}<Pointer>{//}) //TODO:почемуто не работают синонимы с объектами, приходится наследовать
-                                                            //TODO:надо тут поменять GZVectorP на GZVectorSimple
+PTZctnrVectorPointer=^TZctnrVectorPointer;
+TZctnrVectorPointer=object(GZVectorP{-}<Pointer>{//}) //TODO:почемуто не работают синонимы с объектами, приходится наследовать
+                                                         //TODO:надо тут поменять GZVectorP на GZVectorSimple
                     end;
 {Export-}
 implementation

@@ -24,7 +24,7 @@ interface
 uses
   LazLogger,
   uzccommandsabstract,uzccommandsimpl,
-  gzctnrvectortypes,uzctnrvectorstrings,
+  gzctnrVectorTypes,uzctnrvectorstrings,
   uzccommandsmanager,
   uzcinterface;
 

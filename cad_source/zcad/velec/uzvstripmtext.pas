@@ -35,7 +35,7 @@ uses
   uzcdrawings,     //Drawings manager, all open drawings are processed him
   //uzccombase,
   uzccommand_regen,
-  gzctnrvectortypes,
+  gzctnrVectorTypes,
   uzcinterface,
   RegExpr;
 

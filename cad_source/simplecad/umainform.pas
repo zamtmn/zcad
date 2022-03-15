@@ -26,7 +26,7 @@ uses
   uzeentitiestree,                                                                  //entities spatial binary tree
   uzedrawingsimple,                                                            //drawing
   uzestyleslinetypes,UGDBNamedObjectsArray,
-  gzctnrvectortypes,uzeconsts;                                                           //some consts
+  gzctnrVectorTypes,uzeconsts;                                                           //some consts
 
 const
   lttypename='test_lt';

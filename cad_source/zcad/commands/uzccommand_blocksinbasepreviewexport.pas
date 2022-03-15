@@ -22,7 +22,7 @@ unit uzccommand_blocksinbasepreviewexport;
 interface
 uses
   uzccommandsabstract,uzccommandsimpl,
-  uzbpaths,gzctnrvectortypes,
+  uzbpaths,gzctnrVectorTypes,
   uzcdrawings,
   uzeblockdef,
   uzccommand_blockpreviewexport,

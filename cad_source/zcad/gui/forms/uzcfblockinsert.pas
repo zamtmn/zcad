@@ -13,7 +13,7 @@ uses
   uzbtypes,          //базовые типы
   uzegeometrytypes,          //базовые типы
   uzbstrproc,               //билеберда для работы со стрингами
-  gzctnrvectortypes
+  gzctnrVectorTypes
   ;
 
 type

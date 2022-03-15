@@ -24,7 +24,7 @@ interface
 uses
   UEnumDescriptor,uzctnrVectorPointers,LCLProc,uabstractunit,
   SysUtils,UBaseTypeDescriptor,uzctnrVectorBytes,
-  gzctnrvectortypes,uzctnrvectorstrings,varmandef,gzctnrSTL,
+  gzctnrVectorTypes,uzctnrvectorstrings,varmandef,gzctnrSTL,
   TypeDescriptors,URecordDescriptor,UObjectDescriptor,uzbstrproc,classes,typinfo,
   UPointerDescriptor,
   gzctnrVectorPData,gzctnrVector,
@@ -194,7 +194,7 @@ PTSimpleUnit=^TSimpleUnit;
 {REGISTEROBJECTWITHOUTCONSTRUCTORTYPE TSimpleUnit}
 TSimpleUnit=object(TAbstractUnit)
                   Name:TInternalScriptString;
-                  InterfaceUses:TZctnrVectorGDBPointer;
+                  InterfaceUses:TZctnrVectorPointer;
                   InterfaceVariables: varmanager;
                   constructor init(nam:TInternalScriptString);
                   destructor done;virtual;
@@ -206,7 +206,7 @@ TSimpleUnit=object(TAbstractUnit)
                   function FindValue(varname:TInternalScriptString):pvardesk;virtual;
                   function FindOrCreateValue(varname,vartype:TInternalScriptString):vardesk;virtual;
                   function TypeName2PTD(n: TInternalScriptString):PUserTypeDescriptor;virtual;
-                  function SaveToMem(var membuf:TZctnrVectorBytes;PEntUnits:PTZctnrVectorGDBPointer=nil):PUserTypeDescriptor;virtual;
+                  function SaveToMem(var membuf:TZctnrVectorBytes;PEntUnits:PTZctnrVectorPointer=nil):PUserTypeDescriptor;virtual;
                   function SavePasToMem(var membuf:TZctnrVectorBytes):PUserTypeDescriptor;virtual;abstract;
                   procedure setvardesc(out vd: vardesk; varname, username, typename: TInternalScriptString;_pinstance:pointer=nil);
                   procedure free;virtual;abstract;
@@ -626,7 +626,7 @@ begin
      //self.InterfaceVariables.vardescarray.Clear;
      self.InterfaceVariables.vararray.Clear;
 end;
-function TSimpleUnit.SaveToMem(var membuf:TZctnrVectorBytes;PEntUnits:PTZctnrVectorGDBPointer=nil):PUserTypeDescriptor;
+function TSimpleUnit.SaveToMem(var membuf:TZctnrVectorBytes;PEntUnits:PTZctnrVectorPointer=nil):PUserTypeDescriptor;
 var
    pu:PTUnit;
    pv:pvardesk;

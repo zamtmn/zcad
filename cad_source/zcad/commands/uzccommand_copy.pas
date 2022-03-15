@@ -21,7 +21,7 @@ unit uzccommand_copy;
 
 interface
 uses
-  gzctnrvectortypes,zcmultiobjectcreateundocommand,
+  gzctnrVectorTypes,zcmultiobjectcreateundocommand,
   usimplegenerics,
   uzcdrawing,
   uzgldrawcontext,

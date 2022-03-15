@@ -30,7 +30,7 @@ uses
   uzcdrawings,
   uzcsysvars,
   uzefontmanager,
-  gzctnrvectortypes;
+  gzctnrVectorTypes;
 
 implementation
 

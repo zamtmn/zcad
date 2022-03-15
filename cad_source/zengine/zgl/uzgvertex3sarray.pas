@@ -20,7 +20,7 @@ unit uzgvertex3sarray;
 {$INCLUDE zcadconfig.inc}
 interface
 uses gzctnrVector,sysutils,
-     gzctnrvectortypes,uzegeometrytypes,uzegeometry;
+     gzctnrVectorTypes,uzegeometrytypes,uzegeometry;
 type
 {Export+}
 PZGLVertex3Sarray=^ZGLVertex3Sarray;

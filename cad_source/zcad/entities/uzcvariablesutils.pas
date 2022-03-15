@@ -20,7 +20,7 @@ unit uzcvariablesutils;
 
 interface
 uses uzcenitiesvariablesextender,sysutils,UGDBOpenArrayOfPV,
-     gzctnrvectortypes,uzeentity,varmandef,uzeentsubordinated;
+     gzctnrVectorTypes,uzeentity,varmandef,uzeentsubordinated;
 //**поиск значения свойства по имени varname:String которое было в ведено в инспекторе для данного устройства PEnt:PGDBObjEntity
 //**возвращает
 function FindVariableInEnt(PEnt:PGDBObjEntity;varname:String):pvardesk;

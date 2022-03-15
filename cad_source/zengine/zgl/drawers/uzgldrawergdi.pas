@@ -34,7 +34,7 @@ uses
     {$IFNDEF DELPHI}LCLIntf,LCLType,{$ENDIF}
     Classes,Controls,
     uzegeometrytypes,uzegeometry,uzgldrawergeneral,uzgldrawerabstract,
-    Graphics,LazLogger,gzctnrvectortypes;
+    Graphics,LazLogger,gzctnrVectorTypes;
 const
   NeedScreenInvalidrect=true;
 type

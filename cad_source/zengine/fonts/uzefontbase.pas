@@ -20,7 +20,7 @@ unit uzefontbase;
 {$INCLUDE zcadconfig.inc}
 interface
 uses uzgprimitives,uzglvectorobject,uzbstrproc,uzctnrVectorBytes,
-     gzctnrvectortypes,gzctnrVector,sysutils,uzbtypes,uzegeometrytypes,uzegeometry;
+     gzctnrVectorTypes,gzctnrVector,sysutils,uzbtypes,uzegeometrytypes,uzegeometry;
 type
 {EXPORT+}
 TSymbolInfoArray=packed array [0..255] of GDBsymdolinfo;

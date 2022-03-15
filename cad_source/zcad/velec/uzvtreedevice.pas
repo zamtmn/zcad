@@ -95,7 +95,7 @@ uses
                       //<**система логирования
   uzcvariablesutils, // для работы с ртти
 
-  //gzctnrvectortypes,                  //itrec
+  //gzctnrVectorTypes,                  //itrec
 
   //для работы графа
   ExtType,

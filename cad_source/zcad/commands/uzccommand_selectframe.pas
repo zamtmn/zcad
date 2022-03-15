@@ -45,7 +45,7 @@ uses
  UUnitManager,uzclog,Varman,
  uzegeometrytypes,dialogs,uzcinfoform,
  uzeentpolyline,uzeentlwpolyline,UGDBSelectedObjArray,
- gzctnrvectortypes,uzegeometry,uzelongprocesssupport;
+ gzctnrVectorTypes,uzegeometry,uzelongprocesssupport;
 var
   selframecommand:PCommandObjectDef;
 

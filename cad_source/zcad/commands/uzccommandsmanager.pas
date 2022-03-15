@@ -22,7 +22,7 @@ unit uzccommandsmanager;
 interface
 uses uzctnrVectorPointers,gzctnrVectorPObjects,uzcsysvars,uzegeometry,uzglviewareaabstract,uzbpaths,
      uzeconsts,uzcctrldynamiccommandmenu,uzcinfoform,uzcstrconsts,uzcsysinfo,
-     gzctnrvectortypes,uzegeometrytypes,uzbstrproc,gzctnrVectorP,
+     gzctnrVectorTypes,uzegeometrytypes,uzbstrproc,gzctnrVectorP,
      uzccommandsabstract, sysutils,uzglviewareadata,
      uzclog,varmandef,varman,uzedrawingdef,uzcinterface,
      uzcsysparams,uzedrawingsimple,uzcdrawings,uzctnrvectorstrings,forms,LazLogger,
@@ -50,7 +50,7 @@ type
                           LatestRunOperands:String;
                           LatestRunPDrawing:PTDrawingDef;
 
-                          CommandsStack:TZctnrVectorGDBPointer;
+                          CommandsStack:TZctnrVectorPointer;
                           ContextCommandParams:Pointer;
                           busy:Boolean;
                           varstack:tvarstack;

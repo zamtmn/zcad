@@ -20,7 +20,7 @@ unit UGDBPoint3DArray;
 {$INCLUDE zcadconfig.inc}
 interface
 uses uzegeometrytypes,gzctnrVector,sysutils,math,
-     gzctnrvectortypes,{uzgloglstatemanager,}uzegeometry;
+     gzctnrVectorTypes,{uzgloglstatemanager,}uzegeometry;
 type
 {Export+}
 {REGISTEROBJECTTYPE GDBPoint3dArray}

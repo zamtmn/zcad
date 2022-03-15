@@ -33,7 +33,7 @@ uses
                    //менеджер команд и объекты связанные с ним
   uzcdrawings,     //Drawings manager, all open drawings are processed him
   uzccombase,
-  gzctnrvectortypes,
+  gzctnrVectorTypes,
   uzcinterface,
 
   //uzvsettingform,

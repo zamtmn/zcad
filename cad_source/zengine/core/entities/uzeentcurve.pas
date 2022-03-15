@@ -24,7 +24,7 @@ uses uzgldrawcontext,uzedrawingdef,uzecamera,
      uzctnrVectorBytes,uzestyleslayers,UGDBVectorSnapArray,
      UGDBSelectedObjArray,uzeent3d,uzeentity,UGDBPolyLine2DArray,UGDBPoint3DArray,
      uzbtypes,uzegeometry,uzeconsts,uzglviewareadata,uzeffdxfsupport,sysutils,
-     gzctnrvectortypes,uzegeometrytypes,uzeentsubordinated,uzctnrvectorpgdbaseobjects;
+     gzctnrVectorTypes,uzegeometrytypes,uzeentsubordinated,uzctnrvectorpgdbaseobjects;
 type
 //------------snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)
 {Export+}

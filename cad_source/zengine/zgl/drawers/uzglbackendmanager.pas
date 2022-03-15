@@ -25,7 +25,7 @@ const test:String='asdasd';
 type
     TVA=class of TAbstractViewArea;
 var
-    Backends:TZctnrVectorGDBPointer;
+    Backends:TZctnrVectorPointer;
     BackendsNames:TEnumData;
 procedure RegisterBackend(BackEndClass:TVA;Name:string);
 function GetCurrentBackEnd:TVA;

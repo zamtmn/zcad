@@ -24,7 +24,7 @@ interface
 uses
   LazLogger,
   uzccommandsabstract,uzccommandsimpl,
-  uzeentity,gzctnrvectortypes,uzcdrawings,uzcdrawing,
+  uzeentity,gzctnrVectorTypes,uzcdrawings,uzcdrawing,
   zcmultiobjectcreateundocommand,uzcinterface,uzcutils;
 
 function Erase_com(operands:TCommandOperands):TCommandResult;

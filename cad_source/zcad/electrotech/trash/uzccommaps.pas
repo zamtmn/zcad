@@ -18,7 +18,7 @@ uses
   uzccomdraw,uzeentline,uzbpaths,uzeentblockinsert,
   uzegeometrytypes,varman,uzeentdevice,uzeentmtext,math,
   uzcentcable,UUnitManager,
-  gzctnrvectortypes,uzccomelectrical,URecordDescriptor,TypeDescriptors,LazLogger,
+  gzctnrVectorTypes,uzccomelectrical,URecordDescriptor,TypeDescriptors,LazLogger,
   gzctnrSTL,gutil,uzccmdfloatinsert;
 
 const

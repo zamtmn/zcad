@@ -20,7 +20,7 @@ unit uzgprimitivescreatorabstract;
 {$INCLUDE zcadconfig.inc}
 interface
 uses uzgprimitivessarray,uzgindexsarray,sysutils,uzbtypes,//
-     gzctnrvectortypes,uzegeometry;
+     gzctnrVectorTypes,uzegeometry;
 type
 TLLPrimitivesCreatorAbstract=class
                 function CreateLLLine(var pa:TLLPrimitivesArray;const P1Index:TLLVertexIndex):TArrayIndex;virtual;abstract;

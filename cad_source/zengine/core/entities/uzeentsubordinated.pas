@@ -22,7 +22,7 @@ unit uzeentsubordinated;
 interface
 uses strutils,uzgldrawcontext,uzeentityextender,uzetextpreprocessor,uzedrawingdef,
      uzbstrproc{$IFNDEF DELPHI},LazUTF8{$ENDIF},uzctnrVectorBytes,uzegeometrytypes,uzbtypes,
-     sysutils,uzestyleslayers,uzeffdxfsupport,gzctnrvectortypes;
+     sysutils,uzestyleslayers,uzeffdxfsupport,gzctnrVectorTypes;
 type
 {EXPORT+}
 PGDBObjExtendable=^GDBObjExtendable;

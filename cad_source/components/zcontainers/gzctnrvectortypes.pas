@@ -15,7 +15,7 @@
 {**
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
-unit gzctnrvectortypes;
+unit gzctnrVectorTypes;
 
 interface
 uses sysutils,typinfo;

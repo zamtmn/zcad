@@ -35,7 +35,7 @@ uses
   uzedimensionaltypes,
   varmandef,
   TypeDescriptors,
-  gzctnrvectortypes,uzctnrvectorstrings;
+  gzctnrVectorTypes,uzctnrvectorstrings;
 const
   fastEditorOffset={$IFDEF LCLQT}2{$ELSE}2{$ENDIF} ;
   spliterhalfwidth=4;

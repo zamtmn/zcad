@@ -27,7 +27,7 @@ uses
  uzcdevicebaseabstract,uzclog,SysUtils,uzcdrawings,varman,
  varmandef,uzcsysinfo,uzccommandsimpl,uzccommandsabstract,
  uztoolbarsmanager,
- gzctnrvectortypes,uzeblockdef,UBaseTypeDescriptor,uzcinterface,UUnitManager,LazLogger,uzmenusmanager;
+ gzctnrVectorTypes,uzeblockdef,UBaseTypeDescriptor,uzcinterface,UUnitManager,LazLogger,uzmenusmanager;
 const
   uncat='UNCAT';
   uncat_='UNCAT_';

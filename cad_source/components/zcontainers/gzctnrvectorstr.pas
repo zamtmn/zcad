@@ -21,7 +21,7 @@ unit gzctnrVectorStr;
 interface
 uses
   SysUtils,StrUtils,
-  uzctnrvectorbytes,gzctnrVectorSimple,gzctnrvectortypes;
+  uzctnrvectorbytes,gzctnrVectorSimple,gzctnrVectorTypes;
 type
 {Export+}
 {----REGISTEROBJECTTYPE GZVectorSimple}

@@ -28,7 +28,7 @@ uses
   menus,graphics,Themes,
   Types,UniqueInstanceBase,simpleipc,Laz2_XMLCfg,LCLVersion,
  {ZCAD BASE}
-       uzcsysparams,gzctnrvectortypes,uzemathutils,uzelongprocesssupport,
+       uzcsysparams,gzctnrVectorTypes,uzemathutils,uzelongprocesssupport,
        uzgldrawergdi,uzcdrawing,UGDBOpenArrayOfPV,uzedrawingabstract,
        uzepalette,uzbpaths,uzglviewareadata,uzeentitiesprop,uzcinterface,
        uzctnrVectorBytes,uzbtypes,

@@ -21,7 +21,7 @@ unit uzglgeometry;
 interface
 uses uzgldrawergeneral,math,uzgldrawcontext,uzgldrawerabstract,uzgvertex3sarray,
      uzegeometrytypes,gzctnrVector,UGDBPoint3DArray,uzegeometry,uzeentitiesprop,
-     gzctnrvectortypes,uzestyleslinetypes,sysutils,uzbtypes,
+     gzctnrVectorTypes,uzestyleslinetypes,sysutils,uzbtypes,
      uzbstrproc,uzefont,uzglvectorobject,uzgprimitivessarray;
 type
 {Export+}

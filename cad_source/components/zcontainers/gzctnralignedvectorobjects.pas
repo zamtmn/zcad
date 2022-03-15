@@ -21,7 +21,7 @@ unit gzctnrAlignedVectorObjects;
 interface
 
 uses
-  uzctnrAlignedVectorBytes,gzctnrvectortypes;
+  uzctnrAlignedVectorBytes,gzctnrVectorTypes;
 
 type
 {Export+}

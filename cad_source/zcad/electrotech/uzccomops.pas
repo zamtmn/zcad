@@ -18,7 +18,7 @@ uses
   uzccomdraw,UGDBVisibleOpenArray,uzeentline,uzbpaths,uzeentblockinsert,
   uzegeometrytypes,varman,uzccablemanager,uzeentdevice,uzeentmtext,math,
   uzcenitiesvariablesextender,uzeroot,uzglviewareadata,uzcentcable,UUnitManager,
-  gzctnrvectortypes,uzccomelectrical,URecordDescriptor,TypeDescriptors,LazLogger,
+  gzctnrVectorTypes,uzccomelectrical,URecordDescriptor,TypeDescriptors,LazLogger,
   uzcstrconsts,uzccmdfloatinsert,uzctnrvectorpgdbaseobjects;
 
 type

@@ -21,7 +21,7 @@ unit uzccommand_selsim;
 
 interface
 uses
-  gzctnrvectortypes,
+  gzctnrVectorTypes,
   uzctnrvectorobjid,
   uzctnrVectorDouble,
   uzctnrvectorgdblineweight,
@@ -77,7 +77,7 @@ TSelSimParams=record
                          created:boolean;
                          bnames:TZctnrVectorStrings;
                          textcontents,textremplates:TZctnrVectorUnicodeStrings;
-                         layers,linetypes:TZctnrVectorGDBPointer;
+                         layers,linetypes:TZctnrVectorPointer;
                          colors:TZctnrVectorTGDBPaletteColor;
                          weights:TZctnrVectorGDBLineWeight;
                          objtypes:TZctnrVectorObjID;

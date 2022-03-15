@@ -23,7 +23,7 @@ interface
 uses uzgldrawcontext,uzeentabstracttext,uzetrash,uzedrawingdef,uzbstrproc,uzctnrVectorBytes,
      uzestylestables,uzeentline,uzeentcomplex,sysutils,gzctnrVectorPObjects,
      uzctnrvectorstrings,uzeentmtext,uzeentity,uzbtypes,uzeconsts,uzegeometry,
-     gzctnrvectortypes,uzegeometrytypes,uzeentblockinsert,uzeffdxfsupport;
+     gzctnrVectorTypes,uzegeometrytypes,uzeentblockinsert,uzeffdxfsupport;
 //jcm(*'TopMiddle'*),
 type
 {TTableCellJustify=(jcl(*'TopLeft'*),

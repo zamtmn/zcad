@@ -12,7 +12,7 @@ uses uzeobjectextender,varman,uzgldrawcontext,uzeentgenericsubentry,uzedrawingde
      uzcsysvars,uzctnrVectorBytes,uzestyleslayers,UUnitManager,uzeentcurve,uzegeometry,
      math,gzctnrVector,uzeentity,varmandef,uzbtypes,
      uzegeometrytypes,uzeconsts,uzeffdxfsupport,sysutils,uzeentsubordinated,uzeentdevice,
-     gzctnrvectortypes,uzcenitiesvariablesextender,uzeentityfactory,uzclog,LazLogger;
+     gzctnrVectorTypes,uzcenitiesvariablesextender,uzeentityfactory,uzclog,LazLogger;
 type
 {Повторное описание типа в Cableы}
   PTCableType=^TCableType;

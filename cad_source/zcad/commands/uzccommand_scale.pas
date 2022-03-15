@@ -21,7 +21,7 @@ unit uzccommand_scale;
 
 interface
 uses
-  gzctnrvectortypes,
+  gzctnrVectorTypes,
   uzcdrawing,
   uzgldrawcontext,
   

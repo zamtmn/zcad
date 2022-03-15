@@ -19,7 +19,7 @@
 unit gzctnrVectorP;
 
 interface
-uses gzctnrvectortypes,sysutils,gzctnrVector,gzctnrVectorSimple;
+uses gzctnrVectorTypes,sysutils,gzctnrVector,gzctnrVectorSimple;
 type
 {Export+}
 {---------REGISTEROBJECTTYPE GZVectorP}

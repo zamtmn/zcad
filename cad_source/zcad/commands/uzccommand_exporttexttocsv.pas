@@ -36,7 +36,7 @@ uses
   uzbtypes,
   uzegeometry,
   uzeentity,uzeenttext,uzeconsts,
-  URecordDescriptor,typedescriptors,Varman,gzctnrvectortypes,uzelongprocesssupport;
+  URecordDescriptor,typedescriptors,Varman,gzctnrVectorTypes,uzelongprocesssupport;
 
 implementation
 

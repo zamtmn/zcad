@@ -27,7 +27,7 @@ uses
   uzeffmanager,uzctranslations,
   uzccommandsimpl,uzccommandsabstract,
   uzcdrawings,uzcdrawing,
-  uzctnrVectorBytes,UUnitManager,URecordDescriptor,gzctnrvectortypes,
+  uzctnrVectorBytes,UUnitManager,URecordDescriptor,gzctnrVectorTypes,
   Varman,varmandef,typedescriptors,
   uzgldrawcontext,
   uzedrawingsimple,uzeconsts,

@@ -25,7 +25,7 @@ uses
   LazLoggerBase,uzcoimultiproperties,uzcoiwrapper,uzctranslations,uzepalette,
   uzedimensionaltypes,uzcstrconsts,sysutils,uzeentityfactory,
   uzcenitiesvariablesextender,uzgldrawcontext,usimplegenerics,gzctnrSTL,
-  gzctnrvectortypes,uzbtypes,uzcdrawings,varmandef,uzeentity,
+  gzctnrVectorTypes,uzbtypes,uzcdrawings,varmandef,uzeentity,
   Varman,uzctnrvectorstrings,UGDBSelectedObjArray,uzcoimultipropertiesutil,
   uzeentityextender,uzelongprocesssupport,uzbLogIntf;
 type
@@ -841,7 +841,7 @@ var
     ptextstyle:pointer;
 begin
     selected:=PTEnumDataWithOtherData(PInstance)^.Selected;
-    ptextstyle:=PTZctnrVectorGDBPointer(PTEnumDataWithOtherData(PInstance)^.PData).getData(selected);
+    ptextstyle:=PTZctnrVectorPointer(PTEnumDataWithOtherData(PInstance)^.PData).getData(selected);
     count:=0;
     pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
     if pv<>nil then
@@ -868,7 +868,7 @@ var
     ptextstyle:pointer;
 begin
     selected:=PTEnumDataWithOtherData(PInstance)^.Selected;
-    ptextstyle:=PTZctnrVectorGDBPointer(PTEnumDataWithOtherData(PInstance)^.PData).getData(selected);
+    ptextstyle:=PTZctnrVectorPointer(PTEnumDataWithOtherData(PInstance)^.PData).getData(selected);
     count:=0;
     pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
     if pv<>nil then
@@ -894,7 +894,7 @@ var
     plinetype:pointer;
 begin
     selected:=PTEnumDataWithOtherData(PInstance)^.Selected;
-    plinetype:=PTZctnrVectorGDBPointer(PTEnumDataWithOtherData(PInstance)^.PData).getData(selected);
+    plinetype:=PTZctnrVectorPointer(PTEnumDataWithOtherData(PInstance)^.PData).getData(selected);
     count:=0;
     pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
     if pv<>nil then
@@ -957,7 +957,7 @@ var
     ptextstyle:pointer;
 begin
     selected:=PTEnumDataWithOtherData(PInstance)^.Selected;
-    ptextstyle:=PTZctnrVectorGDBPointer(PTEnumDataWithOtherData(PInstance)^.PData).getData(selected);
+    ptextstyle:=PTZctnrVectorPointer(PTEnumDataWithOtherData(PInstance)^.PData).getData(selected);
     //if NeededObjType<>0 then
     begin
       count:=0;
@@ -992,7 +992,7 @@ var
     player:pointer;
 begin
     selected:=PTEnumDataWithOtherData(PInstance)^.Selected;
-    player:=PTZctnrVectorGDBPointer(PTEnumDataWithOtherData(PInstance)^.PData).getData(selected);
+    player:=PTZctnrVectorPointer(PTEnumDataWithOtherData(PInstance)^.PData).getData(selected);
     //if NeededObjType<>0 then
     begin
       count:=0;
@@ -1027,7 +1027,7 @@ var
     plinetype:pointer;
 begin
     selected:=PTEnumDataWithOtherData(PInstance)^.Selected;
-    plinetype:=PTZctnrVectorGDBPointer(PTEnumDataWithOtherData(PInstance)^.PData).getData(selected);
+    plinetype:=PTZctnrVectorPointer(PTEnumDataWithOtherData(PInstance)^.PData).getData(selected);
     //if NeededObjType<>0 then
     begin
       count:=0;

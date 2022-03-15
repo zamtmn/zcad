@@ -20,7 +20,7 @@ unit UGDBObjBlockdefArray;
 {$INCLUDE zcadconfig.inc}
 interface
 uses LCLProc,uzgldrawcontext,uzedrawingdef,uzbstrproc,uzeblockdef,gzctnrVectorObjects,
-     gzctnrvectortypes,sysutils,uzbtypes,uzegeometry,uzbLogIntf;
+     gzctnrVectorTypes,sysutils,uzbtypes,uzegeometry,uzbLogIntf;
 type
 {Export+}
 {REGISTEROBJECTTYPE GDBObjBlockdefArray}

@@ -23,7 +23,7 @@ interface
 uses
   LCLProc,
   uzccommandsimpl,uzccommandsabstract,
-  uzcdrawings,uzcdrawing,gzctnrvectortypes,uzgldrawcontext,uzegeometrytypes,
+  uzcdrawings,uzcdrawing,gzctnrVectorTypes,uzgldrawcontext,uzegeometrytypes,
   uzglviewareadata,uzeentity,uzegeometry, uzeentwithlocalcs,
   zcmultiobjectcreateundocommand,uzccommandsmanager;
 

@@ -20,7 +20,7 @@ unit zcmultiobjectchangeundocommand;
 {$INCLUDE zcadconfig.inc}
 interface
 uses gzctnrVector,zeundostack,zebaseundocommands,
-     gzctnrvectortypes,uzegeometrytypes,uzeentity,uzcdrawings;
+     gzctnrVectorTypes,uzegeometrytypes,uzeentity,uzcdrawings;
 
 {DEFINE TCommand  := TGDBTransformChangeCommand}
 {DEFINE PTCommand := PTGDBTransformChangeCommand}

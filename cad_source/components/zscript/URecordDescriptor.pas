@@ -21,7 +21,7 @@ unit URecordDescriptor;
 {$MODE DELPHI}
 interface
 uses LCLProc,UPointerDescriptor,uzbstrproc,uzctnrVectorBytes,sysutils,UBaseTypeDescriptor,
-  gzctnrvectortypes,uzedimensionaltypes,TypeDescriptors,gzctnrVector,
+  gzctnrVectorTypes,uzedimensionaltypes,TypeDescriptors,gzctnrVector,
   TypInfo,varmandef,uzbtypes,uzbLogIntf;
 type
 TFieldDescriptor=GZVector<FieldDescriptor>;

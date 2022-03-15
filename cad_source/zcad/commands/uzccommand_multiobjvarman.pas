@@ -30,7 +30,7 @@ uses
   uzccommandsabstract,uzccommandsimpl,
   uzctnrVectorBytes,
   uzeentity,
-  gzctnrvectortypes,
+  gzctnrVectorTypes,
   uzcenitiesvariablesextender,
   uzcinterface,
   uzcstrconsts,

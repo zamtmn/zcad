@@ -26,7 +26,7 @@ uses
   UEnumDescriptor,zcobjectinspector,Forms,sysutils,
   Graphics,LCLType,Themes,uzctnrvectorstrings,
   varmandef,Varman,uzbtypes,usupportgui,
-  gzctnrvectortypes,StdCtrls,Controls,Classes,uzbstrproc;
+  gzctnrVectorTypes,StdCtrls,Controls,Classes,uzbstrproc;
 type
     TBaseTypesEditors=class
                              class function BaseCreateEditor           (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:String;ptdesc:PUserTypeDescriptor;preferedHeight:integer):TEditorDesc;

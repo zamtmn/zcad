@@ -26,7 +26,7 @@ uses
   uzccommandsabstract,uzccommandsimpl,
   uzeentity,
   UGDBSelectedObjArray,
-  gzctnrvectortypes,
+  gzctnrVectorTypes,
   uzgldrawcontext,
   uzcdrawings,
   uzcutils;

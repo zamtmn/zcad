@@ -20,7 +20,7 @@ unit gzctnrVector;
 
 {DEFINE FILL0ALLOCATEDMEMORY}
 interface
-uses gzctnrvectortypes,sysutils,typinfo;
+uses gzctnrVectorTypes,sysutils,typinfo;
 const
   {**типы нуждающиеся в инициализации}
   TypesNeedToFinalize=[tkUnknown{$IFNDEF DELPHI},tkSString{$ENDIF},tkLString{$IFNDEF DELPHI},tkAString{$ENDIF},

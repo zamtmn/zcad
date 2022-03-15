@@ -34,7 +34,7 @@ uses
                    //менеджер команд и объекты связанные с ним
   //uzcdrawings,     //Drawings manager, all open drawings are processed him
   //uzccombase,
-  //gzctnrvectortypes,
+  //gzctnrVectorTypes,
 
     gvector,//garrayutils, // Подключение Generics и модуля для работы с ним
 

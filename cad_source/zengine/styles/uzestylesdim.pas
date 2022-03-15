@@ -21,7 +21,7 @@ unit uzestylesdim;
 interface
 uses uzepalette,uzeconsts,uzestyleslinetypes,uzestylestexts,usimplegenerics,
      uzedimensionaltypes,sysutils,uzbtypes,uzegeometry,
-     gzctnrvectortypes,uzbstrproc,UGDBNamedObjectsArray,uzeffdxfsupport;
+     gzctnrVectorTypes,uzbstrproc,UGDBNamedObjectsArray,uzeffdxfsupport;
 const
      DIMLWEDefaultValue=LnWtByBlock;
      DIMCLREDefaultValue=ClByBlock;

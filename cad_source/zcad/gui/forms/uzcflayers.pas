@@ -12,7 +12,7 @@ uses
   uzcgui2linetypes,uzeconsts,uzestyleslayers,uzcdrawings,uzbtypes,varmandef,
 
   uzcinterface, uzcstrconsts, uzbstrproc,UBaseTypeDescriptor,
-  gzctnrvectortypes,uzcimagesmanager, usupportgui, ZListView, uzcuitypes;
+  gzctnrVectorTypes,uzcimagesmanager, usupportgui, ZListView, uzcuitypes;
 
 const
      NameColumn=0;

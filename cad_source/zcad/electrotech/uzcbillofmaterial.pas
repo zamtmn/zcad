@@ -19,7 +19,7 @@
 unit uzcbillofmaterial;
 {$INCLUDE zcadconfig.inc}
 interface
-uses gzctnrvectortypes,gzctnrVector,sysutils;
+uses gzctnrVectorTypes,gzctnrVector,sysutils;
 type
 {EXPORT+}
 PGDBBOMItem=^GDBBOMItem;

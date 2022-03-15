@@ -23,7 +23,7 @@ interface
 
 uses
   uzcinterfacedata,usupportgui,StdCtrls,uzcdrawings,uzcstrconsts,Controls,Classes,
-  gzctnrvectortypes,uzestylestexts,uzbstrproc,uzcsysvars,uzccommandsmanager,uzcinterface;
+  gzctnrVectorTypes,uzestylestexts,uzbstrproc,uzcsysvars,uzccommandsmanager,uzcinterface;
 
 type
   TSupportTStyleCombo = class

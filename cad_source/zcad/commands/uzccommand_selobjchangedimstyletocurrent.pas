@@ -27,7 +27,7 @@ uses
   uzeentdimension,
   uzestylesdim,
   UGDBSelectedObjArray,
-  gzctnrvectortypes,
+  gzctnrVectorTypes,
   uzgldrawcontext,
   uzcdrawings,
   uzcsysvars,

@@ -21,7 +21,7 @@ unit UEnumDescriptor;
 {$MODE DELPHI}
 interface
 uses types,sysutils,uzctnrVectorBytes,TypeDescriptors,
-     gzctnrvectortypes,uzedimensionaltypes,varmandef,uzbtypes,gzctnrVector,uzctnrvectorstrings;
+     gzctnrVectorTypes,uzedimensionaltypes,varmandef,uzbtypes,gzctnrVector,uzctnrvectorstrings;
 resourcestring
   rsDifferent='Different';
 type

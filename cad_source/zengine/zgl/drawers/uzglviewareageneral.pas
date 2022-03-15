@@ -20,7 +20,7 @@ unit uzglviewareageneral;
 {$INCLUDE zcadconfig.inc}
 interface
 uses
-     gzctnrvectortypes,uzegeometrytypes,LCLProc,uzemathutils,uzepalette,
+     gzctnrVectorTypes,uzegeometrytypes,LCLProc,uzemathutils,uzepalette,
      uzeentsubordinated,uzegeometry,uzbtypes,UGDBSelectedObjArray,
      uzglviewareadata,uzgldrawcontext,uzeentity,uzedrawingabstract,UGDBPoint3DArray,uzeentitiestree,
      uzeconsts,uzestrconsts,UGDBTracePropArray,math,sysutils,uzedrawingdef,uzbstrproc,

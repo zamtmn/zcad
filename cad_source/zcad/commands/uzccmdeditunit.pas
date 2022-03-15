@@ -27,7 +27,7 @@ uses
   uzbpaths,
   Varman,
   UUnitManager,
-  uzctnrVectorBytes,uzctnrVectorPointers,gzctnrvectortypes,
+  uzctnrVectorBytes,uzctnrVectorPointers,gzctnrVectorTypes,
   uzcinterface,
   uzctranslations,
   Controls,
@@ -40,7 +40,7 @@ implementation
 function EditUnit(var entityunit:TSimpleUnit):boolean;
 var
    mem:TZctnrVectorBytes;
-   entunits:TZctnrVectorGDBPointer;
+   entunits:TZctnrVectorPointer;
    astring:ansistring;
    pu:PTUnit;
    ir:itrec;

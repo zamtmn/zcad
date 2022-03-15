@@ -21,7 +21,7 @@ unit uzegeomentitiestree;
 interface
 uses
     graphics,uzgeomentity,
-    gzctnrvectortypes,uzegeometrytypes,gzctnrBinarySeparatedTree,uzegeometry,
+    gzctnrVectorTypes,uzegeometrytypes,gzctnrBinarySeparatedTree,uzegeometry,
     gzctnrAlignedVectorObjects;
 type
 TZEntsManipulator=class;

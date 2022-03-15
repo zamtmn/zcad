@@ -22,7 +22,7 @@ unit uzccommand_text;
 interface
 uses
   SysUtils,
-  gzctnrvectortypes,
+  gzctnrVectorTypes,
   uzgldrawcontext,
   
   uzbtypes,

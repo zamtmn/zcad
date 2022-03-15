@@ -20,7 +20,7 @@ unit UGDBVisibleTreeArray;
 {$INCLUDE zcadconfig.inc}
 interface
 uses uzeentitiestree,UGDBVisibleOpenArray,sysutils,uzegeometry,
-     uzeentity,gzctnrvectortypes;
+     uzeentity,gzctnrVectorTypes;
 type
 {Export+}
 PGDBObjEntityTreeArray=^GDBObjEntityTreeArray;

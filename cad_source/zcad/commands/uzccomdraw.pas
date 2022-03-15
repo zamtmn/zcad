@@ -22,7 +22,7 @@ unit uzccomdraw;
 interface
 uses
   gzctnrVector,uzglviewareageneral,
-  gzctnrvectortypes,zcmultiobjectcreateundocommand,uzgldrawercanvas,
+  gzctnrVectorTypes,zcmultiobjectcreateundocommand,uzgldrawercanvas,
   uzcoimultiobjects,uzcenitiesvariablesextender,uzcdrawing,uzepalette,
   uzgldrawcontext,usimplegenerics,UGDBPoint3DArray,
   uzeentpoint,uzeentitiestree,gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,uzeentityfactory,

@@ -21,7 +21,7 @@ unit uzestyleslinetypes;
 interface
 uses LCLProc,LazUTF8,Classes,gzctnrVector,sysutils,uzbtypes,
      uzegeometry,uzestylestexts,gzctnrVectorObjects,UGDBNamedObjectsArray,
-     gzctnrvectortypes,uzbstrproc;
+     gzctnrVectorTypes,uzbstrproc;
 const
      DefaultSHXHeight=1;
      DefaultSHXAngle=0;

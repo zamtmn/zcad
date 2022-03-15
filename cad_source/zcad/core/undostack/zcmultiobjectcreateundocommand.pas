@@ -20,7 +20,7 @@ unit zcmultiobjectcreateundocommand;
 {$INCLUDE zcadconfig.inc}
 interface
 uses UGDBOpenArrayOfPV,zeundostack,zebaseundocommands,uzbtypes,
-     gzctnrvectortypes,uzeentity,uzcdrawings;
+     gzctnrVectorTypes,uzeentity,uzcdrawings;
 
 {DEFINE TCommand  := TGDBMultiCreateCommand}
 {DEFINE PTCommand := PTGDBMultiCreateCommand}

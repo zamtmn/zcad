@@ -28,7 +28,7 @@ uses
     uzedrawingsimple,uzeentgenericsubentry,uzestyleslayers,uzeentity,
     UGDBSelectedObjArray,uzestylestexts,uzefontmanager,uzestyleslinetypes,
     UGDBOpenArrayOfPV,uzefont,UGDBVisibleOpenArray,
-    gzctnrvectortypes,uzedimensionaltypes,uzetrash,uzctnrVectorBytes,uzglviewareadata,
+    gzctnrVectorTypes,uzedimensionaltypes,uzetrash,uzctnrVectorBytes,uzglviewareadata,
     uzccommandsabstract,
     uzeentitiestypefilter,uzctnrvectorpgdbaseobjects,
     LCLProc;

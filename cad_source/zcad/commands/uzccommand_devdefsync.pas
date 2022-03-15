@@ -24,7 +24,7 @@ interface
 uses
   LazLogger,SysUtils,
   uzccommandsabstract,uzccommandsimpl,
-  uzeentity,gzctnrvectortypes,uzcdrawings,uzcstrconsts,
+  uzeentity,gzctnrVectorTypes,uzcdrawings,uzcstrconsts,
   uzcinterface,gzctnrSTL,uzeblockdef,uzeentblockinsert,uzeconsts,uzeentdevice;
 
 resourcestring

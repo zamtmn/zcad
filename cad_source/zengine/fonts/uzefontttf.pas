@@ -22,7 +22,7 @@ interface
 uses LCLProc,uzgprimitivescreator,uzgprimitives,uzglvectorobject,uzefontbase,
      uzebeziersolver,math,uzgloglstatemanager,uzegluinterface,TTTypes,TTObjs,
   usimplegenerics,EasyLazFreeType,uzbstrproc,sysutils,
-  uzegeometrytypes,uzbtypes,uzegeometry,gzctnrSTL,gzctnrvectortypes,uzbLogIntf;
+  uzegeometrytypes,uzbtypes,uzegeometry,gzctnrSTL,gzctnrVectorTypes,uzbLogIntf;
 type
 PTTTFSymInfo=^TTTFSymInfo;
 TTTFSymInfo=record

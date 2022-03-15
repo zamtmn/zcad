@@ -20,7 +20,7 @@ unit UArrayDescriptor;
 
 {$MODE DELPHI}
 interface
-uses gzctnrvectortypes,uzedimensionaltypes,sysutils,LCLProc,TypeDescriptors,
+uses gzctnrVectorTypes,uzedimensionaltypes,sysutils,LCLProc,TypeDescriptors,
      varmandef,uzbtypes,gzctnrVector,uzbLogIntf;
 type
 PArrayIndexDescriptor=^ArrayIndexDescriptor;

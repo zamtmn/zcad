@@ -40,7 +40,7 @@ uses
 
   uzegeometrytypes,URecordDescriptor,TypeDescriptors,
 
-  Forms, //gzctnrvectortypes,
+  Forms, //gzctnrVectorTypes,
   //uzcfblockinsert,  //старое временно
   //uzcfarrayinsert,
 
@@ -117,7 +117,7 @@ uses
   //Graphs,
   uzcenitiesvariablesextender,
   uzvsgeom,
-    gzctnrvectortypes,                  //itrec
+    gzctnrVectorTypes,                  //itrec
   uzvtestdraw; // тестовые рисунки
 
 

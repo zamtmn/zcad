@@ -34,7 +34,7 @@ uses
 
   uzbpaths,uzcinterface, uzcstrconsts, uzcsysinfo,uzbstrproc,UBaseTypeDescriptor,
   uzcimagesmanager, usupportgui, ZListView,uzefontmanager,varman,uzctnrvectorstrings,
-  gzctnrvectortypes,uzeentity,uzeenttext;
+  gzctnrVectorTypes,uzeentity,uzeenttext;
 
 const
      NameColumn=0;

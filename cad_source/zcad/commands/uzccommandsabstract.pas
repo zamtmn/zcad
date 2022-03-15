@@ -19,7 +19,7 @@
 unit uzccommandsabstract;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzegeometrytypes,uzbtypes,uzglviewareadata,uzclog,gzctnrvectortypes;
+uses uzegeometrytypes,uzbtypes,uzglviewareadata,uzclog,gzctnrVectorTypes;
 const
      //нужна динамическая регистация
      CADWG=1;                    //есть открытый чертеж

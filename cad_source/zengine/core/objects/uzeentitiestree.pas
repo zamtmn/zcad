@@ -20,7 +20,7 @@ unit uzeentitiestree;
 {$INCLUDE zcadconfig.inc}
 interface
 uses
-    gzctnrvectortypes,graphics,gzctnrVectorSimple,gzctnrVectorPObjects,
+    gzctnrVectorTypes,graphics,gzctnrVectorSimple,gzctnrVectorPObjects,
     uzegeometrytypes,gzctnrBinarySeparatedTree,uzgldrawcontext,uzegeometry,UGDBVisibleOpenArray,uzeentity,uzbtypes;
 type
 TZEntsManipulator=class;

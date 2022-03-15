@@ -20,7 +20,7 @@ unit uzccommandlineutil;
 {$INCLUDE zcadconfig.inc}
 interface
 uses uzegeometrytypes,varmandef,uzctnrvectorstrings,uzccommandsmanager,
-     gzctnrvectortypes,sysutils,uzbstrproc,uzcdrawings,uzegeometry,math,
+     gzctnrVectorTypes,sysutils,uzbstrproc,uzcdrawings,uzegeometry,math,
      UGDBTracePropArray,uzglviewareadata,languade,Varman,uzcinterface,uzcstrconsts,
      strmy,LCLProc,uzccommandsabstract,LazUtilities;
 const

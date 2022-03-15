@@ -22,7 +22,7 @@ interface
 uses uzeentity,uzgldrawcontext,uzeentityfactory,uzedrawingdef,uzestyleslayers,math,
      uzeentcomplex,sysutils,UGDBObjBlockdefArray,uzeblockdef,uzbtypes,
      uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzeentsubordinated,
-     gzctnrvectortypes,uzegeometrytypes,uzctnrVectorBytes,uzestrconsts,LCLProc,
+     gzctnrVectorTypes,uzegeometrytypes,uzctnrVectorBytes,uzestrconsts,LCLProc,
      uzbLogIntf;
 const zcadmetric='!!ZMODIFIER:';
 type

@@ -20,7 +20,7 @@ unit uzglvectorobject;
 {$INCLUDE zcadconfig.inc}
 interface
 uses uzgldrawerabstract,uzgldrawcontext,uzgprimitives,uzglgeomdata,uzgprimitivessarray,
-     uzegeometrytypes,uzegeometry,sysutils,uzbtypes,uzbstrproc,gzctnrvectortypes;
+     uzegeometrytypes,uzegeometry,sysutils,uzbtypes,uzbstrproc,gzctnrVectorTypes;
 type
 {Export+}
 TAppearance=(TAMatching,TANeedProxy);

@@ -32,7 +32,7 @@ uses
   uzcstrconsts,uzccommand_loadlayout,uzcgui2linetypes,uzestyleslinetypes,uzcinterfacedata,
   uzcgui2linewidth,uzcflineweights,uzcgui2textstyles,uzcgui2dimstyles,
   uzedrawingsimple,uzcdrawing,uzcuidialogs,uzbstrproc,
-  uzestyleslayers,zcchangeundocommand,uzcutils,gzctnrvectortypes;
+  uzestyleslayers,zcchangeundocommand,uzcutils,gzctnrVectorTypes;
 type
   TMyToolbar=class(TToolBar)
     public

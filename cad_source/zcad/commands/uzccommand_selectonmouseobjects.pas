@@ -29,7 +29,7 @@ uses
   uzccommandsabstract,uzccommandsimpl,
   uzeentity,
   uzcdrawings,
-  gzctnrvectortypes,
+  gzctnrVectorTypes,
   uzcenitiesvariablesextender,
   varmandef,
   uzcctrlcontextmenu;

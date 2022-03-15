@@ -27,7 +27,7 @@ uses
   uzeentity,
   uzcdrawings,
   uzcinterface,uzcutils,
-  gzctnrvectortypes;
+  gzctnrVectorTypes;
 
 var
   selall:pCommandFastObjectPlugin;

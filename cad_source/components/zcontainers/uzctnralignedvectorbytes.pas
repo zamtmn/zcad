@@ -18,7 +18,7 @@
 
 unit uzctnrAlignedVectorBytes;
 interface
-uses gzctnrVector,sysutils,gzctnrvectortypes;
+uses gzctnrVector,sysutils,gzctnrVectorTypes;
 const
   ObjAlign=4;
 type

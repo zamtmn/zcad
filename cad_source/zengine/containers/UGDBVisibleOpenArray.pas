@@ -19,7 +19,7 @@
 unit UGDBVisibleOpenArray;
 {$INCLUDE zcadconfig.inc}
 interface
-uses gzctnrvectortypes,uzegeometrytypes,uzeentity,uzecamera,UGDBOpenArrayOfPV,sysutils,uzbtypes,uzegeometry;
+uses gzctnrVectorTypes,uzegeometrytypes,uzeentity,uzecamera,UGDBOpenArrayOfPV,sysutils,uzbtypes,uzegeometry;
 type
 {Export+}
 PGDBObjEntityOpenArray=^GDBObjEntityOpenArray;

@@ -55,7 +55,7 @@ uses
 
   URecordDescriptor,TypeDescriptors,
 
-  Forms, //gzctnrvectortypes,
+  Forms, //gzctnrVectorTypes,
   //  uzcfblockinsert, //старое временно
    //uzcfarrayinsert,
 
@@ -125,7 +125,7 @@ uses
                       //<**система логирования
   //uzcvariablesutils, // для работы с ртти
 
-     gzctnrvectortypes,                  //itrec
+     gzctnrVectorTypes,                  //itrec
   //для работы графа
   ExtType,
   Pointerv,

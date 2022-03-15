@@ -20,7 +20,7 @@ unit uzgprimitives;
 {$INCLUDE zcadconfig.inc}
 interface
 uses uzgprimitivessarray,math,uzglgeomdata,uzgldrawcontext,uzgvertex3sarray,uzgldrawerabstract,
-     sysutils,uzbtypes,gzctnrvectortypes,
+     sysutils,uzbtypes,gzctnrVectorTypes,
      uzegeometrytypes,uzegeometry;
 const
      LLAttrNothing=0;

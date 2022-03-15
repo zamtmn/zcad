@@ -24,7 +24,7 @@ uses
   uzestyleslayers,uzestylestexts,                                            //layers and text steles support
   uzeentitiestree,                                                                  //entities spatial binary tree
   uzedrawingsimple,                                                            //drawing
-  gzctnrvectortypes,uzeconsts;                                                           //some consts
+  gzctnrVectorTypes,uzeconsts;                                                           //some consts
 
 type
 

@@ -22,7 +22,7 @@ unit uzccommand_move;
 interface
 uses
   gzctnrVector,zcmultiobjectchangeundocommand,
-  gzctnrvectortypes,uzgldrawercanvas,
+  gzctnrVectorTypes,uzgldrawercanvas,
   uzcoimultiobjects,uzcdrawing,uzepalette,
   uzgldrawcontext,
   uzeentpoint,uzeentityfactory,

@@ -19,7 +19,7 @@
 unit UGDBNumerator;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzbtypes,gzctnrvectortypes,sysutils,UGDBNamedObjectsArray;
+uses uzbtypes,gzctnrVectorTypes,sysutils,UGDBNamedObjectsArray;
 type
 {EXPORT+}
 PGDBNumItem=^GDBNumItem;

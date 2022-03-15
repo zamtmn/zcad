@@ -21,7 +21,7 @@ unit typedescriptors;
 interface
 uses uzedimensionaltypes,uzctnrVectorPointers,LCLProc,
      varmandef,uzctnrvectorstrings,
-     gzctnrvectortypes,gzctnrVectorP,uzbstrproc,sysutils,uzbLogIntf;
+     gzctnrVectorTypes,gzctnrVectorP,uzbstrproc,sysutils,uzbLogIntf;
 const
      m_procedure=1;
      m_function=2;

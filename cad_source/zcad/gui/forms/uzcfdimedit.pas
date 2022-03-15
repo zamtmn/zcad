@@ -18,7 +18,7 @@ uses
 
   uzbpaths,uzcinterface, uzcstrconsts, uzcsysinfo,uzbstrproc,UBaseTypeDescriptor,
   uzcimagesmanager, uzefontmanager,varman,
-  gzctnrvectortypes,uzeentity,uzeenttext,uzepalette, uzcflineweights,uzestyleslinetypes,Types;
+  gzctnrVectorTypes,uzeentity,uzeenttext,uzepalette, uzcflineweights,uzestyleslinetypes,Types;
 
 type
 

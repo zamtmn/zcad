@@ -117,7 +117,7 @@ uses
    uzbpaths,
 
    uzccablemanager,
-   gzctnrvectortypes,
+   gzctnrVectorTypes,
    uzccomelectrical,
    uzeroot,
    uzeentmtext,

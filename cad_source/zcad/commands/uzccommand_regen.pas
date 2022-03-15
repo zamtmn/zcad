@@ -25,7 +25,7 @@ uses
   LazLogger,
   uzccommandsabstract,uzccommandsimpl,
   uzeentity,
-  gzctnrvectortypes,
+  gzctnrVectorTypes,
   uzedrawingsimple,uzcdrawings,
   uzcinterface,
   uzgldrawcontext,

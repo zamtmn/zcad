@@ -19,7 +19,7 @@
 unit uzgeomproxy;
 {$INCLUDE zcadconfig.inc}
 interface
-uses uzgeomentity,sysutils,uzbtypes,uzegeometrytypes,uzegeometry,gzctnrvectortypes;
+uses uzgeomentity,sysutils,uzbtypes,uzegeometrytypes,uzegeometry,gzctnrVectorTypes;
 type
 {Export+}
 PTGeomProxy=^TGeomProxy;

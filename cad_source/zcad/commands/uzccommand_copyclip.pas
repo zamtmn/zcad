@@ -28,7 +28,7 @@ uses
   uzbpaths,
   uzeentity,
   uzeffdxf,
-  gzctnrvectortypes,
+  gzctnrVectorTypes,
   uzgldrawcontext,
   uzcdrawings,
   uzccommandsabstract,uzccommandsimpl;

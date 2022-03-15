@@ -20,7 +20,7 @@ unit UGDBOpenArrayOfPV;
 {$INCLUDE zcadconfig.inc}
 interface
 uses uzegeometrytypes,uzgldrawcontext,uzedrawingdef,uzeentity,uzecamera,
-     gzctnrvectortypes,sysutils,uzbtypes,uzegeometry,
+     gzctnrVectorTypes,sysutils,uzbtypes,uzegeometry,
      uzeentsubordinated,uzeentityfactory,uzctnrvectorpgdbaseobjects;
 type
 {PGDBObjEntityArray=^GDBObjEntityArray;

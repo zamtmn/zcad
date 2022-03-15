@@ -27,7 +27,7 @@ uses
   uzbpaths,
   Varman,
   UUnitManager,
-  uzctnrVectorBytes,
+  uzctnrVectorBytes,uzctnrVectorPointers,gzctnrvectortypes,
   uzcinterface,
   uzctranslations,
   Controls,
@@ -40,38 +40,39 @@ implementation
 function EditUnit(var entityunit:TSimpleUnit):boolean;
 var
    mem:TZctnrVectorBytes;
-   //pobj:PGDBObjEntity;
-   //op:String;
-   modalresult:integer;
-   u8s:UTF8String;
+   entunits:TZctnrVectorGDBPointer;
    astring:ansistring;
+   pu:PTUnit;
+   ir:itrec;
 begin
   astring:='';
-     mem.init(1024);
-     entityunit.SaveToMem(mem);
-     //mem.SaveToFile(expandpath(ProgramPath+'autosave\lastvariableset.pas'));
-     setlength(astring,mem.Count);
-     StrLCopy(@astring[1],mem.GetParrayAsPointer,mem.Count);
-     u8s:=(astring);
+  mem.init(1024);
+  entunits.init(10);
+  entityunit.SaveToMem(mem,@entunits);
+  setlength(astring,mem.Count);
+  StrLCopy(@astring[1],mem.GetParrayAsPointer,mem.Count);
+  createInfoFormVar;
+  InfoFormVar.memo.text:=astring;
+  if ZCMsgCallBackInterface.DOShowModal(InfoFormVar)=ZCmrOK then begin
+    astring:=InfoFormVar.memo.text;
+    mem.Clear;
+    mem.AddData(@astring[1],length(astring));
 
-     createInfoFormVar;
+    entityunit.free;
+    units.parseunit(SupportPath,InterfaceTranslate,mem,@entityunit);
 
-     InfoFormVar.memo.text:=u8s;
-     modalresult:=ZCMsgCallBackInterface.DOShowModal(InfoFormVar);
-     if modalresult=ZCmrOK then
-                         begin
-                               u8s:=InfoFormVar.memo.text;
-                               astring:={utf8tosys}(u8s);
-                               mem.Clear;
-                               mem.AddData(@astring[1],length(astring));
+    pu:=entunits.beginiterate(ir);
+    if pu<>nil then
+      repeat
+        entityunit.InterfaceUses.PushBackData(pu);
+        pu:=entunits.iterate(ir);
+      until pu=nil;
 
-                               entityunit.free;
-                               units.parseunit(SupportPath,InterfaceTranslate,mem,@entityunit);
-                               result:=true;
-                         end
-                         else
-                             result:=false;
-     mem.done;
+    result:=true;
+  end else
+    result:=false;
+  entunits.done;
+  mem.done;
 end;
 
 initialization

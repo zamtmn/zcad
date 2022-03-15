@@ -28,7 +28,7 @@ uses
   TypeDescriptors,URecordDescriptor,UObjectDescriptor,uzbstrproc,classes,typinfo,
   UPointerDescriptor,
   gzctnrVectorPData,gzctnrVector,
-  uzbLogIntf,uzctnrAlignedVectorBytes;
+  uzbLogIntf,uzctnrAlignedVectorBytes,uzbtypes;
 type
     td=record
              template:String;
@@ -206,7 +206,7 @@ TSimpleUnit=object(TAbstractUnit)
                   function FindValue(varname:TInternalScriptString):pvardesk;virtual;
                   function FindOrCreateValue(varname,vartype:TInternalScriptString):vardesk;virtual;
                   function TypeName2PTD(n: TInternalScriptString):PUserTypeDescriptor;virtual;
-                  function SaveToMem(var membuf:TZctnrVectorBytes):PUserTypeDescriptor;virtual;
+                  function SaveToMem(var membuf:TZctnrVectorBytes;PEntUnits:PTZctnrVectorGDBPointer=nil):PUserTypeDescriptor;virtual;
                   function SavePasToMem(var membuf:TZctnrVectorBytes):PUserTypeDescriptor;virtual;abstract;
                   procedure setvardesc(out vd: vardesk; varname, username, typename: TInternalScriptString;_pinstance:pointer=nil);
                   procedure free;virtual;abstract;
@@ -626,30 +626,36 @@ begin
      //self.InterfaceVariables.vardescarray.Clear;
      self.InterfaceVariables.vararray.Clear;
 end;
-function TSimpleUnit.SaveToMem(var membuf:TZctnrVectorBytes):PUserTypeDescriptor;
+function TSimpleUnit.SaveToMem(var membuf:TZctnrVectorBytes;PEntUnits:PTZctnrVectorGDBPointer=nil):PUserTypeDescriptor;
 var
    pu:PTUnit;
    pv:pvardesk;
    ir:itrec;
    value:TInternalScriptString;
+   realUsesCount:integer;
 begin
      membuf.TXTAddStringEOL('unit '+Name+';');
      membuf.TXTAddStringEOL('interface');
-     if InterfaceUses.Count<>0 then
-        begin
-             pu:=InterfaceUses.beginiterate(ir);
-             if pu<>nil then
-                            begin
-                                 membuf.TXTAddString('uses '+pu^.Name);
-                            end;
-             pu:=InterfaceUses.iterate(ir);
-                          if pu<>nil then
-                            repeat
-                                 membuf.TXTAddString(','+pu^.Name);
-                                 pu:=InterfaceUses.iterate(ir);
-                            until pu=nil;
-            membuf.TXTAddStringEOL(';');
-        end;
+     realUsesCount:=0;
+     if InterfaceUses.Count<>0 then begin
+       pu:=InterfaceUses.beginiterate(ir);
+       if pu<>nil then
+         repeat
+           if not IsIt(typeof(pu^),typeof(TObjectUnit)) then begin
+             if realUsesCount=0 then
+               membuf.TXTAddString('uses '+pu^.Name)
+             else
+               membuf.TXTAddString(','+pu^.Name);
+             inc(realUsesCount);
+           end else begin
+             if PEntUnits<>nil then
+               PEntUnits^.PushBackData(pu);
+           end;
+           pu:=InterfaceUses.iterate(ir);
+         until pu=nil;
+       if realUsesCount>0 then
+         membuf.TXTAddStringEOL(';');
+     end;
      if InterfaceVariables.vardescarray.Count<>0 then
         begin
               membuf.TXTAddStringEOL('var');

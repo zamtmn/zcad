@@ -1,2 +1,0 @@
-
-{$i ../laz.dummyolemethods.inc}

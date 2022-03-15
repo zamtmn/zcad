@@ -1,2 +1,0 @@
-
-{$i ../laz.dummydragmanager.inc}

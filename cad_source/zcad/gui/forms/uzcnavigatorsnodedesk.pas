@@ -33,6 +33,7 @@ type
     NodeMode:TNodeMode;
     name,id:string;
     pent:PGDBObjEntity;
+    subLeafCounter:Integer;
   end;
   TNodesStatesVector=tvector<TNodeData>;
   TNodesStates=class

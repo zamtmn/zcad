@@ -43,8 +43,6 @@ type
     Ent2NodeMap:TEnt2NodeMap;
     RefreshToolButton: TToolButton;
     UMFToolButton: TToolButton;
-    {ToolButton1: TToolButton;
-    ToolButton3: TToolButton;}
     ActionList1:TActionList;
     Refresh:TAction;
     IncludeEnts:TAction;
@@ -52,6 +50,7 @@ type
     TreeProps:TAction;
     function CreateEntityNode(Tree: TVirtualStringTree;basenode:PVirtualNode;pent:pGDBObjEntity;Name:string):PVirtualNode;virtual;
     procedure RefreshTree(Sender: TObject);
+    procedure PostProcessTree;virtual;
     procedure EditIncludeEnts(Sender: TObject);
     procedure EditIncludeProperties(Sender: TObject);
     procedure EditTreeProperties(Sender: TObject);
@@ -653,9 +652,46 @@ begin
      StandaloneNode.RestoreState(StandaloneNodeStates);
      FreeAndNil(StandaloneNodeStates);
    end;
-
+   PostProcessTree;
    LPS.EndLongProcess(lpsh);
    NavTree.EndUpdate;
+end;
+
+procedure TNavigatorDevices.PostProcessTree;
+
+  procedure CountLeaf(Leaf:PVirtualNode);
+  var
+    CurrentParent:PVirtualNode;
+    pnd:PTNodeData;
+  begin
+    CurrentParent:=Leaf.Parent;
+    while CurrentParent<>NavTree.RootNode do
+    begin
+      pnd:=NavTree.GetNodeData(CurrentParent);
+      if pnd<>nil then
+        inc(pnd^.subLeafCounter);
+      CurrentParent:=CurrentParent.Parent;
+    end;
+  end;
+
+  procedure ProcessChild(Node:PVirtualNode);
+  var
+    child:PVirtualNode;
+  begin
+    child:=Node.FirstChild;
+    if child=nil then
+      CountLeaf(Node)
+    else
+      while child<>nil do
+      begin
+        ProcessChild(child);
+        child:=child^.NextSibling;
+      end;
+  end;
+
+begin
+  if assigned(StandaloneNode)then
+    ProcessChild(StandaloneNode.RootNode);
 end;
 
 procedure TNavigatorDevices.AutoRefreshTree(sender:TObject;GUIAction:TZMessageID);
@@ -776,9 +812,12 @@ begin
   begin
     //celltext:=pnd^.name;
   if pnd^.pent=nil then begin
-    if Column=0 then
-      celltext:=pnd^.name
-    else
+    if Column=0 then begin
+      if pnd^.subLeafCounter>0 then
+        celltext:=format('%s (%d)',[pnd^.name,pnd^.subLeafCounter])
+      else
+        celltext:=pnd^.name;
+    end else
       celltext:='';
   end else
     celltext:=textformat(ExtTreeParam.ExtColumnsParams[Column].Pattern,pnd^.pent);//GetEntityVariableValue(pnd^.pent,'NMO_Name',rsNameAbsent);

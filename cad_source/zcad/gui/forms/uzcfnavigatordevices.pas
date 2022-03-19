@@ -68,7 +68,7 @@ type
                          TextType: TVSTTextType; var CellText: String);virtual;
     procedure NavGetImage(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
                           var Ghosted: Boolean; var ImageIndex: Integer);
-    procedure getImageindex;
+    procedure SetDefaultImagesIndex;
     procedure AfterCellPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode;
     Column: TColumnIndex; const CellRect: TRect);
     procedure DrawText(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode;
@@ -498,7 +498,7 @@ begin
     pentvarext:=pnd^.pent^.GetExtension<TVariablesExtender>;
     if pentvarext<>nil then begin
 
-    getImageIndex;
+    SetDefaultImagesIndex;
 
     //if CellPaintMode=cpmPaint then begin
       myContentRect:=CellRect;
@@ -784,7 +784,7 @@ begin
     celltext:=textformat(ExtTreeParam.ExtColumnsParams[Column].Pattern,pnd^.pent);//GetEntityVariableValue(pnd^.pent,'NMO_Name',rsNameAbsent);
   end;
 end;
-procedure TNavigatorDevices.getImageIndex;
+procedure TNavigatorDevices.SetDefaultImagesIndex;
 begin
   if MainFunctionIconIndex=-1 then
     MainFunctionIconIndex:=ImagesManager.GetImageIndex('basket');
@@ -807,7 +807,7 @@ begin
     exit;
   end;
 
-  getImageIndex;
+  SetDefaultImagesIndex;
      if (assigned(CombinedNode))and(node=CombinedNode.RootNode) then
                                        ImageIndex:=CombinedNode.ficonindex
 else if (assigned(StandaloneNode))and(node=StandaloneNode.RootNode) then

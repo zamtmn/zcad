@@ -20,6 +20,8 @@ uses
 
 resourcestring
   rsStandaloneDevices='Standalone devices';
+  DefaultNodeText='%0:s(%1:d,%2:d,%3:d)';
+  //DefaultNodeText='%0:s';
 
 const
   TreeBuildMapSaveVarSuffix='_TreeBuildMap';
@@ -30,9 +32,11 @@ const
 type
   TBuildParam=record
     TreeBuildMap:ansistring;
-    IncludeEntities,IncludeProperties:ansistring;
+    IncludeEntities:ansistring;
+    IncludeProperties:ansistring;
     TreeProperties:ansistring;
     UseMainFunctions:Boolean;
+    NodeNameFormat:ansistring;
   end;
   TStringPartEnabler=TPartEnabler<String>;
   TEnt2NodeMap=TDictionary<pGDBObjEntity,PVirtualNode>;
@@ -659,7 +663,7 @@ end;
 
 procedure TNavigatorDevices.PostProcessTree;
 
-  procedure CountLeaf(Leaf:PVirtualNode);
+  procedure CountLeaf(Leaf:PVirtualNode;MainFunction:Boolean);
   var
     CurrentParent:PVirtualNode;
     pnd:PTNodeData;
@@ -668,8 +672,11 @@ procedure TNavigatorDevices.PostProcessTree;
     while CurrentParent<>NavTree.RootNode do
     begin
       pnd:=NavTree.GetNodeData(CurrentParent);
-      if pnd<>nil then
-        inc(pnd^.subLeafCounter);
+      if pnd<>nil then begin
+        inc(pnd^.ppp.subLeafCounter);
+        if MainFunction then
+          inc(pnd^.ppp.subLeafCounterWithMainFubction);
+      end;
       CurrentParent:=CurrentParent.Parent;
     end;
   end;
@@ -677,13 +684,25 @@ procedure TNavigatorDevices.PostProcessTree;
   procedure ProcessChild(Node:PVirtualNode);
   var
     child:PVirtualNode;
+    pnd:PTNodeData;
+    mf:Boolean;
+    entvarext:TVariablesExtender;
   begin
+    pnd:=NavTree.GetNodeData(Node);
     child:=Node.FirstChild;
-    if child=nil then
-      CountLeaf(Node)
-    else
-      while child<>nil do
-      begin
+    if child=nil then begin
+      mf:=false;
+      if pnd<>nil then
+        if pnd^.pent<>nil then begin
+         entvarext:=pnd^.pent^.GetExtension<TVariablesExtender>;
+         if entvarext<>nil then
+           mf:=entvarext.isMainFunction;
+        end;
+      CountLeaf(Node,mf)
+    end else
+      while child<>nil do begin
+        if pnd<>nil then
+          inc(pnd.ppp.subNodesCounter);
         ProcessChild(child);
         child:=child^.NextSibling;
       end;
@@ -813,8 +832,8 @@ begin
     //celltext:=pnd^.name;
   if pnd^.pent=nil then begin
     if Column=0 then begin
-      if pnd^.subLeafCounter>0 then
-        celltext:=format('%s (%d)',[pnd^.name,pnd^.subLeafCounter])
+      if pnd^.ppp.subLeafCounter>0 then
+        celltext:=format(DefaultNodeText,[pnd^.name,pnd^.ppp.subNodesCounter,pnd^.ppp.subLeafCounterWithMainFubction,pnd^.ppp.subLeafCounter])
       else
         celltext:=pnd^.name;
     end else

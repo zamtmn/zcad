@@ -28,12 +28,17 @@ type
   TFilterEntityProc=function(pent:pGDBObjEntity):Boolean of object;
   TTraceEntityProc=function(rootdesk:TBaseRootNodeDesk;pent:pGDBObjEntity;out name:string):PVirtualNode of object;
   TNodeMode=(TNMGroup,TNMAutoGroup,TNMData,TNMHardGroup);
+  TNodePastProcessParam=record
+    subNodesCounter:Integer;
+    subLeafCounter:Integer;
+    subLeafCounterWithMainFubction:Integer;
+  end;
   PTNodeData=^TNodeData;
   TNodeData=record
     NodeMode:TNodeMode;
     name,id:string;
     pent:PGDBObjEntity;
-    subLeafCounter:Integer;
+    ppp:TNodePastProcessParam;
   end;
   TNodesStatesVector=tvector<TNodeData>;
   TNodesStates=class

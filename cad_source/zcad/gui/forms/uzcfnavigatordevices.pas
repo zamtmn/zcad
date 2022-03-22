@@ -16,7 +16,8 @@ uses
   uzcfnavigatordevicescxmenu,uzbpaths,Toolwin,uzcctrlpartenabler,StrUtils,
   uzctextenteditor,uzcinfoform,uzcsysparams,uzcsysvars,uzetextpreprocessor,
   {Masks,}uzelongprocesssupport,uzeentitiestypefilter,uzcuitypes,
-  uzeparserenttypefilter,uzeparserentpropfilter,uzeparsernavparam,uzclog,uzcuidialogs;
+  uzeparserenttypefilter,uzeparserentpropfilter,uzeparsernavparam,uzclog,uzcuidialogs,
+  XMLConf,XMLPropStorage,LazConfigStorage,Dialogs;
 
 resourcestring
   rsStandaloneDevices='Standalone devices';
@@ -35,7 +36,6 @@ type
     TreeProperties:ansistring;
     UseMainFunctions:Boolean;
     NodeNameFormat:ansistring;
-    NodeText:ansistring;
   end;
   TStringPartEnabler=TPartEnabler<String>;
   TEnt2NodeMap=TDictionary<pGDBObjEntity,PVirtualNode>;
@@ -115,6 +115,11 @@ type
 
     destructor Destroy; override;
 
+    procedure LoadParamsToFile(Filename:string);
+    procedure LoadParamsFromConfig(Config: TConfigStorage);
+    procedure SaveParamsToFile(FileName:string);
+    procedure SaveParamsToConfig(Config: TConfigStorage);
+
   end;
 
 var
@@ -129,6 +134,70 @@ var
 implementation
 
 {$R *.lfm}
+
+procedure TNavigatorDevices.LoadParamsFromConfig(Config: TConfigStorage);
+begin
+  BP.TreeBuildMap:=Config.GetValue('TreeBuildMap','');
+  BP.IncludeEntities:=Config.GetValue('IncludeEntities','');
+  BP.IncludeProperties:=Config.GetValue('IncludeProperties','');
+  BP.TreeProperties:=Config.GetValue('TreeProperties','');
+  BP.UseMainFunctions:=Config.GetValue('UseMainFunctions',false);
+  BP.NodeNameFormat:=Config.GetValue('NodeNameFormat','');
+  BP.TreeProperties:=Config.GetValue('TreeProperties','');
+end;
+
+procedure TNavigatorDevices.LoadParamsToFile(Filename:string);
+var
+  Config: TXMLConfigStorage;
+begin
+  try
+    Config:=TXMLConfigStorage.Create(Filename,True);
+    try
+      Config.AppendBasePath('NavigatorParams/');
+      LoadParamsFromConfig(Config);
+      Config.UndoAppendBasePath;
+    finally
+      Config.Free;
+    end;
+  except
+    on E: Exception do
+      ZCMsgCallBackInterface.TextMessage('Error loading navigator params from file '+Filename+':'#13+E.Message,TMWOShowError);
+  end;
+end;
+
+procedure TNavigatorDevices.SaveParamsToConfig(Config: TConfigStorage);
+begin
+  Config.SetDeleteValue('TreeBuildMap',BP.TreeBuildMap,'');
+  Config.SetDeleteValue('IncludeEntities',BP.IncludeEntities,'');
+  Config.SetDeleteValue('IncludeProperties',BP.IncludeProperties,'');
+  Config.SetDeleteValue('TreeProperties',BP.TreeProperties,'');
+  Config.SetDeleteValue('UseMainFunctions',BP.UseMainFunctions,false);
+  Config.SetDeleteValue('NodeNameFormat',BP.NodeNameFormat,'');
+  Config.SetDeleteValue('TreeProperties',BP.TreeProperties,'');
+end;
+
+procedure TNavigatorDevices.SaveParamsToFile(Filename: string);
+var
+  XMLConfig: TXMLConfig;
+  Config: TXMLConfigStorage;
+begin
+  XMLConfig:=TXMLConfig.Create(nil);
+  try
+    XMLConfig.StartEmpty:=true;
+    XMLConfig.Filename:=Filename;
+    Config:=TXMLConfigStorage.Create(XMLConfig);
+    try
+      Config.AppendBasePath('NavigatorParams/');
+      SaveParamsToConfig(Config);
+      Config.UndoAppendBasePath;
+    finally
+      Config.Free;
+    end;
+    XMLConfig.Flush;
+  finally
+    XMLConfig.Free;
+  end;
+end;
 
 destructor TNavigatorDevices.Destroy;
 var
@@ -470,8 +539,8 @@ begin
    MainFunctionIconIndex:=-1;
    BuggyIconIndex:=-1;
 
-   //bp.NodeText:='%0:s(%1:d,%2:d,%3:d)';
-   BP.NodeText:='%0:s';
+   //bp.NodeNameFormat:='%0:s(%1:d,%2:d,%3:d)';
+   BP.NodeNameFormat:='%0:s';
 
    SetTreeProp;
 
@@ -835,7 +904,7 @@ begin
   if pnd^.pent=nil then begin
     if Column=0 then begin
       if pnd^.ppp.subLeafCounter>0 then
-        celltext:=format(BP.NodeText,[pnd^.name,pnd^.ppp.subNodesCounter,pnd^.ppp.subLeafCounterWithMainFubction,pnd^.ppp.subLeafCounter])
+        celltext:=format(BP.NodeNameFormat,[pnd^.name,pnd^.ppp.subNodesCounter,pnd^.ppp.subLeafCounterWithMainFubction,pnd^.ppp.subLeafCounter])
       else
         celltext:=pnd^.name;
     end else

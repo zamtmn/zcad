@@ -8,20 +8,22 @@ uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
   ActnList, laz.VirtualTrees, gvector,
   uzegeometry, uzccommandsmanager,
-  uzcinterface,uzeentity,uzcimagesmanager,
-  uzcenitiesvariablesextender,varmandef,uzbstrproc,uzcmainwindow,uzctreenode,
-  Varman,uzcoimultiproperties;
+  uzcinterface, uzeentity, uzcimagesmanager,
+  uzcenitiesvariablesextender, varmandef, uzbstrproc, uzcmainwindow, uzctreenode,
+  Varman, uzcoimultiproperties;
+
 type
+
   TExtColumnParams=record
     Pattern:string;
     SaveWidthVar:string;
   end;
+
   TExtColumnsParams=array of TExtColumnParams;
   PTExtTreeParam=^TExtTreeParam;
   TExtTreeParam=record
     ExtColumnsParams:TExtColumnsParams;
   end;
-
 
   TCreateEntityNodeFunc=function(Tree: TVirtualStringTree;basenode:PVirtualNode;pent:pGDBObjEntity;Name:string):PVirtualNode of object;
   TBaseRootNodeDesk=class;
@@ -33,6 +35,7 @@ type
     subLeafCounter:Integer;
     subLeafCounterWithMainFubction:Integer;
   end;
+
   PTNodeData=^TNodeData;
   TNodeData=record
     NodeMode:TNodeMode;
@@ -40,14 +43,18 @@ type
     pent:PGDBObjEntity;
     ppp:TNodePastProcessParam;
   end;
+
   TNodesStatesVector=tvector<TNodeData>;
+
   TNodesStates=class
-      OpenedNodes:TNodesStatesVector;
-      SelectedNode:TNodeData;
-      constructor Create;
-      destructor Destroy;override;
+    OpenedNodes:TNodesStatesVector;
+    SelectedNode:TNodeData;
+    constructor Create;
+    destructor Destroy;override;
   end;
+
   TFindFunc=function(pnd:Pointer; Criteria:string):boolean of object;
+
   TBaseRootNodeDesk=class(Tcomponent)
     public
     RootNode:PVirtualNode;
@@ -66,8 +73,6 @@ type
     procedure RecursiveSaveState(Node:PVirtualNode;NodesStates:TNodesStates);
     procedure RestoreState(State:TNodesStates);
     procedure RecursiveRestoreState(Node:PVirtualNode;var StartInNodestates:integer;NodesStates:TNodesStates);
-
-    //function FilterEntity(pent:pGDBObjEntity):Boolean;virtual;
     function DefaultTraceEntity(rootdesk:TBaseRootNodeDesk;pent:pGDBObjEntity;out name:string):PVirtualNode;virtual;
   end;
 
@@ -79,7 +84,6 @@ implementation
 function GetMainFunction(const pent:pGDBObjEntity):pGDBObjEntity;
 var
   pentvarext:TVariablesExtender;
-  //pvd:pvardesk;
 begin
   pentvarext:=pent^.GetExtension<TVariablesExtender>;
   if pentvarext<>nil then

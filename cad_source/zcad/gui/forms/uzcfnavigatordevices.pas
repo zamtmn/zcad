@@ -20,8 +20,6 @@ uses
 
 resourcestring
   rsStandaloneDevices='Standalone devices';
-  DefaultNodeText='%0:s(%1:d,%2:d,%3:d)';
-  //DefaultNodeText='%0:s';
 
 const
   TreeBuildMapSaveVarSuffix='_TreeBuildMap';
@@ -37,6 +35,7 @@ type
     TreeProperties:ansistring;
     UseMainFunctions:Boolean;
     NodeNameFormat:ansistring;
+    NodeText:ansistring;
   end;
   TStringPartEnabler=TPartEnabler<String>;
   TEnt2NodeMap=TDictionary<pGDBObjEntity,PVirtualNode>;
@@ -471,6 +470,9 @@ begin
    MainFunctionIconIndex:=-1;
    BuggyIconIndex:=-1;
 
+   //bp.NodeText:='%0:s(%1:d,%2:d,%3:d)';
+   BP.NodeText:='%0:s';
+
    SetTreeProp;
 
    {NavTree.Header.AutoSizeIndex := 0;
@@ -833,7 +835,7 @@ begin
   if pnd^.pent=nil then begin
     if Column=0 then begin
       if pnd^.ppp.subLeafCounter>0 then
-        celltext:=format(DefaultNodeText,[pnd^.name,pnd^.ppp.subNodesCounter,pnd^.ppp.subLeafCounterWithMainFubction,pnd^.ppp.subLeafCounter])
+        celltext:=format(BP.NodeText,[pnd^.name,pnd^.ppp.subNodesCounter,pnd^.ppp.subLeafCounterWithMainFubction,pnd^.ppp.subLeafCounter])
       else
         celltext:=pnd^.name;
     end else

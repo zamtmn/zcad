@@ -17,7 +17,8 @@ uses
   uzctextenteditor,uzcinfoform,uzcsysparams,uzcsysvars,uzetextpreprocessor,
   {Masks,}uzelongprocesssupport,uzeentitiestypefilter,uzcuitypes,
   uzeparserenttypefilter,uzeparserentpropfilter,uzeparsernavparam,uzclog,uzcuidialogs,
-  XMLConf,XMLPropStorage,LazConfigStorage,uzcdialogsfiles;
+  XMLConf,XMLPropStorage, EditBtn,LazConfigStorage,uzcdialogsfiles,
+  Masks;
 
 resourcestring
   rsStandaloneDevices='Standalone devices';
@@ -42,6 +43,7 @@ type
   TEnt2NodeMap=TDictionary<pGDBObjEntity,PVirtualNode>;
   { TNavigatorDevices }
   TNavigatorDevices = class(TForm)
+    FilterBtn: TEditButton;
     SaveToFile: TAction;
     LoadFromFile: TAction;
     CoolBar1: TCoolBar;
@@ -55,7 +57,11 @@ type
     IncludeProps:TAction;
     TreeProps:TAction;
     function CreateEntityNode(Tree: TVirtualStringTree;basenode:PVirtualNode;pent:pGDBObjEntity;Name:string):PVirtualNode;virtual;
+    procedure Filter(Sender: TObject);
+    function Match(node:PVirtualNode;pattern:AnsiString):boolean;
+    function DoFilter(tree:TVirtualStringTree;node:PVirtualNode;pattern:AnsiString):boolean;
     procedure LoadFromFileProc(Sender: TObject);
+    procedure PurgeFilter(Sender: TObject);
     procedure RefreshTree(Sender: TObject);
     procedure PostProcessTree;virtual;
     procedure EditIncludeEnts(Sender: TObject);
@@ -513,6 +519,15 @@ begin
    Refresh.ImageIndex:=ImagesManager.GetImageIndex('Refresh');
    CoolBar1.AutoSize:=true;
 
+  FilterBtn.Button.Images:=ImagesManager.IconList;
+  FilterBtn.Button.ImageIndex:=ImagesManager.GetImageIndex('purge');
+  FilterBtn.Height:=sysvar.INTF.INTF_DefaultControlHeight^;
+  //FilterBtn.Button.Height:=sysvar.INTF.INTF_DefaultControlHeight^;
+  FilterBtn.Button.AutoSize:=true;
+  FilterBtn.Spacing:=4;
+  FilterBtn.TextHint:=rsFilterHint;
+
+
    TreeEnabler:=TStringPartEnabler.Create(self);
    TreeEnabler.EdgeBorders:=[{ebLeft,ebTop,ebRight,ebBottom}];
    TreeEnabler.AutoSize:=true;
@@ -655,6 +670,58 @@ begin
   end else begin
     result:=StandaloneNode.CreateEntityNode(Tree,basenode,pent,Name);
   end;
+end;
+
+function TNavigatorDevices.Match(node:PVirtualNode;pattern:AnsiString):boolean;
+var
+  i:integer;
+  ColumnText:string;
+begin
+  for i:=low(ExtTreeParam.ExtColumnsParams) to high(ExtTreeParam.ExtColumnsParams) do begin
+    NavGetText(NavTree,node,i,ttNormal,ColumnText);
+    if MatchesMask(ColumnText,pattern) then
+      exit(true);
+  end;
+  Result:=false;
+end;
+
+function TNavigatorDevices.DoFilter(tree:TVirtualStringTree;node:PVirtualNode;pattern:AnsiString):boolean;
+var
+  SubNode:PVirtualNode;
+  MatchInChildren:boolean;
+begin
+  result:=false;
+  repeat
+    SubNode := node.FirstChild;
+    if assigned(SubNode) then
+      MatchInChildren:=DoFilter(tree,SubNode,pattern)
+    else
+      MatchInChildren:=false;
+    if MatchInChildren then
+      node.States:=node.States+[vsExpanded];
+    if pattern='' then
+      node.States:=node.States-[vsFiltered]
+    else begin
+      if MatchInChildren or Match(node,pattern) then begin
+        node.States:=node.States-[vsFiltered];
+        result:=true;
+      end else
+        node.States:=node.States+[vsFiltered]
+    end;
+    node:=node.NextSibling;
+  until (node=nil)or(node=node.NextSibling);
+end;
+
+procedure TNavigatorDevices.Filter(Sender: TObject);
+var
+  pattern:AnsiString;
+begin
+  pattern:=TEditButton(sender).Text;
+  if pattern<>'' then
+    if (pos('*',pattern)=0)and(pos('?',pattern)=0) then
+      pattern:='*'+pattern+'*';
+  DoFilter(NavTree,NavTree.RootNode,pattern);
+  NavTree.Invalidate;
 end;
 
 procedure TNavigatorDevices.EditIncludeEnts(Sender: TObject);
@@ -841,6 +908,11 @@ begin
   FileFilter:=format(rsNavigatorParamsFileFilter,[FileExt]);
   if SaveFileDialog(FileName,FileExt,FileFilter,'',rsSaveSomething) then
     SaveParamsToFile(FileName);
+end;
+
+procedure TNavigatorDevices.PurgeFilter(Sender: TObject);
+begin
+  FilterBtn.Text:='';
 end;
 
 procedure TNavigatorDevices.TVDblClick(Sender: TObject);

@@ -1,28 +1,29 @@
 object NavigatorDevices: TNavigatorDevices
   Left = 334
-  Height = 885
+  Height = 1128
   Top = 99
-  Width = 484
+  Width = 617
   Caption = 'Devices'
-  ClientHeight = 885
-  ClientWidth = 484
-  DesignTimePPI = 113
+  ClientHeight = 1128
+  ClientWidth = 617
+  DesignTimePPI = 144
   OnCreate = _onCreate
-  LCLVersion = '1.9.0.0'
+  LCLVersion = '2.3.0.0'
   object NavTree: TVirtualStringTree
     Left = 0
-    Height = 853
-    Top = 32
-    Width = 484
+    Height = 1087
+    Top = 41
+    Width = 617
     Align = alClient
-    DefaultNodeHeight = 19
+    DefaultNodeHeight = 25
     DefaultText = 'Node'
     Header.AutoSizeIndex = 0
     Header.Columns = <    
       item
         Position = 0
-        Width = 484
+        Width = 617
       end>
+    Header.Height = 41
     Header.Options = [hoAutoResize, hoColumnResize, hoDrag, hoShowSortGlyphs, hoVisible]
     Header.SortColumn = 0
     TabOrder = 0
@@ -32,30 +33,39 @@ object NavigatorDevices: TNavigatorDevices
   end
   object CoolBar1: TCoolBar
     Left = 0
-    Height = 32
+    Height = 41
     Top = 0
-    Width = 484
+    Width = 617
+    Bands = <>
     EdgeBorders = []
     Themed = False
   end
   object ActionList1: TActionList
-    Left = 365
-    Top = 76
+    Left = 465
+    Top = 97
     object Refresh: TAction
-      OnExecute = RefreshTree
       Caption = 'Refresh tree'
+      OnExecute = RefreshTree
     end
     object IncludeEnts: TAction
-      OnExecute = EditIncludeEnts
       Caption = 'Edit include entities'
+      OnExecute = EditIncludeEnts
     end
     object IncludeProps: TAction
-      OnExecute = EditIncludeProperties
       Caption = 'Edit include properties'
+      OnExecute = EditIncludeProperties
     end
     object TreeProps: TAction
-      OnExecute = EditTreeProperties
       Caption = 'Edit tree properties'
+      OnExecute = EditTreeProperties
+    end
+    object LoadFromFile: TAction
+      Caption = 'Load from file'
+      OnExecute = LoadFromFileProc
+    end
+    object SaveToFile: TAction
+      Caption = 'Save to file'
+      OnExecute = SaveToFileProc
     end
   end
 end

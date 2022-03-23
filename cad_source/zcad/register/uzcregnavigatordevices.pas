@@ -215,6 +215,7 @@ end;
 function CreateNavigatorDevices(FormName:string):TForm;
 begin
  result:=tform(TNavigatorDevices.NewInstance);
+ TNavigatorDevices(result).FileExt:='navdevicesxml';
  TNavigatorDevices(result).BP.TreeBuildMap:=GetAnsiStringFromSavedUnit(FormName,TreeBuildMapSaveVarSuffix,'+NMO_Prefix|+NMO_BaseName|+@@[NMO_Name]');
  TNavigatorDevices(result).BP.IncludeEntities:=GetAnsiStringFromSavedUnit(FormName,IncludeEntitiesSaveVarSuffix,'IncludeEntityName(''Device'')');
  TNavigatorDevices(result).BP.IncludeProperties:=GetAnsiStringFromSavedUnit(FormName,IncludePropertiesSaveVarSuffix,'');
@@ -224,6 +225,7 @@ end;
 function CreateNavigatorRisers(FormName:string):TForm;
 begin
  result:=tform(TNavigatorRisers.NewInstance);
+ TNavigatorRisers(result).FileExt:='navrisersxml';
  TNavigatorRisers(result).BP.TreeBuildMap:=GetAnsiStringFromSavedUnit(FormName,TreeBuildMapSaveVarSuffix,'+@@[RiserName]');
  TNavigatorRisers(result).BP.IncludeEntities:=GetAnsiStringFromSavedUnit(FormName,IncludeEntitiesSaveVarSuffix,'IncludeEntityName(''Device'')');
  TNavigatorRisers(result).BP.IncludeProperties:=GetAnsiStringFromSavedUnit(FormName,IncludePropertiesSaveVarSuffix,'IncludeIfMask(%%(''Name''),''EL_CABLE_*'')');
@@ -233,6 +235,7 @@ end;
 function CreateNavigatorCables(FormName:string):TForm;
 begin
  result:=tform(TNavigatorCables.NewInstance);
+ TNavigatorCables(result).FileExt:='navcablesxml';
  TNavigatorCables(result).BP.TreeBuildMap:=GetAnsiStringFromSavedUnit(FormName,TreeBuildMapSaveVarSuffix,'+NMO_Prefix|+NMO_BaseName|+@@[NMO_Name]');
  TNavigatorCables(result).BP.IncludeEntities:=GetAnsiStringFromSavedUnit(FormName,IncludeEntitiesSaveVarSuffix,'IncludeEntityName(''Cable'');'#10'IncludeEntityName(''Device'')');
  TNavigatorCables(result).BP.IncludeProperties:=GetAnsiStringFromSavedUnit(FormName,IncludePropertiesSaveVarSuffix,'IncludeIfSame(Or(SameMask(%%(''Name''),''CABLE_*''),SameMask(%%(''EntityName''),''Cable'')))');

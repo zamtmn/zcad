@@ -21,6 +21,9 @@ unit uzcdialogsfiles;
 interface
 uses sysutils,uzbstrproc,
      {$IFNDEF DELPHI}LResources,{$ENDIF}Dialogs{$IFNDEF DELPHI},FileUtil{$ENDIF};
+resourcestring
+  rsOpenSomething='Open something...';
+  rsSaveSomething='Save something...';
 const
     ImportFileFilter: String = 'PDF files (*.pdf)|*.pdf|PostScript files (*.ps)|*.ps|SVG files (*.svg)|*.svg|DXF files (*.dxf)|*.dxf|EPS files (*.eps)|*.eps';
     ProjectFileFilter: String = 'DXF files (*.dxf)|*.dxf|AutoCAD DWG files (*.dwg)|*.dwg|ZCAD ZCP files (*.zcp)|*.zcp|All files (*.*)|*.*';

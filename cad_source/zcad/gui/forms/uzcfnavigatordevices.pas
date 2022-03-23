@@ -17,10 +17,11 @@ uses
   uzctextenteditor,uzcinfoform,uzcsysparams,uzcsysvars,uzetextpreprocessor,
   {Masks,}uzelongprocesssupport,uzeentitiestypefilter,uzcuitypes,
   uzeparserenttypefilter,uzeparserentpropfilter,uzeparsernavparam,uzclog,uzcuidialogs,
-  XMLConf,XMLPropStorage,LazConfigStorage,Dialogs;
+  XMLConf,XMLPropStorage,LazConfigStorage,uzcdialogsfiles;
 
 resourcestring
   rsStandaloneDevices='Standalone devices';
+  rsNavigatorParamsFileFilter='This navigator params files (*.%0:s)|*.%0:s|Xml files (*.xml)|*.xml|All files (*.*)|*.*';
 
 const
   TreeBuildMapSaveVarSuffix='_TreeBuildMap';
@@ -41,6 +42,8 @@ type
   TEnt2NodeMap=TDictionary<pGDBObjEntity,PVirtualNode>;
   { TNavigatorDevices }
   TNavigatorDevices = class(TForm)
+    SaveToFile: TAction;
+    LoadFromFile: TAction;
     CoolBar1: TCoolBar;
     NavTree: TVirtualStringTree;
     Ent2NodeMap:TEnt2NodeMap;
@@ -52,12 +55,14 @@ type
     IncludeProps:TAction;
     TreeProps:TAction;
     function CreateEntityNode(Tree: TVirtualStringTree;basenode:PVirtualNode;pent:pGDBObjEntity;Name:string):PVirtualNode;virtual;
+    procedure LoadFromFileProc(Sender: TObject);
     procedure RefreshTree(Sender: TObject);
     procedure PostProcessTree;virtual;
     procedure EditIncludeEnts(Sender: TObject);
     procedure EditIncludeProperties(Sender: TObject);
     procedure EditTreeProperties(Sender: TObject);
     procedure AutoRefreshTree(sender:TObject;GUIAction:TZMessageID);
+    procedure SaveToFileProc(Sender: TObject);
     procedure TVDblClick(Sender: TObject);
     procedure TVOnMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure VTOnContextMenu(Sender: TObject; MousePos: TPoint;
@@ -94,6 +99,7 @@ type
   public
     BP:TBuildParam;
     ExtTreeParam:TExtTreeParam;
+    FileExt:String;
     {TreeBuildMap:string;
     IncludeEntities,IncludeProperties:string;
     UseMainFunctions:Boolean;}
@@ -115,7 +121,7 @@ type
 
     destructor Destroy; override;
 
-    procedure LoadParamsToFile(Filename:string);
+    procedure LoadParamsFromFile(Filename:string);
     procedure LoadParamsFromConfig(Config: TConfigStorage);
     procedure SaveParamsToFile(FileName:string);
     procedure SaveParamsToConfig(Config: TConfigStorage);
@@ -146,7 +152,7 @@ begin
   BP.TreeProperties:=Config.GetValue('TreeProperties','');
 end;
 
-procedure TNavigatorDevices.LoadParamsToFile(Filename:string);
+procedure TNavigatorDevices.LoadParamsFromFile(Filename:string);
 var
   Config: TXMLConfigStorage;
 begin
@@ -495,7 +501,8 @@ var
   po:TVTPaintOptions;
   //i:integer;
 begin
-
+  if FileExt='' then
+    FileExt:='xml';
    umf:=TmyVariableAction.Create(self);
    umf.ActionList:=ZCADMainWindow.StandartActions;
    umf.AssignToVar('DSGN_NavigatorsUseMainFunction',0);
@@ -509,7 +516,7 @@ begin
    TreeEnabler:=TStringPartEnabler.Create(self);
    TreeEnabler.EdgeBorders:=[{ebLeft,ebTop,ebRight,ebBottom}];
    TreeEnabler.AutoSize:=true;
-   TreeEnabler.actns:=[umf,IncludeEnts,IncludeProps,TreeProps,Refresh];
+   TreeEnabler.actns:=[umf,nil,IncludeEnts,IncludeProps,TreeProps,Refresh,nil,LoadFromFile,SaveToFile];
 
    TreeEnabler.OnPartChanged:=RefreshTree;
    TreeEnabler.GetCountFunc:=GetPartsCount;
@@ -810,6 +817,32 @@ begin
     end;
   end;
 end;
+
+procedure TNavigatorDevices.LoadFromFileProc(Sender: TObject);
+var
+  FileName,FileFilter:String;
+begin
+  FileFilter:=format(rsNavigatorParamsFileFilter,[FileExt]);
+  if OpenFileDialog(FileName,1,FileExt,FileFilter,'',rsOpenSomething) then begin
+    LoadParamsFromFile(FileName);
+    TreeEnabler.setup(BP.TreeBuildMap);
+    if assigned(EntityIncluder) then
+      FreeAndNil(EntityIncluder);
+    EntityIncluder:=ParserEntityPropFilter.GetTokens(BP.IncludeProperties);
+    SetTreeProp;
+    RefreshTree(nil);
+  end;
+end;
+
+procedure TNavigatorDevices.SaveToFileProc(Sender: TObject);
+var
+  FileName,FileFilter:String;
+begin
+  FileFilter:=format(rsNavigatorParamsFileFilter,[FileExt]);
+  if SaveFileDialog(FileName,FileExt,FileFilter,'',rsSaveSomething) then
+    SaveParamsToFile(FileName);
+end;
+
 procedure TNavigatorDevices.TVDblClick(Sender: TObject);
 var
   pnode:PVirtualNode;

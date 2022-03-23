@@ -116,9 +116,13 @@ begin
       _menu:=TPopupMenu.Create(self);
       style:=tbsDropDown;
       for i:=0 to length(actns)-1 do begin
-        CreatedMenuItem:=TMenuItem.Create(_menu);
-        CreatedMenuItem.Action:=actns[i];
-        _menu.items.Add(CreatedMenuItem);
+        if actns[i]<>nil then begin
+          CreatedMenuItem:=TMenuItem.Create(_menu);
+          CreatedMenuItem.Action:=actns[i];
+          _menu.items.Add(CreatedMenuItem);
+        end else begin
+          _menu.items.AddSeparator;
+        end;
       end;
     end;
     PopupMenu:=_menu;

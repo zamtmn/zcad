@@ -8,6 +8,7 @@ object NavigatorDevices: TNavigatorDevices
   ClientWidth = 617
   DesignTimePPI = 144
   OnCreate = _onCreate
+  LCLVersion = '2.3.0.0'
   object NavTree: TVirtualStringTree
     Left = 0
     Height = 1054
@@ -20,7 +21,7 @@ object NavigatorDevices: TNavigatorDevices
     Header.Columns = <    
       item
         Position = 0
-        Width = 613
+        Width = 617
       end>
     Header.Height = 41
     Header.Options = [hoAutoResize, hoColumnResize, hoDrag, hoShowSortGlyphs, hoVisible]
@@ -44,7 +45,6 @@ object NavigatorDevices: TNavigatorDevices
     Height = 33
     Top = 41
     Width = 617
-    AutoSize = False
     Align = alTop
     ButtonWidth = 34
     Flat = True

@@ -31,6 +31,10 @@ const
   TreePropertiesSaveVarSuffix='_TreeProperties';
 
 type
+  TCrutchForTEditButton=class helper for TEditButton
+    procedure SetupEditButtonBorderStyle(bs:TBorderStyle);
+  end;
+
   TBuildParam=record
     TreeBuildMap:ansistring;
     IncludeEntities:ansistring;
@@ -501,6 +505,10 @@ begin
   result:=RunEditor('Parts editor','PartsEdWND',parts);
 end;
 
+procedure TCrutchForTEditButton.SetupEditButtonBorderStyle(bs:TBorderStyle);
+begin
+  Edit.BorderStyle:=bs;
+end;
 
 procedure TNavigatorDevices._onCreate(Sender: TObject);
 var
@@ -521,9 +529,7 @@ begin
 
   FilterBtn.Button.Images:=ImagesManager.IconList;
   FilterBtn.Button.ImageIndex:=ImagesManager.GetImageIndex('purge');
-  FilterBtn.Height:=sysvar.INTF.INTF_DefaultControlHeight^;
-  //FilterBtn.Button.Height:=sysvar.INTF.INTF_DefaultControlHeight^;
-  FilterBtn.Button.AutoSize:=true;
+  FilterBtn.SetupEditButtonBorderStyle(bsNone);
   FilterBtn.Spacing:=4;
   FilterBtn.TextHint:=rsFilterHint;
 
@@ -802,6 +808,7 @@ begin
      FreeAndNil(StandaloneNodeStates);
    end;
    PostProcessTree;
+   Filter(FilterBtn);
    LPS.EndLongProcess(lpsh);
    NavTree.EndUpdate;
 end;

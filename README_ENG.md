@@ -20,13 +20,13 @@ In the future, I believe that Lazarus is installed on disk C, and the path to ru
 if anything - to clarify the place)).
 
 You will also need the following paths:
-* path to Lazarus `C:\lazarus\`
-* the path to the Lazarus primary settings file, by default it is `C:\Users \<USERNAME>\AppData\Local\lazarus\`
+* path to Lazarus `C:\lazarus`
+* the path to the Lazarus primary settings file, by default it is `C:\Users \<USERNAME>\AppData\Local\lazarus`
 
 If your username is in non latin - additional actions are required, users with normal names calmly proceed to step 2.
 
 The non latin (cyrillic) symbols in the paths is not supported by the `make` utility, or I didn't figure it out. We will have to "reconfigure" Lazarus so that the settings are stored in "normal" ways.
-To do this, in the folder `C:\lazarus\` creating a file `runlazarus.bat` with the following content:
+To do this, in the folder `C:\lazarus` creating a file `runlazarus.bat` with the following content:
 
 `startlazarus.exe --pcp=C:\lazarus\mylazcfg`
 
@@ -35,8 +35,8 @@ and then we always use it to launch Lazarus IDE, everything that is written belo
 ### 2 Getting ZCAD
 We clone the source code of zcad (or download it as an archive, but this is bad, it's better git clone). For the reasons described above, the path to the `zcad` folder should not contain non-Latin characters
 There will be a lot of files\folders, but the main ones:
-* `zcad\cad_source\` - zcad source folder
-* `zcad\environment\` - a folder with the program environment files and the source of a small program 'typeexporter' that configures the zcad sources for compilation
+* `zcad\cad_source` - zcad source folder
+* `zcad\environment` - a folder with the program environment files and the source of a small program 'typeexporter' that configures the zcad sources for compilation
 * `zcad\Makefile` - a file with installation scripts
 * `zcad\cad` - there is no such folder initially, it will be created in step 4 and contains a compiled zcad distribution with all the necessary files
 
@@ -48,15 +48,15 @@ You need to install the packages required to compile the zcad in Lazarus, the it
 skip this item (but if something happens, then re-execution does not bear anything terrible).
 We perform:
 
-`C:\lazarus\fpc\3.2.2\bin\i386-win32\make installpkgstolaz LP=C:\lazarus PCP=C:\Users\<USERNAME>\AppData\Local\lazarus\`
+`C:\lazarus\fpc\3.2.2\bin\i386-win32\make installpkgstolaz LP=C:\lazarus PCP=C:\Users\<USERNAME>\AppData\Local\lazarus`
 
-**installpkgstolaz** this will write the required packages from `zcad\cad_source\other\` and `zcad\cad_source\components \` to Lazarus configs and will rebuild Lazarus.
+**installpkgstolaz** this will write the required packages from `zcad\cad_source\other` and `zcad\cad_source\components` to Lazarus configs and will rebuild Lazarus.
 For unclear reasons, builting at this point sometimes fails, but that's okay, just go ahead, Lazarus will compile everything you need in 4.
 
 ### 4 Compiling ZCAD
 Actually, we run the compilation of the zcad by running the following:
 
-`C:\lazarus\fpc\3.2.2\bin\i386-win32\make cleanzcadelectrotech LP=C:\lazarus PCP=C:\Users\<USERNAME>\AppData\Local\lazarus\`
+`C:\lazarus\fpc\3.2.2\bin\i386-win32\make cleanzcadelectrotech LP=C:\lazarus PCP=C:\Users\<USERNAME>\AppData\Local\lazarus`
 
 **cleanzcadelectrotech** - this target will build the program in **ZCADELECTROTECH** mode, replace with **cleanzcad** - if you want **ZCAD mode**
 

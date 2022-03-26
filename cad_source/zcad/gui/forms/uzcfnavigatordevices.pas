@@ -15,24 +15,39 @@ uses
   GraphType,generics.collections,uzglviewareaabstract,Menus,
   uzcfnavigatordevicescxmenu,uzbpaths,Toolwin,uzcctrlpartenabler,StrUtils,
   uzctextenteditor,uzcinfoform,uzcsysparams,uzcsysvars,uzetextpreprocessor,
-  {Masks,}uzelongprocesssupport,uzeentitiestypefilter,uzcuitypes,
+  uzelongprocesssupport,uzeentitiestypefilter,uzcuitypes,
   uzeparserenttypefilter,uzeparserentpropfilter,uzeparsernavparam,uzclog,uzcuidialogs,
   XMLConf,XMLPropStorage, EditBtn,LazConfigStorage,uzcdialogsfiles,
-  Masks;
+  Masks,gvector,garrayutils;
 
 resourcestring
   rsStandaloneDevices='Standalone devices';
   rsNavigatorParamsFileFilter='This navigator params files (*.%0:s)|*.%0:s|Xml files (*.xml)|*.xml|All files (*.*)|*.*';
 
 const
+  AllFilesWithExt='*.%s';
   TreeBuildMapSaveVarSuffix='_TreeBuildMap';
   IncludeEntitiesSaveVarSuffix='_IncludeEntities';
   IncludePropertiesSaveVarSuffix='_IncludeProperties';
   TreePropertiesSaveVarSuffix='_TreeProperties';
 
 type
+  TCfgFileDesk=record
+    FileName,FilePath:string;
+  end;
+  TCfgFilesDesks=TVector<TCfgFileDesk>;
+  TCfgFileDeskCompare=class
+    class function c(a,b:TCfgFileDesk):boolean;inline;
+  end;
+  TCfgFilesDesksSorter=TOrderingArrayUtils<TCfgFilesDesks,TCfgFileDesk,TCfgFileDeskCompare>;
+
   TCrutchForTEditButton=class helper for TEditButton
     procedure SetupEditButtonBorderStyle(bs:TBorderStyle);
+  end;
+
+  TMenuItemWithFileDesk=class(TMenuItem)
+    public
+      FilePath:string;
   end;
 
   TBuildParam=record
@@ -64,6 +79,9 @@ type
     procedure Filter(Sender: TObject);
     function Match(node:PVirtualNode;pattern:AnsiString):boolean;
     function DoFilter(tree:TVirtualStringTree;node:PVirtualNode;pattern:AnsiString):boolean;
+    procedure AsyncLoadParamsFromFile(Data: PtrInt);
+    procedure TEMenuPopUpClick(Sender: TObject);
+    procedure TEMenuPopUp(Sender: TObject);
     procedure LoadFromFileProc(Sender: TObject);
     procedure PurgeFilter(Sender: TObject);
     procedure RefreshTree(Sender: TObject);
@@ -131,6 +149,7 @@ type
 
     destructor Destroy; override;
 
+    procedure LoadAndSetParamsFromFile(Filename:string);
     procedure LoadParamsFromFile(Filename:string);
     procedure LoadParamsFromConfig(Config: TConfigStorage);
     procedure SaveParamsToFile(FileName:string);
@@ -160,6 +179,17 @@ begin
   BP.UseMainFunctions:=Config.GetValue('UseMainFunctions',false);
   BP.NodeNameFormat:=Config.GetValue('NodeNameFormat','');
   BP.TreeProperties:=Config.GetValue('TreeProperties','');
+end;
+
+procedure TNavigatorDevices.LoadAndSetParamsFromFile(Filename:string);
+begin
+  LoadParamsFromFile(FileName);
+  TreeEnabler.setup(BP.TreeBuildMap);
+  if assigned(EntityIncluder) then
+    FreeAndNil(EntityIncluder);
+  EntityIncluder:=ParserEntityPropFilter.GetTokens(BP.IncludeProperties);
+  SetTreeProp;
+  RefreshTree(nil);
 end;
 
 procedure TNavigatorDevices.LoadParamsFromFile(Filename:string);
@@ -537,8 +567,9 @@ begin
    TreeEnabler:=TStringPartEnabler.Create(self);
    TreeEnabler.EdgeBorders:=[{ebLeft,ebTop,ebRight,ebBottom}];
    TreeEnabler.AutoSize:=true;
-   TreeEnabler.actns:=[umf,nil,IncludeEnts,IncludeProps,TreeProps,Refresh,nil,LoadFromFile,SaveToFile];
+   TreeEnabler.actns:=[PEMenuSubMenu,PEMenuSeparator,umf,PEMenuSeparator,IncludeEnts,IncludeProps,TreeProps,Refresh,nil,LoadFromFile,SaveToFile];
 
+   TreeEnabler.OnMenuPopup:=TEMenuPopUp;
    TreeEnabler.OnPartChanged:=RefreshTree;
    TreeEnabler.GetCountFunc:=GetPartsCount;
    TreeEnabler.GetStateFunc:=GetPartState;
@@ -892,19 +923,79 @@ begin
   end;
 end;
 
+class function TCfgFileDeskCompare.c(a,b:TCfgFileDesk):boolean;
+begin
+  c:=a.FileName<b.FileName;
+end;
+
+procedure EnumerateCfgs(filename:String;pdata:pointer);
+var
+  fd:TCfgFileDesk;
+begin
+  fd.FilePath:=filename;
+  fd.FileName:=ChangeFileExt(ExtractFileName(filename),'');
+  TCfgFilesDesks(pdata).PushBack(fd);
+end;
+
+procedure TNavigatorDevices.AsyncLoadParamsFromFile(Data: PtrInt);
+var
+  FilePath:string;
+begin
+  PtrInt(FilePath):=Data;
+  LoadAndSetParamsFromFile(FilePath);
+end;
+
+procedure TNavigatorDevices.TEMenuPopUpClick(Sender: TObject);
+var
+  FilePath:string;
+begin
+  if (sender is TMenuItemWithFileDesk) then begin
+    FilePath:=(sender as TMenuItemWithFileDesk).FilePath;
+    Application.QueueAsyncCall(AsyncLoadParamsFromFile,PtrInt(@FilePath[1]));
+    Pointer(FilePath):=nil;
+  end;
+end;
+
+procedure TNavigatorDevices.TEMenuPopUp(Sender: TObject);
+var
+  presets:TMenuItem;
+  CfgFilesDesks:TCfgFilesDesks;
+  CfgFileDesk:TCfgFileDesk;
+  CreatedMenuItem:TMenuItemWithFileDesk;
+begin
+  if sender is TStringPartEnabler then
+    if assigned(TStringPartEnabler(sender).submenus) then
+      if TStringPartEnabler(sender).submenus.count>0 then begin
+        presets:=TStringPartEnabler(sender).submenus.Items[0];
+        presets.caption:='Presets';
+        presets.Clear;
+        CfgFilesDesks:=TCfgFilesDesks.Create;
+        FromDirsIterator(SysVar.PATH.Program_Run^,format(AllFilesWithExt,[FileExt]),'',EnumerateCfgs,nil,CfgFilesDesks);
+        if CfgFilesDesks.Size>0 then begin
+          if CfgFilesDesks.Size>1 then
+            TCfgFilesDesksSorter.Sort(CfgFilesDesks,CfgFilesDesks.Size-1);
+          presets.Enabled:=True;
+          for CfgFileDesk in CfgFilesDesks do begin
+            CreatedMenuItem:=TMenuItemWithFileDesk.Create(presets);
+            CreatedMenuItem.Caption:=CfgFileDesk.FileName;
+            CreatedMenuItem.FilePath:=CfgFileDesk.FilePath;
+            CreatedMenuItem.OnClick:=TEMenuPopUpClick;
+            presets.add(CreatedMenuItem);
+          end;
+        end else begin
+          presets.Enabled:=False;
+        end;
+        CfgFilesDesks.Free;
+  end;
+end;
+
 procedure TNavigatorDevices.LoadFromFileProc(Sender: TObject);
 var
   FileName,FileFilter:String;
 begin
   FileFilter:=format(rsNavigatorParamsFileFilter,[FileExt]);
   if OpenFileDialog(FileName,1,FileExt,FileFilter,'',rsOpenSomething) then begin
-    LoadParamsFromFile(FileName);
-    TreeEnabler.setup(BP.TreeBuildMap);
-    if assigned(EntityIncluder) then
-      FreeAndNil(EntityIncluder);
-    EntityIncluder:=ParserEntityPropFilter.GetTokens(BP.IncludeProperties);
-    SetTreeProp;
-    RefreshTree(nil);
+    LoadAndSetParamsFromFile(FileName);
   end;
 end;
 
@@ -956,9 +1047,6 @@ procedure TNavigatorDevices.VTOnContextMenu(Sender: TObject; MousePos: TPoint;
                              var Handled: Boolean);
 var
   pnode:PVirtualNode;
-  //pnd:PTNodeData;
-  //pc:gdbvertex;
-  //bb:TBoundingBox;
   PopupMenu:TPopupMenu;
 begin
   Handled:=true;

@@ -24,9 +24,14 @@ interface
 uses
   GraphType,LCLIntf,LCLType,
   Controls,Classes,Graphics,Buttons,ExtCtrls,ComCtrls,Forms,Themes,ActnList,Menus,
-  sysutils;
+  sysutils,Generics.Collections;
+
+const
+  PEMenuSeparator:Pointer=nil;
+  PEMenuSubMenu:Pointer=Pointer(1);
 
 type
+  TMenuItemList=specialize TObjectList<TMenuItem>;
   generic TPartEnabler<T>=class(TToolBar)
     type
       PT=^T;
@@ -38,20 +43,25 @@ type
     var
       fpvalue:PT;
       actns:array of taction;
+      submenus:TMenuItemList;
       fGetCountFunc:TGetCountFunc;
       fGetStateFunc:TGetStateFunc;
       fSetStateProc:TSetStateProc;
       fOnPartChanged:TNotifyEvent;
+      fOnMenuPopup:TNotifyEvent;
       fPartsEditFunc:TPartsEditFunc;
 
    public
       constructor Create(TheOwner: TComponent); override;
+      destructor Destroy; override;
       procedure setup(var value:T);
+      procedure createSubMenus;
       function DoGetCountFunc(const value:T):integer;
       function DoGetStateFunc(const value:T;const nmax,n:integer; out _name:string;out _enabled:boolean):boolean;
       procedure DoSetStateProc(var value:T;const n:integer;state:boolean);
       procedure DoButtonClick(Sender: TObject);
       procedure DoPartsEditor(Sender: TObject);
+      procedure DoMenuPopup(Sender: TObject);
       function ButtonIndex2PartIndex(index:integer):integer;
 
       property pvalue:PT read fpvalue write fpvalue;
@@ -60,9 +70,16 @@ type
       property GetStateFunc:TGetStateFunc read fGetStateFunc write fGetStateFunc;
       property SetStateProc:TSetStateProc read fSetStateProc write fSetStateProc;
       property OnPartChanged:TNotifyEvent read fOnPartChanged write fOnPartChanged;
+      property OnMenuPopup:TNotifyEvent read fOnMenuPopup write fOnMenuPopup;
   end;
 
 implementation
+procedure TPartEnabler.DoMenuPopup(Sender: TObject);
+begin
+  if assigned(fOnMenuPopup) then
+    fOnMenuPopup(self);
+end;
+
 generic function TPartEnabler<T>.DoGetCountFunc(const value:T):integer;
 begin
   if assigned(fGetCountFunc)then
@@ -94,6 +111,20 @@ begin
   EdgeBorders:=[];
   fPartsEditFunc:=nil;
 end;
+destructor TPartEnabler.Destroy;
+begin
+  inherited;
+  setlength(actns,0);
+  submenus.Free;
+end;
+
+procedure TPartEnabler.createSubMenus;
+begin
+  if not assigned(submenus) then begin
+    submenus:=TMenuItemList.Create;
+    submenus.OwnsObjects:=False;
+  end;
+end;
 
 generic procedure TPartEnabler<T>.setup(var value:T);
 var
@@ -107,6 +138,8 @@ begin
   fpvalue:=@value;
   for i:=ButtonCount-1 downto 0 do
     Buttons[i].free;
+  if assigned(submenus) then
+    submenus.clear;
   if assigned(fPartsEditFunc)then
   with TToolButton.create(self) do
   begin
@@ -114,14 +147,20 @@ begin
     ShowCaption:=false;
     if length(actns)>0 then begin
       _menu:=TPopupMenu.Create(self);
+      _menu.onPopup:=@DoMenuPopup;
       style:=tbsDropDown;
       for i:=0 to length(actns)-1 do begin
-        if actns[i]<>nil then begin
+        if actns[i]=TObject(PEMenuSeparator) then begin
+          _menu.items.AddSeparator;
+        end else if actns[i]=TObject(PEMenuSubMenu) then begin
+          CreatedMenuItem:=TMenuItem.Create(_menu);
+          createSubMenus;
+          submenus.Add(CreatedMenuItem);
+          _menu.items.add(CreatedMenuItem);
+        end else begin
           CreatedMenuItem:=TMenuItem.Create(_menu);
           CreatedMenuItem.Action:=actns[i];
           _menu.items.Add(CreatedMenuItem);
-        end else begin
-          _menu.items.AddSeparator;
         end;
       end;
     end;

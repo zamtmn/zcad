@@ -22,7 +22,7 @@ interface
 
 uses
   StdCtrls,Controls,Classes,LCLType,ComCtrls,Graphics,LMessages,LCLIntf,LCLProc,
-  Laz2_XMLCfg,Laz2_DOM,sysutils,EditBtn;
+  Laz2_XMLCfg,Laz2_DOM,sysutils,EditBtn,Masks;
 
 type
   TIsShortcutFunc=function(var Message: TLMKey): boolean of object;
@@ -43,6 +43,7 @@ type
     WithSelectionInFocus:Integer;
     ClassNameInFocus,
     ControlNameInFocus:string;
+    ControlNameMask,NotControlNameMask:string;
   end;
 
 procedure SetcomboItemsCount(cb:tcombobox;ItemsCount:integer);
@@ -164,6 +165,8 @@ begin
   ShortCutContextRec.WithSelectionInFocus:=getAttrValue(SubNode,'WithSelection',-1);
   ShortCutContextRec.ClassNameInFocus:=getAttrValue(SubNode,'ClassName','');
   ShortCutContextRec.ControlNameInFocus:=getAttrValue(SubNode,'ControlName','');
+  ShortCutContextRec.NotControlNameMask:=getAttrValue(SubNode,'NotControlNameMask','');
+  ShortCutContextRec.ControlNameMask:=getAttrValue(SubNode,'ControlNameMask','');
   case NodeMode of
     SCCCM_One:begin
                 case ShortCutContextRec.EditableInFocus of
@@ -190,7 +193,12 @@ begin
                   1:if ShortCutContext.WithSelectionInFocus then
                       exit(true);
                 end;
-                exit(false);
+                if ShortCutContextRec.NotControlNameMask<>'' then
+                  if not MatchesMask(ShortCutContext.ControlNameInFocus,ShortCutContextRec.NotControlNameMask) then
+                    exit(true);
+                if ShortCutContextRec.ControlNameMask<>'' then
+                  if MatchesMask(ShortCutContext.ControlNameInFocus,ShortCutContextRec.ControlNameMask) then
+                    exit(true);
               end;
     SCCCM_All:begin
               end;

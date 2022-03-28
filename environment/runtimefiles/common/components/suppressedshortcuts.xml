@@ -2,7 +2,7 @@
 <CONFIG>
   <SUPRESSEDSHORTCUTS>
     <DEFAULTCONTROLINFOCUS>
-      <!--Эта ветка работает когда в фокусе контрол поумолчанию - командная строка-->
+      <!--Эта ветка работает когда в фокусе контрол поумолчанию - командная строка или едит инспектора объектов-->
       <!--IFONE шорткат будет подавлен при выполнении хотябы одного условия-->
       <!--IFALL шорткат будет подавлен при выполнении всех условий (пока не реализвано)-->
       <!--Возможные условия:-->
@@ -13,6 +13,7 @@
                        <!--выше перечисленное может принимать значения '1'-true '0'-false-->
                        <!--ClassName - шаблон имени класса контрола (пока не реализвано)-->
                        <!--ControlName - шаблон имени контрола (пока не реализвано)-->
+                       <!--NotControlNameMask - шаблон имени контрола не совпадает с маской-->
       <IFONE ShortCut="INSERT" NotEmpty='1'/>
       <IFONE ShortCut="SPACE" NotEmpty='1'/>
       <IFONE ShortCut="HOME" NotEmpty='1'/>
@@ -22,13 +23,13 @@
       <IFONE ShortCut="UP" NotEmpty='1'/>
       <IFONE ShortCut="DOWN" NotEmpty='1'/>
       <IFONE ShortCut="DEL" NotEmpty='1'/>
-      <IFONE ShortCut="CTRL+INS" NotEmpty='1'/>
-      <IFONE ShortCut="SHIFT+INS" NotEmpty='1'/>
-      <IFONE ShortCut="CTRL+V" NotEmpty='1'/>
-      <IFONE ShortCut="SHIFT+C" NotEmpty='1'/>
-      <IFONE ShortCut="CTRL+X" NotEmpty='1'/>
-      <IFONE ShortCut="CTRL+Z" NotEmpty='1'/>
-      <IFONE ShortCut="SHIFT+CTRL+Z" NotEmpty='1'/>
+      <IFONE ShortCut="CTRL+INS" NotEmpty='1' NotControlNameMask='*commandline*'/>
+      <IFONE ShortCut="SHIFT+INS" NotEmpty='1' NotControlNameMask='*commandline*'/>
+      <IFONE ShortCut="CTRL+V" NotEmpty='1' NotControlNameMask='*commandline*'/>
+      <IFONE ShortCut="SHIFT+C" NotEmpty='1' NotControlNameMask='*commandline*'/>
+      <IFONE ShortCut="CTRL+X" NotEmpty='1' NotControlNameMask='*commandline*'/>
+      <IFONE ShortCut="CTRL+Z" NotEmpty='1' NotControlNameMask='*commandline*'/>
+      <IFONE ShortCut="SHIFT+CTRL+Z" NotEmpty='1' NotControlNameMask='*commandline*'/>
       <IFONE ShortCut="A" Editable='1'/>
       <IFONE ShortCut="B" Editable='1'/>
       <IFONE ShortCut="C" Editable='1'/>
@@ -62,10 +63,10 @@
       <IFONE ShortCut="SPACE" Editable='1'/>
       <IFONE ShortCut="HOME" Editable='1'/>
       <IFONE ShortCut="END" Editable='1'/>
-      <IFONE ShortCut="LEFT" Editable='1'/>
-      <IFONE ShortCut="RIGHT" Editable='1'/>
-      <IFONE ShortCut="UP" Editable='1'/>
-      <IFONE ShortCut="DOWN" Editable='1'/>
+      <IFONE ShortCut="LEFT" Editable='1' ControlNameMask='*navtree*'/>
+      <IFONE ShortCut="RIGHT" Editable='1' ControlNameMask='*navtree*'/>
+      <IFONE ShortCut="UP" Editable='1' ControlNameMask='*navtree*'/>
+      <IFONE ShortCut="DOWN" Editable='1' ControlNameMask='*navtree*'/>
       <IFONE ShortCut="DEL" Editable='1'/>
       <IFONE ShortCut="CTRL+INS" Editable='1' WithSelection='1'/>
       <IFONE ShortCut="SHIFT+INS" Editable='1'/>

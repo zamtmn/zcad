@@ -41,6 +41,8 @@ type
     EntitiesNodeStates:TNodesStates;
     NavMX,NavMy:integer;
   public
+    CurrentSel:TNodeData;
+    LastAutoselectedEnt:PGDBObjEntity;
     procedure CreateRoots;
     procedure EraseRoots;
     procedure FreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
@@ -70,11 +72,13 @@ var
   s:ansistring;
 begin
   pnd := Sender.GetNodeData(Node);
-  if assigned(pnd) then
-    if pnd^.pent<>nil then
-  begin
-   s:='SelectObjectByAddres('+inttostr(PtrUInt(pnd^.pent))+')';
-   commandmanager.executecommandsilent(@s[1],drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
+  if assigned(pnd) then begin
+    CurrentSel:=pnd^;
+    if (pnd^.pent<>nil)and(pnd^.pent<>LastAutoselectedEnt) then begin
+       LastAutoselectedEnt:=pnd^.pent;
+       s:='SelectObjectByAddres('+inttostr(PtrUInt(pnd^.pent))+')';
+       commandmanager.executecommandsilent(@s[1],drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
+    end;
   end;
 end;
 procedure TNavigatorEntities._onCreate(Sender: TObject);
@@ -244,7 +248,7 @@ procedure TNavigatorEntities.EraseRoots;
 begin
   if assigned(EntitiesNode) then
   begin
-    EntitiesNodeStates:=EntitiesNode.SaveState;
+    EntitiesNodeStates:=EntitiesNode.SaveState(CurrentSel);
     FreeAndNil(EntitiesNode);
   end;
 end;

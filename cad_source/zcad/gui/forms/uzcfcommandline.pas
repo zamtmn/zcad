@@ -264,6 +264,8 @@ begin
     sbutton.parent:=panel;
 
     cmdedit:=TComboBox.create(panel);
+    cmdedit.Name:='MainCommandLine';
+    cmdedit.Caption:='';
     cmdedit.Style:=csOwnerDrawEditableVariable;
     clist.init(200);
     p:=commandmanager.beginiterate(ir);

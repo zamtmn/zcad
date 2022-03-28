@@ -69,7 +69,7 @@ type
     function CreateEntityNode(Tree: TVirtualStringTree;basenode:PVirtualNode;pent:pGDBObjEntity;Name:string):PVirtualNode;virtual;
     procedure ConvertNameNodeToGroupNode(pnode:PVirtualNode);
     function FindGroupNodeBy(RootNode:PVirtualNode;criteria:string;func:TFindFunc):PVirtualNode;
-    function SaveState:TNodesStates;
+    function SaveState(var CurrentSel:TNodeData):TNodesStates;
     procedure RecursiveSaveState(Node:PVirtualNode;NodesStates:TNodesStates);
     procedure RestoreState(State:TNodesStates);
     procedure RecursiveRestoreState(Node:PVirtualNode;var StartInNodestates:integer;NodesStates:TNodesStates);
@@ -145,8 +145,8 @@ begin
   begin
     if vsExpanded in Node.states then
       NodesStates.OpenedNodes.PushBack(pnd^);
-    if Tree.Selected[Node]then
-      NodesStates.SelectedNode:=pnd^;
+    {if Tree.Selected[Node]then
+      NodesStates.SelectedNode:=pnd^;}
   end;
   child:=Node^.FirstChild;
   while child<>nil do
@@ -155,9 +155,10 @@ begin
    child:=child^.NextSibling;
   end;
 end;
-function TBaseRootNodeDesk.SaveState:TNodesStates;
+function TBaseRootNodeDesk.SaveState(var CurrentSel:TNodeData):TNodesStates;
 begin
   result:=TNodesStates.create;
+  result.SelectedNode:=CurrentSel;
   RecursiveSaveState(RootNode,result);
 end;
 function findin(pnd:PTNodeData;var StartInNodestates:integer;NodesStates:TNodesStates):boolean;
@@ -190,10 +191,14 @@ begin
   begin
     if findin(pnd,StartInNodestates,NodesStates) then
       Tree.Expanded[Node]:=true;
-    if (pnd.pent=NodesStates.SelectedNode.pent)
+    if {(NodesStates.SelectedNode.pent<>nil)
+    and}(pnd.pent=NodesStates.SelectedNode.pent)
     and(pnd.name=NodesStates.SelectedNode.name)
     and(pnd.id=NodesStates.SelectedNode.id) then
-      Tree.AddToSelection(Node);
+    begin
+      Tree.FocusedNode:=Node;
+      //Tree.AddToSelection(Node);
+    end;
   end;
   if StartInNodestates=NodesStates.OpenedNodes.Size then
                                                         exit;

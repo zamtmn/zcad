@@ -18,7 +18,7 @@ uses
   uzelongprocesssupport,uzeentitiestypefilter,uzcuitypes,
   uzeparserenttypefilter,uzeparserentpropfilter,uzeparsernavparam,uzclog,uzcuidialogs,
   XMLConf,XMLPropStorage, EditBtn,LazConfigStorage,uzcdialogsfiles,
-  Masks,gvector,garrayutils;
+  Masks,gvector,garrayutils,LCLType;
 
 resourcestring
   rsStandaloneDevices='Standalone devices';
@@ -90,6 +90,7 @@ type
     procedure EditIncludeProperties(Sender: TObject);
     procedure EditTreeProperties(Sender: TObject);
     procedure AutoRefreshTree(sender:TObject;GUIAction:TZMessageID);
+    procedure AutoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure SaveToFileProc(Sender: TObject);
     procedure TVDblClick(Sender: TObject);
     procedure TVOnMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
@@ -125,6 +126,8 @@ type
     EntityIncluder:ParserEntityPropFilter.TGeneralParsedText;
 
   public
+    CurrentSel:TNodeData;
+    LastAutoselectedEnt:PGDBObjEntity;
     BP:TBuildParam;
     ExtTreeParam:TExtTreeParam;
     FileExt:String;
@@ -138,6 +141,8 @@ type
     procedure FreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure SetTreeProp;
     procedure VTFocuschanged(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex);
+
+    procedure AsyncRunCommand(Data: PtrInt);
 
     function EntsFilter(pent:pGDBObjEntity):Boolean;virtual;
     function TraceEntity(rootdesk:TBaseRootNodeDesk;pent:pGDBObjEntity;out name:string):PVirtualNode;virtual;
@@ -161,7 +166,6 @@ var
   NavigatorDevices: TNavigatorDevices;
   NavGroupIconIndex,NavAutoGroupIconIndex:integer;
   NDMsgCtx:TMessagesContext=nil;
-
 
   UseMainFunction:Boolean=false;
   //DevicesTreeBuildMap:string='+NMO_Prefix|+NMO_BaseName|+@@[NMO_Name]';
@@ -462,18 +466,37 @@ begin
   end;
 end;
 
+procedure TNavigatorDevices.AsyncRunCommand(Data: PtrInt);
+var
+  s:string;
+begin
+    PtrInt(s):=Data;
+    commandmanager.executecommandsilent(@s[1],drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
+end;
+
 procedure TNavigatorDevices.VTFocuschanged(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex);
 var
   pnd:PTNodeData;
-  s:ansistring;
+  s:string;
 begin
   pnd := Sender.GetNodeData(Node);
-  if assigned(pnd) then
+  if assigned(pnd) then begin
     if pnd^.pent<>nil then
-  begin
-   s:='SelectObjectByAddres('+inttostr(PtrUInt(pnd^.pent))+')';
-   commandmanager.executecommandsilent(@s[1],drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
-  end;
+      begin
+       CurrentSel:=pnd^;
+       if LastAutoselectedEnt<>pnd^.pent then begin
+         s:='SelectObjectByAddres('+inttostr(PtrUInt(pnd^.pent))+')';
+         //commandmanager.executecommandsilent(@s[1],drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
+         Application.QueueAsyncCall(AsyncRunCommand,PtrInt(@s[1]));
+         pointer(s):=nil;
+         LastAutoselectedEnt:=pnd^.pent;
+       end else begin
+         //if not LastAutoselectedEnt^.Selected then
+         //  LastAutoselectedEnt:=nil;
+       end;
+      end else
+        CurrentSel.pent:=nil;
+  end
 end;
 function TNavigatorDevices.GetPartsCount(const parts:string):integer;
 begin
@@ -615,6 +638,7 @@ begin
    NavTree.EndUpdate;
 
    ZCMsgCallBackInterface.RegisterHandler_GUIAction(AutoRefreshTree);
+   ZCMsgCallBackInterface.RegisterHandler_KeyDown(AutoKeyDown);
 end;
 procedure TNavigatorDevices.AfterCellPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode;
     Column: TColumnIndex; const CellRect: TRect);
@@ -909,18 +933,29 @@ begin
       if (pGDBObjEntity(sender_wa.param.SelDesc.LastSelectedObject)^.GetObjType=GDBDeviceID)and(assigned(Ent2NodeMap)) then begin
         if Ent2NodeMap.TryGetValue(sender_wa.param.SelDesc.LastSelectedObject,devnode) then begin
           NavTree.Selected[devnode]:=true;
+          NavTree.FocusedNode:=devnode;
           NavTree.VisiblePath[devnode]:=true;
           NavTree.ScrollIntoView(devnode,false);
         end;
-      end;
+      end
     end else begin
+      LastAutoselectedEnt:=nil;
+      CurrentSel.pent:=nil;
       NavTree.ClearSelection;
       if assigned (StandaloneNodeStates) then
         FreeAndNil(StandaloneNodeStates);
       if assigned (StandaloneNode) then
-      StandaloneNodeStates:=StandaloneNode.SaveState;
+      StandaloneNodeStates:=StandaloneNode.SaveState(CurrentSel);
     end;
   end;
+end;
+procedure TNavigatorDevices.AutoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  if key=VK_ESCAPE then
+    begin
+      LastAutoselectedEnt:=nil;
+      CurrentSel.pent:=nil;
+    end;
 end;
 
 class function TCfgFileDeskCompare.c(a,b:TCfgFileDesk):boolean;
@@ -1202,14 +1237,14 @@ procedure TNavigatorDevices.EraseRoots;
 begin
   if assigned(CombinedNode) then
   begin
-    CombinedNodeStates:=CombinedNode.SaveState;
+    CombinedNodeStates:=CombinedNode.SaveState(CurrentSel);
     FreeAndNil(CombinedNode);
   end;
   if assigned(StandaloneNode) then
   begin
     if Assigned(StandaloneNodeStates)then
       FreeAndNil(StandaloneNodeStates);
-    StandaloneNodeStates:=StandaloneNode.SaveState;
+    StandaloneNodeStates:=StandaloneNode.SaveState(CurrentSel);
     FreeAndNil(StandaloneNode);
   end;
   if assigned(Ent2NodeMap) then

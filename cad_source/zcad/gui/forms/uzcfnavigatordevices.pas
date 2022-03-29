@@ -30,6 +30,7 @@ const
   IncludeEntitiesSaveVarSuffix='_IncludeEntities';
   IncludePropertiesSaveVarSuffix='_IncludeProperties';
   TreePropertiesSaveVarSuffix='_TreeProperties';
+  TreeCreateRootNode='_TreeProperties';
 
 type
   TCfgFileDesk=record
@@ -57,6 +58,7 @@ type
     TreeProperties:ansistring;
     UseMainFunctions:Boolean;
     NodeNameFormat:ansistring;
+    CreateRootNode:Boolean;
   end;
   TStringPartEnabler=TPartEnabler<String>;
   TEnt2NodeMap=TDictionary<pGDBObjEntity,PVirtualNode>;
@@ -112,7 +114,7 @@ type
     procedure MeasureTextWidth(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode;
     Column: TColumnIndex; const CellText: String; var Extent: Integer);
   private
-    CombinedNode:TBaseRootNodeDesk;//удаляем ее, ненужно!!!
+    //CombinedNode:TBaseRootNodeDesk;//удаляем ее, ненужно!!!
     CombinedNodeStates:TNodesStates;
     StandaloneNode:TBaseRootNodeDesk;
     StandaloneNodeStates:TNodesStates;
@@ -181,6 +183,7 @@ begin
   BP.IncludeProperties:=Config.GetValue('IncludeProperties','');
   BP.TreeProperties:=Config.GetValue('TreeProperties','');
   BP.UseMainFunctions:=Config.GetValue('UseMainFunctions',false);
+  BP.CreateRootNode:=Config.GetValue('CreateRootNode',false);
   BP.NodeNameFormat:=Config.GetValue('NodeNameFormat','');
   BP.TreeProperties:=Config.GetValue('TreeProperties','');
 end;
@@ -222,6 +225,7 @@ begin
   Config.SetDeleteValue('IncludeProperties',BP.IncludeProperties,'');
   Config.SetDeleteValue('TreeProperties',BP.TreeProperties,'');
   Config.SetDeleteValue('UseMainFunctions',BP.UseMainFunctions,false);
+  Config.SetDeleteValue('CreateRootNode',BP.CreateRootNode,false);
   Config.SetDeleteValue('NodeNameFormat',BP.NodeNameFormat,'');
   Config.SetDeleteValue('TreeProperties',BP.TreeProperties,'');
 end;
@@ -875,16 +879,18 @@ procedure TNavigatorDevices.PostProcessTree;
     CurrentParent:PVirtualNode;
     pnd:PTNodeData;
   begin
-    CurrentParent:=Leaf.Parent;
-    while CurrentParent<>NavTree.RootNode do
-    begin
-      pnd:=NavTree.GetNodeData(CurrentParent);
-      if pnd<>nil then begin
-        inc(pnd^.ppp.subLeafCounter);
-        if MainFunction then
-          inc(pnd^.ppp.subLeafCounterWithMainFubction);
+    if Leaf<>NavTree.RootNode then begin
+      CurrentParent:=Leaf.Parent;
+      while CurrentParent<>NavTree.RootNode do
+      begin
+        pnd:=NavTree.GetNodeData(CurrentParent);
+        if pnd<>nil then begin
+          inc(pnd^.ppp.subLeafCounter);
+          if MainFunction then
+            inc(pnd^.ppp.subLeafCounterWithMainFubction);
+        end;
+        CurrentParent:=CurrentParent.Parent;
       end;
-      CurrentParent:=CurrentParent.Parent;
     end;
   end;
 
@@ -1172,9 +1178,9 @@ begin
   end;
 
   SetDefaultImagesIndex;
-     if (assigned(CombinedNode))and(node=CombinedNode.RootNode) then
+     {if (assigned(CombinedNode))and(node=CombinedNode.RootNode) then
                                        ImageIndex:=CombinedNode.ficonindex
-else if (assigned(StandaloneNode))and(node=StandaloneNode.RootNode) then
+else} if (assigned(StandaloneNode))and(node=StandaloneNode.RootNode) then
                                        ImageIndex:=StandaloneNode.ficonindex
 else
   begin
@@ -1235,11 +1241,11 @@ end;
 
 procedure TNavigatorDevices.EraseRoots;
 begin
-  if assigned(CombinedNode) then
+  {if assigned(CombinedNode) then
   begin
     CombinedNodeStates:=CombinedNode.SaveState(CurrentSel);
     FreeAndNil(CombinedNode);
-  end;
+  end;}
   if assigned(StandaloneNode) then
   begin
     if Assigned(StandaloneNodeStates)then

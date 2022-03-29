@@ -62,7 +62,7 @@ type
     ficonindex:integer;
     function FindById(pnd:Pointer; Criteria:string):boolean;
     function FindByName(pnd:Pointer; Criteria:string):boolean;
-    constructor Create(AOwner:TComponent; ATree: TVirtualStringTree; AName:string);overload;
+    constructor Create(AOwner:TComponent; ATree: TVirtualStringTree; AName:string; CreateRootNode:Boolean=False);overload;
     destructor Destroy;override;
     function find(BaseName:string;basenode:PVirtualNode):PVirtualNode;
     procedure ProcessEntity(CreateEntityNode:TCreateEntityNodeFunc;pent:pGDBObjEntity;filterproc:TFilterEntityProc;traceproc:TTraceEntityProc);
@@ -319,13 +319,16 @@ begin
   end;
 end;
 
-constructor TBaseRootNodeDesk.create(AOwner:TComponent; ATree: TVirtualStringTree; AName:string);
+constructor TBaseRootNodeDesk.create(AOwner:TComponent; ATree: TVirtualStringTree; AName:string; CreateRootNode:Boolean=False);
 var
    pnd:PTNodeData;
 begin
    inherited create(AOwner);
    Tree:=ATree;
-   RootNode:=ATree.AddChild(nil,nil);
+   if CreateRootNode then
+     RootNode:=ATree.AddChild(nil,nil)
+   else
+     RootNode:=ATree.RootNode;
    pnd := Tree.GetNodeData(RootNode);
    if Assigned(pnd) then
    begin
@@ -335,8 +338,12 @@ begin
 end;
 destructor TBaseRootNodeDesk.Destroy;
 begin
-   tree.DeleteNode(RootNode);
-   RootNode:=nil;
+  if RootNode=Tree.RootNode then
+    tree.Clear
+  else begin
+    tree.DeleteNode(RootNode);
+    RootNode:=nil;
+  end;
    inherited;
 end;
 

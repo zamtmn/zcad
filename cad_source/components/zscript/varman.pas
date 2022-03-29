@@ -264,6 +264,7 @@ procedure StoreBoundsToSavedUnit(name:string;tr:Trect);
 procedure SetTypedDataVariable(out TypedTataVariable:THardTypedData;pTypedTata:pointer;TypeName:string);
 function GetIntegerFromSavedUnit(name,suffix:string;def,min,max:integer):integer;
 function GetAnsiStringFromSavedUnit(name,suffix:ansistring;def:ansistring):ansistring;
+function GetBooleanFromSavedUnit(name,suffix:ansistring;def:Boolean):Boolean;
 procedure StoreIntegerToSavedUnit(name,suffix:string;value:integer);
 procedure StoreAnsiStringToSavedUnit(name,suffix:string;value:string);
 implementation
@@ -320,6 +321,21 @@ begin
     pstr:=pvd.data.Addr.Instance;
     if assigned(pstr)then begin
       result:=pstr^;
+    end else
+      result:=def;
+  end else
+    result:=def;
+end;
+function GetBooleanFromSavedUnit(name,suffix:ansistring;def:Boolean):Boolean;
+var
+  pvd:pvardesk;
+  pbool:PBoolean;
+begin
+  pvd:=SavedUnit.FindValue(name+suffix);
+  if assigned(pvd) then begin
+    pbool:=pvd.data.Addr.Instance;
+    if assigned(pbool)then begin
+      result:=pbool^;
     end else
       result:=def;
   end else

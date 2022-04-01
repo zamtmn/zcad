@@ -180,7 +180,7 @@ begin
   if (Context.pnode<>nil)and(Context.tree<>nil) then begin
     pnd:=Context.tree.GetNodeData(Context.pnode);
     if pnd<>Nil then
-      if pnd^.pent<>nil  then
+      if pnd^.Ident.pent<>nil  then
         exit(true);
   end;
   result:=false;
@@ -194,8 +194,8 @@ begin
     if (PTNavigatorDevicesContext(data).pnode<>nil)and(PTNavigatorDevicesContext(data).tree<>nil) then begin
       pnd:=PTNavigatorDevicesContext(data).tree.GetNodeData(PTNavigatorDevicesContext(data).pnode);
       if pnd<>Nil then
-        if pnd^.pent<>nil  then
-          exit('$'+inttohex(ptruint(pnd^.pent),8));
+        if pnd^.Ident.pent<>nil  then
+          exit('$'+inttohex(ptruint(pnd^.Ident.pent),8));
     end;
   end;
     Abort:=true;

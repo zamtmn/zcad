@@ -188,7 +188,8 @@ begin
     else
       MatchInChildren:=false;
     if MatchInChildren then
-      node.States:=node.States+[vsExpanded];
+      Tree.Expanded[Node]:=true;
+      //node.States:=node.States+[vsExpanded];
     if pattern='' then
       node.States:=node.States-[vsFiltered]
     else begin

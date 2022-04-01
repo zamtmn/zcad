@@ -18,7 +18,7 @@ uses
   uzelongprocesssupport,uzeentitiestypefilter,uzcuitypes,
   uzeparserenttypefilter,uzeparserentpropfilter,uzeparsernavparam,uzclog,uzcuidialogs,
   XMLConf,XMLPropStorage, EditBtn,LazConfigStorage,uzcdialogsfiles,
-  Masks,gvector,garrayutils,LCLType;
+  Masks,gvector,garrayutils,LCLType,LCLIntf;
 
 resourcestring
   rsStandaloneDevices='Standalone devices';
@@ -485,21 +485,21 @@ var
 begin
   pnd := Sender.GetNodeData(Node);
   if assigned(pnd) then begin
-    if pnd^.pent<>nil then
+    if pnd^.Ident.pent<>nil then
       begin
        CurrentSel:=pnd^;
-       if LastAutoselectedEnt<>pnd^.pent then begin
-         s:='SelectObjectByAddres('+inttostr(PtrUInt(pnd^.pent))+')';
+       if LastAutoselectedEnt<>pnd^.Ident.pent then begin
+         s:='SelectObjectByAddres('+inttostr(PtrUInt(pnd^.Ident.pent))+')';
          //commandmanager.executecommandsilent(@s[1],drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
          Application.QueueAsyncCall(AsyncRunCommand,PtrInt(@s[1]));
          pointer(s):=nil;
-         LastAutoselectedEnt:=pnd^.pent;
+         LastAutoselectedEnt:=pnd^.Ident.pent;
        end else begin
          //if not LastAutoselectedEnt^.Selected then
          //  LastAutoselectedEnt:=nil;
        end;
       end else
-        CurrentSel.pent:=nil;
+        CurrentSel.Ident.pent:=nil;
   end
 end;
 function TNavigatorDevices.GetPartsCount(const parts:string):integer;
@@ -625,8 +625,9 @@ begin
    MainFunctionIconIndex:=-1;
    BuggyIconIndex:=-1;
 
+   bp.NodeNameFormat:='%0:s(%1:d,%2:d)';
    //bp.NodeNameFormat:='%0:s(%1:d,%2:d,%3:d)';
-   BP.NodeNameFormat:='%0:s';
+   //BP.NodeNameFormat:='%0:s';
 
    SetTreeProp;
 
@@ -654,9 +655,9 @@ begin
   if Column>0 then exit;
   pnd:=Sender.GetNodeData(Node);
   if pnd<>nil then
-  if pnd^.pent<>nil then
+  if pnd^.Ident.pent<>nil then
   begin
-    pentvarext:=pnd^.pent^.GetExtension<TVariablesExtender>;
+    pentvarext:=pnd^.Ident.pent^.GetExtension<TVariablesExtender>;
     if pentvarext<>nil then begin
 
     SetDefaultImagesIndex;
@@ -665,9 +666,9 @@ begin
       myContentRect:=CellRect;
       myContentRect.Left:=SaveCellRectLeft;
 
-      ImagesManager.IconList.Draw(TargetCanvas,myContentRect.Left,(myContentRect.Bottom-ImagesManager.IconList.Width) div 2,ImagesManager.GetImageIndex(GetEntityVariableValue(pnd^.pent,'ENTID_Function','bug'),BuggyIconIndex),gdeNormal);
+      ImagesManager.IconList.Draw(TargetCanvas,myContentRect.Left,(myContentRect.Bottom-ImagesManager.IconList.Width) div 2,ImagesManager.GetImageIndex(GetEntityVariableValue(pnd^.Ident.pent,'ENTID_Function','bug'),BuggyIconIndex),gdeNormal);
       myContentRect.Left:=myContentRect.Left+ImagesManager.IconList.Width;
-      ImagesManager.IconList.Draw(TargetCanvas,myContentRect.Left,(myContentRect.Bottom-ImagesManager.IconList.Width) div 2,ImagesManager.GetImageIndex(GetEntityVariableValue(pnd^.pent,'ENTID_Representation','bug'),BuggyIconIndex),gdeNormal);
+      ImagesManager.IconList.Draw(TargetCanvas,myContentRect.Left,(myContentRect.Bottom-ImagesManager.IconList.Width) div 2,ImagesManager.GetImageIndex(GetEntityVariableValue(pnd^.Ident.pent,'ENTID_Representation','bug'),BuggyIconIndex),gdeNormal);
       myContentRect.Left:=myContentRect.Left+ImagesManager.IconList.Width;
     //end;
     end;
@@ -682,9 +683,9 @@ var
 begin
   pnd:=Sender.GetNodeData(Node);
   if pnd<>nil then
-  if pnd^.pent<>nil then
+  if pnd^.Ident.pent<>nil then
   begin
-    pentvarext:=pnd^.pent^.GetExtension<TVariablesExtender>;
+    pentvarext:=pnd^.Ident.pent^.GetExtension<TVariablesExtender>;
     if pentvarext<>nil then begin
       SaveCellRectLeft:=CellRect.Left;
       myCellRect:=CellRect;
@@ -706,9 +707,9 @@ var
 begin
   pnd:=Sender.GetNodeData(Node);
   if pnd<>nil then
-  if pnd^.pent<>nil then
+  if pnd^.Ident.pent<>nil then
   begin
-    pentvarext:=pnd^.pent^.GetExtension<TVariablesExtender>;
+    pentvarext:=pnd^.Ident.pent^.GetExtension<TVariablesExtender>;
     if pentvarext<>nil then
       Extent:=Extent+2*ImagesManager.IconList.Width;
   end;
@@ -756,6 +757,7 @@ var
   MatchInChildren:boolean;
 begin
   result:=false;
+  exit;
   repeat
     SubNode := node.FirstChild;
     if assigned(SubNode) then
@@ -763,7 +765,8 @@ begin
     else
       MatchInChildren:=false;
     if MatchInChildren then
-      node.States:=node.States+[vsExpanded];
+      Tree.Expanded[Node]:=true;
+      //node.States:=node.States+[vsExpanded];
     if pattern='' then
       node.States:=node.States-[vsFiltered]
     else begin
@@ -822,6 +825,7 @@ var
   lpsh:TLPSHandle;
   //dr:TZCMsgDialogResult;
   HaveErrors:boolean;
+  NScrollInfo:TScrollInfo;
 begin
    if not isvisible then exit;
    HaveErrors:=false;
@@ -864,6 +868,7 @@ begin
    if assigned(StandaloneNodeStates) then
    begin
      StandaloneNode.RestoreState(StandaloneNodeStates);
+     NavTree.OffsetXY:=StandaloneNodeStates.SaveOffset;
      FreeAndNil(StandaloneNodeStates);
    end;
    PostProcessTree;
@@ -906,8 +911,8 @@ procedure TNavigatorDevices.PostProcessTree;
     if child=nil then begin
       mf:=false;
       if pnd<>nil then
-        if pnd^.pent<>nil then begin
-         entvarext:=pnd^.pent^.GetExtension<TVariablesExtender>;
+        if pnd^.Ident.pent<>nil then begin
+         entvarext:=pnd^.Ident.pent^.GetExtension<TVariablesExtender>;
          if entvarext<>nil then
            mf:=entvarext.isMainFunction;
         end;
@@ -946,7 +951,7 @@ begin
       end
     end else begin
       LastAutoselectedEnt:=nil;
-      CurrentSel.pent:=nil;
+      CurrentSel.Ident.pent:=nil;
       NavTree.ClearSelection;
       if assigned (StandaloneNodeStates) then
         FreeAndNil(StandaloneNodeStates);
@@ -960,7 +965,7 @@ begin
   if key=VK_ESCAPE then
     begin
       LastAutoselectedEnt:=nil;
-      CurrentSel.pent:=nil;
+      CurrentSel.Ident.pent:=nil;
     end;
 end;
 
@@ -1068,11 +1073,11 @@ begin
   begin
     pnd:=NavTree.GetNodeData(pnode);
     if pnd<>nil then
-    if pnd^.pent<>nil then
+    if pnd^.Ident.pent<>nil then
     begin
-      pc:=Vertexmorph(pnd^.pent^.vp.BoundingBox.LBN,pnd^.pent^.vp.BoundingBox.RTF,0.5);
-      bb.LBN:=VertexAdd(pc,VertexMulOnSc(VertexSub(pc,pnd^.pent^.vp.BoundingBox.LBN),scale));
-      bb.RTF:=VertexAdd(pc,VertexMulOnSc(VertexSub(pc,pnd^.pent^.vp.BoundingBox.RTF),scale));
+      pc:=Vertexmorph(pnd^.Ident.pent^.vp.BoundingBox.LBN,pnd^.Ident.pent^.vp.BoundingBox.RTF,0.5);
+      bb.LBN:=VertexAdd(pc,VertexMulOnSc(VertexSub(pc,pnd^.Ident.pent^.vp.BoundingBox.LBN),scale));
+      bb.RTF:=VertexAdd(pc,VertexMulOnSc(VertexSub(pc,pnd^.Ident.pent^.vp.BoundingBox.RTF),scale));
       drawings.GetCurrentDWG.wa.ZoomToVolume(bb);
     end;
   end;
@@ -1142,16 +1147,16 @@ begin
   if assigned(pnd) then
   begin
     //celltext:=pnd^.name;
-  if pnd^.pent=nil then begin
+  if pnd^.Ident.pent=nil then begin
     if Column=0 then begin
       if pnd^.ppp.subLeafCounter>0 then
-        celltext:=format(BP.NodeNameFormat,[pnd^.name,pnd^.ppp.subNodesCounter,pnd^.ppp.subLeafCounterWithMainFubction,pnd^.ppp.subLeafCounter])
+        celltext:=format(BP.NodeNameFormat,[pnd^.Ident.name,pnd^.ppp.subNodesCounter,pnd^.ppp.subLeafCounterWithMainFubction,pnd^.ppp.subLeafCounter])
       else
-        celltext:=pnd^.name;
+        celltext:=pnd^.Ident.name;
     end else
       celltext:='';
   end else
-    celltext:=textformat(ExtTreeParam.ExtColumnsParams[Column].Pattern,pnd^.pent);//GetEntityVariableValue(pnd^.pent,'NMO_Name',rsNameAbsent);
+    celltext:=textformat(ExtTreeParam.ExtColumnsParams[Column].Pattern,pnd^.Ident.pent);//GetEntityVariableValue(pnd^.pent,'NMO_Name',rsNameAbsent);
   end;
 end;
 procedure TNavigatorDevices.SetDefaultImagesIndex;
@@ -1191,9 +1196,9 @@ else
           TNMGroup:ImageIndex:=NavGroupIconIndex;
           TNMAutoGroup:ImageIndex:=NavAutoGroupIconIndex;
           TNMData,TNMHardGroup:begin
-                    if pnd^.pent<>nil then
+                    if pnd^.Ident.pent<>nil then
                                           begin
-                                           pentvarext:=pnd^.pent^.GetExtension<TVariablesExtender>;
+                                           pentvarext:=pnd^.Ident.pent^.GetExtension<TVariablesExtender>;
                                            if pentvarext<>nil then
                                            begin
                                              if pentvarext.isMainFunction then
@@ -1251,6 +1256,7 @@ begin
     if Assigned(StandaloneNodeStates)then
       FreeAndNil(StandaloneNodeStates);
     StandaloneNodeStates:=StandaloneNode.SaveState(CurrentSel);
+    StandaloneNodeStates.SaveOffset:=NavTree.OffsetXY;
     FreeAndNil(StandaloneNode);
   end;
   if assigned(Ent2NodeMap) then
@@ -1272,8 +1278,8 @@ begin
       SelectSubNodes(nav,psubnode);
       pnd:=nav.GetNodeData(psubnode);
       if pnd<>nil then
-        if ((pnd.NodeMode=TNMData)or(pnd.NodeMode=TNMHardGroup))and(pnd^.pent<>nil) then
-          zcSelectEntity(pnd^.pent);
+        if ((pnd.NodeMode=TNMData)or(pnd.NodeMode=TNMHardGroup))and(pnd^.Ident.pent<>nil) then
+          zcSelectEntity(pnd^.Ident.pent);
       psubnode:=psubnode^.NextSibling;
     end;
   end;

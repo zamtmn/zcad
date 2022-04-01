@@ -74,9 +74,9 @@ begin
   pnd := Sender.GetNodeData(Node);
   if assigned(pnd) then begin
     CurrentSel:=pnd^;
-    if (pnd^.pent<>nil)and(pnd^.pent<>LastAutoselectedEnt) then begin
-       LastAutoselectedEnt:=pnd^.pent;
-       s:='SelectObjectByAddres('+inttostr(PtrUInt(pnd^.pent))+')';
+    if (pnd^.Ident.pent<>nil)and(pnd^.Ident.pent<>LastAutoselectedEnt) then begin
+       LastAutoselectedEnt:=pnd^.Ident.pent;
+       s:='SelectObjectByAddres('+inttostr(PtrUInt(pnd^.Ident.pent))+')';
        commandmanager.executecommandsilent(@s[1],drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
     end;
   end;
@@ -146,11 +146,11 @@ begin
   begin
     pnd:=NavTree.GetNodeData(pnode);
     if pnd<>nil then
-    if pnd^.pent<>nil then
+    if pnd^.Ident.pent<>nil then
     begin
-      pc:=Vertexmorph(pnd^.pent^.vp.BoundingBox.LBN,pnd^.pent^.vp.BoundingBox.RTF,0.5);
-      bb.LBN:=VertexAdd(pc,VertexMulOnSc(VertexSub(pc,pnd^.pent^.vp.BoundingBox.LBN),scale));
-      bb.RTF:=VertexAdd(pc,VertexMulOnSc(VertexSub(pc,pnd^.pent^.vp.BoundingBox.RTF),scale));
+      pc:=Vertexmorph(pnd^.Ident.pent^.vp.BoundingBox.LBN,pnd^.Ident.pent^.vp.BoundingBox.RTF,0.5);
+      bb.LBN:=VertexAdd(pc,VertexMulOnSc(VertexSub(pc,pnd^.Ident.pent^.vp.BoundingBox.LBN),scale));
+      bb.RTF:=VertexAdd(pc,VertexMulOnSc(VertexSub(pc,pnd^.Ident.pent^.vp.BoundingBox.RTF),scale));
       drawings.GetCurrentDWG.wa.ZoomToVolume(bb);
     end;
   end;
@@ -198,7 +198,7 @@ var
   pnd:PTNodeData;
 begin
   pnd := Sender.GetNodeData(Node);
-  celltext:=pnd^.name
+  celltext:=pnd^.Ident.name
 end;
 procedure TNavigatorEntities.NavGetImage(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
                                  var Ghosted: Boolean; var ImageIndex: Integer);
@@ -221,9 +221,9 @@ else
           TNMGroup:ImageIndex:=NavGroupIconIndex;
           TNMAutoGroup:ImageIndex:=NavAutoGroupIconIndex;
           TNMData:begin
-                    if pnd^.pent<>nil then
+                    if pnd^.Ident.pent<>nil then
                                           begin
-                                           ImageIndex:=ImagesManager.GetImageIndex(GetEntityVariableValue(pnd^.pent,'ENTID_Representation','bug'));
+                                           ImageIndex:=ImagesManager.GetImageIndex(GetEntityVariableValue(pnd^.Ident.pent,'ENTID_Representation','bug'));
                                           end
                     else
                       ImageIndex:=3;

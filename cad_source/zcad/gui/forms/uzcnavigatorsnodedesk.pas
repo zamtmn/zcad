@@ -10,7 +10,7 @@ uses
   uzegeometry, uzccommandsmanager,
   uzcinterface, uzeentity, uzcimagesmanager,
   uzcenitiesvariablesextender, varmandef, uzbstrproc, uzcmainwindow, uzctreenode,
-  Varman, uzcoimultiproperties;
+  Varman, uzcoimultiproperties,LCLType;
 
 type
 
@@ -36,19 +36,23 @@ type
     subLeafCounterWithMainFubction:Integer;
   end;
 
+  TNodeIdent=record
+    name,id:string;
+    pent:PGDBObjEntity;
+  end;
   PTNodeData=^TNodeData;
   TNodeData=record
     NodeMode:TNodeMode;
-    name,id:string;
-    pent:PGDBObjEntity;
+    Ident:TNodeIdent;
     ppp:TNodePastProcessParam;
   end;
 
-  TNodesStatesVector=tvector<TNodeData>;
+  TNodesStatesVector=tvector<TNodeIdent>;
 
   TNodesStates=class
     OpenedNodes:TNodesStatesVector;
     SelectedNode:TNodeData;
+    SaveOffset:TPoint;
     constructor Create;
     destructor Destroy;override;
   end;
@@ -70,7 +74,7 @@ type
     procedure ConvertNameNodeToGroupNode(pnode:PVirtualNode);
     function FindGroupNodeBy(RootNode:PVirtualNode;criteria:string;func:TFindFunc):PVirtualNode;
     function SaveState(var CurrentSel:TNodeData):TNodesStates;
-    procedure RecursiveSaveState(Node:PVirtualNode;NodesStates:TNodesStates);
+    procedure RecursiveSaveState(var Node:PVirtualNode;NodesStates:TNodesStates);
     procedure RestoreState(State:TNodesStates);
     procedure RecursiveRestoreState(Node:PVirtualNode;var StartInNodestates:integer;NodesStates:TNodesStates);
     function DefaultTraceEntity(rootdesk:TBaseRootNodeDesk;pent:pGDBObjEntity;out name:string):PVirtualNode;virtual;
@@ -111,14 +115,14 @@ end;
 function TBaseRootNodeDesk.FindById(pnd:Pointer; Criteria:string):boolean;
 begin
   if PTNodeData(pnd)^.NodeMode<>TNMHardGroup then
-    result:=PTNodeData(pnd)^.id=Criteria
+    result:=PTNodeData(pnd)^.Ident.id=Criteria
   else
     result:=false;
 end;
 function TBaseRootNodeDesk.FindByName(pnd:Pointer; Criteria:string):boolean;
 begin
   if PTNodeData(pnd)^.NodeMode<>TNMHardGroup then
-    result:=PTNodeData(pnd)^.name=Criteria
+    result:=PTNodeData(pnd)^.Ident.name=Criteria
   else
     result:=false;
 end;
@@ -127,15 +131,15 @@ end;
 constructor TNodesStates.Create;
 begin
   OpenedNodes:=TNodesStatesVector.create;
-  SelectedNode.id:='';
-  SelectedNode.name:='';
-  SelectedNode.pent:=nil;
+  SelectedNode.Ident.id:='';
+  SelectedNode.Ident.name:='';
+  SelectedNode.Ident.pent:=nil;
 end;
 destructor TNodesStates.Destroy;
 begin
-  OpenedNodes.Destroy;
+  FreeAndNil(OpenedNodes);
 end;
-procedure TBaseRootNodeDesk.RecursiveSaveState(Node:PVirtualNode;NodesStates:TNodesStates);
+procedure TBaseRootNodeDesk.RecursiveSaveState(var Node:PVirtualNode;NodesStates:TNodesStates);
 var
   child:PVirtualNode;
   pnd:PTNodeData;
@@ -143,8 +147,8 @@ begin
   pnd:=Tree.GetNodeData(Node);
   if pnd<>nil then
   begin
-    if vsExpanded in Node.states then
-      NodesStates.OpenedNodes.PushBack(pnd^);
+    if {vsExpanded in Node.states}Tree.Expanded[Node]=true then
+      NodesStates.OpenedNodes.PushBack(pnd^.Ident);
     {if Tree.Selected[Node]then
       NodesStates.SelectedNode:=pnd^;}
   end;
@@ -164,15 +168,15 @@ end;
 function findin(pnd:PTNodeData;var StartInNodestates:integer;NodesStates:TNodesStates):boolean;
 var
   i:integer;
-  deb:TNodeData;
+  deb:TNodeIdent;
 begin
   for i:=0 to NodesStates.OpenedNodes.Size-1 do
   begin
   deb:=NodesStates.OpenedNodes[i];
-  if (pnd^.id=deb.id)
-  and(pnd^.name=deb.name)
-  and(pnd^.NodeMode=deb.NodeMode)
-  and(pnd^.pent=deb.pent)then
+  if (pnd^.Ident.id=deb.id)
+  and(pnd^.Ident.name=deb.name)
+  //and(pnd^.NodeMode=deb.NodeMode)
+  and(pnd^.Ident.pent=deb.pent)then
    begin
     StartInNodestates:=i;
     exit(true);
@@ -191,10 +195,11 @@ begin
   begin
     if findin(pnd,StartInNodestates,NodesStates) then
       Tree.Expanded[Node]:=true;
+      //Node.states:=Node.states+[vsExpanded];
     if {(NodesStates.SelectedNode.pent<>nil)
-    and}(pnd.pent=NodesStates.SelectedNode.pent)
-    and(pnd.name=NodesStates.SelectedNode.name)
-    and(pnd.id=NodesStates.SelectedNode.id) then
+    and}(pnd.Ident.pent=NodesStates.SelectedNode.Ident.pent)
+    and(pnd.Ident.name=NodesStates.SelectedNode.Ident.name)
+    and(pnd.Ident.id=NodesStates.SelectedNode.Ident.id) then
     begin
       Tree.FocusedNode:=Node;
       //Tree.AddToSelection(Node);
@@ -246,7 +251,7 @@ begin
     if (pnewnd<>nil)and(pnd<>nil) then
      pnewnd^:=pnd^;
     pnd^.NodeMode:=TNMAutoGroup;
-    pnd^.pent:=nil;
+    pnd^.Ident.pent:=nil;
 end;
 
 function TBaseRootNodeDesk.find(BaseName:string;basenode:PVirtualNode):PVirtualNode;
@@ -259,8 +264,8 @@ begin
       pnd:=Tree.GetNodeData(result);
       if Assigned(pnd) then begin
        pnd^.NodeMode:=TNMGroup;
-       pnd^.id:=BaseName;
-       pnd^.name:=BaseName;
+       pnd^.Ident.id:=BaseName;
+       pnd^.Ident.name:=BaseName;
       end;
     end;
 end;
@@ -285,9 +290,9 @@ begin
   pnd := Tree.GetNodeData(result);
   if Assigned(pnd) then begin
     pnd^.NodeMode:=TNMData;
-    pnd^.pent:=pent;
-    pnd^.id:=Name;
-    pnd^.name:=Name;
+    pnd^.Ident.pent:=pent;
+    pnd^.Ident.id:=Name;
+    pnd^.Ident.name:=Name;
   end;
 end;
 
@@ -333,7 +338,7 @@ begin
    if Assigned(pnd) then
    begin
       pnd^.NodeMode:=TNMGroup;
-      pnd^.name:=AName;
+      pnd^.Ident.name:=AName;
    end;
 end;
 destructor TBaseRootNodeDesk.Destroy;

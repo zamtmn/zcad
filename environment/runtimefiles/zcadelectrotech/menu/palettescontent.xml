@@ -228,6 +228,13 @@
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_UNIT_CH2)" Img='DEVICE_EL_VL_UNIT_CH2_300' Caption='Сноска 2'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_UNIT_CH3)" Img='DEVICE_EL_VL_UNIT_CH3_300' Caption='Сноска 3'/>
       	</ZTreeNode>
+      	<ZTreeNode Caption='Высоковольтные сети'>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_QUESTIONNAIRE1)" Img='DEVICE_EL_VL_QUESTIONNAIRE1_300' Caption='Опросник КТПН'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_QUESTIONNAIRE2_1)" Img='DEVICE_EL_VL_QUESTIONNAIRE2_1_300' Caption='Опросник РУВН Шапка'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_QUESTIONNAIRE2_2)" Img='DEVICE_EL_VL_QUESTIONNAIRE2_2_300' Caption='Опросник РУВН Фидер'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_QUESTIONNAIRE3_1)" Img='DEVICE_EL_VL_QUESTIONNAIRE3_1_300' Caption='Опросник РУНН Шапка'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_QUESTIONNAIRE3_2)" Img='DEVICE_EL_VL_QUESTIONNAIRE3_2_300' Caption='Опросник РУНН Фидер'/>
+      	</ZTreeNode>
       	<ZTreeNode Caption='Расчеты'>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_DATA1_1)" Img='DEVICE_EL_VL_DATA1_1_300' Caption='Обозначение'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_DATA1_2)" Img='DEVICE_EL_VL_DATA1_2_300' Caption='Расшифровка 1'/>

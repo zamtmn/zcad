@@ -121,7 +121,7 @@ begin
 
    if assigned(EntitiesNodeStates) then
    begin
-   EntitiesNode.RestoreState(EntitiesNodeStates);
+   EntitiesNode.RestoreState(EntitiesNodeStates,0);
    freeandnil(EntitiesNodeStates);
    end;
    NavTree.EndUpdate;

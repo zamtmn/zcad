@@ -31,7 +31,8 @@ TDummyData=record
                  attr:TPointAttr;
                  index:TArrayIndex;
            end;
-TMyVectorArrayGDBFontVertex2D=TMyVectorArray<{GDBFontVertex2D}TDummyData>;
+TDummyDataVec=TMyVector<TDummyData>;
+TMyVectorArrayGDBFontVertex2D=TMyVectorArray<TDummyData,TDummyDataVec>;
 TBezierSolver2D=class
                      FArray:TVector2D;
                      FMode:TSolverMode;

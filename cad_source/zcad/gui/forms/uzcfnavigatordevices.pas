@@ -18,7 +18,8 @@ uses
   uzelongprocesssupport,uzeentitiestypefilter,uzcuitypes,
   uzeparserenttypefilter,uzeparserentpropfilter,uzeparsernavparam,uzclog,uzcuidialogs,
   XMLConf,XMLPropStorage, EditBtn,LazConfigStorage,uzcdialogsfiles,
-  Masks,gvector,garrayutils,LCLType,LCLIntf;
+  Masks,garrayutils,LCLType,LCLIntf,
+  gzctnrSTL;
 
 resourcestring
   rsStandaloneDevices='Standalone devices';
@@ -32,11 +33,14 @@ const
   TreePropertiesSaveVarSuffix='_TreeProperties';
   TreeCreateRootNode='_TreeProperties';
 
+  RefreshEqualy=0;
+  RefreshSimilar=1;
+
 type
   TCfgFileDesk=record
     FileName,FilePath:string;
   end;
-  TCfgFilesDesks=TVector<TCfgFileDesk>;
+  TCfgFilesDesks=TMyVector<TCfgFileDesk>;
   TCfgFileDeskCompare=class
     class function c(a,b:TCfgFileDesk):boolean;inline;
   end;
@@ -60,8 +64,10 @@ type
     NodeNameFormat:ansistring;
     CreateRootNode:Boolean;
   end;
+
   TStringPartEnabler=TPartEnabler<String>;
   TEnt2NodeMap=TDictionary<pGDBObjEntity,PVirtualNode>;
+
   { TNavigatorDevices }
   TNavigatorDevices = class(TForm)
     FilterBtn: TEditButton;
@@ -86,7 +92,9 @@ type
     procedure TEMenuPopUp(Sender: TObject);
     procedure LoadFromFileProc(Sender: TObject);
     procedure PurgeFilter(Sender: TObject);
+    procedure InternalRefreshTree(Dist:Integer);
     procedure RefreshTree(Sender: TObject);
+    procedure SimilarRefreshTree(Sender: TObject);
     procedure PostProcessTree;virtual;
     procedure EditIncludeEnts(Sender: TObject);
     procedure EditIncludeProperties(Sender: TObject);
@@ -196,7 +204,7 @@ begin
     FreeAndNil(EntityIncluder);
   EntityIncluder:=ParserEntityPropFilter.GetTokens(BP.IncludeProperties);
   SetTreeProp;
-  RefreshTree(nil);
+  InternalRefreshTree(RefreshEqualy);
 end;
 
 procedure TNavigatorDevices.LoadParamsFromFile(Filename:string);
@@ -597,7 +605,7 @@ begin
    TreeEnabler.actns:=[PEMenuSubMenu,PEMenuSeparator,umf,PEMenuSeparator,IncludeEnts,IncludeProps,TreeProps,Refresh,nil,LoadFromFile,SaveToFile];
 
    TreeEnabler.OnMenuPopup:=TEMenuPopUp;
-   TreeEnabler.OnPartChanged:=RefreshTree;
+   TreeEnabler.OnPartChanged:=SimilarRefreshTree;
    TreeEnabler.GetCountFunc:=GetPartsCount;
    TreeEnabler.GetStateFunc:=GetPartState;
    TreeEnabler.SetStateProc:=SetPartState;
@@ -796,7 +804,7 @@ procedure TNavigatorDevices.EditIncludeEnts(Sender: TObject);
 begin
  if not isvisible then exit;
  if RunEditor('Included entities editor','IncludeEntsEdWND',BP.IncludeEntities) then begin
-   RefreshTree(nil);
+   InternalRefreshTree(RefreshEqualy);
  end;
 end;
 procedure TNavigatorDevices.EditIncludeProperties(Sender: TObject);
@@ -806,7 +814,7 @@ begin
    if assigned(EntityIncluder) then
      FreeAndNil(EntityIncluder);
    EntityIncluder:=ParserEntityPropFilter.GetTokens(BP.IncludeProperties);
-   RefreshTree(nil);
+   InternalRefreshTree(RefreshEqualy);
  end;
 end;
 procedure TNavigatorDevices.EditTreeProperties(Sender: TObject);
@@ -814,16 +822,14 @@ begin
  if not isvisible then exit;
  if RunEditor('Tree properties editor','TreePropertiesEdWND',BP.TreeProperties) then begin
    SetTreeProp;
-   RefreshTree(nil);
+   InternalRefreshTree(RefreshEqualy);;
  end;
 end;
-procedure TNavigatorDevices.RefreshTree(Sender: TObject);
+procedure TNavigatorDevices.InternalRefreshTree(Dist:Integer);
 var
   pv:pGDBObjEntity;
   ir:itrec;
-  //pb:pboolean;
   lpsh:TLPSHandle;
-  //dr:TZCMsgDialogResult;
   HaveErrors:boolean;
   NScrollInfo:TScrollInfo;
 begin
@@ -867,7 +873,7 @@ begin
 
    if assigned(StandaloneNodeStates) then
    begin
-     StandaloneNode.RestoreState(StandaloneNodeStates);
+     StandaloneNode.RestoreState(StandaloneNodeStates,Dist);
      NavTree.OffsetXY:=StandaloneNodeStates.SaveOffset;
      FreeAndNil(StandaloneNodeStates);
    end;
@@ -876,7 +882,14 @@ begin
    LPS.EndLongProcess(lpsh);
    NavTree.EndUpdate;
 end;
-
+procedure TNavigatorDevices.RefreshTree(Sender: TObject);
+begin
+  InternalRefreshTree(RefreshEqualy);
+end;
+procedure TNavigatorDevices.SimilarRefreshTree(Sender: TObject);
+begin
+  InternalRefreshTree(RefreshSimilar);
+end;
 procedure TNavigatorDevices.PostProcessTree;
 
   procedure CountLeaf(Leaf:PVirtualNode;MainFunction:Boolean);
@@ -937,7 +950,7 @@ var
   devnode:PVirtualNode;
 begin
   if GUIAction=ZMsgID_GUIActionRebuild then
-    RefreshTree(sender);
+    InternalRefreshTree(RefreshEqualy);
   if (sender is (TAbstractViewArea))and(GUIAction=ZMsgID_GUIActionSelectionChanged) then begin
     sender_wa:=sender as TAbstractViewArea;
     if sender_wa.param.SelDesc.LastSelectedObject<>nil then begin

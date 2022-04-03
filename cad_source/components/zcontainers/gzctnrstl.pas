@@ -60,11 +60,12 @@ end;
                                      procedure PushBack(const Value: T); inline;
                                      function mutable(const i:integer):pointer; inline;
  {$ENDIF}
+   procedure CopyTo(Dst:TMyVector<T>);
 end;
 
-TMyVectorArray <T> = class
+TMyVectorArray<T,TVec> = class
         type
-        TVec=TMyVector <T>;
+        //TVec=TMyVector <T>;
         TArrayOfVec=TMyVector <TVec>;
         var
         VArray:TArrayOfVec;
@@ -73,8 +74,10 @@ TMyVectorArray <T> = class
         constructor create;
         destructor destroy;override;
         function AddArray:SizeInt;
+        function AddArrayAndSetCurrent:SizeInt;
         procedure SetCurrentArray(ai:SizeInt);
         procedure AddDataToCurrentArray(data:T);
+        function GetCurrentArray:TVec;
 end;
 
 {$IFNDEF DELPHI}TMyHashMap <TKey, TValue, Thash> = class(THashMap<TKey, TValue, Thash>){$ENDIF}
@@ -89,6 +92,14 @@ end;
 TMyAnsiStringDictionary <TValue> = class(TMyHashMap<AnsiString, TValue{$IFNDEF DELPHI},StringHash{$ENDIF}>)
 end;
 implementation
+procedure TMyVector<T>.CopyTo(Dst:TMyVector<T>);
+var
+  Data:T;
+begin
+  Dst.Reserve(Dst.Size+Self.Size);
+  for Data in Self do
+    Dst.PushBack(Data);
+end;
 {$IFDEF DELPHI}
 function TMyVector<T>.Size: SizeUInt;
 begin
@@ -103,11 +114,11 @@ begin
   result:=@FItems[i];
 end;
 {$ENDIF}
-constructor TMyVectorArray<T>.create;
+constructor TMyVectorArray<T,TVec>.create;
 begin
      VArray:=TArrayOfVec.create;
 end;
-destructor TMyVectorArray<T>.destroy;
+destructor TMyVectorArray<T,TVec>.destroy;
 var
   i:integer;
 begin
@@ -115,19 +126,30 @@ begin
     VArray[i].destroy;
   VArray.destroy;
 end;
-function TMyVectorArray<T>.AddArray:SizeInt;
+function TMyVectorArray<T,TVec>.AddArray:SizeInt;
 begin
      result:=VArray.{$IFNDEF DELPHI}size{$ENDIF}{$IFDEF DELPHI}Count{$ENDIF};
      VArray.{$IFNDEF DELPHI}PushBack{$ENDIF}{$IFDEF DELPHI}Add{$ENDIF}(TVec.create);
 end;
-procedure TMyVectorArray<T>.SetCurrentArray(ai:SizeInt);
+function TMyVectorArray<T,TVec>.AddArrayAndSetCurrent:SizeInt;
+begin
+  result:=AddArray;
+  SetCurrentArray(result);
+end;
+
+procedure TMyVectorArray<T,TVec>.SetCurrentArray(ai:SizeInt);
 begin
      CurrentArray:=ai;
 end;
-procedure TMyVectorArray<T>.AddDataToCurrentArray(data:T);
+procedure TMyVectorArray<T,TVec>.AddDataToCurrentArray(data:T);
 begin
      (VArray[CurrentArray]){brackets for 2.6.x compiler version}.{$IFNDEF DELPHI}PushBack{$ENDIF}{$IFDEF DELPHI}Add{$ENDIF}(data);
 end;
+function TMyVectorArray<T,TVec>.GetCurrentArray:TVec;
+begin
+  result:=VArray[CurrentArray];
+end;
+
 function TMyHashMap<TKey, TValue{$IFNDEF DELPHI},Thash{$ENDIF}>.MyGetValue(key:TKey; out Value:TValue):boolean;
 {$IFNDEF DELPHI}var i,h,bs:longint;{$ENDIF}
 begin

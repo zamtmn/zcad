@@ -67,6 +67,7 @@ type
 
   TNodesStates=class
     OpenedNodes:TNodesStatesVector;
+    TrueOpenedNodes:TNodesStatesVector;
     SelectedNode:TNodeData;
     SaveOffset:TPoint;
     constructor Create;
@@ -90,7 +91,7 @@ type
     procedure ConvertNameNodeToGroupNode(pnode:PVirtualNode);
     function FindGroupNodeBy(RootNode:PVirtualNode;criteria:string;func:TFindFunc):PVirtualNode;
     function SaveState(var CurrentSel:TNodeData):TNodesStates;
-    procedure RecursiveSaveState(var Node:PVirtualNode;CurrPath:TNodePath;NodesStates:TNodesStates);
+    procedure RecursiveSaveState(PrevNodeExpanded:Boolean;var Node:PVirtualNode;CurrPath:TNodePath;NodesStates:TNodesStates);
     procedure RestoreState(State:TNodesStates;Dist:Integer);
     procedure RecursiveRestoreState(Node:PVirtualNode;Path:TNodePath;var StartInNodestates:integer;NodesStates:TNodesStates;Dist:Integer);
     function DefaultTraceEntity(rootdesk:TBaseRootNodeDesk;pent:pGDBObjEntity;out name:string):PVirtualNode;virtual;
@@ -229,6 +230,7 @@ end;
 constructor TNodesStates.Create;
 begin
   OpenedNodes:=TNodesStatesVector.create;
+  TrueOpenedNodes:=TNodesStatesVector.create;
   SelectedNode.Ident.id:='';
   SelectedNode.Ident.name:='';
   SelectedNode.Ident.pent:=nil;
@@ -236,28 +238,34 @@ end;
 destructor TNodesStates.Destroy;
 begin
   FreeAndNil(OpenedNodes);
+  FreeAndNil(TrueOpenedNodes);
 end;
-procedure TBaseRootNodeDesk.RecursiveSaveState(var Node:PVirtualNode;CurrPath:TNodePath;NodesStates:TNodesStates);
+procedure TBaseRootNodeDesk.RecursiveSaveState(PrevNodeExpanded:Boolean;var Node:PVirtualNode;CurrPath:TNodePath;NodesStates:TNodesStates);
 var
   child:PVirtualNode;
   pnd:PTNodeData;
+  ThisNodeExpanded:Boolean;
 begin
   pnd:=Tree.GetNodeData(Node);
   if pnd<>nil then
   begin
     CurrPath.PushBack(pnd^.Ident);
-    if {vsExpanded in Node.states}Tree.Expanded[Node]=true then begin
-      NodesStates.OpenedNodes.AddArrayAndSetCurrent;
-      CurrPath.CopyTo(NodesStates.OpenedNodes.GetCurrentArray);
-      //NodesStates.OpenedNodes.PushBack(pnd^.Ident);
+    if Tree.Expanded[Node]=true then begin
+      ThisNodeExpanded:=True;
+      if PrevNodeExpanded then begin
+        NodesStates.TrueOpenedNodes.AddArrayAndSetCurrent;
+        CurrPath.CopyTo(NodesStates.TrueOpenedNodes.GetCurrentArray);
+      end else begin
+        NodesStates.OpenedNodes.AddArrayAndSetCurrent;
+        CurrPath.CopyTo(NodesStates.OpenedNodes.GetCurrentArray);
+      end
     end;
-    {if Tree.Selected[Node]then
-      NodesStates.SelectedNode:=pnd^;}
-  end;
+  end else
+    ThisNodeExpanded:=PrevNodeExpanded;
   child:=Node^.FirstChild;
   while child<>nil do
   begin
-   RecursiveSaveState(child,CurrPath,NodesStates);
+   RecursiveSaveState(PrevNodeExpanded and ThisNodeExpanded,child,CurrPath,NodesStates);
    child:=child^.NextSibling;
   end;
   if pnd<>nil then
@@ -270,27 +278,27 @@ begin
   result:=TNodesStates.create;
   result.SelectedNode:=CurrentSel;
   Path:=TNodePath.Create;
-  RecursiveSaveState(RootNode,Path,result);
+  RecursiveSaveState(True,RootNode,Path,result);
   Path.Free;
 end;
-function findin(Path:TNodePath;var StartInNodestates:integer;NodesStates:TNodesStates;Dist:Integer):boolean;
+function findin(Path:TNodePath;var StartInNodestates:integer;OpNod:TNodesStatesVector;Dist:Integer):boolean;
 var
   i:integer;
   deb:TNodeIdent;
   IsEqual:Boolean;
 begin
-  for i:=0 to NodesStates.OpenedNodes.VArray.Size-1 do
+  for i:=0 to OpNod.VArray.Size-1 do
   begin
    if Dist=0 then
-      IsEqual:=LeveMetric.Equaly(NodesStates.OpenedNodes.VArray[i],Path)
+      IsEqual:=LeveMetric.Equaly(OpNod.VArray[i],Path)
    else begin
-      if NodesStates.OpenedNodes.VArray[i][NodesStates.OpenedNodes.VArray[i].Size-1]=Path[Path.Size-1] then
-        IsEqual:=LeveMetric.LeveDist(NodesStates.OpenedNodes.VArray[i],Path)<=Dist
+      if OpNod.VArray[i][OpNod.VArray[i].Size-1]=Path[Path.Size-1] then
+        IsEqual:=LeveMetric.LeveDist(OpNod.VArray[i],Path)<=Dist
       else
         IsEqual:=False;
    end;
    if IsEqual then begin
-     StartInNodestates:=i;
+     //StartInNodestates:=i;
      exit(true);
    end;
   end;
@@ -299,18 +307,24 @@ end;
 
 procedure TBaseRootNodeDesk.RecursiveRestoreState(Node:PVirtualNode;Path:TNodePath;var StartInNodestates:integer;NodesStates:TNodesStates;Dist:Integer);
 var
-  child:PVirtualNode;
+  child,vparent:PVirtualNode;
   pnd:PTNodeData;
 begin
   pnd:=Tree.GetNodeData(Node);
   if pnd<>nil then
   begin
     Path.PushBack(pnd.Ident);
-    if findin(Path,StartInNodestates,NodesStates,Dist) then
+    if findin(Path,StartInNodestates,NodesStates.TrueOpenedNodes,Dist) then begin
       Tree.Expanded[Node]:=true;
-      //Node.states:=Node.states+[vsExpanded];
-    if {(NodesStates.SelectedNode.pent<>nil)
-    and}(pnd.Ident.pent=NodesStates.SelectedNode.Ident.pent)
+      vparent:=Node.Parent;
+      while vparent<>RootNode do begin
+        Tree.Expanded[vparent]:=true;
+        vparent:=vparent.Parent;
+      end;
+    end else if findin(Path,StartInNodestates,NodesStates.OpenedNodes,Dist) then
+      Tree.Expanded[Node]:=true;
+    if
+       (pnd.Ident.pent=NodesStates.SelectedNode.Ident.pent)
     and(pnd.Ident.name=NodesStates.SelectedNode.Ident.name)
     and(pnd.Ident.id=NodesStates.SelectedNode.Ident.id) then
     begin

@@ -240,35 +240,52 @@ begin
   FreeAndNil(OpenedNodes);
   FreeAndNil(TrueOpenedNodes);
 end;
+
+{rocedure dbg(pref:string;Path:TNodePath);
+var
+  ni:TNodeIdent;
+  s:string;
+begin
+  s:='';
+  for ni in path do
+    s:=format('%s(%s|%s|%p)',[s,ni.name,ni.id,ni.pent]);
+  ZCMsgCallBackInterface.TextMessage(pref+s,TMWOHistoryOut);
+end;}
+
 procedure TBaseRootNodeDesk.RecursiveSaveState(PrevNodeExpanded:Boolean;var Node:PVirtualNode;CurrPath:TNodePath;NodesStates:TNodesStates);
 var
-  child:PVirtualNode;
+  child,ischild:PVirtualNode;
   pnd:PTNodeData;
   ThisNodeExpanded:Boolean;
 begin
   pnd:=Tree.GetNodeData(Node);
+  child:=Node^.FirstChild;
+  ischild:=child;
   if pnd<>nil then
   begin
-    CurrPath.PushBack(pnd^.Ident);
-    if Tree.Expanded[Node]=true then begin
-      ThisNodeExpanded:=True;
-      if PrevNodeExpanded then begin
-        NodesStates.TrueOpenedNodes.AddArrayAndSetCurrent;
-        CurrPath.CopyTo(NodesStates.TrueOpenedNodes.GetCurrentArray);
-      end else begin
-        NodesStates.OpenedNodes.AddArrayAndSetCurrent;
-        CurrPath.CopyTo(NodesStates.OpenedNodes.GetCurrentArray);
-      end
+    if child<>nil then begin
+      CurrPath.PushBack(pnd^.Ident);
+      if Tree.Expanded[Node]=true then begin
+        ThisNodeExpanded:=True;
+        if PrevNodeExpanded then begin
+          //dbg('Save TrueOpenedNodes ',CurrPath);
+          NodesStates.TrueOpenedNodes.AddArrayAndSetCurrent;
+          CurrPath.CopyTo(NodesStates.TrueOpenedNodes.GetCurrentArray);
+        end else begin
+          //dbg('Save OpenedNodes ',CurrPath);
+          NodesStates.OpenedNodes.AddArrayAndSetCurrent;
+          CurrPath.CopyTo(NodesStates.OpenedNodes.GetCurrentArray);
+        end
+      end;
     end;
   end else
     ThisNodeExpanded:=PrevNodeExpanded;
-  child:=Node^.FirstChild;
   while child<>nil do
   begin
    RecursiveSaveState(PrevNodeExpanded and ThisNodeExpanded,child,CurrPath,NodesStates);
    child:=child^.NextSibling;
   end;
-  if pnd<>nil then
+  if (pnd<>nil)and(ischild<>nil) then
     CurrPath.PopBack;
 end;
 function TBaseRootNodeDesk.SaveState(var CurrentSel:TNodeData):TNodesStates;
@@ -281,37 +298,43 @@ begin
   RecursiveSaveState(True,RootNode,Path,result);
   Path.Free;
 end;
+
 function findin(Path:TNodePath;var StartInNodestates:integer;OpNod:TNodesStatesVector;Dist:Integer):boolean;
 var
   i:integer;
   deb:TNodeIdent;
   IsEqual:Boolean;
 begin
+  //dbg('Start compare ',Path);
   for i:=0 to OpNod.VArray.Size-1 do
   begin
+   //dbg('  compare with',OpNod.VArray[i]);
    if Dist=0 then
       IsEqual:=LeveMetric.Equaly(OpNod.VArray[i],Path)
    else begin
-      if OpNod.VArray[i][OpNod.VArray[i].Size-1]=Path[Path.Size-1] then
+      if abs(integer(OpNod.VArray[i].Size-Path.Size))<2 then
         IsEqual:=LeveMetric.LeveDist(OpNod.VArray[i],Path)<=Dist
       else
         IsEqual:=False;
    end;
    if IsEqual then begin
-     //StartInNodestates:=i;
+     //ZCMsgCallBackInterface.TextMessage('yes!',TMWOHistoryOut);
      exit(true);
    end;
   end;
     result:=false;
+    //ZCMsgCallBackInterface.TextMessage('end((',TMWOHistoryOut);
 end;
 
 procedure TBaseRootNodeDesk.RecursiveRestoreState(Node:PVirtualNode;Path:TNodePath;var StartInNodestates:integer;NodesStates:TNodesStates;Dist:Integer);
 var
-  child,vparent:PVirtualNode;
+  child,ischild,vparent:PVirtualNode;
   pnd:PTNodeData;
 begin
   pnd:=Tree.GetNodeData(Node);
-  if pnd<>nil then
+  child:=Node^.FirstChild;
+  ischild:=child;
+  if (pnd<>nil)and(child<>nil) then
   begin
     Path.PushBack(pnd.Ident);
     if findin(Path,StartInNodestates,NodesStates.TrueOpenedNodes,Dist) then begin
@@ -332,15 +355,14 @@ begin
       //Tree.AddToSelection(Node);
     end;
   end;
-  if StartInNodestates=NodesStates.OpenedNodes.VArray.Size then
-                                                        exit;
-  child:=Node^.FirstChild;
+  {if StartInNodestates=NodesStates.OpenedNodes.VArray.Size then
+                                                        exit;}
   while child<>nil do
   begin
    RecursiveRestoreState(child,Path,StartInNodestates,NodesStates,Dist);
    child:=child^.NextSibling;
   end;
-  if pnd<>nil then
+  if (pnd<>nil)and(ischild<>nil) then
     Path.PopBack;
 end;
 procedure TBaseRootNodeDesk.RestoreState(State:TNodesStates;Dist:Integer);

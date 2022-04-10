@@ -160,6 +160,7 @@ type
     function GetPartsCount(const parts:string):integer;
     function GetPartState(const parts:string;const nmax,n:integer; out _name:string;out _enabled:boolean):boolean;
     procedure SetPartState(var parts:string;const n:integer;state:boolean);
+    procedure ReorganizeParts(var parts:string;const AFrom,ATo:integer;ABefore:boolean);
     function PartsEditor(var parts:string):boolean;
 
     destructor Destroy; override;
@@ -412,7 +413,7 @@ begin
       if cn<>'' then
         if cn[1]<>'-'then begin
           cn:=copy(cn,2,length(cn)-1);
-          BaseName:=GetEntityVariableValue(pent,cn,rsPrefixAbsent);
+          BaseName:=GetEntityVariableValue(pent,cn,rsTagMissingt);
           basenode:=rootdesk.find(BaseName,basenode);
         end;
     end else if cn<>'' then begin
@@ -544,6 +545,46 @@ begin
   else
     parts[partstartposition]:='-';
 end;
+procedure TNavigatorDevices.ReorganizeParts(var parts:string;const AFrom,ATo:integer;ABefore:boolean);
+var
+  i,c:integer;
+  partsarray:TMyVector<string>;
+  name:string;
+  en,state:boolean;
+begin
+  c:=GetPartsCount(parts);
+  partsarray:=TMyVector<string>.create;
+  for i:=1 to c do begin
+    state:=GetPartState(parts,c,i,name,en);
+    if state then
+      partsarray.pushback('+'+name)
+    else
+      partsarray.pushback('-'+name)
+  end;
+  name:=partsarray[AFrom-1];
+  partsarray.erase(AFrom-1);
+
+  for i:=0 to partsarray.size-1 do begin
+    if i=0 then
+      parts:=partsarray[i]
+    else
+      parts:=parts+'|'+partsarray[i]
+  end;
+
+  if ABefore then
+    partsarray.Insert(ATo-1,name)
+  else
+    partsarray.Insert(ATo,name);
+
+  for i:=0 to partsarray.size-1 do begin
+    if i=0 then
+      parts:=partsarray[i]
+    else
+      parts:=parts+'|'+partsarray[i]
+  end;
+  parts:=parts;
+end;
+
 function RunEditor(const cpt,BoundsSaveName:string;var AText:string):boolean;
 var
    modalresult:integer;
@@ -610,6 +651,7 @@ begin
    TreeEnabler.GetStateFunc:=GetPartState;
    TreeEnabler.SetStateProc:=SetPartState;
    TreeEnabler.PartsEditFunc:=PartsEditor;
+   TreeEnabler.ReorganizeParts:=ReorganizeParts;
 
    TreeEnabler.setup(BP.TreeBuildMap);
    TreeEnabler.Parent:=CoolBar1;

@@ -29,8 +29,7 @@ const
 resourcestring
   {errors}
   rsNameAbsent='Absent Name';
-  rsPrefixAbsent='Absent Prefix';
-  rsBaseNameAbsent='Absent BaseName';
+  rsTagMissingt='Tag is missing';
   rseGeneralEroror='Error in '#13'"%s"'#13'with msg'#13'"%s"';
 
   rsNotSpecified='Not specified';

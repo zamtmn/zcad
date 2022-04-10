@@ -22,7 +22,7 @@ unit uzcctrlpartenabler;
 interface
 
 uses
-  GraphType,LCLIntf,LCLType,
+  GraphType,LCLIntf,LCLType,Toolwin,InterfaceBase,
   Controls,Classes,Graphics,Buttons,ExtCtrls,ComCtrls,Forms,Themes,ActnList,Menus,
   sysutils,Generics.Collections;
 
@@ -31,14 +31,31 @@ const
   PEMenuSubMenu:Pointer=Pointer(1);
 
 type
+  TDraggedToolButton=class(TToolButton)
+   private
+    MDown:TPoint;
+    waitdrag:boolean;
+   public
+    constructor Create(TheOwner: TComponent); override;
+    procedure MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: Integer);override;
+    procedure MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Integer); override;
+    procedure MouseMove(Shift: TShiftState; X, Y: Integer); override;
+  end;
+
+
+  TDToolBar=class(TToolBar)
+    procedure StartToolButtonDrag(btn:TDraggedToolButton;MDownInBtn:TPoint);virtual;abstract;
+  end;
+
   TMenuItemList=specialize TObjectList<TMenuItem>;
-  generic TPartEnabler<T>=class(TToolBar)
+  generic TPartEnabler<T>=class(TDToolBar)
     type
       PT=^T;
       TGetCountFunc=function(const value:T):integer of object;
       TGetStateFunc=function(const value:T;const nmax,n:integer; out _name:string;out _enabled:boolean):boolean of object;
       TSetStateProc=procedure(var value:T;const n:integer;state:boolean) of object;
       TPartsEditFunc=function(var value:T):boolean of object;
+      TReorganizePartsFunc=procedure (var parts:string;const AFrom,ATo:integer;ABefore:boolean) of object;
    private
     var
       fpvalue:PT;
@@ -50,8 +67,20 @@ type
       fOnPartChanged:TNotifyEvent;
       fOnMenuPopup:TNotifyEvent;
       fPartsEditFunc:TPartsEditFunc;
-
+      fReorganizeParts:TReorganizePartsFunc;
+      fButtonDrag:boolean;
+      fShadowShow:boolean;
+      fDraggedBtn:TDraggedToolButton;
+      MDInBtn:TPoint;
+      Before:boolean;
+      InsertTo:integer;
    public
+      procedure StartToolButtonDrag(btn:TDraggedToolButton;MDownInBtn:TPoint);override;
+      procedure MouseMove(Shift: TShiftState; X, Y: Integer); override;
+      procedure MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Integer); override;
+      procedure Reorganize;
+      function CalcShadowPos(X, Y: Integer):TRect;
+      procedure UpdateShadow(sr:TRect);
       constructor Create(TheOwner: TComponent); override;
       destructor Destroy; override;
       procedure setup(var value:T);
@@ -66,6 +95,7 @@ type
 
       property pvalue:PT read fpvalue write fpvalue;
       property PartsEditFunc:TPartsEditFunc read fPartsEditFunc write fPartsEditFunc;
+      property ReorganizeParts:TReorganizePartsFunc read fReorganizeParts write fReorganizeParts;
       property GetCountFunc:TGetCountFunc read fGetCountFunc write fGetCountFunc;
       property GetStateFunc:TGetStateFunc read fGetStateFunc write fGetStateFunc;
       property SetStateProc:TSetStateProc read fSetStateProc write fSetStateProc;
@@ -73,7 +103,43 @@ type
       property OnMenuPopup:TNotifyEvent read fOnMenuPopup write fOnMenuPopup;
   end;
 
+var
+  PartsDockManager:TDockManager;
+
 implementation
+constructor TDraggedToolButton.Create(TheOwner: TComponent);
+begin
+  inherited;
+  waitdrag:=false;
+end;
+
+procedure TDraggedToolButton.MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+  if button=mbLeft then begin
+    MDown:=point(x,y);
+    waitdrag:=true;
+  end;
+  inherited;
+end;
+
+procedure TDraggedToolButton.MouseMove(Shift: TShiftState; X, Y: Integer);
+begin
+  if waitdrag then
+    if (abs(x-MDown.x)>DragManager.DragThreshold)or(abs(y-MDown.y)>DragManager.DragThreshold) then begin
+    waitdrag:=false;
+    if FToolBar is TDToolBar then
+      (FToolBar as TDToolBar).StartToolButtonDrag(self,MDown);
+  end;
+  inherited;
+end;
+
+procedure TDraggedToolButton.MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+  if button=mbLeft then
+    waitdrag:=false;
+  inherited;
+end;
+
 procedure TPartEnabler.DoMenuPopup(Sender: TObject);
 begin
   if assigned(fOnMenuPopup) then
@@ -102,6 +168,110 @@ begin
   if assigned(fSetStateProc)then
     fSetStateProc(value,n,state);
 end;
+procedure TPartEnabler.StartToolButtonDrag(btn:TDraggedToolButton;MDownInBtn:TPoint);
+begin
+  MouseCapture:=true;
+  fButtonDrag:=true;
+  fDraggedBtn:=btn;
+  MDInBtn:=MDownInBtn;
+end;
+
+procedure TPartEnabler.MouseMove(Shift: TShiftState; X, Y: Integer);
+var
+  sr:TRect;
+begin
+  inherited MouseMove(Shift,X,Y);
+  if fButtonDrag then begin
+    sr:=CalcShadowPos(x,y);
+    UpdateShadow(sr);
+  end;
+end;
+
+procedure TPartEnabler.MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+var
+  sr:TRect;
+begin
+  inherited;
+  if fShadowShow then begin
+    sr:=CalcShadowPos(x,y);
+    WidgetSet.DrawDefaultDockImage(sr,sr,disHide);
+    fShadowShow:=false;
+  end;
+  fButtonDrag:=false;
+  if InsertTo>0 then begin
+    Reorganize;
+    setup(fpvalue^);
+    if assigned(fOnPartChanged)then
+      fOnPartChanged(self);
+  end;
+end;
+
+procedure TPartEnabler.Reorganize;
+begin
+  if assigned(ReorganizeParts) then begin
+    ReorganizeParts(fpvalue^,fDraggedBtn.Index,InsertTo,Before)
+  end;
+  InsertTo:=-1;
+end;
+
+function TPartEnabler.CalcShadowPos(X, Y: Integer):TRect;
+var
+  i:integer;
+  pnt:TPoint;
+  draggedBtnNum:integer;
+  prevBtn,currBtn:TDraggedToolButton;
+  prv:boolean;
+begin
+  pnt:=Point(x,y);
+  prevBtn:=nil;
+  prv:=false;
+  draggedBtnNum:=fDraggedBtn.Index;
+  if BoundsRect.Contains(pnt) then
+    for i:=0 to ButtonCount-1 do begin
+      currBtn:=TDraggedToolButton(buttons[i]);
+      InsertTo:=i;
+      if currBtn is TDraggedToolButton then begin
+        if currBtn<>fDraggedBtn then begin
+          if currBtn.BoundsRect.Contains(pnt) or prv then begin
+            before:=(x-currBtn.BoundsRect.Left)*2<currBtn.BoundsRect.Width;
+            if before then begin
+              prv:=false;
+              if prevBtn<>fDraggedBtn then begin
+                if prevBtn<>nil then
+                  Result:=ClientToScreen(rect(prevBtn.BoundsRect.CenterPoint.X,prevBtn.BoundsRect.Top,currBtn.BoundsRect.CenterPoint.x,currBtn.BoundsRect.Bottom))
+                else
+                  Result:=ClientToScreen(rect(currBtn.BoundsRect.Left,currBtn.BoundsRect.Top,currBtn.BoundsRect.CenterPoint.x,currBtn.BoundsRect.Bottom));
+                exit;
+              end else if (currBtn.Index=ButtonCount-1)and(draggedBtnNum<>(ButtonCount-2)) then begin
+                Result:=ClientToScreen(rect(currBtn.BoundsRect.CenterPoint.X,currBtn.BoundsRect.Top,currBtn.BoundsRect.Right,currBtn.BoundsRect.Bottom));
+                exit;
+              end;
+            end else
+              prv:=true;
+          end;
+          //prevBtn:=currBtn;
+        end else
+          prv:=false;
+        prevBtn:=currBtn;
+      end;
+    end;
+  Result.TopLeft:=ClientToScreen(Point(x,y));
+  Result.TopLeft:=Result.TopLeft-MDInBtn;
+  Result.BottomRight:=Result.TopLeft+Point(fDraggedBtn.Width,fDraggedBtn.Height);
+  InsertTo:=-1;
+end;
+
+procedure TPartEnabler.UpdateShadow(sr:TRect);
+begin
+  if fShadowShow then
+    WidgetSet.DrawDefaultDockImage(sr,sr,disMove)
+  else begin
+    WidgetSet.DrawDefaultDockImage(sr,sr,disShow);
+    fShadowShow:=true;
+  end;
+end;
+
+
 constructor TPartEnabler.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
@@ -110,7 +280,10 @@ begin
   Transparent:=true;
   EdgeBorders:=[];
   fPartsEditFunc:=nil;
+  fButtonDrag:=false;
+  fShadowShow:=false;
 end;
+
 destructor TPartEnabler.Destroy;
 begin
   inherited;
@@ -174,7 +347,7 @@ begin
   nmax:=DoGetCountFunc(value);
   for i:=1 to nmax do begin
     _state:=DoGetStateFunc(value,nmax,i,_name,_enabled);
-    with TToolButton.create(self) do
+    with TDraggedToolButton.create(self) do
     begin
       Caption:=_name;
       ShowCaption:=false;
@@ -185,6 +358,7 @@ begin
       Visible:=true;
       left:=300*i;
       parent:=self;
+      dragKind:=dkDock;
       onClick:=@DoButtonClick;
     end;
   end;
@@ -230,4 +404,8 @@ begin
     fOnPartChanged(self);
 end;
 
+initialization
+  PartsDockManager:=DefaultDockManagerClass.Create(nil);
+finalization
+  FreeAndNil(PartsDockManager);
 end.

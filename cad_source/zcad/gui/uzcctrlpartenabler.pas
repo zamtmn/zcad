@@ -80,6 +80,7 @@ type
       procedure MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Integer); override;
       procedure Reorganize;
       function CalcShadowPos(X, Y: Integer):TRect;
+      function Dummy_ClientToScreen(const ARect: TRect):TRect;//добавлен в транке, в 2.2.0 данного медода нет
       procedure UpdateShadow(sr:TRect);
       constructor Create(TheOwner: TComponent); override;
       destructor Destroy; override;
@@ -214,7 +215,19 @@ begin
   InsertTo:=-1;
 end;
 
+{ #todo : Убрать TPartEnabler.Dummy_ClientToScreen когда ClientToScreen(const ARect: TRect): TRect появится в релизе}
+function TPartEnabler.Dummy_ClientToScreen(const ARect: TRect): TRect;//добавлен в транке, в 2.2.0 данного медода нет
+var
+  P : TPoint;
+begin
+  P := ClientToScreen(Point(0, 0));
+  Result := ARect;
+  Result.Offset(P);
+end;
+
+
 function TPartEnabler.CalcShadowPos(X, Y: Integer):TRect;
+
 var
   i:integer;
   pnt:TPoint;
@@ -238,12 +251,12 @@ begin
               prv:=false;
               if prevBtn<>fDraggedBtn then begin
                 if prevBtn<>nil then
-                  Result:=ClientToScreen(rect(prevBtn.BoundsRect.CenterPoint.X,prevBtn.BoundsRect.Top,currBtn.BoundsRect.CenterPoint.x,currBtn.BoundsRect.Bottom))
+                  Result:=Dummy_ClientToScreen(rect(prevBtn.BoundsRect.CenterPoint.X,prevBtn.BoundsRect.Top,currBtn.BoundsRect.CenterPoint.x,currBtn.BoundsRect.Bottom))
                 else
-                  Result:=ClientToScreen(rect(currBtn.BoundsRect.Left,currBtn.BoundsRect.Top,currBtn.BoundsRect.CenterPoint.x,currBtn.BoundsRect.Bottom));
+                  Result:=Dummy_ClientToScreen(rect(currBtn.BoundsRect.Left,currBtn.BoundsRect.Top,currBtn.BoundsRect.CenterPoint.x,currBtn.BoundsRect.Bottom));
                 exit;
               end else if (currBtn.Index=ButtonCount-1)and(draggedBtnNum<>(ButtonCount-2)) then begin
-                Result:=ClientToScreen(rect(currBtn.BoundsRect.CenterPoint.X,currBtn.BoundsRect.Top,currBtn.BoundsRect.Right,currBtn.BoundsRect.Bottom));
+                Result:=Dummy_ClientToScreen(rect(currBtn.BoundsRect.CenterPoint.X,currBtn.BoundsRect.Top,currBtn.BoundsRect.Right,currBtn.BoundsRect.Bottom));
                 exit;
               end;
             end else

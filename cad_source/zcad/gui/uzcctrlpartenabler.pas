@@ -245,6 +245,7 @@ begin
       InsertTo:=i;
       if currBtn is TDraggedToolButton then begin
         if currBtn<>fDraggedBtn then begin
+          if ClientRect.Contains(pnt) then
           if currBtn.BoundsRect.Contains(pnt) or prv then begin
             before:=(x-currBtn.BoundsRect.Left)*2<currBtn.BoundsRect.Width;
             if before then begin
@@ -254,13 +255,20 @@ begin
                   Result:=Dummy_ClientToScreen(rect(prevBtn.BoundsRect.CenterPoint.X,prevBtn.BoundsRect.Top,currBtn.BoundsRect.CenterPoint.x,currBtn.BoundsRect.Bottom))
                 else
                   Result:=Dummy_ClientToScreen(rect(currBtn.BoundsRect.Left,currBtn.BoundsRect.Top,currBtn.BoundsRect.CenterPoint.x,currBtn.BoundsRect.Bottom));
+                Result.intersect(Dummy_ClientToScreen(ClientRect));
                 exit;
               end else if (currBtn.Index=ButtonCount-1)and(draggedBtnNum<>(ButtonCount-2)) then begin
                 Result:=Dummy_ClientToScreen(rect(currBtn.BoundsRect.CenterPoint.X,currBtn.BoundsRect.Top,currBtn.BoundsRect.Right,currBtn.BoundsRect.Bottom));
                 exit;
               end;
-            end else
+            end else begin
+              {if (currBtn.Index=ButtonCount-1) then begin
+                Result:=Dummy_ClientToScreen(rect(currBtn.BoundsRect.CenterPoint.X,currBtn.BoundsRect.Top,currBtn.BoundsRect.Right,currBtn.BoundsRect.Bottom));
+                Result.intersect(Dummy_ClientToScreen(ClientRect));
+                exit;
+              end;}
               prv:=true;
+            end;
           end;
           //prevBtn:=currBtn;
         end else
@@ -289,7 +297,7 @@ constructor TPartEnabler.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   ShowCaptions:=true;
-  Wrapable:=false;
+  Wrapable:=False;
   Transparent:=true;
   EdgeBorders:=[];
   fPartsEditFunc:=nil;

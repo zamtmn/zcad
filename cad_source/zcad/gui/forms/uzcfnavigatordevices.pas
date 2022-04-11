@@ -547,7 +547,7 @@ begin
 end;
 procedure TNavigatorDevices.ReorganizeParts(var parts:string;const AFrom,ATo:integer;ABefore:boolean);
 var
-  i,c:integer;
+  i,c,add:integer;
   partsarray:TMyVector<string>;
   name:string;
   en,state:boolean;
@@ -564,17 +564,16 @@ begin
   name:=partsarray[AFrom-1];
   partsarray.erase(AFrom-1);
 
-  for i:=0 to partsarray.size-1 do begin
-    if i=0 then
-      parts:=partsarray[i]
-    else
-      parts:=parts+'|'+partsarray[i]
-  end;
+  if AFrom<ATo then
+    add:=-1
+  else
+    add:=0;
 
   if ABefore then
-    partsarray.Insert(ATo-1,name)
-  else
-    partsarray.Insert(ATo,name);
+    add:=add-1;
+
+  partsarray.Insert(ATo+Add,name);
+
 
   for i:=0 to partsarray.size-1 do begin
     if i=0 then

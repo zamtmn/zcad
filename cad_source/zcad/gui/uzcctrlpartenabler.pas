@@ -22,7 +22,7 @@ unit uzcctrlpartenabler;
 interface
 
 uses
-  GraphType,LCLIntf,LCLType,Toolwin,InterfaceBase,
+  GraphType,LCLIntf,LCLType,Toolwin,//InterfaceBase,
   Controls,Classes,Graphics,Buttons,ExtCtrls,ComCtrls,Forms,Themes,ActnList,Menus,
   sysutils,Generics.Collections;
 
@@ -45,6 +45,8 @@ type
 
   TDToolBar=class(TToolBar)
     procedure StartToolButtonDrag(btn:TDraggedToolButton;MDownInBtn:TPoint);virtual;abstract;
+    procedure CancelToolButtonDrag;virtual;abstract;
+    procedure onKeyD(Sender: TObject; var Key: Word; Shift: TShiftState);virtual;abstract;
   end;
 
   TMenuItemList=specialize TObjectList<TMenuItem>;
@@ -76,11 +78,12 @@ type
       InsertTo:integer;
    public
       procedure StartToolButtonDrag(btn:TDraggedToolButton;MDownInBtn:TPoint);override;
+      procedure CancelToolButtonDrag;override;
       procedure MouseMove(Shift: TShiftState; X, Y: Integer); override;
       procedure MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Integer); override;
+      procedure onKeyD(Sender: TObject; var Key: Word; Shift: TShiftState); override;
       procedure Reorganize;
       function CalcShadowPos(X, Y: Integer):TRect;
-      function Dummy_ClientToScreen(const ARect: TRect):TRect;//добавлен в транке, в 2.2.0 данного медода нет
       procedure UpdateShadow(sr:TRect);
       constructor Create(TheOwner: TComponent); override;
       destructor Destroy; override;
@@ -94,6 +97,7 @@ type
       procedure DoMenuPopup(Sender: TObject);
       function ButtonIndex2PartIndex(index:integer):integer;
 
+
       property pvalue:PT read fpvalue write fpvalue;
       property PartsEditFunc:TPartsEditFunc read fPartsEditFunc write fPartsEditFunc;
       property ReorganizeParts:TReorganizePartsFunc read fReorganizeParts write fReorganizeParts;
@@ -104,10 +108,48 @@ type
       property OnMenuPopup:TNotifyEvent read fOnMenuPopup write fOnMenuPopup;
   end;
 
+  TDockImageWindow = class(THintWindow)
+  public
+    constructor Create(AOwner: TComponent); override;
+  end;
+
+
+{ #todo : Убрать Dummy_ClientToScreen когда control.ClientToScreen(const ARect: TRect): TRect появится в релизе}
+function Dummy_ClientToScreen(ACtrl:TControl;const ARect: TRect): TRect;//добавлен в транке, в 2.2.0 данного медода нет
+procedure ClipByClientInscr(ACtrl:TControl;var ARect: TRect);
+function ClientToScreenAndClipByParent(ACtrl:TControl):TRect;
+procedure HintDockImage(Sender: TObject; AOldRect, ANewRect: TRect;AOperation: TDockImageOperation);
+
 var
-  PartsDockManager:TDockManager;
+ DockImageWindow:TDockImageWindow=nil;
+
 
 implementation
+
+constructor TDockImageWindow.Create(AOwner: TComponent);
+begin
+inherited Create(AOwner);
+Color := clHighlight;
+Width := 100;
+Height := 100;
+AlphaBlend := True;
+AlphaBlendValue := 100;
+end;
+
+procedure HintDockImage(Sender: TObject; AOldRect, ANewRect: TRect;
+AOperation: TDockImageOperation);
+begin
+if DockImageWindow = nil then
+  DockImageWindow := TDockImageWindow.Create(Application);
+DockImageWindow.onKeyDown:=@TDToolBar(Sender).onKeyD;
+if AOperation <> disHide then
+  DockImageWindow.BoundsRect := ANewRect;
+if AOperation = disShow then
+  DockImageWindow.Show
+else if AOperation = disHide then
+  DockImageWindow.Hide;
+end;
+
 constructor TDraggedToolButton.Create(TheOwner: TComponent);
 begin
   inherited;
@@ -169,6 +211,20 @@ begin
   if assigned(fSetStateProc)then
     fSetStateProc(value,n,state);
 end;
+procedure TPartEnabler.CancelToolButtonDrag;
+var
+  sr:TRect;
+begin
+  if fShadowShow then begin
+    HintDockImage(self,sr,sr,disHide);
+    //WidgetSet.DrawDefaultDockImage(sr,sr,disHide);
+    fShadowShow:=false;
+  end;
+  MouseCapture:=false;
+  fButtonDrag:=false;
+  fDraggedBtn:=nil;
+end;
+
 procedure TPartEnabler.StartToolButtonDrag(btn:TDraggedToolButton;MDownInBtn:TPoint);
 begin
   MouseCapture:=true;
@@ -180,6 +236,7 @@ end;
 procedure TPartEnabler.MouseMove(Shift: TShiftState; X, Y: Integer);
 var
   sr:TRect;
+  a:TDockImageWindow;
 begin
   inherited MouseMove(Shift,X,Y);
   if fButtonDrag then begin
@@ -193,18 +250,13 @@ var
   sr:TRect;
 begin
   inherited;
-  if fShadowShow then begin
-    sr:=CalcShadowPos(x,y);
-    WidgetSet.DrawDefaultDockImage(sr,sr,disHide);
-    fShadowShow:=false;
-  end;
-  fButtonDrag:=false;
   if InsertTo>0 then begin
     Reorganize;
     setup(fpvalue^);
     if assigned(fOnPartChanged)then
       fOnPartChanged(self);
   end;
+  CancelToolButtonDrag;
 end;
 
 procedure TPartEnabler.Reorganize;
@@ -215,16 +267,53 @@ begin
   InsertTo:=-1;
 end;
 
-{ #todo : Убрать TPartEnabler.Dummy_ClientToScreen когда ClientToScreen(const ARect: TRect): TRect появится в релизе}
-function TPartEnabler.Dummy_ClientToScreen(const ARect: TRect): TRect;//добавлен в транке, в 2.2.0 данного медода нет
+{ #todo : Убрать Dummy_ClientToScreen когда control.ClientToScreen(const ARect: TRect): TRect появится в релизе}
+function Dummy_ClientToScreen(ACtrl:TControl;const ARect: TRect): TRect;//добавлен в транке, в 2.2.0 данного медода нет
 var
-  P : TPoint;
+  P:TPoint;
 begin
-  P := ClientToScreen(Point(0, 0));
+  P:=ACtrl.ClientToScreen(Point(0, 0));
   Result := ARect;
   Result.Offset(P);
 end;
 
+procedure ClipByClientInscr(ACtrl:TControl;var ARect: TRect);
+var
+  P:TPoint;
+  ClRect:TRect;
+begin
+  P:=ACtrl.ClientToScreen(Point(0, 0));
+  ClRect:=ACtrl.ClientRect;
+  ClRect.Offset(P) ;
+  ARect.Intersect(ClRect);
+end;
+
+function ClientToScreenAndClipByParent(ACtrl:TControl):TRect;
+var
+  P:TPoint;
+  prnt:TControl;
+begin
+  P:=ACtrl.ClientToScreen(Point(0, 0));
+  Result:=ACtrl.ClientRect;
+  Result.Offset(P);
+
+  prnt:=ACtrl.Parent;
+  while prnt<>nil do begin
+    ClipByClientInscr(prnt,result);
+    prnt:=prnt.Parent;
+  end;
+end;
+
+procedure TPartEnabler.onKeyD(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  case Key of
+    VK_ESCAPE:
+    begin
+      CancelToolButtonDrag;
+      Key:= 0;
+    end;
+  end;
+end;
 
 function TPartEnabler.CalcShadowPos(X, Y: Integer):TRect;
 
@@ -234,12 +323,14 @@ var
   draggedBtnNum:integer;
   prevBtn,currBtn:TDraggedToolButton;
   prv:boolean;
+  clippedrec:TRect;
 begin
   pnt:=Point(x,y);
   prevBtn:=nil;
   prv:=false;
   draggedBtnNum:=fDraggedBtn.Index;
-  if BoundsRect.Contains(pnt) then
+  clippedrec:=ClientToScreenAndClipByParent(self);
+  if clippedrec.Contains(ClientToScreen(pnt)) then
     for i:=0 to ButtonCount-1 do begin
       currBtn:=TDraggedToolButton(buttons[i]);
       InsertTo:=i;
@@ -252,13 +343,14 @@ begin
               prv:=false;
               if prevBtn<>fDraggedBtn then begin
                 if prevBtn<>nil then
-                  Result:=Dummy_ClientToScreen(rect(prevBtn.BoundsRect.CenterPoint.X,prevBtn.BoundsRect.Top,currBtn.BoundsRect.CenterPoint.x,currBtn.BoundsRect.Bottom))
+                  Result:=Dummy_ClientToScreen(self,rect(prevBtn.BoundsRect.CenterPoint.X,prevBtn.BoundsRect.Top,currBtn.BoundsRect.CenterPoint.x,currBtn.BoundsRect.Bottom))
                 else
-                  Result:=Dummy_ClientToScreen(rect(currBtn.BoundsRect.Left,currBtn.BoundsRect.Top,currBtn.BoundsRect.CenterPoint.x,currBtn.BoundsRect.Bottom));
-                Result.intersect(Dummy_ClientToScreen(ClientRect));
+                  Result:=Dummy_ClientToScreen(self,rect(currBtn.BoundsRect.Left,currBtn.BoundsRect.Top,currBtn.BoundsRect.CenterPoint.x,currBtn.BoundsRect.Bottom));
+                Result.intersect(clippedrec);
                 exit;
               end else if (currBtn.Index=ButtonCount-1)and(draggedBtnNum<>(ButtonCount-2)) then begin
-                Result:=Dummy_ClientToScreen(rect(currBtn.BoundsRect.CenterPoint.X,currBtn.BoundsRect.Top,currBtn.BoundsRect.Right,currBtn.BoundsRect.Bottom));
+                Result:=Dummy_ClientToScreen(self,rect(currBtn.BoundsRect.CenterPoint.X,currBtn.BoundsRect.Top,currBtn.BoundsRect.Right,currBtn.BoundsRect.Bottom));
+                Result.intersect(clippedrec);
                 exit;
               end;
             end else begin
@@ -285,9 +377,9 @@ end;
 procedure TPartEnabler.UpdateShadow(sr:TRect);
 begin
   if fShadowShow then
-    WidgetSet.DrawDefaultDockImage(sr,sr,disMove)
+    HintDockImage(self,sr,sr,disMove)//WidgetSet.DrawDefaultDockImage(sr,sr,disMove)
   else begin
-    WidgetSet.DrawDefaultDockImage(sr,sr,disShow);
+    HintDockImage(self,sr,sr,disShow);//WidgetSet.DrawDefaultDockImage(sr,sr,disShow);
     fShadowShow:=true;
   end;
 end;
@@ -381,6 +473,8 @@ begin
       parent:=self;
       dragKind:=dkDock;
       onClick:=@DoButtonClick;
+      if i=nmax then
+        enabled:=false;
     end;
   end;
 end;
@@ -426,7 +520,5 @@ begin
 end;
 
 initialization
-  PartsDockManager:=DefaultDockManagerClass.Create(nil);
 finalization
-  FreeAndNil(PartsDockManager);
 end.

@@ -63,6 +63,7 @@ const {as_normal=0;
   GDBSplineID = 13;
   GDBGenericDimensionID = 14;
   GDBBlockDefID = 15;
+  GDBHatchID = 16;
 
   GDBNetID = 100;
   GDBDeviceID = 101;
@@ -219,6 +220,7 @@ const {as_normal=0;
   ObjN_GDBObjNet='GDBObjNet';
   ObjN_GDBObjCable='GDBObjCable';
   ObjN_GDBObjElLeader='GDBObjElLeader';
+  ObjN_GDBObjHatch='GDBObjHatch';
 
   DevicePrefix='DEVICE_';
   DrawingDeviceBaseUnitName='drawingdevicebase';

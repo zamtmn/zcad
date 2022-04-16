@@ -32,69 +32,37 @@ resourcestring
 type
    TCreateExtLoadData=function:pointer;
    TProcessExtLoadData=procedure(peld:pointer);
-   entnamindex=record
-                    entname:String;
-              end;
+   DXFEntDesc=record
+     UCASEEntName:String;
+   end;
    TLongProcessIndicator=Procedure(a:integer) of object;
 const
-     acadentignoredcol=2;
-     ignorenamtable:array[1..acadentignoredcol]of entnamindex=
-     (
-     (entname:'HATCH'),
-     (entname:'ACAD_PROXY_ENTITY')
-     );
-     {acadentsupportcol=14;
-     entnamtable:array[1..acadentsupportcol]of entnamindex=
-     (
-     (entname:'POINT'),
-     (entname:'LINE'),
-     (entname:'CIRCLE'),
-     (entname:'POLYLINE'),
-     (entname:'TEXT'),
-     (entname:'ARC'),
-     (entname:'INSERT'),
-     (entname:'MTEXT'),
-     (entname:'LWPOLYLINE'),
-     (entname:'3DFACE'),
-     (entname:'SOLID'),
-     (entname:'ELLIPSE'),
-     (entname:'SPLINE'),
-     (entname:'DIMENSION')
-     );}
+     IgnoredDXFEntsArray:array of DXFEntDesc=[
+       (UCASEEntName:'HATCH'),
+       (UCASEEntName:'ACAD_PROXY_ENTITY')
+     ];
 var FOC:Integer;
     CreateExtLoadData:TCreateExtLoadData=nil;
     ClearExtLoadData:TProcessExtLoadData=nil;
     FreeExtLoadData:TProcessExtLoadData=nil;
 procedure addfromdxf(name: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 function savedxf2000(SavedFileName,TemplateFileName:String;var drawing:TSimpleDrawing):boolean;
-procedure saveZCP(name: String; {gdb: PGDBDescriptor}var drawing:TSimpleDrawing);
-procedure LoadZCP(name: String; {gdb: PGDBDescriptor}var drawing:TSimpleDrawing);
+procedure saveZCP(name: String;var drawing:TSimpleDrawing);
+procedure LoadZCP(name: String;var drawing:TSimpleDrawing);
 implementation
-//uses GDBBlockDef,UGDBLayerArray,fileformatsmanager;
 
 function IsIgnoredEntity(name:String):Integer;
-var i:Integer;
+var
+  i:Integer;
+  uname:String;
 begin
-     result:=-1;
-     for i:=1 to acadentignoredcol do
-          if uppercase(ignorenamtable[i].entname)=uppercase(name) then
-          begin
-               result:=i;
-               exit;
-          end;
+  uname:=uppercase(name);
+  for i:=low(IgnoredDXFEntsArray) to high(IgnoredDXFEntsArray) do
+    if IgnoredDXFEntsArray[i].UCASEEntName=uname then
+      exit(i);
+  result:=-1;
 end;
 
-{function entname2GDBID(name:String):Integer;
-var i:Integer;
-begin
-     result:=-1;
-     for i:=1 to acadentsupportcol do
-          if uppercase(entnamtable[i].entname)=uppercase(name) then
-          begin
-               result:=i;
-               exit;
-          end;
-end;}
 procedure gotodxf(var f: TZctnrVectorBytes; fcode: Integer; fname: String);
 var
   byt: Byte;

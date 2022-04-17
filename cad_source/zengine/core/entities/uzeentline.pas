@@ -17,7 +17,7 @@
 }
 
 unit uzeentline;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses LCLProc,uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,

@@ -17,7 +17,7 @@
 }
 
 unit uzgldrawergeneral;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses uzegeometrytypes,uzgvertex3sarray,uzgprimitivescreatorabstract,uzgprimitivescreator,
      uzgldrawerabstract,uzepalette,types,Classes,Graphics,

@@ -17,7 +17,7 @@
 }
 
 unit uzcplugins;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses sysutils, dynlibs, uzclog,gzctnrVector,uzeentity,
      LazLogger;

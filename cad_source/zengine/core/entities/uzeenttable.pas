@@ -17,7 +17,7 @@
 }
 
 unit uzeenttable;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses uzgldrawcontext,uzeentabstracttext,uzetrash,uzedrawingdef,uzbstrproc,uzctnrVectorBytes,

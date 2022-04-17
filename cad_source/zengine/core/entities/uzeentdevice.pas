@@ -17,7 +17,7 @@
 }
 
 unit uzeentdevice;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses uzestyleslayers,uzepalette,uzeobjectextender,uabstractunit,uzeentityfactory,

@@ -17,7 +17,7 @@
 }
 
 unit uzetrash;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses
     uzegeometrytypes,uzeentity,uzeconsts,uzegeometry;

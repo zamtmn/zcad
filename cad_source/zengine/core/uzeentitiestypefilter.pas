@@ -17,7 +17,7 @@
 }
 
 unit uzeentitiestypefilter;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 
 interface

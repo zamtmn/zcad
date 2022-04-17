@@ -5,7 +5,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }  
 unit uzccablemanager;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses uzcenitiesvariablesextender,uzcvariablesutils,Varman,uzbstrproc,uzcentcable,
      uzeentdevice,uzeconsts,gzctnrVectorObjects,

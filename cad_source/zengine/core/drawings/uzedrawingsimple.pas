@@ -17,7 +17,7 @@
 }
 
 unit uzedrawingsimple;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses uzedrawingdef,uzeblockdefsfactory,uzestylesdim,
      gzctnrVectorTypes,uzedrawingabstract,uzbstrproc,UGDBObjBlockdefArray,uzestylestables,

@@ -17,7 +17,7 @@
 }
 {$MODE OBJFPC}{$H+}
 unit zcobjectchangeundocommand2;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses zeundostack,zebaseundocommands,uzbtypes,uzeentity,
      uzestyleslayers,uzestylestexts,uzestylesdim,uzgldrawcontext,uzcdrawings;

@@ -17,7 +17,7 @@
 }
 
 unit uzepalette;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 
 type

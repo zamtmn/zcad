@@ -19,7 +19,7 @@
 {$modeswitch advancedrecords}
 unit uzccommand_treestat;
 
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses

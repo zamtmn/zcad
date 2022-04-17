@@ -5,7 +5,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }   
 unit uzcentcable;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses uzeobjectextender,varman,uzgldrawcontext,uzeentgenericsubentry,uzedrawingdef,

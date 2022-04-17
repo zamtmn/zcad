@@ -17,7 +17,7 @@
 }
 
 unit uzeentwithlocalcs;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,uzeentity,

@@ -17,7 +17,7 @@
 }
 
 unit uzeentityfactory;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 
 interface

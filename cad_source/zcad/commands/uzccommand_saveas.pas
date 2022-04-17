@@ -17,7 +17,7 @@
 }
 
 unit uzccommand_saveas;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses

@@ -18,7 +18,7 @@
 {$mode delphi}
 unit uzccommand_copyclip;
 
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses

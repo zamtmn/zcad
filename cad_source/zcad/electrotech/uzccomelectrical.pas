@@ -9,7 +9,7 @@ unit uzccomelectrical;
 {$IFDEF FPC}
   {$CODEPAGE UTF8}
 {$endif}
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses

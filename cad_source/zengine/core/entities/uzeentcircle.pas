@@ -17,7 +17,7 @@
 }
 
 unit uzeentcircle;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses
     gzctnrVectorTypes,uzeentityfactory,uzeentsubordinated,uzgldrawcontext,uzedrawingdef,uzecamera,

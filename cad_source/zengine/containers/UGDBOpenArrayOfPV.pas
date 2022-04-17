@@ -17,7 +17,7 @@
 }
 
 unit UGDBOpenArrayOfPV;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses uzegeometrytypes,uzgldrawcontext,uzedrawingdef,uzeentity,uzecamera,
      gzctnrVectorTypes,sysutils,uzbtypes,uzegeometry,

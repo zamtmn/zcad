@@ -17,7 +17,7 @@
 }
 
 unit uzedrawingdef;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses uzgldrawcontext,uzestylesdim,uzbtypes,uzestyleslayers,uzestylestexts,
      uzedimensionaltypes,uzestyleslinetypes,uzestylestables;

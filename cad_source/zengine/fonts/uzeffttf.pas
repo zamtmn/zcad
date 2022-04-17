@@ -17,7 +17,7 @@
 }
 
 unit uzeffttf;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses uzefontmanager,EasyLazFreeType,uzefontttf,uzegeometry,
     uzefont,uzbstrproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}sysutils,

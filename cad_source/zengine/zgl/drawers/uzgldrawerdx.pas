@@ -17,7 +17,7 @@
 }
 
 unit uzgldrawerdx;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses
     uzgindexsarray,LCLProc,uzepalette,

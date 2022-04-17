@@ -27,7 +27,7 @@ unit uzccommand_drawsuperline;
 { файл def.inc необходимо включать в начале каждого модуля zcad
   он содержит в себе централизованные настройки параметров компиляции  }
   
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses

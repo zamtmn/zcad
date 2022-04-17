@@ -17,7 +17,7 @@
 }
 {MODE OBJFPC}{H+}
 unit uzeentityextender;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses uzedrawingdef,usimplegenerics,

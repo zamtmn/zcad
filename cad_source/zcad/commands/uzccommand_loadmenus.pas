@@ -17,7 +17,7 @@
 }
 
 unit uzccommand_loadmenus;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses

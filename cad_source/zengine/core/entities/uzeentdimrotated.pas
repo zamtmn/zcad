@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 unit uzeentdimrotated;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses uzeentityfactory,uzeentdimaligned,uzeentdimension,uzestylesdim,

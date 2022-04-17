@@ -18,7 +18,7 @@
 
 {**Модуль утилит движка}
 unit uzeutils;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses
   uzepalette,uzestyleslinetypes,uzestyleslayers,uzedrawingsimple,

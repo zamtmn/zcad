@@ -17,7 +17,7 @@
 }
 
 unit uzefont;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses math,uzgldrawerabstract,uzgprimitivescreator,uzgprimitives,
      uzbstrproc,uzctnrVectorBytes,sysutils,uzbtypes,

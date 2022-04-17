@@ -17,7 +17,7 @@
 }
 
 unit uzeenrepresentation;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses uzgldrawcontext,uzgldrawerabstract,uzglvectorobject,
      sysutils,

@@ -17,7 +17,7 @@
 }
 {MODE OBJFPC}{H+}
 unit uzeffdxf;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses LCLProc,uzbpaths,uzbstrproc,uzgldrawcontext,usimplegenerics,uzestylesdim,uzeentityfactory,
     {$IFNDEF DELPHI}LazUTF8,{$ENDIF}

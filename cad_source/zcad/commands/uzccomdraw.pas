@@ -17,7 +17,7 @@
 }
 {$MODE OBJFPC}{$H+}
 unit uzccomdraw;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses

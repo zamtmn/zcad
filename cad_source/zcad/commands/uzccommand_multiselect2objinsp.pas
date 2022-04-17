@@ -18,7 +18,7 @@
 {$mode delphi}
 unit uzccommand_multiselect2objinsp;
 
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses

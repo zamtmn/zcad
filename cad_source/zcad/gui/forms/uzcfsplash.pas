@@ -17,7 +17,7 @@
 }
 
 unit uzcfsplash;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses
  uzcsysparams,uzbpaths,uzclog,uniqueinstanceraw,uzcstrconsts,uzbstrproc,Forms,

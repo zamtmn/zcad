@@ -17,7 +17,7 @@
 }
 
 unit UGDBPolyLine2DArray;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses uzegeometrytypes,gzctnrVector,sysutils,uzegeometry,
      gzctnrVectorTypes,math;

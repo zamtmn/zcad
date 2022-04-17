@@ -17,7 +17,7 @@
 }
 
 unit UGDBVisibleOpenArray;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses gzctnrVectorTypes,uzegeometrytypes,uzeentity,uzecamera,UGDBOpenArrayOfPV,sysutils,uzbtypes,uzegeometry;
 type

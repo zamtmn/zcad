@@ -17,7 +17,7 @@
 }
 
 unit uzgprimitivescreator;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses uzgprimitivescreatorabstract,uzgindexsarray,uzgprimitives,
      sysutils,uzbtypes,uzgprimitivessarray,

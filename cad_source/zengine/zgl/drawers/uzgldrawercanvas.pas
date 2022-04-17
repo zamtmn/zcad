@@ -17,7 +17,7 @@
 }
 
 unit uzgldrawercanvas;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses
     FPCanvas,uzgldrawergeneral2d,uzcsysvars,

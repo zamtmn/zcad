@@ -17,7 +17,7 @@
 }
 
 unit uzeentlwpolyline;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses gzctnrVector,uzeentityfactory,uzeentsubordinated,

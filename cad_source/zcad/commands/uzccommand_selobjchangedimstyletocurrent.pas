@@ -18,7 +18,7 @@
 {$mode delphi}
 unit uzccommand_selobjchangedimstyletocurrent;
 
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses

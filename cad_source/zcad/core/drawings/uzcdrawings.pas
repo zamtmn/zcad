@@ -17,7 +17,7 @@
 }
 
 unit uzcdrawings;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses
     uzglviewareageneral,uzctranslations,uzedimblocksregister,uzeblockdefsfactory,

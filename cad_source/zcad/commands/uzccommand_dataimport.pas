@@ -17,7 +17,7 @@
 }
 {$MODE DELPHI}
 unit uzccommand_dataimport;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses

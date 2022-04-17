@@ -18,7 +18,7 @@
 
 {**Модуль утилит зкада}
 unit uzcutils;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 
 interface

@@ -17,7 +17,7 @@
 }
 
 unit uzeentwithmatrix;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses uzgldrawcontext,uzedrawingdef,uzecamera,uzeentity,uzbtypes,

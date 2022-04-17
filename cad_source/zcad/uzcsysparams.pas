@@ -17,7 +17,7 @@
 }
 
 unit uzcsysparams;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses XMLConf,XMLPropStorage,LazConfigStorage,fileutil,
   LCLProc,uzclog,uzbpaths,Forms{$IFNDEF DELPHI},LazUTF8{$ENDIF},sysutils;

@@ -17,7 +17,7 @@
 }
 
 unit uzccommandsmanager;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 {$interfaces corba}
 interface
 uses uzctnrVectorPointers,gzctnrVectorPObjects,uzcsysvars,uzegeometry,uzglviewareaabstract,uzbpaths,

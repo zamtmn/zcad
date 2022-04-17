@@ -17,7 +17,7 @@
 }
 
 unit uzglgeomdata;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses uzgindexsarray,uzgvertex3sarray,sysutils,uzbtypes,
      uzegeometrytypes,uzegeometry,gzctnrVectorTypes;

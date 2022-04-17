@@ -18,7 +18,7 @@
 {$mode delphi}
 unit uzccommand_erase;
 
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses

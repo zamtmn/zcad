@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 unit uzcftextstyles;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 {$mode objfpc}{$H+}
 
 interface

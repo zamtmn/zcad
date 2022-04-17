@@ -17,7 +17,7 @@
 }
 
 unit uzglviewareaogl;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses
      {$IFDEF LCLGTK2}

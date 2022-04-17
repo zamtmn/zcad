@@ -18,7 +18,7 @@
 {$mode delphi}
 unit uzccommand_multiobjvarman;
 
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses

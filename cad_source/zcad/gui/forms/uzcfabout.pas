@@ -17,7 +17,7 @@
 }
 
 unit uzcfabout;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses
  uzcsysparams,uzcstrconsts,gettext,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}

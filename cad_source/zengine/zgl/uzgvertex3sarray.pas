@@ -17,7 +17,7 @@
 }
 
 unit uzgvertex3sarray;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses gzctnrVector,sysutils,
      gzctnrVectorTypes,uzegeometrytypes,uzegeometry;

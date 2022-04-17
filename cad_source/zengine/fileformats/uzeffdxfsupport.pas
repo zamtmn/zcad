@@ -17,7 +17,7 @@
 }
 
 unit uzeffdxfsupport;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses uzegeometrytypes,uzbtypes,sysutils,uzctnrVectorBytes,usimplegenerics;

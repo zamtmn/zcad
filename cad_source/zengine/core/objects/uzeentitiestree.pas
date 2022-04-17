@@ -17,7 +17,7 @@
 }
 
 unit uzeentitiestree;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses
     gzctnrVectorTypes,graphics,gzctnrVectorSimple,gzctnrVectorPObjects,

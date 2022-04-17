@@ -17,7 +17,7 @@
 }
 
 unit uzecamera;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses LCLProc,uzegeometrytypes,uzbtypes,uzegeometry;

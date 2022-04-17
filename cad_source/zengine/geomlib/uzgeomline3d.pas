@@ -17,7 +17,7 @@
 }
 
 unit uzgeomline3d;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses
      sysutils,uzbtypes,uzegeometry,uzgeomentity3d,uzegeometrytypes;

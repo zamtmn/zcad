@@ -17,7 +17,7 @@
 }
 
 unit uzctbextpalettes;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses
      uzcstrconsts,uzcsysparams,uzcsysvars,uzcsysinfo,

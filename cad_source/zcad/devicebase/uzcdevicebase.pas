@@ -1,5 +1,5 @@
 unit uzcdevicebase;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses uzcinterface,uzbpaths,uzctranslations,gvector,varmandef,CsvDocument,uzcdevicebaseabstract,uzcsysvars,
      LazUTF8,uzcsysinfo,strmy,uzbtypes,UUnitManager,varman,sysutils,

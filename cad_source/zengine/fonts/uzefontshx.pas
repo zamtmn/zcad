@@ -17,7 +17,7 @@
 }
 
 unit uzefontshx;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses uzefontbase,uzctnrVectorBytes,sysutils,
      uzegeometry;

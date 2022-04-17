@@ -17,7 +17,7 @@
 }
 
 unit uzcLog;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 {$mode objfpc}{$H+}
 interface
 uses uzctnrVectorBytes,LazLoggerBase,

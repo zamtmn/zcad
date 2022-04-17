@@ -17,7 +17,7 @@
 }
 
 unit uzcsuptypededitors;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 

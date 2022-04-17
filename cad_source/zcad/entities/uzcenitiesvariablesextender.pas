@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 unit uzcenitiesvariablesextender;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses sysutils,UGDBObjBlockdefArray,uzedrawingdef,uzeentityextender,

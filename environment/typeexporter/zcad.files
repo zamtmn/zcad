@@ -65,6 +65,7 @@ zengine/core/entities/uzeentplainwithox.pas
 zengine/core/entities/uzeentabstracttext.pas
 zengine/core/entities/uzeentcircle.pas
 zengine/core/entities/uzeentarc.pas
+zengine/core/entities/uzeenthatch.pas
 zengine/core/entities/uzeentellipse.pas
 zengine/core/objects/uzeentitiestree.pas
 zengine/containers/UGDBVisibleTreeArray.pas

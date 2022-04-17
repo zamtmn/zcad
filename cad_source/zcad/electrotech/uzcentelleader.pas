@@ -5,7 +5,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }  
 unit uzcentelleader;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses uzcenitiesvariablesextender,uzeentityfactory,Varman,uzgldrawcontext,

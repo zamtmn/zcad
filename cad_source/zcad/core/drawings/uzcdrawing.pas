@@ -17,7 +17,7 @@
 }
 
 unit uzcdrawing;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses
     uzctranslations,uzcinterface,uzgldrawcontext,zeundostack,zcchangeundocommand,

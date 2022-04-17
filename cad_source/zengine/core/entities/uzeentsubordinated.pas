@@ -17,7 +17,7 @@
 }
 
 unit uzeentsubordinated;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses strutils,uzgldrawcontext,uzeentityextender,uzetextpreprocessor,uzedrawingdef,

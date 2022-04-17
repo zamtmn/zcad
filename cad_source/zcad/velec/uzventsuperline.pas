@@ -17,7 +17,7 @@
 }
 
 unit uzventsuperline;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses uzeobjectextender,LCLProc,uzeentityfactory,uzedrawingdef,

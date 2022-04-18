@@ -657,7 +657,8 @@ var
     dna:devnamearray;
     i:integer;
     DC:TDrawContext;
-    pentvarext:TVariablesExtender;
+    entvarext,delvarext:TVariablesExtender;
+    extensionssave:pointer;
 begin
      currentcoord:=nulvertex;
      dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
@@ -673,9 +674,9 @@ begin
      repeat
            if psd^.objaddr^.GetObjType=GDBDeviceID then
            begin
-                pentvarext:=psd^.objaddr^.GetExtension<TVariablesExtender>;
+                entvarext:=psd^.objaddr^.GetExtension<TVariablesExtender>;
                 //pvd:=PTObjectUnit(psd^.objaddr^.ou.Instance)^.FindVariable('DESC_MountingSite');
-                pvd:=pentvarext.entityunit.FindVariable({'DESC_MountingSite'}'NMO_Name');
+                pvd:=entvarext.entityunit.FindVariable({'DESC_MountingSite'}'NMO_Name');
                 if pvd<>nil then
                                 dn.name:=pvd.data.PTD.GetValueAsString(pvd.data.Addr.Instance)
                             else
@@ -700,7 +701,15 @@ begin
        begin
             dn:=dna[i];
 
+            extensionssave:=dn.pdev^.EntExtensions;
+            dn.pdev^.EntExtensions:=nil;
             pointer(pnevdev):=dn.pdev^.Clone(@drawings.GetCurrentDWG.ConstructObjRoot);
+            dn.pdev^.EntExtensions:=extensionssave;
+
+            entvarext:=dn.pdev^.GetExtension<TVariablesExtender>;
+            pnevdev^.AddExtension(TVariablesExtender.Create(pnevdev));
+            delvarext:=pnevdev^.GetExtension<TVariablesExtender>;
+            entvarext.addDelegate(pnevdev,delvarext);
 
             pnevdev.Local.P_insert:=currentcoord;
             pnevdev.Local.Basis.oz:=xy_Z_Vertex;

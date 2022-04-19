@@ -1,6 +1,7 @@
 unit blocktype;
 interface
 uses system,devices;
+usescopy uentid;
 var
    Device_Type:TDeviceType;(*'Тип устройства'*) 
    Device_Class:TDeviceClass;(*'Класс устройства'*)
@@ -14,6 +15,4 @@ begin
    BTY_TreeCoord:='';
    Device_Group:=TDG_ElDevice;
    ENTID_Type:='OBJT_Unknown';
-   ENTID_Representation:='Test';
-   ENTID_Function:='Test';
 end.

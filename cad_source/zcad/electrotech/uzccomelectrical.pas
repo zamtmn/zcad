@@ -659,6 +659,7 @@ var
     DC:TDrawContext;
     entvarext,delvarext:TVariablesExtender;
     extensionssave:pointer;
+    pu:PTSimpleUnit;
 begin
      currentcoord:=nulvertex;
      dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
@@ -696,6 +697,7 @@ begin
      devnamesort.Sort(dna,dna.Size);
      t_matrix:=uzegeometry.CreateTranslationMatrix(createvertex(0,15,0));
 
+     pu:=units.findunit(SupportPath,InterfaceTranslate,'uentrepresentation');
 
      for i:=0 to dna.Size-1 do
        begin
@@ -710,6 +712,12 @@ begin
             pnevdev^.AddExtension(TVariablesExtender.Create(pnevdev));
             delvarext:=pnevdev^.GetExtension<TVariablesExtender>;
             entvarext.addDelegate(pnevdev,delvarext);
+
+
+            if pu<>nil then
+             delvarext.entityunit.CopyFrom(pu);
+
+            delvarext:=pnevdev^.GetExtension<TVariablesExtender>;
 
             pnevdev.Local.P_insert:=currentcoord;
             pnevdev.Local.Basis.oz:=xy_Z_Vertex;

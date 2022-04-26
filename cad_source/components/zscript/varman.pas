@@ -200,7 +200,7 @@ TSimpleUnit=object(TAbstractUnit)
                   destructor done;virtual;
                   function CreateFixedVariable(varname,vartype:TInternalScriptString;_pinstance:pointer):Pointer;virtual;
                   function CreateVariable(varname,vartype:TInternalScriptString):vardesk;virtual;
-                  function FindVariable(varname:TInternalScriptString):pvardesk;virtual;
+                  function FindVariable(varname:TInternalScriptString;InInterfaceOnly:Boolean=False):pvardesk;virtual;
                   function FindVarDesc(varname:TInternalScriptString):TInVectorAddr;virtual;
                   function FindVariableByInstance(_Instance:Pointer):pvardesk;virtual;
                   function FindValue(varname:TInternalScriptString):pvardesk;virtual;
@@ -446,7 +446,6 @@ var
    pv:pvardesk;
    vd: vardesk;
    ir:itrec;
-//   value:TInternalScriptString;
 begin
      pu:=InterfaceUses.beginiterate(ir);
      if pu<>nil then
@@ -457,7 +456,7 @@ begin
      pv:=InterfaceVariables.vardescarray.beginiterate(ir);
       if pv<>nil then
         repeat
-          if source^.FindVariable(pv^.name)=nil then begin
+          if source^.FindVariable(pv^.name,True)=nil then begin
             source^.setvardesc(vd,pv^.name,pv^.username,pv^.data.ptd^.TypeName);
             source^.InterfaceVariables.createvariable(vd.name, vd);
             pv^.data.ptd^.CopyInstanceTo(pv^.data.Addr.Instance,vd.data.Addr.Instance);
@@ -471,7 +470,6 @@ var
    pv:pvardesk;
    vd: vardesk;
    ir:itrec;
-//   value:TInternalScriptString;
 begin
      pu:=source.InterfaceUses.beginiterate(ir);
      if pu<>nil then
@@ -482,7 +480,7 @@ begin
      pv:=source.InterfaceVariables.vardescarray.beginiterate(ir);
       if pv<>nil then
         repeat
-          if FindVariable(pv^.name)=nil then begin
+          if FindVariable(pv^.name,True)=nil then begin
               setvardesc(vd,pv^.name,pv^.username,pv^.data.ptd^.TypeName);
               InterfaceVariables.createvariable(vd.name, vd);
               pv^.data.ptd^.CopyInstanceTo(pv^.data.Addr.Instance,vd.data.Addr.Instance);
@@ -1623,7 +1621,7 @@ begin
                                                un:=varname;
                 end;
      result:=self.InterfaceVariables.findvardesc(un);
-     if result=nil then
+     if (result=nil)and(InInterfaceOnly=False) then
      begin
                             p:=InterfaceUses.beginiterate(ir);
                             if p<>nil then

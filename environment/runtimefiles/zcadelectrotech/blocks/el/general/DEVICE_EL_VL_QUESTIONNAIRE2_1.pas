@@ -8,7 +8,7 @@ usescopy objname;
 
 var
 
-T1:String;(*'Ном.напряжение'*)
+T1:String;(*'Ном. напряжение'*)
 T2:String;(*'Ток сборных шин'*)
 
 implementation

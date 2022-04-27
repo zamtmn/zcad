@@ -123,6 +123,7 @@
 	   <ZTreeCommand Command="Insert(A4K)" Img='A4K_300' Caption='Рамка А4 книга'/>
 	   <ZTreeCommand Command="Insert(A3A)" Img='A3A_300' Caption='Рамка А3 альбом'/>
 	   <ZTreeCommand Command="Insert(A3A+)" Img='A3A+_300' Caption='Рамка А4х3 альбом'/>
+	   <ZTreeCommand Command="Insert(A3A++)" Img='A3A++_300' Caption='Рамка А4х4 альбом'/>
 	   <ZTreeCommand Command="Insert(A3K)" Img='A3K_300' Caption='Рамка А3 книга'/>
 	   <ZTreeCommand Command="Insert(A2A)" Img='A2A_300' Caption='Рамка А2 альбом'/>
 	   <ZTreeCommand Command="Insert(A2A+)" Img='A2A+_300' Caption='Рамка А3х3 альбом'/>
@@ -169,6 +170,7 @@
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_CN2)" Img='DEVICE_EL_VL_DIAGRAM_CN2_300' Caption='Шина/аппарат в низ'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_CN3)" Img='DEVICE_EL_VL_DIAGRAM_CN3_300' Caption='Шина/вставка в бок'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_CN4)" Img='DEVICE_EL_VL_DIAGRAM_CN4_300' Caption='Шина/вставка в низ'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_CN5)" Img='DEVICE_EL_VL_DIAGRAM_CN5_300' Caption='Шина/вставка секция'/>
 	   <ZTreeCommand Command="Insert(DIAGRAM_CN1)" Img='DIAGRAM_CN1_300' Caption='Шина переход'/>
 	   <ZTreeCommand Command="Insert(DIAGRAM_PE1)" Img='DIAGRAM_PE1_300' Caption='PE+N'/>
 	   <ZTreeCommand Command="Insert(DIAGRAM_PE2)" Img='DIAGRAM_PE2_300' Caption='PEN'/>

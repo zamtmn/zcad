@@ -25,6 +25,10 @@ BlockPreViewExport(24|A3A+|*images/palettes/A3A+.png)
 BlockPreViewExport(24|A3A+|*images/palettes/A3A+_150.png)
 BlockPreViewExport(48|A3A+|*images/palettes/A3A+_300.png)
 
+BlockPreViewExport(24|A3A++|*images/palettes/A3A++.png)
+BlockPreViewExport(24|A3A++|*images/palettes/A3A++_150.png)
+BlockPreViewExport(48|A3A++|*images/palettes/A3A++_300.png)
+
 BlockPreViewExport(24|A2K|*images/palettes/A2K.png)
 BlockPreViewExport(24|A2K|*images/palettes/A2K_150.png)
 BlockPreViewExport(48|A2K|*images/palettes/A2K_300.png)

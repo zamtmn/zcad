@@ -123,9 +123,11 @@
 	   <ZTreeCommand Command="Insert(A4K)" Img='A4K_300' Caption='Рамка А4 книга'/>
 	   <ZTreeCommand Command="Insert(A3A)" Img='A3A_300' Caption='Рамка А3 альбом'/>
 	   <ZTreeCommand Command="Insert(A3A+)" Img='A3A+_300' Caption='Рамка А4х3 альбом'/>
+	   <ZTreeCommand Command="Insert(A3A++)" Img='A3A++_300' Caption='Рамка А4х4 альбом'/>
 	   <ZTreeCommand Command="Insert(A3K)" Img='A3K_300' Caption='Рамка А3 книга'/>
 	   <ZTreeCommand Command="Insert(A2A)" Img='A2A_300' Caption='Рамка А2 альбом'/>
 	   <ZTreeCommand Command="Insert(A2A+)" Img='A2A+_300' Caption='Рамка А3х3 альбом'/>
+	   <ZTreeCommand Command="Insert(A2A++)" Img='A2A++_300' Caption='Рамка А3х4 альбом'/>
 	   <ZTreeCommand Command="Insert(A2K)" Img='A2K_300' Caption='Рамка А2 книга'/>
 	   <ZTreeCommand Command="Insert(A1A)" Img='A1A_300' Caption='Рамка А1 альбом'/>
 	   <ZTreeCommand Command="Insert(A1A+)" Img='A1A+_300' Caption='Рамка А2х3 альбом'/>
@@ -156,6 +158,10 @@
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_REPORT8_2)" Img='DEVICE_EL_VL_REPORT8_2_300' Caption='Ведомость светильников 2'/>
 	   <ZTreeCommand Command="Insert(EL_VL_REPORT9_1)" Img='EL_VL_REPORT9_1_300' Caption='Экспликация 1'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_REPORT9_2)" Img='DEVICE_EL_VL_REPORT9_2_300' Caption='Экспликация 2'/>
+	   <ZTreeCommand Command="Insert(EL_VL_REPORT10_1)" Img='EL_VL_REPORT10_1_300' Caption='Ведомость работ 1'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_REPORT10_2)" Img='DEVICE_EL_VL_REPORT10_2_300' Caption='Ведомость работ 2'/>
+	   <ZTreeCommand Command="Insert(EL_VL_REPORT11_1)" Img='EL_VL_REPORT11_1_300' Caption='Ведомость кабельная 1'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_REPORT11_2)" Img='DEVICE_EL_VL_REPORT11_2_300' Caption='Ведомость кабельная 2'/>
       	</ZTreeNode>
       	<ZTreeNode Caption='Схемы'>
            <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_TX1)" Img='DEVICE_EL_VL_DIAGRAM_TX1_300' Caption='Боковик текст'/>
@@ -164,6 +170,7 @@
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_CN2)" Img='DEVICE_EL_VL_DIAGRAM_CN2_300' Caption='Шина/аппарат в низ'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_CN3)" Img='DEVICE_EL_VL_DIAGRAM_CN3_300' Caption='Шина/вставка в бок'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_CN4)" Img='DEVICE_EL_VL_DIAGRAM_CN4_300' Caption='Шина/вставка в низ'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_CN5)" Img='DEVICE_EL_VL_DIAGRAM_CN5_300' Caption='Шина/вставка секция'/>
 	   <ZTreeCommand Command="Insert(DIAGRAM_CN1)" Img='DIAGRAM_CN1_300' Caption='Шина переход'/>
 	   <ZTreeCommand Command="Insert(DIAGRAM_PE1)" Img='DIAGRAM_PE1_300' Caption='PE+N'/>
 	   <ZTreeCommand Command="Insert(DIAGRAM_PE2)" Img='DIAGRAM_PE2_300' Caption='PEN'/>
@@ -231,9 +238,12 @@
       	<ZTreeNode Caption='Высоковольтные сети'>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_QUESTIONNAIRE1)" Img='DEVICE_EL_VL_QUESTIONNAIRE1_300' Caption='Опросник КТПН'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_QUESTIONNAIRE2_1)" Img='DEVICE_EL_VL_QUESTIONNAIRE2_1_300' Caption='Опросник РУВН Шапка'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_QUESTIONNAIRE2_2)" Img='DEVICE_EL_VL_QUESTIONNAIRE2_2_300' Caption='Опросник РУВН Фидер'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_QUESTIONNAIRE2_2)" Img='DEVICE_EL_VL_QUESTIONNAIRE2_2_300' Caption='Опросник РУВН Фидер 1'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_QUESTIONNAIRE2_3)" Img='DEVICE_EL_VL_QUESTIONNAIRE2_3_300' Caption='Опросник РУВН Фидер 2'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_QUESTIONNAIRE3_1)" Img='DEVICE_EL_VL_QUESTIONNAIRE3_1_300' Caption='Опросник РУНН Шапка'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_QUESTIONNAIRE3_2)" Img='DEVICE_EL_VL_QUESTIONNAIRE3_2_300' Caption='Опросник РУНН Фидер'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_QUESTIONNAIRE3_2)" Img='DEVICE_EL_VL_QUESTIONNAIRE3_2_300' Caption='Опросник РУНН Фидер 1'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_QUESTIONNAIRE3_3)" Img='DEVICE_EL_VL_QUESTIONNAIRE3_3_300' Caption='Опросник РУНН Фидер 2'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_QUESTIONNAIRE3_4)" Img='DEVICE_EL_VL_QUESTIONNAIRE3_4_300' Caption='Опросник РУНН Фидер 3'/>
       	</ZTreeNode>
       	<ZTreeNode Caption='Расчеты'>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_DATA1_1)" Img='DEVICE_EL_VL_DATA1_1_300' Caption='Обозначение'/>

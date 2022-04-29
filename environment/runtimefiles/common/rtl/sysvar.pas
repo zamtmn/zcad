@@ -62,6 +62,7 @@ var
   DSGN_LCCable:TLayerControl;
   DSGN_LCLeader:TLayerControl;
   DSGN_SelSameName:Boolean;
+  DSGN_NavigatorsUseMainFunction:Boolean;
   INTF_ShowScrollBars:Boolean;
   INTF_ShowDwgTabs:Boolean;
   INTF_DwgTabsPosition:TAlign;
@@ -160,6 +161,7 @@ begin
   DSGN_LCLeader.Enabled:=True;
   DSGN_LCLeader.LayerName:='TEXT';
   DSGN_SelSameName:=False;
+  DSGN_NavigatorsUseMainFunction:=True;
   INTF_ShowScrollBars:=True;
   INTF_ShowDwgTabs:=True;
   INTF_DwgTabsPosition:=TATop;

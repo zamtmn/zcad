@@ -18,7 +18,7 @@ uses
   uzelongprocesssupport,uzeentitiestypefilter,uzcuitypes,
   uzeparserenttypefilter,uzeparserentpropfilter,uzeparsernavparam,uzclog,uzcuidialogs,
   XMLConf,XMLPropStorage, EditBtn,LazConfigStorage,uzcdialogsfiles,
-  Masks,garrayutils,LCLType,LCLIntf,
+  Masks,garrayutils,LCLType,LCLIntf, Buttons,
   gzctnrSTL;
 
 resourcestring
@@ -70,6 +70,8 @@ type
 
   { TNavigatorDevices }
   TNavigatorDevices = class(TForm)
+    CollapseAll: TAction;
+    ExpandAll: TAction;
     FilterBtn: TEditButton;
     SaveToFile: TAction;
     LoadFromFile: TAction;
@@ -77,13 +79,17 @@ type
     NavTree: TVirtualStringTree;
     Ent2NodeMap:TEnt2NodeMap;
     RefreshToolButton: TToolButton;
+    ExpandAllBtn: TSpeedButton;
+    CollapseAllBtn: TSpeedButton;
     UMFToolButton: TToolButton;
     ActionList1:TActionList;
     Refresh:TAction;
     IncludeEnts:TAction;
     IncludeProps:TAction;
     TreeProps:TAction;
+    procedure CollapseAllProc(Sender: TObject);
     function CreateEntityNode(Tree: TVirtualStringTree;basenode:PVirtualNode;pent:pGDBObjEntity;Name:string):PVirtualNode;virtual;
+    procedure ExpandAllProc(Sender: TObject);
     procedure Filter(Sender: TObject);
     function Match(node:PVirtualNode;pattern:AnsiString):boolean;
     function DoFilter(tree:TVirtualStringTree;node:PVirtualNode;pattern:AnsiString):boolean;
@@ -627,16 +633,22 @@ begin
    umf.AssignToVar('DSGN_NavigatorsUseMainFunction',0);
    umf.Caption:='Use main functions';
 
-
    ActionList1.Images:=ImagesManager.IconList;
    Refresh.ImageIndex:=ImagesManager.GetImageIndex('Refresh');
    CoolBar1.AutoSize:=true;
 
-  FilterBtn.Button.Images:=ImagesManager.IconList;
-  FilterBtn.Button.ImageIndex:=ImagesManager.GetImageIndex('purge');
-  FilterBtn.SetupEditButtonBorderStyle(bsNone);
-  FilterBtn.Spacing:=4;
-  FilterBtn.TextHint:=rsFilterHint;
+   ExpandAllBtn.Images:=ImagesManager.IconList;
+   ExpandAll.ImageIndex:=ImagesManager.GetImageIndex('Minus');
+   ExpandAllBtn.ShowCaption:=false;
+   CollapseAllBtn.Images:=ImagesManager.IconList;
+   CollapseAll.ImageIndex:=ImagesManager.GetImageIndex('Plus');
+   CollapseAllBtn.ShowCaption:=false;
+
+   FilterBtn.Button.Images:=ImagesManager.IconList;
+   FilterBtn.Button.ImageIndex:=ImagesManager.GetImageIndex('purge');
+   FilterBtn.SetupEditButtonBorderStyle(bsNone);
+   FilterBtn.Spacing:=4;
+   FilterBtn.TextHint:=rsFilterHint;
 
 
    TreeEnabler:=TStringPartEnabler.Create(self);
@@ -785,6 +797,16 @@ begin
   end else begin
     result:=StandaloneNode.CreateEntityNode(Tree,basenode,pent,Name);
   end;
+end;
+
+procedure TNavigatorDevices.ExpandAllProc(Sender: TObject);
+begin
+  NavTree.FullExpand();
+end;
+
+procedure TNavigatorDevices.CollapseAllProc(Sender: TObject);
+begin
+  NavTree.FullCollapse();
 end;
 
 function TNavigatorDevices.Match(node:PVirtualNode;pattern:AnsiString):boolean;

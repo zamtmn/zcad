@@ -828,7 +828,6 @@ var
   MatchInChildren:boolean;
 begin
   result:=false;
-  exit;
   repeat
     SubNode := node.FirstChild;
     if assigned(SubNode) then

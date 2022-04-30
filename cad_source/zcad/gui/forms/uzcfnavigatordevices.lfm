@@ -8,6 +8,7 @@ object NavigatorDevices: TNavigatorDevices
   ClientWidth = 684
   DesignTimePPI = 144
   OnCreate = _onCreate
+  LCLVersion = '2.3.0.0'
   object NavTree: TVirtualStringTree
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = FilterBtn
@@ -27,7 +28,7 @@ object NavigatorDevices: TNavigatorDevices
     Header.Columns = <    
       item
         Position = 0
-        Width = 680
+        Width = 684
       end>
     Header.Height = 41
     Header.Options = [hoAutoResize, hoColumnResize, hoDrag, hoShowSortGlyphs, hoVisible]
@@ -55,13 +56,16 @@ object NavigatorDevices: TNavigatorDevices
     Top = 41
     Width = 507
     Anchors = [akTop, akLeft, akRight]
+    ButtonHint = 'Clear filter'
     ButtonWidth = 34
     Flat = True
     MaxLength = 0
     NumGlyphs = 1
     OnButtonClick = PurgeFilter
     OnChange = Filter
+    ParentShowHint = False
     PasswordChar = #0
+    ShowHint = True
     TabOrder = 2
   end
   object CollapseAllBtn: TSpeedButton
@@ -72,6 +76,7 @@ object NavigatorDevices: TNavigatorDevices
     AnchorSideBottom.Side = asrBottom
     Left = 507
     Height = 33
+    Hint = 'Collapse all'
     Top = 41
     Width = 93
     Action = CollapseAll
@@ -90,6 +95,7 @@ object NavigatorDevices: TNavigatorDevices
     AnchorSideBottom.Side = asrBottom
     Left = 600
     Height = 33
+    Hint = 'Expand all'
     Top = 41
     Width = 84
     Action = ExpandAll

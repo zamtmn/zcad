@@ -92,7 +92,7 @@ type
     procedure ExpandAllProc(Sender: TObject);
     procedure Filter(Sender: TObject);
     function Match(node:PVirtualNode;pattern:AnsiString):boolean;
-    function DoFilter(tree:TVirtualStringTree;node:PVirtualNode;pattern:AnsiString):boolean;
+    function DoFilter(tree:TVirtualStringTree;node:PVirtualNode;pattern:AnsiString;var treeh:Integer):boolean;
     procedure AsyncLoadParamsFromFile(Data: PtrInt);
     procedure TEMenuPopUpClick(Sender: TObject);
     procedure TEMenuPopUp(Sender: TObject);
@@ -822,7 +822,7 @@ begin
   Result:=false;
 end;
 
-function TNavigatorDevices.DoFilter(tree:TVirtualStringTree;node:PVirtualNode;pattern:AnsiString):boolean;
+function TNavigatorDevices.DoFilter(tree:TVirtualStringTree;node:PVirtualNode;pattern:AnsiString;var treeh:Integer):boolean;
 var
   SubNode:PVirtualNode;
   MatchInChildren:boolean;
@@ -831,7 +831,7 @@ begin
   repeat
     SubNode := node.FirstChild;
     if assigned(SubNode) then
-      MatchInChildren:=DoFilter(tree,SubNode,pattern)
+      MatchInChildren:=DoFilter(tree,SubNode,pattern,treeh)
     else
       MatchInChildren:=false;
     if MatchInChildren then
@@ -843,6 +843,7 @@ begin
       if MatchInChildren or Match(node,pattern) then begin
         node.States:=node.States-[vsFiltered];
         result:=true;
+        treeh:=treeh+node.NodeHeight;
       end else
         node.States:=node.States+[vsFiltered]
     end;
@@ -853,12 +854,17 @@ end;
 procedure TNavigatorDevices.Filter(Sender: TObject);
 var
   pattern:AnsiString;
+  filtredtreeh:integer;
 begin
   pattern:=TEditButton(sender).Text;
   if pattern<>'' then
     if (pos('*',pattern)=0)and(pos('?',pattern)=0) then
       pattern:='*'+pattern+'*';
-  DoFilter(NavTree,NavTree.RootNode,pattern);
+  filtredtreeh:=0;
+  DoFilter(NavTree,NavTree.RootNode,pattern,filtredtreeh);
+  if filtredtreeh>0 then
+    if (filtredtreeh+NavTree.OffsetY)<0 then
+      NavTree.OffsetY:=0;
   NavTree.Invalidate;
 end;
 

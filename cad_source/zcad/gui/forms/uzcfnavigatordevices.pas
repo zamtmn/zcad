@@ -427,25 +427,13 @@ begin
        cn:=copy(cn,2,length(cn)-1);
        Name:=textformat(cn,pent)
       end else
-       Name:={GetEntityVariableValue(pent,'NMO_Name',rsNameAbsent)}pent^.GetObjTypeName;
+       Name:=pent^.GetObjTypeName;
     end;
   until an='';
   if name='' then
-    Name:={GetEntityVariableValue(pent,'NMO_Name',rsNameAbsent)}pent^.GetObjTypeName;
+    Name:=pent^.GetObjTypeName;
 
   result:=basenode;
-
-  {if GroupByPrefix then begin
-    BaseName:=GetEntityVariableValue(pent,'NMO_Prefix',rsPrefixAbsent);
-    basenode:=rootdesk.find(BaseName,rootdesk.rootnode);
-  end else
-    basenode:=rootdesk.rootnode;
-
-  if GroupByBase then begin
-    BaseName:=GetEntityVariableValue(pent,'NMO_BaseName',rsBaseNameAbsent);
-    result:=rootdesk.find(BaseName,basenode);
-  end else
-    result:=basenode;}
 end;
 
 
@@ -710,7 +698,7 @@ procedure TNavigatorDevices.AfterCellPaint(Sender: TBaseVirtualTree; TargetCanva
     Column: TColumnIndex; const CellRect: TRect);
 var
   pnd:PTNodeData;
-  pentvarext:TVariablesExtender;
+  EntVarExt:TVariablesExtender;
   myContentRect:TRect;
 begin
   if Column>0 then exit;
@@ -718,20 +706,20 @@ begin
   if pnd<>nil then
   if pnd^.Ident.pent<>nil then
   begin
-    pentvarext:=pnd^.Ident.pent^.GetExtension<TVariablesExtender>;
-    if pentvarext<>nil then begin
+    EntVarExt:=pnd^.Ident.pent^.GetExtension<TVariablesExtender>;
+    if EntVarExt<>nil then begin
 
     SetDefaultImagesIndex;
 
-    //if CellPaintMode=cpmPaint then begin
       myContentRect:=CellRect;
       myContentRect.Left:=SaveCellRectLeft;
 
-      ImagesManager.IconList.Draw(TargetCanvas,myContentRect.Left,(myContentRect.Bottom-ImagesManager.IconList.Width) div 2,ImagesManager.GetImageIndex(GetEntityVariableValue(pnd^.Ident.pent,'ENTID_Function','bug'),BuggyIconIndex),gdeNormal);
+      {if EntVarExt.isMainFunction then begin
+        ImagesManager.IconList.Draw(TargetCanvas,myContentRect.Left,(myContentRect.Bottom-ImagesManager.IconList.Width) div 2,ImagesManager.GetImageIndex(GetVariableValue(EntVarExt,'ENTID_Function','bug'),BuggyIconIndex),gdeNormal);
+        myContentRect.Left:=myContentRect.Left+ImagesManager.IconList.Width;
+      end;}
+      ImagesManager.IconList.Draw(TargetCanvas,myContentRect.Left,(myContentRect.Bottom-ImagesManager.IconList.Width) div 2,ImagesManager.GetImageIndex(GetVariableValue(EntVarExt,'ENTID_Representation','bug'),BuggyIconIndex),gdeNormal);
       myContentRect.Left:=myContentRect.Left+ImagesManager.IconList.Width;
-      ImagesManager.IconList.Draw(TargetCanvas,myContentRect.Left,(myContentRect.Bottom-ImagesManager.IconList.Width) div 2,ImagesManager.GetImageIndex(GetEntityVariableValue(pnd^.Ident.pent,'ENTID_Representation','bug'),BuggyIconIndex),gdeNormal);
-      myContentRect.Left:=myContentRect.Left+ImagesManager.IconList.Width;
-    //end;
     end;
   end;
 end;
@@ -739,24 +727,24 @@ procedure TNavigatorDevices.DrawText(Sender: TBaseVirtualTree; TargetCanvas: TCa
     Column: TColumnIndex; const CellText: String; const CellRect: TRect; var DefaultDraw: Boolean);
 var
   pnd:PTNodeData;
-  pentvarext:TVariablesExtender;
+  EntVarExt:TVariablesExtender;
   myCellRect:TRect;
 begin
   pnd:=Sender.GetNodeData(Node);
   if pnd<>nil then
   if pnd^.Ident.pent<>nil then
   begin
-    pentvarext:=pnd^.Ident.pent^.GetExtension<TVariablesExtender>;
-    if pentvarext<>nil then begin
+    EntVarExt:=pnd^.Ident.pent^.GetExtension<TVariablesExtender>;
+    if EntVarExt<>nil then begin
       SaveCellRectLeft:=CellRect.Left;
       myCellRect:=CellRect;
       DefaultDraw:=false;
       if Column=0 then
-        myCellRect.Left:=myCellRect.Left+2*ImagesManager.IconList.Width;
+        {if EntVarExt.isMainFunction then
+          myCellRect.Left:=myCellRect.Left+2*ImagesManager.IconList.Width
+        else}
+          myCellRect.Left:=myCellRect.Left+ImagesManager.IconList.Width;
       TargetCanvas.TextRect(myCellRect,myCellRect.Left,myCellRect.Top,CellText);
-      //DrawText(TargetCanvas.Handle, PChar(Text), Length(Text), CellRect, DrawFormat);
-      //ImagesManager.IconList.Draw(TargetCanvas,ContentRect.Left,(ContentRect.Bottom-ImagesManager.IconList.Width) div 2,ImagesManager.GetImageIndex(GetEntityVariableValue(pnd^.pent,'ENTID_Function','bug'),BuggyIconIndex),gdeNormal);
-      //ImagesManager.IconList.Draw(TargetCanvas,ContentRect.Left,(ContentRect.Bottom-ImagesManager.IconList.Width) div 2,ImagesManager.GetImageIndex(GetEntityVariableValue(pnd^.pent,'ENTID_Representation','bug'),BuggyIconIndex),gdeNormal);
     end;
   end;
 end;
@@ -836,7 +824,6 @@ begin
       MatchInChildren:=false;
     if MatchInChildren then
       Tree.Expanded[Node]:=true;
-      //node.States:=node.States+[vsExpanded];
     if pattern='' then
       node.States:=node.States-[vsFiltered]
     else begin
@@ -853,17 +840,17 @@ end;
 
 procedure TNavigatorDevices.Filter(Sender: TObject);
 var
-  pattern:AnsiString;
-  filtredtreeh:integer;
+  Pattern:AnsiString;
+  FiltredTreeH:Integer;
 begin
-  pattern:=TEditButton(sender).Text;
-  if pattern<>'' then
-    if (pos('*',pattern)=0)and(pos('?',pattern)=0) then
-      pattern:='*'+pattern+'*';
-  filtredtreeh:=0;
-  DoFilter(NavTree,NavTree.RootNode,pattern,filtredtreeh);
-  if filtredtreeh>0 then
-    if (filtredtreeh+NavTree.OffsetY)<0 then
+  Pattern:=TEditButton(sender).Text;
+  if Pattern<>'' then
+    if (pos('*',Pattern)=0)and(pos('?',Pattern)=0) then
+      Pattern:='*'+Pattern+'*';
+  FiltredTreeH:=0;
+  DoFilter(NavTree,NavTree.RootNode,Pattern,FiltredTreeH);
+  if FiltredTreeH>0 then
+    if (FiltredTreeH+NavTree.OffsetY)<0 then
       NavTree.OffsetY:=0;
   NavTree.Invalidate;
 end;
@@ -1237,7 +1224,7 @@ begin
     end else
       celltext:='';
   end else
-    celltext:=textformat(ExtTreeParam.ExtColumnsParams[Column].Pattern,pnd^.Ident.pent);//GetEntityVariableValue(pnd^.pent,'NMO_Name',rsNameAbsent);
+    celltext:=textformat(ExtTreeParam.ExtColumnsParams[Column].Pattern,pnd^.Ident.pent);
   end;
 end;
 procedure TNavigatorDevices.SetDefaultImagesIndex;
@@ -1256,7 +1243,8 @@ procedure TNavigatorDevices.NavGetImage(Sender: TBaseVirtualTree; Node: PVirtual
                                  var Ghosted: Boolean; var ImageIndex: Integer);
 var
   pnd:PTNodeData;
-  pentvarext:TVariablesExtender;
+  pvd:pvardesk;
+  EntVarExt:TVariablesExtender;
 begin
   if Column>0 then begin
     ImageIndex:=-1;
@@ -1264,38 +1252,34 @@ begin
   end;
 
   SetDefaultImagesIndex;
-     {if (assigned(CombinedNode))and(node=CombinedNode.RootNode) then
-                                       ImageIndex:=CombinedNode.ficonindex
-else} if (assigned(StandaloneNode))and(node=StandaloneNode.RootNode) then
-                                       ImageIndex:=StandaloneNode.ficonindex
-else
-  begin
+  if (assigned(StandaloneNode))and(node=StandaloneNode.RootNode) then
+    ImageIndex:=StandaloneNode.ficonindex
+  else begin
     pnd := Sender.GetNodeData(Node);
-      if (assigned(pnd))or(Column>0) then
-        begin
-          case pnd^.NodeMode of
+    if (assigned(pnd))or(Column>0) then begin
+        case pnd^.NodeMode of
           TNMGroup:ImageIndex:=NavGroupIconIndex;
           TNMAutoGroup:ImageIndex:=NavAutoGroupIconIndex;
           TNMData,TNMHardGroup:begin
-                    if pnd^.Ident.pent<>nil then
-                                          begin
-                                           pentvarext:=pnd^.Ident.pent^.GetExtension<TVariablesExtender>;
-                                           if pentvarext<>nil then
-                                           begin
-                                             if pentvarext.isMainFunction then
-                                               ImageIndex:=MainFunctionIconIndex
-                                             else
-                                               ImageIndex:=-1;
-                                           end
-                                           else
-                                             ImageIndex:=BuggyIconIndex;
-                                          end
-                    else
-                      ImageIndex:=BuggyIconIndex;
-                  end;
+            if pnd^.Ident.pent<>nil then begin
+              EntVarExt:=pnd^.Ident.pent^.GetExtension<TVariablesExtender>;
+              if EntVarExt<>nil then begin
+                if EntVarExt.isMainFunction then begin
+                  pvd:=GetPVD(EntVarExt,'ENTID_Function');
+                  if pvd=nil then
+                    ImageIndex:=BuggyIconIndex
+                  else
+                    ImageIndex:=ImagesManager.GetImageIndex(pvd.data.PTD^.GetValueAsString(pvd.data.Addr.Instance),MainFunctionIconIndex);
+                end else
+                  ImageIndex:=-1;
+              end
+              else
+                ImageIndex:=BuggyIconIndex;
+            end else
+              ImageIndex:=BuggyIconIndex;
           end;
-        end
-      else
+        end;
+      end else
         ImageIndex:=1;
   end;
 end;

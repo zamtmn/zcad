@@ -14,3 +14,10 @@ OBJT_Unknown=dxf
 
 OBJT_Devices_OnPlans=onplan.png
 OBJT_Devices_OnDiagrams_PIDDiagram=ondiagram.png
+
+;functions (ENTID_Function variable)
+Electrotechnics~Alarm~Fire~Detectors~Smoke~Spot=DEVICE_PS_DAT_SMOKE.png
+
+;functions (ENTID_Representation variable)
+GraphSymbol~onPlan=onplan.png
+GraphSymbol~onScheme~Connection=ondiagram.png

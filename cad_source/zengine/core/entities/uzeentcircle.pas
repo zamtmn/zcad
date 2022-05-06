@@ -59,7 +59,6 @@ GDBObjCircle= object(GDBObjWithLocalCS)
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
-                 procedure rtedit(refp:Pointer;mode:Single;dist,wc:gdbvertex);virtual;
                  procedure rtsave(refp:Pointer);virtual;
                  procedure createpoint(var DC:TDrawContext);virtual;
                  procedure projectpoint;virtual;
@@ -513,19 +512,7 @@ begin
   //tvo^.format;
   result := tvo;
 end;
-procedure GDBObjCircle.rtedit;
-begin
-  if mode = os_center then
-  begin
-    Local.p_insert := VertexAdd(pgdbobjcircle(refp)^.Local.p_insert, dist);
-  end
-  else if (mode = os_q0) or (mode = os_q1) or (mode = os_q2) or (mode = os_q3) then
-  begin
-         //r:=VertexAdd(pgdbobjcircle(refp)^.p_insert,wc);
-    Radius := Vertexlength(Local.p_insert, wc);
-  end;
-  //format;
-end;
+
 {procedure GDBObjCircle.higlight;
 begin
   glcolor3ubv(@palette[sysvar.SYS.SYS_SystmGeometryColor^]);
@@ -731,7 +718,7 @@ var pdesc:controlpointdesc;
 begin
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(5);
           pdesc.selected:=false;
-          pdesc.pobject:=nil;
+          pdesc.PDrawable:=nil;
           pdesc.pointtype:=os_center;
           pdesc.attr:=[CPA_Strech];
           pdesc.worldcoord:=Local.p_insert;
@@ -781,7 +768,7 @@ begin
                                                               result:=true;
                       ptcirclertmodify(p).p_insert:=true;
                  end;
-    oS_q3..os_q0:begin
+    os_q0..oS_q3:begin
                       if (not ptcirclertmodify(p).r)and
                          (not ptcirclertmodify(p).p_insert)then
                                                                result:=true;
@@ -797,7 +784,7 @@ begin
                              Local.p_insert:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
                              Radius:=Radius;
                          end;
-            oS_q3..os_q0:begin
+            os_q0..oS_q3:begin
                               Radius:=Vertexlength(Local.p_insert {rtmod.point.worldcoord}, rtmod.wc);
                          end;
           end;

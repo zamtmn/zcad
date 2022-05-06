@@ -43,7 +43,6 @@ GDBObjLine= object(GDBObj3d)
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                  procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                   function Clone(own:Pointer):PGDBObjEntity;virtual;
-                 procedure rtedit(refp:Pointer;mode:Single;dist,wc:gdbvertex);virtual;
                  procedure rtsave(refp:Pointer);virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
                   function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
@@ -603,23 +602,6 @@ begin
   dxfvertexout(outhandle,10,CoordInOCS.lbegin);
   dxfvertexout(outhandle,11,CoordInOCS.lend);
 end;
-procedure GDBObjLine.rtedit;
-begin
-  if mode = os_midle then
-  begin
-    CoordInOCS.lbegin := VertexAdd(pgdbobjline(refp)^.CoordInOCS.lBegin, dist);
-    CoordInOCS.lend := VertexAdd(pgdbobjline(refp)^.CoordInOCS.lend, dist);
-  end
-  else if mode = os_end then
-  begin
-    CoordInOCS.lend := VertexAdd(pgdbobjline(refp)^.CoordInOCS.lend, dist);
-  end
-  else if mode = os_begin then
-  begin
-    CoordInOCS.lbegin := VertexAdd(pgdbobjline(refp)^.CoordInOCS.lBegin, dist);
-  end;
-  //format;
-end;
 
 procedure GDBObjLine.rtsave;
 begin
@@ -713,7 +695,7 @@ begin
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(3);
 
           pdesc.selected:=false;
-          pdesc.pobject:=nil;
+          pdesc.PDrawable:=nil;
 
           //renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,nil);
 

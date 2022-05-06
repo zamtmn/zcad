@@ -20,7 +20,7 @@ unit UGDBControlPointArray;
 {$INCLUDE zengineconfig.inc}
 interface
 uses uzepalette,uzgldrawcontext,gzctnrVector,sysutils,uzbtypes,uzegeometry,
-     uzegeometrytypes;
+     uzegeometrytypes,uzglviewareadata;
 type
 {Export+}
 PGDBControlPointArray=^GDBControlPointArray;
@@ -53,7 +53,7 @@ begin
                                    dc.drawer.SetColor(SelColor)
                                else
                                    begin
-                                        if point^.pobject<>nil then
+                                        if point^.PDrawable<>nil then
                                                                    //dc.drawer.SetColor(0, 255, 50,0)
                                                                else
                                                                    dc.drawer.SetColor(UnSelColor)

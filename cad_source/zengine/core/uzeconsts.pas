@@ -133,8 +133,55 @@ const {as_normal=0;
   se_ModelRoot=1;
   se_ElectricalWires=2;
 
+  type
+  TSnapType={integer}(
+  os_p1,
+  os_p2,
+  os_p3,
+  os_p4,
+  os_p5,
+  os_p6,
+  os_p7,
+  os_p8,
+  os_p9,
+  os_p10,
+  os_p11,
+  os_p12,
+  os_p13,
+  os_p14,
+  os_p15,
+  os_p16,
 
-  os_p1= -1001;
+  os_snap,
+  os_none,
+  os_polar,
+  os_nearest,
+  os_perpendicular,
+  os_midle,
+  os_begin,
+  os_1_3,
+  os_2_3,
+  os_1_4,
+  os_3_4,
+  os_end,
+  os_center,
+  os_q0,
+  os_q1,
+  os_q2,
+  os_q3,
+  os_point,
+  os_textinsert,
+  os_mtextinsert,
+  os_mtextwidth,
+  os_blockinsert,
+  os_insert,
+  os_intersection,
+  os_apparentintersection,
+  os_trace,
+  os_polymin);
+
+  const
+  {os_p1= -1001;
   os_p2= -1002;
   os_p3= -1003;
   os_p4= -1004;
@@ -162,10 +209,10 @@ const {as_normal=0;
   os_3_4 = -1006;
   os_end = -1007;
   os_center = -1008;
-  os_q0 = -1009;
-  os_q1 = -1010;
-  os_q2 = -1011;
-  os_q3 = -1012;
+  os_q0 = -1012;
+  os_q1 = -1011;
+  os_q2 = -1010;
+  os_q3 = -1009;
   os_point = -1013;
   os_textinsert = -1014;
   os_mtextinsert = -1015;
@@ -177,10 +224,7 @@ const {as_normal=0;
   os_intersection = -1021;
   os_apparentintersection = -1022;
   os_trace = -1023;
-  os_polymin =  -3000;
-  os_polymax = -13000;
-
-  os_objnumt = -2000;
+  os_polymin =  -3000;}
 
   maxtrackpoint = 3;
   numofcp = 65535;

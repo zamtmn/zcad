@@ -25,7 +25,7 @@ uses
     uzestyleslayers,uzehelpobj,UGDBSelectedObjArray,
     uzegeometrytypes,uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,uzctnrVectorBytes,
     uzbtypes,uzeentwithlocalcs,uzeconsts,uzegeometry,uzeffdxfsupport,uzecamera,
-    UGDBPolyLine2DArray;
+    UGDBPolyLine2DArray,uzglviewareadata;
 type
 {Export+}
 PGDBObjHatch=^GDBObjHatch;
@@ -256,7 +256,7 @@ end;
 procedure GDBObjHatch.remaponecontrolpoint(pdesc:pcontrolpointdesc);
 var vertexnumber:Integer;
 begin
-     vertexnumber:=abs(pdesc^.pointtype-os_polymin);
+     vertexnumber:=pdesc^.vertexnum;
      pdesc.worldcoord:=GDBPoint3dArray.PTArr(Vertex3D_in_WCS_Array.parray)^[vertexnumber];
      pdesc.dispcoord.x:=round(GDBPolyline2DArray.PTArr(PProjPoint.parray)^[vertexnumber].x);
      pdesc.dispcoord.y:=round(GDBPolyline2DArray.PTArr(PProjPoint.parray)^[vertexnumber].y);
@@ -296,11 +296,11 @@ begin
           //pv2d:=pprojpoint^.parray;
           pv:=Vertex3D_in_WCS_Array.GetParrayAsPointer;
           pdesc.selected:=false;
-          pdesc.pobject:=nil;
+          pdesc.PDrawable:=nil;
 
           for i:=0 to {pprojpoint}Vertex3D_in_WCS_Array.count-1 do
           begin
-               pdesc.pointtype:=os_polymin-i;
+               pdesc.vertexnum:=i;
                pdesc.attr:=[CPA_Strech];
                pdesc.worldcoord:=pv^;
                {pdesc.dispcoord.x:=round(pv2d^.x);
@@ -316,7 +316,7 @@ var
   tv,wwc:gdbvertex;
   M:DMatrix4D;
 begin
-  vertexnumber:=abs(rtmod.point.pointtype-os_polymin);
+  vertexnumber:=rtmod.point.vertexnum;
   m:=self.ObjMatrix;
   uzegeometry.MatrixInvert(m);
 

@@ -20,7 +20,7 @@ unit UGDBSelectedObjArray;
 {$INCLUDE zengineconfig.inc}
 interface
 uses uzegeometrytypes,uzepalette,uzgldrawcontext,uzecamera,uzeentwithmatrix,uzeentity,
-     UGDBControlPointArray,gzctnrVector,sysutils,uzbtypes,uzegeometry;
+     UGDBControlPointArray,gzctnrVector,sysutils,uzbtypes,uzegeometry,uzglviewareadata;
 type
 {Export+}
 PSelectedObjDesc=^SelectedObjDesc;

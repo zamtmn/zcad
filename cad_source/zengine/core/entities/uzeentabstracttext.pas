@@ -23,7 +23,7 @@ uses {эти нужно убрать}{uzglviewareageneral,}UGDBSelectedObjArray,
      uzgldrawcontext,uzeentity,uzecamera,
      uzbstrproc,sysutils,uzeentplainwithox,
      UGDBOutbound2DIArray,uzegeometrytypes,uzbtypes,uzeconsts,uzegeometry,math,
-     uzctnrvectorpgdbaseobjects;
+     uzctnrvectorpgdbaseobjects,uzglviewareadata;
 type
 //jstm(*'TopCenter'*)=2,
 {EXPORT+}
@@ -238,7 +238,7 @@ var pdesc:controlpointdesc;
 begin
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(1);
           pdesc.selected:=false;
-          pdesc.pobject:=nil;
+          pdesc.PDrawable:=nil;
           pdesc.pointtype:=os_point;
           pdesc.attr:=[CPA_Strech];
           pdesc.worldcoord:=P_insert_in_WCS;//Local.P_insert;

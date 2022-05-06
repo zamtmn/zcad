@@ -264,7 +264,7 @@ var pdesc:controlpointdesc;
 begin
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(1);
           pdesc.selected:=false;
-          pdesc.pobject:=nil;
+          pdesc.PDrawable:=nil;
 
           pdesc.pointtype:=os_point;
           pdesc.attr:=[CPA_Strech];

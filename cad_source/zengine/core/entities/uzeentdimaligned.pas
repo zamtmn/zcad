@@ -24,7 +24,7 @@ uses uzgldrawcontext,uzeentityfactory,uzeentdimension,uzeentpoint,uzestylesdim,
      uzctnrVectorBytes,UGDBControlPointArray,uzegeometry,uzeentline,
      uzeentcomplex,sysutils,UGDBSelectedObjArray,uzeentity,uzbtypes,uzeconsts,
      uzegeometrytypes,uzeffdxfsupport,uzeentsubordinated,
-     UGDBOpenArrayOfPV;
+     UGDBOpenArrayOfPV,uzglviewareadata;
 (*
 Alligned dimension structure in DXF
 
@@ -286,7 +286,7 @@ begin
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(4);
 
           pdesc.selected:=false;
-          pdesc.pobject:=nil;
+          pdesc.PDrawable:=nil;
 
           pdesc.pointtype:=os_p10;
           pdesc.attr:=[CPA_Strech];

@@ -19,7 +19,7 @@
 unit zcobjectchangeundocommand;
 {$INCLUDE zengineconfig.inc}
 interface
-uses zeundostack,zebaseundocommands,uzbtypes,uzeentity;
+uses zeundostack,zebaseundocommands,uzbtypes,uzeentity,uzglviewareadata;
 
 type
 

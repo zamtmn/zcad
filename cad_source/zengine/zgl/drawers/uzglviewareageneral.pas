@@ -2154,7 +2154,7 @@ begin
                                                                                        begin
                                                                                             if (osp.radius<param.ospoint.radius) then
                                                                                                                                      begin
-                                                                                                                                     if osp.ostype<param.ospoint.ostype then
+                                                                                                                                     if osp.ostype>param.ospoint.ostype then
                                                                                                                                           copyospoint(param.ospoint,osp)
 
                                                                                                                                      end

@@ -109,27 +109,6 @@ GDBStrWithPoint=record
                       str:TDXFEntsInternalStringType;
                       x,y,z,w:Double;
                 end;
-  pcontrolpointdesc=^controlpointdesc;
-  {REGISTERRECORDTYPE controlpointdesc}
-  controlpointdesc=record
-                         pointtype:Integer;
-                         attr:TControlPointAttrs;
-                         pobject:Pointer;
-                         worldcoord:GDBvertex;
-                         dcoord:GDBvertex;
-                         dispcoord:GDBvertex2DI;
-                         selected:Boolean;
-                   end;
-  {REGISTERRECORDTYPE TRTModifyData}
-  TRTModifyData=record
-                     point:controlpointdesc;
-                     dist,wc:gdbvertex;
-               end;
-  {REGISTERRECORDTYPE tcontrolpointdist}
-  tcontrolpointdist=record
-    pcontrolpoint:pcontrolpointdesc;
-    disttomouse:Integer;
-  end;
   {REGISTERRECORDTYPE TPolyData}
   TPolyData=record
                   //nearestvertex:integer;

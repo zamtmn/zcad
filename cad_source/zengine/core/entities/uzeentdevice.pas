@@ -26,7 +26,7 @@ uses uzestyleslayers,uzepalette,uzeobjectextender,uabstractunit,uzeentityfactory
      uzeconsts,uzeentity,uzeentsubordinated,varmandef,
      uzegeometrytypes,uzeentblockinsert,uzbtypes,UGDBVisibleOpenArray,UGDBObjBlockdefArray,
      gzctnrVectorTypes,uzeblockdef,uzeffdxfsupport,UGDBSelectedObjArray,uzeentitiestree,
-     LazLogger,uzestrconsts,uzctnrvectorpgdbaseobjects,uzglviewareadata;
+     LazLogger,uzestrconsts,uzctnrvectorpgdbaseobjects,uzglviewareadata,uzeSnap;
 
 type
 {EXPORT+}

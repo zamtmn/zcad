@@ -23,7 +23,7 @@ uses {эти нужно убрать}{uzglviewareageneral,}UGDBSelectedObjArray,
      uzgldrawcontext,uzeentity,uzecamera,
      uzbstrproc,sysutils,uzeentplainwithox,
      UGDBOutbound2DIArray,uzegeometrytypes,uzbtypes,uzeconsts,uzegeometry,math,
-     uzctnrvectorpgdbaseobjects,uzglviewareadata;
+     uzctnrvectorpgdbaseobjects,uzglviewareadata,uzeSnap;
 type
 //jstm(*'TopCenter'*)=2,
 {EXPORT+}
@@ -225,13 +225,11 @@ begin
 end;
 procedure GDBObjAbstractText.remaponecontrolpoint(pdesc:pcontrolpointdesc);
 begin
-                    case pdesc^.pointtype of
-                    os_point:begin
-          pdesc.worldcoord:=P_insert_in_WCS;//Local.P_insert;
-          pdesc.dispcoord.x:=round(ProjP_insert.x);
-          pdesc.dispcoord.y:=round(ProjP_insert.y);
-                             end;
-                    end;
+  if pdesc^.pointtype=os_point then begin
+    pdesc.worldcoord:=P_insert_in_WCS;
+    pdesc.dispcoord.x:=round(ProjP_insert.x);
+    pdesc.dispcoord.y:=round(ProjP_insert.y);
+  end;
 end;
 procedure GDBObjAbstractText.addcontrolpoints(tdesc:Pointer);
 var pdesc:controlpointdesc;

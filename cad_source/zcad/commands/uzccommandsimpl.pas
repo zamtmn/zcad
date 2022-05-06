@@ -24,7 +24,7 @@ interface
 uses uzcutils,uzgldrawcontext,uzglviewareageneral,uzeconsts,uzcsysvars,uzegeometry,
      varmandef,uzbtypes,uzccommandsabstract,uzccommandsmanager,
      uzegeometrytypes,uzglviewareadata,uzcdrawings,
-     uzcinterface,varman,uzclog;
+     uzcinterface,varman,uzclog,uzeSnap;
 type
   comproc=procedure(_self:pointer);
   commousefunc=function(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer):Integer;

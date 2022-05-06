@@ -23,7 +23,8 @@ interface
 uses uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,
      uzestyleslayers,sysutils,UGDBSelectedObjArray,UGDBVisibleOpenArray,
      uzeentity,UGDBVisibleTreeArray,uzeentitiestree,uzbtypes,uzeentwithlocalcs,
-     gzctnrVectorTypes,uzegeometrytypes,uzeconsts,uzegeometry,uzctnrvectorpgdbaseobjects,uzglviewareadata;
+     gzctnrVectorTypes,uzegeometrytypes,uzeconsts,uzegeometry,
+     uzctnrvectorpgdbaseobjects,uzglviewareadata,uzeSnap;
 type
 {EXPORT+}
 PGDBObjComplex=^GDBObjComplex;
@@ -91,42 +92,30 @@ end;}
 procedure GDBObjComplex.rtmodifyonepoint;
 var m:DMatrix4D;
 begin
-     //m:=bp.ListPos.owner.getmatrix^;
-     //m:=objmatrix;
-     //PGDBVertex(@m[3])^:=nulvertex;
-     //MatrixInvert(m);
-     m:=onematrix;
-
-     case rtmod.point.pointtype of
-               os_point:begin
-                             if rtmod.point.PDrawable=nil then
-                             Local.p_insert:=vectortransform3d(VertexAdd(rtmod.point.worldcoord, rtmod.dist{VectorTransform3D(rtmod.dist,m)}),m)
-                             else
-                               Local.p_insert:=vectortransform3d(VertexSub(VertexAdd(rtmod.point.worldcoord, rtmod.dist),rtmod.point.dcoord),m);
-                         end;
-     end;
+  m:=onematrix;
+  if rtmod.point.pointtype=os_point then begin
+    if rtmod.point.PDrawable=nil then
+      Local.p_insert:=vectortransform3d(VertexAdd(rtmod.point.worldcoord, rtmod.dist{VectorTransform3D(rtmod.dist,m)}),m)
+    else
+      Local.p_insert:=vectortransform3d(VertexSub(VertexAdd(rtmod.point.worldcoord, rtmod.dist),rtmod.point.dcoord),m);
+  end;
 end;
 
 procedure GDBObjComplex.remaponecontrolpoint(pdesc:pcontrolpointdesc);
 begin
-                    case pdesc^.pointtype of
-                    os_point:begin
-                                  if pdesc.PDrawable=nil then
-                                  begin
-                                  pdesc.worldcoord:=self.P_insert_in_WCS;// Local.P_insert;
-                                  pdesc.dispcoord.x:=round(ProjP_insert.x);
-                                  pdesc.dispcoord.y:=round(ProjP_insert.y);
-                                  end
-                                  else
-                                  begin
-                                  pdesc.worldcoord:=PGDBObjComplex(pdesc.PDrawable).P_insert_in_WCS;// Local.P_insert;
-                                  pdesc.dispcoord.x:=round(PGDBObjComplex(pdesc.PDrawable).ProjP_insert.x);
-                                  pdesc.dispcoord.y:=round(PGDBObjComplex(pdesc.PDrawable).ProjP_insert.y);
-                                  pdesc.dcoord:=vertexsub(PGDBObjComplex(pdesc.PDrawable).P_insert_in_WCS,P_insert_in_WCS);
-                                  end
+  if pdesc^.pointtype=os_point then begin
+    if pdesc.PDrawable=nil then begin
+      pdesc.worldcoord:=self.P_insert_in_WCS;
+      pdesc.dispcoord.x:=round(ProjP_insert.x);
+      pdesc.dispcoord.y:=round(ProjP_insert.y);
+    end else begin
+      pdesc.worldcoord:=PGDBObjComplex(pdesc.PDrawable).P_insert_in_WCS;
+      pdesc.dispcoord.x:=round(PGDBObjComplex(pdesc.PDrawable).ProjP_insert.x);
+      pdesc.dispcoord.y:=round(PGDBObjComplex(pdesc.PDrawable).ProjP_insert.y);
+      pdesc.dcoord:=vertexsub(PGDBObjComplex(pdesc.PDrawable).P_insert_in_WCS,P_insert_in_WCS);
+    end
 
-                             end;
-                    end;
+  end;
 end;
 procedure GDBObjComplex.addcontrolpoints(tdesc:Pointer);
 var pdesc:controlpointdesc;

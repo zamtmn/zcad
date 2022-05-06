@@ -23,7 +23,8 @@ interface
 uses LCLProc,uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,
      uzestyleslayers,uzeentsubordinated,
      UGDBSelectedObjArray,uzeent3d,uzeentity,uzctnrVectorBytes,uzbtypes,uzeconsts,
-     uzegeometrytypes,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzctnrvectorpgdbaseobjects;
+     uzegeometrytypes,uzglviewareadata,uzegeometry,uzeffdxfsupport,
+     uzctnrvectorpgdbaseobjects,uzeSnap;
 type
 {Export+}
 PGDBObjLine=^GDBObjLine;
@@ -625,25 +626,21 @@ begin
 end;
 function GDBObjLine.IsRTNeedModify(const Point:PControlPointDesc; p:Pointer):Boolean;
 begin
-     result:=false;
-  case point.pointtype of
-       os_begin:begin
-                     if not ptlinertmodify(p)^.lbegin then
-                                                               result:=true;
-                     ptlinertmodify(p)^.lbegin:=true;
-                end;
-       os_end:begin
-                     if not ptlinertmodify(p)^.lend then
-                                                             result:=true;
-                     ptlinertmodify(p)^.lend:=true;
-                end;
-       os_midle:begin
-                     if (not ptlinertmodify(p)^.lbegin)
-                     and (not ptlinertmodify(p)^.lend) then
-                                                               result:=true;
-                     ptlinertmodify(p)^.lbegin:=true;
-                     ptlinertmodify(p)^.lend:=true;
-                end;
+  result:=false;
+  if point.pointtype=os_begin then begin
+    if not ptlinertmodify(p)^.lbegin then
+      result:=true;
+    ptlinertmodify(p)^.lbegin:=true;
+  end else if point.pointtype=os_end then begin
+    if not ptlinertmodify(p)^.lend then
+      result:=true;
+    ptlinertmodify(p)^.lend:=true;
+  end else if point.pointtype=os_midle then begin
+    if (not ptlinertmodify(p)^.lbegin)
+    and (not ptlinertmodify(p)^.lend) then
+      result:=true;
+    ptlinertmodify(p)^.lbegin:=true;
+    ptlinertmodify(p)^.lend:=true;
   end;
 
 end;
@@ -652,42 +649,33 @@ procedure GDBObjLine.rtmodifyonepoint(const rtmod:TRTModifyData);
 var
     tv,tv2:GDBVERTEX;
 begin
-          case rtmod.point.pointtype of
-               os_begin:begin
-                             CoordInOCS.lbegin:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
-                        end;
-               os_end:begin
-                           CoordInOCS.lend:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
-                      end;
-               os_midle:begin
-                             tv:=uzegeometry.VertexSub(CoordInOCS.lend,CoordInOCS.lbegin);
-                             tv:=uzegeometry.VertexMulOnSc(tv,0.5);
-                             tv2:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
-                             CoordInOCS.lbegin:=VertexSub(tv2, tv);
-                             CoordInOCS.lend:=VertexAdd(tv2,tv);
-                        end;
-          end;
-
+  if rtmod.point.pointtype=os_begin then begin
+    CoordInOCS.lbegin:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
+  end else if rtmod.point.pointtype=os_end then begin
+    CoordInOCS.lend:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
+  end else if rtmod.point.pointtype=os_midle then begin
+    tv:=uzegeometry.VertexSub(CoordInOCS.lend,CoordInOCS.lbegin);
+    tv:=uzegeometry.VertexMulOnSc(tv,0.5);
+    tv2:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
+    CoordInOCS.lbegin:=VertexSub(tv2, tv);
+    CoordInOCS.lend:=VertexAdd(tv2,tv);
+  end;
 end;
 procedure GDBObjLine.remaponecontrolpoint(pdesc:pcontrolpointdesc);
 begin
-                    case pdesc^.pointtype of
-                    os_begin:begin
-                                  pdesc.worldcoord:=CoordInWCS.lbegin;
-                                  pdesc.dispcoord.x:=round(PProjPoint[0].x);
-                                  pdesc.dispcoord.y:=round(PProjPoint[0].y);
-                             end;
-                    os_end:begin
-                                pdesc.worldcoord:=CoordInWCS.lend;
-                                pdesc.dispcoord.x:=round(PProjPoint[1].x);
-                                pdesc.dispcoord.y:=round(PProjPoint[1].y);
-                             end;
-                    os_midle:begin
-                                  pdesc.worldcoord:=Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 2);
-                                  pdesc.dispcoord.x:=round(PProjPoint[4].x);
-                                  pdesc.dispcoord.y:=round(PProjPoint[4].y);
-                             end;
-                    end;
+  if pdesc^.pointtype=os_begin then begin
+    pdesc.worldcoord:=CoordInWCS.lbegin;
+    pdesc.dispcoord.x:=round(PProjPoint[0].x);
+    pdesc.dispcoord.y:=round(PProjPoint[0].y);
+  end else if pdesc^.pointtype=os_end then begin
+    pdesc.worldcoord:=CoordInWCS.lend;
+    pdesc.dispcoord.x:=round(PProjPoint[1].x);
+    pdesc.dispcoord.y:=round(PProjPoint[1].y);
+  end else if pdesc^.pointtype=os_midle then begin
+    pdesc.worldcoord:=Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 2);
+    pdesc.dispcoord.x:=round(PProjPoint[4].x);
+    pdesc.dispcoord.y:=round(PProjPoint[4].y);
+  end;
 end;
 procedure GDBObjLine.addcontrolpoints(tdesc:Pointer);
 var pdesc:controlpointdesc;

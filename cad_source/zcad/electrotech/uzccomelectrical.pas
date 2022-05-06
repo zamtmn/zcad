@@ -40,7 +40,8 @@ uses
   uzeentabstracttext,uzeentmtext,uzeblockdef,UGDBPoint3DArray,uzcdevicebaseabstract,
   uzelongprocesssupport,LazLogger,
   generics.Collections,
-  uzccommand_treestat,uzccommand_line2,uzccmdfloatinsert,uzcregother,uzcfcommandline,uzeparsercmdprompt,uzctnrvectorpgdbaseobjects;
+  uzccommand_treestat,uzccommand_line2,uzccmdfloatinsert,uzcregother,uzcfcommandline,
+  uzeparsercmdprompt,uzctnrvectorpgdbaseobjects,uzeSnap;
 type
 {Export+}
   TFindType=(

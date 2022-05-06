@@ -25,7 +25,7 @@ uses
     uzedrawingdef,uzecamera,uzbstrproc,sysutils,uzefont,uzestyleslayers,
     uzeentabstracttext,uzeentity,UGDBOutbound2DIArray,uzctnrVectorBytes,uzbtypes,
     uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzeentsubordinated,LazLogger,
-    uzegeometrytypes,uzestylestexts;
+    uzegeometrytypes,uzestylestexts,uzeSnap;
 type
 {Export+}
 PGDBObjText=^GDBObjText;
@@ -566,15 +566,9 @@ begin
      inc(onlygetsnapcount);
 end;
 procedure GDBObjText.rtmodifyonepoint(const rtmod:TRTModifyData);
-//var m:DMatrix4D;
 begin
-     //m:=bp.owner.getmatrix^;
-     //MatrixInvert(m);
-          case rtmod.point.pointtype of
-               os_point:begin
-                             Local.p_insert:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
-                        end;
-          end;
+  if rtmod.point.pointtype=os_point then
+    Local.p_insert:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
 end;
 procedure GDBObjText.SaveToDXFObjXData;
 begin

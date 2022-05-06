@@ -23,7 +23,7 @@ uses uzgldrawcontext,uzeentityfactory,uzeentdimension,uzestylesdim,uzestyleslaye
      uzegeometrytypes,uzedrawingdef,uzbstrproc,uzctnrVectorBytes,
      UGDBControlPointArray,uzegeometry,uzeentline,uzeentcomplex,sysutils,
      UGDBSelectedObjArray,uzeentity,uzbtypes,uzeconsts,uzeffdxfsupport,
-     uzeentsubordinated,uzglviewareadata;
+     uzeentsubordinated,uzglviewareadata,uzeSnap;
 (*
 
 Diametric dimension structure in DXF

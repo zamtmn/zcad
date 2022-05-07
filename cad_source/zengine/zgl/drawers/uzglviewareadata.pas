@@ -42,10 +42,10 @@ controlpointdesc=record
                        dcoord:GDBvertex;
                        dispcoord:GDBvertex2DI;
                        selected:Boolean;
-                   function gvnum:Integer;
-                   procedure svnum(AVertexNum:Integer);
-                   property pointtype:TSnapType read pt write pt;
-                   property vertexnum:Integer read gvnum write svnum;
+                   {-}function gvnum:Integer;{//}
+                   {-}procedure svnum(AVertexNum:Integer);{//}
+                   {-}property pointtype:TSnapType read pt write pt;{//}
+                   {-}property vertexnum:Integer read gvnum write svnum;{//}
                  end;
 {REGISTERRECORDTYPE TRTModifyData}
 TRTModifyData=record

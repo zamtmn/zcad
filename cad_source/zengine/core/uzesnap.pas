@@ -22,12 +22,42 @@ unit uzeSnap;
 interface
 
 uses
-  {uzbhandles,}uzbnamedhandles,uzbnamedhandleswithdata;
+  uzbnamedhandles,uzbnamedhandleswithdata,uzgldrawcontext,uzegeometrytypes,uzepalette,
+  Classes;
+const
+  SOVeryLow=5;
+  SOLow=10;
+  SONormal=100;
+  SOHigh=200;
+  SOVeryHigh=250;
 
 type
+  TDefaultSnatIconDrawer=class
+    class procedure EndIcon(var DC:TDrawContext);
+    class procedure MidleIcon(var DC:TDrawContext);
+
+    class procedure _1_4_3_4Icon(var DC:TDrawContext);
+    class procedure CenterIcon(var DC:TDrawContext);
+    class procedure q0123Icon(var DC:TDrawContext);
+    class procedure _1_3_2_3Icon(var DC:TDrawContext);
+    class procedure PointIcon(var DC:TDrawContext);
+    class procedure IntersectionIcon(var DC:TDrawContext);
+    class procedure ApparentIntersectionIcon(var DC:TDrawContext);
+    class procedure TextInsertIcon(var DC:TDrawContext);
+    class procedure PerpendicularIcon(var DC:TDrawContext);
+    class procedure TraceIcon(var DC:TDrawContext);
+    class procedure NearestIcon(var DC:TDrawContext);
+  end;
+  TSetupSnapIconProc=procedure (var DC:TDrawContext;ViewPortRect:TRect;Coord:GDBvertex2D;SSize:single;SLW:Integer;SColor:TRGB) of object;
+  TDrawSnapIcinProc=procedure (var DC:TDrawContext) of object;
   TSnapInternalType=Integer;
   TSnapNameType=String;
+  PTSnapLincedData=^TSnapLincedData;
   TSnapLincedData=record
+    Order:Byte;
+    SetupIconProc:TSetupSnapIconProc;
+    DrawIconProc:TDrawSnapIcinProc;
+    constructor Create(AOrder:Byte;SP:TSetupSnapIconProc;DP:TDrawSnapIcinProc);
   end;
   TTSnapType=GTNamedHandlesWithData<TSnapInternalType,GTLinearIncHandleManipulator<TSnapInternalType>,TSnapNameType,GTStringNamesUPPERCASE<TSnapNameType>,TSnapLincedData>;
   TSnapType=TSnapInternalType;{(
@@ -189,54 +219,161 @@ var
 
 implementation
 
+constructor TSnapLincedData.Create(AOrder:Byte;SP:TSetupSnapIconProc;DP:TDrawSnapIcinProc);
+begin
+  Order:=AOrder;
+  DrawIconProc:=DP;
+  SetupIconProc:=SP;
+end;
+
+class procedure TDefaultSnatIconDrawer.EndIcon(var DC:TDrawContext);
+begin
+  dc.drawer.DrawClosedPolyLine2DInDCS([-1,  1,
+                                        1,  1,
+                                        1, -1,
+                                       -1, -1]);
+end;
+class procedure TDefaultSnatIconDrawer.MidleIcon(var DC:TDrawContext);
+begin
+  dc.drawer.DrawClosedPolyLine2DInDCS([ 0,              -1,
+                                        0.8660254037844, 0.5,
+                                       -0.8660254037844, 0.5]);
+end;
+
+class procedure TDefaultSnatIconDrawer._1_4_3_4Icon(var DC:TDrawContext);
+begin
+  dc.drawer.DrawLine2DInDCS(-0.5,  1,-0.5, -1);
+  dc.drawer.DrawLine2DInDCS(-0.2, -1, 0.15, 1);
+  dc.drawer.DrawLine2DInDCS( 0.5, -1, 0.15, 1);
+end;
+
+class procedure TDefaultSnatIconDrawer.CenterIcon(var DC:TDrawContext);
+begin
+  dc.drawer.DrawClosedPolyLine2DInDCS([-1,     0,
+                                       -0.707, 0.707,
+                                        0,     1,
+                                        0.707, 0.707,
+                                        1,     0,
+                                        0.707,-0.707,
+                                        0,    -1,
+                                       -0.707,-0.707
+                                        ]);
+end;
+
+class procedure TDefaultSnatIconDrawer.q0123Icon(var DC:TDrawContext);
+begin
+  dc.drawer.DrawClosedPolyLine2DInDCS([-1,  0,
+                                        0,  1,
+                                        1,  0,
+                                        0, -1,
+                                       -1,  0]);
+end;
+
+class procedure TDefaultSnatIconDrawer._1_3_2_3Icon(var DC:TDrawContext);
+begin
+  dc.drawer.DrawLine2DInDCS(-0.5, 1,-0.5, -1);
+  dc.drawer.DrawLine2DInDCS(0, 1,0, -1);
+  dc.drawer.DrawLine2DInDCS(0.5, 1,0.5, -1);
+end;
+
+class procedure TDefaultSnatIconDrawer.PointIcon(var DC:TDrawContext);
+begin
+  dc.drawer.DrawLine2DInDCS(-1, 1,1, -1);
+  dc.drawer.DrawLine2DInDCS(-1, -1,1, 1);
+end;
+
+class procedure TDefaultSnatIconDrawer.IntersectionIcon(var DC:TDrawContext);
+begin
+  dc.drawer.DrawLine2DInDCS(-1, 1,1, -1);
+  dc.drawer.DrawLine2DInDCS(-1, -1,1, 1);
+end;
+
+class procedure TDefaultSnatIconDrawer.ApparentIntersectionIcon(var DC:TDrawContext);
+begin
+  dc.drawer.DrawLine2DInDCS(-1, 1,1, -1);
+  dc.drawer.DrawLine2DInDCS(-1, -1,1, 1);
+  dc.drawer.DrawClosedPolyLine2DInDCS([-1,  1,
+                                        1,  1,
+                                        1, -1,
+                                       -1, -1]);
+end;
+
+class procedure TDefaultSnatIconDrawer.TextInsertIcon(var DC:TDrawContext);
+begin
+  dc.drawer.DrawLine2DInDCS(-1, 0, 1, 0);
+  dc.drawer.DrawLine2DInDCS( 0, 1, 0,-1);
+end;
+
+class procedure TDefaultSnatIconDrawer.PerpendicularIcon(var DC:TDrawContext);
+begin
+  dc.drawer.DrawLine2DInDCS(-1,-1,-1, 1);
+  dc.drawer.DrawLine2DInDCS(-1, 1, 1, 1);
+  dc.drawer.DrawLine2DInDCS(-1, 0, 0, 0);
+  dc.drawer.DrawLine2DInDCS( 0, 0, 0, 1);
+end;
+
+class procedure TDefaultSnatIconDrawer.TraceIcon(var DC:TDrawContext);
+begin
+  dc.drawer.DrawLine2DInDCS(-1, -0.5,1, -0.5);
+  dc.drawer.DrawLine2DInDCS(-1,  0.5,1,  0.5);
+end;
+
+class procedure TDefaultSnatIconDrawer.NearestIcon(var DC:TDrawContext);
+begin
+  dc.drawer.DrawClosedPolyLine2DInDCS([-1, 1,
+                                        1, 1,
+                                       -1,-1,
+                                        1,-1]);
+end;
+
+
+
 initialization
-SnapHandles.init;
-os_p1:=SnapHandles.CreateHandle;
-os_p2:=SnapHandles.CreateHandle;
-os_p3:=SnapHandles.CreateHandle;
-os_p4:=SnapHandles.CreateHandle;
-os_p5:=SnapHandles.CreateHandle;
-os_p6:=SnapHandles.CreateHandle;
-os_p7:=SnapHandles.CreateHandle;
-os_p8:=SnapHandles.CreateHandle;
-os_p9:=SnapHandles.CreateHandle;
-os_p10:=SnapHandles.CreateHandle;
-os_p11:=SnapHandles.CreateHandle;
-os_p12:=SnapHandles.CreateHandle;
-os_p13:=SnapHandles.CreateHandle;
-os_p14:=SnapHandles.CreateHandle;
-os_p15:=SnapHandles.CreateHandle;
-os_p16:=SnapHandles.CreateHandle;
+  SnapHandles.init;
+  os_p1:=SnapHandles.CreateHandleWithData('p1',TSnapLincedData.Create(SONormal,nil,nil));
+  os_p2:=SnapHandles.CreateHandleWithData('p2',TSnapLincedData.Create(SONormal,nil,nil));
+  os_p3:=SnapHandles.CreateHandleWithData('p3',TSnapLincedData.Create(SONormal,nil,nil));
+  os_p4:=SnapHandles.CreateHandleWithData('p4',TSnapLincedData.Create(SONormal,nil,nil));
+  os_p5:=SnapHandles.CreateHandleWithData('p5',TSnapLincedData.Create(SONormal,nil,nil));
+  os_p6:=SnapHandles.CreateHandleWithData('p6',TSnapLincedData.Create(SONormal,nil,nil));
+  os_p7:=SnapHandles.CreateHandleWithData('p7',TSnapLincedData.Create(SONormal,nil,nil));
+  os_p8:=SnapHandles.CreateHandleWithData('p8',TSnapLincedData.Create(SONormal,nil,nil));
+  os_p9:=SnapHandles.CreateHandleWithData('p9',TSnapLincedData.Create(SONormal,nil,nil));
+  os_p10:=SnapHandles.CreateHandleWithData('p10',TSnapLincedData.Create(SONormal,nil,nil));
+  os_p11:=SnapHandles.CreateHandleWithData('p11',TSnapLincedData.Create(SONormal,nil,nil));
+  os_p12:=SnapHandles.CreateHandleWithData('p12',TSnapLincedData.Create(SONormal,nil,nil));
+  os_p13:=SnapHandles.CreateHandleWithData('p13',TSnapLincedData.Create(SONormal,nil,nil));
+  os_p14:=SnapHandles.CreateHandleWithData('p14',TSnapLincedData.Create(SONormal,nil,nil));
+  os_p15:=SnapHandles.CreateHandleWithData('p15',TSnapLincedData.Create(SONormal,nil,nil));
+  os_p16:=SnapHandles.CreateHandleWithData('p16',TSnapLincedData.Create(SONormal,nil,nil));
 
-os_snap:=SnapHandles.CreateHandle;
-os_none:=SnapHandles.CreateHandle;
-os_polar:=SnapHandles.CreateHandle;
-os_nearest:=SnapHandles.CreateHandle;
-os_perpendicular:=SnapHandles.CreateHandle;
-os_midle:=SnapHandles.CreateHandle;
-os_begin:=SnapHandles.CreateHandle;
-os_1_3:=SnapHandles.CreateHandle;
-os_2_3:=SnapHandles.CreateHandle;
-os_1_4:=SnapHandles.CreateHandle;
-os_3_4:=SnapHandles.CreateHandle;
-os_end:=SnapHandles.CreateHandle;
-os_center:=SnapHandles.CreateHandle;
-os_q0:=SnapHandles.CreateHandle;
-os_q1:=SnapHandles.CreateHandle;
-os_q2:=SnapHandles.CreateHandle;
-os_q3:=SnapHandles.CreateHandle;
-os_point:=SnapHandles.CreateHandle;
-os_textinsert:=SnapHandles.CreateHandle;
-os_mtextinsert:=SnapHandles.CreateHandle;
-os_mtextwidth:=SnapHandles.CreateHandle;
-os_blockinsert:=SnapHandles.CreateHandle;
-os_insert:=SnapHandles.CreateHandle;
-os_intersection:=SnapHandles.CreateHandle;
-os_apparentintersection:=SnapHandles.CreateHandle;
-os_trace:=SnapHandles.CreateHandle;
-os_polymin:=SnapHandles.CreateHandle;
-
+  os_snap:=SnapHandles.CreateHandleWithData('Snap',TSnapLincedData.Create(SOLow,nil,nil));
+  os_none:=SnapHandles.CreateHandleWithData('None',TSnapLincedData.Create(SOVeryLow,nil,nil));
+  os_polar:=SnapHandles.CreateHandleWithData('Polar',TSnapLincedData.Create(SONormal,nil,nil));
+  os_nearest:=SnapHandles.CreateHandleWithData('Nearest',TSnapLincedData.Create(SONormal,nil,TDefaultSnatIconDrawer.NearestIcon));
+  os_perpendicular:=SnapHandles.CreateHandleWithData('Perpendicular',TSnapLincedData.Create(SONormal,nil,TDefaultSnatIconDrawer.PerpendicularIcon));
+  os_midle:=SnapHandles.CreateHandleWithData('midle',TSnapLincedData.Create(SONormal,nil,TDefaultSnatIconDrawer.MidleIcon));
+  os_begin:=SnapHandles.CreateHandleWithData('begin',TSnapLincedData.Create(SONormal,nil,TDefaultSnatIconDrawer.EndIcon));
+  os_1_3:=SnapHandles.CreateHandleWithData('1/3',TSnapLincedData.Create(SONormal,nil,TDefaultSnatIconDrawer._1_3_2_3Icon));
+  os_2_3:=SnapHandles.CreateHandleWithData('2/3',TSnapLincedData.Create(SONormal,nil,TDefaultSnatIconDrawer._1_3_2_3Icon));
+  os_1_4:=SnapHandles.CreateHandleWithData('1/4',TSnapLincedData.Create(SONormal,nil,TDefaultSnatIconDrawer._1_4_3_4Icon));
+  os_3_4:=SnapHandles.CreateHandleWithData('3/4',TSnapLincedData.Create(SONormal,nil,TDefaultSnatIconDrawer._1_4_3_4Icon));
+  os_end:=SnapHandles.CreateHandleWithData('End',TSnapLincedData.Create(SONormal,nil,TDefaultSnatIconDrawer.EndIcon));
+  os_center:=SnapHandles.CreateHandleWithData('Center',TSnapLincedData.Create(SONormal,nil,TDefaultSnatIconDrawer.CenterIcon));
+  os_q0:=SnapHandles.CreateHandleWithData('q0',TSnapLincedData.Create(SONormal,nil,TDefaultSnatIconDrawer.q0123Icon));
+  os_q1:=SnapHandles.CreateHandleWithData('q1',TSnapLincedData.Create(SONormal,nil,TDefaultSnatIconDrawer.q0123Icon));
+  os_q2:=SnapHandles.CreateHandleWithData('q2',TSnapLincedData.Create(SONormal,nil,TDefaultSnatIconDrawer.q0123Icon));
+  os_q3:=SnapHandles.CreateHandleWithData('q3',TSnapLincedData.Create(SONormal,nil,TDefaultSnatIconDrawer.q0123Icon));
+  os_point:=SnapHandles.CreateHandleWithData('Point',TSnapLincedData.Create(SONormal,nil,TDefaultSnatIconDrawer.PointIcon));
+  os_textinsert:=SnapHandles.CreateHandleWithData('TextInsert',TSnapLincedData.Create(SOLow,nil,TDefaultSnatIconDrawer.TextInsertIcon));
+  os_mtextinsert:=SnapHandles.CreateHandleWithData('MtextInsert',TSnapLincedData.Create(SONormal,nil,TDefaultSnatIconDrawer.TextInsertIcon));
+  os_mtextwidth:=SnapHandles.CreateHandleWithData('MtextWidth',TSnapLincedData.Create(SONormal,nil,TDefaultSnatIconDrawer.TextInsertIcon));
+  os_blockinsert:=SnapHandles.CreateHandleWithData('BlockInsert',TSnapLincedData.Create(SONormal,nil,TDefaultSnatIconDrawer.TextInsertIcon));
+  os_insert:=SnapHandles.CreateHandleWithData('Insert',TSnapLincedData.Create(SONormal,nil,TDefaultSnatIconDrawer.TextInsertIcon));
+  os_intersection:=SnapHandles.CreateHandleWithData('Intersection',TSnapLincedData.Create(SONormal,nil,TDefaultSnatIconDrawer.IntersectionIcon));
+  os_apparentintersection:=SnapHandles.CreateHandleWithData('ApparentIntersection',TSnapLincedData.Create(SONormal,nil,TDefaultSnatIconDrawer.ApparentIntersectionIcon));
+  os_trace:=SnapHandles.CreateHandleWithData('Trace',TSnapLincedData.Create(SONormal,nil,TDefaultSnatIconDrawer.TraceIcon));
+  os_polymin:=SnapHandles.CreateHandleWithData('Polymin',TSnapLincedData.Create(SONormal,nil,{TDefaultSnatIconDrawer.EndIcon}nil));
 finalization
-SnapHandles.done;
-
+  SnapHandles.done;
 end.

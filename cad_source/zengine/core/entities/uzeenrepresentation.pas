@@ -48,6 +48,8 @@ TZEntityRepresentation= object(GDBaseObject)
                        procedure DrawTextContent(drawer:TZGLAbstractDrawer;content:TDXFEntsInternalStringType;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:Double;var Outbound:OutBound4V);
                        procedure DrawLineWithLT(var rc:TDrawContext;const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp);
                        procedure DrawPolyLineWithLT(var rc:TDrawContext;const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed,ltgen:Boolean);virtual;
+                       procedure StartSurface;
+                       procedure EndSurface;
                        end;
 {Export-}
 implementation
@@ -140,6 +142,14 @@ begin
   end;
   Geometry.UnLock;
 end;
+procedure TZEntityRepresentation.StartSurface;
+begin
+end;
+
+procedure TZEntityRepresentation.EndSurface;
+begin
+end;
+
 begin
 end.
 

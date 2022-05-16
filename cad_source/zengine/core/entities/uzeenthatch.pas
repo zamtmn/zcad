@@ -25,12 +25,13 @@ uses
     uzestyleslayers,uzehelpobj,UGDBSelectedObjArray,
     uzegeometrytypes,uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,uzctnrVectorBytes,
     uzbtypes,uzeentwithlocalcs,uzeconsts,uzegeometry,uzeffdxfsupport,uzecamera,
-    UGDBPolyLine2DArray,uzglviewareadata;
+    UGDBPolyLine2DArray,uzglviewareadata,uzeTriangulator,uzeBoundaryPath;
 type
 {Export+}
 PGDBObjHatch=^GDBObjHatch;
 {REGISTEROBJECTTYPE GDBObjHatch}
 GDBObjHatch= object(GDBObjWithLocalCS)
+                 Path:TBoundaryPath;
                  Outbound:OutBound4V;(*oi_readonly*)(*hidden_in_objinsp*)
                  Vertex2D_in_OCS_Array:GDBpolyline2DArray;(*oi_readonly*)(*hidden_in_objinsp*)
                  Vertex3D_in_WCS_Array:GDBPoint3DArray;(*oi_readonly*)(*hidden_in_objinsp*)
@@ -97,6 +98,7 @@ begin
   PProjPoint:=nil;
   Vertex3D_in_WCS_Array.init(10);
   Vertex2D_in_OCS_Array.init(10,true);
+  Path.init;
 end;
 constructor GDBObjHatch.init;
 begin
@@ -109,6 +111,7 @@ begin
   PProjPoint:=nil;
   Vertex3D_in_WCS_Array.init(10);
   Vertex2D_in_OCS_Array.init(10,true);
+  Path.init;
 end;
 function GDBObjHatch.GetObjType;
 begin
@@ -117,10 +120,24 @@ end;
 procedure GDBObjHatch.SaveToDXF;
 begin
   SaveToDXFObjPrefix(outhandle,'HATCH','AcDbHatch',IODXFContext);
+  dxfvertexout(outhandle,10,Local.p_insert);
+  dxfvertexout(outhandle,210,local.basis.oz);
+  dxfStringout(outhandle,2,'SOLID');
+  dxfIntegerout(outhandle,70,1);
+  dxfIntegerout(outhandle,71,1);
+  Path.SaveToDXF(outhandle);
+  dxfIntegerout(outhandle,75,1);
+  dxfIntegerout(outhandle,76,1);
+  dxfIntegerout(outhandle,47,10);
+  dxfIntegerout(outhandle,98,0);
   SaveToDXFObjPostfix(outhandle);
 end;
 
 procedure GDBObjHatch.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
+var
+   hatchTess:TTriangulator.TTesselator;
+   i,j: Integer;
+   pv:PGDBvertex;
 begin
   if assigned(EntExtensions)then
     EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
@@ -129,30 +146,48 @@ begin
   createpoint;
   calcbb(dc);
   Representation.Clear;
+  hatchTess:=Triangulator.NewTesselator;
+
+  pv:=Vertex3D_in_WCS_Array.GetParrayAsPointer;
+
+  Triangulator.BeginPolygon(@Representation,hatchTess);
+
+  for i:=0 to Path.paths.Count-1  do begin
+    Triangulator.BeginContour(hatchTess);
+    for j:=0 to Path.paths.getData(i).Count-1 do begin
+       Triangulator.TessVertex(hatchTess,pv^);
+       inc(pv);
+    end;
+    Triangulator.EndContour(hatchTess);
+  end;
+  Triangulator.EndPolygon(hatchTess);
+
+  Triangulator.DeleteTess(hatchTess);
   //Representation.DrawPolyLineWithLT(dc,Vertex3D_in_WCS_Array,vp,true,true);
   if assigned(EntExtensions)then
     EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
 end;
 procedure GDBObjHatch.createpoint;
 var
-  i: Integer;
+  i,j: Integer;
   v:GDBvertex4D;
   v3d:GDBVertex;
   pv:PGDBVertex2D;
 begin
   Vertex3D_in_WCS_Array.clear;
-  pv:=Vertex2D_in_OCS_Array.GetParrayAsPointer;
-  for i:=0 to Vertex2D_in_OCS_Array.count-1 do
-  begin
-       v.x:=pv.x;
-       v.y:=pv.y;
+
+  for i:=0 to Path.paths.Count-1  do begin
+    for j:=0 to Path.paths.getData(i).Count-1 do begin
+       v.x:=Path.paths.getData(i).getData(j).x;
+       v.y:=Path.paths.getData(i).getData(j).y;
        v.z:=0;
        v.w:=1;
        v:=VectorTransform(v,objMatrix);
        v3d:=PGDBvertex(@v)^;
        Vertex3D_in_WCS_Array.PushBackData(v3d);
-       inc(pv);
+    end;
   end;
+
   Vertex3D_in_WCS_Array.Shrink;
 end;
 procedure GDBObjHatch.getoutbound;
@@ -208,15 +243,10 @@ begin
   while byt <> 0 do
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
-    {if not dxfvertexload(f,10,byt,Local.P_insert) then
-    if not dxfDoubleload(f,40,byt,Radius) then} f.readString;
+    if not Path.LoadFromDXF (f,byt) then
+      f.readString;
     byt:=readmystrtoint(f);
   end;
-  Vertex2D_in_OCS_Array.Clear;
-  Vertex2D_in_OCS_Array.PushBackData(CreateVertex2D(0,0));
-  Vertex2D_in_OCS_Array.PushBackData(CreateVertex2D(0,1));
-  Vertex2D_in_OCS_Array.PushBackData(CreateVertex2D(1,1));
-  Vertex2D_in_OCS_Array.PushBackData(CreateVertex2D(1,0));
 end;
 function GDBObjHatch.Clone;
 var

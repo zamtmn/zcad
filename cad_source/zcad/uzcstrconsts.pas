@@ -135,6 +135,8 @@ resourcestring
   rscmNEntitiesProcessed='%d entities processed';
   rscmNEntitiesDeselected='%d entities deselected';
 
+  rscmEntitiesCounter='%d entities processed (%d total, %d selected, %d filtred)';
+
   rscmNoBlocksOrDevices='No selected blocks or devices';
   rscmNoBlockDefInDWG='No BlockDef "%s" in the drawing';
   rscmNoBlockDefInDWGCXMenu='No BlockDef "%s" in the drawing. Use context menu';

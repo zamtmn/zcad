@@ -17,30 +17,65 @@
 }
 
 unit uzeBoundaryPath;
-{$INCLUDE zengineconfig.inc}
+{$Mode delphi}{$H+}
+{$Include zengineconfig.inc}
 interface
 uses uzegeometrytypes,UGDBPolyline2DArray,gzctnrVector,
-  uzctnrVectorBytes,{uzbtypes,uzedrawingdef,}uzeffdxfsupport;
+  uzctnrVectorBytes,gzctnrVectorTypes,uzegeometry,uzeffdxfsupport;
 type
 {Export+}
 PBoundaryPath=^TBoundaryPath;
 {REGISTEROBJECTTYPE TZEntityRepresentation}
 TBoundaryPath=object
   paths:GZVector<GDBPolyline2DArray>;
-  constructor init();
+  constructor init(m:TArrayIndex);
   destructor done;virtual;
-  function LoadFromDXF(var f:TZctnrVectorBytes;dxfcod:Integer):Boolean;
+  function LoadFromDXF(var f:TZctnrVectorBytes;dxfcod:Integer):Boolean; {todo: вынести это нафиг из простых типов}
   procedure SaveToDXF(var outhandle:TZctnrVectorBytes);
+  procedure CloneTo(var Dest:TBoundaryPath);
   procedure Clear;virtual;
+
+  procedure transform(const t_matrix:DMatrix4D);virtual;
 end;
 {Export-}
 implementation
-constructor TBoundaryPath.init;
+
+procedure TBoundaryPath.transform(const t_matrix:DMatrix4D);
+var i,j:integer;
+   ppla:PGDBPolyline2DArray;
+   pv:PGDBVertex2D;
+   tv:GDBVertex;
 begin
-  paths.init(10);
+  for i:=0 to paths.count-1 do begin
+    ppla:=paths.getDataMutable(i);
+    for j:=0 to ppla^.count-1 do begin
+      pv:=ppla^.getDataMutable(j);
+      tv.x:=pv^.x;
+      tv.y:=pv^.y;
+      tv.z:=0;
+      tv:=VectorTransform3D(tv,t_matrix);
+      pv^.x:=tv.x;
+      pv^.y:=tv.y;
+    end;
+  end;
+  paths.Clear;
+end;
+
+constructor TBoundaryPath.init(m:TArrayIndex);
+begin
+  paths.init(m);
 end;
 destructor TBoundaryPath.done;
+var
+  i:integer;
+  ppla:PGDBPolyline2DArray;
 begin
+  for i:=0 to paths.count-1 do begin
+    ppla:=paths.getDataMutable(i);
+    //ppla^.free;
+    ppla^.done;
+  end;
+  paths.done;
 end;
 procedure TBoundaryPath.Clear;
 var i:integer;
@@ -100,6 +135,20 @@ begin
       dxfDoubleout(outhandle,20,pv.y);
     end;
     dxfIntegerout(outhandle,97,0);
+  end;
+end;
+procedure TBoundaryPath.CloneTo(var Dest:TBoundaryPath);
+var i,j:integer;
+   ppla:PGDBPolyline2DArray;
+begin
+  Dest.paths.Clear;
+  Dest.paths.SetSize(paths.GetCount);
+  for i:=0 to paths.count-1 do begin
+    ppla:=Dest.paths.getDataMutable(i);
+    ppla^.init(paths.getData(i).GetCount,true);
+    Dest.paths.Count:=i+1;
+    for j:=0 to paths.getData(i).count-1 do
+      ppla^.PushBackData(paths.getData(i).getData(j));
   end;
 end;
 begin

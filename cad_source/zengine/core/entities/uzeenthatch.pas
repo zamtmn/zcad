@@ -61,9 +61,29 @@ GDBObjHatch= object(GDBObjWithLocalCS)
                  procedure addcontrolpoints(tdesc:Pointer);virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
+
+                 procedure transform(const t_matrix:DMatrix4D);virtual;
+                 procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
            end;
 {Export-}
 implementation
+
+procedure GDBObjHatch.transform;
+begin
+  inherited;
+  Path.transform(t_matrix);
+end;
+
+procedure GDBObjHatch.TransformAt;
+begin
+  inherited;
+  Path.Clear;
+  Vertex2D_in_OCS_Array.clear;
+  pGDBObjHatch(p)^.Path.CloneTo(Path);
+  Path.transform(t_matrix^);
+end;
+
+
 
 procedure GDBObjHatch.createfield;
 begin
@@ -98,7 +118,7 @@ begin
   PProjPoint:=nil;
   Vertex3D_in_WCS_Array.init(10);
   Vertex2D_in_OCS_Array.init(10,true);
-  Path.init;
+  Path.init(10);
 end;
 constructor GDBObjHatch.init;
 begin
@@ -111,7 +131,7 @@ begin
   PProjPoint:=nil;
   Vertex3D_in_WCS_Array.init(10);
   Vertex2D_in_OCS_Array.init(10,true);
-  Path.init;
+  Path.init(10);
 end;
 function GDBObjHatch.GetObjType;
 begin
@@ -260,14 +280,7 @@ begin
   CopyVPto(tvo^);
   CopyExtensionsTo(tvo^);
   tvo^.Local:=local;
-
-  p:=Vertex2D_in_OCS_Array.GetParrayAsPointer;
-  for i:=0 to Vertex2D_in_OCS_Array.Count-1 do
-  begin
-      tvo^.Vertex2D_in_OCS_Array.PushBackData(p^);
-      inc(p);
-  end;
-
+  Path.CloneTo(tvo^.Path);
   result := tvo;
 end;
 

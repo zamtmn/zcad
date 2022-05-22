@@ -17,7 +17,8 @@
 }
 
 unit uzeffdxfsupport;
-{$INCLUDE zengineconfig.inc}
+{$Mode delphi}{$H+}
+{$Include zengineconfig.inc}
 
 interface
 uses uzegeometrytypes,uzbtypes,sysutils,uzctnrVectorBytes,usimplegenerics;

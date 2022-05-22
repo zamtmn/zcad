@@ -51,7 +51,7 @@ GZVector{-}<T>{//}=object(TZAbsVector)
         {**~Деструктор}
         destructor done;virtual;
         {**Деструктор}
-        procedure destroy;virtual;
+        destructor destroy;virtual;
         {**Конструктор}
         constructor init(m:TArrayIndex);
         {**Конструктор}
@@ -164,7 +164,8 @@ var
 begin
   newblock:=nil;
   GetMem(newblock, nevsize);
-  Move(pblock^, newblock^, oldsize);
+  if pblock<>nil then
+    Move(pblock^, newblock^, oldsize);
   result := newblock;
   FreeMem(pblock);
 end;
@@ -445,7 +446,7 @@ begin
   free;
   destroy;
 end;
-procedure GZVector<T>.destroy;
+destructor GZVector<T>.destroy;
 begin
   if PArray<>nil then
     Freemem(PArray);

@@ -203,6 +203,10 @@ begin
      if (pvnt<>nil) then
      DeviceNameSubProcess(pvn,pstring(pvnt^.data.Addr.Instance)^,pEntity);
 
+     pvnt:=pentvarext.entityunit.FindVariable('RiserName');
+     if (pvnt<>nil)and(pvn<>nil)then
+       pstring(pvnt^.data.Addr.Instance)^:=pstring(pvn^.data.Addr.Instance)^;
+
      DBLinkProcess(pentity,drawing);
 end;
 procedure DeviceSilaProcess(pEntity:PGDBObjEntity;const drawing:TDrawingDef);

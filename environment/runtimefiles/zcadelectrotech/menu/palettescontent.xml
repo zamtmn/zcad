@@ -236,6 +236,28 @@
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_UNIT_CH3)" Img='DEVICE_EL_VL_UNIT_CH3_300' Caption='Сноска 3'/>
       	</ZTreeNode>
       	<ZTreeNode Caption='Высоковольтные сети'>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_HIGH_Q1)" Img='DEVICE_EL_VL_HIGH_Q1_300' Caption='Вакуумник'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_HIGH_FU1)" Img='DEVICE_EL_VL_HIGH_FU1_300' Caption='Предохранитель'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_HIGH_QW1)" Img='DEVICE_EL_VL_HIGH_QW1_300' Caption='Выключатель нагрузки'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_HIGH_QS1)" Img='DEVICE_EL_VL_HIGH_QS1_300' Caption='Разъединитель 1'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_HIGH_QS2)" Img='DEVICE_EL_VL_HIGH_QS2_300' Caption='Разъединитель 2'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_HIGH_T1)" Img='DEVICE_EL_VL_HIGH_T1_300' Caption='Трансформатор'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_HIGH_TA1)" Img='DEVICE_EL_VL_HIGH_TA1_300' Caption='Трансформатор тока'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_HIGH_TAN1)" Img='DEVICE_EL_VL_HIGH_TAN1_300' Caption='Трансформатор нулевой'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_HIGH_TH1)" Img='DEVICE_EL_VL_HIGH_TH1_300' Caption='Трансформатор напряжения 1'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_HIGH_TV1)" Img='DEVICE_EL_VL_HIGH_TV1_300' Caption='Трансформатор напряжения 2'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_HIGH_UR1)" Img='DEVICE_EL_VL_HIGH_UR1_300' Caption='Ограничитель перенапряжения'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_HIGH_FV1)" Img='DEVICE_EL_VL_HIGH_FV1_300' Caption='Разрядник'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_HIGH_W1)" Img='DEVICE_EL_VL_HIGH_W1_300' Caption='Счетчик'/>
+	   <ZTreeCommand Command="Insert(EL_VL_HIGH_L1)" Img='EL_VL_HIGH_L1_300' Caption='Кабель'/>
+
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_HIGH_CN1)" Img='DEVICE_EL_VL_HIGH_CN1_300' Caption='Шина'/>
+	   <ZTreeCommand Command="Insert(EL_VL_HIGH_CZ1)" Img='EL_VL_HIGH_CZ1_300' Caption='Заземление'/>
+
+	   <ZTreeCommand Command="Insert(EL_VL_HIGH_FD0)" Img='EL_VL_HIGH_FD0_300' Caption='Фидер шапка'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_HIGH_FD1)" Img='DEVICE_EL_VL_HIGH_FD1_300' Caption='Фидер 1'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_HIGH_FD2)" Img='DEVICE_EL_VL_HIGH_FD2_300' Caption='Фидер 2'/>
+
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_QUESTIONNAIRE1)" Img='DEVICE_EL_VL_QUESTIONNAIRE1_300' Caption='Опросник КТПН'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_QUESTIONNAIRE2_1)" Img='DEVICE_EL_VL_QUESTIONNAIRE2_1_300' Caption='Опросник РУВН Шапка'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_QUESTIONNAIRE2_2)" Img='DEVICE_EL_VL_QUESTIONNAIRE2_2_300' Caption='Опросник РУВН Фидер 1'/>

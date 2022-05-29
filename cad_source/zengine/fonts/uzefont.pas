@@ -59,7 +59,6 @@ end;
 procedure GDBfont.CreateSymbol(drawer:TZGLAbstractDrawer;var geom:ZGLVectorObject;_symbol:Integer;const objmatrix:DMatrix4D;matr:DMatrix4D;var Bound:TBoundingRect;var LLSymbolLineIndex:TArrayIndex);
 var
   v,v0,true0Y,fact0y:GDBvertex;
-  pfact0y:PGDBvertex;
   sqrsymh{,CapHeight}:Double;
   psyminfo:PGDBsymdolinfo;
 
@@ -348,24 +347,21 @@ begin
 
                                     PLLSymbolLine^.SymbolsParam.sx:=oneVertexlength(PGDBVertex(@PLLSymbolLine^.SymbolsParam.FirstSymMatr[0])^)/oneVertexlength(PGDBVertex(@PLLSymbolLine^.SymbolsParam.FirstSymMatr[1])^);
 
-                                    {true0Y:=CrossVertex(PGDBVertex(@PLLSymbolLine^.SymbolsParam.FirstSymMatr[2])^,PGDBVertex(@PLLSymbolLine^.SymbolsParam.FirstSymMatr[0])^);
+                                    true0Y:=CrossVertex(PGDBVertex(@PLLSymbolLine^.SymbolsParam.FirstSymMatr[2])^,PGDBVertex(@PLLSymbolLine^.SymbolsParam.FirstSymMatr[0])^);
 
-                                    true0Y:=NormalizeVertex(true0Y);}
-                                    pfact0y:=@PLLSymbolLine^.SymbolsParam.FirstSymMatr[1];
-                                    if IsVectorNul(pfact0y^) then begin
-                                      PLLSymbolLine^.SymbolsParam.Oblique:=pi/2;
-                                    end else begin
-                                      fact0y:=NormalizeVertex(pfact0y^);
-                                      PLLSymbolLine^.SymbolsParam.Oblique:=arccos(scalardot(true0Y,fact0y));
-                                      if GetCSDirFrom0x0y2D(true0Y,fact0y)=TCSDLeft then
-                                        PLLSymbolLine^.SymbolsParam.Oblique:=-PLLSymbolLine^.SymbolsParam.Oblique;
-                                    end;
+                                    if not IsVectorNul(true0Y) then
+                                      true0Y:=NormalizeVertex(true0Y);
+                                    fact0y:=PGDBVertex(@PLLSymbolLine^.SymbolsParam.FirstSymMatr[1])^;
+                                    if not IsVectorNul(fact0y) then
+                                      fact0y:=NormalizeVertex(fact0y);
+
+                                    PLLSymbolLine^.SymbolsParam.Oblique:=arccos(scalardot(true0Y,fact0y));
 
                                     PLLSymbolLine^.SymbolsParam.NeededFontHeight:=PLLSymbolLine^.SymbolsParam.NeededFontHeight*cos(PLLSymbolLine^.SymbolsParam.Oblique);
                                     PLLSymbolLine^.SymbolsParam.sx:=PLLSymbolLine^.SymbolsParam.sx/cos(PLLSymbolLine^.SymbolsParam.Oblique);
 
-                                    //if GetCSDirFrom0x0y2D(true0Y,fact0y)=TCSDLeft then
-                                    //                      PLLSymbolLine^.SymbolsParam.Oblique:=-PLLSymbolLine^.SymbolsParam.Oblique;
+                                    if GetCSDirFrom0x0y2D(true0Y,fact0y)=TCSDLeft then
+                                                          PLLSymbolLine^.SymbolsParam.Oblique:=-PLLSymbolLine^.SymbolsParam.Oblique;
                                end;
     PLLSymbolLine^.LastOutBoundIndex:=PLLPsymbol^.OutBoundIndex;
     if sqrsymh>PLLSymbolLine.MaxSqrSymH then

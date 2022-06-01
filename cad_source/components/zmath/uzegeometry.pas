@@ -65,7 +65,8 @@ const
       YWCS4D:DVector4D=(0,1,0,1);
       ZWCS4D:DVector4D=(0,0,1,1);
       NulVertex2D:GDBVertex2D=(x:0;y:0);
-      XWCS2D2D:GDBVertex2D=(x:1;y:0);
+      XWCS2D:GDBVertex2D=(x:1;y:0);
+      YWCS2D:GDBVertex2D=(x:0;y:1);
 type Intercept3DProp=record
                            isintercept:Boolean;   //**< Есть это пересение или нет
                            interceptcoord:GDBVertex; //**< Точка пересечения X,Y,Z

@@ -712,7 +712,7 @@ begin
            Segmentator.InitFromPolyline(points,polylength,closed,@self);
            TangentScale:={SysVar.dwg.DWG_LTScale^}rc.DrawingContext.GlobalLTScale*vp.LineTypeScale;
            NormalScale:=TangentScale;
-           TrueNumberOfPatterns:=polylength/(TangentScale*LT.LengthFact);
+           TrueNumberOfPatterns:=polylength/(TangentScale*LT.strokesarray.LengthFact);
            if ltgen and closed then
                         begin
                         minPatternsCount:=2;
@@ -720,7 +720,7 @@ begin
                         if NumberOfPatterns=0 then
                                                   TangentScale:=NormalScale
                                               else
-                                                  TangentScale:=polyLength/(NumberOfPatterns*LT.LengthFact);
+                                                  TangentScale:=polyLength/(NumberOfPatterns*LT.strokesarray.LengthFact);
                         end
                     else
                         begin
@@ -732,7 +732,7 @@ begin
            else
                begin
                     Segmentator.startdraw;
-                    D:=(polyLength-(TangentScale*LT.LengthFact)*NumberOfPatterns)/2; //длинна добавки для выравнивания
+                    D:=(polyLength-(TangentScale*LT.strokesarray.LengthFact)*NumberOfPatterns)/2; //длинна добавки для выравнивания
                     normalizedD:=D/polyLength;
 
                     if (not closed)or(not ltgen) then
@@ -801,7 +801,7 @@ begin
           //LT:=getLTfromVP(vp);
           length := Vertexlength(startpoint,endpoint);//длина линии
           scale:={SysVar.dwg.DWG_LTScale^}rc.DrawingContext.GlobalLTScale*vp.LineTypeScale;//фактический масштаб линии
-          num:=Length/(scale*LT.LengthFact);//количество повторений шаблона
+          num:=Length/(scale*LT.strokesarray.LengthFact);//количество повторений шаблона
           if ((num<1)and(not LT^.WithoutLines))or(num>SysVarRDMaxLTPatternsInEntity) then
           begin
                DrawLineWithoutLT(rc,startpoint,endpoint,result); //не рисуем шаблон при большом количестве повторений
@@ -811,7 +811,7 @@ begin
           begin
                Segmentator.InitFromLine(startpoint,endpoint,length,@self);//длина линии
                Segmentator.startdraw;
-               D:=(Length-(scale*LT.LengthFact)*trunc(num))/2; //длинна добавки для выравнивания
+               D:=(Length-(scale*LT.strokesarray.LengthFact)*trunc(num))/2; //длинна добавки для выравнивания
                normalizedD:=D/Length;
 
                PStroke:=LT^.strokesarray.beginiterate(ir3);//первый штрих

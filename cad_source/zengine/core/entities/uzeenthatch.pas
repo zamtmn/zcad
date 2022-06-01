@@ -25,17 +25,20 @@ uses
     uzestyleslayers,uzehelpobj,UGDBSelectedObjArray,
     uzegeometrytypes,uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,uzctnrVectorBytes,
     uzbtypes,uzeentwithlocalcs,uzeconsts,uzegeometry,uzeffdxfsupport,uzecamera,
-    UGDBPolyLine2DArray,uzglviewareadata,uzeTriangulator,uzeBoundaryPath;
+    UGDBPolyLine2DArray,uzglviewareadata,uzeTriangulator,
+  uzeBoundaryPath,uzeStylesHatchPatterns;
 type
 {Export+}
 PGDBObjHatch=^GDBObjHatch;
 {REGISTEROBJECTTYPE GDBObjHatch}
 GDBObjHatch= object(GDBObjWithLocalCS)
                  Path:TBoundaryPath;
+                 PPattern:PTHatchPattern;
                  Outbound:OutBound4V;(*oi_readonly*)(*hidden_in_objinsp*)
                  Vertex2D_in_OCS_Array:GDBpolyline2DArray;(*oi_readonly*)(*hidden_in_objinsp*)
                  Vertex3D_in_WCS_Array:GDBPoint3DArray;(*oi_readonly*)(*hidden_in_objinsp*)
                  PProjPoint:PGDBpolyline2DArray;(*hidden_in_objinsp*)
+                 PatternName:string;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex);
                  constructor initnul;
                  procedure LoadFromDXF(var f:TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
@@ -106,6 +109,9 @@ begin
     pprojpoint^.done;
     Freemem(pointer(pprojpoint));
   end;
+  Path.done;
+  if PPattern<>nil then
+    PPattern^.done;
 end;
 function GDBObjHatch.ObjToString(prefix,sufix:String):String;
 begin
@@ -119,6 +125,7 @@ begin
   Vertex3D_in_WCS_Array.init(10);
   Vertex2D_in_OCS_Array.init(10,true);
   Path.init(10);
+  PPattern:=nil;
 end;
 constructor GDBObjHatch.init;
 begin
@@ -132,6 +139,7 @@ begin
   Vertex3D_in_WCS_Array.init(10);
   Vertex2D_in_OCS_Array.init(10,true);
   Path.init(10);
+  PPattern:=nil;
 end;
 function GDBObjHatch.GetObjType;
 begin
@@ -142,13 +150,26 @@ begin
   SaveToDXFObjPrefix(outhandle,'HATCH','AcDbHatch',IODXFContext);
   dxfvertexout(outhandle,10,Local.p_insert);
   dxfvertexout(outhandle,210,local.basis.oz);
-  dxfStringout(outhandle,2,'SOLID');
-  dxfIntegerout(outhandle,70,1);
+  dxfStringout(outhandle,2,PatternName);
+  if PPattern=nil then
+    dxfIntegerout(outhandle,70,1)
+  else
+    dxfIntegerout(outhandle,70,0);
   dxfIntegerout(outhandle,71,1);
   Path.SaveToDXF(outhandle);
   dxfIntegerout(outhandle,75,1);
   dxfIntegerout(outhandle,76,1);
-  dxfIntegerout(outhandle,47,10);
+
+  if PPattern<>nil then begin
+    dxfDoubleout(outhandle,52,0);
+    dxfDoubleout(outhandle,41,1);
+    dxfIntegerout(outhandle,77,0);
+  end;
+
+  if PPattern<>nil then
+    PPattern^.SaveToDXF(outhandle);
+
+  dxfDoubleout(outhandle,47,1.25);
   dxfIntegerout(outhandle,98,0);
   SaveToDXFObjPostfix(outhandle);
 end;
@@ -264,6 +285,8 @@ begin
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
     if not Path.LoadFromDXF (f,byt) then
+    if not LoadPatternFromDXF(PPattern,f,byt) then
+    if not dxfStringload(f,2,byt,PatternName) then
       f.readString;
     byt:=readmystrtoint(f);
   end;

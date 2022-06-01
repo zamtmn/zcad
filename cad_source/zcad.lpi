@@ -727,6 +727,7 @@
       <Unit85>
         <Filename Value="zengine/styles/uzestyleslinetypes.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="uzeStylesLineTypes"/>
       </Unit85>
       <Unit86>
         <Filename Value="zengine/styles/uzestylestexts.pas"/>

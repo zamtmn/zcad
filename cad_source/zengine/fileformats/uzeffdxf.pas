@@ -736,7 +736,7 @@ begin
        end;
        end;
       if assigned(pltypeprop) then
-        pltypeprop^.LengthFact:=len;
+        pltypeprop^.strokesarray.LengthFact:=len;
   end;
   BShapeProp.Done;
 end;

@@ -108,9 +108,11 @@ begin
              if dxfdoubleload(f,20,byt,p.y) then byt:=readmystrtoint(f);
              currpath.PushBackData(p);
            end;
-           if dxfintegerload(f,97,byt,bt) then byt:=readmystrtoint(f);
+           if dxfintegerload(f,97,byt,bt) then
+             if bt<>0 then
+               byt:=readmystrtoint(f);
            for j:=1 to bt do begin
-             if dxfstringload(f,330,byt,s) then byt:=readmystrtoint(f);
+             if (dxfstringload(f,330,byt,s))and(j<>bt) then byt:=readmystrtoint(f);
            end;
            currpath.Shrink;
            paths.PushBackData(currpath);

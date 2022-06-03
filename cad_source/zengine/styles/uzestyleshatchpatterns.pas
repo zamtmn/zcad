@@ -23,15 +23,21 @@ uses LCLProc,LazUTF8,Classes,gzctnrVector,sysutils,uzbtypes,
      uzegeometry,gzctnrVectorObjects,
      gzctnrVectorTypes,uzbstrproc,uzeStylesLineTypes,uzegeometrytypes,
      uzctnrVectorBytes,
-     uzeffdxfsupport;
+     uzeffdxfsupport,
+     Math;
 type
 {EXPORT+}
   PTPatStrokesArray=^TPatStrokesArray;
-  {REGISTEROBJECTTYPE TStrokesArray}
   TPatStrokesArray=object(TStrokesArray)
-    Angle:Double;(*'Angle'*)
+    fAngle:Double;
+    //fDir:GDBVertex2D;
+
     Base,Offset:GDBVertex2D;
+
+    //procedure setAngle(AAngle:Double);
+
     constructor init(m:Integer);
+    property Angle:Double read fAngle write fAngle{setAngle};
   end;
 
   PTHatchPattern=^THatchPattern;
@@ -40,9 +46,19 @@ type
   end;
 {EXPORT-}
 
-function LoadPatternFromDXF(var PPattern:PTHatchPattern;var f:TZctnrVectorBytes;dxfcod:Integer):Boolean;
+function LoadPatternFromDXF(var PPattern:PTHatchPattern;var f:TZctnrVectorBytes;dxfcod:Integer;const MainAngle:Double):Boolean;
 
 implementation
+
+{procedure TPatStrokesArray.setAngle(AAngle:Double);
+var
+  rAngle:Double;
+begin
+  fAngle:=AAngle;
+  rAngle:=DegToRad(AAngle);
+  fDir.x:=cos(rAngle);
+  fDir.y:=Sin(rAngle);
+end;}
 
 constructor TPatStrokesArray.init(m:Integer);
 begin
@@ -74,10 +90,11 @@ begin
 end;
 
 
-function LoadPatternFromDXF(var PPattern:PTHatchPattern;var f:TZctnrVectorBytes;dxfcod:Integer):Boolean;
+function LoadPatternFromDXF(var PPattern:PTHatchPattern;var f:TZctnrVectorBytes;dxfcod:Integer;const MainAngle:Double):Boolean;
 var
   i,j,patternscount,dashcount:Integer;
   angle,dash:Double;
+  sinA,cosA:Double;
   base,offset:GDBvertex2D;
   psa:PTPatStrokesArray;
 begin
@@ -99,15 +116,24 @@ begin
       if dxfintegerload(f,79,dxfcod,dashcount) then dxfcod:=readmystrtoint(f);
       psa:=PPattern^.CreateObject;
       psa^.init(dashcount);
-      psa^.Angle:=angle;
+      psa^.Angle:=angle-MainAngle;
+
+      angle:=DegToRad(MainAngle);
+      sinA:=sin(-angle);
+      cosA:=cos(-angle);
       psa^.Base:=base;
-      psa^.Offset:=offset;
+
+      psa^.Offset.x:=offset.x*cosA-offset.y*sinA;
+      psa^.Offset.y:=offset.y*cosA+offset.x*sinA;
+      //psa^.Offset:=offset;
+
       for j:=1 to dashcount do begin
         if dxfdoubleload(f,49,dxfcod,dash) then begin
           psa^.PushBackData(dash);
           dxfcod:=readmystrtoint(f);
         end;
       end;
+      psa^.format;
     end;
   end;
 end;

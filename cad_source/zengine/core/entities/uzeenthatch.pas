@@ -26,9 +26,10 @@ uses
     uzegeometrytypes,uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,uzctnrVectorBytes,
     uzbtypes,uzeentwithlocalcs,uzeconsts,uzegeometry,uzeffdxfsupport,uzecamera,
     UGDBPolyLine2DArray,uzglviewareadata,uzeTriangulator,
-  uzeBoundaryPath,uzeStylesHatchPatterns;
+    uzeBoundaryPath,uzeStylesHatchPatterns;
 type
 {Export+}
+THatchIslandDetection=(HID_Normal,Hid_Ignore,HID_Outer);
 PGDBObjHatch=^GDBObjHatch;
 {REGISTEROBJECTTYPE GDBObjHatch}
 GDBObjHatch= object(GDBObjWithLocalCS)
@@ -39,12 +40,15 @@ GDBObjHatch= object(GDBObjWithLocalCS)
                  Vertex3D_in_WCS_Array:GDBPoint3DArray;(*oi_readonly*)(*hidden_in_objinsp*)
                  PProjPoint:PGDBpolyline2DArray;(*hidden_in_objinsp*)
                  PatternName:string;
+                 IslandDetection:THatchIslandDetection;
+                 Angle,Scale:Double;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex);
                  constructor initnul;
                  procedure LoadFromDXF(var f:TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
                  procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                 procedure FillPattern(var Strokes:TPatStrokesArray;var DC:TDrawContext);
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
                  function ObjToString(prefix,sufix:String):String;virtual;
                  destructor done;virtual;
@@ -69,6 +73,8 @@ GDBObjHatch= object(GDBObjWithLocalCS)
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
            end;
 {Export-}
+const
+  HID2DXF:array[THatchIslandDetection] of integer=(0,2,1);
 implementation
 
 procedure GDBObjHatch.transform;
@@ -126,6 +132,9 @@ begin
   Vertex2D_in_OCS_Array.init(10,true);
   Path.init(10);
   PPattern:=nil;
+  IslandDetection:=HID_Normal;
+  Angle:=0;
+  Scale:=1;
 end;
 constructor GDBObjHatch.init;
 begin
@@ -140,6 +149,9 @@ begin
   Vertex2D_in_OCS_Array.init(10,true);
   Path.init(10);
   PPattern:=nil;
+  IslandDetection:=HID_Normal;
+  Angle:=0;
+  Scale:=1;
 end;
 function GDBObjHatch.GetObjType;
 begin
@@ -157,12 +169,12 @@ begin
     dxfIntegerout(outhandle,70,0);
   dxfIntegerout(outhandle,71,1);
   Path.SaveToDXF(outhandle);
-  dxfIntegerout(outhandle,75,1);
+  dxfIntegerout(outhandle,75,HID2DXF[IslandDetection]);
   dxfIntegerout(outhandle,76,1);
 
   if PPattern<>nil then begin
-    dxfDoubleout(outhandle,52,0);
-    dxfDoubleout(outhandle,41,1);
+    dxfDoubleout(outhandle,52,Angle);
+    dxfDoubleout(outhandle,41,Scale);
     dxfIntegerout(outhandle,77,0);
   end;
 
@@ -172,6 +184,67 @@ begin
   dxfDoubleout(outhandle,47,1.25);
   dxfIntegerout(outhandle,98,0);
   SaveToDXFObjPostfix(outhandle);
+end;
+
+procedure GDBObjHatch.FillPattern(var Strokes:TPatStrokesArray;var DC:TDrawContext);
+var
+  Angl,LenOffs,LF,sinA,cosA:Double;
+  offs,offs2,dirx,diry,p2,ls:GDBVertex2D;
+  pp:PGDBvertex2D;
+  i,j:integer;
+  iprop:intercept2dprop;
+  tmin,tmax:double;
+  first:boolean;
+begin
+  Angl:=DegToRad(Angle+Strokes.Angle);
+  LenOffs:=oneVertexlength2D(Strokes.Offset);
+  if Strokes.LengthFact>0 then
+    LF:=Strokes.LengthFact
+  else
+    LF:=1;
+  diry.x:=cos(Angl)*LF*Scale;
+  diry.y:=sin(Angl)*LF*Scale;
+
+  Angl:=DegToRad(Angle);
+  sinA:=sin(Angl);
+  cosA:=cos(Angl);
+  dirx.x:=(Strokes.Offset.x*cosA-Strokes.Offset.y*sinA)*Scale;
+  dirx.y:=(Strokes.Offset.y*cosA+Strokes.Offset.x*sinA)*Scale;
+  //dirx.x:=Strokes.Offset.x*Scale;
+  //dirx.y:=Strokes.Offset.y*Scale;
+
+  offs:=Vertex2dMulOnSc(Strokes.Offset,Scale);
+  offs2:=Vertex2DAdd(offs,dirx);
+
+  first:=true;
+  for i:=0 to Path.paths.Count-1 do
+    for j:=0 to Path.paths.getDataMutable(i)^.count-1 do begin
+      pp:=Path.paths.getDataMutable(i)^.getDataMutable(j);
+      p2:=Vertex2DAdd(pp^,diry);
+      iprop:=intercept2dmy(offs,offs2,pp^,p2);
+      if iprop.isintercept then
+        if first then begin
+          first:=false;
+          tmin:=iprop.t1;
+          tmax:=iprop.t1;
+        end else begin
+          if tmin>iprop.t1 then
+            tmin:=iprop.t1;
+          if tmax<iprop.t1 then
+            tmax:=iprop.t1;
+        end;
+    end;
+  if not first then begin
+    tmin:=int(tmin+0.5);
+    tmax:=int(tmax);
+    ls:=Vertex2DAdd(offs,Vertex2dMulOnSc(dirx,tmin));
+    while tmin<=tmax do begin
+      Representation.DrawLineWithLT(DC,CreateVertex(ls.x,ls.y,0),CreateVertex(ls.x+diry.x*1000,ls.y+diry.y*1000,0),vp);
+      Representation.DrawLineWithLT(DC,CreateVertex(ls.x,ls.y,0),CreateVertex(ls.x-diry.x*1000,ls.y-diry.y*1000,0),vp);
+      ls:=Vertex2DAdd(ls,dirx);
+      tmin:=tmin+1;
+    end;
+  end;
 end;
 
 procedure GDBObjHatch.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
@@ -191,17 +264,21 @@ begin
 
   pv:=Vertex3D_in_WCS_Array.GetParrayAsPointer;
 
-  Triangulator.BeginPolygon(@Representation,hatchTess);
-
-  for i:=0 to Path.paths.Count-1  do begin
-    Triangulator.BeginContour(hatchTess);
-    for j:=0 to Path.paths.getData(i).Count-1 do begin
-       Triangulator.TessVertex(hatchTess,pv^);
-       inc(pv);
+  if PPattern=nil then begin
+    Triangulator.BeginPolygon(@Representation,hatchTess);
+    for i:=0 to Path.paths.Count-1 do begin
+      Triangulator.BeginContour(hatchTess);
+      for j:=0 to Path.paths.getData(i).Count-1 do begin
+         Triangulator.TessVertex(hatchTess,pv^);
+         inc(pv);
+      end;
+      Triangulator.EndContour(hatchTess);
     end;
-    Triangulator.EndContour(hatchTess);
+    Triangulator.EndPolygon(hatchTess);
+  end else begin
+    for i:=0 to PPattern^.Count-1 do
+      FillPattern(PPattern^.getDataMutable(i)^,DC);
   end;
-  Triangulator.EndPolygon(hatchTess);
 
   Triangulator.DeleteTess(hatchTess);
   //Representation.DrawPolyLineWithLT(dc,Vertex3D_in_WCS_Array,vp,true,true);
@@ -278,19 +355,30 @@ begin
 end;
 procedure GDBObjHatch.LoadFromDXF;
 var
-  byt:Integer;
+  byt,hstyle:Integer;
 begin
+  hstyle:=100;
+  Angle:=0;
   byt:=readmystrtoint(f);
   while byt <> 0 do
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
     if not Path.LoadFromDXF (f,byt) then
-    if not LoadPatternFromDXF(PPattern,f,byt) then
+    if not LoadPatternFromDXF(PPattern,f,byt,Angle) then
+    if not dxfintegerload(f,75,byt,hstyle) then
+    if not dxfDoubleload(f,52,byt,Angle) then
+    if not dxfDoubleload(f,41,byt,Scale) then
     if not dxfStringload(f,2,byt,PatternName) then
       f.readString;
     byt:=readmystrtoint(f);
   end;
+  case hstyle of
+    1:IslandDetection:=HID_Outer;
+    2:IslandDetection:=Hid_Ignore;
+    else IslandDetection:=HID_Normal;
+  end;
 end;
+
 function GDBObjHatch.Clone;
 var
   tvo: PGDBObjHatch;

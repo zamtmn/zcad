@@ -74,6 +74,7 @@ TStrokesArray= object(GZVector{-}<Double>{//})(*OpenArrayOfData=Double*)
                 constructor init(m:Integer);
                 function CopyTo(var source:GZVector{-}<Double>{//}):Integer;virtual;
                 procedure Clear;virtual;
+                procedure format;
                end;
 {REGISTEROBJECTTYPE GDBShapePropArray}
 GDBShapePropArray= object(GZVectorObjects{-}<ShapeProp>{//})(*OpenArrayOfObject=ShapeProp*)
@@ -715,6 +716,14 @@ procedure TStrokesArray.Clear;
 begin
   inherited;
   LengthFact:=0;
+end;
+procedure TStrokesArray.format;
+var
+  i:integer;
+begin
+  LengthFact:=0;
+  for i:=0 to count-1 do
+    LengthFact:=LengthFact+abs(getDataMutable(i)^);
 end;
 constructor TStrokesArray.init(m:Integer);
 begin

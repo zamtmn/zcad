@@ -118,10 +118,12 @@ function VertexDmorph(const Vector1, Vector2: GDBVertex3S; a: Double): GDBVertex
 function Vertexangle(const Vector1, Vector2: GDBVertex2d): Double;inline;
 function TwoVectorAngle(const Vector1, Vector2: GDBVertex): Double;inline;
 function oneVertexlength(const Vector1: GDBVertex): Double;inline;
+function oneVertexlength2D(const Vector1: GDBVertex2D): Double;inline;
 function SqrOneVertexlength(const Vector1: GDBVertex): Double;inline;
 function vertexlen2df(const x1, y1, x2, y2: Single): Single;inline;
 function NormalizeVertex(const Vector1: GDBVertex): GDBVertex;{inline;}
 function VertexMulOnSc(const Vector1:GDBVertex;sc:Double): GDBVertex;inline;
+function Vertex2DMulOnSc(const Vector1:GDBVertex2D;sc:Double): GDBVertex2D;inline;
 
 //к первой вершине прибавить вторую по осям Vector1.х + Vector2.х
 function VertexAdd(const Vector1, Vector2: GDBVertex): GDBVertex;inline;overload;
@@ -1643,6 +1645,11 @@ begin
   result := sqrt(sqr(vector1.x) + sqr(vector1.y) + sqr(vector1.z));
 end;
 
+function oneVertexlength2D(const Vector1: GDBVertex2D): Double;
+begin
+  result := sqrt(sqr(vector1.x) + sqr(vector1.y));
+end;
+
 function SqrOneVertexlength(const Vector1: GDBVertex): Double;
 begin
   result := (sqr(vector1.x) + sqr(vector1.y) + sqr(vector1.z));
@@ -1786,6 +1793,11 @@ begin
   Result.X := Vector1.x*sc;
   Result.Y := Vector1.y*sc;
   Result.Z := Vector1.z*sc;
+end;
+function Vertex2DMulOnSc(const Vector1:GDBVertex2D;sc:Double): GDBVertex2D;
+begin
+  Result.X := Vector1.x*sc;
+  Result.Y := Vector1.y*sc;
 end;
 function VertexAdd(const Vector1, Vector2: GDBVertex): GDBVertex;
 begin

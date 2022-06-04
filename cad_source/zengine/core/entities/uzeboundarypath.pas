@@ -97,7 +97,9 @@ begin
        byt:=readmystrtoint(f);
        Clear;
        for i:=1 to pathscount do begin
-         if dxfintegerload(f,92,byt,bt) then byt:=readmystrtoint(f);
+         while not dxfintegerload(f,92,byt,bt) do
+           byt:=readmystrtoint(f);
+         byt:=readmystrtoint(f);
          if (bt and 2)<>0 then begin
            if dxfintegerload(f,72,byt,bt) then byt:=readmystrtoint(f);
            if dxfintegerload(f,73,byt,bt) then byt:=readmystrtoint(f);

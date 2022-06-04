@@ -26,8 +26,21 @@ uses
     uzegeometrytypes,uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,uzctnrVectorBytes,
     uzbtypes,uzeentwithlocalcs,uzeconsts,uzegeometry,uzeffdxfsupport,uzecamera,
     UGDBPolyLine2DArray,uzglviewareadata,uzeTriangulator,
-    uzeBoundaryPath,uzeStylesHatchPatterns;
+    uzeBoundaryPath,uzeStylesHatchPatterns,gvector,garrayutils;
 type
+TLineInContour=record
+  C,L:integer;
+end;
+TIntercept2dpropWithLIC=record
+  i2dprop:intercept2dprop;
+  LIC:TLineInContour;
+  constructor create(const Ai2dprop:intercept2dprop;const AC,AL:Integer);
+end;
+TIntercept2dpropWithLICCompate=class
+  class function c(a,b:TIntercept2dpropWithLIC):boolean;inline;
+end;
+TIntercept2dpropWithLICVector=TVector<TIntercept2dpropWithLIC>;
+TVSorter=TOrderingArrayUtils<TIntercept2dpropWithLICVector,TIntercept2dpropWithLIC,TIntercept2dpropWithLICCompate>;
 {Export+}
 THatchIslandDetection=(HID_Normal,Hid_Ignore,HID_Outer);
 PGDBObjHatch=^GDBObjHatch;
@@ -49,6 +62,9 @@ GDBObjHatch= object(GDBObjWithLocalCS)
 
                  procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                 procedure ProcessLine(const l1,l2,c1,c2:GDBvertex2D;var IV:TIntercept2dpropWithLICVector);
+                 procedure ProcessLines(const p1,p2:GDBvertex2D;var IV:TIntercept2dpropWithLICVector);
+                 procedure ProcessStroke(var Strokes:TPatStrokesArray;var IV:TIntercept2dpropWithLICVector;var DC:TDrawContext);
                  procedure FillPattern(var Strokes:TPatStrokesArray;var DC:TDrawContext);
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
                  function ObjToString(prefix,sufix:String):String;virtual;
@@ -77,6 +93,18 @@ GDBObjHatch= object(GDBObjWithLocalCS)
 const
   HID2DXF:array[THatchIslandDetection] of integer=(0,2,1);
 implementation
+
+class function TIntercept2dpropWithLICCompate.c(a,b:TIntercept2dpropWithLIC):boolean;
+begin
+  result:=a.i2dprop.t1<b.i2dprop.t1;
+end;
+
+constructor TIntercept2dpropWithLIC.create(const Ai2dprop:intercept2dprop;const AC,AL:Integer);
+begin
+  i2dprop:=Ai2dprop;
+  LIC.C:=AC;
+  LIC.L:=AL;
+end;
 
 procedure GDBObjHatch.transform;
 begin
@@ -188,6 +216,79 @@ begin
   dxfIntegerout(outhandle,98,0);
   SaveToDXFObjPostfix(outhandle);
 end;
+procedure GDBObjHatch.ProcessLine(const l1,l2,c1,c2:GDBvertex2D;var IV:TIntercept2dpropWithLICVector);
+var
+  iprop:intercept2dprop;
+begin
+  iprop:=intercept2dmy(l1,l2,c1,c2);
+  if iprop.isintercept then
+    if iprop.t2<1 then
+      if iprop.t2>-eps then begin
+        IV.PushBack(TIntercept2dpropWithLIC.create(iprop,1,1));
+      end;
+end;
+
+procedure GDBObjHatch.ProcessLines(const p1,p2:GDBvertex2D;var IV:TIntercept2dpropWithLICVector);
+var
+  i,j:integer;
+  ppath:PGDBPolyline2DArray;
+  FirstP,PrevP,CurrP:PGDBvertex2D;
+  iprop:intercept2dprop;
+begin
+  for i:=0 to Path.paths.Count-1 do begin
+    ppath:=Path.paths.getDataMutable(i);
+    FirstP:=ppath.getDataMutable(0);
+    PrevP:=FirstP;
+    CurrP:=nil;
+    for j:=1 to ppath^.count-1 do begin
+      CurrP:=ppath.getDataMutable(j);
+      ProcessLine(p1,p2,PrevP^,CurrP^,IV);
+      PrevP:=CurrP;
+    end;
+    if PrevP<>FirstP then
+      ProcessLine(p1,p2,PrevP^,FirstP^,IV);
+  end;
+end;
+
+procedure GDBObjHatch.ProcessStroke(var Strokes:TPatStrokesArray;var IV:TIntercept2dpropWithLICVector;var DC:TDrawContext);
+var
+  p1,p2:PGDBvertex2D;
+  i:integer;
+begin
+  if IV.Size>1 then begin
+    TVSorter.Sort(IV,IV.Size);
+    case IslandDetection of
+      HID_Normal:begin
+                   p1:=@IV.Mutable[0].i2dprop.interceptcoord;
+                   for i:=1 to IV.Size-1 do begin
+                     p2:=@IV.Mutable[i].i2dprop.interceptcoord;
+                     if (i and 1)=1 then
+                       Representation.DrawLineWithLT(DC,CreateVertex(p1.x,p1.y,0),CreateVertex(p2.x,p2.y,0),vp);
+                     p1:=p2;
+                   end;
+                 end;
+      Hid_Ignore:begin
+                   p1:=@IV.Mutable[0].i2dprop.interceptcoord;
+                   p2:=@IV.Mutable[IV.Size-1].i2dprop.interceptcoord;
+                   Representation.DrawLineWithLT(DC,CreateVertex(p1.x,p1.y,0),CreateVertex(p2.x,p2.y,0),vp);
+                 end;
+       HID_Outer:begin
+                   if IV.Size>3 then begin
+                     p1:=@IV.Mutable[0].i2dprop.interceptcoord;
+                     p2:=@IV.Mutable[1].i2dprop.interceptcoord;
+                     Representation.DrawLineWithLT(DC,CreateVertex(p1.x,p1.y,0),CreateVertex(p2.x,p2.y,0),vp);
+                     p1:=@IV.Mutable[IV.Size-2].i2dprop.interceptcoord;
+                     p2:=@IV.Mutable[IV.Size-1].i2dprop.interceptcoord;
+                     Representation.DrawLineWithLT(DC,CreateVertex(p1.x,p1.y,0),CreateVertex(p2.x,p2.y,0),vp);
+                   end else begin
+                     p1:=@IV.Mutable[0].i2dprop.interceptcoord;
+                     p2:=@IV.Mutable[IV.Size-1].i2dprop.interceptcoord;
+                     Representation.DrawLineWithLT(DC,CreateVertex(p1.x,p1.y,0),CreateVertex(p2.x,p2.y,0),vp);
+                   end;
+               end;
+    end;
+  end;
+end;
 
 procedure GDBObjHatch.FillPattern(var Strokes:TPatStrokesArray;var DC:TDrawContext);
 var
@@ -198,7 +299,9 @@ var
   iprop:intercept2dprop;
   tmin,tmax:double;
   first:boolean;
+  IV:TIntercept2dpropWithLICVector;
 begin
+  IV:=TIntercept2dpropWithLICVector.Create;
   Angl:=DegToRad(Angle+Strokes.Angle);
   LenOffs:=oneVertexlength2D(Strokes.Offset);
   if Strokes.LengthFact>0 then
@@ -238,16 +341,18 @@ begin
         end;
     end;
   if not first then begin
-    tmin:=int(tmin+0.5);
+    tmin:=int(tmin{+0.5});
     tmax:=int(tmax);
     ls:=Vertex2DAdd(offs,Vertex2dMulOnSc(dirx,tmin));
     while tmin<=tmax do begin
-      Representation.DrawLineWithLT(DC,CreateVertex(ls.x,ls.y,0),CreateVertex(ls.x+diry.x*1000,ls.y+diry.y*1000,0),vp);
-      Representation.DrawLineWithLT(DC,CreateVertex(ls.x,ls.y,0),CreateVertex(ls.x-diry.x*1000,ls.y-diry.y*1000,0),vp);
+      IV.Clear;
+      ProcessLines(ls,Vertex2DAdd(ls,diry),IV);
+      ProcessStroke(Strokes,IV,DC);
       ls:=Vertex2DAdd(ls,dirx);
       tmin:=tmin+1;
     end;
   end;
+  IV.Free;
 end;
 
 procedure GDBObjHatch.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);

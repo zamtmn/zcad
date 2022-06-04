@@ -46,7 +46,7 @@ type
   end;
 {EXPORT-}
 
-function LoadPatternFromDXF(var PPattern:PTHatchPattern;var f:TZctnrVectorBytes;dxfcod:Integer;const MainAngle:Double):Boolean;
+function LoadPatternFromDXF(var PPattern:PTHatchPattern;var f:TZctnrVectorBytes;dxfcod:Integer;const MainAngle,MainScale:Double):Boolean;
 
 implementation
 
@@ -90,7 +90,7 @@ begin
 end;
 
 
-function LoadPatternFromDXF(var PPattern:PTHatchPattern;var f:TZctnrVectorBytes;dxfcod:Integer;const MainAngle:Double):Boolean;
+function LoadPatternFromDXF(var PPattern:PTHatchPattern;var f:TZctnrVectorBytes;dxfcod:Integer;const MainAngle,MainScale:Double):Boolean;
 var
   i,j,patternscount,dashcount:Integer;
   angle,dash:Double;
@@ -123,8 +123,8 @@ begin
       cosA:=cos(-angle);
       psa^.Base:=base;
 
-      psa^.Offset.x:=offset.x*cosA-offset.y*sinA;
-      psa^.Offset.y:=offset.y*cosA+offset.x*sinA;
+      psa^.Offset.x:=(offset.x*cosA-offset.y*sinA)/MainScale;
+      psa^.Offset.y:=(offset.y*cosA+offset.x*sinA)/MainScale;
       //psa^.Offset:=offset;
 
       for j:=1 to dashcount do begin

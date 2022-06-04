@@ -42,6 +42,7 @@ GDBObjHatch= object(GDBObjWithLocalCS)
                  PatternName:string;
                  IslandDetection:THatchIslandDetection;
                  Angle,Scale:Double;
+                 Origin:GDBvertex2D;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex);
                  constructor initnul;
                  procedure LoadFromDXF(var f:TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
@@ -135,6 +136,7 @@ begin
   IslandDetection:=HID_Normal;
   Angle:=0;
   Scale:=1;
+  Origin:=NulVertex2D;
 end;
 constructor GDBObjHatch.init;
 begin
@@ -152,6 +154,7 @@ begin
   IslandDetection:=HID_Normal;
   Angle:=0;
   Scale:=1;
+  Origin:=NulVertex2D;
 end;
 function GDBObjHatch.GetObjType;
 begin
@@ -213,7 +216,7 @@ begin
   //dirx.x:=Strokes.Offset.x*Scale;
   //dirx.y:=Strokes.Offset.y*Scale;
 
-  offs:=Vertex2dMulOnSc(Strokes.Offset,Scale);
+  offs:=Vertex2dMulOnSc(Origin,Scale);
   offs2:=Vertex2DAdd(offs,dirx);
 
   first:=true;
@@ -364,7 +367,7 @@ begin
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
     if not Path.LoadFromDXF (f,byt) then
-    if not LoadPatternFromDXF(PPattern,f,byt,Angle) then
+    if not LoadPatternFromDXF(PPattern,f,byt,Angle,Scale) then
     if not dxfintegerload(f,75,byt,hstyle) then
     if not dxfDoubleload(f,52,byt,Angle) then
     if not dxfDoubleload(f,41,byt,Scale) then

@@ -29,12 +29,12 @@ uses
     uzeBoundaryPath,uzeStylesHatchPatterns,gvector,garrayutils;
 type
 TLineInContour=record
-  C,L:integer;
+  C{,L}:integer;
 end;
 TIntercept2dpropWithLIC=record
   i2dprop:intercept2dprop;
   LIC:TLineInContour;
-  constructor create(const Ai2dprop:intercept2dprop;const AC,AL:Integer);
+  constructor create(const Ai2dprop:intercept2dprop;const AC{,AL}:Integer);
 end;
 TIntercept2dpropWithLICCompate=class
   class function c(a,b:TIntercept2dpropWithLIC):boolean;inline;
@@ -62,7 +62,7 @@ GDBObjHatch= object(GDBObjWithLocalCS)
 
                  procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                 procedure ProcessLine(const l1,l2,c1,c2:GDBvertex2D;var IV:TIntercept2dpropWithLICVector);
+                 procedure ProcessLine(const c:integer;const l1,l2,c1,c2:GDBvertex2D;var IV:TIntercept2dpropWithLICVector);
                  procedure ProcessLines(const p1,p2:GDBvertex2D;var IV:TIntercept2dpropWithLICVector);
                  procedure ProcessStroke(var Strokes:TPatStrokesArray;var IV:TIntercept2dpropWithLICVector;var DC:TDrawContext);
                  procedure FillPattern(var Strokes:TPatStrokesArray;var DC:TDrawContext);
@@ -99,11 +99,11 @@ begin
   result:=a.i2dprop.t1<b.i2dprop.t1;
 end;
 
-constructor TIntercept2dpropWithLIC.create(const Ai2dprop:intercept2dprop;const AC,AL:Integer);
+constructor TIntercept2dpropWithLIC.create(const Ai2dprop:intercept2dprop;const AC{,AL}:Integer);
 begin
   i2dprop:=Ai2dprop;
   LIC.C:=AC;
-  LIC.L:=AL;
+  //LIC.L:=AL;
 end;
 
 procedure GDBObjHatch.transform;
@@ -216,7 +216,7 @@ begin
   dxfIntegerout(outhandle,98,0);
   SaveToDXFObjPostfix(outhandle);
 end;
-procedure GDBObjHatch.ProcessLine(const l1,l2,c1,c2:GDBvertex2D;var IV:TIntercept2dpropWithLICVector);
+procedure GDBObjHatch.ProcessLine(const c:integer;const l1,l2,c1,c2:GDBvertex2D;var IV:TIntercept2dpropWithLICVector);
 var
   iprop:intercept2dprop;
 begin
@@ -224,7 +224,7 @@ begin
   if iprop.isintercept then
     if iprop.t2<1 then
       if iprop.t2>-eps then begin
-        IV.PushBack(TIntercept2dpropWithLIC.create(iprop,1,1));
+        IV.PushBack(TIntercept2dpropWithLIC.create(iprop,c{,1}));
       end;
 end;
 
@@ -242,18 +242,19 @@ begin
     CurrP:=nil;
     for j:=1 to ppath^.count-1 do begin
       CurrP:=ppath.getDataMutable(j);
-      ProcessLine(p1,p2,PrevP^,CurrP^,IV);
+      ProcessLine(i,p1,p2,PrevP^,CurrP^,IV);
       PrevP:=CurrP;
     end;
     if PrevP<>FirstP then
-      ProcessLine(p1,p2,PrevP^,FirstP^,IV);
+      ProcessLine(i,p1,p2,PrevP^,FirstP^,IV);
   end;
 end;
 
 procedure GDBObjHatch.ProcessStroke(var Strokes:TPatStrokesArray;var IV:TIntercept2dpropWithLICVector;var DC:TDrawContext);
 var
   p1,p2:PGDBvertex2D;
-  i:integer;
+  i,first,current:integer;
+  inside:boolean;
 begin
   if IV.Size>1 then begin
     TVSorter.Sort(IV,IV.Size);
@@ -268,18 +269,51 @@ begin
                    end;
                  end;
       Hid_Ignore:begin
+                   if IV.Size>3 then begin
+
                    p1:=@IV.Mutable[0].i2dprop.interceptcoord;
-                   p2:=@IV.Mutable[IV.Size-1].i2dprop.interceptcoord;
-                   Representation.DrawLineWithLT(DC,CreateVertex(p1.x,p1.y,0),CreateVertex(p2.x,p2.y,0),vp);
+                   first:=IV.Mutable[0].LIC.C;
+                   inside:=true;
+                   for i:=1 to IV.Size-1 do begin
+                     //first:=IV.Mutable[i].LIC.C;
+                     if first=IV.Mutable[i].LIC.C then begin
+                       p2:=@IV.Mutable[i].i2dprop.interceptcoord;
+                       if inside then
+                         Representation.DrawLineWithLT(DC,CreateVertex(p1.x,p1.y,0),CreateVertex(p2.x,p2.y,0),vp);
+                       p1:=p2;
+                       inside:=not inside;
+                     end;
+                    end;
+
+                    end else begin
+                      p1:=@IV.Mutable[0].i2dprop.interceptcoord;
+                      p2:=@IV.Mutable[IV.Size-1].i2dprop.interceptcoord;
+                      Representation.DrawLineWithLT(DC,CreateVertex(p1.x,p1.y,0),CreateVertex(p2.x,p2.y,0),vp);
+                    end;
                  end;
        HID_Outer:begin
                    if IV.Size>3 then begin
-                     p1:=@IV.Mutable[0].i2dprop.interceptcoord;
-                     p2:=@IV.Mutable[1].i2dprop.interceptcoord;
-                     Representation.DrawLineWithLT(DC,CreateVertex(p1.x,p1.y,0),CreateVertex(p2.x,p2.y,0),vp);
-                     p1:=@IV.Mutable[IV.Size-2].i2dprop.interceptcoord;
-                     p2:=@IV.Mutable[IV.Size-1].i2dprop.interceptcoord;
-                     Representation.DrawLineWithLT(DC,CreateVertex(p1.x,p1.y,0),CreateVertex(p2.x,p2.y,0),vp);
+
+                   p1:=@IV.Mutable[0].i2dprop.interceptcoord;
+                   first:=IV.Mutable[0].LIC.C;
+                   inside:=true;
+                   current:=-1;
+                   for i:=1 to IV.Size-1 do begin
+                     p2:=@IV.Mutable[i].i2dprop.interceptcoord;
+                     if (current=-1)and inside then
+                       Representation.DrawLineWithLT(DC,CreateVertex(p1.x,p1.y,0),CreateVertex(p2.x,p2.y,0),vp);
+                     p1:=p2;
+                     if current=-1 then begin
+                       if first<>IV.Mutable[i].LIC.C then
+                         current:=IV.Mutable[i].LIC.C;
+                     end else
+                       if current=IV.Mutable[i].LIC.C then
+                         current:=-1;
+
+                     if first=IV.Mutable[i].LIC.C then
+                       inside:=not inside;
+                   end;
+
                    end else begin
                      p1:=@IV.Mutable[0].i2dprop.interceptcoord;
                      p2:=@IV.Mutable[IV.Size-1].i2dprop.interceptcoord;

@@ -65,6 +65,7 @@ GDBObjHatch= object(GDBObjWithLocalCS)
                  procedure ProcessLine(const c:integer;const l1,l2,c1,c2:GDBvertex2D;var IV:TIntercept2dpropWithLICVector);
                  procedure ProcessLines(const p1,p2:GDBvertex2D;var IV:TIntercept2dpropWithLICVector);
                  procedure ProcessStroke(var Strokes:TPatStrokesArray;var IV:TIntercept2dpropWithLICVector;var DC:TDrawContext);
+                 procedure DrawStrokes(var Strokes:TPatStrokesArray;var st:Double;const p1,p2:GDBvertex2D;var DC:TDrawContext);
                  procedure FillPattern(var Strokes:TPatStrokesArray;var DC:TDrawContext);
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
                  function ObjToString(prefix,sufix:String):String;virtual;
@@ -249,10 +250,101 @@ begin
       ProcessLine(i,p1,p2,PrevP^,FirstP^,IV);
   end;
 end;
+function normalizeT(t,plen:Double):Double;
+var
+  c:double;
+begin
+  c:=abs(int(t/plen));
+  if t>eps then
+    result:=t-c*plen
+  else if t<eps then
+    result:=t+(c+1)*plen
+  else
+    result:=0;
+end;
+
+procedure findInterval(var Strokes:TPatStrokesArray;t:Double;out cl:double;out c:integer);
+var
+  i:integer;
+  d:double;
+begin
+  cl:=0;c:=-1;
+  for i:=0 to Strokes.Count-1 do begin
+    d:=abs(Strokes.getData(i));
+    if cl+d>t then begin
+      c:=i;
+      exit;
+    end;
+    cl:=cl+d;
+  end;
+  //result:=0;
+end;
+
+
+
+procedure GDBObjHatch.DrawStrokes(var Strokes:TPatStrokesArray;var st:Double;const p1,p2:GDBvertex2D;var DC:TDrawContext);
+var
+  t,l,cl,d,drawedlen:double;
+  c:integer;
+  dir:GDBvertex2D;
+  p,pp:GDBvertex2D;
+  first:boolean;
+  newdrawlen:Double;
+begin
+  if Strokes.Count=0 then
+    Representation.DrawLineWithLT(DC,CreateVertex(p1.x,p1.y,0),CreateVertex(p2.x,p2.y,0),vp)
+  else begin
+    dir:=NormalizeVertex2D(Vertex2DSub(p2,p1));
+    t:=normalizeT(st*Strokes.LengthFact,Strokes.LengthFact);
+
+    l:=Vertexlength2d(p1,p2);
+    findInterval(Strokes,t,cl,c);
+    drawedlen:=0;
+    p:=p1;
+    first:=true;
+    while drawedlen<l do begin
+      d:=Strokes.getData(c);
+      if first then begin
+        first:=false;
+        if d>0 then
+          d:=d-(t-cl)
+        else
+          d:=d+(t-cl)
+      end;
+
+      newdrawlen:=drawedlen+abs(d);
+
+      if d=0 then
+        Representation.DrawPoint(DC,CreateVertex(p.x,p.y,0),vp)
+      else if d>0 then begin
+        if newdrawlen<=l then begin
+          pp.x:=p.x+dir.x*abs(d);
+          pp.y:=p.y+dir.y*abs(d);
+          Representation.DrawLineWithLT(DC,CreateVertex(p.x,p.y,0),CreateVertex(pp.x,pp.y,0),vp)
+        end else begin
+          pp.x:=p.x+dir.x*(d-(newdrawlen-l));
+          pp.y:=p.y+dir.y*(d-(newdrawlen-l));
+          Representation.DrawLineWithLT(DC,CreateVertex(p.x,p.y,0),CreateVertex(pp.x,pp.y,0),vp);
+        end;
+      end else begin
+        pp.x:=p.x-dir.x*d;
+        pp.y:=p.y-dir.y*d;
+      end;
+      p:=pp;
+
+      drawedlen:=newdrawlen;
+      inc(c);
+      if c>(Strokes.Count-1) then
+        c:=0;
+    end;
+
+  end;
+end;
 
 procedure GDBObjHatch.ProcessStroke(var Strokes:TPatStrokesArray;var IV:TIntercept2dpropWithLICVector;var DC:TDrawContext);
 var
   p1,p2:PGDBvertex2D;
+  t1:Double;
   i,first,current:integer;
   inside:boolean;
 begin
@@ -264,7 +356,7 @@ begin
                    for i:=1 to IV.Size-1 do begin
                      p2:=@IV.Mutable[i].i2dprop.interceptcoord;
                      if (i and 1)=1 then
-                       Representation.DrawLineWithLT(DC,CreateVertex(p1.x,p1.y,0),CreateVertex(p2.x,p2.y,0),vp);
+                       DrawStrokes(Strokes,IV.Mutable[0].i2dprop.t1,p1^,p2^,DC);
                      p1:=p2;
                    end;
                  end;
@@ -272,15 +364,16 @@ begin
                    if IV.Size>3 then begin
 
                    p1:=@IV.Mutable[0].i2dprop.interceptcoord;
+                   t1:=IV.Mutable[0].i2dprop.t1;
                    first:=IV.Mutable[0].LIC.C;
                    inside:=true;
                    for i:=1 to IV.Size-1 do begin
-                     //first:=IV.Mutable[i].LIC.C;
                      if first=IV.Mutable[i].LIC.C then begin
                        p2:=@IV.Mutable[i].i2dprop.interceptcoord;
                        if inside then
-                         Representation.DrawLineWithLT(DC,CreateVertex(p1.x,p1.y,0),CreateVertex(p2.x,p2.y,0),vp);
+                         DrawStrokes(Strokes,t1,p1^,p2^,DC);
                        p1:=p2;
+                       t1:=IV.Mutable[i].i2dprop.t1;
                        inside:=not inside;
                      end;
                     end;
@@ -288,21 +381,23 @@ begin
                     end else begin
                       p1:=@IV.Mutable[0].i2dprop.interceptcoord;
                       p2:=@IV.Mutable[IV.Size-1].i2dprop.interceptcoord;
-                      Representation.DrawLineWithLT(DC,CreateVertex(p1.x,p1.y,0),CreateVertex(p2.x,p2.y,0),vp);
+                      DrawStrokes(Strokes,IV.Mutable[0].i2dprop.t1,p1^,p2^,DC);
                     end;
                  end;
        HID_Outer:begin
                    if IV.Size>3 then begin
 
                    p1:=@IV.Mutable[0].i2dprop.interceptcoord;
+                   t1:=IV.Mutable[0].i2dprop.t1;
                    first:=IV.Mutable[0].LIC.C;
                    inside:=true;
                    current:=-1;
                    for i:=1 to IV.Size-1 do begin
                      p2:=@IV.Mutable[i].i2dprop.interceptcoord;
                      if (current=-1)and inside then
-                       Representation.DrawLineWithLT(DC,CreateVertex(p1.x,p1.y,0),CreateVertex(p2.x,p2.y,0),vp);
+                       DrawStrokes(Strokes,t1,p1^,p2^,DC);
                      p1:=p2;
+                     t1:=IV.Mutable[i].i2dprop.t1;
                      if current=-1 then begin
                        if first<>IV.Mutable[i].LIC.C then
                          current:=IV.Mutable[i].LIC.C;
@@ -317,7 +412,7 @@ begin
                    end else begin
                      p1:=@IV.Mutable[0].i2dprop.interceptcoord;
                      p2:=@IV.Mutable[IV.Size-1].i2dprop.interceptcoord;
-                     Representation.DrawLineWithLT(DC,CreateVertex(p1.x,p1.y,0),CreateVertex(p2.x,p2.y,0),vp);
+                     DrawStrokes(Strokes,IV.Mutable[0].i2dprop.t1,p1^,p2^,DC);
                    end;
                end;
     end;
@@ -353,7 +448,8 @@ begin
   //dirx.x:=Strokes.Offset.x*Scale;
   //dirx.y:=Strokes.Offset.y*Scale;
 
-  offs:=Vertex2dMulOnSc(Origin,Scale);
+  offs:=Vertex2dMulOnSc(Strokes.Base,Scale);
+  offs:=Vertex2DAdd(offs,Vertex2dMulOnSc(Origin,Scale));
   offs2:=Vertex2DAdd(offs,dirx);
 
   first:=true;

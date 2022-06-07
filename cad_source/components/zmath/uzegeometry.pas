@@ -105,6 +105,8 @@ function pointinquad2d(const x1, y1, x2, y2, xp, yp: Single): Boolean;inline;
 //**Функция определения длины по двум точкам с учетом 3-х мерного пространства
 function Vertexlength(const Vector1, Vector2: GDBVertex): Double;{inline;}
 
+function Vertexlength2d(const Vector1, Vector2: GDBVertex2d): Double;{inline;}
+
 function SqrVertexlength(const Vector1, Vector2: GDBVertex): Double;inline;overload;
 function SqrVertexlength(const Vector1, Vector2: GDBVertex2d): Double;inline; overload;
 //**нахождение точки смещения от одной точки к другой в зависимости от коэффициент а
@@ -122,6 +124,7 @@ function oneVertexlength2D(const Vector1: GDBVertex2D): Double;inline;
 function SqrOneVertexlength(const Vector1: GDBVertex): Double;inline;
 function vertexlen2df(const x1, y1, x2, y2: Single): Single;inline;
 function NormalizeVertex(const Vector1: GDBVertex): GDBVertex;{inline;}
+function NormalizeVertex2D(const Vector1: GDBVertex2D): GDBVertex2D;{inline;}
 function VertexMulOnSc(const Vector1:GDBVertex;sc:Double): GDBVertex;inline;
 function Vertex2DMulOnSc(const Vector1:GDBVertex2D;sc:Double): GDBVertex2D;inline;
 
@@ -130,6 +133,7 @@ function VertexAdd(const Vector1, Vector2: GDBVertex): GDBVertex;inline;overload
 function VertexAdd(const Vector1, Vector2: GDBVertex3S): GDBVertex3S;inline;overload;
 function Vertex2DAdd(const Vector1, Vector2: GDBVertex2D): GDBVertex2D;inline;
 function VertexSub(const Vector1, Vector2: GDBVertex): GDBVertex;overload;inline;
+function Vertex2DSub(const Vector1, Vector2: GDBVertex2D): GDBVertex2D;overload;inline;
 function VertexSub(const Vector1, Vector2: GDBvertex3S): GDBVertex3S;overload;inline;
 function MinusVertex(const Vector1: GDBVertex): GDBVertex;inline;
 function vertexlen2id(const x1, y1, x2, y2: Integer): Double;inline;
@@ -1631,6 +1635,10 @@ function Vertexlength(const Vector1, Vector2: GDBVertex): Double;
 begin
   result := sqrt(sqr(vector1.x - vector2.x) + sqr(vector1.y - vector2.y) + sqr(vector1.z - vector2.z));
 end;
+function Vertexlength2d(const Vector1, Vector2: GDBVertex2d): Double;
+begin
+  result := sqrt(sqr(vector1.x - vector2.x) + sqr(vector1.y - vector2.y));
+end;
 function SqrVertexlength(const Vector1, Vector2: GDBVertex): Double;
 begin
   result := (sqr(vector1.x - vector2.x) + sqr(vector1.y - vector2.y) + sqr(vector1.z - vector2.z));
@@ -1788,6 +1796,21 @@ begin
                  len:=len+2;
                  end;
 end;
+function NormalizeVertex2D(const Vector1: GDBVertex2D): GDBVertex2D;
+var len:Double;
+begin
+  len:=oneVertexlength2D(Vector1);
+  if abs(len)>eps then
+                 begin
+                      Result.X := Vector1.x / len;
+                      Result.Y := Vector1.y / len;
+                 end
+             else
+                 begin
+                 DebugLn('{EH}'+rsDivByZero);
+                 len:=len+2;
+                 end;
+end;
 function VertexMulOnSc(const Vector1:GDBVertex;sc:Double): GDBVertex;
 begin
   Result.X := Vector1.x*sc;
@@ -1822,6 +1845,11 @@ begin
   Result.X := Vector1.x - Vector2.x;
   Result.Y := Vector1.y - Vector2.y;
   Result.Z := Vector1.z - Vector2.z;
+end;
+function Vertex2DSub(const Vector1, Vector2: GDBVertex2D): GDBVertex2D;
+begin
+  Result.X := Vector1.x - Vector2.x;
+  Result.Y := Vector1.y - Vector2.y;
 end;
 function VertexSub(const Vector1, Vector2: GDBvertex3S): GDBVertex3S;
 begin

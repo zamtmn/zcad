@@ -48,6 +48,7 @@ TZEntityRepresentation= object(GDBaseObject)
                        procedure DrawTextContent(drawer:TZGLAbstractDrawer;content:TDXFEntsInternalStringType;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:Double;var Outbound:OutBound4V);
                        procedure DrawLineWithLT(var rc:TDrawContext;const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp);
                        procedure DrawPolyLineWithLT(var rc:TDrawContext;const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed,ltgen:Boolean);virtual;
+                       procedure DrawPoint(var rc:TDrawContext;const point:GDBVertex; const vp:GDBObjVisualProp);
                        procedure StartSurface;
                        procedure EndSurface;
                        end;
@@ -110,6 +111,23 @@ begin
   end;
   gl.init(startpoint,endpoint,0);
   Geometry.AddObjectToNodeTree(gl);
+  Geometry.UnLock;
+end;
+procedure TZEntityRepresentation.DrawPoint(var rc:TDrawContext;const point:GDBVertex; const vp:GDBObjVisualProp);
+var
+  //gl:TGeomLine3D;
+  gp:TGeomProxy;
+  dr:TLLDrawResult;
+begin
+  Graphix.DrawPointWithoutLT(rc,point,{vp}dr);
+  Geometry.Lock;
+  if dr.Appearance<>TAMatching then
+  begin
+    gp.init(dr.LLPStart,dr.LLPEndi-1,dr.BB);
+    Geometry.AddObjectToNodeTree(gp);
+  end;
+  //gl.init(startpoint,endpoint,0);
+  //Geometry.AddObjectToNodeTree(gl);
   Geometry.UnLock;
 end;
 procedure TZEntityRepresentation.DrawPolyLineWithLT(var rc:TDrawContext;const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed,ltgen:Boolean);

@@ -320,11 +320,11 @@ begin
         if newdrawlen<=l then begin
           pp.x:=p.x+dir.x*abs(d);
           pp.y:=p.y+dir.y*abs(d);
-          Representation.DrawLineWithLT(DC,CreateVertex(p.x,p.y,0),CreateVertex(pp.x,pp.y,0),vp)
+          Representation.DrawLineWithoutLT(DC,CreateVertex(p.x,p.y,0),CreateVertex(pp.x,pp.y,0))
         end else begin
           pp.x:=p.x+dir.x*(d-(newdrawlen-l));
           pp.y:=p.y+dir.y*(d-(newdrawlen-l));
-          Representation.DrawLineWithLT(DC,CreateVertex(p.x,p.y,0),CreateVertex(pp.x,pp.y,0),vp);
+          Representation.DrawLineWithoutLT(DC,CreateVertex(p.x,p.y,0),CreateVertex(pp.x,pp.y,0));
         end;
       end else begin
         pp.x:=p.x-dir.x*d;
@@ -498,6 +498,7 @@ begin
   createpoint;
   calcbb(dc);
   Representation.Clear;
+  Representation.Geometry.Lock;
   hatchTess:=Triangulator.NewTesselator;
 
   pv:=Vertex3D_in_WCS_Array.GetParrayAsPointer;
@@ -518,6 +519,7 @@ begin
       FillPattern(PPattern^.getDataMutable(i)^,DC);
   end;
 
+  Representation.Geometry.UnLock;
   Triangulator.DeleteTess(hatchTess);
   //Representation.DrawPolyLineWithLT(dc,Vertex3D_in_WCS_Array,vp,true,true);
   if assigned(EntExtensions)then

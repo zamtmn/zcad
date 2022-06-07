@@ -20,6 +20,7 @@
 |Сплайн               |Spline            |SPLINE    |ZCAD                  |Экспериментально   
 |3D Фэйс              |3DFace            |3DFACE    |ZCAD                  |                   
 |Солид                |Solid             |SOLID     |ZCAD                  |                   
+|Штриховка            |Hatch             |HATCH     |ZCAD                  |Дуговые сегменты, сплайны, асоциативность   
 
 |Дуга                 |Arc               |ARC       |ZCAD                  |                   
 |Окружность           |Circle            |CIRCLE    |ZCAD                  |                   

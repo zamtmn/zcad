@@ -49,7 +49,7 @@ GDBObjHatch= object(GDBObjWithLocalCS)
                  Path:TBoundaryPath;
                  PPattern:PTHatchPattern;
                  Outbound:OutBound4V;(*oi_readonly*)(*hidden_in_objinsp*)
-                 Vertex2D_in_OCS_Array:GDBpolyline2DArray;(*oi_readonly*)(*hidden_in_objinsp*)
+                 //Vertex2D_in_OCS_Array:GDBpolyline2DArray;(*oi_readonly*)(*hidden_in_objinsp*)
                  Vertex3D_in_WCS_Array:GDBPoint3DArray;(*oi_readonly*)(*hidden_in_objinsp*)
                  PProjPoint:PGDBpolyline2DArray;(*hidden_in_objinsp*)
                  PatternName:string;
@@ -117,7 +117,7 @@ procedure GDBObjHatch.TransformAt;
 begin
   inherited;
   Path.Clear;
-  Vertex2D_in_OCS_Array.clear;
+  //Vertex2D_in_OCS_Array.clear;
   pGDBObjHatch(p)^.Path.CloneTo(Path);
   Path.transform(t_matrix^);
 end;
@@ -139,7 +139,7 @@ end;
 destructor GDBObjHatch.done;
 begin
   Vertex3D_in_WCS_Array.Done;
-  Vertex2D_in_OCS_Array.Done;
+  //Vertex2D_in_OCS_Array.Done;
   inherited done;
   if pprojpoint<>nil then begin
     pprojpoint^.done;
@@ -159,7 +159,7 @@ begin
   PProjoutbound:=nil;
   PProjPoint:=nil;
   Vertex3D_in_WCS_Array.init(10);
-  Vertex2D_in_OCS_Array.init(10,true);
+  //Vertex2D_in_OCS_Array.init(10,true);
   Path.init(10);
   PPattern:=nil;
   IslandDetection:=HID_Normal;
@@ -177,7 +177,7 @@ begin
   PProjoutbound:=nil;
   PProjPoint:=nil;
   Vertex3D_in_WCS_Array.init(10);
-  Vertex2D_in_OCS_Array.init(10,true);
+  //Vertex2D_in_OCS_Array.init(10,true);
   Path.init(10);
   PPattern:=nil;
   IslandDetection:=HID_Normal;
@@ -353,11 +353,13 @@ begin
     case IslandDetection of
       HID_Normal:begin
                    p1:=@IV.Mutable[0].i2dprop.interceptcoord;
+                   t1:=IV.Mutable[0].i2dprop.t1;
                    for i:=1 to IV.Size-1 do begin
                      p2:=@IV.Mutable[i].i2dprop.interceptcoord;
                      if (i and 1)=1 then
-                       DrawStrokes(Strokes,IV.Mutable[0].i2dprop.t1,p1^,p2^,DC);
+                       DrawStrokes(Strokes,t1,p1^,p2^,DC);
                      p1:=p2;
+                     t1:=IV.Mutable[i].i2dprop.t1;
                    end;
                  end;
       Hid_Ignore:begin
@@ -531,13 +533,15 @@ var
   v:GDBvertex4D;
   v3d:GDBVertex;
   pv:PGDBVertex2D;
+  ppolyarr:pGDBPolyline2DArray;
 begin
   Vertex3D_in_WCS_Array.clear;
 
   for i:=0 to Path.paths.Count-1  do begin
+    ppolyarr:=Path.paths.getDataMutable(i);
     for j:=0 to Path.paths.getData(i).Count-1 do begin
-       v.x:=Path.paths.getData(i).getData(j).x;
-       v.y:=Path.paths.getData(i).getData(j).y;
+       v.x:=ppolyarr^.getData(j).x;
+       v.y:=ppolyarr^.getData(j).y;
        v.z:=0;
        v.w:=1;
        v:=VectorTransform(v,objMatrix);
@@ -549,10 +553,10 @@ begin
   Vertex3D_in_WCS_Array.Shrink;
 end;
 procedure GDBObjHatch.getoutbound;
-var //tv,tv2:GDBVertex4D;
-    t,b,l,r,n,f:Double;
-    ptv:pgdbvertex;
-    ir:itrec;
+var
+  t,b,l,r,n,f:Double;
+  ptv:pgdbvertex;
+  ir:itrec;
 begin
   l:=Infinity;
   b:=Infinity;
@@ -708,6 +712,7 @@ procedure GDBObjHatch.rtmodifyonepoint(const rtmod:TRTModifyData);
 var
   vertexnumber:Integer;
   tv,wwc:gdbvertex;
+  pv:PGDBvertex2D;
   M:DMatrix4D;
 begin
   vertexnumber:=rtmod.point.vertexnum;
@@ -719,8 +724,11 @@ begin
   wwc:=VertexAdd(wwc,tv);
   wwc:=uzegeometry.VectorTransform3D(wwc,m);
 
-  GDBPolyline2DArray.PTArr(Vertex2D_in_OCS_Array.parray)^[vertexnumber].x:=wwc.x{VertexAdd(wwc,tv)};
-  GDBPolyline2DArray.PTArr(Vertex2D_in_OCS_Array.parray)^[vertexnumber].y:=wwc.y;
+  pv:=Path.getDataMutableByPlainIndex(vertexnumber);
+  if pv<>nil then begin
+    pv.x:=wwc.x;
+    pv.y:=wwc.y;
+  end;
 end;
 
 function AllocHatch:PGDBObjHatch;

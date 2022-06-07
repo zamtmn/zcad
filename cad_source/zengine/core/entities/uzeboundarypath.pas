@@ -36,6 +36,7 @@ TBoundaryPath=object
   procedure Clear;virtual;
 
   procedure transform(const t_matrix:DMatrix4D);virtual;
+  function getDataMutableByPlainIndex(index:TArrayIndex):PGDBVertex2D;
 end;
 {Export-}
 implementation
@@ -60,7 +61,20 @@ begin
   end;
   paths.Clear;
 end;
-
+function TBoundaryPath.getDataMutableByPlainIndex(index:TArrayIndex):PGDBVertex2D;
+var
+   i,pln:integer;
+   ppla:PGDBPolyline2DArray;
+begin
+  pln:=0;
+  for i:=0 to paths.count-1 do begin
+    ppla:=paths.getDataMutable(i);
+    pln:=pln+ppla^.count;
+    if pln>index then
+      exit(ppla^.getDataMutable(index-pln+ppla^.count));
+  end;
+  result:=nil;
+end;
 constructor TBoundaryPath.init(m:TArrayIndex);
 begin
   paths.init(m);

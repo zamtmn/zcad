@@ -100,39 +100,80 @@ begin
 end;
 
 function TBoundaryPath.LoadFromDXF(var f:TZctnrVectorBytes;dxfcod:Integer):Boolean;
+type
+  TNotPolyLine=(NPL_Line,NPL_CircularArc,NPL_EllipticArc,NPL_Spline);
 var
   currpath:GDBPolyline2DArray;
   i,j,pathscount,vertexcount,byt,bt:integer;
-  p:GDBVertex2D;
+  firstp,prevp,p:GDBVertex2D;
   s:string;
+  isPolyLine:boolean;
+  NotPolyLine:TNotPolyLine;
+  isFirst:boolean;
 begin
      result:=dxfIntegerload(f,91,dxfcod,pathscount);
      if result then begin
+       isPolyLine:=false;
        byt:=readmystrtoint(f);
        Clear;
        for i:=1 to pathscount do begin
          while not dxfintegerload(f,92,byt,bt) do
            byt:=readmystrtoint(f);
+         isPolyLine:=(bt and 2)<>0;
          byt:=readmystrtoint(f);
-         if (bt and 2)<>0 then begin
+         if isPolyLine then begin
            if dxfintegerload(f,72,byt,bt) then byt:=readmystrtoint(f);
            if dxfintegerload(f,73,byt,bt) then byt:=readmystrtoint(f);
            if dxfintegerload(f,93,byt,vertexcount) then byt:=readmystrtoint(f);
-           currpath.init(10,true);
+           currpath.init(vertexcount,true);
            for j:=1 to vertexcount do begin
              if dxfdoubleload(f,10,byt,p.x) then byt:=readmystrtoint(f);
              if dxfdoubleload(f,20,byt,p.y) then byt:=readmystrtoint(f);
              currpath.PushBackData(p);
            end;
-           if dxfintegerload(f,97,byt,bt) then
-             if bt<>0 then
+         end else begin
+           if dxfintegerload(f,93,byt,vertexcount) then byt:=readmystrtoint(f);
+           currpath.init(vertexcount,true);
+           isFirst:=true;
+           for j:=1 to vertexcount do begin
+             if dxfintegerload(f,72,byt,bt) then begin
                byt:=readmystrtoint(f);
-           for j:=1 to bt do begin
-             if (dxfstringload(f,330,byt,s))and(j<>bt) then byt:=readmystrtoint(f);
+               case bt of
+                 1:begin
+                     if dxfdoubleload(f,10,byt,p.x) then byt:=readmystrtoint(f);
+                     if dxfdoubleload(f,20,byt,p.y) then byt:=readmystrtoint(f);
+                     if not isFirst then begin
+                       if not(IsPoint2DEqual(p,prevp)) then
+                         currpath.PushBackData(p);
+                     end else begin
+                       currpath.PushBackData(p);
+                       firstp:=p;
+                     end;
+                     isFirst:=false;
+                     if dxfdoubleload(f,11,byt,p.x) then byt:=readmystrtoint(f);
+                     if dxfdoubleload(f,21,byt,p.y) then byt:=readmystrtoint(f);
+                     if j<>vertexcount then
+                       currpath.PushBackData(p)
+                     else
+                       if not(IsPoint2DEqual(p,firstp)) then
+                         currpath.PushBackData(p);
+                     prevp:=p;
+                   end;
+                 2:NotPolyLine:=NPL_CircularArc;
+                 3:NotPolyLine:=NPL_EllipticArc;
+                 4:NotPolyLine:=NPL_Spline;
+               end;
+             end;
            end;
-           currpath.Shrink;
-           paths.PushBackData(currpath);
          end;
+         if dxfintegerload(f,97,byt,bt) then
+           if bt<>0 then
+             byt:=readmystrtoint(f);
+         for j:=1 to bt do begin
+           if (dxfstringload(f,330,byt,s))and(j<>bt) then byt:=readmystrtoint(f);
+         end;
+         currpath.Shrink;
+         paths.PushBackData(currpath);
        end;
      end;
 end;

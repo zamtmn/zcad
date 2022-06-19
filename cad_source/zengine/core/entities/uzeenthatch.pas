@@ -263,14 +263,14 @@ begin
     result:=0;
 end;
 
-procedure findInterval(var Strokes:TPatStrokesArray;t:Double;out cl:double;out c:integer);
+procedure findInterval(var Strokes:TPatStrokesArray;AScale:Double;t:Double;out cl:double;out c:integer);
 var
   i:integer;
   d:double;
 begin
   cl:=0;c:=-1;
   for i:=0 to Strokes.Count-1 do begin
-    d:=abs(Strokes.getData(i));
+    d:=abs(Strokes.getData(i))*AScale;
     if cl+d>t then begin
       c:=i;
       exit;
@@ -295,15 +295,15 @@ begin
     Representation.DrawLineWithLT(DC,CreateVertex(p1.x,p1.y,0),CreateVertex(p2.x,p2.y,0),vp)
   else begin
     dir:=NormalizeVertex2D(Vertex2DSub(p2,p1));
-    t:=normalizeT(st*Strokes.LengthFact,Strokes.LengthFact);
+    t:=Scale*normalizeT(st*Strokes.LengthFact,Strokes.LengthFact);
 
     l:=Vertexlength2d(p1,p2);
-    findInterval(Strokes,t,cl,c);
+    findInterval(Strokes,Scale,t,cl,c);
     drawedlen:=0;
     p:=p1;
     first:=true;
     while drawedlen<l do begin
-      d:=Strokes.getData(c);
+      d:=Strokes.getData(c)*Scale;
       if first then begin
         first:=false;
         if d>0 then

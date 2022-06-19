@@ -121,7 +121,8 @@ begin
       angle:=DegToRad(MainAngle);
       sinA:=sin(-angle);
       cosA:=cos(-angle);
-      psa^.Base:=base;
+      psa^.Base.x:=base.x/MainScale;
+      psa^.Base.y:=base.y/MainScale;
 
       psa^.Offset.x:=(offset.x*cosA-offset.y*sinA)/MainScale;
       psa^.Offset.y:=(offset.y*cosA+offset.x*sinA)/MainScale;
@@ -129,7 +130,7 @@ begin
 
       for j:=1 to dashcount do begin
         if dxfdoubleload(f,49,dxfcod,dash) then begin
-          psa^.PushBackData(dash);
+          psa^.PushBackData(dash/MainScale);
           dxfcod:=readmystrtoint(f);
         end;
       end;

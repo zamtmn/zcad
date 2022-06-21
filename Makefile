@@ -140,6 +140,7 @@ zcadelectrotechpdfuseguide: checkvars
 
 tests: checkvars
 	$(MAKE) -C cad_source/components/zcontainers/tests LP=$(LP) PCP=$(PCP) clean all
+	$(MAKE) -C cad_source/zengine/tests LP=$(LP) PCP=$(PCP) clean all
 
 cleanzcad: clean zcadenv zcad
 

@@ -17,7 +17,7 @@
 }
 
 unit uzgldrawergdi;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses
     uzgprimitivessarray,sysutils,uzgldrawergeneral2d,uzelclintfex,

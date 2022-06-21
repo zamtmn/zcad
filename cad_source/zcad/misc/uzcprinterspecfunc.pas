@@ -17,7 +17,7 @@
 }
 
 unit uzcprinterspecfunc;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses uzegeometrytypes,uzepalette,uzbtypes,LCLType,Printers,

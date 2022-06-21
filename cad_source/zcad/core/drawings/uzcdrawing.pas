@@ -17,7 +17,7 @@
 }
 
 unit uzcdrawing;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses
     uzctranslations,uzcinterface,uzgldrawcontext,zeundostack,zcchangeundocommand,
@@ -25,7 +25,7 @@ uses
     uzcdialogsfiles,LResources,uzcsysvars,uzcstrconsts,uzbstrproc,uzeblockdef,UUnitManager,
     uzbtypes,varmandef,varman,sysutils,uzegeometry, uzeconsts,
     uzedrawingsimple,uzestyleslayers,uzeentity,uzefontmanager,
-    uzedimensionaltypes,uzegeometrytypes,uzctnrVectorBytes,gzctnrVectorTypes;
+    uzedimensionaltypes,uzegeometrytypes,uzctnrVectorBytes,gzctnrVectorTypes,uzglviewareadata;
 type
 {EXPORT+}
 PTZCADDrawing=^TZCADDrawing;

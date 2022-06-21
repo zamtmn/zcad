@@ -18,7 +18,7 @@
 
 program zcad;
 //файл с объявлениями директив компилятора - должен быть подключен во все файлы проекта
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 {$IFDEF FPC}
   {$CODEPAGE UTF8}
@@ -229,6 +229,7 @@ uses
   uzccommand_dataexport,uzccommand_dataimport,
   uzccommand_extdrentslist,uzccommand_extdralllist,uzccommand_extdradd,
   uzccommand_DevDefSync,
+  uzccommand_VariablesAdd,
 
   uzcenitiesvariablesextender,uzcExtdrLayerControl,uzcExtdrSmartTextEnt,
 

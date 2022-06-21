@@ -24,6 +24,7 @@ MergeBlocks(_vl_line.dxf)
 MergeBlocks(_vl_ops.dxf)
 MergeBlocks(_vl_table.dxf)
 MergeBlocks(_vl_unit.dxf)
+MergeBlocks(_vl_high_voltage.dxf)
 
 ;------------------------
 ;Создание пустого чертежа

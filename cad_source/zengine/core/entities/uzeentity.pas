@@ -17,7 +17,7 @@
 }
 
 unit uzeentity;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses uzepalette,uzeobjectextender,uzgldrawerabstract,uzgldrawcontext,uzedrawingdef,
      uzecamera,uzeentitiesprop,uzestyleslinetypes,
@@ -90,7 +90,6 @@ GDBObjEntity= object(GDBObjSubordinated)
                     function Clone(own:Pointer):PGDBObjEntity;virtual;
                     procedure SetFromClone(_clone:PGDBObjEntity);virtual;
                     function CalcOwner(own:Pointer):Pointer;virtual;
-                    procedure rtedit(refp:Pointer;mode:Single;dist,wc:gdbvertex);virtual;
                     procedure rtsave(refp:Pointer);virtual;
                     procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;abstract;
                     procedure getoutbound(var DC:TDrawContext);virtual;
@@ -773,7 +772,7 @@ begin
       LT:=getLTfromVP(vp);
       if LT<>nil then
       begin
-           result:=GlobalLTScale*vp.LineTypeScale*LT.LengthFact
+           result:=GlobalLTScale*vp.LineTypeScale*LT.strokesarray.LengthFact
       end
          else
          result:=0;
@@ -864,12 +863,6 @@ begin
   //Getmem(Pointer(tvo), sizeof(GDBObjEntity));
   //tvo^.init(bp.owner,vp.Layer, vp.LineWeight);
   result := nil;
-end;
-
-procedure GDBObjEntity.rtedit;
-begin
-     if PExtAttrib<>nil then
-                            Freemem(pointer(PExtAttrib));
 end;
 
 destructor GDBObjEntity.done;
@@ -977,8 +970,8 @@ begin
                pdesc:=pp^.getparrayaspointer;
                for i:=0 to pp.count-1 do
                begin
-                    if pdesc.pobject<>nil then
-                                              PGDBObjEntity(pdesc.pobject).RenderFeedback({gdb.GetCurrentDWG.pcamera^.POSCOUNT}pcount,camera,ProjectProc,dc);
+                    if pdesc.PDrawable<>nil then
+                                              pdesc.PDrawable.RenderFeedback(pcount,camera,ProjectProc,dc);
                     remaponecontrolpoint(pdesc);
                     inc(pdesc);
                end;

@@ -17,7 +17,7 @@
 }
 
 unit uzcgui2linewidth;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 

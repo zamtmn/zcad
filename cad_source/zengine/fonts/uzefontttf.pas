@@ -17,7 +17,7 @@
 }
 
 unit uzefontttf;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses LCLProc,uzgprimitivescreator,uzgprimitives,uzglvectorobject,uzefontbase,
      uzebeziersolver,math,uzgloglstatemanager,uzegluinterface,TTTypes,TTObjs,

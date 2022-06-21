@@ -17,7 +17,7 @@
 }
 
 unit uzcfhelp;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses
  uzclog,uzbstrproc,uzctreenode,FileUtil,Forms, stdctrls, Controls,uzcstrconsts;

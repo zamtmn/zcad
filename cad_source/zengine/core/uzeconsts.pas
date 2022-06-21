@@ -17,28 +17,13 @@
 }
 
 unit uzeconsts;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 //uses gdbasetypes;
 const {as_normal=0;
       as_point=1;
       as_line=2;}
-
-  osm_inspoint=1;
-  osm_endpoint=2;
-  osm_midpoint=4;
-  osm_3=8;
-  osm_4=16;
-  osm_center=32;
-  osm_quadrant=64;
-  osm_point=128;
-  osm_intersection=256;
-  osm_perpendicular=512;
-  osm_tangent=1024;
-  osm_nearest=2048;
-  osm_apparentintersection=4096;
-  osm_paralel=8192;
 
   SHXLine=$01;
   SHXPoly=$02;
@@ -63,6 +48,7 @@ const {as_normal=0;
   GDBSplineID = 13;
   GDBGenericDimensionID = 14;
   GDBBlockDefID = 15;
+  GDBHatchID = 16;
 
   GDBNetID = 100;
   GDBDeviceID = 101;
@@ -132,55 +118,6 @@ const {as_normal=0;
   se_ModelRoot=1;
   se_ElectricalWires=2;
 
-
-  os_p1= -1001;
-  os_p2= -1002;
-  os_p3= -1003;
-  os_p4= -1004;
-  os_p5= -1005;
-  os_p6= -1006;
-  os_p7= -1007;
-  os_p8= -1008;
-  os_p9= -1009;
-  os_p10= -1010;
-  os_p11= -1011;
-  os_p12= -1012;
-  os_p13= -1013;
-  os_p14= -1014;
-  os_p15= -1015;
-  os_p16= -1016;
-
-  os_snap = -998;
-  os_none = -999;
-  os_perpendicular = -1000;
-  os_midle = -1001;
-  os_begin= -1002;
-  os_1_3 = -1003;
-  os_2_3 = -1004;
-  os_1_4 = -1005;
-  os_3_4 = -1006;
-  os_end = -1007;
-  os_center = -1008;
-  os_q0 = -1009;
-  os_q1 = -1010;
-  os_q2 = -1011;
-  os_q3 = -1012;
-  os_point = -1013;
-  os_textinsert = -1014;
-  os_mtextinsert = -1015;
-  os_mtextwidth = -1016;
-  os_blockinsert = -1017;
-  os_polar = -1018;
-  os_nearest = -1019;
-  os_insert = -1020;
-  os_intersection = -1021;
-  os_apparentintersection = -1022;
-  os_trace = -1023;
-  os_polymin =  -3000;
-  os_polymax = -13000;
-
-  os_objnumt = -2000;
-
   maxtrackpoint = 3;
   numofcp = 65535;
   marksize = 10;
@@ -219,6 +156,7 @@ const {as_normal=0;
   ObjN_GDBObjNet='GDBObjNet';
   ObjN_GDBObjCable='GDBObjCable';
   ObjN_GDBObjElLeader='GDBObjElLeader';
+  ObjN_GDBObjHatch='GDBObjHatch';
 
   DevicePrefix='DEVICE_';
   DrawingDeviceBaseUnitName='drawingdevicebase';

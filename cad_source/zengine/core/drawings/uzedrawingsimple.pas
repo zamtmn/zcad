@@ -17,14 +17,15 @@
 }
 
 unit uzedrawingsimple;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses uzedrawingdef,uzeblockdefsfactory,uzestylesdim,
      gzctnrVectorTypes,uzedrawingabstract,uzbstrproc,UGDBObjBlockdefArray,uzestylestables,
      UGDBNumerator,uzbtypes,sysutils,uzegeometry,uzeentgenericsubentry,
      uzestyleslayers,uzestyleslinetypes,uzeentity,UGDBSelectedObjArray,uzestylestexts,
      uzedimensionaltypes,uzegeometrytypes,uzecamera,UGDBOpenArrayOfPV,uzeroot,uzefont,
-     uzglviewareaabstract,uzglviewareageneral,uzgldrawcontext,UGDBControlPointArray;
+     uzglviewareaabstract,uzglviewareageneral,uzgldrawcontext,UGDBControlPointArray,
+     uzglviewareadata;
 type
 TMainBlockCreateProc=procedure (_to:PTDrawingDef;name:String) of object;
 {EXPORT+}

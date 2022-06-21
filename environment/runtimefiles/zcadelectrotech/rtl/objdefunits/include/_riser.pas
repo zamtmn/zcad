@@ -1,6 +1,7 @@
 ﻿unit _riser;
 interface
 uses system;
+usescopy objname;
 usescopy _addtocable;
 var
    Text:String;(*'Текст'*)

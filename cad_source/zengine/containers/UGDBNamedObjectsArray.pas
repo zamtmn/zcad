@@ -17,7 +17,7 @@
 }
 
 unit UGDBNamedObjectsArray;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses gzctnrVectorTypes,gzctnrVectorPObjects,sysutils,uzbtypes,uzegeometry;
 type

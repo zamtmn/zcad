@@ -1,5 +1,5 @@
 unit uzcdevicebaseabstract;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses uzcsysvars,{$IFNDEF DELPHI}fileutil,{$ENDIF}uzbstrproc,strmy,
      uzbtypes,UUnitManager,varman,sysutils,typedescriptors,uzclog;

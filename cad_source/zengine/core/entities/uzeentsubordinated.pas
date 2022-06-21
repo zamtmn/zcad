@@ -17,12 +17,12 @@
 }
 
 unit uzeentsubordinated;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses strutils,uzgldrawcontext,uzeentityextender,uzetextpreprocessor,uzedrawingdef,
      uzbstrproc{$IFNDEF DELPHI},LazUTF8{$ENDIF},uzctnrVectorBytes,uzegeometrytypes,uzbtypes,
-     sysutils,uzestyleslayers,uzeffdxfsupport,gzctnrVectorTypes;
+     sysutils,uzestyleslayers,uzeffdxfsupport,gzctnrVectorTypes,uzecamera;
 type
 {EXPORT+}
 PGDBObjExtendable=^GDBObjExtendable;
@@ -38,10 +38,16 @@ GDBObjExtendable=object(GDBaseObject)
                                  destructor done;virtual;
 end;
 
+PGDBObjDrawable=^GDBObjDrawable;
+{REGISTEROBJECTTYPE GDBObjDrawable}
+GDBObjDrawable=object(GDBObjExtendable)
+  procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;abstract;
+end;
+
 PGDBObjSubordinated=^GDBObjSubordinated;
 PGDBObjGenericWithSubordinated=^GDBObjGenericWithSubordinated;
 {REGISTEROBJECTTYPE GDBObjGenericWithSubordinated}
-GDBObjGenericWithSubordinated= object(GDBObjExtendable)
+GDBObjGenericWithSubordinated= object(GDBObjDrawable)
                                     {OU:TFaceTypedData;(*'Variables'*)}
                                     procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
                                     procedure ImSelected(pobj:PGDBObjSubordinated;pobjinarray:Integer);virtual;

@@ -17,7 +17,7 @@
 }
 
 unit uzegluinterface;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses LCLProc,uzepalette,{$IFNDEF DELPHI}LCLType,{$ENDIF}

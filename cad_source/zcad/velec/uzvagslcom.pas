@@ -17,7 +17,7 @@
 }
 
 unit uzvagslcom;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses uzccommandsimpl,    //тут реализация объекта CommandRTEdObject
      uzccommandsabstract,//базовые объявления для команд

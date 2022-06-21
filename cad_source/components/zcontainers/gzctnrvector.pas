@@ -51,7 +51,7 @@ GZVector{-}<T>{//}=object(TZAbsVector)
         {**~Деструктор}
         destructor done;virtual;
         {**Деструктор}
-        procedure destroy;virtual;
+        destructor destroy;virtual;
         {**Конструктор}
         constructor init(m:TArrayIndex);
         {**Конструктор}
@@ -73,7 +73,7 @@ GZVector{-}<T>{//}=object(TZAbsVector)
         {**Инвертировать массив}
         procedure Invert;
         {**Копировать в массив}
-        function copyto(var source:GZVector<T>):Integer;virtual;
+        function copyto(var dest:GZVector<T>):Integer;virtual;
         {**Выделяет место и копирует в массив SData элементов из PData. Надо compilermagic! соответствие с AllocData
           @PData(указатель на копируемые элементы)
           @SData(кол-во копируемых элементов)
@@ -164,7 +164,8 @@ var
 begin
   newblock:=nil;
   GetMem(newblock, nevsize);
-  Move(pblock^, newblock^, oldsize);
+  if pblock<>nil then
+    Move(pblock^, newblock^, oldsize);
   result := newblock;
   FreeMem(pblock);
 end;
@@ -324,12 +325,12 @@ begin
         p:=iterate(ir);
   until p=nil;}
 end;
-function GZVector<T>.copyto(var source:GZVector<T>):Integer;
+function GZVector<T>.copyto(var dest:GZVector<T>):Integer;
 var i:integer;
 begin
      result:=count;
      for i:=0 to count-1 do
-       source.PushBackData(parray[i]);
+       dest.PushBackData(parray[i]);
 end;
 
 {var p:pt;
@@ -445,7 +446,7 @@ begin
   free;
   destroy;
 end;
-procedure GZVector<T>.destroy;
+destructor GZVector<T>.destroy;
 begin
   if PArray<>nil then
     Freemem(PArray);

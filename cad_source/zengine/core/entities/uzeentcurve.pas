@@ -17,14 +17,15 @@
 }
 
 unit uzeentcurve;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses uzgldrawcontext,uzedrawingdef,uzecamera,
      uzctnrVectorBytes,uzestyleslayers,UGDBVectorSnapArray,
      UGDBSelectedObjArray,uzeent3d,uzeentity,UGDBPolyLine2DArray,UGDBPoint3DArray,
      uzbtypes,uzegeometry,uzeconsts,uzglviewareadata,uzeffdxfsupport,sysutils,
-     gzctnrVectorTypes,uzegeometrytypes,uzeentsubordinated,uzctnrvectorpgdbaseobjects;
+     gzctnrVectorTypes,uzegeometrytypes,uzeentsubordinated,
+     uzctnrvectorpgdbaseobjects,uzeSnap;
 type
 //------------snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)
 {Export+}
@@ -41,7 +42,6 @@ GDBObjCurve= object(GDBObj3d)
                  procedure FormatWithoutSnapArray;virtual;
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
-                 procedure rtedit(refp:Pointer;mode:Single;dist,wc:gdbvertex);virtual;
                  procedure rtsave(refp:Pointer);virtual;
                  procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                  function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
@@ -396,21 +396,7 @@ begin
   //tpo^.format;
   result := tpo;
 end;
-procedure GDBObjCurve.rtedit;
-var p,pold:pgdbvertex;
-    i:Integer;
-begin
-  if mode <= os_polymin then
-  begin
-  i:=round(os_polymin-mode);
-  p:=vertexarrayinocs.GetParrayAsPointer;
-  pold:=pgdbobjcurve(refp)^.vertexarrayinocs.GetParrayAsPointer;
-  inc(p,i);
-  inc(pold,i);
-  p^ := VertexAdd(pold^, dist);
-  //format;
-  end;
-end;
+
 procedure GDBObjCurve.rtsave;
 var p,pold:pgdbvertex;
     i:Integer;
@@ -478,7 +464,7 @@ end;
 procedure GDBObjCurve.rtmodifyonepoint(const rtmod:TRTModifyData);
 var vertexnumber:Integer;
 begin
-     vertexnumber:=abs(rtmod.point.pointtype-os_polymin);
+     vertexnumber:=rtmod.point.vertexnum;
      //pdesc.worldcoord:=PGDBArrayVertex(vertexarray.parray)^[vertexnumber];
      //pdesc.dispcoord.x:=round(PGDBArrayVertex2D(PProjPoint.parray)^[vertexnumber].x);
      //pdesc.dispcoord.y:=round(poglwnd^.height-PGDBArrayVertex2D(PProjPoint.parray)^[vertexnumber].y);
@@ -488,7 +474,7 @@ end;
 procedure GDBObjCurve.remaponecontrolpoint(pdesc:pcontrolpointdesc);
 var vertexnumber:Integer;
 begin
-     vertexnumber:=abs(pdesc^.pointtype-os_polymin);
+     vertexnumber:=pdesc^.vertexnum;
      pdesc.worldcoord:=GDBPoint3dArray.PTArr(VertexArrayInWCS.parray)^[vertexnumber];
      pdesc.dispcoord.x:=round(GDBPolyline2DArray.PTArr(PProjPoint.parray)^[vertexnumber].x);
      pdesc.dispcoord.y:=round(GDBPolyline2DArray.PTArr(PProjPoint.parray)^[vertexnumber].y);
@@ -504,11 +490,11 @@ begin
           {pv2d:=pprojpoint^.parray;}
           pv:=VertexArrayInWCS.GetParrayAsPointer;
           pdesc.selected:=false;
-          pdesc.pobject:=nil;
+          pdesc.PDrawable:=nil;
 
           for i:=0 to {pprojpoint}VertexArrayInWCS.count-1 do
           begin
-               pdesc.pointtype:=os_polymin-i;
+               pdesc.vertexnum:=i;
                pdesc.attr:=[CPA_Strech];
                pdesc.worldcoord:=pv^;
                (*pdesc.dispcoord.x:=round(pv2d^.x);

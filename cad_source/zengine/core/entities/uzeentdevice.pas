@@ -17,7 +17,7 @@
 }
 
 unit uzeentdevice;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses uzestyleslayers,uzepalette,uzeobjectextender,uabstractunit,uzeentityfactory,
@@ -26,7 +26,7 @@ uses uzestyleslayers,uzepalette,uzeobjectextender,uabstractunit,uzeentityfactory
      uzeconsts,uzeentity,uzeentsubordinated,varmandef,
      uzegeometrytypes,uzeentblockinsert,uzbtypes,UGDBVisibleOpenArray,UGDBObjBlockdefArray,
      gzctnrVectorTypes,uzeblockdef,uzeffdxfsupport,UGDBSelectedObjArray,uzeentitiestree,
-     LazLogger,uzestrconsts,uzctnrvectorpgdbaseobjects;
+     LazLogger,uzestrconsts,uzctnrvectorpgdbaseobjects,uzglviewareadata,uzeSnap;
 
 type
 {EXPORT+}
@@ -133,7 +133,7 @@ begin
           end;
 
           pdesc.selected:=false;
-          pdesc.pobject:=nil;
+          pdesc.PDrawable:=nil;
 
 
           if assigned(SysVar.DWG.DWG_AdditionalGrips)then
@@ -146,7 +146,7 @@ begin
                if PGDBObjDevice(pv).Name='FIX' then
                begin
                pdesc.pointtype:=os_point;
-               pdesc.pobject:=pv;
+               pdesc.PDrawable:=pv;
                pdesc.dcoord:=vertexsub(PGDBObjDevice(pv).P_insert_in_WCS,P_insert_in_WCS);
                pdesc.worldcoord:=PGDBObjDevice(pv).P_insert_in_WCS;
                {pdesc.dispcoord.x:=round(PGDBObjDevice(pv).ProjP_insert.x);

@@ -16,14 +16,15 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 unit uzeentdimension;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses uzemathutils,uzgldrawcontext,uzeentabstracttext,uzestylestexts,
      uzestylesdim,uzeentmtext,uzestyleslayers,uzedrawingdef,uzecamera,
      uzbstrproc,uzctnrVectorBytes,uzeenttext,uzegeometry,uzeentline,uzeentcomplex,
      uzegeometrytypes,sysutils,uzeentity,uzbtypes,uzeconsts,
-     uzedimensionaltypes,uzeentitiesmanager,UGDBOpenArrayOfPV,uzeentblockinsert;
+     uzedimensionaltypes,uzeentitiesmanager,UGDBOpenArrayOfPV,uzeentblockinsert,
+     uzglviewareadata,uzeSnap;
 type
 {EXPORT+}
 PTDXFDimData2D=^TDXFDimData2D;
@@ -467,31 +468,21 @@ begin
 end;
 procedure GDBObjDimension.rtmodifyonepoint(const rtmod:TRTModifyData);
 begin
-          case rtmod.point.pointtype of
-               os_p10:begin
-                             DimData.P10InWCS:=P10ChangeTo(VertexAdd(rtmod.point.worldcoord, rtmod.dist));
-                        end;
-               os_p11:begin
-                             DimData.P11InOCS:=P11ChangeTo(VertexAdd(rtmod.point.worldcoord, rtmod.dist));
-                        end;
-               os_p12:begin
-                             DimData.P12InOCS:=P12ChangeTo(VertexAdd(rtmod.point.worldcoord, rtmod.dist));
-                        end;
-               os_p13:begin
-                             DimData.P13InWCS:=P13ChangeTo(VertexAdd(rtmod.point.worldcoord, rtmod.dist));
-                        end;
-               os_p14:begin
-                             DimData.P14InWCS:=P14ChangeTo(VertexAdd(rtmod.point.worldcoord, rtmod.dist));
-                        end;
-               os_p15:begin
-                             DimData.P15InWCS:=P15ChangeTo(VertexAdd(rtmod.point.worldcoord, rtmod.dist));
-                        end;
-               os_p16:begin
-                             DimData.P16InOCS:=P16ChangeTo(VertexAdd(rtmod.point.worldcoord, rtmod.dist));
-                        end;
-
-          end;
-
+  if rtmod.point.pointtype=os_p10 then begin
+    DimData.P10InWCS:=P10ChangeTo(VertexAdd(rtmod.point.worldcoord, rtmod.dist));
+  end else if rtmod.point.pointtype=os_p11 then begin
+    DimData.P11InOCS:=P11ChangeTo(VertexAdd(rtmod.point.worldcoord, rtmod.dist));
+  end else if rtmod.point.pointtype=os_p12 then begin
+    DimData.P12InOCS:=P12ChangeTo(VertexAdd(rtmod.point.worldcoord, rtmod.dist));
+  end else if rtmod.point.pointtype=os_p13 then begin
+    DimData.P13InWCS:=P13ChangeTo(VertexAdd(rtmod.point.worldcoord, rtmod.dist));
+  end else if rtmod.point.pointtype=os_p14 then begin
+    DimData.P14InWCS:=P14ChangeTo(VertexAdd(rtmod.point.worldcoord, rtmod.dist));
+  end else if rtmod.point.pointtype=os_p15 then begin
+    DimData.P15InWCS:=P15ChangeTo(VertexAdd(rtmod.point.worldcoord, rtmod.dist));
+  end else if rtmod.point.pointtype=os_p16 then begin
+    DimData.P16InOCS:=P16ChangeTo(VertexAdd(rtmod.point.worldcoord, rtmod.dist));
+  end;
 end;
 function GDBObjDimension.LinearFloatToStr(l:Double;var drawing:TDrawingDef):TDXFEntsInternalStringType;
 var
@@ -564,43 +555,35 @@ end;
 
 procedure GDBObjDimension.remaponecontrolpoint(pdesc:pcontrolpointdesc);
 begin
-                    case pdesc^.pointtype of
-                    os_p10:begin
-                                  pdesc.worldcoord:=DimData.P10InWCS;
-                                  pdesc.dispcoord.x:=round(pprojpoint.P10.x);
-                                  pdesc.dispcoord.y:=round(pprojpoint.P10.y);
-                             end;
-                    os_p11:begin
-                                  pdesc.worldcoord:=DimData.P11InOCS;
-                                  pdesc.dispcoord.x:=round(pprojpoint.P11.x);
-                                  pdesc.dispcoord.y:=round(pprojpoint.P11.y);
-                             end;
-                    os_p12:begin
-                                  pdesc.worldcoord:=DimData.P12InOCS;
-                                  pdesc.dispcoord.x:=round(pprojpoint.P12.x);
-                                  pdesc.dispcoord.y:=round(pprojpoint.P12.y);
-                             end;
-                    os_p13:begin
-                                  pdesc.worldcoord:=DimData.P13InWCS;
-                                  pdesc.dispcoord.x:=round(pprojpoint.P13.x);
-                                  pdesc.dispcoord.y:=round(pprojpoint.P13.y);
-                             end;
-                    os_p14:begin
-                                  pdesc.worldcoord:=DimData.P14InWCS;
-                                  pdesc.dispcoord.x:=round(pprojpoint.P14.x);
-                                  pdesc.dispcoord.y:=round(pprojpoint.P14.y);
-                             end;
-                    os_p15:begin
-                                  pdesc.worldcoord:=DimData.P15InWCS;
-                                  pdesc.dispcoord.x:=round(pprojpoint.P15.x);
-                                  pdesc.dispcoord.y:=round(pprojpoint.P15.y);
-                             end;
-                    os_p16:begin
-                                  pdesc.worldcoord:=DimData.P16InOCS;
-                                  pdesc.dispcoord.x:=round(pprojpoint.P16.x);
-                                  pdesc.dispcoord.y:=round(pprojpoint.P16.y);
-                             end;
-                    end;
+  if pdesc^.pointtype=os_p10 then begin
+    pdesc.worldcoord:=DimData.P10InWCS;
+    pdesc.dispcoord.x:=round(pprojpoint.P10.x);
+    pdesc.dispcoord.y:=round(pprojpoint.P10.y);
+  end else if pdesc^.pointtype=os_p11 then begin
+    pdesc.worldcoord:=DimData.P11InOCS;
+    pdesc.dispcoord.x:=round(pprojpoint.P11.x);
+    pdesc.dispcoord.y:=round(pprojpoint.P11.y);
+  end else if pdesc^.pointtype=os_p12 then begin
+    pdesc.worldcoord:=DimData.P12InOCS;
+    pdesc.dispcoord.x:=round(pprojpoint.P12.x);
+    pdesc.dispcoord.y:=round(pprojpoint.P12.y);
+  end else if pdesc^.pointtype=os_p13 then begin
+    pdesc.worldcoord:=DimData.P13InWCS;
+    pdesc.dispcoord.x:=round(pprojpoint.P13.x);
+    pdesc.dispcoord.y:=round(pprojpoint.P13.y);
+  end else if pdesc^.pointtype=os_p14 then begin
+    pdesc.worldcoord:=DimData.P14InWCS;
+    pdesc.dispcoord.x:=round(pprojpoint.P14.x);
+    pdesc.dispcoord.y:=round(pprojpoint.P14.y);
+  end else if pdesc^.pointtype=os_p15 then begin
+    pdesc.worldcoord:=DimData.P15InWCS;
+    pdesc.dispcoord.x:=round(pprojpoint.P15.x);
+    pdesc.dispcoord.y:=round(pprojpoint.P15.y);
+  end else if pdesc^.pointtype=os_p16 then begin
+    pdesc.worldcoord:=DimData.P16InOCS;
+    pdesc.dispcoord.x:=round(pprojpoint.P16.x);
+    pdesc.dispcoord.y:=round(pprojpoint.P16.y);
+  end;
 end;
 
 function GDBObjDimension.DrawDimensionLineLinePart(p1,p2:GDBVertex;var drawing:TDrawingDef):pgdbobjline;

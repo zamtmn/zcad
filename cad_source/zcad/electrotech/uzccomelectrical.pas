@@ -9,7 +9,7 @@ unit uzccomelectrical;
 {$IFDEF FPC}
   {$CODEPAGE UTF8}
 {$endif}
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses
@@ -40,7 +40,8 @@ uses
   uzeentabstracttext,uzeentmtext,uzeblockdef,UGDBPoint3DArray,uzcdevicebaseabstract,
   uzelongprocesssupport,LazLogger,
   generics.Collections,
-  uzccommand_treestat,uzccommand_line2,uzccmdfloatinsert,uzcregother,uzcfcommandline,uzeparsercmdprompt,uzctnrvectorpgdbaseobjects;
+  uzccommand_treestat,uzccommand_line2,uzccmdfloatinsert,uzcregother,uzcfcommandline,
+  uzeparsercmdprompt,uzctnrvectorpgdbaseobjects,uzeSnap;
 type
 {Export+}
   TFindType=(
@@ -657,7 +658,9 @@ var
     dna:devnamearray;
     i:integer;
     DC:TDrawContext;
-    pentvarext:TVariablesExtender;
+    entvarext,delvarext:TVariablesExtender;
+    extensionssave:pointer;
+    pu:PTSimpleUnit;
 begin
      currentcoord:=nulvertex;
      dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
@@ -673,9 +676,9 @@ begin
      repeat
            if psd^.objaddr^.GetObjType=GDBDeviceID then
            begin
-                pentvarext:=psd^.objaddr^.GetExtension<TVariablesExtender>;
+                entvarext:=psd^.objaddr^.GetExtension<TVariablesExtender>;
                 //pvd:=PTObjectUnit(psd^.objaddr^.ou.Instance)^.FindVariable('DESC_MountingSite');
-                pvd:=pentvarext.entityunit.FindVariable({'DESC_MountingSite'}'NMO_Name');
+                pvd:=entvarext.entityunit.FindVariable({'DESC_MountingSite'}'NMO_Name');
                 if pvd<>nil then
                                 dn.name:=pvd.data.PTD.GetValueAsString(pvd.data.Addr.Instance)
                             else
@@ -695,12 +698,27 @@ begin
      devnamesort.Sort(dna,dna.Size);
      t_matrix:=uzegeometry.CreateTranslationMatrix(createvertex(0,15,0));
 
+     pu:=units.findunit(SupportPath,InterfaceTranslate,'uentrepresentation');
 
      for i:=0 to dna.Size-1 do
        begin
             dn:=dna[i];
 
+            extensionssave:=dn.pdev^.EntExtensions;
+            dn.pdev^.EntExtensions:=nil;
             pointer(pnevdev):=dn.pdev^.Clone(@drawings.GetCurrentDWG.ConstructObjRoot);
+            dn.pdev^.EntExtensions:=extensionssave;
+
+            entvarext:=dn.pdev^.GetExtension<TVariablesExtender>;
+            pnevdev^.AddExtension(TVariablesExtender.Create(pnevdev));
+            delvarext:=pnevdev^.GetExtension<TVariablesExtender>;
+            entvarext.addDelegate(pnevdev,delvarext);
+
+
+            if pu<>nil then
+             delvarext.entityunit.CopyFrom(pu);
+
+            delvarext:=pnevdev^.GetExtension<TVariablesExtender>;
 
             pnevdev.Local.P_insert:=currentcoord;
             pnevdev.Local.Basis.oz:=xy_Z_Vertex;

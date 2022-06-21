@@ -17,7 +17,7 @@
 }
 
 unit uzglviewareadx;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses
      Windows, Messages, LCLType, LCLProc, SysUtils, Variants,

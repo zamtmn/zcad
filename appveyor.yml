@@ -64,12 +64,15 @@ after_build:
 test_script:
   - cmd: echo Run tests
   - cmd: utils\tests\runfpcunittest cad_source\components\zcontainers\tests\testzcontainers testzcontainers.xml
+  - cmd: utils\tests\runfpcunittest cad_source\zengine\tests\testzengine testzengine.xml
   - cmd: echo Convert tests results
 # convert result from fpcunit to junit
   - ps: $XSLInputElement = New-Object System.Xml.Xsl.XslCompiledTransform;$XSLInputElement.Load("https://raw.githubusercontent.com/zamtmn/zcad/master/utils/tests/fpctest2junit.xsl");$XSLInputElement.Transform((Resolve-Path .\testzcontainers.xml),((Join-Path (Resolve-Path .) "junittestzcontainers.xml")))
+  - ps: $XSLInputElement = New-Object System.Xml.Xsl.XslCompiledTransform;$XSLInputElement.Load("https://raw.githubusercontent.com/zamtmn/zcad/master/utils/tests/fpctest2junit.xsl");$XSLInputElement.Transform((Resolve-Path .\testzengine.xml),((Join-Path (Resolve-Path .) "junittestzengine.xml")))
 
 # upload results to AppVeyor
   - ps: $wc = New-Object 'System.Net.WebClient';$wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\junittestzcontainers.xml))
+  - ps: $wc = New-Object 'System.Net.WebClient';$wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\junittestzengine.xml))
 
 #---------------------------------#
 #      artifacts configuration    #

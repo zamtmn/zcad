@@ -17,14 +17,14 @@
 }
 
 unit uzeentpoint;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses uzeentityfactory,uzgldrawcontext,uzeffdxfsupport,uzedrawingdef,uzecamera,
      uzestyleslayers,UGDBSelectedObjArray,
      uzeentsubordinated,uzeent3d,uzeentity,sysutils,uzctnrVectorBytes,
      uzegeometrytypes,uzbtypes,uzeconsts,uzglviewareadata,uzegeometry,
-     uzctnrvectorpgdbaseobjects;
+     uzctnrvectorpgdbaseobjects,uzeSnap;
 type
 {Export+}
 PGDBObjPoint=^GDBObjPoint;
@@ -251,20 +251,18 @@ begin
 end;
 procedure GDBObjPoint.remaponecontrolpoint(pdesc:pcontrolpointdesc);
 begin
-                    case pdesc^.pointtype of
-                    os_point:begin
-          pdesc.worldcoord:=P_insertInOCS;
-          pdesc.dispcoord.x:=round(ProjPoint.x);
-          pdesc.dispcoord.y:=round(ProjPoint.y);
-                             end;
-                    end;
+  if pdesc^.pointtype=os_point then begin
+    pdesc.worldcoord:=P_insertInOCS;
+    pdesc.dispcoord.x:=round(ProjPoint.x);
+    pdesc.dispcoord.y:=round(ProjPoint.y);
+  end;
 end;
 procedure GDBObjPoint.addcontrolpoints(tdesc:Pointer);
 var pdesc:controlpointdesc;
 begin
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(1);
           pdesc.selected:=false;
-          pdesc.pobject:=nil;
+          pdesc.PDrawable:=nil;
 
           pdesc.pointtype:=os_point;
           pdesc.attr:=[CPA_Strech];
@@ -275,11 +273,9 @@ begin
 end;
 procedure GDBObjPoint.rtmodifyonepoint(const rtmod:TRTModifyData);
 begin
-          case rtmod.point.pointtype of
-               os_point:begin
-                             P_insertInOCS:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
-                        end;
-          end;
+  if rtmod.point.pointtype=os_point then begin
+    P_insertInOCS:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
+  end;
 end;
 function GDBObjPoint.Clone;
 var tvo: PGDBObjPoint;

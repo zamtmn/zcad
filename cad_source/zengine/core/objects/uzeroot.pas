@@ -17,7 +17,7 @@
 }
 
 unit uzeroot;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 Uses

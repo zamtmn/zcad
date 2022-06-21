@@ -18,7 +18,7 @@
 {$mode delphi}
 unit uzccommand_saveoptions;
 
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses

@@ -17,7 +17,7 @@
 }
 
 unit uzgprimitivessarray;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses gzctnrAlignedVectorObjects,uzbtypes;
 type

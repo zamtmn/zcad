@@ -17,7 +17,7 @@
 }
 
 unit uzeenttext;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses
@@ -25,7 +25,7 @@ uses
     uzedrawingdef,uzecamera,uzbstrproc,sysutils,uzefont,uzestyleslayers,
     uzeentabstracttext,uzeentity,UGDBOutbound2DIArray,uzctnrVectorBytes,uzbtypes,
     uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzeentsubordinated,LazLogger,
-    uzegeometrytypes,uzestylestexts;
+    uzegeometrytypes,uzestylestexts,uzeSnap;
 type
 {Export+}
 PGDBObjText=^GDBObjText;
@@ -52,7 +52,6 @@ GDBObjText= object(GDBObjAbstractText)
 
                  function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
-                 procedure rtedit(refp:Pointer;mode:Single;dist,wc:gdbvertex);virtual;
                  procedure rtsave(refp:Pointer);virtual;
                  function IsHaveObjXData:Boolean;virtual;
                  procedure SaveToDXFObjXData(var outhandle:{Integer}TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
@@ -261,15 +260,6 @@ begin
   result := tvo;
 end;
 
-procedure GDBObjText.rtedit;
-begin
-  if mode = os_textinsert then
-  begin
-    Local.p_insert := VertexAdd(pgdbobjtext(refp)^.Local.p_insert, dist);
-    calcobjmatrix;
-    //format;
-  end
-end;
 procedure GDBObjText.rtsave(refp:Pointer);
 begin
   inherited;
@@ -576,15 +566,9 @@ begin
      inc(onlygetsnapcount);
 end;
 procedure GDBObjText.rtmodifyonepoint(const rtmod:TRTModifyData);
-//var m:DMatrix4D;
 begin
-     //m:=bp.owner.getmatrix^;
-     //MatrixInvert(m);
-          case rtmod.point.pointtype of
-               os_point:begin
-                             Local.p_insert:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
-                        end;
-          end;
+  if rtmod.point.pointtype=os_point then
+    Local.p_insert:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
 end;
 procedure GDBObjText.SaveToDXFObjXData;
 begin

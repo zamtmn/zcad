@@ -17,7 +17,7 @@
 }
 
 unit uzeentwithlocalcs;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,uzeentity,
@@ -45,7 +45,7 @@ GDBObjWithLocalCS= object(GDBObjWithMatrix)
                constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                constructor initnul(owner:PGDBObjGenericWithSubordinated);
                destructor done;virtual;
-               procedure SaveToDXFObjPostfix(var outhandle:{Integer}TZctnrVectorBytes);
+               procedure SaveToDXFObjPostfix(var outhandle:{Integer}TZctnrVectorBytes);{todo: проверить использование, выкинуть нах}
                function LoadFromDXFObjShared(var f:TZctnrVectorBytes;dxfcod:Integer;ptu:PExtensionData;var drawing:TDrawingDef):Boolean;
 
                procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;

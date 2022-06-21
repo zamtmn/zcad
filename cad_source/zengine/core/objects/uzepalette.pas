@@ -17,7 +17,7 @@
 }
 
 unit uzepalette;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 
 type
@@ -29,6 +29,7 @@ type
             g:Byte;(*'Green'*)
             b:Byte;(*'Blue'*)
             a:Byte;(*'Alpha'*)
+            {-}constructor create(AR,AG,AB,AA:Byte);{//}
       end;
   PTDXFCOLOR=^TDXFCOLOR;
   {REGISTERRECORDTYPE TDXFCOLOR}
@@ -819,6 +820,13 @@ const
 var
   palette: TGDBPalette;
 implementation
+constructor TRGB.create(AR,AG,AB,AA:Byte);
+begin
+  r:=AR;
+  g:=AG;
+  b:=AB;
+  a:=AA;
+end;
 initialization
   palette:=acadpalette;
 end.

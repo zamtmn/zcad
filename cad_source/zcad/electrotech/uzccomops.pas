@@ -6,7 +6,7 @@
 }
 
 unit uzccomops;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses
 

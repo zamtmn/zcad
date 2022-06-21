@@ -16,7 +16,8 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 unit usimplegenerics;
-{$INCLUDE zcadconfig.inc}
+{$Mode delphi}{$H+}
+{$Include zengineconfig.inc}
 
 interface
 uses uzbstrproc,uzbtypes,gzctnrSTL,

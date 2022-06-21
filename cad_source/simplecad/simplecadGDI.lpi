@@ -36,22 +36,25 @@
         </Mode0>
       </Modes>
     </RunParams>
-    <RequiredPackages Count="5">
+    <RequiredPackages Count="6">
       <Item1>
-        <PackageName Value="zmath"/>
+        <PackageName Value="zbaseutils"/>
       </Item1>
       <Item2>
-        <PackageName Value="zcontainers"/>
+        <PackageName Value="zmath"/>
       </Item2>
       <Item3>
-        <PackageName Value="zebase"/>
+        <PackageName Value="zcontainers"/>
       </Item3>
       <Item4>
-        <PackageName Value="LazOpenGLContext"/>
+        <PackageName Value="zebase"/>
       </Item4>
       <Item5>
-        <PackageName Value="LCL"/>
+        <PackageName Value="LazOpenGLContext"/>
       </Item5>
+      <Item6>
+        <PackageName Value="LCL"/>
+      </Item6>
     </RequiredPackages>
     <Units Count="327">
       <Unit0>
@@ -2466,8 +2469,8 @@
       <Unit314>
         <Filename Value="..\components\zebase\uzbtypes.pas"/>
         <EditorIndex Value="11"/>
-        <TopLine Value="336"/>
-        <CursorPos Y="335"/>
+        <TopLine Value="327"/>
+        <CursorPos Y="326"/>
         <UsageCount Value="11"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -2509,6 +2512,7 @@
       </Unit318>
       <Unit319>
         <Filename Value="..\components\zcontainers\gzctnrvector.pas"/>
+        <UnitName Value="gzctnrVector"/>
         <EditorIndex Value="2"/>
         <TopLine Value="92"/>
         <CursorPos X="18" Y="111"/>
@@ -2538,8 +2542,8 @@
         <Filename Value="..\zengine\zgl\drawers\uzglviewareageneral.pas"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="180"/>
-        <CursorPos Y="180"/>
+        <TopLine Value="1411"/>
+        <CursorPos Y="1428"/>
         <UsageCount Value="11"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -2582,123 +2586,123 @@
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="..\zengine\zgl\drawers\uzglviewareageneral.pas"/>
-        <Caret Line="1434" TopLine="1425"/>
+        <Caret Line="1436" TopLine="1425"/>
       </Position1>
       <Position2>
         <Filename Value="..\zengine\zgl\drawers\uzglviewareageneral.pas"/>
-        <Caret Line="1436" TopLine="1425"/>
+        <Caret Line="1438" TopLine="1425"/>
       </Position2>
       <Position3>
         <Filename Value="..\zengine\zgl\drawers\uzglviewareageneral.pas"/>
-        <Caret Line="1438" TopLine="1425"/>
+        <Caret Line="1450" TopLine="1425"/>
       </Position3>
       <Position4>
         <Filename Value="..\zengine\zgl\drawers\uzglviewareageneral.pas"/>
-        <Caret Line="1450" TopLine="1425"/>
+        <Caret Line="1451" TopLine="1425"/>
       </Position4>
       <Position5>
         <Filename Value="..\zengine\zgl\drawers\uzglviewareageneral.pas"/>
-        <Caret Line="1451" TopLine="1425"/>
+        <Caret Line="1473" TopLine="1450"/>
       </Position5>
       <Position6>
         <Filename Value="..\zengine\zgl\drawers\uzglviewareageneral.pas"/>
-        <Caret Line="1473" TopLine="1450"/>
+        <Caret Line="1479" TopLine="1450"/>
       </Position6>
       <Position7>
         <Filename Value="..\zengine\zgl\drawers\uzglviewareageneral.pas"/>
-        <Caret Line="1479" TopLine="1450"/>
+        <Caret Line="1480" TopLine="1450"/>
       </Position7>
       <Position8>
         <Filename Value="..\zengine\zgl\drawers\uzglviewareageneral.pas"/>
-        <Caret Line="1480" TopLine="1450"/>
+        <Caret Line="1481" TopLine="1450"/>
       </Position8>
       <Position9>
         <Filename Value="..\zengine\zgl\drawers\uzglviewareageneral.pas"/>
-        <Caret Line="1481" TopLine="1450"/>
+        <Caret Line="1482" TopLine="1450"/>
       </Position9>
       <Position10>
         <Filename Value="..\zengine\zgl\drawers\uzglviewareageneral.pas"/>
-        <Caret Line="1482" TopLine="1450"/>
+        <Caret Line="1484" TopLine="1450"/>
       </Position10>
       <Position11>
         <Filename Value="..\zengine\zgl\drawers\uzglviewareageneral.pas"/>
-        <Caret Line="1484" TopLine="1450"/>
+        <Caret Line="1485" TopLine="1450"/>
       </Position11>
       <Position12>
         <Filename Value="..\zengine\zgl\drawers\uzglviewareageneral.pas"/>
-        <Caret Line="1485" TopLine="1450"/>
+        <Caret Line="1487" TopLine="1450"/>
       </Position12>
       <Position13>
         <Filename Value="..\zengine\zgl\drawers\uzglviewareageneral.pas"/>
-        <Caret Line="1487" TopLine="1450"/>
+        <Caret Line="1489" TopLine="1459"/>
       </Position13>
       <Position14>
         <Filename Value="..\zengine\zgl\drawers\uzglviewareageneral.pas"/>
-        <Caret Line="1489" TopLine="1459"/>
+        <Caret Line="1490" TopLine="1459"/>
       </Position14>
       <Position15>
         <Filename Value="..\zengine\zgl\drawers\uzglviewareageneral.pas"/>
-        <Caret Line="1490" TopLine="1459"/>
+        <Caret Line="1492" TopLine="1459"/>
       </Position15>
       <Position16>
         <Filename Value="..\zengine\zgl\drawers\uzglviewareageneral.pas"/>
-        <Caret Line="1492" TopLine="1459"/>
+        <Caret Line="1493" TopLine="1459"/>
       </Position16>
       <Position17>
         <Filename Value="..\zengine\zgl\drawers\uzglviewareageneral.pas"/>
-        <Caret Line="1493" TopLine="1459"/>
+        <Caret Line="1504" TopLine="1465"/>
       </Position17>
       <Position18>
         <Filename Value="..\zengine\zgl\drawers\uzglviewareageneral.pas"/>
-        <Caret Line="1504" TopLine="1465"/>
+        <Caret Line="1505" TopLine="1475"/>
       </Position18>
       <Position19>
         <Filename Value="..\zengine\zgl\drawers\uzglviewareageneral.pas"/>
-        <Caret Line="1505" TopLine="1475"/>
+        <Caret Line="1507" TopLine="1475"/>
       </Position19>
       <Position20>
         <Filename Value="..\zengine\zgl\drawers\uzglviewareageneral.pas"/>
-        <Caret Line="1507" TopLine="1475"/>
+        <Caret Line="1508" TopLine="1475"/>
       </Position20>
       <Position21>
         <Filename Value="..\zengine\zgl\drawers\uzglviewareageneral.pas"/>
-        <Caret Line="1508" TopLine="1475"/>
+        <Caret Line="1554" Column="66" TopLine="1533"/>
       </Position21>
       <Position22>
         <Filename Value="..\zengine\zgl\drawers\uzglviewareageneral.pas"/>
-        <Caret Line="1554" Column="66" TopLine="1533"/>
+        <Caret Line="79" Column="40" TopLine="57"/>
       </Position22>
       <Position23>
         <Filename Value="..\zengine\zgl\drawers\uzglviewareageneral.pas"/>
-        <Caret Line="79" Column="40" TopLine="57"/>
+        <Caret Line="1899" Column="3" TopLine="1889"/>
       </Position23>
       <Position24>
-        <Filename Value="..\zengine\zgl\drawers\uzglviewareageneral.pas"/>
-        <Caret Line="1899" Column="3" TopLine="1889"/>
+        <Filename Value="..\zcad\electrotech\uzcentelleader.pas"/>
+        <Caret Line="43" Column="26" TopLine="12"/>
       </Position24>
       <Position25>
         <Filename Value="..\zcad\electrotech\uzcentelleader.pas"/>
-        <Caret Line="43" Column="26" TopLine="12"/>
+        <Caret Line="268" Column="6" TopLine="246"/>
       </Position25>
       <Position26>
-        <Filename Value="..\zcad\electrotech\uzcentelleader.pas"/>
-        <Caret Line="268" Column="6" TopLine="246"/>
+        <Filename Value="..\zengine\core\drawings\uzedrawingsimple.pas"/>
+        <Caret Line="40" Column="61" TopLine="31"/>
       </Position26>
       <Position27>
         <Filename Value="..\zengine\core\drawings\uzedrawingsimple.pas"/>
-        <Caret Line="40" Column="61" TopLine="31"/>
+        <Caret Line="61" Column="45" TopLine="31"/>
       </Position27>
       <Position28>
-        <Filename Value="..\zengine\core\drawings\uzedrawingsimple.pas"/>
-        <Caret Line="61" Column="45" TopLine="31"/>
+        <Filename Value="..\zengine\core\entities\uzeentgenericsubentry.pas"/>
+        <Caret Line="88" Column="50" TopLine="56"/>
       </Position28>
       <Position29>
         <Filename Value="..\zengine\core\entities\uzeentgenericsubentry.pas"/>
-        <Caret Line="88" Column="50" TopLine="56"/>
+        <Caret Line="268" Column="32" TopLine="267"/>
       </Position29>
       <Position30>
-        <Filename Value="..\zengine\core\entities\uzeentgenericsubentry.pas"/>
-        <Caret Line="268" Column="32" TopLine="267"/>
+        <Filename Value="..\zengine\zgl\drawers\uzglviewareageneral.pas"/>
+        <Caret Line="180" TopLine="180"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>
@@ -2709,7 +2713,7 @@
       <Filename Value="..\..\cad\simplecadGDI"/>
     </Target>
     <SearchPaths>
-      <IncludeFiles Value="$(ProjOutDir)"/>
+      <IncludeFiles Value="$(ProjOutDir);..\zengine"/>
       <OtherUnitFiles Value="..\zengine\containers;..\zengine;..\zengine\core;..\zengine\core\utils;..\zengine\core\objects;..\zengine\core\entities;..\zengine\zgl;..\zengine\geomlib;..\zengine\styles;..\zengine\zgl\drawers;..\zengine\misc;..\zengine\fileformats;..\zengine\fonts;..\zengine\core\drawings"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
@@ -2727,7 +2731,7 @@
     </Linking>
   </CompilerOptions>
   <Debugging>
-    <BreakPoints Count="2">
+    <BreakPoints Count="1">
       <Item1>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
@@ -2735,13 +2739,6 @@
         <Source Value="..\languade\urtl.pas"/>
         <Line Value="46"/>
       </Item1>
-      <Item2>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsLocal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="..\zengine\zgl\drawers\uzglviewareageneral.pas"/>
-        <Line Value="1428"/>
-      </Item2>
     </BreakPoints>
     <Exceptions Count="3">
       <Item1>

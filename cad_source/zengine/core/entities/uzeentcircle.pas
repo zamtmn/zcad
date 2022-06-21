@@ -17,14 +17,14 @@
 }
 
 unit uzeentcircle;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses
     gzctnrVectorTypes,uzeentityfactory,uzeentsubordinated,uzgldrawcontext,uzedrawingdef,uzecamera,
     uzestyleslayers,uzehelpobj,UGDBSelectedObjArray,
     uzegeometrytypes,uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,uzctnrVectorBytes,
     uzbtypes,uzeentwithlocalcs,uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,
-    uzctnrvectorpgdbaseobjects;
+    uzctnrvectorpgdbaseobjects,uzeSnap;
 type
 {Export+}
   ptcirclertmodify=^tcirclertmodify;
@@ -59,7 +59,6 @@ GDBObjCircle= object(GDBObjWithLocalCS)
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
-                 procedure rtedit(refp:Pointer;mode:Single;dist,wc:gdbvertex);virtual;
                  procedure rtsave(refp:Pointer);virtual;
                  procedure createpoint(var DC:TDrawContext);virtual;
                  procedure projectpoint;virtual;
@@ -513,19 +512,7 @@ begin
   //tvo^.format;
   result := tvo;
 end;
-procedure GDBObjCircle.rtedit;
-begin
-  if mode = os_center then
-  begin
-    Local.p_insert := VertexAdd(pgdbobjcircle(refp)^.Local.p_insert, dist);
-  end
-  else if (mode = os_q0) or (mode = os_q1) or (mode = os_q2) or (mode = os_q3) then
-  begin
-         //r:=VertexAdd(pgdbobjcircle(refp)^.p_insert,wc);
-    Radius := Vertexlength(Local.p_insert, wc);
-  end;
-  //format;
-end;
+
 {procedure GDBObjCircle.higlight;
 begin
   glcolor3ubv(@palette[sysvar.SYS.SYS_SystmGeometryColor^]);
@@ -698,40 +685,34 @@ begin
 end;*)
 procedure GDBObjCircle.remaponecontrolpoint(pdesc:pcontrolpointdesc);
 begin
-                    case pdesc^.pointtype of
-                    os_center:begin
-          pdesc.worldcoord:=P_insert_in_WCS;
-          pdesc.dispcoord.x:=round(ProjP_insert.x);
-          pdesc.dispcoord.y:=round(ProjP_insert.y);
-                             end;
-                    os_q0:begin
-          pdesc.worldcoord:=q0;
-          pdesc.dispcoord.x:=round(Pq0.x);
-          pdesc.dispcoord.y:=round(Pq0.y);
-                             end;
-                    os_q1:begin
-          pdesc.worldcoord:=q1;
-          pdesc.dispcoord.x:=round(Pq1.x);
-          pdesc.dispcoord.y:=round(Pq1.y);
-                             end;
-                    os_q2:begin
-          pdesc.worldcoord:=q2;
-          pdesc.dispcoord.x:=round(Pq2.x);
-          pdesc.dispcoord.y:=round(Pq2.y);
-                             end;
-                    os_q3:begin
-          pdesc.worldcoord:=q3;
-          pdesc.dispcoord.x:=round(Pq3.x);
-          pdesc.dispcoord.y:=round(Pq3.y);
-                             end;
-                    end;
+  if pdesc^.pointtype=os_center then begin
+    pdesc.worldcoord:=P_insert_in_WCS;
+    pdesc.dispcoord.x:=round(ProjP_insert.x);
+    pdesc.dispcoord.y:=round(ProjP_insert.y);
+  end else if pdesc^.pointtype=os_q0 then begin
+    pdesc.worldcoord:=q0;
+    pdesc.dispcoord.x:=round(Pq0.x);
+    pdesc.dispcoord.y:=round(Pq0.y);
+  end else if pdesc^.pointtype=os_q1 then begin
+    pdesc.worldcoord:=q1;
+    pdesc.dispcoord.x:=round(Pq1.x);
+    pdesc.dispcoord.y:=round(Pq1.y);
+  end else if pdesc^.pointtype=os_q2 then begin
+    pdesc.worldcoord:=q2;
+    pdesc.dispcoord.x:=round(Pq2.x);
+    pdesc.dispcoord.y:=round(Pq2.y);
+  end else if pdesc^.pointtype=os_q3 then begin
+    pdesc.worldcoord:=q3;
+    pdesc.dispcoord.x:=round(Pq3.x);
+    pdesc.dispcoord.y:=round(Pq3.y);
+  end;
 end;
 procedure GDBObjCircle.addcontrolpoints(tdesc:Pointer);
 var pdesc:controlpointdesc;
 begin
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(5);
           pdesc.selected:=false;
-          pdesc.pobject:=nil;
+          pdesc.PDrawable:=nil;
           pdesc.pointtype:=os_center;
           pdesc.attr:=[CPA_Strech];
           pdesc.worldcoord:=Local.p_insert;
@@ -774,33 +755,26 @@ begin
 end;
 function GDBObjCircle.IsRTNeedModify(const Point:PControlPointDesc; p:Pointer):Boolean;
 begin
-     result:=false;
-  case point.pointtype of
-       os_center:begin
-                      if not ptcirclertmodify(p).p_insert then
-                                                              result:=true;
-                      ptcirclertmodify(p).p_insert:=true;
-                 end;
-    oS_q3..os_q0:begin
-                      if (not ptcirclertmodify(p).r)and
-                         (not ptcirclertmodify(p).p_insert)then
-                                                               result:=true;
-                      ptcirclertmodify(p).r:=true;
-                 end;
+  result:=false;
+  if point.pointtype=os_center then begin
+    if not ptcirclertmodify(p).p_insert then
+                                            result:=true;
+    ptcirclertmodify(p).p_insert:=true;
+  end else if (point.pointtype=os_q0)or(point.pointtype=os_q1)or(point.pointtype=os_q2)or(point.pointtype=os_q3) then begin
+    if (not ptcirclertmodify(p).r)and
+       (not ptcirclertmodify(p).p_insert)then
+                                             result:=true;
+    ptcirclertmodify(p).r:=true;
   end;
-
 end;
 procedure GDBObjCircle.rtmodifyonepoint(const rtmod:TRTModifyData);
 begin
-          case rtmod.point.pointtype of
-               os_center:begin
-                             Local.p_insert:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
-                             Radius:=Radius;
-                         end;
-            oS_q3..os_q0:begin
-                              Radius:=Vertexlength(Local.p_insert {rtmod.point.worldcoord}, rtmod.wc);
-                         end;
-          end;
+  if rtmod.point.pointtype=os_center then begin
+    Local.p_insert:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
+    Radius:=Radius;
+  end else if (rtmod.point.pointtype=os_q0)or(rtmod.point.pointtype=os_q1)or(rtmod.point.pointtype=os_q2)or(rtmod.point.pointtype=os_q3) then begin
+    Radius:=Vertexlength(Local.p_insert, rtmod.wc);
+  end;
 end;
 function AllocCircle:PGDBObjCircle;
 begin

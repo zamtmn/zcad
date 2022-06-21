@@ -17,7 +17,7 @@
 }
 {$MODE OBJFPC}{$H+}
 unit uzccommand_ondrawinged;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses
@@ -119,7 +119,7 @@ begin
   drawings.GetCurrentDWG^.wa.CalcOptimalMatrix;
   fixentities:=false;
   if drawings.GetCurrentDWG^.wa.param.startgluepoint<>nil then
-  if drawings.GetCurrentDWG^.wa.param.startgluepoint^.pobject<>nil then
+  if drawings.GetCurrentDWG^.wa.param.startgluepoint^.PDrawable<>nil then
   if osp<>nil then
   if osp^.PGDBObject<>nil then
   //if pgdbobjentity(osp^.PGDBObject).GetObjType=GDBlwPolylineID then

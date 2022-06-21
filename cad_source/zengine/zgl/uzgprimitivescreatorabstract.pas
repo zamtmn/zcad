@@ -17,7 +17,7 @@
 }
 
 unit uzgprimitivescreatorabstract;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses uzgprimitivessarray,uzgindexsarray,sysutils,uzbtypes,//
      gzctnrVectorTypes,uzegeometry;

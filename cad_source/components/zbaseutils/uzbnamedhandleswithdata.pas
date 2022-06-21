@@ -43,6 +43,7 @@ type
      HandleDataVector:THandleDataVector;
    constructor init;
    function CreateHandle:GHandleType;virtual;
+   function CreateHandleWithData(N:GNameType;LD:GLincedData):GHandleType;virtual;
    destructor done;virtual;
    procedure RegisterHandleName(Handle:GHandleType;HandleName:GNameType);virtual;
    function GetPLincedData(Handle:GHandleType):PGLincedData;
@@ -71,6 +72,18 @@ begin
   if not assigned(HandleDataVector)then
     HandleDataVector:=THandleDataVector.create;
   HD:=Default(THandleData);
+  HandleDataVector.PushBack(HD);
+end;
+
+function GTNamedHandlesWithData<GHandleType,GHandleManipulator,GNameType,GNameManipulator,GLincedData>.CreateHandleWithData(N:GNameType;LD:GLincedData):GHandleType;
+var
+  HD:THandleData;
+begin
+  result:=inherited CreateHandle;
+  if not assigned(HandleDataVector)then
+    HandleDataVector:=THandleDataVector.create;
+  HD.N:=N;
+  HD.D:=LD;
   HandleDataVector.PushBack(HD);
 end;
 

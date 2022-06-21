@@ -17,7 +17,7 @@
 }
 
 unit uzcregzscript;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses uzcsysvars,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,varman,
      UBaseTypeDescriptor,uzedimensionaltypes,uzemathutils,LazLogger;

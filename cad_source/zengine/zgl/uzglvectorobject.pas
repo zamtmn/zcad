@@ -17,7 +17,7 @@
 }
 
 unit uzglvectorobject;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses uzgldrawerabstract,uzgldrawcontext,uzgprimitives,uzglgeomdata,uzgprimitivessarray,
      uzegeometrytypes,uzegeometry,sysutils,uzbtypes,uzbstrproc,gzctnrVectorTypes;

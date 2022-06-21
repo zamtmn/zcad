@@ -17,7 +17,7 @@
 }
 {$MODE OBJFPC}{$H+}
 unit uzerasterizer;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses
   uzegeometrytypes,

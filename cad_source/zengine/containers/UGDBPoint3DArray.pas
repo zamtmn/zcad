@@ -17,7 +17,7 @@
 }
 
 unit UGDBPoint3DArray;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses uzegeometrytypes,gzctnrVector,sysutils,math,
      gzctnrVectorTypes,{uzgloglstatemanager,}uzegeometry;

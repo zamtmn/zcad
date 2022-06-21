@@ -18,7 +18,7 @@
 {$mode objfpc}{$h+}
 
 unit uzvagsl;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses

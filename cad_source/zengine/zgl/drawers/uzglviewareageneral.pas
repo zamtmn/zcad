@@ -17,7 +17,7 @@
 }
 
 unit uzglviewareageneral;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses
      gzctnrVectorTypes,uzegeometrytypes,LCLProc,uzemathutils,uzepalette,
@@ -26,7 +26,8 @@ uses
      uzeconsts,uzestrconsts,UGDBTracePropArray,math,sysutils,uzedrawingdef,uzbstrproc,
      ExtCtrls,Controls,Classes,{$IFDEF DELPHI}Types,{$ENDIF}{$IFNDEF DELPHI}LCLType,{$ENDIF}Forms,
      UGDBOpenArrayOfPV,uzeentgenericsubentry,uzecamera,UGDBVisibleOpenArray,uzgldrawerabstract,
-     uzgldrawergeneral,uzglviewareaabstract,uzeentitiesprop,gzctnrSTL,uzbLogIntf;
+     uzgldrawergeneral,uzglviewareaabstract,uzeentitiesprop,gzctnrSTL,uzbLogIntf,
+     uzeSnap;
 const
   ontracdist=10;
   ontracignoredist=25;
@@ -913,114 +914,37 @@ begin
   //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.draw---{end}',lp_DecPos);{$ENDIF}
 end;
 procedure TGeneralViewArea.showsnap(var DC:TDrawContext);
+var
+  PLD:PTSnapLincedData;
+  clr:TRGB;
 begin
-  if param.ospoint.ostype <> os_none then
+  clr:=TRGB.create(255,255, 0,255);
+  if ((param.ospoint.ostype <> os_none)and(param.ospoint.ostype <> os_snap))and(param.ospoint.ostype > 0) then
   begin
-    dc.drawer.SetColor(255,255, 0,255);
-    dc.drawer.SetLineWidth(2);
-    dc.drawer.TranslateCoord2D(param.ospoint.dispcoord.x, getviewcontrol.clientheight - param.ospoint.dispcoord.y);
-    dc.drawer.ScaleCoord2D(sysvarDISPOSSize,sysvarDISPOSSize);
-      if (param.ospoint.ostype = os_begin)or(param.ospoint.ostype = os_end) then
-      begin
-           dc.drawer.DrawClosedPolyLine2DInDCS([-1,  1,
-                                                 1,  1,
-                                                 1, -1,
-                                                -1, -1]);
-      end
-      else
-      if (param.ospoint.ostype = os_midle) then
-      begin
-           dc.drawer.DrawClosedPolyLine2DInDCS([ 0,              -1,
-                                                 0.8660254037844, 0.5,
-                                                -0.8660254037844, 0.5]);
-      end
-      else
-      if (param.ospoint.ostype = os_1_4)or(param.ospoint.ostype = os_3_4) then
-      begin
-           dc.drawer.DrawLine2DInDCS(-0.5,  1,-0.5, -1);
-           dc.drawer.DrawLine2DInDCS(-0.2, -1, 0.15, 1);
-           dc.drawer.DrawLine2DInDCS( 0.5, -1, 0.15, 1);
-      end
-      else
-      if (param.ospoint.ostype = os_center)then
-                                               begin
-                                                 dc.drawer.DrawClosedPolyLine2DInDCS([-1,     0,
-                                                                                      -0.707, 0.707,
-                                                                                       0,     1,
-                                                                                       0.707, 0.707,
-                                                                                       1,     0,
-                                                                                       0.707,-0.707,
-                                                                                       0,    -1,
-                                                                                      -0.707,-0.707
-                                                                                       ]);
-                                               end
-      else
-      if (param.ospoint.ostype = os_q0)or(param.ospoint.ostype = os_q1)
-       or(param.ospoint.ostype = os_q2)or(param.ospoint.ostype = os_q3) then
-      begin
-           dc.drawer.DrawClosedPolyLine2DInDCS([-1,  0,
-                                                 0,  1,
-                                                 1,  0,
-                                                 0, -1,
-                                                -1,  0]);
-      end
-      else
-      if (param.ospoint.ostype = os_1_3)or(param.ospoint.ostype = os_2_3) then
-      begin
-                                      dc.drawer.DrawLine2DInDCS(-0.5, 1,-0.5, -1);
-                                      dc.drawer.DrawLine2DInDCS(0, 1,0, -1);
-                                      dc.drawer.DrawLine2DInDCS(0.5, 1,0.5, -1);
-      end
-      else
-      if (param.ospoint.ostype = os_point) then
-      begin
-           dc.drawer.DrawLine2DInDCS(-1, 1,1, -1);
-           dc.drawer.DrawLine2DInDCS(-1, -1,1, 1);
-      end
-      else
-      if (param.ospoint.ostype = os_intersection) then
-      begin
-           dc.drawer.DrawLine2DInDCS(-1, 1,1, -1);
-           dc.drawer.DrawLine2DInDCS(-1, -1,1, 1);
-      end
-      else
-      if (param.ospoint.ostype = os_apparentintersection) then
-      begin
-           dc.drawer.DrawLine2DInDCS(-1, 1,1, -1);
-           dc.drawer.DrawLine2DInDCS(-1, -1,1, 1);
-           dc.drawer.DrawClosedPolyLine2DInDCS([-1,  1,
-                                                 1,  1,
-                                                 1, -1,
-                                                -1, -1]);
-      end
-      else
-      if (param.ospoint.ostype = os_textinsert) then
-      begin
-           dc.drawer.DrawLine2DInDCS(-1, 0, 1, 0);
-           dc.drawer.DrawLine2DInDCS( 0, 1, 0,-1);
-      end
-      else
-      if (param.ospoint.ostype = os_perpendicular) then
-      begin
-           dc.drawer.DrawLine2DInDCS(-1,-1,-1, 1);
-           dc.drawer.DrawLine2DInDCS(-1, 1, 1, 1);
-           dc.drawer.DrawLine2DInDCS(-1, 0, 0, 0);
-           dc.drawer.DrawLine2DInDCS( 0, 0, 0, 1);
-      end
-      else
-      if (param.ospoint.ostype = os_trace) then
-      begin
-           dc.drawer.DrawLine2DInDCS(-1, -0.5,1, -0.5);
-           dc.drawer.DrawLine2DInDCS(-1,  0.5,1,  0.5);
-      end
-      else if (param.ospoint.ostype = os_nearest) then
-      begin
-           dc.drawer.DrawClosedPolyLine2DInDCS([-1, 1,
-                                                 1, 1,
-                                                -1,-1,
-                                                 1,-1]);
+    PLD:=SnapHandles.GetPLincedData(param.ospoint.ostype);
+    if assigned(PLD^.DrawIconProc) then begin
+      if assigned(PLD^.SetupIconProc) then begin
+        PLD^.SetupIconProc(DC,getviewcontrol.ClientRect,CreateVertex2D(param.ospoint.dispcoord.x,param.ospoint.dispcoord.y),sysvarDISPOSSize,2,clr)
+      end else begin
+        dc.drawer.SetColor(clr);
+        dc.drawer.SetLineWidth(2);
+        dc.drawer.TranslateCoord2D(param.ospoint.dispcoord.x, getviewcontrol.clientheight - param.ospoint.dispcoord.y);
+        dc.drawer.ScaleCoord2D(sysvarDISPOSSize,sysvarDISPOSSize);
       end;
-    dc.drawer.SetLineWidth(1);
+      PLD^.DrawIconProc(DC);
+    end else begin
+      dc.drawer.SetColor(clr);
+      dc.drawer.SetLineWidth(2);
+      dc.drawer.TranslateCoord2D(param.ospoint.dispcoord.x, getviewcontrol.clientheight - param.ospoint.dispcoord.y);
+      dc.drawer.ScaleCoord2D(sysvarDISPOSSize,sysvarDISPOSSize);
+
+      dc.drawer.DrawClosedPolyLine2DInDCS([-1,  1,
+                                            1,  1,
+                                            1, -1,
+                                           -1, -1]);
+
+      dc.drawer.SetLineWidth(1);
+    end;
   end;
 end;
 
@@ -2154,7 +2078,7 @@ begin
                                                                                        begin
                                                                                             if (osp.radius<param.ospoint.radius) then
                                                                                                                                      begin
-                                                                                                                                     if osp.ostype<param.ospoint.ostype then
+                                                                                                                                     if SnapHandles.GetPLincedData(osp.ostype)^.Order>SnapHandles.GetPLincedData(param.ospoint.ostype)^.Order then
                                                                                                                                           copyospoint(param.ospoint,osp)
 
                                                                                                                                      end

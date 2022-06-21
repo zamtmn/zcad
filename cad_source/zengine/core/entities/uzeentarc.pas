@@ -16,14 +16,14 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 } 
 unit uzeentarc;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses
     uzeentityfactory,uzeentsubordinated,uzgldrawcontext,uzedrawingdef,uzeentwithlocalcs,
     uzecamera,uzestyleslayers,UGDBSelectedObjArray,
     uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,uzctnrVectorBytes,uzbtypes,
     uzegeometrytypes,uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzeentplain,
-    uzctnrvectorpgdbaseobjects;
+    uzctnrvectorpgdbaseobjects,uzeSnap;
 type
 {Export+}
 {REGISTEROBJECTTYPE GDBObjArc}
@@ -614,30 +614,26 @@ begin
 end;
 procedure GDBObjARC.remaponecontrolpoint(pdesc:pcontrolpointdesc);
 begin
-                    case pdesc^.pointtype of
-                    os_begin:begin
-          pdesc.worldcoord:=q0;
-          pdesc.dispcoord.x:=round(Pq0.x);
-          pdesc.dispcoord.y:=round(Pq0.y);
-                             end;
-                    os_midle:begin
-          pdesc.worldcoord:=q1;
-          pdesc.dispcoord.x:=round(Pq1.x);
-          pdesc.dispcoord.y:=round(Pq1.y);
-                             end;
-                    os_end:begin
-          pdesc.worldcoord:=q2;
-          pdesc.dispcoord.x:=round(Pq2.x);
-          pdesc.dispcoord.y:=round(Pq2.y);
-                             end;
-                    end;
+  if pdesc^.pointtype=os_begin then begin
+    pdesc.worldcoord:=q0;
+    pdesc.dispcoord.x:=round(Pq0.x);
+    pdesc.dispcoord.y:=round(Pq0.y);
+  end else if pdesc^.pointtype=os_midle then begin
+    pdesc.worldcoord:=q1;
+    pdesc.dispcoord.x:=round(Pq1.x);
+    pdesc.dispcoord.y:=round(Pq1.y);
+  end else if pdesc^.pointtype=os_end then begin
+    pdesc.worldcoord:=q2;
+    pdesc.dispcoord.x:=round(Pq2.x);
+    pdesc.dispcoord.y:=round(Pq2.y);
+  end;
 end;
 procedure GDBObjARC.addcontrolpoints(tdesc:Pointer);
 var pdesc:controlpointdesc;
 begin
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(3);
           pdesc.selected:=false;
-          pdesc.pobject:=nil;
+          pdesc.PDrawable:=nil;
 
           pdesc.pointtype:=os_begin;
           pdesc.attr:=[CPA_Strech];
@@ -756,20 +752,17 @@ begin
      ptdata.p3.x:=q2.x;
      ptdata.p3.y:=q2.y;
 
-          case rtmod.point.pointtype of
-               os_begin:begin
-                             ptdata.p1.x:={q0.x+rtmod.dist}tv3d.x;
-                             ptdata.p1.y:={q0.y+rtmod.dist}tv3d.y;
-                        end;
-               os_midle:begin
-                             ptdata.p2.x:={q1.x+rtmod.dist}tv3d.x;
-                             ptdata.p2.y:={q1.y+rtmod.dist}tv3d.y;
-                      end;
-               os_end:begin
-                             ptdata.p3.x:={q2.x+rtmod.dist}tv3d.x;
-                             ptdata.p3.y:={q2.y+rtmod.dist}tv3d.y;
-                        end;
-          end;
+  if rtmod.point.pointtype=os_begin then begin
+    ptdata.p1.x:=tv3d.x;
+    ptdata.p1.y:=tv3d.y;
+  end else if rtmod.point.pointtype=os_midle then begin
+    ptdata.p2.x:=tv3d.x;
+    ptdata.p2.y:=tv3d.y;
+  end else if rtmod.point.pointtype=os_end then begin
+    ptdata.p3.x:=tv3d.x;
+    ptdata.p3.y:=tv3d.y;
+  end;
+
         if GetArcParamFrom3Point2D(ptdata,ad) then
         begin
               Local.p_insert.x:=ad.p.x;

@@ -1,5 +1,5 @@
 unit uzcflayers;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 {$mode objfpc}{$H+}
 
 interface

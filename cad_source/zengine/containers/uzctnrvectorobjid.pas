@@ -17,7 +17,7 @@
 }
 
 unit uzctnrvectorobjid;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses uzbtypes,gzctnrVectorSimple;
 type

@@ -133,6 +133,10 @@ type
                 Wire_Count_Section_DESC:TSPECCABLE_KIPEVKG_NGA_LS_WCS;
            end;
 
+    TSPECCABLE_KIPEV_NGA_LS=packed object(CableDeviceBaseObject)
+                Wire_Count_Section_DESC:TSPECCABLE_KIPEVKG_NGA_LS_WCS;
+           end;
+
     TSPECCABLE_KSBK_NGA_FRLS=packed object(CableDeviceBaseObject)
                 Wire_Count_Section_DESC:TSPECCABLE_KSBK_NGA_FRLS_WCS;
            end;
@@ -169,6 +173,7 @@ type
            end;
 var
    _EQ_SPECCABLE_KIPEVKG_NGA_LS:TSPECCABLE_KIPEVKG_NGA_LS;
+   _EQ_SPECCABLE_KIPEV_NGA_LS:TSPECCABLE_KIPEV_NGA_LS;
    _EQ_SPECCABLE_KSBK_NGA_FRLS:TSPECCABLE_KSBK_NGA_FRLS;
    _EQ_SPECCABLE_KPSVV_ng_LS:TSPECCABLE_KPSVV_ng_LS;
    _EQ_SPECCABLE_KPSVV:TSPECCABLE_KPSVV;
@@ -190,7 +195,7 @@ begin
      _EQ_SPECCABLE_KIPEVKG_NGA_LS.EdIzm:=_m;
      _EQ_SPECCABLE_KIPEVKG_NGA_LS.ID:='SPECCABLE_KIPEVKG_NGA_LS';
      _EQ_SPECCABLE_KIPEVKG_NGA_LS.Standard:='ТУ 16.К99-025-2005';
-     _EQ_SPECCABLE_KIPEVKG_NGA_LS.OKP:='35 7413 4100';
+     _EQ_SPECCABLE_KIPEVKG_NGA_LS.OKP:='35 7413 4300';
      _EQ_SPECCABLE_KIPEVKG_NGA_LS.Manufacturer:='НПП "Спецкабель" г.Москва';
      _EQ_SPECCABLE_KIPEVKG_NGA_LS.Description:='КИПЭВКГнг(А)-LS - кабели симметричные для промышленного интерфейса RS-485, групповой прокладки, с пониженным дымо- и газовыделением, бронированные';
      _EQ_SPECCABLE_KIPEVKG_NGA_LS.NameShortTemplate:='КИПЭВКГнг(А)-LS %%[Wire_Count_Section_DESC]';
@@ -200,6 +205,24 @@ begin
      _EQ_SPECCABLE_KIPEVKG_NGA_LS.Wire_Count_Section_DESC:=_2_2_0_64;
      _EQ_SPECCABLE_KIPEVKG_NGA_LS.TreeCoord:='BP_СПЕЦКАБЕЛЬ_Для ОПС_КИПЭВКГнг(А)-LS|BC_Кабельная продукция_Связи_КИПЭВКГнг(А)-LS(СПЕЦКАБЕЛЬ)';
      _EQ_SPECCABLE_KIPEVKG_NGA_LS.format;
+
+     _EQ_SPECCABLE_KIPEV_NGA_LS.initnul;
+     _EQ_SPECCABLE_KIPEV_NGA_LS.Category:=_kables;
+     _EQ_SPECCABLE_KIPEV_NGA_LS.Group:=_cables_sv;
+     _EQ_SPECCABLE_KIPEV_NGA_LS.EdIzm:=_m;
+     _EQ_SPECCABLE_KIPEV_NGA_LS.ID:='SPECCABLE_KIPEV_NGA_LS';
+     _EQ_SPECCABLE_KIPEV_NGA_LS.Standard:='ТУ 16.К99-025-2005';
+     _EQ_SPECCABLE_KIPEV_NGA_LS.OKP:='35 7413 4100';
+     _EQ_SPECCABLE_KIPEV_NGA_LS.Manufacturer:='НПП "Спецкабель" г.Москва';
+     _EQ_SPECCABLE_KIPEV_NGA_LS.Description:='КИПЭВнг(А)-LS - кабели симметричные для промышленного интерфейса RS-485, групповой прокладки, с пониженным дымо- и газовыделением';
+     _EQ_SPECCABLE_KIPEV_NGA_LS.NameShortTemplate:='КИПЭВнг(А)-LS %%[Wire_Count_Section_DESC]';
+     _EQ_SPECCABLE_KIPEV_NGA_LS.NameTemplate:='Кабель симметричный для промышленного интерфейса RS-485, групповой прокладки, с пониженным дымо- и газовыделением КИПЭВнг(А)-LS %%[Wire_Count_Section_DESC]';
+     _EQ_SPECCABLE_KIPEV_NGA_LS.UIDTemplate:='%%[ID]-%%[Wire_Count_Section_DESC]';
+     _EQ_SPECCABLE_KIPEV_NGA_LS.NameFullTemplate:='Кабель симметричный для промышленного интерфейса RS-485, групповой прокладки, с пониженным дымо- и газовыделением КИПЭВнг(А)-LS %%[Wire_Count_Section_DESC]';
+     _EQ_SPECCABLE_KIPEV_NGA_LS.Wire_Count_Section_DESC:=_2_2_0_64;
+     _EQ_SPECCABLE_KIPEV_NGA_LS.TreeCoord:='BP_СПЕЦКАБЕЛЬ_Для ОПС_КИПЭВнг(А)-LS|BC_Кабельная продукция_Связи_КИПЭВнг(А)-LS(СПЕЦКАБЕЛЬ)';
+     _EQ_SPECCABLE_KIPEV_NGA_LS.format;
+
 
 
 

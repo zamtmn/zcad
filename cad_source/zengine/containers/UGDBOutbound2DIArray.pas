@@ -17,7 +17,7 @@
 }
 
 unit UGDBOutbound2DIArray;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses uzegeometrytypes,uzgldrawcontext,gzctnrVector,sysutils,uzegeometry;
 type

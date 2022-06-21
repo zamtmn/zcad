@@ -17,7 +17,7 @@
 }
 
 unit uzcgui2linetypes;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 

@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 } 
 unit uzeentblockinsert;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses uzeentity,uzgldrawcontext,uzeentityfactory,uzedrawingdef,uzestyleslayers,math,
@@ -44,7 +44,6 @@ GDBObjBlockInsert= object(GDBObjComplex)
                      procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                      procedure CalcObjMatrix;virtual;
                      function Clone(own:Pointer):PGDBObjEntity;virtual;
-                     //procedure rtedit(refp:Pointer;mode:Single;dist,wc:gdbvertex);virtual;
                      //procedure rtmodifyonepoint(point:pcontrolpointdesc;tobj:PGDBObjEntity;dist,wc:gdbvertex;ptdata:Pointer);virtual;
                      destructor done;virtual;
                      function GetObjTypeName:String;virtual;

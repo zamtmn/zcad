@@ -98,6 +98,9 @@ type
   end;
 
 function GetEntityVariableValue(const pent:pGDBObjEntity;varname,defvalue:string):string;
+function GetVariableValue(const EntVarExt:TVariablesExtender;varname,defvalue:string):string;
+function GetPVD(const EntVarExt:TVariablesExtender;varname:string):pvardesk;
+
 function GetMainFunction(const pent:pGDBObjEntity):pGDBObjEntity;
 
 var
@@ -186,29 +189,43 @@ end;
 
 function GetMainFunction(const pent:pGDBObjEntity):pGDBObjEntity;
 var
-  pentvarext:TVariablesExtender;
+  EntVarExt:TVariablesExtender;
 begin
-  pentvarext:=pent^.GetExtension<TVariablesExtender>;
-  if pentvarext<>nil then
-    result:=pentvarext.pMainFuncEntity
+  EntVarExt:=pent^.GetExtension<TVariablesExtender>;
+  if EntVarExt<>nil then
+    result:=EntVarExt.pMainFuncEntity
   else
     result:=nil;
 end;
 
 function GetEntityVariableValue(const pent:pGDBObjEntity;varname,defvalue:string):string;
 var
-  pentvarext:TVariablesExtender;
+  EntVarExt:TVariablesExtender;
+begin
+  EntVarExt:=pent^.GetExtension<TVariablesExtender>;
+  if EntVarExt<>nil then
+    result:=GetVariableValue(EntVarExt,varname,defvalue)
+  else
+    result:=defvalue;
+end;
+
+function GetVariableValue(const EntVarExt:TVariablesExtender;varname,defvalue:string):string;
+var
   pvd:pvardesk;
 begin
-  result:=defvalue;
-  pentvarext:=pent^.GetExtension<TVariablesExtender>;
-  if pentvarext<>nil then
-  begin
-       pvd:=pentvarext.entityunit.FindVariable(varname);
-       if pvd<>nil then
-                       result:=pvd.data.PTD^.GetValueAsString(pvd.data.Addr.Instance);
-  end;
+  pvd:=GetPVD(EntVarExt,varname);
+  if pvd<>nil then
+    result:=pvd.data.PTD^.GetValueAsString(pvd.data.Addr.Instance)
+  else
+    result:=defvalue;
 end;
+
+function GetPVD(const EntVarExt:TVariablesExtender;varname:string):pvardesk;
+begin
+  result:=EntVarExt.entityunit.FindVariable(varname);
+end;
+
+
 
 
 function TBaseRootNodeDesk.FindById(pnd:Pointer; Criteria:string):boolean;

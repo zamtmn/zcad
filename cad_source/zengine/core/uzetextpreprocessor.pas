@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 } 
 unit uzetextpreprocessor;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses uzbtypes,uzbstrproc,sysutils,gzctnrSTL,LazLogger,uzeparser;

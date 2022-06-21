@@ -17,7 +17,7 @@
 }
 
 unit uzgeomentity3d;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses
      sysutils,uzgeomentity,uzegeometry;

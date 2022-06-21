@@ -129,7 +129,7 @@ var
 begin
 createdfilehandle:=createoutfile(AutoRegisterPath+filename+'.pas');
 writestring(createdfilehandle,'unit '+filename+';');
-writestring(createdfilehandle,'{$INCLUDE zcadconfig.inc}');
+writestring(createdfilehandle,'{$INCLUDE zengineconfig.inc}');
 writestring(createdfilehandle,'{Этот модуль создан автоматически. НЕ РЕДАКТИРОВАТЬ}');
 writestring(createdfilehandle,'interface');
 if uppercase(unitname)<>'VARMAN' then
@@ -158,7 +158,7 @@ var
 begin
 createdfilehandle:=createoutfile(AutoRegisterPath+filename+'.pas');
 writestring(createdfilehandle,'unit '+filename+';');
-writestring(createdfilehandle,'{$INCLUDE zcadconfig.inc}');
+writestring(createdfilehandle,'{$INCLUDE zengineconfig.inc}');
 writestring(createdfilehandle,'{Этот модуль создан автоматически. НЕ РЕДАКТИРОВАТЬ}');
 writestring(createdfilehandle,'interface');
 if uppercase(unitname)<>'VARMAN' then
@@ -187,7 +187,7 @@ var
 begin
 createdfilehandle:=createoutfile(AutoRegisterPath+filename+'.pas');
 writestring(createdfilehandle,'unit '+filename+';');
-writestring(createdfilehandle,'{$INCLUDE zcadconfig.inc}');
+writestring(createdfilehandle,'{$INCLUDE zengineconfig.inc}');
 writestring(createdfilehandle,'{Этот модуль создан автоматически. НЕ РЕДАКТИРОВАТЬ}');
 writestring(createdfilehandle,'interface');
 writestring(createdfilehandle,'uses URecordDescriptor,Varman,TypeDescriptors,'+unitname+';');

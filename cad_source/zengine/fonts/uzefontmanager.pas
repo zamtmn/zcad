@@ -17,7 +17,7 @@
 }
 
 unit uzefontmanager;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 {$ModeSwitch advancedrecords}
 interface
 uses

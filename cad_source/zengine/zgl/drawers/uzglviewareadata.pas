@@ -17,12 +17,12 @@
 }
 
 unit uzglviewareadata;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses
   uzegeometry,uzeconsts,uzegeometrytypes,uzbtypes, UGDBPoint3DArray,
-  UGDBTracePropArray,uzgldrawcontext;
+  UGDBTracePropArray,uzgldrawcontext,uzeentsubordinated,uzeSnap;
 const
 MZW_LBUTTON=1;
 MZW_SHIFT=128;
@@ -30,6 +30,34 @@ MZW_CONTROL=64;
 type
   TShowCursorHandler=procedure (var DC:TDrawContext) of object;
 {Export+}
+pcontrolpointdesc=^controlpointdesc;
+{REGISTERRECORDTYPE controlpointdesc}
+controlpointdesc=record
+                   pt:TSnapType;
+                   vn:Integer;
+
+                       attr:TControlPointAttrs;
+                       PDrawable:PGDBObjDrawable;
+                       worldcoord:GDBvertex;
+                       dcoord:GDBvertex;
+                       dispcoord:GDBvertex2DI;
+                       selected:Boolean;
+                   {-}function gvnum:Integer;{//}
+                   {-}procedure svnum(AVertexNum:Integer);{//}
+                   {-}property pointtype:TSnapType read pt write pt;{//}
+                   {-}property vertexnum:Integer read gvnum write svnum;{//}
+                 end;
+{REGISTERRECORDTYPE TRTModifyData}
+TRTModifyData=record
+                   point:controlpointdesc;
+                   dist,wc:gdbvertex;
+             end;
+{REGISTERRECORDTYPE tcontrolpointdist}
+tcontrolpointdist=record
+  pcontrolpoint:pcontrolpointdesc;
+  disttomouse:Integer;
+end;
+
   pmousedesc = ^mousedesc;
   {REGISTERRECORDTYPE mousedesc}
   mousedesc = record
@@ -80,7 +108,7 @@ type
     tmouse: Double;
     arrayworldaxis:GDBPoint3DArray;
     arraydispaxis:GDBtracepropArray;
-    ostype: Single;
+    ostype:TSnapType;
     radius: Single;
     PGDBObject:Pointer;
   end;
@@ -139,6 +167,18 @@ type
 
 
 implementation
+
+function controlpointdesc.gvnum:Integer;
+begin
+  result:=vn;
+end;
+
+procedure controlpointdesc.svnum(AVertexNum:Integer);
+begin
+  vn:=AVertexNum;
+  pt:=os_polymin;
+end;
+
 constructor OGLWndtype.init;
 var
   i:integer;

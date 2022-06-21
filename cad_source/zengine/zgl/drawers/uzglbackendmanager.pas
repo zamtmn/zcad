@@ -17,7 +17,7 @@
 }
 
 unit uzglbackendmanager;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses uzctnrvectorstrings,uzglviewareaabstract,uzctnrVectorPointers,LazLogger;

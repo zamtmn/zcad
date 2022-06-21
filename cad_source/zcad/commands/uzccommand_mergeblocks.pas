@@ -17,7 +17,7 @@
 }
 
 unit uzccommand_mergeblocks;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses

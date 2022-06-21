@@ -16,14 +16,14 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 } 
 unit uzeentsolid;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses
     uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,uzeentwithlocalcs,
     uzegeometry,uzeffdxfsupport,uzestyleslayers,
     UGDBSelectedObjArray,uzeentsubordinated,uzeentity,sysutils,uzctnrVectorBytes,
-    uzegeometrytypes,uzbtypes,uzeconsts,uzctnrvectorpgdbaseobjects;
+    uzegeometrytypes,uzbtypes,uzeconsts,uzctnrvectorpgdbaseobjects,uzglviewareadata;
 type
 {Export+}
 PGDBObjSolid=^GDBObjSolid;
@@ -331,7 +331,7 @@ end;
 procedure GDBObjSolid.remaponecontrolpoint(pdesc:pcontrolpointdesc);
 var vertexnumber:Integer;
 begin
-     vertexnumber:=abs(pdesc^.pointtype-os_polymin);
+     vertexnumber:=pdesc^.vertexnum;
      pdesc.worldcoord:=PInWCS[vertexnumber];
      pdesc.dispcoord.x:=round(PInDCS[vertexnumber].x);
      pdesc.dispcoord.y:=round(PInDCS[vertexnumber].y);
@@ -344,11 +344,11 @@ var pdesc:controlpointdesc;
 begin
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(1);
           pdesc.selected:=false;
-          pdesc.pobject:=nil;
+          pdesc.PDrawable:=nil;
 
           for i := 0 to 3 do
           begin
-          pdesc.pointtype:=os_polymin-i;
+          pdesc.vertexnum:=i;
           pdesc.attr:=[CPA_Strech];
           pdesc.worldcoord:=PInWCS[i];
           {pdesc.dispcoord.x:=round(PInDCS[i].x);
@@ -362,7 +362,7 @@ var vertexnumber:Integer;
     tv,wwc:gdbvertex;
     M: DMatrix4D;
 begin
-     vertexnumber:=abs(rtmod.point.pointtype-os_polymin);
+     vertexnumber:=rtmod.point.vertexnum;
 
      m:=self.ObjMatrix;
 
@@ -384,14 +384,6 @@ begin
 
      PInOCS[vertexnumber]:=wwc{VertexAdd(wwc,tv)};
      //PInOCS[vertexnumber].z:=0;
-
-{
-vertexnumber:=abs(rtmod.point.pointtype-os_polymin);
-tv:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
-uzegeometry.VectorTransform3D(tv,self.ObjMatrix);
-PGDBArrayVertex2D(Vertex2D_in_OCS_Array.parray)^[vertexnumber].x:=tv.x;
-PGDBArrayVertex2D(Vertex2D_in_OCS_Array.parray)^[vertexnumber].y:=tv.y;
-}
 end;
 
 function GDBObjSolid.Clone;

@@ -17,7 +17,7 @@
 }
 
 unit uzeentlwpolyline;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses gzctnrVector,uzeentityfactory,uzeentsubordinated,
@@ -371,7 +371,7 @@ var vertexnumber:Integer;
 
     M: DMatrix4D;
 begin
-  vertexnumber:=abs(rtmod.point.pointtype-os_polymin);
+  vertexnumber:=rtmod.point.vertexnum;
 
   m:=self.ObjMatrix;
 
@@ -393,17 +393,11 @@ begin
 
   GDBPolyline2DArray.PTArr(Vertex2D_in_OCS_Array.parray)^[vertexnumber].x:=wwc.x{VertexAdd(wwc,tv)};
   GDBPolyline2DArray.PTArr(Vertex2D_in_OCS_Array.parray)^[vertexnumber].y:=wwc.y;
-  //PInOCS[vertexnumber].z:=0;
-     {vertexnumber:=abs(rtmod.point.pointtype-os_polymin);
-     tv:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
-     uzegeometry.VectorTransform3D(tv,self.ObjMatrix);
-     PGDBArrayVertex2D(Vertex2D_in_OCS_Array.parray)^[vertexnumber].x:=tv.x;
-     PGDBArrayVertex2D(Vertex2D_in_OCS_Array.parray)^[vertexnumber].y:=tv.y;}
 end;
 procedure GDBObjLWpolyline.remaponecontrolpoint(pdesc:pcontrolpointdesc);
 var vertexnumber:Integer;
 begin
-     vertexnumber:=abs(pdesc^.pointtype-os_polymin);
+     vertexnumber:=pdesc^.vertexnum;
      pdesc.worldcoord:=GDBPoint3dArray.PTArr(Vertex3D_in_WCS_Array.parray)^[vertexnumber];
      pdesc.dispcoord.x:=round(GDBPolyline2DArray.PTArr(PProjPoint.parray)^[vertexnumber].x);
      pdesc.dispcoord.y:=round(GDBPolyline2DArray.PTArr(PProjPoint.parray)^[vertexnumber].y);
@@ -419,11 +413,11 @@ begin
           //pv2d:=pprojpoint^.parray;
           pv:=Vertex3D_in_WCS_Array.GetParrayAsPointer;
           pdesc.selected:=false;
-          pdesc.pobject:=nil;
+          pdesc.PDrawable:=nil;
 
           for i:=0 to {pprojpoint}Vertex3D_in_WCS_Array.count-1 do
           begin
-               pdesc.pointtype:=os_polymin-i;
+               pdesc.vertexnum:=i;
                pdesc.attr:=[CPA_Strech];
                pdesc.worldcoord:=pv^;
                {pdesc.dispcoord.x:=round(pv2d^.x);

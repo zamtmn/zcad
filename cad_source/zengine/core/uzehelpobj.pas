@@ -17,7 +17,7 @@
 }
 
 unit uzehelpobj;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses uzegeometrytypes,LazLogger,gzctnrVector;
 const

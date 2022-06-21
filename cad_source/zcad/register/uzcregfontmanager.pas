@@ -17,7 +17,7 @@
 }
 
 unit uzcregfontmanager;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses uzcsysvars,uzefontmanager,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,LazLogger;
 implementation

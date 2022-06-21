@@ -17,7 +17,7 @@
 }
 
 unit uzgldrawergeneral2d;
-{$INCLUDE zcadconfig.inc}
+{$INCLUDE zengineconfig.inc}
 interface
 uses uzgindexsarray,{$IFNDEF DELPHI}LCLIntf,{$ENDIF}{$IFDEF DELPHI}windows,Types,{$ENDIF}Controls,
      uzegeometrytypes,uzglviewareaabstract,uzgldrawergeneral,uzgprimitivescreator,

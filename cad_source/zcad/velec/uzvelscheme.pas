@@ -54,12 +54,11 @@ uses
   uzeentcircle,
   uzeentity,
   uzegeometrytypes,
-
+  uzeentdevice,
 
   gvector,//garrayutils, // Подключение Generics и модуля для работы с ним
 
   uzcentcable,
-  uzeentdevice,
   //UGDBOpenArrayOfPV,
 
   uzegeometry,
@@ -96,7 +95,7 @@ uses
 
   //для работы графа
   ExtType,
-  //Pointerv,
+  Pointerv,
   Graphs,
    AttrType,
 
@@ -108,7 +107,7 @@ uses
    //*****
    uzcstrconsts,
    uzcdevicebaseabstract,
-
+   uzcvariablesutils,
    uzestyleslayers,
    //uzcdrawings,
 
@@ -208,6 +207,10 @@ type
       //procedure getListSuperline(var listSLname:TGDBlistSLname);
       function getListGroupGraph():TListGraph;
       procedure buildSSScheme(listGraph:TListGraph;insertPoint:GDBVertex);
+      procedure visualCentralCabelTree(G: TGraph; var startPt:GDBVertex;height:double);
+      //function allStructGraph(oGraph:TListGraph):TListInteger;
+      function getFullGraphConnect(oGraph:TListGraph):TListGraph;
+      procedure graphMerge(var mainG:TGraph;vertexStNum:integer;absorbedG:TGraph;absorbedGVert:TVertex);
 
 implementation
 
@@ -533,6 +536,7 @@ end;
 function createELSchema_com(operands:TCommandOperands):TCommandResult;
 var
    listGraph:TListGraph;
+   listFullGraph:TListGraph;
    insertPoint:gdbvertex;
    a,gg:GDBVertex;
    i:integer;
@@ -555,11 +559,23 @@ begin
 
          //визуализация графа
 //     gg:=uzegeometry.CreateVertex(0,0,0);
+
+       //Получаем список индесков графов которые начинается с основного устройства
+       //задача получить глобальную модель,
+       ZCMsgCallBackInterface.TextMessage('Получение списка главных устройств',TMWOHistoryOut);
+       listFullGraph:=TListGraph.Create;
+       if listGraph <> nil then    //пропуск когда лист пустой
+          listFullGraph:=getFullGraphConnect(listGraph);
+
+        for i:=0 to listFullGraph.Size-1 do
+            ZCMsgCallBackInterface.TextMessage('Список главных мастеров' + inttostr(listFullGraph[i].Root.index),TMWOHistoryOut);
+
      ZCMsgCallBackInterface.TextMessage('Визуализация групп начата',TMWOHistoryOut);
      if listGraph <> nil then    //пропуск когда лист пустой
-         for i:=0 to listGraph.Size-1 do
+         for i:=0 to listFullGraph.Size-1 do
             begin
-                    visualCabelTree(listGraph[i],insertPoint,1);
+                    //visualCabelTree(listGraph[i],insertPoint,1);
+                    visualCentralCabelTree(listFullGraph[i],insertPoint,1);
             end;
      ZCMsgCallBackInterface.TextMessage('Визуализация групп ЗАКОНЧЕНА!',TMWOHistoryOut);
 
@@ -574,6 +590,521 @@ begin
     result:=cmd_ok;
 end;
 
+// mainG - граф приемник
+// vertexStNum - вершина в которую врезаемся
+// absorbedG - поглащаемый граф
+// Главный граф поглащает другой граф
+procedure graphMerge(var mainG:TGraph;vertexStNum:integer;absorbedG:TGraph;absorbedGVert:TVertex);
+var
+VertexPath: TClassList;
+//listVertex:TListVertex;
+newChild:Tvertex;
+i:integer;
+begin
+if absorbedGVert.ChildCount > 0 then
+ for i:=0 to absorbedGVert.ChildCount-1 do
+    begin
+      newChild:=mainG.Vertices[vertexStNum].AddChild;
+      newChild.AsPointer[vpTVertexTree]:=absorbedGVert.Childs[i].AsPointer[vpTVertexTree];
+      mainG.GetEdge(mainG.Vertices[vertexStNum],newChild).AsPointer[vpTEdgeTree]:=absorbedG.GetEdge(absorbedGVert,absorbedGVert.Childs[i]).AsPointer[vpTEdgeTree];
+      graphMerge(mainG,newChild.Index,absorbedG,absorbedGVert.Childs[i])
+    end;
+end;
+
+function getFullGraphConnect(oGraph:TListGraph):TListGraph;
+var
+    i,j,m,n:integer;
+
+    listNum:TListInteger;
+    x,y,tParent:integer;
+    iNum:integer;
+    //listVertex:TListVertex;
+    //infoVertex:TInfoVertex;
+    pt1,pt2,pt3,ptext,ptSt,ptEd:GDBVertex;
+
+    pv:pGDBObjDevice;
+    ppvvarext,pvarv:TVariablesExtender;
+    pvmc,pvv:pvardesk;
+    pvd:pvardesk;
+    isMerged,inList:boolean;
+    nameDev,nameRootDev:string;
+
+begin
+
+
+     result:=TListGraph.Create;
+     listNum:=TListInteger.Create;
+
+     Repeat
+      isMerged:=true;
+
+      for i:= 0 to oGraph.Size-1 do
+       begin
+         ZCMsgCallBackInterface.TextMessage('номер-' + inttostr(i),TMWOHistoryOut);
+         inList:=false;
+          if listNum.size>0 then
+            for m:= 0 to listNum.Size-1 do
+              if listNum[m] = i then
+                 inList:=true;
+          if inList then
+             continue;
+          ZCMsgCallBackInterface.TextMessage('номер прошел-' + inttostr(i),TMWOHistoryOut);
+
+
+          for j:= 0 to oGraph[i].VertexCount-1 do
+            begin
+
+               for n:= 0 to oGraph.Size-1 do
+                begin
+                   if i = n then
+                      continue;
+
+                   inList:=false;
+                   if listNum.size>0 then
+                     for m:= 0 to listNum.Size-1 do
+                       if listNum[m] = n then
+                          inList:=true;
+                   if inList then
+                      continue;
+                   //ZCMsgCallBackInterface.TextMessage('номерyjvth-' + inttostr(i)+'номер прошел-'+inttostr(n),TMWOHistoryOut);
+
+                   //velec_NameDevice
+                   nameDev:='nameDev';
+                   nameRootDev:='nameRootDev';
+                   //ZCMsgCallBackInterface.TextMessage('nameDev -' + nameDev +'  ----   nameRootDev-'+nameRootDev,TMWOHistoryOut);
+                   if TVertexTree(oGraph[i].Vertices[j].AsPointer[vpTVertexTree]^).dev <> nil then begin
+                     pvd:=FindVariableInEnt(TVertexTree(oGraph[i].Vertices[j].AsPointer[vpTVertexTree]^).dev,velec_NameDevice);
+                     if pvd<>nil then
+                        nameDev:=pString(pvd^.data.Addr.Instance)^;
+                   end
+                   else
+                      ZCMsgCallBackInterface.TextMessage('index - ' + inttostr(oGraph[i].Vertices[j].Index)+'   children - '+inttostr(oGraph[i].Vertices[j].ChildCount),TMWOHistoryOut);
+                   //ZCMsgCallBackInterface.TextMessage('nameDev -' + nameDev +'  ----   nameRootDev-'+nameRootDev,TMWOHistoryOut);
+                   if TVertexTree(oGraph[n].Root.AsPointer[vpTVertexTree]^).dev <> nil then begin
+                     pvd:=FindVariableInEnt(TVertexTree(oGraph[n].Root.AsPointer[vpTVertexTree]^).dev,velec_NameDevice);
+                     if pvd<>nil then
+                        nameRootDev:=pString(pvd^.data.Addr.Instance)^;
+                   end;
+                   ZCMsgCallBackInterface.TextMessage('nameDev -' + nameDev +'  ----   nameRootDev-'+nameRootDev,TMWOHistoryOut);
+
+                   //if (TVertexTree(oGraph[i].Vertices[j].AsPointer[vpTVertexTree]^).dev = TVertexTree(oGraph[n].Root.AsPointer[vpTVertexTree]^).dev) then
+                   if (nameDev = nameRootDev) then
+                   begin
+                       graphMerge(oGraph.Mutable[i]^,j,oGraph[n],oGraph[n].root);
+                       listNum.PushBack(n);
+                       isMerged:=false;
+
+                     if (TVertexTree(oGraph[i].Vertices[j].AsPointer[vpTVertexTree]^).dev <> nil) and (TVertexTree(oGraph[n].Root.AsPointer[vpTVertexTree]^).dev <> nil) then
+                           ZCMsgCallBackInterface.TextMessage(TVertexTree(oGraph[i].Vertices[j].AsPointer[vpTVertexTree]^).dev^.Name + ' = ' + TVertexTree(oGraph[n].Root.AsPointer[vpTVertexTree]^).dev^.Name,TMWOHistoryOut);
+
+                   end;
+
+
+                  //if (TVertexTree(oGraph[j].Root.AsPointer[vpTVertexTree]^).dev <> nil) and (TVertexTree(oGraph[j].Vertices[n].AsPointer[vpTVertexTree]^).dev <> nil) then
+                  // ZCMsgCallBackInterface.TextMessage(TVertexTree(oGraph[j].Root.AsPointer[vpTVertexTree]^).dev^.Name + ' = ' + TVertexTree(oGraph[j].Vertices[n].AsPointer[vpTVertexTree]^).dev^.Name,TMWOHistoryOut);
+                  // if (TVertexTree(oGraph[j].Root.AsPointer[vpTVertexTree]^).dev = TVertexTree(oGraph[j].Vertices[n].AsPointer[vpTVertexTree]^).dev) then
+                  //    continue;
+                  //     TVertexTree(oGraph[j].Root.AsPointer[vpTVertexTree]^).
+                  // if (TVertexTree(oGraph[i].Root.AsPointer[vpTVertexTree]^).dev <> nil) and (TVertexTree(oGraph[j].Vertices[n].AsPointer[vpTVertexTree]^).dev <> nil) then
+                  // ZCMsgCallBackInterface.TextMessage(TVertexTree(oGraph[i].Root.AsPointer[vpTVertexTree]^).dev^.Name + ' = ' + TVertexTree(oGraph[j].Vertices[n].AsPointer[vpTVertexTree]^).dev^.Name,TMWOHistoryOut);
+                  // if (TVertexTree(oGraph[i].Root.AsPointer[vpTVertexTree]^).dev = TVertexTree(oGraph[j].Vertices[n].AsPointer[vpTVertexTree]^).dev) then
+                  // begin
+                  //    ZCMsgCallBackInterface.TextMessage('Я ЗДЕСЬ!!!',TMWOHistoryOut);
+                  //    isMain:=false;
+                  // end;
+                end;
+
+
+
+
+
+               //if (TVertexTree(oGraph[i].Root.AsPointer[vpTVertexTree]^).dev = TVertexTree(oGraph[j].Vertices[n].AsPointer[vpTVertexTree]^).dev) then
+               //begin
+               //   ZCMsgCallBackInterface.TextMessage('Я ЗДЕСЬ!!!',TMWOHistoryOut);
+               //   isMain:=false;
+               //end;
+
+
+            end;
+           //if isMain then
+           //begin
+           //   result.PushBack(i);
+           //end;
+
+       end;
+    until isMerged = true;
+
+    for i:= 0 to oGraph.Size-1 do
+     begin
+          inList:=false;
+           if listNum.size>0 then
+             for m:= 0 to listNum.Size-1 do
+               if listNum[m] = i then
+                  inList:=true;
+           if inList then
+              continue;
+           result.PushBack(oGraph[i]);
+
+     end;
+
+
+
+
+
+end;
+
+
+//function allStructGraph(oGraph:TListGraph):TListInteger;
+//var
+//    i,j,n:integer;
+//    isMain:boolean;
+//begin
+//     result:=TListInteger.Create;
+//     //TVertexTree(oGraph.Back.vertex.AsPointer[vpTVertexTree]^).dev
+//     for i:= 0 to oGraph.Size-1 do
+//       begin
+//          isMain:=true;
+//          ZCMsgCallBackInterface.TextMessage('номер' + inttostr(i),TMWOHistoryOut);
+//          for j:= 0 to oGraph.Size-1 do
+//            begin
+//              for n:= 0 to oGraph[j].VertexCount-1 do
+//                begin
+//                  if (TVertexTree(oGraph[j].Root.AsPointer[vpTVertexTree]^).dev <> nil) and (TVertexTree(oGraph[j].Vertices[n].AsPointer[vpTVertexTree]^).dev <> nil) then
+//                   ZCMsgCallBackInterface.TextMessage(TVertexTree(oGraph[j].Root.AsPointer[vpTVertexTree]^).dev^.Name + ' = ' + TVertexTree(oGraph[j].Vertices[n].AsPointer[vpTVertexTree]^).dev^.Name,TMWOHistoryOut);
+//                   if (TVertexTree(oGraph[j].Root.AsPointer[vpTVertexTree]^).dev = TVertexTree(oGraph[j].Vertices[n].AsPointer[vpTVertexTree]^).dev) then
+//                      continue;
+//                       TVertexTree(oGraph[j].Root.AsPointer[vpTVertexTree]^).
+//                   if (TVertexTree(oGraph[i].Root.AsPointer[vpTVertexTree]^).dev <> nil) and (TVertexTree(oGraph[j].Vertices[n].AsPointer[vpTVertexTree]^).dev <> nil) then
+//                   ZCMsgCallBackInterface.TextMessage(TVertexTree(oGraph[i].Root.AsPointer[vpTVertexTree]^).dev^.Name + ' = ' + TVertexTree(oGraph[j].Vertices[n].AsPointer[vpTVertexTree]^).dev^.Name,TMWOHistoryOut);
+//                   if (TVertexTree(oGraph[i].Root.AsPointer[vpTVertexTree]^).dev = TVertexTree(oGraph[j].Vertices[n].AsPointer[vpTVertexTree]^).dev) then
+//                   begin
+//                      ZCMsgCallBackInterface.TextMessage('Я ЗДЕСЬ!!!',TMWOHistoryOut);
+//                      isMain:=false;
+//                   end;
+//                end;
+//            end;
+//           if isMain then
+//           begin
+//              result.PushBack(i);
+//           end;
+//
+//       end;
+//end;
+
+////Визуализация графа
+procedure visualCentralCabelTree(G: TGraph; var startPt:GDBVertex;height:double);
+const
+  size=5;
+  indent=30;
+type
+   PTInfoVertex=^TInfoVertex;
+   TInfoVertex=record
+       num,kol,childs:Integer;
+       poz:GDBVertex2D;
+       vertex:TVertex;
+   end;
+
+   TListVertex=specialize TVector<TInfoVertex>;
+
+var
+  //ptext:PGDBObjText;
+  //indent,size:double;
+  x,y,i,tParent:integer;
+  iNum:integer;
+  listVertex:TListVertex;
+  infoVertex:TInfoVertex;
+  pt1,pt2,pt3,ptext,ptSt,ptEd:GDBVertex;
+  VertexPath: TClassList;
+  pv:pGDBObjDevice;
+  ppvvarext,pvarv:TVariablesExtender;
+  pvmc,pvv:pvardesk;
+
+  function howParent(listVertex:TListVertex;ch:integer):integer;
+  var
+      c:integer;
+  begin
+      result:=-1;
+
+      for c:=0 to listVertex.Size-1 do
+            if ch = listVertex[c].num then
+               result:=c;
+  end;
+
+//  (datname,name:String;var currentcoord:GDBVertex; var root:GDBObjRoot);
+   //procedure addBlockonDraw(datname:String;var currentcoord:GDBVertex; var root:GDBObjRoot);
+  procedure addBlockonDraw(dev:pGDBObjDevice;var currentcoord:GDBVertex; var root:GDBObjRoot);
+  var
+      datname:String;
+      pv:pGDBObjDevice;
+      DC:TDrawContext;
+      lx,{rx,}uy,dy:Double;
+        c:integer;
+        pCentralVarext,pVarext:TVariablesExtender;
+  begin
+      //addBlockonDraw(velec_beforeNameGlobalSchemaBlock + string(TVertexTree(G.Root.AsPointer[vpTVertexTree]^).dev^.Name),pt1,drawings.GetCurrentDWG^.mainObjRoot);
+
+     datname:= velec_beforeNameGlobalSchemaBlock + dev^.Name;
+
+     drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,datname);
+     pointer(pv):=old_ENTF_CreateBlockInsert(drawings.GetCurrentROOT,@{drawings.GetCurrentROOT}root.ObjArray,
+                                         drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
+                                         currentcoord, 1, 0,@datname[1]);
+     //dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+     zcSetEntPropFromCurrentDrawingProp(pv);
+     //pv^.formatentity(drawings.GetCurrentDWG^,dc);
+     //pv^.getoutbound(dc);
+     //
+     //lx:=pv^.P_insert_in_WCS.x-pv^.vp.BoundingBox.LBN.x;
+     ////rx:=pv.vp.BoundingBox.RTF.x-pv.P_insert_in_WCS.x;
+     //dy:=pv^.P_insert_in_WCS.y-pv^.vp.BoundingBox.LBN.y;
+     //uy:=pv^.vp.BoundingBox.RTF.y-pv^.P_insert_in_WCS.y;
+     //
+     //pv^.Local.P_insert.y:=pv^.Local.P_insert.y+dy;
+     //pv^.Formatentity(drawings.GetCurrentDWG^,dc);
+
+     pCentralVarext:=dev^.specialize GetExtension<TVariablesExtender>;
+     pVarext:=pv^.specialize GetExtension<TVariablesExtender>;
+     pCentralVarext.addDelegate({pmainobj,}pv,pVarext);
+
+  end;
+
+  procedure addBlockNodeonDraw(var currentcoord:GDBVertex; var root:GDBObjRoot);
+  var
+      datname:String;
+      pv:pGDBObjDevice;
+      DC:TDrawContext;
+      lx,{rx,}uy,dy:Double;
+        c:integer;
+        pCentralVarext,pVarext:TVariablesExtender;
+  begin
+      //addBlockonDraw(velec_beforeNameGlobalSchemaBlock + string(TVertexTree(G.Root.AsPointer[vpTVertexTree]^).dev^.Name),pt1,drawings.GetCurrentDWG^.mainObjRoot);
+
+     datname:= velec_beforeNameGlobalSchemaBlock + 'EL_VL_BOX1';
+
+     drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,datname);
+     pointer(pv):=old_ENTF_CreateBlockInsert(drawings.GetCurrentROOT,@{drawings.GetCurrentROOT}root.ObjArray,
+                                         drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
+                                         currentcoord, 1, 0,@datname[1]);
+     //dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+     zcSetEntPropFromCurrentDrawingProp(pv);
+     //pv^.formatentity(drawings.GetCurrentDWG^,dc);
+     //pv^.getoutbound(dc);
+     //
+     //lx:=pv^.P_insert_in_WCS.x-pv^.vp.BoundingBox.LBN.x;
+     ////rx:=pv.vp.BoundingBox.RTF.x-pv.P_insert_in_WCS.x;
+     //dy:=pv^.P_insert_in_WCS.y-pv^.vp.BoundingBox.LBN.y;
+     //uy:=pv^.vp.BoundingBox.RTF.y-pv^.P_insert_in_WCS.y;
+     //
+     //pv^.Local.P_insert.y:=pv^.Local.P_insert.y+dy;
+     //pv^.Formatentity(drawings.GetCurrentDWG^,dc);
+     //
+     //pCentralVarext:=dev^.specialize GetExtension<TVariablesExtender>;
+     //pVarext:=pv^.specialize GetExtension<TVariablesExtender>;
+     //pCentralVarext.addDelegate({pmainobj,}pv,pVarext);
+
+  end;
+    //рисуем прямоугольник с цветом  зная номера вершин, координат возьмем из графа по номерам
+      procedure drawConnectLine(pt1,pt2:GDBVertex;color:integer);
+      var
+          polyObj:PGDBObjPolyLine;
+      begin
+           polyObj:=GDBObjPolyline.CreateInstance;
+           zcSetEntPropFromCurrentDrawingProp(polyObj);
+           polyObj^.Closed:=false;
+           polyObj^.vp.Color:=color;
+           polyObj^.vp.LineWeight:=LnWt050;
+           //polyObj^.vp.Layer:=uzvtestdraw.getTestLayer('systemTempVisualLayer');
+           polyObj^.VertexArrayInOCS.PushBackData(pt1);
+           polyObj^.VertexArrayInOCS.PushBackData(uzegeometry.CreateVertex(pt1.x,pt2.y,0));
+           polyObj^.VertexArrayInOCS.PushBackData(pt2);
+           zcAddEntToCurrentDrawingWithUndo(polyObj);
+      end;
+
+      //рисуем прямоугольник с цветом  зная номера вершин, координат возьмем из графа по номерам
+      procedure drawConnectLineDev(pSt,p1,p2,pEd:GDBVertex);
+      var
+          polyObj:PGDBObjPolyLine;
+          cableLine:PGDBObjCable;
+          p3:GDBVertex;
+      begin
+           cableLine := AllocEnt(GDBCableID);
+           cableLine^.init(nil,nil,0);
+           zcSetEntPropFromCurrentDrawingProp(cableLine);
+
+           cableLine^.VertexArrayInOCS.PushBackData(pSt);
+           cableLine^.VertexArrayInOCS.PushBackData(p1);
+           cableLine^.VertexArrayInOCS.PushBackData(uzegeometry.CreateVertex(p2.x,p1.y,0));
+           cableLine^.VertexArrayInOCS.PushBackData(p2);
+           cableLine^.VertexArrayInOCS.PushBackData(pEd);
+
+           zcAddEntToCurrentDrawingWithUndo(cableLine);
+
+           //polyObj:=GDBObjPolyline.CreateInstance;
+           //zcSetEntPropFromCurrentDrawingProp(polyObj);
+           //polyObj^.Closed:=false;
+           //polyObj^.vp.Color:=color;
+           //polyObj^.vp.LineWeight:=LnWt050;
+           ////polyObj^.vp.Layer:=uzvtestdraw.getTestLayer('systemTempVisualLayer');
+           //polyObj^.VertexArrayInOCS.PushBackData(pt1);
+           //polyObj^.VertexArrayInOCS.PushBackData(uzegeometry.CreateVertex(pt1.x,pt2.y,0));
+           //polyObj^.VertexArrayInOCS.PushBackData(pt2);
+           //zcAddEntToCurrentDrawingWithUndo(polyObj);
+      end;
+
+begin
+
+    //.AsPointer[vpTEdgeTree] - Ссылка на объект кабель
+    x:=0;
+    y:=0;
+
+    VertexPath:=TClassList.Create;
+    listVertex:=TListVertex.Create;
+
+
+    infoVertex.num:=G.Root.Index;
+    infoVertex.vertex:=G.Root;
+    infoVertex.poz:=uzegeometry.CreateVertex2D(x,0);
+    infoVertex.kol:=0;
+    infoVertex.childs:=G.Root.ChildCount;
+    listVertex.PushBack(infoVertex);
+    ptSt:=uzegeometry.CreateVertex(startPt.x + x*indent,startPt.y + y*indent,0);
+
+    //ZCMsgCallBackInterface.TextMessage('ptSt.x -' + floattostr(ptSt.x) + ' ptSt.Y -' + floattostr(ptSt.Y),TMWOHistoryOut);
+    //*********
+    //ZCMsgCallBackInterface.TextMessage('root i -'+ inttostr(G.Root.Index),TMWOHistoryOut);
+    //pvarv:=TVertexTree(G.Root.AsPointer[vpTVertexTree]^).dev^.specialize GetExtension<TVariablesExtender>;
+    //ZCMsgCallBackInterface.TextMessage(string(TVertexTree(G.Root.AsPointer[vpTVertexTree]^).dev^.Name) + ' - '+ inttostr(G.Root.Index),TMWOHistoryOut);
+    //pvv:=pvarv.entityunit.FindVariable('Name');
+    //ZCMsgCallBackInterface.TextMessage('3'+ inttostr(G.Root.Index),TMWOHistoryOut);
+    //if pvv<>nil then  begin
+    //    ZCMsgCallBackInterface.TextMessage(pstring(pvv^.data.Addr.Instance)^ + ' - '+ inttostr(G.Root.Index),TMWOHistoryOut);
+        //addBlockonDraw(TVertexTree(G.Root.AsPointer[vpTVertexTree]^).dev^);
+        addBlockonDraw(TVertexTree(listVertex.Back.vertex.AsPointer[vpTVertexTree]^).dev,ptSt,drawings.GetCurrentDWG^.mainObjRoot);
+    //end;
+    //ZCMsgCallBackInterface.TextMessage('фин'+ inttostr(G.Root.Index),TMWOHistoryOut);
+    //drawVertex(pt1,3,height);
+    //*********
+
+    //drawText(pt1,inttostr(G.Root.index),4);
+    //ptext:=uzegeometry.CreateVertex(pt1.x,pt1.y + indent/10,0) ;
+    //pt1.y+=indent/10;
+     //G.Root.
+    //iNum:=0;
+
+    //********
+    //drawMText(pt1,inttostr(iNum),4,0,height);
+    //********
+
+           //PGDBObjDevice(G.Root.AsPointer[vGPGDBObjDevice])^.P_insert_in_WCS;
+    //*****drawMText(PTStructDeviceLine(G.Root.AsPointer[vGPGDBObjVertex])^.centerPoint,inttostr(G.Root.AsInt32[vGGIndex]),4,0,height);
+
+    //drawMText(GGraph.listVertex[G.Root.AsInt32[vGGIndex]].centerPoint,inttostr(G.Root.AsInt32[vGGIndex]),4,0,height);
+    //drawMText(GGraph.pt1,G.Root.AsString['infoVertex'],4,0,height);
+
+    G.TreeTraversal(G.Root, VertexPath); //получаем путь обхода графа
+    for i:=1 to VertexPath.Count - 1 do begin
+        //ZCMsgCallBackInterface.TextMessage('VertexPath i -'+ inttostr(TVertex(VertexPath[i]).Parent.Index),TMWOHistoryOut);
+        tParent:=howParent(listVertex,TVertex(VertexPath[i]).Parent.Index);
+        if tParent>=0 then
+        begin
+          inc(listVertex.Mutable[tparent]^.kol);
+          if listVertex[tparent].kol = 1 then begin
+             infoVertex.poz:=uzegeometry.CreateVertex2D(listVertex[tparent].poz.x,listVertex[tparent].poz.y + 1) ;
+             infoVertex.vertex:=TVertex(VertexPath[i]);
+          end
+          else  begin
+            inc(x);
+            infoVertex.poz:=uzegeometry.CreateVertex2D(x,listVertex[tparent].poz.y + 1);
+            infoVertex.vertex:=TVertex(VertexPath[i]);
+          end;
+
+          infoVertex.num:=TVertex(VertexPath[i]).Index;
+          infoVertex.kol:=0;
+          infoVertex.childs:=TVertex(VertexPath[i]).ChildCount;
+          listVertex.PushBack(infoVertex);
+
+
+        ptEd:=uzegeometry.CreateVertex(startPt.x + listVertex.Back.poz.x*indent,startPt.y - listVertex.Back.poz.y*indent,0) ;
+
+        if TVertexTree(listVertex.Back.vertex.AsPointer[vpTVertexTree]^).dev<>nil then
+           ZCMsgCallBackInterface.TextMessage('VertexPath i -'+ string(TVertexTree(listVertex.Back.vertex.AsPointer[vpTVertexTree]^).dev^.Name),TMWOHistoryOut);
+
+        //*********
+        if TVertexTree(listVertex.Back.vertex.AsPointer[vpTVertexTree]^).dev<>nil then
+           addBlockonDraw(TVertexTree(listVertex.Back.vertex.AsPointer[vpTVertexTree]^).dev,ptEd,drawings.GetCurrentDWG^.mainObjRoot)
+        else
+           addBlockNodeonDraw(ptEd,drawings.GetCurrentDWG^.mainObjRoot);
+
+        //drawVertex(pt1,3,height);
+        //*********
+
+        //drawText(pt1,inttostr(listVertex.Back.num),4);
+
+        //if G.Vertices[listVertex.Back.num].AsBool[vGIsDevice] then
+        //*****   drawMText(PTStructDeviceLine(G.Vertices[listVertex.Back.num].AsPointer[vGPGDBObjVertex])^.centerPoint,inttostr(G.Vertices[listVertex.Back.num].AsInt32[vGGIndex]),4,0,height);
+
+        //drawMText(GGraph.listVertex[G.Vertices[listVertex.Back.num].AsInt32[vGGIndex]].centerPoint,inttostr(G.Vertices[listVertex.Back.num].AsInt32[vGGIndex]),4,0,height);
+
+        //iNum:=iNum+1;
+
+        //********
+//        drawMText(pt1,inttostr(iNum),4,0,height);
+        //********
+
+        //pt3:=uzegeometry.CreateVertex(pt1.x,(pt1.y + size)*height,0);
+        //
+        //ptext:=uzegeometry.CreateVertex(pt3.x,pt3.y + indent/20,0);
+
+                                             //.AsPointer[vpTEdgeTree]:=
+        //drawMText(ptext,G.GetEdge(G.Vertices[listVertex.Back.num],G.Vertices[listVertex.Back.num].Parent).length.AsString[vGInfoEdge],4,90,height);
+
+        //*********
+//        drawMText(ptext,floattostr(TEdgeTree(G.GetEdge(G.Vertices[listVertex.Back.num],G.Vertices[listVertex.Back.num].Parent).AsPointer[vpTEdgeTree]^).length),4,90,height);
+        //*********
+
+        //drawMText(ptext,'Ребро',4,90,height);
+//
+        ptSt:=uzegeometry.CreateVertex(startPt.x + listVertex[tparent].poz.x*indent,startPt.y - listVertex[tparent].poz.y*indent,0) ;
+
+        if listVertex[tparent].kol = 1 then
+        begin
+          pt1:=uzegeometry.CreateVertex(startPt.x + listVertex[tparent].poz.x*indent,startPt.y - listVertex[tparent].poz.y*indent-size,0) ;
+          //pt2.x:=startPt.x + listVertex[tparent].poz.x*indent;
+          //pt2.y:=startPt.y - listVertex[tparent].poz.y*indent-size;
+          //pt2.z:=0;
+        end
+        else
+        begin
+          pt1:=uzegeometry.CreateVertex(startPt.x + listVertex[tparent].poz.x*indent + size,startPt.y - listVertex[tparent].poz.y*indent-size+(listVertex[tparent].kol-1)*((2*size)/listVertex[tparent].childs),0) ;
+          //pt2.x:=startPt.x + listVertex[tparent].poz.x*indent + size;
+          //pt2.y:=startPt.y - listVertex[tparent].poz.y*indent-size+(listVertex[tparent].kol-1)*((2*size)/listVertex[tparent].childs);
+          //pt2.z:=0;
+        end;
+
+        pt2:=uzegeometry.CreateVertex(startPt.x + listVertex.Back.poz.x*indent,startPt.y - listVertex.Back.poz.y*indent+size,0) ;
+
+        //pt1.x:=startPt.x + listVertex.Back.poz.x*indent;
+        //pt1.y:=startPt.y - listVertex.Back.poz.y*indent+size;
+        //pt1.z:=0;
+
+
+        //pt2:=uzegeometry.CreateVertex(startPt.x + listVertex[tparent].poz.x*indent,startPt.y - listVertex[tparent].poz.y*indent,0) ;
+
+        //******
+        drawConnectLineDev(ptSt,pt1,pt2,ptEd);
+
+        //ptSt:=ptEd;
+
+        //drawConnectLine(pt1,pt2,4);
+        //******
+
+
+        end;
+     end;
+    startPt.x:=startPt.x + (infoVertex.poz.x+1)*indent;
+    //startPt.y:=0;
+
+end;
 
 procedure buildSSScheme(listGraph:TListGraph;insertPoint:GDBVertex);
 type
@@ -1202,7 +1733,7 @@ begin
 
   result:=TListGraph.Create;
 
-  //ZCMsgCallBackInterface.TextMessage('Получаем схему!!!',TMWOHistoryOut);
+  ZCMsgCallBackInterface.TextMessage('Получаем схему электрическую!!!',TMWOHistoryOut);
 
   if drawings.GetCurrentROOT^.ObjArray.Count = 0 then exit;
   dc:=drawings.GetCurrentDWG^.CreateDrawingRC;

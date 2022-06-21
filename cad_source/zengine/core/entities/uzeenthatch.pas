@@ -211,7 +211,7 @@ begin
   end;
 
   if PPattern<>nil then
-    PPattern^.SaveToDXF(outhandle);
+    PPattern^.SaveToDXF(outhandle,Angle,Scale);
 
   dxfDoubleout(outhandle,47,1.25);
   dxfIntegerout(outhandle,98,0);

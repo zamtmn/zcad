@@ -42,7 +42,7 @@ type
 
   PTHatchPattern=^THatchPattern;
   THatchPattern=object(GZVectorObjects<TPatStrokesArray>)
-    procedure SaveToDXF(var outhandle:TZctnrVectorBytes);
+    procedure SaveToDXF(var outhandle:TZctnrVectorBytes;const MainAngle,MainScale:Double);
   end;
 {EXPORT-}
 
@@ -68,23 +68,30 @@ begin
   Offset:=YWCS2D;
 end;
 
-procedure THatchPattern.SaveToDXF(var outhandle:TZctnrVectorBytes);
+procedure THatchPattern.SaveToDXF(var outhandle:TZctnrVectorBytes;const MainAngle,MainScale:Double);
 var
    i,j: Integer;
    pv:PGDBvertex2D;
    psa:PTPatStrokesArray;
+   angle:Double;
+   sinA,cosA:Double;
 begin
   dxfIntegerout(outhandle,78,Count);
   for i:=0 to Count-1 do begin
     psa:=getDataMutable(i);
-    dxfDoubleout(outhandle,53,psa^.Angle);
-    dxfDoubleout(outhandle,43,psa^.Base.x);
-    dxfDoubleout(outhandle,44,psa^.Base.y);
-    dxfDoubleout(outhandle,45,psa^.Offset.x);
-    dxfDoubleout(outhandle,46,psa^.Offset.y);
+    dxfDoubleout(outhandle,53,psa^.Angle+MainAngle);
+    dxfDoubleout(outhandle,43,psa^.Base.x*MainScale);
+    dxfDoubleout(outhandle,44,psa^.Base.y*MainScale);
+
+    angle:=DegToRad(MainAngle);
+    sinA:=sin(angle);
+    cosA:=cos(angle);
+
+    dxfDoubleout(outhandle,45,(psa^.offset.x*cosA-psa^.offset.y*sinA)*MainScale);
+    dxfDoubleout(outhandle,46,(psa^.offset.y*cosA+psa^.offset.x*sinA)*MainScale);
     dxfIntegerout(outhandle,79,psa^.Count);
     for j:=0 to psa^.Count-1 do begin
-      dxfDoubleout(outhandle,49,psa^.getData(j));
+      dxfDoubleout(outhandle,49,psa^.getData(j)*MainScale);
     end;
   end;
 end;

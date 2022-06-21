@@ -30,6 +30,7 @@ const
   vGLonelyNode='lonelyNode';
   vGIsSubMasterDevice='vGIsSubMasterDevice';
   vGIsSubNodeDevice='vGIsSubNodeDevice';
+  vGIsSubNodeCabDev='vGIsSubNodeCabDev';  // ноды внутри кабеля что данный кусок кабеля подключает
   vGIsSubCUDevice='vGIsSubCUDevice';
   vGInfoVertex='infoVertex';
   vGLength='length';
@@ -38,6 +39,7 @@ const
   vTempLayerName='systemTempVisualLayer';
   vpTVertexTree='TVertexTree';
   vpTEdgeTree='TEdgeTree';
+  //velec_NameDevice='NMO_Name';
 
   vGPGDBObjEdge='vGPGDBObjEdge';
   vGPGDBObjVertex='vGPGDBObjVertex';
@@ -53,10 +55,14 @@ const
   velec_serialConnectDev='SLCABAGEN_DevConnectMethod';
   velec_cableMounting='Cable_Mounting_Method';
 //  velec_cableMounting='SLCABAGEN_CableMounting';
-  velec_CableRoutNodes = '-';
+  velec_CableRoutNodes = '-';//индивидуальная прокладка кабеля от этого устройства и до Узла управления, далее как и все
+  velec_cabControlUnits = 'GC_velecSubGroupControlUnit'; //прописывается для кабеля что чего подключает. Нужно для Велек и организации однолинейной схемы
+
   velec_separator='~';
-  velec_onlyThisDev='!';
+  velec_onlyThisDev='!';    // кабель довести только до этой точки и все, дальше не идет
   velec_masterTravelNode='^';
+  velec_beforeNameGlobalSchemaBlock='DEVICE_VELEC_';
+  velec_cableMountingNon='';
 
 implementation
 

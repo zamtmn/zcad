@@ -183,3 +183,5 @@ BlockPreViewExport(48|UNIT_GRID2|*images/palettes/UNIT_GRID2_300.png)
 
 ClLayerOff(TEXT)
 
+BlocksInBasePreViewExport(comp*||48|<>|*images/palettes/<>_300.png)
+BlocksInBasePreViewExport(comp*||24|<>|*images/palettes/<>_150.png)

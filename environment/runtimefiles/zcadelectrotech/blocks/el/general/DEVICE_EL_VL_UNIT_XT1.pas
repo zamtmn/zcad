@@ -1,4 +1,4 @@
-unit DEVICE_EL_VL_UNIT_A1;
+unit DEVICE_EL_VL_UNIT_XT1;
 
 interface
 
@@ -8,7 +8,7 @@ usescopy objname;
 
 var
 
-T1:String;(*'Обозначение'*)
+T1:String;(*'Сноска'*)
 
 implementation
 
@@ -18,9 +18,9 @@ BTY_TreeCoord:='PLAN_EM_Аппаратура';
 Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 
-NMO_Name:='A0';
-NMO_BaseName:='A';
-NMO_Suffix:='??';
+NMO_Name:='XT0';
+NMO_BaseName:='';
+NMO_Suffix:='';
 NMO_Affix:='';
 
 T1:='';

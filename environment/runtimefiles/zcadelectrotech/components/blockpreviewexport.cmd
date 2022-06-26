@@ -173,6 +173,18 @@ BlockPreViewExport(24|EL_VL_SCHEMA4_0|*images/palettes/EL_VL_SCHEMA4_0.png)
 BlockPreViewExport(24|EL_VL_SCHEMA4_0|*images/palettes/EL_VL_SCHEMA4_0_150.png)
 BlockPreViewExport(48|EL_VL_SCHEMA4_0|*images/palettes/EL_VL_SCHEMA4_0_300.png)
 
+BlockPreViewExport(24|EL_VL_HIGH_L1|*images/palettes/EL_VL_HIGH_L1.png)
+BlockPreViewExport(24|EL_VL_HIGH_L1|*images/palettes/EL_VL_HIGH_L1_150.png)
+BlockPreViewExport(48|EL_VL_HIGH_L1|*images/palettes/EL_VL_HIGH_L1_300.png)
+
+BlockPreViewExport(24|EL_VL_HIGH_CZ1|*images/palettes/EL_VL_HIGH_CZ1.png)
+BlockPreViewExport(24|EL_VL_HIGH_CZ1|*images/palettes/EL_VL_HIGH_CZ1_150.png)
+BlockPreViewExport(48|EL_VL_HIGH_CZ1|*images/palettes/EL_VL_HIGH_CZ1_300.png)
+
+BlockPreViewExport(24|EL_VL_HIGH_FD0|*images/palettes/EL_VL_HIGH_FD0.png)
+BlockPreViewExport(24|EL_VL_HIGH_FD0|*images/palettes/EL_VL_HIGH_FD0_150.png)
+BlockPreViewExport(48|EL_VL_HIGH_FD0|*images/palettes/EL_VL_HIGH_FD0_300.png)
+
 BlockPreViewExport(24|UNIT_GRID1|*images/palettes/UNIT_GRID1.png)
 BlockPreViewExport(24|UNIT_GRID1|*images/palettes/UNIT_GRID1_150.png)
 BlockPreViewExport(48|UNIT_GRID1|*images/palettes/UNIT_GRID1_300.png)

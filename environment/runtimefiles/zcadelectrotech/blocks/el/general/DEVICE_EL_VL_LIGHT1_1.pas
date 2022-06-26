@@ -13,6 +13,9 @@ var
 T1:String;(*'Группа'*)
 T2:String;(*'Код'*)
 
+VL_Type:String;(*'Тип'*)
+VL_Room:String;(*'Помещение'*)
+
 implementation
 
 begin

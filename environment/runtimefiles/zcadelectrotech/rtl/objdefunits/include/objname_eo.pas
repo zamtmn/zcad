@@ -1,6 +1,11 @@
 unit objname_eo;
 interface
 uses system;
+
+type
+
+(*varcategoryforoi VL='База'*)
+
 var
    NMO_Name:String;(*'Обозначение'*)
    NMO_BaseName:String;(*'Короткое Имя'*)
@@ -14,4 +19,5 @@ begin
    NMO_Suffix:='';
    NMO_BaseName:='unnamed';
    NMO_Template:='@@[GC_HDShortName]@@[GC_HDGroup]@@[T1]';
+
 end.

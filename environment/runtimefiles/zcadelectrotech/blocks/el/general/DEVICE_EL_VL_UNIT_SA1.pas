@@ -18,11 +18,11 @@ BTY_TreeCoord:='PLAN_EM_Аппаратура';
 Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 
-NMO_Name:='СХ0';
-NMO_BaseName:='СХ';
+NMO_Name:='SA0';
+NMO_BaseName:='SA';
 NMO_Suffix:='??';
-NMO_Affix:='.SA';
+NMO_Affix:='';
 
-T1:='??';
+T1:='';
 
 end.

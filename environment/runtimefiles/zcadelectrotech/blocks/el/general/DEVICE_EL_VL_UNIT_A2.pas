@@ -8,8 +8,7 @@ usescopy objname;
 
 var
 
-T1:String;(*'Клемник'*)
-T2:String;(*'Расшифровка'*)
+T1:String;(*'Обозначение'*)
 
 implementation
 
@@ -19,11 +18,11 @@ BTY_TreeCoord:='PLAN_EM_Аппаратура';
 Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 
-NMO_Name:='СХ0';
-NMO_BaseName:='СХ';
+NMO_Name:='A0';
+NMO_BaseName:='A';
 NMO_Suffix:='??';
-NMO_Affix:='.A';
+NMO_Affix:='';
 
-T1:='??';
+T1:='';
 
 end.

@@ -342,6 +342,7 @@ initialization
   ParserEntityPropFilter.RegisterToken('''','''','''',ParserEntityPropFilter.TParserTokenizer.TStringProcessor,nil,TGOIncludeBrackeOpen);
   ParserEntityPropFilter.RegisterToken(',',#0,#0,nil,nil,TGOSeparator);
   ParserEntityPropFilter.RegisterToken(';',#0,#0,nil,nil,TGOSeparator);
+  ParserEntityPropFilter.RegisterToken('\P',#0,#0,nil,nil,TGOSeparator);
   ParserEntityPropFilter.RegisterToken(' ',#0,#0,nil,nil,TGOSeparator or TGOCanBeOmitted);
   ParserEntityPropFilter.RegisterToken(#10,#0,#0,nil,nil,TGOSeparator or TGOCanBeOmitted);
   ParserEntityPropFilter.RegisterToken(#13,#0,#0,nil,nil,TGOSeparator or TGOCanBeOmitted);

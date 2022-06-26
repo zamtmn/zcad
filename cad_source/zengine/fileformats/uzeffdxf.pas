@@ -736,7 +736,7 @@ begin
        end;
        end;
       if assigned(pltypeprop) then
-        pltypeprop^.LengthFact:=len;
+        pltypeprop^.strokesarray.LengthFact:=len;
   end;
   BShapeProp.Done;
 end;
@@ -2261,6 +2261,8 @@ begin
                       outstream.TXTAddStringEOL('0');
 
                       //тут сами настройки
+                      outstream.TXTAddStringEOL(dxfGroupCode(40));
+                      outstream.TXTAddStringEOL(floattostr(pdsp^.Units.DIMSCALE));
                       outstream.TXTAddStringEOL(dxfGroupCode(44));
                       outstream.TXTAddStringEOL(floattostr(pdsp^.Lines.DIMEXE));
                       outstream.TXTAddStringEOL(dxfGroupCode(42));

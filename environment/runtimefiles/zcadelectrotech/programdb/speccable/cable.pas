@@ -129,6 +129,10 @@ type
                                   _2_2_0_52(*'2х2х0.52'*),
                                   _4_2_0_52(*'4х2х0.52'*));
 
+     TSPECCABLE_SPECLANFTP5_FRHF_WCS=(_2_2_0_52(*'2х2х0.52'*),
+                                  _4_2_0_52(*'4х2х0.52'*));
+
+
     TSPECCABLE_KIPEVKG_NGA_LS=packed object(CableDeviceBaseObject)
                 Wire_Count_Section_DESC:TSPECCABLE_KIPEVKG_NGA_LS_WCS;
            end;
@@ -171,6 +175,10 @@ type
     TSPECCABLE_KVPEFNGA_HF=packed object(CableDeviceBaseObject)
                 Wire_Count_Section_DESC:TSPECCABLE_KVPEFNGA_HF_WCS;
            end;
+    TSPECCABLE_SPECLANFTP5_FRHF=packed object(CableDeviceBaseObject)
+                Wire_Count_Section_DESC:TSPECCABLE_SPECLANFTP5_FRHF_WCS;
+           end;
+
 var
    _EQ_SPECCABLE_KIPEVKG_NGA_LS:TSPECCABLE_KIPEVKG_NGA_LS;
    _EQ_SPECCABLE_KIPEV_NGA_LS:TSPECCABLE_KIPEV_NGA_LS;
@@ -186,6 +194,7 @@ var
    _EQ_SPECCABLE_KPSEFRHF:TSPECCABLE_KPSEFRHF;
    _EQ_SPECCABLE_KSBG_A_FRHF:TSPECCABLE_KSBG_A_FRHF;
    _EQ_TSPECCABLE_KVPEFNGA_HF:TSPECCABLE_KVPEFNGA_HF;
+   _EQ_TSPECCABLE_SPECLANFTP5_FRHF:TSPECCABLE_SPECLANFTP5_FRHF;
 
 implementation
 begin
@@ -418,5 +427,22 @@ begin
      _EQ_TSPECCABLE_KVPEFNGA_HF.Wire_Count_Section_DESC:=_2_2_0_52;
      _EQ_TSPECCABLE_KVPEFNGA_HF.TreeCoord:='BP_СПЕЦКАБЕЛЬ_Для СКС_КВПЭфнг(А)-HF-5e|BC_Кабельная продукция_Связи_КВПЭфнг(А)-HF-5e(СПЕЦКАБЕЛЬ)';
      _EQ_TSPECCABLE_KVPEFNGA_HF.format;
+
+     _EQ_TSPECCABLE_SPECLANFTP5_FRHF.initnul;
+     _EQ_TSPECCABLE_SPECLANFTP5_FRHF.Category:=_kables;
+     _EQ_TSPECCABLE_SPECLANFTP5_FRHF.Group:=_cables_sv;
+     _EQ_TSPECCABLE_SPECLANFTP5_FRHF.EdIzm:=_m;
+     _EQ_TSPECCABLE_SPECLANFTP5_FRHF.ID:='SPECLANFTP5_FRHF';
+     _EQ_TSPECCABLE_SPECLANFTP5_FRHF.Standard:='ТУ 16.К99-048-2012';
+     _EQ_TSPECCABLE_SPECLANFTP5_FRHF.OKP:='';
+     _EQ_TSPECCABLE_SPECLANFTP5_FRHF.Manufacturer:='НПП "Спецкабель" г.Москва';
+     _EQ_TSPECCABLE_SPECLANFTP5_FRHF.Description:='';
+     _EQ_TSPECCABLE_SPECLANFTP5_FRHF.NameShortTemplate:='СПЕЦЛАН FTP-5нг(А)-FRHF %%[Wire_Count_Section_DESC]';
+     _EQ_TSPECCABLE_SPECLANFTP5_FRHF.NameTemplate:='Кабель симметричный для структурированных кабельных систем (FTP) категории 5, огнестойкий, групповой прокладки СПЕЦЛАН FTP-5нг(А)-FRHF %%[Wire_Count_Section_DESC]';
+     _EQ_TSPECCABLE_SPECLANFTP5_FRHF.UIDTemplate:='%%[ID]-%%[Wire_Count_Section_DESC]';
+     _EQ_TSPECCABLE_SPECLANFTP5_FRHF.NameFullTemplate:='Кабель симметричный для структурированных кабельных систем (FTP) категории 5, огнестойкий, групповой прокладки СПЕЦЛАН FTP-5нг(А)-FRHF %%[Wire_Count_Section_DESC]';
+     _EQ_TSPECCABLE_SPECLANFTP5_FRHF.Wire_Count_Section_DESC:=_2_2_0_52;
+     _EQ_TSPECCABLE_SPECLANFTP5_FRHF.TreeCoord:='BP_СПЕЦКАБЕЛЬ_Для СКС_СПЕЦЛАН-FTP-5нг(А)-FRHF|BC_Кабельная продукция_Связи_СПЕЦЛАН-FTP-5нг(А)-FRHF(СПЕЦКАБЕЛЬ)';
+     _EQ_TSPECCABLE_SPECLANFTP5_FRHF.format;
 
 end.

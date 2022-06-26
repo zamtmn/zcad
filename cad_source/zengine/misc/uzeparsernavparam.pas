@@ -195,6 +195,7 @@ initialization
   ParserNavParam.RegisterToken('''','''','''',ParserNavParam.TParserTokenizer.TStringProcessor,nil,TGOIncludeBrackeOpen);
   ParserNavParam.RegisterToken(',',#0,#0,nil,nil,TGOSeparator or TGOCanBeOmitted);
   ParserNavParam.RegisterToken(';',#0,#0,nil,nil,TGOSeparator);
+  ParserNavParam.RegisterToken('\P',#0,#0,nil,nil,TGOSeparator);
   ParserNavParam.RegisterToken(' ',#0,#0,nil,nil,TGOSeparator or TGOCanBeOmitted);
   ParserNavParam.RegisterToken(#10,#0,#0,nil,nil,TGOSeparator or TGOCanBeOmitted);
   ParserNavParam.RegisterToken(#13,#0,#0,nil,nil,TGOSeparator or TGOCanBeOmitted);

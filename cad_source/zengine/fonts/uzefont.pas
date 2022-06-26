@@ -349,8 +349,11 @@ begin
 
                                     true0Y:=CrossVertex(PGDBVertex(@PLLSymbolLine^.SymbolsParam.FirstSymMatr[2])^,PGDBVertex(@PLLSymbolLine^.SymbolsParam.FirstSymMatr[0])^);
 
-                                    true0Y:=NormalizeVertex(true0Y);
-                                    fact0y:=NormalizeVertex(PGDBVertex(@PLLSymbolLine^.SymbolsParam.FirstSymMatr[1])^);
+                                    if not IsVectorNul(true0Y) then
+                                      true0Y:=NormalizeVertex(true0Y);
+                                    fact0y:=PGDBVertex(@PLLSymbolLine^.SymbolsParam.FirstSymMatr[1])^;
+                                    if not IsVectorNul(fact0y) then
+                                      fact0y:=NormalizeVertex(fact0y);
 
                                     PLLSymbolLine^.SymbolsParam.Oblique:=arccos(scalardot(true0Y,fact0y));
 

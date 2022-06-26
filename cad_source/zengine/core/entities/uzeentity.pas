@@ -772,7 +772,7 @@ begin
       LT:=getLTfromVP(vp);
       if LT<>nil then
       begin
-           result:=GlobalLTScale*vp.LineTypeScale*LT.LengthFact
+           result:=GlobalLTScale*vp.LineTypeScale*LT.strokesarray.LengthFact
       end
          else
          result:=0;

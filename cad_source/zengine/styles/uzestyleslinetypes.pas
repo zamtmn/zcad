@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzestyleslinetypes;
+unit uzeStylesLineTypes;
 {$INCLUDE zengineconfig.inc}
 interface
 uses LCLProc,LazUTF8,Classes,gzctnrVector,sysutils,uzbtypes,
@@ -67,9 +67,14 @@ ShapeProp= object(BasicSHXDashProp)
 {REGISTEROBJECTTYPE GDBDashInfoArray}
 GDBDashInfoArray= object(GZVector{-}<TDashInfo>{//})(*OpenArrayOfData=TDashInfo*)
                end;
-{REGISTEROBJECTTYPE DoubleArray}
-DoubleArray= object(GZVector{-}<Double>{//})(*OpenArrayOfData=Double*)
+PTStrokesArray=^TStrokesArray;
+{REGISTEROBJECTTYPE TStrokesArray}
+TStrokesArray= object(GZVector{-}<Double>{//})(*OpenArrayOfData=Double*)
+                LengthFact:Double;(*'Length'*)
                 constructor init(m:Integer);
+                function CopyTo(var source:GZVector{-}<Double>{//}):Integer;virtual;
+                procedure Clear;virtual;
+                procedure format;
                end;
 {REGISTEROBJECTTYPE GDBShapePropArray}
 GDBShapePropArray= object(GZVectorObjects{-}<ShapeProp>{//})(*OpenArrayOfObject=ShapeProp*)
@@ -84,13 +89,13 @@ PGDBLtypePropObjInsp=Pointer;
 PGDBLtypeProp=^GDBLtypeProp;
 {REGISTEROBJECTTYPE GDBLtypeProp}
 GDBLtypeProp= object(GDBNamedObject)
-               LengthDXF,LengthFact:Double;(*'Length'*)
+               LengthDXF{,LengthFact}:Double;(*'Length'*)
                h:Double;(*'Height'*)
                Mode:TLTMode;
                FirstStroke,LastStroke:TOuterDashInfo;
                WithoutLines:Boolean;
                dasharray:GDBDashInfoArray;(*'DashInfo array'*)
-               strokesarray:DoubleArray;(*'Strokes array'*)
+               strokesarray:TStrokesArray;(*'Strokes array'*)
                shapearray:GDBShapePropArray;(*'Shape array'*)
                Textarray:GDBTextPropArray;(*'Text array'*)
                desk:AnsiString;(*'Description'*)
@@ -316,7 +321,6 @@ begin
      WithoutLines:=true;
      Mode:=N2TLTMode(n);
      LengthDXF:=0;
-     LengthFact:=0;
      h:=0;
      pointer(desk):=nil;
      dasharray.init(10);
@@ -343,21 +347,18 @@ begin
             begin
                  plp.init('Continuous');
                  plp.LengthDXF:=0;
-                 plp.LengthFact:=0;
                  plp.Mode:=TLTContinous;
             end;
   if AddItem('ByLayer',pointer(plp))=IsCreated then
             begin
                  plp.init('ByLayer');
                  plp.LengthDXF:=0;
-                 plp.LengthFact:=0;
                  plp.Mode:=TLTByLayer;
             end;
   if AddItem('ByBlock',pointer(plp))=IsCreated then
             begin
                  plp.init('ByBlock');
                  plp.LengthDXF:=0;
-                 plp.LengthFact:=0;
                  plp.Mode:=TLTByBlock;
             end;
 end;
@@ -423,7 +424,7 @@ begin
                        if AddItem(_source.Name,pointer(result))=IsCreated then
                        begin
                        result.init(_source.Name);
-                       result.LengthFact:=_source.LengthFact;
+                       //result.LengthFact:=_source.LengthFact;
                        result.LengthDXF:=_source.LengthDXF;
                        _source.dasharray.copyto(result.dasharray);
                        _source.strokesarray.copyto(result.strokesarray);
@@ -572,7 +573,7 @@ begin
      shapearray.Clear;
      dasharray.Clear;
      element:=GetStr(LT,dinfo);
-     LengthFact:=0;
+     //LengthFact:=0;
      LengthDXF:=0;
      stroke:=1;
      while element<>'' do
@@ -580,7 +581,7 @@ begin
           case dinfo of
                        TDIDash:begin
                                     trystrtofloat(element,stroke);
-                                    LengthFact:=LengthFact+abs(stroke);
+                                    strokesarray.LengthFact:=strokesarray.LengthFact+abs(stroke);
                                     LengthDXF:=LengthDXF+abs(stroke);
                                     strokesarray.PushBackData(stroke);
                                     if stroke>eps then
@@ -705,9 +706,29 @@ begin
      strings.Destroy;
 end;
 
-constructor DoubleArray.init(m:Integer);
+function TStrokesArray.CopyTo(var source:GZVector{-}<Double>{//}):Integer;
+begin
+ result:=inherited;
+ if IsIt(TypeOf(source),TypeOf(TStrokesArray)) then
+   PTStrokesArray(@source)^.LengthFact:=PTStrokesArray(@source)^.LengthFact+LengthFact;
+end;
+procedure TStrokesArray.Clear;
+begin
+  inherited;
+  LengthFact:=0;
+end;
+procedure TStrokesArray.format;
+var
+  i:integer;
+begin
+  LengthFact:=0;
+  for i:=0 to count-1 do
+    LengthFact:=LengthFact+abs(getDataMutable(i)^);
+end;
+constructor TStrokesArray.init(m:Integer);
 begin
   inherited init(m);
+  LengthFact:=0;
 end;
 constructor GDBShapePropArray.init(m:Integer);
 begin

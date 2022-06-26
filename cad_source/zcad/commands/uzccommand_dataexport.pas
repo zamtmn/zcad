@@ -601,6 +601,7 @@ initialization
   ExporterParser.RegisterToken('''','''','''',ExporterParser.TParserTokenizer.TStringProcessor,nil,TGOIncludeBrackeOpen);
   ExporterParser.RegisterToken(',',#0,#0,nil,nil,TGOSeparator);
   ExporterParser.RegisterToken(';',#0,#0,nil,nil,TGOSeparator);
+  ExporterParser.RegisterToken('\P',#0,#0,nil,nil,TGOSeparator);
   ExporterParser.RegisterToken(' ',#0,#0,nil,nil,TGOSeparator or TGOCanBeOmitted);
   ExporterParser.RegisterToken(#10,#0,#0,nil,nil,TGOSeparator or TGOCanBeOmitted);
   ExporterParser.RegisterToken(#13,#0,#0,nil,nil,TGOSeparator or TGOCanBeOmitted);

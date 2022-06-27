@@ -83,6 +83,7 @@ procedure FreePNamedObjectCounterDataUTF8(piteratedata:Pointer;mp:TMultiProperty
 procedure FreeVertex3DControlData(piteratedata:Pointer;mp:TMultiProperty);
 procedure GeneralEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure EntityNameEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+procedure EntityAddressEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure PolylineVertex3DControlEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure PolylineVertex3DControlFromVarEntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 procedure Double2SumEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
@@ -463,6 +464,34 @@ begin
                          if mp.MPType.Compare(ChangedData.PGetDataInEtity,PVD.data.Addr.Instance)<>CREqual then
                             ProcessVariableAttributes(PVD.attrib,vda_approximately,0);
                          if PTOneVarData(pdata).StrValue<>mp.MPType.GetDecoratedValueAsString(ChangedData.PGetDataInEtity,f) then
+                            ProcessVariableAttributes(PVD.attrib,vda_different,vda_approximately);
+                    end;
+end;
+procedure EntityAddressEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+{
+процедура копирования адреса примитива в мультипроперти
+pdata - указатель на структуру созданную GetOneVarData или аналогичной прцедурой
+pentity - указатель на примитив или на копируемое поле, если смещение поля было задано при регистрации
+mp - описание мультипроперти
+fistrun - флаг установлен при первой итерации (только копировать, не сравнивать)
+ecp - указатель на процедуру копирования значения из мультипроперти в примитив, если nil то делаем readonly
+}
+var
+  PVD:pvardesk;
+begin
+  PVD:=PTOneVarData(pdata).VDAddr.Instance;
+     if @ecp=nil then ProcessVariableAttributes(PVD.attrib,vda_RO,0);
+     if fistrun then
+                    begin
+                      ProcessVariableAttributes(PVD.attrib,0,vda_different);
+                      mp.MPType.CopyInstanceTo(@ChangedData.PEntity,PVD.data.Addr.Instance);
+                      PTOneVarData(pdata).StrValue:=mp.MPType.GetDecoratedValueAsString(ChangedData.PGetDataInEtity,f);
+                    end
+                else
+                    begin
+                         if mp.MPType.Compare(@ChangedData.PEntity,PVD.data.Addr.Instance)<>CREqual then
+                            ProcessVariableAttributes(PVD.attrib,vda_approximately,0);
+                         if PTOneVarData(pdata).StrValue<>mp.MPType.GetDecoratedValueAsString(@ChangedData.PEntity,f) then
                             ProcessVariableAttributes(PVD.attrib,vda_different,vda_approximately);
                     end;
 end;

@@ -409,6 +409,7 @@ begin
   {General section}
   MultiPropertiesManager.RestartMultipropertySortID;
   MultiPropertiesManager.RegisterPhysMultiproperty('EntityName','Entity name',sysunit^.TypeName2PTD('AnsiString'),MPCGeneral,0,nil,0,0,OneVarDataMIPD,TEntIterateProcsData.Create(nil,@EntityNameEntIterateProc,nil));
+  MultiPropertiesManager.RegisterPhysMultiproperty('EntityAddress','Entity address',sysunit^.TypeName2PTD('Pointer'),MPCGeneral,0,nil,0,0,OneVarDataMIPD,TEntIterateProcsData.Create(nil,@EntityAddressEntIterateProc,nil));
   MultiPropertiesManager.RegisterPhysMultiproperty('Color','Color',sysunit^.TypeName2PTD('TGDBPaletteColor'),MPCGeneral,0,nil,PtrInt(@pent^.vp.Color),PtrInt(@pent^.vp.Color),OneVarDataMIPD,OneVarDataEIPD);
   MultiPropertiesManager.RegisterPhysMultiproperty('Layer','Layer',sysunit^.TypeName2PTD('PGDBLayerPropObjInsp'),MPCGeneral,0,nil,PtrInt(@pent^.vp.Layer),PtrInt(@pent^.vp.Layer),OneVarDataMIPD,OneVarDataEIPD);
   MultiPropertiesManager.RegisterPhysMultiproperty('LineType','Linetype',sysunit^.TypeName2PTD('PGDBLtypePropObjInsp'),MPCGeneral,0,nil,PtrInt(@pent^.vp.LineType),PtrInt(@pent^.vp.LineType),OneVarDataMIPD,OneVarDataEIPD);

@@ -39,12 +39,6 @@ const
         DefaultVP:IMatrix4=(0,0,
                             100,100);
         IdentityQuaternion: GDBQuaternion = (ImagPart:(x:0;y:0;z:0); RealPart: 1);
-      EPSILON  : Single = 1e-40;
-      EPSILON2 : Single = 1e-30;
-      eps=1e-14;
-      floateps=1e-6;
-      sqreps=1e-7;
-      bigeps=1e-10;
       xAxisIndex=0;yAxisIndex=1;zAxisIndex=2;wAxisIndex=3;
       ScaleOne:GDBVertex=(x:1;y:1;z:1);
       OneVertex:GDBVertex=(x:1;y:1;z:1);
@@ -123,7 +117,7 @@ function oneVertexlength(const Vector1: GDBVertex): Double;inline;
 function oneVertexlength2D(const Vector1: GDBVertex2D): Double;inline;
 function SqrOneVertexlength(const Vector1: GDBVertex): Double;inline;
 function vertexlen2df(const x1, y1, x2, y2: Single): Single;inline;
-function NormalizeVertex(const Vector1: GDBVertex): GDBVertex;{inline;}
+function NormalizeVertex(const Vector1: GDBVertex): GDBVertex;inline;
 function NormalizeVertex2D(const Vector1: GDBVertex2D): GDBVertex2D;{inline;}
 function VertexMulOnSc(const Vector1:GDBVertex;sc:Double): GDBVertex;inline;
 function Vertex2DMulOnSc(const Vector1:GDBVertex2D;sc:Double): GDBVertex2D;inline;

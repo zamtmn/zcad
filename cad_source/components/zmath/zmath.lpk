@@ -17,7 +17,7 @@
         </SyntaxOptions>
       </Parsing>
     </CompilerOptions>
-    <Files Count="4">
+    <Files Count="6">
       <Item1>
         <Filename Value="uzegeometry.pas"/>
         <UnitName Value="uzegeometry"/>
@@ -34,6 +34,14 @@
         <Filename Value="uzegeometrytypes.pas"/>
         <UnitName Value="uzegeometrytypes"/>
       </Item4>
+      <Item5>
+        <Filename Value="gvectorimpl.inc"/>
+        <Type Value="Include"/>
+      </Item5>
+      <Item6>
+        <Filename Value="gvectorintf.inc"/>
+        <Type Value="Include"/>
+      </Item6>
     </Files>
     <CompatibilityMode Value="True"/>
     <RequiredPkgs Count="2">

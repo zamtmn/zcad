@@ -18,7 +18,7 @@
 
 unit uzemathutils;
 interface
-uses uzedimensionaltypes,math,uzegeometry,sysutils;
+uses uzedimensionaltypes,math,uzegeometry,uzegeometrytypes,sysutils;
 function zeDimensionToString(const value:Double; const f:TzeUnitsFormat):String;overload;
 function zeDimensionToUnicodeString(const value:Double; const f:TzeUnitsFormat):UnicodeString;
 function zeNonDimensionToString(const value:Double; const f:TzeUnitsFormat):String;

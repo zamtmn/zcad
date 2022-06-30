@@ -294,7 +294,7 @@ begin
   if Strokes.Count=0 then
     Representation.DrawLineWithLT(DC,CreateVertex(p1.x,p1.y,0),CreateVertex(p2.x,p2.y,0),vp)
   else begin
-    dir:=NormalizeVertex2D(Vertex2DSub(p2,p1));
+    dir:=(p2-p1).NormalizeVertex;
     t:=Scale*normalizeT(st*Strokes.LengthFact,Strokes.LengthFact);
 
     l:=Vertexlength2d(p1,p2);
@@ -451,14 +451,14 @@ begin
   //dirx.y:=Strokes.Offset.y*Scale;
 
   offs:=Vertex2dMulOnSc(Strokes.Base,Scale);
-  offs:=Vertex2DAdd(offs,Vertex2dMulOnSc(Origin,Scale));
-  offs2:=Vertex2DAdd(offs,dirx);
+  offs:=VertexAdd(offs,Vertex2dMulOnSc(Origin,Scale));
+  offs2:=VertexAdd(offs,dirx);
 
   first:=true;
   for i:=0 to Path.paths.Count-1 do
     for j:=0 to Path.paths.getDataMutable(i)^.count-1 do begin
       pp:=Path.paths.getDataMutable(i)^.getDataMutable(j);
-      p2:=Vertex2DAdd(pp^,diry);
+      p2:=VertexAdd(pp^,diry);
       iprop:=intercept2dmy(offs,offs2,pp^,p2);
       if iprop.isintercept then
         if first then begin
@@ -475,12 +475,12 @@ begin
   if not first then begin
     tmin:=int(tmin{+0.5});
     tmax:=int(tmax);
-    ls:=Vertex2DAdd(offs,Vertex2dMulOnSc(dirx,tmin));
+    ls:=VertexAdd(offs,Vertex2dMulOnSc(dirx,tmin));
     while tmin<=tmax do begin
       IV.Clear;
-      ProcessLines(ls,Vertex2DAdd(ls,diry),IV);
+      ProcessLines(ls,VertexAdd(ls,diry),IV);
       ProcessStroke(Strokes,IV,DC);
-      ls:=Vertex2DAdd(ls,dirx);
+      ls:=VertexAdd(ls,dirx);
       tmin:=tmin+1;
     end;
   end;

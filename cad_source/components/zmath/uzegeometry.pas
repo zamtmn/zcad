@@ -125,11 +125,11 @@ function Vertex2DMulOnSc(const Vector1:GDBVertex2D;sc:Double): GDBVertex2D;inlin
 //к первой вершине прибавить вторую по осям Vector1.х + Vector2.х
 function VertexAdd(const Vector1, Vector2: GDBVertex): GDBVertex;inline;overload;
 function VertexAdd(const Vector1, Vector2: GDBVertex3S): GDBVertex3S;inline;overload;
-function Vertex2DAdd(const Vector1, Vector2: GDBVertex2D): GDBVertex2D;inline;
+function VertexAdd(const Vector1, Vector2: GDBVertex2D): GDBVertex2D;inline;overload;
 function VertexSub(const Vector1, Vector2: GDBVertex): GDBVertex;overload;inline;
-function Vertex2DSub(const Vector1, Vector2: GDBVertex2D): GDBVertex2D;overload;inline;
+function VertexSub(const Vector1, Vector2: GDBVertex2D): GDBVertex2D;overload;inline;
 function VertexSub(const Vector1, Vector2: GDBvertex3S): GDBVertex3S;overload;inline;
-function MinusVertex(const Vector1: GDBVertex): GDBVertex;inline;
+//function MinusVertex(const Vector1: GDBVertex): GDBVertex;inline;
 function vertexlen2id(const x1, y1, x2, y2: Integer): Double;inline;
 function Vertexdmorphabs(const Vector1, Vector2: GDBVertex;a: Double): GDBVertex;inline;
 function Vertexmorphabs(const Vector1, Vector2: GDBVertex;a: Double): GDBVertex;inline;
@@ -1837,7 +1837,7 @@ begin
   Result.Y := Vector1.y + Vector2.y;
   Result.Z := Vector1.z + Vector2.z;
 end;
-function Vertex2DAdd(const Vector1, Vector2: GDBVertex2D): GDBVertex2D;
+function VertexAdd(const Vector1, Vector2: GDBVertex2D): GDBVertex2D;
 begin
   Result.X := Vector1.x + Vector2.x;
   Result.Y := Vector1.y + Vector2.y;
@@ -1849,7 +1849,7 @@ begin
   Result.Y := Vector1.y - Vector2.y;
   Result.Z := Vector1.z - Vector2.z;
 end;
-function Vertex2DSub(const Vector1, Vector2: GDBVertex2D): GDBVertex2D;
+function VertexSub(const Vector1, Vector2: GDBVertex2D): GDBVertex2D;
 begin
   Result.X := Vector1.x - Vector2.x;
   Result.Y := Vector1.y - Vector2.y;
@@ -1860,12 +1860,12 @@ begin
   Result.Y := Vector1.y - Vector2.y;
   Result.Z := Vector1.z - Vector2.z;
 end;
-function MinusVertex(const Vector1: GDBVertex): GDBVertex;
+{function MinusVertex(const Vector1: GDBVertex): GDBVertex;
 begin
   Result.X := -Vector1.x;
   Result.Y := -Vector1.y;
   Result.Z := -Vector1.z;
-end;
+end;}
 function CrossVertex;
 begin
   Result.X := (Vector1.Y * Vector2.Z) - (Vector1.Z * Vector2.Y);

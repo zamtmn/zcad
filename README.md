@@ -27,7 +27,7 @@ ToDo:
 
 ## Build from source
 Dailed instructions: [ENG](htps://github.com/zamtmn/zcad/blob/master/README_ENG.md "ENG") [RUS](htps://github.com/zamtmn/zcad/blob/master/README_RUS.md "RUS")
-[ссылка с title элементом](http://example.com/link "Я ссылка").
+[ENG](htps://github.com/zamtmn/zcad/blob/master/README_ENG.md "ENG").
 
 Requirements:
 

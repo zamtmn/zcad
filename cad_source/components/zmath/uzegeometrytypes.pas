@@ -102,6 +102,17 @@ type
         1:(x,y:TT);
   end;
 {EXPORT+}
+
+  FontFloat=Single;
+  PFontFloat=^FontFloat;
+  PGDBXCoordinate=^GDBXCoordinate;
+  GDBXCoordinate=Double;
+  PGDBYCoordinate=^GDBYCoordinate;
+  GDBYCoordinate=Double;
+  PGDBZCoordinate=^GDBZCoordinate;
+  GDBZCoordinate=Double;
+
+
   PGDBvertex=^GDBvertex;
   {REGISTERRECORDTYPE GDBvertex}
   {-}GDBvertex=GVector3<Double,Double>;{//}
@@ -128,13 +139,47 @@ type
     {-}{/y:Double;/}
   {-}{/end;/}
 
-
+  //DVector4F=packed array[0..3]of Single;
+  PDVector4F=^DVector4F;
+  {REGISTERRECORDTYPE DVector4F}
+  {-}DVector4F=GVector4<Single,Single>;{//}
+  {-}{/DVector4F=record/}
+    {-}{/x:Single;/}
+    {-}{/y:Single;/}
+    {-}{/z:Single;/}
+    {-}{/w:Single;/}
+  {-}{/end;/}
 
   PIMatrix4=^IMatrix4;
-  IMatrix4=packed array[0..3]of Integer;
-  DVector4D=packed array[0..3]of Double;
-  DVector3D=packed array[0..2]of Double;
-  DVector4F=packed array[0..3]of Single;
+  //IMatrix4=packed array[0..3]of Integer;
+  {REGISTERRECORDTYPE IMatrix4}
+  {-}IMatrix4=GVector4i<Integer,Integer>;{//}
+  {-}{/IMatrix4=record/}
+    {-}{/x:Integer;/}
+    {-}{/y:Integer;/}
+    {-}{/z:Integer;/}
+    {-}{/w:Integer;/}
+  {-}{/end;/}
+
+  //DVector4D=packed array[0..3]of Double;
+  {REGISTERRECORDTYPE DVector4D}
+  {-}DVector4D=GVector4<Double,Double>;{//}
+  {-}{/DVector4D=record/}
+    {-}{/x:Double;/}
+    {-}{/y:Double;/}
+    {-}{/z:Double;/}
+    {-}{/w:Double;/}
+  {-}{/end;/}
+
+  //DVector3D=packed array[0..2]of Double;
+  {REGISTERRECORDTYPE DVector3D}
+  {-}DVector3D=GVector3<Double,Double>;{//}
+  {-}{/DVector3D=record/}
+    {-}{/x:Double;/}
+    {-}{/y:Double;/}
+    {-}{/z:Double;/}
+  {-}{/end;/}
+
   PDMatrix4D=^DMatrix4D;
   DMatrix4D=packed array[0..3]of DVector4D;
   DMatrix3D=packed array[0..2]of DVector3D;
@@ -142,14 +187,6 @@ type
   PDMatrix4F=^DMatrix4F;
   DMatrix4F=packed array[0..3]of DVector4F;
 
-  FontFloat=Single;
-  PFontFloat=^FontFloat;
-  PGDBXCoordinate=^GDBXCoordinate;
-  GDBXCoordinate=Double;
-  PGDBYCoordinate=^GDBYCoordinate;
-  GDBYCoordinate=Double;
-  PGDBZCoordinate=^GDBZCoordinate;
-  GDBZCoordinate=Double;
   PGDBCoordinates3D=^GDBCoordinates3D;
   GDBCoordinates3D=GDBvertex;
   PGDBLength=^GDBLength;

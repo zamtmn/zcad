@@ -183,7 +183,7 @@ begin
       result:=true;
       for i:=0 to 4 do
       begin
-      if(frustum[i][0] * P_insertInWCS.x + frustum[i][1] * P_insertInWCS.y + frustum[i][2] * P_insertInWCS.z + frustum[i][3] < 0 )
+      if(frustum[i].v[0] * P_insertInWCS.x + frustum[i].v[1] * P_insertInWCS.y + frustum[i].v[2] * P_insertInWCS.z + frustum[i].v[3] < 0 )
       then
       begin
            result:=false;
@@ -225,7 +225,7 @@ var {t,xx,yy,}d1:Double;
 begin
       for i:=0 to 5 do
       begin
-      d1:=MF[i][0] * P_insertInWCS.x + MF[i][1] * P_insertInWCS.y + MF[i][2] * P_insertInWCS.z + MF[i][3];
+      d1:=MF[i].v[0] * P_insertInWCS.x + MF[i].v[1] * P_insertInWCS.y + MF[i].v[2] * P_insertInWCS.z + MF[i].v[3];
       if d1<0 then
                  begin
                       result:=false;
@@ -240,7 +240,7 @@ var {t,xx,yy,}d1:Double;
 begin
       for i:=0 to 5 do
       begin
-      d1:=frustum[i][0] * P_insertInWCS.x + frustum[i][1] * P_insertInWCS.y + frustum[i][2] * P_insertInWCS.z + frustum[i][3];
+      d1:=frustum[i].v[0] * P_insertInWCS.x + frustum[i].v[1] * P_insertInWCS.y + frustum[i].v[2] * P_insertInWCS.z + frustum[i].v[3];
       if d1<0 then
                  begin
                       result:=IREmpty;

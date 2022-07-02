@@ -102,10 +102,10 @@ procedure GDBObjAbstractText.setrot(r:Double);
 var m1:DMatrix4D;
 begin
 m1:=onematrix;
-m1[0,0]:=cos(r);
-m1[1,1]:=cos(r);
-m1[1,0]:=-sin(r);
-m1[0,1]:=sin(r);
+m1[0].v[0]:=cos(r);
+m1[1].v[1]:=cos(r);
+m1[1].v[0]:=-sin(r);
+m1[0].v[1]:=sin(r);
 objMatrix:=MatrixMultiply(m1,objMatrix);
 end;
 procedure GDBObjAbstractText.FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);
@@ -330,10 +330,10 @@ begin
       result:=true;
       for i:=0 to 4 do
       begin
-      if(frustum[i][0] * outbound[0].x + frustum[i][1] * outbound[0].y + frustum[i][2] * outbound[0].z + frustum[i][3] < 0 )
-      and(frustum[i][0] * outbound[1].x + frustum[i][1] * outbound[1].y + frustum[i][2] * outbound[1].z + frustum[i][3] < 0 )
-      and(frustum[i][0] * outbound[2].x + frustum[i][1] * outbound[2].y + frustum[i][2] * outbound[2].z + frustum[i][3] < 0 )
-      and(frustum[i][0] * outbound[3].x + frustum[i][1] * outbound[3].y + frustum[i][2] * outbound[3].z + frustum[i][3] < 0 )
+      if(frustum[i].v[0] * outbound[0].x + frustum[i].v[1] * outbound[0].y + frustum[i].v[2] * outbound[0].z + frustum[i].v[3] < 0 )
+      and(frustum[i].v[0] * outbound[1].x + frustum[i].v[1] * outbound[1].y + frustum[i].v[2] * outbound[1].z + frustum[i].v[3] < 0 )
+      and(frustum[i].v[0] * outbound[2].x + frustum[i].v[1] * outbound[2].y + frustum[i].v[2] * outbound[2].z + frustum[i].v[3] < 0 )
+      and(frustum[i].v[0] * outbound[3].x + frustum[i].v[1] * outbound[3].y + frustum[i].v[2] * outbound[3].z + frustum[i].v[3] < 0 )
       then
       begin
            result:=false;
@@ -414,16 +414,16 @@ begin
   angle:=(pi/2 - textprop.oblique);
   if angle<>pi/2 then
                      begin
-                          m1[1, 0] :=cotan(angle);//1/tan(angle)
+                          m1[1].v[0] :=cotan(angle);//1/tan(angle)
                      end
                 else
-                   m1[1, 0] := 0;
+                   m1[1].v[ 0] := 0;
   m2:= OneMatrix;
   Pgdbvertex(@m2[3])^:=P_drawInOCS;
   m3:=OneMatrix;
-  m3[0, 0] := textprop.wfactor*textprop.size;
-  m3[1, 1] := textprop.size;
-  m3[2, 2] := textprop.size;
+  m3[0].v[0] := textprop.wfactor*textprop.size;
+  m3[1].v[1] := textprop.size;
+  m3[2].v[2] := textprop.size;
   {DrawMatrix:=MatrixMultiply(m1,m3);
   DrawMatrix:=MatrixMultiply(DrawMatrix,m2);}
   DrawMatrix:=MatrixMultiply(m3,m1);

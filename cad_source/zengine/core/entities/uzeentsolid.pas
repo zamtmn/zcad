@@ -260,10 +260,10 @@ begin
       result:=true;
       for i:=0 to 4 do
       begin
-      if(frustum[i][0] * PInWCS[0].x + frustum[i][1] * PInWCS[0].y + frustum[i][2] * PInWCS[0].z + frustum[i][3] < 0 )
-      and(frustum[i][0] * PInWCS[1].x + frustum[i][1] * PInWCS[1].y + frustum[i][2] * PInWCS[1].z + frustum[i][3] < 0 )
-      and(frustum[i][0] * PInWCS[2].x + frustum[i][1] * PInWCS[2].y + frustum[i][2] * PInWCS[2].z + frustum[i][3] < 0 )
-      and(frustum[i][0] * PInWCS[3].x + frustum[i][1] * PInWCS[3].y + frustum[i][2] * PInWCS[3].z + frustum[i][3] < 0 )
+      if(frustum[i].v[0] * PInWCS[0].x + frustum[i].v[1] * PInWCS[0].y + frustum[i].v[2] * PInWCS[0].z + frustum[i].v[3] < 0 )
+      and(frustum[i].v[0] * PInWCS[1].x + frustum[i].v[1] * PInWCS[1].y + frustum[i].v[2] * PInWCS[1].z + frustum[i].v[3] < 0 )
+      and(frustum[i].v[0] * PInWCS[2].x + frustum[i].v[1] * PInWCS[2].y + frustum[i].v[2] * PInWCS[2].z + frustum[i].v[3] < 0 )
+      and(frustum[i].v[0] * PInWCS[3].x + frustum[i].v[1] * PInWCS[3].y + frustum[i].v[2] * PInWCS[3].z + frustum[i].v[3] < 0 )
       then
       begin
            result:=false;

@@ -161,8 +161,8 @@ class function TZEntsManipulator.GetBBPosition(const sep:DVector4D;const BB:TBou
 var
     d,d1,d2:double;
 begin
-     d1:=sep[0] * BB.RTF.x + sep[1] * BB.RTF.y + sep[2] * BB.RTF.z + sep[3];
-     d2:=sep[0] * BB.LBN.x + sep[1] * BB.LBN.y + sep[2] * BB.LBN.z + sep[3];
+     d1:=sep.v[0] * BB.RTF.x + sep.v[1] * BB.RTF.y + sep.v[2] * BB.RTF.z + sep.v[3];
+     d2:=sep.v[0] * BB.LBN.x + sep.v[1] * BB.LBN.y + sep.v[2] * BB.LBN.z + sep.v[3];
      if abs(d1)<eps then
                         d1:=0;
      if abs(d2)<eps then

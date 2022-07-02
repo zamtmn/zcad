@@ -72,7 +72,7 @@ var
 begin
      if dc.maxdetail then
                          exit(true);
-  templod:=sqrt(objmatrix[0,0]*objmatrix[0,0]+objmatrix[1,1]*objmatrix[1,1]+objmatrix[2,2]*objmatrix[2,2]);
+  templod:=sqrt(objmatrix[0].v[0]*objmatrix[0].v[0]+objmatrix[1].v[1]*objmatrix[1].v[1]+objmatrix[2].v[2]*objmatrix[2].v[2]);
   templod:=(templod*ParamSize)/(dc.DrawingContext.zoom);
   if templod>TargetSize then
                             exit(true)

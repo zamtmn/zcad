@@ -289,15 +289,15 @@ procedure GDBObjBlockInsert.setrot(r:Double);
 var m1:DMatrix4D;
 begin
 m1:=onematrix;
-m1[0,0]:=cos(r);
-m1[1,1]:=cos(r);
-m1[1,0]:=-sin(r);
-m1[0,1]:=sin(r);
+m1[0].v[0]:=cos(r);
+m1[1].v[1]:=cos(r);
+m1[1].v[0]:=-sin(r);
+m1[0].v[1]:=sin(r);
 objMatrix:=MatrixMultiply(m1,objMatrix);
 end;
 function GDBObjBlockInsert.getrot:Double;
 begin
-     result:=arccos((objmatrix[0,0])/oneVertexlength(PGDBVertex(@objmatrix[0])^))
+     result:=arccos((objmatrix[0].v[0])/oneVertexlength(PGDBVertex(@objmatrix[0])^))
 end;
 
 procedure GDBObjBlockInsert.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
@@ -346,9 +346,9 @@ begin
   setrot(rotate);
 
   m1:=OneMatrix;
-  m1[0, 0] := scale.x;
-  m1[1, 1] := scale.y;
-  m1[2, 2] := scale.z;
+  m1[0].v[0] := scale.x;
+  m1[1].v[1] := scale.y;
+  m1[2].v[2] := scale.z;
   objMatrix:=MatrixMultiply(m1,objMatrix);
   //setrot(rotate);
 end;

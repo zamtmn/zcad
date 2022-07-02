@@ -196,10 +196,10 @@ begin
   otracktimerwork := 0;
   ontrackarray.total := 1;
   ontrackarray.current := 1;
-  md.workplane{.normal.x}[0] := 0;
-  md.workplane{.normal.y}[1] := {sqrt(0.1)}0;
-  md.workplane{.normal.z}[2] := {sqrt(0.9)}1;
-  md.workplane{.d}[3] := 0;
+  md.workplane.v[0] := 0;
+  md.workplane.v[1] := 0;
+  md.workplane.v[2] := 1;
+  md.workplane.v[3] := 0;
   scrollmode:=false;
 
   md.mousein:=false;

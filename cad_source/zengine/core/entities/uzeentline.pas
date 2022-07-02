@@ -256,8 +256,8 @@ begin
       result:=true;
       for i:=0 to 5 do
       begin
-      if(frustum[i][0] * CoordInWCS.lbegin.x + frustum[i][1] * CoordInWCS.lbegin.y + frustum[i][2] * CoordInWCS.lbegin.z + frustum[i][3] < 0 )
-     and(frustum[i][0] * CoordInWCS.lend.x +   frustum[i][1] * CoordInWCS.lend.y +   frustum[i][2] * CoordInWCS.lend.z +   frustum[i][3] < 0 )
+      if(frustum[i].v[0] * CoordInWCS.lbegin.x + frustum[i].v[1] * CoordInWCS.lbegin.y + frustum[i].v[2] * CoordInWCS.lbegin.z + frustum[i].v[3] < 0 )
+     and(frustum[i].v[0] * CoordInWCS.lend.x +   frustum[i].v[1] * CoordInWCS.lend.y +   frustum[i].v[2] * CoordInWCS.lend.z +   frustum[i].v[3] < 0 )
       then
       begin
            result:=false;

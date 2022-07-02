@@ -75,9 +75,9 @@ if a<eps then a:=1;
 dispmatr:=uzegeometry.CreateTranslationMatrix(createvertex(-t3dp.x,-t3dp.y,-t3dp.z));
 
 rotmatr:=onematrix;
-rotmatr[0][0]:=a;
-rotmatr[1][1]:=a;
-rotmatr[2][2]:=a;
+rotmatr[0].v[0]:=a;
+rotmatr[1].v[1]:=a;
+rotmatr[2].v[2]:=a;
 
 rotmatr:=uzegeometry.MatrixMultiply(dispmatr,rotmatr);
 dispmatr:=uzegeometry.CreateTranslationMatrix(createvertex(t3dp.x,t3dp.y,t3dp.z));

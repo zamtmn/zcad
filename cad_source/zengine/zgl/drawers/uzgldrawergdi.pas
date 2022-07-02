@@ -593,7 +593,7 @@ begin
   _scaleM:=CreateScaleMatrix(CreateVertex(txtSx,txtSy,1));
   _obliqueM:=OneMatrix;
   if txtOblique<>0 then
-                       _obliqueM[1,0]:=-cotan(txtOblique);
+                       _obliqueM[1].v[0]:=-cotan(txtOblique);
   _transplusM:=CreateTranslationMatrix(CreateVertex(x,y,0));
   _rotateM:=CreateRotationMatrixZ(sin(-txtRotate),cos(-txtRotate));
 

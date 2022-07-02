@@ -455,9 +455,9 @@ begin
                //rtmod.point.worldcoord:={point^}VectorTransform3D(rtmod.point.worldcoord,mt);
                mt:=m;
 
-               mt[3][0]:=0;
-               mt[3][1]:=0;
-               mt[3][2]:=0;
+               mt[3].v[0]:=0;
+               mt[3].v[1]:=0;
+               mt[3].v[2]:=0;
 
                rtmod.dist:=VectorTransform3D(dist,mt);
                rtmod.wc:=VectorTransform3D(wc,m);

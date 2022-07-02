@@ -19,25 +19,24 @@
 unit uzegeometry;
 
 interface
-uses LCLProc,{}uzegeometrytypes,math;
+uses LCLProc,uzegeometrytypes,math;
 resourcestring
   rsDivByZero='Divide by zero';
 const
       RightAngle=pi/2;
-      EmptyMatrix: DMatrix4D = ((0, 0, 0, 0),
-                                (0, 0, 0, 0),
-                                (0, 0, 0, 0),
-                                (0, 0, 0, 0));
-        OneMatrix: DMatrix4D = ((1, 0, 0, 0),
-                                (0, 1, 0, 0),
-                                (0, 0, 1, 0),
-                                (0, 0, 0, 1));
-        TwoMatrix: DMatrix4D = ((2, 0, 0, 0),
-                                (0, 2, 0, 0),
-                                (0, 0, 2, 0),
-                                (0, 0, 0, 2));
-        DefaultVP:IMatrix4=(0,0,
-                            100,100);
+      EmptyMatrix: DMatrix4D = ((v:(0,0,0,0)),
+                                (v:(0,0,0,0)),
+                                (v:(0,0,0,0)),
+                                (v:(0,0,0,0)));
+        OneMatrix: DMatrix4D = ((x:1;y:0;z:0;w:0),
+                                (x:0;y:1;z:0;w:0),
+                                (x:0;y:0;z:1;w:0),
+                                (x:0;y:0;z:0;w:1));
+        TwoMatrix: DMatrix4D = ((x:2;y:0;z:0;w:0),
+                                (x:0;y:2;z:0;w:0),
+                                (x:0;y:0;z:2;w:0),
+                                (x:0;y:0;z:0;w:2));
+        DefaultVP:IMatrix4=(x:2;y:0;z:100;w:100);
         IdentityQuaternion: GDBQuaternion = (ImagPart:(x:0;y:0;z:0); RealPart: 1);
       xAxisIndex=0;yAxisIndex=1;zAxisIndex=2;wAxisIndex=3;
       ScaleOne:GDBVertex=(x:1;y:1;z:1);
@@ -49,15 +48,15 @@ const
       MinusInfinityVertex:GDBVertex=(x:NegInfinity;y:NegInfinity;z:NegInfinity);
       InfinityVertex:GDBVertex=(x:Infinity;y:Infinity;z:Infinity);
       NulVertex4D:GDBVertex4d=(x:0;y:0;z:0;w:1);
-      NulVector4D:DVector4D=(0,0,0,0);
-      NulVector4D2:DVector4D=(0,0,0,1);
+      NulVector4D:DVector4D=(v:(0,0,0,0));
+      NulVector4D2:DVector4D=(v:(0,0,0,1));
       NulVertex:GDBVertex=(x:0;y:0;z:0);
       XWCS:GDBVertex=(x:1;y:0;z:0);
       YWCS:GDBVertex=(x:0;y:1;z:0);
       ZWCS:GDBVertex=(x:0;y:0;z:1);
-      XWCS4D:DVector4D=(1,0,0,1);
-      YWCS4D:DVector4D=(0,1,0,1);
-      ZWCS4D:DVector4D=(0,0,1,1);
+      XWCS4D:DVector4D=(v:(1,0,0,1));
+      YWCS4D:DVector4D=(v:(0,1,0,1));
+      ZWCS4D:DVector4D=(v:(0,0,1,1));
       NulVertex2D:GDBVertex2D=(x:0;y:0);
       XWCS2D:GDBVertex2D=(x:1;y:0);
       YWCS2D:GDBVertex2D=(x:0;y:1);
@@ -249,10 +248,10 @@ type
 implementation
 function ToDVector4F(const m:DVector4D):DVector4F;
 begin
-  result[0]:=m[0];
-  result[1]:=m[1];
-  result[2]:=m[2];
-  result[3]:=m[3];
+  result.v[0]:=m.v[0];
+  result.v[1]:=m.v[1];
+  result.v[2]:=m.v[2];
+  result.v[3]:=m.v[3];
 end;
 function ToDMatrix4F(const m:DMatrix4D):DMatrix4F;
 begin
@@ -270,9 +269,9 @@ function myPickMatrix(const x,y,deltax,deltay:Double;const vp:IMatrix4): DMatrix
 var
   tm,sm: DMatrix4D;
 begin
-    tm:=CreateTranslationMatrix(createvertex((vp[2]-2*(x-vp[0]))/deltax,
-	                                              (vp[3]-2*(y-vp[1]))/deltay, 0));
-    sm:=CreateScaleMatrix(createvertex(vp[2]/deltax,vp[3]/deltay, 1.0));
+    tm:=CreateTranslationMatrix(createvertex((vp.v[2]-2*(x-vp.v[0]))/deltax,
+	                                              (vp.v[3]-2*(y-vp.v[1]))/deltay, 0));
+    sm:=CreateScaleMatrix(createvertex(vp.v[2]/deltax,vp.v[3]/deltay, 1.0));
     result:=MatrixMultiply(sm,tm);
 end;
 
@@ -418,10 +417,10 @@ begin
       count:=0;
       for i:=0 to 5 do
       begin
-      d1:=frustum[i][0] * outbound[0].x + frustum[i][1] * outbound[0].y + frustum[i][2] * outbound[0].z + frustum[i][3];
-      d2:=frustum[i][0] * outbound[1].x + frustum[i][1] * outbound[1].y + frustum[i][2] * outbound[1].z + frustum[i][3];
-      d3:=frustum[i][0] * outbound[2].x + frustum[i][1] * outbound[2].y + frustum[i][2] * outbound[2].z + frustum[i][3];
-      d4:=frustum[i][0] * outbound[3].x + frustum[i][1] * outbound[3].y + frustum[i][2] * outbound[3].z + frustum[i][3];
+      d1:=frustum[i].v[0] * outbound[0].x + frustum[i].v[1] * outbound[0].y + frustum[i].v[2] * outbound[0].z + frustum[i].v[3];
+      d2:=frustum[i].v[0] * outbound[1].x + frustum[i].v[1] * outbound[1].y + frustum[i].v[2] * outbound[1].z + frustum[i].v[3];
+      d3:=frustum[i].v[0] * outbound[2].x + frustum[i].v[1] * outbound[2].y + frustum[i].v[2] * outbound[2].z + frustum[i].v[3];
+      d4:=frustum[i].v[0] * outbound[3].x + frustum[i].v[1] * outbound[3].y + frustum[i].v[2] * outbound[3].z + frustum[i].v[3];
       if (d1<0)and(d2<0)and(d3<0)and(d4<0)
       then
       begin
@@ -457,8 +456,8 @@ begin
       cacount:=0;
       for i:=0 to 5 do
       begin
-      d1:=frustum[i][0] * lbegin.x + frustum[i][1] * lbegin.y + frustum[i][2] * lbegin.z + frustum[i][3];
-      d2:=frustum[i][0] * lend.x +   frustum[i][1] * lend.y +   frustum[i][2] * lend.z +   frustum[i][3];
+      d1:=frustum[i].v[0] * lbegin.x + frustum[i].v[1] * lbegin.y + frustum[i].v[2] * lbegin.z + frustum[i].v[3];
+      d2:=frustum[i].v[0] * lend.x +   frustum[i].v[1] * lend.y +   frustum[i].v[2] * lend.z +   frustum[i].v[3];
       if d1<0 then
                   bytebegin:=bytebegin or bit;
       if d2<0 then
@@ -510,7 +509,7 @@ begin
       p:=VertexDmorph(lbegin,d,d1);
       for i:=0 to 5 do
       begin
-            if (frustum[i][0] * p.x + frustum[i][1] * p.y + frustum[i][2] * p.z + frustum[i][3])>=0
+            if (frustum[i].v[0] * p.x + frustum[i].v[1] * p.y + frustum[i].v[2] * p.z + frustum[i].v[3])>=0
             then
                 inc(bit);
       end;
@@ -538,8 +537,8 @@ begin
       cacount:=0;
       for i:=0 to 5 do
       begin
-      d1:=frustum[i][0] * lbegin.x + frustum[i][1] * lbegin.y + frustum[i][2] * lbegin.z + frustum[i][3];
-      d2:=frustum[i][0] * lend.x +   frustum[i][1] * lend.y +   frustum[i][2] * lend.z +   frustum[i][3];
+      d1:=frustum[i].v[0] * lbegin.x + frustum[i].v[1] * lbegin.y + frustum[i].v[2] * lbegin.z + frustum[i].v[3];
+      d2:=frustum[i].v[0] * lend.x +   frustum[i].v[1] * lend.y +   frustum[i].v[2] * lend.z +   frustum[i].v[3];
        if d1<0 then
                   bytebegin:=bytebegin or bit;
         if d2<0 then
@@ -591,7 +590,7 @@ begin
       p:=VertexDmorph(lbegin,d,d1);
       for i:=0 to 5 do
       begin
-            if (frustum[i][0] * p.x + frustum[i][1] * p.y + frustum[i][2] * p.z + frustum[i][3])>=0
+            if (frustum[i].v[0] * p.x + frustum[i].v[1] * p.y + frustum[i].v[2] * p.z + frustum[i].v[3])>=0
             then
                 inc(bit);
       end;
@@ -613,7 +612,7 @@ var i{,j}:Integer;
 begin
       for i:=0 to 5 do
       begin
-      d1:=frustum[i][0] * lbegin.x + frustum[i][1] * lbegin.y + frustum[i][2] * lbegin.z + frustum[i][3];
+      d1:=frustum[i].v[0] * lbegin.x + frustum[i].v[1] * lbegin.y + frustum[i].v[2] * lbegin.z + frustum[i].v[3];
       if d1<0 then
                   begin
                        result:=IREmpty;
@@ -643,14 +642,14 @@ begin
       count:=0;
       for i:=0 to 5 do
       begin
-          d1:=frustum[i][0] * p1.x + frustum[i][1] * p1.y + frustum[i][2] * p1.z + frustum[i][3];
-          d2:=frustum[i][0] * p2.x + frustum[i][1] * p2.y + frustum[i][2] * p2.z + frustum[i][3];
-          d3:=frustum[i][0] * p3.x + frustum[i][1] * p3.y + frustum[i][2] * p3.z + frustum[i][3];
-          d4:=frustum[i][0] * p4.x + frustum[i][1] * p4.y + frustum[i][2] * p4.z + frustum[i][3];
-          d5:=frustum[i][0] * p5.x + frustum[i][1] * p5.y + frustum[i][2] * p5.z + frustum[i][3];
-          d6:=frustum[i][0] * p6.x + frustum[i][1] * p6.y + frustum[i][2] * p6.z + frustum[i][3];
-          d7:=frustum[i][0] * p7.x + frustum[i][1] * p7.y + frustum[i][2] * p7.z + frustum[i][3];
-          d8:=frustum[i][0] * p8.x + frustum[i][1] * p8.y + frustum[i][2] * p8.z + frustum[i][3];
+          d1:=frustum[i].v[0] * p1.x + frustum[i].v[1] * p1.y + frustum[i].v[2] * p1.z + frustum[i].v[3];
+          d2:=frustum[i].v[0] * p2.x + frustum[i].v[1] * p2.y + frustum[i].v[2] * p2.z + frustum[i].v[3];
+          d3:=frustum[i].v[0] * p3.x + frustum[i].v[1] * p3.y + frustum[i].v[2] * p3.z + frustum[i].v[3];
+          d4:=frustum[i].v[0] * p4.x + frustum[i].v[1] * p4.y + frustum[i].v[2] * p4.z + frustum[i].v[3];
+          d5:=frustum[i].v[0] * p5.x + frustum[i].v[1] * p5.y + frustum[i].v[2] * p5.z + frustum[i].v[3];
+          d6:=frustum[i].v[0] * p6.x + frustum[i].v[1] * p6.y + frustum[i].v[2] * p6.z + frustum[i].v[3];
+          d7:=frustum[i].v[0] * p7.x + frustum[i].v[1] * p7.y + frustum[i].v[2] * p7.z + frustum[i].v[3];
+          d8:=frustum[i].v[0] * p8.x + frustum[i].v[1] * p8.y + frustum[i].v[2] * p8.z + frustum[i].v[3];
 
           if (d1<0)and(d2<0)and(d3<0)and(d4<0)and(d5<0)and(d6<0)and(d7<0)and(d8<0)
           then
@@ -684,16 +683,16 @@ var
    a4:Double;
 begin
      result:=nulvertex;
-     n1:=createvertex(p1[0],p1[1],p1[2]);
-     n2:=createvertex(p2[0],p2[1],p2[2]);
-     n3:=createvertex(p3[0],p3[1],p3[2]);
+     n1:=createvertex(p1.v[0],p1.v[1],p1.v[2]);
+     n2:=createvertex(p2.v[0],p2.v[1],p2.v[2]);
+     n3:=createvertex(p3.v[0],p3.v[1],p3.v[2]);
      n12:=vectordot(n1,n2);
      n23:=vectordot(n2,n3);
      n31:=vectordot(n3,n1);
 
-     a1:=VertexMulOnSc(n23,p1[3]);
-     a2:=VertexMulOnSc(n31,p2[3]);
-     a3:=VertexMulOnSc(n12,p3[3]);
+     a1:=VertexMulOnSc(n23,p1.v[3]);
+     a2:=VertexMulOnSc(n31,p2.v[3]);
+     a3:=VertexMulOnSc(n12,p3.v[3]);
      a4:=scalardot(n1,n23);
      if abs(a4)<eps then
                    exit;
@@ -708,11 +707,11 @@ end;
 procedure NormalizePlane(var plane:DVector4D);{inline;}
 var t:Double;
 begin
-  t := sqrt( plane[0] * plane[0] + plane[1] * plane[1] + plane[2] * plane[2] );
-  plane[0] := plane[0]/t;
-  plane[1] := plane[1]/t;
-  plane[2] := plane[2]/t;
-  plane[3] := plane[3]/t;
+  t := sqrt( plane.v[0] * plane.v[0] + plane.v[1] * plane.v[1] + plane.v[2] * plane.v[2] );
+  plane.v[0] := plane.v[0]/t;
+  plane.v[1] := plane.v[1]/t;
+  plane.v[2] := plane.v[2]/t;
+  plane.v[3] := plane.v[3]/t;
 end;
 
 function PlaneFrom3Pont(const P1,P2,P3:GDBVertex):DVector4D;
@@ -720,10 +719,10 @@ function PlaneFrom3Pont(const P1,P2,P3:GDBVertex):DVector4D;
 //   N1,N2,N3,N12,N23,N31,a1,a2,a3:GDBVertex;
 //   a4:Double;
 begin
-      result[0]:= P1.y*(P2.z - P3.z) + P2.y* (P3.z - P1.z) + P3.y* (P1.z - P2.z);
-      result[1]:= P1.z*(P2.x - P3.x) + P2.z* (P3.x - P1.x) + P3.z* (P1.x - P2.x);
-      result[2]:= P1.x*(P2.y - P3.y) + P2.x* (P3.y - P1.y) + P3.x* (P1.y - P2.y);
-      result[3]:= -(P1.x*(P2.y*P3.z - P3.y*P2.z) + P2.x*(P3.y*P1.z - P1.y*P3.z) + P3.x*(P1.y*P2.z - P2.y*P1.z));
+      result.v[0]:= P1.y*(P2.z - P3.z) + P2.y* (P3.z - P1.z) + P3.y* (P1.z - P2.z);
+      result.v[1]:= P1.z*(P2.x - P3.x) + P2.z* (P3.x - P1.x) + P3.z* (P1.x - P2.x);
+      result.v[2]:= P1.x*(P2.y - P3.y) + P2.x* (P3.y - P1.y) + P3.x* (P1.y - P2.y);
+      result.v[3]:= -(P1.x*(P2.y*P3.z - P3.y*P2.z) + P2.x*(P3.y*P1.z - P1.y*P3.z) + P3.x*(P1.y*P2.z - P2.y*P1.z));
 
 end;
 function PointOfLinePlaneIntersect(const p1,d:GDBVertex;const plane:DVector4D;out point :GDBVertex):Boolean;
@@ -731,13 +730,13 @@ var
 //   N1,N2,N3,N12,N23,N31,a1,a2,a3:GDBVertex;
    td:Double;
 begin
-     td:=-plane[0]*d.x-plane[1]*d.y-plane[2]*d.z;
+     td:=-plane.v[0]*d.x-plane.v[1]*d.y-plane.v[2]*d.z;
      if abs(td)<eps then
                         begin
                              result:=false;
                              exit;
                         end;
-     td:=(plane[0]*p1.x+plane[1]*p1.y+plane[2]*p1.z+plane[3])/td;
+     td:=(plane.v[0]*p1.x+plane.v[1]*p1.y+plane.v[2]*p1.z+plane.v[3])/td;
      point:=VertexDmorph(p1,d,td);
      result:=true;
 
@@ -746,70 +745,70 @@ function calcfrustum(const clip:PDMatrix4D):cliparray;
 var t:Double;
 begin
    //* Находим A, B, C, D для ПРАВОЙ плоскости */
-   result[0][0] := clip[0, 3] - clip[0, 0];
-   result[0][1] := clip[1, 3] - clip[1, 0];
-   result[0][2] := clip[2,3] - clip[2,0];
-   result[0][3] := clip[3,3] - clip[3,0];
-   t := sqrt( result[0][0] * result[0][0] + result[0][1] * result[0][1] + result[0][2] * result[0][2] );
-   result[0][0] := result[0][0]/t;
-   result[0][1] := result[0][1]/t;
-   result[0][2] := result[0][2]/t;
-   result[0][3] := result[0][3]/t;
+   result[0].v[0] := clip[0].v[3] - clip[0].v[0];
+   result[0].v[1] := clip[1].v[3] - clip[1].v[0];
+   result[0].v[2] := clip[2].v[3] - clip[2].v[0];
+   result[0].v[3] := clip[3].v[3] - clip[3].v[0];
+   t := sqrt( result[0].v[0] * result[0].v[0] + result[0].v[1] * result[0].v[1] + result[0].v[2] * result[0].v[2] );
+   result[0].v[0] := result[0].v[0]/t;
+   result[0].v[1] := result[0].v[1]/t;
+   result[0].v[2] := result[0].v[2]/t;
+   result[0].v[3] := result[0].v[3]/t;
 
    //* Находим A, B, C, D для ЛЕВОЙ плоскости */
-   result[1][0] := clip[0, 3] + clip[0,0];
-   result[1][1] := clip[1, 3] + clip[1,0];
-   result[1][2] := clip[2,3] + clip[2,0];
-   result[1][3] := clip[3,3] + clip[3,0];
-   t := sqrt( result[1][0] * result[1][0] + result[1][1] * result[1][1] + result[1][2] * result[1][2] );
-   result[1][0] := result[1][0]/t;
-   result[1][1] := result[1][1]/t;
-   result[1][2] := result[1][2]/t;
-   result[1][3] := result[1][3]/t;
+   result[1].v[0] := clip[0].v[3] + clip[0].v[0];
+   result[1].v[1] := clip[1].v[3] + clip[1].v[0];
+   result[1].v[2] := clip[2].v[3] + clip[2].v[0];
+   result[1].v[3] := clip[3].v[3] + clip[3].v[0];
+   t := sqrt( result[1].v[0] * result[1].v[0] + result[1].v[1] * result[1].v[1] + result[1].v[2] * result[1].v[2] );
+   result[1].v[0] := result[1].v[0]/t;
+   result[1].v[1] := result[1].v[1]/t;
+   result[1].v[2] := result[1].v[2]/t;
+   result[1].v[3] := result[1].v[3]/t;
 
    //* Находим A, B, C, D для НИЖНЕЙ плоскости */
-   result[2][0] := clip[ 0,3] + clip[ 0,1];
-   result[2][1] := clip[ 1,3] + clip[ 1,1];
-   result[2][2] := clip[2,3] + clip[ 2,1];
-   result[2][3] := clip[3,3] + clip[3,1];
-   t := sqrt( result[2][0] * result[2][0] + result[2][1] * result[2][1] + result[2][2] * result[2][2] );
-   result[2][0] := result[2][0]/t;
-   result[2][1] := result[2][1]/t;
-   result[2][2] := result[2][2]/t;
-   result[2][3] := result[2][3]/t;
+   result[2].v[0] := clip[0].v[3] + clip[0].v[1];
+   result[2].v[1] := clip[1].v[3] + clip[1].v[1];
+   result[2].v[2] := clip[2].v[3] + clip[2].v[1];
+   result[2].v[3] := clip[3].v[3] + clip[3].v[1];
+   t := sqrt( result[2].v[0] * result[2].v[0] + result[2].v[1] * result[2].v[1] + result[2].v[2] * result[2].v[2] );
+   result[2].v[0] := result[2].v[0]/t;
+   result[2].v[1] := result[2].v[1]/t;
+   result[2].v[2] := result[2].v[2]/t;
+   result[2].v[3] := result[2].v[3]/t;
 
    //* ВЕРХНЯЯ плоскость */
-   result[3][0] := clip[ 0,3] - clip[ 0,1];
-   result[3][1] := clip[ 1,3] - clip[ 1,1];
-   result[3][2] := clip[2,3] - clip[ 2,1];
-   result[3][3] := clip[3,3] - clip[3,1];
-   t := sqrt( result[3][0] * result[3][0] + result[3][1] * result[3][1] + result[3][2] * result[3][2] );
-   result[3][0] := result[3][0]/t;
-   result[3][1] := result[3][1]/t;
-   result[3][2] := result[3][2]/t;
-   result[3][3] := result[3][3]/t;
+   result[3].v[0] := clip[0].v[3] - clip[0].v[1];
+   result[3].v[1] := clip[1].v[3] - clip[1].v[1];
+   result[3].v[2] := clip[2].v[3] - clip[2].v[1];
+   result[3].v[3] := clip[3].v[3] - clip[3].v[1];
+   t := sqrt( result[3].v[0] * result[3].v[0] + result[3].v[1] * result[3].v[1] + result[3].v[2] * result[3].v[2] );
+   result[3].v[0] := result[3].v[0]/t;
+   result[3].v[1] := result[3].v[1]/t;
+   result[3].v[2] := result[3].v[2]/t;
+   result[3].v[3] := result[3].v[3]/t;
 
    //* ПЕРЕДНЯЯ плоскость */
-   result[4][0] := clip[ 0,3] + clip[ 0,2];
-   result[4][1] := clip[ 1,3] + clip[ 1,2];
-   result[4][2] := clip[2,3] + clip[2,2];
-   result[4][3] := clip[3,3] + clip[3,2];
-   t := sqrt( result[4][0] * result[4][0] + result[4][1] * result[4][1] + result[4][2] * result[4][2] );
-   result[4][0] := result[4][0]/t;
-   result[4][1] := result[4][1]/t;
-   result[4][2] := result[4][2]/t;
-   result[4][3] := result[4][3]/t;
+   result[4].v[0] := clip[0].v[3] + clip[0].v[2];
+   result[4].v[1] := clip[1].v[3] + clip[1].v[2];
+   result[4].v[2] := clip[2].v[3] + clip[2].v[2];
+   result[4].v[3] := clip[3].v[3] + clip[3].v[2];
+   t := sqrt( result[4].v[0] * result[4].v[0] + result[4].v[1] * result[4].v[1] + result[4].v[2] * result[4].v[2] );
+   result[4].v[0] := result[4].v[0]/t;
+   result[4].v[1] := result[4].v[1]/t;
+   result[4].v[2] := result[4].v[2]/t;
+   result[4].v[3] := result[4].v[3]/t;
 
    //* ?? плоскость */
-   result[5][0] := clip[ 0,3] - clip[ 0,2];
-   result[5][1] := clip[ 1,3] - clip[ 1,2];
-   result[5][2] := clip[2,3] - clip[2,2];
-   result[5][3] := clip[3,3] - clip[3,2];
-   t := sqrt( result[5][0] * result[5][0] + result[5][1] * result[5][1] + result[5][2] * result[5][2] );
-   result[5][0] := result[5][0]/t;
-   result[5][1] := result[5][1]/t;
-   result[5][2] := result[5][2]/t;
-   result[5][3] := result[5][3]/t;
+   result[5].v[0] := clip[0].v[3] - clip[0].v[2];
+   result[5].v[1] := clip[1].v[3] - clip[1].v[2];
+   result[5].v[2] := clip[2].v[3] - clip[2].v[2];
+   result[5].v[3] := clip[3].v[3] - clip[3].v[2];
+   t := sqrt( result[5].v[0] * result[5].v[0] + result[5].v[1] * result[5].v[1] + result[5].v[2] * result[5].v[2] );
+   result[5].v[0] := result[5].v[0]/t;
+   result[5].v[1] := result[5].v[1]/t;
+   result[5].v[2] := result[5].v[2]/t;
+   result[5].v[3] := result[5].v[3]/t;
 end;
 
 
@@ -833,14 +832,14 @@ begin
                                         exit;
                                    end;
      {Все коэффициенты домножены на xmaxminusxmin, воччтановить оригинал - соответственно всё разделить}
-     m[0,0]:=2{/xmaxminusxmin};
-     m[1,1]:=(2/ymaxminusymin)*xmaxminusxmin;
-     m[2,2]:=(2/zmaxminuszmin)*xmaxminusxmin;
-     m[3,0]:=(-xmaxplusxmin/xmaxminusxmin)*xmaxminusxmin;
-     m[3,1]:=(-ymaxplusymin/ymaxminusymin)*xmaxminusxmin;
-     m[3,2]:=(zmaxpluszmin/zmaxminuszmin)*xmaxminusxmin;
+     m[0].v[0]:=2{/xmaxminusxmin};
+     m[1].v[1]:=(2/ymaxminusymin)*xmaxminusxmin;
+     m[2].v[2]:=(2/zmaxminuszmin)*xmaxminusxmin;
+     m[3].v[0]:=(-xmaxplusxmin/xmaxminusxmin)*xmaxminusxmin;
+     m[3].v[1]:=(-ymaxplusymin/ymaxminusymin)*xmaxminusxmin;
+     m[3].v[2]:=(zmaxpluszmin/zmaxminuszmin)*xmaxminusxmin;
 
-     m[3,3]:=xmaxminusxmin;
+     m[3].v[3]:=xmaxminusxmin;
 
      result:=MatrixMultiply(m,matrix^);
      //glMultMatrixd(@m);
@@ -882,12 +881,12 @@ begin
 
     m:=OneMatrix;
 
-    m[0,0] := cotangent / w_h;
-    m[1,1] := cotangent;
-    m[2,2] := -(zmax + zmin) / deltaZ;
-    m[2,3] := -1;
-    m[3,2] := -2 * zmin * zmax / deltaZ;
-    m[3,3] := 0;
+    m[0].v[0] := cotangent / w_h;
+    m[1].v[1] := cotangent;
+    m[2].v[2] := -(zmax + zmin) / deltaZ;
+    m[2].v[3] := -1;
+    m[3].v[2] := -2 * zmin * zmax / deltaZ;
+    m[3].v[3] := 0;
 
     result:=MatrixMultiply(m,matrix^);
 end;
@@ -960,8 +959,8 @@ begin
      _in.z:=winz;
      _in.w:=1.0;
 
-     _in.x:= (_in.x - viewport[0]) / viewport[2];
-     _in.y:= (_in.y - viewport[1]) / viewport[3];
+     _in.x:= (_in.x - viewport.v[0]) / viewport.v[2];
+     _in.y:= (_in.y - viewport.v[1]) / viewport.v[3];
 
      //* Map to range -1 to 1 */
      _in.x:= _in.x * 2 - 1;
@@ -1002,8 +1001,8 @@ begin
     _in.z:=_in.z * 0.5 + 0.5;
 
     //* Map x,y to viewport */
-    _in.x:=_in.x * viewport[2] + viewport[0];
-    _in.y:=_in.y * viewport[3] + viewport[1];
+    _in.x:=_in.x * viewport.v[2] + viewport.v[0];
+    _in.y:=_in.y * viewport.v[3] + viewport.v[1];
 
     winx:=_in.x;
     winy:=_in.y;
@@ -1038,35 +1037,35 @@ var a1, a2, a3, a4,
     c1, c2, c3, c4,
     d1, d2, d3, d4: Double;
 begin
-    a1 :=  M[0, 0]; b1 :=  M[0, 1];
-    c1 :=  M[0, 2]; d1 :=  M[0, 3];
-    a2 :=  M[1, 0]; b2 :=  M[1, 1];
-    c2 :=  M[1, 2]; d2 :=  M[1, 3];
-    a3 :=  M[2, 0]; b3 :=  M[2, 1];
-    c3 :=  M[2, 2]; d3 :=  M[2, 3];
-    a4 :=  M[3, 0]; b4 :=  M[3, 1];
-    c4 :=  M[3, 2]; d4 :=  M[3, 3];
+    a1 :=  M[0].v[0]; b1 :=  M[0].v[1];
+    c1 :=  M[0].v[2]; d1 :=  M[0].v[3];
+    a2 :=  M[1].v[0]; b2 :=  M[1].v[1];
+    c2 :=  M[1].v[2]; d2 :=  M[1].v[3];
+    a3 :=  M[2].v[0]; b3 :=  M[2].v[1];
+    c3 :=  M[2].v[2]; d3 :=  M[2].v[3];
+    a4 :=  M[3].v[0]; b4 :=  M[3].v[1];
+    c4 :=  M[3].v[2]; d4 :=  M[3].v[3];
 
     // row column labeling reversed since we transpose rows & columns
-    M[XAxisIndex, XAxisIndex] :=  MatrixDetInternal(b2, b3, b4, c2, c3, c4, d2, d3, d4);
-    M[YAxisIndex, XAxisIndex] := -MatrixDetInternal(a2, a3, a4, c2, c3, c4, d2, d3, d4);
-    M[ZAxisIndex, XAxisIndex] :=  MatrixDetInternal(a2, a3, a4, b2, b3, b4, d2, d3, d4);
-    M[WAxisIndex, XAxisIndex] := -MatrixDetInternal(a2, a3, a4, b2, b3, b4, c2, c3, c4);
+    M[XAxisIndex].v[XAxisIndex] :=  MatrixDetInternal(b2, b3, b4, c2, c3, c4, d2, d3, d4);
+    M[YAxisIndex].v[XAxisIndex] := -MatrixDetInternal(a2, a3, a4, c2, c3, c4, d2, d3, d4);
+    M[ZAxisIndex].v[XAxisIndex] :=  MatrixDetInternal(a2, a3, a4, b2, b3, b4, d2, d3, d4);
+    M[WAxisIndex].v[XAxisIndex] := -MatrixDetInternal(a2, a3, a4, b2, b3, b4, c2, c3, c4);
 
-    M[XAxisIndex, YAxisIndex] := -MatrixDetInternal(b1, b3, b4, c1, c3, c4, d1, d3, d4);
-    M[YAxisIndex, YAxisIndex] :=  MatrixDetInternal(a1, a3, a4, c1, c3, c4, d1, d3, d4);
-    M[ZAxisIndex, YAxisIndex] := -MatrixDetInternal(a1, a3, a4, b1, b3, b4, d1, d3, d4);
-    M[WAxisIndex, YAxisIndex] :=  MatrixDetInternal(a1, a3, a4, b1, b3, b4, c1, c3, c4);
+    M[XAxisIndex].v[YAxisIndex] := -MatrixDetInternal(b1, b3, b4, c1, c3, c4, d1, d3, d4);
+    M[YAxisIndex].v[YAxisIndex] :=  MatrixDetInternal(a1, a3, a4, c1, c3, c4, d1, d3, d4);
+    M[ZAxisIndex].v[YAxisIndex] := -MatrixDetInternal(a1, a3, a4, b1, b3, b4, d1, d3, d4);
+    M[WAxisIndex].v[YAxisIndex] :=  MatrixDetInternal(a1, a3, a4, b1, b3, b4, c1, c3, c4);
 
-    M[XAxisIndex, ZAxisIndex] :=  MatrixDetInternal(b1, b2, b4, c1, c2, c4, d1, d2, d4);
-    M[YAxisIndex, ZAxisIndex] := -MatrixDetInternal(a1, a2, a4, c1, c2, c4, d1, d2, d4);
-    M[ZAxisIndex, ZAxisIndex] :=  MatrixDetInternal(a1, a2, a4, b1, b2, b4, d1, d2, d4);
-    M[WAxisIndex, ZAxisIndex] := -MatrixDetInternal(a1, a2, a4, b1, b2, b4, c1, c2, c4);
+    M[XAxisIndex].v[ZAxisIndex] :=  MatrixDetInternal(b1, b2, b4, c1, c2, c4, d1, d2, d4);
+    M[YAxisIndex].v[ZAxisIndex] := -MatrixDetInternal(a1, a2, a4, c1, c2, c4, d1, d2, d4);
+    M[ZAxisIndex].v[ZAxisIndex] :=  MatrixDetInternal(a1, a2, a4, b1, b2, b4, d1, d2, d4);
+    M[WAxisIndex].v[ZAxisIndex] := -MatrixDetInternal(a1, a2, a4, b1, b2, b4, c1, c2, c4);
 
-    M[XAxisIndex, WAxisIndex] := -MatrixDetInternal(b1, b2, b3, c1, c2, c3, d1, d2, d3);
-    M[YAxisIndex, WAxisIndex] :=  MatrixDetInternal(a1, a2, a3, c1, c2, c3, d1, d2, d3);
-    M[ZAxisIndex, WAxisIndex] := -MatrixDetInternal(a1, a2, a3, b1, b2, b3, d1, d2, d3);
-    M[WAxisIndex, WAxisIndex] :=  MatrixDetInternal(a1, a2, a3, b1, b2, b3, c1, c2, c3);
+    M[XAxisIndex].v[WAxisIndex] := -MatrixDetInternal(b1, b2, b3, c1, c2, c3, d1, d2, d3);
+    M[YAxisIndex].v[WAxisIndex] :=  MatrixDetInternal(a1, a2, a3, c1, c2, c3, d1, d2, d3);
+    M[ZAxisIndex].v[WAxisIndex] := -MatrixDetInternal(a1, a2, a3, b1, b2, b3, d1, d2, d3);
+    M[WAxisIndex].v[WAxisIndex] :=  MatrixDetInternal(a1, a2, a3, b1, b2, b3, c1, c2, c3);
 end;
 function MatrixDeterminant(M: DMatrix4D): Double;
 var a1, a2, a3, a4,
@@ -1075,10 +1074,10 @@ var a1, a2, a3, a4,
     d1, d2, d3, d4  : Double;
 
 begin
-  a1 := M[0, 0];  b1 := M[0, 1];  c1 := M[0, 2];  d1 := M[0, 3];
-  a2 := M[1, 0];  b2 := M[1, 1];  c2 := M[1, 2];  d2 := M[1, 3];
-  a3 := M[2, 0];  b3 := M[2, 1];  c3 := M[2, 2];  d3 := M[2, 3];
-  a4 := M[3, 0];  b4 := M[3, 1];  c4 := M[3, 3];  d4 := M[3, 3];
+  a1 := M[0].v[0];  b1 := M[0].v[1];  c1 := M[0].v[2];  d1 := M[0].v[3];
+  a2 := M[1].v[0];  b2 := M[1].v[1];  c2 := M[1].v[2];  d2 := M[1].v[3];
+  a3 := M[2].v[0];  b3 := M[2].v[1];  c3 := M[2].v[2];  d3 := M[2].v[3];
+  a4 := M[3].v[0];  b4 := M[3].v[1];  c4 := M[3].v[3];  d4 := M[3].v[3];
 
   Result := a1 * MatrixDetInternal(b2, b3, b4, c2, c3, c4, d2, d3, d4) -
             b1 * MatrixDetInternal(a2, a3, a4, c2, c3, c4, d2, d3, d4) +
@@ -1089,7 +1088,7 @@ procedure MatrixScale(var M: DMatrix4D; Factor: Double);
 var I, J: Integer;
 begin
   for I := 0 to 3 do
-    for J := 0 to 3 do M[I, J] := M[I, J] * Factor;
+    for J := 0 to 3 do M[I].v[J] := M[I].v[J] * Factor;
 end;
 
 procedure MatrixInvert(var M: DMatrix4D);
@@ -1319,62 +1318,62 @@ end;
 function CreateTranslationMatrix(const V:GDBvertex): DMatrix4D;
 begin
   Result := onematrix;
-  Result[3, 0] := V.x;
-  Result[3, 1] := V.y;
-  Result[3, 2] := V.z;
-  Result[3, 3] := 1;
+  Result[3].v[0] := V.x;
+  Result[3].v[1] := V.y;
+  Result[3].v[2] := V.z;
+  Result[3].v[3] := 1;
 end;
 function CreateReflectionMatrix(plane:DVector4D): DMatrix4D;
 begin
-  result[0,0] :=-2 * plane[0] * plane[0] + 1;
-  result[1,0] :=-2 * plane[0] * plane[1];
-  result[2,0] :=-2 * plane[0] * plane[2];
-  result[3,0] :=-2 * plane[0] * plane[3];
+  result[0].v[0] :=-2 * plane.v[0] * plane.v[0] + 1;
+  result[1].v[0] :=-2 * plane.v[0] * plane.v[1];
+  result[2].v[0] :=-2 * plane.v[0] * plane.v[2];
+  result[3].v[0] :=-2 * plane.v[0] * plane.v[3];
 
-  result[0,1] :=-2 * plane[1] * plane[0];
-  result[1,1] :=-2 * plane[1] * plane[1] + 1;
-  result[2,1] :=-2 * plane[1] * plane[2];
-  result[3,1] :=-2 * plane[1] * plane[3];
+  result[0].v[1] :=-2 * plane.v[1] * plane.v[0];
+  result[1].v[1] :=-2 * plane.v[1] * plane.v[1] + 1;
+  result[2].v[1] :=-2 * plane.v[1] * plane.v[2];
+  result[3].v[1] :=-2 * plane.v[1] * plane.v[3];
 
-  result[0,2] :=-2 * plane[2] * plane[0];
-  result[1,2] :=-2 * plane[2] * plane[1];
-  result[2,2] :=-2 * plane[2] * plane[2] + 1;
-  result[3,2] :=-2 * plane[2] * plane[3];
+  result[0].v[2] :=-2 * plane.v[2] * plane.v[0];
+  result[1].v[2] :=-2 * plane.v[2] * plane.v[1];
+  result[2].v[2] :=-2 * plane.v[2] * plane.v[2] + 1;
+  result[3].v[2] :=-2 * plane.v[2] * plane.v[3];
 
-  result[0,3]:=0;
-  result[1,3]:=0;
-  result[2,3]:=0;
-  result[3,3]:=1;
+  result[0].v[3]:=0;
+  result[1].v[3]:=0;
+  result[2].v[3]:=0;
+  result[3].v[3]:=1;
 end;
 
 function CreateScaleMatrix(const V:GDBvertex): DMatrix4D;
 begin
   Result := onematrix;
-  Result[0, 0] := V.x;
-  Result[1, 1] := V.y;
-  Result[2, 2] := V.z;
-  Result[3, 3] := 1;
+  Result[0].v[0] := V.x;
+  Result[1].v[1] := V.y;
+  Result[2].v[2] := V.z;
+  Result[3].v[3] := 1;
 end;
 
 function CreateRotationMatrixX(const Sine, Cosine: Double): DMatrix4D;
 begin
   Result := EmptyMatrix;
-  Result[0, 0] := 1;
-  Result[1, 1] := Cosine;
-  Result[1, 2] := Sine;
-  Result[2, 1] := -Sine;
-  Result[2, 2] := Cosine;
-  Result[3, 3] := 1;
+  Result[0].v[0] := 1;
+  Result[1].v[1] := Cosine;
+  Result[1].v[2] := Sine;
+  Result[2].v[1] := -Sine;
+  Result[2].v[2] := Cosine;
+  Result[3].v[3] := 1;
 end;
 function CreateRotationMatrixY(const Sine, Cosine: Double): DMatrix4D;
 begin
   Result := EmptyMatrix;
-  Result[0, 0] := Cosine;
-  Result[0, 2] := -Sine;
-  Result[1, 1] := 1;
-  Result[2, 0] := Sine;
-  Result[2, 2] := Cosine;
-  Result[3, 3] := 1;
+  Result[0].v[0] := Cosine;
+  Result[0].v[2] := -Sine;
+  Result[1].v[1] := 1;
+  Result[2].v[0] := Sine;
+  Result[2].v[2] := Cosine;
+  Result[3].v[3] := 1;
 end;
 function CreateRotatedXVector(const angle: Double):GDBVertex;
 begin
@@ -1389,10 +1388,10 @@ end;
 function CreateRotationMatrixZ(const Sine, Cosine: Double): DMatrix4D;
 begin
   Result := Onematrix;
-  Result[0, 0] := Cosine;
-  Result[1, 1] := Cosine;
-  Result[1, 0] := -Sine;
-  Result[0, 1] := Sine;
+  Result[0].v[0] := Cosine;
+  Result[1].v[1] := Cosine;
+  Result[1].v[0] := -Sine;
+  Result[0].v[1] := Sine;
 
 end;
 function CreateAffineRotationMatrix(const anAxis: GDBvertex; angle: double):DMatrix4D;
@@ -1405,17 +1404,17 @@ begin
    one_minus_cosine:=1 - cosine;
    axis:=NormalizeVertex(anAxis);
    result:=onematrix;
-   Result[XAxisIndex, XAxisIndex]:=(one_minus_cosine * Sqr(Axis.x)) + Cosine;
-   Result[XAxisIndex, YAxisIndex]:=(one_minus_cosine * Axis.x * Axis.y) - (Axis.z * Sine);
-   Result[XAxisIndex, ZAxisIndex]:=(one_minus_cosine * Axis.z * Axis.x) + (Axis.y * Sine);
+   Result[XAxisIndex].v[XAxisIndex]:=(one_minus_cosine * Sqr(Axis.x)) + Cosine;
+   Result[XAxisIndex].v[YAxisIndex]:=(one_minus_cosine * Axis.x * Axis.y) - (Axis.z * Sine);
+   Result[XAxisIndex].v[ZAxisIndex]:=(one_minus_cosine * Axis.z * Axis.x) + (Axis.y * Sine);
 
-   Result[YAxisIndex, XAxisIndex]:=(one_minus_cosine * Axis.x * Axis.y) + (Axis.z * Sine);
-   Result[YAxisIndex, YAxisIndex]:=(one_minus_cosine * Sqr(Axis.y)) + Cosine;
-   Result[YAxisIndex, ZAxisIndex]:=(one_minus_cosine * Axis.y * Axis.z) - (Axis.x * Sine);
+   Result[YAxisIndex].v[XAxisIndex]:=(one_minus_cosine * Axis.x * Axis.y) + (Axis.z * Sine);
+   Result[YAxisIndex].v[YAxisIndex]:=(one_minus_cosine * Sqr(Axis.y)) + Cosine;
+   Result[YAxisIndex].v[ZAxisIndex]:=(one_minus_cosine * Axis.y * Axis.z) - (Axis.x * Sine);
 
-   Result[ZAxisIndex, XAxisIndex]:=(one_minus_cosine * Axis.z * Axis.x) - (Axis.y * Sine);
-   Result[ZAxisIndex, YAxisIndex]:=(one_minus_cosine * Axis.y * Axis.z) + (Axis.x * Sine);
-   Result[ZAxisIndex, ZAxisIndex]:=(one_minus_cosine * Sqr(Axis.z)) + Cosine;
+   Result[ZAxisIndex].v[XAxisIndex]:=(one_minus_cosine * Axis.z * Axis.x) - (Axis.y * Sine);
+   Result[ZAxisIndex].v[YAxisIndex]:=(one_minus_cosine * Axis.y * Axis.z) + (Axis.x * Sine);
+   Result[ZAxisIndex].v[ZAxisIndex]:=(one_minus_cosine * Sqr(Axis.z)) + Cosine;
 end;
 
 function MatrixMultiply(const M1, M2: DMatrix4D): DMatrix4D;
@@ -1426,10 +1425,10 @@ var I, J: Integer;
 begin
   for I := 0 to 3 do
     for J := 0 to 3 do
-      TM[I, J] := M1[I,0] * M2[0,J] +
-                  M1[I,1] * M2[1,J] +
-                  M1[I,2] * M2[2,J] +
-                  M1[I,3] * M2[3,J];
+      TM[I].v[J] := M1[I].v[0] * M2[0].v[J] +
+                  M1[I].v[1] * M2[1].v[J] +
+                  M1[I].v[2] * M2[2].v[J] +
+                  M1[I].v[3] * M2[3].v[J];
   Result := TM;
 end;
 function MatrixMultiply(const M1: DMatrix4D; M2: DMatrix4F):DMatrix4D;
@@ -1440,10 +1439,10 @@ var I, J: Integer;
 begin
   for I := 0 to 3 do
     for J := 0 to 3 do
-      TM[I, J] := M1[I,0] * M2[0,J] +
-                  M1[I,1] * M2[1,J] +
-                  M1[I,2] * M2[2,J] +
-                  M1[I,3] * M2[3,J];
+      TM[I].v[J] := M1[I].v[0] * M2[0].v[J] +
+                  M1[I].v[1] * M2[1].v[J] +
+                  M1[I].v[2] * M2[2].v[J] +
+                  M1[I].v[3] * M2[3].v[J];
   Result := TM;
 end;
 function MatrixMultiplyF(const M1, M2: DMatrix4D):DMatrix4F;
@@ -1454,10 +1453,10 @@ var I, J: Integer;
 begin
   for I := 0 to 3 do
     for J := 0 to 3 do
-      TM[I, J] := M1[I,0] * M2[0,J] +
-                  M1[I,1] * M2[1,J] +
-                  M1[I,2] * M2[2,J] +
-                  M1[I,3] * M2[3,J];
+      TM[I].v[J] := M1[I].v[0] * M2[0].v[J] +
+                  M1[I].v[1] * M2[1].v[J] +
+                  M1[I].v[2] * M2[2].v[J] +
+                  M1[I].v[3] * M2[3].v[J];
   Result := TM;
 end;
 procedure MatrixTranspose(var M: DMatrix4D);
@@ -1465,7 +1464,7 @@ var I, J: Integer;
     TM: DMatrix4D;
 begin
   for I := 0 to 3 do
-    for J := 0 to 3 do TM[J, I] := M[I, J];
+    for J := 0 to 3 do TM[J].v[I] := M[I].v[J];
   M := TM;
 end;
 procedure MatrixTranspose(var M: DMatrix4F);
@@ -1473,7 +1472,7 @@ var I, J: Integer;
     TM: DMatrix4F;
 begin
   for I := 0 to 3 do
-    for J := 0 to 3 do TM[J, I] := M[I, J];
+    for J := 0 to 3 do TM[J].v[I] := M[I].v[J];
   M := TM;
 end;
 procedure MatrixNormalize(var M: DMatrix4D);
@@ -1481,36 +1480,36 @@ var I, J: Integer;
 begin
   for I := 0 to 3 do
     for J := 0 to 3 do
-      M[I,J]:=M[I,J]/M[3,3];
+      M[I].v[J]:=M[I].v[J]/M[3].v[3];
 end;
 
 function VectorTransform(const V:GDBVertex4D;const M:DMatrix4D):GDBVertex4D;
 var TV: GDBVertex4D;
 begin
-  TV.X := V.X * M[0, 0] + V.y * M[1, 0] + V.z * M[2, 0] + V.w * M[3, 0];
-  TV.Y := V.X * M[0, 1] + V.y * M[1, 1] + V.z * M[2, 1] + V.w * M[3, 1];
-  TV.z := V.x * M[0, 2] + V.y * M[1, 2] + V.z * M[2, 2] + V.w * M[3, 2];
-  TV.W := V.x * M[0, 3] + V.y * M[1, 3] + V.z * M[2, 3] + V.w * M[3, 3];
+  TV.X := V.X * M[0].v[0] + V.y * M[1].v[0] + V.z * M[2].v[0] + V.w * M[3].v[0];
+  TV.Y := V.X * M[0].v[1] + V.y * M[1].v[1] + V.z * M[2].v[1] + V.w * M[3].v[1];
+  TV.z := V.x * M[0].v[2] + V.y * M[1].v[2] + V.z * M[2].v[2] + V.w * M[3].v[2];
+  TV.W := V.x * M[0].v[3] + V.y * M[1].v[3] + V.z * M[2].v[3] + V.w * M[3].v[3];
 
   Result := TV
 end;
 function VectorTransform(const V:GDBVertex4D;const M:DMatrix4F):GDBVertex4D;
 var TV: GDBVertex4D;
 begin
-  TV.X := V.X * M[0, 0] + V.y * M[1, 0] + V.z * M[2, 0] + V.w * M[3, 0];
-  TV.Y := V.X * M[0, 1] + V.y * M[1, 1] + V.z * M[2, 1] + V.w * M[3, 1];
-  TV.z := V.x * M[0, 2] + V.y * M[1, 2] + V.z * M[2, 2] + V.w * M[3, 2];
-  TV.W := V.x * M[0, 3] + V.y * M[1, 3] + V.z * M[2, 3] + V.w * M[3, 3];
+  TV.X := V.X * M[0].v[0] + V.y * M[1].v[0] + V.z * M[2].v[0] + V.w * M[3].v[0];
+  TV.Y := V.X * M[0].v[1] + V.y * M[1].v[1] + V.z * M[2].v[1] + V.w * M[3].v[1];
+  TV.z := V.x * M[0].v[2] + V.y * M[1].v[2] + V.z * M[2].v[2] + V.w * M[3].v[2];
+  TV.W := V.x * M[0].v[3] + V.y * M[1].v[3] + V.z * M[2].v[3] + V.w * M[3].v[3];
 
   Result := TV
 end;
 function VectorTransform(const V:GDBVertex4F;const M:DMatrix4F):GDBVertex4F;
 var TV: GDBVertex4F;
 begin
-  TV.X := V.X * M[0, 0] + V.y * M[1, 0] + V.z * M[2, 0] + V.w * M[3, 0];
-  TV.Y := V.X * M[0, 1] + V.y * M[1, 1] + V.z * M[2, 1] + V.w * M[3, 1];
-  TV.z := V.x * M[0, 2] + V.y * M[1, 2] + V.z * M[2, 2] + V.w * M[3, 2];
-  TV.W := V.x * M[0, 3] + V.y * M[1, 3] + V.z * M[2, 3] + V.w * M[3, 3];
+  TV.X := V.X * M[0].v[0] + V.y * M[1].v[0] + V.z * M[2].v[0] + V.w * M[3].v[0];
+  TV.Y := V.X * M[0].v[1] + V.y * M[1].v[1] + V.z * M[2].v[1] + V.w * M[3].v[1];
+  TV.z := V.x * M[0].v[2] + V.y * M[1].v[2] + V.z * M[2].v[2] + V.w * M[3].v[2];
+  TV.W := V.x * M[0].v[3] + V.y * M[1].v[3] + V.z * M[2].v[3] + V.w * M[3].v[3];
 
   Result := TV
 end;
@@ -2342,35 +2341,35 @@ function QuaternionFromMatrix(const mat : DMatrix4D) : GDBQuaternion;
 var
    traceMat, s, invS : Double;
 begin
-   traceMat := 1 + mat[0,0] + mat[1,1] + mat[2,2];
+   traceMat := 1 + mat[0].v[0] + mat[1].v[1] + mat[2].v[2];
    if traceMat>EPSILON2 then begin
       s:=Sqrt(traceMat)*2;
       invS:=1/s;
-      Result.ImagPart.x:=(mat[1,2]-mat[2,1])*invS;
-      Result.ImagPart.y:=(mat[2,0]-mat[0,2])*invS;
-      Result.ImagPart.z:=(mat[0,1]-mat[1,0])*invS;
+      Result.ImagPart.x:=(mat[1].v[2]-mat[2].v[1])*invS;
+      Result.ImagPart.y:=(mat[2].v[0]-mat[0].v[2])*invS;
+      Result.ImagPart.z:=(mat[0].v[1]-mat[1].v[0])*invS;
       Result.RealPart   :=0.25*s;
-   end else if (mat[0,0]>mat[1,1]) and (mat[0,0]>mat[2,2]) then begin  // Row 0:
-      s:=Sqrt(Max{Float}(EPSILON2, {cOne}1+mat[0,0]-mat[1,1]-mat[2,2]))*2;
+   end else if (mat[0].v[0]>mat[1].v[1]) and (mat[0].v[0]>mat[2].v[2]) then begin  // Row 0:
+      s:=Sqrt(Max{Float}(EPSILON2, {cOne}1+mat[0].v[0]-mat[1].v[1]-mat[2].v[2]))*2;
       invS:=1/s;
       Result.ImagPart.x:=0.25*s;
-      Result.ImagPart.y:=(mat[0,1]+mat[1,0])*invS;
-      Result.ImagPart.z:=(mat[2,0]+mat[0,2])*invS;
-      Result.RealPart   :=(mat[1,2]-mat[2,1])*invS;
-   end else if (mat[1,1]>mat[2,2]) then begin  // Row 1:
-      s:=Sqrt(Max{Float}(EPSILON2, {cOne}1+mat[1,1]-mat[0,0]-mat[2,2]))*2;
+      Result.ImagPart.y:=(mat[0].v[1]+mat[1].v[0])*invS;
+      Result.ImagPart.z:=(mat[2].v[0]+mat[0].v[2])*invS;
+      Result.RealPart   :=(mat[1].v[2]-mat[2].v[1])*invS;
+   end else if (mat[1].v[1]>mat[2].v[2]) then begin  // Row 1:
+      s:=Sqrt(Max{Float}(EPSILON2, {cOne}1+mat[1].v[1]-mat[0].v[0]-mat[2].v[2]))*2;
       invS:=1/s;
-      Result.ImagPart.x:=(mat[0,1]+mat[1,0])*invS;
+      Result.ImagPart.x:=(mat[0].v[1]+mat[1].v[0])*invS;
       Result.ImagPart.y:=0.25*s;
-      Result.ImagPart.z:=(mat[1,2]+mat[2,1])*invS;
-      Result.RealPart   :=(mat[2,0]-mat[0,2])*invS;
+      Result.ImagPart.z:=(mat[1].v[2]+mat[2].v[1])*invS;
+      Result.RealPart   :=(mat[2].v[0]-mat[0].v[2])*invS;
    end else begin  // Row 2:
-      s:=Sqrt(Max{Float}(EPSILON2, {cOne}1+mat[2,2]-mat[0,0]-mat[1,1]))*2;
+      s:=Sqrt(Max{Float}(EPSILON2, {cOne}1+mat[2].v[2]-mat[0].v[0]-mat[1].v[1]))*2;
       invS:=1/s;
-      Result.ImagPart.x:=(mat[2,0]+mat[0,2])*invS;
-      Result.ImagPart.y:=(mat[1,2]+mat[2,1])*invS;
+      Result.ImagPart.x:=(mat[2].v[0]+mat[0].v[2])*invS;
+      Result.ImagPart.y:=(mat[1].v[2]+mat[2].v[1])*invS;
       Result.ImagPart.z:=0.25*s;
-      Result.RealPart   :=(mat[0,1]-mat[1,0])*invS;
+      Result.RealPart   :=(mat[0].v[1]-mat[1].v[0])*invS;
    end;
    NormalizeQuaternion(Result);
 end;
@@ -2436,22 +2435,22 @@ begin
    yw := y * w;
    zz := z * z;
    zw := z * w;
-   Result[0, 0] := 1 - 2 * ( yy + zz );
-   Result[1, 0] :=     2 * ( xy - zw );
-   Result[2, 0] :=     2 * ( xz + yw );
-   Result[3, 0] := 0;
-   Result[0, 1] :=     2 * ( xy + zw );
-   Result[1, 1] := 1 - 2 * ( xx + zz );
-   Result[2, 1] :=     2 * ( yz - xw );
-   Result[3, 1] := 0;
-   Result[0, 2] :=     2 * ( xz - yw );
-   Result[1, 2] :=     2 * ( yz + xw );
-   Result[2, 2] := 1 - 2 * ( xx + yy );
-   Result[3, 2] := 0;
-   Result[0, 3] := 0;
-   Result[1, 3] := 0;
-   Result[2, 3] := 0;
-   Result[3, 3] := 1;
+   Result[0].v[0] := 1 - 2 * ( yy + zz );
+   Result[1].v[0] :=     2 * ( xy - zw );
+   Result[2].v[0] :=     2 * ( xz + yw );
+   Result[3].v[0] := 0;
+   Result[0].v[1] :=     2 * ( xy + zw );
+   Result[1].v[1] := 1 - 2 * ( xx + zz );
+   Result[2].v[1] :=     2 * ( yz - xw );
+   Result[3].v[1] := 0;
+   Result[0].v[2] :=     2 * ( xz - yw );
+   Result[1].v[2] :=     2 * ( yz + xw );
+   Result[2].v[2] := 1 - 2 * ( xx + yy );
+   Result[3].v[2] := 0;
+   Result[0].v[3] := 0;
+   Result[1].v[3] := 0;
+   Result[2].v[3] := 0;
+   Result[3].v[3] := 1;
 end;
 function GetArcParamFrom3Point2D(Const PointData:tarcrtmodify;out ad:TArcData):Boolean;
 var a,b,c,d,e,f,g,rr:Double;

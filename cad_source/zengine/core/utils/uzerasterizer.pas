@@ -149,10 +149,10 @@ begin
 
   //modelMatrix:=onematrix;
   //projMatrix:DMatrix4D;
-  viewport[0]:=0;
-  viewport[1]:=0;
-  viewport[2]:=pw;
-  viewport[3]:=ph;
+  viewport.v[0]:=0;
+  viewport.v[1]:=0;
+  viewport.v[2]:=pw;
+  viewport.v[3]:=ph;
   dc.DrawingContext.matrixs.pmodelMatrix:=@modelMatrix;
   dc.DrawingContext.matrixs.pprojMatrix:=@projMatrix;
   dc.DrawingContext.matrixs.pviewport:=@viewport;

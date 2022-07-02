@@ -266,7 +266,7 @@ Tempplane:DVector4D;
 
 begin
   Tempplane:=frustum[5];
-  tempplane[3]:=(tempplane[3]-frustum[4][3])/2;
+  tempplane.v[3]:=(tempplane.v[3]-frustum[4].v[3])/2;
   begin
   tv1:=PointOf3PlaneIntersect(frustum[0],frustum[3],Tempplane);
   tv2:=PointOf3PlaneIntersect(frustum[1],frustum[3],Tempplane);
@@ -312,7 +312,7 @@ begin
   if param.ShowDebugFrustum then
                           drawfrustustum(param.debugfrustum,dc);
   Tempplane:=param.mousefrustumLCS[5];
-  tempplane[3]:=(tempplane[3]-param.mousefrustumLCS[4][3])/2;
+  tempplane.v[3]:=(tempplane.v[3]-param.mousefrustumLCS[4].v[3])/2;
   {курсор фрустума выделения}
   if param.md.mousein then
   if (param.md.mode and MGetSelectObject) <> 0 then
@@ -2594,10 +2594,10 @@ var
 begin
   //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.SetOGLMatrix',0);{$ENDIF}
   pcam:=pdwg.GetPcamera;
-  pcam^.viewport[0]:=0;
-  pcam^.viewport[1]:=0;
-  pcam^.viewport[2]:=getviewcontrol.clientWidth;
-  pcam^.viewport[3]:=getviewcontrol.clientHeight;
+  pcam^.viewport.v[0]:=0;
+  pcam^.viewport.v[1]:=0;
+  pcam^.viewport.v[2]:=getviewcontrol.clientWidth;
+  pcam^.viewport.v[3]:=getviewcontrol.clientHeight;
   drawer.SetOGLMatrix(pcam^,getviewcontrol.clientWidth, getviewcontrol.clientHeight);
 
   {oglsm.myglMatrixMode(GL_MODELVIEW);
@@ -3174,12 +3174,12 @@ begin
   pdwg^.myGluUnProject(createvertex(x, y, 1),param.md.mouseray.lend);
 
   param.md.mouseray.dir:=vertexsub(param.md.mouseray.lend,param.md.mouseray.lbegin);
-  cv:=param.md.workplane[0]*param.md.mouseray.dir.x +
-      param.md.workplane[1]*param.md.mouseray.dir.y +
-      param.md.workplane[2]*param.md.mouseray.dir.z;
-  ca:=-param.md.workplane[3] - param.md.workplane[0]*param.md.mouseray.lbegin.x -
-       param.md.workplane[1]*param.md.mouseray.lbegin.y -
-       param.md.workplane[2]*param.md.mouseray.lbegin.z;
+  cv:=param.md.workplane.v[0]*param.md.mouseray.dir.x +
+      param.md.workplane.v[1]*param.md.mouseray.dir.y +
+      param.md.workplane.v[2]*param.md.mouseray.dir.z;
+  ca:=-param.md.workplane.v[3] - param.md.workplane.v[0]*param.md.mouseray.lbegin.x -
+       param.md.workplane.v[1]*param.md.mouseray.lbegin.y -
+       param.md.workplane.v[2]*param.md.mouseray.lbegin.z;
   if cv = 0 then param.md.mouseonworkplan := false
   else begin
     param.md.mouseonworkplan := true;
@@ -3188,19 +3188,19 @@ begin
     param.md.mouseonworkplanecoord.y := param.md.mouseray.lbegin.y + param.md.mouseray.dir.y * ca;
     param.md.mouseonworkplanecoord.z := param.md.mouseray.lbegin.z + param.md.mouseray.dir.z * ca;
 
-    ca:=param.md.workplane[0] * param.md.mouseonworkplanecoord.x +
-        param.md.workplane[1] * param.md.mouseonworkplanecoord.y +
-        param.md.workplane[2] * param.md.mouseonworkplanecoord.z+param.md.workplane[3];
+    ca:=param.md.workplane.v[0] * param.md.mouseonworkplanecoord.x +
+        param.md.workplane.v[1] * param.md.mouseonworkplanecoord.y +
+        param.md.workplane.v[2] * param.md.mouseonworkplanecoord.z+param.md.workplane.v[3];
 
     if ca<>0 then
     begin
-         param.md.mouseonworkplanecoord.x:=param.md.mouseonworkplanecoord.x-param.md.workplane[0]*ca;
-         param.md.mouseonworkplanecoord.y:=param.md.mouseonworkplanecoord.y-param.md.workplane[1]*ca;
-         param.md.mouseonworkplanecoord.z:=param.md.mouseonworkplanecoord.z-param.md.workplane[2]*ca;
+         param.md.mouseonworkplanecoord.x:=param.md.mouseonworkplanecoord.x-param.md.workplane.v[0]*ca;
+         param.md.mouseonworkplanecoord.y:=param.md.mouseonworkplanecoord.y-param.md.workplane.v[1]*ca;
+         param.md.mouseonworkplanecoord.z:=param.md.mouseonworkplanecoord.z-param.md.workplane.v[2]*ca;
     end;
-    ca:=param.md.workplane[0] * param.md.mouseonworkplanecoord.x +
-        param.md.workplane[1] * param.md.mouseonworkplanecoord.y +
-        param.md.workplane[2] * param.md.mouseonworkplanecoord.z + param.md.workplane[3];
+    ca:=param.md.workplane.v[0] * param.md.mouseonworkplanecoord.x +
+        param.md.workplane.v[1] * param.md.mouseonworkplanecoord.y +
+        param.md.workplane.v[2] * param.md.mouseonworkplanecoord.z + param.md.workplane.v[3];
     str(ca,ds);
   end;
 end;
@@ -3338,7 +3338,7 @@ begin
      param.md.WPPointBL.x:=round((param.md.WPPointBL.x-pdwg^.Snap.Base.x)/pdwg^.GridSpacing.x)*pdwg^.GridSpacing.x+pdwg^.GridSpacing.x+pdwg^.Snap.Base.x;
      param.md.WPPointBL.y:=round((param.md.WPPointBL.y-pdwg^.Snap.Base.y)/pdwg^.GridSpacing.y)*pdwg^.GridSpacing.y-pdwg^.GridSpacing.y+pdwg^.Snap.Base.y;
 
-     param.md.WPPointBL.z:=(-param.md.workplane[3]-param.md.workplane[0]*param.md.WPPointBL.x-param.md.workplane[1]*param.md.WPPointBL.y)/param.md.workplane[2];
+     param.md.WPPointBL.z:=(-param.md.workplane.v[3]-param.md.workplane.v[0]*param.md.WPPointBL.x-param.md.workplane.v[1]*param.md.WPPointBL.y)/param.md.workplane.v[2];
 
      param.md.WPPointUR.x:=pv;
      param.md.WPPointUR.y:=ph;

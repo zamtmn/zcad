@@ -80,12 +80,12 @@ function SetWorldTransform_(hdc:HDC; const tm:DMatrix4D):WINBOOL;
 {$ENDIF}
 begin
   {$IFDEF WINDOWS}
-  _m.eM11:=tm[0,0];
-  _m.eM12:=tm[0,1];
-  _m.eM21:=tm[1,0];
-  _m.eM22:=tm[1,1];
-  _m.eDx:=tm[3,0];
-  _m.eDy:=tm[3,1];
+  _m.eM11:=tm[0].v[0];
+  _m.eM12:=tm[0].v[1];
+  _m.eM21:=tm[1].v[0];
+  _m.eM22:=tm[1].v[1];
+  _m.eDx:=tm[3].v[0];
+  _m.eDy:=tm[3].v[1];
   result:=SetWorldTransform(hdc,_m);
   {$ENDIF}
   {$if DEFINED(LCLQt) OR DEFINED(LCLQt5)}

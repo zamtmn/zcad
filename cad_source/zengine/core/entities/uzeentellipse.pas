@@ -164,7 +164,7 @@ var i{,count}:Integer;
 begin
       for i:=0 to 5 do
       begin
-      if(frustum[i][0] * P_insert_in_WCS.x + frustum[i][1] * P_insert_in_WCS.y + frustum[i][2] * P_insert_in_WCS.z + frustum[i][3]+rr < 0 )
+      if(frustum[i].v[0] * P_insert_in_WCS.x + frustum[i].v[1] * P_insert_in_WCS.y + frustum[i].v[2] * P_insert_in_WCS.z + frustum[i].v[3]+rr < 0 )
       then
       begin
            result:=IREmpty;
@@ -180,10 +180,10 @@ begin
       result:=true;
       for i:=0 to 4 do
       begin
-      if(frustum[i][0] * outbound[0].x + frustum[i][1] * outbound[0].y + frustum[i][2] * outbound[0].z + frustum[i][3] < 0 )
-      and(frustum[i][0] * outbound[1].x + frustum[i][1] * outbound[1].y + frustum[i][2] * outbound[1].z + frustum[i][3] < 0 )
-      and(frustum[i][0] * outbound[2].x + frustum[i][1] * outbound[2].y + frustum[i][2] * outbound[2].z + frustum[i][3] < 0 )
-      and(frustum[i][0] * outbound[3].x + frustum[i][1] * outbound[3].y + frustum[i][2] * outbound[3].z + frustum[i][3] < 0 )
+      if(frustum[i].v[0] * outbound[0].x + frustum[i].v[1] * outbound[0].y + frustum[i].v[2] * outbound[0].z + frustum[i].v[3] < 0 )
+      and(frustum[i].v[0] * outbound[1].x + frustum[i].v[1] * outbound[1].y + frustum[i].v[2] * outbound[1].z + frustum[i].v[3] < 0 )
+      and(frustum[i].v[0] * outbound[2].x + frustum[i].v[1] * outbound[2].y + frustum[i].v[2] * outbound[2].z + frustum[i].v[3] < 0 )
+      and(frustum[i].v[0] * outbound[3].x + frustum[i].v[1] * outbound[3].y + frustum[i].v[2] * outbound[3].z + frustum[i].v[3] < 0 )
       then
       begin
            result:=false;
@@ -235,9 +235,9 @@ var m1:DMatrix4D;
 begin
   inherited CalcObjMatrix;
   m1:=ONEMATRIX;
-  m1[0, 0] := {ratio*}onevertexlength(majoraxis);
-  m1[1, 1] := ratio*onevertexlength(majoraxis);
-  m1[2, 2] := {ratio*onevertexlength(majoraxis)}1;
+  m1[0].v[0] := {ratio*}onevertexlength(majoraxis);
+  m1[1].v[1] := ratio*onevertexlength(majoraxis);
+  m1[2].v[2] := {ratio*onevertexlength(majoraxis)}1;
   objmatrix:=matrixmultiply(m1,objmatrix);
 
     pgdbvertex(@v)^:=local.p_insert;
@@ -487,7 +487,7 @@ var i:Integer;
 begin
      for i:=0 to 5 do
      begin
-     if(mf[i][0] * P_insert_in_WCS.x + mf[i][1] * P_insert_in_WCS.y + mf[i][2] * P_insert_in_WCS.z + mf[i][3]+RR < 0 )
+     if(mf[i].v[0] * P_insert_in_WCS.x + mf[i].v[1] * P_insert_in_WCS.y + mf[i].v[2] * P_insert_in_WCS.z + mf[i].v[3]+RR < 0 )
      then
      begin
           result:=false;

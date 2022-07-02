@@ -268,13 +268,13 @@ begin
                  begin
                   oglsm.myglMatrixMode(GL_PROJECTION);
                   oglsm.myglLoadIdentity;
-                  oglsm.myglOrtho(0.0,matrixs.pviewport[2],matrixs.pviewport[3], 0.0, -1.0, 1.0);
+                  oglsm.myglOrtho(0.0,matrixs.pviewport.v[2],matrixs.pviewport.v[3], 0.0, -1.0, 1.0);
                   oglsm.myglMatrixMode(GL_MODELVIEW);
                   oglsm.myglLoadIdentity;
                   if mode=TRM_DisplaySpace then
                   begin
                   oglsm.myglscalef(1, -1, 1);
-                  oglsm.mygltranslated(0, -matrixs.pviewport[3], 0);
+                  oglsm.mygltranslated(0, -matrixs.pviewport.v[3], 0);
                   end;
                  end;
      end;

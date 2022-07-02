@@ -343,7 +343,7 @@ begin
 
                                     PLLSymbolLine^.FirstOutBoundIndex:=PLLPsymbol^.OutBoundIndex;
                                     PLLSymbolLine^.SymbolsParam.FirstSymMatr:=uzegeometry.MatrixMultiply(matr,objmatrix);
-                                    PLLSymbolLine^.SymbolsParam.Rotate:=Vertexangle(CreateVertex2D(0,0),CreateVertex2D(PLLSymbolLine^.SymbolsParam.FirstSymMatr[0][0],PLLSymbolLine^.SymbolsParam.FirstSymMatr[0][1]));
+                                    PLLSymbolLine^.SymbolsParam.Rotate:=Vertexangle(CreateVertex2D(0,0),CreateVertex2D(PLLSymbolLine^.SymbolsParam.FirstSymMatr[0].v[0],PLLSymbolLine^.SymbolsParam.FirstSymMatr[0].v[1]));
 
                                     PLLSymbolLine^.SymbolsParam.sx:=oneVertexlength(PGDBVertex(@PLLSymbolLine^.SymbolsParam.FirstSymMatr[0])^)/oneVertexlength(PGDBVertex(@PLLSymbolLine^.SymbolsParam.FirstSymMatr[1])^);
 

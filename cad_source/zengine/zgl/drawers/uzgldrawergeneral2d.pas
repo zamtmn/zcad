@@ -520,17 +520,17 @@ begin
                  TRM_ModelSpace:
                  begin
                       m:=uzegeometry.MatrixMultiply(matrixs.pmodelMatrix^,matrixs.pprojMatrix^);
-                      sx:=(m[0][0]/m[3][3]*0.5)*matrixs.pviewport[2] ;
-                      sy:=-(m[1][1]/m[3][3]*0.5)*matrixs.pviewport[3] ;
-                      tx:=(m[3][0]/m[3][3]*0.5+0.5)*matrixs.pviewport[2];
-                      ty:=matrixs.pviewport[3]-(m[3][1]/m[3][3]*0.5+0.5)*matrixs.pviewport[3];
+                      sx:=(m[0].v[0]/m[3].v[3]*0.5)*matrixs.pviewport.v[2] ;
+                      sy:=-(m[1].v[1]/m[3].v[3]*0.5)*matrixs.pviewport.v[3] ;
+                      tx:=(m[3].v[0]/m[3].v[3]*0.5+0.5)*matrixs.pviewport.v[2];
+                      ty:=matrixs.pviewport.v[3]-(m[3].v[1]/m[3].v[3]*0.5+0.5)*matrixs.pviewport.v[3];
                  end;
                  TRM_DisplaySpace:
                  begin
                       sx:=1;
                       sy:=-1;
                       tx:=0;
-                      ty:=matrixs.pviewport[3];
+                      ty:=matrixs.pviewport.v[3];
                  end;
                  TRM_WindowSpace:
                  begin

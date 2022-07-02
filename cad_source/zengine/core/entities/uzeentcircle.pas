@@ -429,9 +429,9 @@ var m1{,m2,m3,m4}:DMatrix4D;
 begin
   inherited CalcObjMatrix;
   m1:=ONEMATRIX;
-  m1[0, 0] := Radius;
-  m1[1, 1] := Radius;
-  m1[2, 2] := Radius;
+  m1[0].v[0] := Radius;
+  m1[1].v[1] := Radius;
+  m1[2].v[2] := Radius;
   objmatrix:=matrixmultiply(m1,objmatrix);
 end;
 
@@ -529,7 +529,7 @@ var i:Integer;
 begin
      for i:=0 to 5 do
      begin
-     if(mf[i][0] * P_insert_in_WCS.x + mf[i][1] * P_insert_in_WCS.y + mf[i][2] * P_insert_in_WCS.z + mf[i][3]+radius < 0 )
+     if(mf[i].v[0] * P_insert_in_WCS.x + mf[i].v[1] * P_insert_in_WCS.y + mf[i].v[2] * P_insert_in_WCS.z + mf[i].v[3]+radius < 0 )
      then
      begin
           result:=false;
@@ -554,7 +554,7 @@ begin
       result:=true;
       for i:=0 to 5 do
       begin
-      if(frustum[i][0] * P_insert_in_WCS.x + frustum[i][1] * P_insert_in_WCS.y + frustum[i][2] * P_insert_in_WCS.z + frustum[i][3]+radius{+GetLTCorrectH} < 0 )
+      if(frustum[i].v[0] * P_insert_in_WCS.x + frustum[i].v[1] * P_insert_in_WCS.y + frustum[i].v[2] * P_insert_in_WCS.z + frustum[i].v[3]+radius{+GetLTCorrectH} < 0 )
       then
       begin
            result:=false;
@@ -568,7 +568,7 @@ var i{,count}:Integer;
 begin
       for i:=0 to 5 do
       begin
-      if(frustum[i][0] * P_insert_in_WCS.x + frustum[i][1] * P_insert_in_WCS.y + frustum[i][2] * P_insert_in_WCS.z + frustum[i][3]+radius{+GetLTCorrectH} < 0 )
+      if(frustum[i].v[0] * P_insert_in_WCS.x + frustum[i].v[1] * P_insert_in_WCS.y + frustum[i].v[2] * P_insert_in_WCS.z + frustum[i].v[3]+radius{+GetLTCorrectH} < 0 )
       then
       begin
            result:=IREmpty;

@@ -26,7 +26,7 @@ ToDo:
 * ~~Printing~~
 
 ## Build from source
-Dailed instructions: htps://github.com/zamtmn/zcad/blob/master/README_ENG.md [RUS](htps://github.com/zamtmn/zcad/blob/master/README_RUS.md)
+Dailed instructions: [ENG](htps://github.com/zamtmn/zcad/blob/master/README_ENG.md "ENG") [RUS](htps://github.com/zamtmn/zcad/blob/master/README_RUS.md "RUS")
 
 Requirements:
 

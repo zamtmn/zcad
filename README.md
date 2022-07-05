@@ -26,6 +26,8 @@ ToDo:
 * ~~Printing~~
 
 ## Build from source
+Dailed instructions: [ENG](https://github.com/zamtmn/zcad/blob/master/README_ENG.md "ENG") / [RUS](https://github.com/zamtmn/zcad/blob/master/README_RUS.md "RUS")
+
 Requirements:
 
 * **Lazarus RC2.2 (or trunk)**

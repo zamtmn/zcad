@@ -10,8 +10,10 @@ usescopy _addtocable;
 
 var
 
-T1:String;(*'Группа'*)
-T2:String;(*'Код'*)
+VL_Code:String;(*'Код'*)
+VL_Type:String;(*'Светильник'*)
+VL_Room:String;(*'Помещение'*)
+VL_Group:String;(*'Группа'*)
 
 implementation
 
@@ -30,6 +32,7 @@ GC_HeadDevice:='ЩАО??';
 GC_HDShortName:='??';
 GC_HDGroup:=0;
 
-T2:='А';
+VL_Code:='А';
+VL_Room:='.';
 
 end.

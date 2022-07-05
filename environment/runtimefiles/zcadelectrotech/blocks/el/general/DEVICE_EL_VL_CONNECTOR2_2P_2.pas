@@ -10,7 +10,9 @@ usescopy addtocable;
 
 var
 
-T1:String;(*'Группа'*)
+VL_Type:String;(*'Розетка'*)
+VL_Room:String;(*'Помещение'*)
+VL_Group:String;(*'Группа'*)
 
 implementation
 
@@ -28,5 +30,7 @@ SerialConnection:=1;
 GC_HeadDevice:='ШО??';
 GC_HDShortName:='??';
 GC_HDGroup:=0;
+
+VL_Room:='.';
 
 end.

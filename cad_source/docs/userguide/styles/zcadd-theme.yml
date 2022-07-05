@@ -1,0 +1,5 @@
+extends: default
+role:
+  filepath:
+    font-style: italic
+    text-decoration-color: #FF0000

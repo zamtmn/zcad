@@ -1,4 +1,4 @@
-unit DEVICE_EL_VL_YTR2;
+unit DEVICE_EL_VL_SWITH1_1P_3;
 
 interface
 
@@ -10,7 +10,7 @@ usescopy addtocable;
 
 var
 
-VL_Type:String;(*'Трансформатор'*)
+VL_Type:String;(*'Выключатель'*)
 VL_Room:String;(*'Помещение'*)
 VL_Group:String;(*'Группа'*)
 
@@ -18,7 +18,7 @@ implementation
 
 begin
 
-BTY_TreeCoord:='PLAN_EM_Трансформатор';
+BTY_TreeCoord:='PLAN_EM_Выключатель';
 Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 

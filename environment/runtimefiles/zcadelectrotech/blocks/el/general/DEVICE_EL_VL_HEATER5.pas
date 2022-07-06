@@ -10,13 +10,15 @@ usescopy addtocable;
 
 var
 
-T1:String;(*'Группа'*)
+VL_Type:String;(*'Эл.обогреватель'*)
+VL_Room:String;(*'Помещение'*)
+VL_Group:String;(*'Группа'*)
 
 implementation
 
 begin
 
-BTY_TreeCoord:='PLAN_EM_Трансформатор';
+BTY_TreeCoord:='PLAN_EM_Эл.обогреватель';
 Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 
@@ -28,5 +30,7 @@ SerialConnection:=1;
 GC_HeadDevice:='ЩО??';
 GC_HDShortName:='??';
 GC_HDGroup:=0;
+
+VL_Room:='.';
 
 end.

@@ -4,7 +4,7 @@ uses system;
 
 type
 
-(*varcategoryforoi VL='База'*)
+(*varcategoryforoi VL='VL(База)'*)
 
 var
    NMO_Name:String;(*'Обозначение'*)
@@ -18,6 +18,6 @@ begin
    NMO_Prefix:='';
    NMO_Suffix:='';
    NMO_BaseName:='unnamed';
-   NMO_Template:='@@[GC_HDShortName]@@[GC_HDGroup]@@[T1]';
+   NMO_Template:='@@[GC_HDShortName]@@[GC_HDGroup]@@[VL_Group]';
 
 end.

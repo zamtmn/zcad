@@ -1,23 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <PalettesContent>
-    <BlockLib2 Type="Tree" Caption='Computers' ImagesWidth='24'>
-      <ZTreeNode Caption='Computers test'>
-      	<ZTreeNode Caption='Computers'>
-	   <ZTreeCommand Command="Insert(comp1)" Img='comp1_300' Caption='Computer 1'/>
-	   <ZTreeCommand Command="Insert(comp2)" Img='comp2_300' Caption='Computer 2'/>
-	   <ZTreeCommand Command="Insert(comp3)" Img='comp3_300' Caption='Computer 3'/>
-	   <ZTreeCommand Command="Insert(comp4)" Img='comp4_300' Caption='Computer 4'/>
-	   <ZTreeCommand Command="Insert(comp5)" Img='comp5_300' Caption='Computer 5'/>
-	   <ZTreeCommand Command="Insert(comp6)" Img='comp6_300' Caption='Computer 6'/>
-	   <ZTreeCommand Command="Insert(comp7)" Img='comp7_300' Caption='Computer 7'/>
-	   <ZTreeCommand Command="Insert(comp8)" Img='comp8_300' Caption='Computer 8'/>
-	   <ZTreeCommand Command="Insert(comp9)" Img='comp9_300' Caption='Computer 9'/>
-	   <ZTreeCommand Command="Insert(comp10)" Img='comp10_300' Caption='Computer 10'/>
-	   <ZTreeCommand Command="Insert(comp11)" Img='comp11_300' Caption='Computer 11'/>
-      	</ZTreeNode>
-      </ZTreeNode>
-    </BlockLib2>
     <BlockLib Type="Tree" Caption='Блоки' ImagesWidth='24'>
       <ZTreeNode Caption='Сила'>
       	<ZTreeNode Caption='Кабельные стояки'>

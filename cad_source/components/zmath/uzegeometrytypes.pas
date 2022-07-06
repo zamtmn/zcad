@@ -115,7 +115,7 @@ type
 
   PGDBvertex=^GDBvertex;
   {REGISTERRECORDTYPE GDBvertex}
-  {-}GDBvertex=GVector3<Double,Double>;{//}
+  {-}GDBvertex=type GVector3<Double,Double>;{//}
   {-}{/GDBvertex=record/}
     {-}{/x:GDBXCoordinate;/}
     {-}{/y:GDBYCoordinate;/}
@@ -124,7 +124,7 @@ type
 
   PGDBvertex3S=^GDBvertex3S;
   {REGISTERRECORDTYPE GDBvertex3S}
-  {-}GDBvertex3S=GVector3<Single,Single>;{//}
+  {-}GDBvertex3S=type GVector3<Single,Single>;{//}
   {-}{/GDBvertex3S=record/}
     {-}{/x:Single;/}
     {-}{/y:Single;/}
@@ -133,7 +133,7 @@ type
 
   PGDBvertex2D=^GDBvertex2D;
   {REGISTERRECORDTYPE GDBvertex2D}
-  {-}GDBvertex2D=GVector2<Double,Double>;{//}
+  {-}GDBvertex2D=type GVector2<Double,Double>;{//}
   {-}{/GDBvertex2D=record/}
     {-}{/x:Double;/}
     {-}{/y:Double;/}
@@ -142,7 +142,7 @@ type
   //DVector4F=packed array[0..3]of Single;
   PDVector4F=^DVector4F;
   {REGISTERRECORDTYPE DVector4F}
-  {-}DVector4F=GVector4<Single,Single>;{//}
+  {-}DVector4F=type GVector4<Single,Single>;{//}
   {-}{/DVector4F=record/}
     {-}{/x:Single;/}
     {-}{/y:Single;/}
@@ -153,7 +153,7 @@ type
   PIMatrix4=^IMatrix4;
   //IMatrix4=packed array[0..3]of Integer;
   {REGISTERRECORDTYPE IMatrix4}
-  {-}IMatrix4=GVector4i<Integer,Integer>;{//}
+  {-}IMatrix4=type GVector4i<Integer,Integer>;{//}
   {-}{/IMatrix4=record/}
     {-}{/x:Integer;/}
     {-}{/y:Integer;/}
@@ -163,7 +163,7 @@ type
 
   //DVector4D=packed array[0..3]of Double;
   {REGISTERRECORDTYPE DVector4D}
-  {-}DVector4D=GVector4<Double,Double>;{//}
+  {-}DVector4D=type GVector4<Double,Double>;{//}
   {-}{/DVector4D=record/}
     {-}{/x:Double;/}
     {-}{/y:Double;/}
@@ -173,7 +173,7 @@ type
 
   //DVector3D=packed array[0..2]of Double;
   {REGISTERRECORDTYPE DVector3D}
-  {-}DVector3D=GVector3<Double,Double>;{//}
+  {-}DVector3D=type GVector3<Double,Double>;{//}
   {-}{/DVector3D=record/}
     {-}{/x:Double;/}
     {-}{/y:Double;/}

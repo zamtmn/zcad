@@ -515,7 +515,7 @@ begin
           if fd.base.PFT<>nil then
                              fd.Size:=fd.base.PFT^.SizeInBytes
                          else
-                             fd.Size:=1;
+                             system.break;
           etd^.AddField(fd);
 
           inc(mf);

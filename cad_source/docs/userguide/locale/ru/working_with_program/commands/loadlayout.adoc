@@ -9,7 +9,7 @@
 include::../../_elements/commandsummary.adoc[]
 
 Загрузка и применение файла раскладки окон !!NEEDLINK!!. При отсутствии операнда будет произведена загрузка файла раскладки поумолчанию !!NEEDLINK!!.
-При отсутствии файла раскладки указанного поумолчанию будет загружен файл `defaultlayout.xml`
-Файлы раскладки ищутся в папке `$(ZCADPath)/components`
+При отсутствии файла раскладки указанного поумолчанию будет загружен файл [.filepath]#defaultlayout.xml#
+Файлы раскладки ищутся в папке [.filepath]#$(ZCADPath)/components#
 
 include::commandsummaryfree.adoc[]

@@ -8,6 +8,6 @@
 include::../../_elements/commandsummary.adoc[]
 
 Загрузка файла описаний тулбаров !!NEEDLINK!!. Загрузка обычно происходит на ранней стадии запуска программы,
-поэтому команда обычно используется в скрипте `$(ZCADPath)/components/stage0.cmd` !!NEEDLINK!!.
+поэтому команда обычно используется в скрипте [.filepath]#$(ZCADPath)/components/stage0.cmd# !!NEEDLINK!!.
 
 include::commandsummaryfree.adoc[]

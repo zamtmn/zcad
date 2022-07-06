@@ -9,6 +9,6 @@ include::../../_elements/commandsummary.adoc[]
 
 Подгружает файл DXF в библиотеку блоков !!NEEDLINK!!. Повторные определения блоков игнорируются !!NEEDLINK!!.
 Загрузка обычно происходит на стадии запуска программы, поэтому команда обычно используется в скрипте
-`$(ZCADPath)/components/autorun.cmd` !!NEEDLINK!!.
+[.filepath]#$(ZCADPath)/components/autorun.cmd# !!NEEDLINK!!.
 
 include::commandsummaryfree.adoc[]

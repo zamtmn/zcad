@@ -1,5 +1,17 @@
 extends: default
 role:
   filepath:
-    font-style: italic
-    text-decoration-color: #FF0000
+    font-family: M+ 1mn
+    font-color: #0f0f0f
+  command:
+    font-family: M+ 1mn
+    font-color: #ff0000
+  cmdline:
+    font-family: M+ 1mn
+    font-color: #0000ff
+  ent:
+    font-family: M+ 1mn
+    font-color: #0000ff
+  ent:
+    font-family: M+ 1mn
+    font-color: #0000ff

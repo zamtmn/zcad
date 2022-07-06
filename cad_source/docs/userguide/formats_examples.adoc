@@ -1,14 +1,20 @@
 include::attributes.adoc[]
 
-Shortcuts kbd:[Ctrl+O]
+Shortcuts kbd:[Ctrl+O]  - asciidoc ext
 
-Monospace text: `Monospace text`
+Monospace text: `Monospace text` - asciidoc spec
 
-Highlight text: #Highlight text#
+Highlight text: #Highlight text# - asciidoc spec
 
-File or path: [.filepath]#Selected text#
+Highlight text: [.hl]#Highlight text# - custom
 
-Command: [.command]#Selected text#
+File or path: [.filepath]#File or path# - custom
+
+Command name: [.command]#Command name# - custom
+
+Command line content: [.cmdline]#Command line content# - custom
+
+Entity name: [.ent]#EntityName# - custom
 
 Tree:
 

@@ -9,6 +9,9 @@ endif::[]
 ifeval::["{cmdshortcuts}"!=""]
   |*Сочетания клавиш*: |{cmdshortcuts}
 endif::[]
+ifeval::["{cmdmenu}"!=""]
+  |*Меню*: a|[.menu]#{cmdmenu}#
+endif::[]
 ifeval::["{predselect}"!=""]
   |*Предвыбор примитивов*: |{predselect}
 endif::[]

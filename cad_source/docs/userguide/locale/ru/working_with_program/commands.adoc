@@ -1,11 +1,17 @@
 
 [[command_list]]
 ### Команды
-3DPoly
-About
+include::commands/3dpoly.adoc[]
+include::commands/about.adoc[]
+
+
 AddToOwner
-Arc
-BEdit
+
+
+include::commands/arc.adoc[]
+include::commands/bedit.adoc[]
+
+
 BlockDefVarMan
 BlockPreViewExport
 BlockReplace
@@ -13,7 +19,7 @@ BlockRotate
 BlockScale
 BlocksInBasePreViewExport
 BlocksList
-Cam_Reset
+include::commands/cam_reset.adoc[]
 Cancel
 ChangeProjType
 Circle

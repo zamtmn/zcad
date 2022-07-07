@@ -12,6 +12,8 @@ File or path: [.filepath]#File or path# - custom
 
 Command name: [.command]#Command name# - custom
 
+Menu path: [.menu]#Menu > Submenu# - custom
+
 Command line content: [.cmdline]#Command line content# - custom
 
 Entity name: [.ent]#EntityName# - custom

@@ -5,7 +5,6 @@
 :cmdicon: ../../../../../../environment/runtimefiles/common/images/actions/move.png
 :cmdshortcuts: kbd:[Ctrl+ALT+M]; kbd:[M]
 :predselect: Требуется
-:cmdexample: Move
 
 include::../../_elements/commandsummary.adoc[]
 

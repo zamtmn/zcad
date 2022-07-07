@@ -2,16 +2,20 @@ extends: default
 role:
   filepath:
     font-family: M+ 1mn
-    font-color: #0f0f0f
+    font-style: bold
+    font-color: #101010
   command:
-    font-family: M+ 1mn
+    font-style: bold
     font-color: #ff0000
   cmdline:
     font-family: M+ 1mn
+    font-style: bold_italic
     font-color: #0000ff
   ent:
-    font-family: M+ 1mn
+    font-style: bold_italic
     font-color: #0000ff
-  ent:
-    font-family: M+ 1mn
+  hl:
+    font-style: bold
+  menu:
+    font-style: bold
     font-color: #0000ff

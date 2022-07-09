@@ -52,6 +52,8 @@ type
     end;
 
 function InterfaceTranslate(const Identifier, OriginalValue: String): String;
+function IsLatin(const Identifier:string):Boolean;
+
 procedure DisableTranslate;
 procedure EnableTranslate;
 var
@@ -197,6 +199,11 @@ begin
                                                end;
          end;
 end;
+function IsLatin(const Identifier:string):Boolean;
+begin
+  result:=(utf8length(Identifier)=length(Identifier));
+end;
+
 function InterfaceTranslate( const Identifier, OriginalValue: String): String;
 const nontranslatedword='InterfaceTranslate: found not translated word: identifier:"%s" originalValue:"%s"';
 var
@@ -226,8 +233,7 @@ begin
                end
                else
                begin
-               if (utf8length(Identifier)=length(Identifier))and
-                  (utf8length(OriginalValue)=length(OriginalValue)) then
+               if IsLatin(Identifier) and IsLatin(OriginalValue) then
                begin
                     if pos(identpref,Identifier)<>1 then
                         begin

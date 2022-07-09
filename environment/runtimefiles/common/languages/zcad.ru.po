@@ -11,6 +11,135 @@ msgstr ""
 "Language: ru\n"
 "X-Generator: Poedit 1.5.7\n"
 
+#: tblockinsertform.anglelabel.caption
+msgid "Angle: "
+msgstr ""
+
+#: tblockinsertform.angleonscreen.caption
+msgctxt "tblockinsertform.angleonscreen.caption"
+msgid "Specify on-screen"
+msgstr ""
+
+#: tblockinsertform.blockinit.text
+msgid "BlockInit"
+msgstr ""
+
+#: tblockinsertform.blocknamecombobox.text
+msgid "BlockNameComboBox"
+msgstr ""
+
+#: tblockinsertform.blocknamelabel.caption
+msgid "Name: "
+msgstr ""
+
+#: tblockinsertform.caption
+msgid "Вставка блока"
+msgstr ""
+
+#: tblockinsertform.explodecheckbox.caption
+msgid "Explode"
+msgstr ""
+
+#: tblockinsertform.factorlabel.caption
+msgid "Factor: "
+msgstr ""
+
+#: tblockinsertform.insertgroupbox.caption
+msgid "Insertion point"
+msgstr ""
+
+#: tblockinsertform.insertonscreen.caption
+msgctxt "tblockinsertform.insertonscreen.caption"
+msgid "Specify on-screen"
+msgstr ""
+
+#: tblockinsertform.insxlabel.caption
+msgctxt "tblockinsertform.insxlabel.caption"
+msgid "X: "
+msgstr ""
+
+#: tblockinsertform.insylabel.caption
+msgctxt "tblockinsertform.insylabel.caption"
+msgid "Y: "
+msgstr ""
+
+#: tblockinsertform.inszlabel.caption
+msgctxt "tblockinsertform.inszlabel.caption"
+msgid "Z: "
+msgstr ""
+
+#: tblockinsertform.mainpanel.caption
+msgid "Prewiev"
+msgstr ""
+
+#: tblockinsertform.pathlabel.caption
+msgid "Path: "
+msgstr ""
+
+#: tblockinsertform.rotationgroupbox.caption
+msgid "Rotation"
+msgstr ""
+
+#: tblockinsertform.scalegroupbox.caption
+msgid "Scale"
+msgstr ""
+
+#: tblockinsertform.scaleonscreen.caption
+msgctxt "tblockinsertform.scaleonscreen.caption"
+msgid "Specify on-screen"
+msgstr ""
+
+#: tblockinsertform.scalexlabel.caption
+msgctxt "tblockinsertform.scalexlabel.caption"
+msgid "X: "
+msgstr ""
+
+#: tblockinsertform.scaleylabel.caption
+msgctxt "tblockinsertform.scaleylabel.caption"
+msgid "Z: "
+msgstr ""
+
+#: tblockinsertform.scalezlabel.caption
+msgctxt "tblockinsertform.scalezlabel.caption"
+msgid "Y: "
+msgstr ""
+
+#: tblockinsertform.uniformscale.caption
+msgid "Uniform scale"
+msgstr ""
+
+#: tblockinsertform.unitlabel.caption
+msgid "Unit: "
+msgstr ""
+
+#: tblockinsertform.unitsgroupbox.caption
+msgid "Block unit"
+msgstr ""
+
+#: tcolorselectform.byblock.caption
+msgid "??ByBlock"
+msgstr ""
+
+#: tcolorselectform.bylayer.caption
+msgid "??ByLayer"
+msgstr ""
+
+#: tcolorselectform.caption
+msgid "Color selection"
+msgstr ""
+
+#: tcolorselectform.label2.caption
+msgid "Color number:"
+msgstr ""
+
+#: tcolorselectform.label3.caption
+msgid "??Color description"
+msgstr ""
+
+#: tcolorselectform.tabsheet1.caption
+msgid "Color index"
+msgstr ""
+
 #: tdimstylesform.addstyle.caption
 msgctxt "tdimstylesform.addstyle.caption"
 msgid "AddStyle"
@@ -185,6 +314,110 @@ msgctxt "tlinetypesform.listview1.columns[3].caption"
 msgid "Description"
 msgstr "Описание"
 
+#: tlinetypesloadform.caption
+msgctxt "tlinetypesloadform.caption"
+msgid "Form1"
+msgstr ""
+
+#: tlinetypesloadform.listview1.columns[0].caption
+msgctxt "tlinetypesloadform.listview1.columns[0].caption"
+msgid "Name"
+msgstr "Имя"
+
+#: tlinetypesloadform.listview1.columns[1].caption
+msgctxt "tlinetypesloadform.listview1.columns[1].caption"
+msgid "Description"
+msgstr "Описание"
+
+#: tnavigatordevices.caption
+msgctxt "tnavigatordevices.caption"
+msgid "Devices"
+msgstr "Устройства"
+
+#: tnavigatordevices.collapseall.caption
+msgctxt "tnavigatordevices.collapseall.caption"
+msgid "Collapse all"
+msgstr ""
+
+#: tnavigatordevices.collapseallbtn.hint
+msgctxt "tnavigatordevices.collapseallbtn.hint"
+msgid "Collapse all"
+msgstr ""
+
+#: tnavigatordevices.expandall.caption
+msgctxt "tnavigatordevices.expandall.caption"
+msgid "Expand all"
+msgstr ""
+
+#: tnavigatordevices.expandallbtn.hint
+msgctxt "tnavigatordevices.expandallbtn.hint"
+msgid "Expand all"
+msgstr ""
+
+#: tnavigatordevices.filterbtn.buttonhint
+msgid "Clear filter"
+msgstr ""
+
+#: tnavigatordevices.includeents.caption
+msgid "Edit include entities"
+msgstr ""
+
+#: tnavigatordevices.includeprops.caption
+msgid "Edit include properties"
+msgstr ""
+
+#: tnavigatordevices.loadfromfile.caption
+msgid "Load from file"
+msgstr ""
+
+#: tnavigatordevices.refresh.caption
+msgid "Refresh tree"
+msgstr ""
+
+#: tnavigatordevices.savetofile.caption
+msgid "Save to file"
+msgstr ""
+
+#: tnavigatordevices.treeprops.caption
+msgid "Edit tree properties"
+msgstr ""
+
+#: tnavigatorentities.caption
+msgctxt "tnavigatorentities.caption"
+msgid "Entities"
+msgstr "Примитивы"
+
+#: tnavigatorentities.maintoolbar.caption
+msgid "MainToolBar"
+msgstr ""
+
+#: tnavigatorentities.refresh.caption
+msgid "Refresh"
+msgstr ""
+
+#: tnavigatorentities.toolbutton1.caption
+msgid "ToolButton1"
+msgstr ""
+
+#: tnavigatorentities.toolbutton3.caption
+msgid "ToolButton3"
+msgstr ""
+
+#: tselectorform.caption
+msgctxt "tselectorform.caption"
+msgid "Form1"
+msgstr ""
+
+#: tselectorform.listview1.columns[0].caption
+msgctxt "tselectorform.listview1.columns[0].caption"
+msgid "Name"
+msgstr "Имя"
+
+#: tselectorform.listview1.columns[1].caption
+msgctxt "tselectorform.listview1.columns[1].caption"
+msgid "Description"
+msgstr "Описание"
+
 #: ttextstylesform.addstyle.caption
 msgctxt "ttextstylesform.addstyle.caption"
 msgid "AddStyle"
@@ -293,6 +526,68 @@ msgctxt "ttextstylesform.toolbar1.caption"
 msgid "ToolBar1"
 msgstr ""
 
+#: tunitsform.angdircheckbox.caption
+msgid "Clockwise"
+msgstr ""
+
+#: tunitsform.angledirectionbitbtn.caption
+msgid "Direction"
+msgstr ""
+
+#: tunitsform.caption
+msgid "Drawing units"
+msgstr ""
+
+#: tunitsform.groupbox1.caption
+msgid "Length"
+msgstr ""
+
+#: tunitsform.groupbox2.caption
+msgid "Angle"
+msgstr ""
+
+#: tunitsform.groupbox3.caption
+msgid "Insertion scale"
+msgstr ""
+
+#: tunitsform.groupbox4.caption
+msgctxt "tunitsform.groupbox4.caption"
+msgid "Sample output"
+msgstr ""
+
+#: tunitsform.label1.caption
+msgctxt "tunitsform.label1.caption"
+msgid "Sample output"
+msgstr ""
+
+#: tunitsform.label3.caption
+msgctxt "tunitsform.label3.caption"
+msgid "Type:"
+msgstr ""
+
+#: tunitsform.label4.caption
+msgctxt "tunitsform.label4.caption"
+msgid "Precision:"
+msgstr ""
+
+#: tunitsform.label5.caption
+msgctxt "tunitsform.label5.caption"
+msgid "Type:"
+msgstr ""
+
+#: tunitsform.label6.caption
+msgctxt "tunitsform.label6.caption"
+msgid "Precision:"
+msgstr ""
+
+#: tunitsform.label7.caption
+msgid "Units to scale inserted content:"
+msgstr ""
+
+#: tunitsform.unitmodecheckbox.caption
+msgid "Unit mode"
+msgstr ""
+
 #: tzcadmainwindow.toolbard.caption
 msgid "ToolBarD"
 msgstr ""
@@ -339,9 +634,24 @@ msgid ""
 "default):"
 msgstr ""
 
+#: uzcdialogsfiles.rsopensomething
+msgid "Open something..."
+msgstr ""
+
+#: uzcdialogsfiles.rssavesomething
+msgid "Save something..."
+msgstr ""
+
 #: uzcentnet.rscannotbeconnected
 msgid "Can not be connected"
 msgstr "Неможет быть соединено"
+
+#: uzcfnavigatordevices.rsnavigatorparamsfilefilter
+#, object-pascal-format
+msgid ""
+"This navigator params files (*.%0:s)|*.%0:s|Xml files (*.xml)|*.xml|All "
+"files (*.*)|*.*"
+msgstr ""
 
 #: uzcfnavigatordevices.rsstandalonedevices
 msgid "Standalone devices"
@@ -385,10 +695,6 @@ msgstr "Автор: Зубарев А.М."
 #: uzcstrconsts.rsautosave
 msgid "Autosave"
 msgstr "Автосохранение"
-
-#: uzcstrconsts.rsbasenameabsent
-msgid "Absent BaseName"
-msgstr "Базовое имя отсутствует"
 
 #: uzcstrconsts.rsblocks
 msgid "Blocks"
@@ -462,6 +768,11 @@ msgstr "Параметры команды"
 #: uzcstrconsts.rscmcopy
 msgid "Copy"
 msgstr "Копировать"
+
+#: uzcstrconsts.rscmentitiescounter
+#, object-pascal-format
+msgid "%d entities processed (%d total, %d selected, %d filtred)"
+msgstr ""
 
 #: uzcstrconsts.rscmexport
 msgid "Export"
@@ -893,8 +1204,11 @@ msgstr "Тип линии"
 
 #: uzcstrconsts.rslinetypedesk
 #, object-pascal-format
+#| msgid ""
+#| ";;Pattern length %f\n"
+#| "%s"
 msgid ""
-";;Pattern length %f\n"
+";;DXF pattern length: %f, fact pattern length: %f\n"
 "%s"
 msgstr ""
 ";;Длина шаблона %f\n"
@@ -977,10 +1291,6 @@ msgstr "Пока не реализовано"
 #: uzcstrconsts.rsopenfile
 msgid "Open file..."
 msgstr "Открыть файл..."
-
-#: uzcstrconsts.rsprefixabsent
-msgid "Absent Prefix"
-msgstr "Префикс отсутствует"
 
 #: uzcstrconsts.rsprocesstimemsg
 #, object-pascal-format
@@ -1072,6 +1382,10 @@ msgstr "Стиль должен быть выбран"
 #: uzcstrconsts.rssyslinetypewarning
 msgid "This is system line type!"
 msgstr "Это системный тип линии!"
+
+#: uzcstrconsts.rstagmissingt
+msgid "Tag is missing"
+msgstr ""
 
 #: uzcstrconsts.rstemplatenotfound
 #, object-pascal-format
@@ -1197,6 +1511,11 @@ msgstr ""
 #: uzeffdxf.rsloaddxffile
 msgid "Load DXF file"
 msgstr "Файл DXF загружен"
+
+#: uzestrconsts.fontnotfound
+#, object-pascal-format
+msgid "For text style \"%s\" not found font \"%s\" (\"%s\" fontfamily)"
+msgstr ""
 
 #: uzestrconsts.fontnotfoundandreplace
 #, object-pascal-format

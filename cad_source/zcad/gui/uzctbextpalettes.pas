@@ -311,10 +311,15 @@ var
   pTND:PTPaletteTreeNodeData;
   TBSubNode:TDomNode;
   imgname:AnsiString;
+  cptn:string;
 begin
   TN:=TZPaletteTreeView(palette).AddChild(PZPaletteTreeNode(rootnode),nil);
   pTND:=TZPaletteTreeView(palette).GetNodeData(TN);
-  pTND^.Text:=InterfaceTranslate(palette.Parent.Name+'~caption',getAttrValue(aNode,'Caption',''));
+  cptn:=getAttrValue(aNode,'Caption','');
+  if IsLatin(cptn) then
+    pTND^.Text:=InterfaceTranslate(palette.Parent.Name+'_caption'+'~'+cptn,cptn)
+  else
+    pTND^.Text:=cptn;
   imgname:=getAttrValue(aNode,'Img','');
   if imgname<>'' then
     pTND^.ImageIndex:=ImagesManager.GetImageIndex(imgname)

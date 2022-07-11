@@ -645,161 +645,142 @@ commandmanager.DMShow;
 end;*)
 procedure KIP_CDBuild_com.Command(Operands:TCommandOperands);
 var
-    psd:PSelectedObjDesc;
-    ir:itrec;
-    {pdev,}pnevdev:PGDBObjDevice;
-    PBH:PGDBObjBlockdef;
-    currentcoord:GDBVertex;
-    t_matrix:DMatrix4D;
-    pobj,pcobj:PGDBObjEntity;
-    ir2:itrec;
-    pvd:pvardesk;
-    dn:tdevname;
-    dna:devnamearray;
-    i:integer;
-    DC:TDrawContext;
-    entvarext,delvarext:TVariablesExtender;
-    extensionssave:pointer;
-    pu:PTSimpleUnit;
+  psd:PSelectedObjDesc;
+  ir:itrec;
+  pnevdev:PGDBObjDevice;
+  PBH:PGDBObjBlockdef;
+  currentcoord:GDBVertex;
+  t_matrix:DMatrix4D;
+  pobj,pcobj:PGDBObjEntity;
+  ir2:itrec;
+  pvd:pvardesk;
+  dn:tdevname;
+  dna:devnamearray;
+  i:integer;
+  DC:TDrawContext;
+  entvarext,delvarext:TVariablesExtender;
+  extensionssave:pointer;
+  pu:PTSimpleUnit;
 begin
-     currentcoord:=nulvertex;
-     dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-     drawings.GetCurrentDWG^.AddBlockFromDBIfNeed('HEAD_CONNECTIONDIAGRAM');
-     PBH:=drawings.GetCurrentDWG^.BlockDefArray.getblockdef('HEAD_CONNECTIONDIAGRAM');
-     if pbh=nil then
-                    exit;
-     if not PBH.Formated then
-                             PBH.FormatEntity(drawings.GetCurrentDWG^,dc);
-     dna:=devnamearray.Create;
-     psd:=drawings.GetCurrentDWG^.SelObjArray.beginiterate(ir);
-     if psd<>nil then
-     repeat
-           if psd^.objaddr^.GetObjType=GDBDeviceID then
-           begin
-                entvarext:=psd^.objaddr^.GetExtension<TVariablesExtender>;
-                //pvd:=PTObjectUnit(psd^.objaddr^.ou.Instance)^.FindVariable('DESC_MountingSite');
-                pvd:=entvarext.entityunit.FindVariable({'DESC_MountingSite'}'NMO_Name');
-                if pvd<>nil then
-                                dn.name:=pvd.data.PTD.GetValueAsString(pvd.data.Addr.Instance)
-                            else
-                                dn.name:='';
-                dn.pdev:=pointer(psd^.objaddr);
-                dna.PushBack(dn);
-           end;
-           psd:=drawings.GetCurrentDWG^.SelObjArray.iterate(ir);
-     until psd=nil;
+  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
 
-     if dna.Size=0 then
-     begin
-          ZCMsgCallBackInterface.TextMessage(rscmSelDevsBeforeComm,TMWOHistoryOut);
-     end
-     else
-     begin
-     devnamesort.Sort(dna,dna.Size);
-     t_matrix:=uzegeometry.CreateTranslationMatrix(createvertex(0,15,0));
+  //добавляем определение блока HEAD_CONNECTIONDIAGRAM в чечтеж если надо
+  drawings.GetCurrentDWG^.AddBlockFromDBIfNeed('HEAD_CONNECTIONDIAGRAM');
 
-     pu:=units.findunit(SupportPath,InterfaceTranslate,'uentrepresentation');
+  //получаеи указатель на него
+  PBH:=drawings.GetCurrentDWG^.BlockDefArray.getblockdef('HEAD_CONNECTIONDIAGRAM');
 
-     for i:=0 to dna.Size-1 do
+  //такого блок в библиотеке нет, водим
+  //TODO: надо добавить ругань
+  if pbh=nil then
+                exit;
+  if not PBH.Formated then
+                         PBH.FormatEntity(drawings.GetCurrentDWG^,dc);
+
+  //создаем массив ИмяУстройств+АдресУстройства
+  dna:=devnamearray.Create;
+  //заполняем массив устройствами попавшими в выделение
+  //TODO: тут нужно учитывать централизацию
+  psd:=drawings.GetCurrentDWG^.SelObjArray.beginiterate(ir);
+  if psd<>nil then
+  repeat
+       if psd^.objaddr^.GetObjType=GDBDeviceID then
        begin
-            dn:=dna[i];
-
-            extensionssave:=dn.pdev^.EntExtensions;
-            dn.pdev^.EntExtensions:=nil;
-            pointer(pnevdev):=dn.pdev^.Clone(@drawings.GetCurrentDWG.ConstructObjRoot);
-            dn.pdev^.EntExtensions:=extensionssave;
-
-            entvarext:=dn.pdev^.GetExtension<TVariablesExtender>;
-            pnevdev^.AddExtension(TVariablesExtender.Create(pnevdev));
-            delvarext:=pnevdev^.GetExtension<TVariablesExtender>;
-            entvarext.addDelegate(pnevdev,delvarext);
-
-
-            if pu<>nil then
-             delvarext.entityunit.CopyFrom(pu);
-
-            delvarext:=pnevdev^.GetExtension<TVariablesExtender>;
-
-            pnevdev.Local.P_insert:=currentcoord;
-            pnevdev.Local.Basis.oz:=xy_Z_Vertex;
-            pnevdev.Local.Basis.ox:=_X_yzVertex;
-            pnevdev.Local.Basis.oy:=x_Y_zVertex;
-            pnevdev.rotate:=0;
-
-            //pnevdev^.BuildGeometry(drawings.GetCurrentDWG^);
-            //pnevdev^.BuildVarGeometry(drawings.GetCurrentDWG^);
-            pnevdev^.formatEntity(drawings.GetCurrentDWG^,dc);
-
-            //PBH^.ObjArray.clonetransformedentityto(@pnevdev^.VarObjArray,pnevdev,t_matrix);
-                 pobj:=PBH.ObjArray.beginiterate(ir2);
-                 if pobj<>nil then
-                 repeat
-                       pcobj:=pobj.Clone(pnevdev);
-                       //pobj.FormatEntity(drawings.GetCurrentDWG^);
-                       pcobj.transformat(pobj,@t_matrix);
-                       //pcobj.ReCalcFromObjMatrix;
-                       if pcobj^.IsHaveLCS then
-                                             pcobj^.FormatEntity(drawings.GetCurrentDWG^,dc);
-                       pcobj^.FormatEntity(drawings.GetCurrentDWG^,dc);
-                       pnevdev^.VarObjArray.AddPEntity(pcobj^);
-                       pobj:=PBH.ObjArray.iterate(ir2);
-                 until pobj=nil;
-
-
-
-            pnevdev^.formatEntity(drawings.GetCurrentDWG^,dc);
-
-            drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.AddPEntity(pnevdev^);
-            currentcoord.x:=currentcoord.x+45;
-
-            //drawings.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(pb);
-
-
+            entvarext:=psd^.objaddr^.GetExtension<TVariablesExtender>;
+            //pvd:=PTObjectUnit(psd^.objaddr^.ou.Instance)^.FindVariable('DESC_MountingSite');
+            pvd:=entvarext.entityunit.FindVariable({'DESC_MountingSite'}'NMO_Name');
+            if pvd<>nil then
+                            dn.name:=pvd.data.PTD.GetValueAsString(pvd.data.Addr.Instance)
+                        else
+                            dn.name:='';
+            dn.pdev:=pointer(psd^.objaddr);
+            dna.PushBack(dn);
        end;
-     {psd:=drawings.GetCurrentDWG^.SelObjArray.beginiterate(ir);
-     if psd<>nil then
-     repeat
-           if psd^.objaddr^.GetObjType=GDBDeviceID then
-           begin
-                pointer(pnevdev):=psd^.objaddr^.Clone(@drawings.GetCurrentDWG.ConstructObjRoot);
+       psd:=drawings.GetCurrentDWG^.SelObjArray.iterate(ir);
+  until psd=nil;
 
-                pnevdev.Local.P_insert:=currentcoord;
-                pnevdev.Local.Basis.oz:=xy_Z_Vertex;
+  if dna.Size=0 then
+    //ругаемся если устройств в выделениии не оказалось
+    ZCMsgCallBackInterface.TextMessage(rscmSelDevsBeforeComm,TMWOHistoryOut)
+  else begin
+    //устройства в выделениии присутствуют, сортируем по именам
+    //это нужно только чтоб вставить рыбу в упорядоченной по именам последовательности
+    devnamesort.Sort(dna,dna.Size);
+    //создаем матрицу для перемещения по оси У на +15
+    t_matrix:=uzegeometry.CreateTranslationMatrix(createvertex(0,15,0));
+    //ищем модуль с переменными дефолтными переменными для представителя устройства
+    pu:=units.findunit(SupportPath,InterfaceTranslate,'uentrepresentation');
+    //эта команда работает после указания пользователем точки вставки
+    //смещение первого вставляемого элемента nulvertex
+    currentcoord:=nulvertex;
+    //побежали по массиву сортированных имен
+    for i:=0 to dna.Size-1 do begin
+      dn:=dna[i];
 
-                pnevdev^.BuildGeometry(drawings.GetCurrentDWG^);
-                pnevdev^.BuildVarGeometry(drawings.GetCurrentDWG^);
-                pnevdev^.formatEntity(drawings.GetCurrentDWG^);
+      //временно выключаем все расширители примитива чтоб они не скопировались
+      //в клон
+      extensionssave:=dn.pdev^.EntExtensions;
+      dn.pdev^.EntExtensions:=nil;
+      //клонируем устройство в конструкторской области
+      pointer(pnevdev):=dn.pdev^.Clone(@drawings.GetCurrentDWG.ConstructObjRoot);
+      //возвращаем расширители
+      dn.pdev^.EntExtensions:=extensionssave;
 
-                //PBH^.ObjArray.clonetransformedentityto(@pnevdev^.VarObjArray,pnevdev,t_matrix);
-                     pobj:=PBH.ObjArray.beginiterate(ir2);
-                     if pobj<>nil then
-                     repeat
-                           pcobj:=pobj.Clone(pnevdev);
-                           //pobj.FormatEntity(drawings.GetCurrentDWG^);
-                           pcobj.transformat(pobj,@t_matrix);
-                           //pcobj.ReCalcFromObjMatrix;
-                           if pcobj^.IsHaveLCS then
-                                                 pcobj^.FormatEntity(drawings.GetCurrentDWG^);
-                           pcobj^.FormatEntity(drawings.GetCurrentDWG^);
-                           pnevdev^.VarObjArray.add(@pcobj);
-                           pobj:=PBH.ObjArray.iterate(ir2);
-                     until pobj=nil;
+      entvarext:=dn.pdev^.GetExtension<TVariablesExtender>;
+      //добавляем клону расширение с переменными
+      pnevdev^.AddExtension(TVariablesExtender.Create(pnevdev));
+      delvarext:=pnevdev^.GetExtension<TVariablesExtender>;
+      //добавляем устройству клона как представителя
+      entvarext.addDelegate(pnevdev,delvarext);
 
+      //копируем клону типичный набор переменных представителя
+      if pu<>nil then
+        delvarext.entityunit.CopyFrom(pu);
 
+      //снова получаем расширение с переменными клона
+      //оно такто уже получено
+      //TODO: убрать
+      delvarext:=pnevdev^.GetExtension<TVariablesExtender>;
 
-                pnevdev^.formatEntity(drawings.GetCurrentDWG^);
+      //выставляем клону точку вставки, ориентируем по осям, вращаем
+      pnevdev.Local.P_insert:=currentcoord;
+      pnevdev.Local.Basis.oz:=xy_Z_Vertex;
+      pnevdev.Local.Basis.ox:=_X_yzVertex;
+      pnevdev.Local.Basis.oy:=x_Y_zVertex;
+      pnevdev.rotate:=0;
 
-                drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.add(addr(pnevdev));
-                currentcoord.x:=currentcoord.x+45;
+      //форматируем клон
+      //TODO: убрать, форматировать клон надо в конце
+      pnevdev^.formatEntity(drawings.GetCurrentDWG^,dc);
 
-                //drawings.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(pb);
+      //бежим по определению блока HEAD_CONNECTIONDIAGRAM
+      pobj:=PBH.ObjArray.beginiterate(ir2);
+      if pobj<>nil then
+        repeat
+          //клонируем примитивы из HEAD_CONNECTIONDIAGRAM к себе в клон
+          pcobj:=pobj.Clone(pnevdev);
+          //переносим их Y+15
+          pcobj.transformat(pobj,@t_matrix);
+          //форматируем
+          pcobj^.FormatEntity(drawings.GetCurrentDWG^,dc);
+          //в наш клон в динамическую часть
+          pnevdev^.VarObjArray.AddPEntity(pcobj^);
 
-           end;
-     psd:=drawings.GetCurrentDWG^.SelObjArray.iterate(ir);
-     until psd=nil;}
+          pobj:=PBH.ObjArray.iterate(ir2);
+        until pobj=nil;
 
-     end;
-     dna.Destroy;
+      //в этом меесте мы имеем клон исходного устройства с добавленым в динамическую часть
+      //содержимым блока HEAD_CONNECTIONDIAGRAM
+
+      //форматируем
+      pnevdev^.formatEntity(drawings.GetCurrentDWG^,dc);
+      //добавляем в чертеж
+      drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.AddPEntity(pnevdev^);
+      //смещаем для следующего устройства
+      currentcoord.x:=currentcoord.x+45;
+    end;
+  end;
+  dna.Destroy;
 end;
 
 procedure KIP_LugTableBuild_com.Command(Operands:TCommandOperands);

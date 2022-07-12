@@ -18,11 +18,10 @@ endif::[]
 ifeval::["{cmdoperands}"!=""]
 |*Операнды*:         |{cmdoperands}
 endif::[]
-ifeval::["{cmdexample2}"==""]
+ifeval::["{cmdexample}"!=""]
   |*Пример использования*:         a|[.cmdline]#{cmdexample}#
 endif::[]
 ifeval::["{cmdexample2}"!=""]
-  |*Пример использования 1*:       a|[.cmdline]#{cmdexample}#
   |*Пример использования 2*:       a|[.cmdline]#{cmdexample2}#
 endif::[]
 |==========================

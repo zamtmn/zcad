@@ -2283,6 +2283,15 @@ msgctxt "zcadexternal.oimultiproperty_width~"
 msgid "Width"
 msgstr ""
 
+#: zcadexternal.palette~blocks
+msgid "Blocks"
+msgstr ""
+
+#: zcadexternal.palette~fire alarm
+msgctxt "zcadexternal.palette~fire alarm"
+msgid "Fire alarm"
+msgstr ""
+
 #: zcadexternal.representationsroot~graphsymbol
 msgid "Symbols"
 msgstr ""

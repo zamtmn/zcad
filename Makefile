@@ -142,6 +142,13 @@ tests: checkvars
 	$(MAKE) -C cad_source/components/zcontainers/tests LP=$(LP) PCP=$(PCP) clean all
 	$(MAKE) -C cad_source/zengine/tests LP=$(LP) PCP=$(PCP) clean all
 
+updatelocalizedpofiles: checkvars
+	cp cad/languages/rtzcad.po cad/languages/rtzcad.pot
+	$(LP)$(PATHDELIM)tools$(PATHDELIM)updatepofiles cad/languages/rtzcad.pot
+	rm -rf cad/languages/rtzcad.pot
+	cp $(LP)$(PATHDELIM)lcl/languages/*.po cad/languages
+	cp $(LP)$(PATHDELIM)components/anchordocking/languages/*.po cad/languages
+
 cleanzcad: clean zcadenv zcad
 
 cleanzcadelectrotech: clean zcadelectrotechenv zcadelectrotech

@@ -1,0 +1,295 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Péter Gábor <ptrg@freemail.hu>\n"
+"Language-Team: Magyar (Hungarian)\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.7.1\n"
+
+#: anchordockstr.adrsafreesideofasplittermustnotbeanchorednodetypeancho
+#, object-pascal-format
+msgid "A free side of a splitter must not be anchored: Node=\"%s\" Type=%s Anchors[%s]=\"%s\""
+msgstr "Egy elválasztó szabad oldala nem rögzíthető: Csomópont=\"%s\" Típus=%s Horgonyok[%s]=\"%s\""
+
+#: anchordockstr.adrsallowdocksitestobeminimized
+msgid "Allow dock sites to be minimized"
+msgstr "A dokkterületek legyenek minimalizálhatók"
+
+#: anchordockstr.adrsamountofpixelthemousehastodragbeforedragstarts
+msgid "Amount of pixel the mouse has to drag before drag starts"
+msgstr "Ennyi képpontot kell mozdulnia az egérnek mielőtt a húzás elkezdődik"
+
+#: anchordockstr.adrsanchorisnotsplitternodeanchors
+#, object-pascal-format
+msgid "Anchor is not splitter: Node=\"%s\" Anchors[%s]=\"%s\""
+msgstr "Rögzítés nem elválasztóhoz: Csomópont=\"%s\" Horgonyok[%s]=\"%s\""
+
+#: anchordockstr.adrsanchornotfoundnodeanchors
+#, object-pascal-format
+msgid "Anchor not found: Node=\"%s\" Anchors[%s]=\"%s\""
+msgstr "Rögzítési hely nem található: Csomópont=\"%s\" Horgonyok[%s]=\"%s\""
+
+#: anchordockstr.adrsanchortowrongsideofsplitternodeanchors
+#, object-pascal-format
+msgid "Anchor to wrong side of splitter: Node=\"%s\" Anchors[%s]=\"%s\""
+msgstr "Rögzítés az elválasztó rossz oldalához: Csomópont=\"%s\" Horgonyok[%s]=\"%s\""
+
+#: anchordockstr.adrsapagemustnotbeanchorednodeparentparenttypeanchors
+#, object-pascal-format
+msgid "A page must not be anchored: Node=\"%s\" Parent=%s ParentType=%s Anchors[%s]=\"%s\""
+msgstr "Egy lap nem rögzíthető: Csomópont=\"%s\" Szülő:%s Szülőtípus=%s Horgonyok[%s]=\"%s\""
+
+#: anchordockstr.adrsautomatically
+msgid "Automatically"
+msgstr "Automatikusan"
+
+#: anchordockstr.adrsbottom
+msgid "bottom"
+msgstr "le"
+
+#: anchordockstr.adrsclose
+msgid "Close"
+msgstr "Bezárás"
+
+#: anchordockstr.adrscontrolisalreadyadocksite
+msgid "control is already a docksite"
+msgstr "a vezérlő már dokkterület"
+
+#: anchordockstr.adrscustomdocksitecanhaveonlyonesite
+#, object-pascal-format
+msgid "Custom dock site \"%s\" can have only one site."
+msgstr "Az \"%s\" dokkterület csak egy területet tartalmazhat."
+
+#: anchordockstr.adrsdockinganchordocking
+msgid "Docking / Anchordocking"
+msgstr "Dokkolás / Ablakok rögzítése"
+
+#: anchordockstr.adrsdockingoptions
+msgid "Docking options"
+msgstr "Dokkolás beállításai"
+
+#: anchordockstr.adrsdraganddockc
+#, object-pascal-format
+msgid "Use the mouse to drag and dock window \"%s\""
+msgstr "Használja az egeret a(z) \"%s\" ablak húzásához és dokkolásához"
+
+#: anchordockstr.adrsdragthreshold
+msgid "Drag threshold"
+msgstr "Húzási küszöb"
+
+#: anchordockstr.adrsduplicatename
+msgid "Duplicate name: "
+msgstr "Ismétlődő név:"
+
+#: anchordockstr.adrseachdockedwindowhasaheaderthatallowsdragginghasaco
+msgid "Each docked window has a header that allows dragging, has a context menu with extra layout functions and shows the caption of the docked window"
+msgstr "Minden dokkolt ablaknak van fejléce, amely lehetővé teszi a húzást, a helyi menüjében további elrendezési műveletek vannak és megjeleníti a dokkolt ablak címét"
+
+#: anchordockstr.adrsemptyname
+msgid "Empty name: "
+msgstr "Üres név:"
+
+#: anchordockstr.adrsenlarge
+msgid "Enlarge"
+msgstr "Bővítés"
+
+#: anchordockstr.adrsenlargeside
+#, object-pascal-format
+msgid "Enlarge %s side"
+msgstr "Bővítés %s"
+
+#: anchordockstr.adrsfilledheaders
+msgid "Fill headers"
+msgstr "Fejlécek kitöltése"
+
+#: anchordockstr.adrsfilledheadershint
+msgid "Fill headers of docked controls"
+msgstr "A dokkolt vezérlők fejléceinek kitöltése"
+
+#: anchordockstr.adrsflattenheaders
+msgid "Flatten headers"
+msgstr "Lapos fejlécek"
+
+#: anchordockstr.adrsflattenheadershint
+msgid "Flatten headers of docked controls"
+msgstr "A dokkolt vezérlők fejlécei laposak"
+
+#: anchordockstr.adrsfloatingwindowsontop
+msgid "Floating windows on top"
+msgstr ""
+
+#: anchordockstr.adrsfloatingwindowsontophint
+msgid "Show floating windows on top of main form"
+msgstr ""
+
+#: anchordockstr.adrsgeneraldockingoptions
+msgid "General docking options"
+msgstr "Általános dokkolási beállítások"
+
+#: anchordockstr.adrsheaderalignleft
+msgid "Header align left"
+msgstr "Fejléc igazítása balra"
+
+#: anchordockstr.adrsheaderaligntop
+msgid "Header align top"
+msgstr "Fejléc igazítása jobbra"
+
+#: anchordockstr.adrsheaderposition
+msgid "Header position"
+msgstr "Fejléc elhelyezése"
+
+#: anchordockstr.adrsheaderstyle
+msgid "Header Style:"
+msgstr "Fejléc stílusa:"
+
+#: anchordockstr.adrshideheadercaptionsforsiteswithonlyonedockedcontrol
+msgid "Hide header captions for sites with only one docked control, as that is already shown in the normal window title"
+msgstr "A fejléc-felírat elrejtése az olyan területek esetén, ahol csak egy dokkolt vezérlő van, mivel az már megjelenik az ablak címében."
+
+#: anchordockstr.adrshighlightfocused
+msgid "Highlight focused"
+msgstr "Kiválasztott elem kiemelése"
+
+#: anchordockstr.adrshighlightfocusedhint
+msgid "Highlight header of focused docked control"
+msgstr "Kiválasztott dokkolt vezérlők fejlécének kiemelése"
+
+#: anchordockstr.adrsleft
+msgid "left"
+msgstr "balra"
+
+#: anchordockstr.adrslocked
+msgid "Locked"
+msgstr "Zárolva"
+
+#: anchordockstr.adrsmerge
+msgid "Merge"
+msgstr "Egyesítés"
+
+#: anchordockstr.adrsminimize
+msgid "Minimize"
+msgstr "Minimalizálás"
+
+#: anchordockstr.adrsmissingcontrolname
+msgid "missing control name"
+msgstr "hiányzik a vezérlő neve"
+
+#: anchordockstr.adrsmodalformscannotbemadedockable
+msgid "modal forms can not be made dockable"
+msgstr "a modális form-ok nem dokkolhatók"
+
+#: anchordockstr.adrsmoveheadertoleftwhenwidthheight100headeralignleft
+msgid "Move header to left when (Width/Height)*100>=HeaderAlignLeft"
+msgstr "Fejléc áthelyezése balra amikor (Width/Height)*100>=HeaderAlignLeft"
+
+#: anchordockstr.adrsmoveheadertotopwhenwidthheight100headeraligntop
+msgid "Move header to top when (Width/Height)*100<=HeaderAlignTop"
+msgstr "Fejléc áthelyezése felülre amikor (Width/Height)*100<=HeaderAlignTop"
+
+#: anchordockstr.adrsmovepageleft
+msgid "Move page left"
+msgstr "Lap mozgatása eggyel balra"
+
+#: anchordockstr.adrsmovepageleftmost
+msgid "Move page leftmost"
+msgstr "Lap mozgatása a bal szélre"
+
+#: anchordockstr.adrsmovepageright
+msgid "Move page right"
+msgstr "Lap mozgatása eggyel jobbra"
+
+#: anchordockstr.adrsmovepagerightmost
+msgid "Move page rightmost"
+msgstr "Lap mozgatása a jobb szélre"
+
+#: anchordockstr.adrsmultilinepages
+msgid "Multiline Tabs"
+msgstr ""
+
+#: anchordockstr.adrsmultilinepageshint
+msgid "Tabs of pages can be shown in multiple lines"
+msgstr ""
+
+#: anchordockstr.adrsnocaptionsforfloatingsites
+msgid "No captions for floating sites"
+msgstr "Nincs cím a lebegő területek esetén"
+
+#: anchordockstr.adrsnochildrenallowedfornodetype
+#, object-pascal-format
+msgid "No children allowed for Node=\"%s\" Type=%s"
+msgstr "Gyermekek nincsenek engedélyezve: Csomópont=\"%s\" Típus=\"%s\""
+
+#: anchordockstr.adrsnotsupportedhasparent
+#, object-pascal-format
+msgid "Not supported: %s has parent %s"
+msgstr "Nincs támogatva: %s szülője %s"
+
+#: anchordockstr.adrsquit
+#, object-pascal-format
+msgid "Quit %s"
+msgstr "Kilépés - %s"
+
+#: anchordockstr.adrsrequestedbutcreated
+#, object-pascal-format
+msgid "%s requested, but %s created"
+msgstr "a kért %s helyett %s lett létrehozva"
+
+#: anchordockstr.adrsright
+msgid "right"
+msgstr "jobbra"
+
+#: anchordockstr.adrsscaleonresize
+msgid "Scale on resize"
+msgstr "Arányos átméretezés"
+
+#: anchordockstr.adrsscalesubsiteswhenasiteisresized
+msgid "Scale sub sites when a site is resized"
+msgstr "Az alárendelt területek arányos méretezése egy terület átméretezésekor"
+
+#: anchordockstr.adrsshowcaptionsofdockedcontrolsintheheader
+msgid "Show captions of docked controls in the header"
+msgstr "Cím megjelenítése a dokkolt vezérlők fejlécében"
+
+#: anchordockstr.adrsshowheadercaptions
+msgid "Show header captions"
+msgstr "Fejléc-felíratok megjelenítése"
+
+#: anchordockstr.adrsshowheaders
+msgid "Show headers"
+msgstr "Fejlécek megjelenítése"
+
+#: anchordockstr.adrssplitterthickness
+msgid "Splitter thickness"
+msgstr "Elválasztó vastagsága"
+
+#: anchordockstr.adrssplitterwidth
+msgid "Splitter width"
+msgstr "Elválasztó szélessége"
+
+#: anchordockstr.adrstabposition
+msgid "Tab position"
+msgstr "Lappozíció"
+
+#: anchordockstr.adrsthereisanotherdockmasterinstalledonlyonedockingpac
+#, object-pascal-format
+msgid "There is another dock master installed. Only one docking package can be installed at a time. Please uninstall the other dock master %s and restart the IDE"
+msgstr "Már telepítve van egy másik dokkmester. Egyszerre csak egy dokkoló csomag lehet telepítve. Távolítsa el a másik dokkmestert (%s) és indítsa újra az IDE-t!"
+
+#: anchordockstr.adrstop
+msgid "top"
+msgstr "fel"
+
+#: anchordockstr.adrstouseanchordockingyoumustfirstuninstall
+#, object-pascal-format
+msgid "To use anchordocking you must first uninstall %s"
+msgstr "Az ablakok rögzítésének használatához először el kell távolítani ezt: %s"
+
+#: anchordockstr.adrsundock
+msgid "Undock"
+msgstr "Rögzítés feloldása"
+

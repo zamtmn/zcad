@@ -1,35 +1,35 @@
 object LayersForm: TLayersForm
   Left = 643
-  Height = 590
+  Height = 885
   Top = 222
-  Width = 1051
+  Width = 1576
   ActiveControl = ButtonApplyClose
   Caption = 'Layers'
-  ClientHeight = 590
-  ClientWidth = 1051
-  Constraints.MinHeight = 500
-  Constraints.MinWidth = 800
+  ClientHeight = 885
+  ClientWidth = 1576
+  Constraints.MinHeight = 750
+  Constraints.MinWidth = 1200
+  DesignTimePPI = 144
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = RefreshListItems
   Position = poMainFormCenter
-  LCLVersion = '1.7'
-  Visible = False
   object Bevel1: TBevel
     AnchorSideLeft.Control = ToolBar1
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = ToolBar1
     AnchorSideBottom.Side = asrBottom
-    Left = 123
-    Height = 25
-    Top = 1
-    Width = 927
-    Anchors = [akTop, akLeft, akRight]
-    BorderSpacing.Left = 2
-    BorderSpacing.Top = 1
-    BorderSpacing.Right = 1
+    Left = 187
+    Height = 33
+    Top = 2
+    Width = 1387
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BorderSpacing.Left = 3
+    BorderSpacing.Top = 2
+    BorderSpacing.Right = 2
   end
   object LayerDescLabel: TLabel
     AnchorSideLeft.Control = Bevel1
@@ -38,12 +38,14 @@ object LayersForm: TLayersForm
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Bevel1
     AnchorSideBottom.Side = asrBottom
-    Left = 124
-    Height = 23
-    Top = 2
-    Width = 925
+    Left = 189
+    Height = 29
+    Top = 4
+    Width = 1383
     Anchors = [akTop, akLeft, akRight, akBottom]
-    BorderSpacing.Around = 1
+    AutoSize = False
+    BorderSpacing.Around = 2
+    Color = clDefault
     Layout = tlCenter
     ParentColor = False
   end
@@ -52,13 +54,13 @@ object LayersForm: TLayersForm
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
-    Left = 896
-    Height = 30
-    Top = 559
-    Width = 154
+    Left = 1343
+    Height = 45
+    Top = 838
+    Width = 231
     Anchors = [akRight, akBottom]
-    BorderSpacing.Right = 1
-    BorderSpacing.Bottom = 1
+    BorderSpacing.Right = 2
+    BorderSpacing.Bottom = 2
     Caption = 'Apply and close'
     OnClick = AplyClose
     TabOrder = 0
@@ -67,13 +69,13 @@ object LayersForm: TLayersForm
     AnchorSideRight.Control = ButtonApplyClose
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
-    Left = 745
-    Height = 30
-    Top = 559
-    Width = 150
+    Left = 1116
+    Height = 45
+    Top = 838
+    Width = 225
     Anchors = [akRight, akBottom]
-    BorderSpacing.Right = 1
-    BorderSpacing.Bottom = 1
+    BorderSpacing.Right = 2
+    BorderSpacing.Bottom = 2
     Caption = 'Apply'
     OnClick = Aply
     ParentShowHint = False
@@ -86,55 +88,56 @@ object LayersForm: TLayersForm
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = ButtonApplyClose
-    Left = 1
-    Height = 529
-    Top = 28
-    Width = 1049
+    Left = 2
+    Height = 797
+    Top = 38
+    Width = 1572
     Anchors = [akTop, akLeft, akRight, akBottom]
-    BorderSpacing.Left = 1
-    BorderSpacing.Top = 2
-    BorderSpacing.Right = 1
-    BorderSpacing.Bottom = 2
+    BorderSpacing.Left = 2
+    BorderSpacing.Top = 3
+    BorderSpacing.Right = 2
+    BorderSpacing.Bottom = 3
     Columns = <    
       item
         Caption = 'Status'
-        Width = 100
+        Width = 150
       end    
       item
         Caption = 'Name'
-        Width = 238
+        Width = 362
       end    
       item
         Caption = 'On'
-        Width = 100
+        Width = 150
       end    
       item
         Caption = 'Freze'
-        Width = 100
+        Width = 150
       end    
       item
         Caption = 'Lock'
-        Width = 100
+        Width = 150
       end    
       item
         Caption = 'Color'
-        Width = 80
+        Width = 120
       end    
       item
         Caption = 'Line type'
-        Width = 100
+        Width = 150
       end    
       item
         Caption = 'Line weight'
-        Width = 100
+        Width = 150
       end    
       item
         Caption = 'Plot'
+        Width = 75
       end    
       item
         AutoSize = True
         Caption = 'Description'
-        Width = 81
+        Width = 115
       end>
     MultiSelect = True
     ReadOnly = True
@@ -150,9 +153,9 @@ object LayersForm: TLayersForm
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
     Left = 0
-    Height = 24
+    Height = 35
     Top = 0
-    Width = 121
+    Width = 184
     Align = alNone
     AutoSize = True
     Caption = 'ToolBar1'
@@ -167,36 +170,35 @@ object LayersForm: TLayersForm
       ShowHint = True
     end
     object ToolButton2: TToolButton
-      Left = 24
+      Left = 36
       Top = 2
       Action = DelLayer
       ParentShowHint = False
       ShowHint = True
     end
     object ToolButton3: TToolButton
-      Left = 47
+      Left = 71
       Top = 2
       Action = MkCurrentLayer
       ParentShowHint = False
       ShowHint = True
     end
     object ToolButton4: TToolButton
-      Left = 70
-      Height = 22
+      Left = 106
+      Height = 33
       Top = 2
-      Width = 5
       Caption = 'ToolButton4'
       Style = tbsDivider
     end
     object ToolButton5: TToolButton
-      Left = 75
+      Left = 114
       Top = 2
       Action = PurgeLayers
       ParentShowHint = False
       ShowHint = True
     end
     object ToolButton6: TToolButton
-      Left = 98
+      Left = 149
       Top = 2
       Action = RefreshLayers
       ParentShowHint = False
@@ -204,8 +206,8 @@ object LayersForm: TLayersForm
     end
   end
   object ActionList1: TActionList
-    left = 754
-    top = 260
+    Left = 1131
+    Top = 390
     object AddLayer: TAction
       Caption = 'AddLayer'
       DisableIfNoHandler = False

@@ -180,8 +180,9 @@ varmanager=object(varmanagerdef)
                  function findvardesc(varname:TInternalScriptString):pvardesk;virtual;
                  function findvardescbyinst(varinst:Pointer):pvardesk;virtual;
                  function findvardescbytype(pt:PUserTypeDescriptor):pvardesk;virtual;
-                 function createvariable(varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0):pvardesk;virtual;
-                 function createvariable2(varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0):TInVectorAddr;virtual;
+                 function CreateVariable(varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0):pvardesk;virtual;
+                 function CreateVariable2(varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0):TInVectorAddr;virtual;
+                 procedure RemoveVariable(pvd:pvardesk);virtual;
                  function findvardesc2(varname:TInternalScriptString):TInVectorAddr;virtual;
                  function findfieldcustom(var pdesc: pByte; var offset: Integer;var tc:PUserTypeDescriptor; nam: ShortString): Boolean;virtual;
                  function getDS:Pointer;virtual;
@@ -895,7 +896,7 @@ begin
 
      //programlog.LogOutStr('end;',lp_DecPos,LM_Trace);
 end;
-function varmanager.createvariable(varname: TInternalScriptString; var vd: vardesk;attr:TVariableAttributes=0):pvardesk;
+function varmanager.CreateVariable(varname: TInternalScriptString; var vd: vardesk;attr:TVariableAttributes=0):pvardesk;
 var
   size: LongWord;
   i:TArrayIndex;
@@ -918,7 +919,7 @@ begin
        //KillString(vd.name);
        //KillString(vd.username);
 end;
-function varmanager.createvariable2(varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0):TInVectorAddr;
+function varmanager.CreateVariable2(varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0):TInVectorAddr;
 var
   size: LongWord;
   i:TArrayIndex;
@@ -936,6 +937,11 @@ begin
        end;
        vd.attrib:=attr;
        Result.SetInstance(@vardescarray,vardescarray.PushBackData(vd));
+end;
+procedure varmanager.RemoveVariable(pvd:pvardesk);
+begin
+  pvd.data.PTD.MagicFreeInstance(pvd.data.Addr.GetInstance);
+  Vardescarray.DeleteElementByP(pvd);
 end;
 function varmanager.findvardesc2(varname: TInternalScriptString):TInVectorAddr;
 var

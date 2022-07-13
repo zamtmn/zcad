@@ -221,6 +221,7 @@ uses
   uzccommand_dimradius,
 
   uzccommand_exampleinsertdevice,uzccommand_examplecreatelayer,
+  uzccommand_ExampleVarManipulation,
 
   uzccommand_ld,
 

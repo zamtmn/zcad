@@ -52,6 +52,10 @@ DimRadius
 DimStyles
 Dist
 DockingOptions
+include::commands/dwgnext.adoc[]
+include::commands/dwgprev.adoc[]
+
+
 EL_AutoGen_Cable_Remove
 EL_Cable
 EM_SEPBUILD
@@ -118,7 +122,6 @@ MultiObjVarMan
 MultiSelect2ObjIbsp
 NavSelectSubNodes
 NewDWG
-NextDrawing
 NumDevices
 OPS_SPBuild
 OPS_Sensor_Mark
@@ -135,7 +138,6 @@ PolyDiv
 PolyEd
 PolyTest
 Polygon
-PrevDrawing
 Print
 ProfileBuild
 ProjectTree

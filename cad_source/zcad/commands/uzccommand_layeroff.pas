@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 {$mode delphi}
-unit uzccommand_cllayeroff;
+unit uzccommand_LayerOff;
 
 {$INCLUDE zengineconfig.inc}
 
@@ -29,8 +29,8 @@ uses
 
 implementation
 const
-  ClLayerOnCommandName='ClLayerOff';
-function ClLayerOff_com(operands:TCommandOperands):TCommandResult;
+  LayerOnCommandName='LayerOff';
+function LayerOff_com(operands:TCommandOperands):TCommandResult;
 var
   UndoStartMarkerPlaced:boolean;
   plp:PGDBLayerProp;
@@ -42,7 +42,7 @@ begin
       ZCMsgCallBackInterface.TextMessage(format(rsLayerAlreadyOff,[operands]),TMWOHistoryOut);
       result:=cmd_error;
     end else begin
-      zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,ClLayerOnCommandName,true);
+      zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,LayerOnCommandName,true);
       with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,plp^._on)^ do begin
         plp^._on:=not plp^._on;
         ComitFromObj;
@@ -57,7 +57,7 @@ begin
 end;
 initialization
   debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
-  CreateCommandFastObjectPlugin(@ClLayerOff_com,ClLayerOnCommandName,CADWG,0);
+  CreateCommandFastObjectPlugin(@LayerOff_com,LayerOnCommandName,CADWG,0);
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

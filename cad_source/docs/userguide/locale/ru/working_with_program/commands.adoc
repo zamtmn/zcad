@@ -24,8 +24,6 @@ include::commands/cancel.adoc[]
 ChangeProjType
 include::commands/circle.adoc[]
 Circle2
-ClLayerOff
-ClLayerOn
 ClearFileHistory
 include::commands/closedwg.adoc[]
 Colors
@@ -97,8 +95,10 @@ KIP_CDBuild
 KIP_Cable_Mark
 KIP_LugTableBuild
 LD
-LayOff
 Layer
+LayerOff
+LayerOn
+LayOff
 Line
 LineOld
 LineTypes

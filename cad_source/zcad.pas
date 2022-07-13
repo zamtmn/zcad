@@ -144,7 +144,7 @@ uses
   uzccommand_blocksinbasepreviewexport,
   uzccommand_layoff,
   uzccommand_insertlayersfrombase,
-  uzccommand_cllayeron,uzccommand_cllayeroff,
+  uzccommand_LayerOn,uzccommand_LayerOff,
   uzccommand_loadmenus,
   uzccommand_loadpalettes,
   uzccommand_loadtoolbars,

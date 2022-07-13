@@ -1087,14 +1087,14 @@ begin
       if (tempkey=VK_TAB)and(shift=[ssctrl,ssShift]) then begin
         if assigned(PageControl)then
           if PageControl.PageCount>1 then begin
-            commandmanager.executecommandsilent('PrevDrawing',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
+            commandmanager.executecommandsilent('DWGPrev',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
             tempkey:=00;
           end;
       end else
         if (tempkey=VK_TAB)and(shift=[ssctrl]) then begin
           if assigned(PageControl)then
             if PageControl.PageCount>1 then begin
-              commandmanager.executecommandsilent('NextDrawing',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
+              commandmanager.executecommandsilent('DWGNext',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
               tempkey:=0;
             end;
         end

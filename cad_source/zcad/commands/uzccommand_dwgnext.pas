@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzccommand_nextdrawing;
+unit uzccommand_DWGNext;
 {$INCLUDE zengineconfig.inc}
 
 interface
@@ -27,7 +27,7 @@ uses
 
 implementation
 
-function NextDrawing_com(operands:TCommandOperands):TCommandResult;
+function DWGNext_com(operands:TCommandOperands):TCommandResult;
 var
    i:integer;
 begin
@@ -44,7 +44,7 @@ end;
 
 procedure startup;
 begin
-  CreateCommandFastObjectPlugin(@NextDrawing_com,'NextDrawing',0,0);
+  CreateCommandFastObjectPlugin(@DWGNext_com,'DWGNext',0,0);
 end;
 procedure finalize;
 begin

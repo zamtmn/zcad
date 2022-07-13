@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzccommand_prevdrawing;
+unit uzccommand_DWGPrev;
 {$INCLUDE zengineconfig.inc}
 
 interface
@@ -27,7 +27,7 @@ uses
 
 implementation
 
-function PrevDrawing_com(operands:TCommandOperands):TCommandResult;
+function DWGPrev_com(operands:TCommandOperands):TCommandResult;
 var
    i:integer;
 begin
@@ -44,7 +44,7 @@ end;
 
 procedure startup;
 begin
-  CreateCommandFastObjectPlugin(@PrevDrawing_com,'PrevDrawing',0,0);
+  CreateCommandFastObjectPlugin(@DWGPrev_com,'DWGPrev',0,0);
 end;
 procedure finalize;
 begin

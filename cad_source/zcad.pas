@@ -150,7 +150,7 @@ uses
   uzccommand_loadtoolbars,
   uzccommand_loadactions,
   uzccommand_newdwg,
-  uzccommand_nextdrawing,uzccommand_prevdrawing,
+  uzccommand_DWGNext,uzccommand_DWGPrev,
   uzccommand_closedwg,
   uzccommand_load,
   uzccommand_mergeblocks,

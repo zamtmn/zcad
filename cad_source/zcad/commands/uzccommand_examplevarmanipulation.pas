@@ -40,7 +40,7 @@ const
   VarName='TST_Test';
   VarType='String';
 begin
-  //выбираем примитив в цикле
+  //выбираем примитив
   if commandmanager.getentity(rscmSelectSourceEntity,pe) then begin
     //получаем расширение с переменными у выбранного примитива
     Varext:=pe^.GetExtension<TVariablesExtender>;

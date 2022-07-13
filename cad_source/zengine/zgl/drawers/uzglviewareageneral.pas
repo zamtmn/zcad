@@ -3088,44 +3088,6 @@ begin
                                 OnWaKeyPress(self,Key,Shift);
   if key=0 then
                exit;
- {else if (Key = VK_A) and (shift=[ssCtrl]) then
-      begin
-        commandmanager.ExecuteCommand('SelectAll');
-        Key:=00;
-      end}
- {else if (Key = VK_Z) and (shift=[ssCtrl]) then
-      begin
-        commandmanager.ExecuteCommand('Undo');
-        Key:=00;
-      end}
-  {else if (Key = VK_Z) and (shift=[ssCtrl,ssShift]) then
-      begin
-        commandmanager.ExecuteCommand('Redo');
-        Key:=00;
-      end}
- {else if (Key = VK_DELETE) then
-      begin
-        commandmanager.ExecuteCommand('Erase');
-        Key:=00;
-      end}
- (*else if (Key=VK_TAB)and(shift=[ssctrl,ssShift]) then
-                          begin
-                               //if assigned(MainFormN.PageControl)then
-                               //   if MainFormN.PageControl.PageCount>1 then
-                                  begin
-                                       commandmanager.executecommandsilent('PrevDrawing');
-                                       key:=00;
-                                  end;
-                          end
- else if (Key=VK_TAB)and(shift=[ssctrl]) then
-                          begin
-                               //if assigned(MainFormN.PageControl)then
-                               //   if MainFormN.PageControl.PageCount>1 then
-                                  begin
-                                       commandmanager.executecommandsilent('NextDrawing');
-                                       key:=00;
-                                  end;
-                          end*)
 end;
 
 function TGeneralViewArea.ProjectPoint(pntx,pnty,pntz:Double;var wcsLBN,wcsRTF,dcsLBN,dcsRTF: GDBVertex):gdbvertex;

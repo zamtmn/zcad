@@ -42,9 +42,9 @@ include::commands/dataimport.adoc[]
 
 
 dbgAppExplorer
+dbgClipboard
 dbgMemSummary
 DeSelectAll
-DebClip
 DimAligned
 DimDiameter
 DimLinear
@@ -99,7 +99,7 @@ KIP_CDBuild
 KIP_Cable_Mark
 KIP_LugTableBuild
 LD
-Layer
+include::commands/layer.adoc[]
 LayerOff
 LayerOn
 LayOff

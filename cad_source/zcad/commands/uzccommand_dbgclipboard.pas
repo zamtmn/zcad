@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 {$mode delphi}
-unit uzccommand_debclip;
+unit uzccommand_dbgClipboard;
 
 {$INCLUDE zengineconfig.inc}
 
@@ -30,7 +30,7 @@ uses
 
 implementation
 
-function DebClip_com(operands:TCommandOperands):TCommandResult;
+function dbgClipboard_com(operands:TCommandOperands):TCommandResult;
 var
    pbuf:pansichar;
    i:integer;
@@ -71,7 +71,7 @@ end;
 
 initialization
   debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
-  CreateCommandFastObjectPlugin(@DebClip_com,'DebClip',0,0);
+  CreateCommandFastObjectPlugin(@dbgClipboard_com,'dbgClipboard',0,0);
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

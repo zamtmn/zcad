@@ -196,7 +196,7 @@ uses
   uzccommand_setobjinsp,
   uzccommand_dbgmemsummary,
   uzccommand_executefile,
-  uzccommand_debclip,
+  uzccommand_dbgClipboard,
   uzccommand_import,
   uzccommand_commandlist,uzccommand_entslist,
   uzccommand_saveoptions,

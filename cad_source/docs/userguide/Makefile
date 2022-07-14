@@ -30,7 +30,7 @@ version:
 
 all: clean pdf html
 
-getpdftheme:
+styles/default-theme.yml:
 	cp $(ASCIIDOCTOR_PDF_DIR)/data/themes/default-theme.yml styles/default-theme.yml
 
 clean:                  
@@ -47,12 +47,12 @@ copyimages: ../images
 	cp -r ../../../environment/runtimefiles/common/images/* ../images
 
 pdf: getpdftheme version copyimages
-	asciidoctor-pdf.bat -a pdf-themesdir=styles -a pdf-theme=zcadd -r asciidoctor-diagram userguide.ru.adoc
+	asciidoctor-pdf -a pdf-themesdir=styles -a pdf-theme=zcadd -r asciidoctor-diagram userguide.ru.adoc
 
 html: version copyimages                      
-	asciidoctor.bat -a stylesheet=styles/stylesheet.css -r asciidoctor-diagram userguide.ru.adoc
+	asciidoctor -a stylesheet=styles/stylesheet.css -r asciidoctor-diagram userguide.ru.adoc
 
-example: getpdftheme version
-	asciidoctor-pdf.bat -a pdf-themesdir=styles -a pdf-theme=zcadd -r asciidoctor-diagram formats_examples.adoc
-	asciidoctor.bat -a stylesheet=styles/stylesheet.css -r asciidoctor-diagram formats_examples.adoc
+example: version styles/default-theme.yml
+	asciidoctor-pdf -a pdf-themesdir=styles -a pdf-theme=zcadd -r asciidoctor-diagram formats_examples.adoc
+	asciidoctor -a stylesheet=styles/stylesheet.css -r asciidoctor-diagram formats_examples.adoc
 

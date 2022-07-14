@@ -41,8 +41,8 @@ begin
       FullParams:='';
   {$ifdef unix}
     AProcess := TProcess.Create(nil);
-    AProcess.Executable := ABrowser;
-    AProcess.Parameters.Add(fulllink);
+    AProcess.Executable := Browser;
+    AProcess.Parameters.Add(FullParams);
     AProcess.Execute;
     AProcess.Free;
   {$else}

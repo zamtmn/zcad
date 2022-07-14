@@ -112,6 +112,8 @@ GZVector{-}<T>{//}=object(TZAbsVector)
         function getDataMutable(index:TArrayIndex):PT;
         {**Возвращает значение по индексу}
         function getData(index:TArrayIndex):T;
+        {**Возвращает последнее значение}
+        function getLast:T;
         {**Добавить в конец массива значение, возвращает индекс добавленного значения}
         function PushBackData(const data:T):TArrayIndex;
         {**Добавить в конец массива значение если его еще нет в массиве, возвращает индекс найденного или добавленного значения}
@@ -122,6 +124,8 @@ GZVector{-}<T>{//}=object(TZAbsVector)
         function PushBackIfNotLastOrFirstWithCompareProc(data:T;EqualFunc:TEqualFunc):Integer;
         {**Проверка нахождения в массиве значения с функцией сравнения}
         function IsDataExistWithCompareProc(pobj:T;EqualFunc:TEqualFunc):Integer;
+        {**Пустой ли массив?}
+        function IsEmpty:Boolean;
         {**Возвращает тип элемента массива}
         function GetSpecializedTypeInfo:PTypeInfo;inline;
 
@@ -198,6 +202,11 @@ else if PArray=nil then
                    else
                      result:=parray[index];
 end;
+function GZVector<T>.getLast;
+begin
+  Result:=getData(count-1);
+end;
+
 function GZVector<T>.PushBackData(const data:T):TArrayIndex;
 begin
   if parray=nil then
@@ -493,6 +502,10 @@ end;
 function GZVector<T>.GetCount:Integer;
 begin
   result:=count;
+end;
+function GZVector<T>.IsEmpty:Boolean;
+begin
+  result:=(count=0);
 end;
 function GZVector<T>.InsertElement;
 {var

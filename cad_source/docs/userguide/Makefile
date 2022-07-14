@@ -44,7 +44,7 @@ cad:
 	mkdir $(subst /,$(PATHDELIM),locale/ru/images)
 
 copyimages: ../images
-	cp -r ../../../environment\runtimefiles\common\images\* ..
+	cp -r ../../../environment/runtimefiles/common/images/* ..
 
 pdf: getpdftheme version copyimages
 	asciidoctor-pdf.bat -a pdf-themesdir=styles -a pdf-theme=zcadd -r asciidoctor-diagram userguide.ru.adoc

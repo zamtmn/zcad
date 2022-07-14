@@ -2,7 +2,7 @@
 #### Load
 
 :cmdcommand: Load
-:cmdicon: ../../../../../../environment/runtimefiles/common/images/actions/open.png
+:cmdicon: ../../../../images/actions/open.png
 :cmdshortcuts: kbd:[Ctrl+O]
 :cmdmenu: Файл > Открыть
 :cmdoperands: Не обязательный. Путь и имя файла dxf

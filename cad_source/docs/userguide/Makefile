@@ -1,9 +1,27 @@
 .PHONY: pdf html all example getpdftheme
 default: all
 
+OSDETECT:=
+ifeq ($(OS),Windows_NT)
+	OSDETECT:=WIN32
+else
+	UNAME_S:=$(shell uname -s)
+	ifeq ($(UNAME_S),Linux)
+		OSDETECT=LINUX
+	endif
+	ifeq ($(UNAME_S),Darwin)
+		OSDETECT:=OSX
+	endif
+endif
 ASCIIDOCTOR_PDF_DIR:=$(shell gem contents asciidoctor-pdf --show-install-dir)
 RULASTCOMMIT:=$(shell git log --pretty=tformat:\"%H\" -n1 locale/ru)
 RUVERSION:=$(shell git describe --tags  $(RULASTCOMMIT))
+PATHDELIM:=
+ifeq ($(OSDETECT),WIN32)
+	PATHDELIM =\\
+else
+	PATHDELIM =/
+endif
 
 version:
 	@echo RULASTCOMMIT: $(RULASTCOMMIT)
@@ -20,10 +38,18 @@ clean:
 	rm -rf userguide.ru.pdf
 	rm -rf formats_examples.pdf
 	rm -rf formats_examples.html
-pdf: getpdftheme version
+cad:
+	mkdir cad
+../images:
+	mkdir $(subst /,$(PATHDELIM),locale/ru/images)
+
+copyimages: ../images
+	cp -r ../../../environment\runtimefiles\common\images\* ..
+
+pdf: getpdftheme version copyimages
 	asciidoctor-pdf.bat -a pdf-themesdir=styles -a pdf-theme=zcadd -r asciidoctor-diagram userguide.ru.adoc
 
-html: version                      
+html: version copyimages                      
 	asciidoctor.bat -a stylesheet=styles/stylesheet.css -r asciidoctor-diagram userguide.ru.adoc
 
 example: getpdftheme version

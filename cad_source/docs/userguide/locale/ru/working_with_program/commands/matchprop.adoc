@@ -2,7 +2,7 @@
 #### MatchProp
 
 :cmdcommand: MatchProp
-:cmdicon: ../../../../../../environment/runtimefiles/common/images/actions/matchprop.png
+:cmdicon: ../../../../images/actions/matchprop.png
 :cmdexample: MatchProp
 
 include::../../_elements/commandsummary.adoc[]

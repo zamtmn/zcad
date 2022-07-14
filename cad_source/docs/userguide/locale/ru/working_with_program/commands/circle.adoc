@@ -2,7 +2,7 @@
 #### Circle
 
 :cmdcommand: Circle
-:cmdicon: ../../../../../../environment/runtimefiles/common/images/actions/draw/circle.png
+:cmdicon: ../../../../images/actions/draw/circle.png
 :cmdmenu: Черчение > Окружность >
 :cmdoperands: CR, CD, 2P, 3P. Не обязательный (CR используется в случае не указания)
 :cmdexample: Circle

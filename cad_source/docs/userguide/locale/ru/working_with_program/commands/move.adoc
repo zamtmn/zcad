@@ -2,7 +2,7 @@
 #### Move
 
 :cmdcommand: Move
-:cmdicon: ../../../../../../environment/runtimefiles/common/images/actions/move.png
+:cmdicon: ../../../../images/actions/move.png
 :cmdshortcuts: kbd:[Ctrl+ALT+M]; kbd:[M]
 :predselect: Требуется
 

@@ -2,7 +2,7 @@
 #### SaveAs
 
 :cmdcommand: SaveAs
-:cmdicon: ../../../../../../environment/runtimefiles/common/images/actions/saveas.png
+:cmdicon: ../../../../images/actions/saveas.png
 :cmdshortcuts: kbd:[Shift+Ctrl+S]
 :cmdmenu: Файл > Сохранить как ...
 

@@ -2,7 +2,7 @@
 #### Layer
 
 :cmdcommand: Layer
-:cmdicon: ../../../../../../environment/runtimefiles/common/images/actions/layers.png
+:cmdicon: ../../../../images/actions/layers.png
 :cmdmenu: Format > Слои ...
 
 include::../../_elements/commandsummary.adoc[]

@@ -2,7 +2,7 @@
 #### Mirror
 
 :cmdcommand: Mirror
-:cmdicon: ../../../../../../environment/runtimefiles/common/images/actions/mirror.png
+:cmdicon: ../../../../images/actions/mirror.png
 :predselect: Требуется
 
 include::../../_elements/commandsummary.adoc[]

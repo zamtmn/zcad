@@ -2,7 +2,7 @@
 #### CloseDwg
 
 :cmdcommand: CloseDwg
-:cmdicon: ../../../../../../environment/runtimefiles/common/images/actions/close.png
+:cmdicon: ../../../../images/actions/close.png
 :cmdmenu: Файл > Закрыть
 
 include::../../_elements/commandsummary.adoc[]

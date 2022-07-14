@@ -2,7 +2,7 @@
 #### BEdit
 
 :cmdcommand: BEdit
-:cmdicon: ../../../../../../environment/runtimefiles/common/images/actions/bedit.png
+:cmdicon: ../../../../images/actions/bedit.png
 :cmdmenu: Изменить > Блок/Устройство > Редактор блоков
 :predselect: Не требуется, но можно заранее выделить вставку редактируемого блока или устройства
 

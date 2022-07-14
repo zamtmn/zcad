@@ -2,7 +2,7 @@
 #### 3DPoly
 
 :cmdcommand: 3DPoly
-:cmdicon: ../../../../../../environment/runtimefiles/common/images/actions/draw/pline.png
+:cmdicon: ../../../../images/actions/draw/pline.png
 :cmdmenu: Черчение > 3D Полилиния
 
 include::../../_elements/commandsummary.adoc[]

@@ -122,7 +122,7 @@ uses
    uzeentmtext,
    uzbstrproc,
    //uzccombase,
-
+   uzeentityextender,
    uzctranslations;//,
    //generics.Collections;
 
@@ -832,7 +832,7 @@ var
 
 //  (datname,name:String;var currentcoord:GDBVertex; var root:GDBObjRoot);
    //procedure addBlockonDraw(datname:String;var currentcoord:GDBVertex; var root:GDBObjRoot);
-  procedure addBlockonDraw(dev:pGDBObjDevice;var currentcoord:GDBVertex; var root:GDBObjRoot);
+  procedure addBlockonDraw(var dev:pGDBObjDevice;var currentcoord:GDBVertex; var root:GDBObjRoot);
   var
       datname:String;
       pv:pGDBObjDevice;
@@ -840,12 +840,119 @@ var
       lx,{rx,}uy,dy:Double;
         c:integer;
         pCentralVarext,pVarext:TVariablesExtender;
+        pu:PTSimpleUnit;
+        extensionssave:TEntityExtensions;
+        pnevdev:PGDBObjDevice;
+        entvarext,delvarext:TVariablesExtender;
   begin
-      //addBlockonDraw(velec_beforeNameGlobalSchemaBlock + string(TVertexTree(G.Root.AsPointer[vpTVertexTree]^).dev^.Name),pt1,drawings.GetCurrentDWG^.mainObjRoot);
 
-     datname:= velec_beforeNameGlobalSchemaBlock + dev^.Name;
+      ZCMsgCallBackInterface.TextMessage('DEVICE-' + dev^.Name,TMWOHistoryOut);
 
-     drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,datname);
+      dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+
+      //ищем модуль с переменными дефолтными переменными для представителя устройства
+     // pu:=units.findunit(SupportPath,InterfaceTranslate,'uentrepresentation');
+
+     //временно выключаем все расширители примитива чтоб они не скопировались
+      //в клон
+      extensionssave:=dev^.EntExtensions;
+      dev^.EntExtensions:=nil;
+      ////клонируем устройство в конструкторской области
+      ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
+      ZCMsgCallBackInterface.TextMessage('DEVICE-' + dev^.Name,TMWOHistoryOut);
+      if dev <> nil then
+         pointer(pnevdev):=dev^.Clone(@drawings.GetCurrentDWG^);
+      ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
+      ////возвращаем расширители
+      dev^.EntExtensions:=extensionssave;
+
+      entvarext:=dev^.specialize GetExtension<TVariablesExtender>;
+      //добавляем клону расширение с переменными
+      pnevdev^.AddExtension(TVariablesExtender.Create(pnevdev));
+      delvarext:=pnevdev^.specialize GetExtension<TVariablesExtender>;
+      //добавляем устройству клона как представителя
+      entvarext.addDelegate(pnevdev,delvarext);
+      ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
+     //      pCentralVarext:=dev^.specialize GetExtension<TVariablesExtender>;
+     //pVarext:=pv^.specialize GetExtension<TVariablesExtender>;
+     //pCentralVarext.addDelegate({pmainobj,}pv,pVarext);
+
+
+      //копируем клону типичный набор переменных представителя
+     // if pu<>nil then
+       // delvarext.entityunit.CopyFrom(pu);
+
+      //снова получаем расширение с переменными клона
+      //оно такто уже получено
+      //TODO: убрать
+      //delvarext:=pnevdev^.specialize GetExtension<TVariablesExtender>;
+
+      //выставляем клону точку вставки, ориентируем по осям, вращаем
+      pnevdev^.Local.P_insert:=currentcoord;
+      //pnevdev.Local.Basis.oz:=xy_Z_Vertex;
+      //pnevdev.Local.Basis.ox:=_X_yzVertex;
+      //pnevdev.Local.Basis.oy:=x_Y_zVertex;
+      //pnevdev.rotate:=0;
+
+      //форматируем клон
+      //TODO: убрать, форматировать клон надо в конце
+      pnevdev^.formatEntity(drawings.GetCurrentDWG^,dc);
+
+      //бежим по определению блока HEAD_CONNECTIONDIAGRAM
+      //pobj:=PBH.ObjArray.beginiterate(ir2);
+      //if pobj<>nil then
+      //  repeat
+      //    //клонируем примитивы из HEAD_CONNECTIONDIAGRAM к себе в клон
+      //    pcobj:=pobj.Clone(pnevdev);
+      //    //переносим их Y+15
+      //    pcobj.transformat(pobj,@t_matrix);
+      //    //форматируем
+      //    pcobj^.FormatEntity(drawings.GetCurrentDWG^,dc);
+      //    //в наш клон в динамическую часть
+      //    pnevdev^.VarObjArray.AddPEntity(pcobj^);
+      //
+      //    pobj:=PBH.ObjArray.iterate(ir2);
+      //  until pobj=nil;
+
+      //в этом меесте мы имеем клон исходного устройства с добавленым в динамическую часть
+      //содержимым блока HEAD_CONNECTIONDIAGRAM
+
+      //форматируем
+      //pnevdev^.formatEntity(drawings.GetCurrentDWG^,dc);
+      //добавляем в чертеж
+      //drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.AddPEntity(pnevdev^);
+      //смещаем для следующего устройства
+      //currentcoord.x:=currentcoord.x+45;
+
+
+      ZCMsgCallBackInterface.TextMessage('DEVICE-' + dev^.Name,TMWOHistoryOut);
+
+  {//addBlockonDraw(velec_beforeNameGlobalSchemaBlock + string(TVertexTree(G.Root.AsPointer[vpTVertexTree]^).dev^.Name),pt1,drawings.GetCurrentDWG^.mainObjRoot);
+
+     datname:= dev^.Name;
+
+     ZCMsgCallBackInterface.TextMessage('DEVICE-' + datname,TMWOHistoryOut);
+       //добавляем определение блока HEAD_CONNECTIONDIAGRAM в чечтеж если надо
+      drawings.GetCurrentDWG^.AddBlockFromDBIfNeed(datname);
+
+      //получаеи указатель на него
+      PBH:=drawings.GetCurrentDWG^.BlockDefArray.getblockdef(datname);
+
+      //такого блок в библиотеке нет, водим
+      //TODO: надо добавить ругань
+      if pbh=nil then
+         exit;
+      if not PBH.Formated then
+         PBH.FormatEntity(drawings.GetCurrentDWG^,dc);
+
+
+     //datname:= dev^.Name;
+
+     //drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,datname);
+
+       //получаеи указатель на него
+      // PBH:=drawings.GetCurrentDWG^.BlockDefArray.getblockdef(datname);
+
      pointer(pv):=old_ENTF_CreateBlockInsert(drawings.GetCurrentROOT,@{drawings.GetCurrentROOT}root.ObjArray,
                                          drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
                                          currentcoord, 1, 0,@datname[1]);
@@ -865,7 +972,7 @@ var
      pCentralVarext:=dev^.specialize GetExtension<TVariablesExtender>;
      pVarext:=pv^.specialize GetExtension<TVariablesExtender>;
      pCentralVarext.addDelegate({pmainobj,}pv,pVarext);
-
+       }
   end;
 
   procedure addBlockNodeonDraw(var currentcoord:GDBVertex; var root:GDBObjRoot);

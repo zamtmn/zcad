@@ -46,6 +46,7 @@ const
   //для работы автоукладчика
   velec_nameDevice='NMO_Name';
 //  velec_nameDevice='NMO_BaseName';
+  velec_subNameConnection='SLCABAGEN';
   velec_HeadDeviceName='SLCABAGEN_HeadDeviceName';
   //velec_CableRoutingNodes='SLCABAGEN_CableRoutingNodes';
   velec_ControlUnitName='SLCABAGEN_ControlUnitName';

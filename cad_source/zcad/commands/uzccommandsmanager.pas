@@ -20,7 +20,7 @@ unit uzccommandsmanager;
 {$INCLUDE zengineconfig.inc}
 {$interfaces corba}
 interface
-uses uzctnrVectorPointers,gzctnrVectorPObjects,uzcsysvars,uzegeometry,uzglviewareaabstract,uzbpaths,
+uses gzctnrVectorPObjects,uzcsysvars,uzegeometry,uzglviewareaabstract,uzbpaths,
      uzeconsts,uzcctrldynamiccommandmenu,uzcinfoform,uzcstrconsts,uzcsysinfo,
      gzctnrVectorTypes,uzegeometrytypes,uzbstrproc,gzctnrVectorP,
      uzccommandsabstract, sysutils,uzglviewareadata,
@@ -41,6 +41,10 @@ type
             end;
   TOnCommandRun=procedure(command:string) of object;
 
+  TZctnrPCommandObjectDef=object(GZVectorP{-}<PCommandObjectDef>{//}) //TODO:почемуто не работают синонимы с объектами, приходится наследовать
+                                                         //TODO:надо тут поменять GZVectorP на GZVectorSimple
+                    end;
+
   GDBcommandmanager=object({TZctnrVectorPGDBaseObjects}GZVectorPObects{-}<PCommandObjectDef,CommandObjectDef>{//})
 
                           lastcommand:String;
@@ -50,7 +54,7 @@ type
                           LatestRunOperands:String;
                           LatestRunPDrawing:PTDrawingDef;
 
-                          CommandsStack:TZctnrVectorPointer;
+                          CommandsStack:{TZctnrVectorPointer}TZctnrPCommandObjectDef;
                           ContextCommandParams:Pointer;
                           busy:Boolean;
                           varstack:tvarstack;
@@ -122,7 +126,7 @@ type
                           procedure SetPrompt(APrompt:TParserCommandLinePrompt.TGeneralParsedText);overload;
 
                     end;
-var commandmanager:GDBcommandmanager;
+var CommandManager:GDBcommandmanager;
 function getcommandmanager:Pointer;export;
 function GetCommandContext(pdrawing:PTDrawingDef;POGLWnd:POGLWndtype):TCStartAttr;
 procedure ParseCommand(comm:string; out command,operands:String);

@@ -41,10 +41,10 @@ clean:
 cad:
 	mkdir cad
 ../images:
-	mkdir $(subst /,$(PATHDELIM),locale/ru/images)
+	mkdir $(subst /,$(PATHDELIM),../images)
 
 copyimages: ../images
-	cp -r ../../../environment/runtimefiles/common/images/* ..
+	cp -r ../../../environment/runtimefiles/common/images/* ../images
 
 pdf: getpdftheme version copyimages
 	asciidoctor-pdf.bat -a pdf-themesdir=styles -a pdf-theme=zcadd -r asciidoctor-diagram userguide.ru.adoc

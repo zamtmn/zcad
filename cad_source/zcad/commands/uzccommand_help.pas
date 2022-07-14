@@ -23,23 +23,29 @@ unit uzccommand_help;
 interface
 uses
   LazLogger,
-  uzccommandsabstract,uzccommandsimpl,
-  uzcfhelp,
-  uzcinterface;
+  uzccommandsabstract,uzccommandsimpl,uzccommandsmanager,
+  LCLIntf,
+  uzbpaths;
 
 implementation
 
 function Help_com(operands:TCommandOperands):TCommandResult;
+var
+  URL:string;
 begin
-  if not assigned(HelpForm) then
-    HelpForm:=THelpForm.mycreate(nil,@HelpForm);
-  ZCMsgCallBackInterface.DOShowModal(HelpForm);
+  URL:=ProgramPath+'help/userguide.ru.html';
+  {if commandmanager.CommandsStack.Count=0 then
+    URL:=ProgramPath+'help/userguide.ru.html'
+  else
+    URL:=ProgramPath+'help\userguide.ru.html#_'+
+    lowercase(PCommandObjectDef(commandmanager.CommandsStack.getData(commandmanager.CommandsStack.Count-1))^.CommandName);}
+  OpenDocument(URL);
   result:=cmd_ok;
 end;
 
 initialization
   debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
-  CreateCommandFastObjectPlugin(@Help_com,'Help',0,0);
+  CreateCommandFastObjectPlugin(@Help_com,'Help',0,0).overlay:=True;
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

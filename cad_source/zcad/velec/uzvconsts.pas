@@ -62,7 +62,10 @@ const
   velec_separator='~';
   velec_onlyThisDev='!';    // кабель довести только до этой точки и все, дальше не идет
   velec_masterTravelNode='^';
-  velec_beforeNameGlobalSchemaBlock='DEVICE_VELEC_';
+  velec_beforeNameGlobalSchemaBlock='DEVICE_';
+  velec_SchemaBlockJunctionBox='DEVICE_EL_VL_BOX1';
+  velec_SchemaELDevInfo='VELEC_EL_SCHEME_INFO';
+  velec_SchemaCableInfo='VELEC_CABLE_SCHEME_INFO';
   velec_cableMountingNon='';
 
 implementation

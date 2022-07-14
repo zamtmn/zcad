@@ -123,6 +123,7 @@ uses
    uzbstrproc,
    //uzccombase,
    uzeentityextender,
+   uzeblockdef,
    uzctranslations;//,
    //generics.Collections;
 
@@ -844,11 +845,29 @@ var
         extensionssave:TEntityExtensions;
         pnevdev:PGDBObjDevice;
         entvarext,delvarext:TVariablesExtender;
+        PBH:PGDBObjBlockdef;
+        t_matrix:DMatrix4D;
+        ir2:itrec;
+        pobj,pcobj:PGDBObjEntity;
   begin
 
       ZCMsgCallBackInterface.TextMessage('DEVICE-' + dev^.Name,TMWOHistoryOut);
 
       dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+
+
+      //добавляем определение блока HEAD_CONNECTIONDIAGRAM в чечтеж если надо
+      drawings.GetCurrentDWG^.AddBlockFromDBIfNeed(velec_SchemaELDevInfo);
+
+      //получаеи указатель на него
+      PBH:=drawings.GetCurrentDWG^.BlockDefArray.getblockdef(velec_SchemaELDevInfo);
+
+      //такого блок в библиотеке нет, водим
+      //TODO: надо добавить ругань
+      if pbh=nil then
+          exit;
+      if not (PBH^.Formated) then
+          PBH^.FormatEntity(drawings.GetCurrentDWG^,dc);
 
       //ищем модуль с переменными дефолтными переменными для представителя устройства
      // pu:=units.findunit(SupportPath,InterfaceTranslate,'uentrepresentation');
@@ -861,7 +880,7 @@ var
       ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
       ZCMsgCallBackInterface.TextMessage('DEVICE-' + dev^.Name,TMWOHistoryOut);
       if dev <> nil then
-         pointer(pnevdev):=dev^.Clone(@drawings.GetCurrentDWG^);
+         pointer(pnevdev):=dev^.Clone(@{drawings.GetCurrentROOT}root);
       ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
       ////возвращаем расширители
       dev^.EntExtensions:=extensionssave;
@@ -898,21 +917,23 @@ var
       //TODO: убрать, форматировать клон надо в конце
       pnevdev^.formatEntity(drawings.GetCurrentDWG^,dc);
 
+      //создаем матрицу для перемещения по оси У на +15
+      t_matrix:=uzegeometry.CreateTranslationMatrix(createvertex(0,0,0));
       //бежим по определению блока HEAD_CONNECTIONDIAGRAM
-      //pobj:=PBH.ObjArray.beginiterate(ir2);
-      //if pobj<>nil then
-      //  repeat
-      //    //клонируем примитивы из HEAD_CONNECTIONDIAGRAM к себе в клон
-      //    pcobj:=pobj.Clone(pnevdev);
-      //    //переносим их Y+15
-      //    pcobj.transformat(pobj,@t_matrix);
-      //    //форматируем
-      //    pcobj^.FormatEntity(drawings.GetCurrentDWG^,dc);
-      //    //в наш клон в динамическую часть
-      //    pnevdev^.VarObjArray.AddPEntity(pcobj^);
-      //
-      //    pobj:=PBH.ObjArray.iterate(ir2);
-      //  until pobj=nil;
+      pobj:=PBH^.ObjArray.beginiterate(ir2);
+      if pobj<>nil then
+        repeat
+          //клонируем примитивы из HEAD_CONNECTIONDIAGRAM к себе в клон
+          pcobj:=pobj^.Clone(pnevdev);
+          //переносим их Y+15
+          //pcobj^.transformat(pobj,@t_matrix);
+          //форматируем
+          pcobj^.FormatEntity(drawings.GetCurrentDWG^,dc);
+          //в наш клон в динамическую часть
+          pnevdev^.VarObjArray.AddPEntity(pcobj^);
+
+          pobj:=PBH^.ObjArray.iterate(ir2);
+        until pobj=nil;
 
       //в этом меесте мы имеем клон исходного устройства с добавленым в динамическую часть
       //содержимым блока HEAD_CONNECTIONDIAGRAM
@@ -920,7 +941,7 @@ var
       //форматируем
       //pnevdev^.formatEntity(drawings.GetCurrentDWG^,dc);
       //добавляем в чертеж
-      //drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.AddPEntity(pnevdev^);
+      drawings.GetCurrentDWG^.mainObjRoot.ObjArray.AddPEntity(pnevdev^);
       //смещаем для следующего устройства
       //currentcoord.x:=currentcoord.x+45;
 
@@ -986,7 +1007,7 @@ var
   begin
       //addBlockonDraw(velec_beforeNameGlobalSchemaBlock + string(TVertexTree(G.Root.AsPointer[vpTVertexTree]^).dev^.Name),pt1,drawings.GetCurrentDWG^.mainObjRoot);
 
-     datname:= velec_beforeNameGlobalSchemaBlock + 'EL_VL_BOX1';
+     datname:= velec_SchemaBlockJunctionBox;
 
      drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,datname);
      pointer(pv):=old_ENTF_CreateBlockInsert(drawings.GetCurrentROOT,@{drawings.GetCurrentROOT}root.ObjArray,
@@ -1028,11 +1049,16 @@ var
       end;
 
       //рисуем прямоугольник с цветом  зная номера вершин, координат возьмем из графа по номерам
-      procedure drawConnectLineDev(pSt,p1,p2,pEd:GDBVertex);
+      procedure drawConnectLineDev(pSt,p1,p2,pEd:GDBVertex;cabl:PGDBObjCable; var root:GDBObjRoot);
       var
-          polyObj:PGDBObjPolyLine;
           cableLine:PGDBObjCable;
-          p3:GDBVertex;
+          //pnevdev:PGDBObjCable;
+          entvarext,delvarext:TVariablesExtender;
+          //DC:TDrawContext;
+          //PBH:PGDBObjBlockdef;
+          //pobj,pcobj:PGDBObjEntity;
+          //ir2:itrec;
+          datname:String;
       begin
            cableLine := AllocEnt(GDBCableID);
            cableLine^.init(nil,nil,0);
@@ -1046,16 +1072,29 @@ var
 
            zcAddEntToCurrentDrawingWithUndo(cableLine);
 
-           //polyObj:=GDBObjPolyline.CreateInstance;
-           //zcSetEntPropFromCurrentDrawingProp(polyObj);
-           //polyObj^.Closed:=false;
-           //polyObj^.vp.Color:=color;
-           //polyObj^.vp.LineWeight:=LnWt050;
-           ////polyObj^.vp.Layer:=uzvtestdraw.getTestLayer('systemTempVisualLayer');
-           //polyObj^.VertexArrayInOCS.PushBackData(pt1);
-           //polyObj^.VertexArrayInOCS.PushBackData(uzegeometry.CreateVertex(pt1.x,pt2.y,0));
-           //polyObj^.VertexArrayInOCS.PushBackData(pt2);
-           //zcAddEntToCurrentDrawingWithUndo(polyObj);
+          entvarext:=cabl^.specialize GetExtension<TVariablesExtender>;
+          //добавляем клону расширение с переменными
+          cableLine^.AddExtension(TVariablesExtender.Create(cableLine));
+          delvarext:=cableLine^.specialize GetExtension<TVariablesExtender>;
+          //добавляем устройству клона как представителя
+          entvarext.addDelegate(cableLine,delvarext);
+          ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
+
+           //вставляем информационный блок
+           datname:= velec_SchemaCableInfo;
+           drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,datname);
+           pointer(pv):=old_ENTF_CreateBlockInsert(drawings.GetCurrentROOT,@{drawings.GetCurrentROOT}root.ObjArray,
+                                               drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
+                                               p2, 1, 0,@datname[1]);
+           //dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+           zcSetEntPropFromCurrentDrawingProp(pv);
+           pv^.AddExtension(TVariablesExtender.Create(pv));
+           delvarext:=pv^.specialize GetExtension<TVariablesExtender>;
+           //добавляем устройству клона как представителя
+           entvarext.addDelegate(pv,delvarext);
+           ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
+
+
       end;
 
 begin
@@ -1110,8 +1149,9 @@ begin
 
     G.TreeTraversal(G.Root, VertexPath); //получаем путь обхода графа
     for i:=1 to VertexPath.Count - 1 do begin
-        //ZCMsgCallBackInterface.TextMessage('VertexPath i -'+ inttostr(TVertex(VertexPath[i]).Parent.Index),TMWOHistoryOut);
+        ZCMsgCallBackInterface.TextMessage('VertexPath i -'+ inttostr(TVertex(VertexPath[i]).Parent.Index),TMWOHistoryOut);
         tParent:=howParent(listVertex,TVertex(VertexPath[i]).Parent.Index);
+        ZCMsgCallBackInterface.TextMessage('1/2',TMWOHistoryOut);
         if tParent>=0 then
         begin
           inc(listVertex.Mutable[tparent]^.kol);
@@ -1130,18 +1170,18 @@ begin
           infoVertex.childs:=TVertex(VertexPath[i]).ChildCount;
           listVertex.PushBack(infoVertex);
 
-
+        ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
         ptEd:=uzegeometry.CreateVertex(startPt.x + listVertex.Back.poz.x*indent,startPt.y - listVertex.Back.poz.y*indent,0) ;
-
+        ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
         if TVertexTree(listVertex.Back.vertex.AsPointer[vpTVertexTree]^).dev<>nil then
            ZCMsgCallBackInterface.TextMessage('VertexPath i -'+ string(TVertexTree(listVertex.Back.vertex.AsPointer[vpTVertexTree]^).dev^.Name),TMWOHistoryOut);
-
+         ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
         //*********
         if TVertexTree(listVertex.Back.vertex.AsPointer[vpTVertexTree]^).dev<>nil then
            addBlockonDraw(TVertexTree(listVertex.Back.vertex.AsPointer[vpTVertexTree]^).dev,ptEd,drawings.GetCurrentDWG^.mainObjRoot)
         else
            addBlockNodeonDraw(ptEd,drawings.GetCurrentDWG^.mainObjRoot);
-
+         ZCMsgCallBackInterface.TextMessage('4',TMWOHistoryOut);
         //drawVertex(pt1,3,height);
         //*********
 
@@ -1198,7 +1238,7 @@ begin
         //pt2:=uzegeometry.CreateVertex(startPt.x + listVertex[tparent].poz.x*indent,startPt.y - listVertex[tparent].poz.y*indent,0) ;
 
         //******
-        drawConnectLineDev(ptSt,pt1,pt2,ptEd);
+        drawConnectLineDev(ptSt,pt1,pt2,ptEd,TEdgeTree(G.GetEdge(listVertex[tparent].vertex,listVertex.Back.vertex).AsPointer[vpTEdgeTree]^).segm,drawings.GetCurrentDWG^.mainObjRoot);
 
         //ptSt:=ptEd;
 

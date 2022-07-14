@@ -82,7 +82,7 @@ test_script:
 artifacts:
   - path: ZCADElectrotech-%APPVEYOR_REPO_COMMIT%.zip
     name: ZCADElectrotech-%APPVEYOR_REPO_COMMIT%
-  - path: cad\userguide.ru.pdf
+  - path: cad\help\userguide.ru.pdf
     name: userguide.ru.pdf
 
 #---------------------------------#

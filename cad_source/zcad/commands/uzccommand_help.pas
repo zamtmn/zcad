@@ -22,21 +22,43 @@ unit uzccommand_help;
 
 interface
 uses
-  {$ifdef unix}Process,{$else}windows,Forms,{$endif}
+  {$ifdef unix}Process,sysutils,{$else}windows,Forms,{$endif}
   LazLogger,LCLIntf,
   uzccommandsabstract,uzccommandsimpl,uzccommandsmanager,
   uzbpaths;
 
 implementation
 
+{$ifdef unix}
+const
+  cfVivaldi='/usr/bin/vivaldi';
+  cfFirefox='/usr/bin/firefox';
+  cfSeamonkey='/usr/bin/seamonkey';
+  cfChrome='/usr/bin/google-chrome';
+  cfOpera='/usr/bin/opera';
+
+function MyFindDefaultBrowser(out ABrowser, AParams: String): Boolean;
+begin
+  result:=true;
+  AParams:='';
+  {FindExecutable not available in Linux, workaround:}
+  if FileExists(cfVivaldi) then ABrowser:=cfVivaldi else
+  if FileExists(cfFirefox) then ABrowser:=cfFirefox else
+  if FileExists(cfSeamonkey) then ABrowser:=cfSeamonkey else
+  if FileExists(cfChrome) then ABrowser:=cfChrome else
+  if FileExists(cfOpera) then ABrowser:=cfOpera else result:=false;
+end;
+
+{$endif}
+
 procedure OpenDocumentWithAnchor(AFile,AAnchor:string);
 var
   Browser, Params, FullParams: String;
   {$ifdef unix}AProcess: TProcess;{$endif}
 begin
-  if FindDefaultBrowser(Browser, Params) then begin
+  if {$ifdef unix}MyFindDefaultBrowser{$else}FindDefaultBrowser{$endif}(Browser, Params) then begin
     if AAnchor<>'' then
-      FullParams:='"'+'file:///'+AFile+AAnchor+'"'
+      FullParams:={$ifndef unix}'"'+{$endif}'file:///'+AFile+AAnchor{$ifndef unix}+'"'{$endif}
     else
       FullParams:='';
   {$ifdef unix}

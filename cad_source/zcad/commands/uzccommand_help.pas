@@ -22,24 +22,45 @@ unit uzccommand_help;
 
 interface
 uses
-  LazLogger,
+  {$ifdef unix}Process,{$else}windows,Forms,{$endif}
+  LazLogger,LCLIntf,
   uzccommandsabstract,uzccommandsimpl,uzccommandsmanager,
-  LCLIntf,
   uzbpaths;
 
 implementation
 
+procedure OpenDocumentWithAnchor(AFile,AAnchor:string);
+var
+  Browser, Params, FullParams: String;
+  {$ifdef unix}AProcess: TProcess;{$endif}
+begin
+  if FindDefaultBrowser(Browser, Params) then begin
+    if AAnchor<>'' then
+      FullParams:='"'+'file:///'+AFile+AAnchor+'"'
+    else
+      FullParams:='';
+  {$ifdef unix}
+    AProcess := TProcess.Create(nil);
+    AProcess.Executable := ABrowser;
+    AProcess.Parameters.Add(fulllink);
+    AProcess.Execute;
+    AProcess.Free;
+  {$else}
+    ShellExecute(Application.MainForm.Handle,'open',PChar(Browser),PChar(FullParams),nil, SW_SHOWNORMAL);
+  {$endif}
+  end else
+    OpenDocument(AFile);
+end;
+
 function Help_com(operands:TCommandOperands):TCommandResult;
 var
-  URL:string;
+  htmlDoc:string;
 begin
-  URL:=ProgramPath+'help/userguide.ru.html';
-  {if commandmanager.CommandsStack.Count=0 then
-    URL:=ProgramPath+'help/userguide.ru.html'
+  htmlDoc:=ProgramPath+'help/userguide.ru.html';//todo: расхардкодить
+  if CommandManager.CommandsStack.isEmpty then
+    OpenDocument(htmlDoc)
   else
-    URL:=ProgramPath+'help\userguide.ru.html#_'+
-    lowercase(PCommandObjectDef(commandmanager.CommandsStack.getData(commandmanager.CommandsStack.Count-1))^.CommandName);}
-  OpenDocument(URL);
+    OpenDocumentWithAnchor(htmlDoc,'#_'+lowercase(CommandManager.CommandsStack.getLast^.CommandName));
   result:=cmd_ok;
 end;
 

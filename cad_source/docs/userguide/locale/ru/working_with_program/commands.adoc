@@ -51,7 +51,7 @@ DimLinear
 DimRadius
 DimStyles
 Dist
-DockingOptions
+include::commands/dockingoptions.adoc[]
 include::commands/dwgnext.adoc[]
 include::commands/dwgprev.adoc[]
 
@@ -72,7 +72,7 @@ El_Leader
 El_Material_Legend
 El_Wire
 El_Wire
-Erase
+include::commands/erase.adoc[]
 ExampleCreateLayer
 ExampleInsertDevice
 ExecuteFile

@@ -1,0 +1,16 @@
+
+#### DockingOptions
+
+:cmdcommand: DockingOptions
+
+include::../../_elements/commandsummary.adoc[]
+
+Показ модального окна настройки параметров стыковки. Также окно натройки можно вызвать в контекстном меню сплитеров
+и заголовков окон докинга
+
+.Окно настройки параметров стыковки
+image::zcad_ui_dockingoptions.png[width=25%,pdfwidth=25%]
+
+!!NEEDDETAILS!!
+
+include::commandsummaryfree.adoc[]

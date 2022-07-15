@@ -62,6 +62,9 @@ begin
       end;
       vd:=Varext.entityunit.CreateVariable(VarName,VarType);//в vd вернется копия созданного описателя переменной
       pstring(vd.data.Addr.GetInstance)^:='тест';//можно работать с ним, помня что он всеголишь копия
+      pvd:=Varext.entityunit.FindVariable(VarName);//а тут уже указатель на настоящий описатель переменной
+      pvd^.username:='страшноеИмя';
+      ProcessVariableAttributes(pvd^.attrib,vda_RO,0);//ставим ридонли для инспектора
     end;
   end;
     result:=cmd_ok;

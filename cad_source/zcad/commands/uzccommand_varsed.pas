@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 {$mode delphi}
-unit uzccommand_objvarman;
+unit uzccommand_VarsED;
 
 {$INCLUDE zengineconfig.inc}
 
@@ -40,7 +40,7 @@ uses
 
 implementation
 
-function ObjVarMan_com(operands:TCommandOperands):TCommandResult;
+function VarsEd_com(operands:TCommandOperands):TCommandResult;
 var
   pobj:PGDBObjEntity;
   pentvarext:TVariablesExtender;
@@ -62,7 +62,7 @@ end;
 
 initialization
   debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
-  CreateCommandFastObjectPlugin(@ObjVarMan_com,'ObjVarMan',CADWG or CASelEnt,0);
+  CreateCommandFastObjectPlugin(@VarsEd_com,'VarsEd',CADWG or CASelEnt,0);
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

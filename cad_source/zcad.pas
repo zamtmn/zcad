@@ -176,7 +176,7 @@ uses
   uzccommand_polydiv,
   uzccommand_selectobjectbyaddres,
   uzccommand_selectonmouseobjects,
-  uzccommand_multiobjvarman,uzccommand_objvarman,uzccommand_blockdefvarman,
+  uzccommand_VarsEdSel,uzccommand_VarsED,uzccommand_VarsEdBD,
   uzccommand_unitsman,
   uzccommand_rebuildtree,
   uzccommand_changeprojtype,

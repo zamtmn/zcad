@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 {$mode delphi}
-unit uzccommand_blockdefvarman;
+unit uzccommand_VarsEdSel;
 
 {$INCLUDE zengineconfig.inc}
 
@@ -30,46 +30,63 @@ uses
   uzccommandsabstract,uzccommandsimpl,
   uzctnrVectorBytes,
   uzeentity,
+  gzctnrVectorTypes,
   uzcenitiesvariablesextender,
   uzcinterface,
   uzcstrconsts,
   uzcdrawings,
   UUnitManager,
-  uzccmdeditunit,
-  uzctranslations;
+  uzctranslations,uzcuitypes;
 
 implementation
 
-function BlockDefVarMan_com(operands:TCommandOperands):TCommandResult;
+function VarsEdSel_com(operands:TCommandOperands):TCommandResult;
 var
+  mem:TZctnrVectorBytes;
   pobj:PGDBObjEntity;
-  op:ansistring;
+  modalresult:integer;
+  u8s:UTF8String;
+  astring:ansistring;
+  counter:integer;
+  ir:itrec;
   pentvarext:TVariablesExtender;
 begin
-  pobj:=nil;
-  if drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount=1 then begin
-    op:=PGDBObjEntity(drawings.GetCurrentDWG.GetLastSelected)^.GetNameInBlockTable;
-    if op<>'' then
-      pobj:=drawings.GetCurrentDWG.BlockDefArray.getblockdef(op)
-  end else
-    if length(Operands)>0 then begin
-      op:=Operands;
-      pobj:=drawings.GetCurrentDWG.BlockDefArray.getblockdef(op)
+  mem.init(1024);
+
+  createInfoFormVar;
+  counter:=0;
+
+  InfoFormVar.memo.text:='';
+  modalresult:=ZCMsgCallBackInterface.DOShowModal(InfoFormVar);
+  if modalresult=ZCMrOk then begin
+    u8s:=InfoFormVar.memo.text;
+    astring:={utf8tosys}(u8s);
+    mem.Clear;
+    mem.AddData(@astring[1],length(astring));
+
+    pobj:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
+    if pobj<>nil then
+    repeat
+    if pobj^.Selected then begin
+      pentvarext:=pobj^.GetExtension<TVariablesExtender>;
+      pentvarext.entityunit.free;
+      units.parseunit(SupportPath,InterfaceTranslate,mem,@pentvarext.entityunit);
+      mem.Seek(0);
+      inc(counter);
     end;
-  if pobj<>nil then begin
-    pentvarext:=pobj^.GetExtension<TVariablesExtender>;
-    if pentvarext<>nil then begin
-      if EditUnit(pentvarext.entityunit) then
-        ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIRePrepareObject);
-    end;
-  end else
-    ZCMsgCallBackInterface.TextMessage(rscmSelOrSpecEntity,TMWOHistoryOut);
+    pobj:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
+    until pobj=nil;
+    ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIRePrepareObject);
+  end;
+
+  mem.done;
+  ZCMsgCallBackInterface.TextMessage(format(rscmNEntitiesProcessed,[counter]),TMWOHistoryOut);
   result:=cmd_ok;
 end;
 
 initialization
   debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
-  CreateCommandFastObjectPlugin(@BlockDefVarMan_com,'BlockDefVarMan',CADWG,0);
+  CreateCommandFastObjectPlugin(@VarsEdSel_com,'VarsEdSel',CADWG or CASelEnts,0);
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

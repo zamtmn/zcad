@@ -87,8 +87,8 @@
       <ZAction Name="ACN_ADDTOOWNER" Command="AddToOwner" Img="addtoowner" Caption="Add to owner"/>
       <ZAction Name="ACN_COPYFROMOWNER" Command="CopyFromOwner" Img="#COF" Caption="Copy from owner"/>
       <ZAction Name="ACN_POLYED" Command="PolyED" Img="polyed" Caption="Edit polyline"/>
-      <ZAction Name="ACN_OBJVARMAN" Command="ObjVarMan" Img="varman" Caption="Object variables manager"/>
-      <ZAction Name="ACN_MULTIOBJVARMAN" Command="MultiObjVarMan" Img="mvarman" Caption="Multi object variables manager"/>
+      <ZAction Name="ACN_OBJVARMAN" Command="VarsEd" Img="varman" Caption="Object variables manager"/>
+      <ZAction Name="ACN_MULTIOBJVARMAN" Command="VarsEdSel" Img="mvarman" Caption="Multi object variables manager"/>
       <ZAction Name="ACN_smtextall" Command="stripmtext(ALL)" Img="stripmtextall" Caption="Start command clear mtext all"/>
       <ZAction Name="ACN_smtextarea" Command="stripmtext" Img="stripmtextsel" Caption="Start command clear mtext area"/>
       <ZAction Name="ACN_LAYOFF" Command="LayOff" Img="#LO" Caption="Layer off" Hint="Turns off the layer of selected object"/>

@@ -149,7 +149,7 @@ uses
   uzccommand_loadpalettes,
   uzccommand_loadtoolbars,
   uzccommand_loadactions,
-  uzccommand_newdwg,
+  uzccommand_DWGNew,
   uzccommand_DWGNext,uzccommand_DWGPrev,
   uzccommand_closedwg,
   uzccommand_load,

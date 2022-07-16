@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzccommand_newdwg;
+unit uzccommand_DWGNew;
 {$INCLUDE zengineconfig.inc}
 
 interface
@@ -33,11 +33,11 @@ uses
   uzcdrawing,uzcdrawings,
   uzcinterface,uzcmainwindow;
 
-function newdwg_com(operands:TCommandOperands):TCommandResult;
+function DWGNew_com(operands:TCommandOperands):TCommandResult;
 
 implementation
 
-function newdwg_com(operands:TCommandOperands):TCommandResult;
+function DWGNew_com(operands:TCommandOperands):TCommandResult;
 var
    PDrawing:PTZCADDrawing;
    TabSheet:TTabSheet;
@@ -105,7 +105,7 @@ begin
 end;
 procedure startup;
 begin
-  CreateCommandFastObjectPlugin(@newdwg_com,'NewDWG',0,0).CEndActionAttr:=CEDWGNChanged;
+  CreateCommandFastObjectPlugin(@DWGNew_com,'DWGNew',0,0).CEndActionAttr:=CEDWGNChanged;
 end;
 procedure finalize;
 begin

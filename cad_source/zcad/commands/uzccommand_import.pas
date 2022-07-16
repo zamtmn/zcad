@@ -30,7 +30,7 @@ uses
   uzcstrconsts,
   uzcdialogsfiles,
   uzcdrawings,
-  uzccommand_newdwg,
+  uzccommand_DWGNew,
   uzccomimport;
 
 implementation
@@ -63,7 +63,7 @@ begin
   isload:=FileExists(utf8tosys(s));
   if isload then
   begin
-       newdwg_com(s);
+       DWGNew_com(s);
        drawings.GetCurrentDWG.SetFileName(s);
        import(s,drawings.GetCurrentDWG^);
   end

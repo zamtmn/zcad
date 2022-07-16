@@ -27,7 +27,7 @@ uses
   uzbtypes,uzbpaths,
 
   uzeffmanager,
-  uzccommand_newdwg,
+  uzccommand_DWGNew,
   uzccommandsimpl,uzccommandsabstract,
   uzcsysvars,
   uzcstrconsts,
@@ -57,7 +57,7 @@ begin
   end;
   isload:=FileExists(utf8tosys(s));
   if isload then begin
-    newdwg_com(s);
+    DWGNew_com(s);
     drawings.GetCurrentDWG.SetFileName(s);
     load_merge(s,tloload);
     drawings.GetCurrentDWG.wa.Drawer.delmyscrbuf;//буфер чистить, потому что он может оказаться невалидным в случае отрисовки во время

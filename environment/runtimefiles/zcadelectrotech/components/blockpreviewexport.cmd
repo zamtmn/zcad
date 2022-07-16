@@ -1,5 +1,5 @@
 ;run thisfile in zcad by command: ExecuteFile(*components/blockpreviewexport.cmd)
-NewDwg
+DWGNew
 
 InsertLayersFromBase(*)
 LayerOff(SYS_PIN)

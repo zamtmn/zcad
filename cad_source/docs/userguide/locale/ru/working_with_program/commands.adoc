@@ -52,6 +52,7 @@ DimRadius
 DimStyles
 Dist
 include::commands/dockingoptions.adoc[]
+include::commands/dwgnew.adoc[]
 include::commands/dwgnext.adoc[]
 include::commands/dwgprev.adoc[]
 
@@ -121,7 +122,6 @@ include::commands/move.adoc[]
 MultiObjVarMan
 MultiSelect2ObjIbsp
 NavSelectSubNodes
-NewDWG
 NumDevices
 OPS_SPBuild
 OPS_Sensor_Mark

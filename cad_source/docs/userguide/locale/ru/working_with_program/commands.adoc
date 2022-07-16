@@ -78,6 +78,9 @@ ExampleInsertDevice
 ExecuteFile
 ExportDevWithAxis
 ExportTextToCSV
+include::commands/extdradd.adoc[]
+include::commands/extdralllist.adoc[]
+include::commands/extdrentslist.adoc[]
 FindAllIntersections
 Get3DPoint
 Get3DPoint_DrawRect

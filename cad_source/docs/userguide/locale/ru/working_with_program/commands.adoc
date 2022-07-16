@@ -180,10 +180,9 @@ Units
 UnitsMan
 UpdatePO
 VarReport
-VarsEd
-VarsEdBD
-VarsEdSel
-MultiObjVarMan ObjVarMan
+include::commands/varsed.adoc[]
+include::commands/varsedbd.adoc[]
+include::commands/varsedsel.adoc[]
 View
 Zoom
 ZoomWindow

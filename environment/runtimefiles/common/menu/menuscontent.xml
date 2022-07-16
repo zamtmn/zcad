@@ -164,8 +164,8 @@
         <Action Name="ACN_smtextarea"/>
       </SubMenu>
     <Separator/>
-      <Action Name="ACN_OBJVARMAN"/>
-      <Action Name="ACN_MULTIOBJVARMAN"/>
+      <Action Name="ACN_VARSED"/>
+      <Action Name="ACN_VARSEDSEL"/>
     </Menu>
     <Menu Name="Info">
       <Action Name="ACN_DIST"/>

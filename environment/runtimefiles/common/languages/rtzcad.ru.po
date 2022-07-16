@@ -947,11 +947,11 @@ msgstr ""
 
 #: zcadexternal.acn_varsedsel~caption
 msgid "Multi object variables editor"
-msgstr "Редактор переменных примитива"
+msgstr "Редактор переменных нескольких примитивов"
 
 #: zcadexternal.acn_varsed~caption
 msgid "Object variables editor"
-msgstr "Редактор переменных нескольких примитивов"
+msgstr "Редактор переменных примитива"
 
 #: zcadexternal.acn_vbuildelschema~caption
 msgid "Start building vEL Schema"

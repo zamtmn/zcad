@@ -1186,8 +1186,9 @@
         <UnitName Value="uzccommand_DWGPrev"/>
       </Unit196>
       <Unit197>
-        <Filename Value="zcad/commands/uzccommand_closedwg.pas"/>
+        <Filename Value="zcad/commands/uzccommand_dwgclose.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="uzccommand_DWGClose"/>
       </Unit197>
       <Unit198>
         <Filename Value="zcad/gui/uzcuilcl2zc.pas"/>

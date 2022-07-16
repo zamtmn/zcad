@@ -25,7 +25,6 @@ ChangeProjType
 include::commands/circle.adoc[]
 Circle2
 ClearFileHistory
-include::commands/closedwg.adoc[]
 Colors
 CommandList
 Connection2Dot
@@ -52,6 +51,7 @@ DimRadius
 DimStyles
 Dist
 include::commands/dockingoptions.adoc[]
+include::commands/dwgclose.adoc[]
 include::commands/dwgnew.adoc[]
 include::commands/dwgnext.adoc[]
 include::commands/dwgprev.adoc[]

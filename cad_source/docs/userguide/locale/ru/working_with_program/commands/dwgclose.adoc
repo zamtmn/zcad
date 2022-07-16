@@ -1,8 +1,9 @@
 
-#### CloseDwg
+#### DWGClose
 
-:cmdcommand: CloseDwg
+:cmdcommand: DWGClose
 :cmdicon: ../../../../images/actions/close.png
+:cmdshortcuts: kbd:[Ctrl+F4]
 :cmdmenu: Файл > Закрыть
 
 include::../../_elements/commandsummary.adoc[]

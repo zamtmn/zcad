@@ -10,7 +10,7 @@
       <ZAction Name="ACN_SAVEAS" Command="SaveAs" Img="saveas" Caption="Save as ..." Hint="Save drawing as" ShortCut="CTRL+SHIFT+S"/>
       <ZAction Name="ACN_SAVEQS" Command="QSave(QS)" Img="qsave" Caption="Save (Autosave)" Hint="Autosave"/>
       <ZAction Name="ACN_PRINT" Command="Print" Img="print" Caption="Print" Hint="Print" ShortCut="CTRL+P"/>
-      <ZAction Name="ACN_CLOSE" Command="CloseDWG" Img="close" Caption="Close drawing" ShortCut="CTRL+F4"/>
+      <ZAction Name="ACN_CLOSE" Command="DWGClose" Img="close" Caption="Close drawing" ShortCut="CTRL+F4"/>
       <ZAction Name="ACN_QUIT" Command="Quit" Img="exit" Caption="Quit" ShortCut="CTRL+Q"/>
     </Group>
     <Group Category="Edit">

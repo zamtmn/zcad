@@ -151,7 +151,7 @@ uses
   uzccommand_loadactions,
   uzccommand_DWGNew,
   uzccommand_DWGNext,uzccommand_DWGPrev,
-  uzccommand_closedwg,
+  uzccommand_DWGClose,
   uzccommand_load,
   uzccommand_mergeblocks,
   uzccommand_merge,

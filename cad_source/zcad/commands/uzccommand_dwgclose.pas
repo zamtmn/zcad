@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzccommand_closedwg;
+unit uzccommand_DWGClose;
 {$INCLUDE zengineconfig.inc}
 
 interface
@@ -28,7 +28,7 @@ uses
 
 implementation
 
-function CloseDWG_com(operands:TCommandOperands):TCommandResult;
+function DWGClose_com(operands:TCommandOperands):TCommandResult;
 var
    CurrentDWG:PTZCADDrawing;
 begin
@@ -40,7 +40,7 @@ end;
 
 procedure startup;
 begin
-  CreateCommandFastObjectPlugin(@CloseDWG_com,'CloseDWG',CADWG,0).CEndActionAttr:=CEDWGNChanged;
+  CreateCommandFastObjectPlugin(@DWGClose_com,'DWGClose',CADWG,0).CEndActionAttr:=CEDWGNChanged;
 end;
 procedure finalize;
 begin

@@ -27,7 +27,7 @@ ClearFileHistory
 Colors
 
 Connection2Dot
-Copy
+include::commands/сopy.adoc[]
 include::commands/сopbase.adoc[]
 include::commands/copyclip.adoc[]
 CopyFromOwner

@@ -25,7 +25,7 @@ include::commands/circle.adoc[]
 Circle2
 ClearFileHistory
 Colors
-CommandList
+
 Connection2Dot
 Copy
 CopyBase
@@ -41,6 +41,7 @@ include::commands/dataimport.adoc[]
 
 dbgAppExplorer
 dbgClipboard
+dbgCmdList
 dbgMemSummary
 DeSelectAll
 DimAligned

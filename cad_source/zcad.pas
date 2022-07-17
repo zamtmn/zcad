@@ -198,7 +198,7 @@ uses
   uzccommand_executefile,
   uzccommand_dbgClipboard,
   uzccommand_import,
-  uzccommand_commandlist,uzccommand_entslist,
+  uzccommand_dbgCmdList,uzccommand_entslist,
   uzccommand_saveoptions,
   uzccommand_showpage,
   uzccommand_options,

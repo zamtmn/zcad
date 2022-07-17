@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 {$mode delphi}
-unit uzccommand_commandlist;
+unit uzccommand_dbgCmdList;
 
 {$INCLUDE zengineconfig.inc}
 
@@ -30,7 +30,7 @@ uses
 
 implementation
 
-function CommandList_com(operands:TCommandOperands):TCommandResult;
+function dbgCmdList_com(operands:TCommandOperands):TCommandResult;
 var
    p:PCommandObjectDef;
    ir:itrec;
@@ -51,7 +51,7 @@ end;
 
 initialization
   debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
-  CreateCommandFastObjectPlugin(@CommandList_com,'CommandList',0,0);
+  CreateCommandFastObjectPlugin(@dbgCmdList_com,'dbgCmdList',0,0);
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

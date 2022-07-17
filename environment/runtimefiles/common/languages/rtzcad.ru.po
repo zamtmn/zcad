@@ -3176,7 +3176,7 @@ msgstr "Исходные примитивы"
 
 #: zcadexternal.tmseditor~extendersunit
 msgid "Extenders"
-msgstr ""
+msgstr "Расширения"
 
 #: zcadexternal.tmseditor~generalunit
 msgctxt "zcadexternal.tmseditor~generalunit"
@@ -3193,7 +3193,7 @@ msgstr "Разное"
 
 #: zcadexternal.tmseditor~relatedvariablesunit
 msgid "Related variables"
-msgstr ""
+msgstr "Связанные переменные"
 
 #: zcadexternal.tmseditor~summaryunit
 msgctxt "zcadexternal.tmseditor~summaryunit"
@@ -3206,7 +3206,7 @@ msgstr "Обрабатывать примитивы"
 
 #: zcadexternal.tmseditor~variableprocessselector
 msgid "Process variables"
-msgstr ""
+msgstr "Обработка переменных"
 
 #: zcadexternal.tmseditor~variablesunit
 msgid "Variables"

@@ -261,9 +261,11 @@ begin
      //ObjCasheArray.addnodouble(@pobj);
 end;
 procedure GDBObjElLeader.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
+const
+  textoffset=0.5;
 var
    pl:pgdbobjline;
-   tv,tv2{,tv3}:gdbvertex;
+   tv,tv2,textpoint:gdbvertex;
    pobj,pcable:PGDBObjCable;
    ir,ir2:itrec;
    s:String;
@@ -527,29 +529,34 @@ begin
           ptext.Local.P_insert.y:=ptext.Local.P_insert.y+1.5*scale;
           ptext.textprop.justify:=jsbl;
           ptext.TXTStyleIndex:=pointer(drawing.GetTextStyleTable^.getDataMutable(0));
-          if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).x<=0 then
-                                   begin
-                                   ptext.Local.P_insert.x:= ptext.Local.P_insert.x+tbl.w;
-                                   ptext.textprop.justify:=jsbr;
-                                   end;
+          if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).x<=0 then begin
+            ptext.Local.P_insert.x:= ptext.Local.P_insert.x+tbl.w;
+            textpoint:=ptext.Local.P_insert;
+            ptext.Local.P_insert.x:= ptext.Local.P_insert.x-textoffset;
+            ptext.textprop.justify:=jsbr;
+          end else begin
+            textpoint:=ptext.Local.P_insert;
+            ptext.Local.P_insert.x:=ptext.Local.P_insert.x+textoffset;
+          end;
           ptext.textprop.size:=2.5*scale;
           ptext.FormatEntity(drawing,dc);
+
           pl:=pointer(self.ConstObjArray.CreateInitObj(GDBlineID,@self));
           pl.vp.Layer:=vp.Layer;
-          pl.CoordInOCS.lBegin:=ptext.Local.P_insert;
+          pl.CoordInOCS.lBegin:=textpoint;
           pl.CoordInOCS.lBegin.y:=pl.CoordInOCS.lBegin.y-0.5*scale;
           pl.CoordInOCS.lEnd:=pl.CoordInOCS.lBegin;
           pl.CoordInOCS.lEnd.y:=pl.CoordInOCS.lEnd.y-1*scale;
           pl.FormatEntity(drawing,dc);
           pl:=pointer(self.ConstObjArray.CreateInitObj(GDBlineID,@self));
           pl.vp.Layer:=vp.Layer;
-          pl.CoordInOCS.lBegin:=ptext.Local.P_insert;
+          pl.CoordInOCS.lBegin:=textpoint;
           pl.CoordInOCS.lBegin.y:=pl.CoordInOCS.lBegin.y-0.5*scale;
           pl.CoordInOCS.lEnd:=pl.CoordInOCS.lBegin;
           if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).x>0 then
-                                   pl.CoordInOCS.lEnd.x:=pl.CoordInOCS.lEnd.x+ptext.obj_width*ptext.textprop.size*0.7
+                                   pl.CoordInOCS.lEnd.x:=pl.CoordInOCS.lEnd.x+ptext.obj_width*ptext.textprop.size*ptext.TXTStyleIndex.prop.wfactor +2*textoffset
                                else
-                                   pl.CoordInOCS.lEnd.x:=pl.CoordInOCS.lEnd.x-ptext.obj_width*ptext.textprop.size*0.7;
+                                   pl.CoordInOCS.lEnd.x:=pl.CoordInOCS.lEnd.x-ptext.obj_width*ptext.textprop.size*ptext.TXTStyleIndex.prop.wfactor-2*textoffset;
           pl.FormatEntity(drawing,dc);
           end;
 

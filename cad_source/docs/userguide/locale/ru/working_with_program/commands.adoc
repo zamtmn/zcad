@@ -28,10 +28,10 @@ Colors
 
 Connection2Dot
 Copy
-CopyBase
-CopyClip
+include::commands/сopbase.adoc[]
+include::commands/copyclip.adoc[]
 CopyFromOwner
-CutClip
+include::commands/cutclip.adoc[]
 DBaseAdd
 DBaseLink
 DBaseRename

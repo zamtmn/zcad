@@ -2052,8 +2052,8 @@ end;
 initialization
 begin
   LMD:=programlog.RegisterModule('zcad\gui\uzcmainwindow-gui');
-  CreateCommandFastObjectPlugin(pointer($100),'GetAV',0,0);
-  CreateCommandFastObjectPlugin(@RaiseException_com,'RaiseException',0,0);
+  CreateCommandFastObjectPlugin(pointer($100),'dbgGetAV',0,0);
+  CreateCommandFastObjectPlugin(@RaiseException_com,'dbgRaiseException',0,0);
   CreateCommandFastObjectPlugin(@DockingOptions_com,'DockingOptions',0,0);
 end
 finalization

@@ -42,6 +42,7 @@ include::commands/dataimport.adoc[]
 dbgAppExplorer
 dbgClipboard
 dbgCmdList
+dbgGetAV
 dbgMemSummary
 DeSelectAll
 DimAligned
@@ -85,7 +86,6 @@ include::commands/extdrentslist.adoc[]
 FindAllIntersections
 Get3DPoint
 Get3DPoint_DrawRect
-GetAV
 GetLength
 GetPoint
 GetRect
@@ -143,7 +143,6 @@ ProfileBuild
 ProjectTree
 QSave
 Quit
-RaiseException
 ReadBlockLibrary
 RebuildTree
 Rectangle

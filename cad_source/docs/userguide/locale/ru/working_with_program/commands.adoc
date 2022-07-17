@@ -149,7 +149,7 @@ Rectangle
 Redo
 Regen
 RegenZEnts
-Rotate
+include::commands/rotate.adoc[]
 RotateEnts
 include::commands/saveas.adoc[]
 include::commands/savelayout.adoc[]

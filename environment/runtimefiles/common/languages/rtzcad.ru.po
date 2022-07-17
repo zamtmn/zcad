@@ -4095,19 +4095,19 @@ msgstr ""
 
 #: zcadexternal.tvariableprocessselector~vps_allents
 msgid "All ents"
-msgstr ""
+msgstr "Все примитивы"
 
 #: zcadexternal.tvariableprocessselector~vps_allentsseparated
 msgid "All ents separated"
-msgstr ""
+msgstr "Все примитивы раздельно"
 
 #: zcadexternal.tvariableprocessselector~vps_onlyrelatedents
 msgid "Only related ents"
-msgstr ""
+msgstr "Связанные примитивы"
 
 #: zcadexternal.tvariableprocessselector~vps_onlythisents
 msgid "Only this ents"
-msgstr ""
+msgstr "Выбранный примитив"
 
 #: zcadexternal.variablecategory~bty
 msgid "Blockdef params"

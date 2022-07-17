@@ -2,7 +2,7 @@
 [[VarsEdSel_com]]
 #### VarsEdSel
 
-:cmdcommand: VarsEdVarsEdSel
+:cmdcommand: VarsEdSel
 :cmdicon: ../../../../images/actions/varsedsel.png
 :cmdmenu: Изменить > Редактор переменных нескольких примитивов
 :predselect: Примитивы, редактирование переменных которых будет осуществляться

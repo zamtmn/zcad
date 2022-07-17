@@ -101,7 +101,6 @@ InverseSelected
 KIP_CDBuild
 KIP_Cable_Mark
 KIP_LugTableBuild
-LD
 include::commands/layer.adoc[]
 LayerOff
 LayerOn
@@ -186,6 +185,7 @@ VarReport
 include::commands/varsed.adoc[]
 include::commands/varsedbd.adoc[]
 include::commands/varsedsel.adoc[]
+include::commands/varslink.adoc[]
 View
 Zoom
 ZoomWindow

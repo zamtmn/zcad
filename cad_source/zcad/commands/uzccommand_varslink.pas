@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 {$mode delphi}
-unit uzccommand_ld;
+unit uzccommand_VarsLink;
 
 {$INCLUDE zengineconfig.inc}
 
@@ -34,7 +34,7 @@ resourcestring
 
 implementation
 
-function LinkDevices_com(operands:TCommandOperands):TCommandResult;
+function VarsLink_com(operands:TCommandOperands):TCommandResult;
 var
     pobj: pGDBObjEntity;
     pmainobj: pGDBObjEntity;
@@ -71,7 +71,7 @@ end;
 
 initialization
   debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
-  CreateCommandFastObjectPlugin(@LinkDevices_com,'LD',   CADWG,0);
+  CreateCommandFastObjectPlugin(@VarsLink_com,'VarsLink',   CADWG,0);
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

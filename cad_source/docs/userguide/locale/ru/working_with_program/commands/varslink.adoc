@@ -1,0 +1,11 @@
+
+[[VarsLink]]
+#### VarsLink
+
+:cmdcommand: VarsLink
+
+include::../../_elements/commandsummary.adoc[]
+
+!!NEEDDETAILS!!
+
+include::commandsummaryfree.adoc[]

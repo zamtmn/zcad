@@ -223,7 +223,7 @@ uses
   uzccommand_exampleinsertdevice,uzccommand_examplecreatelayer,
   uzccommand_ExampleVarManipulation,
 
-  uzccommand_ld,
+  uzccommand_VarsLink,
 
   uzccommand_text,
   uzccommand_exporttexttocsv,

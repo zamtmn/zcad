@@ -1,0 +1,34 @@
+unit drawingdevicebase;
+interface
+uses System,devicebase;
+var
+  DBCounter:Integer;
+  _EQ000000:TSPECCABLE_KPSVEV_ng_LS;
+implementation
+begin
+  DBCounter:=1;
+  _EQ000000.initnul;
+  _EQ000000.Category:=_kables;
+  _EQ000000.Group:='Кабели_связь';
+  _EQ000000.Position:='';
+  _EQ000000.NameShort:='КПСВЭВнг-LS 2х2х0.75';
+  _EQ000000.Name:='Кабель симметричный парной скрутки для систем сигнализации и управления КПСВЭВнг-LS 2х2х0.75';
+  _EQ000000.NameFull:='Кабель симметричный парной скрутки для систем сигнализации и управления групповой прокладки  КПСВЭВнг-LS 2х2х0.75, сечением 2х2х0.75';
+  _EQ000000.Description:='';
+  _EQ000000.ID:='SPECCABLE_KPSVEV_ng_LS';
+  _EQ000000.Standard:='ТУ 16.К99-002-2003';
+  _EQ000000.OKP:='35 8100';
+  _EQ000000.EdIzm:=_m;
+  _EQ000000.Manufacturer:='НПП "Спецкабель" г.Москва';
+  _EQ000000.TreeCoord:='BP_СПЕЦКАБЕЛЬ_Для ОПС_КПСВЭВнг-LS|BC_Кабельная продукция_Связи_КПСВЭВнг-LS(СПЕЦКАБЕЛЬ)';
+  _EQ000000.UID:='SPECCABLE_KPSVEV_ng_LS-2х2х0.75';
+  _EQ000000.NameShortTemplate:='КПСВЭВнг-LS %%[Wire_Count_Section_DESC]';
+  _EQ000000.NameTemplate:='Кабель симметричный парной скрутки для систем сигнализации и управления КПСВЭВнг-LS %%[Wire_Count_Section_DESC]';
+  _EQ000000.NameFullTemplate:='Кабель симметричный парной скрутки для систем сигнализации и управления групповой прокладки  КПСВЭВнг-LS %%[Wire_Count_Section_DESC], сечением %%[Wire_Count_Section_DESC]';
+  _EQ000000.UIDTemplate:='%%[ID]-%%[Wire_Count_Section_DESC]';
+  _EQ000000.ThreadSection:=0.0;
+  _EQ000000.ThreadCount:=0.0;
+  _EQ000000.OuterDiameter:=0.0;
+  _EQ000000.Wire_Count_Section_DESC:=_2_2_0_75;
+
+end.

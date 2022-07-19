@@ -1984,303 +1984,303 @@ msgstr ""
 msgid "Zoom"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_angle~
-msgctxt "zcadexternal.oimultiproperty_angle~"
+#: zcadexternal.oimultiproperty~angle
+msgctxt "zcadexternal.oimultiproperty~angle"
 msgid "Angle"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_area~
+#: zcadexternal.oimultiproperty~area
 msgid "Area"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_backward~
+#: zcadexternal.oimultiproperty~backward
 msgid "Backward"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_center_x~
+#: zcadexternal.oimultiproperty~center_x
 msgid "Center X"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_center_y~
+#: zcadexternal.oimultiproperty~center_y
 msgid "Center Y"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_center_z~
+#: zcadexternal.oimultiproperty~center_z
 msgid "Center Z"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_circumference~
+#: zcadexternal.oimultiproperty~circumference
 msgid "Circumference"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_closed~
+#: zcadexternal.oimultiproperty~closed
 msgid "Closed"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_color~
-msgctxt "zcadexternal.oimultiproperty_color~"
+#: zcadexternal.oimultiproperty~color
+msgctxt "zcadexternal.oimultiproperty~color"
 msgid "Color"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_delta_x~
+#: zcadexternal.oimultiproperty~delta_x
 msgid "Delta X"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_delta_y~
+#: zcadexternal.oimultiproperty~delta_y
 msgid "Delta Y"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_delta_z~
+#: zcadexternal.oimultiproperty~delta_z
 msgid "Delta Z"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_diameter~
+#: zcadexternal.oimultiproperty~diameter
 msgid "Diameter"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_dimstyle~
-msgctxt "zcadexternal.oimultiproperty_dimstyle~"
+#: zcadexternal.oimultiproperty~dimstyle
+msgctxt "zcadexternal.oimultiproperty~dimstyle"
 msgid "Style"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_dimtextmoved~
+#: zcadexternal.oimultiproperty~dimtextmoved
 msgid "Text moved"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_endangle~
+#: zcadexternal.oimultiproperty~endangle
 msgid "End angle"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_end_x~
+#: zcadexternal.oimultiproperty~end_x
 msgid "End X"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_end_y~
+#: zcadexternal.oimultiproperty~end_y
 msgid "End Y"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_end_z~
+#: zcadexternal.oimultiproperty~end_z
 msgid "End Z"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_entityaddress~
+#: zcadexternal.oimultiproperty~entityaddress
 msgid "Entity address"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_entityname~
+#: zcadexternal.oimultiproperty~entityname
 msgid "Entity name"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_filter_blocksbynames~
+#: zcadexternal.oimultiproperty~extdrlayercontrol_badlayer
+msgid "False layer"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~extdrlayercontrol_expression
+msgid "Expression"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~extdrlayercontrol_goodlayer
+msgid "True layer"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~filter_blocksbynames
 msgid "Blocks by names"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_filter_entsbylayers~
+#: zcadexternal.oimultiproperty~filter_entsbylayers
 msgid "Ents by layers"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_filter_entsbylinestypes~
+#: zcadexternal.oimultiproperty~filter_entsbylinestypes
 msgid "Ents by linetypes"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_filter_textsbystyles~
+#: zcadexternal.oimultiproperty~filter_textsbystyles
 msgid "Texts by styles"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_height~
-msgctxt "zcadexternal.oimultiproperty_height~"
+#: zcadexternal.oimultiproperty~height
+msgctxt "zcadexternal.oimultiproperty~height"
 msgid "Height"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_insert_x~
+#: zcadexternal.oimultiproperty~insert_x
 msgid "Insert X"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_insert_y~
+#: zcadexternal.oimultiproperty~insert_y
 msgid "Insert Y"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_insert_z~
+#: zcadexternal.oimultiproperty~insert_z
 msgid "Insert Z"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_layer~
-msgctxt "zcadexternal.oimultiproperty_layer~"
+#: zcadexternal.oimultiproperty~layer
+msgctxt "zcadexternal.oimultiproperty~layer"
 msgid "Layer"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_lcontrol_badlayer~
-msgid "LC bad layer"
-msgstr ""
-
-#: zcadexternal.oimultiproperty_lcontrol_expression~
-msgid "LC expression"
-msgstr ""
-
-#: zcadexternal.oimultiproperty_lcontrol_goodlayer~
-msgid "LC good layer"
-msgstr ""
-
-#: zcadexternal.oimultiproperty_leaderscale~
-msgctxt "zcadexternal.oimultiproperty_leaderscale~"
+#: zcadexternal.oimultiproperty~leaderscale
+msgctxt "zcadexternal.oimultiproperty~leaderscale"
 msgid "Scale"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_leadersize~
-msgctxt "zcadexternal.oimultiproperty_leadersize~"
+#: zcadexternal.oimultiproperty~leadersize
+msgctxt "zcadexternal.oimultiproperty~leadersize"
 msgid "Size"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_leaderwidth~
-msgctxt "zcadexternal.oimultiproperty_leaderwidth~"
+#: zcadexternal.oimultiproperty~leaderwidth
+msgctxt "zcadexternal.oimultiproperty~leaderwidth"
 msgid "Width"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_length~
-msgctxt "zcadexternal.oimultiproperty_length~"
+#: zcadexternal.oimultiproperty~length
+msgctxt "zcadexternal.oimultiproperty~length"
 msgid "Length"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_linespacefactor~
+#: zcadexternal.oimultiproperty~linespacefactor
 msgid "Linespace factor"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_linetypescale~
-msgid "Linetype scale"
-msgstr ""
-
-#: zcadexternal.oimultiproperty_linetype~
+#: zcadexternal.oimultiproperty~linetype
 msgid "Linetype"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_lineweight~
+#: zcadexternal.oimultiproperty~linetypescale
+msgid "Linetype scale"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~lineweight
 msgid "Lineweight"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_majorradius~
+#: zcadexternal.oimultiproperty~majorradius
 msgid "Major radius"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_name~
-msgctxt "zcadexternal.oimultiproperty_name~"
+#: zcadexternal.oimultiproperty~name
+msgctxt "zcadexternal.oimultiproperty~name"
 msgid "Name"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_normal_x~
+#: zcadexternal.oimultiproperty~normal_x
 msgid "Normal X"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_normal_y~
+#: zcadexternal.oimultiproperty~normal_y
 msgid "Normal Y"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_normal_z~
+#: zcadexternal.oimultiproperty~normal_z
 msgid "Normal Z"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_oblique~
+#: zcadexternal.oimultiproperty~oblique
 msgid "Oblique"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_osnapmodecontrol~
-msgctxt "zcadexternal.oimultiproperty_osnapmodecontrol~"
+#: zcadexternal.oimultiproperty~osnapmodecontrol
+msgctxt "zcadexternal.oimultiproperty~osnapmodecontrol"
 msgid "OSnap mode control"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_radiusratio~
-msgid "Radius ratio"
-msgstr ""
-
-#: zcadexternal.oimultiproperty_radius~
-msgctxt "zcadexternal.oimultiproperty_radius~"
+#: zcadexternal.oimultiproperty~radius
+msgctxt "zcadexternal.oimultiproperty~radius"
 msgid "Radius"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_rotationwcs~
-msgid "RotationWCS"
+#: zcadexternal.oimultiproperty~radiusratio
+msgid "Radius ratio"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_rotation~
-msgctxt "zcadexternal.oimultiproperty_rotation~"
+#: zcadexternal.oimultiproperty~rotation
+msgctxt "zcadexternal.oimultiproperty~rotation"
 msgid "Rotation"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_scale_x~
+#: zcadexternal.oimultiproperty~rotationwcs
+msgid "RotationWCS"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~scale_x
 msgid "Scale X"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_scale_y~
+#: zcadexternal.oimultiproperty~scale_y
 msgid "Scale Y"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_scale_z~
+#: zcadexternal.oimultiproperty~scale_z
 msgid "Scale Z"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_startangle~
+#: zcadexternal.oimultiproperty~startangle
 msgid "Start angle"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_start_x~
+#: zcadexternal.oimultiproperty~start_x
 msgid "Start X"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_start_y~
+#: zcadexternal.oimultiproperty~start_y
 msgid "Start Y"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_start_z~
+#: zcadexternal.oimultiproperty~start_z
 msgid "Start Z"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_totalarea~
+#: zcadexternal.oimultiproperty~totalarea
 msgid "Total area"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_totallength~
+#: zcadexternal.oimultiproperty~totallength
 msgid "Total length"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_totalvertexcount~
+#: zcadexternal.oimultiproperty~totalvertexcount
 msgid "Total vertex count"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_txtcontent~
+#: zcadexternal.oimultiproperty~txtcontent
 msgid "Content"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_txtjustify~
+#: zcadexternal.oimultiproperty~txtjustify
 msgid "Justify"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_txtstyle~
-msgctxt "zcadexternal.oimultiproperty_txtstyle~"
+#: zcadexternal.oimultiproperty~txtstyle
+msgctxt "zcadexternal.oimultiproperty~txtstyle"
 msgid "Style"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_txttemplate~
+#: zcadexternal.oimultiproperty~txttemplate
 msgid "Template"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_upsidedown~
+#: zcadexternal.oimultiproperty~upsidedown
 msgid "Upside down"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_vertex3dcontrol_~
+#: zcadexternal.oimultiproperty~vertex3dcontrol_
 msgid "Vertex control"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_vertexcount~
+#: zcadexternal.oimultiproperty~vertexcount
 msgid "Vertex count"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_widthfactor~
-msgid "Width factor"
+#: zcadexternal.oimultiproperty~width
+msgctxt "zcadexternal.oimultiproperty~width"
+msgid "Width"
 msgstr ""
 
-#: zcadexternal.oimultiproperty_width~
-msgctxt "zcadexternal.oimultiproperty_width~"
-msgid "Width"
+#: zcadexternal.oimultiproperty~widthfactor
+msgid "Width factor"
 msgstr ""
 
 #: zcadexternal.palette~blocks
@@ -4017,91 +4017,95 @@ msgstr ""
 msgid "Only this ents"
 msgstr ""
 
-#: zcadexternal.variablecategory~bty
+#: zcadexternal.varcategory~bty
 msgid "Blockdef params"
 msgstr ""
 
-#: zcadexternal.variablecategory~cable
+#: zcadexternal.varcategory~cable
 msgid "Cable params"
 msgstr ""
 
-#: zcadexternal.variablecategory~center
-msgctxt "zcadexternal.variablecategory~center"
+#: zcadexternal.varcategory~center
+msgctxt "zcadexternal.varcategory~center"
 msgid "Center"
 msgstr ""
 
-#: zcadexternal.variablecategory~db
+#: zcadexternal.varcategory~db
 msgid "Data base"
 msgstr ""
 
-#: zcadexternal.variablecategory~delta
+#: zcadexternal.varcategory~delta
 msgid "Delta"
 msgstr ""
 
-#: zcadexternal.variablecategory~desc
-msgctxt "zcadexternal.variablecategory~desc"
+#: zcadexternal.varcategory~desc
+msgctxt "zcadexternal.varcategory~desc"
 msgid "Description"
 msgstr ""
 
-#: zcadexternal.variablecategory~device
+#: zcadexternal.varcategory~device
 msgid "Device params"
 msgstr ""
 
-#: zcadexternal.variablecategory~el
+#: zcadexternal.varcategory~el
 msgid "El(deprecated)"
 msgstr ""
 
-#: zcadexternal.variablecategory~end
-msgctxt "zcadexternal.variablecategory~end"
+#: zcadexternal.varcategory~end
+msgctxt "zcadexternal.varcategory~end"
 msgid "End"
 msgstr ""
 
-#: zcadexternal.variablecategory~gc
+#: zcadexternal.varcategory~extdrlayercontrol
+msgid "Layer control"
+msgstr ""
+
+#: zcadexternal.varcategory~gc
 msgid "Group connection"
 msgstr ""
 
-#: zcadexternal.variablecategory~insert
-msgctxt "zcadexternal.variablecategory~insert"
+#: zcadexternal.varcategory~insert
+msgctxt "zcadexternal.varcategory~insert"
 msgid "Insert"
 msgstr ""
 
-#: zcadexternal.variablecategory~length
+#: zcadexternal.varcategory~length
 msgid "Length params"
 msgstr ""
 
-#: zcadexternal.variablecategory~nmo
-msgctxt "zcadexternal.variablecategory~nmo"
+#: zcadexternal.varcategory~nmo
+msgctxt "zcadexternal.varcategory~nmo"
 msgid "Name"
 msgstr ""
 
-#: zcadexternal.variablecategory~normal
+#: zcadexternal.varcategory~normal
 msgid "Normal"
 msgstr ""
 
-#: zcadexternal.variablecategory~objfunc
+#: zcadexternal.varcategory~objfunc
 msgid "Function:object"
 msgstr ""
 
-#: zcadexternal.variablecategory~scale
-msgctxt "zcadexternal.variablecategory~scale"
+#: zcadexternal.varcategory~scale
+msgctxt "zcadexternal.varcategory~scale"
 msgid "Scale"
 msgstr ""
 
-#: zcadexternal.variablecategory~slcabagen
+#: zcadexternal.varcategory~slcabagen
 msgid "vELEC"
 msgstr ""
 
-#: zcadexternal.variablecategory~start
-msgctxt "zcadexternal.variablecategory~start"
+#: zcadexternal.varcategory~start
+msgctxt "zcadexternal.varcategory~start"
 msgid "Start"
 msgstr ""
 
-#: zcadexternal.variablecategory~summary
-msgctxt "zcadexternal.variablecategory~summary"
+#: zcadexternal.varcategory~summary
+msgctxt "zcadexternal.varcategory~summary"
 msgid "Summary"
 msgstr ""
 
-#: zcadexternal.variablecategory~unitparam
+#: zcadexternal.varcategory~unitparam
 msgid "Measured parameter"
 msgstr ""
 

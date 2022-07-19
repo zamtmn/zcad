@@ -333,7 +333,7 @@ initialization
   EntityExtenders.RegisterKey(uppercase(LayerControlExtenderName),TLayerControlExtender);
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('LCGoodLayer',TLayerControlExtender.EntIOLoadGoodLayer);
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('LCBadLayer',TLayerControlExtender.EntIOLoadBadLayer);
-  {Для совместимолти, потом убрать}GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('LCVariableName',TLayerControlExtender.EntIOLoadExpression);
+  {TODO: Для совместимолти, потом убрать}GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('LCVariableName',TLayerControlExtender.EntIOLoadExpression);
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('LCExpression',TLayerControlExtender.EntIOLoadExpression);
 finalization
 end.

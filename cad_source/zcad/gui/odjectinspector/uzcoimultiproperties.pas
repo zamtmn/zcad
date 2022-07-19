@@ -298,7 +298,7 @@ var
    mp:TMultiProperty;
    mpdfo:TMultiPropertyDataForObjects;
 begin
-     username:=InterfaceTranslate('oimultiproperty_'+name+'~',username);
+     username:=InterfaceTranslate('oimultiproperty~'+name,username);
      if MultiPropertiesManager.MultiPropertyDictionary.MyGetValue(name,mp) then
                                                         begin
                                                              if mp.MPCategory<>category then

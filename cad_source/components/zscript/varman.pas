@@ -268,8 +268,19 @@ function GetAnsiStringFromSavedUnit(name,suffix:ansistring;def:ansistring):ansis
 function GetBooleanFromSavedUnit(name,suffix:ansistring;def:Boolean):Boolean;
 procedure StoreIntegerToSavedUnit(name,suffix:string;value:integer);
 procedure StoreAnsiStringToSavedUnit(name,suffix:string;value:string);
+procedure RegisterVarCategory(CategoryName,CategoryUserName:string;TranslateFunc:TTranslateFunction);
 implementation
 uses strmy;
+
+procedure RegisterVarCategory(CategoryName,CategoryUserName:string;TranslateFunc:TTranslateFunction);
+begin
+  if (CategoryUserName<>'')and(CategoryName<>'')then begin
+    if assigned(TranslateFunc)then
+      VarCategory.PushBackIfNotPresent(CategoryName+'_'+TranslateFunc('VarCategory~'+CategoryName,CategoryUserName))
+    else
+      VarCategory.PushBackIfNotPresent(CategoryName+'_'+CategoryUserName);
+  end;
+end;
 
 procedure SetTypedDataVariable(out TypedTataVariable:THardTypedData;pTypedTata:pointer;TypeName:string);
 var

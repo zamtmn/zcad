@@ -25,7 +25,10 @@ uses
   LazLogger,
   uzccommandsabstract,uzccommandsimpl,uzccommandsmanager,
   uzcenitiesvariablesextender,
-  varmandef,
+  varmandef,Varman,UUnitManager,
+  uzctranslations,
+  uzbpaths,
+  gzctnrVectorTypes,
   uzcstrconsts,uzeentity;
 
 implementation
@@ -36,6 +39,9 @@ var
   pe:PGDBObjEntity;
   pvd:pvardesk;
   vd:vardesk;
+  pu:PTSimpleUnit;
+  ir:itrec;
+  test:string;
 const
   VarName='TST_Test';
   VarType='String';
@@ -65,6 +71,23 @@ begin
       pvd:=Varext.entityunit.FindVariable(VarName);//а тут уже указатель на настоящий описатель переменной
       pvd^.username:='страшноеИмя';
       ProcessVariableAttributes(pvd^.attrib,vda_RO,0);//ставим ридонли для инспектора
+
+      //пытаемся найти или загрузить модуль
+      pu:=units.findunit(SupportPath,//пути по которым будет искаться юнит если он еще небыл загружен
+                         InterfaceTranslate,//процедура локализации которая будет пытаться перевести на русский все что можно при загрузке
+                         'uentrepresentation');//имя модуля
+      if pu<>nil then begin //если нашли
+        pvd:=pu^.InterfaceVariables.vardescarray.beginiterate(ir); //пробуем перебрать все определения переменных в интерфейсной части
+        if pvd<>nil then //переменные есть
+          repeat
+            //работаем с очередной переменной
+            test:=pvd^.name; //имя переменной
+            test:=pvd^.username; //пользовательское имя переменной
+            test:=pvd^.data.PTD.TypeName; //имя имя типа; pvd^.data.PTD - указатель на тип
+            pvd:=pu^.InterfaceVariables.vardescarray.iterate(ir); //следующая переменная
+          until pvd=nil;
+      end;
+
     end;
   end;
     result:=cmd_ok;

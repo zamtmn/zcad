@@ -136,6 +136,9 @@ begin
   //programlog.LogOutFormatStr('RD_MaxWidth:="%G"',[min(sysvar.RD.RD_MaxPointSize^,sysvar.RD.RD_MaxLineWidth^)],0,LM_Info);
   end;
   //programlog.logoutstr('end;',lp_DecPos,LM_Debug);
+  OpenglParam.RD_UseStencil:=@sysvarRDUseStencil;
+  OpenglParam.RD_Light:=@sysvarRDLight;
+  OpenglParam.RD_LineSmooth:=@SysVarRDLineSmooth;
   debugln('{D-}TOGLWnd.SetDeiceVariable');
 end;
 
@@ -252,7 +255,7 @@ begin
      OpenGLWindow:=TOGLWnd(WorkArea);
      OpenGLWindow.wa:=self;
      {if assigned(sysvar.RD.RD_RemoveSystemCursorFromWorkArea) then}
-                                                                  RemoveCursorIfNeed(OpenGLWindow,sysvarRDRemoveSystemCursorFromWorkArea);
+                                                                  RemoveCursorIfNeed(OpenGLWindow,SysVarDISPRemoveSystemCursorFromWorkArea);
                                                               {else
                                                                   RemoveCursorIfNeed(OpenGLWindow,true);}
      OpenGLWindow.ShowHint:=true;

@@ -175,7 +175,7 @@ var
    SysVarRDImageDegradationPrefferedRenderTime:integer=0;
    SysVarRDImageDegradationCurrentDegradationFactor:Double=0;
    SysVarRDImageDegradationMaxDegradationFactor:Double=0;
-   SysVarRDRemoveSystemCursorFromWorkArea:Boolean=true;
+   SysVarDISPRemoveSystemCursorFromWorkArea:Boolean=true;
    sysvarDSGNSelNew:Boolean=false;
    sysvarDWGEditInSubEntry:Boolean=false;
    sysvarDSGNOTrackTimerInterval:Integer=500;
@@ -960,7 +960,7 @@ end;
 procedure TGeneralViewArea.hidemousecursor;
 begin
      if assigned(WorkArea) then
-     RemoveCursorIfNeed(WorkArea,sysvarRDRemoveSystemCursorFromWorkArea);
+     RemoveCursorIfNeed(WorkArea,SysVarDISPRemoveSystemCursorFromWorkArea);
 end;
 procedure TGeneralViewArea.RestoreMouse;
 var
@@ -1746,7 +1746,7 @@ begin
   inherited;
   if button = mbMiddle then
   begin
-    RemoveCursorIfNeed(WorkArea,sysvarRDRemoveSystemCursorFromWorkArea);
+    RemoveCursorIfNeed(WorkArea,SysVarDISPRemoveSystemCursorFromWorkArea);
     param.scrollmode:=false;
     param.firstdraw:=true;
     WorkArea.invalidate;

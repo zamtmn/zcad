@@ -68,7 +68,7 @@ units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),Inte
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_ID_Enabled','Boolean',@SysVarRDImageDegradationEnabled);
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_ID_PrefferedRenderTime','Integer',@SysVarRDImageDegradationPrefferedRenderTime);
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_ID_MaxDegradationFactor','Double',@SysVarRDImageDegradationMaxDegradationFactor);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_RemoveSystemCursorFromWorkArea','Boolean',@SysVarRDRemoveSystemCursorFromWorkArea);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_RemoveSystemCursorFromWorkArea','Boolean',@SysVarDISPRemoveSystemCursorFromWorkArea);
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DSGN_SelNew','Boolean',@sysvarDSGNSelNew);
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DWG_EditInSubEntry','Boolean',@sysvarDWGEditInSubEntry);
 
@@ -99,13 +99,12 @@ sysvar.DISP.DISP_DrawZAxis:=@sysvarDISPDrawZAxis;
 
 sysvar.DISP.DISP_LWDisplayScale:=@sysvarDISPLWDisplayScale;
 sysvar.DISP.DISP_DefaultLW:=@sysvarDISPDefaultLW;
+SysVar.DISP.DISP_RemoveSystemCursorFromWorkArea:=@SysVarDISPRemoveSystemCursorFromWorkArea;
 
 sysvar.RD.RD_DrawInsidePaintMessage:=@sysvarDrawInsidePaintMessage;
 
 sysvar.DWG.DWG_OSMode:=@sysvarDWGOSMode;
 sysvar.DWG.DWG_PolarMode:=@sysvarDWGPolarMode;
-sysvar.RD.RD_LineSmooth:=@SysVarRDLineSmooth;
-sysvar.RD.RD_UseStencil:=@sysvarRDUseStencil;
 sysvar.RD.RD_LastRenderTime:=@sysvarRDLastRenderTime;
 sysvar.RD.RD_LastUpdateTime:=@sysvarRDLastUpdateTime;
 SysVar.RD.RD_ImageDegradation.RD_ID_Enabled:=@SysVarRDImageDegradationEnabled;
@@ -113,7 +112,6 @@ SysVar.RD.RD_ImageDegradation.RD_ID_PrefferedRenderTime:=@SysVarRDImageDegradati
 SysVar.RD.RD_ImageDegradation.RD_ID_CurrentDegradationFactor:=@SysVarRDImageDegradationCurrentDegradationFactor;
 SysVar.RD.RD_ImageDegradation.RD_ID_MaxDegradationFactor:=@SysVarRDImageDegradationMaxDegradationFactor;
 
-SysVar.RD.RD_RemoveSystemCursorFromWorkArea:=@SysVarRDRemoveSystemCursorFromWorkArea;
 sysvar.DWG.DWG_EditInSubEntry:=@sysvarDWGEditInSubEntry;
 
 SysVar.RD.RD_SpatialNodeCount:=@SysVarRDSpatialNodeCount;
@@ -126,8 +124,7 @@ sysvar.RD.RD_RendererBackEnd:=@BackendsNames;
 
 sysvar.DSGN.DSGN_OTrackTimerInterval:=@sysvarDSGNOTrackTimerInterval;
 sysvar.DSGN.DSGN_SelNew:=@sysvarDSGNSelNew;
-sysvar.RD.RD_LastCalcVisible:=@sysvarRDLastCalcVisible;
-sysvar.RD.RD_Light:=@sysvarRDLight;
+sysvar.RD.RD_LastCalcVisible:=@sysvarRDLastCalcVisible;;
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

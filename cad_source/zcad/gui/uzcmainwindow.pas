@@ -1344,9 +1344,9 @@ begin
                                                                     Sender.getviewcontrol.Cursor:=crNoDrop
                                                                 else
                                                                     begin
-                                                                         {if assigned(sysvarRDRemoveSystemCursorFromWorkArea)
+                                                                         {if assigned(SysVarDISPRemoveSystemCursorFromWorkArea)
                                                                          then}
-                                                                             RemoveCursorIfNeed(Sender.getviewcontrol,(sysvarRDRemoveSystemCursorFromWorkArea)and((Sender.param.md.mode and not(MNone or MMoveCamera or MRotateCamera))<>0))
+                                                                             RemoveCursorIfNeed(Sender.getviewcontrol,(SysVarDISPRemoveSystemCursorFromWorkArea)and((Sender.param.md.mode and not(MNone or MMoveCamera or MRotateCamera))<>0))
                                                                          {else
                                                                              RemoveCursorIfNeed(getviewcontrol,true)}
                                                                     end;
@@ -1354,9 +1354,9 @@ begin
                                                      else
                                                          if not Sender.param.scrollmode then
                                                                                      begin
-                                                                                          {if assigned(sysvarRDRemoveSystemCursorFromWorkArea)
+                                                                                          {if assigned(SysVarDISPRemoveSystemCursorFromWorkArea)
                                                                                           then}
-                                                                                              RemoveCursorIfNeed(Sender.getviewcontrol,(sysvarRDRemoveSystemCursorFromWorkArea)and((Sender.param.md.mode and not(MNone or MMoveCamera or MRotateCamera))<>0))
+                                                                                              RemoveCursorIfNeed(Sender.getviewcontrol,(SysVarDISPRemoveSystemCursorFromWorkArea)and((Sender.param.md.mode and not(MNone or MMoveCamera or MRotateCamera))<>0))
                                                                                           {else
                                                                                               RemoveCursorIfNeed(getviewcontrol,true)}
                                                                                      end;

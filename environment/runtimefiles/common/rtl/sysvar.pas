@@ -78,8 +78,6 @@ var
   RD_Renderer:String;
   RD_Extensions:String;
   RD_Version:String;
-  RD_GLUVersion:String;
-  RD_GLUExtensions:String;
   RD_Restore_Mode:TRestoreMode;
   RD_VSync:TGDB3StateBool;
   SAVE_Auto_Interval:Integer;
@@ -177,8 +175,6 @@ begin
   RD_Renderer:='';
   RD_Extensions:='';
   RD_Version:='4.3.0';
-  RD_GLUVersion:='1.3';
-  RD_GLUExtensions:='';
   RD_Restore_Mode:=WND_Texture;
   RD_VSync:=T3SB_Fale;
   SAVE_Auto_Interval:=300;

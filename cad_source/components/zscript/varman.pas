@@ -43,6 +43,8 @@ type
                   value:LongWord;
             end;
 const
+     SysVarN='sysvar';
+     SysVarNSN='sysvarns';
      SuffLeft='_Left';
      SuffTop='_Top';
      SuffWidth='_Width';
@@ -248,6 +250,7 @@ var
   OnCreateSystemUnit:TOnCreateSystemUnit=nil;
   SysUnit:PTUnit=nil;
   SysVarUnit:PTUnit=nil;
+  SysVarNotSavedUnit:PTUnit=nil;
   SavedUnit,DBUnit,DWGDBUnit,DWGUnit:PTUnit;
   BaseTypesEndIndex:Integer;
   OldTypesCount:Integer;

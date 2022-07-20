@@ -19,12 +19,14 @@
 unit uzcregpaths;
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzcsysvars,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,LazLogger;
+uses
+  uzcsysvars,uzbpaths,uzctranslations,UUnitManager,Varman,
+  TypeDescriptors,LazLogger;
 implementation
 
 initialization
   //units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'PATH_Program_Run','String',@ProgramPath);
-  units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'PATH_Support_Path','String',@SupportPath);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'PATH_Support_Path','String',@SupportPath);
   sysvar.PATH.Program_Run:=@ProgramPath;
   sysvar.PATH.Support_Path:=@SupportPath;
   sysvar.PATH.Temp_files:=@TempPath;

@@ -46,7 +46,7 @@ type
                        //procedure AfterObjectDone(p:PGDBaseObject);virtual;
                        procedure free;virtual;
 
-                       procedure CreateExtenalSystemVariable(PPaths:String;sysunitname:String;TranslateFunc:TTranslateFunction;varname,vartype:String;pinstance:Pointer);
+                       procedure CreateExtenalSystemVariable(var VarUnit:PTUnit;VarUnitName:string;PPaths:String;sysunitname:String;TranslateFunc:TTranslateFunction;varname,vartype:String;pinstance:Pointer);
                  end;
 {EXPORT-}
 var
@@ -83,7 +83,7 @@ const
                             Size:sizeof(Pointer);
                             //Attributes:{FA_HIDDEN_IN_OBJ_INSP or }FA_READONLY
                             );
-procedure TUnitManager.CreateExtenalSystemVariable(PPaths:String;sysunitname:String;TranslateFunc:TTranslateFunction;varname,vartype:String;pinstance:Pointer);
+procedure TUnitManager.CreateExtenalSystemVariable(var VarUnit:PTUnit;VarUnitName:string;PPaths:String;sysunitname:String;TranslateFunc:TTranslateFunction;varname,vartype:String;pinstance:Pointer);
 begin
   //TODO: убрать такуюже шнягу из urtl, сделать создание SysUnit в одном месте
   if SysUnit=nil then
@@ -91,12 +91,12 @@ begin
       units.loadunit(ppaths,TranslateFunc,sysunitname,nil);
       SysUnit:=units.findunit(PPaths,TranslateFunc,'System');
     end;
-  if SysVarUnit=nil then
+  if VarUnit=nil then
     begin
-      SysVarUnit:=units.FindOrCreateEmptyUnit('sysvar');
-      SysVarUnit.InterfaceUses.PushBackIfNotPresent(SysUnit);
+      VarUnit:=units.FindOrCreateEmptyUnit(VarUnitName);
+      VarUnit.InterfaceUses.PushBackIfNotPresent(SysUnit);
     end;
-  SysVarUnit.CreateFixedVariable(varname,vartype,pinstance);
+  VarUnit.CreateFixedVariable(varname,vartype,pinstance);
 end;
 {procedure TUnitManager.AfterObjectDone;
 begin

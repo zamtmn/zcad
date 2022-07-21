@@ -1504,7 +1504,7 @@ begin
                          tempstr:=tempstr+'   '+pp^.ValKey+':'+pp^.ValType;
     if pp^.Value<>'' then
                          tempstr:=tempstr+':='+pp^.Value;
-    tempstr:=ReplaceStr(tempstr,'|',';');
+    //tempstr:=ReplaceStr(tempstr,'|',';');
   self.Hint:=tempstr;
   self.ShowHint:=true;
 

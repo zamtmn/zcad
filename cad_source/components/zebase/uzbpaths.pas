@@ -70,7 +70,7 @@ begin
 
      s:=Paths;
      repeat
-           GetPartOfPath(ts,s,'|');
+           GetPartOfPath(ts,s,';');
            ts:=ExpandPath(ts)+FileName;
            ts2:={$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts);
            if FileExists(ts2) then
@@ -126,7 +126,7 @@ begin
      begin
      s:=PPaths;
      repeat
-           GetPartOfPath(ts,s,'|');
+           GetPartOfPath(ts,s,';');
            ts:=ExpandPath(ts);
            zTraceLn(sysutils.Format('[FILEOPS]FindInSupportPath: searh in "%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)]));
            ts:=ts+FileName;
@@ -162,7 +162,7 @@ var
 begin
      s:=path;
      repeat
-           GetPartOfPath(ts,s,'|');
+           GetPartOfPath(ts,s,';');
            ts:=ExpandPath(ts);
            FromDirIterator(ts,mask,firstloadfilename,proc,method,pdata);
      until s='';

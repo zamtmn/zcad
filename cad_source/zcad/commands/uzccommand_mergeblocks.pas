@@ -25,7 +25,7 @@ uses
   uzbpaths,
 
   uzeffmanager,
-  uzccommand_newdwg,
+  uzccommand_DWGNew,
   uzccommand_merge,uzccommandsimpl,uzccommandsabstract,
   uzcdrawings,uzedrawingsimple;
 

@@ -39,7 +39,7 @@ var
   RD_ID_Enabled:Boolean;
   RD_ID_PrefferedRenderTime:Integer;
   RD_ID_MaxDegradationFactor:Double;
-  RD_RemoveSystemCursorFromWorkArea:Boolean;
+  DISP_RemoveSystemCursorFromWorkArea:Boolean;
   DSGN_SelNew:Boolean;
   DWG_EditInSubEntry:Boolean;
   RD_SpatialNodeCount:Integer;
@@ -135,7 +135,7 @@ begin
   RD_ID_Enabled:=False;
   RD_ID_PrefferedRenderTime:=20;
   RD_ID_MaxDegradationFactor:=0.0;
-  RD_RemoveSystemCursorFromWorkArea:=True;
+  DISP_RemoveSystemCursorFromWorkArea:=True;
   DSGN_SelNew:=False;
   DWG_EditInSubEntry:=False;
   RD_SpatialNodeCount:=-1;

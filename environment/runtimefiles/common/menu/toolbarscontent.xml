@@ -44,8 +44,8 @@
       <Separator/>
       <Action Name="ACN_El_FIND"/>
       <Separator/>
-      <Action Name="ACN_OBJVARMAN"/>
-      <Action Name="ACN_MULTIOBJVARMAN"/>
+      <Action Name="ACN_VARSED"/>
+      <Action Name="ACN_VARSEDSEL"/>
       <Separator/>
       <Variable VarName="DSGN_SelNew" Img="#1" Hint="New selection set"/>
       <Variable VarName="DSGN_SelSameName" Img="#SN" Hint="Auto select devices with same name"/>

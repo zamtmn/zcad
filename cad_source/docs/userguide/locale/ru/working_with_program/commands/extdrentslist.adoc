@@ -1,0 +1,12 @@
+
+[[extdrEntsList_com]]
+#### extdrEntsList
+
+:cmdcommand: extdrEntsList
+:predselect: Требуется
+
+include::../../_elements/commandsummary.adoc[]
+
+Команда выводит список привязаных к выбранным примитивам расширений (см. <<ent_extenders>>)
+
+include::commandsummaryfree.adoc[]

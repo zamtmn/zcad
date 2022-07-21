@@ -1,8 +1,9 @@
-= ZCAD Рукаводство пользователя
-Андрей Зубарев <zamtmn@yandex.ru>
-v0.01
 :lang: ru
 include::attributes.adoc[]
+include::locale/{lang}/gitversion.adoc[]
+= ZCAD Руководство пользователя +
+Андрей Зубарев <zamtmn@yandex.ru>
+{gitversion}
 :toc: left
 :toclevels: 4
 :sectnums:

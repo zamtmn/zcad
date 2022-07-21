@@ -13,7 +13,7 @@ Features:
 * DXF fileformat
 * SHX, TTF font support
 * true DXF linetypes
-* POINT, LINE, CIRCLE, POLYLINE,  LWPOLYLINE, ARC, ELLIPSE, INSERT, TEXT, MTEXT, 3DFACE, SOLID, SPLINE entities support
+* POINT, LINE, CIRCLE, POLYLINE,  LWPOLYLINE, ARC, ELLIPSE, INSERT, TEXT, MTEXT, 3DFACE, SOLID, SPLINE, HATCH entities support
 * Polar tracking, Object snap
 
 ToDo:
@@ -26,7 +26,7 @@ ToDo:
 * ~~Printing~~
 
 ## Build from source
-Dailed instructions: [ENG](https://github.com/zamtmn/zcad/blob/master/README_ENG.md "ENG") / [RUS](https://github.com/zamtmn/zcad/blob/master/README_RUS.md "RUS")
+Detailed instructions: [ENG](https://github.com/zamtmn/zcad/blob/master/README_ENG.md "ENG") / [RUS](https://github.com/zamtmn/zcad/blob/master/README_RUS.md "RUS")
 
 Requirements:
 

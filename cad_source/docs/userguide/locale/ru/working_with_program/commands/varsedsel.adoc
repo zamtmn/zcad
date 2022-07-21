@@ -1,0 +1,14 @@
+
+[[VarsEdSel_com]]
+#### VarsEdSel
+
+:cmdcommand: VarsEdSel
+:cmdicon: ../../../../images/actions/varsedsel.png
+:cmdmenu: Изменить > Редактор переменных нескольких примитивов
+:predselect: Примитивы, редактирование переменных которых будет осуществляться
+
+include::../../_elements/commandsummary.adoc[]
+
+!!NEEDDETAILS!!
+
+include::commandsummaryfree.adoc[]

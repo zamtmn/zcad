@@ -22,24 +22,73 @@ unit uzccommand_help;
 
 interface
 uses
-  LazLogger,
-  uzccommandsabstract,uzccommandsimpl,
-  uzcfhelp,
-  uzcinterface;
+  {$ifdef unix}Process,sysutils,{$else}windows,Forms,{$endif}
+  LazLogger,LCLIntf,
+  uzccommandsabstract,uzccommandsimpl,uzccommandsmanager,
+  uzbpaths;
 
 implementation
 
-function Help_com(operands:TCommandOperands):TCommandResult;
+{$ifdef unix}
+const
+  cfVivaldi='/usr/bin/vivaldi';
+  cfFirefox='/usr/bin/firefox';
+  cfSeamonkey='/usr/bin/seamonkey';
+  cfChrome='/usr/bin/google-chrome';
+  cfOpera='/usr/bin/opera';
+
+function MyFindDefaultBrowser(out ABrowser, AParams: String): Boolean;
 begin
-  if not assigned(HelpForm) then
-    HelpForm:=THelpForm.mycreate(nil,@HelpForm);
-  ZCMsgCallBackInterface.DOShowModal(HelpForm);
+  result:=true;
+  AParams:='';
+  {FindExecutable not available in Linux, workaround:}
+  if FileExists(cfVivaldi) then ABrowser:=cfVivaldi else
+  if FileExists(cfFirefox) then ABrowser:=cfFirefox else
+  if FileExists(cfSeamonkey) then ABrowser:=cfSeamonkey else
+  if FileExists(cfChrome) then ABrowser:=cfChrome else
+  if FileExists(cfOpera) then ABrowser:=cfOpera else result:=false;
+end;
+
+{$endif}
+
+procedure OpenDocumentWithAnchor(AFile,AAnchor:string);
+var
+  Browser, Params, FullParams: String;
+  {$ifdef unix}AProcess: TProcess;{$endif}
+begin
+  if {$ifdef unix}MyFindDefaultBrowser{$else}FindDefaultBrowser{$endif}(Browser, Params) then begin
+    if AAnchor<>'' then
+      FullParams:={$ifndef unix}'"'+{$endif}'file:///'+AFile+AAnchor{$ifndef unix}+'"'{$endif}
+    else
+      FullParams:='';
+  {$ifdef unix}
+    AProcess := TProcess.Create(nil);
+    AProcess.Executable := Browser;
+    AProcess.Parameters.Add(FullParams);
+    AProcess.Execute;
+    AProcess.Free;
+  {$else}
+    ShellExecute(Application.MainForm.Handle,'open',PChar(Browser),PChar(FullParams),nil, SW_SHOWNORMAL);
+  {$endif}
+  end else
+    OpenDocument(AFile);
+end;
+
+function Help_com(operands:TCommandOperands):TCommandResult;
+var
+  htmlDoc:string;
+begin
+  htmlDoc:=ProgramPath+'help/userguide.ru.html';//todo: расхардкодить
+  if CommandManager.CommandsStack.isEmpty then
+    OpenDocument(htmlDoc)
+  else
+    OpenDocumentWithAnchor(htmlDoc,'#_'+lowercase(CommandManager.CommandsStack.getLast^.CommandName));
   result:=cmd_ok;
 end;
 
 initialization
   debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
-  CreateCommandFastObjectPlugin(@Help_com,'Help',0,0);
+  CreateCommandFastObjectPlugin(@Help_com,'Help',0,0).overlay:=True;
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

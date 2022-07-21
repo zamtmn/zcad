@@ -77,18 +77,14 @@ type
   {REGISTERRECORDTYPE trd}
   trd=record
             RD_RendererBackEnd:PTEnumData;(*'Render backend'*)
-            RD_CurrentWAParam:TFaceTypedData;
+            RD_CurrentWAParam:TFaceTypedData;(*'Current render backend params'*)
             RD_GLUVersion:PString;(*'GLU Version'*)(*oi_readonly*)
             RD_GLUExtensions:PString;(*'GLU Extensions'*)(*oi_readonly*)
-            RD_UseStencil:PBoolean;(*'Use STENCIL buffer'*)
             RD_LastRenderTime:PInteger;(*'Last render time'*)(*oi_readonly*)
             RD_LastUpdateTime:PInteger;(*'Last update time'*)(*oi_readonly*)
             RD_LastCalcVisible:PInteger;(*'Last visible calculation time'*)(*oi_readonly*)
             RD_MaxRenderTime:PInteger;(*'Maximum single pass time'*)
             RD_DrawInsidePaintMessage:PTGDB3StateBool;(*'Draw inside paint message'*)
-            RD_RemoveSystemCursorFromWorkArea:PBoolean;(*'Remove system cursor from work area'*)
-            RD_Light:PBoolean;(*'Light'*)
-            RD_LineSmooth:PBoolean;(*'Line smoothing'*)
             RD_ImageDegradation:TImageDegradation;(*'Image degradation'*)
             RD_PanObjectDegradation:PBoolean;(*'Degradation while pan'*)
             RD_SpatialNodesDepth:PInteger;(*'Spatial index nodes depth'*)(*hidden_in_objinsp*)
@@ -121,8 +117,8 @@ type
              SYS_RunTime:PInteger;(*'Uptime'*)(*oi_readonly*)
              SYS_UniqueInstance:PBoolean;(*'Unique instance'*)
              SYS_NoSplash:PBoolean;(*'No splash screen'*)
-             SYS_NoLoadLayout:PBoolean;(*'No load layout'*)
-             SYS_UpdatePO:PBoolean;(*'Update PO file'*)
+             SYS_NoLoadLayout:PBoolean;(*'No load layout'*)(*oi_readonly*)
+             SYS_UpdatePO:PBoolean;(*'Update PO file'*)(*oi_readonly*)
 
        end;
   {REGISTERRECORDTYPE tdwg}
@@ -212,6 +208,7 @@ type
              DISP_OSSize:PDouble;(*'Snap aperture size'*)
              DISP_CursorSize:PInteger;(*'Cursor size'*)
              DISP_CrosshairSize:PDouble;(*'Crosshair size'*)
+             DISP_RemoveSystemCursorFromWorkArea:PBoolean;(*'Remove system cursor from work area'*)
              DISP_DrawZAxis:PBoolean;(*'Show Z axis'*)
              DISP_ColorAxis:PBoolean;(*'Colored cursor'*)
              DISP_GripSize:PInteger;(*'Grip size'*)

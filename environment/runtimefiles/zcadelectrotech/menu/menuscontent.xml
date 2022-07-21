@@ -164,8 +164,8 @@
         <Action Name="ACN_smtextarea"/>
       </SubMenu>
     <Separator/>
-      <Action Name="ACN_OBJVARMAN"/>
-      <Action Name="ACN_MULTIOBJVARMAN"/>
+      <Action Name="ACN_VARSED"/>
+      <Action Name="ACN_VARSEDSEL"/>
     </Menu>
     <Menu Name="Info">
       <Action Name="ACN_DIST"/>
@@ -209,7 +209,7 @@
         <Command Caption="Clear File History" Command="ClearFileHistory"/>
         <Command Caption="PlaceAllBlocks" Command="PlaceAllBlocks"/>
         <Command Caption="BlocksList" Command="BlocksList"/>
-        <Command Caption="Check clipboard" Command="DebClip"/>
+        <Command Caption="Check clipboard" Command="dbgClipboard"/>
         <Command Caption="Report on memory allocation(for debugbuild)" Command="dbgMemSummary"/>
         <Command Caption="BlockPreviewExport" Command="ExecuteFile(*components\blockpreviewexport.cmd)"/>
         <Action Name="ACN_TREESTAT"/>

@@ -5,12 +5,12 @@
       <ZAction Name="ACN_LOAD" Command="Load" Img="open" Caption="Open ..." Hint="Open drawing" ShortCut="CTRL+O"/>
       <ZAction Name="ACN_LOADQS" Command="Load($(ZCADAutoSaveFilePath))" Img="qload" Caption="Open (Autosave)" Hint="Open last autosave"/>
       <ZAction Name="ACN_IMPORT" Command="Import" Img="#Import" Caption="Import ..." Hint="Import drawing"/>
-      <ZAction Name="ACN_NEW" Command="NewDWG" Img="new" Caption="New drawing" ShortCut="CTRL+N"/>
+      <ZAction Name="ACN_NEW" Command="DWGNew" Img="new" Caption="New drawing" ShortCut="CTRL+N"/>
       <ZAction Name="ACN_QSAVE" Command="QSave" Img="save" Caption="Save" Hint="Save drawing" ShortCut="CTRL+S"/>
       <ZAction Name="ACN_SAVEAS" Command="SaveAs" Img="saveas" Caption="Save as ..." Hint="Save drawing as" ShortCut="CTRL+SHIFT+S"/>
       <ZAction Name="ACN_SAVEQS" Command="QSave(QS)" Img="qsave" Caption="Save (Autosave)" Hint="Autosave"/>
       <ZAction Name="ACN_PRINT" Command="Print" Img="print" Caption="Print" Hint="Print" ShortCut="CTRL+P"/>
-      <ZAction Name="ACN_CLOSE" Command="CloseDWG" Img="close" Caption="Close drawing" ShortCut="CTRL+F4"/>
+      <ZAction Name="ACN_CLOSE" Command="DWGClose" Img="close" Caption="Close drawing" ShortCut="CTRL+F4"/>
       <ZAction Name="ACN_QUIT" Command="Quit" Img="exit" Caption="Quit" ShortCut="CTRL+Q"/>
     </Group>
     <Group Category="Edit">
@@ -87,8 +87,8 @@
       <ZAction Name="ACN_ADDTOOWNER" Command="AddToOwner" Img="addtoowner" Caption="Add to owner"/>
       <ZAction Name="ACN_COPYFROMOWNER" Command="CopyFromOwner" Img="#COF" Caption="Copy from owner"/>
       <ZAction Name="ACN_POLYED" Command="PolyED" Img="polyed" Caption="Edit polyline"/>
-      <ZAction Name="ACN_OBJVARMAN" Command="ObjVarMan" Img="varman" Caption="Object variables manager"/>
-      <ZAction Name="ACN_MULTIOBJVARMAN" Command="MultiObjVarMan" Img="mvarman" Caption="Multi object variables manager"/>
+      <ZAction Name="ACN_VARSED" Command="VarsEd" Img="varsed" Caption="Object variables editor"/>
+      <ZAction Name="ACN_VARSEDSEL" Command="VarsEdSel" Img="varsedsel" Caption="Multi object variables editor"/>
       <ZAction Name="ACN_smtextall" Command="stripmtext(ALL)" Img="stripmtextall" Caption="Start command clear mtext all"/>
       <ZAction Name="ACN_smtextarea" Command="stripmtext" Img="stripmtextsel" Caption="Start command clear mtext area"/>
       <ZAction Name="ACN_LAYOFF" Command="LayOff" Img="#LO" Caption="Layer off" Hint="Turns off the layer of selected object"/>
@@ -117,8 +117,8 @@
       <ZAction Name="ACN_CANCEL" Command="Cancel" Img="#C" Caption="Cancel"/>
       <ZAction Name="ACN_SNAPRUNTIME" Command="SnapProperties" Img="snap" Caption="Run time snap editor" ShortCut="ALT+S"/>
       <ZAction Name="ACN_MATCHPROP" Command="MatchProp" Img="matchprop" Caption="Match properties"/>
-      <ZAction Name="ACN_WNEXT" Command="NextDrawing" Img="#N" Caption="Next window" ShortCut="CTRL+TAB"/>
-      <ZAction Name="ACN_WPREV" Command="PrevDrawing" Img="#P" Caption="Previous window" ShortCut="SHIFT+CTRL+TAB"/>
+      <ZAction Name="ACN_WNEXT" Command="DWGNext" Img="#N" Caption="Next window" ShortCut="CTRL+TAB"/>
+      <ZAction Name="ACN_WPREV" Command="DWGPrev" Img="#P" Caption="Previous window" ShortCut="SHIFT+CTRL+TAB"/>
       <ZAction Name="ACN_ABOUT" Command="About" Img="about" Caption="About"/>
       <ZAction Name="ACN_HELP" Command="Help" Img="help.bmp" Caption="Help" ShortCut="F1"/>
       <ZAction Name="ACN_DBASEADD" Command="DBaseAdd" Img="#DBAdd" Caption="Add to drawing database"/>

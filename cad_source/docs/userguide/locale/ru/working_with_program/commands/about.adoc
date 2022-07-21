@@ -2,7 +2,7 @@
 #### About
 
 :cmdcommand: About
-:cmdicon: ../../../../../../environment/runtimefiles/common/images/actions/about.png
+:cmdicon: ../../../../images/actions/about.png
 :cmdmenu: Справка > О программе
 
 include::../../_elements/commandsummary.adoc[]

@@ -2,7 +2,7 @@
 #### Arc
 
 :cmdcommand: Arc
-:cmdicon: ../../../../../../environment/runtimefiles/common/images/actions/draw/arc.png
+:cmdicon: ../../../../images/actions/draw/arc.png
 :cmdmenu: Черчение > Дуга
 
 include::../../_elements/commandsummary.adoc[]

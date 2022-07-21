@@ -22,6 +22,7 @@ unit uzcoiregistermultiproperties;
 interface
 uses
   uzeentwithlocalcs,math,uzcoimultiobjects,uzepalette,sysutils,uzeentityfactory,
+  uzctranslations,
   uzegeometrytypes,
   varmandef,
   uzeconsts,
@@ -402,9 +403,10 @@ const
      LayerControlExtender:TLayerControlExtender=nil;
 begin
   MultiPropertiesManager.RestartMultipropertySortID;
-  MultiPropertiesManager.RegisterPhysMultiproperty('LControl_GoodLayer','LC good layer',sysunit^.TypeName2PTD('String'),MPCExtenders,0,TLayerControlExtender,PtrInt(@LayerControlExtender.GoodLayer),PtrInt(@LayerControlExtender.GoodLayer),OneVarDataMIPD,OneVarDataEIPD);
-  MultiPropertiesManager.RegisterPhysMultiproperty('LControl_BadLayer','LC bad layer',sysunit^.TypeName2PTD('String'),MPCExtenders,0,TLayerControlExtender,PtrInt(@LayerControlExtender.BadLayer),PtrInt(@LayerControlExtender.BadLayer),OneVarDataMIPD,OneVarDataEIPD);
-  MultiPropertiesManager.RegisterPhysMultiproperty('LControl_Expression','LC expression',sysunit^.TypeName2PTD('String'),MPCExtenders,0,TLayerControlExtender,PtrInt(@LayerControlExtender.FExpression),PtrInt(@LayerControlExtender.FExpression),OneVarDataMIPD,OneVarDataEIPD);
+  RegisterVarCategory('EXTDRLAYERCONTROL','Layer control',@InterfaceTranslate);
+  MultiPropertiesManager.RegisterPhysMultiproperty('EXTDRLAYERCONTROL_GoodLayer','True layer',sysunit^.TypeName2PTD('String'),MPCExtenders,0,TLayerControlExtender,PtrInt(@LayerControlExtender.GoodLayer),PtrInt(@LayerControlExtender.GoodLayer),OneVarDataMIPD,OneVarDataEIPD);
+  MultiPropertiesManager.RegisterPhysMultiproperty('EXTDRLAYERCONTROL_BadLayer','False layer',sysunit^.TypeName2PTD('String'),MPCExtenders,0,TLayerControlExtender,PtrInt(@LayerControlExtender.BadLayer),PtrInt(@LayerControlExtender.BadLayer),OneVarDataMIPD,OneVarDataEIPD);
+  MultiPropertiesManager.RegisterPhysMultiproperty('EXTDRLAYERCONTROL_Expression','Expression',sysunit^.TypeName2PTD('String'),MPCExtenders,0,TLayerControlExtender,PtrInt(@LayerControlExtender.FExpression),PtrInt(@LayerControlExtender.FExpression),OneVarDataMIPD,OneVarDataEIPD);
   MultiPropertiesManager.RegisterPropertyMultiproperty('LControl_T','LControl_T',MPCExtenders,0,TLayerControlExtender,TLayerControlExtender,'Expr',OneVarDataMIPD,OneVarDataEIPD);
   {General section}
   MultiPropertiesManager.RestartMultipropertySortID;

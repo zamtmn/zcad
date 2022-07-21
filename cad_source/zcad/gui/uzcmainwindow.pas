@@ -1087,14 +1087,14 @@ begin
       if (tempkey=VK_TAB)and(shift=[ssctrl,ssShift]) then begin
         if assigned(PageControl)then
           if PageControl.PageCount>1 then begin
-            commandmanager.executecommandsilent('PrevDrawing',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
+            commandmanager.executecommandsilent('DWGPrev',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
             tempkey:=00;
           end;
       end else
         if (tempkey=VK_TAB)and(shift=[ssctrl]) then begin
           if assigned(PageControl)then
             if PageControl.PageCount>1 then begin
-              commandmanager.executecommandsilent('NextDrawing',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
+              commandmanager.executecommandsilent('DWGNext',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
               tempkey:=0;
             end;
         end
@@ -1344,9 +1344,9 @@ begin
                                                                     Sender.getviewcontrol.Cursor:=crNoDrop
                                                                 else
                                                                     begin
-                                                                         {if assigned(sysvarRDRemoveSystemCursorFromWorkArea)
+                                                                         {if assigned(SysVarDISPRemoveSystemCursorFromWorkArea)
                                                                          then}
-                                                                             RemoveCursorIfNeed(Sender.getviewcontrol,(sysvarRDRemoveSystemCursorFromWorkArea)and((Sender.param.md.mode and not(MNone or MMoveCamera or MRotateCamera))<>0))
+                                                                             RemoveCursorIfNeed(Sender.getviewcontrol,(SysVarDISPRemoveSystemCursorFromWorkArea)and((Sender.param.md.mode and not(MNone or MMoveCamera or MRotateCamera))<>0))
                                                                          {else
                                                                              RemoveCursorIfNeed(getviewcontrol,true)}
                                                                     end;
@@ -1354,9 +1354,9 @@ begin
                                                      else
                                                          if not Sender.param.scrollmode then
                                                                                      begin
-                                                                                          {if assigned(sysvarRDRemoveSystemCursorFromWorkArea)
+                                                                                          {if assigned(SysVarDISPRemoveSystemCursorFromWorkArea)
                                                                                           then}
-                                                                                              RemoveCursorIfNeed(Sender.getviewcontrol,(sysvarRDRemoveSystemCursorFromWorkArea)and((Sender.param.md.mode and not(MNone or MMoveCamera or MRotateCamera))<>0))
+                                                                                              RemoveCursorIfNeed(Sender.getviewcontrol,(SysVarDISPRemoveSystemCursorFromWorkArea)and((Sender.param.md.mode and not(MNone or MMoveCamera or MRotateCamera))<>0))
                                                                                           {else
                                                                                               RemoveCursorIfNeed(getviewcontrol,true)}
                                                                                      end;
@@ -2052,8 +2052,8 @@ end;
 initialization
 begin
   LMD:=programlog.RegisterModule('zcad\gui\uzcmainwindow-gui');
-  CreateCommandFastObjectPlugin(pointer($100),'GetAV',0,0);
-  CreateCommandFastObjectPlugin(@RaiseException_com,'RaiseException',0,0);
+  CreateCommandFastObjectPlugin(pointer($100),'dbgGetAV',0,0);
+  CreateCommandFastObjectPlugin(@RaiseException_com,'dbgRaiseException',0,0);
   CreateCommandFastObjectPlugin(@DockingOptions_com,'DockingOptions',0,0);
 end
 finalization

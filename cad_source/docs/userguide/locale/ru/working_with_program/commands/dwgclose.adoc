@@ -1,0 +1,14 @@
+
+#### DWGClose
+
+:cmdcommand: DWGClose
+:cmdicon: ../../../../images/actions/close.png
+:cmdshortcuts: kbd:[Ctrl+F4]
+:cmdmenu: Файл > Закрыть
+
+include::../../_elements/commandsummary.adoc[]
+
+Закрыть текущий чертеж. В случае присутствия изменений в чертеже, будет предложено сохранить
+файл чертежа на диск
+
+include::commandsummaryfree.adoc[]

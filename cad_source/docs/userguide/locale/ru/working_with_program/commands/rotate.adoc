@@ -1,0 +1,14 @@
+
+#### Rotate
+
+:cmdcommand: Rotate
+:cmdicon: ../../../../images/actions/rotate.png
+:cmdshortcuts: kbd:[Ctrl+ALT+R]; kbd:[R]
+:predselect: Требуется
+
+include::../../_elements/commandsummary.adoc[]
+
+Поворот выбраных примитивов. Исходные примитивы нужно выбрать до запуска команды.
+После запуска требуется указать точку определяющую угол поворота.
+
+include::commandsummaryfree.adoc[]

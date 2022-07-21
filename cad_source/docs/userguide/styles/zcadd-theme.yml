@@ -5,11 +5,11 @@ role:
     font-style: bold
     font-color: #101010
   command:
-    font-style: bold
-    font-color: #ff0000
+    font-style: bold_italic
+    font-color: #0000ff
   cmdline:
     font-family: M+ 1mn
-    font-style: bold_italic
+    font-style: bold
     font-color: #0000ff
   ent:
     font-style: bold_italic
@@ -17,5 +17,5 @@ role:
   hl:
     font-style: bold
   menu:
-    font-style: bold
+    font-style: bold_italic
     font-color: #0000ff

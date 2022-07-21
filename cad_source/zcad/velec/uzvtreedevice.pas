@@ -1848,7 +1848,70 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph):T
   {shortNameHead, }headDevName, groupName:string;
   pvd:pvardesk; //для работы со свойствами устройств
 
-    //** Получаем количество кабелей подключения данного устройства к головным устройствам, с последующим разбором
+    //**СТАРОЕ СТАРОЕ СТАРОЕ Получаем количество кабелей подключения данного устройства к головным устройствам, с последующим разбором
+    {function listCollectConnect(nowDev:PGDBObjDevice;var listCableLaying:TVertexofCableLaying;nameSL:string):boolean;
+    var
+       pvd:pvardesk; //для работы со свойствами устройств
+       polyObj:PGDBObjPolyLine;
+       i,counter1,counter2,counter3:integer;
+       tempName,nameParam:String;
+       infoLay:TCableLaying;
+       listStr1,listStr2,listStr3:TVertexofString;
+
+    begin
+         listStr1:=TVertexofString.Create;
+         listStr2:=TVertexofString.Create;
+         listStr3:=TVertexofString.Create;
+
+         pvd:=FindVariableInEnt(nowDev,velec_HeadDeviceName);
+         if pvd<>nil then
+            BEGIN
+               nameParam:=pString(pvd^.data.Addr.Instance)^;
+               listStr1.PushBack(nameParam);
+               //repeat
+               //      GetPartOfPath(nameParam,tempName,';');
+               //      listStr1.PushBack(nameParam);
+               //     // HistoryOutStr(' code2 = ' + nameParam);
+               //until tempName='';
+
+               pvd:=FindVariableInEnt(nowDev,'SLCABAGEN_NGHeadDevice');
+                   if pvd<>nil then
+                    BEGIN
+                     nameParam:=pString(pvd^.data.Addr.Instance)^;
+                     //repeat
+                     //      GetPartOfPath(nameParam,tempName,';');
+                     listStr2.PushBack(nameParam);
+                     //until tempName='';
+
+                     pvd:=FindVariableInEnt(nowDev,'SLCABAGEN_SLTypeagen');
+                     if pvd<>nil then
+                        BEGIN
+                           nameParam:=pString(pvd^.data.Addr.Instance)^;
+                           //repeat
+                           //      GetPartOfPath(nameParam,tempName,';');
+                                 listStr3.PushBack(nameParam);
+                           //until tempName='';
+
+                           for i:=0 to listStr1.size-1 do
+                             begin
+                             infoLay.headName:=listStr1[i];
+                             infoLay.GroupNum:=listStr2[i];
+                             infoLay.typeSLine:=listStr3[i];
+                             if infoLay.typeSLine = nameSL then
+                                listCableLaying.PushBack(infoLay);
+                             end;
+                        end;
+                     end;
+
+         end;
+         if listCableLaying.size > 0 then
+            result:=true
+            else
+            result:=false;
+    end;
+    }
+
+    //**НОВОЕ НОВОЕ НОВОЕ Получаем количество кабелей подключения данного устройства к головным устройствам, с последующим разбором
     function listCollectConnect(nowDev:PGDBObjDevice;var listCableLaying:TVertexofCableLaying;nameSL:string):boolean;
     var
        pvd:pvardesk; //для работы со свойствами устройств
@@ -1863,45 +1926,45 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph):T
          listStr2:=TVertexofString.Create;
          listStr3:=TVertexofString.Create;
 
-         pvd:=FindVariableInEnt(nowDev,'SLCABAGEN_HeadDeviceName');
+         pvd:=FindVariableInEnt(nowDev,velec_HeadDeviceName);
          if pvd<>nil then
             BEGIN
-         nameParam:=pString(pvd^.data.Addr.Instance)^;
-         listStr1.PushBack(nameParam);
-         //repeat
-         //      GetPartOfPath(nameParam,tempName,';');
-         //      listStr1.PushBack(nameParam);
-         //     // HistoryOutStr(' code2 = ' + nameParam);
-         //until tempName='';
+               nameParam:=pString(pvd^.data.Addr.Instance)^;
+               listStr1.PushBack(nameParam);
+               //repeat
+               //      GetPartOfPath(nameParam,tempName,';');
+               //      listStr1.PushBack(nameParam);
+               //     // HistoryOutStr(' code2 = ' + nameParam);
+               //until tempName='';
 
-         pvd:=FindVariableInEnt(nowDev,'SLCABAGEN_NGHeadDevice');
+               pvd:=FindVariableInEnt(nowDev,'SLCABAGEN_NGHeadDevice');
                    if pvd<>nil then
-            BEGIN
-         nameParam:=pString(pvd^.data.Addr.Instance)^;
-         //repeat
-         //      GetPartOfPath(nameParam,tempName,';');
-         listStr2.PushBack(nameParam);
-         //until tempName='';
+                    BEGIN
+                     nameParam:=pString(pvd^.data.Addr.Instance)^;
+                     //repeat
+                     //      GetPartOfPath(nameParam,tempName,';');
+                     listStr2.PushBack(nameParam);
+                     //until tempName='';
 
-         pvd:=FindVariableInEnt(nowDev,'SLCABAGEN_SLTypeagen');
-              if pvd<>nil then
-            BEGIN
-         nameParam:=pString(pvd^.data.Addr.Instance)^;
-         //repeat
-         //      GetPartOfPath(nameParam,tempName,';');
-               listStr3.PushBack(nameParam);
-         //until tempName='';
+                     pvd:=FindVariableInEnt(nowDev,'SLCABAGEN_SLTypeagen');
+                     if pvd<>nil then
+                        BEGIN
+                           nameParam:=pString(pvd^.data.Addr.Instance)^;
+                           //repeat
+                           //      GetPartOfPath(nameParam,tempName,';');
+                                 listStr3.PushBack(nameParam);
+                           //until tempName='';
 
-         for i:=0 to listStr1.size-1 do
-             begin
-             infoLay.headName:=listStr1[i];
-             infoLay.GroupNum:=listStr2[i];
-             infoLay.typeSLine:=listStr3[i];
-             if infoLay.typeSLine = nameSL then
-                listCableLaying.PushBack(infoLay);
-             end;
-            end;
-            end;
+                           for i:=0 to listStr1.size-1 do
+                             begin
+                             infoLay.headName:=listStr1[i];
+                             infoLay.GroupNum:=listStr2[i];
+                             infoLay.typeSLine:=listStr3[i];
+                             if infoLay.typeSLine = nameSL then
+                                listCableLaying.PushBack(infoLay);
+                             end;
+                        end;
+                     end;
 
          end;
          if listCableLaying.size > 0 then

@@ -175,7 +175,7 @@ var
    SysVarRDImageDegradationPrefferedRenderTime:integer=0;
    SysVarRDImageDegradationCurrentDegradationFactor:Double=0;
    SysVarRDImageDegradationMaxDegradationFactor:Double=0;
-   SysVarRDRemoveSystemCursorFromWorkArea:Boolean=true;
+   SysVarDISPRemoveSystemCursorFromWorkArea:Boolean=true;
    sysvarDSGNSelNew:Boolean=false;
    sysvarDWGEditInSubEntry:Boolean=false;
    sysvarDSGNOTrackTimerInterval:Integer=500;
@@ -960,7 +960,7 @@ end;
 procedure TGeneralViewArea.hidemousecursor;
 begin
      if assigned(WorkArea) then
-     RemoveCursorIfNeed(WorkArea,sysvarRDRemoveSystemCursorFromWorkArea);
+     RemoveCursorIfNeed(WorkArea,SysVarDISPRemoveSystemCursorFromWorkArea);
 end;
 procedure TGeneralViewArea.RestoreMouse;
 var
@@ -1746,7 +1746,7 @@ begin
   inherited;
   if button = mbMiddle then
   begin
-    RemoveCursorIfNeed(WorkArea,sysvarRDRemoveSystemCursorFromWorkArea);
+    RemoveCursorIfNeed(WorkArea,SysVarDISPRemoveSystemCursorFromWorkArea);
     param.scrollmode:=false;
     param.firstdraw:=true;
     WorkArea.invalidate;
@@ -3088,44 +3088,6 @@ begin
                                 OnWaKeyPress(self,Key,Shift);
   if key=0 then
                exit;
- {else if (Key = VK_A) and (shift=[ssCtrl]) then
-      begin
-        commandmanager.ExecuteCommand('SelectAll');
-        Key:=00;
-      end}
- {else if (Key = VK_Z) and (shift=[ssCtrl]) then
-      begin
-        commandmanager.ExecuteCommand('Undo');
-        Key:=00;
-      end}
-  {else if (Key = VK_Z) and (shift=[ssCtrl,ssShift]) then
-      begin
-        commandmanager.ExecuteCommand('Redo');
-        Key:=00;
-      end}
- {else if (Key = VK_DELETE) then
-      begin
-        commandmanager.ExecuteCommand('Erase');
-        Key:=00;
-      end}
- (*else if (Key=VK_TAB)and(shift=[ssctrl,ssShift]) then
-                          begin
-                               //if assigned(MainFormN.PageControl)then
-                               //   if MainFormN.PageControl.PageCount>1 then
-                                  begin
-                                       commandmanager.executecommandsilent('PrevDrawing');
-                                       key:=00;
-                                  end;
-                          end
- else if (Key=VK_TAB)and(shift=[ssctrl]) then
-                          begin
-                               //if assigned(MainFormN.PageControl)then
-                               //   if MainFormN.PageControl.PageCount>1 then
-                                  begin
-                                       commandmanager.executecommandsilent('NextDrawing');
-                                       key:=00;
-                                  end;
-                          end*)
 end;
 
 function TGeneralViewArea.ProjectPoint(pntx,pnty,pntz:Double;var wcsLBN,wcsRTF,dcsLBN,dcsRTF: GDBVertex):gdbvertex;

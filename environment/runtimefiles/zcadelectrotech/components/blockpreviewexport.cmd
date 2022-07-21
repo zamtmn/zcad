@@ -1,9 +1,9 @@
 ;run thisfile in zcad by command: ExecuteFile(*components/blockpreviewexport.cmd)
-NewDwg
+DWGNew
 
 InsertLayersFromBase(*)
-ClLayerOff(SYS_PIN)
-ClLayerOff(EL_DEVICE_NAME)
+LayerOff(SYS_PIN)
+LayerOff(EL_DEVICE_NAME)
 
 BlocksInBasePreViewExport(DEVICE_*|DEVICE_EL_VL_MOTOR1;DEVICE_EL_VL_HEATER1;DEVICE_EL_VL_DEVICE1|48|<>|*images/palettes/<>_300.png)
 BlocksInBasePreViewExport(DEVICE_*|DEVICE_EL_VL_MOTOR1;DEVICE_EL_VL_HEATER1;DEVICE_EL_VL_DEVICE1|24|<>|*images/palettes/<>_150.png)
@@ -193,7 +193,7 @@ BlockPreViewExport(24|UNIT_GRID2|*images/palettes/UNIT_GRID2.png)
 BlockPreViewExport(24|UNIT_GRID2|*images/palettes/UNIT_GRID2_150.png)
 BlockPreViewExport(48|UNIT_GRID2|*images/palettes/UNIT_GRID2_300.png)
 
-ClLayerOff(TEXT)
+LayerOff(TEXT)
 
 BlocksInBasePreViewExport(comp*||48|<>|*images/palettes/<>_300.png)
 BlocksInBasePreViewExport(comp*||24|<>|*images/palettes/<>_150.png)

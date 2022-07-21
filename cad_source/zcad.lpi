@@ -1176,16 +1176,19 @@
         <IsPartOfProject Value="True"/>
       </Unit194>
       <Unit195>
-        <Filename Value="zcad/commands/uzccommand_nextdrawing.pas"/>
+        <Filename Value="zcad/commands/uzccommand_dwgnext.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="uzccommand_DWGNext"/>
       </Unit195>
       <Unit196>
-        <Filename Value="zcad/commands/uzccommand_prevdrawing.pas"/>
+        <Filename Value="zcad/commands/uzccommand_dwgprev.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="uzccommand_DWGPrev"/>
       </Unit196>
       <Unit197>
-        <Filename Value="zcad/commands/uzccommand_closedwg.pas"/>
+        <Filename Value="zcad/commands/uzccommand_dwgclose.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="uzccommand_DWGClose"/>
       </Unit197>
       <Unit198>
         <Filename Value="zcad/gui/uzcuilcl2zc.pas"/>

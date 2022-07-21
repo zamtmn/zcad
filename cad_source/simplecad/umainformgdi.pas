@@ -288,7 +288,7 @@ begin
          lw.endw:=CreateRandomDouble(10);
          lw.startw:=CreateRandomDouble(10);
          PLWPolyLineEnt^.Width2D_in_OCS_Array.PushBackData(lw);
-         v1:=uzegeometry.Vertex2DAdd(v1,CreateRandomVertex2D(100,50));
+         v1:=uzegeometry.VertexAdd(v1,CreateRandomVertex2D(100,50));
     end;
     if vcount>2 then
                     PLWPolyLineEnt^.closed:=random(10)>5;          //random close lwpolyline

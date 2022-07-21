@@ -46,6 +46,7 @@ const
   //для работы автоукладчика
   velec_nameDevice='NMO_Name';
 //  velec_nameDevice='NMO_BaseName';
+  velec_subNameConnection='SLCABAGEN';
   velec_HeadDeviceName='SLCABAGEN_HeadDeviceName';
   //velec_CableRoutingNodes='SLCABAGEN_CableRoutingNodes';
   velec_ControlUnitName='SLCABAGEN_ControlUnitName';
@@ -61,7 +62,14 @@ const
   velec_separator='~';
   velec_onlyThisDev='!';    // кабель довести только до этой точки и все, дальше не идет
   velec_masterTravelNode='^';
-  velec_beforeNameGlobalSchemaBlock='DEVICE_VELEC_';
+  velec_beforeNameGlobalSchemaBlock='DEVICE_';
+  velec_SchemaBlockJunctionBox='DEVICE_EL_VL_BOX1';
+  velec_SchemaELDevInfo='VELEC_EL_SCHEME_INFO';
+  velec_SchemaCableInfo='VELEC_CABLE_SCHEME_INFO';
+
+  velec_SchemaELSTART='EL_STARTSCHEMA';
+  velec_SchemaELEND='EL_ENDSCHEMA';
+
   velec_cableMountingNon='';
 
 implementation

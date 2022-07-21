@@ -134,13 +134,33 @@ zcadelectrotech: checkvars version
 	environment/typeexporter/typeexporter pathprefix=cad_source/ outputfile=cad/rtl/system.pas processfiles=environment/typeexporter/zcad.files+environment/typeexporter/zcadelectrotech.files
 	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) cad_source/zcad.lpi
 
-zcadelectrotechpdfuseguide: checkvars
-	$(MAKE) -C cad_source/docs/userguide clean pdf
-	cp -r cad_source/docs/userguide/*.pdf cad
+cad:
+	mkdir cad
+cad/help:
+	mkdir $(subst /,$(PATHDELIM),cad/help)
+cad/help/locale:
+	mkdir $(subst /,$(PATHDELIM),cad/help/locale)
+cad/help/locale/ru:
+	mkdir $(subst /,$(PATHDELIM),cad/help/locale/ru)
+cad/help/locale/ru/_images:
+	mkdir $(subst /,$(PATHDELIM),cad/help/locale/ru/_images)
+
+documentation: checkvars cad cad/help cad/help/locale cad/help/locale/ru cad/help/locale/ru/_images
+	$(MAKE) -C cad_source/docs/userguide LP=$(LP) PCP=$(PCP) all
+	cp cad_source/docs/userguide/*.html cad/help
+	cp cad_source/docs/userguide/*.pdf cad/help
+	cp -r cad_source/docs/userguide/locale/ru/_images/* cad/help/locale/ru/_images
 
 tests: checkvars
 	$(MAKE) -C cad_source/components/zcontainers/tests LP=$(LP) PCP=$(PCP) clean all
 	$(MAKE) -C cad_source/zengine/tests LP=$(LP) PCP=$(PCP) clean all
+
+updatelocalizedpofiles: checkvars
+	cp cad/languages/rtzcad.po cad/languages/rtzcad.pot
+	$(LP)$(PATHDELIM)tools$(PATHDELIM)updatepofiles cad/languages/rtzcad.pot
+	rm -rf cad/languages/rtzcad.pot
+	cp $(LP)$(PATHDELIM)lcl/languages/*.po cad/languages
+	cp $(LP)$(PATHDELIM)components/anchordocking/languages/*.po cad/languages
 
 cleanzcad: clean zcadenv zcad
 

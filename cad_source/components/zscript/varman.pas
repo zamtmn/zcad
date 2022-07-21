@@ -180,8 +180,9 @@ varmanager=object(varmanagerdef)
                  function findvardesc(varname:TInternalScriptString):pvardesk;virtual;
                  function findvardescbyinst(varinst:Pointer):pvardesk;virtual;
                  function findvardescbytype(pt:PUserTypeDescriptor):pvardesk;virtual;
-                 function createvariable(varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0):pvardesk;virtual;
-                 function createvariable2(varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0):TInVectorAddr;virtual;
+                 function CreateVariable(varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0):pvardesk;virtual;
+                 function CreateVariable2(varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0):TInVectorAddr;virtual;
+                 procedure RemoveVariable(pvd:pvardesk);virtual;
                  function findvardesc2(varname:TInternalScriptString):TInVectorAddr;virtual;
                  function findfieldcustom(var pdesc: pByte; var offset: Integer;var tc:PUserTypeDescriptor; nam: ShortString): Boolean;virtual;
                  function getDS:Pointer;virtual;
@@ -267,8 +268,19 @@ function GetAnsiStringFromSavedUnit(name,suffix:ansistring;def:ansistring):ansis
 function GetBooleanFromSavedUnit(name,suffix:ansistring;def:Boolean):Boolean;
 procedure StoreIntegerToSavedUnit(name,suffix:string;value:integer);
 procedure StoreAnsiStringToSavedUnit(name,suffix:string;value:string);
+procedure RegisterVarCategory(CategoryName,CategoryUserName:string;TranslateFunc:TTranslateFunction);
 implementation
 uses strmy;
+
+procedure RegisterVarCategory(CategoryName,CategoryUserName:string;TranslateFunc:TTranslateFunction);
+begin
+  if (CategoryUserName<>'')and(CategoryName<>'')then begin
+    if assigned(TranslateFunc)then
+      VarCategory.PushBackIfNotPresent(CategoryName+'_'+TranslateFunc('VarCategory~'+CategoryName,CategoryUserName))
+    else
+      VarCategory.PushBackIfNotPresent(CategoryName+'_'+CategoryUserName);
+  end;
+end;
 
 procedure SetTypedDataVariable(out TypedTataVariable:THardTypedData;pTypedTata:pointer;TypeName:string);
 var
@@ -895,7 +907,7 @@ begin
 
      //programlog.LogOutStr('end;',lp_DecPos,LM_Trace);
 end;
-function varmanager.createvariable(varname: TInternalScriptString; var vd: vardesk;attr:TVariableAttributes=0):pvardesk;
+function varmanager.CreateVariable(varname: TInternalScriptString; var vd: vardesk;attr:TVariableAttributes=0):pvardesk;
 var
   size: LongWord;
   i:TArrayIndex;
@@ -918,7 +930,7 @@ begin
        //KillString(vd.name);
        //KillString(vd.username);
 end;
-function varmanager.createvariable2(varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0):TInVectorAddr;
+function varmanager.CreateVariable2(varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0):TInVectorAddr;
 var
   size: LongWord;
   i:TArrayIndex;
@@ -936,6 +948,11 @@ begin
        end;
        vd.attrib:=attr;
        Result.SetInstance(@vardescarray,vardescarray.PushBackData(vd));
+end;
+procedure varmanager.RemoveVariable(pvd:pvardesk);
+begin
+  pvd.data.PTD.MagicFreeInstance(pvd.data.Addr.GetInstance);
+  Vardescarray.DeleteElementByP(pvd);
 end;
 function varmanager.findvardesc2(varname: TInternalScriptString):TInVectorAddr;
 var

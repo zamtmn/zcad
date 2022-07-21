@@ -1,0 +1,25 @@
+
+#### Circle
+
+:cmdcommand: Circle
+:cmdicon: ../../../../images/actions/draw/circle.png
+:cmdmenu: Черчение > Окружность >
+:cmdoperands: CR, CD, 2P, 3P. Не обязательный (CR используется в случае не указания)
+:cmdexample: Circle
+:cmdexample2: Circle(3P)
+
+include::../../_elements/commandsummary.adoc[]
+
+Черчение примитива [.ent]#Circle#. После запуска команды последовательно задать точки на окружности,
+в зависимости от операнда клманды.
+
+ * [.hl]#CR# - укзывается центр и радиус окружности
+
+ * [.hl]#CD# - укзывается центр и диаметр окружности
+
+ * [.hl]#2P# - укзывается центр 2 точки на окружности (лежащие на концах диаметра)
+
+ * [.hl]#3P# - укзывается центр 3 точки на окружности
+
+
+include::commandsummaryfree.adoc[]

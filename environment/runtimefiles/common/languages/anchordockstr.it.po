@@ -1,0 +1,297 @@
+# Giuliano Colla <giuliano.colla@fastwebnet.it>, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2014-10-20 01:55+0100\n"
+"Last-Translator: Giuliano Colla <giuliano.colla@fastwebnet.it>\n"
+"Language-Team: Lazarus\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Virtaal 0.6.1\n"
+
+#: anchordockstr.adrsafreesideofasplittermustnotbeanchorednodetypeancho
+#, object-pascal-format
+msgid "A free side of a splitter must not be anchored: Node=\"%s\" Type=%s Anchors[%s]=\"%s\""
+msgstr "Un lato libero di uno splitter non deve essere ancorato: Nodo=\"%s\" Tipo=%s Ancore[%s]=\"%s\""
+
+#: anchordockstr.adrsallowdocksitestobeminimized
+msgid "Allow dock sites to be minimized"
+msgstr ""
+
+#: anchordockstr.adrsamountofpixelthemousehastodragbeforedragstarts
+msgid "Amount of pixel the mouse has to drag before drag starts"
+msgstr "Di quanti pixel deve spostarsi il mouse per far partire il trascinamento"
+
+#: anchordockstr.adrsanchorisnotsplitternodeanchors
+#, object-pascal-format
+msgid "Anchor is not splitter: Node=\"%s\" Anchors[%s]=\"%s\""
+msgstr "L'ancora non è uno splitter: Nodo=\"%s\" Ancore[%s]=\"%s\""
+
+#: anchordockstr.adrsanchornotfoundnodeanchors
+#, object-pascal-format
+msgid "Anchor not found: Node=\"%s\" Anchors[%s]=\"%s\""
+msgstr "Ancora non trovata: Nodo=\"%s\" Ancore[%s]=\"%s\""
+
+#: anchordockstr.adrsanchortowrongsideofsplitternodeanchors
+#, object-pascal-format
+msgid "Anchor to wrong side of splitter: Node=\"%s\" Anchors[%s]=\"%s\""
+msgstr "L'ancora è sul lato sbagliato dello splitter: Nodo=\"%s\" Ancore[%s]=\"%s\""
+
+#: anchordockstr.adrsapagemustnotbeanchorednodeparentparenttypeanchors
+#, object-pascal-format
+msgid "A page must not be anchored: Node=\"%s\" Parent=%s ParentType=%s Anchors[%s]=\"%s\""
+msgstr "Una pagina non deve essere ancorata:Nodo=\"%s\" Padre=%s ParentType=%s Ancore[%s]=\"%s\""
+
+#: anchordockstr.adrsautomatically
+msgid "Automatically"
+msgstr "Automaticamente"
+
+#: anchordockstr.adrsbottom
+msgid "bottom"
+msgstr "basso"
+
+#: anchordockstr.adrsclose
+msgid "Close"
+msgstr "Chiudi"
+
+#: anchordockstr.adrscontrolisalreadyadocksite
+msgid "control is already a docksite"
+msgstr "Il controllo è già un sito di docking"
+
+#: anchordockstr.adrscustomdocksitecanhaveonlyonesite
+#, object-pascal-format
+msgid "Custom dock site \"%s\" can have only one site."
+msgstr "Il sito di docking personalizzato \"%s\" può avere un solo sito."
+
+#: anchordockstr.adrsdockinganchordocking
+msgid "Docking / Anchordocking"
+msgstr "Docking/Docking ancorato"
+
+#: anchordockstr.adrsdockingoptions
+msgid "Docking options"
+msgstr "Opzioni di docking"
+
+#: anchordockstr.adrsdraganddockc
+#, object-pascal-format
+msgid "Use the mouse to drag and dock window \"%s\""
+msgstr "Usa il mouse per trascinare la finestra \"%s\""
+
+#: anchordockstr.adrsdragthreshold
+msgid "Drag threshold"
+msgstr "Soglia di trascinamento"
+
+#: anchordockstr.adrsduplicatename
+msgid "Duplicate name: "
+msgstr "Nome duplicato: "
+
+#: anchordockstr.adrseachdockedwindowhasaheaderthatallowsdragginghasaco
+msgid "Each docked window has a header that allows dragging, has a context menu with extra layout functions and shows the caption of the docked window"
+msgstr "Ogni finestra \"docked\" ha un'intestazione che consente il trascinamento e contiene un menu di contesto con ulteriori funzioni di posizionamento e mostra il titolo della finestra"
+
+#: anchordockstr.adrsemptyname
+msgid "Empty name: "
+msgstr "Nome vuoto: "
+
+#: anchordockstr.adrsenlarge
+msgid "Enlarge"
+msgstr "Allarga"
+
+#: anchordockstr.adrsenlargeside
+#, object-pascal-format
+msgid "Enlarge %s side"
+msgstr "Allarga lato a %s"
+
+#: anchordockstr.adrsfilledheaders
+msgid "Fill headers"
+msgstr "Riempi le intestazioni"
+
+#: anchordockstr.adrsfilledheadershint
+msgid "Fill headers of docked controls"
+msgstr "Riempi le intestazioni dei controlli \"docked\""
+
+#: anchordockstr.adrsflattenheaders
+msgid "Flatten headers"
+msgstr "Rendi piatte le intestazioni"
+
+#: anchordockstr.adrsflattenheadershint
+msgid "Flatten headers of docked controls"
+msgstr "Rendi piatte le intestazioni dei controlli \"docked\""
+
+#: anchordockstr.adrsfloatingwindowsontop
+msgid "Floating windows on top"
+msgstr ""
+
+#: anchordockstr.adrsfloatingwindowsontophint
+msgid "Show floating windows on top of main form"
+msgstr ""
+
+#: anchordockstr.adrsgeneraldockingoptions
+msgid "General docking options"
+msgstr "Opzioni generiche di docking"
+
+#: anchordockstr.adrsheaderalignleft
+msgid "Header align left"
+msgstr "Allinea testata a sinistra"
+
+#: anchordockstr.adrsheaderaligntop
+msgid "Header align top"
+msgstr "Allinea testata in alto"
+
+#: anchordockstr.adrsheaderposition
+msgid "Header position"
+msgstr "Posizione testata"
+
+#: anchordockstr.adrsheaderstyle
+msgid "Header Style:"
+msgstr "Stile dell'intestazione:"
+
+#: anchordockstr.adrshideheadercaptionsforsiteswithonlyonedockedcontrol
+msgid "Hide header captions for sites with only one docked control, as that is already shown in the normal window title"
+msgstr "Nascondi il titolo della testata per siti con un solo controllo ospite, perché è già mostrato nel normale titolo della finestra"
+
+#: anchordockstr.adrshighlightfocused
+msgid "Highlight focused"
+msgstr ""
+
+#: anchordockstr.adrshighlightfocusedhint
+msgid "Highlight header of focused docked control"
+msgstr ""
+
+#: anchordockstr.adrsleft
+msgid "left"
+msgstr "sinistra"
+
+#: anchordockstr.adrslocked
+msgid "Locked"
+msgstr "Bloccato"
+
+#: anchordockstr.adrsmerge
+msgid "Merge"
+msgstr "Unisci"
+
+#: anchordockstr.adrsminimize
+msgid "Minimize"
+msgstr ""
+
+#: anchordockstr.adrsmissingcontrolname
+msgid "missing control name"
+msgstr "nome controllo mancante"
+
+#: anchordockstr.adrsmodalformscannotbemadedockable
+msgid "modal forms can not be made dockable"
+msgstr "I form modali non possono essere dockabili"
+
+#: anchordockstr.adrsmoveheadertoleftwhenwidthheight100headeralignleft
+msgid "Move header to left when (Width/Height)*100>=HeaderAlignLeft"
+msgstr "Sposta la testata a sinistra quando (larghezza/altezza)*100 >= HeaderAlignLeft"
+
+#: anchordockstr.adrsmoveheadertotopwhenwidthheight100headeraligntop
+msgid "Move header to top when (Width/Height)*100<=HeaderAlignTop"
+msgstr "Sposta la testata in alto quando (larghezza/altezza)*100 <= HeaderAlignTop"
+
+#: anchordockstr.adrsmovepageleft
+msgid "Move page left"
+msgstr "Sposta la pagina a sinistra"
+
+#: anchordockstr.adrsmovepageleftmost
+msgid "Move page leftmost"
+msgstr "Sposta la pagina tutta a sinistra"
+
+#: anchordockstr.adrsmovepageright
+msgid "Move page right"
+msgstr "Sposta la pagina a destra"
+
+#: anchordockstr.adrsmovepagerightmost
+msgid "Move page rightmost"
+msgstr "Sposta la pagina tutta a destra"
+
+#: anchordockstr.adrsmultilinepages
+msgid "Multiline Tabs"
+msgstr ""
+
+#: anchordockstr.adrsmultilinepageshint
+msgid "Tabs of pages can be shown in multiple lines"
+msgstr ""
+
+#: anchordockstr.adrsnocaptionsforfloatingsites
+msgid "No captions for floating sites"
+msgstr "Nessun titolo per i siti flottanti"
+
+#: anchordockstr.adrsnochildrenallowedfornodetype
+#, object-pascal-format
+msgid "No children allowed for Node=\"%s\" Type=%s"
+msgstr "Non sono ammessi figli per il nodo=\"%s\" tipo=%s"
+
+#: anchordockstr.adrsnotsupportedhasparent
+#, object-pascal-format
+msgid "Not supported: %s has parent %s"
+msgstr "Non supportato: %s ha padre %s"
+
+#: anchordockstr.adrsquit
+#, object-pascal-format
+msgid "Quit %s"
+msgstr "Esci %s"
+
+#: anchordockstr.adrsrequestedbutcreated
+#, object-pascal-format
+msgid "%s requested, but %s created"
+msgstr "Era richiesto %s, invece è stato creato %s"
+
+#: anchordockstr.adrsright
+msgid "right"
+msgstr "destra"
+
+#: anchordockstr.adrsscaleonresize
+msgid "Scale on resize"
+msgstr "Scala durante il ridimensionamento"
+
+#: anchordockstr.adrsscalesubsiteswhenasiteisresized
+msgid "Scale sub sites when a site is resized"
+msgstr "Ridimensiona i sottositi insieme al sito"
+
+#: anchordockstr.adrsshowcaptionsofdockedcontrolsintheheader
+msgid "Show captions of docked controls in the header"
+msgstr "Mostra il titolo dei controlli ospiti nell'intestazione"
+
+#: anchordockstr.adrsshowheadercaptions
+msgid "Show header captions"
+msgstr "Mostra titolo delle intestazioni"
+
+#: anchordockstr.adrsshowheaders
+msgid "Show headers"
+msgstr "Mostra intestazioni"
+
+#: anchordockstr.adrssplitterthickness
+msgid "Splitter thickness"
+msgstr "Spessore dello splitter"
+
+#: anchordockstr.adrssplitterwidth
+msgid "Splitter width"
+msgstr "Larghezza dello splitter"
+
+#: anchordockstr.adrstabposition
+msgid "Tab position"
+msgstr "Posizione dei tab"
+
+#: anchordockstr.adrsthereisanotherdockmasterinstalledonlyonedockingpac
+#, object-pascal-format
+msgid "There is another dock master installed. Only one docking package can be installed at a time. Please uninstall the other dock master %s and restart the IDE"
+msgstr "C'è un altro pacchetto dock master installato: ci può essere un solo dock master nell'IDE, quindi dovete prima disinstallare l'attuale dockmaster %s e poi riavviare l'IDE."
+
+#: anchordockstr.adrstop
+msgid "top"
+msgstr "alto"
+
+#: anchordockstr.adrstouseanchordockingyoumustfirstuninstall
+#, object-pascal-format
+msgid "To use anchordocking you must first uninstall %s"
+msgstr "Per usare l'anchordocking dovete prima disinstallare %s"
+
+#: anchordockstr.adrsundock
+msgid "Undock"
+msgstr "Libera"
+

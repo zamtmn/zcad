@@ -29,7 +29,7 @@ type
 
   TPaletteControlBaseType=TWinControl;
   TPaletteCreateFunc=function (aName,aCaption,aType: string;TBNode:TDomNode;var PaletteControl:TPaletteControlBaseType;DoDisableAlign:boolean):TPaletteControlBaseType of object;
-  TPaletteItemCreateFunc=procedure (aNode: TDomNode;rootnode:TPersistent;palette:TPaletteControlBaseType) of object;
+  TPaletteItemCreateFunc=procedure (aNode: TDomNode;rootnode:TPersistent;palette:TPaletteControlBaseType;treeprefix:string) of object;
   TTBCreateFunc=function (aName,aType: string):TToolBar of object;
   TTBItemCreateFunc=procedure (fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar) of object;
   TTBRegisterInAPPFunc=procedure (fmf:TForm;actlist:TActionList;aTBNode: TDomNode;aName,aType: string;Data:Pointer) of object;
@@ -88,7 +88,7 @@ type
     function DoTBCreateFunc(aName,aType:string):TToolBar;
     function DoToolPaletteCreateFunc(aControlName,aInternalName:string;TBNode:TDomNode;var PaletteControl:TPaletteControlBaseType;DoDisableAlign:boolean):TPaletteControlBaseType;
     procedure DoTBItemCreateFunc(fmf:TForm;actlist:TActionList;aNodeName:string; aNode: TDomNode; TB:TToolBar);
-    procedure DoToolPaletteItemCreateFunc(aNodeName:string; aNode: TDomNode;rootnode:TPersistent;PC:TPaletteControlBaseType);
+    procedure DoToolPaletteItemCreateFunc(aNodeName:string; aNode: TDomNode;rootnode:TPersistent;PC:TPaletteControlBaseType;treeprefix:string);
 
     procedure SetupDefaultToolBar(aName,atype: string; tb:TToolBar);
     function CreateDefaultToolBar(aName,atype: string):TToolBar;
@@ -464,13 +464,13 @@ begin
       tbicf(fmf,actlist,aNode,TB);
 end;
 
-procedure TToolBarsManager.DoToolPaletteItemCreateFunc(aNodeName:string; aNode: TDomNode;rootnode:TPersistent;PC:TPaletteControlBaseType);
+procedure TToolBarsManager.DoToolPaletteItemCreateFunc(aNodeName:string; aNode: TDomNode;rootnode:TPersistent;PC:TPaletteControlBaseType;treeprefix:string);
 var
   picf:TPaletteItemCreateFunc;
 begin
   if assigned(PaletteItemCreateFuncRegister) then
     if PaletteItemCreateFuncRegister.TryGetValue(uppercase(aNodeName),picf)then
-      picf(aNode,rootnode,PC);
+      picf(aNode,rootnode,PC,treeprefix);
 end;
 
 function TToolBarsManager.DoToolPaletteCreateFunc(aControlName,aInternalName:string;TBNode:TDomNode;var PaletteControl:TPaletteControlBaseType;DoDisableAlign:boolean):TPaletteControlBaseType;
@@ -780,7 +780,7 @@ begin
   TBSubNode:=TBNode.FirstChild;
   while assigned(TBSubNode)do
   begin
-    DoToolPaletteItemCreateFunc(TBSubNode.NodeName,TBSubNode,rootnode,PaletteControl);
+    DoToolPaletteItemCreateFunc(TBSubNode.NodeName,TBSubNode,rootnode,PaletteControl,'');
     TBSubNode:=TBSubNode.NextSibling;
   end;
 end;

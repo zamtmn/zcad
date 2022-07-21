@@ -435,10 +435,11 @@ begin
                                               addtype:=false;
                                               typename:=parseresult^.getData(0)+'_'+parseresult^.getData(1);
                                               GetPartOfPath(fieldtype,typename,'_');
-                                              if (typename<>'')and(fieldtype<>'')then begin
+                                              RegisterVarCategory(fieldtype,typename,TranslateFunc);
+                                              {if (typename<>'')and(fieldtype<>'')then begin
                                                 if assigned(TranslateFunc)then
                                                   VarCategory.PushBackIfNotPresent(fieldtype+'_'+TranslateFunc('zcadexternal.variablecategory~'+fieldtype,typename));
-                                              end;
+                                              end;}
                                             end;
                                   identtype:begin
                                                   typename:=parseresult^.getData(0);

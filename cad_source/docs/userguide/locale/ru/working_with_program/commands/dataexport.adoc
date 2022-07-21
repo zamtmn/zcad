@@ -1,4 +1,5 @@
 
+[[DataExport_com]]
 #### DataExport
 
 :cmdcommand: DataExport
@@ -117,6 +118,7 @@ node5 [label = "File select dialog (5)" shape=record];
 
 Также все это можно сделать с помошью инспектора объектов, который при выполнении команды имеет вид:
 
+.Опции команды DataExport
 image::cmd_params_dataexport.png[width=25%,pdfwidth=25%]
 
 [[enttypefilter_lng]]

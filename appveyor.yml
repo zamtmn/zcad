@@ -45,7 +45,7 @@ install:
 build_script:
   - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe installpkgstolaz
   - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe cleanzcadelectrotech
-  - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe zcadelectrotechpdfuseguide
+  - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe documentation
   - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe tests
 
 # scripts to run after build
@@ -82,7 +82,7 @@ test_script:
 artifacts:
   - path: ZCADElectrotech-%APPVEYOR_REPO_COMMIT%.zip
     name: ZCADElectrotech-%APPVEYOR_REPO_COMMIT%
-  - path: cad\userguide.ru.pdf
+  - path: cad\help\userguide.ru.pdf
     name: userguide.ru.pdf
 
 #---------------------------------#

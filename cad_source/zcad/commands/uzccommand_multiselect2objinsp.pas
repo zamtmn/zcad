@@ -37,10 +37,7 @@ var
 function MultiSelect2ObjIbsp_com(operands:TCommandOperands):TCommandResult;
 begin
   MSEditor.CreateUnit(drawings.GetUnitsFormat);
-  if {MSEditor.SelCount>0}true then begin
-    ZCMsgCallBackInterface.Do_PrepareObject(drawings.GetUndoStack,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('TMSEditor'),@MSEditor,drawings.GetCurrentDWG);
-  end {else
-    commandmanager.executecommandend};
+  ZCMsgCallBackInterface.Do_PrepareObject(drawings.GetUndoStack,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('TMSEditor'),@MSEditor,drawings.GetCurrentDWG);
   result:=cmd_ok;
 end;
 

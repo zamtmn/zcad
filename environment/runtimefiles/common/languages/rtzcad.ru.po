@@ -1631,8 +1631,8 @@ msgid "Paths"
 msgstr "Пути"
 
 #: zcadexternal.gdbsysvariable~rd
-msgid "Render"
-msgstr "Рендер"
+msgid "Graphics"
+msgstr "Графика"
 
 #: zcadexternal.gdbsysvariable~save
 msgid "Saving"
@@ -2766,8 +2766,8 @@ msgid "Cursor size"
 msgstr "Размер прицела"
 
 #: zcadexternal.tdisp~disp_defaultlw
-msgid "DefaultLW"
-msgstr ""
+msgid "Default line weight"
+msgstr "Толщина линии по умочанию"
 
 #: zcadexternal.tdisp~disp_drawzaxis
 msgid "Show Z axis"
@@ -2782,12 +2782,17 @@ msgid "Hot grip color"
 msgstr "Цвет \"горячих\" ручек"
 
 #: zcadexternal.tdisp~disp_lwdisplayscale
-msgid "LWDisplayScale"
-msgstr ""
+msgid "Display line weight scale"
+msgstr "Масштаб отображения толщин линий"
 
 #: zcadexternal.tdisp~disp_ossize
 msgid "Snap aperture size"
 msgstr "Размер апертуры привязки"
+
+#: zcadexternal.tdisp~disp_removesystemcursorfromworkarea
+msgctxt "zcadexternal.tdisp~disp_removesystemcursorfromworkarea"
+msgid "Remove system cursor from work area"
+msgstr "Убирать системный курсор в области отрисовки"
 
 #: zcadexternal.tdisp~disp_selectedgripcolor
 msgid "Selected grip color"
@@ -2812,6 +2817,22 @@ msgstr "Масштаб колеса мыши"
 #: zcadexternal.tdwg~dwg_additionalgrips
 msgid "Additional grips"
 msgstr "Дополнительные ручки"
+
+#: zcadexternal.tdwg~dwg_angbase
+msgid "AngBase (zero base angle)"
+msgstr "AngBase (базовый угол)"
+
+#: zcadexternal.tdwg~dwg_angdir
+msgid "AngDir (direction of positive angles)"
+msgstr "AngDir (направление положительного угла)"
+
+#: zcadexternal.tdwg~dwg_aunits
+msgid "AUnits (angular units format)"
+msgstr "AUnits (формат угловых едениц)"
+
+#: zcadexternal.tdwg~dwg_auprec
+msgid "AUPrec (angular units precision)"
+msgstr "AUPrec (точность угловых едениц)"
 
 #: zcadexternal.tdwg~dwg_ccolor
 msgid "Current color"
@@ -2862,9 +2883,21 @@ msgstr "Шаг сетки"
 msgid "Help geometry"
 msgstr "Вспомогательная геометрия"
 
+#: zcadexternal.tdwg~dwg_insunits
+msgid "InsUnits (value for automatic scaling of blocks)"
+msgstr "InsUnits (масштаб вставки блока)"
+
 #: zcadexternal.tdwg~dwg_ltscale
 msgid "Global line type scale"
 msgstr "Масштаб типов линий чертжа"
+
+#: zcadexternal.tdwg~dwg_lunits
+msgid "LUnits (linear units format)"
+msgstr "LUnits (формат линейных едениц)"
+
+#: zcadexternal.tdwg~dwg_luprec
+msgid "LUPrec (linear units precision)"
+msgstr "LUPrec (точность линейных едениц)"
 
 #: zcadexternal.tdwg~dwg_osmode
 msgid "Snap mode"
@@ -2890,6 +2923,14 @@ msgstr "Настройка шаговой привязки"
 msgctxt "zcadexternal.tdwg~dwg_snapgrid"
 msgid "Snap"
 msgstr "Шаг"
+
+#: zcadexternal.tdwg~dwg_textsize
+msgid "TextSize (size of new crreated text ents)"
+msgstr "TextSize (размер вновь созданных текстоывх примитивов)"
+
+#: zcadexternal.tdwg~dwg_unitmode
+msgid "UnitMode (display format for units)"
+msgstr "UnitMode (формат отображения едениц)"
 
 #: zcadexternal.tdxdata~rd_renderer
 msgctxt "zcadexternal.tdxdata~rd_renderer"
@@ -3160,19 +3201,19 @@ msgstr "Показывать полосы прокрутки"
 
 #: zcadexternal.tinterface~intf_themeddowntoolbars
 msgid "Themed down toolbars"
-msgstr ""
+msgstr "Системный нижний тулбар"
 
 #: zcadexternal.tinterface~intf_themedlefttoolbars
 msgid "Themed left toolbars"
-msgstr ""
+msgstr "Системный левый тулбар"
 
 #: zcadexternal.tinterface~intf_themedrighttoolbars
 msgid "Themed right toolbars"
-msgstr ""
+msgstr "Системный правый тулбар"
 
 #: zcadexternal.tinterface~intf_themeduptoolbars
 msgid "Themed up toolbars"
-msgstr ""
+msgstr "Системный верхний тулбар"
 
 #: zcadexternal.tlayercontrols~dsgn_lc_cable
 msgid "Cables"
@@ -3326,7 +3367,7 @@ msgstr "Всегда использовать врапер множествен�
 
 #: zcadexternal.tobjinspinterface~intf_objinsp_buttonsizereducing
 msgid "Button size reducing"
-msgstr ""
+msgstr "Уменьшение размера кнопок"
 
 #: zcadexternal.tobjinspinterface~intf_objinsp_oldstyledraw
 msgctxt "zcadexternal.tobjinspinterface~intf_objinsp_oldstyledraw"
@@ -3424,12 +3465,11 @@ msgstr "Пожарная сигнализация"
 
 #: zcadexternal.toolpalette_blocklib_power suply_itemcaption~high-voltage
 #: networks
-#, fuzzy
 msgctxt ""
 "zcadexternal.toolpalette_blocklib_power suply_itemcaption~high-voltage "
 "networks"
 msgid "High-voltage networks"
-msgstr "Высоковольтные сети"
+msgstr ""
 
 #: zcadexternal.toolpalette_blocklib_power suply_itemcaption~lighting 1.100
 msgctxt ""
@@ -3495,6 +3535,16 @@ msgstr ""
 msgid "Extensions"
 msgstr "Расширения"
 
+#: zcadexternal.topengldata~rd_light
+msgctxt "zcadexternal.topengldata~rd_light"
+msgid "Light"
+msgstr "Освещение"
+
+#: zcadexternal.topengldata~rd_linesmooth
+msgctxt "zcadexternal.topengldata~rd_linesmooth"
+msgid "Line smoothing"
+msgstr "Сглаживание линий"
+
 #: zcadexternal.topengldata~rd_maxlinewidth
 msgid "Max line width"
 msgstr "Макс. ширина линий"
@@ -3515,6 +3565,11 @@ msgstr "Устройство"
 #: zcadexternal.topengldata~rd_restore_mode
 msgid "Restore mode"
 msgstr "Режим обновления"
+
+#: zcadexternal.topengldata~rd_usestencil
+msgctxt "zcadexternal.topengldata~rd_usestencil"
+msgid "Use STENCIL buffer"
+msgstr "Использовать STENCIL буфер"
 
 #: zcadexternal.topengldata~rd_vendor
 msgid "Vendor"
@@ -3799,6 +3854,10 @@ msgstr ""
 msgid "Proportional"
 msgstr ""
 
+#: zcadexternal.trd~rd_currentwaparam
+msgid "Current graphic device params"
+msgstr "Параметры текущего устройства отображения"
+
 #: zcadexternal.trd~rd_drawinsidepaintmessage
 msgid "Draw inside paint message"
 msgstr "Отрисовка чертежа внутри сообщения отрисовки"
@@ -3827,14 +3886,6 @@ msgstr "Время рендера"
 msgid "Last update time"
 msgstr "Время обновления"
 
-#: zcadexternal.trd~rd_light
-msgid "Light"
-msgstr "Освещение"
-
-#: zcadexternal.trd~rd_linesmooth
-msgid "Line smoothing"
-msgstr "Сглаживание линий"
-
 #: zcadexternal.trd~rd_maxltpatternsinentity
 msgid "Max LT patterns in entity"
 msgstr "Максимально шаблонов типа в линии"
@@ -3847,13 +3898,9 @@ msgstr "Макс. время одного прохода рендера"
 msgid "Degradation while pan"
 msgstr "Деградация при перетаскивании"
 
-#: zcadexternal.trd~rd_removesystemcursorfromworkarea
-msgid "Remove system cursor from work area"
-msgstr ""
-
 #: zcadexternal.trd~rd_rendererbackend
-msgid "Render backend"
-msgstr ""
+msgid "Graphic device"
+msgstr "Устройство отображения"
 
 #: zcadexternal.trd~rd_spatialnodecount
 msgid "Spatial index ents in node"
@@ -3862,10 +3909,6 @@ msgstr ""
 #: zcadexternal.trd~rd_spatialnodesdepth
 msgid "Spatial index nodes depth"
 msgstr ""
-
-#: zcadexternal.trd~rd_usestencil
-msgid "Use STENCIL buffer"
-msgstr "Использовать STENCIL буфер"
 
 #: zcadexternal.trestoremode~wnd_accumbuffer
 msgid "ACCUM buffer"
@@ -3909,22 +3952,22 @@ msgstr "Красный"
 #: zcadexternal.tsavedparams~noloadlayout
 msgctxt "zcadexternal.tsavedparams~noloadlayout"
 msgid "No load layout"
-msgstr ""
+msgstr "Не загружать раскладку окон"
 
 #: zcadexternal.tsavedparams~nosplash
 msgctxt "zcadexternal.tsavedparams~nosplash"
 msgid "No splash screen"
-msgstr ""
+msgstr "Не показывать заставку"
 
 #: zcadexternal.tsavedparams~uniqueinstance
 msgctxt "zcadexternal.tsavedparams~uniqueinstance"
 msgid "Unique instance"
-msgstr ""
+msgstr "Один экземпляр"
 
 #: zcadexternal.tsavedparams~updatepo
 msgctxt "zcadexternal.tsavedparams~updatepo"
 msgid "Update PO file"
-msgstr ""
+msgstr "Обновление PO файлов"
 
 #: zcadexternal.tsave~save_auto_current_interval
 msgid "Time to autosave"
@@ -3974,28 +4017,32 @@ msgid "Build info"
 msgstr "Информация о сборке"
 
 #: zcadexternal.tsys~sys_noloadlayout
+#, fuzzy
 msgctxt "zcadexternal.tsys~sys_noloadlayout"
 msgid "No load layout"
-msgstr ""
+msgstr "Не загружать раскладку окон"
 
 #: zcadexternal.tsys~sys_nosplash
+#, fuzzy
 msgctxt "zcadexternal.tsys~sys_nosplash"
 msgid "No splash screen"
-msgstr ""
+msgstr "Не показывать заставку"
 
 #: zcadexternal.tsys~sys_runtime
 msgid "Uptime"
 msgstr "Время работы"
 
 #: zcadexternal.tsys~sys_uniqueinstance
+#, fuzzy
 msgctxt "zcadexternal.tsys~sys_uniqueinstance"
 msgid "Unique instance"
-msgstr ""
+msgstr "Один экземпляр"
 
 #: zcadexternal.tsys~sys_updatepo
+#, fuzzy
 msgctxt "zcadexternal.tsys~sys_updatepo"
 msgid "Update PO file"
-msgstr ""
+msgstr "Обновление PO файлов"
 
 #: zcadexternal.tsys~sys_version
 msgid "Program version"

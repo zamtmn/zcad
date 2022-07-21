@@ -1578,7 +1578,7 @@ msgid "Paths"
 msgstr ""
 
 #: zcadexternal.gdbsysvariable~rd
-msgid "Render"
+msgid "Graphics"
 msgstr ""
 
 #: zcadexternal.gdbsysvariable~save
@@ -2651,7 +2651,7 @@ msgid "Cursor size"
 msgstr ""
 
 #: zcadexternal.tdisp~disp_defaultlw
-msgid "DefaultLW"
+msgid "Default line weight"
 msgstr ""
 
 #: zcadexternal.tdisp~disp_drawzaxis
@@ -2667,11 +2667,15 @@ msgid "Hot grip color"
 msgstr ""
 
 #: zcadexternal.tdisp~disp_lwdisplayscale
-msgid "LWDisplayScale"
+msgid "Display line weight scale"
 msgstr ""
 
 #: zcadexternal.tdisp~disp_ossize
 msgid "Snap aperture size"
+msgstr ""
+
+#: zcadexternal.tdisp~disp_removesystemcursorfromworkarea
+msgid "Remove system cursor from work area"
 msgstr ""
 
 #: zcadexternal.tdisp~disp_selectedgripcolor
@@ -2696,6 +2700,22 @@ msgstr ""
 
 #: zcadexternal.tdwg~dwg_additionalgrips
 msgid "Additional grips"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_angbase
+msgid "AngBase (zero base angle)"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_angdir
+msgid "AngDir (direction of positive angles)"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_aunits
+msgid "AUnits (angular units format)"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_auprec
+msgid "AUPrec (angular units precision)"
 msgstr ""
 
 #: zcadexternal.tdwg~dwg_ccolor
@@ -2747,8 +2767,20 @@ msgstr ""
 msgid "Help geometry"
 msgstr ""
 
+#: zcadexternal.tdwg~dwg_insunits
+msgid "InsUnits (value for automatic scaling of blocks)"
+msgstr ""
+
 #: zcadexternal.tdwg~dwg_ltscale
 msgid "Global line type scale"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_lunits
+msgid "LUnits (linear units format)"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_luprec
+msgid "LUPrec (linear units precision)"
 msgstr ""
 
 #: zcadexternal.tdwg~dwg_osmode
@@ -2774,6 +2806,14 @@ msgstr ""
 #: zcadexternal.tdwg~dwg_snapgrid
 msgctxt "zcadexternal.tdwg~dwg_snapgrid"
 msgid "Snap"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_textsize
+msgid "TextSize (size of new crreated text ents)"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_unitmode
+msgid "UnitMode (display format for units)"
 msgstr ""
 
 #: zcadexternal.tdxdata~rd_renderer
@@ -3352,6 +3392,14 @@ msgstr ""
 msgid "Extensions"
 msgstr ""
 
+#: zcadexternal.topengldata~rd_light
+msgid "Light"
+msgstr ""
+
+#: zcadexternal.topengldata~rd_linesmooth
+msgid "Line smoothing"
+msgstr ""
+
 #: zcadexternal.topengldata~rd_maxlinewidth
 msgid "Max line width"
 msgstr ""
@@ -3371,6 +3419,10 @@ msgstr ""
 
 #: zcadexternal.topengldata~rd_restore_mode
 msgid "Restore mode"
+msgstr ""
+
+#: zcadexternal.topengldata~rd_usestencil
+msgid "Use STENCIL buffer"
 msgstr ""
 
 #: zcadexternal.topengldata~rd_vendor
@@ -3656,6 +3708,10 @@ msgstr ""
 msgid "Proportional"
 msgstr ""
 
+#: zcadexternal.trd~rd_currentwaparam
+msgid "Current graphic device params"
+msgstr ""
+
 #: zcadexternal.trd~rd_drawinsidepaintmessage
 msgid "Draw inside paint message"
 msgstr ""
@@ -3684,14 +3740,6 @@ msgstr ""
 msgid "Last update time"
 msgstr ""
 
-#: zcadexternal.trd~rd_light
-msgid "Light"
-msgstr ""
-
-#: zcadexternal.trd~rd_linesmooth
-msgid "Line smoothing"
-msgstr ""
-
 #: zcadexternal.trd~rd_maxltpatternsinentity
 msgid "Max LT patterns in entity"
 msgstr ""
@@ -3704,12 +3752,8 @@ msgstr ""
 msgid "Degradation while pan"
 msgstr ""
 
-#: zcadexternal.trd~rd_removesystemcursorfromworkarea
-msgid "Remove system cursor from work area"
-msgstr ""
-
 #: zcadexternal.trd~rd_rendererbackend
-msgid "Render backend"
+msgid "Graphic device"
 msgstr ""
 
 #: zcadexternal.trd~rd_spatialnodecount
@@ -3718,10 +3762,6 @@ msgstr ""
 
 #: zcadexternal.trd~rd_spatialnodesdepth
 msgid "Spatial index nodes depth"
-msgstr ""
-
-#: zcadexternal.trd~rd_usestencil
-msgid "Use STENCIL buffer"
 msgstr ""
 
 #: zcadexternal.trestoremode~wnd_accumbuffer

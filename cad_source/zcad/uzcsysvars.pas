@@ -59,7 +59,6 @@ type
         end;
   {REGISTERRECORDTYPE tpath}
   tpath=record
-             Device_Library:PString;(*'Device base'*)
              Support_Path:PString;(*'Support files'*)
              Fonts_Path:PString;(*'Fonts'*)
              Alternate_Font:PString;(*'Alternate font file'*)
@@ -68,6 +67,7 @@ type
              LayoutFile:PString;(*'Current layout'*)
              Program_Run:PString;(*'Program'*)(*oi_readonly*)
              Temp_files:PString;(*'Temporary files'*)(*oi_readonly*)
+             Device_Library:PString;(*'Device base'*)
         end;
   PTCanvasData=^TCanvasData;
   {REGISTERRECORDTYPE TCanvasData}

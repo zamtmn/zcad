@@ -1,0 +1,3 @@
+[submodule "cad_source/components/fpdwg"]
+	path = cad_source/components/fpdwg
+	url = https://github.com/zamtmn/fpdwg.git

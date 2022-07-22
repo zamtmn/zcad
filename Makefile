@@ -178,6 +178,7 @@ rmpkgslibs:
 	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)zscript$(PATHDELIM)lib$(PATHDELIM)*
 	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)ztoolbars$(PATHDELIM)lib$(PATHDELIM)*
 	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)zundostack$(PATHDELIM)lib$(PATHDELIM)*
+	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)fpdwg$(PATHDELIM)lib$(PATHDELIM)*
 
 installpkgstolaz: checkvars rmpkgslibs
 ifneq ($(OSDETECT),OSX)
@@ -197,4 +198,5 @@ endif
 	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zscript$(PATHDELIM)zscript.lpk
 	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)ztoolbars$(PATHDELIM)ztoolbars.lpk
 	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zundostack$(PATHDELIM)zundostack.lpk
+	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)fpdwg$(PATHDELIM)fpdwg.lpk
 	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --build-ide=""

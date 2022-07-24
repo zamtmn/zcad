@@ -75,8 +75,8 @@ constructor TTypedChangeCommand.Assign(PDataInstance:Pointer;PType:PUserTypeDesc
 begin
      Addr:=PDataInstance;
      PTypeManager:=PType;
-     Getmem(OldData,PTypeManager^.SizeInBytes);
-     Getmem(NewData,PTypeManager^.SizeInBytes);
+     OldData:=PTypeManager^.AllocAndInitInstance;
+     NewData:=PTypeManager^.AllocAndInitInstance;
      PTypeManager^.CopyInstanceTo(Addr,OldData);
      PTypeManager^.CopyInstanceTo(Addr,NewData);
      PDataOwner:=nil;

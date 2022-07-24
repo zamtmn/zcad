@@ -3,7 +3,7 @@
 *                                                                           *
 *  This file is part of the ZCAD                                            *
 *                                                                           *
-*  See the file COPYING.modifiedLGPL.txt, included in this distribution,    *
+*  See the file GPL-3.0.txt, included in this distribution,                 *
 *  for details about the copyright.                                         *
 *                                                                           *
 *  This program is distributed in the hope that it will be useful,          *
@@ -76,6 +76,9 @@ begin
     DC:=drawing.CreateDrawingRC;
     for i := 0 to dwg.num_objects do begin
       case dwg.&object[i].fixedtype of
+        DWG_TYPE_LAYER:begin
+          //dwg.&object[i].tio.&object^.tio.layer^.name;
+        end;
         DWG_TYPE_Line:begin
           pobj := AllocAndInitLine(drawing.pObjRoot);
           PGDBObjLine(pobj)^.CoordInOCS.lBegin.x:=dwg.&object[i].tio.entity^.tio.line^.start.x;

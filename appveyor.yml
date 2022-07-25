@@ -47,7 +47,7 @@ build_script:
   - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe installpkgstolaz
   - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe cleanzcad
   - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe documentation
-  - cmd: setx ZCADVERSION < cad_source/zcadversion.txt
+  - cmd: setx ZCADVERSION /F cad_source/zcadversion.txt /A 0,0
   - cmd: 7z a ZCAD-%ZCADVERSION%.zip "cad"
   - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe cleanzcadelectrotech
   - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe documentation

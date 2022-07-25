@@ -47,7 +47,8 @@ build_script:
   - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe installpkgstolaz
   - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe cleanzcad
   - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe documentation
-  - cmd: 7z a ZCAD-%APPVEYOR_REPO_COMMIT%.zip "cad"
+  - cmd: setx ZCADVERSION < cad_source/zcadversion.txt
+  - cmd: 7z a ZCAD-%ZCADVERSION%.zip "cad"
   - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe cleanzcadelectrotech
   - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe documentation
   - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe tests
@@ -56,7 +57,7 @@ build_script:
 after_build:
   # zip the build archive
   #- tree /F "cad"
-  - 7z a ZCADElectrotech-%APPVEYOR_REPO_COMMIT%.zip "cad"
+  - 7z a ZCADElectrotech-%ZCADVERSION%.zip "cad"
 
 #---------------------------------#
 #       tests configuration       #
@@ -84,10 +85,10 @@ test_script:
 
 #specify artifacts to upload
 artifacts:
-  - path: ZCAD-%APPVEYOR_REPO_COMMIT%.zip
-    name: ZCAD-%APPVEYOR_REPO_COMMIT%
-  - path: ZCADElectrotech-%APPVEYOR_REPO_COMMIT%.zip
-    name: ZCADElectrotech-%APPVEYOR_REPO_COMMIT%
+  - path: ZCAD-%ZCADVERSION%.zip
+    name: ZCAD-%ZCADVERSION%
+  - path: ZCADElectrotech-%ZCADVERSION%.zip
+    name: ZCADElectrotech-%ZCADVERSION%
   - path: cad\help\userguide.ru.pdf
     name: userguide.ru.pdf
 

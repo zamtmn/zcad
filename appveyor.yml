@@ -56,7 +56,7 @@ build_script:
 after_build:
   # zip the build archive
   #- tree /F "cad"
-  - 7z a ZCADElectrotech-%ZCADVERSION%.zip "cad"
+  - 7z a ZCADElectrotech-%APPVEYOR_REPO_COMMIT%.zip "cad"
 
 #---------------------------------#
 #       tests configuration       #

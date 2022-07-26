@@ -3,7 +3,7 @@
 *                                                                           *
 *  This file is part of the ZCAD                                            *
 *                                                                           *
-*  See the file COPYING.modifiedLGPL.txt, included in this distribution,    *
+*  See the file COPYING.txt, included in this distribution,                 *
 *  for details about the copyright.                                         *
 *                                                                           *
 *  This program is distributed in the hope that it will be useful,          *
@@ -21,6 +21,7 @@ unit uzcreggeneralwiewarea;
 interface
 uses uzglbackendmanager,uzglgeometry,uzeentitiestree,uzcsysvars,uzglviewareageneral,
      uzeentabstracttext,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,LazLogger,
+     Varman,
      uzgldrawcontext,uzccommandsmanager,uzepalette;
 type
   TShowCursorHelper=class
@@ -42,45 +43,45 @@ end;
 
 initialization
   TGeneralViewArea.RegisterShowCursorHandler(TShowCursorHelper.ShowCursorHandlerDrawLine);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_CursorSize','Integer',@sysvarDISPCursorSize);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_OSSize','Double',@sysvarDISPOSSize);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_CrosshairSize','Double',@SysVarDISPCrosshairSize);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_BackGroundColor','TRGB',@sysvarDISPBackGroundColor);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_MaxRenderTime','Integer',@sysvarRDMaxRenderTime);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_ZoomFactor','Double',@sysvarDISPZoomFactor);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_SystmGeometryDraw','Boolean',@sysvarDISPSystmGeometryDraw);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_SystmGeometryDraw','Boolean',@sysvarDISPSystmGeometryDraw);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_SystmGeometryColor','TGDBPaletteColor',@sysvarDISPSystmGeometryColor);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_HotGripColor','TGDBPaletteColor',@sysvarDISPHotGripColor);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_SelectedGripColor','TGDBPaletteColor',@sysvarDISPSelGripColor);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_UnSelectedGripColor','TGDBPaletteColor',@sysvarDISPUnSelGripColor);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DWG_OSMode','TGDBOSMode',@sysvarDWGOSMode);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DWG_OSModeControl','Boolean',@sysvarDWGOSModeControl);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_GripSize','Integer',@sysvarDISPGripSize);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_ColorAxis','Boolean',@sysvarDISPColorAxis);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_DrawZAxis','Boolean',@sysvarDISPDrawZAxis);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_DrawInsidePaintMessage','TGDB3StateBool',@sysvarDrawInsidePaintMessage);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DWG_PolarMode','Boolean',@sysvarDWGPolarMode);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_LineSmooth','Boolean',@SysVarRDLineSmooth);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_UseStencil','Boolean',@sysvarRDUseStencil);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_LastRenderTime','Integer',@sysvarRDLastRenderTime);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_LastUpdateTime','Integer',@sysvarRDLastUpdateTime);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_ID_Enabled','Boolean',@SysVarRDImageDegradationEnabled);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_ID_PrefferedRenderTime','Integer',@SysVarRDImageDegradationPrefferedRenderTime);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_ID_MaxDegradationFactor','Double',@SysVarRDImageDegradationMaxDegradationFactor);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_RemoveSystemCursorFromWorkArea','Boolean',@SysVarDISPRemoveSystemCursorFromWorkArea);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DSGN_SelNew','Boolean',@sysvarDSGNSelNew);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DWG_EditInSubEntry','Boolean',@sysvarDWGEditInSubEntry);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_CursorSize','Integer',@sysvarDISPCursorSize);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_OSSize','Double',@sysvarDISPOSSize);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_CrosshairSize','Double',@SysVarDISPCrosshairSize);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_BackGroundColor','TRGB',@sysvarDISPBackGroundColor);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_MaxRenderTime','Integer',@sysvarRDMaxRenderTime);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_ZoomFactor','Double',@sysvarDISPZoomFactor);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_SystmGeometryDraw','Boolean',@sysvarDISPSystmGeometryDraw);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_SystmGeometryDraw','Boolean',@sysvarDISPSystmGeometryDraw);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_SystmGeometryColor','TGDBPaletteColor',@sysvarDISPSystmGeometryColor);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_HotGripColor','TGDBPaletteColor',@sysvarDISPHotGripColor);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_SelectedGripColor','TGDBPaletteColor',@sysvarDISPSelGripColor);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_UnSelectedGripColor','TGDBPaletteColor',@sysvarDISPUnSelGripColor);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DWG_OSMode','TGDBOSMode',@sysvarDWGOSMode);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DWG_OSModeControl','Boolean',@sysvarDWGOSModeControl);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_GripSize','Integer',@sysvarDISPGripSize);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_ColorAxis','Boolean',@sysvarDISPColorAxis);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_DrawZAxis','Boolean',@sysvarDISPDrawZAxis);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_DrawInsidePaintMessage','TGDB3StateBool',@sysvarDrawInsidePaintMessage);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DWG_PolarMode','Boolean',@sysvarDWGPolarMode);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_LineSmooth','Boolean',@SysVarRDLineSmooth);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_UseStencil','Boolean',@sysvarRDUseStencil);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_LastRenderTime','Integer',@sysvarRDLastRenderTime);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_LastUpdateTime','Integer',@sysvarRDLastUpdateTime);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_ID_Enabled','Boolean',@SysVarRDImageDegradationEnabled);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_ID_PrefferedRenderTime','Integer',@SysVarRDImageDegradationPrefferedRenderTime);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_ID_MaxDegradationFactor','Double',@SysVarRDImageDegradationMaxDegradationFactor);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_RemoveSystemCursorFromWorkArea','Boolean',@SysVarDISPRemoveSystemCursorFromWorkArea);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DSGN_SelNew','Boolean',@sysvarDSGNSelNew);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DWG_EditInSubEntry','Boolean',@sysvarDWGEditInSubEntry);
 
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_SpatialNodeCount','Integer',@SysVarRDSpatialNodeCount);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_SpatialNodesDepth','Integer',@SysVarRDSpatialNodesDepth);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_SpatialNodeCount','Integer',@SysVarRDSpatialNodeCount);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_SpatialNodesDepth','Integer',@SysVarRDSpatialNodesDepth);
 
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DWG_RotateTextInLT','Boolean',@sysvarDWGRotateTextInLT);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_MaxLTPatternsInEntity','Integer',@SysVarRDMaxLTPatternsInEntity);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_PanObjectDegradation','Boolean',@SysVarRDPanObjectDegradation);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DSGN_OTrackTimerInterval','Integer',@sysvarDSGNOTrackTimerInterval);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_LWDisplayScale','Integer',@sysvarDISPLWDisplayScale);
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_Light','Boolean',@sysvarRDLight);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DWG_RotateTextInLT','Boolean',@sysvarDWGRotateTextInLT);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_MaxLTPatternsInEntity','Integer',@SysVarRDMaxLTPatternsInEntity);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_PanObjectDegradation','Boolean',@SysVarRDPanObjectDegradation);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DSGN_OTrackTimerInterval','Integer',@sysvarDSGNOTrackTimerInterval);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_LWDisplayScale','Integer',@sysvarDISPLWDisplayScale);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_Light','Boolean',@sysvarRDLight);
 
 sysvar.DISP.DISP_CursorSize:=@sysvarDISPCursorSize;
 sysvar.DISP.DISP_OSSize:=@sysvarDISPOSSize;

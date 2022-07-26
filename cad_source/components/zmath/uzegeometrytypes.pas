@@ -3,7 +3,7 @@
 *                                                                           *
 *  This file is part of the ZCAD                                            *
 *                                                                           *
-*  See the file COPYING.modifiedLGPL.txt, included in this distribution,    *
+*  See the file COPYING.txt, included in this distribution,                 *
 *  for details about the copyright.                                         *
 *                                                                           *
 *  This program is distributed in the hope that it will be useful,          *
@@ -59,8 +59,8 @@ type
     {$UnDef VectorTypeName}
     var
       case Integer of
-        0:(v:TCoordArray);
-        1:(x,y:TT);
+        0:(x,y:TT);
+        1:(v:TCoordArray);
   end;
   GVector4i<T;TT:record>=record
     const
@@ -98,8 +98,8 @@ type
     {$UnDef VectorTypeName}
     var
       case Integer of
-        0:(v:TCoordArray);
-        1:(x,y:TT);
+        0:(x,y:TT);
+        1:(v:TCoordArray);
   end;
 {EXPORT+}
 

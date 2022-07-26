@@ -16,6 +16,8 @@ Menu path: [.menu]#Menu > Submenu# - custom
 
 Command line content: [.cmdline]#Command line content# - custom
 
+Shell command line content: [.shell]#Command line content# - custom
+
 Entity name: [.ent]#EntityName# - custom
 
 Tree:

@@ -3,7 +3,7 @@
 *                                                                           *
 *  This file is part of the ZCAD                                            *
 *                                                                           *
-*  See the file COPYING.modifiedLGPL.txt, included in this distribution,    *
+*  See the file COPYING.txt, included in this distribution,                 *
 *  for details about the copyright.                                         *
 *                                                                           *
 *  This program is distributed in the hope that it will be useful,          *
@@ -43,6 +43,8 @@ type
                   value:LongWord;
             end;
 const
+     SysVarN='sysvar';
+     SysVarNSN='sysvarns';
      SuffLeft='_Left';
      SuffTop='_Top';
      SuffWidth='_Width';
@@ -248,6 +250,7 @@ var
   OnCreateSystemUnit:TOnCreateSystemUnit=nil;
   SysUnit:PTUnit=nil;
   SysVarUnit:PTUnit=nil;
+  SysVarNotSavedUnit:PTUnit=nil;
   SavedUnit,DBUnit,DWGDBUnit,DWGUnit:PTUnit;
   BaseTypesEndIndex:Integer;
   OldTypesCount:Integer;

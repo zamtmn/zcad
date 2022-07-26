@@ -3,7 +3,7 @@
 *                                                                           *
 *  This file is part of the ZCAD                                            *
 *                                                                           *
-*  See the file COPYING.modifiedLGPL.txt, included in this distribution,    *
+*  See the file COPYING.txt, included in this distribution,                 *
 *  for details about the copyright.                                         *
 *                                                                           *
 *  This program is distributed in the hope that it will be useful,          *
@@ -75,8 +75,8 @@ constructor TTypedChangeCommand.Assign(PDataInstance:Pointer;PType:PUserTypeDesc
 begin
      Addr:=PDataInstance;
      PTypeManager:=PType;
-     Getmem(OldData,PTypeManager^.SizeInBytes);
-     Getmem(NewData,PTypeManager^.SizeInBytes);
+     OldData:=PTypeManager^.AllocAndInitInstance;
+     NewData:=PTypeManager^.AllocAndInitInstance;
      PTypeManager^.CopyInstanceTo(Addr,OldData);
      PTypeManager^.CopyInstanceTo(Addr,NewData);
      PDataOwner:=nil;

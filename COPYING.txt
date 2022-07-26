@@ -1,5 +1,18 @@
 This is the file COPYING, it gives an overview of the licenses used in the
-ZCAD sources.
+ZCAD project.
+
+------------------------------------------------------------------------------
+This software is available under 2 licenses - choose whichever you prefer.
+------------------------------------------------------------------------------
+ALTERNATIVE A - General Public License Version 3.0 License
+See GPL-3.0.txt
+------------------------------------------------------------------------------
+ALTERNATIVE B - Mozilla Public License Version 2.0 License
+See MPL-2.0.txt
+------------------------------------------------------------------------------
+
+ALTERNATIVE B is not available for all files, this is specified in the file
+header
 
 The ZCAD sources consists of several parts and each part has its own
 license. In general, each file contains a header, describing the license of

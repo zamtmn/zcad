@@ -3,7 +3,7 @@
 *                                                                           *
 *  This file is part of the ZCAD                                            *
 *                                                                           *
-*  See the file COPYING.modifiedLGPL.txt, included in this distribution,    *
+*  See the file COPYING.txt, included in this distribution,                 *
 *  for details about the copyright.                                         *
 *                                                                           *
 *  This program is distributed in the hope that it will be useful,          *
@@ -37,7 +37,7 @@ function ExampleVarManipulation_com(operands:TCommandOperands):TCommandResult;
 var
   Varext:TVariablesExtender;
   pe:PGDBObjEntity;
-  pvd:pvardesk;
+  pvd,pvd2:pvardesk;
   vd:vardesk;
   pu:PTSimpleUnit;
   ir:itrec;
@@ -77,15 +77,23 @@ begin
                          InterfaceTranslate,//процедура локализации которая будет пытаться перевести на русский все что можно при загрузке
                          'uentrepresentation');//имя модуля
       if pu<>nil then begin //если нашли
-        pvd:=pu^.InterfaceVariables.vardescarray.beginiterate(ir); //пробуем перебрать все определения переменных в интерфейсной части
-        if pvd<>nil then //переменные есть
+        pvd2:=pu^.InterfaceVariables.vardescarray.beginiterate(ir); //пробуем перебрать все определения переменных в интерфейсной части
+        if pvd2<>nil then //переменные есть
           repeat
             //работаем с очередной переменной
-            test:=pvd^.name; //имя переменной
-            test:=pvd^.username; //пользовательское имя переменной
-            test:=pvd^.data.PTD.TypeName; //имя имя типа; pvd^.data.PTD - указатель на тип
-            pvd:=pu^.InterfaceVariables.vardescarray.iterate(ir); //следующая переменная
-          until pvd=nil;
+            test:=pvd2^.name; //имя переменной
+            test:=pvd2^.username; //пользовательское имя переменной
+            test:=pvd2^.data.PTD.TypeName; //имя имя типа; pvd2^.data.PTD - указатель на тип
+
+
+            vd:=Varext.entityunit.CreateVariable(pvd2^.name,pvd2^.data.PTD.TypeName);//создаем такуюже переменную
+            pvd:=Varext.entityunit.FindVariable(VarName);//находим описатель созданой переменной
+            pvd^.username:=pvd2^.username;//пользовательское имя устанавливаем отдлельно
+
+            pvd2^.data.PTD.CopyInstanceTo(pvd2^.data.Addr.Instance,pvd.data.Addr.Instance);//копируем значение из старой переменной в новую
+
+            pvd2:=pu^.InterfaceVariables.vardescarray.iterate(ir); //следующая переменная
+          until pvd2=nil;
       end;
 
     end;

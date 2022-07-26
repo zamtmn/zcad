@@ -28,6 +28,7 @@ platform:
 
 # Scripts that run after cloning repository
 install:
+  - cmd: git submodule update --init --recursive
   - cmd: echo Download lazarus-2.2.0-fpc-3.2.2-win32
   - cmd: curl -fsSL -o lazarus-2.2.0-fpc-3.2.2-win32.exe "https://softslot.ru/d28bc0c/programming/file-editors/lazarus-2.2.0-fpc-3.2.2-win32.exe"
   - cmd: echo Installing lazarus-2.2.0-fpc-3.2.2-win32
@@ -44,6 +45,9 @@ install:
 # Build scripts
 build_script:
   - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe installpkgstolaz
+  - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe cleanzcad
+  - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe documentation
+  - cmd: 7z a ZCAD-%APPVEYOR_REPO_COMMIT%.zip "cad"
   - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe cleanzcadelectrotech
   - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe documentation
   - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe tests
@@ -80,6 +84,8 @@ test_script:
 
 #specify artifacts to upload
 artifacts:
+  - path: ZCAD-%APPVEYOR_REPO_COMMIT%.zip
+    name: ZCAD-%APPVEYOR_REPO_COMMIT%
   - path: ZCADElectrotech-%APPVEYOR_REPO_COMMIT%.zip
     name: ZCADElectrotech-%APPVEYOR_REPO_COMMIT%
   - path: cad\help\userguide.ru.pdf

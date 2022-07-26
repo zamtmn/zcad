@@ -3,7 +3,7 @@
 *                                                                           *
 *  This file is part of the ZCAD                                            *
 *                                                                           *
-*  See the file COPYING.modifiedLGPL.txt, included in this distribution,    *
+*  See the file COPYING.txt, included in this distribution,                 *
 *  for details about the copyright.                                         *
 *                                                                           *
 *  This program is distributed in the hope that it will be useful,          *
@@ -20,9 +20,10 @@ unit URecordDescriptor;
 
 {$MODE DELPHI}
 interface
-uses LCLProc,UPointerDescriptor,uzbstrproc,uzctnrVectorBytes,sysutils,UBaseTypeDescriptor,
+uses
+  LCLProc,UPointerDescriptor,uzbstrproc,uzctnrVectorBytes,sysutils,UBaseTypeDescriptor,
   gzctnrVectorTypes,uzedimensionaltypes,TypeDescriptors,gzctnrVector,
-  TypInfo,varmandef,uzbtypes,uzbLogIntf;
+  TypInfo,varmandef,uzbtypes,uzbLogIntf,math;
 type
 TFieldDescriptor=GZVector<FieldDescriptor>;
 PRecordDescriptor=^RecordDescriptor;
@@ -104,22 +105,24 @@ var
    etd:PRecordDescriptor;
    pfd:pFieldDescriptor;
 begin
-     td:=GetTypeData(ti);
-     self.SizeInBytes:=td.RecSize;
-     mf:=@td.ManagedFldCount;
-     inc(pointer(mf),sizeof(td.ManagedFldCount));
-     for i:=0 to td.ManagedFldCount-1 do
-     begin
-          ti:=mf.TypeRef;
-          pfd:=Fields.getDataMutable(i);
-          {fd.base.ProgramName:=ti.Name;
-          fd.base.PFT:=RegisterType(ti);;
-          fd.base.Attributes:=0;
-          fd.base.Saved:=0;
-          fd.Collapsed:=true;}
-          Pfd.Offset:=mf.FldOffset;
-          inc(mf);
-     end;
+  td:=GetTypeData(ti);
+  self.SizeInBytes:=td.RecSize;
+  mf:=@td.ManagedFldCount;
+  inc(pointer(mf),sizeof(td.ManagedFldCount));
+  if td.ManagedFldCount<>Fields.Count then
+    DebugLn('{W}Fields count of "%s" record = %d, but rtti.ManagedFldCount = %d',[TypeName,Fields.Count,td.ManagedFldCount]);
+  for i:=0 to min(td.ManagedFldCount,Fields.Count)-1 do
+  begin
+      ti:=mf.TypeRef;
+      pfd:=Fields.getDataMutable(i);
+      {fd.base.ProgramName:=ti.Name;
+      fd.base.PFT:=RegisterType(ti);;
+      fd.base.Attributes:=0;
+      fd.base.Saved:=0;
+      fd.Collapsed:=true;}
+      Pfd.Offset:=mf.FldOffset;
+      inc(mf);
+  end;
 end;
 
 

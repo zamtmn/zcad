@@ -18,7 +18,7 @@
       <ZAction Name="ACN_REDO" Command="REdo" Img="redo" Caption="Redo" ShortCut="CTRL+SHIFT+Z"/>
       <ZAction Name="ACN_CUTCLIP" Command="CutClip" Img="cutclip" Caption="Cut to clipboard" ShortCut="CTRL+X"/>
       <ZAction Name="ACN_COPYCLIP" Command="CopyClip" Img="copyclip" Caption="Copy to clipboard" ShortCut="CTRL+C"/>
-      <ZAction Name="ACN_COPYCLIPBASE" Command="CopyBase" Img="copyclipbase.bmp" Caption="Copy to clipboard with base point" ShortCut="CTRL+SHIFT+C" SecondaryShortCuts="CTRL+INS"/>
+      <ZAction Name="ACN_COPYCLIPBASE" Command="CopyBase" Img="copyclipbase" Caption="Copy to clipboard with base point" ShortCut="CTRL+SHIFT+C" SecondaryShortCuts="CTRL+INS"/>
       <ZAction Name="ACN_PASTE" Command="PasteClip" Img="pasteclip" Caption="Paste" Hint="Paste from clipboard" ShortCut="CTRL+V" SecondaryShortCuts="SHIFT+INS"/>
       <ZAction Name="ACN_ERASE" Command="Erase" Img="erase" Caption="Erase" ShortCut="DEL"/>
       <ZAction Name="ACN_SELECTALL" Command="SelectAll" Img="#SA" Caption="Select all" ShortCut="CTRL+A"/>

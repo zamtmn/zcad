@@ -35,7 +35,7 @@ TControlPointAttrs=set of TControlPointAttr;
 (*varcategoryforoi OBJFUNC='Function:object'*)
 (*varcategoryforoi NMO='Name'*)
 
-(*varcategoryforoi SLCABAGEN='vELEC'*)
+(*varcategoryforoi SLCABAGEN1='Подключение №1'*)
 (*varcategoryforoi DB='Data base'*)
 (*varcategoryforoi GC='Group connection'*)
 (*varcategoryforoi LENGTH='Length params'*)

@@ -46,14 +46,16 @@ const
   //для работы автоукладчика
   velec_nameDevice='NMO_Name';
 //  velec_nameDevice='NMO_BaseName';
-  velec_subNameConnection='SLCABAGEN';
-  velec_HeadDeviceName='SLCABAGEN_HeadDeviceName';
+  //velec_subNameConnection='SLCABAGEN';
+  velec_HeadDeviceName='SLCABAGEN1_HeadDeviceName';
+  velec_NGHeadDevice='SLCABAGEN1_NGHeadDevice';
+  velec_SLTypeagen='SLCABAGEN1_SLTypeagen';
   //velec_CableRoutingNodes='SLCABAGEN_CableRoutingNodes';
-  velec_ControlUnitName='SLCABAGEN_ControlUnitName';
+  velec_ControlUnitName='SLCABAGEN1_ControlUnitName';
   //velec_NGControlUnitNodes='SLCABAGEN_NGControlUnitNodes';
-  velec_NGControlUnit='SLCABAGEN_NGControlUnit';
+  velec_NGControlUnit='SLCABAGEN1_NGControlUnit';
   //velec_inerNodeWithoutConnection='SLCABAGEN_inerNodeWithoutConnection';
-  velec_serialConnectDev='SLCABAGEN_DevConnectMethod';
+  velec_serialConnectDev='SLCABAGEN1_DevConnectMethod';
   velec_cableMounting='Cable_Mounting_Method';
 //  velec_cableMounting='SLCABAGEN_CableMounting';
   velec_CableRoutNodes = '-';//индивидуальная прокладка кабеля от этого устройства и до Узла управления, далее как и все
@@ -69,6 +71,10 @@ const
 
   velec_SchemaELSTART='EL_STARTSCHEMA';
   velec_SchemaELEND='EL_ENDSCHEMA';
+
+  velec_VarNameForAddConnectBefore='SLCABAGEN';
+  velec_VarNameForAddConnectBeforeName='Подключение №';
+  velec_VarNameForAddConnectAfter='SLTypeagen';
 
   velec_cableMountingNon='';
 

@@ -7,6 +7,8 @@
       <ZAction Name="ACN_vBuildELSchema" Command="vBuildELSchema" Img="#vEL" Caption="Start building vEL Schema"/>
       <ZAction Name="ACN_agslr" Command="AGSLROOM" Img="#ASL" Caption="Start command ASL"/>
       <ZAction Name="ACN_SupeLine" Command="DrawSuperLine" Img="superline.bmp" Caption="SuperLine"/>
+	  <ZAction Name="ACN_uzvaddconnection" Command="uzvaddconnection" Img="#C+" Caption="Add connection"/>
+	  <ZAction Name="ACN_uzvremoveconnection" Command="uzvremoveconnection" Img="#С-" Caption="Remove connection"/>
     </Group>
   </ActionsContent>
 </CONFIG>

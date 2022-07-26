@@ -1,41 +1,47 @@
 unit slcabagenmodul;
 interface
-uses system,devices;
+uses system,devices,cables;
 var
 
-SLCABAGEN_SLTypeagen:String;(*'Имя суперлинии/трассы монтажа кабеля'*)
+SLCABAGEN1_SLTypeagen:String;(*'Имя суперлинии/трассы монтажа кабеля'*)
 
-SLCABAGEN_HeadDeviceName:String;(*'Имя головного устройства'*)
+SLCABAGEN1_HeadDeviceName:String;(*'Имя головного устройства'*)
 
-SLCABAGEN_NGHeadDevice:String;(*'Номер группы в головном устройстве'*)
+SLCABAGEN1_NGHeadDevice:String;(*'Номер группы в головном устройстве'*)
 
 //SLCABAGEN_CableRoutingNodes:String;(*'Промежуточные узлы прокладки кабеля от устройсва/УУ до головного устройства. Множественность через ~ '*)
 
-SLCABAGEN_ControlUnitName:String;(*'Имя узла управления устройствами'*)
+SLCABAGEN1_ControlUnitName:String;(*'Имя узла управления устройствами'*)
 
-SLCABAGEN_NGControlUnit:String;(*'Номер группы в узле управления устройствами'*)
+SLCABAGEN1_NGControlUnit:String;(*'Номер группы в узле управления устройствами'*)
 
 //SLCABAGEN_NGControlUnitNodes:String;(*'Промежуточные узлы прокладки кабеля от устройсва до УУ. Множественность через ~ '*)
 
-SLCABAGEN_TypeCableRouting:TTypeCableRouting;(*'НЕРАБОТАЕТ. НЕТ ПОНИМАНИЯ ЧТО ЭТО. Прокладка кабеля одиночная/групповая.'*)
+SLCABAGEN1_TypeCableRouting:TTypeCableRouting;(*'НЕРАБОТАЕТ. НЕТ ПОНИМАНИЯ ЧТО ЭТО. Прокладка кабеля одиночная/групповая.'*)
 
-SLCABAGEN_DevConnectMethod:TDevConnectMethod;(*'Соединение устройств выполняется'*)
+SLCABAGEN1_DevConnectMethod:TDevConnectMethod;(*'Соединение устройств выполняется'*)
+
+SLCABAGEN1_CabConnectAddLength:Double;(*'Добавить к длине кабеля при подключении'*)
+
+SLCABAGEN1_CabConnectMountingMethod:TDCableMountingMethod;(*'Метод монтажа кабеля при подключения'*)
 
 //SLCABAGEN_inerNodeWithoutConnection:Boolean;(*'Промежуточный узел. К головному стройству кабель не прокладывается'*)
 
 implementation
 begin
 
-   SLCABAGEN_SLTypeagen:='???';
-   SLCABAGEN_HeadDeviceName:='???';
-   SLCABAGEN_NGHeadDevice:='???';
+   SLCABAGEN1_SLTypeagen:='???';
+   SLCABAGEN1_HeadDeviceName:='???';
+   SLCABAGEN1_NGHeadDevice:='???';
    //SLCABAGEN_CableRoutingNodes:='-';
-   SLCABAGEN_ControlUnitName:='-';
-   SLCABAGEN_NGControlUnit:='-';
+   SLCABAGEN1_ControlUnitName:='-';
+   SLCABAGEN1_NGControlUnit:='-';
    //SLCABAGEN_NGControlUnitNodes:='-';
-   SLCABAGEN_SLTest:='???';
-   SLCABAGEN_TypeCableRouting:=TDT_GroupRouting;
-   SLCABAGEN_DevConnectMethod:=TDT_CableConnectParallel;
+   SLCABAGEN1_SLTest:='???';
+   SLCABAGEN1_TypeCableRouting:=TDT_GroupRouting;
+   SLCABAGEN1_DevConnectMethod:=TDT_CableConnectParallel;
    //SLCABAGEN_inerNodeWithoutConnection:=false;
+   SLCABAGEN1_CabConnectAddLength:=0.1;
+   SLCABAGEN1_CabConnectMountingMethod:='-';
    
 end.

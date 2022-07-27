@@ -29,23 +29,68 @@ uses
   uzelongprocesssupport,uzeentline,uzeentity,uzgldrawcontext,
   gzctnrSTL;
 type
-  TDWGObjectLoadProc=procedure(owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var DC:TDrawContext;var dwg:Dwg_Data; var DWGObject:Dwg_Object);
+  TZDrawingContext=record
+    PDrawing:PTSimpleDrawing;
+    POwner:PGDBObjGenericSubEntry;
+    LoadMode:TLoadOpt;
+    DC:TDrawContext;
+    procedure CreateRec(var ADrawing:TSimpleDrawing;var AOwner:GDBObjGenericSubEntry;ALoadMode:TLoadOpt;var ADC:TDrawContext);
+  end;
+  TDWGContext=record
+  end;
+
+
+  TDWGObjectLoadProc=procedure(var ZContext:TZDrawingContext;var dwg:Dwg_Data;var DWGObject:Dwg_Object;P:Pointer);
 procedure addfromdwg(filename:String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+procedure RegisterDWGEntityLoadProc(const DOT:DWG_OBJECT_TYPE;const LP:TDWGObjectLoadProc);
+procedure RegisterDWGObjectLoadProc(const DOT:DWG_OBJECT_TYPE;const LP:TDWGObjectLoadProc);
 implementation
 
 type
   PTDWGObjectData=^TDWGObjectData;
   TDWGObjectData=record
-    LP:TDWGObjectLoadProc;
+    LoadEntityProc:TDWGObjectLoadProc;
+    LoadObjectProc:TDWGObjectLoadProc;
     procedure Create;
   end;
   TDWGObjectsDataDic=specialize GKey2DataMap<DWG_OBJECT_TYPE,TDWGObjectData>;
 
 var
   DWGObjectsDataDic:TDWGObjectsDataDic=nil;
+
+procedure TZDrawingContext.CreateRec(var ADrawing:TSimpleDrawing;var AOwner:GDBObjGenericSubEntry;ALoadMode:TLoadOpt;var ADC:TDrawContext);
+begin
+  PDrawing:=@ADrawing;
+  POwner:=@AOwner;
+  LoadMode:=ALoadMode;
+  DC:=ADC;
+end;
+
 procedure TDWGObjectData.Create;
 begin
-  LP:=nil;
+  LoadEntityProc:=nil;
+  LoadObjectProc:=nil;
+end;
+procedure RegisterDWGEntityLoadProc(const DOT:DWG_OBJECT_TYPE;const LP:TDWGObjectLoadProc);
+var
+  pdod:PTDWGObjectData;
+  dod:TDWGObjectData;
+begin
+  if DWGObjectsDataDic=nil then
+    DWGObjectsDataDic:=TDWGObjectsDataDic.Create;
+  if DWGObjectsDataDic.MyGetMutableValue(DOT,pdod) then begin
+    if pdod^.LoadEntityProc<>nil then
+      raise Exception.Create(format('DWGObjectData.LP already registred for %d',[DOT]))
+    else begin
+      pdod^.LoadEntityProc:=LP;
+      pdod^.LoadObjectProc:=nil;
+    end;
+  end else begin
+    dod.Create;
+    dod.LoadEntityProc:=LP;
+    dod.LoadObjectProc:=nil;
+    DWGObjectsDataDic.RegisterKey(DOT,dod);
+  end;
 end;
 procedure RegisterDWGObjectLoadProc(const DOT:DWG_OBJECT_TYPE;const LP:TDWGObjectLoadProc);
 var
@@ -55,30 +100,18 @@ begin
   if DWGObjectsDataDic=nil then
     DWGObjectsDataDic:=TDWGObjectsDataDic.Create;
   if DWGObjectsDataDic.MyGetMutableValue(DOT,pdod) then begin
-    if pdod^.LP<>nil then
+    if pdod^.LoadEntityProc<>nil then
       raise Exception.Create(format('DWGObjectData.LP already registred for %d',[DOT]))
-    else
-      pdod^.LP:=LP;
+    else begin
+      pdod^.LoadEntityProc:=nil;
+      pdod^.LoadObjectProc:=LP;
+    end;
   end else begin
     dod.Create;
-    dod.LP:=LP;
+    dod.LoadEntityProc:=nil;
+    dod.LoadObjectProc:=LP;
     DWGObjectsDataDic.RegisterKey(DOT,dod);
   end;
-end;
-procedure AddLineEntity(owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var DC:TDrawContext;var dwg:Dwg_Data; var DWGObject:Dwg_Object);
-var
-  pobj:PGDBObjEntity;
-begin
-  pobj := AllocAndInitLine(drawing.pObjRoot);
-  PGDBObjLine(pobj)^.CoordInOCS.lBegin.x:=DWGObject.tio.entity^.tio.line^.start.x;
-  PGDBObjLine(pobj)^.CoordInOCS.lBegin.y:=DWGObject.tio.entity^.tio.line^.start.y;
-  PGDBObjLine(pobj)^.CoordInOCS.lBegin.z:=DWGObject.tio.entity^.tio.line^.start.x;
-  PGDBObjLine(pobj)^.CoordInOCS.lEnd.x:=DWGObject.tio.entity^.tio.line^.&end.x;
-  PGDBObjLine(pobj)^.CoordInOCS.lEnd.y:=DWGObject.tio.entity^.tio.line^.&end.y;
-  PGDBObjLine(pobj)^.CoordInOCS.lEnd.z:=DWGObject.tio.entity^.tio.line^.&end.x;
-  drawing.pObjRoot^.AddMi(@pobj);
-  PGDBObjEntity(pobj)^.BuildGeometry(drawing);
-  PGDBObjEntity(pobj)^.formatEntity(drawing,dc);
 end;
 
 procedure parseDwg_Data(owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var dwg:Dwg_Data);
@@ -88,14 +121,18 @@ var
   pobj:PGDBObjEntity;
   DC:TDrawContext;
   pdod:PTDWGObjectData;
+  ZContext:TZDrawingContext;
 begin
   lph:=lps.StartLongProcess('Create entinies',nil,dwg.num_objects);
   DC:=drawing.CreateDrawingRC;
+  ZContext.CreateRec(Drawing,Owner^,LoadMode,DC);
   if DWGObjectsDataDic<>nil then begin
     for i := 0 to dwg.num_objects do begin
       if DWGObjectsDataDic.MyGetMutableValue(dwg.&object[i].fixedtype,pdod) then begin
-        if pdod^.LP<>nil then
-          pdod^.LP(owner,LoadMode,drawing,DC,dwg,dwg.&object[i]);
+        if pdod^.LoadEntityProc<>nil then
+          pdod^.LoadEntityProc(ZContext,dwg,dwg.&object[i],dwg.&object[i].tio.entity^.tio.UNUSED)
+        else if pdod^.LoadObjectProc<>nil then
+          pdod^.LoadObjectProc(ZContext,dwg,dwg.&object[i],dwg.&object[i].tio.&object^.tio.DUMMY);
       end;
       {case dwg.&object[i].fixedtype of
         DWG_TYPE_LAYER:begin
@@ -165,7 +202,6 @@ begin
 end;
 initialization
   Ext2LoadProcMap.RegisterExt('dwg','AutoCAD DWG files via LibreDWG (*.dwg)',@addfromdwg);
-  RegisterDWGObjectLoadProc(DWG_TYPE_Line,@AddLineEntity);
   //nExt2LoadProcMap.RegisterExt('dxf','AutoCAD DXF files via LibreDWG (*.dxf)',@addfromdwg);
 finalization
   if assigned(DWGObjectsDataDic)then

@@ -78,7 +78,7 @@ uses
   uzcregother,//setup SysVar
   UUnitManager,
   uzefontmanager,
-  uzeffshx,uzeffttf,uzeffLibreDWG,
+  uzeffshx,uzeffttf,uzeffLibreDWG,uzeffLibreDWG2Ents,
 
 
   uzcdrawings,

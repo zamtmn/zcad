@@ -37,13 +37,16 @@ type
     procedure CreateRec(var ADrawing:TSimpleDrawing;var AOwner:GDBObjGenericSubEntry;ALoadMode:TLoadOpt;var ADC:TDrawContext);
   end;
   TDWGContext=record
+    DWG:Dwg_Data;
+    procedure CreateRec(var ADWG:Dwg_Data);
   end;
 
 
-  TDWGObjectLoadProc=procedure(var ZContext:TZDrawingContext;var dwg:Dwg_Data;var DWGObject:Dwg_Object;P:Pointer);
+  TDWGObjectLoadProc=procedure(var ZContext:TZDrawingContext;var DWGContext:TDWGContext;var DWGObject:Dwg_Object;P:Pointer);
 procedure addfromdwg(filename:String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 procedure RegisterDWGEntityLoadProc(const DOT:DWG_OBJECT_TYPE;const LP:TDWGObjectLoadProc);
 procedure RegisterDWGObjectLoadProc(const DOT:DWG_OBJECT_TYPE;const LP:TDWGObjectLoadProc);
+procedure BITCODE_T2Text(const p:BITCODE_T;constref DWGContext:TDWGContext;out text:string);
 implementation
 
 type
@@ -58,12 +61,24 @@ type
 var
   DWGObjectsDataDic:TDWGObjectsDataDic=nil;
 
+procedure BITCODE_T2Text(const p:BITCODE_T;constref DWGContext:TDWGContext;out text:string);
+begin
+  if DWGContext.dwg.header.version<=R_2004 then
+    text:=pchar(p)
+  else
+    text:=punicodechar(p)
+end;
+
 procedure TZDrawingContext.CreateRec(var ADrawing:TSimpleDrawing;var AOwner:GDBObjGenericSubEntry;ALoadMode:TLoadOpt;var ADC:TDrawContext);
 begin
   PDrawing:=@ADrawing;
   POwner:=@AOwner;
   LoadMode:=ALoadMode;
   DC:=ADC;
+end;
+procedure TDWGContext.CreateRec(var ADWG:Dwg_Data);
+begin
+  DWG:=ADWG;
 end;
 
 procedure TDWGObjectData.Create;
@@ -122,17 +137,19 @@ var
   DC:TDrawContext;
   pdod:PTDWGObjectData;
   ZContext:TZDrawingContext;
+  DWGContext:TDWGContext;
 begin
   lph:=lps.StartLongProcess('Create entinies',nil,dwg.num_objects);
   DC:=drawing.CreateDrawingRC;
   ZContext.CreateRec(Drawing,Owner^,LoadMode,DC);
+  DWGContext.CreateRec(dwg);
   if DWGObjectsDataDic<>nil then begin
     for i := 0 to dwg.num_objects do begin
       if DWGObjectsDataDic.MyGetMutableValue(dwg.&object[i].fixedtype,pdod) then begin
         if pdod^.LoadEntityProc<>nil then
-          pdod^.LoadEntityProc(ZContext,dwg,dwg.&object[i],dwg.&object[i].tio.entity^.tio.UNUSED)
+          pdod^.LoadEntityProc(ZContext,DWGContext,dwg.&object[i],dwg.&object[i].tio.entity^.tio.UNUSED)
         else if pdod^.LoadObjectProc<>nil then
-          pdod^.LoadObjectProc(ZContext,dwg,dwg.&object[i],dwg.&object[i].tio.&object^.tio.DUMMY);
+          pdod^.LoadObjectProc(ZContext,DWGContext,dwg.&object[i],dwg.&object[i].tio.&object^.tio.DUMMY);
       end;
       {case dwg.&object[i].fixedtype of
         DWG_TYPE_LAYER:begin

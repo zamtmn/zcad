@@ -26,6 +26,8 @@ uses
   SysUtils,
   dwg,
   uzeentgenericsubentry,uzbtypes,uzedrawingsimple,
+  uzbstrproc,
+  uzestyleslayers,
   uzeentline,uzeentity,uzgldrawcontext,
   uzeffLibreDWG;
 implementation
@@ -33,20 +35,45 @@ type
   PDwg_Entity_LINE=^Dwg_Entity_LINE;
   PDwg_Object_LAYER=^Dwg_Object_LAYER;
 
-procedure AddLayer(var ZContext:TZDrawingContext;var dwg:Dwg_Data; var DWGObject:Dwg_Object;PLayer:PDwg_Object_LAYER);
+procedure AddLayer(var ZContext:TZDrawingContext;var DWGContext:TDWGContext;var DWGObject:Dwg_Object;PDWGLayer:PDwg_Object_LAYER);
 var
-  pobj:PGDBObjEntity;
-  b:boolean;
+  player:PGDBLayerProp;
   name:string;
 begin
-  name:=pchar(PLayer^.name);
-  name:=pchar(DWGObject.tio.&object^.tio.layer^.name);
-  //b:=DWGObject.tio.&object^.tio.layer^.&on;
-  //DWGObject.tio.&object^.tio.layer^.&on;
-  pobj:=pobj;
+  BITCODE_T2Text(PDWGLayer^.name,DWGContext,name);
+  name:=Tria_Utf8ToAnsi(name);
+  player:=ZContext.PDrawing^.LayerTable.MergeItem(name,ZContext.LoadMode);
+  if player<>nil then begin
+    player^.init(name);
+    player^.color:=PDWGLayer^.color.index;
+    player^.lineweight:=PDWGLayer^.linewt;
+    //LT:Pointer;
+    player^._on:=(PDWGLayer^.&on<>0);
+    player^._lock:=(PDWGLayer^.locked<>0);
+    player^._print:=(PDWGLayer^.plotflag<>0);
+    //desk:AnsiString;
+
+  end;
+  (*      _dwg_object_LAYER = record
+          {$define BITCODE_XXlaytype:=BITCODE_RC}
+          COMMON_TABLE_FIELDS;
+          {$undef BITCODE_XXlaytype}
+          frozen : BITCODE_B;
+          &on : BITCODE_B;
+          frozen_in_new : BITCODE_B;
+          locked : BITCODE_B;
+          plotflag : BITCODE_B;
+          linewt : BITCODE_RC;
+          color : BITCODE_CMC;
+          plotstyle : BITCODE_H;
+          material : BITCODE_H;
+          ltype : BITCODE_H;
+          visualstyle : BITCODE_H;
+        end;
+  *)
 end;
 
-procedure AddLineEntity(var ZContext:TZDrawingContext;var dwg:Dwg_Data; var DWGObject:Dwg_Object;PLine:PDwg_Entity_LINE);
+procedure AddLineEntity(var ZContext:TZDrawingContext;var DWGContext:TDWGContext;var DWGObject:Dwg_Object;PLine:PDwg_Entity_LINE);
 var
   pobj:PGDBObjEntity;
 begin

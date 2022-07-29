@@ -106,7 +106,6 @@ updatezcadenv: checkvars
 	rm -rf  cad/menu
 	rm -rf  cad/plugins
 	rm -rf  cad/programdb
-	rm -rf  cad/rtl
 	rm -rf  cad/template
 	cp -r environment/runtimefiles/common/* cad
 	cp -r environment/runtimefiles/zcad/* cad
@@ -123,7 +122,6 @@ updatezcadelectrotechenv: checkvars
 	rm -rf  cad/menu
 	rm -rf  cad/plugins
 	rm -rf  cad/programdb
-	rm -rf  cad/rtl
 	rm -rf  cad/template
 	cp -r environment/runtimefiles/common/* cad
 	cp -r environment/runtimefiles/zcadelectrotech/* cad

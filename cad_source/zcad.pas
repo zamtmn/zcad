@@ -243,6 +243,8 @@ uses
   uzvstripmtext, //очистка мтекста, сделано плохо, в будущем надо переделывать мтекст и механизм.
   uzvcabmountmethod,
   uzvelscheme, //создание электрической схемы
+  uzvaddconnection, //добавить подключение к устройству
+  uzvremoveconnection, //удаление подключения к устройству
   //**//
   {$ENDIF}
   {$ENDIF}

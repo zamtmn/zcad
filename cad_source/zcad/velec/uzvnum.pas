@@ -139,6 +139,7 @@ uses
    uzctranslations,
 
   uzvcom,
+  uzvconsts,
   uzvtmasterdev,
   uzvtestdraw;
 
@@ -1180,7 +1181,7 @@ begin
      listStr2:=TListString.Create;
      listStr3:=TListString.Create;
 
-     pvd:=FindVariableInEnt(nowDev,'SLCABAGEN_HeadDeviceName');
+     pvd:=FindVariableInEnt(nowDev,velec_HeadDeviceName);
      if pvd<>nil then
         BEGIN
      tempName:=pString(pvd^.data.Addr.Instance)^;
@@ -1190,7 +1191,7 @@ begin
           // HistoryOutStr(' code2 = ' + nameParam);
      until tempName='';
 
-     pvd:=FindVariableInEnt(nowDev,'SLCABAGEN_NGHeadDevice');
+     pvd:=FindVariableInEnt(nowDev,velec_NGHeadDevice);
                if pvd<>nil then
         BEGIN
      tempName:=pString(pvd^.data.Addr.Instance)^;
@@ -1199,7 +1200,7 @@ begin
            listStr2.PushBack(nameParam);
      until tempName='';
 
-     pvd:=FindVariableInEnt(nowDev,'SLCABAGEN_SLTypeagen');
+     pvd:=FindVariableInEnt(nowDev,velec_SLTypeagen);
           if pvd<>nil then
         BEGIN
      tempName:=pString(pvd^.data.Addr.Instance)^;
@@ -1721,7 +1722,7 @@ function getListMasterDev(listVertexEdge:TGraphBuilder;globalGraph: TGraph):TVec
          listStr2:=TListString.Create;
          listStr3:=TListString.Create;
 
-         pvd:=FindVariableInEnt(nowDev,'SLCABAGEN_HeadDeviceName');
+         pvd:=FindVariableInEnt(nowDev,velec_HeadDeviceName);
          if pvd<>nil then
             BEGIN
          tempName:=pString(pvd^.data.Addr.Instance)^;
@@ -1731,7 +1732,7 @@ function getListMasterDev(listVertexEdge:TGraphBuilder;globalGraph: TGraph):TVec
               // HistoryOutStr(' code2 = ' + nameParam);
          until tempName='';
 
-         pvd:=FindVariableInEnt(nowDev,'SLCABAGEN_NGHeadDevice');
+         pvd:=FindVariableInEnt(nowDev,velec_NGHeadDevice);
                    if pvd<>nil then
             BEGIN
          tempName:=pString(pvd^.data.Addr.Instance)^;
@@ -1740,7 +1741,7 @@ function getListMasterDev(listVertexEdge:TGraphBuilder;globalGraph: TGraph):TVec
                listStr2.PushBack(nameParam);
          until tempName='';
 
-         pvd:=FindVariableInEnt(nowDev,'SLCABAGEN_SLTypeagen');
+         pvd:=FindVariableInEnt(nowDev,velec_SLTypeagen);
               if pvd<>nil then
             BEGIN
          tempName:=pString(pvd^.data.Addr.Instance)^;
@@ -2596,9 +2597,9 @@ procedure errorSearchAllParam(ourGraph:TGraphBuilder;Epsilon:double;var listErro
          //если это устройство и не разрыв
          if (ourGraph.listVertex[i].deviceEnt<>nil) and (ourGraph.listVertex[i].break<>true) then
          begin
-              listStr1:=getListParamDev(ourGraph.listVertex[i].deviceEnt,'SLCABAGEN_HeadDeviceName');
-              listStr2:=getListParamDev(ourGraph.listVertex[i].deviceEnt,'SLCABAGEN_NGHeadDevice');
-              listStr3:=getListParamDev(ourGraph.listVertex[i].deviceEnt,'SLCABAGEN_SLTypeagen');
+              listStr1:=getListParamDev(ourGraph.listVertex[i].deviceEnt,velec_HeadDeviceName);
+              listStr2:=getListParamDev(ourGraph.listVertex[i].deviceEnt,velec_NGHeadDevice);
+              listStr3:=getListParamDev(ourGraph.listVertex[i].deviceEnt,velec_SLTypeagen);
               if (listStr1.size = listStr2.size) and (listStr1.size = listStr3.size) and (listStr2.size = listStr3.size) then
               begin
                   counter:=0;
@@ -2709,9 +2710,9 @@ procedure errorSearchSLAGCAB(ourGraph:TGraphBuilder;Epsilon:double;var listError
          //если это устройство и не разрыв
          if (ourGraph.listVertex[i].deviceEnt<>nil) and (ourGraph.listVertex[i].break<>true) then
          begin
-              listStr1:=getListParamDev(ourGraph.listVertex[i].deviceEnt,'SLCABAGEN_HeadDeviceName');
-              listStr2:=getListParamDev(ourGraph.listVertex[i].deviceEnt,'SLCABAGEN_NGHeadDevice');
-              listStr3:=getListParamDev(ourGraph.listVertex[i].deviceEnt,'SLCABAGEN_SLTypeagen');
+              listStr1:=getListParamDev(ourGraph.listVertex[i].deviceEnt,velec_HeadDeviceName);
+              listStr2:=getListParamDev(ourGraph.listVertex[i].deviceEnt,velec_NGHeadDevice);
+              listStr3:=getListParamDev(ourGraph.listVertex[i].deviceEnt,velec_SLTypeagen);
               if (listStr1.size = listStr2.size) and (listStr1.size = listStr3.size) and (listStr2.size = listStr3.size) then
               begin
                 //if isALL then begin

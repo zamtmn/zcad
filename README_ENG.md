@@ -21,7 +21,7 @@ if anything - to clarify the place)).
 
 You will also need the following paths:
 * path to Lazarus `C:\lazarus`
-* the path to the Lazarus primary settings file, by default it is `C:\Users \<USERNAME>\AppData\Local\lazarus`
+* the path to the Lazarus primary settings file, by default it is `C:\Users\<USERNAME>\AppData\Local\lazarus`
 
 If your username is in non latin - additional actions are required, users with normal names calmly proceed to step 2.
 
@@ -33,7 +33,7 @@ To do this, in the folder `C:\lazarus` creating a file `runlazarus.bat` with the
 and then we always use it to launch Lazarus IDE, everything that is written below you should edit on the assumption that the path to the Lazarus settings will be `C:\lazarus\mylazcfg`
 
 ### 2 Getting ZCAD
-We clone the source code of zcad (or download it as an archive, but this is bad, it's better git clone). For the reasons described above, the path to the `zcad` folder should not contain non-Latin characters
+We clone the source code of zcad (or download it as an archive, but this is bad, it's better git clone). Some parts of zcad source code are decorated with git submodules, so the zcad submodules need to be initialized and updated. For the reasons described above, the path to the `zcad` folder should not contain non-Latin characters
 There will be a lot of files\folders, but the main ones:
 * `zcad\cad_source` - zcad source folder
 * `zcad\environment` - a folder with the program environment files and the source of a small program 'typeexporter' that configures the zcad sources for compilation

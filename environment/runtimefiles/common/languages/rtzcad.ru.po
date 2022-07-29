@@ -945,6 +945,18 @@ msgctxt "zcadexternal.acn_units~textimage"
 msgid "0.0"
 msgstr ""
 
+#: zcadexternal.acn_uzvaddconnection~caption
+msgid "Add connection"
+msgstr ""
+
+#: zcadexternal.acn_uzvaddconnection~textimage
+msgid "C+"
+msgstr ""
+
+#: zcadexternal.acn_uzvremoveconnection~caption
+msgid "Remove connection"
+msgstr ""
+
 #: zcadexternal.acn_varsedsel~caption
 msgid "Multi object variables editor"
 msgstr "Редактор переменных нескольких примитивов"
@@ -1865,7 +1877,8 @@ msgstr ""
 msgid "Names of entities"
 msgstr ""
 
-#: zcadexternal.menu~alarm system
+#: zcadexternal.menu~alarm_system
+msgctxt "zcadexternal.menu~alarm_system"
 msgid "Alarm system"
 msgstr ""
 
@@ -1873,12 +1886,13 @@ msgstr ""
 msgid "Block/Device"
 msgstr ""
 
-#: zcadexternal.menu~cable legend
-msgid "Cable legend"
-msgstr ""
-
 #: zcadexternal.menu~cable/trace
 msgid "Cable/Trace"
+msgstr ""
+
+#: zcadexternal.menu~cable_legend
+msgctxt "zcadexternal.menu~cable_legend"
+msgid "Cable legend"
 msgstr ""
 
 #: zcadexternal.menu~cctv
@@ -1889,11 +1903,13 @@ msgstr ""
 msgid "Circle"
 msgstr ""
 
-#: zcadexternal.menu~circuit diagram
+#: zcadexternal.menu~circuit_diagram
+msgctxt "zcadexternal.menu~circuit_diagram"
 msgid "Circuit diagram"
 msgstr ""
 
-#: zcadexternal.menu~connections diagram
+#: zcadexternal.menu~connections_diagram
+msgctxt "zcadexternal.menu~connections_diagram"
 msgid "Connections diagram"
 msgstr ""
 
@@ -1922,8 +1938,9 @@ msgstr "Правка"
 msgid "File"
 msgstr "Файл"
 
-#: zcadexternal.menu~fire alarm
-msgctxt "zcadexternal.menu~fire alarm"
+#: zcadexternal.menu~fire_alarm
+#, fuzzy
+msgctxt "zcadexternal.menu~fire_alarm"
 msgid "Fire alarm"
 msgstr "Пожарная сигнализация"
 
@@ -1944,7 +1961,8 @@ msgstr "Информация"
 msgid "Inspector"
 msgstr "Инспектор"
 
-#: zcadexternal.menu~instrumentation and control
+#: zcadexternal.menu~instrumentation_and_control
+msgctxt "zcadexternal.menu~instrumentation_and_control"
 msgid "Instrumentation and Control"
 msgstr ""
 
@@ -1977,7 +1995,8 @@ msgstr "Изменить"
 msgid "Pan"
 msgstr ""
 
-#: zcadexternal.menu~placement equipment
+#: zcadexternal.menu~placement_equipment
+msgctxt "zcadexternal.menu~placement_equipment"
 msgid "Placement equipment"
 msgstr ""
 
@@ -1989,11 +2008,13 @@ msgstr "План"
 msgid "Polygon"
 msgstr ""
 
-#: zcadexternal.menu~power supply
+#: zcadexternal.menu~power_supply
+msgctxt "zcadexternal.menu~power_supply"
 msgid "Power supply"
 msgstr ""
 
-#: zcadexternal.menu~sample files
+#: zcadexternal.menu~sample_files
+msgctxt "zcadexternal.menu~sample_files"
 msgid "Sample files"
 msgstr ""
 
@@ -2001,7 +2022,8 @@ msgstr ""
 msgid "Schematic"
 msgstr "Схема"
 
-#: zcadexternal.menu~security alarm
+#: zcadexternal.menu~security_alarm
+msgctxt "zcadexternal.menu~security_alarm"
 msgid "Security alarm"
 msgstr ""
 
@@ -2009,7 +2031,9 @@ msgstr ""
 msgid "Settings"
 msgstr "Настройки"
 
-#: zcadexternal.menu~show window
+#: zcadexternal.menu~show_window
+#, fuzzy
+msgctxt "zcadexternal.menu~show_window"
 msgid "Show window"
 msgstr "Показать окно"
 
@@ -2394,8 +2418,9 @@ msgstr "Фактор ширины"
 msgid "Blocks"
 msgstr "Блоки"
 
-#: zcadexternal.palette~fire alarm
-msgctxt "zcadexternal.palette~fire alarm"
+#: zcadexternal.palette~fire_alarm
+#, fuzzy
+msgctxt "zcadexternal.palette~fire_alarm"
 msgid "Fire alarm"
 msgstr "Пожарная сигнализация"
 
@@ -3419,8 +3444,9 @@ msgctxt "zcadexternal.toolpalette_blocklib_itemcaption~low-current"
 msgid "Low-current"
 msgstr "Слаботочка"
 
-#: zcadexternal.toolpalette_blocklib_itemcaption~power suply
-msgctxt "zcadexternal.toolpalette_blocklib_itemcaption~power suply"
+#: zcadexternal.toolpalette_blocklib_itemcaption~power_suply
+#, fuzzy
+msgctxt "zcadexternal.toolpalette_blocklib_itemcaption~power_suply"
 msgid "Power suply"
 msgstr "Силовое"
 
@@ -3429,9 +3455,10 @@ msgctxt "zcadexternal.toolpalette_blocklib_itemcaption~unsorted"
 msgid "Unsorted"
 msgstr "Без сортировки"
 
-#: zcadexternal.toolpalette_blocklib_low-current_alarm_itemcaption~fire alarm
+#: zcadexternal.toolpalette_blocklib_low-current_alarm_itemcaption~fire_alarm
+#, fuzzy
 msgctxt ""
-"zcadexternal.toolpalette_blocklib_low-current_alarm_itemcaption~fire alarm"
+"zcadexternal.toolpalette_blocklib_low-current_alarm_itemcaption~fire_alarm"
 msgid "Fire alarm"
 msgstr "Пожарная сигнализация"
 
@@ -3440,90 +3467,100 @@ msgctxt "zcadexternal.toolpalette_blocklib_low-current_itemcaption~alarm"
 msgid "Alarm"
 msgstr "Сигнализация"
 
-#: zcadexternal.toolpalette_blocklib_power suply_itemcaption~calculations
+#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~calculations
+#, fuzzy
 msgctxt ""
-"zcadexternal.toolpalette_blocklib_power suply_itemcaption~calculations"
+"zcadexternal.toolpalette_blocklib_power_suply_itemcaption~calculations"
 msgid "Calculations"
 msgstr "Расчеты"
 
-#: zcadexternal.toolpalette_blocklib_power suply_itemcaption~equipment 1.100
+#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~equipment_1.100
+#, fuzzy
 msgctxt ""
-"zcadexternal.toolpalette_blocklib_power suply_itemcaption~equipment 1.100"
+"zcadexternal.toolpalette_blocklib_power_suply_itemcaption~equipment_1.100"
 msgid "Equipment 1:100"
 msgstr "Оборудование 1:100"
 
-#: zcadexternal.toolpalette_blocklib_power suply_itemcaption~equipment 2.100
+#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~equipment_2.100
+#, fuzzy
 msgctxt ""
-"zcadexternal.toolpalette_blocklib_power suply_itemcaption~equipment 2.100"
+"zcadexternal.toolpalette_blocklib_power_suply_itemcaption~equipment_2.100"
 msgid "Equipment 2:100"
 msgstr "Оборудование 2:100"
 
-#: zcadexternal.toolpalette_blocklib_power suply_itemcaption~fire alarm
-msgctxt "zcadexternal.toolpalette_blocklib_power suply_itemcaption~fire alarm"
+#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~fire_alarm
+#, fuzzy
+msgctxt "zcadexternal.toolpalette_blocklib_power_suply_itemcaption~fire_alarm"
 msgid "Fire alarm"
 msgstr "Пожарная сигнализация"
 
-#: zcadexternal.toolpalette_blocklib_power suply_itemcaption~high-voltage
-#: networks
-msgctxt ""
-"zcadexternal.toolpalette_blocklib_power suply_itemcaption~high-voltage "
-"networks"
+#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~high-voltage_networks
 msgid "High-voltage networks"
-msgstr ""
+msgstr "Высоковольтные сети"
 
-#: zcadexternal.toolpalette_blocklib_power suply_itemcaption~lighting 1.100
+#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~lighting_1.100
+#, fuzzy
 msgctxt ""
-"zcadexternal.toolpalette_blocklib_power suply_itemcaption~lighting 1.100"
+"zcadexternal.toolpalette_blocklib_power_suply_itemcaption~lighting_1.100"
 msgid "Lighting 1:100"
 msgstr "Освещение 1:100"
 
-#: zcadexternal.toolpalette_blocklib_power suply_itemcaption~lighting 1.200
+#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~lighting_1.200
+#, fuzzy
 msgctxt ""
-"zcadexternal.toolpalette_blocklib_power suply_itemcaption~lighting 1.200"
+"zcadexternal.toolpalette_blocklib_power_suply_itemcaption~lighting_1.200"
 msgid "Lighting 1:200"
 msgstr "Освещение 1:200"
 
-#: zcadexternal.toolpalette_blocklib_power suply_itemcaption~nodes
-msgctxt "zcadexternal.toolpalette_blocklib_power suply_itemcaption~nodes"
+#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~nodes
+#, fuzzy
+msgctxt "zcadexternal.toolpalette_blocklib_power_suply_itemcaption~nodes"
 msgid "Nodes"
 msgstr "Узлы"
 
-#: zcadexternal.toolpalette_blocklib_power suply_itemcaption~outdoor networks
+#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~outdoor_networks
+#, fuzzy
 msgctxt ""
-"zcadexternal.toolpalette_blocklib_power suply_itemcaption~outdoor networks"
+"zcadexternal.toolpalette_blocklib_power_suply_itemcaption~outdoor_networks"
 msgid "Outdoor networks"
 msgstr "Наружные сети"
 
-#: zcadexternal.toolpalette_blocklib_power suply_itemcaption~risers
-msgctxt "zcadexternal.toolpalette_blocklib_power suply_itemcaption~risers"
+#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~risers
+#, fuzzy
+msgctxt "zcadexternal.toolpalette_blocklib_power_suply_itemcaption~risers"
 msgid "Risers"
 msgstr "Стояки"
 
-#: zcadexternal.toolpalette_blocklib_power suply_itemcaption~schemes
-msgctxt "zcadexternal.toolpalette_blocklib_power suply_itemcaption~schemes"
+#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~schemes
+#, fuzzy
+msgctxt "zcadexternal.toolpalette_blocklib_power_suply_itemcaption~schemes"
 msgid "Schemes"
 msgstr "Схемы"
 
-#: zcadexternal.toolpalette_blocklib_power suply_itemcaption~sockets 1.100
+#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~sockets_1.100
+#, fuzzy
 msgctxt ""
-"zcadexternal.toolpalette_blocklib_power suply_itemcaption~sockets 1.100"
+"zcadexternal.toolpalette_blocklib_power_suply_itemcaption~sockets_1.100"
 msgid "Sockets 1:100"
 msgstr "Розетки 1:100"
 
-#: zcadexternal.toolpalette_blocklib_power suply_itemcaption~sockets 1.200
+#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~sockets_1.200
+#, fuzzy
 msgctxt ""
-"zcadexternal.toolpalette_blocklib_power suply_itemcaption~sockets 1.200"
+"zcadexternal.toolpalette_blocklib_power_suply_itemcaption~sockets_1.200"
 msgid "Sockets 1:200"
 msgstr "Розетки 1:200"
 
-#: zcadexternal.toolpalette_blocklib_power suply_itemcaption~switches 1.200
+#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~switches_1.200
+#, fuzzy
 msgctxt ""
-"zcadexternal.toolpalette_blocklib_power suply_itemcaption~switches 1.200"
+"zcadexternal.toolpalette_blocklib_power_suply_itemcaption~switches_1.200"
 msgid "Switches 1:200"
 msgstr "Выключатели 1:200"
 
-#: zcadexternal.toolpalette_blocklib_power suply_itemcaption~tables
-msgctxt "zcadexternal.toolpalette_blocklib_power suply_itemcaption~tables"
+#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~tables
+#, fuzzy
+msgctxt "zcadexternal.toolpalette_blocklib_power_suply_itemcaption~tables"
 msgid "Tables"
 msgstr "Таблицы"
 

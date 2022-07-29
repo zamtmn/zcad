@@ -195,7 +195,8 @@ var
 begin
   for i:=1 to length(Identifier) do
     case Identifier[i] of
-      ':':Identifier[i]:='.'
+      ':':Identifier[i]:='.';
+      ' ':Identifier[i]:='_';
     end;
 end;
 

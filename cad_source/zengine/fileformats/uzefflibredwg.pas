@@ -173,6 +173,25 @@ begin
   lps.EndLongProcess(lph);
 end;
 
+procedure DebugDWG(dwg:PDwg_Data);
+begin
+  DebugLn(['{WH}header.version: ',dwg^.header.version]);
+  DebugLn(['{WH}header.from_version: ',dwg^.header.from_version]);
+  DebugLn(['{WH}header.zero_5[0]: ',dwg^.header.zero_5[0]]);
+  DebugLn(['{WH}header.zero_5[1]: ',dwg^.header.zero_5[1]]);
+  DebugLn(['{WH}header.zero_5[2]: ',dwg^.header.zero_5[2]]);
+  DebugLn(['{WH}header.zero_5[3]: ',dwg^.header.zero_5[3]]);
+  DebugLn(['{WH}header.zero_5[4]: ',dwg^.header.zero_5[4]]);
+  DebugLn(['{WH}header.is_maint: ',dwg^.header.is_maint]);
+  DebugLn(['{WH}header.zero_one_or_three: ',dwg^.header.zero_one_or_three]);
+  DebugLn(['{WH}header.unknown_3: ',dwg^.header.unknown_3]);
+  DebugLn(['{WH}header.numheader_vars: ',dwg^.header.numheader_vars]);
+  DebugLn(['{WH}header.thumbnail_address: ',dwg^.header.thumbnail_address]);
+  DebugLn(['{WH}header.dwg_version: ',dwg^.header.dwg_version]);
+  DebugLn(['{WH}header.maint_version: ',dwg^.header.maint_version]);
+  DebugLn(['{WH}header.codepage: ',dwg^.header.codepage]);
+end;
+
 procedure addfromdwg(filename:String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 var
   dwg:Dwg_Data;
@@ -196,30 +215,45 @@ begin
     Success:=dwg_read_file(pchar(ansistring(filename)),@dwg);
     lps.EndLongProcess(lph);
     DebugLn(['{WH}Success: ',Success]);
-    {DebugLn(['{WH}header.version: ',dwg.header.version]);
-    DebugLn(['{WH}header.from_version: ',dwg.header.from_version]);
-    DebugLn(['{WH}header.zero_5[0]: ',dwg.header.zero_5[0]]);
-    DebugLn(['{WH}header.zero_5[1]: ',dwg.header.zero_5[1]]);
-    DebugLn(['{WH}header.zero_5[2]: ',dwg.header.zero_5[2]]);
-    DebugLn(['{WH}header.zero_5[3]: ',dwg.header.zero_5[3]]);
-    DebugLn(['{WH}header.zero_5[4]: ',dwg.header.zero_5[4]]);
-    DebugLn(['{WH}header.is_maint: ',dwg.header.is_maint]);
-    DebugLn(['{WH}header.zero_one_or_three: ',dwg.header.zero_one_or_three]);
-    DebugLn(['{WH}header.unknown_3: ',dwg.header.unknown_3]);
-    DebugLn(['{WH}header.numheader_vars: ',dwg.header.numheader_vars]);
-    DebugLn(['{WH}header.thumbnail_address: ',dwg.header.thumbnail_address]);
-    DebugLn(['{WH}header.dwg_version: ',dwg.header.dwg_version]);
-    DebugLn(['{WH}header.maint_version: ',dwg.header.maint_version]);
-    DebugLn(['{WH}header.codepage: ',dwg.header.codepage]);}
-
+    DebugDWG(@dwg);
     parseDwg_Data(owner,LoadMode,drawing,dwg);
     dwg_free(@dwg);
   finally
   end;
 end;
+procedure addfromdxf(filename:String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+var
+  dwg:Dwg_Data;
+  Success:integer;
+  lph:TLPSHandle;
+begin
+  try
+    DebugLn('{WH}LibreDWG: Not yet implement');
+    try
+      LoadLibreDWG;
+    except
+      on E : Exception do begin
+        debugln('{EHM}LibreDWG: ',E.Message);
+        exit;
+      end;
+    end;
+    fillchar(dwg,sizeof(dwg),0);
+    dwg.opts:=0;
+    DebugLn(['{WH}try load file: ',ansistring(filename)]);
+    lph:=lps.StartLongProcess('LibreDWG.dxf_read_file',nil);
+    Success:=dxf_read_file(pchar(ansistring(filename)),@dwg);
+    lps.EndLongProcess(lph);
+    DebugLn(['{WH}Success: ',Success]);
+    DebugDWG(@dwg);
+    parseDwg_Data(owner,LoadMode,drawing,dwg);
+    dwg_free(@dwg);
+  finally
+  end;
+end;
+
 initialization
   Ext2LoadProcMap.RegisterExt('dwg','AutoCAD DWG files via LibreDWG (*.dwg)',@addfromdwg);
-  //nExt2LoadProcMap.RegisterExt('dxf','AutoCAD DXF files via LibreDWG (*.dxf)',@addfromdwg);
+  Ext2LoadProcMap.RegisterExt('dxf','AutoCAD DXF files via LibreDWG (*.dxf)',@addfromdxf);
 finalization
   if assigned(DWGObjectsDataDic)then
     FreeAndNil(DWGObjectsDataDic);

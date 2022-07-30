@@ -20,14 +20,16 @@ unit uzcdialogsfiles;
 {$INCLUDE zengineconfig.inc}
 interface
 uses sysutils,uzbstrproc,
-     {$IFNDEF DELPHI}LResources,{$ENDIF}Dialogs{$IFNDEF DELPHI},FileUtil{$ENDIF};
+     {$IFNDEF DELPHI}LResources,{$ENDIF}Dialogs{$IFNDEF DELPHI},FileUtil{$ENDIF},
+     uzeffmanager;
 resourcestring
   rsOpenSomething='Open something...';
   rsSaveSomething='Save something...';
 const
     {todo: используется для диалога сохранения, убрать, переделать на регистрацию форматов}ProjectFileFilter:String='DXF files (*.dxf)|*.dxf|AutoCAD DWG files (*.dwg)|*.dwg|ZCAD ZCP files (*.zcp)|*.zcp|All files (*.*)|*.*';
     CSVFileFilter: String ='CSV files (*.csv)|*.csv|All files (*.*)|*.*';
-function OpenFileDialog(out FileName:String;const DefFilterIndex:integer; const DefExt, Filter, InitialDir, Title: string):Boolean;
+function OpenFileDialog(out FileName:String;var DefFilterIndex:integer; const DefExt, Filter, InitialDir, Title: string):Boolean;overload;
+function OpenFileDialog(out FileName:String;const DefExt, Filter, InitialDir, Title: string):Boolean;overload;
 function SaveFileDialog(var FileName:String;const DefExt, Filter, InitialDir, Title: string):Boolean;
 implementation
 function SaveFileDialog;
@@ -48,23 +50,31 @@ begin
     result:=false;;
   sd.Free;
 end;
-function OpenFileDialog;
+function OpenFileDialog(out FileName:String;var DefFilterIndex:integer; const DefExt, Filter, InitialDir, Title: string):Boolean;
 var
   OD:TOpenDialog;
 begin
   od:=TOpenDialog.Create(nil);
   od.Title:=Title;
-  od.InitialDir:={szCurrentDir}InitialDir;
+  od.InitialDir:=InitialDir;
   od.Filter:=Filter;
   od.DefaultExt :=DefExt;
   od.FilterIndex := DefFilterIndex;
   od.Options := [ofFileMustExist];
   if od.Execute then begin
     FileName := od.FileName;
+    DefFilterIndex:=od.FilterIndex;
     result:=true;
   end else
     result:=false;
   od.Free;
+end;
+function OpenFileDialog(out FileName:String;const DefExt, Filter, InitialDir, Title: string):Boolean;
+var
+  idx:integer;
+begin
+  idx:=1;
+  result:=OpenFileDialog(FileName,idx,DefExt, Filter, InitialDir, Title);
 end;
 begin
 end.

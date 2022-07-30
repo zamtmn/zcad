@@ -37,14 +37,19 @@ uses
 
 implementation
 
+var
+  LastFileHandle:Integer=-1;
+
 function Load_com(operands:TCommandOperands):TCommandResult;
 var
    s: AnsiString;
    isload:boolean;
 begin
   if length(operands)=0 then begin
+    if LastFileHandle=-1 then
+      LastFileHandle:=Ext2LoadProcMap.GetDefaultFileFormatHandle(Ext2LoadProcMap.DefaultExt);
     ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
-    isload:=OpenFileDialog(s,Ext2LoadProcMap.GetDefaultFileFilterIndex,Ext2LoadProcMap.GetDefaultFileExt,{ProjectFileFilter}Ext2LoadProcMap.GetCurrentFileFilter,'',rsOpenFile);
+    isload:=OpenFileDialog(s,LastFileHandle,'',Ext2LoadProcMap.GetCurrentFileFilter,'',rsOpenFile);
     ZCMsgCallBackInterface.Do_AfterShowModal(nil);
     if not isload then begin
       result:=cmd_cancel;

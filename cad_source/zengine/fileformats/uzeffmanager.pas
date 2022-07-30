@@ -40,19 +40,22 @@ type
       var
         fDefaultFileExt:String;
         map:TExt2LoadProcMapGen;
-        vec:TFileFormats;
+
     public
+      vec:TFileFormats;
       constructor Create;
       destructor Done;
-      procedure RegisterExt(const _Wxt:String; const _FormatDesk:String; _FileLoadProcedure:GFileProcessProc; const _default:boolean=false);
+      procedure RegisterExt(const _Wxt:String; const _FormatDesk:String; _FileLoadProcedure:GFileProcessProc; const DefaultForThisExt:boolean=false);
       function GetLoadProc(const _Wxt:String):GFileProcessProc;
+      function GetDefaultFileFormatHandle(const _Wxt:String):TFileFormatHandle;
       function GetCurrentFileFilter:String;
-      function GetDefaultFileExt:String;
-      function GetDefaultFileFilterIndex:integer;
+      //function GetDefaultFileFilterIndex:integer;
+      property DefaultExt:String read fDefaultFileExt write fDefaultFileExt;
   end;
   TFileLoadProcedure=procedure(name: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+  TLoadFomats=TExt2LoadProcMap<TFileLoadProcedure>;
 var
-  Ext2LoadProcMap:TExt2LoadProcMap<TFileLoadProcedure>;
+    Ext2LoadProcMap:TLoadFomats;
 
 implementation
 
@@ -75,17 +78,27 @@ var
   ExtHandle:TFileFormatHandle;
   _key:String;
 begin
-  result:=nil;
+  ExtHandle:=GetDefaultFileFormatHandle(_Wxt);
+  if ExtHandle>=0 then
+    result:=vec.GetPLincedData(ExtHandle)^.FileLoadProcedure
+  else
+    result:=nil;
+end;
+
+function TExt2LoadProcMap<GFileProcessProc>.GetDefaultFileFormatHandle(const _Wxt:String):TFileFormatHandle;
+var
+  _key:String;
+begin
+  result:=-1;
   _key:=vec.StandartizeName(_Wxt);
   if _key<>'' then begin
     while _key[1]='.' do
      _key:=copy(_key,2,length(_key)-1);
-    if map.MyGetValue(_key,ExtHandle) then
-      result:=vec.GetPLincedData(ExtHandle)^.FileLoadProcedure;
+    map.MyGetValue(_key,result)
   end;
 end;
 
-procedure TExt2LoadProcMap<GFileProcessProc>.RegisterExt(const _Wxt:String; const _FormatDesk:String; _FileLoadProcedure:GFileProcessProc; const _default:boolean=false);
+procedure TExt2LoadProcMap<GFileProcessProc>.RegisterExt(const _Wxt:String; const _FormatDesk:String; _FileLoadProcedure:GFileProcessProc; const DefaultForThisExt:boolean=false);
 var
   FileFormatData:TFileFormatData;
   StandartizedName:string;
@@ -100,7 +113,7 @@ begin
     PData^.FormatDesk:=_FormatDesk;
     PData^.FormatExt:=_Wxt;
     PData^.FileLoadProcedure:=_FileLoadProcedure;
-    if _default then
+    if DefaultForThisExt then
       PValue^:=ExtHandle;
   end else begin
     ExtHandle:=vec.CreateOrGetHandle(_Wxt);
@@ -112,30 +125,18 @@ begin
   end;
 end;
 
-function TExt2LoadProcMap<GFileProcessProc>.GetDefaultFileFilterIndex:integer;
-{$IFNDEF DELPHI}
+{function TExt2LoadProcMap<GFileProcessProc>.GetDefaultFileFilterIndex:integer;
 var
-   pair:TExt2LoadProcMapGen.TDictionaryPair;
-   //iterator:TExt2LoadProcMap.TIterator;
+  pair:TExt2LoadProcMapGen.TDictionaryPair;
 begin
   result:=1;
   for pair in map do begin
-     //iterator:=Min;
-     //if assigned(iterator) then
-     //repeat
     if fDefaultFileExt=pair.key then
       exit;
     inc(result)
-     //until not iterator.Next;
   end;
-end;
-{$ENDIF}
-{$IFDEF DELPHI}
-begin
-end;
-{$ENDIF}
+end;}
 function TExt2LoadProcMap<GFileProcessProc>.GetCurrentFileFilter:String;
-{$IFNDEF DELPHI}
 var
   ffd:TFileFormats.THandleData;
 begin
@@ -149,20 +150,10 @@ begin
   if result<>'' then
     result:=result+'|';
   result:=result+'All files (*.*)|*.*'
-     //ProjectFileFilter: String = 'DXF files (*.dxf)|*.dxf|AutoCAD DWG files (*.dwg)|*.dwg|ZCAD ZCP files (*.zcp)|*.zcp|All files (*.*)|*.*';
-end;
-{$ENDIF}
-{$IFDEF DELPHI}
-begin
-end;
-{$ENDIF}
-function TExt2LoadProcMap<GFileProcessProc>.GetDefaultFileExt:String;
-begin
-     result:=fDefaultFileExt;
 end;
 
 initialization
-  Ext2LoadProcMap:=TExt2LoadProcMap<TFileLoadProcedure>.create;
+  Ext2LoadProcMap:=TLoadFomats.create;
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   Ext2LoadProcMap.Destroy;

@@ -27,9 +27,9 @@ uses
 
 type
 
-  {GTLinearIncHandleManipulator<GHandleType>=object(GTHandleManipulator<GHandleType>)
+  GTLinearIncHandleManipulator<GHandleType>=object(GTHandleManipulator<GHandleType>)
     class function GetIndex(Handle:GHandleType):SizeInt;inline;static;
-  end;}
+  end;
 
  GTNamedHandlesWithData<GHandleType,GHandleManipulator,GNameType,GNameManipulator,GLincedData>=object(GTNamedHandles<GHandleType,GHandleManipulator,GNameType,GNameManipulator>)
    type
@@ -47,16 +47,17 @@ type
    destructor done;virtual;
    procedure RegisterHandleName(Handle:GHandleType;HandleName:GNameType);virtual;
    function GetPLincedData(Handle:GHandleType):PGLincedData;
+   function GetDataIndex(Handle:GHandleType):SizeInt;
    function GetHandleName(Handle:GHandleType):GNameType;
    function CreateOrGetHandleAndSetData(HandleName:GNameType;data:GLincedData):GHandleType;
  end;
 
 implementation
 
-{class function GTLinearIncHandleManipulator<GHandleType>.GetIndex(Handle:GHandleType):SizeInt;
+class function GTLinearIncHandleManipulator<GHandleType>.GetIndex(Handle:GHandleType):SizeInt;
 begin
   result:=Handle-1;
-end;}
+end;
 
 constructor GTNamedHandlesWithData<GHandleType,GHandleManipulator,GNameType,GNameManipulator,GLincedData>.init;
 begin
@@ -104,6 +105,10 @@ end;
 function GTNamedHandlesWithData<GHandleType,GHandleManipulator,GNameType,GNameManipulator,GLincedData>.GetPLincedData(Handle:GHandleType):PGLincedData;
 begin
   result:=@HandleDataVector.Mutable[GHandleManipulator.GetIndex(Handle)]^.D;
+end;
+function GTNamedHandlesWithData<GHandleType,GHandleManipulator,GNameType,GNameManipulator,GLincedData>.GetDataIndex(Handle:GHandleType):SizeInt;
+begin
+  result:=GHandleManipulator.GetIndex(Handle);
 end;
 function GTNamedHandlesWithData<GHandleType,GHandleManipulator,GNameType,GNameManipulator,GLincedData>.GetHandleName(Handle:GHandleType):GNameType;
 begin

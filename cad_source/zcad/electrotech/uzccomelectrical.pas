@@ -3041,7 +3041,7 @@ begin
   dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
   if length(operands)=0 then
                      begin
-                          isload:=OpenFileDialog(s,1,'csv',CSVFileFilter,'','Открыть журнал...');
+                          isload:=OpenFileDialog(s,'csv',CSVFileFilter,'','Открыть журнал...');
                           if not isload then
                                             begin
                                                  result:=cmd_cancel;

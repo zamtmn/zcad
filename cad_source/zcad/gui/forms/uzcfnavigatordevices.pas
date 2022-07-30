@@ -1108,7 +1108,7 @@ var
   FileName,FileFilter:String;
 begin
   FileFilter:=format(rsNavigatorParamsFileFilter,[FileExt]);
-  if OpenFileDialog(FileName,1,FileExt,FileFilter,'',rsOpenSomething) then begin
+  if OpenFileDialog(FileName,FileExt,FileFilter,'',rsOpenSomething) then begin
     LoadAndSetParamsFromFile(FileName);
   end;
 end;

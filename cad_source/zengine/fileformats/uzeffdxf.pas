@@ -2857,5 +2857,6 @@ begin
      //i2:=0;
      FOC:=0;
      Ext2LoadProcMap.RegisterExt('dxf','AutoCAD DXF files via zengine (*.dxf)',@addfromdxf,true);
+     Ext2LoadProcMap.DefaultExt:='dxf';
      DefaultFormatSettings.DecimalSeparator:='.';
 end.

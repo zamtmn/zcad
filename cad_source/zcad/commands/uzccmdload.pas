@@ -37,6 +37,7 @@ uses
   sysutils;
 
 function Load_Merge(Operands:TCommandOperands;LoadMode:TLoadOpt):TCommandResult;
+function Internal_Load_Merge(s: AnsiString;loadproc:TFileLoadProcedure;LoadMode:TLoadOpt):TCommandResult;
 
 implementation
 
@@ -71,62 +72,53 @@ begin
         until pv=nil;
 end;
 
+function Internal_Load_Merge(s: AnsiString;loadproc:TFileLoadProcedure;LoadMode:TLoadOpt):TCommandResult;
+var
+   mem:TZctnrVectorBytes;
+   pu:ptunit;
+   DC:TDrawContext;
+begin
+  loadproc(s,@drawings.GetCurrentDWG^.pObjRoot^,loadmode,drawings.GetCurrentDWG^);
+  if FileExists(utf8tosys(s+'.dbpas')) then begin
+    pu:=PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
+    if assigned(pu) then begin
+      mem.InitFromFile(s+'.dbpas');
+      units.parseunit(SupportPath,InterfaceTranslate,mem,PTSimpleUnit(pu));
+      remapprjdb(pu);
+      mem.done;
+    end;
+  end;
+  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+  drawings.GetCurrentROOT.calcbb(dc);
+  drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree.maketreefrom(drawings.GetCurrentDWG^.pObjRoot.ObjArray,drawings.GetCurrentDWG^.pObjRoot.vp.BoundingBox,nil);
+  drawings.GetCurrentROOT.FormatEntity(drawings.GetCurrentDWG^,dc);
+  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
+  if drawings.currentdwg<>PTSimpleDrawing(BlockBaseDWG) then begin
+    drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree.maketreefrom(drawings.GetCurrentDWG^.pObjRoot.ObjArray,drawings.GetCurrentDWG^.pObjRoot.vp.BoundingBox,nil);
+    zcRedrawCurrentDrawing;
+  end;
+
+  result:=cmd_ok;
+end;
 
 function Load_Merge(Operands:TCommandOperands;LoadMode:TLoadOpt):TCommandResult;
 var
    s: AnsiString;
-   //fileext:String;
    isload:boolean;
-   mem:TZctnrVectorBytes;
-   pu:ptunit;
    loadproc:TFileLoadProcedure;
-   DC:TDrawContext;
 begin
-     if drawings.currentdwg<>PTSimpleDrawing(BlockBaseDWG) then
-       if drawings.GetCurrentROOT.ObjArray.Count>0 then begin
-         if ZCMsgCallBackInterface.TextQuestion(rsDWGAlreadyContainsData,'QLOAD')=zccbNo then
-           exit;
-       end;
-     s:=operands;
-     loadproc:=Ext2LoadProcMap.GetLoadProc(extractfileext(s));
-     isload:=(assigned(loadproc))and(FileExists(utf8tosys(s)));
-     if isload then
-     begin
-          //fileext:=uppercase(ExtractFileEXT(s));
-          loadproc(s,@drawings.GetCurrentDWG^.pObjRoot^,loadmode,drawings.GetCurrentDWG^);
-     if FileExists(utf8tosys(s+'.dbpas')) then
-     begin
-           pu:=PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
-           if assigned(pu) then begin
-             mem.InitFromFile(s+'.dbpas');
-             //pu^.free;
-             units.parseunit(SupportPath,InterfaceTranslate,mem,PTSimpleUnit(pu));
-             remapprjdb(pu);
-             mem.done;
-           end;
-     end;
-     dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-     drawings.GetCurrentROOT.calcbb(dc);
-     //drawings.GetCurrentDWG.ObjRoot.format;//FormatAfterEdit;
-     //drawings.GetCurrentROOT.sddf
-     //drawings.GetCurrentROOT.format;
-     drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree.maketreefrom(drawings.GetCurrentDWG^.pObjRoot.ObjArray,drawings.GetCurrentDWG^.pObjRoot.vp.BoundingBox,nil);
-     //drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree:=createtree(drawings.GetCurrentDWG^.pObjRoot.ObjArray,drawings.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
-     drawings.GetCurrentROOT.FormatEntity(drawings.GetCurrentDWG^,dc);
-     ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
-     //if assigned(updatevisibleproc) then updatevisibleproc(ZMsgID_GUIActionRedraw);
-     if drawings.currentdwg<>PTSimpleDrawing(BlockBaseDWG) then
-                                         begin
-                                         drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree.maketreefrom(drawings.GetCurrentDWG^.pObjRoot.ObjArray,drawings.GetCurrentDWG^.pObjRoot.vp.BoundingBox,nil);
-                                         //drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree:=createtree(drawings.GetCurrentDWG^.pObjRoot.ObjArray,drawings.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
-                                         //isOpenGLError;
-                                         zcRedrawCurrentDrawing;
-                                         end;
-     result:=cmd_ok;
-
-     end
-        else
-        ZCMsgCallBackInterface.TextMessage('MERGE:'+format(rsUnableToOpenFile,[s]),TMWOShowError);
+  if drawings.currentdwg<>PTSimpleDrawing(BlockBaseDWG) then
+    if drawings.GetCurrentROOT.ObjArray.Count>0 then begin
+      if ZCMsgCallBackInterface.TextQuestion(rsDWGAlreadyContainsData,'QLOAD')=zccbNo then
+        exit;
+    end;
+  s:=operands;
+  loadproc:=Ext2LoadProcMap.GetLoadProc(extractfileext(s));
+  isload:=(assigned(loadproc))and(FileExists(utf8tosys(s)));
+  if isload then begin
+    result:=Internal_Load_Merge(s,loadproc,LoadMode);
+  end else
+    ZCMsgCallBackInterface.TextMessage('MERGE:'+format(rsUnableToOpenFile,[s]),TMWOShowError);
 end;
 
 

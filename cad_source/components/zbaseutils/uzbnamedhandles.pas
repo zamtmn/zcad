@@ -50,6 +50,7 @@ type
    function GetHandleByName(HandleName:GNameType):GHandleType;
    function CreateOrGetHandle(HandleName:GNameType):GHandleType;
    function TryGetHandle(HandleName:GNameType;out Handle:GHandleType):boolean;
+   function StandartizeName(name:GNameType):GNameType;
 end;
 
 implementation
@@ -127,6 +128,11 @@ begin
     OldHN.N:=HandleName;
     HandleNameRegister.add(StandartizedHandleName,OldHN);
   end;
+end;
+
+function GTNamedHandles<GHandleType,GHandleManipulator,GNameType,GNameManipulator>.StandartizeName(name:GNameType):GNameType;
+begin
+  Result:=GNameManipulator.Standartize(name);
 end;
 
 begin

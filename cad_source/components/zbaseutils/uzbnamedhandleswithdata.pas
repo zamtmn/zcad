@@ -27,9 +27,9 @@ uses
 
 type
 
-  GTLinearIncHandleManipulator<GHandleType>=object(GTHandleManipulator<GHandleType>)
+  {GTLinearIncHandleManipulator<GHandleType>=object(GTHandleManipulator<GHandleType>)
     class function GetIndex(Handle:GHandleType):SizeInt;inline;static;
-  end;
+  end;}
 
  GTNamedHandlesWithData<GHandleType,GHandleManipulator,GNameType,GNameManipulator,GLincedData>=object(GTNamedHandles<GHandleType,GHandleManipulator,GNameType,GNameManipulator>)
    type
@@ -53,10 +53,10 @@ type
 
 implementation
 
-class function GTLinearIncHandleManipulator<GHandleType>.GetIndex(Handle:GHandleType):SizeInt;
+{class function GTLinearIncHandleManipulator<GHandleType>.GetIndex(Handle:GHandleType):SizeInt;
 begin
   result:=Handle-1;
-end;
+end;}
 
 constructor GTNamedHandlesWithData<GHandleType,GHandleManipulator,GNameType,GNameManipulator,GLincedData>.init;
 begin

@@ -15,69 +15,111 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-{MODE OBJFPC}{H+}
 unit uzeffmanager;
 {$INCLUDE zengineconfig.inc}
+{$Mode Delphi}{$H+}
 
 interface
-uses uzbtypes,uzeentgenericsubentry,uzedrawingsimple,sysutils,gzctnrSTL,LazLogger;
+uses uzbnamedhandles,uzbnamedhandleswithdata,uzbtypes,uzeentgenericsubentry,uzedrawingsimple,sysutils,gzctnrSTL,LazLogger;
 
 type
-TFileLoadProcedure=procedure(name: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
-TFileFormatData=record
-                FormatDesk:String;
-                FileLoadProcedure:TFileLoadProcedure;
-                end;
-TExt2LoadProcMapGen=GKey2DataMap<String,TFileFormatData(*{$IFNDEF DELPHI},LessString{$ENDIF}*)>;
-TExt2LoadProcMap=class(TExt2LoadProcMapGen)
-                      fDefaultFileExt:String;
-                      function GetCurrentFileFilter:String;
-                      function GetDefaultFileExt:String;
-                      function GetDefaultFileFilterIndex:integer;
-                      function GetLoadProc(const _Wxt:String):TFileLoadProcedure;
-
-                      procedure RegisterExt(const _Wxt:String; const _FormatDesk:String; _FileLoadProcedure:TFileLoadProcedure; const _default:boolean=false);
-                 end;
-
+  TExt2LoadProcMap<GFileProcessProc>=class
+    private
+      type
+        PTFileFormatData=^TFileFormatData;
+        TFileFormatData=record
+          FormatExt:String;
+          FormatDesk:String;
+          FileLoadProcedure:GFileProcessProc;
+        end;
+        PTFileFormatHandle=^TFileFormatHandle;
+        TFileFormatHandle=Integer;
+        TFileFormats=GTNamedHandlesWithData<TFileFormatHandle,GTLinearIncHandleManipulator<TFileFormatHandle>,String,GTStringNamesUPPERCASE<String>,TFileFormatData>;
+        TFileFormatDataVector=TMyVector<TFileFormatData>;
+        TExt2LoadProcMapGen=GKey2DataMap<String,TFileFormatHandle>;
+      var
+        fDefaultFileExt:String;
+        map:TExt2LoadProcMapGen;
+        vec:TFileFormats;
+    public
+      constructor Create;
+      destructor Done;
+      procedure RegisterExt(const _Wxt:String; const _FormatDesk:String; _FileLoadProcedure:GFileProcessProc; const _default:boolean=false);
+      function GetLoadProc(const _Wxt:String):GFileProcessProc;
+      function GetCurrentFileFilter:String;
+      function GetDefaultFileExt:String;
+      function GetDefaultFileFilterIndex:integer;
+  end;
+  TFileLoadProcedure=procedure(name: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 var
-  Ext2LoadProcMap:TExt2LoadProcMap;
+  Ext2LoadProcMap:TExt2LoadProcMap<TFileLoadProcedure>;
 
 implementation
 
-function TExt2LoadProcMap.GetLoadProc(const _Wxt:String):TFileLoadProcedure;
-var
-   data:TFileFormatData;
-   _key:String;
+constructor TExt2LoadProcMap<GFileProcessProc>.Create;
 begin
-     result:=nil;
-     _key:=lowercase(_Wxt);
-     if _key<>'' then
-     begin
-     while _key[1]='.' do
-      _key:=copy(_key,2,length(_key)-1);
-     if MyGetValue(_key,data) then
-                                  result:=data.FileLoadProcedure;
-     end;
+  inherited;
+  map:=TExt2LoadProcMapGen.Create;
+  vec.Init;
 end;
 
-procedure TExt2LoadProcMap.RegisterExt(const _Wxt:String; const _FormatDesk:String; _FileLoadProcedure:TFileLoadProcedure; const _default:boolean=false);
-var
-   FileFormatData:TFileFormatData;
+destructor TExt2LoadProcMap<GFileProcessProc>.Done;
 begin
-     FileFormatData.FormatDesk:=_FormatDesk;
-     FileFormatData.FileLoadProcedure:=_FileLoadProcedure;
-     RegisterKey(_Wxt,FileFormatData);
-     if _default then
-                     fDefaultFileExt:=_Wxt;
+  inherited;
+  map.Free;
+  vec.Done;
 end;
-function TExt2LoadProcMap.GetDefaultFileFilterIndex:integer;
+
+function TExt2LoadProcMap<GFileProcessProc>.GetLoadProc(const _Wxt:String):TFileLoadProcedure;
+var
+  ExtHandle:TFileFormatHandle;
+  _key:String;
+begin
+  result:=nil;
+  _key:=vec.StandartizeName(_Wxt);
+  if _key<>'' then begin
+    while _key[1]='.' do
+     _key:=copy(_key,2,length(_key)-1);
+    if map.MyGetValue(_key,ExtHandle) then
+      result:=vec.GetPLincedData(ExtHandle)^.FileLoadProcedure;
+  end;
+end;
+
+procedure TExt2LoadProcMap<GFileProcessProc>.RegisterExt(const _Wxt:String; const _FormatDesk:String; _FileLoadProcedure:GFileProcessProc; const _default:boolean=false);
+var
+  FileFormatData:TFileFormatData;
+  StandartizedName:string;
+  ExtHandle:integer;
+  PValue:TExt2LoadProcMapGen.PValue;
+  PData:PTFileFormatData;
+begin
+  StandartizedName:=vec.StandartizeName(_Wxt);
+  if map.MyGetMutableValue(StandartizedName,PValue) then begin
+    ExtHandle:=vec.CreateHandle;
+    PData:=vec.GetPLincedData(ExtHandle);
+    PData^.FormatDesk:=_FormatDesk;
+    PData^.FormatExt:=_Wxt;
+    PData^.FileLoadProcedure:=_FileLoadProcedure;
+    if _default then
+      PValue^:=ExtHandle;
+  end else begin
+    ExtHandle:=vec.CreateOrGetHandle(_Wxt);
+    PData:=vec.GetPLincedData(ExtHandle);
+    PData^.FormatDesk:=_FormatDesk;
+    PData^.FormatExt:=_Wxt;
+    PData^.FileLoadProcedure:=_FileLoadProcedure;
+    map.RegisterKey(StandartizedName,ExtHandle);
+  end;
+end;
+
+function TExt2LoadProcMap<GFileProcessProc>.GetDefaultFileFilterIndex:integer;
 {$IFNDEF DELPHI}
 var
-   pair:TExt2LoadProcMap.TDictionaryPair;
+   pair:TExt2LoadProcMapGen.TDictionaryPair;
    //iterator:TExt2LoadProcMap.TIterator;
 begin
   result:=1;
-  for pair in self do begin
+  for pair in map do begin
      //iterator:=Min;
      //if assigned(iterator) then
      //repeat
@@ -92,22 +134,18 @@ end;
 begin
 end;
 {$ENDIF}
-function TExt2LoadProcMap.GetCurrentFileFilter:String;
+function TExt2LoadProcMap<GFileProcessProc>.GetCurrentFileFilter:String;
 {$IFNDEF DELPHI}
 var
-  pair:TExt2LoadProcMap.TDictionaryPair;
-  //iterator:TExt2LoadProcMap.TIterator;
+  ffd:TFileFormats.THandleData;
 begin
   result:='';
-  for pair in self do
-  //   iterator:=Min;
-  //   if assigned(iterator) then
-  //   repeat
-         if result<>'' then
-                           result:=result+'|'+pair.Value.FormatDesk+'|*.'+pair.key
-                       else
-                           result:=pair.Value.FormatDesk+'|*.'+pair.key;
-  //   until not iterator.Next;
+  for ffd in vec.HandleDataVector do
+    if result<>'' then
+      result:=result+'|'+ffd.d.FormatDesk+'|*.'+ffd.d.FormatExt
+    else
+      result:=ffd.d.FormatDesk+'|*.'+ffd.d.FormatExt;
+
   if result<>'' then
     result:=result+'|';
   result:=result+'All files (*.*)|*.*'
@@ -118,13 +156,13 @@ end;
 begin
 end;
 {$ENDIF}
-function TExt2LoadProcMap.GetDefaultFileExt:String;
+function TExt2LoadProcMap<GFileProcessProc>.GetDefaultFileExt:String;
 begin
      result:=fDefaultFileExt;
 end;
 
 initialization
-  Ext2LoadProcMap:=TExt2LoadProcMap.create;
+  Ext2LoadProcMap:=TExt2LoadProcMap<TFileLoadProcedure>.create;
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   Ext2LoadProcMap.Destroy;

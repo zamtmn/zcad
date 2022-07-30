@@ -34,6 +34,8 @@ uses
   uzccomimport;
 
 implementation
+const
+  ImportFileFilter:String='PDF files (*.pdf)|*.pdf|PostScript files (*.ps)|*.ps|SVG files (*.svg)|*.svg|DXF files (*.dxf)|*.dxf|EPS files (*.eps)|*.eps';
 
 function Import_com(operands:TCommandOperands):TCommandResult;
 var

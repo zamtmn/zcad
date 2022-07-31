@@ -23,8 +23,8 @@ unit uzeffLibreDWG;
 interface
 uses
   LCLProc,
-  SysUtils,
-  dwg,
+  SysUtils,TypInfo,
+  dwg,dwgproc,
   uzeffmanager,uzeentgenericsubentry,uzbtypes,uzedrawingsimple,
   uzelongprocesssupport,uzeentline,uzeentity,uzgldrawcontext,
   gzctnrSTL;
@@ -38,6 +38,7 @@ type
   end;
   TDWGContext=record
     DWG:Dwg_Data;
+    DWGVer:DWG_VERSION_TYPE;
     procedure CreateRec(var ADWG:Dwg_Data);
   end;
 
@@ -61,6 +62,13 @@ type
 var
   DWGObjectsDataDic:TDWGObjectsDataDic=nil;
 
+function DWG_V(v:DWG_VERSION_TYPE):string;
+begin
+  if Ord(v)>Ord(R_AFTER)then
+    v:=R_AFTER;
+  result:=GetEnumName(typeinfo(v),Ord(v));
+end;
+
 procedure BITCODE_T2Text(const p:BITCODE_T;constref DWGContext:TDWGContext;out text:string);
 begin
   if DWGContext.dwg.header.version<=R_2004 then
@@ -79,6 +87,9 @@ end;
 procedure TDWGContext.CreateRec(var ADWG:Dwg_Data);
 begin
   DWG:=ADWG;
+  DWGVer:=ADWG.HEADER.version;
+  if DWGVer=R_INVALID then
+    DWGVer:=ADWG.HEADER.from_version;
 end;
 
 procedure TDWGObjectData.Create;
@@ -175,13 +186,12 @@ end;
 
 procedure DebugDWG(dwg:PDwg_Data);
 begin
-  DebugLn(['{WH}header.version: ',dwg^.header.version]);
-  DebugLn(['{WH}header.from_version: ',dwg^.header.from_version]);
-  DebugLn(['{WH}header.zero_5[0]: ',dwg^.header.zero_5[0]]);
-  DebugLn(['{WH}header.zero_5[1]: ',dwg^.header.zero_5[1]]);
-  DebugLn(['{WH}header.zero_5[2]: ',dwg^.header.zero_5[2]]);
-  DebugLn(['{WH}header.zero_5[3]: ',dwg^.header.zero_5[3]]);
-  DebugLn(['{WH}header.zero_5[4]: ',dwg^.header.zero_5[4]]);
+  DebugLn(['{WH}header.version: ',DWG_V(dwg^.header.version)]);
+  DebugLn(['{WH}header.from_version: ',DWG_V(dwg^.header.from_version)]);
+  if (dwg^.header.zero_5[0]=0)and(dwg^.header.zero_5[1]=0)and(dwg^.header.zero_5[2]=0)and(dwg^.header.zero_5[3]=0)and(dwg^.header.zero_5[4]=0)then
+    DebugLn(['{WH}header.zero_5: 0,0,0,0,0'])
+  else
+    DebugLn(['{WHM}header.zero_5: ',dwg^.header.zero_5[0],',',dwg^.header.zero_5[1],',',dwg^.header.zero_5[2],',',dwg^.header.zero_5[3],',',dwg^.header.zero_5[4]]);
   DebugLn(['{WH}header.is_maint: ',dwg^.header.is_maint]);
   DebugLn(['{WH}header.zero_one_or_three: ',dwg^.header.zero_one_or_three]);
   DebugLn(['{WH}header.unknown_3: ',dwg^.header.unknown_3]);

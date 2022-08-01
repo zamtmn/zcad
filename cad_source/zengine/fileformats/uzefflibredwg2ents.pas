@@ -24,7 +24,7 @@ interface
 uses
   LCLProc,
   SysUtils,
-  dwg,
+  dwg,dwgproc,
   uzeentgenericsubentry,uzbtypes,uzedrawingsimple,
   uzbstrproc,
   uzestyleslayers,
@@ -35,7 +35,7 @@ type
   PDwg_Entity_LINE=^Dwg_Entity_LINE;
   PDwg_Object_LAYER=^Dwg_Object_LAYER;
 
-procedure AddLayer(var ZContext:TZDrawingContext;var DWGContext:TDWGContext;var DWGObject:Dwg_Object;PDWGLayer:PDwg_Object_LAYER);
+procedure AddLayer(var ZContext:TZDrawingContext;var DWGContext:TDWGCtx;var DWGObject:Dwg_Object;PDWGLayer:PDwg_Object_LAYER);
 var
   player:PGDBLayerProp;
   name:string;
@@ -53,28 +53,10 @@ begin
     player^._lock:=(PDWGLayer^.locked<>0);
     player^._print:=(PDWGLayer^.plotflag<>0);
     //desk:AnsiString;
-
   end;
-  (*      _dwg_object_LAYER = record
-          {$define BITCODE_XXlaytype:=BITCODE_RC}
-          COMMON_TABLE_FIELDS;
-          {$undef BITCODE_XXlaytype}
-          frozen : BITCODE_B;
-          &on : BITCODE_B;
-          frozen_in_new : BITCODE_B;
-          locked : BITCODE_B;
-          plotflag : BITCODE_B;
-          linewt : BITCODE_RC;
-          color : BITCODE_CMC;
-          plotstyle : BITCODE_H;
-          material : BITCODE_H;
-          ltype : BITCODE_H;
-          visualstyle : BITCODE_H;
-        end;
-  *)
 end;
 
-procedure AddLineEntity(var ZContext:TZDrawingContext;var DWGContext:TDWGContext;var DWGObject:Dwg_Object;PLine:PDwg_Entity_LINE);
+procedure AddLineEntity(var ZContext:TZDrawingContext;var DWGContext:TDWGCtx;var DWGObject:Dwg_Object;PLine:PDwg_Entity_LINE);
 var
   pobj:PGDBObjEntity;
 begin
@@ -91,7 +73,7 @@ begin
 end;
 
 initialization
-  RegisterDWGObjectLoadProc(DWG_TYPE_Layer,@AddLayer);
-  RegisterDWGEntityLoadProc(DWG_TYPE_Line,@AddLineEntity);
+  ZCDWGParser.RegisterDWGObjectLoadProc(DWG_TYPE_Layer,@AddLayer);
+  ZCDWGParser.RegisterDWGEntityLoadProc(DWG_TYPE_Line,@AddLineEntity);
 finalization
 end.

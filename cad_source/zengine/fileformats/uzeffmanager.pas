@@ -20,7 +20,9 @@ unit uzeffmanager;
 {$Mode Delphi}{$H+}
 
 interface
-uses uzbnamedhandles,uzbnamedhandleswithdata,uzbtypes,uzeentgenericsubentry,uzedrawingsimple,sysutils,gzctnrSTL,LazLogger;
+uses
+  uzbnamedhandles,uzbnamedhandleswithdata,uzbtypes,uzeentgenericsubentry,
+  uzedrawingsimple,sysutils,gzctnrSTL,LazLogger,uzgldrawcontext;
 
 type
   TExt2LoadProcMap<GFileProcessProc>=class
@@ -52,12 +54,28 @@ type
       //function GetDefaultFileFilterIndex:integer;
       property DefaultExt:String read fDefaultFileExt write fDefaultFileExt;
   end;
-  TFileLoadProcedure=procedure(name: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+  TZDrawingContext=record
+    PDrawing:PTSimpleDrawing;
+    POwner:PGDBObjGenericSubEntry;
+    LoadMode:TLoadOpt;
+    DC:TDrawContext;
+    procedure CreateRec(var ADrawing:TSimpleDrawing;var AOwner:GDBObjGenericSubEntry;ALoadMode:TLoadOpt;constref ADC:TDrawContext);
+  end;
+  TFileLoadProcedure=procedure(name: String;var ZCDCtx:TZDrawingContext{owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing});
   TLoadFomats=TExt2LoadProcMap<TFileLoadProcedure>;
 var
     Ext2LoadProcMap:TLoadFomats;
 
 implementation
+
+procedure TZDrawingContext.CreateRec(var ADrawing:TSimpleDrawing;var AOwner:GDBObjGenericSubEntry;ALoadMode:TLoadOpt;constref ADC:TDrawContext);
+begin
+  PDrawing:=@ADrawing;
+  POwner:=@AOwner;
+  LoadMode:=ALoadMode;
+  DC:=ADC;
+end;
+
 
 constructor TExt2LoadProcMap<GFileProcessProc>.Create;
 begin

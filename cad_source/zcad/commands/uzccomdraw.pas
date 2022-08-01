@@ -49,7 +49,7 @@ uses
   math,uzeenttable,uzctnrvectorstrings,
   uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray
   ,uzelongprocesssupport,LazLogger,uzccommand_circle2,uzccommand_erase,uzccmdfloatinsert,
-  uzccommand_rebuildtree;
+  uzccommand_rebuildtree, uzeffmanager;
 const
      modelspacename:String='**Модель**';
 type
@@ -1208,6 +1208,7 @@ var
   tmpStr:AnsiString;
   tmpStream:TMemoryStream;
   tmpSize:LongInt;
+  zdctx:TZDrawingContext;
 begin
   zcformat:=RegisterClipboardFormat(ZCAD_DXF_CLIPBOARD_NAME);
   if clipboard.HasFormat(zcformat) then begin
@@ -1222,8 +1223,10 @@ begin
     finally
       tmpStream.free;
     end;
-    if fileexists(utf8tosys(tmpStr)) then
-      addfromdxf(tmpStr,@drawings.GetCurrentDWG^.ConstructObjRoot,{tloload}TLOMerge,drawings.GetCurrentDWG^);
+    if fileexists(utf8tosys(tmpStr)) then begin
+      zdctx.CreateRec(drawings.GetCurrentDWG^,drawings.GetCurrentDWG^.ConstructObjRoot,TLOMerge,drawings.GetCurrentDWG^.CreateDrawingRC);
+      addfromdxf(tmpStr,zdctx{@drawings.GetCurrentDWG^.ConstructObjRoot,{tloload}TLOMerge,drawings.GetCurrentDWG^});
+    end;
     drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
     ZCMsgCallBackInterface.TextMessage(rscmNewBasePoint,TMWOHistoryOut);
   end else

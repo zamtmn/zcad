@@ -29,7 +29,8 @@ uses
   uzbstrproc,
   uzestyleslayers,
   uzeentline,uzeentity,uzgldrawcontext,
-  uzeffLibreDWG;
+  uzeffLibreDWG,
+  uzeffmanager;
 implementation
 type
   PDwg_Entity_LINE=^Dwg_Entity_LINE;

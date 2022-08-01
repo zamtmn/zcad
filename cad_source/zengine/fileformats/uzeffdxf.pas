@@ -45,7 +45,7 @@ var FOC:Integer;
     CreateExtLoadData:TCreateExtLoadData=nil;
     ClearExtLoadData:TProcessExtLoadData=nil;
     FreeExtLoadData:TProcessExtLoadData=nil;
-procedure addfromdxf(name: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+procedure addfromdxf(name: String;var ZCDCtx:TZDrawingContext{owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing});
 function savedxf2000(SavedFileName,TemplateFileName:String;var drawing:TSimpleDrawing):boolean;
 procedure saveZCP(name: String;var drawing:TSimpleDrawing);
 procedure LoadZCP(name: String;var drawing:TSimpleDrawing);
@@ -1408,7 +1408,7 @@ begin
   lps.EndLongProcess(lph);
 end;
 
-procedure addfromdxf(name: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+procedure addfromdxf(name: String;var ZCDCtx:TZDrawingContext{owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing});
 var
   f: TZctnrVectorBytes;
   s,s1,s2: String;
@@ -1446,27 +1446,27 @@ begin
                                          //HistoryOutStr(format(rsFileFormat,['DXF12 ('+s+')']));
                                          DebugLn('{IH}'+rsFileFormat,['DXF12 ('+s+')']);
                                          gotodxf(f, 0, dxfName_ENDSEC);
-                                         addfromdxf12(f,'EOF',owner,loadmode,drawing);
+                                         addfromdxf12(f,'EOF',ZCDCtx.POwner{owner},ZCDCtx.LoadMode{loadmode},ZCDCtx.PDrawing^{drawing});
                                     end;
                                1015:begin
                                          //HistoryOutStr(format(rsFileFormat,['DXF2000 ('+s+')']));
                                          DebugLn('{IH}'+rsFileFormat,['DXF2000 ('+s+')']);
-                                         addfromdxf2000(f,'EOF',owner,loadmode,drawing,context,DWGVarsDict)
+                                         addfromdxf2000(f,'EOF',ZCDCtx.POwner{owner},ZCDCtx.LoadMode{loadmode},ZCDCtx.PDrawing^{drawing},context,DWGVarsDict)
                                     end;
                                1018:begin
                                          //HistoryOutStr(format(rsFileFormat,['DXF2004 ('+s+')']));
                                          DebugLn('{IH}'+rsFileFormat,['DXF2004 ('+s+')']);
-                                         addfromdxf2000(f,'EOF',owner,loadmode,drawing,context,DWGVarsDict)
+                                         addfromdxf2000(f,'EOF',ZCDCtx.POwner{owner},ZCDCtx.LoadMode{loadmode},ZCDCtx.PDrawing^{drawing},context,DWGVarsDict)
                                     end;
                                1021:begin
                                          //HistoryOutStr(format(rsFileFormat,['DXF2007 ('+s+')']));
                                          DebugLn('{IH}'+rsFileFormat,['DXF2007 ('+s+')']);
-                                         addfromdxf2000(f,'EOF',owner,loadmode,drawing,context,DWGVarsDict)
+                                         addfromdxf2000(f,'EOF',ZCDCtx.POwner{owner},ZCDCtx.LoadMode{loadmode},ZCDCtx.PDrawing^{drawing},context,DWGVarsDict)
                                     end;
                                1024:begin
                                          //HistoryOutStr(format(rsFileFormat,['DXF2010 ('+s+')']));
                                          DebugLn('{IH}'+rsFileFormat,['DXF2010 ('+s+')']);
-                                         addfromdxf2000(f,'EOF',owner,loadmode,drawing,context,DWGVarsDict)
+                                         addfromdxf2000(f,'EOF',ZCDCtx.POwner{owner},ZCDCtx.LoadMode{loadmode},ZCDCtx.PDrawing^{drawing},context,DWGVarsDict)
                                     end;
                                else
                                        begin
@@ -1483,8 +1483,8 @@ begin
   lps.EndLongProcess(lph);
   //if assigned(EndLongProcessProc)then
   //  EndLongProcessProc;
-  dc:=drawing.CreateDrawingRC;
-  owner^.calcbb(dc);
+  //dc:=drawing.CreateDrawingRC;
+  ZCDCtx.POwner^{owner^}.calcbb(ZCDCtx.DC{ dc});
   context.h2p.Destroy;
   DWGVarsDict.destroy;
   //Freemem(Pointer(phandlearray));

@@ -30,28 +30,12 @@ uses
 
 type
 
-  TZDrawingContext=record
-    PDrawing:PTSimpleDrawing;
-    POwner:PGDBObjGenericSubEntry;
-    LoadMode:TLoadOpt;
-    DC:TDrawContext;
-    procedure CreateRec(var ADrawing:TSimpleDrawing;var AOwner:GDBObjGenericSubEntry;ALoadMode:TLoadOpt;var ADC:TDrawContext);
-  end;
-
   TZCADDWGParser=specialize GDWGParser<TZDrawingContext>;
 
 var
   ZCDWGParser:TZCADDWGParser=nil;
 
 implementation
-
-procedure TZDrawingContext.CreateRec(var ADrawing:TSimpleDrawing;var AOwner:GDBObjGenericSubEntry;ALoadMode:TLoadOpt;var ADC:TDrawContext);
-begin
-  PDrawing:=@ADrawing;
-  POwner:=@AOwner;
-  LoadMode:=ALoadMode;
-  DC:=ADC;
-end;
 
 procedure DebugDWG(dwg:PDwg_Data);
 begin
@@ -74,15 +58,13 @@ end;
 procedure PLP(const Data:TData;const Counter:TCounter);
 begin
  lps.ProgressLongProcess(TLPSHandle(Data),Counter);
- Application.ProcessMessages;
 end;
 
-procedure addfromdwg(filename:String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+procedure addfromdwg(filename:String;var ZCDCtx:TZDrawingContext{owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing});
 var
   dwg:Dwg_Data;
   Success:integer;
   lph:TLPSHandle;
-  ZContext:TZDrawingContext;
   DC:TDrawContext;
 begin
   try
@@ -103,21 +85,18 @@ begin
     lps.EndLongProcess(lph);
     DebugLn(['{WH}Success: ',Success]);
     DebugDWG(@dwg);
-    DC:=drawing.CreateDrawingRC;
-    ZContext.CreateRec(Drawing,Owner^,LoadMode,DC);
     lph:=lps.StartLongProcess('Parse DWG data',nil,dwg.num_objects);
-    ZCDWGParser.parseDwg_Data(ZContext,dwg,@PLP,pointer(lph));
+    ZCDWGParser.parseDwg_Data(ZCDCtx,dwg,@PLP,pointer(lph));
     lps.EndLongProcess(lph);
     dwg_free(@dwg);
   finally
   end;
 end;
-procedure addfromdxf(filename:String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+procedure addfromdxf(filename:String;var ZCDCtx:TZDrawingContext{owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing});
 var
   dwg:Dwg_Data;
   Success:integer;
   lph:TLPSHandle;
-  ZContext:TZDrawingContext;
   DC:TDrawContext;
 begin
   try
@@ -138,10 +117,8 @@ begin
     lps.EndLongProcess(lph);
     DebugLn(['{WH}Success: ',Success]);
     DebugDWG(@dwg);
-    DC:=drawing.CreateDrawingRC;
-    ZContext.CreateRec(Drawing,Owner^,LoadMode,DC);
     lph:=lps.StartLongProcess('Parse DWG data',nil,dwg.num_objects);
-    ZCDWGParser.parseDwg_Data(ZContext,dwg,@PLP,pointer(lph));
+    ZCDWGParser.parseDwg_Data(ZCDCtx,dwg,@PLP,pointer(lph));
     lps.EndLongProcess(lph);
     dwg_free(@dwg);
   finally

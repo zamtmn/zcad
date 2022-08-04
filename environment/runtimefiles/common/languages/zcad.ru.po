@@ -375,7 +375,7 @@ msgid "Load"
 msgstr ""
 
 #: tlinetypesform.caption
-msgid "Line type manager"
+msgid "Line types"
 msgstr ""
 
 #: tlinetypesform.checkbox1.caption
@@ -720,10 +720,7 @@ msgid "${\"&[<]<<\",Keys[<],StrId[CLPIdBack]} Enter new export script:"
 msgstr ""
 
 #: uzccommand_dataexport.rsclpdataexportoptions
-msgid ""
-"${\"&[<]<<\",Keys[<],StrId[CLPIdBack]} Set ${\"&[e]ntities\",Keys[o],StrId"
-"[CLPIdUser1]}/${\"&[p]roperties\",Keys[o],StrId[CLPIdUser2]} filter or "
-"export ${\"&[s]cript\",Keys[o],StrId[CLPIdUser3]}"
+msgid "${\"&[<]<<\",Keys[<],StrId[CLPIdBack]} Set ${\"&[e]ntities\",Keys[o],StrId[CLPIdUser1]}/${\"&[p]roperties\",Keys[o],StrId[CLPIdUser2]} filter or export ${\"&[s]cript\",Keys[o],StrId[CLPIdUser3]}"
 msgstr ""
 
 #: uzccommand_dataexport.rsclpdataexportpropsfiltercurrentvalue
@@ -735,10 +732,7 @@ msgid "${\"&[<]<<\",Keys[<],StrId[CLPIdBack]} Enter new properties filter:"
 msgstr ""
 
 #: uzccommand_dataexport.rsclpdataexportwaitfile
-msgid ""
-"Configure export ${\"&[p]arams\",Keys[p],StrId[CLPIdOptions]}, run ${\"&[f]"
-"ile dialog\",Keys[f],StrId[CLPIdFileDialog]} or enter file name (empty for "
-"default):"
+msgid "Configure export ${\"&[p]arams\",Keys[p],StrId[CLPIdOptions]}, run ${\"&[f]ile dialog\",Keys[f],StrId[CLPIdFileDialog]} or enter file name (empty for default):"
 msgstr ""
 
 #: uzcdialogsfiles.rsopensomething
@@ -755,9 +749,7 @@ msgstr "Неможет быть соединено"
 
 #: uzcfnavigatordevices.rsnavigatorparamsfilefilter
 #, object-pascal-format
-msgid ""
-"This navigator params files (*.%0:s)|*.%0:s|Xml files (*.xml)|*.xml|All "
-"files (*.*)|*.*"
+msgid "This navigator params files (*.%0:s)|*.%0:s|Xml files (*.xml)|*.xml|All files (*.*)|*.*"
 msgstr ""
 
 #: uzcfnavigatordevices.rsstandalonedevices
@@ -816,12 +808,8 @@ msgid "ByLayer"
 msgstr "По Слою"
 
 #: uzcstrconsts.rscautionnosyntaxcheckyet
-msgid ""
-"CAUTION! There is no syntax check yet. Clicking \"OK\" the object will be "
-"updated. Error - CRASHES!!!"
-msgstr ""
-"ВНИМАНИЕ! проверки синтаксиса нет. При нажатии \"OK\" объекты будут "
-"обновлены. Ошибка=Вылет!"
+msgid "CAUTION! There is no syntax check yet. Clicking \"OK\" the object will be updated. Error - CRASHES!!!"
+msgstr "ВНИМАНИЕ! проверки синтаксиса нет. При нажатии \"OK\" объекты будут обновлены. Ошибка=Вылет!"
 
 #: uzcstrconsts.rsclipboardisempty
 msgid "Clipboard is empty, there is nothing to paste"
@@ -1104,12 +1092,8 @@ msgstr "Команда \"%s\" не может быть запущена"
 
 #: uzcstrconsts.rscommenteeport
 #, object-pascal-format
-msgid ""
-"Registered commands - %d; registered entities - %d; registered DXF entities "
-"- %d"
-msgstr ""
-"Зарегистрированных команд - %d; зарегистрированных примитивов - %d; "
-"зарегистрированных DXF примитивов - %d"
+msgid "Registered commands - %d; registered entities - %d; registered DXF entities - %d"
+msgstr "Зарегистрированных команд - %d; зарегистрированных примитивов - %d; зарегистрированных DXF примитивов - %d"
 
 #: uzcstrconsts.rscompiledtimemsg
 #, object-pascal-format
@@ -1173,12 +1157,8 @@ msgstr "Разный"
 
 #: uzcstrconsts.rsdimstyleusedin
 #, object-pascal-format
-msgid ""
-"Dimension style \"%s\" used in: %d-model, %d-blockdef table, %d-dimstyle "
-"table"
-msgstr ""
-"Стиль размеров \"%s\" используется в: %d-модели, %d-таблице определений "
-"блоков, %d-ьаблице стилей размеров"
+msgid "Dimension style \"%s\" used in: %d-model, %d-blockdef table, %d-dimstyle table"
+msgstr "Стиль размеров \"%s\" используется в: %d-модели, %d-таблице определений блоков, %d-ьаблице стилей размеров"
 
 #: uzcstrconsts.rsdivbyzero
 msgid "Divide by zero"
@@ -1233,8 +1213,7 @@ msgstr "Выражение  %s возвращает %s"
 
 #: uzcstrconsts.rsfardeffilenotfounf
 #, object-pascal-format
-msgid ""
-"File definition of the variables can not be found for the device \"%s\";"
+msgid "File definition of the variables can not be found for the device \"%s\";"
 msgstr "Файл определения переменных не найден для устройства \"%s\";"
 
 #: uzcstrconsts.rsfilterhint
@@ -1434,20 +1413,15 @@ msgstr "Повторное создание %s!"
 msgid ""
 "-UNDO\\REDO - yet it is better not to use;\n"
 "\n"
-"-If you have problems with rendering or selecting entities, run \"Regen\" "
-"and \"RebuildTree\" in command line;\n"
+"-If you have problems with rendering or selecting entities, run \"Regen\" and \"RebuildTree\" in command line;\n"
 "\n"
-"-To disable the display of this window comment out line \"About\" in the "
-"file \"components\\autorun.cmd\". Encoding of all configuration files - "
-"UTF8;\n"
+"-To disable the display of this window comment out line \"About\" in the file \"components\\autorun.cmd\". Encoding of all configuration files - UTF8;\n"
 msgstr ""
 "-UNDO\\REDO - пока лучше не пользоваться;\n"
 "\n"
-"-При проблемах с отображением или выделением примитивов, запустите \"Regen\" "
-"и \"RebuildTree\" в командной строке;\n"
+"-При проблемах с отображением или выделением примитивов, запустите \"Regen\" и \"RebuildTree\" в командной строке;\n"
 "\n"
-"-Для отключения показа этого окна закоментируйте строку \"About\" в файле "
-"\"components\\autorun.cmd\". Кодировка всех конфигурационных файлов - UTF8;\n"
+"-Для отключения показа этого окна закоментируйте строку \"About\" в файле \"components\\autorun.cmd\". Кодировка всех конфигурационных файлов - UTF8;\n"
 
 #: uzcstrconsts.rsrenamedto
 #, object-pascal-format
@@ -1506,11 +1480,8 @@ msgstr "Редактор текста"
 
 #: uzcstrconsts.rstextstyleusedin
 #, object-pascal-format
-msgid ""
-"Text style \"%s\" used in: %d-model, %d-blockdef table, %d-dimstyle table"
-msgstr ""
-"Стиль текста \"%s\" используется: %d-в модели, %d-в таблице определений "
-"блоков, %d-в таблице стилей размеров"
+msgid "Text style \"%s\" used in: %d-model, %d-blockdef table, %d-dimstyle table"
+msgstr "Стиль текста \"%s\" используется: %d-в модели, %d-в таблице определений блоков, %d-в таблице стилей размеров"
 
 #: uzcstrconsts.rstoolbarnotfound
 #, object-pascal-format
@@ -1623,12 +1594,8 @@ msgstr "Для стиля текста \"%s\" не найден шрифт \"%s\
 
 #: uzestrconsts.fontnotfoundandreplace
 #, object-pascal-format
-msgid ""
-"For text style \"%s\" not found font \"%s\" (\"%s\" fontfamily), is replaced "
-"by an alternative"
-msgstr ""
-"Для стиля текста \"%s\" не найден фонт \"%s\" (\"%s\" семейство), заменен на "
-"альтернативный"
+msgid "For text style \"%s\" not found font \"%s\" (\"%s\" fontfamily), is replaced by an alternative"
+msgstr "Для стиля текста \"%s\" не найден фонт \"%s\" (\"%s\" семейство), заменен на альтернативный"
 
 #: uzestrconsts.rsalternatefontnotfoundin
 #, object-pascal-format
@@ -1697,3 +1664,4 @@ msgstr "Работает только при виде сверху"
 #: zcad.rsstartautorun
 msgid "Execute *components\\autorun.cmd"
 msgstr "*componentsautorun.cmd выполняется"
+

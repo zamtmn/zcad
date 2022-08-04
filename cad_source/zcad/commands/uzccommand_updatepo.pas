@@ -45,13 +45,13 @@ begin
      if sysparam.saved.updatepo then
      begin
           begin
-               cleaned:=po.exportcompileritems(actualypo);
+               cleaned:=RunTimePO.exportcompileritems(actualypo);
                s:='Cleaned items: '+inttostr(cleaned)
            +#13#10'Added items: '+inttostr(_UpdatePO)
            +#13#10'File zcadrt.po must be rewriten. Confirm?';
                if ZCMsgCallBackInterface.TextQuestion('UpdatePO',s)=zccbNo then
                  exit;
-               po.SaveToFile(expandpath(PODirectory + ZCADRTBackupPOFileName));
+               RunTimePO.SaveToFile(expandpath(PODirectory + ZCADRTBackupPOFileName));
                actualypo.SaveToFile(expandpath(PODirectory + ZCADRTPOFileName));
                sysparam.saved.updatepo:=false
           end;

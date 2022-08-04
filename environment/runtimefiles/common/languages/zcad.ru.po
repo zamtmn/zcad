@@ -261,21 +261,20 @@ msgstr ""
 
 #: tlayersform.addlayer.hint
 msgid "Add layer"
-msgstr ""
+msgstr "Добавить слой"
 
 #: tlayersform.buttonapplyclose.caption
-#, fuzzy
 msgctxt "tlayersform.buttonapplyclose.caption"
 msgid "Apply and close"
 msgstr "Применить и закрыть"
 
 #: tlayersform.button_apply.caption
 msgid "Apply"
-msgstr ""
+msgstr "Применить"
 
 #: tlayersform.caption
 msgid "Layers"
-msgstr ""
+msgstr "Слои"
 
 #: tlayersform.dellayer.caption
 msgid "DelLayer"
@@ -283,54 +282,49 @@ msgstr ""
 
 #: tlayersform.dellayer.hint
 msgid "Delete layer"
-msgstr ""
+msgstr "Удалить слой"
 
 #: tlayersform.listview1.columns[0].caption
-#, fuzzy
 msgctxt "tlayersform.listview1.columns[0].caption"
 msgid "Status"
 msgstr "Статус"
 
 #: tlayersform.listview1.columns[1].caption
-#, fuzzy
 msgctxt "tlayersform.listview1.columns[1].caption"
 msgid "Name"
 msgstr "Имя"
 
 #: tlayersform.listview1.columns[2].caption
 msgid "On"
-msgstr ""
+msgstr "Включен"
 
 #: tlayersform.listview1.columns[3].caption
 msgid "Freze"
-msgstr ""
+msgstr "Заморожен"
 
 #: tlayersform.listview1.columns[4].caption
 msgid "Lock"
-msgstr ""
+msgstr "Заблокирован"
 
 #: tlayersform.listview1.columns[5].caption
-#, fuzzy
 msgctxt "tlayersform.listview1.columns[5].caption"
 msgid "Color"
 msgstr "Цвет"
 
 #: tlayersform.listview1.columns[6].caption
-#, fuzzy
 msgctxt "tlayersform.listview1.columns[6].caption"
 msgid "Line type"
 msgstr "Тип линии"
 
 #: tlayersform.listview1.columns[7].caption
 msgid "Line weight"
-msgstr ""
+msgstr "Вес линии"
 
 #: tlayersform.listview1.columns[8].caption
 msgid "Plot"
-msgstr ""
+msgstr "Печать"
 
 #: tlayersform.listview1.columns[9].caption
-#, fuzzy
 msgctxt "tlayersform.listview1.columns[9].caption"
 msgid "Description"
 msgstr "Описание"
@@ -341,7 +335,7 @@ msgstr ""
 
 #: tlayersform.mkcurrentlayer.hint
 msgid "Make selected layer current"
-msgstr ""
+msgstr "Сделать выбраный слой текущим"
 
 #: tlayersform.purgelayers.caption
 msgid "PurgeLayers"
@@ -349,7 +343,7 @@ msgstr ""
 
 #: tlayersform.purgelayers.hint
 msgid "Purge layers"
-msgstr ""
+msgstr "Очистить слои"
 
 #: tlayersform.refreshlayers.caption
 msgid "RefreshLayers"
@@ -357,7 +351,7 @@ msgstr ""
 
 #: tlayersform.refreshlayers.hint
 msgid "Refresh layers"
-msgstr ""
+msgstr "Обновить слои"
 
 #: tlayersform.toolbar1.caption
 msgctxt "tlayersform.toolbar1.caption"
@@ -450,26 +444,26 @@ msgstr "Устройства"
 #: tnavigatordevices.collapseall.caption
 msgctxt "tnavigatordevices.collapseall.caption"
 msgid "Collapse all"
-msgstr ""
+msgstr "Свернуть всё"
 
 #: tnavigatordevices.collapseallbtn.hint
 msgctxt "tnavigatordevices.collapseallbtn.hint"
 msgid "Collapse all"
-msgstr ""
+msgstr "Свернуть всё"
 
 #: tnavigatordevices.expandall.caption
 msgctxt "tnavigatordevices.expandall.caption"
 msgid "Expand all"
-msgstr ""
+msgstr "Развернуть всё"
 
 #: tnavigatordevices.expandallbtn.hint
 msgctxt "tnavigatordevices.expandallbtn.hint"
 msgid "Expand all"
-msgstr ""
+msgstr "Развернуть всё"
 
 #: tnavigatordevices.filterbtn.buttonhint
 msgid "Clear filter"
-msgstr ""
+msgstr "Очистить фильтр"
 
 #: tnavigatordevices.includeents.caption
 msgid "Edit include entities"
@@ -726,7 +720,10 @@ msgid "${\"&[<]<<\",Keys[<],StrId[CLPIdBack]} Enter new export script:"
 msgstr ""
 
 #: uzccommand_dataexport.rsclpdataexportoptions
-msgid "${\"&[<]<<\",Keys[<],StrId[CLPIdBack]} Set ${\"&[e]ntities\",Keys[o],StrId[CLPIdUser1]}/${\"&[p]roperties\",Keys[o],StrId[CLPIdUser2]} filter or export ${\"&[s]cript\",Keys[o],StrId[CLPIdUser3]}"
+msgid ""
+"${\"&[<]<<\",Keys[<],StrId[CLPIdBack]} Set ${\"&[e]ntities\",Keys[o],StrId"
+"[CLPIdUser1]}/${\"&[p]roperties\",Keys[o],StrId[CLPIdUser2]} filter or "
+"export ${\"&[s]cript\",Keys[o],StrId[CLPIdUser3]}"
 msgstr ""
 
 #: uzccommand_dataexport.rsclpdataexportpropsfiltercurrentvalue
@@ -738,7 +735,10 @@ msgid "${\"&[<]<<\",Keys[<],StrId[CLPIdBack]} Enter new properties filter:"
 msgstr ""
 
 #: uzccommand_dataexport.rsclpdataexportwaitfile
-msgid "Configure export ${\"&[p]arams\",Keys[p],StrId[CLPIdOptions]}, run ${\"&[f]ile dialog\",Keys[f],StrId[CLPIdFileDialog]} or enter file name (empty for default):"
+msgid ""
+"Configure export ${\"&[p]arams\",Keys[p],StrId[CLPIdOptions]}, run ${\"&[f]"
+"ile dialog\",Keys[f],StrId[CLPIdFileDialog]} or enter file name (empty for "
+"default):"
 msgstr ""
 
 #: uzcdialogsfiles.rsopensomething
@@ -755,7 +755,9 @@ msgstr "Неможет быть соединено"
 
 #: uzcfnavigatordevices.rsnavigatorparamsfilefilter
 #, object-pascal-format
-msgid "This navigator params files (*.%0:s)|*.%0:s|Xml files (*.xml)|*.xml|All files (*.*)|*.*"
+msgid ""
+"This navigator params files (*.%0:s)|*.%0:s|Xml files (*.xml)|*.xml|All "
+"files (*.*)|*.*"
 msgstr ""
 
 #: uzcfnavigatordevices.rsstandalonedevices
@@ -814,8 +816,12 @@ msgid "ByLayer"
 msgstr "По Слою"
 
 #: uzcstrconsts.rscautionnosyntaxcheckyet
-msgid "CAUTION! There is no syntax check yet. Clicking \"OK\" the object will be updated. Error - CRASHES!!!"
-msgstr "ВНИМАНИЕ! проверки синтаксиса нет. При нажатии \"OK\" объекты будут обновлены. Ошибка=Вылет!"
+msgid ""
+"CAUTION! There is no syntax check yet. Clicking \"OK\" the object will be "
+"updated. Error - CRASHES!!!"
+msgstr ""
+"ВНИМАНИЕ! проверки синтаксиса нет. При нажатии \"OK\" объекты будут "
+"обновлены. Ошибка=Вылет!"
 
 #: uzcstrconsts.rsclipboardisempty
 msgid "Clipboard is empty, there is nothing to paste"
@@ -1098,8 +1104,12 @@ msgstr "Команда \"%s\" не может быть запущена"
 
 #: uzcstrconsts.rscommenteeport
 #, object-pascal-format
-msgid "Registered commands - %d; registered entities - %d; registered DXF entities - %d"
-msgstr "Зарегистрированных команд - %d; зарегистрированных примитивов - %d; зарегистрированных DXF примитивов - %d"
+msgid ""
+"Registered commands - %d; registered entities - %d; registered DXF entities "
+"- %d"
+msgstr ""
+"Зарегистрированных команд - %d; зарегистрированных примитивов - %d; "
+"зарегистрированных DXF примитивов - %d"
 
 #: uzcstrconsts.rscompiledtimemsg
 #, object-pascal-format
@@ -1163,8 +1173,12 @@ msgstr "Разный"
 
 #: uzcstrconsts.rsdimstyleusedin
 #, object-pascal-format
-msgid "Dimension style \"%s\" used in: %d-model, %d-blockdef table, %d-dimstyle table"
-msgstr "Стиль размеров \"%s\" используется в: %d-модели, %d-таблице определений блоков, %d-ьаблице стилей размеров"
+msgid ""
+"Dimension style \"%s\" used in: %d-model, %d-blockdef table, %d-dimstyle "
+"table"
+msgstr ""
+"Стиль размеров \"%s\" используется в: %d-модели, %d-таблице определений "
+"блоков, %d-ьаблице стилей размеров"
 
 #: uzcstrconsts.rsdivbyzero
 msgid "Divide by zero"
@@ -1219,7 +1233,8 @@ msgstr "Выражение  %s возвращает %s"
 
 #: uzcstrconsts.rsfardeffilenotfounf
 #, object-pascal-format
-msgid "File definition of the variables can not be found for the device \"%s\";"
+msgid ""
+"File definition of the variables can not be found for the device \"%s\";"
 msgstr "Файл определения переменных не найден для устройства \"%s\";"
 
 #: uzcstrconsts.rsfilterhint
@@ -1295,12 +1310,12 @@ msgid "Line type"
 msgstr "Тип линии"
 
 #: uzcstrconsts.rslinetypedesk
-#, object-pascal-format, fuzzy, badformat
+#, object-pascal-format
 msgid ""
 ";;DXF pattern length: %f, fact pattern length: %f\n"
 "%s"
 msgstr ""
-";;Длина шаблона %f\n"
+";;DXF длина паттерна: %f, фактическая длина: %f\n"
 "%s"
 
 #: uzcstrconsts.rslinetypeusedin
@@ -1419,15 +1434,20 @@ msgstr "Повторное создание %s!"
 msgid ""
 "-UNDO\\REDO - yet it is better not to use;\n"
 "\n"
-"-If you have problems with rendering or selecting entities, run \"Regen\" and \"RebuildTree\" in command line;\n"
+"-If you have problems with rendering or selecting entities, run \"Regen\" "
+"and \"RebuildTree\" in command line;\n"
 "\n"
-"-To disable the display of this window comment out line \"About\" in the file \"components\\autorun.cmd\". Encoding of all configuration files - UTF8;\n"
+"-To disable the display of this window comment out line \"About\" in the "
+"file \"components\\autorun.cmd\". Encoding of all configuration files - "
+"UTF8;\n"
 msgstr ""
 "-UNDO\\REDO - пока лучше не пользоваться;\n"
 "\n"
-"-При проблемах с отображением или выделением примитивов, запустите \"Regen\" и \"RebuildTree\" в командной строке;\n"
+"-При проблемах с отображением или выделением примитивов, запустите \"Regen\" "
+"и \"RebuildTree\" в командной строке;\n"
 "\n"
-"-Для отключения показа этого окна закоментируйте строку \"About\" в файле \"components\\autorun.cmd\". Кодировка всех конфигурационных файлов - UTF8;\n"
+"-Для отключения показа этого окна закоментируйте строку \"About\" в файле "
+"\"components\\autorun.cmd\". Кодировка всех конфигурационных файлов - UTF8;\n"
 
 #: uzcstrconsts.rsrenamedto
 #, object-pascal-format
@@ -1486,8 +1506,11 @@ msgstr "Редактор текста"
 
 #: uzcstrconsts.rstextstyleusedin
 #, object-pascal-format
-msgid "Text style \"%s\" used in: %d-model, %d-blockdef table, %d-dimstyle table"
-msgstr "Стиль текста \"%s\" используется: %d-в модели, %d-в таблице определений блоков, %d-в таблице стилей размеров"
+msgid ""
+"Text style \"%s\" used in: %d-model, %d-blockdef table, %d-dimstyle table"
+msgstr ""
+"Стиль текста \"%s\" используется: %d-в модели, %d-в таблице определений "
+"блоков, %d-в таблице стилей размеров"
 
 #: uzcstrconsts.rstoolbarnotfound
 #, object-pascal-format
@@ -1596,12 +1619,16 @@ msgstr "Файл DXF загружен"
 #: uzestrconsts.fontnotfound
 #, object-pascal-format
 msgid "For text style \"%s\" not found font \"%s\" (\"%s\" fontfamily)"
-msgstr ""
+msgstr "Для стиля текста \"%s\" не найден шрифт \"%s\" (\"%s\" семейство)"
 
 #: uzestrconsts.fontnotfoundandreplace
 #, object-pascal-format
-msgid "For text style \"%s\" not found font \"%s\" (\"%s\" fontfamily), is replaced by an alternative"
-msgstr "Для стиля текста \"%s\" не найден фонт \"%s\" (\"%s\" семейство), заменен на альтернативный"
+msgid ""
+"For text style \"%s\" not found font \"%s\" (\"%s\" fontfamily), is replaced "
+"by an alternative"
+msgstr ""
+"Для стиля текста \"%s\" не найден фонт \"%s\" (\"%s\" семейство), заменен на "
+"альтернативный"
 
 #: uzestrconsts.rsalternatefontnotfoundin
 #, object-pascal-format
@@ -1670,4 +1697,3 @@ msgstr "Работает только при виде сверху"
 #: zcad.rsstartautorun
 msgid "Execute *components\\autorun.cmd"
 msgstr "*componentsautorun.cmd выполняется"
-

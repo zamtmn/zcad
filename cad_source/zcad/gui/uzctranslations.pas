@@ -52,7 +52,7 @@ type
 var
   PODirectory:String;
   Lang, FallbackLang:String;
-  po:TmyPOFile;
+  RunTimePO,CompileTimePO:TmyPOFile;
   actualypo:TmyPOFile;
   _UpdatePO:integer=0;
   _NotEnlishWord:integer=0;
@@ -82,14 +82,14 @@ procedure TPoTranslator.TranslateStringProperty(Sender: TObject;const Instance: 
 var
   s: String;
 begin
-  if not Assigned(po) then exit;
+  if not Assigned(RunTimePO) then exit;
   if not Assigned(PropInfo) then exit;
 {Нужно ли нам это?}
   if Instance is TComponent then
    if csDesigning in (Instance as TComponent).ComponentState then exit;
 {:)}
   if (AnsiUpperCase(PropInfo^.PropType^.Name)<>'TTRANSLATESTRING') then exit;
-  s:=po.Translate(Content,Content);
+  s:=CompileTimePO.Translate(Content,Content);
   if s<>'' then Content:=s;
 end;
 
@@ -149,34 +149,66 @@ begin
   //inherited  Add(Identifier, OriginalValue, TranslatedValue, Comments,Context, Flags, PreviousID);
   self.FAllEntries:=t;
 end;
-
-procedure createpo;
+procedure internalCreatePO(out CreatedPO:TmyPOFile;UpdatePOMode:Boolean;POFormat,POFileName:string);
 var
    AFilename:string;
 begin
-  if not sysparam.saved.updatepo then begin
+  if not UpdatePOMode then begin
     if Lang<>'' then begin
-      AFilename:=Format(PODirectory + ZCADRTTranslatedPOFileName,[Lang]);
+      AFilename:=Format(PODirectory + POFormat,[Lang]);
       if FileExists(AFilename) then
-        po:=TmyPOFile.Create(AFilename);
+        CreatedPO:=TmyPOFile.Create(AFilename);
     end;
-    if (FallbackLang<>'')and(not assigned(po)) then begin
-      AFilename:=Format(PODirectory + ZCADRTTranslatedPOFileName,[FallbackLang]);
+    if (FallbackLang<>'')and(not assigned(CreatedPO)) then begin
+      AFilename:=Format(PODirectory + POFormat,[FallbackLang]);
       if FileExists(AFilename) then
-        po:=TmyPOFile.Create(AFilename);
+        CreatedPO:=TmyPOFile.Create(AFilename);
     end;
-    if (not assigned(po)) then
-      po:=TmyPOFile.Create;
+    if (not assigned(RunTimePO)) then
+      CreatedPO:=TmyPOFile.Create;
   end else begin
-    AFilename:=(PODirectory + ZCADRTPOFileName);
+    AFilename:=(PODirectory + POFileName);
     if FileExists(AFilename) then begin
-      po:=TmyPOFile.Create(AFilename,true);
+      CreatedPO:=TmyPOFile.Create(AFilename,true);
       actualypo:=TmyPOFile.Create;
     end else begin
       programlog.LogOutFormatStr(ZCADPOFileNotFound,[AFilename],0,LM_Fatal);
       halt(0);
     end;
   end;
+end;
+
+procedure createpo;
+var
+   AFilename:string;
+begin
+  internalCreatePO(RunTimePO,sysparam.saved.updatepo,ZCADRTTranslatedPOFileName,ZCADRTPOFileName);
+  internalCreatePO(CompileTimePO,sysparam.saved.updatepo,ZCADTranslatedPOFileName,ZCADPOFileName);
+  if sysparam.saved.updatepo then
+    actualypo:=TmyPOFile.Create;
+  {if not sysparam.saved.updatepo then begin
+    if Lang<>'' then begin
+      AFilename:=Format(PODirectory + ZCADRTTranslatedPOFileName,[Lang]);
+      if FileExists(AFilename) then
+        RunTimePO:=TmyPOFile.Create(AFilename);
+    end;
+    if (FallbackLang<>'')and(not assigned(RunTimePO)) then begin
+      AFilename:=Format(PODirectory + ZCADRTTranslatedPOFileName,[FallbackLang]);
+      if FileExists(AFilename) then
+        RunTimePO:=TmyPOFile.Create(AFilename);
+    end;
+    if (not assigned(RunTimePO)) then
+      RunTimePO:=TmyPOFile.Create;
+  end else begin
+    AFilename:=(PODirectory + ZCADRTPOFileName);
+    if FileExists(AFilename) then begin
+      RunTimePO:=TmyPOFile.Create(AFilename,true);
+      actualypo:=TmyPOFile.Create;
+    end else begin
+      programlog.LogOutFormatStr(ZCADPOFileNotFound,[AFilename],0,LM_Fatal);
+      halt(0);
+    end;
+  end;}
 end;
 
 function IsLatin(const Identifier:string):Boolean;
@@ -229,11 +261,11 @@ begin
   if DisableTranslateCount>0 then
     exit(OriginalValue);
 
-  result:=po.Translate(Identifier, OriginalValue);
+  result:=RunTimePO.Translate(Identifier, OriginalValue);
   programlog.LogOutFormatStr('InterfaceTranslate: identifier:"%s" originalValue:"%s" translate to "%s"',[Identifier,OriginalValue,result],0,LM_Debug,TranslateLogModuleId);
 
   if sysparam.saved.updatepo then begin
-    Item:=po.FindPoItem(FullIdentifier);
+    Item:=RunTimePO.FindPoItem(FullIdentifier);
     if not assigned(item) then begin
       if IsNoNeedTranslate(OriginalValue)then begin
         inc(_DebugWord);
@@ -241,7 +273,7 @@ begin
       end else begin
         if LatinIdentifier and IsLatin(OriginalValue) then begin
           programlog.LogOutStr(format(nontranslatedword,[Identifier,OriginalValue]),0,LM_Warning,TranslateLogModuleId);
-          po.Add(FullIdentifier,OriginalValue, {TranslatedValue}'', {Comments}'',{Context}'', {Flags}'', {PreviousID}'');
+          RunTimePO.Add(FullIdentifier,OriginalValue, {TranslatedValue}'', {Comments}'',{Context}'', {Flags}'', {PreviousID}'');
           actualypo.Add(FullIdentifier,OriginalValue, {TranslatedValue}'', {Comments}'',{Context}'', {Flags}'', {PreviousID}'');
           inc(_UpdatePO);
         end else begin
@@ -277,7 +309,12 @@ initialization
 
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
-  if assigned(actualypo) then freeandnil(actualypo);
-  if assigned(po) then freeandnil(po);
-  if assigned(LRSTranslator) then freeandnil(LRSTranslator);
+  if assigned(actualypo) then
+    freeandnil(actualypo);
+  if assigned(RunTimePO) then
+    freeandnil(RunTimePO);
+  if assigned(CompileTimePO) then
+    freeandnil(CompileTimePO);
+  if assigned(LRSTranslator) then
+    freeandnil(LRSTranslator);
 end.

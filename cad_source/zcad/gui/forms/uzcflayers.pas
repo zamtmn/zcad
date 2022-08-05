@@ -34,6 +34,8 @@ type
   { TLayersForm }
 
   TLayersForm = class(TForm)
+    CoolBar1: TCoolBar;
+    Panel1: TPanel;
     RefreshLayers: TAction;
     AddLayer: TAction;
     DelLayer: TAction;
@@ -451,6 +453,7 @@ begin
      OnClick:=@createdesceditor;
      OnGetName:=@GetDescName;
 end;
+  Panel1.Constraints.MinWidth:=ToolBar1.Left+ToolButton6.Left+ToolButton6.Width+CoolBar1.GrabWidth;
 end;
 procedure TLayersForm.MaceItemCurrent(ListItem:TListItem);
 begin

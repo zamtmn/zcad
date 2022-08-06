@@ -140,8 +140,6 @@ type
       end;
 
   function LLD(_LLD:TLogLevelType):TLogLevelData;
-var
-   VerboseLog:boolean;
 implementation
 var
   PerfomaneBuf:TMemoryStream;// TZctnrVectorBytes;
@@ -393,10 +391,6 @@ begin
                                          CurrentLogLevel:=LogLevel;
                                          if not silent then
                                            WriteToLog('Current log level changed to: '+LogMode2string(LogLevel),true,CurrentTime.time,0,CurrentTime.rdtsc,0,0);
-                                         if LogLevel=LM_Trace then
-                                           VerboseLog:=true
-                                         else
-                                           VerboseLog:=false;
                                     end;
 end;
 procedure tlog.SetDefaultLogLevel(LogLevel:TLogLevel;silent:boolean=false);
@@ -491,7 +485,7 @@ end;
 
 function tlog.isTraceEnabled:boolean;
 begin
-  result:=VerboseLog;
+  result:=LM_Trace>=CurrentLogLevel
 end;
 procedure tlog.ZDebugLN(const S: string);
 var
@@ -594,6 +588,5 @@ begin
        FreeAndNil(LogLevelAliasDic);
 end;
 begin
-  VerboseLog:=False;
 end.
 

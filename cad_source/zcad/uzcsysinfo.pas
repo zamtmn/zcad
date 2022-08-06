@@ -104,8 +104,6 @@ begin
                                                    SysParam.saved.UniqueInstance:=false
        else if (paramUC='NOSPLASH')or(paramUC='NS')then
                                                    SysParam.saved.NoSplash:=true
-       else if (paramUC='VERBOSELOG')or(paramUC='VL')then
-                                                          uzclog.VerboseLog:=true
        else if (paramUC='NOLOADLAYOUT')or(paramUC='NLL')then
                                                                SysParam.saved.NoLoadLayout:=true
        else if (paramUC='UPDATEPO')then

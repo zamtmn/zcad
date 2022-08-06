@@ -45,7 +45,6 @@ var
   :TLogLevel;
 
   ProgramLog:tlog;
-  VerboseLog:boolean;
   UnitsInitializeLMId,UnitsFinalizeLMId:TModuleDesk;
 
 implementation

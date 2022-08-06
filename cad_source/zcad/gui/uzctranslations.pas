@@ -20,9 +20,9 @@ unit uzctranslations;
 {$INCLUDE zengineconfig.inc}
 
 interface
-uses uzbpaths,LCLVersion,uzbstrproc,LazUTF8,gettext,translations,
-     fileutil,LResources,uzcsysinfo,sysutils,uzclog,uzblog,forms,
-     Classes, typinfo,uzcsysparams,LazLogger;
+uses uzbpaths,uzbstrproc,LazUTF8,gettext,translations,
+     fileutil,LResources,sysutils,uzclog,uzblog,forms,
+     Classes, typinfo,uzcsysparams{,LazLogger};
 
 const
   ZCADTranslatedPOFileName='zcad.%s.po';
@@ -180,36 +180,11 @@ begin
 end;
 
 procedure createpo;
-var
-   AFilename:string;
 begin
   internalCreatePO(RunTimePO,sysparam.saved.updatepo,ZCADRTTranslatedPOFileName,ZCADRTPOFileName);
   internalCreatePO(CompileTimePO,sysparam.saved.updatepo,ZCADTranslatedPOFileName,ZCADPOFileName);
   if sysparam.saved.updatepo then
     actualypo:=TmyPOFile.Create;
-  {if not sysparam.saved.updatepo then begin
-    if Lang<>'' then begin
-      AFilename:=Format(PODirectory + ZCADRTTranslatedPOFileName,[Lang]);
-      if FileExists(AFilename) then
-        RunTimePO:=TmyPOFile.Create(AFilename);
-    end;
-    if (FallbackLang<>'')and(not assigned(RunTimePO)) then begin
-      AFilename:=Format(PODirectory + ZCADRTTranslatedPOFileName,[FallbackLang]);
-      if FileExists(AFilename) then
-        RunTimePO:=TmyPOFile.Create(AFilename);
-    end;
-    if (not assigned(RunTimePO)) then
-      RunTimePO:=TmyPOFile.Create;
-  end else begin
-    AFilename:=(PODirectory + ZCADRTPOFileName);
-    if FileExists(AFilename) then begin
-      RunTimePO:=TmyPOFile.Create(AFilename,true);
-      actualypo:=TmyPOFile.Create;
-    end else begin
-      programlog.LogOutFormatStr(ZCADPOFileNotFound,[AFilename],0,LM_Fatal);
-      halt(0);
-    end;
-  end;}
 end;
 
 function IsLatin(const Identifier:string):Boolean;
@@ -295,7 +270,7 @@ begin
 end;
 
 initialization
-  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],lp_OldPos,LM_Info,UnitsInitializeLMId);
   TranslateLogModuleId:=programlog.RegisterModule('TRANSLATOR');
   DisableTranslateCount:=0;
   PODirectory := ProgramPath+'languages/';
@@ -309,7 +284,7 @@ initialization
   end;
 
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  programlog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],lp_OldPos,LM_Info,UnitsFinalizeLMId);
   if assigned(actualypo) then
     freeandnil(actualypo);
   if assigned(RunTimePO) then

@@ -153,6 +153,7 @@ procedure internalCreatePO(out CreatedPO:TmyPOFile;UpdatePOMode:Boolean;POFormat
 var
    AFilename:string;
 begin
+  CreatedPO:=nil;
   if not UpdatePOMode then begin
     if Lang<>'' then begin
       AFilename:=Format(PODirectory + POFormat,[Lang]);

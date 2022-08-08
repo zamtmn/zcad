@@ -46,26 +46,38 @@ var
 
   ProgramLog:tlog;
   UnitsInitializeLMId,UnitsFinalizeLMId:TModuleDesk;
+  FileLogBackend:TLogerFileBackend;
 
 implementation
 
 initialization
-  programlog.init({$IFNDEF DELPHI}SysToUTF8{$ENDIF}(ExtractFilePath(paramstr(0)))+filelog,'LM_Trace','T');
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],lp_OldPos,LM_Info,UnitsInitializeLMId);
-  UnitsInitializeLMId:=programlog.RegisterModule('UnitsInitialization');
-  UnitsFinalizeLMId:=programlog.RegisterModule('UnitsFinalization');
-  LM_Debug:=programlog.RegisterLogLevel('LM_Debug','D',LLD(LLTInfo));
-  LM_Info:=programlog.RegisterLogLevel('LM_Info','I',LLD(LLTInfo));
-  LM_Warning:=programlog.RegisterLogLevel('LM_Warning','W',LLD(LLTWarning));
-  LM_Error:=programlog.RegisterLogLevel('LM_Error','E',LLD(LLTError));
-  LM_Fatal:=programlog.RegisterLogLevel('LM_Fatal','F',LLD(LLTError));
-  LM_Necessarily:=programlog.RegisterLogLevel('LM_Necessarily','N',LLD(LLTInfo));
-  programlog.SetDefaultLogLevel(LM_Debug);
-  programlog.SetCurrentLogLevel(LM_Info);
+
+  ProgramLog.init; //эти значения теперь по дефолту ('LM_Trace','T');
+
+  LM_Debug:=ProgramLog.RegisterLogLevel('LM_Debug','D',LLD(LLTInfo));
+  LM_Info:=ProgramLog.RegisterLogLevel('LM_Info','I',LLD(LLTInfo));
+  LM_Warning:=ProgramLog.RegisterLogLevel('LM_Warning','W',LLD(LLTWarning));
+  LM_Error:=ProgramLog.RegisterLogLevel('LM_Error','E',LLD(LLTError));
+  LM_Fatal:=ProgramLog.RegisterLogLevel('LM_Fatal','F',LLD(LLTError));
+  LM_Necessarily:=ProgramLog.RegisterLogLevel('LM_Necessarily','N',LLD(LLTInfo));
+
+  ProgramLog.SetDefaultLogLevel(LM_Debug);
+  ProgramLog.SetCurrentLogLevel(LM_Info);
+
+  UnitsInitializeLMId:=ProgramLog.RegisterModule('UnitsInitialization');
+  UnitsFinalizeLMId:=ProgramLog.RegisterModule('UnitsFinalization');
+
+
+  FileLogBackend.init(SysToUTF8(ExtractFilePath(paramstr(0)))+filelog);
+  ProgramLog.addBackend(FileLogBackend);
+  ProgramLog.LogStart;
+  programlog.LogOutFormatStr('Unit "%s" initialization finish, log created',[{$INCLUDE %FILE%}],lp_OldPos,LM_Info,UnitsInitializeLMId);
 
 finalization
-  programlog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],lp_OldPos,LM_Info,UnitsFinalizeLMId);
-  programlog.done;
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],lp_OldPos,LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogEnd;
+  ProgramLog.done;
+  FileLogBackend.done;
 
 end.
 

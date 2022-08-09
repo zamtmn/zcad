@@ -26,6 +26,7 @@ uses
   Generics.Collections,uzbnamedhandles,uzbnamedhandleswithdata;
 
 type
+  TMsgOpt=LongWord;
   TLogMsg=AnsiString;
   TModuleDesk=LongInt;
   TModuleDeskNameType=AnsiString;

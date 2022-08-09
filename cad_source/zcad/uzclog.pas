@@ -44,22 +44,82 @@ var
   LM_Necessarily// — Вывод в любом случае
   :TLogLevel;
 
+  PDIncPos,PDDecPos:TMsgOpt;
+
+
   ProgramLog:tlog;
   UnitsInitializeLMId,UnitsFinalizeLMId:TModuleDesk;
-  FileLogBackend:TLogerFileBackend;
 
 implementation
 
-initialization
+type
+  TLogerFileBackend=object(TLogerBaseBackend)
+    LogFileName:AnsiString;
+    FileHandle:cardinal;
+    procedure doLog(msg:TLogMsg);virtual;
+    procedure endLog;virtual;
+    constructor init(fn:AnsiString);
+    destructor done;virtual;
+    procedure OpenLog;
+    procedure CloseLog;
+    procedure CreateLog;
+  end;
 
+var
+   FileLogBackend:TLogerFileBackend;
+
+procedure TLogerFileBackend.OpenLog;
+begin
+  FileHandle := FileOpen({$IFNDEF DELPHI}UTF8ToSys{$ENDIF}(logfilename), fmOpenWrite);
+  FileSeek(FileHandle, 0, 2);
+end;
+
+procedure TLogerFileBackend.CloseLog;
+begin
+  fileclose(FileHandle);
+  FileHandle:=0;
+end;
+procedure TLogerFileBackend.CreateLog;
+begin
+  FileHandle:=FileCreate({$IFNDEF DELPHI}UTF8ToSys{$ENDIF}(logfilename));
+  CloseLog;
+end;
+
+procedure TLogerFileBackend.doLog(msg:TLogMsg);
+begin
+  OpenLog;
+  FileWrite(FileHandle,msg[1],Length(msg)*SizeOf(msg[1]));
+  CloseLog;
+end;
+
+procedure TLogerFileBackend.endLog;
+begin
+end;
+
+constructor TLogerFileBackend.init(fn:AnsiString);
+begin
+  logfilename:=fn;
+  CreateLog;
+end;
+
+destructor TLogerFileBackend.done;
+begin
+  logfilename:='';
+end;
+
+
+initialization
   ProgramLog.init; //эти значения теперь по дефолту ('LM_Trace','T');
 
-  LM_Debug:=ProgramLog.RegisterLogLevel('LM_Debug','D',LLD(LLTInfo));
-  LM_Info:=ProgramLog.RegisterLogLevel('LM_Info','I',LLD(LLTInfo));
-  LM_Warning:=ProgramLog.RegisterLogLevel('LM_Warning','W',LLD(LLTWarning));
-  LM_Error:=ProgramLog.RegisterLogLevel('LM_Error','E',LLD(LLTError));
-  LM_Fatal:=ProgramLog.RegisterLogLevel('LM_Fatal','F',LLD(LLTError));
-  LM_Necessarily:=ProgramLog.RegisterLogLevel('LM_Necessarily','N',LLD(LLTInfo));
+  LM_Debug:=ProgramLog.RegisterLogLevel('LM_Debug','D',LLTInfo);
+  LM_Info:=ProgramLog.RegisterLogLevel('LM_Info','I',LLTInfo);
+  LM_Warning:=ProgramLog.RegisterLogLevel('LM_Warning','W',LLTWarning);
+  LM_Error:=ProgramLog.RegisterLogLevel('LM_Error','E',LLTError);
+  LM_Fatal:=ProgramLog.RegisterLogLevel('LM_Fatal','F',LLTError);
+  LM_Necessarily:=ProgramLog.RegisterLogLevel('LM_Necessarily','N',LLTInfo);
+
+  PDIncPos:=MsgOpt.GetEnum;
+  PDDecPos:=MsgOpt.GetEnum;
 
   ProgramLog.SetDefaultLogLevel(LM_Debug);
   ProgramLog.SetCurrentLogLevel(LM_Info);

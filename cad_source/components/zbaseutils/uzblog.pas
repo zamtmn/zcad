@@ -24,7 +24,7 @@ interface
 uses
   gvector,strutils,sysutils{$IFNDEF DELPHI},LazUTF8{$ENDIF},
   uzbLogTypes,
-  Generics.Collections,uzbnamedhandles,uzbnamedhandleswithdata;
+  Generics.Collections,uzbnamedhandles,uzbnamedhandleswithdata,uzbsets;
 
 const
   lp_IncPos=1;
@@ -35,6 +35,8 @@ const
 
 type
 
+  TMsgOptions=specialize GTSet<TMsgOpt,TMsgOpt>;
+
   TEntered=record
     Entered:boolean;
     EnteredTo:AnsiString;
@@ -42,12 +44,6 @@ type
   TDoEnteredHelper = type helper for TEntered
     function IfEntered:TEntered;
   end;
-
-  TModuleDeskData=record
-    enabled:boolean;
-  end;
-
-  TModulesDeskHandles=specialize GTNamedHandlesWithData<TModuleDesk,specialize GTLinearIncHandleManipulator<TModuleDesk>,TModuleDeskNameType,specialize GTStringNamesUPPERCASE<TModuleDeskNameType>,TModuleDeskData>;
 
   TLogLevelData=record
     LogLevelType:TLogLevelType;
@@ -58,60 +54,46 @@ type
   TSplashTextOutProc=procedure (s:string;pm:boolean);
   THistoryTextOutMethod=procedure (s:string) of object;
   THistoryTextOutProc=procedure (s:string);
-  PTMyTimeStamp=^TMyTimeStamp;
-  TMyTimeStamp=record
-                     time:TDateTime;
-                     rdtsc:int64;
-  end;
   TLatestLogStrings=array of AnsiString;
   TLogLevelAliasDic=specialize TDictionary<AnsiChar,TLogLevel>;
+
+  PTMyTimeStamp=^TMyTimeStamp;
+  TMyTimeStamp=record
+    time:TDateTime;
+    rdtsc:int64;
+  end;
   TTimeBuf=specialize TVector<TMyTimeStamp>;
 
-  TLogerFileBackend=object(TLogerBaseBackend)
-    LogFileName:AnsiString;
-    FileHandle:cardinal;
-    procedure doLog(msg:TLogMsg);virtual;
-    procedure endLog;virtual;
-    constructor init(fn:AnsiString);
-    destructor done;virtual;
-    procedure OpenLog;
-    procedure CloseLog;
-    procedure CreateLog;
-  end;
-
-  TLatestMsgsBackend=object(TLogerBaseBackend)
-    LatestLogStrings:TLatestLogStrings;
-    LatestLogStringsCount,TotalLogStringsCount:integer;
-    procedure doLog(msg:TLogMsg);virtual;
-    procedure endLog;virtual;
-    constructor init(MaxLLStrings:Integer);
-    destructor done;virtual;
-    procedure WriteLatestToFile(var f:system.text);
-  end;
-
-  TLogerBackendData=record
-    PBackend:PTLogerBaseBackend;
-    //msgFormat:
-    constructor CreateRec(PBE:PTLogerBaseBackend);
-  end;
-
   TBackendHandle=Integer;
-  TBackends=specialize TVector<TLogerBackendData>;
 
   tlog=object
     private
-      Indent:integer;
-      LogLevels:TLogLevelsHandles;
-      LogLevelAliasDic:TLogLevelAliasDic;
-      CurrentLogLevel:TLogLevel;
-      DefaultLogLevel:TLogLevel;
+      type
+        TModuleDeskData=record
+          enabled:boolean;
+        end;
+        TModulesDeskHandles=specialize GTNamedHandlesWithData<TModuleDesk,specialize GTLinearIncHandleManipulator<TModuleDesk>,TModuleDeskNameType,specialize GTStringNamesUPPERCASE<TModuleDeskNameType>,TModuleDeskData>;
 
-      ModulesDesks:TModulesDeskHandles;
-      NewModuleDesk:TModuleDeskData;
-      DefaultModuleDeskIndex:TModuleDesk;
-      TimeBuf:TTimeBuf;
-      Backends:TBackends;
-      TotalBackendsCount:Integer;
+        TLogerBackendData=record
+          PBackend:PTLogerBaseBackend;
+          //msgFormat:
+          constructor CreateRec(PBE:PTLogerBaseBackend);
+        end;
+        TBackends=specialize TVector<TLogerBackendData>;
+
+      var
+        Indent:integer;
+        LogLevels:TLogLevelsHandles;
+        LogLevelAliasDic:TLogLevelAliasDic;
+        CurrentLogLevel:TLogLevel;
+        DefaultLogLevel:TLogLevel;
+
+        ModulesDesks:TModulesDeskHandles;
+        NewModuleDesk:TModuleDeskData;
+        DefaultModuleDeskIndex:TModuleDesk;
+        TimeBuf:TTimeBuf;
+        Backends:TBackends;
+        TotalBackendsCount:Integer;
       procedure WriteLogHeader;
 
 
@@ -150,7 +132,7 @@ type
 
       procedure LogOutFormatStr(Const Fmt:AnsiString;const Args :Array of const;IncIndent:integer;LogMode:TLogLevel;LMDI:TModuleDesk=1);virtual;
       procedure LogOutStr(str:AnsiString;IncIndent:integer;LogMode:TLogLevel=1;LMDI:TModuleDesk=1);virtual;
-      function RegisterLogLevel(LogLevelName:TLogLevelHandleNameType;LLAlias:AnsiChar;data:TLogLevelData):TLogLevel;
+      function RegisterLogLevel(LogLevelName:TLogLevelHandleNameType;LLAlias:AnsiChar;_LLD:TLogLevelType):TLogLevel;
 
       function RegisterModule(ModuleName:TModuleDeskNameType):TModuleDesk;
       procedure SetCurrentLogLevel(LogLevel:TLogLevel;silent:boolean=false);
@@ -167,103 +149,15 @@ type
       function TryGetLogLevelHandle(LogLevelName:TLogLevelHandleNameType;out LogLevel:TLogLevel):Boolean;
   end;
 
-  function LLD(_LLD:TLogLevelType):TLogLevelData;
+var
+  MsgOpt:TMsgOptions;
+
 implementation
 
-constructor TLogerBackendData.CreateRec(PBE:PTLogerBaseBackend);
+constructor tlog.TLogerBackendData.CreateRec(PBE:PTLogerBaseBackend);
 begin
   PBackend:=PBE;
 end;
-
-
-procedure TLogerFileBackend.OpenLog;
-begin
-  FileHandle := FileOpen({$IFNDEF DELPHI}UTF8ToSys{$ENDIF}(logfilename), fmOpenWrite);
-  FileSeek(FileHandle, 0, 2);
-end;
-
-procedure TLogerFileBackend.CloseLog;
-begin
-  fileclose(FileHandle);
-  FileHandle:=0;
-end;
-procedure TLogerFileBackend.CreateLog;
-begin
-  FileHandle:=FileCreate({$IFNDEF DELPHI}UTF8ToSys{$ENDIF}(logfilename));
-  CloseLog;
-end;
-
-procedure TLogerFileBackend.doLog(msg:TLogMsg);
-begin
-  OpenLog;
-  FileWrite(FileHandle,msg[1],Length(msg)*SizeOf(msg[1]));
-  CloseLog;
-end;
-
-procedure TLogerFileBackend.endLog;
-begin
-end;
-
-constructor TLogerFileBackend.init(fn:AnsiString);
-begin
-  logfilename:=fn;
-  CreateLog;
-end;
-
-destructor TLogerFileBackend.done;
-begin
-  logfilename:='';
-end;
-
-procedure TLatestMsgsBackend.doLog(msg:TLogMsg);
-begin
-  if LatestLogStringsCount>High(LatestLogStrings) then
-    LatestLogStringsCount:=Low(LatestLogStrings);
-  LatestLogStrings[LatestLogStringsCount]:=msg;
-  inc(TotalLogStringsCount);
-  inc(LatestLogStringsCount);
-end;
-
-procedure TLatestMsgsBackend.endLog;
-begin
-end;
-
-constructor TLatestMsgsBackend.init(MaxLLStrings:Integer);
-begin
-  setlength(LatestLogStrings,MaxLLStrings);
-  LatestLogStringsCount:=0;
-  TotalLogStringsCount:=0;
-end;
-
-destructor TLatestMsgsBackend.done;
-begin
-  setlength(LatestLogStrings,0);
-end;
-
-procedure TLatestMsgsBackend.WriteLatestToFile(var f:system.text);
-var
-  currentindex,LatestLogArraySize:integer;
-begin
-     if TotalLogStringsCount=0 then exit;
-     LatestLogArraySize:=Low(LatestLogStrings);
-     LatestLogArraySize:=High(LatestLogStrings);
-     LatestLogArraySize:=High(LatestLogStrings)-Low(LatestLogStrings)+1;
-     if TotalLogStringsCount>LatestLogArraySize then
-                                                    currentindex:=LatestLogStringsCount
-                                                else
-                                                    currentindex:=Low(LatestLogStrings);
-     if TotalLogStringsCount<LatestLogArraySize then
-                                                    LatestLogArraySize:=TotalLogStringsCount;
-     repeat
-       if currentindex>High(LatestLogStrings) then
-                                                  currentindex:=Low(LatestLogStrings);
-       WriteLn(f,pchar(@LatestLogStrings[currentindex][1]));
-       inc(currentindex);
-       dec(LatestLogArraySize);
-     until LatestLogArraySize=0;
-end;
-
-
 
 function TDoEnteredHelper.IfEntered:TEntered;
 begin
@@ -468,8 +362,11 @@ begin
                                            WriteToLog('Default log level changed to: '+LogMode2string(LogLevel),CurrentTime.time,0,CurrentTime.rdtsc,0,0);
                                     end;
 end;
-function tlog.RegisterLogLevel(LogLevelName:TLogLevelHandleNameType;LLAlias:AnsiChar;data:TLogLevelData):TLogLevel;
+function tlog.RegisterLogLevel(LogLevelName:TLogLevelHandleNameType;LLAlias:AnsiChar;_LLD:TLogLevelType):TLogLevel;
+var
+  data:TLogLevelData;
 begin
+  data:=LLD(_LLD);
   result:=LogLevels.CreateOrGetHandleAndSetData(LogLevelName,data);
   if LLAlias<>#0 then
     LogLevelAliasDic.Add(LLAlias,result);
@@ -543,7 +440,7 @@ begin
   LogLevels.init;
   ModulesDesks.init;
   LogLevelAliasDic:=TLogLevelAliasDic.create;
-  LM_Trace:=RegisterLogLevel(TraceModeName,TraceModeAlias,LLD(LLTInfo));// — вывод всего подряд. На тот случай, если Debug не позволяет локализовать ошибку.
+  LM_Trace:=RegisterLogLevel(TraceModeName,TraceModeAlias,LLTInfo);// — вывод всего подряд. На тот случай, если Debug не позволяет локализовать ошибку.
      CurrentTime:=mynow();
      TimeBuf:=TTimeBuf.Create;
      Indent:=1;
@@ -680,6 +577,10 @@ begin
      if assigned(LogLevelAliasDic)then
        FreeAndNil(LogLevelAliasDic);
 end;
-begin
+
+initialization
+  MsgOpt.init;
+finalization
+  MsgOpt.done;
 end.
 

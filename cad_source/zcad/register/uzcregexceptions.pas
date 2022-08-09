@@ -21,12 +21,70 @@ unit uzcregexceptions;
 interface
 
 uses
-  SysUtils,LazLogger,uzbLog,uzcLog,uzcsysvars,uzbpaths,uzbexceptionscl,uzcstrconsts;
+  SysUtils,LazLogger,uzbLog, uzbLogTypes, uzcLog,uzcsysvars,uzbpaths,uzbexceptionscl,uzcstrconsts;
 
 implementation
+type
+  TLatestMsgsBackend=object(TLogerBaseBackend)
+    LatestLogStrings:TLatestLogStrings;
+    LatestLogStringsCount,TotalLogStringsCount:integer;
+    procedure doLog(msg:TLogMsg);virtual;
+    procedure endLog;virtual;
+    constructor init(MaxLLStrings:Integer);
+    destructor done;virtual;
+    procedure WriteLatestToFile(var f:system.text);
+  end;
 var
   LLMsgs:TLatestMsgsBackend;
   LLMsgsH:TBackendHandle;
+
+procedure TLatestMsgsBackend.doLog(msg:TLogMsg);
+begin
+  if LatestLogStringsCount>High(LatestLogStrings) then
+    LatestLogStringsCount:=Low(LatestLogStrings);
+  LatestLogStrings[LatestLogStringsCount]:=msg;
+  inc(TotalLogStringsCount);
+  inc(LatestLogStringsCount);
+end;
+
+procedure TLatestMsgsBackend.endLog;
+begin
+end;
+
+constructor TLatestMsgsBackend.init(MaxLLStrings:Integer);
+begin
+  setlength(LatestLogStrings,MaxLLStrings);
+  LatestLogStringsCount:=0;
+  TotalLogStringsCount:=0;
+end;
+
+destructor TLatestMsgsBackend.done;
+begin
+  setlength(LatestLogStrings,0);
+end;
+
+procedure TLatestMsgsBackend.WriteLatestToFile(var f:system.text);
+var
+  currentindex,LatestLogArraySize:integer;
+begin
+     if TotalLogStringsCount=0 then exit;
+     LatestLogArraySize:=Low(LatestLogStrings);
+     LatestLogArraySize:=High(LatestLogStrings);
+     LatestLogArraySize:=High(LatestLogStrings)-Low(LatestLogStrings)+1;
+     if TotalLogStringsCount>LatestLogArraySize then
+                                                    currentindex:=LatestLogStringsCount
+                                                else
+                                                    currentindex:=Low(LatestLogStrings);
+     if TotalLogStringsCount<LatestLogArraySize then
+                                                    LatestLogArraySize:=TotalLogStringsCount;
+     repeat
+       if currentindex>High(LatestLogStrings) then
+                                                  currentindex:=Low(LatestLogStrings);
+       WriteLn(f,pchar(@LatestLogStrings[currentindex][1]));
+       inc(currentindex);
+       dec(LatestLogArraySize);
+     until LatestLogArraySize=0;
+end;
 
 procedure ProvideHeader(var f:system.text;Obj : TObject; Addr: CodePointer; _FrameCount: Longint; _Frames: PCodePointer);
 begin

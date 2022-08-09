@@ -21,7 +21,7 @@ unit uzctranslations;
 
 interface
 uses uzbpaths,uzbstrproc,LazUTF8,gettext,translations,
-     fileutil,LResources,sysutils,uzclog,uzblog,forms,
+     fileutil,LResources,sysutils,uzbLogTypes,uzcLog,uzbLog,forms,
      Classes, typinfo,uzcsysparams{,LazLogger};
 
 const

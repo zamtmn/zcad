@@ -20,7 +20,7 @@ unit uzcreglog;
 {$mode delphi}
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzbLog,uzclog,uzcinterface,uzcuidialogs,uzcuitypes,uzelongprocesssupport,
+uses uzbLogTypes,uzbLog,uzclog,uzcinterface,uzcuidialogs,uzcuitypes,uzelongprocesssupport,
      {$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}LCLProc,Forms,
      LazLoggerBase,LazLogger,uzbLogIntf;
 implementation

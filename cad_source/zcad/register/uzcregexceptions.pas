@@ -21,9 +21,12 @@ unit uzcregexceptions;
 interface
 
 uses
-  SysUtils,LazLogger,uzclog,uzcsysvars,uzbpaths,uzbexceptionscl,uzcstrconsts;
+  SysUtils,LazLogger,uzbLog,uzcLog,uzcsysvars,uzbpaths,uzbexceptionscl,uzcstrconsts;
 
 implementation
+var
+  LLMsgs:TLatestMsgsBackend;
+  LLMsgsH:TBackendHandle;
 
 procedure ProvideHeader(var f:system.text;Obj : TObject; Addr: CodePointer; _FrameCount: Longint; _Frames: PCodePointer);
 begin
@@ -41,7 +44,7 @@ procedure ProvideLog(var f:system.text;Obj : TObject; Addr: CodePointer; _FrameC
 begin
   WriteLn(f);
   WriteLn(f,'Latest log:');
-  programlog.WriteLatestToFile(f);
+  LLMsgs.WriteLatestToFile(f);
   WriteLn(f,'Log end.');
 end;
 
@@ -68,12 +71,15 @@ end;
 
 initialization
   debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
-  //SetCrashReportFilename(GetTempDir+CrashReportFilename);
+  LLMsgs.init(99);
+  LLMsgsH:=ProgramLog.addBackend(LLMsgs);
   RegisterCrashInfoProvider(ProvideHeader,true);
   RegisterCrashInfoProvider(ProvideLog);
   RegisterCrashInfoProvider(ProvideBuildAndRunTimeInfo);
   RegisterCrashInfoProvider(ProvideFooter);
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.removeBackend(LLMsgsH);
+  LLMsgs.done;
 end.
 

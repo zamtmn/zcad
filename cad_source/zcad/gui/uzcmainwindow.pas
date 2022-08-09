@@ -32,11 +32,9 @@ uses
        uzgldrawergdi,uzcdrawing,UGDBOpenArrayOfPV,uzedrawingabstract,
        uzepalette,uzbpaths,uzglviewareadata,uzeentitiesprop,uzcinterface,
        uzctnrVectorBytes,uzbtypes,
-       uzegeometry,uzcsysvars,uzcstrconsts,uzbstrproc,uzclog,uzblog,
+       uzegeometry,uzcsysvars,uzcstrconsts,uzbstrproc,uzcLog,uzbLogTypes,uzbLog,
        uzedimensionaltypes,varmandef, varman,UUnitManager,uzcsysinfo,strmy,uzestylestexts,uzestylesdim,
   uzbexceptionscl,uzbexceptionsgui,
-  {ZCAD SIMPLE PASCAL SCRIPT}
-       //languade,
   {ZCAD ENTITIES}
        uzegeometrytypes,uzeentity,UGDBSelectedObjArray,uzestyleslayers,uzedrawingsimple,
        uzeblockdef,uzcdrawings,uzestyleslinetypes,uzeconsts,uzeenttext,uzeentdimension,

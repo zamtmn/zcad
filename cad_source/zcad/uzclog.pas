@@ -24,7 +24,7 @@ interface
 
 uses
   sysutils,LazUTF8,
-  uzblog;
+  uzbLogTypes,uzblog;
 
 const
   {$IFDEF LINUX}filelog='../../log/zcad_linux.log';{$ENDIF}

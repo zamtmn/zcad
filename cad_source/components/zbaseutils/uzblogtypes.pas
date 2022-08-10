@@ -38,6 +38,10 @@ type
     procedure doLog(msg:TLogMsg);virtual;abstract;
     procedure endLog;virtual;abstract;
   end;
+  PTLogerBaseDecorator=^TLogerBaseDecorator;
+  TLogerBaseDecorator=object
+    function GetDecor(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel=1;LMDI:TModuleDesk=1):TLogMsg;virtual;abstract;
+  end;
 
 implementation
 

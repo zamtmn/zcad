@@ -64,9 +64,22 @@ type
     procedure CloseLog;
     procedure CreateLog;
   end;
-
+  TTimeBackend=object(TLogerBaseDecorator)
+    function GetDecor(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel=1;LMDI:TModuleDesk=1):TLogMsg;virtual;
+    constructor init;
+  end;
 var
    FileLogBackend:TLogerFileBackend;
+   TimeBackend:TTimeBackend;
+
+constructor TTimeBackend.init;
+begin
+end;
+
+function TTimeBackend.GetDecor(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel=1;LMDI:TModuleDesk=1):TLogMsg;
+begin
+  result:=TimeToStr(Time);
+end;
 
 procedure TLogerFileBackend.OpenLog;
 begin
@@ -127,9 +140,13 @@ initialization
   UnitsInitializeLMId:=ProgramLog.RegisterModule('UnitsInitialization');
   UnitsFinalizeLMId:=ProgramLog.RegisterModule('UnitsFinalization');
 
+  TimeBackend.init;
+  ProgramLog.addDecorator(TimeBackend);
+
 
   FileLogBackend.init(SysToUTF8(ExtractFilePath(paramstr(0)))+filelog);
-  ProgramLog.addBackend(FileLogBackend);
+  ProgramLog.addBackend(FileLogBackend,'&0:s &%0:d:s',[@TimeBackend]);
+
   ProgramLog.LogStart;
   programlog.LogOutFormatStr('Unit "%s" initialization finish, log created',[{$INCLUDE %FILE%}],lp_OldPos,LM_Info,UnitsInitializeLMId);
 

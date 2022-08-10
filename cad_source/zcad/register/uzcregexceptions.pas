@@ -24,7 +24,9 @@ uses
   SysUtils,LazLogger,uzbLog, uzbLogTypes, uzcLog,uzcsysvars,uzbpaths,uzbexceptionscl,uzcstrconsts;
 
 implementation
+
 type
+  TLatestLogStrings=array of AnsiString;
   TLatestMsgsBackend=object(TLogerBaseBackend)
     LatestLogStrings:TLatestLogStrings;
     LatestLogStringsCount,TotalLogStringsCount:integer;
@@ -130,7 +132,7 @@ end;
 initialization
   debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
   LLMsgs.init(99);
-  LLMsgsH:=ProgramLog.addBackend(LLMsgs);
+  LLMsgsH:=ProgramLog.addBackend(LLMsgs,'',[]);
   RegisterCrashInfoProvider(ProvideHeader,true);
   RegisterCrashInfoProvider(ProvideLog);
   RegisterCrashInfoProvider(ProvideBuildAndRunTimeInfo);

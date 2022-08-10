@@ -24,6 +24,7 @@ interface
 uses
   gvector,strutils,sysutils{$IFNDEF DELPHI},LazUTF8{$ENDIF},
   uzbLogTypes,
+  uzbhandles,
   Generics.Collections,uzbnamedhandles,uzbnamedhandleswithdata,uzbsets;
 
 const
@@ -32,6 +33,8 @@ const
   lp_OldPos=0;
 
   tsc2ms=2000;
+
+  MsgDefaultOptions=0;
 
 type
 
@@ -54,7 +57,6 @@ type
   TSplashTextOutProc=procedure (s:string;pm:boolean);
   THistoryTextOutMethod=procedure (s:string) of object;
   THistoryTextOutProc=procedure (s:string);
-  TLatestLogStrings=array of AnsiString;
   TLogLevelAliasDic=specialize TDictionary<AnsiChar,TLogLevel>;
 
   PTMyTimeStamp=^TMyTimeStamp;
@@ -69,15 +71,26 @@ type
   tlog=object
     private
       type
+        TLogStampt=LongInt;
+        TLogStampter=specialize GTSimpleHandles<TLogStampt,specialize GTHandleManipulator<TLogStampt>>;
         TModuleDeskData=record
           enabled:boolean;
         end;
         TModulesDeskHandles=specialize GTNamedHandlesWithData<TModuleDesk,specialize GTLinearIncHandleManipulator<TModuleDesk>,TModuleDeskNameType,specialize GTStringNamesUPPERCASE<TModuleDeskNameType>,TModuleDeskData>;
 
+        TDecoratorData=record
+          PDecorator:PTLogerBaseDecorator;
+          CurrRes:TLogMsg;
+          Stampt:TLogStampt;
+          constructor CreateRec(PDD:PTLogerBaseDecorator;s:TLogStampt);
+        end;
+
+        TDecorators=specialize TVector<TDecoratorData>;
+
         TLogerBackendData=record
           PBackend:PTLogerBaseBackend;
-          //msgFormat:
-          constructor CreateRec(PBE:PTLogerBaseBackend);
+          msgFmt:string;
+          constructor CreateRec(PBE:PTLogerBaseBackend;Fmt:string;const args:array of integer);
         end;
         TBackends=specialize TVector<TLogerBackendData>;
 
@@ -94,6 +107,8 @@ type
         TimeBuf:TTimeBuf;
         Backends:TBackends;
         TotalBackendsCount:Integer;
+        LogStampter:TLogStampter;
+        Decorators:TDecorators;
       procedure WriteLogHeader;
 
 
@@ -121,8 +136,10 @@ type
       constructor init(TraceModeName:TLogLevelHandleNameType='LM_Trace';TraceModeAlias:AnsiChar='T');
       destructor done;virtual;
 
-      function addBackend(var BackEnd:TLogerBaseBackend):TBackendHandle;
+      function addBackend(var BackEnd:TLogerBaseBackend;fmt:string;const args:array of PTLogerBaseDecorator):TBackendHandle;
       procedure removeBackend(BackEndH:TBackendHandle);
+
+      procedure addDecorator(var Decorator:TLogerBaseDecorator);
 
       procedure LogStart;
       procedure LogEnd;
@@ -130,8 +147,8 @@ type
       function Enter(EnterTo:AnsiString;LogMode:TLogLevel=1;LMDI:TModuleDesk=1):TEntered;
       procedure Leave(AEntered:TEntered);
 
-      procedure LogOutFormatStr(Const Fmt:AnsiString;const Args :Array of const;IncIndent:integer;LogMode:TLogLevel;LMDI:TModuleDesk=1);virtual;
-      procedure LogOutStr(str:AnsiString;IncIndent:integer;LogMode:TLogLevel=1;LMDI:TModuleDesk=1);virtual;
+      procedure LogOutFormatStr(Const Fmt:AnsiString;const Args :Array of const;IncIndent:integer;LogMode:TLogLevel;LMDI:TModuleDesk=1;MsgOptions:TMsgOpt=MsgDefaultOptions);virtual;
+      procedure LogOutStr(str:AnsiString;IncIndent:integer;LogMode:TLogLevel=1;LMDI:TModuleDesk=1;MsgOptions:TMsgOpt=MsgDefaultOptions);virtual;
       function RegisterLogLevel(LogLevelName:TLogLevelHandleNameType;LLAlias:AnsiChar;_LLD:TLogLevelType):TLogLevel;
 
       function RegisterModule(ModuleName:TModuleDeskNameType):TModuleDesk;
@@ -154,7 +171,7 @@ var
 
 implementation
 
-constructor tlog.TLogerBackendData.CreateRec(PBE:PTLogerBaseBackend);
+constructor tlog.TLogerBackendData.CreateRec(PBE:PTLogerBaseBackend;Fmt:string;const args:array of integer);
 begin
   PBackend:=PBE;
 end;
@@ -299,7 +316,7 @@ begin
                                else
                                    result:=true;
 end;
-procedure tlog.LogOutFormatStr(Const Fmt:AnsiString;const Args :Array of const;IncIndent:integer;LogMode:TLogLevel;LMDI:TModuleDesk);
+procedure tlog.LogOutFormatStr(Const Fmt:AnsiString;const Args :Array of const;IncIndent:integer;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt=MsgDefaultOptions);
 begin
      if IsNeedToLog(LogMode,lmdi) then
                                  ProcessStr(format(fmt,args),IncIndent);
@@ -329,7 +346,7 @@ begin
     ProcessStr(format('end; {%s}',[AEntered.EnteredTo]),lp_DecPos);
 end;
 
-procedure tlog.logoutstr(str:AnsiString;IncIndent:integer;LogMode:TLogLevel;LMDI:TModuleDesk);
+procedure tlog.logoutstr(str:AnsiString;IncIndent:integer;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt=MsgDefaultOptions);
 begin
      if IsNeedToLog(LogMode,lmdi) then
                                  ProcessStr(str,IncIndent);
@@ -398,19 +415,65 @@ begin
   NewModuleDesk.enabled:=true;
 end;
 
-function tlog.addBackend(var BackEnd:TLogerBaseBackend):TBackendHandle;
+constructor tlog.TDecoratorData.CreateRec(PDD:PTLogerBaseDecorator;s:TLogStampt);
+begin
+  PDecorator:=PDD;
+  CurrRes:='';
+  Stampt:=s;
+end;
+
+
+procedure tlog.addDecorator(var Decorator:TLogerBaseDecorator);
 var
-  BD:TLogerBackendData;
+  DD:TDecoratorData;
   i:Integer;
 begin
-  BD.CreateRec(@BackEnd);
+  for i:=0 to Decorators.Size-1 do
+    if Decorators.Mutable[i]^.PDecorator=@Decorator then
+      exit;
+  DD.CreateRec(@Decorator,LogStampter.GetInitialHandleValue);
+  Decorators.PushBack(DD);
+end;
+
+
+function tlog.addBackend(var BackEnd:TLogerBaseBackend;fmt:string;const args:array of PTLogerBaseDecorator):TBackendHandle;
+var
+  BD:TLogerBackendData;
+  i,j,k:Integer;
+  arrVT:array of TVarRec;
+  arr:array of integer;
+begin
+  //хрень. нужно хранить отдельно форматы сообщений а не в бакэндах
+  if length(args)=0 then
+    BD.CreateRec(@BackEnd,fmt,[])
+  else begin
+    setlength(arrVT,length(args));
+    setlength(arr,length(args));
+    for i:=low(args) to high(args) do begin
+      k:=0;
+      for j:=0 to Decorators.Size-1 do
+        if Decorators.Mutable[i]^.PDecorator=args[i] then begin
+          k:=j+1;
+          break;
+        end;
+      arr[i]:=k;
+      arrVT[i].VType:=vtInteger;
+      arrVT[i].VInteger:=k;
+      fmt:=format(fmt,arrVT);
+      fmt:=StringsReplace(fmt,['&'],['%'],[rfReplaceAll]);
+    end;
+    BD.CreateRec(@BackEnd,fmt,arr);
+  end;
+
   if TotalBackendsCount=Backends.Size then begin
     result:=Backends.Size;
     Backends.PushBack(BD);
   end else begin
     for i:=0 to Backends.Size-1 do
-      if Backends.Mutable[i]^.PBackend=nil then
+      if Backends.Mutable[i]^.PBackend=nil then begin
         Backends.Mutable[i]^:=BD;
+        result:=i;
+      end;
   end;
   inc(TotalBackendsCount);
 end;
@@ -440,20 +503,24 @@ begin
   LogLevels.init;
   ModulesDesks.init;
   LogLevelAliasDic:=TLogLevelAliasDic.create;
+  LogStampter.init;
+  LogStampter.CreateHandle;
   LM_Trace:=RegisterLogLevel(TraceModeName,TraceModeAlias,LLTInfo);// — вывод всего подряд. На тот случай, если Debug не позволяет локализовать ошибку.
-     CurrentTime:=mynow();
-     TimeBuf:=TTimeBuf.Create;
-     Indent:=1;
-     timebuf.PushBack(CurrentTime);
+  CurrentTime:=mynow();
+  TimeBuf:=TTimeBuf.Create;
+  Indent:=1;
+  timebuf.PushBack(CurrentTime);
 
-     NewModuleDesk.enabled:=true;
-     DefaultModuleDeskIndex:=RegisterModule('DEFAULT');
-     NewModuleDesk.enabled:=false;
-     SetDefaultLogLevel(LM_Trace,true);
-     SetCurrentLogLevel(LM_Trace,true);
+  NewModuleDesk.enabled:=true;
+  DefaultModuleDeskIndex:=RegisterModule('DEFAULT');
+  NewModuleDesk.enabled:=false;
+  SetDefaultLogLevel(LM_Trace,true);
+  SetCurrentLogLevel(LM_Trace,true);
 
-     Backends:=TBackends.Create;
-     TotalBackendsCount:=0;
+  Backends:=TBackends.Create;
+  TotalBackendsCount:=0;
+
+  Decorators:=TDecorators.Create;
 end;
 
 procedure tlog.LogStart;
@@ -563,19 +630,24 @@ var
    CurrentTime:TMyTimeStamp;
    i:integer;
 begin
-     CurrentTime:=mynow();
-     for i:=0 to ModulesDesks.HandleDataVector.Size-1 do
-      if ModulesDesks.HandleDataVector[i].D.enabled then
-                                         WriteToLog(format('Log module name "%s" state: Enabled',[ModulesDesks.HandleDataVector[I].N]),CurrentTime.time,0,CurrentTime.rdtsc,0,0)
-                                     else
-                                         WriteToLog(format('Log module name "%s" state: Disabled',[ModulesDesks.HandleDataVector[I].N]),CurrentTime.time,0,CurrentTime.rdtsc,0,0);
-     CurrentTime:=mynow();
-     WriteToLog('-------------------------Log ended-------------------------',CurrentTime.time,0,CurrentTime.rdtsc,0,0);
-     TimeBuf.Front;
-     LogLevels.done;
-     ModulesDesks.done;
-     if assigned(LogLevelAliasDic)then
-       FreeAndNil(LogLevelAliasDic);
+  CurrentTime:=mynow();
+  for i:=0 to ModulesDesks.HandleDataVector.Size-1 do
+  if ModulesDesks.HandleDataVector[i].D.enabled then
+    WriteToLog(format('Log module name "%s" state: Enabled',[ModulesDesks.HandleDataVector[I].N]),CurrentTime.time,0,CurrentTime.rdtsc,0,0)
+  else
+    WriteToLog(format('Log module name "%s" state: Disabled',[ModulesDesks.HandleDataVector[I].N]),CurrentTime.time,0,CurrentTime.rdtsc,0,0);
+  CurrentTime:=mynow();
+  WriteToLog('-------------------------Log ended-------------------------',CurrentTime.time,0,CurrentTime.rdtsc,0,0);
+  TimeBuf.Front;
+  LogLevels.done;
+  ModulesDesks.done;
+  LogStampter.done;
+  if assigned(Backends)then
+    FreeAndNil(Backends);
+  if assigned(Decorators)then
+    FreeAndNil(Decorators);
+  if assigned(LogLevelAliasDic)then
+    FreeAndNil(LogLevelAliasDic);
 end;
 
 initialization

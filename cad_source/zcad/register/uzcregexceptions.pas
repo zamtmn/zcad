@@ -30,7 +30,7 @@ type
   TLatestMsgsBackend=object(TLogerBaseBackend)
     LatestLogStrings:TLatestLogStrings;
     LatestLogStringsCount,TotalLogStringsCount:integer;
-    procedure doLog(msg:TLogMsg);virtual;
+    procedure doLog(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);virtual;
     procedure endLog;virtual;
     constructor init(MaxLLStrings:Integer);
     destructor done;virtual;
@@ -40,7 +40,7 @@ var
   LLMsgs:TLatestMsgsBackend;
   LLMsgsH:TBackendHandle;
 
-procedure TLatestMsgsBackend.doLog(msg:TLogMsg);
+procedure TLatestMsgsBackend.doLog(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);
 begin
   if LatestLogStringsCount>High(LatestLogStrings) then
     LatestLogStringsCount:=Low(LatestLogStrings);

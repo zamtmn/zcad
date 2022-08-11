@@ -270,7 +270,7 @@ begin
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],lp_OldPos,LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   TranslateLogModuleId:=programlog.RegisterModule('TRANSLATOR');
   DisableTranslateCount:=0;
   PODirectory := ProgramPath+'languages/';
@@ -284,7 +284,7 @@ initialization
   end;
 
 finalization
-  programlog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],lp_OldPos,LM_Info,UnitsFinalizeLMId);
+  programlog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   if assigned(actualypo) then
     freeandnil(actualypo);
   if assigned(RunTimePO) then

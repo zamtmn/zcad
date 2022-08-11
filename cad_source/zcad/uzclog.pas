@@ -24,15 +24,12 @@ interface
 
 uses
   sysutils,LazUTF8,
-  uzbLogTypes,uzblog;
+  uzbLogTypes,uzblog,StrUtils;
 
 const
   {$IFDEF LINUX}filelog='../../log/zcad_linux.log';{$ENDIF}
   {$IFDEF WINDOWS}filelog='../../log/zcad_windows.log';{$ENDIF}
   {$IFDEF DARWIN}filelog='../../log/zcad_darwin.log';{$ENDIF}
-  lp_IncPos=uzblog.lp_IncPos;
-  lp_DecPos=uzblog.lp_DecPos;
-  lp_OldPos=uzblog.lp_OldPos;
 
 var
 //LM_Trace,     //уже определен в uzbLog.tlog // — вывод всего подряд. На тот случай, если Debug не позволяет локализовать ошибку.
@@ -44,7 +41,7 @@ var
   LM_Necessarily// — Вывод в любом случае
   :TLogLevel;
 
-  PDIncPos,PDDecPos:TMsgOpt;
+  lp_IncPos,lp_DecPos:TMsgOpt;
 
 
   ProgramLog:tlog;
@@ -56,7 +53,7 @@ type
   TLogerFileBackend=object(TLogerBaseBackend)
     LogFileName:AnsiString;
     FileHandle:cardinal;
-    procedure doLog(msg:TLogMsg);virtual;
+    procedure doLog(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);virtual;
     procedure endLog;virtual;
     constructor init(fn:AnsiString);
     destructor done;virtual;
@@ -64,19 +61,41 @@ type
     procedure CloseLog;
     procedure CreateLog;
   end;
-  TTimeBackend=object(TLogerBaseDecorator)
-    function GetDecor(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel=1;LMDI:TModuleDesk=1):TLogMsg;virtual;
+
+  TTimeDecorator=object(TLogerBaseDecorator)
+    function GetDecor(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk):TLogMsg;virtual;
     constructor init;
   end;
+  TPositionDecorator=object(TLogerBaseDecorator)
+    offset:integer;
+    function GetDecor(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk):TLogMsg;virtual;
+    constructor init;
+  end;
+
 var
    FileLogBackend:TLogerFileBackend;
-   TimeBackend:TTimeBackend;
+   TimeDecorator:TTimeDecorator;
+   PositionDecorator:TPositionDecorator;
 
-constructor TTimeBackend.init;
+function TPositionDecorator.GetDecor(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk):TLogMsg;
+begin
+ if (MsgOptions and lp_DecPos)>0 then
+   dec(offset,2);
+ result:=dupestring(' ',offset);
+ if (MsgOptions and lp_IncPos)>0 then
+   inc(offset,2);
+end;
+
+constructor TPositionDecorator.init;
+begin
+  offset:=1;
+end;
+
+constructor TTimeDecorator.init;
 begin
 end;
 
-function TTimeBackend.GetDecor(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel=1;LMDI:TModuleDesk=1):TLogMsg;
+function TTimeDecorator.GetDecor(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk):TLogMsg;
 begin
   result:=TimeToStr(Time);
 end;
@@ -98,10 +117,11 @@ begin
   CloseLog;
 end;
 
-procedure TLogerFileBackend.doLog(msg:TLogMsg);
+procedure TLogerFileBackend.doLog(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);
 begin
   OpenLog;
   FileWrite(FileHandle,msg[1],Length(msg)*SizeOf(msg[1]));
+  FileWrite(FileHandle,LineEnding[1],Length(LineEnding)*SizeOf(LineEnding[1]));
   CloseLog;
 end;
 
@@ -131,8 +151,13 @@ initialization
   LM_Fatal:=ProgramLog.RegisterLogLevel('LM_Fatal','F',LLTError);
   LM_Necessarily:=ProgramLog.RegisterLogLevel('LM_Necessarily','N',LLTInfo);
 
-  PDIncPos:=MsgOpt.GetEnum;
-  PDDecPos:=MsgOpt.GetEnum;
+  lp_DecPos:=MsgOpt.GetEnum;
+  lp_IncPos:=MsgOpt.GetEnum;
+  ProgramLog.EnterMsgOpt:=lp_IncPos;
+  ProgramLog.ExitMsgOpt:=lp_DecPos;
+  ProgramLog.MsgOptAliasDic.add('+',lp_IncPos);
+  ProgramLog.MsgOptAliasDic.add('-',lp_DecPos);
+
 
   ProgramLog.SetDefaultLogLevel(LM_Debug);
   ProgramLog.SetCurrentLogLevel(LM_Info);
@@ -140,21 +165,23 @@ initialization
   UnitsInitializeLMId:=ProgramLog.RegisterModule('UnitsInitialization');
   UnitsFinalizeLMId:=ProgramLog.RegisterModule('UnitsFinalization');
 
-  TimeBackend.init;
-  ProgramLog.addDecorator(TimeBackend);
+  TimeDecorator.init;
+  ProgramLog.addDecorator(TimeDecorator);
+
+  PositionDecorator.init;
+  ProgramLog.addDecorator(PositionDecorator);
 
 
   FileLogBackend.init(SysToUTF8(ExtractFilePath(paramstr(0)))+filelog);
-  ProgramLog.addBackend(FileLogBackend,'&0:s &%0:d:s',[@TimeBackend]);
+  ProgramLog.addBackend(FileLogBackend,'%1:s%2:s%0:s',[@TimeDecorator,@PositionDecorator]);
 
   ProgramLog.LogStart;
-  programlog.LogOutFormatStr('Unit "%s" initialization finish, log created',[{$INCLUDE %FILE%}],lp_OldPos,LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization finish, log created',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
 
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],lp_OldPos,LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   ProgramLog.LogEnd;
   ProgramLog.done;
   FileLogBackend.done;
-
 end.
 

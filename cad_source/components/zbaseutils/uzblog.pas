@@ -25,16 +25,14 @@ uses
   gvector,strutils,sysutils{$IFNDEF DELPHI},LazUTF8{$ENDIF},
   uzbLogTypes,
   uzbhandles,
-  Generics.Collections,uzbnamedhandles,uzbnamedhandleswithdata,uzbsets;
+  Generics.Collections,Generics.Defaults,uzbnamedhandles,uzbnamedhandleswithdata,uzbsets;
 
 const
-  lp_IncPos=1;
-  lp_DecPos=-lp_IncPos;
-  lp_OldPos=0;
-
   tsc2ms=2000;
 
   MsgDefaultOptions=0;
+  LogModeDefault=1;
+  LMDIDefault=1;
 
 type
 
@@ -43,6 +41,9 @@ type
   TEntered=record
     Entered:boolean;
     EnteredTo:AnsiString;
+    LogLevel:TLogLevel;
+    LMDI:TModuleDesk;
+    MsgOptions:TMsgOpt;
   end;
   TDoEnteredHelper = type helper for TEntered
     function IfEntered:TEntered;
@@ -54,10 +55,8 @@ type
 
   TLogLevelsHandles=specialize GTNamedHandlesWithData<TLogLevel,specialize GTLinearIncHandleManipulator<TLogLevel>,TLogLevelHandleNameType,specialize GTStringNamesUPPERCASE<TLogLevelHandleNameType>,TLogLevelData>;
 
-  TSplashTextOutProc=procedure (s:string;pm:boolean);
-  THistoryTextOutMethod=procedure (s:string) of object;
-  THistoryTextOutProc=procedure (s:string);
   TLogLevelAliasDic=specialize TDictionary<AnsiChar,TLogLevel>;
+  TTMsgOptAliasDic=specialize TDictionary<AnsiChar,TMsgOpt>;
 
   PTMyTimeStamp=^TMyTimeStamp;
   TMyTimeStamp=record
@@ -68,10 +67,29 @@ type
 
   TBackendHandle=Integer;
 
+  TFmtData=record
+    msgFmt:String;
+    argsI:array of Integer;
+    argsP:array of PTLogerBaseDecorator
+  end;
+  TLogStampt=LongInt;
+  TFmtResultData=record
+    Fmt:TFmtData;
+    Res:TLogMsg;
+    Stampt:TLogStampt;
+  end;
+
+  IFmtDataComparer=specialize IEqualityComparer<TFmtData>;
+  TFmtDataComparer=class(TInterfacedObject,IFmtDataComparer)
+      function Equals(constref ALeft, ARight: TFmtData): Boolean;
+      function GetHashCode(constref AValue: TFmtData): UInt32;
+    end;
+
+  TEnable=(EEnable,EDisable,EDefault);
+
   tlog=object
     private
       type
-        TLogStampt=LongInt;
         TLogStampter=specialize GTSimpleHandles<TLogStampt,specialize GTHandleManipulator<TLogStampt>>;
         TModuleDeskData=record
           enabled:boolean;
@@ -85,18 +103,20 @@ type
           constructor CreateRec(PDD:PTLogerBaseDecorator;s:TLogStampt);
         end;
 
+        TFmtDatas=specialize TVector<TFmtResultData>;
+        TFmtDatasDic=specialize TDictionary<TFmtData,Integer>;
+
         TDecorators=specialize TVector<TDecoratorData>;
 
         TLogerBackendData=record
           PBackend:PTLogerBaseBackend;
-          msgFmt:string;
-          constructor CreateRec(PBE:PTLogerBaseBackend;Fmt:string;const args:array of integer);
+          msgFmtIndex:Integer;
+          constructor CreateRec(PBE:PTLogerBaseBackend;Index:Integer);
         end;
         TBackends=specialize TVector<TLogerBackendData>;
 
       var
         Indent:integer;
-        LogLevels:TLogLevelsHandles;
         LogLevelAliasDic:TLogLevelAliasDic;
         CurrentLogLevel:TLogLevel;
         DefaultLogLevel:TLogLevel;
@@ -109,25 +129,26 @@ type
         TotalBackendsCount:Integer;
         LogStampter:TLogStampter;
         Decorators:TDecorators;
+        FmtDatas:TFmtDatas;
+        FmtDatasDic:TFmtDatasDic;
       procedure WriteLogHeader;
-
-
-      procedure LogOutStrFast(str:AnsiString;IncIndent:integer);virtual;
-      procedure WriteToLog(s:AnsiString;t,dt:TDateTime;tick,dtick:int64;IncIndent:integer);virtual;
 
       function IsNeedToLog(LogMode:TLogLevel;LMDI:TModuleDesk):boolean;
 
-      procedure ProcessStr(str:AnsiString;IncIndent:integer);virtual;
-      procedure ProcessStrToLog(str:AnsiString;IncIndent:integer);virtual;
+      procedure ProcessStrToLog(str:AnsiString;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);virtual;
 
-      function LogMode2string(LogMode:TLogLevel):TLogLevelHandleNameType;
+      function LogMode2String(LogMode:TLogLevel):TLogLevelHandleNameType;
 
-      procedure processMsg(msg:TLogMsg);
+      procedure processMsg(msg:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);
+
+      procedure processFmtResultData(var FRD:TFmtResultData;Stampt:TLogStampt;msg:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);
+
+      procedure processDecoratorData(var DD:TDecoratorData;Stampt:TLogStampt;msg:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);
 
     public
-      HistoryTextOut:THistoryTextOutMethod;
-      SplashTextOut:TSplashTextOutProc;
-      MessageBoxTextOut,WarningBoxTextOut,ErrorBoxTextOut:THistoryTextOutProc;
+      LogLevels:TLogLevelsHandles;
+      EnterMsgOpt,ExitMsgOpt:TMsgOpt;
+      MsgOptAliasDic:TTMsgOptAliasDic;
 
 
       LM_Trace:TLogLevel;     // — вывод всего подряд. На тот случай, если Debug не позволяет локализовать ошибку.
@@ -144,14 +165,14 @@ type
       procedure LogStart;
       procedure LogEnd;
 
-      function Enter(EnterTo:AnsiString;LogMode:TLogLevel=1;LMDI:TModuleDesk=1):TEntered;
+      function Enter(EnterTo:AnsiString;LogMode:TLogLevel=1;LMDI:TModuleDesk=1;MsgOptions:TMsgOpt=MsgDefaultOptions):TEntered;
       procedure Leave(AEntered:TEntered);
 
-      procedure LogOutFormatStr(Const Fmt:AnsiString;const Args :Array of const;IncIndent:integer;LogMode:TLogLevel;LMDI:TModuleDesk=1;MsgOptions:TMsgOpt=MsgDefaultOptions);virtual;
-      procedure LogOutStr(str:AnsiString;IncIndent:integer;LogMode:TLogLevel=1;LMDI:TModuleDesk=1;MsgOptions:TMsgOpt=MsgDefaultOptions);virtual;
+      procedure LogOutFormatStr(Const Fmt:AnsiString;const Args :Array of const;LogMode:TLogLevel;LMDI:TModuleDesk=1;MsgOptions:TMsgOpt=MsgDefaultOptions);virtual;
+      procedure LogOutStr(str:AnsiString;LogMode:TLogLevel=1;LMDI:TModuleDesk=1;MsgOptions:TMsgOpt=MsgDefaultOptions);virtual;
       function RegisterLogLevel(LogLevelName:TLogLevelHandleNameType;LLAlias:AnsiChar;_LLD:TLogLevelType):TLogLevel;
 
-      function RegisterModule(ModuleName:TModuleDeskNameType):TModuleDesk;
+      function RegisterModule(ModuleName:TModuleDeskNameType;Enbl:TEnable=EDefault):TModuleDesk;
       procedure SetCurrentLogLevel(LogLevel:TLogLevel;silent:boolean=false);
       procedure SetDefaultLogLevel(LogLevel:TLogLevel;silent:boolean=false);
 
@@ -171,15 +192,45 @@ var
 
 implementation
 
-constructor tlog.TLogerBackendData.CreateRec(PBE:PTLogerBaseBackend;Fmt:string;const args:array of integer);
+function TFmtDataComparer.Equals(constref ALeft, ARight: TFmtData): Boolean;
+var
+  i:integer;
+begin
+  if ALeft.msgFmt<>ARight.msgFmt then
+    exit(False);
+  if length(ALeft.argsP)<>length(ARight.argsP) then
+    exit(False);
+  if length(ALeft.argsI)<>length(ARight.argsI) then
+    exit(False);
+  for i:=low(ALeft.argsP) to high(ALeft.argsP) do
+    if ALeft.argsP[i]<>ARight.argsP[i] then
+      exit(False);
+  for i:=low(ALeft.argsI) to high(ALeft.argsI) do
+    if ALeft.argsI[i]<>ARight.argsI[i] then
+      exit(False);
+  Result:=True;
+end;
+
+function TFmtDataComparer.GetHashCode(constref AValue: TFmtData): UInt32;
+begin
+  Result := BobJenkinsHash(AValue.msgFmt[1],length(AValue.msgFmt)*SizeOf(AValue.msgFmt[1]),0);
+  Result := BobJenkinsHash(AValue.argsP[0],length(AValue.argsP)*SizeOf(AValue.argsP[1]),Result);
+  Result := BobJenkinsHash(AValue.argsI[0],length(AValue.argsI)*SizeOf(AValue.argsI[1]),Result);
+end;
+
+constructor tlog.TLogerBackendData.CreateRec(PBE:PTLogerBaseBackend;Index:Integer);
 begin
   PBackend:=PBE;
+  msgFmtIndex:=Index;
 end;
 
 function TDoEnteredHelper.IfEntered:TEntered;
 begin
   result.Entered:=Entered;
   Result.EnteredTo:=EnteredTo;
+  Result.LogLevel:=LogLevel;
+  Result.LMDI:=LMDI;
+  Result.MsgOptions:=MsgOptions;
 end;
 function LLD(_LLD:TLogLevelType):TLogLevelData;
 begin
@@ -190,7 +241,7 @@ begin
   result:=LogLevels.TryGetHandle(LogLevelName,LogLevel);
 end;
 
-function tlog.LogMode2string(LogMode:TLogLevel):AnsiString;
+function tlog.LogMode2String(LogMode:TLogLevel):AnsiString;
 begin
   result:=LogLevels.GetHandleName(LogMode);
   if result='' then result:='LM_Unknown';
@@ -210,101 +261,9 @@ begin
   result:=result+Format('%.3d', [MilliSecond]);
 end;
 
-procedure tlog.WriteToLog(s:AnsiString;t,dt:TDateTime;tick,dtick:int64;IncIndent:integer);
-var ts:AnsiString;
+procedure tlog.processstrtolog(str:AnsiString;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);
 begin
-  ts:=TimeToStr(Time)+{'|'+}DupeString(' ',Indent*2);
-  ts :='!!!! '+ts +s;
-
-  ts:=ts+DupeString('-',80-length(ts));
-  //decodetime(t,Hour,Minute,Second,MilliSecond);
-  ts := ts +' t:=' + {inttostr(round(t*10e7))}MyTimeToStr(t) + ', dt:=' + {inttostr(round(dt*10e7))}MyTimeToStr(dt) {+#13+#10};
-  ts := ts +' tick:=' + inttostr(tick div tsc2ms) + ', dtick:=' + inttostr(dtick div tsc2ms)+#13+#10;
-  if (Indent=1)and(IncIndent<0) then ts:=ts+#13+#10;
-
-  processMsg(ts);
-end;
-{procedure tlog.logout;
-begin
-     logoutstr(str,IncIndent);
-end;}
-(*function RDTSC: comp;
-var
-  TimeStamp: record
-    case byte of
-      1: (Whole: comp);
-      2: (Lo, Hi: Longint);
-  end;
-begin
-  asm
-    db $0F; db $31;
-  {$ifdef Cpu386}
-    mov [TimeStamp.Lo], eax
-    mov [TimeStamp.Hi], edx
-  {$else}
-    db D32
-    mov word ptr TimeStamp.Lo, AX   dfg
-    db D32
-    mov word ptr TimeStamp.Hi, DX
-  {$endif}
-  end;
-  Result := TimeStamp.Whole;
-end;*)
-function mynow:TMyTimeStamp;
-//var a:int64;
-begin
-     result.time:=now();
-     {asm
-        rdtsc
-        mov dword ptr [a],eax
-        mov dword ptr [a+4],edx
-     end;
-     result.rdtsc:=a;}
-     result.rdtsc:=GetTickCount64;
-end;
-
-procedure tlog.processstrtolog(str:AnsiString;IncIndent:integer);
-var
-   CurrentTime:TMyTimeStamp;
-   DeltaTime,FromStartTime:TDateTime;
-   tick,dtick:int64;
-
-begin
-     CurrentTime:=mynow();
-
-     if timebuf.size>0 then
-                            begin
-                                 FromStartTime:=CurrentTime.time-PTMyTimeStamp(TimeBuf.Mutable[0])^.time;
-                                 DeltaTime:=CurrentTime.time-PTMyTimeStamp(TimeBuf.Mutable[timebuf.Size-1])^.time;
-                                 tick:=CurrentTime.rdtsc-PTMyTimeStamp(TimeBuf.Mutable[0])^.rdtsc;
-                                 dtick:=CurrentTime.rdtsc-PTMyTimeStamp(TimeBuf.Mutable[timebuf.Size-1])^.rdtsc;
-                            end
-                        else
-                            begin
-                                  FromStartTime:=0;
-                                  DeltaTime:=0;
-                                  tick:=0;
-                                  dtick:=0;
-                            end;
-     if IncIndent=0 then
-                      begin
-                           WriteToLog(str,FromStartTime,DeltaTime,tick,dtick,IncIndent);
-                      end
-else if IncIndent>0 then
-                      begin
-                           WriteToLog(str,FromStartTime,DeltaTime,tick,dtick,IncIndent);
-                           inc(Indent,IncIndent);
-
-                           timebuf.PushBack(CurrentTime);
-                      end
-                  else
-                      begin
-                           inc(Indent,IncIndent);
-                           WriteToLog(str,FromStartTime,DeltaTime,tick,dtick,IncIndent);
-
-                           timebuf.PopBack;
-                           //dec(timebuf.Count);
-                      end;
+  processMsg(str,LogMode,LMDI,MsgOptions);
 end;
 
 function tlog.IsNeedToLog(LogMode:TLogLevel;LMDI:TModuleDesk):boolean;
@@ -316,24 +275,20 @@ begin
                                else
                                    result:=true;
 end;
-procedure tlog.LogOutFormatStr(Const Fmt:AnsiString;const Args :Array of const;IncIndent:integer;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt=MsgDefaultOptions);
+procedure tlog.LogOutFormatStr(Const Fmt:AnsiString;const Args :Array of const;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt=MsgDefaultOptions);
 begin
      if IsNeedToLog(LogMode,lmdi) then
-                                 ProcessStr(format(fmt,args),IncIndent);
+                                 ProcessStrToLog(format(fmt,args),LogMode,LMDI,MsgOptions);
 end;
-procedure tlog.ProcessStr(str:AnsiString;IncIndent:integer);
-begin
-     if (Indent=0) then
-                    if assigned(SplashTextOut) then
-                                                  SplashTextOut(str,false);
-     ProcessStrToLog(str,IncIndent);
-end;
-function tlog.Enter(EnterTo:AnsiString;LogMode:TLogLevel=1;LMDI:TModuleDesk=1):TEntered;
+function tlog.Enter(EnterTo:AnsiString;LogMode:TLogLevel=1;LMDI:TModuleDesk=1;MsgOptions:TMsgOpt=MsgDefaultOptions):TEntered;
 begin
   if IsNeedToLog(LogMode,lmdi) then begin
     result.Entered:=true;
     result.EnteredTo:=EnterTo;
-    ProcessStr(EnterTo,lp_IncPos);
+    result.LogLevel:=LogMode;
+    result.LMDI:=LMDI;
+    result.MsgOptions:=MsgOptions;
+    ProcessStrToLog(EnterTo,LogMode,LMDI,MsgOptions or EnterMsgOpt);
   end else begin
     result.Entered:=false;
     result.EnteredTo:='';
@@ -343,29 +298,23 @@ end;
 procedure tlog.Leave(AEntered:TEntered);
 begin
   if AEntered.Entered then
-    ProcessStr(format('end; {%s}',[AEntered.EnteredTo]),lp_DecPos);
+    ProcessStrToLog(format('end; {%s}',[AEntered.EnteredTo]),AEntered.LogLevel,AEntered.LMDI,AEntered.MsgOptions or ExitMsgOpt);
 end;
 
-procedure tlog.logoutstr(str:AnsiString;IncIndent:integer;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt=MsgDefaultOptions);
+procedure tlog.logoutstr(str:AnsiString;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt=MsgDefaultOptions);
 begin
-     if IsNeedToLog(LogMode,lmdi) then
-                                 ProcessStr(str,IncIndent);
-end;
-procedure tlog.LogOutStrFast(str:AnsiString;IncIndent:integer);
-begin
-  ProcessStrToLog(str,IncIndent);
+  if IsNeedToLog(LogMode,lmdi) then
+    ProcessStrToLog(str,LogMode,LMDI,MsgOptions);
 end;
 procedure tlog.SetCurrentLogLevel(LogLevel:TLogLevel;silent:boolean=false);
 var
    CurrentTime:TMyTimeStamp;
 begin
-     if CurrentLogLevel<>LogLevel then
-                                    begin
-                                         CurrentTime:=mynow();
-                                         CurrentLogLevel:=LogLevel;
-                                         if not silent then
-                                           WriteToLog('Current log level changed to: '+LogMode2string(LogLevel),CurrentTime.time,0,CurrentTime.rdtsc,0,0);
-                                    end;
+  if CurrentLogLevel<>LogLevel then begin
+    CurrentLogLevel:=LogLevel;
+    if not silent then
+      processMsg('Current log level changed to: '+LogMode2string(LogLevel),LogModeDefault,LMDIDefault,MsgDefaultOptions);
+  end;
 end;
 procedure tlog.SetDefaultLogLevel(LogLevel:TLogLevel;silent:boolean=false);
 var
@@ -373,10 +322,9 @@ var
 begin
      if DefaultLogLevel<>LogLevel then
                                     begin
-                                         CurrentTime:=mynow();
                                          DefaultLogLevel:=LogLevel;
                                          if not silent then
-                                           WriteToLog('Default log level changed to: '+LogMode2string(LogLevel),CurrentTime.time,0,CurrentTime.rdtsc,0,0);
+                                           processMsg('Default log level changed to: '+LogMode2string(LogLevel),LogModeDefault,LMDIDefault,MsgDefaultOptions);
                                     end;
 end;
 function tlog.RegisterLogLevel(LogLevelName:TLogLevelHandleNameType;LLAlias:AnsiChar;_LLD:TLogLevelType):TLogLevel;
@@ -389,13 +337,18 @@ begin
     LogLevelAliasDic.Add(LLAlias,result);
 end;
 
-function tlog.registermodule(modulename:AnsiString):TModuleDesk;
+function tlog.registermodule(modulename:AnsiString;Enbl:TEnable=EDefault):TModuleDesk;
 begin
   if not ModulesDesks.TryGetHandle(modulename,result) then
   begin
     result:=ModulesDesks.CreateOrGetHandle(modulename);
-    ModulesDesks.GetPLincedData(result)^.enabled:=NewModuleDesk.enabled;
-    //LogOutStr(format('Register log module "%s"',[modulename]),0,LM_Info);
+    with ModulesDesks.GetPLincedData(result)^ do begin
+      case Enbl of
+        EEnable:enabled:=True;
+        EDisable:enabled:=False;
+        EDefault:enabled:=NewModuleDesk.enabled;
+      end;
+    end;
   end;
 end;
 procedure tlog.enablemodule(modulename:AnsiString);
@@ -442,28 +395,38 @@ var
   i,j,k:Integer;
   arrVT:array of TVarRec;
   arr:array of integer;
+  FmtData:TFmtData;
+  FmtRData:TFmtResultData;
+  num:integer;
 begin
-  //хрень. нужно хранить отдельно форматы сообщений а не в бакэндах
-  if length(args)=0 then
-    BD.CreateRec(@BackEnd,fmt,[])
-  else begin
-    setlength(arrVT,length(args));
-    setlength(arr,length(args));
+  if fmt<>'' then begin
+    FmtData.msgFmt:=fmt;
+    setlength(FmtData.argsI,length(args));
+    setlength(FmtData.argsP,length(args));
     for i:=low(args) to high(args) do begin
-      k:=0;
+      k:=-1;
       for j:=0 to Decorators.Size-1 do
-        if Decorators.Mutable[i]^.PDecorator=args[i] then begin
-          k:=j+1;
+        if Decorators.Mutable[j]^.PDecorator=args[i] then begin
+          k:=j;
           break;
         end;
-      arr[i]:=k;
-      arrVT[i].VType:=vtInteger;
-      arrVT[i].VInteger:=k;
-      fmt:=format(fmt,arrVT);
-      fmt:=StringsReplace(fmt,['&'],['%'],[rfReplaceAll]);
+      FmtData.argsI[i]:=k;
+      FmtData.argsP[i]:=args[i];
     end;
-    BD.CreateRec(@BackEnd,fmt,arr);
+
+    if not FmtDatasDic.tryGetValue(FmtData,num) then begin
+      num:=FmtDatas.Size;
+      FmtDatasDic.add(FmtData,num);
+      FmtRData.Fmt:=FmtData;
+      FmtRData.Res:='';
+      FmtRData.Stampt:=LogStampter.GetInitialHandleValue;
+      FmtDatas.PushBack(FmtRData);
+    end;
+  end else begin
+    num:=-1;
   end;
+
+  BD.CreateRec(@BackEnd,num);
 
   if TotalBackendsCount=Backends.Size then begin
     result:=Backends.Size;
@@ -486,13 +449,48 @@ begin
   end;
 end;
 
-procedure tlog.processMsg(msg:TLogMsg);
+procedure tlog.processDecoratorData(var DD:TDecoratorData;Stampt:TLogStampt;msg:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);
+begin
+  if DD.Stampt=Stampt then
+    exit;
+  DD.CurrRes:=DD.PDecorator^.GetDecor(msg,MsgOptions,LogMode,LMDI);
+  DD.Stampt:=Stampt
+end;
+
+procedure tlog.processFmtResultData(var FRD:TFmtResultData;Stampt:TLogStampt;msg:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);
+var
+  arrVT:array of TVarRec;
+  i:integer;
+begin
+  if FRD.Stampt=Stampt then
+    exit;
+  SetLength(arrVT,length(FRD.Fmt.argsI)+1);
+  arrVT[0].VAnsiString:=@msg[1];
+  arrVT[0].VType:=vtAnsiString;
+  for i:=low(FRD.Fmt.argsI) to high(FRD.Fmt.argsI) do begin
+    processDecoratorData(Decorators.Mutable[FRD.Fmt.argsI[i]]^,Stampt,msg,LogMode,LMDI,MsgOptions);
+    arrVT[i+1].VAnsiString:=@Decorators.Mutable[FRD.Fmt.argsI[i]]^.CurrRes[1];
+    arrVT[i+1].VType:=vtAnsiString;
+  end;
+  FRD.Stampt:=Stampt;
+  FRD.Res:=format(FRD.Fmt.msgFmt,arrVT);
+end;
+
+procedure tlog.processMsg(msg:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);
 var
   i:Integer;
+  Stampt:TLogStampt;
 begin
+  Stampt:=LogStampter.CreateHandle;
   for i:=0 to Backends.Size-1 do
-    if Backends.Mutable[i]^.PBackend<>nil then
-      Backends.Mutable[i]^.PBackend^.doLog(msg);
+    if Backends.Mutable[i]^.PBackend<>nil then begin
+      if Backends.Mutable[i]^.msgFmtIndex=-1 then
+        Backends.Mutable[i]^.PBackend^.doLog(msg,MsgOptions,LogMode,LMDI)
+      else begin
+        processFmtResultData(FmtDatas.Mutable[Backends.Mutable[i]^.msgFmtIndex]^,Stampt,msg,LogMode,LMDI,MsgOptions);
+        Backends.Mutable[i]^.PBackend^.doLog(FmtDatas.Mutable[Backends.Mutable[i]^.msgFmtIndex]^.Res,MsgOptions,LogMode,LMDI);
+      end;
+    end;
 end;
 
 constructor tlog.init(TraceModeName:TLogLevelHandleNameType;TraceModeAlias:AnsiChar);
@@ -500,13 +498,13 @@ var
    CurrentTime:TMyTimeStamp;
    //lz:TLazLogger;
 begin
+  MsgOptAliasDic:=TTMsgOptAliasDic.Create;
   LogLevels.init;
   ModulesDesks.init;
   LogLevelAliasDic:=TLogLevelAliasDic.create;
   LogStampter.init;
   LogStampter.CreateHandle;
   LM_Trace:=RegisterLogLevel(TraceModeName,TraceModeAlias,LLTInfo);// — вывод всего подряд. На тот случай, если Debug не позволяет локализовать ошибку.
-  CurrentTime:=mynow();
   TimeBuf:=TTimeBuf.Create;
   Indent:=1;
   timebuf.PushBack(CurrentTime);
@@ -521,6 +519,10 @@ begin
   TotalBackendsCount:=0;
 
   Decorators:=TDecorators.Create;
+  FmtDatas:=TFmtDatas.Create;
+  FmtDatasDic:=TFmtDatasDic.Create(TFmtDataComparer.Create);
+  EnterMsgOpt:=0;
+  ExitMsgOpt:=0;
 end;
 
 procedure tlog.LogStart;
@@ -534,11 +536,8 @@ begin
 end;
 
 procedure tlog.WriteLogHeader;
-var
-  CurrentTime:TMyTimeStamp;
 begin
-  CurrentTime:=mynow();
-  WriteToLog('------------------------Log started------------------------',CurrentTime.time,0,CurrentTime.rdtsc,0,0);
+  processMsg('------------------------Log started------------------------',LogModeDefault,LMDIDefault,MsgDefaultOptions);
   //WriteToLog('Log mode: '+LogMode2string(CurrentLogLevel),true,CurrentTime.time,0,CurrentTime.rdtsc,0,0);
 end;
 
@@ -551,37 +550,22 @@ var
   dbgmode,tdbgmode:TLogLevel;
   _indent:integer;
   prefixlength,prefixstart:integer;
-  NeedToHistory,NeedMessageBox:boolean;
   modulename:string;
   lmdi:TModuleDesk;
+  MsgOptions,TempMsgOptions:TMsgOpt;
   ss:string;
 begin
    ss:=s;
    dbgmode:=LM_Trace;
-   _indent:=lp_OldPos;
-   NeedToHistory:=false;
-   NeedMessageBox:=false;
+   MsgOptions:=MsgDefaultOptions;
    if length(ss)>1 then
      if ss[1]='{' then begin
        prefixlength:=2;
        while (ss[prefixlength]<>'}')and(prefixlength<=length(ss)) do begin
-         case ss[prefixlength] of
-           {'T':dbgmode:=LM_Trace;
-           'D':dbgmode:=LM_Debug;
-           'I':dbgmode:=LM_Info;
-           'W':dbgmode:=LM_Warning;
-           'E':dbgmode:=LM_Error;
-           'F':dbgmode:=LM_Fatal;
-           'N':dbgmode:=LM_Necessarily;}
-           '+':_indent:=lp_IncPos;
-           '-':_indent:=lp_DecPos;
-           'H':NeedToHistory:=true;
-           'M':NeedMessageBox:=true;
-            else begin
-              if LogLevelAliasDic.TryGetValue(ss[prefixlength],tdbgmode) then
-                dbgmode:=tdbgmode;
-            end;
-         end;
+         if LogLevelAliasDic.TryGetValue(ss[prefixlength],tdbgmode) then
+           dbgmode:=tdbgmode
+         else if MsgOptAliasDic.TryGetValue(ss[prefixlength],TempMsgOptions) then
+           MsgOptions:=MsgOptions or TempMsgOptions;
          inc(prefixlength);
        end;
        ss:=copy(ss,prefixlength+1,length(ss)-prefixlength);
@@ -603,21 +587,8 @@ begin
    else
      lmdi:=RegisterModule(modulename);
 
-   if NeedToHistory then
-       if assigned(HistoryTextOut) then
-         HistoryTextOut(ss);
-     if NeedMessageBox then
-       begin case LogLevels.GetPLincedData(dbgmode)^.LogLevelType of
-         LLTWarning:if assigned(WarningBoxTextOut) then
-                      WarningBoxTextOut(ss);
-           LLTError:if assigned(ErrorBoxTextOut) then
-                      ErrorBoxTextOut(ss);
-               else if assigned(MessageBoxTextOut) then
-                      MessageBoxTextOut(ss);
-       end;
-       end;
-     if IsNeedToLog(dbgmode,lmdi) then
-      LogOutStr(ss,_indent,dbgmode,lmdi);
+   if IsNeedToLog(dbgmode,lmdi) then
+     LogOutStr(ss,dbgmode,lmdi,MsgOptions);
 end;
 
 procedure tlog.ZOnDebugLN(Sender: TObject; S: string; var Handled: Boolean);
@@ -627,17 +598,14 @@ end;
 
 destructor tlog.done;
 var
-   CurrentTime:TMyTimeStamp;
    i:integer;
 begin
-  CurrentTime:=mynow();
   for i:=0 to ModulesDesks.HandleDataVector.Size-1 do
   if ModulesDesks.HandleDataVector[i].D.enabled then
-    WriteToLog(format('Log module name "%s" state: Enabled',[ModulesDesks.HandleDataVector[I].N]),CurrentTime.time,0,CurrentTime.rdtsc,0,0)
+    processMsg(format('Log module name "%s" state: Enabled',[ModulesDesks.HandleDataVector[I].N]),LogModeDefault,LMDIDefault,MsgDefaultOptions)
   else
-    WriteToLog(format('Log module name "%s" state: Disabled',[ModulesDesks.HandleDataVector[I].N]),CurrentTime.time,0,CurrentTime.rdtsc,0,0);
-  CurrentTime:=mynow();
-  WriteToLog('-------------------------Log ended-------------------------',CurrentTime.time,0,CurrentTime.rdtsc,0,0);
+    processMsg(format('Log module name "%s" state: Disabled',[ModulesDesks.HandleDataVector[I].N]),LogModeDefault,LMDIDefault,MsgDefaultOptions);
+  processMsg('-------------------------Log ended-------------------------',LogModeDefault,LMDIDefault,MsgDefaultOptions);
   TimeBuf.Front;
   LogLevels.done;
   ModulesDesks.done;
@@ -648,6 +616,8 @@ begin
     FreeAndNil(Decorators);
   if assigned(LogLevelAliasDic)then
     FreeAndNil(LogLevelAliasDic);
+  if assigned(MsgOptAliasDic)then
+    FreeAndNil(MsgOptAliasDic);
 end;
 
 initialization

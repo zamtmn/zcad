@@ -21,7 +21,7 @@ unit uzcfsplash;
 interface
 uses
  uzcsysparams,uzbpaths,uzclog,uniqueinstanceraw,uzcstrconsts,uzbstrproc,Forms,
- stdctrls, Controls, Graphics,ExtCtrls,uzcsysinfo,LazUTF8,sysutils,
+ stdctrls, Controls, Graphics,ExtCtrls,uzcsysinfo,LazUTF8,sysutils,uzbLogTypes,
  LazLogger;
 type
   TSplashForm = class(TForm)
@@ -39,6 +39,15 @@ procedure createsplash(RunUniqueInstance:boolean);
 procedure removesplash;
 procedure SplashTextOutProc(s:string;pm:boolean);
 implementation
+type
+  TLogerSplashBackend=object(TLogerBaseBackend)
+    procedure doLog(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);virtual;
+    constructor init;
+  end;
+
+var
+  LogerSplashBackend:TLogerSplashBackend;
+
 procedure SplashTextOutProc(s:string;pm:boolean);
 begin
      if assigned(SplashForm) then
@@ -103,11 +112,20 @@ begin
           SplashForm:=nil;
      end;
 end;
+procedure TLogerSplashBackend.doLog(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);
+begin
+  if (lp_IncPos and MsgOptions)<>0 then
+  SplashTextOutProc(msg,false);
+end;
+constructor TLogerSplashBackend.init;
+begin
+end;
+
 initialization
   Application.Initialize;
-  //RequireDerivedFormResource:=false;
   createsplash(SysParam.saved.UniqueInstance);
-  programlog.SplashTextOut:=SplashTextOutProc;
+  LogerSplashBackend.init;
+  ProgramLog.addBackend(LogerSplashBackend,'',[]);
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   removesplash;

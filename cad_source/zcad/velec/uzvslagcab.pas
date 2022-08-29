@@ -43,6 +43,7 @@ uses
      //gzctnrVector,
      uzvconsts,
      uzcutils,
+     uzvslagcabparams, //вынесенные параметры
      Varman;             //Зкадовский RTTI
 
 type
@@ -60,31 +61,11 @@ Tuzvslagcab_com=object(CommandRTEdObject)//определяем тип - объ�
              procedure cablingNewGraphDevice(pdata:PtrInt); virtual;//построение всех Новых графов и его визуализация
 
             end;
-PTuzvslagcabComParams=^TuzvslagcabComParams;//указатель на тип данных параметров команды. зкад работает с ними через указатель
-
-TsettingVizCab=record
-  sErrors:Boolean;
-  vizNumMetric:Boolean;
-  vizFullTreeCab:Boolean;
-  vizEasyTreeCab:Boolean;
-end;
-
-TuzvslagcabComParams=record       //определяем параметры команды которые будут видны в инспекторе во время выполнения команды
-                                      //регистрировать их будем паскалевским RTTI
-                                      //не через экспорт исходников и парсинг файла с определениями типов
-  NamesList:TEnumData;//это тип для отображения списков в инспекторе
-  //nameSL:String;
-  accuracy:Double;
-  metricDev:Boolean;
-  settingVizCab:TsettingVizCab;
-
-end;
 const
   Epsilon=0.2;
 
 var
  uzvslagcab_com:Tuzvslagcab_com;//определяем экземпляр нашей команды
- uzvslagcabComParams:TuzvslagcabComParams;//определяем экземпляр параметров нашей команды
 
  graphCable:TGraphBuilder;        //созданый граф
  listHeadDevice:TListHeadDevice;  //список головных устройств с подключенными к ним устройствами

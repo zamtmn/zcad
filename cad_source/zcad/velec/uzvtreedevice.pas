@@ -115,6 +115,7 @@ uses
   uzvtmasterdev,
   uzvvisualgraph,
   uzvconsts,
+  uzvslagcabparams, //вынесенные параметры
   uzvtestdraw;
 
 

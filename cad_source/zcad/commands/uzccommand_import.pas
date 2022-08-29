@@ -34,6 +34,8 @@ uses
   uzccomimport;
 
 implementation
+const
+  ImportFileFilter:String='PDF files (*.pdf)|*.pdf|PostScript files (*.ps)|*.ps|SVG files (*.svg)|*.svg|DXF files (*.dxf)|*.dxf|EPS files (*.eps)|*.eps';
 
 function Import_com(operands:TCommandOperands):TCommandResult;
 var
@@ -45,7 +47,7 @@ begin
                      begin
                           ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
                           //mainformn.ShowAllCursors;
-                          isload:=OpenFileDialog(s,1,'svg',ImportFileFilter,'','Import...');
+                          isload:=OpenFileDialog(s,'svg',ImportFileFilter,'','Import...');
                           ZCMsgCallBackInterface.Do_AfterShowModal(nil);
                           //mainformn.RestoreCursors;
                           //s:=utf8tosys(s);

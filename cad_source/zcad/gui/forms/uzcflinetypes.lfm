@@ -1,23 +1,22 @@
 object LineTypesForm: TLineTypesForm
   Left = 226
-  Height = 616
+  Height = 924
   Top = 131
-  Width = 1084
+  Width = 1626
   Anchors = [akTop]
-  Caption = 'Line type manager'
-  ClientHeight = 616
-  ClientWidth = 1084
+  Caption = 'Line types'
+  ClientHeight = 924
+  ClientWidth = 1626
+  DesignTimePPI = 144
   OnClose = _close
   OnCreate = _onCreate
   Position = poMainFormCenter
-  LCLVersion = '1.7'
-  Visible = False
   object ButtonPanel1: TButtonPanel
-    Left = 1
-    Height = 37
-    Top = 578
-    Width = 1082
-    BorderSpacing.Around = 1
+    Left = 2
+    Height = 43
+    Top = 879
+    Width = 1622
+    BorderSpacing.Around = 2
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True
     HelpButton.Name = 'HelpButton'
@@ -29,48 +28,23 @@ object LineTypesForm: TLineTypesForm
     TabOrder = 0
     ShowButtons = [pbOK, pbCancel, pbHelp]
   end
-  object DeleteLtBtn: TSpeedButton
-    AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = Bevel1
-    AnchorSideBottom.Control = Bevel1
-    AnchorSideBottom.Side = asrBottom
-    Left = 5
-    Height = 25
-    Top = 1
-    Width = 27
-    Anchors = [akTop, akLeft, akBottom]
-    BorderSpacing.Left = 5
-    Flat = True
-  end
-  object MkCurrentBtn: TSpeedButton
-    AnchorSideLeft.Control = DeleteLtBtn
-    AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = Bevel1
-    AnchorSideBottom.Control = Bevel1
-    AnchorSideBottom.Side = asrBottom
-    Left = 32
-    Height = 25
-    Top = 1
-    Width = 25
-    Anchors = [akTop, akLeft, akBottom]
-    Flat = True
-    OnClick = MkCurrentBtnClick
-  end
   object Bevel1: TBevel
-    AnchorSideLeft.Control = MkCurrentBtn
+    AnchorSideLeft.Control = Panel3
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Panel3
     AnchorSideBottom.Side = asrBottom
-    Left = 62
-    Height = 25
-    Top = 1
-    Width = 1017
+    Left = 508
+    Height = 38
+    Top = 2
+    Width = 1110
     Anchors = [akTop, akLeft, akRight]
-    BorderSpacing.Left = 5
-    BorderSpacing.Top = 1
-    BorderSpacing.Right = 5
+    BorderSpacing.Left = 8
+    BorderSpacing.Top = 2
+    BorderSpacing.Right = 8
+    BorderSpacing.Bottom = 2
   end
   object LTDescLabel: TLabel
     AnchorSideLeft.Control = Bevel1
@@ -79,46 +53,52 @@ object LineTypesForm: TLineTypesForm
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Bevel1
     AnchorSideBottom.Side = asrBottom
-    Left = 63
-    Height = 23
-    Top = 2
-    Width = 1015
+    Left = 520
+    Height = 34
+    Top = 4
+    Width = 1086
     Anchors = [akTop, akLeft, akRight, akBottom]
-    BorderSpacing.Around = 1
+    BorderSpacing.Left = 10
+    BorderSpacing.Right = 10
+    BorderSpacing.Around = 2
+    Color = clDefault
     Layout = tlCenter
     ParentColor = False
   end
   object ListView1: TListView
     AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = Bevel1
+    AnchorSideTop.Control = Panel3
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Panel1
-    Left = 5
-    Height = 387
-    Top = 28
-    Width = 1074
+    Left = 8
+    Height = 624
+    Top = 42
+    Width = 1610
     Anchors = [akTop, akLeft, akRight, akBottom]
-    BorderSpacing.Left = 5
-    BorderSpacing.Top = 2
-    BorderSpacing.Right = 5
+    BorderSpacing.Left = 8
+    BorderSpacing.Top = 3
+    BorderSpacing.Right = 8
     Columns = <    
       item
+        Alignment = taCenter
         Caption = 'Status'
+        Width = 75
       end    
       item
         Caption = 'Line type'
-        Width = 100
+        Width = 150
       end    
       item
+        Alignment = taCenter
         Caption = 'Apperance'
-        Width = 200
+        Width = 300
       end    
       item
         AutoSize = True
         Caption = 'Description'
-        Width = 720
+        Width = 115
       end>
     ReadOnly = True
     RowSelect = True
@@ -136,18 +116,18 @@ object LineTypesForm: TLineTypesForm
     AnchorSideTop.Control = Panel1
     AnchorSideRight.Control = Panel1
     AnchorSideBottom.Control = ButtonPanel1
-    Left = 5
-    Height = 158
-    Top = 415
-    Width = 799
+    Left = 8
+    Height = 205
+    Top = 666
+    Width = 1233
     Anchors = [akTop, akLeft, akRight, akBottom]
     AutoSize = True
-    BorderSpacing.Left = 5
-    BorderSpacing.Right = 5
-    BorderSpacing.Bottom = 5
+    BorderSpacing.Left = 8
+    BorderSpacing.Right = 8
+    BorderSpacing.Bottom = 8
     Caption = 'Line type description'
-    ClientHeight = 134
-    ClientWidth = 795
+    ClientHeight = 175
+    ClientWidth = 1229
     TabOrder = 2
     object Memo1: TMemo
       AnchorSideLeft.Control = GroupBox1
@@ -155,12 +135,12 @@ object LineTypesForm: TLineTypesForm
       AnchorSideRight.Control = Panel2
       AnchorSideBottom.Control = GroupBox1
       AnchorSideBottom.Side = asrBottom
-      Left = 5
-      Height = 124
-      Top = 5
-      Width = 709
+      Left = 8
+      Height = 159
+      Top = 8
+      Width = 1121
       Anchors = [akTop, akLeft, akRight, akBottom]
-      BorderSpacing.Around = 5
+      BorderSpacing.Around = 8
       Lines.Strings = (
         'Select line type!'
       )
@@ -169,24 +149,24 @@ object LineTypesForm: TLineTypesForm
     object Panel2: TPanel
       AnchorSideRight.Control = GroupBox1
       AnchorSideRight.Side = asrBottom
-      Left = 719
-      Height = 119
-      Top = 5
-      Width = 71
+      Left = 1137
+      Height = 152
+      Top = 8
+      Width = 84
       Anchors = [akTop, akRight, akBottom]
       AutoSize = True
-      BorderSpacing.Top = 5
-      BorderSpacing.Right = 5
-      BorderSpacing.Bottom = 5
+      BorderSpacing.Top = 8
+      BorderSpacing.Right = 8
+      BorderSpacing.Bottom = 8
       BevelOuter = bvNone
-      ClientHeight = 119
-      ClientWidth = 71
+      ClientHeight = 152
+      ClientWidth = 84
       TabOrder = 1
       object BitBtn1: TBitBtn
         Left = 0
-        Height = 29
+        Height = 35
         Top = 0
-        Width = 71
+        Width = 84
         Align = alTop
         AutoSize = True
         Caption = 'Update'
@@ -195,9 +175,9 @@ object LineTypesForm: TLineTypesForm
       end
       object BitBtn2: TBitBtn
         Left = 0
-        Height = 29
-        Top = 29
-        Width = 71
+        Height = 35
+        Top = 35
+        Width = 84
         Align = alTop
         AutoSize = True
         Caption = 'Create'
@@ -206,9 +186,9 @@ object LineTypesForm: TLineTypesForm
       end
       object BitBtn3: TBitBtn
         Left = 0
-        Height = 29
-        Top = 58
-        Width = 71
+        Height = 35
+        Top = 70
+        Width = 84
         Align = alTop
         AutoSize = True
         Caption = 'Load'
@@ -221,56 +201,56 @@ object LineTypesForm: TLineTypesForm
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = ButtonPanel1
-    Left = 809
-    Height = 162
-    Top = 415
-    Width = 275
+    Left = 1249
+    Height = 211
+    Top = 666
+    Width = 377
     Anchors = [akRight, akBottom]
     AutoSize = True
     BevelOuter = bvNone
-    ClientHeight = 162
-    ClientWidth = 275
+    ClientHeight = 211
+    ClientWidth = 377
     TabOrder = 3
     object GroupBox2: TGroupBox
       Left = 0
-      Height = 99
+      Height = 128
       Top = 0
-      Width = 270
+      Width = 369
       Align = alTop
       AutoSize = True
-      BorderSpacing.Right = 5
-      BorderSpacing.InnerBorder = 3
+      BorderSpacing.Right = 8
+      BorderSpacing.InnerBorder = 4
       Caption = 'Drawing settings'
-      ClientHeight = 75
-      ClientWidth = 266
+      ClientHeight = 98
+      ClientWidth = 365
       TabOrder = 0
       object Label3: TLabel
         AnchorSideLeft.Control = GroupBox2
         AnchorSideTop.Control = GScale
         AnchorSideTop.Side = asrCenter
         AnchorSideRight.Control = GScale
-        Left = 5
-        Height = 19
-        Top = 9
-        Width = 166
+        Left = 8
+        Height = 25
+        Top = 12
+        Width = 214
         Anchors = [akTop, akLeft, akRight]
-        BorderSpacing.Left = 5
+        BorderSpacing.Left = 8
         Caption = 'Global scale factor'
+        Color = clDefault
         ParentColor = False
       end
       object GScale: TFloatSpinEdit
         AnchorSideTop.Control = GroupBox2
         AnchorSideRight.Control = GroupBox2
         AnchorSideRight.Side = asrBottom
-        Left = 171
-        Height = 27
-        Top = 5
-        Width = 90
+        Left = 222
+        Height = 33
+        Top = 8
+        Width = 135
         Anchors = [akTop, akRight]
-        BorderSpacing.Top = 5
-        BorderSpacing.Right = 5
-        BorderSpacing.Bottom = 5
-        Increment = 1
+        BorderSpacing.Top = 8
+        BorderSpacing.Right = 8
+        BorderSpacing.Bottom = 8
         MaxValue = 10000000000
         MinValue = 1E-10
         TabOrder = 0
@@ -281,14 +261,13 @@ object LineTypesForm: TLineTypesForm
         AnchorSideTop.Side = asrBottom
         AnchorSideRight.Control = GroupBox2
         AnchorSideRight.Side = asrBottom
-        Left = 171
-        Height = 27
-        Top = 37
-        Width = 90
+        Left = 222
+        Height = 33
+        Top = 49
+        Width = 135
         Anchors = [akTop, akRight]
-        BorderSpacing.Right = 5
-        BorderSpacing.Bottom = 5
-        Increment = 1
+        BorderSpacing.Right = 8
+        BorderSpacing.Bottom = 8
         MaxValue = 10000000000
         MinValue = 1E-10
         TabOrder = 1
@@ -299,13 +278,14 @@ object LineTypesForm: TLineTypesForm
         AnchorSideTop.Control = CScale
         AnchorSideTop.Side = asrCenter
         AnchorSideRight.Control = CScale
-        Left = 5
-        Height = 19
-        Top = 41
-        Width = 166
+        Left = 8
+        Height = 25
+        Top = 53
+        Width = 214
         Anchors = [akTop, akLeft, akRight]
-        BorderSpacing.Left = 5
+        BorderSpacing.Left = 8
         Caption = 'Current object scale factor'
+        Color = clDefault
         ParentColor = False
       end
     end
@@ -313,31 +293,101 @@ object LineTypesForm: TLineTypesForm
       AnchorSideTop.Control = GroupBox2
       AnchorSideTop.Side = asrBottom
       Left = 0
-      Height = 58
-      Top = 99
-      Width = 270
+      Height = 75
+      Top = 128
+      Width = 369
       Align = alBottom
       Anchors = [akTop, akLeft, akRight, akBottom]
       AutoSize = True
-      BorderSpacing.Right = 5
-      BorderSpacing.Bottom = 5
-      BorderSpacing.InnerBorder = 3
+      BorderSpacing.Right = 8
+      BorderSpacing.Bottom = 8
+      BorderSpacing.InnerBorder = 4
       Caption = 'Global settings'
       ChildSizing.Layout = cclLeftToRightThenTopToBottom
-      ClientHeight = 34
-      ClientWidth = 266
+      ClientHeight = 45
+      ClientWidth = 365
       TabOrder = 1
       object CheckBox1: TCheckBox
         AnchorSideTop.Side = asrBottom
-        Left = 5
-        Height = 23
-        Top = 5
-        Width = 122
-        BorderSpacing.Left = 5
-        BorderSpacing.Top = 5
+        Left = 8
+        Height = 29
+        Top = 8
+        Width = 150
+        BorderSpacing.Left = 8
+        BorderSpacing.Top = 8
         Caption = 'Auto rotate text'
         TabOrder = 0
       end
+    end
+  end
+  object Panel3: TPanel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    Left = 0
+    Height = 39
+    Top = 0
+    Width = 500
+    AutoSize = True
+    BevelOuter = bvNone
+    ClientHeight = 39
+    ClientWidth = 500
+    Constraints.MinWidth = 500
+    TabOrder = 4
+    object CoolBar1: TCoolBar
+      Left = 0
+      Height = 39
+      Top = 0
+      Width = 500
+      AutoSize = True
+      Bands = <      
+        item
+          Control = ToolBar1
+          Width = 145
+        end>
+      EdgeBorders = []
+      object ToolBar1: TToolBar
+        AnchorSideLeft.Control = CoolBar1
+        AnchorSideTop.Control = CoolBar1
+        Left = 22
+        Height = 33
+        Top = 3
+        Width = 71
+        Align = alNone
+        AutoSize = True
+        BorderSpacing.Left = 22
+        BorderSpacing.Top = 3
+        Caption = 'ToolBar1'
+        EdgeBorders = []
+        TabOrder = 0
+        Transparent = True
+        Wrapable = False
+        object ToolButton1: TToolButton
+          Left = 1
+          Top = 0
+          Action = MkCurr
+        end
+        object ToolButton2: TToolButton
+          Left = 36
+          Top = 0
+          Action = DelLt
+        end
+      end
+    end
+  end
+  object ActionList1: TActionList
+    Left = 907
+    Top = 227
+    object DelLt: TAction
+      Caption = 'Delete line type'
+      Hint = 'Delete line type'
+      OnExecute = DeletetLT
+      ShortCut = 46
+    end
+    object MkCurr: TAction
+      Caption = 'Make current'
+      Hint = 'Make selected line type current'
+      OnExecute = MakeCurrentLT
+      ShortCut = 32
     end
   end
 end

@@ -26,10 +26,6 @@ uses
 
 type
 
-  GTLinearIncHandleManipulator<GHandleType>=object(GTHandleManipulator<GHandleType>)
-    class function GetIndex(Handle:GHandleType):SizeInt;inline;static;
-  end;
-
   GTStringNamesUPPERCASE<GNameType>=class
     class function Standartize(name:GNameType):GNameType;
   end;
@@ -50,14 +46,10 @@ type
    function GetHandleByName(HandleName:GNameType):GHandleType;
    function CreateOrGetHandle(HandleName:GNameType):GHandleType;
    function TryGetHandle(HandleName:GNameType;out Handle:GHandleType):boolean;
+   function StandartizeName(name:GNameType):GNameType;
 end;
 
 implementation
-
-class function GTLinearIncHandleManipulator<GHandleType>.GetIndex(Handle:GHandleType):SizeInt;
-begin
-  result:=Handle-1;
-end;
 
 function GTNamedHandles<GHandleType,GHandleManipulator,GNameType,GNameManipulator>.GetHandleByName(HandleName:GNameType):GHandleType;
 var
@@ -127,6 +119,11 @@ begin
     OldHN.N:=HandleName;
     HandleNameRegister.add(StandartizedHandleName,OldHN);
   end;
+end;
+
+function GTNamedHandles<GHandleType,GHandleManipulator,GNameType,GNameManipulator>.StandartizeName(name:GNameType):GNameType;
+begin
+  Result:=GNameManipulator.Standartize(name);
 end;
 
 begin

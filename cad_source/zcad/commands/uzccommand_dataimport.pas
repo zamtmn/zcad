@@ -166,7 +166,7 @@ var
   DC:TDrawContext;
 begin
   if length(operands)=0 then begin
-    isload:=OpenFileDialog(FileName,1,'csv',CSVFileFilter,'',rsOpenSomething);
+    isload:=OpenFileDialog(FileName,'csv',CSVFileFilter,'',rsOpenSomething);
     if not isload then
       exit(cmd_cancel);
   end else begin

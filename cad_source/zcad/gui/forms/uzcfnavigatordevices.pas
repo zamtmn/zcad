@@ -915,7 +915,7 @@ begin
    except
      on
         E:Exception do begin
-          programlog.LogOutStr('Error in TNavigatorDevices.RefreshTree '+E.Message,lp_OldPos,LM_Error);
+          programlog.LogOutStr('Error in TNavigatorDevices.RefreshTree '+E.Message,LM_Error);
           if NDMsgCtx=nil then
             NDMsgCtx:=TMessagesContext.create('TNavigatorDevices');
           {dr:=}zcMsgDlg('Error in TNavigatorDevices.RefreshTree '+E.Message,zcdiError,[],true,NDMsgCtx);
@@ -1108,7 +1108,7 @@ var
   FileName,FileFilter:String;
 begin
   FileFilter:=format(rsNavigatorParamsFileFilter,[FileExt]);
-  if OpenFileDialog(FileName,1,FileExt,FileFilter,'',rsOpenSomething) then begin
+  if OpenFileDialog(FileName,FileExt,FileFilter,'',rsOpenSomething) then begin
     LoadAndSetParamsFromFile(FileName);
   end;
 end;

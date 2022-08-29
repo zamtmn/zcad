@@ -938,6 +938,18 @@ msgctxt "zcadexternal.acn_units~textimage"
 msgid "0.0"
 msgstr ""
 
+#: zcadexternal.acn_uzvaddconnection~caption
+msgid "Add connection"
+msgstr ""
+
+#: zcadexternal.acn_uzvaddconnection~textimage
+msgid "C+"
+msgstr ""
+
+#: zcadexternal.acn_uzvremoveconnection~caption
+msgid "Remove connection"
+msgstr ""
+
 #: zcadexternal.acn_varsedsel~caption
 msgid "Multi object variables editor"
 msgstr ""
@@ -1811,7 +1823,7 @@ msgstr ""
 msgid "Names of entities"
 msgstr ""
 
-#: zcadexternal.menu~alarm system
+#: zcadexternal.menu~alarm_system
 msgid "Alarm system"
 msgstr ""
 
@@ -1819,12 +1831,12 @@ msgstr ""
 msgid "Block/Device"
 msgstr ""
 
-#: zcadexternal.menu~cable legend
-msgid "Cable legend"
-msgstr ""
-
 #: zcadexternal.menu~cable/trace
 msgid "Cable/Trace"
+msgstr ""
+
+#: zcadexternal.menu~cable_legend
+msgid "Cable legend"
 msgstr ""
 
 #: zcadexternal.menu~cctv
@@ -1835,11 +1847,11 @@ msgstr ""
 msgid "Circle"
 msgstr ""
 
-#: zcadexternal.menu~circuit diagram
+#: zcadexternal.menu~circuit_diagram
 msgid "Circuit diagram"
 msgstr ""
 
-#: zcadexternal.menu~connections diagram
+#: zcadexternal.menu~connections_diagram
 msgid "Connections diagram"
 msgstr ""
 
@@ -1868,8 +1880,8 @@ msgstr ""
 msgid "File"
 msgstr ""
 
-#: zcadexternal.menu~fire alarm
-msgctxt "zcadexternal.menu~fire alarm"
+#: zcadexternal.menu~fire_alarm
+msgctxt "zcadexternal.menu~fire_alarm"
 msgid "Fire alarm"
 msgstr ""
 
@@ -1890,7 +1902,7 @@ msgstr ""
 msgid "Inspector"
 msgstr ""
 
-#: zcadexternal.menu~instrumentation and control
+#: zcadexternal.menu~instrumentation_and_control
 msgid "Instrumentation and Control"
 msgstr ""
 
@@ -1923,7 +1935,7 @@ msgstr ""
 msgid "Pan"
 msgstr ""
 
-#: zcadexternal.menu~placement equipment
+#: zcadexternal.menu~placement_equipment
 msgid "Placement equipment"
 msgstr ""
 
@@ -1935,11 +1947,11 @@ msgstr ""
 msgid "Polygon"
 msgstr ""
 
-#: zcadexternal.menu~power supply
+#: zcadexternal.menu~power_supply
 msgid "Power supply"
 msgstr ""
 
-#: zcadexternal.menu~sample files
+#: zcadexternal.menu~sample_files
 msgid "Sample files"
 msgstr ""
 
@@ -1947,7 +1959,7 @@ msgstr ""
 msgid "Schematic"
 msgstr ""
 
-#: zcadexternal.menu~security alarm
+#: zcadexternal.menu~security_alarm
 msgid "Security alarm"
 msgstr ""
 
@@ -1955,7 +1967,7 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: zcadexternal.menu~show window
+#: zcadexternal.menu~show_window
 msgid "Show window"
 msgstr ""
 
@@ -2287,8 +2299,8 @@ msgstr ""
 msgid "Blocks"
 msgstr ""
 
-#: zcadexternal.palette~fire alarm
-msgctxt "zcadexternal.palette~fire alarm"
+#: zcadexternal.palette~fire_alarm
+msgctxt "zcadexternal.palette~fire_alarm"
 msgid "Fire alarm"
 msgstr ""
 
@@ -3304,7 +3316,7 @@ msgstr ""
 msgid "Low-current"
 msgstr ""
 
-#: zcadexternal.toolpalette_blocklib_itemcaption~power suply
+#: zcadexternal.toolpalette_blocklib_itemcaption~power_suply
 msgid "Power suply"
 msgstr ""
 
@@ -3313,8 +3325,8 @@ msgctxt "zcadexternal.toolpalette_blocklib_itemcaption~unsorted"
 msgid "Unsorted"
 msgstr ""
 
-#: zcadexternal.toolpalette_blocklib_low-current_alarm_itemcaption~fire alarm
-msgctxt "zcadexternal.toolpalette_blocklib_low-current_alarm_itemcaption~fire alarm"
+#: zcadexternal.toolpalette_blocklib_low-current_alarm_itemcaption~fire_alarm
+msgctxt "zcadexternal.toolpalette_blocklib_low-current_alarm_itemcaption~fire_alarm"
 msgid "Fire alarm"
 msgstr ""
 
@@ -3323,64 +3335,64 @@ msgctxt "zcadexternal.toolpalette_blocklib_low-current_itemcaption~alarm"
 msgid "Alarm"
 msgstr ""
 
-#: zcadexternal.toolpalette_blocklib_power suply_itemcaption~calculations
+#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~calculations
 msgid "Calculations"
 msgstr ""
 
-#: zcadexternal.toolpalette_blocklib_power suply_itemcaption~equipment 1.100
+#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~equipment_1.100
 msgid "Equipment 1:100"
 msgstr ""
 
-#: zcadexternal.toolpalette_blocklib_power suply_itemcaption~equipment 2.100
+#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~equipment_2.100
 msgid "Equipment 2:100"
 msgstr ""
 
-#: zcadexternal.toolpalette_blocklib_power suply_itemcaption~fire alarm
-msgctxt "zcadexternal.toolpalette_blocklib_power suply_itemcaption~fire alarm"
+#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~fire_alarm
+msgctxt "zcadexternal.toolpalette_blocklib_power_suply_itemcaption~fire_alarm"
 msgid "Fire alarm"
 msgstr ""
 
-#: zcadexternal.toolpalette_blocklib_power suply_itemcaption~high-voltage networks
+#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~high-voltage_networks
 msgid "High-voltage networks"
 msgstr ""
 
-#: zcadexternal.toolpalette_blocklib_power suply_itemcaption~lighting 1.100
+#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~lighting_1.100
 msgid "Lighting 1:100"
 msgstr ""
 
-#: zcadexternal.toolpalette_blocklib_power suply_itemcaption~lighting 1.200
+#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~lighting_1.200
 msgid "Lighting 1:200"
 msgstr ""
 
-#: zcadexternal.toolpalette_blocklib_power suply_itemcaption~nodes
+#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~nodes
 msgid "Nodes"
 msgstr ""
 
-#: zcadexternal.toolpalette_blocklib_power suply_itemcaption~outdoor networks
+#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~outdoor_networks
 msgid "Outdoor networks"
 msgstr ""
 
-#: zcadexternal.toolpalette_blocklib_power suply_itemcaption~risers
+#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~risers
 msgid "Risers"
 msgstr ""
 
-#: zcadexternal.toolpalette_blocklib_power suply_itemcaption~schemes
+#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~schemes
 msgid "Schemes"
 msgstr ""
 
-#: zcadexternal.toolpalette_blocklib_power suply_itemcaption~sockets 1.100
+#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~sockets_1.100
 msgid "Sockets 1:100"
 msgstr ""
 
-#: zcadexternal.toolpalette_blocklib_power suply_itemcaption~sockets 1.200
+#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~sockets_1.200
 msgid "Sockets 1:200"
 msgstr ""
 
-#: zcadexternal.toolpalette_blocklib_power suply_itemcaption~switches 1.200
+#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~switches_1.200
 msgid "Switches 1:200"
 msgstr ""
 
-#: zcadexternal.toolpalette_blocklib_power suply_itemcaption~tables
+#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~tables
 msgid "Tables"
 msgstr ""
 

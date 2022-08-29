@@ -20,7 +20,7 @@ unit uzcreglog;
 {$mode delphi}
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzbLog,uzclog,uzcinterface,uzcuidialogs,uzcuitypes,uzelongprocesssupport,
+uses uzbLogTypes,uzbLog,uzclog,uzcinterface,uzcuidialogs,uzcuitypes,uzelongprocesssupport,
      {$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}LCLProc,Forms,
      LazLoggerBase,LazLogger,uzbLogIntf;
 implementation
@@ -31,18 +31,25 @@ type
     class procedure LCLOnDebugLN(Sender: TObject; S: string; var Handled: Boolean);
   end;
 
+  TLogerMBoxBackend=object(TLogerBaseBackend)
+    procedure doLog(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);virtual;
+    constructor init;
+  end;
+
 const
   LPSTIMINGModuleName='LPSTIMING';
 
 var
   LPSTIMINGModuleDeskIndex:TModuleDesk;
+  LogerMBoxBackend:TLogerMBoxBackend;
+  MO_SM,MO_SH:TMsgOpt;
 
 class procedure TLogHelper.EndLongProcessHandler(LPHandle:TLPSHandle;TotalLPTime:TDateTime);
 var
    ts:string;
 begin
   str((TotalLPTime*10e4):3:2,ts);
-  programlog.LogOutFormatStr('LongProcess "%s" finished: %s second',[lps.getLPName(LPHandle),ts],lp_OldPos,LM_Necessarily,LPSTIMINGModuleDeskIndex)
+  programlog.LogOutFormatStr('LongProcess "%s" finished: %s second',[lps.getLPName(LPHandle),ts],LM_Necessarily,LPSTIMINGModuleDeskIndex)
 end;
 
 class procedure TLogHelper.LCLOnDebugLN(Sender: TObject; S: string; var Handled: Boolean);
@@ -69,18 +76,31 @@ begin
   dr:=zcMsgDlg(ErrStr,zcdiError,[],true);
 end;
 
+procedure TLogerMBoxBackend.doLog(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);
+begin
+  if (MO_SM and MsgOptions)<>0 then begin
+       case ProgramLog.LogLevels.GetPLincedData(LogMode)^.LogLevelType of
+         LLTWarning:ShowWarningForLog(msg);
+           LLTError:ShowErrorForLog(msg);
+               else ShowMessageForLog(msg);
+      end;
+  end;
+  if (MO_SH and MsgOptions)<>0 then
+    ZCMsgCallBackInterface.Do_HistoryOut(msg);
+end;
+
+constructor TLogerMBoxBackend.init;
+begin
+end;
+
 var
   lz:TLazLogger;
 
 initialization
 
-  LPSTIMINGModuleDeskIndex:=programlog.RegisterModule(LPSTIMINGModuleName);
+  LPSTIMINGModuleDeskIndex:=programlog.RegisterModule(LPSTIMINGModuleName,EEnable);
 
   lps.AddOnLPEndHandler(TLogHelper.EndLongProcessHandler);
-  programlog.HistoryTextOut:=ZCMsgCallBackInterface.Do_HistoryOut();
-  programlog.MessageBoxTextOut:=@ShowMessageForLog;
-  programlog.WarningBoxTextOut:=@ShowWarningForLog;
-  programlog.ErrorBoxTextOut:=@ShowErrorForLog;
 
   lz:=GetDebugLogger;
   if assigned(lz)then
@@ -91,6 +111,13 @@ initialization
       end;
 
   InstallLoger(programlog.ZDebugLN,nil,programlog.isTraceEnabled);
+  MO_SM:=MsgOpt.GetEnum;
+  MO_SH:=MsgOpt.GetEnum;
+  ProgramLog.MsgOptAliasDic.add('M',MO_SM);
+  ProgramLog.MsgOptAliasDic.add('H',MO_SH);
+  LogerMBoxBackend.init;
+  ProgramLog.addBackend(LogerMBoxBackend,'',[]);
+
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
 end.

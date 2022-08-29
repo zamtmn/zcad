@@ -21,7 +21,7 @@ if anything - to clarify the place)).
 
 You will also need the following paths:
 * path to Lazarus `C:\lazarus`
-* the path to the Lazarus primary settings file, by default it is `C:\Users \<USERNAME>\AppData\Local\lazarus`
+* the path to the Lazarus primary settings file, by default it is `C:\Users\<USERNAME>\AppData\Local\lazarus`
 
 If your username is in non latin - additional actions are required, users with normal names calmly proceed to step 2.
 

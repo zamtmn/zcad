@@ -90,7 +90,7 @@ begin
   {$ENDIF}
   {$if DEFINED(LCLQt) OR DEFINED(LCLQt5)}
     //QtDC.pa;
-    matr:=QMatrix_create(tm[0,0],tm[0,1],tm[1,0],tm[1,1],tm[3,0],tm[3,1]);
+    matr:=QMatrix_create(tm[0].v[0],tm[0].v[1],tm[1].v[0],tm[1].v[1],tm[3].v[0],tm[3].v[1]);
     QPainter_setWorldMatrix(TQtDeviceContext(hdc).Widget,matr,false);
     //setWorldTransform
   {$ENDIF}

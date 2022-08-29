@@ -37,19 +37,28 @@ uses
 
 implementation
 
+var
+  LastFileHandle:Integer=-1;
+
 function Load_com(operands:TCommandOperands):TCommandResult;
 var
    s: AnsiString;
    isload:boolean;
+   loadproc:TFileLoadProcedure;
 begin
+  loadproc:=nil;
   if length(operands)=0 then begin
+    if LastFileHandle=-1 then
+      LastFileHandle:=Ext2LoadProcMap.GetDefaultFileFormatHandle(Ext2LoadProcMap.DefaultExt);
     ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
-    isload:=OpenFileDialog(s,Ext2LoadProcMap.GetDefaultFileFilterIndex,Ext2LoadProcMap.GetDefaultFileExt,{ProjectFileFilter}Ext2LoadProcMap.GetCurrentFileFilter,'',rsOpenFile);
+    isload:=OpenFileDialog(s,LastFileHandle,'',Ext2LoadProcMap.GetCurrentFileFilter,'',rsOpenFile);
     ZCMsgCallBackInterface.Do_AfterShowModal(nil);
     if not isload then begin
       result:=cmd_cancel;
       exit;
     end;
+    if LastFileHandle>=0 then
+      loadproc:=Ext2LoadProcMap.vec.GetPLincedData(LastFileHandle)^.FileLoadProcedure;
   end else begin
     s:=FindInSupportPath(SupportPath,operands);
     if s='' then
@@ -59,7 +68,10 @@ begin
   if isload then begin
     DWGNew_com(s);
     drawings.GetCurrentDWG.SetFileName(s);
-    load_merge(s,tloload);
+    if @loadproc=nil then
+      load_merge(s,tloload)
+    else
+      internal_load_merge(s,loadproc,tloload);
     drawings.GetCurrentDWG.wa.Drawer.delmyscrbuf;//буфер чистить, потому что он может оказаться невалидным в случае отрисовки во время
                                                  //создания или загрузки
     ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedrawContent);

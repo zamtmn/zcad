@@ -482,7 +482,7 @@ begin
                                                   if typ<>packedobjecttype then
                                                                                begin
                                                                                //ShowError('Object "'+typename+'" not packed');
-                                                                               zTraceLn('{W}]Object "'+typename+'" not packed');
+                                                                               zTraceLn('{W}Object "'+typename+'" not packed');
 
                                                                                end;
                                                   if (typename) = 'GDBObj3DFace'

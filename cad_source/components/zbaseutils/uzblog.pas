@@ -607,6 +607,7 @@ begin
     processMsg(format('Log module name "%s" state: Disabled',[ModulesDesks.HandleDataVector[I].N]),LogModeDefault,LMDIDefault,MsgDefaultOptions);
   processMsg('-------------------------Log ended-------------------------',LogModeDefault,LMDIDefault,MsgDefaultOptions);
   TimeBuf.Front;
+  TimeBuf.Free;
   LogLevels.done;
   ModulesDesks.done;
   LogStampter.done;
@@ -618,6 +619,10 @@ begin
     FreeAndNil(LogLevelAliasDic);
   if assigned(MsgOptAliasDic)then
     FreeAndNil(MsgOptAliasDic);
+  if assigned(FmtDatasDic)then
+    FreeAndNil(FmtDatasDic);
+  if assigned(FmtDatas)then
+    FreeAndNil(FmtDatas);
 end;
 
 initialization

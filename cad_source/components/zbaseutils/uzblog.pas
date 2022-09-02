@@ -110,10 +110,10 @@ type
         TBackends=specialize TVector<TLogerBackendData>;
 
       var
-        Indent:integer;
-        LogLevelAliasDic:TLogLevelAliasDic;
         CurrentLogLevel:TLogLevel;
         DefaultLogLevel:TLogLevel;
+
+        LogLevelAliasDic:TLogLevelAliasDic;
         ModulesDesks:TModulesDeskHandles;
         NewModuleDesk:TModuleDeskData;
         DefaultModuleDeskIndex:TModuleDesk;
@@ -127,26 +127,18 @@ type
         MsgOptAliasDic:TTMsgOptAliasDic;
 
       function IsNeedToLog(LogMode:TLogLevel;LMDI:TModuleDesk):boolean;
-
-      procedure ProcessStrToLog(str:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);virtual;
-
       function LogMode2String(LogMode:TLogLevel):TLogLevelHandleNameType;
-
       procedure processMsg(msg:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);
-
       procedure processFmtResultData(var FRD:TFmtResultData;Stampt:TLogStampt;msg:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);
-
       procedure processDecoratorData(var DD:TDecoratorData;Stampt:TLogStampt;msg:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);
 
     public
       EnterMsgOpt,ExitMsgOpt:TMsgOpt;
+      LM_Trace:TLogLevel;// — вывод всего подряд. На тот случай, если Debug не позволяет локализовать ошибку.
 
 
-      LM_Trace:TLogLevel;     // — вывод всего подряд. На тот случай, если Debug не позволяет локализовать ошибку.
-
-
-      constructor init(TraceModeName:TLogLevelHandleNameType='LM_Trace';TraceModeAlias:AnsiChar='T');
-      destructor done;virtual;
+      constructor Init(TraceModeName:TLogLevelHandleNameType='LM_Trace';TraceModeAlias:AnsiChar='T');
+      destructor Done;virtual;
 
       procedure addMsgOptAlias(const ch:AnsiChar;const opt:TMsgOpt);
 
@@ -239,12 +231,13 @@ begin
   result:=LogLevels.GetPLincedData(LL);
 end;
 
-function TLog.LogMode2String(LogMode:TLogLevel):AnsiString;
+function TLog.LogMode2String(LogMode:TLogLevel):TLogLevelHandleNameType;
 begin
   result:=LogLevels.GetHandleName(LogMode);
   if result='' then result:='LM_Unknown';
 end;
-function MyTimeToStr(MyTime:TDateTime):string;
+
+{function MyTimeToStr(MyTime:TDateTime):string;
 var
     Hour,Minute,Second,MilliSecond:word;
 begin
@@ -257,28 +250,23 @@ begin
   if Second<>0 then
     result:=result+Format('%.2d.', [Second]);
   result:=result+Format('%.3d', [MilliSecond]);
-end;
-
-procedure TLog.processstrtolog(str:AnsiString;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);
-begin
-  processMsg(str,LogMode,LMDI,MsgOptions);
-end;
+end;}
 
 function TLog.IsNeedToLog(LogMode:TLogLevel;LMDI:TModuleDesk):boolean;
 begin
-     result:=ModulesDesks.GetPLincedData(LMDI)^.enabled;
-     if result then
-     if LogMode<CurrentLogLevel then
-                                   result:=false
-                               else
-                                   result:=true;
+  result:=ModulesDesks.GetPLincedData(LMDI)^.enabled;
+  if result then
+  if LogMode<CurrentLogLevel then
+    result:=false
+  else
+    result:=true;
 end;
-procedure TLog.LogOutFormatStr(Const Fmt:AnsiString;const Args :Array of const;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt=MsgDefaultOptions);
+procedure TLog.LogOutFormatStr(Const Fmt:TLogMsg;const Args :Array of const;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt=MsgDefaultOptions);
 begin
-     if IsNeedToLog(LogMode,lmdi) then
-                                 ProcessStrToLog(format(fmt,args),LogMode,LMDI,MsgOptions);
+  if IsNeedToLog(LogMode,lmdi) then
+    processMsg(format(fmt,args),LogMode,LMDI,MsgOptions);
 end;
-function TLog.Enter(EnterTo:AnsiString;LogMode:TLogLevel=1;LMDI:TModuleDesk=1;MsgOptions:TMsgOpt=MsgDefaultOptions):TEntered;
+function TLog.Enter(EnterTo:TLogMsg;LogMode:TLogLevel=1;LMDI:TModuleDesk=1;MsgOptions:TMsgOpt=MsgDefaultOptions):TEntered;
 begin
   if IsNeedToLog(LogMode,lmdi) then begin
     result.Entered:=true;
@@ -286,7 +274,7 @@ begin
     result.LogLevel:=LogMode;
     result.LMDI:=LMDI;
     result.MsgOptions:=MsgOptions;
-    ProcessStrToLog(EnterTo,LogMode,LMDI,MsgOptions or EnterMsgOpt);
+    processMsg(EnterTo,LogMode,LMDI,MsgOptions or EnterMsgOpt);
   end else begin
     result.Entered:=false;
     result.EnteredTo:='';
@@ -296,13 +284,13 @@ end;
 procedure TLog.Leave(AEntered:TEntered);
 begin
   if AEntered.Entered then
-    ProcessStrToLog(format('end; {%s}',[AEntered.EnteredTo]),AEntered.LogLevel,AEntered.LMDI,AEntered.MsgOptions or ExitMsgOpt);
+    processMsg(format('end; {%s}',[AEntered.EnteredTo]),AEntered.LogLevel,AEntered.LMDI,AEntered.MsgOptions or ExitMsgOpt);
 end;
 
-procedure TLog.logoutstr(str:AnsiString;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt=MsgDefaultOptions);
+procedure TLog.logoutstr(str:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt=MsgDefaultOptions);
 begin
   if IsNeedToLog(LogMode,lmdi) then
-    ProcessStrToLog(str,LogMode,LMDI,MsgOptions);
+    processMsg(str,LogMode,LMDI,MsgOptions);
 end;
 procedure TLog.SetCurrentLogLevel(LogLevel:TLogLevel;silent:boolean=false);
 begin
@@ -314,12 +302,11 @@ begin
 end;
 procedure TLog.SetDefaultLogLevel(LogLevel:TLogLevel;silent:boolean=false);
 begin
-     if DefaultLogLevel<>LogLevel then
-                                    begin
-                                         DefaultLogLevel:=LogLevel;
-                                         if not silent then
-                                           processMsg('Default log level changed to: '+LogMode2string(LogLevel),LogModeDefault,LMDIDefault,MsgDefaultOptions);
-                                    end;
+  if DefaultLogLevel<>LogLevel then begin
+    DefaultLogLevel:=LogLevel;
+    if not silent then
+      processMsg('Default log level changed to: '+LogMode2string(LogLevel),LogModeDefault,LMDIDefault,MsgDefaultOptions);
+  end;
 end;
 function TLog.RegisterLogLevel(LogLevelName:TLogLevelHandleNameType;LLAlias:AnsiChar;_LLD:TLogLevelType):TLogLevel;
 var
@@ -331,7 +318,7 @@ begin
     LogLevelAliasDic.Add(LLAlias,result);
 end;
 
-function TLog.registermodule(modulename:AnsiString;Enbl:TEnable=EDefault):TModuleDesk;
+function TLog.registermodule(modulename:TModuleDeskNameType;Enbl:TEnable=EDefault):TModuleDesk;
 begin
   if not ModulesDesks.TryGetHandle(modulename,result) then
   begin
@@ -387,8 +374,6 @@ function TLog.addBackend(var BackEnd:TLogerBaseBackend;fmt:TLogMsg;const args:ar
 var
   BD:TLogerBackendData;
   i,j,k:Integer;
-  arrVT:array of TVarRec;
-  arr:array of integer;
   FmtData:TFmtData;
   FmtRData:TFmtResultData;
   num:integer;
@@ -496,9 +481,6 @@ begin
   LogStampter.init;
   LogStampter.CreateHandle;
   LM_Trace:=RegisterLogLevel(TraceModeName,TraceModeAlias,LLTInfo);// — вывод всего подряд. На тот случай, если Debug не позволяет локализовать ошибку.
-  //TimeBuf:=TTimeBuf.Create;
-  Indent:=1;
-  //timebuf.PushBack(CurrentTime);
 
   NewModuleDesk.enabled:=true;
   DefaultModuleDeskIndex:=RegisterModule('DEFAULT');
@@ -539,38 +521,34 @@ var
   MsgOptions,TempMsgOptions:TMsgOpt;
   ss:string;
 begin
-   ss:=s;
-   dbgmode:=LM_Trace;
-   MsgOptions:=MsgDefaultOptions;
-   if length(ss)>1 then
-     if ss[1]='{' then begin
-       prefixlength:=2;
-       while (ss[prefixlength]<>'}')and(prefixlength<=length(ss)) do begin
-         if LogLevelAliasDic.TryGetValue(ss[prefixlength],tdbgmode) then
-           dbgmode:=tdbgmode
-         else if MsgOptAliasDic.TryGetValue(ss[prefixlength],TempMsgOptions) then
-           MsgOptions:=MsgOptions or TempMsgOptions;
-         inc(prefixlength);
-       end;
-       ss:=copy(ss,prefixlength+1,length(ss)-prefixlength);
-     end;
+  ss:=s;
+  dbgmode:=LM_Trace;
+  MsgOptions:=MsgDefaultOptions;
+  if length(ss)>1 then
+    if ss[1]='{' then begin
+      prefixlength:=2;
+      while (ss[prefixlength]<>'}')and(prefixlength<=length(ss)) do begin
+        if LogLevelAliasDic.TryGetValue(ss[prefixlength],tdbgmode) then
+          dbgmode:=tdbgmode
+        else if MsgOptAliasDic.TryGetValue(ss[prefixlength],TempMsgOptions) then
+          MsgOptions:=MsgOptions or TempMsgOptions;
+        inc(prefixlength);
+      end;
+      ss:=copy(ss,prefixlength+1,length(ss)-prefixlength);
+    end;
    if length(ss)>1 then
      if ss[1]='[' then begin
-        prefixstart:=2;
-        prefixlength:=2;
-        while (ss[prefixlength]<>']')and(prefixlength<=length(ss)) do
-        begin
-          inc(prefixlength);
-        end;
-        modulename:=uppercase(copy(ss,prefixstart,prefixlength-2));
-        ss:=copy(ss,prefixlength+1,length(ss)-prefixlength);
+       prefixstart:=2;
+       prefixlength:=2;
+       while (ss[prefixlength]<>']')and(prefixlength<=length(ss)) do
+        inc(prefixlength);
+       modulename:=uppercase(copy(ss,prefixstart,prefixlength-2));
+       ss:=copy(ss,prefixlength+1,length(ss)-prefixlength);
      end;
-
    if modulename='' then
      lmdi:=DefaultModuleDeskIndex
    else
      lmdi:=RegisterModule(modulename);
-
    if IsNeedToLog(dbgmode,lmdi) then
      LogOutStr(ss,dbgmode,lmdi,MsgOptions);
 end;
@@ -587,7 +565,7 @@ end;
 
 destructor TLog.done;
 var
-   i:integer;
+  i:integer;
 begin
   for i:=0 to ModulesDesks.HandleDataVector.Size-1 do
   if ModulesDesks.HandleDataVector[i].D.enabled then

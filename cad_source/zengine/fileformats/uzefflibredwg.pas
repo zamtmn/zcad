@@ -26,7 +26,8 @@ uses
   SysUtils,
   dwg,dwgproc,
   uzeffmanager,uzeentgenericsubentry,uzbtypes,uzedrawingsimple,
-  uzelongprocesssupport,uzgldrawcontext,forms;
+  uzelongprocesssupport,uzgldrawcontext,forms,
+  uzcstrconsts;
 
 type
 
@@ -68,7 +69,7 @@ var
   DC:TDrawContext;
 begin
   try
-    DebugLn('{WH}LibreDWG: Not yet implement');
+    DebugLn('{WH}%s',[rsNotYetImplemented]);
     try
       LoadLibreDWG;
     except
@@ -100,7 +101,7 @@ var
   DC:TDrawContext;
 begin
   try
-    DebugLn('{WH}LibreDWG: Not yet implement');
+    DebugLn('{WH}%s',[rsNotYetImplemented]);
     try
       LoadLibreDWG;
     except

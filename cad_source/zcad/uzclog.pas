@@ -32,7 +32,7 @@ const
   {$IFDEF DARWIN}filelog='../../log/zcad_darwin.log';{$ENDIF}
 
 var
-//LM_Trace,     //уже определен в uzbLog.tlog // — вывод всего подряд. На тот случай, если Debug не позволяет локализовать ошибку.
+//LM_Trace,     //уже определен в uzbLog.TLog // — вывод всего подряд. На тот случай, если Debug не позволяет локализовать ошибку.
   LM_Debug,     // — журналирование моментов вызова «крупных» операций.
   LM_Info,      // — разовые операции, которые повторяются крайне редко, но не регулярно. (загрузка конфига, плагина, запуск бэкапа)
   LM_Warning,   // — неожиданные параметры вызова, странный формат запроса, использование дефолтных значений в замен не корректных. Вообще все, что может свидетельствовать о не штатном использовании.
@@ -44,7 +44,7 @@ var
   lp_IncPos,lp_DecPos:TMsgOpt;
 
 
-  ProgramLog:tlog;
+  ProgramLog:TLog;
   UnitsInitializeLMId,UnitsFinalizeLMId:TModuleDesk;
 
 implementation
@@ -155,8 +155,8 @@ initialization
   lp_IncPos:=MsgOpt.GetEnum;
   ProgramLog.EnterMsgOpt:=lp_IncPos;
   ProgramLog.ExitMsgOpt:=lp_DecPos;
-  ProgramLog.MsgOptAliasDic.add('+',lp_IncPos);
-  ProgramLog.MsgOptAliasDic.add('-',lp_DecPos);
+  ProgramLog.addMsgOptAlias('+',lp_IncPos);
+  ProgramLog.addMsgOptAlias('-',lp_DecPos);
 
 
   ProgramLog.SetDefaultLogLevel(LM_Debug);

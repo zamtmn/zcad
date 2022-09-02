@@ -79,7 +79,7 @@ end;
 procedure TLogerMBoxBackend.doLog(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);
 begin
   if (MO_SM and MsgOptions)<>0 then begin
-       case ProgramLog.LogLevels.GetPLincedData(LogMode)^.LogLevelType of
+       case ProgramLog.GetMutableLogLevelData(LogMode)^.LogLevelType of
          LLTWarning:ShowWarningForLog(msg);
            LLTError:ShowErrorForLog(msg);
                else ShowMessageForLog(msg);
@@ -113,8 +113,8 @@ initialization
   InstallLoger(programlog.ZDebugLN,nil,programlog.isTraceEnabled);
   MO_SM:=MsgOpt.GetEnum;
   MO_SH:=MsgOpt.GetEnum;
-  ProgramLog.MsgOptAliasDic.add('M',MO_SM);
-  ProgramLog.MsgOptAliasDic.add('H',MO_SH);
+  ProgramLog.addMsgOptAlias('M',MO_SM);
+  ProgramLog.addMsgOptAlias('H',MO_SH);
   LogerMBoxBackend.init;
   ProgramLog.addBackend(LogerMBoxBackend,'',[]);
 

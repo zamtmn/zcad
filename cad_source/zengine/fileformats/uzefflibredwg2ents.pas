@@ -28,13 +28,13 @@ uses
   uzeentgenericsubentry,uzbtypes,uzedrawingsimple,
   uzbstrproc,
   uzestyleslayers,
-  uzeentline,uzeentity,uzgldrawcontext,
+  uzeentline,uzeentity,//uzgldrawcontext,
   uzeffLibreDWG,
   uzeffmanager;
 implementation
-type
-  PDwg_Entity_LINE=^Dwg_Entity_LINE;
-  PDwg_Object_LAYER=^Dwg_Object_LAYER;
+//type
+  //PDwg_Entity_LINE=^Dwg_Entity_LINE;
+  //PDwg_Object_LAYER=^Dwg_Object_LAYER;
 
 procedure AddLayer(var ZContext:TZDrawingContext;var DWGContext:TDWGCtx;var DWGObject:Dwg_Object;PDWGLayer:PDwg_Object_LAYER);
 var
@@ -42,6 +42,7 @@ var
   name:string;
 begin
   BITCODE_T2Text(PDWGLayer^.name,DWGContext,name);
+  DebugLn(['{WH}Layer: ',name]);
   if DWGContext.DWGVer>R_2006 then
     name:=Tria_Utf8ToAnsi(name);
   player:=ZContext.PDrawing^.LayerTable.MergeItem(name,ZContext.LoadMode);
@@ -55,6 +56,31 @@ begin
     player^._print:=(PDWGLayer^.plotflag<>0);
     //desk:AnsiString;
   end;
+end;
+
+procedure AddLineType(var ZContext:TZDrawingContext;var DWGContext:TDWGCtx;var DWGObject:Dwg_Object;PDWGLType:PDwg_Object_LTYPE);
+var
+  //player:PGDBLayerProp;
+  name:string;
+begin
+  BITCODE_T2Text(PDWGLType^.name,DWGContext,name);
+  DebugLn(['{WH}LineType: ',name]);
+end;
+
+procedure AddBlockHeader(var ZContext:TZDrawingContext;var DWGContext:TDWGCtx;var DWGObject:Dwg_Object;PDWGBlock_Header:PDwg_Object_BLOCK_HEADER);
+var
+  name:string;
+begin
+  BITCODE_T2Text(PDWGBlock_Header^.name,DWGContext,name);
+  DebugLn(['{WH}BlockHeader: ',name]);
+end;
+
+procedure AddBlock(var ZContext:TZDrawingContext;var DWGContext:TDWGCtx;var DWGObject:Dwg_Object;PDWGBlock_Header:PDwg_Object_BLOCK_HEADER);
+var
+  name:string;
+begin
+  BITCODE_T2Text(PDWGBlock_Header^.name,DWGContext,name);
+  DebugLn(['{WH}Block: ',name]);
 end;
 
 procedure AddLineEntity(var ZContext:TZDrawingContext;var DWGContext:TDWGCtx;var DWGObject:Dwg_Object;PLine:PDwg_Entity_LINE);
@@ -74,7 +100,11 @@ begin
 end;
 
 initialization
-  ZCDWGParser.RegisterDWGObjectLoadProc(DWG_TYPE_Layer,@AddLayer);
-  ZCDWGParser.RegisterDWGEntityLoadProc(DWG_TYPE_Line,@AddLineEntity);
+  ZCDWGParser.RegisterDWGObjectLoadProc(DWG_TYPE_LAYER,@AddLayer);
+  ZCDWGParser.RegisterDWGObjectLoadProc(DWG_TYPE_LTYPE,@AddLineType);
+  ZCDWGParser.RegisterDWGObjectLoadProc(DWG_TYPE_BLOCK_HEADER,@AddBlockHeader);
+
+  ZCDWGParser.RegisterDWGEntityLoadProc(DWG_TYPE_LINE,@AddLineEntity);
+  ZCDWGParser.RegisterDWGEntityLoadProc(DWG_TYPE_BLOCK,@AddBlock);
 finalization
 end.

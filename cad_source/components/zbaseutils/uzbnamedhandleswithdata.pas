@@ -15,7 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
-unit uzbnamedhandleswithdata;
+unit uzbNamedHandlesWithData;
 {$mode delphi}
 
 

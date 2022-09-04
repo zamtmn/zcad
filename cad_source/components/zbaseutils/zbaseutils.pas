@@ -8,8 +8,9 @@ unit zbaseutils;
 interface
 
 uses
-  uzblog, uzbnamedhandles, uzbnamedhandleswithdata, uzbhandles, uzbsets, 
-  uzbexceptionscl, uzbexceptionsparams, uzbLogIntf, LazarusPackageIntf;
+  uzbLog, uzbNamedHandles, uzbNamedHandlesWithData, uzbHandles, uzbSets, 
+  uzbexceptionscl, uzbexceptionsparams, uzbLogIntf, uzbLogDecorators, 
+  uzbLogFileBackend, uzbcommandlineparser, LazarusPackageIntf;
 
 implementation
 

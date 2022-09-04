@@ -24,7 +24,7 @@ interface
 
 uses
   sysutils,LazUTF8,
-  uzbLogTypes,uzblog,StrUtils;
+  uzbLogTypes,uzblog,uzbLogDecorators,uzbLogFileBackend;
 
 const
   {$IFDEF LINUX}filelog='../../log/zcad_linux.log';{$ENDIF}
@@ -41,104 +41,16 @@ var
   LM_Necessarily// — Вывод в любом случае
   :TLogLevel;
 
-  lp_IncPos,lp_DecPos:TMsgOpt;
-
 
   ProgramLog:TLog;
   UnitsInitializeLMId,UnitsFinalizeLMId:TModuleDesk;
 
 implementation
 
-type
-  TLogerFileBackend=object(TLogerBaseBackend)
-    LogFileName:AnsiString;
-    FileHandle:cardinal;
-    procedure doLog(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);virtual;
-    procedure endLog;virtual;
-    constructor init(fn:AnsiString);
-    destructor done;virtual;
-    procedure OpenLog;
-    procedure CloseLog;
-    procedure CreateLog;
-  end;
-
-  TTimeDecorator=object(TLogerBaseDecorator)
-    function GetDecor(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk):TLogMsg;virtual;
-    constructor init;
-  end;
-  TPositionDecorator=object(TLogerBaseDecorator)
-    offset:integer;
-    function GetDecor(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk):TLogMsg;virtual;
-    constructor init;
-  end;
-
 var
-   FileLogBackend:TLogerFileBackend;
+   FileLogBackend:TLogFileBackend;
    TimeDecorator:TTimeDecorator;
    PositionDecorator:TPositionDecorator;
-
-function TPositionDecorator.GetDecor(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk):TLogMsg;
-begin
- if (MsgOptions and lp_DecPos)>0 then
-   dec(offset,2);
- result:=dupestring(' ',offset);
- if (MsgOptions and lp_IncPos)>0 then
-   inc(offset,2);
-end;
-
-constructor TPositionDecorator.init;
-begin
-  offset:=1;
-end;
-
-constructor TTimeDecorator.init;
-begin
-end;
-
-function TTimeDecorator.GetDecor(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk):TLogMsg;
-begin
-  result:=TimeToStr(Time);
-end;
-
-procedure TLogerFileBackend.OpenLog;
-begin
-  FileHandle := FileOpen({$IFNDEF DELPHI}UTF8ToSys{$ENDIF}(logfilename), fmOpenWrite);
-  FileSeek(FileHandle, 0, 2);
-end;
-
-procedure TLogerFileBackend.CloseLog;
-begin
-  fileclose(FileHandle);
-  FileHandle:=0;
-end;
-procedure TLogerFileBackend.CreateLog;
-begin
-  FileHandle:=FileCreate({$IFNDEF DELPHI}UTF8ToSys{$ENDIF}(logfilename));
-  CloseLog;
-end;
-
-procedure TLogerFileBackend.doLog(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);
-begin
-  OpenLog;
-  FileWrite(FileHandle,msg[1],Length(msg)*SizeOf(msg[1]));
-  FileWrite(FileHandle,LineEnding[1],Length(LineEnding)*SizeOf(LineEnding[1]));
-  CloseLog;
-end;
-
-procedure TLogerFileBackend.endLog;
-begin
-end;
-
-constructor TLogerFileBackend.init(fn:AnsiString);
-begin
-  logfilename:=fn;
-  CreateLog;
-end;
-
-destructor TLogerFileBackend.done;
-begin
-  logfilename:='';
-end;
 
 
 initialization
@@ -151,8 +63,6 @@ initialization
   LM_Fatal:=ProgramLog.RegisterLogLevel('LM_Fatal','F',LLTError);
   LM_Necessarily:=ProgramLog.RegisterLogLevel('LM_Necessarily','N',LLTInfo);
 
-  lp_DecPos:=MsgOpt.GetEnum;
-  lp_IncPos:=MsgOpt.GetEnum;
   ProgramLog.EnterMsgOpt:=lp_IncPos;
   ProgramLog.ExitMsgOpt:=lp_DecPos;
   ProgramLog.addMsgOptAlias('+',lp_IncPos);

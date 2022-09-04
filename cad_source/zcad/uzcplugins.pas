@@ -19,7 +19,7 @@
 unit uzcplugins;
 {$INCLUDE zengineconfig.inc}
 interface
-uses sysutils, dynlibs, uzclog,gzctnrVector,uzeentity,
+uses sysutils, dynlibs, uzcLog, uzbLogDecorators, gzctnrVector,uzeentity,
      LazLogger;
 type
     {Export+}

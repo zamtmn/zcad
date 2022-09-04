@@ -29,6 +29,10 @@ type
   GTStringNamesUPPERCASE<GNameType>=class
     class function Standartize(name:GNameType):GNameType;
   end;
+  GTStringNamesCaseSensetive<GNameType>=class
+    class function Standartize(name:GNameType):GNameType;
+  end;
+
 
  GTNamedHandles<GHandleType,GHandleManipulator,GNameType,GNameManipulator>=object(GTSimpleHandles<GHandleType,GHandleManipulator>)
    type
@@ -92,6 +96,12 @@ class function GTStringNamesUPPERCASE<GNameType>.Standartize(name:GNameType):GNa
 begin
   result:=UpperCase(string{без string не компилится в 3.2}(name));
 end;
+
+class function GTStringNamesCaseSensetive<GNameType>.Standartize(name:GNameType):GNameType;
+begin
+  result:=name;
+end;
+
 
 constructor GTNamedHandles<GHandleType,GHandleManipulator,GNameType,GNameManipulator>.init;
 begin

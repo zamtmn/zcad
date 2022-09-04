@@ -14,23 +14,23 @@
     <Files>
       <Item>
         <Filename Value="uzblog.pas"/>
-        <UnitName Value="uzblog"/>
+        <UnitName Value="uzbLog"/>
       </Item>
       <Item>
         <Filename Value="uzbnamedhandles.pas"/>
-        <UnitName Value="uzbnamedhandles"/>
+        <UnitName Value="uzbNamedHandles"/>
       </Item>
       <Item>
         <Filename Value="uzbnamedhandleswithdata.pas"/>
-        <UnitName Value="uzbnamedhandleswithdata"/>
+        <UnitName Value="uzbNamedHandlesWithData"/>
       </Item>
       <Item>
         <Filename Value="uzbhandles.pas"/>
-        <UnitName Value="uzbhandles"/>
+        <UnitName Value="uzbHandles"/>
       </Item>
       <Item>
         <Filename Value="uzbsets.pas"/>
-        <UnitName Value="uzbsets"/>
+        <UnitName Value="uzbSets"/>
       </Item>
       <Item>
         <Filename Value="uzbexceptionscl.pas"/>
@@ -43,6 +43,18 @@
       <Item>
         <Filename Value="uzblogintf.pas"/>
         <UnitName Value="uzbLogIntf"/>
+      </Item>
+      <Item>
+        <Filename Value="uzblogdecorators.pas"/>
+        <UnitName Value="uzbLogDecorators"/>
+      </Item>
+      <Item>
+        <Filename Value="uzblogfilebackend.pas"/>
+        <UnitName Value="uzbLogFileBackend"/>
+      </Item>
+      <Item>
+        <Filename Value="uzbcommandlineparser.pas"/>
+        <UnitName Value="uzbcommandlineparser"/>
       </Item>
     </Files>
     <RequiredPkgs>

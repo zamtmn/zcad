@@ -20,8 +20,8 @@ unit uzcsysinfo;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-  MacroDefIntf,uzmacros,uzcsysparams,LCLProc,uzclog,uzbLogTypes,uzblog,uzbpaths,Forms,
-  {$IFDEF WINDOWS}ShlObj,{$ENDIF}{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils,uzcsysvars;
+  uzcCommandLineParser,MacroDefIntf,uzmacros,uzcsysparams,LCLProc,uzclog,uzbLogTypes,uzblog,uzbpaths,Forms,
+  {$IFDEF WINDOWS}ShlObj,{$ENDIF}{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils,uzcsysvars,consoletestrunner;
 const
   zcaduniqueinstanceid='zcad unique instance';
   zcadgitversion = {$include zcadversion.inc};

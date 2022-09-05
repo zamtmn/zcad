@@ -44,7 +44,7 @@ type
    constructor init;
    function CreateHandle:GHandleType;virtual;
    function CreateHandleWithData(N:GNameType;LD:GLincedData):GHandleType;virtual;
-   destructor done;virtual;
+   destructor Done;virtual;
    procedure RegisterHandleName(Handle:GHandleType;HandleName:GNameType);virtual;
    function GetPLincedData(Handle:GHandleType):PGLincedData;
    function GetDataIndex(Handle:GHandleType):SizeInt;

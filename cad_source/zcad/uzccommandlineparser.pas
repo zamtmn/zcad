@@ -28,7 +28,7 @@ uses
 var
   CommandLineParser:TCommandLineParser;
 
-  NOSPLASHHDL,UPDATEPOHDL,NOLOADLAYOUTHDL,LOGFILEHDL,NOTCHECKUNIQUEINSTANCEHDL:TOptionHandle;
+  NOSPLASHHDL,UPDATEPOHDL,NOLOADLAYOUTHDL,LOGFILEHDL,NOTCHECKUNIQUEINSTANCEHDL,LEAMHDL:TOptionHandle;
 
 implementation
 
@@ -37,8 +37,9 @@ initialization
   NOSPLASHHDL:=CommandLineParser.RegisterArgument('nosplash',AT_Flag);
   UPDATEPOHDL:=CommandLineParser.RegisterArgument('updatepo',AT_Flag);
   NOLOADLAYOUTHDL:=CommandLineParser.RegisterArgument('noloadlayout',AT_Flag);
-  NOLOADLAYOUTHDL:=CommandLineParser.RegisterArgument('logfile',AT_Operand);
+  LOGFILEHDL:=CommandLineParser.RegisterArgument('logfile',AT_Operand);
   NOTCHECKUNIQUEINSTANCEHDL:=CommandLineParser.RegisterArgument('notcheckuniqueinstance',AT_Flag);
+  LEAMHDL:=CommandLineParser.RegisterArgument('leam',AT_Flag);
   CommandLineParser.ParseCommandLine;
 finalization
   CommandLineParser.Done;

@@ -20,8 +20,12 @@ unit uzcsysinfo;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-  uzcCommandLineParser,MacroDefIntf,uzmacros,uzcsysparams,LCLProc,uzclog,uzbLogTypes,uzblog,uzbpaths,Forms,
-  {$IFDEF WINDOWS}ShlObj,{$ENDIF}{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils,uzcsysvars,consoletestrunner;
+  uzbCommandLineParser,uzcCommandLineParser,MacroDefIntf,uzmacros,uzcsysparams,
+  LCLProc,uzclog,uzbLogTypes,uzblog,uzbpaths,Forms,
+  {$IFDEF WINDOWS}ShlObj,{$ENDIF}{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils,uzcsysvars;
+resourcestring
+  rsFoundCLOption='{N}Found command line option "%s"';
+  rsFoundCLOperand='{N}Found command line operand "%s"';
 const
   zcaduniqueinstanceid='zcad unique instance';
   zcadgitversion = {$include zcadversion.inc};
@@ -75,7 +79,8 @@ end;
 
 procedure ProcessParamStr;
 var
-   i:integer;
+   i,prm:integer;
+   pod:PTOptionData;
    param,paramUC:String;
    ll:TLogLevel;
 const
@@ -88,28 +93,54 @@ begin
      SysParam.saved.UniqueInstance:=true;
      LoadParams(expandpath(ProgramPath+'rtl/config.xml'),SysParam.saved);
      SysParam.notsaved.PreloadedFile:='';
+
+     for i:=0 to CommandLineParser.ParamsCount-1 do begin
+       prm:=CommandLineParser.Param[i];
+       if prm>0 then begin
+         pod:=CommandLineParser.GetOptionPData(prm);
+         case pod.&Type of
+                AT_Flag:debugln(rsFoundCLOption,[CommandLineParser.GetOptionName(prm)]);
+                AT_Operand:debugln(rsFoundCLOption,[CommandLineParser.GetOptionName(prm)+' '+pod^.FirstOperand]);
+         end;
+       end else if prm<0 then begin
+         debugln(rsFoundCLOperand,[CommandLineParser.Operand[-prm-1]]);
+       end;
+     end;
+
+
      i:=paramcount;
+     if CommandLineParser.HasOption(NOSPLASHHDL) then
+       SysParam.saved.NoSplash:=true;
+     if CommandLineParser.HasOption(UPDATEPOHDL) then
+       SysParam.saved.UpdatePO:=true;
+     if CommandLineParser.HasOption(NOLOADLAYOUTHDL) then
+       SysParam.saved.NoLoadLayout:=true;
+     if CommandLineParser.HasOption(NOTCHECKUNIQUEINSTANCEHDL) then
+       SysParam.saved.UniqueInstance:=false;
+     if CommandLineParser.HasOption(LEAMHDL) then
+       programlog.EnableAllModules;
+
+
      for i:=1 to paramcount do
        begin
             {$ifdef windows}param:={Tria_AnsiToUtf8}SysToUTF8(paramstr(i));{$endif}
             {$ifndef windows}param:=paramstr(i);{$endif}
             paramUC:=uppercase(param);
 
-            debugln('{N}Found param command line parameter "%s"',[paramUC]);
             //programlog.LogOutStr(format('Found param command line parameter "%s"',[paramUC]),lp_OldPos,LM_Necessarily);
 
             if fileexists(UTF8toSys(param)) then
                                      SysParam.notsaved.PreloadedFile:=param
-       else if (paramUC='NOTCHECKUNIQUEINSTANCE')or(paramUC='NCUI')then
-                                                   SysParam.saved.UniqueInstance:=false
-       else if (paramUC='NOSPLASH')or(paramUC='NS')then
-                                                   SysParam.saved.NoSplash:=true
-       else if (paramUC='NOLOADLAYOUT')or(paramUC='NLL')then
-                                                               SysParam.saved.NoLoadLayout:=true
-       else if (paramUC='UPDATEPO')then
-                                                               SysParam.saved.UpdatePO:=true
-       else if (paramUC='LEAM')then
-                                   programlog.EnableAllModules
+       {else if (paramUC='NOTCHECKUNIQUEINSTANCE')or(paramUC='NCUI')then
+                                                   SysParam.saved.UniqueInstance:=false}
+       {else if (paramUC='NOSPLASH')or(paramUC='NS')then
+                                                   SysParam.saved.NoSplash:=true}
+       {else if (paramUC='NOLOADLAYOUT')or(paramUC='NLL')then
+                                                               SysParam.saved.NoLoadLayout:=true}
+       {else if (paramUC='UPDATEPO')then
+                                                               SysParam.saved.UpdatePO:=true}
+       {else if (paramUC='LEAM')then
+                                   programlog.EnableAllModules}
        else if pos(LogEnableModulePrefix,paramUC)=1 then
                                        begin
                                          paramUC:=copy(paramUC,

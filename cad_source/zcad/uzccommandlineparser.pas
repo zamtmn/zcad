@@ -28,7 +28,13 @@ uses
 var
   CommandLineParser:TCommandLineParser;
 
-  NOSPLASHHDL,UPDATEPOHDL,NOLOADLAYOUTHDL,LOGFILEHDL,NOTCHECKUNIQUEINSTANCEHDL,LEAMHDL:TOptionHandle;
+  NOSPLASHHDL,              //опция nosplash - не показывать сплэш
+  UPDATEPOHDL,              //опция updatepo - актуализация файлов локализации, необходима для команды updatepo
+  NOLOADLAYOUTHDL,          //опция noloadlayout - запуск без загрузки начального состояния раскладки окон
+  LOGFILEHDL,               //опция logfile - указание лог фала, требует аргумент(ы) имя файла
+  NOTCHECKUNIQUEINSTANCEHDL,//опция noloadlayout - запуск без загрузки начального состояния раскладки окон
+  LEAMHDL                   //опция leam -(Log Enable All Modules) разрешение записи в лог всех модулей
+  :TOptionHandle;
 
 implementation
 
@@ -37,7 +43,7 @@ initialization
   NOSPLASHHDL:=CommandLineParser.RegisterArgument('nosplash',AT_Flag);
   UPDATEPOHDL:=CommandLineParser.RegisterArgument('updatepo',AT_Flag);
   NOLOADLAYOUTHDL:=CommandLineParser.RegisterArgument('noloadlayout',AT_Flag);
-  LOGFILEHDL:=CommandLineParser.RegisterArgument('logfile',AT_Operand);
+  LOGFILEHDL:=CommandLineParser.RegisterArgument('logfile',AT_WithOperands);
   NOTCHECKUNIQUEINSTANCEHDL:=CommandLineParser.RegisterArgument('notcheckuniqueinstance',AT_Flag);
   LEAMHDL:=CommandLineParser.RegisterArgument('leam',AT_Flag);
   CommandLineParser.ParseCommandLine;

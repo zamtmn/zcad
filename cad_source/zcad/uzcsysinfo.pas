@@ -79,7 +79,7 @@ end;
 
 procedure ProcessParamStr;
 var
-   i,prm:integer;
+   i,prm,operandsc:integer;
    pod:PTOptionData;
    param,paramUC:String;
    ll:TLogLevel;
@@ -100,7 +100,14 @@ begin
          pod:=CommandLineParser.GetOptionPData(prm);
          case pod.&Type of
                 AT_Flag:debugln(rsFoundCLOption,[CommandLineParser.GetOptionName(prm)]);
-                AT_Operand:debugln(rsFoundCLOption,[CommandLineParser.GetOptionName(prm)+' '+pod^.FirstOperand]);
+                AT_WithOperands:begin
+                             operandsc:=CommandLineParser.OptionOperandsCount(prm);
+                             case operandsc of
+                               0:debugln(rsFoundCLOption,[CommandLineParser.GetOptionName(prm)]);
+                               //1:debugln(rsFoundCLOption,[CommandLineParser.GetOptionName(prm)+' '+pod^.FirstOperand]);
+                             else debugln(rsFoundCLOption,[CommandLineParser.GetOptionName(prm)+' '+CommandLineParser.GetAllOptionOperand(prm)]);
+                             end;
+                           end;
          end;
        end else if prm<0 then begin
          debugln(rsFoundCLOperand,[CommandLineParser.Operand[-prm-1]]);

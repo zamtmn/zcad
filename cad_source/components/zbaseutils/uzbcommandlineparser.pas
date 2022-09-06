@@ -59,6 +59,7 @@ type
       Params:TParams;
       function getParamsCount:Integer;
       function getParam(i:SizeUInt):Integer;
+      function getOperandsCount:Integer;
       function getOperand(i:SizeUInt):TCLStringType;
     public
       constructor Init;
@@ -73,6 +74,7 @@ type
       function GetOptionName(hdl:TOptionHandle):TCLStringType;
       property ParamsCount:Integer read getParamsCount;
       property Param[i:SizeUInt]:Integer read getParam;
+      property OperandsCount:Integer read getOperandsCount;
       property Operand[i:SizeUInt]:TCLStringType read getOperand;
   end;
 
@@ -89,6 +91,11 @@ end;
 function TCommandLineParser.getParam(i:SizeUInt):Integer;
 begin
   result:=Params[i];
+end;
+
+function TCommandLineParser.getOperandsCount:Integer;
+begin
+  result:=Operands.Size;
 end;
 
 function TCommandLineParser.getOperand(i:SizeUInt):TCLStringType;

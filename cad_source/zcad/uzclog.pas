@@ -24,7 +24,8 @@ interface
 
 uses
   sysutils,LazUTF8,
-  uzbLogTypes,uzblog,uzbLogDecorators,uzbLogFileBackend;
+  uzbLogTypes,uzblog,uzbLogDecorators,uzbLogFileBackend,
+  uzbCommandLineParser,uzcCommandLineParser;
 
 const
   {$IFDEF LINUX}filelog='../../log/zcad_linux.log';{$ENDIF}
@@ -51,6 +52,9 @@ var
    FileLogBackend:TLogFileBackend;
    TimeDecorator:TTimeDecorator;
    PositionDecorator:TPositionDecorator;
+   i:integer;
+   mn:TCLStringType;
+   ll:TLogLevel;
 
 
 initialization
@@ -70,7 +74,7 @@ initialization
 
 
   ProgramLog.SetDefaultLogLevel(LM_Debug);
-  ProgramLog.SetCurrentLogLevel(LM_Info);
+  ProgramLog.SetCurrentLogLevel(LM_Warning);
 
   UnitsInitializeLMId:=ProgramLog.RegisterModule('UnitsInitialization');
   UnitsFinalizeLMId:=ProgramLog.RegisterModule('UnitsFinalization');
@@ -87,6 +91,15 @@ initialization
 
   ProgramLog.LogStart;
   programlog.LogOutFormatStr('Unit "%s" initialization finish, log created',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+
+  if CommandLineParser.HasOption(LCLHDL)then
+  for i:=0 to CommandLineParser.OptionOperandsCount(LCLHDL)-1 do begin
+    mn:=CommandLineParser.OptionOperand(LCLHDL,i);
+    if programlog.TryGetLogLevelHandle(mn,ll)then
+      programlog.SetCurrentLogLevel(ll)
+    else
+      programlog.LogOutFormatStr('Unable find log level="%s"',[mn],LM_Error);
+  end;
 
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);

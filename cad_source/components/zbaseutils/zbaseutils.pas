@@ -10,7 +10,7 @@ interface
 uses
   uzbLog, uzbNamedHandles, uzbNamedHandlesWithData, uzbHandles, uzbSets, 
   uzbexceptionscl, uzbexceptionsparams, uzbLogIntf, uzbLogDecorators, 
-  uzbLogFileBackend, uzbcommandlineparser, LazarusPackageIntf;
+  uzbLogFileBackend, uzbCommandLineParser, LazarusPackageIntf;
 
 implementation
 

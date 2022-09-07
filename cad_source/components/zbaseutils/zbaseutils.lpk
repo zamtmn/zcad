@@ -54,7 +54,7 @@
       </Item>
       <Item>
         <Filename Value="uzbcommandlineparser.pas"/>
-        <UnitName Value="uzbcommandlineparser"/>
+        <UnitName Value="uzbCommandLineParser"/>
       </Item>
     </Files>
     <RequiredPkgs>

@@ -202,6 +202,7 @@ cleanzcadelectrotech: clean zcadelectrotechenv zcadelectrotech
 rmpkgslibs:
 	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)zcontainers$(PATHDELIM)lib$(PATHDELIM)*
 	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)zbaseutils$(PATHDELIM)lib$(PATHDELIM)*
+	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)zbaseutilsgui$(PATHDELIM)lib$(PATHDELIM)*
 	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)zebase$(PATHDELIM)lib$(PATHDELIM)*
 	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)zcontrols$(PATHDELIM)lib$(PATHDELIM)*
 	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)zmacros$(PATHDELIM)lib$(PATHDELIM)*
@@ -222,6 +223,7 @@ endif
 	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)other$(PATHDELIM)uniqueinstance$(PATHDELIM)uniqueinstance_package.lpk
 	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zcontainers$(PATHDELIM)zcontainers.lpk
 	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zbaseutils$(PATHDELIM)zbaseutils.lpk
+	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zbaseutilsgui$(PATHDELIM)zbaseutils.lpk
 	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zebase$(PATHDELIM)zebase.lpk
 	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zcontrols$(PATHDELIM)zcontrols.lpk
 	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zmacros$(PATHDELIM)zmacros.lpk

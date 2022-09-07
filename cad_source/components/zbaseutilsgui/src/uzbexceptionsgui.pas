@@ -17,6 +17,7 @@
 }
 
 unit uzbexceptionsgui;
+{$Mode delphi}
 
 interface
 

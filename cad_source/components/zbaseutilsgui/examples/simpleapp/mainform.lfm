@@ -1,0 +1,38 @@
+object Form1: TForm1
+  Left = 447
+  Height = 616
+  Top = 250
+  Width = 830
+  Caption = 'Form1'
+  ClientHeight = 616
+  ClientWidth = 830
+  DesignTimePPI = 144
+  object Button1: TButton
+    Left = 668
+    Height = 63
+    Top = 523
+    Width = 126
+    Caption = 'AV'
+    OnClick = Button1Click
+    TabOrder = 0
+  end
+  object Memo1: TMemo
+    Left = 16
+    Height = 200
+    Top = 48
+    Width = 712
+    Lines.Strings = (
+      'Для AV в секции инициализации запустить с ключем av_on_initialization'
+    )
+    TabOrder = 1
+  end
+  object Button2: TButton
+    Left = 528
+    Height = 63
+    Top = 523
+    Width = 120
+    Caption = 'Button2'
+    OnClick = Button2Click
+    TabOrder = 2
+  end
+end

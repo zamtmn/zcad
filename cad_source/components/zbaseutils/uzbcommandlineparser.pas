@@ -39,22 +39,22 @@ const
 type
   TCLStringType=String;
   TCLStrings=specialize TVector<TCLStringType>;
-  TOptionHandle=Integer;
-  TOptionType=(AT_Flag,AT_WithOperands);
-  PTOptionData=^TOptionData;
-  TOptionData=record
+  TCLOptionHandle=Integer;
+  TCLOptionType=(AT_Flag,AT_WithOperands);
+  PTCLOptionData=^TCLOptionData;
+  TCLOptionData=record
     Present:Boolean;
-    &Type:TOptionType;
+    &Type:TCLOptionType;
     FirstOperand:TCLStringType;
     OtherOperands:TCLStrings;
-    constructor CreateRec(AType:TOptionType);
+    constructor CreateRec(AType:TCLOptionType);
   end;
   TParams=array of Integer;
 
-  TOptions=specialize GTNamedHandlesWithData<TOptionHandle,specialize GTLinearIncHandleManipulator<TOptionHandle>,TCLStringType,specialize GTStringNamesCaseSensetive<TCLStringType>,TOptionData>;
+  TCLOptions=specialize GTNamedHandlesWithData<TCLOptionHandle,specialize GTLinearIncHandleManipulator<TCLOptionHandle>,TCLStringType,specialize GTStringNamesCaseSensetive<TCLStringType>,TCLOptionData>;
   TCommandLineParser=object
     private
-      Options:TOptions;
+      Options:TCLOptions;
       Operands:TCLStrings;
       Params:TParams;
       function getParamsCount:Integer;
@@ -64,14 +64,14 @@ type
     public
       constructor Init;
       destructor Done;
-      function RegisterArgument(const Option:TCLStringType;const OptionType:TOptionType):TOptionHandle;
+      function RegisterArgument(const Option:TCLStringType;const OptionType:TCLOptionType):TCLOptionHandle;
       procedure ParseCommandLine;
-      function HasOption(hdl:TOptionHandle):Boolean;
-      function OptionOperandsCount(hdl:TOptionHandle):Integer;
-      function OptionOperand(hdl:TOptionHandle;num:Integer):TCLStringType;
-      function GetAllOptionOperand(hdl:TOptionHandle):TCLStringType;
-      function GetOptionPData(hdl:TOptionHandle):PTOptionData;
-      function GetOptionName(hdl:TOptionHandle):TCLStringType;
+      function HasOption(hdl:TCLOptionHandle):Boolean;
+      function OptionOperandsCount(hdl:TCLOptionHandle):Integer;
+      function OptionOperand(hdl:TCLOptionHandle;num:Integer):TCLStringType;
+      function GetAllOptionOperand(hdl:TCLOptionHandle):TCLStringType;
+      function GetOptionPData(hdl:TCLOptionHandle):PTCLOptionData;
+      function GetOptionName(hdl:TCLOptionHandle):TCLStringType;
       property ParamsCount:Integer read getParamsCount;
       property Param[i:SizeUInt]:Integer read getParam;
       property OperandsCount:Integer read getOperandsCount;
@@ -80,7 +80,7 @@ type
 
 implementation
 
-constructor TOptionData.CreateRec(AType:TOptionType);
+constructor TCLOptionData.CreateRec(AType:TCLOptionType);
 begin
   Present:=False;
   &Type:=AType;
@@ -126,20 +126,20 @@ begin
   SetLength(Params,0);
 end;
 
-function TCommandLineParser.RegisterArgument(const Option:TCLStringType;const OptionType:TOptionType):TOptionHandle;
+function TCommandLineParser.RegisterArgument(const Option:TCLStringType;const OptionType:TCLOptionType):TCLOptionHandle;
 var
-  data:TOptionData;
+  data:TCLOptionData;
 begin
-  data:=TOptionData.CreateRec(OptionType);
+  data:=TCLOptionData.CreateRec(OptionType);
   result:=Options.CreateOrGetHandleAndSetData(Option,data);
 end;
 
-function TCommandLineParser.GetOptionPData(hdl:TOptionHandle):PTOptionData;
+function TCommandLineParser.GetOptionPData(hdl:TCLOptionHandle):PTCLOptionData;
 begin
   result:=Options.GetPLincedData(hdl);
 end;
 
-function TCommandLineParser.GetOptionName(hdl:TOptionHandle):TCLStringType;
+function TCommandLineParser.GetOptionName(hdl:TCLOptionHandle):TCLStringType;
 begin
   result:=Options.GetHandleName(hdl);
 end;
@@ -158,7 +158,7 @@ begin
   end;
 end;
 
-function addOperands(PArgumentData:PTOptionData;operands:TCLStringType):boolean;
+procedure addOperands(PArgumentData:PTCLOptionData;operands:TCLStringType);
 begin
   if PArgumentData^.FirstOperand='' then
     PArgumentData^.FirstOperand:=operands
@@ -173,8 +173,8 @@ procedure TCommandLineParser.ParseCommandLine;
 var
   i,pi:integer;
   s,op:TCLStringType;
-  ArgumentHandle:TOptionHandle;
-  PArgumentData:PTOptionData;
+  ArgumentHandle:TCLOptionHandle;
+  PArgumentData:PTCLOptionData;
 begin
   PArgumentData:=nil;
   pi:=0;
@@ -204,14 +204,14 @@ begin
   end;
 end;
 
-function TCommandLineParser.HasOption(hdl:TOptionHandle):Boolean;
+function TCommandLineParser.HasOption(hdl:TCLOptionHandle):Boolean;
 begin
   result:=Options.GetPLincedData(hdl)^.Present;
 end;
 
-function TCommandLineParser.OptionOperandsCount(hdl:TOptionHandle):Integer;
+function TCommandLineParser.OptionOperandsCount(hdl:TCLOptionHandle):Integer;
 var
-  PData:PTOptionData;
+  PData:PTCLOptionData;
 begin
   PData:=Options.GetPLincedData(hdl);
   if PData^.OtherOperands<>nil then
@@ -224,16 +224,16 @@ begin
   end;
 end;
 
-function TCommandLineParser.OptionOperand(hdl:TOptionHandle;num:Integer):TCLStringType;
+function TCommandLineParser.OptionOperand(hdl:TCLOptionHandle;num:Integer):TCLStringType;
 begin
   if num=0 then
     result:=Options.GetPLincedData(hdl)^.FirstOperand
   else
     result:=Options.GetPLincedData(hdl)^.OtherOperands[num-1];
 end;
-function TCommandLineParser.GetAllOptionOperand(hdl:TOptionHandle):TCLStringType;
+function TCommandLineParser.GetAllOptionOperand(hdl:TCLOptionHandle):TCLStringType;
 var
-  PData:PTOptionData;
+  PData:PTCLOptionData;
   i,strsize:integer;
 begin
   PData:=Options.GetPLincedData(hdl);

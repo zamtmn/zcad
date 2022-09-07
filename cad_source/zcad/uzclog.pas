@@ -55,6 +55,7 @@ var
    i:integer;
    mn:TCLStringType;
    ll:TLogLevel;
+   LogFileName:string;
 
 
 initialization
@@ -86,7 +87,12 @@ initialization
   ProgramLog.addDecorator(PositionDecorator);
 
 
-  FileLogBackend.init(SysToUTF8(ExtractFilePath(paramstr(0)))+filelog);
+  LogFileName:=SysToUTF8(ExtractFilePath(paramstr(0)))+filelog;
+  if CommandLineParser.HasOption(LOGFILEHDL)then
+  for i:=0 to CommandLineParser.OptionOperandsCount(LOGFILEHDL)-1 do
+    LogFileName:=CommandLineParser.OptionOperand(LOGFILEHDL,i);
+
+  FileLogBackend.init(LogFileName);
   ProgramLog.addBackend(FileLogBackend,'%1:s%2:s%0:s',[@TimeDecorator,@PositionDecorator]);
 
   ProgramLog.LogStart;

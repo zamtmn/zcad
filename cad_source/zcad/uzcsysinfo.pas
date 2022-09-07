@@ -16,13 +16,15 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzcsysinfo;
+unit uzcSysInfo;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-  uzbCommandLineParser,uzcCommandLineParser,MacroDefIntf,uzmacros,uzcsysparams,
-  {LCLProc,}uzclog,uzbLogTypes,uzblog,uzbpaths,Forms,
-  {$IFDEF WINDOWS}ShlObj,{$ENDIF}{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils,uzcsysvars;
+  uzbCommandLineParser,uzcCommandLineParser,
+  uzcsysparams,uzcsysvars,
+  uzbLogTypes,uzbLog,uzcLog,
+  uzbPaths,
+  Forms,{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils;
 resourcestring
   rsCommandLine='Command line "%s"';
   rsFoundCLOption='Found command line option "%s"';
@@ -30,19 +32,6 @@ resourcestring
 const
   zcaduniqueinstanceid='zcad unique instance';
   zcadgitversion = {$include zcadversion.inc};
-type
-  TZCADPathsMacroMethods=class
-    class function MacroFuncZCADPath       (const {%H-}Param: string; const Data: PtrInt;
-                                              var {%H-}Abort: boolean): string;
-    class function MacroFuncZCADAutoSaveFilePath(const {%H-}Param: string; const Data: PtrInt;
-                                                 var {%H-}Abort: boolean): string;
-    class function MacroFuncTEMPPath       (const {%H-}Param: string; const Data: PtrInt;
-                                              var {%H-}Abort: boolean): string;
-    class function MacroFuncSystemFontsPath(const {%H-}Param: string; const Data: PtrInt;
-                                              var {%H-}Abort: boolean): string;
-    class function MacroFuncsUserFontsPath (const {%H-}Param: string; const Data: PtrInt;
-                                              var {%H-}Abort: boolean): string;
-  end;
 var
   SysDefaultFormatSettings:TFormatSettings;
   disabledefaultmodule:boolean;
@@ -81,13 +70,13 @@ end;
 procedure ProcessParamStr;
 var
    i,prm,operandsc:integer;
-   pod:PTOptionData;
+   pod:PTCLOptionData;
    mn:String;
    ll:TLogLevel;
 begin
-  with programlog.Enter('ProcessParamStr',LM_Info) do begin try
+  with programlog.Enter('ProcessParamStr',LM_Info) do try
 
-    //покажем в логе что распарчилось из командной строки
+    //покажем в логе что распарсилось из командной строки
     programlog.LogOutFormatStr(rsCommandLine,[CmdLine],LM_Necessarily);
     for i:=0 to CommandLineParser.ParamsCount-1 do begin
       prm:=CommandLineParser.Param[i];
@@ -135,14 +124,6 @@ begin
         else
           disabledefaultmodule:=true;
       end;
-    {if CommandLineParser.HasOption(LCLHDL)then
-      for i:=0 to CommandLineParser.OptionOperandsCount(LCLHDL)-1 do begin
-        mn:=CommandLineParser.OptionOperand(LDMHDL,i);
-        if programlog.TryGetLogLevelHandle(mn,ll)then
-          programlog.SetCurrentLogLevel(ll)
-        else
-          programlog.LogOutFormatStr('Unable find log level="%s"',[mn],LM_Necessarily);
-      end;}
 
     //операнды из комстроки, если есть - ищем файл для загрузки
     for i:=0 to CommandLineParser.OperandsCount-1 do begin
@@ -151,11 +132,11 @@ begin
         SysParam.notsaved.PreloadedFile:=mn;
     end;
 
-  finally programlog.leave(IfEntered);end;end;
+  finally programlog.leave(IfEntered);end;
 end;
 Procedure GetSysInfo;
 begin
-  with programlog.Enter('GetSysInfo',LM_Info) do begin try
+  with programlog.Enter('GetSysInfo',LM_Info) do try
 
     SysDefaultFormatSettings:=DefaultFormatSettings;
     SysParam.notsaved.ScreenX:=Screen.Width;
@@ -187,63 +168,8 @@ begin
 
     if disabledefaultmodule then programlog.DisableModule('DEFAULT');
 
-  finally programlog.leave(IfEntered);end;end;
+  finally programlog.leave(IfEntered);end;
 end;
-class function TZCADPathsMacroMethods.MacroFuncZCADPath(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
-begin
-  result:=ProgramPath;
-end;
-class function TZCADPathsMacroMethods.MacroFuncZCADAutoSaveFilePath(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
-begin
-  result:=ExpandPath(sysvar.SAVE.SAVE_Auto_FileName^);
-end;
-class function TZCADPathsMacroMethods.MacroFuncTEMPPath(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
-begin
-  result:=TempPath;
-end;
-class function TZCADPathsMacroMethods.MacroFuncSystemFontsPath(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
-{$IF defined(WINDOWS)}
-var
-  s:string;
-begin
-  s:='';
-  SetLength(s,MAX_PATH );
-  if not SHGetSpecialFolderPath(0,PChar(s),CSIDL_FONTS,false) then
-    s:='';
-  Result:=PChar(s);
-end;
-{$ELSEIF (defined(LINUX))or(defined(DARWIN))}
-begin
-   Result:='/todo/';
-end;
-{$ENDIF}
-class function TZCADPathsMacroMethods.MacroFuncsUserFontsPath (const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
-{$IF defined(WINDOWS)}
-var
-  s: string;
-begin
-  s:='';
-  SetLength(s,MAX_PATH );
-  if not SHGetSpecialFolderPath(0,PChar(s),CSIDL_LOCAL_APPDATA,false) then
-    s:='';
-  Result:=PChar(s)+'\Microsoft\Windows\Fonts';
-end;
-{$ELSEIF (defined(LINUX))or(defined(DARWIN))}
-begin
-   Result:='/todo/';
-end;
-{$ENDIF}
 initialization
 GetSysInfo;
-DefaultMacros.AddMacro(TTransferMacro.Create('ZCADPath','',
-                       'Path to ZCAD',TZCADPathsMacroMethods.MacroFuncZCADPath,[]));
-DefaultMacros.AddMacro(TTransferMacro.Create('ZCADAutoSaveFilePath','',
-                       'Path to auto save file',TZCADPathsMacroMethods.MacroFuncZCADAutoSaveFilePath,[]));
-DefaultMacros.AddMacro(TTransferMacro.Create('TEMP','',
-                       'TEMP path',TZCADPathsMacroMethods.MacroFuncTEMPPath,[]));
-DefaultMacros.AddMacro(TTransferMacro.Create('SystemFontsPath','',
-                       'System fonts path',TZCADPathsMacroMethods.MacroFuncSystemFontsPath(),[]));
-DefaultMacros.AddMacro(TTransferMacro.Create('UserFontsPath','',
-                       'User fonts path',TZCADPathsMacroMethods.MacroFuncsUserFontsPath(),[]));
-disabledefaultmodule:=false;
 end.

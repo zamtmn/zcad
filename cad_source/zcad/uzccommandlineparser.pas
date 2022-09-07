@@ -37,7 +37,7 @@ var
   LEMHDL,                   //опция lem -(Log Enable Module) разрешение записи в лог определенного модуля, требует аргумент(ы)
   LDMHDL,                    //опция ldm -(Log Disable Module) запрещение записи в лог определенного модуля, требует аргумент(ы)
   LCLHDL                    //опция lcl -(Log Current Level) установка текущего уровня лога, требует аргумент
-  :TCLOptionHandle;
+  :TOptionHandle;
 
 implementation
 

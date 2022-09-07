@@ -60,11 +60,6 @@
               <UseAnsiStrings Value="False"/>
             </SyntaxOptions>
           </Parsing>
-          <Linking>
-            <Debugging>
-              <DebugInfoType Value="dsDwarf3"/>
-            </Debugging>
-          </Linking>
           <Other>
             <Verbosity>
               <ShowHintsForUnusedUnitsInMainSrc Value="True"/>
@@ -264,14 +259,14 @@
     </PublishOptions>
     <RunParams>
       <local>
-        <CommandLineParams Value="nosplash updatepo qnll qsi C:/fpcupdeluxe/ccr/zcad/cad/examples/zigzag.dxf lcl LM_Info logfile d:/log.log"/>
+        <CommandLineParams Value="nosplash updatepo qnll qsi"/>
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T &apos;Lazarus Run Output&apos; -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
       <FormatVersion Value="2"/>
       <Modes Count="1">
         <Mode0 Name="default">
           <local>
-            <CommandLineParams Value="nosplash updatepo qnll qsi C:/fpcupdeluxe/ccr/zcad/cad/examples/zigzag.dxf lcl LM_Info logfile d:/log.log"/>
+            <CommandLineParams Value="nosplash updatepo qnll qsi"/>
             <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T &apos;Lazarus Run Output&apos; -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
           </local>
         </Mode0>
@@ -369,7 +364,6 @@
       <Unit4>
         <Filename Value="zcad/uzcsysinfo.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="uzcSysInfo"/>
       </Unit4>
       <Unit5>
         <Filename Value="zcad/uzcsysvars.pas"/>

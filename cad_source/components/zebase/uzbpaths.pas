@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzbPaths;
+unit uzbpaths;
 
 interface
 uses uzbtypes,Masks,LCLProc,{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils,

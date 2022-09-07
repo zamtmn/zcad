@@ -52,7 +52,7 @@ uses
   uzcfsplash,
   uzcsysvars,
 
-  uzcsysparams,uzcSysInfo,uzcPathMacros,
+  uzcsysparams,uzcsysinfo,
   uzbpaths,
 
   varman,

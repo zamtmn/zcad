@@ -127,7 +127,6 @@ type
         MsgOptAliasDic:TTMsgOptAliasDic;
 
       function IsNeedToLog(LogMode:TLogLevel;LMDI:TModuleDesk):boolean;
-      function LogMode2String(LogMode:TLogLevel):TLogLevelHandleNameType;
       procedure processMsg(msg:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);
       procedure processFmtResultData(var FRD:TFmtResultData;Stampt:TLogStampt;msg:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);
       procedure processDecoratorData(var DD:TDecoratorData;Stampt:TLogStampt;msg:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);
@@ -159,18 +158,23 @@ type
 
       function RegisterModule(ModuleName:TModuleDeskNameType;Enbl:TEnable=EDefault):TModuleDesk;
       procedure SetCurrentLogLevel(LogLevel:TLogLevel;silent:boolean=false);
+      function GetCurrentLogLevel:TLogLevel;
       procedure SetDefaultLogLevel(LogLevel:TLogLevel;silent:boolean=false);
 
       procedure ZOnDebugLN(Sender: TObject; S: TLogMsg; var Handled: Boolean);
       procedure ZDebugLN(const S: TLogMsg);
       function isTraceEnabled:boolean;
 
-      procedure EnableModule(ModuleName:TModuleDeskNameType);
-      procedure DisableModule(ModuleName:TModuleDeskNameType);
+      procedure EnableModule(ModuleName:TModuleDeskNameType);overload;
+      procedure DisableModule(ModuleName:TModuleDeskNameType);overload;
+      procedure EnableModule(LMDI:TModuleDesk);overload;
+      procedure DisableModule(LMDI:TModuleDesk);overload;
+      function isModuleEnabled(LMDI:TModuleDesk):Boolean;
       procedure EnableAllModules;
 
       function TryGetLogLevelHandle(LogLevelName:TLogLevelHandleNameType;out LogLevel:TLogLevel):Boolean;
       function GetMutableLogLevelData(LL:TLogLevel):PTTLogLevelData;
+      function LogMode2String(LogMode:TLogLevel):TLogLevelHandleNameType;
   end;
 
 var
@@ -300,6 +304,11 @@ begin
       processMsg('Current log level changed to: '+LogMode2string(LogLevel),LogModeDefault,LMDIDefault,MsgDefaultOptions);
   end;
 end;
+function TLog.GetCurrentLogLevel:TLogLevel;
+begin
+  Result:=CurrentLogLevel;
+end;
+
 procedure TLog.SetDefaultLogLevel(LogLevel:TLogLevel;silent:boolean=false);
 begin
   if DefaultLogLevel<>LogLevel then begin
@@ -334,11 +343,25 @@ begin
 end;
 procedure TLog.enablemodule(modulename:TModuleDeskNameType);
 begin
-  ModulesDesks.GetPLincedData(ModulesDesks.CreateOrGetHandle(modulename))^.enabled:=true;
+  enablemodule(ModulesDesks.CreateOrGetHandle(modulename));
 end;
 procedure TLog.disablemodule(modulename:TModuleDeskNameType);
 begin
-  ModulesDesks.GetPLincedData(ModulesDesks.CreateOrGetHandle(modulename))^.enabled:=false;
+  disablemodule(ModulesDesks.CreateOrGetHandle(modulename));
+end;
+procedure TLog.EnableModule(LMDI:TModuleDesk);
+begin
+  ModulesDesks.GetPLincedData(LMDI)^.enabled:=true;
+end;
+
+procedure TLog.DisableModule(LMDI:TModuleDesk);
+begin
+  ModulesDesks.GetPLincedData(LMDI)^.enabled:=false;
+end;
+
+function TLog.isModuleEnabled(LMDI:TModuleDesk):Boolean;
+begin
+  result:=ModulesDesks.GetPLincedData(LMDI)^.enabled;
 end;
 procedure TLog.EnableAllModules;
 var

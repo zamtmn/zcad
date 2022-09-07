@@ -9,7 +9,7 @@ uses
   {$IFDEF HASAMIGA}
   athreads,
   {$ENDIF}
-  uzbexceptionscl,uzbexceptionsgui,commandline,
+  uzbexceptionscl,uzbexceptionsgui,commandline,log,
   avininitializationsection,
   Interfaces, // this includes the LCL widgetset
   Forms, mainform;

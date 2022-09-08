@@ -26,6 +26,9 @@ uses
   StrUtils,SysUtils,
   LazUTF8;
 
+const
+  myLineEnding:TLogMsg=LineEnding;
+
 type
 
   TLogFileBackend=object(TLogerBaseBackend)
@@ -63,7 +66,7 @@ procedure TLogFileBackend.doLog(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel
 begin
   OpenLog;
   FileWrite(FileHandle,msg[1],Length(msg)*SizeOf(msg[1]));
-  FileWrite(FileHandle,LineEnding[1],Length(LineEnding)*SizeOf(LineEnding[1]));
+  FileWrite(FileHandle,myLineEnding[1],Length(myLineEnding)*SizeOf(myLineEnding[1]));
   CloseLog;
 end;
 

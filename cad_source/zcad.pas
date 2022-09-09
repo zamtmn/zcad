@@ -232,6 +232,8 @@ uses
   uzccommand_DevDefSync,
   uzccommand_VariablesAdd,
 
+  uzccommand_dbgRaiseException,uzccommand_dbgGetAV,
+
   uzcenitiesvariablesextender,uzcExtdrLayerControl,uzcExtdrSmartTextEnt,
 
   {$IFNDEF DARWIN}
@@ -323,7 +325,7 @@ begin
                                          commandmanager.executecommand('Load('+sysparam.notsaved.preloadedfile+')',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
                                          sysparam.notsaved.preloadedfile:='';
                                     end;
-  //убираем срлэш
+  //убираем сплэш
   ZCMsgCallBackInterface.Do_SetNormalFocus;
   removesplash;
 

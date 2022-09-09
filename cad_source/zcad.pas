@@ -260,8 +260,6 @@ uses
   uzccomops,
   //uzccommaps,
   {$ENDIF}
-  uzcplugins,
-  //zcregisterobjectinspector,
   uzcmainwindow,
   uzcuidialogs,
   uzcstrconsts,
@@ -318,7 +316,6 @@ begin
   {if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
                                                   sysvar.SYS.SYS_IsHistoryLineCreated^:=true;}
   ZCMsgCallBackInterface.TextMessage(format(rsZCADStarted,[programname,sysvar.SYS.SYS_Version^]),TMWOHistoryOut);
-  gdbplugins.loadplugins(ProgramPath+'PLUGINS\');
 
   SplashForm.TXTOut(rsStartAutorun,false);commandmanager.executefile('*components/autorun.cmd',drawings.GetCurrentDWG,nil);
   if sysparam.notsaved.preloadedfile<>'' then

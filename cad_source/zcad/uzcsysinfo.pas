@@ -88,7 +88,7 @@ begin
             operandsc:=CommandLineParser.OptionOperandsCount(prm);
             case operandsc of
               0:programlog.LogOutFormatStr(rsFoundCLOption,[CommandLineParser.GetOptionName(prm)],LM_Info);
-              else programlog.LogOutFormatStr(rsFoundCLOption,[CommandLineParser.GetOptionName(prm)+' '+CommandLineParser.GetAllOptionOperand(prm)],LM_Info);
+              else programlog.LogOutFormatStr(rsFoundCLOption,[CommandLineParser.GetOptionName(prm)+' '+CommandLineParser.GetAllOptionOperands(prm)],LM_Info);
             end;
           end;
          end;

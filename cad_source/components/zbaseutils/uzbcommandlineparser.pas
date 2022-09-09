@@ -69,7 +69,7 @@ type
       function HasOption(hdl:TCLOptionHandle):Boolean;
       function OptionOperandsCount(hdl:TCLOptionHandle):Integer;
       function OptionOperand(hdl:TCLOptionHandle;num:Integer):TCLStringType;
-      function GetAllOptionOperand(hdl:TCLOptionHandle):TCLStringType;
+      function GetAllOptionOperands(hdl:TCLOptionHandle):TCLStringType;
       function GetOptionPData(hdl:TCLOptionHandle):PTCLOptionData;
       function GetOptionName(hdl:TCLOptionHandle):TCLStringType;
       property ParamsCount:Integer read getParamsCount;
@@ -231,7 +231,7 @@ begin
   else
     result:=Options.GetPLincedData(hdl)^.OtherOperands[num-1];
 end;
-function TCommandLineParser.GetAllOptionOperand(hdl:TCLOptionHandle):TCLStringType;
+function TCommandLineParser.GetAllOptionOperands(hdl:TCLOptionHandle):TCLStringType;
 var
   PData:PTCLOptionData;
   i,strsize:integer;

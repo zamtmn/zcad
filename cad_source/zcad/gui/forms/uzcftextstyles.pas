@@ -50,8 +50,10 @@ type
   { TTextStylesForm }
 
   TTextStylesForm = class(TForm)
+    CoolBar1: TCoolBar;
     DelStyle: TAction;
     MkCurrentStyle: TAction;
+    Panel1: TPanel;
     PurgeStyles: TAction;
     RefreshStyles: TAction;
     AddStyle: TAction;
@@ -326,6 +328,10 @@ begin
   SupportTypedEditors.OnUpdateEditedControl:=@UpdateItem2;
   FontChange:=false;
   IsUndoEndMarkerCreated:=false;
+
+  FontTypeFilterComboBox.ItemHeight:=DescLabel.ClientHeight-4;
+
+  Panel1.Constraints.MinWidth:=ToolBar1.Left+ToolButton_Refresh.Left+ToolButton_Refresh.Width+CoolBar1.GrabWidth;
 
   setlength(ListView1.SubItems,ColumnCount);
 

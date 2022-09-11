@@ -17,6 +17,7 @@
 }
 
 unit uzbexceptionsgui;
+{$Mode delphi}
 
 interface
 
@@ -56,8 +57,8 @@ begin
   ProcessException (Sender,ExceptAddr,ExceptFrameCount,ExceptFrames);
 
   crashreportfilename:=GetCrashReportFilename;
-  errmsg:='Profram raised exception class "'+E.Message+'"'#13#10#13#10'A crash report generated.'#13#10'See "'
-         +crashreportfilename+#13#10#13#10'Attempt to continue running?';
+  errmsg:='Profram raised exception class "'+E.Message+'"'#13#10#13#10'A crash report generated.'#13#10'See file"'
+         +crashreportfilename+'"'#13#10#13#10'Attempt to continue running?';
   if MessageDlg('Error',errmsg,mtError,[mbYes,mbCancel],'')=mrCancel then
     halt(0);
 end;

@@ -5,7 +5,7 @@ program testzengine;
 uses
   //MemCheck,
   Classes, consoletestrunner,
-  BoundaryPathSimpletest;
+  Logtest,BoundaryPathSimpletest;
 
 var
   Application: TTestRunner;

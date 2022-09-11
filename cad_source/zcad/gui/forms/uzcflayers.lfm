@@ -15,21 +15,22 @@ object LayersForm: TLayersForm
   OnShow = RefreshListItems
   Position = poMainFormCenter
   object Bevel1: TBevel
-    AnchorSideLeft.Control = ToolBar1
+    AnchorSideLeft.Control = Panel1
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    AnchorSideBottom.Control = ToolBar1
+    AnchorSideBottom.Control = Panel1
     AnchorSideBottom.Side = asrBottom
-    Left = 187
-    Height = 33
+    Left = 508
+    Height = 35
     Top = 2
-    Width = 1387
+    Width = 1060
     Anchors = [akTop, akLeft, akRight, akBottom]
-    BorderSpacing.Left = 3
+    BorderSpacing.Left = 8
     BorderSpacing.Top = 2
-    BorderSpacing.Right = 2
+    BorderSpacing.Right = 8
+    BorderSpacing.Bottom = 2
   end
   object LayerDescLabel: TLabel
     AnchorSideLeft.Control = Bevel1
@@ -38,12 +39,14 @@ object LayersForm: TLayersForm
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Bevel1
     AnchorSideBottom.Side = asrBottom
-    Left = 189
-    Height = 29
+    Left = 520
+    Height = 31
     Top = 4
-    Width = 1383
+    Width = 1036
     Anchors = [akTop, akLeft, akRight, akBottom]
     AutoSize = False
+    BorderSpacing.Left = 10
+    BorderSpacing.Right = 10
     BorderSpacing.Around = 2
     Color = clDefault
     Layout = tlCenter
@@ -83,14 +86,14 @@ object LayersForm: TLayersForm
   end
   object ListView1: TZListView
     AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = Bevel1
+    AnchorSideTop.Control = Panel1
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = ButtonApplyClose
     Left = 2
-    Height = 797
-    Top = 38
+    Height = 793
+    Top = 42
     Width = 1572
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Left = 2
@@ -99,28 +102,32 @@ object LayersForm: TLayersForm
     BorderSpacing.Bottom = 3
     Columns = <    
       item
+        Alignment = taCenter
         Caption = 'Status'
-        Width = 150
+        Width = 80
       end    
       item
         Caption = 'Name'
-        Width = 362
+        Width = 602
       end    
       item
+        Alignment = taCenter
         Caption = 'On'
-        Width = 150
+        Width = 100
       end    
       item
+        Alignment = taCenter
         Caption = 'Freze'
-        Width = 150
+        Width = 100
       end    
       item
+        Alignment = taCenter
         Caption = 'Lock'
-        Width = 150
+        Width = 100
       end    
       item
         Caption = 'Color'
-        Width = 120
+        Width = 100
       end    
       item
         Caption = 'Line type'
@@ -131,6 +138,7 @@ object LayersForm: TLayersForm
         Width = 150
       end    
       item
+        Alignment = taCenter
         Caption = 'Plot'
         Width = 75
       end    
@@ -149,60 +157,92 @@ object LayersForm: TLayersForm
     OnSelectItem = ListView1SelectItem
     onMakeCurrent = MaceItemCurrent
   end
-  object ToolBar1: TToolBar
+  object Panel1: TPanel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
     Left = 0
-    Height = 35
+    Height = 39
     Top = 0
-    Width = 184
-    Align = alNone
+    Width = 500
     AutoSize = True
-    Caption = 'ToolBar1'
-    ParentShowHint = False
-    ShowHint = True
+    BevelOuter = bvNone
+    ClientHeight = 39
+    ClientWidth = 500
+    Constraints.MinWidth = 500
     TabOrder = 3
-    object ToolButton1: TToolButton
-      Left = 1
-      Top = 2
-      Action = AddLayer
-      ParentShowHint = False
-      ShowHint = True
-    end
-    object ToolButton2: TToolButton
-      Left = 36
-      Top = 2
-      Action = DelLayer
-      ParentShowHint = False
-      ShowHint = True
-    end
-    object ToolButton3: TToolButton
-      Left = 71
-      Top = 2
-      Action = MkCurrentLayer
-      ParentShowHint = False
-      ShowHint = True
-    end
-    object ToolButton4: TToolButton
-      Left = 106
-      Height = 33
-      Top = 2
-      Caption = 'ToolButton4'
-      Style = tbsDivider
-    end
-    object ToolButton5: TToolButton
-      Left = 114
-      Top = 2
-      Action = PurgeLayers
-      ParentShowHint = False
-      ShowHint = True
-    end
-    object ToolButton6: TToolButton
-      Left = 149
-      Top = 2
-      Action = RefreshLayers
-      ParentShowHint = False
-      ShowHint = True
+    object CoolBar1: TCoolBar
+      Left = 0
+      Height = 39
+      Top = 0
+      Width = 500
+      AutoSize = True
+      Bands = <      
+        item
+          Control = ToolBar1
+          Width = 210
+        end>
+      EdgeBorders = []
+      object ToolBar1: TToolBar
+        AnchorSideLeft.Control = CoolBar1
+        AnchorSideTop.Control = CoolBar1
+        Left = 22
+        Height = 33
+        Top = 3
+        Width = 181
+        Align = alNone
+        AutoSize = True
+        BorderSpacing.Left = 22
+        BorderSpacing.Top = 3
+        Caption = 'ToolBar1'
+        EdgeBorders = []
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 0
+        Transparent = True
+        Wrapable = False
+        object ToolButton1: TToolButton
+          Left = 1
+          Top = 0
+          Action = AddLayer
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object ToolButton2: TToolButton
+          Left = 36
+          Top = 0
+          Action = DelLayer
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object ToolButton3: TToolButton
+          Left = 71
+          Top = 0
+          Action = MkCurrentLayer
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object ToolButton4: TToolButton
+          Left = 106
+          Height = 33
+          Top = 0
+          Caption = 'ToolButton4'
+          Style = tbsDivider
+        end
+        object ToolButton5: TToolButton
+          Left = 111
+          Top = 0
+          Action = PurgeLayers
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object ToolButton6: TToolButton
+          Left = 146
+          Top = 0
+          Action = RefreshLayers
+          ParentShowHint = False
+          ShowHint = True
+        end
+      end
     end
   end
   object ActionList1: TActionList

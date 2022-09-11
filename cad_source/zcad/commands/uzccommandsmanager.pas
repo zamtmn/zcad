@@ -757,7 +757,7 @@ begin
           //lastcommand := command;
 
           if silent then begin
-                        programlog.LogOutFormatStr('GDBCommandManager.ExecuteCommandSilent(%s)',[pfoundcommand^.CommandName],lp_OldPos,LM_Info);
+                        programlog.LogOutFormatStr('GDBCommandManager.ExecuteCommandSilent(%s)',[pfoundcommand^.CommandName],LM_Info);
                         inc(SilentCounter);
                     end else
                         begin

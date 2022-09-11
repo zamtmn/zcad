@@ -15,7 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
-unit uzbsets;
+unit uzbSets;
 {$mode delphi}
 
 interface

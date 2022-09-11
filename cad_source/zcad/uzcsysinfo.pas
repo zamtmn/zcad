@@ -16,28 +16,22 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzcsysinfo;
+unit uzcSysInfo;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-  MacroDefIntf,uzmacros,uzcsysparams,LCLProc,uzclog,uzblog,uzbpaths,Forms,
-  {$IFDEF WINDOWS}ShlObj,{$ENDIF}{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils,uzcsysvars;
+  uzbCommandLineParser,uzcCommandLineParser,
+  uzcsysparams,uzcsysvars,
+  uzbLogTypes,uzbLog,uzcLog,
+  uzbPaths,
+  Forms,{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils;
+resourcestring
+  rsCommandLine='Command line "%s"';
+  rsFoundCLOption='Found command line option "%s"';
+  rsFoundCLOperand='Found command line operand "%s"';
 const
   zcaduniqueinstanceid='zcad unique instance';
   zcadgitversion = {$include zcadversion.inc};
-type
-  TZCADPathsMacroMethods=class
-    class function MacroFuncZCADPath       (const {%H-}Param: string; const Data: PtrInt;
-                                              var {%H-}Abort: boolean): string;
-    class function MacroFuncZCADAutoSaveFilePath(const {%H-}Param: string; const Data: PtrInt;
-                                                 var {%H-}Abort: boolean): string;
-    class function MacroFuncTEMPPath       (const {%H-}Param: string; const Data: PtrInt;
-                                              var {%H-}Abort: boolean): string;
-    class function MacroFuncSystemFontsPath(const {%H-}Param: string; const Data: PtrInt;
-                                              var {%H-}Abort: boolean): string;
-    class function MacroFuncsUserFontsPath (const {%H-}Param: string; const Data: PtrInt;
-                                              var {%H-}Abort: boolean): string;
-  end;
 var
   SysDefaultFormatSettings:TFormatSettings;
   disabledefaultmodule:boolean;
@@ -75,175 +69,107 @@ end;
 
 procedure ProcessParamStr;
 var
-   i:integer;
-   param,paramUC:String;
+   i,prm,operandsc:integer;
+   pod:PTCLOptionData;
+   mn:String;
    ll:TLogLevel;
-const
-  LogEnableModulePrefix='LEM_';
-  LogDisableModulePrefix='LDM_';
 begin
-     //programlog.LogOutStr('ProcessParamStr',lp_IncPos,LM_Necessarily);
-     debugln('{N+}ProcessParamStr');
-     SysParam.notsaved.otherinstancerun:=false;
-     SysParam.saved.UniqueInstance:=true;
-     LoadParams(expandpath(ProgramPath+'rtl/config.xml'),SysParam.saved);
-     SysParam.notsaved.PreloadedFile:='';
-     i:=paramcount;
-     for i:=1 to paramcount do
-       begin
-            {$ifdef windows}param:={Tria_AnsiToUtf8}SysToUTF8(paramstr(i));{$endif}
-            {$ifndef windows}param:=paramstr(i);{$endif}
-            paramUC:=uppercase(param);
+  with programlog.Enter('ProcessParamStr',LM_Info) do try
 
-            debugln('{N}Found param command line parameter "%s"',[paramUC]);
-            //programlog.LogOutStr(format('Found param command line parameter "%s"',[paramUC]),lp_OldPos,LM_Necessarily);
+    //покажем в логе что распарсилось из командной строки
+    programlog.LogOutFormatStr(rsCommandLine,[CmdLine],LM_Necessarily);
+    for i:=0 to CommandLineParser.ParamsCount-1 do begin
+      prm:=CommandLineParser.Param[i];
+      if prm>0 then begin
+        pod:=CommandLineParser.GetOptionPData(prm);
+        case pod.&Type of
+          AT_Flag:programlog.LogOutFormatStr(rsFoundCLOption,[CommandLineParser.GetOptionName(prm)],LM_Info);
+          AT_WithOperands:begin
+            operandsc:=CommandLineParser.OptionOperandsCount(prm);
+            case operandsc of
+              0:programlog.LogOutFormatStr(rsFoundCLOption,[CommandLineParser.GetOptionName(prm)],LM_Info);
+              else programlog.LogOutFormatStr(rsFoundCLOption,[CommandLineParser.GetOptionName(prm)+' '+CommandLineParser.GetAllOptionOperands(prm)],LM_Info);
+            end;
+          end;
+         end;
+       end else if prm<0 then
+         programlog.LogOutFormatStr(rsFoundCLOperand,[CommandLineParser.Operand[-prm-1]],LM_Info);
+    end;
 
-            if fileexists(UTF8toSys(param)) then
-                                     SysParam.notsaved.PreloadedFile:=param
-       else if (paramUC='NOTCHECKUNIQUEINSTANCE')or(paramUC='NCUI')then
-                                                   SysParam.saved.UniqueInstance:=false
-       else if (paramUC='NOSPLASH')or(paramUC='NS')then
-                                                   SysParam.saved.NoSplash:=true
-       else if (paramUC='VERBOSELOG')or(paramUC='VL')then
-                                                          uzclog.VerboseLog:=true
-       else if (paramUC='NOLOADLAYOUT')or(paramUC='NLL')then
-                                                               SysParam.saved.NoLoadLayout:=true
-       else if (paramUC='UPDATEPO')then
-                                                               SysParam.saved.UpdatePO:=true
-       else if (paramUC='LEAM')then
-                                   programlog.EnableAllModules
-       else if pos(LogEnableModulePrefix,paramUC)=1 then
-                                       begin
-                                         paramUC:=copy(paramUC,
-                                                      length(LogEnableModulePrefix)+1,
-                                                      length(paramUC)-length(LogEnableModulePrefix)+1);
-                                         programlog.EnableModule(paramUC);
-                                       end
-       else if pos(LogDisableModulePrefix,paramUC)=1 then
-                                       begin
-                                         paramUC:=copy(paramUC,
-                                                      length(LogEnableModulePrefix)+1,
-                                                      length(paramUC)-length(LogEnableModulePrefix)+1);
-                                         if paramUC<>'DEFAULT'then
-                                           programlog.DisableModule(paramUC)
-                                         else
-                                           disabledefaultmodule:=true;
-                                       end
-       else if programlog.TryGetLogLevelHandle(param,ll)then
-                                       programlog.SetCurrentLogLevel(ll);
-       end;
-     debugln('{N-}end;{ProcessParamStr}');
-     //programlog.LogOutStr('end;{ProcessParamStr}',lp_DecPos,LM_Necessarily);
+    //начальные значения некоторых параметров и загрузка параметров
+    SysParam.notsaved.otherinstancerun:=false;
+    SysParam.saved.UniqueInstance:=true;
+    LoadParams(expandpath(ProgramPath+'rtl/config.xml'),SysParam.saved);
+    SysParam.notsaved.PreloadedFile:='';
+
+    //значения некоторых параметров из комстроки, если есть
+    if CommandLineParser.HasOption(NOSPLASHHDL) then
+      SysParam.saved.NoSplash:=true;
+    if CommandLineParser.HasOption(UPDATEPOHDL) then
+      SysParam.saved.UpdatePO:=true;
+    if CommandLineParser.HasOption(NOLOADLAYOUTHDL) then
+      SysParam.saved.NoLoadLayout:=true;
+    if CommandLineParser.HasOption(NOTCHECKUNIQUEINSTANCEHDL) then
+      SysParam.saved.UniqueInstance:=false;
+    if CommandLineParser.HasOption(LEAMHDL) then
+      programlog.EnableAllModules;
+    if CommandLineParser.HasOption(LEMHDL)then
+      for i:=0 to CommandLineParser.OptionOperandsCount(LEMHDL)-1 do
+        programlog.EnableModule(CommandLineParser.OptionOperand(LEMHDL,i));
+    if CommandLineParser.HasOption(LDMHDL)then
+      for i:=0 to CommandLineParser.OptionOperandsCount(LDMHDL)-1 do begin
+        mn:=CommandLineParser.OptionOperand(LDMHDL,i);
+        if uppercase(mn)<>'DEFAULT'then
+          programlog.DisableModule(mn)
+        else
+          disabledefaultmodule:=true;
+      end;
+
+    //операнды из комстроки, если есть - ищем файл для загрузки
+    for i:=0 to CommandLineParser.OperandsCount-1 do begin
+      mn:=CommandLineParser.Operand[i];
+      if fileexists(UTF8toSys(mn)) then
+        SysParam.notsaved.PreloadedFile:=mn;
+    end;
+
+  finally programlog.leave(IfEntered);end;
 end;
 Procedure GetSysInfo;
 begin
-     //programlog.LogOutStr('GetSysInfo',lp_IncPos,LM_Necessarily);
-     debugln('{N+}GetSysInfo');
-     SysDefaultFormatSettings:=DefaultFormatSettings;
-     SysParam.notsaved.ScreenX:={GetSystemMetrics(SM_CXSCREEN)}Screen.Width;
-     SysParam.notsaved.ScreenY:={GetSystemMetrics(SM_CYSCREEN)}Screen.Height;
+  with programlog.Enter('GetSysInfo',LM_Info) do try
 
+    SysDefaultFormatSettings:=DefaultFormatSettings;
+    SysParam.notsaved.ScreenX:=Screen.Width;
+    SysParam.notsaved.ScreenY:=Screen.Height;
+    SysParam.notsaved.Ver:=GetVersion;
 
-     {SysParam.ScreenX:=800;
-     SysParam.ScreenY:=800;}
+    programlog.LogOutStr('ZCAD v'+sysparam.notsaved.ver.versionstring,LM_Necessarily);
+  {$IFDEF FPC}
+    programlog.LogOutStr('Program compiled on Free Pascal Compiler',LM_Info);
+  {$ENDIF}
+  {$IFDEF LOUDERRORS}
+    programlog.LogOutStr('Program compiled with {$DEFINE LOUDERRORS}',LM_Info);
+  {$ENDIF}
 
+    ProcessParamStr;
 
+    programlog.LogOutStr('DefaultSystemCodePage:='+inttostr(DefaultSystemCodePage),LM_Info);
+    programlog.LogOutStr('DefaultUnicodeCodePage:='+inttostr(DefaultUnicodeCodePage),LM_Info);
+    programlog.LogOutStr('UTF8CompareLocale:='+inttostr(UTF8CompareLocale),LM_Info);
 
-     {$IFDEF FPC}
-                 SysParam.notsaved.Ver:=GetVersion({'zcad.exe'});
-     {$ELSE}
-                 sysparam.ver:=GetVersion({'ZCAD.exe'});
-     {$ENDIF}
+    programlog.LogOutFormatStr('SysParam.ProgramPath="%s"',[ProgramPath],LM_Necessarily);
+    programlog.LogOutFormatStr('SysParam.TempPath="%s"',[TempPath],LM_Necessarily);
+    programlog.LogOutFormatStr('SysParam.ScreenX=%d',[SysParam.notsaved.ScreenX],LM_Info);
+    programlog.LogOutFormatStr('SysParam.ScreenY=%d',[SysParam.notsaved.ScreenY],LM_Info);
+    programlog.LogOutFormatStr('SysParam.NoSplash=%s',[BoolToStr(SysParam.saved.NoSplash,true)],LM_Info);
+    programlog.LogOutFormatStr('SysParam.NoLoadLayout=%s',[BoolToStr(SysParam.saved.NoLoadLayout,true)],LM_Info);
+    programlog.LogOutFormatStr('SysParam.UpdatePO=%s',[BoolToStr(SysParam.saved.UpdatePO,true)],LM_Info);
+    programlog.LogOutFormatStr('SysParam.PreloadedFile="%s"',[SysParam.notsaved.PreloadedFile],LM_Necessarily);
 
-     ProcessParamStr;
-     //SysParam.verstr:=Format('%d.%d.%d.%d SVN: %s',[SysParam.Ver.major,SysParam.Ver.minor,SysParam.Ver.release,SysParam.Ver.build,RevisionStr]);
-     debugln('{N}ZCAD log v'+sysparam.notsaved.ver.versionstring+' started');
-{$IFDEF FPC}                 debugln('{N}Program compiled on Free Pascal Compiler');{$ENDIF}
-{$IFDEF PERFOMANCELOG}       debugln('{N}Program compiled with {$DEFINE PERFOMANCELOG}');{$ENDIF}
-{$IFDEF LOUDERRORS}debugln('{N}Program compiled with {$DEFINE LOUDERRORS}');{$ENDIF}
-                             debugln('{N}DefaultSystemCodePage:='+inttostr(DefaultSystemCodePage));
-                             //programlog.logoutstr('DefaultSystemCodePage:='+inttostr(DefaultSystemCodePage),0,LM_Necessarily);
-                             debugln('{N}DefaultUnicodeCodePage:='+inttostr(DefaultUnicodeCodePage));
-                             //programlog.logoutstr('DefaultUnicodeCodePage:='+inttostr(DefaultUnicodeCodePage),0,LM_Necessarily);
-                             debugln('{N}UTF8CompareLocale:='+inttostr(UTF8CompareLocale));
-                             //programlog.logoutstr('UTF8CompareLocale:='+inttostr(UTF8CompareLocale),0,LM_Necessarily);
-                             {modeswitch systemcodepage}
-     debugln('{N}SysParam.ProgramPath="%s"',[ProgramPath]);
-     //programlog.LogOutStr(format('SysParam.ProgramPath="%s"',[ProgramPath]),lp_OldPos,LM_Necessarily);
-     debugln('{N}SysParam.TempPath="%s"',[TempPath]);
-     //programlog.LogOutStr(format('SysParam.TempPath="%s"',[TempPath]),lp_OldPos,LM_Necessarily);
-     debugln('{N}SysParam.ScreenX=%d',[SysParam.notsaved.ScreenX]);
-     //programlog.LogOutStr(format('SysParam.ScreenX=%d',[SysParam.ScreenX]),lp_OldPos,LM_Necessarily);
-     debugln('{N}SysParam.ScreenY=%d',[SysParam.notsaved.ScreenY]);
-     //programlog.LogOutStr(format('SysParam.ScreenY=%d',[SysParam.ScreenY]),lp_OldPos,LM_Necessarily);
-     debugln('{N}SysParam.NoSplash=%s',[BoolToStr(SysParam.saved.NoSplash,true)]);
-     //programlog.LogOutStr(format('SysParam.NoSplash=%s',[BoolToStr(SysParam.NoSplash,true)]),lp_OldPos,LM_Necessarily);
-     debugln('{N}SysParam.NoLoadLayout=%s',[BoolToStr(SysParam.saved.NoLoadLayout,true)]);
-     //programlog.LogOutStr(format('SysParam.NoLoadLayout=%s',[BoolToStr(SysParam.NoLoadLayout,true)]),lp_OldPos,LM_Necessarily);
-     debugln('{N}SysParam.UpdatePO=%s',[BoolToStr(SysParam.saved.UpdatePO,true)]);
-     //programlog.LogOutStr(format('SysParam.UpdatePO=%s',[BoolToStr(SysParam.UpdatePO,true)]),lp_OldPos,LM_Necessarily);
-     debugln('{N}SysParam.PreloadedFile="%s"',[SysParam.notsaved.PreloadedFile]);
-     //programlog.LogOutStr(format('SysParam.PreloadedFile="%s"',[SysParam.PreloadedFile]),lp_OldPos,LM_Necessarily);
+    if disabledefaultmodule then programlog.DisableModule('DEFAULT');
 
-     debugln('{N-}end;{GetSysInfo}');
-     //programlog.LogOutStr('end;{GetSysInfo}',lp_DecPos,LM_Necessarily);
-     if disabledefaultmodule then programlog.DisableModule('DEFAULT');
+  finally programlog.leave(IfEntered);end;
 end;
-class function TZCADPathsMacroMethods.MacroFuncZCADPath(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
-begin
-  result:=ProgramPath;
-end;
-class function TZCADPathsMacroMethods.MacroFuncZCADAutoSaveFilePath(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
-begin
-  result:=ExpandPath(sysvar.SAVE.SAVE_Auto_FileName^);
-end;
-class function TZCADPathsMacroMethods.MacroFuncTEMPPath(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
-begin
-  result:=TempPath;
-end;
-class function TZCADPathsMacroMethods.MacroFuncSystemFontsPath(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
-{$IF defined(WINDOWS)}
-var
-  s:string;
-begin
-  s:='';
-  SetLength(s,MAX_PATH );
-  if not SHGetSpecialFolderPath(0,PChar(s),CSIDL_FONTS,false) then
-    s:='';
-  Result:=PChar(s);
-end;
-{$ELSEIF (defined(LINUX))or(defined(DARWIN))}
-begin
-   Result:='/todo/';
-end;
-{$ENDIF}
-class function TZCADPathsMacroMethods.MacroFuncsUserFontsPath (const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
-{$IF defined(WINDOWS)}
-var
-  s: string;
-begin
-  s:='';
-  SetLength(s,MAX_PATH );
-  if not SHGetSpecialFolderPath(0,PChar(s),CSIDL_LOCAL_APPDATA,false) then
-    s:='';
-  Result:=PChar(s)+'\Microsoft\Windows\Fonts';
-end;
-{$ELSEIF (defined(LINUX))or(defined(DARWIN))}
-begin
-   Result:='/todo/';
-end;
-{$ENDIF}
 initialization
 GetSysInfo;
-DefaultMacros.AddMacro(TTransferMacro.Create('ZCADPath','',
-                       'Path to ZCAD',TZCADPathsMacroMethods.MacroFuncZCADPath,[]));
-DefaultMacros.AddMacro(TTransferMacro.Create('ZCADAutoSaveFilePath','',
-                       'Path to auto save file',TZCADPathsMacroMethods.MacroFuncZCADAutoSaveFilePath,[]));
-DefaultMacros.AddMacro(TTransferMacro.Create('TEMP','',
-                       'TEMP path',TZCADPathsMacroMethods.MacroFuncTEMPPath,[]));
-DefaultMacros.AddMacro(TTransferMacro.Create('SystemFontsPath','',
-                       'System fonts path',TZCADPathsMacroMethods.MacroFuncSystemFontsPath(),[]));
-DefaultMacros.AddMacro(TTransferMacro.Create('UserFontsPath','',
-                       'User fonts path',TZCADPathsMacroMethods.MacroFuncsUserFontsPath(),[]));
-disabledefaultmodule:=false;
 end.

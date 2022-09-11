@@ -261,21 +261,20 @@ msgstr ""
 
 #: tlayersform.addlayer.hint
 msgid "Add layer"
-msgstr ""
+msgstr "Добавить слой"
 
 #: tlayersform.buttonapplyclose.caption
-#, fuzzy
 msgctxt "tlayersform.buttonapplyclose.caption"
 msgid "Apply and close"
 msgstr "Применить и закрыть"
 
 #: tlayersform.button_apply.caption
 msgid "Apply"
-msgstr ""
+msgstr "Применить"
 
 #: tlayersform.caption
 msgid "Layers"
-msgstr ""
+msgstr "Слои"
 
 #: tlayersform.dellayer.caption
 msgid "DelLayer"
@@ -283,54 +282,49 @@ msgstr ""
 
 #: tlayersform.dellayer.hint
 msgid "Delete layer"
-msgstr ""
+msgstr "Удалить слой"
 
 #: tlayersform.listview1.columns[0].caption
-#, fuzzy
 msgctxt "tlayersform.listview1.columns[0].caption"
 msgid "Status"
 msgstr "Статус"
 
 #: tlayersform.listview1.columns[1].caption
-#, fuzzy
 msgctxt "tlayersform.listview1.columns[1].caption"
 msgid "Name"
 msgstr "Имя"
 
 #: tlayersform.listview1.columns[2].caption
 msgid "On"
-msgstr ""
+msgstr "Включен"
 
 #: tlayersform.listview1.columns[3].caption
 msgid "Freze"
-msgstr ""
+msgstr "Заморожен"
 
 #: tlayersform.listview1.columns[4].caption
 msgid "Lock"
-msgstr ""
+msgstr "Заблокирован"
 
 #: tlayersform.listview1.columns[5].caption
-#, fuzzy
 msgctxt "tlayersform.listview1.columns[5].caption"
 msgid "Color"
 msgstr "Цвет"
 
 #: tlayersform.listview1.columns[6].caption
-#, fuzzy
 msgctxt "tlayersform.listview1.columns[6].caption"
 msgid "Line type"
 msgstr "Тип линии"
 
 #: tlayersform.listview1.columns[7].caption
 msgid "Line weight"
-msgstr ""
+msgstr "Вес линии"
 
 #: tlayersform.listview1.columns[8].caption
 msgid "Plot"
-msgstr ""
+msgstr "Печать"
 
 #: tlayersform.listview1.columns[9].caption
-#, fuzzy
 msgctxt "tlayersform.listview1.columns[9].caption"
 msgid "Description"
 msgstr "Описание"
@@ -341,7 +335,7 @@ msgstr ""
 
 #: tlayersform.mkcurrentlayer.hint
 msgid "Make selected layer current"
-msgstr ""
+msgstr "Сделать выбраный слой текущим"
 
 #: tlayersform.purgelayers.caption
 msgid "PurgeLayers"
@@ -349,7 +343,7 @@ msgstr ""
 
 #: tlayersform.purgelayers.hint
 msgid "Purge layers"
-msgstr ""
+msgstr "Очистить слои"
 
 #: tlayersform.refreshlayers.caption
 msgid "RefreshLayers"
@@ -357,7 +351,7 @@ msgstr ""
 
 #: tlayersform.refreshlayers.hint
 msgid "Refresh layers"
-msgstr ""
+msgstr "Обновить слои"
 
 #: tlayersform.toolbar1.caption
 msgctxt "tlayersform.toolbar1.caption"
@@ -381,7 +375,7 @@ msgid "Load"
 msgstr ""
 
 #: tlinetypesform.caption
-msgid "Line type manager"
+msgid "Line types"
 msgstr ""
 
 #: tlinetypesform.checkbox1.caption
@@ -450,26 +444,26 @@ msgstr "Устройства"
 #: tnavigatordevices.collapseall.caption
 msgctxt "tnavigatordevices.collapseall.caption"
 msgid "Collapse all"
-msgstr ""
+msgstr "Свернуть всё"
 
 #: tnavigatordevices.collapseallbtn.hint
 msgctxt "tnavigatordevices.collapseallbtn.hint"
 msgid "Collapse all"
-msgstr ""
+msgstr "Свернуть всё"
 
 #: tnavigatordevices.expandall.caption
 msgctxt "tnavigatordevices.expandall.caption"
 msgid "Expand all"
-msgstr ""
+msgstr "Развернуть всё"
 
 #: tnavigatordevices.expandallbtn.hint
 msgctxt "tnavigatordevices.expandallbtn.hint"
 msgid "Expand all"
-msgstr ""
+msgstr "Развернуть всё"
 
 #: tnavigatordevices.filterbtn.buttonhint
 msgid "Clear filter"
-msgstr ""
+msgstr "Очистить фильтр"
 
 #: tnavigatordevices.includeents.caption
 msgid "Edit include entities"
@@ -1295,12 +1289,12 @@ msgid "Line type"
 msgstr "Тип линии"
 
 #: uzcstrconsts.rslinetypedesk
-#, object-pascal-format, fuzzy, badformat
+#, object-pascal-format
 msgid ""
 ";;DXF pattern length: %f, fact pattern length: %f\n"
 "%s"
 msgstr ""
-";;Длина шаблона %f\n"
+";;DXF длина паттерна: %f, фактическая длина: %f\n"
 "%s"
 
 #: uzcstrconsts.rslinetypeusedin
@@ -1596,7 +1590,7 @@ msgstr "Файл DXF загружен"
 #: uzestrconsts.fontnotfound
 #, object-pascal-format
 msgid "For text style \"%s\" not found font \"%s\" (\"%s\" fontfamily)"
-msgstr ""
+msgstr "Для стиля текста \"%s\" не найден шрифт \"%s\" (\"%s\" семейство)"
 
 #: uzestrconsts.fontnotfoundandreplace
 #, object-pascal-format

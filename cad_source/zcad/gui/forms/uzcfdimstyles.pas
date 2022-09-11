@@ -58,6 +58,7 @@ type
     DelStyle: TAction;
     MkCurrentStyle: TAction;
     InspectListItem: TAction;
+    Panel1: TPanel;
     PurgeStyles: TAction;
     RefreshStyles: TAction;
     AddStyle: TAction;
@@ -330,6 +331,8 @@ begin
   PurgeStyles.ImageIndex:=ImagesManager.GetImageIndex('Purge');
   RefreshStyles.ImageIndex:=ImagesManager.GetImageIndex('Refresh');
   InspectListItem.ImageIndex:=ImagesManager.GetImageIndex('inspectlistitem');
+
+  Panel1.Constraints.MinWidth:=ToolBar1.Left+ToolButton_Refresh.Left+ToolButton_Refresh.Width+CoolBar1.GrabWidth;
 
   ListView1.SmallImages:=ImagesManager.IconList;
   ListView1.DefaultItemIndex:=ImagesManager.GetImageIndex('ok');;

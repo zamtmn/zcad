@@ -15,7 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
-unit uzbhandles;
+unit uzbHandles;
 {$mode delphi}
 
 interface
@@ -47,6 +47,7 @@ GTSimpleHandles<GHandleType,GHandleManipulator>=object
   constructor init;
   destructor done;virtual;
   function CreateHandle:GHandleType;virtual;
+  function GetInitialHandleValue:GHandleType;
   //procedure SetSeed(const Value:GHandleType);
 end;
 
@@ -109,6 +110,11 @@ begin
   if seed=0 then
     Raise Exception.CreateFmt('GTSimpleHandles<GHandleType,GHandleManipulator>.GetHandle overflow',[]);
   result:=Seed;
+end;
+
+function GTSimpleHandles<GHandleType,GHandleManipulator>.GetInitialHandleValue:GHandleType;
+begin
+  result:=GHandleManipulator.GetStartValue;
 end;
 {procedure GTSimpleHandles<GHandleType,GHandleManipulator>.SetSeed(const Value:GHandleType);
 begin

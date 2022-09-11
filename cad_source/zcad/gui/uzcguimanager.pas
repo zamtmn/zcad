@@ -22,7 +22,7 @@ unit uzcguimanager;
 
 interface
 uses gzctnrSTL,uzclog,uzcsysvars,uzeentity,Types,Controls,
-     Forms,LazLogger;
+     Forms;
 type
 TZCADFormSetupProc=procedure(Form:TControl);
 TZCADFormCreateProc=function(FormName:string):TForm;
@@ -88,6 +88,6 @@ end;
 initialization
   ZCADGUIManager:=TZCADGUIManager.Create;
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   ZCADGUIManager.destroy;
 end.

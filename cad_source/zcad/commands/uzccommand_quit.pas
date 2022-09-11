@@ -22,7 +22,7 @@ unit uzccommand_quit;
 
 interface
 uses
-  LazLogger,Controls,SysUtils,
+  uzcLog,Controls,SysUtils,
   uzccommandsmanager,uzcdrawings,uzccommandsabstract,uzccommandsimpl,uzcuitypes,uzglviewareageneral,uzglviewareaabstract,
   uzcdrawing,uzctreenode,uzcuidialogs,uzcstrconsts,LCLType,uzcinterface,Forms;
 
@@ -157,8 +157,8 @@ begin
 end;
 
 initialization
-  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   CreateCommandFastObjectPlugin(@quit_com,'Quit',0,0);
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

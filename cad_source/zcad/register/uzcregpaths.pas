@@ -21,7 +21,7 @@ unit uzcregpaths;
 interface
 uses
   uzcsysvars,uzbpaths,uzctranslations,UUnitManager,Varman,
-  TypeDescriptors,LazLogger;
+  TypeDescriptors,uzcLog;
 implementation
 
 initialization
@@ -31,6 +31,6 @@ initialization
   sysvar.PATH.Support_Path:=@SupportPath;
   sysvar.PATH.Temp_files:=@TempPath;
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.
 

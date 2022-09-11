@@ -23,7 +23,7 @@ unit uzccommand_textstyles;
 interface
 uses
   SysUtils,
-  LazLogger,
+  uzcLog,
   uzcftextstyles,
   uzctreenode,
   uzcsysvars,
@@ -43,8 +43,8 @@ begin
 end;
 
 initialization
-  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   CreateCommandFastObjectPlugin(@TextStyles_cmd,'TextStyles',CADWG,0);
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

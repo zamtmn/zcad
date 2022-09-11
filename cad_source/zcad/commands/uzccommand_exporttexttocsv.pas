@@ -23,7 +23,7 @@ interface
 uses
   gvector,
   CsvDocument,
-  LazLogger,
+  uzbLog,uzcLog,uzcreglog,
   SysUtils,
   uzbpaths,
   math,
@@ -110,13 +110,15 @@ begin
           if pstart=nil then
             pstart:=pv
           else
-            debugln('{EHM}'+'Other "Start" text marker found',[]);
+            ProgramLog.LogOutStr('Other "Start" text marker found',LM_Error,LogModeDefault,MO_SM or MO_SH);
+            //debugln('{EHM}'+'Other "Start" text marker found',[]);
       end;
     pv:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
     until pv=nil;
 
     if pstart=nil then
-      debugln('{EHM}'+'"Start" text marker not found',[])
+      ProgramLog.LogOutStr('"Start" text marker not found',LM_Error,LogModeDefault,MO_SM or MO_SH)
+      //debugln('{EHM}'+'"Start" text marker not found',[])
     else begin
       minx:=pstart^.P_insert_in_WCS.x;
       maxy:=pstart^.P_insert_in_WCS.y;
@@ -130,7 +132,8 @@ begin
         l:=l+td;
         Widths.PushBack(l)
       end else
-        debugln('{EHM}'+'"%s" Not a float',[ts]);
+        ProgramLog.LogOutFormatStr('"%s" Not a float',[ts],LM_Error,LogModeDefault,MO_SM or MO_SH);
+        //debugln('{EHM}'+'"%s" Not a float',[ts]);
     until s='';
     if Widths.IsEmpty then
       Widths.PushBack(20.0);
@@ -162,7 +165,7 @@ begin
 end;
 
 initialization
-  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   ExportTextToCSVParam.Widths:='20,130,60,35,45,20,20,25,40';
   ExportTextToCSVParam.W:=20;
   ExportTextToCSVParam.H:=8;
@@ -173,5 +176,5 @@ initialization
 
   CreateCommandFastObjectPlugin(@ExportTextToCSV_com,'ExportTextToCSV',  CADWG,0);
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

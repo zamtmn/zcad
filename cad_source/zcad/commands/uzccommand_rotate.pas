@@ -30,7 +30,7 @@ uses
   uzglviewareadata,
   uzccommand_move,
   uzccommandsabstract,varmandef,uzccommandsmanager,uzcinterface,uzcstrconsts,uzegeometry,zcmultiobjectchangeundocommand,
-  uzegeometrytypes,uzeentity,LazLogger;
+  uzegeometrytypes,uzeentity,uzcLog;
 type
   {REGISTEROBJECTTYPE rotate_com}
   rotate_com =  object(move_com)
@@ -153,9 +153,9 @@ procedure Finalize;
 begin
 end;
 initialization
-  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   startup;
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   finalize;
 end.

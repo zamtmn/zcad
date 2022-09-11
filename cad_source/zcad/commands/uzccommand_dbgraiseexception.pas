@@ -23,7 +23,7 @@ unit uzccommand_dbgRaiseException;
 interface
 uses
   SysUtils,
-  LazLogger,
+  uzcLog,
   uzccommandsabstract,uzccommandsimpl;
 
 implementation
@@ -35,8 +35,8 @@ begin
 end;
 
 initialization
-  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   CreateCommandFastObjectPlugin(@RaiseException_com,'dbgRaiseException',0,0);
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

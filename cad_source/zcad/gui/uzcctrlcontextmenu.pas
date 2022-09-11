@@ -113,7 +113,7 @@ initialization
   cxmenumgr.menupopupcount:=0;
   cxmenumgr.notprocessedclosecount:=0;
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   freeandnil(cxmenumgr);
 end.
 

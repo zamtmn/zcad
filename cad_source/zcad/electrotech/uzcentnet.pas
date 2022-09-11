@@ -13,7 +13,7 @@ uses uzcinterface,uzeobjectextender,uzeentityfactory,Varman,uzgldrawcontext,uzes
      uzeentity,UGDBOpenArrayOfPV,uzeentconnected,uzeconsts,
      varmandef,uzegeometry,uzbtypes,UGDBGraf,uzeentsubordinated,uunitmanager,
      gzctnrVectorTypes,uzegeometrytypes,sysutils,
-     uzcenitiesvariablesextender,uzeentline,uzeffdxfsupport,math,uzclog,LazLogger,
+     uzcenitiesvariablesextender,uzeentline,uzeffdxfsupport,math,uzclog,
      uzctnrvectorpgdbaseobjects;
 resourcestring
   rscannotbeconnected='Can not be connected';
@@ -620,6 +620,6 @@ initialization
   RegisterEntityUpgradeInfo(GDBLineID,UD_LineToNet,@UpgradeLine2Net);
   GDBObjNetDXFFeatures:=TDXFEntIODataManager.Create;
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   GDBObjNetDXFFeatures.Destroy;
 end.

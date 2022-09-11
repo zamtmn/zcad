@@ -20,7 +20,7 @@ unit uzcreginterface;
 {$INCLUDE zengineconfig.inc}
 interface
 uses uzcsysvars,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,
-     Varman,uzcoidecorations,uzegluinterface,LazLogger,uzccommandlineutil,
+     Varman,uzcoidecorations,uzegluinterface,uzcLog,uzccommandlineutil,
      uzcsysparams,uzcsysinfo;
 implementation
 
@@ -48,6 +48,6 @@ initialization
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_ThemedLeftToolbars,'INTF_ThemedLeftToolbars');
 
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.
 

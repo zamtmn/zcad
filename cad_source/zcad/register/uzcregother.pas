@@ -23,7 +23,7 @@ uses uzbpaths,UUnitManager,uzcsysvars,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
      uzbstrproc,Varman,SysUtils,
      UBaseTypeDescriptor,uzctnrVectorBytes, strmy, varmandef,
      uzcsysparams,uzcsysinfo,TypeDescriptors,URecordDescriptor,
-     uzclog,LazLogger;
+     uzcLog;
 implementation
 {$IFNDEF WINDOWS}
 //var
@@ -240,7 +240,7 @@ initialization;
   SetCategoryCollapsed('CABLE',false);
   end;
 finalization;
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 
   mem.init(1024);
   SavedUnit^.SavePasToMem(mem);

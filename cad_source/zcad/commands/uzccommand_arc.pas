@@ -22,7 +22,7 @@ unit uzccommand_arc;
 
 interface
 uses
-  LazLogger,
+  uzcLog,
   SysUtils,
   uzccommandsabstract,uzccommandsimpl,
   uzccominteractivemanipulators,
@@ -70,8 +70,8 @@ begin
 end;
 
 initialization
-  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   CreateCommandFastObjectPlugin(@DrawArc_com,'Arc',CADWG,0);
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

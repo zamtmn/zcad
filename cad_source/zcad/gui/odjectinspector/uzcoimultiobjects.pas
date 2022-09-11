@@ -22,7 +22,7 @@ unit uzcoimultiobjects;
 interface
 uses
   uzeenttext,uzctnrVectorPointers,uzeentblockinsert,uzeconsts,uzcinterface,
-  LazLoggerBase,uzcoimultiproperties,uzcoiwrapper,uzctranslations,uzepalette,
+  uzcLog,LazLoggerBase,uzcoimultiproperties,uzcoiwrapper,uzctranslations,uzepalette,
   uzedimensionaltypes,uzcstrconsts,sysutils,uzeentityfactory,
   uzcenitiesvariablesextender,uzgldrawcontext,usimplegenerics,gzctnrSTL,
   gzctnrVectorTypes,uzbtypes,uzcdrawings,varmandef,uzeentity,
@@ -1134,6 +1134,6 @@ initialization
   i:=SizeOf(TObjectUnit);
   i:=SizeOf(TObjectUnit);
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   finalize;
 end.

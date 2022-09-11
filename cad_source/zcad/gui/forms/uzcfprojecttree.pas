@@ -24,10 +24,10 @@ uses
  uzctnrvectorstrings,uzeconsts,uzcstrconsts,uzcctrlcontextmenu,uzbstrproc,
  uzctreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  Classes,FileUtil,Forms,stdctrls,Controls,ComCtrls,
- uzcdevicebaseabstract,uzclog,SysUtils,uzcdrawings,varman,
+ uzcdevicebaseabstract,SysUtils,uzcdrawings,varman,
  varmandef,uzcsysinfo,uzccommandsimpl,uzccommandsabstract,
  uztoolbarsmanager,
- gzctnrVectorTypes,uzeblockdef,UBaseTypeDescriptor,uzcinterface,UUnitManager,LazLogger,uzmenusmanager;
+ gzctnrVectorTypes,uzeblockdef,UBaseTypeDescriptor,uzcinterface,UUnitManager,uzcLog,uzmenusmanager;
 const
   uncat='UNCAT';
   uncat_='UNCAT_';
@@ -367,7 +367,7 @@ begin
 end;
 finalization
 begin
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   {FreeAndNil(ProgramDBContextMenuN);
   FreeAndNil(ProjectDBContextMenuN);
   FreeAndNil(ProgramDEVContextMenuN);}

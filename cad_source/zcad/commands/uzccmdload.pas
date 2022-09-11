@@ -21,7 +21,7 @@ unit uzccmdload;
 
 interface
 uses
-  LCLProc,LCLType,LazUTF8,
+  uzcLog,LCLType,LazUTF8,
   uzbpaths,uzbtypes,uzcuitypes,
 
   uzeffmanager,uzctranslations,
@@ -133,6 +133,6 @@ end;
 initialization
   startup;
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   finalize;
 end.

@@ -25,7 +25,7 @@ uses
   uzbpaths,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics,
   Buttons, ExtCtrls, LazUTF8,
   uzcsysvars,uzcsysinfo,gzctnrSTL,uzctnrVectorBytes,
-  uzbstrproc,LazLogger;
+  uzbstrproc,uzcLog;
 type
   TImageData=record
     Index:Integer;
@@ -185,7 +185,7 @@ initialization
   {$i defaultimages.inc}
   ImagesManager:=TImagesManager.Create;
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   ImagesManager.Destroy;
 end.
 

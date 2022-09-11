@@ -25,7 +25,7 @@ unit uzccommand_dataexport;
 interface
 uses
   CsvDocument,
-  LazLogger,
+  uzcLog,
   SysUtils,
   uzccommandsabstract,uzccommandsimpl,
   uzccommandsmanager,
@@ -564,7 +564,7 @@ begin
 end;
 
 initialization
-  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
 
   VU.init('test');
   VU.InterfaceUses.PushBackIfNotPresent(sysunit);
@@ -607,7 +607,7 @@ initialization
   ExporterParser.RegisterToken(#13,#0,#0,nil,nil,TGOSeparator or TGOCanBeOmitted);
 
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   ExporterParser.Free;
   VU.done;
   if clFilePrompt<>nil then

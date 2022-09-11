@@ -22,7 +22,7 @@ unit uzccommand_polygon;
 
 interface
 uses
-  LazLogger,
+  uzcLog,
   SysUtils,
   uzccommandsabstract,uzccommandsimpl,
   uzccominteractivemanipulators,
@@ -155,7 +155,7 @@ end;
 
 
 initialization
-  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
 
   SysUnit.RegisterType(TypeInfo(TPolygonParam));//регистрируем тип данных в зкадном RTTI
   SysUnit.SetTypeDesk(TypeInfo(TPolygonParam),['ET','VNum','PolyWidth'],[FNProgram]);//Даем програмные имена параметрам, по идее это должно быть в ртти, но ненашел
@@ -168,5 +168,5 @@ initialization
   PolygonParam.PolyWidth:=0;
   PolygonParam.VNum:=4;
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

@@ -25,7 +25,7 @@ uses gzctnrVectorPObjects,uzcsysvars,uzegeometry,uzglviewareaabstract,uzbpaths,
      gzctnrVectorTypes,uzegeometrytypes,uzbstrproc,gzctnrVectorP,
      uzccommandsabstract, sysutils,uzglviewareadata,
      uzclog,varmandef,varman,uzedrawingdef,uzcinterface,
-     uzcsysparams,uzedrawingsimple,uzcdrawings,uzctnrvectorstrings,forms,LazLogger,
+     uzcsysparams,uzedrawingsimple,uzcdrawings,uzctnrvectorstrings,forms,
      uzcctrlcommandlineprompt,uzeparsercmdprompt,gzctnrSTL,uzeSnap;
 const
      tm:tmethod=(Code:nil;Data:nil);
@@ -972,6 +972,6 @@ end;}
 initialization
   commandmanager.init(1000);
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   commandmanager.Done;
 end.

@@ -22,7 +22,7 @@ unit uzctranslations;
 interface
 uses uzbpaths,uzbstrproc,LazUTF8,gettext,translations,
      fileutil,LResources,sysutils,uzbLogTypes,uzcLog,uzbLog,forms,
-     Classes, typinfo,uzcsysparams{,LazLogger};
+     Classes, typinfo,uzcsysparams{,uzcLog};
 
 const
   ZCADTranslatedPOFileName='zcad.%s.po';

@@ -21,7 +21,7 @@ unit uzcregfontmanager;
 interface
 uses
   uzcsysvars,uzefontmanager,uzbpaths,uzctranslations,UUnitManager,Varman,
-  TypeDescriptors,LazLogger;
+  TypeDescriptors,uzcLog;
 implementation
 
 initialization
@@ -30,6 +30,6 @@ units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rt
 sysvar.PATH.Fonts_Path:=@sysvarPATHFontsPath;
 sysvar.PATH.Alternate_Font:=@sysvarAlternateFont;
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.
 

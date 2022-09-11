@@ -21,7 +21,7 @@ unit uzcregexceptions;
 interface
 
 uses
-  SysUtils,LazLogger,uzbLog, uzbLogTypes, uzcLog,uzcsysvars,uzbpaths,uzbexceptionscl,uzcstrconsts;
+  SysUtils,uzcLog,uzbLog, uzbLogTypes,uzcsysvars,uzbpaths,uzbexceptionscl,uzcstrconsts;
 
 implementation
 
@@ -130,7 +130,7 @@ begin
 end;
 
 initialization
-  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   LLMsgs.init(99);
   LLMsgsH:=ProgramLog.addBackend(LLMsgs,'',[]);
   RegisterCrashInfoProvider(ProvideHeader,true);
@@ -138,7 +138,7 @@ initialization
   RegisterCrashInfoProvider(ProvideBuildAndRunTimeInfo);
   RegisterCrashInfoProvider(ProvideFooter);
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   ProgramLog.removeBackend(LLMsgsH);
   LLMsgs.done;
 end.

@@ -36,9 +36,9 @@ uses
   uzcentnet,
   uzeentsubordinated,uzcentcable,varman,uzcdialogsfiles,uunitmanager,
   uzcbillofmaterial,uzccablemanager,uzeentdevice,uzeenttable,
-  uzbpaths,uzctnrvectorstrings,math,Masks,uzclog,uzbstrproc,
+  uzbpaths,uzctnrvectorstrings,math,Masks,uzbstrproc,
   uzeentabstracttext,uzeentmtext,uzeblockdef,UGDBPoint3DArray,uzcdevicebaseabstract,
-  uzelongprocesssupport,LazLogger,
+  uzelongprocesssupport,uzcLog,
   generics.Collections,
   uzccommand_treestat,uzccommand_line2,uzccmdfloatinsert,uzcregother,uzcfcommandline,
   uzeparsercmdprompt,uzctnrvectorpgdbaseobjects,uzeSnap;
@@ -3515,7 +3515,7 @@ end;
 initialization
   startup;
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   finalize;
 end.
 

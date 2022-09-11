@@ -20,9 +20,11 @@ unit uzcreglog;
 {$mode delphi}
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzbLogTypes,uzbLog,uzclog,uzcinterface,uzcuidialogs,uzcuitypes,uzelongprocesssupport,
+uses uzbLogTypes,uzbLog,LazLogger,uzcinterface,uzcuidialogs,uzcuitypes,uzelongprocesssupport,
      {$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}LCLProc,Forms,
-     LazLoggerBase,LazLogger,uzbLogIntf;
+     LazLoggerBase,uzcLog,uzbLogIntf;
+var
+  MO_SM,MO_SH:TMsgOpt;
 implementation
 
 type
@@ -42,7 +44,6 @@ const
 var
   LPSTIMINGModuleDeskIndex:TModuleDesk;
   LogerMBoxBackend:TLogerMBoxBackend;
-  MO_SM,MO_SH:TMsgOpt;
 
 class procedure TLogHelper.EndLongProcessHandler(LPHandle:TLPSHandle;TotalLPTime:TDateTime);
 var
@@ -119,6 +120,6 @@ initialization
   ProgramLog.addBackend(LogerMBoxBackend,'',[]);
 
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.
 

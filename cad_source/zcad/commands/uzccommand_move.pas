@@ -21,31 +21,26 @@ unit uzccommand_move;
 
 interface
 uses
-  gzctnrVector,zcmultiobjectchangeundocommand,
-  gzctnrVectorTypes,uzgldrawercanvas,
-  uzcoimultiobjects,uzcdrawing,uzepalette,
-  uzgldrawcontext,
-  uzeentpoint,uzeentityfactory,
-  uzedrawingsimple,uzcsysvars,uzcstrconsts,
-  printers,graphics,uzeentdevice,
-  LazUTF8,Clipbrd,LCLType,classes,uzeenttext,
-  uzccommandsabstract,uzbstrproc,
-  uzccommandsmanager,
-  uzccommandsimpl,
-  uzcdrawings,
-  uzeutils,
   sysutils,
-  varmandef,
-  uzglviewareadata,
-  uzeffdxf,
-  uzcinterface,
-  uzegeometry,
 
-  uzeconsts,
-  uzegeometrytypes,uzeentity,uzeentcircle,uzeentline,uzeentgenericsubentry,uzeentmtext,
-  uzeentblockinsert,uzeentpolyline,uzclog,
-  uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray
-  ,uzelongprocesssupport;
+  gzctnrVectorTypes,gzctnrVector,
+
+  zcmultiobjectchangeundocommand,
+
+  uzcdrawings,uzcdrawing,
+  uzeentity,uzeconsts,
+
+
+  uzgldrawcontext,
+  uzcinterface,uzcstrconsts,
+  uzccommandsmanager,
+  uzccommandsabstract,uzccommandsimpl,
+
+  uzglviewareadata,
+
+  uzegeometrytypes,uzegeometry,
+
+  uzclog;
 type
 {EXPORT+}
   PTCopyObjectDesc=^TCopyObjectDesc;

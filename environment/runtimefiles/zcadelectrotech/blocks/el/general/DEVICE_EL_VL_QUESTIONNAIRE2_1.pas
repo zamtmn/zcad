@@ -19,8 +19,8 @@ BTY_TreeCoord:='PLAN_EM_Опросник';
 Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 
-NMO_Name:='ОП0';
-NMO_BaseName:='ОП';
+NMO_Name:='ОВ.0';
+NMO_BaseName:='ОВ.';
 NMO_Suffix:='??';
 
 T1:='6/10';

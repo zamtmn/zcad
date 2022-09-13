@@ -234,6 +234,7 @@ uses
   uzccommand_VariablesAdd,
 
   uzccommand_dbgRaiseException,uzccommand_dbgGetAV,
+  uzccommand_dbgPlaceAllBlocks,
 
   uzcenitiesvariablesextender,uzcExtdrLayerControl,uzcExtdrSmartTextEnt,
 

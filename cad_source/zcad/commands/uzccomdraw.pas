@@ -1478,53 +1478,7 @@ else if (sd.PFirstSelectedEnt^.GetObjType=GDBDeviceID) then
   result:=cmd_ok;
   zcRedrawCurrentDrawing;
 end;
-function dbgPlaceAllBlocks_com(operands:TCommandOperands):TCommandResult;
-var pb:PGDBObjBlockdef;
-    ir:itrec;
-    xcoord:Double;
-    BLinsert,tb:PGDBObjBlockInsert;
-    dc:TDrawContext;
-begin
-     pb:=drawings.GetCurrentDWG^.BlockDefArray.beginiterate(ir);
-     xcoord:=0;
-     if pb<>nil then
-     repeat
-           ZCMsgCallBackInterface.TextMessage(pb^.name,TMWOHistoryOut);
 
-
-    BLINSERT := Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID{,drawings.GetCurrentROOT}));
-    PGDBObjBlockInsert(BLINSERT)^.initnul;//(@drawings.GetCurrentDWG^.ObjRoot,drawings.LayerTable.GetSystemLayer,0);
-    PGDBObjBlockInsert(BLINSERT)^.init(drawings.GetCurrentROOT,drawings.GetCurrentDWG^.GetCurrentLayer,0);
-    BLinsert^.Name:=pb^.name;
-    BLINSERT^.Local.p_insert.x:=xcoord;
-    tb:=pointer(BLINSERT^.FromDXFPostProcessBeforeAdd(nil,drawings.GetCurrentDWG^));
-    if tb<>nil then begin
-                         tb^.bp:=BLINSERT^.bp;
-                         BLINSERT^.done;
-                         Freemem(pointer(BLINSERT));
-                         BLINSERT:=pointer(tb);
-    end;
-    drawings.GetCurrentROOT^.AddObjectToObjArray{ObjArray.add}(addr(BLINSERT));
-    PGDBObjEntity(BLINSERT)^.FromDXFPostProcessAfterAdd;
-    BLINSERT^.CalcObjMatrix;
-    BLINSERT^.BuildGeometry(drawings.GetCurrentDWG^);
-    BLINSERT^.BuildVarGeometry(drawings.GetCurrentDWG^);
-    dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-    BLINSERT^.FormatEntity(drawings.GetCurrentDWG^,dc);
-    BLINSERT^.Visible:=0;
-    BLINSERT^.RenderFeedback(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,@drawings.GetCurrentDWG^.myGluProject2,dc);
-    //BLINSERT:=nil;
-    //commandmanager.executecommandend;
-
-           pb:=drawings.GetCurrentDWG^.BlockDefArray.iterate(ir);
-           xcoord:=xcoord+20;
-     until pb=nil;
-
-    zcRedrawCurrentDrawing;
-
-    result:=cmd_ok;
-
-end;
 function BlocksList_com(operands:TCommandOperands):TCommandResult;
 var pb:PGDBObjBlockdef;
     ir:itrec;
@@ -1760,7 +1714,6 @@ begin
   BlockReplace.SetCommandParam(@BlockReplaceParams,'PTBlockReplaceParams');
 
   CreateCommandFastObjectPlugin(@Insert2_com,'Insert2',CADWG,0);
-  CreateCommandFastObjectPlugin(@dbgPlaceAllBlocks_com,'dbgPlaceAllBlocks',CADWG,0);
   CreateCommandFastObjectPlugin(@BlocksList_com,'BlocksList',CADWG,0);
   //CreateCommandFastObjectPlugin(@bedit_com,'BEdit');
   pbeditcom:=CreateCommandRTEdObjectPlugin(@bedit_com,nil,nil,@bedit_format,nil,nil,nil,nil,'BEdit',0,0);

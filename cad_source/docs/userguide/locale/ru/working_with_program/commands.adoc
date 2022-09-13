@@ -44,6 +44,7 @@ dbgClipboard
 dbgCmdList
 dbgGetAV
 dbgMemSummary
+dbgPlaceAllBlocks
 DeSelectAll
 DimAligned
 DimDiameter
@@ -132,7 +133,6 @@ Options
 OrtoDevPlace
 Pan
 PasteClip
-PlaceAllBlocks
 PlaceSmokeDetectorOrto
 PolyDiv
 PolyEd

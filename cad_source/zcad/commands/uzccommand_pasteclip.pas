@@ -21,21 +21,14 @@ unit uzccommand_PasteClip;
 
 interface
 uses
-  Varman,
-  gzctnrVectorTypes,
   uzcdrawings,
-  uzeutils,
-  uzglviewareadata,
   uzccommandsabstract,uzccommandsimpl,
   uzccommand_copy,
-  uzegeometry,
   uzccommandsmanager,
-  uzegeometrytypes,uzeentity,uzcLog,
+  uzeentity,uzcLog,
   uzcstrconsts,uzeconsts,
   uzcinterface,
-  uzgldrawcontext,
   uzccommand_copyclip,
-  uzeentwithlocalcs,
   uzccmdfloatinsert,
   Clipbrd,
   LCLType,
@@ -79,7 +72,7 @@ begin
     end;
     if fileexists(utf8tosys(tmpStr)) then begin
       zdctx.CreateRec(drawings.GetCurrentDWG^,drawings.GetCurrentDWG^.ConstructObjRoot,TLOMerge,drawings.GetCurrentDWG^.CreateDrawingRC);
-      addfromdxf(tmpStr,zdctx{@drawings.GetCurrentDWG^.ConstructObjRoot,{tloload}TLOMerge,drawings.GetCurrentDWG^});
+      addfromdxf(tmpStr,zdctx);
     end;
     drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
     ZCMsgCallBackInterface.TextMessage(rscmNewBasePoint,TMWOHistoryOut);

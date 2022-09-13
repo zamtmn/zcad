@@ -21,7 +21,6 @@ unit uzccommand_CopyBase;
 
 interface
 uses
-  Varman,
   gzctnrVectorTypes,
   uzcdrawings,
   uzeutils,
@@ -38,7 +37,6 @@ uses
   uzeentwithlocalcs;
 
 type
-  {REGISTEROBJECTTYPE copybase_com}
   copybase_com =  object(CommandRTEdObject)
     procedure CommandStart(Operands:TCommandOperands); virtual;
     function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
@@ -49,11 +47,10 @@ var
 implementation
 
 procedure copybase_com.CommandStart(Operands:TCommandOperands);
-var //i: Integer;
-  {tv,}pobj: pGDBObjEntity;
-      ir:itrec;
-      counter:integer;
-      //tcd:TCopyObjectDesc;
+var
+  pobj: pGDBObjEntity;
+  ir:itrec;
+  counter:integer;
 begin
   inherited;
 
@@ -81,22 +78,13 @@ begin
 end;
 function copybase_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
 var
-    dist:gdbvertex;
-    dispmatr:DMatrix4D;
-    ir:itrec;
-    //pcd:PTCopyObjectDesc;
-
-    //pbuf:pchar;
-    //hgBuffer:HGLOBAL;
-
-    //s,suni:String;
-    //I:Integer;
-      tv,pobj: pGDBObjEntity;
-      DC:TDrawContext;
-      NeedReCreateClipboardDWG:boolean;
+  dist:gdbvertex;
+  dispmatr:DMatrix4D;
+  ir:itrec;
+  tv,pobj: pGDBObjEntity;
+  DC:TDrawContext;
+  NeedReCreateClipboardDWG:boolean;
 begin
-
-      //drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=dispmatr;
   NeedReCreateClipboardDWG:=true;
   if (button and MZW_LBUTTON)<>0 then
   begin

@@ -128,10 +128,6 @@ type
   ptpcoavector=^tpcoavector;
   tpcoavector={-}specialize{//}
               GZVector{-}<TCopyObjectDesc>{//};
-  {REGISTEROBJECTTYPE PasteClip_com}
-  PasteClip_com =  object(FloatInsert_com)
-    procedure Command(Operands:TCommandOperands); virtual;
-  end;
   {REGISTEROBJECTTYPE BlockReplace_com}
   BlockReplace_com= object(CommandRTEdObject)
                          procedure CommandStart(Operands:TCommandOperands); virtual;
@@ -220,7 +216,6 @@ var
    pold:PGDBObjEntity;
    p3dpl:pgdbobjpolyline;
    p3dplold:PGDBObjEntity;
-   PasteClip:PasteClip_com;
 
    InsertTestTable:ITT_com;
 
@@ -1180,36 +1175,6 @@ begin
      Commandmanager.executecommandend;
 end;
 
-procedure pasteclip_com.Command(Operands:TCommandOperands);
-var
-  zcformat:TClipboardFormat;
-  tmpStr:AnsiString;
-  tmpStream:TMemoryStream;
-  tmpSize:LongInt;
-  zdctx:TZDrawingContext;
-begin
-  zcformat:=RegisterClipboardFormat(ZCAD_DXF_CLIPBOARD_NAME);
-  if clipboard.HasFormat(zcformat) then begin
-    tmpStr:='';
-    tmpStream:=TMemoryStream.create;
-    try
-      clipboard.GetFormat(zcformat,tmpStream);
-      tmpSize:=tmpStream.Seek(0,soFromEnd);
-      setlength(tmpStr,tmpSize);
-      tmpStream.Seek(0,soFromBeginning);
-      tmpStream.ReadBuffer(tmpStr[1],tmpSize);
-    finally
-      tmpStream.free;
-    end;
-    if fileexists(utf8tosys(tmpStr)) then begin
-      zdctx.CreateRec(drawings.GetCurrentDWG^,drawings.GetCurrentDWG^.ConstructObjRoot,TLOMerge,drawings.GetCurrentDWG^.CreateDrawingRC);
-      addfromdxf(tmpStr,zdctx{@drawings.GetCurrentDWG^.ConstructObjRoot,{tloload}TLOMerge,drawings.GetCurrentDWG^});
-    end;
-    drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
-    ZCMsgCallBackInterface.TextMessage(rscmNewBasePoint,TMWOHistoryOut);
-  end else
-    ZCMsgCallBackInterface.TextMessage(rsClipboardIsEmpty,TMWOHistoryOut);
-end;
 function Insert_com_CommandStart(operands:TCommandOperands):Integer;
 var pb:PGDBObjBlockdef;
     //ir:itrec;
@@ -1784,8 +1749,6 @@ begin
   BIProp.Rotation:=0;
 
   CreateCommandRTEdObjectPlugin(@Insert_com_CommandStart,@Insert_com_CommandEnd,nil,nil,@Insert_com_BeforeClick,@Insert_com_BeforeClick,nil,nil,'Insert',0,0);
-
-  PasteClip.init('PasteClip',0,0);
 
   BlockReplace.init('BlockReplace',0,0);
   BlockReplaceParams.Find.Enums.init(10);

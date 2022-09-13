@@ -169,7 +169,7 @@ uses
   uzccommand_regen,
   uzccommand_updatepo,
   uzccommand_treestat,
-  uzccommand_copyclip,uzccommand_CopyBase,
+  uzccommand_copyclip,uzccommand_CopyBase,uzccommand_PasteClip,
   uzccommand_multiselect2objinsp,
   uzccommand_selobjchangelayertocurrent,uzccommand_selobjchangelwtocurrent,
   uzccommand_selobjchangecolortocurrent,uzccommand_selobjchangeltypetocurrent,

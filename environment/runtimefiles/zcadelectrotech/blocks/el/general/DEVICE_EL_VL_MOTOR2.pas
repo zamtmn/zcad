@@ -10,7 +10,7 @@ usescopy addtocable;
 
 var
 
-T1:String;(*'Мощность, кВт'*)
+VL_Power:String;(*'Мощность, кВт'*)
 
 implementation
 
@@ -24,7 +24,7 @@ NMO_Name:='М0';
 NMO_BaseName:='М';
 NMO_Suffix:='??';
 
-T1:='0';
+VL_Power:='0';
 
 SerialConnection:=1;
 GC_HeadDevice:='ЩР??';

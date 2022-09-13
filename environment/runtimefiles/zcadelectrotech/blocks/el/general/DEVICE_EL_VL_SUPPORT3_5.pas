@@ -1,4 +1,4 @@
-unit DEVICE_EL_VL_CONNECTOR1_3P_3;
+unit DEVICE_EL_VL_SUPPORT3_5;
 
 interface
 
@@ -10,24 +10,22 @@ usescopy addtocable;
 
 var
 
-VL_Power:String;(*'Мощность, кВт'*)
+T1:String;(*'Питающая фаза'*)
 
 implementation
 
 begin
 
-BTY_TreeCoord:='PLAN_EM_Розетка';
+BTY_TreeCoord:='PLAN_EM_светильник';
 Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 
-NMO_Name:='Т0';
-NMO_BaseName:='Т';
+NMO_Name:='СВ0';
+NMO_BaseName:='СВ';
 NMO_Suffix:='??';
 
-VL_Power:='0';
-
 SerialConnection:=1;
-GC_HeadDevice:='ЩР??';
+GC_HeadDevice:='ЩНО??';
 GC_HDShortName:='??';
 GC_HDGroup:=0;
 

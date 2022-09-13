@@ -21,13 +21,13 @@ BTY_TreeCoord:='PLAN_EM_Опросник';
 Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 
-NMO_Name:='ОП0';
-NMO_BaseName:='ОП';
+NMO_Name:='ОН.0';
+NMO_BaseName:='ОН.';
 NMO_Suffix:='??';
 
 T1:='380';
-T2:='';
-T3:='';
-T4:='';
+T2:='?';
+T3:='?';
+T4:='?';
 
 end.

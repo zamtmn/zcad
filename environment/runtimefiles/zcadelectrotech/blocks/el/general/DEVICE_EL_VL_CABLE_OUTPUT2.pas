@@ -10,7 +10,7 @@ usescopy _addtocable;
 
 var
 
-T1:String;(*'Группа'*)
+VL_Group:String;(*'Группа'*)
 
 implementation
 

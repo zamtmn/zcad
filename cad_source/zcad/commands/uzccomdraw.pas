@@ -1478,7 +1478,7 @@ else if (sd.PFirstSelectedEnt^.GetObjType=GDBDeviceID) then
   result:=cmd_ok;
   zcRedrawCurrentDrawing;
 end;
-function PlaceAllBlocks_com(operands:TCommandOperands):TCommandResult;
+function dbgPlaceAllBlocks_com(operands:TCommandOperands):TCommandResult;
 var pb:PGDBObjBlockdef;
     ir:itrec;
     xcoord:Double;
@@ -1760,7 +1760,7 @@ begin
   BlockReplace.SetCommandParam(@BlockReplaceParams,'PTBlockReplaceParams');
 
   CreateCommandFastObjectPlugin(@Insert2_com,'Insert2',CADWG,0);
-  CreateCommandFastObjectPlugin(@PlaceAllBlocks_com,'PlaceAllBlocks',CADWG,0);
+  CreateCommandFastObjectPlugin(@dbgPlaceAllBlocks_com,'dbgPlaceAllBlocks',CADWG,0);
   CreateCommandFastObjectPlugin(@BlocksList_com,'BlocksList',CADWG,0);
   //CreateCommandFastObjectPlugin(@bedit_com,'BEdit');
   pbeditcom:=CreateCommandRTEdObjectPlugin(@bedit_com,nil,nil,@bedit_format,nil,nil,nil,nil,'BEdit',0,0);

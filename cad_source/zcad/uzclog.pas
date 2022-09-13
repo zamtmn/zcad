@@ -75,7 +75,7 @@ initialization
 
 
   ProgramLog.SetDefaultLogLevel(LM_Debug);
-  ProgramLog.SetCurrentLogLevel(LM_Warning);
+  ProgramLog.SetCurrentLogLevel(LM_Info);
 
   UnitsInitializeLMId:=ProgramLog.RegisterModule('UnitsInitialization');
   UnitsFinalizeLMId:=ProgramLog.RegisterModule('UnitsFinalization');

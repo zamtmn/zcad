@@ -54,20 +54,11 @@ const
      modelspacename:String='**Модель**';
 type
 {EXPORT+}
-         TEntityProcess=(
-                       TEP_Erase(*'Erase'*),
-                       TEP_leave(*'Leave'*)
-                       );
          {REGISTERRECORDTYPE TBlockInsert}
          TBlockInsert=record
                             Blocks:TEnumData;(*'Block'*)
                             Scale:GDBvertex;(*'Scale'*)
                             Rotation:Double;(*'Rotation'*)
-                      end;
-         PTMirrorParam=^TMirrorParam;
-         {REGISTERRECORDTYPE TMirrorParam}
-         TMirrorParam=record
-                            SourceEnts:TEntityProcess;(*'Source entities'*)
                       end;
          BRMode=(
                  BRM_Block(*'Block'*),
@@ -137,11 +128,6 @@ type
   ptpcoavector=^tpcoavector;
   tpcoavector={-}specialize{//}
               GZVector{-}<TCopyObjectDesc>{//};
-  {REGISTEROBJECTTYPE mirror_com}
-  mirror_com =  object(copy_com)
-    function CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D; virtual;
-    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
-  end;
   {REGISTEROBJECTTYPE copybase_com}
   copybase_com =  object(CommandRTEdObject)
     procedure CommandStart(Operands:TCommandOperands); virtual;
@@ -232,7 +218,6 @@ MapPointOnCurve3DPropArray=specialize TMap<PGDBObjLine,PointOnCurve3DPropArray, 
 devcoordsort=specialize TOrderingArrayUtils<devcoordarray, tdevcoord, TGDBVertexLess>;
 devnamesort=specialize TOrderingArrayUtils<devnamearray, tdevname, TGDBNameLess>;
 var
-   MirrorParam:TMirrorParam;
    pworkvertex:pgdbvertex;
    BIProp:TBlockInsert;
    pb:PGDBObjBlockInsert;
@@ -240,7 +225,6 @@ var
    pold:PGDBObjEntity;
    p3dpl:pgdbobjpolyline;
    p3dplold:PGDBObjEntity;
-   mirror:mirror_com;
    copybase:copybase_com;
    PasteClip:PasteClip_com;
 
@@ -1482,40 +1466,6 @@ begin
                          pb:=nil;
                     end;
 end;
-function Mirror_com.CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D;
-var
-    dist,p3:gdbvertex;
-    d:Double;
-    plane:DVector4D;
-begin
-        dist:=uzegeometry.VertexSub(p2,p1);
-        d:=uzegeometry.oneVertexlength(dist);
-        p3:=uzegeometry.VertexMulOnSc(ZWCS,d);
-        p3:=uzegeometry.VertexAdd(p3,t3dp);
-
-        plane:=PlaneFrom3Pont(p1,p2,p3);
-        normalizeplane(plane);
-        result:=CreateReflectionMatrix(plane);
-end;
-function Mirror_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
-var
-    dispmatr:DMatrix4D;
-begin
-
-  dispmatr:=CalcTransformMatrix(t3dp,wc);
-  drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=dispmatr;
-
-   if (button and MZW_LBUTTON)<>0 then
-   begin
-      case MirrorParam.SourceEnts of
-                           TEP_Erase:move(dispmatr,self.CommandName);
-                           TEP_Leave:copy(dispmatr,self.CommandName);
-      end;
-      //redrawoglwnd;
-      commandmanager.executecommandend;
-   end;
-   result:=cmd_ok;
-end;
 function Insert2_com(operands:TCommandOperands):TCommandResult;
 var
     s:String;
@@ -1931,8 +1881,6 @@ begin
 
   CreateCommandRTEdObjectPlugin(@Insert_com_CommandStart,@Insert_com_CommandEnd,nil,nil,@Insert_com_BeforeClick,@Insert_com_BeforeClick,nil,nil,'Insert',0,0);
 
-  mirror.init('Mirror',0,0);
-  mirror.SetCommandParam(@MirrorParam,'PTMirrorParam');
   copybase.init('CopyBase',CADWG or CASelEnts,0);
   PasteClip.init('PasteClip',0,0);
 

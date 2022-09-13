@@ -138,6 +138,7 @@ uses
   uzccomdraw,
   uzccommand_copy,
   uzccommand_move,
+  uzccommand_mirror,
   uzccommand_3dpoly,
   uzccommand_print,
   uzccommand_blockpreviewexport,

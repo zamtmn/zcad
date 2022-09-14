@@ -233,7 +233,7 @@ uses
   uzccommand_DevDefSync,
   uzccommand_VariablesAdd,
 
-  uzccommand_dbgRaiseException,uzccommand_dbgGetAV,
+  uzccommand_dbgRaiseException,uzccommand_dbgGetAV,uzccommand_dbgGetOutOfMem,uzccommand_dbgGetStackOverflow,
   uzccommand_dbgPlaceAllBlocks,
 
   uzcenitiesvariablesextender,uzcExtdrLayerControl,uzcExtdrSmartTextEnt,

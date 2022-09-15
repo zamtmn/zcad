@@ -183,7 +183,7 @@ end;
 
 
 initialization
-  SetCrashReportFilename({GetTempDir+}CrashReportFileName);
+  SetCrashReportFilename(CrashReportFileName);
   InstallHandler;
 finalization
   UnInstallHandler;

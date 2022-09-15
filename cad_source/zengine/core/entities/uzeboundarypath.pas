@@ -202,6 +202,8 @@ var i,j:integer;
 begin
   Dest.paths.Clear;
   Dest.paths.SetSize(paths.GetCount);
+  if Dest.paths.PArray=nil then
+    Dest.paths.CreateArray;
   for i:=0 to paths.count-1 do begin
     ppla:=Dest.paths.getDataMutable(i);
     ppla^.init(paths.getData(i).GetCount,true);

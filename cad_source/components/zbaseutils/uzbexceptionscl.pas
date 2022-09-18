@@ -144,9 +144,9 @@ end;
 
 
 
-Procedure ZCCatchUnhandledException (Obj : TObject;ARaiseList:PExceptObject);
+Procedure ZCCatchUnhandledException (Obj : TObject; Addr : CodePointer; FrameCount:Longint; Frame: PCodePointer);
 begin
-  ProcessException(Obj,ARaiseList);
+  ProcessException(Obj,RaiseList);
 end;
 
 procedure InstallHandler;

@@ -35,8 +35,9 @@ var
   NOTCHECKUNIQUEINSTANCEHDL,//опция noloadlayout - запуск без загрузки начального состояния раскладки окон
   LEAMHDL,                  //опция leam -(Log Enable All Modules) разрешение записи в лог всех модулей
   LEMHDL,                   //опция lem -(Log Enable Module) разрешение записи в лог определенного модуля, требует аргумент(ы)
-  LDMHDL,                    //опция ldm -(Log Disable Module) запрещение записи в лог определенного модуля, требует аргумент(ы)
-  LCLHDL                    //опция lcl -(Log Current Level) установка текущего уровня лога, требует аргумент
+  LDMHDL,                   //опция ldm -(Log Disable Module) запрещение записи в лог определенного модуля, требует аргумент(ы)
+  LCLHDL,                   //опция lcl -(Log Current Level) установка текущего уровня лога, требует аргумент
+  MaxStackFrameCountHDL     //опция MaxStackFrameCount - максимальная глубина стека для обработчика исключений
   :TCLOptionHandle;
 
 implementation
@@ -52,6 +53,7 @@ initialization
   LEMHDL:=CommandLineParser.RegisterArgument('lem',AT_WithOperands);
   LDMHDL:=CommandLineParser.RegisterArgument('ldm',AT_WithOperands);
   LCLHDL:=CommandLineParser.RegisterArgument('lcl',AT_WithOperands);
+  MaxStackFrameCountHDL:=CommandLineParser.RegisterArgument('maxstackframecount',AT_WithOperands);
   CommandLineParser.ParseCommandLine;
 finalization
   CommandLineParser.Done;

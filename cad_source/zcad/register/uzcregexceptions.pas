@@ -21,7 +21,8 @@ unit uzcregexceptions;
 interface
 
 uses
-  SysUtils,uzcLog,uzbLog, uzbLogTypes,uzcsysvars,uzbpaths,uzbexceptionscl,uzcstrconsts;
+  SysUtils,uzcLog,uzbLog, uzbLogTypes,uzcsysvars,uzbpaths,uzbexceptionscl,
+  uzcstrconsts,uzcCommandLineParser;
 
 implementation
 
@@ -39,6 +40,7 @@ type
 var
   LLMsgs:TLatestMsgsBackend;
   LLMsgsH:TBackendHandle;
+  MaxStackFrameCount:LongInt;
 
 procedure TLatestMsgsBackend.doLog(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);
 begin
@@ -151,6 +153,12 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  if CommandLineParser.HasOption(MaxStackFrameCountHDL) then
+    if TryStrToInt(CommandLineParser.OptionOperand(MaxStackFrameCountHDL,0),MaxStackFrameCount) then begin
+      RaiseMaxFrameCount:=MaxStackFrameCount;
+      ProgramLog.LogOutFormatStr('set MaxStackFrameCount to "%d"',[MaxStackFrameCount],LM_Info);
+    end else
+      ProgramLog.LogOutFormatStr('MaxStackFrameCount "%s" - not a integer',[CommandLineParser.OptionOperand(MaxStackFrameCountHDL,0)],LM_Error);
   LLMsgs.init(99);
   LLMsgsH:=ProgramLog.addBackend(LLMsgs,'',[]);
   RegisterCrashInfoProvider(ProvideHeader,true);

@@ -19,13 +19,13 @@
 unit uzeBoundaryPath;
 {$Mode delphi}{$H+}
 {$Include zengineconfig.inc}
+
 interface
+
 uses uzegeometrytypes,UGDBPolyline2DArray,gzctnrVector,
   uzctnrVectorBytes,gzctnrVectorTypes,uzegeometry,uzeffdxfsupport;
 type
-{Export+}
 PBoundaryPath=^TBoundaryPath;
-{REGISTEROBJECTTYPE TZEntityRepresentation}
 TBoundaryPath=object
   paths:GZVector<GDBPolyline2DArray>;
   constructor init(m:TArrayIndex);
@@ -38,7 +38,7 @@ TBoundaryPath=object
   procedure transform(const t_matrix:DMatrix4D);virtual;
   function getDataMutableByPlainIndex(index:TArrayIndex):PGDBVertex2D;
 end;
-{Export-}
+
 implementation
 
 procedure TBoundaryPath.transform(const t_matrix:DMatrix4D);

@@ -159,9 +159,29 @@ begin
                          currpath.PushBackData(p);
                      prevp:=p;
                    end;
-                 2:NotPolyLine:=NPL_CircularArc;
-                 3:NotPolyLine:=NPL_EllipticArc;
-                 4:NotPolyLine:=NPL_Spline;
+                 2:begin
+                     NotPolyLine:=NPL_CircularArc;
+                     if dxfdoubleload(f,10,byt,p.x) then byt:=readmystrtoint(f);
+                     if dxfdoubleload(f,20,byt,p.y) then byt:=readmystrtoint(f);
+                     if dxfdoubleload(f,40,byt,p.x) then byt:=readmystrtoint(f);
+                     if dxfdoubleload(f,50,byt,p.y) then byt:=readmystrtoint(f);
+                     if dxfdoubleload(f,51,byt,p.x) then byt:=readmystrtoint(f);
+                     if dxfdoubleload(f,73,byt,p.y) then byt:=readmystrtoint(f);
+                   end;
+                 3:begin
+                     NotPolyLine:=NPL_EllipticArc;
+                     if dxfdoubleload(f,10,byt,p.x) then byt:=readmystrtoint(f);
+                     if dxfdoubleload(f,20,byt,p.y) then byt:=readmystrtoint(f);
+                     if dxfdoubleload(f,11,byt,p.x) then byt:=readmystrtoint(f);
+                     if dxfdoubleload(f,21,byt,p.y) then byt:=readmystrtoint(f);
+                     if dxfdoubleload(f,40,byt,p.x) then byt:=readmystrtoint(f);
+                     if dxfdoubleload(f,50,byt,p.y) then byt:=readmystrtoint(f);
+                     if dxfdoubleload(f,51,byt,p.x) then byt:=readmystrtoint(f);
+                     if dxfdoubleload(f,73,byt,p.y) then byt:=readmystrtoint(f);
+                   end;
+                 4:begin
+                     NotPolyLine:=NPL_Spline;
+                   end;
                end;
              end;
            end;

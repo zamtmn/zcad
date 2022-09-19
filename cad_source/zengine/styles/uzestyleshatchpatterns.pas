@@ -38,6 +38,7 @@ type
 
     constructor init(m:Integer);
     property Angle:Double read fAngle write fAngle{setAngle};
+    function CopyTo(var dest:GZVector<Double>):Integer;virtual;
   end;
 
   PTHatchPattern=^THatchPattern;
@@ -66,6 +67,16 @@ begin
   Angle:=0;
   Base:=NulVertex2D;
   Offset:=YWCS2D;
+end;
+function TPatStrokesArray.CopyTo(var dest:GZVector<Double>):Integer;
+begin
+  inherited;
+  if IsIt(TypeOf(dest),TypeOf(TPatStrokesArray)) then begin
+    PTPatStrokesArray(@dest)^.fAngle:=fAngle;
+    PTPatStrokesArray(@dest)^.Base:=Base;
+    PTPatStrokesArray(@dest)^.Offset:=Offset;
+  end;
+
 end;
 
 procedure THatchPattern.SaveToDXF(var outhandle:TZctnrVectorBytes;const MainAngle,MainScale:Double);

@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
-  uzbLog,uzbLogTypes,log;
+  EditBtn, uzbLog, uzbLogTypes, log, lineinfo;
 
 type
 
@@ -41,6 +41,8 @@ type
     Button25: TButton;
     Button26: TButton;
     Button27: TButton;
+    Button28: TButton;
+    Button29: TButton;
     Button3: TButton;
     Button4: TButton;
     Button5: TButton;
@@ -52,6 +54,7 @@ type
     CheckBox2: TCheckBox;
     CheckBox3: TCheckBox;
     ComboBox1: TComboBox;
+    EditButton1: TEditButton;
     GroupBox1: TGroupBox;
     GroupBox2: TGroupBox;
     GroupBox3: TGroupBox;
@@ -62,12 +65,15 @@ type
     Splitter2: TSplitter;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
+    procedure CheckLineInfo(Sender: TObject);
     procedure ComboChange(Sender: TObject);
     procedure DoLogOut(Sender: TObject);
     procedure log2memo(Sender: TObject);
     procedure OnShowHandler(Sender: TObject);
     procedure DoModuleStateChange(Sender: TObject);
     destructor Destroy;override;
+    procedure OutOfMem(Sender: TObject);
+    procedure StackOverflow(Sender: TObject);
   private
     function GroupBox2LogModule(AGroupBox:TObject):TModuleDesk;
     function Tag2LogLevel(ATag:Integer):TLogLevel;
@@ -102,6 +108,17 @@ destructor TForm1.Destroy;
 begin
   MemoBackend.enbl:=False;
   inherited;
+end;
+
+procedure TForm1.OutOfMem(Sender: TObject);
+begin
+  while true do
+    getmem(1024*1024*16);
+end;
+
+procedure TForm1.StackOverflow(Sender: TObject);
+begin
+  StackOverflow(nil);
 end;
 
 function TForm1.GroupBox2LogModule(AGroupBox:TObject):TModuleDesk;
@@ -183,6 +200,17 @@ end;
 procedure TForm1.Button2Click(Sender: TObject);
 begin
   raise Exception.Create('test exception');
+end;
+
+procedure TForm1.CheckLineInfo(Sender: TObject);
+var
+  addr:Int64;
+begin
+  if TryStrToInt64(EditButton1.Text,addr) then begin
+    ProgramLog.LogOutFormatStr('BackTraceStrFunc: "%s"',[BackTraceStrFunc(pointer(addr))],LM_Necessarily);
+    ProgramLog.LogOutFormatStr('SysBackTraceStr: "%s"',[BackTraceStrFunc(pointer(addr))],LM_Necessarily);
+  end else
+    ProgramLog.LogOutFormatStr('"%s" not a pointer',[EditButton1.Text],LM_Necessarily);
 end;
 
 procedure TForm1.ComboChange(Sender: TObject);

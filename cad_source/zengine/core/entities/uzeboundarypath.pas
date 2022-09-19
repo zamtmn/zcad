@@ -106,6 +106,7 @@ var
   currpath:GDBPolyline2DArray;
   i,j,pathscount,vertexcount,byt,bt:integer;
   firstp,prevp,p:GDBVertex2D;
+  tmp:double;
   s:string;
   isPolyLine:boolean;
   NotPolyLine:TNotPolyLine;
@@ -129,6 +130,7 @@ begin
            for j:=1 to vertexcount do begin
              if dxfdoubleload(f,10,byt,p.x) then byt:=readmystrtoint(f);
              if dxfdoubleload(f,20,byt,p.y) then byt:=readmystrtoint(f);
+             if dxfdoubleload(f,42,byt,tmp) then byt:=readmystrtoint(f);
              currpath.PushBackData(p);
            end;
          end else begin

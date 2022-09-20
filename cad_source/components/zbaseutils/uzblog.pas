@@ -25,8 +25,14 @@ uses
   sysutils,
   gvector,
   Generics.Collections,Generics.Defaults,
+  Masks,
   uzbLogTypes,
   uzbHandles,uzbNamedHandles,uzbNamedHandlesWithData,uzbSets;
+
+resourcestring
+  rsLogModuleState='Log module name "%s" state: %s';
+  rsEnabled='Enabled';
+  rsDisabled='Disabled';
 
 const
   MsgDefaultOptions=0;
@@ -97,6 +103,8 @@ type
           constructor CreateRec(PDD:PTLogerBaseDecorator;s:TLogStampt);
         end;
 
+        TMasks=specialize TVector<TModuleDeskNameType>;
+
         TFmtDatas=specialize TVector<TFmtResultData>;
         TFmtDatasDic=specialize TDictionary<TFmtData,Integer>;
 
@@ -114,6 +122,7 @@ type
         DefaultLogLevel:TLogLevel;
 
         LogLevelAliasDic:TLogLevelAliasDic;
+        EnabledMasks,DisabledMasks:TMasks;
         ModulesDesks:TModulesDeskHandles;
         NewModuleDesk:TModuleDeskData;
         DefaultModuleDeskIndex:TModuleDesk;
@@ -164,6 +173,9 @@ type
       procedure ZOnDebugLN(Sender: TObject; S: TLogMsg; var Handled: Boolean);
       procedure ZDebugLN(const S: TLogMsg);
       function isTraceEnabled:boolean;
+
+      procedure AddEnableModuleMask(Mask:TModuleDeskNameType);
+      procedure AddDisableModuleMask(Mask:TModuleDeskNameType);
 
       procedure EnableModule(ModuleName:TModuleDeskNameType);overload;
       procedure DisableModule(ModuleName:TModuleDeskNameType);overload;
@@ -328,6 +340,8 @@ begin
 end;
 
 function TLog.registermodule(modulename:TModuleDeskNameType;Enbl:TEnable=EDefault):TModuleDesk;
+var
+  i:integer;
 begin
   if not ModulesDesks.TryGetHandle(modulename,result) then
   begin
@@ -336,10 +350,46 @@ begin
       case Enbl of
         EEnable:enabled:=True;
         EDisable:enabled:=False;
-        EDefault:enabled:=NewModuleDesk.enabled;
+        EDefault:begin
+          for i:=0 to DisabledMasks.size-1 do
+            if MatchesMask(modulename,DisabledMasks[i])then begin
+              enabled:=False;
+              exit;
+            end;
+          for i:=0 to EnabledMasks.size-1 do
+            if MatchesMask(modulename,EnabledMasks[i])then begin
+              enabled:=True;
+              exit;
+            end;
+          enabled:=NewModuleDesk.enabled;
+       end;
       end;
     end;
   end;
+end;
+procedure TLog.AddEnableModuleMask(Mask:TModuleDeskNameType);
+var
+  i:integer;
+begin
+  for i:=0 to ModulesDesks.HandleDataVector.Size-1 do
+  if not ModulesDesks.HandleDataVector[i].D.Enabled then
+    if MatchesMask(ModulesDesks.HandleDataVector[I].N,Mask) then begin
+      ModulesDesks.HandleDataVector.Mutable[i]^.D.Enabled:=True;
+      processMsg(format(rsLogModuleState,[ModulesDesks.HandleDataVector[I].N,rsEnabled]),LogModeDefault,LMDIDefault,MsgDefaultOptions)
+    end;
+  EnabledMasks.PushBack(Mask);
+end;
+procedure TLog.AddDisableModuleMask(Mask:TModuleDeskNameType);
+var
+  i:integer;
+begin
+  for i:=0 to ModulesDesks.HandleDataVector.Size-1 do
+  if ModulesDesks.HandleDataVector[i].D.Enabled then
+    if MatchesMask(ModulesDesks.HandleDataVector[I].N,Mask) then begin
+      ModulesDesks.HandleDataVector.Mutable[i]^.D.Enabled:=False;
+      processMsg(format(rsLogModuleState,[ModulesDesks.HandleDataVector[I].N,rsDisabled]),LogModeDefault,LMDIDefault,MsgDefaultOptions)
+    end;
+  DisabledMasks.PushBack(Mask);
 end;
 procedure TLog.enablemodule(modulename:TModuleDeskNameType);
 begin
@@ -499,6 +549,8 @@ constructor TLog.init(TraceModeName:TLogLevelHandleNameType;TraceModeAlias:AnsiC
 begin
   MsgOptAliasDic:=TTMsgOptAliasDic.Create;
   LogLevels.init;
+  EnabledMasks:=TMasks.Create;
+  DisabledMasks:=TMasks.Create;
   ModulesDesks.init;
   LogLevelAliasDic:=TLogLevelAliasDic.create;
   LogStampter.init;
@@ -592,9 +644,9 @@ var
 begin
   for i:=0 to ModulesDesks.HandleDataVector.Size-1 do
   if ModulesDesks.HandleDataVector[i].D.enabled then
-    processMsg(format('Log module name "%s" state: Enabled',[ModulesDesks.HandleDataVector[I].N]),LogModeDefault,LMDIDefault,MsgDefaultOptions)
+    processMsg(format(rsLogModuleState,[ModulesDesks.HandleDataVector[I].N,rsEnabled]),LogModeDefault,LMDIDefault,MsgDefaultOptions)
   else
-    processMsg(format('Log module name "%s" state: Disabled',[ModulesDesks.HandleDataVector[I].N]),LogModeDefault,LMDIDefault,MsgDefaultOptions);
+    processMsg(format(rsLogModuleState,[ModulesDesks.HandleDataVector[I].N,rsDisabled]),LogModeDefault,LMDIDefault,MsgDefaultOptions);
   //processMsg('-------------------------Log ended-------------------------',LogModeDefault,LMDIDefault,MsgDefaultOptions);
   LogLevels.done;
   ModulesDesks.done;
@@ -611,6 +663,10 @@ begin
     FreeAndNil(FmtDatasDic);
   if assigned(FmtDatas)then
     FreeAndNil(FmtDatas);
+  if assigned(EnabledMasks)then
+    FreeAndNil(EnabledMasks);
+  if assigned(DisabledMasks)then
+    FreeAndNil(DisabledMasks);
 end;
 
 initialization

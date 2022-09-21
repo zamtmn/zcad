@@ -61,11 +61,13 @@ destructor GDBTextStyle.Done;
 begin
      inherited;
      FontFile:='';
+     FontFamily:='';
 end;
 procedure GDBTextStyleArray.freeelement;
 begin
   PGDBTextStyle(PItem).name:='';
   PGDBTextStyle(PItem).FontFile:='';
+  PGDBTextStyle(PItem).FontFamily:='';
 end;
 constructor GDBTextStyleArray.initnul;
 begin

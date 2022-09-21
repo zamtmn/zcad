@@ -146,8 +146,11 @@ begin
     Freemem(pointer(pprojpoint));
   end;
   Path.done;
-  if PPattern<>nil then
+  if PPattern<>nil then begin
     PPattern^.done;
+    Freemem(PPattern);
+  end;
+  PatternName:='';
 end;
 function GDBObjHatch.ObjToString(prefix,sufix:String):String;
 begin

@@ -310,7 +310,7 @@ initialization
   CMDLinePromptParser.RegisterToken('${','{','}',TOptionProcessor,InternalPromptParser,TGONestedBracke or TGOIncludeBrackeOpen or TGOSeparator);
   //pet:=CMDLinePromptParser.GetTokens('Предлагаю както так $<"&[С]охранить (&[S])",Keys[С,S],Id[100]> или $<"&[В]ыйти",Keys[Q,X],Id[101]>');
   //pet:=CMDLinePromptParser.GetTokens('$<"q&[S]q&[S]",Keys[С,S],Id[100]>');
-  pet:=CMDLinePromptParser.GetTokens('"123"');
+  //pet:=CMDLinePromptParser.GetTokens('"123"');
   //rsdefaultpromot='<Команда1/Команда2/Команда3> [Молча𤭢123]';
 
   //pet:=CMDLinePromptParser.GetTokens('Let $<"&[S]ave (&[v])",Keys[S,V],Id[100]> or $<"&[Q]uit",Keys[Q],Id[101]>');
@@ -322,6 +322,7 @@ finalization;
   CMDLinePromptParser.Free;
   InternalPromptParser.Free;
   InternalPromptParser2.Free;
+  InternalPromptParser3.Free;
   StrIds.Free;
 end.
 

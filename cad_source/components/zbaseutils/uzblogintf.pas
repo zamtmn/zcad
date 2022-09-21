@@ -128,5 +128,7 @@ end;
 initialization
   Loggers:=nil;
 finalization
+  if Loggers<>nil then
+    Loggers.Free;
 end.
 

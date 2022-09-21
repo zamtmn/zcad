@@ -954,12 +954,13 @@ begin
 end;
 destructor GDBcommandmanager.done;
 begin
-     {self.freewithprocanddone(comdeskclear);}
-     cleareraseobj;
-     lastcommand:='';
-     inherited done;
-     CommandsStack.done;
-     varstack.Done;
+  cleareraseobj;
+  lastcommand:='';
+  inherited done;
+  CommandsStack.done;
+  varstack.Done;
+  if Assigned(CommandLinePrompts)then
+    CommandLinePrompts.Free;
 end;
 {procedure startup;
 begin

@@ -17,7 +17,6 @@ BlockReplace
 BlockRotate
 BlockScale
 BlocksInBasePreViewExport
-BlocksList
 include::commands/cam_reset.adoc[]
 include::commands/cancel.adoc[]
 ChangeProjType
@@ -40,6 +39,7 @@ include::commands/dataimport.adoc[]
 
 
 dbgAppExplorer
+dbgBlocksList
 dbgClipboard
 dbgCmdList
 dbgGetAV

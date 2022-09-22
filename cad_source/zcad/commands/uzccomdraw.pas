@@ -1479,23 +1479,6 @@ else if (sd.PFirstSelectedEnt^.GetObjType=GDBDeviceID) then
   zcRedrawCurrentDrawing;
 end;
 
-function BlocksList_com(operands:TCommandOperands):TCommandResult;
-var pb:PGDBObjBlockdef;
-    ir:itrec;
-begin
-     pb:=drawings.GetCurrentDWG^.BlockDefArray.beginiterate(ir);
-     if pb<>nil then
-     repeat
-           ZCMsgCallBackInterface.TextMessage(format('Found block "%s", contains %d entities',[Tria_AnsiToUtf8(pb^.name),pb^.ObjArray.Count]),TMWOHistoryOut);
-
-
-           pb:=drawings.GetCurrentDWG^.BlockDefArray.iterate(ir);
-     until pb=nil;
-
-    result:=cmd_ok;
-
-end;
-
 procedure PlacePoint(const point:GDBVertex);inline;
 var
     PCreatedGDBPoint:PGDBobjPoint;
@@ -1714,7 +1697,6 @@ begin
   BlockReplace.SetCommandParam(@BlockReplaceParams,'PTBlockReplaceParams');
 
   CreateCommandFastObjectPlugin(@Insert2_com,'Insert2',CADWG,0);
-  CreateCommandFastObjectPlugin(@BlocksList_com,'BlocksList',CADWG,0);
   //CreateCommandFastObjectPlugin(@bedit_com,'BEdit');
   pbeditcom:=CreateCommandRTEdObjectPlugin(@bedit_com,nil,nil,@bedit_format,nil,nil,nil,nil,'BEdit',0,0);
   BEditParam.Blocks.Enums.init(100);

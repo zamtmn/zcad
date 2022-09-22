@@ -439,7 +439,7 @@ begin
 
      CopyVPto(tbl);
      tbl.tbl.free{clear};
-     {$ifndef GenericsContainerNotFinished}  psl:=pointer(tbl.tbl.CreateObject);{$endif}
+     psl:=tbl.tbl.CreateObject;
      psl.init(10);
 
      if size>=0 then
@@ -452,7 +452,7 @@ begin
      repeat
            if width<=psl.Count then
                                   begin
-                                       {$ifndef GenericsContainerNotFinished} psl:=pointer(tbl.tbl.CreateObject);{$endif}
+                                       psl:=tbl.tbl.CreateObject;
                                        psl.init(10);
                                   end;
           s:=ps^;

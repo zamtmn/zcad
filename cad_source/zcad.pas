@@ -236,7 +236,7 @@ uses
 
   uzccommand_dbgRaiseException,uzccommand_dbgGetAV,uzccommand_dbgGetOutOfMem,uzccommand_dbgGetStackOverflow,
   uzccommand_dbgPlaceAllBlocks,
-  uzccommand_Insert,
+  uzccommand_Insert,uzccommand_BlockReplace,
 
 
   uzcenitiesvariablesextender,uzcExtdrLayerControl,uzcExtdrSmartTextEnt,

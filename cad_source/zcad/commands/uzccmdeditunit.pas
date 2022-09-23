@@ -22,7 +22,7 @@ unit uzccmdeditunit;
 interface
 uses
   sysutils,
-  LCLProc,
+  uzcLog,
   uzccmdinfoform,
   uzbpaths,
   Varman,
@@ -77,5 +77,5 @@ end;
 
 initialization
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

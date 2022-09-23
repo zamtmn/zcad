@@ -21,7 +21,7 @@ unit uzccommand_dbgappexplorer;
 
 interface
 uses
- LazLogger,
+ uzcLog,
  uzccommandsimpl,uzccommandsabstract,AppExploreFrm;
 implementation
 function dbgAppExplorer_com(operands:TCommandOperands):TCommandResult;
@@ -31,8 +31,8 @@ begin
 end;
 
 initialization
-  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   CreateCommandFastObjectPlugin(@dbgAppExplorer_com,'dbgAppExplorer',0,0);
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

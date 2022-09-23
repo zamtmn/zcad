@@ -46,7 +46,7 @@ type
     public
       vec:TFileFormats;
       constructor Create;
-      destructor Done;
+      destructor Destroy;override;
       procedure RegisterExt(const _Wxt:String; const _FormatDesk:String; _FileLoadProcedure:GFileProcessProc; const DefaultForThisExt:boolean=false);
       function GetLoadProc(const _Wxt:String):GFileProcessProc;
       function GetDefaultFileFormatHandle(const _Wxt:String):TFileFormatHandle;
@@ -84,7 +84,7 @@ begin
   vec.Init;
 end;
 
-destructor TExt2LoadProcMap<GFileProcessProc>.Done;
+destructor TExt2LoadProcMap<GFileProcessProc>.Destroy;
 begin
   inherited;
   map.Free;

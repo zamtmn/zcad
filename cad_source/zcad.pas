@@ -138,6 +138,7 @@ uses
   uzccomdraw,
   uzccommand_copy,
   uzccommand_move,
+  uzccommand_mirror,
   uzccommand_3dpoly,
   uzccommand_print,
   uzccommand_blockpreviewexport,
@@ -168,7 +169,7 @@ uses
   uzccommand_regen,
   uzccommand_updatepo,
   uzccommand_treestat,
-  uzccommand_copyclip,
+  uzccommand_copyclip,uzccommand_CopyBase,uzccommand_PasteClip,
   uzccommand_multiselect2objinsp,
   uzccommand_selobjchangelayertocurrent,uzccommand_selobjchangelwtocurrent,
   uzccommand_selobjchangecolortocurrent,uzccommand_selobjchangeltypetocurrent,
@@ -198,7 +199,8 @@ uses
   uzccommand_executefile,
   uzccommand_dbgClipboard,
   uzccommand_import,
-  uzccommand_dbgCmdList,uzccommand_entslist,
+  uzccommand_dbgCmdList,uzccommand_dbgBlocksList,
+  uzccommand_entslist,
   uzccommand_saveoptions,
   uzccommand_showpage,
   uzccommand_options,
@@ -232,7 +234,10 @@ uses
   uzccommand_DevDefSync,
   uzccommand_VariablesAdd,
 
-  uzccommand_dbgRaiseException,uzccommand_dbgGetAV,
+  uzccommand_dbgRaiseException,uzccommand_dbgGetAV,uzccommand_dbgGetOutOfMem,uzccommand_dbgGetStackOverflow,
+  uzccommand_dbgPlaceAllBlocks,
+  uzccommand_Insert,
+
 
   uzcenitiesvariablesextender,uzcExtdrLayerControl,uzcExtdrSmartTextEnt,
 

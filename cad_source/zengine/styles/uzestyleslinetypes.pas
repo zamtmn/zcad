@@ -72,7 +72,7 @@ PTStrokesArray=^TStrokesArray;
 TStrokesArray= object(GZVector{-}<Double>{//})(*OpenArrayOfData=Double*)
                 LengthFact:Double;(*'Length'*)
                 constructor init(m:Integer);
-                function CopyTo(var source:GZVector{-}<Double>{//}):Integer;virtual;
+                function CopyTo(var dest:GZVector{-}<Double>{//}):Integer;virtual;
                 procedure Clear;virtual;
                 procedure format;
                end;
@@ -706,11 +706,11 @@ begin
      strings.Destroy;
 end;
 
-function TStrokesArray.CopyTo(var source:GZVector{-}<Double>{//}):Integer;
+function TStrokesArray.CopyTo(var dest:GZVector{-}<Double>{//}):Integer;
 begin
  result:=inherited;
- if IsIt(TypeOf(source),TypeOf(TStrokesArray)) then
-   PTStrokesArray(@source)^.LengthFact:=PTStrokesArray(@source)^.LengthFact+LengthFact;
+ if IsIt(TypeOf(dest),TypeOf(TStrokesArray)) then
+   PTStrokesArray(@dest)^.LengthFact:=LengthFact;
 end;
 procedure TStrokesArray.Clear;
 begin

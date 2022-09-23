@@ -54,7 +54,7 @@ class procedure TZGuiExceptionsHandler.GuiExceptionHandler(Sender: TObject; E: E
 var
   crashreportfilename,errmsg:string;
 begin
-  ProcessException (Sender,ExceptAddr,ExceptFrameCount,ExceptFrames);
+  ProcessException (Sender,RaiseList);
 
   crashreportfilename:=GetCrashReportFilename;
   errmsg:='Profram raised exception class "'+E.Message+'"'#13#10#13#10'A crash report generated.'#13#10'See file"'

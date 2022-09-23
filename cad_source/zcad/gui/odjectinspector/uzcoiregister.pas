@@ -24,7 +24,7 @@ uses Laz2_DOM,Toolwin,Clipbrd,sysutils,uzccommandsabstract,uzcfcommandline,uzcut
      uzeentity,uzcenitiesvariablesextender,zcobjectinspector,uzcguimanager,uzcstrconsts,
      gzctnrVectorTypes,Types,Controls,uzcdrawings,Varman,UUnitManager,uzcsysvars,
      uzcsysparams,zcobjectinspectorui,uzcoimultiobjects,uzccommandsimpl,
-     uzmenusmanager,uzcsysinfo,LazLogger,menus,ComCtrls,uztoolbarsmanager,uzcimagesmanager;
+     uzmenusmanager,uzcsysinfo,uzcLog,menus,ComCtrls,uztoolbarsmanager,uzcimagesmanager;
 const
     PEditorFocusPriority=550;
 type
@@ -354,6 +354,6 @@ CreateCommandFastObjectPlugin(@ObjInspCopyToClip_com,'ObjInspCopyToClip',0,0).ov
 
 finalization
   dummyclass.free;
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.
 

@@ -21,7 +21,7 @@ unit uzccmdinfoform;
 
 interface
 uses
-  LCLProc,LCLType,Forms,
+  uzcLog,Forms,
   uzcinfoform,
   uzcstrconsts;
 
@@ -45,5 +45,5 @@ end;
 
 initialization
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

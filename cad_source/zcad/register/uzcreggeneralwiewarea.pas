@@ -20,7 +20,7 @@ unit uzcreggeneralwiewarea;
 {$INCLUDE zengineconfig.inc}
 interface
 uses uzglbackendmanager,uzglgeometry,uzeentitiestree,uzcsysvars,uzglviewareageneral,
-     uzeentabstracttext,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,LazLogger,
+     uzeentabstracttext,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,uzcLog,
      Varman,
      uzgldrawcontext,uzccommandsmanager,uzepalette;
 type
@@ -127,6 +127,6 @@ sysvar.DSGN.DSGN_OTrackTimerInterval:=@sysvarDSGNOTrackTimerInterval;
 sysvar.DSGN.DSGN_SelNew:=@sysvarDSGNSelNew;
 sysvar.RD.RD_LastCalcVisible:=@sysvarRDLastCalcVisible;;
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.
 

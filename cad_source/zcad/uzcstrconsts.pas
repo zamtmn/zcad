@@ -153,6 +153,10 @@ resourcestring
 
   rscmCommandOnlyCTXMenu='The command works only from context menu';
 
+  rscmSourceEntities='Source entities';
+  rscmErase='Erase';
+  rscmLeave='Leave';
+
 
   {task names}
   rsCloseDrawings='Close drawings';

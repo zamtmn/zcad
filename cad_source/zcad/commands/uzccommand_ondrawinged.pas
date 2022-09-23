@@ -35,7 +35,7 @@ uses
   uzglviewareadata,
   uzegeometrytypes,uzegeometry,
   uzeconsts,
-  LazLogger;
+  uzcLog;
 type
   OnDrawingEd_com =object(CommandRTEdObject)
     t3dp: gdbvertex;
@@ -244,9 +244,9 @@ procedure Finalize;
 begin
 end;
 initialization
-  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   startup;
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   finalize;
 end.

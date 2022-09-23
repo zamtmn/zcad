@@ -29,7 +29,7 @@ uses
   Varman,UGDBPoint3DArray,
   uzedimensionaltypes,
   uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,
-  uzeenttext,uzeentmtext,uzeentpolyline,uzegeometry,uzcoimultiproperties,LazLogger,
+  uzeenttext,uzeentmtext,uzeentpolyline,uzegeometry,uzcoimultiproperties,uzcLog,
   uzcstrconsts,
   gzctnrSTL,gzctnrVectorTypes;
 type
@@ -570,6 +570,6 @@ end;
 
 initialization
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.
 

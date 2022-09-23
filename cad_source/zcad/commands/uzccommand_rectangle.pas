@@ -22,7 +22,7 @@ unit uzccommand_rectangle;
 
 interface
 uses
-  LazLogger,
+  uzcLog,
   SysUtils,
   uzccommandsabstract,uzccommandsimpl,
   uzccominteractivemanipulators,
@@ -137,7 +137,7 @@ var
   end;
 
 initialization
-  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
 
   SysUnit.RegisterType(TypeInfo(TRectangParam));//регистрируем тип данных в зкадном RTTI
   SysUnit.SetTypeDesk(TypeInfo(TRectangParam),['ET','PolyWidth'],[FNProgram]);//Даем програмные имена параметрам, по идее это должно быть в ртти, но ненашел
@@ -147,5 +147,5 @@ initialization
   RectangParam.ET:=RET_3DPoly;
   RectangParam.PolyWidth:=0;
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

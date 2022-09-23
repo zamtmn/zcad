@@ -302,7 +302,6 @@ begin
 end;*)
 function GDBObjGenericSubEntry.CalcVisibleByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;
 begin
-  //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('GDBObjGenericSubEntry.CalcVisibleByTree',lp_incPos);{$ENDIF}
   visible:=visibleactualy;
      result:=true;
      //inc(gdb.GetCurrentDWG.pcamera^.totalobj);
@@ -322,7 +321,6 @@ begin
                                visible:=0;
                                result:=false;
                           end;
-     //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('GDBObjGenericSubEntry.CalcVisibleByTree----{end}',lp_decPos);{$ENDIF}
 end;
 function GDBObjGenericSubEntry.CreatePreCalcData:PTDrawingPreCalcData;
 begin

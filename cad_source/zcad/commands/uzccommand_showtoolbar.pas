@@ -24,7 +24,7 @@ interface
 uses
   SysUtils,
   Classes,Controls,AnchorDocking,
-  LazLogger,
+  uzcLog,
   uzcinterface,
   uzcstrconsts,
   uztoolbarsmanager,
@@ -43,8 +43,8 @@ end;
 
 
 initialization
-  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   CreateCommandFastObjectPlugin(@ShowToolBar_com,'ShowToolBar',0,0);
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

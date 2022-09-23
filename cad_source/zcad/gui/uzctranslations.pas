@@ -22,7 +22,7 @@ unit uzctranslations;
 interface
 uses uzbpaths,uzbstrproc,LazUTF8,gettext,translations,
      fileutil,LResources,sysutils,uzbLogTypes,uzcLog,uzbLog,forms,
-     Classes, typinfo,uzcsysparams{,LazLogger};
+     Classes, typinfo,uzcsysparams{,uzcLog};
 
 const
   ZCADTranslatedPOFileName='zcad.%s.po';
@@ -171,7 +171,7 @@ begin
     AFilename:=(PODirectory + POFileName);
     if FileExists(AFilename) then begin
       CreatedPO:=TmyPOFile.Create(AFilename,true);
-      actualypo:=TmyPOFile.Create;
+      //actualypo:=TmyPOFile.Create;
     end else begin
       programlog.LogOutFormatStr(ZCADPOFileNotFound,[AFilename],0,LM_Fatal);
       halt(0);

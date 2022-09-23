@@ -29,6 +29,7 @@ GDBObjElLeader= object(GDBObjComplex)
             size:Integer;
             scale:Double;
             twidth:Double;
+            TextContent:string;
 
 
             procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
@@ -277,7 +278,7 @@ var
    pdev:PGDBObjDevice;
    ptn:PTNodeProp;
    ptext:PGDBObjText;
-   width:Integer;
+   width,sl,l:Integer;
    TCP:TCodePage;
 
    Objects:GDBObjOpenArrayOfPV;
@@ -403,16 +404,42 @@ begin
            until pobj=nil;
            end;
 
-     if sta.Count=0 then
-                        begin
-                             s:='??';
-                             sta.PushBackData(s);
-                        end
-                    else
-                        sta.sort;
+     sta.sort;
+
+     sl:=0;
+     ps:=sta.beginiterate(ir);
+     if ps<>nil then
+     repeat
+       sl:=sl+length(ps^);
+       ps:=sta.iterate(ir);
+       if ps<>nil then
+         inc(sl);
+     until ps=nil;
+
+     SetLength(self.textcontent,sl);
+     sl:=1;
+     ps:=sta.beginiterate(ir);
+     if ps<>nil then
+     repeat
+       for l:=1 to length(ps^) do begin
+         self.textcontent[sl]:=ps^[l];
+         inc(sl);
+       end;
+       ps:=sta.iterate(ir);
+       if ps<>nil then begin
+         self.textcontent[sl]:=',';
+         inc(sl);
+       end;
+     until ps=nil;
+
+     if sta.Count=0 then begin
+       s:='??';
+       sta.PushBackData(s);
+     end;
+
      CopyVPto(tbl);
      tbl.tbl.free{clear};
-     {$ifndef GenericsContainerNotFinished}  psl:=pointer(tbl.tbl.CreateObject);{$endif}
+     psl:=tbl.tbl.CreateObject;
      psl.init(10);
 
      if size>=0 then
@@ -425,7 +452,7 @@ begin
      repeat
            if width<=psl.Count then
                                   begin
-                                       {$ifndef GenericsContainerNotFinished} psl:=pointer(tbl.tbl.CreateObject);{$endif}
+                                       psl:=tbl.tbl.CreateObject;
                                        psl.init(10);
                                   end;
           s:=ps^;

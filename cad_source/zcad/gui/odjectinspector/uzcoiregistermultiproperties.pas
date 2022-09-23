@@ -31,7 +31,7 @@ uses
   Varman,
   uzcoimultipropertiesutil,
   uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,uzeenttext,uzeentmtext,uzeentpolyline,uzcentelleader,uzeentdimension,uzeentellipse,
-  uzegeometry,uzcoimultiproperties,LazLogger,uzcExtdrLayerControl;
+  uzegeometry,uzcoimultiproperties,uzcLog,uzcExtdrLayerControl;
 implementation
 procedure DoubleDeltaEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var
@@ -603,6 +603,7 @@ begin
   MultiPropertiesManager.RegisterPhysMultiproperty('Length','Length',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBElLeaderID,nil,PtrInt(@pelleader^.MainLine.CoordInWCS.lBegin),PtrInt(@pelleader^.MainLine.CoordInOCS.lBegin),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleLengthEntIterateProc,@DoubleLengthEntChangeProc));
   MultiPropertiesManager.RegisterPhysMultiproperty('Angle','Angle',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCGeometry,GDBElLeaderID,nil,PtrInt(@pelleader^.MainLine.CoordInWCS.lBegin),PtrInt(@pelleader^.MainLine.CoordInOCS.lBegin),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleAngleEntIterateProc,@DoubleAngleEntChangeProc));
   {ElLeader misc}
+  MultiPropertiesManager.RegisterPhysMultiproperty('TextContent','TextContent',sysunit^.TypeName2PTD('String'),MPCMisc,GDBElLeaderID,nil,PtrInt(@pelleader^.TextContent),PtrInt(@pelleader^.TextContent),OneVarDataMIPD,OneVarRODataEIPD);
   MultiPropertiesManager.RegisterPhysMultiproperty('LeaderSize','Size',sysunit^.TypeName2PTD('Integer'),MPCMisc,GDBElLeaderID,nil,PtrInt(@pelleader^.size),PtrInt(@pelleader^.size),OneVarDataMIPD,OneVarDataEIPD);
   MultiPropertiesManager.RegisterPhysMultiproperty('Leaderscale','Scale',sysunit^.TypeName2PTD('Double'),MPCMisc,GDBElLeaderID,nil,PtrInt(@pelleader^.scale),PtrInt(@pelleader^.scale),OneVarDataMIPD,OneVarDataEIPD);
   MultiPropertiesManager.RegisterPhysMultiproperty('LeaderWidth','Width',sysunit^.TypeName2PTD('Double'),MPCMisc,GDBElLeaderID,nil,PtrInt(@pelleader^.twidth),PtrInt(@pelleader^.twidth),OneVarDataMIPD,OneVarDataEIPD);
@@ -627,7 +628,7 @@ end;
 initialization
   startup;
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   finalize;
 end.
 

@@ -22,7 +22,7 @@ unit uzccommand_examplecreatelayer;
 
 interface
 uses
-  LazLogger,
+  uzcLog,
   uzccommandsabstract,uzccommandsimpl,
   uzestyleslayers,uzbtypes,
   uzcstrconsts,uzccommandsmanager,uzcdrawings,uzeentity,uzeconsts;
@@ -54,8 +54,8 @@ end;
 
 
 initialization
-  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   CreateCommandFastObjectPlugin(@ExampleCreateLayer_com,'ExampleCreateLayer',CADWG,0);
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

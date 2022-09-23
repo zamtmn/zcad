@@ -20,10 +20,10 @@ unit uzcfsplash;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
- uzcsysparams,uzbpaths,uzclog,uniqueinstanceraw,uzcstrconsts,uzbstrproc,Forms,
+ uzcsysparams,uzbpaths,uniqueinstanceraw,uzcstrconsts,uzbstrproc,Forms,
  stdctrls, Controls, Graphics,ExtCtrls,uzcsysinfo,LazUTF8,sysutils,
  uzbLogTypes,uzbLogDecorators,
- LazLogger;
+ uzcLog;
 type
   TSplashForm = class(TForm)
     txt:tlabel;
@@ -128,6 +128,6 @@ initialization
   LogerSplashBackend.init;
   ProgramLog.addBackend(LogerSplashBackend,'',[]);
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   removesplash;
 end.

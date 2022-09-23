@@ -22,7 +22,7 @@ unit uzccommand_layoff;
 
 interface
 uses
-  LazLogger,
+  uzcLog,
   uzccommandsabstract,uzeentity,uzcdrawing,uzcdrawings,uzccommandsmanager,
   uzcstrconsts,uzcutils,zcchangeundocommand,uzccommandsimpl;
 
@@ -51,8 +51,8 @@ begin
   result:=cmd_ok;
 end;
 initialization
-  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   CreateCommandFastObjectPlugin(@LayOff_com,LayOffCommandName,CADWG,0);
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

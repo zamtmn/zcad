@@ -23,7 +23,7 @@ uses uzbpaths,UUnitManager,uzcsysvars,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
      uzbstrproc,Varman,SysUtils,
      UBaseTypeDescriptor,uzctnrVectorBytes, strmy, varmandef,
      uzcsysparams,uzcsysinfo,TypeDescriptors,URecordDescriptor,
-     uzblog,uzclog,LazLogger;
+     uzblog,uzcLog;
 implementation
 {$IFNDEF WINDOWS}
 var
@@ -39,5 +39,5 @@ initialization;
      programlog.leave(IfEntered);
      end;
 finalization;
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization')
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

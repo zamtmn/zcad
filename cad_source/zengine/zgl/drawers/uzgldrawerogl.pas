@@ -376,7 +376,6 @@ procedure TZGLOpenGLDrawer.SaveBuffers;
   var
     scrx,scry,texture{,e}:integer;
 begin
-  //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.SaveBuffers',lp_incPos);{$ENDIF};
   oglsm.myglEnable(GL_TEXTURE_2D);
   //isOpenGLError;
 
@@ -398,14 +397,12 @@ begin
 
 
   oglsm.myglDisable(GL_TEXTURE_2D);
-  //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.SaveBuffers----{end}',lp_decPos);{$ENDIF}
 end;
 procedure TZGLOpenGLDrawer.RestoreBuffers;
   var
     scrx,scry,texture{,e}:integer;
     _NotUseLCS:boolean;
 begin
-  //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.RestoreBuffers',lp_incPos);{$ENDIF};
   _NotUseLCS:=NotUseLCS;
   NotUseLCS:=true;
   oglsm.myglEnable(GL_TEXTURE_2D);
@@ -451,7 +448,6 @@ begin
        oglsm.myglPopMatrix;
        oglsm.myglMatrixMode(GL_MODELVIEW);
    NotUseLCS:=_NotUseLCS;
-  //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.RestoreBuffers----{end}',lp_decPos);{$ENDIF}
 end;
 function TZGLOpenGLDrawer.CreateScrbuf{(w,h:integer)}:boolean;
 var scrx,scry,texture{,e}:integer;

@@ -146,8 +146,11 @@ begin
     Freemem(pointer(pprojpoint));
   end;
   Path.done;
-  if PPattern<>nil then
+  if PPattern<>nil then begin
     PPattern^.done;
+    Freemem(PPattern);
+  end;
+  PatternName:='';
 end;
 function GDBObjHatch.ObjToString(prefix,sufix:String):String;
 begin
@@ -315,16 +318,16 @@ begin
       newdrawlen:=drawedlen+abs(d);
 
       if d=0 then
-        Representation.DrawPoint(DC,CreateVertex(p.x,p.y,0),vp)
+        Representation.DrawPoint(DC,VectorTransform3D(CreateVertex(p.x,p.y,0),ObjMatrix),vp)
       else if d>0 then begin
         if newdrawlen<=l then begin
           pp.x:=p.x+dir.x*abs(d);
           pp.y:=p.y+dir.y*abs(d);
-          Representation.DrawLineWithoutLT(DC,CreateVertex(p.x,p.y,0),CreateVertex(pp.x,pp.y,0))
+          Representation.DrawLineWithoutLT(DC,VectorTransform3D(CreateVertex(p.x,p.y,0),ObjMatrix),CreateVertex(pp.x,pp.y,0))
         end else begin
           pp.x:=p.x+dir.x*(d-(newdrawlen-l));
           pp.y:=p.y+dir.y*(d-(newdrawlen-l));
-          Representation.DrawLineWithoutLT(DC,CreateVertex(p.x,p.y,0),CreateVertex(pp.x,pp.y,0));
+          Representation.DrawLineWithoutLT(DC,VectorTransform3D(CreateVertex(p.x,p.y,0),ObjMatrix),CreateVertex(pp.x,pp.y,0));
         end;
       end else begin
         pp.x:=p.x-dir.x*d;
@@ -635,7 +638,23 @@ begin
   CopyVPto(tvo^);
   CopyExtensionsTo(tvo^);
   tvo^.Local:=local;
+  tvo^.PatternName:=PatternName;
+  tvo^.IslandDetection:=IslandDetection;
+  tvo^.Angle:=Angle;
+  tvo^.Scale:=Scale;
+  tvo^.Origin:=Origin;
   Path.CloneTo(tvo^.Path);
+  if PPattern<>nil then begin
+    getmem(tvo^.PPattern,SizeOf(THatchPattern));
+    tvo^.PPattern^.init(PPattern^.Count);
+    if tvo^.PPattern^.parray=nil then
+      tvo^.PPattern^.createarray;
+    for i:=0 to PPattern^.Count-1 do begin
+      tvo^.PPattern^.getDataMutable(i)^.init(PPattern^.getDataMutable(i)^.count);
+      PPattern^.getDataMutable(i)^.copyto(tvo^.PPattern^.getDataMutable(i)^);
+    end;
+    tvo^.PPattern^.count:=PPattern^.Count;
+  end;
   result := tvo;
 end;
 

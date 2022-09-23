@@ -23,7 +23,7 @@ unit uzccommand_help;
 interface
 uses
   {$ifdef unix}Process,sysutils,{$else}windows,Forms,{$endif}
-  LazLogger,LCLIntf,
+  uzcLog,LCLIntf,
   uzccommandsabstract,uzccommandsimpl,uzccommandsmanager,
   uzbpaths;
 
@@ -87,8 +87,8 @@ begin
 end;
 
 initialization
-  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   CreateCommandFastObjectPlugin(@Help_com,'Help',0,0).overlay:=True;
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

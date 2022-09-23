@@ -24,12 +24,12 @@ uses
   uzbexceptionsparams;
 
 type
-  TCrashInfoProvider=procedure(var f:system.text;Obj : TObject; Addr: CodePointer; _FrameCount: Longint; _Frames: PCodePointer);
+  TCrashInfoProvider=procedure(var f:system.text;ARaiseList:PExceptObject);
   TCrashInfoProviders=TVector<TCrashInfoProvider>;
 
 procedure SetCrashReportFilename(fn:ansistring);
 function GetCrashReportFilename:ansistring;
-procedure ProcessException (Obj : TObject; Addr: CodePointer; _FrameCount: Longint; _Frames: PCodePointer);
+procedure ProcessException (Obj : TObject;ARaiseList:PExceptObject);
 procedure RegisterCrashInfoProvider(provider:TCrashInfoProvider;atBegining:boolean=false);
 procedure RmoveCrashInfoProvider(provider:TCrashInfoProvider);
 
@@ -74,52 +74,56 @@ begin
   end;
 end;
 
-procedure MyDumpExceptionBackTrace(var f:system.text; Addr: CodePointer; _FrameCount: Longint; _Frames: PCodePointer);
+procedure MyDumpExceptionBackTrace(var f:system.text;ARaiseList:PExceptObject);
 var
-  FrameCount: integer;
-  Frames: PPointer;
   FrameNumber:Integer;
-  Buf : ShortString;
 begin
-  WriteLn(f,'Stack:');
-  WriteLn(f,'  ExceptAddr:');
-  myDumpAddr(ExceptAddr,f);
-  WriteLn(f,'  Addr:');
-  myDumpAddr(Addr,f);
-  WriteLn(f,'  Stack trace:');
-  myDumpAddr(ExceptAddr,f);
-  FrameCount:=_FrameCount;
-  Frames:=_Frames;
-  for FrameNumber := 0 to FrameCount-1 do
-    myDumpAddr(Frames[FrameNumber],f);
-
-  writeln(f,'  ExceptionErrorMessage:');
-  SetLength(Buf,ExceptionErrorMessage(ExceptObject,ExceptAddr,@Buf[1],255));
-  writeln(f,Buf);
-  WriteLn(f,'Stack end!');
+  for FrameNumber := 0 to ARaiseList^.Framecount-1 do
+    myDumpAddr(ARaiseList^.Frames[FrameNumber],f);
 end;
 
-procedure WriteStack(var f:system.text;Obj : TObject; Addr: CodePointer; _FrameCount: Longint; _Frames: PCodePointer);
+procedure WriteStack(var f:system.text;ARaiseList:PExceptObject);
 var
-  errmsg:shortstring;
+  Obj:TObject;
+  Buf:ShortString;
+  i:Integer;
 begin
+  if ARaiseList=nil then begin
+    WriteLn(f,'WriteStack: Something wrong, RaiseList=nil ((');
+    exit;
+  end;
+
+  Obj:=ARaiseList^.FObject;
   if Obj is Exception then begin
-    WriteLn(f,'Crashed with message: ',(Obj as Exception).Message);WriteLn(f,'');
+    WriteLn(f,'Crashed with message: ',(Obj as Exception).Message);//WriteLn(f,'');
   end else begin
     if Obj<>nil then begin
-      WriteLn(f,'Crashed in class: ',obj.ClassName);WriteLn(f,'');
+      WriteLn(f,'Crashed in class: ',obj.ClassName);//WriteLn(f,'');
     end;
   end;
 
-  errmsg:=DateTimeToStr(Now);
-  WriteLn(f,'Date: ',errmsg);
-  WriteLn(f,'');
+  WriteLn(f,'ExceptAddr:');
+  myDumpAddr(ExceptAddr,f);
+  WriteLn(f,'Stack trace:');
 
-  myDumpExceptionBackTrace(f,Addr,_FrameCount,_Frames);
-WriteLn(f,'');
+  repeat
+    myDumpExceptionBackTrace(f,ARaiseList);
+    ARaiseList:=ARaiseList.Next;
+  until ARaiseList=nil;
+
+  WriteLn(f,'Stack end!');
+
+  writeln(f,'ExceptionErrorMessage:');
+  SetLength(Buf,ExceptionErrorMessage(ExceptObject,ExceptAddr,@Buf[1],255));
+  for i:=0 to length(Buf) do
+    if (Buf[i]=#10)or(Buf[i]=#13) then
+      Buf[i]:=' ';
+  WriteLn(f,'  ',Buf);
+
+  WriteLn(f,'');
 end;
 
-procedure ProcessException (Obj : TObject; Addr: CodePointer; _FrameCount: Longint; _Frames: PCodePointer);
+procedure ProcessException (Obj : TObject;ARaiseList:PExceptObject);
 var
   f:system.text;
   i:integer;
@@ -132,7 +136,7 @@ begin
           system.Append(f)
         else
           system.Rewrite(f);
-         CrashInfoProviders[i](f,Obj,Addr,_FrameCount,_Frames);
+         CrashInfoProviders[i](f,ARaiseList);
 
         system.close(f);
       end;
@@ -140,9 +144,9 @@ end;
 
 
 
-Procedure ZCCatchUnhandledException (Obj : TObject; Addr: CodePointer; _FrameCount: Longint; _Frames: PCodePointer);
+Procedure ZCCatchUnhandledException (Obj : TObject; Addr : CodePointer; FrameCount:Longint; Frame: PCodePointer);
 begin
-  ProcessException(Obj,Addr,_FrameCount,_Frames);
+  ProcessException(Obj,RaiseList);
 end;
 
 procedure InstallHandler;
@@ -179,7 +183,7 @@ end;
 
 
 initialization
-  SetCrashReportFilename({GetTempDir+}CrashReportFileName);
+  SetCrashReportFilename(CrashReportFileName);
   InstallHandler;
 finalization
   UnInstallHandler;

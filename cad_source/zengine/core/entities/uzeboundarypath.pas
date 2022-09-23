@@ -19,13 +19,13 @@
 unit uzeBoundaryPath;
 {$Mode delphi}{$H+}
 {$Include zengineconfig.inc}
+
 interface
+
 uses uzegeometrytypes,UGDBPolyline2DArray,gzctnrVector,
   uzctnrVectorBytes,gzctnrVectorTypes,uzegeometry,uzeffdxfsupport;
 type
-{Export+}
 PBoundaryPath=^TBoundaryPath;
-{REGISTEROBJECTTYPE TZEntityRepresentation}
 TBoundaryPath=object
   paths:GZVector<GDBPolyline2DArray>;
   constructor init(m:TArrayIndex);
@@ -38,7 +38,7 @@ TBoundaryPath=object
   procedure transform(const t_matrix:DMatrix4D);virtual;
   function getDataMutableByPlainIndex(index:TArrayIndex):PGDBVertex2D;
 end;
-{Export-}
+
 implementation
 
 procedure TBoundaryPath.transform(const t_matrix:DMatrix4D);
@@ -106,6 +106,7 @@ var
   currpath:GDBPolyline2DArray;
   i,j,pathscount,vertexcount,byt,bt:integer;
   firstp,prevp,p:GDBVertex2D;
+  tmp:double;
   s:string;
   isPolyLine:boolean;
   NotPolyLine:TNotPolyLine;
@@ -129,6 +130,7 @@ begin
            for j:=1 to vertexcount do begin
              if dxfdoubleload(f,10,byt,p.x) then byt:=readmystrtoint(f);
              if dxfdoubleload(f,20,byt,p.y) then byt:=readmystrtoint(f);
+             if dxfdoubleload(f,42,byt,tmp) then byt:=readmystrtoint(f);
              currpath.PushBackData(p);
            end;
          end else begin
@@ -159,9 +161,29 @@ begin
                          currpath.PushBackData(p);
                      prevp:=p;
                    end;
-                 2:NotPolyLine:=NPL_CircularArc;
-                 3:NotPolyLine:=NPL_EllipticArc;
-                 4:NotPolyLine:=NPL_Spline;
+                 2:begin
+                     NotPolyLine:=NPL_CircularArc;
+                     if dxfdoubleload(f,10,byt,p.x) then byt:=readmystrtoint(f);
+                     if dxfdoubleload(f,20,byt,p.y) then byt:=readmystrtoint(f);
+                     if dxfdoubleload(f,40,byt,p.x) then byt:=readmystrtoint(f);
+                     if dxfdoubleload(f,50,byt,p.y) then byt:=readmystrtoint(f);
+                     if dxfdoubleload(f,51,byt,p.x) then byt:=readmystrtoint(f);
+                     if dxfdoubleload(f,73,byt,p.y) then byt:=readmystrtoint(f);
+                   end;
+                 3:begin
+                     NotPolyLine:=NPL_EllipticArc;
+                     if dxfdoubleload(f,10,byt,p.x) then byt:=readmystrtoint(f);
+                     if dxfdoubleload(f,20,byt,p.y) then byt:=readmystrtoint(f);
+                     if dxfdoubleload(f,11,byt,p.x) then byt:=readmystrtoint(f);
+                     if dxfdoubleload(f,21,byt,p.y) then byt:=readmystrtoint(f);
+                     if dxfdoubleload(f,40,byt,p.x) then byt:=readmystrtoint(f);
+                     if dxfdoubleload(f,50,byt,p.y) then byt:=readmystrtoint(f);
+                     if dxfdoubleload(f,51,byt,p.x) then byt:=readmystrtoint(f);
+                     if dxfdoubleload(f,73,byt,p.y) then byt:=readmystrtoint(f);
+                   end;
+                 4:begin
+                     NotPolyLine:=NPL_Spline;
+                   end;
                end;
              end;
            end;
@@ -202,6 +224,8 @@ var i,j:integer;
 begin
   Dest.paths.Clear;
   Dest.paths.SetSize(paths.GetCount);
+  if Dest.paths.PArray=nil then
+    Dest.paths.CreateArray;
   for i:=0 to paths.count-1 do begin
     ppla:=Dest.paths.getDataMutable(i);
     ppla^.init(paths.getData(i).GetCount,true);

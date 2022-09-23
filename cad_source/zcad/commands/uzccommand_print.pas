@@ -40,10 +40,10 @@ uses
   uzegeometry,
 
   uzegeometrytypes,uzeentity,uzeentcircle,uzeentline,uzeentmtext,
-  uzeentblockinsert,uzeentpolyline,uzclog,
+  uzeentblockinsert,uzeentpolyline,
   math,
   uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,
-  TypeDescriptors,uzelongprocesssupport,LazLogger,uzeiopalette,uzerasterizer;
+  TypeDescriptors,uzelongprocesssupport,uzcLog,uzeiopalette,uzerasterizer;
 const
      modelspacename:String='**Модель**';
 type
@@ -183,9 +183,9 @@ begin
   freeandnil(paged);
 end;
 initialization
-  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   startup;
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   finalize;
 end.

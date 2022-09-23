@@ -21,7 +21,7 @@ unit uzccommand_DWGNew;
 
 interface
 uses
-  ComCtrls,Controls,LazUTF8,LCLProc,AnchorDocking,
+  ComCtrls,Controls,LazUTF8,uzcLog,AnchorDocking,
   sysutils,
   uzbtypes,uzbpaths,
   uzglbackendmanager,uzglviewareaabstract,
@@ -111,9 +111,9 @@ procedure finalize;
 begin
 end;
 initialization
-  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   startup;
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   finalize;
 end.

@@ -20,7 +20,7 @@ unit uzcregzscript;
 {$INCLUDE zengineconfig.inc}
 interface
 uses uzcsysvars,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,varman,
-     UBaseTypeDescriptor,uzedimensionaltypes,uzemathutils,LazLogger;
+     UBaseTypeDescriptor,uzedimensionaltypes,uzemathutils,uzcLog;
 type
   GDBNonDimensionDoubleDescriptor=object(DoubleDescriptor)
                             function GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):String;virtual;
@@ -64,6 +64,6 @@ initialization
   OnCreateSystemUnit:=_OnCreateSystemUnit;
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'ShowHiddenFieldInObjInsp','Boolean',@debugShowHiddenFieldInObjInsp);
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.
 

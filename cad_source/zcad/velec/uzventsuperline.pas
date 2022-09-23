@@ -21,7 +21,7 @@ unit uzventsuperline;
 
 interface
 uses uzeobjectextender,LCLProc,uzeentityfactory,uzedrawingdef,
-     uzestyleslayers,uzeentsubordinated,
+     uzestyleslayers,uzeentsubordinated,uzcLog,
      uzeentline,uzeentity,uzctnrVectorBytes,uzbtypes,uzeconsts,
      uzegeometrytypes,uzegeometry,uzeffdxfsupport;
 type
@@ -121,6 +121,6 @@ initialization
   RegisterEntity(GDBSuperLineID,'SuperLine',@AllocSuperLine,@AllocAndInitSuperLine,@SetSuperLineGeomProps,@AllocAndCreateSuperLine);
   RegisterEntityUpgradeInfo(GDBLineID,UD_LineToSuperLine,@UpgradeLine2SuperLine);
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   GDBObjSuperLineDXFFeatures.destroy;
 end.

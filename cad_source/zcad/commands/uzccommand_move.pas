@@ -21,31 +21,26 @@ unit uzccommand_move;
 
 interface
 uses
-  gzctnrVector,zcmultiobjectchangeundocommand,
-  gzctnrVectorTypes,uzgldrawercanvas,
-  uzcoimultiobjects,uzcdrawing,uzepalette,
-  uzgldrawcontext,
-  uzeentpoint,uzeentityfactory,
-  uzedrawingsimple,uzcsysvars,uzcstrconsts,
-  printers,graphics,uzeentdevice,
-  LazUTF8,Clipbrd,LCLType,classes,uzeenttext,
-  uzccommandsabstract,uzbstrproc,
-  uzccommandsmanager,
-  uzccommandsimpl,
-  uzcdrawings,
-  uzeutils,
   sysutils,
-  varmandef,
-  uzglviewareadata,
-  uzeffdxf,
-  uzcinterface,
-  uzegeometry,
 
-  uzeconsts,
-  uzegeometrytypes,uzeentity,uzeentcircle,uzeentline,uzeentgenericsubentry,uzeentmtext,
-  uzeentblockinsert,uzeentpolyline,uzclog,
-  uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray
-  ,uzelongprocesssupport,LazLogger;
+  gzctnrVectorTypes,gzctnrVector,
+
+  zcmultiobjectchangeundocommand,
+
+  uzcdrawings,uzcdrawing,
+  uzeentity,uzeconsts,
+
+
+  uzgldrawcontext,
+  uzcinterface,uzcstrconsts,
+  uzccommandsmanager,
+  uzccommandsabstract,uzccommandsimpl,
+
+  uzglviewareadata,
+
+  uzegeometrytypes,uzegeometry,
+
+  uzclog;
 type
 {EXPORT+}
   PTCopyObjectDesc=^TCopyObjectDesc;
@@ -237,9 +232,9 @@ procedure Finalize;
 begin
 end;
 initialization
-  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   startup;
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   finalize;
 end.

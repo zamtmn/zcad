@@ -21,7 +21,7 @@ unit uzccommand_DWGNext;
 
 interface
 uses
-  LCLProc,
+  uzcLog,
   uzccommandsabstract,uzccommandsimpl,
   uzcmainwindow;
 
@@ -50,9 +50,9 @@ procedure finalize;
 begin
 end;
 initialization
-  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   startup;
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   finalize;
 end.

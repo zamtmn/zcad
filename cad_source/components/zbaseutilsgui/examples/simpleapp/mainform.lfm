@@ -452,22 +452,63 @@ object Form1: TForm1
     ClientWidth = 344
     TabOrder = 4
     object Button1: TButton
-      Left = 1
-      Height = 63
+      Left = 0
+      Height = 35
       Top = 0
-      Width = 126
+      Width = 344
+      Align = alTop
+      AutoSize = True
       Caption = 'AV'
       OnClick = Button1Click
       TabOrder = 0
     end
     object Button2: TButton
-      Left = 136
-      Height = 63
-      Top = 0
-      Width = 120
+      Left = 0
+      Height = 35
+      Top = 35
+      Width = 344
+      Align = alTop
+      AutoSize = True
       Caption = 'Raise'
       OnClick = Button2Click
       TabOrder = 1
+    end
+    object Button28: TButton
+      Left = 0
+      Height = 35
+      Top = 70
+      Width = 344
+      Align = alTop
+      AutoSize = True
+      Caption = 'Stack'
+      OnClick = StackOverflow
+      TabOrder = 2
+    end
+    object Button29: TButton
+      Left = 0
+      Height = 35
+      Top = 105
+      Width = 344
+      Align = alTop
+      AutoSize = True
+      Caption = 'Mem'
+      OnClick = OutOfMem
+      TabOrder = 3
+    end
+    object EditButton1: TEditButton
+      Left = 0
+      Height = 33
+      Top = 140
+      Width = 344
+      Align = alTop
+      ButtonCaption = 'LineInfo'
+      ButtonWidth = 100
+      MaxLength = 0
+      NumGlyphs = 1
+      OnButtonClick = CheckLineInfo
+      PasswordChar = #0
+      TabOrder = 4
+      Text = 'EditButton1'
     end
   end
 end

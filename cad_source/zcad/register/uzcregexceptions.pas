@@ -21,7 +21,8 @@ unit uzcregexceptions;
 interface
 
 uses
-  SysUtils,LazLogger,uzbLog, uzbLogTypes, uzcLog,uzcsysvars,uzbpaths,uzbexceptionscl,uzcstrconsts;
+  SysUtils,uzcLog,uzbLog, uzbLogTypes,uzcsysvars,uzbpaths,uzbexceptionscl,
+  uzcstrconsts,uzcCommandLineParser;
 
 implementation
 
@@ -39,6 +40,7 @@ type
 var
   LLMsgs:TLatestMsgsBackend;
   LLMsgsH:TBackendHandle;
+  MaxStackFrameCount:LongInt;
 
 procedure TLatestMsgsBackend.doLog(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);
 begin
@@ -82,25 +84,45 @@ begin
      repeat
        if currentindex>High(LatestLogStrings) then
                                                   currentindex:=Low(LatestLogStrings);
-       WriteLn(f,pchar(@LatestLogStrings[currentindex][1]));
+       WriteLn(f,'  ',pchar(@LatestLogStrings[currentindex][1]));
        inc(currentindex);
        dec(LatestLogArraySize);
      until LatestLogArraySize=0;
 end;
 
-procedure ProvideHeader(var f:system.text;Obj : TObject; Addr: CodePointer; _FrameCount: Longint; _Frames: PCodePointer);
+procedure ProvideHeader(var f:system.text;ARaiseList:PExceptObject);
+function lead0(d:Word):ShortString;
+begin
+  SetLength(Result,2);
+  if d>9 then begin
+    Result[1]:=char(ord('0')+(d div 10));
+    Result[2]:=char(ord('0')+(d mod 10));
+  end else begin
+    Result[1]:='0';
+    Result[2]:=char(ord('0')+d);
+  end;
+end;
+var
+  DateTime:TDateTime;
+  Year,Month,Day:Word;
+  Hour,Minute,Second,MilliSecond:Word;
 begin
   WriteLn(f);
   WriteLn(f,programname,' crashed ((');
+  DateTime:=Now;
+  DecodeDate(DateTime,Year,Month,Day);
+  DecodeTime(DateTime,Hour,Minute,Second,MilliSecond);
+  WriteLn(f,'  Date: ',Year:4,'-',lead0(Month),'-',lead0(Day));
+  WriteLn(f,'  Time: ',lead0(Hour),':',lead0(Minute),':',lead0(Second));
   WriteLn(f);
 end;
 
-procedure ProvideFooter(var f:system.text;Obj : TObject; Addr: CodePointer; _FrameCount: Longint; _Frames: PCodePointer);
+procedure ProvideFooter(var f:system.text;ARaiseList:PExceptObject);
 begin
   WriteLn(f,'______________________________________________________________________________________');
 end;
 
-procedure ProvideLog(var f:system.text;Obj : TObject; Addr: CodePointer; _FrameCount: Longint; _Frames: PCodePointer);
+procedure ProvideLog(var f:system.text;ARaiseList:PExceptObject);
 begin
   WriteLn(f);
   WriteLn(f,'Latest log:');
@@ -108,7 +130,7 @@ begin
   WriteLn(f,'Log end.');
 end;
 
-procedure ProvideBuildAndRunTimeInfo(var f:system.text;Obj : TObject; Addr: CodePointer; _FrameCount: Longint; _Frames: PCodePointer);
+procedure ProvideBuildAndRunTimeInfo(var f:system.text;ARaiseList:PExceptObject);
 begin
   WriteLn(f);
   WriteLn(f,'Build and runtime info:');
@@ -130,7 +152,13 @@ begin
 end;
 
 initialization
-  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  if CommandLineParser.HasOption(MaxStackFrameCountHDL) then
+    if TryStrToInt(CommandLineParser.OptionOperand(MaxStackFrameCountHDL,0),MaxStackFrameCount) then begin
+      RaiseMaxFrameCount:=MaxStackFrameCount;
+      ProgramLog.LogOutFormatStr('set MaxStackFrameCount to "%d"',[MaxStackFrameCount],LM_Info);
+    end else
+      ProgramLog.LogOutFormatStr('MaxStackFrameCount "%s" - not a integer',[CommandLineParser.OptionOperand(MaxStackFrameCountHDL,0)],LM_Error);
   LLMsgs.init(99);
   LLMsgsH:=ProgramLog.addBackend(LLMsgs,'',[]);
   RegisterCrashInfoProvider(ProvideHeader,true);
@@ -138,7 +166,7 @@ initialization
   RegisterCrashInfoProvider(ProvideBuildAndRunTimeInfo);
   RegisterCrashInfoProvider(ProvideFooter);
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   ProgramLog.removeBackend(LLMsgsH);
   LLMsgs.done;
 end.

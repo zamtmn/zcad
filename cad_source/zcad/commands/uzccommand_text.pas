@@ -31,7 +31,7 @@ uses
   URecordDescriptor,typedescriptors,uzeentityfactory,uzegeometry,Varman,
   uzccommandsabstract,uzccmdfloatinsert,uzeentabstracttext,uzeenttext,uzeentmtext,
   uzcinterface,uzcstrconsts,uzccommandsmanager,
-  uzeentity,LazLogger,uzctnrvectorstrings,uzestylestexts,uzeconsts,uzcsysvars,uzctextenteditor;
+  uzeentity,uzcLog,uzctnrvectorstrings,uzestylestexts,uzeconsts,uzcsysvars,uzctextenteditor;
 type
 {EXPORT+}
   {REGISTEROBJECTTYPE TextInsert_com}
@@ -241,9 +241,9 @@ begin
   TextInsertParams.Style.Enums.done;
 end;
 initialization
-  debugln('{I}[UnitsInitialization] Unit "',{$INCLUDE %FILE%},'" initialization');
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   startup;
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   finalize;
 end.

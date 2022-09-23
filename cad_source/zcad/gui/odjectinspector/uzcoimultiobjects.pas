@@ -17,12 +17,12 @@
 }
 
 unit uzcoimultiobjects;
-{$INCLUDE zengineconfig.inc}
+{$modeswitch TypeHelpers}{$INCLUDE zengineconfig.inc}
 
 interface
 uses
   uzeenttext,uzctnrVectorPointers,uzeentblockinsert,uzeconsts,uzcinterface,
-  LazLoggerBase,uzcoimultiproperties,uzcoiwrapper,uzctranslations,uzepalette,
+  uzbLog,uzcLog,uzcoimultiproperties,uzcoiwrapper,uzctranslations,uzepalette,
   uzedimensionaltypes,uzcstrconsts,sysutils,uzeentityfactory,
   uzcenitiesvariablesextender,uzgldrawcontext,usimplegenerics,gzctnrSTL,
   gzctnrVectorTypes,uzbtypes,uzcdrawings,varmandef,uzeentity,
@@ -724,75 +724,76 @@ var //i: Integer;
     ir,ir2:itrec;
     pentvarext:TVariablesExtender;
 begin
-     debugln('{D+}TMSEditor.createunit start');
-     SavezeUnitsFormat:=f;
-     if _GetEntsTypes then
-                          GetEntsTypes;
+  with ProgramLog.Enter('TMSEditor.createunit',LM_Debug) do begin
+  //debugln('{D+}TMSEditor.createunit start');
+    SavezeUnitsFormat:=f;
+    if _GetEntsTypes then
+      GetEntsTypes;
 
-     zTraceLn('{T+}RelatedVariablesUnit.free start');
-     RelatedVariablesUnit.free;
-     zTraceLn('{T-}end');
+    with ProgramLog.Enter('RelatedVariablesUnit.free',ProgramLog.LM_Trace) do begin
+      RelatedVariablesUnit.free;
+    programlog.leave(IfEntered);end;
 
-     zTraceLn('{T+}VariablesUnit.free start');
-     VariablesUnit.free;
-     zTraceLn('{T-}end');
+    with ProgramLog.Enter('VariablesUnit.free',ProgramLog.LM_Trace) do begin
+      VariablesUnit.free;
+    programlog.leave(IfEntered);end;
 
-     zTraceLn('{T+}ExtendersUnit.free start');
-     ExtendersUnit.free;
-     ExtendersUnit.InterfaceUses.PushBackIfNotPresent(sysunit);
-     zTraceLn('{T-}end');
+    with ProgramLog.Enter('ExtendersUnit.free',ProgramLog.LM_Trace) do begin
+      ExtendersUnit.free;
+      ExtendersUnit.InterfaceUses.PushBackIfNotPresent(sysunit);
+    programlog.leave(IfEntered);end;
 
+    with ProgramLog.Enter('GeneralUnit.free',ProgramLog.LM_Trace) do begin
+      zTraceLn('{T+}GeneralUnit.free start');
+      GeneralUnit.free;
+      GeneralUnit.InterfaceUses.PushBackIfNotPresent(sysunit);
+      zTraceLn('{T-}end');
+    programlog.leave(IfEntered);end;
 
-     zTraceLn('{T+}GeneralUnit.free start');
-     GeneralUnit.free;
-     GeneralUnit.InterfaceUses.PushBackIfNotPresent(sysunit);
-     zTraceLn('{T-}end');
+    with ProgramLog.Enter('GeometryUnit.free',ProgramLog.LM_Trace) do begin
+      GeometryUnit.free;
+      GeometryUnit.InterfaceUses.PushBackIfNotPresent(sysunit);
+    programlog.leave(IfEntered);end;
 
-     zTraceLn('{T+}GeometryUnit.free start');
-     GeometryUnit.free;
-     GeometryUnit.InterfaceUses.PushBackIfNotPresent(sysunit);
-     zTraceLn('{T-}end');
+    with ProgramLog.Enter('MiscUnit.free start',ProgramLog.LM_Trace) do begin
+      MiscUnit.free;
+      MiscUnit.InterfaceUses.PushBackIfNotPresent(sysunit);
+    programlog.leave(IfEntered);end;
 
-     zTraceLn('{T+}MiscUnit.free start');
-     MiscUnit.free;
-     MiscUnit.InterfaceUses.PushBackIfNotPresent(sysunit);
-     zTraceLn('{T-}end');
+    with ProgramLog.Enter('SummaryUnit.free',ProgramLog.LM_Trace) do begin
+      SummaryUnit.free;
+      SummaryUnit.InterfaceUses.PushBackIfNotPresent(sysunit);
+    programlog.leave(IfEntered);end;
 
-     zTraceLn('{T+}SummaryUnit.free start');
-     SummaryUnit.free;
-     SummaryUnit.InterfaceUses.PushBackIfNotPresent(sysunit);
-     zTraceLn('{T-}end');
-
-     CheckMultiPropertyUse;
-     CreateMultiPropertys(f);
-     //etype:=GetObjType;
-     psd:=drawings.GetCurrentDWG.SelObjArray.beginiterate(ir);
-     //pv:=drawings.GetCurrentDWG.ObjRoot.ObjArray.beginiterate(ir);
-     if psd<>nil then
-     repeat
-       pv:=psd^.objaddr;
-       if pv<>nil then
-
-       if pv^.Selected then begin
-         pentvarext:=pv^.GetExtension<TVariablesExtender>;
-         if ((pv^.GetObjType=GetObjType)or(GetObjType=0))and(pentvarext<>nil) then begin
-           if VariableProcessSelector<>VPS_OnlyRelatedEnts then
-             processunit(pentvarext.entityunit);
-           if VariableProcessSelector<>VPS_OnlyThisEnts then begin
-             pu:=pentvarext.entityunit.InterfaceUses.beginiterate(ir2);
-             if pu<>nil then
-               repeat
-                 if typeof(PTSimpleUnit(pu)^)=typeof(TObjectUnit) then
-                   processunit(PTObjectUnit(pu)^,true);
-                 pu:=pentvarext.entityunit.InterfaceUses.iterate(ir2)
-               until pu=nil;
-           end;
-         end;
-       end;
-     //pv:=drawings.GetCurrentDWG.ObjRoot.ObjArray.iterate(ir);
-     psd:=drawings.GetCurrentDWG.SelObjArray.iterate(ir);
-     until psd=nil;
-     debugln('{D+}TMSEditor.createunit end');
+    CheckMultiPropertyUse;
+    CreateMultiPropertys(f);
+    //etype:=GetObjType;
+    psd:=drawings.GetCurrentDWG.SelObjArray.beginiterate(ir);
+    //pv:=drawings.GetCurrentDWG.ObjRoot.ObjArray.beginiterate(ir);
+    if psd<>nil then repeat
+      pv:=psd^.objaddr;
+      if pv<>nil then
+        if pv^.Selected then begin
+          pentvarext:=pv^.GetExtension<TVariablesExtender>;
+          if ((pv^.GetObjType=GetObjType)or(GetObjType=0))and(pentvarext<>nil) then begin
+            if VariableProcessSelector<>VPS_OnlyRelatedEnts then
+              processunit(pentvarext.entityunit);
+            if VariableProcessSelector<>VPS_OnlyThisEnts then begin
+              pu:=pentvarext.entityunit.InterfaceUses.beginiterate(ir2);
+              if pu<>nil then
+                repeat
+                  if typeof(PTSimpleUnit(pu)^)=typeof(TObjectUnit) then
+                    processunit(PTObjectUnit(pu)^,true);
+                  pu:=pentvarext.entityunit.InterfaceUses.iterate(ir2)
+                until pu=nil;
+            end;
+          end;
+        end;
+      //pv:=drawings.GetCurrentDWG.ObjRoot.ObjArray.iterate(ir);
+      psd:=drawings.GetCurrentDWG.SelObjArray.iterate(ir);
+    until psd=nil;
+  programlog.leave(IfEntered);end;
+  //debugln('{D-}TMSEditor.createunit end');
 end;
 procedure DeselectEnts(PInstance:Pointer);
 var
@@ -1134,6 +1135,6 @@ initialization
   i:=SizeOf(TObjectUnit);
   i:=SizeOf(TObjectUnit);
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   finalize;
 end.

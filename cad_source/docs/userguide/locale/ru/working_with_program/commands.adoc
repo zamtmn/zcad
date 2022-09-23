@@ -17,7 +17,6 @@ BlockReplace
 BlockRotate
 BlockScale
 BlocksInBasePreViewExport
-BlocksList
 include::commands/cam_reset.adoc[]
 include::commands/cancel.adoc[]
 ChangeProjType
@@ -40,10 +39,12 @@ include::commands/dataimport.adoc[]
 
 
 dbgAppExplorer
+dbgBlocksList
 dbgClipboard
 dbgCmdList
 dbgGetAV
 dbgMemSummary
+dbgPlaceAllBlocks
 DeSelectAll
 DimAligned
 DimDiameter
@@ -132,7 +133,6 @@ Options
 OrtoDevPlace
 Pan
 PasteClip
-PlaceAllBlocks
 PlaceSmokeDetectorOrto
 PolyDiv
 PolyEd

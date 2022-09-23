@@ -48,27 +48,12 @@ uses
   uzeentsubordinated,uzeentblockinsert,uzeentpolyline,uzclog,
   math,uzeenttable,uzctnrvectorstrings,
   uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray
-  ,uzelongprocesssupport,LazLogger,uzccommand_circle2,uzccommand_erase,uzccmdfloatinsert,
+  ,uzelongprocesssupport,uzccommand_circle2,uzccommand_erase,uzccmdfloatinsert,
   uzccommand_rebuildtree, uzeffmanager;
 const
      modelspacename:String='**Модель**';
 type
 {EXPORT+}
-         TEntityProcess=(
-                       TEP_Erase(*'Erase'*),
-                       TEP_leave(*'Leave'*)
-                       );
-         {REGISTERRECORDTYPE TBlockInsert}
-         TBlockInsert=record
-                            Blocks:TEnumData;(*'Block'*)
-                            Scale:GDBvertex;(*'Scale'*)
-                            Rotation:Double;(*'Rotation'*)
-                      end;
-         PTMirrorParam=^TMirrorParam;
-         {REGISTERRECORDTYPE TMirrorParam}
-         TMirrorParam=record
-                            SourceEnts:TEntityProcess;(*'Source entities'*)
-                      end;
          BRMode=(
                  BRM_Block(*'Block'*),
                  BRM_Device(*'Device'*),
@@ -137,20 +122,6 @@ type
   ptpcoavector=^tpcoavector;
   tpcoavector={-}specialize{//}
               GZVector{-}<TCopyObjectDesc>{//};
-  {REGISTEROBJECTTYPE mirror_com}
-  mirror_com =  object(copy_com)
-    function CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D; virtual;
-    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
-  end;
-  {REGISTEROBJECTTYPE copybase_com}
-  copybase_com =  object(CommandRTEdObject)
-    procedure CommandStart(Operands:TCommandOperands); virtual;
-    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
-  end;
-  {REGISTEROBJECTTYPE PasteClip_com}
-  PasteClip_com =  object(FloatInsert_com)
-    procedure Command(Operands:TCommandOperands); virtual;
-  end;
   {REGISTEROBJECTTYPE BlockReplace_com}
   BlockReplace_com= object(CommandRTEdObject)
                          procedure CommandStart(Operands:TCommandOperands); virtual;
@@ -231,18 +202,16 @@ PointOnCurve3DPropArraySort=specialize TOrderingArrayUtils<PointOnCurve3DPropArr
 MapPointOnCurve3DPropArray=specialize TMap<PGDBObjLine,PointOnCurve3DPropArray, LessPointer>;
 devcoordsort=specialize TOrderingArrayUtils<devcoordarray, tdevcoord, TGDBVertexLess>;
 devnamesort=specialize TOrderingArrayUtils<devnamearray, tdevname, TGDBNameLess>;
+
+function GetBlockDefNames(var BDefNames:TZctnrVectorStrings;selname:String):Integer;
+
 var
-   MirrorParam:TMirrorParam;
    pworkvertex:pgdbvertex;
-   BIProp:TBlockInsert;
    pb:PGDBObjBlockInsert;
 
    pold:PGDBObjEntity;
    p3dpl:pgdbobjpolyline;
    p3dplold:PGDBObjEntity;
-   mirror:mirror_com;
-   copybase:copybase_com;
-   PasteClip:PasteClip_com;
 
    InsertTestTable:ITT_com;
 
@@ -1202,320 +1171,6 @@ begin
      Commandmanager.executecommandend;
 end;
 
-procedure pasteclip_com.Command(Operands:TCommandOperands);
-var
-  zcformat:TClipboardFormat;
-  tmpStr:AnsiString;
-  tmpStream:TMemoryStream;
-  tmpSize:LongInt;
-  zdctx:TZDrawingContext;
-begin
-  zcformat:=RegisterClipboardFormat(ZCAD_DXF_CLIPBOARD_NAME);
-  if clipboard.HasFormat(zcformat) then begin
-    tmpStr:='';
-    tmpStream:=TMemoryStream.create;
-    try
-      clipboard.GetFormat(zcformat,tmpStream);
-      tmpSize:=tmpStream.Seek(0,soFromEnd);
-      setlength(tmpStr,tmpSize);
-      tmpStream.Seek(0,soFromBeginning);
-      tmpStream.ReadBuffer(tmpStr[1],tmpSize);
-    finally
-      tmpStream.free;
-    end;
-    if fileexists(utf8tosys(tmpStr)) then begin
-      zdctx.CreateRec(drawings.GetCurrentDWG^,drawings.GetCurrentDWG^.ConstructObjRoot,TLOMerge,drawings.GetCurrentDWG^.CreateDrawingRC);
-      addfromdxf(tmpStr,zdctx{@drawings.GetCurrentDWG^.ConstructObjRoot,{tloload}TLOMerge,drawings.GetCurrentDWG^});
-    end;
-    drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
-    ZCMsgCallBackInterface.TextMessage(rscmNewBasePoint,TMWOHistoryOut);
-  end else
-    ZCMsgCallBackInterface.TextMessage(rsClipboardIsEmpty,TMWOHistoryOut);
-end;
-procedure copybase_com.CommandStart(Operands:TCommandOperands);
-var //i: Integer;
-  {tv,}pobj: pGDBObjEntity;
-      ir:itrec;
-      counter:integer;
-      //tcd:TCopyObjectDesc;
-begin
-  inherited;
-
-  counter:=0;
-
-  pobj:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
-  if pobj<>nil then
-  repeat
-    if pobj^.selected then
-    inc(counter);
-  pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
-  until pobj=nil;
-
-
-  if counter>0 then
-  begin
-  drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
-  ZCMsgCallBackInterface.TextMessage(rscmBasePoint,TMWOHistoryOut);
-  end
-  else
-  begin
-    ZCMsgCallBackInterface.TextMessage(rscmSelEntBeforeComm,TMWOHistoryOut);
-    Commandmanager.executecommandend;
-  end;
-end;
-function copybase_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
-var
-    dist:gdbvertex;
-    dispmatr:DMatrix4D;
-    ir:itrec;
-    //pcd:PTCopyObjectDesc;
-
-    //pbuf:pchar;
-    //hgBuffer:HGLOBAL;
-
-    //s,suni:String;
-    //I:Integer;
-      tv,pobj: pGDBObjEntity;
-      DC:TDrawContext;
-      NeedReCreateClipboardDWG:boolean;
-begin
-
-      //drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=dispmatr;
-  NeedReCreateClipboardDWG:=true;
-  if (button and MZW_LBUTTON)<>0 then
-  begin
-      ClipboardDWG^.pObjRoot^.ObjArray.free;
-      dist.x := -wc.x;
-      dist.y := -wc.y;
-      dist.z := -wc.z;
-
-      dispmatr:=onematrix;
-      PGDBVertex(@dispmatr[3])^:=dist;
-
-   dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-   pobj:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
-   if pobj<>nil then
-   repeat
-          begin
-              if pobj^.selected then
-              begin
-                if NeedReCreateClipboardDWG then
-                                                 begin
-                                                      ReCreateClipboardDWG;
-                                                      NeedReCreateClipboardDWG:=false;
-                                                 end;
-                tv:=drawings.CopyEnt(drawings.GetCurrentDWG,ClipboardDWG,pobj);
-                if tv^.IsHaveLCS then
-                                    PGDBObjWithLocalCS(tv)^.CalcObjMatrix;
-                tv^.transform(dispmatr);
-                tv^.FormatEntity(ClipboardDWG^,dc);
-              end;
-          end;
-          pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
-   until pobj=nil;
-
-   CopyToClipboard;
-
-   drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=onematrix;
-   commandend;
-   commandmanager.executecommandend;
-  end;
-  result:=cmd_ok;
-end;
-function Insert_com_CommandStart(operands:TCommandOperands):Integer;
-var pb:PGDBObjBlockdef;
-    //ir:itrec;
-    i:integer;
-begin
-     if operands<>'' then
-     begin
-          pb:=drawings.GetCurrentDWG^.BlockDefArray.getblockdef(operands);
-          if pb=nil then
-                        begin
-                             drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,operands);
-                             (*pb:=BlockBaseDWG^.BlockDefArray.getblockdef(operands);
-                             if pb<>nil then
-                             begin
-                                  drawings.CopyBlock(BlockBaseDWG,drawings.GetCurrentDWG,pb);
-                                  //pb^.CloneToGDB({@drawings.GetCurrentDWG^.BlockDefArray});
-                             end;*)
-                        end;
-     end;
-
-
-
-     BIProp.Blocks.Enums.free;
-     i:=GetBlockDefNames(BIProp.Blocks.Enums,operands);
-     if BIProp.Blocks.Enums.Count>0 then
-     begin
-          if i>=0 then
-                     BIProp.Blocks.Selected:=i
-                 else
-                     if length(operands)<>0 then
-                                         begin
-                                               ZCMsgCallBackInterface.TextMessage('Insert:'+sysutils.format(rscmNoBlockDefInDWG,[operands]),TMWOHistoryOut);
-                                               commandmanager.executecommandend;
-                                               exit;
-                                         end;
-          ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD('TBlockInsert'),@BIProp,drawings.GetCurrentDWG);
-          drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
-          ZCMsgCallBackInterface.TextMessage(rscmInsertPoint,TMWOHistoryOut);
-     end
-        else
-            begin
-                 ZCMsgCallBackInterface.TextMessage('Insert:'+rscmInDwgBlockDefNotDeffined,TMWOHistoryOut);
-                 commandmanager.executecommandend;
-            end;
-  result:=cmd_ok;
-end;
-function Insert_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
-var tb:PGDBObjSubordinated;
-    domethod,undomethod:tmethod;
-    DC:TDrawContext;
-begin
-  result:=mclick;
-  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-  if (button and MZW_LBUTTON)<>0 then
-  begin
-    if pb<>nil then begin
-                         //pb^.done;
-                         //Freemem(pointer(pb));
-                         pb:=nil;
-                         drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.free;
-                         //drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count := 0;
-                    end;
-    pb := Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID{,drawings.GetCurrentROOT}));
-    //PGDBObjBlockInsert(pb)^.initnul;//(@drawings.GetCurrentDWG^.ObjRoot,drawings.LayerTable.GetSystemLayer,0);
-    PGDBObjBlockInsert(pb)^.init(drawings.GetCurrentROOT,drawings.GetCurrentDWG^.GetCurrentLayer,0);
-    pb^.Name:=PGDBObjBlockdef(drawings.GetCurrentDWG^.BlockDefArray.getDataMutable(BIProp.Blocks.Selected))^.Name;//'DEVICE_NOC';
-    zcSetEntPropFromCurrentDrawingProp(pb);
-    //pb^.vp.ID:=GDBBlockInsertID;
-    pb^.Local.p_insert:=wc;
-    pb^.scale:=BIProp.Scale;
-    pb^.CalcObjMatrix;
-    //pb^.rotate:=BIProp.Rotation;
-    pb^.setrot(BIProp.Rotation);
-    //pb^.
-    //GDBObjCircleInit(pc,drawings.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, wc, 0);
-    //pc^.lod:=4;
-    tb:=pb^.FromDXFPostProcessBeforeAdd(nil,drawings.GetCurrentDWG^);
-    if tb<>nil then begin
-                         tb^.bp:=pb^.bp;
-                         pb^.done;
-                         Freemem(pointer(pb));
-                         pb:=pointer(tb);
-    end;
-
-    SetObjCreateManipulator(domethod,undomethod);
-    with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),1)^ do
-    begin
-         AddObject(pb);
-         comit;
-    end;
-
-    //drawings.GetCurrentROOT^.AddObjectToObjArray{ObjArray.add}(addr(pb));
-    PGDBObjEntity(pb)^.FromDXFPostProcessAfterAdd;
-    pb^.CalcObjMatrix;
-    pb^.BuildGeometry(drawings.GetCurrentDWG^);
-    pb^.BuildVarGeometry(drawings.GetCurrentDWG^);
-    pb^.FormatEntity(drawings.GetCurrentDWG^,dc);
-    drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeBoundingBox(pb^);
-    pb^.Visible:=0;
-    drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count := 0;
-    pb^.RenderFeedback(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,@drawings.GetCurrentDWG^.myGluProject2,dc);
-    pb:=nil;
-    //commandmanager.executecommandend;
-    //result:=1;
-    zcRedrawCurrentDrawing;
-
-    result:=0;
-  end
-  else
-  begin
-    if pb<>nil then begin
-                         //pb^.done;
-                         //Freemem(pointer(pb));
-                         pb:=nil;
-                         drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.free;
-                         //drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count := 0;
-                    end;
-    pointer(pb) :=AllocEnt(GDBBlockInsertID);
-    //pointer(pb) :=drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID,drawings.GetCurrentROOT);
-    //pb := Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.CreateObj(GDBBlockInsertID,@drawings.GetCurrentDWG^.ObjRoot));
-    //PGDBObjBlockInsert(pb)^.initnul;//(@drawings.GetCurrentDWG^.ObjRoot,drawings.LayerTable.GetSystemLayer,0);
-    PGDBObjBlockInsert(pb)^.init(drawings.GetCurrentROOT,drawings.GetCurrentDWG^.GetCurrentLayer,0);
-    pb^.Name:=PGDBObjBlockdef(drawings.GetCurrentDWG^.BlockDefArray.getDataMutable(BIProp.Blocks.Selected))^.Name;//'NOC';//'TESTBLOCK';
-    zcSetEntPropFromCurrentDrawingProp(pb);
-    //pb^.vp.ID:=GDBBlockInsertID;
-    pb^.Local.p_insert:=wc;
-
-    pb^.Local.p_insert:=wc;
-    pb^.scale:=BIProp.Scale;
-    pb^.CalcObjMatrix;
-    //pb^.rotate:=BIProp.Rotation;
-    pb^.setrot(BIProp.Rotation);
-
-    tb:=pb^.FromDXFPostProcessBeforeAdd(nil,drawings.GetCurrentDWG^);
-    if tb<>nil then begin
-                         tb^.bp:=pb^.bp;
-                         //drawings.GetCurrentDWG^.ConstructObjRoot.deliteminarray(pb^.bp.PSelfInOwnerArray);
-                         pb^.done;
-                         Freemem(pointer(pb));
-                         pb:=pointer(tb);
-    end;
-    drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.AddPEntity(pb^);
-    //PGDBObjEntity(pb)^.FromDXFPostProcessAfterAdd;
-    pb^.CalcObjMatrix;
-    pb^.BuildGeometry(drawings.GetCurrentDWG^);
-    pb^.BuildVarGeometry(drawings.GetCurrentDWG^);
-    pb^.FormatEntity(drawings.GetCurrentDWG^,dc);
-    //drawings.GetCurrentDWG^.ConstructObjRoot.Count := 0;
-    //pb^.RenderFeedback;
-  end;
-end;
-procedure Insert_com_CommandEnd(_self:pointer);
-begin
-     if pb<>nil then
-                    begin
-                         //pb^.done;
-                         //Freemem(pointer(pb));
-                         pb:=nil;
-                    end;
-end;
-function Mirror_com.CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D;
-var
-    dist,p3:gdbvertex;
-    d:Double;
-    plane:DVector4D;
-begin
-        dist:=uzegeometry.VertexSub(p2,p1);
-        d:=uzegeometry.oneVertexlength(dist);
-        p3:=uzegeometry.VertexMulOnSc(ZWCS,d);
-        p3:=uzegeometry.VertexAdd(p3,t3dp);
-
-        plane:=PlaneFrom3Pont(p1,p2,p3);
-        normalizeplane(plane);
-        result:=CreateReflectionMatrix(plane);
-end;
-function Mirror_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
-var
-    dispmatr:DMatrix4D;
-begin
-
-  dispmatr:=CalcTransformMatrix(t3dp,wc);
-  drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=dispmatr;
-
-   if (button and MZW_LBUTTON)<>0 then
-   begin
-      case MirrorParam.SourceEnts of
-                           TEP_Erase:move(dispmatr,self.CommandName);
-                           TEP_Leave:copy(dispmatr,self.CommandName);
-      end;
-      //redrawoglwnd;
-      commandmanager.executecommandend;
-   end;
-   result:=cmd_ok;
-end;
 function Insert2_com(operands:TCommandOperands):TCommandResult;
 var
     s:String;
@@ -1658,69 +1313,6 @@ else if (sd.PFirstSelectedEnt^.GetObjType=GDBDeviceID) then
   drawings.GetCurrentROOT^.ObjArray.DeSelect(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,@drawings.GetCurrentDWG^.deselector);
   result:=cmd_ok;
   zcRedrawCurrentDrawing;
-end;
-function PlaceAllBlocks_com(operands:TCommandOperands):TCommandResult;
-var pb:PGDBObjBlockdef;
-    ir:itrec;
-    xcoord:Double;
-    BLinsert,tb:PGDBObjBlockInsert;
-    dc:TDrawContext;
-begin
-     pb:=drawings.GetCurrentDWG^.BlockDefArray.beginiterate(ir);
-     xcoord:=0;
-     if pb<>nil then
-     repeat
-           ZCMsgCallBackInterface.TextMessage(pb^.name,TMWOHistoryOut);
-
-
-    BLINSERT := Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID{,drawings.GetCurrentROOT}));
-    PGDBObjBlockInsert(BLINSERT)^.initnul;//(@drawings.GetCurrentDWG^.ObjRoot,drawings.LayerTable.GetSystemLayer,0);
-    PGDBObjBlockInsert(BLINSERT)^.init(drawings.GetCurrentROOT,drawings.GetCurrentDWG^.GetCurrentLayer,0);
-    BLinsert^.Name:=pb^.name;
-    BLINSERT^.Local.p_insert.x:=xcoord;
-    tb:=pointer(BLINSERT^.FromDXFPostProcessBeforeAdd(nil,drawings.GetCurrentDWG^));
-    if tb<>nil then begin
-                         tb^.bp:=BLINSERT^.bp;
-                         BLINSERT^.done;
-                         Freemem(pointer(BLINSERT));
-                         BLINSERT:=pointer(tb);
-    end;
-    drawings.GetCurrentROOT^.AddObjectToObjArray{ObjArray.add}(addr(BLINSERT));
-    PGDBObjEntity(BLINSERT)^.FromDXFPostProcessAfterAdd;
-    BLINSERT^.CalcObjMatrix;
-    BLINSERT^.BuildGeometry(drawings.GetCurrentDWG^);
-    BLINSERT^.BuildVarGeometry(drawings.GetCurrentDWG^);
-    dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-    BLINSERT^.FormatEntity(drawings.GetCurrentDWG^,dc);
-    BLINSERT^.Visible:=0;
-    BLINSERT^.RenderFeedback(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,@drawings.GetCurrentDWG^.myGluProject2,dc);
-    //BLINSERT:=nil;
-    //commandmanager.executecommandend;
-
-           pb:=drawings.GetCurrentDWG^.BlockDefArray.iterate(ir);
-           xcoord:=xcoord+20;
-     until pb=nil;
-
-    zcRedrawCurrentDrawing;
-
-    result:=cmd_ok;
-
-end;
-function BlocksList_com(operands:TCommandOperands):TCommandResult;
-var pb:PGDBObjBlockdef;
-    ir:itrec;
-begin
-     pb:=drawings.GetCurrentDWG^.BlockDefArray.beginiterate(ir);
-     if pb<>nil then
-     repeat
-           ZCMsgCallBackInterface.TextMessage(format('Found block "%s", contains %d entities',[Tria_AnsiToUtf8(pb^.name),pb^.ObjArray.Count]),TMWOHistoryOut);
-
-
-           pb:=drawings.GetCurrentDWG^.BlockDefArray.iterate(ir);
-     until pb=nil;
-
-    result:=cmd_ok;
-
 end;
 
 procedure PlacePoint(const point:GDBVertex);inline;
@@ -1925,17 +1517,6 @@ end;
 
 procedure startup;
 begin
-  BIProp.Blocks.Enums.init(100);
-  BIProp.Scale:=uzegeometry.OneVertex;
-  BIProp.Rotation:=0;
-
-  CreateCommandRTEdObjectPlugin(@Insert_com_CommandStart,@Insert_com_CommandEnd,nil,nil,@Insert_com_BeforeClick,@Insert_com_BeforeClick,nil,nil,'Insert',0,0);
-
-  mirror.init('Mirror',0,0);
-  mirror.SetCommandParam(@MirrorParam,'PTMirrorParam');
-  copybase.init('CopyBase',CADWG or CASelEnts,0);
-  PasteClip.init('PasteClip',0,0);
-
   BlockReplace.init('BlockReplace',0,0);
   BlockReplaceParams.Find.Enums.init(10);
   BlockReplaceParams.Replace.Enums.init(10);
@@ -1946,8 +1527,6 @@ begin
   BlockReplace.SetCommandParam(@BlockReplaceParams,'PTBlockReplaceParams');
 
   CreateCommandFastObjectPlugin(@Insert2_com,'Insert2',CADWG,0);
-  CreateCommandFastObjectPlugin(@PlaceAllBlocks_com,'PlaceAllBlocks',CADWG,0);
-  CreateCommandFastObjectPlugin(@BlocksList_com,'BlocksList',CADWG,0);
   //CreateCommandFastObjectPlugin(@bedit_com,'BEdit');
   pbeditcom:=CreateCommandRTEdObjectPlugin(@bedit_com,nil,nil,@bedit_format,nil,nil,nil,nil,'BEdit',0,0);
   BEditParam.Blocks.Enums.init(100);
@@ -1993,12 +1572,11 @@ begin
 end;
 procedure Finalize;
 begin
-  BIProp.Blocks.Enums.done;
   BEditParam.Blocks.Enums.done;
 end;
 initialization
   startup;
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   finalize;
 end.

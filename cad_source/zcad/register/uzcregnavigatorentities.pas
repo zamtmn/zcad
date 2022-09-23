@@ -22,7 +22,7 @@ interface
 uses uzcfnavigatorentities,uzcfcommandline,uzbpaths,TypeDescriptors,uzctranslations,Forms,
      varmandef,
      uzeentity,zcobjectinspector,uzcguimanager,
-     Types,Controls,Varman,UUnitManager,uzcsysvars,uzcsysinfo,LazLogger;
+     Types,Controls,Varman,UUnitManager,uzcsysvars,uzcsysinfo,uzcLog;
 resourcestring
   rsEntities='Entities';
 implementation
@@ -33,6 +33,6 @@ end;
 initialization
   ZCADGUIManager.RegisterZCADFormInfo('NavigatorEntities',rsEntities,TNavigatorEntities,rect(0,100,200,600),ZCADFormSetupProc,nil,@NavigatorEntities,true);
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.
 

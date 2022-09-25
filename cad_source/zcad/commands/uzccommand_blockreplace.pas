@@ -27,11 +27,11 @@ uses
   uzccommandsabstract,uzccommandsimpl,
   uzbstrproc,
   gzctnrVectorTypes,
-  uzeblockdef,uzcdrawing,uzcdrawings,uzcinterface,
-  uzctnrVectorStrings,uzegeometrytypes,
-  uzccomdraw,uzcstrconsts,uzccommandsmanager,Varman,uzeconsts,uzglviewareadata,
-  uzeentsubordinated,uzeentity,uzgldrawcontext,uzeentblockinsert,uzcutils,
-  zcmultiobjectcreateundocommand,uzeentityfactory,uzegeometry,
+  uzeblockdef,uzcdrawings,uzcinterface,
+  uzctnrVectorStrings,
+  uzccomdraw,uzcstrconsts,uzccommandsmanager,Varman,uzeconsts,
+  uzeentsubordinated,uzeentity,uzgldrawcontext,uzeentblockinsert,
+  uzeentityfactory,uzegeometry,
   UGDBVisibleTreeArray,UGDBSelectedObjArray,uzcenitiesvariablesextender,
   uzeentdevice,UBaseTypeDescriptor,uzccommand_regen,URecordDescriptor,typedescriptors;
 
@@ -39,15 +39,15 @@ type
 
   PTBlockReplaceParams=^TBlockReplaceParams;
   TBlockReplaceParams=record
-    Process:BRMode;(*'Process'*)
-    CurrentFindBlock:String;(*'**CurrentFind'*)(*oi_readonly*)(*hidden_in_objinsp*)
-    Find:TEnumData;(*'Find'*)
-    CurrentReplaceBlock:String;(*'**CurrentReplace'*)(*oi_readonly*)(*hidden_in_objinsp*)
-    Replace:TEnumData;(*'Replace'*)
-    SaveOrientation:Boolean;(*'Save orientation'*)
-    SaveVariables:Boolean;(*'Save variables'*)
-    SaveVariablePart:Boolean;(*'Save variable part'*)
-    SaveVariableText:Boolean;(*'Save variable text'*)
+    Process:BRMode;//(*'Process'*)
+    CurrentFindBlock:String;//(*'**CurrentFind'*)(*oi_readonly*)(*hidden_in_objinsp*)
+    Find:TEnumData;//(*'Find'*)
+    CurrentReplaceBlock:String;//(*'**CurrentReplace'*)(*oi_readonly*)(*hidden_in_objinsp*)
+    Replace:TEnumData;//(*'Replace'*)
+    SaveOrientation:Boolean;//(*'Save orientation'*)
+    SaveVariables:Boolean;//(*'Save variables'*)
+    SaveVariablePart:Boolean;//(*'Save variable part'*)
+    SaveVariableText:Boolean;//(*'Save variable text'*)
   end;
 
   BlockReplace_com= object(CommandRTEdObject)

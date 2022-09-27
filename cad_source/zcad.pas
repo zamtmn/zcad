@@ -238,6 +238,8 @@ uses
   uzccommand_dbgPlaceAllBlocks,
   uzccommand_Insert,uzccommand_BlockReplace,
 
+  uzccommand_NumDevices,
+
 
   uzcenitiesvariablesextender,uzcExtdrLayerControl,uzcExtdrSmartTextEnt,
 

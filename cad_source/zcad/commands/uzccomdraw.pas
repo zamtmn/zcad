@@ -22,8 +22,8 @@ unit uzccomdraw;
 interface
 uses
   gzctnrVector,uzglviewareageneral,
-  gzctnrVectorTypes,zcmultiobjectcreateundocommand,uzgldrawercanvas,
-  uzcoimultiobjects,uzcenitiesvariablesextender,uzcdrawing,uzepalette,
+  gzctnrVectorTypes,uzgldrawercanvas,
+  uzcoimultiobjects,uzcenitiesvariablesextender,uzepalette,
   uzgldrawcontext,usimplegenerics,UGDBPoint3DArray,
   uzeentpoint,uzeentitiestree,gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,uzeentityfactory,
   uzedrawingsimple,uzcsysvars,uzcstrconsts,
@@ -77,24 +77,6 @@ type
                              Scale:GDBVertex;(*'New scale'*)
                              Absolytly:Boolean;(*'Absolytly'*)
                            end;}
-         TST=(
-                 TST_YX(*'Y-X'*),
-                 TST_XY(*'X-Y'*),
-                 TST_UNSORTED(*'Unsorted'*)
-                );
-         PTNumberingParams=^TNumberingParams;
-         {REGISTERRECORDTYPE TNumberingParams}
-         TNumberingParams=record
-                            SortMode:TST;(*''*)
-                            InverseX:Boolean;(*'Inverse X axis dir'*)
-                            InverseY:Boolean;(*'Inverse Y axis dir'*)
-                            DeadDand:Double;(*'Deadband'*)
-                            StartNumber:Integer;(*'Start'*)
-                            Increment:Integer;(*'Increment'*)
-                            SaveStart:Boolean;(*'Save start number'*)
-                            BaseName:String;(*'Base name sorting devices'*)
-                            NumberVar:String;(*'Number variable'*)
-                      end;
          PTExportDevWithAxisParams=^TExportDevWithAxisParams;
          {REGISTERRECORDTYPE TExportDevWithAxisParams}
          TExportDevWithAxisParams=record
@@ -133,12 +115,6 @@ type
                          procedure ShowMenu;virtual;
                          procedure Run(pdata:PtrInt); virtual;
           end;
-  {REGISTEROBJECTTYPE Number_com}
-  Number_com= object(CommandRTEdObject)
-                         procedure CommandStart(Operands:TCommandOperands); virtual;
-                         procedure ShowMenu;virtual;
-                         procedure Run(pdata:PtrInt); virtual;
-             end;
   {REGISTEROBJECTTYPE ExportDevWithAxis_com}
   ExportDevWithAxis_com= object(CommandRTEdObject)
                          procedure CommandStart(Operands:TCommandOperands); virtual;
@@ -164,6 +140,7 @@ tdevname=record
               pdev:PGDBObjDevice;
         end;
 TGDBVertexLess=class
+                    class var DeadBand:Double;
                     class function c(a,b:tdevcoord):boolean;{inline;}
                end;
 TGDBNameLess=class
@@ -201,14 +178,12 @@ var
 
    ATO:ATO_com;
    CFO:CFO_com;
-   NumberCom:Number_com;
    ExportDevWithAxisCom:ExportDevWithAxis_com;
    BlockScaleParams:TBlockScaleParams;
    BlockScale:BlockScale_com;
    BlockRotateParams:TBlockRotateParams;
    BlockRotate:BlockRotate_com;
 
-   NumberingParams:TNumberingParams;
    ExportDevWithAxisParams:TExportDevWithAxisParams;
 
 //procedure startup;
@@ -720,168 +695,6 @@ begin
   psd:=drawings.GetCurrentDWG^.SelObjArray.iterate(ir);
   until psd=nil;
 end;
-procedure Number_com.CommandStart(Operands:TCommandOperands);
-begin
-  self.savemousemode:=drawings.GetCurrentDWG^.wa.param.md.mode;
-  if drawings.GetCurrentDWG^.SelObjArray.Count>0 then
-  begin
-       showmenu;
-       inherited CommandStart('');
-  end
-  else
-  begin
-    ZCMsgCallBackInterface.TextMessage(rscmSelEntBeforeComm,TMWOHistoryOut);
-    Commandmanager.executecommandend;
-  end;
-end;
-procedure Number_com.ShowMenu;
-begin
-  commandmanager.DMAddMethod(rscmNumber,'Number selected devices',@run);
-  commandmanager.DMShow;
-end;
-class function TGDBNameLess.c(a,b:tdevname):boolean;
-begin
-     if {a.name<b.name}AnsiNaturalCompare(a.name,b.name)>0 then
-                          result:=false
-                      else
-                          result:=true;
-end;
-class function TGDBtaxisdescLess.c(a,b:taxisdesc):boolean;
-begin
-     if a.d0<b.d0 then
-                          result:=true
-                      else
-                          result:=false;
-end;
-class function TGDBVertexLess.c(a,b:tdevcoord):boolean;
-begin
-     //if a.coord.y<b.coord.y then
-     if a.coord.y<b.coord.y-NumberingParams.DeadDand then
-                    result:=true
-                else
-                    if  {a.coord.y>b.coord.y}abs(a.coord.y-b.coord.y)>{eps}NumberingParams.DeadDand then
-                                   begin
-                                   result:=false;
-                                   end
-                else
-                    if a.coord.x<b.coord.x-NumberingParams.DeadDand then
-                                   result:=true
-                else
-                    begin
-                    result:=false;
-                    end;
-end;
-procedure Number_com.Run(pdata:PtrInt);
-var
-    psd:PSelectedObjDesc;
-    ir:itrec;
-    mpd:devcoordarray;
-    pdev:PGDBObjDevice;
-    //key:GDBVertex;
-    index:integer;
-    pvd:pvardesk;
-    dcoord:tdevcoord;
-    i,count:integer;
-    process:boolean;
-    DC:TDrawContext;
-    pdevvarext:TVariablesExtender;
-begin
-     mpd:=devcoordarray.Create;
-     psd:=drawings.GetCurrentDWG^.SelObjArray.beginiterate(ir);
-     count:=0;
-     dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-     if psd<>nil then
-     repeat
-           if psd^.objaddr^.GetObjType=GDBDeviceID then
-           begin
-                case NumberingParams.SortMode of
-                                                TST_YX,TST_UNSORTED:
-                                                       begin
-                                                       dcoord.coord:=PGDBObjDevice(psd^.objaddr)^.P_insert_in_WCS;
-                                                       if NumberingParams.InverseX then
-                                                                                       dcoord.coord.x:=-dcoord.coord.x;
-                                                       if NumberingParams.InverseY then
-                                                                                       dcoord.coord.y:=-dcoord.coord.y;
-                                                       end;
-                                                TST_XY:
-                                                       begin
-                                                            dcoord.coord.x:=PGDBObjDevice(psd^.objaddr)^.P_insert_in_WCS.y;
-                                                            dcoord.coord.y:=PGDBObjDevice(psd^.objaddr)^.P_insert_in_WCS.x;
-                                                            dcoord.coord.z:=PGDBObjDevice(psd^.objaddr)^.P_insert_in_WCS.z;
-                                                            if NumberingParams.InverseX then
-                                                                                            dcoord.coord.y:=-dcoord.coord.y;
-                                                            if NumberingParams.InverseY then
-                                                                                            dcoord.coord.x:=-dcoord.coord.x;
-                                                       end;
-                                               end;{case}
-                dcoord.pdev:=pointer(psd^.objaddr);
-                inc(count);
-                mpd.PushBack(dcoord);
-           end;
-     psd:=drawings.GetCurrentDWG^.SelObjArray.iterate(ir);
-     until psd=nil;
-     if count=0 then
-                    begin
-                         ZCMsgCallBackInterface.TextMessage('In selection not found devices',TMWOHistoryOut);
-                         mpd.Destroy;
-                         Commandmanager.executecommandend;
-                         exit;
-                    end;
-     index:=NumberingParams.StartNumber;
-     if NumberingParams.SortMode<>TST_UNSORTED then
-                                                   devcoordsort.Sort(mpd,mpd.Size);
-     count:=0;
-     for i:=0 to mpd.Size-1 do
-       begin
-            dcoord:=mpd[i];
-            pdev:=dcoord.pdev;
-            pointer(pdevvarext):=pdev^.specialize GetExtension<TVariablesExtender>;
-
-            if NumberingParams.BaseName<>'' then
-            begin
-            //pvd:=PTObjectUnit(pdev^.ou.Instance)^.FindVariable('NMO_BaseName');
-            pvd:=pdevvarext.entityunit.FindVariable('NMO_BaseName');
-            if pvd<>nil then
-            begin
-            if uppercase(pvd^.data.PTD^.GetUserValueAsString(pvd^.data.Addr.Instance))=
-               uppercase(NumberingParams.BaseName) then
-                                                       process:=true
-                                                   else
-                                                       process:=false;
-            end
-               else
-                   begin
-                        process:=true;
-                        ZCMsgCallBackInterface.TextMessage('In device not found BaseName variable. Processed',TMWOHistoryOut);
-                   end;
-            end
-               else
-                   process:=true;
-            if process then
-            begin
-            //pvd:=PTObjectUnit(pdev^.ou.Instance)^.FindVariable(NumberingParams.NumberVar);
-            pvd:=pdevvarext.entityunit.FindVariable(NumberingParams.NumberVar);
-            if pvd<>nil then
-            begin
-                 pvd^.data.PTD^.SetValueFromString(pvd^.data.Addr.Instance,inttostr(index));
-                 inc(index,NumberingParams.Increment);
-                 inc(count);
-                 pdev^.FormatEntity(drawings.GetCurrentDWG^,dc);
-            end
-               else
-               ZCMsgCallBackInterface.TextMessage('In device not found numbering variable',TMWOHistoryOut);
-            end
-            else
-                ZCMsgCallBackInterface.TextMessage('Device with basename "'+pvd^.data.PTD^.GetUserValueAsString(pvd^.data.Addr.Instance)+'" filtred out',TMWOHistoryOut);
-       end;
-     ZCMsgCallBackInterface.TextMessage(sysutils.format(rscmNEntitiesProcessed,[count]),TMWOHistoryOut);
-     if NumberingParams.SaveStart then
-                                      NumberingParams.StartNumber:=index;
-     mpd.Destroy;
-     Commandmanager.executecommandend;
-end;
-
-
 
 
 procedure ATO_com.ShowMenu;
@@ -1293,6 +1106,38 @@ begin
      ZCMsgCallBackInterface.TextMessage('Intersections count: '+inttostr(intersectcount),TMWOHistoryOut);
      result:=cmd_ok;
 end;
+class function TGDBNameLess.c(a,b:tdevname):boolean;
+begin
+     if {a.name<b.name}AnsiNaturalCompare(a.name,b.name)>0 then
+                          result:=false
+                      else
+                          result:=true;
+end;
+class function TGDBtaxisdescLess.c(a,b:taxisdesc):boolean;
+begin
+     if a.d0<b.d0 then
+                          result:=true
+                      else
+                          result:=false;
+end;
+class function TGDBVertexLess.c(a,b:tdevcoord):boolean;
+begin
+     if a.coord.y<b.coord.y-DeadBand then
+                    result:=true
+                else
+                    if abs(a.coord.y-b.coord.y)>DeadBand then
+                                   begin
+                                   result:=false;
+                                   end
+                else
+                    if a.coord.x<b.coord.x-DeadBand then
+                                   result:=true
+                else
+                    begin
+                    result:=false;
+                    end;
+end;
+
 
 procedure startup;
 begin
@@ -1306,17 +1151,6 @@ begin
   ATO.init('AddToOwner',CADWG,0);
   CFO.init('CopyFromOwner',CADWG,0);
 
-  NumberingParams.BaseName:='??';
-  NumberingParams.Increment:=1;
-  NumberingParams.StartNumber:=1;
-  NumberingParams.SaveStart:=false;
-  NumberingParams.DeadDand:=10;
-  NumberingParams.NumberVar:='NMO_Suffix';
-  NumberingParams.InverseX:=false;
-  NumberingParams.InverseY:=true;
-  NumberingParams.SortMode:=TST_YX;
-  NumberCom.init('NumDevices',CADWG,0);
-  NumberCom.SetCommandParam(@NumberingParams,'PTNumberingParams');
 
   ExportDevWithAxisParams.AxisDeviceName:='SPDS_AXIS';
   ExportDevWithAxisCom.init('ExportDevWithAxis',CADWG,0);

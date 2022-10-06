@@ -56,8 +56,8 @@ TZGLGeneral2DDrawer=class(TZGLGeneralDrawer)
                           procedure TranslateCoord2D(const tx,ty:single);override;
                           procedure ScaleCoord2D(const sx,sy:single);override;
 
-                          procedure pushMatrixAndSetTransform(Transform:DMatrix4D);overload;override;
-                          procedure pushMatrixAndSetTransform(Transform:DMatrix4F);overload;override;
+                          procedure pushMatrixAndSetTransform(Transform:DMatrix4D;ResetLCS:Boolean=False);overload;override;
+                          procedure pushMatrixAndSetTransform(Transform:DMatrix4F;ResetLCS:Boolean=False);overload;override;
                           procedure popMatrix;override;
                           function TranslatePointWithLocalCS(const p:GDBVertex3S):GDBVertex3S;
                           function TranslatePoint(const p:GDBVertex3S):GDBVertex3S;
@@ -553,13 +553,13 @@ begin
      mstackindex:=-1;
 end;
 
-procedure TZGLGeneral2DDrawer.pushMatrixAndSetTransform(Transform:DMatrix4D);
+procedure TZGLGeneral2DDrawer.pushMatrixAndSetTransform(Transform:DMatrix4D;ResetLCS:Boolean=False);
 begin
      inc(mstackindex);
      mstack[mstackindex]:=matr;
      matr:=MatrixMultiply(matr,Transform);
 end;
-procedure TZGLGeneral2DDrawer.pushMatrixAndSetTransform(Transform:DMatrix4F);
+procedure TZGLGeneral2DDrawer.pushMatrixAndSetTransform(Transform:DMatrix4F;ResetLCS:Boolean=False);
 begin
      inc(mstackindex);
      mstack[mstackindex]:=matr;

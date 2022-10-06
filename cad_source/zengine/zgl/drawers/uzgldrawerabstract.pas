@@ -84,8 +84,8 @@ TZGLAbstractDrawer=class
 
                         function ProjectPoint3DInModelSpace(const p:gdbvertex;var matrixs:tmatrixs):GDBvertex2D;virtual;abstract;
 
-                        procedure pushMatrixAndSetTransform(Transform:DMatrix4D);overload;virtual;abstract;
-                        procedure pushMatrixAndSetTransform(Transform:DMatrix4F);overload;virtual;abstract;
+                        procedure pushMatrixAndSetTransform(Transform:DMatrix4D;ResetLCS:Boolean=False);overload;virtual;abstract;
+                        procedure pushMatrixAndSetTransform(Transform:DMatrix4F;ResetLCS:Boolean=False);overload;virtual;abstract;
                         procedure popMatrix;virtual;abstract;
                    end;
 implementation

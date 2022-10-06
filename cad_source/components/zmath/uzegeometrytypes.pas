@@ -103,7 +103,7 @@ type
   end;
 {EXPORT+}
 
-  FontFloat=Single;
+  FontFloat=Double;
   PFontFloat=^FontFloat;
   PGDBXCoordinate=^GDBXCoordinate;
   GDBXCoordinate=Double;

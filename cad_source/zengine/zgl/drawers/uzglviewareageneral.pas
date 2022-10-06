@@ -317,14 +317,14 @@ begin
   if param.md.mousein then
   if (param.md.mode and MGetSelectObject) <> 0 then
   begin
-  _NotUseLCS:=NotUseLCS;
-  NotUseLCS:=true;
+  _NotUseLCS:=LCS.NotUseLCS;
+  LCS.NotUseLCS:=true;
   drawfrustustum(param.mousefrustumLCS,dc);
-  NotUseLCS:=_NotUseLCS;
+  LCS.NotUseLCS:=_NotUseLCS;
   end;
   {оси курсора}
-  _NotUseLCS:=NotUseLCS;
-  NotUseLCS:=true;
+  _NotUseLCS:=LCS.NotUseLCS;
+  LCS.NotUseLCS:=true;
   if param.md.mousein then
   if ((param.md.mode)and(MGet3DPoint or MGet3DPointWoOP or MGetControlpoint))<> 0 then
   begin
@@ -531,7 +531,7 @@ begin
   showsnap(DC);
 
  //{$ENDREGION}
- NotUseLCS:=_NotUseLCS;
+ LCS.NotUseLCS:=_NotUseLCS;
   //oglsm.myglMatrixMode(GL_PROJECTION);
   //glLoadIdentity;
   //gdb.GetCurrentDWG.pcamera^.projMatrix:=onematrix;
@@ -2527,34 +2527,35 @@ begin
                                       begin
                                            if uzegeometry.oneVertexlength(pcamera^.CamCSOffset)>1000000 then
                                            begin
-                                                CurrentCamCSOffset:=pcamera^.CamCSOffset;
-                                                CurrentCamCSOffsetS:=VertexD2S(CurrentCamCSOffset);
-                                                notuseLCS:=pcamera^.notuseLCS;
+                                                LCS.CurrentCamCSOffset:=pcamera^.CamCSOffset;
+                                                LCS.CurrentCamCSOffsetS:=VertexD2S(LCS.CurrentCamCSOffset);
+                                                LCS.notuseLCS:=pcamera^.notuseLCS;
                                            end
-                                           else notuseLCS:=true;
+                                           else LCS.notuseLCS:=true;
                                       end
                                   else
                                       begin
-                                           notuseLCS:=true;
+                                           LCS.notuseLCS:=true;
                                       end;
-  if notuseLCS then
+  if LCS.notuseLCS then
   begin
         pcamera^.projMatrixLCS:=pcamera^.projMatrix;
         pcamera^.modelMatrixLCS:=pcamera^.modelMatrix;
         pcamera^.frustumLCS:=pcamera^.frustum;
         pcamera^.CamCSOffset:=NulVertex;
-        CurrentCamCSOffset:=nulvertex;
+        LCS.CurrentCamCSOffset:=nulvertex;
   end;
 
 
-  if {pdwg.pcamera^.notuseLCS}notuseLCS then
+  {if LCS.notuseLCS then
   begin
         pcamera^.projMatrixLCS:=pcamera^.projMatrix;
         pcamera^.modelMatrixLCS:=pcamera^.modelMatrix;
         pcamera^.frustumLCS:=pcamera^.frustum;
         pcamera^.CamCSOffset:=NulVertex;
-        CurrentCamCSOffset:=nulvertex;
-  end;
+        LCS.CurrentCamCSOffset:=nulvertex;
+  end;}
+  LCSSave:=LCS;
   SetOGLMatrix;
   end;
 end;

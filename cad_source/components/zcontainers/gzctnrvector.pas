@@ -38,6 +38,7 @@ type
 {----REGISTEROBJECTTYPE GZVector}
 GZVector{-}<T>{//}=object(TZAbsVector)
     {-}type{//}
+        {-}TDataType=T;{//}                               //**< Тип данных T
         {-}PT=^T;{//}                                     //**< Тип указатель на тип данных T
         {-}TArr=array[0..0] of T;{//}                     //**< Тип массив данных T
         {-}PTArr=^TArr;{//}                               //**< Тип указатель на массив данных T

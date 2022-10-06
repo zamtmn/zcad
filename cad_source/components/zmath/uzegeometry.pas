@@ -51,6 +51,7 @@ const
       NulVector4D:DVector4D=(v:(0,0,0,0));
       NulVector4D2:DVector4D=(v:(0,0,0,1));
       NulVertex:GDBVertex=(x:0;y:0;z:0);
+      NulVertex3S:GDBVertex3S=(x:0;y:0;z:0);
       XWCS:GDBVertex=(x:1;y:0;z:0);
       YWCS:GDBVertex=(x:0;y:1;z:0);
       ZWCS:GDBVertex=(x:0;y:0;z:1);

@@ -20,7 +20,7 @@ unit uzglvectorobject;
 {$INCLUDE zengineconfig.inc}
 interface
 uses uzgldrawerabstract,uzgldrawcontext,uzgprimitives,uzglgeomdata,uzgprimitivessarray,
-     uzegeometrytypes,uzegeometry,sysutils,uzbtypes,uzbstrproc,gzctnrVectorTypes;
+     uzegeometrytypes,uzegeometry,sysutils,uzbtypes,uzbstrproc,gzctnrVectorTypes,uzgvertex3sarray;
 type
 {Export+}
 TAppearance=(TAMatching,TANeedProxy);
@@ -196,7 +196,7 @@ end;
 function ZGLVectorObject.CopyTo(var dest:ZGLVectorObject;CopyParam:TZGLVectorDataCopyParam):TZGLVectorDataCopyParam;
 var
    LLPrimitivesDestAddr,LLPrimitivesSourceAddr:PTLLPrimitive;
-   DestGeomDataAddr,SourceGeomDataAddr,DestIndexsDataAddr,SourceIndexsDataAddr:PGDBvertex3S;
+   DestGeomDataAddr,SourceGeomDataAddr,DestIndexsDataAddr,SourceIndexsDataAddr:ZGLVertex3Sarray.PT;
 begin
      result.LLPrimitivesDataSize:=CopyParam.LLPrimitivesDataSize;
      dest.LLprimitives.AlignDataSize;
@@ -231,7 +231,7 @@ end;
 procedure ZGLVectorObject.MulOnMatrix(GeomDataIndexMin,GeomDataIndexMax:Integer;const matrix:DMatrix4D);
 var
    i:integer;
-   p:PGDBvertex3S;
+   p:ZGLVertex3Sarray.PT;
 begin
      p:=self.GeomData.Vertex3S.getDataMutable(GeomDataIndexMin);
      for i:=0 to GeomDataIndexMax-GeomDataIndexMin do
@@ -243,7 +243,7 @@ end;
 function ZGLVectorObject.GetBoundingBbox(GeomDataIndexMin,GeomDataIndexMax:Integer):TBoundingBox;
 var
    i:integer;
-   p:PGDBvertex3S;
+   p:ZGLVertex3Sarray.PT;
 begin
      result.LBN:=InfinityVertex;
      result.RTF:=MinusInfinityVertex;
@@ -268,8 +268,8 @@ end;
 function ZGLVectorObject.GetTransformedBoundingBbox(GeomDataIndexMin,GeomDataIndexMax:Integer;const matrix:DMatrix4D):TBoundingBox;
 var
    i:integer;
-   p:PGDBvertex3S;
-   point:GDBvertex3S;
+   p:ZGLVertex3Sarray.PT;
+   point:ZGLVertex3Sarray.TDataType;
 begin
      result.LBN:=InfinityVertex;
      result.RTF:=MinusInfinityVertex;

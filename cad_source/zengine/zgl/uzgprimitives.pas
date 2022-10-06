@@ -569,7 +569,7 @@ else if (Attrib and LLAttrNeedSimtlify)>0 then
                                                               else
                                                                   minsymbolsize:=30;
     sqrparamsize:=GeomData.Vertex3S.GetLength(index)/(rc.DrawingContext.zoom*rc.DrawingContext.zoom);
-    if {(sqrparamsize<minsymbolsize)and(not rc.maxdetail)}False then
+    if (sqrparamsize<minsymbolsize)and(not rc.maxdetail) then
     begin
       //if (PTLLSymbol(PPrimitive)^.Attrib and LLAttrNeedSolid)>0 then
                                                                     Drawer.DrawQuad(@GeomData.Vertex3S,index,index+1,index+2,index+3);

@@ -91,9 +91,9 @@ TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         procedure SetZTest(Z:boolean);override;
                         {в координатах окна}
                         procedure DrawLine2DInDCS(const x1,y1,x2,y2:integer);override;
-                        procedure DrawLine2DInDCS(const x1,y1,x2,y2:single);override;
-                        procedure DrawQuad2DInDCS(const x1,y1,x2,y2:single);override;
-                        procedure DrawClosedPolyLine2DInDCS(const coords:array of single);override;
+                        procedure DrawLine2DInDCS(const x1,y1,x2,y2:TStoredType);override;
+                        procedure DrawQuad2DInDCS(const x1,y1,x2,y2:TStoredType);override;
+                        procedure DrawClosedPolyLine2DInDCS(const coords:array of TStoredType);override;
                         {в координатах модели}
                         procedure DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);override;
                         procedure DrawPoint3DInModelSpace(const p:gdbvertex;var matrixs:tmatrixs);override;
@@ -357,14 +357,14 @@ begin
               oglsm.myglVertex2i(x2,y2);
     oglsm.myglend;
 end;
-procedure TZGLOpenGLDrawer.DrawLine2DInDCS(const x1,y1,x2,y2:single);
+procedure TZGLOpenGLDrawer.DrawLine2DInDCS(const x1,y1,x2,y2:TStoredType);
 begin
     oglsm.myglbegin(GL_lines);
               oglsm.myglVertex2f(x1,y1);
               oglsm.myglVertex2f(x2,y2);
     oglsm.myglend;
 end;
-procedure TZGLOpenGLDrawer.DrawQuad2DInDCS(const x1,y1,x2,y2:single);
+procedure TZGLOpenGLDrawer.DrawQuad2DInDCS(const x1,y1,x2,y2:TStoredType);
 begin
   oglsm.myglbegin(GL_QUADS);
   oglsm.myglVertex2f(x1,y1);
@@ -373,7 +373,7 @@ begin
   oglsm.myglVertex2f(x1,y2);
   oglsm.myglend;
 end;
-procedure TZGLOpenGLDrawer.DrawClosedPolyLine2DInDCS(const coords:array of single);
+procedure TZGLOpenGLDrawer.DrawClosedPolyLine2DInDCS(const coords:array of TStoredType);
 var
    i:integer;
 begin

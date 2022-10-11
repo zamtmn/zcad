@@ -34,7 +34,7 @@ uses
     {$IFNDEF DELPHI}LCLIntf,LCLType,{$ENDIF}
     Classes,Controls,
     uzegeometrytypes,uzegeometry,uzgldrawergeneral,uzgldrawerabstract,
-    Graphics,LazLogger,gzctnrVectorTypes;
+    Graphics,LazLogger,gzctnrVectorTypes,uzgvertex3sarray;
 const
   NeedScreenInvalidrect=true;
 type
@@ -92,10 +92,10 @@ TZGLGDIDrawer=class(TZGLGeneral2DDrawer)
                         procedure deleteoffscreendc;
                         procedure endpaint(InPaintMessage:boolean);override;
 
-                        procedure InternalDrawLine(const x1,y1,x2,y2:Single);override;
-                        procedure InternalDrawTriangle(const x1,y1,x2,y2,x3,y3:Single);override;
-                        procedure InternalDrawQuad(const x1,y1,x2,y2,x3,y3,x4,y4:Single);override;
-                        procedure InternalDrawPoint(const x,y:Single);override;
+                        procedure InternalDrawLine(const x1,y1,x2,y2:TStoredType);override;
+                        procedure InternalDrawTriangle(const x1,y1,x2,y2,x3,y3:TStoredType);override;
+                        procedure InternalDrawQuad(const x1,y1,x2,y2,x3,y3,x4,y4:TStoredType);override;
+                        procedure InternalDrawPoint(const x,y:TStoredType);override;
 
                         function CreateScrbuf:boolean; override;
                         procedure delmyscrbuf; override;
@@ -365,7 +365,7 @@ begin
      {$IFDEF WINDOWS}windows.{$ENDIF}BitBlt({canvas.Handle}CanvasDC,0,0,wh.cx,wh.cy,OffScreedDC,0,0,SRCCOPY);
      isWindowsErrors;
 end;
-procedure TZGLGDIDrawer.InternalDrawLine(const x1,y1,x2,y2:Single);
+procedure TZGLGDIDrawer.InternalDrawLine(const x1,y1,x2,y2:TStoredType);
 var
    _x1,_y1,_x2,_y2:integer;
 begin
@@ -383,7 +383,7 @@ begin
      if CurrentPaintGDIData<>nil then
                                      inc(CurrentPaintGDIData^.DebugCounter.Lines);
 end;
-procedure TZGLGDIDrawer.InternalDrawPoint(const x,y:Single);
+procedure TZGLGDIDrawer.InternalDrawPoint(const x,y:TStoredType);
 var
    _x,_y:integer;
 begin
@@ -397,7 +397,7 @@ begin
      if CurrentPaintGDIData<>nil then
                                      inc(CurrentPaintGDIData^.DebugCounter.Points);
 end;
-procedure TZGLGDIDrawer.InternalDrawTriangle(const x1,y1,x2,y2,x3,y3:Single);
+procedure TZGLGDIDrawer.InternalDrawTriangle(const x1,y1,x2,y2,x3,y3:TStoredType);
 var
     sp:array [1..3]of TPoint;
 begin
@@ -417,7 +417,7 @@ begin
     if CurrentPaintGDIData<>nil then
                                     inc(CurrentPaintGDIData^.DebugCounter.Triangles);
 end;
-procedure TZGLGDIDrawer.InternalDrawQuad(const x1,y1,x2,y2,x3,y3,x4,y4:Single);
+procedure TZGLGDIDrawer.InternalDrawQuad(const x1,y1,x2,y2,x3,y3,x4,y4:TStoredType);
 var
     sp:array [1..4]of TPoint;
 begin

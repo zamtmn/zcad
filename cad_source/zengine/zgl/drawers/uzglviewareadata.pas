@@ -121,7 +121,8 @@ end;
   TCSIcon=record
                CSIconCoord: GDBvertex;
                CSIconX,CSIconY,CSIconZ: GDBvertex;
-               CSX, CSY, CSZ: GDBvertex2DI;
+               CS0: GDBvertex2D;
+               CSX, CSY, CSZ: GDBvertex2D;
                AxisLen:Double;
          end;
   TForceRedrawVolume=record

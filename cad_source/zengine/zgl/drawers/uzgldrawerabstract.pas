@@ -69,9 +69,9 @@ TZGLAbstractDrawer=class
 
 
                         procedure DrawLine2DInDCS(const x1,y1,x2,y2:integer);overload;virtual;abstract;
-                        procedure DrawLine2DInDCS(const x1,y1,x2,y2:single);overload;virtual;abstract;
-                        procedure DrawQuad2DInDCS(const x1,y1,x2,y2:single);virtual;abstract;
-                        procedure DrawClosedPolyLine2DInDCS(const coords:array of single);overload;virtual;abstract;
+                        procedure DrawLine2DInDCS(const x1,y1,x2,y2:TStoredType);overload;virtual;abstract;
+                        procedure DrawQuad2DInDCS(const x1,y1,x2,y2:TStoredType);virtual;abstract;
+                        procedure DrawClosedPolyLine2DInDCS(const coords:array of TStoredType);overload;virtual;abstract;
                         procedure DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);virtual;abstract;
                         procedure DrawPoint3DInModelSpace(const p:gdbvertex;var matrixs:tmatrixs);virtual;abstract;
                         procedure DrawTriangle3DInModelSpace(const normal,p1,p2,p3:gdbvertex;var matrixs:tmatrixs);virtual;abstract;

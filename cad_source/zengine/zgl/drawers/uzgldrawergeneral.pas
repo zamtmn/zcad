@@ -54,8 +54,8 @@ TZGLGeneralDrawer=class(TZGLAbstractDrawer)
                         procedure DisableStencil;override;
                         procedure SetZTest(Z:boolean);override;
                         procedure DrawLine2DInDCS(const x1,y1,x2,y2:integer);override;
-                        procedure DrawLine2DInDCS(const x1,y1,x2,y2:single);override;
-                        procedure DrawClosedPolyLine2DInDCS(const coords:array of single);overload;override;
+                        procedure DrawLine2DInDCS(const x1,y1,x2,y2:TStoredType);override;
+                        procedure DrawClosedPolyLine2DInDCS(const coords:array of TStoredType);overload;override;
                         procedure DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);override;
                         procedure DrawPoint3DInModelSpace(const p:gdbvertex;var matrixs:tmatrixs);override;
                         procedure DrawTriangle3DInModelSpace(const normal,p1,p2,p3:gdbvertex;var matrixs:tmatrixs);override;
@@ -71,19 +71,23 @@ TZGLGeneralDrawer=class(TZGLAbstractDrawer)
                         procedure SwapBuffers; override;
                         procedure SetPenStyle(const style:TZGLPenStyle);override;
                         procedure SetDrawMode(const mode:TZGLDrawMode);override;
-                        procedure DrawQuad2DInDCS(const x1,y1,x2,y2:single);override;
+                        procedure DrawQuad2DInDCS(const x1,y1,x2,y2:TStoredType);override;
                         procedure SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);override;
                         procedure PostRenderDraw;override;
 
-                        procedure pushMatrixAndSetTransform(Transform:DMatrix4D);overload;override;
-                        procedure pushMatrixAndSetTransform(Transform:DMatrix4F);overload;override;
+                        procedure pushMatrixAndSetTransform(Transform:DMatrix4D;ResetLCS:Boolean=False);overload;override;
+                        procedure pushMatrixAndSetTransform(Transform:DMatrix4F;ResetLCS:Boolean=False);overload;override;
                         procedure popMatrix;override;
                    end;
+   TLCSProp=record
+     CurrentCamCSOffset:GDBvertex;
+     CurrentCamCSOffsetS:GDBvertex3S;
+     notuseLCS:Boolean;
+   end;
+
 var
   testrender:TZGLAbstractDrawer;
-  CurrentCamCSOffset:GDBvertex;
-  CurrentCamCSOffsetS:GDBvertex3S;
-  notuseLCS:Boolean;
+  LCS,LCSSave:TLCSProp;
 implementation
 //uses log;
 var
@@ -91,10 +95,10 @@ var
 procedure TZGLGeneralDrawer.popMatrix;
 begin
 end;
-procedure TZGLGeneralDrawer.pushMatrixAndSetTransform(Transform:DMatrix4D);
+procedure TZGLGeneralDrawer.pushMatrixAndSetTransform(Transform:DMatrix4D;ResetLCS:Boolean=False);
 begin
 end;
-procedure TZGLGeneralDrawer.pushMatrixAndSetTransform(Transform:DMatrix4F);
+procedure TZGLGeneralDrawer.pushMatrixAndSetTransform(Transform:DMatrix4F;ResetLCS:Boolean=False);
 begin
 end;
 function TZGLGeneralDrawer.GetLLPrimitivesCreator:TLLPrimitivesCreatorAbstract;
@@ -172,10 +176,10 @@ end;
 procedure TZGLGeneralDrawer.DrawLine2DInDCS(const x1,y1,x2,y2:integer);
 begin
 end;
-procedure TZGLGeneralDrawer.DrawLine2DInDCS(const x1,y1,x2,y2:single);
+procedure TZGLGeneralDrawer.DrawLine2DInDCS(const x1,y1,x2,y2:TStoredType);
 begin
 end;
-procedure TZGLGeneralDrawer.DrawClosedPolyLine2DInDCS(const coords:array of single);
+procedure TZGLGeneralDrawer.DrawClosedPolyLine2DInDCS(const coords:array of TStoredType);
 begin
 end;
 procedure TZGLGeneralDrawer.DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);
@@ -268,7 +272,7 @@ end;
 procedure TZGLGeneralDrawer.SetDrawMode(const mode:TZGLDrawMode);
 begin
 end;
-procedure TZGLGeneralDrawer.DrawQuad2DInDCS(const x1,y1,x2,y2:single);
+procedure TZGLGeneralDrawer.DrawQuad2DInDCS(const x1,y1,x2,y2:TStoredType);
 begin
 end;
 procedure TZGLGeneralDrawer.SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);

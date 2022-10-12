@@ -59,6 +59,7 @@ TOpenglData=record
 {EXPORT-}
 TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         myscrbuf:tmyscrbuf;
+                        mm:DMatrix4D;
                         public
                         procedure SetPenStyle(const style:TZGLPenStyle);override;
                         procedure SetDrawMode(const mode:TZGLDrawMode);override;
@@ -90,9 +91,9 @@ TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         procedure SetZTest(Z:boolean);override;
                         {в координатах окна}
                         procedure DrawLine2DInDCS(const x1,y1,x2,y2:integer);override;
-                        procedure DrawLine2DInDCS(const x1,y1,x2,y2:single);override;
-                        procedure DrawQuad2DInDCS(const x1,y1,x2,y2:single);override;
-                        procedure DrawClosedPolyLine2DInDCS(const coords:array of single);override;
+                        procedure DrawLine2DInDCS(const x1,y1,x2,y2:TStoredType);override;
+                        procedure DrawQuad2DInDCS(const x1,y1,x2,y2:TStoredType);override;
+                        procedure DrawClosedPolyLine2DInDCS(const coords:array of TStoredType);override;
                         {в координатах модели}
                         procedure DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);override;
                         procedure DrawPoint3DInModelSpace(const p:gdbvertex;var matrixs:tmatrixs);override;
@@ -107,8 +108,8 @@ TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         procedure SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);override;
 
                         {}
-                        procedure pushMatrixAndSetTransform(Transform:DMatrix4D);overload;override;
-                        procedure pushMatrixAndSetTransform(Transform:DMatrix4F);overload;override;
+                        procedure pushMatrixAndSetTransform(Transform:DMatrix4D;ResetLCS:Boolean=False);overload;override;
+                        procedure pushMatrixAndSetTransform(Transform:DMatrix4F;ResetLCS:Boolean=False);overload;override;
                         procedure popMatrix;override;
                    end;
 var
@@ -116,33 +117,46 @@ var
    code:integer;
 implementation
 //uses log;
-procedure TZGLOpenGLDrawer.pushMatrixAndSetTransform(Transform:DMatrix4D);
+procedure TZGLOpenGLDrawer.pushMatrixAndSetTransform(Transform:DMatrix4D;ResetLCS:Boolean=False);
 begin
   oglsm.myglPushMatrix;
-  oglsm.myglMultMatrixD(Transform);
+  if ResetLCS and (not LCS.notuseLCS) then begin
+    oglsm.myglLoadMatrixd(@mm);
+    LCS.notuseLCS:=true;
+    LCS.CurrentCamCSOffset:=NulVertex;
+    LCS.CurrentCamCSOffsetS:=NulVertex3S;
+  end;
+  oglsm.myglMultMatrixD(Transform)
 end;
-procedure TZGLOpenGLDrawer.pushMatrixAndSetTransform(Transform:DMatrix4F);
+procedure TZGLOpenGLDrawer.pushMatrixAndSetTransform(Transform:DMatrix4F;ResetLCS:Boolean=False);
 begin
   oglsm.myglPushMatrix;
+  if ResetLCS and (not LCS.notuseLCS) then begin
+    oglsm.myglLoadMatrixd(@mm);
+    LCS.notuseLCS:=true;
+    LCS.CurrentCamCSOffset:=NulVertex;
+    LCS.CurrentCamCSOffsetS:=NulVertex3S;
+  end;
   oglsm.myglMultMatrixF(Transform);
 end;
 procedure TZGLOpenGLDrawer.popMatrix;
 begin
+  LCS:=LCSSave;
   oglsm.myglPopMatrix;
 end;
 procedure TZGLOpenGLDrawer.DrawLine(const PVertexBuffer:PZGLVertex3Sarray;const i1,i2:TLLVertexIndex);
 begin
     oglsm.myglbegin(GL_LINES);
-    oglsm.myglVertex3fV(PVertexBuffer.getDataMutable(i1));
-    oglsm.myglVertex3fV(PVertexBuffer.getDataMutable(i2));
+    oglsm.myglVertex(PVertexBuffer.getDataMutable(i1)^);
+    oglsm.myglVertex(PVertexBuffer.getDataMutable(i2)^);
     oglsm.myglend;
 end;
 procedure TZGLOpenGLDrawer.DrawTriangle(const PVertexBuffer:PZGLVertex3Sarray;const i1,i2,i3:TLLVertexIndex);
 begin
     oglsm.myglbegin(GL_TRIANGLES);
-    oglsm.myglVertex3fV(PVertexBuffer.getDataMutable(i1));
-    oglsm.myglVertex3fV(PVertexBuffer.getDataMutable(i2));
-    oglsm.myglVertex3fV(PVertexBuffer.getDataMutable(i3));
+    oglsm.myglVertex(PVertexBuffer.getDataMutable(i1)^);
+    oglsm.myglVertex(PVertexBuffer.getDataMutable(i2)^);
+    oglsm.myglVertex(PVertexBuffer.getDataMutable(i3)^);
     oglsm.myglend;
 end;
 procedure TZGLOpenGLDrawer.DrawTrianglesFan(const PVertexBuffer:PZGLVertex3Sarray;const PIndexBuffer:PZGLIndexsArray;const i1,IndexCount:TLLVertexIndex);
@@ -154,7 +168,7 @@ begin
     for i:=i1 to i1+IndexCount-1 do
     begin
     pindex:=pointer(PIndexBuffer.getDataMutable(i));
-    oglsm.myglVertex3fV(PVertexBuffer.getDataMutable(pindex^));
+    oglsm.myglVertex(PVertexBuffer.getDataMutable(pindex^)^);
     end;
     oglsm.myglend{mytotalglend};
 end;
@@ -167,17 +181,17 @@ begin
     for i:=i1 to i1+IndexCount-1 do
     begin
     pindex:=pointer(PIndexBuffer.getDataMutable(i));
-    oglsm.myglVertex3fV(PVertexBuffer.getDataMutable(pindex^));
+    oglsm.myglVertex(PVertexBuffer.getDataMutable(pindex^)^);
     end;
     oglsm.myglend{mytotalglend};
 end;
 procedure TZGLOpenGLDrawer.DrawQuad(const PVertexBuffer:PZGLVertex3Sarray;const i1,i2,i3,i4:TLLVertexIndex);
 begin
     oglsm.myglbegin(GL_QUADS);
-    oglsm.myglVertex3fV(PVertexBuffer.getDataMutable(i1));
-    oglsm.myglVertex3fV(PVertexBuffer.getDataMutable(i2));
-    oglsm.myglVertex3fV(PVertexBuffer.getDataMutable(i3));
-    oglsm.myglVertex3fV(PVertexBuffer.getDataMutable(i4));
+    oglsm.myglVertex(PVertexBuffer.getDataMutable(i1)^);
+    oglsm.myglVertex(PVertexBuffer.getDataMutable(i2)^);
+    oglsm.myglVertex(PVertexBuffer.getDataMutable(i3)^);
+    oglsm.myglVertex(PVertexBuffer.getDataMutable(i4)^);
     oglsm.myglend;
 end;
 function TZGLOpenGLDrawer.CheckOutboundInDisplay(const PVertexBuffer:PZGLVertex3Sarray;const i1:TLLVertexIndex):boolean;
@@ -188,7 +202,7 @@ end;
 procedure TZGLOpenGLDrawer.DrawPoint(const PVertexBuffer:PZGLVertex3Sarray;const i:TLLVertexIndex);
 begin
     oglsm.myglbegin(GL_points);
-    oglsm.myglVertex3fV(PVertexBuffer.getDataMutable(i));
+    oglsm.myglVertex(PVertexBuffer.getDataMutable(i)^);
     oglsm.myglend;
 end;
 procedure TZGLOpenGLDrawer.TranslateCoord2D(const tx,ty:single);
@@ -343,14 +357,14 @@ begin
               oglsm.myglVertex2i(x2,y2);
     oglsm.myglend;
 end;
-procedure TZGLOpenGLDrawer.DrawLine2DInDCS(const x1,y1,x2,y2:single);
+procedure TZGLOpenGLDrawer.DrawLine2DInDCS(const x1,y1,x2,y2:TStoredType);
 begin
     oglsm.myglbegin(GL_lines);
               oglsm.myglVertex2f(x1,y1);
               oglsm.myglVertex2f(x2,y2);
     oglsm.myglend;
 end;
-procedure TZGLOpenGLDrawer.DrawQuad2DInDCS(const x1,y1,x2,y2:single);
+procedure TZGLOpenGLDrawer.DrawQuad2DInDCS(const x1,y1,x2,y2:TStoredType);
 begin
   oglsm.myglbegin(GL_QUADS);
   oglsm.myglVertex2f(x1,y1);
@@ -359,7 +373,7 @@ begin
   oglsm.myglVertex2f(x1,y2);
   oglsm.myglend;
 end;
-procedure TZGLOpenGLDrawer.DrawClosedPolyLine2DInDCS(const coords:array of single);
+procedure TZGLOpenGLDrawer.DrawClosedPolyLine2DInDCS(const coords:array of TStoredType);
 var
    i:integer;
 begin
@@ -403,8 +417,8 @@ procedure TZGLOpenGLDrawer.RestoreBuffers;
     scrx,scry,texture{,e}:integer;
     _NotUseLCS:boolean;
 begin
-  _NotUseLCS:=NotUseLCS;
-  NotUseLCS:=true;
+  _NotUseLCS:=LCS.NotUseLCS;
+  LCS.NotUseLCS:=true;
   oglsm.myglEnable(GL_TEXTURE_2D);
   oglsm.myglDisable(GL_DEPTH_TEST);
        oglsm.myglMatrixMode(GL_PROJECTION);
@@ -447,7 +461,7 @@ begin
        oglsm.myglMatrixMode(GL_PROJECTION);
        oglsm.myglPopMatrix;
        oglsm.myglMatrixMode(GL_MODELVIEW);
-   NotUseLCS:=_NotUseLCS;
+   LCS.NotUseLCS:=_NotUseLCS;
 end;
 function TZGLOpenGLDrawer.CreateScrbuf{(w,h:integer)}:boolean;
 var scrx,scry,texture{,e}:integer;
@@ -503,6 +517,7 @@ begin
 end;
 procedure TZGLOpenGLDrawer.SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);
 begin
+  mm:=cam.modelMatrix;
   oglsm.myglViewport(0, 0, w, h);
   oglsm.myglGetIntegerv(GL_VIEWPORT, @cam.viewport);
 

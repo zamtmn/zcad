@@ -129,7 +129,7 @@ TLLSymbol= object(TLLPrimitive)
               PExternalVectorObject:pointer;
               ExternalLLPOffset:TArrayIndex;
               ExternalLLPCount:TArrayIndex;
-              SymMatr:DMatrix4F;
+              SymMatr:DMatrix4D;
               SymCode:Integer;//unicode symbol code
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData):Integer;virtual;
               procedure drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;const PSymbolsParam:PTSymbolSParam);virtual;
@@ -497,7 +497,7 @@ var
    //ir1,ir2,ir3,ir4:TInBoundingVolume;
    myfrustum:ClipArray;
    OutBound:OutBound4V;
-   p:PGDBvertex3S;
+   p:ZGLVertex3Sarray.PT;
 begin
      p:=geomdata.Vertex3S.getDataMutable(OutBoundIndex);
      OutBound[0].x:=p^.x;
@@ -613,7 +613,7 @@ end;
 
 procedure TLLSymbol.drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;const PSymbolsParam:PTSymbolSParam);
 begin
-     drawer.pushMatrixAndSetTransform(SymMatr);
+     drawer.pushMatrixAndSetTransform(SymMatr,true);
      PZGLVectorObject(PExternalVectorObject).DrawCountedLLPrimitives(rc,drawer,OptData,ExternalLLPOffset,ExternalLLPCount);
      drawer.popMatrix;
 end;

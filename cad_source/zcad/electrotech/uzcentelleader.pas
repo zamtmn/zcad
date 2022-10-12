@@ -432,6 +432,8 @@ begin
        end;
      until ps=nil;
 
+     textcontent:=Tria_AnsiToUtf8(textcontent);
+
      if sta.Count=0 then begin
        s:='??';
        sta.PushBackData(s);

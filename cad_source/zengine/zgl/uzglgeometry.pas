@@ -284,25 +284,25 @@ begin
 end;
 
 procedure ZGLGraphix.AddPoint(var rc:TDrawContext;const p:GDBVertex);
-var
-    tv:GDBVertex3S;
+//var
+//    tv:ZGLVertex3Sarray.TDataType;
 begin
-     tv:=VertexD2S(p);
+     //tv:=VertexD2S(p);
      if rc.drawer<>nil then
-     rc.drawer.GetLLPrimitivesCreator.CreateLLPoint(LLprimitives,GeomData.Vertex3S.PushBackData(tv));
+     rc.drawer.GetLLPrimitivesCreator.CreateLLPoint(LLprimitives,GeomData.Vertex3S.AddGDBVertex{PushBackData}({tv}p));
 end;
 
 procedure ZGLGraphix.AddLine(var rc:TDrawContext;const p1,p2:GDBVertex);
-var
-    tv1,tv2:GDBVertex3S;
+//var
+//    tv1,tv2:GDBVertex3S;
 begin
-     tv1:=VertexD2S(p1);
-     tv2:=VertexD2S(p2);
+     //tv1:=VertexD2S(p1);
+     //tv2:=VertexD2S(p2);
      if rc.drawer<>nil then
-                           rc.drawer.GetLLPrimitivesCreator.CreateLLLine(LLprimitives,GeomData.Vertex3S.PushBackData(tv1));
+                           rc.drawer.GetLLPrimitivesCreator.CreateLLLine(LLprimitives,GeomData.Vertex3S.AddGDBVertex{PushBackData}({tv1}p1));
                        {else
                            DefaultLLPCreator.CreateLLLine(LLprimitives,GeomData.Vertex3S.Add(@tv1));}
-     GeomData.Vertex3S.PushBackData(tv2);
+     GeomData.Vertex3S.AddGDBVertex{PushBackData}({tv2}p2);
 
      //lines.Add(@p1);
      //lines.Add(@p2);

@@ -43,53 +43,48 @@ type
 
   TMsgOptions=specialize GTSet<TMsgOpt,TMsgOpt>;
 
-  TEntered=record
-    Entered:Boolean;
-    EnteredTo:TLogMsg;
-    LogLevel:TLogLevel;
-    LMDI:TModuleDesk;
-    MsgOptions:TMsgOpt;
-  end;
-
-  TDoEnteredHelper = type helper for TEntered
-    function IfEntered:TEntered;
-  end;
-
-  PTTLogLevelData=^TLogLevelData;
-  TLogLevelData=record
-    LogLevelType:TLogLevelType;
-  end;
-
-  TLogLevelsHandles=specialize GTNamedHandlesWithData<TLogLevel,specialize GTLinearIncHandleManipulator<TLogLevel>,TLogLevelHandleNameType,specialize GTStringNamesUPPERCASE<TLogLevelHandleNameType>,TLogLevelData>;
-
-  TLogLevelAliasDic=specialize TDictionary<AnsiChar,TLogLevel>;
-  TTMsgOptAliasDic=specialize TDictionary<AnsiChar,TMsgOpt>;
-
-  TBackendHandle=Integer;
-
-  TFmtData=record
-    msgFmt:TLogMsg;
-    argsI:array of Integer;
-    argsP:array of PTLogerBaseDecorator
-  end;
-  TLogStampt=LongInt;
-  TFmtResultData=record
-    Fmt:TFmtData;
-    Res:TLogMsg;
-    Stampt:TLogStampt;
-  end;
-
-  IFmtDataComparer=specialize IEqualityComparer<TFmtData>;
-  TFmtDataComparer=class(TInterfacedObject,IFmtDataComparer)
-      function Equals(constref ALeft, ARight: TFmtData): Boolean;
-      function GetHashCode(constref AValue: TFmtData): UInt32;
-    end;
-
-  TEnable=(EEnable,EDisable,EDefault);
-
   TLog=object
     private
       type
+
+        TEntered=record
+          Entered:Boolean;
+          EnteredTo:TLogMsg;
+          LogLevel:TLogLevel;
+          LMDI:TModuleDesk;
+          MsgOptions:TMsgOpt;
+        end;
+
+        PTTLogLevelData=^TLogLevelData;
+        TLogLevelData=record
+          LogLevelType:TLogLevelType;
+        end;
+
+        TLogLevelsHandles=specialize GTNamedHandlesWithData<TLogLevel,specialize GTLinearIncHandleManipulator<TLogLevel>,TLogLevelHandleNameType,specialize GTStringNamesUPPERCASE<TLogLevelHandleNameType>,TLogLevelData>;
+        TLogStampt=LongInt;
+
+        TFmtData=record
+          msgFmt:TLogMsg;
+          argsI:array of Integer;
+          argsP:array of PTLogerBaseDecorator
+        end;
+
+        IFmtDataComparer=specialize IEqualityComparer<TFmtData>;
+        TFmtDataComparer=class(TInterfacedObject,IFmtDataComparer)
+          function Equals(constref ALeft, ARight: TFmtData): Boolean;
+          function GetHashCode(constref AValue: TFmtData): UInt32;
+        end;
+
+        TFmtResultData=record
+          Fmt:TFmtData;
+          Res:TLogMsg;
+          Stampt:TLogStampt;
+        end;
+
+        TEnable=(EEnable,EDisable,EDefault);
+        TLogLevelAliasDic=specialize TDictionary<AnsiChar,TLogLevel>;
+        TTMsgOptAliasDic=specialize TDictionary<AnsiChar,TMsgOpt>;
+
         TLogStampter=specialize GTSimpleHandles<TLogStampt,specialize GTHandleManipulator<TLogStampt>>;
         TModuleDeskData=record
           enabled:boolean;
@@ -139,6 +134,9 @@ type
       procedure processMsg(msg:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);
       procedure processFmtResultData(var FRD:TFmtResultData;Stampt:TLogStampt;msg:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);
       procedure processDecoratorData(var DD:TDecoratorData;Stampt:TLogStampt;msg:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);
+      function isModuleEnabled(LMDI:TModuleDesk):Boolean;
+      function LogMode2String(LogMode:TLogLevel):TLogLevelHandleNameType;
+
 
     public
       EnterMsgOpt,ExitMsgOpt:TMsgOpt;
@@ -181,12 +179,14 @@ type
       procedure DisableModule(ModuleName:TModuleDeskNameType);overload;
       procedure EnableModule(LMDI:TModuleDesk);overload;
       procedure DisableModule(LMDI:TModuleDesk);overload;
-      function isModuleEnabled(LMDI:TModuleDesk):Boolean;
       procedure EnableAllModules;
 
       function TryGetLogLevelHandle(LogLevelName:TLogLevelHandleNameType;out LogLevel:TLogLevel):Boolean;
       function GetMutableLogLevelData(LL:TLogLevel):PTTLogLevelData;
-      function LogMode2String(LogMode:TLogLevel):TLogLevelHandleNameType;
+  end;
+
+  TDoEnteredHelper = type helper for TLog.TEntered
+    function IfEntered:TLog.TEntered;
   end;
 
 var
@@ -194,7 +194,7 @@ var
 
 implementation
 
-function TFmtDataComparer.Equals(constref ALeft, ARight: TFmtData): Boolean;
+function TLog.TFmtDataComparer.Equals(constref ALeft, ARight: TFmtData): Boolean;
 var
   i:integer;
 begin
@@ -213,7 +213,7 @@ begin
   Result:=True;
 end;
 
-function TFmtDataComparer.GetHashCode(constref AValue: TFmtData): UInt32;
+function TLog.TFmtDataComparer.GetHashCode(constref AValue: TFmtData): UInt32;
 begin
   Result := BobJenkinsHash(AValue.msgFmt[1],length(AValue.msgFmt)*SizeOf(AValue.msgFmt[1]),0);
   Result := BobJenkinsHash(AValue.argsP[0],length(AValue.argsP)*SizeOf(AValue.argsP[1]),Result);
@@ -226,17 +226,13 @@ begin
   msgFmtIndex:=Index;
 end;
 
-function TDoEnteredHelper.IfEntered:TEntered;
+function TDoEnteredHelper.IfEntered:TLog.TEntered;
 begin
   result.Entered:=Entered;
   Result.EnteredTo:=EnteredTo;
   Result.LogLevel:=LogLevel;
   Result.LMDI:=LMDI;
   Result.MsgOptions:=MsgOptions;
-end;
-function LLD(_LLD:TLogLevelType):TLogLevelData;
-begin
-  result.LogLevelType:=_LLD;
 end;
 function TLog.TryGetLogLevelHandle(LogLevelName:TLogLevelHandleNameType;out LogLevel:TLogLevel):Boolean;
 begin
@@ -330,6 +326,10 @@ begin
   end;
 end;
 function TLog.RegisterLogLevel(LogLevelName:TLogLevelHandleNameType;LLAlias:AnsiChar;_LLD:TLogLevelType):TLogLevel;
+  function LLD(_LLD:TLogLevelType):TLogLevelData;
+  begin
+    result.LogLevelType:=_LLD;
+  end;
 var
   data:TLogLevelData;
 begin
@@ -449,7 +449,7 @@ var
   i,j,k:Integer;
   FmtData:TFmtData;
   FmtRData:TFmtResultData;
-  num:integer;
+  num:Integer;
 begin
   if fmt<>'' then begin
     FmtData.msgFmt:=fmt;

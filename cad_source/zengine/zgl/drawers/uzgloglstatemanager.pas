@@ -189,9 +189,11 @@ type
                            procedure myglvertex2dv(const V:Pointer);virtual;//inline;
                            procedure myglvertex2iv(const V:Pointer);virtual;//inline;
                            procedure myglVertex2i(x, y: GLint);virtual;//inline;
-                           procedure myglVertex(const x,y,z:Double);virtual;//inline;
+                           procedure myglVertex(const x,y,z:Double);virtual;overload;//inline;
                            procedure myglVertex3dV(const V:PGDBVertex);virtual;//inline;
                            procedure myglVertex3fV(const V:PGDBVertex3S);virtual;//inline;
+                           procedure myglVertex(constref V:GDBVertex);virtual;overload;//inline;
+                           procedure myglVertex(constref V:GDBVertex3S);virtual;overload;//inline;
                            procedure startrender;virtual;//inline;
                            procedure endrender;virtual;//inline;
                            {$IFDEF SINGLEPRECISIONGEOMETRY}
@@ -355,11 +357,11 @@ begin
      //processpoint(v^);
      inc(pointcount);
      {$ENDIF}
-     if notuseLCS then
+     if LCS.notuseLCS then
                       glVertex2iV(pointer(v))
                   else
                       begin
-                           t:=vertexadd(createvertex(pGDBvertex2DI(v)^.x,pGDBvertex2DI(v)^.y,0),CurrentCamCSOffset);
+                           t:=vertexadd(createvertex(pGDBvertex2DI(v)^.x,pGDBvertex2DI(v)^.y,0),LCS.CurrentCamCSOffset);
                            glVertex3dV(@t);
                       end;
 end;
@@ -370,11 +372,11 @@ begin
      //processpoint(v^);
      inc(pointcount);
      {$ENDIF}
-     if notuseLCS then
+     if LCS.notuseLCS then
                       glVertex2i(x,y)
                   else
                       begin
-                           t:=vertexadd(createvertex(x,y,0),CurrentCamCSOffset);
+                           t:=vertexadd(createvertex(x,y,0),LCS.CurrentCamCSOffset);
                            glVertex3dV(@t);
                       end;
 end;
@@ -385,11 +387,11 @@ begin
      //processpoint(v^);
      inc(pointcount);
      {$ENDIF}
-     if notuseLCS then
+     if LCS.notuseLCS then
                       glVertex2dV(pointer(v))
                   else
                       begin
-                           t:=vertexadd(createvertex(pgdbvertex2d(v)^.x,pgdbvertex2d(v)^.y,0),CurrentCamCSOffset);
+                           t:=vertexadd(createvertex(pgdbvertex2d(v)^.x,pgdbvertex2d(v)^.y,0),LCS.CurrentCamCSOffset);
                            glVertex3dV(@t);
                       end;
 end;
@@ -401,11 +403,11 @@ begin
      //processpoint(v^);
      inc(pointcount);
      {$ENDIF}
-     if notuseLCS then
+     if LCS.notuseLCS then
                       glVertex3dV(pointer(v))
                   else
                       begin
-                           t:=vertexadd(v^,CurrentCamCSOffset);
+                           t:=vertexadd(v^,LCS.CurrentCamCSOffset);
                            glVertex3dV(@t);
                       end;
 end;
@@ -416,13 +418,21 @@ begin
      processpoint(v^);
      inc(pointcount);
      {$ENDIF}
-     if notuseLCS then
+     if LCS.notuseLCS then
                       glVertex3fV(pointer(v))
                   else
                       begin
-                           t:=vertexadd(v^,CurrentCamCSOffsetS);
+                           t:=vertexadd(v^,LCS.CurrentCamCSOffsetS);
                            glVertex3fV(@t);
                       end;
+end;
+procedure TOGLStateManager.myglVertex(constref V:GDBVertex);
+begin
+  myglVertex3dV(@v);
+end;
+procedure TOGLStateManager.myglVertex(constref V:GDBVertex3S);
+begin
+  myglVertex3fV(@v);
 end;
 procedure TOGLStateManager.myglNormal3dV(const V:PGDBVertex);{$IFNDEF DELPHI}inline;{$ENDIF}
 begin
@@ -434,11 +444,11 @@ begin
      {$IFDEF DEBUGCOUNTGEOMETRY}
      inc(pointcount);
      {$ENDIF}
-     if notuseLCS then
+     if LCS.notuseLCS then
                       glVertex2f(x,y)
                   else
                       begin
-                           t:=vertexadd(createvertex(x,y,0),CurrentCamCSOffset);
+                           t:=vertexadd(createvertex(x,y,0),LCS.CurrentCamCSOffset);
                            glVertex3dv(@t);
                       end;
 end;
@@ -449,11 +459,11 @@ begin
      {$IFDEF DEBUGCOUNTGEOMETRY}
      inc(pointcount);
      {$ENDIF}
-     if notuseLCS then
+     if LCS.notuseLCS then
                       glVertex2d(x,y)
                   else
                       begin
-                           t:=vertexadd(createvertex(x,y,0),CurrentCamCSOffset);
+                           t:=vertexadd(createvertex(x,y,0),LCS.CurrentCamCSOffset);
                            glVertex3dv(@t);
                       end;
 end;
@@ -465,15 +475,15 @@ begin
      //processpoint(v);
      inc(pointcount);
      {$ENDIF}
-     if notuseLCS then
+     if LCS.notuseLCS then
                       glVertex3dV(@v)
                   else
                       begin
-                           t:=vertexadd(v,CurrentCamCSOffset);
+                           t:=vertexadd(v,LCS.CurrentCamCSOffset);
                            glVertex3dv(@t);
                       end;
 end;
-procedure TOGLStateManager.myglVertex;
+procedure TOGLStateManager.myglVertex(const x,y,z:Double);
 var t,t1:gdbvertex;
 begin
      t1:=createvertex(x,y,z);
@@ -481,11 +491,11 @@ begin
      //processpoint(t1);
      inc(pointcount);
      {$ENDIF}
-     if notuseLCS then
+     if LCS.notuseLCS then
                       glVertex3dV(@t1)
                   else
                       begin
-                           t:=vertexadd(t1,CurrentCamCSOffset);
+                           t:=vertexadd(t1,LCS.CurrentCamCSOffset);
                            glVertex3dv(@t);
                       end;
 end;

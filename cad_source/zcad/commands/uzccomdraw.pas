@@ -22,8 +22,8 @@ unit uzccomdraw;
 interface
 uses
   gzctnrVector,uzglviewareageneral,
-  gzctnrVectorTypes,zcmultiobjectcreateundocommand,uzgldrawercanvas,
-  uzcoimultiobjects,uzcenitiesvariablesextender,uzcdrawing,uzepalette,
+  gzctnrVectorTypes,uzgldrawercanvas,
+  uzcoimultiobjects,uzcenitiesvariablesextender,uzepalette,
   uzgldrawcontext,usimplegenerics,UGDBPoint3DArray,
   uzeentpoint,uzeentitiestree,gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,uzeentityfactory,
   uzedrawingsimple,uzcsysvars,uzcstrconsts,
@@ -59,19 +59,6 @@ type
                  BRM_Device(*'Device'*),
                  BRM_BD(*'Block and Device'*)
                 );
-         PTBlockReplaceParams=^TBlockReplaceParams;
-         {REGISTERRECORDTYPE TBlockReplaceParams}
-         TBlockReplaceParams=record
-                            Process:BRMode;(*'Process'*)
-                            CurrentFindBlock:String;(*'**CurrentFind'*)(*oi_readonly*)(*hidden_in_objinsp*)
-                            Find:TEnumData;(*'Find'*)
-                            CurrentReplaceBlock:String;(*'**CurrentReplace'*)(*oi_readonly*)(*hidden_in_objinsp*)
-                            Replace:TEnumData;(*'Replace'*)
-                            SaveOrientation:Boolean;(*'Save orientation'*)
-                            SaveVariables:Boolean;(*'Save variables'*)
-                            SaveVariablePart:Boolean;(*'Save variable part'*)
-                            SaveVariableText:Boolean;(*'Save variable text'*)
-                      end;
          PTBlockScaleParams=^TBlockScaleParams;
          {REGISTERRECORDTYPE TBlockScaleParams}
          TBlockScaleParams=record
@@ -90,24 +77,6 @@ type
                              Scale:GDBVertex;(*'New scale'*)
                              Absolytly:Boolean;(*'Absolytly'*)
                            end;}
-         TST=(
-                 TST_YX(*'Y-X'*),
-                 TST_XY(*'X-Y'*),
-                 TST_UNSORTED(*'Unsorted'*)
-                );
-         PTNumberingParams=^TNumberingParams;
-         {REGISTERRECORDTYPE TNumberingParams}
-         TNumberingParams=record
-                            SortMode:TST;(*''*)
-                            InverseX:Boolean;(*'Inverse X axis dir'*)
-                            InverseY:Boolean;(*'Inverse Y axis dir'*)
-                            DeadDand:Double;(*'Deadband'*)
-                            StartNumber:Integer;(*'Start'*)
-                            Increment:Integer;(*'Increment'*)
-                            SaveStart:Boolean;(*'Save start number'*)
-                            BaseName:String;(*'Base name sorting devices'*)
-                            NumberVar:String;(*'Number variable'*)
-                      end;
          PTExportDevWithAxisParams=^TExportDevWithAxisParams;
          {REGISTERRECORDTYPE TExportDevWithAxisParams}
          TExportDevWithAxisParams=record
@@ -122,13 +91,6 @@ type
   ptpcoavector=^tpcoavector;
   tpcoavector={-}specialize{//}
               GZVector{-}<TCopyObjectDesc>{//};
-  {REGISTEROBJECTTYPE BlockReplace_com}
-  BlockReplace_com= object(CommandRTEdObject)
-                         procedure CommandStart(Operands:TCommandOperands); virtual;
-                         procedure BuildDM(Operands:TCommandOperands); virtual;
-                         procedure Format;virtual;
-                         procedure Run(pdata:{pointer}PtrInt); virtual;
-                   end;
   {REGISTEROBJECTTYPE BlockScale_com}
   BlockScale_com= object(CommandRTEdObject)
                          procedure CommandStart(Operands:TCommandOperands); virtual;
@@ -153,12 +115,6 @@ type
                          procedure ShowMenu;virtual;
                          procedure Run(pdata:PtrInt); virtual;
           end;
-  {REGISTEROBJECTTYPE Number_com}
-  Number_com= object(CommandRTEdObject)
-                         procedure CommandStart(Operands:TCommandOperands); virtual;
-                         procedure ShowMenu;virtual;
-                         procedure Run(pdata:PtrInt); virtual;
-             end;
   {REGISTEROBJECTTYPE ExportDevWithAxis_com}
   ExportDevWithAxis_com= object(CommandRTEdObject)
                          procedure CommandStart(Operands:TCommandOperands); virtual;
@@ -184,6 +140,7 @@ tdevname=record
               pdev:PGDBObjDevice;
         end;
 TGDBVertexLess=class
+                    class var DeadBand:Double;
                     class function c(a,b:tdevcoord):boolean;{inline;}
                end;
 TGDBNameLess=class
@@ -204,6 +161,7 @@ devcoordsort=specialize TOrderingArrayUtils<devcoordarray, tdevcoord, TGDBVertex
 devnamesort=specialize TOrderingArrayUtils<devnamearray, tdevname, TGDBNameLess>;
 
 function GetBlockDefNames(var BDefNames:TZctnrVectorStrings;selname:String):Integer;
+function GetSelectedBlockNames(var BDefNames:TZctnrVectorStrings;selname:String;mode:BRMode):Integer;
 
 var
    pworkvertex:pgdbvertex;
@@ -218,18 +176,14 @@ var
    pbeditcom:pCommandRTEdObjectPlugin;
    BEditParam:TBEditParam;
 
-   BlockReplace:BlockReplace_com;
-   BlockReplaceParams:TBlockReplaceParams;
    ATO:ATO_com;
    CFO:CFO_com;
-   NumberCom:Number_com;
    ExportDevWithAxisCom:ExportDevWithAxis_com;
    BlockScaleParams:TBlockScaleParams;
    BlockScale:BlockScale_com;
    BlockRotateParams:TBlockRotateParams;
    BlockRotate:BlockRotate_com;
 
-   NumberingParams:TNumberingParams;
    ExportDevWithAxisParams:TExportDevWithAxisParams;
 
 //procedure startup;
@@ -471,206 +425,6 @@ begin
      end;
 end;
 
-
-
-procedure BlockReplace_com.CommandStart(Operands:TCommandOperands);
-var //pb:PGDBObjBlockdef;
-    //ir:itrec;
-    i:integer;
-begin
-     BlockReplaceParams.Replace.Enums.free;
-     i:=GetBlockDefNames(BlockReplaceParams.Replace.Enums,BlockReplaceParams.CurrentReplaceBlock);
-     if BlockReplaceParams.Replace.Enums.Count>0 then
-     begin
-          if i>0 then
-                     BlockReplaceParams.Replace.Selected:=i
-                 else
-                     if length(operands)<>0 then
-                                         begin
-                                               Prompt(rscmNoBlockDefInDWG);
-                                               commandmanager.executecommandend;
-                                               exit;
-                                         end;
-          format;
-
-          BuildDM(Operands);
-          inherited;
-     end
-        else
-            begin
-                 Prompt(rscmInDwgBlockDefNotDeffined);
-                 commandmanager.executecommandend;
-            end;
-end;
-procedure BlockReplace_com.BuildDM(Operands:TCommandOperands);
-begin
-  commandmanager.DMAddMethod(rscmReplace,'Replace blocks',@run);
-  commandmanager.DMShow;
-end;
-procedure BlockReplace_com.Run(pdata:PtrInt);
-var pb:PGDBObjBlockInsert;
-    ir:itrec;
-    {i,}result:Integer;
-    poa:PGDBObjEntityTreeArray;
-    selname,newname:String;
-    DC:TDrawContext;
-    psdesc:pselectedobjdesc;
-procedure rb(pb:PGDBObjBlockInsert);
-var
-    nb,tb:PGDBObjBlockInsert;
-    psubobj:PGDBObjEntity;
-    ir:itrec;
-    pnbvarext,ppbvarext:TVariablesExtender;
-begin
-
-    nb := Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID));
-    PGDBObjBlockInsert(nb)^.init(drawings.GetCurrentROOT,drawings.GetCurrentDWG^.LayerTable.GetSystemLayer,0);
-    nb^.Name:=newname;
-    nb^.vp:=pb^.vp;
-    nb^.Local.p_insert:=pb^.Local.P_insert;
-    if BlockReplaceParams.SaveOrientation then begin
-      nb^.scale:=pb^.Scale;
-      nb^.rotate:=pb^.rotate;
-    end;
-    tb:=pointer(nb^.FromDXFPostProcessBeforeAdd(nil,drawings.GetCurrentDWG^));
-    if tb<>nil then begin
-                         tb^.bp:=nb^.bp;
-                         nb^.done;
-                         Freemem(pointer(nb));
-                         nb:=pointer(tb);
-    end;
-    drawings.GetCurrentROOT^.AddObjectToObjArray(addr(nb));
-    PGDBObjEntity(nb)^.FromDXFPostProcessAfterAdd;
-
-    nb^.CalcObjMatrix;
-    nb^.BuildGeometry(drawings.GetCurrentDWG^);
-    if not BlockReplaceParams.SaveVariablePart then
-      nb^.BuildVarGeometry(drawings.GetCurrentDWG^);
-
-    if BlockReplaceParams.SaveVariables then begin
-         pnbvarext:=nb^.specialize GetExtension<TVariablesExtender>;
-         ppbvarext:=pb^.specialize GetExtension<TVariablesExtender>;
-         pnbvarext.entityunit.free;
-         pnbvarext.entityunit.CopyFrom(@ppbvarext.entityunit);
-    end;
-
-    if pb^.GetObjType=GDBDeviceID then begin
-      if BlockReplaceParams.SaveVariablePart then begin
-           PGDBObjDevice(nb)^.VarObjArray.free;
-           PGDBObjDevice(pb)^.VarObjArray.CloneEntityTo(@PGDBObjDevice(nb)^.VarObjArray,nil);
-           PGDBObjDevice(nb)^.correctobjects(pointer(PGDBObjDevice(nb)^.bp.ListPos.Owner),PGDBObjDevice(nb)^.bp.ListPos.SelfIndex);
-      end
- else if BlockReplaceParams.SaveVariableText then begin
-           psubobj:=PGDBObjDevice(nb)^.VarObjArray.beginiterate(ir);
-           if psubobj<>nil then
-           repeat
-                 if (psubobj^.GetObjType=GDBtextID)or(psubobj^.GetObjType=GDBMTextID) then
-                   psubobj^.YouDeleted(drawings.GetCurrentDWG^);
-                 psubobj:=PGDBObjDevice(nb)^.VarObjArray.iterate(ir);
-           until psubobj=nil;
-
-           psubobj:=PGDBObjDevice(pb)^.VarObjArray.beginiterate(ir);
-           if psubobj<>nil then
-           repeat
-                 if (psubobj^.GetObjType=GDBtextID)or(psubobj^.GetObjType=GDBMTextID) then
-                   PGDBObjDevice(nb)^.VarObjArray.AddPEntity(psubobj^.Clone(nil)^);
-                 psubobj:=PGDBObjDevice(pb)^.VarObjArray.iterate(ir);
-           until psubobj=nil;
-
-           PGDBObjDevice(nb)^.correctobjects(pointer(PGDBObjDevice(nb)^.bp.ListPos.Owner),PGDBObjDevice(nb)^.bp.ListPos.SelfIndex);
-      end
-    end;
-
-    nb^.Formatentity(drawings.GetCurrentDWG^,dc);
-    drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeBoundingBox(nb^);
-    nb^.Visible:=0;
-    drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count := 0;
-    nb^.RenderFeedback(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,@drawings.GetCurrentDWG^.myGluProject2,dc);
-
-
-     pb^.YouDeleted(drawings.GetCurrentDWG^);
-     inc(result);
-end;
-
-begin
-     if BlockReplaceParams.Find.Enums.Count=0 then
-                                                  Error(rscmCantGetBlockToReplace)
-                                              else
-     begin
-          dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-          poa:=@drawings.GetCurrentROOT^.ObjArray;
-          result:=0;
-          //i:=0;
-          newname:=Tria_Utf8ToAnsi(GDBEnumDataDescriptorObj.GetValueAsString(@BlockReplaceParams.Replace));
-          selname:=Tria_Utf8ToAnsi(GDBEnumDataDescriptorObj.GetValueAsString(@BlockReplaceParams.Find));
-          selname:=uppercase(selname);
-          pb:=poa^.beginiterate(ir);
-          psdesc:=drawings.GetCurrentDWG^.SelObjArray.beginiterate(ir);
-          if psdesc<>nil then
-          repeat
-                pb:=pointer(psdesc^.objaddr);
-                if pb<>nil then
-                if pb^.Selected then
-                case BlockReplaceParams.Process of
-                            BRM_Block:begin
-                                           if pb^.GetObjType=GDBBlockInsertID then
-                                           if uppercase(pb^.name)=selname then
-                                           begin
-                                                rb(pb);
-                                           end;
-                                      end;
-                            BRM_Device:begin
-                                           if pb^.GetObjType=GDBDeviceID then
-                                           if uppercase(pb^.name)=selname then
-                                           begin
-                                                rb(pb);
-                                           end;
-                                       end;
-                            BRM_BD:begin
-                                           if (pb^.GetObjType=GDBBlockInsertID)or
-                                              (pb^.GetObjType=GDBDeviceID)then
-                                           if uppercase(pb^.name)=selname then
-                                           begin
-                                                rb(pb);
-                                           end;
-                                   end;
-                end;
-                psdesc:=drawings.GetCurrentDWG^.SelObjArray.iterate(ir);
-          until psdesc=nil;
-          Prompt(sysutils.format(rscmNEntitiesProcessed,[result]));
-          Regen_com(EmptyCommandOperands);
-          commandmanager.executecommandend;
-     end;
-end;
-procedure BlockReplace_com.Format;
-var //pb:PGDBObjBlockdef;
-    //ir:itrec;
-    i:integer;
-begin
-     BlockReplaceParams.CurrentFindBlock:=GDBEnumDataDescriptorObj.GetValueAsString(@BlockReplaceParams.Find);
-     BlockReplaceParams.CurrentReplaceBlock:=GDBEnumDataDescriptorObj.GetValueAsString(@BlockReplaceParams.Replace);
-     BlockReplaceParams.Find.Enums.free;
-     BlockReplaceParams.Find.Selected:=GetSelectedBlockNames(BlockReplaceParams.Find.Enums,BlockReplaceParams.CurrentFindBlock,BlockReplaceParams.Process);
-     if BlockReplaceParams.Find.Selected<0 then
-                                               begin
-                                                         BlockReplaceParams.Find.Selected:=0;
-                                                         BlockReplaceParams.CurrentFindBlock:='';
-                                               end ;
-     BlockReplaceParams.CurrentFindBlock:=GDBEnumDataDescriptorObj.GetValueAsString(@BlockReplaceParams.Find);
-     BlockReplaceParams.Replace.Enums.free;
-     i:=GetBlockDefNames(BlockReplaceParams.Replace.Enums,DevicePrefix+BlockReplaceParams.CurrentFindBlock);
-     if BlockReplaceParams.Replace.Enums.Count>0 then
-     begin
-          if i>0 then
-                     BlockReplaceParams.Replace.Selected:=i
-                 else
-     end;
-
-     if BlockReplaceParams.Find.Enums.Count=0 then
-                                                       PRecordDescriptor(commanddata.PTD)^.SetAttrib('Find',FA_READONLY,0)
-                                                   else
-                                                       PRecordDescriptor(commanddata.PTD)^.SetAttrib('Find',0,FA_READONLY);
-end;
 procedure CFO_com.ShowMenu;
 begin
   commandmanager.DMAddMethod(rscmCopy,'Copy entities to selected devices',@run);
@@ -941,168 +695,6 @@ begin
   psd:=drawings.GetCurrentDWG^.SelObjArray.iterate(ir);
   until psd=nil;
 end;
-procedure Number_com.CommandStart(Operands:TCommandOperands);
-begin
-  self.savemousemode:=drawings.GetCurrentDWG^.wa.param.md.mode;
-  if drawings.GetCurrentDWG^.SelObjArray.Count>0 then
-  begin
-       showmenu;
-       inherited CommandStart('');
-  end
-  else
-  begin
-    ZCMsgCallBackInterface.TextMessage(rscmSelEntBeforeComm,TMWOHistoryOut);
-    Commandmanager.executecommandend;
-  end;
-end;
-procedure Number_com.ShowMenu;
-begin
-  commandmanager.DMAddMethod(rscmNumber,'Number selected devices',@run);
-  commandmanager.DMShow;
-end;
-class function TGDBNameLess.c(a,b:tdevname):boolean;
-begin
-     if {a.name<b.name}AnsiNaturalCompare(a.name,b.name)>0 then
-                          result:=false
-                      else
-                          result:=true;
-end;
-class function TGDBtaxisdescLess.c(a,b:taxisdesc):boolean;
-begin
-     if a.d0<b.d0 then
-                          result:=true
-                      else
-                          result:=false;
-end;
-class function TGDBVertexLess.c(a,b:tdevcoord):boolean;
-begin
-     //if a.coord.y<b.coord.y then
-     if a.coord.y<b.coord.y-NumberingParams.DeadDand then
-                    result:=true
-                else
-                    if  {a.coord.y>b.coord.y}abs(a.coord.y-b.coord.y)>{eps}NumberingParams.DeadDand then
-                                   begin
-                                   result:=false;
-                                   end
-                else
-                    if a.coord.x<b.coord.x-NumberingParams.DeadDand then
-                                   result:=true
-                else
-                    begin
-                    result:=false;
-                    end;
-end;
-procedure Number_com.Run(pdata:PtrInt);
-var
-    psd:PSelectedObjDesc;
-    ir:itrec;
-    mpd:devcoordarray;
-    pdev:PGDBObjDevice;
-    //key:GDBVertex;
-    index:integer;
-    pvd:pvardesk;
-    dcoord:tdevcoord;
-    i,count:integer;
-    process:boolean;
-    DC:TDrawContext;
-    pdevvarext:TVariablesExtender;
-begin
-     mpd:=devcoordarray.Create;
-     psd:=drawings.GetCurrentDWG^.SelObjArray.beginiterate(ir);
-     count:=0;
-     dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-     if psd<>nil then
-     repeat
-           if psd^.objaddr^.GetObjType=GDBDeviceID then
-           begin
-                case NumberingParams.SortMode of
-                                                TST_YX,TST_UNSORTED:
-                                                       begin
-                                                       dcoord.coord:=PGDBObjDevice(psd^.objaddr)^.P_insert_in_WCS;
-                                                       if NumberingParams.InverseX then
-                                                                                       dcoord.coord.x:=-dcoord.coord.x;
-                                                       if NumberingParams.InverseY then
-                                                                                       dcoord.coord.y:=-dcoord.coord.y;
-                                                       end;
-                                                TST_XY:
-                                                       begin
-                                                            dcoord.coord.x:=PGDBObjDevice(psd^.objaddr)^.P_insert_in_WCS.y;
-                                                            dcoord.coord.y:=PGDBObjDevice(psd^.objaddr)^.P_insert_in_WCS.x;
-                                                            dcoord.coord.z:=PGDBObjDevice(psd^.objaddr)^.P_insert_in_WCS.z;
-                                                            if NumberingParams.InverseX then
-                                                                                            dcoord.coord.y:=-dcoord.coord.y;
-                                                            if NumberingParams.InverseY then
-                                                                                            dcoord.coord.x:=-dcoord.coord.x;
-                                                       end;
-                                               end;{case}
-                dcoord.pdev:=pointer(psd^.objaddr);
-                inc(count);
-                mpd.PushBack(dcoord);
-           end;
-     psd:=drawings.GetCurrentDWG^.SelObjArray.iterate(ir);
-     until psd=nil;
-     if count=0 then
-                    begin
-                         ZCMsgCallBackInterface.TextMessage('In selection not found devices',TMWOHistoryOut);
-                         mpd.Destroy;
-                         Commandmanager.executecommandend;
-                         exit;
-                    end;
-     index:=NumberingParams.StartNumber;
-     if NumberingParams.SortMode<>TST_UNSORTED then
-                                                   devcoordsort.Sort(mpd,mpd.Size);
-     count:=0;
-     for i:=0 to mpd.Size-1 do
-       begin
-            dcoord:=mpd[i];
-            pdev:=dcoord.pdev;
-            pointer(pdevvarext):=pdev^.specialize GetExtension<TVariablesExtender>;
-
-            if NumberingParams.BaseName<>'' then
-            begin
-            //pvd:=PTObjectUnit(pdev^.ou.Instance)^.FindVariable('NMO_BaseName');
-            pvd:=pdevvarext.entityunit.FindVariable('NMO_BaseName');
-            if pvd<>nil then
-            begin
-            if uppercase(pvd^.data.PTD^.GetUserValueAsString(pvd^.data.Addr.Instance))=
-               uppercase(NumberingParams.BaseName) then
-                                                       process:=true
-                                                   else
-                                                       process:=false;
-            end
-               else
-                   begin
-                        process:=true;
-                        ZCMsgCallBackInterface.TextMessage('In device not found BaseName variable. Processed',TMWOHistoryOut);
-                   end;
-            end
-               else
-                   process:=true;
-            if process then
-            begin
-            //pvd:=PTObjectUnit(pdev^.ou.Instance)^.FindVariable(NumberingParams.NumberVar);
-            pvd:=pdevvarext.entityunit.FindVariable(NumberingParams.NumberVar);
-            if pvd<>nil then
-            begin
-                 pvd^.data.PTD^.SetValueFromString(pvd^.data.Addr.Instance,inttostr(index));
-                 inc(index,NumberingParams.Increment);
-                 inc(count);
-                 pdev^.FormatEntity(drawings.GetCurrentDWG^,dc);
-            end
-               else
-               ZCMsgCallBackInterface.TextMessage('In device not found numbering variable',TMWOHistoryOut);
-            end
-            else
-                ZCMsgCallBackInterface.TextMessage('Device with basename "'+pvd^.data.PTD^.GetUserValueAsString(pvd^.data.Addr.Instance)+'" filtred out',TMWOHistoryOut);
-       end;
-     ZCMsgCallBackInterface.TextMessage(sysutils.format(rscmNEntitiesProcessed,[count]),TMWOHistoryOut);
-     if NumberingParams.SaveStart then
-                                      NumberingParams.StartNumber:=index;
-     mpd.Destroy;
-     Commandmanager.executecommandend;
-end;
-
-
 
 
 procedure ATO_com.ShowMenu;
@@ -1514,18 +1106,41 @@ begin
      ZCMsgCallBackInterface.TextMessage('Intersections count: '+inttostr(intersectcount),TMWOHistoryOut);
      result:=cmd_ok;
 end;
+class function TGDBNameLess.c(a,b:tdevname):boolean;
+begin
+     if {a.name<b.name}AnsiNaturalCompare(a.name,b.name)>0 then
+                          result:=false
+                      else
+                          result:=true;
+end;
+class function TGDBtaxisdescLess.c(a,b:taxisdesc):boolean;
+begin
+     if a.d0<b.d0 then
+                          result:=true
+                      else
+                          result:=false;
+end;
+class function TGDBVertexLess.c(a,b:tdevcoord):boolean;
+begin
+     if a.coord.y<b.coord.y-DeadBand then
+                    result:=true
+                else
+                    if abs(a.coord.y-b.coord.y)>DeadBand then
+                                   begin
+                                   result:=false;
+                                   end
+                else
+                    if a.coord.x<b.coord.x-DeadBand then
+                                   result:=true
+                else
+                    begin
+                    result:=false;
+                    end;
+end;
+
 
 procedure startup;
 begin
-  BlockReplace.init('BlockReplace',0,0);
-  BlockReplaceParams.Find.Enums.init(10);
-  BlockReplaceParams.Replace.Enums.init(10);
-  BlockReplaceParams.Process:=BRM_Device;
-  BlockReplaceParams.SaveVariables:=true;
-  BlockReplaceParams.SaveVariablePart:=true;
-  BlockReplaceParams.SaveOrientation:=true;
-  BlockReplace.SetCommandParam(@BlockReplaceParams,'PTBlockReplaceParams');
-
   CreateCommandFastObjectPlugin(@Insert2_com,'Insert2',CADWG,0);
   //CreateCommandFastObjectPlugin(@bedit_com,'BEdit');
   pbeditcom:=CreateCommandRTEdObjectPlugin(@bedit_com,nil,nil,@bedit_format,nil,nil,nil,nil,'BEdit',0,0);
@@ -1536,17 +1151,6 @@ begin
   ATO.init('AddToOwner',CADWG,0);
   CFO.init('CopyFromOwner',CADWG,0);
 
-  NumberingParams.BaseName:='??';
-  NumberingParams.Increment:=1;
-  NumberingParams.StartNumber:=1;
-  NumberingParams.SaveStart:=false;
-  NumberingParams.DeadDand:=10;
-  NumberingParams.NumberVar:='NMO_Suffix';
-  NumberingParams.InverseX:=false;
-  NumberingParams.InverseY:=true;
-  NumberingParams.SortMode:=TST_YX;
-  NumberCom.init('NumDevices',CADWG,0);
-  NumberCom.SetCommandParam(@NumberingParams,'PTNumberingParams');
 
   ExportDevWithAxisParams.AxisDeviceName:='SPDS_AXIS';
   ExportDevWithAxisCom.init('ExportDevWithAxis',CADWG,0);

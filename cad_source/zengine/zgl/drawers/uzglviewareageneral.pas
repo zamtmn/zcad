@@ -317,14 +317,14 @@ begin
   if param.md.mousein then
   if (param.md.mode and MGetSelectObject) <> 0 then
   begin
-  _NotUseLCS:=NotUseLCS;
-  NotUseLCS:=true;
+  _NotUseLCS:=LCS.NotUseLCS;
+  LCS.NotUseLCS:=true;
   drawfrustustum(param.mousefrustumLCS,dc);
-  NotUseLCS:=_NotUseLCS;
+  LCS.NotUseLCS:=_NotUseLCS;
   end;
   {оси курсора}
-  _NotUseLCS:=NotUseLCS;
-  NotUseLCS:=true;
+  _NotUseLCS:=LCS.NotUseLCS;
+  LCS.NotUseLCS:=true;
   if param.md.mousein then
   if ((param.md.mode)and(MGet3DPoint or MGet3DPointWoOP or MGetControlpoint))<> 0 then
   begin
@@ -531,7 +531,7 @@ begin
   showsnap(DC);
 
  //{$ENDREGION}
- NotUseLCS:=_NotUseLCS;
+ LCS.NotUseLCS:=_NotUseLCS;
   //oglsm.myglMatrixMode(GL_PROJECTION);
   //glLoadIdentity;
   //gdb.GetCurrentDWG.pcamera^.projMatrix:=onematrix;
@@ -562,38 +562,72 @@ end;
 end;
 procedure TGeneralViewArea.DrawCSAxis(var DC:TDrawContext);
 var
-  td,td2,td22:Double;
+  //td,td2,td22:Double;
+  d2dx,d2dy,d2d:GDBvertex2D;
 begin
   dc.drawer.SetDrawMode(TDM_Normal);
-  CalcOptimalMatrix;
-  if param.CSIcon.axislen<>0 then {переделать}
-  begin
-  td:=param.CSIcon.axislen;
-  td2:=td/5;
-  td22:=td2/3;
 
-  dc.drawer.SetColor(255, 0, 0,255);
-  dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconCoord,param.CSIcon.CSIconX,dc.DrawingContext.matrixs);
-  dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconX,createvertex(param.CSIcon.CSIconCoord.x + td-td2, param.CSIcon.CSIconCoord.y-td22 , param.CSIcon.CSIconCoord.z),dc.DrawingContext.matrixs);
-  dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconX,createvertex(param.CSIcon.CSIconCoord.x + td-td2, param.CSIcon.CSIconCoord.y+td22 , param.CSIcon.CSIconCoord.z),dc.DrawingContext.matrixs);
+  if param.CSIcon.axislen<>0 then begin
+    dc.drawer.startrender(TRM_DisplaySpace,dc.DrawingContext.matrixs);
+    d2dx:=(param.CSIcon.CSX-param.CSIcon.CS0)*0.075;
+    d2dy:=(param.CSIcon.CSY-param.CSIcon.CS0)*0.075;
+    dc.drawer.SetColor(255, 0, 0,255);
+    dc.drawer.DrawLine2DInDCS(param.CSIcon.CS0.x,param.CSIcon.CS0.y,param.CSIcon.CSX.x,param.CSIcon.CSX.Y);
+    d2d:=param.CSIcon.CSX-d2dx*4;
+    dc.drawer.DrawLine2DInDCS(param.CSIcon.CSX.x,param.CSIcon.CSX.y,d2d.x+d2dy.x,d2d.y+d2dy.y);
+    dc.drawer.DrawLine2DInDCS(param.CSIcon.CSX.x,param.CSIcon.CSX.y,d2d.x-d2dy.x,d2d.y-d2dy.y);
 
-  dc.drawer.SetColor(0, 255, 0,255);
-  dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconCoord,param.CSIcon.CSIconY,dc.DrawingContext.matrixs);
-  dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconY,createvertex(param.CSIcon.CSIconCoord.x-td22, param.CSIcon.CSIconCoord.y + td-td2, param.CSIcon.CSIconCoord.z),dc.DrawingContext.matrixs);
-  dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconY,createvertex(param.CSIcon.CSIconCoord.x+td22, param.CSIcon.CSIconCoord.y + td-td2, param.CSIcon.CSIconCoord.z),dc.DrawingContext.matrixs);
+    dc.drawer.SetColor(0, 255, 0,255);
+    dc.drawer.DrawLine2DInDCS(param.CSIcon.CS0.x,param.CSIcon.CS0.y,param.CSIcon.CSY.x,param.CSIcon.CSY.Y);
+    d2d:=param.CSIcon.CSY-d2dy*4;
+    dc.drawer.DrawLine2DInDCS(param.CSIcon.CSY.x,param.CSIcon.CSY.y,d2d.x+d2dx.x,d2d.y+d2dx.y);
+    dc.drawer.DrawLine2DInDCS(param.CSIcon.CSY.x,param.CSIcon.CSY.y,d2d.x-d2dx.x,d2d.y-d2dx.y);
+    dc.drawer.ClearStatesMachine;
 
-  dc.drawer.SetColor(0, 0, 255,255);
-  dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconCoord,param.CSIcon.CSIconZ,dc.DrawingContext.matrixs);
+    dc.drawer.SetColor(0, 0, 255,255);
+    dc.drawer.DrawLine2DInDCS(param.CSIcon.CS0.x,param.CSIcon.CS0.y,param.CSIcon.CSZ.x,param.CSIcon.CSZ.Y);
+    dc.drawer.ClearStatesMachine;
 
-  if IsVectorNul(vectordot(pdwg.GetPcamera.prop.look,ZWCS)) then
-  begin
+    if IsVectorNul(vectordot(pdwg.GetPcamera.prop.look,ZWCS)) then begin
+      d2dx:=(param.CSIcon.CSX-param.CSIcon.CS0)*0.25;
+      d2dy:=(param.CSIcon.CSY-param.CSIcon.CS0)*0.25;
+      d2d:=param.CSIcon.CS0+d2dx+d2dy;
       dc.drawer.SetColor(255, 255, 255,255);
-      dc.drawer.DrawLine3DInModelSpace(createvertex(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y , param.CSIcon.CSIconCoord.z),createvertex(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z),dc.DrawingContext.matrixs);
-      dc.drawer.DrawLine3DInModelSpace(createvertex(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z),createvertex(param.CSIcon.CSIconCoord.x, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z),dc.DrawingContext.matrixs);
+      dc.drawer.DrawLine2DInDCS(param.CSIcon.CS0.x+d2dx.x,param.CSIcon.CSX.y+d2dx.y,d2d.x,d2d.y);
+      dc.drawer.DrawLine2DInDCS(param.CSIcon.CS0.x+d2dy.x,param.CSIcon.CSX.y+d2dy.y,d2d.x,d2d.y);
+    end;
+    dc.drawer.ClearStatesMachine;
   end;
+
+  (* старая ревлизация в модельных координатах, плывет при большом увеличении
+  CalcOptimalMatrix;
+  if param.CSIcon.axislen<>0 then begin
+    td:=param.CSIcon.axislen;
+    td2:=td/5;
+    td22:=td2/3;
+
+    dc.drawer.SetColor(255, 0, 0,255);
+    dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconCoord,param.CSIcon.CSIconX,dc.DrawingContext.matrixs);
+    dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconX,createvertex(param.CSIcon.CSIconCoord.x + td-td2, param.CSIcon.CSIconCoord.y-td22 , param.CSIcon.CSIconCoord.z),dc.DrawingContext.matrixs);
+    dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconX,createvertex(param.CSIcon.CSIconCoord.x + td-td2, param.CSIcon.CSIconCoord.y+td22 , param.CSIcon.CSIconCoord.z),dc.DrawingContext.matrixs);
+
+    dc.drawer.SetColor(0, 255, 0,255);
+    dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconCoord,param.CSIcon.CSIconY,dc.DrawingContext.matrixs);
+    dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconY,createvertex(param.CSIcon.CSIconCoord.x-td22, param.CSIcon.CSIconCoord.y + td-td2, param.CSIcon.CSIconCoord.z),dc.DrawingContext.matrixs);
+    dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconY,createvertex(param.CSIcon.CSIconCoord.x+td22, param.CSIcon.CSIconCoord.y + td-td2, param.CSIcon.CSIconCoord.z),dc.DrawingContext.matrixs);
+
+    dc.drawer.SetColor(0, 0, 255,255);
+    dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconCoord,param.CSIcon.CSIconZ,dc.DrawingContext.matrixs);
+
+    if IsVectorNul(vectordot(pdwg.GetPcamera.prop.look,ZWCS)) then begin
+        dc.drawer.SetColor(255, 255, 255,255);
+        dc.drawer.DrawLine3DInModelSpace(createvertex(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y , param.CSIcon.CSIconCoord.z),createvertex(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z),dc.DrawingContext.matrixs);
+        dc.drawer.DrawLine3DInModelSpace(createvertex(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z),createvertex(param.CSIcon.CSIconCoord.x, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z),dc.DrawingContext.matrixs);
+    end;
   end;
-  dc.drawer.ClearStatesMachine;
-  dc.drawer.SetDrawMode(TDM_Normal);
+  dc.drawer.ClearStatesMachine;*)
+
+  //dc.drawer.SetDrawMode(TDM_Normal);
 end;
 procedure TGeneralViewArea.DrawGrid(var DC:TDrawContext);
 begin
@@ -2527,34 +2561,35 @@ begin
                                       begin
                                            if uzegeometry.oneVertexlength(pcamera^.CamCSOffset)>1000000 then
                                            begin
-                                                CurrentCamCSOffset:=pcamera^.CamCSOffset;
-                                                CurrentCamCSOffsetS:=VertexD2S(CurrentCamCSOffset);
-                                                notuseLCS:=pcamera^.notuseLCS;
+                                                LCS.CurrentCamCSOffset:=pcamera^.CamCSOffset;
+                                                LCS.CurrentCamCSOffsetS:=VertexD2S(LCS.CurrentCamCSOffset);
+                                                LCS.notuseLCS:=pcamera^.notuseLCS;
                                            end
-                                           else notuseLCS:=true;
+                                           else LCS.notuseLCS:=true;
                                       end
                                   else
                                       begin
-                                           notuseLCS:=true;
+                                           LCS.notuseLCS:=true;
                                       end;
-  if notuseLCS then
+  if LCS.notuseLCS then
   begin
         pcamera^.projMatrixLCS:=pcamera^.projMatrix;
         pcamera^.modelMatrixLCS:=pcamera^.modelMatrix;
         pcamera^.frustumLCS:=pcamera^.frustum;
         pcamera^.CamCSOffset:=NulVertex;
-        CurrentCamCSOffset:=nulvertex;
+        LCS.CurrentCamCSOffset:=nulvertex;
   end;
 
 
-  if {pdwg.pcamera^.notuseLCS}notuseLCS then
+  {if LCS.notuseLCS then
   begin
         pcamera^.projMatrixLCS:=pcamera^.projMatrix;
         pcamera^.modelMatrixLCS:=pcamera^.modelMatrix;
         pcamera^.frustumLCS:=pcamera^.frustum;
         pcamera^.CamCSOffset:=NulVertex;
-        CurrentCamCSOffset:=nulvertex;
-  end;
+        LCS.CurrentCamCSOffset:=nulvertex;
+  end;}
+  LCSSave:=LCS;
   SetOGLMatrix;
   end;
 end;
@@ -3187,12 +3222,15 @@ begin
 
 
      pdwg^.myGluProject2(NulVertex,param.CSIcon.CSIconCoord);
+     param.CSIcon.CS0.x:=param.CSIcon.CSIconCoord.x;
+     param.CSIcon.CS0.y:=param.CSIcon.CSIconCoord.y;
 
      if (param.CSIcon.CSIconCoord.x>0)and(param.CSIcon.CSIconCoord.y>0)and(param.CSIcon.CSIconCoord.x<getviewcontrol.clientwidth)and(param.CSIcon.CSIconCoord.y<getviewcontrol.clientheight)
      then
      begin
           pdwg^.myGluProject2(x_Y_zVertex,
                                   cav);
+
           cav.x:=param.CSIcon.CSIconCoord.x-cav.x;
           cav.y:=param.CSIcon.CSIconCoord.y-cav.y;
           param.CSIcon.axislen:=sqrt(cav.x*cav.x+cav.y*cav.y);
@@ -3209,6 +3247,8 @@ begin
                      cav);
           cav.x:=40-cav.x;
           cav.y:=40-cav.y;
+          param.CSIcon.CS0.x:=40;
+          param.CSIcon.CS0.y:=40;
           param.CSIcon.axislen:=sqrt(cav.x*cav.x+cav.y*cav.y);
 
      end;
@@ -3222,15 +3262,15 @@ begin
      param.CSIcon.CSIconZ.z:=param.CSIcon.CSIconZ.z+param.CSIcon.axislen;
 
 
-     pdwg^.myGluProject2(CreateVertex(param.CSIcon.CSIconCoord.x + sizeaxis * pdwg.getpcamera^.prop.zoom, param.CSIcon.CSIconCoord.y, param.CSIcon.CSIconCoord.z),
+     pdwg^.myGluProject2(CreateVertex(param.CSIcon.CSIconCoord.x + param.CSIcon.axislen, param.CSIcon.CSIconCoord.y, param.CSIcon.CSIconCoord.z),
                 CAV);
-     param.CSIcon.csx.x := round(cav.x);
-     param.CSIcon.csx.y := round(cav.y);
-     pdwg^.myGluProject2(CreateVertex(param.CSIcon.CSIconCoord.x, param.CSIcon.CSIconCoord.y + sizeaxis * pdwg.getpcamera^.prop.zoom, param.CSIcon.CSIconCoord.z),
+     param.CSIcon.csx.x := cav.x;
+     param.CSIcon.csx.y := cav.y;
+     pdwg^.myGluProject2(CreateVertex(param.CSIcon.CSIconCoord.x, param.CSIcon.CSIconCoord.y + param.CSIcon.axislen, param.CSIcon.CSIconCoord.z),
                 CAV);
      param.CSIcon.csy.x := round(cav.x);
      param.CSIcon.csy.y := round(cav.y);
-     pdwg^.myGluProject2(CreateVertex(param.CSIcon.CSIconCoord.x, param.CSIcon.CSIconCoord.y, param.CSIcon.CSIconCoord.z + sizeaxis * pdwg.getpcamera^.prop.zoom),
+     pdwg^.myGluProject2(CreateVertex(param.CSIcon.CSIconCoord.x, param.CSIcon.CSIconCoord.y, param.CSIcon.CSIconCoord.z + param.CSIcon.axislen),
                 CAV);
      param.CSIcon.csz.x := round(cav.x);
      param.CSIcon.csz.y := round(cav.y);

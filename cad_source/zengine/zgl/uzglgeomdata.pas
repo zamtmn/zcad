@@ -38,7 +38,7 @@ implementation
 //uses log;
 function ZGLGeomData.Add2DPoint(const x,y:fontfloat):TArrayIndex;
 var
-    vs:GDBvertex3S;
+    vs:ZGLVertex3Sarray.TDataType;
 begin
      vs.x:=x;
      vs.y:=y;

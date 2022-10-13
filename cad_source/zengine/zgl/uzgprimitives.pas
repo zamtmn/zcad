@@ -205,7 +205,7 @@ begin
 end;
 function TLLLine.CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;
 begin
-     InRect:=uzegeometry.CalcTrueInFrustum(PGDBvertex3S(geomdata.Vertex3S.getDataMutable(self.P1Index))^,PGDBvertex3S(geomdata.Vertex3S.getDataMutable(self.P1Index+1))^,frustum);
+     InRect:=uzegeometry.CalcTrueInFrustum(geomdata.Vertex3S.getDataMutable(self.P1Index)^,geomdata.Vertex3S.getDataMutable(self.P1Index+1)^,frustum);
      result:=getPrimitiveSize;
 end;
 procedure TLLLine.getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);
@@ -425,7 +425,7 @@ begin
      index:=P1Index+1;
      for i:=2 to Count-1 do
      begin
-        SubRect:=uzegeometry.CalcTrueInFrustum(PGDBvertex3S(geomdata.Vertex3S.getDataMutable(index))^,PGDBvertex3S(geomdata.Vertex3S.getDataMutable(index+1))^,frustum);
+        SubRect:=uzegeometry.CalcTrueInFrustum(geomdata.Vertex3S.getDataMutable(index)^,geomdata.Vertex3S.getDataMutable(index+1)^,frustum);
         case SubRect of
           IREmpty:if InRect=IRFully then
                                          InRect:=IRPartially;

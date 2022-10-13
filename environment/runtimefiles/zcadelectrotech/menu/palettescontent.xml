@@ -185,6 +185,7 @@
            <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_QS3)" Img='DEVICE_EL_VL_DIAGRAM_QS3_300' Caption='Разъединитель шина.'/>
            <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_QS4)" Img='DEVICE_EL_VL_DIAGRAM_QS4_300' Caption='Переключатель "крест" левый'/>
            <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_QS5)" Img='DEVICE_EL_VL_DIAGRAM_QS5_300' Caption='Переключатель "крест" правый'/>
+           <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_QS6)" Img='DEVICE_EL_VL_DIAGRAM_QS6_300' Caption='Переключатель в низ'/>
            <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_FU1)" Img='DEVICE_EL_VL_DIAGRAM_FU1_300' Caption='Предохранитель'/>
            <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_TT1)" Img='DEVICE_EL_VL_DIAGRAM_TT1_300' Caption='Трансформатор тока'/>
            <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_WH1)" Img='DEVICE_EL_VL_DIAGRAM_WH1_300' Caption='Эл.счетчик прямого/включения'/>

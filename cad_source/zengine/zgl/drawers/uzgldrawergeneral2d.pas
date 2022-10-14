@@ -62,6 +62,9 @@ TZGLGeneral2DDrawer=class(TZGLGeneralDrawer)
 
                           procedure pushMatrixAndSetTransform(Transform:DMatrix4D;ResetLCS:Boolean=False);overload;override;
                           procedure pushMatrixAndSetTransform(Transform:DMatrix4F;ResetLCS:Boolean=False);overload;override;
+                          procedure DisableLCS;overload;override;
+                          procedure EnableLCS;overload;override;
+
                           procedure popMatrix;override;
                           function TranslatePointWithLocalCS(const p:GDBVertex3S):GDBVertex3S;overload;
                           function TranslatePointWithLocalCS(const p:GDBVertex):GDBVertex;overload;
@@ -599,6 +602,12 @@ procedure TZGLGeneral2DDrawer.pushMatrixAndSetTransform(Transform:DMatrix4F;Rese
 begin
      inc(mstackindex);
      mstack[mstackindex]:=matr;
+     if ResetLCS and (not LCS.notuseLCS) then begin
+       matr:=matrwoLCS;
+       LCS.notuseLCS:=true;
+       LCS.CurrentCamCSOffset:=NulVertex;
+       LCS.CurrentCamCSOffsetS:=NulVertex3S;
+     end;
      matr:=MatrixMultiply(matr,Transform);
 end;
 procedure TZGLGeneral2DDrawer.popMatrix;
@@ -609,6 +618,24 @@ begin
                                  dec(mstackindex);
                            end;
      LCS:=LCSSave;
+end;
+procedure TZGLGeneral2DDrawer.DisableLCS;
+begin
+  //inc(mstackindex);
+  //mstack[mstackindex]:=matr;
+  //  matr:=matrwoLCS;
+  //  LCS.notuseLCS:=true;
+  //  LCS.CurrentCamCSOffset:=NulVertex;
+  //  LCS.CurrentCamCSOffsetS:=NulVertex3S;
+end;
+procedure TZGLGeneral2DDrawer.EnableLCS;
+begin
+    // if mstackindex>-1 then
+    //                       begin
+    //                             matr:=mstack[mstackindex];
+    //                             dec(mstackindex);
+    //                       end;
+   //  LCS:=LCSSave;
 end;
 
 procedure TZGLGeneral2DDrawer.SetPointSize(const s:single);

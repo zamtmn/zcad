@@ -110,6 +110,8 @@ TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         {}
                         procedure pushMatrixAndSetTransform(Transform:DMatrix4D;ResetLCS:Boolean=False);overload;override;
                         procedure pushMatrixAndSetTransform(Transform:DMatrix4F;ResetLCS:Boolean=False);overload;override;
+                        procedure DisableLCS;overload;override;
+                        procedure EnableLCS;overload;override;
                         procedure popMatrix;override;
                    end;
 var
@@ -143,6 +145,16 @@ procedure TZGLOpenGLDrawer.popMatrix;
 begin
   LCS:=LCSSave;
   oglsm.myglPopMatrix;
+end;
+procedure TZGLOpenGLDrawer.DisableLCS;
+begin
+  LCS.notuseLCS:=true;
+  LCS.CurrentCamCSOffset:=NulVertex;
+  LCS.CurrentCamCSOffsetS:=NulVertex3S;
+end;
+procedure TZGLOpenGLDrawer.EnableLCS;
+begin
+  LCS:=LCSSave;
 end;
 procedure TZGLOpenGLDrawer.DrawLine(const PVertexBuffer:PZGLVertex3Sarray;const i1,i2:TLLVertexIndex);
 begin

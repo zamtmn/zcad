@@ -317,14 +317,17 @@ begin
   if param.md.mousein then
   if (param.md.mode and MGetSelectObject) <> 0 then
   begin
-  _NotUseLCS:=LCS.NotUseLCS;
-  LCS.NotUseLCS:=true;
+  {_NotUseLCS:=LCS.NotUseLCS;
+  LCS.NotUseLCS:=true;}
+  dc.drawer.DisableLCS;
   drawfrustustum(param.mousefrustumLCS,dc);
-  LCS.NotUseLCS:=_NotUseLCS;
+  //LCS.NotUseLCS:=_NotUseLCS;
+  dc.drawer.EnableLCS;
   end;
   {оси курсора}
-  _NotUseLCS:=LCS.NotUseLCS;
-  LCS.NotUseLCS:=true;
+  {_NotUseLCS:=LCS.NotUseLCS;
+  LCS.NotUseLCS:=true;}
+  dc.drawer.DisableLCS;
   if param.md.mousein then
   if ((param.md.mode)and(MGet3DPoint or MGet3DPointWoOP or MGetControlpoint))<> 0 then
   begin
@@ -531,7 +534,8 @@ begin
   showsnap(DC);
 
  //{$ENDREGION}
- LCS.NotUseLCS:=_NotUseLCS;
+ dc.drawer.EnableLCS;
+ //LCS.NotUseLCS:=_NotUseLCS;
   //oglsm.myglMatrixMode(GL_PROJECTION);
   //glLoadIdentity;
   //gdb.GetCurrentDWG.pcamera^.projMatrix:=onematrix;
@@ -562,12 +566,13 @@ end;
 end;
 procedure TGeneralViewArea.DrawCSAxis(var DC:TDrawContext);
 var
-  //td,td2,td22:Double;
+  td,td2,td22:Double;
   d2dx,d2dy,d2d:GDBvertex2D;
 begin
   dc.drawer.SetDrawMode(TDM_Normal);
 
-  if param.CSIcon.axislen<>0 then begin
+  // новая ревлизация в экранных координатах, плывет на мелких объектах
+  {if param.CSIcon.axislen<>0 then begin
     dc.drawer.startrender(TRM_DisplaySpace,dc.DrawingContext.matrixs);
     d2dx:=(param.CSIcon.CSX-param.CSIcon.CS0)*0.075;
     d2dy:=(param.CSIcon.CSY-param.CSIcon.CS0)*0.075;
@@ -597,9 +602,9 @@ begin
       dc.drawer.DrawLine2DInDCS(param.CSIcon.CS0.x+d2dy.x,param.CSIcon.CSX.y+d2dy.y,d2d.x,d2d.y);
     end;
     dc.drawer.ClearStatesMachine;
-  end;
+  end;}
 
-  (* старая ревлизация в модельных координатах, плывет при большом увеличении
+  // старая ревлизация в модельных координатах, плывет при большом увеличении
   CalcOptimalMatrix;
   if param.CSIcon.axislen<>0 then begin
     td:=param.CSIcon.axislen;
@@ -625,9 +630,9 @@ begin
         dc.drawer.DrawLine3DInModelSpace(createvertex(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z),createvertex(param.CSIcon.CSIconCoord.x, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z),dc.DrawingContext.matrixs);
     end;
   end;
-  dc.drawer.ClearStatesMachine;*)
+  dc.drawer.ClearStatesMachine;
 
-  //dc.drawer.SetDrawMode(TDM_Normal);
+  dc.drawer.SetDrawMode(TDM_Normal);
 end;
 procedure TGeneralViewArea.DrawGrid(var DC:TDrawContext);
 begin
@@ -2479,6 +2484,13 @@ begin
   ccsLBN:=InfinityVertex;
   ccsRTF:=MinusInfinityVertex;
   tbb:=proot.VisibleOBJBoundingBox;
+  if IsBBNul(tbb) then
+  begin
+       concatBBandPoint(tbb,param.CSIcon.CSIconCoord);
+       concatBBandPoint(tbb,param.CSIcon.CSIconX);
+       concatBBandPoint(tbb,param.CSIcon.CSIconY);
+       concatBBandPoint(tbb,param.CSIcon.CSIconZ);
+  end;
   //pdwg.ConstructObjRoot.calcbb;
   tbb2:=pdwg.getConstructObjRoot.vp.BoundingBox;
   ConcatBB(tbb,tbb2);
@@ -2559,7 +2571,7 @@ begin
                                       end;
   if param.projtype = ProjParalel then
                                       begin
-                                           if uzegeometry.oneVertexlength(pcamera^.CamCSOffset)>1000000 then
+                                           if {uzegeometry.oneVertexlength(pcamera^.CamCSOffset)>1000000}true then
                                            begin
                                                 LCS.CurrentCamCSOffset:=pcamera^.CamCSOffset;
                                                 LCS.CurrentCamCSOffsetS:=VertexD2S(LCS.CurrentCamCSOffset);

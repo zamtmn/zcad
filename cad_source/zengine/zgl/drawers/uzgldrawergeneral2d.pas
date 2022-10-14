@@ -28,7 +28,8 @@ DMatrix4DStackArray=array[0..10] of DMatrix4D;
 
 TZGLGeneral2DDrawer=class(TZGLGeneralDrawer)
                           matr:DMatrix4D;
-                          matrwoLCS:DMatrix4D;
+                          matrwoLCS,matrwithLCS:DMatrix4D;
+                          ProjMatrwoLCS,ProjMatrwithLCS:DMatrix4D;
                           mstack:DMatrix4DStackArray;
                           mstackindex:integer;
                           sx,sy,tx,ty:single;
@@ -62,8 +63,8 @@ TZGLGeneral2DDrawer=class(TZGLGeneralDrawer)
 
                           procedure pushMatrixAndSetTransform(Transform:DMatrix4D;ResetLCS:Boolean=False);overload;override;
                           procedure pushMatrixAndSetTransform(Transform:DMatrix4F;ResetLCS:Boolean=False);overload;override;
-                          procedure DisableLCS;overload;override;
-                          procedure EnableLCS;overload;override;
+                          procedure DisableLCS(var matrixs:tmatrixs);overload;override;
+                          procedure EnableLCS(var matrixs:tmatrixs);overload;override;
 
                           procedure popMatrix;override;
                           function TranslatePointWithLocalCS(const p:GDBVertex3S):GDBVertex3S;overload;
@@ -107,6 +108,9 @@ implementation
 procedure TZGLGeneral2DDrawer.SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);
 begin
   matrwoLCS:=cam.modelMatrix;
+  matrwithLCS:=cam.modelMatrixLCS;
+  ProjMatrwoLCS:=cam.projMatrix;
+  ProjMatrwithLCS:=cam.projMatrixLCS;
 end;
 
 procedure TZGLGeneral2DDrawer.DrawQuad3DInModelSpace(const p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);
@@ -619,23 +623,38 @@ begin
                            end;
      LCS:=LCSSave;
 end;
-procedure TZGLGeneral2DDrawer.DisableLCS;
+procedure TZGLGeneral2DDrawer.DisableLCS(var matrixs:tmatrixs);
+var
+  m:DMatrix4D;
 begin
-  //inc(mstackindex);
-  //mstack[mstackindex]:=matr;
-  //  matr:=matrwoLCS;
-  //  LCS.notuseLCS:=true;
-  //  LCS.CurrentCamCSOffset:=NulVertex;
-  //  LCS.CurrentCamCSOffsetS:=NulVertex3S;
+  m:=uzegeometry.MatrixMultiply(matrwithLCS,ProjMatrwithLCS);
+  sx:=(m[0].v[0]/m[3].v[3]*0.5)*matrixs.pviewport.v[2] ;
+  sy:=-(m[1].v[1]/m[3].v[3]*0.5)*matrixs.pviewport.v[3] ;
+  tx:=(m[3].v[0]/m[3].v[3]*0.5+0.5)*matrixs.pviewport.v[2];
+
+  ty:=matrixs.pviewport.v[3]-(m[3].v[1]/m[3].v[3]*0.5+0.5)*matrixs.pviewport.v[3];
+
+  matrixs.pmodelMatrix^:=matrwithLCS;
+  matrixs.pprojMatrix^:=ProjMatrwithLCS;
+
+  LCS.notuseLCS:=true;
+  LCS.CurrentCamCSOffset:=NulVertex;
+  LCS.CurrentCamCSOffsetS:=NulVertex3S;
 end;
-procedure TZGLGeneral2DDrawer.EnableLCS;
+procedure TZGLGeneral2DDrawer.EnableLCS(var matrixs:tmatrixs);
+var
+  m:DMatrix4D;
 begin
-    // if mstackindex>-1 then
-    //                       begin
-    //                             matr:=mstack[mstackindex];
-    //                             dec(mstackindex);
-    //                       end;
-   //  LCS:=LCSSave;
+  m:=uzegeometry.MatrixMultiply(matrwoLCS,ProjMatrwoLCS);
+  sx:=(m[0].v[0]/m[3].v[3]*0.5)*matrixs.pviewport.v[2] ;
+  sy:=-(m[1].v[1]/m[3].v[3]*0.5)*matrixs.pviewport.v[3] ;
+  tx:=(m[3].v[0]/m[3].v[3]*0.5+0.5)*matrixs.pviewport.v[2];
+  ty:=matrixs.pviewport.v[3]-(m[3].v[1]/m[3].v[3]*0.5+0.5)*matrixs.pviewport.v[3];
+
+  matrixs.pmodelMatrix^:=matrwoLCS;
+  matrixs.pprojMatrix^:=ProjMatrwoLCS;
+
+  LCS:=LCSSave;
 end;
 
 procedure TZGLGeneral2DDrawer.SetPointSize(const s:single);

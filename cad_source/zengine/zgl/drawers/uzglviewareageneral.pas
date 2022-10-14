@@ -319,15 +319,15 @@ begin
   begin
   {_NotUseLCS:=LCS.NotUseLCS;
   LCS.NotUseLCS:=true;}
-  dc.drawer.DisableLCS;
+  dc.drawer.DisableLCS(dc.DrawingContext.matrixs);
   drawfrustustum(param.mousefrustumLCS,dc);
   //LCS.NotUseLCS:=_NotUseLCS;
-  dc.drawer.EnableLCS;
+  dc.drawer.EnableLCS(dc.DrawingContext.matrixs);
   end;
   {оси курсора}
   {_NotUseLCS:=LCS.NotUseLCS;
   LCS.NotUseLCS:=true;}
-  dc.drawer.DisableLCS;
+  dc.drawer.DisableLCS(dc.DrawingContext.matrixs);
   if param.md.mousein then
   if ((param.md.mode)and(MGet3DPoint or MGet3DPointWoOP or MGetControlpoint))<> 0 then
   begin
@@ -534,7 +534,7 @@ begin
   showsnap(DC);
 
  //{$ENDREGION}
- dc.drawer.EnableLCS;
+ dc.drawer.EnableLCS(dc.DrawingContext.matrixs);
  //LCS.NotUseLCS:=_NotUseLCS;
   //oglsm.myglMatrixMode(GL_PROJECTION);
   //glLoadIdentity;

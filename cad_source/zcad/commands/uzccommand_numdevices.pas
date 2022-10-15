@@ -44,7 +44,8 @@ uses
   uzctnrvectorstrings,
   Varman, varmandef,
   uzcLog,uzctnrvectorgdbpalettecolor,
-  uzccomdraw,UGDBSelectedObjArray,uzeentdevice,uzgldrawcontext,uzcenitiesvariablesextender;
+  uzccomdraw,UGDBSelectedObjArray,uzeentdevice,uzgldrawcontext,
+  uzcenitiesvariablesextender,uzbstrproc;
 type
   TST=(
           TST_YX(*'Y-X'*),
@@ -61,8 +62,8 @@ type
                      StartNumber:Integer;(*'Start'*)
                      Increment:Integer;(*'Increment'*)
                      SaveStart:Boolean;(*'Save start number'*)
-                     BaseName:String;(*'Base name sorting devices'*)
-                     NumberVar:String;(*'Number variable'*)
+                     BaseName:AnsiString;(*'Base name sorting devices'*)
+                     NumberVar:AnsiString;(*'Number variable'*)
                end;
   Number_com= object(CommandRTEdObject)
                          procedure CommandStart(Operands:TCommandOperands); virtual;
@@ -167,7 +168,7 @@ begin
             if pvd<>nil then
             begin
             if uppercase(pvd^.data.PTD^.GetUserValueAsString(pvd^.data.Addr.Instance))=
-               uppercase(NumberingParams.BaseName) then
+               uppercase(Tria_AnsiToUtf8(NumberingParams.BaseName)) then
                                                        process:=true
                                                    else
                                                        process:=false;

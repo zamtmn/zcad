@@ -594,8 +594,8 @@ procedure TZGLGeneral2DDrawer.pushMatrixAndSetTransform(Transform:DMatrix4D;Rese
 begin
      inc(mstackindex);
      mstack[mstackindex]:=matr;
-     if ResetLCS and (not LCS.notuseLCS) then begin
-       matr:=matrwoLCS;
+     if ResetLCS{ and (not LCS.notuseLCS)} then begin
+       //matr:=matrwoLCS;
        LCS.notuseLCS:=true;
        LCS.CurrentCamCSOffset:=NulVertex;
        LCS.CurrentCamCSOffsetS:=NulVertex3S;
@@ -606,8 +606,8 @@ procedure TZGLGeneral2DDrawer.pushMatrixAndSetTransform(Transform:DMatrix4F;Rese
 begin
      inc(mstackindex);
      mstack[mstackindex]:=matr;
-     if ResetLCS and (not LCS.notuseLCS) then begin
-       matr:=matrwoLCS;
+     if ResetLCS{ and (not LCS.notuseLCS)} then begin
+       //matr:=matrwoLCS;
        LCS.notuseLCS:=true;
        LCS.CurrentCamCSOffset:=NulVertex;
        LCS.CurrentCamCSOffsetS:=NulVertex3S;

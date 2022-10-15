@@ -122,11 +122,11 @@ implementation
 procedure TZGLOpenGLDrawer.pushMatrixAndSetTransform(Transform:DMatrix4D;ResetLCS:Boolean=False);
 begin
   oglsm.myglPushMatrix;
-  if ResetLCS and (not LCS.notuseLCS) then begin
+  if ResetLCS {and (not LCS.notuseLCS)} then begin
     oglsm.myglLoadMatrixd(@mm);
-    LCS.notuseLCS:=true;
+    {LCS.notuseLCS:=true;
     LCS.CurrentCamCSOffset:=NulVertex;
-    LCS.CurrentCamCSOffsetS:=NulVertex3S;
+    LCS.CurrentCamCSOffsetS:=NulVertex3S;}
   end;
   oglsm.myglMultMatrixD(Transform)
 end;
@@ -135,15 +135,15 @@ begin
   oglsm.myglPushMatrix;
   if ResetLCS and (not LCS.notuseLCS) then begin
     oglsm.myglLoadMatrixd(@mm);
-    LCS.notuseLCS:=true;
+    {LCS.notuseLCS:=true;
     LCS.CurrentCamCSOffset:=NulVertex;
-    LCS.CurrentCamCSOffsetS:=NulVertex3S;
+    LCS.CurrentCamCSOffsetS:=NulVertex3S;}
   end;
   oglsm.myglMultMatrixF(Transform);
 end;
 procedure TZGLOpenGLDrawer.popMatrix;
 begin
-  LCS:=LCSSave;
+  //LCS:=LCSSave;
   oglsm.myglPopMatrix;
 end;
 procedure TZGLOpenGLDrawer.DisableLCS(var matrixs:tmatrixs);

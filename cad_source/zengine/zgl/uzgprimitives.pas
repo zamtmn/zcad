@@ -613,9 +613,11 @@ end;
 
 procedure TLLSymbol.drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;const PSymbolsParam:PTSymbolSParam);
 begin
+     drawer.DisableLCS(rc.DrawingContext.matrixs);
      drawer.pushMatrixAndSetTransform(SymMatr,true);
      PZGLVectorObject(PExternalVectorObject).DrawCountedLLPrimitives(rc,drawer,OptData,ExternalLLPOffset,ExternalLLPCount);
      drawer.popMatrix;
+     drawer.EnableLCS(rc.DrawingContext.matrixs);
 end;
 
 begin

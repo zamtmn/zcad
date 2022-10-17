@@ -315,14 +315,10 @@ begin
   tempplane.v[3]:=(tempplane.v[3]-param.mousefrustumLCS[4].v[3])/2;
   {курсор фрустума выделения}
   if param.md.mousein then
-  if (param.md.mode and MGetSelectObject) <> 0 then
-  begin
-  {_NotUseLCS:=LCS.NotUseLCS;
-  LCS.NotUseLCS:=true;}
-  dc.drawer.DisableLCS(dc.DrawingContext.matrixs);
-  drawfrustustum(param.mousefrustumLCS,dc);
-  //LCS.NotUseLCS:=_NotUseLCS;
-  dc.drawer.EnableLCS(dc.DrawingContext.matrixs);
+  if (param.md.mode and MGetSelectObject) <> 0 then begin
+    dc.drawer.DisableLCS(dc.DrawingContext.matrixs);
+    drawfrustustum(param.mousefrustumLCS,dc);
+    dc.drawer.EnableLCS(dc.DrawingContext.matrixs);
   end;
   {оси курсора}
   {_NotUseLCS:=LCS.NotUseLCS;

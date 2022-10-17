@@ -108,8 +108,8 @@ TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         procedure SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);override;
 
                         {}
-                        procedure pushMatrixAndSetTransform(Transform:DMatrix4D;ResetLCS:Boolean=False);overload;override;
-                        procedure pushMatrixAndSetTransform(Transform:DMatrix4F;ResetLCS:Boolean=False);overload;override;
+                        procedure pushMatrixAndSetTransform(Transform:DMatrix4D;FromOneMatrix:Boolean=False);overload;override;
+                        procedure pushMatrixAndSetTransform(Transform:DMatrix4F;FromOneMatrix:Boolean=False);overload;override;
                         procedure DisableLCS(var matrixs:tmatrixs);overload;override;
                         procedure EnableLCS(var matrixs:tmatrixs);overload;override;
                         procedure popMatrix;override;
@@ -119,10 +119,10 @@ var
    code:integer;
 implementation
 //uses log;
-procedure TZGLOpenGLDrawer.pushMatrixAndSetTransform(Transform:DMatrix4D;ResetLCS:Boolean=False);
+procedure TZGLOpenGLDrawer.pushMatrixAndSetTransform(Transform:DMatrix4D;FromOneMatrix:Boolean=False);
 begin
   oglsm.myglPushMatrix;
-  if ResetLCS {and (not LCS.notuseLCS)} then begin
+  if FromOneMatrix {and (not LCS.notuseLCS)} then begin
     oglsm.myglLoadMatrixd(@mm);
     {LCS.notuseLCS:=true;
     LCS.CurrentCamCSOffset:=NulVertex;
@@ -130,10 +130,10 @@ begin
   end;
   oglsm.myglMultMatrixD(Transform)
 end;
-procedure TZGLOpenGLDrawer.pushMatrixAndSetTransform(Transform:DMatrix4F;ResetLCS:Boolean=False);
+procedure TZGLOpenGLDrawer.pushMatrixAndSetTransform(Transform:DMatrix4F;FromOneMatrix:Boolean=False);
 begin
   oglsm.myglPushMatrix;
-  if ResetLCS and (not LCS.notuseLCS) then begin
+  if FromOneMatrix and (not LCS.notuseLCS) then begin
     oglsm.myglLoadMatrixd(@mm);
     {LCS.notuseLCS:=true;
     LCS.CurrentCamCSOffset:=NulVertex;

@@ -28,8 +28,9 @@ DMatrix4DStackArray=array[0..10] of DMatrix4D;
 
 TZGLGeneral2DDrawer=class(TZGLGeneralDrawer)
                           matr:DMatrix4D;
-                          matrwoLCS,matrwithLCS:DMatrix4D;
-                          ProjMatrwoLCS,ProjMatrwithLCS:DMatrix4D;
+                          {matrwoLCS,}matrwithLCS:DMatrix4D;
+                          mm,pm:DMatrix4D;
+                          {ProjMatrwoLCS,}ProjMatrwithLCS:DMatrix4D;
                           mstack:DMatrix4DStackArray;
                           mstackindex:integer;
                           sx,sy,tx,ty:single;
@@ -107,9 +108,9 @@ implementation
 //uses log;
 procedure TZGLGeneral2DDrawer.SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);
 begin
-  matrwoLCS:=cam.modelMatrix;
+  //matrwoLCS:=cam.modelMatrix;
   matrwithLCS:=cam.modelMatrixLCS;
-  ProjMatrwoLCS:=cam.projMatrix;
+  //ProjMatrwoLCS:=cam.projMatrix;
   ProjMatrwithLCS:=cam.projMatrixLCS;
 end;
 
@@ -623,6 +624,8 @@ begin
   sy:=-(m[1].v[1]/m[3].v[3]*0.5)*matrixs.pviewport.v[3] ;
   tx:=(m[3].v[0]/m[3].v[3]*0.5+0.5)*matrixs.pviewport.v[2];
   ty:=matrixs.pviewport.v[3]-(m[3].v[1]/m[3].v[3]*0.5+0.5)*matrixs.pviewport.v[3];}
+  mm:=matrixs.pmodelMatrix^;
+  pm:=matrixs.pprojMatrix^;
   matrixs.pmodelMatrix^:=matrWithLCS;
   matrixs.pprojMatrix^:=ProjMatrWithLCS;
   LCS.notuseLCS:=true;
@@ -638,8 +641,10 @@ begin
   sy:=-(m[1].v[1]/m[3].v[3]*0.5)*matrixs.pviewport.v[3] ;
   tx:=(m[3].v[0]/m[3].v[3]*0.5+0.5)*matrixs.pviewport.v[2];
   ty:=matrixs.pviewport.v[3]-(m[3].v[1]/m[3].v[3]*0.5+0.5)*matrixs.pviewport.v[3];*)
-  matrixs.pmodelMatrix^:=matrWoLCS;
-  matrixs.pprojMatrix^:=ProjMatrWoLCS;
+  {matrixs.pmodelMatrix^:=matrWoLCS;
+  matrixs.pprojMatrix^:=ProjMatrWoLCS;}
+  matrixs.pmodelMatrix^:=mm;
+  matrixs.pprojMatrix^:=pm;
   LCS:=LCSSave;
 end;
 

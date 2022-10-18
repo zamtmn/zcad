@@ -31,6 +31,9 @@ uses
     {$if DEFINED(LCLQt) OR DEFINED(LCLQt5)}
     qtobjects,
     {$ENDIF}
+    {$if DEFINED(LCLQt5)}
+    qt5,
+    {$ENDIF}
     {$IFNDEF DELPHI}LCLIntf,LCLType,{$ENDIF}
     Classes,Controls,
     uzegeometrytypes,uzegeometry,uzgldrawergeneral,uzgldrawerabstract,
@@ -459,7 +462,14 @@ begin
                        ps:=PS_DOT;
   end;
   SetBkColor(OffScreedDC,ClearColor);
+  {$if DEFINED(LCLQt) OR DEFINED(LCLQt5)}
+  if linewidth=1 then
+    linewidth:=0;
+  {$ENDIF}
   hLinePen:=CreatePen(ps,linewidth,PenColor);
+  {$if DEFINED(LCLQt) OR DEFINED(LCLQt5)}
+  TQtPen(hLinePen).setCosmetic(True);
+  {$ENDIF}
 
   SelectObject(OffScreedDC, hLinePen);
 

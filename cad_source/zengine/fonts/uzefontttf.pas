@@ -55,6 +55,8 @@ implementation
 //uses {math,}log;
 type
     TTriangulationMode=(TM_Triangles,TM_TriangleStrip,TM_TriangleFan);
+    TV4P = array [0..3] of Pointer;
+    TArray4F = Array [0..3] of Float;
 var
    ptrdata:PZGLVectorObject;
    Ptrsize:PInteger;
@@ -132,6 +134,10 @@ end;}
 procedure TessErrorCallBack(error: Cardinal;v2: Pdouble);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
 begin
      error:=error;
+end;
+procedure CombineCallback(coords:GDBvertex;vertex_data:TV4P;weight:TArray4F;var dataout:Pointer);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
+begin
+   ptruint(dataout):=ptrdata^.GeomData.Vertex3S.AddGDBVertex(coords);
 end;
 procedure TessBeginCallBack(gmode: Cardinal;v2: Pdouble);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
 begin
@@ -413,6 +419,7 @@ begin
   GLUIntrf.TessCallback(tesselator,GLU_TESS_VERTEX_DATA,@TessVertexCallBack);
   GLUIntrf.TessCallback(tesselator,GLU_TESS_BEGIN_DATA,@TessBeginCallBack);
   GLUIntrf.TessCallback(tesselator,GLU_TESS_Error_DATA,@TessErrorCallBack);
+  GLUIntrf.TessCallback(tesselator,GLU_TESS_COMBINE,@CombineCallBack);
   //gluTessProperty(tesselator,GLU_TESS_WINDING_RULE,GLU_TESS_WINDING_ODD);
   //gluTessProperty(tesselator, GLU_TESS_BOUNDARY_ONLY, GLU_FALSE);
   //gluTessProperty(tesselator, GLU_TESS_TOLERANCE , 1000.0);

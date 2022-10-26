@@ -493,14 +493,14 @@ function GDBObjDimension.LinearFloatToStr(l:Double;var drawing:TDrawingDef):TDXF
 var
    ff:TzeUnitsFormat;
 begin
-     ff:=drawing.GetUnitsFormat;
-     ff.RemoveTrailingZeros:=false;
-     ff.DeciminalSeparator:=PDimStyle.Units.DIMDSEP;
-     if PDimStyle.Units.DIMLUNIT<>DUSystem then
-                                               ff.uformat:=TLUnits(PDimStyle.Units.DIMLUNIT);
-     ff.umode:=UMWithSpaces;
-     ff.uprec:=TUPrec(PDimStyle.Units.DIMDEC);
-     result:=zeDimensionToUnicodeString(l,ff);
+  ff:=drawing.GetUnitsFormat;
+  ff.RemoveTrailingZeros:=(PDimStyle.Units.DIMZIN and 8)<>0;
+  ff.DeciminalSeparator:=PDimStyle.Units.DIMDSEP;
+  if PDimStyle.Units.DIMLUNIT<>DUSystem then
+    ff.uformat:=TLUnits(PDimStyle.Units.DIMLUNIT);
+  ff.umode:=UMWithSpaces;
+  ff.uprec:=TUPrec(PDimStyle.Units.DIMDEC);
+result:=zeDimensionToUnicodeString(l,ff);
 end;
 function GDBObjDimension.GetLinearDimStr(l:Double;var drawing:TDrawingDef):TDXFEntsInternalStringType;
 var

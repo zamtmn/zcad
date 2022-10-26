@@ -94,6 +94,7 @@ TGDBDimUnitsProp=record
                        DIMRND:Double;//Rounding value for dimension distances//group45
                        DIMPOST:AnsiString; //Dimension prefix<>suffix //group3
                        DIMSCALE:Double;//DIMSCALE//group40
+                       DIMZIN:Integer;//Controls the suppression of zeros in the primary unit values//group78
                  end;
 PPGDBDimStyleObjInsp=^PGDBDimStyleObjInsp;
 PGDBDimStyleObjInsp=Pointer;
@@ -342,6 +343,8 @@ begin
                           end;
                      end;
                 end;
+                78:
+                   Units.DIMZIN:=strtoint(value);
                 144:
                   begin
                                          Units.DIMLFAC:=strtofloat(value);
@@ -475,6 +478,7 @@ begin
      Units.DIMRND:=0;
      Units.DIMDSEP:=DDSDot;
      Units.DIMPOST:='';
+     Units.DIMZIN:=12;
      Arrows.DIMASZ:=0.18;
      text.DIMTXT:=0.18;
      text.DIMTIH:=true;

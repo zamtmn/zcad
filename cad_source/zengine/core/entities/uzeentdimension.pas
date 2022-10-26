@@ -294,7 +294,7 @@ end;
 
 function GDBObjDimension.GetTextOffset(var drawing:TDrawingDef):GDBVertex;
 var
-   l:Double;
+   l,h:Double;
    dimdir:gdbvertex;
    dimtxtstyle:PGDBTextStyle;
    txtlines:XYZWStringArray;
@@ -303,8 +303,14 @@ begin
    dimtxtstyle:=PDimStyle.Text.DIMTXSTY;//drawing.GetTextStyleTable^.getDataMutable(0);
    txtlines.init(3);
    FormatMtext(dimtxtstyle.pfont,0,PDimStyle.Text.DIMTXT,dimtxtstyle^.prop.wfactor,dimtext,txtlines);
-   dimtexth:=GetLinesH(GetLineSpaceFromLineSpaceF(1,PDimStyle.Text.DIMTXT),PDimStyle.Text.DIMTXT,txtlines);
-   dimtextw:=GetLinesW(txtlines)*PDimStyle.Text.DIMTXT;
+
+   if PDimStyle.Text.DIMTXSTY^.prop.size=0 then //это копия куска из GDBObjDimension.DrawDimensionText
+     h:=PDimStyle.Text.DIMTXT*GetDIMSCALE
+   else
+     h:=PDimStyle.Text.DIMTXSTY^.prop.size;
+
+   dimtexth:=GetLinesH(GetLineSpaceFromLineSpaceF(1,h),h,txtlines);
+   dimtextw:=GetLinesW(txtlines)*h;
    txtlines.done;
 
      {dimdir:=uzegeometry.VertexSub(DimData.P10InWCS,DimData.P14InWCS);
@@ -347,7 +353,8 @@ begin
      end
         else
             result:=nulvertex;
-     result:=uzegeometry.VertexMulOnSc(Result,GetDIMSCALE);
+     if PDimStyle.Text.DIMTXSTY^.prop.size=0 then
+       result:=uzegeometry.VertexMulOnSc(Result,GetDIMSCALE);
 end;
 function GDBObjDimension.GetDIMTMOVE:TDimTextMove;
 begin
@@ -361,13 +368,8 @@ var
   p2:GDBVertex;
 begin
   //CalcTextParam;
-  dimtext:={GetLinearDimStr(abs(scalardot(vertexsub(DimData.P14InWCS,DimData.P13InWCS),vectorD)))}GetDimStr(drawing);
-  dimtxtstyle:=PDimStyle.Text.DIMTXSTY;//drawing.GetTextStyleTable^.getDataMutable(0);
-  {txtlines.init(3);
-  FormatMtext(dimtxtstyle.pfont,0,PDimStyle.Text.DIMTXT,dimtxtstyle^.prop.wfactor,dimtext,txtlines);
-  dimtexth:=GetLinesH(1,PDimStyle.Text.DIMTXT,txtlines);
-  dimtextw:=GetLinesW(txtlines)*PDimStyle.Text.DIMTXT;
-  txtlines.done;}
+  dimtext:=GetDimStr(drawing);
+  dimtxtstyle:=PDimStyle.Text.DIMTXSTY;
 
   ptext:=pointer(self.ConstObjArray.CreateInitObj(GDBMTextID,@self));
   ptext.vp.Layer:=vp.Layer;
@@ -394,7 +396,10 @@ begin
   ptext.Local.basis.ox.x:=cos(TextAngle);
   ptext.Local.basis.ox.y:=sin(TextAngle);
   ptext.TXTStyleIndex:=dimtxtstyle;
-  ptext.textprop.size:=PDimStyle.Text.DIMTXT*GetDIMSCALE;
+  if PDimStyle.Text.DIMTXSTY^.prop.size=0 then
+    ptext.textprop.size:=PDimStyle.Text.DIMTXT*GetDIMSCALE
+  else
+    ptext.textprop.size:=PDimStyle.Text.DIMTXSTY^.prop.size;
   ptext.vp.Color:=PDimStyle.Text.DIMCLRT;
   ptext.FormatEntity(drawing,dc);
 

@@ -333,9 +333,9 @@ begin
      if TextNeedOffset(dimdir) then
      begin
           if PDimStyle.Text.DIMGAP>0 then
-                                         l:=PDimStyle.Text.DIMGAP+{PDimStyle.Text.DIMTXT}dimtexth/2
+                                         l:=PDimStyle.Text.DIMGAP*h+{PDimStyle.Text.DIMTXT}dimtexth/2
                                      else
-                                         l:=-2*PDimStyle.Text.DIMGAP+{PDimStyle.Text.DIMTXT}dimtexth/2;
+                                         l:=-2*PDimStyle.Text.DIMGAP*h+{PDimStyle.Text.DIMTXT}dimtexth/2;
      case PDimStyle.Text.DIMTAD of
                                   DTVPCenters:dimdir:=nulvertex;
                                   DTVPAbove:begin

@@ -1,0 +1,18 @@
+object PreviewForm: TPreviewForm
+  Left = 183
+  Height = 984
+  Top = 221
+  Width = 1299
+  BorderStyle = bsToolWindow
+  Caption = 'History'
+  ClientHeight = 984
+  ClientWidth = 1299
+  DesignTimePPI = 144
+  Position = poScreenCenter
+  object Image1: TImage
+    Left = 8
+    Height = 956
+    Top = 8
+    Width = 1274
+  end
+end

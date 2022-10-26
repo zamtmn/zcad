@@ -43,11 +43,9 @@ uses
   uzeentblockinsert,uzeentpolyline,
   math,
   uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,
-  TypeDescriptors,uzelongprocesssupport,uzcLog,uzeiopalette,uzerasterizer;
-const
-     modelspacename:String='**Модель**';
+  TypeDescriptors,uzelongprocesssupport,uzcLog,uzeiopalette,uzerasterizer,
+  uzcfPrintPreview;
 type
-  {REGISTEROBJECTTYPE Print_com}
   Print_com= object(CommandRTEdObject)
     VS:Integer;
     p1,p2:GDBVertex;
@@ -55,6 +53,7 @@ type
     procedure CommandStart(Operands:TCommandOperands); virtual;
     procedure ShowMenu;virtual;
     procedure Print(pdata:PtrInt); virtual;
+    procedure Preview(pdata:PtrInt); virtual;
     procedure SetWindow(pdata:PtrInt); virtual;
     procedure SelectPrinter(pdata:PtrInt); virtual;
     procedure SelectPaper(pdata:PtrInt); virtual;
@@ -105,7 +104,8 @@ begin
   commandmanager.DMAddMethod('Printer setup..','Printer setup..',@SelectPrinter);
   commandmanager.DMAddMethod('Page setup..','Printer setup..',@SelectPaper);
   commandmanager.DMAddMethod('Set window','Set window',@SetWindow);
-  commandmanager.DMAddMethod('Print','Print',@print);
+  commandmanager.DMAddMethod('Print','Print',@Print);
+  commandmanager.DMAddMethod('Preview','Preview',@Preview);
   commandmanager.DMShow;
 end;
 procedure Print_com.SelectPrinter(pdata:PtrInt);
@@ -162,16 +162,33 @@ begin
   zcRedrawCurrentDrawing;
 end;
 
+procedure Print_com.Preview(pdata:PtrInt);
+ var
+  cdwg:PTSimpleDrawing;
+  PrinterDrawer:TZGLGeneral2DDrawer;
+begin
+  cdwg:=drawings.GetCurrentDWG;
+  PreviewForm:=TPreviewForm.Create(nil);
+  PreviewForm.Show;
+  PreviewForm.Image1.Canvas.Brush.Color:=clWhite;
+  PreviewForm.Image1.Canvas.FillRect(0,0,PreviewForm.Image1.ClientWidth-1,PreviewForm.Image1.ClientHeight-1);
+  PrinterDrawer:=TZGLCanvasDrawer.create;
+  //rasterize(cdwg,PreviewForm.PaintBox1.ClientWidth,PreviewForm.PaintBox1.ClientHeight,p1,p2,PrintParam,PreviewForm.PaintBox1.Canvas,PrinterDrawer);
+  rasterize(cdwg,PreviewForm.Image1.ClientWidth,PreviewForm.Image1.ClientHeight,p1,p2,PrintParam,PreviewForm.Image1.Canvas,PrinterDrawer);
+  PrinterDrawer.Free;
+  //PreviewForm.Free;
+end;
+
 procedure startup;
 begin
   SysUnit^.RegisterType(TypeInfo(PTRasterizeParams));
-  SysUnit^.SetTypeDesk(TypeInfo(TRasterizeParams),['FitToPage','Center','Scale']);
+  SysUnit^.SetTypeDesk(TypeInfo(TRasterizeParams),['FitToPage','Center','Scale','Palette']);
 
   Print.init('Print',CADWG,0);
   PrintParam.Scale:=1;
   PrintParam.FitToPage:=true;
   PrintParam.Palette:=PC_Monochrome;
-  Print.SetCommandParam(@PrintParam,'PTPrintParams');
+  Print.SetCommandParam(@PrintParam,'PTRasterizeParams');
 
   PSD:=TPrinterSetupDialog.Create(nil);
   PAGED:=TPageSetupDialog.Create(nil);
@@ -183,7 +200,7 @@ begin
   freeandnil(paged);
 end;
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   startup;
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);

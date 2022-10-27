@@ -5,8 +5,7 @@ unit uzcfPrintPreview;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
-  uzcinterface, uzccommandsabstract, uzbtypes, uzccommandsimpl;
+  SysUtils, Forms, ExtCtrls;
 
 type
 

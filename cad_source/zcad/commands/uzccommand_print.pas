@@ -52,11 +52,12 @@ type
     procedure CommandContinue; virtual;
     procedure CommandStart(Operands:TCommandOperands); virtual;
     procedure ShowMenu;virtual;
-    procedure Print(pdata:PtrInt); virtual;
-    procedure Preview(pdata:PtrInt); virtual;
-    procedure SetWindow(pdata:PtrInt); virtual;
-    procedure SelectPrinter(pdata:PtrInt); virtual;
-    procedure SelectPaper(pdata:PtrInt); virtual;
+    procedure Print(pdata:PtrInt);
+    procedure Preview(pdata:PtrInt);
+    procedure OnShowPreview(Sender: TObject);
+    procedure SetWindow(pdata:PtrInt);
+    procedure SelectPrinter(pdata:PtrInt);
+    procedure SelectPaper(pdata:PtrInt);
   end;
 var
   PrintParam:TRasterizeParams;
@@ -65,6 +66,11 @@ var
   Print:Print_com;
 
 implementation
+
+procedure dbg;
+begin
+  ZCMsgCallBackInterface.TextMessage(Format('Printer "%s", paper "%s"(%dx%d)',[Printer.PrinterName,Printer.PaperSize.PaperName,Printer.PageWidth,Printer.PageHeight]),TMWOHistoryOut);
+end;
 
 procedure Print_com.CommandContinue;
 var v1,v2:vardesk;
@@ -97,7 +103,8 @@ begin
        commandmanager.DMShow;
        vs:=commandmanager.GetValueHeap;
        inherited CommandStart('');
-  end
+  end;
+  dbg;
 end;
 procedure Print_com.ShowMenu;
 begin
@@ -114,6 +121,7 @@ begin
   ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
   if PSD.Execute then;
   ZCMsgCallBackInterface.Do_AfterShowModal(nil);
+  dbg;
 end;
 procedure Print_com.SetWindow(pdata:PtrInt);
 begin
@@ -127,6 +135,7 @@ begin
   ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
   if Paged.Execute then;
   ZCMsgCallBackInterface.Do_AfterShowModal(nil);
+  dbg;
 end;
 function Inch(AValue: Double; VertRes:boolean=true): Integer;
 begin
@@ -140,6 +149,7 @@ procedure Print_com.Print(pdata:PtrInt);
   cdwg:PTSimpleDrawing;
   PrinterDrawer:TZGLGeneral2DDrawer;
 begin
+  dbg;
   cdwg:=drawings.GetCurrentDWG;
   try
 
@@ -162,20 +172,44 @@ begin
   zcRedrawCurrentDrawing;
 end;
 
-procedure Print_com.Preview(pdata:PtrInt);
- var
-  cdwg:PTSimpleDrawing;
-  PrinterDrawer:TZGLGeneral2DDrawer;
+procedure Print_com.OnShowPreview(Sender: TObject);
+
+var
+ cdwg:PTSimpleDrawing;
+ PrinterDrawer:TZGLGeneral2DDrawer;
+ pw,ph,cw,ch:integer;
+ xk,yk:double;
 begin
   cdwg:=drawings.GetCurrentDWG;
+  cw:=PreviewForm.ClientWidth;
+  ch:=PreviewForm.ClientHeight;
+
+  pw:=Printer.PageWidth;
+  ph:=Printer.PageHeight;
+  xk:=pw/cw;
+  yk:=ph/ch;
+
+ if xk<yk then begin
+   PreviewForm.Image1.Height:=PreviewForm.ClientHeight;
+   PreviewForm.Image1.Width:=trunc(PreviewForm.ClientWidth*xk/yk);
+ end else begin
+   PreviewForm.Image1.Height:=trunc(PreviewForm.ClientHeight*yk/xk);
+   PreviewForm.Image1.Width:=PreviewForm.ClientWidth;
+ end;
+
+ PreviewForm.Image1.Canvas.Brush.Color:=clWhite;
+ PreviewForm.Image1.Canvas.FillRect(0,0,PreviewForm.Image1.ClientWidth-1,PreviewForm.Image1.ClientHeight-1);
+ PrinterDrawer:=TZGLCanvasDrawer.create;
+ rasterize(cdwg,PreviewForm.Image1.ClientWidth,PreviewForm.Image1.ClientHeight,p1,p2,PrintParam,PreviewForm.Image1.Canvas,PrinterDrawer);
+ PrinterDrawer.Free;
+end;
+
+procedure Print_com.Preview(pdata:PtrInt);
+begin
+  dbg;
   PreviewForm:=TPreviewForm.Create(nil);
+  PreviewForm.OnShow:=@OnShowPreview;
   PreviewForm.Show;
-  PreviewForm.Image1.Canvas.Brush.Color:=clWhite;
-  PreviewForm.Image1.Canvas.FillRect(0,0,PreviewForm.Image1.ClientWidth-1,PreviewForm.Image1.ClientHeight-1);
-  PrinterDrawer:=TZGLCanvasDrawer.create;
-  //rasterize(cdwg,PreviewForm.PaintBox1.ClientWidth,PreviewForm.PaintBox1.ClientHeight,p1,p2,PrintParam,PreviewForm.PaintBox1.Canvas,PrinterDrawer);
-  rasterize(cdwg,PreviewForm.Image1.ClientWidth,PreviewForm.Image1.ClientHeight,p1,p2,PrintParam,PreviewForm.Image1.Canvas,PrinterDrawer);
-  PrinterDrawer.Free;
   //PreviewForm.Free;
 end;
 

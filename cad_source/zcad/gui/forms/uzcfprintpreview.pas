@@ -1,6 +1,6 @@
 unit uzcfPrintPreview;
 
-{$mode delphi}
+{$MODE OBJFPC}{$H+}
 
 interface
 

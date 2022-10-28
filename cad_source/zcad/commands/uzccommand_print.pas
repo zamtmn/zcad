@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 {$MODE OBJFPC}{$H+}
-unit uzccommand_print;
+unit uzcCommand_Print;
 {$INCLUDE zengineconfig.inc}
 
 interface

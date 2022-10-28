@@ -1,0 +1,23 @@
+object PreviewForm: TPreviewForm
+  Left = 183
+  Height = 984
+  Top = 221
+  Width = 1299
+  Caption = 'Print preview'
+  ClientHeight = 984
+  ClientWidth = 1299
+  DefaultMonitor = dmMainForm
+  DesignTimePPI = 144
+  FormStyle = fsStayOnTop
+  Position = poScreenCenter
+  object Image1: TImage
+    AnchorSideLeft.Control = Owner
+    AnchorSideLeft.Side = asrCenter
+    AnchorSideTop.Control = Owner
+    AnchorSideTop.Side = asrCenter
+    Left = 372
+    Height = 332
+    Top = 326
+    Width = 554
+  end
+end

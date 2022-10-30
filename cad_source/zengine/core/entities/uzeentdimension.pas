@@ -49,6 +49,8 @@ TDXFDimData=record
   P15InWCS:GDBVertex;
   P16InOCS:GDBVertex;
   TextMoved:Boolean;
+  NeedTextLeader:Boolean;
+  MidPoint:GDBVertex;
 end;
 PGDBObjDimension=^GDBObjDimension;
 {REGISTEROBJECTTYPE GDBObjDimension}
@@ -291,7 +293,6 @@ function GDBObjDimension.TextAlwaysMoved:Boolean;
 begin
      result:=false;
 end;
-
 function GDBObjDimension.GetTextOffset(var drawing:TDrawingDef):GDBVertex;
 var
    l,h:Double;
@@ -333,9 +334,11 @@ begin
      if TextNeedOffset(dimdir) then
      begin
           if PDimStyle.Text.DIMGAP>0 then
-                                         l:=PDimStyle.Text.DIMGAP*h+{PDimStyle.Text.DIMTXT}dimtexth/2
+                                         l:=PDimStyle.Text.DIMGAP*h
                                      else
-                                         l:=-2*PDimStyle.Text.DIMGAP*h+{PDimStyle.Text.DIMTXT}dimtexth/2;
+                                         l:=-2*PDimStyle.Text.DIMGAP*h;
+     if not DimData.TextMoved then
+       l:=l+dimtexth/2;
      case PDimStyle.Text.DIMTAD of
                                   DTVPCenters:dimdir:=nulvertex;
                                   DTVPAbove:begin
@@ -353,8 +356,8 @@ begin
      end
         else
             result:=nulvertex;
-     if PDimStyle.Text.DIMTXSTY^.prop.size=0 then
-       result:=uzegeometry.VertexMulOnSc(Result,GetDIMSCALE);
+     {if PDimStyle.Text.DIMTXSTY^.prop.size=0 then
+       result:=uzegeometry.VertexMulOnSc(Result,GetDIMSCALE);}
 end;
 function GDBObjDimension.GetDIMTMOVE:TDimTextMove;
 begin
@@ -366,6 +369,7 @@ var
   ptext:PGDBObjMText;
   dimtxtstyle:PGDBTextStyle;
   p2:GDBVertex;
+  textsize:double;
 begin
   //CalcTextParam;
   dimtext:=GetDimStr(drawing);
@@ -381,14 +385,21 @@ begin
       dimtextw:=dimtextw-2*PDimStyle.Text.DIMGAP;
       dimtexth:=dimtexth-2*PDimStyle.Text.DIMGAP;
   end;
-  if (self.DimData.textmoved)or TextAlwaysMoved then
-                   begin
-                        p:=vertexadd(p,TextOffset);
-                        if GetDIMTMOVE=DTMCreateLeader then
-                              begin
-                                   p:=VertexDmorph(p,VectorT,GetPSize/2);
-                              end;
-                   end;
+
+  if PDimStyle.Text.DIMTXSTY^.prop.size=0 then
+    textsize:=PDimStyle.Text.DIMTXT*GetDIMSCALE
+  else
+    textsize:=PDimStyle.Text.DIMTXSTY^.prop.size;
+
+  DimData.NeedTextLeader:=False;
+  if (self.DimData.textmoved)or TextAlwaysMoved then begin
+    if (abs(scalardot(p-DimData.MidPoint,vectorN))>2*textsize)or TextAlwaysMoved then
+      if GetDIMTMOVE=DTMCreateLeader then begin
+        p:=VertexDmorph(p,VectorT,GetPSize/2);
+        DimData.NeedTextLeader:=True;
+      end;
+    p:=vertexadd(p,TextOffset);
+  end;
   ptext.Local.P_insert:=p;
   ptext.linespacef:=1;
   ptext.textprop.justify:=jsmc;
@@ -396,10 +407,7 @@ begin
   ptext.Local.basis.ox.x:=cos(TextAngle);
   ptext.Local.basis.ox.y:=sin(TextAngle);
   ptext.TXTStyleIndex:=dimtxtstyle;
-  if PDimStyle.Text.DIMTXSTY^.prop.size=0 then
-    ptext.textprop.size:=PDimStyle.Text.DIMTXT*GetDIMSCALE
-  else
-    ptext.textprop.size:=PDimStyle.Text.DIMTXSTY^.prop.size;
+  ptext.textprop.size:=textsize;
   ptext.vp.Color:=PDimStyle.Text.DIMCLRT;
   ptext.FormatEntity(drawing,dc);
 

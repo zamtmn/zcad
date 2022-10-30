@@ -30,8 +30,6 @@ function ENTF_CreateSolid(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityO
 function ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObjEntityOpenArray;
                                 layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:TGDBPaletteColor;LW:TGDBLineWeight;
                                 point: gdbvertex; scale, angle: Double; s: pansichar):PGDBObjEntity;
-var
-   p:gdbvertex;
 implementation
 //uses
 //    log;

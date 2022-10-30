@@ -33,7 +33,7 @@ TZGLGeneral2DDrawer=class(TZGLGeneralDrawer)
                           {ProjMatrwoLCS,}ProjMatrwithLCS:DMatrix4D;
                           mstack:DMatrix4DStackArray;
                           mstackindex:integer;
-                          sx,sy,tx,ty:single;
+                          sx,sy,tx,ty:Double;
                           wa:TAbstractViewArea;
                           canvas:tcanvas;
                           panel:TCustomControl;

@@ -3770,6 +3770,16 @@ var
                end;
     end;
 
+        //** Поиск существует ли устройства с нужным именем
+    procedure visualGraphTreeNew222(G: TGraph; var startPt:GDBVertex;height:double);
+    var
+       i: Integer;
+       pvd:pvardesk; //для работы со свойствами устройств
+    begin
+         ZCMsgCallBackInterface.TextMessage('индекс рут - ' + inttostr(G.Root.Index) + ' - кол дет - ' + inttostr(G.Root.ChildCount),TMWOHistoryOut);
+         ZCMsgCallBackInterface.TextMessage(G.Root.AsString[vGInfoVertex],TMWOHistoryOut);
+    end;
+
     ////** переработка списков LTreeDev в один список AllTreeDev
     //procedure getOneTreeDevOnGroup(var listMasterDevice:TVectorOfMasterDevice);
     //var

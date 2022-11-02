@@ -384,6 +384,9 @@ var
 
 
 begin
+      ZCMsgCallBackInterface.TextMessage('индекс рут - ' + inttostr(G.Root.Index) + ' - кол дет - ' + inttostr(G.Root.ChildCount),TMWOHistoryOut);
+      ZCMsgCallBackInterface.TextMessage(G.Root.AsString[vGInfoVertex],TMWOHistoryOut);
+
     x:=0;
     y:=0;
      ZCMsgCallBackInterface.TextMessage('VСТАРТ визуал',TMWOHistoryOut);

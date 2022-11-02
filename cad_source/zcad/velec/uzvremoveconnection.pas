@@ -82,7 +82,7 @@ begin
                 else
                   repeat
                     inc(numConnect);
-                    pvd:=Varext.entityunit.FindVariable(velec_VarNameForAddConnectBefore+IntToStr(numConnect)+'_'+velec_VarNameForAddConnectAfter);
+                    pvd:=Varext.entityunit.FindVariable(velec_VarNameForConnectBefore+IntToStr(numConnect)+'_'+velec_VarNameForConnectAfter_SLTypeagen);
                   until pvd=nil;
                   //ZCMsgCallBackInterface.TextMessage('numConnect = ' + inttostr(numConnect),TMWOHistoryOut);
                   //удаляем подключение
@@ -93,7 +93,7 @@ begin
                       repeat
                         varName:=pvdadd^.name; //имя переменной
                         //ZCMsgCallBackInterface.TextMessage('numConnect = ' + inttostr(numConnect),TMWOHistoryOut);
-                        varName:=StringReplace(varName,velec_VarNameForAddConnectBefore+'1',velec_VarNameForAddConnectBefore+inttostr(numConnect-1),[rfReplaceAll, rfIgnoreCase]);
+                        varName:=StringReplace(varName,velec_VarNameForConnectBefore+'1',velec_VarNameForConnectBefore+inttostr(numConnect-1),[rfReplaceAll, rfIgnoreCase]);
                         //ZCMsgCallBackInterface.TextMessage('varName = ' + varName,TMWOHistoryOut);
                         pvd:=Varext.entityunit.FindVariable(varName);//а тут уже указатель на настоящий описатель переменной
                         if pvd<>nil then

@@ -8,8 +8,8 @@ type
   TsettingVizCab=record
     sErrors:Boolean;
     vizNumMetric:Boolean;
-    vizFullTreeCab:Boolean;
-    vizEasyTreeCab:Boolean;
+    vizFullTreeCab:Boolean; //Визуализировать полное дерево
+    vizEasyTreeCab:Boolean; //визуализировать упрощенное дерево
   end;
 
   TuzvslagcabComParams=record       //определяем параметры команды которые будут видны в инспекторе во время выполнения команды

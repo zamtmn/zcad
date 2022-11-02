@@ -31,6 +31,8 @@ const
   vGIsSubMasterDevice='vGIsSubMasterDevice';
   vGIsSubNodeDevice='vGIsSubNodeDevice';
   vGIsSubNodeCabDev='vGIsSubNodeCabDev';  // ноды внутри кабеля что данный кусок кабеля подключает
+  velecNumConnectDev='velecNumConnectDev';               // номер подключения внутри устройства
+  velecNumConnectDeviceCad='GC_velecNumConnectDevice';   //имя переменной в zcad
   vGIsSubCUDevice='vGIsSubCUDevice';
   vGInfoVertex='infoVertex';
   vGLength='length';
@@ -72,9 +74,17 @@ const
   velec_SchemaELSTART='EL_STARTSCHEMA';
   velec_SchemaELEND='EL_ENDSCHEMA';
 
-  velec_VarNameForAddConnectBefore='SLCABAGEN';
-  velec_VarNameForAddConnectBeforeName='Подключение №';
-  velec_VarNameForAddConnectAfter='SLTypeagen';
+  velec_VarNameForConnectBefore='SLCABAGEN';
+  velec_VarNameForConnectBeforeName='Подключение №';
+  velec_VarNameForConnectAfter_HeadDeviceName='HeadDeviceName';
+  velec_VarNameForConnectAfter_ControlUnitName='ControlUnitName';
+  velec_VarNameForConnectAfter_NGHeadDevice='NGHeadDevice';
+  velec_VarNameForConnectAfter_SLTypeagen='SLTypeagen';
+  velec_VarNameForConnectAfter_NGControlUnit='NGControlUnit';
+  velec_VarNameForConnectAfter_DevConnectMethod ='DevConnectMethod';
+  velec_VarNameForConnectAfter_CabConnectAddLength='CabConnectAddLength';
+  velec_VarNameForConnectAfter_CabConnectMountingMethod='CabConnectMountingMethod';
+
 
   velec_cableMountingNon='';
 

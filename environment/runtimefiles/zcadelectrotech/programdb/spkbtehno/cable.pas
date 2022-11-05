@@ -2,6 +2,148 @@ subunit devicebase;
 interface
 uses system;
 type
+TSPKBTEHNO_TEHNOKIPVNGAHF_WCS=(_1_2_0_78(*'1х2х0.78'*),
+_2_2_0_78(*'2х2х0.78'*),
+_3_2_0_78(*'3х2х0.78'*),
+_4_2_0_78(*'4х2х0.78'*),
+_5_2_0_78(*'5х2х0.78'*),
+_6_2_0_78(*'6х2х0.78'*),
+_7_2_0_78(*'7х2х0.78'*),
+_8_2_0_78(*'8х2х0.78'*),
+_9_2_0_78(*'9х2х0.78'*),
+_10_2_0_78(*'10х2х0.78'*),
+_11_2_0_78(*'11х2х0.78'*),
+_12_2_0_78(*'12х2х0.78'*),
+_13_2_0_78(*'13х2х0.78'*),
+_14_2_0_78(*'14х2х0.78'*),
+_15_2_0_78(*'15х2х0.78'*),
+_16_2_0_78(*'16х2х0.78'*),
+_17_2_0_78(*'17х2х0.78'*),
+_18_2_0_78(*'18х2х0.78'*),
+_19_2_0_78(*'19х2х0.78'*),
+_20_2_0_78(*'20х2х0.78'*),
+_21_2_0_78(*'21х2х0.78'*),
+_22_2_0_78(*'22х2х0.78'*),
+_23_2_0_78(*'23х2х0.78'*),
+_24_2_0_78(*'24х2х0.78'*),
+_25_2_0_78(*'25х2х0.78'*));
+
+     TSPKBTEHNO_KPSTTng_A_HF_WCS=(_1_2_0_2(*'1х2х0.2'*),
+                                    _1_2_0_35(*'1х2х0.35'*),
+                                    _1_2_0_5(*'1х2х0.5'*),
+                                    _1_2_0_75(*'1х2х0.75'*),
+                                    _1_2_1_0(*'1х2х1.0'*),
+                                    _1_2_1_5(*'1х2х1.5'*),
+                                    _1_2_2_5(*'1х2х2.5'*),
+_2_2_0_2(*'2х2х0.2'*),
+                                    _2_2_0_35(*'2х2х0.35'*),
+                                    _2_2_0_5(*'2х2х0.5'*),
+                                    _2_2_0_75(*'2х2х0.75'*),
+                                    _2_2_1_0(*'2х2х1.0'*),
+                                    _2_2_1_5(*'2х2х1.5'*),
+                                    _2_2_2_5(*'2х2х2.5'*),
+_3_2_0_2(*'3х2х0.2'*),
+                                    _3_2_0_35(*'3х2х0.35'*),
+                                    _3_2_0_5(*'3х2х0.5'*),
+                                    _3_2_0_75(*'3х2х0.75'*),
+                                    _3_2_1_0(*'3х2х1.0'*),
+                                    _3_2_1_5(*'3х2х1.5'*),
+                                    _3_2_2_5(*'3х2х2.5'*),
+_4_2_0_2(*'4х2х0.2'*),
+                                    _4_2_0_35(*'4х2х0.35'*),
+                                    _4_2_0_5(*'4х2х0.5'*),
+                                    _4_2_0_75(*'4х2х0.75'*),
+                                    _4_2_1_0(*'4х2х1.0'*),
+                                    _4_2_1_5(*'4х2х1.5'*),
+                                    _4_2_2_5(*'4х2х2.5'*),
+_5_2_0_2(*'5х2х0.2'*),
+                                    _5_2_0_35(*'5х2х0.35'*),
+                                    _5_2_0_5(*'5х2х0.5'*),
+                                    _5_2_0_75(*'5х2х0.75'*),
+                                    _5_2_1_0(*'5х2х1.0'*),
+                                    _5_2_1_5(*'5х2х1.5'*),
+                                    _5_2_2_5(*'5х2х2.5'*),
+_6_2_0_2(*'6х2х0.2'*),
+                                    _6_2_0_35(*'6х2х0.35'*),
+                                    _6_2_0_5(*'6х2х0.5'*),
+                                    _6_2_0_75(*'6х2х0.75'*),
+                                    _6_2_1_0(*'6х2х1.0'*),
+                                    _6_2_1_5(*'6х2х1.5'*),
+                                    _6_2_2_5(*'6х2х2.5'*),
+_7_2_0_2(*'7х2х0.2'*),
+                                    _7_2_0_35(*'7х2х0.35'*),
+                                    _7_2_0_5(*'7х2х0.5'*),
+                                    _7_2_0_75(*'7х2х0.75'*),
+                                    _7_2_1_0(*'7х2х1.0'*),
+                                    _7_2_1_5(*'7х2х1.5'*),
+                                    _7_2_2_5(*'7х2х2.5'*),
+_8_2_0_2(*'8х2х0.2'*),
+                                    _8_2_0_35(*'8х2х0.35'*),
+                                    _8_2_0_5(*'8х2х0.5'*),
+                                    _8_2_0_75(*'8х2х0.75'*),
+                                    _8_2_1_0(*'8х2х1.0'*),
+                                    _8_2_1_5(*'8х2х1.5'*),
+                                    _8_2_2_5(*'8х2х2.5'*),
+_9_2_0_2(*'9х2х0.2'*),
+                                    _9_2_0_35(*'9х2х0.35'*),
+                                    _9_2_0_5(*'9х2х0.5'*),
+                                    _9_2_0_75(*'9х2х0.75'*),
+                                    _9_2_1_0(*'9х2х1.0'*),
+                                    _9_2_1_5(*'9х2х1.5'*),
+                                    _9_2_2_5(*'9х2х2.5'*),
+_10_2_0_2(*'10х2х0.2'*),
+                                    _10_2_0_35(*'10х2х0.35'*),
+                                    _10_2_0_5(*'10х2х0.5'*),
+                                    _10_2_0_75(*'10х2х0.75'*),
+                                    _10_2_1_0(*'10х2х1.0'*),
+                                    _10_2_1_5(*'10х2х1.5'*),
+                                    _10_2_2_5(*'10х2х2.5'*),
+_11_2_0_2(*'11х2х0.2'*),
+                                    _11_2_0_35(*'11х2х0.35'*),
+                                    _11_2_0_5(*'11х2х0.5'*),
+                                    _11_2_0_75(*'11х2х0.75'*),
+                                    _11_2_1_0(*'11х2х1.0'*),
+                                    _11_2_1_5(*'11х2х1.5'*),
+                                    _11_2_2_5(*'11х2х2.5'*),
+_12_2_0_2(*'12х2х0.2'*),
+                                    _12_2_0_35(*'12х2х0.35'*),
+                                    _12_2_0_5(*'12х2х0.5'*),
+                                    _12_2_0_75(*'12х2х0.75'*),
+                                    _12_2_1_0(*'12х2х1.0'*),
+                                    _12_2_1_5(*'12х2х1.5'*),
+                                    _12_2_2_5(*'12х2х2.5'*),
+_13_2_0_2(*'13х2х0.2'*),
+                                    _13_2_0_35(*'13х2х0.35'*),
+                                    _13_2_0_5(*'13х2х0.5'*),
+                                    _13_2_0_75(*'13х2х0.75'*),
+                                    _13_2_1_0(*'13х2х1.0'*),
+                                    _13_2_1_5(*'13х2х1.5'*),
+                                    _13_2_2_5(*'13х2х2.5'*),
+_14_2_0_2(*'14х2х0.2'*),
+                                    _14_2_0_35(*'14х2х0.35'*),
+                                    _14_2_0_5(*'14х2х0.5'*),
+                                    _14_2_0_75(*'14х2х0.75'*),
+                                    _14_2_1_0(*'14х2х1.0'*),
+                                    _14_2_1_5(*'14х2х1.5'*),
+                                    _14_2_2_5(*'14х2х2.5'*),
+_15_2_0_2(*'15х2х0.2'*),
+                                    _15_2_0_35(*'15х2х0.35'*),
+                                    _15_2_0_5(*'15х2х0.5'*),
+                                    _15_2_0_75(*'15х2х0.75'*),
+                                    _15_2_1_0(*'15х2х1.0'*),
+                                    _15_2_1_5(*'15х2х1.5'*),
+                                    _15_2_2_5(*'15х2х2.5'*),
+_16_2_0_2(*'16х2х0.2'*),
+                                    _16_2_0_35(*'16х2х0.35'*),
+                                    _16_2_0_5(*'16х2х0.5'*),
+                                    _16_2_0_75(*'16х2х0.75'*),
+                                    _16_2_1_0(*'16х2х1.0'*),
+                                    _16_2_1_5(*'16х2х1.5'*),
+                                    _16_2_2_5(*'16х2х2.5'*),
+_unfinished(*'unfinished'*)
+
+                                   );
+
      TSPKBTEHNO_KPKEV_WCS=(_1_2_0_2(*'1х2х0.20'*),
                            _1_2_0_35(*'1х2х0.35'*),
                            _1_2_0_5(*'1х2х0.50'*),
@@ -233,9 +375,16 @@ TSPKBTEHNO_TEHNOKIPNGAFRLS_WCS=(_1_2_0_2(*'1х2х0.20'*),
     TSPKBTEHNO_KPPGENGA_HF=packed object(CableDeviceBaseObject)
                 Wire_Count_Section_DESC:TSPKBTEHNO_KPPGNEGA_HF_WCS;
            end;
+    TSPKBTEHNO_TEHNOKIPVNGAHF=packed object(CableDeviceBaseObject)
+                Wire_Count_Section_DESC:TSPKBTEHNO_TEHNOKIPVNGAHF_WCS;
+           end;
     TSPKBTEHNO_TEHNOKIPNGAFRLS=packed object(CableDeviceBaseObject)
                 Wire_Count_Section_DESC:TSPKBTEHNO_TEHNOKIPNGAFRLS_WCS;
            end;
+    TSPKBTEHNO_KPSTTng_A_HF=packed object(CableDeviceBaseObject)
+                Wire_Count_Section_DESC:TSPKBTEHNO_KPSTTng_A_HF_WCS;
+           end;
+
 
 var
    _EQ_SPKBTEHNO_KPKEV_ng_LS:TSPKBTEHNO_KPKEV_ng_LS;
@@ -244,8 +393,28 @@ var
    _EQ_SPKBTEHNO_KPPGNGA_HF:TSPKBTEHNO_KPPGNGA_HF;
    _EQ_SPKBTEHNO_KPPGENGA_HF:TSPKBTEHNO_KPPGENGA_HF;
    _EQ_SPKBTEHNO_TEHNOKIPNGAFRLS:TSPKBTEHNO_TEHNOKIPNGAFRLS;
+   _EQ_SPKBTEHNO_TEHNOKIPVNGAHF:TSPKBTEHNO_TEHNOKIPVNGAHF;
+   _EQ_SPKBTEHNO_KPSTTng_A_HF:TSPKBTEHNO_KPSTTng_A_HF;
+
 implementation
 begin
+     _EQ_SPKBTEHNO_KPSTTng_A_HF.initnul;
+     _EQ_SPKBTEHNO_KPSTTng_A_HF.Category:=_kables;
+     _EQ_SPKBTEHNO_KPSTTng_A_HF.Group:=_cables_sv;
+     _EQ_SPKBTEHNO_KPSTTng_A_HF.EdIzm:=_m;
+     _EQ_SPKBTEHNO_KPSTTng_A_HF.ID:='SPKBTEHNO_KPSTTng_A_HF';
+     _EQ_SPKBTEHNO_KPSTTng_A_HF.Standard:='ТУ 3581-004-53930360-2010';
+     _EQ_SPKBTEHNO_KPSTTng_A_HF.OKP:='8544 49 910 8';
+     _EQ_SPKBTEHNO_KPSTTng_A_HF.Manufacturer:='ЗАО "СПКБ Техно" г.Подольск';
+     _EQ_SPKBTEHNO_KPSTTng_A_HF.Description:='КПСТТнг(А)-HF - кабели для передачи данных в системах связи, контроля и управления инженерными коммуникациями и другими подсистемами зданий и сооружений, а также в промышленных сетях АСУ ТП, для работы при напряжении до 300 В включительно переменного тока частотой 50 Гц.';
+     _EQ_SPKBTEHNO_KPSTTng_A_HF.NameShortTemplate:='КПСТТнг(А)-HF %%[Wire_Count_Section_DESC]';
+     _EQ_SPKBTEHNO_KPSTTng_A_HF.NameTemplate:='Kабель для передачи данных в системах связи, контроля и управления инженерными коммуникациями и другими подсистемами зданий и сооружений, а также в промышленных сетях АСУ ТП, для работы при напряжении до 300 В включительно переменного тока частотой 50 Гц. КПСТТнг(А)-HF %%[Wire_Count_Section_DESC]';
+     _EQ_SPKBTEHNO_KPSTTng_A_HF.UIDTemplate:='%%[ID]-%%[Wire_Count_Section_DESC]';
+     _EQ_SPKBTEHNO_KPSTTng_A_HF.NameFullTemplate:='Kабель для передачи данных в системах связи, контроля и управления инженерными коммуникациями и другими подсистемами зданий и сооружений, а также в промышленных сетях АСУ ТП, для работы при напряжении до 300 В включительно переменного тока частотой 50 Гц. КПСТТнг(А)-HF %%[Wire_Count_Section_DESC]';
+     _EQ_SPKBTEHNO_KPSTTng_A_HF.Wire_Count_Section_DESC:=_2_2_0_5;
+     _EQ_SPKBTEHNO_KPSTTng_A_HF.TreeCoord:='BP_СПКБ Техно_Для СС_КПСТТнг(А)-HF|BC_Кабельная продукция_Связи_КПСТТнг(А)-HF(СПКБ Техно)';
+     _EQ_SPKBTEHNO_KPSTTng_A_HF.format;
+
      _EQ_SPKBTEHNO_TEHNOKIPNGAFRLS.initnul;
      _EQ_SPKBTEHNO_TEHNOKIPNGAFRLS.Category:=_kables;
      _EQ_SPKBTEHNO_TEHNOKIPNGAFRLS.Group:=_cables_sv;
@@ -262,6 +431,24 @@ begin
      _EQ_SPKBTEHNO_TEHNOKIPNGAFRLS.Wire_Count_Section_DESC:=_1_2_0_75;
      _EQ_SPKBTEHNO_TEHNOKIPNGAFRLS.TreeCoord:='BP_СПКБ Техно_Для ОПС_ТехноКИПнг(А)-FRLS|BC_Кабельная продукция_Связи_ТехноКИПнг(А)-FRLS(СПКБ Техно)';
      _EQ_SPKBTEHNO_TEHNOKIPNGAFRLS.format;
+
+     _EQ_SPKBTEHNO_TEHNOKIPVNGAHF.initnul;
+     _EQ_SPKBTEHNO_TEHNOKIPVNGAHF.Category:=_kables;
+     _EQ_SPKBTEHNO_TEHNOKIPVNGAHF.Group:=_cables_sv;
+     _EQ_SPKBTEHNO_TEHNOKIPVNGAHF.EdIzm:=_m;
+     _EQ_SPKBTEHNO_TEHNOKIPVNGAHF.ID:='SPKBTEHNO_TEHNOKIPNGAFRLS';
+     _EQ_SPKBTEHNO_TEHNOKIPVNGAHF.Standard:='ТУ 3574-014-53930360-2013';
+     _EQ_SPKBTEHNO_TEHNOKIPVNGAHF.OKP:='35 7400';
+     _EQ_SPKBTEHNO_TEHNOKIPVNGAHF.Manufacturer:='ЗАО "СПКБ Техно" г.Подольск';
+     _EQ_SPKBTEHNO_TEHNOKIPVNGAHF.Description:='Кабель безгалогенный, интерфейсный симметричной парной скрутки с низким значением погонной емкости предназначен для высокоскоростной передачи и приема данных построенных по промышленному интерфейсу RS-485 в соответствии со стандартами ИСО/МЭК 8482, TIA/EIA RS-485-A, на промышленных интерфейсах CAN, HART и других,а также в других системах  связи, контроля и управления';
+     _EQ_SPKBTEHNO_TEHNOKIPVNGAHF.NameShortTemplate:='ТехноКИПвнг(А)-HF %%[Wire_Count_Section_DESC]';
+     _EQ_SPKBTEHNO_TEHNOKIPVNGAHF.NameTemplate:='Кабель огнестойкий, интерфейсный симметричной парной скрутки  с низким значением погонной емкости ТехноКИПвнг(А)-HF %%[Wire_Count_Section_DESC]';
+     _EQ_SPKBTEHNO_TEHNOKIPVNGAHF.UIDTemplate:='%%[ID]-%%[Wire_Count_Section_DESC]';
+     _EQ_SPKBTEHNO_TEHNOKIPVNGAHF.NameFullTemplate:='Кабель огнестойкий, интерфейсный симметричной парной скрутки  с низким значением погонной емкости ТехноКИПвнг(А)-HF %%[Wire_Count_Section_DESC]';
+     _EQ_SPKBTEHNO_TEHNOKIPVNGAHF.Wire_Count_Section_DESC:=_1_2_0_78;
+     _EQ_SPKBTEHNO_TEHNOKIPVNGAHF.TreeCoord:='BP_СПКБ Техно_Для ОПС_ТехноКИПвнг(А)-HF|BC_Кабельная продукция_Связи_ТехноКИПвнг(А)-HF(СПКБ Техно)';
+     _EQ_SPKBTEHNO_TEHNOKIPVNGAHF.format;
+
 
      _EQ_SPKBTEHNO_KPKEV_ng_LS.initnul;
      _EQ_SPKBTEHNO_KPKEV_ng_LS.Category:=_kables;

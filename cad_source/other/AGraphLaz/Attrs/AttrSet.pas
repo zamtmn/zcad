@@ -1358,10 +1358,10 @@ begin
       AttrInt32, AttrUInt32, AttrFloat32:
         PInt32(P)^:=0;
       AttrPointer:
-        PPointer(P)^:=0;
+        PPointer(P)^:=nil;
       AttrAutoFree: begin
         TObject(PPointer(P)^).Free;
-        PPointer(P)^:=0;
+        PPointer(P)^:=nil;
       end;
       AttrString: begin
         DisposeVStr(PPVString(P)^);

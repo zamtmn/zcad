@@ -1264,7 +1264,8 @@ begin
   Case TExtAttrType(AType) of
     AttrInt8, AttrUInt8, AttrBool, AttrChar: Int8(Data):=0;
     AttrInt16, AttrUInt16: Int16(Data):=0;
-    AttrInt32, AttrUInt32, AttrFloat32, AttrPointer, AttrAutoFree: Int32(Data):=0;
+    AttrInt32, AttrUInt32, AttrFloat32: Int32(Data):=0;
+    AttrPointer, AttrAutoFree: Pointer(Data):=nil;
     AttrString: String(Data):='';
     AttrFloat64: Float64(Data):=0;
     AttrFloat80: Float80(Data):=0;
@@ -1289,8 +1290,10 @@ begin
     Case TExtAttrType(AType) of
       AttrInt8, AttrUInt8, AttrBool, AttrChar: Int8(Data):=PInt8(P)^;
       AttrInt16, AttrUInt16: Int16(Data):=PInt16(P)^;
-      AttrInt32, AttrUInt32, AttrFloat32, AttrPointer, AttrAutoFree:
+      AttrInt32, AttrUInt32, AttrFloat32:
         Int32(Data):=PInt32(P)^;
+      AttrPointer, AttrAutoFree:
+        Pointer(Data):=PPointer(P)^;
       AttrString:
         if PPVString(P)^ <> nil then
           String(Data):=PPVString(P)^^
@@ -1322,7 +1325,8 @@ begin
   Case TExtAttrType(AType) of
     AttrInt8, AttrUInt8, AttrBool, AttrChar: PInt8(P)^:=Int8(Data);
     AttrInt16, AttrUInt16: PInt16(P)^:=Int16(Data);
-    AttrInt32, AttrUInt32, AttrFloat32, AttrPointer, AttrAutoFree: PInt32(P)^:=Int32(Data);
+    AttrInt32, AttrUInt32, AttrFloat32: PInt32(P)^:=Int32(Data);
+    AttrPointer, AttrAutoFree: PPointer(P)^:=Pointer(Data);
     AttrString: begin
       DisposeVStr(PPVString(P)^);
       PPVString(P)^:=NewVStr(String(Data));
@@ -1351,11 +1355,13 @@ begin
         PInt8(P)^:=0;
       AttrInt16, AttrUInt16:
         PInt16(P)^:=0;
-      AttrInt32, AttrUInt32, AttrFloat32, AttrPointer:
+      AttrInt32, AttrUInt32, AttrFloat32:
         PInt32(P)^:=0;
+      AttrPointer:
+        PPointer(P)^:=0;
       AttrAutoFree: begin
         TObject(PPointer(P)^).Free;
-        PInt32(P)^:=0;
+        PPointer(P)^:=0;
       end;
       AttrString: begin
         DisposeVStr(PPVString(P)^);

@@ -78,6 +78,7 @@ TZGLGeneralDrawer=class(TZGLAbstractDrawer)
                         procedure pushMatrixAndSetTransform(Transform:DMatrix4D;FromOneMatrix:Boolean=False);overload;override;
                         procedure pushMatrixAndSetTransform(Transform:DMatrix4F;FromOneMatrix:Boolean=False);overload;override;
                         procedure popMatrix;override;
+                        procedure AddToLCS(v:GDBvertex);override;
                    end;
    TLCSProp=record
      CurrentCamCSOffset:GDBvertex;
@@ -92,6 +93,13 @@ implementation
 //uses log;
 var
   DrawerLLPCreator:TLLPrimitivesCreator;
+procedure TZGLGeneralDrawer.AddToLCS(v:GDBvertex);
+begin
+  LCS.CurrentCamCSOffset:=LCS.CurrentCamCSOffset+v;
+  LCS.CurrentCamCSOffsetS.x:=LCS.CurrentCamCSOffsetS.x+v.x;
+  LCS.CurrentCamCSOffsetS.y:=LCS.CurrentCamCSOffsetS.y+v.y;
+  LCS.CurrentCamCSOffsetS.z:=LCS.CurrentCamCSOffsetS.z+v.z;
+end;
 procedure TZGLGeneralDrawer.popMatrix;
 begin
 end;

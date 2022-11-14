@@ -612,12 +612,38 @@ else if (Attrib and LLAttrNeedSimtlify)>0 then
 end;
 
 procedure TLLSymbol.drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;const PSymbolsParam:PTSymbolSParam);
+var
+  tv,tv2:GDBvertex;
+  sm,tm:DMatrix4D;
 begin
-     drawer.DisableLCS(rc.DrawingContext.matrixs);
-     drawer.pushMatrixAndSetTransform(SymMatr,true);
+  sm:=SymMatr;
+  tv.x:=SymMatr[3].x;
+  tv.y:=SymMatr[3].y;
+  tv.z:=SymMatr[3].z;
+  tm:=CreateTranslationMatrix(-tv);
+  SymMatr:=MatrixMultiply(SymMatr,tm);
+  tv2:=tv;
+  {tv2:=VectorTransform3D(tv,rc.DrawingContext.matrixs.pprojMatrix^);
+  tm:=rc.DrawingContext.matrixs.pprojMatrix^;
+  MatrixInvert(tm);
+  tv2:=VectorTransform3D(tv,tm);}
+  //SymMatr[3].x:=0;
+  //SymMatr[3].y:=0;
+  //SymMatr[3].z:=0;
+
+     //drawer.DisableLCS(rc.DrawingContext.matrixs);
+     drawer.AddToLCS(tv2);
+     drawer.pushMatrixAndSetTransform(SymMatr{,true});
      PZGLVectorObject(PExternalVectorObject).DrawCountedLLPrimitives(rc,drawer,OptData,ExternalLLPOffset,ExternalLLPCount);
      drawer.popMatrix;
-     drawer.EnableLCS(rc.DrawingContext.matrixs);
+     drawer.AddToLCS(-tv2);
+     //drawer.EnableLCS(rc.DrawingContext.matrixs);
+
+  SymMatr[3].x:=tv.x;
+  SymMatr[3].y:=tv.y;
+  SymMatr[3].z:=tv.z;
+  SymMatr:=sm;
+
 end;
 
 begin

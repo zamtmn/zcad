@@ -611,37 +611,42 @@ else if (Attrib and LLAttrNeedSimtlify)>0 then
 
 end;
 
+function CalcLCS(const m:DMatrix4D):GDBvertex;
+{lcsx:= -((-m12 m21 m30 + m11 m22 m30 + m12 m20 m31 - m10 m22 m31 - m11 m20 m32 + m10 m21 m32)/(m02 m11 m20 - m01 m12 m20 - m02 m10 m21 + m00 m12 m21 + m01 m10 m22 - m00 m11 m22)),
+ lcsy:= -(( m02 m21 m30 - m01 m22 m30 - m02 m20 m31 + m00 m22 m31 + m01 m20 m32 - m00 m21 m32) /(m02 m11 m20 - m01 m12 m20 - m02 m10 m21 + m00 m12 m21 + m01 m10 m22 - m00 m11 m22)),
+ lcsz:= -((-m02 m11 m30 + m01 m12 m30 + m02 m10 m31 - m00 m12 m31 - m01 m10 m32 + m00 m11 m32)/(m02 m11 m20 - m01 m12 m20 - m02 m10 m21 + m00 m12 m21 + m01 m10 m22 - m00 m11 m22))}
+begin
+  result.x:=-((-m[1].v[2]*m[2].v[1]*m[3].v[0] + m[1].v[1]*m[2].v[2]*m[3].v[0] + m[1].v[2]*m[2].v[0]*m[3].v[1] - m[1].v[0]*m[2].v[2]*m[3].v[1] - m[1].v[1]*m[2].v[0]*m[3].v[2] + m[1].v[0]*m[2].v[1]*m[3].v[2])/(m[0].v[2]*m[1].v[1]*m[2].v[0] - m[0].v[1]*m[1].v[2]*m[2].v[0] - m[0].v[2]*m[1].v[0]*m[2].v[1] + m[0].v[0]*m[1].v[2]*m[2].v[1] + m[0].v[1]*m[1].v[0]*m[2].v[2] - m[0].v[0]*m[1].v[1]*m[2].v[2]));
+  result.y:=-(( m[0].v[2]*m[2].v[1]*m[3].v[0] - m[0].v[1]*m[2].v[2]*m[3].v[0] - m[0].v[2]*m[2].v[0]*m[3].v[1] + m[0].v[0]*m[2].v[2]*m[3].v[1] + m[0].v[1]*m[2].v[0]*m[3].v[2] - m[0].v[0]*m[2].v[1]*m[3].v[2])/(m[0].v[2]*m[1].v[1]*m[2].v[0] - m[0].v[1]*m[1].v[2]*m[2].v[0] - m[0].v[2]*m[1].v[0]*m[2].v[1] + m[0].v[0]*m[1].v[2]*m[2].v[1] + m[0].v[1]*m[1].v[0]*m[2].v[2] - m[0].v[0]*m[1].v[1]*m[2].v[2]));
+  result.z:=-((-m[0].v[2]*m[1].v[1]*m[3].v[0] + m[0].v[1]*m[1].v[2]*m[3].v[0] + m[0].v[2]*m[1].v[0]*m[3].v[1] - m[0].v[0]*m[1].v[2]*m[3].v[1] - m[0].v[1]*m[1].v[0]*m[3].v[2] + m[0].v[0]*m[1].v[1]*m[3].v[2])/(m[0].v[2]*m[1].v[1]*m[2].v[0] - m[0].v[1]*m[1].v[2]*m[2].v[0] - m[0].v[2]*m[1].v[0]*m[2].v[1] + m[0].v[0]*m[1].v[2]*m[2].v[1] + m[0].v[1]*m[1].v[0]*m[2].v[2] - m[0].v[0]*m[1].v[1]*m[2].v[2]));
+end;
+
 procedure TLLSymbol.drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;const PSymbolsParam:PTSymbolSParam);
 var
-  tv,tv2:GDBvertex;
+  tv,tv2,c1,c2:GDBvertex;
   sm,tm:DMatrix4D;
 begin
   sm:=SymMatr;
-  tv.x:=SymMatr[3].x;
-  tv.y:=SymMatr[3].y;
-  tv.z:=SymMatr[3].z;
-  tm:=CreateTranslationMatrix(-tv);
-  SymMatr:=MatrixMultiply(SymMatr,tm);
+  tv:=CalcLCS(SymMatr);
+  SymMatr[3].x:=0;
+  SymMatr[3].y:=0;
+  SymMatr[3].z:=0;
   tv2:=tv;
-  {tv2:=VectorTransform3D(tv,rc.DrawingContext.matrixs.pprojMatrix^);
-  tm:=rc.DrawingContext.matrixs.pprojMatrix^;
-  MatrixInvert(tm);
-  tv2:=VectorTransform3D(tv,tm);}
-  //SymMatr[3].x:=0;
-  //SymMatr[3].y:=0;
-  //SymMatr[3].z:=0;
 
-     //drawer.DisableLCS(rc.DrawingContext.matrixs);
+  c1:=VectorTransform3D(CreateVertex(1,1,0),MatrixMultiply(rc.DrawingContext.matrixs.pmodelMatrix^,sm));
+  c2:=VectorTransform3D(CreateVertex(1,1,0)+tv,MatrixMultiply(rc.DrawingContext.matrixs.pmodelMatrix^,SymMatr));
+
+     drawer.DisableLCS(rc.DrawingContext.matrixs);
      drawer.AddToLCS(tv2);
      drawer.pushMatrixAndSetTransform(SymMatr{,true});
      PZGLVectorObject(PExternalVectorObject).DrawCountedLLPrimitives(rc,drawer,OptData,ExternalLLPOffset,ExternalLLPCount);
      drawer.popMatrix;
      drawer.AddToLCS(-tv2);
-     //drawer.EnableLCS(rc.DrawingContext.matrixs);
+     drawer.EnableLCS(rc.DrawingContext.matrixs);
 
-  SymMatr[3].x:=tv.x;
-  SymMatr[3].y:=tv.y;
-  SymMatr[3].z:=tv.z;
+  //SymMatr[3].x:=tv.x;
+  //SymMatr[3].y:=tv.y;
+  //SymMatr[3].z:=tv.z;
   SymMatr:=sm;
 
 end;

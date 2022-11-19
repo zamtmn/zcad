@@ -88,6 +88,7 @@ TZGLAbstractDrawer=class
                         procedure pushMatrixAndSetTransform(Transform:DMatrix4F;ResetLCS:Boolean=False);overload;virtual;abstract;
                         procedure DisableLCS(var matrixs:tmatrixs);overload;virtual;abstract;
                         procedure AddToLCS(v:GDBvertex);virtual;abstract;
+                        function SetLCSState(State:boolean):boolean;virtual;abstract;
                         procedure EnableLCS(var matrixs:tmatrixs);overload;virtual;abstract;
                         procedure popMatrix;virtual;abstract;
                    end;

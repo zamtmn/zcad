@@ -167,7 +167,7 @@ TLLPolyLine= object(TLLPrimitive)
         end;
 {Export-}
 implementation
-uses {log,}uzglvectorobject;
+uses uzglvectorobject,uzcdrawings,uzecamera;
 function TLLPrimitive.getPrimitiveSize:Integer;
 begin
      result:=sizeof(self);
@@ -611,6 +611,8 @@ else if (Attrib and LLAttrNeedSimtlify)>0 then
 
 end;
 
+
+
 function CalcLCS(const m:DMatrix4D):GDBvertex;
 {lcsx:= -((-m12 m21 m30 + m11 m22 m30 + m12 m20 m31 - m10 m22 m31 - m11 m20 m32 + m10 m21 m32)/(m02 m11 m20 - m01 m12 m20 - m02 m10 m21 + m00 m12 m21 + m01 m10 m22 - m00 m11 m22)),
  lcsy:= -(( m02 m21 m30 - m01 m22 m30 - m02 m20 m31 + m00 m22 m31 + m01 m20 m32 - m00 m21 m32) /(m02 m11 m20 - m01 m12 m20 - m02 m10 m21 + m00 m12 m21 + m01 m10 m22 - m00 m11 m22)),
@@ -621,28 +623,165 @@ begin
   result.z:=-((-m[0].v[2]*m[1].v[1]*m[3].v[0] + m[0].v[1]*m[1].v[2]*m[3].v[0] + m[0].v[2]*m[1].v[0]*m[3].v[1] - m[0].v[0]*m[1].v[2]*m[3].v[1] - m[0].v[1]*m[1].v[0]*m[3].v[2] + m[0].v[0]*m[1].v[1]*m[3].v[2])/(m[0].v[2]*m[1].v[1]*m[2].v[0] - m[0].v[1]*m[1].v[2]*m[2].v[0] - m[0].v[2]*m[1].v[0]*m[2].v[1] + m[0].v[0]*m[1].v[2]*m[2].v[1] + m[0].v[1]*m[1].v[0]*m[2].v[2] - m[0].v[0]*m[1].v[1]*m[2].v[2]));
 end;
 
+function CalcLCS2(const m,p:DMatrix4D):GDBvertex;
+{lcsx -> (-m02 m11 m30 p11 p20 + m01 m12 m30 p11 p20 +
+      m02 m10 m31 p11 p20 - m00 m12 m31 p11 p20 -
+      m01 m10 m32 p11 p20 + m00 m11 m32 p11 p20 -
+      m02 m21 m30 p12 p20 + m01 m22 m30 p12 p20 +
+      m02 m20 m31 p12 p20 - m00 m22 m31 p12 p20 -
+      m01 m20 m32 p12 p20 + m00 m21 m32 p12 p20 +
+      m02 m11 m30 p10 p21 - m01 m12 m30 p10 p21 -
+      m02 m10 m31 p10 p21 + m00 m12 m31 p10 p21 +
+      m01 m10 m32 p10 p21 - m00 m11 m32 p10 p21 -
+      m12 m21 m30 p12 p21 + m11 m22 m30 p12 p21 +
+      m12 m20 m31 p12 p21 - m10 m22 m31 p12 p21 -
+      m11 m20 m32 p12 p21 + m10 m21 m32 p12 p21 +
+      m02 m21 m30 p10 p22 - m01 m22 m30 p10 p22 -
+      m02 m20 m31 p10 p22 + m00 m22 m31 p10 p22 +
+      m01 m20 m32 p10 p22 - m00 m21 m32 p10 p22 +
+      m12 m21 m30 p11 p22 - m11 m22 m30 p11 p22 -
+      m12 m20 m31 p11 p22 + m10 m22 m31 p11 p22 +
+      m11 m20 m32 p11 p22 -
+      m10 m21 m32 p11 p22)/((-m02 m11 m20 + m01 m12 m20 +
+        m02 m10 m21 - m00 m12 m21 - m01 m10 m22 +
+        m00 m11 m22) (p02 p11 p20 - p01 p12 p20 - p02 p10 p21 +
+        p00 p12 p21 + p01 p10 p22 - p00 p11 p22)),
+  lcsy -> (m02 m11 m30 p01 p20 - m01 m12 m30 p01 p20 -
+      m02 m10 m31 p01 p20 + m00 m12 m31 p01 p20 +
+      m01 m10 m32 p01 p20 - m00 m11 m32 p01 p20 +
+      m02 m21 m30 p02 p20 - m01 m22 m30 p02 p20 -
+      m02 m20 m31 p02 p20 + m00 m22 m31 p02 p20 +
+      m01 m20 m32 p02 p20 - m00 m21 m32 p02 p20 -
+      m02 m11 m30 p00 p21 + m01 m12 m30 p00 p21 +
+      m02 m10 m31 p00 p21 - m00 m12 m31 p00 p21 -
+      m01 m10 m32 p00 p21 + m00 m11 m32 p00 p21 +
+      m12 m21 m30 p02 p21 - m11 m22 m30 p02 p21 -
+      m12 m20 m31 p02 p21 + m10 m22 m31 p02 p21 +
+      m11 m20 m32 p02 p21 - m10 m21 m32 p02 p21 -
+      m02 m21 m30 p00 p22 + m01 m22 m30 p00 p22 +
+      m02 m20 m31 p00 p22 - m00 m22 m31 p00 p22 -
+      m01 m20 m32 p00 p22 + m00 m21 m32 p00 p22 -
+      m12 m21 m30 p01 p22 + m11 m22 m30 p01 p22 +
+      m12 m20 m31 p01 p22 - m10 m22 m31 p01 p22 -
+      m11 m20 m32 p01 p22 +
+      m10 m21 m32 p01 p22)/((-m02 m11 m20 + m01 m12 m20 +
+        m02 m10 m21 - m00 m12 m21 - m01 m10 m22 +
+        m00 m11 m22) (p02 p11 p20 - p01 p12 p20 - p02 p10 p21 +
+        p00 p12 p21 + p01 p10 p22 - p00 p11 p22)),
+  lcsz -> (m02 m11 m30 p01 p10 - m01 m12 m30 p01 p10 -
+      m02 m10 m31 p01 p10 + m00 m12 m31 p01 p10 +
+      m01 m10 m32 p01 p10 - m00 m11 m32 p01 p10 +
+      m02 m21 m30 p02 p10 - m01 m22 m30 p02 p10 -
+      m02 m20 m31 p02 p10 + m00 m22 m31 p02 p10 +
+      m01 m20 m32 p02 p10 - m00 m21 m32 p02 p10 -
+      m02 m11 m30 p00 p11 + m01 m12 m30 p00 p11 +
+      m02 m10 m31 p00 p11 - m00 m12 m31 p00 p11 -
+      m01 m10 m32 p00 p11 + m00 m11 m32 p00 p11 +
+      m12 m21 m30 p02 p11 - m11 m22 m30 p02 p11 -
+      m12 m20 m31 p02 p11 + m10 m22 m31 p02 p11 +
+      m11 m20 m32 p02 p11 - m10 m21 m32 p02 p11 -
+      m02 m21 m30 p00 p12 + m01 m22 m30 p00 p12 +
+      m02 m20 m31 p00 p12 - m00 m22 m31 p00 p12 -
+      m01 m20 m32 p00 p12 + m00 m21 m32 p00 p12 -
+      m12 m21 m30 p01 p12 + m11 m22 m30 p01 p12 +
+      m12 m20 m31 p01 p12 - m10 m22 m31 p01 p12 -
+      m11 m20 m32 p01 p12 +
+      m10 m21 m32 p01 p12)/((-m02 m11 m20 + m01 m12 m20 +
+        m02 m10 m21 - m00 m12 m21 - m01 m10 m22 +
+        m00 m11 m22) (-p02 p11 p20 + p01 p12 p20 + p02 p10 p21 -
+        p00 p12 p21 - p01 p10 p22 + p00 p11 p22))}
+begin
+  result.x:=(-m[0].v[2]*m[1].v[1]*m[3].v[0]*p[1].v[1]*p[2].v[0] +m[0].v[1]*m[1].v[2]*m[3].v[0]*p[1].v[1]*p[2].v[0] +
+             m[0].v[2]*m[1].v[0]*m[3].v[1]*p[1].v[1]*p[2].v[0] -m[0].v[0]*m[1].v[2]*m[3].v[1]*p[1].v[1]*p[2].v[0] -
+             m[0].v[1]*m[1].v[0]*m[3].v[2]*p[1].v[1]*p[2].v[0] +m[0].v[0]*m[1].v[1]*m[3].v[2]*p[1].v[1]*p[2].v[0] -
+             m[0].v[2]*m[2].v[1]*m[3].v[0]*p[1].v[2]*p[2].v[0] +m[0].v[1]*m[2].v[2]*m[3].v[0]*p[1].v[2]*p[2].v[0] +
+             m[0].v[2]*m[2].v[0]*m[3].v[1]*p[1].v[2]*p[2].v[0] -m[0].v[0]*m[2].v[2]*m[3].v[1]*p[1].v[2]*p[2].v[0] -
+             m[0].v[1]*m[2].v[0]*m[3].v[2]*p[1].v[2]*p[2].v[0] +m[0].v[0]*m[2].v[1]*m[3].v[2]*p[1].v[2]*p[2].v[0] +
+             m[0].v[2]*m[1].v[1]*m[3].v[0]*p[1].v[0]*p[2].v[1] -m[0].v[1]*m[1].v[2]*m[3].v[0]*p[1].v[0]*p[2].v[1] -
+             m[0].v[2]*m[1].v[0]*m[3].v[1]*p[1].v[0]*p[2].v[1] +m[0].v[0]*m[1].v[2]*m[3].v[1]*p[1].v[0]*p[2].v[1] +
+             m[0].v[1]*m[1].v[0]*m[3].v[2]*p[1].v[0]*p[2].v[1] -m[0].v[0]*m[1].v[1]*m[3].v[2]*p[1].v[0]*p[2].v[1] -
+             m[1].v[2]*m[2].v[1]*m[3].v[0]*p[1].v[2]*p[2].v[1] +m[1].v[1]*m[2].v[2]*m[3].v[0]*p[1].v[2]*p[2].v[1] +
+             m[1].v[2]*m[2].v[0]*m[3].v[1]*p[1].v[2]*p[2].v[1] -m[1].v[0]*m[2].v[2]*m[3].v[1]*p[1].v[2]*p[2].v[1] -
+             m[1].v[1]*m[2].v[0]*m[3].v[2]*p[1].v[2]*p[2].v[1] +m[1].v[0]*m[2].v[1]*m[3].v[2]*p[1].v[2]*p[2].v[1] +
+             m[0].v[2]*m[2].v[1]*m[3].v[0]*p[1].v[0]*p[2].v[2] -m[0].v[1]*m[2].v[2]*m[3].v[0]*p[1].v[0]*p[2].v[2] -
+             m[0].v[2]*m[2].v[0]*m[3].v[1]*p[1].v[0]*p[2].v[2] +m[0].v[0]*m[2].v[2]*m[3].v[1]*p[1].v[0]*p[2].v[2] +
+             m[0].v[1]*m[2].v[0]*m[3].v[2]*p[1].v[0]*p[2].v[2] -m[0].v[0]*m[2].v[1]*m[3].v[2]*p[1].v[0]*p[2].v[2] +
+             m[1].v[2]*m[2].v[1]*m[3].v[0]*p[1].v[1]*p[2].v[2] -m[1].v[1]*m[2].v[2]*m[3].v[0]*p[1].v[1]*p[2].v[2] -
+             m[1].v[2]*m[2].v[0]*m[3].v[1]*p[1].v[1]*p[2].v[2] +m[1].v[0]*m[2].v[2]*m[3].v[1]*p[1].v[1]*p[2].v[2] +
+             m[1].v[1]*m[2].v[0]*m[3].v[2]*p[1].v[1]*p[2].v[2] -m[1].v[0]*m[2].v[1]*m[3].v[2]*p[1].v[1]*p[2].v[2])/
+              ((-m[0].v[2]*m[1].v[1]*m[2].v[0] +m[0].v[1]*m[1].v[2]*m[2].v[0] +m[0].v[2]*m[1].v[0]*m[2].v[1] -m[0].v[0]*m[1].v[2]*m[2].v[1] -m[0].v[1]*m[1].v[0]*m[2].v[2] +m[0].v[0]*m[1].v[1]*m[2].v[2])*(p[0].v[2]*p[1].v[1]*p[2].v[0] -p[0].v[1]*p[1].v[2]*p[2].v[0] -p[0].v[2]*p[1].v[0]*p[2].v[1] +p[0].v[0]*p[1].v[2]*p[2].v[1] +p[0].v[1]*p[1].v[0]*p[2].v[2] -p[0].v[0]*p[1].v[1]*p[2].v[2]));
+  result.y:=( m[0].v[2]*m[1].v[1]*m[3].v[0]*p[0].v[1]*p[2].v[0] -m[0].v[1]*m[1].v[2]*m[3].v[0]*p[0].v[1]*p[2].v[0] -
+             m[0].v[2]*m[1].v[0]*m[3].v[1]*p[0].v[1]*p[2].v[0] +m[0].v[0]*m[1].v[2]*m[3].v[1]*p[0].v[1]*p[2].v[0] +
+             m[0].v[1]*m[1].v[0]*m[3].v[2]*p[0].v[1]*p[2].v[0] -m[0].v[0]*m[1].v[1]*m[3].v[2]*p[0].v[1]*p[2].v[0] +
+             m[0].v[2]*m[2].v[1]*m[3].v[0]*p[0].v[2]*p[2].v[0] -m[0].v[1]*m[2].v[2]*m[3].v[0]*p[0].v[2]*p[2].v[0] -
+             m[0].v[2]*m[2].v[0]*m[3].v[1]*p[0].v[2]*p[2].v[0] +m[0].v[0]*m[2].v[2]*m[3].v[1]*p[0].v[2]*p[2].v[0] +
+             m[0].v[1]*m[2].v[0]*m[3].v[2]*p[0].v[2]*p[2].v[0] -m[0].v[0]*m[2].v[1]*m[3].v[2]*p[0].v[2]*p[2].v[0] -
+             m[0].v[2]*m[1].v[1]*m[3].v[0]*p[0].v[0]*p[2].v[1] +m[0].v[1]*m[1].v[2]*m[3].v[0]*p[0].v[0]*p[2].v[1] +
+             m[0].v[2]*m[1].v[0]*m[3].v[1]*p[0].v[0]*p[2].v[1] -m[0].v[0]*m[1].v[2]*m[3].v[1]*p[0].v[0]*p[2].v[1] -
+             m[0].v[1]*m[1].v[0]*m[3].v[2]*p[0].v[0]*p[2].v[1] +m[0].v[0]*m[1].v[1]*m[3].v[2]*p[0].v[0]*p[2].v[1] +
+             m[1].v[2]*m[2].v[1]*m[3].v[0]*p[0].v[2]*p[2].v[1] -m[1].v[1]*m[2].v[2]*m[3].v[0]*p[0].v[2]*p[2].v[1] -
+             m[1].v[2]*m[2].v[0]*m[3].v[1]*p[0].v[2]*p[2].v[1] +m[1].v[0]*m[2].v[2]*m[3].v[1]*p[0].v[2]*p[2].v[1] +
+             m[1].v[1]*m[2].v[0]*m[3].v[2]*p[0].v[2]*p[2].v[1] -m[1].v[0]*m[2].v[1]*m[3].v[2]*p[0].v[2]*p[2].v[1] -
+             m[0].v[2]*m[2].v[1]*m[3].v[0]*p[0].v[0]*p[2].v[2] +m[0].v[1]*m[2].v[2]*m[3].v[0]*p[0].v[0]*p[2].v[2] +
+             m[0].v[2]*m[2].v[0]*m[3].v[1]*p[0].v[0]*p[2].v[2] -m[0].v[0]*m[2].v[2]*m[3].v[1]*p[0].v[0]*p[2].v[2] -
+             m[0].v[1]*m[2].v[0]*m[3].v[2]*p[0].v[0]*p[2].v[2] +m[0].v[0]*m[2].v[1]*m[3].v[2]*p[0].v[0]*p[2].v[2] -
+             m[1].v[2]*m[2].v[1]*m[3].v[0]*p[0].v[1]*p[2].v[2] +m[1].v[1]*m[2].v[2]*m[3].v[0]*p[0].v[1]*p[2].v[2] +
+             m[1].v[2]*m[2].v[0]*m[3].v[1]*p[0].v[1]*p[2].v[2] -m[1].v[0]*m[2].v[2]*m[3].v[1]*p[0].v[1]*p[2].v[2] -
+             m[1].v[1]*m[2].v[0]*m[3].v[2]*p[0].v[1]*p[2].v[2] +m[1].v[0]*m[2].v[1]*m[3].v[2]*p[0].v[1]*p[2].v[2])/
+              ((-m[0].v[2]*m[1].v[1]*m[2].v[0] +m[0].v[1]*m[1].v[2]*m[2].v[0] +m[0].v[2]*m[1].v[0]*m[2].v[1] -m[0].v[0]*m[1].v[2]*m[2].v[1] -m[0].v[1]*m[1].v[0]*m[2].v[2] +m[0].v[0]*m[1].v[1]*m[2].v[2])*(p[0].v[2]*p[1].v[1]*p[2].v[0] -p[0].v[1]*p[1].v[2]*p[2].v[0] -p[0].v[2]*p[1].v[0]*p[2].v[1] +p[0].v[0]*p[1].v[2]*p[2].v[1] +p[0].v[1]*p[1].v[0]*p[2].v[2] -p[0].v[0]*p[1].v[1]*p[2].v[2]));
+  result.z:=( m[0].v[2]*m[1].v[1]*m[3].v[0]*p[0].v[1]*p[1].v[0] -m[0].v[1]*m[1].v[2]*m[3].v[0]*p[0].v[1]*p[1].v[0] -
+             m[0].v[2]*m[1].v[0]*m[3].v[1]*p[0].v[1]*p[1].v[0] +m[0].v[0]*m[1].v[2]*m[3].v[1]*p[0].v[1]*p[1].v[0] +
+             m[0].v[1]*m[1].v[0]*m[3].v[2]*p[0].v[1]*p[1].v[0] -m[0].v[0]*m[1].v[1]*m[3].v[2]*p[0].v[1]*p[1].v[0] +
+             m[0].v[2]*m[2].v[1]*m[3].v[0]*p[0].v[2]*p[1].v[0] -m[0].v[1]*m[2].v[2]*m[3].v[0]*p[0].v[2]*p[1].v[0] -
+             m[0].v[2]*m[2].v[0]*m[3].v[1]*p[0].v[2]*p[1].v[0] +m[0].v[0]*m[2].v[2]*m[3].v[1]*p[0].v[2]*p[1].v[0] +
+             m[0].v[1]*m[2].v[0]*m[3].v[2]*p[0].v[2]*p[1].v[0] -m[0].v[0]*m[2].v[1]*m[3].v[2]*p[0].v[2]*p[1].v[0] -
+             m[0].v[2]*m[1].v[1]*m[3].v[0]*p[0].v[0]*p[1].v[1] +m[0].v[1]*m[1].v[2]*m[3].v[0]*p[0].v[0]*p[1].v[1] +
+             m[0].v[2]*m[1].v[0]*m[3].v[1]*p[0].v[0]*p[1].v[1] -m[0].v[0]*m[1].v[2]*m[3].v[1]*p[0].v[0]*p[1].v[1] -
+             m[0].v[1]*m[1].v[0]*m[3].v[2]*p[0].v[0]*p[1].v[1] +m[0].v[0]*m[1].v[1]*m[3].v[2]*p[0].v[0]*p[1].v[1] +
+             m[1].v[2]*m[2].v[1]*m[3].v[0]*p[0].v[2]*p[1].v[1] -m[1].v[1]*m[2].v[2]*m[3].v[0]*p[0].v[2]*p[1].v[1] -
+             m[1].v[2]*m[2].v[0]*m[3].v[1]*p[0].v[2]*p[1].v[1] +m[1].v[0]*m[2].v[2]*m[3].v[1]*p[0].v[2]*p[1].v[1] +
+             m[1].v[1]*m[2].v[0]*m[3].v[2]*p[0].v[2]*p[1].v[1] -m[1].v[0]*m[2].v[1]*m[3].v[2]*p[0].v[2]*p[1].v[1] -
+             m[0].v[2]*m[2].v[1]*m[3].v[0]*p[0].v[0]*p[1].v[2] +m[0].v[1]*m[2].v[2]*m[3].v[0]*p[0].v[0]*p[1].v[2] +
+             m[0].v[2]*m[2].v[0]*m[3].v[1]*p[0].v[0]*p[1].v[2] -m[0].v[0]*m[2].v[2]*m[3].v[1]*p[0].v[0]*p[1].v[2] -
+             m[0].v[1]*m[2].v[0]*m[3].v[2]*p[0].v[0]*p[1].v[2] +m[0].v[0]*m[2].v[1]*m[3].v[2]*p[0].v[0]*p[1].v[2] -
+             m[1].v[2]*m[2].v[1]*m[3].v[0]*p[0].v[1]*p[1].v[2] +m[1].v[1]*m[2].v[2]*m[3].v[0]*p[0].v[1]*p[1].v[2] +
+             m[1].v[2]*m[2].v[0]*m[3].v[1]*p[0].v[1]*p[1].v[2] -m[1].v[0]*m[2].v[2]*m[3].v[1]*p[0].v[1]*p[1].v[2] -
+             m[1].v[1]*m[2].v[0]*m[3].v[2]*p[0].v[1]*p[1].v[2] +m[1].v[0]*m[2].v[1]*m[3].v[2]*p[0].v[1]*p[1].v[2])/
+              ((-m[0].v[2]*m[1].v[1]*m[2].v[0] +m[0].v[1]*m[1].v[2]*m[2].v[0] +m[0].v[2]*m[1].v[0]*m[2].v[1] -m[0].v[0]*m[1].v[2]*m[2].v[1] -m[0].v[1]*m[1].v[0]*m[2].v[2] +m[0].v[0]*m[1].v[1]*m[2].v[2])*(-p[0].v[2]*p[1].v[1]*p[2].v[0] +p[0].v[1]*p[1].v[2]*p[2].v[0] +p[0].v[2]*p[1].v[0]*p[2].v[1] -p[0].v[0]*p[1].v[2]*p[2].v[1] -p[0].v[1]*p[1].v[0]*p[2].v[2] +p[0].v[0]*p[1].v[1]*p[2].v[2]));
+end;
+
 procedure TLLSymbol.drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;const PSymbolsParam:PTSymbolSParam);
 var
   tv,tv2,c1,c2:GDBvertex;
   sm,tm:DMatrix4D;
+  notuselcs:boolean;
+  pc:PGDBObjCamera;
 begin
   sm:=SymMatr;
+  pc:=drawings.GetCurrentDWG^.GetPcamera;
+  tm:=uzegeometry.MatrixMultiply(pc^.modelMatrixLCS,pc^.projMatrixLCS);
+  //tm:=MatrixMultiply(sm,tm);
   tv:=CalcLCS(SymMatr);
+  tv:=CalcLCS2(SymMatr,pc^.modelMatrix);
+  //tv.z:=0;
+  //tv:=CreateVertex(9999999.8, 9999999.5, 0);
   SymMatr[3].x:=0;
   SymMatr[3].y:=0;
   SymMatr[3].z:=0;
   tv2:=tv;
 
-  c1:=VectorTransform3D(CreateVertex(1,1,0),MatrixMultiply(rc.DrawingContext.matrixs.pmodelMatrix^,sm));
-  c2:=VectorTransform3D(CreateVertex(1,1,0)+tv,MatrixMultiply(rc.DrawingContext.matrixs.pmodelMatrix^,SymMatr));
+  c1:=VectorTransform3D(CreateVertex(1,1,0),tm);
+  c2:=VectorTransform3D(CreateVertex(1,1,0)+tv,tm);
 
-     drawer.DisableLCS(rc.DrawingContext.matrixs);
+     //drawer.DisableLCS(rc.DrawingContext.matrixs);
+     //notuselcs:=drawer.SetLCSState(false);
      drawer.AddToLCS(tv2);
      drawer.pushMatrixAndSetTransform(SymMatr{,true});
      PZGLVectorObject(PExternalVectorObject).DrawCountedLLPrimitives(rc,drawer,OptData,ExternalLLPOffset,ExternalLLPCount);
      drawer.popMatrix;
      drawer.AddToLCS(-tv2);
-     drawer.EnableLCS(rc.DrawingContext.matrixs);
+     //drawer.SetLCSState(notuselcs);
+     //drawer.EnableLCS(rc.DrawingContext.matrixs);
 
   //SymMatr[3].x:=tv.x;
   //SymMatr[3].y:=tv.y;

@@ -8,7 +8,7 @@ uses
   SysUtils,
   uzeentity,uzeparser,Masks,
   uzcoimultiproperties,uzedimensionaltypes,
-  uzbtypes,Varman,varmandef,uzcoimultipropertiesutil;
+  uzbtypes,Varman,varmandef,uzcoimultipropertiesutil,uzcvariablesutils;
 
 type
   TPropFilterData=record
@@ -94,6 +94,26 @@ type
                         var ResultParam:TRawByteStringManipulator.TCharRange;
                         var data:TPropFilterData);override;
   end;
+  TGetEntVariable=class(TParserEntityPropFilter.TParserTokenizer.TDynamicProcessor)
+    tempresult:TRawByteStringManipulator.TStringType;
+    variablename:string;
+    constructor vcreate(const Source:TRawByteStringManipulator.TStringType;
+                            const Token :TRawByteStringManipulator.TCharRange;
+                            const Operands :TRawByteStringManipulator.TCharRange;
+                            const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TPropFilterData>;
+                            InsideBracketParser:TObject;
+                            var Data:TPropFilterData);override;
+    destructor Destroy;override;
+    procedure GetResult(const Source:TRawByteStringManipulator.TStringType;
+                        const Token :TRawByteStringManipulator.TCharRange;
+                        const Operands :TRawByteStringManipulator.TCharRange;
+                        const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TPropFilterData>;
+                        InsideBracketParser:TObject;
+                        var Result:TRawByteStringManipulator.TStringType;
+                        var ResultParam:TRawByteStringManipulator.TCharRange;
+                        var data:TPropFilterData);override;
+  end;
+
 var
   ParserEntityPropFilter:TParserEntityPropFilter;
 
@@ -102,6 +122,48 @@ implementation
 var
   BracketTockenId:TParserEntityPropFilter.TParserTokenizer.TTokenId;
   VU:TObjectUnit;
+
+procedure TGetEntVariable.GetResult(const Source:TRawByteStringManipulator.TStringType;
+                    const Token :TRawByteStringManipulator.TCharRange;
+                    const Operands :TRawByteStringManipulator.TCharRange;
+                    const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TPropFilterData>;
+                    InsideBracketParser:TObject;
+                    var Result:TRawByteStringManipulator.TStringType;
+                    var ResultParam:TRawByteStringManipulator.TCharRange;
+                    var data:TPropFilterData);
+var
+  pv:pvardesk;
+  i:integer;
+begin
+  pv:=nil;
+  if data.CurrentEntity<>nil then
+    pv:=FindVariableInEnt(data.CurrentEntity,variablename);
+  if pv<>nil then
+    tempresult:=pv^.data.ptd^.GetValueAsString(pv^.data.Addr.Instance)
+  else
+    tempresult:='!!ERR('+variablename+')!!';
+  ResultParam.L.CodeUnits:=Length(tempresult);
+  if ResultParam.P.CodeUnitPos<>OnlyGetLength then
+    for i:=0 to Length(tempresult)-1 do
+      Result[ResultParam.P.CodeUnitPos+i]:=tempresult[i+1];
+end;
+
+constructor TGetEntVariable.vcreate(const Source:TRawByteStringManipulator.TStringType;
+                        const Token :TRawByteStringManipulator.TCharRange;
+                        const Operands :TRawByteStringManipulator.TCharRange;
+                        const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TPropFilterData>;
+                        InsideBracketParser:TObject;
+                        var Data:TPropFilterData);
+begin
+  variablename:=ParsedOperands.GetResult(Data);
+end;
+
+destructor TGetEntVariable.Destroy;
+begin
+  variablename:='';
+  inherited;
+end;
+
 
 class procedure TIncludeIfMask.StaticDoit(const Source:TRawByteStringManipulator.TStringType;
                            const Token :TRawByteStringManipulator.TCharRange;
@@ -339,6 +401,7 @@ initialization
   ParserEntityPropFilter.RegisterToken('Or',#0,#0,TOr,ParserEntityPropFilter,TGOWholeWordOnly,BracketTockenId);
   ParserEntityPropFilter.RegisterToken('IncludeIfSame',#0,#0,TIncludeIf,ParserEntityPropFilter,TGOWholeWordOnly,BracketTockenId);
   ParserEntityPropFilter.RegisterToken('%%',#0,#0,TGetEntParam,ParserEntityPropFilter,TGOWholeWordOnly,BracketTockenId);
+  ParserEntityPropFilter.RegisterToken('@@',#0,#0,TGetEntVariable,ParserEntityPropFilter,TGOWholeWordOnly,BracketTockenId);
   ParserEntityPropFilter.RegisterToken('''','''','''',ParserEntityPropFilter.TParserTokenizer.TStringProcessor,nil,TGOIncludeBrackeOpen);
   ParserEntityPropFilter.RegisterToken(',',#0,#0,nil,nil,TGOSeparator);
   ParserEntityPropFilter.RegisterToken(';',#0,#0,nil,nil,TGOSeparator);

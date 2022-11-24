@@ -617,6 +617,7 @@ function CalcLCS(const m:DMatrix4D):GDBvertex;
 {lcsx:= -((-m12 m21 m30 + m11 m22 m30 + m12 m20 m31 - m10 m22 m31 - m11 m20 m32 + m10 m21 m32)/(m02 m11 m20 - m01 m12 m20 - m02 m10 m21 + m00 m12 m21 + m01 m10 m22 - m00 m11 m22)),
  lcsy:= -(( m02 m21 m30 - m01 m22 m30 - m02 m20 m31 + m00 m22 m31 + m01 m20 m32 - m00 m21 m32) /(m02 m11 m20 - m01 m12 m20 - m02 m10 m21 + m00 m12 m21 + m01 m10 m22 - m00 m11 m22)),
  lcsz:= -((-m02 m11 m30 + m01 m12 m30 + m02 m10 m31 - m00 m12 m31 - m01 m10 m32 + m00 m11 m32)/(m02 m11 m20 - m01 m12 m20 - m02 m10 m21 + m00 m12 m21 + m01 m10 m22 - m00 m11 m22))}
+
 begin
   result.x:=-((-m[1].v[2]*m[2].v[1]*m[3].v[0] + m[1].v[1]*m[2].v[2]*m[3].v[0] + m[1].v[2]*m[2].v[0]*m[3].v[1] - m[1].v[0]*m[2].v[2]*m[3].v[1] - m[1].v[1]*m[2].v[0]*m[3].v[2] + m[1].v[0]*m[2].v[1]*m[3].v[2])/(m[0].v[2]*m[1].v[1]*m[2].v[0] - m[0].v[1]*m[1].v[2]*m[2].v[0] - m[0].v[2]*m[1].v[0]*m[2].v[1] + m[0].v[0]*m[1].v[2]*m[2].v[1] + m[0].v[1]*m[1].v[0]*m[2].v[2] - m[0].v[0]*m[1].v[1]*m[2].v[2]));
   result.y:=-(( m[0].v[2]*m[2].v[1]*m[3].v[0] - m[0].v[1]*m[2].v[2]*m[3].v[0] - m[0].v[2]*m[2].v[0]*m[3].v[1] + m[0].v[0]*m[2].v[2]*m[3].v[1] + m[0].v[1]*m[2].v[0]*m[3].v[2] - m[0].v[0]*m[2].v[1]*m[3].v[2])/(m[0].v[2]*m[1].v[1]*m[2].v[0] - m[0].v[1]*m[1].v[2]*m[2].v[0] - m[0].v[2]*m[1].v[0]*m[2].v[1] + m[0].v[0]*m[1].v[2]*m[2].v[1] + m[0].v[1]*m[1].v[0]*m[2].v[2] - m[0].v[0]*m[1].v[1]*m[2].v[2]));
@@ -885,40 +886,74 @@ begin
          p[0].v[0]*p[1].v[2]*p[2].v[1] - p[0].v[1]*p[1].v[0]*p[2].v[2] + p[0].v[0]*p[1].v[1]*p[2].v[2]));
 end;
 
+function CalcLCS4(const m:DMatrix4D;ins:GDBvertex):GDBvertex;
+{lcsx -> -((-Insz m11 m20 + Insy m12 m20 + Insz m10 m21 -
+        Insx m12 m21 - Insy m10 m22 + Insx m11 m22)/(m02 m11 m20 -
+        m01 m12 m20 - m02 m10 m21 + m00 m12 m21 + m01 m10 m22 -
+        m00 m11 m22)),
+  lcsy -> -((Insz m01 m20 - Insy m02 m20 - Insz m00 m21 +
+        Insx m02 m21 + Insy m00 m22 - Insx m01 m22)/(m02 m11 m20 -
+        m01 m12 m20 - m02 m10 m21 + m00 m12 m21 + m01 m10 m22 -
+        m00 m11 m22)),
+  lcsz -> -((Insz m01 m10 - Insy m02 m10 - Insz m00 m11 +
+        Insx m02 m11 + Insy m00 m12 - Insx m01 m12)/(-m02 m11 m20 +
+        m01 m12 m20 + m02 m10 m21 - m00 m12 m21 - m01 m10 m22 +
+        m00 m11 m22))}
+begin
+  result.x:=-((-Ins.z*m[1].v[1]*m[2].v[0]+Ins.y*m[1].v[2]*m[2].v[0]+Ins.z*m[1].v[0]*m[2].v[1] -
+          Ins.x*m[1].v[2]*m[2].v[1]-Ins.y*m[1].v[0]*m[2].v[2]+Ins.x*m[1].v[1]*m[2].v[2])/(m[0].v[2]*m[1].v[1]*m[2].v[0] -
+         m[0].v[1]*m[1].v[2]*m[2].v[0]-m[0].v[2]*m[1].v[0]*m[2].v[1]+m[0].v[0]*m[1].v[2]*m[2].v[1]+m[0].v[1]*m[1].v[0]*m[2].v[2] -
+         m[0].v[0]*m[1].v[1]*m[2].v[2]));
+  result.y:=-((Ins.z*m[0].v[1]*m[2].v[0]-Ins.y*m[0].v[2]*m[2].v[0]-Ins.z*m[0].v[0]*m[2].v[1] +
+          Ins.x*m[0].v[2]*m[2].v[1]+Ins.y*m[0].v[0]*m[2].v[2]-Ins.x*m[0].v[1]*m[2].v[2])/(m[0].v[2]*m[1].v[1]*m[2].v[0] -
+         m[0].v[1]*m[1].v[2]*m[2].v[0]-m[0].v[2]*m[1].v[0]*m[2].v[1]+m[0].v[0]*m[1].v[2]*m[2].v[1]+m[0].v[1]*m[1].v[0]*m[2].v[2] -
+         m[0].v[0]*m[1].v[1]*m[2].v[2]));
+  result.z:=-((Ins.z*m[0].v[1]*m[1].v[0]-Ins.y*m[0].v[2]*m[1].v[0]-Ins.z*m[0].v[0]*m[1].v[1] +
+          Ins.x*m[0].v[2]*m[1].v[1]+Ins.y*m[0].v[0]*m[1].v[2]-Ins.x*m[0].v[1]*m[1].v[2])/(-m[0].v[2]*m[1].v[1]*m[2].v[0] +
+         m[0].v[1]*m[1].v[2]*m[2].v[0]+m[0].v[2]*m[1].v[0]*m[2].v[1]-m[0].v[0]*m[1].v[2]*m[2].v[1]-m[0].v[1]*m[1].v[0]*m[2].v[2] +
+         m[0].v[0]*m[1].v[1]*m[2].v[2]));
+end;
+
 procedure TLLSymbol.drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;const PSymbolsParam:PTSymbolSParam);
 var
   tv,tv2,c1,c2:GDBvertex;
   sm,tm:DMatrix4D;
   notuselcs:boolean;
   pc:PGDBObjCamera;
+  ins:GDBvertex;
 begin
   sm:=SymMatr;
   pc:=drawings.GetCurrentDWG^.GetPcamera;
   tm:=pc^.projMatrixLCS;//MatrixMultiply(pc^.modelMatrixLCS,pc^.projMatrixLCS);
+  ins:=CreateVertex(10000000,10000000,0);
   //tm:=MatrixMultiply(sm,tm);
-  //tv:=CalcLCS(SymMatr);
   //tv:=CalcLCS3(SymMatr,tm);
   //tv.z:=0;
   //tv:=CreateVertex(9999999.8, 9999999.5, 0);
-  tv.x:=SymMatr[3].x;
-  tv.y:=SymMatr[3].y;
-  tv.z:=SymMatr[3].z;
-  SymMatr[3].x:=0;
-  SymMatr[3].y:=0;
-  SymMatr[3].z:=0;
+  //tv.x:=SymMatr[3].x;
+  //tv.y:=SymMatr[3].y;
+  //tv.z:=SymMatr[3].z;
+  tv:=CalcLCS(SymMatr);
+  SymMatr[3].x:={SymMatr[3].x-ins.x}0;
+  SymMatr[3].y:={SymMatr[3].y-ins.y}0;
+  SymMatr[3].z:={SymMatr[3].z-ins.z}0;
+  //tv:=CalcLCS4(sm,ins);
+  //tv.z:=0;
+  //tv:=VectorTransform3D(tv,SymMatr);
+  //tv.z:=0;
   tv2:=tv;
 
-  c1:=VectorTransform3D(CreateVertex(0,0,0),MatrixMultiply(sm,tm));
-  c2:=VectorTransform3D(CreateVertex(0,0,0)+tv,MatrixMultiply(SymMatr,tm));
+  c1:=VectorTransform3D(CreateVertex(100,1000,0)   ,sm);
+  c2:=VectorTransform3D(CreateVertex(100,1000,0)+tv,SymMatr);
 
      //drawer.DisableLCS(rc.DrawingContext.matrixs);
-     //notuselcs:=drawer.SetLCSState(false);
+     notuselcs:=drawer.SetLCSState(false);
      drawer.AddToLCS(tv2);
      drawer.pushMatrixAndSetTransform(SymMatr{,true});
      PZGLVectorObject(PExternalVectorObject).DrawCountedLLPrimitives(rc,drawer,OptData,ExternalLLPOffset,ExternalLLPCount);
      drawer.popMatrix;
      drawer.AddToLCS(-tv2);
-     //drawer.SetLCSState(notuselcs);
+     drawer.SetLCSState(notuselcs);
      //drawer.EnableLCS(rc.DrawingContext.matrixs);
 
   //SymMatr[3].x:=tv.x;

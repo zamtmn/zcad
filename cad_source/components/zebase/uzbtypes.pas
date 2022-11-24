@@ -36,6 +36,7 @@ TControlPointAttrs=set of TControlPointAttr;
 (*varcategoryforoi NMO='Name'*)
 
 (*varcategoryforoi SLCABAGEN1='Подключение №1'*)
+(*varcategoryforoi deverrors='Ошибки выполнения'*)
 (*varcategoryforoi DB='Data base'*)
 (*varcategoryforoi GC='Group connection'*)
 (*varcategoryforoi LENGTH='Length params'*)

@@ -2,6 +2,7 @@ unit objgroup;
 interface
 uses system;
 usescopy slcabagenmodul;
+usescopy deverrors;
 var
    GC_HeadDevice:String;(*'Головное устройство'*)
    GC_HeadDeviceTemplate:String;(*'Шаблон головного устройства'*)

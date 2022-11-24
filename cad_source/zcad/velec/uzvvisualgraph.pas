@@ -384,12 +384,12 @@ var
 
 
 begin
-      ZCMsgCallBackInterface.TextMessage('индекс рут - ' + inttostr(G.Root.Index) + ' - кол дет - ' + inttostr(G.Root.ChildCount),TMWOHistoryOut);
-      ZCMsgCallBackInterface.TextMessage(G.Root.AsString[vGInfoVertex],TMWOHistoryOut);
+      //ZCMsgCallBackInterface.TextMessage('индекс рут - ' + inttostr(G.Root.Index) + ' - кол дет - ' + inttostr(G.Root.ChildCount),TMWOHistoryOut);
+      //ZCMsgCallBackInterface.TextMessage(G.Root.AsString[vGInfoVertex],TMWOHistoryOut);
 
     x:=0;
     y:=0;
-     ZCMsgCallBackInterface.TextMessage('VСТАРТ визуал',TMWOHistoryOut);
+     //ZCMsgCallBackInterface.TextMessage('VСТАРТ визуал',TMWOHistoryOut);
     VertexPath:=TClassList.Create;
     listVertex:=TListVertex.Create;
 
@@ -398,8 +398,8 @@ begin
     infoVertex.poz:=uzegeometry.CreateVertex2D(x,0);
     infoVertex.kol:=0;
     infoVertex.childs:=G.Root.ChildCount;
-    ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
-    ZCMsgCallBackInterface.TextMessage('индекс рут - ' + inttostr(G.Root.Index) + ' - кол дет - ' + inttostr(G.Root.ChildCount),TMWOHistoryOut);
+    //ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
+    //ZCMsgCallBackInterface.TextMessage('индекс рут - ' + inttostr(G.Root.Index) + ' - кол дет - ' + inttostr(G.Root.ChildCount),TMWOHistoryOut);
     listVertex.PushBack(infoVertex);
     pt1:=uzegeometry.CreateVertex(startPt.x + x*indent,startPt.y + y*indent,0) ;
     drawVertex(pt1,3,height);
@@ -407,23 +407,23 @@ begin
     //ptext:=uzegeometry.CreateVertex(pt1.x,pt1.y + indent/10,0) ;
     //pt1.y+=indent/10;
      //G.Root.
-    ZCMsgCallBackInterface.TextMessage('2 + ' + vGInfoVertex,TMWOHistoryOut);
-    ZCMsgCallBackInterface.TextMessage(G.Root.AsString[vGInfoVertex],TMWOHistoryOut);
+    //ZCMsgCallBackInterface.TextMessage('2 + ' + vGInfoVertex,TMWOHistoryOut);
+    //ZCMsgCallBackInterface.TextMessage(G.Root.AsString[vGInfoVertex],TMWOHistoryOut);
     drawMText(pt1,G.Root.AsString[vGInfoVertex],4,0,height);
            //PGDBObjDevice(G.Root.AsPointer[vGPGDBObjDevice])^.P_insert_in_WCS;
-    ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
+    //ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
 
     drawMText(PTStructDeviceLine(G.Root.AsPointer[vGPGDBObjVertex])^.centerPoint,inttostr(G.Root.AsInt32[vGGIndex]),4,0,height);
 
-    ZCMsgCallBackInterface.TextMessage('4',TMWOHistoryOut);
+    //ZCMsgCallBackInterface.TextMessage('4',TMWOHistoryOut);
     //drawMText(GGraph.listVertex[G.Root.AsInt32[vGGIndex]].centerPoint,inttostr(G.Root.AsInt32[vGGIndex]),4,0,height);
     //drawMText(GGraph.pt1,G.Root.AsString['infoVertex'],4,0,height);
 
     G.TreeTraversal(G.Root, VertexPath); //получаем путь обхода графа
-    ZCMsgCallBackInterface.TextMessage('5',TMWOHistoryOut);
+    //ZCMsgCallBackInterface.TextMessage('5',TMWOHistoryOut);
 
     for i:=1 to VertexPath.Count - 1 do begin
-        ZCMsgCallBackInterface.TextMessage('VertexPath i -'+ inttostr(TVertex(VertexPath[i]).Parent.Index),TMWOHistoryOut);
+        //ZCMsgCallBackInterface.TextMessage('VertexPath i -'+ inttostr(TVertex(VertexPath[i]).Parent.Index),TMWOHistoryOut);
         tParent:=howParent(listVertex,TVertex(VertexPath[i]).Parent.Index);
         if tParent>=0 then
         begin

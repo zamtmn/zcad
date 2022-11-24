@@ -54,9 +54,9 @@ Tuzvslagcab_com=object(CommandRTEdObject)//определяем тип - объ�
 
              procedure visualGlobalGraph(pdata:PtrInt); virtual;//построение графа и его визуализация
 
-             procedure visualGraphDevice(pdata:PtrInt); virtual;//построение всех графов и его визуализация
-
-             procedure cablingGraphDevice(pdata:PtrInt); virtual;//построение всех графов и его визуализация
+             //procedure visualGraphDevice(pdata:PtrInt); virtual;//построение всех графов и его визуализация
+             //
+             //procedure cablingGraphDevice(pdata:PtrInt); virtual;//построение всех графов и его визуализация
 
              procedure cablingNewGraphDevice(pdata:PtrInt); virtual;//построение всех Новых графов и его визуализация
 
@@ -84,9 +84,9 @@ begin
   //создаем командное меню из 3х пунктов
   commandmanager.DMAddMethod('Визуализировать трассу','Позволяет просмотреть трассу, места пересечения и места подключения',visualGlobalGraph);
 
-  commandmanager.DMAddMethod('Визуализировать кабели','Визуализирует прохождения кабелей по трассам',visualGraphDevice);
-
-  commandmanager.DMAddMethod('Проложить кабели','Проложить кабели по трассам',cablingGraphDevice);
+  //commandmanager.DMAddMethod('Визуализировать кабели','Визуализирует прохождения кабелей по трассам',visualGraphDevice);
+  //
+  //commandmanager.DMAddMethod('Проложить кабели','Проложить кабели по трассам',cablingGraphDevice);
 
   commandmanager.DMAddMethod('Проложить кабели по новому','Проложить кабели по новому по трассам',cablingNewGraphDevice);
 
@@ -169,174 +169,174 @@ begin
   Commandmanager.executecommandend;
 end;
 
-
-procedure Tuzvslagcab_com.visualGraphDevice(pdata:PtrInt);
-var
- //i,j,counterColor:integer;
- UndoMarcerIsPlazed:boolean;
- nameSL:string;
- listError:TListError;
- errorInfo:TErrorInfo;
- listSLname:TGDBlistSLname;
- listAllSLname:TGDBlistSLname;
- pConnect,fTreeVertex,eTreeVertex:GDBVertex;
- graphBuilderInfo:TListGraphBuilder;
-
- listMasterDevice:TVectorOfMasterDevice;
-begin
-
-  //создаем список ошибок
-  listError:=TListError.Create;
-  listAllGraph:=TListAllGraph.Create;
-
-    //Получаем имя суперлинии выбраное в меню
-  nameSL:=pstring(uzvslagcabComParams.NamesList.Enums.getDataMutable(integer(uzvslagcabComParams.NamesList.selected)))^;
-
-  listSLname:=TGDBlistSLname.Create;
-  listAllSLname:=TGDBlistSLname.Create;
-  if nameSL = vItemAllSLInspector then begin
-        uzvcom.getListSuperline(listSLname);
-        uzvcom.getListSuperline(listAllSLname);
-  end
-  else begin
-        listSLname.PushBack(nameSL);
-        uzvcom.getListSuperline(listAllSLname);
-  end;
-
-  //Строим граф зная имя суперлиний
-  for nameSL in listSLname do
-   begin
-     graphBuilderInfo.graph:=uzvcom.graphBulderFunc(uzvslagcabComParams.accuracy,nameSL);
-     graphBuilderInfo.nameSuperLine:=nameSL;
-     listAllGraph.PushBack(graphBuilderInfo);
-   end;
-
-
-  UndoMarcerIsPlazed:=false;
-  zcPlaceUndoStartMarkerIfNeed(UndoMarcerIsPlazed,'Visualisation Tree Device');
-
-  //Ищем ошибки
-  //errorSearchAllParam(listAllGraph[0].graph,uzvslagcabComParams.accuracy,listError,listSLname);
-
-  //uzvtreedevice.errorSearchList(listAllGraph[0].graph,uzvslagcabComParams.accuracy,listError,listSLname);
-  uzvtreedevice.errorList(listAllGraph,uzvslagcabComParams.accuracy,listError,listSLname,listAllSLname);
-
-  //**Визуализация ошибок и проверка ошибок
-  if uzvslagcabComParams.settingVizCab.sErrors then begin
-    for errorInfo in listError do
-      begin
-        ZCMsgCallBackInterface.TextMessage(errorInfo.name + ' - ошибка: ' + errorInfo.text,TMWOHistoryOut);
-        if getPointConnector(errorInfo.device,pConnect) then
-              uzvcom.visualGraphError(pConnect,4,6,vSystemVisualLayerName);
-      end;
-      listError.Destroy;
-   end;
-
-    if uzvslagcabComParams.settingVizCab.vizFullTreeCab then
-       if commandmanager.get3dpoint('Input tree visualization coordinates',fTreeVertex)= GRNormal then begin
-         ZCMsgCallBackInterface.TextMessage('Ok',TMWOHistoryOut);
-       end
-       else
-         ZCMsgCallBackInterface.TextMessage('Coordinate entry canceled!!!',TMWOHistoryOut);
-
-
-   if uzvslagcabComParams.settingVizCab.vizEasyTreeCab then
-         if commandmanager.get3dpoint('Input easy tree visualization coordinates',eTreeVertex)= GRNormal then begin
-           ZCMsgCallBackInterface.TextMessage('Ok',TMWOHistoryOut);
-         end
-         else
-           ZCMsgCallBackInterface.TextMessage('Coordinate entry canceled!!!',TMWOHistoryOut);
-
-        fTreeVertex:=uzegeometry.CreateVertex(0,0,0);
-        eTreeVertex:=uzegeometry.CreateVertex(0,10000,0);
-   for graphBuilderInfo in listAllGraph do
-     begin
-       listMasterDevice:=uzvtreedevice.buildListAllConnectDevice(graphBuilderInfo.graph,uzvslagcabComParams.accuracy,listError);
-
-       uzvtreedevice.visualGraphConnection(graphBuilderInfo.graph,listMasterDevice,uzvslagcabComParams.settingVizCab.vizFullTreeCab,uzvslagcabComParams.settingVizCab.vizEasyTreeCab,fTreeVertex,eTreeVertex);
-
-       uzvtreedevice.visualMasterGroupLine(graphBuilderInfo.graph,listMasterDevice,uzvslagcabComParams.metricDev,uzvslagcabComParams.accuracy*7,uzvslagcabComParams.settingVizCab.vizNumMetric);
-
-       //uzvtreedevice.cabelingMasterGroupLine(graphBuilderInfo.graph,listMasterDevice,uzvslagcabComParams.metricDev);
-     end;
-
-  zcPlaceUndoEndMarkerIfNeed(UndoMarcerIsPlazed);
-  zcRedrawCurrentDrawing;
-
-  Commandmanager.executecommandend;
-end;
-
-procedure Tuzvslagcab_com.cablingGraphDevice(pdata:PtrInt);
-var
- //i,j,counterColor:integer;
- UndoMarcerIsPlazed:boolean;
- nameSL:string;
- listError:TListError;
- errorInfo:TErrorInfo;
- listSLname:TGDBlistSLname;
- pConnect:GDBVertex;
- graphBuilderInfo:TListGraphBuilder;
-
- listMasterDevice:TVectorOfMasterDevice;
-begin
-  //тут делаем чтонибудь что будет усполнено по нажатию DoSomething2
-  //выполним Commandmanager.executecommandend;
-  //эту кнопку можно нажать 1 раз
-
-  //создаем список ошибок
-  listError:=TListError.Create;
-  listAllGraph:=TListAllGraph.Create;
-
-    //Получаем имя суперлинии выбраное в меню
-  nameSL:=pstring(uzvslagcabComParams.NamesList.Enums.getDataMutable(integer(uzvslagcabComParams.NamesList.selected)))^;
-
-  listSLname:=TGDBlistSLname.Create;
-  if nameSL = vItemAllSLInspector then
-        uzvcom.getListSuperline(listSLname)
-  else
-        listSLname.PushBack(nameSL);
-
-  //Строим граф зная имя суперлиний
-  for nameSL in listSLname do
-   begin
-     graphBuilderInfo.graph:=uzvcom.graphBulderFunc(uzvslagcabComParams.accuracy,nameSL);
-     graphBuilderInfo.nameSuperLine:=nameSL;
-     listAllGraph.PushBack(graphBuilderInfo);
-   end;
-
-
-  UndoMarcerIsPlazed:=false;
-  zcPlaceUndoStartMarkerIfNeed(UndoMarcerIsPlazed,'Visualisation Tree Device');
-
-  //Ищем ошибки
-  uzvtreedevice.errorSearchList(listAllGraph[0].graph,uzvslagcabComParams.accuracy,listError,listSLname);
-
-  //**Визуализация ошибок и проверка ошибок
-  if uzvslagcabComParams.settingVizCab.sErrors then begin
-    for errorInfo in listError do
-      begin
-        ZCMsgCallBackInterface.TextMessage(errorInfo.name + ' - ошибка: ' + errorInfo.text,TMWOHistoryOut);
-        if getPointConnector(errorInfo.device,pConnect) then
-              uzvcom.visualGraphError(pConnect,4,6,vSystemVisualLayerName);
-      end;
-      listError.Destroy;
-   end;
-
-
-   for graphBuilderInfo in listAllGraph do
-     begin
-       listMasterDevice:=uzvtreedevice.buildListAllConnectDevice(graphBuilderInfo.graph,uzvslagcabComParams.accuracy,listError);
-
-       //uzvtreedevice.visualMasterGroupLine(graphBuilderInfo.graph,listMasterDevice,uzvslagcabComParams.metricDev,uzvslagcabComParams.accuracy*7,uzvslagcabComParams.settingVizCab.vizNumMetric);
-
-       uzvtreedevice.cabelingMasterGroupLine(graphBuilderInfo.graph,listMasterDevice,uzvslagcabComParams.metricDev);
-     end;
-
-  zcPlaceUndoEndMarkerIfNeed(UndoMarcerIsPlazed);
-  zcRedrawCurrentDrawing;
-
-  Commandmanager.executecommandend;
-end;
+//
+//procedure Tuzvslagcab_com.visualGraphDevice(pdata:PtrInt);
+//var
+// //i,j,counterColor:integer;
+// UndoMarcerIsPlazed:boolean;
+// nameSL:string;
+// listError:TListError;
+// errorInfo:TErrorInfo;
+// listSLname:TGDBlistSLname;
+// listAllSLname:TGDBlistSLname;
+// pConnect,fTreeVertex,eTreeVertex:GDBVertex;
+// graphBuilderInfo:TListGraphBuilder;
+//
+// listMasterDevice:TVectorOfMasterDevice;
+//begin
+//
+//  //создаем список ошибок
+//  listError:=TListError.Create;
+//  listAllGraph:=TListAllGraph.Create;
+//
+//    //Получаем имя суперлинии выбраное в меню
+//  nameSL:=pstring(uzvslagcabComParams.NamesList.Enums.getDataMutable(integer(uzvslagcabComParams.NamesList.selected)))^;
+//
+//  listSLname:=TGDBlistSLname.Create;
+//  listAllSLname:=TGDBlistSLname.Create;
+//  if nameSL = vItemAllSLInspector then begin
+//        uzvcom.getListSuperline(listSLname);
+//        uzvcom.getListSuperline(listAllSLname);
+//  end
+//  else begin
+//        listSLname.PushBack(nameSL);
+//        uzvcom.getListSuperline(listAllSLname);
+//  end;
+//
+//  //Строим граф зная имя суперлиний
+//  for nameSL in listSLname do
+//   begin
+//     graphBuilderInfo.graph:=uzvcom.graphBulderFunc(uzvslagcabComParams.accuracy,nameSL);
+//     graphBuilderInfo.nameSuperLine:=nameSL;
+//     listAllGraph.PushBack(graphBuilderInfo);
+//   end;
+//
+//
+//  UndoMarcerIsPlazed:=false;
+//  zcPlaceUndoStartMarkerIfNeed(UndoMarcerIsPlazed,'Visualisation Tree Device');
+//
+//  //Ищем ошибки
+//  //errorSearchAllParam(listAllGraph[0].graph,uzvslagcabComParams.accuracy,listError,listSLname);
+//
+//  //uzvtreedevice.errorSearchList(listAllGraph[0].graph,uzvslagcabComParams.accuracy,listError,listSLname);
+//  //uzvtreedevice.errorList(listAllGraph,uzvslagcabComParams.accuracy,listError,listSLname,listAllSLname);
+//
+//  //**Визуализация ошибок и проверка ошибок
+//  if uzvslagcabComParams.settingVizCab.sErrors then begin
+//    for errorInfo in listError do
+//      begin
+//        ZCMsgCallBackInterface.TextMessage(errorInfo.name + ' - ошибка: ' + errorInfo.text,TMWOHistoryOut);
+//        if getPointConnector(errorInfo.device,pConnect) then
+//              uzvcom.visualGraphError(pConnect,4,6,vSystemVisualLayerName);
+//      end;
+//      listError.Destroy;
+//   end;
+//
+//    if uzvslagcabComParams.settingVizCab.vizFullTreeCab then
+//       if commandmanager.get3dpoint('Input tree visualization coordinates',fTreeVertex)= GRNormal then begin
+//         ZCMsgCallBackInterface.TextMessage('Ok',TMWOHistoryOut);
+//       end
+//       else
+//         ZCMsgCallBackInterface.TextMessage('Coordinate entry canceled!!!',TMWOHistoryOut);
+//
+//
+//   if uzvslagcabComParams.settingVizCab.vizEasyTreeCab then
+//         if commandmanager.get3dpoint('Input easy tree visualization coordinates',eTreeVertex)= GRNormal then begin
+//           ZCMsgCallBackInterface.TextMessage('Ok',TMWOHistoryOut);
+//         end
+//         else
+//           ZCMsgCallBackInterface.TextMessage('Coordinate entry canceled!!!',TMWOHistoryOut);
+//
+//        fTreeVertex:=uzegeometry.CreateVertex(0,0,0);
+//        eTreeVertex:=uzegeometry.CreateVertex(0,10000,0);
+//   for graphBuilderInfo in listAllGraph do
+//     begin
+//       //listMasterDevice:=uzvtreedevice.buildListAllConnectDevice(graphBuilderInfo.graph,uzvslagcabComParams.accuracy,listError);
+//
+//       uzvtreedevice.visualGraphConnection(graphBuilderInfo.graph,listMasterDevice,uzvslagcabComParams.settingVizCab.vizFullTreeCab,uzvslagcabComParams.settingVizCab.vizEasyTreeCab,fTreeVertex,eTreeVertex);
+//
+//       uzvtreedevice.visualMasterGroupLine(graphBuilderInfo.graph,listMasterDevice,uzvslagcabComParams.metricDev,uzvslagcabComParams.accuracy*7,uzvslagcabComParams.settingVizCab.vizNumMetric);
+//
+//       //uzvtreedevice.cabelingMasterGroupLine(graphBuilderInfo.graph,listMasterDevice,uzvslagcabComParams.metricDev);
+//     end;
+//
+//  zcPlaceUndoEndMarkerIfNeed(UndoMarcerIsPlazed);
+//  zcRedrawCurrentDrawing;
+//
+//  Commandmanager.executecommandend;
+//end;
+//
+//procedure Tuzvslagcab_com.cablingGraphDevice(pdata:PtrInt);
+//var
+// //i,j,counterColor:integer;
+// UndoMarcerIsPlazed:boolean;
+// nameSL:string;
+// listError:TListError;
+// errorInfo:TErrorInfo;
+// listSLname:TGDBlistSLname;
+// pConnect:GDBVertex;
+// graphBuilderInfo:TListGraphBuilder;
+//
+// listMasterDevice:TVectorOfMasterDevice;
+//begin
+//  //тут делаем чтонибудь что будет усполнено по нажатию DoSomething2
+//  //выполним Commandmanager.executecommandend;
+//  //эту кнопку можно нажать 1 раз
+//
+//  //создаем список ошибок
+//  listError:=TListError.Create;
+//  listAllGraph:=TListAllGraph.Create;
+//
+//    //Получаем имя суперлинии выбраное в меню
+//  nameSL:=pstring(uzvslagcabComParams.NamesList.Enums.getDataMutable(integer(uzvslagcabComParams.NamesList.selected)))^;
+//
+//  listSLname:=TGDBlistSLname.Create;
+//  if nameSL = vItemAllSLInspector then
+//        uzvcom.getListSuperline(listSLname)
+//  else
+//        listSLname.PushBack(nameSL);
+//
+//  //Строим граф зная имя суперлиний
+//  for nameSL in listSLname do
+//   begin
+//     graphBuilderInfo.graph:=uzvcom.graphBulderFunc(uzvslagcabComParams.accuracy,nameSL);
+//     graphBuilderInfo.nameSuperLine:=nameSL;
+//     listAllGraph.PushBack(graphBuilderInfo);
+//   end;
+//
+//
+//  UndoMarcerIsPlazed:=false;
+//  zcPlaceUndoStartMarkerIfNeed(UndoMarcerIsPlazed,'Visualisation Tree Device');
+//
+//  //Ищем ошибки
+//  //uzvtreedevice.errorSearchList(listAllGraph[0].graph,uzvslagcabComParams.accuracy,listError,listSLname);
+//
+//  //**Визуализация ошибок и проверка ошибок
+//  if uzvslagcabComParams.settingVizCab.sErrors then begin
+//    for errorInfo in listError do
+//      begin
+//        ZCMsgCallBackInterface.TextMessage(errorInfo.name + ' - ошибка: ' + errorInfo.text,TMWOHistoryOut);
+//        if getPointConnector(errorInfo.device,pConnect) then
+//              uzvcom.visualGraphError(pConnect,4,6,vSystemVisualLayerName);
+//      end;
+//      listError.Destroy;
+//   end;
+//
+//
+//   for graphBuilderInfo in listAllGraph do
+//     begin
+//       //listMasterDevice:=uzvtreedevice.buildListAllConnectDevice(graphBuilderInfo.graph,uzvslagcabComParams.accuracy,listError);
+//
+//       //uzvtreedevice.visualMasterGroupLine(graphBuilderInfo.graph,listMasterDevice,uzvslagcabComParams.metricDev,uzvslagcabComParams.accuracy*7,uzvslagcabComParams.settingVizCab.vizNumMetric);
+//
+//       uzvtreedevice.cabelingMasterGroupLine(graphBuilderInfo.graph,listMasterDevice,uzvslagcabComParams.metricDev);
+//     end;
+//
+//  zcPlaceUndoEndMarkerIfNeed(UndoMarcerIsPlazed);
+//  zcRedrawCurrentDrawing;
+//
+//  Commandmanager.executecommandend;
+//end;
 
 
 procedure Tuzvslagcab_com.cablingNewGraphDevice(pdata:PtrInt);
@@ -382,7 +382,7 @@ begin
   zcPlaceUndoStartMarkerIfNeed(UndoMarcerIsPlazed,'Visualisation Tree Device');
 
   //Ищем ошибки
-  uzvtreedevice.errorSearchList(listAllGraph[0].graph,uzvslagcabComParams.accuracy,listError,listSLname);
+  //uzvtreedevice.errorSearchList(listAllGraph[0].graph,uzvslagcabComParams.accuracy,listError,listSLname);
 
   //**Визуализация ошибок и проверка ошибок
   if uzvslagcabComParams.settingVizCab.sErrors then begin

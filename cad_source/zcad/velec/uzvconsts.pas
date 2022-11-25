@@ -22,6 +22,10 @@ unit uzvconsts;
 interface
 const
   //osm_inspoint=1;
+
+  vCADihaveError='deverrors_ihaveError';   //ссылка на значение есть ошибка или нет Боолинг
+  vCADerrorsText='deverrors_errorsText';   //ссылка на значение текст ошибки
+
   vItemAllSLInspector='***';
   vSystemVisualLayerName='systemTempCABLINEVisualLayer';
 

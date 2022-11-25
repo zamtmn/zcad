@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CONFIG>
+  <NavigatorParams TreeBuildMap="-@@[NMO_Name]" CreateRootNode="True" NodeNameFormat="%0:s(%1:d,%2:d)" TreeProperties="SetColumnsCount(2,0);&#xD;&#xA;SetColumnParams(0,'Tree','@@[NMO_Name]','tmpGUIParamSave_NavDev_C0',1);&#xD;&#xA;SetColumnParams(1,'Comment','@@[deverrors_errorsText]','tmpGUIParamSave_NavDev_C1',1)" IncludeEntities="IncludeEntityName('Device')" UseMainFunctions="True" IncludeProperties="IncludeIfMask(@@('deverrors_ihaveError'),'True')"/>
+</CONFIG>

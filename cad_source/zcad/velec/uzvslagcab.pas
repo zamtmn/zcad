@@ -43,6 +43,7 @@ uses
      //gzctnrVector,
      uzvconsts,
      uzcutils,
+     uzvdeverrors,
      uzvslagcabparams, //вынесенные параметры
      Varman;             //Зкадовский RTTI
 
@@ -357,7 +358,11 @@ begin
   //эту кнопку можно нажать 1 раз
 
   //создаем список ошибок
-  listError:=TListError.Create;
+  //listError:=TListError.Create;
+
+      //Очищаем все ошибки устройств
+      uzvdeverrors.uzvdeverrorsAllClearDev();
+
   listAllGraph:=TListAllGraph.Create;
 
     //Получаем имя суперлинии выбраное в меню
@@ -369,9 +374,17 @@ begin
   else
         listSLname.PushBack(nameSL);
 
+
+    //Строим граф зная имя суперлиний
+    ZCMsgCallBackInterface.TextMessage('***Список обрабатываемых суперлиний:',TMWOHistoryOut);
+  for nameSL in listSLname do
+     ZCMsgCallBackInterface.TextMessage(' - ' + nameSL,TMWOHistoryOut);
+    ZCMsgCallBackInterface.TextMessage('***Список суперлиний закончен!',TMWOHistoryOut);
+
   //Строим граф зная имя суперлиний
   for nameSL in listSLname do
    begin
+     //ZCMsgCallBackInterface.TextMessage('Обрабатывается суперлиния:' + nameSL,TMWOHistoryOut);
      graphBuilderInfo.graph:=uzvcom.graphBulderFunc(uzvslagcabComParams.accuracy,nameSL);
      graphBuilderInfo.nameSuperLine:=nameSL;
      listAllGraph.PushBack(graphBuilderInfo);
@@ -384,21 +397,21 @@ begin
   //Ищем ошибки
   //uzvtreedevice.errorSearchList(listAllGraph[0].graph,uzvslagcabComParams.accuracy,listError,listSLname);
 
-  //**Визуализация ошибок и проверка ошибок
-  if uzvslagcabComParams.settingVizCab.sErrors then begin
-    for errorInfo in listError do
-      begin
-        ZCMsgCallBackInterface.TextMessage(errorInfo.name + ' - ошибка: ' + errorInfo.text,TMWOHistoryOut);
-        if getPointConnector(errorInfo.device,pConnect) then
-              uzvcom.visualGraphError(pConnect,4,6,vSystemVisualLayerName);
-      end;
-      listError.Destroy;
-   end;
-
+  ////**Визуализация ошибок и проверка ошибок
+  //if uzvslagcabComParams.settingVizCab.sErrors then begin
+  //  for errorInfo in listError do
+  //    begin
+  //      ZCMsgCallBackInterface.TextMessage(errorInfo.name + ' - ошибка: ' + errorInfo.text,TMWOHistoryOut);
+  //      if getPointConnector(errorInfo.device,pConnect) then
+  //            uzvcom.visualGraphError(pConnect,4,6,vSystemVisualLayerName);
+  //    end;
+  //    listError.Destroy;
+  // end;
+  //
 
    for graphBuilderInfo in listAllGraph do
      begin
-       listMasterDevice:=uzvtreedevice.buildListAllConnectDeviceNew(graphBuilderInfo.graph,uzvslagcabComParams.accuracy,listError);
+       listMasterDevice:=uzvtreedevice.buildListAllConnectDeviceNew(graphBuilderInfo.graph,uzvslagcabComParams.accuracy,listSLname);
 
        //uzvtreedevice.visualMasterGroupLine(graphBuilderInfo.graph,listMasterDevice,uzvslagcabComParams.metricDev,uzvslagcabComParams.accuracy*7,uzvslagcabComParams.settingVizCab.vizNumMetric);
 

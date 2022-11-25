@@ -116,6 +116,7 @@ uses
   uzvvisualgraph,
   uzvconsts,
   uzvslagcabparams, //вынесенные параметры
+   uzvdeverrors,
   uzvtestdraw;
 
 
@@ -140,7 +141,7 @@ type
 
  //function buildListAllConnectDevice(listVertexEdge:TGraphBuilder;Epsilon:double; var listError:TListError):TVectorOfMasterDevice;
 
- function buildListAllConnectDeviceNew(listVertexEdge:TGraphBuilder;Epsilon:double; var listError:TListError):TVectorOfMasterDevice;
+ function buildListAllConnectDeviceNew(listVertexEdge:TGraphBuilder;Epsilon:double;listSLname:TGDBlistSLname):TVectorOfMasterDevice;
 
 implementation
 var
@@ -1592,6 +1593,30 @@ end;
 
     end;
 
+    //**Проверка на ошибки подключения ко всем мастерам хоть к кому то данное устройство может подключится
+    function isHaveLineMasterAll(listMasterIndex:TVectorOfInteger;isSub:integer):boolean;
+    var i:integer;
+    begin
+      //ZCMsgCallBackInterface.TextMessage('isMaster : ' + inttostr(isMaster)+' - isSub -  ' + inttostr(isSub),TMWOHistoryOut);
+
+        result:=true; // нет пути между головным устройством и подключаемым
+        for i:=0 to listMasterIndex.Size -1 do
+         begin
+          EdgePath:=TClassList.Create;     //Создаем реберный путь
+          VertexPath:=TClassList.Create;   //Создаем вершиный путь
+          //Получение ребер минимального пути в графе из одной точки в другую
+          sumWeightPath:=globalGraph.FindMinWeightPath(globalGraph[listMasterIndex[i]], globalGraph[isSub], EdgePath);
+          //Получение вершин минимального пути в графе на основе минимального пути в ребер, указывается из какой точки старт
+          globalGraph.EdgePathToVertexPath(globalGraph[listMasterIndex[i]], EdgePath, VertexPath);
+
+          //Узнать существует уже граф если нет то создать его и добавляем начальную вершину
+          if VertexPath.Count > 1 then
+            result:=false;  //путь есть между головным устройством и подключаемым
+
+         end;
+
+    end;
+
   begin
     for i:=0 to listMasterDevice.Size-1 do
       begin
@@ -1624,6 +1649,12 @@ end;
                 //listMasterDevice[i].LGroup[j].LNumSubDevice;
               for k:=0 to listMasterDevice[i].LGroup[j].LNumSubDevice.Size-1 do
                 begin
+                  ZCMsgCallBackInterface.TextMessage('количество новоееее- ' + inttostr(k),TMWOHistoryOut);
+
+                  if isHaveLineMasterAll(listMasterDevice[i].LIndex,listMasterDevice[i].LGroup[j].LNumSubDevice[k].indexSub) then
+                     uzvdeverrors.addDevErrors(listVertexEdge.listVertex[listMasterDevice[i].LGroup[j].LNumSubDevice[k].indexSub].deviceEnt,
+                     'нет соединения ' + listVertexEdge.listVertex[listMasterDevice[i].LGroup[j].LNumSubDevice[k].indexSub].deviceEnt^.Name
+                     );
 
                   if isHaveLineMaster(listMasterDevice[i].LIndex[n],listMasterDevice[i].LGroup[j].LNumSubDevice[k].indexSub) then
                      continue;
@@ -1881,7 +1912,7 @@ end;
 
 
 //** Создает список головных устройств
-function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph):TVectorOfMasterDevice;
+function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph;listSLname:TGDBlistSLname):TVectorOfMasterDevice;
   type
       //**список для кабельной прокладки
       //PTCableLaying=^TCableLaying;
@@ -1974,12 +2005,13 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph):T
     }
 
     //**НОВОЕ НОВОЕ НОВОЕ Получаем количество кабелей подключения данного устройства к головным устройствам, с последующим разбором
-    function listCollectConnect(nowDev:PGDBObjDevice;var listCableLaying:TVertexofCableLaying;nameSL:string):boolean;
+    function listCollectConnect(nowDev:PGDBObjDevice;var listCableLaying:TVertexofCableLaying;nameSL:string;listSLname:TGDBlistSLname):boolean;
     var
        pvd,pvd2:pvardesk; //для работы со свойствами устройств
-       numConnect:integer;
-       varName:String;
-       infoLay:TMasterDevice.TGroupInfo.TdevConnectInfo;
+       numConnect,i:integer;
+       varName,tempName:String;
+       iHaveSLName,iCloneDevConnect:boolean;
+       infoLay,tempInfoLay:TMasterDevice.TGroupInfo.TdevConnectInfo;
        Varext:TVariablesExtender;
     begin
 
@@ -2034,10 +2066,44 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph):T
                  infoLay.numConnect:=numConnect;  //номер соединения
                  //ZCMsgCallBackInterface.TextMessage(infoLay.HeadDeviceName+' - ' + infoLay.NGHeadDevice + ' - ' + infoLay.SLTypeagen
                  //+ ' - ' + infoLay.controlUnitName + ' - ' + infoLay.NGControlUnit + ' - ' + floattostr(infoLay.CabConnectAddLength) + ' - ' + infoLay.CabConnectMountingMethod,TMWOHistoryOut);
+                 //Если имя суперлинии в подключении, соответствует обрабатываемой суперлинии, то добавляем данное подключение устройство для обработки
                  if infoLay.SLTypeagen = nameSL then begin
-                   listCableLaying.PushBack(infoLay);
-                   //ZCMsgCallBackInterface.TextMessage('Вверхняя строчка добавлена',TMWOHistoryOut);
-                   result:=true;
+                   iCloneDevConnect:=true;
+                   if listCableLaying.IsEmpty = false then //проверяем на одинаковые соединения и устраняем дубляж и выводим ошибку
+                     begin
+                        for tempInfoLay in listCableLaying do
+                         begin
+                          if tempInfoLay.HeadDeviceName = infoLay.HeadDeviceName then
+                            if tempInfoLay.NGHeadDevice = infoLay.NGHeadDevice then
+                              if tempInfoLay.ControlUnitName = infoLay.ControlUnitName then
+                                if tempInfoLay.NGControlUnit = infoLay.NGControlUnit then
+                                  begin
+                                    iCloneDevConnect:=false;
+                                    uzvdeverrors.addDevErrors(nowDev,' Подкл.'+inttostr(infoLay.numConnect)+' заполнено так же, как подкл.' + inttostr(tempInfoLay.numConnect)+';')
+                                  end;
+                         end;
+                     end
+                     else
+                     begin
+                       listCableLaying.PushBack(infoLay);
+                       ZCMsgCallBackInterface.TextMessage('-------------------------------------------------Вверхняя строчка добавлена',TMWOHistoryOut);
+                       result:=true;
+                     end;
+                     if iCloneDevConnect then
+                         begin
+                           listCableLaying.PushBack(infoLay);
+                           ZCMsgCallBackInterface.TextMessage('++++++++++++++++++++++++++++++++++++++++++++++Вверхняя строчка добавлена',TMWOHistoryOut);
+                           result:=true;
+                         end;
+                 end
+                 else
+                 begin
+                   iHaveSLName:=true;
+                   for tempName in listSLname do
+                       if infoLay.SLTypeagen = tempName then
+                         iHaveSLName:=false;
+                   if iHaveSLName then
+                     uzvdeverrors.addDevErrors(nowDev,'Подкл.'+inttostr(infoLay.numConnect)+':неправильно задано имя суперлинии ('+ infoLay.SLTypeagen+');');
                  end;
               end;
             until pvd=nil;
@@ -2118,7 +2184,7 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph):T
          begin
              //Получаем список сколько у устройства хозяев
            ZCMsgCallBackInterface.TextMessage('ПОЛУЧАЕМ СПИСОК УСТРОЙСТВ ',TMWOHistoryOut);
-             if listCollectConnect(listVertexEdge.listVertex[i].deviceEnt,listCableLaying,listVertexEdge.nameSuperLine) then
+             if listCollectConnect(listVertexEdge.listVertex[i].deviceEnt,listCableLaying,listVertexEdge.nameSuperLine,listSLname) then
              begin
                //inc(counter);
                for m:=0 to listCableLaying.size-1 do begin
@@ -2176,7 +2242,7 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph):T
                            infoSubDev.indexMaster:=numHeadDev;
                            infoSubDev.indexSub:=i;
                            infoSubDev.isVertexAdded:=false;
-                            //ZCMsgCallBackInterface.TextMessage('master = '+inttostr(infoSubDev.indexMaster)+' sub - ' + inttostr(infoSubDev.indexSub),TMWOHistoryOut);
+                            ZCMsgCallBackInterface.TextMessage('master = '+inttostr(infoSubDev.indexMaster)+' sub - ' + inttostr(infoSubDev.indexSub),TMWOHistoryOut);
 
                            groupInfo.LNumSubDevice.PushBack(infoSubDev);
                            //HeadGroupInfo.listVertexTerminalBox:=nil;
@@ -2190,12 +2256,15 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph):T
                        begin
                            infoSubDev.indexMaster:=numHeadDev;
                            infoSubDev.indexSub:=i;
-                           //ZCMsgCallBackInterface.TextMessage('master = '+inttostr(infoSubDev.indexMaster)+' sub - ' + inttostr(infoSubDev.indexSub),TMWOHistoryOut);
+                           ZCMsgCallBackInterface.TextMessage('master = '+inttostr(infoSubDev.indexMaster)+' sub - ' + inttostr(infoSubDev.indexSub),TMWOHistoryOut);
                            infoSubDev.isVertexAdded:=false;
                            result.mutable[numHead]^.LGroup.mutable[numHeadGroup]^.LNumSubDevice.PushBack(infoSubDev);
                        end;
+                   end
+                   else
+                   begin
+                     uzvdeverrors.addDevErrors(listVertexEdge.listVertex[i].deviceEnt,'Подкл.'+inttostr(infoSubDev.devConnectInfo.numConnect)+':нет трассы до ГУ или неправильное имя ('+ infoSubDev.devConnectInfo.HeadDeviceName+');'  );
                    end;
-
                end;
                listCableLaying.Clear;
             end;
@@ -2326,7 +2395,7 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph):T
                   //Получение ребер минимального пути в графе из одной точки в другую
                   sumWeightPath:=globalGraph.FindMinWeightPath(globalGraph[listMasterDevice[i].LGroup[j].LNumSubDevice[k].indexMaster], globalGraph[listMasterDevice[i].LGroup[j].LNumSubDevice[k].indexSub], EdgePath);
                   //Получение вершин минимального пути в графе на основе минимального пути в ребер, указывается из какой точки старт
-                  //ZCMsgCallBackInterface.TextMessage('master = '+inttostr(listMasterDevice[i].LGroup[j].LNumSubDevice[k].indexMaster)+' sub - ' + inttostr(listMasterDevice[i].LGroup[j].LNumSubDevice[k].indexSub),TMWOHistoryOut);
+                  ZCMsgCallBackInterface.TextMessage('master = '+inttostr(listMasterDevice[i].LGroup[j].LNumSubDevice[k].indexMaster)+' sub - ' + inttostr(listMasterDevice[i].LGroup[j].LNumSubDevice[k].indexSub),TMWOHistoryOut);
 
                   globalGraph.EdgePathToVertexPath(globalGraph[listMasterDevice[i].LGroup[j].LNumSubDevice[k].indexMaster], EdgePath, VertexPath);
 
@@ -3256,7 +3325,7 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph):T
           end;
         end;
         if result <0 then
-          ZCMsgCallBackInterface.TextMessage('Неправильно задано имя головного устройства - ' + tempNameMaster + ' ,а мы ищим такое имя ГУ:' + nameMaster,TMWOHistoryOut);
+          ZCMsgCallBackInterface.TextMessage('ОШИБКА! Неправильно задано имя головного устройства - ' + tempNameMaster + ' ,а мы ищим такое имя ГУ:' + nameMaster,TMWOHistoryOut);
     end;
 
     //**Получаем спец символ узла
@@ -3270,6 +3339,7 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph):T
         if (nameNode[1] = '!') then
            result:=nameNode[1];
     end;
+
         //**удаляем пройденый промежуточный узел
     function delNameTravelNode(specName,nameNode:string):string;
     var
@@ -3578,13 +3648,24 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph):T
                       //    listVertexDevUnit.PushBack('');
                       ////****//
                       //ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
-                      //ZCMsgCallBackInterface.TextMessage('listVertexDevUnit[o]:' + listVertexDevUnit[o],TMWOHistoryOut);
+                      ZCMsgCallBackInterface.TextMessage('Просматриваем: listVertexDevUnit[o]:' + listVertexDevUnit[o],TMWOHistoryOut);
                       //if listVertexDevUnit.Size = o then
                       //   indexMaster:=listMasterDevice[i].LGroup[j].LNumSubDevice[k].indexMaster //специально последний это ГУ
                       //else
+
+                          //запись в кабель номера подключения дя устройства выполняется только один раз сразу как только кабель вышел от устройства
+                          numConDevTemp:=listMasterDevice[i].LGroup[j].LNumSubDevice[k].devConnectInfo.numConnect;
+                          ZCMsgCallBackInterface.TextMessage('numConDevTemp: ' + inttostr(numConDevTemp),TMWOHistoryOut);
+
                          indexMaster:=getIndexMasterByName(delSpecChar(listVertexDevUnit[o]),indexSub); //получаем индекс (в глобальном графе) узла по его имени
+                         ZCMsgCallBackInterface.TextMessage('indexMaster before:' + inttostr(indexMaster),TMWOHistoryOut);
+                          if indexMaster < 0 then
+                          begin
+                            uzvdeverrors.addDevErrors(listVertexEdge.listVertex[indexSub].deviceEnt,'Подкл.'+inttostr(numConDevTemp)+':нет трассы до УУ или неправильное имя (' + delSpecChar(listVertexDevUnit[o]) + '); ' );
+                            system.break;
+                          end;
                       //ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
-                      //ZCMsgCallBackInterface.TextMessage('indexMaster:' + inttostr(indexMaster),TMWOHistoryOut);
+                         ZCMsgCallBackInterface.TextMessage('indexMaster after:' + inttostr(indexMaster),TMWOHistoryOut);
 
                       //ZCMsgCallBackInterface.TextMessage('listVertexDevUnit[o]:' + listVertexDevUnit[o] + ' - Узел УУ с имене:' + nodeCUSpecName,TMWOHistoryOut);
 
@@ -3597,6 +3678,7 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph):T
                       //ZCMsgCallBackInterface.TextMessage('4',TMWOHistoryOut);
                       //ZCMsgCallBackInterface.TextMessage('specChar:' + specChar,TMWOHistoryOut);
                       ZCMsgCallBackInterface.TextMessage('indexMaster:' + inttostr(indexMaster)+' indexSub:' + inttostr(indexSub),TMWOHistoryOut);
+
                       pvd:=FindVariableInEnt(listVertexEdge.listVertex[indexSub].deviceEnt,'NMO_Name');
                        if pvd<>nil then
                           tempSlaveName:= pString(pvd^.data.Addr.Instance)^
@@ -3625,9 +3707,7 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph):T
 
                       lastNodeConnection:=false;
 
-                      //запись в кабель номера подключения дя устройства выполняется только один раз сразу как только кабель вышел от устройства
-                      numConDevTemp:=listMasterDevice[i].LGroup[j].LNumSubDevice[k].devConnectInfo.numConnect;
-                      ZCMsgCallBackInterface.TextMessage('numConDevTemp: ' + inttostr(numConDevTemp),TMWOHistoryOut);
+
 
                       if VertexPath.Count > 1 then
                         for m:=VertexPath.Count - 1 downto 0 do
@@ -3834,14 +3914,14 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph):T
 
   end;
 
-function buildListAllConnectDeviceNew(listVertexEdge:TGraphBuilder;Epsilon:double; var listError:TListError):TVectorOfMasterDevice;
+function buildListAllConnectDeviceNew(listVertexEdge:TGraphBuilder;Epsilon:double;listSLname:TGDBlistSLname):TVectorOfMasterDevice;
 var
 
     globalGraph: TGraph;
     listMasterDevice:TVectorOfMasterDevice;
 
     i,j,k: Integer;
-
+    pvd:pvardesk;
     gg:GDBVertex;
 
 
@@ -3930,6 +4010,20 @@ var
 
   begin
 
+
+
+    //** Что мы получаем после суперпупер анализатора-помогатора
+    ZCMsgCallBackInterface.TextMessage('***Имя суперлинии:' + listVertexEdge.nameSuperLine,TMWOHistoryOut);
+    for i:=0 to listVertexEdge.listVertex.Size-1 do
+      begin
+        if listVertexEdge.listVertex[i].deviceEnt <> nil then
+         begin
+         pvd:=FindVariableInEnt(listVertexEdge.listVertex[i].deviceEnt,velec_nameDevice);
+         if pvd<>nil then
+             ZCMsgCallBackInterface.TextMessage('Полученное имя устройства = '+ pString(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+         end;
+      end;
+
     //Создаем граф на основе класса TGraphBuilder полученого при обработке устройств и суперлиний
     globalGraph:=TGraph.Create;
     globalGraph.Features:=[Weighted];
@@ -3942,7 +4036,7 @@ var
 
 
     //**получаем список подключенных устройств к головным устройствам
-    listMasterDevice:=getListMasterDevNew(listVertexEdge,globalGraph);
+    listMasterDevice:=getListMasterDevNew(listVertexEdge,globalGraph,listSLname);
     //listMasterDevice:=getListDevOneTree(listVertexEdge,globalGraph);
 
     ZCMsgCallBackInterface.TextMessage('*** длина! ***' + inttostr(listMasterDevice.Size-1),TMWOHistoryOut);

@@ -159,8 +159,8 @@ end;
 procedure TZGLOpenGLDrawer.DrawLine(const PVertexBuffer:PZGLVertex3Sarray;const i1,i2:TLLVertexIndex);
 begin
     oglsm.myglbegin(GL_LINES);
-    oglsm.myglVertex(PVertexBuffer.getDataMutable(i1)^);
-    oglsm.myglVertex(PVertexBuffer.getDataMutable(i2)^);
+    oglsm.myglVertex3DV(PVertexBuffer.getDataMutable(i1));
+    oglsm.myglVertex3DV(PVertexBuffer.getDataMutable(i2));
     oglsm.myglend;
 end;
 procedure TZGLOpenGLDrawer.DrawTriangle(const PVertexBuffer:PZGLVertex3Sarray;const i1,i2,i3:TLLVertexIndex);

@@ -108,8 +108,8 @@ TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         procedure SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);override;
 
                         {}
-                        procedure pushMatrixAndSetTransform(Transform:DMatrix4D;ResetLCS:Boolean=False);overload;override;
-                        procedure pushMatrixAndSetTransform(Transform:DMatrix4F;ResetLCS:Boolean=False);overload;override;
+                        procedure pushMatrixAndSetTransform(Transform:DMatrix4D;FromOneMatrix:Boolean=False);overload;override;
+                        procedure pushMatrixAndSetTransform(Transform:DMatrix4F;FromOneMatrix:Boolean=False);overload;override;
                         procedure DisableLCS(var matrixs:tmatrixs);overload;override;
                         procedure EnableLCS(var matrixs:tmatrixs);overload;override;
                         procedure popMatrix;override;
@@ -119,31 +119,31 @@ var
    code:integer;
 implementation
 //uses log;
-procedure TZGLOpenGLDrawer.pushMatrixAndSetTransform(Transform:DMatrix4D;ResetLCS:Boolean=False);
+procedure TZGLOpenGLDrawer.pushMatrixAndSetTransform(Transform:DMatrix4D;FromOneMatrix:Boolean=False);
 begin
   oglsm.myglPushMatrix;
-  if ResetLCS and (not LCS.notuseLCS) then begin
+  if FromOneMatrix {and (not LCS.notuseLCS)} then begin
     oglsm.myglLoadMatrixd(@mm);
-    LCS.notuseLCS:=true;
+    {LCS.notuseLCS:=true;
     LCS.CurrentCamCSOffset:=NulVertex;
-    LCS.CurrentCamCSOffsetS:=NulVertex3S;
+    LCS.CurrentCamCSOffsetS:=NulVertex3S;}
   end;
   oglsm.myglMultMatrixD(Transform)
 end;
-procedure TZGLOpenGLDrawer.pushMatrixAndSetTransform(Transform:DMatrix4F;ResetLCS:Boolean=False);
+procedure TZGLOpenGLDrawer.pushMatrixAndSetTransform(Transform:DMatrix4F;FromOneMatrix:Boolean=False);
 begin
   oglsm.myglPushMatrix;
-  if ResetLCS and (not LCS.notuseLCS) then begin
+  if FromOneMatrix and (not LCS.notuseLCS) then begin
     oglsm.myglLoadMatrixd(@mm);
-    LCS.notuseLCS:=true;
+    {LCS.notuseLCS:=true;
     LCS.CurrentCamCSOffset:=NulVertex;
-    LCS.CurrentCamCSOffsetS:=NulVertex3S;
+    LCS.CurrentCamCSOffsetS:=NulVertex3S;}
   end;
   oglsm.myglMultMatrixF(Transform);
 end;
 procedure TZGLOpenGLDrawer.popMatrix;
 begin
-  LCS:=LCSSave;
+  //LCS:=LCSSave;
   oglsm.myglPopMatrix;
 end;
 procedure TZGLOpenGLDrawer.DisableLCS(var matrixs:tmatrixs);
@@ -159,8 +159,8 @@ end;
 procedure TZGLOpenGLDrawer.DrawLine(const PVertexBuffer:PZGLVertex3Sarray;const i1,i2:TLLVertexIndex);
 begin
     oglsm.myglbegin(GL_LINES);
-    oglsm.myglVertex(PVertexBuffer.getDataMutable(i1)^);
-    oglsm.myglVertex(PVertexBuffer.getDataMutable(i2)^);
+    oglsm.myglVertex3DV(PVertexBuffer.getDataMutable(i1));
+    oglsm.myglVertex3DV(PVertexBuffer.getDataMutable(i2));
     oglsm.myglend;
 end;
 procedure TZGLOpenGLDrawer.DrawTriangle(const PVertexBuffer:PZGLVertex3Sarray;const i1,i2,i3:TLLVertexIndex);

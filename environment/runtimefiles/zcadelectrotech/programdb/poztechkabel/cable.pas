@@ -70,13 +70,32 @@ type
     TPOZTECHCABEL_VVG_ng_FRLSLTX=packed object(CableDeviceBaseObject)
                         Wire_Count_Section_DESC:TPOZTECHCABEL_VVG_ng_FRLSLTX_WCS;
            end;
+    TPOZTECHCABEL_PKT_LAN_UUTP_5E_PVC_ZH_ngAHF=packed object(CableDeviceBaseObject)
+           end;
 
 var
    _EQ_POZTECHCABEL_KPS_ng_FRLSLTX:TPOZTECHCABEL_KPS_ng_FRLSLTX;
    _EQ_POZTECHCABEL_KPS_ng_FRHF:TPOZTECHCABEL_KPS_ng_FRHF;
    _EQ_POZTECHCABEL_VVG_ng_FRLSLTX:TPOZTECHCABEL_VVG_ng_FRLSLTX;
+   _EQ_POZTECHCABEL_PKT_LAN_UUTP_5E_PVC_ZH_ngAHF:TPOZTECHCABEL_PKT_LAN_UUTP_5E_PVC_ZH_ngAHF;
 implementation
 begin
+     _EQ_POZTECHCABEL_PKT_LAN_UUTP_5E_PVC_ZH_ngAHF.initnul;
+     _EQ_POZTECHCABEL_PKT_LAN_UUTP_5E_PVC_ZH_ngAHF.Category:=_kables;
+     _EQ_POZTECHCABEL_PKT_LAN_UUTP_5E_PVC_ZH_ngAHF.Group:=_cables_sv;
+     _EQ_POZTECHCABEL_PKT_LAN_UUTP_5E_PVC_ZH_ngAHF.EdIzm:=_m;
+     _EQ_POZTECHCABEL_PKT_LAN_UUTP_5E_PVC_ZH_ngAHF.ID:='POZTECHCABEL_PKT_LAN_UUTP_5E_PVC_ZH_ngAHF';
+     _EQ_POZTECHCABEL_PKT_LAN_UUTP_5E_PVC_ZH_ngAHF.Standard:='ТУ 3574-001-7030415-2013';
+     _EQ_POZTECHCABEL_PKT_LAN_UUTP_5E_PVC_ZH_ngAHF.OKP:='';
+     _EQ_POZTECHCABEL_PKT_LAN_UUTP_5E_PVC_ZH_ngAHF.Manufacturer:='ООО "ПожТехКабель" г.Саратов';
+     _EQ_POZTECHCABEL_PKT_LAN_UUTP_5E_PVC_ZH_ngAHF.Description:='Предназначены для передачи цифрового сигнала в структурированных кабельных сетях и сетях широкополосного доступа(ШПД)';
+     _EQ_POZTECHCABEL_PKT_LAN_UUTP_5E_PVC_ZH_ngAHF.NameShortTemplate:='PTK-LAN U/UTP cat. 5Е PVC ZH нг(А)-HF 4x2x0.51';
+     _EQ_POZTECHCABEL_PKT_LAN_UUTP_5E_PVC_ZH_ngAHF.NameTemplate:='Кабель сигнальный огнестойкий PTK-LAN U/UTP cat. 5Е PVC ZH нг(А)-HF 4x2x0.51';
+     _EQ_POZTECHCABEL_PKT_LAN_UUTP_5E_PVC_ZH_ngAHF.UIDTemplate:='%%[ID]';
+     _EQ_POZTECHCABEL_PKT_LAN_UUTP_5E_PVC_ZH_ngAHF.NameFullTemplate:='Кабель для СКС безгалогенный PTK-LAN U/UTP cat. 5Е PVC ZH нг(А)-HF 4x2x0.51';
+     _EQ_POZTECHCABEL_PKT_LAN_UUTP_5E_PVC_ZH_ngAHF.TreeCoord:='BP_ПожТехКабель_Сигнальный_PTK-LAN U/UTP cat. 5Е PVC ZH нг(А)-HF|BC_Кабельная продукция_Связи_PTK-LAN U/UTP cat. 5Е PVC ZH нг(А)-HF(ПожТехКабель)';
+     _EQ_POZTECHCABEL_PKT_LAN_UUTP_5E_PVC_ZH_ngAHF.format;
+
      _EQ_POZTECHCABEL_KPS_ng_FRLSLTX.initnul;
      _EQ_POZTECHCABEL_KPS_ng_FRLSLTX.Category:=_kables;
      _EQ_POZTECHCABEL_KPS_ng_FRLSLTX.Group:=_cables_sv;

@@ -368,10 +368,11 @@ var
   p:pGDBObjEntity;
   q:TInBoundingVolume;
   ir:itrec;
-  emptycount,objcount:integer;
+  emptycount,notappl,objcount:integer;
 begin
   emptycount:=0;
   objcount:=0;
+  notappl:=0;
   result:={IREmpty}IRNotAplicable;
   q:=IRNotAplicable;
   p:=beginiterate(ir);
@@ -388,6 +389,10 @@ begin
                             begin
                                  inc(emptycount);
                             end;
+    if q=IRNotAplicable then
+                            begin
+                                 inc(notappl);
+                            end;
      if q=IRPartially then
                                   begin
                                        result:=IRPartially;
@@ -401,11 +406,23 @@ begin
         end;
         p:=iterate(ir);
   until p=nil;
-  if (q<>IRNotAplicable) then begin
+  if objcount=0 then
+    exit(IRNotAplicable);
+  if (result<>IRNotAplicable) then begin
      if (emptycount=0)and(objcount>0) then
                        result:=IRFully
                      else
                        result:=IREmpty;
+  end else if emptycount>0 then begin
+    if emptycount+notappl=objcount then
+      result:=IREmpty
+    else
+      result:=IRPartially;
+  end else begin
+       if notappl=objcount then
+         result:=IREmpty
+       else
+         result:=IRFully;
   end;
   end;
 end;

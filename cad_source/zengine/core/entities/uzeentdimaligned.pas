@@ -400,15 +400,15 @@ begin
           l:=GetTFromDirNormalizedPoint(DimData.P10InWCS,DimData.P13InWCS,vectorN);
           tv:=VertexDmorph(DimData.P13InWCS,self.vectorN,l);
           DrawExtensionLine(DimData.P13InWCS,tv,0,drawing,dc,2);
-
           //CalcTextAngle;
+          DimData.MidPoint:=(tv+DimData.P10InWCS)/2;
           CalcTextParam(tv,DimData.P10InWCS);
           if not self.DimData.TextMoved then
                                             CalcDefaultPlaceText(tv,DimData.P10InWCS,drawing);
 
           DrawDimensionText(DimData.P11InOCS,drawing,dc);
 
-          DrawDimensionLine(tv,DimData.P10InWCS,false,false,true,drawing,dc);
+          DrawDimensionLine(tv,DimData.P10InWCS,false,false,true and DimData.NeedTextLeader,drawing,dc);
    inherited;
    if assigned(EntExtensions)then
      EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);

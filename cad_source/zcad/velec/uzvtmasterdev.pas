@@ -55,17 +55,40 @@ type
 
 TVectorOfInteger=specialize TVector<integer>;
 
+PTDevConnectMethod=^TDevConnectMethod;
+ TDevConnectMethod=(
+              TDT_CableConnectParallel(*'Параллельно'*),
+              TDT_CableConnectSeries(*'Последовательно'*)
+             );
+
 //** Создания класса головного устройства
 TMasterDevice=class
    type
       //**Создания групп у головного устройства
       TGroupInfo=class
          type
+          PTdevConnectInfo=^TdevConnectInfo;
+          TdevConnectInfo=record
+              HeadDeviceName:string;             //Имя головного устройства. Прокладка кабеля
+              ControlUnitName:string;      //Имя контрольного узла. Прокладка кабеля
+              NGHeadDevice:string;             //Имя группы подключения. Прокладка кабеля
+              SLTypeagen:string;               //Имя суперлинии по которой ведется прокладка. Прокладка кабеля
+              NGControlUnit:string;            //Номер группы у узла управлени
+              DevConnectMethod:TDevConnectMethod;         //Метод монтажа данной группы
+              CabConnectAddLength:double;      //Добавочное количество кабеля к данному подключению
+              CabConnectMountingMethod:string; //Метод прокладки кабеля для подключения устройства
+              numConnect:integer;               //номер подключения
+          end;
           PTInfoSubDev=^TInfoSubDev;
           TInfoSubDev=record
               indexMaster:integer;         //номер головного устройства
               indexSub:integer;            //номер подключаемого устройства
               isVertexAdded:boolean;       //Добавлена ли эта вершина в граф
+              devConnectInfo:TdevConnectInfo;
+              //headName:string;             //Имя головного устройства. Прокладка кабеля
+              //controlUnitName:string;      //Имя контрольного узла. Прокладка кабеля
+              //GroupNum:string;             //Имя группы подключения. Прокладка кабеля
+              //typeSLine:string;            //Имя суперлинии по которой ведется прокладка. Прокладка кабеля
           end;
           TVectorOfSubDev=specialize TVector<TInfoSubDev>;
           //**Дерево устройств

@@ -2,6 +2,7 @@ unit objgroup;
 interface
 uses system;
 usescopy slcabagenmodul;
+usescopy deverrors;
 var
    GC_HeadDevice:String;(*'Головное устройство'*)
    GC_HeadDeviceTemplate:String;(*'Шаблон головного устройства'*)
@@ -10,6 +11,7 @@ var
    GC_HDGroup:String;(*'Группа в головном устройстве'*)
    GC_HDGroupTemplate:String;(*'Шаблон группы'*)
    GC_velecSubGroupControlUnit:String;(*'Контрольный узел автопрокладки. ~, - и ! спецсимволы '*)
+   GC_velecNumConnectDevice:Integer;(*'Номер подключения внутри девайса'*)
 
    SerialConnection:Integer;
    GC_NumberInGroup:Integer;(*'Номер устройства в группе'*)
@@ -23,5 +25,6 @@ begin
    GC_HDShortName:='??';
    GC_Metric:='';
    GC_velecSubGroupControlUnit:='-';
+   GC_velecNumConnectDevice:=0;
    GC_HDGroup:='0';
 end.

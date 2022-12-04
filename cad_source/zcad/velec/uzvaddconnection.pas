@@ -82,7 +82,7 @@ begin
                 else
                   repeat
                     inc(numConnect);
-                    pvd:=Varext.entityunit.FindVariable(velec_VarNameForAddConnectBefore+IntToStr(numConnect)+'_'+velec_VarNameForAddConnectAfter);
+                    pvd:=Varext.entityunit.FindVariable(velec_VarNameForConnectBefore+IntToStr(numConnect)+'_'+velec_VarNameForConnectAfter_SLTypeagen);
                   until pvd=nil;
                   //ZCMsgCallBackInterface.TextMessage('numConnect = ' + inttostr(numConnect),TMWOHistoryOut);
                   //Добавляем подключение
@@ -91,7 +91,7 @@ begin
                     repeat
                       varName:=pvdadd^.name; //имя переменной
                       //ZCMsgCallBackInterface.TextMessage('1 = ' + varName,TMWOHistoryOut);
-                      varName:=StringReplace(varName,velec_VarNameForAddConnectBefore+'1',velec_VarNameForAddConnectBefore+inttostr(numConnect),[rfReplaceAll, rfIgnoreCase]);
+                      varName:=StringReplace(varName,velec_VarNameForConnectBefore+'1',velec_VarNameForConnectBefore+inttostr(numConnect),[rfReplaceAll, rfIgnoreCase]);
                       //ZCMsgCallBackInterface.TextMessage('3 = ' + varName,TMWOHistoryOut);
                       vd:=Varext.entityunit.CreateVariable(varName,pvdadd^.data.PTD.TypeName);//в vd вернется копия созданного описателя переменной
                       //pstring(vd.data.Addr.GetInstance)^:='тест';//можно работать с ним, помня что он всеголишь копия
@@ -101,7 +101,7 @@ begin
 
                       pvdadd^.data.PTD.CopyInstanceTo(pvdadd^.data.Addr.Instance,pvd.data.Addr.Instance);//копируем значение из старой переменной в новую
 
-                      RegisterVarCategory(velec_VarNameForAddConnectBefore+inttostr(numConnect),velec_VarNameForAddConnectBeforeName+inttostr(numConnect),@InterfaceTranslate);
+                      RegisterVarCategory(velec_VarNameForConnectBefore+inttostr(numConnect),velec_VarNameForConnectBeforeName+inttostr(numConnect),@InterfaceTranslate);
 
                       ////работаем с очередной переменной
                       //test:=pvdadd^.name; //имя переменной

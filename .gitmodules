@@ -1,3 +1,6 @@
 [submodule "cad_source/components/fpdwg"]
 	path = cad_source/components/fpdwg
 	url = https://github.com/zamtmn/fpdwg.git
+[submodule "agraph"]
+	path = cad_source/other/agraphlaz
+	url = https://github.com/zamtmn/agraphlaz.git

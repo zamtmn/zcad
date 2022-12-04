@@ -574,7 +574,8 @@ begin
      //** Получаем список кабельных групп в виде списка деревьев
     listGraph:=TListGraph.Create;
     listGraph:=getListGroupGraph();
-
+    for i:=0 to listGraph.Size-1 do
+        ZCMsgCallBackInterface.TextMessage('количество вершин' + inttostr(listGraph[i].VertexCount) + 'количество ребер' + inttostr(listGraph[i].edgeCount),TMWOHistoryOut);
          //визуализация графа
 //     gg:=uzegeometry.CreateVertex(0,0,0);
 
@@ -875,7 +876,7 @@ var
         pobj,pcobj:PGDBObjEntity;
   begin
 
-      //ZCMsgCallBackInterface.TextMessage('DEVICE-' + dev^.Name,TMWOHistoryOut);
+      ZCMsgCallBackInterface.TextMessage('addBlockonDraw DEVICE-' + dev^.Name,TMWOHistoryOut);
 
       dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
 
@@ -1030,7 +1031,7 @@ var
         //pCentralVarext,pVarext:TVariablesExtender;
   begin
       //addBlockonDraw(velec_beforeNameGlobalSchemaBlock + string(TVertexTree(G.Root.AsPointer[vpTVertexTree]^).dev^.Name),pt1,drawings.GetCurrentDWG^.mainObjRoot);
-
+     ZCMsgCallBackInterface.TextMessage('addBlockNodeonDraw -',TMWOHistoryOut);
      datname:= velec_SchemaBlockJunctionBox;
 
      drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,datname);
@@ -1073,11 +1074,12 @@ var
       end;
 
       //рисуем прямоугольник с цветом  зная номера вершин, координат возьмем из графа по номерам
-      procedure drawConnectLineDev(pSt,p1,p2,pEd:GDBVertex;cabl:PGDBObjCable; var root:GDBObjRoot);
+      procedure drawConnectLineDev(pSt,p1,p2,pEd:GDBVertex;cabl:TEdgeTree; var root:GDBObjRoot);
       var
           cableLine:PGDBObjCable;
           //pnevdev:PGDBObjCable;
           entvarext,delvarext:TVariablesExtender;
+          psu:ptunit;
           //DC:TDrawContext;
           //PBH:PGDBObjBlockdef;
           //pobj,pcobj:PGDBObjEntity;
@@ -1096,27 +1098,65 @@ var
 
            zcAddEntToCurrentDrawingWithUndo(cableLine);
 
-          entvarext:=cabl^.specialize GetExtension<TVariablesExtender>;
-          //добавляем клону расширение с переменными
-          cableLine^.AddExtension(TVariablesExtender.Create(cableLine));
-          delvarext:=cableLine^.specialize GetExtension<TVariablesExtender>;
-          //добавляем устройству клона как представителя
-          entvarext.addDelegate(cableLine,delvarext);
-          //ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
+             if cabl.isRiser = true then
+                ZCMsgCallBackInterface.TextMessage('это разрыв',TMWOHistoryOut)
+             else
+                ZCMsgCallBackInterface.TextMessage('это не разрыв',TMWOHistoryOut);
 
-           //вставляем информационный блок
-           datname:= velec_SchemaCableInfo;
-           drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,datname);
-           pointer(pv):=old_ENTF_CreateBlockInsert(drawings.GetCurrentROOT,@{drawings.GetCurrentROOT}root.ObjArray,
+          ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
+          if cabl.isRiser = true then
+          begin
+            cableLine^.AddExtension(TVariablesExtender.Create(cableLine));
+            entvarext:=cableLine^.specialize GetExtension<TVariablesExtender>;
+            //**добавление кабельных свойств
+            //pvarext:=cableLine^.specialize GetExtension<TVariablesExtender>; //подклчаемся к инспектору
+            if entvarext<>nil then
+            begin
+              psu:=units.findunit(SupportPath,@InterfaceTranslate,'cable'); //
+              if psu<>nil then
+                entvarext.entityunit.copyfrom(psu);
+            end;
+            //zcSetEntPropFromCurrentDrawingProp(cableLine);
+          end
+          else
+          begin
+            entvarext:=cabl.segm^.specialize GetExtension<TVariablesExtender>;
+            //добавляем клону расширение с переменными
+            cableLine^.AddExtension(TVariablesExtender.Create(cableLine));
+            delvarext:=cableLine^.specialize GetExtension<TVariablesExtender>;
+            //добавляем устройству клона как представителя
+            entvarext.addDelegate(cableLine,delvarext);
+            //вставляем информационный блок
+            //datname:= velec_SchemaCableInfo;
+            //drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,datname);
+            //pointer(pv):=old_ENTF_CreateBlockInsert(drawings.GetCurrentROOT,@{drawings.GetCurrentROOT}root.ObjArray,
+            //                                   drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
+            //                                   p2, 1, 0,@datname[1]);
+            ////dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+            //zcSetEntPropFromCurrentDrawingProp(pv);
+            //pv^.AddExtension(TVariablesExtender.Create(pv));
+            //delvarext:=pv^.specialize GetExtension<TVariablesExtender>;
+            ////добавляем устройству клона как представителя
+            //entvarext.addDelegate(pv,delvarext);
+            ////ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
+          end;
+
+            //вставляем информационный блок
+            datname:= velec_SchemaCableInfo;
+            drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,datname);
+            pointer(pv):=old_ENTF_CreateBlockInsert(drawings.GetCurrentROOT,@{drawings.GetCurrentROOT}root.ObjArray,
                                                drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
                                                p2, 1, 0,@datname[1]);
-           //dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-           zcSetEntPropFromCurrentDrawingProp(pv);
-           pv^.AddExtension(TVariablesExtender.Create(pv));
-           delvarext:=pv^.specialize GetExtension<TVariablesExtender>;
-           //добавляем устройству клона как представителя
-           entvarext.addDelegate(pv,delvarext);
-           //ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
+            //dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+            zcSetEntPropFromCurrentDrawingProp(pv);
+            pv^.AddExtension(TVariablesExtender.Create(pv));
+            delvarext:=pv^.specialize GetExtension<TVariablesExtender>;
+            //добавляем устройству клона как представителя
+            entvarext.addDelegate(pv,delvarext);
+
+          ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
+
+
 
 
       end;
@@ -1201,11 +1241,16 @@ begin
            ZCMsgCallBackInterface.TextMessage('VertexPath i -'+ string(TVertexTree(listVertex.Back.vertex.AsPointer[vpTVertexTree]^).dev^.Name),TMWOHistoryOut);
          //ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
         //*********
-        if TVertexTree(listVertex.Back.vertex.AsPointer[vpTVertexTree]^).dev<>nil then
+        if TVertexTree(listVertex.Back.vertex.AsPointer[vpTVertexTree]^).dev<>nil then  begin
+           ZCMsgCallBackInterface.TextMessage('-dev true-',TMWOHistoryOut);
            addBlockonDraw(TVertexTree(listVertex.Back.vertex.AsPointer[vpTVertexTree]^).dev,ptEd,drawings.GetCurrentDWG^.mainObjRoot)
+        end
         else
+        begin
+           ZCMsgCallBackInterface.TextMessage('-dev false-',TMWOHistoryOut);
            addBlockNodeonDraw(ptEd,drawings.GetCurrentDWG^.mainObjRoot);
-         //ZCMsgCallBackInterface.TextMessage('4',TMWOHistoryOut);
+        end;
+         ZCMsgCallBackInterface.TextMessage('4',TMWOHistoryOut);
         //drawVertex(pt1,3,height);
         //*********
 
@@ -1262,8 +1307,9 @@ begin
         //pt2:=uzegeometry.CreateVertex(startPt.x + listVertex[tparent].poz.x*indent,startPt.y - listVertex[tparent].poz.y*indent,0) ;
 
         //******
-        drawConnectLineDev(ptSt,pt1,pt2,ptEd,TEdgeTree(G.GetEdge(listVertex[tparent].vertex,listVertex.Back.vertex).AsPointer[vpTEdgeTree]^).segm,drawings.GetCurrentDWG^.mainObjRoot);
-
+        ZCMsgCallBackInterface.TextMessage('5',TMWOHistoryOut);
+        drawConnectLineDev(ptSt,pt1,pt2,ptEd,TEdgeTree(G.GetEdge(listVertex[tparent].vertex,listVertex.Back.vertex).AsPointer[vpTEdgeTree]^),drawings.GetCurrentDWG^.mainObjRoot);
+        ZCMsgCallBackInterface.TextMessage('6',TMWOHistoryOut);
         //ptSt:=ptEd;
 
         //drawConnectLine(pt1,pt2,4);
@@ -1957,6 +2003,7 @@ begin
                         new(edgeGraph);
                         edgeGraph^.segm:=segmCable;
                         edgeGraph^.isSegm:=true;
+                        edgeGraph^.isRiser:=false;
 
 
                         //смотрим характеристики сегмента

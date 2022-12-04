@@ -82,7 +82,7 @@ procedure TPoTranslator.TranslateStringProperty(Sender: TObject;const Instance: 
 var
   s: String;
 begin
-  if not Assigned(RunTimePO) then exit;
+  if not Assigned(CompileTimePO) then exit;
   if not Assigned(PropInfo) then exit;
 {Нужно ли нам это?}
   if Instance is TComponent then

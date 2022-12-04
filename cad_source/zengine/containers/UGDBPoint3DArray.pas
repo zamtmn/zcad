@@ -148,6 +148,8 @@ var i,{counter,}emptycount:Integer;
     subresult:TInBoundingVolume;
 begin
    //result:=IREmpty;
+  if count=0 then
+    exit(IRNotAplicable);
    emptycount:=0;
    ptpv0:=GetParrayAsPointer;
    ptpv1:=ptpv0;

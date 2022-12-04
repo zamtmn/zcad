@@ -28,11 +28,12 @@ DMatrix4DStackArray=array[0..10] of DMatrix4D;
 
 TZGLGeneral2DDrawer=class(TZGLGeneralDrawer)
                           matr:DMatrix4D;
-                          matrwoLCS,matrwithLCS:DMatrix4D;
-                          ProjMatrwoLCS,ProjMatrwithLCS:DMatrix4D;
+                          {matrwoLCS,}matrwithLCS:DMatrix4D;
+                          mm,pm:DMatrix4D;
+                          {ProjMatrwoLCS,}ProjMatrwithLCS:DMatrix4D;
                           mstack:DMatrix4DStackArray;
                           mstackindex:integer;
-                          sx,sy,tx,ty:single;
+                          sx,sy,tx,ty:Double;
                           wa:TAbstractViewArea;
                           canvas:tcanvas;
                           panel:TCustomControl;
@@ -61,8 +62,8 @@ TZGLGeneral2DDrawer=class(TZGLGeneralDrawer)
                           procedure TranslateCoord2D(const tx,ty:single);override;
                           procedure ScaleCoord2D(const sx,sy:single);override;
 
-                          procedure pushMatrixAndSetTransform(Transform:DMatrix4D;ResetLCS:Boolean=False);overload;override;
-                          procedure pushMatrixAndSetTransform(Transform:DMatrix4F;ResetLCS:Boolean=False);overload;override;
+                          procedure pushMatrixAndSetTransform(Transform:DMatrix4D;FromOneMatrix:Boolean=False);overload;override;
+                          procedure pushMatrixAndSetTransform(Transform:DMatrix4F;FromOneMatrix:Boolean=False);overload;override;
                           procedure DisableLCS(var matrixs:tmatrixs);overload;override;
                           procedure EnableLCS(var matrixs:tmatrixs);overload;override;
 
@@ -107,9 +108,9 @@ implementation
 //uses log;
 procedure TZGLGeneral2DDrawer.SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);
 begin
-  matrwoLCS:=cam.modelMatrix;
+  //matrwoLCS:=cam.modelMatrix;
   matrwithLCS:=cam.modelMatrixLCS;
-  ProjMatrwoLCS:=cam.projMatrix;
+  //ProjMatrwoLCS:=cam.projMatrix;
   ProjMatrwithLCS:=cam.projMatrixLCS;
 end;
 
@@ -590,53 +591,43 @@ begin
      mstackindex:=-1;
 end;
 
-procedure TZGLGeneral2DDrawer.pushMatrixAndSetTransform(Transform:DMatrix4D;ResetLCS:Boolean=False);
+procedure TZGLGeneral2DDrawer.pushMatrixAndSetTransform(Transform:DMatrix4D;FromOneMatrix:Boolean=False);
 begin
-     inc(mstackindex);
-     mstack[mstackindex]:=matr;
-     if ResetLCS and (not LCS.notuseLCS) then begin
-       matr:=matrwoLCS;
-       LCS.notuseLCS:=true;
-       LCS.CurrentCamCSOffset:=NulVertex;
-       LCS.CurrentCamCSOffsetS:=NulVertex3S;
-     end;
-     matr:=MatrixMultiply(matr,Transform);
+  inc(mstackindex);
+  mstack[mstackindex]:=matr;
+  if FromOneMatrix then
+    matr:=OneMatrix;
+  matr:=MatrixMultiply(matr,Transform);
 end;
-procedure TZGLGeneral2DDrawer.pushMatrixAndSetTransform(Transform:DMatrix4F;ResetLCS:Boolean=False);
+procedure TZGLGeneral2DDrawer.pushMatrixAndSetTransform(Transform:DMatrix4F;FromOneMatrix:Boolean=False);
 begin
-     inc(mstackindex);
-     mstack[mstackindex]:=matr;
-     if ResetLCS and (not LCS.notuseLCS) then begin
-       matr:=matrwoLCS;
-       LCS.notuseLCS:=true;
-       LCS.CurrentCamCSOffset:=NulVertex;
-       LCS.CurrentCamCSOffsetS:=NulVertex3S;
-     end;
-     matr:=MatrixMultiply(matr,Transform);
+  inc(mstackindex);
+  mstack[mstackindex]:=matr;
+  if FromOneMatrix then
+    matr:=OneMatrix;
+  matr:=MatrixMultiply(matr,Transform);
 end;
 procedure TZGLGeneral2DDrawer.popMatrix;
 begin
-     if mstackindex>-1 then
-                           begin
-                                 matr:=mstack[mstackindex];
-                                 dec(mstackindex);
-                           end;
-     LCS:=LCSSave;
+  if mstackindex>-1 then begin
+    matr:=mstack[mstackindex];
+    dec(mstackindex);
+  end;
+  LCS:=LCSSave;
 end;
 procedure TZGLGeneral2DDrawer.DisableLCS(var matrixs:tmatrixs);
 var
   m:DMatrix4D;
 begin
-  m:=uzegeometry.MatrixMultiply(matrwithLCS,ProjMatrwithLCS);
+  {m:=uzegeometry.MatrixMultiply(matrwoLCS,ProjMatrwoLCS);
   sx:=(m[0].v[0]/m[3].v[3]*0.5)*matrixs.pviewport.v[2] ;
   sy:=-(m[1].v[1]/m[3].v[3]*0.5)*matrixs.pviewport.v[3] ;
   tx:=(m[3].v[0]/m[3].v[3]*0.5+0.5)*matrixs.pviewport.v[2];
-
-  ty:=matrixs.pviewport.v[3]-(m[3].v[1]/m[3].v[3]*0.5+0.5)*matrixs.pviewport.v[3];
-
-  matrixs.pmodelMatrix^:=matrwithLCS;
-  matrixs.pprojMatrix^:=ProjMatrwithLCS;
-
+  ty:=matrixs.pviewport.v[3]-(m[3].v[1]/m[3].v[3]*0.5+0.5)*matrixs.pviewport.v[3];}
+  mm:=matrixs.pmodelMatrix^;
+  pm:=matrixs.pprojMatrix^;
+  matrixs.pmodelMatrix^:=matrWithLCS;
+  matrixs.pprojMatrix^:=ProjMatrWithLCS;
   LCS.notuseLCS:=true;
   LCS.CurrentCamCSOffset:=NulVertex;
   LCS.CurrentCamCSOffsetS:=NulVertex3S;
@@ -645,15 +636,15 @@ procedure TZGLGeneral2DDrawer.EnableLCS(var matrixs:tmatrixs);
 var
   m:DMatrix4D;
 begin
-  m:=uzegeometry.MatrixMultiply(matrwoLCS,ProjMatrwoLCS);
+  (*m:=uzegeometry.MatrixMultiply({matrWithLCS,ProjMatrWithLCS}matrixs.pmodelMatrix^,matrixs.pprojMatrix^);
   sx:=(m[0].v[0]/m[3].v[3]*0.5)*matrixs.pviewport.v[2] ;
   sy:=-(m[1].v[1]/m[3].v[3]*0.5)*matrixs.pviewport.v[3] ;
   tx:=(m[3].v[0]/m[3].v[3]*0.5+0.5)*matrixs.pviewport.v[2];
-  ty:=matrixs.pviewport.v[3]-(m[3].v[1]/m[3].v[3]*0.5+0.5)*matrixs.pviewport.v[3];
-
-  matrixs.pmodelMatrix^:=matrwoLCS;
-  matrixs.pprojMatrix^:=ProjMatrwoLCS;
-
+  ty:=matrixs.pviewport.v[3]-(m[3].v[1]/m[3].v[3]*0.5+0.5)*matrixs.pviewport.v[3];*)
+  {matrixs.pmodelMatrix^:=matrWoLCS;
+  matrixs.pprojMatrix^:=ProjMatrWoLCS;}
+  matrixs.pmodelMatrix^:=mm;
+  matrixs.pprojMatrix^:=pm;
   LCS:=LCSSave;
 end;
 

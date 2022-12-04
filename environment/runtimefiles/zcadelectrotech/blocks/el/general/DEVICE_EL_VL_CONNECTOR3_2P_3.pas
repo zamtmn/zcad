@@ -10,7 +10,7 @@ usescopy addtocable;
 
 var
 
-VL_Power:Double;(*'Мощность, кВт'*)
+VL_Power:String;(*'Мощность, кВт'*)
 
 implementation
 

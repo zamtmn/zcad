@@ -12,6 +12,7 @@ var
 
 VL_Type:String;(*'Розетка'*)
 VL_Room:String;(*'Помещение'*)
+VL_Floor:String;(*'Этаж'*)
 VL_Group:String;(*'Группа'*)
 
 implementation
@@ -23,14 +24,16 @@ Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 
 NMO_Name:='Гр0';
-NMO_BaseName:='Гр';
-NMO_Suffix:='??';
+NMO_BaseName:='';
+NMO_Suffix:='';
 
 SerialConnection:=1;
 GC_HeadDevice:='ЩО??';
 GC_HDShortName:='??';
 GC_HDGroup:=0;
 
+VL_Type:='Р ОП/2 ip54';
 VL_Room:='.';
+VL_Floor:='.';
 
 end.

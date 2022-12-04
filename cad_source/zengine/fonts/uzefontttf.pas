@@ -135,7 +135,7 @@ procedure TessErrorCallBack(error: Cardinal;v2: Pdouble);{$IFDEF Windows}stdcall
 begin
      error:=error;
 end;
-procedure CombineCallback(coords:GDBvertex;vertex_data:TV4P;weight:TArray4F;var dataout:Pointer);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
+procedure CombineCallback(const coords:GDBvertex;const vertex_data:TV4P;const weight:TArray4F;var dataout:Pointer);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
 begin
    ptruint(dataout):=ptrdata^.GeomData.Vertex3S.AddGDBVertex(coords);
 end;

@@ -1216,14 +1216,16 @@ var
 
         if dev<>nil then
            begin
-             ZCMsgCallBackInterface.TextMessage(' dev =  ' + dev^.Name,TMWOHistoryOut);
-             ZCMsgCallBackInterface.TextMessage('спец имя кабеля = ' + mTree.GetEdge(tvertex(VPath[index-1]),tvertex(VPath[index])).AsString[vGIsSubNodeCabDev],TMWOHistoryOut);
+             //pvd:=FindVariableInEnt(dev,'NMO_Name');
+             //if pvd<>nil then
+             //ZCMsgCallBackInterface.TextMessage(' dev =  ' + dev^.Name + '////\\\\' + pString(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+             //ZCMsgCallBackInterface.TextMessage('спец имя кабеля = ' + mTree.GetEdge(tvertex(VPath[index]).Parent,tvertex(VPath[index])).AsString[vGIsSubNodeCabDev],TMWOHistoryOut);
 
              for i:=0 to listDev.Size -1 do begin
                  //pvd:=FindVariableInEnt(listVertexEdge.listVertex[listDev[i].indexSub].deviceEnt,'NMO_Name');
                  //if pvd<>nil then
                  //   ZCMsgCallBackInterface.TextMessage(' listVertexEdge.listVertex[listDev[i].indexSub].deviceEnt = ' + pString(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
-               ZCMsgCallBackInterface.TextMessage(' listDev[i].devConnectInfo.ControlUnitName = ' + listDev[i].devConnectInfo.ControlUnitName,TMWOHistoryOut);
+               //ZCMsgCallBackInterface.TextMessage(' listDev[i].devConnectInfo.ControlUnitName = ' + listDev[i].devConnectInfo.ControlUnitName,TMWOHistoryOut);
                pvd:=FindVariableInEnt(dev,'NMO_Name');
                  //if pvd<>nil then
                  //   ZCMsgCallBackInterface.TextMessage(' dev = ' + pString(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
@@ -1259,7 +1261,7 @@ var
 
                  pvd:=FindVariableInEnt(dev,'NMO_Name');
                    if pvd<>nil then
-                      ZCMsgCallBackInterface.TextMessage(' 1255: dev = ' + pString(pvd^.data.Addr.Instance)^ + '+++ numConnect ='+inttostr(numConnect) +' velecNumConnectDev=' + inttostr(mTree.GetEdge(tvertex(VPath[index-1]),tvertex(VPath[index])).AsInt32[velecNumConnectDev]),TMWOHistoryOut);
+                      ZCMsgCallBackInterface.TextMessage(' 1255: dev = ' + pString(pvd^.data.Addr.Instance)^ + '+++ numConnect ='+inttostr(numConnect) +' velecNumConnectDev=' + inttostr(mTree.GetEdge(tvertex(VPath[index]).Parent,tvertex(VPath[index])).AsInt32[velecNumConnectDev]),TMWOHistoryOut);
 
                  specNameTravelNode:=getSpecNameTravelNode(dev,numConnect);
                  //pvd:=FindVariableInEnt(dev,velec_ControlUnitName);
@@ -1283,7 +1285,7 @@ var
 
                        //определяем что мы тянем и подключаем ли мы сейчас устройство
                        //if (pString(pvd^.data.Addr.Instance)^ = mTree.GetEdge(tvertex(VPath[index-1]),tvertex(VPath[index])).AsString[vGIsSubNodeCabDev]) then
-                       if (specNameTravelNode = mTree.GetEdge(tvertex(VPath[index-1]),tvertex(VPath[index])).AsString[vGIsSubNodeCabDev]) then
+                       if (specNameTravelNode = mTree.GetEdge(tvertex(VPath[index]).parent,tvertex(VPath[index])).AsString[vGIsSubNodeCabDev]) then
                            result:=true;
 
                          //ZCMsgCallBackInterface.TextMessage('спец имя вершины = ' + pString(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
@@ -1357,14 +1359,19 @@ begin
                    //  needVertex:=false;
                    //end;
                    //ZCMsgCallBackInterface.TextMessage('номер устройства - '+ inttostr(listInteger.Size),TMWOHistoryOut);
+                   // У вершины дерева нет родителя, поэтому первый шаг цикла пропускаем
+                   if l <> 0 then
+                   begin
+                     numConnectCabDev:= integer(listMasterDevice[i].LGroup[j].AllTreeDev.GetEdge(tvertex(VPath[l]).parent,tvertex(VPath[l])).AsInt32[velecNumConnectDev]);
+                     //ZCMsgCallBackInterface.TextMessage('ребро получено= НОМЕР ПОДКЛЮЧЕНИЯ ==' + tvertex(VPath[l]).Parent.AsString[vGInfoVertex] + ' между ' +tvertex(VPath[l]).AsString[vGInfoVertex] + 'равно ' + inttostr(numConnectCabDev),TMWOHistoryOut)
+                   end;
+
                       if listInteger.Size>1 then
                         begin
                           //ZCMsgCallBackInterface.TextMessage('ребро - '+listMasterDevice[i].LGroup[j].AllTreeDev.GetEdge(tvertex(VPath[l-1]),tvertex(VPath[l])).AsString[vGInfoEdge],TMWOHistoryOut);
                           superlinedev:=PGDBObjSuperLine(listMasterDevice[i].LGroup[j].AllTreeDev.GetEdge(tvertex(VPath[l-1]),tvertex(VPath[l])).AsPointer[vGPGDBObjEdge]);
 
                                                 //ZCMsgCallBackInterface.TextMessage('ребро получено' + inttostr(numConnectCabDev),TMWOHistoryOut);
-                         numConnectCabDev:= integer(listMasterDevice[i].LGroup[j].AllTreeDev.GetEdge(tvertex(VPath[l-1]),tvertex(VPath[l])).AsInt32[velecNumConnectDev]);
-                      //ZCMsgCallBackInterface.TextMessage('ребро получено===' + inttostr(numConnectCabDev),TMWOHistoryOut);
 
                           //ZCMsgCallBackInterface.TextMessage('ребро получено',TMWOHistoryOut);
                           //if superlinedev<>nil then

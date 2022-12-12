@@ -72,12 +72,12 @@
       <ZAction Name="ACN_LTYPES" Command="LineTypes" Img="linetypes" Caption="Line types ..." Hint="Line types properties manager"/>
     </Group>
     <Group Category="Modify">
-      <ZAction Name="ACN_COPY" Command="Copy" Img="copy" Caption="Copy" Hint="Copy primitives" ShortCut="CTRL+ALT+C" SecondaryShortCuts="C"/>
-      <ZAction Name="ACN_MOVE" Command="Move" Img="move" Caption="Move" Hint="Move primitives" ShortCut="CTRL+ALT+M" SecondaryShortCuts="M"/>
+      <ZAction Name="ACN_COPY" Command="Copy" Img="copy" Caption="Copy" Hint="Copy primitives" ShortCut="CTRL+ALT+C" SecondaryShortCuts="Q"/>
+      <ZAction Name="ACN_MOVE" Command="Move" Img="move" Caption="Move" Hint="Move primitives" ShortCut="CTRL+ALT+M" SecondaryShortCuts="A"/>
       <ZAction Name="ACN_ROTATE" Command="Rotate" Img="rotate" Caption="Rotate" Hint="Rotate primitives" ShortCut="CTRL+ALT+R" SecondaryShortCuts="R"/>
       <ZAction Name="ACN_ROTATEENTS_R" Command="RotateEnts" Img="rotater" Caption="Rotate ents right" Hint="Turn ents right" ShortCut="CTRL+G" SecondaryShortCuts="G"/>
       <ZAction Name="ACN_ROTATEENTS_L" Command="RotateEnts(-)" Img="rotatel" Caption="Rotate ents left" Hint="Turn ents left" ShortCut="CTRL+K" SecondaryShortCuts="K"/>
-      <ZAction Name="ACN_SCALE" Command="Scale" Img="scale" Caption="Scale" Hint="Scale primitives" ShortCut="CTRL+ALT+S" SecondaryShortCuts="S"/>
+      <ZAction Name="ACN_SCALE" Command="Scale" Img="scale" Caption="Scale" Hint="Scale primitives"/>
       <ZAction Name="ACN_STRETCH" Command="Stretch" Img="stretch" Caption="Stretch" Hint="Stretch primitives"/>
       <ZAction Name="ACN_MIRROR" Command="Mirror" Img="mirror" Caption="Mirror" Hint="Mirror primitives"/>
       <ZAction Name="ACN_BEDIT" Command="BEdit" Img="bedit" Caption="Block editor"/>

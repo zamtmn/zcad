@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
-  <Package Version="4">
+  <Package Version="5">
     <PathDelim Value="\"/>
     <Name Value="zmacros"/>
     <Type Value="RunAndDesignTime"/>
@@ -18,16 +18,20 @@
         <UnitName Value="uzmacros"/>
       </Item1>
     </Files>
-    <RequiredPkgs Count="3">
+    <CompatibilityMode Value="True"/>
+    <RequiredPkgs Count="4">
       <Item1>
-        <PackageName Value="CodeTools"/>
+        <PackageName Value="ideconfig"/>
       </Item1>
       <Item2>
-        <PackageName Value="IDEIntf"/>
+        <PackageName Value="CodeTools"/>
       </Item2>
       <Item3>
-        <PackageName Value="FCL"/>
+        <PackageName Value="IDEIntf"/>
       </Item3>
+      <Item4>
+        <PackageName Value="FCL"/>
+      </Item4>
     </RequiredPkgs>
     <UsageOptions>
       <UnitPath Value="$(PkgOutDir)"/>

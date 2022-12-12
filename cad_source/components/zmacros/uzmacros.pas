@@ -8,6 +8,10 @@ uses
   sysutils,
   MacroIntf,TransferMacros,MacroDefIntf;//From lazarus ide
 
+  // todo: когда пакет ideconfig попадет в релиз
+  // нужно убрать $(LazarusDir)\ide\packages\ideconfig из путей и
+  // и добавить зависимость от ideconfig
+
 type
   TMacroProcessFunc=function (var s: string): boolean of object;
   TDefaultMacroMethods=class

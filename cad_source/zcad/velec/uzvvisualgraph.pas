@@ -230,7 +230,7 @@ type
           //pmtext^.vp.LineTypeScale:=1;
           pmtext^.vp.Color:=color;
           ////ptext^.vp.Layer:=uzvtestdraw.getTestLayer('systemTempVisualLayer');
-          pmtext^.textprop.size:=height*2.5;
+          pmtext^.textprop.size:=height*1;
           zcAddEntToCurrentDrawingWithUndo(pmtext);   //добавляем в чертеж
           ////result:=cmd_ok;
       end;

@@ -533,6 +533,40 @@ end;
 //
 //end;
 
+function testArrayDelegate_com(operands:TCommandOperands):TCommandResult;
+   var
+   pobj,pdelegateobj: pGDBObjEntity;   //выделеные объекты в пространстве листа
+   ir:itrec;  // применяется для обработки списка выделений, но что это понятия не имею :)
+   devExtens:TVariablesExtender;
+   pvd:pvardesk;
+   begin
+      if commandmanager.GetEntity('Выберите приметив что бы посмотреть всех его делегатов:',pobj) = true then
+      begin
+        devExtens:=pobj^.specialize GetExtension<TVariablesExtender>;
+        pdelegateobj:=devExtens.DelegatesArray.beginiterate(ir);
+        if pdelegateobj<>nil then
+          repeat
+             pvd:=FindVariableInEnt(pdelegateobj,velec_nameDevice);
+               if pvd<>nil then
+                 ZCMsgCallBackInterface.TextMessage(' ИМЯ УСТРОЙСТВА = '+pString(pvd^.data.Addr.Instance)^,TMWOHistoryOut)
+               else
+                 ZCMsgCallBackInterface.TextMessage(' ИМЯ УСТРОЙСТВА = ОТСУТСТВУЕТ',TMWOHistoryOut);
+             pdelegateobj:=devExtens.DelegatesArray.iterate(ir); //переход к следующем примитиву в списке выбраных примитивов
+          until pdelegateobj=nil;
+        end;
+
+//
+//         //+++Выбираем зону в которой будет происходить анализ кабельной продукции.Создаем два списка, список всех отрезков кабелей и список всех девайсов+++//
+//    pobj:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir); //зона уже выбрана в перспективе застовлять пользователя ее выбирать
+//    if pobj<>nil then
+//      repeat
+//        if pobj^.selected then
+//          begin
+//
+//          end;
+//      pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir); //переход к следующем примитиву в списке выбраных примитивов
+//    until pobj=nil;
+   end;
 
 function createELSchema_com(operands:TCommandOperands):TCommandResult;
 var
@@ -2166,6 +2200,7 @@ end;
 
 initialization
  CreateCommandFastObjectPlugin(@createELSchema_com,'vBuildELSchema',CADWG,0);
+ CreateCommandFastObjectPlugin(@testArrayDelegate_com,'testArrayDelegate',CADWG,0);
  //CreateCommandFastObjectPlugin(@TestModul_com,'test888',CADWG,0);
 end.
 

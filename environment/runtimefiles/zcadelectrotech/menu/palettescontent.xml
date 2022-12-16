@@ -70,16 +70,28 @@
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_LIGHT5_2)" Img='DEVICE_EL_VL_LIGHT5_2_300' Caption='Колодка клемная'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_LIGHT6_2)" Img='DEVICE_EL_VL_LIGHT6_2_300' Caption='Свободный аппарат'/>
       	</ZTreeNode>
+      	<ZTreeNode Caption='Выключатели 1:100'>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SWITH1_1P_1)" Img='DEVICE_EL_VL_SWITH1_1P_1_300' Caption='Выключатель СП31 1P'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SWITH1_2P_1)" Img='DEVICE_EL_VL_SWITH1_2P_1_300' Caption='Выключатель СП31 2P'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SWITH1_1P_3)" Img='DEVICE_EL_VL_SWITH1_1P_3_300' Caption='Выключатель СП31 проходной'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SWITH2_1P_1)" Img='DEVICE_EL_VL_SWITH2_1P_1_300' Caption='Выключатель ОП31 1P'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SWITH2_2P_1)" Img='DEVICE_EL_VL_SWITH2_2P_1_300' Caption='Выключатель ОП31 2P'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SWITH2_1P_3)" Img='DEVICE_EL_VL_SWITH2_1P_3_300' Caption='Выключатель ОП31 прохоной'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SWITH3_1P_1)" Img='DEVICE_EL_VL_SWITH3_1P_1_300' Caption='Выключатель ОП54 1P'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SWITH3_2P_1)" Img='DEVICE_EL_VL_SWITH3_2P_1_300' Caption='Выключатель ОП54 2P'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SWITH3_1P_3)" Img='DEVICE_EL_VL_SWITH3_1P_3_300' Caption='Выключатель ОП54 проходной'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_BOX1)" Img='DEVICE_EL_VL_BOX1_300' Caption='Коробка'/>
+      	</ZTreeNode>
       	<ZTreeNode Caption='Выключатели 1:200'>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SWITH1_1P_2)" Img='DEVICE_EL_VL_SWITH1_1P_2_300' Caption='Выключатель СП31 1P'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SWITH1_2P_2)" Img='DEVICE_EL_VL_SWITH1_2P_2_300' Caption='Выключатель СП31 2P'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SWITH1_1P_3)" Img='DEVICE_EL_VL_SWITH1_1P_3_300' Caption='Выключатель СП31 проходной'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SWITH1_1P_4)" Img='DEVICE_EL_VL_SWITH1_1P_4_300' Caption='Выключатель СП31 проходной'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SWITH2_1P_2)" Img='DEVICE_EL_VL_SWITH2_1P_2_300' Caption='Выключатель ОП31 1P'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SWITH2_2P_2)" Img='DEVICE_EL_VL_SWITH2_2P_2_300' Caption='Выключатель ОП31 2P'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SWITH2_1P_3)" Img='DEVICE_EL_VL_SWITH2_1P_3_300' Caption='Выключатель ОП31 прохоной'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SWITH2_1P_4)" Img='DEVICE_EL_VL_SWITH2_1P_4_300' Caption='Выключатель ОП31 прохоной'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SWITH3_1P_2)" Img='DEVICE_EL_VL_SWITH3_1P_2_300' Caption='Выключатель ОП54 1P'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SWITH3_2P_2)" Img='DEVICE_EL_VL_SWITH3_2P_2_300' Caption='Выключатель ОП54 2P'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SWITH3_1P_3)" Img='DEVICE_EL_VL_SWITH3_1P_3_300' Caption='Выключатель ОП54 проходной'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SWITH3_1P_4)" Img='DEVICE_EL_VL_SWITH3_1P_4_300' Caption='Выключатель ОП54 проходной'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_BOX1)" Img='DEVICE_EL_VL_BOX1_300' Caption='Коробка'/>
       	</ZTreeNode>
       	<ZTreeNode Caption='Розетки 1:100'>

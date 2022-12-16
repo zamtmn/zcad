@@ -1,0 +1,9 @@
+unit drawingdevicebase;
+interface
+uses System,devicebase;
+var
+  DBCounter:GDBInteger;
+implementation
+begin
+  DBCounter:=0;
+end.

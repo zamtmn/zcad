@@ -1,0 +1,9 @@
+unit drawingdevicebase;
+interface
+uses System,devicebase;
+var
+  DBCounter:Integer;
+implementation
+begin
+  DBCounter:=0;
+end.

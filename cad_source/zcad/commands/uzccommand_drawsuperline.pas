@@ -217,7 +217,7 @@ begin
 end;
 
 begin
-    ZCMsgCallBackInterface.TextMessage('operands:'+operands,TMWOHistoryOut);
+    //ZCMsgCallBackInterface.TextMessage('operands:'+operands,TMWOHistoryOut);
     //psu:=units.findunit(SupportPath,InterfaceTranslate,'superline');
 
     //пытаемся найти или загрузить модуль
@@ -226,13 +226,13 @@ begin
                        'superline');//имя модуля
 
     if operands = '1' then
-       hotkeyname:=Tria_Utf8ToAnsi(DrawSuperlineParams.SLSetting1);
+       hotkeyname:=Tria_AnsiToUtf8(DrawSuperlineParams.SLSetting1);
     if operands = '2' then
-       hotkeyname:=Tria_Utf8ToAnsi(DrawSuperlineParams.SLSetting2);
+       hotkeyname:=Tria_AnsiToUtf8(DrawSuperlineParams.SLSetting2);
     if operands = '3' then
-       hotkeyname:=Tria_Utf8ToAnsi(DrawSuperlineParams.SLSetting3);
+       hotkeyname:=Tria_AnsiToUtf8(DrawSuperlineParams.SLSetting3);
 
-     ZCMsgCallBackInterface.TextMessage('hotkeyname:'+hotkeyname,TMWOHistoryOut);
+     //ZCMsgCallBackInterface.TextMessage('hotkeyname:'+hotkeyname,TMWOHistoryOut);
     //hotkeyname:='';
     if operands <> '' then
       if psu<>nil then begin //если нашли

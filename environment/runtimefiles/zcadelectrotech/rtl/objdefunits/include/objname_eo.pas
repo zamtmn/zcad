@@ -18,6 +18,6 @@ begin
    NMO_Prefix:='';
    NMO_Suffix:='';
    NMO_BaseName:='unnamed';
-   NMO_Template:='@@[GC_HDShortName]@@[GC_HDGroup]@@[VL_Group] @@[NMO_BaseName]';
+   NMO_Template:='@@[GC_HDShortName].@@[GC_HDGroup] @@[VL_Group]';
 
 end.

@@ -4,7 +4,7 @@
 ## Overview
 ZCAD is simple CAD program, written in Lazarus / FPC.
 
-License: mLGPLv2
+License: GPL3.0/MPL2.0
 
 Features:
 * Fast OpenGL rendering

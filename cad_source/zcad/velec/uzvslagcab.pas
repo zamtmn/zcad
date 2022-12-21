@@ -36,7 +36,7 @@ uses
 
      uzcinterface,
      uzctnrvectorstrings,
-     uzegeometrytypes,
+     //uzegeometrytypes,
      uzegeometry,
 
      typinfo,
@@ -345,10 +345,10 @@ var
  //i,j,counterColor:integer;
  UndoMarcerIsPlazed:boolean;
  nameSL:string;
- listError:TListError;
- errorInfo:TErrorInfo;
+ //listError:TListError;
+ //errorInfo:TErrorInfo;
  listSLname:TGDBlistSLname;
- pConnect:GDBVertex;
+ //pConnect:GDBVertex;
  graphBuilderInfo:TListGraphBuilder;
 
  listMasterDevice:TVectorOfMasterDevice;

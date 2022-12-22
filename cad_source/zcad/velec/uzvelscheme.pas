@@ -2050,7 +2050,7 @@ begin
                         pvSegmLength:=pSegmCablevarext.entityunit.FindVariable('AmountD');
                         edgeGraph^.length:=pdouble(pvSegmLength^.data.Addr.Instance)^;
 
-                        //ZCMsgCallBackInterface.TextMessage('Сегмент № ' + inttostr(pinteger(pvSegm^.Instance)^),TMWOHistoryOut);
+                        ZCMsgCallBackInterface.TextMessage('Сегмент № ' + inttostr(pinteger(pvSegm^.data.Addr.Instance)^),TMWOHistoryOut);
 
                         //перебераем вершины сегмента
                         node:=segmCable^.NodePropArray.beginiterate(ir_inNodeArray);

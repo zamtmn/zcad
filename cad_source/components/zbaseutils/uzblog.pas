@@ -71,8 +71,9 @@ type
 
         IFmtDataComparer=specialize IEqualityComparer<TFmtData>;
         TFmtDataComparer=class(TInterfacedObject,IFmtDataComparer)
-          function Equals(constref ALeft, ARight: TFmtData): Boolean;
-          function GetHashCode(constref AValue: TFmtData): UInt32;
+          {todo: убрать $IF когда const попадет в релиз fpc}
+          function Equals({$IF FPC_FULlVERSION>=30202}const{$ELSE}constref{$ENDIF}ALeft, ARight: TFmtData): Boolean;
+          function GetHashCode({$IF FPC_FULlVERSION>=30202}const{$ELSE}constref{$ENDIF}AValue: TFmtData): UInt32;
         end;
 
         TFmtResultData=record
@@ -194,7 +195,7 @@ var
 
 implementation
 
-function TLog.TFmtDataComparer.Equals(constref ALeft, ARight: TFmtData): Boolean;
+function TLog.TFmtDataComparer.Equals({$if FPC_FULlVERSION>=30202}const{$ELSE}constref{$ENDIF}ALeft, ARight: TFmtData): Boolean;
 var
   i:integer;
 begin
@@ -213,7 +214,7 @@ begin
   Result:=True;
 end;
 
-function TLog.TFmtDataComparer.GetHashCode(constref AValue: TFmtData): UInt32;
+function TLog.TFmtDataComparer.GetHashCode({$if FPC_FULlVERSION>=30202}const{$ELSE}constref{$ENDIF}AValue: TFmtData): UInt32;
 begin
   Result := BobJenkinsHash(AValue.msgFmt[1],length(AValue.msgFmt)*SizeOf(AValue.msgFmt[1]),0);
   Result := BobJenkinsHash(AValue.argsP[0],length(AValue.argsP)*SizeOf(AValue.argsP[1]),Result);

@@ -1014,7 +1014,7 @@ begin
                         if pvd<>nil then
                         begin
                             //endmat:=pstring(pvd^.Instance)^;
-                            endmat:=pvd^.data.PTD.GetValueAsString(pvd^.data.Addr.Instance);
+                            endmat:=nodeend^.Name+pvd^.data.PTD.GetValueAsString(pvd^.data.Addr.Instance);
                             if isfirst then
                                            begin
                                                 isfirst:=false;

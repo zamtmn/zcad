@@ -67,6 +67,7 @@ uses
   varmandef,
   Varman,UBaseTypeDescriptor,uzbstrproc,
 
+  gzctnrVectorTypes,
   uzcstrconsts;       //resouce strings
 
 
@@ -76,6 +77,9 @@ TDrawSuperlineParams=record
                          pu:PTUnit;                //рантайм юнит с параметрами суперлинии
                          LayerNamePrefix:String;//префикс
                          ProcessLayer:Boolean;  //выключатель
+                         SLSetting1:String;     //сохраненная настройка суперлинии для кнопки суперлиния №1
+                         SLSetting2:String;     //сохраненная настройка суперлинии для кнопки суперлиния №2
+                         SLSetting3:String;     //сохраненная настройка суперлинии для кнопки суперлиния №3
                      end;
 var
    DrawSuperlineParams:TDrawSuperlineParams;
@@ -167,6 +171,9 @@ var
     pvarext:TVariablesExtender;
     psu:ptunit;
     UndoMarcerIsPlazed:boolean;
+    pvd2:pvardesk;
+    ir:itrec;
+    hotkeyname:string;
 
 procedure createline;
 var
@@ -210,7 +217,35 @@ begin
 end;
 
 begin
-    psu:=units.findunit(SupportPath,InterfaceTranslate,'superline');
+    //ZCMsgCallBackInterface.TextMessage('operands:'+operands,TMWOHistoryOut);
+    //psu:=units.findunit(SupportPath,InterfaceTranslate,'superline');
+
+    //пытаемся найти или загрузить модуль
+    psu:=units.findunit(SupportPath,//пути по которым будет искаться юнит если он еще небыл загружен
+                       InterfaceTranslate,//процедура локализации которая будет пытаться перевести на русский все что можно при загрузке
+                       'superline');//имя модуля
+
+    if operands = '1' then
+       hotkeyname:=Tria_AnsiToUtf8(DrawSuperlineParams.SLSetting1);
+    if operands = '2' then
+       hotkeyname:=Tria_AnsiToUtf8(DrawSuperlineParams.SLSetting2);
+    if operands = '3' then
+       hotkeyname:=Tria_AnsiToUtf8(DrawSuperlineParams.SLSetting3);
+
+     //ZCMsgCallBackInterface.TextMessage('hotkeyname:'+hotkeyname,TMWOHistoryOut);
+    //hotkeyname:='';
+    if operands <> '' then
+      if psu<>nil then begin //если нашли
+        pvd2:=psu^.InterfaceVariables.vardescarray.beginiterate(ir); //пробуем перебрать все определения переменных в интерфейсной части
+        if pvd2<>nil then //переменные есть
+          repeat
+            if pvd2^.name = 'NMO_Name' then
+              pvd2^.data.PTD.SetValueFromString(pvd2^.data.Addr.GetInstance,hotkeyname);
+            pvd2:=psu^.InterfaceVariables.vardescarray.iterate(ir); //следующая переменная
+          until pvd2=nil;
+      end;
+
+    //psu
     DrawSuperlineParams.pu:=psu;
     zcShowCommandParams(pointer(SysUnit^.TypeName2PTD('TDrawSuperlineParams')),@DrawSuperlineParams);
     UndoMarcerIsPlazed:=false;
@@ -229,8 +264,11 @@ begin
 end;
 initialization
      SysUnit.RegisterType(TypeInfo(TDrawSuperlineParams));//регистрируем тип данных в зкадном RTTI
-     SysUnit.SetTypeDesk(TypeInfo(TDrawSuperlineParams),['SuperLineUnit','Layer name prefix','Layer change']);//даем человеческие имена параметрам
+     SysUnit.SetTypeDesk(TypeInfo(TDrawSuperlineParams),['SuperLineUnit','Layer name prefix','Layer change','Set SL#1','Set SL#2','Set SL#3']);//даем человеческие имена параметрам
      DrawSuperlineParams.LayerNamePrefix:='SYS_SL_';//начальное значение префикса
      DrawSuperlineParams.ProcessLayer:=true;        //начальное значение выключателя
+     DrawSuperlineParams.SLSetting1:='???';
+     DrawSuperlineParams.SLSetting2:='???';
+     DrawSuperlineParams.SLSetting3:='???';
      CreateCommandFastObjectPlugin(@DrawSuperLine_com,   'DrawSuperLine',   CADWG,0);
 end.

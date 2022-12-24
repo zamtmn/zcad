@@ -16,34 +16,33 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzccmdinfoform;
+unit uzcSynForm;
 {$INCLUDE zengineconfig.inc}
-
 interface
+
 uses
-  uzcLog,Forms,
-  uzcSynForm,
-  uzcstrconsts;
-
-var
-  InfoFormVar:TSynForm=nil;
-
-procedure createInfoFormVar;
-
+  uzcsysparams,uzcinterface,ExtCtrls,SynEdit,
+  {$IFNDEF DELPHI}lclproc,{$ENDIF}
+  Graphics,ActnList,ComCtrls,StdCtrls,Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,fileutil,ButtonPanel,{$ENDIF}Buttons,
+  uzcinfoform,uzclog,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}sysutils,uzbstrproc,varmandef,Varman,UBaseTypeDescriptor,uzcsysinfo,uzctnrVectorBytes;
+type
+  TSynForm=class(TDialogForm)
+                         Memo: {TMemo}TSynEdit;
+                         public
+                         procedure AfterConstruction; override;
+                    end;
 implementation
-
-procedure createInfoFormVar;
+procedure TSynForm.AfterConstruction;
 begin
-  if not assigned(InfoFormVar) then
-  begin
-  InfoFormVar:=TSynForm.create(application.MainForm);
-  InfoFormVar.DialogPanel.HelpButton.Hide;
-  InfoFormVar.DialogPanel.CancelButton.Hide;
-  InfoFormVar.caption:=(rsCAUTIONnoSyntaxCheckYet);
-  end;
+     inherited;
+     self.Position:=poDesigned;
+     Memo:={TMemo}TSynEdit.create(self);
+     {$IFNDEF DELPHI}Memo.ScrollBars:=ssAutoBoth;{$ENDIF}
+     Memo.Align:=alClient;
+     Memo.Parent:=self;
 end;
-
 initialization
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.
+

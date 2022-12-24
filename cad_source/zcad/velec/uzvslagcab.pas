@@ -36,7 +36,7 @@ uses
 
      uzcinterface,
      uzctnrvectorstrings,
-     uzegeometrytypes,
+     //uzegeometrytypes,
      uzegeometry,
 
      typinfo,
@@ -89,7 +89,7 @@ begin
   //
   //commandmanager.DMAddMethod('Проложить кабели','Проложить кабели по трассам',cablingGraphDevice);
 
-  commandmanager.DMAddMethod('Проложить кабели по новому','Проложить кабели по новому по трассам',cablingNewGraphDevice);
+  commandmanager.DMAddMethod('Проложить кабели','Проложить кабели по трассам (суперлиниям)',cablingNewGraphDevice);
 
   ///***заполняем поле имени суперлинии
   uzvslagcabComParams.NamesList.Enums.Clear;
@@ -345,10 +345,10 @@ var
  //i,j,counterColor:integer;
  UndoMarcerIsPlazed:boolean;
  nameSL:string;
- listError:TListError;
- errorInfo:TErrorInfo;
+ //listError:TListError;
+ //errorInfo:TErrorInfo;
  listSLname:TGDBlistSLname;
- pConnect:GDBVertex;
+ //pConnect:GDBVertex;
  graphBuilderInfo:TListGraphBuilder;
 
  listMasterDevice:TVectorOfMasterDevice;
@@ -420,6 +420,8 @@ begin
        //Когда много суперлиний, это пропуск когда идет прокладка не той суперлинии, удобнее пропуск организвать не получилось(
        if listMasterDevice.Size-1 <> -1 then
           uzvtreedevice.cabelingMasterGroupLineNew(graphBuilderInfo.graph,listMasterDevice,uzvslagcabComParams.metricDev);
+
+       ZCMsgCallBackInterface.TextMessage('КАБЕЛИ УСПЕШНО ПРОЛОЖЕНЫ!',TMWOHistoryOut);
      end;
 
   zcPlaceUndoEndMarkerIfNeed(UndoMarcerIsPlazed);
@@ -447,7 +449,7 @@ initialization
 
   SysUnit.RegisterType(TypeInfo(PTuzvslagcabComParams));//регистрируем тип данных в зкадном RTTI
 
-  SysUnit.SetTypeDesk(TypeInfo(TsettingVizCab),['Проверять ошибки','Пронумировать устройства','Построить полное дерево','Построить простое дерево']);//Даем человечьи имена параметрам
+  SysUnit.SetTypeDesk(TypeInfo(TsettingVizCab),['Проверять ошибки','Пронумировать устройства','Режим отладки']);//Даем человечьи имена параметрам
   SysUnit.SetTypeDesk(TypeInfo(TuzvslagcabComParams),['Имя суперлинии','Погрешность','Метрика нумерации по типам датчиков','Визуализация настройки']);//Даем человечьи имена параметрам
 
   uzvslagcab_com.init('slagcab',CADWG,0);//инициализируем команду

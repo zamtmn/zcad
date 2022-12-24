@@ -56,6 +56,9 @@
       <IFONE ShortCut="X" Editable='1'/>
       <IFONE ShortCut="Y" Editable='1'/>
       <IFONE ShortCut="Z" Editable='1'/>
+      <IFONE ShortCut="1" Editable='1'/>
+      <IFONE ShortCut="2" Editable='1'/>
+      <IFONE ShortCut="3" Editable='1'/>
     </DEFAULTCONTROLINFOCUS>
     <OTHERCONTROLINFOCUS>
       <!--Эта ветка работает когда в фокусе какойто другой контрол - например tedit инспектора обьектов-->
@@ -101,6 +104,9 @@
       <IFONE ShortCut="X" Editable='1'/>
       <IFONE ShortCut="Y" Editable='1'/>
       <IFONE ShortCut="Z" Editable='1'/>
+      <IFONE ShortCut="1" Editable='1'/>
+      <IFONE ShortCut="2" Editable='1'/>
+      <IFONE ShortCut="3" Editable='1'/>
     </OTHERCONTROLINFOCUS>
   </SUPRESSEDSHORTCUTS>
 </CONFIG>

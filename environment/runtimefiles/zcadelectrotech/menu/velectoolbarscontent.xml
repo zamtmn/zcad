@@ -6,8 +6,11 @@
       <Action Name="ACN_slagcabCom"/>
       <Action Name="ACN_vBuildSSSchema"/>
       <Action Name="ACN_vBuildELSchema"/>
-	  <Action Name="ACN_uzvaddconnection"/>
+      <Action Name="ACN_uzvaddconnection"/>
       <Action Name="ACN_uzvremoveconnection"/>
+      <Action Name="ACN_SupeLineHT1"/>
+      <Action Name="ACN_SupeLineHT2"/>
+      <Action Name="ACN_SupeLineHT3"/>
     </ElectrotechVelec>
   </ToolBarsContent>
 </CONFIG>

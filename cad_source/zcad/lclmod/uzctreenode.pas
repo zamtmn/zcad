@@ -160,6 +160,7 @@ begin
     Details:=ThemeServices.GetElementDetails({$IFDEF LCLWIN32}ttbSplitButtonDropDownNormal{$ENDIF}
                                              {$IFDEF LCLQT}tsDownNormal{$ENDIF}
                                              {$IFDEF LCLQT5}tsDownNormal{$ENDIF}
+                                             {$IFDEF LCLQT6}tsDownNormal{$ENDIF}
                                              {$IFDEF LCLgtk2}ttbSplitButtonDropDownNormal{$ENDIF}
                                              {$IFDEF LCLgtk3}ttbSplitButtonDropDownNormal{$ENDIF}
                                              {$IFDEF LCLcocoa}ttbSplitButtonDropDownNormal{$ENDIF}
@@ -172,6 +173,7 @@ begin
                      end;{$ENDIF}
     {$IFDEF LCLQT}PaintRect.Top:=PaintRect.Bottom div 2;PaintRect.Left:=2*PaintRect.Right div 3;{$ENDIF}
     {$IFDEF LCLQT5}PaintRect.Top:=PaintRect.Bottom div 2;PaintRect.Left:=2*PaintRect.Right div 3;{$ENDIF}
+    {$IFDEF LCLQT6}PaintRect.Top:=PaintRect.Bottom div 2;PaintRect.Left:=2*PaintRect.Right div 3;{$ENDIF}
     {$IFDEF LCLGTK2}PaintRect.Top:=2*PaintRect.Bottom div 3;PaintRect.Left:=PaintRect.Right div 2;{$ENDIF}
     {$IFDEF LCLGTK3}PaintRect.Top:=2*PaintRect.Bottom div 3;PaintRect.Left:=PaintRect.Right div 2;{$ENDIF}
     ThemeServices.DrawElement(Canvas.Handle,Details,PaintRect)

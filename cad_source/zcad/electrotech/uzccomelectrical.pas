@@ -144,6 +144,7 @@ var
 {procedure startup;
 procedure finalize;}
 procedure Cable2CableMark(pcd:PTCableDesctiptor;pv:pGDBObjDevice);
+function RegenZEnts_com(operands:TCommandOperands):TCommandResult;
 implementation
 function GetCableMaterial(pcd:PTCableDesctiptor):String;
 var

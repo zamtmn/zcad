@@ -53,7 +53,7 @@ uses
   uzcsysvars,
 
   uzcsysparams,uzcSysInfo,uzcPathMacros,
-  uzbpaths,
+  uzbpaths,uzbCommandLineParser,uzcCommandLineParser,
 
   varman,
   //
@@ -293,6 +293,8 @@ resourcestring
 
 var
   lpsh:TLPSHandle;
+  i:integer;
+  scrfile:string;
 
 
 {$R *.res}
@@ -327,11 +329,17 @@ begin
   ZCMsgCallBackInterface.TextMessage(format(rsZCADStarted,[programname,sysvar.SYS.SYS_Version^]),TMWOHistoryOut);
 
   SplashForm.TXTOut(rsStartAutorun,false);commandmanager.executefile('*components/autorun.cmd',drawings.GetCurrentDWG,nil);
-  if sysparam.notsaved.preloadedfile<>'' then
-                                    begin
-                                         commandmanager.executecommand('Load('+sysparam.notsaved.preloadedfile+')',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
-                                         sysparam.notsaved.preloadedfile:='';
-                                    end;
+  //*components/blockpreviewexport.cmd
+  if CommandLineParser.HasOption(RunScript)then
+    for i:=0 to CommandLineParser.OptionOperandsCount(RunScript)-1 do begin
+      scrfile:=CommandLineParser.OptionOperand(RunScript,i);
+      commandmanager.executefile(scrfile,drawings.GetCurrentDWG,nil);
+    end;
+
+  if sysparam.notsaved.preloadedfile<>'' then begin
+    commandmanager.executecommand('Load('+sysparam.notsaved.preloadedfile+')',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
+    sysparam.notsaved.preloadedfile:='';
+  end;
   //убираем сплэш
   ZCMsgCallBackInterface.Do_SetNormalFocus;
   removesplash;

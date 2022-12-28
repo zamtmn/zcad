@@ -61,6 +61,7 @@ type
     RadioRes: integer;
     SelectionRes: integer;
     VerifyChecked: Boolean;
+    constructor CreateMR(mr:TZCMsgModalResult);
   end;
 
   TMessagesContext=class(TDictionary<TZCMsgId,TZCMsgDialogResult>)
@@ -69,6 +70,12 @@ type
   end;
 
 implementation
+
+constructor TZCMsgDialogResult.CreateMR(mr:TZCMsgModalResult);
+begin
+  self:=Default(TZCMsgDialogResult);
+  ModalResult:=mr;
+end;
 
 constructor TMessagesContext.Create(TN:TZCTaskStr);
 begin

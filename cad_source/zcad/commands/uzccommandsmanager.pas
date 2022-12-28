@@ -56,7 +56,7 @@ type
 
                           CommandsStack:{TZctnrVectorPointer}TZctnrPCommandObjectDef;
                           ContextCommandParams:Pointer;
-                          busy:Boolean;
+                          busy:Integer;
                           varstack:tvarstack;
                           DMenu:TDMenuWnd;
                           OnCommandRun:TOnCommandRun;
@@ -65,6 +65,7 @@ type
                           SilentCounter:Integer;
                           CommandLinePrompts:TICommandLinePromptVector;
                           CurrentPrompt:TParserCommandLinePrompt.TGeneralParsedText;
+                          function isBusy:Boolean;
                           constructor init(m:Integer);
                           procedure execute(const comm:string;silent:Boolean;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
                           procedure executecommand(const comm:string;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
@@ -552,7 +553,7 @@ var
 begin
      s:=(ExpandPath(fn));
      ZCMsgCallBackInterface.TextMessage(sysutils.format(rsRunScript,[s]),TMWOHistoryOut);
-     busy:=true;
+     inc(busy);
 
      //DisableCmdLine;
      ZCMsgCallBackInterface.Do_GUIMode({ZMsgID_GUIDisableCMDLine}ZMsgID_GUIDisable);
@@ -580,7 +581,7 @@ begin
      //EnableCmdLine;
      ZCMsgCallBackInterface.Do_GUIMode({ZMsgID_GUIEnableCMDLine}ZMsgID_GUIEnable);
      ZCMsgCallBackInterface.Do_GUIMode(ZMsgID_GUICMDLineCheck);
-     busy:=false;
+     dec(busy);
 end;
 procedure GDBcommandmanager.sendpoint2command;
 var
@@ -763,7 +764,7 @@ begin
                         begin
                         ZCMsgCallBackInterface.TextMessage(rsRunCommand+':'+pfoundcommand^.CommandName,TMWOHistoryOut);
                         lastcommand := command;
-                        if not (busy) then
+                        if not (isBusy) then
                         if assigned(OnCommandRun) then
                                                       OnCommandRun(command);
                         end;
@@ -789,14 +790,14 @@ begin
 end;
 procedure GDBcommandmanager.executecommand(const comm:string;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);
 begin
-     if not busy then
+     if not isBusy then
                      execute(comm,false,pdrawing,POGLWndParam)
                  else
                      ZCMsgCallBackInterface.TextMessage(format(rsCommandNRInC,[comm]),TMWOShowError);
 end;
 procedure GDBcommandmanager.executecommandsilent{(const comm:pansichar): Integer};
 begin
-     if not busy then
+     if not isBusy then
      execute(comm,true,pdrawing,POGLWndParam);
 end;
 procedure GDBcommandmanager.PrepairVarStack;
@@ -939,7 +940,13 @@ begin
   end;
   SilentCounter:=0;
   CommandLinePrompts:=nil;
+  busy:=0;
 end;
+function GDBcommandmanager.isBusy:Boolean;
+begin
+  result:=busy>0;
+end;
+
 procedure GDBcommandmanager.CommandRegister(pc:PCommandObjectDef);
 begin
   if count=max then exit;

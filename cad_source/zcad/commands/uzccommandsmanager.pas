@@ -65,6 +65,7 @@ type
                           SilentCounter:Integer;
                           CommandLinePrompts:TICommandLinePromptVector;
                           CurrentPrompt:TParserCommandLinePrompt.TGeneralParsedText;
+                          function GetState:TZState;
                           function isBusy:Boolean;
                           constructor init(m:Integer);
                           procedure execute(const comm:string;silent:Boolean;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
@@ -941,10 +942,18 @@ begin
   SilentCounter:=0;
   CommandLinePrompts:=nil;
   busy:=0;
+  ZCMsgCallBackInterface.RegisterGetStateFunc(GetState);
 end;
 function GDBcommandmanager.isBusy:Boolean;
 begin
   result:=busy>0;
+end;
+function GDBcommandmanager.GetState:TZState;
+begin
+  if isBusy then
+    Result:=ZState_Busy
+  else
+    Result:=ZCMsgCallBackInterface.GetEmptyZState;
 end;
 
 procedure GDBcommandmanager.CommandRegister(pc:PCommandObjectDef);

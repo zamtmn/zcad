@@ -79,7 +79,7 @@ end;
 
 procedure TLogerMBoxBackend.doLog(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);
 begin
-  if (MO_SM and MsgOptions)<>0 then begin
+  if ((MO_SM and MsgOptions)<>0)and((ZCMsgCallBackInterface.GetState and ZState_Busy)=0) then begin
        case ProgramLog.GetMutableLogLevelData(LogMode)^.LogLevelType of
          LLTWarning:ShowWarningForLog(msg);
            LLTError:ShowErrorForLog(msg);

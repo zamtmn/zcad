@@ -38,7 +38,6 @@ uses
   sysutils,
   varmandef,
   uzglviewareadata,
-  uzeffdxf,
   uzcinterface,
   uzegeometry,
 

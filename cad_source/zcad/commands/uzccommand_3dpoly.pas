@@ -21,32 +21,31 @@ unit uzccommand_3dpoly;
 
 interface
 uses
-  uzglviewareageneral,zcobjectchangeundocommand2,
-  zcmultiobjectcreateundocommand,uzgldrawercanvas,
-  uzcoimultiobjects,uzcenitiesvariablesextender,uzcdrawing,uzepalette,
-  uzgldrawcontext,UGDBPoint3DArray,
-  uzeentpoint,uzeentityfactory,
-  uzedrawingsimple,uzcsysvars,uzcstrconsts,
-  printers,graphics,uzeentdevice,
-  LazUTF8,Clipbrd,LCLType,classes,uzeenttext,
-  uzccommandsabstract,uzbstrproc,
+  zcobjectchangeundocommand2,zcmultiobjectcreateundocommand,
+
+  uzcdrawing,uzgldrawcontext,
+
+  uzeentityfactory,
+
+  uzcsysvars,
+  uzcstrconsts,
+
+  uzccommandsabstract,
   uzccommandsmanager,
+
   uzccommandsimpl,
   uzbtypes,
   uzcdrawings,
   uzeutils,uzcutils,
-  sysutils,
-  varmandef,
   uzglviewareadata,
-  uzeffdxf,
   uzcinterface,
+
   uzegeometry,
   
   uzeconsts,
-  uzegeometrytypes,uzeentity,uzeentcircle,uzeentline,uzeentgenericsubentry,uzeentmtext,
-  uzeentblockinsert,uzeentpolyline,
-  uzeentcurve,uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,TypeDescriptors,
-  uzelongprocesssupport,uzcLog;
+  uzegeometrytypes,
+  uzeentpolyline,
+  uzcLog;
 
 implementation
 var

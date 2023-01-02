@@ -96,7 +96,7 @@ function dwgQSave_com(dwg:PTSimpleDrawing):Integer;
 function SetCurrentDWG(PDWG:pointer):pointer;
 //procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
 implementation
- uses uzcenitiesvariablesextender,uzeenttext,uzeentdevice,uzeentblockinsert,uzeffdxf,uzccommandsmanager;
+ uses uzcenitiesvariablesextender,uzeenttext,uzeentdevice,uzeentblockinsert,uzeffdxf;
 procedure TZCADDrawingsManager.redrawoglwnd(Sender:TObject;GUIAction:TZMessageID);
 var
    pdwg:PTSimpleDrawing;

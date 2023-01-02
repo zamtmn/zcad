@@ -23,7 +23,7 @@ uses
   math,
     uzeentityfactory,uzeentsubordinated,uzgldrawcontext,uzedrawingdef,gzctnrVectorTypes,
     uzestyleslayers,uzehelpobj,UGDBSelectedObjArray,
-    uzegeometrytypes,uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,uzctnrVectorBytes,
+    uzegeometrytypes,uzeentity,UGDBPoint3DArray,uzctnrVectorBytes,
     uzbtypes,uzeentwithlocalcs,uzeconsts,uzegeometry,uzeffdxfsupport,uzecamera,
     UGDBPolyLine2DArray,uzglviewareadata,uzeTriangulator,
     uzeBoundaryPath,uzeStylesHatchPatterns,gvector,garrayutils;

@@ -21,7 +21,6 @@ interface
 
 uses
   sysutils,
-  uzbtypes,
   math,uzegeometry,
   uzctnrVectorBytes,
   uzedrawingdef,uzgldrawcontext,

@@ -26,7 +26,6 @@ uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
   uzbstrproc,
-  gzctnrVectorTypes,
   uzeblockdef,uzcdrawing,uzcdrawings,uzcinterface,
   uzctnrVectorStrings,uzegeometrytypes,
   uzccomdraw,uzcstrconsts,uzccommandsmanager,Varman,uzeconsts,uzglviewareadata,

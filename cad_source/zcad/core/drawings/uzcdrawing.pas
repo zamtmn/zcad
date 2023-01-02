@@ -43,7 +43,7 @@ TZCADDrawing= object(TSimpleDrawing)
            procedure onUndoRedo;
            procedure onUndoRedoDataOwner(PDataOwner:Pointer);
 
-           procedure SetCurrentDWG;virtual;
+           //procedure SetCurrentDWG;virtual;
            function StoreOldCamerapPos:Pointer;virtual;
            procedure StoreNewCamerapPos(command:Pointer);virtual;
            //procedure SetEntFromOriginal(_dest,_source:PGDBObjEntity;PCD_dest,PCD_source:PTDrawingPreCalcData);
@@ -67,7 +67,7 @@ TZCADDrawing= object(TSimpleDrawing)
 {EXPORT-}
 //procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
 implementation
- uses uzcdrawings,uzeenttext,uzeentdevice,uzeentblockinsert,uzeffdxf,uzccommandsmanager;
+ uses uzcdrawings,uzccommandsmanager;
 procedure TZCADDrawing.FillDrawingPartRC(var dc:TDrawContext);
 var
   vd:pvardesk;
@@ -136,10 +136,10 @@ begin
                                             sysvar.DWG.DWG_UnitMode^:=f.umode;
 end;
 
-procedure TZCADDrawing.SetCurrentDWG();
+{procedure TZCADDrawing.SetCurrentDWG();
 begin
   drawings.SetCurrentDWG(@self);
-end;
+end;}
 function TZCADDrawing.StoreOldCamerapPos:Pointer;
 begin
      result:=PushCreateTGChangeCommand(UndoStack,GetPcamera^.prop)

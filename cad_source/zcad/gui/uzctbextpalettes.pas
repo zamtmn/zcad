@@ -21,9 +21,11 @@ unit uzctbextpalettes;
 interface
 uses
      uzcstrconsts,uzcsysparams,uzcsysvars,uzcsysinfo,
-     uzcinfoform,Varman,uzcinterface,laz.VirtualTrees,
+     uzcinfoform,Varman,uzcinterface,laz.VirtualTrees,LCLVersion,
      uzbstrproc,uzeenttext,
-     EditBtn,Masks,StdCtrls,Controls,Classes,Forms,uzccommandsmanager,Laz2_DOM,ComCtrls,uztoolbarsmanager,uzxmlnodesutils,uzcimagesmanager,uzctranslations,uzcdrawings;
+     EditBtn,Masks,StdCtrls,Controls,Classes,Forms,uzccommandsmanager,Laz2_DOM,
+     ComCtrls,uztoolbarsmanager,uzxmlnodesutils,uzcimagesmanager,
+     uzctranslations,uzcdrawings;
 type
     TZPaletteListItem=class(TListItem)
     public
@@ -44,7 +46,7 @@ type
       procedure MouseDown(Button: TMouseButton; Shift:TShiftState; X,Y:Integer); override;
       procedure MouseUp(Button: TMouseButton; Shift:TShiftState; X,Y:Integer); override;
   end;
-  TZPaletteTreeView=class(TVirtualStringTree)
+  TZPaletteTreeView=class({$IF LCL_fullversion<2030000}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF})
   public
     procedure _GetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;
                          TextType: TVSTTextType; var CellText: String);

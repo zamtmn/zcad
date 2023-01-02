@@ -1,0 +1,85 @@
+object NavigatorEntities: TNavigatorEntities
+  Left = 316
+  Height = 885
+  Top = 107
+  Width = 484
+  Caption = 'Entities'
+  ClientHeight = 885
+  ClientWidth = 484
+  DesignTimePPI = 113
+  OnCreate = _onCreate
+  LCLVersion = '1.9.0.0'
+  object NavTree: TVirtualStringTree
+    Left = 0
+    Height = 849
+    Top = 36
+    Width = 484
+    Align = alClient
+    DefaultNodeHeight = 19
+    DefaultText = 'Node'
+    Header.AutoSizeIndex = 0
+    Header.Columns = <    
+      item
+        Position = 0
+        Width = 484
+      end>
+    Header.Options = [hoAutoResize, hoColumnResize, hoDrag, hoShowSortGlyphs, hoVisible]
+    Header.SortColumn = 0
+    TabOrder = 0
+    OnCompareNodes = VTCompareNodes
+    OnDblClick = TVDblClick
+    OnHeaderClick = VTHeaderClick
+    OnMouseMove = TVOnMouseMove
+  end
+  object CoolBar1: TCoolBar
+    Left = 0
+    Height = 36
+    Top = 0
+    Width = 484
+    AutoSize = True
+    Bands = <    
+      item
+        Control = MainToolBar
+        Width = 513
+      end>
+    object MainToolBar: TToolBar
+      AnchorSideLeft.Control = CoolBar1
+      AnchorSideTop.Control = CoolBar1
+      Left = 24
+      Height = 26
+      Top = 5
+      Width = 82
+      Align = alNone
+      AutoSize = True
+      BorderSpacing.Left = 22
+      BorderSpacing.Top = 3
+      Caption = 'MainToolBar'
+      EdgeBorders = []
+      TabOrder = 0
+      Transparent = True
+      object ToolButton1: TToolButton
+        Left = 1
+        Top = 0
+        Caption = 'ToolButton1'
+      end
+      object RefreshToolButton: TToolButton
+        Left = 28
+        Top = 0
+        Action = Refresh
+      end
+      object ToolButton3: TToolButton
+        Left = 55
+        Top = 0
+        Caption = 'ToolButton3'
+      end
+    end
+  end
+  object ActionList1: TActionList
+    Left = 365
+    Top = 76
+    object Refresh: TAction
+      Caption = 'Refresh'
+      OnExecute = RefreshTree
+    end
+  end
+end

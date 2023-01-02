@@ -9,7 +9,7 @@ object NavigatorDevices: TNavigatorDevices
   DesignTimePPI = 144
   OnCreate = _onCreate
   LCLVersion = '2.3.0.0'
-  object NavTree: TVirtualStringTree
+  object NavTree: TLazVirtualStringTree
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = FilterBtn
     AnchorSideTop.Side = asrBottom

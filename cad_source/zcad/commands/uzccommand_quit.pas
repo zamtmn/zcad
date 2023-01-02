@@ -131,7 +131,8 @@ begin
     begin
       if (GetChangedDrawingsCount>1)or(CommandManager.isBusy) then
         MCtx:=CreateMessagesContext(rsCloseDrawings);
-      if CommandManager.isBusy then begin
+      if (ZCMsgCallBackInterface.GetState and ZState_Busy)>0 then begin
+      //if CommandManager.isBusy then begin
         MCtx.add(getMsgID(rsQuitQuery),TZCMsgDialogResult.CreateMR(ZCmrYes));
         MCtx.add(getMsgID(rsCloseDWGQuery),TZCMsgDialogResult.CreateMR(ZCmrNo));
       end;

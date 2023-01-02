@@ -24,7 +24,7 @@ uses
   uzcsysparams,uzcinterface,ExtCtrls,SynEdit,
   {$IFNDEF DELPHI}lclproc,{$ENDIF}
   Graphics,ActnList,ComCtrls,StdCtrls,Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,fileutil,{$ENDIF}Buttons,
-  uzcinfoform,uzclog,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}sysutils,uzbstrproc,varmandef,Varman,UBaseTypeDescriptor,uzcsysinfo,uzctnrVectorBytes;
+  uzcinfoform,uzclog,{$IFNDEF DELPHI}uzcTranslations,{$ENDIF}sysutils,uzbstrproc,varmandef,Varman,UBaseTypeDescriptor,uzcsysinfo,uzctnrVectorBytes;
 type
   TSynForm=class(TDialogForm)
                          Memo: {TMemo}TSynEdit;

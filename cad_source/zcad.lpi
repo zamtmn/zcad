@@ -648,8 +648,9 @@
         <IsPartOfProject Value="True"/>
       </Unit50>
       <Unit51>
-        <Filename Value="zcad/gui/uzctranslations.pas"/>
+        <Filename Value="zcad/uzctranslations.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="uzcTranslations"/>
       </Unit51>
       <Unit52>
         <Filename Value="zcad/lclmod/uzcsynform.pas"/>

@@ -23,7 +23,7 @@ interface
 uses
  {LCL}
   AnchorDockPanel,AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr,
-  ActnList,LCLType,LCLProc,uzctranslations,LMessages,LCLIntf,
+  ActnList,LCLType,LCLProc,uzcTranslations,LMessages,LCLIntf,
   Forms, stdctrls, ExtCtrls, ComCtrls,Controls,Classes,SysUtils,LazUTF8,
   menus,graphics,Themes,
   Types,UniqueInstanceBase,simpleipc,Laz2_XMLCfg,LCLVersion,

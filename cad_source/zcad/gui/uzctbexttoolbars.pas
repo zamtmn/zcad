@@ -26,7 +26,7 @@ uses
   ActnList,Laz2_DOM,Menus,Forms,ComCtrls,Graphics,LazUTF8,
   StdCtrls,Controls,
   sysutils,Classes,
-  uzcsysvars,uzbpaths,uzmenusmanager,uzctreenode,uzmenusdefaults,uzctranslations,
+  uzcsysvars,uzbpaths,uzmenusmanager,uzctreenode,uzmenusdefaults,uzcTranslations,
   usupportgui,uzccommandsmanager,uzcimagesmanager,uzcctrllayercombobox,
   uzcgui2color,uzeconsts,uzcfcolors,uzcuitypes,uzepalette,uzcdrawings,uzcinterface,
   uzcstrconsts,uzccommand_loadlayout,uzcgui2linetypes,uzestyleslinetypes,uzcinterfacedata,

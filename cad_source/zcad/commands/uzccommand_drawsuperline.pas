@@ -47,7 +47,7 @@ uses
 
   uzeentline,             //unit describes line entity
                        //модуль описывающий примитив линия
-  uzventsuperline,uzcenitiesvariablesextender,UUnitManager,uzbpaths,uzctranslations,
+  uzventsuperline,uzcenitiesvariablesextender,UUnitManager,uzbpaths,uzcTranslations,
 
   uzeentityfactory,    //unit describing a "factory" to create primitives
                       //модуль описывающий "фабрику" для создания примитивов

@@ -23,7 +23,7 @@ uses sysutils,UGDBObjBlockdefArray,uzedrawingdef,uzeentityextender,
      uzeentdevice,TypeDescriptors,uzetextpreprocessor,uzctnrVectorBytes,
      uzbtypes,uzeentsubordinated,uzeentity,uzeenttext,uzeblockdef,
      varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
-     uzeentitiestree,usimplegenerics,uzeffdxfsupport,uzbpaths,uzctranslations,
+     uzeentitiestree,usimplegenerics,uzeffdxfsupport,uzbpaths,uzcTranslations,
      gzctnrVectorTypes,uzeBaseExtender,uzgldrawcontext;
 const
   VariablesExtenderName='extdrVariables';

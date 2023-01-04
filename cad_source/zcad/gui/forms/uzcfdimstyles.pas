@@ -32,9 +32,9 @@ uses
 
   uzestylesdim, uzeentdimension,
 
-  uzbpaths,uzcinterface, uzcstrconsts, uzcsysinfo,uzbstrproc,UBaseTypeDescriptor,
+  uzbpaths,uzcinterface, uzcstrconsts,uzbstrproc,UBaseTypeDescriptor,
   uzcimagesmanager, usupportgui, ZListView,uzefontmanager,varman,uzctnrvectorstrings,
-  gzctnrVectorTypes,uzeentity,uzeenttext;
+  gzctnrVectorTypes,uzeentity;
 
 const
      NameColumn=0;

@@ -135,9 +135,6 @@ type
       procedure processMsg(msg:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);
       procedure processFmtResultData(var FRD:TFmtResultData;Stampt:TLogStampt;msg:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);
       procedure processDecoratorData(var DD:TDecoratorData;Stampt:TLogStampt;msg:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);
-      function isModuleEnabled(LMDI:TModuleDesk):Boolean;
-      function LogMode2String(LogMode:TLogLevel):TLogLevelHandleNameType;
-
 
     public
       EnterMsgOpt,ExitMsgOpt:TMsgOpt;
@@ -185,6 +182,8 @@ type
 
       function TryGetLogLevelHandle(LogLevelName:TLogLevelHandleNameType;out LogLevel:TLogLevel):Boolean;
       function GetMutableLogLevelData(LL:TLogLevel):PTTLogLevelData;
+      function LogMode2String(LogMode:TLogLevel):TLogLevelHandleNameType;
+      function isModuleEnabled(LMDI:TModuleDesk):Boolean;
   end;
 
   TDoEnteredHelper = type helper for TLog.TEntered
@@ -596,12 +595,12 @@ procedure TLog.LogEnd;
 var
   i:integer;
 begin
+  processMsg('-------------------------Log ended-------------------------',LogModeDefault,LMDIDefault,MsgDefaultOptions);
   for i:=0 to ModulesDesks.HandleDataVector.Size-1 do
   if ModulesDesks.HandleDataVector[i].D.enabled then
     processMsg(format(rsLogModuleState,[ModulesDesks.HandleDataVector[I].N,rsEnabled]),LogModeDefault,LMDIDefault,MsgDefaultOptions)
   else
     processMsg(format(rsLogModuleState,[ModulesDesks.HandleDataVector[I].N,rsDisabled]),LogModeDefault,LMDIDefault,MsgDefaultOptions);
-  processMsg('-------------------------Log ended-------------------------',LogModeDefault,LMDIDefault,MsgDefaultOptions);
 end;
 
 function TLog.isTraceEnabled:boolean;

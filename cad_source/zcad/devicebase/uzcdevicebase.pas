@@ -3,7 +3,6 @@ unit uzcdevicebase;
 interface
 uses
   uzcinterface,uzctranslations,
-  uzbpaths,
 
   SysUtils,gvector,
 
@@ -12,7 +11,7 @@ uses
   varmandef,Varman,URecordDescriptor,UObjectDescriptor,typedescriptors,UUnitManager,
   uzcdevicebaseabstract,
 
-     uzbtypes;
+  uzbpaths,uzbtypes;
 type
 {EXPORT+}
 PDeviceDbBaseObject=^DeviceDbBaseObject;

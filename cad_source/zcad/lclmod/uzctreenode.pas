@@ -22,10 +22,11 @@ interface
 
 uses
   {$IFDEF LCLWIN32}win32proc,{$endif}
-  uzcutils,uzbpaths,Themes,uzcinterface,uzccommandsabstract,ExtCtrls,lclproc,Graphics,ActnList,ComCtrls,
-  Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,{$ENDIF}LazUTF8,Buttons,
-  {$IFNDEF DELPHI}uzctranslations,{$ENDIF}sysutils,uzbstrproc,varmandef,
-  uzccommandsmanager,uzclog,uzcdrawings,Varman,UBaseTypeDescriptor,uzcsysinfo,uzctnrVectorBytes;
+  sysutils,Themes,ExtCtrls,lclproc,Graphics,ActnList,ComCtrls,
+  Controls,Classes,menus,Forms,lcltype,LazUTF8,Buttons,
+  uzcinterface,uzccommandsabstract,
+  uzcutils,uzbpaths,uzctranslations,varmandef,
+  uzccommandsmanager,uzclog,uzcdrawings,Varman,UBaseTypeDescriptor;
 type
     TZAction=class(TAction)
                    public

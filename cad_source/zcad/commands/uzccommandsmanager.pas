@@ -21,12 +21,12 @@ unit uzccommandsmanager;
 {$interfaces corba}
 interface
 uses gzctnrVectorPObjects,uzcsysvars,uzegeometry,uzglviewareaabstract,uzbpaths,
-     uzeconsts,uzcctrldynamiccommandmenu,uzcinfoform,uzcstrconsts,uzcsysinfo,
+     uzeconsts,uzcctrldynamiccommandmenu,uzcinfoform,uzcstrconsts,
      gzctnrVectorTypes,uzegeometrytypes,uzbstrproc,gzctnrVectorP,
      uzccommandsabstract, sysutils,uzglviewareadata,
      uzclog,varmandef,varman,uzedrawingdef,uzcinterface,
      uzcsysparams,uzedrawingsimple,uzcdrawings,uzctnrvectorstrings,forms,
-     uzcctrlcommandlineprompt,uzeparsercmdprompt,gzctnrSTL,uzeSnap;
+     uzcctrlcommandlineprompt,uzeparsercmdprompt,uzeSnap;
 const
      tm:tmethod=(Code:nil;Data:nil);
      nullmethod:{tmethod}TButtonMethod=nil;
@@ -552,7 +552,7 @@ var
    oldlastcomm:String;
    s:String;
 begin
-     s:=(ExpandPath(fn));
+     s:=ExpandPath(fn);
      ZCMsgCallBackInterface.TextMessage(sysutils.format(rsRunScript,[s]),TMWOHistoryOut);
      inc(busy);
 

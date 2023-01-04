@@ -21,8 +21,8 @@ unit uzcfcommandline;
 interface
 uses
  uzcguimanager,uzbpaths,Themes,buttons,uzcsysvars,uzcstrconsts,uzbstrproc,
- uzcsysinfo,lclproc,LazUTF8,sysutils, StdCtrls,ExtCtrls,Controls,Classes,
- menus,Forms,fileutil,graphics, uzbtypes,uzccommandsmanager,
+ lclproc,LazUTF8,sysutils, StdCtrls,ExtCtrls,Controls,Classes,
+ menus,Forms,fileutil,graphics,uzccommandsmanager,
  varman,varmandef,
  uzegeometry,uzctnrvectorstrings,uzcinterface,uzctreenode,uzclog,strmy,
  uzccommandlineutil,uztoolbarsmanager,uzmenusmanager,uzccommandsabstract,gzctnrVectorTypes,

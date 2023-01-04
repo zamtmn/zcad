@@ -22,7 +22,7 @@ interface
 uses uzcfnavigatorentities,uzcfcommandline,uzbpaths,TypeDescriptors,uzctranslations,Forms,
      varmandef,
      uzeentity,zcobjectinspector,uzcguimanager,
-     Types,Controls,Varman,UUnitManager,uzcsysvars,uzcsysinfo,uzcLog;
+     Types,Controls,Varman,UUnitManager,uzcsysvars,uzcLog;
 resourcestring
   rsEntities='Entities';
 implementation

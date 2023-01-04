@@ -20,7 +20,7 @@ unit uzctextenteditor;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-     uzcsysparams,uzcutils,uzcsysvars,uzcsysinfo,
+     uzcsysparams,uzcutils,uzcsysvars,
      uzcinfoform,Varman,uzcinterface,
      uzedrawingdef,uzbstrproc,uzeenttext,uzeconsts,uzcstrconsts,uzcfsinglelinetexteditor,
      Controls,Classes,Forms,uzccommandsmanager,uzcuitypes;

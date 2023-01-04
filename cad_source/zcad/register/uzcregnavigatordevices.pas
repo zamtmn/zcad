@@ -22,7 +22,7 @@ interface
 uses uzcfnavigatordevices,uzcfcommandline,uzbpaths,TypeDescriptors,uzctranslations,Forms,
      varmandef,uzeentdevice,uzcnavigatorsnodedesk,
      uzeentity,zcobjectinspector,uzcguimanager,uzcenitiesvariablesextender,uzbstrproc,
-     Types,Controls,Varman,UUnitManager,uzcsysvars,uzcsysinfo,uzcLog,laz.VirtualTrees,
+     Types,Controls,Varman,UUnitManager,uzcsysvars,uzcLog,laz.VirtualTrees,
      uzcfnavigatordevicescxmenu,uzcmainwindow,MacroDefIntf,sysutils;
 resourcestring
   rsDevices='Devices';

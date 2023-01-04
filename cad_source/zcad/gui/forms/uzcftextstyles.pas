@@ -23,15 +23,15 @@ interface
 
 uses
   uzcutils,zcchangeundocommand,zcobjectchangeundocommand2,uzcdrawing,LMessages,uzefont,
-  uzclog,uzedrawingsimple,uzcsysvars,Classes, SysUtils,
-  FileUtil, LResources, Forms, Controls, Graphics, GraphType,
-  Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype, ActnList,
+  uzclog,uzedrawingsimple,uzcsysvars,Classes,SysUtils,
+  FileUtil,LResources,Forms,Controls,Graphics,GraphType,
+  Buttons,ExtCtrls,StdCtrls,ComCtrls,LCLIntf,lcltype, ActnList,
 
   uzeconsts,uzestylestexts,uzcdrawings,uzbtypes,varmandef,
   uzcsuptypededitors,
 
-  uzbpaths,uzcinterface, uzcstrconsts, uzcsysinfo,uzbstrproc,UBaseTypeDescriptor,
-  uzcimagesmanager, usupportgui, ZListView,uzefontmanager,varman,uzctnrvectorstrings,
+  uzbpaths,uzcinterface,uzcstrconsts,uzbstrproc,UBaseTypeDescriptor,
+  uzcimagesmanager,usupportgui,ZListView,uzefontmanager,varman,uzctnrvectorstrings,
   gzctnrVectorTypes,uzeentity,uzeenttext;
 
 const

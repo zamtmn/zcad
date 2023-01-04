@@ -20,9 +20,9 @@ unit uzctbextpalettes;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-     uzcstrconsts,uzcsysparams,uzcsysvars,uzcsysinfo,
+     uzcstrconsts,uzcsysparams,uzcsysvars,
      uzcinfoform,Varman,uzcinterface,laz.VirtualTrees,LCLVersion,
-     uzbstrproc,uzeenttext,
+     uzbstrproc,
      EditBtn,Masks,StdCtrls,Controls,Classes,Forms,uzccommandsmanager,Laz2_DOM,
      ComCtrls,uztoolbarsmanager,uzxmlnodesutils,uzcimagesmanager,
      uzctranslations,uzcdrawings;

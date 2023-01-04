@@ -24,7 +24,7 @@ uses Laz2_DOM,Toolwin,Clipbrd,sysutils,uzccommandsabstract,uzcfcommandline,uzcut
      uzeentity,uzcenitiesvariablesextender,zcobjectinspector,uzcguimanager,uzcstrconsts,
      gzctnrVectorTypes,Types,Controls,uzcdrawings,Varman,UUnitManager,uzcsysvars,
      uzcsysparams,zcobjectinspectorui,uzcoimultiobjects,uzccommandsimpl,
-     uzmenusmanager,uzcsysinfo,uzcLog,menus,ComCtrls,uztoolbarsmanager,uzcimagesmanager;
+     uzmenusmanager,uzcLog,menus,ComCtrls,uztoolbarsmanager,uzcimagesmanager;
 const
     PEditorFocusPriority=550;
 type

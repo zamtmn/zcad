@@ -78,11 +78,13 @@ constructor TLogFileBackend.init(fn:AnsiString);
 begin
   logfilename:=fn;
   CreateLog;
+  inherited;
 end;
 
 destructor TLogFileBackend.done;
 begin
   logfilename:='';
+  inherited;
 end;
 
 initialization

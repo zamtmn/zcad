@@ -23,9 +23,8 @@ unit uzcLog;
 interface
 
 uses
-  sysutils,LazUTF8,
-  uzbLogTypes,uzblog,uzbLogDecorators,uzbLogFileBackend,
-  uzbCommandLineParser,uzcCommandLineParser;
+  sysutils,
+  uzbLogTypes,uzblog;
 
 const
   {$IFDEF LINUX}filelog='../../log/zcad_linux.log';{$ENDIF}
@@ -48,15 +47,6 @@ var
 
 implementation
 
-var
-   FileLogBackend:TLogFileBackend;
-   TimeDecorator:TTimeDecorator;
-   PositionDecorator:TPositionDecorator;
-   i:integer;
-   mn:TCLStringType;
-   ll:TLogLevel;
-   LogFileName:string;
-
 
 initialization
   ProgramLog.init; //эти значения теперь по дефолту ('LM_Trace','T');
@@ -68,49 +58,10 @@ initialization
   LM_Fatal:=ProgramLog.RegisterLogLevel('LM_Fatal','F',LLTError);
   LM_Necessarily:=ProgramLog.RegisterLogLevel('LM_Necessarily','N',LLTInfo);
 
-  ProgramLog.EnterMsgOpt:=lp_IncPos;
-  ProgramLog.ExitMsgOpt:=lp_DecPos;
-  ProgramLog.addMsgOptAlias('+',lp_IncPos);
-  ProgramLog.addMsgOptAlias('-',lp_DecPos);
-
-
   ProgramLog.SetDefaultLogLevel(LM_Debug);
   ProgramLog.SetCurrentLogLevel(LM_Info);
-
-  UnitsInitializeLMId:=ProgramLog.RegisterModule('UnitsInitialization');
-  UnitsFinalizeLMId:=ProgramLog.RegisterModule('UnitsFinalization');
-
-  TimeDecorator.init;
-  ProgramLog.addDecorator(TimeDecorator);
-
-  PositionDecorator.init;
-  ProgramLog.addDecorator(PositionDecorator);
-
-
-  LogFileName:=SysToUTF8(ExtractFilePath(paramstr(0)))+filelog;
-  if CommandLineParser.HasOption(LOGFILEHDL)then
-  for i:=0 to CommandLineParser.OptionOperandsCount(LOGFILEHDL)-1 do
-    LogFileName:=CommandLineParser.OptionOperand(LOGFILEHDL,i);
-
-  FileLogBackend.init(LogFileName);
-  ProgramLog.addBackend(FileLogBackend,'%1:s%2:s%0:s',[@TimeDecorator,@PositionDecorator]);
-
-  ProgramLog.LogStart;
-  programlog.LogOutFormatStr('Unit "%s" initialization finish, log created',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-
-  if CommandLineParser.HasOption(LCLHDL)then
-  for i:=0 to CommandLineParser.OptionOperandsCount(LCLHDL)-1 do begin
-    mn:=CommandLineParser.OptionOperand(LCLHDL,i);
-    if programlog.TryGetLogLevelHandle(mn,ll)then
-      programlog.SetCurrentLogLevel(ll)
-    else
-      programlog.LogOutFormatStr('Unable find log level="%s"',[mn],LM_Error);
-  end;
-
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  ProgramLog.LogEnd;
   ProgramLog.done;
-  FileLogBackend.done;
 end.
 

@@ -149,10 +149,11 @@ type
 
       procedure addMsgOptAlias(const ch:AnsiChar;const opt:TMsgOpt);
 
-      function addBackend(var BackEnd:TLogerBaseBackend;fmt:TLogMsg;const args:array of PTLogerBaseDecorator):TBackendHandle;
-      procedure removeBackend(BackEndH:TBackendHandle);
+      function addBackend(var BackEnd:TLogerBaseBackend;fmt:TLogMsg;const args:array of PTLogerBaseDecorator):TLogExtHandle;
+      procedure removeBackend(BackEndH:TLogExtHandle);
 
-      procedure addDecorator(var Decorator:TLogerBaseDecorator);
+      function addDecorator(var Decorator:TLogerBaseDecorator):TLogExtHandle;
+      procedure removeDecorator(DecoratorH:TLogExtHandle);
 
       procedure LogStart;
       procedure LogEnd;
@@ -431,20 +432,28 @@ begin
 end;
 
 
-procedure TLog.addDecorator(var Decorator:TLogerBaseDecorator);
+function TLog.addDecorator(var Decorator:TLogerBaseDecorator):TLogExtHandle;
 var
   DD:TDecoratorData;
   i:Integer;
 begin
   for i:=0 to Decorators.Size-1 do
     if Decorators.Mutable[i]^.PDecorator=@Decorator then
-      exit;
+      exit(-i);
   DD.CreateRec(@Decorator,LogStampter.GetInitialHandleValue);
+  result:=Decorators.Size;
   Decorators.PushBack(DD);
 end;
 
+procedure TLog.removeDecorator(DecoratorH:TLogExtHandle);
+begin
+  if DecoratorH>=0 then begin
+    if Decorators.Mutable[DecoratorH]^.PDecorator<>nil then
+      Decorators.Mutable[DecoratorH]^.PDecorator:=nil;
+  end
+end;
 
-function TLog.addBackend(var BackEnd:TLogerBaseBackend;fmt:TLogMsg;const args:array of PTLogerBaseDecorator):TBackendHandle;
+function TLog.addBackend(var BackEnd:TLogerBaseBackend;fmt:TLogMsg;const args:array of PTLogerBaseDecorator):TLogExtHandle;
 var
   BD:TLogerBackendData;
   i,j,k:Integer;
@@ -488,18 +497,22 @@ begin
     for i:=0 to Backends.Size-1 do
       if Backends.Mutable[i]^.PBackend=nil then begin
         Backends.Mutable[i]^:=BD;
-        result:=i;
+        result:=-i;
       end;
   end;
   inc(TotalBackendsCount);
 end;
 
-procedure TLog.removeBackend(BackEndH:TBackendHandle);
+procedure TLog.removeBackend(BackEndH:TLogExtHandle);
 begin
-  if Backends.Mutable[BackEndH]^.PBackend<>nil then begin
-    Backends.Mutable[BackEndH]^.PBackend:=nil;
+  if BackEndH>=0 then begin
+    if Backends.Mutable[BackEndH]^.PBackend<>nil then begin
+      Backends.Mutable[BackEndH]^.PBackend:=nil;
+      dec(TotalBackendsCount);
+    end
+  end else
+  if Backends.Mutable[-BackEndH]^.PBackend<>nil then
     dec(TotalBackendsCount);
-  end;
 end;
 
 procedure TLog.processDecoratorData(var DD:TDecoratorData;Stampt:TLogStampt;msg:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);
@@ -580,7 +593,14 @@ begin
 end;
 
 procedure TLog.LogEnd;
+var
+  i:integer;
 begin
+  for i:=0 to ModulesDesks.HandleDataVector.Size-1 do
+  if ModulesDesks.HandleDataVector[i].D.enabled then
+    processMsg(format(rsLogModuleState,[ModulesDesks.HandleDataVector[I].N,rsEnabled]),LogModeDefault,LMDIDefault,MsgDefaultOptions)
+  else
+    processMsg(format(rsLogModuleState,[ModulesDesks.HandleDataVector[I].N,rsDisabled]),LogModeDefault,LMDIDefault,MsgDefaultOptions);
   processMsg('-------------------------Log ended-------------------------',LogModeDefault,LMDIDefault,MsgDefaultOptions);
 end;
 
@@ -643,11 +663,6 @@ destructor TLog.done;
 var
   i:integer;
 begin
-  for i:=0 to ModulesDesks.HandleDataVector.Size-1 do
-  if ModulesDesks.HandleDataVector[i].D.enabled then
-    processMsg(format(rsLogModuleState,[ModulesDesks.HandleDataVector[I].N,rsEnabled]),LogModeDefault,LMDIDefault,MsgDefaultOptions)
-  else
-    processMsg(format(rsLogModuleState,[ModulesDesks.HandleDataVector[I].N,rsDisabled]),LogModeDefault,LMDIDefault,MsgDefaultOptions);
   //processMsg('-------------------------Log ended-------------------------',LogModeDefault,LMDIDefault,MsgDefaultOptions);
   LogLevels.done;
   ModulesDesks.done;

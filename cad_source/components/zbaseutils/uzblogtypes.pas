@@ -28,17 +28,27 @@ type
   TLogLevelType=(LLTInfo,LLTWarning,LLTError);
   TLogLevel=Integer;
   TLogLevelHandleNameType=AnsiString;
-  TBackendHandle=SizeUInt;
+  TLogExtHandle=SizeInt;
   PTLogerBaseBackend=^TLogerBaseBackend;
   TLogerBaseBackend=object
-    procedure doLog(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);virtual;abstract;
+    procedure DoLog(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);virtual;abstract;
+    destructor Done;virtual;
   end;
   PTLogerBaseDecorator=^TLogerBaseDecorator;
   TLogerBaseDecorator=object
     function GetDecor(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk):TLogMsg;virtual;abstract;
+    destructor Done;virtual;
   end;
 
 implementation
+
+destructor TLogerBaseDecorator.Done;
+begin
+end;
+
+destructor TLogerBaseBackend.Done;
+begin
+end;
 
 begin
 end.

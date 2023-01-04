@@ -7,18 +7,18 @@ unit uzcfdimedit;
 interface
 
 uses
-  uzclog,uzedrawingsimple,uzcsysvars,Classes, SysUtils,
-  FileUtil, LResources, Forms, Controls, Graphics, Dialogs,GraphType,
-  Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype, ActnList, Spin,
+  typinfo,
+  Classes, SysUtils,
+  Forms, Controls,
+  Buttons, ExtCtrls, StdCtrls, ComCtrls, LCLIntf, LCLType, Spin,
 
-  uzestylestexts,uzcdrawings,uzbtypes,varmandef,
-  uzedimensionaltypes,
+  uzcdrawings,uzbtypes,
+  uzedimensionaltypes,uzestylesdim,
+  uzclog,uzedrawingsimple,uzcsysvars,
 
-  uzestylesdim,typinfo,
-
-  uzbpaths,uzcinterface, uzcstrconsts, uzcsysinfo,uzbstrproc,UBaseTypeDescriptor,
-  uzcimagesmanager, uzefontmanager,varman,
-  gzctnrVectorTypes,uzeentity,uzeenttext,uzepalette, uzcflineweights,uzestyleslinetypes,Types;
+  uzcinterface,uzcstrconsts,uzbstrproc,
+  uzepalette,uzcflineweights,uzestyleslinetypes,uzestylestexts,
+  gzctnrVectorTypes;
 
 type
 

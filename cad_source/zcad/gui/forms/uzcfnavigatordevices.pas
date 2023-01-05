@@ -76,7 +76,7 @@ type
     SaveToFile: TAction;
     LoadFromFile: TAction;
     CoolBar1: TCoolBar;
-    NavTree:{$IF LCL_fullversion<2030000}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};
+    NavTree:{$IF DECLARED(TVirtualStringTree)}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};
     Ent2NodeMap:TEnt2NodeMap;
     RefreshToolButton: TToolButton;
     ExpandAllBtn: TSpeedButton;
@@ -88,11 +88,11 @@ type
     IncludeProps:TAction;
     TreeProps:TAction;
     procedure CollapseAllProc(Sender: TObject);
-    function CreateEntityNode(Tree:{$IF LCL_fullversion<2030000}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};basenode:PVirtualNode;pent:pGDBObjEntity;Name:string):PVirtualNode;virtual;
+    function CreateEntityNode(Tree:{$IF DECLARED(TVirtualStringTree)}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};basenode:PVirtualNode;pent:pGDBObjEntity;Name:string):PVirtualNode;virtual;
     procedure ExpandAllProc(Sender: TObject);
     procedure Filter(Sender: TObject);
     function Match(node:PVirtualNode;pattern:AnsiString):boolean;
-    function DoFilter(tree:{$IF LCL_fullversion<2030000}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};node:PVirtualNode;pattern:AnsiString;var treeh:Integer):boolean;
+    function DoFilter(tree:{$IF DECLARED(TVirtualStringTree)}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};node:PVirtualNode;pattern:AnsiString;var treeh:Integer):boolean;
     procedure AsyncLoadParamsFromFile(Data: PtrInt);
     procedure TEMenuPopUpClick(Sender: TObject);
     procedure TEMenuPopUp(Sender: TObject);
@@ -189,7 +189,7 @@ var
 
 implementation
 {todo: убрать когда TLazVirtualStringTree попадет в релиз лазаря}
-{$IF LCL_fullversion<2030000}{$R olduzcfnavigatordevices.lfm}{$ELSE}{$R *.lfm}{$ENDIF}
+{$IF DECLARED(TVirtualStringTree)}{$R olduzcfnavigatordevices.lfm}{$ELSE}{$R *.lfm}{$ENDIF}
 
 procedure TNavigatorDevices.LoadParamsFromConfig(Config: TConfigStorage);
 begin
@@ -764,7 +764,7 @@ begin
   end;
 end;
 
-function TNavigatorDevices.CreateEntityNode(Tree:{$IF LCL_fullversion<2030000}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};basenode:PVirtualNode;pent:pGDBObjEntity;Name:string):PVirtualNode;
+function TNavigatorDevices.CreateEntityNode(Tree:{$IF DECLARED(TVirtualStringTree)}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};basenode:PVirtualNode;pent:pGDBObjEntity;Name:string):PVirtualNode;
 var
   pnd:PTNodeData;
   pentvarext:TVariablesExtender;
@@ -810,7 +810,7 @@ begin
   Result:=false;
 end;
 
-function TNavigatorDevices.DoFilter(tree:{$IF LCL_fullversion<2030000}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};node:PVirtualNode;pattern:AnsiString;var treeh:Integer):boolean;
+function TNavigatorDevices.DoFilter(tree:{$IF DECLARED(TVirtualStringTree)}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};node:PVirtualNode;pattern:AnsiString;var treeh:Integer):boolean;
 var
   SubNode:PVirtualNode;
   MatchInChildren:boolean;
@@ -1330,7 +1330,7 @@ begin
     FreeAndNil(EntityIncluder);
 end;
 
-procedure SelectSubNodes(nav:{$IF LCL_fullversion<2030000}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};pnode:PVirtualNode);
+procedure SelectSubNodes(nav:{$IF DECLARED(TVirtualStringTree)}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};pnode:PVirtualNode);
 var
   psubnode:PVirtualNode;
   pnd:PTNodeData;
@@ -1353,7 +1353,7 @@ end;
 function NavSelectSubNodes_com(operands:TCommandOperands):TCommandResult;
 var
   pnode:PVirtualNode;
-  nav:{$IF LCL_fullversion<2030000}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};
+  nav:{$IF DECLARED(TVirtualStringTree)}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};
 begin
      if commandmanager.ContextCommandParams<>nil then begin
        nav:=commandmanager.ContextCommandParams;

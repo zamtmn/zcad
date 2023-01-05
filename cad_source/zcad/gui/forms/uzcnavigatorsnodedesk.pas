@@ -25,7 +25,7 @@ type
     ExtColumnsParams:TExtColumnsParams;
   end;
 
-  TCreateEntityNodeFunc=function(Tree:{$IF LCL_fullversion<2030000}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};basenode:PVirtualNode;pent:pGDBObjEntity;Name:string):PVirtualNode of object;
+  TCreateEntityNodeFunc=function(Tree:{$IF DECLARED(TVirtualStringTree)}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};basenode:PVirtualNode;pent:pGDBObjEntity;Name:string):PVirtualNode of object;
   TBaseRootNodeDesk=class;
   TFilterEntityProc=function(pent:pGDBObjEntity):Boolean of object;
   TTraceEntityProc=function(rootdesk:TBaseRootNodeDesk;pent:pGDBObjEntity;out name:string):PVirtualNode of object;
@@ -79,15 +79,15 @@ type
   TBaseRootNodeDesk=class(Tcomponent)
     public
     RootNode:PVirtualNode;
-    Tree:{$IF LCL_fullversion<2030000}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};
+    Tree:{$IF DECLARED(TVirtualStringTree)}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};
     ficonindex:integer;
     function FindById(pnd:Pointer; Criteria:string):boolean;
     function FindByName(pnd:Pointer; Criteria:string):boolean;
-    constructor Create(AOwner:TComponent; ATree:{$IF LCL_fullversion<2030000}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF}; AName:string; CreateRootNode:Boolean=False);overload;
+    constructor Create(AOwner:TComponent; ATree:{$IF DECLARED(TVirtualStringTree)}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF}; AName:string; CreateRootNode:Boolean=False);overload;
     destructor Destroy;override;
     function find(BaseName:string;basenode:PVirtualNode):PVirtualNode;
     procedure ProcessEntity(CreateEntityNode:TCreateEntityNodeFunc;pent:pGDBObjEntity;filterproc:TFilterEntityProc;traceproc:TTraceEntityProc);
-    function CreateEntityNode(Tree:{$IF LCL_fullversion<2030000}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};basenode:PVirtualNode;pent:pGDBObjEntity;Name:string):PVirtualNode;virtual;
+    function CreateEntityNode(Tree:{$IF DECLARED(TVirtualStringTree)}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};basenode:PVirtualNode;pent:pGDBObjEntity;Name:string):PVirtualNode;virtual;
     procedure ConvertNameNodeToGroupNode(pnode:PVirtualNode);
     function FindGroupNodeBy(RootNode:PVirtualNode;criteria:string;func:TFindFunc):PVirtualNode;
     function SaveState(var CurrentSel:TNodeData):TNodesStates;
@@ -453,7 +453,7 @@ begin
   result:=rootnode;
 end;
 
-function TBaseRootNodeDesk.CreateEntityNode(Tree:{$IF LCL_fullversion<2030000}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};basenode:PVirtualNode;pent:pGDBObjEntity;Name:string):PVirtualNode;
+function TBaseRootNodeDesk.CreateEntityNode(Tree:{$IF DECLARED(TVirtualStringTree)0}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};basenode:PVirtualNode;pent:pGDBObjEntity;Name:string):PVirtualNode;
 var
    pnd:PTNodeData;
 begin
@@ -495,7 +495,7 @@ begin
   end;
 end;
 
-constructor TBaseRootNodeDesk.create(AOwner:TComponent; ATree:{$IF LCL_fullversion<2030000}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF}; AName:string; CreateRootNode:Boolean=False);
+constructor TBaseRootNodeDesk.create(AOwner:TComponent; ATree:{$IF DECLARED(TVirtualStringTree)}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF}; AName:string; CreateRootNode:Boolean=False);
 var
    pnd:PTNodeData;
 begin

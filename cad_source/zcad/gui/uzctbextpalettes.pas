@@ -46,7 +46,7 @@ type
       procedure MouseDown(Button: TMouseButton; Shift:TShiftState; X,Y:Integer); override;
       procedure MouseUp(Button: TMouseButton; Shift:TShiftState; X,Y:Integer); override;
   end;
-  TZPaletteTreeView=class({$IF LCL_fullversion<2030000}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF})
+  TZPaletteTreeView=class({$IF DECLARED(TVirtualStringTree)}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF})
   public
     procedure _GetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;
                          TextType: TVSTTextType; var CellText: String);

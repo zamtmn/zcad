@@ -17,7 +17,7 @@ type
   TNavigatorEntities = class(TForm)
     CoolBar1: TCoolBar;
     MainToolBar: TToolBar;
-    NavTree:{$IF LCL_fullversion<2030000}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};
+    NavTree:{$IF DECLARED(TVirtualStringTree)}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};
     ToolButton1: TToolButton;
     RefreshToolButton: TToolButton;
     ToolButton3: TToolButton;
@@ -55,7 +55,7 @@ var
 
 implementation
 {todo: убрать когда TLazVirtualStringTree попадет в релиз лазаря}
-{$IF LCL_fullversion<2030000}{$R olduzcfnavigatorentities.lfm}{$ELSE}{$R *.lfm}{$ENDIF}
+{$IF DECLARED(TVirtualStringTree)}{$R olduzcfnavigatorentities.lfm}{$ELSE}{$R *.lfm}{$ENDIF}
 
 { TNavigatorEntities }
 procedure TNavigatorEntities.FreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);

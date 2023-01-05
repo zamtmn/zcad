@@ -20,7 +20,7 @@ type
   TStringsTreeSelector = class(TForm)
     ButtonPanel1: TButtonPanel;
     ComboBox1: TComboBox;
-    StringsTree:{$IF LCL_fullversion<2030000}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};
+    StringsTree:{$IF DECLARED(TVirtualStringTree)}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};
     procedure filltree(StringTreeNode:PVirtualNode;BlobTreeNode:TBlobTree.TTreeNodeType);
     procedure fill(BlobTree:TBlobTree);
     function FindNearestNode(value:TStringTreeType):PVirtualNode;

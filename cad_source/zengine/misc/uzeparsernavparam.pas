@@ -17,7 +17,7 @@ resourcestring
 
 type
   TNavParamData=record
-    NavTree:{$IF LCL_fullversion<2030000}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};
+    NavTree:{$IF DECLARED(TVirtualStringTree)}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};
     ColumnCount:integer;
     PExtTreeParam:PTExtTreeParam;
   end;

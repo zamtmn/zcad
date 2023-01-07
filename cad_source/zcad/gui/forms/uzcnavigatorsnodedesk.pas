@@ -453,7 +453,7 @@ begin
   result:=rootnode;
 end;
 
-function TBaseRootNodeDesk.CreateEntityNode(Tree:{$IF DECLARED(TVirtualStringTree)0}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};basenode:PVirtualNode;pent:pGDBObjEntity;Name:string):PVirtualNode;
+function TBaseRootNodeDesk.CreateEntityNode(Tree:{$IF DECLARED(TVirtualStringTree)}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};basenode:PVirtualNode;pent:pGDBObjEntity;Name:string):PVirtualNode;
 var
    pnd:PTNodeData;
 begin

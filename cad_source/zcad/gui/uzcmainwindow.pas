@@ -45,6 +45,7 @@ uses
        uzcuitypes,
        uzcmenucontextcheckfuncs,uzctbextmenus,uzmenusdefaults,uzmenusmanager,uztoolbarsmanager,uzctextenteditor,uzcfcommandline,uzctreenode,uzcctrlcontextmenu,
        uzcimagesmanager,usupportgui,uzcuidialogs,
+       uzcActionsManager,
   {}
        uzgldrawcontext,uzglviewareaabstract,uzcguimanager,uzcinterfacedata,
        uzcenitiesvariablesextender,uzglviewareageneral,UniqueInstanceRaw,
@@ -80,7 +81,7 @@ type
     PageControl:TmyPageControl;
     DHPanel:TPanel;
     HScrollBar,VScrollBar:TScrollBar;
-    StandartActions:TActionList;
+    //StandartActions:TActionList;
     SystemTimer: TTimer;
     toolbars:tstringlist;
     procedure ZcadException(Sender: TObject; E: Exception);
@@ -717,7 +718,7 @@ var
   ta:TmyAction;
   PFID:PTFormInfoData;
 begin
-  ta:=tmyaction(self.StandartActions.ActionByName('ACN_Show_'+aname));
+  ta:=tmyaction(StandartActions.ActionByName('ACN_Show_'+aname));
   if ta<>nil then
                  ta.Checked:=true;
   if pos(ToolPaletteNamePrefix,uppercase(aname))=1 then begin
@@ -788,7 +789,7 @@ begin
   ZCADMainWindow.HScrollBar.Enabled:=false;
   ZCADMainWindow.HScrollBar.Parent:=ZCADMainWindow.DHPanel;
 
-  InitializeViewAreaCXMenu(ZCADMainWindow,ZCADMainWindow.StandartActions);
+  InitializeViewAreaCXMenu(ZCADMainWindow,StandartActions);
   ZCADMainWindow.PageControl:=TmyPageControl.Create(ZCADMainWindow.MainPanel);
   ZCADMainWindow.PageControl.Constraints.MinHeight:=32;
   ZCADMainWindow.PageControl.Parent:=ZCADMainWindow.MainPanel;
@@ -886,7 +887,7 @@ begin
   ImagesManager.ScanDir(ProgramPath+'images/');
   ImagesManager.LoadAliasesDir(ProgramPath+'images/navigator.ima');
 
-  StandartActions:=TActionList.Create(self);
+  //StandartActions:=TActionList.Create(self);
   if not assigned(StandartActions.Images) then
                              StandartActions.Images:={TImageList.Create(StandartActions)}ImagesManager.IconList;
   brocenicon:=StandartActions.LoadImage(ProgramPath+'menu/BMP/noimage.bmp');

@@ -23,7 +23,7 @@ uses uzcfnavigatordevices,uzcfcommandline,uzbpaths,TypeDescriptors,uzctranslatio
      varmandef,uzeentdevice,uzcnavigatorsnodedesk,
      uzeentity,zcobjectinspector,uzcguimanager,uzcenitiesvariablesextender,uzbstrproc,
      Types,Controls,Varman,UUnitManager,uzcsysvars,uzcLog,laz.VirtualTrees,
-     uzcfnavigatordevicescxmenu,uzcmainwindow,MacroDefIntf,sysutils;
+     uzcfnavigatordevicescxmenu,uzcmainwindow,MacroDefIntf,sysutils,uzcActionsManager;
 resourcestring
   rsDevices='Devices';
   rsRisers='Risers';
@@ -98,7 +98,7 @@ end;
 
 procedure ZCADFormSetupProc(Form:TControl);
 begin
-  InitializeNavigatorDevicesCXMenu(ZCADMainWindow,ZCADMainWindow.StandartActions);
+  InitializeNavigatorDevicesCXMenu(ZCADMainWindow,StandartActions);
 
   NavigatorDevicesMenuManager.RegisterContextCheckFunc('HaveSubNodes',NDMCCFHaveSubNodes);
   NavigatorDevicesMenuManager.RegisterContextCheckFunc('HaveEntity',NDMCCFNodeHaveEntity);

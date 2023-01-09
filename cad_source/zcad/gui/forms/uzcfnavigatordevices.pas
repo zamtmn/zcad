@@ -9,7 +9,7 @@ uses
   StdCtrls, ActnList, laz.VirtualTrees, LCLVersion,
   uzbtypes,gzctnrVectorTypes,uzegeometrytypes ,uzegeometry, uzccommandsmanager,
   uzcinterface,uzeconsts,uzeentity,uzcimagesmanager,uzcdrawings,
-  varmandef,uzbstrproc,uzcmainwindow,uzctreenode,
+  varmandef,uzbstrproc,uzctreenode,
   uzcnavigatorsnodedesk,Varman,uzcstrconsts,uztoolbarsmanager,uzmenusmanager,
   uzccommandsimpl,uzccommandsabstract,uzcutils,uzcenitiesvariablesextender,
   GraphType,generics.collections,uzglviewareaabstract,Menus,
@@ -19,7 +19,7 @@ uses
   uzeparserenttypefilter,uzeparserentpropfilter,uzeparsernavparam,uzclog,uzcuidialogs,
   XMLConf,XMLPropStorage, EditBtn,LazConfigStorage,uzcdialogsfiles,
   Masks,garrayutils,LCLType,LCLIntf, Buttons,
-  gzctnrSTL;
+  gzctnrSTL,uzcActionsManager;
 
 resourcestring
   rsStandaloneDevices='Standalone devices';
@@ -617,7 +617,7 @@ begin
   if FileExt='' then
     FileExt:='xml';
    umf:=TmyVariableAction.Create(self);
-   umf.ActionList:=ZCADMainWindow.StandartActions;
+   umf.ActionList:=StandartActions;
    umf.AssignToVar('DSGN_NavigatorsUseMainFunction',0);
    umf.Caption:='Use main functions';
 

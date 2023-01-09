@@ -20,7 +20,7 @@ unit uzeentsubordinated;
 {$INCLUDE zengineconfig.inc}
 
 interface
-uses strutils,uzgldrawcontext,uzeentityextender,uzetextpreprocessor,uzedrawingdef,
+uses strutils,uzgldrawcontext,uzeentityextender,uzedrawingdef,
      uzbstrproc{$IFNDEF DELPHI},LazUTF8{$ENDIF},uzctnrVectorBytes,uzegeometrytypes,uzbtypes,
      sysutils,uzestyleslayers,uzeffdxfsupport,gzctnrVectorTypes,uzecamera;
 type

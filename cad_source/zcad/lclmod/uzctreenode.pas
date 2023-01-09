@@ -30,7 +30,9 @@ uses
 type
     TZAction=class(TAction)
                    public
-                   imgstr:string;
+                     imgstr:string;
+                   public
+                     constructor Create(AOwner: TComponent); override;
               end;
     TmyVariableAction=class(TZAction)
                       public
@@ -397,6 +399,12 @@ begin
         else
             enabled:=false;
 end;
+constructor TZAction.Create(AOwner: TComponent);
+begin
+  inherited create(AOwner);
+  DisableIfNoHandler:=False;
+end;
+
 function TmyAction.Execute: Boolean;
 var
     s:string;

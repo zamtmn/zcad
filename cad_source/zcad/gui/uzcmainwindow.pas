@@ -888,6 +888,8 @@ begin
   ImagesManager.LoadAliasesDir(ProgramPath+'images/navigator.ima');
 
   //StandartActions:=TActionList.Create(self);
+  uzcActionsManager.Actions:=TActionList.Create(self);
+
   if not assigned(StandartActions.Images) then
                              StandartActions.Images:={TImageList.Create(StandartActions)}ImagesManager.IconList;
   brocenicon:=StandartActions.LoadImage(ProgramPath+'menu/BMP/noimage.bmp');

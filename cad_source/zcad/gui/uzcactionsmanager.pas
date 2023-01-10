@@ -32,8 +32,8 @@ function StandartActions:TActionList;
 implementation
 function StandartActions:TActionList;
 begin
-  if not Assigned(Actions) then
-      Actions:=TActionList.Create(nil);
+  //if not Assigned(Actions) then
+  //    Actions:=TActionList.Create(nil);
   Result:=Actions;
 end;
 
@@ -41,7 +41,7 @@ initialization
   Actions:=nil;
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  if Assigned(Actions) then
-    Actions.Destroy;
+  //if Assigned(Actions) then
+  //  Actions.Destroy;
 end.
 

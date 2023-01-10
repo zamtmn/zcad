@@ -32,7 +32,7 @@ function _CloseDWGPage(ClosedDWG:PTZCADDrawing;lincedcontrol:TObject;NeedAskDonS
 
 implementation
 
-uses uzcmainwindow;
+uses uzcmainwindow,uzccommand_saveas;
 
 { #todo : Убрать зависимость от главной формы }
 

@@ -33,12 +33,51 @@ uses
   uzcstrconsts,
   uzcdrawings,
   uzcinterface,
-  uzeffdxf;
+  uzeffdxf,uzedrawingsimple,Varman,uzctnrVectorBytes,uzcdrawing,uzcTranslations,uzeconsts;
 
 function SaveAs_com(operands:TCommandOperands):TCommandResult;
 function SaveDXFDPAS(s:ansistring):Integer;
+function dwgQSave_com(dwg:PTSimpleDrawing):Integer;
 
 implementation
+
+function dwgSaveDXFDPAS(s:String;dwg:PTSimpleDrawing):Integer;
+var
+   mem:TZctnrVectorBytes;
+   pu:ptunit;
+   allok:boolean;
+begin
+     allok:=savedxf2000(s,ProgramPath + 'components/empty.dxf',dwg^);
+     pu:=PTZCADDrawing(dwg).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
+     mem.init(1024);
+     pu^.SavePasToMem(mem);
+     mem.SaveToFile(expandpath(s+'.dbpas'));
+     mem.done;
+     if allok then
+                  result:=cmd_ok
+              else
+                  result:=cmd_error;
+end;
+
+function dwgQSave_com(dwg:PTSimpleDrawing):Integer;
+var s1:String;
+begin
+     begin
+          if dwg.GetFileName=rsUnnamedWindowTitle then
+          begin
+               s1:='';
+               if not(SaveFileDialog(s1,'dxf',ProjectFileFilter,'',rsSaveFile)) then
+               begin
+                    result:=cmd_error;
+                    exit;
+               end;
+          end
+          else
+              s1:=drawings.GetCurrentDWG.GetFileName;
+     end;
+     result:=dwgSaveDXFDPAS(s1,dwg);
+end;
+
 
 function SaveDXFDPAS(s:ansistring):Integer;
 begin

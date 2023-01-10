@@ -27,6 +27,7 @@ uses uzccommandsimpl,    //тут реализация объекта CommandRTE
        uzcinterface,
        sysutils,
      uzegeometrytypes,
+     uzegeometry,
      //uzvcom,             //
      //uzvnum,
      //uzvagensl,
@@ -106,10 +107,11 @@ var
  //contourRoomEmbedSL:TListVertex;
  stPoint:gdbvertex;
 begin
-  if commandmanager.get3dpoint('Specify insert point:',stPoint)= GRNormal then
-       ZCMsgCallBackInterface.TextMessage('координата введена',TMWOHistoryOut)
-     else
-       ZCMsgCallBackInterface.TextMessage('координаты НЕТ',TMWOHistoryOut);
+  stPoint:=uzegeometry.CreateVertex(0,0,0);
+  //if commandmanager.get3dpoint('Specify insert point:',stPoint)= GRNormal then
+  //     ZCMsgCallBackInterface.TextMessage('координата введена',TMWOHistoryOut)
+  //   else
+  //     ZCMsgCallBackInterface.TextMessage('координаты НЕТ',TMWOHistoryOut);
 
    if uzvagsl.getContourRoom(contourRoom) then                  // получить контур помещения
       if uzvagsl.isRectangelRoom(contourRoom) then begin        //это прямоугольная комната?

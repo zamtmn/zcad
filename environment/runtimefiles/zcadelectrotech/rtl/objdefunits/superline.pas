@@ -3,11 +3,11 @@ interface
 uses system,cables;
 var
    NMO_Name:String;(*'Обозначение'*)
-   Cable_Mounting_Method:TDCableMountingMethod;(*'Метод монтажа'*)
+   CABLE_MountingMethod:TDCableMountingMethod;(*'Метод монтажа'*)
 implementation
 begin
-   NMO_Name:='??;
+   NMO_Name:='??';
    {Cable_Mounting_Method:=TCT_PVCpipe;}
-   Cable_Mounting_Method:="-";
+   CABLE_MountingMethod:='-';
 end.
 

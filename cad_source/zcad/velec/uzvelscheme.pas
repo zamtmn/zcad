@@ -139,6 +139,7 @@ type
       PTEdgeTree=^TEdgeTree;
       TEdgeTree=record
            segm:PGDBObjCable;
+           mountingMethod:string;
            isSegm:boolean;
            isRiser:boolean;
            length:double;
@@ -1108,20 +1109,26 @@ var
       end;
 
       //рисуем прямоугольник с цветом  зная номера вершин, координат возьмем из графа по номерам
-      procedure drawConnectLineDev(pSt,p1,p2,pEd:GDBVertex;cabl:TEdgeTree; var root:GDBObjRoot);
+      procedure drawConnectLineDev(pSt,p1,p2,pEd:GDBVertex;VT1,VT2:TVertex; var root:GDBObjRoot);
       var
-          cableLine:PGDBObjCable;
+          cabl:TEdgeTree;
+          pDev1,pDev2:pGDBObjDevice;
+          cableLine:PGDBObjPolyLine;
           //pnevdev:PGDBObjCable;
           entvarext,delvarext:TVariablesExtender;
           psu:ptunit;
+          pvd:pvardesk;
+          //pv1,pv2,pvlength1,pvlength2:pvardesk;
+          //sum:double;
           //DC:TDrawContext;
           //PBH:PGDBObjBlockdef;
           //pobj,pcobj:PGDBObjEntity;
           //ir2:itrec;
           datname:String;
       begin
-           cableLine := AllocEnt(GDBCableID);
-           cableLine^.init(nil,nil,0);
+           cabl:=TEdgeTree(G.GetEdge(listVertex[tparent].vertex,listVertex.Back.vertex).AsPointer[vpTEdgeTree]^);
+           cableLine:=GDBObjPolyline.CreateInstance;
+           //cableLine^.init(nil,nil,0);
            zcSetEntPropFromCurrentDrawingProp(cableLine);
 
            cableLine^.VertexArrayInOCS.PushBackData(pSt);
@@ -1140,16 +1147,38 @@ var
           ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
           if cabl.isRiser = true then
           begin
+            //pDev1:=TVertexTree(VT1.AsPointer[vpTVertexTree]^).dev;
+            //pv1:=pDev1^.specialize GetExtension<TVariablesExtender>;
+            //pvlength1:=pv1.entityunit.FindVariable('Elevation');
+            //pDev2:=TVertexTree(VT2.AsPointer[vpTVertexTree]^).dev;
+            //pv2:=pDev2^.specialize GetExtension<TVariablesExtender>;
+            //pvlength2:=pv2.entityunit.FindVariable('Elevation');
+            //sum:=0;
+            //if (pvlength1 <> nil) and (pvlength2 <> nil) then begin
+            //
+            //end;
+
+
+
             cableLine^.AddExtension(TVariablesExtender.Create(cableLine));
             entvarext:=cableLine^.specialize GetExtension<TVariablesExtender>;
             //**добавление кабельных свойств
             //pvarext:=cableLine^.specialize GetExtension<TVariablesExtender>; //подклчаемся к инспектору
             if entvarext<>nil then
             begin
-              psu:=units.findunit(SupportPath,@InterfaceTranslate,'cable'); //
+              psu:=units.findunit(SupportPath,@InterfaceTranslate,'cableelscheme'); //
               if psu<>nil then
                 entvarext.entityunit.copyfrom(psu);
+              pvd:=entvarext.entityunit.FindVariable(velec_cableMounting);
+              if pvd<>nil then
+                 pstring(pvd^.data.Addr.Instance)^:=cabl.mountingMethod;
+
+              pvd:=entvarext.entityunit.FindVariable('AmountD');
+              if pvd<>nil then
+                 pdouble(pvd^.data.Addr.Instance)^:=cabl.length;
             end;
+
+
             //zcSetEntPropFromCurrentDrawingProp(cableLine);
           end
           else
@@ -1158,6 +1187,13 @@ var
             //добавляем клону расширение с переменными
             cableLine^.AddExtension(TVariablesExtender.Create(cableLine));
             delvarext:=cableLine^.specialize GetExtension<TVariablesExtender>;
+            if delvarext<>nil then
+            begin
+              psu:=units.findunit(SupportPath,@InterfaceTranslate,'cableelscheme'); //
+              if psu<>nil then
+                delvarext.entityunit.copyfrom(psu);
+            end;
+
             //добавляем устройству клона как представителя
             entvarext.addDelegate(cableLine,delvarext);
             //вставляем информационный блок
@@ -1194,6 +1230,94 @@ var
 
 
       end;
+
+
+      //procedure drawConnectLineDev(pSt,p1,p2,pEd:GDBVertex;cabl:TEdgeTree; var root:GDBObjRoot);
+      //var
+      //    cableLine:PGDBObjCable;
+      //    //pnevdev:PGDBObjCable;
+      //    entvarext,delvarext:TVariablesExtender;
+      //    psu:ptunit;
+      //    //DC:TDrawContext;
+      //    //PBH:PGDBObjBlockdef;
+      //    //pobj,pcobj:PGDBObjEntity;
+      //    //ir2:itrec;
+      //    datname:String;
+      //begin
+      //     cableLine := AllocEnt(GDBCableID);
+      //     cableLine^.init(nil,nil,0);
+      //     zcSetEntPropFromCurrentDrawingProp(cableLine);
+      //
+      //     cableLine^.VertexArrayInOCS.PushBackData(pSt);
+      //     cableLine^.VertexArrayInOCS.PushBackData(p1);
+      //     cableLine^.VertexArrayInOCS.PushBackData(uzegeometry.CreateVertex(p2.x,p1.y,0));
+      //     cableLine^.VertexArrayInOCS.PushBackData(p2);
+      //     cableLine^.VertexArrayInOCS.PushBackData(pEd);
+      //
+      //     zcAddEntToCurrentDrawingWithUndo(cableLine);
+      //
+      //       if cabl.isRiser = true then
+      //          ZCMsgCallBackInterface.TextMessage('это разрыв',TMWOHistoryOut)
+      //       else
+      //          ZCMsgCallBackInterface.TextMessage('это не разрыв',TMWOHistoryOut);
+      //
+      //    ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
+      //    if cabl.isRiser = true then
+      //    begin
+      //      cableLine^.AddExtension(TVariablesExtender.Create(cableLine));
+      //      entvarext:=cableLine^.specialize GetExtension<TVariablesExtender>;
+      //      //**добавление кабельных свойств
+      //      //pvarext:=cableLine^.specialize GetExtension<TVariablesExtender>; //подклчаемся к инспектору
+      //      if entvarext<>nil then
+      //      begin
+      //        psu:=units.findunit(SupportPath,@InterfaceTranslate,'cable'); //
+      //        if psu<>nil then
+      //          entvarext.entityunit.copyfrom(psu);
+      //      end;
+      //      //zcSetEntPropFromCurrentDrawingProp(cableLine);
+      //    end
+      //    else
+      //    begin
+      //      entvarext:=cabl.segm^.specialize GetExtension<TVariablesExtender>;
+      //      //добавляем клону расширение с переменными
+      //      cableLine^.AddExtension(TVariablesExtender.Create(cableLine));
+      //      delvarext:=cableLine^.specialize GetExtension<TVariablesExtender>;
+      //      //добавляем устройству клона как представителя
+      //      entvarext.addDelegate(cableLine,delvarext);
+      //      //вставляем информационный блок
+      //      //datname:= velec_SchemaCableInfo;
+      //      //drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,datname);
+      //      //pointer(pv):=old_ENTF_CreateBlockInsert(drawings.GetCurrentROOT,@{drawings.GetCurrentROOT}root.ObjArray,
+      //      //                                   drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
+      //      //                                   p2, 1, 0,@datname[1]);
+      //      ////dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+      //      //zcSetEntPropFromCurrentDrawingProp(pv);
+      //      //pv^.AddExtension(TVariablesExtender.Create(pv));
+      //      //delvarext:=pv^.specialize GetExtension<TVariablesExtender>;
+      //      ////добавляем устройству клона как представителя
+      //      //entvarext.addDelegate(pv,delvarext);
+      //      ////ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
+      //    end;
+      //
+      //      //вставляем информационный блок
+      //      datname:= velec_SchemaCableInfo;
+      //      drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,datname);
+      //      pointer(pv):=old_ENTF_CreateBlockInsert(drawings.GetCurrentROOT,@{drawings.GetCurrentROOT}root.ObjArray,
+      //                                         drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
+      //                                         p2, 1, 0,@datname[1]);
+      //      //dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+      //      zcSetEntPropFromCurrentDrawingProp(pv);
+      //      pv^.AddExtension(TVariablesExtender.Create(pv));
+      //      delvarext:=pv^.specialize GetExtension<TVariablesExtender>;
+      //      //добавляем устройству клона как представителя
+      //      entvarext.addDelegate(pv,delvarext);
+      //
+      //    ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
+      //
+      //
+      //
+      //
+      //end;
 
 begin
 
@@ -1342,7 +1466,7 @@ begin
 
         //******
         ZCMsgCallBackInterface.TextMessage('5',TMWOHistoryOut);
-        drawConnectLineDev(ptSt,pt1,pt2,ptEd,TEdgeTree(G.GetEdge(listVertex[tparent].vertex,listVertex.Back.vertex).AsPointer[vpTEdgeTree]^),drawings.GetCurrentDWG^.mainObjRoot);
+        drawConnectLineDev(ptSt,pt1,pt2,ptEd,listVertex[tparent].vertex,listVertex.Back.vertex,drawings.GetCurrentDWG^.mainObjRoot);
         ZCMsgCallBackInterface.TextMessage('6',TMWOHistoryOut);
         //ptSt:=ptEd;
 
@@ -1796,13 +1920,16 @@ var
         i:integer;
     begin
          result:=-1;
-         for i:= 0 to oGraph.VertexCount-1 do
+         //ZCMsgCallBackInterface.TextMessage('getVertexGraphIndexCoo(oGraph:TGraph;vertex:GDBVertex):integer  oGraph.VertexCount=' + inttostr(oGraph.VertexCount),TMWOHistoryOut);
+         for i:= 0 to oGraph.VertexCount-1 do begin
+           //ZCMsgCallBackInterface.TextMessage('i='+inttostr(i)+'   dev = '+booltostr(TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).isDev)+ 'ccor oGraph.Vertices[i].AsPointer[vpTVertexTree]^).vertex x=' + floattostr(TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).vertex.x),TMWOHistoryOut);
            if vertexeq(TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).vertex,vertex) then begin
              //if TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).dev <> nil then
-                 ZCMsgCallBackInterface.TextMessage(TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).dev^.Name + '---gggggggggggggggggggg',TMWOHistoryOut);
-               ZCMsgCallBackInterface.TextMessage(inttostr(i)+ '---hhhhhhhhhhhhhhhhhh',TMWOHistoryOut);
+                 //ZCMsgCallBackInterface.TextMessage(TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).dev^.Name + '---gggggggggggggggggggg',TMWOHistoryOut);
+               //ZCMsgCallBackInterface.TextMessage(inttostr(i)+ '---hhhhhhhhhhhhhhhhhh',TMWOHistoryOut);
                result:=i;
            end;
+         end;
     end;
 
     // получаем индекс вершины у которой одинаковое имя с другой вершиной
@@ -1831,62 +1958,62 @@ var
    end;
 
 
-    procedure createRiserEdgeGraph(var oGraph:TGraph;nowDev:PGDBObjDevice);
-    var
-        i,count:integer;
-        sum:double;
-        oGraphStartVertex:TVertex;
-        pnodeendvarext,pnodestartvarext:TVariablesExtender;
-        pvend,pvstart,pvendelevation,pvstartelevation:pvardesk;
-        edgeGraph:PTEdgeTree;
-        vertexGraph:PTVertexTree;
-    begin
-         //result:=-1;
-          count:=-1;
-          sum:=-1;
-          pnodeendvarext:=PGDBObjDevice(node^.DevLink^.bp.ListPos.Owner)^.specialize GetExtension<TVariablesExtender>;
-          pvend:=nil;
-          pvend:=pnodeendvarext.entityunit.FindVariable('RiserName');
-          pvendelevation:=pnodeendvarext.entityunit.FindVariable('Elevation');
-
-            for i:= 0 to oGraph.VertexCount-1 do  begin
-              if (TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).dev <> nil) then
-                begin
-                pnodestartvarext:=TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).dev^.specialize GetExtension<TVariablesExtender>;
-                pvstart:=nil;
-                pvstart:=pnodestartvarext.entityunit.FindVariable('RiserName');
-                pvstartelevation:=pnodestartvarext.entityunit.FindVariable('Elevation');
-                if (pvend <> nil) and (pvstart <> nil) then
-                begin
-                   if (pstring(pvend^.data.Addr.Instance)^ = pstring(pvstart^.data.Addr.Instance)^) then
-                   begin
-                     if ((sum >= abs(pdouble(pvend^.data.Addr.Instance)^ - pdouble(pvstart^.data.Addr.Instance)^)) or (sum < 0)) then
-                      begin
-                        new(edgeGraph);
-                        edgeGraph^.segm:=nil;
-                        edgeGraph^.isSegm:=false;
-                        edgeGraph^.isRiser:=true;
-                        sum:= abs(pdouble(pvend^.data.Addr.Instance)^ + pdouble(pvstart^.data.Addr.Instance)^);
-                        edgeGraph^.length:=sum;
-
-                        count:=i;
-                        new(vertexGraph);
-                        vertexGraph^.dev:=PGDBObjDevice(node^.DevLink^.bp.ListPos.Owner);
-                        vertexGraph^.connector:=nil;
-                        vertexGraph^.vertex:=nowDev^.GetCenterPoint;
-                        vertexGraph^.isDev:=false;
-                        vertexGraph^.isRiser:=true;
-                      end;
-                   end;
-                end;
-              end;
-           end;
-                oGraphStartVertex:=oGraph.AddVertex;
-                oGraphStartVertex.AsPointer[vpTVertexTree]:=vertexGraph;
-
-                oGraphEdge:=oGraph.AddEdge(oGraph.Vertices[count],oGraphStartVertex);
-                oGraphEdge.AsPointer[vpTEdgeTree]:=edgeGraph;
-         end;
+    //procedure createRiserEdgeGraph(var oGraph:TGraph;nowDev:PGDBObjDevice);
+    //var
+    //    i,count:integer;
+    //    sum:double;
+    //    oGraphStartVertex:TVertex;
+    //    pnodeendvarext,pnodestartvarext:TVariablesExtender;
+    //    pvend,pvstart,pvendelevation,pvstartelevation:pvardesk;
+    //    edgeGraph:PTEdgeTree;
+    //    vertexGraph:PTVertexTree;
+    //begin
+    //     //result:=-1;
+    //      count:=-1;
+    //      sum:=-1;
+    //      pnodeendvarext:=PGDBObjDevice(node^.DevLink^.bp.ListPos.Owner)^.specialize GetExtension<TVariablesExtender>;
+    //      pvend:=nil;
+    //      pvend:=pnodeendvarext.entityunit.FindVariable('RiserName');
+    //      pvendelevation:=pnodeendvarext.entityunit.FindVariable('Elevation');
+    //
+    //        for i:= 0 to oGraph.VertexCount-1 do  begin
+    //          if (TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).dev <> nil) then
+    //            begin
+    //            pnodestartvarext:=TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).dev^.specialize GetExtension<TVariablesExtender>;
+    //            pvstart:=nil;
+    //            pvstart:=pnodestartvarext.entityunit.FindVariable('RiserName');
+    //            pvstartelevation:=pnodestartvarext.entityunit.FindVariable('Elevation');
+    //            if (pvend <> nil) and (pvstart <> nil) then
+    //            begin
+    //               if (pstring(pvend^.data.Addr.Instance)^ = pstring(pvstart^.data.Addr.Instance)^) then
+    //               begin
+    //                 if ((sum >= abs(pdouble(pvend^.data.Addr.Instance)^ - pdouble(pvstart^.data.Addr.Instance)^)) or (sum < 0)) then
+    //                  begin
+    //                    new(edgeGraph);
+    //                    edgeGraph^.segm:=nil;
+    //                    edgeGraph^.isSegm:=false;
+    //                    edgeGraph^.isRiser:=true;
+    //                    sum:= abs(pdouble(pvend^.data.Addr.Instance)^ + pdouble(pvstart^.data.Addr.Instance)^);
+    //                    edgeGraph^.length:=sum;
+    //
+    //                    count:=i;
+    //                    new(vertexGraph);
+    //                    vertexGraph^.dev:=PGDBObjDevice(node^.DevLink^.bp.ListPos.Owner);
+    //                    vertexGraph^.connector:=nil;
+    //                    vertexGraph^.vertex:=nowDev^.GetCenterPoint;
+    //                    vertexGraph^.isDev:=false;
+    //                    vertexGraph^.isRiser:=true;
+    //                  end;
+    //               end;
+    //            end;
+    //          end;
+    //       end;
+    //            oGraphStartVertex:=oGraph.AddVertex;
+    //            oGraphStartVertex.AsPointer[vpTVertexTree]:=vertexGraph;
+    //
+    //            oGraphEdge:=oGraph.AddEdge(oGraph.Vertices[count],oGraphStartVertex);
+    //            oGraphEdge.AsPointer[vpTEdgeTree]:=edgeGraph;
+    //     end;
 
     procedure graphAddEdgeRiser(var oGraph:TGraph); //создаем ребра между разрывами
     var
@@ -1986,6 +2113,7 @@ var
                   edgeGraph^.segm:=nil;
                   edgeGraph^.isSegm:=false;
                   edgeGraph^.isRiser:=true;
+                  edgeGraph^.mountingMethod:='УРА';
                   sum:= abs(pdouble(pvendelevation^.data.Addr.Instance)^ - pdouble(pvstartelevation^.data.Addr.Instance)^);
                   edgeGraph^.length:=sum;
                   //ZCMsgCallBackInterface.TextMessage('создали ребро в граф',TMWOHistoryOut);
@@ -2067,6 +2195,7 @@ begin
                         new(edgeGraph);
                         edgeGraph^.segm:=segmCable;
                         edgeGraph^.isSegm:=true;
+                        edgeGraph^.mountingMethod:='Не менять!';
                         edgeGraph^.isRiser:=false;
 
 
@@ -2141,7 +2270,9 @@ begin
                           end;
 
                           ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
+                          ZCMsgCallBackInterface.TextMessage('getVertexGraphIndexCoo --- node^.PrevP.x=' + floattostr(node^.PrevP.x),TMWOHistoryOut);
                           stVertexIndex:=getVertexGraphIndexCoo(oGraph,node^.PrevP); //получает вершину графа путем перебора всех вершин добавленых и вычитания из них первой вершины сегмента если ноль то найдена
+                          ZCMsgCallBackInterface.TextMessage('1-1= stVertexIndex=' + inttostr(stVertexIndex),TMWOHistoryOut);
                           if stVertexIndex >= 0 then begin
                              oGraphStartVertex:= oGraph.Vertices[stVertexIndex];
                              node:=segmCable^.NodePropArray.iterate(ir_inNodeArray);
@@ -2172,7 +2303,7 @@ begin
 
                               if node^.DevLink <> nil then begin
 
-                                  //ZCMsgCallBackInterface.TextMessage('Устройство --- ' + floattostr(node^.DevLink^.GetCenterPoint.x),TMWOHistoryOut);
+                                  ZCMsgCallBackInterface.TextMessage('Устройство --- ' + floattostr(node^.DevLink^.GetCenterPoint.x),TMWOHistoryOut);
                                   //ZCMsgCallBackInterface.TextMessage('Устройство111 --- ' + PGDBObjDevice(node^.DevLink^.bp.ListPos.Owner)^.Name,TMWOHistoryOut);
                                   //vertexGraph^.dev:=node^.DevLink;
                                   vertexGraph^.dev:=PGDBObjDevice(node^.DevLink^.bp.ListPos.Owner);
@@ -2185,7 +2316,7 @@ begin
                                   pvd:=pnodeendvarext.entityunit.FindVariable('RiserName');
                                   if pvd <> nil then
                                   begin
-                                     //ZCMsgCallBackInterface.TextMessage('Устройство --- РАЗРЫВ',TMWOHistoryOut);
+                                     ZCMsgCallBackInterface.TextMessage('Устройство --- РАЗРЫВ',TMWOHistoryOut);
                                      vertexGraph^.isRiser:=true;
                                      //ZCMsgCallBackInterface.TextMessage('Устройство --- РАЗРЫВ',TMWOHistoryOut);
                                   end;
@@ -2200,8 +2331,8 @@ begin
                                   //ZCMsgCallBackInterface.TextMessage('Ус --- ' + endname,TMWOHistoryOut)
                               end
                               else begin
-                                  //ZCMsgCallBackInterface.TextMessage('Устройство --- не устройство ',TMWOHistoryOut);
-                                  //ZCMsgCallBackInterface.TextMessage('Устройство --- ' + floattostr(node^.PrevP.x),TMWOHistoryOut);
+                                  ZCMsgCallBackInterface.TextMessage('Устройство --- не устройство ',TMWOHistoryOut);
+                                  ZCMsgCallBackInterface.TextMessage('Устройство --- node^.PrevP.x=' + floattostr(node^.PrevP.x),TMWOHistoryOut);
                                   vertexGraph^.dev:=nil;
                                   vertexGraph^.connector:=nil;
                                   vertexGraph^.vertex:=node^.PrevP;

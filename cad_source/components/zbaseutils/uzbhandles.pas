@@ -23,19 +23,19 @@ interface
 uses sysutils;
 
 type
-GTHandleManipulator<GHandleType>=object
+GTHandleManipulator<GHandleType>=class
   class function GetStartValue:GHandleType;inline;static;
   class procedure NextValue(var Value:GHandleType);inline;static;
 end;
-GTHandleInvManipulator<GHandleType>=object
+GTHandleInvManipulator<GHandleType>=class
   class function GetStartValue:GHandleType;inline;static;
   class procedure NextValue(var Value:GHandleType);inline;static;
 end;
-GTHandleBitManipulator<GHandleType>=object
+GTHandleBitManipulator<GHandleType>=class
   class function GetStartValue:GHandleType;inline;static;
   class procedure NextValue(var Value:GHandleType);inline;static;
 end;
-GTHandleInvBitManipulator<GHandleType>=object
+GTHandleInvBitManipulator<GHandleType>=class
   class function GetStartValue:GHandleType;inline;static;
   class procedure NextValue(var Value:GHandleType);inline;static;
 end;

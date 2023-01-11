@@ -888,7 +888,7 @@ begin
   ImagesManager.LoadAliasesDir(ProgramPath+'images/navigator.ima');
 
   //StandartActions:=TActionList.Create(self);
-  uzcActionsManager.Actions:=TActionList.Create(self);
+  InsertComponent(StandartActions);
 
   if not assigned(StandartActions.Images) then
                              StandartActions.Images:={TImageList.Create(StandartActions)}ImagesManager.IconList;
@@ -961,6 +961,7 @@ end;
 destructor TZCADMainWindow.Destroy;
 begin
   with programlog.Enter('TZCADMainWindow.Destroy',LM_Debug,LMD) do begin
+    RemoveComponent(StandartActions);
     if DockMaster<>nil then
       DockMaster.CloseAll;
     freeandnil(toolbars);

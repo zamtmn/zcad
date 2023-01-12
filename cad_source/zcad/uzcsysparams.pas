@@ -57,6 +57,7 @@ const
                                    NoSplash:false;
                                    NoLoadLayout:false;
                                    UpdatePO:false);
+  zcaduniqueinstanceid='zcad unique instance';
 var
   SysParam: tsysparam;
 

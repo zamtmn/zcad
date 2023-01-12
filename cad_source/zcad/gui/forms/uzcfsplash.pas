@@ -21,7 +21,7 @@ unit uzcfsplash;
 interface
 uses
  uzcsysparams,uzbpaths,uniqueinstanceraw,uzcstrconsts,uzbstrproc,Forms,
- stdctrls, Controls, Graphics,ExtCtrls,uzcsysinfo,LazUTF8,sysutils,
+ stdctrls, Controls, Graphics,ExtCtrls,LazUTF8,sysutils,
  uzbLogTypes,uzbLogDecorators,
  uzcLog;
 type

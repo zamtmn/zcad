@@ -19,10 +19,17 @@
 unit uzeNamedObject;
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzepalette,uzeconsts,usimplegenerics,
-     uzedimensionaltypes,sysutils,uzbtypes,uzegeometry,
-     gzctnrVectorTypes,uzbstrproc;
+uses uzepalette,sysutils,uzbtypes,uzegeometry,uzbstrproc;
 type
+  TNamedObject=class
+    private
+      fName:String;
+    public
+      constructor Create(n:String);
+      procedure SetDefaultValues;virtual;
+
+      property Name:String read fName write fName;
+  end;
 {EXPORT+}
   PGDBNamedObject=^GDBNamedObject;
   {REGISTEROBJECTTYPE GDBNamedObject}
@@ -39,6 +46,17 @@ type
                  end;
 {EXPORT-}
 implementation
+constructor TNamedObject.Create(n:String);
+begin
+  Name:=n;
+  SetDefaultValues;
+end;
+
+procedure TNamedObject.SetDefaultValues;
+begin
+end;
+
+
 constructor GDBNamedObject.initnul;
 begin
      pointer(name):=nil;

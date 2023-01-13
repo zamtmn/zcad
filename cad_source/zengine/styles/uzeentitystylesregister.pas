@@ -29,9 +29,6 @@ uses
 
 type
 
-  TNamedObject=class
-    Name:String;
-  end;
   TNamedObjectArray=class
   end;
 

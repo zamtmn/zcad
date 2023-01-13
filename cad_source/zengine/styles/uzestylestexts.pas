@@ -20,7 +20,7 @@ unit uzestylestexts;
 {$INCLUDE zengineconfig.inc}
 interface
 uses LCLProc,uzbpaths,uzefontmanager,sysutils,uzbtypes,uzegeometry,
-     uzbstrproc,uzefont,uzestrconsts,UGDBNamedObjectsArray;
+     uzbstrproc,uzefont,uzestrconsts,UGDBNamedObjectsArray,uzeNamedObject;
 type
   //ptextstyle = ^textstyle;
 {EXPORT+}

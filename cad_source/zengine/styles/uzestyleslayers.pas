@@ -20,7 +20,7 @@ unit uzestyleslayers;
 {$INCLUDE zengineconfig.inc}
 interface
 uses sysutils,uzbtypes,uzegeometry,
-     uzeconsts,UGDBNamedObjectsArray,uzbstrproc;
+     uzeconsts,UGDBNamedObjectsArray,uzbstrproc,uzeNamedObject;
 type
 {EXPORT+}
 PPGDBLayerPropObjInsp=^PGDBLayerPropObjInsp;

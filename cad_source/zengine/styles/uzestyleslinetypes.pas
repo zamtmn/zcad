@@ -20,8 +20,8 @@ unit uzeStylesLineTypes;
 {$INCLUDE zengineconfig.inc}
 interface
 uses LCLProc,LazUTF8,Classes,gzctnrVector,sysutils,uzbtypes,
-     uzegeometry,uzegeometrytypes,uzestylestexts,gzctnrVectorObjects,UGDBNamedObjectsArray,
-     gzctnrVectorTypes,uzbstrproc;
+     uzegeometry,uzegeometrytypes,uzestylestexts,gzctnrVectorObjects,
+     UGDBNamedObjectsArray,gzctnrVectorTypes,uzbstrproc,uzeNamedObject;
 const
      DefaultSHXHeight=1;
      DefaultSHXAngle=0;

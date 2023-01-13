@@ -31,7 +31,7 @@ uses
   StdCtrls,uzcdrawings,uzcstrconsts,Controls,Classes,uzbstrproc,uzcsysvars,uzccommandsmanager,
   uzcsysparams,gzctnrVectorTypes,uzegeometrytypes,uzcinterface,uzcoimultiobjects,
   uzcgui2color,uzcgui2linewidth,uzcgui2linetypes,
-  uzccommand_layer,uzcuitypes;
+  uzccommand_layer,uzcuitypes,uzeNamedObject;
 type
     AsyncCommHelper=class
                          class procedure GetVertex(Pinstance:PtrInt);

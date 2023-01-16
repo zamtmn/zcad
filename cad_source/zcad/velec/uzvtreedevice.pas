@@ -4823,7 +4823,7 @@ var
       for I:=0 to G.EdgeCount - 1 do begin
         ZCMsgCallBackInterface.TextMessage(IntToStr(I) + '- соединение ' + IntToStr(G.Edges[I].V1.Index) + ' - ' + IntToStr(G.Edges[I].V2.Index) + ' = ' + floattostr(G.Edges[I].Weight),TMWOHistoryOut);
       end;
-
+      //G.Vertices[4].HelloWorld;
       G.Vertices[4].Destroy;
 
 

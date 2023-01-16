@@ -82,6 +82,7 @@ const
 
   velec_SchemaELSTART='EL_STARTSCHEMA';
   velec_SchemaELEND='EL_ENDSCHEMA';
+  velec_SchemaIsCable='isELSchemaCable';
 
   velec_VarNameForConnectBefore='SLCABAGEN';
   velec_VarNameForConnectBeforeName='Подключение №';

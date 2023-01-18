@@ -42,7 +42,7 @@ GDBNamedObjectsArray{-}<PTObj,TObj>{//}
 PTGenericNamedObjectsArray=^TGenericNamedObjectsArray;
 TGenericNamedObjectsArray=GDBNamedObjectsArray{-}<PGDBNamedObject,GDBNamedObject>{//};
 TNamedObjectsArray{-}<TCls:Class>{//}
-                     = object(GZVectorClass{-}<TCls>{//})
+                     = class(GZVectorClass{-}<TCls>{//})
               end;
 implementation
 procedure GDBNamedObjectsArray<PTObj,TObj>.IterateCounter(PCounted:Pointer;var Counter:Integer;proc:TProcCounter);

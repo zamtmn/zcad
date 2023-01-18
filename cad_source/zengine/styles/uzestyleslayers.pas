@@ -243,5 +243,5 @@ begin
 end;
 begin
   DefaultErrorLayer.Initwithparam('DefaultErrorLayer',200,0,true,false,true,'');
-  LayerHandle:=egisterStyle(TLayerPropClass,TLayersClasss);
+  //LayerHandle:=RegisterStyle(TLayerPropClass,TLayersClasss);
 end.

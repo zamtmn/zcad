@@ -12,7 +12,7 @@ uses
   gzctnrVectorPData, gzctnrVectorPObjects, gzctnrBinarySeparatedTree, 
   gzctnrSTL, uzctnrAlignedVectorBytes, gzctnrVectorStr, uzctnrTree, 
   uzctnrVectorStrings, uzctnrVectorPointers, uzctnrVectorBytes, 
-  gzctnrAlignedVectorObjects, LazarusPackageIntf;
+  gzctnrAlignedVectorObjects, gzctnrVectorc, LazarusPackageIntf;
 
 implementation
 

@@ -19,12 +19,12 @@
 unit gzctnrVectorClass;
 
 interface
-uses gzctnrVector;
+uses gzctnrVectorc,gvector;
 type
 {Export+}
 {----REGISTEROBJECTTYPE GZVectorClass}
-GZVectorClass{-}<T:class>{//}=object
-                               (GZVector{-}<T>{//})
+GZVectorClass{-}<T:class>{//}=class
+                               (GZVectorc{-}<T>{//})
                                  end;
 {Export-}
 implementation

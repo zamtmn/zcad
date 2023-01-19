@@ -19,62 +19,43 @@
 unit zcobjectchangeundocommand2;
 {$INCLUDE zengineconfig.inc}
 interface
-uses zeundostack,zebaseundocommands,uzbtypes,uzeentity,
-     uzestyleslayers,uzestylestexts,uzestylesdim,uzgldrawcontext,uzcdrawings;
+uses
+  zeundostack,zebaseundocommands,
+  uzeentity,uzgldrawcontext,uzcdrawings;
 
 type
+  generic GUCmdChgMethods<_T> =object(TCustomChangeCommand)
+    public
+      type
+        PCmd=^specialize GUCmdChgMethods<_T>;
+      var
+        Data:_T;
+        DoMethod,UnDoMethod:tmethod;
+        constructor Assign(var _dodata:_T;_domethod,_undomethod:tmethod);
 
-generic TGObjectChangeCommand2<_T> =object(TCustomChangeCommand)
-                                      Data:_T;
-                                      DoMethod,UnDoMethod:tmethod;
-                                      constructor Assign(var _dodata:_T;_domethod,_undomethod:tmethod);
+        procedure UnDo;virtual;
+        procedure Comit;virtual;
 
-                                      procedure UnDo;virtual;
-                                      procedure Comit;virtual;
-                                  end;
+        class function CreateCmd(var _dodata:_T;_domethod,_undomethod:tmethod):PCmd;static;
+        class function PushCreateCmd(var us:TZctnrVectorUndoCommands; var _dodata:_T;_domethod,_undomethod:tmethod):PCmd;static;
+  end;
 
-
-{$MACRO ON}
-
-{$DEFINE INTERFACE}
-{$DEFINE TCommand  := TGDBPolyDataChangeCommand}
-{$DEFINE PTCommand := PTGDBPolyDataChangeCommand}
-{$DEFINE TData     := TPolyData}
-  {$I TGObjectChangeCommand2IMPL.inc}
-{$DEFINE TCommand  := TGDBLayerArrayChangeCommand}
-{$DEFINE PTCommand := PTGDBLayerArrayChangeCommand}
-{$DEFINE TData     := PGDBLayerProp}
-  {$I TGObjectChangeCommand2IMPL.inc}
-{$DEFINE TCommand  := TGDBTextStyleArrayChangeCommand}
-{$DEFINE PTCommand := PTGDBTextStyleChangeCommand}
-{$DEFINE TData     := PGDBTextStyle}
-  {$I TGObjectChangeCommand2IMPL.inc}
-{$DEFINE TCommand  := TGDBDimStyleArrayChangeCommand}
-{$DEFINE PTCommand := PTGDBDimStyleChangeCommand}
-{$DEFINE TData     := PGDBDimStyle}
-  {$I TGObjectChangeCommand2IMPL.inc}
-{$UNDEF INTERFACE}
-
-{$DEFINE CLASSDECLARATION}
-{$DEFINE TCommand  := TGDBPolyDataChangeCommand}
-{$DEFINE PTCommand := PTGDBPolyDataChangeCommand}
-{$DEFINE TData     := TPolyData}
-  {$I TGObjectChangeCommand2IMPL.inc}
-{$DEFINE TCommand  := TGDBLayerArrayChangeCommand}
-{$DEFINE PTCommand := PTGDBLayerArrayChangeCommand}
-{$DEFINE TData     := PGDBLayerProp}
-  {$I TGObjectChangeCommand2IMPL.inc}
-{$DEFINE TCommand  := TGDBTextStyleArrayChangeCommand}
-{$DEFINE PTCommand := PTGDBTextStyleChangeCommand}
-{$DEFINE TData     := PGDBTextStyle}
-  {$I TGObjectChangeCommand2IMPL.inc}
-{$DEFINE TCommand  := TGDBDimStyleArrayChangeCommand}
-{$DEFINE PTCommand := PTGDBDimStyleChangeCommand}
-{$DEFINE TData     := PGDBDimStyle}
-  {$I TGObjectChangeCommand2IMPL.inc}
-{$UNDEF CLASSDECLARATION}
 implementation
-constructor TGObjectChangeCommand2.Assign(var _dodata:_T;_domethod,_undomethod:tmethod);
+
+class function GUCmdChgMethods.CreateCmd(var _dodata:_T;_domethod,_undomethod:tmethod):PCmd;
+begin
+Getmem(result,sizeof(specialize GUCmdChgMethods<_T>));
+result^.Assign(_dodata,_domethod,_undomethod);
+end;
+class function GUCmdChgMethods.PushCreateCmd(var us:TZctnrVectorUndoCommands; var _dodata:_T;_domethod,_undomethod:tmethod):PCmd;
+begin
+result:=CreateCmd(_dodata,_domethod,_undomethod);
+us.PushBackData(result);
+inc(us.CurrentCommand);
+end;
+
+
+constructor GUCmdChgMethods.Assign(var _dodata:_T;_domethod,_undomethod:tmethod);
 begin
   AutoProcessGDB:=True;
   AfterAction:=true;
@@ -83,7 +64,7 @@ begin
   undomethod:=_undomethod;
 end;
 
-procedure TGObjectChangeCommand2.UnDo;
+procedure GUCmdChgMethods.UnDo;
 var
   DC:TDrawContext;
 type
@@ -102,7 +83,7 @@ begin
      end;
 end;
 
-procedure TGObjectChangeCommand2.Comit;
+procedure GUCmdChgMethods.Comit;
 var
   DC:TDrawContext;
 type
@@ -121,24 +102,4 @@ begin
      end;
 end;
 
-
-{$DEFINE IMPLEMENTATION}
-{$DEFINE TCommand  := TGDBPolyDataChangeCommand}
-{$DEFINE PTCommand := PTGDBPolyDataChangeCommand}
-{$DEFINE TData     := TPolyData}
-  {$I TGObjectChangeCommand2IMPL.inc}
-{$DEFINE TCommand  := TGDBLayerArrayChangeCommand}
-{$DEFINE PTCommand := PTGDBLayerArrayChangeCommand}
-{$DEFINE TData     := PGDBLayerProp}
-  {$I TGObjectChangeCommand2IMPL.inc}
-{$DEFINE TCommand  := TGDBTextStyleArrayChangeCommand}
-{$DEFINE PTCommand := PTGDBTextStyleChangeCommand}
-{$DEFINE TData     := PGDBTextStyle}
-  {$I TGObjectChangeCommand2IMPL.inc}
-{$DEFINE TCommand  := TGDBDimStyleArrayChangeCommand}
-{$DEFINE PTCommand := PTGDBDimStyleChangeCommand}
-{$DEFINE TData     := PGDBDimStyle}
-  {$I TGObjectChangeCommand2IMPL.inc}
-{$UNDEF IMPLEMENTATION}
-{$MACRO OFF}
 end.

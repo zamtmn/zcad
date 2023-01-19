@@ -20,7 +20,8 @@ unit uzestyleslayers;
 {$INCLUDE zengineconfig.inc}
 interface
 uses sysutils,uzbtypes,uzegeometry,
-     uzeconsts,UGDBNamedObjectsArray,uzbstrproc;
+     uzeconsts,UGDBNamedObjectsArray,uzbstrproc,uzeNamedObject,gzctnrVectorClass,
+     uzeEntityStylesRegister;
 type
 {EXPORT+}
 PPGDBLayerPropObjInsp=^PGDBLayerPropObjInsp;
@@ -55,9 +56,15 @@ GDBLayerArray= object(GDBNamedObjectsArray{-}<PGDBLayerProp,GDBLayerProp>{//})(*
                     function createlayerifneedbyname(lname:String;_source:PGDBLayerProp):PGDBLayerProp;
               end;
 {EXPORT-}
+TLayerProp=class(TNamedObject)
+end;
+TLayerPropClass=class of TLayerProp;
+TLayers=GZVectorClass<TLayerProp>;
+TLayersClass=class of TLayers;
+function GetLTName(LT:PGDBLayerProp):String;
 var
    DefaultErrorLayer:GDBLayerProp;
-function GetLTName(LT:PGDBLayerProp):String;
+   LayerHandle:TStyleDeskHandle;
 implementation
 //uses
 //    log;
@@ -236,4 +243,5 @@ begin
 end;
 begin
   DefaultErrorLayer.Initwithparam('DefaultErrorLayer',200,0,true,false,true,'');
+  //LayerHandle:=RegisterStyle(TLayerPropClass,TLayersClasss);
 end.

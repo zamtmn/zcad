@@ -23,14 +23,14 @@ uses uzepalette,zeundostack,zebaseundocommands,uzbtypes,
      uzegeometrytypes,uzeentity,uzestyleslayers,uzeentabstracttext;
 
 type
-generic TGChangeCommand<_T> =object(TCustomChangeCommand)
+generic TGChangeCommand<_T> =class(TCustomChangeCommand)
                                       public
                                       OldData,NewData:_T;
                                       PEntity:PGDBObjEntity;
-                                      constructor Assign(var data:_T);
+                                      constructor Create(var data:_T);
 
-                                      procedure UnDo;virtual;
-                                      procedure Comit;virtual;
+                                      procedure UnDo;override;
+                                      procedure Comit;override;
                                       procedure ComitFromObj;virtual;
                                       function GetDataTypeSize:PtrInt;virtual;
                                 end;
@@ -38,7 +38,7 @@ generic TGChangeCommand<_T> =object(TCustomChangeCommand)
 
 {$DEFINE INTERFACE}
 {$DEFINE TCommand  := TGDBVertexChangeCommand}
-{$DEFINE PTCommand := PTGDBVertexChangeCommand}
+{DEFINE PTCommand := PTGDBVertexChangeCommand}
 {$DEFINE TData     := GDBVertex}
   {$I TGChangeCommandIMPL.inc}
 
@@ -48,100 +48,100 @@ generic TGChangeCommand<_T> =object(TCustomChangeCommand)
   {$I TGChangeCommandIMPL.inc}
 
 {$DEFINE TCommand  := TGDBCameraBasePropChangeCommand}
-{$DEFINE PTCommand := PTGDBCameraBasePropChangeCommand}
+{DEFINE PTCommand := PTGDBCameraBasePropChangeCommand}
 {$DEFINE TData     := GDBCameraBaseProp}
   {$I TGChangeCommandIMPL.inc}
 
 {$DEFINE TCommand  := TStringChangeCommand}
-{$DEFINE PTCommand := PTStringChangeCommand}
+{DEFINE PTCommand := PTStringChangeCommand}
 {$DEFINE TData     := String}
   {$I TGChangeCommandIMPL.inc}
 
 {$DEFINE TCommand  := TGDBPoinerChangeCommand}
-{$DEFINE PTCommand := PTGDBPoinerChangeCommand}
+{DEFINE PTCommand := PTGDBPoinerChangeCommand}
 {$DEFINE TData     := Pointer}
   {$I TGChangeCommandIMPL.inc}
 
 {$DEFINE TCommand  := TBooleanChangeCommand}
-{$DEFINE PTCommand := PTBooleanChangeCommand}
+{DEFINE PTCommand := PTBooleanChangeCommand}
 {$DEFINE TData     := Boolean}
   {$I TGChangeCommandIMPL.inc}
 
 {$DEFINE TCommand  := TGDBByteChangeCommand}
-{$DEFINE PTCommand := PTGDBByteChangeCommand}
+{DEFINE PTCommand := PTGDBByteChangeCommand}
 {$DEFINE TData     := Byte}
   {$I TGChangeCommandIMPL.inc}
 
 {$DEFINE TCommand  := TGDBTGDBLineWeightChangeCommand}
-{$DEFINE PTCommand := PTGDBTGDBLineWeightChangeCommand}
+{DEFINE PTCommand := PTGDBTGDBLineWeightChangeCommand}
 {$DEFINE TData     := TGDBLineWeight}
   {$I TGChangeCommandIMPL.inc}
 
 {$DEFINE TCommand  := TGDBTGDBPaletteColorChangeCommand}
-{$DEFINE PTCommand := PTGDBTGDBPaletteColorChangeCommand}
+{DEFINE PTCommand := PTGDBTGDBPaletteColorChangeCommand}
 {$DEFINE TData     := TGDBPaletteColor}
   {$I TGChangeCommandIMPL.inc}
 
 {$DEFINE TCommand  := TGDBTTextJustifyChangeCommand}
-{$DEFINE PTCommand := PTGDBTTextJustifyChangeCommand}
+{DEFINE PTCommand := PTGDBTTextJustifyChangeCommand}
 {$DEFINE TData     := TTextJustify}
   {$I TGChangeCommandIMPL.inc}
 {$UNDEF INTERFACE}
 
 {$DEFINE CLASSDECLARATION}
 {$DEFINE TCommand  := TGDBVertexChangeCommand}
-{$DEFINE PTCommand := PTGDBVertexChangeCommand}
+{DEFINE PTCommand := PTGDBVertexChangeCommand}
 {$DEFINE TData     := GDBVertex}
   {$I TGChangeCommandIMPL.inc}
 
 {$DEFINE TCommand  := TDoubleChangeCommand}
-{$DEFINE PTCommand := PTDoubleChangeCommand}
+{DEFINE PTCommand := PTDoubleChangeCommand}
 {$DEFINE TData     := Double}
   {$I TGChangeCommandIMPL.inc}
 
 {$DEFINE TCommand  := TGDBCameraBasePropChangeCommand}
-{$DEFINE PTCommand := PTGDBCameraBasePropChangeCommand}
+{DEFINE PTCommand := PTGDBCameraBasePropChangeCommand}
 {$DEFINE TData     := GDBCameraBaseProp}
   {$I TGChangeCommandIMPL.inc}
 
 {$DEFINE TCommand  := TStringChangeCommand}
-{$DEFINE PTCommand := PTStringChangeCommand}
+{DEFINE PTCommand := PTStringChangeCommand}
 {$DEFINE TData     := String}
   {$I TGChangeCommandIMPL.inc}
 
 {$DEFINE TCommand  := TGDBPoinerChangeCommand}
-{$DEFINE PTCommand := PTGDBPoinerChangeCommand}
+{DEFINE PTCommand := PTGDBPoinerChangeCommand}
 {$DEFINE TData     := Pointer}
   {$I TGChangeCommandIMPL.inc}
 
 {$DEFINE TCommand  := TBooleanChangeCommand}
-{$DEFINE PTCommand := PTBooleanChangeCommand}
+{DEFINE PTCommand := PTBooleanChangeCommand}
 {$DEFINE TData     := Boolean}
   {$I TGChangeCommandIMPL.inc}
 
 {$DEFINE TCommand  := TGDBByteChangeCommand}
-{$DEFINE PTCommand := PTGDBByteChangeCommand}
+{DEFINE PTCommand := PTGDBByteChangeCommand}
 {$DEFINE TData     := Byte}
   {$I TGChangeCommandIMPL.inc}
 
 {$DEFINE TCommand  := TGDBTGDBLineWeightChangeCommand}
-{$DEFINE PTCommand := PTGDBTGDBLineWeightChangeCommand}
+{DEFINE PTCommand := PTGDBTGDBLineWeightChangeCommand}
 {$DEFINE TData     := TGDBLineWeight}
   {$I TGChangeCommandIMPL.inc}
 
 {$DEFINE TCommand  := TGDBTGDBPaletteColorChangeCommand}
-{$DEFINE PTCommand := PTGDBTGDBPaletteColorChangeCommand}
+{DEFINE PTCommand := PTGDBTGDBPaletteColorChangeCommand}
 {$DEFINE TData     := TGDBPaletteColor}
   {$I TGChangeCommandIMPL.inc}
 
 {$DEFINE TCommand  := TGDBTTextJustifyChangeCommand}
-{$DEFINE PTCommand := PTGDBTTextJustifyChangeCommand}
+{DEFINE PTCommand := PTGDBTTextJustifyChangeCommand}
 {$DEFINE TData     := TTextJustify}
   {$I TGChangeCommandIMPL.inc}
 {$UNDEF CLASSDECLARATION}
 implementation
 uses uzcdrawings,uzcinterface;
-constructor TGChangeCommand.Assign(var data:_T);
+constructor TGChangeCommand.Create(var data:_T);
 begin
      Addr:=@data;
      olddata:=data;

@@ -287,7 +287,7 @@ begin
                                                   undomethod:=tmethod(@p3dpl^.InsertVertex);
                                                   {tmethod(undomethod).Code:=pointer(p3dpl.InsertVertex);
                                                   tmethod(undomethod).Data:=p3dpl;}
-                                                  with specialize GUCmdChgMethods<TPolyData>.PushCreateCmd(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,polydata,tmethod(domethod),tmethod(undomethod))^ do
+                                                  with specialize GUCmdChgMethods<TPolyData>.PushCreateCmd(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,polydata,tmethod(domethod),tmethod(undomethod)) do
                                                   begin
                                                        comit;
                                                   end;
@@ -320,7 +320,7 @@ begin
                                                                          undomethod:=tmethod(@p3dpl^.DeleteVertex);
                                                                          {tmethod(undomethod).Code:=pointer(p3dpl.DeleteVertex);
                                                                          tmethod(undomethod).Data:=p3dpl;}
-                                                                         with Specialize GUCmdChgMethods<TPolyData>.PushCreateCmd(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,polydata,tmethod(domethod),tmethod(undomethod))^ do
+                                                                         with Specialize GUCmdChgMethods<TPolyData>.PushCreateCmd(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,polydata,tmethod(domethod),tmethod(undomethod)) do
                                                                          begin
                                                                               comit;
                                                                          end;

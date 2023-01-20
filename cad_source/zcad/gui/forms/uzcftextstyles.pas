@@ -163,15 +163,15 @@ begin
     newfont:=FontManager.addFont(pstring(FontsSelector.Enums.getDataMutable(FontsSelector.Selected))^,'');
     if  (newfont<>PGDBTextStyle(TListItem(Item).Data)^.pfont)and(newfont<>nil) then begin
       CreateUndoStartMarkerNeeded;
-      with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pointer(PGDBTextStyle(TListItem(Item).Data)^.pfont))^ do begin
+      with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pointer(PGDBTextStyle(TListItem(Item).Data)^.pfont)) do begin
         PGDBTextStyle(TListItem(Item).Data)^.pfont:=newfont;
         ComitFromObj;
       end;
-      with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBTextStyle(TListItem(Item).Data)^.FontFile)^ do begin
+      with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBTextStyle(TListItem(Item).Data)^.FontFile) do begin
         PGDBTextStyle(TListItem(Item).Data)^.FontFile:=PGDBTextStyle(TListItem(Item).Data)^.pfont^.Name;
         ComitFromObj;
       end;
-      with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBTextStyle(TListItem(Item).Data)^.FontFile)^ do begin
+      with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBTextStyle(TListItem(Item).Data)^.FontFile) do begin
         PGDBTextStyle(TListItem(Item).Data)^.FontFamily:='';
         ComitFromObj;
       end;
@@ -370,7 +370,7 @@ begin
      if ListView1.CurrentItem<>ListItem then
      begin
      CreateUndoStartMarkerNeeded;
-     with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,sysvar.dwg.DWG_CTStyle^)^ do
+     with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,sysvar.dwg.DWG_CTStyle^) do
      begin
           SysVar.dwg.DWG_CTStyle^:=ListItem.Data;
           ComitFromObj;
@@ -493,7 +493,7 @@ begin
   domethod:=tmethod(@pdwg^.TextStyleTable.PushBackData);
   undomethod:=tmethod(@pdwg^.TextStyleTable.RemoveDataFromArray);
   CreateUndoStartMarkerNeeded;
-  with specialize GUCmdChgMethods<PGDBTextStyle>.PushCreateCmd(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pcreatedstyle,tmethod(domethod),tmethod(undomethod))^ do
+  with specialize GUCmdChgMethods<PGDBTextStyle>.PushCreateCmd(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pcreatedstyle,tmethod(domethod),tmethod(undomethod)) do
   begin
        AfterAction:=false;
        //comit;
@@ -512,7 +512,7 @@ begin
   domethod:=tmethod(@pdwg^.TextStyleTable.RemoveDataFromArray);
   undomethod:=tmethod(@pdwg^.TextStyleTable.PushBackData);
   CreateUndoStartMarkerNeeded;
-  with specialize GUCmdChgMethods<PGDBTextStyle>.PushCreateCmd(PTZCADDrawing(pdwg)^.UndoStack,pstyle,tmethod(domethod),tmethod(undomethod))^ do
+  with specialize GUCmdChgMethods<PGDBTextStyle>.PushCreateCmd(PTZCADDrawing(pdwg)^.UndoStack,pstyle,tmethod(domethod),tmethod(undomethod)) do
   begin
        AfterAction:=false;
        comit;

@@ -1644,7 +1644,7 @@ begin
 
     PTZCADDrawing(drawings.GetCurrentDWG).UndoStack.PushStartMarker('Create cable');
     SetObjCreateManipulator(domethod,undomethod);
-    with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG).UndoStack,tmethod(domethod),tmethod(undomethod),1)^ do
+    with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG).UndoStack,tmethod(domethod),tmethod(undomethod),1) do
     begin
          AddObject(p3dpl);
          comit;
@@ -1847,7 +1847,7 @@ begin
          tmethod(domethod).Data:=p3dpl;
          tmethod(undomethod).Code:=pointer(p3dpl.DeleteVertex);
          tmethod(undomethod).Data:=p3dpl;
-         with GUCmdChgMethods<TPolyData>.PushCreateCmd(PTZCADDrawing(drawings.GetCurrentDWG).UndoStack,polydata,tmethod(domethod),tmethod(undomethod))^ do
+         with GUCmdChgMethods<TPolyData>.PushCreateCmd(PTZCADDrawing(drawings.GetCurrentDWG).UndoStack,polydata,tmethod(domethod),tmethod(undomethod)) do
          begin
               comit;
          end;
@@ -2810,7 +2810,7 @@ begin
 
 
   SetObjCreateManipulator(domethod,undomethod);
-  with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG).UndoStack,tmethod(domethod),tmethod(undomethod),1)^ do
+  with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG).UndoStack,tmethod(domethod),tmethod(undomethod),1) do
   begin
        AddObject(pleader);
        comit;

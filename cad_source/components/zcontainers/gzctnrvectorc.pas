@@ -51,8 +51,6 @@ GZVectorc{-}<T>{//}=class(TZAbsVectorClass)//(TZAbsVector)
         Count:TArrayIndex;(*hidden_in_objinsp*)               //**< Количество занятых элементов массива
         Max:TArrayIndex;(*hidden_in_objinsp*)                 //**< Размер массива (под сколько элементов выделено памяти)
 
-        {**~Деструктор}
-        destructor done;virtual;
         {**Деструктор}
         destructor destroy;virtual;
         {**Конструктор}
@@ -452,11 +450,6 @@ begin
   PArray:=nil;
   Count:=0;
   Max:=m;
-end;
-destructor GZVectorc<T>.done;
-begin
-  free;
-  destroy;
 end;
 destructor GZVectorc<T>.destroy;
 begin

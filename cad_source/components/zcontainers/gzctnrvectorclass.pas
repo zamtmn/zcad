@@ -19,14 +19,31 @@
 unit gzctnrVectorClass;
 
 interface
-uses gzctnrVectorc,gvector;
+uses gzctnrVectorTypes,gzctnrVectorc,gvector;
 type
 {Export+}
 {----REGISTEROBJECTTYPE GZVectorClass}
 GZVectorClass{-}<T:class>{//}=class
                                (GZVectorc{-}<T>{//})
+                               procedure cleareraseobjfrom2(n:Integer);
                                  end;
 {Export-}
 implementation
+procedure GZVectorClass<T>.cleareraseobjfrom2(n:Integer);
+var
+  p:TDataType;
+  ir:itrec;
+begin
+  p:=TDataType(beginiterate(ir));
+  if p<>nil then
+  repeat
+       if ir.itc>=n then
+                       begin
+                       p.free;
+                       end;
+       p:=TDataType(iterate(ir));
+  until p=nil;
+  count:=n;
+end;
 begin
 end.

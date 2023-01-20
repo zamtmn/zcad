@@ -57,7 +57,7 @@ type
   TEditorContext=record
                        ppropcurrentedit:PPropertyDeskriptor;
                        UndoStack:PTZctnrVectorUndoCommands;
-                       UndoCommand:PTTypedChangeCommand;
+                       UndoCommand:TTypedChangeCommand;
                  end;
 
   TOnGetOtherValues=procedure(var vsa:TZctnrVectorStrings;const valkey:string;const pcurcontext:pointer;const pcurrobj:pointer;const GDBobj:boolean);

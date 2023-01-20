@@ -43,7 +43,7 @@ begin
       result:=cmd_error;
     end else begin
       zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,LayerOnCommandName,true);
-      with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,plp^._on)^ do begin
+      with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,plp^._on) do begin
         plp^._on:=not plp^._on;
         ComitFromObj;
       end;

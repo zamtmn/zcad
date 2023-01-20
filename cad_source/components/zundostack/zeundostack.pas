@@ -18,7 +18,8 @@
 {$MODE OBJFPC}{$H+}
 unit zeundostack;
 interface
-uses gzctnrVectorTypes,zebaseundocommands,varmandef,//
+uses gzctnrVectorTypes,zebaseundocommands,varmandef,
+     gzctnrVectorc,gzctnrVector,gzctnrVectorClass,
      gzctnrVectorPObjects,sysutils;
 const BeginUndo:String='BeginUndo';
       EndUndo:String='EndUndo';
@@ -29,7 +30,7 @@ TUndoRedoResult=(URROk,
                  URRNoCommandsToRedo);
 TOnUndoRedoProc=procedure of object;
 PTZctnrVectorUndoCommands=^TZctnrVectorUndoCommands;
-TZctnrVectorUndoCommands=object(specialize GZVectorPObects{-}<PTElementaryCommand,TElementaryCommand>{//})
+TZctnrVectorUndoCommands=class(specialize GZVectorClass{-}<{PTElementaryCommand,}TElementaryCommand>{//})
                                  public
                                  CurrentCommand:TArrayIndex;
                                  currentcommandstartmarker:TArrayIndex;
@@ -44,11 +45,11 @@ TZctnrVectorUndoCommands=object(specialize GZVectorPObects{-}<PTElementaryComman
                                  function redo(out msg:string):TUndoRedoResult;
                                  constructor init;
                                  procedure doOnUndoRedo;
-                                 function PushBackData(const data:Pointer):TArrayIndex;virtual;
+                                 function PushBackData(const data:TElementaryCommand):TArrayIndex;virtual;
                                  Procedure ClearFrom(cc:TArrayIndex);
 
-                                 function CreateTTypedChangeCommand(PDataInstance:Pointer;PType:PUserTypeDescriptor):PTTypedChangeCommand;overload;
-                                 function PushCreateTTypedChangeCommand(PDataInstance:Pointer;PType:PUserTypeDescriptor):PTTypedChangeCommand;overload;
+                                 function CreateTTypedChangeCommand(PDataInstance:Pointer;PType:PUserTypeDescriptor):TTypedChangeCommand;overload;
+                                 function PushCreateTTypedChangeCommand(PDataInstance:Pointer;PType:PUserTypeDescriptor):TTypedChangeCommand;overload;
 
                            end;
 implementation
@@ -61,41 +62,41 @@ end;
 
 procedure TZctnrVectorUndoCommands.PushStartMarker(CommandName:String);
 var
-   pmarker:PTMarkerCommand;
+   marker:TMarkerCommand;
 begin
      inc(startmarkercount);
      if startmarkercount=1 then
      begin
-     Getmem(pointer(pmarker),sizeof(TMarkerCommand));
-     pmarker^.init(CommandName,-1);
-     currentcommandstartmarker:=self.PushBackData(pmarker);
+     //Getmem(pointer(pmarker),sizeof(TMarkerCommand));
+     marker:=TMarkerCommand.Create(CommandName,-1);
+     currentcommandstartmarker:=self.PushBackData(marker);
      inc(CurrentCommand);
      end;
 end;
 procedure TZctnrVectorUndoCommands.PushStone;
 var
-   pmarker:PTMarkerCommand;
+   marker:TMarkerCommand;
 begin
      //inc(startmarkercount);
      //if startmarkercount=1 then
      begin
-     Getmem(pointer(pmarker),sizeof(TMarkerCommand));
-     pmarker^.init('StoneMarker',-2);
-     currentcommandstartmarker:=self.PushBackData(pmarker);
+     //Getmem(pointer(pmarker),sizeof(TMarkerCommand));
+     marker:=TMarkerCommand.Create('StoneMarker',-2);
+     currentcommandstartmarker:=self.PushBackData(marker);
      inc(CurrentCommand);
      end;
 end;
 procedure TZctnrVectorUndoCommands.PushEndMarker;
 var
-   pmarker:PTMarkerCommand;
+   marker:TMarkerCommand;
 begin
      dec(startmarkercount);
      if startmarkercount=0 then
      begin
-     Getmem(pointer(pmarker),sizeof(TMarkerCommand));
-     pmarker^.init('EndMarker',currentcommandstartmarker);
+     //Getmem(pointer(pmarker),sizeof(TMarkerCommand));
+     marker:=TMarkerCommand.Create('EndMarker',currentcommandstartmarker);
      currentcommandstartmarker:=-1;
-     self.PushBackData(pmarker);
+     self.PushBackData(marker);
      inc(CurrentCommand);
      startmarkercount:=0;
      end;
@@ -103,43 +104,43 @@ end;
 //procedure TZctnrVectorUndoCommands.PushTypedChangeCommand(_obj:Pointer;_PTypeManager:PUserTypeDescriptor);overload;
 procedure TZctnrVectorUndoCommands.PushChangeCommand(_obj:Pointer;_fieldsize:PtrInt);
 var
-   pcc:PTChangeCommand;
+   pcc:TChangeCommand;
 begin
      if CurrentCommand>0 then
      begin
-          pcc:=pointer(self.getDataMutable(CurrentCommand-1));
-          if pcc^.GetCommandType=TTC_ChangeCommand then
-          if (pcc^.Addr=_obj)
-          and(pcc^.datasize=_fieldsize) then
+          pcc:=TChangeCommand(self.getDataMutable(CurrentCommand-1));
+          if pcc.GetCommandType=TTC_ChangeCommand then
+          if (pcc.Addr=_obj)
+          and(pcc.datasize=_fieldsize) then
                                              exit;
      end;
-     Getmem(pointer(pcc),sizeof(TChangeCommand));
-     pcc^.init(_obj,_fieldsize);
+     //Getmem(pointer(pcc),sizeof(TChangeCommand));
+     pcc:=TChangeCommand.Create(_obj,_fieldsize);
      inc(CurrentCommand);
      PushBackData(pcc);
 end;
 procedure TZctnrVectorUndoCommands.KillLastCommand;
 var
-   pcc:PTElementaryCommand;
+   cmd:TElementaryCommand;
    mcounter:integer;
 begin
      begin
           mcounter:=0;
           repeat
-          pcc:=self.getDataMutable(CurrentCommand-1);
+          cmd:=self.getDataMutable(CurrentCommand-1)^;
 
-          if pcc^.GetCommandType=TTC_MEnd then
+          if cmd.GetCommandType=TTC_MEnd then
                                               begin
                                               inc(mcounter);
-                                              pcc^.Done;
+                                              cmd.Destroy;
                                               end
-     else if pcc^.GetCommandType=TTC_MBegin then
+     else if cmd.GetCommandType=TTC_MBegin then
                                                 begin
                                                      dec(mcounter);
-                                                     pcc^.Done;
+                                                     cmd.Destroy;
                                                 end
      else
-          pcc^.Done;
+          cmd.Destroy;
           dec(CurrentCommand);
           until mcounter=0;
      end;
@@ -147,7 +148,7 @@ begin
 end;
 function TZctnrVectorUndoCommands.undo(out msg:string;prevheap:TArrayIndex;overlay:Boolean):TUndoRedoResult;
 var
-   pcc:PTElementaryCommand;
+   cmd:TElementaryCommand;
    mcounter:integer;
 begin
      msg:='';
@@ -156,29 +157,29 @@ begin
      begin
           mcounter:=0;
           repeat
-          pcc:=self.getDataMutable(CurrentCommand-1);
+          cmd:=self.getDataMutable(CurrentCommand-1)^;
 
-          if pcc^.GetCommandType=TTC_MEnd then
+          if cmd.GetCommandType=TTC_MEnd then
                                               begin
                                               inc(mcounter);
-                                              //pcc^.undo;
+                                              //cmd^.undo;
                                               end
-     else if pcc^.GetCommandType=TTC_MBegin then
+     else if cmd.GetCommandType=TTC_MBegin then
                                                 begin
                                                      dec(mcounter);
                                                      if mcounter=0 then
-                                                     {HistoryOutStr}msg:=msg+('Undo "'+PTMarkerCommand(pcc)^.Name+'"');
-                                                     //pcc^.undo;
+                                                     {HistoryOutStr}msg:=msg+('Undo "'+TMarkerCommand(cmd).Name+'"');
+                                                     //cmd^.undo;
                                                 end
-     else if pcc^.GetCommandType=TTC_MNotUndableIfOverlay then
+     else if cmd.GetCommandType=TTC_MNotUndableIfOverlay then
                                                 begin
                                                      if overlay then
                                                           result:=URRNoCommandsToUndo;
                                                 end
      else
-          pcc^.undo;
+          cmd.undo;
 
-          if (pcc^.GetCommandType<>TTC_MNotUndableIfOverlay)then
+          if (cmd.GetCommandType<>TTC_MNotUndableIfOverlay)then
                                                               dec(CurrentCommand)
                                                             else
                                                                 if not overlay then
@@ -198,31 +199,31 @@ begin
 end;
 function TZctnrVectorUndoCommands.redo(out msg:string):TUndoRedoResult;
 var
-   pcc:PTElementaryCommand;
+   cmd:TElementaryCommand;
    mcounter:integer;
 begin
      if CurrentCommand<count then
      begin
-          {pcc:=pointer(self.getDataMutable(CurrentCommand));
-          pcc^.Comit;
+          {cmd:=pointer(self.getDataMutable(CurrentCommand));
+          cmd^.Comit;
           inc(CurrentCommand);}
           mcounter:=0;
           repeat
-          pcc:=self.getDataMutable(CurrentCommand);
+          cmd:=self.getDataMutable(CurrentCommand)^;
 
-          if pcc^.GetCommandType=TTC_MEnd then
+          if cmd.GetCommandType=TTC_MEnd then
                                               begin
                                               inc(mcounter);
-                                              pcc^.undo;
+                                              cmd.undo;
                                               end
-     else if pcc^.GetCommandType=TTC_MBegin then
+     else if cmd.GetCommandType=TTC_MBegin then
                                                 begin
                                                      if mcounter=0 then
-                                                     {HistoryOutStr}msg:=msg+('Redo "'+PTMarkerCommand(pcc)^.Name+'"');
+                                                     {HistoryOutStr}msg:=msg+('Redo "'+TMarkerCommand(cmd).Name+'"');
                                                      dec(mcounter);
-                                                     pcc^.undo;
+                                                     cmd.undo;
                                                 end
-     else pcc^.comit;
+     else cmd.comit;
           inc(CurrentCommand);
           until mcounter=0;
           result:=URROk;
@@ -246,25 +247,25 @@ begin
      CurrentCommand:=Count;
 end;
 
-function TZctnrVectorUndoCommands.PushBackData(const data:Pointer):TArrayIndex;
+function TZctnrVectorUndoCommands.PushBackData(const data:TElementaryCommand):TArrayIndex;
 begin
      if self.CurrentCommand<count then
                                        self.cleareraseobjfrom2(self.CurrentCommand);
      result:=inherited PushBackData(data);
 end;
-function TZctnrVectorUndoCommands.CreateTTypedChangeCommand(PDataInstance:Pointer;PType:PUserTypeDescriptor):PTTypedChangeCommand;overload;
+function TZctnrVectorUndoCommands.CreateTTypedChangeCommand(PDataInstance:Pointer;PType:PUserTypeDescriptor):TTypedChangeCommand;overload;
 begin
-     Getmem(result,sizeof(TTypedChangeCommand));
-     result^.Assign(PDataInstance,PType);
+     //Getmem(result,sizeof(TTypedChangeCommand));
+     result:=TTypedChangeCommand.Create(PDataInstance,PType);
 end;
-function TZctnrVectorUndoCommands.PushCreateTTypedChangeCommand(PDataInstance:Pointer;PType:PUserTypeDescriptor):PTTypedChangeCommand;overload;
+function TZctnrVectorUndoCommands.PushCreateTTypedChangeCommand(PDataInstance:Pointer;PType:PUserTypeDescriptor):TTypedChangeCommand;overload;
 begin
   if CurrentCommand>0 then
   begin
-       result:=pointer(self.getDataMutable(CurrentCommand-1));
-       if result^.GetCommandType=TTC_ChangeCommand then
-       if (result^.Addr=PDataInstance)
-       and(result^.PTypeManager=PType)
+       result:=TTypedChangeCommand(self.getDataMutable(CurrentCommand-1));
+       if result.GetCommandType=TTC_ChangeCommand then
+       if (result.Addr=PDataInstance)
+       and(result.PTypeManager=PType)
                                                 then
                                                     exit;
   end;

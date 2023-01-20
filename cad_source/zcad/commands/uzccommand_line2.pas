@@ -111,7 +111,7 @@ begin
     PCreatedGDBLine^.bp.ListPos.Owner:=drawings.GetCurrentROOT;
     //drawings.ObjRoot.ObjArray.add(addr(pl));
     SetObjCreateManipulator(domethod,undomethod);
-    with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),1)^ do
+    with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),1) do
     begin
          AddObject(PCreatedGDBLine);
          comit;

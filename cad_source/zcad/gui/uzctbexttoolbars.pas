@@ -113,7 +113,7 @@ begin
      result:=false;
      case numprop of
                     0:begin
-                        with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(PLayer)^._on)^ do
+                        with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(PLayer)^._on) do
                         begin
                           PGDBLayerProp(PLayer)^._on:=not(PGDBLayerProp(PLayer)^._on);
                           ComitFromObj;
@@ -125,7 +125,7 @@ begin
                       end;
                     {1:;}
                     2:begin
-                        with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(PLayer)^._lock)^ do
+                        with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(PLayer)^._lock) do
                         begin
                           PGDBLayerProp(PLayer)^._lock:=not(PGDBLayerProp(PLayer)^._lock);
                           ComitFromObj;
@@ -140,7 +140,7 @@ begin
                                           if assigned(sysvar.dwg.DWG_CLayer) then
                                           if sysvar.dwg.DWG_CLayer^<>Player then
                                           begin
-                                               with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,sysvar.dwg.DWG_CLayer^)^ do
+                                               with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,sysvar.dwg.DWG_CLayer^) do
                                                begin
                                                     sysvar.dwg.DWG_CLayer^:=Player;
                                                     ComitFromObj;

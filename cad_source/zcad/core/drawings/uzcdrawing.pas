@@ -151,7 +151,7 @@ begin
   tmethod(tum).Code:=pointer(obj.rtmodifyonepoint);
   tmethod(tum).Data:=obj;
   //tum:=tundablemethod(obj^.rtmodifyonepoint);
-  with PushCreateTGObjectChangeCommand(UndoStack,rtmod,tmethod(tum))^ do
+  with PushCreateTGObjectChangeCommand(UndoStack,rtmod,tmethod(tum)) do
   begin
        comit;
        rtmod.wc:=rtmod.point.worldcoord;
@@ -162,7 +162,7 @@ end;
 procedure TZCADDrawing.StoreNewCamerapPos(command:Pointer);
 begin
      if command<>nil then
-                         PTGDBCameraBasePropChangeCommand(command).ComitFromObj;
+                         TGDBCameraBasePropChangeCommand(command).ComitFromObj;
 end;
 procedure TZCADDrawing.PushStartMarker(CommandName:String);
 begin
@@ -275,7 +275,7 @@ begin
   Pointer(FileName):=nil;
   FileName:=rsHardUnnamed;
   Changed:=False;
-  UndoStack.init;
+  UndoStack:=TZctnrVectorUndoCommands.init;
   UndoStack.onUndoRedo:=self.onUndoRedo;
   zebaseundocommands.onUndoRedoDataOwner:=self.onUndoRedoDataOwner;
 
@@ -315,7 +315,9 @@ end;
 destructor TZCADDrawing.done;
 begin
      inherited;
-     undostack.done;
+     undostack.free;
+     undostack.destroy;
+     //undostack.done;
      DWGUnits.Done;
      FileName:='';
 end;

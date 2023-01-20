@@ -81,7 +81,7 @@ begin
                                         PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.ClearFrom(cc);
 
                                         SetObjCreateManipulator(domethod,undomethod);
-                                        with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,domethod,undomethod,1)^ do
+                                        with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,domethod,undomethod,1) do
                                         begin
                                              AddObject(p3dpl);
                                              comit;
@@ -138,7 +138,7 @@ begin
       polydata.wc:=wc;
       domethod:=tmethod(@p3dpl^.InsertVertex);
       undomethod:=tmethod(@p3dpl^.DeleteVertex);
-      with specialize GUCmdChgMethods<TPolyData>.PushCreateCmd(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,polydata,tmethod(domethod),tmethod(undomethod))^ do
+      with specialize GUCmdChgMethods<TPolyData>.PushCreateCmd(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,polydata,tmethod(domethod),tmethod(undomethod)) do
       begin
         AutoProcessGDB:=false;
         comit;

@@ -30,7 +30,7 @@ type
   TUndoContext=record
                        //ppropcurrentedit:PPropertyDeskriptor;
                        UndoStack:PTZctnrVectorUndoCommands;
-                       UndoCommand:PTTypedChangeCommand;
+                       UndoCommand:TTypedChangeCommand;
                  end;
   TOnUpdateControl=procedure (AEditedControl:TObject)of object;
   TUndoPrefixProcedure=procedure of object;

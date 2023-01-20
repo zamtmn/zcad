@@ -568,7 +568,7 @@ begin
 
      domethod:=tmethod(@pdwg^.LayerTable.PushBackData);
      undomethod:=tmethod(@pdwg^.LayerTable.RemoveDataFromArray);
-     with specialize GUCmdChgMethods<PGDBLayerProp>.PushCreateCmd(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pcreatedlayer,tmethod(domethod),tmethod(undomethod)) do
+     with specialize GUCmdChgMethods<PGDBLayerProp>.CreateAndPush(pcreatedlayer,domethod,undomethod,PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack) do
      begin
           AfterAction:=false;
           //comit;
@@ -587,7 +587,7 @@ begin
   domethod:=tmethod(@pdwg^.LayerTable.RemoveDataFromArray);
   undomethod:=tmethod(@pdwg^.LayerTable.PushBackData);
   CreateUndoStartMarkerNeeded;
-  with specialize GUCmdChgMethods<PGDBLayerProp>.PushCreateCmd(PTZCADDrawing(pdwg)^.UndoStack,player,tmethod(domethod),tmethod(undomethod)) do
+  with specialize GUCmdChgMethods<PGDBLayerProp>.CreateAndPush(player,domethod,undomethod,PTZCADDrawing(pdwg)^.UndoStack) do
   begin
        AfterAction:=false;
        comit;

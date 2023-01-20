@@ -519,7 +519,7 @@ begin
   undomethod:=tmethod(@pdwg^.DimStyleTable.RemoveDataFromArray);
   CreateUndoStartMarkerNeeded;
   ///////   не получилось запустить
-  with specialize GUCmdChgMethods<PGDBDimStyle>.PushCreateCmd(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pcreatedstyle,tmethod(domethod),tmethod(undomethod)) do
+  with specialize GUCmdChgMethods<PGDBDimStyle>.CreateAndPush(pcreatedstyle,domethod,undomethod,PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack) do
   begin
        AfterAction:=false;
        //comit;
@@ -556,7 +556,7 @@ begin
   undomethod:=tmethod(@pdwg^.DimStyleTable.PushBackData);
   CreateUndoStartMarkerNeeded;
   ///////   не получилось запустить
-  with specialize GUCmdChgMethods<PGDBDimStyle>.PushCreateCmd(PTZCADDrawing(pdwg)^.UndoStack,pstyle,tmethod(domethod),tmethod(undomethod)) do
+  with specialize GUCmdChgMethods<PGDBDimStyle>.CreateAndPush(pstyle,domethod,undomethod,PTZCADDrawing(pdwg)^.UndoStack) do
   begin
        AfterAction:=false;
        comit;

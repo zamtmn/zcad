@@ -31,17 +31,17 @@ GZVectorClass{-}<T:class>{//}=class
 implementation
 procedure GZVectorClass<T>.cleareraseobjfrom2(n:Integer);
 var
-  p:TDataType;
+  p:^TDataType;
   ir:itrec;
 begin
-  p:=TDataType(beginiterate(ir));
+  p:={TDataType}(beginiterate(ir));
   if p<>nil then
   repeat
        if ir.itc>=n then
                        begin
-                       p.free;
+                       p^.free;
                        end;
-       p:=TDataType(iterate(ir));
+       p:={TDataType}(iterate(ir));
   until p=nil;
   count:=n;
 end;

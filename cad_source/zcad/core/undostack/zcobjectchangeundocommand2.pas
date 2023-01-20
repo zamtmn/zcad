@@ -32,25 +32,18 @@ type
         Data:_T;
         DoMethod,UnDoMethod:tmethod;
         constructor Create(var _dodata:_T;_domethod,_undomethod:tmethod);
+        constructor CreateAndPush(var _dodata:_T;_domethod,_undomethod:tmethod;var us:TZctnrVectorUndoCommands);
 
         procedure UnDo;override;
         procedure Comit;override;
-
-        class function CreateCmd(var _dodata:_T;_domethod,_undomethod:tmethod):PCmd;static;
-        class function PushCreateCmd(var us:TZctnrVectorUndoCommands; var _dodata:_T;_domethod,_undomethod:tmethod):PCmd;static;
   end;
 
 implementation
 
-class function GUCmdChgMethods.CreateCmd(var _dodata:_T;_domethod,_undomethod:tmethod):PCmd;
+constructor GUCmdChgMethods.CreateAndPush(var _dodata:_T;_domethod,_undomethod:tmethod;var us:TZctnrVectorUndoCommands);
 begin
-  //Getmem(result,sizeof(specialize GUCmdChgMethods<_T>));
-  result:=PCmd.Create(_dodata,_domethod,_undomethod);
-end;
-class function GUCmdChgMethods.PushCreateCmd(var us:TZctnrVectorUndoCommands; var _dodata:_T;_domethod,_undomethod:tmethod):PCmd;
-begin
-  result:=CreateCmd(_dodata,_domethod,_undomethod);
-  us.PushBackData(result);
+  Create(_dodata,_domethod,_undomethod);
+  us.PushBackData(self);
   inc(us.CurrentCommand);
 end;
 

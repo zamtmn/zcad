@@ -41,11 +41,13 @@ TMarkerCommand=class(TElementaryCommand)
                end;
 //PTCustomChangeCommand=^TCustomChangeCommand;
 TCustomChangeCommand=class(TElementaryCommand)
-                           Addr:Pointer;
                            function GetCommandType:TTypeCommand;override;
                      end;
+TCustomChangeCommand2=class(TCustomChangeCommand)
+                           Addr:Pointer;
+                     end;
 //PTChangeCommand=^TChangeCommand;
-TChangeCommand=class(TCustomChangeCommand)
+TChangeCommand=class(TCustomChangeCommand2)
                      datasize:PtrInt;
                      tempdata:Pointer;
                      constructor Create(obj:Pointer;_datasize:PtrInt);
@@ -54,7 +56,7 @@ TChangeCommand=class(TCustomChangeCommand)
 
                end;
 //PTTypedChangeCommand=^TTypedChangeCommand;
-TTypedChangeCommand=class(TCustomChangeCommand)
+TTypedChangeCommand=class(TCustomChangeCommand2)
                                       public
                                       OldData,NewData:Pointer;
                                       PTypeManager:PUserTypeDescriptor;

@@ -151,7 +151,7 @@ begin
   tmethod(tum).Code:=pointer(obj.rtmodifyonepoint);
   tmethod(tum).Data:=obj;
   //tum:=tundablemethod(obj^.rtmodifyonepoint);
-  with PushCreateTGObjectChangeCommand(UndoStack,rtmod,tmethod(tum)) do
+  with GUCmdChgMethod<TRTModifyData>.CreateAndPush(rtmod,tmethod(tum),UndoStack) do
   begin
        comit;
        rtmod.wc:=rtmod.point.worldcoord;

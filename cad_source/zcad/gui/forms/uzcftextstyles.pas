@@ -163,15 +163,15 @@ begin
     newfont:=FontManager.addFont(pstring(FontsSelector.Enums.getDataMutable(FontsSelector.Selected))^,'');
     if  (newfont<>PGDBTextStyle(TListItem(Item).Data)^.pfont)and(newfont<>nil) then begin
       CreateUndoStartMarkerNeeded;
-      with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pointer(PGDBTextStyle(TListItem(Item).Data)^.pfont)) do begin
+      with TGDBPoinerChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pointer(PGDBTextStyle(TListItem(Item).Data)^.pfont)) do begin
         PGDBTextStyle(TListItem(Item).Data)^.pfont:=newfont;
         ComitFromObj;
       end;
-      with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBTextStyle(TListItem(Item).Data)^.FontFile) do begin
+      with TStringChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBTextStyle(TListItem(Item).Data)^.FontFile) do begin
         PGDBTextStyle(TListItem(Item).Data)^.FontFile:=PGDBTextStyle(TListItem(Item).Data)^.pfont^.Name;
         ComitFromObj;
       end;
-      with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBTextStyle(TListItem(Item).Data)^.FontFile) do begin
+      with TStringChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBTextStyle(TListItem(Item).Data)^.FontFile) do begin
         PGDBTextStyle(TListItem(Item).Data)^.FontFamily:='';
         ComitFromObj;
       end;
@@ -370,7 +370,7 @@ begin
      if ListView1.CurrentItem<>ListItem then
      begin
      CreateUndoStartMarkerNeeded;
-     with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,sysvar.dwg.DWG_CTStyle^) do
+     with TGDBPoinerChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,sysvar.dwg.DWG_CTStyle^) do
      begin
           SysVar.dwg.DWG_CTStyle^:=ListItem.Data;
           ComitFromObj;

@@ -142,7 +142,7 @@ begin
 end;}
 function TZCADDrawing.StoreOldCamerapPos:Pointer;
 begin
-     result:=PushCreateTGChangeCommand(UndoStack,GetPcamera^.prop)
+     result:=TGDBCameraBasePropChangeCommand.CreateAndPushIfNeed(UndoStack,GetPcamera^.prop)
 end;
 procedure TZCADDrawing.rtmodifyonepoint(obj:PGDBObjEntity;rtmod:TRTModifyData;wc:gdbvertex);
 var

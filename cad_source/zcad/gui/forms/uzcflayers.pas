@@ -155,7 +155,7 @@ function TLayersForm.LayerLockClick(Item: TListItem;r: TRect):boolean;
 begin
      result:=true;
      CreateUndoStartMarkerNeeded;
-     with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(Item.Data)^._lock) do
+     with TBooleanChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(Item.Data)^._lock) do
      begin
        PGDBLayerProp(Item.Data)^._lock:=not PGDBLayerProp(Item.Data)^._lock;
        ComitFromObj;
@@ -170,7 +170,7 @@ function TLayersForm.LayerOnClick(Item: TListItem;r: TRect):boolean;
 begin
      result:=true;
      CreateUndoStartMarkerNeeded;
-     with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(Item.Data)^._on) do
+     with TBooleanChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(Item.Data)^._on) do
      begin
        PGDBLayerProp(Item.Data)^._on:=not PGDBLayerProp(Item.Data)^._on;
        ComitFromObj;
@@ -190,7 +190,7 @@ function TLayersForm.LayerPlotClick(Item: TListItem;r: TRect):boolean;
 begin
      result:=true;
      CreateUndoStartMarkerNeeded;
-     with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(Item.Data)^._print) do
+     with TBooleanChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(Item.Data)^._print) do
      begin
        PGDBLayerProp(Item.Data)^._print:=not PGDBLayerProp(Item.Data)^._print;
        ComitFromObj;
@@ -257,7 +257,7 @@ begin
       if PGDBLayerProp(Item.Data)^.color<>ColorSelectForm.ColorInfex then
         begin
            CreateUndoStartMarkerNeeded;
-           with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(Item.Data)^.color) do
+           with TGDBByteChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(Item.Data)^.color) do
            begin
              PGDBLayerProp(Item.Data)^.color:=ColorSelectForm.ColorInfex;
              ComitFromObj;
@@ -460,7 +460,7 @@ begin
      if ListView1.CurrentItem<>ListItem then
      begin
        CreateUndoStartMarkerNeeded;
-     with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,sysvar.dwg.DWG_CLayer^) do
+     with TGDBPoinerChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,sysvar.dwg.DWG_CLayer^) do
      begin
           SysVar.dwg.DWG_CLayer^:={drawings.GetCurrentDWG^.LayerTable.GetIndexByPointer}(ListItem.Data);
           ComitFromObj;

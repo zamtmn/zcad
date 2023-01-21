@@ -178,7 +178,7 @@ begin
                  ZCMsgCallBackInterface.TextMessage(pstring(FontsSelector.Enums.getDataMutable(FontsSelector.Selected))^,TMWOHistoryOut);
 
                CreateUndoStartMarkerNeeded;
-               with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pointer(PGDBDimStyle(TListItem(Item).Data)^.Text.DIMTXSTY)) do
+               with TGDBPoinerChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pointer(PGDBDimStyle(TListItem(Item).Data)^.Text.DIMTXSTY)) do
                begin
                PGDBDimStyle(TListItem(Item).Data)^.Text.DIMTXSTY:=currentextstyle;
                ComitFromObj;
@@ -395,7 +395,7 @@ begin
      if ListView1.CurrentItem<>ListItem then
      begin
      CreateUndoStartMarkerNeeded;
-     with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,sysvar.dwg.DWG_CTStyle^) do
+     with TGDBPoinerChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,sysvar.dwg.DWG_CTStyle^) do
      begin
           SysVar.dwg.DWG_CTStyle^:=ListItem.Data;
           ComitFromObj;

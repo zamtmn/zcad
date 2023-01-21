@@ -23,105 +23,49 @@ uses uzepalette,zeundostack,zebaseundocommands,uzbtypes,
      uzegeometrytypes,uzeentity,uzestyleslayers,uzeentabstracttext;
 
 type
-generic GUCmdChgData<_T> =class(TCustomChangeCommand2)
-                                      public
-                                      OldData,NewData:_T;
-                                      PEntity:PGDBObjEntity;
-                                      constructor Create(var data:_T);
+  generic GUCmdChgData<T> =class(TCustomChangeCommand2)
+    private
+      type
+        TSelf=specialize GUCmdChgData<T>;
+      var
+        OldData,NewData:T;
+    public
+        PEntity:PGDBObjEntity;
+        constructor Create(var data:T);
+        class function CreateAndPushIfNeed(var us:TZctnrVectorUndoCommands; var data:T):TSelf;
 
-                                      procedure UnDo;override;
-                                      procedure Comit;override;
-                                      procedure ComitFromObj;virtual;
-                                      function GetDataTypeSize:PtrInt;virtual;
-                                end;
-{$MACRO ON}
+        procedure UnDo;override;
+        procedure Comit;override;
+        procedure ComitFromObj;virtual;
+        function GetDataTypeSize:PtrInt;virtual;
+  end;
+  TGDBVertexChangeCommand=specialize GUCmdChgData<GDBVertex>;
+  TDoubleChangeCommand=specialize GUCmdChgData<Double>;
+  TGDBCameraBasePropChangeCommand=specialize GUCmdChgData<GDBCameraBaseProp>;
+  TStringChangeCommand=specialize GUCmdChgData<String>;
+  TGDBPoinerChangeCommand=specialize GUCmdChgData<Pointer>;
+  TBooleanChangeCommand=specialize GUCmdChgData<Boolean>;
+  TGDBByteChangeCommand=specialize GUCmdChgData<Byte>;
+  TGDBTGDBLineWeightChangeCommand=specialize GUCmdChgData<TGDBLineWeight>;
+  TGDBTGDBPaletteColorChangeCommand=specialize GUCmdChgData<TGDBPaletteColor>;
+  TGDBTTextJustifyChangeCommand=specialize GUCmdChgData<TTextJustify>;
 
-{$DEFINE INTERFACE}
-{$DEFINE TCommand  := TGDBVertexChangeCommand}
-{$DEFINE TData     := GDBVertex}
-  {$I TGChangeCommandIMPL.inc}
-
-{$DEFINE TCommand  := TDoubleChangeCommand}
-{$DEFINE TData     := Double}
-  {$I TGChangeCommandIMPL.inc}
-
-{$DEFINE TCommand  := TGDBCameraBasePropChangeCommand}
-{$DEFINE TData     := GDBCameraBaseProp}
-  {$I TGChangeCommandIMPL.inc}
-
-{$DEFINE TCommand  := TStringChangeCommand}
-{$DEFINE TData     := String}
-  {$I TGChangeCommandIMPL.inc}
-
-{$DEFINE TCommand  := TGDBPoinerChangeCommand}
-{$DEFINE TData     := Pointer}
-  {$I TGChangeCommandIMPL.inc}
-
-{$DEFINE TCommand  := TBooleanChangeCommand}
-{$DEFINE TData     := Boolean}
-  {$I TGChangeCommandIMPL.inc}
-
-{$DEFINE TCommand  := TGDBByteChangeCommand}
-{$DEFINE TData     := Byte}
-  {$I TGChangeCommandIMPL.inc}
-
-{$DEFINE TCommand  := TGDBTGDBLineWeightChangeCommand}
-{$DEFINE TData     := TGDBLineWeight}
-  {$I TGChangeCommandIMPL.inc}
-
-{$DEFINE TCommand  := TGDBTGDBPaletteColorChangeCommand}
-{$DEFINE TData     := TGDBPaletteColor}
-  {$I TGChangeCommandIMPL.inc}
-
-{$DEFINE TCommand  := TGDBTTextJustifyChangeCommand}
-{$DEFINE TData     := TTextJustify}
-  {$I TGChangeCommandIMPL.inc}
-{$UNDEF INTERFACE}
-
-{$DEFINE CLASSDECLARATION}
-{$DEFINE TCommand  := TGDBVertexChangeCommand}
-{$DEFINE TData     := GDBVertex}
-  {$I TGChangeCommandIMPL.inc}
-
-{$DEFINE TCommand  := TDoubleChangeCommand}
-{$DEFINE TData     := Double}
-  {$I TGChangeCommandIMPL.inc}
-
-{$DEFINE TCommand  := TGDBCameraBasePropChangeCommand}
-{$DEFINE TData     := GDBCameraBaseProp}
-  {$I TGChangeCommandIMPL.inc}
-
-{$DEFINE TCommand  := TStringChangeCommand}
-{$DEFINE TData     := String}
-  {$I TGChangeCommandIMPL.inc}
-
-{$DEFINE TCommand  := TGDBPoinerChangeCommand}
-{$DEFINE TData     := Pointer}
-  {$I TGChangeCommandIMPL.inc}
-
-{$DEFINE TCommand  := TBooleanChangeCommand}
-{$DEFINE TData     := Boolean}
-  {$I TGChangeCommandIMPL.inc}
-
-{$DEFINE TCommand  := TGDBByteChangeCommand}
-{$DEFINE TData     := Byte}
-  {$I TGChangeCommandIMPL.inc}
-
-{$DEFINE TCommand  := TGDBTGDBLineWeightChangeCommand}
-{$DEFINE TData     := TGDBLineWeight}
-  {$I TGChangeCommandIMPL.inc}
-
-{$DEFINE TCommand  := TGDBTGDBPaletteColorChangeCommand}
-{$DEFINE TData     := TGDBPaletteColor}
-  {$I TGChangeCommandIMPL.inc}
-
-{$DEFINE TCommand  := TGDBTTextJustifyChangeCommand}
-{$DEFINE TData     := TTextJustify}
-  {$I TGChangeCommandIMPL.inc}
-{$UNDEF CLASSDECLARATION}
 implementation
 uses uzcdrawings,uzcinterface;
-constructor GUCmdChgData.Create(var data:_T);
+
+class function GUCmdChgData.CreateAndPushIfNeed(var us:TZctnrVectorUndoCommands; var data:T):TSelf;
+begin
+  if us.CurrentCommand>0 then begin
+    result:=TSelf(us.getDataMutable(us.CurrentCommand-1)^);
+    if result.GetCommandType=TTC_ChangeCommand then
+      if (result.Addr=@data)and(result.GetDataTypeSize=sizeof(data))then
+        exit;
+  end;
+  result:=TSelf.Create(data);
+  us.PushBackData(result);
+  inc(us.CurrentCommand);
+end;
+constructor GUCmdChgData.Create(var data:T);
 begin
      Addr:=@data;
      olddata:=data;
@@ -130,7 +74,7 @@ begin
 end;
 procedure GUCmdChgData.UnDo;
 begin
-     _T(addr^):=OldData;
+     T(addr^):=OldData;
      if assigned(PEntity)then
                              PEntity^.YouChanged(drawings.GetCurrentDWG^);
      ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);
@@ -139,7 +83,7 @@ begin
 end;
 procedure GUCmdChgData.Comit;
 begin
-     _T(addr^):=NewData;
+     T(addr^):=NewData;
      if assigned(PEntity)then
                              PEntity^.YouChanged(drawings.GetCurrentDWG^);
      ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);
@@ -149,65 +93,12 @@ begin
 end;
 procedure GUCmdChgData.ComitFromObj;
 begin
-     NewData:=_T(addr^);
+     NewData:=T(addr^);
 end;
 function GUCmdChgData.GetDataTypeSize:PtrInt;
 begin
-     result:=sizeof(_T);
+     result:=sizeof(T);
 end;
 
-{$DEFINE IMPLEMENTATION}
-{$DEFINE TCommand  := TGDBVertexChangeCommand}
-{$DEFINE PTCommand := PTGDBVertexChangeCommand}
-{$DEFINE TData     := GDBVertex}
-  {$I TGChangeCommandIMPL.inc}
-
-{$DEFINE TCommand  := TDoubleChangeCommand}
-{$DEFINE PTCommand := PTDoubleChangeCommand}
-{$DEFINE TData     := Double}
-  {$I TGChangeCommandIMPL.inc}
-
-{$DEFINE TCommand  := TGDBCameraBasePropChangeCommand}
-{$DEFINE PTCommand := PTGDBCameraBasePropChangeCommand}
-{$DEFINE TData     := GDBCameraBaseProp}
-  {$I TGChangeCommandIMPL.inc}
-
-{$DEFINE TCommand  := TStringChangeCommand}
-{$DEFINE PTCommand := PTStringChangeCommand}
-{$DEFINE TData     := String}
-  {$I TGChangeCommandIMPL.inc}
-
-{$DEFINE TCommand  := TGDBPoinerChangeCommand}
-{$DEFINE PTCommand := PTGDBPoinerChangeCommand}
-{$DEFINE TData     := Pointer}
-  {$I TGChangeCommandIMPL.inc}
-
-{$DEFINE TCommand  := TBooleanChangeCommand}
-{$DEFINE PTCommand := PTBooleanChangeCommand}
-{$DEFINE TData     := Boolean}
-  {$I TGChangeCommandIMPL.inc}
-
-{$DEFINE TCommand  := TGDBByteChangeCommand}
-{$DEFINE PTCommand := PTGDBByteChangeCommand}
-{$DEFINE TData     := Byte}
-  {$I TGChangeCommandIMPL.inc}
-
-{$DEFINE TCommand  := TGDBTGDBLineWeightChangeCommand}
-{$DEFINE PTCommand := PTGDBTGDBLineWeightChangeCommand}
-{$DEFINE TData     := TGDBLineWeight}
-  {$I TGChangeCommandIMPL.inc}
-
-{$DEFINE TCommand  := TGDBTGDBPaletteColorChangeCommand}
-{$DEFINE PTCommand := PTGDBTGDBPaletteColorChangeCommand}
-{$DEFINE TData     := TGDBPaletteColor}
-  {$I TGChangeCommandIMPL.inc}
-
-{$DEFINE TCommand  := TGDBTTextJustifyChangeCommand}
-{$DEFINE PTCommand := PTGDBTTextJustifyChangeCommand}
-{$DEFINE TData     := TTextJustify}
-  {$I TGChangeCommandIMPL.inc}
-{$UNDEF IMPLEMENTATION}
-
-{$MACRO OFF}
 end.
 

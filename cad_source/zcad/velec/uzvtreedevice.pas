@@ -4813,7 +4813,7 @@ var
       G.Edges[9].Weight:=4;
 
       ZCMsgCallBackInterface.TextMessage(IntToStr(G.VertexCount) + '-вершин до удаления ',TMWOHistoryOut);
-      ZCMsgCallBackInterface.TextMessage(IntToStr(G.getCountVertex) + '-вершины из обертки до удаления ',TMWOHistoryOut);
+      //ZCMsgCallBackInterface.TextMessage(IntToStr(G.getCountVertex) + '-вершины из обертки до удаления ',TMWOHistoryOut);
             ZCMsgCallBackInterface.TextMessage(IntToStr(G.EdgeCount) + '-ребер до удаления ',TMWOHistoryOut);
 
             for I:=0 to G.VertexCount - 1 do

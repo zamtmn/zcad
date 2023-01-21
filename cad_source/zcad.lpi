@@ -20,7 +20,7 @@
       <ResourceType Value="res"/>
       <UseXPManifest Value="True"/>
       <XPManifest>
-        <DpiAware Value="True/PM"/>
+        <DpiAware Value="True/PM_V2"/>
       </XPManifest>
       <Icon Value="0"/>
     </General>
@@ -31,9 +31,9 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <MinorVersionNr Value="9"/>
-      <RevisionNr Value="7"/>
+      <RevisionNr Value="10"/>
       <CharSet Value="0000"/>
-      <StringTable ProductVersion="0.0.0.8"/>
+      <StringTable ProductVersion="0.0.0.0"/>
     </VersionInfo>
     <BuildModes Count="7">
       <Item1 Name="Default" Default="True"/>

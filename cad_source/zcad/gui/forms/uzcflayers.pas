@@ -5,7 +5,7 @@ unit uzcflayers;
 interface
 
 uses
-  UGDBNamedObjectsArray,uzcutils,zcchangeundocommand,zcobjectchangeundocommand2,uzcdrawing,uzepalette,uzcsuptypededitors,LMessages,uzcfselector,uzestyleslinetypes,uzeutils,uzclog,uzcflineweights,uzcfcolors,uzedrawingsimple,uzcsysvars,Classes, SysUtils,
+  UGDBNamedObjectsArray,uzcutils,zcchangeundocommand,gzundoCmdChgMethods,uzcdrawing,uzepalette,uzcsuptypededitors,LMessages,uzcfselector,uzestyleslinetypes,uzeutils,uzclog,uzcflineweights,uzcfcolors,uzedrawingsimple,uzcsysvars,Classes, SysUtils,
   FileUtil, LResources, Forms, Controls, Graphics, GraphType,
   Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype, ActnList,
 
@@ -155,7 +155,7 @@ function TLayersForm.LayerLockClick(Item: TListItem;r: TRect):boolean;
 begin
      result:=true;
      CreateUndoStartMarkerNeeded;
-     with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(Item.Data)^._lock)^ do
+     with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(Item.Data)^._lock) do
      begin
        PGDBLayerProp(Item.Data)^._lock:=not PGDBLayerProp(Item.Data)^._lock;
        ComitFromObj;
@@ -170,7 +170,7 @@ function TLayersForm.LayerOnClick(Item: TListItem;r: TRect):boolean;
 begin
      result:=true;
      CreateUndoStartMarkerNeeded;
-     with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(Item.Data)^._on)^ do
+     with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(Item.Data)^._on) do
      begin
        PGDBLayerProp(Item.Data)^._on:=not PGDBLayerProp(Item.Data)^._on;
        ComitFromObj;
@@ -190,7 +190,7 @@ function TLayersForm.LayerPlotClick(Item: TListItem;r: TRect):boolean;
 begin
      result:=true;
      CreateUndoStartMarkerNeeded;
-     with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(Item.Data)^._print)^ do
+     with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(Item.Data)^._print) do
      begin
        PGDBLayerProp(Item.Data)^._print:=not PGDBLayerProp(Item.Data)^._print;
        ComitFromObj;
@@ -257,7 +257,7 @@ begin
       if PGDBLayerProp(Item.Data)^.color<>ColorSelectForm.ColorInfex then
         begin
            CreateUndoStartMarkerNeeded;
-           with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(Item.Data)^.color)^ do
+           with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(Item.Data)^.color) do
            begin
              PGDBLayerProp(Item.Data)^.color:=ColorSelectForm.ColorInfex;
              ComitFromObj;
@@ -460,7 +460,7 @@ begin
      if ListView1.CurrentItem<>ListItem then
      begin
        CreateUndoStartMarkerNeeded;
-     with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,sysvar.dwg.DWG_CLayer^)^ do
+     with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,sysvar.dwg.DWG_CLayer^) do
      begin
           SysVar.dwg.DWG_CLayer^:={drawings.GetCurrentDWG^.LayerTable.GetIndexByPointer}(ListItem.Data);
           ComitFromObj;
@@ -568,7 +568,7 @@ begin
 
      domethod:=tmethod(@pdwg^.LayerTable.PushBackData);
      undomethod:=tmethod(@pdwg^.LayerTable.RemoveDataFromArray);
-     with PushCreateTGObjectChangeCommand2(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pcreatedlayer,tmethod(domethod),tmethod(undomethod))^ do
+     with specialize GUCmdChgMethods<PGDBLayerProp>.CreateAndPush(pcreatedlayer,domethod,undomethod,PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack) do
      begin
           AfterAction:=false;
           //comit;
@@ -587,7 +587,7 @@ begin
   domethod:=tmethod(@pdwg^.LayerTable.RemoveDataFromArray);
   undomethod:=tmethod(@pdwg^.LayerTable.PushBackData);
   CreateUndoStartMarkerNeeded;
-  with PushCreateTGObjectChangeCommand2(PTZCADDrawing(pdwg)^.UndoStack,player,tmethod(domethod),tmethod(undomethod))^ do
+  with specialize GUCmdChgMethods<PGDBLayerProp>.CreateAndPush(player,domethod,undomethod,PTZCADDrawing(pdwg)^.UndoStack) do
   begin
        AfterAction:=false;
        comit;

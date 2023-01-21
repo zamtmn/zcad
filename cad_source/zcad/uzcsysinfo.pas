@@ -30,7 +30,6 @@ resourcestring
   rsFoundCLOption='Found command line option "%s"';
   rsFoundCLOperand='Found command line operand "%s"';
 const
-  zcaduniqueinstanceid='zcad unique instance';
   zcadgitversion = {$include zcadversion.inc};
 var
   SysDefaultFormatSettings:TFormatSettings;

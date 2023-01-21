@@ -15,9 +15,9 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-{MODE OBJFPC}{H+}
 unit uzeffdxf;
 {$INCLUDE zengineconfig.inc}
+{$MODE delphi}{$H+}
 interface
 uses LCLProc,uzbpaths,uzbstrproc,uzgldrawcontext,usimplegenerics,uzestylesdim,uzeentityfactory,
     {$IFNDEF DELPHI}LazUTF8,{$ENDIF}
@@ -37,10 +37,18 @@ type
    end;
    TLongProcessIndicator=Procedure(a:integer) of object;
 const
-     IgnoredDXFEntsArray:array of DXFEntDesc=[
+     IgnoredDXFEntsArray:array [0..1] of DXFEntDesc=(
        (UCASEEntName:'HATCH'),
        (UCASEEntName:'ACAD_PROXY_ENTITY')
-     ];
+     );
+
+{ todo: вернуть как было после https://gitlab.com/freepascal.org/fpc/source/-/issues/40073
+-     IgnoredDXFEntsArray:array of DXFEntDesc=[
++     IgnoredDXFEntsArray:array [0..1] of DXFEntDesc=(
+        (UCASEEntName:'HATCH'),
+        (UCASEEntName:'ACAD_PROXY_ENTITY')
+-     ];
++     );}
 var FOC:Integer;
     CreateExtLoadData:TCreateExtLoadData=nil;
     ClearExtLoadData:TProcessExtLoadData=nil;

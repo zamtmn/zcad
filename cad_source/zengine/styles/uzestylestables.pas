@@ -20,7 +20,7 @@ unit uzestylestables;
 {$INCLUDE zengineconfig.inc}
 interface
 uses sysutils,uzbtypes,uzegeometry,
-     UGDBNamedObjectsArray,gzctnrVector;
+     UGDBNamedObjectsArray,gzctnrVector,uzeNamedObject;
 type
 {EXPORT+}
 TTableCellJustify=(jcl(*'TopLeft'*),

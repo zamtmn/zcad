@@ -21,57 +21,59 @@ interface
 uses varmandef,sysutils,gzctnrVectorTypes;
 type
 TTypeCommand=(TTC_MBegin,TTC_MEnd,TTC_MNotUndableIfOverlay,TTC_Command,TTC_ChangeCommand);
-PTElementaryCommand=^TElementaryCommand;
-TElementaryCommand=object
+//PTElementaryCommand=^TElementaryCommand;
+TElementaryCommand=class
                          AutoProcessGDB:Boolean;
                          AfterAction:Boolean;
                          function GetCommandType:TTypeCommand;virtual;
                          procedure UnDo;virtual;abstract;
                          procedure Comit;virtual;abstract;
-                         destructor Done;virtual;
+                         destructor Destroy;override;
                    end;
-PTMarkerCommand=^TMarkerCommand;
-TMarkerCommand=object(TElementaryCommand)
+//PTMarkerCommand=^TMarkerCommand;
+TMarkerCommand=class(TElementaryCommand)
                      Name:String;
                      PrevIndex:TArrayIndex;
-                     constructor init(_name:String;_index:TArrayIndex);
-                     function GetCommandType:TTypeCommand;virtual;
-                     procedure UnDo;virtual;
-                     procedure Comit;virtual;
+                     constructor Create(_name:String;_index:TArrayIndex);
+                     function GetCommandType:TTypeCommand;override;
+                     procedure UnDo;override;
+                     procedure Comit;override;
                end;
-PTCustomChangeCommand=^TCustomChangeCommand;
-TCustomChangeCommand=object(TElementaryCommand)
-                           Addr:Pointer;
-                           function GetCommandType:TTypeCommand;virtual;
+//PTCustomChangeCommand=^TCustomChangeCommand;
+TCustomChangeCommand=class(TElementaryCommand)
+                           function GetCommandType:TTypeCommand;override;
                      end;
-PTChangeCommand=^TChangeCommand;
-TChangeCommand=object(TCustomChangeCommand)
+TCustomChangeCommand2=class(TCustomChangeCommand)
+                           Addr:Pointer;
+                     end;
+//PTChangeCommand=^TChangeCommand;
+TChangeCommand=class(TCustomChangeCommand2)
                      datasize:PtrInt;
                      tempdata:Pointer;
-                     constructor init(obj:Pointer;_datasize:PtrInt);
-                     procedure undo;virtual;
+                     constructor Create(obj:Pointer;_datasize:PtrInt);
+                     procedure undo;override;
                      function GetDataTypeSize:PtrInt;virtual;
 
                end;
-PTTypedChangeCommand=^TTypedChangeCommand;
-TTypedChangeCommand=object(TCustomChangeCommand)
+//PTTypedChangeCommand=^TTypedChangeCommand;
+TTypedChangeCommand=class(TCustomChangeCommand2)
                                       public
                                       OldData,NewData:Pointer;
                                       PTypeManager:PUserTypeDescriptor;
                                       PDataOwner:{PGDBObjEntity}pointer;//PEntity
-                                      constructor Assign(PDataInstance:Pointer;PType:PUserTypeDescriptor);
-                                      procedure UnDo;virtual;
-                                      procedure Comit;virtual;
+                                      constructor Create(PDataInstance:Pointer;PType:PUserTypeDescriptor);
+                                      procedure UnDo;override;
+                                      procedure Comit;override;
                                       procedure ComitFromObj;virtual;
                                       function GetDataTypeSize:PtrInt;virtual;
-                                      destructor Done;virtual;
+                                      destructor Destroy;override;
                                 end;
 TUndableMethod=procedure of object;
 TOnUndoRedoDataOwner=procedure(PDataOwner:Pointer) of object;
 var
   onUndoRedoDataOwner:TOnUndoRedoDataOwner;
 implementation
-constructor TTypedChangeCommand.Assign(PDataInstance:Pointer;PType:PUserTypeDescriptor);
+constructor TTypedChangeCommand.Create(PDataInstance:Pointer;PType:PUserTypeDescriptor);
 begin
      Addr:=PDataInstance;
      PTypeManager:=PType;
@@ -138,7 +140,7 @@ function TTypedChangeCommand.GetDataTypeSize:PtrInt;
 begin
      result:=PTypeManager^.SizeInBytes;
 end;
-destructor TTypedChangeCommand.Done;
+destructor TTypedChangeCommand.Destroy;
 begin
      inherited;
      PTypeManager^.MagicFreeInstance(NewData);
@@ -150,11 +152,11 @@ function TElementaryCommand.GetCommandType:TTypeCommand;
 begin
      result:=TTC_Command;
 end;
-destructor TElementaryCommand.Done;
+destructor TElementaryCommand.Destroy;
 begin
 end;
 
-constructor TChangeCommand.init(obj:Pointer;_datasize:PtrInt);
+constructor TChangeCommand.Create(obj:Pointer;_datasize:PtrInt);
 begin
      Addr:=obj;
      datasize:=_datasize;
@@ -204,7 +206,7 @@ begin
 //     gdb.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^,dc);
 end;
 
-constructor TMarkerCommand.init(_name:String;_index:TArrayIndex);
+constructor TMarkerCommand.Create(_name:String;_index:TArrayIndex);
 begin
      name:=_name;
      PrevIndex:=_index;

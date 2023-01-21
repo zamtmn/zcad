@@ -161,7 +161,7 @@ var
     domethod,undomethod:tmethod;
 begin
      SetObjCreateManipulator(domethod,undomethod);
-     with PushMultiObjectCreateCommand(Drawing.UndoStack,tmethod(domethod),tmethod(undomethod),1)^ do
+     with PushMultiObjectCreateCommand(Drawing.UndoStack,tmethod(domethod),tmethod(undomethod),1) do
      begin
           AddObject(PEnt);
           comit;
@@ -258,7 +258,7 @@ begin
   if needundo then
   begin
       SetObjCreateManipulator(domethod,undomethod);
-      with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),1)^ do
+      with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),1) do
       begin
            AddObject(result);
            comit;

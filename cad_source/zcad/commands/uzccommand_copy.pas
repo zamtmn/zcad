@@ -55,7 +55,7 @@ begin
   SetObjCreateManipulator(domethod,undomethod);
   dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
   OldEnts2NewEntsMap:=TMapPointerToPointer.Create;
-  with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),1)^ do
+  with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),1) do
   begin
 
     pcd:=pcoa^.beginiterate(ir);

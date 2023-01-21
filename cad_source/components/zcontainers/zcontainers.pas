@@ -12,7 +12,8 @@ uses
   gzctnrVectorPData, gzctnrVectorPObjects, gzctnrBinarySeparatedTree, 
   gzctnrSTL, uzctnrAlignedVectorBytes, gzctnrVectorStr, uzctnrTree, 
   uzctnrVectorStrings, uzctnrVectorPointers, uzctnrVectorBytes, 
-  gzctnrAlignedVectorObjects, LazarusPackageIntf;
+  gzctnrAlignedVectorObjects, gzctnrVectorc, gzctnrVectorClass, 
+  LazarusPackageIntf;
 
 implementation
 

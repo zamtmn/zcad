@@ -19,7 +19,7 @@
 unit UGDBNumerator;
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzbtypes,gzctnrVectorTypes,sysutils,UGDBNamedObjectsArray;
+uses uzbtypes,gzctnrVectorTypes,sysutils,UGDBNamedObjectsArray,uzeNamedObject;
 type
 {EXPORT+}
 PGDBNumItem=^GDBNumItem;

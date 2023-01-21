@@ -22,7 +22,7 @@ unit uzcfdimstyles;
 interface
 
 uses
-  uzcutils,zcchangeundocommand,zcobjectchangeundocommand2,uzcdrawing,LMessages,
+  uzcutils,zcchangeundocommand,gzundoCmdChgMethods,uzcdrawing,LMessages,
   uzclog,uzedrawingsimple,uzcsysvars,Classes, SysUtils,
   FileUtil, LResources, Forms, Controls, Graphics, GraphType,
   Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype, ActnList,
@@ -178,7 +178,7 @@ begin
                  ZCMsgCallBackInterface.TextMessage(pstring(FontsSelector.Enums.getDataMutable(FontsSelector.Selected))^,TMWOHistoryOut);
 
                CreateUndoStartMarkerNeeded;
-               with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pointer(PGDBDimStyle(TListItem(Item).Data)^.Text.DIMTXSTY))^ do
+               with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pointer(PGDBDimStyle(TListItem(Item).Data)^.Text.DIMTXSTY)) do
                begin
                PGDBDimStyle(TListItem(Item).Data)^.Text.DIMTXSTY:=currentextstyle;
                ComitFromObj;
@@ -395,7 +395,7 @@ begin
      if ListView1.CurrentItem<>ListItem then
      begin
      CreateUndoStartMarkerNeeded;
-     with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,sysvar.dwg.DWG_CTStyle^)^ do
+     with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,sysvar.dwg.DWG_CTStyle^) do
      begin
           SysVar.dwg.DWG_CTStyle^:=ListItem.Data;
           ComitFromObj;
@@ -519,7 +519,7 @@ begin
   undomethod:=tmethod(@pdwg^.DimStyleTable.RemoveDataFromArray);
   CreateUndoStartMarkerNeeded;
   ///////   не получилось запустить
-  with PushCreateTGObjectChangeCommand2(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pcreatedstyle,tmethod(domethod),tmethod(undomethod))^ do
+  with specialize GUCmdChgMethods<PGDBDimStyle>.CreateAndPush(pcreatedstyle,domethod,undomethod,PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack) do
   begin
        AfterAction:=false;
        //comit;
@@ -556,7 +556,7 @@ begin
   undomethod:=tmethod(@pdwg^.DimStyleTable.PushBackData);
   CreateUndoStartMarkerNeeded;
   ///////   не получилось запустить
-  with PushCreateTGObjectChangeCommand2(PTZCADDrawing(pdwg)^.UndoStack,pstyle,tmethod(domethod),tmethod(undomethod))^ do
+  with specialize GUCmdChgMethods<PGDBDimStyle>.CreateAndPush(pstyle,domethod,undomethod,PTZCADDrawing(pdwg)^.UndoStack) do
   begin
        AfterAction:=false;
        comit;

@@ -18,7 +18,7 @@
         </SyntaxOptions>
       </Parsing>
     </CompilerOptions>
-    <Files Count="15">
+    <Files Count="17">
       <Item1>
         <Filename Value="gzctnrvector.pas"/>
         <UnitName Value="gzctnrVector"/>
@@ -79,6 +79,14 @@
         <Filename Value="gzctnralignedvectorobjects.pas"/>
         <UnitName Value="gzctnrAlignedVectorObjects"/>
       </Item15>
+      <Item16>
+        <Filename Value="gzctnrvectorc.pas"/>
+        <UnitName Value="gzctnrVectorc"/>
+      </Item16>
+      <Item17>
+        <Filename Value="gzctnrvectorclass.pas"/>
+        <UnitName Value="gzctnrVectorClass"/>
+      </Item17>
     </Files>
     <CompatibilityMode Value="True"/>
     <RequiredPkgs Count="2">

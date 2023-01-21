@@ -32,7 +32,7 @@ uses
   uzcutils,
   uzbtypes,
   uzegeometry,
-  uzeentity,uzeenttext,uzgldrawcontext,uzcdrawing,uzeconsts,zcchangeundocommand,
+  uzeentity,uzeenttext,uzgldrawcontext,uzcdrawing,uzeconsts,gzundoCmdChgData,
   URecordDescriptor,typedescriptors,Varman;
 
 //type

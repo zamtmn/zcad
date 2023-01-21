@@ -20,7 +20,7 @@ unit uzcdrawing;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-    uzcTranslations,uzcinterface,uzgldrawcontext,zeundostack,zcchangeundocommand,
+    uzcTranslations,uzcinterface,uzgldrawcontext,zeundostack,gzundoCmdChgData,
     gzundoCmdChgMethod,zebaseundocommands,uzbpaths,uzestylesdim,
     uzcdialogsfiles,LResources,uzcsysvars,uzcstrconsts,uzbstrproc,uzeblockdef,UUnitManager,
     uzbtypes,varmandef,varman,sysutils,uzegeometry, uzeconsts,

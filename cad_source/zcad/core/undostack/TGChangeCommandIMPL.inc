@@ -6,7 +6,7 @@ function PushCreateTGChangeCommand(var us:TZctnrVectorUndoCommands; var data:TDa
 
 {$IFDEF INTERFACE}
 //PTCommand=^TCommand;
-TCommand=specialize TGChangeCommand<TData>;
+TCommand=specialize GUCmdChgData<TData>;
 //function CreateTGChangeCommand(const data:TData):PTCommand;overload;
 {$ENDIF}
 

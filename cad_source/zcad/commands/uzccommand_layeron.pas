@@ -24,7 +24,7 @@ interface
 uses
   uzcLog,SysUtils,
   uzccommandsabstract,uzeentity,uzcdrawing,uzcdrawings,uzccommandsmanager,
-  uzcstrconsts,uzcutils,zcchangeundocommand,uzccommandsimpl,
+  uzcstrconsts,uzcutils,gzundoCmdChgData,uzccommandsimpl,
   uzestyleslayers,uzcinterface;
 
 implementation

@@ -25,7 +25,7 @@ uses
   sysutils,
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
-  zcchangeundocommand,
+  gzundoCmdChgData,
   uzcutils,uzecamera,
   uzedrawingsimple,uzcdrawings,uzcdrawing;
 

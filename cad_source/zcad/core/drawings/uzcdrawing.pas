@@ -21,7 +21,7 @@ unit uzcdrawing;
 interface
 uses
     uzcTranslations,uzcinterface,uzgldrawcontext,zeundostack,zcchangeundocommand,
-    zcobjectchangeundocommand,zebaseundocommands,uzbpaths,uzestylesdim,
+    gzundoCmdChgMethod,zebaseundocommands,uzbpaths,uzestylesdim,
     uzcdialogsfiles,LResources,uzcsysvars,uzcstrconsts,uzbstrproc,uzeblockdef,UUnitManager,
     uzbtypes,varmandef,varman,sysutils,uzegeometry, uzeconsts,
     uzedrawingsimple,uzestyleslayers,uzeentity,uzefontmanager,

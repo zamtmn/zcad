@@ -21,7 +21,7 @@ unit uzccommand_3dpoly;
 
 interface
 uses
-  zcobjectchangeundocommand2,zcmultiobjectcreateundocommand,
+  gzundoCmdChgMethods,zcmultiobjectcreateundocommand,
 
   uzcdrawing,uzgldrawcontext,
 

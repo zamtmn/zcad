@@ -21,7 +21,7 @@ unit uzccommand_polyed;
 
 interface
 uses
-  zcobjectchangeundocommand2,
+  gzundoCmdChgMethods,
   gzctnrVectorTypes,uzeentitiesmanager,
   uzcdrawing,
   uzgldrawcontext,

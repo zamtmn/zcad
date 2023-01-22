@@ -23,17 +23,14 @@ uses uzccommandsimpl,    //тут реализация объекта CommandRTE
      uzccommandsabstract,//базовые объявления для команд
             //базовые типы
      uzccommandsmanager, //менеджер команд
-       uzeentpolyline,
-       uzcinterface,
-       sysutils,
+     uzeentpolyline,
+     uzcinterface,
+     sysutils,
      uzegeometrytypes,
      uzegeometry,
      uzvmanemparams, //вынесенные параметры
      uzvmanemgetgem,
      uzvagraphsdev,
-     //uzvnum,
-     //uzvagensl,
-
 
      //UGDBSelectedObjArray,
 
@@ -57,6 +54,10 @@ var
 implementation
 //uses
       //uzvagsl;
+var
+ listFullGraphEM:TListGraphDev;     //Граф со всем чем можно
+
+
 procedure Tuzvmanem_com.CommandStart(Operands:TCommandOperands);
 begin
   //создаем командное меню из 3х пунктов
@@ -64,37 +65,36 @@ begin
 
   //показываем командное меню
   commandmanager.DMShow;
+
+    //Получить список всех древовидно ориентированных графов из которых состоит модель
+  listFullGraphEM:=TListGraphDev.Create;
+  listFullGraphEM:=uzvmanemgetgem.getListGrapghEM;
+
   //не забываем вызвать метод родителя, там еще много что должно выполниться
   inherited CommandStart('');
 end;
 
 procedure Tuzvmanem_com.repeatEMShema(pdata:PtrInt);
 var
- //contourRoom:PGDBObjPolyLine;
- //listDeviceinRoom:TListVertexDevice;
- listGraphEM:TListGraphDev;
- stPoint:gdbvertex;
+ depthVisual:double;
+ insertCoordination:GDBVertex;
+ graphDev:TGraphDev;
+ listStructurGraphEM:TListGraphDev; //граф без разрывов, переходов методов прокладки. Только устройства подключения и разветвительные коробки
 begin
-  stPoint:=uzegeometry.CreateVertex(0,0,0);
+   depthVisual:=15;
+   insertCoordination:=uzegeometry.CreateVertex(0,0,0);
 
-  //Получить список всех древовидно ориентированных графов из которых состоит модель
-  listGraphEM:=uzvmanemgetgem.getListGrapghEM;
+   //получаем структурированный граф (граф без разрывов, переходов методов прокладки. Только устройства подключения и разветвительные коробки)
+   listStructurGraphEM:=uzvmanemgetgem.getListStructurGraphEM(listFullGraphEM);
 
+   if uzvmanemComParams.sortGraph then
+     uzvmanemgetgem.sortSumChildListGraph(listFullGraphEM);
 
-  ////if commandmanager.get3dpoint('Specify insert point:',stPoint)= GRNormal then
-  ////     ZCMsgCallBackInterface.TextMessage('координата введена',TMWOHistoryOut)
-  ////   else
-  ////     ZCMsgCallBackInterface.TextMessage('координаты НЕТ',TMWOHistoryOut);
-  //
-  // if uzvagsl.getContourRoom(contourRoom) then                  // получить контур помещения
-  //    if uzvagsl.isRectangelRoom(contourRoom) then begin        //это прямоугольная комната?
-  //       ZCMsgCallBackInterface.TextMessage('проверки пройдены',TMWOHistoryOut);
-  //       // if mainElementAutoEmbedSL(contourRoom,contourRoomEmbedSL) then  begin
-  //       //  listDeviceinRoom:=uzvagsl.getListDeviceinRoom(contourRoom);  //получен список извещателей внутри помещения
-  //       //  ZCMsgCallBackInterface.TextMessage('Количество выделяных извещателей = ' + inttostr(listDeviceinRoom.Size));
-  //       //end;
-  //       //uzvagsl.autoNumberDevice(uzvagslComParams);
-  // end;
+   for graphDev in listFullGraphEM do
+   begin
+      visualGraphTree(graphDev,insertCoordination,3,depthVisual);
+   end;
+
    Commandmanager.executecommandend;
 
 end;
@@ -107,11 +107,14 @@ initialization
   //uzvagslComParams.BaseName:='BTH';
   //uzvagslComParams.DeadDand:=10;
   //uzvagslComParams.NumberVar:='GC_NumberInGroup';
-  //uzvagslComParams.option2:=false;
-
+  uzvmanemComParams.sortGraph:=true;
+  uzvmanemComParams.settingRepeatEMShema.vizStructureGraphEM:=false; // визуализировать полный граф
+  uzvmanemComParams.settingRepeatEMShema.beforeGraphEMSort:=true;    // отсортировать перед отрисовкой
 
   SysUnit.RegisterType(TypeInfo(PTuzvmanemComParams));//регистрируем тип данных в зкадном RTTI
-  SysUnit.SetTypeDesk(TypeInfo(TuzvmanemComParams),['Имя суперлинии','Погрешность','Параметр2']);//Даем человечьи имена параметрам
+
+  SysUnit.SetTypeDesk(TypeInfo(TsettingRepeatEMShema),['Виз.структур граф','Сорт.перед виз']);                                    //Даем человечьи имена параметрам
+  SysUnit.SetTypeDesk(TypeInfo(TuzvmanemComParams),['Имя суперлинии','Погрешность','Параметр2','Сортировать граф','Настройки повторить эл.модель']);//Даем человечьи имена параметрам
   uzvmanem_com.init('manem',CADWG,0);//инициализируем команду
   uzvmanem_com.SetCommandParam(@uzvmanemComParams,'PTuzvmanemComParams');//привязываем параметры к команде
 end.

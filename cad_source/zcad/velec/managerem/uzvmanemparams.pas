@@ -5,12 +5,17 @@ uses
 type
   PTuzvmanemComParams=^TuzvmanemComParams;//указатель на тип данных параметров команды. зкад работает с ними через указатель
 
-  //TsettingVizCab=record
-  //  sErrors:Boolean;
-  //  vizNumMetric:Boolean;
-  //  vizFullTreeCab:Boolean; //Визуализировать полное дерево
+  //TsettingDebugging=record
+  //  //sErrors:Boolean;
+  //  vizGraphEM:Boolean;        // Визуализировать граф
+  //  beforeGraphEMSort:Boolean; // Перед отрисовкой графа, отсортировать его так как будет строиться схема
   //  //vizEasyTreeCab:Boolean; //визуализировать упрощенное дерево
   //end;
+
+  TsettingRepeatEMShema=record
+    vizStructureGraphEM:Boolean;        // Визуализировать граф
+    beforeGraphEMSort:Boolean;          // Перед отрисовкой графа, отсортировать его так как будет строиться схема
+  end;
 
   TuzvmanemComParams=record       //определяем параметры команды которые будут видны в инспекторе во время выполнения команды
                                         //регистрировать их будем паскалевским RTTI
@@ -19,7 +24,9 @@ type
     //nameSL:String;
     accuracy:Double;
     metricDev:Boolean;
-    //settingVizCab:TsettingVizCab;
+    sortGraph:Boolean;  //отсортировать граф как удобно для отрисовки. возможно потому будут условия
+
+    settingRepeatEMShema:TsettingRepeatEMShema;
 
   end;
 var

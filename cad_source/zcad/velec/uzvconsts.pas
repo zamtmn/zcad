@@ -76,7 +76,9 @@ const
   velec_onlyThisDev='!';    // кабель довести только до этой точки и все, дальше не идет
   velec_masterTravelNode='^';
   velec_beforeNameGlobalSchemaBlock='DEVICE_';
-  velec_SchemaBlockJunctionBox='DEVICE_EL_VL_BOX1';
+  velec_SchemaBlockJunctionBox='EL_EMSPLITTERBOX';
+  velec_SchemaBlockChangingLayingMethod='EL_EMCHANGLAYINGMETHOD';
+
   velec_SchemaELDevInfo='VELEC_EL_SCHEME_INFO';
   velec_SchemaCableInfo='VELEC_CABLE_SCHEME_INFO';
 
@@ -97,6 +99,10 @@ const
 
 
   velec_cableMountingNon='-';
+
+  //***КОНСТАНТЫ В РАСЧЕТАХ ЭЛЕКТРИЧЕСКОЙ МОДЕЛИ***//
+  velec_EM_vSumChildVertex='vSumChildVertex';
+
 
 implementation
 

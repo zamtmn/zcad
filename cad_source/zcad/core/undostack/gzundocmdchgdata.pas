@@ -29,6 +29,8 @@ type
         TSelf=specialize GUCmdChgData<T>;
       var
         OldData,NewData:T;
+
+        procedure AfterDo;
     public
         PEntity:PGDBObjEntity;
         constructor Create(var data:T);
@@ -67,38 +69,37 @@ begin
 end;
 constructor GUCmdChgData.Create(var data:T);
 begin
-     Addr:=@data;
-     olddata:=data;
-     newdata:=data;
-     PEntity:=nil;
+  Addr:=@data;
+  olddata:=data;
+  newdata:=data;
+  PEntity:=nil;
 end;
 procedure GUCmdChgData.UnDo;
 begin
-     T(addr^):=OldData;
-     if assigned(PEntity)then
-                             PEntity^.YouChanged(drawings.GetCurrentDWG^);
-     ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);
-     //if assigned(SetVisuaProplProc)then
-     //                                  SetVisuaProplProc;
+  T(addr^):=OldData;
+  AfterDo
 end;
 procedure GUCmdChgData.Comit;
 begin
-     T(addr^):=NewData;
-     if assigned(PEntity)then
-                             PEntity^.YouChanged(drawings.GetCurrentDWG^);
-     ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);
-     //if assigned(SetVisuaProplProc)then
-     //                                  SetVisuaProplProc;
-
+  T(addr^):=NewData;
+  AfterDo
 end;
 procedure GUCmdChgData.ComitFromObj;
 begin
-     NewData:=T(addr^);
+  NewData:=T(addr^);
 end;
 function GUCmdChgData.GetDataTypeSize:PtrInt;
 begin
-     result:=sizeof(T);
+  result:=sizeof(T);
 end;
+
+procedure GUCmdChgData.AfterDo;
+begin
+  if assigned(PEntity)then
+    PEntity^.YouChanged(drawings.GetCurrentDWG^);
+  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);
+end;
+
 
 end.
 

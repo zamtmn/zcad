@@ -28,6 +28,8 @@ type
       type
         TCangeMethod=procedure(const data:T)of object;
       var
+        AfterAction:Boolean;
+        AutoProcessGDB:Boolean;
         Data:T;
         DoMethod,UnDoMethod:tmethod;
         procedure AfterDo;

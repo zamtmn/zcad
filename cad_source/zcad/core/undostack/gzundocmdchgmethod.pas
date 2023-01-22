@@ -50,7 +50,7 @@ end;
 
 constructor GUCmdChgMethod.Create(var AData:T;AMethod:tmethod);
 begin
-  AData:=AData;
+  DoData:=AData;
   method:=AMethod;
 end;
 procedure GUCmdChgMethod.StoreUndoData(var AUndoData:T);

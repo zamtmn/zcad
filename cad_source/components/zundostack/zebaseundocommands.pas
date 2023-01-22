@@ -20,54 +20,50 @@ unit zebaseundocommands;
 interface
 uses varmandef,sysutils,gzctnrVectorTypes;
 type
-TTypeCommand=(TTC_MBegin,TTC_MEnd,TTC_MNotUndableIfOverlay,TTC_Command,TTC_ChangeCommand);
-//PTElementaryCommand=^TElementaryCommand;
-TElementaryCommand=class
-                         AutoProcessGDB:Boolean;
-                         AfterAction:Boolean;
-                         function GetCommandType:TTypeCommand;virtual;
-                         procedure UnDo;virtual;abstract;
-                         procedure Comit;virtual;abstract;
-                         destructor Destroy;override;
-                   end;
-//PTMarkerCommand=^TMarkerCommand;
-TMarkerCommand=class(TElementaryCommand)
-                     Name:String;
-                     PrevIndex:TArrayIndex;
-                     constructor Create(_name:String;_index:TArrayIndex);
-                     function GetCommandType:TTypeCommand;override;
-                     procedure UnDo;override;
-                     procedure Comit;override;
-               end;
-//PTCustomChangeCommand=^TCustomChangeCommand;
-TCustomChangeCommand=class(TElementaryCommand)
-                           function GetCommandType:TTypeCommand;override;
-                     end;
-TCustomChangeCommand2=class(TCustomChangeCommand)
-                           Addr:Pointer;
-                     end;
-//PTChangeCommand=^TChangeCommand;
-TChangeCommand=class(TCustomChangeCommand2)
-                     datasize:PtrInt;
-                     tempdata:Pointer;
-                     constructor Create(obj:Pointer;_datasize:PtrInt);
-                     procedure undo;override;
-                     function GetDataTypeSize:PtrInt;virtual;
-
-               end;
-//PTTypedChangeCommand=^TTypedChangeCommand;
-TTypedChangeCommand=class(TCustomChangeCommand2)
-                                      public
-                                      OldData,NewData:Pointer;
-                                      PTypeManager:PUserTypeDescriptor;
-                                      PDataOwner:{PGDBObjEntity}pointer;//PEntity
-                                      constructor Create(PDataInstance:Pointer;PType:PUserTypeDescriptor);
-                                      procedure UnDo;override;
-                                      procedure Comit;override;
-                                      procedure ComitFromObj;virtual;
-                                      function GetDataTypeSize:PtrInt;virtual;
-                                      destructor Destroy;override;
-                                end;
+  TTypeCommand=(TTC_MBegin,
+                TTC_MEnd,
+                TTC_MNotUndableIfOverlay,
+                TTC_Command,
+                TTC_ChangeCommand);
+  TElementaryCommand=class
+      function GetCommandType:TTypeCommand;virtual;
+      procedure UnDo;virtual;abstract;
+      procedure Comit;virtual;abstract;
+      destructor Destroy;override;
+  end;
+  TMarkerCommand=class(TElementaryCommand)
+      Name:String;
+      PrevIndex:TArrayIndex;
+      constructor Create(_name:String;_index:TArrayIndex);
+      function GetCommandType:TTypeCommand;override;
+      procedure UnDo;override;
+      procedure Comit;override;
+  end;
+  TCustomChangeCommand=class(TElementaryCommand)
+      function GetCommandType:TTypeCommand;override;
+  end;
+  TCustomChangeCommand2=class(TCustomChangeCommand)
+    Addr:Pointer;
+  end;
+  TChangeCommand=class(TCustomChangeCommand2)
+      datasize:PtrInt;
+      tempdata:Pointer;
+      constructor Create(obj:Pointer;_datasize:PtrInt);
+      procedure undo;override;
+      function GetDataTypeSize:PtrInt;virtual;
+  end;
+  TTypedChangeCommand=class(TCustomChangeCommand2)
+    public
+      OldData,NewData:Pointer;
+      PTypeManager:PUserTypeDescriptor;
+      PDataOwner:{PGDBObjEntity}pointer;//PEntity
+      constructor Create(PDataInstance:Pointer;PType:PUserTypeDescriptor);
+      procedure UnDo;override;
+      procedure Comit;override;
+      procedure ComitFromObj;virtual;
+      function GetDataTypeSize:PtrInt;virtual;
+      destructor Destroy;override;
+  end;
 TUndableMethod=procedure of object;
 TOnUndoRedoDataOwner=procedure(PDataOwner:Pointer) of object;
 var

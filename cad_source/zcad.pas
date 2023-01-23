@@ -224,6 +224,7 @@ uses
 
   uzccommand_exampleinsertdevice,uzccommand_examplecreatelayer,
   uzccommand_ExampleVarManipulation,
+  uzccommand_exampleconstructtomodalspace,
 
   uzccommand_VarsLink,
 

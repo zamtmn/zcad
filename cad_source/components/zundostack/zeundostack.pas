@@ -39,7 +39,6 @@ TZctnrVectorUndoCommands=class(specialize GZVectorClass{-}<{PTElementaryCommand,
                                  procedure PushStartMarker(CommandName:String);
                                  procedure PushEndMarker;
                                  procedure PushStone;
-                                 procedure PushChangeCommand(_obj:Pointer;_fieldsize:PtrInt);overload;
                                  function undo(out msg:string;prevheap:TArrayIndex;overlay:Boolean):TUndoRedoResult;
                                  procedure KillLastCommand;
                                  function redo(out msg:string):TUndoRedoResult;
@@ -100,24 +99,6 @@ begin
      inc(CurrentCommand);
      startmarkercount:=0;
      end;
-end;
-//procedure TZctnrVectorUndoCommands.PushTypedChangeCommand(_obj:Pointer;_PTypeManager:PUserTypeDescriptor);overload;
-procedure TZctnrVectorUndoCommands.PushChangeCommand(_obj:Pointer;_fieldsize:PtrInt);
-var
-   pcc:TChangeCommand;
-begin
-     if CurrentCommand>0 then
-     begin
-          pcc:=TChangeCommand(self.getDataMutable(CurrentCommand-1));
-          if pcc.GetCommandType=TTC_ChangeCommand then
-          if (pcc.Addr=_obj)
-          and(pcc.datasize=_fieldsize) then
-                                             exit;
-     end;
-     //Getmem(pointer(pcc),sizeof(TChangeCommand));
-     pcc:=TChangeCommand.Create(_obj,_fieldsize);
-     inc(CurrentCommand);
-     PushBackData(pcc);
 end;
 procedure TZctnrVectorUndoCommands.KillLastCommand;
 var
@@ -263,7 +244,7 @@ begin
   if CurrentCommand>0 then
   begin
        result:=TTypedChangeCommand(self.getDataMutable(CurrentCommand-1));
-       if result.GetCommandType=TTC_ChangeCommand then
+       if result is TTypedChangeCommand then
        if (result.Addr=PDataInstance)
        and(result.PTypeManager=PType)
                                                 then

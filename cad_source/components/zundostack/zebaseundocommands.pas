@@ -23,8 +23,8 @@ type
   TTypeCommand=(TTC_MBegin,
                 TTC_MEnd,
                 TTC_MNotUndableIfOverlay,
-                TTC_Command,
-                TTC_ChangeCommand);
+                TTC_Command//,
+                {TTC_ChangeCommand});
   TUCmdBase=class
       function GetCommandType:TTypeCommand;virtual;
       procedure UnDo;virtual;abstract;
@@ -39,21 +39,9 @@ type
       procedure UnDo;override;
       procedure Comit;override;
   end;
-  TUCmd=class(TUCmdBase)
-      function GetCommandType:TTypeCommand;override;
-  end;
-  TCustomChangeCommand2=class(TUCmd)
-    Addr:Pointer;
-  end;
-  TChangeCommand=class(TCustomChangeCommand2)
-      datasize:PtrInt;
-      tempdata:Pointer;
-      constructor Create(obj:Pointer;_datasize:PtrInt);
-      procedure undo;override;
-      function GetDataTypeSize:PtrInt;virtual;
-  end;
-  TTypedChangeCommand=class(TCustomChangeCommand2)
+  TTypedChangeCommand=class(TUCmdBase)
     public
+      Addr:Pointer;
       OldData,NewData:Pointer;
       PTypeManager:PUserTypeDescriptor;
       PDataOwner:{PGDBObjEntity}pointer;//PEntity
@@ -116,27 +104,6 @@ begin
 end;
 destructor TUCmdBase.Destroy;
 begin
-end;
-
-constructor TChangeCommand.Create(obj:Pointer;_datasize:PtrInt);
-begin
-  Addr:=obj;
-  datasize:=_datasize;
-  Getmem(pointer(tempdata),datasize);
-  Move(Addr^,tempdata^,datasize);
-end;
-
-function TUCmd.GetCommandType:TTypeCommand;
-begin
-  result:=TTC_ChangeCommand;
-end;
-procedure TChangeCommand.undo;
-begin
-  Move(tempdata^,Addr^,datasize);
-end;
-function TChangeCommand.GetDataTypeSize:PtrInt;
-begin
-  result:=self.datasize;
 end;
 
 function TUCmdMarker.GetCommandType:TTypeCommand;

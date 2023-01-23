@@ -23,12 +23,14 @@ uses uzepalette,zeundostack,zebaseundocommands,uzbtypes,
      uzegeometrytypes,uzeentity,uzestyleslayers,uzeentabstracttext;
 
 type
-  generic GUCmdChgData<T> =class(TCustomChangeCommand2)
+  generic GUCmdChgData<T> =class(TUCmdBase)
     private
       type
         TSelf=specialize GUCmdChgData<T>;
       var
+        Addr:Pointer;
         OldData,NewData:T;
+
 
         procedure AfterDo;
     public
@@ -59,7 +61,7 @@ class function GUCmdChgData.CreateAndPushIfNeed(var us:TZctnrVectorUndoCommands;
 begin
   if us.CurrentCommand>0 then begin
     result:=TSelf(us.getDataMutable(us.CurrentCommand-1)^);
-    if result.GetCommandType=TTC_ChangeCommand then
+    if result is TSelf then
       if (result.Addr=@data)and(result.GetDataTypeSize=sizeof(data))then
         exit;
   end;

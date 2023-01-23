@@ -30,7 +30,7 @@ TUndoRedoResult=(URROk,
                  URRNoCommandsToRedo);
 TOnUndoRedoProc=procedure of object;
 PTZctnrVectorUndoCommands=^TZctnrVectorUndoCommands;
-TZctnrVectorUndoCommands=class(specialize GZVectorClass{-}<{PTElementaryCommand,}TElementaryCommand>{//})
+TZctnrVectorUndoCommands=class(specialize GZVectorClass{-}<{PTElementaryCommand,}TUCmdBase>{//})
                                  public
                                  CurrentCommand:TArrayIndex;
                                  currentcommandstartmarker:TArrayIndex;
@@ -45,7 +45,7 @@ TZctnrVectorUndoCommands=class(specialize GZVectorClass{-}<{PTElementaryCommand,
                                  function redo(out msg:string):TUndoRedoResult;
                                  constructor init;
                                  procedure doOnUndoRedo;
-                                 function PushBackData(const data:TElementaryCommand):TArrayIndex;virtual;
+                                 function PushBackData(const data:TUCmdBase):TArrayIndex;virtual;
                                  Procedure ClearFrom(cc:TArrayIndex);
 
                                  function CreateTTypedChangeCommand(PDataInstance:Pointer;PType:PUserTypeDescriptor):TTypedChangeCommand;overload;
@@ -62,39 +62,39 @@ end;
 
 procedure TZctnrVectorUndoCommands.PushStartMarker(CommandName:String);
 var
-   marker:TMarkerCommand;
+   marker:TUCmdMarker;
 begin
      inc(startmarkercount);
      if startmarkercount=1 then
      begin
-     //Getmem(pointer(pmarker),sizeof(TMarkerCommand));
-     marker:=TMarkerCommand.Create(CommandName,-1);
+     //Getmem(pointer(pmarker),sizeof(TUCmdMarker));
+     marker:=TUCmdMarker.Create(CommandName,-1);
      currentcommandstartmarker:=self.PushBackData(marker);
      inc(CurrentCommand);
      end;
 end;
 procedure TZctnrVectorUndoCommands.PushStone;
 var
-   marker:TMarkerCommand;
+   marker:TUCmdMarker;
 begin
      //inc(startmarkercount);
      //if startmarkercount=1 then
      begin
-     //Getmem(pointer(pmarker),sizeof(TMarkerCommand));
-     marker:=TMarkerCommand.Create('StoneMarker',-2);
+     //Getmem(pointer(pmarker),sizeof(TUCmdMarker));
+     marker:=TUCmdMarker.Create('StoneMarker',-2);
      currentcommandstartmarker:=self.PushBackData(marker);
      inc(CurrentCommand);
      end;
 end;
 procedure TZctnrVectorUndoCommands.PushEndMarker;
 var
-   marker:TMarkerCommand;
+   marker:TUCmdMarker;
 begin
      dec(startmarkercount);
      if startmarkercount=0 then
      begin
-     //Getmem(pointer(pmarker),sizeof(TMarkerCommand));
-     marker:=TMarkerCommand.Create('EndMarker',currentcommandstartmarker);
+     //Getmem(pointer(pmarker),sizeof(TUCmdMarker));
+     marker:=TUCmdMarker.Create('EndMarker',currentcommandstartmarker);
      currentcommandstartmarker:=-1;
      self.PushBackData(marker);
      inc(CurrentCommand);
@@ -121,7 +121,7 @@ begin
 end;
 procedure TZctnrVectorUndoCommands.KillLastCommand;
 var
-   cmd:TElementaryCommand;
+   cmd:TUCmdBase;
    mcounter:integer;
 begin
      begin
@@ -148,7 +148,7 @@ begin
 end;
 function TZctnrVectorUndoCommands.undo(out msg:string;prevheap:TArrayIndex;overlay:Boolean):TUndoRedoResult;
 var
-   cmd:TElementaryCommand;
+   cmd:TUCmdBase;
    mcounter:integer;
 begin
      msg:='';
@@ -168,7 +168,7 @@ begin
                                                 begin
                                                      dec(mcounter);
                                                      if mcounter=0 then
-                                                     {HistoryOutStr}msg:=msg+('Undo "'+TMarkerCommand(cmd).Name+'"');
+                                                     {HistoryOutStr}msg:=msg+('Undo "'+TUCmdMarker(cmd).Name+'"');
                                                      //cmd^.undo;
                                                 end
      else if cmd.GetCommandType=TTC_MNotUndableIfOverlay then
@@ -199,7 +199,7 @@ begin
 end;
 function TZctnrVectorUndoCommands.redo(out msg:string):TUndoRedoResult;
 var
-   cmd:TElementaryCommand;
+   cmd:TUCmdBase;
    mcounter:integer;
 begin
      if CurrentCommand<count then
@@ -219,7 +219,7 @@ begin
      else if cmd.GetCommandType=TTC_MBegin then
                                                 begin
                                                      if mcounter=0 then
-                                                     {HistoryOutStr}msg:=msg+('Redo "'+TMarkerCommand(cmd).Name+'"');
+                                                     {HistoryOutStr}msg:=msg+('Redo "'+TUCmdMarker(cmd).Name+'"');
                                                      dec(mcounter);
                                                      cmd.undo;
                                                 end
@@ -247,7 +247,7 @@ begin
      CurrentCommand:=Count;
 end;
 
-function TZctnrVectorUndoCommands.PushBackData(const data:TElementaryCommand):TArrayIndex;
+function TZctnrVectorUndoCommands.PushBackData(const data:TUCmdBase):TArrayIndex;
 begin
      if self.CurrentCommand<count then
                                        self.cleareraseobjfrom2(self.CurrentCommand);

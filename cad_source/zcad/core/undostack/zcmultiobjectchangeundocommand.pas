@@ -28,7 +28,7 @@ uses gzctnrVector,zeundostack,zebaseundocommands,
 
 type
 TtmethodVector=specialize GZVector<tmethod>;
-    generic TGMultiObjectChangeCommand<_T> =class(TCustomChangeCommand)
+    generic TGMultiObjectChangeCommand<_T> =class(TUCmd)
                                           DoData,UnDoData:_T;
                                           ObjArray:{GDBOpenArrayOfData}TtmethodVector;
                                           public

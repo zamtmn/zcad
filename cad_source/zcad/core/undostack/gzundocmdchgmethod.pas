@@ -21,7 +21,7 @@ interface
 uses zeundostack,zebaseundocommands,uzeentity;
 
 type
-  generic GUCmdChgMethod<T> =class(TCustomChangeCommand)
+  generic GUCmdChgMethod<T> =class(TUCmd)
      private
        type
          TCangeMethod=procedure(const data:T)of object;

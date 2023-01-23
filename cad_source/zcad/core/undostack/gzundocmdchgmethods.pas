@@ -23,7 +23,7 @@ uses
   uzeentity,uzgldrawcontext,uzcdrawings;
 
 type
-  generic GUCmdChgMethods<T> =class(TCustomChangeCommand)
+  generic GUCmdChgMethods<T> =class(TUCmd)
     private
       type
         TCangeMethod=procedure(const data:T)of object;

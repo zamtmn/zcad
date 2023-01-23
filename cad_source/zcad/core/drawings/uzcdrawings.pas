@@ -76,6 +76,11 @@ TZCADDrawingsManager= object(TZctnrVectorPGDBaseObjects)
                     procedure SetUnitsFormat(f:TzeUnitsFormat);
                     procedure redrawoglwnd(Sender:TObject;GUIAction:TZMessageID);
                     procedure resetoglwnd(Sender:TObject;GUIAction:TZMessageID);
+
+                    {todo: переименовать по человечьи}
+                    procedure AfterAutoProcessGDB(const AUndoMethod:TMethod);
+                    procedure AfterNotAutoProcessGDB(const AUndoMethod:TMethod);
+                    procedure AfterEnt(const pent:PGDBObjEntity);
               end;
 {EXPORT-}
 var drawings: TZCADDrawingsManager;
@@ -95,6 +100,25 @@ function SetCurrentDWG(PDWG:pointer):pointer;
 //procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
 implementation
  uses uzcenitiesvariablesextender,uzeenttext,uzeentdevice,uzeentblockinsert;
+procedure TZCADDrawingsManager.AfterEnt(const pent:PGDBObjEntity);
+begin
+  if assigned(pent)then
+    pent^.YouChanged(GetCurrentDWG^);
+  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);
+end;
+
+procedure TZCADDrawingsManager.AfterAutoProcessGDB(const AUndoMethod:TMethod);
+begin
+  PGDBObjEntity(AUndoMethod.Data)^.YouChanged(GetCurrentDWG^)
+end;
+procedure TZCADDrawingsManager.AfterNotAutoProcessGDB(const AUndoMethod:TMethod);
+var
+  DC:TDrawContext;
+begin
+  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+  PGDBObjEntity(AUndoMethod.Data)^.formatEntity(GetCurrentDWG^,dc);
+end;
+
 procedure TZCADDrawingsManager.redrawoglwnd(Sender:TObject;GUIAction:TZMessageID);
 var
    pdwg:PTSimpleDrawing;

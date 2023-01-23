@@ -142,7 +142,7 @@ begin
 end;}
 function TZCADDrawing.StoreOldCamerapPos:Pointer;
 begin
-     result:=TGDBCameraBasePropChangeCommand.CreateAndPushIfNeed(UndoStack,GetPcamera^.prop)
+     result:=TGDBCameraBasePropChangeCommand.CreateAndPushIfNeed(UndoStack,GetPcamera^.prop,nil,nil)
 end;
 procedure TZCADDrawing.rtmodifyonepoint(obj:PGDBObjEntity;rtmod:TRTModifyData;wc:gdbvertex);
 var
@@ -151,7 +151,7 @@ begin
   tmethod(tum).Code:=pointer(obj.rtmodifyonepoint);
   tmethod(tum).Data:=obj;
   //tum:=tundablemethod(obj^.rtmodifyonepoint);
-  with GUCmdChgMethod<TRTModifyData>.CreateAndPush(rtmod,tmethod(tum),UndoStack) do
+  with GUCmdChgMethod<TRTModifyData>.CreateAndPush(rtmod,tmethod(tum),UndoStack,drawings.AfterAutoProcessGDB) do
   begin
        comit;
        rtmod.wc:=rtmod.point.worldcoord;

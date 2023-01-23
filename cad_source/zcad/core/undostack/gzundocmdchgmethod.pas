@@ -25,13 +25,15 @@ type
      private
        type
          TCangeMethod=procedure(const data:T)of object;
+         TAfterUndoProc=procedure(const AUndoMethod:TMethod)of object;
        var
          DoData,UnDoData:T;
          method:TMethod;
+         AfterUndoProc:TAfterUndoProc;
          procedure AfterDo;
      public
-         constructor Create(var AData:T;AMethod:tmethod);
-         constructor CreateAndPush(var AData:T;AMethod:TMethod;var us:TZctnrVectorUndoCommands);
+         constructor Create(var AData:T;AMethod:tmethod;const AAfterUndoProc:TAfterUndoProc);
+         constructor CreateAndPush(var AData:T;AMethod:TMethod;var us:TZctnrVectorUndoCommands;const AAfterUndoProc:TAfterUndoProc);
          procedure StoreUndoData(var AUndoData:T);
 
          procedure UnDo;override;
@@ -39,19 +41,20 @@ type
    end;
 
 implementation
-uses uzcdrawings;
+//uses uzcdrawings;
 
-constructor GUCmdChgMethod.CreateAndPush(var AData:T;AMethod:TMethod;var us:TZctnrVectorUndoCommands);
+constructor GUCmdChgMethod.CreateAndPush(var AData:T;AMethod:TMethod;var us:TZctnrVectorUndoCommands;const AAfterUndoProc:TAfterUndoProc);
 begin
-  Create(AData,AMethod);
+  Create(AData,AMethod,AAfterUndoProc);
   us.PushBackData(self);
   inc(us.CurrentCommand);
 end;
 
-constructor GUCmdChgMethod.Create(var AData:T;AMethod:tmethod);
+constructor GUCmdChgMethod.Create(var AData:T;AMethod:tmethod;const AAfterUndoProc:TAfterUndoProc);
 begin
   DoData:=AData;
   method:=AMethod;
+  AfterUndoProc:=AAfterUndoProc;
 end;
 procedure GUCmdChgMethod.StoreUndoData(var AUndoData:T);
 begin
@@ -69,7 +72,9 @@ begin
 end;
 procedure GUCmdChgMethod.AfterDo;
 begin
-  PGDBObjEntity(method.Data)^.YouChanged(drawings.GetCurrentDWG^);
+  if Assigned(AfterUndoProc)then
+    AfterUndoProc(method);
+  //PGDBObjEntity(method.Data)^.YouChanged(drawings.GetCurrentDWG^);
 end;
 
 end.

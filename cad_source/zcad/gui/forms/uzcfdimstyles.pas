@@ -178,7 +178,7 @@ begin
                  ZCMsgCallBackInterface.TextMessage(pstring(FontsSelector.Enums.getDataMutable(FontsSelector.Selected))^,TMWOHistoryOut);
 
                CreateUndoStartMarkerNeeded;
-               with TGDBPoinerChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pointer(PGDBDimStyle(TListItem(Item).Data)^.Text.DIMTXSTY)) do
+               with TGDBPoinerChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pointer(PGDBDimStyle(TListItem(Item).Data)^.Text.DIMTXSTY),nil,nil) do
                begin
                PGDBDimStyle(TListItem(Item).Data)^.Text.DIMTXSTY:=currentextstyle;
                ComitFromObj;
@@ -395,7 +395,7 @@ begin
      if ListView1.CurrentItem<>ListItem then
      begin
      CreateUndoStartMarkerNeeded;
-     with TGDBPoinerChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,sysvar.dwg.DWG_CTStyle^) do
+     with TGDBPoinerChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,sysvar.dwg.DWG_CTStyle^,nil,nil) do
      begin
           SysVar.dwg.DWG_CTStyle^:=ListItem.Data;
           ComitFromObj;
@@ -519,9 +519,9 @@ begin
   undomethod:=tmethod(@pdwg^.DimStyleTable.RemoveDataFromArray);
   CreateUndoStartMarkerNeeded;
   ///////   не получилось запустить
-  with specialize GUCmdChgMethods<PGDBDimStyle>.CreateAndPush(pcreatedstyle,domethod,undomethod,PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack) do
+  with specialize GUCmdChgMethods<PGDBDimStyle>.CreateAndPush(pcreatedstyle,domethod,undomethod,PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,nil) do
   begin
-       AfterAction:=false;
+       //AfterAction:=false;
        //comit;
   end;
 
@@ -556,9 +556,9 @@ begin
   undomethod:=tmethod(@pdwg^.DimStyleTable.PushBackData);
   CreateUndoStartMarkerNeeded;
   ///////   не получилось запустить
-  with specialize GUCmdChgMethods<PGDBDimStyle>.CreateAndPush(pstyle,domethod,undomethod,PTZCADDrawing(pdwg)^.UndoStack) do
+  with specialize GUCmdChgMethods<PGDBDimStyle>.CreateAndPush(pstyle,domethod,undomethod,PTZCADDrawing(pdwg)^.UndoStack,nil) do
   begin
-       AfterAction:=false;
+       //AfterAction:=false;
        comit;
   end;
   ListView1.Items.Delete(ListView1.Items.IndexOf(ProcessedItem));

@@ -106,9 +106,9 @@ begin
     vdpvertex:=commandmanager.PopValue;
     if commandmanager.get3dpoint(rscmSpecifyPoint,p)=GRNormal then
     begin
-         cmd:=TGDBVertexChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pgdbvertex(ppointer(vdpvertex.data.Addr.Instance)^)^);
+         cmd:=TGDBVertexChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pgdbvertex(ppointer(vdpvertex.data.Addr.Instance)^)^,ppointer(vdpobj.data.Addr.Instance)^,drawings.AfterEnt);
          pgdbvertex(ppointer(vdpvertex.data.Addr.Instance)^)^:=p;
-         cmd.PEntity:=ppointer(vdpobj.data.Addr.Instance)^;
+         //cmd.PEntity:=ppointer(vdpobj.data.Addr.Instance)^;
          cmd.ComitFromObj;
     end;
     result:=cmd_ok;
@@ -123,9 +123,9 @@ begin
     vdpvertex:=commandmanager.PopValue;
     if commandmanager.get3dpoint(rscmSpecifyX,p)=GRNormal then
     begin
-         cmd:=TDoubleChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBXCoordinate(ppointer(vdpvertex.data.Addr.Instance)^)^);
+         cmd:=TDoubleChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBXCoordinate(ppointer(vdpvertex.data.Addr.Instance)^)^,ppointer(vdpobj.data.Addr.Instance)^,drawings.AfterEnt);
          pDouble(ppointer(vdpvertex.data.Addr.Instance)^)^:=p.x;
-         cmd.PEntity:=ppointer(vdpobj.data.Addr.Instance)^;
+         //cmd.PEntity:=ppointer(vdpobj.data.Addr.Instance)^;
          cmd.ComitFromObj;
     end;
     result:=cmd_ok;
@@ -140,9 +140,9 @@ begin
     vdpvertex:=commandmanager.PopValue;
     if commandmanager.get3dpoint(rscmSpecifyY,p)=GRNormal then
     begin
-         cmd:=TDoubleChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBYCoordinate(ppointer(vdpvertex.data.Addr.Instance)^)^);
+         cmd:=TDoubleChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBYCoordinate(ppointer(vdpvertex.data.Addr.Instance)^)^,ppointer(vdpobj.data.Addr.Instance)^,drawings.AfterEnt);
          pDouble(ppointer(vdpvertex.data.Addr.Instance)^)^:=p.y;
-         cmd.PEntity:=ppointer(vdpobj.data.Addr.Instance)^;
+         //cmd.PEntity:=ppointer(vdpobj.data.Addr.Instance)^;
          cmd.ComitFromObj;
     end;
     result:=cmd_ok;
@@ -157,9 +157,9 @@ begin
     vdpvertex:=commandmanager.PopValue;
     if commandmanager.get3dpoint(rscmSpecifyZ,p)=GRNormal then
     begin
-         cmd:=TDoubleChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBZCoordinate(ppointer(vdpvertex.data.Addr.Instance)^)^);
+         cmd:=TDoubleChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBZCoordinate(ppointer(vdpvertex.data.Addr.Instance)^)^,ppointer(vdpobj.data.Addr.Instance)^,drawings.AfterEnt);
          pDouble(ppointer(vdpvertex.data.Addr.Instance)^)^:=p.z;
-         cmd.PEntity:=ppointer(vdpobj.data.Addr.Instance)^;
+         //cmd.PEntity:=ppointer(vdpobj.data.Addr.Instance)^;
          cmd.ComitFromObj;
     end;
     result:=cmd_ok;
@@ -176,9 +176,9 @@ begin
     begin
       if commandmanager.get3dpoint(rscmSpecifySecondPoint,p2)=GRNormal then
       begin
-        cmd:=TDoubleChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pDouble(ppointer(vdpvertex.data.Addr.Instance)^)^);
+        cmd:=TDoubleChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pDouble(ppointer(vdpvertex.data.Addr.Instance)^)^,ppointer(vdpobj.data.Addr.Instance)^,drawings.AfterEnt);
         pgdblength(ppointer(vdpvertex.data.Addr.Instance)^)^:=uzegeometry.Vertexlength(p1,p2);
-        cmd.PEntity:=ppointer(vdpobj.data.Addr.Instance)^;
+        //cmd.PEntity:=ppointer(vdpobj.data.Addr.Instance)^;
         cmd.ComitFromObj;
       end;
     end;

@@ -20,44 +20,47 @@ unit gzundoCmdChgData;
 {$INCLUDE zengineconfig.inc}
 interface
 uses uzepalette,zeundostack,zebaseundocommands,uzbtypes,
-     uzegeometrytypes,uzeentity,uzestyleslayers,uzeentabstracttext;
+     uzegeometrytypes,uzeentity,uzeentabstracttext{,uzestyleslayers};
 
 type
-  generic GUCmdChgData<T> =class(TUCmdBase)
+  generic GUCmdChgData<T,HT> =class(TUCmdBase)
     private
       type
-        TSelf=specialize GUCmdChgData<T>;
+        TSelf=specialize GUCmdChgData<T,HT>;
+        TAfterUndoProc=procedure(const AHD:HT)of object;
       var
         Addr:Pointer;
         OldData,NewData:T;
+        HelpData:HT;
+        AfterUndoProc:TAfterUndoProc;
 
 
         procedure AfterDo;
     public
-        PEntity:PGDBObjEntity;
-        constructor Create(var data:T);
-        class function CreateAndPushIfNeed(var us:TZctnrVectorUndoCommands; var data:T):TSelf;
+        //PEntity:PGDBObjEntity;
+        constructor Create(var data:T;const AHelpData:HT;const AAfterUndoProc:TAfterUndoProc);
+        class function CreateAndPushIfNeed(var us:TZctnrVectorUndoCommands; var data:T;const AHelpData:HT;const AAfterUndoProc:TAfterUndoProc):TSelf;
 
         procedure UnDo;override;
         procedure Comit;override;
         procedure ComitFromObj;virtual;
         function GetDataTypeSize:PtrInt;virtual;
   end;
-  TGDBVertexChangeCommand=specialize GUCmdChgData<GDBVertex>;
-  TDoubleChangeCommand=specialize GUCmdChgData<Double>;
-  TGDBCameraBasePropChangeCommand=specialize GUCmdChgData<GDBCameraBaseProp>;
-  TStringChangeCommand=specialize GUCmdChgData<String>;
-  TGDBPoinerChangeCommand=specialize GUCmdChgData<Pointer>;
-  TBooleanChangeCommand=specialize GUCmdChgData<Boolean>;
-  TGDBByteChangeCommand=specialize GUCmdChgData<Byte>;
-  TGDBTGDBLineWeightChangeCommand=specialize GUCmdChgData<TGDBLineWeight>;
-  TGDBTGDBPaletteColorChangeCommand=specialize GUCmdChgData<TGDBPaletteColor>;
-  TGDBTTextJustifyChangeCommand=specialize GUCmdChgData<TTextJustify>;
+  TGDBVertexChangeCommand=specialize GUCmdChgData<GDBVertex,PGDBObjEntity>;
+  TDoubleChangeCommand=specialize GUCmdChgData<Double,PGDBObjEntity>;
+  TGDBCameraBasePropChangeCommand=specialize GUCmdChgData<GDBCameraBaseProp,PGDBObjEntity>;
+  TStringChangeCommand=specialize GUCmdChgData<String,PGDBObjEntity>;
+  TGDBPoinerChangeCommand=specialize GUCmdChgData<Pointer,PGDBObjEntity>;
+  TBooleanChangeCommand=specialize GUCmdChgData<Boolean,PGDBObjEntity>;
+  TGDBByteChangeCommand=specialize GUCmdChgData<Byte,PGDBObjEntity>;
+  TGDBTGDBLineWeightChangeCommand=specialize GUCmdChgData<TGDBLineWeight,PGDBObjEntity>;
+  TGDBTGDBPaletteColorChangeCommand=specialize GUCmdChgData<TGDBPaletteColor,PGDBObjEntity>;
+  TGDBTTextJustifyChangeCommand=specialize GUCmdChgData<TTextJustify,PGDBObjEntity>;
 
 implementation
-uses uzcdrawings,uzcinterface;
+//uses uzcdrawings,uzcinterface;
 
-class function GUCmdChgData.CreateAndPushIfNeed(var us:TZctnrVectorUndoCommands; var data:T):TSelf;
+class function GUCmdChgData.CreateAndPushIfNeed(var us:TZctnrVectorUndoCommands; var data:T;const AHelpData:HT;const AAfterUndoProc:TAfterUndoProc):TSelf;
 begin
   if us.CurrentCommand>0 then begin
     result:=TSelf(us.getDataMutable(us.CurrentCommand-1)^);
@@ -65,16 +68,18 @@ begin
       if (result.Addr=@data)and(result.GetDataTypeSize=sizeof(data))then
         exit;
   end;
-  result:=TSelf.Create(data);
+  result:=TSelf.Create(data,AHelpData,AAfterUndoProc);
   us.PushBackData(result);
   inc(us.CurrentCommand);
 end;
-constructor GUCmdChgData.Create(var data:T);
+constructor GUCmdChgData.Create(var data:T;const AHelpData:HT;const AAfterUndoProc:TAfterUndoProc);
 begin
   Addr:=@data;
   olddata:=data;
   newdata:=data;
-  PEntity:=nil;
+  HelpData:=AHelpData;
+  AfterUndoProc:=AAfterUndoProc;
+  //PEntity:=nil;
 end;
 procedure GUCmdChgData.UnDo;
 begin
@@ -97,9 +102,11 @@ end;
 
 procedure GUCmdChgData.AfterDo;
 begin
-  if assigned(PEntity)then
-    PEntity^.YouChanged(drawings.GetCurrentDWG^);
-  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);
+  if Assigned(AfterUndoProc) then
+    AfterUndoProc(HelpData);
+  {if assigned(HelpData)then
+    HelpData^.YouChanged(drawings.GetCurrentDWG^);
+  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);}
 end;
 
 

@@ -1847,7 +1847,7 @@ begin
          tmethod(domethod).Data:=p3dpl;
          tmethod(undomethod).Code:=pointer(p3dpl.DeleteVertex);
          tmethod(undomethod).Data:=p3dpl;
-         with GUCmdChgMethods<TPolyData>.CreateAndPush(polydata,domethod,undomethod,(PTZCADDrawing(drawings.GetCurrentDWG).UndoStack)) do
+         with GUCmdChgMethods<TPolyData>.CreateAndPush(polydata,domethod,undomethod,(PTZCADDrawing(drawings.GetCurrentDWG).UndoStack),drawings.AfterAutoProcessGDB) do
          begin
               comit;
          end;

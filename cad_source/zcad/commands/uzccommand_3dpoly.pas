@@ -138,9 +138,9 @@ begin
       polydata.wc:=wc;
       domethod:=tmethod(@p3dpl^.InsertVertex);
       undomethod:=tmethod(@p3dpl^.DeleteVertex);
-      with specialize GUCmdChgMethods<TPolyData>.CreateAndPush(polydata,domethod,undomethod,PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack) do
+      with specialize GUCmdChgMethods<TPolyData>.CreateAndPush(polydata,domethod,undomethod,PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,@drawings.AfterNotAutoProcessGDB) do
       begin
-        AutoProcessGDB:=false;
+        //AutoProcessGDB:=false;
         comit;
       end;
       p3dpl^.Formatentity(drawings.GetCurrentDWG^,dc);

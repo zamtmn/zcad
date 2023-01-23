@@ -19,23 +19,22 @@
 unit gzundoCmdChgMethods;
 interface
 uses
-  zeundostack,zebaseundocommands,
-  uzeentity,uzgldrawcontext,uzcdrawings;
+  zeundostack,zebaseundocommands;
 
 type
   generic GUCmdChgMethods<T> =class(TUCmdBase)
     private
       type
         TCangeMethod=procedure(const data:T)of object;
+        TAfterUndoProc=procedure(const AUndoMethod:TMethod)of object;
       var
-        AfterAction:Boolean;
-        AutoProcessGDB:Boolean;
         Data:T;
         DoMethod,UnDoMethod:tmethod;
+        AfterUndoProc:TAfterUndoProc;
         procedure AfterDo;
     public
-        constructor Create(var AData:T;ADoMethod,AUndoMethod:TMethod);
-        constructor CreateAndPush(var AData:T;ADoMethod,AUndoMethod:TMethod;var us:TZctnrVectorUndoCommands);
+        constructor Create(var AData:T;ADoMethod,AUndoMethod:TMethod;const AAfterUndoProc:TAfterUndoProc);
+        constructor CreateAndPush(var AData:T;ADoMethod,AUndoMethod:TMethod;var us:TZctnrVectorUndoCommands;const AAfterUndoProc:TAfterUndoProc);
 
         procedure UnDo;override;
         procedure Comit;override;
@@ -43,17 +42,16 @@ type
 
 implementation
 
-constructor GUCmdChgMethods.CreateAndPush(var AData:T;ADoMethod,AUndoMethod:TMethod;var us:TZctnrVectorUndoCommands);
+constructor GUCmdChgMethods.CreateAndPush(var AData:T;ADoMethod,AUndoMethod:TMethod;var us:TZctnrVectorUndoCommands;const AAfterUndoProc:TAfterUndoProc);
 begin
-  Create(AData,ADoMethod,AUndoMethod);
+  Create(AData,ADoMethod,AUndoMethod,AAfterUndoProc);
   us.PushBackData(self);
   inc(us.CurrentCommand);
 end;
 
-constructor GUCmdChgMethods.Create(var AData:T;ADoMethod,AUndoMethod:TMethod);
+constructor GUCmdChgMethods.Create(var AData:T;ADoMethod,AUndoMethod:TMethod;const AAfterUndoProc:TAfterUndoProc);
 begin
-  AutoProcessGDB:=True;
-  AfterAction:=True;
+  AfterUndoProc:=AAfterUndoProc;
   Data:=AData;
   DoMethod:=ADoMethod;
   UndoMethod:=AUndoMethod;
@@ -72,17 +70,9 @@ begin
 end;
 
 procedure GUCmdChgMethods.AfterDo;
-var
-  DC:TDrawContext;
 begin
-  if AfterAction then begin
-    if AutoProcessGDB then
-      PGDBObjEntity(undomethod.Data)^.YouChanged(drawings.GetCurrentDWG^)
-    else begin
-      dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-      PGDBObjEntity(undomethod.Data)^.formatEntity(drawings.GetCurrentDWG^,dc);
-    end;
-  end;
+  if assigned(AfterUndoProc) then
+    AfterUndoProc(undomethod);
 end;
 
 end.

@@ -43,7 +43,7 @@ begin
       result:=cmd_error;
     end else begin
       zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,LayerOnCommandName,true);
-      with TBooleanChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,plp^._on) do begin
+      with TBooleanChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,plp^._on,nil,nil) do begin
         plp^._on:=not plp^._on;
         ComitFromObj;
       end;

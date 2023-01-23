@@ -11,6 +11,7 @@
       <Action Name="ACN_SupeLineHT1"/>
       <Action Name="ACN_SupeLineHT2"/>
       <Action Name="ACN_SupeLineHT3"/>
+      <Action Name="ACN_managerEM"/>
     </ElectrotechVelec>
   </ToolBarsContent>
 </CONFIG>

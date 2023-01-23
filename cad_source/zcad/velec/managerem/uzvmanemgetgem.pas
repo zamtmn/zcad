@@ -125,21 +125,151 @@ type
  function Compare (Edge1, Edge2: Pointer): Integer;
  function CompareEdges (Edge1, Edge2: Pointer): Integer;
  end;
- TSortTreeLengthComparer=class
+ TSortTreeSumChilderVertex=class
  function Compare (vertex1, vertex2: Pointer): Integer;
  end;
 
-
+ //**Получить список деревьев(графов)
  function getListGrapghEM:TListGraphDev;
+ //**Отсортировать графы у кого меньше детей вершин
+ procedure sortSumChildListGraph(var listGraph:TListGraphDev);
+
+ //**получить структурированный граф
+ function getListStructurGraphEM(listFullGraphEM:TListGraphDev):TListGraphDev;
+
  procedure visualGraphTree(G: TGraph; var startPt:GDBVertex;height:double; var depth:double);
 
 implementation
 var
   DummyComparer:TDummyComparer;
-  SortTreeLengthComparer:TSortTreeLengthComparer;
+  SortTreeSumChilderVertex:TSortTreeSumChilderVertex;
 
 
 
+  //**получить структурированный граф
+  function getListStructurGraphEM(listFullGraphEM:TListGraphDev):TListGraphDev;
+  var
+     graphDev:TGraphDev;
+  begin
+    result:=TListGraphDev.Create;
+    for graphDev in listFullGraphEM do
+    begin
+      //pvd:=FindVariableInEnt(dev,'NMO_Name');
+      //if pvd<>nil then
+      //   ZCMsgCallBackInterface.TextMessage(' - ' + pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+    end;
+  end;
+
+//**Возвращаем список отсортированныых графов
+procedure sortSumChildListGraph(var listGraph:TListGraphDev);
+type
+ TListInteger=specialize TVector<integer>;
+var
+  //dev:pGDBObjDevice;
+  i:integer;
+  pvd:pvardesk;
+  listEndGraphVertexInteger:TListInteger;
+
+  //** Получаем список концевых устройств в графе
+  function getListEndVertexGraphEM(graphDev:TGraphDev):TListInteger;
+  var
+    i:integer;
+  begin
+     result:= TListInteger.Create;
+     for i:=0 to graphDev.VertexCount-1 do
+       if graphDev.Vertices[i].ChildCount = 0 then
+         result.PushBack(i);
+  end;
+
+  ////** Рекурсия проходя через вершину добавляем значение
+  procedure addSumSubVertex(graphDev:TGraphDev;intVertex:integer;sumInt:integer);
+  var
+    count:integer;
+    pvd:pvardesk;
+  begin
+     count:=0;
+     pvd:=FindVariableInEnt(graphDev.Vertices[intVertex].getDevice,velec_EM_vSumChildVertex);
+       if pvd<>nil then
+         begin
+          count:=pinteger(pvd^.data.Addr.Instance)^;
+          if count = 0 then begin
+            count:=count + sumInt + 1;
+            pinteger(pvd^.data.Addr.Instance)^:=count;
+          end
+          else
+          begin
+            pinteger(pvd^.data.Addr.Instance)^:=count+sumInt+1;
+            count:=sumInt;
+          end;
+         end;
+     if graphDev.Vertices[intVertex].Parent <> nil then
+       addSumSubVertex(graphDev,graphDev.Vertices[intVertex].Parent.Index,count)
+
+  end;
+
+  //** Заполняем значение суммы подчиненных устройств(вершин)
+  procedure addMainSumSubVertex(graphDev:TGraphDev;listEndIntVertex:TListInteger);
+  var
+    i:integer;
+    count:integer;
+    vert:TVertex;
+    pvd:pvardesk;
+    intVert:integer;
+  begin
+     for i:=0 to listEndIntVertex.size-1 do
+         addSumSubVertex(graphDev,graphDev.Vertices[listEndIntVertex[i]].Parent.Index,0);
+  end;
+
+  ////** Заполнить глубину (уровень) дерева
+  //procedure writeInLevelTree(graphDev:TGraphDev);
+  //var
+  //  i:integer;
+  //  count:integer;
+  //  vert:TVertex;
+  //  pvd:pvardesk;
+  //  intVert:integer;
+  //begin
+  //   //for i:=0 to listEndIntVertex.size-1 do
+  //   //    addSumSubVertex(graphDev,graphDev.Vertices[listEndIntVertex[i]].Parent.Index,0);
+  //
+  //   for i:=0 to graphDev.VertexCount-1 do
+  //     begin
+  //        if graphDev.Vertices[i] = graphDev.Root then
+  //           continue;
+  //       count:=0;
+  //       vert:=graphDev.Vertices[i];
+  //        repeat
+  //          vert:=vert.Parent;
+  //          inc(count)
+  //        until vert=nil;
+  //        pvd:=FindVariableInEnt(graphDev.Vertices[i].getDevice,velec_EM_vSumChildVertex);
+  //          if pvd<>nil then
+  //             pinteger(pvd^.data.Addr.Instance)^:=count;
+  //     end;
+  //
+  //end;
+
+
+begin
+   ZCMsgCallBackInterface.TextMessage('Начало сортировки по наименьшему количеству подчиненных вершин sortSumChildListGraph-СТАРТ',TMWOHistoryOut);
+   for i:= 0 to listGraph.Size-1 do
+     begin
+       pvd:=FindVariableInEnt(listGraph[i].Root.getDevice,'NMO_Name');
+       if pvd<>nil then
+       begin
+            ZCMsgCallBackInterface.TextMessage('Обрабатывается = ' + pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+            //writeInLevelTree(listGraph[i]);
+            listEndGraphVertexInteger:=TListInteger.Create;
+            listEndGraphVertexInteger:=getListEndVertexGraphEM(listGraph[i]);
+            addMainSumSubVertex(listGraph[i],listEndGraphVertexInteger);
+       end;
+
+       ZCMsgCallBackInterface.TextMessage('Начата сортировка = ' + pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+       listGraph.Mutable[i]^.SortTree(listGraph.Mutable[i]^.Root,@SortTreeSumChilderVertex.Compare);
+     end;
+
+   ZCMsgCallBackInterface.TextMessage('Финиш сортировки по наименьшему количеству подчиненных вершин sortSumChildListGraph-ФИНИШ',TMWOHistoryOut);
+end;
 
 //**Получить список всех древовидно ориентированных графов из которых состоит модель
 function getListGrapghEM:TListGraphDev;
@@ -155,8 +285,6 @@ var
    listTreeRoots:TListDevice;
    dev:pGDBObjDevice;
    pvd:pvardesk;
-   depthVisual:double;
-   insertCoordination:GDBVertex;
 
     //** Получение области выделения по полученным точкам, левая-нижняя-ближняя точка и правая-верхняя-дальняя точка
     function getTBoundingBox(VT1,VT2:GDBVertex):TBoundingBox;
@@ -406,13 +534,14 @@ begin
               graphDev.Root:=vertexDev;                   //Говорим графу что это вершина дерева
               //ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
               getGraphEM(graphDev,vertexDev.Index,listDevice,listCable);
+              //проверка на кооректное дерево
+              ZCMsgCallBackInterface.TextMessage('Проверка на корректность дерева',TMWOHistoryOut);
+              graphDev.CorrectTree;
+              ZCMsgCallBackInterface.TextMessage('Дерево корректно',TMWOHistoryOut);
               ZCMsgCallBackInterface.TextMessage('Количество вершин в древовидном графе = ' + inttostr(graphDev.VertexCount) + 'шт.',TMWOHistoryOut);
               ZCMsgCallBackInterface.TextMessage('Количество ребер в древовидном графе = ' + inttostr(graphDev.EdgeCount) + 'шт.',TMWOHistoryOut);
               result.PushBack(graphDev);
            end;
-         depthVisual:=15;
-         insertCoordination:=uzegeometry.CreateVertex(0,0,0);
-         visualGraphTree(result[0],insertCoordination,3,depthVisual);
      end
      else
         exit;
@@ -677,25 +806,41 @@ begin
     startPt.x:=startPt.x + (infoVertex.poz.x+1)*indent;
 
 end;
-function TSortTreeLengthComparer.Compare (vertex1, vertex2: Pointer): Integer;
+function TSortTreeSumChilderVertex.Compare (vertex1, vertex2: Pointer): Integer;
 var
   e1,e2:TAttrSet;
+  dev1,dev2:pGDBObjDevice;
+  pvd1,pvd2:pvardesk;
 begin
+   //ZCMsgCallBackInterface.TextMessage(' TSortTreeSumChilderVertex.Compare - СТАРТ! ',TMWOHistoryOut);
    result:=0;
    e1:=TAttrSet(vertex1);
    e2:=TAttrSet(vertex2);
 
-       //Edge1
-   ZCMsgCallBackInterface.TextMessage(floattostr(e1.AsFloat32['lengthfromend']) + ' сравниваем ' + floattostr(e2.AsFloat32['lengthfromend']),TMWOHistoryOut);
-   //   ZCMsgCallBackInterface.TextMessage(floattostr(e2.AsFloat32['length']) + '   ',TMWOHistoryOut);
-
-   //e1.GetAsFloat32
-   if e1.AsFloat32['lengthfromend'] <> e2.AsFloat32['lengthfromend'] then
-     if e1.AsFloat32['lengthfromend'] > e2.AsFloat32['lengthfromend'] then
-        result:=1
-     else
-        result:=-1;
-
+   if (e1<>nil) and (e2<>nil) then begin
+   //ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
+   //ZCMsgCallBackInterface.TextMessage(e1.ToString,TMWOHistoryOut);
+   dev1:=pGDBObjDevice(e1.AsPointer[vPGDBObjDeviceVertex]);
+   dev2:=pGDBObjDevice(e2.AsPointer[vPGDBObjDeviceVertex]);
+   //ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
+   //pvd1:=FindVariableInEnt(dev1,velec_nameDevice);
+   //ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
+   //pvd2:=FindVariableInEnt(dev2,velec_nameDevice);
+   //ZCMsgCallBackInterface.TextMessage('4',TMWOHistoryOut);
+   //if (pvd1<>nil) and (pvd2<>nil) then
+   //   ZCMsgCallBackInterface.TextMessage(' Сравниваем = ' + pstring(pvd1^.data.Addr.Instance)^ + ' -с- ' + pstring(pvd2^.data.Addr.Instance)^,TMWOHistoryOut);
+   pvd1:=FindVariableInEnt(dev1,velec_EM_vSumChildVertex);
+   pvd2:=FindVariableInEnt(dev2,velec_EM_vSumChildVertex);
+   if (pvd1<>nil) and (pvd2<>nil) then
+     begin
+       //ZCMsgCallBackInterface.TextMessage(' Сравниваем = ' + inttostr(pinteger(pvd1^.data.Addr.Instance)^) + ' -с- ' + inttostr(pinteger(pvd2^.data.Addr.Instance)^),TMWOHistoryOut);
+       if pinteger(pvd1^.data.Addr.Instance)^ <> pinteger(pvd2^.data.Addr.Instance)^ then
+         if pinteger(pvd1^.data.Addr.Instance)^ > pinteger(pvd2^.data.Addr.Instance)^ then
+            result:=1
+         else
+            result:=-1;
+     end;
+   end;
    //тут e1 и e2 надо както сравнить по какомуто критерию и вернуть -1 0 1
    //в зависимости что чего меньше-больше
 end;
@@ -769,9 +914,9 @@ end;
 
 initialization
   DummyComparer:=TDummyComparer.Create;
-  SortTreeLengthComparer:=TSortTreeLengthComparer.Create;
+  SortTreeSumChilderVertex:=TSortTreeSumChilderVertex.Create;
 finalization
   DummyComparer.free;
-  SortTreeLengthComparer.free;
+  SortTreeSumChilderVertex.free;
 end.
 

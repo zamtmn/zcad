@@ -877,6 +877,7 @@ var
   pt1,pt2,pt3,ptext,ptSt,ptEd:GDBVertex;
   VertexPath: TClassList;
   pv:pGDBObjDevice;
+  newdevname:string;
   //ppvvarext,pvarv:TVariablesExtender;
   //pvmc,pvv:pvardesk;
 
@@ -909,6 +910,8 @@ var
         t_matrix:DMatrix4D;
         ir2:itrec;
         pobj,pcobj:PGDBObjEntity;
+        psu:ptunit;
+
   begin
 
       ZCMsgCallBackInterface.TextMessage('addBlockonDraw DEVICE-' + dev^.Name,TMWOHistoryOut);
@@ -1008,6 +1011,18 @@ var
       //смещаем для следующего устройства
       //currentcoord.x:=currentcoord.x+45;
 
+      //** Добавляем свойства для устройств
+      pnevdev^.AddExtension(TVariablesExtender.Create(pnevdev));
+      entvarext:=pnevdev^.specialize GetExtension<TVariablesExtender>;
+      //**добавление свойств устройтсва
+      if entvarext<>nil then
+      begin
+        psu:=units.findunit(SupportPath,@InterfaceTranslate,'develscheme'); //
+        if psu<>nil then
+          entvarext.entityunit.copyfrom(psu);
+      end;
+      //****//
+
 
       ZCMsgCallBackInterface.TextMessage('DEVICE-' + dev^.Name,TMWOHistoryOut);
 
@@ -1059,9 +1074,9 @@ var
        }
   end;
 
-  procedure addBlockNodeonDraw(var currentcoord:GDBVertex; var root:GDBObjRoot);
+  procedure addBlockNodeonDraw(var currentcoord:GDBVertex; var root:GDBObjRoot;datname:String);
   var
-      datname:String;
+      //datname:String;
       pv:pGDBObjDevice;
       DC:TDrawContext;
       lx,{rx,}uy,dy:Double;
@@ -1075,10 +1090,13 @@ var
         t_matrix:DMatrix4D;
         ir2:itrec;
         pobj,pcobj:PGDBObjEntity;
+
+        psu:ptunit;
+        pvd:pvardesk;
+
   begin
       //addBlockonDraw(velec_beforeNameGlobalSchemaBlock + string(TVertexTree(G.Root.AsPointer[vpTVertexTree]^).dev^.Name),pt1,drawings.GetCurrentDWG^.mainObjRoot);
      ZCMsgCallBackInterface.TextMessage('addBlockNodeonDraw -',TMWOHistoryOut);
-     datname:= velec_SchemaBlockJunctionBox;
      dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
      drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,datname);
      //pv:=GDBObjDevice.CreateInstance;
@@ -1094,46 +1112,61 @@ var
      zcSetEntPropFromCurrentDrawingProp(pnevdev);
 
 
-      //добавляем определение блока HEAD_CONNECTIONDIAGRAM в чечтеж если надо
-      drawings.GetCurrentDWG^.AddBlockFromDBIfNeed(velec_SchemaELDevInfo);
+      //** Добавляем свойства для устройств
+      pnevdev^.AddExtension(TVariablesExtender.Create(pnevdev));
+      entvarext:=pnevdev^.specialize GetExtension<TVariablesExtender>;
+      //**добавление свойств устройтсва
+      if entvarext<>nil then
+      begin
+        psu:=units.findunit(SupportPath,@InterfaceTranslate,'develscheme'); //
+        if psu<>nil then
+          entvarext.entityunit.copyfrom(psu);
+      end;
+      //****//
 
-      //получаеи указатель на него
-      PBH:=drawings.GetCurrentDWG^.BlockDefArray.getblockdef(velec_SchemaELDevInfo);
-
-      //такого блок в библиотеке нет, водим
-      //TODO: надо добавить ругань
-      if pbh=nil then
-          exit;
-      if not (PBH^.Formated) then
-          PBH^.FormatEntity(drawings.GetCurrentDWG^,dc);
-
-      //создаем матрицу для перемещения по оси У на +15
-      t_matrix:=uzegeometry.CreateTranslationMatrix(createvertex(0,0,0));
-      //бежим по определению блока HEAD_CONNECTIONDIAGRAM
-      pobj:=PBH^.ObjArray.beginiterate(ir2);
-      if pobj<>nil then
-        repeat
-          //клонируем примитивы из HEAD_CONNECTIONDIAGRAM к себе в клон
-          pcobj:=pobj^.Clone(pnevdev);
-          //переносим их Y+15
-          //pcobj^.transformat(pobj,@t_matrix);
-          //форматируем
-          pcobj^.FormatEntity(drawings.GetCurrentDWG^,dc);
-          //в наш клон в динамическую часть
-          pnevdev^.VarObjArray.AddPEntity(pcobj^);
-
-          pobj:=PBH^.ObjArray.iterate(ir2);
-        until pobj=nil;
-
-      //в этом меесте мы имеем клон исходного устройства с добавленым в динамическую часть
-      //содержимым блока HEAD_CONNECTIONDIAGRAM
-
-      //форматируем
-      //pnevdev^.formatEntity(drawings.GetCurrentDWG^,dc);
-      //добавляем в чертеж
-      drawings.GetCurrentDWG^.mainObjRoot.ObjArray.AddPEntity(pnevdev^);
-      //смещаем для следующего устройства
+//
+//      //добавляем определение блока HEAD_CONNECTIONDIAGRAM в чечтеж если надо
+//      drawings.GetCurrentDWG^.AddBlockFromDBIfNeed(velec_SchemaELDevInfo);
+//
+//      //получаеи указатель на него
+//      PBH:=drawings.GetCurrentDWG^.BlockDefArray.getblockdef(velec_SchemaELDevInfo);
+//
+//      //такого блок в библиотеке нет, водим
+//      //TODO: надо добавить ругань
+//      if pbh=nil then
+//          exit;
+//      if not (PBH^.Formated) then
+//          PBH^.FormatEntity(drawings.GetCurrentDWG^,dc);
+//
+//      //создаем матрицу для перемещения по оси У на +15
+//      t_matrix:=uzegeometry.CreateTranslationMatrix(createvertex(0,0,0));
+//      //бежим по определению блока HEAD_CONNECTIONDIAGRAM
+//      pobj:=PBH^.ObjArray.beginiterate(ir2);
+//      if pobj<>nil then
+//        repeat
+//          //клонируем примитивы из HEAD_CONNECTIONDIAGRAM к себе в клон
+//          pcobj:=pobj^.Clone(pnevdev);
+//          //переносим их Y+15
+//          //pcobj^.transformat(pobj,@t_matrix);
+//          //форматируем
+//          pcobj^.FormatEntity(drawings.GetCurrentDWG^,dc);
+//          //в наш клон в динамическую часть
+//          pnevdev^.VarObjArray.AddPEntity(pcobj^);
+//
+//          pobj:=PBH^.ObjArray.iterate(ir2);
+//        until pobj=nil;
+//
+//      //в этом меесте мы имеем клон исходного устройства с добавленым в динамическую часть
+//      //содержимым блока HEAD_CONNECTIONDIAGRAM
+//
+//      //форматируем
+//      //pnevdev^.formatEntity(drawings.GetCurrentDWG^,dc);
+//      //добавляем в чертеж
+//      drawings.GetCurrentDWG^.mainObjRoot.ObjArray.AddPEntity(pnevdev^);
+//      //смещаем для следующего устройства
       //currentcoord.x:=currentcoord.x+45;
+
+
 
      //pv^.formatentity(drawings.GetCurrentDWG^,dc);
      //pv^.getoutbound(dc);
@@ -1466,7 +1499,12 @@ begin
         else
         begin
            ZCMsgCallBackInterface.TextMessage('-dev false-',TMWOHistoryOut);
-           addBlockNodeonDraw(ptEd,drawings.GetCurrentDWG^.mainObjRoot);
+           if listVertex.Back.vertex.ChildCount <= 1 then
+              newdevname:= velec_beforeNameGlobalSchemaBlock + velec_SchemaBlockChangingLayingMethod
+           else
+              newdevname:= velec_beforeNameGlobalSchemaBlock + velec_SchemaBlockJunctionBox;
+
+           addBlockNodeonDraw(ptEd,drawings.GetCurrentDWG^.mainObjRoot,newdevname);
         end;
          ZCMsgCallBackInterface.TextMessage('4',TMWOHistoryOut);
         //drawVertex(pt1,3,height);

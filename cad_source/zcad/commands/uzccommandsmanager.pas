@@ -26,7 +26,8 @@ uses gzctnrVectorPObjects,uzcsysvars,uzegeometry,uzglviewareaabstract,uzbpaths,
      uzccommandsabstract, sysutils,uzglviewareadata,
      uzclog,varmandef,varman,uzedrawingdef,uzcinterface,
      uzcsysparams,uzedrawingsimple,uzcdrawings,uzctnrvectorstrings,forms,
-     uzcctrlcommandlineprompt,uzeparsercmdprompt,uzeSnap;
+     uzcctrlcommandlineprompt,uzeparsercmdprompt,uzeSnap,
+     uzeentity,uzgldrawcontext;
 const
      tm:tmethod=(Code:nil;Data:nil);
      nullmethod:{tmethod}TButtonMethod=nil;
@@ -104,6 +105,7 @@ type
                           function Get3DPointWithLineFromBase(prompt:String;const base:GDBVertex;out p:GDBVertex):TGetResult;
                           function GetEntity(prompt:String;out p:Pointer):Boolean;
                           function Get3DPointInteractive(prompt:String;out p:GDBVertex;const InteractiveProc:TInteractiveProcObjBuild;const PInteractiveData:Pointer):TGetResult;
+                          function Get3DAndMoveConstructRootTo(prompt:String;out p:GDBVertex):TGetResult;
                           function GetInput(Prompt:String;out Input:String):TGetResult;
 
                           function GetLastId:TTag;
@@ -343,6 +345,36 @@ begin
   PTSimpleDrawing(pcommandrunning.pdwg)^.SetMouseEditorMode(savemode);//restore editor mode
                                                                       //восстанавливаем сохраненный режим редактора
 end;
+procedure InteractiveConstructRootManipulator( const PInteractiveData : Pointer {must be nil, no additional data needed};
+                                                                Point : GDBVertex  {new end coord};
+                                                                Click : Boolean {true if lmb presseed});
+var
+  ir:itrec;
+  p:PGDBObjEntity;
+  t_matrix:DMatrix4D;
+  RC:TDrawContext;
+begin
+  if click then begin
+    t_matrix:=CreateTranslationMatrix(Point);
+    drawings.GetCurrentDWG^.ConstructObjRoot.transform(t_matrix);
+    drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=OneMatrix;
+    p:=drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.beginiterate(ir);
+     if p<>nil then repeat
+       p^.transform(t_matrix);
+       p:=drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.iterate(ir);
+     until p=nil;
+  end else begin
+    drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=CreateTranslationMatrix(Point);
+    RC:=drawings.GetCurrentDWG^.CreateDrawingRC;
+    drawings.GetCurrentDWG^.ConstructObjRoot.FormatEntity(drawings.GetCurrentDWG^,RC);
+  end;
+end;
+
+function GDBcommandmanager.Get3DAndMoveConstructRootTo(prompt:String;out p:GDBVertex):TGetResult;
+begin
+  result:=Get3DPointInteractive(prompt,p,@InteractiveConstructRootManipulator,nil)
+end;
+
 function GDBcommandmanager.GetLastId:TTag;
 begin
   if pcommandrunning<>nil then

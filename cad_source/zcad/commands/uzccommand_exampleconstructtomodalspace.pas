@@ -83,13 +83,8 @@ end;
 begin
   pt:=drawMText(NulVertex,2,0);                                        //Рисуем текст
   pp:=drawPolyline(uzegeometry.CreateVertex(-20,+5,0),uzegeometry.CreateVertex(+20,-5,0),3);
-  if commandmanager.Get3DPointInteractive(rscmSpecifyFirstPoint,v,@InteractiveConstructRootManipulator,nil)=GRNormal then begin   //Получаем координату ЛКМ-кли
-    zcClearCurrentDrawingConstructRoot;
-    zcStartUndoCommand('ExampleConstructToModalSpace');
-    zcAddEntToCurrentDrawingWithUndo(pt);
-    zcAddEntToCurrentDrawingWithUndo(pp);
-    zcEndUndoCommand;
-  end;
+  if commandmanager.Get3DAndMoveConstructRootTo(rscmSpecifyFirstPoint,v)=GRNormal then   //Получаем координату ЛКМ-кли
+    zcMoveEntsFromConstructRootToCurrentDrawingWithUndo('ExampleConstructToModalSpace');
   result:=cmd_ok;
 end;
 

@@ -33,6 +33,8 @@ uses uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzepalette,
     @param(Drawing Чертеж куда будет добавлен примитив)}
   procedure zcAddEntToDrawingWithUndo(const PEnt:PGDBObjEntity;var Drawing:TZCADDrawing);
 
+  procedure zcMoveEntsFromConstructRootToCurrentDrawingWithUndo(CommandName:String);
+
   {**Добавление в текущий чертеж примитива с обвязкой undo
     @param(PEnt Указатель на добавляемый примитив)}
   procedure zcAddEntToCurrentDrawingWithUndo(const PEnt:PGDBObjEntity);
@@ -171,6 +173,24 @@ procedure zcAddEntToCurrentDrawingWithUndo(const PEnt:PGDBObjEntity);
 begin
      zcAddEntToDrawingWithUndo(PEnt,PTZCADDrawing(drawings.GetCurrentDWG)^);
 end;
+procedure zcMoveEntsFromConstructRootToCurrentDrawingWithUndo(CommandName:String);
+var
+  pcd:PTZCADDrawing;
+  pobj: pGDBObjEntity;
+  ir:itrec;
+begin
+  pcd:=PTZCADDrawing(drawings.GetCurrentDWG);
+  pcd^.UndoStack.PushStartMarker(CommandName);
+  pobj:=pcd^.GetConstructObjRoot.ObjArray.beginiterate(ir);
+  if pobj<>nil then
+  repeat
+    zcAddEntToDrawingWithUndo(pobj,pcd^);
+  pobj:=pcd^.GetConstructObjRoot.ObjArray.iterate(ir);
+  until pobj=nil;
+  pcd^.UndoStack.PushEndMarker;
+  pcd^.ConstructObjRoot.ObjArray.Clear;
+end;
+
 procedure zcStartUndoCommand(CommandName:String;PushStone:boolean=false);
 begin
      PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushStartMarker(CommandName);

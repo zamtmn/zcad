@@ -40,10 +40,6 @@ resourcestring
 implementation
 
 function ExampleConstructToModalSpace_com(operands:TCommandOperands):TCommandResult;
-var
-  pp:PGDBObjPolyLine;
-  pt:PGDBObjMText;
-  v:GDBvertex;
 //Визуализация многострочный текст
 function drawMText(pt:GDBVertex;color:integer;rotate:double):PGDBObjMText;
 begin
@@ -81,10 +77,10 @@ begin
 end;
 
 begin
-  pt:=drawMText(NulVertex,2,0);                                        //Рисуем текст
-  pp:=drawPolyline(uzegeometry.CreateVertex(-20,+5,0),uzegeometry.CreateVertex(+20,-5,0),3);
-  if commandmanager.Get3DAndMoveConstructRootTo(rscmSpecifyFirstPoint,v)=GRNormal then   //Получаем координату ЛКМ-кли
-    zcMoveEntsFromConstructRootToCurrentDrawingWithUndo('ExampleConstructToModalSpace');
+  {pt:=}drawMText(NulVertex,2,0);                                  //Рисуем текст, и полилинию
+  {pp:=}drawPolyline(uzegeometry.CreateVertex(-20,+5,0),uzegeometry.CreateVertex(+20,-5,0),3);
+  if commandmanager.MoveConstructRootTo(rscmSpecifyFirstPoint)=GRNormal then //двигаем их
+    zcMoveEntsFromConstructRootToCurrentDrawingWithUndo('ExampleConstructToModalSpace'); //если все ок, копируем в чертеж
   result:=cmd_ok;
 end;
 

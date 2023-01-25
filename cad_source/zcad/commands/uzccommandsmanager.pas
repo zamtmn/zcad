@@ -106,6 +106,7 @@ type
                           function GetEntity(prompt:String;out p:Pointer):Boolean;
                           function Get3DPointInteractive(prompt:String;out p:GDBVertex;const InteractiveProc:TInteractiveProcObjBuild;const PInteractiveData:Pointer):TGetResult;
                           function Get3DAndMoveConstructRootTo(prompt:String;out p:GDBVertex):TGetResult;
+                          function MoveConstructRootTo(prompt:String):TGetResult;
                           function GetInput(Prompt:String;out Input:String):TGetResult;
 
                           function GetLastId:TTag;
@@ -371,6 +372,12 @@ begin
 end;
 
 function GDBcommandmanager.Get3DAndMoveConstructRootTo(prompt:String;out p:GDBVertex):TGetResult;
+begin
+  result:=Get3DPointInteractive(prompt,p,@InteractiveConstructRootManipulator,nil)
+end;
+function GDBcommandmanager.MoveConstructRootTo(prompt:String):TGetResult;
+var
+  p:GDBVertex;
 begin
   result:=Get3DPointInteractive(prompt,p,@InteractiveConstructRootManipulator,nil)
 end;

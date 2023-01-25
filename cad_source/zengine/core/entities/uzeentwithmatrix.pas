@@ -183,7 +183,7 @@ begin
 end;
 procedure GDBObjWithMatrix.CalcObjMatrix;
 begin
-     ObjMatrix:=OneMatrix;
+     //ObjMatrix:=OneMatrix;
 end;
 procedure GDBObjWithMatrix.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 begin
@@ -192,6 +192,7 @@ end;
 constructor GDBObjWithMatrix.initnul;
 begin
      inherited initnul(owner);
+     objmatrix:=onematrix;
      CalcObjMatrix;
 end;
 begin

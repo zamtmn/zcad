@@ -941,6 +941,9 @@ var
       //добавляем клону расширение с переменными
       pnevdev^.AddExtension(TVariablesExtender.Create(pnevdev));
       delvarext:=pnevdev^.specialize GetExtension<TVariablesExtender>;
+
+      //ZCMsgCallBackInterface.TextMessage('до то как устройство стало делегированным' + dev^.Name,TMWOHistoryOut);
+
       //добавляем устройству клона как представителя
       entvarext.addDelegate(pnevdev,delvarext);
       //ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);

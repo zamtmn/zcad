@@ -88,12 +88,19 @@ begin
    listStructurGraphEM:=uzvmanemgetgem.getListStructurGraphEM(listFullGraphEM);
 
    if uzvmanemComParams.sortGraph then
-     uzvmanemgetgem.sortSumChildListGraph(listFullGraphEM);
+     uzvmanemgetgem.sortSumChildListGraph(listStructurGraphEM);
 
-   for graphDev in listFullGraphEM do
+   //for graphDev in listFullGraphEM do
+   //if uzvmanemComParams.sortGraph then
+   for graphDev in listStructurGraphEM do
    begin
       visualGraphTree(graphDev,insertCoordination,3,depthVisual);
    end;
+   //else
+   //for graphDev in listFullGraphEM do
+   //begin
+   //   visualGraphTree(graphDev,insertCoordination,3,depthVisual);
+   //end;
 
    Commandmanager.executecommandend;
 

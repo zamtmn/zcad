@@ -149,14 +149,106 @@ var
   //**получить структурированный граф
   function getListStructurGraphEM(listFullGraphEM:TListGraphDev):TListGraphDev;
   var
-     graphDev:TGraphDev;
+     graphDev,graphDevNew:TGraphDev;
+     listGraphStrDev:TListGraphDev;
+
+
+  //procedure getStructurGraphEM(var graphStrDev:TGraphDev;intVertex:integer);
+  //var
+  //begin
+  //   if (graphStrDev.Vertices[intVertex].isRiserDev) or (graphStrDev.Vertices[intVertex].isChangeLayingDev) then
+  //     begin
+  //        graphStrDev.Vertices[intVertex].de
+  //     end;
+  //end;
+
+  //** Рекурсия если вершина разрыв или переход, то пропускаем
+  procedure getStructurGraphEM(graphFullDev:TGraphDev;intVertex:integer;var graphStrDev:TGraphDev;parentIntVert:integer;lengthCab:double);
+  var
+    i,count:integer;
+    lenCable:double;
+    pvd:pvardesk;
+    newVertex:TVertex;
+    newVertexIndex:integer;
+  begin
+     //ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
+     lenCable:=0;
+     if (not graphFullDev.Vertices[intVertex].isRiserDev) and (not graphFullDev.Vertices[intVertex].isChangeLayingDev) then
+       begin
+            //ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
+            if parentIntVert = -1 then
+              begin
+                //ZCMsgCallBackInterface.TextMessage('30',TMWOHistoryOut);
+                newVertex:=graphStrDev.addVertexDevFunc(graphFullDev.Vertices[intVertex].getDevice);
+                //ZCMsgCallBackInterface.TextMessage('31',TMWOHistoryOut);
+                graphStrDev.Root:=newVertex;
+                //ZCMsgCallBackInterface.TextMessage('33',TMWOHistoryOut);
+              end
+              else
+              begin
+                //ZCMsgCallBackInterface.TextMessage('4',TMWOHistoryOut);
+                newVertex:=graphStrDev.Vertices[parentIntVert].AddChild;
+                newVertex.attachDevice(graphFullDev.Vertices[intVertex].getDevice);
+                //ZCMsgCallBackInterface.TextMessage('41',TMWOHistoryOut);
+                graphStrDev.GetEdge(graphStrDev.Vertices[parentIntVert],newVertex).attachCable(nil);
+                //ZCMsgCallBackInterface.TextMessage('42',TMWOHistoryOut);
+                graphStrDev.GetEdge(graphStrDev.Vertices[parentIntVert],newVertex).cableLength:=lengthCab;
+                //ZCMsgCallBackInterface.TextMessage('43',TMWOHistoryOut);
+              end;
+              newVertexIndex:=newVertex.Index;
+              //ZCMsgCallBackInterface.TextMessage('5',TMWOHistoryOut);
+       end
+     else
+     begin
+       //ZCMsgCallBackInterface.TextMessage('6',TMWOHistoryOut);
+       lenCable:=graphFullDev.GetEdge(graphFullDev.Vertices[intVertex],graphFullDev.Vertices[intVertex].Parent).cableLength + lengthCab;
+       //ZCMsgCallBackInterface.TextMessage('7',TMWOHistoryOut);
+       newVertexIndex:=parentIntVert;
+     end;
+
+     for i:=0 to graphFullDev.Vertices[intVertex].ChildCount-1 do
+       begin
+            //ZCMsgCallBackInterface.TextMessage('7',TMWOHistoryOut);
+            getStructurGraphEM(graphFullDev,graphFullDev.Vertices[intVertex].Childs[i].Index,graphStrDev,newVertexIndex,lenCable);
+       end;
+     //
+     //count:=0;
+     //pvd:=FindVariableInEnt(graphDev.Vertices[intVertex].getDevice,velec_EM_vSumChildVertex);
+     //  if pvd<>nil then
+     //    begin
+     //     count:=pinteger(pvd^.data.Addr.Instance)^;
+     //     if count = 0 then begin
+     //       count:=count + sumInt + 1;
+     //       pinteger(pvd^.data.Addr.Instance)^:=count;
+     //     end
+     //     else
+     //     begin
+     //       pinteger(pvd^.data.Addr.Instance)^:=count+sumInt+1;
+     //       count:=sumInt;
+     //     end;
+     //    end;
+     //if graphDev.Vertices[intVertex].Parent <> nil then
+     //  addSumSubVertex(graphDev,graphDev.Vertices[intVertex].Parent.Index,count)
+  end;
+
   begin
     result:=TListGraphDev.Create;
     for graphDev in listFullGraphEM do
     begin
-      //pvd:=FindVariableInEnt(dev,'NMO_Name');
-      //if pvd<>nil then
-      //   ZCMsgCallBackInterface.TextMessage(' - ' + pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+      graphDevNew:=TGraphDev.Create;
+      graphDevNew.Features:=[Tree];
+      graphDevNew.CreateVertexAttr(vPTVertexEMTree,AttrPointer);
+      graphDevNew.CreateEdgeAttr(vPTEdgeEMTree,AttrPointer);            // добавили ссылку сразу на саму линию
+      //graphDevNew:=graphDev;
+      ZCMsgCallBackInterface.TextMessage(' getStructurGraphEM - старт ',TMWOHistoryOut);
+      getStructurGraphEM(graphDev,graphDev.Root.Index,graphDevNew,-1,0);
+      ZCMsgCallBackInterface.TextMessage(' getStructurGraphEM - финиш ',TMWOHistoryOut);
+      graphDevNew.CorrectTree;
+      ZCMsgCallBackInterface.TextMessage(' graphDevNew.CorrectTree; - корректно ',TMWOHistoryOut);
+      result.PushBack(graphDevNew);
+      ////pvd:=FindVariableInEnt(dev,'NMO_Name');
+      ////if pvd<>nil then
+      ////   ZCMsgCallBackInterface.TextMessage(' - ' + pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
     end;
   end;
 
@@ -523,8 +615,8 @@ begin
            begin
               graphDev:=TGraphDev.Create;
               graphDev.Features:=[Tree];
-              graphDev.CreateVertexAttr(vPGDBObjDeviceVertex,AttrPointer);
-              graphDev.CreateEdgeAttr(vPGDBObjDeviceEdge,AttrPointer);            // добавили ссылку сразу на саму линию
+              graphDev.CreateVertexAttr(vPTVertexEMTree,AttrPointer);
+              graphDev.CreateEdgeAttr(vPTEdgeEMTree,AttrPointer);            // добавили ссылку сразу на саму линию
 
               pvd:=FindVariableInEnt(dev,'NMO_Name');
               if pvd<>nil then
@@ -820,8 +912,8 @@ begin
    if (e1<>nil) and (e2<>nil) then begin
    //ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
    //ZCMsgCallBackInterface.TextMessage(e1.ToString,TMWOHistoryOut);
-   dev1:=pGDBObjDevice(e1.AsPointer[vPGDBObjDeviceVertex]);
-   dev2:=pGDBObjDevice(e2.AsPointer[vPGDBObjDeviceVertex]);
+   dev1:=PTVertexEMTree(e1.AsPointer[vPTVertexEMTree])^.dev;
+   dev2:=PTVertexEMTree(e2.AsPointer[vPTVertexEMTree])^.dev;
    //ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
    //pvd1:=FindVariableInEnt(dev1,velec_nameDevice);
    //ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);

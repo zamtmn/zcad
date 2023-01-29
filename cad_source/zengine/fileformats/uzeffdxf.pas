@@ -414,8 +414,8 @@ begin
                                      if PGDBObjEntity(pobj)^.PExtAttrib^.Handle>200 then
                                                                                       begin
                                                                                       context.h2p.AddOrSetValue(PGDBObjEntity(pobj)^.PExtAttrib^.Handle,postobj);
-                                                                                      context.h2p.Add(PGDBObjEntity(pobj)^.PExtAttrib^.dwgHandle,postobj);
-                                                                                      end
+                                                                                      end;
+                                     context.h2p.Add(PGDBObjEntity(pobj)^.PExtAttrib^.dwgHandle,postobj);
                                                                                       //pushhandle(phandlearray,PGDBObjEntity(pobj)^.PExtAttrib^.Handle,PtrInt(postobj));
                                 end;
                                 if newowner=pointer($ffffffff) then

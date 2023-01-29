@@ -1140,11 +1140,14 @@ begin
      result:=false;
      case dxfcod of
                 5:begin
-                          {$IFNDEF DELPHI}
-                          if not TryStrToQWord('$'+readmystr(f),AddExtAttrib^.dwgHandle)then
-                          {$ENDIF}
-                          begin
-                               //нужно залупиться
+                          if AddExtAttrib^.dwgHandle=0 then begin
+                            if not TryStrToQWord('$'+readmystr(f),PExtAttrib^.dwgHandle)then
+                              begin
+                                //нужно залупиться
+                              end
+                          end else begin
+                            readmystr(f);
+                            //нужно залупиться
                           end;
                           result:=true;
                   end;

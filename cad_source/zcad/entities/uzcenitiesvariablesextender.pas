@@ -333,7 +333,12 @@ begin
      result:=true;
 end;
 class function TVariablesExtender.EntIOLoadMainFunction(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+var
+  vardata:TVariablesExtender;
 begin
+  vardata:=PGDBObjEntity(PEnt)^.GetExtension<TVariablesExtender>;
+  if vardata=nil then
+    vardata:=addvariablestoentity(PEnt);
   {$IFNDEF DELPHI}
   if not TryStrToQWord('$'+_value,PGDBObjEntity(PEnt)^.AddExtAttrib^.MainFunctionHandle)then
   {$ENDIF}

@@ -423,7 +423,7 @@ var
       CMWaitFile:begin
                    if clFilePrompt=nil then
                      clFilePrompt:=CMDLinePromptParser.GetTokens(RSCLPDataExportWaitFile);
-                   commandmanager.SetPrompt(clFilePrompt);
+                   commandmanager.SetPrompt(clFilePrompt);               //выставляет результат парсинга в командную строчку
                    commandmanager.ChangeInputMode([GPIempty],[]);
                  end;
        CMOptions:begin

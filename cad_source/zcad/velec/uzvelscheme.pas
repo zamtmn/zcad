@@ -894,7 +894,7 @@ var
 
 
 
-  procedure addBlockonDraw(var dev:pGDBObjDevice;var currentcoord:GDBVertex; var root:GDBObjRoot);
+  procedure addBlockonDraw(G:TGraph;vertexGraph:TVertex;var dev:pGDBObjDevice;var currentcoord:GDBVertex; var root:GDBObjRoot);
   var
       datname:String;
       pv:pGDBObjDevice;
@@ -910,8 +910,9 @@ var
         t_matrix:DMatrix4D;
         ir2:itrec;
         pobj,pcobj:PGDBObjEntity;
+        pcable:PGDBObjCable;
         psu:ptunit;
-
+        pvd,pcablepvd:pvardesk;
   begin
 
       ZCMsgCallBackInterface.TextMessage('addBlockonDraw DEVICE-' + dev^.Name,TMWOHistoryOut);
@@ -1026,6 +1027,23 @@ var
       end;
       //****//
 
+      ZCMsgCallBackInterface.TextMessage('vEMGCHDGroup1 -' + dev^.Name,TMWOHistoryOut);
+             //** Имя мастера устройства
+       pvd:=FindVariableInEnt(pnevdev,'vEMGCHDGroup');
+       if (pvd<>nil) and (vertexGraph.Parent<>nil) then begin
+         ZCMsgCallBackInterface.TextMessage('vEMGCHDGroup2 -' + dev^.Name,TMWOHistoryOut);
+             pcable:=PTEdgeTree(G.GetEdge(vertexGraph,vertexGraph.Parent).AsPointer[vpTEdgeTree])^.segm;
+             ZCMsgCallBackInterface.TextMessage('vEMGCHDGroup3 -' + dev^.Name,TMWOHistoryOut);
+             if pcable<> nil then begin
+             pcablepvd:=FindVariableInEnt(pcable,'GC_HDGroup');
+             ZCMsgCallBackInterface.TextMessage('vEMGCHDGroup4 -' + dev^.Name,TMWOHistoryOut);
+             if pcablepvd<>nil then
+                pinteger(pvd^.data.Addr.Instance)^:= strtoint(pstring(pcablepvd^.data.Addr.Instance)^);
+             ZCMsgCallBackInterface.TextMessage('vEMGCHDGroup5 -' + dev^.Name,TMWOHistoryOut);
+             end;
+                      end;
+      //****//
+
 
       ZCMsgCallBackInterface.TextMessage('DEVICE-' + dev^.Name,TMWOHistoryOut);
 
@@ -1077,7 +1095,7 @@ var
        }
   end;
 
-  procedure addBlockNodeonDraw(var currentcoord:GDBVertex; var root:GDBObjRoot;datname:String);
+  procedure addBlockNodeonDraw(G:TGraph;vertexGraph:TVertex;var currentcoord:GDBVertex; var root:GDBObjRoot;datname:String);
   var
       //datname:String;
       pv:pGDBObjDevice;
@@ -1093,9 +1111,9 @@ var
         t_matrix:DMatrix4D;
         ir2:itrec;
         pobj,pcobj:PGDBObjEntity;
-
+        pcable:PGDBObjCable;
         psu:ptunit;
-        pvd:pvardesk;
+        pvd,pcablepvd:pvardesk;
 
   begin
       //addBlockonDraw(velec_beforeNameGlobalSchemaBlock + string(TVertexTree(G.Root.AsPointer[vpTVertexTree]^).dev^.Name),pt1,drawings.GetCurrentDWG^.mainObjRoot);
@@ -1125,6 +1143,14 @@ var
         if psu<>nil then
           entvarext.entityunit.copyfrom(psu);
       end;
+       //** Имя мастера устройства
+       pvd:=FindVariableInEnt(pnevdev,'vEMGCHDGroup');
+       if pvd<>nil then begin
+             pcable:=PTEdgeTree(G.GetEdge(vertexGraph,vertexGraph.Parent).AsPointer[vpTEdgeTree])^.segm;
+             pcablepvd:=FindVariableInEnt(pcable,'GC_HDGroup');
+             if pcablepvd<>nil then
+                pinteger(pvd^.data.Addr.Instance)^:= strtoint(pstring(pcablepvd^.data.Addr.Instance)^);
+             end;
       //****//
 
 //
@@ -1185,8 +1211,9 @@ var
      //pCentralVarext:=dev^.specialize GetExtension<TVariablesExtender>;
      //pVarext:=pv^.specialize GetExtension<TVariablesExtender>;
      //pCentralVarext.addDelegate({pmainobj,}pv,pVarext);
+       end;
 
-  end;
+  //end;
     //рисуем прямоугольник с цветом  зная номера вершин, координат возьмем из графа по номерам
       procedure drawConnectLine(pt1,pt2:GDBVertex;color:integer);
       var
@@ -1443,7 +1470,7 @@ begin
     //if pvv<>nil then  begin
     //    ZCMsgCallBackInterface.TextMessage(pstring(pvv^.data.Addr.Instance)^ + ' - '+ inttostr(G.Root.Index),TMWOHistoryOut);
         //addBlockonDraw(TVertexTree(G.Root.AsPointer[vpTVertexTree]^).dev^);
-        addBlockonDraw(TVertexTree(listVertex.Back.vertex.AsPointer[vpTVertexTree]^).dev,ptSt,drawings.GetCurrentDWG^.mainObjRoot);
+        addBlockonDraw(G,listVertex.Back.vertex,TVertexTree(listVertex.Back.vertex.AsPointer[vpTVertexTree]^).dev,ptSt,drawings.GetCurrentDWG^.mainObjRoot);
     //end;
     //ZCMsgCallBackInterface.TextMessage('фин'+ inttostr(G.Root.Index),TMWOHistoryOut);
     //drawVertex(pt1,3,height);
@@ -1497,7 +1524,7 @@ begin
         //*********
         if TVertexTree(listVertex.Back.vertex.AsPointer[vpTVertexTree]^).dev<>nil then  begin
            ZCMsgCallBackInterface.TextMessage('-dev true-',TMWOHistoryOut);
-           addBlockonDraw(TVertexTree(listVertex.Back.vertex.AsPointer[vpTVertexTree]^).dev,ptEd,drawings.GetCurrentDWG^.mainObjRoot)
+           addBlockonDraw(G,listVertex.Back.vertex,TVertexTree(listVertex.Back.vertex.AsPointer[vpTVertexTree]^).dev,ptEd,drawings.GetCurrentDWG^.mainObjRoot)
         end
         else
         begin
@@ -1507,7 +1534,7 @@ begin
            else
               newdevname:= velec_beforeNameGlobalSchemaBlock + velec_SchemaBlockJunctionBox;
 
-           addBlockNodeonDraw(ptEd,drawings.GetCurrentDWG^.mainObjRoot,newdevname);
+           addBlockNodeonDraw(G,listVertex.Back.vertex,ptEd,drawings.GetCurrentDWG^.mainObjRoot,newdevname);
         end;
          ZCMsgCallBackInterface.TextMessage('4',TMWOHistoryOut);
         //drawVertex(pt1,3,height);

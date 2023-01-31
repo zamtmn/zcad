@@ -256,6 +256,7 @@ uses
   uzvaddconnection, //добавить подключение к устройству
   uzvremoveconnection, //удаление подключения к устройству
   uzvmanemcom, //управления и обработка полученой электрической модели
+  uzvmanemschemalevelone, //создание одноуровневой схемы
   //**//
   {$ENDIF}
   {$ENDIF}

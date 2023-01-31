@@ -68,6 +68,10 @@ type
       procedure attachDevice(dev:pGDBObjDevice);
       {**Получить устройство}
       function getDevice:pGDBObjDevice;
+      {**Получить номер группы подключения у головного устройства}
+      function getNumGroupConnectDevice:integer;
+      {**Получить NMO_Name устройствf}
+      function getNMONameDevice:string;
       {**Это устройство разрыв/стояк}
       function isRiserDev:boolean;
       {**Это устройство смена метода прокладки кабеля}
@@ -80,8 +84,10 @@ type
 
       function getCableLength:double;
       procedure setCableLength(cabLength:double);
-      {**присоеденить к ребру кабель}
+      {**получить длину кабеля или записать ее}
       property cableLength:double read getCableLength write setCableLength;
+      // {**получить имя группы кабеля}
+      //function getNameCableGroup:string;
 
   end;
 
@@ -180,6 +186,40 @@ implementation
   begin
         result:=PTVertexEMTree(self.AsPointer[vPTVertexEMTree])^.dev;
   end;
+  function TVertexDev.getNMONameDevice:string;
+  var
+     dev:PGDBObjDevice;
+     pnodevarext:TVariablesExtender;
+     pvd:pvardesk;
+  begin
+        dev:=self.getDevice;
+        if dev <>nil then begin
+          pnodevarext:=dev^.specialize GetExtension<TVariablesExtender>;
+          pvd:=pnodevarext.entityunit.FindVariable('NMO_Name');
+          if (pvd <> nil) then
+            result:=pstring(pvd^.data.Addr.Instance)^
+        end
+        else
+            result:='устройство NIL';
+  end;
+
+  function TVertexDev.getNumGroupConnectDevice:integer;
+  var
+     dev:PGDBObjDevice;
+     pnodevarext:TVariablesExtender;
+     pvd:pvardesk;
+  begin
+        dev:=self.getDevice;
+        if dev <>nil then begin
+          pnodevarext:=dev^.specialize GetExtension<TVariablesExtender>;
+          pvd:=pnodevarext.entityunit.FindVariable('vEMGCHDGroup');
+          if (pvd <> nil) then
+            result:=pinteger(pvd^.data.Addr.Instance)^
+        end
+        else
+            result:=-1;
+  end;
+
   function TVertexDev.isRiserDev:boolean;
   var
      pnodevarext:TVariablesExtender;
@@ -230,6 +270,22 @@ implementation
         pEdge:=self.AsPointer[vPTEdgeEMTree];
         pEdge^.length:=cabLength;
   end;
+
+  //function TEdgeDev.getNumCableGroup:integer;
+  //var
+  //  pEdge:PTEdgeEMTree;
+  //  pnodevarext:TVariablesExtender;
+  //  pvd:pvardesk;
+  //begin
+  //      new(pEdge);
+  //      pEdge:=self.AsPointer[vPTEdgeEMTree];
+  //      pnodevarext:=pEdge^.cab.specialize GetExtension<TVariablesExtender>;
+  //      pvd:=pnodevarext.entityunit.FindVariable('AmountD');
+  //      if (pvd <> nil) then
+  //        result:=pdouble(pvd^.data.Addr.Instance)^
+  //      else
+  //        result:=-1;
+  //end;
 
   function TVertexDev.MyFunc: Integer;
   begin

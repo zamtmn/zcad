@@ -903,6 +903,7 @@ var
   e1,e2:TAttrSet;
   dev1,dev2:pGDBObjDevice;
   pvd1,pvd2:pvardesk;
+  pvd1group,pvd2group:pvardesk;
 begin
    //ZCMsgCallBackInterface.TextMessage(' TSortTreeSumChilderVertex.Compare - СТАРТ! ',TMWOHistoryOut);
    result:=0;
@@ -923,14 +924,18 @@ begin
    //   ZCMsgCallBackInterface.TextMessage(' Сравниваем = ' + pstring(pvd1^.data.Addr.Instance)^ + ' -с- ' + pstring(pvd2^.data.Addr.Instance)^,TMWOHistoryOut);
    pvd1:=FindVariableInEnt(dev1,velec_EM_vSumChildVertex);
    pvd2:=FindVariableInEnt(dev2,velec_EM_vSumChildVertex);
+   pvd1group:=FindVariableInEnt(dev1,velec_EM_vEMGCHDGroup);
+   pvd2group:=FindVariableInEnt(dev2,velec_EM_vEMGCHDGroup);
+   if (pvd1group<>nil) and (pvd2group<>nil) then
    if (pvd1<>nil) and (pvd2<>nil) then
      begin
-       //ZCMsgCallBackInterface.TextMessage(' Сравниваем = ' + inttostr(pinteger(pvd1^.data.Addr.Instance)^) + ' -с- ' + inttostr(pinteger(pvd2^.data.Addr.Instance)^),TMWOHistoryOut);
+       ZCMsgCallBackInterface.TextMessage(' Сравниваем = ' + inttostr(pinteger(pvd1group^.data.Addr.Instance)^) + ' -с- ' + inttostr(pinteger(pvd2group^.data.Addr.Instance)^),TMWOHistoryOut);
+     if pinteger(pvd1group^.data.Addr.Instance)^ <> pinteger(pvd2group^.data.Addr.Instance)^ then
        if pinteger(pvd1^.data.Addr.Instance)^ <> pinteger(pvd2^.data.Addr.Instance)^ then
-         if pinteger(pvd1^.data.Addr.Instance)^ > pinteger(pvd2^.data.Addr.Instance)^ then
-            result:=1
+         if (pinteger(pvd1^.data.Addr.Instance)^ > pinteger(pvd2^.data.Addr.Instance)^) and (pinteger(pvd1group^.data.Addr.Instance)^ < pinteger(pvd2group^.data.Addr.Instance)^) then
+            result:=-1
          else
-            result:=-1;
+            result:=1;
      end;
    end;
    //тут e1 и e2 надо както сравнить по какомуто критерию и вернуть -1 0 1

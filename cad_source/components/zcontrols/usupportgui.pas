@@ -52,6 +52,7 @@ function ListViewDrawSubItem(State: TCustomDrawState;canvas:tcanvas;Item: TListI
 procedure SetComboSize(cb:tcombobox;ItemH:Integer;ReadOnlyMode:TCBReadOnlyMode);
 function IsZShortcut(var Message: TLMKey;const ActiveControl,DefaultControl:TWinControl; const OldFunction:TIsShortcutFunc;SuppressedShortcuts:TXMLConfig): boolean;
 function MyTextToShortCut(const ShortCutText: string): TShortCut;
+function LMKey2ShortCut(var Message: TLMKey):TShortCut;
 implementation
 
 function MyTextToShortCut(const ShortCutText: string): TShortCut;
@@ -232,21 +233,30 @@ begin
   end;
 end;
 
-function IsZShortcut(var Message: TLMKey;const ActiveControl,DefaultControl:TWinControl; const OldFunction:TIsShortcutFunc;SuppressedShortcuts:TXMLConfig): boolean;
+function LMKey2ShortCut(var Message: TLMKey):TShortCut;
 var
-   s,TestedShortCutText:string;
-   KeyCode:word;
-   ShiftState:tshiftstate;
-   TestedShortCut:TShortCut;
-   ShortCutContext:TShortCutContext;
+  KeyCode:word;
+  ShiftState:tshiftstate;
 begin
   KeyCode:=Message.CharCode;
   ShiftState:=MsgKeyDataToShiftState(Message.KeyData);
-  TestedShortCut:=KeyToShortCut(KeyCode,ShiftState);
-  TestedShortCutText:=ShortCutToText(TestedShortCut);
-  if TestedShortCutText<>'' then
-    TestedShortCutText:=TestedShortCutText;
+  Result:=KeyToShortCut(KeyCode,ShiftState);
+end;
 
+
+function IsZShortcut(var Message: TLMKey;const ActiveControl,DefaultControl:TWinControl; const OldFunction:TIsShortcutFunc;SuppressedShortcuts:TXMLConfig): boolean;
+var
+  //TestedShortCutText:string;
+  //KeyCode:word;
+  //ShiftState:tshiftstate;
+  TestedShortCut:TShortCut;
+  ShortCutContext:TShortCutContext;
+begin
+  //KeyCode:=Message.CharCode;
+  //ShiftState:=MsgKeyDataToShiftState(Message.KeyData);
+  //TestedShortCut:=KeyToShortCut(KeyCode,ShiftState);
+  TestedShortCut:=LMKey2ShortCut(Message);
+  //TestedShortCutText:=ShortCutToText(TestedShortCut);
   ShortCutContext:=GetCurrentShortCutContext(ActiveControl,DefaultControl);
   result:=not SuppresShortcut(TestedShortCut,ShortCutContext,SuppressedShortcuts);
   if result then result:=OldFunction(Message);

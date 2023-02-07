@@ -1037,7 +1037,9 @@ begin
   with programlog.Enter('TZCADMainWindow.IsShortcut',LM_Debug,LMD) do begin
     TMethod(OldFunction).code:=@TForm.IsShortcut;
     TMethod(OldFunction).Data:=self;
-    result:=IsZShortcut(Message,Screen.ActiveControl,ZCMsgCallBackInterface.GetPriorityFocus,OldFunction,SuppressedShortcuts);
+    result:=CommandManager.ProcessCommandShortcuts(LMKey2ShortCut(Message));
+    if not result then
+      result:=IsZShortcut(Message,Screen.ActiveControl,ZCMsgCallBackInterface.GetPriorityFocus,OldFunction,SuppressedShortcuts);
   programlog.leave(IfEntered);end;
 end;
 
@@ -1590,7 +1592,7 @@ begin
   if waitinput then
     waitinput:=commandmanager.pcommandrunning.IData.GetPointMode in SomethingWait;
   if waitinput then
-    waitinput:=GPIempty in commandmanager.pcommandrunning.IData.InputMode;
+    waitinput:=IPEmpty in commandmanager.pcommandrunning.IData.InputMode;
 
      if Key=VK_ESCAPE then
      begin

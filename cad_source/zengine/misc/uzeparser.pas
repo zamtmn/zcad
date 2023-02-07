@@ -189,12 +189,18 @@ type
     TStrProcessor<GManipulator,GString,GSymbol,GManipulatorCharRange,GDataType>=class
       type
         TManipulator=GManipulator;
-      class procedure StaticDoit(const Source:GString;
+      class procedure StaticDoIt(const Source:GString;
                                  const Token :GManipulatorCharRange;
                                  const Operands :GManipulatorCharRange;
                                  const ParsedOperands:TAbstractParsedText<GString,GDataType>;
                                  InsideBracketParser:TObject;
                                  var Data:GDataType);virtual;abstract;
+      procedure DoIt(const Source:GString;
+                     const Token :GManipulatorCharRange;
+                     const Operands :GManipulatorCharRange;
+                     const ParsedOperands:TAbstractParsedText<GString,GDataType>;
+                     InsideBracketParser:TObject;
+                     var Data:GDataType);virtual;abstract;
       class procedure StaticGetResult(const Source:GString;
                                       const Token :GManipulatorCharRange;
                                       const Operands :GManipulatorCharRange;
@@ -369,7 +375,7 @@ type
     TokenDataVector:TParserTokenizer.TTokenDataVector;
     tkEmpty,tkRawText,tkEOF,tkLastPredefToken:TParserTokenizer.TTokenId;
     StoredTokenTextInfo:TTokenTextInfoQueue;
-    constructor create;
+    constructor create(IgnoreRaw:Boolean=False);
     destructor Destroy;override;
     procedure clearStoredToken;
     function RegisterToken(
@@ -914,17 +920,22 @@ end;
 procedure TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>.TParsedText.Doit(var data:GDataType);
 var
   i:integer;
-  //dbg:TParserTokenizer.TTextPart;
+  dbg1:TParserTokenizer.TTextPart;
+  p:pointer;
+  part:TParserTokenizer.TTokenData;
+  Opt:TTokenOptions.TSetType;
 begin
   for i:=0 to Parts.size-1 do begin
-    //dbg:=parts[i];
+    dbg1:=parts[i];
+    part:=dbg1.TokenInfo;
+    p:=parts[i].TokenInfo.ProcessorClass;
     if (parts[i].TokenInfo.ProcessorClass<>nil)and(not(TTokenOptions.IsAllPresent(parts[i].TokenInfo.Options,TGOFake))) then begin
       if parts[i].TokenInfo.ProcessorClass.GetProcessorType=PTStatic then begin
         parts[i].TokenInfo.ProcessorClass.StaticDoit(Source,parts[i].TextInfo.TokenPos,parts[i].TextInfo.OperandsPos,parts[i].Operands,parts[i].TokenInfo.InsideBracketParser,data);
       end else begin
         if not Assigned(parts[i].Processor) then
           parts.Mutable[i]^.Processor:=parts[i].TokenInfo.ProcessorClass.vcreate(Source,parts[i].TextInfo.TokenPos,parts[i].TextInfo.OperandsPos,parts[i].Operands,parts[i].TokenInfo.InsideBracketParser,data);
-        parts[i].Processor.StaticDoit(Source,parts[i].TextInfo.TokenPos,parts[i].TextInfo.OperandsPos,parts[i].Operands,parts[i].TokenInfo.InsideBracketParser,data);
+        parts[i].Processor.Doit(Source,parts[i].TextInfo.TokenPos,parts[i].TextInfo.OperandsPos,parts[i].Operands,parts[i].TokenInfo.InsideBracketParser,data);
       end
     end else begin
       if not TTokenOptions.IsAllPresent(parts[i].TokenInfo.Options,TGOSeparator) then
@@ -932,6 +943,15 @@ begin
     end;
   end;
 end;
+{TTokenData=record
+  Token:GTokenizerString;
+  BrackeOpen,BrackeClose:GTokenizerSymbol;
+  Options:TTokenOptions.TSetType;
+  Description:TTokenDescription.TSetType;
+  FollowOperandsId:TTokenId;
+  ProcessorClass:TStrProcessorClass;
+  InsideBracketParser:TObject;//пиздец тупость
+end;}
 destructor TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>.TParsedText.Destroy;
 var
   i:integer;
@@ -1383,6 +1403,7 @@ end;
 constructor TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>.create;
 var
   i:integer;
+  RawOptions:TTokenOptions.TEnumItemType;
 begin
  for i:=1 to MaxIncludedChars do
   IncludedCharsPos[i]:=[];
@@ -1395,7 +1416,11 @@ begin
  tkEmpty:=RegisterToken('Empty',#0,#0,nil,nil,TGOFake);
  tkEOF:=RegisterToken('EOF',#0,#0,nil,nil,TGOFake);
  GtkEOF:=tkEOF;
- tkRawText:=RegisterToken('RawText',#0,#0,TParserTokenizer.TFakeStrProcessor,nil,TGOFake);
+
+ RawOptions:=TGOFake;
+ if IgnoreRaw then
+   TTokenOptions.Include(RawOptions,TGOSeparator);
+ tkRawText:=RegisterToken('RawText',#0,#0,TParserTokenizer.TFakeStrProcessor,nil,RawOptions);
  tkLastPredefToken:=tkRawText;
 end;
 Destructor TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>.Destroy;

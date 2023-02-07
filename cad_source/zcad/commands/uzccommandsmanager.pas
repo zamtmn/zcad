@@ -27,7 +27,7 @@ uses gzctnrVectorPObjects,uzcsysvars,uzegeometry,uzglviewareaabstract,uzbpaths,
      uzclog,varmandef,varman,uzedrawingdef,uzcinterface,
      uzcsysparams,uzedrawingsimple,uzcdrawings,uzctnrvectorstrings,forms,
      uzcctrlcommandlineprompt,uzeparsercmdprompt,uzeSnap,
-     uzeentity,uzgldrawcontext;
+     uzeentity,uzgldrawcontext,Classes;
 const
      tm:tmethod=(Code:nil;Data:nil);
      nullmethod:{tmethod}TButtonMethod=nil;
@@ -124,6 +124,8 @@ type
 
                           procedure PromptTagNotufy(Tag:TTag);
 
+                          function ProcessCommandShortcuts(const ShortCut:TShortCut):Boolean;
+
 
                           procedure AddClPrompt(CLP:ICommandLinePrompt);
                           procedure RemoveClPrompt(CLP:ICommandLinePrompt);
@@ -153,6 +155,23 @@ begin
     for i:=CommandLinePrompts.Size-1 downto 0 do
        if CommandLinePrompts[i]=CLP then
          CommandLinePrompts.Erase(i);
+end;
+
+function GDBcommandmanager.ProcessCommandShortcuts(const ShortCut:TShortCut):Boolean;
+var
+  data:TCommandLinePromptOption;
+  ts:TParserCommandLinePrompt.TParserString;
+begin
+  result:=false;
+  if pcommandrunning<>nil then
+    if pcommandrunning^.IData.GetPointMode in SomethingWait then
+      if IPShortCuts in pcommandrunning^.IData.InputMode then begin
+        data:=TCommandLinePromptOption.Create(ShortCut);
+        CurrentPrompt.Doit(data);
+        result:=data.ShortCut<>ShortCut;
+        if result then
+          PromptTagNotufy(data.CurrentTag);
+      end
 end;
 
 procedure GDBcommandmanager.SetPrompt(APrompt:String);
@@ -421,7 +440,8 @@ var
    savemode:Byte;//variable to store the current mode of the editor
                      //переменная для сохранения текущего режима редактора
 begin
-  savemode:=PTSimpleDrawing(pcommandrunning.pdwg)^.DefMouseEditorMode({MGet3DPoint or MGet3DPointWoOP}0,//set mode point of the mouse
+  if pcommandrunning.pdwg<>nil then
+    savemode:=PTSimpleDrawing(pcommandrunning.pdwg)^.DefMouseEditorMode({MGet3DPoint or MGet3DPointWoOP}0,//set mode point of the mouse
                                                                                                      //устанавливаем режим указания точек мышью
                                                                       MGetControlpoint or MGetSelectionFrame or MGetSelectObject);//reset selection entities  mode
                                                                                                               //сбрасываем режим выбора примитивов мышью
@@ -446,7 +466,8 @@ begin
     result:=GRCancel;
   end;
   if (pcommandrunning^.IData.GetPointMode<>TGPMCloseDWG)then
-  PTSimpleDrawing(pcommandrunning.pdwg)^.SetMouseEditorMode(savemode);//restore editor mode
+    if pcommandrunning.pdwg<>nil then
+      PTSimpleDrawing(pcommandrunning.pdwg)^.SetMouseEditorMode(savemode);//restore editor mode
                                                                       //восстанавливаем сохраненный режим редактора
 end;
 

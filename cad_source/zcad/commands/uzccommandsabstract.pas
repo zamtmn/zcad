@@ -42,7 +42,8 @@ const
      EmptyCommandOperands='';
 type
 TInteractiveProcObjBuild=procedure(const PInteractiveData:Pointer;Point:GDBVertex;Click:Boolean);
-    TGetInputPossible=(GPIempty//возможность пустого ввода
+    TGetInputPossible=(IPEmpty,//возможность пустого ввода
+                       IPShortCuts//разрешение перехвата шорткатов
                       );
     TGetInputMode=set of TGetInputPossible;//возможности ввода
     TGetPossible=(//GPNormal,//результат запроса, но вроде это ненужно, нахрен запрашивать если результат запроса запрещен

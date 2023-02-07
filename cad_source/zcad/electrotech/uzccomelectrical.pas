@@ -3323,7 +3323,7 @@ begin
      //pet:=CMDLinePromptParser.GetTokens('$<"12&[3]",Keys[1],Id[1]>');
      //pet:=CMDLinePromptParser.GetTokens('фs "ёба" йs "2ёба2" йцу12');
      commandmanager.SetPrompt(pet);
-     commandmanager.ChangeInputMode([GPIempty],[]);
+     commandmanager.ChangeInputMode([IPEmpty],[]);
      pet.Free;
      repeat
        gr:=commandmanager.Get3DPoint('ага',p);

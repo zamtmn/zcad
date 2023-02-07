@@ -241,7 +241,7 @@ uses
 
   uzccommand_NumDevices,
 
-  //uzccommand_tstCmdLinePrompt,
+  uzccommand_tstCmdLinePrompt,
 
 
   uzcenitiesvariablesextender,uzcExtdrLayerControl,uzcExtdrSmartTextEnt,

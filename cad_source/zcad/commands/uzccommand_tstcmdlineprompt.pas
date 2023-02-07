@@ -31,7 +31,7 @@ uses
 
 {resourcestring}//чтоб не засирать локализацию просто const
 const
-  RSCLParam='Нажми ${"э&[т]у",Keys[t],StrId[CLPIdUser1]} кнопку или вызови ${"&[ф]айловый",Keys[a],StrId[CLPIdFileDialog]} диалог';
+  RSCLParam='Нажми ${"э&[т]у",Keys[n],StrId[CLPIdUser1]} кнопку или вызови ${"&[ф]айловый",Keys[a],StrId[CLPIdFileDialog]} диалог';
 
 implementation
 

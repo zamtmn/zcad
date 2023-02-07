@@ -243,7 +243,7 @@ function TZctnrVectorUndoCommands.PushCreateTTypedChangeCommand(PDataInstance:Po
 begin
   if CurrentCommand>0 then
   begin
-       result:=TTypedChangeCommand(self.getDataMutable(CurrentCommand-1));
+       result:=TTypedChangeCommand(self.getDataMutable(CurrentCommand-1)^);
        if result is TTypedChangeCommand then
        if (result.Addr=PDataInstance)
        and(result.PTypeManager=PType)

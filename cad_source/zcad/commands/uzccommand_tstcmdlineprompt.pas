@@ -32,7 +32,7 @@ uses
 
 {resourcestring}//чтоб не засирать локализацию просто const
 const
-  RSCLParam='Нажми ${"э&[т]у",Keys[n],StrId[CLPIdUser1]} кнопку или вызови ${"&[ф]айловый",Keys[a],StrId[CLPIdFileDialog]} диалог';
+  RSCLParam='Нажми ${"э&[т]у",Keys[n],StrId[CLPIdUser1]} кнопку, ${"эт&[у]",Keys[e],100} или запусти ${"&[ф]айловый",Keys[a],StrId[CLPIdFileDialog]} диалог';
 
 implementation
 
@@ -62,6 +62,7 @@ begin
                  system.break;
                end;
              end;
+             else ZCMsgCallBackInterface.TextMessage(format('GRId: %d',[commandmanager.GetLastId]),TMWOHistoryOut);
           end;
   GRNormal:ZCMsgCallBackInterface.TextMessage(format('GRNormal: %g,%g,%g',[p.x,p.y,p.z]),TMWOHistoryOut);
     end;

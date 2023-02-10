@@ -103,7 +103,8 @@ const
   //***КОНСТАНТЫ В РАСЧЕТАХ ЭЛЕКТРИЧЕСКОЙ МОДЕЛИ***//
   velec_EM_vSumChildVertex='vSumChildVertex';
   velec_EM_vEMGCHDGroup='vEMGCHDGroup';
-  velec_EM_Diagram_InOutGroup='DEVICE_EL_VELEC_DIAGRAM_INOUTGROUP';
+  velec_EM_Diagram_InOutGroup='EL_VELEC_DIAGRAM_INOUTGROUP';
+  velec_EL_EMSPLITTERBOX='EL_EMSPLITTERBOX';
 
 
 implementation

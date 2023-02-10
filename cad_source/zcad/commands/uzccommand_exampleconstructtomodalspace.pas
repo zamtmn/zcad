@@ -85,9 +85,11 @@ begin
 end;
 
 begin
+
+  //работа с инспектором
   CmdProp.props.Free;
   CmdProp.props.InterfaceUses.PushBackIfNotPresent(sysunit);
-  with CmdProp.props.CreateVariable('test1','boolean') do begin
+  with CmdProp.props.CreateVariable('F1_test1','boolean') do begin
     username:='тест1';
     pboolean(data.Addr.GetInstance)^:=true;
   end;
@@ -95,7 +97,11 @@ begin
     username:='тест2';
     pinteger(data.Addr.GetInstance)^:=123;
   end;
+  //CmdProp.props.FindVariable();    //получить доступ к измененной переменной
   zcShowCommandParams(SysUnit^.TypeName2PTD('TCmdProp'),@CmdProp);
+
+
+  //рисование и перенос из конструкторской обласи в область чертежа
   {pt:=}drawMText(NulVertex,2,0);                                  //Рисуем текст, и полилинию
   {pp:=}drawPolyline(uzegeometry.CreateVertex(-20,+5,0),uzegeometry.CreateVertex(+20,-5,0),3);
   if commandmanager.MoveConstructRootTo(rscmSpecifyFirstPoint)=GRNormal then //двигаем их

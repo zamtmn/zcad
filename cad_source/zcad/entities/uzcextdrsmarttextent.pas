@@ -27,31 +27,53 @@ uses
   uzeffdxfsupport,
   uzeentdevice,uzeentsubordinated,uzeentity,uzeentabstracttext,uzeenttext,
   uzeblockdef,uzeentmtext,uzeentwithlocalcs,
-  uzeentityextender,uzeBaseExtender;
+  uzeentityextender,uzeBaseExtender,uzbtypes;
 const
   SmartTextEntExtenderName='extdrSmartTextEnt';
 type
   TSmartTextEntExtender=class(TBaseEntityExtender)
-    GoodLayer,BadLayer:String;
-    VariableName:String;
-    Inverse:Boolean;
-    class function getExtenderName:string;override;
-    constructor Create(pEntity:Pointer);override;
-    procedure Assign(Source:TBaseExtender);override;
-    procedure onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
-    procedure onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
-    procedure SaveToDxf(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
-    procedure PostLoad(var context:TIODXFLoadContext);override;
-    procedure onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);override;
+    //private
+    public
+      FExtensionLine:Boolean;
+      FBaseLineLine:Boolean;
+    private
+      function isDefault:boolean;
+    public
+      class function getExtenderName:string;override;
+      constructor Create(pEntity:Pointer);override;
+      procedure Assign(Source:TBaseExtender);override;
+      procedure onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
+      procedure onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
+      procedure SaveToDxf(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
+      procedure PostLoad(var context:TIODXFLoadContext);override;
+      procedure onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);override;
+
+      class function EntIOLoadExtensionLine(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+      class function EntIOLoadBaseLineLine(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+      class function EntIOLoadSmartTextEntExtenderDefault(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+
+
+      property ExtensionLine:Boolean read FExtensionLine write FExtensionLine default true;
+      property BaseLineLine:Boolean read FBaseLineLine write FBaseLineLine default true;
   end;
 
 implementation
+
+function TSmartTextEntExtender.isDefault:boolean;
+begin
+  result:=FExtensionLine and FBaseLineLine;
+end;
+
 procedure TSmartTextEntExtender.Assign(Source:TBaseExtender);
 begin
+  FExtensionLine:=TSmartTextEntExtender(Source).FExtensionLine;
+  FBaseLineLine:=TSmartTextEntExtender(Source).FBaseLineLine;
 end;
 
 constructor TSmartTextEntExtender.Create(pEntity:Pointer);
 begin
+  FExtensionLine:=true;
+  FBaseLineLine:=true;
 end;
 
 procedure TSmartTextEntExtender.onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
@@ -91,6 +113,54 @@ end;
 
 procedure TSmartTextEntExtender.SaveToDxf(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
 begin
+  if isDefault then
+    dxfStringout(outhandle,1000,'SmartTextEntExtenderDefault=TRUE')
+  else
+    begin
+      if not FExtensionLine then
+        dxfStringout(outhandle,1000,'STEExtensionLine=FALSE');
+      if not FBaseLineLine then
+        dxfStringout(outhandle,1000,'STEBaseLineLine=FALSE');
+    end;
+end;
+
+function AddSmartTextEntExtenderToEntity(PEnt:PGDBObjEntity):TSmartTextEntExtender;
+begin
+  result:=TSmartTextEntExtender.Create(PEnt);
+  PEnt^.AddExtension(result);
+end;
+
+
+class function TSmartTextEntExtender.EntIOLoadExtensionLine(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+var
+  STEExtdr:TSmartTextEntExtender;
+begin
+  STEExtdr:=PGDBObjEntity(PEnt)^.GetExtension<TSmartTextEntExtender>;
+  if STEExtdr=nil then
+    STEExtdr:=AddSmartTextEntExtenderToEntity(PEnt);
+  STEExtdr.FExtensionLine:=false;
+  result:=true;
+end;
+
+class function TSmartTextEntExtender.EntIOLoadBaseLineLine(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+var
+  STEExtdr:TSmartTextEntExtender;
+begin
+  STEExtdr:=PGDBObjEntity(PEnt)^.GetExtension<TSmartTextEntExtender>;
+  if STEExtdr=nil then
+    STEExtdr:=AddSmartTextEntExtenderToEntity(PEnt);
+  STEExtdr.FBaseLineLine:=false;
+  result:=true;
+end;
+
+class function TSmartTextEntExtender.EntIOLoadSmartTextEntExtenderDefault(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+var
+  STEExtdr:TSmartTextEntExtender;
+begin
+  STEExtdr:=PGDBObjEntity(PEnt)^.GetExtension<TSmartTextEntExtender>;
+  if STEExtdr=nil then
+    STEExtdr:=AddSmartTextEntExtenderToEntity(PEnt);
+  result:=true;
 end;
 
 procedure TSmartTextEntExtender.PostLoad(var context:TIODXFLoadContext);
@@ -104,5 +174,9 @@ end;
 
 initialization
   EntityExtenders.RegisterKey(uppercase(SmartTextEntExtenderName),TSmartTextEntExtender);
+
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('STEExtensionLine',TSmartTextEntExtender.EntIOLoadExtensionLine);
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('STEBaseLineLine',TSmartTextEntExtender.EntIOLoadBaseLineLine);
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('SmartTextEntExtenderDefault',TSmartTextEntExtender.EntIOLoadSmartTextEntExtenderDefault);
 finalization
 end.

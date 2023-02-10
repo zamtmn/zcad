@@ -31,7 +31,8 @@ uses
   Varman,
   uzcoimultipropertiesutil,
   uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,uzeenttext,uzeentmtext,uzeentpolyline,uzcentelleader,uzeentdimension,uzeentellipse,
-  uzegeometry,uzcoimultiproperties,uzcLog,uzcExtdrLayerControl;
+  uzegeometry,uzcoimultiproperties,uzcLog,
+  uzcExtdrLayerControl,uzcExtdrSmartTextEnt;
 implementation
 procedure DoubleDeltaEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var
@@ -401,6 +402,7 @@ const
      pdim:PGDBObjDimension=nil;
      pellipse:PGDBObjEllipse=nil;
      LayerControlExtender:TLayerControlExtender=nil;
+     SmartTextEntExtender:TSmartTextEntExtender=nil;
 begin
   MultiPropertiesManager.RestartMultipropertySortID;
   RegisterVarCategory('EXTDRLAYERCONTROL','Layer control',@InterfaceTranslate);
@@ -408,6 +410,10 @@ begin
   MultiPropertiesManager.RegisterPhysMultiproperty('EXTDRLAYERCONTROL_BadLayer','False layer',sysunit^.TypeName2PTD('String'),MPCExtenders,0,TLayerControlExtender,PtrInt(@LayerControlExtender.BadLayer),PtrInt(@LayerControlExtender.BadLayer),OneVarDataMIPD,OneVarDataEIPD);
   MultiPropertiesManager.RegisterPhysMultiproperty('EXTDRLAYERCONTROL_Expression','Expression',sysunit^.TypeName2PTD('String'),MPCExtenders,0,TLayerControlExtender,PtrInt(@LayerControlExtender.FExpression),PtrInt(@LayerControlExtender.FExpression),OneVarDataMIPD,OneVarDataEIPD);
   MultiPropertiesManager.RegisterPropertyMultiproperty('LControl_T','LControl_T',MPCExtenders,0,TLayerControlExtender,TLayerControlExtender,'Expr',OneVarDataMIPD,OneVarDataEIPD);
+  RegisterVarCategory('EXTDRSSMARTTEXTENT','Text control',@InterfaceTranslate);
+  MultiPropertiesManager.RegisterPhysMultiproperty('EXTDRSSMARTTEXTENT_ExtensionLine','Extension line',sysunit^.TypeName2PTD('Boolean'),MPCExtenders,0,TSmartTextEntExtender,PtrInt(@SmartTextEntExtender.FExtensionLine),PtrInt(@SmartTextEntExtender.FExtensionLine),OneVarDataMIPD,OneVarDataEIPD);
+  MultiPropertiesManager.RegisterPhysMultiproperty('EXTDRSSMARTTEXTENT_BaseLine','Base line',sysunit^.TypeName2PTD('Boolean'),MPCExtenders,0,TSmartTextEntExtender,PtrInt(@SmartTextEntExtender.FBaseLine),PtrInt(@SmartTextEntExtender.FBaseLine),OneVarDataMIPD,OneVarDataEIPD);
+  MultiPropertiesManager.RegisterPhysMultiproperty('EXTDRSSMARTTEXTENT_ExtensionLineOffset','Extension line offset',sysunit^.TypeName2PTD('Double'),MPCExtenders,0,TSmartTextEntExtender,PtrInt(@SmartTextEntExtender.FExtensionLineOffset),PtrInt(@SmartTextEntExtender.FExtensionLineOffset),OneVarDataMIPD,OneVarDataEIPD);
   {General section}
   MultiPropertiesManager.RestartMultipropertySortID;
   MultiPropertiesManager.RegisterPhysMultiproperty('EntityName','Entity name',sysunit^.TypeName2PTD('AnsiString'),MPCGeneral,0,nil,0,0,OneVarDataMIPD,TEntIterateProcsData.Create(nil,@EntityNameEntIterateProc,nil));

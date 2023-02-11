@@ -26,12 +26,13 @@ uses
   uzedrawingdef,uzgldrawcontext,
   uzeffdxfsupport,
   uzeentdevice,uzeentsubordinated,uzeentity,uzeentabstracttext,uzeenttext,
-  uzeblockdef,uzeentmtext,uzeentwithlocalcs,
+  uzeblockdef,uzeentmtext,uzeentwithlocalcs,uzeentblockinsert,
   uzeentityextender,uzeBaseExtender,uzbtypes,uzegeometrytypes;
 const
   SmartTextEntExtenderName='extdrSmartTextEnt';
   ExtensionLineOffsetDef=0;
   ExtensionLeaderStartLengthDef=10;
+  ExtensionHeightDef=0;
   //добавить это расширение к примитиву можно командой
   //extdrAdd(extdrSmartTextEnt)
 type
@@ -42,6 +43,8 @@ type
       FBaseLine:Boolean;
       FExtensionLineOffset:Double;
       FLeaderStartLength:Double;
+      FSaveHeight:Double;
+      FHeight:Double;
     private
       function isDefault:boolean;
       function getStartPoint(pEntity:Pointer):GDBVertex;
@@ -59,6 +62,7 @@ type
       class function EntIOLoadBaseLine(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
       class function EntIOLoadExtensionLineOffset(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
       class function EntIOLoadExtensionLeaderStartLength(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+      class function EntIOLoadTextHeigth(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
       class function EntIOLoadSmartTextEntExtenderDefault(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 
 
@@ -71,7 +75,8 @@ implementation
 function TSmartTextEntExtender.isDefault:boolean;
 begin
   result:=(FExtensionLine and FBaseLine)and(IsDoubleEqual(FExtensionLineOffset,ExtensionLineOffsetDef))
-        and(IsDoubleEqual(FLeaderStartLength,ExtensionLeaderStartLengthDef));
+        and(IsDoubleEqual(FLeaderStartLength,ExtensionLeaderStartLengthDef))
+        and(IsDoubleEqual(FHeight,ExtensionHeightDef));
 end;
 
 procedure TSmartTextEntExtender.Assign(Source:TBaseExtender);
@@ -80,6 +85,7 @@ begin
   FBaseLine:=TSmartTextEntExtender(Source).FBaseLine;
   FExtensionLineOffset:=TSmartTextEntExtender(Source).FExtensionLineOffset;
   FLeaderStartLength:=TSmartTextEntExtender(Source).FLeaderStartLength;
+  FHeight:=TSmartTextEntExtender(Source).FHeight;
 end;
 
 constructor TSmartTextEntExtender.Create(pEntity:Pointer);
@@ -88,6 +94,7 @@ begin
   FBaseLine:=true;
   FExtensionLineOffset:=ExtensionLineOffsetDef;
   FLeaderStartLength:=ExtensionLeaderStartLengthDef;
+  FHeight:=ExtensionHeightDef;
 end;
 
 function TSmartTextEntExtender.getStartPoint(pEntity:Pointer):GDBVertex;
@@ -115,6 +122,8 @@ procedure TSmartTextEntExtender.onAfterEntityFormat(pEntity:Pointer;const drawin
 var
   dx:Double;
 begin
+  if FHeight>0 then
+    PGDBObjMText(pEntity).textprop.size:=FSaveHeight;
   if (typeof(PGDBObjEntity(pEntity)^)=TypeOf(GDBObjText))then
     if PGDBObjText(pEntity)^.bp.ListPos.Owner<>nil then
       if typeof(PGDBObjText(pEntity)^.bp.ListPos.Owner^)=TypeOf(GDBObjDevice) then begin
@@ -142,6 +151,10 @@ begin
     else
       PGDBObjMText(pEntity).textprop.justify:=jtt2[-sign(PGDBObjText(pEntity).Local.P_insert.y),-sign(PGDBObjText(pEntity).Local.P_insert.x)]
   end;
+  if FHeight>0 then begin
+    FSaveHeight:=PGDBObjMText(pEntity).textprop.size;
+    PGDBObjMText(pEntity).textprop.size:=FHeight/PGDBObjBlockInsert(PGDBObjText(pEntity)^.bp.ListPos.Owner)^.scale.x;
+  end;
 end;
 
 class function TSmartTextEntExtender.getExtenderName:string;
@@ -163,6 +176,8 @@ begin
         dxfStringout(outhandle,1000,'STEExtensionLineOffset='+FloatToStr(FExtensionLineOffset));
       if not IsDoubleEqual(FLeaderStartLength,ExtensionLeaderStartLengthDef)then
         dxfStringout(outhandle,1000,'STELeaderStartLength='+FloatToStr(FLeaderStartLength));
+      if not IsDoubleEqual(FHeight,ExtensionHeightDef)then
+        dxfStringout(outhandle,1000,'STETextHeight='+FloatToStr(FHeight));
     end;
 end;
 
@@ -217,6 +232,16 @@ begin
   result:=true;
 end;
 
+class function TSmartTextEntExtender.EntIOLoadTextHeigth(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+var
+  STEExtdr:TSmartTextEntExtender;
+begin
+  STEExtdr:=PGDBObjEntity(PEnt)^.GetExtension<TSmartTextEntExtender>;
+  if STEExtdr=nil then
+    STEExtdr:=AddSmartTextEntExtenderToEntity(PEnt);
+  STEExtdr.FHeight:=StrToFloat(_Value);
+  result:=true;
+end;
 
 class function TSmartTextEntExtender.EntIOLoadSmartTextEntExtenderDefault(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 var
@@ -244,6 +269,7 @@ initialization
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('STEBaseLineLine',TSmartTextEntExtender.EntIOLoadBaseLine);
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('STEExtensionLineOffset',TSmartTextEntExtender.EntIOLoadExtensionLineOffset);
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('STELeaderStartLength',TSmartTextEntExtender.EntIOLoadExtensionLeaderStartLength);
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('STETextHeight',TSmartTextEntExtender.EntIOLoadTextHeigth);
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('SmartTextEntExtenderDefault',TSmartTextEntExtender.EntIOLoadSmartTextEntExtenderDefault);
 finalization
 end.

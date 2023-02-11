@@ -30,7 +30,8 @@ uses
   uzeentityextender,uzeBaseExtender,uzbtypes,uzegeometrytypes;
 const
   SmartTextEntExtenderName='extdrSmartTextEnt';
-  ExtensionLineOffsetDef=1;
+  ExtensionLineOffsetDef=0;
+  ExtensionLeaderStartLengthDef=10;
   //добавить это расширение к примитиву можно командой
   //extdrAdd(extdrSmartTextEnt)
 type
@@ -40,6 +41,7 @@ type
       FExtensionLine:Boolean;
       FBaseLine:Boolean;
       FExtensionLineOffset:Double;
+      FLeaderStartLength:Double;
     private
       function isDefault:boolean;
       function getStartPoint(pEntity:Pointer):GDBVertex;
@@ -56,6 +58,7 @@ type
       class function EntIOLoadExtensionLine(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
       class function EntIOLoadBaseLine(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
       class function EntIOLoadExtensionLineOffset(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+      class function EntIOLoadExtensionLeaderStartLength(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
       class function EntIOLoadSmartTextEntExtenderDefault(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 
 
@@ -67,7 +70,8 @@ implementation
 
 function TSmartTextEntExtender.isDefault:boolean;
 begin
-  result:=(FExtensionLine and FBaseLine)and(IsDoubleEqual(FExtensionLineOffset,ExtensionLineOffsetDef));
+  result:=(FExtensionLine and FBaseLine)and(IsDoubleEqual(FExtensionLineOffset,ExtensionLineOffsetDef))
+        and(IsDoubleEqual(FLeaderStartLength,ExtensionLeaderStartLengthDef));
 end;
 
 procedure TSmartTextEntExtender.Assign(Source:TBaseExtender);
@@ -75,6 +79,7 @@ begin
   FExtensionLine:=TSmartTextEntExtender(Source).FExtensionLine;
   FBaseLine:=TSmartTextEntExtender(Source).FBaseLine;
   FExtensionLineOffset:=TSmartTextEntExtender(Source).FExtensionLineOffset;
+  FLeaderStartLength:=TSmartTextEntExtender(Source).FLeaderStartLength;
 end;
 
 constructor TSmartTextEntExtender.Create(pEntity:Pointer);
@@ -82,6 +87,7 @@ begin
   FExtensionLine:=true;
   FBaseLine:=true;
   FExtensionLineOffset:=ExtensionLineOffsetDef;
+  FLeaderStartLength:=ExtensionLeaderStartLengthDef;
 end;
 
 function TSmartTextEntExtender.getStartPoint(pEntity:Pointer):GDBVertex;
@@ -112,7 +118,7 @@ begin
   if (typeof(PGDBObjEntity(pEntity)^)=TypeOf(GDBObjText))then
     if PGDBObjText(pEntity)^.bp.ListPos.Owner<>nil then
       if typeof(PGDBObjText(pEntity)^.bp.ListPos.Owner^)=TypeOf(GDBObjDevice) then begin
-        if Vertexlength(PGDBObjWithLocalCS(PGDBObjText(pEntity)^.bp.ListPos.Owner)^.P_insert_in_WCS,PGDBObjText(pEntity).P_insert_in_WCS)>10 then begin
+        if Vertexlength(PGDBObjWithLocalCS(PGDBObjText(pEntity)^.bp.ListPos.Owner)^.P_insert_in_WCS,PGDBObjText(pEntity).P_insert_in_WCS)>FLeaderStartLength then begin
           if FExtensionLine then
             PGDBObjText(pEntity).Representation.DrawLineWithLT(DC,getStartPoint(pEntity),PGDBObjText(pEntity).P_insert_in_WCS,PGDBObjEntity(pEntity)^.vp);
           if FBaseLine then begin
@@ -155,6 +161,8 @@ begin
         dxfStringout(outhandle,1000,'STEBaseLineLine=FALSE');
       if not IsDoubleEqual(FExtensionLineOffset,ExtensionLineOffsetDef)then
         dxfStringout(outhandle,1000,'STEExtensionLineOffset='+FloatToStr(FExtensionLineOffset));
+      if not IsDoubleEqual(FLeaderStartLength,ExtensionLeaderStartLengthDef)then
+        dxfStringout(outhandle,1000,'STELeaderStartLength='+FloatToStr(FLeaderStartLength));
     end;
 end;
 
@@ -198,6 +206,17 @@ begin
   result:=true;
 end;
 
+class function TSmartTextEntExtender.EntIOLoadExtensionLeaderStartLength(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+var
+  STEExtdr:TSmartTextEntExtender;
+begin
+  STEExtdr:=PGDBObjEntity(PEnt)^.GetExtension<TSmartTextEntExtender>;
+  if STEExtdr=nil then
+    STEExtdr:=AddSmartTextEntExtenderToEntity(PEnt);
+  STEExtdr.FLeaderStartLength:=StrToFloat(_Value);
+  result:=true;
+end;
+
 
 class function TSmartTextEntExtender.EntIOLoadSmartTextEntExtenderDefault(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 var
@@ -223,7 +242,8 @@ initialization
 
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('STEExtensionLine',TSmartTextEntExtender.EntIOLoadExtensionLine);
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('STEBaseLineLine',TSmartTextEntExtender.EntIOLoadBaseLine);
-  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('STEExtensionLineOffset',TSmartTextEntExtender.EntIOLoadExtensionLineOffset());
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('STEExtensionLineOffset',TSmartTextEntExtender.EntIOLoadExtensionLineOffset);
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('STELeaderStartLength',TSmartTextEntExtender.EntIOLoadExtensionLeaderStartLength);
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('SmartTextEntExtenderDefault',TSmartTextEntExtender.EntIOLoadSmartTextEntExtenderDefault);
 finalization
 end.

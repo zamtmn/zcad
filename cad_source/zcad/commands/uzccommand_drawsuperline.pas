@@ -76,10 +76,14 @@ PTDrawSuperlineParams=^TDrawSuperlineParams;
 TDrawSuperlineParams=record
                          pu:PTUnit;                //рантайм юнит с параметрами суперлинии
                          LayerNamePrefix:String;//префикс
-                         ProcessLayer:Boolean;  //выключатель
+                         ProcessLayer:Boolean;  //выключатель слоя
+                         ProcessTypeLine:Boolean;  //выключатель типа линyи
                          SLSetting1:String;     //сохраненная настройка суперлинии для кнопки суперлиния №1
+                         SLSettingTypeLine1:String;     //сохраненная настройка суперлинии для кнопки суперлиния №1 типа линии
                          SLSetting2:String;     //сохраненная настройка суперлинии для кнопки суперлиния №2
+                         SLSettingTypeLine2:String;     //сохраненная настройка суперлинии для кнопки суперлиния №2 типа линии
                          SLSetting3:String;     //сохраненная настройка суперлинии для кнопки суперлиния №3
+                         SLSettingTypeLine3:String;     //сохраненная настройка суперлинии для кнопки суперлиния №2 типа линии
                      end;
 var
    DrawSuperlineParams:TDrawSuperlineParams;
@@ -173,7 +177,7 @@ var
     UndoMarcerIsPlazed:boolean;
     pvd2:pvardesk;
     ir:itrec;
-    hotkeyname:string;
+    hotkeyname,hotkeytypeline:string;
 
 procedure createline;
 var
@@ -191,6 +195,18 @@ begin
         pvarext.entityunit.copyfrom(psu);
     end;
     zcSetEntPropFromCurrentDrawingProp(psuperline);           //присваиваем умолчательные значения
+
+    ////open~inTrust          open~inСableСhannel
+    pvd:=psu.FindVariable('CABLE_MountingMethod');
+    if (DrawSuperlineParams.ProcessTypeLine)and(pvd<>nil) then begin
+       if pvd.data.PTD^.GetValueAsString(pvd.data.Addr.Instance) = 'open~inMetalTray' then
+          psuperline.vp.LineType:=drawings.GetCurrentDWG^.LTypeStyleTable.getAddres('cablotok');
+       if pvd.data.PTD^.GetValueAsString(pvd.data.Addr.Instance) = 'open~inСableСhannel' then
+          psuperline.vp.LineType:=drawings.GetCurrentDWG^.LTypeStyleTable.getAddres('cabkorob');
+       if pvd.data.PTD^.GetValueAsString(pvd.data.Addr.Instance) = 'Hidden~inPipe' then
+          psuperline.vp.LineType:=drawings.GetCurrentDWG^.LTypeStyleTable.getAddres('cabtruba');
+       end;
+
     //если манипуляции со слоем включены и ранее был найден "юнит" с параметрами
     if (DrawSuperlineParams.ProcessLayer)and(psu<>nil) then
     begin
@@ -226,11 +242,20 @@ begin
                        'superline');//имя модуля
 
     if operands = '1' then
+    begin
        hotkeyname:=Tria_AnsiToUtf8(DrawSuperlineParams.SLSetting1);
+       hotkeytypeline:=Tria_AnsiToUtf8(DrawSuperlineParams.SLSettingTypeLine1);
+    end;
     if operands = '2' then
+    begin
        hotkeyname:=Tria_AnsiToUtf8(DrawSuperlineParams.SLSetting2);
+       hotkeytypeline:=Tria_AnsiToUtf8(DrawSuperlineParams.SLSettingTypeLine2);
+    end;
     if operands = '3' then
+    begin
        hotkeyname:=Tria_AnsiToUtf8(DrawSuperlineParams.SLSetting3);
+       hotkeytypeline:=Tria_AnsiToUtf8(DrawSuperlineParams.SLSettingTypeLine3);
+    end;
 
      //ZCMsgCallBackInterface.TextMessage('hotkeyname:'+hotkeyname,TMWOHistoryOut);
     //hotkeyname:='';
@@ -241,6 +266,8 @@ begin
           repeat
             if pvd2^.name = 'NMO_Name' then
               pvd2^.data.PTD.SetValueFromString(pvd2^.data.Addr.GetInstance,hotkeyname);
+            if pvd2^.name = 'CABLE_MountingMethod' then
+              pvd2^.data.PTD.SetValueFromString(pvd2^.data.Addr.GetInstance,hotkeytypeline);
             pvd2:=psu^.InterfaceVariables.vardescarray.iterate(ir); //следующая переменная
           until pvd2=nil;
       end;
@@ -264,11 +291,15 @@ begin
 end;
 initialization
      SysUnit.RegisterType(TypeInfo(TDrawSuperlineParams));//регистрируем тип данных в зкадном RTTI
-     SysUnit.SetTypeDesk(TypeInfo(TDrawSuperlineParams),['SuperLineUnit','Layer name prefix','Layer change','Set SL#1','Set SL#2','Set SL#3']);//даем человеческие имена параметрам
+     SysUnit.SetTypeDesk(TypeInfo(TDrawSuperlineParams),['SuperLineUnit','Layer name prefix','Layer change','Linetype change','Set SL#1 name:','Set SL#1 typeline:','Set SL#2 name:','Set SL#2 typeline:','Set SL#3 name:','Set SL#3 typeline:']);//даем человеческие имена параметрам
      DrawSuperlineParams.LayerNamePrefix:='SYS_SL_';//начальное значение префикса
      DrawSuperlineParams.ProcessLayer:=true;        //начальное значение выключателя
+     DrawSuperlineParams.ProcessTypeLine:=true;        //начальное значение выключателя
      DrawSuperlineParams.SLSetting1:='???';
+     DrawSuperlineParams.SLSettingTypeLine1:='-';
      DrawSuperlineParams.SLSetting2:='???';
+     DrawSuperlineParams.SLSettingTypeLine2:='-';
      DrawSuperlineParams.SLSetting3:='???';
+     DrawSuperlineParams.SLSettingTypeLine3:='-';
      CreateCommandFastObjectPlugin(@DrawSuperLine_com,   'DrawSuperLine',   CADWG,0);
 end.

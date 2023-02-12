@@ -122,7 +122,7 @@ begin
                              );}
      {if uzegeometry.IsVectorNul(normal) then
                                          normal:=normal;}
-       if IsPointEqual(PInOCS[2],PInOCS[3])then
+       if IsPointEqual(PInOCS[2],PInOCS[3],sqreps)then
                                                         triangle:=true
                                                     else
                                                         triangle:=false;

@@ -43,11 +43,13 @@ type
       FBaseLine:Boolean;
       FExtensionLineOffset:Double;
       FLeaderStartLength:Double;
-      FSaveHeight:Double;
-      FHeight:Double;
+      //FSaveHeight:Double;
+      FHeightOverride:Double;
     private
       function isDefault:boolean;
-      function getStartPoint(pEntity:Pointer):GDBVertex;
+      function getOwnerInsertPoint(pEntity:Pointer):GDBVertex;
+      function getTextInsertPoint(pEntity:Pointer):GDBVertex;
+      function geExtensionLinetStartPoint(pEntity:Pointer):GDBVertex;
     public
       class function getExtenderName:string;override;
       constructor Create(pEntity:Pointer);override;
@@ -76,7 +78,7 @@ function TSmartTextEntExtender.isDefault:boolean;
 begin
   result:=(FExtensionLine and FBaseLine)and(IsDoubleEqual(FExtensionLineOffset,ExtensionLineOffsetDef))
         and(IsDoubleEqual(FLeaderStartLength,ExtensionLeaderStartLengthDef))
-        and(IsDoubleEqual(FHeight,ExtensionHeightDef));
+        and(IsDoubleEqual(FHeightOverride,ExtensionHeightDef));
 end;
 
 procedure TSmartTextEntExtender.Assign(Source:TBaseExtender);
@@ -85,7 +87,7 @@ begin
   FBaseLine:=TSmartTextEntExtender(Source).FBaseLine;
   FExtensionLineOffset:=TSmartTextEntExtender(Source).FExtensionLineOffset;
   FLeaderStartLength:=TSmartTextEntExtender(Source).FLeaderStartLength;
-  FHeight:=TSmartTextEntExtender(Source).FHeight;
+  FHeightOverride:=TSmartTextEntExtender(Source).FHeightOverride;
 end;
 
 constructor TSmartTextEntExtender.Create(pEntity:Pointer);
@@ -94,19 +96,30 @@ begin
   FBaseLine:=true;
   FExtensionLineOffset:=ExtensionLineOffsetDef;
   FLeaderStartLength:=ExtensionLeaderStartLengthDef;
-  FHeight:=ExtensionHeightDef;
+  FHeightOverride:=ExtensionHeightDef;
 end;
 
-function TSmartTextEntExtender.getStartPoint(pEntity:Pointer):GDBVertex;
-var
-  p1,p2:PGDBvertex;
+function TSmartTextEntExtender.getOwnerInsertPoint(pEntity:Pointer):GDBVertex;
 begin
-  p1:=@PGDBObjWithLocalCS(PGDBObjText(pEntity)^.bp.ListPos.Owner)^.P_insert_in_WCS;
+  result:=PGDBObjWithLocalCS(PGDBObjText(pEntity)^.bp.ListPos.Owner)^.P_insert_in_WCS;
+end;
+
+function TSmartTextEntExtender.getTextInsertPoint(pEntity:Pointer):GDBVertex;
+begin
+  result:=PGDBObjText(pEntity).P_insert_in_WCS;
+end;
+
+function TSmartTextEntExtender.geExtensionLinetStartPoint(pEntity:Pointer):GDBVertex;
+var
+  p1:GDBvertex;
+  p2:PGDBvertex;
+begin
+  p1:=getOwnerInsertPoint(pEntity);
   p2:=@PGDBObjText(pEntity).P_insert_in_WCS;
   if FExtensionLineOffset>0 then
-    result:=p1^+(p2^-p1^).NormalizeVertex*FExtensionLineOffset
+    result:=p1+(p2^-p1).NormalizeVertex*FExtensionLineOffset
   else begin
-    result:=p2^-p1^;
+    result:=p2^-p1;
     if abs(result.x)>abs(result.y)then begin
       result.y:=-result.y*(FExtensionLineOffset/abs(result.x));
       result.x:=-result.x*(FExtensionLineOffset/abs(result.x));
@@ -114,7 +127,7 @@ begin
       result.x:=-result.x*(FExtensionLineOffset/abs(result.y));
       result.y:=-result.y*(FExtensionLineOffset/abs(result.y));
     end;
-    result:=p1^+result;
+    result:=p1+result;
   end;
 end;
 
@@ -122,20 +135,20 @@ procedure TSmartTextEntExtender.onAfterEntityFormat(pEntity:Pointer;const drawin
 var
   dx:Double;
 begin
-  if FHeight>0 then
-    PGDBObjMText(pEntity).textprop.size:=FSaveHeight;
+  //if FHeightOverride>0 then
+  //  PGDBObjMText(pEntity).textprop.size:=FSaveHeight;
   if (typeof(PGDBObjEntity(pEntity)^)=TypeOf(GDBObjText))then
     if PGDBObjText(pEntity)^.bp.ListPos.Owner<>nil then
       if typeof(PGDBObjText(pEntity)^.bp.ListPos.Owner^)=TypeOf(GDBObjDevice) then begin
-        if Vertexlength(PGDBObjWithLocalCS(PGDBObjText(pEntity)^.bp.ListPos.Owner)^.P_insert_in_WCS,PGDBObjText(pEntity).P_insert_in_WCS)>FLeaderStartLength then begin
+        if Vertexlength(getOwnerInsertPoint(pEntity),getTextInsertPoint(pEntity))>FLeaderStartLength then begin
           if FExtensionLine then
-            PGDBObjText(pEntity).Representation.DrawLineWithLT(DC,getStartPoint(pEntity),PGDBObjText(pEntity).P_insert_in_WCS,PGDBObjEntity(pEntity)^.vp);
+            PGDBObjText(pEntity).Representation.DrawLineWithLT(DC,geExtensionLinetStartPoint(pEntity),getTextInsertPoint(pEntity),PGDBObjEntity(pEntity)^.vp);
           if FBaseLine then begin
-            dx:=PGDBObjText(pEntity).obj_width*PGDBObjMText(pEntity).textprop.size*PGDBObjMText(pEntity).textprop.wfactor;
+            dx:=PGDBObjText(pEntity).obj_width*PGDBObjMText(pEntity).textprop.size*PGDBObjMText(pEntity).textprop.wfactor*PGDBObjBlockInsert(PGDBObjText(pEntity)^.bp.ListPos.Owner)^.scale.x;
             if PGDBObjMText(pEntity).textprop.justify in [jsbr,jsmr,jstr] then
               dx:=-dx;
-            PGDBObjText(pEntity).Representation.DrawLineWithLT(DC,PGDBObjText(pEntity).P_insert_in_WCS,
-                                                                  VertexAdd(PGDBObjText(pEntity).P_insert_in_WCS,CreateVertex(dx,0,0)),PGDBObjEntity(pEntity)^.vp);
+            PGDBObjText(pEntity).Representation.DrawLineWithLT(DC,getTextInsertPoint(pEntity),
+                                                               VertexAdd(getTextInsertPoint(pEntity),CreateVertex(dx,0,0)),PGDBObjEntity(pEntity)^.vp);
           end;
         end;
   end;
@@ -146,14 +159,14 @@ var
   jtt: array[-1..1,-1..1] of TTextJustify = ((jsbl, jsbl, jsbr),(jsbl, jsbl, jsbr),(jsbl, jsbl, jsbr));
 begin
   if typeof(PGDBObjEntity(pEntity)^)=TypeOf(GDBObjText) then begin
-    if Vertexlength(PGDBObjWithLocalCS(PGDBObjText(pEntity)^.bp.ListPos.Owner)^.P_insert_in_WCS,PGDBObjText(pEntity).P_insert_in_WCS)>10 then
+    if Vertexlength(getOwnerInsertPoint(pEntity),getTextInsertPoint(pEntity))>10 then
       PGDBObjMText(pEntity).textprop.justify:=jtt[-sign(PGDBObjText(pEntity).Local.P_insert.y),-sign(PGDBObjText(pEntity).Local.P_insert.x)]
     else
       PGDBObjMText(pEntity).textprop.justify:=jtt2[-sign(PGDBObjText(pEntity).Local.P_insert.y),-sign(PGDBObjText(pEntity).Local.P_insert.x)]
   end;
-  if FHeight>0 then begin
-    FSaveHeight:=PGDBObjMText(pEntity).textprop.size;
-    PGDBObjMText(pEntity).textprop.size:=FHeight/PGDBObjBlockInsert(PGDBObjText(pEntity)^.bp.ListPos.Owner)^.scale.x;
+  if FHeightOverride>0 then begin
+    //FSaveHeight:=PGDBObjMText(pEntity).textprop.size;
+    PGDBObjMText(pEntity).textprop.size:=FHeightOverride/PGDBObjBlockInsert(PGDBObjText(pEntity)^.bp.ListPos.Owner)^.scale.y;
   end;
 end;
 
@@ -176,8 +189,8 @@ begin
         dxfStringout(outhandle,1000,'STEExtensionLineOffset='+FloatToStr(FExtensionLineOffset));
       if not IsDoubleEqual(FLeaderStartLength,ExtensionLeaderStartLengthDef)then
         dxfStringout(outhandle,1000,'STELeaderStartLength='+FloatToStr(FLeaderStartLength));
-      if not IsDoubleEqual(FHeight,ExtensionHeightDef)then
-        dxfStringout(outhandle,1000,'STETextHeight='+FloatToStr(FHeight));
+      if not IsDoubleEqual(FHeightOverride,ExtensionHeightDef)then
+        dxfStringout(outhandle,1000,'STEHeightOverride='+FloatToStr(FHeightOverride));
     end;
 end;
 
@@ -239,7 +252,7 @@ begin
   STEExtdr:=PGDBObjEntity(PEnt)^.GetExtension<TSmartTextEntExtender>;
   if STEExtdr=nil then
     STEExtdr:=AddSmartTextEntExtenderToEntity(PEnt);
-  STEExtdr.FHeight:=StrToFloat(_Value);
+  STEExtdr.FHeightOverride:=StrToFloat(_Value);
   result:=true;
 end;
 
@@ -269,7 +282,7 @@ initialization
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('STEBaseLineLine',TSmartTextEntExtender.EntIOLoadBaseLine);
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('STEExtensionLineOffset',TSmartTextEntExtender.EntIOLoadExtensionLineOffset);
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('STELeaderStartLength',TSmartTextEntExtender.EntIOLoadExtensionLeaderStartLength);
-  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('STETextHeight',TSmartTextEntExtender.EntIOLoadTextHeigth);
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('STEHeightOverride',TSmartTextEntExtender.EntIOLoadTextHeigth);
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('SmartTextEntExtenderDefault',TSmartTextEntExtender.EntIOLoadSmartTextEntExtenderDefault);
 finalization
 end.

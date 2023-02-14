@@ -38,7 +38,7 @@ TBaseEntityExtender=class(TBaseExtender)
                   procedure CopyExt2Ent(pSourceEntity,pDestEntity:pointer);virtual;abstract;
                   procedure ReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);virtual;abstract;
                   procedure PostLoad(var context:TIODXFLoadContext);virtual;abstract;
-                  procedure SaveToDxf(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);virtual;abstract;
+                  procedure SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);virtual;abstract;
 end;
 TMetaEntityExtender=class of TBaseEntityExtender;
 TEntityExtenderVector= TMyVector<TBaseEntityExtender>;
@@ -216,7 +216,7 @@ var
 begin
      if assigned(fEntityExtensions)then
      for i:=0 to fEntityExtensions.Size-1 do
-       fEntityExtensions[i].SaveToDxf(outhandle,PEnt,IODXFContext);
+       fEntityExtensions[i].SaveToDxfObjXData(outhandle,PEnt,IODXFContext);
 end;
 initialization
   EntityExtenders:=TEntityExtendersMap.Create;

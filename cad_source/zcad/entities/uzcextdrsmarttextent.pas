@@ -57,7 +57,7 @@ type
       procedure Assign(Source:TBaseExtender);override;
       procedure onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
       procedure onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
-      procedure SaveToDxf(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
+      procedure SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
       procedure PostLoad(var context:TIODXFLoadContext);override;
       procedure onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);override;
 
@@ -182,7 +182,7 @@ begin
   result:=SmartTextEntExtenderName;
 end;
 
-procedure TSmartTextEntExtender.SaveToDxf(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
+procedure TSmartTextEntExtender.SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
 begin
   if isDefault then
     dxfStringout(outhandle,1000,'SmartTextEntExtenderDefault=TRUE')

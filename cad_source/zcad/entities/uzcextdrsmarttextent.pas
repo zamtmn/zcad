@@ -48,6 +48,7 @@ type
     private
       function isDefault:boolean;
       function getOwnerInsertPoint(pEntity:Pointer):GDBVertex;
+      function getOwnerScale(pEntity:Pointer):Double;
       function getTextInsertPoint(pEntity:Pointer):GDBVertex;
       function geExtensionLinetStartPoint(pEntity:Pointer):GDBVertex;
     public
@@ -104,6 +105,11 @@ begin
   result:=PGDBObjWithLocalCS(PGDBObjText(pEntity)^.bp.ListPos.Owner)^.P_insert_in_WCS;
 end;
 
+function TSmartTextEntExtender.getOwnerScale(pEntity:Pointer):Double;
+begin
+  result:=PGDBObjBlockInsert(PGDBObjText(pEntity)^.bp.ListPos.Owner)^.scale.y;
+end;
+
 function TSmartTextEntExtender.getTextInsertPoint(pEntity:Pointer):GDBVertex;
 begin
   result:=PGDBObjText(pEntity).P_insert_in_WCS;
@@ -111,21 +117,22 @@ end;
 
 function TSmartTextEntExtender.geExtensionLinetStartPoint(pEntity:Pointer):GDBVertex;
 var
-  p1:GDBvertex;
-  p2:PGDBvertex;
+  p1,p2:GDBvertex;
+  scl:double;
 begin
   p1:=getOwnerInsertPoint(pEntity);
-  p2:=@PGDBObjText(pEntity).P_insert_in_WCS;
+  p2:=getTextInsertPoint(pEntity);
+  scl:=FExtensionLineOffset*abs(getOwnerScale(pEntity));
   if FExtensionLineOffset>0 then
-    result:=p1+(p2^-p1).NormalizeVertex*FExtensionLineOffset
+    result:=p1+(p2-p1).NormalizeVertex*scl
   else begin
-    result:=p2^-p1;
+    result:=p2-p1;
     if abs(result.x)>abs(result.y)then begin
-      result.y:=-result.y*(FExtensionLineOffset/abs(result.x));
-      result.x:=-result.x*(FExtensionLineOffset/abs(result.x));
+      result.y:=-result.y*(scl/abs(result.x));
+      result.x:=-result.x*(scl/abs(result.x));
     end else begin
-      result.x:=-result.x*(FExtensionLineOffset/abs(result.y));
-      result.y:=-result.y*(FExtensionLineOffset/abs(result.y));
+      result.x:=-result.x*(scl/abs(result.y));
+      result.y:=-result.y*(scl/abs(result.y));
     end;
     result:=p1+result;
   end;
@@ -144,7 +151,7 @@ begin
           if FExtensionLine then
             PGDBObjText(pEntity).Representation.DrawLineWithLT(DC,geExtensionLinetStartPoint(pEntity),getTextInsertPoint(pEntity),PGDBObjEntity(pEntity)^.vp);
           if FBaseLine then begin
-            dx:=PGDBObjText(pEntity).obj_width*PGDBObjMText(pEntity).textprop.size*PGDBObjMText(pEntity).textprop.wfactor*PGDBObjBlockInsert(PGDBObjText(pEntity)^.bp.ListPos.Owner)^.scale.x;
+            dx:=PGDBObjText(pEntity).obj_width*PGDBObjMText(pEntity).textprop.size*PGDBObjMText(pEntity).textprop.wfactor*getOwnerScale(pEntity);
             if PGDBObjMText(pEntity).textprop.justify in [jsbr,jsmr,jstr] then
               dx:=-dx;
             PGDBObjText(pEntity).Representation.DrawLineWithLT(DC,getTextInsertPoint(pEntity),

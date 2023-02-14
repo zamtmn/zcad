@@ -25,6 +25,8 @@ uses uzegeometrytypes,uzbtypes,sysutils,uzctnrVectorBytes,usimplegenerics;
 
 const
   dxfName_AcDbEntity='AcDbEntity';
+  dxfName_AcDbLine='AcDbLine';
+  dxfName_Line='LINE';
   dxfName_AcDbSymbolTableRecord='AcDbSymbolTableRecord';
   dxfName_BLOCK_RECORD='BLOCK_RECORD';
   dxfName_ENDTAB='ENDTAB';
@@ -42,6 +44,7 @@ const
   dxfName_LType='LTYPE';
 
 type
+  PTIODXFContext=^TIODXFContext;
   TIODXFContext=record
     handle: TDWGHandle;
     currentEntAddrOverrider:pointer;

@@ -686,6 +686,9 @@ begin
 end;
 procedure GDBObjEntity.SaveToDXFfollow;
 begin
+  if assigned(EntExtensions) then
+    EntExtensions.RunSaveToDXFfollow(@self,outhandle,drawing,IODXFContext);
+  inherited;
 end;
 procedure GDBObjEntity.SaveToDXFObjXData(var outhandle:TZctnrVectorBytes;var IODXFContext:TIODXFContext);
 begin

@@ -222,7 +222,7 @@ begin
   end;
   if FHeightOverride>0 then begin
     //FSaveHeight:=PGDBObjMText(pEntity).textprop.size;
-    PGDBObjMText(pEntity).textprop.size:=FHeightOverride/PGDBObjBlockInsert(PGDBObjText(pEntity)^.bp.ListPos.Owner)^.scale.y;
+    PGDBObjMText(pEntity).textprop.size:=FHeightOverride/getOwnerScale(pEntity);
   end;
 end;
 

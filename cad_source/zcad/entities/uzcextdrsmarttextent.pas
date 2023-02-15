@@ -146,7 +146,10 @@ end;
 
 function TSmartTextEntExtender.getOwnerScale(pEntity:Pointer):Double;
 begin
-  result:=PGDBObjBlockInsert(PGDBObjText(pEntity)^.bp.ListPos.Owner)^.scale.y;
+  if ESCalcWithoutOwner in PGDBObjEntity(pEntity)^.State then
+    result:=1
+  else
+    result:=PGDBObjBlockInsert(PGDBObjText(pEntity)^.bp.ListPos.Owner)^.scale.y;
 end;
 
 function TSmartTextEntExtender.getTextInsertPoint(pEntity:Pointer):GDBVertex;

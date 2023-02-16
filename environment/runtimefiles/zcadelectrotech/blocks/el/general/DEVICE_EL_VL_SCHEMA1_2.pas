@@ -1,5 +1,4 @@
-﻿
-unit DEVICE_EL_VL_SCHEMA1_2;
+﻿unit DEVICE_EL_VL_SCHEMA1_2;
 
 interface
 

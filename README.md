@@ -26,7 +26,7 @@ ToDo:
 * ~~Printing~~
 
 ## Build from source
-Detailed instructions: [ENG](https://github.com/zamtmn/zcad/blob/master/README_ENG.md "ENG") / [RUS](https://github.com/zamtmn/zcad/blob/master/README_RUS.md "RUS")
+Detailed instructions: [ENG](https://github.com/zamtmn/zcad/blob/master/BUILD_FROM_SOURCES.md "ENG") / [RUS](https://github.com/zamtmn/zcad/blob/master/cad_source/docs/userguide/locale/ru/for_developer/building_from_sources.adoc "RUS")
 
 Requirements:
 

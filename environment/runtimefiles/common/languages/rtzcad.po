@@ -396,6 +396,14 @@ msgstr ""
 msgid "Line types properties manager"
 msgstr ""
 
+#: zcadexternal.acn_managerem~caption
+msgid "Manager electrical model"
+msgstr ""
+
+#: zcadexternal.acn_managerem~textimage
+msgid "MEM"
+msgstr ""
+
 #: zcadexternal.acn_matchprop~caption
 msgid "Match properties"
 msgstr ""
@@ -880,7 +888,38 @@ msgstr ""
 msgid "Stretch primitives"
 msgstr ""
 
+#: zcadexternal.acn_supelineht1~caption
+msgctxt "zcadexternal.acn_supelineht1~caption"
+msgid "SuperLine"
+msgstr ""
+
+#: zcadexternal.acn_supelineht1~textimage
+msgctxt "zcadexternal.acn_supelineht1~textimage"
+msgid "1"
+msgstr ""
+
+#: zcadexternal.acn_supelineht2~caption
+msgctxt "zcadexternal.acn_supelineht2~caption"
+msgid "SuperLine"
+msgstr ""
+
+#: zcadexternal.acn_supelineht2~textimage
+msgctxt "zcadexternal.acn_supelineht2~textimage"
+msgid "2"
+msgstr ""
+
+#: zcadexternal.acn_supelineht3~caption
+msgctxt "zcadexternal.acn_supelineht3~caption"
+msgid "SuperLine"
+msgstr ""
+
+#: zcadexternal.acn_supelineht3~textimage
+msgctxt "zcadexternal.acn_supelineht3~textimage"
+msgid "3"
+msgstr ""
+
 #: zcadexternal.acn_supeline~caption
+msgctxt "zcadexternal.acn_supeline~caption"
 msgid "SuperLine"
 msgstr ""
 
@@ -1110,6 +1149,7 @@ msgid "SG"
 msgstr ""
 
 #: zcadexternal.button_variable~dsgn_selnew
+msgctxt "zcadexternal.button_variable~dsgn_selnew"
 msgid "1"
 msgstr ""
 
@@ -1171,6 +1211,7 @@ msgid "Fire"
 msgstr ""
 
 #: zcadexternal.functionsroot~electrotechnics~alarm~fire~detectors
+msgctxt "zcadexternal.functionsroot~electrotechnics~alarm~fire~detectors"
 msgid "Detectors"
 msgstr ""
 
@@ -2095,6 +2136,42 @@ msgstr ""
 msgid "True layer"
 msgstr ""
 
+#: zcadexternal.oimultiproperty~extdrssmarttextent_baseline
+msgid "Base line"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~extdrssmarttextent_baselineoffsetx
+msgid "Base line offset X"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~extdrssmarttextent_baselineoffsety
+msgid "Base line offset Y"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~extdrssmarttextent_extensionline
+msgid "Extension line"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~extdrssmarttextent_extensionlineoffset
+msgid "Extension line offset length"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~extdrssmarttextent_hjoverride
+msgid "Horizontal justify oferride"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~extdrssmarttextent_leaderstartlength
+msgid "Leader start length"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~extdrssmarttextent_textheight
+msgid "Height override"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~extdrssmarttextent_vjoverride
+msgid "Vertical justify oferride"
+msgstr ""
+
 #: zcadexternal.oimultiproperty~filter_blocksbynames
 msgid "Blocks by names"
 msgstr ""
@@ -2243,6 +2320,10 @@ msgstr ""
 
 #: zcadexternal.oimultiproperty~start_z
 msgid "Start Z"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~textcontent
+msgid "TextContent"
 msgstr ""
 
 #: zcadexternal.oimultiproperty~totalarea
@@ -2446,49 +2527,6 @@ msgstr ""
 
 #: zcadexternal.tblockdesc~btype
 msgid "Block type"
-msgstr ""
-
-#: zcadexternal.tblockinsert~blocks
-msgctxt "zcadexternal.tblockinsert~blocks"
-msgid "Block"
-msgstr ""
-
-#: zcadexternal.tblockinsert~rotation
-msgctxt "zcadexternal.tblockinsert~rotation"
-msgid "Rotation"
-msgstr ""
-
-#: zcadexternal.tblockinsert~scale
-msgctxt "zcadexternal.tblockinsert~scale"
-msgid "Scale"
-msgstr ""
-
-#: zcadexternal.tblockreplaceparams~find
-msgid "Find"
-msgstr ""
-
-#: zcadexternal.tblockreplaceparams~process
-msgid "Process"
-msgstr ""
-
-#: zcadexternal.tblockreplaceparams~replace
-msgid "Replace"
-msgstr ""
-
-#: zcadexternal.tblockreplaceparams~saveorientation
-msgid "Save orientation"
-msgstr ""
-
-#: zcadexternal.tblockreplaceparams~savevariablepart
-msgid "Save variable part"
-msgstr ""
-
-#: zcadexternal.tblockreplaceparams~savevariables
-msgid "Save variables"
-msgstr ""
-
-#: zcadexternal.tblockreplaceparams~savevariabletext
-msgid "Save variable text"
 msgstr ""
 
 #: zcadexternal.tblockrotateparams~absolytly
@@ -2881,15 +2919,6 @@ msgctxt "zcadexternal.tentityadress~selfindex"
 msgid "Position"
 msgstr ""
 
-#: zcadexternal.tentityprocess~tep_erase
-msgctxt "zcadexternal.tentityprocess~tep_erase"
-msgid "Erase"
-msgstr ""
-
-#: zcadexternal.tentityprocess~tep_leave
-msgid "Leave"
-msgstr ""
-
 #: zcadexternal.texportdevwithaxisparams~axisdevicename
 msgid "AxisDeviceName"
 msgstr ""
@@ -3155,10 +3184,6 @@ msgctxt "zcadexternal.tlunits~luscientific"
 msgid "Scientific"
 msgstr ""
 
-#: zcadexternal.tmirrorparam~sourceents
-msgid "Source entities"
-msgstr ""
-
 #: zcadexternal.tmseditor~extendersunit
 msgid "Extenders"
 msgstr ""
@@ -3220,43 +3245,6 @@ msgstr ""
 #: zcadexternal.tnotsavedparams~ver
 msgctxt "zcadexternal.tnotsavedparams~ver"
 msgid "Version"
-msgstr ""
-
-#: zcadexternal.tnumberingparams~basename
-msgid "Base name sorting devices"
-msgstr ""
-
-#: zcadexternal.tnumberingparams~deaddand
-msgid "Deadband"
-msgstr ""
-
-#: zcadexternal.tnumberingparams~increment
-msgid "Increment"
-msgstr ""
-
-#: zcadexternal.tnumberingparams~inversex
-msgid "Inverse X axis dir"
-msgstr ""
-
-#: zcadexternal.tnumberingparams~inversey
-msgid "Inverse Y axis dir"
-msgstr ""
-
-#: zcadexternal.tnumberingparams~numbervar
-msgid "Number variable"
-msgstr ""
-
-#: zcadexternal.tnumberingparams~savestart
-msgid "Save start number"
-msgstr ""
-
-#: zcadexternal.tnumberingparams~sortmode
-msgid ""
-msgstr ""
-
-#: zcadexternal.tnumberingparams~startnumber
-msgctxt "zcadexternal.tnumberingparams~startnumber"
-msgid "Start"
 msgstr ""
 
 #: zcadexternal.tobjinspinterface~intf_objinsp_alwaysusemultiselectwrapper
@@ -3325,6 +3313,11 @@ msgctxt "zcadexternal.toolpalette_blocklib_itemcaption~unsorted"
 msgid "Unsorted"
 msgstr ""
 
+#: zcadexternal.toolpalette_blocklib_low-current_alarm_fire_alarm_itemcaption~detectors
+msgctxt "zcadexternal.toolpalette_blocklib_low-current_alarm_fire_alarm_itemcaption~detectors"
+msgid "Detectors"
+msgstr ""
+
 #: zcadexternal.toolpalette_blocklib_low-current_alarm_itemcaption~fire_alarm
 msgctxt "zcadexternal.toolpalette_blocklib_low-current_alarm_itemcaption~fire_alarm"
 msgid "Fire alarm"
@@ -3339,29 +3332,26 @@ msgstr ""
 msgid "Calculations"
 msgstr ""
 
-#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~equipment_1.100
-msgid "Equipment 1:100"
+#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~detectors
+msgctxt "zcadexternal.toolpalette_blocklib_power_suply_itemcaption~detectors"
+msgid "Detectors"
 msgstr ""
 
-#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~equipment_2.100
-msgid "Equipment 2:100"
+#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~equipment
+msgid "Equipment"
 msgstr ""
 
-#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~fire_alarm
-msgctxt "zcadexternal.toolpalette_blocklib_power_suply_itemcaption~fire_alarm"
-msgid "Fire alarm"
+#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~formats_stamps
+msgid "Formats stamps"
 msgstr ""
 
 #: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~high-voltage_networks
 msgid "High-voltage networks"
 msgstr ""
 
-#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~lighting_1.100
-msgid "Lighting 1:100"
-msgstr ""
-
-#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~lighting_1.200
-msgid "Lighting 1:200"
+#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~lighting
+msgctxt "zcadexternal.toolpalette_blocklib_power_suply_itemcaption~lighting"
+msgid "Lighting"
 msgstr ""
 
 #: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~nodes
@@ -3380,24 +3370,20 @@ msgstr ""
 msgid "Schemes"
 msgstr ""
 
-#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~sockets_1.100
-msgid "Sockets 1:100"
+#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~sockets
+msgid "Sockets"
 msgstr ""
 
-#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~sockets_1.200
-msgid "Sockets 1:200"
+#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~statements
+msgid "Statements"
 msgstr ""
 
-#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~switches_1.200
-msgid "Switches 1:200"
-msgstr ""
-
-#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~tables
-msgid "Tables"
+#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~switches
+msgid "Switches"
 msgstr ""
 
 #: zcadexternal.toolpalette_blocklib~caption
-msgid "Обрыв"
+msgid "Рамка А4 книга"
 msgstr ""
 
 #: zcadexternal.topengldata~rd_extensions
@@ -3468,10 +3454,12 @@ msgid "1 in the quarter"
 msgstr ""
 
 #: zcadexternal.topsmindatcount~topsmdc_2
+msgctxt "zcadexternal.topsmindatcount~topsmdc_2"
 msgid "2"
 msgstr ""
 
 #: zcadexternal.topsmindatcount~topsmdc_3
+msgctxt "zcadexternal.topsmindatcount~topsmdc_3"
 msgid "3"
 msgstr ""
 
@@ -3857,19 +3845,6 @@ msgctxt "zcadexternal.tstrokesarray~lengthfact"
 msgid "Length"
 msgstr ""
 
-#: zcadexternal.tst~tst_unsorted
-msgctxt "zcadexternal.tst~tst_unsorted"
-msgid "Unsorted"
-msgstr ""
-
-#: zcadexternal.tst~tst_xy
-msgid "X-Y"
-msgstr ""
-
-#: zcadexternal.tst~tst_yx
-msgid "Y-X"
-msgstr ""
-
 #: zcadexternal.tsysparam~notsaved
 msgid "Not saved params"
 msgstr ""
@@ -4112,6 +4087,10 @@ msgstr ""
 msgid "Layer control"
 msgstr ""
 
+#: zcadexternal.varcategory~extdrssmarttextent
+msgid "Text control"
+msgstr ""
+
 #: zcadexternal.varcategory~gc
 msgid "Group connection"
 msgstr ""
@@ -4141,10 +4120,6 @@ msgstr ""
 #: zcadexternal.varcategory~scale
 msgctxt "zcadexternal.varcategory~scale"
 msgid "Scale"
-msgstr ""
-
-#: zcadexternal.varcategory~slcabagen
-msgid "vELEC"
 msgstr ""
 
 #: zcadexternal.varcategory~start

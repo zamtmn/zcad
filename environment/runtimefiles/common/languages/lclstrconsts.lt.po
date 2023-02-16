@@ -220,6 +220,16 @@ msgstr "Žymeklis"
 msgid "Custom ..."
 msgstr "Naudotojo…"
 
+#: lclstrconsts.rsdatetoolarge
+#, object-pascal-format
+msgid "Date cannot be past %s"
+msgstr ""
+
+#: lclstrconsts.rsdatetoosmall
+#, object-pascal-format
+msgid "Date cannot be before %s"
+msgstr ""
+
 #: lclstrconsts.rsdefaultcolorcaption
 msgid "Default"
 msgstr "Numatytasis"

@@ -218,6 +218,16 @@ msgstr "カーソルファイル"
 msgid "Custom ..."
 msgstr "カスタム色"
 
+#: lclstrconsts.rsdatetoolarge
+#, object-pascal-format
+msgid "Date cannot be past %s"
+msgstr ""
+
+#: lclstrconsts.rsdatetoosmall
+#, object-pascal-format
+msgid "Date cannot be before %s"
+msgstr ""
+
 #: lclstrconsts.rsdefaultcolorcaption
 msgid "Default"
 msgstr "デフォルト色"
@@ -274,7 +284,7 @@ msgid "Error creating device context for %s.%s"
 msgstr "%s.%s のデバイスコンテキスト生成中のエラー"
 
 #: lclstrconsts.rserroroccurredinataddressframe
-#, object-pascal-format
+#, object-pascal-format, fuzzy, badformat
 msgid "Error occurred in %s at %sAddress %s%s Frame %s"
 msgstr "フレーム %4:s %1:sアドレス %2:s%3:s の %0:s においてエラーが発生しました"
 

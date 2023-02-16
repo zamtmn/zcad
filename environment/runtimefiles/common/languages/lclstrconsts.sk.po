@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: lclstrconsts\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-02-02 16:22+0100\n"
-"PO-Revision-Date: 2022-05-23 14:43+0200\n"
+"PO-Revision-Date: 2022-12-09 08:41+0100\n"
 "Last-Translator: Slavo Gbúr <slavusec@azet.sk>\n"
 "Language-Team: Slovenský <sk@li.org>\n"
 "Language: sk\n"
@@ -215,6 +215,16 @@ msgstr "Kurzorové súbory"
 #: lclstrconsts.rscustomcolorcaption
 msgid "Custom ..."
 msgstr "Vlastná ..."
+
+#: lclstrconsts.rsdatetoolarge
+#, object-pascal-format
+msgid "Date cannot be past %s"
+msgstr "Dátum nemôže byť po %s"
+
+#: lclstrconsts.rsdatetoosmall
+#, object-pascal-format
+msgid "Date cannot be before %s"
+msgstr "Dátum nemôže byť pred %s"
 
 #: lclstrconsts.rsdefaultcolorcaption
 msgid "Default"

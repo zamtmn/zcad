@@ -1,16 +1,16 @@
 msgid ""
 msgstr ""
-"Content-Type: text/plain; charset=UTF-8\n"
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
-"Language-Team: \n"
-"MIME-Version: 1.0\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2.3\n"
 "Last-Translator: Onur ERÇELEN <onur2x@gmail.com>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language-Team: \n"
 "Language: tr_TR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: anchordockstr.adrsafreesideofasplittermustnotbeanchorednodetypeancho
 #, object-pascal-format
@@ -43,13 +43,12 @@ msgstr "Ayırıcının yanlış tarafına tutturun: node = \"%s\" bağlar [ %s] 
 #: anchordockstr.adrsapagemustnotbeanchorednodeparentparenttypeanchors
 #, object-pascal-format
 msgid "A page must not be anchored: Node=\"%s\" Parent=%s ParentType=%s Anchors[%s]=\"%s\""
-msgstr ""
+msgstr "Bir sayfa sabitlenmemelidir: Node=\"%s\" Parent=%s ParentType=%s Anchors[%s]=\"%s\""
 
 #: anchordockstr.adrsautomatically
-#, fuzzy
 msgctxt "anchordockstr.adrsautomatically"
 msgid "Automatically"
-msgstr "Otomatik"
+msgstr "Otomatik olarak"
 
 #: anchordockstr.adrsbottom
 msgid "bottom"
@@ -124,11 +123,11 @@ msgstr "Yerleşik kontrollerin başlıklarını düzleştir"
 
 #: anchordockstr.adrsfloatingwindowsontop
 msgid "Floating windows on top"
-msgstr ""
+msgstr "Üstte yüzen pencereler"
 
 #: anchordockstr.adrsfloatingwindowsontophint
 msgid "Show floating windows on top of main form"
-msgstr ""
+msgstr "Ana formun üstünde kayan pencereleri göster"
 
 #: anchordockstr.adrsgeneraldockingoptions
 msgid "General docking options"
@@ -212,11 +211,11 @@ msgstr "Sayfayı en sağa taşı"
 
 #: anchordockstr.adrsmultilinepages
 msgid "Multiline Tabs"
-msgstr ""
+msgstr "Çok Satırlı Sekmeler"
 
 #: anchordockstr.adrsmultilinepageshint
 msgid "Tabs of pages can be shown in multiple lines"
-msgstr ""
+msgstr "Sayfaların sekmeleri birden çok satırda gösterilebilir"
 
 #: anchordockstr.adrsnocaptionsforfloatingsites
 msgid "No captions for floating sites"

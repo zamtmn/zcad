@@ -14,7 +14,7 @@ msgstr ""
 "POT-Creation-Date: \n"
 
 #: anchordockstr.adrsafreesideofasplittermustnotbeanchorednodetypeancho
-#, object-pascal-format
+#, object-pascal-format, fuzzy, badformat
 msgid "A free side of a splitter must not be anchored: Node=\"%s\" Type=%s Anchors[%s]=\"%s\""
 msgstr "Laisvoji skyriklio kraštinė neturi būti pririšta: mazgas = „%0:s“, tipas = %1:s, prieraišos[%2:s] = „%3:s“"
 
@@ -27,7 +27,7 @@ msgid "Amount of pixel the mouse has to drag before drag starts"
 msgstr "Pelės judesio kelias pikseliais, po kurio pradedamas tempimo veiksmas"
 
 #: anchordockstr.adrsanchorisnotsplitternodeanchors
-#, object-pascal-format
+#, object-pascal-format, fuzzy, badformat
 msgid "Anchor is not splitter: Node=\"%s\" Anchors[%s]=\"%s\""
 msgstr "Prieraiša nėra skyriklis: mazgas = „%0:s“, prieraišos[%1:s] = „%2:s“"
 

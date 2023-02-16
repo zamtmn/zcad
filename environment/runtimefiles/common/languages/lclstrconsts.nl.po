@@ -223,6 +223,16 @@ msgstr "Cursor"
 msgid "Custom ..."
 msgstr "Aangepast ..."
 
+#: lclstrconsts.rsdatetoolarge
+#, object-pascal-format
+msgid "Date cannot be past %s"
+msgstr ""
+
+#: lclstrconsts.rsdatetoosmall
+#, object-pascal-format
+msgid "Date cannot be before %s"
+msgstr ""
+
 #: lclstrconsts.rsdefaultcolorcaption
 msgid "Default"
 msgstr "Standaard"

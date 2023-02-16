@@ -6,8 +6,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Project-Id-Version: LCL in Corsican\n"
-"POT-Creation-Date: 2022-01-15 02:37\n"
-"PO-Revision-Date: 2022-01-20\n"
+"POT-Creation-Date: 2022-07-19 10:37\n"
+"PO-Revision-Date: 2022-07-21 20:38+0200\n"
 "Language-Team: Patriccollu di Santa Maria è Sichè\n"
 "X-Generator: Poedit 3.0\n"
 "Last-Translator: Patriccollu di Santa Maria è Sichè <https://github.com/Patriccollu/Lingua_Corsa-Infurmatica/#readme>\n"
@@ -217,6 +217,16 @@ msgstr "Schedarii di cursore"
 msgid "Custom ..."
 msgstr "Persunalizatu…"
 
+#: lclstrconsts.rsdatetoolarge
+#, object-pascal-format
+msgid "Date cannot be past %s"
+msgstr "A data ùn pò micca esse dopu à u %s"
+
+#: lclstrconsts.rsdatetoosmall
+#, object-pascal-format
+msgid "Date cannot be before %s"
+msgstr "A data ùn pò micca esse nanzu à u %s"
+
 #: lclstrconsts.rsdefaultcolorcaption
 msgid "Default"
 msgstr "Predefinitu"
@@ -252,7 +262,7 @@ msgstr "Incullà"
 
 #: lclstrconsts.rsduplicateiconformat
 msgid "Duplicate icon format."
-msgstr "Duplicà u furmatu d’icona."
+msgstr "Duppià u furmatu d’icona."
 
 #: lclstrconsts.rseditrecordhint
 msgid "Edit"
@@ -786,11 +796,11 @@ msgstr "&Ignurà"
 
 #: lclstrconsts.rsmbno
 msgid "&No"
-msgstr "I&nnò"
+msgstr "&Nò"
 
 #: lclstrconsts.rsmbnotoall
 msgid "No to all"
-msgstr "Innò per tutti"
+msgstr "Nò per tutti"
 
 #: lclstrconsts.rsmbok
 msgid "&OK"
@@ -814,11 +824,11 @@ msgstr "&Spalancà"
 
 #: lclstrconsts.rsmbyes
 msgid "&Yes"
-msgstr "&Iè"
+msgstr "&Sì"
 
 #: lclstrconsts.rsmbyestoall
 msgid "Yes to &All"
-msgstr "Iè per &tutti"
+msgstr "Sì per &tutti"
 
 #: lclstrconsts.rsmedgraycolorcaption
 msgid "Medium Gray"

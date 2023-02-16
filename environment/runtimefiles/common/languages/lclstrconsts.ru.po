@@ -5,7 +5,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-01-15 04:23+0300\n"
+"PO-Revision-Date: 2022-07-22 00:58+0300\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Language: ru\n"
@@ -213,6 +213,16 @@ msgstr "Файлы курсоров"
 #: lclstrconsts.rscustomcolorcaption
 msgid "Custom ..."
 msgstr "Пользовательский ..."
+
+#: lclstrconsts.rsdatetoolarge
+#, object-pascal-format
+msgid "Date cannot be past %s"
+msgstr "Дата не может быть позднее %s"
+
+#: lclstrconsts.rsdatetoosmall
+#, object-pascal-format
+msgid "Date cannot be before %s"
+msgstr "Дата не может быть ранее %s"
 
 #: lclstrconsts.rsdefaultcolorcaption
 msgid "Default"

@@ -20,3 +20,6 @@ include::locale/{lang}/working_with_program.adoc[]
 
 <<<
 include::locale/{lang}/customization.adoc[]
+
+<<<
+include::locale/{lang}/for_developers.adoc[]

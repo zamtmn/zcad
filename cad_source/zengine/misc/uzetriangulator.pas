@@ -19,9 +19,9 @@
 unit uzeTriangulator;
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzgprimitivescreator,uzgprimitives,uzglvectorobject,uzegluinterface,gvector,
+uses uzgprimitivescreator,uzgprimitives,uzglvectorobject,uzegluinterface,
      uzegeometrytypes,uzctnrVectorBytes,
-     sysutils,uzegeometry,gzctnrSTL,LazLogger,gzctnrVectorTypes,uzgloglstatemanager,
+     sysutils,uzegeometry,LazLogger,gzctnrVectorTypes,uzgloglstatemanager,
      uzbtypes,uzeenrepresentation;
 type
   TTriangulationMode=(TM_Triangles,TM_TriangleStrip,TM_TriangleFan);

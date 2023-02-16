@@ -116,6 +116,7 @@ uses
   uzvtmasterdev,
   uzvvisualgraph,
   uzvconsts,
+  uzvagraphsdev,    //моя обертка графа
   uzvslagcabparams, //вынесенные параметры
    uzvdeverrors,
    gzctnrVectorTypes,
@@ -1215,7 +1216,7 @@ var
        if pvd<>nil then
              PInteger(pvd^.data.Addr.Instance)^:=numConnect;
        //ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
-       pvd:=FindVariableInEnt(cableLine,'Cable_Mounting_Method');
+       pvd:=FindVariableInEnt(cableLine,velec_cableMounting);
          if pvd<>nil then
          pString(pvd^.data.Addr.Instance)^:=cabMounting;
 
@@ -1433,9 +1434,9 @@ begin
                 ///Старт укладки кабеля по супелиниям
                 for l:= 1 to VPath.Count - 1 do
                  begin
-                 if listInteger.Size>1 then
+                 if listInteger.Size>=1 then
                    ZCMsgCallBackInterface.TextMessage('вершина отец - '+inttostr(tvertex(VPath[l]).Parent.AsInt32[vGGIndex]),TMWOHistoryOut);
-                 ZCMsgCallBackInterface.TextMessage('вершина - '+inttostr(tvertex(VPath[l]).AsInt32[vGGIndex]),TMWOHistoryOut);
+                 ZCMsgCallBackInterface.TextMessage('вершина - '+inttostr(tvertex(VPath[l]).AsInt32[vGGIndex]) + 'длина списка listInteger.Size=' + inttostr(listInteger.Size),TMWOHistoryOut);
 
                   //Это необходимо что бы убрать с планов дополнительное прокладывание не нужных кабелей между устройствами если они на разных планах и чертится одна группа
                   //if iRootTree then
@@ -1452,6 +1453,7 @@ begin
                         listInteger.PushBack(tvertex(VPath[l]).AsInt32[vGGIndex]);
                         counterSegment:=0;
                         iRootTree:=false;
+                        needParent:=false;
                         continue;
                       end;
                     end;
@@ -4784,14 +4786,14 @@ var
 
   function TestgraphUses_com(operands:TCommandOperands):TCommandResult;
   var
-    G: TGraph;
+    G: TGraphDev;
     EdgePath, VertexPath: TClassList;
     I: Integer;
     T: Float;
   begin
     ZCMsgCallBackInterface.TextMessage('*** Min Weight Path ***',TMWOHistoryOut);
   //  writeln('*** Min Weight Path ***');
-    G:=TGraph.Create;
+    G:=TGraphDev.Create;
     G.Features:=[Weighted];
     EdgePath:=TClassList.Create;
     VertexPath:=TClassList.Create;
@@ -4811,6 +4813,7 @@ var
       G.Edges[9].Weight:=4;
 
       ZCMsgCallBackInterface.TextMessage(IntToStr(G.VertexCount) + '-вершин до удаления ',TMWOHistoryOut);
+      //ZCMsgCallBackInterface.TextMessage(IntToStr(G.getCountVertex) + '-вершины из обертки до удаления ',TMWOHistoryOut);
             ZCMsgCallBackInterface.TextMessage(IntToStr(G.EdgeCount) + '-ребер до удаления ',TMWOHistoryOut);
 
             for I:=0 to G.VertexCount - 1 do
@@ -4820,7 +4823,7 @@ var
       for I:=0 to G.EdgeCount - 1 do begin
         ZCMsgCallBackInterface.TextMessage(IntToStr(I) + '- соединение ' + IntToStr(G.Edges[I].V1.Index) + ' - ' + IntToStr(G.Edges[I].V2.Index) + ' = ' + floattostr(G.Edges[I].Weight),TMWOHistoryOut);
       end;
-
+      //G.Vertices[4].HelloWorld;
       G.Vertices[4].Destroy;
 
 

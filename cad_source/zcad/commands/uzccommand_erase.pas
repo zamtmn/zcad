@@ -55,7 +55,7 @@ begin
   if count>0 then
   begin
   SetObjCreateManipulator(undomethod,domethod);
-  with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),count)^ do
+  with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),count) do
   begin
     pv:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
     if pv<>nil then

@@ -8,7 +8,7 @@ uses
   SysUtils,
   uzeentity,uzeparser,uzcnavigatorsnodedesk,
   uzcoimultiproperties,laz.VirtualTrees,Classes,
-  Varman,Forms;
+  Varman,Forms,LCLVersion;
 
 resourcestring
   rsWrongColCount='Wrong columns count (%d)';
@@ -17,7 +17,7 @@ resourcestring
 
 type
   TNavParamData=record
-    NavTree: TVirtualStringTree;
+    NavTree:{$IF DECLARED(TVirtualStringTree)}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};
     ColumnCount:integer;
     PExtTreeParam:PTExtTreeParam;
   end;

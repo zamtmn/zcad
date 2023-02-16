@@ -94,7 +94,7 @@ if (button and MZW_LBUTTON)=0 then
                   im:=dispmatr;
                   uzegeometry.MatrixInvert(im);
                   PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushStartMarker('Rotate');
-                  with PushCreateTGMultiObjectChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,dispmatr,im,pcoa^.Count)^ do
+                  with PushCreateTGMultiObjectChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,dispmatr,im,pcoa^.Count) do
                   begin
                    pcd:=pcoa^.beginiterate(ir);
                   if pcd<>nil then

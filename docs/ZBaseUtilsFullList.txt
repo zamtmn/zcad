@@ -1,0 +1,2 @@
+..\cad_source\components\zbaseutils\*.pas
+..\cad_source\components\zbaseutilsgui\*.pas

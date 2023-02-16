@@ -20,9 +20,11 @@ unit uzcreglog;
 {$mode delphi}
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzbLogTypes,uzbLog,LazLogger,uzcinterface,uzcuidialogs,uzcuitypes,uzelongprocesssupport,
-     {$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}LCLProc,Forms,
-     LazLoggerBase,uzcLog,uzbLogIntf;
+uses uzbLogTypes,uzbLog,uzcLog,LazLogger,uzcinterface,uzcuidialogs,uzcuitypes,uzelongprocesssupport,
+     {$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}LCLProc,Forms,sysutils,LazUTF8,
+     uzbLogDecorators,uzbLogFileBackend,
+     LazLoggerBase,uzbLogIntf,
+     uzbCommandLineParser,uzcCommandLineParser;
 var
   MO_SM,MO_SH:TMsgOpt;
 implementation
@@ -79,7 +81,7 @@ end;
 
 procedure TLogerMBoxBackend.doLog(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);
 begin
-  if (MO_SM and MsgOptions)<>0 then begin
+  if ((MO_SM and MsgOptions)<>0)and((ZCMsgCallBackInterface.GetState and ZState_Busy)=0) then begin
        case ProgramLog.GetMutableLogLevelData(LogMode)^.LogLevelType of
          LLTWarning:ShowWarningForLog(msg);
            LLTError:ShowErrorForLog(msg);
@@ -96,8 +98,51 @@ end;
 
 var
   lz:TLazLogger;
+  FileLogBackend:TLogFileBackend;
+  TimeDecorator:TTimeDecorator;
+  PositionDecorator:TPositionDecorator;
+  LogFileName:string;
+  i:Integer;
+  mn:TCLStringType;
+  ll:TLogLevel;
+
+  FileLogBackendHandle,LogerMBoxBackendHandle,TimeDecoratorHandle,PositionDecoratorHandle:TLogExtHandle;
 
 initialization
+
+  ProgramLog.EnterMsgOpt:=lp_IncPos;
+  ProgramLog.ExitMsgOpt:=lp_DecPos;
+  ProgramLog.addMsgOptAlias('+',lp_IncPos);
+  ProgramLog.addMsgOptAlias('-',lp_DecPos);
+
+  UnitsInitializeLMId:=ProgramLog.RegisterModule('UnitsInitialization');
+  UnitsFinalizeLMId:=ProgramLog.RegisterModule('UnitsFinalization');
+
+  TimeDecorator.init;
+  TimeDecoratorHandle:=ProgramLog.addDecorator(TimeDecorator);
+
+  PositionDecorator.init;
+  PositionDecoratorHandle:=ProgramLog.addDecorator(PositionDecorator);
+
+  LogFileName:=SysToUTF8(ExtractFilePath(paramstr(0)))+filelog;
+  if CommandLineParser.HasOption(LOGFILEHDL)then
+  for i:=0 to CommandLineParser.OptionOperandsCount(LOGFILEHDL)-1 do
+    LogFileName:=CommandLineParser.OptionOperand(LOGFILEHDL,i);
+
+  FileLogBackend.init(copy(LogFileName,1,length(LogFileName)));
+  FileLogBackendHandle:=ProgramLog.addBackend(FileLogBackend,'%1:s%2:s%0:s',[@TimeDecorator,@PositionDecorator]);
+
+  ProgramLog.LogStart;
+  programlog.LogOutFormatStr('Unit "%s" initialization finish, log created',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+
+  if CommandLineParser.HasOption(LCLHDL)then
+  for i:=0 to CommandLineParser.OptionOperandsCount(LCLHDL)-1 do begin
+    mn:=CommandLineParser.OptionOperand(LCLHDL,i);
+    if programlog.TryGetLogLevelHandle(mn,ll)then
+      programlog.SetCurrentLogLevel(ll)
+    else
+      programlog.LogOutFormatStr('Unable find log level="%s"',[mn],LM_Error);
+  end;
 
   LPSTIMINGModuleDeskIndex:=programlog.RegisterModule(LPSTIMINGModuleName,EEnable);
 
@@ -117,9 +162,17 @@ initialization
   ProgramLog.addMsgOptAlias('M',MO_SM);
   ProgramLog.addMsgOptAlias('H',MO_SH);
   LogerMBoxBackend.init;
-  ProgramLog.addBackend(LogerMBoxBackend,'',[]);
+  LogerMBoxBackendHandle:=ProgramLog.addBackend(LogerMBoxBackend,'',[]);
 
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogEnd;
+  ProgramLog.removeBackend(FileLogBackendHandle);
+  ProgramLog.removeBackend(LogerMBoxBackendHandle);
+  ProgramLog.removeDecorator(TimeDecoratorHandle);
+  ProgramLog.removeDecorator(PositionDecoratorHandle);
+  FileLogBackend.done;
+  TimeDecorator.done;
+  PositionDecorator.done;
 end.
 

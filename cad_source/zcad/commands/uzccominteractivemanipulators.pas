@@ -89,6 +89,7 @@ uses
                       //разные функции упрощающие создание примитивов, пока их там очень мало
   varmandef,
   Varman,
+  gzctnrVectorTypes,
 
   uzclog;                //log system
                       //<**система логирования
@@ -145,11 +146,40 @@ procedure InteractiveRectangleManipulator( const PInteractiveData : PGDBObjPolyl
 procedure InteractivePolygonManipulator( const PInteractiveData : TPointPolygonDrawModePentity {pointer to the line entity};
                                                           Point : GDBVertex  {new end coord};
                                                           Click : Boolean {true if lmb presseed});
+procedure InteractiveConstructRootManipulator( const PInteractiveData : Pointer {must be nil, no additional data needed};
+                                                                Point : GDBVertex  {new end coord};
+                                                                Click : Boolean {true if lmb presseed});
 implementation
 { Интерактивные процедуры используются совместно с Get3DPointInteractive,
   впоследствии будут вынесены в отдельный модуль }
 { Interactive procedures are used together with Get3DPointInteractive,
   later to be moved to a separate unit }
+
+{Процедура интерактивного "перемещения" конструкторской области}
+procedure InteractiveConstructRootManipulator( const PInteractiveData : Pointer {must be nil, no additional data needed};
+                                                                Point : GDBVertex  {new end coord};
+                                                                Click : Boolean {true if lmb presseed});
+var
+  ir:itrec;
+  p:PGDBObjEntity;
+  t_matrix:DMatrix4D;
+  RC:TDrawContext;
+begin
+  if click then begin
+    t_matrix:=CreateTranslationMatrix(Point);
+    drawings.GetCurrentDWG^.ConstructObjRoot.transform(t_matrix);
+    drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=OneMatrix;
+    p:=drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.beginiterate(ir);
+     if p<>nil then repeat
+       p^.transform(t_matrix);
+       p:=drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.iterate(ir);
+     until p=nil;
+  end else begin
+    drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=CreateTranslationMatrix(Point);
+    RC:=drawings.GetCurrentDWG^.CreateDrawingRC;
+    drawings.GetCurrentDWG^.ConstructObjRoot.FormatEntity(drawings.GetCurrentDWG^,RC);
+  end;
+end;
 
 {Procedure interactive changes end of the line}
 {Процедура интерактивного изменения конца линии}

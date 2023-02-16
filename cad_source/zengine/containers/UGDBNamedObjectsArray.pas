@@ -19,7 +19,8 @@
 unit UGDBNamedObjectsArray;
 {$INCLUDE zengineconfig.inc}
 interface
-uses gzctnrVectorTypes,gzctnrVectorPObjects,sysutils,uzbtypes,uzegeometry;
+uses gzctnrVectorTypes,gzctnrVectorPObjects,sysutils,uzbtypes,uzegeometry,
+     uzeNamedObject,gzctnrVectorClass;
 type
 {EXPORT+}
 TForCResult=(IsFounded(*'IsFounded'*)=1,
@@ -40,6 +41,9 @@ GDBNamedObjectsArray{-}<PTObj,TObj>{//}
 {EXPORT-}
 PTGenericNamedObjectsArray=^TGenericNamedObjectsArray;
 TGenericNamedObjectsArray=GDBNamedObjectsArray{-}<PGDBNamedObject,GDBNamedObject>{//};
+TNamedObjectsArray{-}<TCls:Class>{//}
+                     = class(GZVectorClass{-}<TCls>{//})
+              end;
 implementation
 procedure GDBNamedObjectsArray<PTObj,TObj>.IterateCounter(PCounted:Pointer;var Counter:Integer;proc:TProcCounter);
 var p:PGDBNamedObject;

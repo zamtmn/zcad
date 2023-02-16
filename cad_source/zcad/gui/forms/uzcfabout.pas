@@ -20,9 +20,9 @@ unit uzcfabout;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
- uzcsysparams,uzcstrconsts,gettext,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
+ uzcsysparams,uzcstrconsts,gettext,uzctranslations,
  uzbstrproc,uzctreenode,FileUtil,Forms, stdctrls, Controls,
- uzcsysinfo,sysutils,
+ sysutils,
  uzeentityfactory,uzclog,uzccommandsmanager;
 type
   TAboutForm = class(TFreedForm)

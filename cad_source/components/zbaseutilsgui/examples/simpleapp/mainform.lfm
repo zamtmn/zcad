@@ -8,6 +8,7 @@ object Form1: TForm1
   ClientWidth = 956
   DesignTimePPI = 144
   OnShow = OnShowHandler
+  LCLVersion = '2.3.0.0'
   object Memo1: TMemo
     Left = 0
     Height = 400
@@ -43,8 +44,8 @@ object Form1: TForm1
     Width = 600
     Align = alLeft
     Caption = 'Log'
-    ClientHeight = 423
-    ClientWidth = 596
+    ClientHeight = 427
+    ClientWidth = 574
     TabOrder = 2
     object GroupBox3: TGroupBox
       Left = 0
@@ -54,8 +55,8 @@ object Form1: TForm1
       Align = alLeft
       AutoSize = True
       Caption = 'Default module'
-      ClientHeight = 360
-      ClientWidth = 144
+      ClientHeight = 364
+      ClientWidth = 122
       TabOrder = 0
       object Button3: TButton
         Left = 0
@@ -173,8 +174,8 @@ object Form1: TForm1
       Align = alLeft
       AutoSize = True
       Caption = 'Module2'
-      ClientHeight = 360
-      ClientWidth = 144
+      ClientHeight = 364
+      ClientWidth = 122
       TabOrder = 1
       object Button11: TButton
         Left = 0
@@ -292,8 +293,8 @@ object Form1: TForm1
       Align = alLeft
       AutoSize = True
       Caption = 'Module1'
-      ClientHeight = 360
-      ClientWidth = 144
+      ClientHeight = 364
+      ClientWidth = 122
       TabOrder = 2
       object Button19: TButton
         Left = 0
@@ -448,8 +449,8 @@ object Form1: TForm1
     Width = 348
     Align = alClient
     Caption = 'Exceptions'
-    ClientHeight = 423
-    ClientWidth = 344
+    ClientHeight = 427
+    ClientWidth = 322
     TabOrder = 4
     object Button1: TButton
       Left = 0

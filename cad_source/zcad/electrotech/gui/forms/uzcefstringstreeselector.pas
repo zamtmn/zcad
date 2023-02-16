@@ -5,7 +5,7 @@ unit uzcefstringstreeselector;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, StdCtrls, ButtonPanel,
+  Classes, SysUtils, Forms, Controls, Graphics, StdCtrls, ButtonPanel, LCLVersion,
   laz.VirtualTrees, uzceltechtreeprop, uzbtypes, math;
 
 type
@@ -20,7 +20,7 @@ type
   TStringsTreeSelector = class(TForm)
     ButtonPanel1: TButtonPanel;
     ComboBox1: TComboBox;
-    StringsTree: TVirtualStringTree;
+    StringsTree:{$IF DECLARED(TVirtualStringTree)}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};
     procedure filltree(StringTreeNode:PVirtualNode;BlobTreeNode:TBlobTree.TTreeNodeType);
     procedure fill(BlobTree:TBlobTree);
     function FindNearestNode(value:TStringTreeType):PVirtualNode;

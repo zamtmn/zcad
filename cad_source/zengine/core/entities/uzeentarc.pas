@@ -172,20 +172,15 @@ begin
      self.R:=PGDBVertex(@objmatrix[0])^.x/local.basis.OX.x;
 end;
 function GDBObjARC.CalcTrueInFrustum;
-var i{,count}:Integer;
-    //d1,d2,d3,d4:Double;
+var
+  i:Integer;
+  rad:Double;
 begin
-      for i:=0 to 5 do
-      begin
-      if(frustum[i].v[0] * P_insert_in_WCS.x + frustum[i].v[1] * P_insert_in_WCS.y + frustum[i].v[2] * P_insert_in_WCS.z + frustum[i].v[3]+R < 0 )
-      then
-      begin
-           result:=IREmpty;
-           exit;
-           //system.break;
-      end;
-      end;
-      result:=Vertex3D_in_WCS_Array.CalcTrueInFrustum(frustum);
+  rad:=abs(ObjMatrix[0].v[0]);
+  for i:=0 to 5 do
+    if(frustum[i].v[0] * P_insert_in_WCS.x + frustum[i].v[1] * P_insert_in_WCS.y + frustum[i].v[2] * P_insert_in_WCS.z + frustum[i].v[3]+rad{+GetLTCorrectH} < 0 ) then
+      exit(IREmpty);
+  result:=Vertex3D_in_WCS_Array.CalcTrueInFrustum(frustum);
 end;
 function GDBObjARC.calcinfrustum;
 var i:Integer;
@@ -595,22 +590,19 @@ begin
   FormatEntity(drawing,dc);
 end;
 function GDBObjARC.onmouse;
-var i:Integer;
+var
+ i:Integer;
+ rad:Double;
 begin
-     for i:=0 to 5 do
-     begin
-     if(mf[i].v[0] * P_insert_in_WCS.x + mf[i].v[1] * P_insert_in_WCS.y + mf[i].v[2] * P_insert_in_WCS.z + mf[i].v[3]+R < 0 )
-     then
-     begin
-          result:=false;
-          //system.break;
-          exit;
-     end;
-     end;
-     result:=Vertex3D_in_WCS_Array.onmouse(mf,false);
-     if not result then
-                  if CalcPointTrueInFrustum(P_insert_in_WCS,mf)=IRFully then
-                                                                            result:=true;
+ rad:=abs(ObjMatrix[0].v[0]);
+ for i:=0 to 5 do begin
+   if(mf[i].v[0] * P_insert_in_WCS.x + mf[i].v[1] * P_insert_in_WCS.y + mf[i].v[2] * P_insert_in_WCS.z + mf[i].v[3]+rad < 0 ) then
+   exit(false);
+ end;
+ result:=Vertex3D_in_WCS_Array.onmouse(mf,false);
+ if not result then
+   if CalcPointTrueInFrustum(P_insert_in_WCS,mf)=IRFully then
+     result:=true;
 end;
 procedure GDBObjARC.remaponecontrolpoint(pdesc:pcontrolpointdesc);
 begin

@@ -21,29 +21,22 @@ unit uzccommand_stretch;
 
 interface
 uses
- uzeconsts,zeundostack,uzcoimultiobjects,
- uzgldrawcontext,uzbpaths,uzeffmanager,
- uzestylesdim,uzeenttext,
- URecordDescriptor,uzefontmanager,uzedrawingsimple,uzcsysvars,uzccommandsmanager,
- TypeDescriptors,uzcctrlcontextmenu,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
- uzbstrproc,uzctreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
- LCLProc,Classes,LazUTF8,Forms,Controls,Clipbrd,lclintf,
-  uzcsysinfo,
+ uzglviewareageneral,
+ uzgldrawcontext,
+ uzccommandsmanager,
+  uzccommandsabstract,
   uzccommandsimpl,
   uzbtypes,
   uzcdrawings,
-  sysutils,
-  varmandef,
   uzglviewareadata,
-  uzctnrVectorBytes,
-  uzeffdxf,
   uzcinterface,
+  uzeconsts,
   uzeentity,
- uzcdialogsfiles,
- UUnitManager,uzclog,Varman,
- uzegeometrytypes,uzcinfoform,
- uzeentpolyline,uzeentlwpolyline,UGDBSelectedObjArray,
- uzegeometry,uzelongprocesssupport,uzccommand_selectframe,uzccommand_ondrawinged;
+ uzclog,
+ uzegeometrytypes,
+ uzegeometry,
+
+ uzccommand_selectframe,uzccommand_ondrawinged;
 
 implementation
 type

@@ -423,14 +423,14 @@ var
       CMWaitFile:begin
                    if clFilePrompt=nil then
                      clFilePrompt:=CMDLinePromptParser.GetTokens(RSCLPDataExportWaitFile);
-                   commandmanager.SetPrompt(clFilePrompt);
-                   commandmanager.ChangeInputMode([GPIempty],[]);
+                   commandmanager.SetPrompt(clFilePrompt);               //выставляет результат парсинга в командную строчку
+                   commandmanager.ChangeInputMode([IPEmpty],[]);
                  end;
        CMOptions:begin
                    if clOptionsPrompt=nil then
                      clOptionsPrompt:=CMDLinePromptParser.GetTokens(RSCLPDataExportOptions);
                    commandmanager.SetPrompt(clOptionsPrompt);
-                   commandmanager.ChangeInputMode([GPIempty],[]);
+                   commandmanager.ChangeInputMode([IPEmpty],[]);
                  end;
       CMOptions1:begin
                    ZCMsgCallBackInterface.TextMessage(RSCLPDataExportEntsFilterCurrentValue,TMWOHistoryOut);
@@ -438,7 +438,7 @@ var
                    if clOptionsPrompt1=nil then
                      clOptionsPrompt1:=CMDLinePromptParser.GetTokens(RSCLPDataExportEntsFilterNewValue);
                    commandmanager.SetPrompt(clOptionsPrompt1);
-                   commandmanager.ChangeInputMode([GPIempty],[]);
+                   commandmanager.ChangeInputMode([IPEmpty],[]);
                  end;
       CMOptions2:begin
                    ZCMsgCallBackInterface.TextMessage(RSCLPDataExportPropsFilterCurrentValue,TMWOHistoryOut);
@@ -446,7 +446,7 @@ var
                    if clOptionsPrompt2=nil then
                      clOptionsPrompt2:=CMDLinePromptParser.GetTokens(RSCLPDataExportPropsFilterNewValue);
                    commandmanager.SetPrompt(clOptionsPrompt2);
-                   commandmanager.ChangeInputMode([GPIempty],[]);
+                   commandmanager.ChangeInputMode([IPEmpty],[]);
                  end;
       CMOptions3:begin
                    ZCMsgCallBackInterface.TextMessage(RSCLPDataExportExportScriptCurrentValue,TMWOHistoryOut);
@@ -454,7 +454,7 @@ var
                    if clOptionsPrompt3=nil then
                      clOptionsPrompt3:=CMDLinePromptParser.GetTokens(RSCLPDataExportExportScriptNewValue);
                    commandmanager.SetPrompt(clOptionsPrompt3);
-                   commandmanager.ChangeInputMode([GPIempty],[]);
+                   commandmanager.ChangeInputMode([IPEmpty],[]);
                  end;
     end;
     CmdMode:=Mode;

@@ -19,13 +19,19 @@ unit uzcinterface;
 {$INCLUDE zengineconfig.inc}
 interface
 uses controls,uzcstrconsts,uzedimensionaltypes,gzctnrSTL,zeundostack,varmandef,
-     uzcuilcl2zc,uzcuitypes,forms,classes,uzbtypes,LCLType,SysUtils;
+     uzcuilcl2zc,uzcuitypes,forms,classes,LCLType,SysUtils,uzbHandles,uzbSets;
 
 const
     CLinePriority=500;
     DrawingsFocusPriority=400;
     UnPriority=-1;
+type
+  TZMessageID=type Integer;
+  TZState=type LongWord;
+  TZMessageIDCreater=GTSimpleHandles<TZMessageID,GTHandleManipulator<TZMessageID>>;
+  TZStateCreater=GTSet<TZState,TZState>;
 var
+  ZState_Busy:TZState=0;
   ZMsgID_GUIEnable:TZMessageID=-1;
   ZMsgID_GUIDisable:TZMessageID=-1;
   ZMsgID_GUICMDLineCheck:TZMessageID=-1;
@@ -52,6 +58,9 @@ var
   ZMsgID_GUIStoreAndFreeEditorProc:TZMessageID=-1;
   ZMsgID_GUIBeforeCloseApp:TZMessageID=-1;
 type
+  TGetStateFunc=function:TZState of object;
+  TGetStateFuncsVector=TMyVector<TGetStateFunc>;
+
     TProcedure_String_=procedure(s:String);
     TProcedure_String_HandlersVector=TMyVector<TProcedure_String_>;
 
@@ -113,7 +122,11 @@ type
 
     TZCMsgCallBackInterface=class
       private
-        ZMessageIDSeed:TZMessageID;
+        ZMessageIDCreater:TZMessageIDCreater;
+        ZStateCreater:TZStateCreater;
+
+        GetStateFuncsVector:TGetStateFuncsVector;
+
         HistoryOutHandlers:TProcedure_String_HandlersVector;
         LogErrorHandlers:TProcedure_String_HandlersVector;
         StatusLineTextOutHandlers:TProcedure_String_HandlersVector;
@@ -133,6 +146,8 @@ type
       public
         constructor Create;
         destructor Destroy;override;
+        function GetUniqueZState:TZState;
+        function GetEmptyZState:TZState;
         function GetUniqueZMessageID:TZMessageID;
         procedure RegisterHandler_HistoryOut(Handler:TProcedure_String_);
         procedure RegisterHandler_LogError(Handler:TProcedure_String_);
@@ -150,6 +165,9 @@ type
 
         procedure RegisterHandler_GetFocusedControl(Handler:TGetControlWithPriority_TZMessageID__TControlWithPriority);
 
+        procedure RegisterGetStateFunc(fnc:TGetStateFunc);
+
+        function GetState:TZState;
         procedure Do_HistoryOut(s:String);
         procedure Do_LogError(s:String);
         procedure Do_StatusLineTextOut(s:String);
@@ -270,11 +288,15 @@ begin
 end;
 constructor TZCMsgCallBackInterface.Create;
 begin
-  ZMessageIDSeed:=0;
+  ZMessageIDCreater.init;
+  ZStateCreater.init;
   FTextQuestionFunc:=nil;
 end;
 destructor TZCMsgCallBackInterface.Destroy;
 begin
+  ZMessageIDCreater.done;
+  ZStateCreater.done;
+
      FreeAndNil(HistoryOutHandlers);
      FreeAndNil(LogErrorHandlers);
      FreeAndNil(StatusLineTextOutHandlers);
@@ -294,8 +316,15 @@ end;
 
 function TZCMsgCallBackInterface.GetUniqueZMessageID:TZMessageID;
 begin
-  inc(ZMessageIDSeed);
-  result:=ZMessageIDSeed;
+  result:=ZMessageIDCreater.CreateHandle;
+end;
+function TZCMsgCallBackInterface.GetUniqueZState:TZState;
+begin
+  result:=ZStateCreater.GetEnum;
+end;
+function TZCMsgCallBackInterface.GetEmptyZState:TZState;
+begin
+  result:=ZStateCreater.GetEmpty;
 end;
 function TZCMsgCallBackInterface.TextQuestion(Caption,Question:TZCMsgStr):TZCMsgCommonButton;
 var
@@ -571,6 +600,23 @@ begin
   result:=Do_TGetControlWithPriority_TZMessageID__TControlWithPriority_HandlersVector(getfocusedcontrol);
 end;
 
+procedure TZCMsgCallBackInterface.RegisterGetStateFunc(fnc:TGetStateFunc);
+begin
+   if not assigned(GetStateFuncsVector) then
+     GetStateFuncsVector:=TGetStateFuncsVector.Create;
+   GetStateFuncsVector.PushBack(fnc);
+end;
+
+function TZCMsgCallBackInterface.GetState:TZState;
+var
+  fnc:TGetStateFunc;
+begin
+   Result:=ZStateCreater.GetEmpty;
+   for fnc in GetStateFuncsVector do begin
+     ZStateCreater.Include(Result,fnc);
+   end;
+end;
+
 procedure TZCMsgCallBackInterface.Do_SetNormalFocus;
 var
   ctrl:TWinControl;
@@ -602,6 +648,7 @@ end;
 initialization
   ZCMsgCallBackInterface:=TZCMsgCallBackInterface.create;
   ZCStatekInterface:=TZCStatekInterface.create;
+  ZState_Busy:=ZCMsgCallBackInterface.GetUniqueZState;
   ZMsgID_GUIEnable:=ZCMsgCallBackInterface.GetUniqueZMessageID;
   ZMsgID_GUIDisable:=ZCMsgCallBackInterface.GetUniqueZMessageID;
   ZMsgID_GUICMDLineCheck:=ZCMsgCallBackInterface.GetUniqueZMessageID;

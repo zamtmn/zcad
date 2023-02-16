@@ -27,7 +27,7 @@ uses
 
 type
 
-  GTLinearIncHandleManipulator<GHandleType>=object(GTHandleManipulator<GHandleType>)
+  GTLinearIncHandleManipulator<GHandleType>=class(GTHandleManipulator<GHandleType>)
     class function GetIndex(Handle:GHandleType):SizeInt;inline;static;
   end;
 

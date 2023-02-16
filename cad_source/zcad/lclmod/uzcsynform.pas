@@ -21,10 +21,10 @@ unit uzcSynForm;
 interface
 
 uses
-  uzcsysparams,uzcinterface,ExtCtrls,SynEdit,
-  {$IFNDEF DELPHI}lclproc,{$ENDIF}
-  Graphics,ActnList,ComCtrls,StdCtrls,Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,fileutil,ButtonPanel,{$ENDIF}Buttons,
-  uzcinfoform,uzclog,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}sysutils,uzbstrproc,varmandef,Varman,UBaseTypeDescriptor,uzcsysinfo,uzctnrVectorBytes;
+
+  uzcsysparams,uzcinterface,uzclog,uzcinfoform,
+  SynEdit,Forms,StdCtrls,Controls;
+
 type
   TSynForm=class(TDialogForm)
                          Memo: {TMemo}TSynEdit;

@@ -25,7 +25,7 @@ uses
   sysutils,
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
-  zcchangeundocommand,
+  gzundoCmdChgData,
   uzcutils,uzecamera,
   uzedrawingsimple,uzcdrawings,uzcdrawing;
 
@@ -41,7 +41,7 @@ begin
     pcamera:=cdwg.pcamera;
     if pcamera<>nil then begin
       PTZCADDrawing(drawings.GetCurrentDWG).UndoStack.PushStartMarker('Reset camera');
-      with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG).UndoStack,drawings.GetCurrentDWG.pcamera^.prop)^ do begin
+      with TGDBCameraBasePropChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG).UndoStack,drawings.GetCurrentDWG.pcamera^.prop,nil,nil) do begin
         pcamera^.prop.point.x := 0;
         pcamera^.prop.point.y := 0;
         pcamera^.prop.point.z := 50;

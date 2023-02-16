@@ -22,14 +22,17 @@ interface
 
 uses
   {$IFDEF LCLWIN32}win32proc,{$endif}
-  uzcutils,uzbpaths,Themes,uzcinterface,uzccommandsabstract,ExtCtrls,lclproc,Graphics,ActnList,ComCtrls,
-  Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,{$ENDIF}LazUTF8,Buttons,
-  {$IFNDEF DELPHI}uzctranslations,{$ENDIF}sysutils,uzbstrproc,varmandef,
-  uzccommandsmanager,uzclog,uzcdrawings,Varman,UBaseTypeDescriptor,uzcsysinfo,uzctnrVectorBytes;
+  sysutils,Themes,ExtCtrls,lclproc,Graphics,ActnList,ComCtrls,
+  Controls,Classes,menus,Forms,lcltype,LazUTF8,Buttons,
+  uzcinterface,uzccommandsabstract,
+  uzcutils,uzbpaths,uzctranslations,varmandef,
+  uzccommandsmanager,uzclog,uzcdrawings,Varman,UBaseTypeDescriptor;
 type
     TZAction=class(TAction)
                    public
-                   imgstr:string;
+                     imgstr:string;
+                   public
+                     constructor Create(AOwner: TComponent); override;
               end;
     TmyVariableAction=class(TZAction)
                       public
@@ -160,6 +163,7 @@ begin
     Details:=ThemeServices.GetElementDetails({$IFDEF LCLWIN32}ttbSplitButtonDropDownNormal{$ENDIF}
                                              {$IFDEF LCLQT}tsDownNormal{$ENDIF}
                                              {$IFDEF LCLQT5}tsDownNormal{$ENDIF}
+                                             {$IFDEF LCLQT6}tsDownNormal{$ENDIF}
                                              {$IFDEF LCLgtk2}ttbSplitButtonDropDownNormal{$ENDIF}
                                              {$IFDEF LCLgtk3}ttbSplitButtonDropDownNormal{$ENDIF}
                                              {$IFDEF LCLcocoa}ttbSplitButtonDropDownNormal{$ENDIF}
@@ -172,6 +176,7 @@ begin
                      end;{$ENDIF}
     {$IFDEF LCLQT}PaintRect.Top:=PaintRect.Bottom div 2;PaintRect.Left:=2*PaintRect.Right div 3;{$ENDIF}
     {$IFDEF LCLQT5}PaintRect.Top:=PaintRect.Bottom div 2;PaintRect.Left:=2*PaintRect.Right div 3;{$ENDIF}
+    {$IFDEF LCLQT6}PaintRect.Top:=PaintRect.Bottom div 2;PaintRect.Left:=2*PaintRect.Right div 3;{$ENDIF}
     {$IFDEF LCLGTK2}PaintRect.Top:=2*PaintRect.Bottom div 3;PaintRect.Left:=PaintRect.Right div 2;{$ENDIF}
     {$IFDEF LCLGTK3}PaintRect.Top:=2*PaintRect.Bottom div 3;PaintRect.Left:=PaintRect.Right div 2;{$ENDIF}
     ThemeServices.DrawElement(Canvas.Handle,Details,PaintRect)
@@ -394,6 +399,12 @@ begin
         else
             enabled:=false;
 end;
+constructor TZAction.Create(AOwner: TComponent);
+begin
+  inherited create(AOwner);
+  DisableIfNoHandler:=False;
+end;
+
 function TmyAction.Execute: Boolean;
 var
     s:string;

@@ -132,6 +132,7 @@ procedure GDBObjCable.SaveToDXFObjXData(var outhandle:{Integer}TZctnrVectorBytes
    //s:String;
 begin
      inherited;
+     dxfStringout(outhandle,1000,'_HANDLE='+inttohex(GetHandle,10));
      dxfStringout(outhandle,1000,'_UPGRADE=1');
      dxfStringout(outhandle,1000,'_LAYER='+vp.Layer.name);
 end;
@@ -533,8 +534,9 @@ begin
      result:=AllocAndInitCable(pent^.bp.ListPos.Owner);
      if pent^.PExtAttrib<>nil then
      begin
-       result^.PExtAttrib:=pent^.PExtAttrib;
-       pent^.PExtAttrib:=nil;
+       result^.PExtAttrib:=pent^.CopyExtAttrib;
+       //result^.PExtAttrib:=pent^.PExtAttrib;
+       //pent^.PExtAttrib:=nil;
      end;
      //result^.vp:=pent^.vp;
      pent.CopyVPto(result^);

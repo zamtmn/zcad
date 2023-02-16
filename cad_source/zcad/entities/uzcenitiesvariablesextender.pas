@@ -20,10 +20,10 @@ unit uzcenitiesvariablesextender;
 
 interface
 uses sysutils,UGDBObjBlockdefArray,uzedrawingdef,uzeentityextender,
-     uzeentdevice,TypeDescriptors,uzetextpreprocessor,uzctnrVectorBytes,
-     uzbtypes,uzeentsubordinated,uzeentity,uzeenttext,uzeblockdef,
+     uzeentdevice,TypeDescriptors,uzctnrVectorBytes,
+     uzbtypes,uzeentsubordinated,uzeentity,uzeblockdef,
      varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
-     uzeentitiestree,usimplegenerics,uzeffdxfsupport,uzbpaths,uzctranslations,
+     uzeentitiestree,usimplegenerics,uzeffdxfsupport,uzbpaths,uzcTranslations,
      gzctnrVectorTypes,uzeBaseExtender,uzgldrawcontext;
 const
   VariablesExtenderName='extdrVariables';
@@ -62,7 +62,7 @@ TVariablesExtender=class(TBaseVariablesExtender)
     class function EntIOLoadUSES(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
     class function EntIOLoadMainFunction(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 
-    procedure SaveToDxf(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
+    procedure SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
   end;
 
 var
@@ -333,7 +333,12 @@ begin
      result:=true;
 end;
 class function TVariablesExtender.EntIOLoadMainFunction(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+var
+  vardata:TVariablesExtender;
 begin
+  vardata:=PGDBObjEntity(PEnt)^.GetExtension<TVariablesExtender>;
+  if vardata=nil then
+    vardata:=addvariablestoentity(PEnt);
   {$IFNDEF DELPHI}
   if not TryStrToQWord('$'+_value,PGDBObjEntity(PEnt)^.AddExtAttrib^.MainFunctionHandle)then
   {$ENDIF}
@@ -343,7 +348,7 @@ begin
   result:=true;
 end;
 
-procedure TVariablesExtender.SaveToDxf(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
+procedure TVariablesExtender.SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
 var
    ishavevars:boolean;
    pvd:pvardesk;

@@ -71,8 +71,9 @@ type
 
         IFmtDataComparer=specialize IEqualityComparer<TFmtData>;
         TFmtDataComparer=class(TInterfacedObject,IFmtDataComparer)
-          function Equals(constref ALeft, ARight: TFmtData): Boolean;
-          function GetHashCode(constref AValue: TFmtData): UInt32;
+          {todo: убрать $IF когда const попадет в релиз fpc}
+          function Equals({$IF FPC_FULlVERSION>30202}const{$ELSE}constref{$ENDIF}ALeft, ARight: TFmtData): Boolean;
+          function GetHashCode({$IF FPC_FULlVERSION>30202}const{$ELSE}constref{$ENDIF}AValue: TFmtData): UInt32;
         end;
 
         TFmtResultData=record
@@ -134,9 +135,6 @@ type
       procedure processMsg(msg:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);
       procedure processFmtResultData(var FRD:TFmtResultData;Stampt:TLogStampt;msg:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);
       procedure processDecoratorData(var DD:TDecoratorData;Stampt:TLogStampt;msg:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);
-      function isModuleEnabled(LMDI:TModuleDesk):Boolean;
-      function LogMode2String(LogMode:TLogLevel):TLogLevelHandleNameType;
-
 
     public
       EnterMsgOpt,ExitMsgOpt:TMsgOpt;
@@ -148,10 +146,11 @@ type
 
       procedure addMsgOptAlias(const ch:AnsiChar;const opt:TMsgOpt);
 
-      function addBackend(var BackEnd:TLogerBaseBackend;fmt:TLogMsg;const args:array of PTLogerBaseDecorator):TBackendHandle;
-      procedure removeBackend(BackEndH:TBackendHandle);
+      function addBackend(var BackEnd:TLogerBaseBackend;fmt:TLogMsg;const args:array of PTLogerBaseDecorator):TLogExtHandle;
+      procedure removeBackend(BackEndH:TLogExtHandle);
 
-      procedure addDecorator(var Decorator:TLogerBaseDecorator);
+      function addDecorator(var Decorator:TLogerBaseDecorator):TLogExtHandle;
+      procedure removeDecorator(DecoratorH:TLogExtHandle);
 
       procedure LogStart;
       procedure LogEnd;
@@ -183,6 +182,8 @@ type
 
       function TryGetLogLevelHandle(LogLevelName:TLogLevelHandleNameType;out LogLevel:TLogLevel):Boolean;
       function GetMutableLogLevelData(LL:TLogLevel):PTTLogLevelData;
+      function LogMode2String(LogMode:TLogLevel):TLogLevelHandleNameType;
+      function isModuleEnabled(LMDI:TModuleDesk):Boolean;
   end;
 
   TDoEnteredHelper = type helper for TLog.TEntered
@@ -194,7 +195,7 @@ var
 
 implementation
 
-function TLog.TFmtDataComparer.Equals(constref ALeft, ARight: TFmtData): Boolean;
+function TLog.TFmtDataComparer.Equals({$if FPC_FULlVERSION>30202}const{$ELSE}constref{$ENDIF}ALeft, ARight: TFmtData): Boolean;
 var
   i:integer;
 begin
@@ -213,7 +214,7 @@ begin
   Result:=True;
 end;
 
-function TLog.TFmtDataComparer.GetHashCode(constref AValue: TFmtData): UInt32;
+function TLog.TFmtDataComparer.GetHashCode({$if FPC_FULlVERSION>30202}const{$ELSE}constref{$ENDIF}AValue: TFmtData): UInt32;
 begin
   Result := BobJenkinsHash(AValue.msgFmt[1],length(AValue.msgFmt)*SizeOf(AValue.msgFmt[1]),0);
   Result := BobJenkinsHash(AValue.argsP[0],length(AValue.argsP)*SizeOf(AValue.argsP[1]),Result);
@@ -430,20 +431,28 @@ begin
 end;
 
 
-procedure TLog.addDecorator(var Decorator:TLogerBaseDecorator);
+function TLog.addDecorator(var Decorator:TLogerBaseDecorator):TLogExtHandle;
 var
   DD:TDecoratorData;
   i:Integer;
 begin
   for i:=0 to Decorators.Size-1 do
     if Decorators.Mutable[i]^.PDecorator=@Decorator then
-      exit;
+      exit(-i);
   DD.CreateRec(@Decorator,LogStampter.GetInitialHandleValue);
+  result:=Decorators.Size;
   Decorators.PushBack(DD);
 end;
 
+procedure TLog.removeDecorator(DecoratorH:TLogExtHandle);
+begin
+  if DecoratorH>=0 then begin
+    if Decorators.Mutable[DecoratorH]^.PDecorator<>nil then
+      Decorators.Mutable[DecoratorH]^.PDecorator:=nil;
+  end
+end;
 
-function TLog.addBackend(var BackEnd:TLogerBaseBackend;fmt:TLogMsg;const args:array of PTLogerBaseDecorator):TBackendHandle;
+function TLog.addBackend(var BackEnd:TLogerBaseBackend;fmt:TLogMsg;const args:array of PTLogerBaseDecorator):TLogExtHandle;
 var
   BD:TLogerBackendData;
   i,j,k:Integer;
@@ -487,18 +496,22 @@ begin
     for i:=0 to Backends.Size-1 do
       if Backends.Mutable[i]^.PBackend=nil then begin
         Backends.Mutable[i]^:=BD;
-        result:=i;
+        result:=-i;
       end;
   end;
   inc(TotalBackendsCount);
 end;
 
-procedure TLog.removeBackend(BackEndH:TBackendHandle);
+procedure TLog.removeBackend(BackEndH:TLogExtHandle);
 begin
-  if Backends.Mutable[BackEndH]^.PBackend<>nil then begin
-    Backends.Mutable[BackEndH]^.PBackend:=nil;
+  if BackEndH>=0 then begin
+    if Backends.Mutable[BackEndH]^.PBackend<>nil then begin
+      Backends.Mutable[BackEndH]^.PBackend:=nil;
+      dec(TotalBackendsCount);
+    end
+  end else
+  if Backends.Mutable[-BackEndH]^.PBackend<>nil then
     dec(TotalBackendsCount);
-  end;
 end;
 
 procedure TLog.processDecoratorData(var DD:TDecoratorData;Stampt:TLogStampt;msg:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);
@@ -579,8 +592,15 @@ begin
 end;
 
 procedure TLog.LogEnd;
+var
+  i:integer;
 begin
   processMsg('-------------------------Log ended-------------------------',LogModeDefault,LMDIDefault,MsgDefaultOptions);
+  for i:=0 to ModulesDesks.HandleDataVector.Size-1 do
+  if ModulesDesks.HandleDataVector[i].D.enabled then
+    processMsg(format(rsLogModuleState,[ModulesDesks.HandleDataVector[I].N,rsEnabled]),LogModeDefault,LMDIDefault,MsgDefaultOptions)
+  else
+    processMsg(format(rsLogModuleState,[ModulesDesks.HandleDataVector[I].N,rsDisabled]),LogModeDefault,LMDIDefault,MsgDefaultOptions);
 end;
 
 function TLog.isTraceEnabled:boolean;
@@ -642,11 +662,6 @@ destructor TLog.done;
 var
   i:integer;
 begin
-  for i:=0 to ModulesDesks.HandleDataVector.Size-1 do
-  if ModulesDesks.HandleDataVector[i].D.enabled then
-    processMsg(format(rsLogModuleState,[ModulesDesks.HandleDataVector[I].N,rsEnabled]),LogModeDefault,LMDIDefault,MsgDefaultOptions)
-  else
-    processMsg(format(rsLogModuleState,[ModulesDesks.HandleDataVector[I].N,rsDisabled]),LogModeDefault,LMDIDefault,MsgDefaultOptions);
   //processMsg('-------------------------Log ended-------------------------',LogModeDefault,LMDIDefault,MsgDefaultOptions);
   LogLevels.done;
   ModulesDesks.done;

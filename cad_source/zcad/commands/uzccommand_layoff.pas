@@ -24,7 +24,7 @@ interface
 uses
   uzcLog,
   uzccommandsabstract,uzeentity,uzcdrawing,uzcdrawings,uzccommandsmanager,
-  uzcstrconsts,uzcutils,zcchangeundocommand,uzccommandsimpl;
+  uzcstrconsts,uzcutils,gzundoCmdChgData,uzccommandsimpl;
 
 implementation
 const
@@ -39,7 +39,7 @@ begin
   begin
    if _PEntity^.vp.Layer._on then begin
      zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,LayOffCommandName,true);
-     with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,_PEntity^.vp.Layer._on)^ do
+     with TBooleanChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,_PEntity^.vp.Layer._on,nil,nil) do
      begin
        _PEntity^.vp.Layer._on:=not _PEntity^.vp.Layer._on;
        ComitFromObj;

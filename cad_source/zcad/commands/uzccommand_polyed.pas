@@ -21,7 +21,7 @@ unit uzccommand_polyed;
 
 interface
 uses
-  zcobjectchangeundocommand2,
+  gzundoCmdChgMethods,
   gzctnrVectorTypes,uzeentitiesmanager,
   uzcdrawing,
   uzgldrawcontext,
@@ -287,7 +287,7 @@ begin
                                                   undomethod:=tmethod(@p3dpl^.InsertVertex);
                                                   {tmethod(undomethod).Code:=pointer(p3dpl.InsertVertex);
                                                   tmethod(undomethod).Data:=p3dpl;}
-                                                  with PushCreateTGObjectChangeCommand2(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,polydata,tmethod(domethod),tmethod(undomethod))^ do
+                                                  with specialize GUCmdChgMethods<TPolyData>.CreateAndPush(polydata,domethod,undomethod,PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,@drawings.AfterAutoProcessGDB) do
                                                   begin
                                                        comit;
                                                   end;
@@ -320,7 +320,7 @@ begin
                                                                          undomethod:=tmethod(@p3dpl^.DeleteVertex);
                                                                          {tmethod(undomethod).Code:=pointer(p3dpl.DeleteVertex);
                                                                          tmethod(undomethod).Data:=p3dpl;}
-                                                                         with PushCreateTGObjectChangeCommand2(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,polydata,tmethod(domethod),tmethod(undomethod))^ do
+                                                                         with Specialize GUCmdChgMethods<TPolyData>.CreateAndPush(polydata,domethod,undomethod,PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,@drawings.AfterAutoProcessGDB) do
                                                                          begin
                                                                               comit;
                                                                          end;

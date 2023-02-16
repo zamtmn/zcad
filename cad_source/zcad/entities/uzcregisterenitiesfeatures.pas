@@ -19,7 +19,7 @@ unit uzcregisterenitiesfeatures;
 {$INCLUDE zengineconfig.inc}
 
 interface
-uses uzcinterface,uzeffdxf,uzbpaths,uzcsysvars,uzctranslations,sysutils,
+uses uzcinterface,uzeffdxf,uzbpaths,uzcsysvars,uzcTranslations,sysutils,
      uzcenitiesvariablesextender,uzcstrconsts,uzeconsts,devices,uzccomdb,uzcentcable,uzcentnet,uzeentdevice,TypeDescriptors,uzeffdxfsupport,
      uzetextpreprocessor,uzctnrVectorBytes,uzbtypes,uzeobjectextender,
      uzeentsubordinated,uzeentity,uzeenttext,uzeblockdef,varmandef,Varman,UUnitManager,

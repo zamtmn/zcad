@@ -20,8 +20,8 @@ unit uzcdrawing;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-    uzctranslations,uzcinterface,uzgldrawcontext,zeundostack,zcchangeundocommand,
-    zcobjectchangeundocommand,zebaseundocommands,uzbpaths,uzestylesdim,
+    uzcTranslations,uzcinterface,uzgldrawcontext,zeundostack,gzundoCmdChgData,
+    gzundoCmdChgMethod,zebaseundocommands,uzbpaths,uzestylesdim,
     uzcdialogsfiles,LResources,uzcsysvars,uzcstrconsts,uzbstrproc,uzeblockdef,UUnitManager,
     uzbtypes,varmandef,varman,sysutils,uzegeometry, uzeconsts,
     uzedrawingsimple,uzestyleslayers,uzeentity,uzefontmanager,
@@ -43,7 +43,7 @@ TZCADDrawing= object(TSimpleDrawing)
            procedure onUndoRedo;
            procedure onUndoRedoDataOwner(PDataOwner:Pointer);
 
-           procedure SetCurrentDWG;virtual;
+           //procedure SetCurrentDWG;virtual;
            function StoreOldCamerapPos:Pointer;virtual;
            procedure StoreNewCamerapPos(command:Pointer);virtual;
            //procedure SetEntFromOriginal(_dest,_source:PGDBObjEntity;PCD_dest,PCD_source:PTDrawingPreCalcData);
@@ -67,7 +67,7 @@ TZCADDrawing= object(TSimpleDrawing)
 {EXPORT-}
 //procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
 implementation
- uses uzcdrawings,uzeenttext,uzeentdevice,uzeentblockinsert,uzeffdxf,uzccommandsmanager;
+ uses uzcdrawings,uzccommandsmanager;
 procedure TZCADDrawing.FillDrawingPartRC(var dc:TDrawContext);
 var
   vd:pvardesk;
@@ -136,13 +136,13 @@ begin
                                             sysvar.DWG.DWG_UnitMode^:=f.umode;
 end;
 
-procedure TZCADDrawing.SetCurrentDWG();
+{procedure TZCADDrawing.SetCurrentDWG();
 begin
   drawings.SetCurrentDWG(@self);
-end;
+end;}
 function TZCADDrawing.StoreOldCamerapPos:Pointer;
 begin
-     result:=PushCreateTGChangeCommand(UndoStack,GetPcamera^.prop)
+     result:=TGDBCameraBasePropChangeCommand.CreateAndPushIfNeed(UndoStack,GetPcamera^.prop,nil,nil)
 end;
 procedure TZCADDrawing.rtmodifyonepoint(obj:PGDBObjEntity;rtmod:TRTModifyData;wc:gdbvertex);
 var
@@ -151,7 +151,7 @@ begin
   tmethod(tum).Code:=pointer(obj.rtmodifyonepoint);
   tmethod(tum).Data:=obj;
   //tum:=tundablemethod(obj^.rtmodifyonepoint);
-  with PushCreateTGObjectChangeCommand(UndoStack,rtmod,tmethod(tum))^ do
+  with GUCmdChgMethod<TRTModifyData>.CreateAndPush(rtmod,tmethod(tum),UndoStack,drawings.AfterAutoProcessGDB) do
   begin
        comit;
        rtmod.wc:=rtmod.point.worldcoord;
@@ -162,7 +162,7 @@ end;
 procedure TZCADDrawing.StoreNewCamerapPos(command:Pointer);
 begin
      if command<>nil then
-                         PTGDBCameraBasePropChangeCommand(command).ComitFromObj;
+                         TGDBCameraBasePropChangeCommand(command).ComitFromObj;
 end;
 procedure TZCADDrawing.PushStartMarker(CommandName:String);
 begin
@@ -275,7 +275,7 @@ begin
   Pointer(FileName):=nil;
   FileName:=rsHardUnnamed;
   Changed:=False;
-  UndoStack.init;
+  UndoStack:=TZctnrVectorUndoCommands.init;
   UndoStack.onUndoRedo:=self.onUndoRedo;
   zebaseundocommands.onUndoRedoDataOwner:=self.onUndoRedoDataOwner;
 
@@ -315,7 +315,9 @@ end;
 destructor TZCADDrawing.done;
 begin
      inherited;
-     undostack.done;
+     undostack.free;
+     undostack.destroy;
+     //undostack.done;
      DWGUnits.Done;
      FileName:='';
 end;

@@ -95,7 +95,7 @@ begin
 end;
 function GDBObjRoot.GetMatrix;
 begin
-     result:=@self.ObjMatrix{ @OneMatrix};
+     result:={@self.ObjMatrix}@OneMatrix;
 end;
 procedure GDBObjRoot.EraseMi(pobj:pGDBObjEntity;pobjinarray:Integer;var drawing:TDrawingDef);
 var p:PGDBObjConnected;

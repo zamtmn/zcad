@@ -7,9 +7,9 @@ unit uzeparsercmdprompt;
 interface
 
 uses
-  SysUtils,//StrUtils,
+  SysUtils,Classes,
   gvector,Generics.Collections,
-  uzeparser,uzcctrlcommandlineprompt;
+  uzeparser,uzcctrlcommandlineprompt,usupportgui;
 
 const
   CLPIdOptions=1001;
@@ -34,12 +34,15 @@ type
     TT = TArr;
   end;
 
-
+  TCLPMode=(CreateHL,CheckShortCut);
   TCommandLinePromptOption=class
     Parts:TSubStringsVector;
     CurrentTag,PartsCount:integer;
-    constructor create;
-    destructor destroy;override;
+    DoMode:TCLPMode;
+    ShortCut:TShortCut;
+    constructor Create;overload;
+    constructor Create(AShortCut:TShortCut);overload;
+    destructor Destroy;override;
   end;
 
   TParserCommandLinePrompt=TGZParser<TOptStrMan,
@@ -78,7 +81,12 @@ type
                           var ResultParam   :TOptStrMan.TCharRange;
                           var data          :TCommandLinePromptOption
                         );override;
-
+    procedure DoIt(const Source:TOptStrMan.TStringType;
+                   const Token :TOptStrMan.TCharRange;
+                   const Operands :TOptStrMan.TCharRange;
+                   const ParsedOperands:TAbstractParsedText<TOptStrMan.TStringType,TCommandLinePromptOption>;
+                   InsideBracketParser:TObject;
+                   var Data:TCommandLinePromptOption);override;
   end;
 
   TAmpersandProcessor=class(TParserCommandLinePrompt.TParserTokenizer.TStaticProcessor)
@@ -117,7 +125,7 @@ var
   t:UTF8String;
   pt:TCommandLinePromptOption;
   StrIds:TStrIdsDictionary;
-  DigId,StrId:integer;
+  DigId,StrId,KeysId:integer;
 
 implementation
 
@@ -132,15 +140,26 @@ begin
 end;
 
 
-constructor TCommandLinePromptOption.create;
+constructor TCommandLinePromptOption.Create;
 begin
   PartsCount:=0;
   Parts:=TSubStringsVector.Create;
   CurrentTag:=-1;
+  DoMode:=CreateHL;
+  ShortCut:=0;
 end;
-destructor TCommandLinePromptOption.destroy;
+constructor TCommandLinePromptOption.Create(AShortCut:TShortCut);
 begin
-  Parts.Free;
+  PartsCount:=0;
+  Parts:=nil;
+  CurrentTag:=-1;
+  DoMode:=CheckShortCut;
+  ShortCut:=AShortCut;
+end;
+destructor TCommandLinePromptOption.Destroy;
+begin
+  if Parts<>nil then
+    Parts.Free;
 end;
 
 
@@ -198,6 +217,33 @@ begin
   data.CurrentTag:=tag;
   TParserCommandLinePrompt(InsideBracketParser).TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserCommandLinePrompt.TParsedText).Parts.Mutable[0]^,data,Result,ResultParam);
   data.CurrentTag:=-1;
+end;
+
+procedure TOptionProcessor.DoIt(const Source:TOptStrMan.TStringType;
+                                const Token :TOptStrMan.TCharRange;
+                                const Operands :TOptStrMan.TCharRange;
+                                const ParsedOperands:TAbstractParsedText<TOptStrMan.TStringType,TCommandLinePromptOption>;
+                                InsideBracketParser:TObject;
+                                var Data:TCommandLinePromptOption);
+var
+  op2:TOptStrMan.TStringType;
+  ResultParam:TOptStrMan.TCharRange;
+  sc:TShortCut;
+begin
+  if (ParsedOperands as TParserCommandLinePrompt.TParsedText).Parts.Mutable[1]^.TextInfo.TokenId=KeysId then begin
+    //sc:=(ParsedOperands as TParserCommandLinePrompt.TParsedText).Parts.Mutable[1]^.Operands.GetResult(data);
+    ResultParam.P.CodeUnitPos:=OnlyGetLength;
+    ResultParam.L.CodeUnits:=0;
+    TParserCommandLinePrompt.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserCommandLinePrompt.TParsedText).Parts.Mutable[1]^,data,op2,ResultParam);
+    SetLength(op2,ResultParam.L.CodeUnits);
+    ResultParam.P.CodeUnitPos:=InitialStartPos;
+    TParserCommandLinePrompt.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TParserCommandLinePrompt.TParsedText).Parts.Mutable[1]^,data,op2,ResultParam);
+    sc:=MyTextToShortCut(op2);
+    if (MyTextToShortCut(op2)=data.ShortCut)and(data.ShortCut<>0) then begin
+      data.CurrentTag:=tag;
+      data.ShortCut:=0;
+    end;
+  end;
 end;
 
 class procedure TAmpersandProcessor.StaticGetResult(
@@ -300,12 +346,12 @@ initialization
 
   InternalPromptParser:=TParserCommandLinePrompt.create;
   InternalPromptParser.RegisterToken(',',#0,#0,nil,nil,TGOSeparator or TGOCanBeOmitted);
-  InternalPromptParser.RegisterToken('Keys[','[',']',nil,InternalPromptParser2,TGONestedBracke or TGOIncludeBrackeOpen or TGOSeparator);
+  KeysId:=InternalPromptParser.RegisterToken('Keys[','[',']',InternalPromptParser.TParserTokenizer.TStringProcessor,InternalPromptParser2,TGONestedBracke or TGOIncludeBrackeOpen or TGOSeparator);
   DigId:=InternalPromptParser.RegisterToken('Id[','[',']',InternalPromptParser.TParserTokenizer.TStringProcessor,nil,TGOIncludeBrackeOpen);
   StrId:=InternalPromptParser.RegisterToken('StrId[','[',']',InternalPromptParser.TParserTokenizer.TStringProcessor,nil,TGOIncludeBrackeOpen);
   InternalPromptParser.RegisterToken('"','"','"',TTextProcessor,InternalPromptParser3,TGOIncludeBrackeOpen or TGOSeparator);
 
-  CMDLinePromptParser:=TParserCommandLinePrompt.create;
+  CMDLinePromptParser:=TParserCommandLinePrompt.create(true);
   //CMDLinePromptParser.RegisterToken('"','"','"',TTextProcessor,InternalPromptParser3,TGOIncludeBrackeOpen or TGOSeparator);
   CMDLinePromptParser.RegisterToken('${','{','}',TOptionProcessor,InternalPromptParser,TGONestedBracke or TGOIncludeBrackeOpen or TGOSeparator);
   //pet:=CMDLinePromptParser.GetTokens('Предлагаю както так $<"&[С]охранить (&[S])",Keys[С,S],Id[100]> или $<"&[В]ыйти",Keys[Q,X],Id[101]>');

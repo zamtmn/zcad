@@ -6,10 +6,10 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, ComCtrls,
-  StdCtrls, ActnList, laz.VirtualTrees,
+  StdCtrls, ActnList, laz.VirtualTrees, LCLVersion,
   uzbtypes,gzctnrVectorTypes,uzegeometrytypes ,uzegeometry, uzccommandsmanager,
   uzcinterface,uzeconsts,uzeentity,uzcimagesmanager,uzcdrawings,
-  varmandef,uzbstrproc,uzcmainwindow,uzctreenode,
+  varmandef,uzbstrproc,uzctreenode,
   uzcnavigatorsnodedesk,Varman,uzcstrconsts,uztoolbarsmanager,uzmenusmanager,
   uzccommandsimpl,uzccommandsabstract,uzcutils,uzcenitiesvariablesextender,
   GraphType,generics.collections,uzglviewareaabstract,Menus,
@@ -19,7 +19,7 @@ uses
   uzeparserenttypefilter,uzeparserentpropfilter,uzeparsernavparam,uzclog,uzcuidialogs,
   XMLConf,XMLPropStorage, EditBtn,LazConfigStorage,uzcdialogsfiles,
   Masks,garrayutils,LCLType,LCLIntf, Buttons,
-  gzctnrSTL;
+  gzctnrSTL,uzcActionsManager;
 
 resourcestring
   rsStandaloneDevices='Standalone devices';
@@ -76,7 +76,7 @@ type
     SaveToFile: TAction;
     LoadFromFile: TAction;
     CoolBar1: TCoolBar;
-    NavTree: TVirtualStringTree;
+    NavTree:{$IF DECLARED(TVirtualStringTree)}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};
     Ent2NodeMap:TEnt2NodeMap;
     RefreshToolButton: TToolButton;
     ExpandAllBtn: TSpeedButton;
@@ -88,11 +88,11 @@ type
     IncludeProps:TAction;
     TreeProps:TAction;
     procedure CollapseAllProc(Sender: TObject);
-    function CreateEntityNode(Tree: TVirtualStringTree;basenode:PVirtualNode;pent:pGDBObjEntity;Name:string):PVirtualNode;virtual;
+    function CreateEntityNode(Tree:{$IF DECLARED(TVirtualStringTree)}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};basenode:PVirtualNode;pent:pGDBObjEntity;Name:string):PVirtualNode;virtual;
     procedure ExpandAllProc(Sender: TObject);
     procedure Filter(Sender: TObject);
     function Match(node:PVirtualNode;pattern:AnsiString):boolean;
-    function DoFilter(tree:TVirtualStringTree;node:PVirtualNode;pattern:AnsiString;var treeh:Integer):boolean;
+    function DoFilter(tree:{$IF DECLARED(TVirtualStringTree)}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};node:PVirtualNode;pattern:AnsiString;var treeh:Integer):boolean;
     procedure AsyncLoadParamsFromFile(Data: PtrInt);
     procedure TEMenuPopUpClick(Sender: TObject);
     procedure TEMenuPopUp(Sender: TObject);
@@ -188,8 +188,8 @@ var
   //DevicesTreeBuildMap:string='+NMO_Prefix|+NMO_BaseName|+@@[NMO_Name]';
 
 implementation
-
-{$R *.lfm}
+{todo: убрать когда TLazVirtualStringTree попадет в релиз лазаря}
+{$IF DECLARED(TVirtualStringTree)}{$R olduzcfnavigatordevices.lfm}{$ELSE}{$R *.lfm}{$ENDIF}
 
 procedure TNavigatorDevices.LoadParamsFromConfig(Config: TConfigStorage);
 begin
@@ -617,7 +617,7 @@ begin
   if FileExt='' then
     FileExt:='xml';
    umf:=TmyVariableAction.Create(self);
-   umf.ActionList:=ZCADMainWindow.StandartActions;
+   umf.ActionList:=StandartActions;
    umf.AssignToVar('DSGN_NavigatorsUseMainFunction',0);
    umf.Caption:='Use main functions';
 
@@ -764,7 +764,7 @@ begin
   end;
 end;
 
-function TNavigatorDevices.CreateEntityNode(Tree: TVirtualStringTree;basenode:PVirtualNode;pent:pGDBObjEntity;Name:string):PVirtualNode;
+function TNavigatorDevices.CreateEntityNode(Tree:{$IF DECLARED(TVirtualStringTree)}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};basenode:PVirtualNode;pent:pGDBObjEntity;Name:string):PVirtualNode;
 var
   pnd:PTNodeData;
   pentvarext:TVariablesExtender;
@@ -810,7 +810,7 @@ begin
   Result:=false;
 end;
 
-function TNavigatorDevices.DoFilter(tree:TVirtualStringTree;node:PVirtualNode;pattern:AnsiString;var treeh:Integer):boolean;
+function TNavigatorDevices.DoFilter(tree:{$IF DECLARED(TVirtualStringTree)}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};node:PVirtualNode;pattern:AnsiString;var treeh:Integer):boolean;
 var
   SubNode:PVirtualNode;
   MatchInChildren:boolean;
@@ -1330,7 +1330,7 @@ begin
     FreeAndNil(EntityIncluder);
 end;
 
-procedure SelectSubNodes(nav:TVirtualStringTree;pnode:PVirtualNode);
+procedure SelectSubNodes(nav:{$IF DECLARED(TVirtualStringTree)}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};pnode:PVirtualNode);
 var
   psubnode:PVirtualNode;
   pnd:PTNodeData;
@@ -1353,7 +1353,7 @@ end;
 function NavSelectSubNodes_com(operands:TCommandOperands):TCommandResult;
 var
   pnode:PVirtualNode;
-  nav:TVirtualStringTree;
+  nav:{$IF DECLARED(TVirtualStringTree)}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};
 begin
      if commandmanager.ContextCommandParams<>nil then begin
        nav:=commandmanager.ContextCommandParams;

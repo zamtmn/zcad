@@ -21,67 +21,246 @@ interface
 
 uses
   sysutils,
-  uzbtypes,
   math,uzegeometry,
   uzctnrVectorBytes,
   uzedrawingdef,uzgldrawcontext,
   uzeffdxfsupport,
   uzeentdevice,uzeentsubordinated,uzeentity,uzeentabstracttext,uzeenttext,
-  uzeblockdef,uzeentmtext,uzeentwithlocalcs,
-  uzeentityextender,uzeBaseExtender;
+  uzeblockdef,uzeentmtext,uzeentwithlocalcs,uzeentblockinsert,
+  uzeentityextender,uzeBaseExtender,uzbtypes,uzegeometrytypes,uzeconsts;
 const
   SmartTextEntExtenderName='extdrSmartTextEnt';
+  ExtensionLineOffsetDef=0;
+  ExtensionLeaderStartLengthDef=10;
+  ExtensionHeightDef=0;
+  //добавить это расширение к примитиву можно командой
+  //extdrAdd(extdrSmartTextEnt)
+
 type
+  TDummyDtawer=procedure(var IODXFContext:TIODXFContext;var outhandle:TZctnrVectorBytes;pEntity:PGDBObjEntity;const p1,p2:GDBvertex;const drawing:TDrawingDef;var DC:TDrawContext);
   TSmartTextEntExtender=class(TBaseEntityExtender)
-    GoodLayer,BadLayer:String;
-    VariableName:String;
-    Inverse:Boolean;
-    class function getExtenderName:string;override;
-    constructor Create(pEntity:Pointer);override;
-    procedure Assign(Source:TBaseExtender);override;
-    procedure onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
-    procedure onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
-    procedure SaveToDxf(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
-    procedure PostLoad(var context:TIODXFLoadContext);override;
-    procedure onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);override;
+    //private
+    public
+      FExtensionLine:Boolean;
+      FBaseLine:Boolean;
+      FExtensionLineOffset:Double;
+      FLeaderStartLength:Double;
+      //FSaveHeight:Double;
+      FHeightOverride:Double;
+      FHJOverride:Boolean;
+      FVJOverride:Boolean;
+    private
+      function isDefault:boolean;
+      function getOwnerInsertPoint(pEntity:Pointer):GDBVertex;
+      function getOwnerScale(pEntity:Pointer):Double;
+      function getTextInsertPoint(pEntity:Pointer):GDBVertex;
+      function geExtensionLinetStartPoint(pEntity:Pointer):GDBVertex;
+    public
+      class function getExtenderName:string;override;
+      constructor Create(pEntity:Pointer);override;
+      procedure Assign(Source:TBaseExtender);override;
+      procedure onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
+      procedure onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
+      procedure SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
+      procedure SaveToDXFfollow(PEnt:Pointer;var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext)override;
+      procedure PostLoad(var context:TIODXFLoadContext);override;
+      procedure onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);override;
+
+      procedure DrawGeom(var IODXFContext:TIODXFContext;var outhandle:TZctnrVectorBytes;pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext;tdd:TDummyDtawer);
+
+      class function EntIOLoadExtensionLine(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+      class function EntIOLoadBaseLine(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+      class function EntIOLoadExtensionLineOffset(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+      class function EntIOLoadExtensionLeaderStartLength(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+      class function EntIOLoadTextHeigth(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+      class function EntIOLoadHJOverride(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+      class function EntIOLoadVJOverride(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+
+      class function EntIOLoadSmartTextEntExtenderDefault(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+
+      property ExtensionLine:Boolean read FExtensionLine write FExtensionLine default true;
+      property BaseLine:Boolean read FBaseLine write FBaseLine default true;
   end;
 
 implementation
+
+procedure DrawLine(var IODXFContext:TIODXFContext;var outhandle:TZctnrVectorBytes;pEntity:PGDBObjEntity;const p1,p2:GDBvertex;const drawing:TDrawingDef;var DC:TDrawContext);
+begin
+  pEntity.Representation.DrawLineWithLT(DC,p1,p2,pEntity.vp);
+end;
+
+procedure SaveLine(var IODXFContext:TIODXFContext;var outhandle:TZctnrVectorBytes;pEntity:PGDBObjEntity;const p1,p2:GDBvertex;const drawing:TDrawingDef;var DC:TDrawContext);
+begin
+  //SaveToDXFObjPrefix(outhandle,'LINE','AcDbLine',IODXFContext);
+
+  dxfStringout(outhandle,0,dxfName_Line);
+
+  dxfStringout(outhandle,5,inttohex(IODXFContext.handle, 0));
+  inc(IODXFContext.handle);
+
+  dxfStringout(outhandle,100,dxfName_AcDbEntity);
+  dxfStringout(outhandle,8,pEntity^.vp.layer^.name);
+  if pEntity^.vp.color<>ClByLayer then
+                             dxfStringout(outhandle,62,inttostr(pEntity^.vp.color));
+  if pEntity^.vp.lineweight<>-1 then dxfIntegerout(outhandle,370,pEntity^.vp.lineweight);
+
+  dxfStringout(outhandle,100,dxfName_AcDbLine);
+  if pEntity^.vp.LineType<>{''}nil then dxfStringout(outhandle,6,pEntity^.vp.LineType^.Name);
+  if pEntity^.vp.LineTypeScale<>1 then dxfDoubleout(outhandle,48,pEntity^.vp.LineTypeScale);
+
+  dxfvertexout(outhandle,10,p1);
+  dxfvertexout(outhandle,11,p2);
+
+  dxfStringout(outhandle,1001,'DSTP_XDATA');
+  dxfStringout(outhandle,1002,'{');
+  dxfStringout(outhandle,1000,'_OWNERHANDLE=6E');
+  dxfStringout(outhandle,1002,'}');
+end;
+
+
+function TSmartTextEntExtender.isDefault:boolean;
+begin
+  result:=(FExtensionLine and FBaseLine)and(IsDoubleEqual(FExtensionLineOffset,ExtensionLineOffsetDef))
+        and(IsDoubleEqual(FLeaderStartLength,ExtensionLeaderStartLengthDef))
+        and(IsDoubleEqual(FHeightOverride,ExtensionHeightDef))
+        and FHJOverride and FVJOverride;
+end;
+
 procedure TSmartTextEntExtender.Assign(Source:TBaseExtender);
 begin
+  FExtensionLine:=TSmartTextEntExtender(Source).FExtensionLine;
+  FBaseLine:=TSmartTextEntExtender(Source).FBaseLine;
+  FExtensionLineOffset:=TSmartTextEntExtender(Source).FExtensionLineOffset;
+  FLeaderStartLength:=TSmartTextEntExtender(Source).FLeaderStartLength;
+  FHeightOverride:=TSmartTextEntExtender(Source).FHeightOverride;
+  FHJOverride:=TSmartTextEntExtender(Source).FHJOverride;
+  FVJOverride:=TSmartTextEntExtender(Source).FVJOverride;
 end;
 
 constructor TSmartTextEntExtender.Create(pEntity:Pointer);
 begin
+  FExtensionLine:=true;
+  FBaseLine:=true;
+  FExtensionLineOffset:=ExtensionLineOffsetDef;
+  FLeaderStartLength:=ExtensionLeaderStartLengthDef;
+  FHeightOverride:=ExtensionHeightDef;
+  FHJOverride:=true;
+  FVJOverride:=true;
 end;
 
-procedure TSmartTextEntExtender.onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+function TSmartTextEntExtender.getOwnerInsertPoint(pEntity:Pointer):GDBVertex;
+begin
+  result:=PGDBObjWithLocalCS(PGDBObjText(pEntity)^.bp.ListPos.Owner)^.P_insert_in_WCS;
+end;
+
+function TSmartTextEntExtender.getOwnerScale(pEntity:Pointer):Double;
+begin
+  if ESCalcWithoutOwner in PGDBObjEntity(pEntity)^.State then
+    result:=1
+  else
+    result:=PGDBObjBlockInsert(PGDBObjText(pEntity)^.bp.ListPos.Owner)^.scale.y;
+end;
+
+function TSmartTextEntExtender.getTextInsertPoint(pEntity:Pointer):GDBVertex;
+begin
+  result:=PGDBObjText(pEntity).P_insert_in_WCS;
+end;
+
+function TSmartTextEntExtender.geExtensionLinetStartPoint(pEntity:Pointer):GDBVertex;
+var
+  p1,p2:GDBvertex;
+  scl:double;
+begin
+  p1:=getOwnerInsertPoint(pEntity);
+  p2:=getTextInsertPoint(pEntity);
+  scl:=FExtensionLineOffset*abs(getOwnerScale(pEntity));
+  if FExtensionLineOffset>0 then
+    result:=p1+(p2-p1).NormalizeVertex*scl
+  else begin
+    result:=p2-p1;
+    if abs(result.x)>abs(result.y)then begin
+      result.y:=-result.y*(scl/abs(result.x));
+      result.x:=-result.x*(scl/abs(result.x));
+    end else begin
+      result.x:=-result.x*(scl/abs(result.y));
+      result.y:=-result.y*(scl/abs(result.y));
+    end;
+    result:=p1+result;
+  end;
+end;
+
+procedure TSmartTextEntExtender.DrawGeom(var IODXFContext:TIODXFContext;var outhandle:TZctnrVectorBytes;pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext;tdd:TDummyDtawer);
 var
   dx:Double;
 begin
+  //if FHeightOverride>0 then
+  //  PGDBObjMText(pEntity).textprop.size:=FSaveHeight;
   if (typeof(PGDBObjEntity(pEntity)^)=TypeOf(GDBObjText))then
     if PGDBObjText(pEntity)^.bp.ListPos.Owner<>nil then
       if typeof(PGDBObjText(pEntity)^.bp.ListPos.Owner^)=TypeOf(GDBObjDevice) then begin
-        if Vertexlength(PGDBObjWithLocalCS(PGDBObjText(pEntity)^.bp.ListPos.Owner)^.P_insert_in_WCS,PGDBObjText(pEntity).P_insert_in_WCS)>10 then begin
-          PGDBObjText(pEntity).Representation.DrawLineWithLT(DC,PGDBObjWithLocalCS(PGDBObjText(pEntity)^.bp.ListPos.Owner)^.P_insert_in_WCS,PGDBObjText(pEntity).P_insert_in_WCS,PGDBObjEntity(pEntity)^.vp);
-          dx:=PGDBObjText(pEntity).obj_width*PGDBObjMText(pEntity).textprop.size*PGDBObjMText(pEntity).textprop.wfactor;
-          if PGDBObjMText(pEntity).textprop.justify in [jsbr,jsmr,jstr] then
-            dx:=-dx;
-          PGDBObjText(pEntity).Representation.DrawLineWithLT(DC,PGDBObjText(pEntity).P_insert_in_WCS,
-                                                                VertexAdd(PGDBObjText(pEntity).P_insert_in_WCS,CreateVertex(dx,0,0)),PGDBObjEntity(pEntity)^.vp);
+        if Vertexlength(getOwnerInsertPoint(pEntity),getTextInsertPoint(pEntity))>FLeaderStartLength then begin
+          if FExtensionLine then
+            tdd(IODXFContext,outhandle,pEntity,geExtensionLinetStartPoint(pEntity),getTextInsertPoint(pEntity),drawing,DC);
+          if FBaseLine then begin
+            dx:=PGDBObjText(pEntity).obj_width*PGDBObjMText(pEntity).textprop.size*PGDBObjMText(pEntity).textprop.wfactor*getOwnerScale(pEntity);
+            if PGDBObjMText(pEntity).textprop.justify in [jsbr,jsmr,jstr] then
+              dx:=-dx;
+            tdd(IODXFContext,outhandle,pEntity,getTextInsertPoint(pEntity),VertexAdd(getTextInsertPoint(pEntity),CreateVertex(dx,0,0)),drawing,DC);
+          end;
         end;
   end;
 end;
+
+
+
+procedure TSmartTextEntExtender.onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+begin
+  DrawGeom(PTIODXFContext(nil)^,PTZctnrVectorBytes(nil)^,pEntity,drawing,DC,DrawLine);
+end;
+
 procedure TSmartTextEntExtender.onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+  function getXsign(p:GDBvertex):integer;
+  begin
+    result:=sign(p.x);
+  end;
+  function getYsign(p:GDBvertex):integer;
+  begin
+    result:=sign(p.y);
+  end;
 var
-  jtt2: array[-1..1,-1..1] of TTextJustify = ((jsbl, jsbc, jsbr),(jsml, jsmc, jsmr),(jstl, jstc, jstr));
-  jtt: array[-1..1,-1..1] of TTextJustify = ((jsbl, jsbl, jsbr),(jsbl, jsbl, jsbr),(jsbl, jsbl, jsbr));
+  //выравнивание от смещения по осям
+  JustifyWoLeader: array[-1..1{y},-1..1{x}] of TTextJustify = ((jsbl, jsbc, jsbr),(jsml, jsmc, jsmr),(jstl, jstc, jstr));
+  //выравнивание от смещения по осям при черчении выноски
+  JustifyWithLeader: array[-1..1{y},-1..1{x}] of TTextJustify = ((jsbl, jsbl, jsbr),(jsbl, jsbl, jsbr),(jsbl, jsbl, jsbr));
+  //горизонтальное смещение от выравнивания
+  j2hdir: array [TTextJustify] of ShortInt =(-1,0,1,-1,0,1,-1,0,1,-1,0,1);
+  //вертикальное смещение от выравнивания
+  j2vdir: array [TTextJustify] of ShortInt =(1,1,1,0,0,0,-1,-1,-1,-1,-1,-1);
+  x,y:integer;
 begin
   if typeof(PGDBObjEntity(pEntity)^)=TypeOf(GDBObjText) then begin
-    if Vertexlength(PGDBObjWithLocalCS(PGDBObjText(pEntity)^.bp.ListPos.Owner)^.P_insert_in_WCS,PGDBObjText(pEntity).P_insert_in_WCS)>10 then
-      PGDBObjMText(pEntity).textprop.justify:=jtt[-sign(PGDBObjText(pEntity).Local.P_insert.y),-sign(PGDBObjText(pEntity).Local.P_insert.x)]
-    else
-      PGDBObjMText(pEntity).textprop.justify:=jtt2[-sign(PGDBObjText(pEntity).Local.P_insert.y),-sign(PGDBObjText(pEntity).Local.P_insert.x)]
+    if FHJOverride or FVJOverride then
+      if FHJOverride and FVJOverride then begin
+        if Vertexlength(getOwnerInsertPoint(pEntity),getTextInsertPoint(pEntity))>FLeaderStartLength then
+          PGDBObjMText(pEntity).textprop.justify:=JustifyWithLeader[-getYsign(PGDBObjText(pEntity).Local.P_insert),-getXsign(PGDBObjText(pEntity).Local.P_insert)]
+        else
+          PGDBObjMText(pEntity).textprop.justify:=JustifyWoLeader[-getYsign(PGDBObjText(pEntity).Local.P_insert),-getXsign(PGDBObjText(pEntity).Local.P_insert)]
+      end else if FVJOverride then begin
+        y:=getYsign(PGDBObjText(pEntity).Local.P_insert);
+        x:=-j2hdir[PGDBObjMText(pEntity).textprop.justify];
+        if Vertexlength(getOwnerInsertPoint(pEntity),getTextInsertPoint(pEntity))>FLeaderStartLength then
+          PGDBObjMText(pEntity).textprop.justify:=JustifyWithLeader[-getYsign(PGDBObjText(pEntity).Local.P_insert),j2hdir[PGDBObjMText(pEntity).textprop.justify]]
+        else
+          PGDBObjMText(pEntity).textprop.justify:=JustifyWoLeader[-getYsign(PGDBObjText(pEntity).Local.P_insert),j2hdir[PGDBObjMText(pEntity).textprop.justify]]
+      end else{if FHJOverride}begin
+        if Vertexlength(getOwnerInsertPoint(pEntity),getTextInsertPoint(pEntity))>FLeaderStartLength then
+          PGDBObjMText(pEntity).textprop.justify:=JustifyWithLeader[j2vdir[PGDBObjMText(pEntity).textprop.justify],-getXsign(PGDBObjText(pEntity).Local.P_insert)]
+        else
+          PGDBObjMText(pEntity).textprop.justify:=JustifyWoLeader[j2vdir[PGDBObjMText(pEntity).textprop.justify],-getXsign(PGDBObjText(pEntity).Local.P_insert)]
+      end;
+  end;
+  if FHeightOverride>0 then begin
+    PGDBObjMText(pEntity).textprop.size:=FHeightOverride/getOwnerScale(pEntity);
   end;
 end;
 
@@ -90,8 +269,125 @@ begin
   result:=SmartTextEntExtenderName;
 end;
 
-procedure TSmartTextEntExtender.SaveToDxf(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
+procedure TSmartTextEntExtender.SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
 begin
+  if isDefault then
+    dxfStringout(outhandle,1000,'SmartTextEntExtenderDefault=TRUE')
+  else
+    begin
+      if not FExtensionLine then
+        dxfStringout(outhandle,1000,'STEExtensionLine=FALSE');
+      if not FBaseLine then
+        dxfStringout(outhandle,1000,'STEBaseLineLine=FALSE');
+      if not IsDoubleEqual(FExtensionLineOffset,ExtensionLineOffsetDef)then
+        dxfStringout(outhandle,1000,'STEExtensionLineOffset='+FloatToStr(FExtensionLineOffset));
+      if not IsDoubleEqual(FLeaderStartLength,ExtensionLeaderStartLengthDef)then
+        dxfStringout(outhandle,1000,'STELeaderStartLength='+FloatToStr(FLeaderStartLength));
+      if not IsDoubleEqual(FHeightOverride,ExtensionHeightDef)then
+        dxfStringout(outhandle,1000,'STEHeightOverride='+FloatToStr(FHeightOverride));
+      if not FHJOverride then
+        dxfStringout(outhandle,1000,'STEHJOverride=FALSE');
+      if not FVJOverride then
+        dxfStringout(outhandle,1000,'STEVJOverride=FALSE');
+    end;
+end;
+procedure TSmartTextEntExtender.SaveToDXFfollow(PEnt:Pointer;var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
+begin
+  DrawGeom(IODXFContext,outhandle,PGDBObjEntity(PEnt),drawing,PTDrawContext(nil)^,SaveLine);
+end;
+
+function AddSmartTextEntExtenderToEntity(PEnt:PGDBObjEntity):TSmartTextEntExtender;
+begin
+  result:=TSmartTextEntExtender.Create(PEnt);
+  PEnt^.AddExtension(result);
+end;
+
+
+class function TSmartTextEntExtender.EntIOLoadExtensionLine(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+var
+  STEExtdr:TSmartTextEntExtender;
+begin
+  STEExtdr:=PGDBObjEntity(PEnt)^.GetExtension<TSmartTextEntExtender>;
+  if STEExtdr=nil then
+    STEExtdr:=AddSmartTextEntExtenderToEntity(PEnt);
+  STEExtdr.FExtensionLine:=false;
+  result:=true;
+end;
+
+class function TSmartTextEntExtender.EntIOLoadBaseLine(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+var
+  STEExtdr:TSmartTextEntExtender;
+begin
+  STEExtdr:=PGDBObjEntity(PEnt)^.GetExtension<TSmartTextEntExtender>;
+  if STEExtdr=nil then
+    STEExtdr:=AddSmartTextEntExtenderToEntity(PEnt);
+  STEExtdr.FBaseLine:=false;
+  result:=true;
+end;
+
+class function TSmartTextEntExtender.EntIOLoadExtensionLineOffset(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+var
+  STEExtdr:TSmartTextEntExtender;
+begin
+  STEExtdr:=PGDBObjEntity(PEnt)^.GetExtension<TSmartTextEntExtender>;
+  if STEExtdr=nil then
+    STEExtdr:=AddSmartTextEntExtenderToEntity(PEnt);
+  STEExtdr.FExtensionLineOffset:=StrToFloat(_Value);
+  result:=true;
+end;
+
+class function TSmartTextEntExtender.EntIOLoadExtensionLeaderStartLength(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+var
+  STEExtdr:TSmartTextEntExtender;
+begin
+  STEExtdr:=PGDBObjEntity(PEnt)^.GetExtension<TSmartTextEntExtender>;
+  if STEExtdr=nil then
+    STEExtdr:=AddSmartTextEntExtenderToEntity(PEnt);
+  STEExtdr.FLeaderStartLength:=StrToFloat(_Value);
+  result:=true;
+end;
+
+class function TSmartTextEntExtender.EntIOLoadTextHeigth(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+var
+  STEExtdr:TSmartTextEntExtender;
+begin
+  STEExtdr:=PGDBObjEntity(PEnt)^.GetExtension<TSmartTextEntExtender>;
+  if STEExtdr=nil then
+    STEExtdr:=AddSmartTextEntExtenderToEntity(PEnt);
+  STEExtdr.FHeightOverride:=StrToFloat(_Value);
+  result:=true;
+end;
+
+class function TSmartTextEntExtender.EntIOLoadHJOverride(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+var
+  STEExtdr:TSmartTextEntExtender;
+begin
+  STEExtdr:=PGDBObjEntity(PEnt)^.GetExtension<TSmartTextEntExtender>;
+  if STEExtdr=nil then
+    STEExtdr:=AddSmartTextEntExtenderToEntity(PEnt);
+  STEExtdr.FHJOverride:=false;
+  result:=true;
+end;
+
+class function TSmartTextEntExtender.EntIOLoadVJOverride(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+var
+  STEExtdr:TSmartTextEntExtender;
+begin
+  STEExtdr:=PGDBObjEntity(PEnt)^.GetExtension<TSmartTextEntExtender>;
+  if STEExtdr=nil then
+    STEExtdr:=AddSmartTextEntExtenderToEntity(PEnt);
+  STEExtdr.FVJOverride:=false;
+  result:=true;
+end;
+
+class function TSmartTextEntExtender.EntIOLoadSmartTextEntExtenderDefault(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+var
+  STEExtdr:TSmartTextEntExtender;
+begin
+  STEExtdr:=PGDBObjEntity(PEnt)^.GetExtension<TSmartTextEntExtender>;
+  if STEExtdr=nil then
+    STEExtdr:=AddSmartTextEntExtenderToEntity(PEnt);
+  result:=true;
 end;
 
 procedure TSmartTextEntExtender.PostLoad(var context:TIODXFLoadContext);
@@ -105,5 +401,15 @@ end;
 
 initialization
   EntityExtenders.RegisterKey(uppercase(SmartTextEntExtenderName),TSmartTextEntExtender);
+
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('STEExtensionLine',TSmartTextEntExtender.EntIOLoadExtensionLine);
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('STEBaseLineLine',TSmartTextEntExtender.EntIOLoadBaseLine);
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('STEExtensionLineOffset',TSmartTextEntExtender.EntIOLoadExtensionLineOffset);
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('STELeaderStartLength',TSmartTextEntExtender.EntIOLoadExtensionLeaderStartLength);
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('STEHeightOverride',TSmartTextEntExtender.EntIOLoadTextHeigth);
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('STEHJOverride',TSmartTextEntExtender.EntIOLoadHJOverride);
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('STEVJOverride',TSmartTextEntExtender.EntIOLoadVJOverride);
+
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('SmartTextEntExtenderDefault',TSmartTextEntExtender.EntIOLoadSmartTextEntExtenderDefault);
 finalization
 end.

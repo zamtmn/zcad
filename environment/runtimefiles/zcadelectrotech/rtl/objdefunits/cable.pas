@@ -11,15 +11,14 @@ var
    LENGTH_KReserve:Double;(*'Коэфф. запаса'*)
 
    CABLE_Type:TCableType;(*'Тип'*)
-   Cable_Mounting_Method:TDCableMountingMethod;(*'Метод монтажа'*)
+   CABLE_MountingMethod:TDCableMountingMethod;(*'Метод монтажа'*)
    CABLE_Segment:Integer;(*'Сегмент'*)
    CABLE_WireCount:Integer;(*'Число жил'*)
    CABLE_TotalCD:Integer;(*'Подключено устройств'*)
    CABLE_AutoGen:Boolean;(*'Автоматически сгенерирован'*)
 
    AmountD:Double;(*'Длина'*)
-   
-   Cable_Mounting_Method:TDCableMountingMethod;(*'Метод монтажа'*)
+  
 
 implementation
 begin
@@ -32,7 +31,7 @@ begin
    LENGTH_Scale:=0.1;
    CABLE_Material:='не задан ??;
    CABLE_WireCount:=0;
-   Cable_Mounting_Method:='-';
+   CABLE_MountingMethod:='-';
 
    GC_HeadDevice:='??';
    GC_HDShortName:='??';

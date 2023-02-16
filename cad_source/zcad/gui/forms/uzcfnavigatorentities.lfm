@@ -1,21 +1,21 @@
 object NavigatorEntities: TNavigatorEntities
   Left = 316
-  Height = 885
+  Height = 1128
   Top = 107
-  Width = 484
+  Width = 617
   Caption = 'Entities'
-  ClientHeight = 885
-  ClientWidth = 484
-  DesignTimePPI = 113
+  ClientHeight = 1128
+  ClientWidth = 617
+  DesignTimePPI = 144
   OnCreate = _onCreate
-  LCLVersion = '1.9.0.0'
-  object NavTree: TVirtualStringTree
+  LCLVersion = '2.3.0.0'
+  object NavTree: TLazVirtualStringTree
     Left = 0
     Height = 849
     Top = 36
     Width = 484
     Align = alClient
-    DefaultNodeHeight = 19
+    DefaultNodeHeight = 24
     DefaultText = 'Node'
     Header.AutoSizeIndex = 0
     Header.Columns = <    
@@ -46,13 +46,13 @@ object NavigatorEntities: TNavigatorEntities
       AnchorSideLeft.Control = CoolBar1
       AnchorSideTop.Control = CoolBar1
       Left = 24
-      Height = 26
+      Height = 33
       Top = 5
-      Width = 82
+      Width = 484
       Align = alNone
       AutoSize = True
-      BorderSpacing.Left = 22
-      BorderSpacing.Top = 3
+      BorderSpacing.Left = 28
+      BorderSpacing.Top = 4
       Caption = 'MainToolBar'
       EdgeBorders = []
       TabOrder = 0
@@ -63,20 +63,20 @@ object NavigatorEntities: TNavigatorEntities
         Caption = 'ToolButton1'
       end
       object RefreshToolButton: TToolButton
-        Left = 28
+        Left = 36
         Top = 0
         Action = Refresh
       end
       object ToolButton3: TToolButton
-        Left = 55
+        Left = 70
         Top = 0
         Caption = 'ToolButton3'
       end
     end
   end
   object ActionList1: TActionList
-    Left = 365
-    Top = 76
+    Left = 465
+    Top = 97
     object Refresh: TAction
       Caption = 'Refresh'
       OnExecute = RefreshTree

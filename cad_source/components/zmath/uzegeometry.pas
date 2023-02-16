@@ -193,10 +193,11 @@ function scalardot(const v1,v2:GDBVertex):Double;//inline;
 function vertexeq(const v1,v2:gdbvertex):Boolean;inline;
 function SQRdist_Point_to_Segment(const p:GDBVertex;const s0,s1:GDBvertex):Double;inline;
 function NearestPointOnSegment(const p:GDBVertex;const s0,s1:GDBvertex):GDBvertex;inline;
-function IsPointEqual(const p1,p2:gdbvertex):boolean;inline;
+function IsPointEqual(const p1,p2:gdbvertex;const _eps:Double=eps):boolean;inline;
 function IsPoint2DEqual(const p1,p2:gdbvertex2D):boolean;inline;
 function IsVectorNul(const p2:gdbvertex):boolean;inline;
 function IsDoubleNotEqual(const d1,d2:Double;const _eps:Double=eps):boolean;inline;
+function IsDoubleEqual(const d1,d2:Double;const _eps:Double=eps):boolean;inline;
 function IsFloatNotEqual(const d1,d2:Single;const _floateps:Single=floateps):boolean;inline;
 
 procedure _myGluProject(const objx,objy,objz:Double;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PIMatrix4; out winx,winy,winz:Double);inline;
@@ -348,9 +349,9 @@ begin
      normalizevertex(oz);
 end;
 
-function IsPointEqual(const p1,p2:gdbvertex):boolean;
+function IsPointEqual(const p1,p2:gdbvertex;const _eps:Double):boolean;
 begin
-     if SqrVertexlength(p1,p2)>sqreps then
+     if SqrVertexlength(p1,p2)>_eps then
                                           result:=false
                                       else
                                           result:=true;
@@ -378,6 +379,14 @@ begin
                        else
                            result:=false;
 end;
+function IsDoubleEqual(const d1,d2:Double;const _eps:Double=eps):boolean;
+begin
+     if abs(d1-d2)>=_eps then
+                           result:=false
+                       else
+                           result:=true;
+end;
+
 function IsFloatNotEqual(const d1,d2:Single;const _floateps:Single=floateps):boolean;
 begin
      if abs(d1-d2)>_floateps then

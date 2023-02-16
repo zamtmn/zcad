@@ -39,7 +39,7 @@ type
   end;
 var
   LLMsgs:TLatestMsgsBackend;
-  LLMsgsH:TBackendHandle;
+  LLMsgsH:TLogExtHandle;
   MaxStackFrameCount:LongInt;
 
 procedure TLatestMsgsBackend.doLog(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);

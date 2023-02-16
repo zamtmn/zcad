@@ -108,7 +108,7 @@ begin
                 tv^.YouChanged(drawings.GetCurrentDWG^);
 
                 SetObjCreateManipulator(domethod,undomethod);
-                with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),1)^ do
+                with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),1) do
                 begin
                      AddObject(tv);
                      FreeArray:=false;

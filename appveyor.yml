@@ -16,7 +16,7 @@ version: 0.9.8.6.{build}-{branch}
 image: Visual Studio 2019
 # Enable Windows RDP Client Access to Build Worker
 init:
-  #- ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
 #---------------------------------#
 #       build configuration       #
@@ -49,6 +49,7 @@ build_script:
   - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe documentation
   - cmd: 7z a ZCAD-%APPVEYOR_REPO_COMMIT%.zip "cad"
   - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe cleanzcadelectrotech
+  - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe afterzcadelectrotechbuild
   - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe documentation
   - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe tests
 

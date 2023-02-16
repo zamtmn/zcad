@@ -22,10 +22,10 @@ unit uzcimagesmanager;
 interface
 
 uses
-  uzbpaths,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics,
-  Buttons, ExtCtrls, LazUTF8,
-  uzcsysvars,uzcsysinfo,gzctnrSTL,uzctnrVectorBytes,
-  uzbstrproc,uzcLog;
+  Classes,SysUtils,
+  LResources,LazUTF8,Controls,Graphics,
+  gzctnrSTL,uzctnrVectorBytes,
+  uzbpaths,uzbstrproc,uzcLog;
 type
   TImageData=record
     Index:Integer;

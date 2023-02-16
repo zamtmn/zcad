@@ -30,6 +30,8 @@ taddotrac=procedure (var posr:os_record;const axis:GDBVertex) of object;
 PGDBObjEntity=^GDBObjEntity;
 {-}TSelect2Stage=procedure(PEntity,PGripsCreator:PGDBObjEntity;var SelectedObjCount:Integer)of object;{//}
 {-}TDeSelect2Stage=procedure(PV:PGDBObjEntity;var SelectedObjCount:Integer)of object;{//}
+TEntityState=(ESCalcWithoutOwner);
+{-}TEntityStates=set of TEntityState;{/TEntityStates=Integer;/}
 PTExtAttrib=^TExtAttrib;
 {REGISTERRECORDTYPE TExtAttrib}
 TExtAttrib=record
@@ -48,6 +50,7 @@ GDBObjEntity= object(GDBObjSubordinated)
                     infrustum:TActulity;(*'In frustum'*)(*oi_readonly*)(*hidden_in_objinsp*)
                     PExtAttrib:PTExtAttrib;(*hidden_in_objinsp*)
                     Representation:TZEntityRepresentation;
+                    State:TEntityStates;
                     destructor done;virtual;
                     constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                     constructor initnul(owner:PGDBObjGenericWithSubordinated);
@@ -307,6 +310,7 @@ begin
      self.PExtAttrib:=nil;
      vp.LastCameraPos:=-1;
      vp.color:=ClByLayer;
+     State:=[];
 end;
 function GDBObjEntity.CalcOwner(own:Pointer):Pointer;
 begin
@@ -686,6 +690,9 @@ begin
 end;
 procedure GDBObjEntity.SaveToDXFfollow;
 begin
+  if assigned(EntExtensions) then
+    EntExtensions.RunSaveToDXFfollow(@self,outhandle,drawing,IODXFContext);
+  inherited;
 end;
 procedure GDBObjEntity.SaveToDXFObjXData(var outhandle:TZctnrVectorBytes;var IODXFContext:TIODXFContext);
 begin
@@ -1140,11 +1147,14 @@ begin
      result:=false;
      case dxfcod of
                 5:begin
-                          {$IFNDEF DELPHI}
-                          if not TryStrToQWord('$'+readmystr(f),AddExtAttrib^.dwgHandle)then
-                          {$ENDIF}
-                          begin
-                               //нужно залупиться
+                          if AddExtAttrib^.dwgHandle=0 then begin
+                            if not TryStrToQWord('$'+readmystr(f),PExtAttrib^.dwgHandle)then
+                              begin
+                                //нужно залупиться
+                              end
+                          end else begin
+                            readmystr(f);
+                            //нужно залупиться
                           end;
                           result:=true;
                   end;

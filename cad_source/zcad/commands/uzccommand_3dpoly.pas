@@ -21,32 +21,31 @@ unit uzccommand_3dpoly;
 
 interface
 uses
-  uzglviewareageneral,zcobjectchangeundocommand2,
-  zcmultiobjectcreateundocommand,uzgldrawercanvas,
-  uzcoimultiobjects,uzcenitiesvariablesextender,uzcdrawing,uzepalette,
-  uzgldrawcontext,UGDBPoint3DArray,
-  uzeentpoint,uzeentityfactory,
-  uzedrawingsimple,uzcsysvars,uzcstrconsts,
-  printers,graphics,uzeentdevice,
-  LazUTF8,Clipbrd,LCLType,classes,uzeenttext,
-  uzccommandsabstract,uzbstrproc,
+  gzundoCmdChgMethods,zcmultiobjectcreateundocommand,
+
+  uzcdrawing,uzgldrawcontext,
+
+  uzeentityfactory,
+
+  uzcsysvars,
+  uzcstrconsts,
+
+  uzccommandsabstract,
   uzccommandsmanager,
+
   uzccommandsimpl,
   uzbtypes,
   uzcdrawings,
   uzeutils,uzcutils,
-  sysutils,
-  varmandef,
   uzglviewareadata,
-  uzeffdxf,
   uzcinterface,
+
   uzegeometry,
   
   uzeconsts,
-  uzegeometrytypes,uzeentity,uzeentcircle,uzeentline,uzeentgenericsubentry,uzeentmtext,
-  uzeentblockinsert,uzeentpolyline,
-  uzeentcurve,uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,TypeDescriptors,
-  uzelongprocesssupport,uzcLog;
+  uzegeometrytypes,
+  uzeentpolyline,
+  uzcLog;
 
 implementation
 var
@@ -82,7 +81,7 @@ begin
                                         PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.ClearFrom(cc);
 
                                         SetObjCreateManipulator(domethod,undomethod);
-                                        with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,domethod,undomethod,1)^ do
+                                        with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,domethod,undomethod,1) do
                                         begin
                                              AddObject(p3dpl);
                                              comit;
@@ -139,9 +138,9 @@ begin
       polydata.wc:=wc;
       domethod:=tmethod(@p3dpl^.InsertVertex);
       undomethod:=tmethod(@p3dpl^.DeleteVertex);
-      with PushCreateTGObjectChangeCommand2(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,polydata,tmethod(domethod),tmethod(undomethod))^ do
+      with specialize GUCmdChgMethods<TPolyData>.CreateAndPush(polydata,domethod,undomethod,PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,@drawings.AfterNotAutoProcessGDB) do
       begin
-        AutoProcessGDB:=false;
+        //AutoProcessGDB:=false;
         comit;
       end;
       p3dpl^.Formatentity(drawings.GetCurrentDWG^,dc);

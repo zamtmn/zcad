@@ -9,7 +9,7 @@ uses
   ActnList, laz.VirtualTrees,
   uzbtypes,gzctnrVectorTypes,uzegeometrytypes ,uzegeometry, uzccommandsmanager,
   uzcinterface,uzeentity,uzcimagesmanager,uzcdrawings,
-  varmandef,uzbstrproc,uzcnavigatorsnodedesk;
+  varmandef,uzbstrproc,uzcnavigatorsnodedesk,LCLVersion;
 
 type
 
@@ -17,7 +17,7 @@ type
   TNavigatorEntities = class(TForm)
     CoolBar1: TCoolBar;
     MainToolBar: TToolBar;
-    NavTree: TVirtualStringTree;
+    NavTree:{$IF DECLARED(TVirtualStringTree)}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};
     ToolButton1: TToolButton;
     RefreshToolButton: TToolButton;
     ToolButton3: TToolButton;
@@ -54,8 +54,8 @@ var
   NavGroupIconIndex,NavAutoGroupIconIndex:integer;
 
 implementation
-
-{$R *.lfm}
+{todo: убрать когда TLazVirtualStringTree попадет в релиз лазаря}
+{$IF DECLARED(TVirtualStringTree)}{$R olduzcfnavigatorentities.lfm}{$ELSE}{$R *.lfm}{$ENDIF}
 
 { TNavigatorEntities }
 procedure TNavigatorEntities.FreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);

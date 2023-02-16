@@ -180,7 +180,7 @@ begin
     uzegeometry.MatrixInvert(im);
     PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushStartMarker(UndoMaker);
     dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-    with PushCreateTGMultiObjectChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,dispmatr,im,pcoa^.Count)^ do
+    with PushCreateTGMultiObjectChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,dispmatr,im,pcoa^.Count) do
     begin
      pcd:=pcoa^.beginiterate(ir);
    if pcd<>nil then

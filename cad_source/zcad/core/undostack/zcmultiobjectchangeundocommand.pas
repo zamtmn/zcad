@@ -28,17 +28,17 @@ uses gzctnrVector,zeundostack,zebaseundocommands,
 
 type
 TtmethodVector=specialize GZVector<tmethod>;
-    generic TGMultiObjectChangeCommand<_T> =object(TCustomChangeCommand)
+    generic TGMultiObjectChangeCommand<_T> =class(TUCmdBase)
                                           DoData,UnDoData:_T;
                                           ObjArray:{GDBOpenArrayOfData}TtmethodVector;
                                           public
-                                          constructor Assign(const _dodata,_undodata:_T;const objcount:Integer);
+                                          constructor Create(const _dodata,_undodata:_T;const objcount:Integer);
                                           //procedure StoreUndoData(var _undodata:_T);virtual;
                                           procedure AddMethod(method:tmethod);virtual;
 
-                                          procedure UnDo;virtual;
-                                          procedure Comit;virtual;
-                                          destructor Done;virtual;
+                                          procedure UnDo;override;
+                                          procedure Comit;override;
+                                          destructor Destroy;override;
                                       end;
 
 
@@ -47,13 +47,13 @@ TGDBTransformChangeCommand=specialize TGMultiObjectChangeCommand<DMatrix4D>;
 //function CreateTGChangeCommand(const data:TData):PTCommand;overload;
 
 {IFDEF CLASSDECLARATION}
-function CreateTGMultiObjectChangeCommand(var data,undodata:DMatrix4D;const objcount:Integer):PTGDBTransformChangeCommand;overload;
-function PushCreateTGMultiObjectChangeCommand(var us:TZctnrVectorUndoCommands; var data,undodata:DMatrix4D;const objcount:Integer):PTGDBTransformChangeCommand;overload;
+function CreateTGMultiObjectChangeCommand(var data,undodata:DMatrix4D;const objcount:Integer):TGDBTransformChangeCommand;overload;
+function PushCreateTGMultiObjectChangeCommand(var us:TZctnrVectorUndoCommands; var data,undodata:DMatrix4D;const objcount:Integer):TGDBTransformChangeCommand;overload;
 {ENDIF}
 
 implementation
 
-constructor TGMultiObjectChangeCommand.Assign(const _dodata,_undodata:_T;const objcount:Integer);
+constructor TGMultiObjectChangeCommand.Create(const _dodata,_undodata:_T;const objcount:Integer);
 begin
      DoData:=_DoData;
      UnDoData:=_UnDoData;
@@ -104,19 +104,19 @@ begin
   until p=nil;
 end;
 
-destructor TGMultiObjectChangeCommand.Done;
+destructor TGMultiObjectChangeCommand.Destroy;
 begin
      inherited;
      ObjArray.done;
 end;
 
 
-function {TZctnrVectorUndoCommands.}CreateTGMultiObjectChangeCommand(var data,undodata:DMatrix4D;const objcount:Integer):PTGDBTransformChangeCommand;overload;
+function {TZctnrVectorUndoCommands.}CreateTGMultiObjectChangeCommand(var data,undodata:DMatrix4D;const objcount:Integer):TGDBTransformChangeCommand;overload;
 begin
-     Getmem(result,sizeof(TGDBTransformChangeCommand));
-     result^.Assign(data,undodata,objcount);
+     //Getmem(result,sizeof(TGDBTransformChangeCommand));
+     result:=TGDBTransformChangeCommand.Create(data,undodata,objcount);
 end;
-function {TZctnrVectorUndoCommands.}PushCreateTGMultiObjectChangeCommand(var us:TZctnrVectorUndoCommands; var data,undodata:DMatrix4D;const objcount:Integer):PTGDBTransformChangeCommand;overload;
+function {TZctnrVectorUndoCommands.}PushCreateTGMultiObjectChangeCommand(var us:TZctnrVectorUndoCommands; var data,undodata:DMatrix4D;const objcount:Integer):TGDBTransformChangeCommand;overload;
 begin
   result:=CreateTGMultiObjectChangeCommand(data,undodata,objcount);
   us.PushBackData(result);

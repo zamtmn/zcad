@@ -84,7 +84,7 @@ begin
   begin
 
          SetObjCreateManipulator(domethod,undomethod);
-         with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),1)^ do
+         with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),1) do
          begin
               AddObject(pc);
               comit;

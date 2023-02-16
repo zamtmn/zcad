@@ -19,12 +19,12 @@
 unit uzcoiregister;
 {$INCLUDE zengineconfig.inc}
 interface
-uses Laz2_DOM,Toolwin,Clipbrd,sysutils,uzccommandsabstract,uzcfcommandline,uzcutils,uzbpaths,TypeDescriptors,uzctranslations,Forms,uzcinterface,uzeroot,
+uses Laz2_DOM,Toolwin,Clipbrd,sysutils,uzccommandsabstract,uzcfcommandline,uzcutils,uzbpaths,TypeDescriptors,uzcTranslations,Forms,uzcinterface,uzeroot,
      uzbtypes,uzedrawingdef,uzgldrawcontext,uzctnrvectorstrings,varmandef,uzedrawingsimple,
      uzeentity,uzcenitiesvariablesextender,zcobjectinspector,uzcguimanager,uzcstrconsts,
      gzctnrVectorTypes,Types,Controls,uzcdrawings,Varman,UUnitManager,uzcsysvars,
      uzcsysparams,zcobjectinspectorui,uzcoimultiobjects,uzccommandsimpl,
-     uzmenusmanager,uzcsysinfo,uzcLog,menus,ComCtrls,uztoolbarsmanager,uzcimagesmanager;
+     uzmenusmanager,uzcLog,menus,ComCtrls,uztoolbarsmanager,uzcimagesmanager;
 const
     PEditorFocusPriority=550;
 type

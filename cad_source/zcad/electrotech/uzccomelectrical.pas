@@ -13,7 +13,7 @@ unit uzccomelectrical;
 
 interface
 uses
-  gzctnrVectorTypes,uzglviewareageneral,uzctranslations,zcobjectchangeundocommand2,
+  gzctnrVectorTypes,uzglviewareageneral,uzcTranslations,gzundoCmdChgMethods,
   zcmultiobjectcreateundocommand,uzeentitiesmanager,uzedrawingdef,
   uzcenitiesvariablesextender,uzgldrawcontext,uzcdrawing,uzcvariablesutils,
   uzcstrconsts,UGDBSelectedObjArray,uzeentityfactory,uzcsysvars,
@@ -144,6 +144,7 @@ var
 {procedure startup;
 procedure finalize;}
 procedure Cable2CableMark(pcd:PTCableDesctiptor;pv:pGDBObjDevice);
+function RegenZEnts_com(operands:TCommandOperands):TCommandResult;
 implementation
 function GetCableMaterial(pcd:PTCableDesctiptor):String;
 var
@@ -1643,7 +1644,7 @@ begin
 
     PTZCADDrawing(drawings.GetCurrentDWG).UndoStack.PushStartMarker('Create cable');
     SetObjCreateManipulator(domethod,undomethod);
-    with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG).UndoStack,tmethod(domethod),tmethod(undomethod),1)^ do
+    with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG).UndoStack,tmethod(domethod),tmethod(undomethod),1) do
     begin
          AddObject(p3dpl);
          comit;
@@ -1705,11 +1706,11 @@ begin
                  begin
                       if addfirstpoint then
                         cable^.AddVertex(firstpoint);
-                      if not IsPointEqual(tw1,firstpoint) then
+                      if not IsPointEqual(tw1,firstpoint,sqreps) then
                         AddPolySegmentFromConnIfZnotMatch(firstpoint,tw1,cable);
                       tw2:=NearestPointOnSegment(lastpoint,l1.CoordInWCS.lBegin,l1.CoordInWCS.lEnd);
                       cable^.AddVertex(tw2);
-                      if not IsPointEqual(tw2,lastpoint) then
+                      if not IsPointEqual(tw2,lastpoint,sqreps) then
                         AddPolySegmentToConnIfZnotMatch(tw2,lastpoint,cable);
                  end
              else
@@ -1720,14 +1721,14 @@ begin
                       PTrace.graf.FindPath(tw1,tw2,l1,l2,pa);
                       if addfirstpoint then
                       cable^.AddVertex(firstpoint);
-                      if not IsPointEqual(tw1,firstpoint) then
+                      if not IsPointEqual(tw1,firstpoint,sqreps) then
                         AddPolySegmentFromConnIfZnotMatch(firstpoint,tw1,cable);
                                                           //cable^.AddVertex(tw1);
                       pa.copyto(cable.VertexArrayInOCS);
                       //firstpoint:=pgdbvertex(cable^.VertexArrayInWCS.getDataMutable(cable^.VertexArrayInWCS.Count-1))^;
                       //if not IsPointEqual(tw2,firstpoint) then
                         cable^.AddVertex(tw2);
-                      if not IsPointEqual(tw2,lastpoint) then
+                      if not IsPointEqual(tw2,lastpoint,sqreps) then
                         AddPolySegmentToConnIfZnotMatch(tw2,lastpoint,cable);
                                                      //cable^.AddVertex(lastpoint);
                       pa.done;
@@ -1762,11 +1763,11 @@ begin
                begin
                  if addfirstpoint then
                    cable^.AddVertex(firstpoint);
-                 if not IsPointEqual(tw1,firstpoint) then
+                 if not IsPointEqual(tw1,firstpoint,sqreps) then
                    AddPolySegmentFromConnIfZnotMatch(firstpoint,tw1,cable);
                  tw2:=NearestPointOnSegment(lastpoint,l1.CoordInWCS.lBegin,l1.CoordInWCS.lEnd);
                  cable^.AddVertex(tw2);
-                 if not IsPointEqual(tw2,lastpoint) then
+                 if not IsPointEqual(tw2,lastpoint,sqreps) then
                    AddPolySegmentToConnIfZnotMatch(tw2,lastpoint,cable);
                end
            else
@@ -1777,7 +1778,7 @@ begin
                     PTrace.graf.FindPath(tw1,tw2,l1,l2,pa);
                     if addfirstpoint then
                     cable^.AddVertex(firstpoint);
-                    if not IsPointEqual(tw1,firstpoint) then
+                    if not IsPointEqual(tw1,firstpoint,sqreps) then
                       AddPolySegmentFromConnIfZnotMatch(firstpoint,tw1,cable);
 
                     //pa.copyto(@cable.VertexArrayInOCS);
@@ -1810,7 +1811,7 @@ begin
                     //firstpoint:=pgdbvertex(cable^.VertexArrayInWCS.getDataMutable(cable^.VertexArrayInWCS.Count-1))^;
                     //if not IsPointEqual(tw2,firstpoint) then
                       tcable^.AddVertex(tw2);
-                    if not IsPointEqual(tw2,lastpoint) then
+                    if not IsPointEqual(tw2,lastpoint,sqreps) then
                       AddPolySegmentToConnIfZnotMatch(tw2,lastpoint,tcable);
                     pa.done;
                end;
@@ -1846,7 +1847,7 @@ begin
          tmethod(domethod).Data:=p3dpl;
          tmethod(undomethod).Code:=pointer(p3dpl.DeleteVertex);
          tmethod(undomethod).Data:=p3dpl;
-         with PushCreateTGObjectChangeCommand2(PTZCADDrawing(drawings.GetCurrentDWG).UndoStack,polydata,tmethod(domethod),tmethod(undomethod))^ do
+         with GUCmdChgMethods<TPolyData>.CreateAndPush(polydata,domethod,undomethod,(PTZCADDrawing(drawings.GetCurrentDWG).UndoStack),drawings.AfterAutoProcessGDB) do
          begin
               comit;
          end;
@@ -2809,7 +2810,7 @@ begin
 
 
   SetObjCreateManipulator(domethod,undomethod);
-  with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG).UndoStack,tmethod(domethod),tmethod(undomethod),1)^ do
+  with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG).UndoStack,tmethod(domethod),tmethod(undomethod),1) do
   begin
        AddObject(pleader);
        comit;
@@ -3025,7 +3026,7 @@ begin
         repeat
               pointer(nline):=net.GetNearestLine(riser.P_insert_in_WCS);
               np:=NearestPointOnSegment(riser.P_insert_in_WCS,nline.CoordInWCS.lBegin,nline.CoordInWCS.lEnd);
-              if IsPointEqual(np,riser.P_insert_in_WCS)then
+              if IsPointEqual(np,riser.P_insert_in_WCS,sqreps)then
               begin
                    net.riserarray.PushBackData(riser);
               end;
@@ -3322,7 +3323,7 @@ begin
      //pet:=CMDLinePromptParser.GetTokens('$<"12&[3]",Keys[1],Id[1]>');
      //pet:=CMDLinePromptParser.GetTokens('фs "ёба" йs "2ёба2" йцу12');
      commandmanager.SetPrompt(pet);
-     commandmanager.ChangeInputMode([GPIempty],[]);
+     commandmanager.ChangeInputMode([IPEmpty],[]);
      pet.Free;
      repeat
        gr:=commandmanager.Get3DPoint('ага',p);

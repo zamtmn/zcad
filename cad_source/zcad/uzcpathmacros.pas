@@ -20,9 +20,8 @@ unit uzcPathMacros;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-  uzbCommandLineParser,uzcCommandLineParser,
   MacroDefIntf,uzmacros,uzcsysparams,
-  uzclog,uzbLogTypes,uzblog,uzbpaths,Forms,
+  uzclog,uzblog,uzbpaths,Forms,
   {$IFDEF WINDOWS}ShlObj,{$ENDIF}{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils,uzcsysvars;
 type
   TZCADPathsMacroMethods=class

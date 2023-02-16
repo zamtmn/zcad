@@ -26,7 +26,6 @@ uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
   uzbstrproc,
-  gzctnrVectorTypes,
   uzeblockdef,uzcdrawing,uzcdrawings,uzcinterface,
   uzctnrVectorStrings,uzegeometrytypes,
   uzccomdraw,uzcstrconsts,uzccommandsmanager,Varman,uzeconsts,uzglviewareadata,
@@ -131,7 +130,7 @@ begin
     end;
 
     SetObjCreateManipulator(domethod,undomethod);
-    with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),1)^ do
+    with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),1) do
     begin
          AddObject(pb);
          comit;

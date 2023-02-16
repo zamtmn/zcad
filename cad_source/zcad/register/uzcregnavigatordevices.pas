@@ -22,8 +22,8 @@ interface
 uses uzcfnavigatordevices,uzcfcommandline,uzbpaths,TypeDescriptors,uzctranslations,Forms,
      varmandef,uzeentdevice,uzcnavigatorsnodedesk,
      uzeentity,zcobjectinspector,uzcguimanager,uzcenitiesvariablesextender,uzbstrproc,
-     Types,Controls,Varman,UUnitManager,uzcsysvars,uzcsysinfo,uzcLog,laz.VirtualTrees,
-     uzcfnavigatordevicescxmenu,uzcmainwindow,MacroDefIntf,sysutils;
+     Types,Controls,Varman,UUnitManager,uzcsysvars,uzcLog,laz.VirtualTrees,
+     uzcfnavigatordevicescxmenu,uzcmainwindow,MacroDefIntf,sysutils,uzcActionsManager;
 resourcestring
   rsDevices='Devices';
   rsRisers='Risers';
@@ -98,7 +98,7 @@ end;
 
 procedure ZCADFormSetupProc(Form:TControl);
 begin
-  InitializeNavigatorDevicesCXMenu(ZCADMainWindow,ZCADMainWindow.StandartActions);
+  InitializeNavigatorDevicesCXMenu(ZCADMainWindow,StandartActions);
 
   NavigatorDevicesMenuManager.RegisterContextCheckFunc('HaveSubNodes',NDMCCFHaveSubNodes);
   NavigatorDevicesMenuManager.RegisterContextCheckFunc('HaveEntity',NDMCCFNodeHaveEntity);

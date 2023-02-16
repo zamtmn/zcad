@@ -79,7 +79,7 @@ begin
         im:=dispmatr;
         uzegeometry.MatrixInvert(im);
 
-        with PushCreateTGMultiObjectChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,dispmatr,im,1)^ do
+        with PushCreateTGMultiObjectChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,dispmatr,im,1) do
         begin
           m:=TMethod(@pv^.Transform);
           AddMethod(m);

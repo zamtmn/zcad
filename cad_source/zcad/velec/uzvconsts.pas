@@ -67,7 +67,7 @@ const
 //
 
 
-  velec_cableMounting='Cable_Mounting_Method';
+  velec_cableMounting='CABLE_MountingMethod';
 //  velec_cableMounting='SLCABAGEN_CableMounting';
   velec_CableRoutNodes = '-';//индивидуальная прокладка кабеля от этого устройства и до Узла управления, далее как и все
   velec_cabControlUnits = 'GC_velecSubGroupControlUnit'; //прописывается для кабеля что чего подключает. Нужно для Велек и организации однолинейной схемы
@@ -76,12 +76,15 @@ const
   velec_onlyThisDev='!';    // кабель довести только до этой точки и все, дальше не идет
   velec_masterTravelNode='^';
   velec_beforeNameGlobalSchemaBlock='DEVICE_';
-  velec_SchemaBlockJunctionBox='DEVICE_EL_VL_BOX1';
+  velec_SchemaBlockJunctionBox='EL_EMSPLITTERBOX';
+  velec_SchemaBlockChangingLayingMethod='EL_EMCHANGLAYINGMETHOD';
+
   velec_SchemaELDevInfo='VELEC_EL_SCHEME_INFO';
   velec_SchemaCableInfo='VELEC_CABLE_SCHEME_INFO';
 
   velec_SchemaELSTART='EL_STARTSCHEMA';
   velec_SchemaELEND='EL_ENDSCHEMA';
+  velec_SchemaIsCable='isELSchemaCable';
 
   velec_VarNameForConnectBefore='SLCABAGEN';
   velec_VarNameForConnectBeforeName='Подключение №';
@@ -95,7 +98,14 @@ const
   velec_VarNameForConnectAfter_CabConnectMountingMethod='CabConnectMountingMethod';
 
 
-  velec_cableMountingNon='';
+  velec_cableMountingNon='-';
+
+  //***КОНСТАНТЫ В РАСЧЕТАХ ЭЛЕКТРИЧЕСКОЙ МОДЕЛИ***//
+  velec_EM_vSumChildVertex='vSumChildVertex';
+  velec_EM_vEMGCHDGroup='vEMGCHDGroup';
+  velec_EM_Diagram_InOutGroup='EL_VELEC_DIAGRAM_INOUTGROUP';
+  velec_EL_EMSPLITTERBOX='EL_EMSPLITTERBOX';
+
 
 implementation
 

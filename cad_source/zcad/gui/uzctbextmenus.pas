@@ -29,7 +29,7 @@ uses
   {ZCAD BASE}
     uzbpaths,
     uzegeometry,uzcsysvars,uzbstrproc,uzclog,
-    varmandef, varman,UUnitManager,uzcsysinfo,strmy,uzestylesdim,
+    varmandef, varman,UUnitManager,strmy,uzestylesdim,
   {ZCAD SIMPLE PASCAL SCRIPT}
        //languade,
   {ZCAD ENTITIES}

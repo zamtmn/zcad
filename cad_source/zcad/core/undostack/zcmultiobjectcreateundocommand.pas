@@ -28,30 +28,30 @@ uses UGDBOpenArrayOfPV,zeundostack,zebaseundocommands,uzbtypes,
 
 
 type
-generic TGMultiObjectProcessCommand<_LT> =object(TCustomChangeCommand)
+generic TGMultiObjectProcessCommand<_LT> =class(TUCmdBase)
                                       DoData,UnDoData:tmethod;
                                       ObjArray:_LT;
                                       FreeArray:boolean;
                                       public
-                                      constructor Assign(const _dodata,_undodata:tmethod;const objcount:Integer);
+                                      constructor Create(const _dodata,_undodata:tmethod;const objcount:Integer);
                                       //procedure StoreUndoData(var _undodata:_T);virtual;
                                       procedure AddObject(PObject:PGDBaseObject);virtual;
 
-                                      procedure UnDo;virtual;
-                                      procedure Comit;virtual;
-                                      destructor Done;virtual;
+                                      procedure UnDo;override;
+                                      procedure Comit;override;
+                                      destructor Destroy;override;
                                   end;
 
 PTGDBMultiCreateCommand=^TGDBMultiCreateCommand;
 TGDBMultiCreateCommand=specialize TGMultiObjectProcessCommand<GDBObjOpenArrayOfPV>;
 
 
-function CreateMultiObjectCreateCommand(var dodata,undodata:tmethod;objcount:integer):PTGDBMultiCreateCommand;overload;
-function PushMultiObjectCreateCommand(var us:TZctnrVectorUndoCommands; var dodata,undodata:tmethod;objcount:integer):PTGDBMultiCreateCommand;overload;
+function CreateMultiObjectCreateCommand(var dodata,undodata:tmethod;objcount:integer):TGDBMultiCreateCommand;overload;
+function PushMultiObjectCreateCommand(var us:TZctnrVectorUndoCommands; var dodata,undodata:tmethod;objcount:integer):TGDBMultiCreateCommand;overload;
 
 
 implementation
-constructor TGMultiObjectProcessCommand.Assign(const _dodata,_undodata:tmethod;const objcount:Integer);
+constructor TGMultiObjectProcessCommand.Create(const _dodata,_undodata:tmethod;const objcount:Integer);
 begin
      DoData:=_DoData;
      UnDoData:=_UnDoData;
@@ -101,7 +101,7 @@ begin
   until p=nil;
   FreeArray:=not FreeArray;
 end;
-destructor TGMultiObjectProcessCommand.Done;
+destructor TGMultiObjectProcessCommand.Destroy;
 begin
      inherited;
      if {not} FreeArray then
@@ -113,12 +113,12 @@ begin
                           end;
 end;
 
-function {TZctnrVectorUndoCommands.}CreateMultiObjectCreateCommand(var dodata,undodata:tmethod;objcount:integer):PTGDBMultiCreateCommand;overload;
+function {TZctnrVectorUndoCommands.}CreateMultiObjectCreateCommand(var dodata,undodata:tmethod;objcount:integer):TGDBMultiCreateCommand;overload;
 begin
-     Getmem(result,sizeof(TGDBMultiCreateCommand));
-     result^.Assign(dodata,undodata,objcount);
+     //Getmem(result,sizeof(TGDBMultiCreateCommand));
+     result:=TGDBMultiCreateCommand.Create(dodata,undodata,objcount);
 end;
-function {TZctnrVectorUndoCommands.}PushMultiObjectCreateCommand(var us:TZctnrVectorUndoCommands; var dodata,undodata:tmethod;objcount:integer):PTGDBMultiCreateCommand;overload;
+function {TZctnrVectorUndoCommands.}PushMultiObjectCreateCommand(var us:TZctnrVectorUndoCommands; var dodata,undodata:tmethod;objcount:integer):TGDBMultiCreateCommand;overload;
 begin
   result:=CreateMultiObjectCreateCommand(dodata,undodata,objcount);
   us.PushBackData(result);

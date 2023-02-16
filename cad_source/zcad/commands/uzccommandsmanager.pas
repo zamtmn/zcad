@@ -21,12 +21,13 @@ unit uzccommandsmanager;
 {$interfaces corba}
 interface
 uses gzctnrVectorPObjects,uzcsysvars,uzegeometry,uzglviewareaabstract,uzbpaths,
-     uzeconsts,uzcctrldynamiccommandmenu,uzcinfoform,uzcstrconsts,uzcsysinfo,
+     uzeconsts,uzcctrldynamiccommandmenu,uzcinfoform,uzcstrconsts,
      gzctnrVectorTypes,uzegeometrytypes,uzbstrproc,gzctnrVectorP,
      uzccommandsabstract, sysutils,uzglviewareadata,
      uzclog,varmandef,varman,uzedrawingdef,uzcinterface,
      uzcsysparams,uzedrawingsimple,uzcdrawings,uzctnrvectorstrings,forms,
-     uzcctrlcommandlineprompt,uzeparsercmdprompt,gzctnrSTL,uzeSnap;
+     uzcctrlcommandlineprompt,uzeparsercmdprompt,uzeSnap,
+     uzeentity,uzgldrawcontext,Classes;
 const
      tm:tmethod=(Code:nil;Data:nil);
      nullmethod:{tmethod}TButtonMethod=nil;
@@ -56,7 +57,7 @@ type
 
                           CommandsStack:{TZctnrVectorPointer}TZctnrPCommandObjectDef;
                           ContextCommandParams:Pointer;
-                          busy:Boolean;
+                          busy:Integer;
                           varstack:tvarstack;
                           DMenu:TDMenuWnd;
                           OnCommandRun:TOnCommandRun;
@@ -65,6 +66,8 @@ type
                           SilentCounter:Integer;
                           CommandLinePrompts:TICommandLinePromptVector;
                           CurrentPrompt:TParserCommandLinePrompt.TGeneralParsedText;
+                          function GetState:TZState;
+                          function isBusy:Boolean;
                           constructor init(m:Integer);
                           procedure execute(const comm:string;silent:Boolean;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
                           procedure executecommand(const comm:string;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
@@ -102,6 +105,8 @@ type
                           function Get3DPointWithLineFromBase(prompt:String;const base:GDBVertex;out p:GDBVertex):TGetResult;
                           function GetEntity(prompt:String;out p:Pointer):Boolean;
                           function Get3DPointInteractive(prompt:String;out p:GDBVertex;const InteractiveProc:TInteractiveProcObjBuild;const PInteractiveData:Pointer):TGetResult;
+                          function Get3DAndMoveConstructRootTo(prompt:String;out p:GDBVertex):TGetResult;
+                          function MoveConstructRootTo(prompt:String):TGetResult;
                           function GetInput(Prompt:String;out Input:String):TGetResult;
 
                           function GetLastId:TTag;
@@ -118,6 +123,8 @@ type
                           procedure sendcoordtocommandTraceOn(Sender:TAbstractViewArea;coord:GDBVertex;key: Byte;pos:pos_record);
 
                           procedure PromptTagNotufy(Tag:TTag);
+
+                          function ProcessCommandShortcuts(const ShortCut:TShortCut):Boolean;
 
 
                           procedure AddClPrompt(CLP:ICommandLinePrompt);
@@ -148,6 +155,23 @@ begin
     for i:=CommandLinePrompts.Size-1 downto 0 do
        if CommandLinePrompts[i]=CLP then
          CommandLinePrompts.Erase(i);
+end;
+
+function GDBcommandmanager.ProcessCommandShortcuts(const ShortCut:TShortCut):Boolean;
+var
+  data:TCommandLinePromptOption;
+  ts:TParserCommandLinePrompt.TParserString;
+begin
+  result:=false;
+  if pcommandrunning<>nil then
+    if pcommandrunning^.IData.GetPointMode in SomethingWait then
+      if IPShortCuts in pcommandrunning^.IData.InputMode then begin
+        data:=TCommandLinePromptOption.Create(ShortCut);
+        CurrentPrompt.Doit(data);
+        result:=data.ShortCut<>ShortCut;
+        if result then
+          PromptTagNotufy(data.CurrentTag);
+      end
 end;
 
 procedure GDBcommandmanager.SetPrompt(APrompt:String);
@@ -341,6 +365,42 @@ begin
   PTSimpleDrawing(pcommandrunning.pdwg)^.SetMouseEditorMode(savemode);//restore editor mode
                                                                       //восстанавливаем сохраненный режим редактора
 end;
+procedure InteractiveConstructRootManipulator( const PInteractiveData : Pointer {must be nil, no additional data needed};
+                                                                Point : GDBVertex  {new end coord};
+                                                                Click : Boolean {true if lmb presseed});
+var
+  ir:itrec;
+  p:PGDBObjEntity;
+  t_matrix:DMatrix4D;
+  RC:TDrawContext;
+begin
+  if click then begin
+    t_matrix:=CreateTranslationMatrix(Point);
+    drawings.GetCurrentDWG^.ConstructObjRoot.transform(t_matrix);
+    drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=OneMatrix;
+    p:=drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.beginiterate(ir);
+     if p<>nil then repeat
+       p^.transform(t_matrix);
+       p:=drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.iterate(ir);
+     until p=nil;
+  end else begin
+    drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=CreateTranslationMatrix(Point);
+    RC:=drawings.GetCurrentDWG^.CreateDrawingRC;
+    drawings.GetCurrentDWG^.ConstructObjRoot.FormatEntity(drawings.GetCurrentDWG^,RC);
+  end;
+end;
+
+function GDBcommandmanager.Get3DAndMoveConstructRootTo(prompt:String;out p:GDBVertex):TGetResult;
+begin
+  result:=Get3DPointInteractive(prompt,p,@InteractiveConstructRootManipulator,nil)
+end;
+function GDBcommandmanager.MoveConstructRootTo(prompt:String):TGetResult;
+var
+  p:GDBVertex;
+begin
+  result:=Get3DPointInteractive(prompt,p,@InteractiveConstructRootManipulator,nil)
+end;
+
 function GDBcommandmanager.GetLastId:TTag;
 begin
   if pcommandrunning<>nil then
@@ -380,7 +440,8 @@ var
    savemode:Byte;//variable to store the current mode of the editor
                      //переменная для сохранения текущего режима редактора
 begin
-  savemode:=PTSimpleDrawing(pcommandrunning.pdwg)^.DefMouseEditorMode({MGet3DPoint or MGet3DPointWoOP}0,//set mode point of the mouse
+  if pcommandrunning.pdwg<>nil then
+    savemode:=PTSimpleDrawing(pcommandrunning.pdwg)^.DefMouseEditorMode({MGet3DPoint or MGet3DPointWoOP}0,//set mode point of the mouse
                                                                                                      //устанавливаем режим указания точек мышью
                                                                       MGetControlpoint or MGetSelectionFrame or MGetSelectObject);//reset selection entities  mode
                                                                                                               //сбрасываем режим выбора примитивов мышью
@@ -405,7 +466,8 @@ begin
     result:=GRCancel;
   end;
   if (pcommandrunning^.IData.GetPointMode<>TGPMCloseDWG)then
-  PTSimpleDrawing(pcommandrunning.pdwg)^.SetMouseEditorMode(savemode);//restore editor mode
+    if pcommandrunning.pdwg<>nil then
+      PTSimpleDrawing(pcommandrunning.pdwg)^.SetMouseEditorMode(savemode);//restore editor mode
                                                                       //восстанавливаем сохраненный режим редактора
 end;
 
@@ -550,9 +612,9 @@ var
    oldlastcomm:String;
    s:String;
 begin
-     s:=(ExpandPath(fn));
+     s:=ExpandPath(fn);
      ZCMsgCallBackInterface.TextMessage(sysutils.format(rsRunScript,[s]),TMWOHistoryOut);
-     busy:=true;
+     inc(busy);
 
      //DisableCmdLine;
      ZCMsgCallBackInterface.Do_GUIMode({ZMsgID_GUIDisableCMDLine}ZMsgID_GUIDisable);
@@ -580,7 +642,7 @@ begin
      //EnableCmdLine;
      ZCMsgCallBackInterface.Do_GUIMode({ZMsgID_GUIEnableCMDLine}ZMsgID_GUIEnable);
      ZCMsgCallBackInterface.Do_GUIMode(ZMsgID_GUICMDLineCheck);
-     busy:=false;
+     dec(busy);
 end;
 procedure GDBcommandmanager.sendpoint2command;
 var
@@ -763,7 +825,7 @@ begin
                         begin
                         ZCMsgCallBackInterface.TextMessage(rsRunCommand+':'+pfoundcommand^.CommandName,TMWOHistoryOut);
                         lastcommand := command;
-                        if not (busy) then
+                        if not (isBusy) then
                         if assigned(OnCommandRun) then
                                                       OnCommandRun(command);
                         end;
@@ -789,14 +851,14 @@ begin
 end;
 procedure GDBcommandmanager.executecommand(const comm:string;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);
 begin
-     if not busy then
+     if not isBusy then
                      execute(comm,false,pdrawing,POGLWndParam)
                  else
                      ZCMsgCallBackInterface.TextMessage(format(rsCommandNRInC,[comm]),TMWOShowError);
 end;
 procedure GDBcommandmanager.executecommandsilent{(const comm:pansichar): Integer};
 begin
-     if not busy then
+     if not isBusy then
      execute(comm,true,pdrawing,POGLWndParam);
 end;
 procedure GDBcommandmanager.PrepairVarStack;
@@ -939,7 +1001,21 @@ begin
   end;
   SilentCounter:=0;
   CommandLinePrompts:=nil;
+  busy:=0;
+  ZCMsgCallBackInterface.RegisterGetStateFunc(GetState);
 end;
+function GDBcommandmanager.isBusy:Boolean;
+begin
+  result:=busy>0;
+end;
+function GDBcommandmanager.GetState:TZState;
+begin
+  if isBusy then
+    Result:=ZState_Busy
+  else
+    Result:=ZCMsgCallBackInterface.GetEmptyZState;
+end;
+
 procedure GDBcommandmanager.CommandRegister(pc:PCommandObjectDef);
 begin
   if count=max then exit;

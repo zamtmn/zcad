@@ -599,7 +599,7 @@ begin
 end;
 procedure GDBObjLine.SaveToDXF;
 begin
-  SaveToDXFObjPrefix(outhandle,'LINE','AcDbLine',IODXFContext);
+  SaveToDXFObjPrefix(outhandle,dxfName_Line,dxfName_AcDbLine,IODXFContext);
   dxfvertexout(outhandle,10,CoordInOCS.lbegin);
   dxfvertexout(outhandle,11,CoordInOCS.lend);
 end;

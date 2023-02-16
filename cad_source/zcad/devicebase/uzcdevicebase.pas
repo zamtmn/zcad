@@ -1,9 +1,17 @@
 unit uzcdevicebase;
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzcinterface,uzbpaths,uzctranslations,gvector,varmandef,CsvDocument,uzcdevicebaseabstract,uzcsysvars,
-     LazUTF8,uzcsysinfo,strmy,uzbtypes,UUnitManager,varman,sysutils,
-     typedescriptors,URecordDescriptor,UObjectDescriptor,uzclog;
+uses
+  uzcinterface,uzctranslations,
+
+  SysUtils,gvector,
+
+  LazUTF8,CsvDocument,uzcsysvars,
+
+  varmandef,Varman,URecordDescriptor,UObjectDescriptor,typedescriptors,UUnitManager,
+  uzcdevicebaseabstract,
+
+  uzbpaths,uzbtypes;
 type
 {EXPORT+}
 PDeviceDbBaseObject=^DeviceDbBaseObject;

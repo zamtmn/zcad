@@ -104,7 +104,7 @@ begin
                                     uzegeometry.VertexSub(PInWCS[2],PInWCS[1])
                                    )
                          );
-   if uzegeometry.IsPointEqual(PInOCS[2],PInOCS[3])then
+   if uzegeometry.IsPointEqual(PInOCS[2],PInOCS[3],sqreps)then
                                                     triangle:=true
                                                 else
                                                     triangle:=false;

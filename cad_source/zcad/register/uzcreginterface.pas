@@ -21,7 +21,7 @@ unit uzcreginterface;
 interface
 uses uzcsysvars,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,
      Varman,uzcoidecorations,uzegluinterface,uzcLog,uzccommandlineutil,
-     uzcsysparams,uzcsysinfo;
+     uzcsysparams;
 implementation
 
 initialization

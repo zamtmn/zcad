@@ -6,12 +6,13 @@ interface
 
 uses
   sysutils,
-  uzmenusmanager,laz.VirtualTrees,uzmacros,TransferMacros,MacroDefIntf,Forms,ActnList;
+  uzmenusmanager,
+  laz.VirtualTrees,uzmacros,TransferMacros,MacroDefIntf,Forms,ActnList,LCLVersion;
 
 type
   PTNavigatorDevicesContext=^TNavigatorDevicesContext;
   TNavigatorDevicesContext=record
-    tree:TVirtualStringTree;
+    tree:{$IF DECLARED(TVirtualStringTree)}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};
     pnode:PVirtualNode;
   end;
 
@@ -27,7 +28,7 @@ var
   NavigatorDevicesMacroList:TTransferMacroList = nil;
 
 
-function CreateNavigatorDevicesContext(const tree:TVirtualStringTree;const pnode:PVirtualNode):TNavigatorDevicesContext;
+function CreateNavigatorDevicesContext(const tree:{$IF DECLARED(TVirtualStringTree)}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};const pnode:PVirtualNode):TNavigatorDevicesContext;
 procedure InitializeNavigatorDevicesCXMenu(mainform:TForm;actlist:TActionList);
 procedure FinalizeNavigatorDevicesCXMenu;
 implementation
@@ -46,7 +47,7 @@ begin
   NavigatorDevicesMacroList.Add(NewMacro);
 end;
 
-function CreateNavigatorDevicesContext(const tree:TVirtualStringTree;const pnode:PVirtualNode):TNavigatorDevicesContext;
+function CreateNavigatorDevicesContext(const tree:{$IF DECLARED(TVirtualStringTree)}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};const pnode:PVirtualNode):TNavigatorDevicesContext;
 begin
   result.tree:=tree;
   result.pnode:=pnode;

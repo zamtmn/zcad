@@ -87,7 +87,7 @@ uses
                       //разные функции упрощающие создание примитивов, пока их там очень мало
   varmandef,
   Varman,
-  {UGDBOpenArrayOfUCommands,}zcchangeundocommand,
+  gzundoCmdChgData,
 
   uzcstrconsts,       //resouce strings
 
@@ -100,16 +100,16 @@ function GetPoint_com(operands:TCommandOperands):TCommandResult;
 var
    p:GDBVertex;
    vdpobj,vdpvertex:vardesk;
-   pc:pointer;
+   cmd:TGDBVertexChangeCommand;
 begin
     vdpobj:=commandmanager.PopValue;
     vdpvertex:=commandmanager.PopValue;
     if commandmanager.get3dpoint(rscmSpecifyPoint,p)=GRNormal then
     begin
-         pc:=PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pgdbvertex(ppointer(vdpvertex.data.Addr.Instance)^)^);
+         cmd:=TGDBVertexChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pgdbvertex(ppointer(vdpvertex.data.Addr.Instance)^)^,ppointer(vdpobj.data.Addr.Instance)^,drawings.AfterEnt);
          pgdbvertex(ppointer(vdpvertex.data.Addr.Instance)^)^:=p;
-         PTGDBVertexChangeCommand(pc)^.PEntity:=ppointer(vdpobj.data.Addr.Instance)^;
-         PTGDBVertexChangeCommand(pc)^.ComitFromObj;
+         //cmd.PEntity:=ppointer(vdpobj.data.Addr.Instance)^;
+         cmd.ComitFromObj;
     end;
     result:=cmd_ok;
 end;
@@ -117,16 +117,16 @@ function GetVertexX_com(operands:TCommandOperands):TCommandResult;
 var
    p:GDBVertex;
    vdpobj,vdpvertex:vardesk;
-   pc:pointer;
+   cmd:TDoubleChangeCommand;
 begin
     vdpobj:=commandmanager.PopValue;
     vdpvertex:=commandmanager.PopValue;
     if commandmanager.get3dpoint(rscmSpecifyX,p)=GRNormal then
     begin
-         pc:=PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBXCoordinate(ppointer(vdpvertex.data.Addr.Instance)^)^);
+         cmd:=TDoubleChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBXCoordinate(ppointer(vdpvertex.data.Addr.Instance)^)^,ppointer(vdpobj.data.Addr.Instance)^,drawings.AfterEnt);
          pDouble(ppointer(vdpvertex.data.Addr.Instance)^)^:=p.x;
-         PTDoubleChangeCommand(pc)^.PEntity:=ppointer(vdpobj.data.Addr.Instance)^;
-         PTDoubleChangeCommand(pc)^.ComitFromObj;
+         //cmd.PEntity:=ppointer(vdpobj.data.Addr.Instance)^;
+         cmd.ComitFromObj;
     end;
     result:=cmd_ok;
 end;
@@ -134,16 +134,16 @@ function GetVertexY_com(operands:TCommandOperands):TCommandResult;
 var
    p:GDBVertex;
    vdpobj,vdpvertex:vardesk;
-   pc:pointer;
+   cmd:TDoubleChangeCommand;
 begin
     vdpobj:=commandmanager.PopValue;
     vdpvertex:=commandmanager.PopValue;
     if commandmanager.get3dpoint(rscmSpecifyY,p)=GRNormal then
     begin
-         pc:=PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBYCoordinate(ppointer(vdpvertex.data.Addr.Instance)^)^);
+         cmd:=TDoubleChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBYCoordinate(ppointer(vdpvertex.data.Addr.Instance)^)^,ppointer(vdpobj.data.Addr.Instance)^,drawings.AfterEnt);
          pDouble(ppointer(vdpvertex.data.Addr.Instance)^)^:=p.y;
-         PTDoubleChangeCommand(pc)^.PEntity:=ppointer(vdpobj.data.Addr.Instance)^;
-         PTDoubleChangeCommand(pc)^.ComitFromObj;
+         //cmd.PEntity:=ppointer(vdpobj.data.Addr.Instance)^;
+         cmd.ComitFromObj;
     end;
     result:=cmd_ok;
 end;
@@ -151,16 +151,16 @@ function GetVertexZ_com(operands:TCommandOperands):TCommandResult;
 var
    p:GDBVertex;
    vdpobj,vdpvertex:vardesk;
-   pc:pointer;
+   cmd:TDoubleChangeCommand;
 begin
     vdpobj:=commandmanager.PopValue;
     vdpvertex:=commandmanager.PopValue;
     if commandmanager.get3dpoint(rscmSpecifyZ,p)=GRNormal then
     begin
-         pc:=PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBZCoordinate(ppointer(vdpvertex.data.Addr.Instance)^)^);
+         cmd:=TDoubleChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBZCoordinate(ppointer(vdpvertex.data.Addr.Instance)^)^,ppointer(vdpobj.data.Addr.Instance)^,drawings.AfterEnt);
          pDouble(ppointer(vdpvertex.data.Addr.Instance)^)^:=p.z;
-         PTDoubleChangeCommand(pc)^.PEntity:=ppointer(vdpobj.data.Addr.Instance)^;
-         PTDoubleChangeCommand(pc)^.ComitFromObj;
+         //cmd.PEntity:=ppointer(vdpobj.data.Addr.Instance)^;
+         cmd.ComitFromObj;
     end;
     result:=cmd_ok;
 end;
@@ -168,7 +168,7 @@ function GetLength_com(operands:TCommandOperands):TCommandResult;
 var
    p1,p2:GDBVertex;
    vdpobj,vdpvertex:vardesk;
-   pc:pointer;
+   cmd:TDoubleChangeCommand;
 begin
   vdpobj:=commandmanager.PopValue;
   vdpvertex:=commandmanager.PopValue;
@@ -176,10 +176,10 @@ begin
     begin
       if commandmanager.get3dpoint(rscmSpecifySecondPoint,p2)=GRNormal then
       begin
-        pc:=PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pDouble(ppointer(vdpvertex.data.Addr.Instance)^)^);
+        cmd:=TDoubleChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pDouble(ppointer(vdpvertex.data.Addr.Instance)^)^,ppointer(vdpobj.data.Addr.Instance)^,drawings.AfterEnt);
         pgdblength(ppointer(vdpvertex.data.Addr.Instance)^)^:=uzegeometry.Vertexlength(p1,p2);
-        PTDoubleChangeCommand(pc)^.PEntity:=ppointer(vdpobj.data.Addr.Instance)^;
-        PTDoubleChangeCommand(pc)^.ComitFromObj;
+        //cmd.PEntity:=ppointer(vdpobj.data.Addr.Instance)^;
+        cmd.ComitFromObj;
       end;
     end;
     result:=cmd_ok;

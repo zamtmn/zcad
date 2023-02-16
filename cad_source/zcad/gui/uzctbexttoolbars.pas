@@ -26,13 +26,13 @@ uses
   ActnList,Laz2_DOM,Menus,Forms,ComCtrls,Graphics,LazUTF8,
   StdCtrls,Controls,
   sysutils,Classes,
-  uzcsysvars,uzbpaths,uzmenusmanager,uzctreenode,uzmenusdefaults,uzctranslations,
+  uzcsysvars,uzbpaths,uzmenusmanager,uzctreenode,uzmenusdefaults,uzcTranslations,
   usupportgui,uzccommandsmanager,uzcimagesmanager,uzcctrllayercombobox,
   uzcgui2color,uzeconsts,uzcfcolors,uzcuitypes,uzepalette,uzcdrawings,uzcinterface,
   uzcstrconsts,uzccommand_loadlayout,uzcgui2linetypes,uzestyleslinetypes,uzcinterfacedata,
   uzcgui2linewidth,uzcflineweights,uzcgui2textstyles,uzcgui2dimstyles,
   uzedrawingsimple,uzcdrawing,uzcuidialogs,uzbstrproc,
-  uzestyleslayers,zcchangeundocommand,uzcutils,gzctnrVectorTypes;
+  uzestyleslayers,gzundoCmdChgData,uzcutils,gzctnrVectorTypes;
 type
   TMyToolbar=class(TToolBar)
     public
@@ -113,7 +113,7 @@ begin
      result:=false;
      case numprop of
                     0:begin
-                        with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(PLayer)^._on)^ do
+                        with TBooleanChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(PLayer)^._on,nil,nil) do
                         begin
                           PGDBLayerProp(PLayer)^._on:=not(PGDBLayerProp(PLayer)^._on);
                           ComitFromObj;
@@ -125,7 +125,7 @@ begin
                       end;
                     {1:;}
                     2:begin
-                        with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(PLayer)^._lock)^ do
+                        with TBooleanChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(PLayer)^._lock,nil,nil) do
                         begin
                           PGDBLayerProp(PLayer)^._lock:=not(PGDBLayerProp(PLayer)^._lock);
                           ComitFromObj;
@@ -140,7 +140,7 @@ begin
                                           if assigned(sysvar.dwg.DWG_CLayer) then
                                           if sysvar.dwg.DWG_CLayer^<>Player then
                                           begin
-                                               with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,sysvar.dwg.DWG_CLayer^)^ do
+                                               with TGDBPoinerChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,sysvar.dwg.DWG_CLayer^,nil,nil) do
                                                begin
                                                     sysvar.dwg.DWG_CLayer^:=Player;
                                                     ComitFromObj;

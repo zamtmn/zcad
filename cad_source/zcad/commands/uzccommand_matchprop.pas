@@ -32,7 +32,7 @@ uses
   uzcutils,
   uzbtypes,
   uzegeometry,
-  uzeentity,uzeenttext,uzgldrawcontext,uzcdrawing,uzeconsts,zcchangeundocommand,
+  uzeentity,uzeenttext,uzgldrawcontext,uzcdrawing,uzeconsts,gzundoCmdChgData,
   URecordDescriptor,typedescriptors,Varman;
 
 //type
@@ -96,7 +96,7 @@ begin
                 if pd^.vp.Layer<>ps^.vp.Layer then
                   begin
                     zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
-                    with PushCreateTGChangeCommand(drawing.UndoStack,pd^.vp.Layer)^ do
+                    with TGDBPoinerChangeCommand.CreateAndPushIfNeed(drawing.UndoStack,pd^.vp.Layer,nil,nil) do
                     begin
                          pd^.vp.Layer:=ps^.vp.Layer;
                          ComitFromObj;
@@ -107,7 +107,7 @@ begin
                 if pd^.vp.LineType<>ps^.vp.LineType then
                   begin
                     zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
-                    with PushCreateTGChangeCommand(drawing.UndoStack,pd^.vp.LineType)^ do
+                    with TGDBPoinerChangeCommand.CreateAndPushIfNeed(drawing.UndoStack,pd^.vp.LineType,nil,nil) do
                     begin
                          pd^.vp.LineType:=ps^.vp.LineType;
                          ComitFromObj;
@@ -118,7 +118,7 @@ begin
                 if pd^.vp.LineWeight<>ps^.vp.LineWeight then
                   begin
                     zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
-                    with PushCreateTGChangeCommand(drawing.UndoStack,pd^.vp.LineWeight)^ do
+                    with TGDBTGDBLineWeightChangeCommand.CreateAndPushIfNeed(drawing.UndoStack,pd^.vp.LineWeight,nil,nil) do
                     begin
                          pd^.vp.LineWeight:=ps^.vp.LineWeight;
                          ComitFromObj;
@@ -129,7 +129,7 @@ begin
                 if pd^.vp.color<>ps^.vp.Color then
                   begin
                     zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
-                    with PushCreateTGChangeCommand(drawing.UndoStack,pd^.vp.color)^ do
+                    with TGDBTGDBPaletteColorChangeCommand.CreateAndPushIfNeed(drawing.UndoStack,pd^.vp.color,nil,nil) do
                     begin
                          pd^.vp.color:=ps^.vp.Color;
                          ComitFromObj;
@@ -140,7 +140,7 @@ begin
                 if pd^.vp.LineTypeScale<>ps^.vp.LineTypeScale then
                   begin
                     zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
-                    with PushCreateTGChangeCommand(drawing.UndoStack,pd^.vp.LineTypeScale)^ do
+                    with TDoubleChangeCommand.CreateAndPushIfNeed(drawing.UndoStack,pd^.vp.LineTypeScale,nil,nil) do
                     begin
                          pd^.vp.LineTypeScale:=ps^.vp.LineTypeScale;
                          ComitFromObj;
@@ -153,7 +153,7 @@ begin
                   if PGDBObjText(pd)^.TXTStyleIndex<>PGDBObjText(ps)^.TXTStyleIndex then
                     begin
                       zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
-                      with PushCreateTGChangeCommand(drawing.UndoStack,PGDBObjText(pd)^.TXTStyleIndex)^ do
+                      with TGDBPoinerChangeCommand.CreateAndPushIfNeed(drawing.UndoStack,PGDBObjText(pd)^.TXTStyleIndex,nil,nil) do
                       begin
                            PGDBObjText(pd)^.TXTStyleIndex:=PGDBObjText(ps)^.TXTStyleIndex;
                            ComitFromObj;
@@ -164,7 +164,7 @@ begin
                   if PGDBObjText(pd)^.textprop.size<>PGDBObjText(ps)^.textprop.size then
                     begin
                       zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
-                      with PushCreateTGChangeCommand(drawing.UndoStack,PGDBObjText(pd)^.textprop.size)^ do
+                      with TDoubleChangeCommand.CreateAndPushIfNeed(drawing.UndoStack,PGDBObjText(pd)^.textprop.size,nil,nil) do
                       begin
                            PGDBObjText(pd)^.textprop.size:=PGDBObjText(ps)^.textprop.size;
                            ComitFromObj;
@@ -175,7 +175,7 @@ begin
                   if PGDBObjText(pd)^.textprop.Oblique<>PGDBObjText(ps)^.textprop.Oblique then
                     begin
                       zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
-                      with PushCreateTGChangeCommand(drawing.UndoStack,PGDBObjText(pd)^.textprop.Oblique)^ do
+                      with TDoubleChangeCommand.CreateAndPushIfNeed(drawing.UndoStack,PGDBObjText(pd)^.textprop.Oblique,nil,nil) do
                       begin
                            PGDBObjText(pd)^.textprop.Oblique:=PGDBObjText(ps)^.textprop.Oblique;
                            ComitFromObj;
@@ -186,7 +186,7 @@ begin
                   if PGDBObjText(pd)^.textprop.wfactor<>PGDBObjText(ps)^.textprop.wfactor then
                     begin
                       zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
-                      with PushCreateTGChangeCommand(drawing.UndoStack,PGDBObjText(pd)^.textprop.wfactor)^ do
+                      with TDoubleChangeCommand.CreateAndPushIfNeed(drawing.UndoStack,PGDBObjText(pd)^.textprop.wfactor,nil,nil) do
                       begin
                            PGDBObjText(pd)^.textprop.wfactor:=PGDBObjText(ps)^.textprop.wfactor;
                            ComitFromObj;
@@ -197,7 +197,7 @@ begin
                   if PGDBObjText(pd)^.textprop.justify<>PGDBObjText(ps)^.textprop.justify then
                     begin
                       zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
-                      with PushCreateTGChangeCommand(drawing.UndoStack,PGDBObjText(pd)^.textprop.justify)^ do
+                      with TGDBTTextJustifyChangeCommand.CreateAndPushIfNeed(drawing.UndoStack,PGDBObjText(pd)^.textprop.justify,nil,nil) do
                       begin
                            PGDBObjText(pd)^.textprop.justify:=PGDBObjText(ps)^.textprop.justify;
                            ComitFromObj;

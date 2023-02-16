@@ -33,6 +33,7 @@ TDrawingContext=record
                    DrawHeplGeometryProc:TDrawHeplGeometry;
                    ForeGroundColorIndex:Integer;
 end;
+PTDrawContext=^TDrawContext;
 TDrawContext=record
                    DrawingContext:TDrawingContext;
                    Subrender:Integer;

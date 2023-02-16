@@ -21,31 +21,21 @@ unit uzccommand_selectframe;
 
 interface
 uses
- uzglviewareageneral,zeundostack,uzcoimultiobjects,
- uzgldrawcontext,uzbpaths,uzeffmanager,
- uzestylesdim,uzeenttext,
- URecordDescriptor,uzefontmanager,uzedrawingsimple,uzcsysvars,uzccommandsmanager,
- TypeDescriptors,uzcstrconsts,uzcctrlcontextmenu,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
- uzbstrproc,uzctreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
- LCLProc,Classes,LazUTF8,Forms,Controls,Clipbrd,lclintf,
-  uzcsysinfo,
+ uzglviewareageneral,
+ uzgldrawcontext,
+ uzccommandsmanager,
+ uzcstrconsts,
   uzccommandsabstract,
   uzccommandsimpl,
   uzbtypes,
   uzcdrawings,
-  sysutils,
-  varmandef,
   uzglviewareadata,
-  uzctnrVectorBytes,
-  uzeffdxf,
   uzcinterface,
   uzeconsts,
   uzeentity,
- uzcdialogsfiles,
- UUnitManager,uzclog,Varman,
- uzegeometrytypes,dialogs,uzcinfoform,
- uzeentpolyline,uzeentlwpolyline,UGDBSelectedObjArray,
- gzctnrVectorTypes,uzegeometry,uzelongprocesssupport;
+ uzclog,
+ uzegeometrytypes,
+ gzctnrVectorTypes,uzegeometry;
 var
   selframecommand:PCommandObjectDef;
 

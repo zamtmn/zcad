@@ -22,12 +22,16 @@ unit uzcoidecorations;
 interface
 
 uses
-  zcobjectinspectorui,uzctypesdecorations,uzccommandsabstract,zcobjectinspectoreditors,uzcsysinfo,uzepalette,UEnumDescriptor,zcobjectinspector,uzcinfoform,Forms,uzestyleslinetypes,sysutils,uzctreenode,uzcfsnapeditor,
-  Graphics,LCLType,Themes,uzeconsts,UGDBNamedObjectsArray,uzctnrvectorstrings,
+  SysUtils,Graphics,LCLType,Themes,Forms,
+  zcobjectinspectorui,uzctypesdecorations,uzccommandsabstract,uzepalette,
+  zcobjectinspectoreditors,UEnumDescriptor,zcobjectinspector,uzcinfoform,
+  uzestyleslinetypes,uzctreenode,uzcfsnapeditor,
+  uzeconsts,UGDBNamedObjectsArray,uzctnrvectorstrings,
   varmandef,Varman,uzcfcolors,uzestyleslayers,uzbtypes,uzcflineweights,usupportgui,
   StdCtrls,uzcdrawings,uzcstrconsts,Controls,Classes,uzbstrproc,uzcsysvars,uzccommandsmanager,
-  uzcsysparams,gzctnrVectorTypes,uzegeometrytypes,uzcinterface,uzcoimultiobjects,uzcgui2color,uzcgui2linewidth,uzcgui2linetypes,
-  uzccommand_layer,uzcuitypes;
+  uzcsysparams,gzctnrVectorTypes,uzegeometrytypes,uzcinterface,uzcoimultiobjects,
+  uzcgui2color,uzcgui2linewidth,uzcgui2linetypes,
+  uzccommand_layer,uzcuitypes,uzeNamedObject;
 type
     AsyncCommHelper=class
                          class procedure GetVertex(Pinstance:PtrInt);

@@ -38,7 +38,8 @@ TBaseEntityExtender=class(TBaseExtender)
                   procedure CopyExt2Ent(pSourceEntity,pDestEntity:pointer);virtual;abstract;
                   procedure ReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);virtual;abstract;
                   procedure PostLoad(var context:TIODXFLoadContext);virtual;abstract;
-                  procedure SaveToDxf(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);virtual;abstract;
+                  procedure SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);virtual;abstract;
+                  procedure SaveToDXFfollow(PEnt:Pointer;var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext)virtual;
 end;
 TMetaEntityExtender=class of TBaseEntityExtender;
 TEntityExtenderVector= TMyVector<TBaseEntityExtender>;
@@ -66,11 +67,16 @@ TEntityExtensions=class
                        procedure RunReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);
                        procedure RunPostload(var context:TIODXFLoadContext);
                        procedure RunSaveToDxf(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
+                       procedure RunSaveToDXFfollow(PEnt:Pointer;var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
                   end;
   TEntityExtendersMap=GKey2DataMap<string,TMetaEntityExtender>;
 var
   EntityExtenders:TEntityExtendersMap;
 implementation
+procedure TBaseEntityExtender.SaveToDXFfollow(PEnt:Pointer;var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
+begin
+end;
+
 function TEntityExtensions.AddExtension(ExtObj:TBaseEntityExtender):TBaseEntityExtender;
 var
   nevindex:SizeUInt;
@@ -216,8 +222,17 @@ var
 begin
      if assigned(fEntityExtensions)then
      for i:=0 to fEntityExtensions.Size-1 do
-       fEntityExtensions[i].SaveToDxf(outhandle,PEnt,IODXFContext);
+       fEntityExtensions[i].SaveToDxfObjXData(outhandle,PEnt,IODXFContext);
 end;
+procedure TEntityExtensions.RunSaveToDXFfollow(PEnt:Pointer;var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
+var
+  i:integer;
+begin
+     if assigned(fEntityExtensions)then
+     for i:=0 to fEntityExtensions.Size-1 do
+       fEntityExtensions[i].SaveToDXFfollow(PEnt,outhandle,drawing,IODXFContext);
+end;
+
 initialization
   EntityExtenders:=TEntityExtendersMap.Create;
 finalization

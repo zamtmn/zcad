@@ -22,16 +22,16 @@ unit uzcftextstyles;
 interface
 
 uses
-  uzcutils,zcchangeundocommand,zcobjectchangeundocommand2,uzcdrawing,LMessages,uzefont,
-  uzclog,uzedrawingsimple,uzcsysvars,Classes, SysUtils,
-  FileUtil, LResources, Forms, Controls, Graphics, GraphType,
-  Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype, ActnList,
+  uzcutils,gzundoCmdChgData,gzundoCmdChgMethods,uzcdrawing,LMessages,uzefont,
+  uzclog,uzedrawingsimple,uzcsysvars,Classes,SysUtils,
+  FileUtil,LResources,Forms,Controls,Graphics,GraphType,
+  Buttons,ExtCtrls,StdCtrls,ComCtrls,LCLIntf,lcltype, ActnList,
 
   uzeconsts,uzestylestexts,uzcdrawings,uzbtypes,varmandef,
   uzcsuptypededitors,
 
-  uzbpaths,uzcinterface, uzcstrconsts, uzcsysinfo,uzbstrproc,UBaseTypeDescriptor,
-  uzcimagesmanager, usupportgui, ZListView,uzefontmanager,varman,uzctnrvectorstrings,
+  uzbpaths,uzcinterface,uzcstrconsts,uzbstrproc,UBaseTypeDescriptor,
+  uzcimagesmanager,usupportgui,ZListView,uzefontmanager,varman,uzctnrvectorstrings,
   gzctnrVectorTypes,uzeentity,uzeenttext;
 
 const
@@ -163,15 +163,15 @@ begin
     newfont:=FontManager.addFont(pstring(FontsSelector.Enums.getDataMutable(FontsSelector.Selected))^,'');
     if  (newfont<>PGDBTextStyle(TListItem(Item).Data)^.pfont)and(newfont<>nil) then begin
       CreateUndoStartMarkerNeeded;
-      with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pointer(PGDBTextStyle(TListItem(Item).Data)^.pfont))^ do begin
+      with TGDBPoinerChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pointer(PGDBTextStyle(TListItem(Item).Data)^.pfont),nil,nil) do begin
         PGDBTextStyle(TListItem(Item).Data)^.pfont:=newfont;
         ComitFromObj;
       end;
-      with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBTextStyle(TListItem(Item).Data)^.FontFile)^ do begin
+      with TStringChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBTextStyle(TListItem(Item).Data)^.FontFile,nil,nil) do begin
         PGDBTextStyle(TListItem(Item).Data)^.FontFile:=PGDBTextStyle(TListItem(Item).Data)^.pfont^.Name;
         ComitFromObj;
       end;
-      with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBTextStyle(TListItem(Item).Data)^.FontFile)^ do begin
+      with TStringChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBTextStyle(TListItem(Item).Data)^.FontFile,nil,nil) do begin
         PGDBTextStyle(TListItem(Item).Data)^.FontFamily:='';
         ComitFromObj;
       end;
@@ -370,7 +370,7 @@ begin
      if ListView1.CurrentItem<>ListItem then
      begin
      CreateUndoStartMarkerNeeded;
-     with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,sysvar.dwg.DWG_CTStyle^)^ do
+     with TGDBPoinerChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,sysvar.dwg.DWG_CTStyle^,nil,nil) do
      begin
           SysVar.dwg.DWG_CTStyle^:=ListItem.Data;
           ComitFromObj;
@@ -493,9 +493,9 @@ begin
   domethod:=tmethod(@pdwg^.TextStyleTable.PushBackData);
   undomethod:=tmethod(@pdwg^.TextStyleTable.RemoveDataFromArray);
   CreateUndoStartMarkerNeeded;
-  with PushCreateTGObjectChangeCommand2(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pcreatedstyle,tmethod(domethod),tmethod(undomethod))^ do
+  with specialize GUCmdChgMethods<PGDBTextStyle>.CreateAndPush(pcreatedstyle,domethod,undomethod,PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,nil) do
   begin
-       AfterAction:=false;
+       //AfterAction:=false;
        //comit;
   end;
 
@@ -512,9 +512,9 @@ begin
   domethod:=tmethod(@pdwg^.TextStyleTable.RemoveDataFromArray);
   undomethod:=tmethod(@pdwg^.TextStyleTable.PushBackData);
   CreateUndoStartMarkerNeeded;
-  with PushCreateTGObjectChangeCommand2(PTZCADDrawing(pdwg)^.UndoStack,pstyle,tmethod(domethod),tmethod(undomethod))^ do
+  with specialize GUCmdChgMethods<PGDBTextStyle>.CreateAndPush(pstyle,domethod,undomethod,PTZCADDrawing(pdwg)^.UndoStack,nil) do
   begin
-       AfterAction:=false;
+       //AfterAction:=false;
        comit;
   end;
   ListView1.Items.Delete(ListView1.Items.IndexOf(ProcessedItem));

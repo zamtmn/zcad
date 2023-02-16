@@ -20,7 +20,7 @@ unit uzcdrawings;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-    uzglviewareageneral,uzctranslations,uzedimblocksregister,uzeblockdefsfactory,
+    uzglviewareageneral,uzcTranslations,uzedimblocksregister,uzeblockdefsfactory,
     uzemathutils,uzgldrawcontext,uzcdrawing,uzedrawingdef,uzbpaths,uzestylesdim,
     uzedrawingabstract,uzcdialogsfiles,LResources,uzcsysvars,uzcinterface,
     uzcstrconsts,uzbstrproc,uzeblockdef,UGDBObjBlockdefArray,UUnitManager,
@@ -76,6 +76,11 @@ TZCADDrawingsManager= object(TZctnrVectorPGDBaseObjects)
                     procedure SetUnitsFormat(f:TzeUnitsFormat);
                     procedure redrawoglwnd(Sender:TObject;GUIAction:TZMessageID);
                     procedure resetoglwnd(Sender:TObject;GUIAction:TZMessageID);
+
+                    {todo: переименовать по человечьи}
+                    procedure AfterAutoProcessGDB(const AUndoMethod:TMethod);
+                    procedure AfterNotAutoProcessGDB(const AUndoMethod:TMethod);
+                    procedure AfterEnt(const pent:PGDBObjEntity);
               end;
 {EXPORT-}
 var drawings: TZCADDrawingsManager;
@@ -91,12 +96,29 @@ procedure SetObjCreateManipulator(out domethod,undomethod:tmethod);
 procedure clearotrack;
 procedure clearcp;
 //procedure redrawoglwnd(GUIAction:TZMessageID);
-function dwgSaveDXFDPAS(s:String;dwg:PTSimpleDrawing):Integer;
-function dwgQSave_com(dwg:PTSimpleDrawing):Integer;
 function SetCurrentDWG(PDWG:pointer):pointer;
 //procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
 implementation
- uses uzcenitiesvariablesextender,uzeenttext,uzeentdevice,uzeentblockinsert,uzeffdxf,uzccommandsmanager;
+ uses uzcenitiesvariablesextender,uzeenttext,uzeentdevice,uzeentblockinsert;
+procedure TZCADDrawingsManager.AfterEnt(const pent:PGDBObjEntity);
+begin
+  if assigned(pent)then
+    pent^.YouChanged(GetCurrentDWG^);
+  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);
+end;
+
+procedure TZCADDrawingsManager.AfterAutoProcessGDB(const AUndoMethod:TMethod);
+begin
+  PGDBObjEntity(AUndoMethod.Data)^.YouChanged(GetCurrentDWG^)
+end;
+procedure TZCADDrawingsManager.AfterNotAutoProcessGDB(const AUndoMethod:TMethod);
+var
+  DC:TDrawContext;
+begin
+  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+  PGDBObjEntity(AUndoMethod.Data)^.formatEntity(GetCurrentDWG^,dc);
+end;
+
 procedure TZCADDrawingsManager.redrawoglwnd(Sender:TObject;GUIAction:TZMessageID);
 var
    pdwg:PTSimpleDrawing;
@@ -183,42 +205,6 @@ end;
            comit;
       end;
  end;}
-
- function dwgSaveDXFDPAS(s:String;dwg:PTSimpleDrawing):Integer;
- var
-    mem:TZctnrVectorBytes;
-    pu:ptunit;
-    allok:boolean;
- begin
-      allok:=savedxf2000(s,ProgramPath + 'components/empty.dxf',dwg^);
-      pu:=PTZCADDrawing(dwg).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
-      mem.init(1024);
-      pu^.SavePasToMem(mem);
-      mem.SaveToFile(expandpath(s+'.dbpas'));
-      mem.done;
-      if allok then
-                   result:=cmd_ok
-               else
-                   result:=cmd_error;
- end;
- function dwgQSave_com(dwg:PTSimpleDrawing):Integer;
- var s1:String;
- begin
-      begin
-           if dwg.GetFileName=rsUnnamedWindowTitle then
-           begin
-                s1:='';
-                if not(SaveFileDialog(s1,'dxf',ProjectFileFilter,'',rsSaveFile)) then
-                begin
-                     result:=cmd_error;
-                     exit;
-                end;
-           end
-           else
-               s1:=drawings.GetCurrentDWG.GetFileName;
-      end;
-      result:=dwgSaveDXFDPAS(s1,dwg);
- end;
 function SetCurrentDWG(PDWG:pointer):pointer;
 begin
      result:=drawings.GetCurrentDWG;

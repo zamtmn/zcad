@@ -21,8 +21,8 @@ unit uzcregother;
 interface
 uses uzbpaths,UUnitManager,uzcsysvars,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
      uzbstrproc,Varman,SysUtils,
-     UBaseTypeDescriptor,uzctnrVectorBytes, strmy, varmandef,
-     uzcsysparams,uzcsysinfo,TypeDescriptors,URecordDescriptor,
+     UBaseTypeDescriptor,uzctnrVectorBytes,strmy,varmandef,
+     uzcsysparams,TypeDescriptors,URecordDescriptor,
      uzcLog;
 implementation
 {$IFNDEF WINDOWS}

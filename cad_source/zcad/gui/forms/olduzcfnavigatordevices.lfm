@@ -1,0 +1,144 @@
+object NavigatorDevices: TNavigatorDevices
+  Left = 334
+  Height = 1128
+  Top = 99
+  Width = 684
+  Caption = 'Devices'
+  ClientHeight = 1128
+  ClientWidth = 684
+  DesignTimePPI = 144
+  OnCreate = _onCreate
+  LCLVersion = '2.3.0.0'
+  object NavTree: TVirtualStringTree
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = FilterBtn
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
+    Left = 0
+    Height = 1054
+    Top = 74
+    Width = 684
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    DefaultNodeHeight = 25
+    DefaultText = 'Node'
+    Header.AutoSizeIndex = 0
+    Header.Columns = <    
+      item
+        Position = 0
+        Width = 684
+      end>
+    Header.Height = 41
+    Header.Options = [hoAutoResize, hoColumnResize, hoDrag, hoShowSortGlyphs, hoVisible]
+    Header.SortColumn = 0
+    TabOrder = 0
+    OnDblClick = TVDblClick
+    OnHeaderClick = VTHeaderClick
+    OnMouseMove = TVOnMouseMove
+  end
+  object CoolBar1: TCoolBar
+    Left = 0
+    Height = 41
+    Top = 0
+    Width = 684
+    Bands = <>
+    EdgeBorders = []
+    Themed = False
+  end
+  object FilterBtn: TEditButton
+    AnchorSideTop.Control = CoolBar1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = CollapseAllBtn
+    Left = 0
+    Height = 33
+    Top = 41
+    Width = 507
+    Anchors = [akTop, akLeft, akRight]
+    ButtonHint = 'Clear filter'
+    ButtonWidth = 34
+    Flat = True
+    MaxLength = 0
+    NumGlyphs = 1
+    OnButtonClick = PurgeFilter
+    OnChange = Filter
+    ParentShowHint = False
+    PasswordChar = #0
+    ShowHint = True
+    TabOrder = 2
+  end
+  object CollapseAllBtn: TSpeedButton
+    AnchorSideTop.Control = CoolBar1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = ExpandAllBtn
+    AnchorSideBottom.Control = FilterBtn
+    AnchorSideBottom.Side = asrBottom
+    Left = 507
+    Height = 33
+    Hint = 'Collapse all'
+    Top = 41
+    Width = 93
+    Action = CollapseAll
+    Anchors = [akTop, akRight, akBottom]
+    AutoSize = True
+    Flat = True
+    ShowHint = True
+    ParentShowHint = False
+  end
+  object ExpandAllBtn: TSpeedButton
+    AnchorSideTop.Control = CoolBar1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = FilterBtn
+    AnchorSideBottom.Side = asrBottom
+    Left = 600
+    Height = 33
+    Hint = 'Expand all'
+    Top = 41
+    Width = 84
+    Action = ExpandAll
+    Anchors = [akTop, akRight, akBottom]
+    AutoSize = True
+    Flat = True
+    ShowHint = True
+    ParentShowHint = False
+  end
+  object ActionList1: TActionList
+    Left = 465
+    Top = 97
+    object Refresh: TAction
+      Caption = 'Refresh tree'
+      OnExecute = RefreshTree
+    end
+    object IncludeEnts: TAction
+      Caption = 'Edit include entities'
+      OnExecute = EditIncludeEnts
+    end
+    object IncludeProps: TAction
+      Caption = 'Edit include properties'
+      OnExecute = EditIncludeProperties
+    end
+    object TreeProps: TAction
+      Caption = 'Edit tree properties'
+      OnExecute = EditTreeProperties
+    end
+    object LoadFromFile: TAction
+      Caption = 'Load from file'
+      OnExecute = LoadFromFileProc
+    end
+    object SaveToFile: TAction
+      Caption = 'Save to file'
+      OnExecute = SaveToFileProc
+    end
+    object CollapseAll: TAction
+      Caption = 'Collapse all'
+      OnExecute = CollapseAllProc
+    end
+    object ExpandAll: TAction
+      Caption = 'Expand all'
+      OnExecute = ExpandAllProc
+    end
+  end
+end

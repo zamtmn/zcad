@@ -24,15 +24,15 @@ interface
 uses
   uzcLog,Controls,SysUtils,
   uzccommandsmanager,uzcdrawings,uzccommandsabstract,uzccommandsimpl,uzcuitypes,uzglviewareageneral,uzglviewareaabstract,
-  uzcdrawing,uzctreenode,uzcuidialogs,uzcstrconsts,LCLType,uzcinterface,Forms;
+  uzcdrawing,uzctreenode,uzcuidialogs,uzcstrconsts,LCLType,uzcinterface,uzcuiutils,Forms;
 
-function CloseApp:Integer;
+procedure CloseApp;
 function CloseDWGPage(Sender: TObject;NeedAskDonShow:boolean;MCtx:TMessagesContext):integer;
 function _CloseDWGPage(ClosedDWG:PTZCADDrawing;lincedcontrol:TObject;NeedAskDonShow:boolean;MCtx:TMessagesContext):Integer;
 
 implementation
 
-uses uzcmainwindow;
+uses uzcmainwindow,uzccommand_saveas;
 
 { #todo : Убрать зависимость от главной формы }
 
@@ -102,7 +102,7 @@ begin
 end;
 
 
-function CloseApp:Integer;
+procedure CloseApp;
 var
   MCtx:TMessagesContext=nil;
   wa:TGeneralViewArea;
@@ -125,13 +125,17 @@ var
   end;
 
 begin
-  result:=0;
   if IsRealyQuit then
   begin
     if ZCADMainWindow.PageControl<>nil then
     begin
-      if GetChangedDrawingsCount>1 then
+      if (GetChangedDrawingsCount>1)or(CommandManager.isBusy) then
         MCtx:=CreateMessagesContext(rsCloseDrawings);
+      if (ZCMsgCallBackInterface.GetState and ZState_Busy)>0 then begin
+      //if CommandManager.isBusy then begin
+        MCtx.add(getMsgID(rsQuitQuery),TZCMsgDialogResult.CreateMR(ZCmrYes));
+        MCtx.add(getMsgID(rsCloseDWGQuery),TZCMsgDialogResult.CreateMR(ZCmrNo));
+      end;
       while ZCADMainWindow.PageControl.ActivePage<>nil do
       begin
         if CloseDWGPage(ZCADMainWindow.PageControl.ActivePage,GetChangedDrawingsCount>1,MCtx)=IDCANCEL then begin
@@ -151,9 +155,8 @@ end;
 
 function quit_com(operands:TCommandOperands):TCommandResult;
 begin
-     //Application.QueueAsyncCall(MainFormN.asynccloseapp, 0);
-     CloseApp;
-     result:=cmd_ok;
+  CloseApp;
+  result:=cmd_ok;
 end;
 
 initialization

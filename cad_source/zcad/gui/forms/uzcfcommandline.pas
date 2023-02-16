@@ -21,8 +21,8 @@ unit uzcfcommandline;
 interface
 uses
  uzcguimanager,uzbpaths,Themes,buttons,uzcsysvars,uzcstrconsts,uzbstrproc,
- uzcsysinfo,lclproc,LazUTF8,sysutils, StdCtrls,ExtCtrls,Controls,Classes,
- menus,Forms,fileutil,graphics, uzbtypes,uzccommandsmanager,
+ lclproc,LazUTF8,sysutils, StdCtrls,ExtCtrls,Controls,Classes,
+ menus,Forms,fileutil,graphics,uzccommandsmanager,
  varman,varmandef,
  uzegeometry,uzctnrvectorstrings,uzcinterface,uzctreenode,uzclog,strmy,
  uzccommandlineutil,uztoolbarsmanager,uzmenusmanager,uzccommandsabstract,gzctnrVectorTypes,
@@ -68,22 +68,6 @@ implementation
 procedure TCLine.mypaint(sender:tobject);
 begin
      canvas.Line(0,0,100,100);
-end;
-
-procedure TCLine.SetPrompt(APrompt:String{;ATPromptResults:TCommandLinePrompt.TPromptResults});
-begin
-  prompt.SetHighLightedText(APrompt,[],-1);
-end;
-
-procedure TCLine.SetPrompt(APrompt:TParserCommandLinePrompt.TGeneralParsedText);
-var
-  pt:TCommandLinePromptOption;
-  ts:TParserCommandLinePrompt.TParserString;
-begin
-  pt:=TCommandLinePromptOption.Create;
-  ts:=APrompt.GetResult(pt);
-  prompt.SetHighLightedText(ts,pt.Parts.arr,pt.Parts.Size-1);
-  pt.Free;
 end;
 
 procedure TCLine.SetMode(m:TCLineMode);
@@ -176,17 +160,36 @@ begin
 end;
 procedure HandleCmdLine(GUIMode:TZMessageID);
 begin
-     if GUIMode in [ZMsgID_GUICMDLineCheck] then begin
-     if INTFCommandLineEnabled then
-                                   ShowCmdLine
-                               else
-                                   HideCmdLine;
-     end;
-     if GUIMode in [ZMsgID_GUIDisable] then
-                                           DisableCmdLine
-else if (GUIMode in [ZMsgID_GUIEnable])then
-                                          EnableCmdLine;
+  if GUIMode in [ZMsgID_GUICMDLineCheck] then begin
+    if INTFCommandLineEnabled or (prompt.Highlight.Count>0) then
+      ShowCmdLine
+    else
+      HideCmdLine;
+  end;
+  if GUIMode in [ZMsgID_GUIDisable] then
+    DisableCmdLine
+  else if (GUIMode in [ZMsgID_GUIEnable])then
+    EnableCmdLine;
 end;
+
+procedure TCLine.SetPrompt(APrompt:String{;ATPromptResults:TCommandLinePrompt.TPromptResults});
+begin
+  prompt.SetHighLightedText(APrompt,[],-1);
+  HandleCmdLine(ZMsgID_GUICMDLineCheck);
+end;
+
+procedure TCLine.SetPrompt(APrompt:TParserCommandLinePrompt.TGeneralParsedText);
+var
+  pt:TCommandLinePromptOption;
+  ts:TParserCommandLinePrompt.TParserString;
+begin
+  pt:=TCommandLinePromptOption.Create;
+  ts:=APrompt.GetResult(pt);
+  prompt.SetHighLightedText(ts,pt.Parts.arr,pt.Parts.Size-1);
+  pt.Free;
+  HandleCmdLine(ZMsgID_GUICMDLineCheck);
+end;
+
 procedure TCLine.FormCreate(Sender: TObject);
 var
    //bv:tbevel;

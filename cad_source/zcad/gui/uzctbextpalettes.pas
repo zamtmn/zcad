@@ -20,10 +20,12 @@ unit uzctbextpalettes;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-     uzcstrconsts,uzcsysparams,uzcsysvars,uzcsysinfo,
-     uzcinfoform,Varman,uzcinterface,laz.VirtualTrees,
-     uzbstrproc,uzeenttext,
-     EditBtn,Masks,StdCtrls,Controls,Classes,Forms,uzccommandsmanager,Laz2_DOM,ComCtrls,uztoolbarsmanager,uzxmlnodesutils,uzcimagesmanager,uzctranslations,uzcdrawings;
+     uzcstrconsts,uzcsysparams,uzcsysvars,
+     uzcinfoform,Varman,uzcinterface,laz.VirtualTrees,LCLVersion,
+     uzbstrproc,
+     EditBtn,Masks,StdCtrls,Controls,Classes,Forms,uzccommandsmanager,Laz2_DOM,
+     ComCtrls,uztoolbarsmanager,uzxmlnodesutils,uzcimagesmanager,
+     uzctranslations,uzcdrawings;
 type
     TZPaletteListItem=class(TListItem)
     public
@@ -44,7 +46,7 @@ type
       procedure MouseDown(Button: TMouseButton; Shift:TShiftState; X,Y:Integer); override;
       procedure MouseUp(Button: TMouseButton; Shift:TShiftState; X,Y:Integer); override;
   end;
-  TZPaletteTreeView=class(TVirtualStringTree)
+  TZPaletteTreeView=class({$IF DECLARED(TVirtualStringTree)}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF})
   public
     procedure _GetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;
                          TextType: TVSTTextType; var CellText: String);

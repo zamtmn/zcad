@@ -94,6 +94,8 @@ type
       class function EntIOLoadTextHeigth(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
       class function EntIOLoadHJOverride(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
       class function EntIOLoadVJOverride(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+      class function EntIOLoadBaseLineOffsetX(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+      class function EntIOLoadBaseLineOffsetY(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 
       class function EntIOLoadSmartTextEntExtenderDefault(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 
@@ -142,7 +144,9 @@ begin
   result:=(FExtensionLine and FBaseLine)and(IsDoubleEqual(FExtensionLineOffset,ExtensionLineOffsetDef))
         and(IsDoubleEqual(FLeaderStartLength,ExtensionLeaderStartLengthDef))
         and(IsDoubleEqual(FHeightOverride,ExtensionHeightDef))
-        and FHJOverride and FVJOverride;
+        and FHJOverride and FVJOverride and
+        (IsDoubleEqual(FBaseLineOffset.x,BaseLineOffsetDef.x))and((IsDoubleEqual(FBaseLineOffset.y,BaseLineOffsetDef.y)))
+
 end;
 
 procedure TSmartTextEntExtender.Assign(Source:TBaseExtender);
@@ -343,6 +347,10 @@ begin
         dxfStringout(outhandle,1000,'STEHJOverride=FALSE');
       if not FVJOverride then
         dxfStringout(outhandle,1000,'STEVJOverride=FALSE');
+      if not IsDoubleEqual(FBaseLineOffset.x,BaseLineOffsetDef.x)then
+        dxfStringout(outhandle,1000,'STEBaseLineOffsetX='+FloatToStr(FBaseLineOffset.x));
+      if not IsDoubleEqual(FBaseLineOffset.y,BaseLineOffsetDef.y)then
+        dxfStringout(outhandle,1000,'STEBaseLineOffsetY='+FloatToStr(FBaseLineOffset.y));
     end;
 end;
 procedure TSmartTextEntExtender.SaveToDXFfollow(PEnt:Pointer;var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
@@ -412,6 +420,28 @@ begin
   result:=true;
 end;
 
+class function TSmartTextEntExtender.EntIOLoadBaseLineOffsetX(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+var
+  STEExtdr:TSmartTextEntExtender;
+begin
+  STEExtdr:=PGDBObjEntity(PEnt)^.GetExtension<TSmartTextEntExtender>;
+  if STEExtdr=nil then
+    STEExtdr:=AddSmartTextEntExtenderToEntity(PEnt);
+  STEExtdr.FBaseLineOffset.x:=StrToFloat(_Value);
+  result:=true;
+end;
+
+class function TSmartTextEntExtender.EntIOLoadBaseLineOffsetY(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+var
+  STEExtdr:TSmartTextEntExtender;
+begin
+  STEExtdr:=PGDBObjEntity(PEnt)^.GetExtension<TSmartTextEntExtender>;
+  if STEExtdr=nil then
+    STEExtdr:=AddSmartTextEntExtenderToEntity(PEnt);
+  STEExtdr.FBaseLineOffset.y:=StrToFloat(_Value);
+  result:=true;
+end;
+
 class function TSmartTextEntExtender.EntIOLoadHJOverride(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 var
   STEExtdr:TSmartTextEntExtender;
@@ -463,6 +493,8 @@ initialization
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('STEHeightOverride',TSmartTextEntExtender.EntIOLoadTextHeigth);
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('STEHJOverride',TSmartTextEntExtender.EntIOLoadHJOverride);
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('STEVJOverride',TSmartTextEntExtender.EntIOLoadVJOverride);
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('STEBaseLineOffsetX',TSmartTextEntExtender.EntIOLoadBaseLineOffsetX);
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('STEBaseLineOffsetY',TSmartTextEntExtender.EntIOLoadBaseLineOffsetY);
 
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('SmartTextEntExtenderDefault',TSmartTextEntExtender.EntIOLoadSmartTextEntExtenderDefault);
 finalization

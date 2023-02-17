@@ -255,12 +255,13 @@ end;
 procedure TSmartTextEntExtender.DrawGeom(var IODXFContext:TIODXFContext;var outhandle:TZctnrVectorBytes;pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext;tdd:TDummyDtawer);
 var
   dx:Double;
-  p,dir:GDBvertex;
+  p,pnew,dir,normal:GDBvertex;
   offs:GDBvertex2D;
+  i:integer;
 begin
   //if FHeightOverride>0 then
   //  PGDBObjMText(pEntity).textprop.size:=FSaveHeight;
-  if (typeof(PGDBObjEntity(pEntity)^)=TypeOf(GDBObjText))then
+  if (typeof(PGDBObjEntity(pEntity)^)=TypeOf(GDBObjText))or(typeof(PGDBObjEntity(pEntity)^)=TypeOf(GDBObjMText)) then
     if PGDBObjText(pEntity)^.bp.ListPos.Owner<>nil then
       if typeof(PGDBObjText(pEntity)^.bp.ListPos.Owner^)=TypeOf(GDBObjDevice) then begin
         if isNeedLeadert(pEntity) then begin
@@ -274,11 +275,21 @@ begin
               dx:=-dx-2*offs.x
             else
               dx:=dx+2*offs.x;
-            dir:=getTangent(pEntity);
-            tdd(IODXFContext,outhandle,pEntity,p,VertexAdd(p,{CreateVertex(dx,0,0)}dir*dx),drawing,DC);
+            dir:=getTangent(pEntity)*dx;
+            tdd(IODXFContext,outhandle,pEntity,p,VertexAdd(p,{CreateVertex(dx,0,0)}dir),drawing,DC);
+            if typeof(PGDBObjEntity(pEntity)^)=TypeOf(GDBObjMText) then
+              if PGDBObjMText(pEntity).text.Count>1 then begin
+                normal:=getNormal(pEntity)*pGDBObjMText(pEntity).linespace*getOwnerScale(pEntity);
+                for i:=2 to PGDBObjMText(pEntity).text.Count do begin
+                  pnew:=VertexAdd(p,normal);
+                  tdd(IODXFContext,outhandle,pEntity,p,pnew,drawing,DC);
+                  tdd(IODXFContext,outhandle,pEntity,pnew,VertexAdd(pnew,dir),drawing,DC);
+                  p:=pnew;
+                end;
+              end;
           end;
         end;
-  end;
+      end;
 end;
 
 

@@ -36,6 +36,9 @@ type
     const
       SmartTextEntExtenderName='extdrSmartTextEnt';
   private
+    type
+      PDir2J=^TDir2J;
+      TDir2J=array[-1..1{x},-1..1{y}] of TTextJustify;
     const
       ExtensionLineOffsetDef=0;
       ExtensionLeaderStartLengthDef=10;
@@ -45,9 +48,11 @@ type
       //extdrAdd(extdrSmartTextEnt)
 
       //выравнивание от смещения по осям
-      JustifyWoLeader: array[-1..1{y},-1..1{x}] of TTextJustify = ((jsbl, jsbc, jsbr),(jsml, jsmc, jsmr),(jstl, jstc, jstr));
+      dir2j:TDir2J            = ((jsbl,jsml,jstl),(jsbc,jsmc,jstc),(jsbr,jsmr,jstr));
       //выравнивание от смещения по осям при черчении выноски
-      JustifyWithLeader: array[-1..1{y},-1..1{x}] of TTextJustify = ((jsbl, jsbl, jsbr),(jsbl, jsbl, jsbr),(jsbl, jsbl, jsbr));
+      dir2j_TextLeader:TDir2J = ((jsbl,jsbl,jsbl),(jsbl,jsbl,jsbl),(jsbr,jsbr,jsbr));
+      //выравнивание от смещения по осям при черчении выноски для 2хстрочного мтекста
+      dir2j_2LineLeader:TDir2J = ((jsmc,jsmc,jsmc),(jsmc,jsmc,jsmc),(jsmc,jsmc,jsmc));
       //горизонтальное смещение от выравнивания
       j2hdir: array [TTextJustify] of ShortInt =(-1,0,1,-1,0,1,-1,0,1,-1,0,1);
       //вертикальное смещение от выравнивания
@@ -67,12 +72,16 @@ type
       function isDefault:boolean;
       function getOwnerInsertPoint(pEntity:Pointer):GDBVertex;
       function getOwnerScale(pEntity:Pointer):Double;
+
       function getTextInsertPoint(pEntity:Pointer):GDBVertex;
+      function getTextLinesCount(pEntity:Pointer):Integer;
+      function getTextTangent(pEntity:Pointer):GDBVertex;
+      function getTextNormal(pEntity:Pointer):GDBVertex;
+
       function getBaseLineStartPoint(pEntity:Pointer):GDBVertex;
       function getBaseLineOffset(pEntity:Pointer):GDBvertex2D;
       function getExtensionLinetStartPoint(pEntity:Pointer):GDBVertex;
-      function getTangent(pEntity:Pointer):GDBVertex;
-      function getNormal(pEntity:Pointer):GDBVertex;
+
       function isNeedLeadert(pEntity:Pointer):Boolean;
     public
       class function getExtenderName:string;override;
@@ -191,17 +200,41 @@ begin
   result:=PGDBObjText(pEntity).P_insert_in_WCS;
 end;
 
+function TSmartTextEntExtender.getTextLinesCount(pEntity:Pointer):Integer;
+begin
+  if typeof(PGDBObjEntity(pEntity)^)=TypeOf(GDBObjText) then
+    result:=1
+  else
+    result:=PGDBObjMText(pEntity).text.Count;
+end;
+
+function getXsign(p:GDBvertex):integer;
+begin
+  result:=-sign(p.x);
+end;
+function getYsign(p:GDBvertex):integer;
+begin
+  result:=-sign(p.y);
+end;
+
 function TSmartTextEntExtender.getBaseLineStartPoint(pEntity:Pointer):GDBVertex;
 var
   t,n:GDBvertex;
+  dx:double;
 begin
   result:=getTextInsertPoint(pEntity);
+  if PGDBObjMText(pEntity).textprop.justify in [jsbc,jsmc,jstc] then begin
+    dx:=PGDBObjText(pEntity).obj_width*PGDBObjMText(pEntity).textprop.size*PGDBObjMText(pEntity).textprop.wfactor*getOwnerScale(pEntity)/2;
+    if getXsign(PGDBObjText(pEntity).Local.P_insert)<0 then
+      dx:=-dx;
+    result:=result+getTextTangent(pEntity)*dx;
+  end;
   with getBaseLineOffset(pEntity) do begin
     if PGDBObjMText(pEntity).textprop.justify in [jsbr,jsmr,jstr] then
-      result:=result+getTangent(pEntity)*x
+      result:=result+getTextTangent(pEntity)*x
     else
-      result:=result-getTangent(pEntity)*x;
-    result:=result-getNormal(pEntity)*y;
+      result:=result-getTextTangent(pEntity)*x;
+    result:=result-getTextNormal(pEntity)*y;
   end;
 end;
 
@@ -242,12 +275,12 @@ begin
   result:=(Vertexlength(getOwnerInsertPoint(pEntity),getTextInsertPoint(pEntity))>FLeaderStartLength)and(FExtensionLine or FBaseLine)
 end;
 
-function TSmartTextEntExtender.getTangent(pEntity:Pointer):GDBVertex;
+function TSmartTextEntExtender.getTextTangent(pEntity:Pointer):GDBVertex;
 begin
   Result:=PGDBvertex(@PGDBObjMText(pEntity)^.ObjMatrix[0])^.NormalizeVertex;
 end;
 
-function TSmartTextEntExtender.getNormal(pEntity:Pointer):GDBVertex;
+function TSmartTextEntExtender.getTextNormal(pEntity:Pointer):GDBVertex;
 begin
   Result:=PGDBvertex(@PGDBObjMText(pEntity)^.ObjMatrix[1])^.NormalizeVertex;
 end;
@@ -271,15 +304,20 @@ begin
           if FBaseLine then begin
             dx:=PGDBObjText(pEntity).obj_width*PGDBObjMText(pEntity).textprop.size*PGDBObjMText(pEntity).textprop.wfactor*getOwnerScale(pEntity);
             offs:=getBaseLineOffset(pEntity);
-            if PGDBObjMText(pEntity).textprop.justify in [jsbr,jsmr,jstr] then
+            if PGDBObjMText(pEntity).textprop.justify in [jsmc] then begin
+              if getXsign(PGDBObjText(pEntity).Local.P_insert)<0 then
+                dx:=dx+2*offs.x
+              else
+                dx:=-dx-2*offs.x;
+            end else if PGDBObjMText(pEntity).textprop.justify in [jsbr,jsmr,jstr] then
               dx:=-dx-2*offs.x
             else
               dx:=dx+2*offs.x;
-            dir:=getTangent(pEntity)*dx;
+            dir:=getTextTangent(pEntity)*dx;
             tdd(IODXFContext,outhandle,pEntity,p,VertexAdd(p,{CreateVertex(dx,0,0)}dir),drawing,DC);
             if typeof(PGDBObjEntity(pEntity)^)=TypeOf(GDBObjMText) then
-              if PGDBObjMText(pEntity).text.Count>1 then begin
-                normal:=getNormal(pEntity)*pGDBObjMText(pEntity).linespace*getOwnerScale(pEntity);
+              if PGDBObjMText(pEntity).text.Count>2 then begin
+                normal:=getTextNormal(pEntity)*pGDBObjMText(pEntity).linespace*getOwnerScale(pEntity);
                 for i:=2 to PGDBObjMText(pEntity).text.Count do begin
                   pnew:=VertexAdd(p,normal);
                   tdd(IODXFContext,outhandle,pEntity,p,pnew,drawing,DC);
@@ -300,32 +338,30 @@ begin
 end;
 
 procedure TSmartTextEntExtender.onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
-  function getXsign(p:GDBvertex):integer;
-  begin
-    result:=sign(p.x);
-  end;
-  function getYsign(p:GDBvertex):integer;
-  begin
-    result:=sign(p.y);
-  end;
+var
+  currXDir,currYDir,newXDir,newYDir:integer;
+  PD2J:PDir2J;
 begin
   if (typeof(PGDBObjEntity(pEntity)^)=TypeOf(GDBObjText))or(typeof(PGDBObjEntity(pEntity)^)=TypeOf(GDBObjMText)) then begin
     if FHJOverride or FVJOverride then
+      currXDir:=j2hdir[PGDBObjMText(pEntity).textprop.justify];
+      currYDir:=j2vdir[PGDBObjMText(pEntity).textprop.justify];
+      newXDir:=getXsign(PGDBObjText(pEntity).Local.P_insert);
+      newYDir:=getYsign(PGDBObjText(pEntity).Local.P_insert);
+      if isNeedLeadert(pEntity) then begin
+        case getTextLinesCount(pEntity) of
+          1:PD2J:=@dir2j_TextLeader;
+          2:PD2J:=@dir2j_2LineLeader;
+       else PD2J:=@dir2j_TextLeader;
+        end;
+      end else
+        PD2J:=@dir2j;
       if FHJOverride and FVJOverride then begin
-        if isNeedLeadert(pEntity) then
-          PGDBObjMText(pEntity).textprop.justify:=JustifyWithLeader[-getYsign(PGDBObjText(pEntity).Local.P_insert),-getXsign(PGDBObjText(pEntity).Local.P_insert)]
-        else
-          PGDBObjMText(pEntity).textprop.justify:=JustifyWoLeader[-getYsign(PGDBObjText(pEntity).Local.P_insert),-getXsign(PGDBObjText(pEntity).Local.P_insert)]
+        PGDBObjMText(pEntity).textprop.justify:=PD2J^[newXDir,newYDir]
       end else if FVJOverride then begin
-        if isNeedLeadert(pEntity) then
-          PGDBObjMText(pEntity).textprop.justify:=JustifyWithLeader[-getYsign(PGDBObjText(pEntity).Local.P_insert),j2hdir[PGDBObjMText(pEntity).textprop.justify]]
-        else
-          PGDBObjMText(pEntity).textprop.justify:=JustifyWoLeader[-getYsign(PGDBObjText(pEntity).Local.P_insert),j2hdir[PGDBObjMText(pEntity).textprop.justify]]
+        PGDBObjMText(pEntity).textprop.justify:=PD2J^[currXDir,newYDir]
       end else{if FHJOverride}begin
-        if isNeedLeadert(pEntity) then
-          PGDBObjMText(pEntity).textprop.justify:=JustifyWithLeader[j2vdir[PGDBObjMText(pEntity).textprop.justify],-getXsign(PGDBObjText(pEntity).Local.P_insert)]
-        else
-          PGDBObjMText(pEntity).textprop.justify:=JustifyWoLeader[j2vdir[PGDBObjMText(pEntity).textprop.justify],-getXsign(PGDBObjText(pEntity).Local.P_insert)]
+        PGDBObjMText(pEntity).textprop.justify:=PD2J^[newXDir,currYDir]
       end;
     if FHeightOverride>0 then begin
       PGDBObjMText(pEntity).textprop.size:=FHeightOverride/getOwnerScale(pEntity);

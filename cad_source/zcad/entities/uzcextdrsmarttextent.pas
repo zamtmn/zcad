@@ -345,6 +345,8 @@ end;
 
 procedure TSmartTextEntExtender.onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
 begin
+  if ESCalcWithoutOwner in PGDBObjEntity(pEntity)^.State then
+    exit;
   DrawGeom(PTIODXFContext(nil)^,PTZctnrVectorBytes(nil)^,pEntity,drawing,DC,DrawLine);
 end;
 
@@ -356,6 +358,8 @@ var
   l0:Double;
   a:double;
 begin
+  if ESCalcWithoutOwner in PGDBObjEntity(pEntity)^.State then
+    exit;
   if (typeof(PGDBObjEntity(pEntity)^)=TypeOf(GDBObjText))or(typeof(PGDBObjEntity(pEntity)^)=TypeOf(GDBObjMText)) then begin
     if FRotateOverride then begin
       if PGDBObjEntity(pEntity)^.bp.ListPos.owner<>nil then begin

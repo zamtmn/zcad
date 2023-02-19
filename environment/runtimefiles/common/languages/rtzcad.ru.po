@@ -2232,7 +2232,7 @@ msgstr "Смещение Y базовой линии"
 
 #: zcadexternal.oimultiproperty~extdrssmarttextent_enablerotateoverride
 msgid "Rotate override"
-msgstr "Значение угла поворота"
+msgstr "Переопределение угла поворота"
 
 #: zcadexternal.oimultiproperty~extdrssmarttextent_extensionline
 msgid "Extension line"
@@ -2252,7 +2252,7 @@ msgstr "Дистанция начала отображения выноски"
 
 #: zcadexternal.oimultiproperty~extdrssmarttextent_rotateoverride
 msgid "Rotate override value"
-msgstr "Переопределение угла поворота"
+msgstr "Значение угла поворота"
 
 #: zcadexternal.oimultiproperty~extdrssmarttextent_textheightoverride
 msgctxt "zcadexternal.oimultiproperty~extdrssmarttextent_textheightoverride"

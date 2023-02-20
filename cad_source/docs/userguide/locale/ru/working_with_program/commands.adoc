@@ -46,6 +46,7 @@ dbgGetAV
 dbgMemSummary
 dbgPlaceAllBlocks
 DeSelectAll
+include::commands/devdefsync.adoc[]
 DimAligned
 DimDiameter
 DimLinear

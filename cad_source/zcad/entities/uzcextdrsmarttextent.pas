@@ -383,8 +383,9 @@ begin
     if FHJOverride or FVJOverride then
       currXDir:=j2hdir[PGDBObjMText(pEntity).textprop.justify];
       currYDir:=j2vdir[PGDBObjMText(pEntity).textprop.justify];
-      newXDir:=getXsign(PGDBObjText(pEntity).Local.P_insert);
-      newYDir:=getYsign(PGDBObjText(pEntity).Local.P_insert);
+      v1:=PGDBObjText(pEntity).P_insert_in_WCS-getOwnerInsertPoint(pEntity);
+      newXDir:=getXsign({PGDBObjText(pEntity).Local.P_insert}v1);
+      newYDir:=getYsign({PGDBObjText(pEntity).Local.P_insert}v1);
       if isNeedLeadert(pEntity) then begin
         case getTextLinesCount(pEntity) of
           1:PD2J:=@dir2j_TextLeader;

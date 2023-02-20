@@ -180,7 +180,7 @@ TreeStat
 Undo
 Units
 UnitsMan
-UpdatePO
+include::commands/updatepo.adoc[]
 VarReport
 include::commands/varsed.adoc[]
 include::commands/varsedbd.adoc[]

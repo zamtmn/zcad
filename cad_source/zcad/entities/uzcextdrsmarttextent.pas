@@ -283,7 +283,7 @@ end;
 
 function TSmartTextEntExtender.isNeedLeadert(pEntity:Pointer):Boolean;
 begin
-  result:=(Vertexlength(getOwnerInsertPoint(pEntity),getTextInsertPoint(pEntity))>FLeaderStartDrawDist)and(FExtensionLine or FBaseLine)
+  result:=((Vertexlength(getOwnerInsertPoint(pEntity),getTextInsertPoint(pEntity))/getOwnerScale(pEntity))>FLeaderStartDrawDist)and(FExtensionLine or FBaseLine)
 end;
 
 function TSmartTextEntExtender.getTextTangent(pEntity:Pointer):GDBVertex;

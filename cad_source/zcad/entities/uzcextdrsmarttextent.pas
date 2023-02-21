@@ -236,7 +236,8 @@ begin
   result:=getTextInsertPoint(pEntity);
   if PGDBObjMText(pEntity).textprop.justify in [jsbc,jsmc,jstc] then begin
     dx:=PGDBObjText(pEntity).obj_width*PGDBObjMText(pEntity).textprop.size*PGDBObjMText(pEntity).textprop.wfactor*getOwnerScale(pEntity)/2;
-    if getXsign(PGDBObjText(pEntity).Local.P_insert)<0 then
+    //if getXsign(PGDBObjText(pEntity).P_insert_in_WCS-getOwnerInsertPoint(pEntity))<0 then
+    if -sign((PGDBObjText(pEntity).P_insert_in_WCS-getOwnerInsertPoint(pEntity))*getTextTangent(pEntity))<0 then
       dx:=-dx;
     result:=result+getTextTangent(pEntity)*dx;
   end;
@@ -316,7 +317,7 @@ begin
             dx:=PGDBObjText(pEntity).obj_width*PGDBObjMText(pEntity).textprop.size*PGDBObjMText(pEntity).textprop.wfactor*getOwnerScale(pEntity);
             offs:=getBaseLineOffset(pEntity);
             if PGDBObjMText(pEntity).textprop.justify in [jsmc] then begin
-              if getXsign(PGDBObjText(pEntity).Local.P_insert)<0 then
+              if -sign((PGDBObjText(pEntity).P_insert_in_WCS-getOwnerInsertPoint(pEntity))*getTextTangent(pEntity))<0 then
                 dx:=dx+2*offs.x
               else
                 dx:=-dx-2*offs.x;
@@ -384,8 +385,8 @@ begin
       currXDir:=j2hdir[PGDBObjMText(pEntity).textprop.justify];
       currYDir:=j2vdir[PGDBObjMText(pEntity).textprop.justify];
       v1:=PGDBObjText(pEntity).P_insert_in_WCS-getOwnerInsertPoint(pEntity);
-      newXDir:=getXsign({PGDBObjText(pEntity).Local.P_insert}v1);
-      newYDir:=getYsign({PGDBObjText(pEntity).Local.P_insert}v1);
+      newXDir:=-sign(v1*getTextTangent(pEntity));//getXsign({PGDBObjText(pEntity).Local.P_insert}v1);
+      newYDir:=-sign(v1*getTextNormal(pEntity));//getYsign({PGDBObjText(pEntity).Local.P_insert}v1);
       if isNeedLeadert(pEntity) then begin
         case getTextLinesCount(pEntity) of
           1:PD2J:=@dir2j_TextLeader;

@@ -381,7 +381,7 @@ begin
 
       end;
     end;
-    if FHJOverride or FVJOverride then
+    if FHJOverride or FVJOverride then begin
       currXDir:=j2hdir[PGDBObjMText(pEntity).textprop.justify];
       currYDir:=j2vdir[PGDBObjMText(pEntity).textprop.justify];
       v1:=PGDBObjText(pEntity).P_insert_in_WCS-getOwnerInsertPoint(pEntity);
@@ -402,6 +402,7 @@ begin
       end else{if FHJOverride}begin
         PGDBObjMText(pEntity).textprop.justify:=PD2J^[newXDir,currYDir]
       end;
+    end;
     if FTextHeightOverride>0 then begin
       PGDBObjMText(pEntity).textprop.size:=FTextHeightOverride/getOwnerScale(pEntity);
     end;

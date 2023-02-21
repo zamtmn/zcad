@@ -40,7 +40,7 @@ type
       PDir2J=^TDir2J;
       TDir2J=array[-1..1{x},-1..1{y}] of TTextJustify;
     const
-      ExtensionLineStartShiftDef=0;
+      ExtensionLineStartShiftDef=1;
       ExtensionLeaderStartDrawDist=10;
       ExtensionTextHeightOverrideDef=0;
       BaseLineOffsetDef:GDBvertex2D=(x:-0.2;y:-0.2);

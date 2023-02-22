@@ -259,6 +259,7 @@ uses
   uzvremoveconnection, //удаление подключения к устройству
   uzvmanemcom, //управления и обработка полученой электрической модели
   uzvmanemschemalevelone, //создание одноуровневой схемы
+  uzvmanemdialogcom,//запуск генератора схемы через диалоговое окно
   //**//
   {$ENDIF}
   {$ENDIF}

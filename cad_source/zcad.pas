@@ -242,6 +242,7 @@ uses
   uzccommand_NumDevices,
 
   uzccommand_tstCmdLinePrompt,
+  uzccommand_explDbCheck,
 
 
   uzcenitiesvariablesextender,uzcExtdrLayerControl,uzcExtdrSmartTextEnt,

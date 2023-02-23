@@ -29,12 +29,14 @@ DeviceDbBaseObject= object(DbBaseObject)
                        procedure Format;virtual;
                        procedure SetOtherFields(PField,PTypeDescriptor:Pointer);virtual;
                  end;
+PElDeviceBaseObject=^ElDeviceBaseObject;
 {REGISTEROBJECTTYPE ElDeviceBaseObject}
 ElDeviceBaseObject= object(DeviceDbBaseObject)
                                    Pins:String;(*'**Клеммы'*)
                                    constructor initnul;
                                    procedure Format;virtual;
                              end;
+PCableDeviceBaseObject=^CableDeviceBaseObject;
 {REGISTEROBJECTTYPE CableDeviceBaseObject}
 CableDeviceBaseObject= object(DeviceDbBaseObject)
                                    CoreCrossSection:Double;(*'**Сечение жилы'*)

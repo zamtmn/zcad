@@ -1,4 +1,4 @@
-unit DEVICE_ELVELEC_BLOCKCONNECTOR1_2P;
+unit DEVICE_ELVELEC_SWITH1_1P;
 
 interface
 
@@ -7,6 +7,7 @@ usescopy blocktype;
 usescopy objname_eo;
 usescopy objgroup;
 usescopy addtocable;
+usescopy elreceivers;
 
 var
 

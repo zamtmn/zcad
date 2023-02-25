@@ -489,6 +489,7 @@ begin
 end;
 procedure GDBObjMText.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 begin
+  calcobjmatrix;
   if assigned(EntExtensions)then
     EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
 

@@ -41,7 +41,7 @@ type
       TDir2J=array[-1..1{x},-1..1{y}] of TTextJustify;
     const
       ExtensionLineStartShiftDef=1;
-      ExtensionLeaderStartDrawDist=5;
+      ExtensionLeaderStartDrawDist=10;
       ExtensionTextHeightOverrideDef=0;
       BaseLineOffsetDef:GDBvertex2D=(x:-0.2;y:-0.2);
       RotateOverrideValueDef=0;
@@ -82,6 +82,8 @@ type
       function getTextLinesCount(pEntity:Pointer):Integer;
       function getTextTangent(pEntity:Pointer):GDBVertex;
       function getTextNormal(pEntity:Pointer):GDBVertex;
+      function getTextHeight(pEntity:Pointer):Double;
+      function getTextWFactor(pEntity:Pointer):Double;
 
       function getBaseLineStartPoint(pEntity:Pointer):GDBVertex;
       function getBaseLineOffset(pEntity:Pointer):GDBvertex2D;
@@ -234,18 +236,21 @@ var
   dx:double;
 begin
   result:=getTextInsertPoint(pEntity);
+  t:=getTextTangent(pEntity);
   if PGDBObjMText(pEntity).textprop.justify in [jsbc,jsmc,jstc] then begin
-    dx:=PGDBObjText(pEntity).obj_width*PGDBObjMText(pEntity).textprop.size*PGDBObjMText(pEntity).textprop.wfactor*getOwnerScale(pEntity)/2;
-    //if getXsign(PGDBObjText(pEntity).P_insert_in_WCS-getOwnerInsertPoint(pEntity))<0 then
-    if -sign((PGDBObjText(pEntity).P_insert_in_WCS-getOwnerInsertPoint(pEntity))*getTextTangent(pEntity))<0 then
-      dx:=-dx;
-    result:=result+getTextTangent(pEntity)*dx;
+    dx:=PGDBObjText(pEntity).obj_width*getTextHeight(pEntity)*getTextWFactor(pEntity)*getOwnerScale(pEntity)/2;
+    if -sign((PGDBObjText(pEntity).P_insert_in_WCS-getOwnerInsertPoint(pEntity))*getTextTangent(pEntity))<0 then begin
+      result:=result-t*dx;
+    end else begin
+      result:=result+t*dx;
+      t:=-t;
+    end;
   end;
   with getBaseLineOffset(pEntity) do begin
     if PGDBObjMText(pEntity).textprop.justify in [jsbr,jsmr,jstr] then
-      result:=result+getTextTangent(pEntity)*x
+      result:=result+t*x
     else
-      result:=result-getTextTangent(pEntity)*x;
+      result:=result-t*x;
     result:=result-getTextNormal(pEntity)*y;
   end;
 end;
@@ -254,9 +259,9 @@ function TSmartTextEntExtender.getBaseLineOffset(pEntity:Pointer):GDBVertex2D;
 begin
   result:=FBaseLineOffset;
   if result.x<0 then
-    result.x:=-result.x*PGDBObjMText(pEntity).textprop.size*getOwnerScale(pEntity);
+    result.x:=-result.x*getTextHeight(pEntity)*getOwnerScale(pEntity);
   if result.y<0 then
-    result.y:=-result.y*PGDBObjMText(pEntity).textprop.size*getOwnerScale(pEntity);
+    result.y:=-result.y*getTextHeight(pEntity)*getOwnerScale(pEntity);
 end;
 
 function TSmartTextEntExtender.getExtensionLinetStartPoint(pEntity:Pointer):GDBVertex;
@@ -297,6 +302,19 @@ begin
   Result:=PGDBvertex(@PGDBObjMText(pEntity)^.ObjMatrix[1])^.NormalizeVertex;
 end;
 
+function TSmartTextEntExtender.getTextHeight(pEntity:Pointer):Double;
+begin
+  result:=PGDBObjMText(pEntity).textprop.size;
+end;
+
+function TSmartTextEntExtender.getTextWFactor(pEntity:Pointer):Double;
+begin
+  if typeof(PGDBObjEntity(pEntity)^)=TypeOf(GDBObjText) then
+    result:=PGDBObjText(pEntity).textprop.wfactor
+  else
+    result:=PGDBObjMText(pEntity).TXTStyleIndex^.prop.wfactor;
+end;
+
 procedure TSmartTextEntExtender.DrawGeom(var IODXFContext:TIODXFContext;var outhandle:TZctnrVectorBytes;pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext;tdd:TDummyDtawer);
 var
   dx:Double;
@@ -314,7 +332,7 @@ begin
           if FExtensionLine then
             tdd(IODXFContext,outhandle,pEntity,getExtensionLinetStartPoint(pEntity),p,drawing,DC);
           if FBaseLine then begin
-            dx:=PGDBObjText(pEntity).obj_width*PGDBObjMText(pEntity).textprop.size*PGDBObjMText(pEntity).textprop.wfactor*getOwnerScale(pEntity);
+            dx:=PGDBObjText(pEntity).obj_width*getTextHeight(pEntity)*getTextWFactor(pEntity)*getOwnerScale(pEntity);
             offs:=getBaseLineOffset(pEntity);
             if PGDBObjMText(pEntity).textprop.justify in [jsmc] then begin
               if -sign((PGDBObjText(pEntity).P_insert_in_WCS-getOwnerInsertPoint(pEntity))*getTextTangent(pEntity))<0 then

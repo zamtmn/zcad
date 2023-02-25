@@ -30,6 +30,7 @@ PGDBObjExtendable=^GDBObjExtendable;
 GDBObjExtendable=object(GDBaseObject)
                                  EntExtensions:{-}TEntityExtensions{/Pointer/};
                                  procedure AddExtension(ExtObj:TBaseEntityExtender);
+                                 procedure RemoveExtension(ExtType:TMetaEntityExtender);
                                  function GetExtension<GEntityExtenderType>:GEntityExtenderType;overload;
                                  function GetExtension(ExtType:TMetaEntityExtender):TBaseEntityExtender;overload;
                                  function GetExtension(n:Integer):TBaseEntityExtender;overload;
@@ -113,6 +114,11 @@ begin
                                         EntExtensions:=TEntityExtensions.create;
      EntExtensions.AddExtension(ExtObj);
 end;
+procedure GDBObjExtendable.RemoveExtension(ExtType:TMetaEntityExtender);
+begin
+     if assigned(EntExtensions) then
+       EntExtensions.RemoveExtension(ExtType);
+end;
 function GDBObjExtendable.GetExtension<GEntityExtenderType>:GEntityExtenderType;
 begin
      if assigned(EntExtensions) then
@@ -153,13 +159,15 @@ var
 begin
   for i:=0 to GetExtensionsCount-1 do begin
     SourceExt:=GetExtension(i);
-    DestExt:=Dest.GetExtension(TypeOf(SourceExt));
-    if not Assigned(DestExt) then begin
-      DestExt:=TMetaEntityExtender(SourceExt.ClassType).Create(@Dest);
-      DestExt.Assign(SourceExt);
-      Dest.AddExtension(DestExt);
-    end else
-      DestExt.Assign(SourceExt);
+    if SourceExt<>nil then begin
+      DestExt:=Dest.GetExtension(TypeOf(SourceExt));
+      if not Assigned(DestExt) then begin
+        DestExt:=TMetaEntityExtender(SourceExt.ClassType).Create(@Dest);
+        DestExt.Assign(SourceExt);
+        Dest.AddExtension(DestExt);
+      end else
+        DestExt.Assign(SourceExt);
+    end;
   end;
 end;
 

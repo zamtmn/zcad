@@ -157,6 +157,8 @@ resourcestring
   rscmErase='Erase';
   rscmLeave='Leave';
 
+  rscmExtenderNotFound='Extender "%s" not found';
+
 
   {task names}
   rsCloseDrawings='Close drawings';

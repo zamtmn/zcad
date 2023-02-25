@@ -85,6 +85,7 @@ ExportTextToCSV
 include::commands/extdradd.adoc[]
 include::commands/extdralllist.adoc[]
 include::commands/extdrentslist.adoc[]
+include::commands/extdrremove.adoc[]
 FindAllIntersections
 Get3DPoint
 Get3DPoint_DrawRect

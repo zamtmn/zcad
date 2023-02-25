@@ -16,6 +16,8 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 unit uzcExtdrSmartTextEnt;
+//добавить/удалить это расширение к примитиву можно командой
+//extdrAdd(extdrSmartTextEnt)/extdrRemove(extdrSmartTextEnt)
 
 interface
 
@@ -45,8 +47,6 @@ type
       ExtensionTextHeightOverrideDef=0;
       BaseLineOffsetDef:GDBvertex2D=(x:-0.2;y:-0.2);
       RotateOverrideValueDef=0;
-      //добавить это расширение к примитиву можно командой
-      //extdrAdd(extdrSmartTextEnt)
 
       //выравнивание от смещения по осям
       dir2j:TDir2J            = ((jsbl,jsml,jstl),(jsbc,jsmc,jstc),(jsbr,jsmr,jstr));
@@ -260,8 +260,12 @@ begin
   result:=FBaseLineOffset;
   if result.x<0 then
     result.x:=-result.x*getTextHeight(pEntity)*getOwnerScale(pEntity);
-  if result.y<0 then
-    result.y:=-result.y*getTextHeight(pEntity)*getOwnerScale(pEntity);
+  if result.y<0 then begin
+    if getTextLinesCount(pEntity)=2 then
+      result.y:=0
+    else
+      result.y:=-result.y*getTextHeight(pEntity)*getOwnerScale(pEntity);
+  end;
 end;
 
 function TSmartTextEntExtender.getExtensionLinetStartPoint(pEntity:Pointer):GDBVertex;

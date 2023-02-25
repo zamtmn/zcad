@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 {$mode delphi}
-unit uzccommand_extdrAdd;
+unit uzccommand_extdrRemove;
 
 {$INCLUDE zengineconfig.inc}
 
@@ -27,11 +27,9 @@ uses
   uzeentity,gzctnrVectorTypes,uzcdrawings,uzcstrconsts,uzeentityextender,
   uzcinterface;
 
-function extdrAdd_com(operands:TCommandOperands):TCommandResult;
-
 implementation
 
-function extdrAdd_com(operands:TCommandOperands):TCommandResult;
+function extdrRemove_com(operands:TCommandOperands):TCommandResult;
 var
   extdr:TMetaEntityExtender;
   pEntity,pLastSelectedEntity:PGDBObjEntity;
@@ -46,8 +44,8 @@ begin
       //на данный момент только так можно работать с примитивами в динамической части устройств
       pLastSelectedEntity:=drawings.GetCurrentOGLWParam.SelDesc.LastSelectedObject;
       if pLastSelectedEntity<>nil then begin
-        if pLastSelectedEntity^.GetExtension(extdr)=nil then begin
-          pLastSelectedEntity^.AddExtension(extdr.Create(pLastSelectedEntity));
+        if pLastSelectedEntity^.GetExtension(extdr)<>nil then begin
+          pLastSelectedEntity^.RemoveExtension(extdr);
           inc(count);
         end;
       end;
@@ -56,8 +54,8 @@ begin
       if pEntity<>nil then
       repeat
         if (pEntity^.Selected)and(pEntity<>pLastSelectedEntity) then
-          if pEntity^.GetExtension(extdr)=nil then begin
-            pEntity^.AddExtension(extdr.Create(pEntity));
+          if pEntity^.GetExtension(extdr)<>nil then begin
+            pEntity^.RemoveExtension(extdr);
             inc(count);
           end;
         pEntity:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
@@ -72,7 +70,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@extdrAdd_com,'extdrAdd',CADWG or CASelEnts,0);
+  CreateCommandFastObjectPlugin(@extdrRemove_com,'extdrRemove',CADWG or CASelEnts,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

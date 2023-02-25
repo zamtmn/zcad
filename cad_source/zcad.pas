@@ -231,7 +231,7 @@ uses
   uzccommand_text,
   uzccommand_exporttexttocsv,
   uzccommand_dataexport,uzccommand_dataimport,
-  uzccommand_extdrentslist,uzccommand_extdralllist,uzccommand_extdradd,
+  uzccommand_extdrentslist,uzccommand_extdralllist,uzccommand_extdrAdd,uzccommand_extdrRemove,
   uzccommand_DevDefSync,
   uzccommand_VariablesAdd,
 

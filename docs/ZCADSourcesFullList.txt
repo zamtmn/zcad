@@ -4,8 +4,8 @@
 ..\cad_source\zcad\core\drawings\*.pas
 ..\cad_source\zcad\core\undostack\*.pas
 ..\cad_source\zcad\core\utils\*.pas
-..\--cad_source\zcad\devicebase\*.pas
-..\--cad_source\zcad\electrotech\*.pas
+..\cad_source\zcad\devicebase\*.pas
+..\cad_source\zcad\electrotech\*.pas
 ..\cad_source\zcad\entities\*.pas
 ..\cad_source\zcad\gui\*.pas
 ..\cad_source\zcad\gui\forms\*.pas

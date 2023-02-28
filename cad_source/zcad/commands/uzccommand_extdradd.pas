@@ -25,11 +25,15 @@ uses
   uzcLog,SysUtils,
   uzccommandsabstract,uzccommandsimpl,
   uzeentity,gzctnrVectorTypes,uzcdrawings,uzcstrconsts,uzeentityextender,
+  gzundoCmdChgMethods2,uzcdrawing,
   uzcinterface;
 
 function extdrAdd_com(operands:TCommandOperands):TCommandResult;
 
 implementation
+
+const
+  cmdName='extdrAdd';
 
 function extdrAdd_com(operands:TCommandOperands):TCommandResult;
 var
@@ -37,6 +41,8 @@ var
   pEntity,pLastSelectedEntity:PGDBObjEntity;
   ir:itrec;
   count:Integer;
+  DoMethod,UndoMethod:TMethod;
+  ext:TBaseEntityExtender;
 begin
   try
     if EntityExtenders.tryGetValue(uppercase(operands),extdr) then begin
@@ -47,7 +53,17 @@ begin
       pLastSelectedEntity:=drawings.GetCurrentOGLWParam.SelDesc.LastSelectedObject;
       if pLastSelectedEntity<>nil then begin
         if pLastSelectedEntity^.GetExtension(extdr)=nil then begin
-          pLastSelectedEntity^.AddExtension(extdr.Create(pLastSelectedEntity));
+          PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushStartMarker(cmdName);
+          domethod.Code:=pointer(pLastSelectedEntity^.AddExtension);
+          domethod.Data:=pLastSelectedEntity;
+          undomethod.Code:=pointer(pLastSelectedEntity^.RemoveExtension);
+          undomethod.Data:=pLastSelectedEntity;
+          ext:=extdr.Create(pLastSelectedEntity);
+
+          with GUCmdChgMethods2<TBaseEntityExtender,Pointer>.CreateAndPush(ext,typeof(ext),domethod,undomethod,PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,drawings.AfterNotAutoProcessGDB) do
+          begin
+            comit;
+          end;
           inc(count);
         end;
       end;
@@ -57,12 +73,23 @@ begin
       repeat
         if (pEntity^.Selected)and(pEntity<>pLastSelectedEntity) then
           if pEntity^.GetExtension(extdr)=nil then begin
-            pEntity^.AddExtension(extdr.Create(pEntity));
+            PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushStartMarker(cmdName);
+            domethod.Code:=pointer(pEntity^.AddExtension);
+            domethod.Data:=pEntity;
+            undomethod.Code:=pointer(pEntity^.RemoveExtension);
+            undomethod.Data:=pEntity;
+            ext:=extdr.Create(pEntity);
+            with GUCmdChgMethods2<TBaseEntityExtender,Pointer>.CreateAndPush(ext,typeof(ext),domethod,undomethod,PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,drawings.AfterNotAutoProcessGDB) do
+            begin
+              comit;
+            end;
             inc(count);
           end;
         pEntity:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
       until pEntity=nil;
       ZCMsgCallBackInterface.TextMessage(format(rscmNEntitiesProcessed,[count]),TMWOHistoryOut);
+      if count>0 then
+        PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushEndMarker;
     end else
       ZCMsgCallBackInterface.TextMessage(format(rscmExtenderNotFound,[operands]),TMWOHistoryOut);
   finally
@@ -72,7 +99,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@extdrAdd_com,'extdrAdd',CADWG or CASelEnts,0);
+  CreateCommandFastObjectPlugin(@extdrAdd_com,cmdName,CADWG or CASelEnts,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

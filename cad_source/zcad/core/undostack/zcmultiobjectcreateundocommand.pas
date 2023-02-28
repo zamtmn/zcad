@@ -22,11 +22,6 @@ interface
 uses UGDBOpenArrayOfPV,zeundostack,zebaseundocommands,uzbtypes,
      gzctnrVectorTypes,uzeentity,uzcdrawings;
 
-{DEFINE TCommand  := TGDBMultiCreateCommand}
-{DEFINE PTCommand := PTGDBMultiCreateCommand}
-{DEFINE TData     := GDBObjOpenArrayOfPV}
-
-
 type
 generic TGMultiObjectProcessCommand<_LT> =class(TUCmdBase)
                                       DoData,UnDoData:tmethod;

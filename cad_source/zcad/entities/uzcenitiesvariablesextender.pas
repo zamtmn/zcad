@@ -33,6 +33,7 @@ TBaseVariablesExtender=class(TBaseEntityExtender)
 TVariablesExtender=class(TBaseVariablesExtender)
     entityunit:TObjectUnit;
     pMainFuncEntity:PGDBObjEntity;
+
     DelegatesArray:TEntityArray;
     pThisEntity:PGDBObjEntity;
     class function getExtenderName:string;override;
@@ -52,6 +53,10 @@ TVariablesExtender=class(TBaseVariablesExtender)
     procedure PostLoad(var context:TIODXFLoadContext);override;
 
     function isMainFunction:boolean;
+
+    // возвращает сам себя если
+    function getMainFuncEntity:PGDBObjEntity;
+
     procedure addDelegate(pDelegateEntity:PGDBObjEntity;pDelegateEntityVarext:TVariablesExtender);
     procedure removeDelegate(pDelegateEntity:PGDBObjEntity;pDelegateEntityVarext:TVariablesExtender);
 
@@ -72,6 +77,14 @@ implementation
 function TVariablesExtender.isMainFunction:boolean;
 begin
   result:=pMainFuncEntity=nil;
+end;
+
+function TVariablesExtender.getMainFuncEntity:PGDBObjEntity;
+begin
+  if isMainFunction then
+     result:=pThisEntity
+  else
+     result:=pMainFuncEntity;
 end;
 
 procedure TVariablesExtender.addDelegate(pDelegateEntity:PGDBObjEntity;pDelegateEntityVarext:TVariablesExtender);

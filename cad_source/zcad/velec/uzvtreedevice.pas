@@ -1553,7 +1553,7 @@ begin
 
                       ////****прокладка кабеля согласно методов прокладки
                       if beforeCabellingMountigName <> CabellingMountigName then begin
-                            ZCMsgCallBackInterface.TextMessage('Прокладываем кабель новый метод прокладки',TMWOHistoryOut);
+                            //ZCMsgCallBackInterface.TextMessage('Прокладываем кабель новый метод прокладки',TMWOHistoryOut);
                             drawCableLine(listInteger,i,j,counterSegment,beforeCabellingMountigName,numConnectCabDev);
                             listInteger:=TVectorofInteger.Create;
                             inc(counterSegment);

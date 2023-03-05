@@ -3,6 +3,7 @@ interface
 uses system,devices;
 usescopy ellocation;
 var
+   ANALYSISEM_icanbeheadunit:boolean;(*'Я могу быть ГУ?'*)
    labelondev:string;(*'Метка на устройстве'*)
    Position:String;(*'Позиция по заданию ТХ'*)
 
@@ -17,6 +18,7 @@ var
 
 implementation
 begin
+   ANALYSISEM_icanbeheadunit:=true;
    labelondev:='';
    Position:='-';
 

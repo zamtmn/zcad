@@ -106,6 +106,9 @@ const
   velec_EM_Diagram_InOutGroup='EL_VELEC_DIAGRAM_INOUTGROUP';
   velec_EL_EMSPLITTERBOX='EL_EMSPLITTERBOX';
 
+  velec_GC_HeadDevice='GC_HeadDevice';
+  velec_ANALYSISEM_icanbeheadunit='ANALYSISEM_icanbeheadunit';
+
 
 implementation
 

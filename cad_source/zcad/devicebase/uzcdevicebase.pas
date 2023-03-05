@@ -42,6 +42,7 @@ CableDeviceBaseObject= object(DeviceDbBaseObject)
                                    CoreCrossSection:Double;(*'**Сечение жилы'*)
                                    NumberOfCores:Double;(*'**Количество жил'*)
                                    OuterDiameter:Double;(*'**Наружный диаметр'*)
+                                   DDT:Double;(*'**ДТТ'*)
                                    constructor initnul;
                              end;
 {EXPORT-}

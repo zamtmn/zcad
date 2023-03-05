@@ -13,6 +13,8 @@
       <ZAction Name="ACN_uzvaddconnection" Command="uzvaddconnection" Img="#C+" Caption="Add connection"/>
       <ZAction Name="ACN_uzvremoveconnection" Command="uzvremoveconnection" Img="#С-" Caption="Remove connection"/>
       <ZAction Name="ACN_managerEM" Command="manem" Img="#MEM" Caption="Manager electrical model"/>
+      <ZAction Name="ACN_generatorOneDiagram" Command="vGeneratorOneLine" Img="#GD1" Caption="Generator one-level diagram"/>
+      <ZAction Name="ACN_CreateLL" Command="extdrAdd(extdrSmartTextEnt)" Img="#CLL" Caption="Creating Leader Lines"/>
     </Group>
   </ActionsContent>
 </CONFIG>

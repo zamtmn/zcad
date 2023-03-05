@@ -16,9 +16,9 @@ type
   TSingleLineTextEditorForm = class(TForm)
     OkButton: TButton;
     EditField: TEdit;
-    helptext: TLabel;
+    HelpText: TLabel;
     procedure _onKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
-    procedure shoftedform(Sender: TObject);
+    procedure _onShow(Sender: TObject);
   private
     { private declarations }
   public
@@ -35,23 +35,21 @@ implementation
 
 { TSingleLineTextEditorForm }
 
-procedure TSingleLineTextEditorForm.shoftedform(Sender: TObject);
+procedure TSingleLineTextEditorForm._onShow(Sender: TObject);
 begin
-     EditField.SelectAll;
-     Constraints.MaxHeight:=Height;
-     Constraints.MinHeight:=Height;
+  Constraints.MaxHeight:=Height;
+  Constraints.MinHeight:=Height;
+  EditField.SetFocus;
+  EditField.SelectAll;
 end;
 
 procedure TSingleLineTextEditorForm._onKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
-{$IFNDEF DELPHI}
-     if key=VK_ESCAPE then
-                          begin
-                          key:=0;
-                          close;
-                          end;
-{$ENDIF}
+  if key=VK_ESCAPE then begin
+    key:=0;
+    close;
+  end;
 end;
 
 end.

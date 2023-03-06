@@ -7,7 +7,8 @@ uses
   Classes, SysUtils,
   {$IFNDEF DELPHI}FileUtil, LResources,LCLType,{$ENDIF}
    Forms, Controls, Graphics,
-  StdCtrls;
+  StdCtrls, Types,
+  Math;
 
 type
 
@@ -18,6 +19,8 @@ type
     EditField: TEdit;
     HelpText: TLabel;
     procedure _onKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure _onMouseWheel(Sender: TObject; Shift: TShiftState;
+      WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
     procedure _onShow(Sender: TObject);
   private
     { private declarations }
@@ -49,6 +52,23 @@ begin
   if key=VK_ESCAPE then begin
     key:=0;
     close;
+  end;
+end;
+
+procedure TSingleLineTextEditorForm._onMouseWheel(Sender: TObject;
+  Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint;
+  var Handled: Boolean);
+var
+  n,ss:Integer;
+  s:string;
+begin
+  if TryStrToInt(EditField.SelText,n) then begin
+    ss:=EditField.SelStart;
+    s:=inttostr(n+sign(WheelDelta));
+    EditField.SelText:=s;
+    EditField.SelStart:=ss;
+    EditField.SelLength:=Length(s);
+    Handled:=true;
   end;
 end;
 

@@ -11,6 +11,7 @@ object SingleLineTextEditorForm: TSingleLineTextEditorForm
   DesignTimePPI = 144
   KeyPreview = True
   OnKeyDown = _onKeyDown
+  OnMouseWheel = _onMouseWheel
   OnShow = _onShow
   Position = poOwnerFormCenter
   LCLVersion = '2.3.0.0'

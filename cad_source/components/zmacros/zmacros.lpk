@@ -8,6 +8,7 @@
       <Version Value="11"/>
       <PathDelim Value="\"/>
       <SearchPaths>
+        <IncludeFiles Value="$(LazarusDir)\ide\packages\ideconfig\include\$(TargetOS)"/>
         <OtherUnitFiles Value="$(LazarusDir)\ide;$(LazarusDir)\ide\packages\ideconfig"/>
         <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>

@@ -62,7 +62,7 @@ begin
      Application.CreateForm(TSingleLineTextEditorForm, SingleLineTextEditorForm);
      SingleLineTextEditorForm.caption:=(rsTextEditor);
 
-     SingleLineTextEditorForm.helptext.Caption:=rsTextEdCaption;
+     SingleLineTextEditorForm.HelpText.Caption:=rsTextEdCaption;
      SingleLineTextEditorForm.EditField.TEXT:=astring;
      if assigned(SysVar.INTF.INTF_DefaultEditorFontHeight) then
         SingleLineTextEditorForm.EditField.Font.Height:=SysVar.INTF.INTF_DefaultEditorFontHeight^;

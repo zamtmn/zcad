@@ -19,6 +19,7 @@ uses
   uzeent3Dface,uzeentlwpolyline,uzeentpolyline,uzeenttext,uzeentline,uzeentcircle,uzeentarc,         //entitys created by program
   {$ifdef dxfio}
   uzeffdxf,                                                                        //dxf fileformat support
+  uzeffmanager,
   uzeentmtext,uzeentdimensiongeneric,uzeentdimaligned,uzeentdimrotated,uzeentsolid,//some other entitys can be found in loaded files
   uzeentspline,
   {$endif}
@@ -650,13 +651,15 @@ end;
 procedure TForm1.BtnOpenDXFClick(Sender: TObject);
 var
    dc:TDrawContext;
+   zdc:TZDrawingContext;
 begin
      {$ifdef dxfio}
      if OpenDialog1.Execute then
      begin
           _StartLongProcess(0,'Load dxf file');
           dc:=GetCurrentDrawing^.CreateDrawingRC;
-          addfromdxf(OpenDialog1.FileName,@GetCurrentDrawing^.pObjRoot^,TLOLoad,GetCurrentDrawing^);
+          zdc.CreateRec(GetCurrentDrawing^,GetCurrentDrawing^.pObjRoot^,TLOLoad,dc);
+          addfromdxf(OpenDialog1.FileName,zdc);
           GetCurrentDrawing^.pObjRoot^.FormatEntity(GetCurrentDrawing^,dc);
           GetCurrentDrawing^.pObjRoot^.ObjArray.ObjTree.maketreefrom(GetCurrentDrawing^.pObjRoot^.ObjArray,GetCurrentDrawing^.pObjRoot^.vp.BoundingBox,nil);
           //GetCurrentDrawing^.pObjRoot^.ObjArray.ObjTree:=createtree(GetCurrentDrawing^.pObjRoot^.ObjArray,GetCurrentDrawing^.pObjRoot^.vp.BoundingBox,@GetCurrentDrawing^.pObjRoot^.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;

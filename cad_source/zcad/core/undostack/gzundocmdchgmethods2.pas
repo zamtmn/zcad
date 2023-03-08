@@ -36,7 +36,11 @@ type
         Commited:Boolean;
         procedure AfterDo;
     public
-        constructor Create(const AData:GDoData;const AUndoData:GUndoData;ADoMethod,AUndoMethod:TMethod;const AAfterUndoProc:TAfterUndoProc;ACommited:Boolean=False);
+        constructor Create(const AData:GDoData;                //тип данных для Do метода
+                           const AUndoData:GUndoData;          //тип данных для UnDo метода
+                           ADoMethod,AUndoMethod:TMethod;      //Do/UnDo методы
+                           const AAfterUndoProc:TAfterUndoProc;//нечто выполняемое после Do/UnDo
+                           ACommited:Boolean=False);           //смена Do/UnDo местами по умолчанию первым выполняется Do
         constructor CreateAndPush(const AData:GDoData;const AUndoData:GUndoData;ADoMethod,AUndoMethod:TMethod;var us:TZctnrVectorUndoCommands;const AAfterUndoProc:TAfterUndoProc;ACommited:Boolean=False);
 
         procedure UnDo;override;
@@ -65,9 +69,6 @@ end;
 
 procedure GUCmdChgMethods2.UnDo;
 begin
-  {TUndoMethod(UnDoMethod)(UndoData);
-  Commited:=not Commited;
-  AfterDo;}
   Comit;
 end;
 

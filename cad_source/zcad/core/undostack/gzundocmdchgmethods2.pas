@@ -22,6 +22,11 @@ uses
   zeundostack,zebaseundocommands;
 
 type
+  //команда вызывает для Do и UnDo 2 разных метода с разными типами данных
+  //DoData подразумевается класс, UndoData - простой тип
+  //сделано для добавления в массивы классов. Do - добавляет, UnDo - изымает
+  //в деструкторе DoData дестроится если последним было произведено UnDo,
+  //т.е. DoData не добавлен в массив
   generic GUCmdChgMethods2<GDoData:class;GundoData> =class(TUCmdBase)
     private
       type

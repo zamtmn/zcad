@@ -21,6 +21,7 @@ interface
 uses zeundostack,zebaseundocommands,uzeentity;
 
 type
+  //команда вызывает для Do и UnDo один метод с разными данными
   generic GUCmdChgMethod<T> =class(TUCmdBase)
      private
        type

@@ -25,7 +25,7 @@ uses
   uzcLog,SysUtils,
   uzccommandsabstract,uzccommandsimpl,
   uzeentity,gzctnrVectorTypes,uzcdrawings,uzcstrconsts,uzeentityextender,
-  gzundoCmdChgMethods2,uzcdrawing,
+  gzundoCmdChgMethods2,zUndoCmdSaveEntityState,uzcdrawing,
   uzcinterface;
 
 function extdrAdd_com(operands:TCommandOperands):TCommandResult;
@@ -60,6 +60,8 @@ begin
           undomethod.Data:=pLastSelectedEntity;
           ext:=extdr.Create(pLastSelectedEntity);
 
+          TUndoCmdSaveEntityState.CreateAndPush(pLastSelectedEntity,PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack);
+
           with GUCmdChgMethods2<TBaseEntityExtender,Pointer>.CreateAndPush(ext,typeof(ext),domethod,undomethod,PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,drawings.AfterNotAutoProcessGDB) do
           begin
             comit;
@@ -79,6 +81,9 @@ begin
             undomethod.Code:=pointer(pEntity^.RemoveExtension);
             undomethod.Data:=pEntity;
             ext:=extdr.Create(pEntity);
+
+            TUndoCmdSaveEntityState.CreateAndPush(pLastSelectedEntity,PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack);
+
             with GUCmdChgMethods2<TBaseEntityExtender,Pointer>.CreateAndPush(ext,typeof(ext),domethod,undomethod,PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,drawings.AfterNotAutoProcessGDB) do
             begin
               comit;

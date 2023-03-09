@@ -361,7 +361,7 @@ begin
 
      drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,datname);
      pointer(pv):=old_ENTF_CreateBlockInsert(drawings.GetCurrentROOT,@{drawings.GetCurrentROOT}root.ObjArray,
-                                         drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
+                                         drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,sysvar.DWG.DWG_CLinew^,sysvar.DWG.DWG_CColor^,
                                          currentcoord, 1, 0,@datname[1]);
      dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
      zcSetEntPropFromCurrentDrawingProp(pv);
@@ -589,7 +589,7 @@ var
        //datname:= velec_SchemaBlockJunctionBox;
        drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,datname);
        pointer(pv):=old_ENTF_CreateBlockInsert(drawings.GetCurrentROOT,@{drawings.GetCurrentROOT}drawings.GetCurrentDWG^.mainObjRoot.ObjArray,
-                                           drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
+                                           drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,sysvar.DWG.DWG_CLinew^,sysvar.DWG.DWG_CColor^,
                                            currentcoord, 1, 0,@datname[1]);
        zcSetEntPropFromCurrentDrawingProp(pv);
     end;
@@ -1126,7 +1126,7 @@ var
      //pv:=GDBObjDevice.CreateInstance;
 
      pointer(pnevdev):=old_ENTF_CreateBlockInsert(drawings.GetCurrentROOT,@{drawings.GetCurrentROOT}root.ObjArray,
-                                         drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
+                                         drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,sysvar.DWG.DWG_CLinew^,sysvar.DWG.DWG_CColor^,
                                          currentcoord, 1, 0,@datname[1]);
      //dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
 
@@ -1341,7 +1341,7 @@ var
             datname:= velec_SchemaCableInfo;
             drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,datname);
             pointer(pv):=old_ENTF_CreateBlockInsert(drawings.GetCurrentROOT,@{drawings.GetCurrentROOT}root.ObjArray,
-                                               drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
+                                               drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,sysvar.DWG.DWG_CLinew^,sysvar.DWG.DWG_CColor^,
                                                p2, 1, 0,@datname[1]);
             //dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
             zcSetEntPropFromCurrentDrawingProp(pv);
@@ -1805,7 +1805,7 @@ var
 
           drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,'DEVICE_CABLE_MARK');
           pointer(pv):=old_ENTF_CreateBlockInsert(@drawings.GetCurrentDWG^.mainObjRoot,@{drawings.GetCurrentROOT.ObjArray}drawings.GetCurrentDWG^.mainObjRoot.ObjArray,
-                                              drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
+                                              drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,sysvar.DWG.DWG_CLinew^,sysvar.DWG.DWG_CColor^,
                                               insertPoint, 1, 0,'DEVICE_CABLE_MARK');
           zcSetEntPropFromCurrentDrawingProp(pv);
           ppvvarext:=pv^.specialize GetExtension<TVariablesExtender>;

@@ -27,37 +27,37 @@ uses LCLProc,uzeconsts,uzepalette,uzestyleslinetypes,uzeentityfactory,
 function ENTF_CreateLine(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;args:array of const): PGDBObjEntity;
 function ENTF_CreateCircle(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;args:array of const): PGDBObjEntity;
 function ENTF_CreateSolid(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;args:array of const): PGDBObjEntity;
-function ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObjEntityOpenArray;
-                                layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:TGDBPaletteColor;LW:TGDBLineWeight;
-                                point: gdbvertex; scale, angle: Double; s: pansichar):PGDBObjEntity;
+function ENTF_CreateBlockInsert(AOwner:PGDBObjGenericSubEntry;AArrayInOwner: PGDBObjEntityOpenArray;
+                                ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
+                                APoint:GDBvertex;AScale,AAngle:Double;AName:String):PGDBObjEntity;
 implementation
 //uses
 //    log;
-function ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObjEntityOpenArray;
-                                layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:TGDBPaletteColor;LW:TGDBLineWeight;
-                                point: gdbvertex; scale, angle: Double; s: pansichar):PGDBObjEntity;
+function ENTF_CreateBlockInsert(AOwner:PGDBObjGenericSubEntry;AArrayInOwner: PGDBObjEntityOpenArray;
+                                ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
+                                APoint: GDBvertex;AScale,AAngle:Double;AName:String):PGDBObjEntity;
 var
   pb:PGDBObjEntity;
   nam:String;
   CreateProc:TAllocAndInitAndSetGeomPropsFunc;
 begin
   result:=nil;
-  if pos(DevicePrefix, uppercase(s))=1  then
+  if pos(DevicePrefix, uppercase(AName))=1  then
                                             begin
-                                                nam:=copy(s,length(DevicePrefix)+1,length(s)-length(DevicePrefix));
+                                                nam:=copy(AName,length(DevicePrefix)+1,length(AName)-length(DevicePrefix));
                                                 CreateProc:=_StandartDeviceCreateProcedure;
                                             end
                                         else
                                             begin
-                                                 nam:=s;
+                                                 nam:=AName;
                                                  CreateProc:=_StandartBlockInsertCreateProcedure;
                                             end;
   if assigned(CreateProc)then
                            begin
-                               PGDBObjEntity(pb):=CreateProc(owner,[point.x,point.y,point.z,scale,angle,nam]);
-                               zeSetEntityProp(pb,layeraddres,LTAddres,color,LW);
-                               if ownerarray<>nil then
-                                               ownerarray^.AddPEntity(pb^);
+                               PGDBObjEntity(pb):=CreateProc(AOwner,[APoint.x,APoint.y,APoint.z,AScale,AAngle,nam]);
+                               zeSetEntityProp(pb,ALayer,ALT,AColor,ALW);
+                               if AArrayInOwner<>nil then
+                                               AArrayInOwner^.AddPEntity(pb^);
                            end
                        else
                            begin

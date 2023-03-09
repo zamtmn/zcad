@@ -22,6 +22,7 @@ uses
   zeundostack,zebaseundocommands;
 
 type
+  //команда вызывает для Do и UnDo 2 разных метода с одними данными
   generic GUCmdChgMethods<T> =class(TUCmdBase)
     private
       type

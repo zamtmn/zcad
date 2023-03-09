@@ -1062,7 +1062,10 @@ var
     //myVertex,vertexAnalized:TListVertexWayOnlyVertex;
     //myTerminalBox:TListVertexTerminalBox;
     superlinedev:PGDBObjSuperLine;
+    superlinedevone:PGDBObjSuperLine;
+    superlinedevoneDO:boolean;
     numConnectCabDev:integer;
+    cableNameinGraph:string;
     heightText:double;
     colorNum,numberGDev:integer;
     listCounterGroupDevice:TCounterGroupDevice;
@@ -1072,6 +1075,7 @@ var
 
     listAllDeviceMainAndDelegate:TListDevice; //список главной функции и делегатов
     iRootTree:boolean;
+    pvd2:pvardesk;
     //isDevTogether:boolean
 
     //Метрирование датчиков
@@ -1160,7 +1164,7 @@ var
               result:= true;
     end;
 
-    procedure drawCableLine(listInteger:TVectorofInteger;numLMaster,numLGroup,counterSegment:Integer;cabMounting:string;numConnect:integer);
+    procedure drawCableLine(listInteger:TVectorofInteger;numLMaster,numLGroup,counterSegment:Integer;cabMounting:string;numConnect:integer;cableNameinGraph:string);
     var
     cableLine:PGDBObjCable;
     i:integer;
@@ -1212,8 +1216,10 @@ var
        //правка шаблона что бы выводилось короткое имя плюс точка плюс номер группы
        pvd:=FindVariableInEnt(cableLine,'NMO_Template');
        if pvd<>nil then
-       pString(pvd^.data.Addr.Instance)^:='@@[GC_HDShortName].@@[GC_HDGroup]';
-
+         if cableNameinGraph = vGCableNameDefault then
+           pString(pvd^.data.Addr.Instance)^:='@@[GC_HDShortName].@@[GC_HDGroup]'
+         else
+           pString(pvd^.data.Addr.Instance)^:=cableNameinGraph;
 
       pvd:=FindVariableInEnt(cableLine,'NMO_BaseName');
        if pvd<>nil then
@@ -1451,7 +1457,7 @@ begin
 
                 if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
                   ZCMsgCallBackInterface.TextMessage('listInteger добавил Рут',TMWOHistoryOut);
-
+                superlinedevoneDO:=false;
                 //iRootTree:=true;
                 ///Старт укладки кабеля по супелиниям
                 for l:= 1 to VPath.Count - 1 do
@@ -1484,6 +1490,8 @@ begin
                         counterSegment:=0;
                         iRootTree:=false;
                         needParent:=false;
+
+                        superlinedevone:=PGDBObjSuperLine(listMasterDevice[i].LGroup[j].AllTreeDev.GetEdge(tvertex(VPath[l-1]),tvertex(VPath[l])).AsPointer[vGPGDBObjEdge]);
                         continue;
                       end;
                     end;
@@ -1516,6 +1524,7 @@ begin
                    if l <> 0 then
                    begin
                      numConnectCabDev:= integer(listMasterDevice[i].LGroup[j].AllTreeDev.GetEdge(tvertex(VPath[l]).parent,tvertex(VPath[l])).AsInt32[velecNumConnectDev]);
+                     cableNameinGraph:= string(listMasterDevice[i].LGroup[j].AllTreeDev.GetEdge(tvertex(VPath[l]).parent,tvertex(VPath[l])).AsString[vGCableName]);
                      if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
                         ZCMsgCallBackInterface.TextMessage('ребро получено= НОМЕР ПОДКЛЮЧЕНИЯ ==' + tvertex(VPath[l]).Parent.AsString[vGInfoVertex] + ' между ' +tvertex(VPath[l]).AsString[vGInfoVertex] + 'равно ' + inttostr(numConnectCabDev),TMWOHistoryOut)
                    end;
@@ -1524,42 +1533,59 @@ begin
                         begin
                           if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
                             ZCMsgCallBackInterface.TextMessage('ребро - '+listMasterDevice[i].LGroup[j].AllTreeDev.GetEdge(tvertex(VPath[l-1]),tvertex(VPath[l])).AsString[vGInfoEdge],TMWOHistoryOut);
+
                           superlinedev:=PGDBObjSuperLine(listMasterDevice[i].LGroup[j].AllTreeDev.GetEdge(tvertex(VPath[l-1]),tvertex(VPath[l])).AsPointer[vGPGDBObjEdge]);
-
-                                                //ZCMsgCallBackInterface.TextMessage('ребро получено' + inttostr(numConnectCabDev),TMWOHistoryOut);
-
-                          //ZCMsgCallBackInterface.TextMessage('ребро получено',TMWOHistoryOut);
-                          //if superlinedev<>nil then
-                             //ZCMsgCallBackInterface.TextMessage('2 - '+superlinedev^.GetObjName,TMWOHistoryOut);
                           if superlinedev<>nil then
-                             //CabellingMountigName:='УКАЗАН'
-                             begin
-                               CabellingMountigNamePVD:=FindVariableInEnt(superlinedev,velec_cableMounting);
-                               if CabellingMountigNamePVD<>nil then
-                                  CabellingMountigName:=pString(FindVariableInEnt(superlinedev,velec_cableMounting)^.data.Addr.Instance)^
-                               else
-                                  begin
-                                       ZCMsgCallBackInterface.TextMessage('ОШИБКА ОШИБКА!!! Старый примитив суперлинии, на определен метод укладки кабеля. Кабель укладки принят = ' + velec_cableMountingNon,TMWOHistoryOut);
-                                       CabellingMountigName:=velec_cableMountingNon;
-                                  end;
-                             end
+                            //CabellingMountigName:='УКАЗАН'
+                            begin
+                              CabellingMountigNamePVD:=FindVariableInEnt(superlinedev,velec_cableMounting);
+                              if CabellingMountigNamePVD<>nil then begin
+                                 CabellingMountigName:=pString(CabellingMountigNamePVD^.data.Addr.Instance)^;
+                                 ZCMsgCallBackInterface.TextMessage('Кабель укладки принят = ' + CabellingMountigName,TMWOHistoryOut);
+                                 end
+                              else
+                                 begin
+                                   ZCMsgCallBackInterface.TextMessage('ОШИБКА ОШИБКА!!! Старый примитив суперлинии, на определен метод укладки кабеля. Кабель укладки принят = ' + velec_cableMountingNon,TMWOHistoryOut);
+                                   CabellingMountigName:=velec_cableMountingNon;
+                                 end;
+                            end
                           else
-                             CabellingMountigName:=velec_cableMountingNon;
-                          //ZCMsgCallBackInterface.TextMessage('метод прокладки - '+CabellingMountigName,TMWOHistoryOut);
+                          begin
+                              //listMasterDevice[i].LGroup[j].AllTreeDev.Vertices[];
+                              //ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
+                            //ZCMsgCallBackInterface.TextMessage('VPath[l] l=' + inttostr(l),TMWOHistoryOut);
+                            //ZCMsgCallBackInterface.TextMessage('PGDBObjDevice(tvertex(VPath[l]).AsPointer[vGPGDBObjVertex])=' + listVertexEdge.listVertex[tvertex(VPath[l]).AsInt32[vGGIndex]].deviceEnt^.Name,TMWOHistoryOut);
+
+                             //if listVertexEdge.listVertex[tvertex(VPath[l]).AsInt32[vGGIndex]].deviceEnt <> nil then
+                             //  begin
+                             //    CabellingMountigName:= beforeCabellingMountigName;
+                             //
+                             //end;
+                             CabellingMountigName:= velec_cableMountingNon;
+                          end;
                        end;
 
                       if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
                          ZCMsgCallBackInterface.TextMessage('Для поиска ощибок №1',TMWOHistoryOut);
 
                       ////****прокладка кабеля согласно методов прокладки
-                      if beforeCabellingMountigName <> CabellingMountigName then begin
-                            //ZCMsgCallBackInterface.TextMessage('Прокладываем кабель новый метод прокладки',TMWOHistoryOut);
-                            drawCableLine(listInteger,i,j,counterSegment,beforeCabellingMountigName,numConnectCabDev);
-                            listInteger:=TVectorofInteger.Create;
-                            inc(counterSegment);
-                            listInteger.PushBack(tvertex(VPath[l]).Parent.AsInt32[vGGIndex]);
-                      end;
-                      beforeCabellingMountigName:=CabellingMountigName;
+                        //if not superlinedevoneDO then begin
+                        //       // что бы кабель от головного устройства был таким же как после него
+                        //ZCMsgCallBackInterface.TextMessage('superlinedevoneDO   beforeCabellingMountigName='+beforeCabellingMountigName+'        CabellingMountigName=' + CabellingMountigName,TMWOHistoryOut);
+                        //  beforeCabellingMountigName:=CabellingMountigName;
+                        //                          ZCMsgCallBackInterface.TextMessage('superlinedevoneDO   beforeCabellingMountigName='+beforeCabellingMountigName+'        CabellingMountigName=' + CabellingMountigName,TMWOHistoryOut);
+                        //
+                        //end;
+                        //superlinedevoneDO:=true;
+                        //                        ZCMsgCallBackInterface.TextMessage('beforeCabellingMountigName='+beforeCabellingMountigName+'        CabellingMountigName=' + CabellingMountigName,TMWOHistoryOut);
+                        if beforeCabellingMountigName <> CabellingMountigName then begin
+                              ZCMsgCallBackInterface.TextMessage('Прокладываем кабель новый метод прокладки',TMWOHistoryOut);
+                              drawCableLine(listInteger,i,j,counterSegment,beforeCabellingMountigName,numConnectCabDev,cableNameinGraph);
+                              listInteger:=TVectorofInteger.Create;
+                              inc(counterSegment);
+                              listInteger.PushBack(tvertex(VPath[l]).Parent.AsInt32[vGGIndex]);
+                        end;
+                        beforeCabellingMountigName:=CabellingMountigName;
 
                       if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
                          ZCMsgCallBackInterface.TextMessage('Для поиска ощибок №2',TMWOHistoryOut);
@@ -1596,8 +1622,8 @@ begin
                          //if (tvertex(VPath[l]).ChildCount > 1) or (tvertex(VPath[l]).ChildCount = 0) or (listVertexEdge.listVertex[tvertex(VPath[l]).AsInt32[vGGIndex]].break and listVertexEdge.listVertex[tvertex(VPath[l]).Parent.AsInt32[vGGIndex]].break) then
                            begin
                              //ZCMsgCallBackInterface.TextMessage('tvertex(VPath[l]).ChildCount = '+inttostr(tvertex(VPath[l]).ChildCount),TMWOHistoryOut);
-                             //ZCMsgCallBackInterface.TextMessage('Прокладываем кабель основное',TMWOHistoryOut);
-                              drawCableLine(listInteger,i,j,counterSegment,beforeCabellingMountigName,numConnectCabDev);
+                             ZCMsgCallBackInterface.TextMessage('Прокладываем кабель основное',TMWOHistoryOut);
+                              drawCableLine(listInteger,i,j,counterSegment,beforeCabellingMountigName,numConnectCabDev,cableNameinGraph);
                               listInteger:=TVectorofInteger.Create;
                               inc(counterSegment);
                               needParent:=true;
@@ -2245,6 +2271,10 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph;li
 
                  pvd2:=FindVariableInEnt(nowDev,velec_VarNameForConnectBefore+IntToStr(numConnect)+'_'+velec_VarNameForConnectAfter_CabConnectMountingMethod);
                  infoLay.CabConnectMountingMethod:=pString(pvd2^.data.Addr.Instance)^;
+
+                 //pvd2:=FindVariableInEnt(nowDev,velec_VarNameForConnectBefore+IntToStr(numConnect)+'_'+velec_VarNameForConnectAfter_CableName);
+                 //infoLay.CableName:=pString(pvd2^.data.Addr.Instance)^;
+
                  //ZCMsgCallBackInterface.TextMessage(infoLay.CabConnectMountingMethod,TMWOHistoryOut);
 
                  infoLay.numConnect:=numConnect;  //номер соединения
@@ -3051,6 +3081,7 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph;li
      sumWeightPath{,tempFloat}: Float;
      tempMasterName,tempSlaveName:string;
              pvd:pvardesk;
+             cableNameinGraph:string;
      //tempLVertex:TvectorOfInteger;
      //gg:GDBVertex;
      listVertexSNCU, listVertexDevUnit:TVertexofString;
@@ -3610,6 +3641,7 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph;li
               infoGTree.CreateEdgeAttr(velecNumConnectDev, AttrInt32);  //номер подключения внутри устройства
               infoGTree.CreateEdgeAttr(vGLength, AttrFloat64);          //длина ребра
               infoGTree.CreateEdgeAttr(vGInfoEdge, AttrString);         //информация для пользователя
+              infoGTree.CreateEdgeAttr(vGCableName, AttrString);        //желаемое имя кабеля
               infoGTree.CreateEdgeAttr(vGPGDBObjEdge,AttrPointer);      //добавили ссылку сразу на саму линию
 
 
@@ -3651,7 +3683,13 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph;li
                     ZCMsgCallBackInterface.TextMessage('НОМЕР УСТРОЙСТВА= '+inttostr(listMasterDevice[i].LGroup[j].LNumSubDevice[k].indexSub) +
                                                                    ' ИМЯ УСТРОЙСТВА= ОТСУТСТВУЕТ',TMWOHistoryOut);
 
+                    cableNameinGraph:=vGCableNameDefault;
+                    //ZCMsgCallBackInterface.TextMessage('Название переменной = '+velec_VarNameForConnectBefore+inttostr(listMasterDevice[i].LGroup[j].LNumSubDevice[k].devConnectInfo.numConnect)+'_'+velec_VarNameForConnectAfter_CableName,TMWOHistoryOut);
+                    pvd:=FindVariableInEnt(listVertexEdge.listVertex[listMasterDevice[i].LGroup[j].LNumSubDevice[k].indexSub].deviceEnt,velec_VarNameForConnectBefore+inttostr(listMasterDevice[i].LGroup[j].LNumSubDevice[k].devConnectInfo.numConnect)+'_'+velec_VarNameForConnectAfter_CableName);
+                    if pvd<>nil then
+                      cableNameinGraph:=pString(pvd^.data.Addr.Instance)^;
 
+                    //ZCMsgCallBackInterface.TextMessage('cableNameinGraph='+cableNameinGraph,TMWOHistoryOut);
 
                   //**от промежуточных узлов и узлов управления дерево строиться не должно!!!
                   if not listVertexSNCU.IsEmpty then
@@ -3754,6 +3792,7 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph;li
 
                      infoGTree.Edges[infoGTree.EdgeCount-1].AsFloat64[vGLength]:=0;
                      infoGTree.Edges[infoGTree.EdgeCount-1].AsString[vGIsSubNodeCabDev]:='';
+                     infoGTree.Edges[infoGTree.EdgeCount-1].AsString[vGCableName]:=cableNameinGraph;
 
                      infoGTree.Edges[infoGTree.EdgeCount-1].AsInt32[velecNumConnectDev]:=-1; //добавил номер подключения в устройства
 
@@ -3965,6 +4004,8 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph;li
                                   //НОВОЕ!!!! Добавил ссылку на устройство
                                   infoGTree.Edges[infoGTree.EdgeCount-1].AsPointer[vGPGDBObjEdge]:=getvGPGDBObjSuperLine(listVertexEdge,infoGTree.Vertices[tIndexLocal].AsInt32[vGGIndex],infoGTree.Vertices[infoGTree.VertexCount-1].AsInt32[vGGIndex]);
 
+                                  infoGTree.Edges[infoGTree.EdgeCount-1].AsString[vGCableName]:=cableNameinGraph;
+
                                   //ZCMsgCallBackInterface.TextMessage('edgelength : ' + floattostr(getlength(listVertexEdge,tIndexGlobal,TVertex(VertexPath[m]).Index)),TMWOHistoryOut);
                                   //tempFloat:=1*RoundTo(getlength(listVertexEdge,tIndexGlobal,TVertex(VertexPath[m]).Index),-1);
                                   //tempFloat:=20;
@@ -4033,6 +4074,8 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph;li
 
                                  //ZCMsgCallBackInterface.TextMessage('edgelength : ' + floattostr(getlength(listVertexEdge,tIndexGlobal,TVertex(VertexPath[m]).Index)),TMWOHistoryOut);
                                  infoGTree.Edges[infoGTree.EdgeCount-1].AsFloat64[vGLength]:=getlength(listVertexEdge,tIndexGlobal,TVertex(VertexPath[m]).Index);
+
+                                 infoGTree.Edges[infoGTree.EdgeCount-1].AsString[vGCableName]:=cableNameinGraph;
 
                                  infoGTree.Edges[infoGTree.EdgeCount-1].AsString[vGIsSubNodeCabDev]:=saveSpecNameNodeEdge;
 

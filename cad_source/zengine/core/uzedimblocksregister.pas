@@ -45,6 +45,72 @@ begin
      zeSetEntityProp(pentity,layertable^.GetSystemLayer,lttable^.GetSystemLT(TLTByLayer),ClByLayer,LnWtByLayer);
    end;
 end;
+function CreateClosedBlankBlock(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:String):PGDBObjBlockdef;
+var
+   BlockDefArray:PGDBObjBlockdefArray;
+   layertable:PGDBLayerArray;
+   lttable:PGDBLtypeArray;
+   pentity:PGDBObjEntity;
+   SystemLayer:PGDBLayerProp;
+   SystemLT:PGDBLtypeProp;
+begin
+   layertable:=dwg^.GetLayerTable;
+   lttable:=dwg^.GetLTypeTable;
+   SystemLayer:=layertable^.GetSystemLayer;
+   SystemLT:=lttable^.GetSystemLT(TLTByLayer);
+
+   BlockDefArray:=dwg^.GetBlockDefArraySimple;
+   result:=BlockDefArray.create(BlockName);
+   pentity:=ENTF_CreateLine(result,@result.ObjArray,[ 0,   0,0,
+                                                     -1,-1/6,0]);
+   if pentity<>nil then
+     zeSetEntityProp(pentity,SystemLayer,SystemLT,ClByLayer,LnWtByLayer);
+   pentity:=ENTF_CreateLine(result,@result.ObjArray,[-1,-1/6,0,
+                                                     -1, 1/6,0]);
+   if pentity<>nil then
+     zeSetEntityProp(pentity,SystemLayer,SystemLT,ClByLayer,LnWtByLayer);
+
+   pentity:=ENTF_CreateLine(result,@result.ObjArray,[-1,1/6,0,
+                                                      0,  0,0]);
+   if pentity<>nil then
+     zeSetEntityProp(pentity,SystemLayer,SystemLT,ClByLayer,LnWtByLayer);
+end;
+function CreateClosedBlock(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:String):PGDBObjBlockdef;
+var
+   BlockDefArray:PGDBObjBlockdefArray;
+   layertable:PGDBLayerArray;
+   lttable:PGDBLtypeArray;
+   pentity:PGDBObjEntity;
+   SystemLayer:PGDBLayerProp;
+   SystemLT:PGDBLtypeProp;
+begin
+   layertable:=dwg^.GetLayerTable;
+   lttable:=dwg^.GetLTypeTable;
+   SystemLayer:=layertable^.GetSystemLayer;
+   SystemLT:=lttable^.GetSystemLT(TLTByLayer);
+
+   BlockDefArray:=dwg^.GetBlockDefArraySimple;
+   result:=BlockDefArray.create(BlockName);
+   pentity:=ENTF_CreateLine(result,@result.ObjArray,[ 0,   0,0,
+                                                     -1,-1/6,0]);
+   if pentity<>nil then
+     zeSetEntityProp(pentity,SystemLayer,SystemLT,ClByLayer,LnWtByLayer);
+   pentity:=ENTF_CreateLine(result,@result.ObjArray,[-1,-1/6,0,
+                                                     -1, 1/6,0]);
+   if pentity<>nil then
+     zeSetEntityProp(pentity,SystemLayer,SystemLT,ClByLayer,LnWtByLayer);
+
+   pentity:=ENTF_CreateLine(result,@result.ObjArray,[-1,1/6,0,
+                                                      0,  0,0]);
+   if pentity<>nil then
+     zeSetEntityProp(pentity,SystemLayer,SystemLT,ClByLayer,LnWtByLayer);
+
+   pentity:=ENTF_CreateLine(result,@result.ObjArray,[-1,0,0,
+                                                      0,0,0]);
+   if pentity<>nil then
+     zeSetEntityProp(pentity,SystemLayer,SystemLT,ClByLayer,LnWtByLayer);
+
+end;
 function CreateArchTickBlock(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:String):PGDBObjBlockdef;
 var
    BlockDefArray:PGDBObjBlockdefArray;
@@ -68,9 +134,9 @@ begin
 end;
 initialization
   RegisterBlockDefCreateFunc('_ClosedFilled','','',CreateClosedFilledBlock);//implemented
-  RegisterBlockDefCreateFunc('_ClosedBlank','','',CreateClosedFilledBlock);
-  RegisterBlockDefCreateFunc('_Closed','','',CreateClosedFilledBlock);
-  RegisterBlockDefCreateFunc('_Dot','','',CreateClosedFilledBlock);
+  RegisterBlockDefCreateFunc('_ClosedBlank','','',CreateClosedBlankBlock);//implemented
+  RegisterBlockDefCreateFunc('_Closed','','',CreateClosedBlock);//implemented
+  //RegisterBlockDefCreateFunc('_Dot','','',CreateClosedFilledBlock);
   RegisterBlockDefCreateFunc('_ArchTick','','',CreateArchTickBlock);//implemented
   RegisterBlockDefCreateFunc('_Oblique','','',CreateClosedFilledBlock);
   RegisterBlockDefCreateFunc('_Open','','',CreateClosedFilledBlock);

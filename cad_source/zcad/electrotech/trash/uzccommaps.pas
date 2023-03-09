@@ -218,11 +218,11 @@ begin
 
   drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,'profilestart');
   pointer(pv):=old_ENTF_CreateBlockInsert(@drawings.GetCurrentDWG.ConstructObjRoot,@drawings.GetCurrentDWG.ConstructObjRoot.ObjArray,
-                                      drawings.GetCurrentDWG.GetCurrentLayer,drawings.GetCurrentDWG.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
+                                      drawings.GetCurrentDWG.GetCurrentLayer,drawings.GetCurrentDWG.GetCurrentLType,sysvar.DWG.DWG_CLinew^,sysvar.DWG.DWG_CColor^,
                                       trans(0,0,0,0), 1, 0,'profilestart');
   drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,'profileend');
   pointer(pv):=old_ENTF_CreateBlockInsert(@drawings.GetCurrentDWG.ConstructObjRoot,@drawings.GetCurrentDWG.ConstructObjRoot.ObjArray,
-                                      drawings.GetCurrentDWG.GetCurrentLayer,drawings.GetCurrentDWG.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
+                                      drawings.GetCurrentDWG.GetCurrentLayer,drawings.GetCurrentDWG.GetCurrentLType,sysvar.DWG.DWG_CLinew^,sysvar.DWG.DWG_CColor^,
                                       trans(FactTraceLength,0,0,0), 1, 0,'profileend');
   zcSetEntPropFromCurrentDrawingProp(pv);
 
@@ -342,7 +342,7 @@ begin
     if com.blockname[1]<>'@' then begin
      drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,com.blockname);
      pointer(pv):=old_ENTF_CreateBlockInsert(@drawings.GetCurrentDWG.ConstructObjRoot,@drawings.GetCurrentDWG.ConstructObjRoot.ObjArray,
-                                         drawings.GetCurrentDWG.GetCurrentLayer,drawings.GetCurrentDWG.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
+                                         drawings.GetCurrentDWG.GetCurrentLayer,drawings.GetCurrentDWG.GetCurrentLType,sysvar.DWG.DWG_CLinew^,sysvar.DWG.DWG_CColor^,
                                          trans(com.t*FactTraceLength,com.h,0,0), 1, 0,@com.blockname[1]);
 
      pl:=pointer(AllocEnt(GDBLineID));

@@ -155,12 +155,12 @@ begin
   begin
   if p0inside then
                   pointer(pv):=ENTF_CreateBlockInsert(@self,@self.ConstObjArray,
-                                                      vp.Layer,vp.LineType,PDimStyle.Lines.DIMCLRD,PDimStyle.Lines.DIMLWD,
-                                                      p1,PDimStyle.Arrows.DIMASZ*GetDIMSCALE,ZAngle{*180/pi}-pi,@tbp0.name[1])
+                                                      vp.Layer,vp.LineType,PDimStyle.Lines.DIMLWD,PDimStyle.Lines.DIMCLRD,
+                                                      p1,PDimStyle.Arrows.DIMASZ*GetDIMSCALE,ZAngle{*180/pi}-pi,tbp0.name)
               else
                   pointer(pv):=ENTF_CreateBlockInsert(@self,@self.ConstObjArray,
-                                                      vp.Layer,vp.LineType,PDimStyle.Lines.DIMCLRD,PDimStyle.Lines.DIMLWD,
-                                                      p1,PDimStyle.Arrows.DIMASZ*GetDIMSCALE,ZAngle{*180/pi},@tbp0.name[1]);
+                                                      vp.Layer,vp.LineType,PDimStyle.Lines.DIMLWD,PDimStyle.Lines.DIMCLRD,
+                                                      p1,PDimStyle.Arrows.DIMASZ*GetDIMSCALE,ZAngle{*180/pi},tbp0.name);
   //pv^.vp.LineWeight:=PDimStyle.Lines.DIMLWD;
   //pv^.vp.Color:=PDimStyle.Lines.DIMCLRD;
   pv^.BuildGeometry(drawing);
@@ -170,12 +170,12 @@ begin
   begin
   if p1inside then
                   pointer(pv):=ENTF_CreateBlockInsert(@self,@self.ConstObjArray,
-                                                      vp.Layer,vp.LineType,PDimStyle.Lines.DIMCLRD,PDimStyle.Lines.DIMLWD,
-                                                      p2,PDimStyle.Arrows.DIMASZ*GetDIMSCALE,ZAngle{*180/pi},@tbp1.name[1])
+                                                      vp.Layer,vp.LineType,PDimStyle.Lines.DIMLWD,PDimStyle.Lines.DIMCLRD,
+                                                      p2,PDimStyle.Arrows.DIMASZ*GetDIMSCALE,ZAngle{*180/pi},tbp1.name)
               else
                   pointer(pv):=ENTF_CreateBlockInsert(@self,@self.ConstObjArray,
-                                                      vp.Layer,vp.LineType,PDimStyle.Lines.DIMCLRD,PDimStyle.Lines.DIMLWD,
-                                                      p2,PDimStyle.Arrows.DIMASZ*GetDIMSCALE,ZAngle{*180/pi}-pi,@tbp1.name[1]);
+                                                      vp.Layer,vp.LineType,PDimStyle.Lines.DIMLWD,PDimStyle.Lines.DIMCLRD,
+                                                      p2,PDimStyle.Arrows.DIMASZ*GetDIMSCALE,ZAngle{*180/pi}-pi,tbp1.name);
   //pv^.vp.LineWeight:=PDimStyle.Lines.DIMLWD;
   //pv^.vp.Color:=PDimStyle.Lines.DIMCLRD;
   pv^.BuildGeometry(drawing);

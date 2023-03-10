@@ -46,6 +46,7 @@ dbgGetAV
 dbgMemSummary
 dbgPlaceAllBlocks
 DeSelectAll
+include::commands/devdefsync.adoc[]
 DimAligned
 DimDiameter
 DimLinear
@@ -84,6 +85,7 @@ ExportTextToCSV
 include::commands/extdradd.adoc[]
 include::commands/extdralllist.adoc[]
 include::commands/extdrentslist.adoc[]
+include::commands/extdrremove.adoc[]
 FindAllIntersections
 Get3DPoint
 Get3DPoint_DrawRect
@@ -180,7 +182,7 @@ TreeStat
 Undo
 Units
 UnitsMan
-UpdatePO
+include::commands/updatepo.adoc[]
 VarReport
 include::commands/varsed.adoc[]
 include::commands/varsedbd.adoc[]

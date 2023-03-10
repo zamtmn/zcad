@@ -231,7 +231,7 @@ uses
   uzccommand_text,
   uzccommand_exporttexttocsv,
   uzccommand_dataexport,uzccommand_dataimport,
-  uzccommand_extdrentslist,uzccommand_extdralllist,uzccommand_extdradd,
+  uzccommand_extdrentslist,uzccommand_extdralllist,uzccommand_extdrAdd,uzccommand_extdrRemove,
   uzccommand_DevDefSync,
   uzccommand_VariablesAdd,
 
@@ -242,6 +242,7 @@ uses
   uzccommand_NumDevices,
 
   uzccommand_tstCmdLinePrompt,
+  uzccommand_explDbCheck,
 
 
   uzcenitiesvariablesextender,uzcExtdrLayerControl,uzcExtdrSmartTextEnt,
@@ -259,6 +260,7 @@ uses
   uzvremoveconnection, //удаление подключения к устройству
   uzvmanemcom, //управления и обработка полученой электрической модели
   uzvmanemschemalevelone, //создание одноуровневой схемы
+  uzvmanemdialogcom,//запуск генератора схемы через диалоговое окно
   //**//
   {$ENDIF}
   {$ENDIF}

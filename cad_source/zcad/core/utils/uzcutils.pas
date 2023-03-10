@@ -96,12 +96,12 @@ function GDBInsertBlock(own:PGDBObjGenericSubEntry;BlockName:String;p_insert:GDB
                         ):PGDBObjBlockInsert;
 
 function old_ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObjEntityOpenArray;
-                                layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:TGDBPaletteColor;LW:TGDBLineWeight;
+                                layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;LW:TGDBLineWeight;color:TGDBPaletteColor;
                                 point: gdbvertex; scale, angle: Double; s: pansichar):PGDBObjBlockInsert;
 function zcGetRealSelEntsCount:integer;
 implementation
 function old_ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObjEntityOpenArray;
-                                layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:TGDBPaletteColor;LW:TGDBLineWeight;
+                                layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;LW:TGDBLineWeight;color:TGDBPaletteColor;
                                 point: gdbvertex; scale, angle: Double; s: pansichar):PGDBObjBlockInsert;
 var
   pb:pgdbobjblockinsert;

@@ -24,7 +24,7 @@ uses uzcinterface,uzeffdxf,uzbpaths,uzcsysvars,uzcTranslations,sysutils,
      uzetextpreprocessor,uzctnrVectorBytes,uzbtypes,uzeobjectextender,
      uzeentsubordinated,uzeentity,uzeenttext,uzeblockdef,varmandef,Varman,UUnitManager,
      URecordDescriptor,UBaseTypeDescriptor,uzedrawingdef,
-     uzbstrproc,uzeentitiesprop,uzcentelleader;
+     uzbstrproc,uzeentitiesprop,uzcentelleader,math;
 var
    PFCTTD:Pointer=nil;
    extvarunit:TUnit;
@@ -255,14 +255,16 @@ begin
 
                      case calcip of
                           _I_from_P:begin
-                                         if PTPhase(pvphase^.data.Addr.Instance)^=_ABC
-                                         then pDouble(pvi^.data.Addr.Instance)^:=pDouble(pvp^.data.Addr.Instance)^/u/1.73/pDouble(pvcos^.data.Addr.Instance)^
-                                         else pDouble(pvi^.data.Addr.Instance)^:=pDouble(pvp^.data.Addr.Instance)^/u/pDouble(pvcos^.data.Addr.Instance)^
+                                         //if PTPhase(pvphase^.data.Addr.Instance)^=_ABC
+                                         if volt = _AC_380V_50Hz
+                                         then pDouble(pvi^.data.Addr.Instance)^:=SimpleRoundTo(pDouble(pvp^.data.Addr.Instance)^/u/1.73/pDouble(pvcos^.data.Addr.Instance)^,-2)
+                                         else pDouble(pvi^.data.Addr.Instance)^:=SimpleRoundTo(pDouble(pvp^.data.Addr.Instance)^/u/pDouble(pvcos^.data.Addr.Instance)^,-2)
                                     end;
                           _P_from_I:begin
-                                         if PTPhase(pvphase^.data.Addr.Instance)^=_ABC
-                                         then pDouble(pvp^.data.Addr.Instance)^:=pDouble(pvi^.data.Addr.Instance)^*u*1.73*pDouble(pvcos^.data.Addr.Instance)^
-                                         else pDouble(pvp^.data.Addr.Instance)^:=pDouble(pvi^.data.Addr.Instance)^*u*pDouble(pvcos^.data.Addr.Instance)^
+                                         //if PTPhase(pvphase^.data.Addr.Instance)^=_ABC
+                                         if volt = _AC_380V_50Hz
+                                         then pDouble(pvp^.data.Addr.Instance)^:=SimpleRoundTo(pDouble(pvi^.data.Addr.Instance)^*u*1.73*pDouble(pvcos^.data.Addr.Instance)^,-2)
+                                         else pDouble(pvp^.data.Addr.Instance)^:=SimpleRoundTo(pDouble(pvi^.data.Addr.Instance)^*u*pDouble(pvcos^.data.Addr.Instance)^,-2)
                                     end
 
 

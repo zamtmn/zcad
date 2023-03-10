@@ -80,7 +80,7 @@ begin
                  if SingleLineTextEditorForm=nil then
                                   Application.CreateForm(TSingleLineTextEditorForm, SingleLineTextEditorForm);
                  SingleLineTextEditorForm.caption:=('Rename entry');
-                 SingleLineTextEditorForm.helptext.Caption:=' _EQ ';
+                 SingleLineTextEditorForm.HelpText.Caption:=' _EQ ';
                  SingleLineTextEditorForm.EditField.Caption:=copy(pdbv.name,4,length(pdbv.name)-3);
                  renamed:=false;
                  repeat

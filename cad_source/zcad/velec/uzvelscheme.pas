@@ -361,7 +361,7 @@ begin
 
      drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,datname);
      pointer(pv):=old_ENTF_CreateBlockInsert(drawings.GetCurrentROOT,@{drawings.GetCurrentROOT}root.ObjArray,
-                                         drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
+                                         drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,sysvar.DWG.DWG_CLinew^,sysvar.DWG.DWG_CColor^,
                                          currentcoord, 1, 0,@datname[1]);
      dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
      zcSetEntPropFromCurrentDrawingProp(pv);
@@ -589,7 +589,7 @@ var
        //datname:= velec_SchemaBlockJunctionBox;
        drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,datname);
        pointer(pv):=old_ENTF_CreateBlockInsert(drawings.GetCurrentROOT,@{drawings.GetCurrentROOT}drawings.GetCurrentDWG^.mainObjRoot.ObjArray,
-                                           drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
+                                           drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,sysvar.DWG.DWG_CLinew^,sysvar.DWG.DWG_CColor^,
                                            currentcoord, 1, 0,@datname[1]);
        zcSetEntPropFromCurrentDrawingProp(pv);
     end;
@@ -701,7 +701,7 @@ begin
 
       for i:= 0 to oGraph.Size-1 do
        begin
-         ZCMsgCallBackInterface.TextMessage('номер-' + inttostr(i),TMWOHistoryOut);
+         //ZCMsgCallBackInterface.TextMessage('номер-' + inttostr(i),TMWOHistoryOut);
          inList:=false;
           if listNum.size>0 then
             for m:= 0 to listNum.Size-1 do
@@ -709,7 +709,7 @@ begin
                  inList:=true;
           if inList then
              continue;
-          ZCMsgCallBackInterface.TextMessage('номер прошел-' + inttostr(i),TMWOHistoryOut);
+          //ZCMsgCallBackInterface.TextMessage('номер прошел-' + inttostr(i),TMWOHistoryOut);
 
 
           for j:= 0 to oGraph[i].VertexCount-1 do
@@ -740,13 +740,16 @@ begin
                    end
                    else
                       ZCMsgCallBackInterface.TextMessage('index - ' + inttostr(oGraph[i].Vertices[j].Index)+'   children - '+inttostr(oGraph[i].Vertices[j].ChildCount),TMWOHistoryOut);
-                   //ZCMsgCallBackInterface.TextMessage('nameDev -' + nameDev +'  ----   nameRootDev-'+nameRootDev,TMWOHistoryOut);
+
+
+
+                   ZCMsgCallBackInterface.TextMessage('nameDev -' + nameDev +'  ----   nameRootDev-'+nameRootDev,TMWOHistoryOut);
                    if TVertexTree(oGraph[n].Root.AsPointer[vpTVertexTree]^).dev <> nil then begin
                      pvd:=FindVariableInEnt(TVertexTree(oGraph[n].Root.AsPointer[vpTVertexTree]^).dev,velec_NameDevice);
                      if pvd<>nil then
                         nameRootDev:=pString(pvd^.data.Addr.Instance)^;
                    end;
-                   ZCMsgCallBackInterface.TextMessage('nameDev -' + nameDev +'  ----   nameRootDev-'+nameRootDev,TMWOHistoryOut);
+                   //ZCMsgCallBackInterface.TextMessage('nameDev -' + nameDev +'  ----   nameRootDev-'+nameRootDev,TMWOHistoryOut);
 
                    //if (TVertexTree(oGraph[i].Vertices[j].AsPointer[vpTVertexTree]^).dev = TVertexTree(oGraph[n].Root.AsPointer[vpTVertexTree]^).dev) then
                    if (nameDev = nameRootDev) then
@@ -915,7 +918,7 @@ var
         pvd,pcablepvd:pvardesk;
   begin
 
-      ZCMsgCallBackInterface.TextMessage('addBlockonDraw DEVICE-' + dev^.Name,TMWOHistoryOut);
+      //ZCMsgCallBackInterface.TextMessage('addBlockonDraw DEVICE-' + dev^.Name,TMWOHistoryOut);
 
       dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
 
@@ -1027,25 +1030,25 @@ var
       end;
       //****//
 
-      ZCMsgCallBackInterface.TextMessage('vEMGCHDGroup1 -' + dev^.Name,TMWOHistoryOut);
+      //ZCMsgCallBackInterface.TextMessage('vEMGCHDGroup1 -' + dev^.Name,TMWOHistoryOut);
              //** Имя мастера устройства
        pvd:=FindVariableInEnt(pnevdev,'vEMGCHDGroup');
        if (pvd<>nil) and (vertexGraph.Parent<>nil) then begin
-         ZCMsgCallBackInterface.TextMessage('vEMGCHDGroup2 -' + dev^.Name,TMWOHistoryOut);
-             pcable:=PTEdgeTree(G.GetEdge(vertexGraph,vertexGraph.Parent).AsPointer[vpTEdgeTree])^.segm;
-             ZCMsgCallBackInterface.TextMessage('vEMGCHDGroup3 -' + dev^.Name,TMWOHistoryOut);
-             if pcable<> nil then begin
+          //ZCMsgCallBackInterface.TextMessage('vEMGCHDGroup2 -' + dev^.Name,TMWOHistoryOut);
+          pcable:=PTEdgeTree(G.GetEdge(vertexGraph,vertexGraph.Parent).AsPointer[vpTEdgeTree])^.segm;
+          //ZCMsgCallBackInterface.TextMessage('vEMGCHDGroup3 -' + dev^.Name,TMWOHistoryOut);
+          if pcable<> nil then begin
              pcablepvd:=FindVariableInEnt(pcable,'GC_HDGroup');
-             ZCMsgCallBackInterface.TextMessage('vEMGCHDGroup4 -' + dev^.Name,TMWOHistoryOut);
+             //ZCMsgCallBackInterface.TextMessage('vEMGCHDGroup4 -' + dev^.Name,TMWOHistoryOut);
              if pcablepvd<>nil then
                 pinteger(pvd^.data.Addr.Instance)^:= strtoint(pstring(pcablepvd^.data.Addr.Instance)^);
-             ZCMsgCallBackInterface.TextMessage('vEMGCHDGroup5 -' + dev^.Name,TMWOHistoryOut);
-             end;
-                      end;
+             //ZCMsgCallBackInterface.TextMessage('vEMGCHDGroup5 -' + dev^.Name,TMWOHistoryOut);
+           end;
+       end;
       //****//
 
 
-      ZCMsgCallBackInterface.TextMessage('DEVICE-' + dev^.Name,TMWOHistoryOut);
+      //ZCMsgCallBackInterface.TextMessage('DEVICE-' + dev^.Name,TMWOHistoryOut);
 
   {//addBlockonDraw(velec_beforeNameGlobalSchemaBlock + string(TVertexTree(G.Root.AsPointer[vpTVertexTree]^).dev^.Name),pt1,drawings.GetCurrentDWG^.mainObjRoot);
 
@@ -1117,13 +1120,13 @@ var
 
   begin
       //addBlockonDraw(velec_beforeNameGlobalSchemaBlock + string(TVertexTree(G.Root.AsPointer[vpTVertexTree]^).dev^.Name),pt1,drawings.GetCurrentDWG^.mainObjRoot);
-     ZCMsgCallBackInterface.TextMessage('addBlockNodeonDraw -',TMWOHistoryOut);
+     //ZCMsgCallBackInterface.TextMessage('addBlockNodeonDraw -',TMWOHistoryOut);
      dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
      drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,datname);
      //pv:=GDBObjDevice.CreateInstance;
 
      pointer(pnevdev):=old_ENTF_CreateBlockInsert(drawings.GetCurrentROOT,@{drawings.GetCurrentROOT}root.ObjArray,
-                                         drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
+                                         drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,sysvar.DWG.DWG_CLinew^,sysvar.DWG.DWG_CColor^,
                                          currentcoord, 1, 0,@datname[1]);
      //dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
 
@@ -1262,12 +1265,12 @@ var
 
            zcAddEntToCurrentDrawingWithUndo(cableLine);
 
-             if cabl.isRiser = true then
-                ZCMsgCallBackInterface.TextMessage('это разрыв',TMWOHistoryOut)
-             else
-                ZCMsgCallBackInterface.TextMessage('это не разрыв',TMWOHistoryOut);
+             //if cabl.isRiser = true then
+             //   ZCMsgCallBackInterface.TextMessage('это разрыв',TMWOHistoryOut)
+             //else
+             //   ZCMsgCallBackInterface.TextMessage('это не разрыв',TMWOHistoryOut);
 
-          ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
+          //ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
           if cabl.isRiser = true then
           begin
             //pDev1:=TVertexTree(VT1.AsPointer[vpTVertexTree]^).dev;
@@ -1338,7 +1341,7 @@ var
             datname:= velec_SchemaCableInfo;
             drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,datname);
             pointer(pv):=old_ENTF_CreateBlockInsert(drawings.GetCurrentROOT,@{drawings.GetCurrentROOT}root.ObjArray,
-                                               drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
+                                               drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,sysvar.DWG.DWG_CLinew^,sysvar.DWG.DWG_CColor^,
                                                p2, 1, 0,@datname[1]);
             //dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
             zcSetEntPropFromCurrentDrawingProp(pv);
@@ -1347,7 +1350,7 @@ var
             //добавляем устройству клона как представителя
             entvarext.addDelegate(pv,delvarext);
 
-          ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
+          //ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
 
 
 
@@ -1518,17 +1521,17 @@ begin
         //ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
         ptEd:=uzegeometry.CreateVertex(startPt.x + listVertex.Back.poz.x*indent,startPt.y - listVertex.Back.poz.y*indent,0) ;
         //ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
-        if TVertexTree(listVertex.Back.vertex.AsPointer[vpTVertexTree]^).dev<>nil then
-           ZCMsgCallBackInterface.TextMessage('VertexPath i -'+ string(TVertexTree(listVertex.Back.vertex.AsPointer[vpTVertexTree]^).dev^.Name),TMWOHistoryOut);
+        //if TVertexTree(listVertex.Back.vertex.AsPointer[vpTVertexTree]^).dev<>nil then
+        //   ZCMsgCallBackInterface.TextMessage('VertexPath i -'+ string(TVertexTree(listVertex.Back.vertex.AsPointer[vpTVertexTree]^).dev^.Name),TMWOHistoryOut);
          //ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
         //*********
         if TVertexTree(listVertex.Back.vertex.AsPointer[vpTVertexTree]^).dev<>nil then  begin
-           ZCMsgCallBackInterface.TextMessage('-dev true-',TMWOHistoryOut);
+           //ZCMsgCallBackInterface.TextMessage('-dev true-',TMWOHistoryOut);
            addBlockonDraw(G,listVertex.Back.vertex,TVertexTree(listVertex.Back.vertex.AsPointer[vpTVertexTree]^).dev,ptEd,drawings.GetCurrentDWG^.mainObjRoot)
         end
         else
         begin
-           ZCMsgCallBackInterface.TextMessage('-dev false-',TMWOHistoryOut);
+           //ZCMsgCallBackInterface.TextMessage('-dev false-',TMWOHistoryOut);
            if listVertex.Back.vertex.ChildCount <= 1 then
               newdevname:= velec_beforeNameGlobalSchemaBlock + velec_SchemaBlockChangingLayingMethod
            else
@@ -1536,7 +1539,7 @@ begin
 
            addBlockNodeonDraw(G,listVertex.Back.vertex,ptEd,drawings.GetCurrentDWG^.mainObjRoot,newdevname);
         end;
-         ZCMsgCallBackInterface.TextMessage('4',TMWOHistoryOut);
+         //ZCMsgCallBackInterface.TextMessage('4',TMWOHistoryOut);
         //drawVertex(pt1,3,height);
         //*********
 
@@ -1593,9 +1596,9 @@ begin
         //pt2:=uzegeometry.CreateVertex(startPt.x + listVertex[tparent].poz.x*indent,startPt.y - listVertex[tparent].poz.y*indent,0) ;
 
         //******
-        ZCMsgCallBackInterface.TextMessage('5',TMWOHistoryOut);
+        //ZCMsgCallBackInterface.TextMessage('5',TMWOHistoryOut);
         drawConnectLineDev(ptSt,pt1,pt2,ptEd,listVertex[tparent].vertex,listVertex.Back.vertex,drawings.GetCurrentDWG^.mainObjRoot);
-        ZCMsgCallBackInterface.TextMessage('6',TMWOHistoryOut);
+        //ZCMsgCallBackInterface.TextMessage('6',TMWOHistoryOut);
         //ptSt:=ptEd;
 
         //drawConnectLine(pt1,pt2,4);
@@ -1802,7 +1805,7 @@ var
 
           drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,'DEVICE_CABLE_MARK');
           pointer(pv):=old_ENTF_CreateBlockInsert(@drawings.GetCurrentDWG^.mainObjRoot,@{drawings.GetCurrentROOT.ObjArray}drawings.GetCurrentDWG^.mainObjRoot.ObjArray,
-                                              drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
+                                              drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,sysvar.DWG.DWG_CLinew^,sysvar.DWG.DWG_CColor^,
                                               insertPoint, 1, 0,'DEVICE_CABLE_MARK');
           zcSetEntPropFromCurrentDrawingProp(pv);
           ppvvarext:=pv^.specialize GetExtension<TVariablesExtender>;
@@ -2459,8 +2462,8 @@ begin
                                   //ZCMsgCallBackInterface.TextMessage('Ус --- ' + endname,TMWOHistoryOut)
                               end
                               else begin
-                                  ZCMsgCallBackInterface.TextMessage('Устройство --- не устройство ',TMWOHistoryOut);
-                                  ZCMsgCallBackInterface.TextMessage('Устройство --- node^.PrevP.x=' + floattostr(node^.PrevP.x),TMWOHistoryOut);
+                                  //ZCMsgCallBackInterface.TextMessage('Устройство --- не устройство ',TMWOHistoryOut);
+                                  //ZCMsgCallBackInterface.TextMessage('Устройство --- node^.PrevP.x=' + floattostr(node^.PrevP.x),TMWOHistoryOut);
                                   vertexGraph^.dev:=nil;
                                   vertexGraph^.connector:=nil;
                                   vertexGraph^.vertex:=node^.PrevP;
@@ -2469,7 +2472,7 @@ begin
                               end;
                               //vertexGraph.dev:=node^.DevLink;
                               //vertexGraph.isDev:=true;
-                              ZCMsgCallBackInterface.TextMessage('111111 ',TMWOHistoryOut);
+                              //ZCMsgCallBackInterface.TextMessage('111111 ',TMWOHistoryOut);
                               node:=segmCable^.NodePropArray.iterate(ir_inNodeArray);
 
                         until node=nil;
@@ -2477,12 +2480,12 @@ begin
                             //isStartVertex:boolean;
                             //startVertexDevIndex:integer;
 
-                        ZCMsgCallBackInterface.TextMessage('222222 ',TMWOHistoryOut);
+                        //ZCMsgCallBackInterface.TextMessage('222222 ',TMWOHistoryOut);
                         oGraphEndVertex:=oGraph.AddVertex;
                         oGraphEndVertex.AsPointer[vpTVertexTree]:=vertexGraph;
-                        ZCMsgCallBackInterface.TextMessage('3333',TMWOHistoryOut);
-                        ZCMsgCallBackInterface.TextMessage('oGraphStartVertex х=' + floattostr(PTVertexTree(oGraphStartVertex.AsPointer[vpTVertexTree])^.vertex.x),TMWOHistoryOut);
-                        ZCMsgCallBackInterface.TextMessage('oGraphEndVertex х=' + floattostr(PTVertexTree(oGraphEndVertex.AsPointer[vpTVertexTree])^.vertex.x),TMWOHistoryOut);
+                        //ZCMsgCallBackInterface.TextMessage('3333',TMWOHistoryOut);
+                        //ZCMsgCallBackInterface.TextMessage('oGraphStartVertex х=' + floattostr(PTVertexTree(oGraphStartVertex.AsPointer[vpTVertexTree])^.vertex.x),TMWOHistoryOut);
+                        //ZCMsgCallBackInterface.TextMessage('oGraphEndVertex х=' + floattostr(PTVertexTree(oGraphEndVertex.AsPointer[vpTVertexTree])^.vertex.x),TMWOHistoryOut);
                         oGraphEdge:= oGraph.AddEdge(oGraphStartVertex,oGraphEndVertex);
                         ZCMsgCallBackInterface.TextMessage('44444',TMWOHistoryOut);
                         //oGraphEdge.Weight:=edgeGraph^.length;

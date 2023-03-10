@@ -415,6 +415,7 @@ var
     entinfo:TEntInfoData;
     ObjIDWithExtender:TObjIDWithExtender;
     counter:integer;
+    EE:TBaseEntityExtender;
 begin
   //очистка-пересоздание структур данных
   ObjID2Counter.Free;
@@ -441,8 +442,11 @@ begin
       //считаем расширения
       ObjIDWithExtender.ObjID:=pv^.GetObjType;
       for i:=0 to pv^.GetExtensionsCount()-1 do begin
-        ObjIDWithExtender.ExtenderClass:=typeof(pv^.GetExtension(i));
-        ObjIDWithExtenderCounter.CountKey(ObjIDWithExtender,1);
+        EE:=pv^.GetExtension(i);
+        if EE<>nil then begin
+          ObjIDWithExtender.ExtenderClass:=typeof(EE);
+          ObjIDWithExtenderCounter.CountKey(ObjIDWithExtender,1);
+        end;
       end;
 
       inc(counter);

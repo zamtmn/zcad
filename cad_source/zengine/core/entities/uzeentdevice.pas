@@ -202,10 +202,14 @@ begin
          self.ObjMatrix:=onematrix;
          if pvc^.IsHaveLCS then
                                begin
+                               pvc^.State:=pv^.State+[ESCalcWithoutOwner];
                                pvc^.FormatEntity(drawing,dc);
+                               pvc^.State:=pv^.State-[ESCalcWithoutOwner];
                                end;
          pvc^.transform(m4);
+         pvc^.State:=pv^.State+[ESCalcWithoutOwner];
          pvc^.FormatEntity(drawing,dc);
+         pvc^.State:=pv^.State-[ESCalcWithoutOwner];
 
 
          //pvc^.DXFOut(handle, outhandle);

@@ -1,4 +1,4 @@
-## Building from source
+## Building from sources
 
 The program has 2 assembly modes **ZCAD** and **ZCADELECTROTECH**, in the first only basic CAD functions, in the second plus a bit of electrical specifics.
 I advise you to try to build **ZCADELECTROTECH**, because I always use it myself, respectively, it is more stable.

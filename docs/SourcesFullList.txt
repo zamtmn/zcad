@@ -5,7 +5,7 @@
 ..\cad_source\zengine\core\entities\*.pas
 ..\cad_source\zengine\core\objects\*.pas
 ..\cad_source\zengine\core\utils\*.pas
-..\---cad_source\zengine\fileformats\*.pas	
+..\cad_source\zengine\fileformats\*.pas	
 ..\cad_source\zengine\fileformats\uzeffdxf.pas	
 ..\cad_source\zengine\fileformats\uzeffdxfsupport.pas
 ..\cad_source\zengine\fileformats\uzeffmanager.pas
@@ -20,8 +20,8 @@
 ..\cad_source\zcad\core\drawings\*.pas
 ..\cad_source\zcad\core\undostack\*.pas
 ..\cad_source\zcad\core\utils\*.pas
-..\--cad_source\zcad\devicebase\*.pas
-..\--cad_source\zcad\electrotech\*.pas
+..\cad_source\zcad\devicebase\*.pas
+..\cad_source\zcad\electrotech\*.pas
 ..\cad_source\zcad\entities\*.pas
 ..\cad_source\zcad\gui\*.pas
 ..\cad_source\zcad\gui\forms\*.pas

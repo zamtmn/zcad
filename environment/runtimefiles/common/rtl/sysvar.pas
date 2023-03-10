@@ -133,7 +133,7 @@ begin
   RD_LineSmooth:=False;
   RD_UseStencil:=True;
   RD_LastRenderTime:=2;
-  RD_LastUpdateTime:=1;
+  RD_LastUpdateTime:=0;
   RD_ID_Enabled:=False;
   RD_ID_PrefferedRenderTime:=20;
   RD_ID_MaxDegradationFactor:=0;
@@ -150,7 +150,7 @@ begin
   RD_Light:=False;
   PATH_Fonts:=DecodeStringBase64('JChTeXN0ZW1Gb250c1BhdGgpLzskKFVzZXJGb250c1BhdGgpLzskKFpDQURQYXRoKS9mb250cy87QzovQVBQUy9NWS9hY2FkL3N1cHBvcnQvO0M6L1Byb2dyYW0gRmlsZXMvQXV0b2Rlc2svQXV0b0NBRCAyMDIwL0ZvbnRzLw==');
   PATH_AlternateFont:=DecodeStringBase64('X21pcEdvc3Quc2h4');
-  PATH_Support_Path:=DecodeStringBase64('JChaQ0FEUGF0aCkvcnRsOyQoWkNBRFBhdGgpL3J0bC9vYmpkZWZ1bml0czskKFpDQURQYXRoKS9ydGwvb2JqZGVmdW5pdHMvaW5jbHVkZTskKFpDQURQYXRoKS9jb21wb25lbnRzOyQoWkNBRFBhdGgpL2Jsb2Nrcy9lbC9nZW5lcmFsOyQoWkNBRFBhdGgpL3J0bC9zdHlsZXM=');
+  PATH_Support_Path:=DecodeStringBase64('JChaQ0FEUGF0aCkvcnRsOyQoWkNBRFBhdGgpL3J0bC9vYmpkZWZ1bml0czskKFpDQURQYXRoKS9ydGwvb2JqZGVmdW5pdHMvaW5jbHVkZTskKFpDQURQYXRoKS9jb21wb25lbnRzOyQoWkNBRFBhdGgpL2Jsb2Nrcy9lbC9nZW5lcmFsOyQoWkNBRFBhdGgpL2Jsb2Nrcy9lbC9nZW5lcmFsL3ZlbGVjZGV2aWNlOyQoWkNBRFBhdGgpL3J0bC9zdHlsZXM=');
   INTF_CommandLineEnabled:=True;
   DSGN_NavigatorsUseMainFunction:=True;
   INTF_ObjInspButtonSizeReducing:=4;
@@ -171,7 +171,7 @@ begin
   INTF_ShowDwgTabs:=True;
   INTF_DwgTabsPosition:=TATop;
   INTF_ShowDwgTabCloseBurron:=True;
-  INTF_DefaultControlHeight:=33;
+  INTF_DefaultControlHeight:=23;
   INTF_ObjInsp_AlwaysUseMultiSelectWrapper:=True;
   INTF_DefaultEditorFontHeight:=0;
   INTF_ThemedUpToolbars:=True;
@@ -185,11 +185,11 @@ begin
   RD_Restore_Mode:=WND_Texture;
   RD_VSync:=T3SB_Fale;
   SAVE_Auto_Interval:=300;
-  SAVE_Auto_Current_Interval:=299;
+  SAVE_Auto_Current_Interval:=60;
   SAVE_Auto_FileName:=DecodeStringBase64('JChaQ0FEUGF0aCkvYXV0b3NhdmUvYXV0b3NhdmUuZHhm');
   SAVE_Auto_On:=True;
-  SYS_RunTime:=124;
-  SYS_Version:=DecodeStringBase64('MC45LjguNi0xODEtZzZhZjViMzA3');
+  SYS_RunTime:=251;
+  SYS_Version:=DecodeStringBase64('MC45LjEwLjAtMTgyLWdkMWI5NTVhYw==');
   PATH_Device_Library:=DecodeStringBase64('JChaQ0FEUGF0aCkvcHJvZ3JhbWRiOyQoWkNBRFBhdGgpL3VzZXJkYg==');
   PATH_Template_Path:=DecodeStringBase64('JChaQ0FEUGF0aCkvdGVtcGxhdGU=');
   PATH_Template_File:=DecodeStringBase64('ZGVmYXVsdC5keGY=');

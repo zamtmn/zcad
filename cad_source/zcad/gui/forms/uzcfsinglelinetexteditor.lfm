@@ -1,26 +1,28 @@
 object SingleLineTextEditorForm: TSingleLineTextEditorForm
   Left = 384
-  Height = 40
+  Height = 60
   Top = 224
-  Width = 530
+  Width = 795
   AutoSize = True
   BorderIcons = [biSystemMenu]
   Caption = 'Text editor'
-  ClientHeight = 40
-  ClientWidth = 530
+  ClientHeight = 60
+  ClientWidth = 795
+  DesignTimePPI = 144
   KeyPreview = True
   OnKeyDown = _onKeyDown
-  OnShow = shoftedform
+  OnMouseWheel = _onMouseWheel
+  OnShow = _onShow
   Position = poOwnerFormCenter
-  LCLVersion = '1.7'
+  LCLVersion = '2.3.0.0'
   object EditField: TEdit
-    Left = 25
+    Left = -30
     Height = 40
     Top = 0
-    Width = 395
+    Width = 450
     Align = alClient
     AutoSize = False
-    Constraints.MinWidth = 300
+    Constraints.MinWidth = 450
     TabOrder = 0
   end
   object helptext: TLabel

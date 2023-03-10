@@ -129,6 +129,9 @@ type
  function Compare (vertex1, vertex2: Pointer): Integer;
  end;
 
+ //список устройств
+ TListDev=specialize TVector<pGDBObjDevice>;
+
  //**Получить список деревьев(графов)
  function getListGrapghEM:TListGraphDev;
  //**Отсортировать графы у кого меньше детей вершин
@@ -136,6 +139,10 @@ type
 
  //**получить структурированный граф
  function getListStructurGraphEM(listFullGraphEM:TListGraphDev):TListGraphDev;
+ //**получить список всех головных устройств (устройств централей)
+ function getListMainFuncHeadDev(listFullGraphEM:TListGraphDev):TListDev;
+ //**получить граф головного устройства с учетом подключенных ТОЛЬКО к нему устройств (с учетом особеностей отказа от ГУ)
+ function getGraphHeadDev(listFullGraphEM:TListGraphDev;rootDev:PGDBObjDevice;listAllHeadDev:TListDev):TGraphDev;
 
  procedure visualGraphTree(G: TGraph; var startPt:GDBVertex;height:double; var depth:double);
 
@@ -144,6 +151,237 @@ var
   DummyComparer:TDummyComparer;
   SortTreeSumChilderVertex:TSortTreeSumChilderVertex;
 
+ //**получить граф головного устройства с учетом подключенных ТОЛЬКО к нему устройств (с учетом особеностей отказа от ГУ)
+ function getGraphHeadDev(listFullGraphEM:TListGraphDev;rootDev:PGDBObjDevice;listAllHeadDev:TListDev):TGraphDev;
+ var
+   //graphDev,thisGraphDev:TGraphDev;
+   intRootVertex,i:integer;
+
+
+  function getEntToDev(pEnt:PGDBObjEntity):PGDBObjDevice;
+  begin
+     result:=nil;
+     if pEnt^.GetObjType=GDBDeviceID then
+         result:=PGDBObjDevice(pEnt);
+  end;
+
+   //** Рекурсия получаем номер нужного нам головного устройства внутри нужного нам графа
+  procedure getNumMyHeadDevinGraph(graphDev:TGraphDev;intVertex:integer;rootDevMF:PGDBObjDevice;var myIntRootVertex:integer);
+  var
+    i:integer;
+    devNowMF:PGDBObjDevice;
+    devNowvarext:TVariablesExtender;
+  begin
+     if myIntRootVertex < 0 then
+       begin
+         devNowvarext:=graphDev.Vertices[intVertex].getDevice^.specialize GetExtension<TVariablesExtender>;
+         devNowMF:=getEntToDev(devNowvarext.getMainFuncEntity);
+         if devNowMF = rootDevMF then
+           myIntRootVertex:=intVertex;
+
+         ZCMsgCallBackInterface.TextMessage(' myIntRootVertex= '+inttostr(myIntRootVertex),TMWOHistoryOut);
+
+         for i:=0 to graphDev.Vertices[intVertex].ChildCount-1 do
+             getNumMyHeadDevinGraph(graphDev,graphDev.Vertices[intVertex].Childs[i].Index,rootDev,myIntRootVertex);
+       end;
+  end;
+  //** Создание графа, от эталанного до нужного нам для отрисовки схемы (с учетом ГУ)
+  procedure createNewGraph(graphDev:TGraphDev;intVertex:integer;var newGraph:TGraphDev;newInt:integer;cab:PGDBObjPolyLine;lastChild:boolean);
+  var
+    i:integer;
+    pvd:pvardesk;
+    newVertex:TVertex;
+    childDevVarExt:TVariablesExtender;
+    newcab:PGDBObjPolyLine;
+    childDev:PGDBObjDevice;
+    devlistMF:PGDBObjDevice;
+  begin
+     //ZCMsgCallBackInterface.TextMessage('41',TMWOHistoryOut);
+    if newGraph.VertexCount = 0 then
+      begin
+       //ZCMsgCallBackInterface.TextMessage(' newGraph.VertexCount = 0 ',TMWOHistoryOut);
+       newVertex:=newGraph.addVertexDevFunc(graphDev.Vertices[intVertex].getDevice);
+       newGraph.Root:=newVertex;
+       newInt:=newVertex.Index;
+       //ZCMsgCallBackInterface.TextMessage(' nnewGraph.Root:=newVertex; ',TMWOHistoryOut);
+      end
+      else
+      begin
+        newVertex:=newGraph.Vertices[newInt].AddChild;
+        newInt:=newVertex.Index;
+        newVertex.attachDevice(graphDev.Vertices[intVertex].getDevice);
+        //ZCMsgCallBackInterface.TextMessage('41',TMWOHistoryOut);
+        newGraph.GetEdge(newVertex.Parent,newVertex).attachCable(cab);
+      end;
+
+    if not lastChild then
+      for i:=0 to graphDev.Vertices[intVertex].ChildCount-1 do begin
+        // проводим проверку ребенка является ли он ГУ, если да то ГУ отображаем,а дальше нет
+        childDevVarExt:=graphDev.Vertices[intVertex].Childs[i].getDevice^.specialize GetExtension<TVariablesExtender>;
+        childDev:=getEntToDev(childDevVarExt.getMainFuncEntity);    // получиль центра устройства
+        pvd:=FindVariableInEnt(childDev,velec_ANALYSISEM_icanbeheadunit);       // смотрим может ли данное устройство быть централью
+          if pvd<>nil then
+            begin
+             if (pboolean(pvd^.data.Addr.Instance)^) then
+              for devlistMF in listAllHeadDev do
+                 if (devlistMF = childDev) then
+                    lastChild:=true;
+            end;
+
+        newcab:=PTEdgeEMTree(graphDev.GetEdge(graphDev.Vertices[intVertex],graphDev.Vertices[intVertex].Childs[i]).AsPointer[vPTEdgeEMTree])^.cab;
+        //ZCMsgCallBackInterface.TextMessage(' newcab.length= ' + floattostr(PTEdgeEMTree(graphDev.GetEdge(graphDev.Vertices[intVertex],graphDev.Vertices[intVertex].Childs[i]).AsPointer[vPTEdgeEMTree])^.length),TMWOHistoryOut);
+        createNewGraph(graphDev,graphDev.Vertices[intVertex].Childs[i].Index,newGraph,newInt,newcab,lastChild);
+      end
+    else
+    lastChild:=false;
+  end;
+ begin
+   ZCMsgCallBackInterface.TextMessage(' getGraphHeadDev - старт ',TMWOHistoryOut);
+   result:=TGraphDev.Create;
+   result.Features:=[Tree];
+   result.CreateVertexAttr(vPTVertexEMTree,AttrPointer);
+   result.CreateEdgeAttr(vPTEdgeEMTree,AttrPointer);
+   //thisGraphDev:=TGraphDev.Create;
+   intRootVertex:=-1;
+   for i:=0 to listFullGraphEM.Size-1 do
+   begin
+     getNumMyHeadDevinGraph(listFullGraphEM[i],listFullGraphEM[i].Root.Index,rootDev,intRootVertex);
+     //thisGraphDev:=graphDev;
+     if intRootVertex > -1 then
+       system.break;
+   end;
+   ZCMsgCallBackInterface.TextMessage(' intRootVertex= '+inttostr(intRootVertex),TMWOHistoryOut);
+
+   if intRootVertex > -1 then
+     createNewGraph(listFullGraphEM[i],intRootVertex,result,-1,nil,false)
+   else
+     ZCMsgCallBackInterface.TextMessage('ОШИБКА! Быть такого не может.',TMWOHistoryOut);
+
+   ZCMsgCallBackInterface.TextMessage(' result vertexcount =  ' + inttostr(result.VertexCount),TMWOHistoryOut);
+
+   ZCMsgCallBackInterface.TextMessage(' getGraphHeadDev - ФИНИШ ',TMWOHistoryOut);
+ end;
+
+
+  //**Получить список всех головных устройств (устройств централей)
+  function getListMainFuncHeadDev(listFullGraphEM:TListGraphDev):TListDev;
+  type
+    TListString=specialize TVector<string>;
+  var
+  graphDev,graphDevNew:TGraphDev;
+  listNameHeadDev:TListString;
+  listHeadDev:TListDev;
+  tempStr:string;
+  pvd:pvardesk;
+  devMaincFunc:PGDBObjDevice;
+  listGraphStrDev:TListGraphDev;
+
+  function getEntToDev(pEnt:PGDBObjEntity):PGDBObjDevice;
+  begin
+     result:=nil;
+     if pEnt^.GetObjType=GDBDeviceID then
+         result:=PGDBObjDevice(pEnt);
+  end;
+
+  //** Рекурсия получаем список имен всех головных устройств без учета ограничителей
+  procedure getListNameHeadDevinGraph(graphFullDev:TGraphDev;intVertex:integer;var listStr:TListString);
+  var
+    i,count:integer;
+    lenCable:double;
+    pvd:pvardesk;
+    devName:string;
+    isListDev:boolean;
+    newVertex:TVertex;
+    newVertexIndex:integer;
+  begin
+     isListDev:=true;
+     pvd:=FindVariableInEnt(graphFullDev.Vertices[intVertex].getDevice,velec_GC_HeadDevice);
+      if pvd<>nil then
+        begin
+           for devName in listStr do
+             if pstring(pvd^.data.Addr.Instance)^ = devName then
+               isListDev:=false;
+        end
+      else
+        isListDev:=false;
+
+      if isListDev then
+        listStr.PushBack(pstring(pvd^.data.Addr.Instance)^);
+
+     for i:=0 to graphFullDev.Vertices[intVertex].ChildCount-1 do
+       begin
+            getListNameHeadDevinGraph(graphFullDev,graphFullDev.Vertices[intVertex].Childs[i].Index,listStr);
+       end;
+  end;
+
+  //** Рекурсия получаем список всех головных устройств (централий) с учетом ограничителей на ГУ (когда пользователем отказано что это ГУ)
+  procedure getListMainFuncHeadDevinGraph(graphFullDev:TGraphDev;intVertex:integer;var listDev:TListDev;devName:string);
+  var
+    i:integer;
+    pvd,pvd2:pvardesk;
+    //devName:string;
+    devNow:PGDBObjDevice;
+    devNowMF,listDevMF:PGDBObjDevice;
+    isListDev:boolean;
+    listdevvarext,devNowvarext:TVariablesExtender;
+
+  begin
+     isListDev:=true;
+     pvd:=FindVariableInEnt(graphFullDev.Vertices[intVertex].getDevice,velec_nameDevice);
+     if pvd<>nil then
+       begin
+         if pstring(pvd^.data.Addr.Instance)^ = devName then
+           begin
+           devNowvarext:=graphFullDev.Vertices[intVertex].getDevice^.specialize GetExtension<TVariablesExtender>;
+           devNowMF:=getEntToDev(devNowvarext.getMainFuncEntity);
+           for devNow in listDev do
+             begin
+               //listdevvarext:=devNow^.specialize GetExtension<TVariablesExtender>;
+               //listDevMF:=getEntToDev(listdevvarext.pMainFuncEntity);
+               if devNowMF = devNow then
+                 isListDev:=false;
+             end;
+             if isListDev then begin
+               // Проверяем из настроек у устройства должнали его программа воспринимать как ГУ
+               pvd2:=FindVariableInEnt(devNowMF,velec_ANALYSISEM_icanbeheadunit);
+               if pvd2<>nil then
+                 if pboolean(pvd2^.data.Addr.Instance)^ then
+                   listDev.PushBack(devNowMF);
+             end;
+           end;
+       end;
+
+     for i:=0 to graphFullDev.Vertices[intVertex].ChildCount-1 do
+       begin
+            getListMainFuncHeadDevinGraph(graphFullDev,graphFullDev.Vertices[intVertex].Childs[i].Index,listDev,devName);
+       end;
+  end;
+
+  begin
+    result:=TListDev.Create;
+    listNameHeadDev:=TListString.Create;
+
+    for graphDev in listFullGraphEM do
+    begin
+      ZCMsgCallBackInterface.TextMessage(' getListMainFuncHeadDevinGraph - старт ',TMWOHistoryOut);
+      getListNameHeadDevinGraph(graphDev,graphDev.Root.Index,listNameHeadDev);
+      for tempStr in listNameHeadDev do
+        begin
+          ZCMsgCallBackInterface.TextMessage('Имя ГУ без отсева ='+tempStr,TMWOHistoryOut);
+          getListMainFuncHeadDevinGraph(graphDev,graphDev.Root.Index,result,tempStr);
+        end;
+      for devMaincFunc in result do
+        begin
+          pvd:=FindVariableInEnt(devMaincFunc,velec_nameDevice);
+          if pvd<>nil then
+            begin
+              ZCMsgCallBackInterface.TextMessage('Имя ГУ с учетом особенностей = '+pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+            end;
+        end;
+      ZCMsgCallBackInterface.TextMessage(' getListMainFuncHeadDevinGraph - финиш',TMWOHistoryOut);
+    end;
+  end;
+  //***//
 
 
   //**получить структурированный граф

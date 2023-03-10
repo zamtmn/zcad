@@ -88,7 +88,7 @@ begin
     if pv<>nil then
     repeat
       if (pv^.Selected)and(pv<>pls)and(pv^.GetObjType=GDBDeviceID) then
-        process(pls,BlockDefCounter);
+        process(pv,BlockDefCounter);
       pv:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
     until pv=nil;
     ZCMsgCallBackInterface.TextMessage(format(rscmNEntitiesProcessed,[BlockDefCounter.count]),TMWOHistoryOut);

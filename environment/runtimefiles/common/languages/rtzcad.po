@@ -2148,23 +2148,31 @@ msgstr ""
 msgid "Base line offset Y"
 msgstr ""
 
+#: zcadexternal.oimultiproperty~extdrssmarttextent_enablerotateoverride
+msgid "Rotate override"
+msgstr ""
+
 #: zcadexternal.oimultiproperty~extdrssmarttextent_extensionline
 msgid "Extension line"
 msgstr ""
 
-#: zcadexternal.oimultiproperty~extdrssmarttextent_extensionlineoffset
-msgid "Extension line offset length"
+#: zcadexternal.oimultiproperty~extdrssmarttextent_extensionlinestartshift
+msgid "Extension line start shift"
 msgstr ""
 
 #: zcadexternal.oimultiproperty~extdrssmarttextent_hjoverride
 msgid "Horizontal justify oferride"
 msgstr ""
 
-#: zcadexternal.oimultiproperty~extdrssmarttextent_leaderstartlength
-msgid "Leader start length"
+#: zcadexternal.oimultiproperty~extdrssmarttextent_leaderstartdrawdist
+msgid "Leader start draw distance"
 msgstr ""
 
-#: zcadexternal.oimultiproperty~extdrssmarttextent_textheight
+#: zcadexternal.oimultiproperty~extdrssmarttextent_rotateoverride
+msgid "Rotate override value"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~extdrssmarttextent_textheightoverride
 msgid "Height override"
 msgstr ""
 

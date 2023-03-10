@@ -258,6 +258,28 @@
               <ZTreeCommand Command="Insert(DEVICE_PS_VL_DAT_RUPOR)" Img='DEVICE_PS_VL_DAT_RUPOR_300' Caption='Оповещатель'/>
       	</ZTreeNode>
       </ZTreeNode>
+      <ZTreeNode Caption='vELEС.Electrical section'>
+      	<ZTreeNode Caption='Electrical receivers'>
+		<ZTreeNode Caption='Shield'>
+			<ZTreeCommand Command="Insert(DEVICE_ELVELEC_POWER_SHR1)" Img='DEVICE_ELVELEC_POWER_SHR1_150' Caption='Щит распределительный'/>
+			<ZTreeCommand Command="Insert(DEVICE_ELVELEC_POWER_SHO1)" Img='DEVICE_ELVELEC_POWER_SHO1_150' Caption='Щит освещения'/>
+			<ZTreeCommand Command="Insert(DEVICE_ELVELEC_POWER_SHAO1)" Img='DEVICE_ELVELEC_POWER_SHAO1_150' Caption='Щит аварийного освещения'/>
+		</ZTreeNode>
+		<ZTreeNode Caption='Sockets'>
+			<ZTreeCommand Command="Insert(DEVICE_ELVELEC_SOCKET1_1P)" Img='DEVICE_ELVELEC_SOCKET1_1P_150' Caption='Розетка 1Р. Скрытая'/>
+			<ZTreeCommand Command="Insert(DEVICE_ELVELEC_SOCKET1_2P)" Img='DEVICE_ELVELEC_SOCKET1_2P_150' Caption='Розетка 2Р. Скрытая'/>
+			<ZTreeCommand Command="Insert(DEVICE_ELVELEC_BLOCKCONNECTOR_2P)" Img='DEVICE_ELVELEC_BLOCKCONNECTOR_2P_150' Caption='2-х розеточный блок'/>
+			<ZTreeCommand Command="Insert(DEVICE_ELVELEC_BLOCKCONNECTOR_4P)" Img='DEVICE_ELVELEC_BLOCKCONNECTOR_4P_150' Caption='4-х розеточный блок'/>
+		</ZTreeNode>
+		<ZTreeNode Caption='Lighting'>
+			<ZTreeCommand Command="Insert(DEVICE_ELVELEC_LIGHT1_1)" Img='DEVICE_ELVELEC_LIGHT1_1_150' Caption='Светильник 2х36'/>
+			<ZTreeCommand Command="Insert(DEVICE_ELVELEC_SWITH1_1P)" Img='DEVICE_ELVELEC_SWITH1_1P_150' Caption='Выключатель 1Р. Скрытый'/>
+			<ZTreeCommand Command="Insert(DEVICE_ELVELEC_SWITH1_2P)" Img='DEVICE_ELVELEC_SWITH1_2P_150' Caption='Выключатель 2Р. Скрытый'/>
+		</ZTreeNode>
+		<ZTreeCommand Command="Insert(DEVICE_ELVELEC_POWER_HEATER1)" Img='DEVICE_ELVELEC_POWER_HEATER1_150' Caption='Электрический обогреватель'/>
+		<ZTreeCommand Command="Insert(DEVICE_ELVELEC_POWER_MOTOR1)" Img='DEVICE_ELVELEC_POWER_MOTOR1_150' Caption='Двигатель'/>
+      	</ZTreeNode>
+      </ZTreeNode>
       <ZTreeNode Caption='Low-current'>
         <ZTreeNode Caption='Alarm'>
           <ZTreeCommand Command="Insert(DEVICE_PS_ARK_DEVICE)" Img='DEVICE_PS_ARK_DEVICE' Caption='Прибор'/>

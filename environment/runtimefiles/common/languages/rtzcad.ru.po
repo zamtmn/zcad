@@ -2220,39 +2220,48 @@ msgstr "True слой"
 
 #: zcadexternal.oimultiproperty~extdrssmarttextent_baseline
 msgid "Base line"
-msgstr ""
+msgstr "Базовая линия"
 
 #: zcadexternal.oimultiproperty~extdrssmarttextent_baselineoffsetx
 msgid "Base line offset X"
-msgstr ""
+msgstr "Смещение X базовой линии"
 
 #: zcadexternal.oimultiproperty~extdrssmarttextent_baselineoffsety
 msgid "Base line offset Y"
-msgstr ""
+msgstr "Смещение Y базовой линии"
+
+#: zcadexternal.oimultiproperty~extdrssmarttextent_enablerotateoverride
+msgid "Rotate override"
+msgstr "Переопределение угла поворота"
 
 #: zcadexternal.oimultiproperty~extdrssmarttextent_extensionline
 msgid "Extension line"
-msgstr ""
+msgstr "Выносная линия"
 
-#: zcadexternal.oimultiproperty~extdrssmarttextent_extensionlineoffset
-msgid "Extension line offset length"
-msgstr ""
+#: zcadexternal.oimultiproperty~extdrssmarttextent_extensionlinestartshift
+msgid "Extension line start shift"
+msgstr "Сдвиг начала выносной линии"
 
 #: zcadexternal.oimultiproperty~extdrssmarttextent_hjoverride
 msgid "Horizontal justify oferride"
-msgstr ""
+msgstr "Переопределение горизонтального выравнивания"
 
-#: zcadexternal.oimultiproperty~extdrssmarttextent_leaderstartlength
-msgid "Leader start length"
-msgstr ""
+#: zcadexternal.oimultiproperty~extdrssmarttextent_leaderstartdrawdist
+msgid "Leader start draw distance"
+msgstr "Дистанция начала отображения выноски"
 
-#: zcadexternal.oimultiproperty~extdrssmarttextent_textheight
+#: zcadexternal.oimultiproperty~extdrssmarttextent_rotateoverride
+msgid "Rotate override value"
+msgstr "Значение угла поворота"
+
+#: zcadexternal.oimultiproperty~extdrssmarttextent_textheightoverride
+msgctxt "zcadexternal.oimultiproperty~extdrssmarttextent_textheightoverride"
 msgid "Height override"
-msgstr ""
+msgstr "Переопределение высоты"
 
 #: zcadexternal.oimultiproperty~extdrssmarttextent_vjoverride
 msgid "Vertical justify oferride"
-msgstr ""
+msgstr "Переопределение вертикального выравнивания"
 
 #: zcadexternal.oimultiproperty~filter_blocksbynames
 msgctxt "zcadexternal.oimultiproperty~filter_blocksbynames"
@@ -4238,7 +4247,7 @@ msgstr "Управление слоем"
 
 #: zcadexternal.varcategory~extdrssmarttextent
 msgid "Text control"
-msgstr ""
+msgstr "Управление текстом"
 
 #: zcadexternal.varcategory~gc
 msgctxt "zcadexternal.varcategory~gc"

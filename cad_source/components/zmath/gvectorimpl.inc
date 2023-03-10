@@ -79,8 +79,13 @@ begin
   end;
 end;
 class operator VectorTypeName<T,TT>.*(const l,r:TSelf):Real;
+var
+  i:integer;
 begin
-
+  result:=l.v[0]*r.v[0];
+  for i:=1 to ArrH do begin
+    result:=result+l.v[i]*r.v[i];
+  end;
 end;
 {$IfNDef IntParam}
 class operator VectorTypeName<T,TT>./(const l:TSelf;const r:Real):TSelf;

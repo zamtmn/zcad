@@ -61,9 +61,9 @@ type
     @param(PEnt Указатель на примитив)
     @param(PLayer Указатель на слой)
     @param(PLT Указатель на тип линий)
-    @param(Color Цвет)
-    @param(LW Вес линий)}
-  procedure zeSetEntityProp(const PEnt:PGDBObjEntity;const PLayer:PGDBLayerProp;const PLT:PGDBLtypeProp;const Color:TGDBPaletteColor;const LW:TGDBLineWeight);
+    @param(LW Вес линий)
+    @param(Color Цвет)}
+  procedure zeSetEntityProp(const PEnt:PGDBObjEntity;const PLayer:PGDBLayerProp;const PLT:PGDBLtypeProp;const LW:TGDBLineWeight;const Color:TGDBPaletteColor);
 
   procedure zeAddEntToRoot(const PEnt: PGDBObjEntity; var Root:GDBObjGenericSubEntry);
 
@@ -120,7 +120,7 @@ begin
      for i:=0 to EntPropSetters.Size-1 do
        EntPropSetters[i](PEnt,Drawing);
 end;
-procedure zeSetEntityProp(const PEnt:PGDBObjEntity;const PLayer:PGDBLayerProp;const PLT:PGDBLtypeProp;const Color:TGDBPaletteColor;const LW:TGDBLineWeight);
+procedure zeSetEntityProp(const PEnt:PGDBObjEntity;const PLayer:PGDBLayerProp;const PLT:PGDBLtypeProp;const LW:TGDBLineWeight;const Color:TGDBPaletteColor);
 begin
      PEnt^.vp.Layer:=PLayer;
      PEnt^.vp.LineType:=PLT;

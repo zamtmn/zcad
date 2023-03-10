@@ -156,11 +156,11 @@ begin
   if p0inside then
                   pointer(pv):=ENTF_CreateBlockInsert(@self,@self.ConstObjArray,
                                                       vp.Layer,vp.LineType,PDimStyle.Lines.DIMLWD,PDimStyle.Lines.DIMCLRD,
-                                                      p1,PDimStyle.Arrows.DIMASZ*GetDIMSCALE,ZAngle{*180/pi}-pi,tbp0.name)
+                                                      tbp0.name,p1,PDimStyle.Arrows.DIMASZ*GetDIMSCALE,ZAngle{*180/pi}-pi)
               else
                   pointer(pv):=ENTF_CreateBlockInsert(@self,@self.ConstObjArray,
                                                       vp.Layer,vp.LineType,PDimStyle.Lines.DIMLWD,PDimStyle.Lines.DIMCLRD,
-                                                      p1,PDimStyle.Arrows.DIMASZ*GetDIMSCALE,ZAngle{*180/pi},tbp0.name);
+                                                      tbp0.name,p1,PDimStyle.Arrows.DIMASZ*GetDIMSCALE,ZAngle{*180/pi});
   //pv^.vp.LineWeight:=PDimStyle.Lines.DIMLWD;
   //pv^.vp.Color:=PDimStyle.Lines.DIMCLRD;
   pv^.BuildGeometry(drawing);
@@ -171,11 +171,11 @@ begin
   if p1inside then
                   pointer(pv):=ENTF_CreateBlockInsert(@self,@self.ConstObjArray,
                                                       vp.Layer,vp.LineType,PDimStyle.Lines.DIMLWD,PDimStyle.Lines.DIMCLRD,
-                                                      p2,PDimStyle.Arrows.DIMASZ*GetDIMSCALE,ZAngle{*180/pi},tbp1.name)
+                                                      tbp1.name,p2,PDimStyle.Arrows.DIMASZ*GetDIMSCALE,ZAngle{*180/pi})
               else
                   pointer(pv):=ENTF_CreateBlockInsert(@self,@self.ConstObjArray,
                                                       vp.Layer,vp.LineType,PDimStyle.Lines.DIMLWD,PDimStyle.Lines.DIMCLRD,
-                                                      p2,PDimStyle.Arrows.DIMASZ*GetDIMSCALE,ZAngle{*180/pi}-pi,tbp1.name);
+                                                      tbp1.name,p2,PDimStyle.Arrows.DIMASZ*GetDIMSCALE,ZAngle{*180/pi}-pi);
   //pv^.vp.LineWeight:=PDimStyle.Lines.DIMLWD;
   //pv^.vp.Color:=PDimStyle.Lines.DIMCLRD;
   pv^.BuildGeometry(drawing);

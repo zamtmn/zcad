@@ -65,7 +65,9 @@ begin
   if (button and MZW_LBUTTON)<>0 then
   begin
     dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-    PCreatedGDBLine := PGDBObjLine(ENTF_CreateLine(@drawings.GetCurrentDWG^.ConstructObjRoot,@drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray,[wc.x,wc.y,wc.z,wc.x,wc.y,wc.z]));
+    PCreatedGDBLine := PGDBObjLine(ENTF_CreateLine(@drawings.GetCurrentDWG^.ConstructObjRoot,@drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray,
+                                   drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,LnWtByLayer,ClByLayer,
+                                   wc,wc));
     zcSetEntPropFromCurrentDrawingProp(PCreatedGDBLine);
     PCreatedGDBLine^.FormatEntity(drawings.GetCurrentDWG^,dc);
   end

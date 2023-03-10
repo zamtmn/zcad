@@ -1358,7 +1358,9 @@ begin
   begin
   dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
     Prompt('Вторая точка:');
-    New_line := PGDBObjLine(ENTF_CreateLine(@drawings.GetCurrentDWG^.ConstructObjRoot,@drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray,[wc.x,wc.y,wc.z,wc.x,wc.y,wc.z]));
+    New_line := PGDBObjLine(ENTF_CreateLine(@drawings.GetCurrentDWG^.ConstructObjRoot,@drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray,
+                                            drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,LnWtByLayer,ClByLayer,
+                                            wc,wc));
     zcSetEntPropFromCurrentDrawingProp(New_line);
     //New_line := Pointer(drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID{,drawings.GetCurrentROOT}));
     //GDBObjLineInit(drawings.GetCurrentROOT,New_line,drawings.GetCurrentDWG.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,wc,wc);
@@ -3156,7 +3158,9 @@ begin
                                                                  processednets.PushBackData(net2);
                                                             end;
 
-                                                                New_line:=PGDBObjLine(ENTF_CreateLine(drawings.GetCurrentROOT,{@drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray}nil,[riser.P_insert_in_WCS.x,riser.P_insert_in_WCS.y,riser.P_insert_in_WCS.z,riser2.P_insert_in_WCS.x,riser2.P_insert_in_WCS.y,riser2.P_insert_in_WCS.z]));
+                                                                New_line:=PGDBObjLine(ENTF_CreateLine(drawings.GetCurrentROOT,nil,
+                                                                                                      drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,LnWtByLayer,ClByLayer,
+                                                                                                      riser.P_insert_in_WCS,riser2.P_insert_in_WCS));
                                                                 zcSetEntPropFromCurrentDrawingProp(New_line);
                                                                 plinevarext:=New_line^.GetExtension<TVariablesExtender>;
                                                                 if plinevarext=nil then

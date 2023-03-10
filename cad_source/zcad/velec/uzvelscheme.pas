@@ -362,7 +362,7 @@ begin
      drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,datname);
      pointer(pv):=old_ENTF_CreateBlockInsert(drawings.GetCurrentROOT,@{drawings.GetCurrentROOT}root.ObjArray,
                                          drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,sysvar.DWG.DWG_CLinew^,sysvar.DWG.DWG_CColor^,
-                                         currentcoord, 1, 0,@datname[1]);
+                                         currentcoord, 1, 0,datname);
      dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
      zcSetEntPropFromCurrentDrawingProp(pv);
      pv^.formatentity(drawings.GetCurrentDWG^,dc);
@@ -590,7 +590,7 @@ var
        drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,datname);
        pointer(pv):=old_ENTF_CreateBlockInsert(drawings.GetCurrentROOT,@{drawings.GetCurrentROOT}drawings.GetCurrentDWG^.mainObjRoot.ObjArray,
                                            drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,sysvar.DWG.DWG_CLinew^,sysvar.DWG.DWG_CColor^,
-                                           currentcoord, 1, 0,@datname[1]);
+                                           currentcoord, 1, 0,datname);
        zcSetEntPropFromCurrentDrawingProp(pv);
     end;
 begin
@@ -1127,7 +1127,7 @@ var
 
      pointer(pnevdev):=old_ENTF_CreateBlockInsert(drawings.GetCurrentROOT,@{drawings.GetCurrentROOT}root.ObjArray,
                                          drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,sysvar.DWG.DWG_CLinew^,sysvar.DWG.DWG_CColor^,
-                                         currentcoord, 1, 0,@datname[1]);
+                                         currentcoord, 1, 0,datname);
      //dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
 
      //addBlockonDraw(pv,currentcoord,root);
@@ -1342,7 +1342,7 @@ var
             drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,datname);
             pointer(pv):=old_ENTF_CreateBlockInsert(drawings.GetCurrentROOT,@{drawings.GetCurrentROOT}root.ObjArray,
                                                drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,sysvar.DWG.DWG_CLinew^,sysvar.DWG.DWG_CColor^,
-                                               p2, 1, 0,@datname[1]);
+                                               p2, 1, 0,datname);
             //dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
             zcSetEntPropFromCurrentDrawingProp(pv);
             pv^.AddExtension(TVariablesExtender.Create(pv));

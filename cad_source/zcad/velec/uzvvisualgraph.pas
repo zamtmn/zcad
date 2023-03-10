@@ -645,7 +645,7 @@ var
      drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,datname);
      pointer(pv):=old_ENTF_CreateBlockInsert(drawings.GetCurrentROOT,@{drawings.GetCurrentROOT}root.ObjArray,
                                          drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,sysvar.DWG.DWG_CLinew^,sysvar.DWG.DWG_CColor^,
-                                         currentcoord, 1, 0,@datname[1]);
+                                         currentcoord, 1, 0,datname);
      //dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
      zcSetEntPropFromCurrentDrawingProp(pv);
      //pv^.formatentity(drawings.GetCurrentDWG^,dc);
@@ -681,7 +681,7 @@ var
      drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,datname);
      pointer(pv):=old_ENTF_CreateBlockInsert(drawings.GetCurrentROOT,@{drawings.GetCurrentROOT}root.ObjArray,
                                          drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,sysvar.DWG.DWG_CLinew^,sysvar.DWG.DWG_CColor^,
-                                         currentcoord, 1, 0,@datname[1]);
+                                         currentcoord, 1, 0,datname);
      //dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
      zcSetEntPropFromCurrentDrawingProp(pv);
      //pv^.formatentity(drawings.GetCurrentDWG^,dc);

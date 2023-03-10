@@ -24,18 +24,25 @@ interface
 uses LCLProc,uzeconsts,uzepalette,uzestyleslinetypes,uzeentityfactory,
      uzeutils,uzestyleslayers,sysutils,uzbtypes,UGDBVisibleOpenArray,
      uzegeometrytypes,uzeentgenericsubentry,uzeentity;
-function ENTF_CreateLine(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;args:array of const): PGDBObjEntity;
-function ENTF_CreateCircle(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;args:array of const): PGDBObjEntity;
-function ENTF_CreateSolid(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;args:array of const): PGDBObjEntity;
+function ENTF_CreateLine(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;
+                         ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
+                         const AP1,AP2:GDBvertex): PGDBObjEntity;
+function ENTF_CreateCircle(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;
+                           ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
+                           const ACenter:GDBvertex;ARadius:Double): PGDBObjEntity;
+function ENTF_CreateSolid(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;
+                          ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
+                          const AP1,AP2,AP3:GDBvertex): PGDBObjEntity;overload;
+function ENTF_CreateSolid(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;
+                          ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
+                          const AP1,AP2,AP3,AP4:GDBvertex): PGDBObjEntity;overload;
 function ENTF_CreateBlockInsert(AOwner:PGDBObjGenericSubEntry;AArrayInOwner: PGDBObjEntityOpenArray;
                                 ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
-                                APoint:GDBvertex;AScale,AAngle:Double;AName:String):PGDBObjEntity;
+                                AName:String;const APInsert:GDBvertex;const AScale,AAngle:Double):PGDBObjEntity;
 implementation
-//uses
-//    log;
 function ENTF_CreateBlockInsert(AOwner:PGDBObjGenericSubEntry;AArrayInOwner: PGDBObjEntityOpenArray;
                                 ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
-                                APoint: GDBvertex;AScale,AAngle:Double;AName:String):PGDBObjEntity;
+                                AName:String;const APInsert:GDBvertex;const AScale,AAngle:Double):PGDBObjEntity;
 var
   pb:PGDBObjEntity;
   nam:String;
@@ -54,10 +61,10 @@ begin
                                             end;
   if assigned(CreateProc)then
                            begin
-                               PGDBObjEntity(pb):=CreateProc(AOwner,[APoint.x,APoint.y,APoint.z,AScale,AAngle,nam]);
-                               zeSetEntityProp(pb,ALayer,ALT,AColor,ALW);
+                               PGDBObjEntity(pb):=CreateProc(AOwner,[APInsert.x,APInsert.y,APInsert.z,AScale,AAngle,nam]);
                                if AArrayInOwner<>nil then
                                                AArrayInOwner^.AddPEntity(pb^);
+                               zeSetEntityProp(pb,ALayer,ALT,ALW,AColor);
                            end
                        else
                            begin
@@ -69,28 +76,49 @@ begin
   result:=pb;
 end;
 
-function ENTF_CreateSolid(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;args:array of const): PGDBObjEntity;
+function ENTF_CreateSolid(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;
+                          ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
+                          const AP1,AP2,AP3:GDBvertex): PGDBObjEntity;
 begin
-  if assigned(_StandartSolidCreateProcedure)then
-                                               begin
-                                                   result:=_StandartSolidCreateProcedure(owner,args);
-                                                   if ownerarray<>nil then
-                                                                          ownerarray^.AddPEntity(result^);
-                                               end
-                                           else
-                                               begin
-                                                    result:=nil;
-                                                    debugln('{E}ENTF_CreateSolid: Solid entity not registred');
-                                                    //programlog.LogOutStr('ENTF_CreateSolid: Solid entity not registred',lp_OldPos,LM_Error);
-                                               end;
+  if assigned(_StandartSolidCreateProcedure)then begin
+    result:=_StandartSolidCreateProcedure(owner,[AP1.x,AP1.y,AP1.z,AP2.x,AP2.y,AP2.z,AP3.x,AP3.y,AP3.z]);
+    if result<>nil then begin
+      if ownerarray<>nil then
+                          ownerarray^.AddPEntity(result^);
+      zeSetEntityProp(result,ALayer,ALT,ALW,AColor);
+    end;
+  end else begin
+    result:=nil;
+    debugln('{E}ENTF_CreateSolid: Solid entity not registred');
+  end;
 end;
-function ENTF_CreateLine(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;args:array of const): PGDBObjEntity;
+function ENTF_CreateSolid(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;
+                          ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
+                          const AP1,AP2,AP3,AP4:GDBvertex): PGDBObjEntity;
+begin
+  if assigned(_StandartSolidCreateProcedure)then begin
+    result:=_StandartSolidCreateProcedure(owner,[AP1.x,AP1.y,AP1.z,AP2.x,AP2.y,AP2.z,AP3.x,AP3.y,AP3.z,AP4.x,AP4.y,AP4.z]);
+    if result<>nil then begin
+      if ownerarray<>nil then
+                          ownerarray^.AddPEntity(result^);
+      zeSetEntityProp(result,ALayer,ALT,ALW,AColor);
+    end;
+  end else begin
+    result:=nil;
+    debugln('{E}ENTF_CreateSolid: Solid entity not registred');
+  end;
+end;
+
+function ENTF_CreateLine(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;
+                         ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
+                         const AP1,AP2:GDBvertex): PGDBObjEntity;
 begin
   if assigned(_StandartLineCreateProcedure)then
                                                begin
-                                                   result:=_StandartLineCreateProcedure(owner,args);
+                                                   result:=_StandartLineCreateProcedure(owner,[AP1.x,AP1.y,AP1.z,AP2.x,AP2.y,AP2.z]);
                                                    if ownerarray<>nil then
                                                                           ownerarray^.AddPEntity(result^);
+                                                   zeSetEntityProp(result,ALayer,ALT,ALW,AColor);
                                                end
                                            else
                                                begin
@@ -99,20 +127,22 @@ begin
                                                     //programlog.LogOutStr('ENTF_CreateLine: Line entity not registred',lp_OldPos,LM_Error);
                                                end;
 end;
-function ENTF_CreateCircle(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;args:array of const): PGDBObjEntity;
+function ENTF_CreateCircle(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;
+                           ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
+                           const ACenter:GDBvertex;ARadius:Double): PGDBObjEntity;
 begin
-  if assigned(_StandartCircleCreateProcedure)then
-                                               begin
-                                                   result:=_StandartCircleCreateProcedure(owner,args);
-                                                   if ownerarray<>nil then
-                                                                          ownerarray^.AddPEntity(result^);
-                                               end
-                                           else
-                                               begin
-                                                    result:=nil;
-                                                    debugln('{E}ENTF_CreateCircle: Circle entity not registred');
-                                                    //programlog.LogOutStr('ENTF_CreateCircle: Circle entity not registred',lp_OldPos,LM_Error);
-                                               end;
+  if assigned(_StandartCircleCreateProcedure)then begin
+    result:=_StandartCircleCreateProcedure(owner,[ACenter.x,ACenter.y,ACenter.z,ARadius]);
+    if result<>nil then begin
+      if ownerarray<>nil then
+        ownerarray^.AddPEntity(result^);
+      zeSetEntityProp(result,ALayer,ALT,ALW,AColor);
+    end;
+  end else begin
+    result:=nil;
+    debugln('{E}ENTF_CreateCircle: Circle entity not registred');
+      //programlog.LogOutStr('ENTF_CreateCircle: Circle entity not registred',lp_OldPos,LM_Error);
+  end;
 end;
 begin
 end.

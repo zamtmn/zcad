@@ -26,7 +26,7 @@ uses uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzepalette,
      uzeentityfactory,uzgldrawcontext,uzcdrawing,uzestyleslinetypes,uzcsysvars,
      uzestyleslayers,sysutils,uzbtypes,uzcdrawings,varmandef,
      uzeconsts,UGDBVisibleOpenArray,uzeentgenericsubentry,uzeentity,
-     uzegeometrytypes,uzeentblockinsert,uzcinterface,gzctnrVectorTypes;
+     uzegeometrytypes,uzeentblockinsert,uzcinterface,gzctnrVectorTypes,uzeentitiesmanager;
 
   {**Добавление в чертеж примитива с обвязкой undo
     @param(PEnt Указатель на добавляемый примитив)
@@ -97,51 +97,26 @@ function GDBInsertBlock(own:PGDBObjGenericSubEntry;BlockName:String;p_insert:GDB
 
 function old_ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObjEntityOpenArray;
                                 layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;LW:TGDBLineWeight;color:TGDBPaletteColor;
-                                point: gdbvertex; scale, angle: Double; s: pansichar):PGDBObjBlockInsert;
+                                point: gdbvertex; scale, angle: Double; AName: String):PGDBObjBlockInsert;
 function zcGetRealSelEntsCount:integer;
 implementation
 function old_ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObjEntityOpenArray;
                                 layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;LW:TGDBLineWeight;color:TGDBPaletteColor;
-                                point: gdbvertex; scale, angle: Double; s: pansichar):PGDBObjBlockInsert;
+                                point: gdbvertex; scale, angle: Double; AName: String):PGDBObjBlockInsert;
 var
-  pb:pgdbobjblockinsert;
-  nam:String;
   DC:TDrawContext;
-  CreateProc:TAllocAndInitAndSetGeomPropsFunc;
 begin
-  result:=nil;
-  if pos(DevicePrefix, uppercase(s))=1  then
-                                            begin
-                                                nam:=copy(s,length(DevicePrefix)+1,length(s)-length(DevicePrefix));
-                                                CreateProc:=_StandartDeviceCreateProcedure;
-                                            end
-                                        else
-                                            begin
-                                                 nam:=s;
-                                                 CreateProc:=_StandartBlockInsertCreateProcedure;
-                                            end;
-  if assigned(CreateProc)then
-                           begin
-                               PGDBObjEntity(pb):=CreateProc(owner,[point.x,point.y,point.z,scale,angle,nam]);
-                               zeSetEntityProp(pb,layeraddres,LTAddres,color,LW);
-                               if ownerarray<>nil then
-                                               ownerarray^.AddPEntity(pb^);
-                           end
-                       else
-                           begin
-                                pb:=nil;
-                                debugln('{E}ENTF_CreateBlockInsert: BlockInsert entity not registred');
-                                //programlog.LogOutStr('ENTF_CreateBlockInsert: BlockInsert entity not registred',lp_OldPos,LM_Error);
-                           end;
-  if pb=nil then exit;
-  //setdefaultproperty(pb);
-  pb.pattrib := nil;
-  pb^.BuildGeometry(drawings.GetCurrentDWG^);
-  pb^.BuildVarGeometry(drawings.GetCurrentDWG^);
+  Result:=PGDBObjBlockInsert(ENTF_CreateBlockInsert(owner,ownerarray,
+                                layeraddres,LTAddres,LW,color,
+                                AName,point,scale, angle));
+  if Result=nil then exit;
+  //setdefaultproperty(Result);
+  Result.pattrib := nil;
+  Result^.BuildGeometry(drawings.GetCurrentDWG^);
+  Result^.BuildVarGeometry(drawings.GetCurrentDWG^);
   DC:=drawings.GetCurrentDWG^.CreateDrawingRC;
-  pb^.formatEntity(drawings.GetCurrentDWG^,dc);
-  owner.ObjArray.ObjTree.CorrectNodeBoundingBox(pb^);
-  result:=pb;
+  Result^.formatEntity(drawings.GetCurrentDWG^,dc);
+  owner.ObjArray.ObjTree.CorrectNodeBoundingBox(Result^);
 end;
 function zcGetRealSelEntsCount:integer;
 var

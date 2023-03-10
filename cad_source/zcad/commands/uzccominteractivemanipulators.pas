@@ -351,8 +351,8 @@ begin
        zeSetEntityProp(PT3PointPentity(PInteractiveData)^.pentity,
                            sysvar.dwg.DWG_CLayer^,
                            sysvar.dwg.DWG_CLType^,
-                           sysvar.dwg.DWG_CColor^,
-                           sysvar.dwg.DWG_CLinew^);
+                           sysvar.dwg.DWG_CLinew^,
+                           sysvar.dwg.DWG_CColor^);
        dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
        PT3PointPentity(PInteractiveData)^.pentity^.FormatEntity(drawings.GetCurrentDWG^,dc);
      end;

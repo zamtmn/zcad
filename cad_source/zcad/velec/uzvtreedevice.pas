@@ -1063,7 +1063,9 @@ var
     //myTerminalBox:TListVertexTerminalBox;
     superlinedev:PGDBObjSuperLine;
     superlinedevone:PGDBObjSuperLine;
+    superlinedevonePVD:pvardesk;
     superlinedevoneDO:boolean;
+    superlinedevoneDOcount:integer;
     numConnectCabDev:integer;
     cableNameinGraph:string;
     heightText:double;
@@ -1454,10 +1456,12 @@ begin
 
                 //добавляем первую вершину в список прокладки кабелей
                 listInteger.PushBack(listMasterDevice[i].LGroup[j].AllTreeDev.Root.AsInt32[vGGIndex]);
+                //ZCMsgCallBackInterface.TextMessage('Первый 0. listInteger.PushBack size=' + inttostr(listInteger.Size),TMWOHistoryOut);
 
                 if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
                   ZCMsgCallBackInterface.TextMessage('listInteger добавил Рут',TMWOHistoryOut);
                 superlinedevoneDO:=false;
+                superlinedevoneDOcount:=0;
                 //iRootTree:=true;
                 ///Старт укладки кабеля по супелиниям
                 for l:= 1 to VPath.Count - 1 do
@@ -1487,11 +1491,26 @@ begin
 
                         listInteger:=TVectorofInteger.Create;
                         listInteger.PushBack(tvertex(VPath[l]).AsInt32[vGGIndex]);
+                        //ZCMsgCallBackInterface.TextMessage('1. listInteger.PushBack size=' + inttostr(listInteger.Size),TMWOHistoryOut);
                         counterSegment:=0;
                         iRootTree:=false;
                         needParent:=false;
 
-                        superlinedevone:=PGDBObjSuperLine(listMasterDevice[i].LGroup[j].AllTreeDev.GetEdge(tvertex(VPath[l-1]),tvertex(VPath[l])).AsPointer[vGPGDBObjEdge]);
+                        //ZCMsgCallBackInterface.TextMessage(' continue continue continue continue',TMWOHistoryOut);
+                        //
+                        //superlinedevone:=PGDBObjSuperLine(listMasterDevice[i].LGroup[j].AllTreeDev.GetEdge(tvertex(VPath[l-1]),tvertex(VPath[l])).AsPointer[vGPGDBObjEdge]);
+                        ////superlinedev:=PGDBObjSuperLine(listMasterDevice[i].LGroup[j].AllTreeDev.GetEdge(tvertex(VPath[l-1]),tvertex(VPath[l])).AsPointer[vGPGDBObjEdge]);
+                        //if superlinedevone<>nil then
+                        //begin
+                        //   superlinedevonePVD:=FindVariableInEnt(superlinedevone,'CABLE_Segment');
+                        //   ZCMsgCallBackInterface.TextMessage(' каьельный сегмент = ' + pString(superlinedevonePVD^.data.Addr.Instance)^,TMWOHistoryOut);
+                        //end;
+                        //
+                        //if listVertexEdge.listVertex[tvertex(VPath[l-1]).AsInt32[vGGIndex]].deviceEnt <> nil then
+                        // begin
+                        //     CabellingMountigName:= 'privet';
+                        // end;
+
                         continue;
                       end;
                     end;
@@ -1512,6 +1531,23 @@ begin
                   // //Создаем список точек кабеля который передадим в отрисовку кабельной линии
                    if needParent then begin
                      listInteger.PushBack(tvertex(VPath[l]).Parent.AsInt32[vGGIndex]);
+                     //ZCMsgCallBackInterface.TextMessage('needParent 2. listInteger.PushBack size=' + inttostr(listInteger.Size),TMWOHistoryOut);
+                     superlinedev:=PGDBObjSuperLine(listMasterDevice[i].LGroup[j].AllTreeDev.GetEdge(tvertex(VPath[l]).Parent,tvertex(VPath[l])).AsPointer[vGPGDBObjEdge]);
+                       if superlinedev<>nil then
+                       begin
+                         CabellingMountigNamePVD:=FindVariableInEnt(superlinedev,velec_cableMounting);
+                         if CabellingMountigNamePVD<>nil then
+                           CabellingMountigName:=pString(CabellingMountigNamePVD^.data.Addr.Instance)^;
+                       end
+                       else
+                       begin
+                         CabellingMountigName:=velec_cableMountingNon;
+                         superlinedevoneDOcount:=0;
+                       end;
+                       beforeCabellingMountigName:=CabellingMountigName;
+
+                       //ZCMsgCallBackInterface.TextMessage('111superlinedevoneDO ='+ inttostr(superlinedevoneDOcount) + '         beforeCabellingMountigName='+beforeCabellingMountigName+'        CabellingMountigName=' + CabellingMountigName,TMWOHistoryOut);
+
                      needParent:=false;
                      end;
                    //if needVertex then begin
@@ -1525,8 +1561,14 @@ begin
                    begin
                      numConnectCabDev:= integer(listMasterDevice[i].LGroup[j].AllTreeDev.GetEdge(tvertex(VPath[l]).parent,tvertex(VPath[l])).AsInt32[velecNumConnectDev]);
                      cableNameinGraph:= string(listMasterDevice[i].LGroup[j].AllTreeDev.GetEdge(tvertex(VPath[l]).parent,tvertex(VPath[l])).AsString[vGCableName]);
+
+                     //if not superlinedevoneDO then
+                     //begin
+                     //
+                     //end;
+                     //superlinedevoneDO:=true;
                      if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
-                        ZCMsgCallBackInterface.TextMessage('ребро получено= НОМЕР ПОДКЛЮЧЕНИЯ ==' + tvertex(VPath[l]).Parent.AsString[vGInfoVertex] + ' между ' +tvertex(VPath[l]).AsString[vGInfoVertex] + 'равно ' + inttostr(numConnectCabDev),TMWOHistoryOut)
+                        ZCMsgCallBackInterface.TextMessage('*******************************ребро получено= НОМЕР ПОДКЛЮЧЕНИЯ ==' + tvertex(VPath[l]).Parent.AsString[vGInfoVertex] + ' между ' +tvertex(VPath[l]).AsString[vGInfoVertex] + 'равно ' + inttostr(numConnectCabDev),TMWOHistoryOut)
                    end;
 
                       if listInteger.Size>1 then
@@ -1534,14 +1576,16 @@ begin
                           if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
                             ZCMsgCallBackInterface.TextMessage('ребро - '+listMasterDevice[i].LGroup[j].AllTreeDev.GetEdge(tvertex(VPath[l-1]),tvertex(VPath[l])).AsString[vGInfoEdge],TMWOHistoryOut);
 
-                          superlinedev:=PGDBObjSuperLine(listMasterDevice[i].LGroup[j].AllTreeDev.GetEdge(tvertex(VPath[l-1]),tvertex(VPath[l])).AsPointer[vGPGDBObjEdge]);
+                          //ZCMsgCallBackInterface.TextMessage('ребро - '+listMasterDevice[i].LGroup[j].AllTreeDev.GetEdge(tvertex(VPath[l-1]),tvertex(VPath[l])).AsString[vGInfoEdge],TMWOHistoryOut);
+                          //superlinedev:=PGDBObjSuperLine(listMasterDevice[i].LGroup[j].AllTreeDev.GetEdge(tvertex(VPath[l-1]),tvertex(VPath[l])).AsPointer[vGPGDBObjEdge]);
+                          superlinedev:=PGDBObjSuperLine(listMasterDevice[i].LGroup[j].AllTreeDev.GetEdge(tvertex(VPath[l]).Parent,tvertex(VPath[l])).AsPointer[vGPGDBObjEdge]);
                           if superlinedev<>nil then
                             //CabellingMountigName:='УКАЗАН'
                             begin
                               CabellingMountigNamePVD:=FindVariableInEnt(superlinedev,velec_cableMounting);
                               if CabellingMountigNamePVD<>nil then begin
                                  CabellingMountigName:=pString(CabellingMountigNamePVD^.data.Addr.Instance)^;
-                                 ZCMsgCallBackInterface.TextMessage('Кабель укладки принят = ' + CabellingMountigName,TMWOHistoryOut);
+                                 //ZCMsgCallBackInterface.TextMessage('Кабель укладки принят = ' + CabellingMountigName,TMWOHistoryOut);
                                  end
                               else
                                  begin
@@ -1552,18 +1596,27 @@ begin
                           else
                           begin
                               //listMasterDevice[i].LGroup[j].AllTreeDev.Vertices[];
-                              //ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
+                            //  ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
                             //ZCMsgCallBackInterface.TextMessage('VPath[l] l=' + inttostr(l),TMWOHistoryOut);
                             //ZCMsgCallBackInterface.TextMessage('PGDBObjDevice(tvertex(VPath[l]).AsPointer[vGPGDBObjVertex])=' + listVertexEdge.listVertex[tvertex(VPath[l]).AsInt32[vGGIndex]].deviceEnt^.Name,TMWOHistoryOut);
 
-                             //if listVertexEdge.listVertex[tvertex(VPath[l]).AsInt32[vGGIndex]].deviceEnt <> nil then
-                             //  begin
-                             //    CabellingMountigName:= beforeCabellingMountigName;
+                             if listVertexEdge.listVertex[tvertex(VPath[l]).AsInt32[vGGIndex]].deviceEnt <> nil then
+                               begin
+                                 CabellingMountigName:= beforeCabellingMountigName;
                              //
-                             //end;
-                             CabellingMountigName:= velec_cableMountingNon;
+                             end;
+                             //CabellingMountigName:= velec_cableMountingNon;
                           end;
                        end;
+
+                      ///**** костыль что бы первй кабель от ГУ был имел такоеже метод прокладки как и следующий после него
+                      //ZCMsgCallBackInterface.TextMessage('superlinedevoneDO ='+ inttostr(superlinedevoneDOcount) + '         beforeCabellingMountigName='+beforeCabellingMountigName+'        CabellingMountigName=' + CabellingMountigName,TMWOHistoryOut);
+                      if superlinedevoneDOcount < 2 then
+                         beforeCabellingMountigName:=CabellingMountigName;
+                      inc(superlinedevoneDOcount);
+                      //ZCMsgCallBackInterface.TextMessage('222superlinedevoneDO ='+ inttostr(superlinedevoneDOcount) + '         beforeCabellingMountigName='+beforeCabellingMountigName+'        CabellingMountigName=' + CabellingMountigName,TMWOHistoryOut);
+
+
 
                       if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
                          ZCMsgCallBackInterface.TextMessage('Для поиска ощибок №1',TMWOHistoryOut);
@@ -1579,11 +1632,12 @@ begin
                         //superlinedevoneDO:=true;
                         //                        ZCMsgCallBackInterface.TextMessage('beforeCabellingMountigName='+beforeCabellingMountigName+'        CabellingMountigName=' + CabellingMountigName,TMWOHistoryOut);
                         if beforeCabellingMountigName <> CabellingMountigName then begin
-                              ZCMsgCallBackInterface.TextMessage('Прокладываем кабель новый метод прокладки',TMWOHistoryOut);
+                              //ZCMsgCallBackInterface.TextMessage('Прокладываем кабель новый метод прокладки',TMWOHistoryOut);
                               drawCableLine(listInteger,i,j,counterSegment,beforeCabellingMountigName,numConnectCabDev,cableNameinGraph);
                               listInteger:=TVectorofInteger.Create;
                               inc(counterSegment);
                               listInteger.PushBack(tvertex(VPath[l]).Parent.AsInt32[vGGIndex]);
+                              //ZCMsgCallBackInterface.TextMessage('СБРОС. 3. listInteger.PushBack size=' + inttostr(listInteger.Size),TMWOHistoryOut);
                         end;
                         beforeCabellingMountigName:=CabellingMountigName;
 
@@ -1593,6 +1647,7 @@ begin
                       //ZCMsgCallBackInterface.TextMessage('111 - ',TMWOHistoryOut);
 
                       listInteger.PushBack(tvertex(VPath[l]).AsInt32[vGGIndex]);
+                      //ZCMsgCallBackInterface.TextMessage('Всегда. 4. listInteger.PushBack size=' + inttostr(listInteger.Size),TMWOHistoryOut);
 
                       if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
                          ZCMsgCallBackInterface.TextMessage('Для поиска ощибок №3',TMWOHistoryOut);
@@ -1622,7 +1677,7 @@ begin
                          //if (tvertex(VPath[l]).ChildCount > 1) or (tvertex(VPath[l]).ChildCount = 0) or (listVertexEdge.listVertex[tvertex(VPath[l]).AsInt32[vGGIndex]].break and listVertexEdge.listVertex[tvertex(VPath[l]).Parent.AsInt32[vGGIndex]].break) then
                            begin
                              //ZCMsgCallBackInterface.TextMessage('tvertex(VPath[l]).ChildCount = '+inttostr(tvertex(VPath[l]).ChildCount),TMWOHistoryOut);
-                             ZCMsgCallBackInterface.TextMessage('Прокладываем кабель основное',TMWOHistoryOut);
+                             //ZCMsgCallBackInterface.TextMessage('Прокладываем кабель основное',TMWOHistoryOut);
                               drawCableLine(listInteger,i,j,counterSegment,beforeCabellingMountigName,numConnectCabDev,cableNameinGraph);
                               listInteger:=TVectorofInteger.Create;
                               inc(counterSegment);

@@ -1,4 +1,4 @@
-unit DEVICE_EL_VL_STAMP5_2;
+unit DEVICE_EL_VL_VEDOMOSTI1_2;
 
 interface
 
@@ -8,8 +8,9 @@ usescopy objname;
 
 var
 
-T5:String;(*'Содержание'*)
-T10:String;(*'Лист'*)
+T1:String;(*'Лист'*)
+T2:String;(*'Наименование'*)
+T3:String;(*'Примечание'*)
 
 implementation
 
@@ -19,11 +20,12 @@ BTY_TreeCoord:='PLAN_EM_Штамп';
 Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 
-NMO_Name:='ШТ0';
-NMO_BaseName:='ШТ';
+NMO_Name:='ВЧ0';
+NMO_BaseName:='ВЧ';
 NMO_Suffix:='??';
 
-T5:='??';
-T10:='??';
+T1:='??';
+T2:='??';
+T3:='??';
 
 end.

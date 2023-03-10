@@ -1,4 +1,4 @@
-unit DEVICE_EL_VL_STAMP3_2;
+unit DEVICE_EL_VL_VEDOMOSTI4_2;
 
 interface
 

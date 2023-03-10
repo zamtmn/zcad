@@ -77,6 +77,7 @@ TMasterDevice=class
               DevConnectMethod:TDevConnectMethod;         //Метод монтажа данной группы
               CabConnectAddLength:double;      //Добавочное количество кабеля к данному подключению
               CabConnectMountingMethod:string; //Метод прокладки кабеля для подключения устройства
+              CableName:string; //Желаемое имя кабеля
               numConnect:integer;               //номер подключения
           end;
           PTInfoSubDev=^TInfoSubDev;

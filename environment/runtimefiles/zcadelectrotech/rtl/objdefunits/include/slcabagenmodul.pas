@@ -25,6 +25,8 @@ SLCABAGEN1_CabConnectAddLength:Double;(*'Добавить к длине кабе
 
 SLCABAGEN1_CabConnectMountingMethod:TDCableMountingMethod;(*'Метод монтажа кабеля при подключения'*)
 
+SLCABAGEN1_CableName:String;(*'Назначить имя кабеля'*)
+
 //SLCABAGEN_inerNodeWithoutConnection:Boolean;(*'Промежуточный узел. К головному стройству кабель не прокладывается'*)
 
 implementation
@@ -43,5 +45,6 @@ begin
    //SLCABAGEN_inerNodeWithoutConnection:=false;
    SLCABAGEN1_CabConnectAddLength:=0.1;
    SLCABAGEN1_CabConnectMountingMethod:='-';
+   SLCABAGEN1_CableName:='-';
    
 end.

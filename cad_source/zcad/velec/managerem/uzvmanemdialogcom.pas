@@ -42,51 +42,72 @@ uses
   uzcvariablesutils,
   uzvconsts,
   uzcenitiesvariablesextender,
-  uzvmanemparams,
+  uzvmanemshieldsgroupparams,
+  uzegeometry,
   Varman;
 
-{resourcestring}//чтоб не засирать локализацию просто const
-const
+resourcestring
+  RSCLPuzvmanemNameShield                       ='Name shield';
+  RSCLPuzvmanemShieldGroup                      ='Group ';
+  RSCLPuzvmanemConstructShort                   ='Short';
+  RSCLPuzvmanemConstructMedium                  ='Medium';
+  RSCLPuzvmanemConstructFull                    ='Full';
+  RSCLPuzvmanemCircuitBreaker                   ='CircuitBreaker';
+  RSCLPuzvmanemRCCBWithOP                       ='RCCBwithOP';                     //ResidualCurrentCircuitBreakerWithOvercurrentProtection
+  RSCLPuzvmanemRCCB                             ='RCCB';                           //ResidualCurrentCircuitBreaker
+  RSCLPuzvmanemCBRCCB                           ='CB+RCCB';                        //CircuitBreaker + ResidualCurrentCircuitBreaker
+  RSCLPuzvmanemRenderType                       ='Render type';
+  RSCLPuzvmanemTypeProtection                   ='Type protection';
+  RSCLPuzvmanemChooseYourHeadUnit               ='Choose your head unit:';
+  RSCLPuzvmanemDedicatedPrimitiveNotHost        ='Dedicated primitive not host!';                                      // 'Выделенный примитив не головное устройство!'
+
+  //RSCLPDataExportOptions                 ='${"&[<]<<",Keys[<],StrId[CLPIdBack]} Set ${"&[e]ntities",Keys[o],StrId[CLPIdUser1]}/${"&[p]roperties",Keys[o],StrId[CLPIdUser2]} filter or export ${"&[s]cript",Keys[o],StrId[CLPIdUser3]}';
+  //RSCLPDataExportEntsFilterCurrentValue  ='Entities filter current value:';
+  //RSCLPDataExportEntsFilterNewValue      ='${"&[<]<<",Keys[<],StrId[CLPIdBack]} Enter new entities filter:';
+  //RSCLPDataExportPropsFilterCurrentValue ='Properties filter current value:';
+  //RSCLPDataExportPropsFilterNewValue     ='${"&[<]<<",Keys[<],StrId[CLPIdBack]} Enter new properties filter:';
+  //RSCLPDataExportExportScriptCurrentValue='Properties export script current value:';
+  //RSCLPDataExportExportScriptNewValue    ='${"&[<]<<",Keys[<],StrId[CLPIdBack]} Enter new export script:';
   RSCLParam='Нажми ${"э&[т]у",Keys[n],StrId[CLPIdUser1]} кнопку, ${"эт&[у]",Keys[e],100} или запусти ${"&[ф]айловый",Keys[a],StrId[CLPIdFileDialog]} диалог';
 
 implementation
 type
-    TDiff=(
-        TD_Diff(*'Diff'*),
-        TD_NotDiff(*'Not Diff'*)
-       );
-
-  TCmdProp=record
-   props:TObjectUnit;
-   //SameName:Boolean;(*'Same name'*)
-   //DiffBlockDevice:TDiff;(*'Block and Device'*)
-  end;
-
-
-  PTSelSimParams=^TSelBlockParams;
-  TSelBlockParams=record
-                        SameName:Boolean;(*'Same name'*)
-                        DiffBlockDevice:TDiff;(*'Block and Device'*)
-                  end;
-
+  //  TDiff=(
+  //      TD_Diff(*'Diff'*),
+  //      TD_NotDiff(*'Not Diff'*)
+  //     );
+  //
+  //TCmdProp=record
+  // props:TObjectUnit;
+  //// //SameName:Boolean;(*'Same name'*)
+  //// //DiffBlockDevice:TDiff;(*'Block and Device'*)
+  ////end;
+  //
+  //
+  //PTSelSimParams=^TSelBlockParams;
+  //TSelBlockParams=record
+  //                      SameName:Boolean;(*'Same name'*)
+  //                      DiffBlockDevice:TDiff;(*'Block and Device'*)
+  //                end;
+  //
 
   TListDev=TVector<pGDBObjDevice>;
 
 var
   clFileParam:CMDLinePromptParser.TGeneralParsedText=nil;
-  CmdProp:TCmdProp;
-  SelSimParams:TSelBlockParams;
+  CmdProp:TuzvmanemSGparams;
+  //SelSimParams:TSelBlockParams;
   listFullGraphEM:TListGraphDev;     //Граф со всем чем можно
   listMainFuncHeadDev:TListDev;
 
   //Получить головное устройство
-  function getDeviceHeadGroup(listFullGraphEM:TListGraphDev):pGDBObjDevice;
+  function getDeviceHeadGroup(listFullGraphEM:TListGraphDev;listDev:TListDev):pGDBObjDevice;
   type
     TListEntity=TVector<pGDBObjEntity>;
   var
      selEnt:pGDBObjEntity;
      pvd:pvardesk;
-     listDev:TListDev;
+     //listDev:TListDev;
      devName:string;
      devlistMF,selDev,selDevMF:PGDBObjDevice;
      isListDev:boolean;
@@ -124,7 +145,7 @@ var
         pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir); //переход к следующем примитиву в списке выбраных примитивов
       until pobj=nil;
 
-      ZCMsgCallBackInterface.TextMessage('Количество выбранных примитивов: ' + inttostr(count) + ' шт.',TMWOHistoryOut);
+      //ZCMsgCallBackInterface.TextMessage('Количество выбранных примитивов: ' + inttostr(count) + ' шт.',TMWOHistoryOut);
 
       if count = 1 then
         result:=myobj;
@@ -132,9 +153,6 @@ var
   end;
 
   begin
-
-       listDev:=TListDev.Create;
-       listDev:=getListMainFuncHeadDev(listFullGraphEM);
 
        result:=nil;
 
@@ -173,9 +191,9 @@ var
 
        if result = nil then
        begin
-          ZCMsgCallBackInterface.TextMessage('Выделенный примитив не устройство или его нет в списке головных устройств!',TMWOHistoryOut);
+          ZCMsgCallBackInterface.TextMessage(RSCLPuzvmanemDedicatedPrimitiveNotHost,TMWOHistoryOut);
             repeat
-              if commandmanager.getentity('Выбрать устройство: ',selEnt) then
+              if commandmanager.getentity(RSCLPuzvmanemChooseYourHeadUnit,selEnt) then
               begin
                  //ZCMsgCallBackInterface.TextMessage('Устройство:' + selEnt^.GetObjName,TMWOHistoryOut);
                  // Если выделенный устройство GDBDeviceID тогда
@@ -202,7 +220,7 @@ var
                  end;
               end;
               if result = nil then
-                ZCMsgCallBackInterface.TextMessage('Выделенный примитив не устройство или его нет в списке головных устройств!',TMWOHistoryOut);
+                ZCMsgCallBackInterface.TextMessage(RSCLPuzvmanemDedicatedPrimitiveNotHost,TMWOHistoryOut);
             until result <> nil;
        end;
   end;
@@ -217,57 +235,37 @@ var
   listHeadDev:TListDev;
   headDev:pGDBObjDevice;
   graphView:TGraphDev;
+  depthVisual:double;
+  insertCoordination:GDBVertex;
+  listAllHeadDev:TListDev;
 begin
-  //Получить список всех древовидно ориентированных графов из которых состоит модель
+  depthVisual:=15;
+  insertCoordination:=uzegeometry.CreateVertex(0,0,0);
+
+
+   //Получить список всех древовидно ориентированных графов из которых состоит модель
   listFullGraphEM:=TListGraphDev.Create;
   listFullGraphEM:=uzvmanemgetgem.getListGrapghEM;
 
-  headDev:=getDeviceHeadGroup(listFullGraphEM);
+  listAllHeadDev:=TListDev.Create;
+  listAllHeadDev:=getListMainFuncHeadDev(listFullGraphEM);
+
+  headDev:=getDeviceHeadGroup(listFullGraphEM,listAllHeadDev);
   if headDev <> nil then
   begin
     pvd:=FindVariableInEnt(headDev,velec_nameDevice);
       if pvd<>nil then
-         ZCMsgCallBackInterface.TextMessage('Выбрано головное утройтсво = ' + pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+         CmdProp.nameShield:=pstring(pvd^.data.Addr.Instance)^;
+         //ZCMsgCallBackInterface.TextMessage('Выбрано головное утройтсво = ' + pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
 
+    zcShowCommandParams(SysUnit^.TypeName2PTD('TuzvmanemSGparams'),@CmdProp);
     //  получаем граф для его изучени
-    //graphView:=uzvmanemgetgem.getGraphHeadDev(listFullGraphEM,headDev);
-//
-    CmdProp.props.Free;
-    CmdProp.props.InterfaceUses.PushBackIfNotPresent(sysunit);
-    with CmdProp.props.CreateVariable('F1_avt','boolean') do begin
-      username:='тест1';
-      pboolean(data.Addr.GetInstance)^:=true;
-    end;
-//    with CmdProp.props.CreateVariable('gr1_avt','string') do begin
-//      username:='Состав отх.груп.';
-//      pstring(data.Addr.GetInstance)^:='АВ+КК+РТ';
-//    end;
-//    with CmdProp.props.CreateVariable('gr1_view','string') do begin
-//      username:='Отрисовка группы';
-//      pstring(data.Addr.GetInstance)^:='Кратко';
-//    end;
-//    with CmdProp.props.CreateVariable('gr2_avt','string') do begin
-//      username:='Состав отх.груп.';
-//      pstring(data.Addr.GetInstance)^:='АВ';
-//    end;
-//    with CmdProp.props.CreateVariable('gr2_view','string') do begin
-//      username:='Отрисовка группы';
-//      pstring(data.Addr.GetInstance)^:='Упрощенно';
-//    end;
-//    with CmdProp.props.CreateVariable('gr3_avt','string') do begin
-//      username:='Состав отх.груп.';
-//      pstring(data.Addr.GetInstance)^:='Дифф.';
-//    end;
-//    with CmdProp.props.CreateVariable('gr3_view','string') do begin
-//      username:='Отрисовка группы';
-//      pstring(data.Addr.GetInstance)^:='Полное';
-//    end;
-//    with CmdProp.props.CreateVariable('test2','integer') do begin
-//      username:='тест2';
-//      pinteger(data.Addr.GetInstance)^:=123;
-//    end;
+    graphView:=uzvmanemgetgem.getGraphHeadDev(listFullGraphEM,headDev,listAllHeadDev);
+
+    visualGraphTree(graphView,insertCoordination,3,depthVisual);
+
     //CmdProp.props.FindVariable();    //получить доступ к измененной переменной
-    zcShowCommandParams(SysUnit^.TypeName2PTD('TCmdProp'),@CmdProp);
+
 //
 //    if clFileParam=nil then
 //      clFileParam:=CMDLinePromptParser.GetTokens(RSCLParam);
@@ -298,27 +296,51 @@ end;
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   //SysUnit^.RegisterType(TypeInfo(TCmdProp));
-  //SysUnit^.RegisterType(TypeInfo(TDiff));
-  //SysUnit^.RegisterType(TypeInfo(TSelBlockParams));
+  SysUnit^.RegisterType(TypeInfo(TuzvmanemSGSetConstruct));
+  SysUnit^.RegisterType(TypeInfo(TuzvmanemSGSetProtectDev));
+  SysUnit^.RegisterType(TypeInfo(TuzvmanemSG));
+  SysUnit^.RegisterType(TypeInfo(TuzvmanemSGparams));
 
-  SysUnit.RegisterType(TypeInfo(PTuzvmanemComParams));//регистрируем тип данных в зкадном RTTI
-
-  SysUnit.SetTypeDesk(TypeInfo(TsettingRepeatEMShema),['Виз.структур граф','Сорт.перед виз']);                                    //Даем человечьи имена параметрам
-  SysUnit.SetTypeDesk(TypeInfo(TuzvmanemComParams),['Имя суперлинии','Погрешность','Параметр2','Сортировать граф','Настройки повторить эл.модель']);//Даем человечьи имена параметрам
+  SysUnit.SetTypeDesk(TypeInfo(TuzvmanemSGSetConstruct),[RSCLPuzvmanemConstructShort,RSCLPuzvmanemConstructMedium,RSCLPuzvmanemConstructFull]);
+  SysUnit.SetTypeDesk(TypeInfo(TuzvmanemSGSetProtectDev),[RSCLPuzvmanemCircuitBreaker,RSCLPuzvmanemRCCBWithOP,RSCLPuzvmanemRCCB]);
+  SysUnit.SetTypeDesk(TypeInfo(TuzvmanemSG),[RSCLPuzvmanemRenderType,RSCLPuzvmanemTypeProtection]);
+  SysUnit.SetTypeDesk(TypeInfo(TuzvmanemSGparams),                        [RSCLPuzvmanemNameShield,
+                                                                           RSCLPuzvmanemShieldGroup+'1',
+                                                                           RSCLPuzvmanemShieldGroup+'2',
+                                                                           RSCLPuzvmanemShieldGroup+'3',
+                                                                           RSCLPuzvmanemShieldGroup+'4',
+                                                                           RSCLPuzvmanemShieldGroup+'5',
+                                                                           RSCLPuzvmanemShieldGroup+'6',
+                                                                           RSCLPuzvmanemShieldGroup+'7',
+                                                                           RSCLPuzvmanemShieldGroup+'8',
+                                                                           RSCLPuzvmanemShieldGroup+'9',
+                                                                           RSCLPuzvmanemShieldGroup+'10',
+                                                                           RSCLPuzvmanemShieldGroup+'11',
+                                                                           RSCLPuzvmanemShieldGroup+'12',
+                                                                           RSCLPuzvmanemShieldGroup+'13',
+                                                                           RSCLPuzvmanemShieldGroup+'14',
+                                                                           RSCLPuzvmanemShieldGroup+'15',
+                                                                           RSCLPuzvmanemShieldGroup+'16',
+                                                                           RSCLPuzvmanemShieldGroup+'17',
+                                                                           RSCLPuzvmanemShieldGroup+'18',
+                                                                           RSCLPuzvmanemShieldGroup+'19',
+                                                                           RSCLPuzvmanemShieldGroup+'20'
+                                                                           ]);  //Даем человечьи имена параметрам
 
   //SysUnit^.SetTypeDesk(TypeInfo(TCmdProp),['Настройки генерации щита']);
   //SysUnit^.SetTypeDesk(TypeInfo(TDiff),['Diff','Not Diff']);
   //SysUnit^.SetTypeDesk(TypeInfo(TSelBlockParams),['Same Name','Block and Device']);
-  CmdProp.props.init('test');
+  //CmdProp.props.init('test');
 
   //SelSim.SetCommandParam(@SelSimParams,'PTSelSimParams');
   CreateCommandFastObjectPlugin(@generatorOnelineDiagramOneLevel_com,'vGeneratorOneLine',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  CmdProp.props.free;
-  CmdProp.props.done;
-  if clFileParam<>nil then
-    clFileParam.Free;
+  //CmdProp.props.free;
+  //CmdProp.props.done;
+  //if clFileParam<>nil then
+  //  clFileParam.Free;
 end.
+
 
 

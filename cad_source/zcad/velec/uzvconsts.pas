@@ -41,6 +41,8 @@ const
   vGInfoVertex='infoVertex';
   vGLength='length';
   vGInfoEdge='infoEdge';
+  vGCableName='vGCableName';
+  vGCableNameDefault='-';
   vGLengthFromEnd='lengthfromend';
   vTempLayerName='systemTempVisualLayer';
   vpTVertexTree='TVertexTree';
@@ -96,6 +98,7 @@ const
   velec_VarNameForConnectAfter_DevConnectMethod ='DevConnectMethod';
   velec_VarNameForConnectAfter_CabConnectAddLength='CabConnectAddLength';
   velec_VarNameForConnectAfter_CabConnectMountingMethod='CabConnectMountingMethod';
+  velec_VarNameForConnectAfter_CableName='CableName';
 
 
   velec_cableMountingNon='-';

@@ -10,7 +10,6 @@
 ;непосредственная загрузка блоков происходит при
 ;необходимости, с учетом зависимостей
 ;ReadBlockLibrary(zcadblocks.lst)
-MergeBlocks(_sys.dxf)
 MergeBlocks(_connector.dxf)
 MergeBlocks(_el.dxf)
 MergeBlocks(_nok.dxf)

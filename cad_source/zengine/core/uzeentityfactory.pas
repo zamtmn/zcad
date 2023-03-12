@@ -76,7 +76,8 @@ var
   _StandartBlockInsertCreateProcedure:TAllocAndInitAndSetGeomPropsFunc=nil;
   _StandartDeviceCreateProcedure:TAllocAndInitAndSetGeomPropsFunc=nil;
   _StandartSolidCreateProcedure:TAllocAndInitAndSetGeomPropsFunc=nil;
-  //_StandartLWPolyLineCreateProcedure:TAllocAndInitAndSetGeomPropsFunc=nil;
+  _StandartArcCreateProcedure:TAllocAndInitAndSetGeomPropsFunc=nil;
+  _StandartLWPolyLineCreateProcedure:TAllocAndInitAndSetGeomPropsFunc=nil;
 implementation
 //uses
 //    log;
@@ -111,7 +112,8 @@ begin
       GDBBlockInsertID:_StandartBlockInsertCreateProcedure:=_AllocAndCreateEntFunc;
            GDBDeviceID:_StandartDeviceCreateProcedure:=_AllocAndCreateEntFunc;
             GDBSolidID:_StandartSolidCreateProcedure:=_AllocAndCreateEntFunc;
-     //GDBLWPolylineID:_StandartLWPolyLineCreateProcedure:=_AllocAndCreateEntFunc;
+              GDBarcID:_StandartArcCreateProcedure:=_AllocAndCreateEntFunc;
+     GDBLWPolylineID:_StandartLWPolyLineCreateProcedure:=_AllocAndCreateEntFunc;
      end;
 
      if dxfent then

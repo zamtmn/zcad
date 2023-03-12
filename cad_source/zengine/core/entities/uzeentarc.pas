@@ -838,10 +838,26 @@ begin
   result.initnul{(owner)};
   result.bp.ListPos.Owner:=owner;
 end;
+procedure SetArcGeomProps(AArc:PGDBObjArc;args:array of const);
+var
+   counter:integer;
+begin
+  counter:=low(args);
+  AArc^.Local.P_insert:=CreateVertexFromArray(counter,args);
+  AArc^.R:=CreateDoubleFromArray(counter,args);
+  AArc^.StartAngle:=CreateDoubleFromArray(counter,args);
+  AArc^.EndAngle:=CreateDoubleFromArray(counter,args);
+end;
+function AllocAndCreateArc(owner:PGDBObjGenericWithSubordinated;args:array of const):PGDBObjArc;
+begin
+  result:=AllocAndInitArc(owner);
+  SetArcGeomProps(result,args);
+end;
+
 class function GDBObjARC.CreateInstance:PGDBObjArc;
 begin
   result:=AllocAndInitArc(nil);
 end;
 begin
-  RegisterDXFEntity(GDBArcID,'ARC','Arc',@AllocArc,@AllocAndInitArc);
+  RegisterDXFEntity(GDBArcID,'ARC','Arc',@AllocArc,@AllocAndInitArc,@SetArcGeomProps,@AllocAndCreateArc);
 end.

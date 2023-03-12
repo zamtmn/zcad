@@ -997,20 +997,60 @@ begin
 
   end;
 end;
+
 function AllocLWpolyline:PGDBObjLWpolyline;
 begin
   Getmem(pointer(result),sizeof(GDBObjLWpolyline));
 end;
+
 function AllocAndInitLWpolyline(owner:PGDBObjGenericWithSubordinated):PGDBObjLWpolyline;
 begin
   result:=AllocLWpolyline;
   result.initnul{(owner)};
   result.bp.ListPos.Owner:=owner;
 end;
+
 class function GDBObjLWpolyline.CreateInstance:PGDBObjLWpolyline;
 begin
   result:=AllocAndInitLWpolyline(nil);
 end;
+
+procedure SetLWpolylineGeomProps(ALWpolyLine:PGDBObjLWpolyline;args:array of const);
+var
+   counter:integer;
+   i,c:integer;
+   pw:PGLLWWidth;
+   pp:PGDBvertex2D;
 begin
-  RegisterDXFEntity(GDBLWPolylineID,'LWPOLYLINE','LWPolyline',@AllocLWpolyline,@AllocAndInitLWpolyline);
+  counter:=low(args);
+  ALWpolyLine.Closed:=CreateBooleanFromArray(counter,args);
+  c:=(high(args)-low(args){+1})div 5;
+  if ((high(args)-low(args){+1})mod 5)>1 then
+    inc(c);
+  if ALWpolyLine.Closed then
+    ALWpolyLine.Width2D_in_OCS_Array.SetCount(c)
+  else
+    ALWpolyLine.Width2D_in_OCS_Array.SetCount(c{-1});
+  ALWpolyLine.Vertex2D_in_OCS_Array.SetCount(c);
+  for i:=0 to c-1 do begin
+    pp:=ALWpolyLine.Vertex2D_in_OCS_Array.getDataMutable(i);
+    pp^:=CreateVertex2DFromArray(counter,args);
+    if (ALWpolyLine.Closed)or(i<(c-1)) then begin
+      {bulge:=}CreateDoubleFromArray(counter,args);
+      pw:=ALWpolyLine.Width2D_in_OCS_Array.getDataMutable(i);
+      pw.startw:=CreateDoubleFromArray(counter,args);
+      pw.endw:=CreateDoubleFromArray(counter,args);
+      pw.hw:=IsDoubleNotEqual(pw.startw,0) or IsDoubleNotEqual(pw.endw,0);
+    end;
+  end;
+end;
+
+function AllocAndCreateLWpolyline(owner:PGDBObjGenericWithSubordinated;args:array of const):PGDBObjLWPolyline;
+begin
+  result:=AllocAndInitLWpolyline(owner);
+  SetLWpolylineGeomProps(result,args);
+end;
+
+begin
+  RegisterDXFEntity(GDBLWPolylineID,'LWPOLYLINE','LWPolyline',@AllocLWpolyline,@AllocAndInitLWpolyline,@SetLWpolylineGeomProps,@AllocAndCreateLWpolyline);
 end.

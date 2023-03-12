@@ -176,8 +176,10 @@ function CreateReflectionMatrix(plane:DVector4D): DMatrix4D;
 //**Создать 3D вершину
 function CreateVertex(const x,y,z:Double):GDBVertex;inline;
 function CreateVertexFromArray(var counter:integer;const args:array of const):GDBVertex;
-function  CreateDoubleFromArray(var counter:integer;const args:array of const):Double;
-function  CreateStringFromArray(var counter:integer;const args:array of const):String;
+function CreateVertex2DFromArray(var counter:integer;const args:array of const):GDBVertex2D;
+function CreateDoubleFromArray(var counter:integer;const args:array of const):Double;
+function CreateStringFromArray(var counter:integer;const args:array of const):String;
+function CreateBooleanFromArray(var counter:integer;const args:array of const):Boolean;
 //**Создать 2D вершину
 function CreateVertex2D(const x,y:Double):GDBVertex2D;inline;
 function IsPointInBB(const point:GDBvertex; var fistbb:TBoundingBox):Boolean;inline;
@@ -2132,22 +2134,35 @@ begin
      result.y:=y;
      result.z:=z;
 end;
-function  CreateDoubleFromArray(var counter:integer;const args:array of const):Double;
+function CreateDoubleFromArray(var counter:integer;const args:array of const):Double;
 begin
-     case args[counter].VType of
-                       vtInteger:result:=args[counter].VInteger;
-                      vtExtended:result:=args[counter].VExtended^;
-     end;{case}
-     inc(counter);
+  case args[counter].VType of
+    vtInteger:result:=args[counter].VInteger;
+    vtExtended:result:=args[counter].VExtended^;
+  else
+      DebugLn('{E}CreateDoubleFromArray: not Integer, not Extended');
+  end;{case}
+  inc(counter);
 end;
-function  CreateStringFromArray(var counter:integer;const args:array of const):String;
+function CreateBooleanFromArray(var counter:integer;const args:array of const):Boolean;
 begin
-     case args[counter].VType of
-                       vtString:result:=args[counter].VString^;
-                   vtAnsiString:result:=ansistring(args[counter].VAnsiString);
-                //vtUnicodeString:result:=args[counter].VUnicodeString^;
-     end;{case}
-     inc(counter);
+  case args[counter].VType of
+    vtBoolean:result:=args[counter].VBoolean;
+  else
+    DebugLn('{E}CreateStrinBooleanFromArray: not boolean');
+  end;{case}
+  inc(counter);
+end;
+
+function CreateStringFromArray(var counter:integer;const args:array of const):String;
+begin
+  case args[counter].VType of
+    vtString:result:=args[counter].VString^;
+    vtAnsiString:result:=ansistring(args[counter].VAnsiString);
+  else
+    DebugLn('{E}CreateStringFromArray: not String');
+  end;{case}
+  inc(counter);
 end;
 function CreateVertexFromArray(var counter:integer;const args:array of const):GDBVertex;
 var
@@ -2166,6 +2181,19 @@ begin
                                       //programlog.LogOutStr('CreateVertexFromArray: no enough params in args',lp_OldPos,LM_Error);
                                  end;
 
+end;
+
+function CreateVertex2DFromArray(var counter:integer;const args:array of const):GDBVertex2D;
+var
+  len:integer;
+begin
+  len:=high(args);
+  if (counter+1)<=(high(args)) then begin
+    result.x:=CreateDoubleFromArray(counter,args);
+    result.y:=CreateDoubleFromArray(counter,args);
+  end else begin
+    DebugLn('{E}CreateVertex2DFromArray: no enough params in args');
+  end;
 end;
 
 function CreateVertex2D(const x,y:Double):GDBVertex2D;

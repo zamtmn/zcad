@@ -671,10 +671,60 @@ begin
     tempTBConfig.Free;
   end;
 end;
+function CompareNodes(CntNode,TmpCntNode:TDomNode):boolean;
+var
+  cntAttrNode,TmpcntAttrNode:TDomNode;
+
+function CompareAttr(AttrName:string):boolean;
+begin
+  cntAttrNode:=CntNode.Attributes.GetNamedItem(AttrName);
+  TmpcntAttrNode:=TmpCntNode.Attributes.GetNamedItem(AttrName);
+  if (cntAttrNode<>nil)and(TmpcntAttrNode<>nil) then begin
+    if cntAttrNode.NodeValue<>TmpcntAttrNode.NodeValue then
+      exit(false);
+    result:=true;
+  end else
+    exit(false);
+end;
+
+begin
+  result:=false;
+  if UpperCase(CntNode.NodeName)=UpperCase(TmpCntNode.NodeName)then begin
+    result:=CompareAttr('Caption')
+  end;
+end;
+
+function FindSameNodeInChild(CntNode,TmpCntNode:TDomNode):TDomNode;
+var
+  CntNodeChaild:TDomNode;
+begin
+   CntNodeChaild:=CntNode.FirstChild;
+   while (CntNodeChaild<>nil)and not CompareNodes(CntNodeChaild,TmpCntNode) do begin
+     CntNodeChaild:=CntNodeChaild.NextSibling;
+   end;
+   result:=CntNodeChaild;
+end;
+
+procedure ProcessNodes(TBContentNode,tempPalettesContentNode:TDomNode);
+var
+  TBSubNode,findedNode:TDomNode;
+begin
+  TBSubNode:=tempPalettesContentNode.FirstChild;
+  while assigned(TBSubNode)do
+  begin
+    findedNode:=FindSameNodeInChild(TBContentNode,TBSubNode);
+    if findedNode=nil then
+      TBContentNode.AppendChild(TBSubNode.CloneNode(true,TBContentNode.OwnerDocument))
+    else
+      ProcessNodes(findedNode,TBSubNode);
+    TBSubNode:=TBSubNode.NextSibling;
+  end;
+end;
+
 procedure TToolBarsManager.LoadPalettes(filename:string);
 var
   tempPalettesConfig:TXMLConfig;
-  tempPalettesContentNode,TBContentNode,TBSubNode:TDomNode;
+  tempPalettesContentNode,TBContentNode,TBSubNode,findedNode:TDomNode;
 begin
   if not assigned(PalettesConfig) then begin
     PalettesConfig:=TXMLConfig.Create(nil);
@@ -687,13 +737,7 @@ begin
     TBContentNode:=PalettesConfig.FindNode('PalettesContent',false);
 
     if assigned(tempPalettesContentNode) and assigned(TBContentNode)then begin
-      TBSubNode:=tempPalettesContentNode.FirstChild;
-      while assigned(TBSubNode)do
-      begin
-        TBContentNode.AppendChild(TBSubNode.CloneNode(true,TBContentNode.OwnerDocument));
-
-        TBSubNode:=TBSubNode.NextSibling;
-      end;
+      ProcessNodes(TBContentNode,tempPalettesContentNode);
     end;
 
     tempPalettesConfig.Free;

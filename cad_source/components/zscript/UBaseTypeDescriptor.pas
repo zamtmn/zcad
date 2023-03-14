@@ -466,13 +466,35 @@ class function TPointerTypeManipulator<T>.GetFormattedValueAsString(const data:T
 begin
    result:=GetValueAsString(data);
 end;
-procedure StringDescriptor.SavePasToMem;
+function IsNeedBase64(value:TInternalScriptString):boolean;
+var
+  i:integer;
 begin
-     membuf.TXTAddStringEOL(prefix+':=DecodeStringBase64('''+EncodeStringBase64(GetValueAsString(PInstance))+''');');
+  for i:=1 to length(value) do
+    if (ord(value[i])<32)or(value[i] in [''''])then
+      exit(true);
+  result:=False;
+end;
+
+procedure StringDescriptor.SavePasToMem;
+var
+  value:TInternalScriptString;
+begin
+  value:=GetValueAsString(PInstance);
+  if IsNeedBase64(value)then
+    membuf.TXTAddStringEOL(prefix+':=DecodeStringBase64('''+EncodeStringBase64(GetValueAsString(PInstance))+''');')
+  else
+    membuf.TXTAddStringEOL(prefix+':='''+GetValueAsString(PInstance)+''';')
 end;
 procedure AnsiStringDescriptor.SavePasToMem;
+var
+  value:TInternalScriptString;
 begin
-     membuf.TXTAddStringEOL(prefix+':=DecodeStringBase64('''+EncodeStringBase64(GetValueAsString(PInstance))+''');');
+  value:=GetValueAsString(PInstance);
+  if IsNeedBase64(value)then
+    membuf.TXTAddStringEOL(prefix+':=DecodeStringBase64('''+EncodeStringBase64(GetValueAsString(PInstance))+''');')
+  else
+    membuf.TXTAddStringEOL(prefix+':='''+GetValueAsString(PInstance)+''';')
 end;
 destructor TEnumDataDescriptor.done;
 begin

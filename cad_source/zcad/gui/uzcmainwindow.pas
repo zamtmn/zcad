@@ -909,7 +909,7 @@ begin
   toolbars.Sorted:=true;
   CreateInterfaceLists;
 
-  commandmanager.executefile('*components/stage0.cmd',drawings.GetCurrentDWG,nil);
+  commandmanager.executefile('*components/stage0.cmd0',drawings.GetCurrentDWG,nil);
 
   CreateAnchorDockingInterface;
   ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);

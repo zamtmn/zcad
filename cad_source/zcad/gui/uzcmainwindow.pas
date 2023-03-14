@@ -164,6 +164,7 @@ var
   ProcessBar:TProgressBar;
   //StoreBackTraceStrFunc:TBackTraceStrFunc;//this unneed after fpc rev 31026 see http://bugs.freepascal.org/view.php?id=13518
   function IsRealyQuit:Boolean;
+  procedure RunCmdFile(filename:String;pdata:pointer);
 
 implementation
 {$R *.lfm}
@@ -857,6 +858,12 @@ begin
     UniqueInstanceBase.FIPCServer.StartServer;
   SetupFIPCServer;
 end;
+
+procedure RunCmdFile(filename:String;pdata:pointer);
+begin
+  commandmanager.executefile(filename,drawings.GetCurrentDWG,nil);
+end;
+
 procedure TZCADMainWindow._onCreate(Sender: TObject);
 begin
   with programlog.Enter('TZCADMainWindow._onCreate',LM_Debug,LMD) do begin try
@@ -909,7 +916,8 @@ begin
   toolbars.Sorted:=true;
   CreateInterfaceLists;
 
-  commandmanager.executefile('*components/stage0.cmd0',drawings.GetCurrentDWG,nil);
+  //commandmanager.executefile('*components/stage0.cmd0',drawings.GetCurrentDWG,nil);
+  FromDirsIterator(sysvar.PATH.Preload_Path^,'*.cmd0','stage0.cmd0',RunCmdFile,nil);
 
   CreateAnchorDockingInterface;
   ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);

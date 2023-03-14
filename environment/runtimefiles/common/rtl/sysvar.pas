@@ -51,6 +51,7 @@ var
   DSGN_OTrackTimerInterval:Integer;
   DISP_LWDisplayScale:Integer;
   RD_Light:Boolean;
+  PATH_Preload_Path:String;
   PATH_Fonts:String;
   PATH_AlternateFont:String;
   PATH_Support_Path:String;
@@ -148,6 +149,7 @@ begin
   DSGN_OTrackTimerInterval:=500;
   DISP_LWDisplayScale:=10;
   RD_Light:=False;
+  PATH_Preload_Path:='$(ZCADPath)/preload/';
   PATH_Fonts:='$(SystemFontsPath)/;$(UserFontsPath)/;$(ZCADPath)/fonts/;C:/APPS/MY/acad/support/;C:/Program Files/Autodesk/AutoCAD 2020/Fonts/';
   PATH_AlternateFont:='_mipGost.shx';
   PATH_Support_Path:='$(ZCADPath)/rtl;$(ZCADPath)/rtl/objdefunits;$(ZCADPath)/rtl/objdefunits/include;$(ZCADPath)/components;$(ZCADPath)/blocks/el/general;$(ZCADPath)/blocks/el/general/velecdevice;$(ZCADPath)/rtl/styles';
@@ -181,15 +183,15 @@ begin
   RD_Vendor:='';
   RD_Renderer:='';
   RD_Extensions:='';
-  RD_Version:='4.3.0';
+  RD_Version:='';
   RD_Restore_Mode:=WND_Texture;
   RD_VSync:=T3SB_Fale;
   SAVE_Auto_Interval:=300;
   SAVE_Auto_Current_Interval:=300;
   SAVE_Auto_FileName:='$(ZCADPath)/autosave/autosave.dxf';
   SAVE_Auto_On:=True;
-  SYS_RunTime:=20;
-  SYS_Version:='0.9.10.0-234-g528a999f';
+  SYS_RunTime:=0;
+  SYS_Version:='';
   PATH_Device_Library:='$(ZCADPath)/programdb;$(ZCADPath)/userdb';
   PATH_Template_Path:='$(ZCADPath)/template';
   PATH_Template_File:='default.dxf';

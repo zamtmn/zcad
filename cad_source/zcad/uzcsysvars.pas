@@ -60,6 +60,7 @@ type
   {REGISTERRECORDTYPE tpath}
   tpath=record
              Support_Path:PString;(*'Support files'*)
+             Preload_Path:PString;(*'Preload files'*)
              Fonts_Path:PString;(*'Fonts'*)
              Alternate_Font:PString;(*'Alternate font file'*)
              Template_Path:PString;(*'Templates'*)

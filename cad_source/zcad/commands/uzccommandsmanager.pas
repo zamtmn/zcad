@@ -27,7 +27,8 @@ uses gzctnrVectorPObjects,uzcsysvars,uzegeometry,uzglviewareaabstract,uzbpaths,
      uzclog,varmandef,varman,uzedrawingdef,uzcinterface,
      uzcsysparams,uzedrawingsimple,uzcdrawings,uzctnrvectorstrings,forms,
      uzcctrlcommandlineprompt,uzeparsercmdprompt,uzeSnap,
-     uzeentity,uzgldrawcontext,Classes;
+     uzeentity,uzgldrawcontext,Classes,
+     MacroDefIntf,uzmacros;
 const
      tm:tmethod=(Code:nil;Data:nil);
      nullmethod:{tmethod}TButtonMethod=nil;
@@ -66,6 +67,7 @@ type
                           SilentCounter:Integer;
                           CommandLinePrompts:TICommandLinePromptVector;
                           CurrentPrompt:TParserCommandLinePrompt.TGeneralParsedText;
+                          currMacros:string;
                           function GetState:TZState;
                           function isBusy:Boolean;
                           constructor init(m:Integer);
@@ -132,6 +134,10 @@ type
                           procedure SetPrompt(APrompt:String);overload;
                           procedure SetPrompt(APrompt:TParserCommandLinePrompt.TGeneralParsedText);overload;
 
+                          function MacroFuncsCurrentMacrosParh (const {%H-}Param: string; const Data: PtrInt;
+                                                                var {%H-}Abort: boolean): string;
+                          function MacroFuncsCurrentMacrosFile (const {%H-}Param: string; const Data: PtrInt;
+                                                                var {%H-}Abort: boolean): string;
                     end;
 var CommandManager:GDBcommandmanager;
 function getcommandmanager:Pointer;export;
@@ -140,6 +146,19 @@ procedure ParseCommand(comm:string; out command,operands:String);
 {procedure startup;
 procedure finalize;}
 implementation
+
+function GDBcommandmanager.MacroFuncsCurrentMacrosParh (const {%H-}Param: string; const Data: PtrInt;
+                                                        var {%H-}Abort: boolean): string;
+begin
+  result:=ExtractFilePath(currMacros);
+end;
+
+function GDBcommandmanager.MacroFuncsCurrentMacrosFile (const {%H-}Param: string; const Data: PtrInt;
+                                                        var {%H-}Abort: boolean): string;
+begin
+  result:=ExtractFileName(currMacros);
+end;
+
 procedure GDBcommandmanager.AddClPrompt(CLP:ICommandLinePrompt);
 begin
   if CommandLinePrompts=nil then
@@ -610,18 +629,19 @@ var
    p:pstring;
    ir:itrec;
    oldlastcomm:String;
-   s:String;
+   MacrosFile:String;
 begin
-     s:=ExpandPath(fn);
-     ZCMsgCallBackInterface.TextMessage(sysutils.format(rsRunScript,[s]),TMWOHistoryOut);
+     MacrosFile:=ExpandPath(fn);
+     ZCMsgCallBackInterface.TextMessage(sysutils.format(rsRunScript,[MacrosFile]),TMWOHistoryOut);
      inc(busy);
 
      //DisableCmdLine;
      ZCMsgCallBackInterface.Do_GUIMode({ZMsgID_GUIDisableCMDLine}ZMsgID_GUIDisable);
 
      oldlastcomm:=lastcommand;
+     currMacros:=MacrosFile;
      sa.init(200);
-     sa.loadfromfile(s);
+     sa.loadfromfile(MacrosFile);
      //sa.getString(1);
   p:=sa.beginiterate(ir);
   if p<>nil then
@@ -639,6 +659,7 @@ begin
   sa.Done;
   lastcommand:=oldlastcomm;
 
+    currMacros:='';
      //EnableCmdLine;
      ZCMsgCallBackInterface.Do_GUIMode({ZMsgID_GUIEnableCMDLine}ZMsgID_GUIEnable);
      ZCMsgCallBackInterface.Do_GUIMode(ZMsgID_GUICMDLineCheck);
@@ -1048,6 +1069,10 @@ begin
 end;}
 initialization
   commandmanager.init(1000);
+  DefaultMacros.AddMacro(TTransferMacro.Create('CurrentMacrosParh','',
+                         'Current macros parh',commandmanager.MacroFuncsCurrentMacrosParh(),[]));
+  DefaultMacros.AddMacro(TTransferMacro.Create('CurrentMacrosFile','',
+                         'Current macros file',commandmanager.MacroFuncsCurrentMacrosFile(),[]));
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   commandmanager.Done;

@@ -796,7 +796,7 @@ if addtype then
                                                         if copy(line,1,10)='VIEW_ObjIn'
                                                         then
                                                             line:=line;
-                                                        line:=copy(line,1,pos(';',line)-1);
+                                                        line:=copy(line,1,PosWithBracket(';','''','''',line,1,0)-1);
                                                         if line='camera.prop.point.x:=111.0'
                                                                  then
                                                                      line:=line;

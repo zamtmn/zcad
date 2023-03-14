@@ -92,7 +92,6 @@ end;
 function TZctnrVectorBytes.readtoparser;
 var
   s: String;
-  //i:Integer;
   scobcacount:Integer;
   mode:(parse,commenttoendline,commenttouncomment);
   lastbreak:Boolean;
@@ -105,41 +104,31 @@ begin
   mode:=parse;
   stringread:=false;
   begin
-    while noteof do
-    begin
-      if (GetChar(readpos)='''')and(mode=parse) then
-                                  begin
-                                       stringread:=not stringread;
-                                  end;
-      if (GetChar(readpos)='{')and(mode=parse)and(not stringread) then
-                                  begin
-                                       mode:=commenttouncomment;
-                                       inc(readpos);
-                                  end
-      else if (GetChar(readpos)='}')and(mode=commenttouncomment) then
-                                  begin
-                                       mode:=parse;
-                                       s:= s+' ';
-                                       lastbreak:=true;
-                                       inc(readpos);
-                                  end
-      else if (GetChar(readpos)='/')and(mode=parse)and(GetChar(readpos+1)='/')and(not stringread) then
-                                  begin
-                                       //if readpos<>buferread-1 then
-                                       begin
-                                            if GetChar(readpos+1)='/'then
-                                                                         begin
-                                                                              mode:=commenttoendline;
-                                                                              inc(readpos,2);
-                                                                         end;
-                                       end;
-                                  end
-      else if (GetChar(readpos)=#10)and(mode=commenttoendline) then
-                                  begin
-                                       mode:=parse;
-                                       s:= s+' ';
-                                       inc(readpos);
-                                  end
+    while noteof do begin
+      if (GetChar(readpos)='''')and(mode=parse) then begin
+        stringread:=not stringread;
+      end;
+      if (GetChar(readpos)='{')and(mode=parse)and(not stringread) then begin
+        mode:=commenttouncomment;
+        inc(readpos);
+      end
+      else if (GetChar(readpos)='}')and(mode=commenttouncomment) then begin
+        mode:=parse;
+        s:= s+' ';
+        lastbreak:=true;
+        inc(readpos);
+      end
+      else if (GetChar(readpos)='/')and(mode=parse)and(GetChar(readpos+1)='/')and(not stringread) then begin
+        if GetChar(readpos+1)='/'then begin
+          mode:=commenttoendline;
+          inc(readpos,2);
+        end;
+      end
+      else if (GetChar(readpos)=#10)and(mode=commenttoendline) then begin
+        mode:=parse;
+        s:= s+' ';
+        inc(readpos);
+      end
 
       else if (mode=parse)and(pos(GetChar(readpos),break)=0) then
       begin
@@ -162,6 +151,10 @@ begin
           end;
           inc(readpos);
           //inc(currentpos);
+      end
+      else if stringread then begin
+        s:=s+GetChar(readpos);
+        inc(readpos);
       end
       else
       begin

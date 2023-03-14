@@ -89,9 +89,16 @@ var
 begin
   pc:=@s[StartPos];
   for i:=StartPos to length(s) do begin
-    if pc^='(' then
-      inc(InitCounterValue)
-    else if pc^=')' then
+    if pc^={'('}OpenBracket then begin
+      if OpenBracket<>CloseBracket then
+        inc(InitCounterValue)
+      else begin
+        if InitCounterValue>0 then
+          dec(InitCounterValue)
+        else
+          inc(InitCounterValue)
+      end;
+    end else if pc^={')'}CloseBracket then
       dec(InitCounterValue);
     if InitCounterValue=0 then
       if pc^=c then

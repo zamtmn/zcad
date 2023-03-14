@@ -134,7 +134,7 @@ type
                           procedure SetPrompt(APrompt:String);overload;
                           procedure SetPrompt(APrompt:TParserCommandLinePrompt.TGeneralParsedText);overload;
 
-                          function MacroFuncsCurrentMacrosParh (const {%H-}Param: string; const Data: PtrInt;
+                          function MacroFuncsCurrentMacrosPath (const {%H-}Param: string; const Data: PtrInt;
                                                                 var {%H-}Abort: boolean): string;
                           function MacroFuncsCurrentMacrosFile (const {%H-}Param: string; const Data: PtrInt;
                                                                 var {%H-}Abort: boolean): string;
@@ -147,7 +147,7 @@ procedure ParseCommand(comm:string; out command,operands:String);
 procedure finalize;}
 implementation
 
-function GDBcommandmanager.MacroFuncsCurrentMacrosParh (const {%H-}Param: string; const Data: PtrInt;
+function GDBcommandmanager.MacroFuncsCurrentMacrosPath (const {%H-}Param: string; const Data: PtrInt;
                                                         var {%H-}Abort: boolean): string;
 begin
   result:=ExtractFilePath(currMacros);
@@ -1070,7 +1070,7 @@ end;}
 initialization
   commandmanager.init(1000);
   DefaultMacros.AddMacro(TTransferMacro.Create('CurrentMacrosParh','',
-                         'Current macros parh',commandmanager.MacroFuncsCurrentMacrosParh(),[]));
+                         'Current macros path',commandmanager.MacroFuncsCurrentMacrosPath(),[]));
   DefaultMacros.AddMacro(TTransferMacro.Create('CurrentMacrosFile','',
                          'Current macros file',commandmanager.MacroFuncsCurrentMacrosFile(),[]));
 finalization

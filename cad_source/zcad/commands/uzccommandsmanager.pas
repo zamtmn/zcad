@@ -1069,7 +1069,7 @@ begin
 end;}
 initialization
   commandmanager.init(1000);
-  DefaultMacros.AddMacro(TTransferMacro.Create('CurrentMacrosParh','',
+  DefaultMacros.AddMacro(TTransferMacro.Create('CurrentMacrosPath','',
                          'Current macros path',commandmanager.MacroFuncsCurrentMacrosPath(),[]));
   DefaultMacros.AddMacro(TTransferMacro.Create('CurrentMacrosFile','',
                          'Current macros file',commandmanager.MacroFuncsCurrentMacrosFile(),[]));

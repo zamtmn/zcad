@@ -1033,7 +1033,7 @@ if WindowsVersion < wvVista then
 {$endif}
 {$IFDEF LCLGTK2}DefaultDetails := ThemeServices.GetElementDetails(ttbody){$endif}
 {$IFDEF LCLQT}DefaultDetails := ThemeServices.GetElementDetails({ttpane}thHeaderDontCare){$endif};
-{$IFDEF LCLQT5}DefaultDetails := ThemeServices.GetElementDetails({ttpane}thHeaderDontCare){$endif};
+{$IFDEF LCLQT5}DefaultDetails := ThemeServices.GetElementDetails(ttPane){$endif};
 if IsWgiteBackground then
                          Canvas.FillRect(ARect)
                      else

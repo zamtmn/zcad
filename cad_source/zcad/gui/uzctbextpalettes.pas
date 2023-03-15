@@ -164,6 +164,7 @@ begin
     IconOptions.AutoArrange:=True;
     DragMode:=dmAutomatic;
     Parent:=result;
+    BorderStyle:=bsNone;
     OnDblClick:=ZPalettevsIconDoubleClick;
   end;
 end;
@@ -288,6 +289,7 @@ begin
     align:=alClient;
     DragMode:=dmAutomatic;
     Parent:=result;
+    BorderStyle:=bsNone;
     OnDblClick:=ZPalettevsIconDoubleClick;
   end;
   PaletteTreeViewFilter.tree:=TZPaletteTreeView(PaletteControl);

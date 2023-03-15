@@ -22,6 +22,7 @@ object NavigatorDevices: TNavigatorDevices
     Top = 74
     Width = 684
     Anchors = [akTop, akLeft, akRight, akBottom]
+    BorderStyle = bsNone
     DefaultNodeHeight = 25
     DefaultText = 'Node'
     Header.AutoSizeIndex = 0

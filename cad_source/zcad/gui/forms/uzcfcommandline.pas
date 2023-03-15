@@ -216,14 +216,12 @@ begin
     panel.BorderWidth:=0;
     panel.Align:=alBottom;
 
-    with TBevel.Create(self) do
-    begin
-         parent:={self}panel;
-         top:=0;
-         height:=2;
-         Align:={alBottom}altop;
-         //---------------BevelOuter:=bvraised;
-    end;
+    {with TBevel.Create(self) do begin
+      parent:=panel;
+      top:=0;
+      height:=2;
+      Align:=altop;
+    end;}
 
     HistoryLine:=TMemo.create(self);
     HistoryLine.Align:=alClient;

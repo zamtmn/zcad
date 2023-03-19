@@ -303,7 +303,7 @@ begin
     if result<>nil then
       FreeAndNil(result);
   result:={TMainMenu(application.FindComponent(MenuNameModifier+aName))}nil;
-  if result=nil then begin
+  if (result=nil)and(MenuConfig<>nil) then begin
     TBNode:=MenuConfig.FindNode('MenusContent',false);
     if assigned(TBNode) then begin
       TBSubNode:=TBNode.FirstChild;

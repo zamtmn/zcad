@@ -202,7 +202,7 @@ begin
 end;
 procedure loaddev(fn:string;pdata:pointer);
 begin
-     units.loadunit(SupportPath,InterfaceTranslate,{utf8tosys}(fn),nil);
+     units.loadunit(GetSupportPath,InterfaceTranslate,{utf8tosys}(fn),nil);
 end;
 procedure loadvariants(fn:string;pdata:pointer);
 var

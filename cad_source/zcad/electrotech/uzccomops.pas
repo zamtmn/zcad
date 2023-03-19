@@ -682,7 +682,7 @@ begin
   UManager.init;
 
   defaultunit.init(DefNumMetric);
-  units.loadunit(SupportPath,InterfaceTranslate,expandpath('*rtl/objcalc/opsmarkdef.pas'),(@defaultunit));
+  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('*rtl/objcalc/opsmarkdef.pas'),(@defaultunit));
   pcabledesk:=cman.beginiterate(ir);
   if pcabledesk<>nil then
   repeat
@@ -759,7 +759,7 @@ begin
                          p:=@pptnownervarext.entityunit;
                          currentunit.InterfaceUses.PushBackIfNotPresent(p);
 
-                         units.loadunit(SupportPath,InterfaceTranslate,expandpath('*rtl/objcalc/opsmark.pas'),(currentunit));
+                         units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('*rtl/objcalc/opsmark.pas'),(currentunit));
 
                          ProcessedDevices.PushBackData(ptn^.bp.ListPos.Owner);
 

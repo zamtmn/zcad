@@ -244,6 +244,8 @@ uses
   uzccommand_tstCmdLinePrompt,
   uzccommand_explDbCheck,
 
+  uzccommand_cfgAddSupportPath,
+
 
   uzcenitiesvariablesextender,uzcExtdrLayerControl,uzcExtdrSmartTextEnt,
 

@@ -11,6 +11,7 @@ object LineTypesForm: TLineTypesForm
   OnClose = _close
   OnCreate = _onCreate
   Position = poMainFormCenter
+  LCLVersion = '2.3.0.0'
   object ButtonPanel1: TButtonPanel
     Left = 2
     Height = 43
@@ -61,7 +62,6 @@ object LineTypesForm: TLineTypesForm
     BorderSpacing.Left = 10
     BorderSpacing.Right = 10
     BorderSpacing.Around = 2
-    Color = clDefault
     Layout = tlCenter
     ParentColor = False
   end
@@ -236,7 +236,6 @@ object LineTypesForm: TLineTypesForm
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 8
         Caption = 'Global scale factor'
-        Color = clDefault
         ParentColor = False
       end
       object GScale: TFloatSpinEdit
@@ -285,7 +284,6 @@ object LineTypesForm: TLineTypesForm
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 8
         Caption = 'Current object scale factor'
-        Color = clDefault
         ParentColor = False
       end
     end

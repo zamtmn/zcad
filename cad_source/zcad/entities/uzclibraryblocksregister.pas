@@ -47,7 +47,7 @@ var
   line,block,depends,s:String;
   f:TZctnrVectorBytes;
 begin
-  s:=FindInSupportPath(SupportPath,operands);
+  s:=FindInSupportPath(GetSupportPath,operands);
   f.InitFromFile(s);
   while f.notEOF do
     begin

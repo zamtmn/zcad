@@ -70,7 +70,7 @@ begin
     if pobj^.Selected then begin
       pentvarext:=pobj^.GetExtension<TVariablesExtender>;
       pentvarext.entityunit.free;
-      units.parseunit(SupportPath,InterfaceTranslate,mem,@pentvarext.entityunit);
+      units.parseunit(GetSupportPath,InterfaceTranslate,mem,@pentvarext.entityunit);
       mem.Seek(0);
       inc(counter);
     end;

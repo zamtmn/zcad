@@ -33,12 +33,46 @@ function FindInPaths(Paths,FileName:String):String;
 //**separator - разделитель.
 //**part - переменная которая возвращает куски текста
 function GetPartOfPath(out part:String;var path:String;const separator:String):String;
+function GetSupportPath:String;
+{TODO: костыли))}
+function GeAddrSupportPath:PString;
+procedure AddSupportPath(APath:String);
 
 procedure FromDirIterator(const path,mask,firstloadfilename:String;proc:TFromDirIterator;method:TFromDirIteratorObj;pdata:pointer=nil);
 procedure FromDirsIterator(const path,mask,firstloadfilename:String;proc:TFromDirIterator;method:TFromDirIteratorObj;pdata:pointer=nil);
-var ProgramPath,SupportPath,TempPath:String;
+var ProgramPath,AdditionalSupportPath,TempPath:String;
 implementation
+var SupportPath:String;
 //uses log;
+procedure AddSupportPath(APath:String);
+begin
+  if APath=''then exit;
+  if AdditionalSupportPath='' then
+    AdditionalSupportPath:=APath
+  else
+    if (AdditionalSupportPath[Length(AdditionalSupportPath)]=PathSeparator)or(APath[1]=PathSeparator) then
+      AdditionalSupportPath:=AdditionalSupportPath+APath
+    else
+      AdditionalSupportPath:=AdditionalSupportPath+PathSeparator+APath;
+end;
+
+function GetSupportPath:String;
+begin
+  if AdditionalSupportPath='' then
+    result:=SupportPath
+  else
+    if SupportPath='' then
+      result:=AdditionalSupportPath
+    else
+      if SupportPath[Length(SupportPath)]=DirectorySeparator then
+        result:=SupportPath+AdditionalSupportPath
+      else
+        result:=SupportPath+DirectorySeparator+AdditionalSupportPath
+end;
+function GeAddrSupportPath:PString;
+begin
+  result:=@SupportPath;
+end;
 function FindInPaths(Paths,FileName:String):String;
 var
    s,ts,ts2:String;

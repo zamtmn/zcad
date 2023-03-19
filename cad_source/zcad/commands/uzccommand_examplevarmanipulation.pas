@@ -73,7 +73,7 @@ begin
       ProcessVariableAttributes(pvd^.attrib,vda_RO,0);//ставим ридонли для инспектора
 
       //пытаемся найти или загрузить модуль
-      pu:=units.findunit(SupportPath,//пути по которым будет искаться юнит если он еще небыл загружен
+      pu:=units.findunit(GetSupportPath,//пути по которым будет искаться юнит если он еще небыл загружен
                          InterfaceTranslate,//процедура локализации которая будет пытаться перевести на русский все что можно при загрузке
                          'uentrepresentation');//имя модуля
       if pu<>nil then begin //если нашли

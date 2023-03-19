@@ -256,7 +256,7 @@ end;
 procedure TLineTypesForm._LoadLT(Sender: TObject);
 begin
   LineTypesLoadForm:=TLineTypesLoadForm.Create(nil);
-  if LineTypesLoadForm.run(FindInSupportPath(SupportPath,'zcad.lin'))=ZCmrok then
+  if LineTypesLoadForm.run(FindInSupportPath(GetSupportPath,'zcad.lin'))=ZCmrok then
     Memo1.Text:=LineTypesLoadForm.text;
   Freeandnil(LineTypesLoadForm);
 end;

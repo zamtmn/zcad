@@ -82,10 +82,10 @@ begin
   ZCDCtx.CreateRec(drawings.GetCurrentDWG^,drawings.GetCurrentDWG^.pObjRoot^,loadmode,drawings.GetCurrentDWG.CreateDrawingRC);
   loadproc(s,ZCDCtx);
   if FileExists(utf8tosys(s+'.dbpas')) then begin
-    pu:=PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
+    pu:=PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(GetSupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
     if assigned(pu) then begin
       mem.InitFromFile(s+'.dbpas');
-      units.parseunit(SupportPath,InterfaceTranslate,mem,PTSimpleUnit(pu));
+      units.parseunit(GetSupportPath,InterfaceTranslate,mem,PTSimpleUnit(pu));
       remapprjdb(pu);
       mem.done;
     end;

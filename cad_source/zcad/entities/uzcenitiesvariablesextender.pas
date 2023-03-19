@@ -337,7 +337,7 @@ var
     vardata:TVariablesExtender;
 begin
      vardata:=PGDBObjEntity(PEnt)^.GetExtension<TVariablesExtender>;
-     usedunit:=pointer(units.findunit(SupportPath,InterfaceTranslate,_Value));
+     usedunit:=pointer(units.findunit(GetSupportPath,InterfaceTranslate,_Value));
      if vardata=nil then
      begin
           vardata:=addvariablestoentity(PEnt);

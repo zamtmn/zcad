@@ -171,7 +171,7 @@ begin
       exit(cmd_cancel);
   end else begin
     FileName:=ExpandPath(operands);
-    FileName:=FindInSupportPath(SupportPath,operands);
+    FileName:=FindInSupportPath(GetSupportPath,operands);
   end;
   isload:=FileExists(utf8tosys(FileName));
   if isload then begin

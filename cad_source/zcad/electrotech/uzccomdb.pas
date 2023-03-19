@@ -47,7 +47,7 @@ var //t:PUserTypeDescriptor;
 begin
      if commandmanager.ContextCommandParams<>nil then
      begin
-           pu:=PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
+           pu:=PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(GetSupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
            pvd:=pu^.FindVariable('DBCounter');
            vn:=inttostr(Integer(pvd.data.Addr.Instance^));
            vn:='_EQ'+dupestring('0',6-length(vn))+vn;
@@ -73,7 +73,7 @@ var
 begin
      if commandmanager.ContextCommandParams<>nil then
      begin
-           pu:=PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
+           pu:=PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(GetSupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
            pdbv:=pu.InterfaceVariables.findvardescbyinst(PTHardTypedData(commandmanager.ContextCommandParams)^.Instance);
            if pdbv<>nil then
            begin
@@ -131,7 +131,7 @@ begin
           pum:=drawing.GetDWGUnits;
           if pum<>nil then
           begin
-            pdbu:=pum^.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
+            pdbu:=pum^.findunit(GetSupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
             if pdbu<>nil then
             begin
               pdbv:=pdbu^.FindVariable(pstring(pvn.data.Addr.Instance)^);
@@ -161,7 +161,7 @@ var //t:PUserTypeDescriptor;
 begin
      if commandmanager.ContextCommandParams<>nil then
      begin
-           pu:=PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
+           pu:=PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(GetSupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
            pdbv:=pu.InterfaceVariables.findvardescbyinst(PTHardTypedData(commandmanager.ContextCommandParams)^.Instance);
            if pdbv<>nil then
            begin

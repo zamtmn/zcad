@@ -13,46 +13,28 @@
 *****************************************************************************
 }
 {
-@author(Andrey Zubarev <zamtmn@yandex.ru>)
+@author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-{$mode delphi}
-unit uzccommand_unitsman;
 
+unit uzccommand_cfgAddSupportPath;
 {$INCLUDE zengineconfig.inc}
 
 interface
 uses
-  uzcLog,
-  Controls,
-  uzbpaths,
-  uzccommandsabstract,uzccommandsimpl,
-  uzcinterface,
-  UUnitManager,
-  uzccmdeditunit,
-  uzctranslations,
-  Varman;
+ uzcLog,
+ uzbpaths,uzccommandsabstract,uzccommandsimpl,uzmenusmanager;
 
 implementation
-
-function UnitsMan_com(operands:TCommandOperands):TCommandResult;
-var
-  PUnit:ptunit;
+function cfgAddSupportPath_com(operands:TCommandOperands):TCommandResult;
 begin
-  if length(Operands)>0 then begin
-    PUnit:=units.findunit(GetSupportPath,InterfaceTranslate,operands);
-    if PUnit<>nil then
-      EditUnit(PUnit^)
-    else
-      ZCMsgCallBackInterface.TextMessage('unit not found!',TMWOHistoryOut);
-  end else
-    ZCMsgCallBackInterface.TextMessage('Specify unit name!',TMWOHistoryOut);
+  AddSupportPath(ExpandPath(operands));
   result:=cmd_ok;
 end;
 
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@UnitsMan_com,'UnitsMan',0,0);
+  CreateCommandFastObjectPlugin(@cfgAddSupportPath_com,'cfgAddSupportPath',0,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

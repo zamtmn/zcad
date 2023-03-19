@@ -710,7 +710,7 @@ begin
     //создаем матрицу для перемещения по оси У на +15
     t_matrix:=uzegeometry.CreateTranslationMatrix(createvertex(0,15,0));
     //ищем модуль с переменными дефолтными переменными для представителя устройства
-    pu:=units.findunit(SupportPath,InterfaceTranslate,'uentrepresentation');
+    pu:=units.findunit(GetSupportPath,InterfaceTranslate,'uentrepresentation');
     //эта команда работает после указания пользователем точки вставки
     //смещение первого вставляемого элемента nulvertex
     currentcoord:=nulvertex;
@@ -1433,7 +1433,7 @@ begin
                  zcSetEntPropFromCurrentDrawingProp(TempNet);
                  drawings.standardization(TempNet,GDBNetID);
                  ptempnetvarext:=TempNet^.GetExtension<TVariablesExtender>;
-                 ptempnetvarext.entityunit.copyfrom(units.findunit(SupportPath,InterfaceTranslate,'trace'));
+                 ptempnetvarext.entityunit.copyfrom(units.findunit(GetSupportPath,InterfaceTranslate,'trace'));
                  pvd:=ptempnetvarext.entityunit.FindVariable('NMO_Suffix');
                  pstring(pvd^.data.Addr.Instance)^:=inttostr(drawings.GetCurrentDWG.numerator.getnumber(UNNAMEDNET,SysVar.DSGN.DSGN_TraceAutoInc^));
                  pvd:=ptempnetvarext.entityunit.FindVariable('NMO_Prefix');
@@ -1624,7 +1624,7 @@ begin
 
     //uunitmanager.units.loadunit(expandpath('*blocks\el\cable.pas'),@p3dpl^.ou);
     pcablevarext:=p3dpl^.GetExtension<TVariablesExtender>;
-    pcablevarext.entityunit.copyfrom(units.findunit(SupportPath,InterfaceTranslate,'cable'));
+    pcablevarext.entityunit.copyfrom(units.findunit(GetSupportPath,InterfaceTranslate,'cable'));
     //pvd:=p3dpl^.ou.FindVariable('DB_link');
     //pstring(pvd^.Instance)^:='Кабель ??';
 
@@ -2264,7 +2264,7 @@ begin
                      pt^.ptablestyle:=drawings.GetCurrentDWG.TableStyleTable.getAddres('Spec');
                      pt^.tbl.free;
 
-  pdbu:=PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
+  pdbu:=PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(GetSupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
   currentgroup:=MainSpecContentFormat.beginiterate(ir_inscf);
   if currentgroup<>nil then
   if length(currentgroup^)>1 then
@@ -2803,7 +2803,7 @@ begin
 
   pcablevarext:=pleader^.GetExtension<TVariablesExtender>;
   if pcablevarext<>nil then
-    pcablevarext.entityunit.copyfrom(units.findunit(SupportPath,InterfaceTranslate,'elleader'));
+    pcablevarext.entityunit.copyfrom(units.findunit(GetSupportPath,InterfaceTranslate,'elleader'));
 
   zcSetEntPropFromCurrentDrawingProp(pleader);
   drawings.standardization(pleader,GDBELleaderID);
@@ -2946,7 +2946,7 @@ begin
   result.init(drawings.GetCurrentROOT,nil,0);
   //result := Pointer(drawings.GetCurrentROOT.ObjArray.CreateInitObj(GDBCableID,drawings.GetCurrentROOT));
   pentvarext:=result^.GetExtension<TVariablesExtender>;
-  pentvarext.entityunit.copyfrom(units.findunit(SupportPath,InterfaceTranslate,'cable'));
+  pentvarext.entityunit.copyfrom(units.findunit(GetSupportPath,InterfaceTranslate,'cable'));
   pvd:=pentvarext.entityunit.FindVariable('NMO_Suffix');
   pstring(pvd^.data.Addr.Instance)^:='';
   pvd:=pentvarext.entityunit.FindVariable('NMO_Prefix');
@@ -3059,7 +3059,7 @@ begin
                  begin
                                            begin
                                            s:=ExpandPath(operands);
-                                           s:=FindInSupportPath(SupportPath,operands);
+                                           s:=FindInSupportPath(GetSupportPath,operands);
                                            end;
                  end;
   isload:=FileExists(utf8tosys(s));
@@ -3165,7 +3165,7 @@ begin
                                                                 plinevarext:=New_line^.GetExtension<TVariablesExtender>;
                                                                 if plinevarext=nil then
                                                                                        plinevarext:=AddVariablesToEntity(New_line);
-                                                                plinevarext.entityunit.copyfrom(units.findunit(SupportPath,InterfaceTranslate,'_riserlink'));
+                                                                plinevarext.entityunit.copyfrom(units.findunit(GetSupportPath,InterfaceTranslate,'_riserlink'));
                                                                 vd:=plinevarext.entityunit.FindVariable('LengthOverrider');
 
                                                                 pvn :=FindVariableInEnt(riser,'Elevation');
@@ -3464,7 +3464,7 @@ procedure startup;
   // s:String;
 begin
   MainSpecContentFormat.init(100);
-  MainSpecContentFormat.loadfromfile(FindInSupportPath(SupportPath,'main.sf'));
+  MainSpecContentFormat.loadfromfile(FindInSupportPath(GetSupportPath,'main.sf'));
   CreateCommandFastObjectPlugin(@RegenZEnts_com,'RegenZEnts',CADWG,0);
   Wire.init('El_Wire',0,0);
   commandmanager.CommandRegister(@Wire);

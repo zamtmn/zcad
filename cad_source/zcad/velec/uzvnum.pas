@@ -981,7 +981,7 @@ begin
       pvarext:=polyObj^.specialize GetExtension<TVariablesExtender>; //подклчаемся к инспектору
       if pvarext<>nil then
       begin
-        psu:=units.findunit(SupportPath,@InterfaceTranslate,'cable'); //
+        psu:=units.findunit(GetSupportPath,@InterfaceTranslate,'cable'); //
         if psu<>nil then
           pvarext.entityunit.copyfrom(psu);
       end;

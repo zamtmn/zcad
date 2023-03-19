@@ -26,9 +26,10 @@ implementation
 
 initialization
   //units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'PATH_Program_Run','String',@ProgramPath);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'PATH_Support_Path','String',@SupportPath);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'PATH_Support_Path','String',GeAddrSupportPath);
   sysvar.PATH.Program_Run:=@ProgramPath;
-  sysvar.PATH.Support_Path:=@SupportPath;
+  sysvar.PATH.Support_Path:=GeAddrSupportPath;
+  sysvar.PATH.AdditionalSupport_Path:=@AdditionalSupportPath;
   sysvar.PATH.Temp_files:=@TempPath;
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);

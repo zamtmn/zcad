@@ -59,7 +59,7 @@ begin
     mem.AddData(@astring[1],length(astring));
 
     entityunit.free;
-    units.parseunit(SupportPath,InterfaceTranslate,mem,@entityunit);
+    units.parseunit(GetSupportPath,InterfaceTranslate,mem,@entityunit);
 
     pu:=entunits.beginiterate(ir);
     if pu<>nil then

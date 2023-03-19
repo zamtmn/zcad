@@ -48,7 +48,7 @@ var
    allok:boolean;
 begin
      allok:=savedxf2000(s,ProgramPath + 'components/empty.dxf',dwg^);
-     pu:=PTZCADDrawing(dwg).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
+     pu:=PTZCADDrawing(dwg).DWGUnits.findunit(GetSupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
      mem.init(1024);
      pu^.SavePasToMem(mem);
      mem.SaveToFile(expandpath(s+'.dbpas'));

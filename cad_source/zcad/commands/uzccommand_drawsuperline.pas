@@ -133,7 +133,7 @@ begin
     pvarext:=psuperline^.GetExtension<TVariablesExtender>;
     if pvarext<>nil then
     begin
-      psu:=units.findunit(SupportPath,InterfaceTranslate,'superline');
+      psu:=units.findunit(GetSupportPath,InterfaceTranslate,'superline');
       if psu<>nil then
         pvarext.entityunit.copyfrom(psu);
     end;
@@ -190,7 +190,7 @@ begin
     pvarext:=psuperline^.GetExtension<TVariablesExtender>;
     if pvarext<>nil then
     begin
-      psu:=units.findunit(SupportPath,InterfaceTranslate,'superline');
+      psu:=units.findunit(GetSupportPath,InterfaceTranslate,'superline');
       if psu<>nil then
         pvarext.entityunit.copyfrom(psu);
     end;
@@ -237,7 +237,7 @@ begin
     //psu:=units.findunit(SupportPath,InterfaceTranslate,'superline');
 
     //пытаемся найти или загрузить модуль
-    psu:=units.findunit(SupportPath,//пути по которым будет искаться юнит если он еще небыл загружен
+    psu:=units.findunit(GetSupportPath,//пути по которым будет искаться юнит если он еще небыл загружен
                        InterfaceTranslate,//процедура локализации которая будет пытаться перевести на русский все что можно при загрузке
                        'superline');//имя модуля
 

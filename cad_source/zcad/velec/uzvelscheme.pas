@@ -1024,7 +1024,7 @@ var
       //**добавление свойств устройтсва
       if entvarext<>nil then
       begin
-        psu:=units.findunit(SupportPath,@InterfaceTranslate,'develscheme'); //
+        psu:=units.findunit(GetSupportPath,@InterfaceTranslate,'develscheme'); //
         if psu<>nil then
           entvarext.entityunit.copyfrom(psu);
       end;
@@ -1142,7 +1142,7 @@ var
       //**добавление свойств устройтсва
       if entvarext<>nil then
       begin
-        psu:=units.findunit(SupportPath,@InterfaceTranslate,'develscheme'); //
+        psu:=units.findunit(GetSupportPath,@InterfaceTranslate,'develscheme'); //
         if psu<>nil then
           entvarext.entityunit.copyfrom(psu);
       end;
@@ -1292,7 +1292,7 @@ var
             //pvarext:=cableLine^.specialize GetExtension<TVariablesExtender>; //подклчаемся к инспектору
             if entvarext<>nil then
             begin
-              psu:=units.findunit(SupportPath,@InterfaceTranslate,'cableelscheme'); //
+              psu:=units.findunit(GetSupportPath,@InterfaceTranslate,'cableelscheme'); //
               if psu<>nil then
                 entvarext.entityunit.copyfrom(psu);
               pvd:=entvarext.entityunit.FindVariable(velec_cableMounting);
@@ -1315,7 +1315,7 @@ var
             delvarext:=cableLine^.specialize GetExtension<TVariablesExtender>;
             if delvarext<>nil then
             begin
-              psu:=units.findunit(SupportPath,@InterfaceTranslate,'cableelscheme'); //
+              psu:=units.findunit(GetSupportPath,@InterfaceTranslate,'cableelscheme'); //
               if psu<>nil then
                 delvarext.entityunit.copyfrom(psu);
             end;

@@ -60,7 +60,7 @@ begin
                  else
                  begin
                    s:=ExpandPath(operands);
-                   s:=FindInSupportPath(SupportPath,operands);
+                   s:=FindInSupportPath(GetSupportPath,operands);
                  end;
   isload:=FileExists(utf8tosys(s));
   if isload then

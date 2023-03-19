@@ -32,13 +32,13 @@ implementation
 var
   mem:TZctnrVectorBytes;
 initialization;
-  units.loadunit(SupportPath,InterfaceTranslate,expandpath('*rtl/sysvar.pas'),nil);
-  units.loadunit(SupportPath,InterfaceTranslate,expandpath('*rtl/savedvar.pas'),nil);
-  units.loadunit(SupportPath,InterfaceTranslate,expandpath('*rtl/devicebase.pas'),nil);
+  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('*rtl/sysvar.pas'),nil);
+  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('*rtl/savedvar.pas'),nil);
+  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('*rtl/devicebase.pas'),nil);
 
-  SysVarUnit:=units.findunit(SupportPath,InterfaceTranslate,'sysvar');
-  SavedUnit:=units.findunit(SupportPath,InterfaceTranslate,'savedvar');
-  DBUnit:=units.findunit(SupportPath,InterfaceTranslate,'devicebase');
+  SysVarUnit:=units.findunit(GetSupportPath,InterfaceTranslate,'sysvar');
+  SavedUnit:=units.findunit(GetSupportPath,InterfaceTranslate,'savedvar');
+  DBUnit:=units.findunit(GetSupportPath,InterfaceTranslate,'devicebase');
 
   if SysVarUnit<>nil then
   begin
@@ -198,10 +198,10 @@ initialization;
   end;
 
 
-  units.loadunit(SupportPath,InterfaceTranslate,expandpath('*rtl/cables.pas'),nil);
-  units.loadunit(SupportPath,InterfaceTranslate,expandpath('*rtl/devices.pas'),nil);
-  units.loadunit(SupportPath,InterfaceTranslate,expandpath('*rtl/connectors.pas'),nil);
-  units.loadunit(SupportPath,InterfaceTranslate,expandpath('*rtl/styles/styles.pas'),nil);
+  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('*rtl/cables.pas'),nil);
+  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('*rtl/devices.pas'),nil);
+  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('*rtl/connectors.pas'),nil);
+  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('*rtl/styles/styles.pas'),nil);
 
   //units.loadunit(expandpath('*rtl\objdefunits\objname.pas'),nil);
   //units.loadunit(expandpath('*rtl\objdefunits\blocktype.pas'),nil);

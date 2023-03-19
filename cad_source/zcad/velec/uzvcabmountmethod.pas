@@ -98,7 +98,7 @@ initialization
   CreateCommandFastObjectPlugin(@MountingMethodsTest_com,'mt',CADWG,0);//тестовая команда, вызывает окно с твоим деревом
 
 
-  AddFastEditorToType(units.findunit(SupportPath,InterfaceTranslate,'cables').TypeName2PTD('TDCableMountingMethod'),//привязка быстрого редактора, я вяжу к String, ты поставишь свой тип
+  AddFastEditorToType(units.findunit(GetSupportPath,InterfaceTranslate,'cables').TypeName2PTD('TDCableMountingMethod'),//привязка быстрого редактора, я вяжу к String, ты поставишь свой тип
                       @OIUI_FE_ButtonGetPrefferedSize,//процедура определяющая размер кнопки в инспекторе
                       @OIUI_FE_ButtonMultiplyDraw,//процедура рисующая кнопку в инспекторе
                       @RunMountingMethodsFastEditor);//запуск  редактора  и  возврат  значения

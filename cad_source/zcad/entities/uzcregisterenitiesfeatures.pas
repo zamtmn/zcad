@@ -380,7 +380,7 @@ begin
          //p:=@units;
          //S:=pEntity^.name;
          //S:=SupportPath;
-         uou:=pointer(units.findunit(SupportPath,InterfaceTranslate,pEntity^.name));
+         uou:=pointer(units.findunit(GetSupportPath,InterfaceTranslate,pEntity^.name));
          if uou<>nil then
                          begin
                               pentvarext:=pEntity^.GetExtension<TVariablesExtender>;

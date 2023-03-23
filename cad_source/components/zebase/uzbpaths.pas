@@ -67,7 +67,7 @@ begin
       if SupportPath[Length(SupportPath)]=DirectorySeparator then
         result:=SupportPath+AdditionalSupportPath
       else
-        result:=SupportPath+DirectorySeparator+AdditionalSupportPath
+        result:=SupportPath+PathSeparator+AdditionalSupportPath
 end;
 function GeAddrSupportPath:PString;
 begin

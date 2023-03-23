@@ -149,7 +149,7 @@ begin
   DSGN_OTrackTimerInterval:=500;
   DISP_LWDisplayScale:=10;
   RD_Light:=False;
-  PATH_Preload_Path:='$(ZCADPath)/preload/';
+  PATH_Preload_Path:='$(ZCADPath)/preload/;$(UserDir)/zcad/preload/;$(LocalConfigDir)/$(AppName)/preload/;$(GlobalConfigDir)/$(AppName)/preload/';
   PATH_Fonts:='$(SystemFontsPath)/;$(UserFontsPath)/;$(ZCADPath)/fonts/;C:/APPS/MY/acad/support/;C:/Program Files/Autodesk/AutoCAD 2020/Fonts/';
   PATH_AlternateFont:='_mipGost.shx';
   PATH_Support_Path:='$(ZCADPath)/rtl;$(ZCADPath)/rtl/objdefunits;$(ZCADPath)/rtl/objdefunits/include;$(ZCADPath)/components;$(ZCADPath)/blocks/el/general;$(ZCADPath)/blocks/el/general/velecdevice;$(ZCADPath)/rtl/styles';

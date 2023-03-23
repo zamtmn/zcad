@@ -1,0 +1,2 @@
+cfgAddSupportPath($(CurrentMacrosPath))
+LoadPalettes($(CurrentMacrosPath)$(DirectorySeparator)instrumentation.xml)

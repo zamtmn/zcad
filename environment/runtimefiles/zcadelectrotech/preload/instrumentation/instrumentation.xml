@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <PalettesContent>
+    <BlockLib Type="Tree" Caption='Blocks' ImagesWidth='24'>
+      <ZTreeNode Caption='Instrumentation'>
+        <ZTreeNode Caption='Unsorted'>
+          <ZTreeCommand Command="Insert(DEVICE_KIP_ACTUATOR)"/>
+          <ZTreeCommand Command="Insert(DEVICE_KIP_AUTOMATION_BOX)"/>
+          <ZTreeCommand Command="Insert(DEVICE_KIP_CONNECTION_BOX)"/>
+          <ZTreeCommand Command="Insert(DEVICE_KIP_DETECTOR)"/>
+          <ZTreeCommand Command="Insert(DEVICE_KIP_DEVICE)"/>
+          <ZTreeCommand Command="Insert(DEVICE_KIP_KDU)"/>
+          <ZTreeCommand Command="Insert(DEVICE_KIP_KNOPKA)"/>
+          <ZTreeCommand Command="Insert(DEVICE_KIP_KNOPKA_PKE)"/>
+          <ZTreeCommand Command="Insert(DEVICE_KIP_KOROBKA)"/>
+          <ZTreeCommand Command="Insert(DEVICE_KIP_KPV)"/>
+          <ZTreeCommand Command="Insert(DEVICE_KIP_OZK)"/>
+          <ZTreeCommand Command="Insert(DEVICE_KIP_SENSOR)"/>
+          <ZTreeCommand Command="Insert(DEVICE_KIP_SOLENOID)"/>
+          <ZTreeCommand Command="Insert(DEVICE_KIP_SPZH)"/>
+          <ZTreeCommand Command="Insert(DEVICE_KIP_UKP)"/>
+          <ZTreeCommand Command="Insert(DEVICE_KIP_VALVE)"/>
+          <ZTreeCommand Command="Insert(DEVICE_KIP_VE)"/>
+        </ZTreeNode>
+      </ZTreeNode>
+    </BlockLib>
+  </PalettesContent>
+</CONFIG>

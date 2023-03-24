@@ -57,7 +57,7 @@ begin
   ProcessException (Sender,RaiseList);
 
   crashreportfilename:=GetCrashReportFilename;
-  errmsg:='Profram raised exception class "'+E.Message+'"'#13#10#13#10'A crash report generated.'#13#10'See file"'
+  errmsg:='Program raised exception class "'+E.Message+'"'#13#10#13#10'A crash report generated.'#13#10'See file"'
          +crashreportfilename+'"'#13#10#13#10'Attempt to continue running?';
   if MessageDlg('Error',errmsg,mtError,[mbYes,mbCancel],'')=mrCancel then
     halt(0);

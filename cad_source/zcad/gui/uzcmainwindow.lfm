@@ -7,7 +7,6 @@ object ZCADMainWindow: TZCADMainWindow
   ClientWidth = 805
   DesignTimePPI = 144
   OnCreate = _onCreate
-  LCLVersion = '2.3.0.0'
   object AnchorDockPanel1: TAnchorDockPanel
     Left = 4
     Height = 569
@@ -30,6 +29,7 @@ object ZCADMainWindow: TZCADMainWindow
     EdgeBorders = []
     GrabWidth = 5
     ParentFont = False
+    Themed = False
   end
   object ToolBarD: TToolBar
     Left = 0
@@ -40,9 +40,6 @@ object ZCADMainWindow: TZCADMainWindow
     AutoSize = True
     Caption = 'ToolBarD'
     DragKind = dkDock
-    EdgeBorders = []
-    EdgeInner = esNone
-    EdgeOuter = esNone
     ParentFont = False
     ShowCaptions = True
     TabOrder = 2

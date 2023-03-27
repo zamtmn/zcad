@@ -176,7 +176,7 @@ begin
   INTF_DefaultControlHeight:=33;
   INTF_ObjInsp_AlwaysUseMultiSelectWrapper:=True;
   INTF_DefaultEditorFontHeight:=0;
-  INTF_ThemedUpToolbars:=True;
+  INTF_ThemedUpToolbars:=False;
   INTF_ThemedRightToolbars:=False;
   INTF_ThemedDownToolbars:=False;
   INTF_ThemedLeftToolbars:=False;

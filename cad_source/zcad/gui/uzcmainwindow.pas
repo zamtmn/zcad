@@ -1787,10 +1787,10 @@ var
 begin
   if ThemeServices.ThemesEnabled then begin
     rect:=TToolBar(Sender).ClientRect;
-    det:=ThemeServices.GetElementDetails(tsStatusRoot);
-    ThemeServices.DrawElement(TToolBar(Sender).Canvas.Handle,det,rect);
+    {det:=ThemeServices.GetElementDetails(tsStatusRoot);
+    ThemeServices.DrawElement(TToolBar(Sender).Canvas.Handle,det,rect);}
     det:=ThemeServices.GetElementDetails(tsGripper);
-    rect.Left:=rect.Right-16;
+    rect.Left:=rect.Right-24;
     ThemeServices.DrawElement(TToolBar(Sender).Canvas.Handle,det,rect);
   end;
 end;

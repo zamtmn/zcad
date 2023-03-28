@@ -1,8 +1,10 @@
 unit DEVICE_OPS_GB2;
 interface
-uses system,devices;
-usescopy rip;
+usescopy firesensor;
 implementation
 begin
-   BTY_TreeCoord:='PLAN_OPS_Блок питания 2';
+   NMO_Name:='0GB0.0';
+   NMO_BaseName:='GB';
+   DB_link:='Блок питания';
+   BTY_TreeCoord:='PLAN_СКУД_Блок питания (+ -)';
 end.

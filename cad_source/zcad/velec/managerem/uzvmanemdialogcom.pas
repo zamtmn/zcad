@@ -184,45 +184,37 @@ var
          end;
        //ZCMsgCallBackInterface.TextMessage('05000000000000',TMWOHistoryOut);
 
-       //if result <> nil then
-       //  ZCMsgCallBackInterface.TextMessage('result Устройство:' + result^.Name,TMWOHistoryOut)
-       //  else
-       //  ZCMsgCallBackInterface.TextMessage('result нет устройства',TMWOHistoryOut);
-
        if result = nil then
        begin
           ZCMsgCallBackInterface.TextMessage(RSCLPuzvmanemDedicatedPrimitiveNotHost,TMWOHistoryOut);
-            repeat
-              if commandmanager.getentity(RSCLPuzvmanemChooseYourHeadUnit,selEnt) then
-              begin
-                 //ZCMsgCallBackInterface.TextMessage('Устройство:' + selEnt^.GetObjName,TMWOHistoryOut);
-                 // Если выделенный устройство GDBDeviceID тогда
-                 if selEnt^.GetObjType=GDBDeviceID then
-                 begin
-                   //ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
-                   selDevVarExt:=PGDBObjDevice(selEnt)^.GetExtension<TVariablesExtender>;
-                   //ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
-                   selEntMF:=selDevVarExt.getMainFuncEntity;
-                   //ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
+            if commandmanager.getentity(RSCLPuzvmanemChooseYourHeadUnit,selEnt) then
+            begin
+             //Если выделенный устройство GDBDeviceID тогда
+            if selEnt^.GetObjType=GDBDeviceID then
+            begin
+              //ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
+              selDevVarExt:=PGDBObjDevice(selEnt)^.GetExtension<TVariablesExtender>;
+              //ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
+              selEntMF:=selDevVarExt.getMainFuncEntity;
+              //ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
 
-                   if selEntMF^.GetObjType=GDBDeviceID then
-                     //ZCMsgCallBackInterface.TextMessage('selEntMF = ' + PGDBObjDevice(selEntMF)^.Name,TMWOHistoryOut);
-                     for devlistMF in listDev do
-                     begin
-                       //ZCMsgCallBackInterface.TextMessage('4 + '+ devlistMF^.Name,TMWOHistoryOut);
-                       if devlistMF = PGDBObjDevice(selEntMF) then
-                       begin
-                         //ZCMsgCallBackInterface.TextMessage('5',TMWOHistoryOut);
-                         result:=PGDBObjDevice(selEntMF);
-                         //system.break;
-                       end;
-                     end;
-                 end;
-              end;
-              if result = nil then
-                ZCMsgCallBackInterface.TextMessage(RSCLPuzvmanemDedicatedPrimitiveNotHost,TMWOHistoryOut);
-            until result <> nil;
+              if selEntMF^.GetObjType=GDBDeviceID then
+                //ZCMsgCallBackInterface.TextMessage('selEntMF = ' + PGDBObjDevice(selEntMF)^.Name,TMWOHistoryOut);
+                for devlistMF in listDev do
+                begin
+                  //ZCMsgCallBackInterface.TextMessage('4 + '+ devlistMF^.Name,TMWOHistoryOut);
+                  if devlistMF = PGDBObjDevice(selEntMF) then
+                  begin
+                    //ZCMsgCallBackInterface.TextMessage('5',TMWOHistoryOut);
+                    result:=PGDBObjDevice(selEntMF);
+                    //system.break;
+                  end;
+                end;
+            end;
+          end;
        end;
+       if result = nil then
+         ZCMsgCallBackInterface.TextMessage(RSCLPuzvmanemDedicatedPrimitiveNotHost,TMWOHistoryOut);
   end;
 
 function generatorOnelineDiagramOneLevel_com(operands:TCommandOperands):TCommandResult;
@@ -259,8 +251,10 @@ begin
          //ZCMsgCallBackInterface.TextMessage('Выбрано головное утройтсво = ' + pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
 
     zcShowCommandParams(SysUnit^.TypeName2PTD('TuzvmanemSGparams'),@CmdProp);
-    //  получаем граф для его изучени
+    // получаем граф для его изучени
     graphView:=uzvmanemgetgem.getGraphHeadDev(listFullGraphEM,headDev,listAllHeadDev);
+
+    // Получить группы которые есть у головного устройства
 
     visualGraphTree(graphView,insertCoordination,3,depthVisual);
 

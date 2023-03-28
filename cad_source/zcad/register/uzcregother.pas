@@ -95,6 +95,7 @@ initialization;
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_ThemedLeftToolbars,'INTF_ThemedLeftToolbars');
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_ShowDwgTabCloseBurron,'INTF_ShowDwgTabCloseBurron');
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_DefaultControlHeight,'INTF_DefaultControlHeight');
+  SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_AppMode,'INTF_AppMode');
 
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowHeaders,'INTF_ObjInsp_ShowHeaders');
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_OldStyleDraw,'INTF_ObjInsp_OldStyleDraw');

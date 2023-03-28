@@ -147,6 +147,8 @@ GDBUNISymbolInfo=record
   end;
 PTAlign=^TAlign;
 TAlign=(TATop,TABottom,TALeft,TARight);
+PTAppMode=^TAppMode;
+TAppMode=(TAMAllowDark,TAMForceDark,TAMForceLight);
 TDWGHandle=QWord;
 PTGDBLineWeight=^TGDBLineWeight;
 TGDBLineWeight=SmallInt;

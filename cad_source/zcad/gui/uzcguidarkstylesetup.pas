@@ -16,24 +16,19 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uDarkStyleParams;
+unit uzcguiDarkStyleSetup;
 
 interface
 
-type
-  // Insider 18334
-  TPreferredAppMode =
-  (
-    pamDefault,
-    pamAllowDark,
-    pamForceDark,
-    pamForceLight
-  );
-
-var
-  PreferredAppMode:TPreferredAppMode=pamForceLight;
-  IsDarkModeEnabled: Boolean = False;
+uses
+  uDarkStyleParams,uzcsysvars,uzbtypes;
 
 implementation
-
+initialization
+  if sysvar.INTF.INTF_AppMode<>nil then
+    case sysvar.INTF.INTF_AppMode^ of
+       TAMAllowDark:PreferredAppMode:=pamAllowDark;
+       TAMForceDark:PreferredAppMode:=pamForceDark;
+      TAMForceLight:PreferredAppMode:=pamForceLight;
+    end;
 end.

@@ -201,6 +201,7 @@ type
               INTF_DefaultControlHeight:PInteger;(*'Default control height'*)(*oi_readonly*)
               INTF_DefaultEditorFontHeight:PInteger;(*'Default editor font height'*)
               INTF_OBJINSP_Properties:tobjinspinterface;(*'Object inspector properties'*)
+              INTF_AppMode:PTAppMode;(*'Application mode'*)
              end;
   {REGISTERRECORDTYPE tdisp}
   tdisp=record

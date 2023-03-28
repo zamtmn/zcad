@@ -46,6 +46,11 @@ uses
        uzcmenucontextcheckfuncs,uzctbextmenus,uzmenusdefaults,uzmenusmanager,uztoolbarsmanager,uzctextenteditor,uzcfcommandline,uzctreenode,uzcctrlcontextmenu,
        uzcimagesmanager,usupportgui,uzcuidialogs,
        uzcActionsManager,
+
+       //это разделять нельзя, иначе загрузятся невыровенные рекорды
+       {$INCLUDE allgeneratedfiles.inc}uzcregother,
+
+       {$IFDEF WINDOWS}uzcguiDarkStyleSetup,uWin32WidgetSetDark,{$ENDIF}
   {}
        uzgldrawcontext,uzglviewareaabstract,uzcguimanager,uzcinterfacedata,
        uzcenitiesvariablesextender,uzglviewareageneral,UniqueInstanceRaw,
@@ -1871,6 +1876,9 @@ begin
   newmenu:=TMainMenu(MenusManager.GetMainMenu('MAINMENU',application));
   if IsDifferentMenu(oldmenu,newmenu) then begin
     self.Menu:=newmenu;
+    {$IF DEFINED(MSWINDOWS)}
+    DarkFormChanged(self);
+    {$ENDIF}
     if assigned(oldmenu) then
       Application.QueueAsyncCall(AsyncFree,PtrInt(oldmenu));
   end else

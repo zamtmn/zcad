@@ -79,6 +79,7 @@ var
   INTF_ThemedRightToolbars:Boolean;
   INTF_ThemedDownToolbars:Boolean;
   INTF_ThemedLeftToolbars:Boolean;
+  INTF_AppMode:TAppMode;
   RD_Vendor:String;
   RD_Renderer:String;
   RD_Extensions:String;
@@ -180,6 +181,7 @@ begin
   INTF_ThemedRightToolbars:=False;
   INTF_ThemedDownToolbars:=False;
   INTF_ThemedLeftToolbars:=False;
+  INTF_AppMode:=TAMForceLight;
   RD_Vendor:='';
   RD_Renderer:='';
   RD_Extensions:='';

@@ -76,6 +76,9 @@ uses
   uzcregsystempas,//loading rtl/system.pas
   {$INCLUDE allgeneratedfiles.inc}//correct defs in system.pas
   uzcregother,//setup SysVar
+
+  {$IFDEF WINDOWS}uzcguiDarkStyleSetup,{$IF DEFINED(LCLQT5)}uDarkStyle,{$ENDIF}uWin32WidgetSetDark,{$ENDIF}
+
   UUnitManager,
   uzefontmanager,
   uzeffshx,uzeffttf,uzeffLibreDWG,uzeffLibreDWG2Ents,
@@ -294,7 +297,6 @@ uses
 
   uzcinterface,
   uzccommand_dbgappexplorer,
-  {$IFDEF WINDOWS}{$IFDEF LCLQT5}uDarkStyle,{$ENDIF}{$ENDIF}
   uzelongprocesssupport;
 
 resourcestring
@@ -304,7 +306,6 @@ var
   lpsh:TLPSHandle;
   i:integer;
   scrfile:string;
-
 
 {$R *.res}
 
@@ -330,7 +331,9 @@ begin
     Application.MainFormOnTaskBar:=true;
   {$ENDIF}
   //создание окна программы
-  {$IFDEF WINDOWS}{$IFDEF LCLQT5}uDarkStyle.ApplyDarkStyle;{$ENDIF}{$ENDIF}
+  {$IF DEFINED(MSWINDOWS)}
+  ApplyDarkStyle;
+  {$ENDIF}
   Application.CreateForm(TZCADMainWindow,ZCADMainWindow);
   ZCADMainWindow.show;
   {if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then

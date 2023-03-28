@@ -30,6 +30,7 @@ uses
   LCLVersion, uDarkStyleParams;
 
 procedure ApplyDarkStyle;
+procedure DarkFormChanged(Form: TObject);
 
 implementation
 
@@ -1276,6 +1277,14 @@ begin
     SetMenuBackground(GetMenu(Form.Handle));
     Form.Menu.OwnerDraw:= False;
   end;
+end;
+
+procedure DarkFormChanged(Form: TObject);
+begin
+  if not IsDarkModeEnabled then
+    Exit;
+  if Form is TForm then
+    ScreenFormEvent(nil,nil,Form as TForm);
 end;
 
 {

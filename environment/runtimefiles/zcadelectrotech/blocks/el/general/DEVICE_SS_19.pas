@@ -7,4 +7,5 @@ begin
    NMO_BaseName:='Ст';
    DB_link:='Стойка 19"';
    BTY_TreeCoord:='PLAN_SS_Стойка 19"';
+   NMO_Template:='@@[NMO_Prefix]@@[NMO_BaseName]@@[NMO_Suffix]';
 end.

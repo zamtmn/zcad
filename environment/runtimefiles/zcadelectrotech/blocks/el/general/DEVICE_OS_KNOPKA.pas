@@ -1,20 +1,10 @@
 unit DEVICE_OS_KNOPKA;
 interface
-uses system,devices;
-usescopy objname;
-usescopy objmaterial;
-usescopy objconnect;
-usescopy blocktype;
+usescopy firesensor;
 implementation
 begin
-   BTY_TreeCoord:='PLAN_OPS_Кнопка на выход';
-
-   NMO_Template:='@@[NMO_Prefix]@@[NMO_BaseName]@@[NMO_Suffix]';
-
-   NMO_Prefix:='';
-   NMO_BaseName:='SB';
-   NMO_Suffix:='??';
-
-   DB_link:='OS_KNOPKA';
-
+   NMO_Name:='0Кн0.0';
+   NMO_BaseName:='Кн';
+   DB_link:='Кнопка выхода';
+   BTY_TreeCoord:='PLAN_СКУД_Кнопка выхода';
 end.

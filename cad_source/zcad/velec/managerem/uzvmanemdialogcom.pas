@@ -92,6 +92,7 @@ type
   //
 
   TListDev=TVector<pGDBObjDevice>;
+  TListGroupHeadDev=TVector<string>;
 
 var
   clFileParam:CMDLinePromptParser.TGeneralParsedText=nil;
@@ -217,6 +218,7 @@ var
          ZCMsgCallBackInterface.TextMessage(RSCLPuzvmanemDedicatedPrimitiveNotHost,TMWOHistoryOut);
   end;
 
+
 function generatorOnelineDiagramOneLevel_com(operands:TCommandOperands):TCommandResult;
 var
   //inpt:String;
@@ -225,6 +227,7 @@ var
   pvd:pvardesk;
   p:GDBVertex;
   listHeadDev:TListDev;
+  listNameGroupDev:TListGroupHeadDev;
   headDev:pGDBObjDevice;
   graphView:TGraphDev;
   depthVisual:double;
@@ -240,7 +243,7 @@ begin
   listFullGraphEM:=uzvmanemgetgem.getListGrapghEM;
 
   listAllHeadDev:=TListDev.Create;
-  listAllHeadDev:=getListMainFuncHeadDev(listFullGraphEM);
+  listAllHeadDev:=uzvmanemgetgem.getListMainFuncHeadDev(listFullGraphEM);
 
   headDev:=getDeviceHeadGroup(listFullGraphEM,listAllHeadDev);
   if headDev <> nil then
@@ -251,10 +254,12 @@ begin
          //ZCMsgCallBackInterface.TextMessage('Выбрано головное утройтсво = ' + pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
 
     zcShowCommandParams(SysUnit^.TypeName2PTD('TuzvmanemSGparams'),@CmdProp);
-    // получаем граф для его изучени
+    //Получаем граф для его изучени
     graphView:=uzvmanemgetgem.getGraphHeadDev(listFullGraphEM,headDev,listAllHeadDev);
 
-    // Получить группы которые есть у головного устройства
+    //Получить группы которые есть у головного устройства
+    listNameGroupDev:=TListGroupHeadDev.Create;
+    listNameGroupDev:=uzvmanemgetgem.getListNameGroupHD(graphView);
 
     visualGraphTree(graphView,insertCoordination,3,depthVisual);
 

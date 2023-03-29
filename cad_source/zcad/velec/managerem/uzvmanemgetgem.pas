@@ -131,6 +131,8 @@ type
 
  //список устройств
  TListDev=specialize TVector<pGDBObjDevice>;
+ //список имен группы головного устройства
+ TListGroupHeadDev=specialize TVector<string>;
 
  //**Получить список деревьев(графов)
  function getListGrapghEM:TListGraphDev;
@@ -143,6 +145,8 @@ type
  function getListMainFuncHeadDev(listFullGraphEM:TListGraphDev):TListDev;
  //**получить граф головного устройства с учетом подключенных ТОЛЬКО к нему устройств (с учетом особеностей отказа от ГУ)
  function getGraphHeadDev(listFullGraphEM:TListGraphDev;rootDev:PGDBObjDevice;listAllHeadDev:TListDev):TGraphDev;
+ //**Получить список имен групп которые есть у головного устройства (рут) у вершины дерева
+ function getListNameGroupHD(graphDev:TGraphDev):TListGroupHeadDev;
 
  procedure visualGraphTree(G: TGraph; var startPt:GDBVertex;height:double; var depth:double);
 
@@ -150,6 +154,100 @@ implementation
 var
   DummyComparer:TDummyComparer;
   SortTreeSumChilderVertex:TSortTreeSumChilderVertex;
+
+
+  //**Получить список имен групп которые есть у головного устройства (рут) у вершины дерева
+  function getListNameGroupHD(graphDev:TGraphDev):TListGroupHeadDev;
+  var
+    i,j:integer;
+    cabNowMF:PGDBObjEntity;
+    cabNowvarext:TVariablesExtender;
+    isHaveList:boolean;
+    pvd:pvardesk;
+    ////** Рекурсия получаем номер нужного нам головного устройства внутри нужного нам графа
+    //procedure getListName(graphDev:TGraphDev;intVertex:integer;var listGroup:TListGroupHeadDev);
+    //var
+    //  i:integer;
+    //  devNowMF:PGDBObjDevice;
+    //  devNowvarext:TVariablesExtender;
+    //  devNameGroup:string;
+    //
+    //begin
+    //   if intVertex <> graphDev.Root.Index then
+    //     begin
+    //       devNowvarext:=graphDev.Vertices[intVertex].getDevice^.specialize GetExtension<TVariablesExtender>;
+    //       devNowMF:=devNowvarext.getMainFuncDevice;
+    //       if devNowMF <> nil then
+    //         begin
+    //           // Проверяем из настроек у устройства должнали его программа воспринимать как ГУ
+    //           pvd:=FindVariableInEnt(devNowMF,velec_ANALYSISEM_icanbeheadunit);
+    //           if pvd2<>nil then
+    //             if pboolean(pvd2^.data.Addr.Instance)^ then
+    //               listDev.PushBack(devNowMF);
+    //         end;
+    //     end;
+    //
+    //     for i:=0 to graphDev.Vertices[intVertex].ChildCount-1 do
+    //         getListName(graphDev,graphDev.Vertices[intVertex].Childs[i].Index,listGroup);
+    //end;
+  begin
+     ZCMsgCallBackInterface.TextMessage(' getListNameGroupHD - старт ',TMWOHistoryOut);
+     result:=TListGroupHeadDev.Create;
+
+     //intRootVertex:=-1;
+     //for i:=0 to listFullGraphEM.Size-1 do
+     //begin
+       //getListName(graphDev,graphDev.Root.Index,result);
+
+     for i:=0 to graphDev.Root.ChildCount-1 do
+       begin
+         cabNowvarext:=graphDev.GetEdge(graphDev.Root,graphDev.Root.Childs[i]).getCableSet^.cab^.specialize GetExtension<TVariablesExtender>;
+         ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
+         cabNowMF:=cabNowvarext.getMainFuncEntity;
+                  ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
+         if cabNowMF^.GetObjType=GDBCableID then
+           begin
+                    ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
+             pvd:=FindVariableInEnt(cabNowMF,velec_GC_HDGroup);
+             if pvd<>nil then
+               begin
+                 isHaveList:=true;
+                 for j:=0 to result.Size-1 do
+                   begin
+                      if result[j] = pstring(pvd^.data.Addr.Instance)^ then
+                         isHaveList:=false;
+                   end;
+                 if isHaveList then
+                   result.PushBack(pstring(pvd^.data.Addr.Instance)^);
+               end;
+               //if pboolean(pvd2^.data.Addr.Instance)^ then
+               //  listDev.PushBack(devNowMF);
+           end;
+//
+//         graphDev.Root.Childs[i]
+//         graphDev.GetEdge(graphDev.Root,graphDev.Root.Childs[i]).getCable;
+//           getListName(graphDev,graphDev.Root.Childs[i].Index,listGroup);
+       end;
+
+          for j:=0 to result.Size-1 do
+       begin
+         ZCMsgCallBackInterface.TextMessage(' GroupName= '+result[j],TMWOHistoryOut);
+       end;
+       //thisGraphDev:=graphDev;
+     //  if intRootVertex > -1 then
+     //    system.break;
+     //end;
+     //ZCMsgCallBackInterface.TextMessage(' intRootVertex= '+inttostr(intRootVertex),TMWOHistoryOut);
+     //
+     //if intRootVertex > -1 then
+     //  createNewGraph(listFullGraphEM[i],intRootVertex,result,-1,nil,false)
+     //else
+     //  ZCMsgCallBackInterface.TextMessage('ОШИБКА! Быть такого не может.',TMWOHistoryOut);
+     //
+     //ZCMsgCallBackInterface.TextMessage(' result vertexcount =  ' + inttostr(result.VertexCount),TMWOHistoryOut);
+     //
+     ZCMsgCallBackInterface.TextMessage(' getListNameGroupHD - ФИНИШ ',TMWOHistoryOut);
+  end;
 
  //**получить граф головного устройства с учетом подключенных ТОЛЬКО к нему устройств (с учетом особеностей отказа от ГУ)
  function getGraphHeadDev(listFullGraphEM:TListGraphDev;rootDev:PGDBObjDevice;listAllHeadDev:TListDev):TGraphDev;

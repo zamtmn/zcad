@@ -24,7 +24,7 @@ uses sysutils,UGDBObjBlockdefArray,uzedrawingdef,uzeentityextender,
      uzbtypes,uzeentsubordinated,uzeentity,uzeblockdef,
      varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
      uzeentitiestree,usimplegenerics,uzeffdxfsupport,uzbpaths,uzcTranslations,
-     gzctnrVectorTypes,uzeBaseExtender,uzgldrawcontext;
+     gzctnrVectorTypes,uzeBaseExtender,uzeconsts,uzgldrawcontext;
 const
   VariablesExtenderName='extdrVariables';
 type
@@ -56,6 +56,8 @@ TVariablesExtender=class(TBaseVariablesExtender)
 
     // возвращает сам себя если
     function getMainFuncEntity:PGDBObjEntity;
+    //**Если примитив - устройство, тогда возвращает ссылку на устройство. Если примитив - не устройство, тогда возвращает ноль
+    function getMainFuncDevice:PGDBObjDevice;
 
     procedure addDelegate(pDelegateEntity:PGDBObjEntity;pDelegateEntityVarext:TVariablesExtender);
     procedure removeDelegate(pDelegateEntity:PGDBObjEntity;pDelegateEntityVarext:TVariablesExtender);
@@ -85,6 +87,14 @@ begin
      result:=pThisEntity
   else
      result:=pMainFuncEntity;
+end;
+
+//**Если примитив - устройство, тогда возвращает ссылку на устройство. Если примитив - не устройство, тогда возвращает ноль
+function TVariablesExtender.getMainFuncDevice:PGDBObjDevice;
+begin
+  result:=nil;
+  if getMainFuncEntity^.GetObjType=GDBDeviceID then
+     result:=PGDBObjDevice(getMainFuncEntity);
 end;
 
 procedure TVariablesExtender.addDelegate(pDelegateEntity:PGDBObjEntity;pDelegateEntityVarext:TVariablesExtender);

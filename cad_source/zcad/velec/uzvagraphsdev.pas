@@ -81,6 +81,8 @@ type
   TEdgeDev = class helper for TEdge
       {**присоеденить к ребру кабель}
       procedure attachCable(cab:PGDBObjPolyLine);
+      {**Получить ссылку на полилинию кабеля. Если нет то ноль }
+      function getCableSet:PTEdgeEMTree;
 
       function getCableLength:double;
       procedure setCableLength(cabLength:double);
@@ -251,6 +253,12 @@ implementation
           else
             pEdge^.length:=0;
         self.AsPointer[vPTEdgeEMTree]:=pEdge;
+  end;
+  function TEdgeDev.getCableSet:PTEdgeEMTree;
+  begin
+    result:=nil;
+    if self <> nil then
+      result:=self.AsPointer[vPTEdgeEMTree];
   end;
 
   function TEdgeDev.getCableLength:double;

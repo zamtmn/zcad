@@ -1041,7 +1041,7 @@ var
              pcablepvd:=FindVariableInEnt(pcable,'GC_HDGroup');
              //ZCMsgCallBackInterface.TextMessage('vEMGCHDGroup4 -' + dev^.Name,TMWOHistoryOut);
              if pcablepvd<>nil then
-                pinteger(pvd^.data.Addr.Instance)^:= strtoint(pstring(pcablepvd^.data.Addr.Instance)^);
+                pstring(pvd^.data.Addr.Instance)^:= pstring(pcablepvd^.data.Addr.Instance)^;
              //ZCMsgCallBackInterface.TextMessage('vEMGCHDGroup5 -' + dev^.Name,TMWOHistoryOut);
            end;
        end;
@@ -1152,7 +1152,7 @@ var
              pcable:=PTEdgeTree(G.GetEdge(vertexGraph,vertexGraph.Parent).AsPointer[vpTEdgeTree])^.segm;
              pcablepvd:=FindVariableInEnt(pcable,'GC_HDGroup');
              if pcablepvd<>nil then
-                pinteger(pvd^.data.Addr.Instance)^:= strtoint(pstring(pcablepvd^.data.Addr.Instance)^);
+                pstring(pvd^.data.Addr.Instance)^:= pstring(pcablepvd^.data.Addr.Instance)^;
              end;
       //****//
 

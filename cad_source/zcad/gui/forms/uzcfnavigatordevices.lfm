@@ -18,10 +18,11 @@ object NavigatorDevices: TNavigatorDevices
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
     Left = 0
-    Height = 1054
-    Top = 74
+    Height = 1050
+    Top = 78
     Width = 684
     Anchors = [akTop, akLeft, akRight, akBottom]
+    BorderSpacing.Top = 4
     BorderStyle = bsNone
     DefaultNodeHeight = 25
     DefaultText = 'Node'

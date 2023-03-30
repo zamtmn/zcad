@@ -287,6 +287,7 @@ begin
     ImagesWidth:=getAttrValue(TBNode,'ImagesWidth',64);
     Images:=ImagesManager.IconList;
     align:=alClient;
+    BorderSpacing.Top:=4;
     DragMode:=dmAutomatic;
     Parent:=result;
     BorderStyle:=bsNone;

@@ -357,7 +357,9 @@
         <InsertMenu Name="Plan"/>
         <InsertMenu Name="Info"/>
         <InsertMenu Name="Model"/>
+      </IFONE>
         <InsertMenu Name="Settings"/>
+      <IFONE Сonditions="ActiveDrawing">
         <InsertMenu Name="DB"/>
         <InsertMenu Name="Window"/>
       </IFONE>

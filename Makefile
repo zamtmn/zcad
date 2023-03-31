@@ -226,6 +226,7 @@ cleanzcad: clean zcadenv zcad
 cleanzcadelectrotech: clean zcadelectrotechenv zcadelectrotech
 
 rmpkgslibs:
+	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)metadarkstyle$(PATHDELIM)lib$(PATHDELIM)*
 	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)zcontainers$(PATHDELIM)lib$(PATHDELIM)*
 	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)zbaseutils$(PATHDELIM)lib$(PATHDELIM)*
 	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)zbaseutilsgui$(PATHDELIM)lib$(PATHDELIM)*
@@ -247,6 +248,7 @@ ifneq ($(OSDETECT),OSX)
 	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)other$(PATHDELIM)agraphlaz$(PATHDELIM)lazarus$(PATHDELIM)ag_vectors.lpk
 endif
 	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)other$(PATHDELIM)uniqueinstance$(PATHDELIM)uniqueinstance_package.lpk
+	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)metadarkstyle$(PATHDELIM)metadarkstyle.lpk
 	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zcontainers$(PATHDELIM)zcontainers.lpk
 	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zbaseutils$(PATHDELIM)zbaseutils.lpk
 	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zbaseutilsgui$(PATHDELIM)zbaseutilsgui.lpk

@@ -4,3 +4,6 @@
 [submodule "agraph"]
 	path = cad_source/other/agraphlaz
 	url = https://github.com/zamtmn/agraphlaz.git
+[submodule "cad_source/components/metadarkstyle"]
+	path = cad_source/components/metadarkstyle
+	url = https://github.com/zamtmn/metadarkstyle.git

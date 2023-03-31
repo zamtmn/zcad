@@ -77,7 +77,7 @@ uses
   {$INCLUDE allgeneratedfiles.inc}//correct defs in system.pas
   uzcregother,//setup SysVar
 
-  {$IFDEF WINDOWS}uzcguiDarkStyleSetup,{$IF DEFINED(LCLQT5)}uDarkStyle,{$ENDIF}uWin32WidgetSetDark,{$ENDIF}
+  uMetaDarkStyle,
 
   UUnitManager,
   uzefontmanager,
@@ -332,7 +332,7 @@ begin
   {$ENDIF}
   //создание окна программы
   {$IF DEFINED(MSWINDOWS)}
-  ApplyDarkStyle;
+  ApplyMetaDarkStyle;
   {$ENDIF}
   Application.CreateForm(TZCADMainWindow,ZCADMainWindow);
   ZCADMainWindow.show;

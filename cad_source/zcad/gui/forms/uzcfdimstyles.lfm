@@ -159,6 +159,7 @@ object DimStylesForm: TDimStylesForm
       EdgeBorders = []
       GrabWidth = 5
       ParentFont = False
+      Themed = False
       object ToolBar1: TToolBar
         AnchorSideLeft.Control = CoolBar1
         AnchorSideTop.Control = CoolBar1

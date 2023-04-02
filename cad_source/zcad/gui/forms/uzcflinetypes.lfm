@@ -343,6 +343,7 @@ object LineTypesForm: TLineTypesForm
           Width = 145
         end>
       EdgeBorders = []
+      Themed = False
       object ToolBar1: TToolBar
         AnchorSideLeft.Control = CoolBar1
         AnchorSideTop.Control = CoolBar1

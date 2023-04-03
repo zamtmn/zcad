@@ -1037,7 +1037,7 @@ begin
      y:=p2.y-p1.y;
      result:=x*x+y*y;
 end;
-function MatrixDetInternal(a1, a2, a3, b1, b2, b3, c1, c2, c3:Double):Double;
+function MatrixDetInternal(var a1, a2, a3, b1, b2, b3, c1, c2, c3:Double):Double;
 begin
   Result := a1 * (b2 * c3 - b3 * c2) -
             b1 * (a2 * c3 - a3 * c2) +

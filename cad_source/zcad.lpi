@@ -52,7 +52,6 @@
             <UnitOutputDirectory Value="../lib/$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <Parsing>
-            <Style Value="1"/>
             <SyntaxOptions>
               <SyntaxMode Value="Delphi"/>
               <IncludeAssertionCode Value="True"/>
@@ -99,7 +98,6 @@
             <UnitOutputDirectory Value="../lib/$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <Parsing>
-            <Style Value="1"/>
             <SyntaxOptions>
               <SyntaxMode Value="Delphi"/>
               <IncludeAssertionCode Value="True"/>
@@ -141,7 +139,6 @@
             <UnitOutputDirectory Value="../lib/$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <Parsing>
-            <Style Value="1"/>
             <SyntaxOptions>
               <SyntaxMode Value="Delphi"/>
               <IncludeAssertionCode Value="True"/>
@@ -183,7 +180,6 @@
             <UnitOutputDirectory Value="../lib/$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <Parsing>
-            <Style Value="1"/>
             <SyntaxOptions>
               <SyntaxMode Value="Delphi"/>
               <IncludeAssertionCode Value="True"/>
@@ -225,7 +221,6 @@
             <UnitOutputDirectory Value="../lib/$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <Parsing>
-            <Style Value="1"/>
             <SyntaxOptions>
               <SyntaxMode Value="Delphi"/>
               <IncludeAssertionCode Value="True"/>
@@ -267,7 +262,6 @@
             <UnitOutputDirectory Value="../lib/$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <Parsing>
-            <Style Value="1"/>
             <SyntaxOptions>
               <SyntaxMode Value="Delphi"/>
               <IncludeAssertionCode Value="True"/>
@@ -1279,7 +1273,6 @@
       <UnitOutputDirectory Value="../lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Parsing>
-      <Style Value="1"/>
       <SyntaxOptions>
         <SyntaxMode Value="Delphi"/>
         <IncludeAssertionCode Value="True"/>
